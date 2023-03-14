@@ -2,148 +2,238 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E96F26B8E2B
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 10:10:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3A0A6B8E32
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 10:11:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229977AbjCNJKF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 05:10:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40878 "EHLO
+        id S230289AbjCNJKt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 05:10:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230020AbjCNJJu (ORCPT
+        with ESMTP id S229695AbjCNJKr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 05:09:50 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D018B4345C
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 02:09:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678784948;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=MZiEdMEJZU9Q5QYrqalML5RHHEvYiFGOlrIymPa3oQk=;
-        b=ETW9mQrU2MgX+hk4b60o2a2rF8qoh2AAOhOFUgLKI+JfYmAIQ0rlJhBrbSdJ/dSRJdEkq9
-        D1QL8OjvHkkL+uDNPTt0jGbEE75o2BMEgiArZHUvJ9JzoHM6a/tzr8rJgiYpkoSFkDn9+R
-        q2WEoeu1m6bvFIkCFHPwX/7qHUDL8FA=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-68-xP4AMAcoO5S0g6gJipUx7Q-1; Tue, 14 Mar 2023 05:09:07 -0400
-X-MC-Unique: xP4AMAcoO5S0g6gJipUx7Q-1
-Received: by mail-wr1-f70.google.com with SMTP id o15-20020a05600002cf00b002c54a27803cso2536511wry.22
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 02:09:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678784946;
-        h=content-transfer-encoding:in-reply-to:organization:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MZiEdMEJZU9Q5QYrqalML5RHHEvYiFGOlrIymPa3oQk=;
-        b=xxuAilE35ozNxq5zqDEpn12EEEsjpGy0HDzJqJJzoncsDTFKLhldxCTsFEO0zmoOwJ
-         EQZpBuWOkmLyEtBsSkPDunwPC8VlF+xpwsguIchvt0kmsKvu3a+CozxKzosfuprQWPNr
-         f/MxlV+CKlW9C41WJrfNCw3UPUqFdVoQNMOMwqTiVpkl7/fJj6YgK6uGWtjefkEiF5yJ
-         90vTpdEY0yXghYc+kAp/zwVanFE5mE7m2GxxYn6phD4IXbcQPV4KPWw6gXn4X1NitLyW
-         gJokyS+QUc65SbrDF9fmkoVInyKJG2eZML+1GnNApVl3mI+gKoIr2RzIzjU3aPSyFmBw
-         vwhg==
-X-Gm-Message-State: AO0yUKVaxs12YA5xa4QqLVqv2VDtOBkhd9ocnaMpl4+6rtdBduIfBuwN
-        nFrMSvjBdsXhcTPcyAn32t5HtqFO2AhOPN8i+ltWZFp7HGI9YXcnJ+5TcGpY/HBQu0H3hmjAXG+
-        VWxKBTIXavgRJUZUBe7p293gv
-X-Received: by 2002:a5d:6188:0:b0:2ce:ad32:5439 with SMTP id j8-20020a5d6188000000b002cead325439mr5664624wru.21.1678784945952;
-        Tue, 14 Mar 2023 02:09:05 -0700 (PDT)
-X-Google-Smtp-Source: AK7set/2QYhcEW7QJ2oWWSMlZ7W5mOKcxbLyj4yDmNaK0xMlrlFcBHnyxJAs4vay6omYiKl8xlIIsw==
-X-Received: by 2002:a5d:6188:0:b0:2ce:ad32:5439 with SMTP id j8-20020a5d6188000000b002cead325439mr5664603wru.21.1678784945628;
-        Tue, 14 Mar 2023 02:09:05 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c704:1000:21d5:831d:e107:fbd6? (p200300cbc704100021d5831de107fbd6.dip0.t-ipconnect.de. [2003:cb:c704:1000:21d5:831d:e107:fbd6])
-        by smtp.gmail.com with ESMTPSA id m1-20020adffa01000000b002c5526234d2sm1602596wrr.8.2023.03.14.02.09.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Mar 2023 02:09:05 -0700 (PDT)
-Message-ID: <70abf872-99d1-6ff4-3332-d86d320abff2@redhat.com>
-Date:   Tue, 14 Mar 2023 10:09:04 +0100
+        Tue, 14 Mar 2023 05:10:47 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47290900AA;
+        Tue, 14 Mar 2023 02:10:45 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id E27C46603009;
+        Tue, 14 Mar 2023 09:10:42 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1678785043;
+        bh=AzTZ2BxRqFcOVG5EJd3ZGhH//IxUcNMPjjCqWCgf6WE=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=i/P5Hv4fP2IZJuSCLEuiBPqWAz50uyoogFx4cq82uKIecGouuM3YtN5wDFsJfQOEH
+         SN4ut40lCy1r5JPWnhOoDcTahEcqOuXocLX4hLeIfwn/MZXmqV0S+oBLPnw5iRbSCP
+         ViY4HkuoWcpPN0zUkch5ZjfoSNDkNrPosJVtGHOdbxqLtOM1lXBJ8Qqyc4sblnRcd/
+         Ha0CrFITv1p0WLj09uTOS9W7Q0/ptNx2kSnmq570b6dvAjzOyeoqmRQCfJVaAZiiDA
+         SJOR10ZnNi6fKqwpj1hpLok8CPyT/m3p9dUs4Kc4eFxFh4SqwXE7NbDpx5zhtmG9qS
+         WzCTNwwiXULlA==
+Message-ID: <bf221312-ce85-8696-8b5a-f5b78206bd07@collabora.com>
+Date:   Tue, 14 Mar 2023 10:10:40 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-Subject: Re: [PATCH] mm: remove redundant check in handle_mm_fault
-To:     Haifeng Xu <haifeng.xu@shopee.com>,
-        Matthew Wilcox <willy@infradead.org>
-Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-References: <20230306024959.131468-1-haifeng.xu@shopee.com>
- <df3997ed-a844-597b-fbb1-154caad78543@redhat.com>
- <354360d5-dce6-a11c-ee61-d41e615bfa05@shopee.com>
- <ZAamFX/hq6Y/iNJb@casper.infradead.org>
- <6df72872-2829-47ab-552c-7ef8a6470e6f@shopee.com>
- <562e9cc3-d0aa-23e9-bd19-266b5aef2ae7@redhat.com>
- <b07c5e99-b251-2509-dfac-0f8e571d39d7@shopee.com>
+Subject: Re: [PATCH v6 03/19] clk: mediatek: Add MT8188 topckgen clock support
 Content-Language: en-US
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <b07c5e99-b251-2509-dfac-0f8e571d39d7@shopee.com>
+To:     "Garmin.Chang" <Garmin.Chang@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Richard Cochran <richardcochran@gmail.com>
+Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-clk@vger.kernel.org, netdev@vger.kernel.org
+References: <20230309135419.30159-1-Garmin.Chang@mediatek.com>
+ <20230309135419.30159-4-Garmin.Chang@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230309135419.30159-4-Garmin.Chang@mediatek.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14.03.23 09:05, Haifeng Xu wrote:
+Il 09/03/23 14:54, Garmin.Chang ha scritto:
+> Add MT8188 topckgen clock controller which provides muxes, dividers
+> to handle variety clock selection in other IP blocks.
 > 
+> Signed-off-by: Garmin.Chang <Garmin.Chang@mediatek.com>
+> ---
+>   drivers/clk/mediatek/Makefile              |    2 +-
+>   drivers/clk/mediatek/clk-mt8188-topckgen.c | 1347 ++++++++++++++++++++
+>   2 files changed, 1348 insertions(+), 1 deletion(-)
+>   create mode 100644 drivers/clk/mediatek/clk-mt8188-topckgen.c
 > 
-> On 2023/3/8 17:13, David Hildenbrand wrote:
->> On 08.03.23 10:03, Haifeng Xu wrote:
->>>
->>>
->>> On 2023/3/7 10:48, Matthew Wilcox wrote:
->>>> On Tue, Mar 07, 2023 at 10:36:55AM +0800, Haifeng Xu wrote:
->>>>> On 2023/3/6 21:49, David Hildenbrand wrote:
->>>>>> On 06.03.23 03:49, Haifeng Xu wrote:
->>>>>>> mem_cgroup_oom_synchronize() has checked whether current memcg_in_oom is
->>>>>>> set or not, so remove the check in handle_mm_fault().
->>>>>>
->>>>>> "mem_cgroup_oom_synchronize() will returned immediately if memcg_in_oom is not set, so remove the check from handle_mm_fault()".
->>>>>>
->>>>>> However, that requires now always an indirect function call -- do we care about dropping that optimization?
->>>>>>
->>>>>>
->>>>>
->>>>> If memcg_in_oom is set, we will check it twice, one is from handle_mm_fault(), the other is from mem_cgroup_oom_synchronize(). That seems a bit redundant.
->>>>>
->>>>> if memcg_in_oom is not set, mem_cgroup_oom_synchronize() returns directly. Though it's an indirect function call, but the time spent can be negligible
->>>>> compare to the whole mm user falut preocess. And that won't cause stack overflow error.
->>>>
->>>> I suggest you measure it.
->>>
->>> test steps:
->>> 1) Run command: ./mmap_anon_test(global alloc, so the memcg_in_oom is not set)
->>> 2) Calculate the quotient of cost time and page-fault counts, run 10 rounds and average the results.
->>>
->>> The test result shows that whether using indirect function call or not, the time spent in user fault
->>> is almost the same, about 2.3ms.
->>
->> I guess most of the benchmark time is consumed by allocating fresh pages in your test (also, why exactly do you use MAP_SHARED?).
->>
->> Is 2.3ms the total time for writing to that 1GiB of memory or how did you derive that number? Posting both results would be cleaner (with more digits ;) ).
->>
-> 
-> Hi Daivd, the details of test result were posted last week. Do you have any suggestions or more concerns about this change?
+> diff --git a/drivers/clk/mediatek/Makefile b/drivers/clk/mediatek/Makefile
+> index 1f822fcf6084..d845bf7308c3 100644
+> --- a/drivers/clk/mediatek/Makefile
+> +++ b/drivers/clk/mediatek/Makefile
+> @@ -91,7 +91,7 @@ obj-$(CONFIG_COMMON_CLK_MT8186) += clk-mt8186-mcu.o clk-mt8186-topckgen.o clk-mt
+>   				   clk-mt8186-mfg.o clk-mt8186-mm.o clk-mt8186-wpe.o \
+>   				   clk-mt8186-img.o clk-mt8186-vdec.o clk-mt8186-venc.o \
+>   				   clk-mt8186-cam.o clk-mt8186-mdp.o clk-mt8186-ipe.o
+> -obj-$(CONFIG_COMMON_CLK_MT8188) += clk-mt8188-apmixedsys.o
+> +obj-$(CONFIG_COMMON_CLK_MT8188) += clk-mt8188-apmixedsys.o clk-mt8188-topckgen.o
+>   obj-$(CONFIG_COMMON_CLK_MT8192) += clk-mt8192.o
+>   obj-$(CONFIG_COMMON_CLK_MT8192_AUDSYS) += clk-mt8192-aud.o
+>   obj-$(CONFIG_COMMON_CLK_MT8192_CAMSYS) += clk-mt8192-cam.o
+> diff --git a/drivers/clk/mediatek/clk-mt8188-topckgen.c b/drivers/clk/mediatek/clk-mt8188-topckgen.c
+> new file mode 100644
+> index 000000000000..b3f9577de081
+> --- /dev/null
+> +++ b/drivers/clk/mediatek/clk-mt8188-topckgen.c
+> @@ -0,0 +1,1347 @@
 
-No, I guess it really doesn't matter performance wise.
+..snip..
 
-One valid question would be: why perform this change at all? The 
-redundancy doesn't seem to harm performance either.
+> +
+> +static const struct of_device_id of_match_clk_mt8188_topck[] = {
+> +	{ .compatible = "mediatek,mt8188-topckgen", },
 
-If the change would obviously improve code readability it would be easy 
-to justify. I'm not convinced, that is the case, but maybe for others.
+	{ .compatible = "mediatek,mt8188-topckgen" },
+	{ /* sentinel */ }
 
-So FWIW, the change looks good to me and should not affect performance 
-in one way or the other. So no objections from my side ...
+> +	{}
+> +};
+> +
+> +/* Register mux notifier for MFG mux */
+> +static int clk_mt8188_reg_mfg_mux_notifier(struct device *dev, struct clk *clk)
+> +{
+> +	struct mtk_mux_nb *mfg_mux_nb;
+> +
+> +	mfg_mux_nb = devm_kzalloc(dev, sizeof(*mfg_mux_nb), GFP_KERNEL);
+> +	if (!mfg_mux_nb)
+> +		return -ENOMEM;
+> +
+> +	mfg_mux_nb->ops = &clk_mux_ops;
+> +	mfg_mux_nb->bypass_index = 0; /* Bypass to TOP_MFG_CORE_TMP */
+> +
+> +	return devm_mtk_clk_mux_notifier_register(dev, clk, mfg_mux_nb);
+> +}
+> +
+> +static int clk_mt8188_topck_probe(struct platform_device *pdev)
+> +{
+> +	struct clk_hw_onecell_data *top_clk_data;
+> +	struct device_node *node = pdev->dev.of_node;
+> +	struct clk_hw *hw;
+> +	int r;
+> +	void __iomem *base;
+> +
+> +	top_clk_data = mtk_alloc_clk_data(CLK_TOP_NR_CLK);
+> +	if (!top_clk_data)
+> +		return -ENOMEM;
+> +
+> +	base = devm_platform_ioremap_resource(pdev, 0);
+> +	if (IS_ERR(base)) {
+> +		r = PTR_ERR(base);
+> +		goto free_top_data;
+> +	}
+> +
+> +	r = mtk_clk_register_fixed_clks(top_fixed_clks, ARRAY_SIZE(top_fixed_clks),
+> +					top_clk_data);
+> +	if (r)
+> +		goto free_top_data;
+> +
+> +	r = mtk_clk_register_factors(top_divs, ARRAY_SIZE(top_divs), top_clk_data);
+> +	if (r)
+> +		goto unregister_fixed_clks;
+> +
+> +	r = mtk_clk_register_muxes(&pdev->dev, top_mtk_muxes,
+> +				   ARRAY_SIZE(top_mtk_muxes), node,
+> +				   &mt8188_clk_lock, top_clk_data);
+> +	if (r)
+> +		goto unregister_factors;
+> +
+> +	hw = devm_clk_hw_register_mux(&pdev->dev, "mfg_ck_fast_ref", mfg_fast_ref_parents,
+> +				      ARRAY_SIZE(mfg_fast_ref_parents), CLK_SET_RATE_PARENT,
+> +				      (base + 0x250), 8, 1, 0, &mt8188_clk_lock);
 
--- 
-Thanks,
+If you make this a mtk mux and put it in top_mtk_muxes, you can migrate topckgen to
+the simple_probe() mechanism, greatly reducing the size of this file.
 
-David / dhildenb
+> +	if (IS_ERR(hw)) {
+> +		r = PTR_ERR(hw);
+> +		goto unregister_muxes;
+> +	}
+> +	top_clk_data->hws[CLK_TOP_MFG_CK_FAST_REF] = hw;
+> +
+> +	r = clk_mt8188_reg_mfg_mux_notifier(&pdev->dev,
+> +					    top_clk_data->hws[CLK_TOP_MFG_CK_FAST_REF]->clk);
+> +	if (r)
+> +		goto unregister_muxes;
+> +
+> +	r = mtk_clk_register_composites(&pdev->dev, top_adj_divs,
+> +					ARRAY_SIZE(top_adj_divs), base,
+> +					&mt8188_clk_lock, top_clk_data);
+> +	if (r)
+> +		goto unregister_muxes;
+> +
+> +	r = mtk_clk_register_gates(&pdev->dev, node, top_clks,
+> +				   ARRAY_SIZE(top_clks), top_clk_data);
+> +	if (r)
+> +		goto unregister_composite_divs;
+> +
+> +	r = of_clk_add_hw_provider(node, of_clk_hw_onecell_get, top_clk_data);
+> +	if (r)
+> +		goto unregister_gates;
+> +
+> +	platform_set_drvdata(pdev, top_clk_data);
+> +
+> +	return r;
+> +
+> +unregister_gates:
+> +	mtk_clk_unregister_gates(top_clks, ARRAY_SIZE(top_clks), top_clk_data);
+> +unregister_composite_divs:
+> +	mtk_clk_unregister_composites(top_adj_divs, ARRAY_SIZE(top_adj_divs), top_clk_data);
+> +unregister_muxes:
+> +	mtk_clk_unregister_muxes(top_mtk_muxes, ARRAY_SIZE(top_mtk_muxes), top_clk_data);
+> +unregister_factors:
+> +	mtk_clk_unregister_factors(top_divs, ARRAY_SIZE(top_divs), top_clk_data);
+> +unregister_fixed_clks:
+> +	mtk_clk_unregister_fixed_clks(top_fixed_clks, ARRAY_SIZE(top_fixed_clks), top_clk_data);
+> +free_top_data:
+> +	mtk_free_clk_data(top_clk_data);
+> +	return r;
+> +}
+> +
+> +static int clk_mt8188_topck_remove(struct platform_device *pdev)
+> +{
+> +	struct clk_hw_onecell_data *top_clk_data = platform_get_drvdata(pdev);
+> +	struct device_node *node = pdev->dev.of_node;
+> +
+> +	of_clk_del_provider(node);
+> +	mtk_clk_unregister_gates(top_clks, ARRAY_SIZE(top_clks), top_clk_data);
+> +	mtk_clk_unregister_composites(top_adj_divs, ARRAY_SIZE(top_adj_divs), top_clk_data);
+> +	mtk_clk_unregister_muxes(top_mtk_muxes, ARRAY_SIZE(top_mtk_muxes), top_clk_data);
+> +	mtk_clk_unregister_factors(top_divs, ARRAY_SIZE(top_divs), top_clk_data);
+> +	mtk_clk_unregister_fixed_clks(top_fixed_clks, ARRAY_SIZE(top_fixed_clks), top_clk_data);
+> +	mtk_free_clk_data(top_clk_data);
+> +
+> +	return 0;
+> +}
+> +
+> +static struct platform_driver clk_mt8188_topck_drv = {
+> +	.probe = clk_mt8188_topck_probe,
+> +	.remove = clk_mt8188_topck_remove,
+> +	.driver = {
+> +		.name = "clk-mt8188-topck",
+> +		.of_match_table = of_match_clk_mt8188_topck,
+> +	},
+> +};
+> +builtin_platform_driver(clk_mt8188_topck_drv);
 
+module_platform_driver....
+MODULE_LICENSE....
