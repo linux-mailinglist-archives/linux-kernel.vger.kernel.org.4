@@ -2,204 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 270886B8AF9
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 07:13:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F0C16B8AF4
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 07:13:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230180AbjCNGN1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 02:13:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46294 "EHLO
+        id S229866AbjCNGNB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 02:13:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230152AbjCNGNW (ORCPT
+        with ESMTP id S229479AbjCNGM7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 02:13:22 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD4B1C3;
-        Mon, 13 Mar 2023 23:13:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678774400; x=1710310400;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=lYU9/lOsDjrGWnrNFnc3eD+bZCqLaCoXFbUAdhwVlmw=;
-  b=DgzQPJ/tlWNjob1Tq2lPzE7fj9cWi9ac0V3I4YM9UJPRh2Z3x9LFasa4
-   dqMbvUMzx8860mFrqM1LDP7mMa8lN1aIRweluvbad8V9H15AVnBGj5HwH
-   1j7PxKR4yIu5zTGLLtOIDm0XpxYHMZgpXHlPwmOpUoSKDMSA8tHLUTZvY
-   a/8s6F1EMvfJcO8frlGEUmzleG52UaX+IT80MfiSl+b9lBnhVywIsMSUE
-   RArN/G5hsocc5OP73pPKytbhoMfq8Ul8NvkFQPhjE3Bzi+aRpQOuDYx0S
-   gKVZ//b0sYawou+snZAqGO07nlJPzXukFFLgwjTjRW+85FOusY4ADk1MT
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="334818367"
-X-IronPort-AV: E=Sophos;i="5.98,259,1673942400"; 
-   d="scan'208";a="334818367"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 23:12:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="681296678"
-X-IronPort-AV: E=Sophos;i="5.98,259,1673942400"; 
-   d="scan'208";a="681296678"
-Received: from unknown (HELO localhost.localdomain) ([10.237.112.144])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 23:12:44 -0700
-Date:   Tue, 14 Mar 2023 07:12:35 +0100
-From:   Michal Swiatkowski <michal.swiatkowski@linux.intel.com>
-To:     Shradha Gupta <shradhagupta@linux.microsoft.com>
-Cc:     linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        linux-rdma@vger.kernel.org, netdev@vger.kernel.org,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Ajay Sharma <sharmaajay@microsoft.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Long Li <longli@microsoft.com>,
-        Michael Kelley <mikelley@microsoft.com>
-Subject: Re: [PATCH] net: mana: Add new MANA VF performance counters for
- easier troubleshooting
-Message-ID: <ZBAQU2qJg6kcud50@localhost.localdomain>
-References: <1678771810-21050-1-git-send-email-shradhagupta@linux.microsoft.com>
+        Tue, 14 Mar 2023 02:12:59 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C2FA1BACD
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 23:12:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 4A9B2CE0E4A
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 06:12:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E477EC433EF;
+        Tue, 14 Mar 2023 06:12:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1678774374;
+        bh=IwKzcgaTwqwQYTs70kEWktqJi1K/npa63t9+ZA2J44o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LE/BLlkH+Jag5CI1/x1cFBIDkwoTYKQ5zRtndearb+RE0f29LjGy+T8GLPJTsigba
+         LBhQSZ6qKmCgN39L/pIwnlqu/TLfOOpz1NXm0ZIaQS3cxooPJ354mG8tCmq6jv5kOv
+         IaWMmXtHyHr+RtJmEi2GnrKLwfZIY4RPW9ITNYXg=
+Date:   Tue, 14 Mar 2023 07:12:52 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Doug Anderson <dianders@chromium.org>, kernel-team@android.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1] driver core: Add CONFIG_FW_DEVLINK_SYNC_STATE_TIMEOUT
+Message-ID: <ZBAQZKY+PuVeGDu1@kroah.com>
+References: <20230313232719.3565369-1-saravanak@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1678771810-21050-1-git-send-email-shradhagupta@linux.microsoft.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230313232719.3565369-1-saravanak@google.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 13, 2023 at 10:30:10PM -0700, Shradha Gupta wrote:
-> Extended performance counter stats in 'ethtool -S <interface>' output
-> for MANA VF to facilitate troubleshooting.
+On Mon, Mar 13, 2023 at 04:27:19PM -0700, Saravana Kannan wrote:
+> Add a build time equivalent of fw_devlink.sync_state=timeout so that
+> board specific kernels could enable it and not have to deal with setting
+> or cluttering the kernel commandline.
 > 
-> Tested-on: Ubuntu22
-> Signed-off-by: Shradha Gupta <shradhagupta@linux.microsoft.com>
+> Cc: Doug Anderson <dianders@chromium.org>
+> Signed-off-by: Saravana Kannan <saravanak@google.com>
 > ---
->  drivers/net/ethernet/microsoft/mana/mana_en.c | 67 ++++++++++++++++++-
->  .../ethernet/microsoft/mana/mana_ethtool.c    | 52 +++++++++++++-
->  include/net/mana/mana.h                       | 18 +++++
->  3 files changed, 133 insertions(+), 4 deletions(-)
+>  drivers/base/Kconfig | 10 ++++++++++
+>  drivers/base/core.c  |  5 +++++
+>  2 files changed, 15 insertions(+)
 > 
-> diff --git a/drivers/net/ethernet/microsoft/mana/mana_en.c b/drivers/net/ethernet/microsoft/mana/mana_en.c
-> index 6120f2b6684f..9762bdda6df1 100644
-> --- a/drivers/net/ethernet/microsoft/mana/mana_en.c
-> +++ b/drivers/net/ethernet/microsoft/mana/mana_en.c
-> @@ -156,6 +156,8 @@ netdev_tx_t mana_start_xmit(struct sk_buff *skb, struct net_device *ndev)
->  	struct mana_txq *txq;
->  	struct mana_cq *cq;
->  	int err, len;
-> +	u16 ihs;
-> +	int hopbyhop = 0;
-RCT
+> diff --git a/drivers/base/Kconfig b/drivers/base/Kconfig
+> index 6f04b831a5c0..da91b409482f 100644
+> --- a/drivers/base/Kconfig
+> +++ b/drivers/base/Kconfig
+> @@ -230,4 +230,14 @@ config GENERIC_ARCH_NUMA
+>  	  Enable support for generic NUMA implementation. Currently, RISC-V
+>  	  and ARM64 use it.
+>  
+> +config FW_DEVLINK_SYNC_STATE_TIMEOUT
+> +	bool
+> +	default n
 
->  
->  	if (unlikely(!apc->port_is_up))
->  		goto tx_drop;
-> @@ -166,6 +168,7 @@ netdev_tx_t mana_start_xmit(struct sk_buff *skb, struct net_device *ndev)
->  	txq = &apc->tx_qp[txq_idx].txq;
->  	gdma_sq = txq->gdma_sq;
->  	cq = &apc->tx_qp[txq_idx].tx_cq;
-> +	tx_stats = &txq->stats;
->  
->  	pkg.tx_oob.s_oob.vcq_num = cq->gdma_id;
->  	pkg.tx_oob.s_oob.vsq_frame = txq->vsq_frame;
-> @@ -179,10 +182,17 @@ netdev_tx_t mana_start_xmit(struct sk_buff *skb, struct net_device *ndev)
->  
->  	pkg.tx_oob.s_oob.pkt_fmt = pkt_fmt;
->  
-> -	if (pkt_fmt == MANA_SHORT_PKT_FMT)
-> +	if (pkt_fmt == MANA_SHORT_PKT_FMT) {
->  		pkg.wqe_req.inline_oob_size = sizeof(struct mana_tx_short_oob);
-> -	else
-> +		u64_stats_update_begin(&tx_stats->syncp);
-> +		tx_stats->short_pkt_fmt++;
-> +		u64_stats_update_end(&tx_stats->syncp);
-> +	} else {
->  		pkg.wqe_req.inline_oob_size = sizeof(struct mana_tx_oob);
-> +		u64_stats_update_begin(&tx_stats->syncp);
-> +		tx_stats->long_pkt_fmt++;
-> +		u64_stats_update_end(&tx_stats->syncp);
-> +	}
->  
->  	pkg.wqe_req.inline_oob_data = &pkg.tx_oob;
->  	pkg.wqe_req.flags = 0;
-> @@ -232,9 +242,37 @@ netdev_tx_t mana_start_xmit(struct sk_buff *skb, struct net_device *ndev)
->  						 &ipv6_hdr(skb)->daddr, 0,
->  						 IPPROTO_TCP, 0);
->  		}
-> +
-> +		if (skb->encapsulation) {
-> +			ihs = skb_inner_tcp_all_headers(skb);
-> +			u64_stats_update_begin(&tx_stats->syncp);
-> +			tx_stats->tso_inner_packets++;
-> +			tx_stats->tso_inner_bytes += skb->len - ihs;
-> +			u64_stats_update_end(&tx_stats->syncp);
-> +		} else {
-hopbyhop can be defined here
+n is always the default, no need to say it here again.
 
-> +			if (skb_shinfo(skb)->gso_type & SKB_GSO_UDP_L4) {
-> +				ihs = skb_transport_offset(skb) + sizeof(struct udphdr);
-> +			} else {
-> +				ihs = skb_tcp_all_headers(skb);
-> +				if (ipv6_has_hopopt_jumbo(skb)) {
-> +					hopbyhop = sizeof(struct hop_jumbo_hdr);
-> +					ihs -= sizeof(struct hop_jumbo_hdr);
-> +				}
-Maybe I missed sth, but it looks like this part of code can be removed.
-hopbyhop is only used to calculate tso_bytes. Instead of substract
-hopbyhop from ihs, and calculate tso_bytes as len - ihs - hopbyhop, You
-can remove hopbyhop and calculate tso_bytes like len - ihs.
+> +	help
+> +	  This is build time equivalent of adding kernel commandline parameter
+> +	  "fw_devlink.sync_state=timeout". Give up waiting on consumers and
+> +	  call sync_state() on any devices that haven't yet received their
+> +	  sync_state() calls after deferred_probe_timeout has expired or by
+> +	  late_initcall() if !CONFIG_MODULES.
 
-> +			}
-> +
-> +			u64_stats_update_begin(&tx_stats->syncp);
-> +			tx_stats->tso_packets++;
-> +			tx_stats->tso_bytes += skb->len - ihs - hopbyhop;
-> +			u64_stats_update_end(&tx_stats->syncp);
-> +		}
-> +
->  
-[...]
+I think you forgot a noun in this last sentence :)
 
-> @@ -1341,11 +1394,17 @@ static void mana_poll_rx_cq(struct mana_cq *cq)
->  {
->  	struct gdma_comp *comp = cq->gdma_comp_buf;
->  	struct mana_rxq *rxq = cq->rxq;
-> +	struct net_device *ndev;
-> +	struct mana_port_context *apc;
-RCT
->  	int comp_read, i;
->  
-> +	ndev = rxq->ndev;
-> +	apc = netdev_priv(ndev);
-maybe:
-apc = netdev_priv(rxq->ndev);
-> +
->  	comp_read = mana_gd_poll_cq(cq->gdma_cq, comp, CQE_POLLING_BUFFER);
->  	WARN_ON_ONCE(comp_read > CQE_POLLING_BUFFER);
->  
-> +	apc->eth_stats.rx_cqes = comp_read;
->  	rxq->xdp_flush = false;
->  
->  	for (i = 0; i < comp_read; i++) {
-> @@ -1357,6 +1416,8 @@ static void mana_poll_rx_cq(struct mana_cq *cq)
->  			return;
->  
->  		mana_process_rx_cqe(rxq, cq, &comp[i]);
-> +
-> +		apc->eth_stats.rx_cqes--;
->  	}
->  
->  	if (rxq->xdp_flush)
->  
-[...]
+And add something like "You should almost always want to select N here
+unless you have successfully tested with this command line option
+already"
 
-> -- 
-> 2.37.2
-> 
+thanks,
+
+greg k-h
