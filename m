@@ -2,104 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3209A6B9A9C
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 17:05:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 799CB6B9AA0
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 17:05:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230045AbjCNQE5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 12:04:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45670 "EHLO
+        id S231129AbjCNQFL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 12:05:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230297AbjCNQEj (ORCPT
+        with ESMTP id S229974AbjCNQE5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 12:04:39 -0400
-Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D4D853290;
-        Tue, 14 Mar 2023 09:04:29 -0700 (PDT)
-Received: by mail-ot1-x332.google.com with SMTP id p13-20020a9d744d000000b0069438f0db7eso8678579otk.3;
-        Tue, 14 Mar 2023 09:04:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678809868;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=0V1xObPOu1sKOo+zU+U91XCBQL6wMo8D/re2Ep+Sd8c=;
-        b=Nd1h0JZpPla3jCeVZ1zmfgs/A5lsBso9dx3o9uaMBnU7ovfuVL4Btpd4Jjb9KTw5yJ
-         aiyrdBxue+cetazW9tJbrvTYC1pCiPbT1wnAfD9bagmSmWtwXCEFiIUEJ97LkjQ6HUA8
-         U3Z9z8cRe7Dh48GsbaEDxvFmJh9RtsbLLjl0bRxi5jgC6I0nlU4ArWhzEmPNpJc5AUb4
-         g0g4OvOY63wcQRomcoYP/ttsMIEREcU3jQCqu4mjIwuCF9CQp8+Wt/Fu+91KrV717RkQ
-         h/hmzJ7hinywYxt1QICr9++nEECZ/N19KxG18Hsu7/q1E1zZodX5OWMAv3fO+BPOQ+oL
-         FInw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678809868;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0V1xObPOu1sKOo+zU+U91XCBQL6wMo8D/re2Ep+Sd8c=;
-        b=NtvMVuTnJk84kUL0ByRs2rFJuBqQIwaWcBZtzPPljs859pFxwTyU8zRCMwDigLfBE1
-         gJnFCM21ts+/jltPxK8L5HpEy9cwBBJVxw4kRzU287P+/GtWc5RQKaRhsyD6oPqxqkFp
-         8AZqQFcGFzNSedD25YB6o3eWd9lQ5NPjTJopRW3jiOY8BGoCd8+05TxaS+gTVNjoRj5u
-         fS32s2GKPBFiM0VWMKJsl/LpM635xiHFFwVeYq76qB8/0kI8q0KQUqjPFWGnQcpeRaNR
-         F95bnH/1Y78j9DxbpvLrQJZ9bqCJByS+XN59NwAtGO8A+ZwerPFtjB4v9BgscbYU4Vbp
-         /UhA==
-X-Gm-Message-State: AO0yUKVtWQGcTQrAO5v3gjRpCwObJdzZxwMv9EMwyWNEWeTN+K4oeMl5
-        1cVWcPwApiS8QPotUATDTu4=
-X-Google-Smtp-Source: AK7set94TsrHo854JTD8IoFkuuoEcNBJlUmrlBDp9qrrNBZXdGOkUyGEG1VV/8LCaCCYvf1OIp+mIA==
-X-Received: by 2002:a05:6830:6504:b0:699:221e:b07d with SMTP id cm4-20020a056830650400b00699221eb07dmr347642otb.11.1678809868351;
-        Tue, 14 Mar 2023 09:04:28 -0700 (PDT)
-Received: from chcpu13.cse.ust.hk (191host119.mobilenet.cse.ust.hk. [143.89.191.119])
-        by smtp.gmail.com with ESMTPSA id q5-20020a4a3005000000b0051a6cb524b6sm1194392oof.2.2023.03.14.09.04.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Mar 2023 09:04:28 -0700 (PDT)
-From:   Wei Chen <harperchen1110@gmail.com>
-To:     andi.shyti@kernel.org
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Wei Chen <harperchen1110@gmail.com>
-Subject: [PATCH v3] i2c: xgene-slimpro: Fix out-of-bounds bug in xgene_slimpro_i2c_xfer()
-Date:   Tue, 14 Mar 2023 16:04:16 +0000
-Message-Id: <20230314160416.2813398-1-harperchen1110@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 14 Mar 2023 12:04:57 -0400
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17B4683F9;
+        Tue, 14 Mar 2023 09:04:54 -0700 (PDT)
+Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 5259EE000A;
+        Tue, 14 Mar 2023 16:04:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1678809893;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=c2+H7wt3YGMoJy1kI08Oezx1jFQC9X+jtLDpoYMlXss=;
+        b=ohgih14REmXqm2YF0JReNRyzYFa6p8DeLxCOosBOjCP69WgwLl4SrXk9XakcXKF0kd9xwy
+        iMCvNea8EW5AtPT1hqpXjAuy/hc08syMWVHptjb3t3f/VlI/gwsFTpM/GkF3gADXnCx7Sa
+        heStzYo3ZsO4uFShLISuSNrbNPDvvUn/SwHvbVuXlTsShQXYB2aIQPMGAR3hifMfAzym1f
+        vvExPpy3d7rvd/a5XYG/A7SnTG3bNwlMZpT47oWKVFLprwab4fy8qdRnSHXwrSrhA3RsMQ
+        HriELQR7raePfh3IEayUhBeiw+dLQhEZAA6NXmgA3hYX14DWwAULtDN/5eNAeg==
+Date:   Tue, 14 Mar 2023 17:04:48 +0100
+From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Joe Tessler <jrt@google.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Niklas =?utf-8?Q?S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        Rui Miguel Silva <rmfrfs@gmail.com>,
+        Wenyou Yang <wenyou.yang@microchip.com>,
+        Bin Liu <bin.liu@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Minghsiu Tsai <minghsiu.tsai@mediatek.com>,
+        Houlong Wei <houlong.wei@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Yong Deng <yong.deng@magewell.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Sean Young <sean@mess.org>, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-rockchip@lists.infradead.org
+Subject: Re: [PATCH 18/28] media: platform: sun8i-a83t-mipi-csi2: drop
+ of_match_ptr for ID table
+Message-ID: <ZBCbIILFhcDMIg+h@aptenodytes>
+References: <20230312131318.351173-1-krzysztof.kozlowski@linaro.org>
+ <20230312131318.351173-18-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="VxKfudML6kIseEz3"
+Content-Disposition: inline
+In-Reply-To: <20230312131318.351173-18-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The data->block[0] variable comes from user and is a number between
-0-255. Without proper check, the variable may be very large to cause
-an out-of-bounds when performing memcpy in slimpro_i2c_blkwr.
 
-Fix this bug by checking the value of writelen.
+--VxKfudML6kIseEz3
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Fixes: f6505fbabc42 ("i2c: add SLIMpro I2C device driver on APM X-Gene platform")
-Signed-off-by: Wei Chen <harperchen1110@gmail.com>
----
-Changes in v2:
- - Put length check inside slimpro_i2c_blkwr
-Changes in v3:
- - Correct the format of patch
+Hi Krzysztof,
 
- drivers/i2c/busses/i2c-xgene-slimpro.c | 3 +++
- 1 file changed, 3 insertions(+)
+On Sun 12 Mar 23, 14:13, Krzysztof Kozlowski wrote:
+> The driver can match only via the DT table so the table should be always
+> used and the of_match_ptr does not have any sense (this also allows ACPI
+> matching via PRP0001, even though it might not be relevant here).  This
+> also fixes !CONFIG_OF error:
+>=20
+>   drivers/media/platform/sunxi/sun8i-a83t-mipi-csi2/sun8i_a83t_mipi_csi2.=
+c:818:34: error: =E2=80=98sun8i_a83t_mipi_csi2_of_match=E2=80=99 defined bu=
+t not used [-Werror=3Dunused-const-variable=3D]
+>=20
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-diff --git a/drivers/i2c/busses/i2c-xgene-slimpro.c b/drivers/i2c/busses/i2c-xgene-slimpro.c
-index bc9a3e7e0c96..0f7263e2276a 100644
---- a/drivers/i2c/busses/i2c-xgene-slimpro.c
-+++ b/drivers/i2c/busses/i2c-xgene-slimpro.c
-@@ -308,6 +308,9 @@ static int slimpro_i2c_blkwr(struct slimpro_i2c_dev *ctx, u32 chip,
- 	u32 msg[3];
- 	int rc;
- 
-+	if (writelen > I2C_SMBUS_BLOCK_MAX)
-+		return -EINVAL;
-+
- 	memcpy(ctx->dma_buffer, data, writelen);
- 	paddr = dma_map_single(ctx->dev, ctx->dma_buffer, writelen,
- 			       DMA_TO_DEVICE);
--- 
-2.25.1
+Looks good to me:
+Reviewed-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 
+Thanks !
+
+Paul
+
+> ---
+>  .../platform/sunxi/sun8i-a83t-mipi-csi2/sun8i_a83t_mipi_csi2.c  | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/media/platform/sunxi/sun8i-a83t-mipi-csi2/sun8i_a83t=
+_mipi_csi2.c b/drivers/media/platform/sunxi/sun8i-a83t-mipi-csi2/sun8i_a83t=
+_mipi_csi2.c
+> index cd2e92ae2293..1f0cc7b1ba47 100644
+> --- a/drivers/media/platform/sunxi/sun8i-a83t-mipi-csi2/sun8i_a83t_mipi_c=
+si2.c
+> +++ b/drivers/media/platform/sunxi/sun8i-a83t-mipi-csi2/sun8i_a83t_mipi_c=
+si2.c
+> @@ -826,7 +826,7 @@ static struct platform_driver sun8i_a83t_mipi_csi2_pl=
+atform_driver =3D {
+>  	.remove	=3D sun8i_a83t_mipi_csi2_remove,
+>  	.driver	=3D {
+>  		.name		=3D SUN8I_A83T_MIPI_CSI2_NAME,
+> -		.of_match_table	=3D of_match_ptr(sun8i_a83t_mipi_csi2_of_match),
+> +		.of_match_table	=3D sun8i_a83t_mipi_csi2_of_match,
+>  		.pm		=3D &sun8i_a83t_mipi_csi2_pm_ops,
+>  	},
+>  };
+> --=20
+> 2.34.1
+>=20
+
+--=20
+Paul Kocialkowski, Bootlin
+Embedded Linux and kernel engineering
+https://bootlin.com
+
+--VxKfudML6kIseEz3
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEJZpWjZeIetVBefti3cLmz3+fv9EFAmQQmyAACgkQ3cLmz3+f
+v9FJ+wf/Vs+zvL4HtIgKv1HYr45R/bI+XzRQ4edLJ+86siTyMIe6/xFs4hPJqnc/
+Kuop0jFCkE6h2zK7PLMPUxXZrLAThJRzd6YcMHKFN2JutU93IMSmu5Uz6R7NvnOd
+a0EpxMMQ8VZw+1bth4K5ttM6ZOI7uNuhD6ipUvXq7QLifzs9UJ7392zOtafnn0Sd
+vHbZ+ADRZzdCYpp4MjkR5rMxMyxBUpQ8PchA4eANo+Uq+gCKQWkoWGW9DSQ84eJN
+I8+xB1hddqMNyazPRNC+r01B6GydbodK+KdDjbE8xgLGy7Q1V4NPbmV1UkH+p+Oa
+pO1TUIhFzI6T+zb/bNmkmLiKPBkdmA==
+=crX/
+-----END PGP SIGNATURE-----
+
+--VxKfudML6kIseEz3--
