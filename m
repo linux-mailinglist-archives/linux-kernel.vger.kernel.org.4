@@ -2,217 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A461E6BA357
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 00:07:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A04846BA35B
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 00:08:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230227AbjCNXH4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 19:07:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43680 "EHLO
+        id S231127AbjCNXI3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 19:08:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229540AbjCNXHy (ORCPT
+        with ESMTP id S229540AbjCNXI0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 19:07:54 -0400
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E53243527F
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 16:07:52 -0700 (PDT)
-Received: by mail-yb1-xb2a.google.com with SMTP id e194so17420062ybf.1
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 16:07:52 -0700 (PDT)
+        Tue, 14 Mar 2023 19:08:26 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 871C543470;
+        Tue, 14 Mar 2023 16:08:25 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id y4so39127706edo.2;
+        Tue, 14 Mar 2023 16:08:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google; t=1678835272;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=d+0qOiCrrtnzpEUqVtaCFakO5fXS/poOQvsYo+FCHmA=;
-        b=WO6LjRsaXmY9Mv/QJfbCuUr3Aamf85UqstL5DJBoKnXtPj42haARaUWmYDICn2PuTB
-         YI2Ko8kzoHOEYkTJ7Y1bfyDP1bJzOd7NzTSG8hc22ugCuIeDtJeALrQoCYbMLs/ol/t3
-         GBGhKRBtlEnT2KgRq8u7BlKOWKS1MyD3z9YTs=
+        d=gmail.com; s=20210112; t=1678835304;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=jvmGVDEzmPPLoccnkwji0Qxa4oXf8h5vE1XEFGmmxW8=;
+        b=eOyXOmUee5BwB4IC5sCf/yCpGXIsEQpsHqEBW3Iuuy5MR9XP5GxEFLBBqFqstbsR1l
+         bVLDr2ewlYn2ZyJgNxo39hVl86mlG0vgh759IHBUWoOKmbedirnQCbn/pEFd4ZpP/WHm
+         wdJZhMoPuJcBVl4uyPPYccAYwBS5i1LokMEr/vnaqTR/ZSRbyPaR/4M0r/9sgSwxQEoI
+         vmLyI2j6n6+01gHYpm8ip8JxuWoflV736hSif9flwO7+oujpQdxVB7WNBYjvvmzk9AwG
+         sYuh6c8dLQdO6LPLIKtuybfFpHUiJaxrT56yz8BoVhktw2h4JExtgutIpYFWYpmjZqni
+         3nTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678835272;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=d+0qOiCrrtnzpEUqVtaCFakO5fXS/poOQvsYo+FCHmA=;
-        b=GrS291C+a3yaFuVHjmKZWxrRFiDpAlNbqBo1ny21oDfM8gX5OXWW2ZdNlHGc2UC47X
-         RkkzjRwObqYxZfi4Hv7/VU6L33M+vyZkbnmbZdspC5syrmbXVlDNbkooNZ3erKVI9aw/
-         ZTxlcfpUO508k15ZBRsavQw8TK85KxZ/upsmsBdm+Y28l9EsXEhRzGAHgj9OzetsZNtX
-         TsFrf6KVygAvtVkbIKZqwTyLzKa86jy5mAl0CuszrV6d3+X5ZAOpOU4RSUds07fryIE0
-         kKy7uPd/ioH5QLKOzBbidGngreHjraJIKYswq/lpR8mK5jsAzDlA40V13YmE4QyZ4SGq
-         Rj8A==
-X-Gm-Message-State: AO0yUKURNlDOcVHzSwdSczb/L8XWTxr0HdYXbMQ75qMxyZlUegFBspaN
-        gc2aYRf7F3XCo8w3MFHkj3Sw6Ss7k7fXqAYv9JKU/Q==
-X-Google-Smtp-Source: AK7set+X/LpQwH8KN2IMQfrBAo+d6z4hLAotEpM2muvUjSzQfHpzDSOWwmb7QWLYwbIRJx5TgCaJf0KKb9xBxjtTjsg=
-X-Received: by 2002:a25:8f82:0:b0:b39:be7e:30c8 with SMTP id
- u2-20020a258f82000000b00b39be7e30c8mr5617003ybl.2.1678835272044; Tue, 14 Mar
- 2023 16:07:52 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1678835304;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jvmGVDEzmPPLoccnkwji0Qxa4oXf8h5vE1XEFGmmxW8=;
+        b=1obbz2+Y2qbet+48RrJ/Qk0SyhlkOGfuotVYjrwliq/WYDzRpfG/P8jYMCDBttSWmV
+         LRXI114Zkf/qAGT8R69v91gyZB/zSR6iXS/Tadp2LtSGiDqw8whA0Qh77atj0wfLYgRy
+         SND0LrtZteljjYX7S+omR+DJtfD4FeFlCHEOU5yRVpqCoNPk+P7b1Q6FldNrwh+NjeGW
+         hRfe5Hje56BaWNuBW6tV72+Wi8xetgbbW8ZlAHomWbcEIacBNHmhjybao0K4O+vBRClm
+         mJNWkxAjes5oe3G1PyTKkFJQBH5F9Oqe94ZQyNIc+FFV1s49Otbg+W5SXgbUGzwZOZEP
+         nHXw==
+X-Gm-Message-State: AO0yUKV8HCasJHPWxxFvvnwVQUMdk7pzZVyCDC9n+aIzRQZ/NBc83rlD
+        sYZk/9vjk+7Cu7zfeRclq2o=
+X-Google-Smtp-Source: AK7set/FsMo7uOhPHCx5ABveI2O+e/19Ed5TYsOXR6c6PUejTDR+mNnBORM1NYe7W3EhArW9+yBF2A==
+X-Received: by 2002:a17:906:8393:b0:8ae:f73e:233f with SMTP id p19-20020a170906839300b008aef73e233fmr5098936ejx.32.1678835303807;
+        Tue, 14 Mar 2023 16:08:23 -0700 (PDT)
+Received: from skbuf ([188.27.184.189])
+        by smtp.gmail.com with ESMTPSA id qt22-20020a170906ecf600b009240a577b38sm1729931ejb.14.2023.03.14.16.08.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Mar 2023 16:08:23 -0700 (PDT)
+Date:   Wed, 15 Mar 2023 01:08:21 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     =?utf-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Herve Codina <herve.codina@bootlin.com>,
+        =?utf-8?Q?Miqu=C3=A8l?= Raynal <miquel.raynal@bootlin.com>,
+        Milan Stevanovic <milan.stevanovic@se.com>,
+        Jimmy Lalande <jimmy.lalande@se.com>,
+        Pascal Eberhard <pascal.eberhard@se.com>,
+        Arun Ramadoss <Arun.Ramadoss@microchip.com>,
+        linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RESEND net-next v4 2/3] net: dsa: rzn1-a5psw: add support
+ for .port_bridge_flags
+Message-ID: <20230314230821.kjiyseiqhat4apqb@skbuf>
+References: <20230314163651.242259-1-clement.leger@bootlin.com>
+ <20230314163651.242259-3-clement.leger@bootlin.com>
 MIME-Version: 1.0
-References: <20230314190236.203370742@goodmis.org> <20230314190310.486609095@goodmis.org>
- <CAEXW_YRzVhbm2mNc04Fop7cud4kujgjT5sZR1paqkLeeNJvgHA@mail.gmail.com>
-In-Reply-To: <CAEXW_YRzVhbm2mNc04Fop7cud4kujgjT5sZR1paqkLeeNJvgHA@mail.gmail.com>
-From:   Joel Fernandes <joel@joelfernandes.org>
-Date:   Tue, 14 Mar 2023 19:07:41 -0400
-Message-ID: <CAEXW_YTjkaYKo6OP_=82bh6kfgW0ROE2tF+fd7eOrZGhdzh+vg@mail.gmail.com>
-Subject: Re: [for-linus][PATCH 5/5] tracing: Make tracepoint lockdep check
- actually test something
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        stable@vger.kernel.org, Dave Hansen <dave.hansen@linux.intel.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230314163651.242259-3-clement.leger@bootlin.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 14, 2023 at 7:03=E2=80=AFPM Joel Fernandes <joel@joelfernandes.=
-org> wrote:
->
-> On Tue, Mar 14, 2023 at 3:03=E2=80=AFPM Steven Rostedt <rostedt@goodmis.o=
-rg> wrote:
-> >
-> > From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
-> >
-> > A while ago where the trace events had the following:
-> >
-> >    rcu_read_lock_sched_notrace();
-> >    rcu_dereference_sched(...);
-> >    rcu_read_unlock_sched_notrace();
-> >
-> > If the tracepoint is enabled, it could trigger RCU issues if called in
-> > the wrong place. And this warning was only triggered if lockdep was
-> > enabled. If the tracepoint was never enabled with lockdep, the bug woul=
-d
-> > not be caught. To handle this, the above sequence was done when lockdep
-> > was enabled regardless if the tracepoint was enabled or not (although t=
-he
-> > always enabled code really didn't do anything, it would still trigger a
-> > warning).
-> >
-> > But a lot has changed since that lockdep code was added. One is, that
-> > sequence no longer triggers any warning. Another is, the tracepoint whe=
-n
-> > enabled doesn't even do that sequence anymore.
->
-> I agree with the change but I am confused by the commit message a bit
-> due to "Another is, the tracepoint when enabled doesn't even do that
-> sequence anymore.".
->
-> Whether the tracepoint was enabled or disabled, it is always doing the
-> old sequence because we were skipping the tracepoint's static key test
-> before running the sequence. Right?
->
-> So how was it not doing the old sequence before?
+On Tue, Mar 14, 2023 at 05:36:50PM +0100, Clément Léger wrote:
+> +static int a5psw_port_pre_bridge_flags(struct dsa_switch *ds, int port,
+> +				       struct switchdev_brport_flags flags,
+> +				       struct netlink_ext_ack *extack)
+> +{
+> +	if (flags.mask & ~(BR_LEARNING | BR_FLOOD | BR_MCAST_FLOOD |
+> +			   BR_BCAST_FLOOD))
+> +		return -EINVAL;
+> +
+> +	return 0;
+> +}
+> +
+> +static int
+> +a5psw_port_bridge_flags(struct dsa_switch *ds, int port,
+> +			struct switchdev_brport_flags flags,
+> +			struct netlink_ext_ack *extack)
+> +{
+> +	struct a5psw *a5psw = ds->priv;
+> +	u32 val;
+> +
+> +	if (flags.mask & BR_LEARNING) {
+> +		val = flags.val & BR_LEARNING ? 0 : A5PSW_INPUT_LEARN_DIS(port);
+> +		a5psw_reg_rmw(a5psw, A5PSW_INPUT_LEARN,
+> +			      A5PSW_INPUT_LEARN_DIS(port), val);
+> +	}
 
-Ah I see, you meant "It was doing a dummy de-ref", not that "it was
-_not_ doing anything". ;-)
+2 issues.
 
-So it is good then, but perhaps (optionally) call the code as a dummy
-RCU deref which was supposed to trigger a warning. ;-)
+1: does this not get overwritten by a5psw_port_stp_state_set()?
+2: What is the hardware default value for A5PSW_INPUT_LEARN? Please make
+   sure that standalone ports have learning disabled by default, when
+   the driver probes.
 
- - Joel
+> +
+> +	if (flags.mask & BR_FLOOD) {
+> +		val = flags.val & BR_FLOOD ? BIT(port) : 0;
+> +		a5psw_reg_rmw(a5psw, A5PSW_UCAST_DEF_MASK, BIT(port), val);
+> +	}
+> +
+> +	if (flags.mask & BR_MCAST_FLOOD) {
+> +		val = flags.val & BR_MCAST_FLOOD ? BIT(port) : 0;
+> +		a5psw_reg_rmw(a5psw, A5PSW_MCAST_DEF_MASK, BIT(port), val);
+> +	}
+> +
+> +	if (flags.mask & BR_BCAST_FLOOD) {
+> +		val = flags.val & BR_BCAST_FLOOD ? BIT(port) : 0;
+> +		a5psw_reg_rmw(a5psw, A5PSW_BCAST_DEF_MASK, BIT(port), val);
+> +	}
 
+Humm, there's a (huge) problem with this flooding mask.
 
->
-> Other than that,
-> Reviewed-by: Joel Fernandes (Google) <joel@joelfernandes.org>
->
->  - Joel
->
->
-> > The main check we care about today is whether RCU is "watching" or not.
-> > So if lockdep is enabled, always check if rcu_is_watching() which will
-> > trigger a warning if it is not (tracepoints require RCU to be watching)=
-.
-> >
-> > Note, that old sequence did add a bit of overhead when lockdep was enab=
-led,
-> > and with the latest kernel updates, would cause the system to slow down
-> > enough to trigger kernel "stalled" warnings.
-> >
-> > Link: http://lore.kernel.org/lkml/20140806181801.GA4605@redhat.com
-> > Link: http://lore.kernel.org/lkml/20140807175204.C257CAC5@viggo.jf.inte=
-l.com
-> > Link: https://lore.kernel.org/lkml/20230307184645.521db5c9@gandalf.loca=
-l.home/
-> > Link: https://lore.kernel.org/linux-trace-kernel/20230310172856.7740644=
-6@gandalf.local.home
-> >
-> > Cc: stable@vger.kernel.org
-> > Cc: Masami Hiramatsu <mhiramat@kernel.org>
-> > Cc: Dave Hansen <dave.hansen@linux.intel.com>
-> > Cc: "Paul E. McKenney" <paulmck@kernel.org>
-> > Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> > Cc: Joel Fernandes <joel@joelfernandes.org>
-> > Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> > Fixes: e6753f23d961 ("tracepoint: Make rcuidle tracepoint callers use S=
-RCU")
-> > Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-> > ---
-> >  include/linux/tracepoint.h | 15 ++++++---------
-> >  1 file changed, 6 insertions(+), 9 deletions(-)
-> >
-> > diff --git a/include/linux/tracepoint.h b/include/linux/tracepoint.h
-> > index fa1004fcf810..2083f2d2f05b 100644
-> > --- a/include/linux/tracepoint.h
-> > +++ b/include/linux/tracepoint.h
-> > @@ -231,12 +231,11 @@ static inline struct tracepoint *tracepoint_ptr_d=
-eref(tracepoint_ptr_t *p)
-> >   * not add unwanted padding between the beginning of the section and t=
-he
-> >   * structure. Force alignment to the same alignment as the section sta=
-rt.
-> >   *
-> > - * When lockdep is enabled, we make sure to always do the RCU portions=
- of
-> > - * the tracepoint code, regardless of whether tracing is on. However,
-> > - * don't check if the condition is false, due to interaction with idle
-> > - * instrumentation. This lets us find RCU issues triggered with tracep=
-oints
-> > - * even when this tracepoint is off. This code has no purpose other th=
-an
-> > - * poking RCU a bit.
-> > + * When lockdep is enabled, we make sure to always test if RCU is
-> > + * "watching" regardless if the tracepoint is enabled or not. Tracepoi=
-nts
-> > + * require RCU to be active, and it should always warn at the tracepoi=
-nt
-> > + * site if it is not watching, as it will need to be active when the
-> > + * tracepoint is enabled.
-> >   */
-> >  #define __DECLARE_TRACE(name, proto, args, cond, data_proto)          =
- \
-> >         extern int __traceiter_##name(data_proto);                     =
- \
-> > @@ -249,9 +248,7 @@ static inline struct tracepoint *tracepoint_ptr_der=
-ef(tracepoint_ptr_t *p)
-> >                                 TP_ARGS(args),                         =
- \
-> >                                 TP_CONDITION(cond), 0);                =
- \
-> >                 if (IS_ENABLED(CONFIG_LOCKDEP) && (cond)) {            =
- \
-> > -                       rcu_read_lock_sched_notrace();                 =
- \
-> > -                       rcu_dereference_sched(__tracepoint_##name.funcs=
-);\
-> > -                       rcu_read_unlock_sched_notrace();               =
- \
-> > +                       WARN_ON_ONCE(!rcu_is_watching());              =
- \
-> >                 }                                                      =
- \
-> >         }                                                              =
- \
-> >         __DECLARE_TRACE_RCU(name, PARAMS(proto), PARAMS(args),         =
- \
-> > --
-> > 2.39.1
+a5psw_flooding_set_resolution() - called from a5psw_port_bridge_join()
+and a5psw_port_bridge_leave() - touches the same registers as
+a5psw_port_bridge_flags(). Which means that your bridge forwarding
+domain controls are the same as your flooding controls.
+
+Which is bad news, because
+dsa_port_bridge_leave()
+-> dsa_port_switchdev_unsync_attrs()
+   -> dsa_port_clear_brport_flags()
+      -> dsa_port_bridge_flags()
+         -> a5psw_port_bridge_flags()
+
+enables flooding on the port after calling a5psw_port_bridge_leave().
+So the port which has left a bridge is standalone, but it still forwards
+packets to the other bridged ports!
+
+You should be able to see that this is the case, if you put the ports
+under a dummy bridge, then run tools/testing/selftests/drivers/net/dsa/no_forwarding.sh.
