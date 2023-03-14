@@ -2,162 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A37E96B9887
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 16:07:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13D856B9A3C
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 16:47:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231476AbjCNPHN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 11:07:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45840 "EHLO
+        id S231302AbjCNPr3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 11:47:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229590AbjCNPHL (ORCPT
+        with ESMTP id S231741AbjCNPrM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 11:07:11 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7E32AD039;
-        Tue, 14 Mar 2023 08:07:02 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id y14so16350746ljq.4;
-        Tue, 14 Mar 2023 08:07:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678806421;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=vbLXsISyWgbVocJH/scN2oci69TRy0WQAp+UcL8HxWE=;
-        b=p0EHmvR1vBC356rN7/hm4DOqRkE0aTTA91VTR19VIj+t/xskGgPxcVC3Swn6v9ey4F
-         hbZfTPYuaYAyhipmyuQAQiT9RiKEflzSzfvMU8NftKq826q6fQGijvPoAqFXQfhx2YNM
-         DZ0i8d+f5YC8PUInQ/YGggRBNF7L0zduinQoSh/szpA7/UfmEdSQZnXCD88Lw2CyoPd2
-         AsbYncMjY75d3PAIP65fHKB/efe59KSueM5VSxPJOzIxxOgST+XFh4HkqwTZw7xG5WoD
-         H4IY3tz0HYGYUCEVI5Y7rZ2y+Y0sOCOq+odtg7nB0dEuKuiCUypgbTjBbVm/5a2Jzwas
-         QqGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678806421;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vbLXsISyWgbVocJH/scN2oci69TRy0WQAp+UcL8HxWE=;
-        b=0wIr9/tn4Nwwv7e8J4z7ps/dhSU/ejiOgIlQK7T6knllv8+6iBKjnv7SFU+Z4BFcx7
-         GRErpxkqMTrmxo39/MffqLtu62UhjcebRFY4HMlpWo2cERUQLEBV8R9hUaXGWn7libgx
-         6lBAFynF6be6mEYWvKpQTFSzbyL1Gti2VVXeo6NKvrZhKAQiUELv6DrxwniXfttykLBv
-         O1FmRxisovbztgmrupz3B/yjXpWXCQFmwZRRO97/CzzA+l3TsB787HSHUShAeeZP6QFS
-         TYg8N0GkMv5jKSVQHZMHkRxTIYPqKNoUPsz8c84BfQIu+kUJ6/GHZHoFfrEmaDz22hVY
-         +Ebw==
-X-Gm-Message-State: AO0yUKXnjX7/ro4cwANEL8AAD9HcIEpZ29pdEnKjhMdYzKNKbmxxnFMx
-        iwcK6VT6V4dUUGZ2T2NR/gQ=
-X-Google-Smtp-Source: AK7set+bnaLvSzK+Qv9g7g8oQCKeqApzg3XCPn/W6kdtRZtalZ50JNrzKxOFyptmqs0wq8VDOrJGng==
-X-Received: by 2002:a2e:8e8d:0:b0:298:6f36:dd6c with SMTP id z13-20020a2e8e8d000000b002986f36dd6cmr7223147ljk.11.1678806421025;
-        Tue, 14 Mar 2023 08:07:01 -0700 (PDT)
-Received: from mobilestation ([95.79.133.202])
-        by smtp.gmail.com with ESMTPSA id f14-20020a2e9e8e000000b00295b1b6e063sm482600ljk.34.2023.03.14.08.06.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Mar 2023 08:07:00 -0700 (PDT)
-Date:   Tue, 14 Mar 2023 18:06:57 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Biao Huang <biao.huang@mediatek.com>, netdev@vger.kernel.org,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-stm32@st-md-mailman.stormreply.com
-Subject: Re: [PATCH net-next 01/16] dt-bindings: net: dwmac: Validate PBL for
- all IP-cores
-Message-ID: <20230314150657.ytgyegi7qlwao6px@mobilestation>
-References: <20230313225103.30512-1-Sergey.Semin@baikalelectronics.ru>
- <20230313225103.30512-2-Sergey.Semin@baikalelectronics.ru>
- <167880254800.26004.7037306365469081272.robh@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <167880254800.26004.7037306365469081272.robh@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 14 Mar 2023 11:47:12 -0400
+X-Greylist: delayed 1248 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 14 Mar 2023 08:46:39 PDT
+Received: from wnew2-smtp.messagingengine.com (wnew2-smtp.messagingengine.com [64.147.123.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7679BB0BA3;
+        Tue, 14 Mar 2023 08:46:39 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailnew.west.internal (Postfix) with ESMTP id B5AC02B069D9;
+        Tue, 14 Mar 2023 11:08:43 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Tue, 14 Mar 2023 11:08:45 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1678806523; x=1678813723; bh=K4
+        tQ8ndVOUfpM0Pr+iYsgl8sdiO//rofLCiHgEHKHaw=; b=Bs89wlqsdZVa4k07Fb
+        epoolTHKszWvfBhS2lZVBBRcF2IS0ywxX526WC1eBDNhzycvLK/kat0+XRfJx2W3
+        7bMNtqMaeH4ZJIdGU9yRt8ThnhgzDS7LLG23ou/0reQhjVATwpoCDU2V8vqm2W1g
+        J+1jlCnkFsdB00fs75PZcsnbMJQ5s0C5KPnLZjhqSn8SwimhhuRyHr4X0dC/PTsg
+        runNfLuCg/cSr0AkAoZgfQFS4waYRIDooAHqrMWtZtpzKTnjgRDZ+8reMknQWs0Z
+        eoZ852c0rPiprZQoIxvBFd9ZExdObLmVVzDXAkThfBx5XDZj6gfT51hkb+yCSOEK
+        qb1A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1678806523; x=1678813723; bh=K4tQ8ndVOUfpM
+        0Pr+iYsgl8sdiO//rofLCiHgEHKHaw=; b=FcVdEJUEJOBFn8vyntSfSiv6vsKGS
+        hxzdTfs9AcxmtwZ5y1sR0yXhzJ99CF9MXTpWC+ABwuF7Rtpv1TkBGNjNpsV6Om5f
+        dtPB6w6JUNhXycjYrxPIg/RAWfQny5kcjIIZY4MsTNL5WQMkK9FZ5JVjfkhq6000
+        I4KrV9UjqLokn4iBCs+nAu+QFd5+zWcdFsaymVn1JdQjXp5p6OIcBjLpx4QgreLj
+        wYQZ3SOWH6tcEuqWKW6Z+BaR70e/RUZ9Fa/F4u+0ul++229JrQKHN7GgAgMbAdAD
+        4cns8a5dDWvtxvYx+83RxxNxPzNTvcFgOby7T3TIytlb8ZsA7HgRcFHmw==
+X-ME-Sender: <xms:-o0QZK7P_IOpvfkXAJTvZsGq0nxcIFi21rXd_e5XDXLyhDMebh2_nA>
+    <xme:-o0QZD7dmPVC77qe5xy7iIFqqccVdVdsSEIY2cJ65en99sOTy5DG8bDWDMZEjjCjK
+    kg8yMOB41kCCRQNqFA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvddviedgjeehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:-o0QZJc_ZJnv__s_0rxNyhivqegZK7Z_v0h4mlYw68ZNd9X5urONyg>
+    <xmx:-o0QZHIp6DY7kGHp39y5XRCh11PF4bviEV4MGoRs_tuGNYI_P-Cn5g>
+    <xmx:-o0QZOLVcUPTfqPTZ6w7QlCi-H2uAW7eIfDzED9woacZag2egABCvQ>
+    <xmx:-40QZDB8FC5V93wwc2nXAo4BNIGlkdi-SW-0xyTxCo85UPhNMS4EWPMW1F4>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 018F2B60086; Tue, 14 Mar 2023 11:08:41 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-221-gec32977366-fm-20230306.001-gec329773
+Mime-Version: 1.0
+Message-Id: <9894438c-dca7-40cf-adb8-4bc7cb7b5c02@app.fastmail.com>
+In-Reply-To: <CAMuHMdXXapUNn2-_+WWULq1ELLJEzVgJ7CZ-OJpbTSy-=JjZVA@mail.gmail.com>
+References: <20230314121216.413434-1-schnelle@linux.ibm.com>
+ <20230314121216.413434-4-schnelle@linux.ibm.com>
+ <CAMuHMdXXapUNn2-_+WWULq1ELLJEzVgJ7CZ-OJpbTSy-=JjZVA@mail.gmail.com>
+Date:   Tue, 14 Mar 2023 16:08:20 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Geert Uytterhoeven" <geert@linux-m68k.org>,
+        "Niklas Schnelle" <schnelle@linux.ibm.com>
+Cc:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        "Corey Minyard" <minyard@acm.org>,
+        "Peter Huewe" <peterhuewe@gmx.de>,
+        "Jarkko Sakkinen" <jarkko@kernel.org>,
+        "Jason Gunthorpe" <jgg@ziepe.ca>,
+        "Bjorn Helgaas" <bhelgaas@google.com>,
+        =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
+        "Alan Stern" <stern@rowland.harvard.edu>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        "Paul Walmsley" <paul.walmsley@sifive.com>,
+        "Palmer Dabbelt" <palmer@dabbelt.com>,
+        "Albert Ou" <aou@eecs.berkeley.edu>, linux-kernel@vger.kernel.org,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-pci@vger.kernel.org, "Arnd Bergmann" <arnd@kernel.org>,
+        openipmi-developer@lists.sourceforge.net,
+        linux-integrity@vger.kernel.org
+Subject: Re: [PATCH v3 03/38] char: impi, tpm: depend on HAS_IOPORT
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 14, 2023 at 09:10:19AM -0500, Rob Herring wrote:
-> 
-> On Tue, 14 Mar 2023 01:50:48 +0300, Serge Semin wrote:
-> > Indeed the maximum DMA burst length can be programmed not only for DW
-> > xGMACs, Allwinner EMACs and Spear SoC GMAC, but in accordance with [1]
-> > for Generic DW *MAC IP-cores. Moreover the STMMAC set of drivers parse
-> > the property and then apply the configuration for all supported DW MAC
-> > devices. All of that makes the property being available for all IP-cores
-> > the bindings supports. Let's make sure the PBL-related properties are
-> > validated for all of them by the common DW MAC DT schema.
-> > 
-> > [1] DesignWare Cores Ethernet MAC Universal Databook, Revision 3.73a,
-> >     October 2013, p. 380.
-> > 
-> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > Reviewed-by: Rob Herring <robh@kernel.org>
-> > 
-> > ---
-> > 
-> > Changelog v1:
-> > - Use correct syntax of the JSON pointers, so the later would begin
-> >   with a '/' after the '#'.
-> > ---
-> >  .../devicetree/bindings/net/snps,dwmac.yaml   | 77 +++++++------------
-> >  1 file changed, 26 insertions(+), 51 deletions(-)
-> > 
-> 
-> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-> on your patch (DT_CHECKER_FLAGS is new in v5.13):
-> 
-> yamllint warnings/errors:
-> 
-> dtschema/dtc warnings/errors:
-> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/mediatek-dwmac.example.dtb: ethernet@1101c000: snps,txpbl:0:0: 1 is not one of [2, 4, 8]
-> 	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/snps,dwmac.yaml
-> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/mediatek-dwmac.example.dtb: ethernet@1101c000: snps,rxpbl:0:0: 1 is not one of [2, 4, 8]
-> 	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/snps,dwmac.yaml
-> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/mediatek-dwmac.example.dtb: ethernet@1101c000: snps,txpbl:0:0: 1 is not one of [2, 4, 8]
-> 	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/mediatek-dwmac.yaml
-> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/mediatek-dwmac.example.dtb: ethernet@1101c000: snps,rxpbl:0:0: 1 is not one of [2, 4, 8]
-> 	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/mediatek-dwmac.yaml
-> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/mediatek-dwmac.example.dtb: ethernet@1101c000: Unevaluated properties are not allowed ('interrupt-names', 'interrupts', 'mac-address', 'phy-mode', 'reg', 'snps,reset-delays-us', 'snps,reset-gpio', 'snps,rxpbl', 'snps,txpbl' were unexpected)
-> 	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/mediatek-dwmac.yaml
+On Tue, Mar 14, 2023, at 15:17, Geert Uytterhoeven wrote:
+>> --- a/drivers/char/Kconfig
+>> +++ b/drivers/char/Kconfig
+>> @@ -34,6 +34,7 @@ config TTY_PRINTK_LEVEL
+>>  config PRINTER
+>>         tristate "Parallel printer support"
+>>         depends on PARPORT
+>> +       depends on HAS_IOPORT
+>
+> This looks wrong to me.
+> drivers/char/lp.c uses the parport API, no direct I/O port access.
 
-Oops, on rebasing my work from older kernel I missed that the PBL
-properties constraints have already been extended. I'll drop the next
-patch in the series then and fix this one so the already defined
-constraints would be preserved.
+It looks like include/linux/parport.h requires I/O port access
+when PARPORT_PC is enabled and PARPORT_NOT_PC is disabled.
+Maybe this would work:
 
--Serge(y)
+      depends on PARPORT
+      depends on HAS_IOPORT || PARPORT_NOT_PC
 
-> 
-> doc reference errors (make refcheckdocs):
-> 
-> See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230313225103.30512-2-Sergey.Semin@baikalelectronics.ru
-> 
-> The base for the series is generally the latest rc1. A different dependency
-> should be noted in *this* patch.
-> 
-> If you already ran 'make dt_binding_check' and didn't see the above
-> error(s), then make sure 'yamllint' is installed and dt-schema is up to
-> date:
-> 
-> pip3 install dtschema --upgrade
-> 
-> Please check and re-submit after running the above command yourself. Note
-> that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-> your schema. However, it must be unset to test all examples with your schema.
-> 
+       Arnd
