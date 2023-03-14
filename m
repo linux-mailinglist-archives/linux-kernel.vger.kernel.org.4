@@ -2,75 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 325B36B8A7E
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 06:37:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D14E06B8A81
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 06:37:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229987AbjCNFhY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 01:37:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51150 "EHLO
+        id S230020AbjCNFhv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 01:37:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229962AbjCNFhW (ORCPT
+        with ESMTP id S230013AbjCNFht (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 01:37:22 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0165C2200D
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 22:36:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678772188;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=CUNqowlHsOHTiRljuMolx/A+uVnVqERrix3vDx9FlvY=;
-        b=TRpoB+rA+WWUCqRFtqaGCCElQtw+StRxm+YwqogZmA2Y+segHSlqQQDL50L2wceBnVmD3G
-        nU5/qYl2i/D7mAcWlx+pmQuhdyo3s3k/N1YRz5xSVK9smSnaMTAfMC7y/apiJqhrxp5hnW
-        1j8PnKonrN6myzDEXj0M7Q7mzQdI2Ak=
-Received: from mail-oa1-f69.google.com (mail-oa1-f69.google.com
- [209.85.160.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-652-6LFPpg6COd2ChIEpiaA5UQ-1; Tue, 14 Mar 2023 01:36:26 -0400
-X-MC-Unique: 6LFPpg6COd2ChIEpiaA5UQ-1
-Received: by mail-oa1-f69.google.com with SMTP id 586e51a60fabf-177b0f40c4eso2938884fac.12
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 22:36:26 -0700 (PDT)
+        Tue, 14 Mar 2023 01:37:49 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AE2565453
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 22:37:36 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id i3so15423305plg.6
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 22:37:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678772255;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=gfrJI5PNfrDYglmqcN7rbiKMpj3Qw+gQrMl67mX9taM=;
+        b=VxX4X7hey+FJG4ADvS5aE9f0fwMwPgFPSWdfTwavquukBfTQKtwnylcPX3ML/JPSsx
+         gA3/VOauMXaCVraEPlY+z0xRSWtvBsbpa2x3M3yOJrDTc/lA/gwwe58cRSJCVv8uV0ks
+         FdWjYKl7Dxkx4jpzspR6Qjilt41YzKXLWEP5lt1ijRKCjHJV7Y8ziQ8QxgLltdpdCD8e
+         FLWGxVaolAslAEGhJm25IBwYKZ6BedkzOmA/9ai7oGX2OyQq6eqbd6XXFooDtrAqaFiP
+         AVFrvyFikj456RQ78dPT+V/EQJFgnJ6b4L4s9zPmMBWhAByBTXeYgWb8WvK+m5pet23O
+         Ubcg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678772185;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=CUNqowlHsOHTiRljuMolx/A+uVnVqERrix3vDx9FlvY=;
-        b=hycwzmMbgPalOnOHJC42700hr7njGFjssz5p1xxsEvmM1LGMABrltt5/zyxRUMLO2l
-         jp5DYUTo3I7xM0P39zjKHpngOOluBG9GUQ2Mea2i/4p+G/jueJNJg0vnh93PafhCVDaJ
-         mXl6A3/nnLn3kpZ2SPVqf9hSUM86TsULyTkhe6C4+3tFZVkdNEwB2PtT/ycCectMkfmG
-         tyWap7xgLIUOw04VmDEroOhprBCKEyyFS3hOqfenR5aJxxw+1HkL21dkAn0xPwGB40UK
-         UaBoPV0fduEvuK69NO5eZfE9vCof2720BpjvPmtgjn1ZunqLdhSKUW7LeGClfCQmGycg
-         zKxw==
-X-Gm-Message-State: AO0yUKVRrX37BVINebSqSdkm3hpL1Q/6Xu7kWM+iTG5/irqZbiMCvuQh
-        zfBL6SryhNABOSQKCbg7Kuy1dRTZ+6IlH58wMUm7MM6K0eQm1ITAzOxH6mYR0WjYWW4oyrDJUt6
-        vi2QiLxUDxzPrttdYcrCPAaGiX/w2aSAG3R7iuE+l
-X-Received: by 2002:a9d:60d0:0:b0:688:d1d6:2029 with SMTP id b16-20020a9d60d0000000b00688d1d62029mr12568434otk.2.1678772185641;
-        Mon, 13 Mar 2023 22:36:25 -0700 (PDT)
-X-Google-Smtp-Source: AK7set+kN4AtoVa9aWxyktypjoY9bQX/jqJh/j0S1GrS5sbNhOwjiFrtu8xIdNunTOUI244RxuH+n3UiLO9HYeAQIRc=
-X-Received: by 2002:a9d:60d0:0:b0:688:d1d6:2029 with SMTP id
- b16-20020a9d60d0000000b00688d1d62029mr12568426otk.2.1678772185358; Mon, 13
- Mar 2023 22:36:25 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1678772255;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gfrJI5PNfrDYglmqcN7rbiKMpj3Qw+gQrMl67mX9taM=;
+        b=tvvPFeBsu2rfyehWT33a2ZApRjlSX7TW3TZCGeZq98rIwjl7aMe3XLZlEwNUHMBILl
+         bC3OsjEBIyWzT4uuZS6dOgM4UA6cuzgGMY1haLHiU/9+YTEE0Z8eP7R4o+WlaZt17seR
+         MfS8eFBOO6t9fZn5Sgs3VwwHfHpwkqhQIaXJrDHQEvLvvo93tHrHR4eWItExX1oiPveG
+         5LDClWCI1GudT4W/WLH23e2mUZPxBRGlhQfDr6b9H+DJ6dNOmUmMIeFB8Ce1q0oRT38i
+         ZfgQo627dCgbIG5WafVLmK+MBRaDy8s97Fxif0Tqe9VS0CKOY+8KCjdGNUjYxk9h4bcn
+         k4PQ==
+X-Gm-Message-State: AO0yUKVmrZWPGLfsAcchT8SOHsxGawA58N79YvggTX+lklmviM4TNny8
+        i4V9/SSQRV+zprKh8Dl7WtJ6
+X-Google-Smtp-Source: AK7set+1JjhX+Cy1WW/IT5ddeigUUZXYQSGObQMxvZc1n/t/tMLtkXEUqc6iM987MH4NWGdBC3eIZg==
+X-Received: by 2002:a17:90b:4d12:b0:234:b786:6867 with SMTP id mw18-20020a17090b4d1200b00234b7866867mr38773216pjb.36.1678772255200;
+        Mon, 13 Mar 2023 22:37:35 -0700 (PDT)
+Received: from localhost.localdomain ([117.217.177.49])
+        by smtp.gmail.com with ESMTPSA id n126-20020a634084000000b005034a46fbf7sm675093pga.28.2023.03.13.22.37.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Mar 2023 22:37:34 -0700 (PDT)
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     andersson@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, bp@alien8.de,
+        tony.luck@intel.com
+Cc:     konrad.dybcio@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, james.morse@arm.com,
+        mchehab@kernel.org, rric@kernel.org, linux-edac@vger.kernel.org,
+        quic_ppareek@quicinc.com, luca.weiss@fairphone.com,
+        ahalaney@redhat.com, steev@kali.org,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Subject: [PATCH v7 00/13] Qcom: LLCC/EDAC: Fix base address used for LLCC banks
+Date:   Tue, 14 Mar 2023 11:07:12 +0530
+Message-Id: <20230314053725.13623-1-manivannan.sadhasivam@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20230302113421.174582-1-sgarzare@redhat.com> <20230302113421.174582-9-sgarzare@redhat.com>
-In-Reply-To: <20230302113421.174582-9-sgarzare@redhat.com>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Tue, 14 Mar 2023 13:36:13 +0800
-Message-ID: <CACGkMEt1hBcRdh0oQYCs4meRs0mvDu9X9o-zK4aS87hrN+QPxA@mail.gmail.com>
-Subject: Re: [PATCH v2 8/8] vdpa_sim: add support for user VA
-To:     Stefano Garzarella <sgarzare@redhat.com>
-Cc:     virtualization@lists.linux-foundation.org,
-        Andrey Zhadchenko <andrey.zhadchenko@virtuozzo.com>,
-        eperezma@redhat.com, netdev@vger.kernel.org, stefanha@redhat.com,
-        linux-kernel@vger.kernel.org,
-        "Michael S. Tsirkin" <mst@redhat.com>, kvm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,221 +75,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 2, 2023 at 7:35=E2=80=AFPM Stefano Garzarella <sgarzare@redhat.=
-com> wrote:
->
-> The new "use_va" module parameter (default: false) is used in
-> vdpa_alloc_device() to inform the vDPA framework that the device
-> supports VA.
->
-> vringh is initialized to use VA only when "use_va" is true and the
-> user's mm has been bound. So, only when the bus supports user VA
-> (e.g. vhost-vdpa).
->
-> vdpasim_mm_work_fn work is used to attach the kthread to the user
-> address space when the .bind_mm callback is invoked, and to detach
-> it when the .unbind_mm callback is invoked.
->
-> Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
-> ---
->
-> Notes:
->     v2:
->     - `use_va` set to true by default [Eugenio]
->     - supported the new unbind_mm callback [Jason]
->     - removed the unbind_mm call in vdpasim_do_reset() [Jason]
->     - avoided to release the lock while call kthread_flush_work() since w=
-e
->       are now using a mutex to protect the device state
->
->  drivers/vdpa/vdpa_sim/vdpa_sim.h |  1 +
->  drivers/vdpa/vdpa_sim/vdpa_sim.c | 98 +++++++++++++++++++++++++++++++-
->  2 files changed, 97 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.h b/drivers/vdpa/vdpa_sim/vdp=
-a_sim.h
-> index 4774292fba8c..3a42887d05d9 100644
-> --- a/drivers/vdpa/vdpa_sim/vdpa_sim.h
-> +++ b/drivers/vdpa/vdpa_sim/vdpa_sim.h
-> @@ -59,6 +59,7 @@ struct vdpasim {
->         struct vdpasim_virtqueue *vqs;
->         struct kthread_worker *worker;
->         struct kthread_work work;
-> +       struct mm_struct *mm_bound;
->         struct vdpasim_dev_attr dev_attr;
->         /* mutex to synchronize virtqueue state */
->         struct mutex mutex;
-> diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.c b/drivers/vdpa/vdpa_sim/vdp=
-a_sim.c
-> index a28103a67ae7..eda26bc33df5 100644
-> --- a/drivers/vdpa/vdpa_sim/vdpa_sim.c
-> +++ b/drivers/vdpa/vdpa_sim/vdpa_sim.c
-> @@ -35,10 +35,77 @@ module_param(max_iotlb_entries, int, 0444);
->  MODULE_PARM_DESC(max_iotlb_entries,
->                  "Maximum number of iotlb entries for each address space.=
- 0 means unlimited. (default: 2048)");
->
-> +static bool use_va =3D true;
-> +module_param(use_va, bool, 0444);
-> +MODULE_PARM_DESC(use_va, "Enable/disable the device's ability to use VA"=
-);
-> +
->  #define VDPASIM_QUEUE_ALIGN PAGE_SIZE
->  #define VDPASIM_QUEUE_MAX 256
->  #define VDPASIM_VENDOR_ID 0
->
-> +struct vdpasim_mm_work {
-> +       struct kthread_work work;
-> +       struct mm_struct *mm;
-> +       bool bind;
-> +       int ret;
-> +};
-> +
-> +static void vdpasim_mm_work_fn(struct kthread_work *work)
-> +{
-> +       struct vdpasim_mm_work *mm_work =3D
-> +               container_of(work, struct vdpasim_mm_work, work);
-> +
-> +       mm_work->ret =3D 0;
-> +
-> +       if (mm_work->bind) {
-> +               kthread_use_mm(mm_work->mm);
-> +               //TODO: should we attach the cgroup of the mm owner?
-> +       } else {
-> +               kthread_unuse_mm(mm_work->mm);
-> +       }
-> +}
-> +
-> +static void vdpasim_worker_queue_mm(struct vdpasim *vdpasim,
-> +                                   struct vdpasim_mm_work *mm_work)
-> +{
+The Qualcomm LLCC/EDAC drivers were using a fixed register stride for
+accessing the (Control and Status Regsiters) CSRs of each LLCC bank.
+This offset only works for some SoCs like SDM845 for which driver support
+was initially added.
+    
+But the later SoCs use different register stride that vary between the
+banks with holes in-between. So it is not possible to use a single register
+stride for accessing the CSRs of each bank. By doing so could result in a
+crash with the current drivers. So far this crash is not reported since
+EDAC_QCOM driver is not enabled in ARM64 defconfig and no one tested the
+driver extensively by triggering the EDAC IRQ (that's where each bank
+CSRs are accessed).
 
-Nit: we need to tweak the name as it does flush besides queuing the work.
+For fixing this issue, let's obtain the base address of each LLCC bank from
+devicetree and get rid of the fixed stride.
 
-> +       struct kthread_work *work =3D &mm_work->work;
-> +
-> +       kthread_init_work(work, vdpasim_mm_work_fn);
-> +       kthread_queue_work(vdpasim->worker, work);
-> +
-> +       kthread_flush_work(work);
-> +}
-> +
-> +static int vdpasim_worker_bind_mm(struct vdpasim *vdpasim,
-> +                                 struct mm_struct *new_mm)
-> +{
-> +       struct vdpasim_mm_work mm_work;
-> +
-> +       mm_work.mm =3D new_mm;
-> +       mm_work.bind =3D true;
-> +
-> +       vdpasim_worker_queue_mm(vdpasim, &mm_work);
-> +
-> +       if (!mm_work.ret)
-> +               vdpasim->mm_bound =3D new_mm;
-> +
-> +       return mm_work.ret;
-> +}
-> +
-> +static void vdpasim_worker_unbind_mm(struct vdpasim *vdpasim)
-> +{
-> +       struct vdpasim_mm_work mm_work;
-> +
-> +       if (!vdpasim->mm_bound)
-> +               return;
-> +
-> +       mm_work.mm =3D vdpasim->mm_bound;
-> +       mm_work.bind =3D false;
+This series has been tested on SM8250, SM8450, SM6350, SC8280XP, SA8540P,
+and SDM845.
 
-Can we simply use mm_work.mm =3D NULL for unbinding?
+Merging strategy
+----------------
 
-> +
-> +       vdpasim_worker_queue_mm(vdpasim, &mm_work);
-> +
-> +       vdpasim->mm_bound =3D NULL;
+All patches should be merged to qcom tree due to LLCC dependency.
 
-And change the mm_bound in the worker?
+Thanks,
+Mani
 
-Thanks
+Changes in v7:
 
-> +}
->  static struct vdpasim *vdpa_to_sim(struct vdpa_device *vdpa)
->  {
->         return container_of(vdpa, struct vdpasim, vdpa);
-> @@ -59,8 +126,10 @@ static void vdpasim_queue_ready(struct vdpasim *vdpas=
-im, unsigned int idx)
->  {
->         struct vdpasim_virtqueue *vq =3D &vdpasim->vqs[idx];
->         uint16_t last_avail_idx =3D vq->vring.last_avail_idx;
-> +       bool va_enabled =3D use_va && vdpasim->mm_bound;
->
-> -       vringh_init_iotlb(&vq->vring, vdpasim->features, vq->num, true, f=
-alse,
-> +       vringh_init_iotlb(&vq->vring, vdpasim->features, vq->num, true,
-> +                         va_enabled,
->                           (struct vring_desc *)(uintptr_t)vq->desc_addr,
->                           (struct vring_avail *)
->                           (uintptr_t)vq->driver_addr,
-> @@ -151,7 +220,7 @@ struct vdpasim *vdpasim_create(struct vdpasim_dev_att=
-r *dev_attr,
->         vdpa =3D __vdpa_alloc_device(NULL, ops,
->                                    dev_attr->ngroups, dev_attr->nas,
->                                    dev_attr->alloc_size,
-> -                                  dev_attr->name, false);
-> +                                  dev_attr->name, use_va);
->         if (IS_ERR(vdpa)) {
->                 ret =3D PTR_ERR(vdpa);
->                 goto err_alloc;
-> @@ -571,6 +640,27 @@ static int vdpasim_set_map(struct vdpa_device *vdpa,=
- unsigned int asid,
->         return ret;
->  }
->
-> +static int vdpasim_bind_mm(struct vdpa_device *vdpa, struct mm_struct *m=
-m)
-> +{
-> +       struct vdpasim *vdpasim =3D vdpa_to_sim(vdpa);
-> +       int ret;
-> +
-> +       mutex_lock(&vdpasim->mutex);
-> +       ret =3D vdpasim_worker_bind_mm(vdpasim, mm);
-> +       mutex_unlock(&vdpasim->mutex);
-> +
-> +       return ret;
-> +}
-> +
-> +static void vdpasim_unbind_mm(struct vdpa_device *vdpa)
-> +{
-> +       struct vdpasim *vdpasim =3D vdpa_to_sim(vdpa);
-> +
-> +       mutex_lock(&vdpasim->mutex);
-> +       vdpasim_worker_unbind_mm(vdpasim);
-> +       mutex_unlock(&vdpasim->mutex);
-> +}
-> +
->  static int vdpasim_dma_map(struct vdpa_device *vdpa, unsigned int asid,
->                            u64 iova, u64 size,
->                            u64 pa, u32 perm, void *opaque)
-> @@ -667,6 +757,8 @@ static const struct vdpa_config_ops vdpasim_config_op=
-s =3D {
->         .set_group_asid         =3D vdpasim_set_group_asid,
->         .dma_map                =3D vdpasim_dma_map,
->         .dma_unmap              =3D vdpasim_dma_unmap,
-> +       .bind_mm                =3D vdpasim_bind_mm,
-> +       .unbind_mm              =3D vdpasim_unbind_mm,
->         .free                   =3D vdpasim_free,
->  };
->
-> @@ -701,6 +793,8 @@ static const struct vdpa_config_ops vdpasim_batch_con=
-fig_ops =3D {
->         .get_iova_range         =3D vdpasim_get_iova_range,
->         .set_group_asid         =3D vdpasim_set_group_asid,
->         .set_map                =3D vdpasim_set_map,
-> +       .bind_mm                =3D vdpasim_bind_mm,
-> +       .unbind_mm              =3D vdpasim_unbind_mm,
->         .free                   =3D vdpasim_free,
->  };
->
-> --
-> 2.39.2
->
+* Rebased on top of v6.3-rc1
+* Dropped the patches applied for v6.3
+* Dropped Sai from the binding maintainers list since he left Qcom
+
+Changes in v6:
+
+* Incorporated comments from Borislav for the EDAC patches and collected
+  review tags.
+
+Changes in v5:
+
+* Reduced the size of llcc0 to 0x45000 on SDM845 due to overlapping with BWMON
+* Added a patch to disable creation of EDAC platform device on SDM845
+* Rebase on top of v6.2-rc1
+* Moved the EDAC specific patches to the start so that they can be applied
+  independently of LLCC patches
+
+Changes in v4:
+
+* Added a patch that fixes the use-after-free bug in qcom_edac driver
+
+Changes in v3:
+
+* Brought back reg-names property for compatibility (Krzysztof)
+* Removed Fixes tag and stable list as backporting the drivers/binding/dts
+  patches alone would break (Krzysztof)
+* Fixed the uninitialized variable issue (Kbot)
+* Added a patch to make use of driver supplied polling interval (Luca)
+* Added a patch for module autoloading (Andrew)
+* Didn't collect Review tags from Sai as the dts patches were changed.
+
+Changes in v2:
+
+* Removed reg-names property and used index of reg property to parse LLCC
+  bank base address (Bjorn)
+* Collected Ack from Sai for binding
+* Added a new patch for polling mode (Luca)
+* Renamed subject of patches targeting SC7180 and SM6350
+
+Manivannan Sadhasivam (13):
+  dt-bindings: arm: msm: Update the maintainers for LLCC
+  dt-bindings: arm: msm: Fix register regions used for LLCC banks
+  arm64: dts: qcom: sdm845: Fix the base addresses of LLCC banks
+  arm64: dts: qcom: sc7180: Fix the base addresses of LLCC banks
+  arm64: dts: qcom: sc7280: Fix the base addresses of LLCC banks
+  arm64: dts: qcom: sc8280xp: Fix the base addresses of LLCC banks
+  arm64: dts: qcom: sm8150: Fix the base addresses of LLCC banks
+  arm64: dts: qcom: sm8250: Fix the base addresses of LLCC banks
+  arm64: dts: qcom: sm8350: Fix the base addresses of LLCC banks
+  arm64: dts: qcom: sm8450: Fix the base addresses of LLCC banks
+  arm64: dts: qcom: sm6350: Fix the base addresses of LLCC banks
+  qcom: llcc/edac: Fix the base address used for accessing LLCC banks
+  soc: qcom: llcc: Do not create EDAC platform device on SDM845
+
+ .../bindings/arm/msm/qcom,llcc.yaml           | 128 ++++++++++++++++--
+ arch/arm64/boot/dts/qcom/sc7180.dtsi          |   2 +-
+ arch/arm64/boot/dts/qcom/sc7280.dtsi          |   5 +-
+ arch/arm64/boot/dts/qcom/sc8280xp.dtsi        |  10 +-
+ arch/arm64/boot/dts/qcom/sdm845.dtsi          |   7 +-
+ arch/arm64/boot/dts/qcom/sm6350.dtsi          |   2 +-
+ arch/arm64/boot/dts/qcom/sm8150.dtsi          |   7 +-
+ arch/arm64/boot/dts/qcom/sm8250.dtsi          |   7 +-
+ arch/arm64/boot/dts/qcom/sm8350.dtsi          |   7 +-
+ arch/arm64/boot/dts/qcom/sm8450.dtsi          |   7 +-
+ drivers/edac/qcom_edac.c                      |  14 +-
+ drivers/soc/qcom/llcc-qcom.c                  |  87 +++++++-----
+ include/linux/soc/qcom/llcc-qcom.h            |   6 +-
+ 13 files changed, 213 insertions(+), 76 deletions(-)
+
+-- 
+2.25.1
 
