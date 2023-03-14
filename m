@@ -2,211 +2,395 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61CE56B9E0E
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 19:17:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AD9A6B9E12
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 19:18:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229538AbjCNSRV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 14:17:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41948 "EHLO
+        id S230080AbjCNSR4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 14:17:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229712AbjCNSRU (ORCPT
+        with ESMTP id S229840AbjCNSRv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 14:17:20 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E60776BC37;
-        Tue, 14 Mar 2023 11:17:18 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 0C0B21F8BA;
-        Tue, 14 Mar 2023 18:17:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1678817837; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=YLIuIjePw0AXA6BmEraD20IliZzbWVdaCt1MG07LrQ4=;
-        b=e0fhVj3JMLZkbQKEOI9rS9zzdbQcoojjtz1n0NOR1VwvHDpdkcScPrhCdT8yVdZNXFXtCc
-        WVUJMd2vyg2471DAfdHmonAVoNTuSgagIJQq86HZNcQh2PJM6KnfLexvPg/5kM3yTqyRYX
-        sFtcZ/XKOHwNGT8CP4ZCF9aHC0FfaOE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1678817837;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=YLIuIjePw0AXA6BmEraD20IliZzbWVdaCt1MG07LrQ4=;
-        b=17b05HfqhnT7UcZ6YXL7+JK0QxBOa+go5bQIUNHuvECDCEjr6Bp7X7ZhX8vT76w3iGwEdB
-        6gWRPB9+T5YB7CAA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5F9D413A26;
-        Tue, 14 Mar 2023 18:17:16 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id dDU5BCy6EGQOIQAAMHmgww
-        (envelope-from <mpdesouza@suse.com>); Tue, 14 Mar 2023 18:17:16 +0000
-Date:   Tue, 14 Mar 2023 15:17:13 -0300
-From:   Marcos Paulo de Souza <mpdesouza@suse.de>
-To:     Joe Lawrence <joe.lawrence@redhat.com>
-Cc:     live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, Josh Poimboeuf <jpoimboe@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Marcos Paulo de Souza <mpdesouza@suse.com>
-Subject: Re: [PATCH v7 04/10] livepatch: Add sample livepatch module
-Message-ID: <20230314181713.tgpc7t7yia5nlhil@daedalus>
-References: <20230306140824.3858543-1-joe.lawrence@redhat.com>
- <20230306140824.3858543-5-joe.lawrence@redhat.com>
+        Tue, 14 Mar 2023 14:17:51 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ADCFA72A9
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 11:17:48 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id j3-20020a17090adc8300b0023d09aea4a6so6895653pjv.5
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 11:17:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1678817868;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=KfJ0B910CUoLAoT+ScGCvEuIluwEvBBQTfRxdmq0xco=;
+        b=bo/Xau48aID+gaWoWA5tsYT0saEZAjSAJ9ABEwsKsb0INW/1CIMMG1/D5p0VYra4Du
+         YUnHK166E+zKYvPrkF5qxGPiU+9Exm5gYZo7Tc8v7UEbhTrH0DNua/Fit9NLGWANnjnH
+         gNqptiiJxgUpLjZk0gSVQsQ9K0CUwy4pD4dbo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678817868;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KfJ0B910CUoLAoT+ScGCvEuIluwEvBBQTfRxdmq0xco=;
+        b=a+1jnAiGec+iv/hcSnOPKbsZT70CGk0fbhPbcRbO+gf3SRfi4B3xPk1lKwS021uvfo
+         EbNmE0zgVwB00+j4wyXHVB8DTMQXNOvZf3r3fR8BG9H3CA95MwGN5w54X6hKtktYnWkI
+         iFpW5cP589OYyJxCKY38hfMPN48k1QSqfUVnLq6CigTezRf0Yn6zopwD0zYEOs+C2uLS
+         GiHv+sStLkXuE52KRxHsdxvU2qlwakTIh/9G+apsqVUDbZZ+GOCIzKxMfpWIh1XB0TvI
+         qT9MZIMIAFvKcOyp9V/fhtZxkJFvrJI/7hYNQtypVxM1AgMlsc/fP4EjssEmQroF8ea5
+         bcPA==
+X-Gm-Message-State: AO0yUKX3tVeEaZMYDKXfgY84qTAphH2EUC+iX86qZpGuYfDqz6jcFST2
+        nLKqj6gasyQW6HpdY5f3eua+Og==
+X-Google-Smtp-Source: AK7set+C1xk0b+VHJkpegA6/xI6h1X/GeXXFlrBBQ/orBV57zUK5K0LXNfTxfldW4NLM7n3Lv8oIoA==
+X-Received: by 2002:a17:902:b597:b0:1a0:48c6:3b2c with SMTP id a23-20020a170902b59700b001a048c63b2cmr7056274pls.47.1678817867691;
+        Tue, 14 Mar 2023 11:17:47 -0700 (PDT)
+Received: from wafflehead.lan ([47.144.140.44])
+        by smtp.gmail.com with ESMTPSA id w12-20020a170902d3cc00b0019edc1b9eb2sm2053744plb.238.2023.03.14.11.17.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Mar 2023 11:17:46 -0700 (PDT)
+From:   Jeffrey Kardatzke <jkardatzke@chromium.org>
+X-Google-Original-From: Jeffrey Kardatzke <jkardatzke@google.com>
+To:     op-tee@lists.trustedfirmware.org
+Cc:     Jeffrey Kardatzke <jkardatzke@google.com>,
+        Jeffrey Kardatzke <jkardatzke@chromium.org>,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sumit Garg <sumit.garg@linaro.org>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v8] tee: optee: Add SMC for loading OP-TEE image
+Date:   Tue, 14 Mar 2023 11:17:43 -0700
+Message-Id: <20230314111736.v8.1.I8e7f9b01d9ac940507d78e15368e200a6a69bedb@changeid>
+X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230306140824.3858543-5-joe.lawrence@redhat.com>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 06, 2023 at 09:08:18AM -0500, Joe Lawrence wrote:
-> Add a new livepatch sample in samples/livepatch/ to make use of symbols
-> that must be post-processed to enable load-time relocation resolution.
-> As the new sample is to be used as an example, it is annotated with
-> KLP_MODULE_RELOC and with KLP_SYMPOS macros.
-> 
-> The livepatch sample updates the function cmdline_proc_show to print the
-> string referenced by the symbol saved_command_line appended by the
-> string "livepatch=1".
-> 
-> Update livepatch-sample.c to remove livepatch MODULE_INFO statement.
+Adds an SMC call that will pass an OP-TEE binary image to EL3 and
+instruct it to load it as the BL32 payload. This works in conjunction
+with a feature added to Trusted Firmware for ARMv8 and above
+architectures that supports this.
 
-LGTM:
+The main purpose of this change is to facilitate updating the OP-TEE
+component on devices via a rootfs change rather than having to do a
+firmware update. Further details are linked to in the Kconfig file.
 
-Reviewed-by: Marcos Paulo de Souza <mpdesouza@suse.com>
+Signed-off-by: Jeffrey Kardatzke <jkardatzke@chromium.org>
+Signed-off-by: Jeffrey Kardatzke <jkardatzke@google.com>
+---
 
-> 
-> Signed-off-by: Josh Poimboeuf <jpoimboe@redhat.com>
-> Signed-off-by: Joao Moreira <jmoreira@suse.de>
-> Signed-off-by: Joe Lawrence <joe.lawrence@redhat.com>
-> ---
->  samples/livepatch/Makefile                    |  1 +
->  .../livepatch/livepatch-annotated-sample.c    | 93 +++++++++++++++++++
->  2 files changed, 94 insertions(+)
->  create mode 100644 samples/livepatch/livepatch-annotated-sample.c
-> 
-> diff --git a/samples/livepatch/Makefile b/samples/livepatch/Makefile
-> index 9f853eeb6140..f2b41f4d6c16 100644
-> --- a/samples/livepatch/Makefile
-> +++ b/samples/livepatch/Makefile
-> @@ -6,3 +6,4 @@ obj-$(CONFIG_SAMPLE_LIVEPATCH) += livepatch-shadow-fix2.o
->  obj-$(CONFIG_SAMPLE_LIVEPATCH) += livepatch-callbacks-demo.o
->  obj-$(CONFIG_SAMPLE_LIVEPATCH) += livepatch-callbacks-mod.o
->  obj-$(CONFIG_SAMPLE_LIVEPATCH) += livepatch-callbacks-busymod.o
-> +obj-$(CONFIG_SAMPLE_LIVEPATCH) += livepatch-annotated-sample.o
-> diff --git a/samples/livepatch/livepatch-annotated-sample.c b/samples/livepatch/livepatch-annotated-sample.c
-> new file mode 100644
-> index 000000000000..4fe0e16423c7
-> --- /dev/null
-> +++ b/samples/livepatch/livepatch-annotated-sample.c
-> @@ -0,0 +1,93 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +/*
-> + * Copyright (C) 2014 Seth Jennings <sjenning@redhat.com>
-> + */
-> +
-> +/*
-> + * livepatch-annotated-sample.c - Kernel Live Patching Sample Module
-> + */
-> +
-> +#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-> +
-> +#include <linux/module.h>
-> +#include <linux/kernel.h>
-> +#include <linux/livepatch.h>
-> +
-> +/*
-> + * This (dumb) live patch overrides the function that prints the
-> + * kernel boot cmdline when /proc/cmdline is read.
-> + *
-> + * This livepatch uses the symbol saved_command_line whose relocation
-> + * must be resolved during load time. To enable that, this module
-> + * must be post-processed by a tool called klp-convert, which embeds
-> + * information to be used by the loader to solve the relocation.
-> + *
-> + * The module is annotated with KLP_MODULE_RELOC/KLP_SYMPOS macros.
-> + * These annotations are used by klp-convert to infer that the symbol
-> + * saved_command_line is in the object vmlinux.
-> + *
-> + * As saved_command_line has no other homonimous symbol across
-> + * kernel objects, this annotation is not a requirement, and can be
-> + * suppressed with no harm to klp-convert. Yet, it is kept here as an
-> + * example on how to annotate livepatch modules that contain symbols
-> + * whose names are used in more than one kernel object.
-> + *
-> + * Example:
-> + *
-> + * $ cat /proc/cmdline
-> + * <your cmdline>
-> + *
-> + * $ insmod livepatch-sample.ko
-> + * $ cat /proc/cmdline
-> + * <your cmdline> livepatch=1
-> + *
-> + * $ echo 0 > /sys/kernel/livepatch/livepatch_sample/enabled
-> + * $ cat /proc/cmdline
-> + * <your cmdline>
-> + */
-> +
-> +extern char *saved_command_line;
-> +
-> +#include <linux/seq_file.h>
-> +static int livepatch_cmdline_proc_show(struct seq_file *m, void *v)
-> +{
-> +	seq_printf(m, "%s livepatch=1\n", saved_command_line);
-> +	return 0;
-> +}
-> +
-> +KLP_MODULE_RELOC(vmlinux) vmlinux_relocs[] = {
-> +	KLP_SYMPOS(saved_command_line, 0)
-> +};
-> +
-> +static struct klp_func funcs[] = {
-> +	{
-> +		.old_name = "cmdline_proc_show",
-> +		.new_func = livepatch_cmdline_proc_show,
-> +	}, { }
-> +};
-> +
-> +static struct klp_object objs[] = {
-> +	{
-> +		/* name being NULL means vmlinux */
-> +		.funcs = funcs,
-> +	}, { }
-> +};
-> +
-> +static struct klp_patch patch = {
-> +	.mod = THIS_MODULE,
-> +	.objs = objs,
-> +};
-> +
-> +static int livepatch_init(void)
-> +{
-> +	return klp_enable_patch(&patch);
-> +}
-> +
-> +static void livepatch_exit(void)
-> +{
-> +}
-> +
-> +module_init(livepatch_init);
-> +module_exit(livepatch_exit);
-> +MODULE_LICENSE("GPL");
-> +MODULE_INFO(livepatch, "Y");
-> -- 
-> 2.39.2
-> 
+Changes in v8:
+- Renamed params and fixed alignment issue
+
+Changes in v7:
+- Added documentation to Documentation/staging/tee.rst
+
+Changes in v6:
+- Expanded Kconfig documentation
+
+Changes in v5:
+- Renamed config option
+- Added runtime warning when config is used
+
+Changes in v4:
+- Update commit message
+- Added more documentation
+- Renamed config option, added ARM64 dependency
+
+Changes in v3:
+- Removed state tracking for driver reload
+- Check UID of service to verify it needs image load
+
+Changes in v2:
+- Fixed compile issue when feature is disabled
+- Addressed minor comments
+- Added state tracking for driver reload
+
+ Documentation/staging/tee.rst | 41 +++++++++++++++
+ drivers/tee/optee/Kconfig     | 17 ++++++
+ drivers/tee/optee/optee_msg.h | 12 +++++
+ drivers/tee/optee/optee_smc.h | 24 +++++++++
+ drivers/tee/optee/smc_abi.c   | 98 +++++++++++++++++++++++++++++++++++
+ 5 files changed, 192 insertions(+)
+
+diff --git a/Documentation/staging/tee.rst b/Documentation/staging/tee.rst
+index 498343c7ab08..315aa8e35e6b 100644
+--- a/Documentation/staging/tee.rst
++++ b/Documentation/staging/tee.rst
+@@ -214,6 +214,47 @@ call is done from the thread assisting the interrupt handler. This is a
+ building block for OP-TEE OS in secure world to implement the top half and
+ bottom half style of device drivers.
+ 
++OPTEE_INSECURE_LOAD_IMAGE Kconfig option
++----------------------------------------
++
++The OPTEE_INSECURE_LOAD_IMAGE Kconfig option enables the ability to load the
++BL32 OP-TEE image from the kernel after the kernel boots, rather than loading
++it from the firmware before the kernel boots. This also requires enabling the
++corresponding option in Trusted Firmware for Arm. The documentation there
++explains the security threat associated with enabling this as well as
++mitigations at the firmware and platform level.
++https://trustedfirmware-a.readthedocs.io/en/latest/threat_model/threat_model.html
++
++There are additional attack vectors/mitigations for the kernel that should be
++addressed when using this option.
++
++1. Boot chain security.
++   Attack vector: Replace the OP-TEE OS image in the rootfs to gain control of
++                  the system.
++   Migitation: There must be boot chain security that verifies the kernel and
++               rootfs, otherwise an attacker can modify the loaded OP-TEE
++               binary by modifying it in the rootfs.
++3. Alternate boot modes.
++   Attack vector: Using an alternate boot mode (i.e. recovery mode), the OP-TEE
++                  driver isn't loaded, leaving the SMC hole open.
++   Mitigation: If there are alternate methods of booting the device, such as a
++               recovery mode, it should be ensured that the same mitigations are
++               applied in that mode.
++3. Attacks prior to SMC invocation.
++   Attack vector: Code that is executed prior to issuing the SMC call to load
++                  OP-TEE can be exploited to then load an alternate OS image.
++   Mitigation: The OP-TEE driver must be loaded before any potential attack
++               vectors are opened up. This should include mounting of any
++               modifiable filesystems, opening of network ports or communicating
++               with external devices (e.g. USB).
++4. Blocking SMC call to load OP-TEE.
++   Attack vector: Prevent the driver from being probed, so the SMC call to load
++                  OP-TEE isn't executed when desired, leaving it open to being
++                  executed later and loading a modified OS.
++   Mitigation: It is recommended to build the OP-TEE driver as an included
++               driver rather than a module to prevent exploits that may cause
++               the module to not be loaded.
++
+ AMD-TEE driver
+ ==============
+ 
+diff --git a/drivers/tee/optee/Kconfig b/drivers/tee/optee/Kconfig
+index f121c224e682..70898bbd5809 100644
+--- a/drivers/tee/optee/Kconfig
++++ b/drivers/tee/optee/Kconfig
+@@ -7,3 +7,20 @@ config OPTEE
+ 	help
+ 	  This implements the OP-TEE Trusted Execution Environment (TEE)
+ 	  driver.
++
++config OPTEE_INSECURE_LOAD_IMAGE
++	bool "Load OP-TEE image as firmware"
++	default n
++	depends on OPTEE && ARM64
++	help
++	  This loads the BL32 image for OP-TEE as firmware when the driver is
++	  probed. This returns -EPROBE_DEFER until the firmware is loadable from
++	  the filesystem which is determined by checking the system_state until
++	  it is in SYSTEM_RUNNING. This also requires enabling the corresponding
++	  option in Trusted Firmware for Arm. The documentation there explains
++	  the security threat associated with enabling this as well as
++	  mitigations at the firmware and platform level.
++	  https://trustedfirmware-a.readthedocs.io/en/latest/threat_model/threat_model.html
++
++	  Additional documentation on kernel security risks are at
++	  Documentation/staging/tee.rst.
+diff --git a/drivers/tee/optee/optee_msg.h b/drivers/tee/optee/optee_msg.h
+index 70e9cc2ee96b..e8840a82b983 100644
+--- a/drivers/tee/optee/optee_msg.h
++++ b/drivers/tee/optee/optee_msg.h
+@@ -241,11 +241,23 @@ struct optee_msg_arg {
+  * 384fb3e0-e7f8-11e3-af63-0002a5d5c51b.
+  * Represented in 4 32-bit words in OPTEE_MSG_UID_0, OPTEE_MSG_UID_1,
+  * OPTEE_MSG_UID_2, OPTEE_MSG_UID_3.
++ *
++ * In the case where the OP-TEE image is loaded by the kernel, this will
++ * initially return an alternate UID to reflect that we are communicating with
++ * the TF-A image loading service at that time instead of OP-TEE. That UID is:
++ * a3fbeab1-1246-315d-c7c4-06b9c03cbea4.
++ * Represented in 4 32-bit words in OPTEE_MSG_IMAGE_LOAD_UID_0,
++ * OPTEE_MSG_IMAGE_LOAD_UID_1, OPTEE_MSG_IMAGE_LOAD_UID_2,
++ * OPTEE_MSG_IMAGE_LOAD_UID_3.
+  */
+ #define OPTEE_MSG_UID_0			0x384fb3e0
+ #define OPTEE_MSG_UID_1			0xe7f811e3
+ #define OPTEE_MSG_UID_2			0xaf630002
+ #define OPTEE_MSG_UID_3			0xa5d5c51b
++#define OPTEE_MSG_IMAGE_LOAD_UID_0	0xa3fbeab1
++#define OPTEE_MSG_IMAGE_LOAD_UID_1	0x1246315d
++#define OPTEE_MSG_IMAGE_LOAD_UID_2	0xc7c406b9
++#define OPTEE_MSG_IMAGE_LOAD_UID_3	0xc03cbea4
+ #define OPTEE_MSG_FUNCID_CALLS_UID	0xFF01
+ 
+ /*
+diff --git a/drivers/tee/optee/optee_smc.h b/drivers/tee/optee/optee_smc.h
+index 73b5e7760d10..7d9fa426505b 100644
+--- a/drivers/tee/optee/optee_smc.h
++++ b/drivers/tee/optee/optee_smc.h
+@@ -104,6 +104,30 @@ struct optee_smc_call_get_os_revision_result {
+ 	unsigned long reserved1;
+ };
+ 
++/*
++ * Load Trusted OS from optee/tee.bin in the Linux firmware.
++ *
++ * WARNING: Use this cautiously as it could lead to insecure loading of the
++ * Trusted OS.
++ * This SMC instructs EL3 to load a binary and execute it as the Trusted OS.
++ *
++ * Call register usage:
++ * a0 SMC Function ID, OPTEE_SMC_CALL_LOAD_IMAGE
++ * a1 Upper 32bit of a 64bit size for the payload
++ * a2 Lower 32bit of a 64bit size for the payload
++ * a3 Upper 32bit of the physical address for the payload
++ * a4 Lower 32bit of the physical address for the payload
++ *
++ * The payload is in the OP-TEE image format.
++ *
++ * Returns result in a0, 0 on success and an error code otherwise.
++ */
++#define OPTEE_SMC_FUNCID_LOAD_IMAGE 2
++#define OPTEE_SMC_CALL_LOAD_IMAGE \
++	ARM_SMCCC_CALL_VAL(ARM_SMCCC_FAST_CALL, ARM_SMCCC_SMC_32, \
++			   ARM_SMCCC_OWNER_TRUSTED_OS_END, \
++			   OPTEE_SMC_FUNCID_LOAD_IMAGE)
++
+ /*
+  * Call with struct optee_msg_arg as argument
+  *
+diff --git a/drivers/tee/optee/smc_abi.c b/drivers/tee/optee/smc_abi.c
+index a1c1fa1a9c28..c52930d0062c 100644
+--- a/drivers/tee/optee/smc_abi.c
++++ b/drivers/tee/optee/smc_abi.c
+@@ -8,9 +8,11 @@
+ 
+ #include <linux/arm-smccc.h>
+ #include <linux/errno.h>
++#include <linux/firmware.h>
+ #include <linux/interrupt.h>
+ #include <linux/io.h>
+ #include <linux/irqdomain.h>
++#include <linux/kernel.h>
+ #include <linux/mm.h>
+ #include <linux/module.h>
+ #include <linux/of.h>
+@@ -1149,6 +1151,22 @@ static bool optee_msg_api_uid_is_optee_api(optee_invoke_fn *invoke_fn)
+ 	return false;
+ }
+ 
++#ifdef CONFIG_OPTEE_INSECURE_LOAD_IMAGE
++static bool optee_msg_api_uid_is_optee_image_load(optee_invoke_fn *invoke_fn)
++{
++	struct arm_smccc_res res;
++
++	invoke_fn(OPTEE_SMC_CALLS_UID, 0, 0, 0, 0, 0, 0, 0, &res);
++
++	if (res.a0 == OPTEE_MSG_IMAGE_LOAD_UID_0 &&
++	   res.a1 == OPTEE_MSG_IMAGE_LOAD_UID_1 &&
++	   res.a2 == OPTEE_MSG_IMAGE_LOAD_UID_2 &&
++	   res.a3 == OPTEE_MSG_IMAGE_LOAD_UID_3)
++		return true;
++	return false;
++}
++#endif
++
+ static void optee_msg_get_os_revision(optee_invoke_fn *invoke_fn)
+ {
+ 	union {
+@@ -1354,6 +1372,82 @@ static void optee_shutdown(struct platform_device *pdev)
+ 		optee_disable_shm_cache(optee);
+ }
+ 
++#ifdef CONFIG_OPTEE_INSECURE_LOAD_IMAGE
++
++#define OPTEE_FW_IMAGE "optee/tee.bin"
++
++static int optee_load_fw(struct platform_device *pdev,
++			 optee_invoke_fn *invoke_fn)
++{
++	const struct firmware *fw = NULL;
++	struct arm_smccc_res res;
++	phys_addr_t data_pa;
++	u8 *data_buf = NULL;
++	u64 data_size;
++	u32 data_pa_high, data_pa_low;
++	u32 data_size_high, data_size_low;
++	int rc;
++
++	if (!optee_msg_api_uid_is_optee_image_load(invoke_fn))
++		return 0;
++
++	rc = request_firmware(&fw, OPTEE_FW_IMAGE, &pdev->dev);
++	if (rc) {
++		/*
++		 * The firmware in the rootfs will not be accessible until we
++		 * are in the SYSTEM_RUNNING state, so return EPROBE_DEFER until
++		 * that point.
++		 */
++		if (system_state < SYSTEM_RUNNING)
++			return -EPROBE_DEFER;
++		goto fw_err;
++	}
++
++	data_size = fw->size;
++	/*
++	 * This uses the GFP_DMA flag to ensure we are allocated memory in the
++	 * 32-bit space since TF-A cannot map memory beyond the 32-bit boundary.
++	 */
++	data_buf = kmalloc(fw->size, GFP_KERNEL | GFP_DMA);
++	if (!data_buf) {
++		rc = -ENOMEM;
++		goto fw_err;
++	}
++	memcpy(data_buf, fw->data, fw->size);
++	data_pa = virt_to_phys(data_buf);
++	reg_pair_from_64(&data_pa_high, &data_pa_low, data_pa);
++	reg_pair_from_64(&data_size_high, &data_size_low, data_size);
++	goto fw_load;
++
++fw_err:
++	pr_warn("image loading failed\n");
++	data_pa_high = data_pa_low = data_size_high = data_size_low = 0;
++
++fw_load:
++	/*
++	 * Always invoke the SMC, even if loading the image fails, to indicate
++	 * to EL3 that we have passed the point where it should allow invoking
++	 * this SMC.
++	 */
++	pr_warn("OP-TEE image loaded from kernel, this can be insecure");
++	invoke_fn(OPTEE_SMC_CALL_LOAD_IMAGE, data_size_high, data_size_low,
++		  data_pa_high, data_pa_low, 0, 0, 0, &res);
++	if (!rc)
++		rc = res.a0;
++	if (fw)
++		release_firmware(fw);
++	kfree(data_buf);
++
++	return rc;
++}
++#else
++static inline int optee_load_fw(struct platform_device *pdev,
++				optee_invoke_fn *invoke_fn)
++{
++	return 0;
++}
++#endif
++
+ static int optee_probe(struct platform_device *pdev)
+ {
+ 	optee_invoke_fn *invoke_fn;
+@@ -1372,6 +1466,10 @@ static int optee_probe(struct platform_device *pdev)
+ 	if (IS_ERR(invoke_fn))
+ 		return PTR_ERR(invoke_fn);
+ 
++	rc = optee_load_fw(pdev, invoke_fn);
++	if (rc)
++		return rc;
++
+ 	if (!optee_msg_api_uid_is_optee_api(invoke_fn)) {
+ 		pr_warn("api uid mismatch\n");
+ 		return -EINVAL;
+-- 
+2.40.0.rc1.284.g88254d51c5-goog
+
