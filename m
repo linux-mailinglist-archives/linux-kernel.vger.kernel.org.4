@@ -2,161 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32FCC6B8F28
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 11:02:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8D5D6B8F2B
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 11:02:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229810AbjCNKB6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 06:01:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40900 "EHLO
+        id S229626AbjCNKCi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 06:02:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbjCNKB5 (ORCPT
+        with ESMTP id S229446AbjCNKCh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 06:01:57 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A7DF8C58F;
-        Tue, 14 Mar 2023 03:01:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=public-files.de;
-        s=s31663417; t=1678788102; i=frank-w@public-files.de;
-        bh=nWZ0C/Z5vtI09XjgI+kRHhkKyKhHcEAc1TQPLoGhFpk=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=iS/r78nySa9yxiZx6MuLGdklvMWytPnOcZHNg5SRnAZThJ5UuvJ7z/vGiylQuL3li
-         1eRY0YYxlVWU5Z/sLA29zzwRNLXRio1ZVMHu27f6Cua6jPBX5AfSlQohxWMPf86vcf
-         skoQkVeq/XCd2Zxq8Yf9ulJFqaG+MUrMGgFSiRLN6zl10j+j0TtuwtMQoOXCDn1s+1
-         LhfDgzXjCZclKjN6/ofzViW7RJ9GsfaV3tX+vGVlsomvxX/fHsmRq2REtUSG2nuQSe
-         iBy8banIjg/+0ajRc42MVr3IRo7FAseDwxF6IXDwnFGrIiZjB382g/+lGzBxSJcg3N
-         +VJNyu9SQLu4Q==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [80.245.77.27] ([80.245.77.27]) by web-mail.gmx.net
- (3c-app-gmx-bap66.server.lan [172.19.172.66]) (via HTTP); Tue, 14 Mar 2023
- 11:01:42 +0100
+        Tue, 14 Mar 2023 06:02:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC228907B9
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 03:02:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 680F6616E0
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 10:02:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C95E3C433EF
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 10:02:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678788154;
+        bh=hy1fVJsDP8QU+RSH4/B3YXf+/OlOJnZXP6rso7FYQNI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=TRm74GYgV5L9zL64q1094tejQsFbP/6t5dNi3Bjq9pGCbcFr0O4CuCI29FaKQofJk
+         C0NkZVTzFe7tkTgbjDddAiOGLC1rGw4JIO2mEiksAYFE8iuwcfhcHoJJHL00+pkqgT
+         q/rAiGZSL1ovdokH1TkuExXWH48WOJ4Xxz5Z8N1zOGsZmRZ513Zv9i7wEBl6W//N1C
+         /Uj6ayebhUJsWGGZKvL9F5UL9wAXiS2dmqbJ+Epw+ZYNvSXPLf0qYT+45XN+1eAWCT
+         jSW/JTSwG5PQeks7ktn+BjetWUk0leufKuo/K8gA+uNXdPl25ScCfveCtsNaVwEONB
+         go5nUflvYsdxw==
+Received: by mail-ed1-f54.google.com with SMTP id eh3so3716885edb.11
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 03:02:34 -0700 (PDT)
+X-Gm-Message-State: AO0yUKVuoOR245NmyZTfT+lv5kJpaetZ+1cV4xC3gz+gTRdj0CnEsla+
+        dl0rmBRyhkYiHEG89BWabYtJyWnRUI4FJO1tc7E=
+X-Google-Smtp-Source: AK7set8I70Sic6UL3a3mg0g/+mPcGyN//JyOqXau0V89oxLi3jtL7SC76TWv3uRaMsQdlvaHQrOXcHrmPXTaWgqtiuU=
+X-Received: by 2002:a17:906:6d49:b0:878:6488:915f with SMTP id
+ a9-20020a1709066d4900b008786488915fmr930929ejt.10.1678788153049; Tue, 14 Mar
+ 2023 03:02:33 -0700 (PDT)
 MIME-Version: 1.0
-Message-ID: <trinity-bc4bbf4e-812a-4682-ac8c-5178320467f5-1678788102813@3c-app-gmx-bap66>
-From:   Frank Wunderlich <frank-w@public-files.de>
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Daniel Golle <daniel@makrotopia.org>, netdev@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Aw: Re: Re: Re: Re: Re: [PATCH net-next v12 08/18] net: ethernet:
- mtk_eth_soc: fix 1000Base-X and 2500Base-X modes
-Content-Type: text/plain; charset=UTF-8
-Date:   Tue, 14 Mar 2023 11:01:42 +0100
-Importance: normal
-Sensitivity: Normal
-In-Reply-To: <ZBA6gszARdJY26Mz@shell.armlinux.org.uk>
-References: <trinity-79e9f0b8-a267-4bf9-a3d4-1ec691eb5238-1678536337569@3c-app-gmx-bs24>
- <ZAzd1A0SAKZK0hF5@shell.armlinux.org.uk>
- <4B891976-C29E-4D98-B604-3AC4507D3661@public-files.de>
- <ZAzk71mTxgV/pRxC@shell.armlinux.org.uk>
- <trinity-8577978d-1c11-4f6d-ae11-aef37e8b78b0-1678624836722@3c-app-gmx-bap51>
- <ZA4wlQ8P48aDhDly@shell.armlinux.org.uk>
- <ZA8B/kI0fLx4gkQm@shell.armlinux.org.uk>
- <trinity-93681801-f99c-40e2-9fbd-45888b3069aa-1678732740564@3c-app-gmx-bs66>
- <ZA+qTyQ3n6YiURkQ@shell.armlinux.org.uk>
- <trinity-e2c457f1-c897-45f1-907a-8ea3664b7512-1678783872771@3c-app-gmx-bap66>
- <ZBA6gszARdJY26Mz@shell.armlinux.org.uk>
+References: <20230314085433.4078119-1-chenhuacai@loongson.cn> <21f5aba50b7732b48d2610a5015186adf6bdfb38.camel@xry111.site>
+In-Reply-To: <21f5aba50b7732b48d2610a5015186adf6bdfb38.camel@xry111.site>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Tue, 14 Mar 2023 18:02:21 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H4TpQuq9sE2H=zbO8cvwn3Aer_pu1a-DU9L9OSR1bQX=g@mail.gmail.com>
+Message-ID: <CAAhV-H4TpQuq9sE2H=zbO8cvwn3Aer_pu1a-DU9L9OSR1bQX=g@mail.gmail.com>
+Subject: Re: [PATCH] LoongArch: Make WriteCombine configurable for ioremap()
+To:     Xi Ruoyao <xry111@xry111.site>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>, loongarch@lists.linux.dev,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-UI-Message-Type: mail
-X-Priority: 3
-X-Provags-ID: V03:K1:wapH+Fg+zxqJspdputyYroVMnLUEUu0otmaCiOOlCS7FfawOEM2rytVRpJPH2qoKqiPNy
- kyMfeRwfZGNyjYnVvLPvz8Bcr/kAybStj42JpuqUX3Uzv4XJuTnRd0SH/qVxXdtlfK7a+ypZgy/O
- te/66HGI0LvRlbNgdUoRJtCZktwoUJlFAs/3VXBuX92qXvCZ9ZgdY9Wl6UgKvqQARuAzZHI73nEN
- RykJXaj5XdFtTe43Frve8hvVRkxJpj4Zekj58O7RVUkQ+ure0jodPOEr3BKCAnl8Go4PCSREnIXq
- us=
-UI-OutboundReport: notjunk:1;M01:P0:PayLcYJZHEs=;dG4E1CIyqqGyWe4q93J9DWLHHYy
- 2Xoji/en+2pTKvfCap3nd/oQUDLv4W+mBiPI4bE0yLNRJFPZ4V3GdGlCWTTg2g6uLCLb5BjnS
- 9bqt+CMZ64VwmyXp9Ppm60s5We42vnFaGEO83ZkJbHiDqW+NKrO4U3EM/6KTfyIMu1prp6lSg
- EYGhAZxvfParsuvy+TVVzgwLiGJRyG5Cdm8Oco8pV0hBrPk4Oxz45mM8T3uyyGKNqEPyXkGP7
- NzE8xxaxTJSr9lr+0e4s4wchaNFXMLYyuoJHHrVAVmvPb921qA9TmiF0ioYhuoAXCOWn5HgwO
- CO8NsYu5oFfdsyiLsGUWIBSkKXp+zFxoJLF9XDZfE26v5vkm8J5MeL5e9QcfQDTJDTWpDKVMf
- DgtYEALbmgWErWBCSLXY9kDocHQleyLGYbUmmnH6cdoORW4O4/9/9n9H9xRlvn8Jahq7nCsAh
- xpQF6eIhWldLVM+lr2LvnQxyewHs84FFLo5JWUQ+0dQd0ZqzZoaLVrlFGisP9+313vVRlpUWF
- VbCMAqY8/65+eHXIjtfBTZ+5KB35c0yixgXrF/RQl8wHwUempqN4g/IEKC8dd2P21zGr7cpuT
- sYQow+Bsfdxw4+XzVDvoY2f5ETxqEaxH1kE2FWGbF1rvusq/iITBIWcMOS9CcAHHweJH09r8o
- zz1atywcQWyEit7E5nRXlb+cuQV/WqoFqD2VZEPeR9h3dERFNmHyhS8rgBX6ZRMnrH9w66E4Y
- PEPi62MGkG+5OrNNCkC2Mbs0iclUCV7IboI7O5SwA89HUHkIzn+Ry376H9Gdy+LFGvXZpNd2o
- HNMy0nBjkZ4s/He7sd9KkBCA==
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi
+Hi, Ruoyao,
 
-> Gesendet: Dienstag, 14=2E M=C3=A4rz 2023 um 10:12 Uhr
-> Von: "Russell King (Oracle)" <linux@armlinux=2Eorg=2Euk>
-> On Tue, Mar 14, 2023 at 09:51:12AM +0100, Frank Wunderlich wrote:
-> > Hi,
-> >=20
-> > at least the error-message is gone, and interface gets up when i call =
-ethtoo to switch off autoneg=2E
-=2E=2E=2E
-> > [   34=2E400860] mtk_soc_eth 15100000=2Eethernet eth1: phylink_mac_con=
-fig: mode=3Dinband/2500base-x/Unknown/Unknown/none adv=3D00,00000000,000000=
-00,0000e400 pause=3D04 link=3D0 an=3D1
->=20
-> Looking good - apart from that pesky an=3D1 (which isn't used by the PCS
-> driver, and I've been thinking of killing it off anyway=2E) Until such
-> time that happens, we really ought to set that correctly, which means
-> an extra bit is needed in phylink_sfp_set_config()=2E However, this
-> should not affect anything=2E
->=20
-> > root@bpi-r3:~#=20
-> > root@bpi-r3:~# ethtool -s eth1 autoneg off
-> > root@bpi-r3:~# [  131=2E031902] mtk_soc_eth 15100000=2Eethernet eth1: =
-Link is Up - 2=2E5Gbps/Full - flow control off
-> > [  131=2E040366] IPv6: ADDRCONF(NETDEV_CHANGE): eth1: link becomes rea=
-dy
-> >=20
-> > full log here:
-> > https://pastebin=2Ecom/yDC7PuM2
-> >=20
-> > i see that an is still 1=2E=2Emaybe because of the fixed value here?
-> >=20
-> > https://elixir=2Ebootlin=2Ecom/linux/v6=2E3-rc1/source/drivers/net/phy=
-/phylink=2Ec#L3038
->=20
-> Not sure what that line has to do with it - this is what the above
-> points to:
->=20
->         phylink_sfp_set_config(pl, MLO_AN_INBAND, pl->sfp_support, &conf=
-ig);
+On Tue, Mar 14, 2023 at 5:41=E2=80=AFPM Xi Ruoyao <xry111@xry111.site> wrot=
+e:
+>
+> On Tue, 2023-03-14 at 16:54 +0800, Huacai Chen wrote:
+> > LoongArch maintains cache coherency in hardware, but when works with
+> > LS7A chipsets the WUC attribute (Weak-ordered UnCached, which is simila=
+r
+> > to WriteCombine) is out of the scope of cache coherency machanism for
+> > PCIe devices (this is a PCIe protocol violation, may be fixed in newer
+> > chipsets).
+>
+> IIUC all launched LS7A models (7A1000 and 7A2000) suffers this issue?
+Yes, very unfortunately, but this issue is only observed in the amdgpu
+driver now.
 
-MLO_AN_INBAND =3D> may cause the an=3D1 and mode=3Dinband if previously (?=
-) disabled :)
+>
+> > This means WUC can only used for write-only memory regions now, so this
+> > option is disabled by default (means WUC falls back to SUC for ioremap)=
+.
+> > You can enable this option if the kernel is ensured to run on bug-free
+> > hardwares.
+>
+> Hmm, is it possible to make a PCI quirk so SUC/WUC will be decided
+> automatically from the vendor:device ID of the PCI root controller?
+> Then we don't need to rely on the user or distro maintainer to select an
+> option.  I see there is already many architecture-dependant #if
+> directives in drivers/pci/quirks.c so I guess such a quirk is acceptable
+> in PCI tree...
+Not a good idea, pci quirks need too long a time to review, and we
+don't know when this issue can be fixed in hardware.
 
-> Anyway, the important thing is the Autoneg bit in the advertising mask
-> is now zero, which is what we want=2E That should set the PCS to disable
-> negotiation when in 2500baseX mode, the same as ethtool -s eth1 autoneg
-> off=2E
->=20
-> So I think the question becomes - what was the state that ethtool was
-> reporting before asking ethtool to set autoneg off, and why does that
-> make a difference=2E
+>
+> If a PCI quirk is not possible, then is it possible to make a kernel
+> command line option, leaving this CONFIG as the default value of the
+> option?  I guess in the future many LoongArch users will just install a
+> binary distro, then it would be much easier to edit grub.cfg than
+> rebuilding the kernel when they finally buy a compliant PCIe controller.
+If we use command line parameter, we can remove this Kconfig option.
 
-ok, i do ethtool output before and after on next test=2E
-
-> > and yes, module seems to do rate adaption (it is labeled with 100M/1G/=
-2=2E5G), i tried it on a 1G-Port and link came up (with workaround patch fr=
-om daniel),
-> > traffic "works" but in tx-direction with massive retransmitts (i guess=
- because pause-frames are ignored - pause was 00)=2E
->=20
-> We'll see about addressing that later once we've got the module working
-> at 2=2E5G=2E However, thanks for the information=2E
-
-of course=2E=2E=2Estep by step, just wanted to tell this behaviour
-
-> The patch below should result in ethtool reporting 2500baseT rather than
-> 2500baseX, and that an=3D1 should now be an=3D0=2E Please try it, and du=
-mp the
-> ethtool eth1 before asking for autoneg to be manually disabled, and also
-> report the kernel messages=2E
-
-i see no Patch below ;)
-
-regards Frank
+Huacai
+>
+> > Suggested-by: WANG Xuerui <kernel@xen0n.name>
+> > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> > ---
+> >  arch/loongarch/Kconfig          | 14 ++++++++++++++
+> >  arch/loongarch/include/asm/io.h |  5 +++++
+> >  2 files changed, 19 insertions(+)
+> >
+> > diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
+> > index 0d11738a861a..e3f5c422636f 100644
+> > --- a/arch/loongarch/Kconfig
+> > +++ b/arch/loongarch/Kconfig
+> > @@ -446,6 +446,20 @@ config ARCH_IOREMAP
+> >           protection support. However, you can enable LoongArch DMW-bas=
+ed
+> >           ioremap() for better performance.
+> >
+> > +config ARCH_WRITECOMBINE
+> > +       bool "Enable WriteCombine (WUC) for ioremap()"
+> > +       help
+> > +         LoongArch maintains cache coherency in hardware, but with LS7=
+A
+> > +         chipsets the WUC attribute (Weak-ordered UnCached, which is s=
+imilar
+> > +         to WriteCombine) is out of the scope of cache coherency macha=
+nism
+> > +         for PCIe devices (this is a PCIe protocol violation, may be f=
+ixed
+> > +         in newer chipsets).
+> > +
+> > +         This means WUC can only used for write-only memory regions no=
+w, so
+> > +         this option is disabled by default (means WUC falls back to S=
+UC for
+> > +         ioremap). You can enable this option if the kernel is ensured=
+ to run
+> > +         on bug-free hardwares.
+> > +
+> >  config ARCH_STRICT_ALIGN
+> >         bool "Enable -mstrict-align to prevent unaligned accesses" if E=
+XPERT
+> >         default y
+> > diff --git a/arch/loongarch/include/asm/io.h b/arch/loongarch/include/a=
+sm/io.h
+> > index 402a7d9e3a53..079ef897ed1a 100644
+> > --- a/arch/loongarch/include/asm/io.h
+> > +++ b/arch/loongarch/include/asm/io.h
+> > @@ -54,8 +54,13 @@ static inline void __iomem *ioremap_prot(phys_addr_t=
+ offset, unsigned long size,
+> >   * @offset:    bus address of the memory
+> >   * @size:      size of the resource to map
+> >   */
+> > +#ifdef CONFIG_ARCH_WRITECOMBINE
+> >  #define ioremap_wc(offset, size)       \
+> >         ioremap_prot((offset), (size), pgprot_val(PAGE_KERNEL_WUC))
+> > +#else
+> > +#define ioremap_wc(offset, size)       \
+> > +       ioremap_prot((offset), (size), pgprot_val(PAGE_KERNEL_SUC))
+> > +#endif
+> >
+> >  #define ioremap_cache(offset, size)    \
+> >         ioremap_prot((offset), (size), pgprot_val(PAGE_KERNEL))
+>
+> --
+> Xi Ruoyao <xry111@xry111.site>
+> School of Aerospace Science and Technology, Xidian University
