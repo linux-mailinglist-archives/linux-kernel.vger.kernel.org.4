@@ -2,156 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1C246B9810
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 15:35:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CAD86B9813
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 15:35:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231240AbjCNOfE convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 14 Mar 2023 10:35:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49578 "EHLO
+        id S231324AbjCNOfe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 10:35:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231499AbjCNOe7 (ORCPT
+        with ESMTP id S231356AbjCNOfa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 10:34:59 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80D9A4DE1D
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 07:34:58 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1pc5jQ-0002Cq-1j; Tue, 14 Mar 2023 15:34:28 +0100
-Received: from [2a0a:edc0:0:900:1d::4e] (helo=lupine)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1pc5jP-0046Eq-BQ; Tue, 14 Mar 2023 15:34:27 +0100
-Received: from pza by lupine with local (Exim 4.94.2)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1pc5jO-0008kD-GN; Tue, 14 Mar 2023 15:34:26 +0100
-Message-ID: <3df9aa881dce1cfb1360c4d4fe6f609f5a73f97b.camel@pengutronix.de>
-Subject: Re: [PATCH v5 06/21] reset: Create subdirectory for StarFive drivers
-From:   Philipp Zabel <p.zabel@pengutronix.de>
-To:     Hal Feng <hal.feng@starfivetech.com>, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org
-Cc:     Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Ben Dooks <ben.dooks@sifive.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        linux-kernel@vger.kernel.org
-Date:   Tue, 14 Mar 2023 15:34:26 +0100
-In-Reply-To: <20230311090733.56918-7-hal.feng@starfivetech.com>
-References: <20230311090733.56918-1-hal.feng@starfivetech.com>
-         <20230311090733.56918-7-hal.feng@starfivetech.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.38.3-1+deb11u1 
+        Tue, 14 Mar 2023 10:35:30 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CFA5664D0;
+        Tue, 14 Mar 2023 07:35:28 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32EEZGNk092841;
+        Tue, 14 Mar 2023 09:35:16 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1678804517;
+        bh=L5/zGgUxjjME0dckJN91YKQn8hM7/NY/ZCwMlIsSkB4=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=ttCOaj5Xhxf6CVF4Q4CXGJ5R0lTM3o4WqpD4SVsVxuUiWLKVaXbZbKMZrnRiNFXZ7
+         Zoc2o16Q9vaCJ7ZAmhjPO8Pk9unL5uecSLaqSPppFjZ2aYnLNRGuzs0LyHhcza5RJq
+         Md3u4C2p0cv0qVKYAd9JqebNe5rzTaw0IZdG8KPI=
+Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32EEZG2q097822
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 14 Mar 2023 09:35:16 -0500
+Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 14
+ Mar 2023 09:35:16 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE101.ent.ti.com
+ (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Tue, 14 Mar 2023 09:35:16 -0500
+Received: from [172.24.145.215] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32EEZCor097950;
+        Tue, 14 Mar 2023 09:35:13 -0500
+Message-ID: <ee4dbb15-30c3-259b-3ae7-4f7ad4898d33@ti.com>
+Date:   Tue, 14 Mar 2023 20:05:12 +0530
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 1/2] arm64: dts: ti: k3-j784s4-mcu-wakeup: Add device id
+ property for mcu_navss
+Content-Language: en-US
+To:     Nishanth Menon <nm@ti.com>,
+        Siddharth Vadapalli <s-vadapalli@ti.com>
+CC:     <vigneshr@ti.com>, <kristo@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski@linaro.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <srk@ti.com>
+References: <20230314104055.1475054-1-s-vadapalli@ti.com>
+ <20230314104055.1475054-2-s-vadapalli@ti.com>
+ <20230314132922.ejbutfxt7z7xhqgm@danger>
+From:   Jayesh Choudhary <j-choudhary@ti.com>
+In-Reply-To: <20230314132922.ejbutfxt7z7xhqgm@danger>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sa, 2023-03-11 at 17:07 +0800, Hal Feng wrote:
-> From: Emil Renner Berthing <kernel@esmil.dk>
-> 
-> This moves the StarFive JH7100 reset driver to a new subdirectory in
-> preparation for adding more StarFive reset drivers.
-> 
-> Tested-by: Tommaso Merciai <tomm.merciai@gmail.com>
-> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-> Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
-> Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
-> ---
->  MAINTAINERS                                          | 2 +-
->  drivers/reset/Kconfig                                | 8 +-------
->  drivers/reset/Makefile                               | 2 +-
->  drivers/reset/starfive/Kconfig                       | 8 ++++++++
->  drivers/reset/starfive/Makefile                      | 2 ++
->  drivers/reset/{ => starfive}/reset-starfive-jh7100.c | 0
->  6 files changed, 13 insertions(+), 9 deletions(-)
->  create mode 100644 drivers/reset/starfive/Kconfig
->  create mode 100644 drivers/reset/starfive/Makefile
->  rename drivers/reset/{ => starfive}/reset-starfive-jh7100.c (100%)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index caba3b61ad5c..87f210e357ca 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -19940,7 +19940,7 @@ STARFIVE JH7100 RESET CONTROLLER DRIVER
->  M:	Emil Renner Berthing <kernel@esmil.dk>
->  S:	Maintained
->  F:	Documentation/devicetree/bindings/reset/starfive,jh7100-reset.yaml
-> -F:	drivers/reset/reset-starfive-jh7100.c
-> +F:	drivers/reset/starfive/reset-starfive-jh7100.c
->  F:	include/dt-bindings/reset/starfive-jh7100.h
->  
-> 
-> 
-> 
->  STARFIVE JH71XX PMU CONTROLLER DRIVER
-> diff --git a/drivers/reset/Kconfig b/drivers/reset/Kconfig
-> index 6ae5aa46a6b2..6aa8f243b30c 100644
-> --- a/drivers/reset/Kconfig
-> +++ b/drivers/reset/Kconfig
-> @@ -232,13 +232,6 @@ config RESET_SOCFPGA
->  	  This enables the reset driver for the SoCFPGA ARMv7 platforms. This
->  	  driver gets initialized early during platform init calls.
->  
-> 
-> 
-> 
-> -config RESET_STARFIVE_JH7100
-> -	bool "StarFive JH7100 Reset Driver"
-> -	depends on ARCH_STARFIVE || COMPILE_TEST
-> -	default ARCH_STARFIVE
-> -	help
-> -	  This enables the reset controller driver for the StarFive JH7100 SoC.
-> -
->  config RESET_SUNPLUS
->  	bool "Sunplus SoCs Reset Driver" if COMPILE_TEST
->  	default ARCH_SUNPLUS
-> @@ -320,6 +313,7 @@ config RESET_ZYNQ
->  	help
->  	  This enables the reset controller driver for Xilinx Zynq SoCs.
->  
-> 
-> 
-> 
-> +source "drivers/reset/starfive/Kconfig"
->  source "drivers/reset/sti/Kconfig"
->  source "drivers/reset/hisilicon/Kconfig"
->  source "drivers/reset/tegra/Kconfig"
-> diff --git a/drivers/reset/Makefile b/drivers/reset/Makefile
-> index 3e7e5fd633a8..719b8f6f84bc 100644
-> --- a/drivers/reset/Makefile
-> +++ b/drivers/reset/Makefile
-> @@ -1,6 +1,7 @@
->  # SPDX-License-Identifier: GPL-2.0
->  obj-y += core.o
->  obj-y += hisilicon/
-> +obj-$(CONFIG_ARCH_STARFIVE) += starfive/
 
-This should really be obj-y, otherwise this won't compile with
-COMPILE_TEST=y but ARCH_STARFIVE=n.
 
-With that fixed,
-Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
+On 14/03/23 18:59, Nishanth Menon wrote:
+> On 16:10-20230314, Siddharth Vadapalli wrote:
+>> The "ti,sci-dev-id" property used to indicate the Device ID is missing
+>> for mcu_navss device-tree node. Add it.
+>>
+>> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
+>> ---
+>>   arch/arm64/boot/dts/ti/k3-j784s4-mcu-wakeup.dtsi | 2 ++
+>>   1 file changed, 2 insertions(+)
+>>
+>> diff --git a/arch/arm64/boot/dts/ti/k3-j784s4-mcu-wakeup.dtsi b/arch/arm64/boot/dts/ti/k3-j784s4-mcu-wakeup.dtsi
+>> index 93952af618f6..52311da15579 100644
+>> --- a/arch/arm64/boot/dts/ti/k3-j784s4-mcu-wakeup.dtsi
+>> +++ b/arch/arm64/boot/dts/ti/k3-j784s4-mcu-wakeup.dtsi
+>> @@ -212,6 +212,8 @@ mcu_navss: bus@28380000{
+>>   		dma-coherent;
+>>   		dma-ranges;
+>>   
+>> +		ti,sci-dev-id = <323>;
+>> +
+>>   		mcu_ringacc: ringacc@2b800000 {
+>>   			compatible = "ti,am654-navss-ringacc";
+>>   			reg = <0x00 0x2b800000 0x00 0x400000>,
+>> -- 
+>> 2.25.1
+>>
+> 
+> Looks like
+> https://lore.kernel.org/all/20230313104721.407071-2-j-choudhary@ti.com/
+> is another part of the Fixup?
+> 
+> Why not squash the two as a missing ti,sci-dev-id for j784s4?
 
-regards
-Philipp
+Okay I will add this to my series and re-roll v2.
+
+-Jayesh
+
+> 
+> 
