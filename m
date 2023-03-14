@@ -2,61 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E640E6B9766
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 15:11:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B7CE6B9763
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 15:11:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230199AbjCNOLJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 10:11:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57336 "EHLO
+        id S231909AbjCNOLE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 10:11:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232602AbjCNOKw (ORCPT
+        with ESMTP id S232583AbjCNOKu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 10:10:52 -0400
-Received: from mail-io1-f49.google.com (mail-io1-f49.google.com [209.85.166.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 492989FBDD;
-        Tue, 14 Mar 2023 07:10:46 -0700 (PDT)
-Received: by mail-io1-f49.google.com with SMTP id f14so6450664iow.5;
-        Tue, 14 Mar 2023 07:10:46 -0700 (PDT)
+        Tue, 14 Mar 2023 10:10:50 -0400
+Received: from mail-io1-f41.google.com (mail-io1-f41.google.com [209.85.166.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 285E18E3F2;
+        Tue, 14 Mar 2023 07:10:43 -0700 (PDT)
+Received: by mail-io1-f41.google.com with SMTP id m22so6449809ioy.4;
+        Tue, 14 Mar 2023 07:10:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678803045;
+        d=1e100.net; s=20210112; t=1678803042;
         h=date:subject:message-id:references:in-reply-to:cc:to:from
          :mime-version:content-transfer-encoding:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=KPNzf+HQqdCHDIm57ke58vX4Ge6Far2yuTyMjYWrrg8=;
-        b=EgnPdKxiPNAz2yT1kP/ptS/cguAi9KECytbPns2HHHehwXDgtbDLWui/I4apR23QXp
-         3xAblLXrI3Yhozed9tJzbB+xnV+bm0nWYKgQOVfUVmN7Aq09ervme2H4TWzeim3F19sX
-         ZGtL0Lmva2dlTXWZLg7+SIFKZ259PsthZsg+7t+ErFeOJYhR9hueiJLzQ0uJxWBvr+v8
-         HkYfP5Q2skbpzNow1t0C6MS2OoYt9J75MLiaP2QplLY5IPC92Vo1bIzX16PPrJUI6+QT
-         gb0ZbWMSIk1Rph55PuZp+RBml9rVWap0G2nKmYWNbZfef4ENv0cP4kMF0adibQjpYdeD
-         isVw==
-X-Gm-Message-State: AO0yUKV9DLYBFpVYMgREsrXvwctJi/2zWWoaZwX9QmySh2r/6Z8U+L8k
-        bpqaSvKKwap4rSORaMFo0Q==
-X-Google-Smtp-Source: AK7set/ocHiedGVn3EYKa+oI9LdcoqYevEqv/MuedJEJn4ARvKcoiOUJNoQKDEkorOs6HTOylwSY5w==
-X-Received: by 2002:a6b:d216:0:b0:74c:9235:8753 with SMTP id q22-20020a6bd216000000b0074c92358753mr19035122iob.13.1678803045491;
-        Tue, 14 Mar 2023 07:10:45 -0700 (PDT)
+        bh=Kvo3o7iBOZ0SitIt/v03D3djxGZS2cc9kZtOLnMfPWw=;
+        b=p+ynSjweluMYjr9Nu6hpKU+JPB0SwxmYNY8fbVcaBHlnSidYW0cnHr9LjJkcnRIWEZ
+         FI0lulf83n4LiDm4KPbdI1eywJjw+ry2PvUR+G6K98mZjmAQYLvRhwTh9kkKf2h8vSMP
+         3JDXAN5eCmArjgySp7+4YvstKb2XoWCI4Qr1C/gnum7Rrc9USJf+PelybAA6N9OIseJq
+         TvTngHj8Y6q4f0/GVS7IXHk8cyREFOxZzZjQNpko2HW0YQqoIKb80xMgkw7/ZSReCybr
+         kbHkXOAV81itwihO6T6/SppRP/TxWKOxzen4PVuqXF/9CoJcQ6mUhXIlGxBEbTKoO3xi
+         WO+g==
+X-Gm-Message-State: AO0yUKVWezpxp38qI2TCdhSI2rI2jDdubZNWXEAnDS4HaUXa6umRR44G
+        ZsoNJ/E+vgqCZyfGd78uK2rLOlfPHA==
+X-Google-Smtp-Source: AK7set8ACG0kSoQkv6VrxHrp+10R+OZ6fW7tNemyOQje4bekljWOx5pe5rtb2DbjX232JVkUkLxoyg==
+X-Received: by 2002:a6b:cf05:0:b0:74c:9907:e5b4 with SMTP id o5-20020a6bcf05000000b0074c9907e5b4mr8795099ioa.6.1678803042294;
+        Tue, 14 Mar 2023 07:10:42 -0700 (PDT)
 Received: from robh_at_kernel.org ([64.188.179.249])
-        by smtp.gmail.com with ESMTPSA id s14-20020a6bd30e000000b00734ac8a5ef7sm833864iob.25.2023.03.14.07.10.42
+        by smtp.gmail.com with ESMTPSA id a22-20020a02ac16000000b003ed8808d450sm787450jao.161.2023.03.14.07.10.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Mar 2023 07:10:43 -0700 (PDT)
-Received: (nullmailer pid 83779 invoked by uid 1000);
+        Tue, 14 Mar 2023 07:10:40 -0700 (PDT)
+Received: (nullmailer pid 83795 invoked by uid 1000);
         Tue, 14 Mar 2023 14:10:19 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 MIME-Version: 1.0
 From:   Rob Herring <robh@kernel.org>
-To:     Andi Shyti <andi.shyti@kernel.org>
-Cc:     linux-i2c@vger.kernel.org, Ryan Chen <ryan_chen@aspeedtech.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>
-In-Reply-To: <20230312233613.303408-2-andi.shyti@kernel.org>
-References: <20230312233613.303408-1-andi.shyti@kernel.org>
- <20230312233613.303408-2-andi.shyti@kernel.org>
-Message-Id: <167880254331.25515.17901856481962486896.robh@kernel.org>
-Subject: Re: [PATCH v3 1/3] dt-bindings: i2c: mpc: Mark "fsl,timeout" as
- deprecated
+To:     Vaishnav Achath <vaishnav.a@ti.com>
+Cc:     bparrot@ti.com, robh+dt@kernel.org, mchehab@kernel.org,
+        tomi.valkeinen@ideasonboard.com, laurent.pinchart@ideasonboard.com,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        martyn.welch@collabora.com, devicetree@vger.kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, mripard@kernel.org,
+        u-kumar1@ti.com, praneeth@ti.com, nm@ti.com, j-luthra@ti.com,
+        vigneshr@ti.com, devarsht@ti.com,
+        niklas.soderlund+renesas@ragnatech.se, sakari.ailus@linux.intel.com
+In-Reply-To: <20230314115516.667-13-vaishnav.a@ti.com>
+References: <20230314115516.667-1-vaishnav.a@ti.com>
+ <20230314115516.667-13-vaishnav.a@ti.com>
+Message-Id: <167880254910.26054.12313108385082876859.robh@kernel.org>
+Subject: Re: [PATCH v7 12/13] media: dt-bindings: Add DT bindings for TI
+ J721E CSI2RX driver
 Date:   Tue, 14 Mar 2023 09:10:19 -0500
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
@@ -70,16 +72,42 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Mon, 13 Mar 2023 00:36:11 +0100, Andi Shyti wrote:
-> Now we have the i2c-scl-clk-low-timeout-ms property defined in
-> the i2c schema.
+On Tue, 14 Mar 2023 17:25:15 +0530, Vaishnav Achath wrote:
+> From: Pratyush Yadav <p.yadav@ti.com>
 > 
-> Mark "fsl,timeout" as deprecated and update the example.
+> TI's J721E uses the Cadence CSI2RX and DPHY peripherals to facilitate
+> capture over a CSI-2 bus. The TI CSI2RX platform driver glues all the
+> parts together.
 > 
-> Signed-off-by: Andi Shyti <andi.shyti@kernel.org>
+> Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
+> Signed-off-by: Vaishnav Achath <vaishnav.a@ti.com>
+> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> Reviewed-by: Rob Herring <robh@kernel.org>
 > ---
->  Documentation/devicetree/bindings/i2c/i2c-mpc.yaml | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> (no changes since v5)
+> 
+> Changes in v5:
+> - Add Laurent's and Rob's R-by.
+> 
+> Changes in v2:
+> - Rename to ti,j721e-csi2rx.yaml
+> - Add an entry in MAINTAINERS.
+> - Add a description for the binding.
+> - Change compatible to ti,j721e-csi2rx to make it SoC specific.
+> - Remove description from dmas, reg, power-domains.
+> - Remove a limit of 2 from #address-cells and #size-cells.
+> - Fix add ^ to csi-bridge subnode regex.
+> - Make ranges mandatory.
+> - Add unit address in example.
+> - Add a reference to cdns,csi2rx in csi-bridge subnode.
+> - Expand the example to include the csi-bridge subnode as well.
+> - Re-order subject prefixes.
+> 
+>  .../bindings/media/ti,j721e-csi2rx.yaml       | 101 ++++++++++++++++++
+>  MAINTAINERS                                   |   1 +
+>  2 files changed, 102 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/media/ti,j721e-csi2rx.yaml
 > 
 
 My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
@@ -88,12 +116,14 @@ on your patch (DT_CHECKER_FLAGS is new in v5.13):
 yamllint warnings/errors:
 
 dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/i2c/i2c-mpc.example.dtb: i2c@3100: Unevaluated properties are not allowed ('i2c-scl-clk-low-timeout-ms' was unexpected)
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/i2c/i2c-mpc.yaml
+./Documentation/devicetree/bindings/media/ti,j721e-csi2rx.yaml: Unable to find schema file matching $id: http://devicetree.org/schemas/media/cdns,csi2rx.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/ti,j721e-csi2rx.example.dtb: ticsi2rx@4500000: csi-bridge@4504000: False schema does not allow {'compatible': ['cdns,csi2rx'], 'reg': [[72368128, 4096]], 'clocks': [[4294967295, 26, 2], [4294967295, 26, 0], [4294967295, 26, 2], [4294967295, 26, 2], [4294967295, 26, 3], [4294967295, 26, 3]], 'clock-names': ['sys_clk', 'p_clk', 'pixel_if0_clk', 'pixel_if1_clk', 'pixel_if2_clk', 'pixel_if3_clk'], 'phys': [[4294967295]], 'phy-names': ['dphy'], 'ports': {'#address-cells': [[1]], '#size-cells': [[0]], 'port@0': {'reg': [[0]], 'endpoint': {'remote-endpoint': [[4294967295]], 'bus-type': [[4]], 'clock-lanes': [[0]], 'data-lanes': [[1, 2]]}}}}
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/ti,j721e-csi2rx.yaml
+Documentation/devicetree/bindings/media/ti,j721e-csi2rx.example.dtb: /example-0/ticsi2rx@4500000/csi-bridge@4504000: failed to match any schema with compatible: ['cdns,csi2rx']
 
 doc reference errors (make refcheckdocs):
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230312233613.303408-2-andi.shyti@kernel.org
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230314115516.667-13-vaishnav.a@ti.com
 
 The base for the series is generally the latest rc1. A different dependency
 should be noted in *this* patch.
