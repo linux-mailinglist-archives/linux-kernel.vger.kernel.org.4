@@ -2,74 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F6EF6B881D
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 03:11:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A68536B881F
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 03:12:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229612AbjCNCLb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 22:11:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55434 "EHLO
+        id S229621AbjCNCL7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 22:11:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229571AbjCNCL3 (ORCPT
+        with ESMTP id S229571AbjCNCL5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 22:11:29 -0400
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9A2D85B32
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 19:11:22 -0700 (PDT)
-Received: by mail-io1-f72.google.com with SMTP id s1-20020a6bd301000000b0073e7646594aso7240677iob.8
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 19:11:22 -0700 (PDT)
+        Mon, 13 Mar 2023 22:11:57 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DB8B856A5;
+        Mon, 13 Mar 2023 19:11:55 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id y19so8068699pgk.5;
+        Mon, 13 Mar 2023 19:11:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678759914;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2Kh93D/+te+j0IB0dAgsr8PGEgdCLFuhdg5/LQctP2E=;
+        b=mzmcop6Eswi/dah8swmQ/Sf6zoUFx83VLxuiMkGIlE3ctBJRVb91+I7eh8OB3zH96H
+         wekJceblT/j6kmDNWMCkGfNMTXJXT+Q2jzC8NZb4Mi/vYCeeae9J2qateruTRwuk6JGd
+         WJ7J8MLydSkmZahnlKmNIjnU7M6ECnUKvSoALKL1BTacDb4h0MrQ/FnAIfEOqSLd+nUL
+         RSH9QDcKdpF88ngtj86Exbbj+/v3XiDSm8hAEn887t+EvoZ4aYOgJZyOiUuopv+/H5+n
+         1e+9epnZYTfojXqzZjEesblPBNGI7lk3+won7tfusHk9GHQkcHx2m0VRuM7U6McCYftc
+         ty0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678759881;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=j+gommvcmQInkAWZvmI953iPYt6DUKvljAaKIYhxxxw=;
-        b=5kwsVmmSYjiad9DsJGFNULeTPrW2+CUkw26f/+vii25wv7XnW0jU4S6kmsnlTuNSmm
-         lCU1jOh1N7bcZU71Gnkb9fTaSHJINK3DuG0vtdhDnyKdsfP98xDDbe5j8IjT4o6lXsNM
-         2kSHe3FCCuNjgXakotRY2GTG8PBFyii/Yntbl/vkxDhk6qQRRPn24aQokwnbjNKm/qZw
-         c2L+YwkeGdVeqrtNVm8T3YeJ9pRSfD44mYToBbXmoAIBBIjx4NvfG9OxLfLQVZn7KrgQ
-         a/vYJnUqflcLsNGMRlsUqNcAwmc8iP2DApLS//L05MiRUPB1Az2zQqyVi5knZS4B816N
-         wlrA==
-X-Gm-Message-State: AO0yUKWYFhNzmmsMS0UeLHq00icKeUNeDYkR7k9QdQC4ujgHuFDPUaef
-        dF5A6DWhexu1XZBiXAq/fWGlbC3oiZijtX3McyKD/5hN+CZY
-X-Google-Smtp-Source: AK7set+GrKCT8l8cwWsvNMiTfNPoyQwYd9VfsJSV3mE1Dgs29Wu6WexwgUQPzwDEFYHoIv3NBp+k97oAtRL0rFNGyArYl0EXsmlS
+        d=1e100.net; s=20210112; t=1678759914;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2Kh93D/+te+j0IB0dAgsr8PGEgdCLFuhdg5/LQctP2E=;
+        b=8LZUvmOXZW/2dioEa2pEDUUZd9FS5r4g7UIrFg+k9gj4f2QD3VKaGA81ziON8wtVy6
+         UYNcGaRj+xAs2Q5doraWe6JDwpAS90fs9S/RfCjCV9ljOpd+KkW1oH3UnZUcpSoexzOh
+         tDDM/PoOGQrZu8Ib3bGjLs1UJ4KtWtFLEsEoe0DlHYcF3sODZhPE1M5+6NPzyn7WlvRv
+         pBpDkrYpZhCGD+tuCL7xtBvgDJXRsZjlcJ5iLspN7o5HnpKkF14gNCiA+2HGpyefEfiv
+         5FV69waIhy5bBwb3RnKUTqSBeUQNhNT9OcgAosWYXrycTSb1zaYfAVsowv6FdbZu/qPf
+         jj2g==
+X-Gm-Message-State: AO0yUKWt87vUNjdjKaswMQC+CEM3DTcO4kz633pen8In5vgUB7QW6OO5
+        fHvAV7nSGdA76l8AufeRM7G/5XWaWvKYhgF5AWgJlFcjIxknO8g3D3EprQ==
+X-Google-Smtp-Source: AK7set96Kx9hVT10DY+Y2kshjDDGkEUewcJzEvR8BMO2mJTUPNbWBkz7at0WAAgqh9ptXT3Rh0TPZuEvbaxEyxov+6k=
+X-Received: by 2002:a63:7d03:0:b0:503:4a2c:5f0 with SMTP id
+ y3-20020a637d03000000b005034a2c05f0mr11936753pgc.9.1678759914543; Mon, 13 Mar
+ 2023 19:11:54 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a6b:ef18:0:b0:745:dfde:ecec with SMTP id
- k24-20020a6bef18000000b00745dfdeececmr16586583ioh.1.1678759881671; Mon, 13
- Mar 2023 19:11:21 -0700 (PDT)
-Date:   Mon, 13 Mar 2023 19:11:21 -0700
-In-Reply-To: <20230314014732.1971-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000690ab405f6d2beb8@google.com>
-Subject: Re: [syzbot] [fscrypt?] WARNING in fscrypt_destroy_keyring
-From:   syzbot <syzbot+93e495f6a4f748827c88@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
+References: <20230310105734.1574078-1-zyytlz.wz@163.com> <20230313170046.287bae8d@kernel.org>
+In-Reply-To: <20230313170046.287bae8d@kernel.org>
+From:   Zheng Hacker <hackerzheng666@gmail.com>
+Date:   Tue, 14 Mar 2023 10:11:42 +0800
+Message-ID: <CAJedcCzaQZfyNzx0tE40k4sK=wmC3hdQ07cUNXwk8nukMYdw2Q@mail.gmail.com>
+Subject: Re: [PATCH net] net: qcom/emac: Fix use after free bug in emac_remove
+ due to race condition
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Zheng Wang <zyytlz.wz@163.com>, timur@kernel.org,
+        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        1395428693sheep@gmail.com, alex000young@gmail.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Jakub Kicinski <kuba@kernel.org> =E4=BA=8E2023=E5=B9=B43=E6=9C=8814=E6=97=
+=A5=E5=91=A8=E4=BA=8C 08:00=E5=86=99=E9=81=93=EF=BC=9A
+>
+> On Fri, 10 Mar 2023 18:57:34 +0800 Zheng Wang wrote:
+> > +     netif_carrier_off(netdev);
+> > +     netif_tx_disable(netdev);
+> > +     cancel_work_sync(&adpt->work_thread);
+> >       unregister_netdev(netdev);
+> >       netif_napi_del(&adpt->rx_q.napi);
+>
+> same problem as in the natsemi driver
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+Hi Jakub,
 
-Reported-and-tested-by: syzbot+93e495f6a4f748827c88@syzkaller.appspotmail.com
+Thanks for your reply. Here we schedule the work when handling IRQ
+request, So I think we should add free_irq after netif_napi_del and move
+the cancel_work_sync after that like:
 
-Tested on:
+netif_carrier_off(netdev);
+netif_tx_disable(netdev);
 
-commit:         fe15c26e Linux 6.3-rc1
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=116c0c3ac80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=7573cbcd881a88c9
-dashboard link: https://syzkaller.appspot.com/bug?extid=93e495f6a4f748827c88
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=12aad472c80000
+unregister_netdev(netdev);
+netif_napi_del(&adpt->rx_q.napi);
 
-Note: testing is done by a robot and is best-effort only.
+free_irq(adpt->irq.irq, &adpt->irq);
+cancel_work_sync(&adpt->work_thread);
+
+Apprecaite for your advice about the fix.
+
+Best regards,
+Zheng
