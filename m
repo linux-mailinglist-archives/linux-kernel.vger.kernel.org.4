@@ -2,68 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0BBF6B9A2A
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 16:45:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CAF06B9A27
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 16:45:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231277AbjCNPpo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 11:45:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35508 "EHLO
+        id S231232AbjCNPpa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 11:45:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231259AbjCNPpc (ORCPT
+        with ESMTP id S230466AbjCNPpU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 11:45:32 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 464D53B67B;
-        Tue, 14 Mar 2023 08:45:00 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id da10so63917383edb.3;
-        Tue, 14 Mar 2023 08:45:00 -0700 (PDT)
+        Tue, 14 Mar 2023 11:45:20 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B25EB32A1;
+        Tue, 14 Mar 2023 08:44:42 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id f18so20612526lfa.3;
+        Tue, 14 Mar 2023 08:44:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678808698;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20210112; t=1678808678; x=1681400678;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=eKXDqlgRlxDBpfBSUg+NALui/8xB4e6ou/BhNO7mLI4=;
-        b=IAzLxnAp6XszDIaOhMc3QPxTqF85nNzGKqy1tkwbOUs9FdXHZECjQhBSHD/wu/SMCO
-         XEGhPvZbIAK7G898j0na7C8AlqoqrOFXDjW7wbFe3aHu0+EecYHkrQuLeVQcoQz6JMos
-         JD4cCmgQTg0nVK/iRrKwFJfUPMhXlM/TXjNk5A7tWpSobltqv2xDJxUg/5H7xhQTLqAH
-         C3fBqWtfEHgUZvW5t3PJ0O48977uryrB1CN57tYG30Eg983bLlEZpZKUnMRePHn4i0qn
-         riZDYiVaA64QTH4kuawKv1uGH53tMe2peloWMAwl9C2EpPu6WMsjjNm9pqtOm0NR8sot
-         h/4Q==
+        bh=cgTpDdjkEtDwUyqMsKfKimgkpTko/+U4mjHsdeCCyAw=;
+        b=jn+4fsbltc9iHB3Pg5GN3DIZTz8zMRzUeKeAIzOiTyYvXPUn/3asS8Ueyq6cSIzv7b
+         KfOshWG4YecYkTM5ULwjC66WFhoMkDdpEsW4UewwGMGhucUoNikdZIvciTL/i9szXTHL
+         FaSQuKBvVTEdjgSN5O6bAMSKQAoFg5wFR7nLwLZaGgpQ03j2Xwo8SL9alAhePo7gOL2n
+         gpbcyWjJKAS45cJ/PMATN1DElGUDwNAQsfI9nSwIb+Z5CNVqPov6+NDgMeku5Ypt6UEC
+         AGzG6Fg35jFPB1Wjjd8Bq8F4T8S93tyGqnVoDw03OQJy9gifmcrNyqbXz9WIeArpE2BA
+         /p/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678808698;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20210112; t=1678808678; x=1681400678;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=eKXDqlgRlxDBpfBSUg+NALui/8xB4e6ou/BhNO7mLI4=;
-        b=KMxIbI1MTe0ofO45/EdC+N1B4BPvC54qNhlpxVO7Fj+VQ/MBuZSlDlOR59YxKFn17E
-         isAFOC/U7Pq3Tu96MXhnTBDjhsn7thuzvu859DkfZrnUrkspuAYNZ++AeQYeVVKzo1rN
-         oKpwVC773hhkRaLIDBkPIcvz2ZgYVEovRRYRb6ADzqiVRGcJ1Y2WGzxzsctlciBJLTx8
-         Y7v6XINtbehM73Xrr6c6IAxl9aIJivzrCJM1qzDRdUP1EMmG3Phd9jN62onzUo2Yx/3e
-         OVbBya0OBBqiyO+A/0LYyAmruZz48sANzsC6/9qKJTvR59ZLcqAf8dh1cUkpodbpnxcv
-         bKyQ==
-X-Gm-Message-State: AO0yUKVpfhQ0FHXVkc1IGp4O3jzSMKs5xRn8czekn9Sq7+zcFVlrz7Mr
-        98Lh2YWtkJE5OUSDk3+AOP1TOOXi2JDLRZZA5kY=
-X-Google-Smtp-Source: AK7set9q7zAwL8U3or4cXTpOyuJtTD98rXetlwgFWoer8FKPE8NTLIcMS9zdJoPbs8aex72ekWe7OJDq0ibIvIyYO6Q=
-X-Received: by 2002:a17:906:518:b0:8dd:70a:3a76 with SMTP id
- j24-20020a170906051800b008dd070a3a76mr1491582eja.11.1678808697803; Tue, 14
- Mar 2023 08:44:57 -0700 (PDT)
+        bh=cgTpDdjkEtDwUyqMsKfKimgkpTko/+U4mjHsdeCCyAw=;
+        b=DtyeXw8GuykBCw3lVMx6mDFx4Lcy13UDiMwf/sTLDNpu9I14CZcDUdLurT/alQ1hyj
+         +192wFW5eEMBkcHa0ie9jWQMBAklKMzTWhha0iKntfwOLxzldqkr/6KVrV4sv34ne36R
+         JBOT5tVGBOjJXNvnidGyuYjHCXtCjbtdusL9vPWpkPQZDlDIZMVUeOPYX9NI8PZIWQtg
+         OSNfQygvizeHTn5dLIrTdMfICVW2u8NFqx/N3Qq7U2Hoi9rrI9rEk16f0MotQfbahNNl
+         iMeHz+sngFzxAVWiflVqy7aNAly+OqMQFLgkJCYkLdakrurFhij2Tm4zldXUZBrmIYR2
+         ZvkQ==
+X-Gm-Message-State: AO0yUKW0yQ0Tcr7hvAnusuUrJ2Sgg2BZeYXL2fAiABmBjfw3+D4NPRrA
+        Ibu/QVIiUj/2c/PeuOIULoXRxlwjF2k=
+X-Google-Smtp-Source: AK7set9Y1zV5rLAEEvjenaYbvtewXbHCXiE3dOYMiaGQa6T/jHn8v6l35bVSLf5V1f4SsCB9xAyJDg==
+X-Received: by 2002:ac2:5239:0:b0:4db:3467:f2ff with SMTP id i25-20020ac25239000000b004db3467f2ffmr62296lfl.5.1678808678111;
+        Tue, 14 Mar 2023 08:44:38 -0700 (PDT)
+Received: from localhost (88-115-161-74.elisa-laajakaista.fi. [88.115.161.74])
+        by smtp.gmail.com with ESMTPSA id w16-20020ac25990000000b004cb1de3f487sm443117lfn.104.2023.03.14.08.44.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Mar 2023 08:44:38 -0700 (PDT)
+Date:   Tue, 14 Mar 2023 17:44:36 +0200
+From:   Zhi Wang <zhi.wang.linux@gmail.com>
+To:     Steven Price <steven.price@arm.com>
+Cc:     kvm@vger.kernel.org, kvmarm@lists.linux.dev,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Marc Zyngier <maz@kernel.org>, Will Deacon <will@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Joey Gouly <joey.gouly@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Christoffer Dall <christoffer.dall@arm.com>,
+        Fuad Tabba <tabba@google.com>, linux-coco@lists.linux.dev
+Subject: Re: [RFC PATCH 15/28] KVM: arm64: Handle realm MMIO emulation
+Message-ID: <20230314174436.0000584d@gmail.com>
+In-Reply-To: <e0354676-e8cf-6ea0-3229-a55d90259f8e@arm.com>
+References: <20230127112248.136810-1-suzuki.poulose@arm.com>
+        <20230127112932.38045-1-steven.price@arm.com>
+        <20230127112932.38045-16-steven.price@arm.com>
+        <20230306173751.000026d4@gmail.com>
+        <e0354676-e8cf-6ea0-3229-a55d90259f8e@arm.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-References: <20230314030532.9238-1-kerneljasonxing@gmail.com>
- <20230314030532.9238-2-kerneljasonxing@gmail.com> <CANn89iKP7GVxZ0HYcPQq5ryC+rtwyymZuHuvza_SoCOJeADzGw@mail.gmail.com>
-In-Reply-To: <CANn89iKP7GVxZ0HYcPQq5ryC+rtwyymZuHuvza_SoCOJeADzGw@mail.gmail.com>
-From:   Jason Xing <kerneljasonxing@gmail.com>
-Date:   Tue, 14 Mar 2023 23:44:21 +0800
-Message-ID: <CAL+tcoANe4FMSCvTH46ToPqMsEUSwwKMhdT+z_hR7hEE0FsL7g@mail.gmail.com>
-Subject: Re: [PATCH v2 net-next 1/2] net-sysfs: display two backlog queue len separately
-To:     Eric Dumazet <edumazet@google.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
-        ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
-        john.fastabend@gmail.com, stephen@networkplumber.org,
-        simon.horman@corigine.com, sinquersw@gmail.com,
-        bpf@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jason Xing <kernelxing@tencent.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -74,100 +87,112 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 14, 2023 at 10:59=E2=80=AFPM Eric Dumazet <edumazet@google.com>=
- wrote:
->
-> On Mon, Mar 13, 2023 at 8:06=E2=80=AFPM Jason Xing <kerneljasonxing@gmail=
-.com> wrote:
-> >
-> > From: Jason Xing <kernelxing@tencent.com>
-> >
-> > Sometimes we need to know which one of backlog queue can be exactly
-> > long enough to cause some latency when debugging this part is needed.
-> > Thus, we can then separate the display of both.
-> >
-> > Signed-off-by: Jason Xing <kernelxing@tencent.com>
-> > ---
-> > v2: keep the total len of backlog queues untouched as Eric said
-> > Link: https://lore.kernel.org/lkml/20230311151756.83302-1-kerneljasonxi=
-ng@gmail.com/
-> > ---
-> >  net/core/net-procfs.c | 20 ++++++++++++++++----
-> >  1 file changed, 16 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/net/core/net-procfs.c b/net/core/net-procfs.c
-> > index 1ec23bf8b05c..2809b663e78d 100644
-> > --- a/net/core/net-procfs.c
-> > +++ b/net/core/net-procfs.c
-> > @@ -115,10 +115,19 @@ static int dev_seq_show(struct seq_file *seq, voi=
-d *v)
-> >         return 0;
-> >  }
-> >
-> > +static u32 softnet_input_pkt_queue_len(struct softnet_data *sd)
-> > +{
-> > +       return skb_queue_len_lockless(&sd->input_pkt_queue);
-> > +}
-> > +
-> > +static u32 softnet_process_queue_len(struct softnet_data *sd)
-> > +{
-> > +       return skb_queue_len_lockless(&sd->process_queue);
-> > +}
-> > +
-> >  static u32 softnet_backlog_len(struct softnet_data *sd)
-> >  {
-> > -       return skb_queue_len_lockless(&sd->input_pkt_queue) +
-> > -              skb_queue_len_lockless(&sd->process_queue);
-> > +       return softnet_input_pkt_queue_len(sd) + softnet_process_queue_=
-len(sd);
->
-[...]
-> Reading these variables twice might lead to inconsistency that can
-> easily be avoided.
->
-> I would suggest you cache the values,
->
-> u32 len1 =3D softnet_input_pkt_queue_len(sd);
-> u32 len2 =3D softnet_process_queue_len(sd);
+On Fri, 10 Mar 2023 15:47:14 +0000
+Steven Price <steven.price@arm.com> wrote:
 
-Agreed. Thank you, Eric. I should have realized that.
+> On 06/03/2023 15:37, Zhi Wang wrote:
+> > On Fri, 27 Jan 2023 11:29:19 +0000
+> > Steven Price <steven.price@arm.com> wrote:
+> >   
+> >> MMIO emulation for a realm cannot be done directly with the VM's
+> >> registers as they are protected from the host. However the RMM interface
+> >> provides a structure member for providing the read/written value and  
+> > 
+> > More details would be better for helping the review. I can only see the
+> > emulated mmio value from the device model (kvmtool or kvm_io_bus) is put into
+> > the GPRS[0] of the RecEntry object. But the rest of the flow is missing.  
+> 
+> The commit message is out of date (sorry about that). A previous version
+> of the spec had a dedicated member for the read/write value, but this
+> was changed to just use GPRS[0] as you've spotted. I'll update the text.
+> 
+> > I guess RMM copies the value in the RecEntry.GPRS[0] to the target GPR in the
+> > guest context in RMI_REC_ENTER when seeing RMI_EMULATED_MMIO. This is for
+> > the guest MMIO read path.  
+> 
+> Yes, when entering the guest after an (emulatable) read data abort the
+> value in GPRS[0] is loaded from the RecEntry structure into the
+> appropriate register for the guest.
+> 
+> > How about the MMIO write path? I don't see where the RecExit.GPRS[0] is loaded
+> > to a varible and returned to the userspace.  
+> 
 
-Also, the 2/2 patch which is all about the time_/budget_squeeze should
-avoid such inconsistency, I think.
+-----
+> The RMM will populate GPRS[0] with the written value in this case (even
+> if another register was actually used in the instruction). We then
+> transfer that to the usual VCPU structure so that the normal fault
+> handling logic works.
+> 
+-----
 
-Jason
->
->
->
-> >  }
-> >
-> >  static struct softnet_data *softnet_get_online(loff_t *pos)
-> > @@ -169,12 +178,15 @@ static int softnet_seq_show(struct seq_file *seq,=
- void *v)
-> >          * mapping the data a specific CPU
-> >          */
-> >         seq_printf(seq,
-> > -                  "%08x %08x %08x %08x %08x %08x %08x %08x %08x %08x %=
-08x %08x %08x\n",
-> > +                  "%08x %08x %08x %08x %08x %08x %08x %08x %08x %08x %=
-08x %08x %08x "
-> > +                  "%08x %08x\n",
-> >                    sd->processed, sd->dropped, sd->time_squeeze, 0,
-> >                    0, 0, 0, 0, /* was fastroute */
-> >                    0,   /* was cpu_collision */
-> >                    sd->received_rps, flow_limit_count,
-> > -                  softnet_backlog_len(sd), (int)seq->index);
-> > +                  softnet_backlog_len(sd),     /* keep it untouched */
->                     len1 + len2.
->
-> > +                  (int)seq->index,
-> > +                  softnet_input_pkt_queue_len(sd), softnet_process_que=
-ue_len(sd));
->                len1,  len2);
->
-> >         return 0;
-> >  }
-> >
-> > --
-> > 2.37.3
-> >
+Are these in this patch or another patch?
+
+> >> we can transfer this to the appropriate VCPU's register entry and then
+> >> depend on the generic MMIO handling code in KVM.
+> >>
+> >> Signed-off-by: Steven Price <steven.price@arm.com>
+> >> ---
+> >>  arch/arm64/kvm/mmio.c | 7 +++++++
+> >>  1 file changed, 7 insertions(+)
+> >>
+> >> diff --git a/arch/arm64/kvm/mmio.c b/arch/arm64/kvm/mmio.c
+> >> index 3dd38a151d2a..c4879fa3a8d3 100644
+> >> --- a/arch/arm64/kvm/mmio.c
+> >> +++ b/arch/arm64/kvm/mmio.c
+> >> @@ -6,6 +6,7 @@
+> >>  
+> >>  #include <linux/kvm_host.h>
+> >>  #include <asm/kvm_emulate.h>
+> >> +#include <asm/rmi_smc.h>
+> >>  #include <trace/events/kvm.h>
+> >>  
+> >>  #include "trace.h"
+> >> @@ -109,6 +110,9 @@ int kvm_handle_mmio_return(struct kvm_vcpu *vcpu)
+> >>  			       &data);
+> >>  		data = vcpu_data_host_to_guest(vcpu, data, len);
+> >>  		vcpu_set_reg(vcpu, kvm_vcpu_dabt_get_rd(vcpu), data);
+> >> +
+> >> +		if (vcpu_is_rec(vcpu))
+> >> +			vcpu->arch.rec.run->entry.gprs[0] = data;  
+> > 
+> > I think the guest context is maintained by RMM (while KVM can only touch
+> > Rec{Entry, Exit} object) so that guest context in the legacy VHE mode is
+> > unused.
+> > 
+> > If yes, I guess here is should be:
+> > 
+> > if (unlikely(vcpu_is_rec(vcpu)))
+> > 	vcpu->arch.rec.run->entry.gprs[0] = data;
+> > else
+> > 	vcpu_set_reg(vcpu, kvm_vcpu_dabt_get_rd(vcpu), data);  
+> 
+> Correct. Although there's no harm in updating with vcpu_set_reg(). But
+> I'll make the change because it's clearer.
+> 
+> >>  	}
+> >>  
+> >>  	/*
+> >> @@ -179,6 +183,9 @@ int io_mem_abort(struct kvm_vcpu *vcpu, phys_addr_t fault_ipa)
+> >>  	run->mmio.len		= len;
+> >>  	vcpu->mmio_needed	= 1;
+> >>  
+> >> +	if (vcpu_is_rec(vcpu))
+> >> +		vcpu->arch.rec.run->entry.flags |= RMI_EMULATED_MMIO;
+> >> +  
+> > 
+> > Wouldn't it be better to set this in the kvm_handle_mmio_return where the MMIO
+> > read emulation has been surely successful?  
+> 
+> Yes, that makes sense - I'll move this.
+> 
+> Thanks,
+> 
+> Steve
+> 
+> >>  	if (!ret) {
+> >>  		/* We handled the access successfully in the kernel. */
+> >>  		if (!is_write)  
+> >   
+> 
+
