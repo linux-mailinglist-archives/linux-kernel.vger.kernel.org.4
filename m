@@ -2,149 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F4E76B9FE5
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 20:40:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8BCD6B9FF5
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 20:47:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230210AbjCNTkK convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 14 Mar 2023 15:40:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59144 "EHLO
+        id S229525AbjCNTri (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 15:47:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230109AbjCNTkI (ORCPT
+        with ESMTP id S230160AbjCNTre (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 15:40:08 -0400
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 155CC193E0;
-        Tue, 14 Mar 2023 12:40:07 -0700 (PDT)
-Received: by mail-ed1-f46.google.com with SMTP id x13so19264319edd.1;
-        Tue, 14 Mar 2023 12:40:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678822805;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lngV1SBJchusWtrK2aOr9VYqvqXEEwJ9k8SBgXaHbrk=;
-        b=Z8RFCd5x5piC/w/qZE85f2CA6aRmQqPjxEHb87Ph5o4TLioJyhuUysH8oYtn5zT00i
-         N2WQKiXCIEQyTLYWRb8B/LEHRMl6myFJ6MuxrCw1O+DykyEw9JZbi6UKaOivp+xgsuU3
-         50sEF5oZak9lbmyVLUVmPwUjjfLYBQjKbklumVPNcykHTq6J5Kud+o6jjjAh6+EkWng3
-         W6Esu085h1rnxQ+03rbWWqAx5EIispjjL8kjl1Nh7gClHwtaP6Gh2xLWdJGFtC76Tr2E
-         yafmRzmvnu2zaNBkOfuhgnHaTV1qZHzzYdOtRZLC0DKFJBfBf5y7lUMWfggH4+DJ4OSR
-         Sfbg==
-X-Gm-Message-State: AO0yUKWuILM7u4Onb0SEhrOqWt/NIRGBODj6Y1cSeVkLt8bwtYDC5XY1
-        NnGM3Em7IaSE/E7guiww3v4KzquO8rm+cKOeB/8=
-X-Google-Smtp-Source: AK7set/lJc5Pr883/nO0O+8ECRQFHtff91e6HCCh3sc0wnAQLJZk6QiDSRlN/qBx2oOymxYCdUYTCiZHrpVq94ilq9g=
-X-Received: by 2002:a17:906:58c6:b0:8b1:7aec:c8e6 with SMTP id
- e6-20020a17090658c600b008b17aecc8e6mr2049482ejs.2.1678822805425; Tue, 14 Mar
- 2023 12:40:05 -0700 (PDT)
+        Tue, 14 Mar 2023 15:47:34 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B39473645D;
+        Tue, 14 Mar 2023 12:47:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 59420B81ACC;
+        Tue, 14 Mar 2023 19:47:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E826AC433EF;
+        Tue, 14 Mar 2023 19:47:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678823250;
+        bh=rcZILeEMZPxS/d8YTx+9VSG/J7+wybp/InVGDfs/zpo=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Qj/7X4y1Y5aIKXYYELdBYclAxhUVcDHpndiHZLmhbmJSlzCbf0EZu3d+6pO6NSW+U
+         Xhq9xjl1dgtX16yF9xDs5WmlUIkVO+HdEqn02vHzU92Cj7bfyw4akTzAfAmxcWz64s
+         50DpJzgAW2CvvvXOSGO4GsIimnJpOYHsWxPsy/q3OOcLCbrlkKv3xKNO85rUg7ID06
+         D5G7EJ62T6Uqce+VJa0R61ZXSDhmVcYQvZgGA9aP8Qvx3pWVSmvs7DoifrBpGSQFj2
+         nCYr5OEHY95AuWzuFqf8bSTkNfmUOT5G9dn9PuRV6pbqclYGIsajEQGgFOOdFNcm9I
+         MYBm9hm5x4n1A==
+Received: by mail-qv1-f45.google.com with SMTP id bo10so13023174qvb.12;
+        Tue, 14 Mar 2023 12:47:30 -0700 (PDT)
+X-Gm-Message-State: AO0yUKU2H5WGP2oS+DP5Ihm6Gfm855vX0tZMNjLCQ8q3j8wckPxwcLN8
+        ox1mX9UpG7hgvfF9nEiEWMS++2aW4P8y+jiHzHs=
+X-Google-Smtp-Source: AK7set9L1dAKh3yoJogBPeNvjI7idAiDwJJvdauMpYnWgYdvqnncGYRuxo9/Mc0GdLXat6Xw/x57jX83GWkWhAYnbUc=
+X-Received: by 2002:ac8:40cd:0:b0:3d3:36eb:27c4 with SMTP id
+ f13-20020ac840cd000000b003d336eb27c4mr661890qtm.13.1678823250062; Tue, 14 Mar
+ 2023 12:47:30 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230308132309.18827-1-yu.c.chen@intel.com>
-In-Reply-To: <20230308132309.18827-1-yu.c.chen@intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 14 Mar 2023 20:39:54 +0100
-Message-ID: <CAJZ5v0hgKifYp=5L4XVVnDDZ_JDvizQWu5CvAFP1eb5xK0+XMA@mail.gmail.com>
-Subject: Re: [PATCH v2] ACPI: tools: pfrut: Check if the input of level and
- type is in the right numeric range
-To:     Chen Yu <yu.c.chen@intel.com>
-Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Len Brown <lenb@kernel.org>,
-        Robert Moore <robert.moore@intel.com>,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hariganesh Govindarajulu <hariganesh.govindarajulu@intel.com>
+References: <20230308080327.33906-1-chengen.du@canonical.com> <84E89457-478E-42F8-AC5F-DFFC58FBEFFB@hammerspace.com>
+In-Reply-To: <84E89457-478E-42F8-AC5F-DFFC58FBEFFB@hammerspace.com>
+From:   Anna Schumaker <anna@kernel.org>
+Date:   Tue, 14 Mar 2023 15:47:14 -0400
+X-Gmail-Original-Message-ID: <CAFX2JfkR3exLZUYS6mydhS-putG+6WoHjP790NJbXOQCw3McJQ@mail.gmail.com>
+Message-ID: <CAFX2JfkR3exLZUYS6mydhS-putG+6WoHjP790NJbXOQCw3McJQ@mail.gmail.com>
+Subject: Re: [PATCH] NFS: Correct timing for assigning access cache timestamp
+To:     Trond Myklebust <trondmy@hammerspace.com>
+Cc:     Chengen Du <chengen.du@canonical.com>,
+        Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 8, 2023 at 6:28 AM Chen Yu <yu.c.chen@intel.com> wrote:
+On Tue, Mar 14, 2023 at 2:51=E2=80=AFPM Trond Myklebust <trondmy@hammerspac=
+e.com> wrote:
 >
-> The user provides arbitrary non-numeic value to level and type,
-> which could bring expected behavior. In this case the expected
-> behavior would be to throw an error.
 >
->  pfrut -h
-> usage: pfrut [OPTIONS]
-> code injection:
-> -l, --load
-> -s, --stage
-> -a, --activate
-> -u, --update [stage and activate]
-> -q, --query
-> -d, --revid
-> update telemetry:
-> -G, --getloginfo
-> -T, --type(0:execution, 1:history)
-> -L, --level(0, 1, 2, 4)
-> -R, --read
-> -D, --revid log
 >
->  pfrut -T A
->  pfrut -G
-> log_level:0
-> log_type:0
-> log_revid:2
-> max_data_size:65536
-> chunk1_size:0
-> chunk2_size:1530
-> rollover_cnt:0
-> reset_cnt:17
+> > On Mar 8, 2023, at 03:03, Chengen Du <chengen.du@canonical.com> wrote:
+> >
+> > When the user's login time is newer than the cache's timestamp,
+> > the original entry in the RB-tree will be replaced by a new entry.
+> > Currently, the timestamp is only set if the entry is not found in
+> > the RB-tree, which can cause the timestamp to be undefined when
+> > the entry exists. This may result in a significant increase in
+> > ACCESS operations if the timestamp is set to zero.
+> >
+> > Signed-off-by: Chengen Du <chengen.du@canonical.com>
+> > ---
+> > fs/nfs/dir.c | 2 +-
+> > 1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/fs/nfs/dir.c b/fs/nfs/dir.c
+> > index a41c3ee4549c..6fbcbb8d6587 100644
+> > --- a/fs/nfs/dir.c
+> > +++ b/fs/nfs/dir.c
+> > @@ -3089,7 +3089,6 @@ static void nfs_access_add_rbtree(struct inode *i=
+node,
+> > else
+> > goto found;
+> > }
+> > - set->timestamp =3D ktime_get_ns();
+> > rb_link_node(&set->rb_node, parent, p);
+> > rb_insert_color(&set->rb_node, root_node);
+> > list_add_tail(&set->lru, &nfsi->access_cache_entry_lru);
+> > @@ -3114,6 +3113,7 @@ void nfs_access_add_cache(struct inode *inode, st=
+ruct nfs_access_entry *set,
+> > cache->fsgid =3D cred->fsgid;
+> > cache->group_info =3D get_group_info(cred->group_info);
+> > cache->mask =3D set->mask;
+> > + cache->timestamp =3D ktime_get_ns();
+> >
+> > /* The above field assignments must be visible
+> > * before this item appears on the lru.  We cannot easily
+> > --
+> > 2.37.2
+> >
 >
-> Fix this by restricting the input to be in the expected range.
+> Doh! Nice catch=E2=80=A6
 >
-> Reported-by: Hariganesh Govindarajulu <hariganesh.govindarajulu@intel.com>
-> Suggested-by: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-> Signed-off-by: Chen Yu <yu.c.chen@intel.com>
-> ---
-> v2: Replace atoi() with strtol() to filter the number. (Rafael)
+> Anna, please pick this up for 6.2-rcX and add an appropriate
 >
-> ---
->  tools/power/acpi/tools/pfrut/pfrut.c | 18 +++++++++++++++---
->  1 file changed, 15 insertions(+), 3 deletions(-)
->
-> diff --git a/tools/power/acpi/tools/pfrut/pfrut.c b/tools/power/acpi/tools/pfrut/pfrut.c
-> index 52aa0351533c..388c9e3ad040 100644
-> --- a/tools/power/acpi/tools/pfrut/pfrut.c
-> +++ b/tools/power/acpi/tools/pfrut/pfrut.c
-> @@ -97,7 +97,7 @@ static struct option long_options[] = {
->  static void parse_options(int argc, char **argv)
->  {
->         int option_index = 0;
-> -       char *pathname;
-> +       char *pathname, *endptr;
->         int opt;
->
->         pathname = strdup(argv[0]);
-> @@ -125,11 +125,23 @@ static void parse_options(int argc, char **argv)
->                         log_getinfo = 1;
->                         break;
->                 case 'T':
-> -                       log_type = atoi(optarg);
-> +                       log_type = strtol(optarg, &endptr, 0);
-> +                       if (*endptr || (log_type != 0 && log_type != 1)) {
-> +                               printf("Number expected: type(0:execution, 1:history) - Quit.\n");
-> +                               exit(1);
-> +                       }
-> +
->                         set_log_type = 1;
->                         break;
->                 case 'L':
-> -                       log_level = atoi(optarg);
-> +                       log_level = strtol(optarg, &endptr, 0);
-> +                       if (*endptr ||
-> +                           (log_level != 0 && log_level != 1 &&
-> +                            log_level != 2 && log_level != 4)) {
-> +                               printf("Number expected: level(0, 1, 2, 4) - Quit.\n");
-> +                               exit(1);
-> +                       }
-> +
->                         set_log_level = 1;
->                         break;
->                 case 'R':
-> --
+> Fixes: 0eb43812c027 ("NFS: Clear the file access cache upon login=E2=80=
+=9D)
 
-Applied as 6.3-rc material, thanks!
+Will do!
+
+Anna
+>
+> Thanks!
+>   Trond
+>
+> _________________________________
+> Trond Myklebust
+> Linux NFS client maintainer, Hammerspace
+> trond.myklebust@hammerspace.com
+>
