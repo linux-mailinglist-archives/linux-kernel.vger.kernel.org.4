@@ -2,123 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15AAD6B9DAE
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 18:57:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56B4C6B9DC5
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 19:01:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230115AbjCNR54 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 14 Mar 2023 13:57:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33848 "EHLO
+        id S229785AbjCNSB0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 14:01:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbjCNR5x (ORCPT
+        with ESMTP id S230211AbjCNSBW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 13:57:53 -0400
-Received: from mail-il1-f173.google.com (mail-il1-f173.google.com [209.85.166.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 854DB76B4;
-        Tue, 14 Mar 2023 10:57:52 -0700 (PDT)
-Received: by mail-il1-f173.google.com with SMTP id j6so4590604ilr.7;
-        Tue, 14 Mar 2023 10:57:52 -0700 (PDT)
+        Tue, 14 Mar 2023 14:01:22 -0400
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EFBAA9082
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 11:01:18 -0700 (PDT)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-54195ef155aso141457677b3.9
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 11:01:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678816877;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xhpChpDnYzRgDCLfFYmayugPU/QEuab/jcblVRZdX+0=;
+        b=WE4h/xj/p5Qib8Xi6XVgVWVqL/xki8CU1n3C9MkBvJg8zNzusRdBAhv1G9mmbir+Y9
+         sC65KA1Ny916sF3agVzXmyCWpz4oiRDz7bfAvZDR8oXrt1q/Gt0JU0YNEOW3ZEI+RgkY
+         b2oscXng2uSLlYKAm6LykvUiFJd/X5dfk12lP5YUG8xExAjfzXLu8USoGLAZEe9Y2ffQ
+         oKq6di6Qq465LFO4seCDCJTfaHGj6Tn2c8vYfKiDQSMUL3JFOmFhALKTRDFlugUNSOEX
+         daFouMOnCeayCnJy2dRyhLJZvW3bHBWwMmC9tew5hN+H0hGisPefZnm62OXD0lcql5jh
+         tkNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678816671;
+        d=1e100.net; s=20210112; t=1678816877;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=PpqmR5FGblTUCTS1MnsgIvKqvurAy+dKc3s6nFwCqg0=;
-        b=WuLBA1CrNcteftdXP4OzRssv0UCpwk6bPrQ0I4Lruo+oesHlAcW+EDk4sD/Wy2ey11
-         1rzJ+aAofPFyvAEUfBXjr8ndpktA/v+vk0d4wLbvgm2gyfo6MssCtxxTMpLYAafz7zli
-         WmJJ54gbJ7JudXr2sH1YLQ1ksEGftDojl2ufB8UUED8vYZLH2QaBY3I4hG76svlpDX70
-         xgwlSnFxcKLCbgSovXEVao7fBkuwsqY1fAHaVU7gjasENnWGx9a3DC7MfQhWAMSDCEFe
-         /oJ3SX+FF1k2mjSqes6+cvQcVI8Ku7JLhddRMPFK0d0QGLD3RZRbOhAp5eujNDUBmPko
-         qhSQ==
-X-Gm-Message-State: AO0yUKWuydVyykx40VaMdsBVMe4BK3pOIC3rn4XJPtjyNynWq1Ccl34O
-        hGWwqU/nTELMR4OaN4kvPsY046xURfxZP2nkFs+owLcv
-X-Google-Smtp-Source: AK7set+oWO7uxZNcxezoNglqkni5RC4P6boAGCI7NJtJfa15OOr/snj7IE8Sbl7MntPQWtOb8fjXbrvF+Xay+KFz390=
-X-Received: by 2002:a92:d346:0:b0:313:fad9:a014 with SMTP id
- a6-20020a92d346000000b00313fad9a014mr1969666ilh.5.1678816671660; Tue, 14 Mar
- 2023 10:57:51 -0700 (PDT)
+        bh=xhpChpDnYzRgDCLfFYmayugPU/QEuab/jcblVRZdX+0=;
+        b=hkvcqDfUzCQUFgH6K2PeGQp2EXifPli3hrs/N0yj9O05uowRcROtXm7w8WMadbjHO5
+         6uc/D6jQpRt5CmnBEnxuQVO4VMBaFguznK7233dzL1JlHO8HH4wYWlkGwjM5hULx3EBh
+         HZxW3eG0cS1bIF6NUlegin+EB0o6iPQL1o1mUMJD4DUFCTZs/uzuCWKH3txbjO5MCwHW
+         xnUEC1qQUWW4LOZypLcfNL3JI4Uu9xATr/eD/GGFpL62OhCOoOY2abkXe89ZGtIt5o+l
+         BgF1g5OWw0YQSbmuSsqdGirqL9pTUg+IGIOmEmmdfVrbp/xgxa4RzaSW6YajL5V0Y17A
+         a/Ug==
+X-Gm-Message-State: AO0yUKWd+HZO2X3oaJNzF7LBiabrc7BPxRqCBf4tkulbGCzWtG7Tbjbp
+        /gDlDXG4+ii2gd2Kyl4zcorMd6BQATViVck/Hcde4XvoZpcRQp1O
+X-Google-Smtp-Source: AK7set9irUAqYRGoxKyt7y0ItQw/wqe0vFICY9m0xDO0dSynNWsPS2tydx/N5F4beW7gyWZDvl6dZEX8Z1DURPa6U2Y=
+X-Received: by 2002:a81:4005:0:b0:532:e887:2c23 with SMTP id
+ l5-20020a814005000000b00532e8872c23mr26717340ywn.9.1678816877438; Tue, 14 Mar
+ 2023 11:01:17 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230307233309.3546160-1-namhyung@kernel.org> <f5b3de20-797c-4ff6-a85b-06c85b4eaa1b@amd.com>
- <ZAtG43JZkUoO9XkF@kernel.org> <ZBBc5SQK2OhIGtGy@kernel.org> <9b2a3f48-44bc-3719-9ba1-b60f9382a5ba@amd.com>
-In-Reply-To: <9b2a3f48-44bc-3719-9ba1-b60f9382a5ba@amd.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Tue, 14 Mar 2023 10:57:40 -0700
-Message-ID: <CAM9d7cjWbm1AcgEVx4ruYCtqxFVwEt_6SjoipmMPJRoUpk-hAQ@mail.gmail.com>
-Subject: Re: [RFC/PATCHSET 0/9] perf record: Implement BPF sample filter (v4)
-To:     Ravi Bangoria <ravi.bangoria@amd.com>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Song Liu <song@kernel.org>,
-        Stephane Eranian <eranian@google.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        James Clark <james.clark@arm.com>, Hao Luo <haoluo@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
+References: <20230314154117.477138-1-robh@kernel.org>
+In-Reply-To: <20230314154117.477138-1-robh@kernel.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Tue, 14 Mar 2023 19:01:06 +0100
+Message-ID: <CACRpkdaKxO8Nq1nqSh35imRY3HAHvh=TYgua_irj_TVRHZWNNg@mail.gmail.com>
+Subject: Re: [PATCH v2] gpio: Use of_property_read_bool() for boolean properties
+To:     Rob Herring <robh@kernel.org>
+Cc:     Bartosz Golaszewski <brgl@bgdev.pl>, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Tue, Mar 14, 2023 at 4:41=E2=80=AFPM Rob Herring <robh@kernel.org> wrote=
+:
 
-On Tue, Mar 14, 2023 at 8:27 AM Ravi Bangoria <ravi.bangoria@amd.com> wrote:
+> It is preferred to use typed property access functions (i.e.
+> of_property_read_<type> functions) rather than low-level
+> of_get_property/of_find_property functions for reading properties.
+> Convert reading boolean properties to to of_property_read_bool().
 >
-> On 14-Mar-23 5:09 PM, Arnaldo Carvalho de Melo wrote:
-> > Em Fri, Mar 10, 2023 at 12:04:03PM -0300, Arnaldo Carvalho de Melo escreveu:
-> >> Em Fri, Mar 10, 2023 at 03:28:03PM +0530, Ravi Bangoria escreveu:
-> >>>> It requires samples satisfy all the filter expressions otherwise it'd
-> >>>> drop the sample.  IOW filter expressions are connected with logical AND
-> >>>> operations unless they used "||" explicitly.  So if user has something
-> >>>> like 'A, B || C, D', then BOTH A and D should be true AND either B or C
-> >>>> also needs to be true.
-> >>>>
-> >>>> Essentially the BPF filter expression is:
-> >>>>
-> >>>>   <term> <operator> <value> (("," | "||") <term> <operator> <value>)*
-> >>>>
-> >>>> The <term> can be one of:
-> >>>>   ip, id, tid, pid, cpu, time, addr, period, txn, weight, phys_addr,
-> >>>>   code_pgsz, data_pgsz, weight1, weight2, weight3, ins_lat, retire_lat,
-> >>>>   p_stage_cyc, mem_op, mem_lvl, mem_snoop, mem_remote, mem_lock,
-> >>>>   mem_dtlb, mem_blk, mem_hops
-> >>>>
-> >>>> The <operator> can be one of:
-> >>>>   ==, !=, >, >=, <, <=, &
-> >>>>
-> >>>> The <value> can be one of:
-> >>>>   <number> (for any term)
-> >>>>   na, load, store, pfetch, exec (for mem_op)
-> >>>>   l1, l2, l3, l4, cxl, io, any_cache, lfb, ram, pmem (for mem_lvl)
-> >>>>   na, none, hit, miss, hitm, fwd, peer (for mem_snoop)
-> >>>>   remote (for mem_remote)
-> >>>>   na, locked (for mem_locked)
-> >>>>   na, l1_hit, l1_miss, l2_hit, l2_miss, any_hit, any_miss, walk, fault (for mem_dtlb)
-> >>>>   na, by_data, by_addr (for mem_blk)
-> >>>>   hops0, hops1, hops2, hops3 (for mem_hops)
-> >>>
-> >>> I think this and few examples should be added in perf-record man page.
-> >>
-> >> Agreed, and even mentioning cases where it overcome problems like the
-> >> filtering you mentioned for AMD systems.
-> >
-> > So, what do you think is best? Wait for v5 or apply v4 and then add
-> > documentation and other touches as followup patches?
->
-> I'm fine with both :)
+> Signed-off-by: Rob Herring <robh@kernel.org>
 
-Unless there's an objection, I'd prefer you take the v4.
-I'll send a documentation update later.
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
-Thanks,
-Namhyung
+Yours,
+Linus Walleij
