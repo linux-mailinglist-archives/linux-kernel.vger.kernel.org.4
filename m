@@ -2,171 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8124E6BA223
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 23:14:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E82776BA239
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 23:15:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231495AbjCNWO2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 18:14:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48586 "EHLO
+        id S230122AbjCNWPb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 18:15:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231314AbjCNWOK (ORCPT
+        with ESMTP id S231286AbjCNWOY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 18:14:10 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4263323DB5;
-        Tue, 14 Mar 2023 15:13:19 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id o11-20020a05600c4fcb00b003eb33ea29a8so11182837wmq.1;
-        Tue, 14 Mar 2023 15:13:19 -0700 (PDT)
+        Tue, 14 Mar 2023 18:14:24 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2749F38E86
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 15:13:48 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id bp27so11639222lfb.6
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 15:13:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678831913;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=SekFEmAeK9leXCVtEJ/5RiO3jcSsl6NVfTaRrfrZ9J0=;
-        b=oPNWwBITue+0q+Gxhr58U1kNBLFxTO1MPp56f9Y+lN6aB40OfQA+HcognUG0yf4pmn
-         e2gFvCzgqkNE6DheOGDTX0/va4sOjqSyisTfHD+971zqRBaQclJWHRyep4Ubzuh3yQXD
-         PoP/JZglgDGJzPNLExl32duTvYBCrew7Gy6GazTQgjn56B9PfHWeIh2JJ6dNHCx6nStX
-         SyYgktXbqCSlyFfVei4/hSS3w2rWnzrT0enOosoLz03a8OsbGSrYqpYavBHJzPR94Xoi
-         zC+uHX4ceP0QL57R6SRib0pqx13y0moaj+EMNnhezYvMliREdD7Kc1djkgAfXkvd3NRf
-         EGJw==
+        d=linaro.org; s=google; t=1678831943;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Q7IZ9/42Vz12w/UhWJvvh9TDHZc4aTylvTdpvECO9YY=;
+        b=crYJ+AsWsbvri0SBzNdxKp2m4z3iMgx3xNd45aNqdiVGwSrH0uBCa4Eb5Bt5LHQ4Js
+         XQ+DkqM3moFi59nk0XtrglzfB7MVYbvol+nhffaM2KutBLwh/3vTn5pEbpuiwD57oW/O
+         Baf5SRSb028y5hszarmDhzHfLBjkQhEaWsRx5qbsem8wA2wWGTRKx9sJiM46YI7NCGaK
+         mPXFlZooGYc2pUlvUOfJ89ZJYc4omf+2fv2SbQ01HDYnUaP7TNE28u2O+MEOLqxz+D9K
+         1TlHeL1o3LCOmAtulgpp4eGYcCFEjnu79UAiXYBsHlpOLGBGRgQLqTF1VcBM/fvtluWu
+         EhoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678831913;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SekFEmAeK9leXCVtEJ/5RiO3jcSsl6NVfTaRrfrZ9J0=;
-        b=pB1AeW4XclKCcyVMETIxLjwzBsLzrd9k+trKqGwCjBSj22EBQWUDYPBZwYddj1aqx3
-         TvME97nbSGdD1UYtw++oZ2aXN5uVfQUd0zNihHRyotLQHruDGoq032i7lZcefzd++4NX
-         krMz9NaOGoReb4S+DAYtvkvIfieWfDkiR+ukJaouDz/2vLVPDi3geHna+U3zvd40YCnQ
-         Txcn2icHFx8nzga30XbCOpbRxFfKAa5TC20LaSvA2u03TcTdKvptMkK3PvPUK62oT0oh
-         P6yI5Yn6WU9NE4YAIg5wKpe97Eqa+Y/vloPTF3o3ZQXQa4XpDujBeJgAukNZXNgd5IKZ
-         mXJg==
-X-Gm-Message-State: AO0yUKUyhE204/LlrAWjuzWXfeTzE6hyZd8FtgAaFiMY2zlu8J/ddJke
-        C+1JDyQkWWemevUOIDB1djM=
-X-Google-Smtp-Source: AK7set867EXlhkXXBMVZCE2npmcXP0xJU5GRhkg31e64K452iGc8VYDPMj8kt4wPWuhgptenPGsmDA==
-X-Received: by 2002:a05:600c:1c95:b0:3e2:1ef0:f585 with SMTP id k21-20020a05600c1c9500b003e21ef0f585mr16262253wms.2.1678831913150;
-        Tue, 14 Mar 2023 15:11:53 -0700 (PDT)
-Received: from localhost (host86-146-209-214.range86-146.btcentralplus.com. [86.146.209.214])
-        by smtp.gmail.com with ESMTPSA id l8-20020a05600c4f0800b003db01178b62sm4438120wmq.40.2023.03.14.15.11.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Mar 2023 15:11:52 -0700 (PDT)
-Date:   Tue, 14 Mar 2023 22:11:51 +0000
-From:   Lorenzo Stoakes <lstoakes@gmail.com>
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        rcu@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        netdev@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH 1/7] mm/slob: remove CONFIG_SLOB
-Message-ID: <4e936740-1f1c-4dd2-968b-b781ee2bfc6a@lucifer.local>
-References: <20230310103210.22372-1-vbabka@suse.cz>
- <20230310103210.22372-2-vbabka@suse.cz>
+        d=1e100.net; s=20210112; t=1678831943;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Q7IZ9/42Vz12w/UhWJvvh9TDHZc4aTylvTdpvECO9YY=;
+        b=1AbkgEqMFgtJ216TiireRwrKfzQ+1ZDj7cDGDs5fr9qIoukfDUZGWFTbobVMvEVtS5
+         Za6c9BYS3PvJwIi2ejyWXUFLcJZDO8+zJT3VRCzEo+6F61iYRGCcjBV+aHXBIbjXFXTa
+         q1I1VyyB3/3Im84iJZv7ogF+tWU7VEbg/KrE2pk0J2CDY/F+NfdcS9cJSMb+HmvY5ZGs
+         JpaVKI0dr+lXPjcTrf552d2xGO22J/o9W/LtY5GnzXCCqbBxJGR2n6T+bMgUUSyymxLq
+         o2z8uIdL+IFNZIshNuJdOfv2ZSMadcN1RmavbSntOTcy0XlaIqaRezSHPu23vbpBI0QB
+         YHTw==
+X-Gm-Message-State: AO0yUKUh/ghUX8irBn7wgymcVIdKd3x5QCNvbGnk1+HhGU8CEHW2i4NA
+        KXXUI29jq5ZNAivbO3XVOHzLLQ==
+X-Google-Smtp-Source: AK7set/ZJKSOqYo3eqRe7cU87LMkjRpUBViavrajwK8eZnXV7MJyrHv254VUmXBH2Bu1YB16/ZZt/w==
+X-Received: by 2002:ac2:44db:0:b0:4e8:5112:1ff2 with SMTP id d27-20020ac244db000000b004e851121ff2mr811415lfm.27.1678831942897;
+        Tue, 14 Mar 2023 15:12:22 -0700 (PDT)
+Received: from [192.168.1.101] (abyj16.neoplus.adsl.tpnet.pl. [83.9.29.16])
+        by smtp.gmail.com with ESMTPSA id d3-20020a05651221c300b004e1b880ba20sm552430lft.292.2023.03.14.15.12.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Mar 2023 15:12:22 -0700 (PDT)
+Message-ID: <c63ecdc2-11e0-79d2-8647-284913f0c0da@linaro.org>
+Date:   Tue, 14 Mar 2023 23:12:20 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230310103210.22372-2-vbabka@suse.cz>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v4 5/5] arm64: dts: qcom: sm8450: add dp controller
+Content-Language: en-US
+To:     Neil Armstrong <neil.armstrong@linaro.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230206-topic-sm8450-upstream-dp-controller-v4-0-dca33f531e0d@linaro.org>
+ <20230206-topic-sm8450-upstream-dp-controller-v4-5-dca33f531e0d@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230206-topic-sm8450-upstream-dp-controller-v4-5-dca33f531e0d@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 10, 2023 at 11:32:03AM +0100, Vlastimil Babka wrote:
-> Remove SLOB from Kconfig and Makefile. Everything under #ifdef
-> CONFIG_SLOB, and mm/slob.c is now dead code.
->
-> Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
+
+
+On 9.03.2023 10:19, Neil Armstrong wrote:
+> Add the Display Port controller subnode to the MDSS node.
+> 
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 > ---
->  init/Kconfig               |  2 +-
->  kernel/configs/tiny.config |  1 -
->  mm/Kconfig                 | 22 ----------------------
->  mm/Makefile                |  1 -
->  4 files changed, 1 insertion(+), 25 deletions(-)
->
-> diff --git a/init/Kconfig b/init/Kconfig
-> index 1fb5f313d18f..72ac3f66bc27 100644
-> --- a/init/Kconfig
-> +++ b/init/Kconfig
-> @@ -973,7 +973,7 @@ config MEMCG
->
->  config MEMCG_KMEM
->  	bool
-> -	depends on MEMCG && !SLOB
-> +	depends on MEMCG
->  	default y
->
->  config BLK_CGROUP
-> diff --git a/kernel/configs/tiny.config b/kernel/configs/tiny.config
-> index c2f9c912df1c..144b2bd86b14 100644
-> --- a/kernel/configs/tiny.config
-> +++ b/kernel/configs/tiny.config
-> @@ -7,6 +7,5 @@ CONFIG_KERNEL_XZ=y
->  # CONFIG_KERNEL_LZO is not set
->  # CONFIG_KERNEL_LZ4 is not set
->  # CONFIG_SLAB is not set
-> -# CONFIG_SLOB_DEPRECATED is not set
->  CONFIG_SLUB=y
->  CONFIG_SLUB_TINY=y
-> diff --git a/mm/Kconfig b/mm/Kconfig
-> index 4751031f3f05..669399ab693c 100644
-> --- a/mm/Kconfig
-> +++ b/mm/Kconfig
-> @@ -238,30 +238,8 @@ config SLUB
->  	   and has enhanced diagnostics. SLUB is the default choice for
->  	   a slab allocator.
->
-> -config SLOB_DEPRECATED
-> -	depends on EXPERT
-> -	bool "SLOB (Simple Allocator - DEPRECATED)"
-> -	depends on !PREEMPT_RT
-> -	help
-> -	   Deprecated and scheduled for removal in a few cycles. SLUB
-> -	   recommended as replacement. CONFIG_SLUB_TINY can be considered
-> -	   on systems with 16MB or less RAM.
-> -
-> -	   If you need SLOB to stay, please contact linux-mm@kvack.org and
-> -	   people listed in the SLAB ALLOCATOR section of MAINTAINERS file,
-> -	   with your use case.
-> -
-> -	   SLOB replaces the stock allocator with a drastically simpler
-> -	   allocator. SLOB is generally more space efficient but
-> -	   does not perform as well on large systems.
-> -
->  endchoice
->
-> -config SLOB
-> -	bool
-> -	default y
-> -	depends on SLOB_DEPRECATED
-> -
->  config SLUB_TINY
->  	bool "Configure SLUB for minimal memory footprint"
->  	depends on SLUB && EXPERT
-> diff --git a/mm/Makefile b/mm/Makefile
-> index 8e105e5b3e29..2d9c1e7f6085 100644
-> --- a/mm/Makefile
-> +++ b/mm/Makefile
-> @@ -81,7 +81,6 @@ obj-$(CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP)	+= hugetlb_vmemmap.o
->  obj-$(CONFIG_NUMA) 	+= mempolicy.o
->  obj-$(CONFIG_SPARSEMEM)	+= sparse.o
->  obj-$(CONFIG_SPARSEMEM_VMEMMAP) += sparse-vmemmap.o
-> -obj-$(CONFIG_SLOB) += slob.o
->  obj-$(CONFIG_MMU_NOTIFIER) += mmu_notifier.o
->  obj-$(CONFIG_KSM) += ksm.o
->  obj-$(CONFIG_PAGE_POISONING) += page_poison.o
-> --
-> 2.39.2
->
+[...]
+> +
+> +				dp_opp_table: opp-table {
+> +					compatible = "operating-points-v2";
+> +
+> +					opp-160000000 {
+> +						opp-hz = /bits/ 64 <160000000>;
+> +						required-opps = <&rpmhpd_opp_low_svs>;
+> +					};
+Downstream seems to use 19200000 here
 
-Looks good to me too,
+Otherwise,
 
-Acked-by: Lorenzo Stoakes <lstoakes@gmail.com>
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+
+Konrad
+
+> +
+> +					opp-270000000 {
+> +						opp-hz = /bits/ 64 <270000000>;
+> +						required-opps = <&rpmhpd_opp_svs>;
+> +					};
+> +
+> +					opp-540000000 {
+> +						opp-hz = /bits/ 64 <540000000>;
+> +						required-opps = <&rpmhpd_opp_svs_l1>;
+> +					};
+> +
+> +					opp-810000000 {
+> +						opp-hz = /bits/ 64 <810000000>;
+> +						required-opps = <&rpmhpd_opp_nom>;
+> +					};
+> +				};
+> +			};
+> +
+>  			mdss_dsi0: dsi@ae94000 {
+>  				compatible = "qcom,sm8450-dsi-ctrl", "qcom,mdss-dsi-ctrl";
+>  				reg = <0 0x0ae94000 0 0x400>;
+> 
