@@ -2,53 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD1BD6B9B4E
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 17:26:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C3C66B9B4F
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 17:26:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231283AbjCNQ0G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 12:26:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59894 "EHLO
+        id S230429AbjCNQ0L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 12:26:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231320AbjCNQZu (ORCPT
+        with ESMTP id S229730AbjCNQZx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 12:25:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 384313C0A
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 09:25:25 -0700 (PDT)
+        Tue, 14 Mar 2023 12:25:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72CC0211F3
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 09:25:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 558F36184A
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 16:25:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A92AEC433D2;
-        Tue, 14 Mar 2023 16:25:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BD7836182E
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 16:25:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70FAEC433D2;
+        Tue, 14 Mar 2023 16:25:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678811118;
-        bh=ZfJ7DoowlnfEJtqtW2HTk5HtViAZXRbciYaFKLR7iI8=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=THYhYAUXXHqGgwKS1ZFIdriAaZZqkcCbBcnj7U2fhBdnbbxa/jNmiQCdGfRmDht75
-         3UjRqAn8xITFwoFr79PukwL383CstkH5/4fz2MVbghMxWbF7jDrBDqIpAQvlcQEO4o
-         yUiP+CqUaz+m4NU9hvU75pSp6+Ei4NOBO+PXo/Dwf8XjIC/Zjglzqn7YdclRN4z5Y6
-         OIol4g+IGo1YdGo8eafuqiDYskyb0ndhvbFeIuIoPpqIgTSR0z1Fsiga2tAaJ+Upbr
-         ApwQEcYy2F545Ql2cHIKRqiicRbsOywFBVJ/W+FBXmBY3QdpaQMkJOgrUqqBqMc0gS
-         DUmo01WNUtH3w==
-From:   Mark Brown <broonie@kernel.org>
-To:     Douglas Anderson <dianders@chromium.org>
-Cc:     mka@chromium.org, christian@kohlschutter.com,
-        Liam Girdwood <lgirdwood@gmail.com>,
+        s=k20201202; t=1678811130;
+        bh=8ETbXH3HFRhnrmoJeOc1AT/DX/Eah23kheU2y3YZMo0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=PECFkUwV2Ep2p0qVUg63V6DKWrMXMyZlGOZv4TaWkdfT4K32sstERsij1UHwLjkVH
+         0VNeQJKLBEO6nD5AbKWHZAPz7uQ3dVIFdXDzbXixTovR6+6jXvqp3RNSuPiDqpqHCg
+         nfvmOH0guBqmee0MqDPz6JPHy7vTlLqs19yvq7aQJDuZu/uLYwZMug8A01zoq2555L
+         Ild06qHasXF534xPGGZSXSwaY+uTIpuYYRM4tDMtnHStlKCMap5Od4vUeBKBi1fXwD
+         tWEKJN3pCGX/RGg/pYQ1lL3UOYg35CK1gOvOQnxvpvyk7gD0q0WbfatJ68KZasBFeL
+         Rd9ioyHIfpyBQ==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Imre Deak <imre.deak@intel.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
+        <ville.syrjala@linux.intel.com>,
+        =?UTF-8?q?Jouni=20H=C3=B6gander?= <jouni.hogander@intel.com>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20230313181820.2482385-1-dianders@chromium.org>
-References: <20230313181820.2482385-1-dianders@chromium.org>
-Subject: Re: (subset) [PATCH 0/2] regulator: Fix boot speed regression w/
- off-on-delay-us
-Message-Id: <167881111741.52189.2713635636188395950.b4-ty@kernel.org>
-Date:   Tue, 14 Mar 2023 16:25:17 +0000
+Subject: [PATCH] drm/i915/opregion: add missing intel_opregion_cleanup() dummy
+Date:   Tue, 14 Mar 2023 17:25:18 +0100
+Message-Id: <20230314162523.631652-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-bd1bf
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,46 +61,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 13 Mar 2023 11:18:18 -0700, Douglas Anderson wrote:
-> These two patches together fix a boot speed regression on
-> sc7180-trogdor boards which use off-on-delay-us together with
-> regulator-boot-on with the eDP power rail.
-> 
-> The first patch is _almost_ a revert of another patch. Depending on
-> when the regulator is probed and the actual delay, the end result
-> might be the same as a revert or might result in a delay that's
-> somewhere between "no delay" and a full delay. As talked about in the
-> patch, I believe this is the correct behavior and, if the problems
-> fixed in the original patch are still present, I'm hoping that they
-> can be fixed in a cleaner way.
-> 
-> [...]
+From: Arnd Bergmann <arnd@arndb.de>
 
-Applied to
+When ACPI is disabled, i915 fails to build because of a missing
+declaration:
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
+drivers/gpu/drm/i915/i915_driver.c: In function 'i915_driver_hw_probe':
+drivers/gpu/drm/i915/i915_driver.c:556:9: error: implicit declaration of function 'intel_opregion_cleanup'; did you mean 'intel_opregion_setup'? [-Werror=implicit-function-declaration]
+  556 |         intel_opregion_cleanup(dev_priv);
 
-Thanks!
+Add another empty dummy helper next to intel_opregion_setup().
 
-[1/2] regulator: core: Shorten off-on-delay-us for always-on/boot-on by time since booted
-      commit: 691c1fcda5351ed98a44610b7dccc0e3ee920020
+Fixes: 3e226e4a2180 ("drm/i915/opregion: Cleanup opregion after errors during driver loading")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ drivers/gpu/drm/i915/display/intel_opregion.h | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+diff --git a/drivers/gpu/drm/i915/display/intel_opregion.h b/drivers/gpu/drm/i915/display/intel_opregion.h
+index 181eb3e9abbf..fd2ea8ef0fa2 100644
+--- a/drivers/gpu/drm/i915/display/intel_opregion.h
++++ b/drivers/gpu/drm/i915/display/intel_opregion.h
+@@ -86,6 +86,10 @@ static inline int intel_opregion_setup(struct drm_i915_private *dev_priv)
+ 	return 0;
+ }
+ 
++static inline void intel_opregion_cleanup(struct drm_i915_private *i915)
++{
++}
++
+ static inline void intel_opregion_register(struct drm_i915_private *dev_priv)
+ {
+ }
+-- 
+2.39.2
 
