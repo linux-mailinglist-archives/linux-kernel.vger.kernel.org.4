@@ -2,122 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDF4D6B9ED0
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 19:41:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D84696B9ED4
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 19:43:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229742AbjCNSl4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 14:41:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37278 "EHLO
+        id S230011AbjCNSm4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 14:42:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbjCNSlx (ORCPT
+        with ESMTP id S229666AbjCNSmx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 14:41:53 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2463E1166D;
-        Tue, 14 Mar 2023 11:41:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678819312; x=1710355312;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=cCLbIes7UXT3DAC9eDK/G+6dQMpfpn9vtj5PUMV+0Io=;
-  b=Af2FD7pGJgxJcLSxK8hjVc+o6A7GaUbywJetD8mVZokYCesM4St4G2+P
-   O+V1+0aKwa0Yzi+Sbtc6pB2xmemvXRipZl1A81YOqPufcp67dXsDyRoyJ
-   C8OOIVmDCmut9u1ReD7/cnejnOE9KkjR+3V0pngqPKIHkNn3TaSxUhx6T
-   NORONl6r5VpSkiC/4jLLRcE0sqdvmvbNpd8VUV/hHiO6UCaWBXjUNP6vE
-   ld6x2i4XU2yE594c3uS9XV1NEXXPju8e7nB+1MQhrnbjjwF8x1zEpXceL
-   GJrGNeuHRjquhV7Mujh52muOyXZde6YLQfvoxxW3ZMpOIgtWFBXkSb79C
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="365184272"
-X-IronPort-AV: E=Sophos;i="5.98,260,1673942400"; 
-   d="scan'208";a="365184272"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2023 11:40:13 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="768214212"
-X-IronPort-AV: E=Sophos;i="5.98,260,1673942400"; 
-   d="scan'208";a="768214212"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by FMSMGA003.fm.intel.com with ESMTP; 14 Mar 2023 11:40:01 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pc9Yy-003NFt-2t;
-        Tue, 14 Mar 2023 20:39:56 +0200
-Date:   Tue, 14 Mar 2023 20:39:56 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Keith Busch <kbusch@kernel.org>
-Cc:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Niklas Schnelle <schnelle@linux.ibm.com>,
-        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Juergen Gross <jgross@suse.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-pci@vger.kernel.org,
-        xen-devel@lists.xenproject.org, linux-acpi@vger.kernel.org,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Anatolij Gustschin <agust@denx.de>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
-Subject: Re: [PATCH v4 1/4] PCI: Introduce pci_dev_for_each_resource()
-Message-ID: <ZBC/fL+KS7RiZClB@smile.fi.intel.com>
-References: <20230310171416.23356-1-andriy.shevchenko@linux.intel.com>
- <20230310171416.23356-2-andriy.shevchenko@linux.intel.com>
- <ZAusCnLSXeEcpQs+@kbusch-mbp.dhcp.thefacebook.com>
+        Tue, 14 Mar 2023 14:42:53 -0400
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D25265A8
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 11:42:51 -0700 (PDT)
+Received: by mail-oi1-x234.google.com with SMTP id s41so12453022oiw.13
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 11:42:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678819370;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=sQZdm3Qt8HI/pCzzQC1iTxrg7CqI+Nk8HHkdN6ICxfg=;
+        b=Kx+i42drI06qWbfEBnAJ5SenOPvBn5Yyw7cwQRos5iBZbTLQUhA+hG3uL2MNmv15fl
+         04Fyjf95xYpl44J3NSJF5Ns5d732HSwmHH23Gj0gbHskcdmVeAqF7XA+vbhWIhuzB2Up
+         Zj+/KVUECtQsZQiny8dWsM1O+1a4iCBFmqDEZ/H6irOIigHiLHgASFyRNmrKhv3Q+bs+
+         XjOQNox2yYL1MSbLkPXb61U4/CLJuHaX8DIk4nU+4S2c3GvVwt24Yyvd4vdqjHAIOsmJ
+         E6NQKzRGzPeAwBK40/MKno63QiX4Ze+Y52zq3oY2m94abxwssQcukjZ6fWhTeVvcC59R
+         /oQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678819370;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=sQZdm3Qt8HI/pCzzQC1iTxrg7CqI+Nk8HHkdN6ICxfg=;
+        b=Ofq9rfWDni76r1SCfj3pKWs/GS/iyeSPcFfE1DPmkRBdu2DgQ8PF0EhoZn0gkaScdH
+         PyajcmWRZKGjI2r5JWuosSAtXshhOzy4MAEG69eekkOauSWeezEyyzKbywLcQUXf3fqP
+         3QcvhBLr+KUDcN42SnlNG7n/NzUsuNQ2ML+4dWFqS6zrKqjhhVxNRi5Xbzrd7XwZ+GOp
+         MUnRb9j0XO3U/hj42Zgh//YLwhrKYjEjXCb2Qj5nJgXTG4AmL4Ew94BtbDYHyoyu9Ygd
+         9iAC5mJ3pUE3KfHvgSbjkGY5ctcOGS+FHjc0jpih/miur1usVsyuJAcwBRNbadRVXbtZ
+         SAZg==
+X-Gm-Message-State: AO0yUKVG4JKFevrCivttdaJQDDf08wKik/fZvVU20r7W1LK8ABYR+avb
+        LS3mLQ3uDmyVi3t3q6jNXxaqcsO3Yl2Hubs73wSI/Q==
+X-Google-Smtp-Source: AK7set/GTyWucztbb4fOhjq0dgZFCI5u3Ap4JlWaVtkYFTvM7NFFWEoosSHH/f45RCvapGK8jFdSfFb3hJFzv+vrzmc=
+X-Received: by 2002:a05:6808:355:b0:383:eace:e858 with SMTP id
+ j21-20020a056808035500b00383eacee858mr26706oie.6.1678819370396; Tue, 14 Mar
+ 2023 11:42:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZAusCnLSXeEcpQs+@kbusch-mbp.dhcp.thefacebook.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230311150647.22935-1-sireeshkodali1@gmail.com>
+ <20230311150647.22935-2-sireeshkodali1@gmail.com> <CAMZdPi_uBLutBejSV1fz5p9GYqHYd75VTAePtndUnsu=JypdTQ@mail.gmail.com>
+ <CR6AZI7T6X51.AX26VA80VSUW@skynet-linux>
+In-Reply-To: <CR6AZI7T6X51.AX26VA80VSUW@skynet-linux>
+From:   Loic Poulain <loic.poulain@linaro.org>
+Date:   Tue, 14 Mar 2023 19:42:14 +0100
+Message-ID: <CAMZdPi8NJbKcn1i+bAq4RtWhDwE-Og5x631myW57i0ZHVvsDxA@mail.gmail.com>
+Subject: Re: [PATCH 1/1] net: wireless: ath: wcn36xx: add support for pronto-v3
+To:     Sireesh Kodali <sireeshkodali1@gmail.com>
+Cc:     wcn36xx@lists.infradead.org, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+        linux-kernel@vger.kernel.org,
+        Vladimir Lypak <vladimir.lypak@gmail.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 10, 2023 at 03:15:38PM -0700, Keith Busch wrote:
-> On Fri, Mar 10, 2023 at 07:14:13PM +0200, Andy Shevchenko wrote:
+On Tue, 14 Mar 2023 at 19:04, Sireesh Kodali <sireeshkodali1@gmail.com> wrote:
+>
+> On Tue Mar 14, 2023 at 2:19 PM IST, Loic Poulain wrote:
+> > On Sat, 11 Mar 2023 at 16:07, Sireesh Kodali <sireeshkodali1@gmail.com> wrote:
+> > >
+> > > From: Vladimir Lypak <vladimir.lypak@gmail.com>
+> > >
+> > > Pronto v3 has a different DXE address than prior Pronto versions. This
+> > > patch changes the macro to return the correct register address based on
+> > > the pronto version.
+> > >
+> > > Signed-off-by: Vladimir Lypak <vladimir.lypak@gmail.com>
+> > > Signed-off-by: Sireesh Kodali <sireeshkodali1@gmail.com>
+> >
+> > Acked-by: Loic Poulain <loic.poulain@linaro.org>
+> >
+> > Could you also submit a change for the new 'qcom,pronto-v3-pil'
+> > compatible in the related devicetree documentation ?
+> > (bindings/remoteproc/qcom,wcnss-pil.txt)
+>
+> The changes to the device tree were only recently merged
+> LKML link: https://lkml.org/lkml/2022/9/30/1502
 
-...
+Perfect, thanks.
 
-> > +#define pci_dev_for_each_resource_p(dev, res)				\
-> > +	__pci_dev_for_each_resource(dev, res, i, unsigned int)
-> 
-> It looks dangerous to have a macro declare a variable when starting a new
-> scope. How do you know the name 'i' won't clash with something defined above?
-
-I'll rename. Thank you.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Loic
