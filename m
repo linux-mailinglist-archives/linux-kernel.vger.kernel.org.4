@@ -2,365 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44C626B9018
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 11:34:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 982D86B9005
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 11:31:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230211AbjCNKeV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 06:34:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41884 "EHLO
+        id S230490AbjCNKbE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 06:31:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229934AbjCNKeI (ORCPT
+        with ESMTP id S230416AbjCNKah (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 06:34:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B0203C0A;
-        Tue, 14 Mar 2023 03:33:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 53346616F7;
-        Tue, 14 Mar 2023 10:27:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E1DEC433D2;
-        Tue, 14 Mar 2023 10:27:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678789673;
-        bh=mktWL3pBA6fgZw5itPxAboV+gR9yVVLoCoTcs7Hg/Ek=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LJWbHdIU9n1KmGpb0FJOLIdBjb7xhxPXlfqJyuSO+bO4M5UYR7TyHljtY5IoS2aC/
-         Wn8K5B4qHUbh4wjNKVN5GktwhaMRBL+Bghj/yU4j4n4tfkCru3VBpxHfObh/wYB6gt
-         C9pF+/OWGsW5P3Uom6emnc/PpgDcQ4Y6aL1jhpMX6pd2NTU/oHR1vKmq2CTIwbYCOZ
-         xkja03SD5OlHOdpMR7PW07sgBlnC3F8jiLVGg2N13eOmUNJKrq4xzcAd6OCDpqZaj5
-         JKfxCBStyFJqJMf0FFsCK/RVVewBLB8CF94ZSjie6+Ho2ooibqIBw90uBjKIfahw/W
-         +jCj//rNmtgKg==
-Date:   Tue, 14 Mar 2023 11:27:48 +0100
-From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
-To:     Hongxing Zhu <hongxing.zhu@nxp.com>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>,
-        "l.stach@pengutronix.de" <l.stach@pengutronix.de>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        dl-linux-imx <linux-imx@nxp.com>
-Subject: Re: [PATCH v2] PCI: imx6: Save and restore MSI control of RC in
- suspend and resume
-Message-ID: <ZBBMJFBXNcohep8u@lpieralisi>
-References: <AS8PR04MB86763F096229D90DCBF6C0D08CB99@AS8PR04MB8676.eurprd04.prod.outlook.com>
- <20230313174929.GA1509198@bhelgaas>
- <AS8PR04MB8676BF1BF21EDC92F0F1C1A38CBE9@AS8PR04MB8676.eurprd04.prod.outlook.com>
+        Tue, 14 Mar 2023 06:30:37 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2FCC8F738;
+        Tue, 14 Mar 2023 03:29:46 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id br6so1159134lfb.11;
+        Tue, 14 Mar 2023 03:29:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678789724;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7C1QtmVJ640L0mKoUMF31ONDgoULzcI2trSajJYK7fg=;
+        b=hfy2hyw0rHUVBkr3+tMyR/t7T1tumMP/PKSVYJroe5nLFl1t4ieo4M4aW1+P23upCM
+         xT3F83/b0Tnpq3YC/wNCP6HxYQjHsT7IUxbAjY7bh+rI93DJHh8z4iz/ecv2VAqY6C60
+         R5+0PBLeWvmXcX3OwceFLPXX0+Pj7SpfuiT21Bw2oaqf044E+HFJeYy9T4645qg9mSJg
+         tjUai48x+DDGnTm+OqkD6pnPU/JuI5Eqb0PoNx+Cq9P+n191ma1ZCaSyoiKeJAeGQXny
+         CKtcwhbX8vN+OYmhp/mLKXK5g+ika0FCu58B+3cHBTQWSSLMNVdub8Hx1xVRrDn9uTK+
+         jKAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678789724;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7C1QtmVJ640L0mKoUMF31ONDgoULzcI2trSajJYK7fg=;
+        b=hWhdQ9XQQbXnDbSn+DVeGKmf3aunAmTlJfpOJJKNGk1yCF0WvZzkVy2NE8TPn7Kh7x
+         kTWuuPdnSuNLPca6/aA1QxNW7PpXv1XFWZPz6CO4Sfee3qgj906jnSUTjBOZleWIIhHG
+         3lbwW0Hqkk+Gp/lz+fD0nnJTZ7Grf1LKIZG72P/HI64rmap50cjVL5WDr7eAfCYY1PzP
+         2zyxESPCBCvKTf5VWITWvO9P3gcoj2FFelxVjJiH1H2kP4LYr8L+/yUdSr7NOwEE6Lmh
+         4HjSETNOwZ2xVmiHDx0CA7BoF2IiIkaffAzi+/67Y/mN8LJRYVy1iF6TDcBvluW+gXs2
+         KSSg==
+X-Gm-Message-State: AO0yUKVhYeKqirC1ApcEs6LQaPOB3+IoF8KTXDa2UcC52112kcUwYKMJ
+        fN+0NZUG/T+d2L5umIUpplhTBXZLcwk=
+X-Google-Smtp-Source: AK7set/AZIv5za5RGeJ7/88wLRHKe9eh16DSVxJWVrofCD0yAKFTD+NOQYzhdMGme1xyRTurCqriew==
+X-Received: by 2002:ac2:4c33:0:b0:4e0:2b8f:6004 with SMTP id u19-20020ac24c33000000b004e02b8f6004mr693332lfq.4.1678789724031;
+        Tue, 14 Mar 2023 03:28:44 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:16f3:4a00::6? (dc75zzyyyyyyyyyyyyydy-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::6])
+        by smtp.gmail.com with ESMTPSA id y4-20020ac24204000000b004d545f1e0ccsm345767lfh.187.2023.03.14.03.28.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Mar 2023 03:28:43 -0700 (PDT)
+Message-ID: <9d63c161-0449-7e56-5873-2909587f17af@gmail.com>
+Date:   Tue, 14 Mar 2023 12:28:43 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <AS8PR04MB8676BF1BF21EDC92F0F1C1A38CBE9@AS8PR04MB8676.eurprd04.prod.outlook.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Content-Language: en-US, en-GB
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Paul Gazzillo <paul@pgazz.com>,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        Shreeya Patel <shreeya.patel@collabora.com>,
+        Zhigang Shi <Zhigang.Shi@liteon.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>
+References: <cover.1677750859.git.mazziesaccount@gmail.com>
+ <9895826669118a1aa1db3f85c2610fa759426c33.1677750859.git.mazziesaccount@gmail.com>
+ <ZAC7L8NQYgBcBTCF@smile.fi.intel.com>
+ <7e537200-37ab-f6e6-c4e0-c3997128c01b@fi.rohmeurope.com>
+ <ZAXK9Hn2NuQPJ7eo@smile.fi.intel.com>
+ <1dbfc336-7d09-cd44-dfa2-9c4bedf257e1@gmail.com>
+ <ZA81rpWgwvP2bigt@smile.fi.intel.com>
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+Subject: Re: [PATCH v2 2/6] iio: light: Add gain-time-scale helpers
+In-Reply-To: <ZA81rpWgwvP2bigt@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 14, 2023 at 03:24:28AM +0000, Hongxing Zhu wrote:
-> > -----Original Message-----
-> > From: Bjorn Helgaas <helgaas@kernel.org>
-> > Sent: 2023年3月14日 1:49
-> > To: Hongxing Zhu <hongxing.zhu@nxp.com>
-> > Cc: Lorenzo Pieralisi <lpieralisi@kernel.org>; l.stach@pengutronix.de;
-> > bhelgaas@google.com; linux-pci@vger.kernel.org;
-> > linux-arm-kernel@lists.infradead.org; linux-kernel@vger.kernel.org;
-> > kernel@pengutronix.de; dl-linux-imx <linux-imx@nxp.com>
-> > Subject: Re: [PATCH v2] PCI: imx6: Save and restore MSI control of RC in
-> > suspend and resume
-> > 
-> > On Mon, Mar 13, 2023 at 02:50:31AM +0000, Hongxing Zhu wrote:
-> > > > -----Original Message-----
-> > > > From: Lorenzo Pieralisi <lpieralisi@kernel.org>
-> > > > Sent: 2023年3月11日 0:14
-> > > > To: Hongxing Zhu <hongxing.zhu@nxp.com>
-> > > > Cc: l.stach@pengutronix.de; bhelgaas@google.com;
-> > > > linux-pci@vger.kernel.org; linux-arm-kernel@lists.infradead.org;
-> > > > linux-kernel@vger.kernel.org; kernel@pengutronix.de; dl-linux-imx
-> > > > <linux-imx@nxp.com>
-> > > > Subject: Re: [PATCH v2] PCI: imx6: Save and restore MSI control of
-> > > > RC in suspend and resume
-> > > >
-> > > > On Mon, Jan 09, 2023 at 02:08:06AM +0000, Hongxing Zhu wrote:
-> > > > > > -----Original Message-----
-> > > > > > From: Lorenzo Pieralisi <lpieralisi@kernel.org>
-> > > > > > Sent: 2022年12月30日 23:06
-> > > > > > To: Hongxing Zhu <hongxing.zhu@nxp.com>; l.stach@pengutronix.de;
-> > > > > > bhelgaas@google.com
-> > > > > > Cc: linux-pci@vger.kernel.org;
-> > > > > > linux-arm-kernel@lists.infradead.org;
-> > > > > > linux-kernel@vger.kernel.org; kernel@pengutronix.de;
-> > > > > > dl-linux-imx <linux-imx@nxp.com>
-> > > > > > Subject: Re: [PATCH v2] PCI: imx6: Save and restore MSI control
-> > > > > > of RC in suspend and resume
-> > > > > >
-> > > > > > On Thu, Dec 08, 2022 at 02:05:34PM +0800, Richard Zhu wrote:
-> > > > > > > The MSI Enable bit controls delivery of MSI interrupts from
-> > > > > > > components below the Root Port. This bit might lost during the
-> > > > > > > suspend, should be re-stored during resume.
-> > > > > > >
-> > > > > > > Save the MSI control during suspend, and restore it in resume.
-> > > > > >
-> > > > > > I believe that what Lucas and Bjorn asked on v1 is still not answered.
-> > > > > >
-> > > > > > The root port is a PCI device, why do we need to save and
-> > > > > > restore the MSI cap on top of what PCI core already does ? The
-> > > > > > RP should be enumerated as a PCI device and therefore I expect
-> > > > > > the MSI cap to be saved/restored in the suspend/resume execution.
-> > > > > >
-> > > > > > I don't think there is anything iMX6 specific in this.
-> > > > > Hi Lorenzo:
-> > > > > Thanks for your comments.
-> > > > > Sorry to reply late, since I got a high fever in the past days.
-> > > > >
-> > > > > Based on i.MX6QP SABRESD board and XHCI PCIe2USB3.0 device, the
-> > > > > MSI cap  save/restore of PCI core is not executed(dev->msi_enabled
-> > > > > is
-> > > > > zero)  during my suspend/resume tests.
-> > > >
-> > > > I still do not understand. The register you are saving/restoring in
-> > > > the RC is not the root port Message control field in the root port
-> > > > MSI capability, it is a separate register that controls the root
-> > > > complex MSI forwarding, is that correct ?
-> > > >
-> > > > The root port MSI capability does not control the root complex
-> > > > forwarding of MSIs TLPs.
-> > > >
-> > > > So the bits you are saving and restoring IIUC should be MMIO space
-> > > > in the root complex, dressed as an MSI capability, that has nothing
-> > > > to do with the root port MSI capability.
-> > > >
-> > > > Is that correct ?
-> > >
-> > > It's not a separate register.
-> > >
-> > > The bit I manipulated is the MSI Enable bit of the Message Control
-> > > Register for MSI (Offset 02h) contained in the MSI-capability of Root
-> > > Complex.
-> > >
-> > > In addition, on i.MX6, the MSI Enable bit controls delivery of MSI
-> > > interrupts from components below the Root Port.
-> > >
-> > > So, set MSI Enable in imx6q-pcie to let the MSI from downstream
-> > > components works.
-> > 
-> > My confusion is about this "MSI Capability" found by
-> > "dw_pcie_find_capability(pci, PCI_CAP_ID_MSI)" in your patch.
-> > 
-> > The i.MX6 manual might refer to that as an "MSI Capability" but as far as I
-> > know, the PCIe base spec doesn't document a Root Complex MSI Capability.
-> > 
-> > I don't think it's the same as the one documented in PCIe r6.0, sec 7.7.2.  I
-> > think it's different because:
-> > 
-> >   (1) I *think* "pci" here refers to the RC, not to a Root Port.
-> > 
-> >   (2) The semantics are different.  The MSI-X Enable bit in 7.7.2 only
-> >   determines whether the Function itself is permitted to use MSI-X.
-> >   It has nothing to do with devices *below* a Root Port can use MSI-X.
-> >   It also has nothing to do with whether a Root Port can forward MSI
-> >   transactions from those downstream devices.
-> > 
-> > This part of my confusion could be easily resolved via a comment.
-> > 
-> > I do have a follow-on question, though: the patch seems to enable
-> > MSI-related functionality using a register in the DesignWare IP, not something
-> > in the i.MX6-specific IP.  If that's true, why don't other DesignWare-based
-> > drivers need something similar?
-> Hi Bjorn:
-> Thanks a lot for you reply.
-> This behavior is specific for i.MX PCIe.
-
-Which behaviour ? It can't be the root port MSI capability, that would
-be a HW bug (ie disabling root port MSIs would imply disabling MSIs for all
-downstream components).
-
-> i.MX PCIe designer use this MSI_EN bit to control the MSI trigger when
->  integrate Design Ware PCIe IP.
-
-Fair enough but that can't be the MSI Enable bit in the Root Port MSI
-capability "Message Control" field I am afraid.
-
-It is what Bjorn mentioned quite clearly, a root complex configuration
-register dressed as an MSI capability, the root complex is not a PCI
-device; either that or that's an HW bug.
-
-Lorenzo
-
-> So, the other DesignWare-base PCIe driver doesn't need this beahvior.
+On 3/13/23 16:39, Andy Shevchenko wrote:
+> On Mon, Mar 13, 2023 at 01:31:42PM +0200, Matti Vaittinen wrote:
+>> On 3/6/23 13:13, Andy Shevchenko wrote:
+>>> On Fri, Mar 03, 2023 at 07:54:22AM +0000, Vaittinen, Matti wrote:
+>>>> On 3/2/23 17:05, Andy Shevchenko wrote:
+>>>>> On Thu, Mar 02, 2023 at 12:57:54PM +0200, Matti Vaittinen wrote:
 > 
-> Best Regards
-> Richard Zhu
-> > 
-> > > > > It seems that some device might shutdown msi when do the suspend
-> > > > operations.
-> > > > > >
-> > > > > > Would you mind investigating it please ?
-> > > > > Sure, I did further investigation on i.MX6QP platform.
-> > > > > The MSI_EN bit of RC MSI capability would be cleared to zero, when
-> > > > >  PCIE_RESET(BIT29 of IOMUXC_GPR1) is toggled (assertion 1b'1,
-> > > > > then de-assertion 1b'0).
-> > > > >
-> > > > > Verification steps:
-> > > > > MSI_EN of RC is set to 1b'1 when system is boot up.
-> > > > >  ./memtool 1ffc050 1
-> > > > > 0x01FFC050:  01017005
-> > > > >
-> > > > > Toggle PCIe reset of i.MX6QP.
-> > > > > root@imx6qpdlsolox:~# ./memtool 20e0004=68691005 Writing 32-bit
-> > > > > value
-> > > > > 0x68691005 to address 0x020E0004 root@imx6qpdlsolox:~# ./memtool
-> > > > > 20e0004=48691005 Writing 32-bit value 0x48691005 to address
-> > > > 0x020E0004
-> > > > >
-> > > > > The MSI_EN bit of RC had been cleared to 1b'0.
-> > > > > ./memtool 1ffc050 1
-> > > > > 0x01FFC050:  01807005
-> > > > >
-> > > > > This is why I used to reply to Bjorn the MSI_EN of RC is cleared
-> > > > > when RESETs are toggled during the imx6_pcie_host_init() in
-> > > > >  imx6_pcie_resume_noirq() callback.
-> > > > >
-> > > > > Best Regards
-> > > > > Richard Zhu
-> > > > > >
-> > > > > > Lorenzo
-> > > > > >
-> > > > > > > Signed-off-by: Richard Zhu <hongxing.zhu@nxp.com>
-> > > > > > > ---
-> > > > > > > Changes v1-->v2:
-> > > > > > > New create one save/restore function, used save the setting in
-> > > > > > > suspend and restore the configuration in resume.
-> > > > > > > v1
-> > > > > > > https://eur01.safelinks.protection.outlook.com/?url=https%3A%2
-> > > > > > > F%2F
-> > > > > > >
-> > > >
-> > patc%2F&data=05%7C01%7Chongxing.zhu%40nxp.com%7C24971d8de9b54b
-> > > > 0b10
-> > > > > > >
-> > > >
-> > ad08db2182774d%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C6
-> > > > 38140
-> > > > > > >
-> > > >
-> > 616456052078%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJ
-> > > > QIjoiV
-> > > > > > >
-> > > >
-> > 2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&sdata=vE
-> > > > tRxL
-> > > > > > > BVi5lYmpwTNZfafMms3263LZXodneLChjEaOM%3D&reserved=0
-> > > > > > >
-> > > > > >
-> > > >
-> > hwork.kernel.org%2Fproject%2Flinux-pci%2Fpatch%2F1667289595-12440-1-
-> > > > > > g
-> > > > > > i
-> > > > > > >
-> > > > > >
-> > > >
-> > t-send-email-hongxing.zhu%40nxp.com%2F&data=05%7C01%7Chongxing.zhu
-> > > > > > %40n
-> > > > > > >
-> > > > > >
-> > > >
-> > xp.com%7C3aeb1d128f854dad1a5608daea77706d%7C686ea1d3bc2b4c6fa9
-> > > > 2
-> > > > > > cd99c5c
-> > > > > > >
-> > > > > >
-> > > >
-> > 301635%7C0%7C0%7C638080095954881374%7CUnknown%7CTWFpbGZsb3
-> > > > > > d8eyJWIjoiMC
-> > > > > > >
-> > > > > >
-> > > >
-> > 4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000
-> > > > %
-> > > > > > 7C%7C%
-> > > > > > >
-> > > > > >
-> > > >
-> > 7C&sdata=V8yVvvpTKGoR1UyQP5HD2IdlSjJdznBeD12bdI67dEI%3D&reserved
-> > > > =
-> > > > > > 0
-> > > > > > >
-> > > > > > > ---
-> > > > > > >  drivers/pci/controller/dwc/pci-imx6.c | 23
-> > > > > > > +++++++++++++++++++++++
-> > > > > > >  1 file changed, 23 insertions(+)
-> > > > > > >
-> > > > > > > diff --git a/drivers/pci/controller/dwc/pci-imx6.c
-> > > > > > > b/drivers/pci/controller/dwc/pci-imx6.c
-> > > > > > > index 1dde5c579edc..aa3096890c3b 100644
-> > > > > > > --- a/drivers/pci/controller/dwc/pci-imx6.c
-> > > > > > > +++ b/drivers/pci/controller/dwc/pci-imx6.c
-> > > > > > > @@ -76,6 +76,7 @@ struct imx6_pcie {
-> > > > > > >  	struct clk		*pcie;
-> > > > > > >  	struct clk		*pcie_aux;
-> > > > > > >  	struct regmap		*iomuxc_gpr;
-> > > > > > > +	u16			msi_ctrl;
-> > > > > > >  	u32			controller_id;
-> > > > > > >  	struct reset_control	*pciephy_reset;
-> > > > > > >  	struct reset_control	*apps_reset;
-> > > > > > > @@ -1042,6 +1043,26 @@ static void imx6_pcie_pm_turnoff(struct
-> > > > > > imx6_pcie *imx6_pcie)
-> > > > > > >  	usleep_range(1000, 10000);
-> > > > > > >  }
-> > > > > > >
-> > > > > > > +static void imx6_pcie_msi_save_restore(struct imx6_pcie
-> > > > > > > +*imx6_pcie, bool save) {
-> > > > > > > +	u8 offset;
-> > > > > > > +	u16 val;
-> > > > > > > +	struct dw_pcie *pci = imx6_pcie->pci;
-> > > > > > > +
-> > > > > > > +	if (pci_msi_enabled()) {
-> > > > > > > +		offset = dw_pcie_find_capability(pci, PCI_CAP_ID_MSI);
-> > > > > > > +		if (save) {
-> > > > > > > +			val = dw_pcie_readw_dbi(pci, offset +
-> > PCI_MSI_FLAGS);
-> > > > > > > +			imx6_pcie->msi_ctrl = val;
-> > > > > > > +		} else {
-> > > > > > > +			dw_pcie_dbi_ro_wr_en(pci);
-> > > > > > > +			val = imx6_pcie->msi_ctrl;
-> > > > > > > +			dw_pcie_writew_dbi(pci, offset + PCI_MSI_FLAGS,
-> > val);
-> > > > > > > +			dw_pcie_dbi_ro_wr_dis(pci);
-> > > > > > > +		}
-> > > > > > > +	}
-> > > > > > > +}
-> > > > > > > +
-> > > > > > >  static int imx6_pcie_suspend_noirq(struct device *dev)  {
-> > > > > > >  	struct imx6_pcie *imx6_pcie = dev_get_drvdata(dev); @@
-> > > > > > > -1050,6
-> > > > > > > +1071,7 @@ static int imx6_pcie_suspend_noirq(struct device
-> > > > > > > +*dev)
-> > > > > > >  	if (!(imx6_pcie->drvdata->flags &
-> > > > > > IMX6_PCIE_FLAG_SUPPORTS_SUSPEND))
-> > > > > > >  		return 0;
-> > > > > > >
-> > > > > > > +	imx6_pcie_msi_save_restore(imx6_pcie, true);
-> > > > > > >  	imx6_pcie_pm_turnoff(imx6_pcie);
-> > > > > > >  	imx6_pcie_stop_link(imx6_pcie->pci);
-> > > > > > >  	imx6_pcie_host_exit(pp);
-> > > > > > > @@ -1069,6 +1091,7 @@ static int imx6_pcie_resume_noirq(struct
-> > > > > > > device
-> > > > > > *dev)
-> > > > > > >  	ret = imx6_pcie_host_init(pp);
-> > > > > > >  	if (ret)
-> > > > > > >  		return ret;
-> > > > > > > +	imx6_pcie_msi_save_restore(imx6_pcie, false);
-> > > > > > >  	dw_pcie_setup_rc(pp);
-> > > > > > >
-> > > > > > >  	if (imx6_pcie->link_is_up)
-> > > > > > > --
-> > > > > > > 2.25.1
+> ...
+> 
+>>>>>> +		for (i = 0; !ret && i < gts->num_avail_all_scales; i++)
+>>>>>
+>>>>> Much easier to read if you move this...
+>>>>>
+>>>>>> +			ret = iio_gts_total_gain_to_scale(gts, all_gains[i],
+>>>>>> +					&gts->avail_all_scales_table[i * 2],
+>>>>>> +					&gts->avail_all_scales_table[i * 2 + 1]);
+>>>>>
+>>>>> ...here as
+>>>>>
+>>>>> 		if (ret)
+>>>>> 			break;
+>>>>
+>>>> I think the !ret in loop condition is obvious. Adding break and brackets
+>>>> would not improve this.
+>>>
+>>> It moves it to the regular pattern. Yours is not so distributed in the kernel.
+>>
+>> I believe we can find examples of both patterns in kernel. I don't think the
+>> "many people use different pattern" is a great reason to add break +
+>> brackets which (in my eyes) give no additional value to code I am planning
+>> to keep reading also in the future...
+> 
+> The problem is that your pattern is not so standard (distributed) and hence
+> less maintainable.
+
+I am sorry but I can't really agree with you on this one. For me adding 
+the break and brackets would just complicate the flow and thus decrease 
+the maintainability.
+
+> ...
+> 
+>>>>>> +			if (!diff) {
+>>>>>
+>>>>> Why not positive conditional?
+>>>>
+>>>> Because !diff is a special condition and we check explicitly for it.
+>>>
+>>> And how my suggestion makes it different?
+>>
+>> In example you gave we would be checking if the value is anything else but
+>> the specific value we are checking for. It is counter intuitive.
+>>
+>>> (Note, it's easy to miss the ! in the conditionals, that's why positive ones
+>>>    are preferable.)
+>>
+>> Thank you for explaining me the rationale behind the "positive checks". I
+>> didn't know missing '!' was seen as a thing.
+>>
+>> I still don't think being afraid of missing '!' is a good reason to switch
+>> to counter intuitive checks. A check "if (!foo)" is a pattern in-kernel if
+>> anything and in my opinion people really should be aware of it.
+>>
+>> (I would much more say that having a constant value on left side of a
+>> "equality" check is beneficial as people do really occasionally miss one '='
+>> when meaning '=='. Still, this is not strong enough reason to make
+>> counter-intuitive checks. In my books 'avoiding negative checks' is much
+>> less of a reason as people (in my experience) do not really miss the '!'.)
+> 
+> It's not a problem when it's a common pattern (like you mentioned
+> if (!foo) return -ENOMEM; or alike), but in your case it's not.
+
+I think we can find plenty of cases where the if (!foo) is used also for 
+other type of checks. To me the argument about people easily missing the 
+! in if () just do not sound reasonable.
+
+> I would rather see if (diff == 0) which definitely shows the intention
+> and I wouldn't tell a word against it.
+
+I think this depends much of the corner of the kernel you have been 
+working with. As far as I remember, in some parts the kernel the check
+(foo == 0) was actually discouraged, and check (!foo) was preferred.
+
+Personally I like !foo much more - but I can tolerate the (foo == 0) in 
+cases where the purpose is to really see if some measure equals to zero.
+
+Other uses where I definitely don't want to use "== 0" are for example 
+checking if a flag is clear, pointer is NULL or "magic value" is zero.
+
+In this case we are checking for a magic value. Having this check 
+written as: (diff == 0), would actually falsely suggest me we are 
+checking for the difference of gains being zero. That would really be a 
+clever obfuscation and I am certain the code readers would fall on that 
+trap quite easily.
+
+Yours,
+	-- Matti
+
+-- 
+Matti Vaittinen
+Linux kernel developer at ROHM Semiconductors
+Oulu Finland
+
+~~ When things go utterly wrong vim users can always type :help! ~~
+
