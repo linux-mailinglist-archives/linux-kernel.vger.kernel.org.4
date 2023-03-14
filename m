@@ -2,72 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C220D6B97D0
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 15:23:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02E866B97D4
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 15:23:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230030AbjCNOXK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 10:23:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51552 "EHLO
+        id S231216AbjCNOXc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 10:23:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231204AbjCNOXG (ORCPT
+        with ESMTP id S230471AbjCNOX1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 10:23:06 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CB49AB889;
-        Tue, 14 Mar 2023 07:22:35 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id l12so6239781wrm.10;
-        Tue, 14 Mar 2023 07:22:35 -0700 (PDT)
+        Tue, 14 Mar 2023 10:23:27 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C906D13DC8
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 07:23:00 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id j11so62750977edq.4
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 07:23:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678803754;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=OXl4TgI3IpmiTT3XmEwykC+oT2OJpvBfbKn8ITV5+I4=;
-        b=Qd6udfidgl6S8YWBabq6CfpDGX989xxqr3fu4G5b//IdS31IGCKZBJbJEHOvlLqI6o
-         kTGLQS8hg3GLfjSKFTQUyOeD4mBD7OwYQR5w2ciFzsSunlinEORfUJTS4RWfC4pqcIm/
-         gs5kNTkZWG6QOSDzG8IP8Gb8lB6wa9FR8VvtNlii+RuL6oFHWY1R+LYHfrqU5P7ibCu3
-         pmtN04IcKGLw6HJoYeYYr7xRJhel2QFlTlXkSJtyq8K+lHW3UKN2lAFYn/1t8XikuRnB
-         VrcVMxEvKqwVD9oQevkzfe1ly7AR9hKeYfegVU85TlnAzoZ/wOD7I/ooRwSxxFD3qglM
-         5BjQ==
+        d=linaro.org; s=google; t=1678803774;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=UMxrUpznXSIBDo2JBKKZe9hAbpKqNtdthZ67TgrD304=;
+        b=GTGBBybGUCWr8NRVVOUsCyAosbwVGVWSu3bqDDbw9xDnXA+8NgqD8LwkL86aoeNrIY
+         euRoJQ9wyR2+H2vXJRuNuO3OHg1JpwxD3JhLl1nc2OR34rKiAsQFX1uuaMr/FeYwXjEx
+         Gd7QsilVuCde+S1lII2v5woiuZYFM+nJfz62WM7vF7IeGdFbiPCs0URkEfM0a4PlFg/H
+         DxEHgR1HxOocPfZzEnklSamjU0i7x7hFKSIvOdWpq77vaY3MtjXeeG5kKhrsmaPmxhW1
+         X/FEe4x7JnF3/OOxEMG5Y1uaxP7y6HDEkREp6xy3W5udTmp17M+rAQQ8w4BSwl9rGNL/
+         2eKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678803754;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OXl4TgI3IpmiTT3XmEwykC+oT2OJpvBfbKn8ITV5+I4=;
-        b=qxESJW4XMZqMq9KAPUpO/FVzXqGqkEdjfqs5zP7ZU1yFIys4PqtUUuOD078g1Z8uVT
-         wNl4AuC/3zHHy53wC8rsHhXbvUMDpLHB/yuBVmYYbptSM+6ntFrqh48jhnYZwR/p4gjH
-         aUhCShrRgNfH8910ILZxvZNhkT4241oo10ys03iG/R+JBv0NRIYCqKPKLpvVb3jItCfb
-         cU/iBDyqkORXZAwr24SilAEMRbk+WC7OfSiOwftspRtGl0ZGnauMyJfocEBpGSw9JdDq
-         /nk09a+h5pC3WXOVGtVNtdPkFTBIgH4SNEnLbiUU2MnsDwSKsr6AS/8nONH+SiZfIIm7
-         cJgQ==
-X-Gm-Message-State: AO0yUKXqEPxrCioYutkn/aJ1EkJKYuphAJcSdBRjIXYotINBuoHg+Xtm
-        hbc2biz5VLr+FHLt9MFXh6o=
-X-Google-Smtp-Source: AK7set/qjMFLVqloraRunzYDMxB3B+4nSWcH4blFYg7bum9qXDXw/ldPZeraNtS5HiDOTxsoaR+fUA==
-X-Received: by 2002:adf:f84f:0:b0:2ce:aa62:ff73 with SMTP id d15-20020adff84f000000b002ceaa62ff73mr5480045wrq.54.1678803753757;
-        Tue, 14 Mar 2023 07:22:33 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id d17-20020a5d4f91000000b002c5598c14acsm2315939wru.6.2023.03.14.07.22.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Mar 2023 07:22:33 -0700 (PDT)
-Date:   Tue, 14 Mar 2023 17:22:28 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     Dongliang Mu <dzm91@hust.edu.cn>
-Cc:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH linux-next v2 1/3] platform/x86/intel/tpmi: Fix double
- free in tpmi_create_device()
-Message-ID: <155c581f-1a3e-4d6c-82b9-0ff7855dcaab@kili.mountain>
-References: <20230309040107.534716-1-dzm91@hust.edu.cn>
- <20230309040107.534716-2-dzm91@hust.edu.cn>
+        d=1e100.net; s=20210112; t=1678803774;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=UMxrUpznXSIBDo2JBKKZe9hAbpKqNtdthZ67TgrD304=;
+        b=U3AcsHYjH7/2hVw4sCM13xwgXxi81aY2aQY0mMqdnmPEFwYVote1+IxBFcny4KHL2J
+         U6aKtYIZVSl/ZZwyhFEXBR2fIPlnl0uxk6/LlkT+Jia7CFmcqDTye7JoxPCAbu1ZhcsQ
+         aI2qN3aVu8qM8j1xPUvwv2UhdhEwXcmKu6LBy278MiAd0DUuml0JIoYohWRUBmB7P4n/
+         PXvIfiuxftZtRdWRC4iOj99xRba4EBqK7ZiYg2jXcPYk98jaXaWQsFQcKz+EtCh52JP1
+         ffbrR44BhF5jiPXtyLVGsh7ioOqPequNlYt2MRKGgmzDrkeSvhz4ADlFXNBxTwQMm3hb
+         svUg==
+X-Gm-Message-State: AO0yUKU8rZHOneJwhKphNpsgmrxOr+pMq3zLxtfWgzM5pjPfM2uMMkis
+        oY+YzfJrIOyStT3tC7VRvlP7bQ==
+X-Google-Smtp-Source: AK7set/ies7q/bxpR0JGu9kGi9/sMVrE4sF4RFClvxfUbWMiesVzIQmDyZZF9q00uf84NX1+jmFjGA==
+X-Received: by 2002:a17:906:4f8f:b0:88d:f759:15b0 with SMTP id o15-20020a1709064f8f00b0088df75915b0mr3266541eju.45.1678803774214;
+        Tue, 14 Mar 2023 07:22:54 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:59be:4b3f:994b:e78c? ([2a02:810d:15c0:828:59be:4b3f:994b:e78c])
+        by smtp.gmail.com with ESMTPSA id b27-20020a50ccdb000000b004ad601533a3sm1125175edj.55.2023.03.14.07.22.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Mar 2023 07:22:53 -0700 (PDT)
+Message-ID: <ec504c7d-66d4-a4b7-547e-7272e012cdf9@linaro.org>
+Date:   Tue, 14 Mar 2023 15:22:52 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230309040107.534716-2-dzm91@hust.edu.cn>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v3 3/3] i2c: mpc: Use i2c-scl-clk-low-timeout-ms i2c
+ property
+Content-Language: en-US
+To:     Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Wolfram Sang <wsa@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>,
+        Ryan Chen <ryan_chen@aspeedtech.com>
+References: <20230312233613.303408-1-andi.shyti@kernel.org>
+ <20230312233613.303408-4-andi.shyti@kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230312233613.303408-4-andi.shyti@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,25 +80,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 09, 2023 at 12:01:05PM +0800, Dongliang Mu wrote:
-> The previous commit 6a192c0cbf38 ("platform/x86/intel/tpmi: Fix
-> double free reported by Smatch") incorrectly handle the deallocation of
-> res variable. As shown in the comment, intel_vsec_add_aux handles all
-> the deallocation of res and feature_vsec_dev. Therefore, kfree(res) can
-> still cause double free if intel_vsec_add_aux returns error.
+On 13/03/2023 00:36, Andi Shyti wrote:
+> "fsl,timeout" is marked as deprecated and replaced by the
+> "i2c-scl-clk-low-timeout-ms" i2c property.
 > 
-> Fix this by adjusting the error handling part in tpmi_create_device,
-> following the function intel_vsec_add_dev.
+> Use this latter and, in case it is missing, for back
+> compatibility, check whether we still have "fsl,timeout" defined.
 > 
-> Fixes: 6a192c0cbf38 ("platform/x86/intel/tpmi: Fix double free reported by Smatch")
-> Signed-off-by: Dongliang Mu <dzm91@hust.edu.cn>
+> Signed-off-by: Andi Shyti <andi.shyti@kernel.org>
+> Reviewed-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
 > ---
+>  drivers/i2c/busses/i2c-mpc.c | 12 +++++++++++-
+>  1 file changed, 11 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-mpc.c b/drivers/i2c/busses/i2c-mpc.c
+> index 87e5c1725750..28f11e30ac50 100644
+> --- a/drivers/i2c/busses/i2c-mpc.c
+> +++ b/drivers/i2c/busses/i2c-mpc.c
+> @@ -843,8 +843,18 @@ static int fsl_i2c_probe(struct platform_device *op)
+>  			mpc_i2c_setup_8xxx(op->dev.of_node, i2c, clock);
+>  	}
+>  
+> +	/*
+> +	 * "fsl,timeout" has been marked as deprecated and, to maintain
+> +	 * backward compatibility, we will only look for it if
+> +	 * "i2c-scl-clk-low-timeout-ms" is not present.
+> +	 */
+>  	result = of_property_read_u32(op->dev.of_node,
+> -				      "fsl,timeout", &mpc_ops.timeout);
+> +				      "i2c-scl-clk-low-timeout-ms",
+> +				      &mpc_ops.timeout);
+> +	if (result == -EINVAL)
+> +		result = of_property_read_u32(op->dev.of_node,
+> +					      "fsl,timeout", &mpc_ops.timeout);
 
-Yeah.  These patches are right.  The earlier fix still has a double
-free.  Devres stuff is confusing...
+Wasn't old property in us and new one is in ms?
 
-Reviewed-by: Dan Carpenter <error27@gmail.com>
-
-regards,
-dan carpenter
+Best regards,
+Krzysztof
 
