@@ -2,193 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D9226B91A4
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 12:30:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 655446B91A6
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 12:31:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229875AbjCNL36 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 07:29:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53870 "EHLO
+        id S231239AbjCNLbq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 07:31:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229926AbjCNL3z (ORCPT
+        with ESMTP id S229886AbjCNLbo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 07:29:55 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 808EAAC;
-        Tue, 14 Mar 2023 04:29:54 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32EBTfgj051738;
-        Tue, 14 Mar 2023 06:29:41 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1678793381;
-        bh=w73ME4BqNLG1jQWq7o3E8JXdQsx94xFuptDNByH+I7U=;
-        h=From:To:CC:Subject:Date;
-        b=b/xpA8nEHutUQM/OcljYb3+JDRGCnKn+2D9xYe2pAqA1aq/zwbhJtZ6A+BGxUvtls
-         A8ds/o+nlgXP8MfiKKHs2/pDAErSV6Uu60KwFlgxuW7pqebTqwhRWSFZ0/dS7GFNCw
-         Tky3T/heZxD/1Hkqy6TY5UrNbZLi9sEy22ypl+QM=
-Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32EBTf5f099463
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 14 Mar 2023 06:29:41 -0500
-Received: from DFLE110.ent.ti.com (10.64.6.31) by DFLE114.ent.ti.com
- (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 14
- Mar 2023 06:29:41 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE110.ent.ti.com
- (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Tue, 14 Mar 2023 06:29:41 -0500
-Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32EBTejn012980;
-        Tue, 14 Mar 2023 06:29:40 -0500
-From:   Bhavya Kapoor <b-kapoor@ti.com>
-To:     <devicetree@vger.kernel.org>, <robh+dt@kernel.org>
-CC:     <nm@ti.com>, <vigneshr@ti.com>, <kristo@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v6] arm64: dts: ti: k3-j721s2: Add support for ADC nodes
-Date:   Tue, 14 Mar 2023 16:59:39 +0530
-Message-ID: <20230314112939.139894-1-b-kapoor@ti.com>
-X-Mailer: git-send-email 2.34.1
+        Tue, 14 Mar 2023 07:31:44 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98EAA92F0C;
+        Tue, 14 Mar 2023 04:31:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678793502; x=1710329502;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=B2JIdZFnOgODiCPaS156p+1hgs/76WeFRt2PCzonJqQ=;
+  b=k7iVdOl/Pgf063zyRD9v9NMwFeRm4Cy+Zd1HKn22LQI+9OyCbe4Kajq1
+   oemWMwPsOKCBuY6AhU3Jn/rGONrM1cxlAxQv73t71ySjfAgDEfi6el5MM
+   xxUskhuT1QHabbnPiICrPzT39/LuPlJxt0kbADqNqmVzrfykthniue5QC
+   LIb+AmlLhC/y2+MdL6C3qnH1rySLUuYtQ0kmhhpYoHmUJ9QjIXAeTtnX+
+   FHPveWViWYMsri7AW8GhNIHJfkgyHgGtU9IwcRdLqGky8QflDyjyz9nrw
+   T+y5xfV8ub+Y7oXv5ufkp5rgRU9odt+JOQnGs3J6fJTm77/OZUmSuGZPu
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="399985105"
+X-IronPort-AV: E=Sophos;i="5.98,259,1673942400"; 
+   d="scan'208";a="399985105"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2023 04:31:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="709247031"
+X-IronPort-AV: E=Sophos;i="5.98,259,1673942400"; 
+   d="scan'208";a="709247031"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga008.jf.intel.com with ESMTP; 14 Mar 2023 04:31:08 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pc2ry-003Bcf-05;
+        Tue, 14 Mar 2023 13:31:06 +0200
+Date:   Tue, 14 Mar 2023 13:31:05 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Matti Vaittinen <mazziesaccount@gmail.com>
+Cc:     "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Paul Gazzillo <paul@pgazz.com>,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        Shreeya Patel <shreeya.patel@collabora.com>,
+        Zhigang Shi <Zhigang.Shi@liteon.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>
+Subject: Re: [PATCH v2 2/6] iio: light: Add gain-time-scale helpers
+Message-ID: <ZBBa+e9VXj/eyT4J@smile.fi.intel.com>
+References: <cover.1677750859.git.mazziesaccount@gmail.com>
+ <9895826669118a1aa1db3f85c2610fa759426c33.1677750859.git.mazziesaccount@gmail.com>
+ <ZAC7L8NQYgBcBTCF@smile.fi.intel.com>
+ <7e537200-37ab-f6e6-c4e0-c3997128c01b@fi.rohmeurope.com>
+ <ZAXK9Hn2NuQPJ7eo@smile.fi.intel.com>
+ <1dbfc336-7d09-cd44-dfa2-9c4bedf257e1@gmail.com>
+ <ZA81rpWgwvP2bigt@smile.fi.intel.com>
+ <9d63c161-0449-7e56-5873-2909587f17af@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9d63c161-0449-7e56-5873-2909587f17af@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-J721s2 has two instances of 8 channel ADCs in MCU domain. Add support
-for both ADC nodes.
+On Tue, Mar 14, 2023 at 12:28:43PM +0200, Matti Vaittinen wrote:
+> On 3/13/23 16:39, Andy Shevchenko wrote:
+> > On Mon, Mar 13, 2023 at 01:31:42PM +0200, Matti Vaittinen wrote:
+> > > On 3/6/23 13:13, Andy Shevchenko wrote:
+> > > > On Fri, Mar 03, 2023 at 07:54:22AM +0000, Vaittinen, Matti wrote:
+> > > > > On 3/2/23 17:05, Andy Shevchenko wrote:
+> > > > > > On Thu, Mar 02, 2023 at 12:57:54PM +0200, Matti Vaittinen wrote:
 
-Signed-off-by: Bhavya Kapoor <b-kapoor@ti.com>
----
+...
 
-Changelog v5->v6:
-- Added pinmux for ADCs
+> > > > > > > +		for (i = 0; !ret && i < gts->num_avail_all_scales; i++)
+> > > > > > 
+> > > > > > Much easier to read if you move this...
+> > > > > > 
+> > > > > > > +			ret = iio_gts_total_gain_to_scale(gts, all_gains[i],
+> > > > > > > +					&gts->avail_all_scales_table[i * 2],
+> > > > > > > +					&gts->avail_all_scales_table[i * 2 + 1]);
+> > > > > > 
+> > > > > > ...here as
+> > > > > > 
+> > > > > > 		if (ret)
+> > > > > > 			break;
+> > > > > 
+> > > > > I think the !ret in loop condition is obvious. Adding break and brackets
+> > > > > would not improve this.
+> > > > 
+> > > > It moves it to the regular pattern. Yours is not so distributed in the kernel.
+> > > 
+> > > I believe we can find examples of both patterns in kernel. I don't think the
+> > > "many people use different pattern" is a great reason to add break +
+> > > brackets which (in my eyes) give no additional value to code I am planning
+> > > to keep reading also in the future...
+> > 
+> > The problem is that your pattern is not so standard (distributed) and hence
+> > less maintainable.
+> 
+> I am sorry but I can't really agree with you on this one. For me adding the
+> break and brackets would just complicate the flow and thus decrease the
+> maintainability.
 
-link to v5 patch : https://lore.kernel.org/all/20230314095553.110559-1-b-kapoor@ti.com/
+So, we may start to have a "fundamental disagreements between Matti and Andy on
+the code style in the Linux kernel" document that we won't clash on this again.
+At least the amount of these disagreements seems not decreasing in time.
 
-Testlog for v6 : https://gist.github.com/a0498981/c70327e178cb11c09b8df757e772e9be
+...
 
- .../dts/ti/k3-j721s2-common-proc-board.dts    | 44 +++++++++++++++++++
- .../boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi     | 40 +++++++++++++++++
- 2 files changed, 84 insertions(+)
+> > > > > > > +			if (!diff) {
+> > > > > > 
+> > > > > > Why not positive conditional?
+> > > > > 
+> > > > > Because !diff is a special condition and we check explicitly for it.
+> > > > 
+> > > > And how my suggestion makes it different?
+> > > 
+> > > In example you gave we would be checking if the value is anything else but
+> > > the specific value we are checking for. It is counter intuitive.
+> > > 
+> > > > (Note, it's easy to miss the ! in the conditionals, that's why positive ones
+> > > >    are preferable.)
+> > > 
+> > > Thank you for explaining me the rationale behind the "positive checks". I
+> > > didn't know missing '!' was seen as a thing.
+> > > I still don't think being afraid of missing '!' is a good reason to switch
+> > > to counter intuitive checks. A check "if (!foo)" is a pattern in-kernel if
+> > > anything and in my opinion people really should be aware of it.
+> > > 
+> > > (I would much more say that having a constant value on left side of a
+> > > "equality" check is beneficial as people do really occasionally miss one '='
+> > > when meaning '=='. Still, this is not strong enough reason to make
+> > > counter-intuitive checks. In my books 'avoiding negative checks' is much
+> > > less of a reason as people (in my experience) do not really miss the '!'.)
+> > 
+> > It's not a problem when it's a common pattern (like you mentioned
+> > if (!foo) return -ENOMEM; or alike), but in your case it's not.
+> 
+> I think we can find plenty of cases where the if (!foo) is used also for
 
-diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts b/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
-index a7aa6cf08acd..b4b9edfe2d12 100644
---- a/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
-+++ b/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
-@@ -197,6 +197,32 @@ mcu_mcan1_gpio_pins_default: mcu-mcan1-gpio-pins-default {
- 			J721S2_WKUP_IOPAD(0x0c8, PIN_INPUT, 7) /* (C28) WKUP_GPIO0_2 */
- 		>;
- 	};
-+
-+	mcu_adc0_pins_default: mcu-adc0-pins-default {
-+		pinctrl-single,pins = <
-+			J721S2_WKUP_IOPAD(0x134, PIN_INPUT, 0) /* (L25) MCU_ADC0_AIN0 */
-+			J721S2_WKUP_IOPAD(0x138, PIN_INPUT, 0) /* (K25) MCU_ADC0_AIN1 */
-+			J721S2_WKUP_IOPAD(0x13c, PIN_INPUT, 0) /* (M24) MCU_ADC0_AIN2 */
-+			J721S2_WKUP_IOPAD(0x140, PIN_INPUT, 0) /* (L24) MCU_ADC0_AIN3 */
-+			J721S2_WKUP_IOPAD(0x144, PIN_INPUT, 0) /* (L27) MCU_ADC0_AIN4 */
-+			J721S2_WKUP_IOPAD(0x148, PIN_INPUT, 0) /* (K24) MCU_ADC0_AIN5 */
-+			J721S2_WKUP_IOPAD(0x14c, PIN_INPUT, 0) /* (M27) MCU_ADC0_AIN6 */
-+			J721S2_WKUP_IOPAD(0x150, PIN_INPUT, 0) /* (M26) MCU_ADC0_AIN7 */
-+		>;
-+	};
-+
-+	mcu_adc1_pins_default: mcu-adc1-pins-default {
-+		pinctrl-single,pins = <
-+			J721S2_WKUP_IOPAD(0x154, PIN_INPUT, 0) /* (P25) MCU_ADC1_AIN0 */
-+			J721S2_WKUP_IOPAD(0x158, PIN_INPUT, 0) /* (R25) MCU_ADC1_AIN1 */
-+			J721S2_WKUP_IOPAD(0x15c, PIN_INPUT, 0) /* (P28) MCU_ADC1_AIN2 */
-+			J721S2_WKUP_IOPAD(0x160, PIN_INPUT, 0) /* (P27) MCU_ADC1_AIN3 */
-+			J721S2_WKUP_IOPAD(0x164, PIN_INPUT, 0) /* (N25) MCU_ADC1_AIN4 */
-+			J721S2_WKUP_IOPAD(0x168, PIN_INPUT, 0) /* (P26) MCU_ADC1_AIN5 */
-+			J721S2_WKUP_IOPAD(0x16c, PIN_INPUT, 0) /* (N26) MCU_ADC1_AIN6 */
-+			J721S2_WKUP_IOPAD(0x170, PIN_INPUT, 0) /* (N27) MCU_ADC1_AIN7 */
-+		>;
-+	};
- };
- 
- &main_gpio2 {
-@@ -309,3 +335,21 @@ &mcu_mcan1 {
- 	pinctrl-0 = <&mcu_mcan1_pins_default>;
- 	phys = <&transceiver2>;
- };
-+
-+&tscadc0 {
-+	pinctrl-0 = <&mcu_adc0_pins_default>;
-+	pinctrl-names = "default";
-+	status = "okay";
-+	adc {
-+		ti,adc-channels = <0 1 2 3 4 5 6 7>;
-+	};
-+};
-+
-+&tscadc1 {
-+	pinctrl-0 = <&mcu_adc1_pins_default>;
-+	pinctrl-names = "default";
-+	status = "okay";
-+	adc {
-+		ti,adc-channels = <0 1 2 3 4 5 6 7>;
-+	};
-+};
-diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi b/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
-index 0af242aa9816..5da5f0cf7009 100644
---- a/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
-@@ -306,4 +306,44 @@ cpts@3d000 {
- 			ti,cpts-periodic-outputs = <2>;
- 		};
- 	};
-+
-+	tscadc0: tscadc@40200000 {
-+		compatible = "ti,am3359-tscadc";
-+		reg = <0x00 0x40200000 0x00 0x1000>;
-+		interrupts = <GIC_SPI 860 IRQ_TYPE_LEVEL_HIGH>;
-+		power-domains = <&k3_pds 0 TI_SCI_PD_EXCLUSIVE>;
-+		clocks = <&k3_clks 0 0>;
-+		assigned-clocks = <&k3_clks 0 2>;
-+		assigned-clock-rates = <60000000>;
-+		clock-names = "fck";
-+		dmas = <&main_udmap 0x7400>,
-+			<&main_udmap 0x7401>;
-+		dma-names = "fifo0", "fifo1";
-+		status = "disabled";
-+
-+		adc {
-+			#io-channel-cells = <1>;
-+			compatible = "ti,am3359-adc";
-+		};
-+	};
-+
-+	tscadc1: tscadc@40210000 {
-+		compatible = "ti,am3359-tscadc";
-+		reg = <0x00 0x40210000 0x00 0x1000>;
-+		interrupts = <GIC_SPI 861 IRQ_TYPE_LEVEL_HIGH>;
-+		power-domains = <&k3_pds 1 TI_SCI_PD_EXCLUSIVE>;
-+		clocks = <&k3_clks 1 0>;
-+		assigned-clocks = <&k3_clks 1 2>;
-+		assigned-clock-rates = <60000000>;
-+		clock-names = "fck";
-+		dmas = <&main_udmap 0x7402>,
-+			<&main_udmap 0x7403>;
-+		dma-names = "fifo0", "fifo1";
-+		status = "disabled";
-+
-+		adc {
-+			#io-channel-cells = <1>;
-+			compatible = "ti,am3359-adc";
-+		};
-+	};
- };
+Pleading to the quantity and not quality is not an argument, right?
+
+> other type of checks. To me the argument about people easily missing the !
+> in if () just do not sound reasonable.
+
+You may theoretically discuss this, I'm telling from my review background
+and real cases.
+
+> > I would rather see if (diff == 0) which definitely shows the intention
+> > and I wouldn't tell a word against it.
+> 
+> I think this depends much of the corner of the kernel you have been working
+> with. As far as I remember, in some parts the kernel the check
+> (foo == 0) was actually discouraged, and check (!foo) was preferred.
+
+Don't you use your common sense?
+
+> Personally I like !foo much more - but I can tolerate the (foo == 0) in
+> cases where the purpose is to really see if some measure equals to zero.
+> 
+> Other uses where I definitely don't want to use "== 0" are for example
+> checking if a flag is clear, pointer is NULL or "magic value" is zero.
+> 
+> In this case we are checking for a magic value. Having this check written
+> as: (diff == 0), would actually falsely suggest me we are checking for the
+> difference of gains being zero. That would really be a clever obfuscation
+> and I am certain the code readers would fall on that trap quite easily.
+
+Testing with !diff sounds like it's a boolean kind and makes a false
+impression that all other values are almost the same meaning which is
+not the case. Am I right? That's why diff == 0 shows the exact intention
+here "I would like to check if diff is 0 because this is *special case*".
+
+Making !diff creates less visibility on this.
+
+Result: Fundamental disagreement between us.
+
 -- 
-2.34.1
+With Best Regards,
+Andy Shevchenko
+
 
