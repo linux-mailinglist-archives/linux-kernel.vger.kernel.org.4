@@ -2,91 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3BE46B96C9
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 14:49:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0AD46B96C3
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 14:48:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232498AbjCNNtH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 09:49:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36672 "EHLO
+        id S229896AbjCNNsp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 09:48:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231231AbjCNNsc (ORCPT
+        with ESMTP id S231866AbjCNNsU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 09:48:32 -0400
-Received: from exchange.fintech.ru (e10edge.fintech.ru [195.54.195.159])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FEFD9F061;
-        Tue, 14 Mar 2023 06:45:31 -0700 (PDT)
-Received: from Ex16-01.fintech.ru (10.0.10.18) by exchange.fintech.ru
- (195.54.195.169) with Microsoft SMTP Server (TLS) id 14.3.498.0; Tue, 14 Mar
- 2023 16:45:25 +0300
-Received: from localhost (10.0.253.157) by Ex16-01.fintech.ru (10.0.10.18)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2242.4; Tue, 14 Mar
- 2023 16:45:25 +0300
-From:   Nikita Zhandarovich <n.zhandarovich@fintech.ru>
-To:     <stable@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Nikita Zhandarovich <n.zhandarovich@fintech.ru>,
-        Mustafa Ismail <mustafa.ismail@intel.com>,
-        Shiraz Saleem <shiraz.saleem@intel.com>,
-        "Jason Gunthorpe" <jgg@ziepe.ca>,
-        Leon Romanovsky <leon@kernel.org>,
-        <linux-rdma@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <lvc-project@linuxtesting.org>
-Subject: [PATCH 5.4/5.10 1/1] RDMA/i40iw: Fix potential NULL-ptr-dereference
-Date:   Tue, 14 Mar 2023 06:44:56 -0700
-Message-ID: <20230314134456.3557-2-n.zhandarovich@fintech.ru>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230314134456.3557-1-n.zhandarovich@fintech.ru>
-References: <20230314134456.3557-1-n.zhandarovich@fintech.ru>
+        Tue, 14 Mar 2023 09:48:20 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BEA8E968DC
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 06:45:16 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 397B04B3
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 06:46:00 -0700 (PDT)
+Received: from e110455-lin.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 548363F67D
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 06:45:16 -0700 (PDT)
+Date:   Tue, 14 Mar 2023 13:45:06 +0000
+From:   Liviu Dudau <liviu.dudau@arm.com>
+To:     Yang Li <yang.lee@linux.alibaba.com>
+Cc:     airlied@gmail.com, daniel@ffwll.ch, brian.starkey@arm.com,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH -next 1/2] drm/arm/malidp: Use
+ devm_platform_get_and_ioremap_resource()
+Message-ID: <ZBB6YmrrNnufgpIh@e110455-lin.cambridge.arm.com>
+References: <20230314080231.20212-1-yang.lee@linux.alibaba.com>
+ <20230314080231.20212-2-yang.lee@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.0.253.157]
-X-ClientProxiedBy: Ex16-02.fintech.ru (10.0.10.19) To Ex16-01.fintech.ru
- (10.0.10.18)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230314080231.20212-2-yang.lee@linux.alibaba.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nikita Zhandarovich <n.zhandarovich@fintech.ru>
+On Tue, Mar 14, 2023 at 04:02:31PM +0800, Yang Li wrote:
+> According to commit 890cc39a8799 ("drivers: provide
+> devm_platform_get_and_ioremap_resource()"), convert
+> platform_get_resource(), devm_ioremap_resource() to a single
+> call to devm_platform_get_and_ioremap_resource(), as this is exactly
+> what this function does.
+> 
+> Since 'struct platform_device *pdev = to_platform_device(dev)',
+> 'pdev->dev' is equivalent to 'dev'.
+> 
+> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
 
-commit 5d9745cead1f121974322b94ceadfb4d1e67960e upstream.
+Acked-by: Liviu Dudau <liviu.dudau@arm.com>
 
-in_dev_get() can return NULL which will cause a failure once idev is
-dereferenced in in_dev_for_each_ifa_rtnl(). This patch adds a
-check for NULL value in idev beforehand.
+Thanks for the cleanup! I will pull this patch and the hdlcd one into
+drm-misc-next by the end of the week.
 
-Found by Linux Verification Center (linuxtesting.org) with SVACE.
+Best regards,
+Liviu
 
-Changes made to the original patch during backporting:
-Apply patch to drivers/infiniband/hw/i40iw/i40iw_cm.c instead of
-drivers/infiniband/hw/irdma/cm.c due to the fact that kernel versions
-5.10 and below use i40iw driver, not irdma.
+> ---
+>  drivers/gpu/drm/arm/malidp_drv.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/arm/malidp_drv.c b/drivers/gpu/drm/arm/malidp_drv.c
+> index cf040e2e9efe..e220bfc85b2e 100644
+> --- a/drivers/gpu/drm/arm/malidp_drv.c
+> +++ b/drivers/gpu/drm/arm/malidp_drv.c
+> @@ -724,8 +724,7 @@ static int malidp_bind(struct device *dev)
+>  	hwdev->hw = (struct malidp_hw *)of_device_get_match_data(dev);
+>  	malidp->dev = hwdev;
+>  
+> -	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> -	hwdev->regs = devm_ioremap_resource(dev, res);
+> +	hwdev->regs = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
+>  	if (IS_ERR(hwdev->regs))
+>  		return PTR_ERR(hwdev->regs);
+>  
+> -- 
+> 2.20.1.7.g153144c
+> 
 
-Fixes: f27b4746f378 ("i40iw: add connection management code")
-Signed-off-by: Nikita Zhandarovich <n.zhandarovich@fintech.ru>
-Link: https://lore.kernel.org/r/20230126185230.62464-1-n.zhandarovich@fintech.ru
----
- drivers/infiniband/hw/i40iw/i40iw_cm.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/infiniband/hw/i40iw/i40iw_cm.c b/drivers/infiniband/hw/i40iw/i40iw_cm.c
-index 3053c345a5a3..e1236ac502f2 100644
---- a/drivers/infiniband/hw/i40iw/i40iw_cm.c
-+++ b/drivers/infiniband/hw/i40iw/i40iw_cm.c
-@@ -1776,6 +1776,8 @@ static enum i40iw_status_code i40iw_add_mqh_4(
- 			const struct in_ifaddr *ifa;
- 
- 			idev = in_dev_get(dev);
-+			if (!idev)
-+				continue;
- 
- 			in_dev_for_each_ifa_rtnl(ifa, idev) {
- 				i40iw_debug(&iwdev->sc_dev,
 -- 
-2.25.1
-
+====================
+| I would like to |
+| fix the world,  |
+| but they're not |
+| giving me the   |
+ \ source code!  /
+  ---------------
+    ¯\_(ツ)_/¯
