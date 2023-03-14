@@ -2,204 +2,266 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE8476B9742
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 15:08:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65D696B9744
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 15:08:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231398AbjCNOIQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 10:08:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49766 "EHLO
+        id S231282AbjCNOIm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 10:08:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229987AbjCNOIM (ORCPT
+        with ESMTP id S229958AbjCNOIk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 10:08:12 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16192126E6
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 07:08:11 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id k2so8838660pll.8
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 07:08:11 -0700 (PDT)
+        Tue, 14 Mar 2023 10:08:40 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB25410417
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 07:08:36 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id o12so62535254edb.9
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 07:08:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678802890;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=9lPoZZPacx9fdneUfHux1/KYUBYODq0fopFLjkjIOik=;
-        b=V9hO1c5s9f9mi2Gw7qut7duszo+fbowP4j2pkKss4fRvTmwnbpNtZUv09ZmQGI3ZwA
-         2jg5s2IoX5iTxbiOI+hCOk8zxrU+ZA+HPmsQ8WacVC9jKB9HaiXvZgPDOUJYRm3JVVsD
-         ShJiA9OJVLRXC/NVMhwSPholWIRl9mXekIbK7nfKy0y4nbYwOavt6P9zs0v87+Ue41hK
-         M3cNKIgE66yL0AbM9XP8bqulnFlNsqnfQDS//aztPR8hZ5Pk9LsKBPl/bykzAL6qvZK3
-         ElT/PmNj19JT1scXffc5KNghTKw4add0Oa9tsJ8eNcF0hkixALFdttWswAAocBi8hBS7
-         RYRQ==
+        d=gmail.com; s=20210112; t=1678802915;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=2fh50q0+/HEalk1h1oQC2pXaNeew6AKaitkp7RgML7Q=;
+        b=J1G5R1YnRKN2hzDDJInJdLGi2sJjFHgYNB/uDk3DMY1eqELgKvyT78qq1VUN3anRAY
+         7bQSxtcGc/J2RWnxz9XLdnE6L2mMC+St1n4XEuYo5fqdTxQqDTgiG32m1SHSOkSyf2Fx
+         N2tQmCPw42aVW6+WXa6j4dzCYdEFvXA/s0bwrCWY/vbjBJzILEPQU4YckdkJ1kc7zVpo
+         FOrPmSS5JHhOD0ddM3fuhoJHzS3RdXzs89cFbifyy/8R/Ah3f/Sf9HO99/WwuM0dSMPh
+         ucVk8oMa4kZ2wxA+wDl00F0MiojdNoiQlAa4SfM1Hg9a//XOuUbXMSIyGxdJCDCho1ZA
+         Ts2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678802890;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9lPoZZPacx9fdneUfHux1/KYUBYODq0fopFLjkjIOik=;
-        b=q0jpSe7M63qSPvZ+GN2WzLAjDAYk+T782Xepy7l0NeUi50pwXnan1r8q/fNHgD6/Oa
-         NrY+Pijcwrcz2PE7vfAg6FJ1X/SJjAPvXz2CNiTZq8xnuYbSP5k1dtPf0xlledUAxSCl
-         LqAz1G8oZ0Le8IEhiSO6g08zuaoT0GNq9rTMxqIJdcugxIfjHr0Q1+EXKbmyrqjPN3L4
-         19fouY7i+Fk1DOe7Gbrq81E622coKoMTyWYw0MbpXsugwIebYlY0HmNJWTHYV0mRmmQf
-         +e32ed01k6bFX0+2qz7elpVJZNde0r8gYYpc9NXqnt1CWKh8jmeRJBIXfW3JBStvmJL2
-         JDwA==
-X-Gm-Message-State: AO0yUKXtVdbQyVORvGiKcnV4KV5+c0Dd1uRAthYsWxgsotQyXOqa0T/a
-        zF57Hll8bc+ShmHbmHBX1oNy
-X-Google-Smtp-Source: AK7set+jjrZxXvG/HqwihK5qqGzkzo6NJC3ZPFgQShYZYkHWr0ZYgNVzuREatJ5EWXGJaMtZmOcZew==
-X-Received: by 2002:a05:6a20:b061:b0:c7:320a:60b6 with SMTP id dx33-20020a056a20b06100b000c7320a60b6mr31206938pzb.26.1678802890196;
-        Tue, 14 Mar 2023 07:08:10 -0700 (PDT)
-Received: from thinkpad ([117.217.182.35])
-        by smtp.gmail.com with ESMTPSA id u23-20020aa78497000000b005a8b4dcd213sm1666092pfn.78.2023.03.14.07.08.05
+        d=1e100.net; s=20210112; t=1678802915;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2fh50q0+/HEalk1h1oQC2pXaNeew6AKaitkp7RgML7Q=;
+        b=OyM+gyYAw8hNo5CZ1hlQIFFe7UXfzhPlknlTSmHJnfDHG6i6fL50sxEKaDCew4RCGe
+         Q3RkOufVGYUWK3cNM0VM1hRCsCZ5NXXkzb9zNl+KhyAGljptmjOFUdUt9Zx67zlmkyLN
+         wps7NCAUt5/nbOToPOPjijMrPxR5nbkhSuBSUMpR8eJC5WpJ7FQJf0xhQ340m0nd2x7b
+         J7Ew9wkLEFmy5fUWhfRgRaTvfGjh41JZpf0/FioeXLULKVCscSFAEA9UHTnEW4FBiVrE
+         QUK2WZ9OaISlB+qpol4FRoCTCROvBLb0KRNsg+3HiUd6rZpKiV1IHbgWkhyKNKokGvf6
+         hM+g==
+X-Gm-Message-State: AO0yUKUGxxZ7xwFuGa3eSkYvbacqVHIm10px1dCp+9vfuvyl3hUdxU5m
+        1KIoQClXP8PIrBNq9bMUG43EmTTYVf6QYgUX
+X-Google-Smtp-Source: AK7set86cuDzNUeHz96tiWnCTlYRXr331XXgSySDYske0mghcxOZyatZQSOnYpKOjpb3zG7dWQVokw==
+X-Received: by 2002:a05:6402:516a:b0:4fc:c7c8:e78d with SMTP id d10-20020a056402516a00b004fcc7c8e78dmr6730921ede.31.1678802914820;
+        Tue, 14 Mar 2023 07:08:34 -0700 (PDT)
+Received: from khadija-virtual-machine ([39.41.111.116])
+        by smtp.gmail.com with ESMTPSA id kk1-20020a170907766100b0092b8c1f41ebsm1198352ejc.24.2023.03.14.07.08.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Mar 2023 07:08:09 -0700 (PDT)
-Date:   Tue, 14 Mar 2023 19:37:56 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     Johan Hovold <johan@kernel.org>, will@kernel.org, joro@8bytes.org,
-        andersson@kernel.org, johan+linaro@kernel.org, steev@kali.org,
-        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] iommu/arm-smmu-qcom: Rework the logic finding the
- bypass quirk
-Message-ID: <20230314140756.GD137001@thinkpad>
-References: <20230314105905.137241-1-manivannan.sadhasivam@linaro.org>
- <ZBBX0n4S2QBYB3Pi@hovoldconsulting.com>
- <20230314112620.GB137001@thinkpad>
- <13b46d42-e497-8dd7-4785-f58447128a40@arm.com>
- <20230314132018.GC137001@thinkpad>
- <a81515c5-c88c-e3c2-2077-0a78b900bbe5@arm.com>
+        Tue, 14 Mar 2023 07:08:34 -0700 (PDT)
+Date:   Tue, 14 Mar 2023 19:08:31 +0500
+From:   Khadija Kamran <kamrankhadijadj@gmail.com>
+To:     outreachy@lists.linux.dev
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] staging: axis-fifo: initialize timeouts in probe only
+Message-ID: <ZBB/30ZBW9EU1QfK@khadija-virtual-machine>
+References: <ZA9mThZ7NyRrQAMX@khadija-virtual-machine>
+ <202303141159.6wN9HNP9-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <a81515c5-c88c-e3c2-2077-0a78b900bbe5@arm.com>
+In-Reply-To: <202303141159.6wN9HNP9-lkp@intel.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 14, 2023 at 01:41:56PM +0000, Robin Murphy wrote:
-> On 2023-03-14 13:20, Manivannan Sadhasivam wrote:
-> > On Tue, Mar 14, 2023 at 11:58:24AM +0000, Robin Murphy wrote:
-> > > On 2023-03-14 11:26, Manivannan Sadhasivam wrote:
-> > > > On Tue, Mar 14, 2023 at 12:17:38PM +0100, Johan Hovold wrote:
-> > > > > On Tue, Mar 14, 2023 at 04:29:05PM +0530, Manivannan Sadhasivam wrote:
-> > > > > > The logic used to find the quirky firmware that intercepts the writes to
-> > > > > > S2CR register to replace bypass type streams with a fault, and ignore the
-> > > > > > fault type, is not working with the firmware on newer SoCs like SC8280XP.
-> > > > > > 
-> > > > > > The current logic uses the last stream mapping group (num_mapping_groups
-> > > > > > - 1) as an index for finding quirky firmware. But on SC8280XP, NUSMRG
-> > > > > > reports a value of 162 (possibly emulated by the hypervisor) and logic is
-> > > > > > not working for stream mapping groups > 128. (Note that the ARM SMMU
-> > > > > > architecture specification defines NUMSMRG in the range of 0-127).
-> > > > > > 
-> > > > > > So the current logic that checks the (162-1)th S2CR entry fails to detect
-> > > > > > the quirky firmware on these devices and SMMU triggers invalid context
-> > > > > > fault for bypass streams.
-> > > > > > 
-> > > > > > To fix this issue, rework the logic to find the first non-valid (free)
-> > > > > > stream mapping register group (SMR) within 128 groups and use that index
-> > > > > > to access S2CR for detecting the bypass quirk. If no free groups are
-> > > > > > available, then just skip the quirk detection.
-> > > > > > 
-> > > > > > While at it, let's move the quirk detection logic to a separate function
-> > > > > > and change the local variable name from last_s2cr to free_s2cr.
-> > > > > > 
-> > > > > > Reviewed-by: Bjorn Andersson <andersson@kernel.org>
-> > > > > > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> > > > > > ---
-> > > > > > 
-> > > > > > Changes in v2:
-> > > > > > 
-> > > > > > * Limited the check to 128 groups as per ARM SMMU spec's NUMSMRG range
-> > > > > > * Moved the quirk handling to its own function
-> > > > > > * Collected review tag from Bjorn
-> > > > > > 
-> > > > > >    drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c | 48 ++++++++++++++++++----
-> > > > > >    1 file changed, 40 insertions(+), 8 deletions(-)
-> > > > > > 
-> > > > > > diff --git a/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c b/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
-> > > > > > index d1b296b95c86..48362d7ef451 100644
-> > > > > > --- a/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
-> > > > > > +++ b/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
-> > > > > > @@ -266,25 +266,49 @@ static int qcom_smmu_init_context(struct arm_smmu_domain *smmu_domain,
-> > > > > >    	return 0;
-> > > > > >    }
-> > > > > > -static int qcom_smmu_cfg_probe(struct arm_smmu_device *smmu)
-> > > > > > +static void qcom_smmu_bypass_quirk(struct arm_smmu_device *smmu)
-> > > > > >    {
-> > > > > > -	unsigned int last_s2cr = ARM_SMMU_GR0_S2CR(smmu->num_mapping_groups - 1);
-> > > > > >    	struct qcom_smmu *qsmmu = to_qcom_smmu(smmu);
-> > > > > > -	u32 reg;
-> > > > > > -	u32 smr;
-> > > > > > +	u32 free_s2cr;
-> > > > > > +	u32 reg, smr;
-> > > > > >    	int i;
-> > > > > > +	/*
-> > > > > > +	 * Find the first non-valid (free) stream mapping register group and
-> > > > > > +	 * use that index to access S2CR for detecting the bypass quirk.
-> > > > > > +	 *
-> > > > > > +	 * Note that only the first 128 stream mapping groups are considered for
-> > > > > > +	 * the check. This is because the ARM SMMU architecture specification
-> > > > > > +	 * defines NUMSMRG (Number of Stream Mapping Register Groups) in the
-> > > > > > +	 * range of 0-127, but some Qcom platforms emulate more stream mapping
-> > > > > > +	 * groups with the help of hypervisor. And those groups don't exhibit
-> > > > > > +	 * the quirky behavior.
-> > > > > > +	 */
-> > > > > > +	for (i = 0; i < 128; i++) {
-> > > > > 
-> > > > > This may now access registers beyond smmu->num_mapping_groups. Should
-> > > > > you not use the minimum of these two values here (and below)?
-> > > > > 
-> > > > 
-> > > > Doh! yeah, you're right. Will fix it in v3.
-> > > 
-> > > FWIW I'd say it's probably best if the cfg_probe hook clamps
-> > > smmu->num_mapping_groups to the architectural maximum straight away, to also
-> > > prevent the main driver iterating off into the nonsensical area in
-> > > arm_smmu_device_reset() or the SMR allocator itself.
-> > > 
-> > 
-> > We considered that also but Qcom purposefully extended the NUMSMRG for
-> > virtualization usecase and we do not have a clear picture of it.
+On Tue, Mar 14, 2023 at 11:45:51AM +0800, kernel test robot wrote:
+> Hi Khadija,
 > 
-> Whatever that supposed use-case may be, Linux does not support it, and
-> clearly isn't going to support it any time soon if we don't even know what
-> it is. Therefore Linux does not need to accommodate this weirdness for the
-> foreseeable future, beyond simply making sure it doesn't cause any problems
-> for what Linux *does* support. It's bad enough that the emulation of
-> "normal" SMRs continues to violate the architecture, but I'm even more
-> uncomfortable letting the generic architecture driver poke at completely
-> non-architectural registers which don't even have the same behaviour as the
-> ones they're supposedly extending.
+> Thank you for the patch! Perhaps something to improve:
 > 
-
-Okay then. I'll cap it to 128.
-
-Thanks,
-Mani
-
-> Thanks,
-> Robin.
+> [auto build test WARNING on staging/staging-testing]
 > 
-> > That's the
-> > reason we settled with capping the value only for the quirk detection.
-> > 
-> > Thanks,
-> > Mani
-> > 
-> > > (Note that we don't support the weird EXSMRGS extension that appeared in a
-> > > late version of the architecture, but even if we did, that still reports 128
-> > > for IDR0.NUMSMRG, and the extra extended SMRs live somewhere completely
-> > > different.)
-> > > 
-> > > Thanks,
-> > > Robin.
-> > 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Khadija-Kamran/staging-axis-fifo-initialize-timeouts-in-probe-only/20230314-020827
+> patch link:    https://lore.kernel.org/r/ZA9mThZ7NyRrQAMX%40khadija-virtual-machine
+> patch subject: [PATCH] staging: axis-fifo: initialize timeouts in probe only
+> config: arm64-randconfig-r012-20230313 (https://download.01.org/0day-ci/archive/20230314/202303141159.6wN9HNP9-lkp@intel.com/config)
+> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # install arm64 cross compiling tool for clang build
+>         # apt-get install binutils-aarch64-linux-gnu
+>         # https://github.com/intel-lab-lkp/linux/commit/9d186f6c9f9bf467b48da3e28b0e9aa31fc3faf3
+>         git remote add linux-review https://github.com/intel-lab-lkp/linux
+>         git fetch --no-tags linux-review Khadija-Kamran/staging-axis-fifo-initialize-timeouts-in-probe-only/20230314-020827
+>         git checkout 9d186f6c9f9bf467b48da3e28b0e9aa31fc3faf3
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/staging/axis-fifo/
+> 
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Link: https://lore.kernel.org/oe-kbuild-all/202303141159.6wN9HNP9-lkp@intel.com/
+> 
+> All warnings (new ones prefixed by >>):
+> 
+> >> drivers/staging/axis-fifo/axis-fifo.c:817:18: warning: implicit conversion from 'long' to 'int' changes value from 9223372036854775807 to -1 [-Wconstant-conversion]
+>                    read_timeout = MAX_SCHEDULE_TIMEOUT;
+>                                 ~ ^~~~~~~~~~~~~~~~~~~~
+>    include/linux/sched.h:296:31: note: expanded from macro 'MAX_SCHEDULE_TIMEOUT'
+>    #define MAX_SCHEDULE_TIMEOUT            LONG_MAX
+>                                            ^~~~~~~~
+>    include/vdso/limits.h:11:19: note: expanded from macro 'LONG_MAX'
+>    #define LONG_MAX        ((long)(~0UL >> 1))
+>                             ^~~~~~~~~~~~~~~~~
+>    drivers/staging/axis-fifo/axis-fifo.c:822:19: warning: implicit conversion from 'long' to 'int' changes value from 9223372036854775807 to -1 [-Wconstant-conversion]
+>                    write_timeout = MAX_SCHEDULE_TIMEOUT;
+>                                  ~ ^~~~~~~~~~~~~~~~~~~~
+>    include/linux/sched.h:296:31: note: expanded from macro 'MAX_SCHEDULE_TIMEOUT'
+>    #define MAX_SCHEDULE_TIMEOUT            LONG_MAX
+>                                            ^~~~~~~~
+>    include/vdso/limits.h:11:19: note: expanded from macro 'LONG_MAX'
+>    #define LONG_MAX        ((long)(~0UL >> 1))
+>                             ^~~~~~~~~~~~~~~~~
+>    2 warnings generated.
+>
 
--- 
-மணிவண்ணன் சதாசிவம்
+Hi everyone!
+Kindly let me know if I should look into these warnings.
+Thank you!
+
+Regards,
+Khadija
+
+
+> 
+> vim +817 drivers/staging/axis-fifo/axis-fifo.c
+> 
+>    805	
+>    806	static int axis_fifo_probe(struct platform_device *pdev)
+>    807	{
+>    808		struct resource *r_mem; /* IO mem resources */
+>    809		struct device *dev = &pdev->dev; /* OS device (from device tree) */
+>    810		struct axis_fifo *fifo = NULL;
+>    811		char *device_name;
+>    812		int rc = 0; /* error return value */
+>    813	
+>    814		if (read_timeout >= 0)
+>    815			read_timeout = msecs_to_jiffies(read_timeout);
+>    816		else
+>  > 817			read_timeout = MAX_SCHEDULE_TIMEOUT;
+>    818	
+>    819		if (write_timeout >= 0)
+>    820			write_timeout = msecs_to_jiffies(write_timeout);
+>    821		else
+>    822			write_timeout = MAX_SCHEDULE_TIMEOUT;
+>    823	
+>    824		/* ----------------------------
+>    825		 *     init wrapper device
+>    826		 * ----------------------------
+>    827		 */
+>    828	
+>    829		device_name = devm_kzalloc(dev, 32, GFP_KERNEL);
+>    830		if (!device_name)
+>    831			return -ENOMEM;
+>    832	
+>    833		/* allocate device wrapper memory */
+>    834		fifo = devm_kzalloc(dev, sizeof(*fifo), GFP_KERNEL);
+>    835		if (!fifo)
+>    836			return -ENOMEM;
+>    837	
+>    838		dev_set_drvdata(dev, fifo);
+>    839		fifo->dt_device = dev;
+>    840	
+>    841		init_waitqueue_head(&fifo->read_queue);
+>    842		init_waitqueue_head(&fifo->write_queue);
+>    843	
+>    844		mutex_init(&fifo->read_lock);
+>    845		mutex_init(&fifo->write_lock);
+>    846	
+>    847		/* ----------------------------
+>    848		 *   init device memory space
+>    849		 * ----------------------------
+>    850		 */
+>    851	
+>    852		/* get iospace for the device */
+>    853		r_mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+>    854		if (!r_mem) {
+>    855			dev_err(fifo->dt_device, "invalid address\n");
+>    856			rc = -ENODEV;
+>    857			goto err_initial;
+>    858		}
+>    859	
+>    860		/* request physical memory */
+>    861		fifo->base_addr = devm_ioremap_resource(fifo->dt_device, r_mem);
+>    862		if (IS_ERR(fifo->base_addr)) {
+>    863			rc = PTR_ERR(fifo->base_addr);
+>    864			goto err_initial;
+>    865		}
+>    866	
+>    867		dev_dbg(fifo->dt_device, "remapped memory to 0x%p\n", fifo->base_addr);
+>    868	
+>    869		/* create unique device name */
+>    870		snprintf(device_name, 32, "%s_%pa", DRIVER_NAME, &r_mem->start);
+>    871		dev_dbg(fifo->dt_device, "device name [%s]\n", device_name);
+>    872	
+>    873		/* ----------------------------
+>    874		 *          init IP
+>    875		 * ----------------------------
+>    876		 */
+>    877	
+>    878		rc = axis_fifo_parse_dt(fifo);
+>    879		if (rc)
+>    880			goto err_initial;
+>    881	
+>    882		reset_ip_core(fifo);
+>    883	
+>    884		/* ----------------------------
+>    885		 *    init device interrupts
+>    886		 * ----------------------------
+>    887		 */
+>    888	
+>    889		/* get IRQ resource */
+>    890		rc = platform_get_irq(pdev, 0);
+>    891		if (rc < 0)
+>    892			goto err_initial;
+>    893	
+>    894		/* request IRQ */
+>    895		fifo->irq = rc;
+>    896		rc = devm_request_irq(fifo->dt_device, fifo->irq, &axis_fifo_irq, 0,
+>    897				      DRIVER_NAME, fifo);
+>    898		if (rc) {
+>    899			dev_err(fifo->dt_device, "couldn't allocate interrupt %i\n",
+>    900				fifo->irq);
+>    901			goto err_initial;
+>    902		}
+>    903	
+>    904		/* ----------------------------
+>    905		 *      init char device
+>    906		 * ----------------------------
+>    907		 */
+>    908	
+>    909		/* create character device */
+>    910		fifo->miscdev.fops = &fops;
+>    911		fifo->miscdev.minor = MISC_DYNAMIC_MINOR;
+>    912		fifo->miscdev.name = device_name;
+>    913		fifo->miscdev.groups = axis_fifo_attrs_groups;
+>    914		fifo->miscdev.parent = dev;
+>    915		rc = misc_register(&fifo->miscdev);
+>    916		if (rc < 0)
+>    917			goto err_initial;
+>    918	
+>    919		dev_info(fifo->dt_device, "axis-fifo created at %pa mapped to 0x%pa, irq=%i\n",
+>    920			 &r_mem->start, &fifo->base_addr, fifo->irq);
+>    921	
+>    922		return 0;
+>    923	
+>    924	err_initial:
+>    925		dev_set_drvdata(dev, NULL);
+>    926		return rc;
+>    927	}
+>    928	
+> 
+> -- 
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests
