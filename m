@@ -2,113 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C47C6B9FFF
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 20:49:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DE9E6BA001
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 20:50:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229722AbjCNTti (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 15:49:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44790 "EHLO
+        id S230104AbjCNTuL convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 14 Mar 2023 15:50:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229588AbjCNTtg (ORCPT
+        with ESMTP id S229704AbjCNTuJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 15:49:36 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 324BE55B6
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 12:49:34 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id cn21so36545176edb.0
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 12:49:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678823372;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4KSUmznh2ok6aa4Ci09Di7Dv3MtowRhPOcy1yLcL7PA=;
-        b=jhzyPJPIDbGYuM0hUKTd+D6vgjFyeu7ZpRP1qaZS5jT+kvx/4fm6sGjaYRIu1q3Y1A
-         PP8VoUGZCDyrTklBaz6k6rwXl9FmVyHyE0vBIPUKe/GrtFFM3RhoS0txQ8iIcUKfzcNA
-         6eUzXD0Hju2BVJdAhA/9e7Z3kwgFXE93ZnoU599CdSJeHd8sjxOhdsNwqoZaVQHt4Q2y
-         eqPIr1hpvpwgfMp87Q3z7ZrzFnub1rccXEvY6/s8Qf+yg0fCQlW4A8hyRStmfH0zXE5r
-         m39vnFOp9KaMCfXrQg2P7jSA8J2UdCsJkhTdBW5nhlJr5Y+RGb5lbcf8uhJb4Dk3zmVm
-         NqWg==
+        Tue, 14 Mar 2023 15:50:09 -0400
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77E1055B6;
+        Tue, 14 Mar 2023 12:50:08 -0700 (PDT)
+Received: by mail-ed1-f53.google.com with SMTP id x13so19372438edd.1;
+        Tue, 14 Mar 2023 12:50:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678823372;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4KSUmznh2ok6aa4Ci09Di7Dv3MtowRhPOcy1yLcL7PA=;
-        b=DuOVBIFO4YId7dHRcniZS5GESNDwbC01z4Jwo+IL9iEyUimoa2tkUNuV1vzLsJC/z3
-         ygT6UMuYLx9+Mri+zuTwn9usMKju3IFNM/17VJhX9hkpijGiUzZfbiPLeOF+HOMttuY1
-         Ji01ybABeS6M9msSjR8CAC3F8QMRIf6+nASPYzDCOJJrirXKeiAaUqiGhq+eR3+veO6x
-         /JfV+s+wi2NUcKqcT1MCsRqAAE5y9LETxCSQ1pff6Id5ZmUMXWxFewd+WeOYSpyBOKBO
-         xR5GrRJi8ne7W95thY+DY9GIApJ94CnqnG7m+Eo4gfVi6HLnY/CfDuitupziAbYCEdH9
-         iUXQ==
-X-Gm-Message-State: AO0yUKUCbCUdTH+AUXsYQBha3hGs67pFAEql8ioeZNACJ6TAPcUSOoGd
-        CXdnuDCkCIkF2F84HP/xpM2yAQ==
-X-Google-Smtp-Source: AK7set+Be2eJplmpdWbWUybqVGKj1gD5EKFPFiDQCyOXzQdcw5BoHDAXe4gUNBkyWtrujDRp581wow==
-X-Received: by 2002:a17:906:cc54:b0:884:37fd:bf4c with SMTP id mm20-20020a170906cc5400b0088437fdbf4cmr3904484ejb.19.1678823372716;
-        Tue, 14 Mar 2023 12:49:32 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:642b:87c2:1efc:c8af? ([2a02:810d:15c0:828:642b:87c2:1efc:c8af])
-        by smtp.gmail.com with ESMTPSA id g11-20020a170906348b00b0092b4602f506sm1522869ejb.73.2023.03.14.12.49.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Mar 2023 12:49:32 -0700 (PDT)
-Message-ID: <1bd962b1-2fbc-9bdb-8b7a-9f2c70c316e2@linaro.org>
-Date:   Tue, 14 Mar 2023 20:49:31 +0100
+        d=1e100.net; s=20210112; t=1678823407;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pWbK/M0x77Xrv3ybj/Re+cbFQtzYq8yEvXF3k1BEmvY=;
+        b=4RJRfPd5RPNkJJj5YwJTo8rGmEB0qCDxCLTVv+B12w+cqQrnmu2rcdv/qFiJCnhD5K
+         M4INv1+0ApxINpoDFm0idTskbCRa//LitkRPT8A54VIHCr0N7P+UGfu5VZOZDf/O0lTW
+         TVzDPENCLROXJ6YO7aa49w4kvw7CwD/FQsJ1R/x4HtWr+OUsVm9fD1EWm6mdy0MI8/we
+         6/BdAPkKIquo5NQ+/+CyzIeTtEYSofoAcNwjBHISUrOwxJvAw1Jq0qDZ+1Ir3DSvABpm
+         IQe+DtYcGCJy5axzZUpuw4Prmiuj53m9C1ykFAhZr3xUfb9BCcDl3OxR1TvsDwh+5/Qe
+         HPeA==
+X-Gm-Message-State: AO0yUKXDTeEIOstL/d2ay3kUAz5hWBR7JG0HuWh8JQ/OJJCwpyA0q9v2
+        0ZzqhnrY5hzIaCNsylF0aqn4rZmDJQff/CvB+GE=
+X-Google-Smtp-Source: AK7set/Djlb4zJE6lSC+TyP7Pdyu5bPVjgQ1dFa2g2As+v6CEIyqKFqSzUCxjq+autyjSQRQArE2iqolCK3vDD2exTY=
+X-Received: by 2002:a50:874e:0:b0:4fb:2593:846 with SMTP id
+ 14-20020a50874e000000b004fb25930846mr155813edv.3.1678823406946; Tue, 14 Mar
+ 2023 12:50:06 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v5 1/3] dt-bindings: exynos-dw-mshc-common: add exynos7885
- variants
-Content-Language: en-US
-To:     Sergey Lisov <sleirsgoevy@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Jaehoon Chung <jh80.chung@samsung.com>
-Cc:     linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1678644516.665314-1-sleirsgoevy@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1678644516.665314-1-sleirsgoevy@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230225115144.31212-1-W_Armin@gmx.de> <d2660362-dc25-e75f-394b-1997bd062933@gmx.de>
+In-Reply-To: <d2660362-dc25-e75f-394b-1997bd062933@gmx.de>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 14 Mar 2023 20:49:55 +0100
+Message-ID: <CAJZ5v0itUSnsxgdvw39e+YZWe4jTHA1fLjw3HZSKHTkp+eLHwQ@mail.gmail.com>
+Subject: Re: [PATCH v2 0/4] ACPI: SBS: Fix various issues
+To:     Armin Wolf <W_Armin@gmx.de>
+Cc:     rafael@kernel.org, lenb@kernel.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/03/2023 18:58, Sergey Lisov wrote:
-> Some Samsung Exynos boards using the arm64 architecture have DW MMC
-> controllers configured for a 32-bit data bus but a 64-bit FIFO. On these
-> systems the 64-bit FIFO registers must be accessed in two 32-bit halves.
-> 
-> Add two new compatible strings, "samsung,exynos7885-dw-mshc" and
-> "samsung,exynos7885-dw-mshc-smu" respectively, to denote exynos7885
-> boards that need this quirk. But it's very possible that all
-> "samsung,exynos7-dw-mshc" boards are actually affected.
-> ---
->  .../devicetree/bindings/mmc/samsung,exynos-dw-mshc.yaml         | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/mmc/samsung,exynos-dw-mshc.yaml b/Documentation/devicetree/bindings/mmc/samsung,exynos-dw-mshc.yaml
-> index fdaa18481..3eebaed2c 100644
-> --- a/Documentation/devicetree/bindings/mmc/samsung,exynos-dw-mshc.yaml
-> +++ b/Documentation/devicetree/bindings/mmc/samsung,exynos-dw-mshc.yaml
-> @@ -22,6 +22,8 @@ properties:
->        - samsung,exynos5420-dw-mshc-smu
->        - samsung,exynos7-dw-mshc
->        - samsung,exynos7-dw-mshc-smu
-> +      - samsung,exynos7885-dw-mshc
-> +      - samsung,exynos7885-dw-mshc-smu
+On Sun, Mar 12, 2023 at 6:15 PM Armin Wolf <W_Armin@gmx.de> wrote:
+>
+> Am 25.02.23 um 12:51 schrieb Armin Wolf:
+>
+> > On my Acer Travelmate 4002WLMi, the system locks up upon
+> > suspend/shutdown. After a lot of research, it turned out
+> > that the sbs module was the culprit. The driver would not
+> > correctly mask out the value used to select a battery using
+> > the "Smart Battery Selector" (subset of the "Smart Battery Manager").
+> > This accidentally caused a invalid power source to be selected,
+> > which was automatically corrected by the selector. Upon
+> > notifing the host about the corrected power source, some batteries
+> > would be selected for re-reading, causing a endless loop.
+> > This would lead to some workqueues filling up, which caused the
+> > lockup upon suspend/shutdown.
+> >
+> > The first three patches fix a stacktrace on module removal caused
+> > by some locking issues. The last patch finally fixes the
+> > suspend/shutdown issues.
+> >
+> > As a side note: This was the first machine on which i installed Linux,
+> > to finally fixing this took ~5 years of tinkering.
+>
+> What is the status of this patchset? Should i use a SRCU notifier chain
+> for the query notifiers? I would really like to see this getting fixed,
+> as it prevents me from using linux on this machine.
 
-What about the if-then at the end? Since this is pretty compatible with
-exynos7, then I would expect being added also there.
-
-Best regards,
-Krzysztof
-
+I'm not entirely convinced about the query notifiers idea TBH.
