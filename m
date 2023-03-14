@@ -2,33 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77B766B93F5
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 13:35:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5943C6B9400
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 13:38:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231276AbjCNMfs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 08:35:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44860 "EHLO
+        id S230388AbjCNMiN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 08:38:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230111AbjCNMfq (ORCPT
+        with ESMTP id S230270AbjCNMiJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 08:35:46 -0400
-Received: from sym2.noone.org (sym.noone.org [IPv6:2a01:4f8:120:4161::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47D5B9545C;
-        Tue, 14 Mar 2023 05:35:10 -0700 (PDT)
-Received: by sym2.noone.org (Postfix, from userid 1002)
-        id 4PbXyZ4t8yzvjfn; Tue, 14 Mar 2023 13:34:14 +0100 (CET)
-From:   Tobias Klauser <tklauser@distanz.ch>
-To:     Christian Brauner <brauner@kernel.org>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] selftests/clone3: fix number of tests in ksft_set_plan
-Date:   Tue, 14 Mar 2023 13:34:14 +0100
-Message-Id: <20230314123414.26907-1-tklauser@distanz.ch>
-X-Mailer: git-send-email 2.11.0
-In-Reply-To: <20230314115352.20623-1-tklauser@distanz.ch>
-References: <20230314115352.20623-1-tklauser@distanz.ch>
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_NONE autolearn=no
+        Tue, 14 Mar 2023 08:38:09 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6DF0D509
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 05:36:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678797350;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=ZoLxBS4sCcddIB4Qt1Fu55N4ue8UhWhYQjCpsRyp28w=;
+        b=TNkkZb0BQqiqtLRayyeeCkCca1KtR/N59JjSk9zWeKI1Ebf+evAhJbWYBi7Auxf1jD8AAG
+        G6afFrPqpyLwSfO28HyRhaB5Np7sPrXQJLiN2+8i0eLEeKl38UUVTOvuhJBEdZ5y7AGGXB
+        gIFROQQfImIU4BjU8+fvNZ4XMbuMubk=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-664-WnSoYnekPFO02XgVBCawag-1; Tue, 14 Mar 2023 08:35:45 -0400
+X-MC-Unique: WnSoYnekPFO02XgVBCawag-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AA5963855562;
+        Tue, 14 Mar 2023 12:35:44 +0000 (UTC)
+Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 8B02C400F4F;
+        Tue, 14 Mar 2023 12:35:44 +0000 (UTC)
+From:   Paolo Bonzini <pbonzini@redhat.com>
+To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     bgardon@google.com
+Subject: [PATCH] KVM: selftests: skip hugetlb tests if huge pages are not available
+Date:   Tue, 14 Mar 2023 08:35:44 -0400
+Message-Id: <20230314123544.3050347-1-pbonzini@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -36,43 +57,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 515bddf0ec41 ("selftests/clone3: test clone3 with CLONE_NEWTIME")
-added an additional test, so the number passed to ksft_set_plan needs to
-be bumped accordingly.
+Right now, if KVM memory stress tests are run with hugetlb sources but hugetlb is
+not available (either in the kernel or because /proc/sys/vm/nr_hugepages is 0)
+the test will fail with a memory allocation error.
 
-Also use ksft_finished() to print results and exit. This will catch future
-mismatches between ksft_set_plan() and the number of tests being run.
+This makes it impossible to add tests that default to hugetlb-backed memory,
+because on a machine with a default configuration they will fail.  Therefore,
+check HugePages_Total as well and, if zero, direct the user to enable hugepages
+in procfs.  Furthermore, return KSFT_SKIP whenever hugetlb is not available.
 
-Fixes: 515bddf0ec41 ("selftests/clone3: test clone3 with CLONE_NEWTIME")
-Cc: Christian Brauner <brauner@kernel.org>
-Signed-off-by: Tobias Klauser <tklauser@distanz.ch>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 ---
-v2:
- - actually added ksft_finished call as mentioned in the commit message
+ tools/testing/selftests/kvm/lib/test_util.c | 25 +++++++++++++--------
+ 1 file changed, 16 insertions(+), 9 deletions(-)
 
- tools/testing/selftests/clone3/clone3.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/tools/testing/selftests/clone3/clone3.c b/tools/testing/selftests/clone3/clone3.c
-index 4fce46afe6db..e495f895a2cd 100644
---- a/tools/testing/selftests/clone3/clone3.c
-+++ b/tools/testing/selftests/clone3/clone3.c
-@@ -129,7 +129,7 @@ int main(int argc, char *argv[])
- 	uid_t uid = getuid();
+diff --git a/tools/testing/selftests/kvm/lib/test_util.c b/tools/testing/selftests/kvm/lib/test_util.c
+index 5c22fa4c2825..b772193f6c18 100644
+--- a/tools/testing/selftests/kvm/lib/test_util.c
++++ b/tools/testing/selftests/kvm/lib/test_util.c
+@@ -165,26 +165,33 @@ size_t get_trans_hugepagesz(void)
+ size_t get_def_hugetlb_pagesz(void)
+ {
+ 	char buf[64];
+-	const char *tag = "Hugepagesize:";
++	const char *hugepagesize = "Hugepagesize:";
++	const char *hugepages_total = "HugePages_Total:";
+ 	FILE *f;
  
- 	ksft_print_header();
--	ksft_set_plan(17);
-+	ksft_set_plan(18);
- 	test_clone3_supported();
+ 	f = fopen("/proc/meminfo", "r");
+ 	TEST_ASSERT(f != NULL, "Error in opening /proc/meminfo");
  
- 	/* Just a simple clone3() should return 0.*/
-@@ -198,5 +198,5 @@ int main(int argc, char *argv[])
- 	/* Do a clone3() in a new time namespace */
- 	test_clone3(CLONE_NEWTIME, 0, 0, CLONE3_ARGS_NO_TEST);
+ 	while (fgets(buf, sizeof(buf), f) != NULL) {
+-		if (strstr(buf, tag) == buf) {
++		if (strstr(buf, hugepages_total) == buf) {
++			unsigned long long total = strtoull(buf + strlen(hugepages_total), NULL, 10);
++			if (!total) {
++				fprintf(stderr, "HUGETLB is not enabled in /proc/sys/vm/nr_hugepages\n");
++				exit(KSFT_SKIP);
++			}
++		}
++		if (strstr(buf, hugepagesize) == buf) {
+ 			fclose(f);
+-			return strtoull(buf + strlen(tag), NULL, 10) << 10;
++			return strtoull(buf + strlen(hugepagesize), NULL, 10) << 10;
+ 		}
+ 	}
  
--	return !ksft_get_fail_cnt() ? ksft_exit_pass() : ksft_exit_fail();
-+	ksft_finished();
+-	if (feof(f))
+-		TEST_FAIL("HUGETLB is not configured in host kernel");
+-	else
+-		TEST_FAIL("Error in reading /proc/meminfo");
++	if (feof(f)) {
++		fprintf(stderr, "HUGETLB is not configured in host kernel");
++		exit(KSFT_SKIP);
++	}
+ 
+-	fclose(f);
+-	return 0;
++	TEST_FAIL("Error in reading /proc/meminfo");
  }
+ 
+ #define ANON_FLAGS	(MAP_PRIVATE | MAP_ANONYMOUS)
 -- 
 2.39.1
 
