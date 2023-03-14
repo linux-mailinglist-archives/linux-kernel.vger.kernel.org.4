@@ -2,154 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 708E46B9725
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 15:04:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 240236B95B1
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 14:12:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231545AbjCNOEA convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 14 Mar 2023 10:04:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43096 "EHLO
+        id S231853AbjCNNMj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 09:12:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231539AbjCNOD5 (ORCPT
+        with ESMTP id S231705AbjCNNMR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 10:03:57 -0400
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9450C66D26;
-        Tue, 14 Mar 2023 07:03:23 -0700 (PDT)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id E61E424E211;
-        Tue, 14 Mar 2023 20:44:14 +0800 (CST)
-Received: from EXMBX061.cuchost.com (172.16.6.61) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 14 Mar
- 2023 20:44:14 +0800
-Received: from localhost.localdomain (113.72.145.194) by EXMBX061.cuchost.com
- (172.16.6.61) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 14 Mar
- 2023 20:44:13 +0800
-From:   Xingyu Wu <xingyu.wu@starfivetech.com>
-To:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        "Michael Turquette" <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Emil Renner Berthing <kernel@esmil.dk>
-CC:     Rob Herring <robh+dt@kernel.org>, Conor Dooley <conor@kernel.org>,
-        "Paul Walmsley" <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Hal Feng <hal.feng@starfivetech.com>,
-        Xingyu Wu <xingyu.wu@starfivetech.com>,
-        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>
-Subject: [PATCH v3 11/11] riscv: dts: starfive: jh7110: Add STGCRG/ISPCRG/VOUTCRG nodes
-Date:   Tue, 14 Mar 2023 20:44:04 +0800
-Message-ID: <20230314124404.117592-12-xingyu.wu@starfivetech.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230314124404.117592-1-xingyu.wu@starfivetech.com>
-References: <20230314124404.117592-1-xingyu.wu@starfivetech.com>
+        Tue, 14 Mar 2023 09:12:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34227A02A7;
+        Tue, 14 Mar 2023 06:09:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E3064B818E2;
+        Tue, 14 Mar 2023 12:44:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB487C433EF;
+        Tue, 14 Mar 2023 12:44:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678797855;
+        bh=tBw9+bRQetQ6U/3eEzL4oQkjCyHAA6mvTeS2bMVuCe8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=n75S4Vvu5eh3zlt8AY7044FjUj2/XFgb/LXnZA0JOKMwG0CqPbrxr0HdYYDbF5SSy
+         dkPc/Pi+WO0Mk1ptNvzjv66YNLETARWwRr01L1wEtUkoVzXODQ/OBNcJyju0XoI3Tk
+         1xjnLkGZffHj7MTSA+1F+BI72HhoQA/zdqySahHoEkRCzpxTKwAo9cc4zIPkpUcMCA
+         j01bG2qPBsZMe7Zau/gK/Ume+IyGxvfujOudYpS/7PDqo12kiiUkYn2sSQdaC9e5Uy
+         3+YWK3SFcyr+ra0H+6L72fBNamcqN+X3qUPl+15Vj7bVBb9Mb5GtMhCN1fk8tbyhfI
+         s6WhAZJDKdAHQ==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Tobias Schramm <t.schramm@manjaro.org>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Sasha Levin <sashal@kernel.org>, linux-mmc@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 1/7] mmc: atmel-mci: fix race between stop command and start of next command
+Date:   Tue, 14 Mar 2023 08:44:06 -0400
+Message-Id: <20230314124412.471364-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [113.72.145.194]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX061.cuchost.com
- (172.16.6.61)
-X-YovoleRuleAgent: yovoleflag
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_FILL_THIS_FORM_SHORT autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add STGCRG/ISPCRG/VOUTCRG new node to support JH7110
-System-Top-Group, Image-Signal-Process and Video-Output
-clock and reset drivers for the JH7110 RISC-V SoC.
+From: Tobias Schramm <t.schramm@manjaro.org>
 
-Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+[ Upstream commit eca5bd666b0aa7dc0bca63292e4778968241134e ]
+
+This commit fixes a race between completion of stop command and start of a
+new command.
+Previously the command ready interrupt was enabled before stop command
+was written to the command register. This caused the command ready
+interrupt to fire immediately since the CMDRDY flag is asserted constantly
+while there is no command in progress.
+Consequently the command state machine will immediately advance to the
+next state when the tasklet function is executed again, no matter
+actual completion state of the stop command.
+Thus a new command can then be dispatched immediately, interrupting and
+corrupting the stop command on the CMD line.
+Fix that by dropping the command ready interrupt enable before calling
+atmci_send_stop_cmd. atmci_send_stop_cmd does already enable the
+command ready interrupt, no further writes to ATMCI_IER are necessary.
+
+Signed-off-by: Tobias Schramm <t.schramm@manjaro.org>
+Acked-by: Ludovic Desroches <ludovic.desroches@microchip.com>
+Link: https://lore.kernel.org/r/20221230194315.809903-2-t.schramm@manjaro.org
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/riscv/boot/dts/starfive/jh7110.dtsi | 55 ++++++++++++++++++++++++
- 1 file changed, 55 insertions(+)
+ drivers/mmc/host/atmel-mci.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
-diff --git a/arch/riscv/boot/dts/starfive/jh7110.dtsi b/arch/riscv/boot/dts/starfive/jh7110.dtsi
-index d2757f4afab3..b323dffd8a63 100644
---- a/arch/riscv/boot/dts/starfive/jh7110.dtsi
-+++ b/arch/riscv/boot/dts/starfive/jh7110.dtsi
-@@ -6,6 +6,7 @@
- 
- /dts-v1/;
- #include <dt-bindings/clock/starfive,jh7110-crg.h>
-+#include <dt-bindings/power/starfive,jh7110-pmu.h>
- #include <dt-bindings/reset/starfive,jh7110-crg.h>
- 
- / {
-@@ -374,6 +375,25 @@ i2c2: i2c@10050000 {
- 			status = "disabled";
- 		};
- 
-+		stgcrg: clock-controller@10230000 {
-+			compatible = "starfive,jh7110-stgcrg";
-+			reg = <0x0 0x10230000 0x0 0x10000>;
-+			clocks = <&osc>,
-+				 <&syscrg JH7110_SYSCLK_HIFI4_CORE>,
-+				 <&syscrg JH7110_SYSCLK_STG_AXIAHB>,
-+				 <&syscrg JH7110_SYSCLK_USB_125M>,
-+				 <&syscrg JH7110_SYSCLK_CPU_BUS>,
-+				 <&syscrg JH7110_SYSCLK_HIFI4_AXI>,
-+				 <&syscrg JH7110_SYSCLK_NOCSTG_BUS>,
-+				 <&syscrg JH7110_SYSCLK_APB_BUS>;
-+			clock-names = "osc", "hifi4_core",
-+				      "stg_axiahb", "usb_125m",
-+				      "cpu_bus", "hifi4_axi",
-+				      "nocstg_bus", "apb_bus";
-+			#clock-cells = <1>;
-+			#reset-cells = <1>;
-+		};
-+
- 		uart3: serial@12000000 {
- 			compatible = "snps,dw-apb-uart";
- 			reg = <0x0 0x12000000 0x0 0x10000>;
-@@ -524,5 +544,40 @@ pwrc: power-controller@17030000 {
- 			interrupts = <111>;
- 			#power-domain-cells = <1>;
- 		};
-+
-+		ispcrg: clock-controller@19810000 {
-+			compatible = "starfive,jh7110-ispcrg";
-+			reg = <0x0 0x19810000 0x0 0x10000>;
-+			clocks = <&syscrg JH7110_SYSCLK_ISP_TOP_CORE>,
-+				 <&syscrg JH7110_SYSCLK_ISP_TOP_AXI>,
-+				 <&syscrg JH7110_SYSCLK_NOC_BUS_ISP_AXI>,
-+				 <&dvp_clk>;
-+			clock-names = "isp_top_core", "isp_top_axi",
-+				      "noc_bus_isp_axi", "dvp_clk";
-+			resets = <&syscrg JH7110_SYSRST_ISP_TOP>,
-+				 <&syscrg JH7110_SYSRST_ISP_TOP_AXI>,
-+				 <&syscrg JH7110_SYSRST_NOC_BUS_ISP_AXI>;
-+			#clock-cells = <1>;
-+			#reset-cells = <1>;
-+			power-domains = <&pwrc JH7110_PD_ISP>;
-+		};
-+
-+		voutcrg: clock-controller@295c0000 {
-+			compatible = "starfive,jh7110-voutcrg";
-+			reg = <0x0 0x295c0000 0x0 0x10000>;
-+			clocks = <&syscrg JH7110_SYSCLK_VOUT_SRC>,
-+				 <&syscrg JH7110_SYSCLK_VOUT_TOP_AHB>,
-+				 <&syscrg JH7110_SYSCLK_VOUT_TOP_AXI>,
-+				 <&syscrg JH7110_SYSCLK_VOUT_TOP_HDMITX0_MCLK>,
-+				 <&syscrg JH7110_SYSCLK_I2STX0_BCLK>,
-+				 <&hdmitx0_pixelclk>;
-+			clock-names = "vout_src", "vout_top_ahb",
-+				      "vout_top_axi", "vout_top_hdmitx0_mclk",
-+				      "i2stx0_bclk", "hdmitx0_pixelclk";
-+			resets = <&syscrg JH7110_SYSRST_VOUT_TOP_SRC>;
-+			#clock-cells = <1>;
-+			#reset-cells = <1>;
-+			power-domains = <&pwrc JH7110_PD_VOUT>;
-+		};
- 	};
- };
+diff --git a/drivers/mmc/host/atmel-mci.c b/drivers/mmc/host/atmel-mci.c
+index 9c084f64f7dba..4d8f2778d8f9a 100644
+--- a/drivers/mmc/host/atmel-mci.c
++++ b/drivers/mmc/host/atmel-mci.c
+@@ -1812,7 +1812,6 @@ static void atmci_tasklet_func(unsigned long priv)
+ 				atmci_writel(host, ATMCI_IER, ATMCI_NOTBUSY);
+ 				state = STATE_WAITING_NOTBUSY;
+ 			} else if (host->mrq->stop) {
+-				atmci_writel(host, ATMCI_IER, ATMCI_CMDRDY);
+ 				atmci_send_stop_cmd(host, data);
+ 				state = STATE_SENDING_STOP;
+ 			} else {
+@@ -1845,8 +1844,6 @@ static void atmci_tasklet_func(unsigned long priv)
+ 				 * command to send.
+ 				 */
+ 				if (host->mrq->stop) {
+-					atmci_writel(host, ATMCI_IER,
+-					             ATMCI_CMDRDY);
+ 					atmci_send_stop_cmd(host, data);
+ 					state = STATE_SENDING_STOP;
+ 				} else {
 -- 
-2.25.1
+2.39.2
 
