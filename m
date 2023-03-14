@@ -2,211 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6F566B88AD
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 03:38:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E03126B88B0
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 03:41:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229735AbjCNCiT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 22:38:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41528 "EHLO
+        id S229901AbjCNCli (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 22:41:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbjCNCiQ (ORCPT
+        with ESMTP id S229801AbjCNClg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 22:38:16 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7927F8A56;
-        Mon, 13 Mar 2023 19:38:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678761494; x=1710297494;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=hDPfO4oLWwjI1pYXvHU/1IRB8RnFA1iLwQ3CZ7WkcTU=;
-  b=BcqnX+ZhKT1GlVf/furd+dxKxP++cR49yF0JjHKMvj8tEwi3pXMeqWGR
-   yp1MZwu7802d/O+Z0cIph7ygsGKzAY9opZXgUs4OYm01ORzQMpMW7a4w+
-   BjnrWITLk2HY3w4WWREeP+WNklrnbYJo5YFF8A5dSVMfvJPeaC8BZBM21
-   qrVl64NEj/qW71rFErYfKLu928135mRdSa43nhF0t5eEDpCebp8BlPeiG
-   iPQbeixhQTWlYxXR32IjqZf3uyqllfYlSRZKA1Ft4VfI0RUmlGvl0zzX3
-   rO7B0VeNBA2JQ/BBFd4b9Px4vD9t2DOggra+I1LY+n1GP/P0B/ez0VTUu
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="423581015"
-X-IronPort-AV: E=Sophos;i="5.98,258,1673942400"; 
-   d="scan'208";a="423581015"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 19:38:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="656179395"
-X-IronPort-AV: E=Sophos;i="5.98,258,1673942400"; 
-   d="scan'208";a="656179395"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by orsmga006.jf.intel.com with ESMTP; 13 Mar 2023 19:38:13 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Mon, 13 Mar 2023 19:38:13 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Mon, 13 Mar 2023 19:38:13 -0700
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21 via Frontend Transport; Mon, 13 Mar 2023 19:38:13 -0700
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.108)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.21; Mon, 13 Mar 2023 19:38:13 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Gt4YxScO0pigqHQxhUpmotSuNcWq5N84t8grZ921nb7lJHtxvAqYq+snHB9tDde8/p5JN1gLy+rRHW/WgEAzS09Sjc76Z3T4L0jXdeNG4fHbPOgpTbUp1oSSG03mPUijUViit5b1TKykPAwlaZixKqDdFt3KQTj8QDlln/tJTA7o+jLRZ7njk7B398nNJ7RaAC0mzJ7ZGF+RVLMSaQdejOvZBTV+kNLzaMKvOE7nUYugs/50J8mpSSag8kMq6E2b/MrVyYq2iOIhj6Zl35ESrKS5B4BYnoiudYzCxLnOaO3JMxLiBEzZxtemRmcQLrEpz8la+GSzv0BWrN/DdwagGQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hDPfO4oLWwjI1pYXvHU/1IRB8RnFA1iLwQ3CZ7WkcTU=;
- b=c1eJzA8VwMih3D54dgsPjOE5kVOEI/nosx0pP/28ktA5MDIOGezp750sSrOYx+itXy6co3LQKk0o1Tc7SM0uettgFFPYDJcODcLpXEXIvC5uDLySiJyh6Q3JKt3PsMQwAnJpxiemVZp3vO+Ryr67VUloG0WkbhL0Yaf++xOrwAsFt3BW5UC97MF9xJP6emQroRSxpRIuIGuIVrXWH3WGg8Qj4kryMil5gqMqmExhUGKT3MhIs1NddaPWgDHG/x/a6PjHf1OZpYsJbn4Ymt3JP9TWqmSWCMtuItTKQ3Yn6ybZ6dJq5Je9UxGhjdG0yNQyZjxvXB0/k0rn7YnvtvAhGw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BL1PR11MB5978.namprd11.prod.outlook.com (2603:10b6:208:385::18)
- by PH0PR11MB4854.namprd11.prod.outlook.com (2603:10b6:510:35::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.26; Tue, 14 Mar
- 2023 02:38:06 +0000
-Received: from BL1PR11MB5978.namprd11.prod.outlook.com
- ([fe80::f403:a0a2:e468:c1e9]) by BL1PR11MB5978.namprd11.prod.outlook.com
- ([fe80::f403:a0a2:e468:c1e9%5]) with mapi id 15.20.6178.024; Tue, 14 Mar 2023
- 02:38:06 +0000
-From:   "Huang, Kai" <kai.huang@intel.com>
-To:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>
-CC:     "zhi.wang.linux@gmail.com" <zhi.wang.linux@gmail.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "Shahar, Sagi" <sagis@google.com>,
-        "Aktas, Erdem" <erdemaktas@google.com>,
-        "isaku.yamahata@gmail.com" <isaku.yamahata@gmail.com>,
-        "dmatlack@google.com" <dmatlack@google.com>,
-        "Christopherson,, Sean" <seanjc@google.com>
-Subject: Re: [PATCH v13 003/113] KVM: TDX: Initialize the TDX module when
- loading the KVM intel kernel module
-Thread-Topic: [PATCH v13 003/113] KVM: TDX: Initialize the TDX module when
- loading the KVM intel kernel module
-Thread-Index: AQHZVQwsPOGReWj5Uka2uRq42SaKMa75keeA
-Date:   Tue, 14 Mar 2023 02:38:06 +0000
-Message-ID: <20ebae70fd625f8a0fe87f98c25613a2d4dc5792.camel@intel.com>
-References: <cover.1678643051.git.isaku.yamahata@intel.com>
-         <44f7fe9f235e29f2193eaac5890a4dede22c324c.1678643052.git.isaku.yamahata@intel.com>
-In-Reply-To: <44f7fe9f235e29f2193eaac5890a4dede22c324c.1678643052.git.isaku.yamahata@intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.46.4 (3.46.4-1.fc37) 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BL1PR11MB5978:EE_|PH0PR11MB4854:EE_
-x-ms-office365-filtering-correlation-id: b789c09c-9ac2-4f7e-a751-08db2435241c
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 5PScgQQbh63i9fK7HXxeCOHkFrD39eaS47njf52pW2oGM0xzaoL8Nk4DZZJWLDi7MpL6rjUfsvN12bz4jb7TXWoAqTdknv6AjJU4wmkqTBa/vGxmOX3bPwLMFUmSaggjWZLjdXeOc/Ur5Dlu9IFkUCXk8IF92EAdYwmgTsflRTxPeRze/sh2ZbKxqHtqkIJlce4O2erM0Jnow3ouJqDd7dsS9RHvV72dEAQPO1Awb03dQrBIFEDtuyzH6/0YK4AyIaKZczj/s3s/yt2u9YmEWVX0NJmXsBd/1+R2gd22Ns1lHimlmpW1VSZlqicKut50UzMx1lzt3L71LHpugLoPdR0L6nWYesBLmwcwCNLOa8gi35w4muUZKeB8OssDVBMJqBT9/Jv2eE9+FXkTmMwH7VMVzSEsQNi8pR17fkOGLWSexN6xDOR87kqqpQ5IVt2i6oxgtWngbqdqe1bfAEYtLVEah/urK8Y0PK5BIHfKzF/EQH605UpD9/WUXGi52TXY2+8gkPGd0VUOt20dBPTq680NKe0S9139iau7Ab6eZ12BzngsMV4eV6nfYUJjzfh+iXeluZ+DlAz9xfILxHBrXxzpCZCM7UbQxM8By+lzrYIcdCraW9WB22lFhfMI7uBMjPZOTvndpg6JX5A467VYjbyXRNwQcc6TelN8VMScpyIOz75cE2DomDOB09+0g/EzisSiq0m9piZfLJLG+r6XfA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR11MB5978.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(396003)(136003)(376002)(366004)(346002)(39860400002)(451199018)(122000001)(82960400001)(38100700002)(91956017)(66946007)(66556008)(66476007)(64756008)(76116006)(66446008)(4326008)(41300700001)(110136005)(8936002)(316002)(38070700005)(54906003)(6636002)(83380400001)(8676002)(478600001)(5660300002)(71200400001)(86362001)(6486002)(36756003)(2616005)(6512007)(6506007)(186003)(2906002)(26005);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?bjBPTjl6cHd6T3VwMHQ3N3hjeTdJSThPMW5LRGY3UHZ6ZFR6NXFDR0p2TThD?=
- =?utf-8?B?K3gyWVliUnlPUnYzV1BmNURCMHBPeVZKZGtVTUZjZlBvYVlPUGYxK1pEaysv?=
- =?utf-8?B?WWFJTFEwaTBqSEtMVlRQOFIzOG56Z2lvNHdkWGdHOHNKcU53TnkxeEtqeExj?=
- =?utf-8?B?Q0xnY3pNS3FQRkE3dDA1UW5IbnQzcXNrNDFOdVhtVHNsTFF5NUVEdmJJSGVa?=
- =?utf-8?B?Qi9qR01tdC92RWRXc0Q3QjlaaEFITXR0US9ON0pra2Y3ODJBN1Qvc1N0dEY5?=
- =?utf-8?B?Nmo1bzZKRjMrN0JYVWg0SEZlaGczdndVN09YSDVyYkJ1VVQvYzJzT0Zoc2Vo?=
- =?utf-8?B?M1Vrb3Y1VnhPYUwwQlNGaEdxbWJFdU94dGFpaHlmbTFSTEdxSGh2bVlYZTJs?=
- =?utf-8?B?bUt6Ny9KTTFQZ1I1U2NhaUlVTW1lV1I3Y2JoM0NFUzlLK1h4NTZkRGo3ZXYr?=
- =?utf-8?B?MHIxeE0yUXZLZEhxSThoSFRZdDA0cDlHd0gyc3RORjhiaXN1c2xvb3k3T3gx?=
- =?utf-8?B?Q3RBSDVPWUw5anhhRXBrbXo0Y0JCckVBOGdlOWtCZU5Ec1VkUnl0TUtmbnFw?=
- =?utf-8?B?MXhTeWtqL0dxRUMvclJZUFVsOGFPZjduM2xBWnpacXZIQ2s0SkNJaGQ1ZmZz?=
- =?utf-8?B?U01WS0ZQTDZ4cXhuWVJQLzBxdFNSM1VnUHJmc2xWRDhwbU0xNmZKWEhNcjEr?=
- =?utf-8?B?MjBlMG1ZaVpSU3pwaG8yZFFra1lVWHhZcDZvbXJUUGt4dVFYMUh4ZENxd3po?=
- =?utf-8?B?Z053RCs1VjZER1cxNi9ZZnZyR1pKRXFnTnFOaHYwMWxZOXp6Y3FHUWExVUxa?=
- =?utf-8?B?NC9EanhCUVYxQVNDSnFkdkVTMDN5c1pVU1dBWGpTdGF5STUvdTBQSUszS0t6?=
- =?utf-8?B?RHZJaHlQcHBLVlhYb0xLRUs0Q05WYzZnakdyOUNoZCtzTytlTjhGVitHOEFp?=
- =?utf-8?B?STBIbXZiYnpsczBoN2tTM2xwMEpNZWQ1dVZRTE5VMzdyNTl1YUs5MWkyRFlp?=
- =?utf-8?B?am5sZHJjOEhWNVJCUE02bWxsOXJLK1FiaGxYWUN3V2toNFo0djg2SG8zekhG?=
- =?utf-8?B?K1JzTkdXd1dqQXBHd01ONC9aS1UwOUNJWUlTQkFNMGN5d3I2bEFGSDlFTnhm?=
- =?utf-8?B?c0U3a1Q0WFNiM2xxbUNmeloyYU95TWQxY0xqZXNDODR0K2Q0cW5uT29RaE9J?=
- =?utf-8?B?UXRSZ2dhR3hUZXRoRWwxRjB2MnBORHo4aW5oU2I5alZhRHZnenFNMEI4bTEy?=
- =?utf-8?B?OERTcWVxUWpucWpsVGdGdEE0bC9IMXd3VEJQK0ZTY2M2M25hcGRwNFRMN0VN?=
- =?utf-8?B?TUhsY0hqL09LeE1Ed1pxVllZNUxDVGpTejZleEVCYlFzNWFwMjhwWjRMNktN?=
- =?utf-8?B?Nm0xcEJYenJhaXdHRU4xbzREckFuYi9mTGlJek9pYkZMN2R0aW5vNW5rZEZD?=
- =?utf-8?B?cUczNE1LK3cvbW9pU3hmR0o5amV6Um9NbG5MR2JzdkV1L1p1R3pGemtNelZk?=
- =?utf-8?B?MVhIQ3daRDdGSUtUNnowZTQwVVo2clZudjZPdmhqcEdzMzY0a2sxa3JCdnZ5?=
- =?utf-8?B?NmNMMlJKRzBicEdGeTc0Y3YzTW5kS1h4NlpWdndjWEZTRTA2THJ2RjMram5h?=
- =?utf-8?B?T0FWbnhJNHFuWFFHWG9ES2EyVFpaYThMdGxKVEJUK29kU0JOUTNqWWVZTU52?=
- =?utf-8?B?Q2NlZGNsN3I5eW9PS2hIT3VHRDNCUEowdndmc1g4R2lCdEFMbUFGZ1NxT1Yy?=
- =?utf-8?B?eG0zMEx5V2FUVmhoNGRhQnZwS1NnWnpDdXJRbTFXZUI5SGhOKzZXWU11M2RN?=
- =?utf-8?B?amVBaVZGN3dCWkVnYUNRRnB0VDVWd2xINGY5SGFEQU1aNTBaRFcvdFJmOTl0?=
- =?utf-8?B?VVpVT0lrR1hZWko1bUJQdGFtZTdaeGlma0F5cVlRRlFIcWorVXJjTVJ4YzIz?=
- =?utf-8?B?NHFlOUhWVXljcjdFUnAwd0R4andiSnZka2I2U3VRdDh6eVdJTWZKYzJOK2xC?=
- =?utf-8?B?SWk4QWVUcFZzKzNpNndEUkNvaktYaHlheS9mVXV1OURySWNQWXhtMVZMSDZV?=
- =?utf-8?B?QzJKZldYV3BYdkRhaGRDeFpQZVVzOU40cGcvZ1c0RkFlSXV2MmVIVytBSWs5?=
- =?utf-8?B?dGpnR1ZkTk9TU0NWSDdFSGIzb0ZEZHBnL1NIcldOK0hmbFluUngyeEhzSlZC?=
- =?utf-8?B?UEE9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <41BED874FFE0594193E5197577AB8219@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Mon, 13 Mar 2023 22:41:36 -0400
+Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CF648736D;
+        Mon, 13 Mar 2023 19:41:34 -0700 (PDT)
+Received: by mail-ot1-x335.google.com with SMTP id q11-20020a056830440b00b00693c1a62101so7845021otv.0;
+        Mon, 13 Mar 2023 19:41:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678761693;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KE/nGLdvkwfVUr4AhhgCtbqbn2lhxYvpOjtLEftaoNs=;
+        b=Kvnx/PXP2K9FTtl53AwFntps/LNg9+zresClR9bux70AkKpDxkfxxl+HqsLOzw9I1/
+         bgWkKMalvIz6VLb3U2+GDyQtLCJ65Huyieq/HbY3yH+Yk7hsTB0XmQykwLV2u5KLtX43
+         aZqwN60mNDX1yvDovM5kz+xatEpRiqV6WIhMCc4vOLYK093kEOHSJpEP5z6KfElOvo/M
+         dgft2WOh1taV4c8oqpgV5mV6E/vXb5szO9LhMPfvR2NBKHkekN4bZbnDdu74O2luYAK6
+         Bs7UWHZpm73TglZ8NL+EPrVSbpomALoRo/b/M4fjdO8nhM4EpYsvrb2Kca1ck9Piic+a
+         d04g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678761693;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KE/nGLdvkwfVUr4AhhgCtbqbn2lhxYvpOjtLEftaoNs=;
+        b=DkXF/fm6/QyQclJgWQJyxANW2LcF/wPQfKjaSR3DgiOjQvyYo/lQbXAKA4n3ej4zfc
+         wvlssmC4xKvc5JIRMi7VZ1oeDby5Ffjzc16CWuYzupfEsKk9vOq+NdBQN+CfFsVrxIf0
+         t+Ni26hIRXku6mKwXWwQ430kNLpd8gqFSmXQE9tRqIXtrzssllq8Ct6B9Gr5zC2pYAhj
+         uZUcx1KqBeFklM6bsM+u8iRisFobUrwClntD98irBLoAsoJtDlVwNezuTY1uoZwZsVmZ
+         +78EcyVdqThADQiFYf7dL/P8LZwG+wf4B+N680w2rBVBqucXUOBrlsNh+twZaFlj2nYp
+         Y7zw==
+X-Gm-Message-State: AO0yUKWqFabEb8iiV+wvIB3YK9Z9AcYTJeD/kE20N/pKRduzDPB5lhn8
+        JFobTPm2f3e89gLjmU42dH2pKuHqj5NU9W6KtnU=
+X-Google-Smtp-Source: AK7set+dZp5MJC+ixj38X8XdXwUuUNnBBW/efhr7qTl680muyO+JxZ1L2fuBf9IYWlnOZ6M/EXfPkB6KcxU9gmnFMHQ=
+X-Received: by 2002:a9d:5f87:0:b0:68d:7557:f74c with SMTP id
+ g7-20020a9d5f87000000b0068d7557f74cmr12404212oti.7.1678761693376; Mon, 13 Mar
+ 2023 19:41:33 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BL1PR11MB5978.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b789c09c-9ac2-4f7e-a751-08db2435241c
-X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Mar 2023 02:38:06.0468
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 8ZBSZ0s8LY2pBDIIpBw+98BJowD/dxvnUHsW3+mMdLIz6nztEbmOhjmedD7pKC6ThGkdJTmYyqx59bCHCa7L5g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB4854
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230309135515.1232-1-di.shen@unisoc.com> <db539c1e-22d5-2261-1248-07883dac12ee@arm.com>
+ <CAB8ipk_T5RUZxD42d9wg_i8-3UXHFP=4Ffa_NH8Nm7FnyW2Ppw@mail.gmail.com>
+ <8727651b-88ec-efe7-eed2-1ff08faf22b8@arm.com> <CAB8ipk8dwkaqx7q_57Ehd5OZUfAJKtD_Bk2drpx+Op4grquAdQ@mail.gmail.com>
+ <f6aaa5f1-495d-a158-14d8-ddb2bffbd9c2@arm.com>
+In-Reply-To: <f6aaa5f1-495d-a158-14d8-ddb2bffbd9c2@arm.com>
+From:   Xuewen Yan <xuewen.yan94@gmail.com>
+Date:   Tue, 14 Mar 2023 10:41:22 +0800
+Message-ID: <CAB8ipk9rcZh9MF1PaT=4tfhX0mknNL2PdmJQRWHtRNeiXf9oag@mail.gmail.com>
+Subject: Re: [PATCH] thermal/core/power_allocator: avoid cdev->state can not
+ be reset
+To:     Lukasz Luba <lukasz.luba@arm.com>, orson.zhai@unisoc.com,
+        orsonzhai@gmail.com, Chunyan Zhang <zhang.lyra@gmail.com>
+Cc:     Di Shen <di.shen@unisoc.com>, daniel.lezcano@linaro.org,
+        rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        xuewen.yan@unisoc.com, Qais Yousef <qyousef@layalina.io>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gU3VuLCAyMDIzLTAzLTEyIGF0IDEwOjU1IC0wNzAwLCBpc2FrdS55YW1haGF0YUBpbnRlbC5j
-b20gd3JvdGU6DQo+ICtpbnQgX19pbml0IHRkeF9oYXJkd2FyZV9zZXR1cChzdHJ1Y3Qga3ZtX3g4
-Nl9vcHMgKng4Nl9vcHMpDQo+ICt7DQo+ICsJaW50IHI7DQo+ICsNCj4gKwlpZiAoIWVuYWJsZV9l
-cHQpIHsNCj4gKwkJcHJfd2FybigiQ2Fubm90IGVuYWJsZSBURFggd2l0aCBFUFQgZGlzYWJsZWRc
-biIpOw0KPiArCQlyZXR1cm4gLUVJTlZBTDsNCj4gKwl9DQo+ICsNCj4gKwkvKiB0ZHhfZW5hYmxl
-KCkgaW4gdGR4X21vZHVsZV9zZXR1cCgpIHJlcXVpcmVzIGNwdXMgbG9jay4gKi8NCj4gKwljcHVz
-X3JlYWRfbG9jaygpOw0KPiArCS8qIFREWCByZXF1aXJlcyBWTVguICovDQo+ICsJciA9IHZteG9u
-X2FsbCgpOw0KDQpXaHkgbm90IHVzaW5nIGhhcmR3YXJlX2VuYWJsZV9hbGwoKT8NCg0KPiArCWlm
-ICghcikgew0KPiArCQlpbnQgY3B1Ow0KPiArDQo+ICsJCS8qDQo+ICsJCSAqIEJlY2F1c2UgdGR4
-X2NwdV9lbmFiZWwoKSBhY3F1aXJlIHNwaW4gbG9ja3MsIG9uX2VhY2hfY3B1KCkNCj4gKwkJICog
-Y2FuJ3QgYmUgdXNlZC4NCj4gKwkJICovDQo+ICsJCWZvcl9lYWNoX29ubGluZV9jcHUoY3B1KSB7
-DQo+ICsJCQlpZiAoc21wX2NhbGxfb25fY3B1KGNwdSwgdGR4X2NwdV9lbmFibGVfY3B1LCBOVUxM
-LCBmYWxzZSkpDQo+ICsJCQkJciA9IC1FSU87DQo+ICsJCX0NCj4gKwkJaWYgKCFyKQ0KPiArCQkJ
-ciA9IHRkeF9tb2R1bGVfc2V0dXAoKTsNCj4gKwl9DQo+ICsJdm14b2ZmX2FsbCgpOw0KPiArCWNw
-dXNfcmVhZF91bmxvY2soKTsNCj4gKw0KPiArCXJldHVybiByOw0KPiArfQ0KDQpJIHRoaW5rIHlv
-dSBzaG91bGQgdXNlIGhhcmR3YXJlX2VuYWJsZV9hbGwoKSwgYW5kIGp1c3QgZG8gc29tZXRoaW5n
-IHNpbWlsYXIgdG8NCmJlbG93IGluIHZteF9oYXJkd2FyZV9lbmFibGUoKToNCg0KZGlmZiAtLWdp
-dCBhL2FyY2gveDg2L2t2bS92bXgvdm14LmMgYi9hcmNoL3g4Ni9rdm0vdm14L3ZteC5jDQppbmRl
-eCA3ZWVjMDIyNmQ1NmEuLmI3YjNmOTljMDA5NSAxMDA2NDQNCi0tLSBhL2FyY2gveDg2L2t2bS92
-bXgvdm14LmMNCisrKyBiL2FyY2gveDg2L2t2bS92bXgvdm14LmMNCkBAIC0yNTA0LDYgKzI1MDQs
-MTUgQEAgc3RhdGljIGludCB2bXhfaGFyZHdhcmVfZW5hYmxlKHZvaWQpDQogICAgICAgICAgICAg
-ICAgcmV0dXJuIHI7DQogICAgICAgIH0NCiANCisgICAgICAgaWYgKGVuYWJsZV90ZHgpIHsNCisg
-ICAgICAgICAgICAgICByID0gdGR4X2NwdV9lbmFibGUoKTsNCisgICAgICAgICAgICAgICBpZiAo
-cikgew0KKyAgICAgICAgICAgICAgICAgICAgICAgY3B1X3ZteG9mZigpOw0KKyAgICAgICAgICAg
-ICAgICAgICAgICAgaW50ZWxfcHRfaGFuZGxlX3ZteCgwKTsNCisgICAgICAgICAgICAgICAgICAg
-ICAgIHJldHVybiByOw0KKyAgICAgICAgICAgICAgIH0NCisgICAgICAgfQ0KKw0KICAgICAgICBp
-ZiAoZW5hYmxlX2VwdCkNCiAgICAgICAgICAgICAgICBlcHRfc3luY19nbG9iYWwoKTsNCg0KSXQg
-aGFuZGxlcyB0d28gY2FzZXMgYXV0b21hdGljYWxseToNCg0KMSkgV2hlbiB1c2VyIHdhbnRzIHRv
-IHVzZSBURFggd2hpbGUgbG9hZGluZyBLVk0gbW9kdWxlLCBpZiBhYm92ZSBmYWlscywgdGhlbg0K
-aGFyZHdhcmVfZW5hYmxlX2FsbCgpIHJldHVybnMgZXJyb3IsIGFuZCB5b3UganVzdCBnaXZlIHVw
-IGluaXRpYWxpemluZyBURFgNCm1vZHVsZSBhbmQgbWFyayBlbmFibGVfdGR4IGFzIGZhbHNlLg0K
-DQoyKSBXaGVuIGEgbmV3IGNwdSBiZWNvbWVzIG9ubGluZSwgYW5kIHdoZW4gVERYIGlzIGJlaW5n
-IHVzZWQgYnkgS1ZNLCB0aGVuIGlmDQphYm92ZSBmYWlscywgaXQgYXV0b21hdGljYWxseSByZWpl
-Y3RzIHRoZSBDUFUgd2hpY2ggaXNuJ3QgVERYLXJ1bm5hYmxlIGFsdGhvdWdoDQppdCBpcyBWTVgt
-cnVubmFibGUuDQo=
+add Orson and lyra
+
+Hi Lukasz
+
+On Mon, Mar 13, 2023 at 7:18=E2=80=AFPM Lukasz Luba <lukasz.luba@arm.com> w=
+rote:
+>
+>
+>
+> On 3/13/23 11:10, Xuewen Yan wrote:
+> > Hi Lukasz
+> >
+> > On Mon, Mar 13, 2023 at 5:35=E2=80=AFPM Lukasz Luba <lukasz.luba@arm.co=
+m> wrote:
+> >>
+> >> Hi Xuewen,
+> >>
+> >> On 3/13/23 01:40, Xuewen Yan wrote:
+> >>> Hi Lukasz
+> >>>
+> >>> On Fri, Mar 10, 2023 at 11:56=E2=80=AFPM Lukasz Luba <lukasz.luba@arm=
+.com> wrote:
+> >>>>
+> >>>> Hi Di,
+> >>>>
+> >>>> On 3/9/23 13:55, Di Shen wrote:
+> >>>>> Commit 0952177f2a1f (thermal/core/power_allocator: Update once cool=
+ing devices when temp is low)
+> >>>>> add a update flag to update cooling device only once when temp is l=
+ow.
+> >>>>> But when the switch_on_temp is set to be a higher value, the coolin=
+g device state
+> >>>>> may not be reset to max, because the last_temp is smaller than the =
+switch_on_temp.
+> >>>>>
+> >>>>> For example:
+> >>>>> First:
+> >>>>> swicth_on_temp=3D70 control_temp=3D85;
+> >>>>>
+> >>>>> Then userspace change the trip_temp:
+> >>>>> swicth_on_temp=3D45 control_temp=3D55 cur_temp=3D54
+> >>>>>
+> >>>>> Then userspace reset the trip_temp:
+> >>>>> swicth_on_temp=3D70 control_temp=3D85 cur_temp=3D57 last_temp=3D54
+> >>>>>
+> >>>>> At this time, the cooling device state should be reset to be max.
+> >>>>> However, because cur_temp(57) < switch_on_temp(70)
+> >>>>> last_temp(54) < swicth_on_temp(70) --> update =3D false
+> >>>>> When update is false, the cooling device state can not be reset.
+> >>>>
+> >>>> That's a tricky use case. How is that now possible,
+> >>>
+> >>> We use the trip_temp in the Android System. Often, we set different
+> >>> control temperatures in different scenarios,
+> >>> and when we change the switch_on_temp from small to bigger, we find
+> >>> the power can not be reset to be max.
+> >>
+> >> I see, thanks for letting me know that this is Android.
+> >>
+> >>>
+> >>>
+> >>>>>
+> >>>>> So delete the update condition, so that the cooling device state
+> >>>>> could be reset.
+> >>>>
+> >>>> IMO this is not the desired solution. Daniel reported the issue that
+> >>>> IPA triggers the event sent to user-space even when there is no need=
+.
+> >>>> That's the motivation for the 0952177f2a1f change.
+> >>>>
+> >>>> To address your scenario properly, we need an interface which allows
+> >>>> to respond properly for such situation when someone from user-space
+> >>>> writes a new value to something fundamental as trip point.
+> >>>>
+> >>>> You also have a kernel config enabled:
+> >>>> CONFIG_THERMAL_WRITABLE_TRIPS
+> >>>> which IMO is only for debug kernels for system integrator (according
+> >>>> to the Kconfig description).
+> >>>
+> >>>    Yes, we use it to meet the temperature control needs of different =
+scenarios.
+> >>> And now in android with google's GKI2.0, the config must be opened.
+> >>
+> >> OK
+> >>
+> >>>
+> >>>>
+> >>>> When you disable this config in your deploy/product kernel
+> >>>> than this issue would disappear.
+> >>>>
+> >>>>>
+> >>>>> Fixes: 0952177f2a1f (thermal/core/power_allocator: Update once cool=
+ing devices when temp is low)
+> >>>>> Signed-off-by: Di Shen <di.shen@unisoc.com>
+> >>>>> ---
+> >>>>>     drivers/thermal/gov_power_allocator.c | 9 +++------
+> >>>>>     1 file changed, 3 insertions(+), 6 deletions(-)
+> >>>>>
+> >>>>
+> >>>> That's why IMO this is not the solution.
+> >>>
+> >>> Yes, but I think we should fix the bug, although the
+> >>> CONFIG_THERMAL_WRITABLE_TRIPS is just for debugging.
+> >>> How about record the last_trip_temp, and when the last_temp >
+> >>> last_trip_temp, set the update tobe true?
+> >>
+> >> Yes, if that config is used in Android then we must fix it.
+> >>
+> >> That last_trip_temp makes sense (but maybe name it last_switch_on_temp=
+).
+> >> Please put that new field into the IPA local
+> >> struct power_allocator_params. We should store the trip temp
+> >> value there every time power_allocator_throttle() is called.
+> >> That can be called due to a write from user-space w/ a new trip point
+> >> value, so should be OK.
+> >
+> > Thanks for the suggestion. We would send the patch-v2 as soon as possib=
+le.
+>
+> Thanks!
+> I'll review that and check on my board.
+> BTW, which board/device you use with this IPA? Maybe I can buy it
+> and also test to capture such regression in future.
+
+We use our company(unisoc)'s mobile phone, and the development board
+with the same chip should be available in the market. And Orson would
+help and then reply to you.
+
+Thanks!
+BR
+xuewen
