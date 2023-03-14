@@ -2,140 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D3856B9088
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 11:49:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEF6A6B905D
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 11:43:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230284AbjCNKtI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 06:49:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52588 "EHLO
+        id S230012AbjCNKnJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 06:43:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229946AbjCNKsf (ORCPT
+        with ESMTP id S230200AbjCNKnC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 06:48:35 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAA8A5256;
-        Tue, 14 Mar 2023 03:48:09 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32EAf5lK104544;
-        Tue, 14 Mar 2023 05:41:05 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1678790465;
-        bh=tD+HW2jXlzXX+ISeE6txXOKr6OdGkAglobR389STNXs=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=nYE6hl1If3Ul0RtP3cZHlF7FQUzikFWYhLoexvdJeYsQSmRJ/KfwMobh8qyjsUsXu
-         ItNHFpjVE6z4wQv7craWrhd9fvDP9ggWZW/SF2cEchHj0AOG+z3PhYEf8Pbmfp0Gc5
-         M066gtoDLtN5wrJ1GsTPH9HiRSEPZ9twQAbo4XYQ=
-Received: from DLEE101.ent.ti.com (dlee101.ent.ti.com [157.170.170.31])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32EAf5Yt074983
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 14 Mar 2023 05:41:05 -0500
-Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE101.ent.ti.com
- (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 14
- Mar 2023 05:41:05 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE100.ent.ti.com
- (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Tue, 14 Mar 2023 05:41:05 -0500
-Received: from uda0492258.dhcp.ti.com (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32EAetN4124205;
-        Tue, 14 Mar 2023 05:41:02 -0500
-From:   Siddharth Vadapalli <s-vadapalli@ti.com>
-To:     <nm@ti.com>, <vigneshr@ti.com>, <kristo@kernel.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski@linaro.org>,
-        <krzysztof.kozlowski+dt@linaro.org>
-CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <srk@ti.com>,
-        <s-vadapalli@ti.com>
-Subject: [PATCH 2/2] arm64: dts: ti: k3-j784s4-evm: Enable MCU CPSW2G
-Date:   Tue, 14 Mar 2023 16:10:55 +0530
-Message-ID: <20230314104055.1475054-3-s-vadapalli@ti.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230314104055.1475054-1-s-vadapalli@ti.com>
-References: <20230314104055.1475054-1-s-vadapalli@ti.com>
+        Tue, 14 Mar 2023 06:43:02 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13989CA
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 03:42:33 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id i28so19427445lfv.0
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 03:42:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678790552;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ddsEOqN0WCluTndil1PR5ITOkumrYADNMRhiGg1TLi8=;
+        b=GiEuRVL3oLL6Vh+sncGzeoqofKVyv0oQaQnK1B5lKE+IQYpEUJO49q0Ycv97g9BFz6
+         j7uwVrrCtpJnqtKgzkBL/w0bRPBjLXWpbze6CYBufebtkM0r9b2Y+5yqHCBpLtswdHlp
+         aGh5wMAJHKCwYF/y0SQRrhVTo/4DIp9SQEJtriEoTcP7tnmd7lDJoocMm8AbU+mpRr5C
+         avraMcBFlllF1GlbnCWfFwzWwfCa7lOa+84bjo6iligIncVgXzpS9DaiaXp6SH5aFxw/
+         czRrXARjCNVbIFY8TP5VKCZK5UVeMH0JMDOYIMryU71nI3pt8Mu+ebvGe/ChjS8lvS08
+         yQiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678790552;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ddsEOqN0WCluTndil1PR5ITOkumrYADNMRhiGg1TLi8=;
+        b=OmIQSGcjQFBGSzl37eW7f7qXu2SGOVYn5p1Yx4KpiwM4gDN0KF5IfPrO0H7PPKYm2X
+         1BjqVONmfCOXpK7WuihAinXSWqKakK20N01nsJ3jlitJiV1t9KV+v+bztH5XSvSEllUk
+         48QSrcaQ4S9rRdpdS29S1BTBpu0qnTOssVBg4wdtSoKA3fq0brRAYwN2qWfx3QeaivAw
+         PgXY8OtsOGou9oUCOY1maIzx8Q36a6Jw5CVeuJxUvl+wApIVmT7Mi5XaGRmK1Pla8Rnz
+         5TdsLIONySewSMNLXjx2VbKLb34NoDCFIVznglKXjWqOBIK3Gh2aUM587jCKVTIQyxaW
+         zP8Q==
+X-Gm-Message-State: AO0yUKWTXdqGLMWlh1q3Sge5ZT4rEfUuTRspWhWqoCMwgBAafa/WEpzT
+        kPiINQj6hMttvRh6FyCRs+LYRw==
+X-Google-Smtp-Source: AK7set/wgp8O8fMeZ11Mfbu0XNr4HVywv2i7lajlKxdFLMuiU8qd3wZT0aGnXXqUMdnxSLfygLGJYg==
+X-Received: by 2002:a05:6512:3743:b0:4cc:ff7c:4846 with SMTP id a3-20020a056512374300b004ccff7c4846mr518444lfs.0.1678790551852;
+        Tue, 14 Mar 2023 03:42:31 -0700 (PDT)
+Received: from [192.168.1.101] (abyj16.neoplus.adsl.tpnet.pl. [83.9.29.16])
+        by smtp.gmail.com with ESMTPSA id w30-20020ac2599e000000b004b58500383bsm345858lfn.272.2023.03.14.03.42.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Mar 2023 03:42:30 -0700 (PDT)
+Message-ID: <5a921230-c84f-aa10-1f5c-e9c2972fb9fd@linaro.org>
+Date:   Tue, 14 Mar 2023 11:42:28 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v3 07/10] drm/msm/dsi: Remove custom DSI config handling
+Content-Language: en-US
+To:     Marijn Suijten <marijn.suijten@somainline.org>
+Cc:     Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Krishna Manikandan <quic_mkrishn@quicinc.com>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh@kernel.org>, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230307-topic-dsi_qcm-v3-0-8bd7e1add38a@linaro.org>
+ <20230307-topic-dsi_qcm-v3-7-8bd7e1add38a@linaro.org>
+ <20230314000744.otbglr33ndizq5pc@SoMainline.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230314000744.otbglr33ndizq5pc@SoMainline.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add device tree support to enable MCU CPSW with J784S4 EVM.
 
-Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
----
- arch/arm64/boot/dts/ti/k3-j784s4-evm.dts | 47 ++++++++++++++++++++++++
- 1 file changed, 47 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/ti/k3-j784s4-evm.dts b/arch/arm64/boot/dts/ti/k3-j784s4-evm.dts
-index 8cd4a7ecc121..05db64ed0706 100644
---- a/arch/arm64/boot/dts/ti/k3-j784s4-evm.dts
-+++ b/arch/arm64/boot/dts/ti/k3-j784s4-evm.dts
-@@ -140,6 +140,32 @@ J784S4_IOPAD(0x020, PIN_INPUT, 7) /* (AJ35) MCAN15_RX.GPIO0_8 */
- 	};
- };
- 
-+&wkup_pmx0 {
-+	mcu_cpsw_pins_default: mcu-cpsw-pins-default {
-+		pinctrl-single,pins = <
-+			J784S4_WKUP_IOPAD(0x094, PIN_INPUT, 0) /* (A35) MCU_RGMII1_RD0 */
-+			J784S4_WKUP_IOPAD(0x090, PIN_INPUT, 0) /* (B36) MCU_RGMII1_RD1 */
-+			J784S4_WKUP_IOPAD(0x08c, PIN_INPUT, 0) /* (C36) MCU_RGMII1_RD2 */
-+			J784S4_WKUP_IOPAD(0x088, PIN_INPUT, 0) /* (D36) MCU_RGMII1_RD3 */
-+			J784S4_WKUP_IOPAD(0x084, PIN_INPUT, 0) /* (B37) MCU_RGMII1_RXC */
-+			J784S4_WKUP_IOPAD(0x06c, PIN_INPUT, 0) /* (C37) MCU_RGMII1_RX_CTL */
-+			J784S4_WKUP_IOPAD(0x07c, PIN_OUTPUT, 0) /* (D37) MCU_RGMII1_TD0 */
-+			J784S4_WKUP_IOPAD(0x078, PIN_OUTPUT, 0) /* (D38) MCU_RGMII1_TD1 */
-+			J784S4_WKUP_IOPAD(0x074, PIN_OUTPUT, 0) /* (E37) MCU_RGMII1_TD2 */
-+			J784S4_WKUP_IOPAD(0x070, PIN_OUTPUT, 0) /* (E38) MCU_RGMII1_TD3 */
-+			J784S4_WKUP_IOPAD(0x080, PIN_OUTPUT, 0) /* (E36) MCU_RGMII1_TXC */
-+			J784S4_WKUP_IOPAD(0x068, PIN_OUTPUT, 0) /* (C38) MCU_RGMII1_TX_CTL */
-+		>;
-+	};
-+
-+	mcu_mdio_pins_default: mcu-mdio-pins-default {
-+		pinctrl-single,pins = <
-+			J784S4_WKUP_IOPAD(0x09c, PIN_OUTPUT, 0) /* (A36) MCU_MDIO0_MDC */
-+			J784S4_WKUP_IOPAD(0x098, PIN_INPUT, 0) /* (B35) MCU_MDIO0_MDIO */
-+		>;
-+	};
-+};
-+
- &main_uart8 {
- 	status = "okay";
- 	pinctrl-names = "default";
-@@ -194,3 +220,24 @@ &main_sdhci1 {
- &main_gpio0 {
- 	status = "okay";
- };
-+
-+&mcu_cpsw {
-+	status = "okay";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&mcu_cpsw_pins_default &mcu_mdio_pins_default>;
-+};
-+
-+&davinci_mdio {
-+	mcu_phy0: ethernet-phy@0 {
-+		reg = <0>;
-+		ti,rx-internal-delay = <DP83867_RGMIIDCTL_2_00_NS>;
-+		ti,fifo-depth = <DP83867_PHYCR_FIFO_DEPTH_4_B_NIB>;
-+		ti,min-output-impedance;
-+	};
-+};
-+
-+&mcu_cpsw_port1 {
-+	status = "okay";
-+	phy-mode = "rgmii-rxid";
-+	phy-handle = <&mcu_phy0>;
-+};
--- 
-2.25.1
+On 14.03.2023 01:07, Marijn Suijten wrote:
+> On 2023-03-07 14:01:45, Konrad Dybcio wrote:
+>> Now that the only user is handled by common code, remove the option to
+>> specify custom handlers through match data.
+>>
+>> This is effectively a revert of commit:
+>> 5ae15e76271 ("drm/msm/dsi: Allow to specify dsi config as pdata")
+> 
+> Would it also be worth to mention something along these lines in the
+> previous patch, but for ee1f09678f14 ("drm/msm/dsi: Add support for
+> qcm2290 dsi controller")?
+50/50, it wouldn't hurt but it doesn't sound groundbreaking to skip it..
 
+Konrad
+> 
+>> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> 
+> Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
+> 
+>> ---
+>>  drivers/gpu/drm/msm/dsi/dsi.c      | 4 ++--
+>>  drivers/gpu/drm/msm/dsi/dsi_host.c | 4 ----
+>>  2 files changed, 2 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/drivers/gpu/drm/msm/dsi/dsi.c b/drivers/gpu/drm/msm/dsi/dsi.c
+>> index 90d43628b22b..e0b911af618d 100644
+>> --- a/drivers/gpu/drm/msm/dsi/dsi.c
+>> +++ b/drivers/gpu/drm/msm/dsi/dsi.c
+>> @@ -173,10 +173,10 @@ static int dsi_dev_remove(struct platform_device *pdev)
+>>  }
+>>  
+>>  static const struct of_device_id dt_match[] = {
+>> -	{ .compatible = "qcom,mdss-dsi-ctrl", .data = NULL /* autodetect cfg */ },
+>> +	{ .compatible = "qcom,mdss-dsi-ctrl" },
+>>  
+>>  	/* Deprecated, don't use */
+>> -	{ .compatible = "qcom,dsi-ctrl-6g-qcm2290", .data = NULL },
+>> +	{ .compatible = "qcom,dsi-ctrl-6g-qcm2290" },
+>>  	{}
+>>  };
+>>  
+>> diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c b/drivers/gpu/drm/msm/dsi/dsi_host.c
+>> index 9cfb9e91bfea..961689a255c4 100644
+>> --- a/drivers/gpu/drm/msm/dsi/dsi_host.c
+>> +++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
+>> @@ -214,10 +214,6 @@ static const struct msm_dsi_cfg_handler *dsi_get_config(
+>>  	int ret;
+>>  	u32 major = 0, minor = 0;
+>>  
+>> -	cfg_hnd = device_get_match_data(dev);
+>> -	if (cfg_hnd)
+>> -		return cfg_hnd;
+>> -
+>>  	ahb_clk = msm_clk_get(msm_host->pdev, "iface");
+>>  	if (IS_ERR(ahb_clk)) {
+>>  		pr_err("%s: cannot get interface clock\n", __func__);
+>>
+>> -- 
+>> 2.39.2
+>>
