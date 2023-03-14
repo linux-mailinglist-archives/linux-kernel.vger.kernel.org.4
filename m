@@ -2,133 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C20E46B8CEF
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 09:19:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1799D6B8D0F
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 09:21:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229701AbjCNISr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 04:18:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59378 "EHLO
+        id S230343AbjCNIU4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 04:20:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229684AbjCNISG (ORCPT
+        with ESMTP id S231234AbjCNIUC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 04:18:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D18D54D2A9;
-        Tue, 14 Mar 2023 01:17:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4C40161640;
-        Tue, 14 Mar 2023 08:17:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B1CBC433D2;
-        Tue, 14 Mar 2023 08:17:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678781862;
-        bh=Xi2794rdLlEIsfm3cg4qF1ROjcOdCNpLbzUABC/gRQc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UzbwfGVIDSHLMLIkX+l3tn4KjEkfQkXi6RDxwh7iaaeUsJOfJiLLVQmX4LMhJuLJZ
-         +JaJlQS4iVuNHM/IsYnVjDiGD/Ytj7WdhN1hn7kFjZvmMg2FtzYAUrnk9CoQ77dVTi
-         32gDeMtT7faxnhvv269AeWv+rjEyCBwW0PzQw+j/tlTPoecrX4Oa4x8pPBcXtDlbnm
-         p2V4mHJhLBvcccYkVARBeMO63/cffNLPhLEfIbey24Lpa/FH3/HSnFJYsUFTeS+Ffy
-         YC/1OObK8qetusWHAkga/TO6zbTxwaHO8Yz0betHqlsa4xQUfiMaMbk44ecMEHJm3S
-         +3sMPf9vXoAWQ==
-Date:   Tue, 14 Mar 2023 16:17:35 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     Francesco Dolcini <francesco@dolcini.it>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Philippe Schenker <dev@pschenker.ch>,
-        devicetree@vger.kernel.org, Sascha Hauer <s.hauer@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Frank Rowand <frowand.list@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Fabio Estevam <festevam@gmail.com>,
-        Philippe Schenker <philippe.schenker@toradex.com>,
-        linux-kernel@vger.kernel.org,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>
-Subject: Re: [PATCH v1 03/25] arm64: dts: colibri-imx8x: Sort properties
-Message-ID: <20230314081735.GE143566@dragon>
-References: <20230308125300.58244-1-dev@pschenker.ch>
- <20230308125300.58244-4-dev@pschenker.ch>
- <9d213504-d457-21a6-d467-41d8783d53d3@linaro.org>
- <ZAnOwaXpcqI30jFi@francesco-nb.int.toradex.com>
+        Tue, 14 Mar 2023 04:20:02 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DAB76EBD;
+        Tue, 14 Mar 2023 01:19:32 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id v21so5618551ple.9;
+        Tue, 14 Mar 2023 01:19:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678781972;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=8uO2pb0aT1NnyTIVfLkUifV1o9o6G5xDatiTfXnW8OM=;
+        b=QCEaXsu/OjbQKOKTYOcfuHjvGyeHK9nYJiXxfEUWECrdKCyWwPq0L0FNqeK2N9n0Ae
+         EYhweA0WDiVCNFTXO/Wu2yt+0iX/rIGOjay3O9J0T5PfyRcM9Od/wAOnZeMKsTEccNB1
+         kBPODFp6Fy5xfTTUhVz+KrAXlcmQwZdHP+yI41uKkVWzMoTXmLqYZGqI2hHTgzIP5M4q
+         /RAASByDELA1VcinP8SU4Nnn47z78AHy+V6TX7KQ4FM3dvquhkssjsbw6ytwlZpCQ4zG
+         C1OUBzTPW44akruzEoyygVQ3dj7HZ9nnKMlsFkidV34OJTbRtTmlN9/8JVCA/Jd6/d8K
+         AasQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678781972;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8uO2pb0aT1NnyTIVfLkUifV1o9o6G5xDatiTfXnW8OM=;
+        b=ZKXqVLN7cSWL7EY19nw0eWkYpnFC32F9FGF4NLn1RszeCN7NBEN1TpyKPFiuho17fB
+         2MKmc9cz7HEpSYp31iLNZp88IsWBxW5UA4PrmumkoBJxitH6wjX5WfukVCvZEfQwDGTG
+         mcvJSRnUwI3jlrycXEMguks9XEJfuZQpcmtErspSuyMKpKqBUaZeefWPog83cEyERn9C
+         naWiie9tx98GC4C/hY4L9sXaSbeejVv+5hFsFhT5KIeaJ0r6caz6celbc18Sxbc+p6+2
+         n9joBF5BRhNVeDLTRplLM8vShrgZZ+L65N0+13II2ZnpsEM85MiCzfCD+Jq855dcSMX8
+         3SPA==
+X-Gm-Message-State: AO0yUKWK45zEmyNuNszJCSAnmzAAUFD9hHBmnM4RoiglJYkgLXdXsT2E
+        mgFwnHJByhFljaQryVN+R4Y=
+X-Google-Smtp-Source: AK7set/EQKyfrynoi8fEAytH0KIk6OtEN1YHKRHZ+aytWMZMlLInWc+g/9ht3BCMiq8qdv6zEI7rTA==
+X-Received: by 2002:a17:902:c407:b0:19e:7490:c93e with SMTP id k7-20020a170902c40700b0019e7490c93emr49670592plk.63.1678781971870;
+        Tue, 14 Mar 2023 01:19:31 -0700 (PDT)
+Received: from localhost ([2400:8902::f03c:93ff:fe27:642a])
+        by smtp.gmail.com with ESMTPSA id w5-20020a170902d3c500b0019fcece6847sm1113921plb.227.2023.03.14.01.19.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Mar 2023 01:19:30 -0700 (PDT)
+Date:   Tue, 14 Mar 2023 08:19:18 +0000
+From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        rcu@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        netdev@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH 4/7] mm, pagemap: remove SLOB and SLQB from comments and
+ documentation
+Message-ID: <ZBAuBj0hgLK7Iqgy@localhost>
+References: <20230310103210.22372-1-vbabka@suse.cz>
+ <20230310103210.22372-5-vbabka@suse.cz>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZAnOwaXpcqI30jFi@francesco-nb.int.toradex.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230310103210.22372-5-vbabka@suse.cz>
+X-Spam-Status: No, score=3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 09, 2023 at 01:19:13PM +0100, Francesco Dolcini wrote:
-> Hello Krzysztof, first thanks for your review.
+On Fri, Mar 10, 2023 at 11:32:06AM +0100, Vlastimil Babka wrote:
+> SLOB has been removed and SLQB never merged, so remove their mentions
+> from comments and documentation of pagemap.
 > 
-> Let's try to get some clarity on this with the help of Shawn.
+> Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
+> ---
+>  Documentation/admin-guide/mm/pagemap.rst | 6 +++---
+>  fs/proc/page.c                           | 5 ++---
+>  2 files changed, 5 insertions(+), 6 deletions(-)
 > 
-> On Wed, Mar 08, 2023 at 01:57:38PM +0100, Krzysztof Kozlowski wrote:
-> > On 08/03/2023 13:52, Philippe Schenker wrote:
-> > > From: Philippe Schenker <philippe.schenker@toradex.com>
-> > > 
-> > > Sort properties according to the following order and inside these
-> > > alphabetically.
-> > > 
-> > > 1. compatible
-> > > 2. reg
-> > > 3. standard properties
-> > > 4. specific properties
-> > > 5. status
-> > 
-> > Is this approved coding style for IMX DTS?
-> 
-> I 100% understand your concerns here.
-> 
-> With that said let me try to briefly explain the reasoning here, in
-> various threads we were asked in the past to move node around based on
-> some not 100% defined rules [0][1].
-> 
-> On Sun, 2023-01-29 at 11:19 +0800, Shawn Guo wrote:
-> >> +&usbotg1 {
-> >> +	adp-disable;
-> >> +	ci-disable-lpm;
-> >> +	hnp-disable;
-> >> +	over-current-active-low;
-> >> +	pinctrl-names = "default";
-> >> +	pinctrl-0 = <&pinctrl_usbotg1>;
-> >
-> >We generally want to put such generic properties before device specific
-> >ones.
-> 
-> In addition to that we find convenient to have properties sorted
-> alphabetically when no other rule is available, it just prevents any
-> kind of discussion, minimize merge conflicts and make comparing files
-> easier.
-> 
-> I also agree that the difference between "generic"/"specific" is fuzzy
-> at best.
-> 
-> With all that said ...
-> 
-> Shawn: What should we do? We can of course avoid any kind of re-ordering
-> from now on.
+> diff --git a/Documentation/admin-guide/mm/pagemap.rst b/Documentation/admin-guide/mm/pagemap.rst
+> index b5f970dc91e7..bb4aa897a773 100644
+> --- a/Documentation/admin-guide/mm/pagemap.rst
+> +++ b/Documentation/admin-guide/mm/pagemap.rst
+> @@ -91,9 +91,9 @@ Short descriptions to the page flags
+>     The page is being locked for exclusive access, e.g. by undergoing read/write
+>     IO.
+>  7 - SLAB
+> -   The page is managed by the SLAB/SLOB/SLUB/SLQB kernel memory allocator.
+> -   When compound page is used, SLUB/SLQB will only set this flag on the head
+> -   page; SLOB will not flag it at all.
+> +   The page is managed by the SLAB/SLUB kernel memory allocator.
+> +   When compound page is used, either will only set this flag on the head
+> +   page..
+>  10 - BUDDY
+>      A free memory block managed by the buddy system allocator.
+>      The buddy system organizes free memory in blocks of various orders.
+> diff --git a/fs/proc/page.c b/fs/proc/page.c
+> index 6249c347809a..1356aeffd8dc 100644
+> --- a/fs/proc/page.c
+> +++ b/fs/proc/page.c
+> @@ -125,7 +125,7 @@ u64 stable_page_flags(struct page *page)
+>  	/*
+>  	 * pseudo flags for the well known (anonymous) memory mapped pages
+>  	 *
+> -	 * Note that page->_mapcount is overloaded in SLOB/SLUB/SLQB, so the
+> +	 * Note that page->_mapcount is overloaded in SLAB/SLUB, so the
 
-We are practically asking for 1, 2 and 5 for i.MX DTS files, but pretty
-flexible for the rest.
+SLUB does not overload _mapcount.
 
-> I am fine to be very pragmatic here, no-reordering on existing DTS
-> files, newly added DTS files we discuss whatever is the reasoning of the
-> reviewer/maintainer on a case-by-case basis.
+>  	 * simple test in page_mapped() is not enough.
+>  	 */
+>  	if (!PageSlab(page) && page_mapped(page))
+> @@ -166,8 +166,7 @@ u64 stable_page_flags(struct page *page)
+>  
+>  	/*
+>  	 * Caveats on high order pages: page->_refcount will only be set
+> -	 * -1 on the head page; SLUB/SLQB do the same for PG_slab;
+> -	 * SLOB won't set PG_slab at all on compound pages.
+> +	 * -1 on the head page; SLAB/SLUB do the same for PG_slab;
 
-Sounds good to me!  While I personally like your ordering, I do not want
-it to churn the existing DTS files.
+I think this comment could be just saying that PG_buddy is only set on
+head page, not saying
 
-I'm happy to take this patch as a special case though :)
+_refcount is set to -1 on head page (is it even correct?)
 
-Shawn
+>  	 */
+>  	if (PageBuddy(page))
+>  		u |= 1 << KPF_BUDDY;
+> -- 
+> 2.39.2
+> 
