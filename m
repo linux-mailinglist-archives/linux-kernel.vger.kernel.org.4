@@ -2,89 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 487976B9A82
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 17:02:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB1346B9A8B
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 17:03:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229675AbjCNQB5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 12:01:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41476 "EHLO
+        id S230205AbjCNQDX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 12:03:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231578AbjCNQBu (ORCPT
+        with ESMTP id S229545AbjCNQDL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 12:01:50 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1FC0A4B1E
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 09:01:49 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 6E98321B1A;
-        Tue, 14 Mar 2023 16:01:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1678809708; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Tue, 14 Mar 2023 12:03:11 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40090B256D
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 09:02:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678809734;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=+8IuhxaTGu9PZQr5muU6k8w0fHt96XLDZ7FDJyoEVFM=;
-        b=aWwJxfPodjo5c08Os7tIFiLI/Ti2mGQ2n9phEZ7+o9MrarTHGAZrpdM7nTpUkTTKkxBaFw
-        ddMlOMwqLOMMJjM9AVyTXlWEac6jln4/Vtlc8TIzyVCfUlPwrQUlGEJW5JOdcMjJkRvA1T
-        +3hIAapIRsw5uDRsFMYmsEk+A0n0QlU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1678809708;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=+8IuhxaTGu9PZQr5muU6k8w0fHt96XLDZ7FDJyoEVFM=;
-        b=8Xm3B6kIRmZoc/RPqe9QTlfcecdRR0rVYyDIc8AdLBKuUioLdHD6sNP5GyobZl5v0/6bBS
-        gRsNTrTcz9YdjhCA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        bh=gTiQ//RyRLi76X7jSKyCpAyfYe9vbbQZH8ngsfv84X8=;
+        b=UAwHSSxr1TcN3RGkMGe3hNEagWH15hytEtmeZ0p1jQvkeudOgafA6ao7EM7V9llbXU5k3m
+        iS2aSn/A7eP/7w8eAjtlHbeB1oSrhDKch9Uf8qf91MGPyp2DO8/QwH1sb9IdbO41suX3JW
+        YASO4/xlDqEIHF+xq2N2NpC937by2hU=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-300-2WsvibyWNhuiGo_7x6Z-6w-1; Tue, 14 Mar 2023 12:02:10 -0400
+X-MC-Unique: 2WsvibyWNhuiGo_7x6Z-6w-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3BA3B13A1B;
-        Tue, 14 Mar 2023 16:01:48 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 4OK+DWyaEGQnVgAAMHmgww
-        (envelope-from <tiwai@suse.de>); Tue, 14 Mar 2023 16:01:48 +0000
-Date:   Tue, 14 Mar 2023 17:01:47 +0100
-Message-ID: <87ilf3b9uc.wl-tiwai@suse.de>
-From:   Takashi Iwai <tiwai@suse.de>
-To:     Ruslan Bilovol <ruslan.bilovol@gmail.com>
-Cc:     perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] sound: usb: remove Wireless USB dead code
-In-Reply-To: <20230312222857.296623-1-ruslan.bilovol@gmail.com>
-References: <20230312222857.296623-1-ruslan.bilovol@gmail.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1972E80280D;
+        Tue, 14 Mar 2023 16:02:10 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.18])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 5990C4042AC2;
+        Tue, 14 Mar 2023 16:02:09 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <20230221170804.3267242-1-sshedi@vmware.com>
+References: <20230221170804.3267242-1-sshedi@vmware.com>
+To:     Shreenidhi Shedi <yesshedi@gmail.com>
+Cc:     dhowells@redhat.com, dwmw2@infradead.org,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        sshedi@vmware.com
+Subject: Re: [ PATCH v4 1/6] sign-file: refactor argument parsing logic
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <3754504.1678809728.1@warthog.procyon.org.uk>
+Date:   Tue, 14 Mar 2023 16:02:08 +0000
+Message-ID: <3754505.1678809728@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 12 Mar 2023 23:28:57 +0100,
-Ruslan Bilovol wrote:
-> 
-> Wireless USB host controller support has been removed
-> from Linux Kernel more than 3 years ago in commit
-> caa6772db4c1 ("Staging: remove wusbcore and UWB from the
-> kernel tree."), and the associated code in the
-> snd-usb-audio driver became unused and untested.
-> 
-> If in the future somebody will return WUSB/UWB support
-> back to the kernel, the snd-usb-audio driver will reject
-> Wireless USB audio devices at probe stage, and this patch
-> should be reverted.
-> 
-> Signed-off-by: Ruslan Bilovol <ruslan.bilovol@gmail.com>
+Can you please include a cover note indicating what this series is about?
 
-Thanks, applied now to for-next branch.
+> - Use getopt_long_only for parsing input args
+> - Use more easy to remember command line argument names
 
+You're also adding a bunch of new flags.  I would recommend splitting that
+into a separate patch.
 
-Takashi
+> +	char *hash_algo = opts.hash_algo;
+> +	char *dest_name = opts.dest_name;
+> +	char *private_key_name = opts.private_key_name;
+> +	char *raw_sig_name = opts.raw_sig_name;
+> +	char *x509_name = opts.x509_name;
+> +	char *module_name = opts.module_name;
+
+I wonder if these should now be const char *.
+
+> @@ -292,7 +381,6 @@ int main(int argc, char **argv)
+>  		exit(3);
+>  	}
+>  #endif
+> -
+>  	/* Open the module file */
+>  	bm = BIO_new_file(module_name, "rb");
+>  	ERR(!bm, "%s", module_name);
+
+Please don't remove that blank line - it separates two logically distinct
+parts of the program.
+
+David
+
