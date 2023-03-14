@@ -2,99 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E685A6B9358
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 13:17:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDB996B92C4
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 13:12:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231964AbjCNMP5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 08:15:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54988 "EHLO
+        id S230449AbjCNMMh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 08:12:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231874AbjCNMOn (ORCPT
+        with ESMTP id S231646AbjCNMMd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 08:14:43 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 638AF136C3;
-        Tue, 14 Mar 2023 05:13:25 -0700 (PDT)
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32EC13Fm016816;
-        Tue, 14 Mar 2023 12:12:49 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=JGZjUvHW9OTgIPAS677cE3e+uqj5f0D2PWaalmgOXGU=;
- b=HUTzGHg6rG3IBkCtTDliWAc7YYi9k8NpC0IM23JW+z21ofcA76Lupbv4hS9xPk1cxdfb
- sV2GN+8yp4cMBZjtkR21BfsItPhv7wIRMIbp1fdShjS32alBWwkbqLlLNpQQbiNJcMfV
- r44MfDp7tUEFacF6cbzVrXHLUyNzo9bYgMDKnD26r/+N/GCEruc183kqcJoCpswtQpYv
- k3Zi1PfLzOKAexUGLf+9WjlddCzy+y8gezfXPqBa84etbcpQzELIr8Gbf/VpMyjrA76M
- +qYSwqLxwu4ZqX/k7Zx2JKuHqlqv1G/vdvYzp+O051z3hjkq4OJo6uYqu8ogrrXQsCBv Yg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3paph23ufn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Mar 2023 12:12:48 +0000
-Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32EBTINi024659;
-        Tue, 14 Mar 2023 12:12:48 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3paph23ue3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Mar 2023 12:12:48 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32E7kqS0028633;
-        Tue, 14 Mar 2023 12:12:45 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3p8h96msmt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Mar 2023 12:12:44 +0000
-Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32ECCgPN31523140
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 14 Mar 2023 12:12:42 GMT
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A06212007B;
-        Tue, 14 Mar 2023 12:12:42 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 358E32007A;
-        Tue, 14 Mar 2023 12:12:42 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-        by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 14 Mar 2023 12:12:42 +0000 (GMT)
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     Arnd Bergmann <arnd@arndb.de>,
-        Dominik Brodowski <linux@dominikbrodowski.net>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-pci@vger.kernel.org
-Subject: [PATCH v3 24/38] pcmcia: add HAS_IOPORT dependencies
-Date:   Tue, 14 Mar 2023 13:12:02 +0100
-Message-Id: <20230314121216.413434-25-schnelle@linux.ibm.com>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20230314121216.413434-1-schnelle@linux.ibm.com>
-References: <20230314121216.413434-1-schnelle@linux.ibm.com>
+        Tue, 14 Mar 2023 08:12:33 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E1C762304;
+        Tue, 14 Mar 2023 05:12:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A0A77B81900;
+        Tue, 14 Mar 2023 12:12:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3571DC433D2;
+        Tue, 14 Mar 2023 12:12:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678795925;
+        bh=TJqMs+aA7y2xOU+ED1ZI1nE8tu87rDEpfFJAfmZM6EE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LEOo92Tl3Rh8YJIsI0aO7zaZ72X9MccFlJ7+0SglI9YS2wvrX27vCMVrx/8V38AEG
+         Vc7KiLcPE1IiCHRepPfBLO9jBYJzPgFwlUE8np2QTCdy7Wf0hMtcx/Bm5/pHmU+Yvc
+         MEZbfd6mKSG4WWrYa9RC3HDpmf9xPBky4IrmU6sbKTOFVAjosdj1T4Ym3/VqErL27M
+         t4P0ws5Oa/myo5GCYrvdKuckPoBkNdVCZZ5yD+MBIceAyyuKmPkj4fGOTWhZQiCBAx
+         vWAs/3XmN0fnXVbJLBRYWpcWE45YCxh3IejyMkeBh8adVw7YuD14IcKhM/mXkaejGe
+         2qDHx6TNcapVg==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 6DF434049F; Tue, 14 Mar 2023 09:12:03 -0300 (-03)
+Date:   Tue, 14 Mar 2023 09:12:03 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        Quentin Monnet <quentin@isovalent.com>,
+        Andres Freund <andres@anarazel.de>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Pavithra Gurushankar <gpavithrasha@gmail.com>,
+        Yang Jihong <yangjihong1@huawei.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Martin =?utf-8?B?TGnFoWth?= <mliska@suse.cz>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        llvm@lists.linux.dev, Stephane Eranian <eranian@google.com>
+Subject: Re: [PATCH v1 00/13] Perf tool build improvements
+Message-ID: <ZBBkkye0TGP9EVYl@kernel.org>
+References: <20230311065753.3012826-1-irogers@google.com>
+ <ZBBkWDFdBDC9Spt9@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 3ijb_RFvwX6xZHYg55by5gLccmLL9BGy
-X-Proofpoint-GUID: pJNmPTfja7xpP4tEVkRETjAy-WrlOt0f
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-14_06,2023-03-14_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 malwarescore=0
- suspectscore=0 adultscore=0 phishscore=0 bulkscore=0 mlxscore=0
- mlxlogscore=747 spamscore=0 lowpriorityscore=0 priorityscore=1501
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2303140103
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZBBkWDFdBDC9Spt9@kernel.org>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NUMERIC_HTTP_ADDR,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -102,44 +76,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
-not being declared. Add dependencies for those drivers that use them.
+Em Tue, Mar 14, 2023 at 09:11:04AM -0300, Arnaldo Carvalho de Melo escreveu:
+> Em Fri, Mar 10, 2023 at 10:57:40PM -0800, Ian Rogers escreveu:
+> > Make the default build options a more preferred set, such as making
+> > BPF skeletons default and failing the build if jevents or libtracevent
+> > dependencies fail. The binutil dependencies are opt-in given license
+> > restrictions. abi::__cxa_demangle demangling support is added so that
+> > libiberty, from binutils, isn't necessary for C++ demangling.
+> > 
+> > Some build/test dependencies are fixed and the code cleaned up.
+> 
+> I'll continue fixing more stuff, like adding NO_LIBTRACEEVENT=1 to
+> things like amazonlinux devel, that still doesn't package libtraceevent,
+> but so far...
+> 
+> [perfbuilder@five ~]$ export BUILD_TARBALL=http://192.168.86.10/perf/perf-6.3.0-rc1.tar.xz
+> [perfbuilder@five ~]$ time dm
+>    1     5.58 almalinux:8                   : FAIL gcc version 8.5.0 20210514 (Red Hat 8.5.0-4) (GCC)
+>    2     5.38 almalinux:9                   : FAIL gcc version 11.2.1 20220127 (Red Hat 11.2.1-9) (GCC)
+>    3     4.57 alpine:3.15                   : FAIL gcc version 10.3.1 20211027 (Alpine 10.3.1_git20211027)
+>    4     4.27 alpine:3.16                   : FAIL gcc version 11.2.1 20220219 (Alpine 11.2.1_git20220219)
+>    5     4.27 alpine:3.17                   : FAIL gcc version 12.2.1 20220924 (Alpine 12.2.1_git20220924-r4)
+>    6     4.67 alpine:edge                   : FAIL gcc version 12.2.1 20220924 (Alpine 12.2.1_git20220924-r9)
+>    7     4.47 alt:p9                        : FAIL gcc version 8.4.1 20200305 (ALT p9 8.4.1-alt0.p9.1) (GCC)
+>    8     4.58 alt:p10                       : FAIL gcc version 10.3.1 20210703 (ALT Sisyphus 10.3.1-alt2) (GCC)
+>    9     4.57 alt:sisyphus                  : FAIL gcc version 12.1.1 20220518 (ALT Sisyphus 12.1.1-alt2) (GCC)
+>   10     3.97 amazonlinux:2                 : FAIL gcc version 7.3.1 20180712 (Red Hat 7.3.1-15) (GCC)
+>   11     5.77 amazonlinux:devel             : FAIL gcc version 11.3.1 20220421 (Red Hat 11.3.1-2) (GCC)
+>   12   160.30 archlinux:base                : Ok   gcc (GCC) 12.2.0 , clang version 14.0.6
+>   13     4.68 centos:8                      : FAIL gcc version 8.4.1 20200928 (Red Hat 8.4.1-1) (GCC)
+>   14     5.07 centos:stream                 : FAIL gcc version 8.5.0 20210514 (Red Hat 8.5.0-18) (GCC)
+>   15     5.27 clearlinux:latest             : FAIL gcc version 12.2.1 20230202 releases/gcc-12.2.0-400-gd31bd71386 (Clear Linux OS for Intel Architecture)
+>   16     3.37 debian:10                     : FAIL gcc version 8.3.0 (Debian 8.3.0-6)
+>   17     3.57 debian:11                     : FAIL gcc version 10.2.1 20210110 (Debian 10.2.1-6)
+>   18     4.08 debian:experimental           : FAIL gcc version 12.2.0 (Debian 12.2.0-10)
+>   19     3.78 debian:experimental-x-arm64   : FAIL gcc version 12.2.0 (Debian 12.2.0-14)
+>   20     2.77 debian:experimental-x-mips    : FAIL gcc version 12.2.0 (Debian 12.2.0-14)
+>   21     3.47 debian:experimental-x-mips64  : FAIL gcc version 10.2.1 20210110 (Debian 10.2.1-6)
+>   22     3.47 debian:experimental-x-mipsel  : FAIL gcc version 12.2.0 (Debian 12.2.0-14)
+>   23     4.37 fedora:26                     : FAIL gcc version 7.3.1 20180130 (Red Hat 7.3.1-2) (GCC)
+>   24     4.27 fedora:27                     : FAIL gcc version 7.3.1 20180712 (Red Hat 7.3.1-6) (GCC)
+>   25     4.27 fedora:28                     : FAIL gcc version 8.3.1 20190223 (Red Hat 8.3.1-2) (GCC)
+>   26     4.87 fedora:29                     : FAIL gcc version 8.3.1 20190223 (Red Hat 8.3.1-2) (GCC)
+>   27     4.97 fedora:30                     : FAIL gcc version 9.3.1 20200408 (Red Hat 9.3.1-2) (GCC)
+>   28     5.38 fedora:31                     : FAIL gcc version 9.3.1 20200408 (Red Hat 9.3.1-2) (GCC)
+>   29     5.48 fedora:32                     : FAIL gcc version 10.3.1 20210422 (Red Hat 10.3.1-1) (GCC)
+> 
+> 
+> Yeah, I'll take the opportunity and prune the older ones.
 
-Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
----
- drivers/pcmcia/Kconfig | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+One more!
 
-diff --git a/drivers/pcmcia/Kconfig b/drivers/pcmcia/Kconfig
-index 44c16508ef14..e72419d7e72e 100644
---- a/drivers/pcmcia/Kconfig
-+++ b/drivers/pcmcia/Kconfig
-@@ -5,7 +5,6 @@
- 
- menuconfig PCCARD
- 	tristate "PCCard (PCMCIA/CardBus) support"
--	depends on !UML
- 	help
- 	  Say Y here if you want to attach PCMCIA- or PC-cards to your Linux
- 	  computer.  These are credit-card size devices such as network cards,
-@@ -113,7 +112,7 @@ config YENTA_TOSHIBA
- 
- config PD6729
- 	tristate "Cirrus PD6729 compatible bridge support"
--	depends on PCMCIA && PCI
-+	depends on PCMCIA && PCI && HAS_IOPORT
- 	select PCCARD_NONSTATIC
- 	help
- 	  This provides support for the Cirrus PD6729 PCI-to-PCMCIA bridge
-@@ -121,7 +120,7 @@ config PD6729
- 
- config I82092
- 	tristate "i82092 compatible bridge support"
--	depends on PCMCIA && PCI
-+	depends on PCMCIA && PCI && HAS_IOPORT
- 	select PCCARD_NONSTATIC
- 	help
- 	  This provides support for the Intel I82092AA PCI-to-PCMCIA bridge device,
--- 
-2.37.2
+  30   181.19 fedora:33                     : Ok   gcc (GCC) 10.3.1 20210422 (Red Hat 10.3.1-1) , clang version 11.0.0 (Fedora 11.0.0-3.fc33)
 
