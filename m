@@ -2,59 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 112386B977F
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 15:15:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 936676B977C
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 15:14:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230489AbjCNOPL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 10:15:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36830 "EHLO
+        id S230209AbjCNOOh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 10:14:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231600AbjCNOOx (ORCPT
+        with ESMTP id S229525AbjCNOOe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 10:14:53 -0400
+        Tue, 14 Mar 2023 10:14:34 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C7A493E25;
-        Tue, 14 Mar 2023 07:14:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81ECA2D73;
+        Tue, 14 Mar 2023 07:14:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ABA1C6179C;
-        Tue, 14 Mar 2023 14:14:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20722C433A0;
-        Tue, 14 Mar 2023 14:14:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E93C9617A5;
+        Tue, 14 Mar 2023 14:14:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42195C433D2;
+        Tue, 14 Mar 2023 14:14:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678803289;
-        bh=lbt3u3WhPf0RUtdapFsOcCTtMZ6GZznOdU71nY6UTW4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=n1BP22Zcxfdv1kWsK2cC15r52JjqvMGpLQYfMCA+Vnj/p0fvAt+/LyzJJ541e7oJT
-         RPZXK3izufw/PphinjQZuuCf+A9HXZOKCOVfpu/L+OKUnj3boSCCcNtGiPbaGjHANA
-         FmSo3F4paBaeISzALjIfOQIA1Bf1SA+F9C7IurVDMc2ax3VEndpqfDoHCRra1Dep45
-         Plsa4HRwrpd6vxhr61KAYdDw2linApRqBIKyhS5w+ElmT2hlm1WUWxK7Z+W5r2dm1e
-         8I1G1kt95rsORNpjdVqxpGF+4qfQm1XrSqhaxlOeMuFPewBroif5Kc8fWM/xOE0khY
-         25sSCDzK0lLow==
-Received: by mail-ot1-f44.google.com with SMTP id b26-20020a9d755a000000b006972b28ae37so1053428otl.4;
-        Tue, 14 Mar 2023 07:14:49 -0700 (PDT)
-X-Gm-Message-State: AO0yUKWo9udTjqWb9E1tp7D2VOOS0Pp87mAfNJRykeP4h2I3g+BDdxp3
-        dfwuRUPicXW8MaCekTh4lKiL2aXoML1JcL+W8Mo=
-X-Google-Smtp-Source: AK7set9Ri+WI7GkE0FhiL0GJu3IcjaCzAeOQQn5JizhdOOkXiMwwGgaSvbxFge+uI1u+PT1o4fvd8V3vVBLHNM+/91I=
-X-Received: by 2002:a05:6830:308a:b0:68d:48be:fa9c with SMTP id
- g10-20020a056830308a00b0068d48befa9cmr12796587ots.1.1678803288297; Tue, 14
- Mar 2023 07:14:48 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230314130248.954196-1-nvidia@cohens.org.il> <20230314130248.954196-2-nvidia@cohens.org.il>
-In-Reply-To: <20230314130248.954196-2-nvidia@cohens.org.il>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Tue, 14 Mar 2023 23:14:12 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQpaH6dp5sX5Kq3eyxbkHyXCqFmT+oxd66i3ZJyOOpNQA@mail.gmail.com>
-Message-ID: <CAK7LNAQpaH6dp5sX5Kq3eyxbkHyXCqFmT+oxd66i3ZJyOOpNQA@mail.gmail.com>
-Subject: Re: [PATCH] Makefile: Make kernelrelease target work with M=
-To:     nvidia@cohens.org.il
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        s=k20201202; t=1678803270;
+        bh=qhXwhy6Cl+s9k6JRE6nqU7xp7VBDDJnS951Dvre7bkg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=LY7gjSiuMUB5pPGHUjwLNoTDLnJO+/gmKbfcmqDFZktVM1oJ9unB1E8ayT2zcQyXS
+         sWKlUqkLFdIq2shgcuntAcjnnGwtd34ns6fr0Y8j2RsQZUw3e2jNeR6Se39qlfr2NE
+         F9uGpnbiPsDwmnhlv3xu2EQukcSHeAmH0imBHjUxgEZmpq+G7buXq1QAsIYvT/rHZm
+         ZzQ2ig3GxB2CNjWHt/9PR6kvEQoERyVkcK5sAIm9UhUNNqvpAhmxll6r1/0dBVES9U
+         oxyDZp/yvpkMJiQacmf0ss4/5vvW3zDMoqnUSTirLxKXK79QLT4wOeVWYRnGmV4GX7
+         XSqJLv4C3XyAA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pc5Q3-00HaSl-PZ;
+        Tue, 14 Mar 2023 14:14:27 +0000
+Date:   Tue, 14 Mar 2023 14:14:27 +0000
+Message-ID: <86h6unxvwc.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Lucas Tanure <lucas.tanure@collabora.com>
+Cc:     Robin Murphy <robin.murphy@arm.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof Wilczynski <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>, Qu Wenruo <wqu@suse.com>,
+        Piotr Oniszczuk <piotr.oniszczuk@gmail.com>,
+        Kever Yang <kever.yang@rock-chips.com>,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org, kernel@collabora.com
+Subject: Re: [PATCH 1/7] irqchip/gic-v3: Add a DMA Non-Coherent flag
+In-Reply-To: <93e4d83d-9559-c987-d93b-c49572413275@collabora.com>
+References: <20230310080518.78054-1-lucas.tanure@collabora.com>
+        <20230310080518.78054-2-lucas.tanure@collabora.com>
+        <CAMdYzYpL7V6udw=T7ZChTFi0xOj1tb-5CVHb84u1pL4kj3eDZA@mail.gmail.com>
+        <3db23e11-5fac-f36e-c89e-93c4e8ac2d98@arm.com>
+        <93e4d83d-9559-c987-d93b-c49572413275@collabora.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: lucas.tanure@collabora.com, robin.murphy@arm.com, pgwipeout@gmail.com, vkoul@kernel.org, kishon@kernel.org, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, heiko@sntech.de, tglx@linutronix.de, lpieralisi@kernel.org, kw@linux.com, bhelgaas@google.com, wqu@suse.com, piotr.oniszczuk@gmail.com, kever.yang@rock-chips.com, linux-phy@lists.infradead.org, devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org, kernel@collabora.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -64,44 +84,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 14, 2023 at 10:04=E2=80=AFPM <nvidia@cohens.org.il> wrote:
->
-> From: Tzafrir Cohen <nvidia@cohens.org.il>
->
-> Fixes: commit 1cb86b6c3136 ("kbuild: save overridden KERNELRELEASE in inc=
-lude/config/kernel.release")
->
-> That commit required the use of filechk_kernel.release for the
-> kernelrelease Makefile target. It is currently only being set when
-> KBUILD_EXTMOD is not set. Make sure it is set in that case as well.
->
-> Signed-off-by: Tzafrir Cohen <nvidia@cohens.org.il>
+On Tue, 14 Mar 2023 13:25:28 +0000,
+Lucas Tanure <lucas.tanure@collabora.com> wrote:
+> 
+> On 10-03-2023 12:04, Robin Murphy wrote:
+> > On 2023-03-10 11:41, Peter Geis wrote:
+> >> On Fri, Mar 10, 2023 at 3:05 AM Lucas Tanure
+> >> <lucas.tanure@collabora.com> wrote:
+> >>> 
+> >>> The GIC600 integration in RK356x, used in rk3588, doesn't support
+> >>> any of the shareability or cacheability attributes, and requires
+> >>> both values to be set to 0b00 for all the ITS and Redistributor
+> >>> tables.
+> >>> 
+> >>> This is loosely based on prior work from XiaoDong Huang and
+> >>> Peter Geis fixing this issue specifically for Rockchip 356x.
+> >> 
+> >> Good Morning,
+> >> 
+> >> Since the gic is using dma, would it be reasonable to have all memory
+> >> allocations be requested with the GFP_DMA flag? Otherwise this doesn't
+> >> fully solve the problem for rk356x, where only the lower 4GB range is
+> >> DMA capable, but this tends to get allocated in the upper 4GB on 8GB
+> >> boards.
+> > 
+> > Not really, because there's no fixed definition of what GFP_DMA
+> > actually means, and it may mean nothing (same for GFP_DMA32, which
+> > may or may not be meaningful depending on kernel config and platform
+> > topology). Drivers should really use the DMA API allocation
+> > functions if they care about what they get, which comes back round
+> > to the notion from years ago of converting the ITS driver to a
+> > regular platform driver, so it can benefit from regular DT concepts
+> > like "dma-ranges" automatically.
+> > 
+> > Thanks,
+> > Robin.
+> > 
+> I am looking how to do that conversion to platform driver.
+> But about the communication between irq-gic-v3-its and irq-gic-v3.
+> Should irq-gic-v3-its be a MFD child of irq-gic-v3?
 
+MFD? I'd rather suggest an VME bus driver. ;-)
 
-Applied to linux-kbuild/fixes. Thanks.
+Seriously, this is an interrupt controller. Nothing else. It should
+probe the parent irqdomain, and stack onto that. No parent? Probe
+deferral.
 
-> ---
->  Makefile | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/Makefile b/Makefile
-> index 3e7f96f12f08..e0859c608147 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -1880,6 +1880,8 @@ endif
->
->  else # KBUILD_EXTMOD
->
-> +filechk_kernel.release =3D echo $(KERNELRELEASE)
-> +
->  ###
->  # External module support.
->  # When building external modules the kernel used as basis is considered
-> --
-> 2.39.2
->
+> Or use the component bind/unbind framework?
 
+I don't understand what you mean here.
 
---=20
-Best Regards
-Masahiro Yamada
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
