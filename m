@@ -2,189 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8446A6B92AF
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 13:07:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8456D6B92B6
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 13:08:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230231AbjCNMH2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 08:07:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39886 "EHLO
+        id S231755AbjCNMI3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 08:08:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231360AbjCNMHW (ORCPT
+        with ESMTP id S231699AbjCNMIX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 08:07:22 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F5C66133E
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 05:06:47 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id m4so6694240lfj.2
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 05:06:47 -0700 (PDT)
+        Tue, 14 Mar 2023 08:08:23 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 461E334F5F;
+        Tue, 14 Mar 2023 05:07:45 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id da10so61171818edb.3;
+        Tue, 14 Mar 2023 05:07:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678795575;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=gmail.com; s=20210112; t=1678795636;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=e6PMzxNPu0tsz3tjRajBCZnSPtI1e5mB9Su+fsMf3bk=;
-        b=Dkuwu1dFGFoMSVkuxQVa1GD2Nl2OPE0YFBafjm4iaAtc+EQ3/NFUJ+GST24b3ymsk6
-         um+RZQxhy6h4v6XpKGwQxpxPqWHbeAlSvSMmMMY/SS+evvb/aJN7KzCddo/jt0n6ifFk
-         AKIB8DZ+nAbo5tzq8nFdIYGXgfQiBDidop5k9mLq/HcuNnmauJaZjtkceAQilJhSVqzD
-         ynqDM13h6tIfchnN5G+2V2a8vEmaxKx6YmStmk+soihKqtVx/mr4lOgFQJ9CLdKKY5mF
-         qUSxVkozbLLnGjWcffoaHK9E2+Dq301aqJYS1TI5TQ5jcmHLJF+VlULpRU+TE5LVuN+v
-         IXMg==
+        bh=AGJ/J3etGXzzl0b+NHW/iN6M3fmzVQmhjKRcIxTWVds=;
+        b=ka8JGNS5D9SBcMnt4d472x2hwdFkFyldNKxnGEnO6pkvYSlUbIPqO4QQXn8NmzwyVC
+         8rk0yUI9Ytm+zUIbnPDGByyhREZTWaoVHCxqr4ft5G7ajdPtRGbMnPcEvfISWe33JRdS
+         2zRjYKlZv0ukmKIM/H+sCicuGvpuDBWpJEavqLje0lpLqJ6a2VYTridpp5gFZJJD/8JH
+         OGSN3wph8HBzAGDNII2yYIqbjNDKCH0vsLyK6uYB3NXGFwph+zJjCETmmrwsneflYZSh
+         CNI3KkJJK1fAfWwer4wZpllE82hWWa8pfYSbJKnUcfO0jTEFk/Iz//RQLwUCp3Me57+v
+         VDfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678795575;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20210112; t=1678795636;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=e6PMzxNPu0tsz3tjRajBCZnSPtI1e5mB9Su+fsMf3bk=;
-        b=XBy1f5m6S07o0AawOe50Q04iWxv6NpzxP1QK+SFrxqBa/hIoMjcuFR7WP5xelTb+M/
-         wp+vZA8wxO7LHHgk9KqBVBhT3Qgwkw+fafB2fC+o9MHIPz0T3bZpLga6Iwm0pC5jkMAR
-         /68j9vcmpfQhz7eDNnu6B/Qo6rCPzdT/7KTEsjj0wbs7mvBB0fQPB0q9oh4vh4mJ2GH5
-         k/0A6DrEDaGubF7ymf1jHTNfSoJ+UbRn1FpbbUrZloBojqB1YohgD90b9Yz88pRtYhj1
-         yEhkjqXl4dwamtHSEMAn4Y6U8NIvkOEimKgbhzMsAsdPMcX04Vt/e2r/HIB50jtJf4g+
-         2wiQ==
-X-Gm-Message-State: AO0yUKV9CnieAvlr3x7LcaeNUXwZJLinA/IfWU6SozlwqcT+j98MWyeV
-        3+2gZoEtxWyCvkXMmju+z/28zg==
-X-Google-Smtp-Source: AK7set8y1S3Ew42r0fNJc7kHIb75SA1cUzze9ztJfgE0b5T6mi+HLLRdUIRz6wmiM+EMjWdU5uLedg==
-X-Received: by 2002:ac2:4189:0:b0:4dd:ad88:ba5c with SMTP id z9-20020ac24189000000b004ddad88ba5cmr712969lfh.4.1678795575616;
-        Tue, 14 Mar 2023 05:06:15 -0700 (PDT)
-Received: from [192.168.1.101] (abyj16.neoplus.adsl.tpnet.pl. [83.9.29.16])
-        by smtp.gmail.com with ESMTPSA id f25-20020ac251b9000000b004dab932248fsm378828lfk.180.2023.03.14.05.06.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Mar 2023 05:06:14 -0700 (PDT)
-Message-ID: <20ebe4a3-1352-ae02-a56b-672ff3fcf12d@linaro.org>
-Date:   Tue, 14 Mar 2023 13:06:12 +0100
+        bh=AGJ/J3etGXzzl0b+NHW/iN6M3fmzVQmhjKRcIxTWVds=;
+        b=CLUOrZl1slwXwTtGA6dYbTgtrI2Xy2AXViuSITlTjvZcoO2w0UbLdJ29eb2VMiPAQI
+         41q1u8VLH7lw6OP7lIfTNlhEzlPCSWdkVb92UfY0eX5fxiiXXY2bWzEuXrNtJ9Wijito
+         E1ik1JmmfZ1rehvaH3Y9hB7SIHlysSqMkmGyZzu+s7F2qzLpiQycUebiiSpj8Jyyb71r
+         Iojr7uepPBlFlZxPn6IEJIQAxpuONEOM2Pz96gJ5AmNWyEcMT4cT908/u+pOR7uFJyP3
+         zLcJV/D6aELISJ/s2zaQV3yVern005VJ1Q6J6kAE/bLyf/2RPIi///uzmRenftQ3qm/9
+         QaJA==
+X-Gm-Message-State: AO0yUKWn4aYxtqsBKLUpOrrM5FAqWk8pFlO112MzqR+BZ4VzTFS1Hp54
+        J2wfECZO/8jZ9Ubp2VgEEoY=
+X-Google-Smtp-Source: AK7set/ZXQ+XfAoC7QvC3zJZuOUeUmwsfD1u7z9CGxTW9HvRYx2Fw+SlEkD2QSWMCctkfcyjX1j1Tw==
+X-Received: by 2002:aa7:d38b:0:b0:4fb:fd9f:7375 with SMTP id x11-20020aa7d38b000000b004fbfd9f7375mr7624487edq.2.1678795636347;
+        Tue, 14 Mar 2023 05:07:16 -0700 (PDT)
+Received: from eldamar.lan (c-82-192-242-114.customer.ggaweb.ch. [82.192.242.114])
+        by smtp.gmail.com with ESMTPSA id v30-20020a50d59e000000b004af7191fe35sm948475edi.22.2023.03.14.05.07.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Mar 2023 05:07:15 -0700 (PDT)
+Sender: Salvatore Bonaccorso <salvatore.bonaccorso@gmail.com>
+Received: by eldamar.lan (Postfix, from userid 1000)
+        id BBA70BE2DE0; Tue, 14 Mar 2023 13:07:14 +0100 (CET)
+Date:   Tue, 14 Mar 2023 13:07:14 +0100
+From:   Salvatore Bonaccorso <carnil@debian.org>
+To:     Andrew Cooper <Andrew.Cooper3@citrix.com>
+Cc:     Juergen Gross <jgross@suse.com>,
+        Joost Roeleveld <joost@antarean.org>,
+        Christoph Hellwig <hch@infradead.org>, jejb@linux.ibm.com,
+        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        sathya.prakash@broadcom.com, suganath-prabu.subramani@broadcom.com,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, xen-devel@lists.xenproject.org,
+        adi@kriegisch.at
+Subject: Re: Report in downstream Debian: mpt3sas broken with xen dom0 with
+ update to 5.10.149 in 5.10.y.
+Message-ID: <ZBBjcu2YH9HFY06l@eldamar.lan>
+References: <Y1JkuKTjVYrOWbvm@eldamar.lan>
+ <85ad4508-b979-c792-e92b-01bc16260dec@acm.org>
+ <CAK=zhgr=MYn=-mrz3gKUFoXG_+EQ796bHEWSdK88o1Aqamby7g@mail.gmail.com>
+ <2fd505a07bd26d76f1166761fa50905414edb7ef.camel@linux.ibm.com>
+ <30a056c8-071f-4259-3253-75e718af619d@suse.com>
+ <Y1bEQMS5SNTbZO/3@infradead.org>
+ <858a4288-46ac-d423-a529-b3b77b7fbc8a@citrix.com>
+ <20230314111752.EGroupware.TiNRv1BSroWqKL7zQtfNLJ8@_>
+ <4c5de098-5cd3-116b-54cb-6972c6c06818@suse.com>
+ <8cc36c16-4aa0-9c47-ab2f-c75c1e22772f@citrix.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v3 06/10] drm/msm/dsi: Switch the QCM2290-specific
- compatible to index autodetection
-Content-Language: en-US
-To:     Marijn Suijten <marijn.suijten@somainline.org>
-Cc:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Krishna Manikandan <quic_mkrishn@quicinc.com>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh@kernel.org>, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230307-topic-dsi_qcm-v3-0-8bd7e1add38a@linaro.org>
- <20230307-topic-dsi_qcm-v3-6-8bd7e1add38a@linaro.org>
- <20230314000322.ptxs5d5mx54vdopa@SoMainline.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230314000322.ptxs5d5mx54vdopa@SoMainline.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <8cc36c16-4aa0-9c47-ab2f-c75c1e22772f@citrix.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Andrew,
 
+On Tue, Mar 14, 2023 at 11:41:08AM +0000, Andrew Cooper wrote:
+> On 14/03/2023 11:23 am, Juergen Gross wrote:
+> > On 14.03.23 12:17, Joost Roeleveld wrote:
+> >>> On Mon, Oct 24, 2022 at 05:28:05PM +0000, Andrew Cooper wrote:
+> >>>> I don't know exactly how this translates to Linux internals, but most
+> >>>> devices are fine and it's routinely the mpt2/3sas drivers which
+> >>>> encounter problems.  It would be lovely if we could get to the
+> >>>> bottom of
+> >>>> this for once and for all.
+> >>>
+> >>> So to summarize my two mails: I think te use of dma_get_required_mask
+> >>> in mpt3sas is wrong, and the dma_get_required_mask return value from
+> >>> xen-swiotlb is also wrong. Fixing either one should fix this problem,
+> >>> and I think we should fix both.
+> >>
+> >> Hi all,
+> >>
+> >> Is there anything that can be done to get this fixed in xen and the
+> >> kernel somehow?
+> >> I keep having to manually patch the mpt3sas driver to prevent it from
+> >> being able to switch to 32bit mode each time I upgrade the kernel.
+> >
+> > Just use 5.10.173.
+> 
+> Its still broken even in 6.1
+> 
+> We've just stumbled over this yet again in XenServer.
 
-On 14.03.2023 01:03, Marijn Suijten wrote:
-> On 2023-03-07 14:01:44, Konrad Dybcio wrote:
->> Now that the logic can handle multiple sets of registers, move
->> the QCM2290 to the common logic and mark it deprecated. This allows us
->> to remove a couple of structs, saving some memory.
->>
->> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
->> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->> ---
->>  drivers/gpu/drm/msm/dsi/dsi.c     |  4 +++-
->>  drivers/gpu/drm/msm/dsi/dsi_cfg.c | 28 ++--------------------------
->>  2 files changed, 5 insertions(+), 27 deletions(-)
->>
->> diff --git a/drivers/gpu/drm/msm/dsi/dsi.c b/drivers/gpu/drm/msm/dsi/dsi.c
->> index 31fdee2052be..90d43628b22b 100644
->> --- a/drivers/gpu/drm/msm/dsi/dsi.c
->> +++ b/drivers/gpu/drm/msm/dsi/dsi.c
->> @@ -174,7 +174,9 @@ static int dsi_dev_remove(struct platform_device *pdev)
->>  
->>  static const struct of_device_id dt_match[] = {
->>  	{ .compatible = "qcom,mdss-dsi-ctrl", .data = NULL /* autodetect cfg */ },
->> -	{ .compatible = "qcom,dsi-ctrl-6g-qcm2290", .data = &qcm2290_dsi_cfg_handler },
->> +
->> +	/* Deprecated, don't use */
->> +	{ .compatible = "qcom,dsi-ctrl-6g-qcm2290", .data = NULL },
->>  	{}
->>  };
->>  
->> diff --git a/drivers/gpu/drm/msm/dsi/dsi_cfg.c b/drivers/gpu/drm/msm/dsi/dsi_cfg.c
->> index 6d4b2ce4b918..29ccd755cc2e 100644
->> --- a/drivers/gpu/drm/msm/dsi/dsi_cfg.c
->> +++ b/drivers/gpu/drm/msm/dsi/dsi_cfg.c
->> @@ -169,7 +169,8 @@ static const struct msm_dsi_config sdm845_dsi_cfg = {
->>  	.bus_clk_names = dsi_v2_4_clk_names,
->>  	.num_bus_clks = ARRAY_SIZE(dsi_v2_4_clk_names),
->>  	.io_start = {
->> -		{ 0xae94000, 0xae96000 }, /* SDM845 / SDM670 / SC7180 */
->> +		{ 0xae94000, 0xae96000 }, /* SDM845 / SDM670 */
->> +		{ 0x5e94000 }, /* QCM2290 / SM6115 / SM6125 / SM6375 */
->>  	},
->>  };
->>  
->> @@ -203,25 +204,6 @@ static const struct msm_dsi_config sc7280_dsi_cfg = {
->>  	},
->>  };
->>  
->> -static const char * const dsi_qcm2290_bus_clk_names[] = {
->> -	"iface", "bus",
->> -};
->> -
->> -static const struct regulator_bulk_data qcm2290_dsi_cfg_regulators[] = {
->> -	{ .supply = "vdda", .init_load_uA = 21800 },	/* 1.2 V */
->> -};
-> 
-> These two consts should really have already been deleted as part of
-> 04/10: drm/msm/dsi: dsi_cfg: Deduplicate identical structs.
-Right, will fix
+The mentioned commit has been backported to 6.1.16, 5.15.100 and
+5.10.173. Is the issue still reproducible with 6.1.16?
 
-> 
->> -static const struct msm_dsi_config qcm2290_dsi_cfg = {
->> -	.io_offset = DSI_6G_REG_SHIFT,
->> -	.regulator_data = qcm2290_dsi_cfg_regulators,
->> -	.num_regulators = ARRAY_SIZE(qcm2290_dsi_cfg_regulators),
->> -	.bus_clk_names = dsi_qcm2290_bus_clk_names,
->> -	.num_bus_clks = ARRAY_SIZE(dsi_qcm2290_bus_clk_names),
->> -	.io_start = {
->> -		{ 0x5e94000 },
->> -	},
->> -};
->> -
->>  static const struct msm_dsi_host_cfg_ops msm_dsi_v2_host_ops = {
->>  	.link_clk_set_rate = dsi_link_clk_set_rate_v2,
->>  	.link_clk_enable = dsi_link_clk_enable_v2,
->> @@ -312,9 +294,3 @@ const struct msm_dsi_cfg_handler *msm_dsi_cfg_get(u32 major, u32 minor)
->>  
->>  	return cfg_hnd;
->>  }
->> -
->> -/*  Non autodetect configs */
->> -const struct msm_dsi_cfg_handler qcm2290_dsi_cfg_handler = {
->> -	.cfg = &qcm2290_dsi_cfg,
->> -	.ops = &msm_dsi_6g_v2_host_ops,
->> -};
-> 
-> And how do you think dsi.c is able to reference this... don't forget to
-> remove it from dsi_cfg.h in v4.  In fact, if you look at how this was
-> implemented you should also be able to remove #include "dsi_cfg.h" from
-> dsi.c.  A clean revert of that patch would be nice, or just use it as
-> reference to find the remnants:
-> 
-> https://lore.kernel.org/all/1644853060-12222-2-git-send-email-loic.poulain@linaro.org/
-Ack
-
-Konrad
-> 
-> - Marijn
+Regards,
+Salvatore
