@@ -2,158 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E69ED6B9113
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 12:07:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E79D6B912B
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 12:10:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230227AbjCNLHA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 07:07:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35266 "EHLO
+        id S231162AbjCNLKU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 07:10:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230224AbjCNLG5 (ORCPT
+        with ESMTP id S231343AbjCNLKH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 07:06:57 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88AB247423;
-        Tue, 14 Mar 2023 04:06:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678791979; x=1710327979;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=BITUYkoSga6F+EORhAd27x2Ck6fcH/5teE0HpeuSSiI=;
-  b=gLISrTkWboXC8UTrCK6iYfT56q9Lbcip3AALGDlI/7L0XwJnrxdsORw8
-   DCOzcgU3wE+fp6P8S5JfTHIYHukw0fGXnNifaA4Zer2h5oJ5AzmE3Vq/v
-   PWB/td+HBN6DC6KXKEIc3KdNOXd4+2G4hczEpANpebTBsjBTON/M3UDX8
-   Z7/QTU3x/NPJ1CSG0nSOCxc2J+UBxvmzlAaYX6vpSdn/1RlOsmZxWC7Vs
-   49iZa7mal7gtYagrUSVGhgqPPlM5FBU9O58zFSARpFE2xM639pAvRge/T
-   GcaqnSJCXSfI0rjO0EKhZ7FOw2cj1HDK5qU729LcjuSRT3c8TWn2qu1OJ
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="339757432"
-X-IronPort-AV: E=Sophos;i="5.98,259,1673942400"; 
-   d="scan'208";a="339757432"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2023 04:05:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="822332495"
-X-IronPort-AV: E=Sophos;i="5.98,259,1673942400"; 
-   d="scan'208";a="822332495"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga001.fm.intel.com with ESMTP; 14 Mar 2023 04:05:28 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pc2T7-003AuV-31;
-        Tue, 14 Mar 2023 13:05:25 +0200
-Date:   Tue, 14 Mar 2023 13:05:25 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>,
-        Mirsad Goran Todorovac <mirsad.goran.todorovac@alu.hr>,
-        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Christian =?iso-8859-1?Q?G=F6ttsche?= <cgzones@googlemail.com>,
-        =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
-        Frederick Lawler <fred@cloudflare.com>
-Subject: Re: [PATCH v1 0/2] Add destructor hook to LSM modules
-Message-ID: <ZBBU9diKqetWQztO@smile.fi.intel.com>
-References: <20230310192614.GA528@domac.alu.hr>
- <CAHC9VhSzppHevG_Td+hKU4KRSDgV_NYf2RSeKA06PR-rD+dJLw@mail.gmail.com>
- <c1c1cbcc-10b6-de3f-81e8-78e6b173d46f@alu.unizg.hr>
- <CAHC9VhRFQtqTZku==BkW0uz1oZgG63j15GoQD1iexW4aPoAPcA@mail.gmail.com>
- <ZA7tyrscjwavzY3a@smile.fi.intel.com>
- <CAHC9VhTMoCAFhaa36Bq7_jiKGiaeMbYTuWv7tTQP1OHpY0EUsg@mail.gmail.com>
+        Tue, 14 Mar 2023 07:10:07 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E98B787374;
+        Tue, 14 Mar 2023 04:09:39 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id 756585FD61;
+        Tue, 14 Mar 2023 14:08:58 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1678792138;
+        bh=3iLPJaGeMrLb7xNjIHjUqhJAp4hqvLxn8oJMxDMG6R0=;
+        h=Message-ID:Date:MIME-Version:To:From:Subject:Content-Type;
+        b=ZgOUElosaYO1LiE/XLPSTYPW8MI+wAI/CjoI8nuhTTrvUFAXhYE/6VEqPFAv4g5PE
+         7KXqzQn4ydLgwWZwY9xdupYJ7BQ6eU5ia8bnc0IxBjxHm4QNOgsu7HgGx6Qo85UfBi
+         WbJgm85f86qF9vXcnQXPr8QU3y/3yGGlbEW5GeEN/U+BUhSm9KVGvsIopqUgYAC6+q
+         +wDZRQEeTShF3yU3lg9X19etZlN014G85/7yI991rUUj46AzRF8wGlVFWldYCv/nLG
+         IAzrZVjLahNj0IhXxRZOX12fKImKqNJ7RM6fThhe5hX8tEfUgsrCXX3WHWkyL1HI8n
+         Q/PuaLB1CledQ==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Tue, 14 Mar 2023 14:08:57 +0300 (MSK)
+Message-ID: <92bc3587-6994-e003-5ec5-252c1961d8ec@sberdevices.ru>
+Date:   Tue, 14 Mar 2023 14:05:48 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHC9VhTMoCAFhaa36Bq7_jiKGiaeMbYTuWv7tTQP1OHpY0EUsg@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Content-Language: en-US
+In-Reply-To: <1bfcb7fd-bce3-30cf-8a58-8baa57b7345c@sberdevices.ru>
+To:     Stefan Hajnoczi <stefanha@redhat.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Bobby Eshleman <bobby.eshleman@bytedance.com>
+CC:     <kvm@vger.kernel.org>, <virtualization@lists.linux-foundation.org>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <kernel@sberdevices.ru>, <oxffffaa@gmail.com>,
+        <avkrasnov@sberdevices.ru>
+From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
+Subject: [PATCH RESEND net v4 1/4] virtio/vsock: don't use skbuff state to
+ account credit
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/03/14 06:01:00 #20942017
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 13, 2023 at 04:27:42PM -0400, Paul Moore wrote:
-> On Mon, Mar 13, 2023 at 5:33 AM Andy Shevchenko
-> <andriy.shevchenko@linux.intel.com> wrote:
-> > On Sat, Mar 11, 2023 at 09:59:17AM -0500, Paul Moore wrote:
-> > > On Fri, Mar 10, 2023 at 5:53 PM Mirsad Goran Todorovac
-> > > <mirsad.todorovac@alu.unizg.hr> wrote:
+'skb->len' can vary when we partially read the data, this complicates the
+calculation of credit to be updated in 'virtio_transport_inc_rx_pkt()/
+virtio_transport_dec_rx_pkt()'.
 
-...
+Also in 'virtio_transport_dec_rx_pkt()' we were miscalculating the
+credit since 'skb->len' was redundant.
 
-> > > With that out of the way, I wanted to make a quick comment on the
-> > > patch itself.  Currently LSMs do not support unloading, or dynamic
-> > > loading for that matter.  There are several reasons for this, but
-> > > perhaps the most important is that in order to help meet the security
-> > > goals for several of the LSMs they need to be present in the kernel
-> > > from the very beginning and remain until the very end.  Adding a
-> > > proper "release" method to a LSM is going to be far more complicated
-> > > than what you've done with this patchset, involving a lot of
-> > > discussion both for the LSM layer itself and all of the currently
-> > > supported LSMs, and ultimately I don't believe it is something we will
-> > > want to support.
-> > >
-> > > I appreciate your desire to help, and I want to thank you for your
-> > > patch and the effort behind it, but I don't believe the kobject memory
-> > > leak you saw at kernel shutdown was a real issue (it was only "leaked"
-> > > because the system was shutting down) and I'm not sure the current
-> > > behavior is something we want to change in the near future.
-> >
-> > Currently the security module so secure that even adds an unneeded noise to
-> > the debugging output.
-> >
-> > At very least it would be nice to add a stub and put a big comment
-> > (on your taste) explaining why we do not do anything there.
-> >
-> > Agree?
-> 
-> No.
+For these reasons, let's replace the use of skbuff state to calculate new
+'rx_bytes'/'fwd_cnt' values with explicit value as input argument. This
+makes code more simple, because it is not needed to change skbuff state
+before each call to update 'rx_bytes'/'fwd_cnt'.
 
-Are you sure? I'm proposing to add a stub which is no-op, but with a comment
-inside explaining why. In such case we:
+Fixes: 71dc9ec9ac7d ("virtio/vsock: replace virtio_vsock_pkt with sk_buff")
+Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
+---
+ net/vmw_vsock/virtio_transport_common.c | 23 +++++++++++------------
+ 1 file changed, 11 insertions(+), 12 deletions(-)
 
-1) shut the kobject infra up;
-2) keep the status quo in LSM;
-3) put in the code a good explanation for others on what's going on.
-
-> At least not without a lot of additional work beyond what was
-> presented in this patchset.  What about all of the other kobject
-> caches created by other LSMs, this is more than just the IMA
-> iint_cache.  I'm also skeptical that this patchset was ever tested and
-> verified as the newly added release() method was never actually called
-> from anywhere that I could see.
-
-I'm not talking about this patchset, but you are right that it wasn't
-tested.
-
-> I think we would need to see a proper, verified fix before I could say
-> for certain.
-
-And continuing to spread the noise in the logs just because LSM is stubborn?
-
-> If you want to discuss potential designs, we can do that
-> too, but please remember the constraints that were already mentioned
-> about intentionally not allowing the LSMs to be unloaded (prior to
-> system shutdown).
-> 
-> I don't know the answer to this, but I'm guessing the LSMs aren't the
-> only kernel subsystems to "leak" memory on system shutdown; working on
-> the assumption that this is the case, how are those "leaked"
-> allocations handled?
-
-Note, I'm full for the proper fix, but the current issue is logs flooding done
-by LSM that needs to be addressed.
-
+diff --git a/net/vmw_vsock/virtio_transport_common.c b/net/vmw_vsock/virtio_transport_common.c
+index a1581c77cf84..618680fd9906 100644
+--- a/net/vmw_vsock/virtio_transport_common.c
++++ b/net/vmw_vsock/virtio_transport_common.c
+@@ -241,21 +241,18 @@ static int virtio_transport_send_pkt_info(struct vsock_sock *vsk,
+ }
+ 
+ static bool virtio_transport_inc_rx_pkt(struct virtio_vsock_sock *vvs,
+-					struct sk_buff *skb)
++					u32 len)
+ {
+-	if (vvs->rx_bytes + skb->len > vvs->buf_alloc)
++	if (vvs->rx_bytes + len > vvs->buf_alloc)
+ 		return false;
+ 
+-	vvs->rx_bytes += skb->len;
++	vvs->rx_bytes += len;
+ 	return true;
+ }
+ 
+ static void virtio_transport_dec_rx_pkt(struct virtio_vsock_sock *vvs,
+-					struct sk_buff *skb)
++					u32 len)
+ {
+-	int len;
+-
+-	len = skb_headroom(skb) - sizeof(struct virtio_vsock_hdr) - skb->len;
+ 	vvs->rx_bytes -= len;
+ 	vvs->fwd_cnt += len;
+ }
+@@ -388,7 +385,9 @@ virtio_transport_stream_do_dequeue(struct vsock_sock *vsk,
+ 		skb_pull(skb, bytes);
+ 
+ 		if (skb->len == 0) {
+-			virtio_transport_dec_rx_pkt(vvs, skb);
++			u32 pkt_len = le32_to_cpu(virtio_vsock_hdr(skb)->len);
++
++			virtio_transport_dec_rx_pkt(vvs, pkt_len);
+ 			consume_skb(skb);
+ 		} else {
+ 			__skb_queue_head(&vvs->rx_queue, skb);
+@@ -437,17 +436,17 @@ static int virtio_transport_seqpacket_do_dequeue(struct vsock_sock *vsk,
+ 
+ 	while (!msg_ready) {
+ 		struct virtio_vsock_hdr *hdr;
++		size_t pkt_len;
+ 
+ 		skb = __skb_dequeue(&vvs->rx_queue);
+ 		if (!skb)
+ 			break;
+ 		hdr = virtio_vsock_hdr(skb);
++		pkt_len = (size_t)le32_to_cpu(hdr->len);
+ 
+ 		if (dequeued_len >= 0) {
+-			size_t pkt_len;
+ 			size_t bytes_to_copy;
+ 
+-			pkt_len = (size_t)le32_to_cpu(hdr->len);
+ 			bytes_to_copy = min(user_buf_len, pkt_len);
+ 
+ 			if (bytes_to_copy) {
+@@ -484,7 +483,7 @@ static int virtio_transport_seqpacket_do_dequeue(struct vsock_sock *vsk,
+ 				msg->msg_flags |= MSG_EOR;
+ 		}
+ 
+-		virtio_transport_dec_rx_pkt(vvs, skb);
++		virtio_transport_dec_rx_pkt(vvs, pkt_len);
+ 		kfree_skb(skb);
+ 	}
+ 
+@@ -1040,7 +1039,7 @@ virtio_transport_recv_enqueue(struct vsock_sock *vsk,
+ 
+ 	spin_lock_bh(&vvs->rx_lock);
+ 
+-	can_enqueue = virtio_transport_inc_rx_pkt(vvs, skb);
++	can_enqueue = virtio_transport_inc_rx_pkt(vvs, len);
+ 	if (!can_enqueue) {
+ 		free_pkt = true;
+ 		goto out;
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+2.25.1
