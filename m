@@ -2,99 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F47A6B89E5
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 05:50:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DA356B89E1
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 05:49:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229700AbjCNEui (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 00:50:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44920 "EHLO
+        id S229565AbjCNEtj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 00:49:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229687AbjCNEuc (ORCPT
+        with ESMTP id S229535AbjCNEtf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 00:50:32 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE39523DAB;
-        Mon, 13 Mar 2023 21:50:29 -0700 (PDT)
-Received: from kwepemm600003.china.huawei.com (unknown [172.30.72.56])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4PbLgB13VbzKmyT;
-        Tue, 14 Mar 2023 12:50:14 +0800 (CST)
-Received: from localhost.localdomain (10.67.174.95) by
- kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Tue, 14 Mar 2023 12:50:26 +0800
-From:   Yang Jihong <yangjihong1@huawei.com>
-To:     <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
-        <mark.rutland@arm.com>, <alexander.shishkin@linux.intel.com>,
-        <jolsa@kernel.org>, <namhyung@kernel.org>, <irogers@google.com>,
-        <adrian.hunter@intel.com>, <linux-perf-users@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH] perf/core: Fix perf_output_begin parameter is incorrectly invoked in perf_event_bpf_output
-Date:   Tue, 14 Mar 2023 04:47:35 +0000
-Message-ID: <20230314044735.56551-1-yangjihong1@huawei.com>
-X-Mailer: git-send-email 2.30.GIT
+        Tue, 14 Mar 2023 00:49:35 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A758F94F4A;
+        Mon, 13 Mar 2023 21:49:07 -0700 (PDT)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32E3WW6a009513;
+        Tue, 14 Mar 2023 04:48:42 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=GXHNRae79Yv1jTgXEj+ykb0o3orfiIoOE9qjwwFlVHI=;
+ b=iJeV1xgkj8LmXKSqi1JA57D7XHT15SMhCBPbTzD4gLiWkbLXaLH+fTePes+LmPl4OO+v
+ z2YpIdZpsBnEknnpwK0J2tN6wt8CAdBgsx3Xv9n2L0HAePXI04/Iz7ANxlcroQ5cw6ZP
+ G7KLKXWpbdML3ZJqv1CiIGpVKYFjtr6t+biHzndk9eMdwTPW0zVdFaT8emsnXSPrPQm6
+ DbNLI82jXBAtauUrbL8f/LYrFg7XGeRyMmWbaWXtU+nGHnHS2EfOBuRPK3OEgBM+s1hy
+ l/wKoXQ5M/Tgvxgnh569Iu14+xk4TN/0aYqsCwppMZGhZeshs3ia7hzd+cKzKFXc8snC vg== 
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pa203thbf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 14 Mar 2023 04:48:42 +0000
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32E4mf7d003639
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 14 Mar 2023 04:48:41 GMT
+Received: from [10.110.22.229] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Mon, 13 Mar
+ 2023 21:48:40 -0700
+Message-ID: <1bd61fa7-cd0e-e198-9cee-7485eacbe685@quicinc.com>
+Date:   Mon, 13 Mar 2023 21:48:39 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.174.95]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemm600003.china.huawei.com (7.193.23.202)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH] arm64: dts: qcom: sa8775p: add symbols to dtb
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Eric Chanudet <echanude@redhat.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+CC:     <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20230309233945.1199358-1-echanude@redhat.com>
+ <43c11038-91d5-cbfd-7349-06fcd61a0661@linaro.org>
+From:   Prasad Sodagudi <quic_psodagud@quicinc.com>
+In-Reply-To: <43c11038-91d5-cbfd-7349-06fcd61a0661@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: j_tz-nZj03YcvYZTdFlNdVkfPFyIYb7S
+X-Proofpoint-GUID: j_tz-nZj03YcvYZTdFlNdVkfPFyIYb7S
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-13_13,2023-03-13_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 mlxlogscore=999
+ suspectscore=0 spamscore=0 bulkscore=0 malwarescore=0 impostorscore=0
+ clxscore=1011 phishscore=0 adultscore=0 priorityscore=1501
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2303140041
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzkaller reportes a KASAN issue with stack-out-of-bounds.
-The call trace is as follows:
-  dump_stack+0x9c/0xd3
-  print_address_description.constprop.0+0x19/0x170
-  __kasan_report.cold+0x6c/0x84
-  kasan_report+0x3a/0x50
-  __perf_event_header__init_id+0x34/0x290
-  perf_event_header__init_id+0x48/0x60
-  perf_output_begin+0x4a4/0x560
-  perf_event_bpf_output+0x161/0x1e0
-  perf_iterate_sb_cpu+0x29e/0x340
-  perf_iterate_sb+0x4c/0xc0
-  perf_event_bpf_event+0x194/0x2c0
-  __bpf_prog_put.constprop.0+0x55/0xf0
-  __cls_bpf_delete_prog+0xea/0x120 [cls_bpf]
-  cls_bpf_delete_prog_work+0x1c/0x30 [cls_bpf]
-  process_one_work+0x3c2/0x730
-  worker_thread+0x93/0x650
-  kthread+0x1b8/0x210
-  ret_from_fork+0x1f/0x30
 
-commit 267fb27352b6 ("perf: Reduce stack usage of perf_output_begin()")
-use on-stack struct perf_sample_data of the caller function.
 
-However, perf_event_bpf_output uses incorrect parameter to convert
-small-sized data (struct perf_bpf_event) into large-sized data
-(struct perf_sample_data), which causes memory overwriting occurs in
-__perf_event_header__init_id.
+On 3/9/2023 3:47 PM, Konrad Dybcio wrote:
+> 
+> 
+> On 10.03.2023 00:39, Eric Chanudet wrote:
+>> ABL uses the __symbols__ section to process the DTB before passing it
+>> forward. Without it, the bootstrap is interrupted.
+>>
+>> Signed-off-by: Eric Chanudet <echanude@redhat.com>
+>> ---
+> Fix your ABL.
+Hi Konrad,
 
-Fixes: 267fb27352b6 ("perf: Reduce stack usage of perf_output_begin()")
-Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
----
- kernel/events/core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Apps boot-loader need __symbols__ for dynamic overlay operation. 
+Qualcomm firmware passes an overlay file to apps boot-loader to overlay 
+some of the nodes based on firmware configuration. Without __symbols__ 
+apps boot-loader is not able to overlay.
 
-diff --git a/kernel/events/core.c b/kernel/events/core.c
-index f79fd8b87f75..296617edbda1 100644
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -9187,7 +9187,7 @@ static void perf_event_bpf_output(struct perf_event *event, void *data)
- 
- 	perf_event_header__init_id(&bpf_event->event_id.header,
- 				   &sample, event);
--	ret = perf_output_begin(&handle, data, event,
-+	ret = perf_output_begin(&handle, &sample, event,
- 				bpf_event->event_id.header.size);
- 	if (ret)
- 		return;
--- 
-2.30.GIT
+Qualcomm hypervisor/gunyah would like to overlay arch timer node with 
+always-on property, So adding __symbols__ helps boot-loader to overlay.
 
+I think, commit text is misleading here and I will request Eric to fix 
+the commit text.
+
+-Thanks, Prasad
+
+> 
+> Konrad
+>> Depends on initial sa8775p-ride.dts:
+>> https://lore.kernel.org/all/20230214092713.211054-3-brgl@bgdev.pl/
+>>
+>>   arch/arm64/boot/dts/qcom/Makefile | 4 ++++
+>>   1 file changed, 4 insertions(+)
+>>
+>> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
+>> index b63cd1861e68..72e85ab31d74 100644
+>> --- a/arch/arm64/boot/dts/qcom/Makefile
+>> +++ b/arch/arm64/boot/dts/qcom/Makefile
+>> @@ -1,4 +1,8 @@
+>>   # SPDX-License-Identifier: GPL-2.0
+>> +
+>> +# Enable support for device-tree overlays required on sa8775p-ride.
+>> +DTC_FLAGS_sa8775p-ride := -@
+>> +
+>>   dtb-$(CONFIG_ARCH_QCOM)	+= apq8016-sbc.dtb
+>>   dtb-$(CONFIG_ARCH_QCOM)	+= apq8094-sony-xperia-kitakami-karin_windy.dtb
+>>   dtb-$(CONFIG_ARCH_QCOM)	+= apq8096-db820c.dtb
+> 
+> 
