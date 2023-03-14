@@ -2,178 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 291FB6B8DDB
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 09:54:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9143B6B8DDF
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 09:54:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229875AbjCNIx6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 04:53:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43016 "EHLO
+        id S229886AbjCNIy1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 04:54:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjCNIx4 (ORCPT
+        with ESMTP id S229743AbjCNIyW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 04:53:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8103A1717;
-        Tue, 14 Mar 2023 01:53:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1E01A61684;
-        Tue, 14 Mar 2023 08:53:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37FC5C433EF;
-        Tue, 14 Mar 2023 08:53:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678784033;
-        bh=hhk1J4ONP6mjhXxAG2T33eYmJ6gxsSx9EIKa3jOh4ss=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IBtuPkQvhc/JLQsOo3dnwP1rDv6yoxVe9G9EOsEaJuO2SFB8+mYvBsIyKztH2nD7K
-         VZAjvTL14PSHwky/jS+zSwNjuTbOdwPvWg6kRI5klzyPJduLk5KSFY6dclvmQ7ivUN
-         cIBlOf9I6FSZCkE99HITh4/I1nDrBfPi8jqXj6Aj+sp8wpYD50uTym3q/nLK63kbQx
-         kPhTqkkc0w8ChyN4ZnipR30uZfpJQGs7MFJAjP93d/MyLXGgNvyNmE7pX7WflxW8Fm
-         FsYAL6CLlTGhU3811d9sS14WhnSq7QiK/gURdv9wT76T2geHh3wJu69g3uUj0zwoJ+
-         S2sTzyrStR2lQ==
-Date:   Tue, 14 Mar 2023 09:53:46 +0100
-From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Shawn Guo <shawn.guo@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        linux-pci@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] arm64: PCI: Add quirk for platforms running Windows
-Message-ID: <ZBA2Gl5xCjk7mMoW@lpieralisi>
-References: <ZAswHyaYjeqjW/+A@lpieralisi>
- <20230310230539.GA1289856@bhelgaas>
+        Tue, 14 Mar 2023 04:54:22 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FD8C5D444
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 01:54:14 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id m35so133060wms.4
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 01:54:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678784053;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=v75KTMuw3KcdDlrLuoPJiGsmVBznB/RJnpqv1/ly5lI=;
+        b=aNjUjLrcpaXjwu/4dbQzHaY4b3Dn3tv81YXVqdiqApk5IEp9oECS4JWIDTNUVppAym
+         y9L7MeJazA4s4euFcL/Y5gSA7r/P00+tXhJhCnkoEqXRKOp1+JYNMppKKi863Fpetisj
+         W71QhvISwvBCfbprWr3tOQL7TGpENcbYc20v7IGGwBE9LLp1raxERYAojlFUxC0ESJ+q
+         8aE/QNqBrbCaIRrd47RcCnBRnbJV3YsxWJi0kuiPG2mmyhtYmRGOhTf2Q6ewrdsUk7f+
+         WzMIEOpjdjbEGoM79qboDF8TTvNBGiDqLFAXsqARGz+ZSY8jVTCAqE8iUvj+1xh2U+40
+         s3Hg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678784053;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=v75KTMuw3KcdDlrLuoPJiGsmVBznB/RJnpqv1/ly5lI=;
+        b=EZQ6caF4Qpli+bIOSJoMECHe0U052zThzDV0VLanY+8YBBDZw0J4EoRLLb0BcYtNZX
+         wJ8ertOcsU087FE02Wlqo+6tf9DcsH0qz+cWlLpw9gyl5gBUPM2/1zmyFC9NeA9cM/gp
+         B53+IP8YaXHbLOxsHVemwBxv/v1upmyuUFUucw/npCWThE3Y/qh2Hr0Go3O8Ol463tW3
+         rPIaC63/+ZCrJGUhIvnLVhq8sy0Kul8duoOcGhVUUSikYg7xNz5PDwHq5XzXoisjmQdK
+         2+ef1sgApSvN0bkdVBxAs/wyOHcR+tl6mjuf2UzZ1Nk42kWmjTcGufzgPYl3I9IH30zB
+         ZIZg==
+X-Gm-Message-State: AO0yUKVszvOktPhkaXO+96Db58Rsy41g2qoxmiYwTJO7YIM/7s3I3DXs
+        LpGF6Bt3d0J1rkrHckZu/gzNnQ==
+X-Google-Smtp-Source: AK7set+WZGtNLvW0dZC4TbyqElBmfwd/9FmjaR6AfzRA4EVNJIBui7DLWbnR0qrXHxzQSr5KwXGxCw==
+X-Received: by 2002:a05:600c:4f08:b0:3e2:20c7:6544 with SMTP id l8-20020a05600c4f0800b003e220c76544mr13392562wmq.19.1678784053087;
+        Tue, 14 Mar 2023 01:54:13 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:982:cbb0:11c3:d4e5:ef75:8eb9? ([2a01:e0a:982:cbb0:11c3:d4e5:ef75:8eb9])
+        by smtp.gmail.com with ESMTPSA id u15-20020a05600c440f00b003dfe549da4fsm2142551wmn.18.2023.03.14.01.54.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Mar 2023 01:54:12 -0700 (PDT)
+Message-ID: <d7bd6663-516a-a1f9-506c-5853eaa948e4@linaro.org>
+Date:   Tue, 14 Mar 2023 09:54:11 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230310230539.GA1289856@bhelgaas>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH v3 01/12] usb: typec: ucsi: add PMIC Glink UCSI driver
+Content-Language: en-US
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20230130-topic-sm8450-upstream-pmic-glink-v3-0-4c860d265d28@linaro.org>
+ <20230130-topic-sm8450-upstream-pmic-glink-v3-1-4c860d265d28@linaro.org>
+ <ZA7wPtttsWlQRpAR@kuha.fi.intel.com>
+Organization: Linaro Developer Services
+In-Reply-To: <ZA7wPtttsWlQRpAR@kuha.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 10, 2023 at 05:05:39PM -0600, Bjorn Helgaas wrote:
-> On Fri, Mar 10, 2023 at 02:26:55PM +0100, Lorenzo Pieralisi wrote:
-> > On Wed, Mar 08, 2023 at 12:53:10PM -0600, Bjorn Helgaas wrote:
-> > > On Mon, Feb 27, 2023 at 10:12:21AM +0800, Shawn Guo wrote:
-> > > > Commit 8fd4391ee717 ("arm64: PCI: Exclude ACPI "consumer" resources from
-> > > > host bridge windows") introduced a check to remove host bridge register
-> > > > resources for all arm64 platforms, with the assumption that the PNP0A03
-> > > > _CRS resources would always be host bridge registers and never as windows
-> > > > on arm64.
-> > > > 
-> > > > The assumption stands true until Qualcomm Snapdragon Windows laptops
-> > > > emerge.  These laptops describe host bridge windows in PNP0A03 _CRS
-> > > > resources instead.  For example, the Microsoft Surface Pro X has host
-> > > > bridges defined as
-> > > > 
-> > > >     Name (_HID, EisaId ("PNP0A08") /* PCI Express Bus */)  // _HID: Hardware ID
-> > > >     Name (_CID, EisaId ("PNP0A03") /* PCI Bus */)  // _CID: Compatible ID
-> > > > 
-> > > >     Method (_CRS, 0, NotSerialized)  // _CRS: Current Resource Settings
-> > > >     {
-> > > >         Name (RBUF, ResourceTemplate ()
-> > > >         {
-> > > >             Memory32Fixed (ReadWrite,
-> > > >                 0x60200000,         // Address Base
-> > > >                 0x01DF0000,         // Address Length
-> > > >                 )
-> > > >             WordBusNumber (ResourceProducer, MinFixed, MaxFixed, PosDecode,
-> > > >                 0x0000,             // Granularity
-> > > >                 0x0000,             // Range Minimum
-> > > >                 0x0001,             // Range Maximum
-> > > >                 0x0000,             // Translation Offset
-> > > >                 0x0002,             // Length
-> > > >                 ,, )
-> > > >         })
-> > > >         Return (RBUF) /* \_SB_.PCI0._CRS.RBUF */
-> > > >     }
-> > > > 
-> > > > The Memory32Fixed holds a host bridge window, but it's not properly
-> > > > defined as a "producer" resource.  Consequently the resource gets
-> > > > removed by kernel, and the BAR allocation fails later on:
-> > > > 
-> > > >     [ 0.150731] pci 0002:00:00.0: BAR 14: no space for [mem size 0x00100000]
-> > > >     [ 0.150744] pci 0002:00:00.0: BAR 14: failed to assign [mem size 0x00100000]
-> > > >     [ 0.150758] pci 0002:01:00.0: BAR 0: no space for [mem size 0x00004000 64bit]
-> > > >     [ 0.150769] pci 0002:01:00.0: BAR 0: failed to assign [mem size 0x00004000 64bit]
-> > > > 
-> > > > This eventually prevents the PCIe NVME drive from being accessible.
-> > > > 
-> > > > Add a quirk for these platforms to avoid the resource being removed.
-> > > > 
-> > > > Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
-> > > > ---
-> > > > We are running into the issue on more devices than just Surface Pro X
-> > > > now, so trying to sort it out with a quirk as suggested by Lorenzo [1].
-> > > 
-> > > One thing I don't like about this application of quirks is that the
-> > > list of affected platforms is likely to grow, which is an ongoing
-> > > burden for users and developers.
-> > > 
-> > > Can we have a conversation with Qualcomm about how they *intend* this
-> > > to work?  Linux is probably doing something wrong (interpreting
-> > > something differently than Windows does), and if we could fix that, we
-> > > have a better chance of future platforms working without quirks.
-> > 
-> > Catch-22. What if some firmware would add host bridge MMIO register
-> > space (marked as consumer) in the _CRS ? We would end up allocating
-> > BAR regions in there, which is not right, so your commit:
-> > 
-> > 8fd4391ee717 ("arm64: PCI: Exclude ACPI "consumer" resources from host bridge windows")
-> > 
-> > is correct and if we revert it we would trigger regressions on some
-> > arm64 platforms for the reason I mention above.
-> > 
-> > We can look for clarification at ACPI specs level but for firmware
-> > that is out there I am not sure what options we have.
+On 13/03/2023 10:43, Heikki Krogerus wrote:
+> Hi,
 > 
-> I don't remember why 8fd4391ee717 exists; I assume there was some
-> platform that needed it.  I should have included that in the commit
-> log; mea culpa.
+> On Thu, Mar 09, 2023 at 02:27:52PM +0100, Neil Armstrong wrote:
+>> +static void pmic_glink_ucsi_register(struct work_struct *work)
+>> +{
+>> +	struct pmic_glink_ucsi *ucsi = container_of(work, struct pmic_glink_ucsi, register_work);
+>> +
+>> +	ucsi_register(ucsi->ucsi);
+>> +}
+>> +
+>> +static void pmic_glink_ucsi_callback(const void *data, size_t len, void *priv)
+>> +{
+>> +	struct pmic_glink_ucsi *ucsi = priv;
+>> +	const struct pmic_glink_hdr *hdr = data;
+>> +
+>> +	switch (hdr->opcode) {
+>> +	case UC_UCSI_READ_BUF_REQ:
+>> +		pmic_glink_ucsi_read_ack(ucsi, data, len);
+>> +		break;
+>> +	case UC_UCSI_WRITE_BUF_REQ:
+>> +		pmic_glink_ucsi_write_ack(ucsi, data, len);
+>> +		break;
+>> +	case UC_UCSI_USBC_NOTIFY_IND:
+>> +		schedule_work(&ucsi->notify_work);
+>> +		break;
+>> +	};
+>> +}
+>> +
+>> +static void pmic_glink_ucsi_pdr_notify(void *priv, int state)
+>> +{
+>> +	struct pmic_glink_ucsi *ucsi = priv;
+>> +
+>> +	if (state == SERVREG_SERVICE_STATE_UP)
+>> +		schedule_work(&ucsi->register_work);
+>> +	else if (state == SERVREG_SERVICE_STATE_DOWN)
+>> +		ucsi_unregister(ucsi->ucsi);
+>> +}
+>> +
+>> +static int pmic_glink_ucsi_probe(struct auxiliary_device *adev,
+>> +				 const struct auxiliary_device_id *id)
+>> +{
+>> +	struct pmic_glink_ucsi *ucsi;
+>> +	struct device *dev = &adev->dev;
+>> +
+>> +	ucsi = devm_kzalloc(dev, sizeof(*ucsi), GFP_KERNEL);
+>> +	if (!ucsi)
+>> +		return -ENOMEM;
+>> +
+>> +	ucsi->dev = dev;
+>> +	dev_set_drvdata(dev, ucsi);
+>> +
+>> +	INIT_WORK(&ucsi->notify_work, pmic_glink_ucsi_notify);
+>> +	INIT_WORK(&ucsi->register_work, pmic_glink_ucsi_register);
+>> +	init_completion(&ucsi->read_ack);
+>> +	init_completion(&ucsi->write_ack);
+>> +	init_completion(&ucsi->sync_ack);
+>> +	mutex_init(&ucsi->lock);
+>> +
+>> +	ucsi->ucsi = ucsi_create(dev, &pmic_glink_ucsi_ops);
+>> +	if (IS_ERR(ucsi->ucsi))
+>> +		return PTR_ERR(ucsi->ucsi);
+>> +
+>> +	ucsi_set_drvdata(ucsi->ucsi, ucsi);
+>> +
+>> +	ucsi->client = devm_pmic_glink_register_client(dev,
+>> +						       PMIC_GLINK_OWNER_USBC,
+>> +						       pmic_glink_ucsi_callback,
+>> +						       pmic_glink_ucsi_pdr_notify,
+>> +						       ucsi);
+>> +	return PTR_ERR_OR_ZERO(ucsi->client);
+>> +}
+>> +
+>> +static const struct auxiliary_device_id pmic_glink_ucsi_id_table[] = {
+>> +	{ .name = "pmic_glink.ucsi", },
+>> +	{},
+>> +};
+>> +MODULE_DEVICE_TABLE(auxiliary, pmic_glink_ucsi_id_table);
+>> +
+>> +static struct auxiliary_driver pmic_glink_ucsi_driver = {
+>> +	.name = "pmic_glink_ucsi",
+>> +	.probe = pmic_glink_ucsi_probe,
+>> +	.id_table = pmic_glink_ucsi_id_table,
+>> +};
+> 
+> What happens if you remove the module - I think you need to implement
+> the remove callback, no?
 
-I believe it is because there were arm64 platforms (early) that added a
-consumer descriptor in the host bridge CRS with MMIO registers space in
-it (I am not sure I can find the bug report - it has been a while,
-remember the issue with non-ECAM config space and where to add the MMIO
-resource required to "extend" MCFG config space ? I will never forget
-that :)).
+You're right, I thought devm_pmic_glink_register_client would call
+pmic_glink_ucsi_pdr_notify which would unregister ucsi, but no so will add.
 
-> In any event, I assume Windows works on both that platform and the
-> ones mentioned in this quirk, and I assume Windows doesn't require
-> platform-specific quirks for something like this.
+Thanks,
+Neil
 
-I don't think it can work *without* quirks.
+> 
+> thanks,
+> 
 
-If, for reasons that I don't understand, anyone would add consumer
-resources in the host bridge CRS that include at the same time PCI
-memory windows and bridge MMIO registers, how can Windows detect which
-one is what ? There is no way - at least none I can see.
-
-Most likely, on platforms on which Windows boots, nobody ever added
-in FW MMIO register space as a consumer resource in the host bridge
-CRS (or Windows has a quirk mechanism for those).
-
-> I admit that's a lot of assuming, but if Windows can do it, Linux
-> should be able to do it, too.
-
-I don't think it can do it, would be happy to be wrong.
-
-I can ask, that will not solve anything but at least we know.
-
-Lorenzo
-
-> > > > +static struct acpi_platform_list qcom_platlist[] = {
-> > > > +	/* Thinkpad X13s */
-> > > > +	{ "LENOVO", "SDM8280 ", 0, ACPI_SIG_DSDT, all_versions, QCOM_DSDT_QUIRK },
-> > > > +	/* Microsoft Surface Pro 9 (5G) and Windows Dev Kit 2023 */
-> > > > +	{ "QCOMM ", "SDM8280 ", 0, ACPI_SIG_DSDT, all_versions, QCOM_DSDT_QUIRK },
-> > > > +	/* Microsoft Surface Pro X */
-> > > > +	{ "QCOMM ", "SDM8180 ", 0, ACPI_SIG_DSDT, all_versions, QCOM_DSDT_QUIRK },
