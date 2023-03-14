@@ -2,167 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D55D46B9A38
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 16:46:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 627156B9A18
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 16:43:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231221AbjCNPq6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 11:46:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41092 "EHLO
+        id S231175AbjCNPnq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 11:43:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231528AbjCNPqs (ORCPT
+        with ESMTP id S230338AbjCNPne (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 11:46:48 -0400
-Received: from EUR01-DB5-obe.outbound.protection.outlook.com (mail-db5eur01on061f.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe02::61f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 287A01A1;
-        Tue, 14 Mar 2023 08:46:18 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YfZ9VjDfc4BYaOmNfvM3jwVVA8bWjQRwSpMqrIpHFATlxkJeqSf1gPykBii4z1i1DLp70OArHoAJSktWOfAFm6IaF4CloMZwBXI2yHhoogMHj36rujv7W45pc+x//rxBcPm85gZpZDm3cIQZmfsQM458CRVIfoIitcZnsSAgRmb2pvEyREj95BffXc3DE/s+kLHDI1UOrt3GcJRLP+z15uSgedGdYdQjDoMPRcGNlZ7TbYHEhTZtCjuW0stGNqZjPb/Y4CN35lvy6Tvtr9d059+hREIuTdX5ZWJ+mKVkV02Su14JA8QrUiDyo6Xa6Qumnzd8BCJbpfncTLbhEB5REA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=QSEVygR0e+cT7g/SI5Milnp6h8l6VBpcnJ+LDP6ZNxE=;
- b=UY5xax05x65KMfHNbObpAyCbvRJJOPsrHEW+fYTgb1WpyyST3i9ANbt/h5OmxJWupBej8R+nqjCSxsgC6258G8tW3fkNxJC27bGXswZloXiRyTlDin938jXgh5sk2JGB2W+S4pcomOIl+SWlKNe6YwvdK5KiApyk6urD1lewwBMmw8JEVuDEEO9IapTCABNJIGu80iqTMK64pnjH7TlFRGTMBul48Gdclx68ceWF5uSvsxcKoBlNSFsihsRBdgnQSC88QqdXrCzin5neI41dUX6w+fnaDglxEnnh+5z5M9bd1nwiqB5TQtLbSOWdRMgmyYwTYDrTLPcUa5p6InVuRg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QSEVygR0e+cT7g/SI5Milnp6h8l6VBpcnJ+LDP6ZNxE=;
- b=m9CCiomFds9YMa44zUy3vhBZSFIJ8ou3tfvNs8DOVFpsp129tx2eRFSQ5d0XZtc1PHYzjHyl0ui1ejQ3tG7uJvEDNuilEybPSd77P2NINOVCNdElW6xRMRcTZfDxBXdsnpeFQ6ygSxtGVuhtSvc388+07DWB8bfiqL9b+gUvvmc=
-Received: from AM9PR04MB8603.eurprd04.prod.outlook.com (2603:10a6:20b:43a::10)
- by PA4PR04MB7744.eurprd04.prod.outlook.com (2603:10a6:102:c9::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.24; Tue, 14 Mar
- 2023 15:40:34 +0000
-Received: from AM9PR04MB8603.eurprd04.prod.outlook.com
- ([fe80::45d2:ce51:a1c4:8762]) by AM9PR04MB8603.eurprd04.prod.outlook.com
- ([fe80::45d2:ce51:a1c4:8762%5]) with mapi id 15.20.6178.026; Tue, 14 Mar 2023
- 15:40:34 +0000
-From:   Neeraj sanjay kale <neeraj.sanjaykale@nxp.com>
-To:     Simon Horman <simon.horman@corigine.com>
-CC:     "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "marcel@holtmann.org" <marcel@holtmann.org>,
-        "johan.hedberg@gmail.com" <johan.hedberg@gmail.com>,
-        "luiz.dentz@gmail.com" <luiz.dentz@gmail.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "jirislaby@kernel.org" <jirislaby@kernel.org>,
-        "alok.a.tiwari@oracle.com" <alok.a.tiwari@oracle.com>,
-        "hdanton@sina.com" <hdanton@sina.com>,
-        "ilpo.jarvinen@linux.intel.com" <ilpo.jarvinen@linux.intel.com>,
-        "leon@kernel.org" <leon@kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
-        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
-        Amitkumar Karwar <amitkumar.karwar@nxp.com>,
-        Rohit Fule <rohit.fule@nxp.com>,
-        Sherry Sun <sherry.sun@nxp.com>
-Subject: Re: [PATCH v10 3/3] Bluetooth: NXP: Add protocol support for NXP
- Bluetooth chipsets
-Thread-Topic: [PATCH v10 3/3] Bluetooth: NXP: Add protocol support for NXP
- Bluetooth chipsets
-Thread-Index: AQHZVotRGPsclWmNZ0GS/ELZRggMMQ==
-Date:   Tue, 14 Mar 2023 15:40:34 +0000
-Message-ID: <AM9PR04MB8603E3F3900DB13502CFCB8DE7BE9@AM9PR04MB8603.eurprd04.prod.outlook.com>
-References: <20230313144028.3156825-1-neeraj.sanjaykale@nxp.com>
- <20230313144028.3156825-4-neeraj.sanjaykale@nxp.com>
- <ZBBUYDhrnn/udT+Z@corigine.com>
-In-Reply-To: <ZBBUYDhrnn/udT+Z@corigine.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: AM9PR04MB8603:EE_|PA4PR04MB7744:EE_
-x-ms-office365-filtering-correlation-id: b61f96cc-4fac-4f27-7e01-08db24a2739a
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 6BGl5JB51HkFjgStFdEqtNTxmMjelXh6gOLTYWz59oOhDrxstORjVirg5v2bBixJKcoPEDPwrV98v5/DxfC0HoIy8/+oYaqLMGFqQl+/vzc+AOpiM3wXfRM8Cv6RB4aU0IK65MpRWYgUhkUCf8w6cMu/TBKjpnv7HJPyp/LKisPM6BZr7jLb1kSAOySYy8ks4KwcoNJAGPK1Gyo4RS0B5WKqbzmSF5SsayXQMscSjSpeXv1GTom1ThAxM1b7JS9l3OR7Hnt2vqt3oktoiIhbM0HPrjxbneXtan/CFwvvwN4+aHy4XCWT6a2HEFAwsR7GGTGR7xRwjyXA7EiSI3QbBP8sqBiLPQbYcFEcNjP4ZuKNR1ke1n3eAFjzDj6vhfRbmKl2UYma3kNgPxf3OiCr/SLSjo6A6FuEBCSI/h+pYT6+VRF/Fm9Nso0BaZWYoeQG0aS/NfBHatptbGM1fbZPI1bLpb1omkCBh1isUZZcxLjC3P/d8cHJb/7ehGWP/36sqPLqy1Wykpk52+ASPJERP4GRbRzw/2zit/gXIqsRkYfp6+XaQdVjHIVUDNyFthsNdNZNsKkSQyqH8HA7193O4Yv8WuMPTl1QKaIj/izTcKZC0Na4AutmkWEb9BI8Pr8DYMFQv5IQi/B+N69Rst32DU+iZarjm8Dt8z0gLPjdj1rRdz/LgeH5t/JzayQtBO2ORlNBWa9bYYajmw5rG/eRqA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR04MB8603.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(366004)(136003)(39860400002)(396003)(346002)(451199018)(6916009)(9686003)(4326008)(8936002)(5660300002)(52536014)(186003)(26005)(41300700001)(7416002)(6506007)(86362001)(33656002)(316002)(4744005)(2906002)(55236004)(83380400001)(66476007)(66556008)(64756008)(8676002)(66446008)(66946007)(7696005)(55016003)(71200400001)(54906003)(478600001)(38100700002)(38070700005)(76116006)(122000001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?M1FCaDFENVVrTGY5REFnNEE1djIrdWk1ZVpFa2c1V3NMNnQwbHhGZXF0ZGxp?=
- =?utf-8?B?UzM1dGs0Q0R3L2RNM3RMc0RacE9WeDdhMVc5eGdaZ1pIZXlxVTJoRWZucmJZ?=
- =?utf-8?B?My9jbTNDWUNaekowK1BsckNYVjI4SFQ3THUxY3hBcTVWTGxkejdOVkp0Q3J2?=
- =?utf-8?B?WTlPY1d0aE4wSXVqK0FEWGFYSkpDRE1pOHR5TEdlZm5odzN6MWxWV1QrSzNF?=
- =?utf-8?B?c09yWkxsd1JDNWVSS1lxTnNGS1RjVVVtUW1VVFpEQ2VMeWlXR3oremFNN0ly?=
- =?utf-8?B?R0tYK2twSlVlVU5CalVHb3hkUWRJNnJtTkVYd3ErSGM1L1IxSE15R3FDN0tn?=
- =?utf-8?B?eUJLVWNrQWdlcEFrMmFHS2h0aXJmU2U3MGNHM1M1V2swYWVzL1BxUjBLQjRa?=
- =?utf-8?B?M2JMYm1CNWh1WU1QM1RpZythTW5OejNkTzFoUEpyWWxHZEZCV1lISXA3VzhC?=
- =?utf-8?B?c3NxeEs1NjlieFhOZ0I3cFgzaWlrVFVGb1M5dDhlTDlKNUd1Z2NuSnlWSjVU?=
- =?utf-8?B?MEN5cnFhNGc5WVdYdXI1UVZ4TXFSRmtlTmlUWHJ6MmtyVkxldGNoWXllMjRj?=
- =?utf-8?B?UzVWd2I0UkJCY1piSGRZdTM3SWVHeEZlQ1JVbXVYUXBVeXNYbi9pM0IxeUx3?=
- =?utf-8?B?ek5VVUdnRFVPNlNoZXJGQzNaa3JCZXhabTN2WG1oOW12UFRIS2FzdlB3WXNF?=
- =?utf-8?B?c2xVNFZURFFmbE5aUlZ5OXhScWhhNERJZEFDa00vVmxqMWM1U0lwR0UyTDBs?=
- =?utf-8?B?MWJ5YTBrMU02UlBicHhTVU5PdENsM05uQTIycGNic0FRMjdKS2lnSWFITE8w?=
- =?utf-8?B?MCthL2NIcDdCVXF6ai9WN1RLbk5WTGRPeUpQcjJESEtvU1M5c0lFd2hYck5s?=
- =?utf-8?B?ZXVLdGxETXJ2SUJpK3hocmlDMzkyaDVBMVFvdVBVSS9naTh4TGo3VGNnV1Jr?=
- =?utf-8?B?Y3NlY2VYZVlKMnp2SnRlWHJ5NkhudUExckdUVVNuMHFxeUh2ck9DR0RXbmVy?=
- =?utf-8?B?VlNwcTVSc0QxdEJJVlVzbnp1NnVCS0ExbmJtTXdmYWd2c3lWRlp0b3hZYzF3?=
- =?utf-8?B?dFQyeG1EUlNPbU5DWmpydUNFZTY5TFFPYlRDb2tQdnNRdHVlV2NxSjVzZ3pu?=
- =?utf-8?B?REM5bkFBVW1oNHlTYUdiT2Vsd1FuUGh6ci9VZnJoL0x0SEJtc0YxdzVtaVdU?=
- =?utf-8?B?TWdLS3A4WTZ3VVY1cXJmT1FiaVVGVU01ZmRjMENRR1lEM1I4dDRpRG1jNzh1?=
- =?utf-8?B?TDUweEEyd0RleW4zTjc0WjdKL3JYcmJFZ2pDNjVBU05YZFVsdEllbkhWc1NB?=
- =?utf-8?B?YTViSVVIOHdBMVp3QWpEVWRNbXVSV0VJeGdyL1NCZDRlbG1rMGpBU2V5ZEly?=
- =?utf-8?B?WHNtZ1VMQ3Jsd1FCT3lRMHJXWnhpc0FxMUhWc0t3RTlaSkhOekZYV3F6R1ZY?=
- =?utf-8?B?WVdUdVFIejNQOGNwcUE5S1ZFYjlqdmNpbzI2dzRkaGpPTi9KVGUrY3VFampT?=
- =?utf-8?B?QSt4WWJkV21QdEpZRUtzSVB2ODZXNzJhcUxTSkNueVEvdjB3L2xxcm8yL1NF?=
- =?utf-8?B?d0Y5VVRycldoZ3QxeFBxckRyeno5bklkV1BxdTErb0o5MXVHVnVjejBtRFl0?=
- =?utf-8?B?Y0g4YUo5NlduZ1p5YkUzQTN2WFVzUCtxWUlSUWpid05IWnFiNlJ6NWFIS3o3?=
- =?utf-8?B?a1VmOWo1S0grSTNsdWZiVm1rM3Z5TkJ0ZmNqSjJYY0lkNm5Lajl6eEJWS0Vz?=
- =?utf-8?B?cm9BbmZJU2tDRjAvTGpSWE13TEhNcE43TlNha1JxaEpjRjY1YythYkpUMVB4?=
- =?utf-8?B?eW5zT0FDdXBLOVhmZ3JiVVNoZkdQeVVsdUJ6ZDhaOWV5Z25PdVc3MHo5ZjZs?=
- =?utf-8?B?UERvMGZQbi9Ec0U2dEhqOXJwQjlxK2ZDZ0Z0TXVRUzgyY1VRTzhjSUlScTBn?=
- =?utf-8?B?OStUMFRIWnozZ0Z5RUNTTTBlcjR3Snl0cjVGQUpRV09qMFJ4SFVhSWJxbVRw?=
- =?utf-8?B?VjJEL3ZtV0l0RkVDeWtmMmd5K0ZlL0w2aEVhbk00eXFXK3BwK0FucUU3VXhN?=
- =?utf-8?B?WUJFOFNuSEc2Qm90TGNsT3pPZFQyQVJ3azMrcEJibkQrTjlRYSt5aDZxd0p5?=
- =?utf-8?B?KzVNVkg1OU1DUFRhbWtSOURkcWxFb0w0VUREUG4xajFUOC9QSUFUdXpHSEtr?=
- =?utf-8?B?ZlE9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Tue, 14 Mar 2023 11:43:34 -0400
+Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72DCA5F6D3;
+        Tue, 14 Mar 2023 08:42:58 -0700 (PDT)
+Received: by mail-il1-x135.google.com with SMTP id l9so5738013iln.1;
+        Tue, 14 Mar 2023 08:42:58 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678808487;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LCAtIzojDKjXwvTZHur7bC8iD1yA0PDQlsydS6C7RKo=;
+        b=sbQBRpctIILoHU8Py6U5QAzpb3Ef1d3zBmtwin1FIeWtko+oVH9bzgJSGyNyVaXuYr
+         VvDkoaKCmSmItZgeh5gzgNGAXCJ2ZiGpkTZKldqA5wVmBr1Ja8ki/fOvnvczOIB6Be4t
+         OUlbtNa/lbeCbpmW86tv+/dcJNZO4QBF/FY9CEJ78QsI5OcMmIfPdVynOo5E2Zf1Tuyz
+         dS73bEBGcs3OrsZ1flBz0Ozyq5FEecPTH9utsC0JqhTJ49abJjoIwOa827aMEIx/zUp4
+         xU0+lZdSvNIDP2XGqZuTAXA9zCiqWwy1W8E5N/bjrS2m4nB9Urw+M8IZ/S4wsqcB6j6A
+         AzNg==
+X-Gm-Message-State: AO0yUKWRdZIQnangdG33wElUSlvWltPkjwrky1V4xV+8bF2JwTT3poKL
+        ySjkRv6poF69rq2Ewl5kbI0aZMRJxw==
+X-Google-Smtp-Source: AK7set8y3epFKFBjfVmJ/SgGeZ54GIN9djSuAFcfwC4M7hpCzdzbY1nCfCI/qvUz7zHBYEhse+mFkA==
+X-Received: by 2002:a05:6e02:1d0e:b0:323:1869:15a1 with SMTP id i14-20020a056e021d0e00b00323186915a1mr3811947ila.25.1678808486709;
+        Tue, 14 Mar 2023 08:41:26 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.249])
+        by smtp.gmail.com with ESMTPSA id t12-20020a92dc0c000000b00314007fdbc2sm876071iln.62.2023.03.14.08.41.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Mar 2023 08:41:26 -0700 (PDT)
+Received: (nullmailer pid 477337 invoked by uid 1000);
+        Tue, 14 Mar 2023 15:41:24 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] gpio: Use of_property_read_bool() for boolean properties
+Date:   Tue, 14 Mar 2023 10:41:17 -0500
+Message-Id: <20230314154117.477138-1-robh@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM9PR04MB8603.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b61f96cc-4fac-4f27-7e01-08db24a2739a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Mar 2023 15:40:34.5395
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Tqlnv9B+EGQAz/PMz5kpY3/gh0tLQStBaG1y9drDcKp2brDHJODhVjN4JKp1fMgBtT1zf0Al+DLbV/JJ7+VMmmo9FkvIrX/ImK3LvOuZM7g=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR04MB7744
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,SPF_HELO_PASS,
-        T_SPF_PERMERROR,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgU2ltb24NCg0KVGhhbmsgeW91IGZvciByZXZpZXdpbmcgdGhlIHBhdGNoLiBJIGhhdmUgYSBj
-b21tZW50IGJlbG93Og0KDQo+IA0KPiA+ICtzZW5kX3NrYjoNCj4gPiArICAgICAvKiBQcmVwZW5k
-IHNrYiB3aXRoIGZyYW1lIHR5cGUgKi8NCj4gPiArICAgICBtZW1jcHkoc2tiX3B1c2goc2tiLCAx
-KSwgJmhjaV9za2JfcGt0X3R5cGUoc2tiKSwgMSk7DQo+ID4gKyAgICAgc2tiX3F1ZXVlX3RhaWwo
-Jm54cGRldi0+dHhxLCBza2IpOw0KPiA+ICsNCj4gPiArICAgICBidG54cHVhcnRfdHhfd2FrZXVw
-KG54cGRldik7DQo+ID4gK3JldDoNCj4gPiArICAgICByZXR1cm4gMDsNCj4gPiArDQo+ID4gK2Zy
-ZWVfc2tiOg0KPiA+ICsgICAgIGtmcmVlX3NrYihza2IpOw0KPiA+ICsgICAgIGdvdG8gcmV0Ow0K
-PiANCj4gbml0OiBJIHRoaW5rIGl0IHdvdWxkIGJlIG5pY2VyIHRvIHNpbXBseSByZXR1cm4gMCBo
-ZXJlLg0KPiAgICAgIEFuZCByZW1vdmUgdGhlIHJldCBsYWJlbCBlbnRpcmVseS4NCj4gDQo+ID4g
-K30NCj4gDQpXZSBuZWVkIHRvIHJldHVybiBmcm9tIHRoaXMgZnVuY3Rpb24gd2l0aG91dCBjbGVh
-cmluZyB0aGUgc2ticywgdW5sZXNzICJnb3RvIGZyZWVfc2tiIiBpcyBjYWxsZWQuDQpJZiBJIHJl
-bW92ZSB0aGUgcmV0IGxhYmVsIGFuZCByZXR1cm4gYWZ0ZXIga2ZyZWVfc2tiKCkgaXQgY2F1c2Vz
-IGEga2VybmVsIGNyYXNoLg0KS2VlcGluZyB0aGlzIGNoYW5nZSBhcyBpdCBpcy4NCg0KUGxlYXNl
-IGxldCBtZSBrbm93IGlmIHlvdSBoYXZlIGFueSBmdXJ0aGVyIHJldmlldyBjb21tZW50cyBvbiB0
-aGUgdjExIHBhdGNoLg0KDQpUaGFua3MsDQpOZWVyYWoNCg==
+It is preferred to use typed property access functions (i.e.
+of_property_read_<type> functions) rather than low-level
+of_get_property/of_find_property functions for reading properties.
+Convert reading boolean properties to to of_property_read_bool().
+
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+v2:
+ - Actually use of_property_read_bool() as the commit msg says instead
+   of of_property_present()
+---
+ drivers/gpio/gpio-stp-xway.c | 2 +-
+ drivers/gpio/gpio-tb10x.c    | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/gpio/gpio-stp-xway.c b/drivers/gpio/gpio-stp-xway.c
+index 0ce1543426a4..4750ea34204c 100644
+--- a/drivers/gpio/gpio-stp-xway.c
++++ b/drivers/gpio/gpio-stp-xway.c
+@@ -292,7 +292,7 @@ static int xway_stp_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	/* check which edge trigger we should use, default to a falling edge */
+-	if (!of_find_property(pdev->dev.of_node, "lantiq,rising", NULL))
++	if (!of_property_read_bool(pdev->dev.of_node, "lantiq,rising"))
+ 		chip->edge = XWAY_STP_FALLING;
+ 
+ 	clk = devm_clk_get(&pdev->dev, NULL);
+diff --git a/drivers/gpio/gpio-tb10x.c b/drivers/gpio/gpio-tb10x.c
+index de6afa3f9716..78f8790168ae 100644
+--- a/drivers/gpio/gpio-tb10x.c
++++ b/drivers/gpio/gpio-tb10x.c
+@@ -167,7 +167,7 @@ static int tb10x_gpio_probe(struct platform_device *pdev)
+ 
+ 	platform_set_drvdata(pdev, tb10x_gpio);
+ 
+-	if (of_find_property(np, "interrupt-controller", NULL)) {
++	if (of_property_read_bool(np, "interrupt-controller")) {
+ 		struct irq_chip_generic *gc;
+ 
+ 		ret = platform_get_irq(pdev, 0);
+-- 
+2.39.2
+
