@@ -2,83 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A2536B9E49
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 19:27:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 388A76B9E5A
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 19:28:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230123AbjCNS1K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 14:27:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59656 "EHLO
+        id S230351AbjCNS2w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 14:28:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229885AbjCNS1H (ORCPT
+        with ESMTP id S230281AbjCNS2m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 14:27:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D960974B2;
-        Tue, 14 Mar 2023 11:27:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ED528B81AE1;
-        Tue, 14 Mar 2023 18:27:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 641C2C433EF;
-        Tue, 14 Mar 2023 18:27:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1678818422;
-        bh=sZJC19YJ19ITSfQATsdT6wquwPEVzTC8Tb6zCiuxHhw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rgleUlJoXnikh8YK3DWXMKfJcOFvQ3cgCGxrVLOVtU4Et7fhmBB4k2W53IWTS1Bnw
-         GUY9h2uZWYNjkGT4szhLspw98l7Fv0scOmX/9vksctARYT0cFoU84LSAJacHLwQ+tw
-         dYZ3RZSPjOM0d+cUbucL9byTcWgAtyUrufkVtgDk=
+        Tue, 14 Mar 2023 14:28:42 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA824B4215;
+        Tue, 14 Mar 2023 11:28:13 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id fm20-20020a05600c0c1400b003ead37e6588so13812723wmb.5;
+        Tue, 14 Mar 2023 11:28:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678818490;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uCZkrMLZx8ZVMQLFuANkNwADh4tGUpOBmEXyzie1B/E=;
+        b=UarJ3AuQtgdT97POi2QL4jhEBe0WUGNTBL9LOFoKiy5WPNaL6vER6d6ibVrQIAmjlL
+         DDfARMnIDTGFvCAd3DqhXAe44PBm5frJHA1s0/zqr+zMAbeDcpXvibgSPlpM5/rZgKSR
+         iUIQKlOp3QIwPt0NS0vQ7szqSi5vvFkA6Uh53hal4F1lYAGBJ/QBvDwWoccPpAuIW2Vm
+         NC4/EjVYiVKw4RC43f9xGHFi8/wDFWL//QIW5JoVAJgnCndFqwaHEAHJFBn5CYlamf28
+         13IqIpbvm7Jmty7Yl8l2xmSjX4s1qpnQt2Zek9q1Rq4orLMVHqjHdXxkiYrRy7iH6Asx
+         wC1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678818490;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=uCZkrMLZx8ZVMQLFuANkNwADh4tGUpOBmEXyzie1B/E=;
+        b=YCSTzlN3x+wdVjSCfHWU8RO8bl0y8REJJl/+4cZW4Bjokj5TFk+h2/uT7bI63dNxHp
+         CcJlF5ykbHwI83w4LXLFfis9x9f254D7y9ylx1/v976L+xme/3kSYj8RJOmPZswqFCGx
+         SB70saJfdaOHC8gUPqudIeiEJfe0nJmYQCRC20wPffbcwwDN4iukj0un1A7j/WGfRzat
+         GP1VnAEBsEvjpuSixZwrHrJ6bogm+Rc0ujboB/7XNPkvlkhaZzFjskkAKy6qYe/gcyeK
+         dO4W4A+YRyFVOKs3RjIjaw6ahZSHlOkQpB6DuaA2pZlv288JwqpnEk1/dS1It+PY1qUl
+         p6Jg==
+X-Gm-Message-State: AO0yUKXxyH3YaLyGstSXJO33/wE/MCJeB+cpQJLCmt4gJL6zR2/hSdNu
+        VX0KwG389+8/2Lt3L3P9iRA=
+X-Google-Smtp-Source: AK7set+lUkWThuG1N23QJqHPUBSaOk5Y13PSBdLBj0pekiBWwf/CEnjZKJzslUlaJPscTptKfZRI5Q==
+X-Received: by 2002:a05:600c:3c89:b0:3eb:38e6:f659 with SMTP id bg9-20020a05600c3c8900b003eb38e6f659mr15820259wmb.15.1678818490700;
+        Tue, 14 Mar 2023 11:28:10 -0700 (PDT)
+Received: from mars.. ([2a02:168:6806:0:5862:40de:7045:5e1b])
+        by smtp.gmail.com with ESMTPSA id u7-20020a7bc047000000b003e206cc7237sm3443490wmc.24.2023.03.14.11.28.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Mar 2023 11:28:10 -0700 (PDT)
+From:   Klaus Kudielka <klaus.kudielka@gmail.com>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Klaus Kudielka <klaus.kudielka@gmail.com>
+Subject: [PATCH net-next v3 4/4] net: dsa: mv88e6xxx: mask apparently non-existing phys during probing
 Date:   Tue, 14 Mar 2023 19:26:59 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     Sasha Levin <sashal@kernel.org>, Theodore Ts'o <tytso@mit.edu>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pavel Machek <pavel@ucw.cz>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, viro@zeniv.linux.org.uk,
-        linux-fsdevel@vger.kernel.org
-Subject: Re: AUTOSEL process
-Message-ID: <ZBC8c31rf1E2EsF5@kroah.com>
-References: <ZATC3djtr9/uPX+P@duo.ucw.cz>
- <ZAewdAql4PBUYOG5@gmail.com>
- <ZAwe95meyCiv6qc4@casper.infradead.org>
- <ZAyK0KM6JmVOvQWy@sashalap>
- <20230311161644.GH860405@mit.edu>
- <ZAy+3f1/xfl6dWpI@sol.localdomain>
- <ZAzH8Ve05SRLYPnR@sashalap>
- <ZAzOgw8Ui4kh1Z3D@sol.localdomain>
- <ZA9gXRMvQj2TO0W3@kroah.com>
- <ZA9xWaHuh3hiYr8X@sol.localdomain>
+Message-Id: <20230314182659.63686-5-klaus.kudielka@gmail.com>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230314182659.63686-1-klaus.kudielka@gmail.com>
+References: <20230314182659.63686-1-klaus.kudielka@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZA9xWaHuh3hiYr8X@sol.localdomain>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 13, 2023 at 11:54:17AM -0700, Eric Biggers wrote:
-> 
-> The fact is, many people *do* follow the rules exactly by *not* tagging commits
-> for stable when they don't meet the documented eligibility criteria.  But then
-> the stable maintainers backport the commits anyway, as the real eligibility
-> criteria are *much* more relaxed than what is documented.
+To avoid excessive mdio bus transactions during probing, mask all phy
+addresses that do not exist (there is a 1:1 mapping between switch port
+number and phy address).
 
-Again, if you do NOT want your patches backported, because you always
-mark them properly for stable releases, just let us know and we will add
-you to the list of other subsystems and maintainers that have asked us
-for this in the past.
+Suggested-by: Andrew Lunn <andrew@lunn.ch>
+Signed-off-by: Klaus Kudielka <klaus.kudielka@gmail.com>
+---
+v2: Patch is new
+v3: No change
 
-We can't detect the absence of a tag as "I know exactly what I am doing"
-because of the huge number of developers who do NOT tag patches, and so,
-we have to dig through the tree to find fixes on our own.
+ drivers/net/dsa/mv88e6xxx/chip.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-thanks,
+diff --git a/drivers/net/dsa/mv88e6xxx/chip.c b/drivers/net/dsa/mv88e6xxx/chip.c
+index 29b0f3bb1c..c52798d9ce 100644
+--- a/drivers/net/dsa/mv88e6xxx/chip.c
++++ b/drivers/net/dsa/mv88e6xxx/chip.c
+@@ -3797,6 +3797,7 @@ static int mv88e6xxx_mdio_register(struct mv88e6xxx_chip *chip,
+ 	bus->read_c45 = mv88e6xxx_mdio_read_c45;
+ 	bus->write_c45 = mv88e6xxx_mdio_write_c45;
+ 	bus->parent = chip->dev;
++	bus->phy_mask = GENMASK(31, mv88e6xxx_num_ports(chip));
+ 
+ 	if (!external) {
+ 		err = mv88e6xxx_g2_irq_mdio_setup(chip, bus);
+-- 
+2.39.2
 
-greg k-h
