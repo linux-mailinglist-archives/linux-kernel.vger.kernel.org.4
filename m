@@ -2,148 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C86EA6BA294
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 23:37:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B23046BA2A4
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 23:41:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229930AbjCNWhE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 18:37:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58060 "EHLO
+        id S231303AbjCNWlv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 18:41:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbjCNWhC (ORCPT
+        with ESMTP id S230514AbjCNWlu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 18:37:02 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0A6D32E76
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 15:36:59 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id c8-20020a05600c0ac800b003ed2f97a63eso1311731wmr.3
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 15:36:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678833418;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Z6l4jnUPgiSL9pwE7XPhJHqJWDs8eBCpbTvbsPB+B0A=;
-        b=igGLKO/amsFm2CuBDjGiFD2P4Vb8eBCG+38gyP5ACSj6Mk3L+PH70NcKWjCMJUD1bq
-         WRpVxjeHiOOeYJBCS6UXYD2hc9a8WW1dYEYUWTeqcHz9i5VEStSk9WYXRiETB5DGv9CW
-         i7VZwrlAwQWK4qelWd9pgQzNj+tz6OvSlU7TZ9TO9dJqnR9xD4X8J0YsQ3iefKmzHd1j
-         FQKqrIpcWI8oBAAwaJx7pZOC1fPddtImqJwawqBAPs+eeKgEk5NIt7enJHAiON8dIO0f
-         ZOGULCfGzM1k0Do67XCQsOJFB2VmW5YnPVpkzwy0HWVw49UCiuM6r0K0XpYjivnmYeF8
-         pyfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678833418;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Z6l4jnUPgiSL9pwE7XPhJHqJWDs8eBCpbTvbsPB+B0A=;
-        b=XFOQTVbEwww0xD3i2ipDr5bN03NeakvFEj9b0CduUppyWMxUUcbwauNiSHDPDd9hXt
-         v5aOh83G8v1JDuTka19jtFmf5OPe6FlyW3PIbCw5KEj549foSbRzr4TEQVcVuAJRGcn+
-         emd2jtZacnsl8RoaPO4SHlbXHm2wGbsxFjelySC13yXXYNW7qqbWVQO57K3xRzyZxvcv
-         0LzL6RGfEENxieqAUwLsoDV2bXyvhLhFLQj80zD7j0HDfqmCQOiXhewo3+MlsFQ2aQiR
-         bickDjxL+WObLsCyvuEZF0crul0bG/YZzJ0mWwSXOKrqoYpSqh238CbAjcJt7fSd8EPe
-         688Q==
-X-Gm-Message-State: AO0yUKXxYHLXGRjhWeLlt5eSzxXrIp5KFX1f/4FNdMT7y7TGqEY0flds
-        Wnlkvr3gvX9eTyL+a9jEmA/vh4LMqq8=
-X-Google-Smtp-Source: AK7set8B+/2sE9/73LsBJy9qXjVPNWmDNhuCtXSX+pPd41Zq6FBHcSzizIIxnlvNwOCRrZfz8uFzmA==
-X-Received: by 2002:a05:600c:19d3:b0:3eb:3945:d3f9 with SMTP id u19-20020a05600c19d300b003eb3945d3f9mr15857968wmq.4.1678833418226;
-        Tue, 14 Mar 2023 15:36:58 -0700 (PDT)
-Received: from localhost (host86-146-209-214.range86-146.btcentralplus.com. [86.146.209.214])
-        by smtp.gmail.com with ESMTPSA id n6-20020a7bcbc6000000b003ed2fb86f85sm1525693wmi.47.2023.03.14.15.36.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Mar 2023 15:36:57 -0700 (PDT)
-Date:   Tue, 14 Mar 2023 22:36:56 +0000
-From:   Lorenzo Stoakes <lstoakes@gmail.com>
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        maple-tree@lists.infradead.org,
-        Suren Baghdasaryan <surenb@google.com>
-Subject: Re: [PATCH 07/10] mm/mmap/vma_merge: rename adj_next to adj_start
-Message-ID: <8dcd3ff4-bcf3-4960-973a-d494d8bd5b11@lucifer.local>
-References: <20230309111258.24079-1-vbabka@suse.cz>
- <20230309111258.24079-8-vbabka@suse.cz>
+        Tue, 14 Mar 2023 18:41:50 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5170D37F3D
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 15:41:48 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 715C12F4;
+        Tue, 14 Mar 2023 15:42:31 -0700 (PDT)
+Received: from [10.57.64.116] (unknown [10.57.64.116])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0F8C43F64C;
+        Tue, 14 Mar 2023 15:41:46 -0700 (PDT)
+Message-ID: <7d026744-6bd6-6827-0471-b5e8eae0be3f@arm.com>
+Date:   Tue, 14 Mar 2023 22:41:45 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230309111258.24079-8-vbabka@suse.cz>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.8.0
+Content-Language: en-US
+From:   Ryan Roberts <ryan.roberts@arm.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Yury Norov <yury.norov@gmail.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel@lists.infradead.org
+Subject: [BUG] v6.3-rc2 regresses sched_getaffinity() for arm64
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 09, 2023 at 12:12:55PM +0100, Vlastimil Babka wrote:
-> The variable 'adj_next' holds the value by which we adjust vm_start of a
-> vma in variable 'adjust', that's either 'next' or 'mid', so the current
-> name is inaccurate. Rename it to 'adj_start'.
->
-> Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
-> ---
->  mm/mmap.c | 16 ++++++++--------
->  1 file changed, 8 insertions(+), 8 deletions(-)
->
-> diff --git a/mm/mmap.c b/mm/mmap.c
-> index 3396c9b13f1c..c51d69592e4e 100644
-> --- a/mm/mmap.c
-> +++ b/mm/mmap.c
-> @@ -903,7 +903,7 @@ struct vm_area_struct *vma_merge(struct vma_iterator *vmi, struct mm_struct *mm,
->  	bool vma_expanded = false;
->  	struct vma_prepare vp;
->  	unsigned long vma_end = end;
-> -	long adj_next = 0;
-> +	long adj_start = 0;
->  	unsigned long vma_start = addr;
->
->  	validate_mm(mm);
-> @@ -971,7 +971,7 @@ struct vm_area_struct *vma_merge(struct vma_iterator *vmi, struct mm_struct *mm,
->  				remove = mid;
->  			} else {			/* case 5 */
->  				adjust = mid;
-> -				adj_next = (end - mid->vm_start);
-> +				adj_start = (end - mid->vm_start);
->  			}
->  		}
->  	} else if (merge_next) {
-> @@ -979,7 +979,7 @@ struct vm_area_struct *vma_merge(struct vma_iterator *vmi, struct mm_struct *mm,
->  		if (prev && addr < prev->vm_end) {	/* case 4 */
->  			vma_end = addr;
->  			adjust = next;
-> -			adj_next = -(prev->vm_end - addr);
-> +			adj_start = -(prev->vm_end - addr);
->  			err = dup_anon_vma(next, prev);
->  		} else {
->  			vma = next;			/* case 3 */
-> @@ -1002,7 +1002,7 @@ struct vm_area_struct *vma_merge(struct vma_iterator *vmi, struct mm_struct *mm,
->  	if (vma_iter_prealloc(vmi))
->  		return NULL;
->
-> -	vma_adjust_trans_huge(vma, vma_start, vma_end, adj_next);
-> +	vma_adjust_trans_huge(vma, vma_start, vma_end, adj_start);
->  	init_multi_vma_prep(&vp, vma, adjust, remove, remove2);
->  	VM_WARN_ON(vp.anon_vma && adjust && adjust->anon_vma &&
->  		   vp.anon_vma != adjust->anon_vma);
-> @@ -1018,10 +1018,10 @@ struct vm_area_struct *vma_merge(struct vma_iterator *vmi, struct mm_struct *mm,
->  	if (vma_expanded)
->  		vma_iter_store(vmi, vma);
->
-> -	if (adj_next) {
-> -		adjust->vm_start += adj_next;
-> -		adjust->vm_pgoff += adj_next >> PAGE_SHIFT;
-> -		if (adj_next < 0) {
-> +	if (adj_start) {
-> +		adjust->vm_start += adj_start;
-> +		adjust->vm_pgoff += adj_start >> PAGE_SHIFT;
-> +		if (adj_start < 0) {
->  			WARN_ON(vma_expanded);
->  			vma_iter_store(vmi, next);
->  		}
-> --
-> 2.39.2
->
+Hi Linus,
 
-It looks like Suren's dc72d59c416d ("mm/mmap: move vma_prepare before
-vma_adjust_trans_huge") trivially conflicts with this change.
+I need to report a regression in v6.3-rc2 where sched_getaffinity() returns an
+incorrect cpu_set, at least when running on arm64. Git bisect shows this patch
+as the culprit, authored by you:
+
+  596ff4a09b89 cpumask: re-introduce constant-sized cpumask optimizations
+
+Apologies if this is the wrong channel for reporting this - I couldn't find a
+suitable mail on the list for this patch to reply to. Happy to direct it
+somewhere else if appropriate.
+
+
+Details:
+
+I'm running v6.3-rc2 kernel in a VM on Ampere Altra (arm64 system). The VM is
+assigned 8 vCPUs. The kernel is defconfig and I'm booting into an Ubuntu
+user-space. `nproc` returns a value that fluctuates from call to call in the
+range ~80-100. If I run with v6.2, nproc always returns 8, as expected.
+
+nproc is calling sched_getaffinity() with a 1024 entry cpu_set mask, then adds
+up all the set bits to find the number of CPUs. I wrote a test program and can
+see that the first 8 bits are always correctly set and most of the other bits
+are always correctly 0. But bits ~64-224 are randomly set/clear from call to call.
+
+
+Test program:
+
+#define _GNU_SOURCE             /* See feature_test_macros(7) */
+#include <sched.h>
+#include <stdio.h>
+
+#define SET_SIZE 1024
+
+static void print_cpu_set(cpu_set_t *cpu_set)
+{
+	int ret, i, j, k;
+
+	printf("cpu_count=%d\n", CPU_COUNT(cpu_set));
+	for (i = 0; i < SET_SIZE;) {
+		printf("[%03d]: ", i);
+		for (k = 0; k < 8; k++) {
+			for (j = 0; j < 8; j++, i++) {
+				printf("%d", CPU_ISSET(i, cpu_set));
+			}
+			printf("  ");
+		}
+		printf("\n");
+	}
+}
+
+int main()
+{
+	int ret;
+	cpu_set_t *cpu_set;
+	size_t size;
+
+	cpu_set = CPU_ALLOC(SET_SIZE);
+	size = CPU_ALLOC_SIZE(SET_SIZE);
+	CPU_ZERO(cpu_set);
+
+	printf("before:\n");
+	print_cpu_set(cpu_set);
+	ret = sched_getaffinity(0, size, cpu_set);
+	printf("ret=%d\n", ret);
+	printf("after:\n");
+	print_cpu_set(cpu_set);
+
+	return 0;
+}
+
+
+Broken output on v6.3-rc2:
+
+before:
+cpu_count=0
+[000]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+[064]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+[128]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+[192]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+[256]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+[320]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+[384]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+[448]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+[512]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+[576]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+[640]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+[704]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+[768]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+[832]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+[896]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+[960]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+ret=0
+after:
+cpu_count=82
+[000]: 11111111 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+[064]: 00000100 10110111 00110010 01101001 11111111 11111111 00000000 00000000
+[128]: 00010101 00001101 11011111 10001110 11110001 10100101 11111111 11111111
+[192]: 00000000 00001000 00000000 00000100 00000000 00000000 00000000 00000000
+[256]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+[320]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+[384]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+[448]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+[512]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+[576]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+[640]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+[704]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+[768]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+[832]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+[896]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+[960]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+
+
+Correct output in v6.2:
+
+before:
+cpu_count=0
+[000]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+[064]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+[128]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+[192]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+[256]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+[320]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+[384]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+[448]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+[512]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+[576]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+[640]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+[704]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+[768]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+[832]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+[896]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+[960]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+ret=0
+after:
+cpu_count=8
+[000]: 11111111 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+[064]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+[128]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+[192]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+[256]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+[320]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+[384]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+[448]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+[512]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+[576]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+[640]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+[704]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+[768]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+[832]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+[896]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+[960]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+
+
+Thanks,
+Ryan
