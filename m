@@ -2,178 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E49E96B8F07
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 10:55:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A7CF6B8F0A
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 10:55:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229578AbjCNJzY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 05:55:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60198 "EHLO
+        id S229665AbjCNJz4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 05:55:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbjCNJzW (ORCPT
+        with ESMTP id S229516AbjCNJzy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 05:55:22 -0400
-Received: from mail-ua1-x936.google.com (mail-ua1-x936.google.com [IPv6:2607:f8b0:4864:20::936])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B678763CD;
-        Tue, 14 Mar 2023 02:55:20 -0700 (PDT)
-Received: by mail-ua1-x936.google.com with SMTP id ay14so3624688uab.13;
-        Tue, 14 Mar 2023 02:55:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678787719;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0Il9aSYFgvyC+QVRpoSnFZREA4Z/90xca38uXI7ssx4=;
-        b=BlgOw0/01AaBqF4PBzqRb/yWW8lU9q25ndV1l+QuScHpAkN7rAsPaRoQUtQdvC7Ua8
-         D3ch+bOhUiZ49p0QsJK8wdz1/i4RL3Mu2JzVuBj/oZ3bpdA0UJYjds2MsF8YViyzJDAJ
-         RshGQkpSPISDwgMT9up973C4JEimUoC4CS3rLrRjqJN3caI91vd31shRXIhW9lG+qEnz
-         8Q3eJx4vKGCM9de8y0EcjZb3oZ3BxCHdodZlkhPrxGHpHpfFBeQK9ih7YXylguCE2yde
-         F/CKD0LsFDoLgkPc1S7Mqb6sh5LM87CT5wFSQeai35PPQxXfPL/SnA429hlul+CjF+XZ
-         Mlrg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678787719;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0Il9aSYFgvyC+QVRpoSnFZREA4Z/90xca38uXI7ssx4=;
-        b=YGSBQtGXUQTxxU9JCQxex9t09fYVE4ndosamj4LvZpaFtTWO8ygA36/QrHN2Yn8DCw
-         OX9t7e+98ft6GuLieoR6pkFV22ZdwWhZp+NusTiCvIOJRERhvcEfuVvBkcUafeO/aILX
-         fC9XynYtHvl9ezk7JlO9kE86QyhV0IAXkYW85h+ew+Kj0lhOc9zUXQn1ciGvUfX1+5K4
-         uvL8G4WpXuMRblmvNoEv+IL6OG1Mg+qdutDcAQoi464ft3mjoHRpqVTpVRqWOP1/fErt
-         n8QqmB3ThTe8Hbq94LsGg6Gc0SPtKro/Is0GxjuxWJqWgCnjS4bDka61cuuBf92XJ2zS
-         8dhA==
-X-Gm-Message-State: AO0yUKVOJH44gvJcmzdwJ2upY389iAGOzz6oMpLlfOFJ/VL7CaTKl3Xr
-        kgnS02mzbRT4+qN6VHJXYWiFzEUQbLRyizxibHk=
-X-Google-Smtp-Source: AK7set/6MKWlYVJvaeh02CQeRyORxAEuEoedzIGcjVDrdsjiQrC3m8yxILNOPoyMBLBiQgoIWG1KVoPTUJFEuhsMIPE=
-X-Received: by 2002:a05:6122:1424:b0:432:3ef:c8be with SMTP id
- o4-20020a056122142400b0043203efc8bemr3494988vkp.3.1678787719334; Tue, 14 Mar
- 2023 02:55:19 -0700 (PDT)
+        Tue, 14 Mar 2023 05:55:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AAA675865;
+        Tue, 14 Mar 2023 02:55:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2C38A616CA;
+        Tue, 14 Mar 2023 09:55:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7487C433D2;
+        Tue, 14 Mar 2023 09:55:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678787744;
+        bh=Ml5eEB7wiPfEgRtV2rIkKaAoqJoRbyT21kgehns7Z48=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=G7m6L0kpZwkFxG1VN7QQ9eaT7lyq2OfAbj1bbpaO9NX6P+lOkstYFr9obbJzU/XDi
+         DziwewMWij7zSQAnSuzJBNCAAVL4HdeuUsFXWz28Cs4fNFJ+jq411+r7jWyG4cIjvW
+         IsGpEvhfkder/jEMC2SnohzBWR4Ot/OEIoCiOZIMmhJI38L6dJ9pUjuK2neonmL2qp
+         Ti9WbXh6RCmFe6znlXqAWZ5gC2hZ9ssAORRwM4pvkHEA8o/wxfntxhpgGCFR3O+gBF
+         DjQgPeZfXzncN+WhIKsUstfhHkVfDnuQhcdQFFzwEssZe9WIc78kVfCPmy+nGFVif1
+         CFVvB8ZZNvP+w==
+Date:   Tue, 14 Mar 2023 10:55:39 +0100
+From:   Christian Brauner <brauner@kernel.org>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Kirtikumar Anandrao Ramchandani <kirtiar15502@gmail.com>,
+        security@kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org,
+        Linus Torvalds <torvalds@linuxfoundation.org>
+Subject: Re: Patch for a overwriting/corruption of the file system
+Message-ID: <20230314095539.zf7uy27cjflqp6kp@wittgenstein>
+References: <CADZg-m0Z+dOGfG=ddJxqPvgFwG0+OLAyP157SNzj6R6J2p7L-g@mail.gmail.com>
+ <ZA734rBwf4ib2u9n@kroah.com>
+ <CADZg-m04XELrO-v-uYZ4PyYHXVPX35dgWbCHBpZvwepS4XV9Ew@mail.gmail.com>
+ <CADZg-m2k_L8-byX0WKYw5Cj1JPPhxk3HCBexpqPtZvcLRNY8Ug@mail.gmail.com>
+ <ZA77qAuaTVCEwqHc@kroah.com>
 MIME-Version: 1.0
-References: <ZA9T14Ks66HOlwH+@corigine.com> <20230312163726.55257-1-josef@miegl.cz>
- <57238dfc519a27b1b8d604879caa7b1b@miegl.cz> <ZA9s2Ti9PlUzsq/m@corigine.com>
-In-Reply-To: <ZA9s2Ti9PlUzsq/m@corigine.com>
-From:   Eyal Birger <eyal.birger@gmail.com>
-Date:   Tue, 14 Mar 2023 11:55:07 +0200
-Message-ID: <CAHsH6GsUAzye2puFES_5iemTtQZyoiR590NRPC8ZXrTg4B+OMA@mail.gmail.com>
-Subject: Re: [PATCH net-next] net: geneve: accept every ethertype
-To:     Simon Horman <simon.horman@corigine.com>
-Cc:     Josef Miegl <josef@miegl.cz>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Pravin B Shelar <pshelar@ovn.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <ZA77qAuaTVCEwqHc@kroah.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Mon, Mar 13, 2023 at 11:32:08AM +0100, Greg KH wrote:
+> On Mon, Mar 13, 2023 at 03:54:55PM +0530, Kirtikumar Anandrao Ramchandani wrote:
+> > Seems like again it got rejected. I am sending it in the body if it works:
+> > 
+> > >From 839cae91705e044b49397590f2d85a5dd289f0c5 Mon Sep 17 00:00:00 2001
+> > From: KirtiRamchandani <kirtar15502@gmail.com>
+> > Date: Mon, 13 Mar 2023 15:05:08 +0530
+> > Subject: [PATCH] Fix bug in affs_rename() function. The `affs_rename()`
+> >  function in the AFFS filesystem has a bug that can cause the `retval`
+> >  variable to be overwritten before it is used. Specifically, the function
+> >  assigns `retval` a value in two separate code blocks, but then only checks
+> >  its value in one of those blocks. This commit fixes the bug by ensuring
+> > that
+> >  `retval` is properly checked in both code blocks.
+> > 
+> > Signed-off-by: KirtiRamchandani <kirtar15502@gmail.com>
+> > ---
+> >  namei.c | 4++++--
+> >  1 file changed, 4 insertions(+), 2 deletion(-)
+> > 
+> > diff --git a/fs/affs/namei.c b/fs/affs/namei.c
+> > index d1084e5..a54c700 100644
+> > --- a/fs/affs/namei.c
+> > +++ b/fs/affs/namei.c
+> > @@ -488,7 +488,8 @@ affs_xrename(struct inode *old_dir, struct dentry
+> > *old_dentry,
+> >         affs_lock_dir(new_dir);
+> >         retval = affs_insert_hash(new_dir, bh_old);
+> >         affs_unlock_dir(new_dir);
+> > -
+> > +       if (retval)
+> > +               goto done;
+> 
+> The patch is corrupted and can not be applied.
 
-On Mon, Mar 13, 2023 at 8:35=E2=80=AFPM Simon Horman <simon.horman@corigine=
-.com> wrote:
->
-> On Mon, Mar 13, 2023 at 05:14:58PM +0000, Josef Miegl wrote:
-> > March 13, 2023 5:48 PM, "Simon Horman" <simon.horman@corigine.com> wrot=
-e:
-> >
-> > > +Pravin
-> > >
-> > > On Sun, Mar 12, 2023 at 05:37:26PM +0100, Josef Miegl wrote:
-> > >
-> > >> The Geneve encapsulation, as defined in RFC 8926, has a Protocol Typ=
-e
-> > >> field, which states the Ethertype of the payload appearing after the
-> > >> Geneve header.
-> > >>
-> > >> Commit 435fe1c0c1f7 ("net: geneve: support IPv4/IPv6 as inner protoc=
-ol")
-> > >> introduced a new IFLA_GENEVE_INNER_PROTO_INHERIT flag that allowed t=
-he
-> > >> use of other Ethertypes than Ethernet. However, it imposed a restric=
-tion
-> > >> that prohibits receiving payloads other than IPv4, IPv6 and Ethernet=
-.
-> > >>
-> > >> This patch removes this restriction, making it possible to receive a=
-ny
-> > >> Ethertype as a payload, if the IFLA_GENEVE_INNER_PROTO_INHERIT flag =
-is
-> > >> set.
-> > >>
-> > >> This is especially useful if one wants to encapsulate MPLS, because =
-with
-> > >> this patch the control-plane traffic (IP, IS-IS) and the data-plane
-> > >> traffic (MPLS) can be encapsulated without an Ethernet frame, making
-> > >> lightweight overlay networks a possibility.
-> > >
-> > > Hi Josef,
-> > >
-> > > I could be mistaken. But I believe that the thinking at the time,
-> > > was based on the idea that it was better to only allow protocols that
-> > > were known to work. And allow more as time goes on.
-> >
-> > Thanks for the reply Simon!
-> >
-> > What does "known to work" mean? Protocols that the net stack handles wi=
-ll
-> > work, protocols that Linux doesn't handle will not.
->
-> Yes, a good question. But perhaps it was more "known to have been tested"=
-.
->
-> > > Perhaps we have moved away from that thinking (I have no strong feeli=
-ng
-> > > either way). Or perhaps this is safe because of some other guard. But=
- if
-> > > not perhaps it is better to add the MPLS ethertype(s) to the if claus=
-e
-> > > rather than remove it.
-> >
-> > The thing is it is not just adding one ethertype. For my own use-case,
-> > I would need to whitelist MPLS UC and 0x00fe for IS-IS. But I am sure
-> > other people will want to use GENEVE` for xx other protocols.
->
-> Right, so the list could be expanded for known cases.
-> But I also understand your point,
-> which I might describe as this adding friction.
->
-> > The protocol handling seems to work, what I am not sure about is if
-> > allowing all Ethertypes has any security implications. However, if thes=
-e
-> > implications exist, safeguarding should be done somewhere down the stoc=
-k.
->
-> Yes, I believe that the idea was to limit the scope of such risks.
-> (Really, it was a long time ago, so I very likely don't recall everything=
-.)
+Yeah, that patch is pretty borked. This should probably be sm like:
 
-Digging a little into the history of this code I found this discussion [1]
-where this specific point was raised:
+From f3a7758bb53cc776820656c6ac66b13fb8ed9022 Mon Sep 17 00:00:00 2001
+From: KirtiRamchandani <kirtar15502@gmail.com>
+Date: Tue, 14 Mar 2023 10:49:38 +0100
+Subject: [PATCH] affs: handle errors in affs_xrename()
 
-<quote>
->> +       if (unlikely(geneveh->proto_type !=3D htons(ETH_P_TEB)))
->
-> Why? I thought the point of geneve carrying protocol field was to
-> allow protocols other than Ethernet... is this temporary maybe?
+Fix a bug in the affs_xrename() function. The affs_xrename() function in
+the AFFS filesystem has a bug that can cause the retval variable to be
+overwritten before it is used. Specifically, the function assigns retval
+a value in two separate code blocks, but then only checks its value in
+one of those blocks. This commit fixes the bug by ensuring that retval
+is properly checked in both code blocks.
 
-Yes, it is temporary. Currently OVS only handles Ethernet packets but
-this restriction can be lifted once we have a consumer that is capable
-of handling other protocols.
-</quote>
+Signed-off-by: KirtiRamchandani <kirtar15502@gmail.com>
+---
+ fs/affs/namei.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-This seems to have been ported as is when moving to a generic net device.
+diff --git a/fs/affs/namei.c b/fs/affs/namei.c
+index d12ccfd2a83d..98525d69391d 100644
+--- a/fs/affs/namei.c
++++ b/fs/affs/namei.c
+@@ -488,6 +488,8 @@ affs_xrename(struct inode *old_dir, struct dentry *old_dentry,
+ 	affs_lock_dir(new_dir);
+ 	retval = affs_insert_hash(new_dir, bh_old);
+ 	affs_unlock_dir(new_dir);
++	if (retval)
++		goto done;
+ 
+ 	/* Insert new into the old directory with the old name. */
+ 	affs_copy_name(AFFS_TAIL(sb, bh_new)->name, old_dentry);
+@@ -495,6 +497,8 @@ affs_xrename(struct inode *old_dir, struct dentry *old_dentry,
+ 	affs_lock_dir(old_dir);
+ 	retval = affs_insert_hash(old_dir, bh_new);
+ 	affs_unlock_dir(old_dir);
++	if (retval)
++		goto done;
+ done:
+ 	mark_buffer_dirty_inode(bh_old, new_dir);
+ 	mark_buffer_dirty_inode(bh_new, old_dir);
+-- 
+2.34.1
 
-So now that the consumer is capable of other protocols, the question is
-whether the restrictions should be lifted for any protocol or moderately.
-
-I went with the moderate approach when adding IP support, but I do see the
-merits in allowing any protocol without having to fiddle with this code.
-
-https://www.spinics.net/lists/netdev/msg290579.html
