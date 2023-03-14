@@ -2,5179 +2,5975 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B58406B8D5B
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 09:33:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AADE6B8D89
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 09:38:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229960AbjCNIdB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 04:33:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34032 "EHLO
+        id S229977AbjCNIh6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 04:37:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229869AbjCNIc6 (ORCPT
+        with ESMTP id S230388AbjCNIhk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 04:32:58 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1600C5BC9D;
-        Tue, 14 Mar 2023 01:32:52 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id m18-20020a05600c3b1200b003ed2a3d635eso1769342wms.4;
-        Tue, 14 Mar 2023 01:32:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678782770;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZFjEDp8UdHWxWyLLdhDZzCQi9dmOVN7sgM5kHZ+aRVk=;
-        b=A7VA2d/vkA8njpqb9WDvOiuMoE03A15L/Gh90VDED4ew23JMEfojx4hBGQiafBDVLe
-         Teg5vDfUSfb8Hwgt2iBtdzjm55xcZFEB+N97nwiozSmik72ij3CFvGVuS1m7eQwLaEty
-         S9MKr8qCF0USTK1ygwbJo+0SaxwvOAdirMotZ39Av5O1cjhIzENMQAHtvdxeBOOyQ1LT
-         OB/aioqEa6J+6au2OuxSCyLEu4mooSKzefDqSTkPGUsbTKWVTEF/dGH6NsBXbbk98Al0
-         S0VDFTqLb4SlkAG2If7IYoL1l/Vcihbok9QMMwAIt3SiiVbR0nty5qjnU4/N5NVSIPKA
-         K0lA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678782770;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZFjEDp8UdHWxWyLLdhDZzCQi9dmOVN7sgM5kHZ+aRVk=;
-        b=o0my+sXu6IrakXyEQV+8TDwVxCpidrRhaM2Gh3JC/eghOt/sp1ZSE1Mri+VLB1U5ia
-         eAp48VC8fwLUiAWCGWp0e1mDrL9IEvMODxUYxTPYgUIsMyZ0QBmSkRwFDASpa31l0/m4
-         Y8K4+U9GZtp/EeWIThVykD20T76hKe9zT8Ix3+ekPQ66J2uRTzy6rfcskA4AXiQZ56Ti
-         mN+Jb1KAFALqV6Nz8u+9bR9Tr3szQ7cGjvrrLMbhjGsDfXM8DiQ5FTjr2WEumA+ZIdrL
-         P/dJKUAyT52g3EPX4nAZoNbySbvv9sbHfVSBZa62vA/zpdssmWUamBYPeG4dqn49qkwD
-         9LPw==
-X-Gm-Message-State: AO0yUKU/q0WM0NpvKbzWMlmK3N2I/ZSr/9/FiQJlXPxDKlxTnBMqvO6u
-        uDmSJ0rHJDSerNE4j2TpCu4=
-X-Google-Smtp-Source: AK7set+rnauzTQ5FHgsXorB3rmHWZZvAaZGjVNh6/hMaizj+LASfX5G2E8AHVsLTE9CbVTtUKOo8fQ==
-X-Received: by 2002:a05:600c:1546:b0:3ed:22f2:554c with SMTP id f6-20020a05600c154600b003ed22f2554cmr6340831wmg.29.1678782769525;
-        Tue, 14 Mar 2023 01:32:49 -0700 (PDT)
-Received: from gmail.com ([81.168.73.77])
-        by smtp.gmail.com with ESMTPSA id d9-20020a1c7309000000b003daf672a616sm2064040wmb.22.2023.03.14.01.32.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Mar 2023 01:32:48 -0700 (PDT)
-Date:   Tue, 14 Mar 2023 08:32:42 +0000
-From:   Martin Habets <habetsm.xilinx@gmail.com>
-To:     Gautam Dawar <gdawar@amd.com>
-Cc:     "Lucero Palau, Alejandro" <alejandro.lucero-palau@amd.com>,
-        "Dawar, Gautam" <gautam.dawar@amd.com>,
-        "linux-net-drivers (AMD-Xilinx)" <linux-net-drivers@amd.com>,
-        "jasowang@redhat.com" <jasowang@redhat.com>,
-        Edward Cree <ecree.xilinx@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "eperezma@redhat.com" <eperezma@redhat.com>,
-        "Anand, Harpreet" <harpreet.anand@amd.com>,
-        "Kamde, Tanuj" <tanuj.kamde@amd.com>,
-        "Dutta, Koushik" <Koushik.Dutta@amd.com>
-Subject: Re: [PATCH net-next v2 03/14] sfc: update MCDI headers for
- CLIENT_CMD_VF_PROXY capability bit
-Message-ID: <ZBAxKpthcc5XrfiX@gmail.com>
-Mail-Followup-To: Gautam Dawar <gdawar@amd.com>,
-        "Lucero Palau, Alejandro" <alejandro.lucero-palau@amd.com>,
-        "Dawar, Gautam" <gautam.dawar@amd.com>,
-        "linux-net-drivers (AMD-Xilinx)" <linux-net-drivers@amd.com>,
-        "jasowang@redhat.com" <jasowang@redhat.com>,
-        Edward Cree <ecree.xilinx@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "eperezma@redhat.com" <eperezma@redhat.com>,
-        "Anand, Harpreet" <harpreet.anand@amd.com>,
-        "Kamde, Tanuj" <tanuj.kamde@amd.com>,
-        "Dutta, Koushik" <Koushik.Dutta@amd.com>
-References: <20230307113621.64153-1-gautam.dawar@amd.com>
- <20230307113621.64153-4-gautam.dawar@amd.com>
- <9a8c3a7d-7815-3099-e75e-930568dccb35@amd.com>
- <ZAi0tVAismlBwOG+@gmail.com>
- <d979045c-993c-8974-6f41-416ad8f5d248@amd.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+        Tue, 14 Mar 2023 04:37:40 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0E2B6A1C0;
+        Tue, 14 Mar 2023 01:37:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678783042; x=1710319042;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=aeWLDFokKhwHQK5GvTG87mSGUtx9KLI9wIG3KqfEAkQ=;
+  b=ij5W3vf+KHrLKEuy9/saJVOvZJZGNvNSdWmyg+BgT2wZxDifinAzGRn7
+   2wdD2VA1s96bGl1An68Iid27YfCExlrrJxd2thmAbIC0wWTSNS/zm27tV
+   mh8mB264PVxEctVTX0Cvk383o7zDWXBcHCPHaQYz1F9WbJDxRiM8kzKCX
+   rKq1JvEr38Uc5CvNPLFbbAruKdAJxinvwhqzQ431ZNRQGu5RXUU4Cp7Ai
+   +YlcL+TSudmt11VdITEbprqRIJifcnKv0PMiF0qlwYyV3c+h1ZA36aPTF
+   bPB9DoW9S5bfzwZEMQyn7984V6EXi9CYBqEVGe9+2WQ+Mi2g2kXsmo/or
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="325729274"
+X-IronPort-AV: E=Sophos;i="5.98,259,1673942400"; 
+   d="xz'341?scan'341,208,341";a="325729274"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2023 01:37:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="747917146"
+X-IronPort-AV: E=Sophos;i="5.98,259,1673942400"; 
+   d="xz'341?scan'341,208,341";a="747917146"
+Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
+  by fmsmga004.fm.intel.com with ESMTP; 14 Mar 2023 01:37:19 -0700
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Tue, 14 Mar 2023 01:37:18 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Tue, 14 Mar 2023 01:37:18 -0700
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21 via Frontend Transport; Tue, 14 Mar 2023 01:37:18 -0700
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.174)
+ by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.21; Tue, 14 Mar 2023 01:37:17 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Q86YB9E/DANE08f0psLMLkwxbKS1Tnmyn5y6QB5+iCq8FetuxLCyQd3bAeXWk8MP2vjWpJxtn+QJvavJ1H4Gji1pmTDgYWc2Np9vrwMArGvpoDkU2IFkzRAifEeXHAo6d+/c+AOl5nhYcy8OFIgsdos3x9L7y50pTU/Y3/MZfukcbs5DPV0Gsth/NqIrJjKoY/mwuWqSyhP8+u0lUKqaSJtVcyyG6gN4L1kH3VU9Zoh3SFg5sqRdumi9woossO4rpF2PaqXbjovFB7JTek9wnuqTvXzkO339JnY8UhSZYihBKfRUpiJC1BSToNIR48mDQVkewt21dT6EFhdXoXM1Mg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=wesciCGDnLohJeT+pDgOHRxrGq6bU3KnJnr67WukaWQ=;
+ b=SYM7z5F0dtRfaFwZFvd+//TsqgA/sTjI9rRsLtGiIYe6PjS4j9Em4pY6diFvJgE8p2JJoOYw+jh70dfrZmagpoa7UUo0V9vqUwo0BP2yIra8z0GbTW2Qz01gIN1luf+qxZUqgvuBl8bWsqs9XGvQbqa4a1nqy/5d/STQ74QsTa70ClNwxBPBoY2A8RejY2dRBhUR3U3T2t9e/x91stZGoXse1aXQ6tVU5s3SZ7PcCXtjlx4nRecUGKMDZgCwxEvqzXXaIWIb3Yj1VCg+dP/0orv/gVUe18Nne1uiemWDjDB3d5ZmO5R8qz/onk1/wjBiHchJiX5XmfdWnEMmFUYtuA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from CY5PR11MB6392.namprd11.prod.outlook.com (2603:10b6:930:37::15)
+ by PH7PR11MB7549.namprd11.prod.outlook.com (2603:10b6:510:27b::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.24; Tue, 14 Mar
+ 2023 08:37:12 +0000
+Received: from CY5PR11MB6392.namprd11.prod.outlook.com
+ ([fe80::66b:243c:7f3d:db9e]) by CY5PR11MB6392.namprd11.prod.outlook.com
+ ([fe80::66b:243c:7f3d:db9e%3]) with mapi id 15.20.6178.026; Tue, 14 Mar 2023
+ 08:37:12 +0000
+Date:   Tue, 14 Mar 2023 16:34:22 +0800
+From:   kernel test robot <yujie.liu@intel.com>
+To:     Kees Cook <keescook@chromium.org>
+CC:     <oe-lkp@lists.linux.dev>, <lkp@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        tangmeng <tangmeng@uniontech.com>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        "Luis Chamberlain" <mcgrof@kernel.org>,
+        Eric Biggers <ebiggers@google.com>,
+        <linux-hardening@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <aliyunlinux2-dev@linux.alibaba.com>, <jane.lv@intel.com>
+Subject: [linux-stable-rc:linux-4.19.y] [panic] 4d00e68cfc:
+ WARNING:at_fs/sysfs/file.c:#sysfs_emit_at
+Message-ID: <202303141634.1e64fd76-yujie.liu@intel.com>
+Content-Type: multipart/mixed; boundary="pM1j5p9RDJondMxj"
 Content-Disposition: inline
-In-Reply-To: <d979045c-993c-8974-6f41-416ad8f5d248@amd.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UPPERCASE_50_75,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+X-ClientProxiedBy: SG2PR02CA0064.apcprd02.prod.outlook.com
+ (2603:1096:4:54::28) To CY5PR11MB6392.namprd11.prod.outlook.com
+ (2603:10b6:930:37::15)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY5PR11MB6392:EE_|PH7PR11MB7549:EE_
+X-MS-Office365-Filtering-Correlation-Id: 54a45f2c-0fbe-4ea6-89dc-08db24674dfa
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Si7PybSETLnd0rg2eXtNp108uix+Dw3ps5hUlA4KWzL3y9zjY8tUvAvfzFLNhTIW1WqxeWoM/v2MxwIYnREa0I40VEkm4sut7QTDxQUllqHgqFhbRq622yeclCjs8hSrcmZ3i0UgsQI9gbLRlZPscaZtdty00QBcvZ92NSdn9GSxeN6W7qGNOkfmgvxrk2vaCOINl9zPtV+RcTkswSi24NgH1v2v9tGGdOaHRTzTJC7cJIijgXDB/4hjnaMEpxMCaz5UG05+u9ut773HZUjIVPYatcxULWshbQ+v51GGH9PVVvPWhymTY9caod4405RME3wVat48Apm/7K2Fa2xajLCANMtHxwlqp4NLfzoFk7ILLnchAvQsN5dZxzV0uzwE96oD6KMzpZJUxzLH//r71f74rPjNfm5yleyv8MsPxQA60yaMn9IBSteuzVByc1Ap3Mm9ELPGKpTTDIDy091sBCw/v+WFPyMngc2C7IjUtb+pkJclAED2YWBZyDlEpn+wYz3giRs2sNxSCazPIlXgES/CNDaXAWgGcYCiSZcONSSZIDsaAnIIHe51nTSBO4C/pDaaw5cessOkOp47dalI8rndYgxQLCcyA2zFHrllb5Yxix3HnVpxfUnUd37KL0T8kcBPPRrckKMapYlFS48RnNq3s3svscpYQhUbrKKQPyHDVjGWE+KHOPXsKyEjSVDMkeO0D2bw0tuubWHFaEozR7LdUnk2DQtSTlkRwk6EOvY=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR11MB6392.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(376002)(136003)(396003)(39860400002)(346002)(366004)(451199018)(6916009)(2616005)(235185007)(4326008)(5660300002)(8936002)(186003)(7416002)(41300700001)(6512007)(6506007)(26005)(1076003)(36756003)(86362001)(2906002)(83380400001)(44144004)(66556008)(6486002)(107886003)(8676002)(66476007)(966005)(6666004)(54906003)(316002)(66946007)(45080400002)(478600001)(82960400001)(38100700002)(2700100001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?O97a64mmSIyfCAIYLbmMUgMqFiCzXOsaEZmFliGExduNSbu+OPGjyVZQTlk4?=
+ =?us-ascii?Q?xLWuYV9nM5YrsKIpULk2rwER7kgkNxhNVXvvd0gZ3XUMe8YulctCcytUr0OR?=
+ =?us-ascii?Q?Q/uaqzrSFM2sswrbNODXp8RBQggpyeyf1Gv9071a+7opOYHogZTAZsO8YrPG?=
+ =?us-ascii?Q?1z4SY3QtA5GbutrsUVFdGCDhMAXRbMJ3O00Dz2wEmvWlEkhXrORK+Ql/zEsV?=
+ =?us-ascii?Q?XVWWAn7xxto5eOn36U6bl/22CPp9FhNutPZKr1Lywz0BPUB413HMT0dBH500?=
+ =?us-ascii?Q?9T9iXFd19yCfiuBpzHGUnRqwUYHwBzj4FxeYid/5vM4Lx85f5qBEwrgSdm0J?=
+ =?us-ascii?Q?VZJCxPCx9vpM0PBjoga3yJYE8iaTplw8zr/SQYFC1KxzlobXWY3h/oz/FU1z?=
+ =?us-ascii?Q?ybdDOHYylvUniRMBOrw+kFxqqWEdPCTMyS+ytZTsC+9KAVYO69tEDaUOxyKI?=
+ =?us-ascii?Q?RbyZ2RZLv/SGSHl2F0emCtAlFW8pTT6isgwTWsI3NXqHoQnWYGFPnpM3elDn?=
+ =?us-ascii?Q?pIhoAmGeanM3xrBnihy7uB0kekUpdGYzVhfiQMzRPE4r/YyabfUIUmcaTA15?=
+ =?us-ascii?Q?6VfeveeFWsBlEVObonep63aAo3iXUnnvU9FQuSkQWYxL0fRniGzInxhmZgU0?=
+ =?us-ascii?Q?9kdPwTWj12HWm1EusztKEq5VyL9DIpCPRh/7zjo/wfqyJNROiB5Dklei+Err?=
+ =?us-ascii?Q?atTEyxrDSRscsfOADhqP/JNFzRpzmT0hcMdkwvynt2Mh/Z4IZ/EbLlNYzeDO?=
+ =?us-ascii?Q?A/Qh0wslp6ivtKHyYZMpa4cQxkCztJeSudYoXpad7KVbPbTwytI6Ws6AT5a4?=
+ =?us-ascii?Q?xfR5/80KCnP38xZopKe8lti0PWeKdT2S5E0GVd5wEvHi654jRLPubJPGyU4E?=
+ =?us-ascii?Q?JzLeTdbRQ+XgKa4FkCycfKtNBAFlqBQ4x+kRJKOYLrr693aBz/ZzVvwibrUU?=
+ =?us-ascii?Q?D4ApNk0Bc2HyyndONo4UnqtV/E/h2Ts9T4NqxbBdJm2VkSTHYdG/oWWkZEnB?=
+ =?us-ascii?Q?B+MEx8uW7j1MPQDweXDu3rVB8KuIqY0BQdX/GF3UDQdyQy801TFR4EmgDX/t?=
+ =?us-ascii?Q?O1oz/78z+MrgH9O5JNeEC2BS/Yfq5gThymgQDw8SGVwV03DbMk3OYBN0EDUz?=
+ =?us-ascii?Q?pmuS1SejzYkzVldw4/AGhGgKvis0nHaep1igudh4iRR+48GTyZs1dJOx68F/?=
+ =?us-ascii?Q?se52tKtbictoww34xA7qbaMuJ9UGrROekqMgveg5pjXBsdMqSQIv8gFMEMJM?=
+ =?us-ascii?Q?j1RZ8nazL7J4soQvxH3iXfSWkEU7m8ZLYgCyT9z2kmjf7cponu1V4NWmkN/U?=
+ =?us-ascii?Q?8qRQtJWoTD2NyTCNv6A6LvmOvZvGUnDaeKV8335iZyfJpxRqVM3R/eeifnMf?=
+ =?us-ascii?Q?TuGh7zF5t3nwoBshD5FoGiPHSCZU+p5C8oJJ2ubXzx4qKS+OnEUPuYns6TiI?=
+ =?us-ascii?Q?WTs60T786R5A3qqqGSw3IK7AGfwlyXup/R61vqBEgTHOlOGhLZ0MmgScZxHd?=
+ =?us-ascii?Q?29nkVxP+kZMO4Z9v67F+NSFeQ3ddf8nOXJeH16XgP4v0lDnXIxHSyGFRMGC/?=
+ =?us-ascii?Q?5JuT2PCE7PMJIRcs4NZ2OsinnpB/I6Zd5uPC2Km6eJthENaNcyY78QAngA0R?=
+ =?us-ascii?Q?3w=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 54a45f2c-0fbe-4ea6-89dc-08db24674dfa
+X-MS-Exchange-CrossTenant-AuthSource: CY5PR11MB6392.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Mar 2023 08:37:12.0156
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 5lNYo9dsNr3K+RBRUAI1g4UzP0KpyUQLgCswlFUlblcBwy+MnA5r2xargBppWN/RxV3K/g0JGzwsUfItiWlNRg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB7549
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        UPPERCASE_50_75,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 13, 2023 at 08:08:14PM +0530, Gautam Dawar wrote:
-> 
-> On 3/8/23 21:45, Martin Habets wrote:
-> > Caution: This message originated from an External Source. Use proper caution when opening attachments, clicking links, or responding.
-> > 
-> > 
-> > On Tue, Mar 07, 2023 at 12:12:15PM +0000, Lucero Palau, Alejandro wrote:
-> > > On 3/7/23 11:36, Gautam Dawar wrote:
-> > > > vDPA requires the ability to proxy MCDI commands from a PF to a VF
-> > > > there by using PF's IOMMU domain for executing vDPA VF's MCDI commands
-> > > > ensuring isolation from the DMA domain used by guest buffers.
-> > > > A new capability bit CLIENT_CMD_VF_PROXY has been added to Firmware,
-> > > > which when exposed, suggests that Firmware supports MC_CMD_CLIENT_CMD
-> > > > to VFs and hence supports vDPA requirement.
-> > > > mcdi_pcol.h is a tool generated file and hence may not be free from
-> > > > all checks and/or warnings when tested with checkpatch.pl script.
-> > > > 
-> > > > Signed-off-by: Gautam Dawar <gautam.dawar@amd.com>
-> > > > ---
-> > > >    drivers/net/ethernet/sfc/mcdi_pcol.h | 4390 +++++++++++++++++++++++++-
-> > > >    drivers/net/ethernet/sfc/mcdi_vdpa.c |   10 +-
-> > > >    2 files changed, 4288 insertions(+), 112 deletions(-)
-> > > > 
-> > > > diff --git a/drivers/net/ethernet/sfc/mcdi_pcol.h b/drivers/net/ethernet/sfc/mcdi_pcol.h
-> > > > index cd297e19cddc..bdb6a53b8be3 100644
-> > > > --- a/drivers/net/ethernet/sfc/mcdi_pcol.h
-> > > > +++ b/drivers/net/ethernet/sfc/mcdi_pcol.h
-> > > > @@ -2,10 +2,9 @@
-> > > >    /****************************************************************************
-> > > >     * Driver for Solarflare network controllers and boards
-> > > >     * Copyright 2009-2018 Solarflare Communications Inc.
-> > > > - * Copyright 2019-2020 Xilinx Inc.
-> > > > + * Copyright 2019-2022 Xilinx Inc.
-> > > >     */
-> > > > 
-> > > 2023?
-> 
-> I can do that unless manual changes to this file are prohibited.
-> 
-> Martin?
+--pM1j5p9RDJondMxj
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
 
-We can change the code that generates this file, we'll discuss the procedure
-offline.
+Greeting,
 
-> 
-> > > 
-> > > > -
-> > > >    #ifndef MCDI_PCOL_H
-> > > >    #define MCDI_PCOL_H
-> > > > 
-> > > > @@ -72,19 +71,19 @@
-> > > >     *               |                      \------- Error
-> > > >     *               \------------------------------ Resync (always set)
-> > > >     *
-> > > > - * The client writes it's request into MC shared memory, and rings the
-> > > > - * doorbell. Each request is completed by either by the MC writing
-> > > > + * The client writes its request into MC shared memory, and rings the
-> > > > + * doorbell. Each request is completed either by the MC writing
-> > > It seems this patch has been also seized for fixing a good number of typos.
-> > > I would not mind if one or two go into, but that is not the case here.
-> > > All those fixes should be in another patch out of this patchset.
-> > As stated in the description, mcdi_pcol.h is a generated file. We cannot
-> > pick and choose what parts to pick up, we always have to use the latest
-> > version that contains the changes we need.
-> > 
-> > Martin
-> +1
-> > 
-> > > >     * back into shared memory, or by writing out an event.
-> > > >     *
-> > > >     * All MCDI commands support completion by shared memory response. Each
-> > > >     * request may also contain additional data (accounted for by HEADER.LEN),
-> > > > - * and some response's may also contain additional data (again, accounted
-> > > > + * and some responses may also contain additional data (again, accounted
-> > > >     * for by HEADER.LEN).
-> > > >     *
-> > > >     * Some MCDI commands support completion by event, in which any associated
-> > > >     * response data is included in the event.
-> > > >     *
-> > > > - * The protocol requires one response to be delivered for every request, a
-> > > > + * The protocol requires one response to be delivered for every request; a
-> > > >     * request should not be sent unless the response for the previous request
-> > > >     * has been received (either by polling shared memory, or by receiving
-> > > >     * an event).
-> > > > @@ -121,7 +120,6 @@
-> > > > 
-> > > >    #define MCDI_CTL_SDU_LEN_MAX MCDI_CTL_SDU_LEN_MAX_V2
-> > > > 
-> > > > -
-> > > >    /* The MC can generate events for two reasons:
-> > > >     *   - To advance a shared memory request if XFLAGS_EVREQ was set
-> > > >     *   - As a notification (link state, i2c event), controlled
-> > > > @@ -165,6 +163,7 @@
-> > > >    #define FSE_AZ_EV_CODE_MCDI_EVRESPONSE 0xc
-> > > > 
-> > > > 
-> > > > +
-> > > >    #define MC_CMD_ERR_CODE_OFST 0
-> > > >    #define MC_CMD_ERR_PROXY_PENDING_HANDLE_OFST 4
-> > > > 
-> > > > @@ -228,7 +227,6 @@
-> > > >     */
-> > > >    #define EVB_STACK_ID(n)  (((n) & 0xff) << 16)
-> > > > 
-> > > > -
-> > > >    /* Version 2 adds an optional argument to error returns: the errno value
-> > > >     * may be followed by the (0-based) number of the first argument that
-> > > >     * could not be processed.
-> > > > @@ -321,7 +319,7 @@
-> > > >    /* enum: The requesting client is not a function */
-> > > >    #define          MC_CMD_ERR_CLIENT_NOT_FN 0x100c
-> > > >    /* enum: The requested operation might require the command to be passed between
-> > > > - * MCs, and thetransport doesn't support that. Should only ever been seen over
-> > > > + * MCs, and the transport doesn't support that. Should only ever been seen over
-> > > >     * the UART.
-> > > >     */
-> > > >    #define          MC_CMD_ERR_TRANSPORT_NOPROXY 0x100d
-> > > > @@ -358,7 +356,7 @@
-> > > >     * sub-variant switching.
-> > > >     */
-> > > >    #define          MC_CMD_ERR_FILTERS_PRESENT 0x1014
-> > > > -/* enum: The clock whose frequency you've attempted to set set doesn't exist on
-> > > > +/* enum: The clock whose frequency you've attempted to set doesn't exist on
-> > > >     * this NIC
-> > > >     */
-> > > >    #define          MC_CMD_ERR_NO_CLOCK 0x1015
-> > > > @@ -640,7 +638,11 @@
-> > > >     * be allocated by different counter blocks, so e.g. AR counter 42 is different
-> > > >     * from CT counter 42. Generation counts are also type-specific. This value is
-> > > >     * also present in the header of streaming counter packets, in the IDENTIFIER
-> > > > - * field (see packetiser packet format definitions).
-> > > > + * field (see packetiser packet format definitions). Also note that LACP
-> > > > + * counter IDs are not allocated individually, instead the counter IDs are
-> > > > + * directly tied to the LACP balance table indices. These in turn are allocated
-> > > > + * in large contiguous blocks as a LAG config. Calling MAE_COUNTER_ALLOC/FREE
-> > > > + * with an LACP counter type will return EPERM.
-> > > >     */
-> > > >    /* enum: Action Rule counters - can be referenced in AR response. */
-> > > >    #define          MAE_COUNTER_TYPE_AR 0x0
-> > > > @@ -648,6 +650,14 @@
-> > > >    #define          MAE_COUNTER_TYPE_CT 0x1
-> > > >    /* enum: Outer Rule counters - can be referenced in OR response. */
-> > > >    #define          MAE_COUNTER_TYPE_OR 0x2
-> > > > +/* enum: LACP counters - linked to LACP balance table entries. */
-> > > > +#define          MAE_COUNTER_TYPE_LACP 0x3
-> > > > +
-> > > > +/* MAE_COUNTER_ID enum: ID of allocated counter or counter list. */
-> > > > +/* enum: A counter ID that is guaranteed never to represent a real counter or
-> > > > + * counter list.
-> > > > + */
-> > > > +#define          MAE_COUNTER_ID_NULL 0xffffffff
-> > > > 
-> > > >    /* TABLE_ID enum: Unique IDs for tables. The 32-bit ID values have been
-> > > >     * structured with bits [31:24] reserved (0), [23:16] indicating which major
-> > > > @@ -656,7 +666,9 @@
-> > > >     * variations of the same table. (All of the tables currently defined within
-> > > >     * the streaming engines are listed here, but this does not imply that they are
-> > > >     * all supported - MC_CMD_TABLE_LIST returns the list of actually supported
-> > > > - * tables.)
-> > > > + * tables.) The DPU offload engines' enumerators follow a deliberate pattern:
-> > > > + * 0x01010000 + is_dpu_net * 0x10000 + is_wr_or_tx * 0x8000 + is_lite_pipe *
-> > > > + * 0x1000 + oe_engine_type * 0x100 + oe_instance_within_pipe * 0x10
-> > > >     */
-> > > >    /* enum: Outer_Rule_Table in the MAE - refer to SF-123102-TC. */
-> > > >    #define          TABLE_ID_OUTER_RULE_TABLE 0x10000
-> > > > @@ -694,6 +706,70 @@
-> > > >    #define          TABLE_ID_RSS_CONTEXT_TABLE 0x20200
-> > > >    /* enum: Indirection_Table in VNIC Rx - refer to SF-123102-TC. */
-> > > >    #define          TABLE_ID_INDIRECTION_TABLE 0x20300
-> > > > +/* enum: DPU.host read pipe first CRC offload engine profiles - refer to
-> > > > + * XN-200147-AN.
-> > > I think this is an internal document not available to the public.
-> > > Please, remove all those references.
-> 
-> Again, not sure if any manual changes are allowed to this file. IIUC, we
-> simply replace this file with the newer version generated by the tool
-> whenever any new changes are added.
+FYI, we noticed WARNING:at_fs/sysfs/file.c:#sysfs_emit_at due to commit (built with gcc-11):
 
-Agree
+commit: 4d00e68cfcfd91d3a8c794d47617429a96d623ed ("panic: Expose "warn_count" to sysfs")
+https://git.kernel.org/cgit/linux/kernel/git/stable/linux-stable-rc.git linux-4.19.y
 
-Martin
+in testcase: trinity
+version: trinity-static-x86_64-x86_64-1c734c75-1_2020-01-06
+with following parameters:
 
-> Thanks
-> 
-> > > 
-> > > > + */
-> > > > +#define          TABLE_ID_DPU_HOST_RD_CRC0_OE_PROFILE 0x1010000
-> > > > +/* enum: DPU.host read pipe second CRC offload engine profiles - refer to
-> > > > + * XN-200147-AN.
-> > > > + */
-> > > > +#define          TABLE_ID_DPU_HOST_RD_CRC1_OE_PROFILE 0x1010010
-> > > > +/* enum: DPU.host write pipe first CRC offload engine profiles - refer to
-> > > > + * XN-200147-AN.
-> > > > + */
-> > > > +#define          TABLE_ID_DPU_HOST_WR_CRC0_OE_PROFILE 0x1018000
-> > > > +/* enum: DPU.host write pipe second CRC offload engine profiles - refer to
-> > > > + * XN-200147-AN.
-> > > > + */
-> > > > +#define          TABLE_ID_DPU_HOST_WR_CRC1_OE_PROFILE 0x1018010
-> > > > +/* enum: DPU.net 'full' receive pipe CRC offload engine profiles - refer to
-> > > > + * XN-200147-AN.
-> > > > + */
-> > > > +#define          TABLE_ID_DPU_NET_RX_CRC0_OE_PROFILE 0x1020000
-> > > > +/* enum: DPU.net 'full' receive pipe first checksum offload engine profiles -
-> > > > + * refer to XN-200147-AN.
-> > > > + */
-> > > > +#define          TABLE_ID_DPU_NET_RX_CSUM0_OE_PROFILE 0x1020100
-> > > > +/* enum: DPU.net 'full' receive pipe second checksum offload engine profiles -
-> > > > + * refer to XN-200147-AN.
-> > > > + */
-> > > > +#define          TABLE_ID_DPU_NET_RX_CSUM1_OE_PROFILE 0x1020110
-> > > > +/* enum: DPU.net 'full' receive pipe AES-GCM offload engine profiles - refer to
-> > > > + * XN-200147-AN.
-> > > > + */
-> > > > +#define          TABLE_ID_DPU_NET_RX_AES_GCM0_OE_PROFILE 0x1020200
-> > > > +/* enum: DPU.net 'lite' receive pipe CRC offload engine profiles - refer to
-> > > > + * XN-200147-AN.
-> > > > + */
-> > > > +#define          TABLE_ID_DPU_NET_RXLITE_CRC0_OE_PROFILE 0x1021000
-> > > > +/* enum: DPU.net 'lite' receive pipe checksum offload engine profiles - refer
-> > > > + * to XN-200147-AN.
-> > > > + */
-> > > > +#define          TABLE_ID_DPU_NET_RXLITE_CSUM0_OE_PROFILE 0x1021100
-> > > > +/* enum: DPU.net 'full' transmit pipe CRC offload engine profiles - refer to
-> > > > + * XN-200147-AN.
-> > > > + */
-> > > > +#define          TABLE_ID_DPU_NET_TX_CRC0_OE_PROFILE 0x1028000
-> > > > +/* enum: DPU.net 'full' transmit pipe first checksum offload engine profiles -
-> > > > + * refer to XN-200147-AN.
-> > > > + */
-> > > > +#define          TABLE_ID_DPU_NET_TX_CSUM0_OE_PROFILE 0x1028100
-> > > > +/* enum: DPU.net 'full' transmit pipe second checksum offload engine profiles -
-> > > > + * refer to XN-200147-AN.
-> > > > + */
-> > > > +#define          TABLE_ID_DPU_NET_TX_CSUM1_OE_PROFILE 0x1028110
-> > > > +/* enum: DPU.net 'full' transmit pipe AES-GCM offload engine profiles - refer
-> > > > + * to XN-200147-AN.
-> > > > + */
-> > > > +#define          TABLE_ID_DPU_NET_TX_AES_GCM0_OE_PROFILE 0x1028200
-> > > > +/* enum: DPU.net 'lite' transmit pipe CRC offload engine profiles - refer to
-> > > > + * XN-200147-AN.
-> > > > + */
-> > > > +#define          TABLE_ID_DPU_NET_TXLITE_CRC0_OE_PROFILE 0x1029000
-> > > > +/* enum: DPU.net 'lite' transmit pipe checksum offload engine profiles - refer
-> > > > + * to XN-200147-AN.
-> > > > + */
-> > > > +#define          TABLE_ID_DPU_NET_TXLITE_CSUM0_OE_PROFILE 0x1029100
-> > > > 
-> > > >    /* TABLE_COMPRESSED_VLAN enum: Compressed VLAN TPID as used by some field
-> > > >     * types; can be calculated by (((ether_type_msb >> 2) & 0x4) ^ 0x4) |
-> > > > @@ -734,6 +810,42 @@
-> > > >    /* enum: RSS uses even spreading calculation. */
-> > > >    #define          TABLE_RSS_SPREAD_MODE_EVEN 0x1
-> > > > 
-> > > > +/* CRC_VARIANT enum: Operation for the DPU CRC engine to perform. */
-> > > > +/* enum: Calculate a 32-bit CRC. */
-> > > > +#define          CRC_VARIANT_CRC32 0x1
-> > > > +/* enum: Calculate a 64-bit CRC. */
-> > > > +#define          CRC_VARIANT_CRC64 0x2
-> > > > +
-> > > > +/* DPU_CSUM_OP enum: Operation for the DPU checksum engine to perform. */
-> > > > +/* enum: Calculate the checksum for a TCP payload, output result on OPR bus. */
-> > > > +#define          DPU_CSUM_OP_CALC_TCP 0x0
-> > > > +/* enum: Calculate the checksum for a UDP payload, output result on OPR bus. */
-> > > > +#define          DPU_CSUM_OP_CALC_UDP 0x1
-> > > > +/* enum: Calculate the checksum for a TCP payload, output match/not match value
-> > > > + * on OPR bus.
-> > > > + */
-> > > > +#define          DPU_CSUM_OP_VALIDATE_TCP 0x2
-> > > > +/* enum: Calculate the checksum for a UDP payload, output match/not match value
-> > > > + * on OPR bus.
-> > > > + */
-> > > > +#define          DPU_CSUM_OP_VALIDATE_UDP 0x3
-> > > > +
-> > > > +/* GCM_OP_CODE enum: Operation for the DPU AES-GCM engine to perform. */
-> > > > +/* enum: Encrypt/decrypt a stream of data. */
-> > > > +#define          GCM_OP_CODE_BULK_CRYPT 0x0
-> > > > +/* enum: Calculate the authentication tag for a stream of data. */
-> > > > +#define          GCM_OP_CODE_BULK_AUTH 0x1
-> > > > +/* enum: Encrypt/decrypt an IPsec packet. */
-> > > > +#define          GCM_OP_CODE_IPSEC_CRYPT 0x2
-> > > > +/* enum: Calculate the authentication tag of an IPsec packet. */
-> > > > +#define          GCM_OP_CODE_IPSEC_AUTH 0x3
-> > > > +
-> > > > +/* AES_KEY_LEN enum: Key size for AES crypto operations */
-> > > > +/* enum: 128 bit key size. */
-> > > > +#define          AES_KEY_LEN_AES_KEY_128 0x0
-> > > > +/* enum: 256 bit key size. */
-> > > > +#define          AES_KEY_LEN_AES_KEY_256 0x1
-> > > > +
-> > > >    /* TABLE_FIELD_ID enum: Unique IDs for fields. Related concepts have been
-> > > >     * loosely grouped together into blocks with gaps for expansion, but the values
-> > > >     * are arbitrary. Field IDs are not specific to particular tables, and in some
-> > > > @@ -1026,6 +1138,16 @@
-> > > >    #define          TABLE_FIELD_ID_BAL_TBL_BASE_DIV64 0xde
-> > > >    /* enum: Length of balance table region: 0=>64, 1=>128, 2=>256. */
-> > > >    #define          TABLE_FIELD_ID_BAL_TBL_LEN_ID 0xdf
-> > > > +/* enum: LACP LAG ID (i.e. the low 3 bits of LACP LAG mport ID), indexing
-> > > > + * LACP_LAG_Config_Table. Refer to SF-123102-TC.
-> > > > + */
-> > > > +#define          TABLE_FIELD_ID_LACP_LAG_ID 0xe0
-> > > > +/* enum: Address in LACP_Balance_Table. The balance table is partitioned
-> > > > + * between LAGs according to the settings in LACP_LAG_Config_Table and then
-> > > > + * indexed by the LACP hash, providing the mapping to destination mports. Refer
-> > > > + * to SF-123102-TC.
-> > > > + */
-> > > > +#define          TABLE_FIELD_ID_BAL_TBL_ADDR 0xe1
-> > > >    /* enum: UDP port to match for UDP-based encapsulations; required to be 0 for
-> > > >     * other encapsulation types.
-> > > >     */
-> > > > @@ -1082,6 +1204,58 @@
-> > > >    #define          TABLE_FIELD_ID_INDIR_TBL_LEN_ID 0x105
-> > > >    /* enum: An offset to be applied to the base destination queue ID. */
-> > > >    #define          TABLE_FIELD_ID_INDIR_OFFSET 0x106
-> > > > +/* enum: DPU offload engine profile ID to address. */
-> > > > +#define          TABLE_FIELD_ID_OE_PROFILE 0x3e8
-> > > > +/* enum: Width of the CRC to calculate - see CRC_VARIANT enum. */
-> > > > +#define          TABLE_FIELD_ID_CRC_VARIANT 0x3f2
-> > > > +/* enum: If set, reflect the bits of each input byte, bit 7 is LSB, bit 0 is
-> > > > + * MSB. If clear, bit 7 is MSB, bit 0 is LSB.
-> > > > + */
-> > > > +#define          TABLE_FIELD_ID_CRC_REFIN 0x3f3
-> > > > +/* enum: If set, reflect the bits of each output byte, bit 7 is LSB, bit 0 is
-> > > > + * MSB. If clear, bit 7 is MSB, bit 0 is LSB.
-> > > > + */
-> > > > +#define          TABLE_FIELD_ID_CRC_REFOUT 0x3f4
-> > > > +/* enum: If set, invert every bit of the output value. */
-> > > > +#define          TABLE_FIELD_ID_CRC_INVOUT 0x3f5
-> > > > +/* enum: The CRC polynomial to use for checksumming, in normal form. See
-> > > > + * https://en.wikipedia.org/wiki/Cyclic_redundancy_check#Specification for a
-> > > > + * description of normal form.
-> > > > + */
-> > > > +#define          TABLE_FIELD_ID_CRC_POLY 0x3f6
-> > > > +/* enum: Operation for the checksum engine to perform - see DPU_CSUM_OP enum.
-> > > > + */
-> > > > +#define          TABLE_FIELD_ID_CSUM_OP 0x410
-> > > > +/* enum: Byte offset of checksum relative to region_start (for VALIDATE_*
-> > > > + * operations only).
-> > > > + */
-> > > > +#define          TABLE_FIELD_ID_CSUM_OFFSET 0x411
-> > > > +/* enum: Indicates there is additional data on OPR bus that needs to be
-> > > > + * incorporated into the payload checksum.
-> > > > + */
-> > > > +#define          TABLE_FIELD_ID_CSUM_OPR_ADDITIONAL_DATA 0x412
-> > > > +/* enum: Log2 data size of additional data on OPR bus. */
-> > > > +#define          TABLE_FIELD_ID_CSUM_OPR_DATA_SIZE_LOG2 0x413
-> > > > +/* enum: 4 byte offset of where to find the additional data on the OPR bus. */
-> > > > +#define          TABLE_FIELD_ID_CSUM_OPR_4B_OFF 0x414
-> > > > +/* enum: Operation type for the AES-GCM core - see GCM_OP_CODE enum. */
-> > > > +#define          TABLE_FIELD_ID_GCM_OP_CODE 0x41a
-> > > > +/* enum: Key length - AES_KEY_LEN enum. */
-> > > > +#define          TABLE_FIELD_ID_GCM_KEY_LEN 0x41b
-> > > > +/* enum: OPR 4 byte offset for ICV or GHASH output (only in BULK_* mode) or
-> > > > + * IPSEC descrypt output.
-> > > > + */
-> > > > +#define          TABLE_FIELD_ID_GCM_OPR_4B_OFFSET 0x41c
-> > > > +/* enum: If OP_CODE is BULK_*, indicates Emit GHASH (Fragment mode). Else,
-> > > > + * indicates IPSEC-ESN mode.
-> > > > + */
-> > > > +#define          TABLE_FIELD_ID_GCM_EMIT_GHASH_ISESN 0x41d
-> > > > +/* enum: Replay Protection Enable. */
-> > > > +#define          TABLE_FIELD_ID_GCM_REPLAY_PROTECT_EN 0x41e
-> > > > +/* enum: IPSEC Encrypt ESP trailer NEXT_HEADER byte. */
-> > > > +#define          TABLE_FIELD_ID_GCM_NEXT_HDR 0x41f
-> > > > +/* enum: Replay Window Size. */
-> > > > +#define          TABLE_FIELD_ID_GCM_REPLAY_WIN_SIZE 0x420
-> > > > 
-> > > >    /* MCDI_EVENT structuredef: The structure of an MCDI_EVENT on Siena/EF10/EF100
-> > > >     * platforms
-> > > > @@ -1237,7 +1411,7 @@
-> > > >    #define          MCDI_EVENT_AOE_FPGA_LOAD_FAILED 0xe
-> > > >    /* enum: Notify that invalid flash type detected */
-> > > >    #define          MCDI_EVENT_AOE_INVALID_FPGA_FLASH_TYPE 0xf
-> > > > -/* enum: Notify that the attempt to run FPGA Controller firmware timedout */
-> > > > +/* enum: Notify that the attempt to run FPGA Controller firmware timed out */
-> > > >    #define          MCDI_EVENT_AOE_FC_RUN_TIMEDOUT 0x10
-> > > >    /* enum: Failure to probe one or more FPGA boot flash chips */
-> > > >    #define          MCDI_EVENT_AOE_FPGA_BOOT_FLASH_INVALID 0x11
-> > > > @@ -1255,7 +1429,7 @@
-> > > >    #define        MCDI_EVENT_AOE_ERR_FC_ASSERT_INFO_WIDTH 8
-> > > >    /* enum: FC Assert happened, but the register information is not available */
-> > > >    #define          MCDI_EVENT_AOE_ERR_FC_ASSERT_SEEN 0x0
-> > > > -/* enum: The register information for FC Assert is ready for readinng by driver
-> > > > +/* enum: The register information for FC Assert is ready for reading by driver
-> > > >     */
-> > > >    #define          MCDI_EVENT_AOE_ERR_FC_ASSERT_DATA_READY 0x1
-> > > >    #define        MCDI_EVENT_AOE_ERR_CODE_FPGA_HEADER_VERIFY_FAILED_OFST 0
-> > > > @@ -1364,6 +1538,12 @@
-> > > >    #define        MCDI_EVENT_MODULECHANGE_SEQ_OFST 0
-> > > >    #define        MCDI_EVENT_MODULECHANGE_SEQ_LBN 30
-> > > >    #define        MCDI_EVENT_MODULECHANGE_SEQ_WIDTH 2
-> > > > +#define        MCDI_EVENT_DESC_PROXY_VIRTQ_VI_ID_OFST 0
-> > > > +#define        MCDI_EVENT_DESC_PROXY_VIRTQ_VI_ID_LBN 0
-> > > > +#define        MCDI_EVENT_DESC_PROXY_VIRTQ_VI_ID_WIDTH 16
-> > > > +#define        MCDI_EVENT_DESC_PROXY_VIRTQ_ID_OFST 0
-> > > > +#define        MCDI_EVENT_DESC_PROXY_VIRTQ_ID_LBN 16
-> > > > +#define        MCDI_EVENT_DESC_PROXY_VIRTQ_ID_WIDTH 16
-> > > >    #define       MCDI_EVENT_DATA_LBN 0
-> > > >    #define       MCDI_EVENT_DATA_WIDTH 32
-> > > >    /* Alias for PTP_DATA. */
-> > > > @@ -1500,6 +1680,12 @@
-> > > >     * change to the journal.
-> > > >     */
-> > > >    #define          MCDI_EVENT_CODE_MPORT_JOURNAL_CHANGE 0x27
-> > > > +/* enum: Notification that a source queue is enabled and attached to its proxy
-> > > > + * sink queue. SRC field contains the handle of the affected descriptor proxy
-> > > > + * function. DATA field contains the relative source queue number and absolute
-> > > > + * VI ID.
-> > > > + */
-> > > > +#define          MCDI_EVENT_CODE_DESC_PROXY_FUNC_QUEUE_START 0x28
-> > > >    /* enum: Artificial event generated by host and posted via MC for test
-> > > >     * purposes.
-> > > >     */
-> > > > @@ -1977,7 +2163,7 @@
-> > > >    #define MC_CMD_COPYCODE 0x3
-> > > >    #undef MC_CMD_0x3_PRIVILEGE_CTG
-> > > > 
-> > > > -#define MC_CMD_0x3_PRIVILEGE_CTG SRIOV_CTG_ADMIN
-> > > > +#define MC_CMD_0x3_PRIVILEGE_CTG SRIOV_CTG_ADMIN_TSA_UNBOUND
-> > > > 
-> > > >    /* MC_CMD_COPYCODE_IN msgrequest */
-> > > >    #define    MC_CMD_COPYCODE_IN_LEN 16
-> > > > @@ -3943,11 +4129,15 @@
-> > > >    /***********************************/
-> > > >    /* MC_CMD_CSR_READ32
-> > > >     * Read 32bit words from the indirect memory map.
-> > > > + *
-> > > > + * Note - this command originally belonged to INSECURE category. But access is
-> > > > + * required to specific registers for customer diagnostics. The command handler
-> > > > + * has additional checks to reject insecure calls.
-> > > >     */
-> > > >    #define MC_CMD_CSR_READ32 0xc
-> > > >    #undef MC_CMD_0xc_PRIVILEGE_CTG
-> > > > 
-> > > > -#define MC_CMD_0xc_PRIVILEGE_CTG SRIOV_CTG_INSECURE
-> > > > +#define MC_CMD_0xc_PRIVILEGE_CTG SRIOV_CTG_ADMIN
-> > > > 
-> > > >    /* MC_CMD_CSR_READ32_IN msgrequest */
-> > > >    #define    MC_CMD_CSR_READ32_IN_LEN 12
-> > > > @@ -4013,7 +4203,7 @@
-> > > >    #define MC_CMD_HP 0x54
-> > > >    #undef MC_CMD_0x54_PRIVILEGE_CTG
-> > > > 
-> > > > -#define MC_CMD_0x54_PRIVILEGE_CTG SRIOV_CTG_ADMIN
-> > > > +#define MC_CMD_0x54_PRIVILEGE_CTG SRIOV_CTG_ADMIN_TSA_UNBOUND
-> > > > 
-> > > >    /* MC_CMD_HP_IN msgrequest */
-> > > >    #define    MC_CMD_HP_IN_LEN 16
-> > > > @@ -4931,6 +5121,53 @@
-> > > >    /* MC_CMD_GET_PHY_CFG_IN msgrequest */
-> > > >    #define    MC_CMD_GET_PHY_CFG_IN_LEN 0
-> > > > 
-> > > > +/* MC_CMD_GET_PHY_CFG_IN_V2 msgrequest */
-> > > > +#define    MC_CMD_GET_PHY_CFG_IN_V2_LEN 8
-> > > > +/* Target port to request PHY state for. Uses MAE_LINK_ENDPOINT_SELECTOR which
-> > > > + * identifies a real or virtual network port by MAE port and link end. See the
-> > > > + * structure definition for more details
-> > > > + */
-> > > > +#define       MC_CMD_GET_PHY_CFG_IN_V2_TARGET_OFST 0
-> > > > +#define       MC_CMD_GET_PHY_CFG_IN_V2_TARGET_LEN 8
-> > > > +#define       MC_CMD_GET_PHY_CFG_IN_V2_TARGET_LO_OFST 0
-> > > > +#define       MC_CMD_GET_PHY_CFG_IN_V2_TARGET_LO_LEN 4
-> > > > +#define       MC_CMD_GET_PHY_CFG_IN_V2_TARGET_LO_LBN 0
-> > > > +#define       MC_CMD_GET_PHY_CFG_IN_V2_TARGET_LO_WIDTH 32
-> > > > +#define       MC_CMD_GET_PHY_CFG_IN_V2_TARGET_HI_OFST 4
-> > > > +#define       MC_CMD_GET_PHY_CFG_IN_V2_TARGET_HI_LEN 4
-> > > > +#define       MC_CMD_GET_PHY_CFG_IN_V2_TARGET_HI_LBN 32
-> > > > +#define       MC_CMD_GET_PHY_CFG_IN_V2_TARGET_HI_WIDTH 32
-> > > > +#define       MC_CMD_GET_PHY_CFG_IN_V2_TARGET_MPORT_SELECTOR_OFST 0
-> > > > +#define       MC_CMD_GET_PHY_CFG_IN_V2_TARGET_MPORT_SELECTOR_LEN 4
-> > > > +#define       MC_CMD_GET_PHY_CFG_IN_V2_TARGET_MPORT_SELECTOR_FLAT_OFST 0
-> > > > +#define       MC_CMD_GET_PHY_CFG_IN_V2_TARGET_MPORT_SELECTOR_FLAT_LEN 4
-> > > > +#define       MC_CMD_GET_PHY_CFG_IN_V2_TARGET_MPORT_SELECTOR_TYPE_OFST 3
-> > > > +#define       MC_CMD_GET_PHY_CFG_IN_V2_TARGET_MPORT_SELECTOR_TYPE_LEN 1
-> > > > +#define       MC_CMD_GET_PHY_CFG_IN_V2_TARGET_MPORT_SELECTOR_MPORT_ID_OFST 0
-> > > > +#define       MC_CMD_GET_PHY_CFG_IN_V2_TARGET_MPORT_SELECTOR_MPORT_ID_LEN 3
-> > > > +#define       MC_CMD_GET_PHY_CFG_IN_V2_TARGET_MPORT_SELECTOR_PPORT_ID_LBN 0
-> > > > +#define       MC_CMD_GET_PHY_CFG_IN_V2_TARGET_MPORT_SELECTOR_PPORT_ID_WIDTH 4
-> > > > +#define       MC_CMD_GET_PHY_CFG_IN_V2_TARGET_MPORT_SELECTOR_FUNC_INTF_ID_LBN 20
-> > > > +#define       MC_CMD_GET_PHY_CFG_IN_V2_TARGET_MPORT_SELECTOR_FUNC_INTF_ID_WIDTH 4
-> > > > +#define       MC_CMD_GET_PHY_CFG_IN_V2_TARGET_MPORT_SELECTOR_FUNC_MH_PF_ID_LBN 16
-> > > > +#define       MC_CMD_GET_PHY_CFG_IN_V2_TARGET_MPORT_SELECTOR_FUNC_MH_PF_ID_WIDTH 4
-> > > > +#define       MC_CMD_GET_PHY_CFG_IN_V2_TARGET_MPORT_SELECTOR_FUNC_PF_ID_OFST 2
-> > > > +#define       MC_CMD_GET_PHY_CFG_IN_V2_TARGET_MPORT_SELECTOR_FUNC_PF_ID_LEN 1
-> > > > +#define       MC_CMD_GET_PHY_CFG_IN_V2_TARGET_MPORT_SELECTOR_FUNC_VF_ID_OFST 0
-> > > > +#define       MC_CMD_GET_PHY_CFG_IN_V2_TARGET_MPORT_SELECTOR_FUNC_VF_ID_LEN 2
-> > > > +#define       MC_CMD_GET_PHY_CFG_IN_V2_TARGET_LINK_END_OFST 4
-> > > > +#define       MC_CMD_GET_PHY_CFG_IN_V2_TARGET_LINK_END_LEN 4
-> > > > +#define       MC_CMD_GET_PHY_CFG_IN_V2_TARGET_FLAT_OFST 0
-> > > > +#define       MC_CMD_GET_PHY_CFG_IN_V2_TARGET_FLAT_LEN 8
-> > > > +#define       MC_CMD_GET_PHY_CFG_IN_V2_TARGET_FLAT_LO_OFST 0
-> > > > +#define       MC_CMD_GET_PHY_CFG_IN_V2_TARGET_FLAT_LO_LEN 4
-> > > > +#define       MC_CMD_GET_PHY_CFG_IN_V2_TARGET_FLAT_LO_LBN 0
-> > > > +#define       MC_CMD_GET_PHY_CFG_IN_V2_TARGET_FLAT_LO_WIDTH 32
-> > > > +#define       MC_CMD_GET_PHY_CFG_IN_V2_TARGET_FLAT_HI_OFST 4
-> > > > +#define       MC_CMD_GET_PHY_CFG_IN_V2_TARGET_FLAT_HI_LEN 4
-> > > > +#define       MC_CMD_GET_PHY_CFG_IN_V2_TARGET_FLAT_HI_LBN 32
-> > > > +#define       MC_CMD_GET_PHY_CFG_IN_V2_TARGET_FLAT_HI_WIDTH 32
-> > > > +
-> > > >    /* MC_CMD_GET_PHY_CFG_OUT msgresponse */
-> > > >    #define    MC_CMD_GET_PHY_CFG_OUT_LEN 72
-> > > >    /* flags */
-> > > > @@ -5026,6 +5263,9 @@
-> > > >    #define        MC_CMD_PHY_CAP_25G_BASER_FEC_REQUESTED_OFST 8
-> > > >    #define        MC_CMD_PHY_CAP_25G_BASER_FEC_REQUESTED_LBN 21
-> > > >    #define        MC_CMD_PHY_CAP_25G_BASER_FEC_REQUESTED_WIDTH 1
-> > > > +#define        MC_CMD_PHY_CAP_200000FDX_OFST 8
-> > > > +#define        MC_CMD_PHY_CAP_200000FDX_LBN 22
-> > > > +#define        MC_CMD_PHY_CAP_200000FDX_WIDTH 1
-> > > >    /* ?? */
-> > > >    #define       MC_CMD_GET_PHY_CFG_OUT_CHANNEL_OFST 12
-> > > >    #define       MC_CMD_GET_PHY_CFG_OUT_CHANNEL_LEN 4
-> > > > @@ -5084,7 +5324,7 @@
-> > > >    #define MC_CMD_START_BIST 0x25
-> > > >    #undef MC_CMD_0x25_PRIVILEGE_CTG
-> > > > 
-> > > > -#define MC_CMD_0x25_PRIVILEGE_CTG SRIOV_CTG_ADMIN
-> > > > +#define MC_CMD_0x25_PRIVILEGE_CTG SRIOV_CTG_ADMIN_TSA_UNBOUND
-> > > > 
-> > > >    /* MC_CMD_START_BIST_IN msgrequest */
-> > > >    #define    MC_CMD_START_BIST_IN_LEN 4
-> > > > @@ -5124,7 +5364,7 @@
-> > > >    #define MC_CMD_POLL_BIST 0x26
-> > > >    #undef MC_CMD_0x26_PRIVILEGE_CTG
-> > > > 
-> > > > -#define MC_CMD_0x26_PRIVILEGE_CTG SRIOV_CTG_ADMIN
-> > > > +#define MC_CMD_0x26_PRIVILEGE_CTG SRIOV_CTG_ADMIN_TSA_UNBOUND
-> > > > 
-> > > >    /* MC_CMD_POLL_BIST_IN msgrequest */
-> > > >    #define    MC_CMD_POLL_BIST_IN_LEN 0
-> > > > @@ -5320,6 +5560,53 @@
-> > > >    /* MC_CMD_GET_LOOPBACK_MODES_IN msgrequest */
-> > > >    #define    MC_CMD_GET_LOOPBACK_MODES_IN_LEN 0
-> > > > 
-> > > > +/* MC_CMD_GET_LOOPBACK_MODES_IN_V2 msgrequest */
-> > > > +#define    MC_CMD_GET_LOOPBACK_MODES_IN_V2_LEN 8
-> > > > +/* Target port to request loopback modes for. Uses MAE_LINK_ENDPOINT_SELECTOR
-> > > > + * which identifies a real or virtual network port by MAE port and link end.
-> > > > + * See the structure definition for more details
-> > > > + */
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_IN_V2_TARGET_OFST 0
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_IN_V2_TARGET_LEN 8
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_IN_V2_TARGET_LO_OFST 0
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_IN_V2_TARGET_LO_LEN 4
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_IN_V2_TARGET_LO_LBN 0
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_IN_V2_TARGET_LO_WIDTH 32
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_IN_V2_TARGET_HI_OFST 4
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_IN_V2_TARGET_HI_LEN 4
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_IN_V2_TARGET_HI_LBN 32
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_IN_V2_TARGET_HI_WIDTH 32
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_IN_V2_TARGET_MPORT_SELECTOR_OFST 0
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_IN_V2_TARGET_MPORT_SELECTOR_LEN 4
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_IN_V2_TARGET_MPORT_SELECTOR_FLAT_OFST 0
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_IN_V2_TARGET_MPORT_SELECTOR_FLAT_LEN 4
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_IN_V2_TARGET_MPORT_SELECTOR_TYPE_OFST 3
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_IN_V2_TARGET_MPORT_SELECTOR_TYPE_LEN 1
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_IN_V2_TARGET_MPORT_SELECTOR_MPORT_ID_OFST 0
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_IN_V2_TARGET_MPORT_SELECTOR_MPORT_ID_LEN 3
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_IN_V2_TARGET_MPORT_SELECTOR_PPORT_ID_LBN 0
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_IN_V2_TARGET_MPORT_SELECTOR_PPORT_ID_WIDTH 4
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_IN_V2_TARGET_MPORT_SELECTOR_FUNC_INTF_ID_LBN 20
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_IN_V2_TARGET_MPORT_SELECTOR_FUNC_INTF_ID_WIDTH 4
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_IN_V2_TARGET_MPORT_SELECTOR_FUNC_MH_PF_ID_LBN 16
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_IN_V2_TARGET_MPORT_SELECTOR_FUNC_MH_PF_ID_WIDTH 4
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_IN_V2_TARGET_MPORT_SELECTOR_FUNC_PF_ID_OFST 2
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_IN_V2_TARGET_MPORT_SELECTOR_FUNC_PF_ID_LEN 1
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_IN_V2_TARGET_MPORT_SELECTOR_FUNC_VF_ID_OFST 0
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_IN_V2_TARGET_MPORT_SELECTOR_FUNC_VF_ID_LEN 2
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_IN_V2_TARGET_LINK_END_OFST 4
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_IN_V2_TARGET_LINK_END_LEN 4
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_IN_V2_TARGET_FLAT_OFST 0
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_IN_V2_TARGET_FLAT_LEN 8
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_IN_V2_TARGET_FLAT_LO_OFST 0
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_IN_V2_TARGET_FLAT_LO_LEN 4
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_IN_V2_TARGET_FLAT_LO_LBN 0
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_IN_V2_TARGET_FLAT_LO_WIDTH 32
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_IN_V2_TARGET_FLAT_HI_OFST 4
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_IN_V2_TARGET_FLAT_HI_LEN 4
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_IN_V2_TARGET_FLAT_HI_LBN 32
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_IN_V2_TARGET_FLAT_HI_WIDTH 32
-> > > > +
-> > > >    /* MC_CMD_GET_LOOPBACK_MODES_OUT msgresponse */
-> > > >    #define    MC_CMD_GET_LOOPBACK_MODES_OUT_LEN 40
-> > > >    /* Supported loopbacks. */
-> > > > @@ -5649,6 +5936,204 @@
-> > > >    /*            Enum values, see field(s): */
-> > > >    /*               100M */
-> > > > 
-> > > > +/* MC_CMD_GET_LOOPBACK_MODES_OUT_V3 msgresponse: Supported loopback modes for
-> > > > + * newer NICs with 200G support
-> > > > + */
-> > > > +#define    MC_CMD_GET_LOOPBACK_MODES_OUT_V3_LEN 72
-> > > > +/* Supported loopbacks. */
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_100M_OFST 0
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_100M_LEN 8
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_100M_LO_OFST 0
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_100M_LO_LEN 4
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_100M_LO_LBN 0
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_100M_LO_WIDTH 32
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_100M_HI_OFST 4
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_100M_HI_LEN 4
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_100M_HI_LBN 32
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_100M_HI_WIDTH 32
-> > > > +/* enum: None. */
-> > > > +/*               MC_CMD_LOOPBACK_NONE 0x0 */
-> > > > +/* enum: Data. */
-> > > > +/*               MC_CMD_LOOPBACK_DATA 0x1 */
-> > > > +/* enum: GMAC. */
-> > > > +/*               MC_CMD_LOOPBACK_GMAC 0x2 */
-> > > > +/* enum: XGMII. */
-> > > > +/*               MC_CMD_LOOPBACK_XGMII 0x3 */
-> > > > +/* enum: XGXS. */
-> > > > +/*               MC_CMD_LOOPBACK_XGXS 0x4 */
-> > > > +/* enum: XAUI. */
-> > > > +/*               MC_CMD_LOOPBACK_XAUI 0x5 */
-> > > > +/* enum: GMII. */
-> > > > +/*               MC_CMD_LOOPBACK_GMII 0x6 */
-> > > > +/* enum: SGMII. */
-> > > > +/*               MC_CMD_LOOPBACK_SGMII 0x7 */
-> > > > +/* enum: XGBR. */
-> > > > +/*               MC_CMD_LOOPBACK_XGBR 0x8 */
-> > > > +/* enum: XFI. */
-> > > > +/*               MC_CMD_LOOPBACK_XFI 0x9 */
-> > > > +/* enum: XAUI Far. */
-> > > > +/*               MC_CMD_LOOPBACK_XAUI_FAR 0xa */
-> > > > +/* enum: GMII Far. */
-> > > > +/*               MC_CMD_LOOPBACK_GMII_FAR 0xb */
-> > > > +/* enum: SGMII Far. */
-> > > > +/*               MC_CMD_LOOPBACK_SGMII_FAR 0xc */
-> > > > +/* enum: XFI Far. */
-> > > > +/*               MC_CMD_LOOPBACK_XFI_FAR 0xd */
-> > > > +/* enum: GPhy. */
-> > > > +/*               MC_CMD_LOOPBACK_GPHY 0xe */
-> > > > +/* enum: PhyXS. */
-> > > > +/*               MC_CMD_LOOPBACK_PHYXS 0xf */
-> > > > +/* enum: PCS. */
-> > > > +/*               MC_CMD_LOOPBACK_PCS 0x10 */
-> > > > +/* enum: PMA-PMD. */
-> > > > +/*               MC_CMD_LOOPBACK_PMAPMD 0x11 */
-> > > > +/* enum: Cross-Port. */
-> > > > +/*               MC_CMD_LOOPBACK_XPORT 0x12 */
-> > > > +/* enum: XGMII-Wireside. */
-> > > > +/*               MC_CMD_LOOPBACK_XGMII_WS 0x13 */
-> > > > +/* enum: XAUI Wireside. */
-> > > > +/*               MC_CMD_LOOPBACK_XAUI_WS 0x14 */
-> > > > +/* enum: XAUI Wireside Far. */
-> > > > +/*               MC_CMD_LOOPBACK_XAUI_WS_FAR 0x15 */
-> > > > +/* enum: XAUI Wireside near. */
-> > > > +/*               MC_CMD_LOOPBACK_XAUI_WS_NEAR 0x16 */
-> > > > +/* enum: GMII Wireside. */
-> > > > +/*               MC_CMD_LOOPBACK_GMII_WS 0x17 */
-> > > > +/* enum: XFI Wireside. */
-> > > > +/*               MC_CMD_LOOPBACK_XFI_WS 0x18 */
-> > > > +/* enum: XFI Wireside Far. */
-> > > > +/*               MC_CMD_LOOPBACK_XFI_WS_FAR 0x19 */
-> > > > +/* enum: PhyXS Wireside. */
-> > > > +/*               MC_CMD_LOOPBACK_PHYXS_WS 0x1a */
-> > > > +/* enum: PMA lanes MAC-Serdes. */
-> > > > +/*               MC_CMD_LOOPBACK_PMA_INT 0x1b */
-> > > > +/* enum: KR Serdes Parallel (Encoder). */
-> > > > +/*               MC_CMD_LOOPBACK_SD_NEAR 0x1c */
-> > > > +/* enum: KR Serdes Serial. */
-> > > > +/*               MC_CMD_LOOPBACK_SD_FAR 0x1d */
-> > > > +/* enum: PMA lanes MAC-Serdes Wireside. */
-> > > > +/*               MC_CMD_LOOPBACK_PMA_INT_WS 0x1e */
-> > > > +/* enum: KR Serdes Parallel Wireside (Full PCS). */
-> > > > +/*               MC_CMD_LOOPBACK_SD_FEP2_WS 0x1f */
-> > > > +/* enum: KR Serdes Parallel Wireside (Sym Aligner to TX). */
-> > > > +/*               MC_CMD_LOOPBACK_SD_FEP1_5_WS 0x20 */
-> > > > +/* enum: KR Serdes Parallel Wireside (Deserializer to Serializer). */
-> > > > +/*               MC_CMD_LOOPBACK_SD_FEP_WS 0x21 */
-> > > > +/* enum: KR Serdes Serial Wireside. */
-> > > > +/*               MC_CMD_LOOPBACK_SD_FES_WS 0x22 */
-> > > > +/* enum: Near side of AOE Siena side port */
-> > > > +/*               MC_CMD_LOOPBACK_AOE_INT_NEAR 0x23 */
-> > > > +/* enum: Medford Wireside datapath loopback */
-> > > > +/*               MC_CMD_LOOPBACK_DATA_WS 0x24 */
-> > > > +/* enum: Force link up without setting up any physical loopback (snapper use
-> > > > + * only)
-> > > > + */
-> > > > +/*               MC_CMD_LOOPBACK_FORCE_EXT_LINK 0x25 */
-> > > > +/* Supported loopbacks. */
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_1G_OFST 8
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_1G_LEN 8
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_1G_LO_OFST 8
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_1G_LO_LEN 4
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_1G_LO_LBN 64
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_1G_LO_WIDTH 32
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_1G_HI_OFST 12
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_1G_HI_LEN 4
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_1G_HI_LBN 96
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_1G_HI_WIDTH 32
-> > > > +/*            Enum values, see field(s): */
-> > > > +/*               100M */
-> > > > +/* Supported loopbacks. */
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_10G_OFST 16
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_10G_LEN 8
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_10G_LO_OFST 16
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_10G_LO_LEN 4
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_10G_LO_LBN 128
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_10G_LO_WIDTH 32
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_10G_HI_OFST 20
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_10G_HI_LEN 4
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_10G_HI_LBN 160
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_10G_HI_WIDTH 32
-> > > > +/*            Enum values, see field(s): */
-> > > > +/*               100M */
-> > > > +/* Supported loopbacks. */
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_SUGGESTED_OFST 24
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_SUGGESTED_LEN 8
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_SUGGESTED_LO_OFST 24
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_SUGGESTED_LO_LEN 4
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_SUGGESTED_LO_LBN 192
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_SUGGESTED_LO_WIDTH 32
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_SUGGESTED_HI_OFST 28
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_SUGGESTED_HI_LEN 4
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_SUGGESTED_HI_LBN 224
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_SUGGESTED_HI_WIDTH 32
-> > > > +/*            Enum values, see field(s): */
-> > > > +/*               100M */
-> > > > +/* Supported loopbacks. */
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_40G_OFST 32
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_40G_LEN 8
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_40G_LO_OFST 32
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_40G_LO_LEN 4
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_40G_LO_LBN 256
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_40G_LO_WIDTH 32
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_40G_HI_OFST 36
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_40G_HI_LEN 4
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_40G_HI_LBN 288
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_40G_HI_WIDTH 32
-> > > > +/*            Enum values, see field(s): */
-> > > > +/*               100M */
-> > > > +/* Supported 25G loopbacks. */
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_25G_OFST 40
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_25G_LEN 8
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_25G_LO_OFST 40
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_25G_LO_LEN 4
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_25G_LO_LBN 320
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_25G_LO_WIDTH 32
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_25G_HI_OFST 44
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_25G_HI_LEN 4
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_25G_HI_LBN 352
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_25G_HI_WIDTH 32
-> > > > +/*            Enum values, see field(s): */
-> > > > +/*               100M */
-> > > > +/* Supported 50 loopbacks. */
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_50G_OFST 48
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_50G_LEN 8
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_50G_LO_OFST 48
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_50G_LO_LEN 4
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_50G_LO_LBN 384
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_50G_LO_WIDTH 32
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_50G_HI_OFST 52
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_50G_HI_LEN 4
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_50G_HI_LBN 416
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_50G_HI_WIDTH 32
-> > > > +/*            Enum values, see field(s): */
-> > > > +/*               100M */
-> > > > +/* Supported 100G loopbacks. */
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_100G_OFST 56
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_100G_LEN 8
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_100G_LO_OFST 56
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_100G_LO_LEN 4
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_100G_LO_LBN 448
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_100G_LO_WIDTH 32
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_100G_HI_OFST 60
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_100G_HI_LEN 4
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_100G_HI_LBN 480
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_100G_HI_WIDTH 32
-> > > > +/*            Enum values, see field(s): */
-> > > > +/*               100M */
-> > > > +/* Supported 200G loopbacks. */
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_200G_OFST 64
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_200G_LEN 8
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_200G_LO_OFST 64
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_200G_LO_LEN 4
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_200G_LO_LBN 512
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_200G_LO_WIDTH 32
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_200G_HI_OFST 68
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_200G_HI_LEN 4
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_200G_HI_LBN 544
-> > > > +#define       MC_CMD_GET_LOOPBACK_MODES_OUT_V3_200G_HI_WIDTH 32
-> > > > +/*            Enum values, see field(s): */
-> > > > +/*               100M */
-> > > > +
-> > > >    /* AN_TYPE structuredef: Auto-negotiation types defined in IEEE802.3 */
-> > > >    #define    AN_TYPE_LEN 4
-> > > >    #define       AN_TYPE_TYPE_OFST 0
-> > > > @@ -5694,6 +6179,53 @@
-> > > >    /* MC_CMD_GET_LINK_IN msgrequest */
-> > > >    #define    MC_CMD_GET_LINK_IN_LEN 0
-> > > > 
-> > > > +/* MC_CMD_GET_LINK_IN_V2 msgrequest */
-> > > > +#define    MC_CMD_GET_LINK_IN_V2_LEN 8
-> > > > +/* Target port to request link state for. Uses MAE_LINK_ENDPOINT_SELECTOR which
-> > > > + * identifies a real or virtual network port by MAE port and link end. See the
-> > > > + * structure definition for more details.
-> > > > + */
-> > > > +#define       MC_CMD_GET_LINK_IN_V2_TARGET_OFST 0
-> > > > +#define       MC_CMD_GET_LINK_IN_V2_TARGET_LEN 8
-> > > > +#define       MC_CMD_GET_LINK_IN_V2_TARGET_LO_OFST 0
-> > > > +#define       MC_CMD_GET_LINK_IN_V2_TARGET_LO_LEN 4
-> > > > +#define       MC_CMD_GET_LINK_IN_V2_TARGET_LO_LBN 0
-> > > > +#define       MC_CMD_GET_LINK_IN_V2_TARGET_LO_WIDTH 32
-> > > > +#define       MC_CMD_GET_LINK_IN_V2_TARGET_HI_OFST 4
-> > > > +#define       MC_CMD_GET_LINK_IN_V2_TARGET_HI_LEN 4
-> > > > +#define       MC_CMD_GET_LINK_IN_V2_TARGET_HI_LBN 32
-> > > > +#define       MC_CMD_GET_LINK_IN_V2_TARGET_HI_WIDTH 32
-> > > > +#define       MC_CMD_GET_LINK_IN_V2_TARGET_MPORT_SELECTOR_OFST 0
-> > > > +#define       MC_CMD_GET_LINK_IN_V2_TARGET_MPORT_SELECTOR_LEN 4
-> > > > +#define       MC_CMD_GET_LINK_IN_V2_TARGET_MPORT_SELECTOR_FLAT_OFST 0
-> > > > +#define       MC_CMD_GET_LINK_IN_V2_TARGET_MPORT_SELECTOR_FLAT_LEN 4
-> > > > +#define       MC_CMD_GET_LINK_IN_V2_TARGET_MPORT_SELECTOR_TYPE_OFST 3
-> > > > +#define       MC_CMD_GET_LINK_IN_V2_TARGET_MPORT_SELECTOR_TYPE_LEN 1
-> > > > +#define       MC_CMD_GET_LINK_IN_V2_TARGET_MPORT_SELECTOR_MPORT_ID_OFST 0
-> > > > +#define       MC_CMD_GET_LINK_IN_V2_TARGET_MPORT_SELECTOR_MPORT_ID_LEN 3
-> > > > +#define       MC_CMD_GET_LINK_IN_V2_TARGET_MPORT_SELECTOR_PPORT_ID_LBN 0
-> > > > +#define       MC_CMD_GET_LINK_IN_V2_TARGET_MPORT_SELECTOR_PPORT_ID_WIDTH 4
-> > > > +#define       MC_CMD_GET_LINK_IN_V2_TARGET_MPORT_SELECTOR_FUNC_INTF_ID_LBN 20
-> > > > +#define       MC_CMD_GET_LINK_IN_V2_TARGET_MPORT_SELECTOR_FUNC_INTF_ID_WIDTH 4
-> > > > +#define       MC_CMD_GET_LINK_IN_V2_TARGET_MPORT_SELECTOR_FUNC_MH_PF_ID_LBN 16
-> > > > +#define       MC_CMD_GET_LINK_IN_V2_TARGET_MPORT_SELECTOR_FUNC_MH_PF_ID_WIDTH 4
-> > > > +#define       MC_CMD_GET_LINK_IN_V2_TARGET_MPORT_SELECTOR_FUNC_PF_ID_OFST 2
-> > > > +#define       MC_CMD_GET_LINK_IN_V2_TARGET_MPORT_SELECTOR_FUNC_PF_ID_LEN 1
-> > > > +#define       MC_CMD_GET_LINK_IN_V2_TARGET_MPORT_SELECTOR_FUNC_VF_ID_OFST 0
-> > > > +#define       MC_CMD_GET_LINK_IN_V2_TARGET_MPORT_SELECTOR_FUNC_VF_ID_LEN 2
-> > > > +#define       MC_CMD_GET_LINK_IN_V2_TARGET_LINK_END_OFST 4
-> > > > +#define       MC_CMD_GET_LINK_IN_V2_TARGET_LINK_END_LEN 4
-> > > > +#define       MC_CMD_GET_LINK_IN_V2_TARGET_FLAT_OFST 0
-> > > > +#define       MC_CMD_GET_LINK_IN_V2_TARGET_FLAT_LEN 8
-> > > > +#define       MC_CMD_GET_LINK_IN_V2_TARGET_FLAT_LO_OFST 0
-> > > > +#define       MC_CMD_GET_LINK_IN_V2_TARGET_FLAT_LO_LEN 4
-> > > > +#define       MC_CMD_GET_LINK_IN_V2_TARGET_FLAT_LO_LBN 0
-> > > > +#define       MC_CMD_GET_LINK_IN_V2_TARGET_FLAT_LO_WIDTH 32
-> > > > +#define       MC_CMD_GET_LINK_IN_V2_TARGET_FLAT_HI_OFST 4
-> > > > +#define       MC_CMD_GET_LINK_IN_V2_TARGET_FLAT_HI_LEN 4
-> > > > +#define       MC_CMD_GET_LINK_IN_V2_TARGET_FLAT_HI_LBN 32
-> > > > +#define       MC_CMD_GET_LINK_IN_V2_TARGET_FLAT_HI_WIDTH 32
-> > > > +
-> > > >    /* MC_CMD_GET_LINK_OUT msgresponse */
-> > > >    #define    MC_CMD_GET_LINK_OUT_LEN 28
-> > > >    /* Near-side advertised capabilities. Refer to
-> > > > @@ -5969,6 +6501,94 @@
-> > > >    #define        MC_CMD_SET_LINK_IN_V2_MODULE_SEQ_IGNORE_LBN 7
-> > > >    #define        MC_CMD_SET_LINK_IN_V2_MODULE_SEQ_IGNORE_WIDTH 1
-> > > > 
-> > > > +/* MC_CMD_SET_LINK_IN_V3 msgrequest */
-> > > > +#define    MC_CMD_SET_LINK_IN_V3_LEN 28
-> > > > +/* Near-side advertised capabilities. Refer to
-> > > > + * MC_CMD_GET_PHY_CFG_OUT/SUPPORTED_CAP for bit definitions.
-> > > > + */
-> > > > +#define       MC_CMD_SET_LINK_IN_V3_CAP_OFST 0
-> > > > +#define       MC_CMD_SET_LINK_IN_V3_CAP_LEN 4
-> > > > +/* Flags */
-> > > > +#define       MC_CMD_SET_LINK_IN_V3_FLAGS_OFST 4
-> > > > +#define       MC_CMD_SET_LINK_IN_V3_FLAGS_LEN 4
-> > > > +#define        MC_CMD_SET_LINK_IN_V3_LOWPOWER_OFST 4
-> > > > +#define        MC_CMD_SET_LINK_IN_V3_LOWPOWER_LBN 0
-> > > > +#define        MC_CMD_SET_LINK_IN_V3_LOWPOWER_WIDTH 1
-> > > > +#define        MC_CMD_SET_LINK_IN_V3_POWEROFF_OFST 4
-> > > > +#define        MC_CMD_SET_LINK_IN_V3_POWEROFF_LBN 1
-> > > > +#define        MC_CMD_SET_LINK_IN_V3_POWEROFF_WIDTH 1
-> > > > +#define        MC_CMD_SET_LINK_IN_V3_TXDIS_OFST 4
-> > > > +#define        MC_CMD_SET_LINK_IN_V3_TXDIS_LBN 2
-> > > > +#define        MC_CMD_SET_LINK_IN_V3_TXDIS_WIDTH 1
-> > > > +#define        MC_CMD_SET_LINK_IN_V3_LINKDOWN_OFST 4
-> > > > +#define        MC_CMD_SET_LINK_IN_V3_LINKDOWN_LBN 3
-> > > > +#define        MC_CMD_SET_LINK_IN_V3_LINKDOWN_WIDTH 1
-> > > > +/* Loopback mode. */
-> > > > +#define       MC_CMD_SET_LINK_IN_V3_LOOPBACK_MODE_OFST 8
-> > > > +#define       MC_CMD_SET_LINK_IN_V3_LOOPBACK_MODE_LEN 4
-> > > > +/*            Enum values, see field(s): */
-> > > > +/*               MC_CMD_GET_LOOPBACK_MODES/MC_CMD_GET_LOOPBACK_MODES_OUT/100M */
-> > > > +/* A loopback speed of "0" is supported, and means (choose any available
-> > > > + * speed).
-> > > > + */
-> > > > +#define       MC_CMD_SET_LINK_IN_V3_LOOPBACK_SPEED_OFST 12
-> > > > +#define       MC_CMD_SET_LINK_IN_V3_LOOPBACK_SPEED_LEN 4
-> > > > +#define       MC_CMD_SET_LINK_IN_V3_MODULE_SEQ_OFST 16
-> > > > +#define       MC_CMD_SET_LINK_IN_V3_MODULE_SEQ_LEN 1
-> > > > +#define        MC_CMD_SET_LINK_IN_V3_MODULE_SEQ_NUMBER_OFST 16
-> > > > +#define        MC_CMD_SET_LINK_IN_V3_MODULE_SEQ_NUMBER_LBN 0
-> > > > +#define        MC_CMD_SET_LINK_IN_V3_MODULE_SEQ_NUMBER_WIDTH 7
-> > > > +#define        MC_CMD_SET_LINK_IN_V3_MODULE_SEQ_IGNORE_OFST 16
-> > > > +#define        MC_CMD_SET_LINK_IN_V3_MODULE_SEQ_IGNORE_LBN 7
-> > > > +#define        MC_CMD_SET_LINK_IN_V3_MODULE_SEQ_IGNORE_WIDTH 1
-> > > > +/* Padding */
-> > > > +#define       MC_CMD_SET_LINK_IN_V3_RESERVED_OFST 17
-> > > > +#define       MC_CMD_SET_LINK_IN_V3_RESERVED_LEN 3
-> > > > +/* Target port to set link state for. Uses MAE_LINK_ENDPOINT_SELECTOR which
-> > > > + * identifies a real or virtual network port by MAE port and link end. See the
-> > > > + * structure definition for more details
-> > > > + */
-> > > > +#define       MC_CMD_SET_LINK_IN_V3_TARGET_OFST 20
-> > > > +#define       MC_CMD_SET_LINK_IN_V3_TARGET_LEN 8
-> > > > +#define       MC_CMD_SET_LINK_IN_V3_TARGET_LO_OFST 20
-> > > > +#define       MC_CMD_SET_LINK_IN_V3_TARGET_LO_LEN 4
-> > > > +#define       MC_CMD_SET_LINK_IN_V3_TARGET_LO_LBN 160
-> > > > +#define       MC_CMD_SET_LINK_IN_V3_TARGET_LO_WIDTH 32
-> > > > +#define       MC_CMD_SET_LINK_IN_V3_TARGET_HI_OFST 24
-> > > > +#define       MC_CMD_SET_LINK_IN_V3_TARGET_HI_LEN 4
-> > > > +#define       MC_CMD_SET_LINK_IN_V3_TARGET_HI_LBN 192
-> > > > +#define       MC_CMD_SET_LINK_IN_V3_TARGET_HI_WIDTH 32
-> > > > +#define       MC_CMD_SET_LINK_IN_V3_TARGET_MPORT_SELECTOR_OFST 20
-> > > > +#define       MC_CMD_SET_LINK_IN_V3_TARGET_MPORT_SELECTOR_LEN 4
-> > > > +#define       MC_CMD_SET_LINK_IN_V3_TARGET_MPORT_SELECTOR_FLAT_OFST 20
-> > > > +#define       MC_CMD_SET_LINK_IN_V3_TARGET_MPORT_SELECTOR_FLAT_LEN 4
-> > > > +#define       MC_CMD_SET_LINK_IN_V3_TARGET_MPORT_SELECTOR_TYPE_OFST 23
-> > > > +#define       MC_CMD_SET_LINK_IN_V3_TARGET_MPORT_SELECTOR_TYPE_LEN 1
-> > > > +#define       MC_CMD_SET_LINK_IN_V3_TARGET_MPORT_SELECTOR_MPORT_ID_OFST 20
-> > > > +#define       MC_CMD_SET_LINK_IN_V3_TARGET_MPORT_SELECTOR_MPORT_ID_LEN 3
-> > > > +#define       MC_CMD_SET_LINK_IN_V3_TARGET_MPORT_SELECTOR_PPORT_ID_LBN 160
-> > > > +#define       MC_CMD_SET_LINK_IN_V3_TARGET_MPORT_SELECTOR_PPORT_ID_WIDTH 4
-> > > > +#define       MC_CMD_SET_LINK_IN_V3_TARGET_MPORT_SELECTOR_FUNC_INTF_ID_LBN 180
-> > > > +#define       MC_CMD_SET_LINK_IN_V3_TARGET_MPORT_SELECTOR_FUNC_INTF_ID_WIDTH 4
-> > > > +#define       MC_CMD_SET_LINK_IN_V3_TARGET_MPORT_SELECTOR_FUNC_MH_PF_ID_LBN 176
-> > > > +#define       MC_CMD_SET_LINK_IN_V3_TARGET_MPORT_SELECTOR_FUNC_MH_PF_ID_WIDTH 4
-> > > > +#define       MC_CMD_SET_LINK_IN_V3_TARGET_MPORT_SELECTOR_FUNC_PF_ID_OFST 22
-> > > > +#define       MC_CMD_SET_LINK_IN_V3_TARGET_MPORT_SELECTOR_FUNC_PF_ID_LEN 1
-> > > > +#define       MC_CMD_SET_LINK_IN_V3_TARGET_MPORT_SELECTOR_FUNC_VF_ID_OFST 20
-> > > > +#define       MC_CMD_SET_LINK_IN_V3_TARGET_MPORT_SELECTOR_FUNC_VF_ID_LEN 2
-> > > > +#define       MC_CMD_SET_LINK_IN_V3_TARGET_LINK_END_OFST 24
-> > > > +#define       MC_CMD_SET_LINK_IN_V3_TARGET_LINK_END_LEN 4
-> > > > +#define       MC_CMD_SET_LINK_IN_V3_TARGET_FLAT_OFST 20
-> > > > +#define       MC_CMD_SET_LINK_IN_V3_TARGET_FLAT_LEN 8
-> > > > +#define       MC_CMD_SET_LINK_IN_V3_TARGET_FLAT_LO_OFST 20
-> > > > +#define       MC_CMD_SET_LINK_IN_V3_TARGET_FLAT_LO_LEN 4
-> > > > +#define       MC_CMD_SET_LINK_IN_V3_TARGET_FLAT_LO_LBN 160
-> > > > +#define       MC_CMD_SET_LINK_IN_V3_TARGET_FLAT_LO_WIDTH 32
-> > > > +#define       MC_CMD_SET_LINK_IN_V3_TARGET_FLAT_HI_OFST 24
-> > > > +#define       MC_CMD_SET_LINK_IN_V3_TARGET_FLAT_HI_LEN 4
-> > > > +#define       MC_CMD_SET_LINK_IN_V3_TARGET_FLAT_HI_LBN 192
-> > > > +#define       MC_CMD_SET_LINK_IN_V3_TARGET_FLAT_HI_WIDTH 32
-> > > > +
-> > > >    /* MC_CMD_SET_LINK_OUT msgresponse */
-> > > >    #define    MC_CMD_SET_LINK_OUT_LEN 0
-> > > > 
-> > > > @@ -6188,19 +6808,9 @@
-> > > >    #define        MC_CMD_SET_MAC_V3_IN_CFG_FCS_OFST 28
-> > > >    #define        MC_CMD_SET_MAC_V3_IN_CFG_FCS_LBN 4
-> > > >    #define        MC_CMD_SET_MAC_V3_IN_CFG_FCS_WIDTH 1
-> > > > -/* Identifies the MAC to update by the specifying the end of a logical MAE
-> > > > - * link. Setting TARGET to MAE_LINK_ENDPOINT_COMPAT is equivalent to using the
-> > > > - * previous version of the command (MC_CMD_SET_MAC_EXT). Not all possible
-> > > > - * combinations of MPORT_END and MPORT_SELECTOR in TARGET will work in all
-> > > > - * circumstances. 1. Some will always work (e.g. a VF can always address its
-> > > > - * logical MAC using MPORT_SELECTOR=ASSIGNED,LINK_END=VNIC), 2. Some are not
-> > > > - * meaningful and will always fail with EINVAL (e.g. attempting to address the
-> > > > - * VNIC end of a link to a physical port), 3. Some are meaningful but require
-> > > > - * the MCDI client to have the required permission and fail with EPERM
-> > > > - * otherwise (e.g. trying to set the MAC on a VF the caller cannot administer),
-> > > > - * and 4. Some could be implementation-specific and fail with ENOTSUP if not
-> > > > - * available (no examples exist right now). See SF-123581-TC section 4.3 for
-> > > > - * more details.
-> > > > +/* Target port to set mac state for. Uses MAE_LINK_ENDPOINT_SELECTOR which
-> > > > + * identifies a real or virtual network port by MAE port and link end. See the
-> > > > + * structure definition for more details
-> > > >     */
-> > > >    #define       MC_CMD_SET_MAC_V3_IN_TARGET_OFST 32
-> > > >    #define       MC_CMD_SET_MAC_V3_IN_TARGET_LEN 8
-> > > > @@ -6405,6 +7015,97 @@
-> > > >    #define       MC_CMD_MAC_STATS_IN_PORT_ID_OFST 16
-> > > >    #define       MC_CMD_MAC_STATS_IN_PORT_ID_LEN 4
-> > > > 
-> > > > +/* MC_CMD_MAC_STATS_V2_IN msgrequest */
-> > > > +#define    MC_CMD_MAC_STATS_V2_IN_LEN 28
-> > > > +/* ??? */
-> > > > +#define       MC_CMD_MAC_STATS_V2_IN_DMA_ADDR_OFST 0
-> > > > +#define       MC_CMD_MAC_STATS_V2_IN_DMA_ADDR_LEN 8
-> > > > +#define       MC_CMD_MAC_STATS_V2_IN_DMA_ADDR_LO_OFST 0
-> > > > +#define       MC_CMD_MAC_STATS_V2_IN_DMA_ADDR_LO_LEN 4
-> > > > +#define       MC_CMD_MAC_STATS_V2_IN_DMA_ADDR_LO_LBN 0
-> > > > +#define       MC_CMD_MAC_STATS_V2_IN_DMA_ADDR_LO_WIDTH 32
-> > > > +#define       MC_CMD_MAC_STATS_V2_IN_DMA_ADDR_HI_OFST 4
-> > > > +#define       MC_CMD_MAC_STATS_V2_IN_DMA_ADDR_HI_LEN 4
-> > > > +#define       MC_CMD_MAC_STATS_V2_IN_DMA_ADDR_HI_LBN 32
-> > > > +#define       MC_CMD_MAC_STATS_V2_IN_DMA_ADDR_HI_WIDTH 32
-> > > > +#define       MC_CMD_MAC_STATS_V2_IN_CMD_OFST 8
-> > > > +#define       MC_CMD_MAC_STATS_V2_IN_CMD_LEN 4
-> > > > +#define        MC_CMD_MAC_STATS_V2_IN_DMA_OFST 8
-> > > > +#define        MC_CMD_MAC_STATS_V2_IN_DMA_LBN 0
-> > > > +#define        MC_CMD_MAC_STATS_V2_IN_DMA_WIDTH 1
-> > > > +#define        MC_CMD_MAC_STATS_V2_IN_CLEAR_OFST 8
-> > > > +#define        MC_CMD_MAC_STATS_V2_IN_CLEAR_LBN 1
-> > > > +#define        MC_CMD_MAC_STATS_V2_IN_CLEAR_WIDTH 1
-> > > > +#define        MC_CMD_MAC_STATS_V2_IN_PERIODIC_CHANGE_OFST 8
-> > > > +#define        MC_CMD_MAC_STATS_V2_IN_PERIODIC_CHANGE_LBN 2
-> > > > +#define        MC_CMD_MAC_STATS_V2_IN_PERIODIC_CHANGE_WIDTH 1
-> > > > +#define        MC_CMD_MAC_STATS_V2_IN_PERIODIC_ENABLE_OFST 8
-> > > > +#define        MC_CMD_MAC_STATS_V2_IN_PERIODIC_ENABLE_LBN 3
-> > > > +#define        MC_CMD_MAC_STATS_V2_IN_PERIODIC_ENABLE_WIDTH 1
-> > > > +#define        MC_CMD_MAC_STATS_V2_IN_PERIODIC_CLEAR_OFST 8
-> > > > +#define        MC_CMD_MAC_STATS_V2_IN_PERIODIC_CLEAR_LBN 4
-> > > > +#define        MC_CMD_MAC_STATS_V2_IN_PERIODIC_CLEAR_WIDTH 1
-> > > > +#define        MC_CMD_MAC_STATS_V2_IN_PERIODIC_NOEVENT_OFST 8
-> > > > +#define        MC_CMD_MAC_STATS_V2_IN_PERIODIC_NOEVENT_LBN 5
-> > > > +#define        MC_CMD_MAC_STATS_V2_IN_PERIODIC_NOEVENT_WIDTH 1
-> > > > +#define        MC_CMD_MAC_STATS_V2_IN_PERIOD_MS_OFST 8
-> > > > +#define        MC_CMD_MAC_STATS_V2_IN_PERIOD_MS_LBN 16
-> > > > +#define        MC_CMD_MAC_STATS_V2_IN_PERIOD_MS_WIDTH 16
-> > > > +/* DMA length. Should be set to MAC_STATS_NUM_STATS * sizeof(uint64_t), as
-> > > > + * returned by MC_CMD_GET_CAPABILITIES_V4_OUT. For legacy firmware not
-> > > > + * supporting MC_CMD_GET_CAPABILITIES_V4_OUT, DMA_LEN should be set to
-> > > > + * MC_CMD_MAC_NSTATS * sizeof(uint64_t)
-> > > > + */
-> > > > +#define       MC_CMD_MAC_STATS_V2_IN_DMA_LEN_OFST 12
-> > > > +#define       MC_CMD_MAC_STATS_V2_IN_DMA_LEN_LEN 4
-> > > > +/* port id so vadapter stats can be provided */
-> > > > +#define       MC_CMD_MAC_STATS_V2_IN_PORT_ID_OFST 16
-> > > > +#define       MC_CMD_MAC_STATS_V2_IN_PORT_ID_LEN 4
-> > > > +/* Target port to request statistics for. Uses MAE_LINK_ENDPOINT_SELECTOR which
-> > > > + * identifies a real or virtual network port by MAE port and link end. See the
-> > > > + * structure definition for more details
-> > > > + */
-> > > > +#define       MC_CMD_MAC_STATS_V2_IN_TARGET_OFST 20
-> > > > +#define       MC_CMD_MAC_STATS_V2_IN_TARGET_LEN 8
-> > > > +#define       MC_CMD_MAC_STATS_V2_IN_TARGET_LO_OFST 20
-> > > > +#define       MC_CMD_MAC_STATS_V2_IN_TARGET_LO_LEN 4
-> > > > +#define       MC_CMD_MAC_STATS_V2_IN_TARGET_LO_LBN 160
-> > > > +#define       MC_CMD_MAC_STATS_V2_IN_TARGET_LO_WIDTH 32
-> > > > +#define       MC_CMD_MAC_STATS_V2_IN_TARGET_HI_OFST 24
-> > > > +#define       MC_CMD_MAC_STATS_V2_IN_TARGET_HI_LEN 4
-> > > > +#define       MC_CMD_MAC_STATS_V2_IN_TARGET_HI_LBN 192
-> > > > +#define       MC_CMD_MAC_STATS_V2_IN_TARGET_HI_WIDTH 32
-> > > > +#define       MC_CMD_MAC_STATS_V2_IN_TARGET_MPORT_SELECTOR_OFST 20
-> > > > +#define       MC_CMD_MAC_STATS_V2_IN_TARGET_MPORT_SELECTOR_LEN 4
-> > > > +#define       MC_CMD_MAC_STATS_V2_IN_TARGET_MPORT_SELECTOR_FLAT_OFST 20
-> > > > +#define       MC_CMD_MAC_STATS_V2_IN_TARGET_MPORT_SELECTOR_FLAT_LEN 4
-> > > > +#define       MC_CMD_MAC_STATS_V2_IN_TARGET_MPORT_SELECTOR_TYPE_OFST 23
-> > > > +#define       MC_CMD_MAC_STATS_V2_IN_TARGET_MPORT_SELECTOR_TYPE_LEN 1
-> > > > +#define       MC_CMD_MAC_STATS_V2_IN_TARGET_MPORT_SELECTOR_MPORT_ID_OFST 20
-> > > > +#define       MC_CMD_MAC_STATS_V2_IN_TARGET_MPORT_SELECTOR_MPORT_ID_LEN 3
-> > > > +#define       MC_CMD_MAC_STATS_V2_IN_TARGET_MPORT_SELECTOR_PPORT_ID_LBN 160
-> > > > +#define       MC_CMD_MAC_STATS_V2_IN_TARGET_MPORT_SELECTOR_PPORT_ID_WIDTH 4
-> > > > +#define       MC_CMD_MAC_STATS_V2_IN_TARGET_MPORT_SELECTOR_FUNC_INTF_ID_LBN 180
-> > > > +#define       MC_CMD_MAC_STATS_V2_IN_TARGET_MPORT_SELECTOR_FUNC_INTF_ID_WIDTH 4
-> > > > +#define       MC_CMD_MAC_STATS_V2_IN_TARGET_MPORT_SELECTOR_FUNC_MH_PF_ID_LBN 176
-> > > > +#define       MC_CMD_MAC_STATS_V2_IN_TARGET_MPORT_SELECTOR_FUNC_MH_PF_ID_WIDTH 4
-> > > > +#define       MC_CMD_MAC_STATS_V2_IN_TARGET_MPORT_SELECTOR_FUNC_PF_ID_OFST 22
-> > > > +#define       MC_CMD_MAC_STATS_V2_IN_TARGET_MPORT_SELECTOR_FUNC_PF_ID_LEN 1
-> > > > +#define       MC_CMD_MAC_STATS_V2_IN_TARGET_MPORT_SELECTOR_FUNC_VF_ID_OFST 20
-> > > > +#define       MC_CMD_MAC_STATS_V2_IN_TARGET_MPORT_SELECTOR_FUNC_VF_ID_LEN 2
-> > > > +#define       MC_CMD_MAC_STATS_V2_IN_TARGET_LINK_END_OFST 24
-> > > > +#define       MC_CMD_MAC_STATS_V2_IN_TARGET_LINK_END_LEN 4
-> > > > +#define       MC_CMD_MAC_STATS_V2_IN_TARGET_FLAT_OFST 20
-> > > > +#define       MC_CMD_MAC_STATS_V2_IN_TARGET_FLAT_LEN 8
-> > > > +#define       MC_CMD_MAC_STATS_V2_IN_TARGET_FLAT_LO_OFST 20
-> > > > +#define       MC_CMD_MAC_STATS_V2_IN_TARGET_FLAT_LO_LEN 4
-> > > > +#define       MC_CMD_MAC_STATS_V2_IN_TARGET_FLAT_LO_LBN 160
-> > > > +#define       MC_CMD_MAC_STATS_V2_IN_TARGET_FLAT_LO_WIDTH 32
-> > > > +#define       MC_CMD_MAC_STATS_V2_IN_TARGET_FLAT_HI_OFST 24
-> > > > +#define       MC_CMD_MAC_STATS_V2_IN_TARGET_FLAT_HI_LEN 4
-> > > > +#define       MC_CMD_MAC_STATS_V2_IN_TARGET_FLAT_HI_LBN 192
-> > > > +#define       MC_CMD_MAC_STATS_V2_IN_TARGET_FLAT_HI_WIDTH 32
-> > > > +
-> > > >    /* MC_CMD_MAC_STATS_OUT_DMA msgresponse */
-> > > >    #define    MC_CMD_MAC_STATS_OUT_DMA_LEN 0
-> > > > 
-> > > > @@ -7522,7 +8223,7 @@
-> > > >    #define MC_CMD_REBOOT 0x3d
-> > > >    #undef MC_CMD_0x3d_PRIVILEGE_CTG
-> > > > 
-> > > > -#define MC_CMD_0x3d_PRIVILEGE_CTG SRIOV_CTG_ADMIN
-> > > > +#define MC_CMD_0x3d_PRIVILEGE_CTG SRIOV_CTG_ADMIN_TSA_UNBOUND
-> > > > 
-> > > >    /* MC_CMD_REBOOT_IN msgrequest */
-> > > >    #define    MC_CMD_REBOOT_IN_LEN 4
-> > > > @@ -8061,6 +8762,53 @@
-> > > >    /* MC_CMD_GET_PHY_STATE_IN msgrequest */
-> > > >    #define    MC_CMD_GET_PHY_STATE_IN_LEN 0
-> > > > 
-> > > > +/* MC_CMD_GET_PHY_STATE_IN_V2 msgrequest */
-> > > > +#define    MC_CMD_GET_PHY_STATE_IN_V2_LEN 8
-> > > > +/* Target port to request PHY state for. Uses MAE_LINK_ENDPOINT_SELECTOR which
-> > > > + * identifies a real or virtual network port by MAE port and link end. See the
-> > > > + * structure definition for more details.
-> > > > + */
-> > > > +#define       MC_CMD_GET_PHY_STATE_IN_V2_TARGET_OFST 0
-> > > > +#define       MC_CMD_GET_PHY_STATE_IN_V2_TARGET_LEN 8
-> > > > +#define       MC_CMD_GET_PHY_STATE_IN_V2_TARGET_LO_OFST 0
-> > > > +#define       MC_CMD_GET_PHY_STATE_IN_V2_TARGET_LO_LEN 4
-> > > > +#define       MC_CMD_GET_PHY_STATE_IN_V2_TARGET_LO_LBN 0
-> > > > +#define       MC_CMD_GET_PHY_STATE_IN_V2_TARGET_LO_WIDTH 32
-> > > > +#define       MC_CMD_GET_PHY_STATE_IN_V2_TARGET_HI_OFST 4
-> > > > +#define       MC_CMD_GET_PHY_STATE_IN_V2_TARGET_HI_LEN 4
-> > > > +#define       MC_CMD_GET_PHY_STATE_IN_V2_TARGET_HI_LBN 32
-> > > > +#define       MC_CMD_GET_PHY_STATE_IN_V2_TARGET_HI_WIDTH 32
-> > > > +#define       MC_CMD_GET_PHY_STATE_IN_V2_TARGET_MPORT_SELECTOR_OFST 0
-> > > > +#define       MC_CMD_GET_PHY_STATE_IN_V2_TARGET_MPORT_SELECTOR_LEN 4
-> > > > +#define       MC_CMD_GET_PHY_STATE_IN_V2_TARGET_MPORT_SELECTOR_FLAT_OFST 0
-> > > > +#define       MC_CMD_GET_PHY_STATE_IN_V2_TARGET_MPORT_SELECTOR_FLAT_LEN 4
-> > > > +#define       MC_CMD_GET_PHY_STATE_IN_V2_TARGET_MPORT_SELECTOR_TYPE_OFST 3
-> > > > +#define       MC_CMD_GET_PHY_STATE_IN_V2_TARGET_MPORT_SELECTOR_TYPE_LEN 1
-> > > > +#define       MC_CMD_GET_PHY_STATE_IN_V2_TARGET_MPORT_SELECTOR_MPORT_ID_OFST 0
-> > > > +#define       MC_CMD_GET_PHY_STATE_IN_V2_TARGET_MPORT_SELECTOR_MPORT_ID_LEN 3
-> > > > +#define       MC_CMD_GET_PHY_STATE_IN_V2_TARGET_MPORT_SELECTOR_PPORT_ID_LBN 0
-> > > > +#define       MC_CMD_GET_PHY_STATE_IN_V2_TARGET_MPORT_SELECTOR_PPORT_ID_WIDTH 4
-> > > > +#define       MC_CMD_GET_PHY_STATE_IN_V2_TARGET_MPORT_SELECTOR_FUNC_INTF_ID_LBN 20
-> > > > +#define       MC_CMD_GET_PHY_STATE_IN_V2_TARGET_MPORT_SELECTOR_FUNC_INTF_ID_WIDTH 4
-> > > > +#define       MC_CMD_GET_PHY_STATE_IN_V2_TARGET_MPORT_SELECTOR_FUNC_MH_PF_ID_LBN 16
-> > > > +#define       MC_CMD_GET_PHY_STATE_IN_V2_TARGET_MPORT_SELECTOR_FUNC_MH_PF_ID_WIDTH 4
-> > > > +#define       MC_CMD_GET_PHY_STATE_IN_V2_TARGET_MPORT_SELECTOR_FUNC_PF_ID_OFST 2
-> > > > +#define       MC_CMD_GET_PHY_STATE_IN_V2_TARGET_MPORT_SELECTOR_FUNC_PF_ID_LEN 1
-> > > > +#define       MC_CMD_GET_PHY_STATE_IN_V2_TARGET_MPORT_SELECTOR_FUNC_VF_ID_OFST 0
-> > > > +#define       MC_CMD_GET_PHY_STATE_IN_V2_TARGET_MPORT_SELECTOR_FUNC_VF_ID_LEN 2
-> > > > +#define       MC_CMD_GET_PHY_STATE_IN_V2_TARGET_LINK_END_OFST 4
-> > > > +#define       MC_CMD_GET_PHY_STATE_IN_V2_TARGET_LINK_END_LEN 4
-> > > > +#define       MC_CMD_GET_PHY_STATE_IN_V2_TARGET_FLAT_OFST 0
-> > > > +#define       MC_CMD_GET_PHY_STATE_IN_V2_TARGET_FLAT_LEN 8
-> > > > +#define       MC_CMD_GET_PHY_STATE_IN_V2_TARGET_FLAT_LO_OFST 0
-> > > > +#define       MC_CMD_GET_PHY_STATE_IN_V2_TARGET_FLAT_LO_LEN 4
-> > > > +#define       MC_CMD_GET_PHY_STATE_IN_V2_TARGET_FLAT_LO_LBN 0
-> > > > +#define       MC_CMD_GET_PHY_STATE_IN_V2_TARGET_FLAT_LO_WIDTH 32
-> > > > +#define       MC_CMD_GET_PHY_STATE_IN_V2_TARGET_FLAT_HI_OFST 4
-> > > > +#define       MC_CMD_GET_PHY_STATE_IN_V2_TARGET_FLAT_HI_LEN 4
-> > > > +#define       MC_CMD_GET_PHY_STATE_IN_V2_TARGET_FLAT_HI_LBN 32
-> > > > +#define       MC_CMD_GET_PHY_STATE_IN_V2_TARGET_FLAT_HI_WIDTH 32
-> > > > +
-> > > >    /* MC_CMD_GET_PHY_STATE_OUT msgresponse */
-> > > >    #define    MC_CMD_GET_PHY_STATE_OUT_LEN 4
-> > > >    #define       MC_CMD_GET_PHY_STATE_OUT_STATE_OFST 0
-> > > > @@ -8200,7 +8948,7 @@
-> > > >    #define MC_CMD_TESTASSERT 0x49
-> > > >    #undef MC_CMD_0x49_PRIVILEGE_CTG
-> > > > 
-> > > > -#define MC_CMD_0x49_PRIVILEGE_CTG SRIOV_CTG_ADMIN
-> > > > +#define MC_CMD_0x49_PRIVILEGE_CTG SRIOV_CTG_ADMIN_TSA_UNBOUND
-> > > > 
-> > > >    /* MC_CMD_TESTASSERT_IN msgrequest */
-> > > >    #define    MC_CMD_TESTASSERT_IN_LEN 0
-> > > > @@ -8324,6 +9072,61 @@
-> > > >    #define        MC_CMD_GET_PHY_MEDIA_INFO_IN_DSFP_BANK_LBN 16
-> > > >    #define        MC_CMD_GET_PHY_MEDIA_INFO_IN_DSFP_BANK_WIDTH 16
-> > > > 
-> > > > +/* MC_CMD_GET_PHY_MEDIA_INFO_IN_V2 msgrequest */
-> > > > +#define    MC_CMD_GET_PHY_MEDIA_INFO_IN_V2_LEN 12
-> > > > +#define       MC_CMD_GET_PHY_MEDIA_INFO_IN_V2_PAGE_OFST 0
-> > > > +#define       MC_CMD_GET_PHY_MEDIA_INFO_IN_V2_PAGE_LEN 4
-> > > > +#define        MC_CMD_GET_PHY_MEDIA_INFO_IN_V2_DSFP_PAGE_OFST 0
-> > > > +#define        MC_CMD_GET_PHY_MEDIA_INFO_IN_V2_DSFP_PAGE_LBN 0
-> > > > +#define        MC_CMD_GET_PHY_MEDIA_INFO_IN_V2_DSFP_PAGE_WIDTH 16
-> > > > +#define        MC_CMD_GET_PHY_MEDIA_INFO_IN_V2_DSFP_BANK_OFST 0
-> > > > +#define        MC_CMD_GET_PHY_MEDIA_INFO_IN_V2_DSFP_BANK_LBN 16
-> > > > +#define        MC_CMD_GET_PHY_MEDIA_INFO_IN_V2_DSFP_BANK_WIDTH 16
-> > > > +/* Target port to request PHY state for. Uses MAE_LINK_ENDPOINT_SELECTOR which
-> > > > + * identifies a real or virtual network port by MAE port and link end. See the
-> > > > + * structure definition for more details
-> > > > + */
-> > > > +#define       MC_CMD_GET_PHY_MEDIA_INFO_IN_V2_TARGET_OFST 4
-> > > > +#define       MC_CMD_GET_PHY_MEDIA_INFO_IN_V2_TARGET_LEN 8
-> > > > +#define       MC_CMD_GET_PHY_MEDIA_INFO_IN_V2_TARGET_LO_OFST 4
-> > > > +#define       MC_CMD_GET_PHY_MEDIA_INFO_IN_V2_TARGET_LO_LEN 4
-> > > > +#define       MC_CMD_GET_PHY_MEDIA_INFO_IN_V2_TARGET_LO_LBN 32
-> > > > +#define       MC_CMD_GET_PHY_MEDIA_INFO_IN_V2_TARGET_LO_WIDTH 32
-> > > > +#define       MC_CMD_GET_PHY_MEDIA_INFO_IN_V2_TARGET_HI_OFST 8
-> > > > +#define       MC_CMD_GET_PHY_MEDIA_INFO_IN_V2_TARGET_HI_LEN 4
-> > > > +#define       MC_CMD_GET_PHY_MEDIA_INFO_IN_V2_TARGET_HI_LBN 64
-> > > > +#define       MC_CMD_GET_PHY_MEDIA_INFO_IN_V2_TARGET_HI_WIDTH 32
-> > > > +#define       MC_CMD_GET_PHY_MEDIA_INFO_IN_V2_TARGET_MPORT_SELECTOR_OFST 4
-> > > > +#define       MC_CMD_GET_PHY_MEDIA_INFO_IN_V2_TARGET_MPORT_SELECTOR_LEN 4
-> > > > +#define       MC_CMD_GET_PHY_MEDIA_INFO_IN_V2_TARGET_MPORT_SELECTOR_FLAT_OFST 4
-> > > > +#define       MC_CMD_GET_PHY_MEDIA_INFO_IN_V2_TARGET_MPORT_SELECTOR_FLAT_LEN 4
-> > > > +#define       MC_CMD_GET_PHY_MEDIA_INFO_IN_V2_TARGET_MPORT_SELECTOR_TYPE_OFST 7
-> > > > +#define       MC_CMD_GET_PHY_MEDIA_INFO_IN_V2_TARGET_MPORT_SELECTOR_TYPE_LEN 1
-> > > > +#define       MC_CMD_GET_PHY_MEDIA_INFO_IN_V2_TARGET_MPORT_SELECTOR_MPORT_ID_OFST 4
-> > > > +#define       MC_CMD_GET_PHY_MEDIA_INFO_IN_V2_TARGET_MPORT_SELECTOR_MPORT_ID_LEN 3
-> > > > +#define       MC_CMD_GET_PHY_MEDIA_INFO_IN_V2_TARGET_MPORT_SELECTOR_PPORT_ID_LBN 32
-> > > > +#define       MC_CMD_GET_PHY_MEDIA_INFO_IN_V2_TARGET_MPORT_SELECTOR_PPORT_ID_WIDTH 4
-> > > > +#define       MC_CMD_GET_PHY_MEDIA_INFO_IN_V2_TARGET_MPORT_SELECTOR_FUNC_INTF_ID_LBN 52
-> > > > +#define       MC_CMD_GET_PHY_MEDIA_INFO_IN_V2_TARGET_MPORT_SELECTOR_FUNC_INTF_ID_WIDTH 4
-> > > > +#define       MC_CMD_GET_PHY_MEDIA_INFO_IN_V2_TARGET_MPORT_SELECTOR_FUNC_MH_PF_ID_LBN 48
-> > > > +#define       MC_CMD_GET_PHY_MEDIA_INFO_IN_V2_TARGET_MPORT_SELECTOR_FUNC_MH_PF_ID_WIDTH 4
-> > > > +#define       MC_CMD_GET_PHY_MEDIA_INFO_IN_V2_TARGET_MPORT_SELECTOR_FUNC_PF_ID_OFST 6
-> > > > +#define       MC_CMD_GET_PHY_MEDIA_INFO_IN_V2_TARGET_MPORT_SELECTOR_FUNC_PF_ID_LEN 1
-> > > > +#define       MC_CMD_GET_PHY_MEDIA_INFO_IN_V2_TARGET_MPORT_SELECTOR_FUNC_VF_ID_OFST 4
-> > > > +#define       MC_CMD_GET_PHY_MEDIA_INFO_IN_V2_TARGET_MPORT_SELECTOR_FUNC_VF_ID_LEN 2
-> > > > +#define       MC_CMD_GET_PHY_MEDIA_INFO_IN_V2_TARGET_LINK_END_OFST 8
-> > > > +#define       MC_CMD_GET_PHY_MEDIA_INFO_IN_V2_TARGET_LINK_END_LEN 4
-> > > > +#define       MC_CMD_GET_PHY_MEDIA_INFO_IN_V2_TARGET_FLAT_OFST 4
-> > > > +#define       MC_CMD_GET_PHY_MEDIA_INFO_IN_V2_TARGET_FLAT_LEN 8
-> > > > +#define       MC_CMD_GET_PHY_MEDIA_INFO_IN_V2_TARGET_FLAT_LO_OFST 4
-> > > > +#define       MC_CMD_GET_PHY_MEDIA_INFO_IN_V2_TARGET_FLAT_LO_LEN 4
-> > > > +#define       MC_CMD_GET_PHY_MEDIA_INFO_IN_V2_TARGET_FLAT_LO_LBN 32
-> > > > +#define       MC_CMD_GET_PHY_MEDIA_INFO_IN_V2_TARGET_FLAT_LO_WIDTH 32
-> > > > +#define       MC_CMD_GET_PHY_MEDIA_INFO_IN_V2_TARGET_FLAT_HI_OFST 8
-> > > > +#define       MC_CMD_GET_PHY_MEDIA_INFO_IN_V2_TARGET_FLAT_HI_LEN 4
-> > > > +#define       MC_CMD_GET_PHY_MEDIA_INFO_IN_V2_TARGET_FLAT_HI_LBN 64
-> > > > +#define       MC_CMD_GET_PHY_MEDIA_INFO_IN_V2_TARGET_FLAT_HI_WIDTH 32
-> > > > +
-> > > >    /* MC_CMD_GET_PHY_MEDIA_INFO_OUT msgresponse */
-> > > >    #define    MC_CMD_GET_PHY_MEDIA_INFO_OUT_LENMIN 5
-> > > >    #define    MC_CMD_GET_PHY_MEDIA_INFO_OUT_LENMAX 252
-> > > > @@ -8348,7 +9151,7 @@
-> > > >    #define MC_CMD_NVRAM_TEST 0x4c
-> > > >    #undef MC_CMD_0x4c_PRIVILEGE_CTG
-> > > > 
-> > > > -#define MC_CMD_0x4c_PRIVILEGE_CTG SRIOV_CTG_ADMIN
-> > > > +#define MC_CMD_0x4c_PRIVILEGE_CTG SRIOV_CTG_ADMIN_TSA_UNBOUND
-> > > > 
-> > > >    /* MC_CMD_NVRAM_TEST_IN msgrequest */
-> > > >    #define    MC_CMD_NVRAM_TEST_IN_LEN 4
-> > > > @@ -8593,7 +9396,7 @@
-> > > >    #define MC_CMD_CLP 0x56
-> > > >    #undef MC_CMD_0x56_PRIVILEGE_CTG
-> > > > 
-> > > > -#define MC_CMD_0x56_PRIVILEGE_CTG SRIOV_CTG_ADMIN
-> > > > +#define MC_CMD_0x56_PRIVILEGE_CTG SRIOV_CTG_ADMIN_TSA_UNBOUND
-> > > > 
-> > > >    /* MC_CMD_CLP_IN msgrequest */
-> > > >    #define    MC_CMD_CLP_IN_LEN 4
-> > > > @@ -9500,27 +10303,22 @@
-> > > >     * and a generation count for this version of the sensor table. On systems
-> > > >     * advertising the DYNAMIC_SENSORS capability bit, this replaces the
-> > > >     * MC_CMD_READ_SENSORS command. On multi-MC systems this may include sensors
-> > > > - * added by the NMC.
-> > > > - *
-> > > > - * Sensor handles are persistent for the lifetime of the sensor and are used to
-> > > > - * identify sensors in MC_CMD_DYNAMIC_SENSORS_GET_DESCRIPTIONS and
-> > > > - * MC_CMD_DYNAMIC_SENSORS_GET_VALUES.
-> > > > - *
-> > > > - * The generation count is maintained by the MC, is persistent across reboots
-> > > > - * and will be incremented each time the sensor table is modified. When the
-> > > > - * table is modified, a CODE_DYNAMIC_SENSORS_CHANGE event will be generated
-> > > > - * containing the new generation count. The driver should compare this against
-> > > > - * the current generation count, and if it is different, call
-> > > > - * MC_CMD_DYNAMIC_SENSORS_LIST again to update it's copy of the sensor table.
-> > > > - *
-> > > > - * The sensor count is provided to allow a future path to supporting more than
-> > > > + * added by the NMC. Sensor handles are persistent for the lifetime of the
-> > > > + * sensor and are used to identify sensors in
-> > > > + * MC_CMD_DYNAMIC_SENSORS_GET_DESCRIPTIONS and
-> > > > + * MC_CMD_DYNAMIC_SENSORS_GET_VALUES. The generation count is maintained by the
-> > > > + * MC, is persistent across reboots and will be incremented each time the
-> > > > + * sensor table is modified. When the table is modified, a
-> > > > + * CODE_DYNAMIC_SENSORS_CHANGE event will be generated containing the new
-> > > > + * generation count. The driver should compare this against the current
-> > > > + * generation count, and if it is different, call MC_CMD_DYNAMIC_SENSORS_LIST
-> > > > + * again to update it's copy of the sensor table. The sensor count is provided
-> > > > + * to allow a future path to supporting more than
-> > > >     * MC_CMD_DYNAMIC_SENSORS_GET_READINGS_IN_HANDLES_MAXNUM_MCDI2 sensors, i.e.
-> > > >     * the maximum number that will fit in a single response. As this is a fairly
-> > > >     * large number (253) it is not anticipated that this will be needed in the
-> > > > - * near future, so can currently be ignored.
-> > > > - *
-> > > > - * On Riverhead this command is implemented as a wrapper for `list` in the
-> > > > - * sensor_query SPHINX service.
-> > > > + * near future, so can currently be ignored. On Riverhead this command is
-> > > > + * implemented as a wrapper for `list` in the sensor_query SPHINX service.
-> > > >     */
-> > > >    #define MC_CMD_DYNAMIC_SENSORS_LIST 0x66
-> > > >    #undef MC_CMD_0x66_PRIVILEGE_CTG
-> > > > @@ -9557,15 +10355,13 @@
-> > > >    /***********************************/
-> > > >    /* MC_CMD_DYNAMIC_SENSORS_GET_DESCRIPTIONS
-> > > >     * Get descriptions for a set of sensors, specified as an array of sensor
-> > > > - * handles as returned by MC_CMD_DYNAMIC_SENSORS_LIST
-> > > > - *
-> > > > - * Any handles which do not correspond to a sensor currently managed by the MC
-> > > > - * will be dropped from from the response. This may happen when a sensor table
-> > > > - * update is in progress, and effectively means the set of usable sensors is
-> > > > - * the intersection between the sets of sensors known to the driver and the MC.
-> > > > - *
-> > > > - * On Riverhead this command is implemented as a wrapper for
-> > > > - * `get_descriptions` in the sensor_query SPHINX service.
-> > > > + * handles as returned by MC_CMD_DYNAMIC_SENSORS_LIST. Any handles which do not
-> > > > + * correspond to a sensor currently managed by the MC will be dropped from from
-> > > > + * the response. This may happen when a sensor table update is in progress, and
-> > > > + * effectively means the set of usable sensors is the intersection between the
-> > > > + * sets of sensors known to the driver and the MC. On Riverhead this command is
-> > > > + * implemented as a wrapper for `get_descriptions` in the sensor_query SPHINX
-> > > > + * service.
-> > > >     */
-> > > >    #define MC_CMD_DYNAMIC_SENSORS_GET_DESCRIPTIONS 0x67
-> > > >    #undef MC_CMD_0x67_PRIVILEGE_CTG
-> > > > @@ -9602,19 +10398,15 @@
-> > > >    /***********************************/
-> > > >    /* MC_CMD_DYNAMIC_SENSORS_GET_READINGS
-> > > >     * Read the state and value for a set of sensors, specified as an array of
-> > > > - * sensor handles as returned by MC_CMD_DYNAMIC_SENSORS_LIST.
-> > > > - *
-> > > > - * In the case of a broken sensor, then the state of the response's
-> > > > - * MC_CMD_DYNAMIC_SENSORS_VALUE entry will be set to BROKEN, and any value
-> > > > - * provided should be treated as erroneous.
-> > > > - *
-> > > > - * Any handles which do not correspond to a sensor currently managed by the MC
-> > > > - * will be dropped from from the response. This may happen when a sensor table
-> > > > - * update is in progress, and effectively means the set of usable sensors is
-> > > > - * the intersection between the sets of sensors known to the driver and the MC.
-> > > > - *
-> > > > - * On Riverhead this command is implemented as a wrapper for `get_readings`
-> > > > - * in the sensor_query SPHINX service.
-> > > > + * sensor handles as returned by MC_CMD_DYNAMIC_SENSORS_LIST. In the case of a
-> > > > + * broken sensor, then the state of the response's MC_CMD_DYNAMIC_SENSORS_VALUE
-> > > > + * entry will be set to BROKEN, and any value provided should be treated as
-> > > > + * erroneous. Any handles which do not correspond to a sensor currently managed
-> > > > + * by the MC will be dropped from from the response. This may happen when a
-> > > > + * sensor table update is in progress, and effectively means the set of usable
-> > > > + * sensors is the intersection between the sets of sensors known to the driver
-> > > > + * and the MC. On Riverhead this command is implemented as a wrapper for
-> > > > + * `get_readings` in the sensor_query SPHINX service.
-> > > >     */
-> > > >    #define MC_CMD_DYNAMIC_SENSORS_GET_READINGS 0x68
-> > > >    #undef MC_CMD_0x68_PRIVILEGE_CTG
-> > > > @@ -10212,6 +11004,42 @@
-> > > >    #define       CTPIO_STATS_MAP_BUCKET_LBN 16
-> > > >    #define       CTPIO_STATS_MAP_BUCKET_WIDTH 16
-> > > > 
-> > > > +/* MESSAGE_TYPE structuredef: When present this defines the meaning of a
-> > > > + * message, and is used to protect against chosen message attacks in signed
-> > > > + * messages, regardless their origin. The message type also defines the
-> > > > + * signature cryptographic algorithm, encoding, and message fields included in
-> > > > + * the signature. The values are used in different commands but must be unique
-> > > > + * across all commands, e.g. MC_CMD_TSA_BIND_IN_SECURE_UNBIND uses different
-> > > > + * message type than MC_CMD_SECURE_NIC_INFO_IN_STATUS.
-> > > > + */
-> > > > +#define    MESSAGE_TYPE_LEN 4
-> > > > +#define       MESSAGE_TYPE_MESSAGE_TYPE_OFST 0
-> > > > +#define       MESSAGE_TYPE_MESSAGE_TYPE_LEN 4
-> > > > +#define          MESSAGE_TYPE_UNUSED 0x0 /* enum */
-> > > > +/* enum: Message type value for the response to a
-> > > > + * MC_CMD_TSA_BIND_IN_SECURE_UNBIND message. TSA_SECURE_UNBIND messages are
-> > > > + * ECDSA SECP384R1 signed using SHA384 message digest algorithm over fields
-> > > > + * MESSAGE_TYPE, TSANID, TSAID, and UNBINDTOKEN, and encoded as suggested by
-> > > > + * RFC6979 (section 2.4).
-> > > > + */
-> > > > +#define          MESSAGE_TYPE_TSA_SECURE_UNBIND 0x1
-> > > > +/* enum: Message type value for the response to a
-> > > > + * MC_CMD_TSA_BIND_IN_SECURE_DECOMMISSION message. TSA_SECURE_DECOMMISSION
-> > > > + * messages are ECDSA SECP384R1 signed using SHA384 message digest algorithm
-> > > > + * over fields MESSAGE_TYPE, TSAID, USER, and REASON, and encoded as suggested
-> > > > + * by RFC6979 (section 2.4).
-> > > > + */
-> > > > +#define          MESSAGE_TYPE_TSA_SECURE_DECOMMISSION 0x2
-> > > > +/* enum: Message type value for the response to a
-> > > > + * MC_CMD_SECURE_NIC_INFO_IN_STATUS message. This enum value is not sequential
-> > > > + * to other message types for backwards compatibility as the message type for
-> > > > + * MC_CMD_SECURE_NIC_INFO_IN_STATUS was defined before the existence of this
-> > > > + * global enum.
-> > > > + */
-> > > > +#define          MESSAGE_TYPE_SECURE_NIC_INFO_STATUS 0xdb4
-> > > > +#define       MESSAGE_TYPE_MESSAGE_TYPE_LBN 0
-> > > > +#define       MESSAGE_TYPE_MESSAGE_TYPE_WIDTH 32
-> > > > +
-> > > > 
-> > > >    /***********************************/
-> > > >    /* MC_CMD_READ_REGS
-> > > > @@ -12860,6 +13688,48 @@
-> > > >    #define        MC_CMD_GET_PARSER_DISP_RESTRICTIONS_OUT_DST_IP_MCAST_ONLY_LBN 0
-> > > >    #define        MC_CMD_GET_PARSER_DISP_RESTRICTIONS_OUT_DST_IP_MCAST_ONLY_WIDTH 1
-> > > > 
-> > > > +/* MC_CMD_GET_PARSER_DISP_SECURITY_RULE_INFO_OUT msgresponse:
-> > > > + * GET_PARSER_DISP_INFO response format for OP_GET_SECURITY_RULE_INFO.
-> > > > + * (Medford-only; for use by SolarSecure apps, not directly by drivers. See
-> > > > + * SF-114946-SW.) NOTE - this message definition is provisional. It has not yet
-> > > > + * been used in any released code and may change during development. This note
-> > > > + * will be removed once it is regarded as stable.
-> > > > + */
-> > > > +#define    MC_CMD_GET_PARSER_DISP_SECURITY_RULE_INFO_OUT_LEN 36
-> > > > +/* identifies the type of operation requested */
-> > > > +#define       MC_CMD_GET_PARSER_DISP_SECURITY_RULE_INFO_OUT_OP_OFST 0
-> > > > +#define       MC_CMD_GET_PARSER_DISP_SECURITY_RULE_INFO_OUT_OP_LEN 4
-> > > > +/*            Enum values, see field(s): */
-> > > > +/*               MC_CMD_GET_PARSER_DISP_INFO_IN/OP */
-> > > > +/* a version number representing the set of rule lookups that are implemented
-> > > > + * by the currently running firmware
-> > > > + */
-> > > > +#define       MC_CMD_GET_PARSER_DISP_SECURITY_RULE_INFO_OUT_RULES_VERSION_OFST 4
-> > > > +#define       MC_CMD_GET_PARSER_DISP_SECURITY_RULE_INFO_OUT_RULES_VERSION_LEN 4
-> > > > +/* enum: implements lookup sequences described in SF-114946-SW draft C */
-> > > > +#define          MC_CMD_GET_PARSER_DISP_SECURITY_RULE_INFO_OUT_RULES_VERSION_SF_114946_SW_C 0x0
-> > > > +/* the number of nodes in the subnet map */
-> > > > +#define       MC_CMD_GET_PARSER_DISP_SECURITY_RULE_INFO_OUT_SUBNET_MAP_NUM_NODES_OFST 8
-> > > > +#define       MC_CMD_GET_PARSER_DISP_SECURITY_RULE_INFO_OUT_SUBNET_MAP_NUM_NODES_LEN 4
-> > > > +/* the number of entries in one subnet map node */
-> > > > +#define       MC_CMD_GET_PARSER_DISP_SECURITY_RULE_INFO_OUT_SUBNET_MAP_NUM_ENTRIES_PER_NODE_OFST 12
-> > > > +#define       MC_CMD_GET_PARSER_DISP_SECURITY_RULE_INFO_OUT_SUBNET_MAP_NUM_ENTRIES_PER_NODE_LEN 4
-> > > > +/* minimum valid value for a subnet ID in a subnet map leaf */
-> > > > +#define       MC_CMD_GET_PARSER_DISP_SECURITY_RULE_INFO_OUT_SUBNET_ID_MIN_OFST 16
-> > > > +#define       MC_CMD_GET_PARSER_DISP_SECURITY_RULE_INFO_OUT_SUBNET_ID_MIN_LEN 4
-> > > > +/* maximum valid value for a subnet ID in a subnet map leaf */
-> > > > +#define       MC_CMD_GET_PARSER_DISP_SECURITY_RULE_INFO_OUT_SUBNET_ID_MAX_OFST 20
-> > > > +#define       MC_CMD_GET_PARSER_DISP_SECURITY_RULE_INFO_OUT_SUBNET_ID_MAX_LEN 4
-> > > > +/* the number of entries in the local and remote port range maps */
-> > > > +#define       MC_CMD_GET_PARSER_DISP_SECURITY_RULE_INFO_OUT_PORTRANGE_TREE_NUM_ENTRIES_OFST 24
-> > > > +#define       MC_CMD_GET_PARSER_DISP_SECURITY_RULE_INFO_OUT_PORTRANGE_TREE_NUM_ENTRIES_LEN 4
-> > > > +/* minimum valid value for a portrange ID in a port range map leaf */
-> > > > +#define       MC_CMD_GET_PARSER_DISP_SECURITY_RULE_INFO_OUT_PORTRANGE_ID_MIN_OFST 28
-> > > > +#define       MC_CMD_GET_PARSER_DISP_SECURITY_RULE_INFO_OUT_PORTRANGE_ID_MIN_LEN 4
-> > > > +/* maximum valid value for a portrange ID in a port range map leaf */
-> > > > +#define       MC_CMD_GET_PARSER_DISP_SECURITY_RULE_INFO_OUT_PORTRANGE_ID_MAX_OFST 32
-> > > > +#define       MC_CMD_GET_PARSER_DISP_SECURITY_RULE_INFO_OUT_PORTRANGE_ID_MAX_LEN 4
-> > > > +
-> > > >    /* MC_CMD_GET_PARSER_DISP_VNIC_ENCAP_MATCHES_OUT msgresponse: This response is
-> > > >     * returned if a MC_CMD_GET_PARSER_DISP_INFO_IN request is sent with OP value
-> > > >     * OP_GET_SUPPORTED_VNIC_ENCAP_MATCHES. It contains information about the
-> > > > @@ -13716,7 +14586,7 @@
-> > > >    #define MC_CMD_SATELLITE_DOWNLOAD 0x91
-> > > >    #undef MC_CMD_0x91_PRIVILEGE_CTG
-> > > > 
-> > > > -#define MC_CMD_0x91_PRIVILEGE_CTG SRIOV_CTG_ADMIN
-> > > > +#define MC_CMD_0x91_PRIVILEGE_CTG SRIOV_CTG_ADMIN_TSA_UNBOUND
-> > > > 
-> > > >    /* MC_CMD_SATELLITE_DOWNLOAD_IN msgrequest: The reset requirements for the CPUs
-> > > >     * are subtle, and so downloads must proceed in a number of phases.
-> > > > @@ -13835,10 +14705,9 @@
-> > > > 
-> > > >    /***********************************/
-> > > >    /* MC_CMD_GET_CAPABILITIES
-> > > > - * Get device capabilities.
-> > > > - *
-> > > > - * This is supplementary to the MC_CMD_GET_BOARD_CFG command, and intended to
-> > > > - * reference inherent device capabilities as opposed to current NVRAM config.
-> > > > + * Get device capabilities. This is supplementary to the MC_CMD_GET_BOARD_CFG
-> > > > + * command, and intended to reference inherent device capabilities as opposed
-> > > > + * to current NVRAM config.
-> > > >     */
-> > > >    #define MC_CMD_GET_CAPABILITIES 0xbe
-> > > >    #undef MC_CMD_0xbe_PRIVILEGE_CTG
-> > > > @@ -16796,9 +17665,15 @@
-> > > >    #define        MC_CMD_GET_CAPABILITIES_V7_OUT_RSS_STEER_ON_OUTER_SUPPORTED_OFST 148
-> > > >    #define        MC_CMD_GET_CAPABILITIES_V7_OUT_RSS_STEER_ON_OUTER_SUPPORTED_LBN 12
-> > > >    #define        MC_CMD_GET_CAPABILITIES_V7_OUT_RSS_STEER_ON_OUTER_SUPPORTED_WIDTH 1
-> > > > +#define        MC_CMD_GET_CAPABILITIES_V7_OUT_MAE_ACTION_SET_ALLOC_V3_SUPPORTED_OFST 148
-> > > > +#define        MC_CMD_GET_CAPABILITIES_V7_OUT_MAE_ACTION_SET_ALLOC_V3_SUPPORTED_LBN 13
-> > > > +#define        MC_CMD_GET_CAPABILITIES_V7_OUT_MAE_ACTION_SET_ALLOC_V3_SUPPORTED_WIDTH 1
-> > > >    #define        MC_CMD_GET_CAPABILITIES_V7_OUT_DYNAMIC_MPORT_JOURNAL_OFST 148
-> > > >    #define        MC_CMD_GET_CAPABILITIES_V7_OUT_DYNAMIC_MPORT_JOURNAL_LBN 14
-> > > >    #define        MC_CMD_GET_CAPABILITIES_V7_OUT_DYNAMIC_MPORT_JOURNAL_WIDTH 1
-> > > > +#define        MC_CMD_GET_CAPABILITIES_V7_OUT_CLIENT_CMD_VF_PROXY_OFST 148
-> > > > +#define        MC_CMD_GET_CAPABILITIES_V7_OUT_CLIENT_CMD_VF_PROXY_LBN 15
-> > > > +#define        MC_CMD_GET_CAPABILITIES_V7_OUT_CLIENT_CMD_VF_PROXY_WIDTH 1
-> > > > 
-> > > >    /* MC_CMD_GET_CAPABILITIES_V8_OUT msgresponse */
-> > > >    #define    MC_CMD_GET_CAPABILITIES_V8_OUT_LEN 160
-> > > > @@ -17300,9 +18175,15 @@
-> > > >    #define        MC_CMD_GET_CAPABILITIES_V8_OUT_RSS_STEER_ON_OUTER_SUPPORTED_OFST 148
-> > > >    #define        MC_CMD_GET_CAPABILITIES_V8_OUT_RSS_STEER_ON_OUTER_SUPPORTED_LBN 12
-> > > >    #define        MC_CMD_GET_CAPABILITIES_V8_OUT_RSS_STEER_ON_OUTER_SUPPORTED_WIDTH 1
-> > > > +#define        MC_CMD_GET_CAPABILITIES_V8_OUT_MAE_ACTION_SET_ALLOC_V3_SUPPORTED_OFST 148
-> > > > +#define        MC_CMD_GET_CAPABILITIES_V8_OUT_MAE_ACTION_SET_ALLOC_V3_SUPPORTED_LBN 13
-> > > > +#define        MC_CMD_GET_CAPABILITIES_V8_OUT_MAE_ACTION_SET_ALLOC_V3_SUPPORTED_WIDTH 1
-> > > >    #define        MC_CMD_GET_CAPABILITIES_V8_OUT_DYNAMIC_MPORT_JOURNAL_OFST 148
-> > > >    #define        MC_CMD_GET_CAPABILITIES_V8_OUT_DYNAMIC_MPORT_JOURNAL_LBN 14
-> > > >    #define        MC_CMD_GET_CAPABILITIES_V8_OUT_DYNAMIC_MPORT_JOURNAL_WIDTH 1
-> > > > +#define        MC_CMD_GET_CAPABILITIES_V8_OUT_CLIENT_CMD_VF_PROXY_OFST 148
-> > > > +#define        MC_CMD_GET_CAPABILITIES_V8_OUT_CLIENT_CMD_VF_PROXY_LBN 15
-> > > > +#define        MC_CMD_GET_CAPABILITIES_V8_OUT_CLIENT_CMD_VF_PROXY_WIDTH 1
-> > > >    /* These bits are reserved for communicating test-specific capabilities to
-> > > >     * host-side test software. All production drivers should treat this field as
-> > > >     * opaque.
-> > > > @@ -17818,9 +18699,15 @@
-> > > >    #define        MC_CMD_GET_CAPABILITIES_V9_OUT_RSS_STEER_ON_OUTER_SUPPORTED_OFST 148
-> > > >    #define        MC_CMD_GET_CAPABILITIES_V9_OUT_RSS_STEER_ON_OUTER_SUPPORTED_LBN 12
-> > > >    #define        MC_CMD_GET_CAPABILITIES_V9_OUT_RSS_STEER_ON_OUTER_SUPPORTED_WIDTH 1
-> > > > +#define        MC_CMD_GET_CAPABILITIES_V9_OUT_MAE_ACTION_SET_ALLOC_V3_SUPPORTED_OFST 148
-> > > > +#define        MC_CMD_GET_CAPABILITIES_V9_OUT_MAE_ACTION_SET_ALLOC_V3_SUPPORTED_LBN 13
-> > > > +#define        MC_CMD_GET_CAPABILITIES_V9_OUT_MAE_ACTION_SET_ALLOC_V3_SUPPORTED_WIDTH 1
-> > > >    #define        MC_CMD_GET_CAPABILITIES_V9_OUT_DYNAMIC_MPORT_JOURNAL_OFST 148
-> > > >    #define        MC_CMD_GET_CAPABILITIES_V9_OUT_DYNAMIC_MPORT_JOURNAL_LBN 14
-> > > >    #define        MC_CMD_GET_CAPABILITIES_V9_OUT_DYNAMIC_MPORT_JOURNAL_WIDTH 1
-> > > > +#define        MC_CMD_GET_CAPABILITIES_V9_OUT_CLIENT_CMD_VF_PROXY_OFST 148
-> > > > +#define        MC_CMD_GET_CAPABILITIES_V9_OUT_CLIENT_CMD_VF_PROXY_LBN 15
-> > > > +#define        MC_CMD_GET_CAPABILITIES_V9_OUT_CLIENT_CMD_VF_PROXY_WIDTH 1
-> > > >    /* These bits are reserved for communicating test-specific capabilities to
-> > > >     * host-side test software. All production drivers should treat this field as
-> > > >     * opaque.
-> > > > @@ -18371,9 +19258,15 @@
-> > > >    #define        MC_CMD_GET_CAPABILITIES_V10_OUT_RSS_STEER_ON_OUTER_SUPPORTED_OFST 148
-> > > >    #define        MC_CMD_GET_CAPABILITIES_V10_OUT_RSS_STEER_ON_OUTER_SUPPORTED_LBN 12
-> > > >    #define        MC_CMD_GET_CAPABILITIES_V10_OUT_RSS_STEER_ON_OUTER_SUPPORTED_WIDTH 1
-> > > > +#define        MC_CMD_GET_CAPABILITIES_V10_OUT_MAE_ACTION_SET_ALLOC_V3_SUPPORTED_OFST 148
-> > > > +#define        MC_CMD_GET_CAPABILITIES_V10_OUT_MAE_ACTION_SET_ALLOC_V3_SUPPORTED_LBN 13
-> > > > +#define        MC_CMD_GET_CAPABILITIES_V10_OUT_MAE_ACTION_SET_ALLOC_V3_SUPPORTED_WIDTH 1
-> > > >    #define        MC_CMD_GET_CAPABILITIES_V10_OUT_DYNAMIC_MPORT_JOURNAL_OFST 148
-> > > >    #define        MC_CMD_GET_CAPABILITIES_V10_OUT_DYNAMIC_MPORT_JOURNAL_LBN 14
-> > > >    #define        MC_CMD_GET_CAPABILITIES_V10_OUT_DYNAMIC_MPORT_JOURNAL_WIDTH 1
-> > > > +#define        MC_CMD_GET_CAPABILITIES_V10_OUT_CLIENT_CMD_VF_PROXY_OFST 148
-> > > > +#define        MC_CMD_GET_CAPABILITIES_V10_OUT_CLIENT_CMD_VF_PROXY_LBN 15
-> > > > +#define        MC_CMD_GET_CAPABILITIES_V10_OUT_CLIENT_CMD_VF_PROXY_WIDTH 1
-> > > >    /* These bits are reserved for communicating test-specific capabilities to
-> > > >     * host-side test software. All production drivers should treat this field as
-> > > >     * opaque.
-> > > > @@ -18468,6 +19361,13 @@
-> > > >     * are not defined.
-> > > >     */
-> > > >    #define          MC_CMD_V2_EXTN_IN_MCDI_MESSAGE_TYPE_TSA 0x1
-> > > > +/* enum: MCDI command used for platform management. Typically, these commands
-> > > > + * are used for low-level operations directed at the platform as a whole (e.g.
-> > > > + * MMIO device enumeration) rather than individual functions and use a
-> > > > + * dedicated comms channel (e.g. RPmsg/IPI). May be handled by the same or
-> > > > + * different CPU as MCDI_MESSAGE_TYPE_MC.
-> > > > + */
-> > > > +#define          MC_CMD_V2_EXTN_IN_MCDI_MESSAGE_TYPE_PLATFORM 0x2
-> > > > 
-> > > > 
-> > > >    /***********************************/
-> > > > @@ -20179,7 +21079,7 @@
-> > > >    #define MC_CMD_SHMBOOT_OP 0xe6
-> > > >    #undef MC_CMD_0xe6_PRIVILEGE_CTG
-> > > > 
-> > > > -#define MC_CMD_0xe6_PRIVILEGE_CTG SRIOV_CTG_ADMIN
-> > > > +#define MC_CMD_0xe6_PRIVILEGE_CTG SRIOV_CTG_ADMIN_TSA_UNBOUND
-> > > > 
-> > > >    /* MC_CMD_SHMBOOT_OP_IN msgrequest */
-> > > >    #define    MC_CMD_SHMBOOT_OP_IN_LEN 4
-> > > > @@ -20448,7 +21348,7 @@
-> > > >    #define MC_CMD_ENABLE_OFFLINE_BIST 0xed
-> > > >    #undef MC_CMD_0xed_PRIVILEGE_CTG
-> > > > 
-> > > > -#define MC_CMD_0xed_PRIVILEGE_CTG SRIOV_CTG_ADMIN
-> > > > +#define MC_CMD_0xed_PRIVILEGE_CTG SRIOV_CTG_ADMIN_TSA_UNBOUND
-> > > > 
-> > > >    /* MC_CMD_ENABLE_OFFLINE_BIST_IN msgrequest */
-> > > >    #define    MC_CMD_ENABLE_OFFLINE_BIST_IN_LEN 0
-> > > > @@ -20588,7 +21488,7 @@
-> > > >    #define MC_CMD_KR_TUNE 0xf1
-> > > >    #undef MC_CMD_0xf1_PRIVILEGE_CTG
-> > > > 
-> > > > -#define MC_CMD_0xf1_PRIVILEGE_CTG SRIOV_CTG_ADMIN
-> > > > +#define MC_CMD_0xf1_PRIVILEGE_CTG SRIOV_CTG_ADMIN_TSA_UNBOUND
-> > > > 
-> > > >    /* MC_CMD_KR_TUNE_IN msgrequest */
-> > > >    #define    MC_CMD_KR_TUNE_IN_LENMIN 4
-> > > > @@ -21144,7 +22044,7 @@
-> > > >    #define MC_CMD_PCIE_TUNE 0xf2
-> > > >    #undef MC_CMD_0xf2_PRIVILEGE_CTG
-> > > > 
-> > > > -#define MC_CMD_0xf2_PRIVILEGE_CTG SRIOV_CTG_ADMIN
-> > > > +#define MC_CMD_0xf2_PRIVILEGE_CTG SRIOV_CTG_ADMIN_TSA_UNBOUND
-> > > > 
-> > > >    /* MC_CMD_PCIE_TUNE_IN msgrequest */
-> > > >    #define    MC_CMD_PCIE_TUNE_IN_LENMIN 4
-> > > > @@ -21877,7 +22777,7 @@
-> > > >    #define MC_CMD_LICENSING_V3_TEMPORARY 0xd6
-> > > >    #undef MC_CMD_0xd6_PRIVILEGE_CTG
-> > > > 
-> > > > -#define MC_CMD_0xd6_PRIVILEGE_CTG SRIOV_CTG_ADMIN
-> > > > +#define MC_CMD_0xd6_PRIVILEGE_CTG SRIOV_CTG_ADMIN_TSA_UNBOUND
-> > > > 
-> > > >    /* MC_CMD_LICENSING_V3_TEMPORARY_IN msgrequest */
-> > > >    #define    MC_CMD_LICENSING_V3_TEMPORARY_IN_LEN 4
-> > > > @@ -22305,8 +23205,8 @@
-> > > >     * TLV_PORT_MODE_*). A superset of MC_CMD_GET_PORT_MODES_OUT/MODES that
-> > > >     * contains all modes implemented in firmware for a particular board. Modes
-> > > >     * listed in MODES are considered production modes and should be exposed in
-> > > > - * userland tools. Modes listed in ENGINEERING_MODES, but not in MODES
-> > > > - * should be considered hidden (not to be exposed in userland tools) and for
-> > > > + * userland tools. Modes listed in ENGINEERING_MODES, but not in MODES should
-> > > > + * be considered hidden (not to be exposed in userland tools) and for
-> > > >     * engineering use only. There are no other semantic differences and any mode
-> > > >     * listed in either MODES or ENGINEERING_MODES can be set on the board.
-> > > >     */
-> > > > @@ -22937,7 +23837,7 @@
-> > > >    #define MC_CMD_EXEC_SIGNED 0x10c
-> > > >    #undef MC_CMD_0x10c_PRIVILEGE_CTG
-> > > > 
-> > > > -#define MC_CMD_0x10c_PRIVILEGE_CTG SRIOV_CTG_ADMIN
-> > > > +#define MC_CMD_0x10c_PRIVILEGE_CTG SRIOV_CTG_ADMIN_TSA_UNBOUND
-> > > > 
-> > > >    /* MC_CMD_EXEC_SIGNED_IN msgrequest */
-> > > >    #define    MC_CMD_EXEC_SIGNED_IN_LEN 28
-> > > > @@ -22967,7 +23867,7 @@
-> > > >    #define MC_CMD_PREPARE_SIGNED 0x10d
-> > > >    #undef MC_CMD_0x10d_PRIVILEGE_CTG
-> > > > 
-> > > > -#define MC_CMD_0x10d_PRIVILEGE_CTG SRIOV_CTG_ADMIN
-> > > > +#define MC_CMD_0x10d_PRIVILEGE_CTG SRIOV_CTG_ADMIN_TSA_UNBOUND
-> > > > 
-> > > >    /* MC_CMD_PREPARE_SIGNED_IN msgrequest */
-> > > >    #define    MC_CMD_PREPARE_SIGNED_IN_LEN 4
-> > > > @@ -22979,6 +23879,445 @@
-> > > >    #define    MC_CMD_PREPARE_SIGNED_OUT_LEN 0
-> > > > 
-> > > > 
-> > > > +/***********************************/
-> > > > +/* MC_CMD_SET_SECURITY_RULE
-> > > > + * Set blacklist and/or whitelist action for a particular match criteria.
-> > > > + * (Medford-only; for use by SolarSecure apps, not directly by drivers. See
-> > > > + * SF-114946-SW.) NOTE - this message definition is provisional. It has not yet
-> > > > + * been used in any released code and may change during development. This note
-> > > > + * will be removed once it is regarded as stable.
-> > > > + */
-> > > > +#define MC_CMD_SET_SECURITY_RULE 0x10f
-> > > > +#undef MC_CMD_0x10f_PRIVILEGE_CTG
-> > > > +
-> > > > +#define MC_CMD_0x10f_PRIVILEGE_CTG SRIOV_CTG_ADMIN_TSA_UNBOUND
-> > > > +
-> > > > +/* MC_CMD_SET_SECURITY_RULE_IN msgrequest */
-> > > > +#define    MC_CMD_SET_SECURITY_RULE_IN_LEN 92
-> > > > +/* fields to include in match criteria */
-> > > > +#define       MC_CMD_SET_SECURITY_RULE_IN_MATCH_FIELDS_OFST 0
-> > > > +#define       MC_CMD_SET_SECURITY_RULE_IN_MATCH_FIELDS_LEN 4
-> > > > +#define        MC_CMD_SET_SECURITY_RULE_IN_MATCH_REMOTE_IP_OFST 0
-> > > > +#define        MC_CMD_SET_SECURITY_RULE_IN_MATCH_REMOTE_IP_LBN 0
-> > > > +#define        MC_CMD_SET_SECURITY_RULE_IN_MATCH_REMOTE_IP_WIDTH 1
-> > > > +#define        MC_CMD_SET_SECURITY_RULE_IN_MATCH_LOCAL_IP_OFST 0
-> > > > +#define        MC_CMD_SET_SECURITY_RULE_IN_MATCH_LOCAL_IP_LBN 1
-> > > > +#define        MC_CMD_SET_SECURITY_RULE_IN_MATCH_LOCAL_IP_WIDTH 1
-> > > > +#define        MC_CMD_SET_SECURITY_RULE_IN_MATCH_REMOTE_MAC_OFST 0
-> > > > +#define        MC_CMD_SET_SECURITY_RULE_IN_MATCH_REMOTE_MAC_LBN 2
-> > > > +#define        MC_CMD_SET_SECURITY_RULE_IN_MATCH_REMOTE_MAC_WIDTH 1
-> > > > +#define        MC_CMD_SET_SECURITY_RULE_IN_MATCH_REMOTE_PORT_OFST 0
-> > > > +#define        MC_CMD_SET_SECURITY_RULE_IN_MATCH_REMOTE_PORT_LBN 3
-> > > > +#define        MC_CMD_SET_SECURITY_RULE_IN_MATCH_REMOTE_PORT_WIDTH 1
-> > > > +#define        MC_CMD_SET_SECURITY_RULE_IN_MATCH_LOCAL_MAC_OFST 0
-> > > > +#define        MC_CMD_SET_SECURITY_RULE_IN_MATCH_LOCAL_MAC_LBN 4
-> > > > +#define        MC_CMD_SET_SECURITY_RULE_IN_MATCH_LOCAL_MAC_WIDTH 1
-> > > > +#define        MC_CMD_SET_SECURITY_RULE_IN_MATCH_LOCAL_PORT_OFST 0
-> > > > +#define        MC_CMD_SET_SECURITY_RULE_IN_MATCH_LOCAL_PORT_LBN 5
-> > > > +#define        MC_CMD_SET_SECURITY_RULE_IN_MATCH_LOCAL_PORT_WIDTH 1
-> > > > +#define        MC_CMD_SET_SECURITY_RULE_IN_MATCH_ETHER_TYPE_OFST 0
-> > > > +#define        MC_CMD_SET_SECURITY_RULE_IN_MATCH_ETHER_TYPE_LBN 6
-> > > > +#define        MC_CMD_SET_SECURITY_RULE_IN_MATCH_ETHER_TYPE_WIDTH 1
-> > > > +#define        MC_CMD_SET_SECURITY_RULE_IN_MATCH_INNER_VLAN_OFST 0
-> > > > +#define        MC_CMD_SET_SECURITY_RULE_IN_MATCH_INNER_VLAN_LBN 7
-> > > > +#define        MC_CMD_SET_SECURITY_RULE_IN_MATCH_INNER_VLAN_WIDTH 1
-> > > > +#define        MC_CMD_SET_SECURITY_RULE_IN_MATCH_OUTER_VLAN_OFST 0
-> > > > +#define        MC_CMD_SET_SECURITY_RULE_IN_MATCH_OUTER_VLAN_LBN 8
-> > > > +#define        MC_CMD_SET_SECURITY_RULE_IN_MATCH_OUTER_VLAN_WIDTH 1
-> > > > +#define        MC_CMD_SET_SECURITY_RULE_IN_MATCH_IP_PROTO_OFST 0
-> > > > +#define        MC_CMD_SET_SECURITY_RULE_IN_MATCH_IP_PROTO_LBN 9
-> > > > +#define        MC_CMD_SET_SECURITY_RULE_IN_MATCH_IP_PROTO_WIDTH 1
-> > > > +#define        MC_CMD_SET_SECURITY_RULE_IN_MATCH_PHYSICAL_PORT_OFST 0
-> > > > +#define        MC_CMD_SET_SECURITY_RULE_IN_MATCH_PHYSICAL_PORT_LBN 10
-> > > > +#define        MC_CMD_SET_SECURITY_RULE_IN_MATCH_PHYSICAL_PORT_WIDTH 1
-> > > > +#define        MC_CMD_SET_SECURITY_RULE_IN_MATCH_RESERVED_OFST 0
-> > > > +#define        MC_CMD_SET_SECURITY_RULE_IN_MATCH_RESERVED_LBN 11
-> > > > +#define        MC_CMD_SET_SECURITY_RULE_IN_MATCH_RESERVED_WIDTH 1
-> > > > +#define        MC_CMD_SET_SECURITY_RULE_IN_MATCH_REMOTE_SUBNET_ID_OFST 0
-> > > > +#define        MC_CMD_SET_SECURITY_RULE_IN_MATCH_REMOTE_SUBNET_ID_LBN 12
-> > > > +#define        MC_CMD_SET_SECURITY_RULE_IN_MATCH_REMOTE_SUBNET_ID_WIDTH 1
-> > > > +#define        MC_CMD_SET_SECURITY_RULE_IN_MATCH_REMOTE_PORTRANGE_ID_OFST 0
-> > > > +#define        MC_CMD_SET_SECURITY_RULE_IN_MATCH_REMOTE_PORTRANGE_ID_LBN 13
-> > > > +#define        MC_CMD_SET_SECURITY_RULE_IN_MATCH_REMOTE_PORTRANGE_ID_WIDTH 1
-> > > > +#define        MC_CMD_SET_SECURITY_RULE_IN_MATCH_LOCAL_PORTRANGE_ID_OFST 0
-> > > > +#define        MC_CMD_SET_SECURITY_RULE_IN_MATCH_LOCAL_PORTRANGE_ID_LBN 14
-> > > > +#define        MC_CMD_SET_SECURITY_RULE_IN_MATCH_LOCAL_PORTRANGE_ID_WIDTH 1
-> > > > +/* remote MAC address to match (as bytes in network order) */
-> > > > +#define       MC_CMD_SET_SECURITY_RULE_IN_REMOTE_MAC_OFST 4
-> > > > +#define       MC_CMD_SET_SECURITY_RULE_IN_REMOTE_MAC_LEN 6
-> > > > +/* remote port to match (as bytes in network order) */
-> > > > +#define       MC_CMD_SET_SECURITY_RULE_IN_REMOTE_PORT_OFST 10
-> > > > +#define       MC_CMD_SET_SECURITY_RULE_IN_REMOTE_PORT_LEN 2
-> > > > +/* local MAC address to match (as bytes in network order) */
-> > > > +#define       MC_CMD_SET_SECURITY_RULE_IN_LOCAL_MAC_OFST 12
-> > > > +#define       MC_CMD_SET_SECURITY_RULE_IN_LOCAL_MAC_LEN 6
-> > > > +/* local port to match (as bytes in network order) */
-> > > > +#define       MC_CMD_SET_SECURITY_RULE_IN_LOCAL_PORT_OFST 18
-> > > > +#define       MC_CMD_SET_SECURITY_RULE_IN_LOCAL_PORT_LEN 2
-> > > > +/* Ethernet type to match (as bytes in network order) */
-> > > > +#define       MC_CMD_SET_SECURITY_RULE_IN_ETHER_TYPE_OFST 20
-> > > > +#define       MC_CMD_SET_SECURITY_RULE_IN_ETHER_TYPE_LEN 2
-> > > > +/* Inner VLAN tag to match (as bytes in network order) */
-> > > > +#define       MC_CMD_SET_SECURITY_RULE_IN_INNER_VLAN_OFST 22
-> > > > +#define       MC_CMD_SET_SECURITY_RULE_IN_INNER_VLAN_LEN 2
-> > > > +/* Outer VLAN tag to match (as bytes in network order) */
-> > > > +#define       MC_CMD_SET_SECURITY_RULE_IN_OUTER_VLAN_OFST 24
-> > > > +#define       MC_CMD_SET_SECURITY_RULE_IN_OUTER_VLAN_LEN 2
-> > > > +/* IP protocol to match (in low byte; set high byte to 0) */
-> > > > +#define       MC_CMD_SET_SECURITY_RULE_IN_IP_PROTO_OFST 26
-> > > > +#define       MC_CMD_SET_SECURITY_RULE_IN_IP_PROTO_LEN 2
-> > > > +/* Physical port to match (as little-endian 32-bit value) */
-> > > > +#define       MC_CMD_SET_SECURITY_RULE_IN_PHYSICAL_PORT_OFST 28
-> > > > +#define       MC_CMD_SET_SECURITY_RULE_IN_PHYSICAL_PORT_LEN 4
-> > > > +/* Reserved; set to 0 */
-> > > > +#define       MC_CMD_SET_SECURITY_RULE_IN_RESERVED_OFST 32
-> > > > +#define       MC_CMD_SET_SECURITY_RULE_IN_RESERVED_LEN 4
-> > > > +/* remote IP address to match (as bytes in network order; set last 12 bytes to
-> > > > + * 0 for IPv4 address)
-> > > > + */
-> > > > +#define       MC_CMD_SET_SECURITY_RULE_IN_REMOTE_IP_OFST 36
-> > > > +#define       MC_CMD_SET_SECURITY_RULE_IN_REMOTE_IP_LEN 16
-> > > > +/* local IP address to match (as bytes in network order; set last 12 bytes to 0
-> > > > + * for IPv4 address)
-> > > > + */
-> > > > +#define       MC_CMD_SET_SECURITY_RULE_IN_LOCAL_IP_OFST 52
-> > > > +#define       MC_CMD_SET_SECURITY_RULE_IN_LOCAL_IP_LEN 16
-> > > > +/* remote subnet ID to match (as little-endian 32-bit value); note that remote
-> > > > + * subnets are matched by mapping the remote IP address to a "subnet ID" via a
-> > > > + * data structure which must already have been configured using
-> > > > + * MC_CMD_SUBNET_MAP_SET_NODE appropriately
-> > > > + */
-> > > > +#define       MC_CMD_SET_SECURITY_RULE_IN_REMOTE_SUBNET_ID_OFST 68
-> > > > +#define       MC_CMD_SET_SECURITY_RULE_IN_REMOTE_SUBNET_ID_LEN 4
-> > > > +/* remote portrange ID to match (as little-endian 32-bit value); note that
-> > > > + * remote port ranges are matched by mapping the remote port to a "portrange
-> > > > + * ID" via a data structure which must already have been configured using
-> > > > + * MC_CMD_REMOTE_PORTRANGE_MAP_SET_TREE
-> > > > + */
-> > > > +#define       MC_CMD_SET_SECURITY_RULE_IN_REMOTE_PORTRANGE_ID_OFST 72
-> > > > +#define       MC_CMD_SET_SECURITY_RULE_IN_REMOTE_PORTRANGE_ID_LEN 4
-> > > > +/* local portrange ID to match (as little-endian 32-bit value); note that local
-> > > > + * port ranges are matched by mapping the local port to a "portrange ID" via a
-> > > > + * data structure which must already have been configured using
-> > > > + * MC_CMD_LOCAL_PORTRANGE_MAP_SET_TREE
-> > > > + */
-> > > > +#define       MC_CMD_SET_SECURITY_RULE_IN_LOCAL_PORTRANGE_ID_OFST 76
-> > > > +#define       MC_CMD_SET_SECURITY_RULE_IN_LOCAL_PORTRANGE_ID_LEN 4
-> > > > +/* set the action for transmitted packets matching this rule */
-> > > > +#define       MC_CMD_SET_SECURITY_RULE_IN_TX_ACTION_OFST 80
-> > > > +#define       MC_CMD_SET_SECURITY_RULE_IN_TX_ACTION_LEN 4
-> > > > +/* enum: make no decision */
-> > > > +#define          MC_CMD_SET_SECURITY_RULE_IN_TX_ACTION_NONE 0x0
-> > > > +/* enum: decide to accept the packet */
-> > > > +#define          MC_CMD_SET_SECURITY_RULE_IN_TX_ACTION_WHITELIST 0x1
-> > > > +/* enum: decide to drop the packet */
-> > > > +#define          MC_CMD_SET_SECURITY_RULE_IN_TX_ACTION_BLACKLIST 0x2
-> > > > +/* enum: inform the TSA controller about some sample of packets matching this
-> > > > + * rule (via MC_CMD_TSA_INFO_IN_PKT_SAMPLE messages); may be bitwise-ORed with
-> > > > + * either the WHITELIST or BLACKLIST action
-> > > > + */
-> > > > +#define          MC_CMD_SET_SECURITY_RULE_IN_TX_ACTION_SAMPLE 0x4
-> > > > +/* enum: do not change the current TX action */
-> > > > +#define          MC_CMD_SET_SECURITY_RULE_IN_TX_ACTION_UNCHANGED 0xffffffff
-> > > > +/* set the action for received packets matching this rule */
-> > > > +#define       MC_CMD_SET_SECURITY_RULE_IN_RX_ACTION_OFST 84
-> > > > +#define       MC_CMD_SET_SECURITY_RULE_IN_RX_ACTION_LEN 4
-> > > > +/* enum: make no decision */
-> > > > +#define          MC_CMD_SET_SECURITY_RULE_IN_RX_ACTION_NONE 0x0
-> > > > +/* enum: decide to accept the packet */
-> > > > +#define          MC_CMD_SET_SECURITY_RULE_IN_RX_ACTION_WHITELIST 0x1
-> > > > +/* enum: decide to drop the packet */
-> > > > +#define          MC_CMD_SET_SECURITY_RULE_IN_RX_ACTION_BLACKLIST 0x2
-> > > > +/* enum: inform the TSA controller about some sample of packets matching this
-> > > > + * rule (via MC_CMD_TSA_INFO_IN_PKT_SAMPLE messages); may be bitwise-ORed with
-> > > > + * either the WHITELIST or BLACKLIST action
-> > > > + */
-> > > > +#define          MC_CMD_SET_SECURITY_RULE_IN_RX_ACTION_SAMPLE 0x4
-> > > > +/* enum: do not change the current RX action */
-> > > > +#define          MC_CMD_SET_SECURITY_RULE_IN_RX_ACTION_UNCHANGED 0xffffffff
-> > > > +/* counter ID to associate with this rule; IDs are allocated using
-> > > > + * MC_CMD_SECURITY_RULE_COUNTER_ALLOC
-> > > > + */
-> > > > +#define       MC_CMD_SET_SECURITY_RULE_IN_COUNTER_ID_OFST 88
-> > > > +#define       MC_CMD_SET_SECURITY_RULE_IN_COUNTER_ID_LEN 4
-> > > > +/* enum: special value for the null counter ID */
-> > > > +#define          MC_CMD_SET_SECURITY_RULE_IN_COUNTER_ID_NONE 0x0
-> > > > +/* enum: special value to tell the MC to allocate an available counter */
-> > > > +#define          MC_CMD_SET_SECURITY_RULE_IN_COUNTER_ID_SW_AUTO 0xeeeeeeee
-> > > > +/* enum: special value to request use of hardware counter (Medford2 only) */
-> > > > +#define          MC_CMD_SET_SECURITY_RULE_IN_COUNTER_ID_HW 0xffffffff
-> > > > +
-> > > > +/* MC_CMD_SET_SECURITY_RULE_OUT msgresponse */
-> > > > +#define    MC_CMD_SET_SECURITY_RULE_OUT_LEN 32
-> > > > +/* new reference count for uses of counter ID */
-> > > > +#define       MC_CMD_SET_SECURITY_RULE_OUT_COUNTER_REFCNT_OFST 0
-> > > > +#define       MC_CMD_SET_SECURITY_RULE_OUT_COUNTER_REFCNT_LEN 4
-> > > > +/* constructed match bits for this rule (as a tracing aid only) */
-> > > > +#define       MC_CMD_SET_SECURITY_RULE_OUT_LUE_MATCH_BITS_OFST 4
-> > > > +#define       MC_CMD_SET_SECURITY_RULE_OUT_LUE_MATCH_BITS_LEN 12
-> > > > +/* constructed discriminator bits for this rule (as a tracing aid only) */
-> > > > +#define       MC_CMD_SET_SECURITY_RULE_OUT_LUE_DISCRIMINATOR_OFST 16
-> > > > +#define       MC_CMD_SET_SECURITY_RULE_OUT_LUE_DISCRIMINATOR_LEN 4
-> > > > +/* base location for probes for this rule (as a tracing aid only) */
-> > > > +#define       MC_CMD_SET_SECURITY_RULE_OUT_LUE_PROBE_BASE_OFST 20
-> > > > +#define       MC_CMD_SET_SECURITY_RULE_OUT_LUE_PROBE_BASE_LEN 4
-> > > > +/* step for probes for this rule (as a tracing aid only) */
-> > > > +#define       MC_CMD_SET_SECURITY_RULE_OUT_LUE_PROBE_STEP_OFST 24
-> > > > +#define       MC_CMD_SET_SECURITY_RULE_OUT_LUE_PROBE_STEP_LEN 4
-> > > > +/* ID for reading back the counter */
-> > > > +#define       MC_CMD_SET_SECURITY_RULE_OUT_COUNTER_ID_OFST 28
-> > > > +#define       MC_CMD_SET_SECURITY_RULE_OUT_COUNTER_ID_LEN 4
-> > > > +
-> > > > +
-> > > > +/***********************************/
-> > > > +/* MC_CMD_RESET_SECURITY_RULES
-> > > > + * Reset all blacklist and whitelist actions for a particular physical port, or
-> > > > + * all ports. (Medford-only; for use by SolarSecure apps, not directly by
-> > > > + * drivers. See SF-114946-SW.) NOTE - this message definition is provisional.
-> > > > + * It has not yet been used in any released code and may change during
-> > > > + * development. This note will be removed once it is regarded as stable.
-> > > > + */
-> > > > +#define MC_CMD_RESET_SECURITY_RULES 0x110
-> > > > +#undef MC_CMD_0x110_PRIVILEGE_CTG
-> > > > +
-> > > > +#define MC_CMD_0x110_PRIVILEGE_CTG SRIOV_CTG_ADMIN_TSA_UNBOUND
-> > > > +
-> > > > +/* MC_CMD_RESET_SECURITY_RULES_IN msgrequest */
-> > > > +#define    MC_CMD_RESET_SECURITY_RULES_IN_LEN 4
-> > > > +/* index of physical port to reset (or ALL_PHYSICAL_PORTS to reset all) */
-> > > > +#define       MC_CMD_RESET_SECURITY_RULES_IN_PHYSICAL_PORT_OFST 0
-> > > > +#define       MC_CMD_RESET_SECURITY_RULES_IN_PHYSICAL_PORT_LEN 4
-> > > > +/* enum: special value to reset all physical ports */
-> > > > +#define          MC_CMD_RESET_SECURITY_RULES_IN_ALL_PHYSICAL_PORTS 0xffffffff
-> > > > +
-> > > > +/* MC_CMD_RESET_SECURITY_RULES_OUT msgresponse */
-> > > > +#define    MC_CMD_RESET_SECURITY_RULES_OUT_LEN 0
-> > > > +
-> > > > +
-> > > > +/***********************************/
-> > > > +/* MC_CMD_GET_SECURITY_RULESET_VERSION
-> > > > + * Return a large hash value representing a "version" of the complete set of
-> > > > + * currently active blacklist / whitelist rules and associated data structures.
-> > > > + * (Medford-only; for use by SolarSecure apps, not directly by drivers. See
-> > > > + * SF-114946-SW.) NOTE - this message definition is provisional. It has not yet
-> > > > + * been used in any released code and may change during development. This note
-> > > > + * will be removed once it is regarded as stable.
-> > > > + */
-> > > > +#define MC_CMD_GET_SECURITY_RULESET_VERSION 0x111
-> > > > +#undef MC_CMD_0x111_PRIVILEGE_CTG
-> > > > +
-> > > > +#define MC_CMD_0x111_PRIVILEGE_CTG SRIOV_CTG_ADMIN
-> > > > +
-> > > > +/* MC_CMD_GET_SECURITY_RULESET_VERSION_IN msgrequest */
-> > > > +#define    MC_CMD_GET_SECURITY_RULESET_VERSION_IN_LEN 0
-> > > > +
-> > > > +/* MC_CMD_GET_SECURITY_RULESET_VERSION_OUT msgresponse */
-> > > > +#define    MC_CMD_GET_SECURITY_RULESET_VERSION_OUT_LENMIN 1
-> > > > +#define    MC_CMD_GET_SECURITY_RULESET_VERSION_OUT_LENMAX 252
-> > > > +#define    MC_CMD_GET_SECURITY_RULESET_VERSION_OUT_LENMAX_MCDI2 1020
-> > > > +#define    MC_CMD_GET_SECURITY_RULESET_VERSION_OUT_LEN(num) (0+1*(num))
-> > > > +#define    MC_CMD_GET_SECURITY_RULESET_VERSION_OUT_VERSION_NUM(len) (((len)-0)/1)
-> > > > +/* Opaque hash value; length may vary depending on the hash scheme used */
-> > > > +#define       MC_CMD_GET_SECURITY_RULESET_VERSION_OUT_VERSION_OFST 0
-> > > > +#define       MC_CMD_GET_SECURITY_RULESET_VERSION_OUT_VERSION_LEN 1
-> > > > +#define       MC_CMD_GET_SECURITY_RULESET_VERSION_OUT_VERSION_MINNUM 1
-> > > > +#define       MC_CMD_GET_SECURITY_RULESET_VERSION_OUT_VERSION_MAXNUM 252
-> > > > +#define       MC_CMD_GET_SECURITY_RULESET_VERSION_OUT_VERSION_MAXNUM_MCDI2 1020
-> > > > +
-> > > > +
-> > > > +/***********************************/
-> > > > +/* MC_CMD_SECURITY_RULE_COUNTER_ALLOC
-> > > > + * Allocate counters for use with blacklist / whitelist rules. (Medford-only;
-> > > > + * for use by SolarSecure apps, not directly by drivers. See SF-114946-SW.)
-> > > > + * NOTE - this message definition is provisional. It has not yet been used in
-> > > > + * any released code and may change during development. This note will be
-> > > > + * removed once it is regarded as stable.
-> > > > + */
-> > > > +#define MC_CMD_SECURITY_RULE_COUNTER_ALLOC 0x112
-> > > > +#undef MC_CMD_0x112_PRIVILEGE_CTG
-> > > > +
-> > > > +#define MC_CMD_0x112_PRIVILEGE_CTG SRIOV_CTG_ADMIN_TSA_UNBOUND
-> > > > +
-> > > > +/* MC_CMD_SECURITY_RULE_COUNTER_ALLOC_IN msgrequest */
-> > > > +#define    MC_CMD_SECURITY_RULE_COUNTER_ALLOC_IN_LEN 4
-> > > > +/* the number of new counter IDs to request */
-> > > > +#define       MC_CMD_SECURITY_RULE_COUNTER_ALLOC_IN_NUM_COUNTERS_OFST 0
-> > > > +#define       MC_CMD_SECURITY_RULE_COUNTER_ALLOC_IN_NUM_COUNTERS_LEN 4
-> > > > +
-> > > > +/* MC_CMD_SECURITY_RULE_COUNTER_ALLOC_OUT msgresponse */
-> > > > +#define    MC_CMD_SECURITY_RULE_COUNTER_ALLOC_OUT_LENMIN 4
-> > > > +#define    MC_CMD_SECURITY_RULE_COUNTER_ALLOC_OUT_LENMAX 252
-> > > > +#define    MC_CMD_SECURITY_RULE_COUNTER_ALLOC_OUT_LENMAX_MCDI2 1020
-> > > > +#define    MC_CMD_SECURITY_RULE_COUNTER_ALLOC_OUT_LEN(num) (4+4*(num))
-> > > > +#define    MC_CMD_SECURITY_RULE_COUNTER_ALLOC_OUT_COUNTER_ID_NUM(len) (((len)-4)/4)
-> > > > +/* the number of new counter IDs allocated (may be less than the number
-> > > > + * requested if resources are unavailable)
-> > > > + */
-> > > > +#define       MC_CMD_SECURITY_RULE_COUNTER_ALLOC_OUT_NUM_COUNTERS_OFST 0
-> > > > +#define       MC_CMD_SECURITY_RULE_COUNTER_ALLOC_OUT_NUM_COUNTERS_LEN 4
-> > > > +/* new counter ID(s) */
-> > > > +#define       MC_CMD_SECURITY_RULE_COUNTER_ALLOC_OUT_COUNTER_ID_OFST 4
-> > > > +#define       MC_CMD_SECURITY_RULE_COUNTER_ALLOC_OUT_COUNTER_ID_LEN 4
-> > > > +#define       MC_CMD_SECURITY_RULE_COUNTER_ALLOC_OUT_COUNTER_ID_MINNUM 0
-> > > > +#define       MC_CMD_SECURITY_RULE_COUNTER_ALLOC_OUT_COUNTER_ID_MAXNUM 62
-> > > > +#define       MC_CMD_SECURITY_RULE_COUNTER_ALLOC_OUT_COUNTER_ID_MAXNUM_MCDI2 254
-> > > > +
-> > > > +
-> > > > +/***********************************/
-> > > > +/* MC_CMD_SECURITY_RULE_COUNTER_FREE
-> > > > + * Allocate counters for use with blacklist / whitelist rules. (Medford-only;
-> > > > + * for use by SolarSecure apps, not directly by drivers. See SF-114946-SW.)
-> > > > + * NOTE - this message definition is provisional. It has not yet been used in
-> > > > + * any released code and may change during development. This note will be
-> > > > + * removed once it is regarded as stable.
-> > > > + */
-> > > > +#define MC_CMD_SECURITY_RULE_COUNTER_FREE 0x113
-> > > > +#undef MC_CMD_0x113_PRIVILEGE_CTG
-> > > > +
-> > > > +#define MC_CMD_0x113_PRIVILEGE_CTG SRIOV_CTG_ADMIN_TSA_UNBOUND
-> > > > +
-> > > > +/* MC_CMD_SECURITY_RULE_COUNTER_FREE_IN msgrequest */
-> > > > +#define    MC_CMD_SECURITY_RULE_COUNTER_FREE_IN_LENMIN 4
-> > > > +#define    MC_CMD_SECURITY_RULE_COUNTER_FREE_IN_LENMAX 252
-> > > > +#define    MC_CMD_SECURITY_RULE_COUNTER_FREE_IN_LENMAX_MCDI2 1020
-> > > > +#define    MC_CMD_SECURITY_RULE_COUNTER_FREE_IN_LEN(num) (4+4*(num))
-> > > > +#define    MC_CMD_SECURITY_RULE_COUNTER_FREE_IN_COUNTER_ID_NUM(len) (((len)-4)/4)
-> > > > +/* the number of counter IDs to free */
-> > > > +#define       MC_CMD_SECURITY_RULE_COUNTER_FREE_IN_NUM_COUNTERS_OFST 0
-> > > > +#define       MC_CMD_SECURITY_RULE_COUNTER_FREE_IN_NUM_COUNTERS_LEN 4
-> > > > +/* the counter ID(s) to free */
-> > > > +#define       MC_CMD_SECURITY_RULE_COUNTER_FREE_IN_COUNTER_ID_OFST 4
-> > > > +#define       MC_CMD_SECURITY_RULE_COUNTER_FREE_IN_COUNTER_ID_LEN 4
-> > > > +#define       MC_CMD_SECURITY_RULE_COUNTER_FREE_IN_COUNTER_ID_MINNUM 0
-> > > > +#define       MC_CMD_SECURITY_RULE_COUNTER_FREE_IN_COUNTER_ID_MAXNUM 62
-> > > > +#define       MC_CMD_SECURITY_RULE_COUNTER_FREE_IN_COUNTER_ID_MAXNUM_MCDI2 254
-> > > > +
-> > > > +/* MC_CMD_SECURITY_RULE_COUNTER_FREE_OUT msgresponse */
-> > > > +#define    MC_CMD_SECURITY_RULE_COUNTER_FREE_OUT_LEN 0
-> > > > +
-> > > > +
-> > > > +/***********************************/
-> > > > +/* MC_CMD_SUBNET_MAP_SET_NODE
-> > > > + * Atomically update a trie node in the map of subnets to subnet IDs. The
-> > > > + * constants in the descriptions of the fields of this message may be retrieved
-> > > > + * by the GET_SECURITY_RULE_INFO op of MC_CMD_GET_PARSER_DISP_INFO. (Medford-
-> > > > + * only; for use by SolarSecure apps, not directly by drivers. See
-> > > > + * SF-114946-SW.) NOTE - this message definition is provisional. It has not yet
-> > > > + * been used in any released code and may change during development. This note
-> > > > + * will be removed once it is regarded as stable.
-> > > > + */
-> > > > +#define MC_CMD_SUBNET_MAP_SET_NODE 0x114
-> > > > +#undef MC_CMD_0x114_PRIVILEGE_CTG
-> > > > +
-> > > > +#define MC_CMD_0x114_PRIVILEGE_CTG SRIOV_CTG_ADMIN_TSA_UNBOUND
-> > > > +
-> > > > +/* MC_CMD_SUBNET_MAP_SET_NODE_IN msgrequest */
-> > > > +#define    MC_CMD_SUBNET_MAP_SET_NODE_IN_LENMIN 6
-> > > > +#define    MC_CMD_SUBNET_MAP_SET_NODE_IN_LENMAX 252
-> > > > +#define    MC_CMD_SUBNET_MAP_SET_NODE_IN_LENMAX_MCDI2 1020
-> > > > +#define    MC_CMD_SUBNET_MAP_SET_NODE_IN_LEN(num) (4+2*(num))
-> > > > +#define    MC_CMD_SUBNET_MAP_SET_NODE_IN_ENTRY_NUM(len) (((len)-4)/2)
-> > > > +/* node to update in the range 0 .. SUBNET_MAP_NUM_NODES-1 */
-> > > > +#define       MC_CMD_SUBNET_MAP_SET_NODE_IN_NODE_ID_OFST 0
-> > > > +#define       MC_CMD_SUBNET_MAP_SET_NODE_IN_NODE_ID_LEN 4
-> > > > +/* SUBNET_MAP_NUM_ENTRIES_PER_NODE new entries; each entry is either a pointer
-> > > > + * to the next node, expressed as an offset in the trie memory (i.e. node ID
-> > > > + * multiplied by SUBNET_MAP_NUM_ENTRIES_PER_NODE), or a leaf value in the range
-> > > > + * SUBNET_ID_MIN .. SUBNET_ID_MAX
-> > > > + */
-> > > > +#define       MC_CMD_SUBNET_MAP_SET_NODE_IN_ENTRY_OFST 4
-> > > > +#define       MC_CMD_SUBNET_MAP_SET_NODE_IN_ENTRY_LEN 2
-> > > > +#define       MC_CMD_SUBNET_MAP_SET_NODE_IN_ENTRY_MINNUM 1
-> > > > +#define       MC_CMD_SUBNET_MAP_SET_NODE_IN_ENTRY_MAXNUM 124
-> > > > +#define       MC_CMD_SUBNET_MAP_SET_NODE_IN_ENTRY_MAXNUM_MCDI2 508
-> > > > +
-> > > > +/* MC_CMD_SUBNET_MAP_SET_NODE_OUT msgresponse */
-> > > > +#define    MC_CMD_SUBNET_MAP_SET_NODE_OUT_LEN 0
-> > > > +
-> > > > +/* PORTRANGE_TREE_ENTRY structuredef */
-> > > > +#define    PORTRANGE_TREE_ENTRY_LEN 4
-> > > > +/* key for branch nodes (<= key takes left branch, > key takes right branch),
-> > > > + * or magic value for leaf nodes
-> > > > + */
-> > > > +#define       PORTRANGE_TREE_ENTRY_BRANCH_KEY_OFST 0
-> > > > +#define       PORTRANGE_TREE_ENTRY_BRANCH_KEY_LEN 2
-> > > > +#define          PORTRANGE_TREE_ENTRY_LEAF_NODE_KEY 0xffff /* enum */
-> > > > +#define       PORTRANGE_TREE_ENTRY_BRANCH_KEY_LBN 0
-> > > > +#define       PORTRANGE_TREE_ENTRY_BRANCH_KEY_WIDTH 16
-> > > > +/* final portrange ID for leaf nodes (don't care for branch nodes) */
-> > > > +#define       PORTRANGE_TREE_ENTRY_LEAF_PORTRANGE_ID_OFST 2
-> > > > +#define       PORTRANGE_TREE_ENTRY_LEAF_PORTRANGE_ID_LEN 2
-> > > > +#define       PORTRANGE_TREE_ENTRY_LEAF_PORTRANGE_ID_LBN 16
-> > > > +#define       PORTRANGE_TREE_ENTRY_LEAF_PORTRANGE_ID_WIDTH 16
-> > > > +
-> > > > +
-> > > > +/***********************************/
-> > > > +/* MC_CMD_REMOTE_PORTRANGE_MAP_SET_TREE
-> > > > + * Atomically update the entire tree mapping remote port ranges to portrange
-> > > > + * IDs. The constants in the descriptions of the fields of this message may be
-> > > > + * retrieved by the GET_SECURITY_RULE_INFO op of MC_CMD_GET_PARSER_DISP_INFO.
-> > > > + * (Medford-only; for use by SolarSecure apps, not directly by drivers. See
-> > > > + * SF-114946-SW.) NOTE - this message definition is provisional. It has not yet
-> > > > + * been used in any released code and may change during development. This note
-> > > > + * will be removed once it is regarded as stable.
-> > > > + */
-> > > > +#define MC_CMD_REMOTE_PORTRANGE_MAP_SET_TREE 0x115
-> > > > +#undef MC_CMD_0x115_PRIVILEGE_CTG
-> > > > +
-> > > > +#define MC_CMD_0x115_PRIVILEGE_CTG SRIOV_CTG_ADMIN_TSA_UNBOUND
-> > > > +
-> > > > +/* MC_CMD_REMOTE_PORTRANGE_MAP_SET_TREE_IN msgrequest */
-> > > > +#define    MC_CMD_REMOTE_PORTRANGE_MAP_SET_TREE_IN_LENMIN 4
-> > > > +#define    MC_CMD_REMOTE_PORTRANGE_MAP_SET_TREE_IN_LENMAX 252
-> > > > +#define    MC_CMD_REMOTE_PORTRANGE_MAP_SET_TREE_IN_LENMAX_MCDI2 1020
-> > > > +#define    MC_CMD_REMOTE_PORTRANGE_MAP_SET_TREE_IN_LEN(num) (0+4*(num))
-> > > > +#define    MC_CMD_REMOTE_PORTRANGE_MAP_SET_TREE_IN_ENTRIES_NUM(len) (((len)-0)/4)
-> > > > +/* PORTRANGE_TREE_NUM_ENTRIES new entries, each laid out as a
-> > > > + * PORTRANGE_TREE_ENTRY
-> > > > + */
-> > > > +#define       MC_CMD_REMOTE_PORTRANGE_MAP_SET_TREE_IN_ENTRIES_OFST 0
-> > > > +#define       MC_CMD_REMOTE_PORTRANGE_MAP_SET_TREE_IN_ENTRIES_LEN 4
-> > > > +#define       MC_CMD_REMOTE_PORTRANGE_MAP_SET_TREE_IN_ENTRIES_MINNUM 1
-> > > > +#define       MC_CMD_REMOTE_PORTRANGE_MAP_SET_TREE_IN_ENTRIES_MAXNUM 63
-> > > > +#define       MC_CMD_REMOTE_PORTRANGE_MAP_SET_TREE_IN_ENTRIES_MAXNUM_MCDI2 255
-> > > > +
-> > > > +/* MC_CMD_REMOTE_PORTRANGE_MAP_SET_TREE_OUT msgresponse */
-> > > > +#define    MC_CMD_REMOTE_PORTRANGE_MAP_SET_TREE_OUT_LEN 0
-> > > > +
-> > > > +
-> > > > +/***********************************/
-> > > > +/* MC_CMD_LOCAL_PORTRANGE_MAP_SET_TREE
-> > > > + * Atomically update the entire tree mapping remote port ranges to portrange
-> > > > + * IDs. The constants in the descriptions of the fields of this message may be
-> > > > + * retrieved by the GET_SECURITY_RULE_INFO op of MC_CMD_GET_PARSER_DISP_INFO.
-> > > > + * (Medford-only; for use by SolarSecure apps, not directly by drivers. See
-> > > > + * SF-114946-SW.) NOTE - this message definition is provisional. It has not yet
-> > > > + * been used in any released code and may change during development. This note
-> > > > + * will be removed once it is regarded as stable.
-> > > > + */
-> > > > +#define MC_CMD_LOCAL_PORTRANGE_MAP_SET_TREE 0x116
-> > > > +#undef MC_CMD_0x116_PRIVILEGE_CTG
-> > > > +
-> > > > +#define MC_CMD_0x116_PRIVILEGE_CTG SRIOV_CTG_ADMIN_TSA_UNBOUND
-> > > > +
-> > > > +/* MC_CMD_LOCAL_PORTRANGE_MAP_SET_TREE_IN msgrequest */
-> > > > +#define    MC_CMD_LOCAL_PORTRANGE_MAP_SET_TREE_IN_LENMIN 4
-> > > > +#define    MC_CMD_LOCAL_PORTRANGE_MAP_SET_TREE_IN_LENMAX 252
-> > > > +#define    MC_CMD_LOCAL_PORTRANGE_MAP_SET_TREE_IN_LENMAX_MCDI2 1020
-> > > > +#define    MC_CMD_LOCAL_PORTRANGE_MAP_SET_TREE_IN_LEN(num) (0+4*(num))
-> > > > +#define    MC_CMD_LOCAL_PORTRANGE_MAP_SET_TREE_IN_ENTRIES_NUM(len) (((len)-0)/4)
-> > > > +/* PORTRANGE_TREE_NUM_ENTRIES new entries, each laid out as a
-> > > > + * PORTRANGE_TREE_ENTRY
-> > > > + */
-> > > > +#define       MC_CMD_LOCAL_PORTRANGE_MAP_SET_TREE_IN_ENTRIES_OFST 0
-> > > > +#define       MC_CMD_LOCAL_PORTRANGE_MAP_SET_TREE_IN_ENTRIES_LEN 4
-> > > > +#define       MC_CMD_LOCAL_PORTRANGE_MAP_SET_TREE_IN_ENTRIES_MINNUM 1
-> > > > +#define       MC_CMD_LOCAL_PORTRANGE_MAP_SET_TREE_IN_ENTRIES_MAXNUM 63
-> > > > +#define       MC_CMD_LOCAL_PORTRANGE_MAP_SET_TREE_IN_ENTRIES_MAXNUM_MCDI2 255
-> > > > +
-> > > > +/* MC_CMD_LOCAL_PORTRANGE_MAP_SET_TREE_OUT msgresponse */
-> > > > +#define    MC_CMD_LOCAL_PORTRANGE_MAP_SET_TREE_OUT_LEN 0
-> > > > +
-> > > >    /* TUNNEL_ENCAP_UDP_PORT_ENTRY structuredef */
-> > > >    #define    TUNNEL_ENCAP_UDP_PORT_ENTRY_LEN 4
-> > > >    /* UDP port (the standard ports are named below but any port may be used) */
-> > > > @@ -23058,7 +24397,7 @@
-> > > >    #define MC_CMD_RX_BALANCING 0x118
-> > > >    #undef MC_CMD_0x118_PRIVILEGE_CTG
-> > > > 
-> > > > -#define MC_CMD_0x118_PRIVILEGE_CTG SRIOV_CTG_ADMIN
-> > > > +#define MC_CMD_0x118_PRIVILEGE_CTG SRIOV_CTG_ADMIN_TSA_UNBOUND
-> > > > 
-> > > >    /* MC_CMD_RX_BALANCING_IN msgrequest */
-> > > >    #define    MC_CMD_RX_BALANCING_IN_LEN 16
-> > > > @@ -23079,6 +24418,627 @@
-> > > >    #define    MC_CMD_RX_BALANCING_OUT_LEN 0
-> > > > 
-> > > > 
-> > > > +/***********************************/
-> > > > +/* MC_CMD_TSA_BIND
-> > > > + * TSAN - TSAC binding communication protocol. Refer to SF-115479-TC for more
-> > > > + * info in respect to the binding protocol.
-> > > > + */
-> > > > +#define MC_CMD_TSA_BIND 0x119
-> > > > +#undef MC_CMD_0x119_PRIVILEGE_CTG
-> > > > +
-> > > > +#define MC_CMD_0x119_PRIVILEGE_CTG SRIOV_CTG_ADMIN
-> > > > +
-> > > > +/* MC_CMD_TSA_BIND_IN msgrequest: Protocol operation code */
-> > > > +#define    MC_CMD_TSA_BIND_IN_LEN 4
-> > > > +#define       MC_CMD_TSA_BIND_IN_OP_OFST 0
-> > > > +#define       MC_CMD_TSA_BIND_IN_OP_LEN 4
-> > > > +/* enum: Obsolete. Use MC_CMD_SECURE_NIC_INFO_IN_STATUS. */
-> > > > +#define          MC_CMD_TSA_BIND_OP_GET_ID 0x1
-> > > > +/* enum: Get a binding ticket from the TSAN. The binding ticket is used as part
-> > > > + * of the binding procedure to authorize the binding of an adapter to a TSAID.
-> > > > + * Refer to SF-114946-SW for more information. This sub-command is only
-> > > > + * available over a TLS secure connection between the TSAN and TSAC.
-> > > > + */
-> > > > +#define          MC_CMD_TSA_BIND_OP_GET_TICKET 0x2
-> > > > +/* enum: Opcode associated with the propagation of a private key that TSAN uses
-> > > > + * as part of post-binding authentication procedure. More specifically, TSAN
-> > > > + * uses this key for a signing operation. TSAC uses the counterpart public key
-> > > > + * to verify the signature. Note - The post-binding authentication occurs when
-> > > > + * the TSAN-TSAC connection terminates and TSAN tries to reconnect. Refer to
-> > > > + * SF-114946-SW for more information. This sub-command is only available over a
-> > > > + * TLS secure connection between the TSAN and TSAC.
-> > > > + */
-> > > > +#define          MC_CMD_TSA_BIND_OP_SET_KEY 0x3
-> > > > +/* enum: Request an insecure unbinding operation. This sub-command is available
-> > > > + * for any privileged client.
-> > > > + */
-> > > > +#define          MC_CMD_TSA_BIND_OP_UNBIND 0x4
-> > > > +/* enum: Obsolete. Use MC_CMD_TSA_BIND_OP_SECURE_UNBIND. */
-> > > > +#define          MC_CMD_TSA_BIND_OP_UNBIND_EXT 0x5
-> > > > +/* enum: Opcode associated with the propagation of the unbinding secret token.
-> > > > + * TSAN persists the unbinding secret token. Refer to SF-115479-TC for more
-> > > > + * information. This sub-command is only available over a TLS secure connection
-> > > > + * between the TSAN and TSAC.
-> > > > + */
-> > > > +#define          MC_CMD_TSA_BIND_OP_SET_UNBINDTOKEN 0x6
-> > > > +/* enum: Obsolete. Use MC_CMD_TSA_BIND_OP_SECURE_DECOMMISSION. */
-> > > > +#define          MC_CMD_TSA_BIND_OP_DECOMMISSION 0x7
-> > > > +/* enum: Obsolete. Use MC_CMD_GET_CERTIFICATE. */
-> > > > +#define          MC_CMD_TSA_BIND_OP_GET_CERTIFICATE 0x8
-> > > > +/* enum: Request a secure unbinding operation using unbinding token. This sub-
-> > > > + * command is available for any privileged client.
-> > > > + */
-> > > > +#define          MC_CMD_TSA_BIND_OP_SECURE_UNBIND 0x9
-> > > > +/* enum: Request a secure decommissioning operation. This sub-command is
-> > > > + * available for any privileged client.
-> > > > + */
-> > > > +#define          MC_CMD_TSA_BIND_OP_SECURE_DECOMMISSION 0xa
-> > > > +/* enum: Test facility that allows an adapter to be configured to behave as if
-> > > > + * Bound to a TSA controller with restricted MCDI administrator operations.
-> > > > + * This operation is primarily intended to aid host driver development.
-> > > > + */
-> > > > +#define          MC_CMD_TSA_BIND_OP_TEST_MCDI 0xb
-> > > > +
-> > > > +/* MC_CMD_TSA_BIND_IN_GET_ID msgrequest: Obsolete. Use
-> > > > + * MC_CMD_SECURE_NIC_INFO_IN_STATUS.
-> > > > + */
-> > > > +#define    MC_CMD_TSA_BIND_IN_GET_ID_LEN 20
-> > > > +/* The operation requested. */
-> > > > +#define       MC_CMD_TSA_BIND_IN_GET_ID_OP_OFST 0
-> > > > +#define       MC_CMD_TSA_BIND_IN_GET_ID_OP_LEN 4
-> > > > +/* Cryptographic nonce that TSAC generates and sends to TSAN. TSAC generates
-> > > > + * the nonce every time as part of the TSAN post-binding authentication
-> > > > + * procedure when the TSAN-TSAC connection terminates and TSAN does need to re-
-> > > > + * connect to the TSAC. Refer to SF-114946-SW for more information.
-> > > > + */
-> > > > +#define       MC_CMD_TSA_BIND_IN_GET_ID_NONCE_OFST 4
-> > > > +#define       MC_CMD_TSA_BIND_IN_GET_ID_NONCE_LEN 16
-> > > > +
-> > > > +/* MC_CMD_TSA_BIND_IN_GET_TICKET msgrequest */
-> > > > +#define    MC_CMD_TSA_BIND_IN_GET_TICKET_LEN 4
-> > > > +/* The operation requested. */
-> > > > +#define       MC_CMD_TSA_BIND_IN_GET_TICKET_OP_OFST 0
-> > > > +#define       MC_CMD_TSA_BIND_IN_GET_TICKET_OP_LEN 4
-> > > > +
-> > > > +/* MC_CMD_TSA_BIND_IN_SET_KEY msgrequest */
-> > > > +#define    MC_CMD_TSA_BIND_IN_SET_KEY_LENMIN 5
-> > > > +#define    MC_CMD_TSA_BIND_IN_SET_KEY_LENMAX 252
-> > > > +#define    MC_CMD_TSA_BIND_IN_SET_KEY_LENMAX_MCDI2 1020
-> > > > +#define    MC_CMD_TSA_BIND_IN_SET_KEY_LEN(num) (4+1*(num))
-> > > > +#define    MC_CMD_TSA_BIND_IN_SET_KEY_DATKEY_NUM(len) (((len)-4)/1)
-> > > > +/* The operation requested. */
-> > > > +#define       MC_CMD_TSA_BIND_IN_SET_KEY_OP_OFST 0
-> > > > +#define       MC_CMD_TSA_BIND_IN_SET_KEY_OP_LEN 4
-> > > > +/* This data blob contains the private key generated by the TSAC. TSAN uses
-> > > > + * this key for a signing operation. Note- This private key is used in
-> > > > + * conjunction with the post-binding TSAN authentication procedure that occurs
-> > > > + * when the TSAN-TSAC connection terminates and TSAN tries to reconnect. Refer
-> > > > + * to SF-114946-SW for more information.
-> > > > + */
-> > > > +#define       MC_CMD_TSA_BIND_IN_SET_KEY_DATKEY_OFST 4
-> > > > +#define       MC_CMD_TSA_BIND_IN_SET_KEY_DATKEY_LEN 1
-> > > > +#define       MC_CMD_TSA_BIND_IN_SET_KEY_DATKEY_MINNUM 1
-> > > > +#define       MC_CMD_TSA_BIND_IN_SET_KEY_DATKEY_MAXNUM 248
-> > > > +#define       MC_CMD_TSA_BIND_IN_SET_KEY_DATKEY_MAXNUM_MCDI2 1016
-> > > > +
-> > > > +/* MC_CMD_TSA_BIND_IN_UNBIND msgrequest: Request an insecure unbinding
-> > > > + * operation.
-> > > > + */
-> > > > +#define    MC_CMD_TSA_BIND_IN_UNBIND_LEN 10
-> > > > +/* The operation requested. */
-> > > > +#define       MC_CMD_TSA_BIND_IN_UNBIND_OP_OFST 0
-> > > > +#define       MC_CMD_TSA_BIND_IN_UNBIND_OP_LEN 4
-> > > > +/* TSAN unique identifier for the network adapter */
-> > > > +#define       MC_CMD_TSA_BIND_IN_UNBIND_TSANID_OFST 4
-> > > > +#define       MC_CMD_TSA_BIND_IN_UNBIND_TSANID_LEN 6
-> > > > +
-> > > > +/* MC_CMD_TSA_BIND_IN_UNBIND_EXT msgrequest: Obsolete. Use
-> > > > + * MC_CMD_TSA_BIND_IN_SECURE_UNBIND.
-> > > > + */
-> > > > +#define    MC_CMD_TSA_BIND_IN_UNBIND_EXT_LENMIN 93
-> > > > +#define    MC_CMD_TSA_BIND_IN_UNBIND_EXT_LENMAX 252
-> > > > +#define    MC_CMD_TSA_BIND_IN_UNBIND_EXT_LENMAX_MCDI2 1020
-> > > > +#define    MC_CMD_TSA_BIND_IN_UNBIND_EXT_LEN(num) (92+1*(num))
-> > > > +#define    MC_CMD_TSA_BIND_IN_UNBIND_EXT_SIG_NUM(len) (((len)-92)/1)
-> > > > +/* The operation requested. */
-> > > > +#define       MC_CMD_TSA_BIND_IN_UNBIND_EXT_OP_OFST 0
-> > > > +#define       MC_CMD_TSA_BIND_IN_UNBIND_EXT_OP_LEN 4
-> > > > +/* TSAN unique identifier for the network adapter */
-> > > > +#define       MC_CMD_TSA_BIND_IN_UNBIND_EXT_TSANID_OFST 4
-> > > > +#define       MC_CMD_TSA_BIND_IN_UNBIND_EXT_TSANID_LEN 6
-> > > > +/* Align the arguments to 32 bits */
-> > > > +#define       MC_CMD_TSA_BIND_IN_UNBIND_EXT_TSANID_RSVD_OFST 10
-> > > > +#define       MC_CMD_TSA_BIND_IN_UNBIND_EXT_TSANID_RSVD_LEN 2
-> > > > +/* This attribute identifies the TSA infrastructure domain. The length of the
-> > > > + * TSAID attribute is limited to 64 bytes. This is how TSA SDK defines the max
-> > > > + * length. Note- The TSAID is the Organizational Unit Name filed as part of the
-> > > > + * root and server certificates.
-> > > > + */
-> > > > +#define       MC_CMD_TSA_BIND_IN_UNBIND_EXT_TSAID_OFST 12
-> > > > +#define       MC_CMD_TSA_BIND_IN_UNBIND_EXT_TSAID_LEN 1
-> > > > +#define       MC_CMD_TSA_BIND_IN_UNBIND_EXT_TSAID_NUM 64
-> > > > +/* Unbinding secret token. The adapter validates this unbinding token by
-> > > > + * comparing it against the one stored on the adapter as part of the
-> > > > + * MC_CMD_TSA_BIND_IN_SET_UNBINDTOKEN msgrequest. Refer to SF-115479-TC for
-> > > > + * more information.
-> > > > + */
-> > > > +#define       MC_CMD_TSA_BIND_IN_UNBIND_EXT_UNBINDTOKEN_OFST 76
-> > > > +#define       MC_CMD_TSA_BIND_IN_UNBIND_EXT_UNBINDTOKEN_LEN 16
-> > > > +/* This is the signature of the above mentioned fields- TSANID, TSAID and
-> > > > + * UNBINDTOKEN. As per current requirements, the SIG opaque data blob contains
-> > > > + * ECDSA ECC-384 based signature. The ECC curve is secp384r1. The signature is
-> > > > + * also ASN-1 encoded. Note- The signature is verified based on the public key
-> > > > + * stored into the root certificate that is provisioned on the adapter side.
-> > > > + * This key is known as the PUKtsaid. Refer to SF-115479-TC for more
-> > > > + * information.
-> > > > + */
-> > > > +#define       MC_CMD_TSA_BIND_IN_UNBIND_EXT_SIG_OFST 92
-> > > > +#define       MC_CMD_TSA_BIND_IN_UNBIND_EXT_SIG_LEN 1
-> > > > +#define       MC_CMD_TSA_BIND_IN_UNBIND_EXT_SIG_MINNUM 1
-> > > > +#define       MC_CMD_TSA_BIND_IN_UNBIND_EXT_SIG_MAXNUM 160
-> > > > +#define       MC_CMD_TSA_BIND_IN_UNBIND_EXT_SIG_MAXNUM_MCDI2 928
-> > > > +
-> > > > +/* MC_CMD_TSA_BIND_IN_SET_UNBINDTOKEN msgrequest */
-> > > > +#define    MC_CMD_TSA_BIND_IN_SET_UNBINDTOKEN_LEN 20
-> > > > +/* The operation requested. */
-> > > > +#define       MC_CMD_TSA_BIND_IN_SET_UNBINDTOKEN_OP_OFST 0
-> > > > +#define       MC_CMD_TSA_BIND_IN_SET_UNBINDTOKEN_OP_LEN 4
-> > > > +/* Unbinding secret token. TSAN persists the unbinding secret token. Refer to
-> > > > + * SF-115479-TC for more information.
-> > > > + */
-> > > > +#define       MC_CMD_TSA_BIND_IN_SET_UNBINDTOKEN_UNBINDTOKEN_OFST 4
-> > > > +#define       MC_CMD_TSA_BIND_IN_SET_UNBINDTOKEN_UNBINDTOKEN_LEN 16
-> > > > +/* enum: There are situations when the binding process does not complete
-> > > > + * successfully due to key, other attributes corruption at the database level
-> > > > + * (Controller). Adapter can't connect to the controller anymore. To recover,
-> > > > + * make usage of the decommission command that forces the adapter into
-> > > > + * unbinding state.
-> > > > + */
-> > > > +#define          MC_CMD_TSA_BIND_IN_SET_UNBINDTOKEN_ADAPTER_BINDING_FAILURE 0x1
-> > > > +
-> > > > +/* MC_CMD_TSA_BIND_IN_DECOMMISSION msgrequest: Obsolete. Use
-> > > > + * MC_CMD_TSA_BIND_IN_SECURE_DECOMMISSION.
-> > > > + */
-> > > > +#define    MC_CMD_TSA_BIND_IN_DECOMMISSION_LENMIN 109
-> > > > +#define    MC_CMD_TSA_BIND_IN_DECOMMISSION_LENMAX 252
-> > > > +#define    MC_CMD_TSA_BIND_IN_DECOMMISSION_LENMAX_MCDI2 1020
-> > > > +#define    MC_CMD_TSA_BIND_IN_DECOMMISSION_LEN(num) (108+1*(num))
-> > > > +#define    MC_CMD_TSA_BIND_IN_DECOMMISSION_SIG_NUM(len) (((len)-108)/1)
-> > > > +/* This is the signature of the above mentioned fields- TSAID, USER and REASON.
-> > > > + * As per current requirements, the SIG opaque data blob contains ECDSA ECC-384
-> > > > + * based signature. The ECC curve is secp384r1. The signature is also ASN-1
-> > > > + * encoded . Note- The signature is verified based on the public key stored
-> > > > + * into the root certificate that is provisioned on the adapter side. This key
-> > > > + * is known as the PUKtsaid. Refer to SF-115479-TC for more information.
-> > > > + */
-> > > > +#define       MC_CMD_TSA_BIND_IN_DECOMMISSION_SIG_OFST 108
-> > > > +#define       MC_CMD_TSA_BIND_IN_DECOMMISSION_SIG_LEN 1
-> > > > +#define       MC_CMD_TSA_BIND_IN_DECOMMISSION_SIG_MINNUM 1
-> > > > +#define       MC_CMD_TSA_BIND_IN_DECOMMISSION_SIG_MAXNUM 144
-> > > > +#define       MC_CMD_TSA_BIND_IN_DECOMMISSION_SIG_MAXNUM_MCDI2 912
-> > > > +/* The operation requested. */
-> > > > +#define       MC_CMD_TSA_BIND_IN_DECOMMISSION_OP_OFST 0
-> > > > +#define       MC_CMD_TSA_BIND_IN_DECOMMISSION_OP_LEN 4
-> > > > +/* This attribute identifies the TSA infrastructure domain. The length of the
-> > > > + * TSAID attribute is limited to 64 bytes. This is how TSA SDK defines the max
-> > > > + * length. Note- The TSAID is the Organizational Unit Name filed as part of the
-> > > > + * root and server certificates.
-> > > > + */
-> > > > +#define       MC_CMD_TSA_BIND_IN_DECOMMISSION_TSAID_OFST 4
-> > > > +#define       MC_CMD_TSA_BIND_IN_DECOMMISSION_TSAID_LEN 1
-> > > > +#define       MC_CMD_TSA_BIND_IN_DECOMMISSION_TSAID_NUM 64
-> > > > +/* User ID that comes, as an example, from the Controller. Note- The 33 byte
-> > > > + * length of this attribute is max length of the linux user name plus null
-> > > > + * character.
-> > > > + */
-> > > > +#define       MC_CMD_TSA_BIND_IN_DECOMMISSION_USER_OFST 68
-> > > > +#define       MC_CMD_TSA_BIND_IN_DECOMMISSION_USER_LEN 1
-> > > > +#define       MC_CMD_TSA_BIND_IN_DECOMMISSION_USER_NUM 33
-> > > > +/* Align the arguments to 32 bits */
-> > > > +#define       MC_CMD_TSA_BIND_IN_DECOMMISSION_USER_RSVD_OFST 101
-> > > > +#define       MC_CMD_TSA_BIND_IN_DECOMMISSION_USER_RSVD_LEN 3
-> > > > +/* Reason of why decommissioning happens Note- The list of reasons, defined as
-> > > > + * part of the enumeration below, can be extended.
-> > > > + */
-> > > > +#define       MC_CMD_TSA_BIND_IN_DECOMMISSION_REASON_OFST 104
-> > > > +#define       MC_CMD_TSA_BIND_IN_DECOMMISSION_REASON_LEN 4
-> > > > +
-> > > > +/* MC_CMD_TSA_BIND_IN_GET_CERTIFICATE msgrequest: Obsolete. Use
-> > > > + * MC_CMD_GET_CERTIFICATE.
-> > > > + */
-> > > > +#define    MC_CMD_TSA_BIND_IN_GET_CERTIFICATE_LEN 8
-> > > > +/* The operation requested, must be MC_CMD_TSA_BIND_OP_GET_CERTIFICATE. */
-> > > > +#define       MC_CMD_TSA_BIND_IN_GET_CERTIFICATE_OP_OFST 0
-> > > > +#define       MC_CMD_TSA_BIND_IN_GET_CERTIFICATE_OP_LEN 4
-> > > > +/* Type of the certificate to be retrieved. */
-> > > > +#define       MC_CMD_TSA_BIND_IN_GET_CERTIFICATE_TYPE_OFST 4
-> > > > +#define       MC_CMD_TSA_BIND_IN_GET_CERTIFICATE_TYPE_LEN 4
-> > > > +#define          MC_CMD_TSA_BIND_IN_GET_CERTIFICATE_UNUSED 0x0 /* enum */
-> > > > +/* enum: Adapter Authentication Certificate (AAC). The AAC is used by the
-> > > > + * controller to verify the authenticity of the adapter.
-> > > > + */
-> > > > +#define          MC_CMD_TSA_BIND_IN_GET_CERTIFICATE_AAC 0x1
-> > > > +/* enum: Adapter Authentication Signing Certificate (AASC). The AASC is used by
-> > > > + * the controller to verify the validity of AAC.
-> > > > + */
-> > > > +#define          MC_CMD_TSA_BIND_IN_GET_CERTIFICATE_AASC 0x2
-> > > > +
-> > > > +/* MC_CMD_TSA_BIND_IN_SECURE_UNBIND msgrequest: Request a secure unbinding
-> > > > + * operation using unbinding token.
-> > > > + */
-> > > > +#define    MC_CMD_TSA_BIND_IN_SECURE_UNBIND_LENMIN 97
-> > > > +#define    MC_CMD_TSA_BIND_IN_SECURE_UNBIND_LENMAX 200
-> > > > +#define    MC_CMD_TSA_BIND_IN_SECURE_UNBIND_LENMAX_MCDI2 200
-> > > > +#define    MC_CMD_TSA_BIND_IN_SECURE_UNBIND_LEN(num) (96+1*(num))
-> > > > +#define    MC_CMD_TSA_BIND_IN_SECURE_UNBIND_SIG_NUM(len) (((len)-96)/1)
-> > > > +/* The operation requested, must be MC_CMD_TSA_BIND_OP_SECURE_UNBIND. */
-> > > > +#define       MC_CMD_TSA_BIND_IN_SECURE_UNBIND_OP_OFST 0
-> > > > +#define       MC_CMD_TSA_BIND_IN_SECURE_UNBIND_OP_LEN 4
-> > > > +/* Type of the message. (MESSAGE_TYPE_xxx) Must be
-> > > > + * MESSAGE_TYPE_TSA_SECURE_UNBIND.
-> > > > + */
-> > > > +#define       MC_CMD_TSA_BIND_IN_SECURE_UNBIND_MESSAGE_TYPE_OFST 4
-> > > > +#define       MC_CMD_TSA_BIND_IN_SECURE_UNBIND_MESSAGE_TYPE_LEN 4
-> > > > +/* TSAN unique identifier for the network adapter */
-> > > > +#define       MC_CMD_TSA_BIND_IN_SECURE_UNBIND_TSANID_OFST 8
-> > > > +#define       MC_CMD_TSA_BIND_IN_SECURE_UNBIND_TSANID_LEN 6
-> > > > +/* Align the arguments to 32 bits */
-> > > > +#define       MC_CMD_TSA_BIND_IN_SECURE_UNBIND_TSANID_RSVD_OFST 14
-> > > > +#define       MC_CMD_TSA_BIND_IN_SECURE_UNBIND_TSANID_RSVD_LEN 2
-> > > > +/* A NUL padded US-ASCII string identifying the TSA infrastructure domain. This
-> > > > + * field is for information only, and not used by the firmware. Note- The TSAID
-> > > > + * is the Organizational Unit Name field as part of the root and server
-> > > > + * certificates.
-> > > > + */
-> > > > +#define       MC_CMD_TSA_BIND_IN_SECURE_UNBIND_TSAID_OFST 16
-> > > > +#define       MC_CMD_TSA_BIND_IN_SECURE_UNBIND_TSAID_LEN 1
-> > > > +#define       MC_CMD_TSA_BIND_IN_SECURE_UNBIND_TSAID_NUM 64
-> > > > +/* Unbinding secret token. The adapter validates this unbinding token by
-> > > > + * comparing it against the one stored on the adapter as part of the
-> > > > + * MC_CMD_TSA_BIND_IN_SET_UNBINDTOKEN msgrequest. Refer to SF-115479-TC for
-> > > > + * more information.
-> > > > + */
-> > > > +#define       MC_CMD_TSA_BIND_IN_SECURE_UNBIND_UNBINDTOKEN_OFST 80
-> > > > +#define       MC_CMD_TSA_BIND_IN_SECURE_UNBIND_UNBINDTOKEN_LEN 16
-> > > > +/* The signature computed and encoded as specified by MESSAGE_TYPE. */
-> > > > +#define       MC_CMD_TSA_BIND_IN_SECURE_UNBIND_SIG_OFST 96
-> > > > +#define       MC_CMD_TSA_BIND_IN_SECURE_UNBIND_SIG_LEN 1
-> > > > +#define       MC_CMD_TSA_BIND_IN_SECURE_UNBIND_SIG_MINNUM 1
-> > > > +#define       MC_CMD_TSA_BIND_IN_SECURE_UNBIND_SIG_MAXNUM 104
-> > > > +#define       MC_CMD_TSA_BIND_IN_SECURE_UNBIND_SIG_MAXNUM_MCDI2 104
-> > > > +
-> > > > +/* MC_CMD_TSA_BIND_IN_SECURE_DECOMMISSION msgrequest: Request a secure
-> > > > + * decommissioning operation.
-> > > > + */
-> > > > +#define    MC_CMD_TSA_BIND_IN_SECURE_DECOMMISSION_LENMIN 113
-> > > > +#define    MC_CMD_TSA_BIND_IN_SECURE_DECOMMISSION_LENMAX 216
-> > > > +#define    MC_CMD_TSA_BIND_IN_SECURE_DECOMMISSION_LENMAX_MCDI2 216
-> > > > +#define    MC_CMD_TSA_BIND_IN_SECURE_DECOMMISSION_LEN(num) (112+1*(num))
-> > > > +#define    MC_CMD_TSA_BIND_IN_SECURE_DECOMMISSION_SIG_NUM(len) (((len)-112)/1)
-> > > > +/* The operation requested, must be MC_CMD_TSA_BIND_OP_SECURE_DECOMMISSION. */
-> > > > +#define       MC_CMD_TSA_BIND_IN_SECURE_DECOMMISSION_OP_OFST 0
-> > > > +#define       MC_CMD_TSA_BIND_IN_SECURE_DECOMMISSION_OP_LEN 4
-> > > > +/* Type of the message. (MESSAGE_TYPE_xxx) Must be
-> > > > + * MESSAGE_TYPE_SECURE_DECOMMISSION.
-> > > > + */
-> > > > +#define       MC_CMD_TSA_BIND_IN_SECURE_DECOMMISSION_MESSAGE_TYPE_OFST 4
-> > > > +#define       MC_CMD_TSA_BIND_IN_SECURE_DECOMMISSION_MESSAGE_TYPE_LEN 4
-> > > > +/* A NUL padded US-ASCII string identifying the TSA infrastructure domain. This
-> > > > + * field is for information only, and not used by the firmware. Note- The TSAID
-> > > > + * is the Organizational Unit Name field as part of the root and server
-> > > > + * certificates.
-> > > > + */
-> > > > +#define       MC_CMD_TSA_BIND_IN_SECURE_DECOMMISSION_TSAID_OFST 8
-> > > > +#define       MC_CMD_TSA_BIND_IN_SECURE_DECOMMISSION_TSAID_LEN 1
-> > > > +#define       MC_CMD_TSA_BIND_IN_SECURE_DECOMMISSION_TSAID_NUM 64
-> > > > +/* A NUL padded US-ASCII string containing user name of the creator of the
-> > > > + * decommissioning ticket. This field is for information only, and not used by
-> > > > + * the firmware.
-> > > > + */
-> > > > +#define       MC_CMD_TSA_BIND_IN_SECURE_DECOMMISSION_USER_OFST 72
-> > > > +#define       MC_CMD_TSA_BIND_IN_SECURE_DECOMMISSION_USER_LEN 1
-> > > > +#define       MC_CMD_TSA_BIND_IN_SECURE_DECOMMISSION_USER_NUM 36
-> > > > +/* Reason of why decommissioning happens */
-> > > > +#define       MC_CMD_TSA_BIND_IN_SECURE_DECOMMISSION_REASON_OFST 108
-> > > > +#define       MC_CMD_TSA_BIND_IN_SECURE_DECOMMISSION_REASON_LEN 4
-> > > > +/* enum: There are situations when the binding process does not complete
-> > > > + * successfully due to key, other attributes corruption at the database level
-> > > > + * (Controller). Adapter can't connect to the controller anymore. To recover,
-> > > > + * use the decommission command to force the adapter into unbound state.
-> > > > + */
-> > > > +#define          MC_CMD_TSA_BIND_IN_SECURE_DECOMMISSION_ADAPTER_BINDING_FAILURE 0x1
-> > > > +/* The signature computed and encoded as specified by MESSAGE_TYPE. */
-> > > > +#define       MC_CMD_TSA_BIND_IN_SECURE_DECOMMISSION_SIG_OFST 112
-> > > > +#define       MC_CMD_TSA_BIND_IN_SECURE_DECOMMISSION_SIG_LEN 1
-> > > > +#define       MC_CMD_TSA_BIND_IN_SECURE_DECOMMISSION_SIG_MINNUM 1
-> > > > +#define       MC_CMD_TSA_BIND_IN_SECURE_DECOMMISSION_SIG_MAXNUM 104
-> > > > +#define       MC_CMD_TSA_BIND_IN_SECURE_DECOMMISSION_SIG_MAXNUM_MCDI2 104
-> > > > +
-> > > > +/* MC_CMD_TSA_BIND_IN_TEST_MCDI msgrequest: Test mode that emulates MCDI
-> > > > + * interface restrictions of a bound adapter. This operation is intended for
-> > > > + * test use on adapters that are not deployed and bound to a TSA Controller.
-> > > > + * Using it on a Bound adapter will succeed but will not alter the MCDI
-> > > > + * privileges as MCDI operations will already be restricted.
-> > > > + */
-> > > > +#define    MC_CMD_TSA_BIND_IN_TEST_MCDI_LEN 8
-> > > > +/* The operation requested must be MC_CMD_TSA_BIND_OP_TEST_MCDI. */
-> > > > +#define       MC_CMD_TSA_BIND_IN_TEST_MCDI_OP_OFST 0
-> > > > +#define       MC_CMD_TSA_BIND_IN_TEST_MCDI_OP_LEN 4
-> > > > +/* Enable or disable emulation of bound adapter */
-> > > > +#define       MC_CMD_TSA_BIND_IN_TEST_MCDI_CTRL_OFST 4
-> > > > +#define       MC_CMD_TSA_BIND_IN_TEST_MCDI_CTRL_LEN 4
-> > > > +#define          MC_CMD_TSA_BIND_IN_TEST_MCDI_DISABLE 0x0 /* enum */
-> > > > +#define          MC_CMD_TSA_BIND_IN_TEST_MCDI_ENABLE 0x1 /* enum */
-> > > > +
-> > > > +/* MC_CMD_TSA_BIND_OUT_GET_ID msgresponse: Obsolete. Use
-> > > > + * MC_CMD_SECURE_NIC_INFO_OUT_STATUS.
-> > > > + */
-> > > > +#define    MC_CMD_TSA_BIND_OUT_GET_ID_LENMIN 15
-> > > > +#define    MC_CMD_TSA_BIND_OUT_GET_ID_LENMAX 252
-> > > > +#define    MC_CMD_TSA_BIND_OUT_GET_ID_LENMAX_MCDI2 1020
-> > > > +#define    MC_CMD_TSA_BIND_OUT_GET_ID_LEN(num) (14+1*(num))
-> > > > +#define    MC_CMD_TSA_BIND_OUT_GET_ID_SIG_NUM(len) (((len)-14)/1)
-> > > > +/* The protocol operation code MC_CMD_TSA_BIND_OP_GET_ID that is sent back to
-> > > > + * the caller.
-> > > > + */
-> > > > +#define       MC_CMD_TSA_BIND_OUT_GET_ID_OP_OFST 0
-> > > > +#define       MC_CMD_TSA_BIND_OUT_GET_ID_OP_LEN 4
-> > > > +/* Rules engine type. Note- The rules engine type allows TSAC to further
-> > > > + * identify the connected endpoint (e.g. TSAN, NIC Emulator) type and take the
-> > > > + * proper action accordingly. As an example, TSAC uses the rules engine type to
-> > > > + * select the SF key that differs in the case of TSAN vs. NIC Emulator.
-> > > > + */
-> > > > +#define       MC_CMD_TSA_BIND_OUT_GET_ID_RULE_ENGINE_OFST 4
-> > > > +#define       MC_CMD_TSA_BIND_OUT_GET_ID_RULE_ENGINE_LEN 4
-> > > > +/* enum: Hardware rules engine. */
-> > > > +#define          MC_CMD_TSA_BIND_OUT_GET_ID_RULE_ENGINE_TSAN 0x1
-> > > > +/* enum: Nic emulator rules engine. */
-> > > > +#define          MC_CMD_TSA_BIND_OUT_GET_ID_RULE_ENGINE_NEMU 0x2
-> > > > +/* enum: SSFE. */
-> > > > +#define          MC_CMD_TSA_BIND_OUT_GET_ID_RULE_ENGINE_SSFE 0x3
-> > > > +/* TSAN unique identifier for the network adapter */
-> > > > +#define       MC_CMD_TSA_BIND_OUT_GET_ID_TSANID_OFST 8
-> > > > +#define       MC_CMD_TSA_BIND_OUT_GET_ID_TSANID_LEN 6
-> > > > +/* The signature data blob. The signature is computed against the message
-> > > > + * formed by TSAN ID concatenated with the NONCE value. Refer to SF-115479-TC
-> > > > + * for more information also in respect to the private keys that are used to
-> > > > + * sign the message based on TSAN pre/post-binding authentication procedure.
-> > > > + */
-> > > > +#define       MC_CMD_TSA_BIND_OUT_GET_ID_SIG_OFST 14
-> > > > +#define       MC_CMD_TSA_BIND_OUT_GET_ID_SIG_LEN 1
-> > > > +#define       MC_CMD_TSA_BIND_OUT_GET_ID_SIG_MINNUM 1
-> > > > +#define       MC_CMD_TSA_BIND_OUT_GET_ID_SIG_MAXNUM 238
-> > > > +#define       MC_CMD_TSA_BIND_OUT_GET_ID_SIG_MAXNUM_MCDI2 1006
-> > > > +
-> > > > +/* MC_CMD_TSA_BIND_OUT_GET_TICKET msgresponse */
-> > > > +#define    MC_CMD_TSA_BIND_OUT_GET_TICKET_LENMIN 5
-> > > > +#define    MC_CMD_TSA_BIND_OUT_GET_TICKET_LENMAX 252
-> > > > +#define    MC_CMD_TSA_BIND_OUT_GET_TICKET_LENMAX_MCDI2 1020
-> > > > +#define    MC_CMD_TSA_BIND_OUT_GET_TICKET_LEN(num) (4+1*(num))
-> > > > +#define    MC_CMD_TSA_BIND_OUT_GET_TICKET_TICKET_NUM(len) (((len)-4)/1)
-> > > > +/* The protocol operation code MC_CMD_TSA_BIND_OP_GET_TICKET that is sent back
-> > > > + * to the caller.
-> > > > + */
-> > > > +#define       MC_CMD_TSA_BIND_OUT_GET_TICKET_OP_OFST 0
-> > > > +#define       MC_CMD_TSA_BIND_OUT_GET_TICKET_OP_LEN 4
-> > > > +/* The ticket represents the data blob construct that TSAN sends to TSAC as
-> > > > + * part of the binding protocol. From the TSAN perspective the ticket is an
-> > > > + * opaque construct. For more info refer to SF-115479-TC.
-> > > > + */
-> > > > +#define       MC_CMD_TSA_BIND_OUT_GET_TICKET_TICKET_OFST 4
-> > > > +#define       MC_CMD_TSA_BIND_OUT_GET_TICKET_TICKET_LEN 1
-> > > > +#define       MC_CMD_TSA_BIND_OUT_GET_TICKET_TICKET_MINNUM 1
-> > > > +#define       MC_CMD_TSA_BIND_OUT_GET_TICKET_TICKET_MAXNUM 248
-> > > > +#define       MC_CMD_TSA_BIND_OUT_GET_TICKET_TICKET_MAXNUM_MCDI2 1016
-> > > > +
-> > > > +/* MC_CMD_TSA_BIND_OUT_SET_KEY msgresponse */
-> > > > +#define    MC_CMD_TSA_BIND_OUT_SET_KEY_LEN 4
-> > > > +/* The protocol operation code MC_CMD_TSA_BIND_OP_SET_KEY that is sent back to
-> > > > + * the caller.
-> > > > + */
-> > > > +#define       MC_CMD_TSA_BIND_OUT_SET_KEY_OP_OFST 0
-> > > > +#define       MC_CMD_TSA_BIND_OUT_SET_KEY_OP_LEN 4
-> > > > +
-> > > > +/* MC_CMD_TSA_BIND_OUT_UNBIND msgresponse: Response to insecure unbind request.
-> > > > + */
-> > > > +#define    MC_CMD_TSA_BIND_OUT_UNBIND_LEN 8
-> > > > +/* Same as MC_CMD_ERR field, but included as 0 in success cases */
-> > > > +#define       MC_CMD_TSA_BIND_OUT_UNBIND_RESULT_OFST 0
-> > > > +#define       MC_CMD_TSA_BIND_OUT_UNBIND_RESULT_LEN 4
-> > > > +/* Extra status information */
-> > > > +#define       MC_CMD_TSA_BIND_OUT_UNBIND_INFO_OFST 4
-> > > > +#define       MC_CMD_TSA_BIND_OUT_UNBIND_INFO_LEN 4
-> > > > +/* enum: Unbind successful. */
-> > > > +#define          MC_CMD_TSA_BIND_OUT_UNBIND_OK_UNBOUND 0x0
-> > > > +/* enum: TSANID mismatch */
-> > > > +#define          MC_CMD_TSA_BIND_OUT_UNBIND_ERR_BAD_TSANID 0x1
-> > > > +/* enum: Unable to remove the binding ticket from persistent storage. */
-> > > > +#define          MC_CMD_TSA_BIND_OUT_UNBIND_ERR_REMOVE_TICKET 0x2
-> > > > +/* enum: TSAN is not bound to a binding ticket. */
-> > > > +#define          MC_CMD_TSA_BIND_OUT_UNBIND_ERR_NOT_BOUND 0x3
-> > > > +
-> > > > +/* MC_CMD_TSA_BIND_OUT_UNBIND_EXT msgresponse: Obsolete. Use
-> > > > + * MC_CMD_TSA_BIND_OUT_SECURE_UNBIND.
-> > > > + */
-> > > > +#define    MC_CMD_TSA_BIND_OUT_UNBIND_EXT_LEN 8
-> > > > +/* Same as MC_CMD_ERR field, but included as 0 in success cases */
-> > > > +#define       MC_CMD_TSA_BIND_OUT_UNBIND_EXT_RESULT_OFST 0
-> > > > +#define       MC_CMD_TSA_BIND_OUT_UNBIND_EXT_RESULT_LEN 4
-> > > > +/* Extra status information */
-> > > > +#define       MC_CMD_TSA_BIND_OUT_UNBIND_EXT_INFO_OFST 4
-> > > > +#define       MC_CMD_TSA_BIND_OUT_UNBIND_EXT_INFO_LEN 4
-> > > > +/* enum: Unbind successful. */
-> > > > +#define          MC_CMD_TSA_BIND_OUT_UNBIND_EXT_OK_UNBOUND 0x0
-> > > > +/* enum: TSANID mismatch */
-> > > > +#define          MC_CMD_TSA_BIND_OUT_UNBIND_EXT_ERR_BAD_TSANID 0x1
-> > > > +/* enum: Unable to remove the binding ticket from persistent storage. */
-> > > > +#define          MC_CMD_TSA_BIND_OUT_UNBIND_EXT_ERR_REMOVE_TICKET 0x2
-> > > > +/* enum: TSAN is not bound to a binding ticket. */
-> > > > +#define          MC_CMD_TSA_BIND_OUT_UNBIND_EXT_ERR_NOT_BOUND 0x3
-> > > > +/* enum: Invalid unbind token */
-> > > > +#define          MC_CMD_TSA_BIND_OUT_UNBIND_EXT_ERR_BAD_TOKEN 0x4
-> > > > +/* enum: Invalid signature */
-> > > > +#define          MC_CMD_TSA_BIND_OUT_UNBIND_EXT_ERR_BAD_SIGNATURE 0x5
-> > > > +
-> > > > +/* MC_CMD_TSA_BIND_OUT_SET_UNBINDTOKEN msgresponse */
-> > > > +#define    MC_CMD_TSA_BIND_OUT_SET_UNBINDTOKEN_LEN 4
-> > > > +/* The protocol operation code MC_CMD_TSA_BIND_OP_SET_UNBINDTOKEN that is sent
-> > > > + * back to the caller.
-> > > > + */
-> > > > +#define       MC_CMD_TSA_BIND_OUT_SET_UNBINDTOKEN_OP_OFST 0
-> > > > +#define       MC_CMD_TSA_BIND_OUT_SET_UNBINDTOKEN_OP_LEN 4
-> > > > +
-> > > > +/* MC_CMD_TSA_BIND_OUT_DECOMMISSION msgresponse: Obsolete. Use
-> > > > + * MC_CMD_TSA_BIND_OUT_SECURE_DECOMMISSION.
-> > > > + */
-> > > > +#define    MC_CMD_TSA_BIND_OUT_DECOMMISSION_LEN 4
-> > > > +/* The protocol operation code MC_CMD_TSA_BIND_OP_DECOMMISSION that is sent
-> > > > + * back to the caller.
-> > > > + */
-> > > > +#define       MC_CMD_TSA_BIND_OUT_DECOMMISSION_OP_OFST 0
-> > > > +#define       MC_CMD_TSA_BIND_OUT_DECOMMISSION_OP_LEN 4
-> > > > +
-> > > > +/* MC_CMD_TSA_BIND_OUT_GET_CERTIFICATE msgresponse */
-> > > > +#define    MC_CMD_TSA_BIND_OUT_GET_CERTIFICATE_LENMIN 9
-> > > > +#define    MC_CMD_TSA_BIND_OUT_GET_CERTIFICATE_LENMAX 252
-> > > > +#define    MC_CMD_TSA_BIND_OUT_GET_CERTIFICATE_LENMAX_MCDI2 1020
-> > > > +#define    MC_CMD_TSA_BIND_OUT_GET_CERTIFICATE_LEN(num) (8+1*(num))
-> > > > +#define    MC_CMD_TSA_BIND_OUT_GET_CERTIFICATE_DATA_NUM(len) (((len)-8)/1)
-> > > > +/* The protocol operation code MC_CMD_TSA_BIND_OP_GET_CERTIFICATE that is sent
-> > > > + * back to the caller.
-> > > > + */
-> > > > +#define       MC_CMD_TSA_BIND_OUT_GET_CERTIFICATE_OP_OFST 0
-> > > > +#define       MC_CMD_TSA_BIND_OUT_GET_CERTIFICATE_OP_LEN 4
-> > > > +/* Type of the certificate. */
-> > > > +#define       MC_CMD_TSA_BIND_OUT_GET_CERTIFICATE_TYPE_OFST 4
-> > > > +#define       MC_CMD_TSA_BIND_OUT_GET_CERTIFICATE_TYPE_LEN 4
-> > > > +/*            Enum values, see field(s): */
-> > > > +/*               MC_CMD_TSA_BIND_IN_GET_CERTIFICATE/TYPE */
-> > > > +/* The certificate data. */
-> > > > +#define       MC_CMD_TSA_BIND_OUT_GET_CERTIFICATE_DATA_OFST 8
-> > > > +#define       MC_CMD_TSA_BIND_OUT_GET_CERTIFICATE_DATA_LEN 1
-> > > > +#define       MC_CMD_TSA_BIND_OUT_GET_CERTIFICATE_DATA_MINNUM 1
-> > > > +#define       MC_CMD_TSA_BIND_OUT_GET_CERTIFICATE_DATA_MAXNUM 244
-> > > > +#define       MC_CMD_TSA_BIND_OUT_GET_CERTIFICATE_DATA_MAXNUM_MCDI2 1012
-> > > > +
-> > > > +/* MC_CMD_TSA_BIND_OUT_SECURE_UNBIND msgresponse: Response to secure unbind
-> > > > + * request.
-> > > > + */
-> > > > +#define    MC_CMD_TSA_BIND_OUT_SECURE_UNBIND_LEN 8
-> > > > +/* The protocol operation code that is sent back to the caller. */
-> > > > +#define       MC_CMD_TSA_BIND_OUT_SECURE_UNBIND_OP_OFST 0
-> > > > +#define       MC_CMD_TSA_BIND_OUT_SECURE_UNBIND_OP_LEN 4
-> > > > +#define       MC_CMD_TSA_BIND_OUT_SECURE_UNBIND_RESULT_OFST 4
-> > > > +#define       MC_CMD_TSA_BIND_OUT_SECURE_UNBIND_RESULT_LEN 4
-> > > > +/* enum: Unbind successful. */
-> > > > +#define          MC_CMD_TSA_BIND_OUT_SECURE_UNBIND_OK_UNBOUND 0x0
-> > > > +/* enum: TSANID mismatch */
-> > > > +#define          MC_CMD_TSA_BIND_OUT_SECURE_UNBIND_ERR_BAD_TSANID 0x1
-> > > > +/* enum: Unable to remove the binding ticket from persistent storage. */
-> > > > +#define          MC_CMD_TSA_BIND_OUT_SECURE_UNBIND_ERR_REMOVE_TICKET 0x2
-> > > > +/* enum: TSAN is not bound to a domain. */
-> > > > +#define          MC_CMD_TSA_BIND_OUT_SECURE_UNBIND_ERR_NOT_BOUND 0x3
-> > > > +/* enum: Invalid unbind token */
-> > > > +#define          MC_CMD_TSA_BIND_OUT_SECURE_UNBIND_ERR_BAD_TOKEN 0x4
-> > > > +/* enum: Invalid signature */
-> > > > +#define          MC_CMD_TSA_BIND_OUT_SECURE_UNBIND_ERR_BAD_SIGNATURE 0x5
-> > > > +
-> > > > +/* MC_CMD_TSA_BIND_OUT_SECURE_DECOMMISSION msgresponse: Response to secure
-> > > > + * decommission request.
-> > > > + */
-> > > > +#define    MC_CMD_TSA_BIND_OUT_SECURE_DECOMMISSION_LEN 8
-> > > > +/* The protocol operation code that is sent back to the caller. */
-> > > > +#define       MC_CMD_TSA_BIND_OUT_SECURE_DECOMMISSION_OP_OFST 0
-> > > > +#define       MC_CMD_TSA_BIND_OUT_SECURE_DECOMMISSION_OP_LEN 4
-> > > > +#define       MC_CMD_TSA_BIND_OUT_SECURE_DECOMMISSION_RESULT_OFST 4
-> > > > +#define       MC_CMD_TSA_BIND_OUT_SECURE_DECOMMISSION_RESULT_LEN 4
-> > > > +/* enum: Unbind successful. */
-> > > > +#define          MC_CMD_TSA_BIND_OUT_SECURE_DECOMMISSION_OK_UNBOUND 0x0
-> > > > +/* enum: TSANID mismatch */
-> > > > +#define          MC_CMD_TSA_BIND_OUT_SECURE_DECOMMISSION_ERR_BAD_TSANID 0x1
-> > > > +/* enum: Unable to remove the binding ticket from persistent storage. */
-> > > > +#define          MC_CMD_TSA_BIND_OUT_SECURE_DECOMMISSION_ERR_REMOVE_TICKET 0x2
-> > > > +/* enum: TSAN is not bound to a domain. */
-> > > > +#define          MC_CMD_TSA_BIND_OUT_SECURE_DECOMMISSION_ERR_NOT_BOUND 0x3
-> > > > +/* enum: Invalid unbind token */
-> > > > +#define          MC_CMD_TSA_BIND_OUT_SECURE_DECOMMISSION_ERR_BAD_TOKEN 0x4
-> > > > +/* enum: Invalid signature */
-> > > > +#define          MC_CMD_TSA_BIND_OUT_SECURE_DECOMMISSION_ERR_BAD_SIGNATURE 0x5
-> > > > +
-> > > > +/* MC_CMD_TSA_BIND_OUT_TEST_MCDI msgrequest */
-> > > > +#define    MC_CMD_TSA_BIND_OUT_TEST_MCDI_LEN 4
-> > > > +/* The protocol operation code MC_CMD_TSA_BIND_OP_TEST_MCDI that is sent back
-> > > > + * to the caller.
-> > > > + */
-> > > > +#define       MC_CMD_TSA_BIND_OUT_TEST_MCDI_OP_OFST 0
-> > > > +#define       MC_CMD_TSA_BIND_OUT_TEST_MCDI_OP_LEN 4
-> > > > +
-> > > > +
-> > > > +/***********************************/
-> > > > +/* MC_CMD_MANAGE_SECURITY_RULESET_CACHE
-> > > > + * Manage the persistent NVRAM cache of security rules created with
-> > > > + * MC_CMD_SET_SECURITY_RULE. Note that the cache is not automatically updated
-> > > > + * as rules are added or removed; the active ruleset must be explicitly
-> > > > + * committed to the cache. The cache may also be explicitly invalidated,
-> > > > + * without affecting the currently active ruleset. When the cache is valid, it
-> > > > + * will be loaded at power on or MC reboot, instead of the default ruleset.
-> > > > + * Rollback of the currently active ruleset to the cached version (when it is
-> > > > + * valid) is also supported. (Medford-only; for use by SolarSecure apps, not
-> > > > + * directly by drivers. See SF-114946-SW.) NOTE - The only sub-operation
-> > > > + * allowed in an adapter bound to a TSA controller from the local host is
-> > > > + * OP_GET_CACHED_VERSION. All other sub-operations are prohibited.
-> > > > + */
-> > > > +#define MC_CMD_MANAGE_SECURITY_RULESET_CACHE 0x11a
-> > > > +#undef MC_CMD_0x11a_PRIVILEGE_CTG
-> > > > +
-> > > > +#define MC_CMD_0x11a_PRIVILEGE_CTG SRIOV_CTG_ADMIN
-> > > > +
-> > > > +/* MC_CMD_MANAGE_SECURITY_RULESET_CACHE_IN msgrequest */
-> > > > +#define    MC_CMD_MANAGE_SECURITY_RULESET_CACHE_IN_LEN 4
-> > > > +/* the operation to perform */
-> > > > +#define       MC_CMD_MANAGE_SECURITY_RULESET_CACHE_IN_OP_OFST 0
-> > > > +#define       MC_CMD_MANAGE_SECURITY_RULESET_CACHE_IN_OP_LEN 4
-> > > > +/* enum: reports the ruleset version that is cached in persistent storage but
-> > > > + * performs no other action
-> > > > + */
-> > > > +#define          MC_CMD_MANAGE_SECURITY_RULESET_CACHE_IN_OP_GET_CACHED_VERSION 0x0
-> > > > +/* enum: rolls back the active state to the cached version. (May fail with
-> > > > + * ENOENT if there is no valid cached version.)
-> > > > + */
-> > > > +#define          MC_CMD_MANAGE_SECURITY_RULESET_CACHE_IN_OP_ROLLBACK 0x1
-> > > > +/* enum: commits the active state to the persistent cache */
-> > > > +#define          MC_CMD_MANAGE_SECURITY_RULESET_CACHE_IN_OP_COMMIT 0x2
-> > > > +/* enum: invalidates the persistent cache without affecting the active state */
-> > > > +#define          MC_CMD_MANAGE_SECURITY_RULESET_CACHE_IN_OP_INVALIDATE 0x3
-> > > > +
-> > > > +/* MC_CMD_MANAGE_SECURITY_RULESET_CACHE_OUT msgresponse */
-> > > > +#define    MC_CMD_MANAGE_SECURITY_RULESET_CACHE_OUT_LENMIN 5
-> > > > +#define    MC_CMD_MANAGE_SECURITY_RULESET_CACHE_OUT_LENMAX 252
-> > > > +#define    MC_CMD_MANAGE_SECURITY_RULESET_CACHE_OUT_LENMAX_MCDI2 1020
-> > > > +#define    MC_CMD_MANAGE_SECURITY_RULESET_CACHE_OUT_LEN(num) (4+1*(num))
-> > > > +#define    MC_CMD_MANAGE_SECURITY_RULESET_CACHE_OUT_VERSION_NUM(len) (((len)-4)/1)
-> > > > +/* indicates whether the persistent cache is valid (after completion of the
-> > > > + * requested operation in the case of rollback, commit, or invalidate)
-> > > > + */
-> > > > +#define       MC_CMD_MANAGE_SECURITY_RULESET_CACHE_OUT_STATE_OFST 0
-> > > > +#define       MC_CMD_MANAGE_SECURITY_RULESET_CACHE_OUT_STATE_LEN 4
-> > > > +/* enum: persistent cache is invalid (the VERSION field will be empty in this
-> > > > + * case)
-> > > > + */
-> > > > +#define          MC_CMD_MANAGE_SECURITY_RULESET_CACHE_OUT_STATE_INVALID 0x0
-> > > > +/* enum: persistent cache is valid */
-> > > > +#define          MC_CMD_MANAGE_SECURITY_RULESET_CACHE_OUT_STATE_VALID 0x1
-> > > > +/* cached ruleset version (after completion of the requested operation, in the
-> > > > + * case of rollback, commit, or invalidate) as an opaque hash value in the same
-> > > > + * form as MC_CMD_GET_SECURITY_RULESET_VERSION_OUT_VERSION
-> > > > + */
-> > > > +#define       MC_CMD_MANAGE_SECURITY_RULESET_CACHE_OUT_VERSION_OFST 4
-> > > > +#define       MC_CMD_MANAGE_SECURITY_RULESET_CACHE_OUT_VERSION_LEN 1
-> > > > +#define       MC_CMD_MANAGE_SECURITY_RULESET_CACHE_OUT_VERSION_MINNUM 1
-> > > > +#define       MC_CMD_MANAGE_SECURITY_RULESET_CACHE_OUT_VERSION_MAXNUM 248
-> > > > +#define       MC_CMD_MANAGE_SECURITY_RULESET_CACHE_OUT_VERSION_MAXNUM_MCDI2 1016
-> > > > +
-> > > > +
-> > > >    /***********************************/
-> > > >    /* MC_CMD_NVRAM_PRIVATE_APPEND
-> > > >     * Append a single TLV to the MC_USAGE_TLV partition. Returns MC_CMD_ERR_EEXIST
-> > > > @@ -23087,7 +25047,7 @@
-> > > >    #define MC_CMD_NVRAM_PRIVATE_APPEND 0x11c
-> > > >    #undef MC_CMD_0x11c_PRIVILEGE_CTG
-> > > > 
-> > > > -#define MC_CMD_0x11c_PRIVILEGE_CTG SRIOV_CTG_ADMIN
-> > > > +#define MC_CMD_0x11c_PRIVILEGE_CTG SRIOV_CTG_ADMIN_TSA_UNBOUND
-> > > > 
-> > > >    /* MC_CMD_NVRAM_PRIVATE_APPEND_IN msgrequest */
-> > > >    #define    MC_CMD_NVRAM_PRIVATE_APPEND_IN_LENMIN 9
-> > > > @@ -23409,6 +25369,38 @@
-> > > >    #define    MC_CMD_DEALLOCATE_TX_VFIFO_CP_OUT_LEN 0
-> > > > 
-> > > > 
-> > > > +/***********************************/
-> > > > +/* MC_CMD_REKEY
-> > > > + * This request causes the NIC to generate a new per-NIC key and program it
-> > > > + * into the write-once memory. During the process all flash partitions that are
-> > > > + * protected with a CMAC are verified with the old per-NIC key and then signed
-> > > > + * with the new per-NIC key. If the NIC has already reached its rekey limit the
-> > > > + * REKEY op will return MC_CMD_ERR_ERANGE. The REKEY op may block until
-> > > > + * completion or it may return 0 and continue processing, therefore the caller
-> > > > + * must poll at least once to confirm that the rekeying has completed. The POLL
-> > > > + * operation returns MC_CMD_ERR_EBUSY if the rekey process is still running
-> > > > + * otherwise it will return the result of the last completed rekey operation,
-> > > > + * or 0 if there has not been a previous rekey.
-> > > > + */
-> > > > +#define MC_CMD_REKEY 0x123
-> > > > +#undef MC_CMD_0x123_PRIVILEGE_CTG
-> > > > +
-> > > > +#define MC_CMD_0x123_PRIVILEGE_CTG SRIOV_CTG_ADMIN_TSA_UNBOUND
-> > > > +
-> > > > +/* MC_CMD_REKEY_IN msgrequest */
-> > > > +#define    MC_CMD_REKEY_IN_LEN 4
-> > > > +/* the type of operation requested */
-> > > > +#define       MC_CMD_REKEY_IN_OP_OFST 0
-> > > > +#define       MC_CMD_REKEY_IN_OP_LEN 4
-> > > > +/* enum: Start the rekeying operation */
-> > > > +#define          MC_CMD_REKEY_IN_OP_REKEY 0x0
-> > > > +/* enum: Poll for completion of the rekeying operation */
-> > > > +#define          MC_CMD_REKEY_IN_OP_POLL 0x1
-> > > > +
-> > > > +/* MC_CMD_REKEY_OUT msgresponse */
-> > > > +#define    MC_CMD_REKEY_OUT_LEN 0
-> > > > +
-> > > > +
-> > > >    /***********************************/
-> > > >    /* MC_CMD_SWITCH_GET_UNASSIGNED_BUFFERS
-> > > >     * This interface allows the host to find out how many common pool buffers are
-> > > > @@ -23432,6 +25424,945 @@
-> > > >    #define       MC_CMD_SWITCH_GET_UNASSIGNED_BUFFERS_OUT_ENG_LEN 4
-> > > > 
-> > > > 
-> > > > +/***********************************/
-> > > > +/* MC_CMD_SET_SECURITY_FUSES
-> > > > + * Change the security level of the adapter by setting bits in the write-once
-> > > > + * memory. The firmware maps each flag in the message to a set of one or more
-> > > > + * hardware-defined or software-defined bits and sets these bits in the write-
-> > > > + * once memory. For Medford the hardware-defined bits are defined in
-> > > > + * SF-112079-PS 5.3, the software-defined bits are defined in xpm.h. Returns 0
-> > > > + * if all of the required bits were set and returns MC_CMD_ERR_EIO if any of
-> > > > + * the required bits were not set.
-> > > > + */
-> > > > +#define MC_CMD_SET_SECURITY_FUSES 0x126
-> > > > +#undef MC_CMD_0x126_PRIVILEGE_CTG
-> > > > +
-> > > > +#define MC_CMD_0x126_PRIVILEGE_CTG SRIOV_CTG_ADMIN_TSA_UNBOUND
-> > > > +
-> > > > +/* MC_CMD_SET_SECURITY_FUSES_IN msgrequest */
-> > > > +#define    MC_CMD_SET_SECURITY_FUSES_IN_LEN 4
-> > > > +/* Flags specifying what type of security features are being set */
-> > > > +#define       MC_CMD_SET_SECURITY_FUSES_IN_FLAGS_OFST 0
-> > > > +#define       MC_CMD_SET_SECURITY_FUSES_IN_FLAGS_LEN 4
-> > > > +#define        MC_CMD_SET_SECURITY_FUSES_IN_SECURE_BOOT_OFST 0
-> > > > +#define        MC_CMD_SET_SECURITY_FUSES_IN_SECURE_BOOT_LBN 0
-> > > > +#define        MC_CMD_SET_SECURITY_FUSES_IN_SECURE_BOOT_WIDTH 1
-> > > > +#define        MC_CMD_SET_SECURITY_FUSES_IN_REJECT_TEST_SIGNED_OFST 0
-> > > > +#define        MC_CMD_SET_SECURITY_FUSES_IN_REJECT_TEST_SIGNED_LBN 1
-> > > > +#define        MC_CMD_SET_SECURITY_FUSES_IN_REJECT_TEST_SIGNED_WIDTH 1
-> > > > +#define        MC_CMD_SET_SECURITY_FUSES_IN_SOFT_CONFIG_OFST 0
-> > > > +#define        MC_CMD_SET_SECURITY_FUSES_IN_SOFT_CONFIG_LBN 31
-> > > > +#define        MC_CMD_SET_SECURITY_FUSES_IN_SOFT_CONFIG_WIDTH 1
-> > > > +
-> > > > +/* MC_CMD_SET_SECURITY_FUSES_OUT msgresponse */
-> > > > +#define    MC_CMD_SET_SECURITY_FUSES_OUT_LEN 0
-> > > > +
-> > > > +/* MC_CMD_SET_SECURITY_FUSES_V2_OUT msgresponse */
-> > > > +#define    MC_CMD_SET_SECURITY_FUSES_V2_OUT_LEN 4
-> > > > +/* Flags specifying which security features are enforced on the NIC after the
-> > > > + * flags in the request have been applied. See
-> > > > + * MC_CMD_SET_SECURITY_FUSES_IN/FLAGS for flag definitions.
-> > > > + */
-> > > > +#define       MC_CMD_SET_SECURITY_FUSES_V2_OUT_FLAGS_OFST 0
-> > > > +#define       MC_CMD_SET_SECURITY_FUSES_V2_OUT_FLAGS_LEN 4
-> > > > +
-> > > > +
-> > > > +/***********************************/
-> > > > +/* MC_CMD_TSA_INFO
-> > > > + * Messages sent from TSA adapter to TSA controller. This command is only valid
-> > > > + * when the MCDI header has MESSAGE_TYPE set to MCDI_MESSAGE_TYPE_TSA. This
-> > > > + * command is not sent by the driver to the MC; it is sent from the MC to a TSA
-> > > > + * controller, being treated more like an alert message rather than a command;
-> > > > + * hence the MC does not expect a response in return. Doxbox reference
-> > > > + * SF-117371-SW
-> > > > + */
-> > > > +#define MC_CMD_TSA_INFO 0x127
-> > > > +#undef MC_CMD_0x127_PRIVILEGE_CTG
-> > > > +
-> > > > +#define MC_CMD_0x127_PRIVILEGE_CTG SRIOV_CTG_ADMIN_TSA_UNBOUND
-> > > > +
-> > > > +/* MC_CMD_TSA_INFO_IN msgrequest */
-> > > > +#define    MC_CMD_TSA_INFO_IN_LEN 4
-> > > > +#define       MC_CMD_TSA_INFO_IN_OP_HDR_OFST 0
-> > > > +#define       MC_CMD_TSA_INFO_IN_OP_HDR_LEN 4
-> > > > +#define        MC_CMD_TSA_INFO_IN_OP_OFST 0
-> > > > +#define        MC_CMD_TSA_INFO_IN_OP_LBN 0
-> > > > +#define        MC_CMD_TSA_INFO_IN_OP_WIDTH 16
-> > > > +/* enum: Information about recently discovered local IP address of the adapter
-> > > > + */
-> > > > +#define          MC_CMD_TSA_INFO_OP_LOCAL_IP 0x1
-> > > > +/* enum: Information about a sampled packet that either - did not match any
-> > > > + * black/white-list filters and was allowed by the default filter or - did not
-> > > > + * match any black/white-list filters and was denied by the default filter
-> > > > + */
-> > > > +#define          MC_CMD_TSA_INFO_OP_PKT_SAMPLE 0x2
-> > > > +/* enum: Information about an unbind or decommission attempt. */
-> > > > +#define          MC_CMD_TSA_INFO_OP_UNBIND 0x3
-> > > > +
-> > > > +/* MC_CMD_TSA_INFO_IN_LOCAL_IP msgrequest:
-> > > > + *
-> > > > + * The TSA controller maintains a list of IP addresses valid for each port of a
-> > > > + * TSA adapter. The TSA controller requires information from the adapter
-> > > > + * inorder to learn new IP addresses assigned to a physical port and to
-> > > > + * identify those that are no longer assigned to the physical port. For this
-> > > > + * purpose, the TSA adapter snoops ARP replys, gratuitous ARP requests and ARP
-> > > > + * probe packets seen on each physical port. This definition describes the
-> > > > + * format of the notification message sent from a TSA adapter to a TSA
-> > > > + * controller related to any information related to a change in IP address
-> > > > + * assignment for a port. Doxbox reference SF-117371.
-> > > > + *
-> > > > + * There may be a possibility of combining multiple notifications in a single
-> > > > + * message in future. When that happens, a new flag can be defined using the
-> > > > + * reserved bits to describe the extended format of this notification.
-> > > > + */
-> > > > +#define    MC_CMD_TSA_INFO_IN_LOCAL_IP_LEN 18
-> > > > +#define       MC_CMD_TSA_INFO_IN_LOCAL_IP_OP_HDR_OFST 0
-> > > > +#define       MC_CMD_TSA_INFO_IN_LOCAL_IP_OP_HDR_LEN 4
-> > > > +/* Additional metadata describing the IP address information such as source of
-> > > > + * information retrieval, type of IP address, physical port number.
-> > > > + */
-> > > > +#define       MC_CMD_TSA_INFO_IN_LOCAL_IP_META_OFST 4
-> > > > +#define       MC_CMD_TSA_INFO_IN_LOCAL_IP_META_LEN 4
-> > > > +#define        MC_CMD_TSA_INFO_IN_LOCAL_IP_META_PORT_INDEX_OFST 4
-> > > > +#define        MC_CMD_TSA_INFO_IN_LOCAL_IP_META_PORT_INDEX_LBN 0
-> > > > +#define        MC_CMD_TSA_INFO_IN_LOCAL_IP_META_PORT_INDEX_WIDTH 8
-> > > > +#define        MC_CMD_TSA_INFO_IN_LOCAL_IP_RESERVED_OFST 4
-> > > > +#define        MC_CMD_TSA_INFO_IN_LOCAL_IP_RESERVED_LBN 8
-> > > > +#define        MC_CMD_TSA_INFO_IN_LOCAL_IP_RESERVED_WIDTH 8
-> > > > +#define        MC_CMD_TSA_INFO_IN_LOCAL_IP_META_REASON_OFST 4
-> > > > +#define        MC_CMD_TSA_INFO_IN_LOCAL_IP_META_REASON_LBN 16
-> > > > +#define        MC_CMD_TSA_INFO_IN_LOCAL_IP_META_REASON_WIDTH 8
-> > > > +/* enum: ARP reply sent out of the physical port */
-> > > > +#define          MC_CMD_TSA_INFO_IP_REASON_TX_ARP 0x0
-> > > > +/* enum: ARP probe packet received on the physical port */
-> > > > +#define          MC_CMD_TSA_INFO_IP_REASON_RX_ARP_PROBE 0x1
-> > > > +/* enum: Gratuitous ARP packet received on the physical port */
-> > > > +#define          MC_CMD_TSA_INFO_IP_REASON_RX_GRATUITOUS_ARP 0x2
-> > > > +/* enum: DHCP ACK packet received on the physical port */
-> > > > +#define          MC_CMD_TSA_INFO_IP_REASON_RX_DHCP_ACK 0x3
-> > > > +#define        MC_CMD_TSA_INFO_IN_LOCAL_IP_META_IPV4_OFST 4
-> > > > +#define        MC_CMD_TSA_INFO_IN_LOCAL_IP_META_IPV4_LBN 24
-> > > > +#define        MC_CMD_TSA_INFO_IN_LOCAL_IP_META_IPV4_WIDTH 1
-> > > > +#define        MC_CMD_TSA_INFO_IN_LOCAL_IP_RESERVED1_OFST 4
-> > > > +#define        MC_CMD_TSA_INFO_IN_LOCAL_IP_RESERVED1_LBN 25
-> > > > +#define        MC_CMD_TSA_INFO_IN_LOCAL_IP_RESERVED1_WIDTH 7
-> > > > +/* IPV4 address retrieved from the sampled packets. This field is relevant only
-> > > > + * when META_IPV4 is set to 1.
-> > > > + */
-> > > > +#define       MC_CMD_TSA_INFO_IN_LOCAL_IP_IPV4_ADDR_OFST 8
-> > > > +#define       MC_CMD_TSA_INFO_IN_LOCAL_IP_IPV4_ADDR_LEN 4
-> > > > +/* Target MAC address retrieved from the sampled packet. */
-> > > > +#define       MC_CMD_TSA_INFO_IN_LOCAL_IP_MAC_ADDR_OFST 12
-> > > > +#define       MC_CMD_TSA_INFO_IN_LOCAL_IP_MAC_ADDR_LEN 1
-> > > > +#define       MC_CMD_TSA_INFO_IN_LOCAL_IP_MAC_ADDR_NUM 6
-> > > > +
-> > > > +/* MC_CMD_TSA_INFO_IN_PKT_SAMPLE msgrequest:
-> > > > + *
-> > > > + * It is desireable for the TSA controller to learn the traffic pattern of
-> > > > + * packets seen at the network port being monitored. In order to learn about
-> > > > + * the traffic pattern, the TSA controller may want to sample packets seen at
-> > > > + * the network port. Based on the packet samples that the TSA controller
-> > > > + * receives from the adapter, the controller may choose to configure additional
-> > > > + * black-list or white-list rules to allow or block packets as required.
-> > > > + *
-> > > > + * Although the entire sampled packet as seen on the network port is available
-> > > > + * to the MC the length of sampled packet sent to controller is restricted by
-> > > > + * MCDI payload size. Besides, the TSA controller does not require the entire
-> > > > + * packet to make decisions about filter updates. Hence the packet sample being
-> > > > + * passed to the controller is truncated to 128 bytes. This length is large
-> > > > + * enough to hold the ethernet header, IP header and maximum length of
-> > > > + * supported L4 protocol headers (IPv4 only, but can hold IPv6 header too, if
-> > > > + * required in future).
-> > > > + *
-> > > > + * The intention is that any future changes to this message format that are not
-> > > > + * backwards compatible will be defined with a new operation code.
-> > > > + */
-> > > > +#define    MC_CMD_TSA_INFO_IN_PKT_SAMPLE_LEN 136
-> > > > +#define       MC_CMD_TSA_INFO_IN_PKT_SAMPLE_OP_HDR_OFST 0
-> > > > +#define       MC_CMD_TSA_INFO_IN_PKT_SAMPLE_OP_HDR_LEN 4
-> > > > +/* Additional metadata describing the sampled packet */
-> > > > +#define       MC_CMD_TSA_INFO_IN_PKT_SAMPLE_META_OFST 4
-> > > > +#define       MC_CMD_TSA_INFO_IN_PKT_SAMPLE_META_LEN 4
-> > > > +#define        MC_CMD_TSA_INFO_IN_PKT_SAMPLE_META_PORT_INDEX_OFST 4
-> > > > +#define        MC_CMD_TSA_INFO_IN_PKT_SAMPLE_META_PORT_INDEX_LBN 0
-> > > > +#define        MC_CMD_TSA_INFO_IN_PKT_SAMPLE_META_PORT_INDEX_WIDTH 8
-> > > > +#define        MC_CMD_TSA_INFO_IN_PKT_SAMPLE_META_DIRECTION_OFST 4
-> > > > +#define        MC_CMD_TSA_INFO_IN_PKT_SAMPLE_META_DIRECTION_LBN 8
-> > > > +#define        MC_CMD_TSA_INFO_IN_PKT_SAMPLE_META_DIRECTION_WIDTH 1
-> > > > +#define        MC_CMD_TSA_INFO_IN_PKT_SAMPLE_RESERVED_OFST 4
-> > > > +#define        MC_CMD_TSA_INFO_IN_PKT_SAMPLE_RESERVED_LBN 9
-> > > > +#define        MC_CMD_TSA_INFO_IN_PKT_SAMPLE_RESERVED_WIDTH 7
-> > > > +#define        MC_CMD_TSA_INFO_IN_PKT_SAMPLE_META_ACTION_MASK_OFST 4
-> > > > +#define        MC_CMD_TSA_INFO_IN_PKT_SAMPLE_META_ACTION_MASK_LBN 16
-> > > > +#define        MC_CMD_TSA_INFO_IN_PKT_SAMPLE_META_ACTION_MASK_WIDTH 4
-> > > > +#define        MC_CMD_TSA_INFO_IN_PKT_SAMPLE_META_ACTION_ALLOW_OFST 4
-> > > > +#define        MC_CMD_TSA_INFO_IN_PKT_SAMPLE_META_ACTION_ALLOW_LBN 16
-> > > > +#define        MC_CMD_TSA_INFO_IN_PKT_SAMPLE_META_ACTION_ALLOW_WIDTH 1
-> > > > +#define        MC_CMD_TSA_INFO_IN_PKT_SAMPLE_META_ACTION_DENY_OFST 4
-> > > > +#define        MC_CMD_TSA_INFO_IN_PKT_SAMPLE_META_ACTION_DENY_LBN 17
-> > > > +#define        MC_CMD_TSA_INFO_IN_PKT_SAMPLE_META_ACTION_DENY_WIDTH 1
-> > > > +#define        MC_CMD_TSA_INFO_IN_PKT_SAMPLE_META_ACTION_COUNT_OFST 4
-> > > > +#define        MC_CMD_TSA_INFO_IN_PKT_SAMPLE_META_ACTION_COUNT_LBN 18
-> > > > +#define        MC_CMD_TSA_INFO_IN_PKT_SAMPLE_META_ACTION_COUNT_WIDTH 1
-> > > > +/* 128-byte raw prefix of the sampled packet which includes the ethernet
-> > > > + * header, IP header and L4 protocol header (only IPv4 supported initially).
-> > > > + * This provides the controller enough information about the packet sample to
-> > > > + * report traffic patterns seen on a network port and to make decisions
-> > > > + * concerning rule-set updates.
-> > > > + */
-> > > > +#define       MC_CMD_TSA_INFO_IN_PKT_SAMPLE_PACKET_DATA_OFST 8
-> > > > +#define       MC_CMD_TSA_INFO_IN_PKT_SAMPLE_PACKET_DATA_LEN 1
-> > > > +#define       MC_CMD_TSA_INFO_IN_PKT_SAMPLE_PACKET_DATA_NUM 128
-> > > > +
-> > > > +/* MC_CMD_TSA_INFO_IN_UNBIND msgrequest: Information about an unbind or
-> > > > + * decommission attempt. The purpose of this event is to let the controller
-> > > > + * know about unbind and decommission attempts (both successful and failed)
-> > > > + * received from the adapter host. The event is not sent if the unbind or
-> > > > + * decommission request was received from the controller.
-> > > > + */
-> > > > +#define    MC_CMD_TSA_INFO_IN_UNBIND_LEN 12
-> > > > +#define       MC_CMD_TSA_INFO_IN_UNBIND_OP_HDR_OFST 0
-> > > > +#define       MC_CMD_TSA_INFO_IN_UNBIND_OP_HDR_LEN 4
-> > > > +#define        MC_CMD_TSA_INFO_IN_UNBIND_OP_OFST 0
-> > > > +#define        MC_CMD_TSA_INFO_IN_UNBIND_OP_LBN 0
-> > > > +#define        MC_CMD_TSA_INFO_IN_UNBIND_OP_WIDTH 16
-> > > > +/* Type of the unbind attempt. */
-> > > > +#define       MC_CMD_TSA_INFO_IN_UNBIND_TYPE_OFST 4
-> > > > +#define       MC_CMD_TSA_INFO_IN_UNBIND_TYPE_LEN 4
-> > > > +/* enum: This event is sent because MC_CMD_TSA_BIND_OP_SECURE_UNBIND was
-> > > > + * received from the adapter local host.
-> > > > + */
-> > > > +#define          MC_CMD_TSA_INFO_UNBIND_TYPE_SECURE_UNBIND 0x1
-> > > > +/* enum: This event is sent because MC_CMD_TSA_BIND_OP_SECURE_DECOMMISSION was
-> > > > + * received from the adapter local host.
-> > > > + */
-> > > > +#define          MC_CMD_TSA_INFO_UNBIND_TYPE_SECURE_DECOMMISSION 0x2
-> > > > +/* Result of the attempt. */
-> > > > +#define       MC_CMD_TSA_INFO_IN_UNBIND_RESULT_OFST 8
-> > > > +#define       MC_CMD_TSA_INFO_IN_UNBIND_RESULT_LEN 4
-> > > > +/*            Enum values, see field(s): */
-> > > > +/*               MC_CMD_TSA_BIND/MC_CMD_TSA_BIND_OUT_SECURE_UNBIND/RESULT */
-> > > > +
-> > > > +/* MC_CMD_TSA_INFO_OUT msgresponse */
-> > > > +#define    MC_CMD_TSA_INFO_OUT_LEN 0
-> > > > +
-> > > > +
-> > > > +/***********************************/
-> > > > +/* MC_CMD_HOST_INFO
-> > > > + * Commands to appply or retrieve host-related information from an adapter.
-> > > > + * Doxbox reference SF-117371-SW
-> > > > + */
-> > > > +#define MC_CMD_HOST_INFO 0x128
-> > > > +#undef MC_CMD_0x128_PRIVILEGE_CTG
-> > > > +
-> > > > +#define MC_CMD_0x128_PRIVILEGE_CTG SRIOV_CTG_ADMIN
-> > > > +
-> > > > +/* MC_CMD_HOST_INFO_IN msgrequest */
-> > > > +#define    MC_CMD_HOST_INFO_IN_LEN 4
-> > > > +/* sub-operation code info */
-> > > > +#define       MC_CMD_HOST_INFO_IN_OP_HDR_OFST 0
-> > > > +#define       MC_CMD_HOST_INFO_IN_OP_HDR_LEN 4
-> > > > +#define        MC_CMD_HOST_INFO_IN_OP_OFST 0
-> > > > +#define        MC_CMD_HOST_INFO_IN_OP_LBN 0
-> > > > +#define        MC_CMD_HOST_INFO_IN_OP_WIDTH 16
-> > > > +/* enum: Read a 16-byte unique host identifier from the adapter. This UUID
-> > > > + * helps to identify the host that an adapter is plugged into. This identifier
-> > > > + * is ideally the system UUID retrieved and set by the UEFI driver. If the UEFI
-> > > > + * driver is unable to extract the system UUID, it would still set a random
-> > > > + * 16-byte value into each supported SF adapter plugged into it. Host UUIDs may
-> > > > + * change if the system is power-cycled, however, they persist across adapter
-> > > > + * resets. If the host UUID was not set on an adapter, due to an unsupported
-> > > > + * version of UEFI driver, then this command returns an error. Doxbox reference
-> > > > + * - SF-117371-SW section 'Host UUID'.
-> > > > + */
-> > > > +#define          MC_CMD_HOST_INFO_OP_GET_UUID 0x0
-> > > > +/* enum: Set a 16-byte unique host identifier on the adapter to identify the
-> > > > + * host that the adapter is plugged into. See MC_CMD_HOST_INFO_OP_GET_UUID for
-> > > > + * further details.
-> > > > + */
-> > > > +#define          MC_CMD_HOST_INFO_OP_SET_UUID 0x1
-> > > > +
-> > > > +/* MC_CMD_HOST_INFO_IN_GET_UUID msgrequest */
-> > > > +#define    MC_CMD_HOST_INFO_IN_GET_UUID_LEN 4
-> > > > +/* sub-operation code info */
-> > > > +#define       MC_CMD_HOST_INFO_IN_GET_UUID_OP_HDR_OFST 0
-> > > > +#define       MC_CMD_HOST_INFO_IN_GET_UUID_OP_HDR_LEN 4
-> > > > +
-> > > > +/* MC_CMD_HOST_INFO_OUT_GET_UUID msgresponse */
-> > > > +#define    MC_CMD_HOST_INFO_OUT_GET_UUID_LEN 16
-> > > > +/* 16-byte host UUID read out of the adapter. See MC_CMD_HOST_INFO_OP_GET_UUID
-> > > > + * for further details.
-> > > > + */
-> > > > +#define       MC_CMD_HOST_INFO_OUT_GET_UUID_HOST_UUID_OFST 0
-> > > > +#define       MC_CMD_HOST_INFO_OUT_GET_UUID_HOST_UUID_LEN 1
-> > > > +#define       MC_CMD_HOST_INFO_OUT_GET_UUID_HOST_UUID_NUM 16
-> > > > +
-> > > > +/* MC_CMD_HOST_INFO_IN_SET_UUID msgrequest */
-> > > > +#define    MC_CMD_HOST_INFO_IN_SET_UUID_LEN 20
-> > > > +/* sub-operation code info */
-> > > > +#define       MC_CMD_HOST_INFO_IN_SET_UUID_OP_HDR_OFST 0
-> > > > +#define       MC_CMD_HOST_INFO_IN_SET_UUID_OP_HDR_LEN 4
-> > > > +/* 16-byte host UUID set on the adapter. See MC_CMD_HOST_INFO_OP_GET_UUID for
-> > > > + * further details.
-> > > > + */
-> > > > +#define       MC_CMD_HOST_INFO_IN_SET_UUID_HOST_UUID_OFST 4
-> > > > +#define       MC_CMD_HOST_INFO_IN_SET_UUID_HOST_UUID_LEN 1
-> > > > +#define       MC_CMD_HOST_INFO_IN_SET_UUID_HOST_UUID_NUM 16
-> > > > +
-> > > > +/* MC_CMD_HOST_INFO_OUT_SET_UUID msgresponse */
-> > > > +#define    MC_CMD_HOST_INFO_OUT_SET_UUID_LEN 0
-> > > > +
-> > > > +
-> > > > +/***********************************/
-> > > > +/* MC_CMD_TSAN_INFO
-> > > > + * Get TSA adapter information. TSA controllers query each TSA adapter to learn
-> > > > + * some configuration parameters of each adapter. Doxbox reference SF-117371-SW
-> > > > + * section 'Adapter Information'
-> > > > + */
-> > > > +#define MC_CMD_TSAN_INFO 0x129
-> > > > +#undef MC_CMD_0x129_PRIVILEGE_CTG
-> > > > +
-> > > > +#define MC_CMD_0x129_PRIVILEGE_CTG SRIOV_CTG_ADMIN
-> > > > +
-> > > > +/* MC_CMD_TSAN_INFO_IN msgrequest */
-> > > > +#define    MC_CMD_TSAN_INFO_IN_LEN 4
-> > > > +/* sub-operation code info */
-> > > > +#define       MC_CMD_TSAN_INFO_IN_OP_HDR_OFST 0
-> > > > +#define       MC_CMD_TSAN_INFO_IN_OP_HDR_LEN 4
-> > > > +#define        MC_CMD_TSAN_INFO_IN_OP_OFST 0
-> > > > +#define        MC_CMD_TSAN_INFO_IN_OP_LBN 0
-> > > > +#define        MC_CMD_TSAN_INFO_IN_OP_WIDTH 16
-> > > > +/* enum: Read configuration parameters and IDs that uniquely identify an
-> > > > + * adapter. The parameters include - host identification, adapter
-> > > > + * identification string and number of physical ports on the adapter.
-> > > > + */
-> > > > +#define          MC_CMD_TSAN_INFO_OP_GET_CFG 0x0
-> > > > +
-> > > > +/* MC_CMD_TSAN_INFO_IN_GET_CFG msgrequest */
-> > > > +#define    MC_CMD_TSAN_INFO_IN_GET_CFG_LEN 4
-> > > > +/* sub-operation code info */
-> > > > +#define       MC_CMD_TSAN_INFO_IN_GET_CFG_OP_HDR_OFST 0
-> > > > +#define       MC_CMD_TSAN_INFO_IN_GET_CFG_OP_HDR_LEN 4
-> > > > +
-> > > > +/* MC_CMD_TSAN_INFO_OUT_GET_CFG msgresponse */
-> > > > +#define    MC_CMD_TSAN_INFO_OUT_GET_CFG_LEN 26
-> > > > +/* Information about the configuration parameters returned in this response. */
-> > > > +#define       MC_CMD_TSAN_INFO_OUT_GET_CFG_CONFIG_WORD_OFST 0
-> > > > +#define       MC_CMD_TSAN_INFO_OUT_GET_CFG_CONFIG_WORD_LEN 4
-> > > > +#define        MC_CMD_TSAN_INFO_OUT_GET_CFG_CAP_FLAGS_OFST 0
-> > > > +#define        MC_CMD_TSAN_INFO_OUT_GET_CFG_CAP_FLAGS_LBN 0
-> > > > +#define        MC_CMD_TSAN_INFO_OUT_GET_CFG_CAP_FLAGS_WIDTH 16
-> > > > +#define        MC_CMD_TSAN_INFO_OUT_GET_CFG_FLAG_HOST_UUID_VALID_OFST 0
-> > > > +#define        MC_CMD_TSAN_INFO_OUT_GET_CFG_FLAG_HOST_UUID_VALID_LBN 0
-> > > > +#define        MC_CMD_TSAN_INFO_OUT_GET_CFG_FLAG_HOST_UUID_VALID_WIDTH 1
-> > > > +#define        MC_CMD_TSAN_INFO_OUT_GET_CFG_NUM_PORTS_OFST 0
-> > > > +#define        MC_CMD_TSAN_INFO_OUT_GET_CFG_NUM_PORTS_LBN 16
-> > > > +#define        MC_CMD_TSAN_INFO_OUT_GET_CFG_NUM_PORTS_WIDTH 8
-> > > > +/* 16-byte host UUID read out of the adapter. See MC_CMD_HOST_INFO_OP_GET_UUID
-> > > > + * for further details.
-> > > > + */
-> > > > +#define       MC_CMD_TSAN_INFO_OUT_GET_CFG_HOST_UUID_OFST 4
-> > > > +#define       MC_CMD_TSAN_INFO_OUT_GET_CFG_HOST_UUID_LEN 1
-> > > > +#define       MC_CMD_TSAN_INFO_OUT_GET_CFG_HOST_UUID_NUM 16
-> > > > +/* A unique identifier per adapter. The base MAC address of the card is used
-> > > > + * for this purpose.
-> > > > + */
-> > > > +#define       MC_CMD_TSAN_INFO_OUT_GET_CFG_GUID_OFST 20
-> > > > +#define       MC_CMD_TSAN_INFO_OUT_GET_CFG_GUID_LEN 1
-> > > > +#define       MC_CMD_TSAN_INFO_OUT_GET_CFG_GUID_NUM 6
-> > > > +
-> > > > +/* MC_CMD_TSAN_INFO_OUT_GET_CFG_V2 msgresponse */
-> > > > +#define    MC_CMD_TSAN_INFO_OUT_GET_CFG_V2_LEN 36
-> > > > +/* Information about the configuration parameters returned in this response. */
-> > > > +#define       MC_CMD_TSAN_INFO_OUT_GET_CFG_V2_CONFIG_WORD_OFST 0
-> > > > +#define       MC_CMD_TSAN_INFO_OUT_GET_CFG_V2_CONFIG_WORD_LEN 4
-> > > > +#define        MC_CMD_TSAN_INFO_OUT_GET_CFG_V2_CAP_FLAGS_OFST 0
-> > > > +#define        MC_CMD_TSAN_INFO_OUT_GET_CFG_V2_CAP_FLAGS_LBN 0
-> > > > +#define        MC_CMD_TSAN_INFO_OUT_GET_CFG_V2_CAP_FLAGS_WIDTH 16
-> > > > +#define        MC_CMD_TSAN_INFO_OUT_GET_CFG_V2_FLAG_HOST_UUID_VALID_OFST 0
-> > > > +#define        MC_CMD_TSAN_INFO_OUT_GET_CFG_V2_FLAG_HOST_UUID_VALID_LBN 0
-> > > > +#define        MC_CMD_TSAN_INFO_OUT_GET_CFG_V2_FLAG_HOST_UUID_VALID_WIDTH 1
-> > > > +#define        MC_CMD_TSAN_INFO_OUT_GET_CFG_V2_NUM_PORTS_OFST 0
-> > > > +#define        MC_CMD_TSAN_INFO_OUT_GET_CFG_V2_NUM_PORTS_LBN 16
-> > > > +#define        MC_CMD_TSAN_INFO_OUT_GET_CFG_V2_NUM_PORTS_WIDTH 8
-> > > > +/* 16-byte host UUID read out of the adapter. See MC_CMD_HOST_INFO_OP_GET_UUID
-> > > > + * for further details.
-> > > > + */
-> > > > +#define       MC_CMD_TSAN_INFO_OUT_GET_CFG_V2_HOST_UUID_OFST 4
-> > > > +#define       MC_CMD_TSAN_INFO_OUT_GET_CFG_V2_HOST_UUID_LEN 1
-> > > > +#define       MC_CMD_TSAN_INFO_OUT_GET_CFG_V2_HOST_UUID_NUM 16
-> > > > +/* A unique identifier per adapter. The base MAC address of the card is used
-> > > > + * for this purpose.
-> > > > + */
-> > > > +#define       MC_CMD_TSAN_INFO_OUT_GET_CFG_V2_GUID_OFST 20
-> > > > +#define       MC_CMD_TSAN_INFO_OUT_GET_CFG_V2_GUID_LEN 1
-> > > > +#define       MC_CMD_TSAN_INFO_OUT_GET_CFG_V2_GUID_NUM 6
-> > > > +/* Unused bytes, defined for 32-bit alignment of new fields. */
-> > > > +#define       MC_CMD_TSAN_INFO_OUT_GET_CFG_V2_UNUSED_OFST 26
-> > > > +#define       MC_CMD_TSAN_INFO_OUT_GET_CFG_V2_UNUSED_LEN 2
-> > > > +/* Maximum number of TSA statistics counters in each direction of dataflow
-> > > > + * supported on the card. Note that the statistics counters are always
-> > > > + * allocated in pairs, i.e. a counter ID is associated with one Tx and one Rx
-> > > > + * counter.
-> > > > + */
-> > > > +#define       MC_CMD_TSAN_INFO_OUT_GET_CFG_V2_MAX_STATS_OFST 28
-> > > > +#define       MC_CMD_TSAN_INFO_OUT_GET_CFG_V2_MAX_STATS_LEN 4
-> > > > +/* Width of each statistics counter (represented in bits). This gives an
-> > > > + * indication of wrap point to the user.
-> > > > + */
-> > > > +#define       MC_CMD_TSAN_INFO_OUT_GET_CFG_V2_STATS_WIDTH_OFST 32
-> > > > +#define       MC_CMD_TSAN_INFO_OUT_GET_CFG_V2_STATS_WIDTH_LEN 4
-> > > > +
-> > > > +
-> > > > +/***********************************/
-> > > > +/* MC_CMD_TSA_STATISTICS
-> > > > + * TSA adapter statistics operations.
-> > > > + */
-> > > > +#define MC_CMD_TSA_STATISTICS 0x130
-> > > > +#undef MC_CMD_0x130_PRIVILEGE_CTG
-> > > > +
-> > > > +#define MC_CMD_0x130_PRIVILEGE_CTG SRIOV_CTG_ADMIN_TSA_UNBOUND
-> > > > +
-> > > > +/* MC_CMD_TSA_STATISTICS_IN msgrequest */
-> > > > +#define    MC_CMD_TSA_STATISTICS_IN_LEN 4
-> > > > +/* TSA statistics sub-operation code */
-> > > > +#define       MC_CMD_TSA_STATISTICS_IN_OP_CODE_OFST 0
-> > > > +#define       MC_CMD_TSA_STATISTICS_IN_OP_CODE_LEN 4
-> > > > +/* enum: Get the configuration parameters that describe the TSA statistics
-> > > > + * layout on the adapter.
-> > > > + */
-> > > > +#define          MC_CMD_TSA_STATISTICS_OP_GET_CONFIG 0x0
-> > > > +/* enum: Read and/or clear TSA statistics counters. */
-> > > > +#define          MC_CMD_TSA_STATISTICS_OP_READ_CLEAR 0x1
-> > > > +
-> > > > +/* MC_CMD_TSA_STATISTICS_IN_GET_CONFIG msgrequest */
-> > > > +#define    MC_CMD_TSA_STATISTICS_IN_GET_CONFIG_LEN 4
-> > > > +/* TSA statistics sub-operation code */
-> > > > +#define       MC_CMD_TSA_STATISTICS_IN_GET_CONFIG_OP_CODE_OFST 0
-> > > > +#define       MC_CMD_TSA_STATISTICS_IN_GET_CONFIG_OP_CODE_LEN 4
-> > > > +
-> > > > +/* MC_CMD_TSA_STATISTICS_OUT_GET_CONFIG msgresponse */
-> > > > +#define    MC_CMD_TSA_STATISTICS_OUT_GET_CONFIG_LEN 8
-> > > > +/* Maximum number of TSA statistics counters in each direction of dataflow
-> > > > + * supported on the card. Note that the statistics counters are always
-> > > > + * allocated in pairs, i.e. a counter ID is associated with one Tx and one Rx
-> > > > + * counter.
-> > > > + */
-> > > > +#define       MC_CMD_TSA_STATISTICS_OUT_GET_CONFIG_MAX_STATS_OFST 0
-> > > > +#define       MC_CMD_TSA_STATISTICS_OUT_GET_CONFIG_MAX_STATS_LEN 4
-> > > > +/* Width of each statistics counter (represented in bits). This gives an
-> > > > + * indication of wrap point to the user.
-> > > > + */
-> > > > +#define       MC_CMD_TSA_STATISTICS_OUT_GET_CONFIG_STATS_WIDTH_OFST 4
-> > > > +#define       MC_CMD_TSA_STATISTICS_OUT_GET_CONFIG_STATS_WIDTH_LEN 4
-> > > > +
-> > > > +/* MC_CMD_TSA_STATISTICS_IN_READ_CLEAR msgrequest */
-> > > > +#define    MC_CMD_TSA_STATISTICS_IN_READ_CLEAR_LENMIN 20
-> > > > +#define    MC_CMD_TSA_STATISTICS_IN_READ_CLEAR_LENMAX 252
-> > > > +#define    MC_CMD_TSA_STATISTICS_IN_READ_CLEAR_LENMAX_MCDI2 1020
-> > > > +#define    MC_CMD_TSA_STATISTICS_IN_READ_CLEAR_LEN(num) (16+4*(num))
-> > > > +#define    MC_CMD_TSA_STATISTICS_IN_READ_CLEAR_COUNTER_ID_NUM(len) (((len)-16)/4)
-> > > > +/* TSA statistics sub-operation code */
-> > > > +#define       MC_CMD_TSA_STATISTICS_IN_READ_CLEAR_OP_CODE_OFST 0
-> > > > +#define       MC_CMD_TSA_STATISTICS_IN_READ_CLEAR_OP_CODE_LEN 4
-> > > > +/* Parameters describing the statistics operation */
-> > > > +#define       MC_CMD_TSA_STATISTICS_IN_READ_CLEAR_FLAGS_OFST 4
-> > > > +#define       MC_CMD_TSA_STATISTICS_IN_READ_CLEAR_FLAGS_LEN 4
-> > > > +#define        MC_CMD_TSA_STATISTICS_IN_READ_CLEAR_READ_OFST 4
-> > > > +#define        MC_CMD_TSA_STATISTICS_IN_READ_CLEAR_READ_LBN 0
-> > > > +#define        MC_CMD_TSA_STATISTICS_IN_READ_CLEAR_READ_WIDTH 1
-> > > > +#define        MC_CMD_TSA_STATISTICS_IN_READ_CLEAR_CLEAR_OFST 4
-> > > > +#define        MC_CMD_TSA_STATISTICS_IN_READ_CLEAR_CLEAR_LBN 1
-> > > > +#define        MC_CMD_TSA_STATISTICS_IN_READ_CLEAR_CLEAR_WIDTH 1
-> > > > +/* Counter ID list specification type */
-> > > > +#define       MC_CMD_TSA_STATISTICS_IN_READ_CLEAR_MODE_OFST 8
-> > > > +#define       MC_CMD_TSA_STATISTICS_IN_READ_CLEAR_MODE_LEN 4
-> > > > +/* enum: The statistics counters are specified as an unordered list of
-> > > > + * individual counter ID.
-> > > > + */
-> > > > +#define          MC_CMD_TSA_STATISTICS_IN_READ_CLEAR_LIST 0x0
-> > > > +/* enum: The statistics counters are specified as a range of consecutive
-> > > > + * counter IDs.
-> > > > + */
-> > > > +#define          MC_CMD_TSA_STATISTICS_IN_READ_CLEAR_RANGE 0x1
-> > > > +/* Number of statistics counters */
-> > > > +#define       MC_CMD_TSA_STATISTICS_IN_READ_CLEAR_NUM_STATS_OFST 12
-> > > > +#define       MC_CMD_TSA_STATISTICS_IN_READ_CLEAR_NUM_STATS_LEN 4
-> > > > +/* Counter IDs to be read/cleared. When mode is set to LIST, this entry holds a
-> > > > + * list of counter IDs to be operated on. When mode is set to RANGE, this entry
-> > > > + * holds a single counter ID representing the start of the range of counter IDs
-> > > > + * to be operated on.
-> > > > + */
-> > > > +#define       MC_CMD_TSA_STATISTICS_IN_READ_CLEAR_COUNTER_ID_OFST 16
-> > > > +#define       MC_CMD_TSA_STATISTICS_IN_READ_CLEAR_COUNTER_ID_LEN 4
-> > > > +#define       MC_CMD_TSA_STATISTICS_IN_READ_CLEAR_COUNTER_ID_MINNUM 1
-> > > > +#define       MC_CMD_TSA_STATISTICS_IN_READ_CLEAR_COUNTER_ID_MAXNUM 59
-> > > > +#define       MC_CMD_TSA_STATISTICS_IN_READ_CLEAR_COUNTER_ID_MAXNUM_MCDI2 251
-> > > > +
-> > > > +/* MC_CMD_TSA_STATISTICS_OUT_READ_CLEAR msgresponse */
-> > > > +#define    MC_CMD_TSA_STATISTICS_OUT_READ_CLEAR_LENMIN 24
-> > > > +#define    MC_CMD_TSA_STATISTICS_OUT_READ_CLEAR_LENMAX 248
-> > > > +#define    MC_CMD_TSA_STATISTICS_OUT_READ_CLEAR_LENMAX_MCDI2 1016
-> > > > +#define    MC_CMD_TSA_STATISTICS_OUT_READ_CLEAR_LEN(num) (8+16*(num))
-> > > > +#define    MC_CMD_TSA_STATISTICS_OUT_READ_CLEAR_STATS_COUNTERS_NUM(len) (((len)-8)/16)
-> > > > +/* Number of statistics counters returned in this response */
-> > > > +#define       MC_CMD_TSA_STATISTICS_OUT_READ_CLEAR_NUM_STATS_OFST 0
-> > > > +#define       MC_CMD_TSA_STATISTICS_OUT_READ_CLEAR_NUM_STATS_LEN 4
-> > > > +/* MC_TSA_STATISTICS_ENTRY Note that this field is expected to start at a
-> > > > + * 64-bit aligned offset
-> > > > + */
-> > > > +#define       MC_CMD_TSA_STATISTICS_OUT_READ_CLEAR_STATS_COUNTERS_OFST 8
-> > > > +#define       MC_CMD_TSA_STATISTICS_OUT_READ_CLEAR_STATS_COUNTERS_LEN 16
-> > > > +#define       MC_CMD_TSA_STATISTICS_OUT_READ_CLEAR_STATS_COUNTERS_MINNUM 1
-> > > > +#define       MC_CMD_TSA_STATISTICS_OUT_READ_CLEAR_STATS_COUNTERS_MAXNUM 15
-> > > > +#define       MC_CMD_TSA_STATISTICS_OUT_READ_CLEAR_STATS_COUNTERS_MAXNUM_MCDI2 63
-> > > > +
-> > > > +/* MC_TSA_STATISTICS_ENTRY structuredef */
-> > > > +#define    MC_TSA_STATISTICS_ENTRY_LEN 16
-> > > > +/* Tx statistics counter */
-> > > > +#define       MC_TSA_STATISTICS_ENTRY_TX_STAT_OFST 0
-> > > > +#define       MC_TSA_STATISTICS_ENTRY_TX_STAT_LEN 8
-> > > > +#define       MC_TSA_STATISTICS_ENTRY_TX_STAT_LO_OFST 0
-> > > > +#define       MC_TSA_STATISTICS_ENTRY_TX_STAT_LO_LEN 4
-> > > > +#define       MC_TSA_STATISTICS_ENTRY_TX_STAT_LO_LBN 0
-> > > > +#define       MC_TSA_STATISTICS_ENTRY_TX_STAT_LO_WIDTH 32
-> > > > +#define       MC_TSA_STATISTICS_ENTRY_TX_STAT_HI_OFST 4
-> > > > +#define       MC_TSA_STATISTICS_ENTRY_TX_STAT_HI_LEN 4
-> > > > +#define       MC_TSA_STATISTICS_ENTRY_TX_STAT_HI_LBN 32
-> > > > +#define       MC_TSA_STATISTICS_ENTRY_TX_STAT_HI_WIDTH 32
-> > > > +#define       MC_TSA_STATISTICS_ENTRY_TX_STAT_LBN 0
-> > > > +#define       MC_TSA_STATISTICS_ENTRY_TX_STAT_WIDTH 64
-> > > > +/* Rx statistics counter */
-> > > > +#define       MC_TSA_STATISTICS_ENTRY_RX_STAT_OFST 8
-> > > > +#define       MC_TSA_STATISTICS_ENTRY_RX_STAT_LEN 8
-> > > > +#define       MC_TSA_STATISTICS_ENTRY_RX_STAT_LO_OFST 8
-> > > > +#define       MC_TSA_STATISTICS_ENTRY_RX_STAT_LO_LEN 4
-> > > > +#define       MC_TSA_STATISTICS_ENTRY_RX_STAT_LO_LBN 64
-> > > > +#define       MC_TSA_STATISTICS_ENTRY_RX_STAT_LO_WIDTH 32
-> > > > +#define       MC_TSA_STATISTICS_ENTRY_RX_STAT_HI_OFST 12
-> > > > +#define       MC_TSA_STATISTICS_ENTRY_RX_STAT_HI_LEN 4
-> > > > +#define       MC_TSA_STATISTICS_ENTRY_RX_STAT_HI_LBN 96
-> > > > +#define       MC_TSA_STATISTICS_ENTRY_RX_STAT_HI_WIDTH 32
-> > > > +#define       MC_TSA_STATISTICS_ENTRY_RX_STAT_LBN 64
-> > > > +#define       MC_TSA_STATISTICS_ENTRY_RX_STAT_WIDTH 64
-> > > > +
-> > > > +
-> > > > +/***********************************/
-> > > > +/* MC_CMD_ERASE_INITIAL_NIC_SECRET
-> > > > + * This request causes the NIC to find the initial NIC secret (programmed
-> > > > + * during ATE) in XPM memory and if and only if the NIC has already been
-> > > > + * rekeyed with MC_CMD_REKEY, erase it. This is used by manftest after
-> > > > + * installing TSA binding certificates. See SF-117631-TC.
-> > > > + */
-> > > > +#define MC_CMD_ERASE_INITIAL_NIC_SECRET 0x131
-> > > > +#undef MC_CMD_0x131_PRIVILEGE_CTG
-> > > > +
-> > > > +#define MC_CMD_0x131_PRIVILEGE_CTG SRIOV_CTG_ADMIN_TSA_UNBOUND
-> > > > +
-> > > > +/* MC_CMD_ERASE_INITIAL_NIC_SECRET_IN msgrequest */
-> > > > +#define    MC_CMD_ERASE_INITIAL_NIC_SECRET_IN_LEN 0
-> > > > +
-> > > > +/* MC_CMD_ERASE_INITIAL_NIC_SECRET_OUT msgresponse */
-> > > > +#define    MC_CMD_ERASE_INITIAL_NIC_SECRET_OUT_LEN 0
-> > > > +
-> > > > +
-> > > > +/***********************************/
-> > > > +/* MC_CMD_TSA_CONFIG
-> > > > + * TSA adapter configuration operations. This command is used to prepare the
-> > > > + * NIC for TSA binding.
-> > > > + */
-> > > > +#define MC_CMD_TSA_CONFIG 0x64
-> > > > +#undef MC_CMD_0x64_PRIVILEGE_CTG
-> > > > +
-> > > > +#define MC_CMD_0x64_PRIVILEGE_CTG SRIOV_CTG_ADMIN
-> > > > +
-> > > > +/* MC_CMD_TSA_CONFIG_IN msgrequest */
-> > > > +#define    MC_CMD_TSA_CONFIG_IN_LEN 4
-> > > > +/* TSA configuration sub-operation code */
-> > > > +#define       MC_CMD_TSA_CONFIG_IN_OP_OFST 0
-> > > > +#define       MC_CMD_TSA_CONFIG_IN_OP_LEN 4
-> > > > +/* enum: Append a single item to the tsa_config partition. Items will be
-> > > > + * encrypted unless they are declared as non-sensitive. Returns
-> > > > + * MC_CMD_ERR_EEXIST if the tag is already present.
-> > > > + */
-> > > > +#define          MC_CMD_TSA_CONFIG_OP_APPEND 0x1
-> > > > +/* enum: Reset the tsa_config partition to a clean state. */
-> > > > +#define          MC_CMD_TSA_CONFIG_OP_RESET 0x2
-> > > > +/* enum: Read back a configured item from tsa_config partition. Returns
-> > > > + * MC_CMD_ERR_ENOENT if the item doesn't exist, or MC_CMD_ERR_EPERM if the item
-> > > > + * is declared as sensitive (i.e. is encrypted).
-> > > > + */
-> > > > +#define          MC_CMD_TSA_CONFIG_OP_READ 0x3
-> > > > +
-> > > > +/* MC_CMD_TSA_CONFIG_IN_APPEND msgrequest */
-> > > > +#define    MC_CMD_TSA_CONFIG_IN_APPEND_LENMIN 12
-> > > > +#define    MC_CMD_TSA_CONFIG_IN_APPEND_LENMAX 252
-> > > > +#define    MC_CMD_TSA_CONFIG_IN_APPEND_LENMAX_MCDI2 1020
-> > > > +#define    MC_CMD_TSA_CONFIG_IN_APPEND_LEN(num) (12+1*(num))
-> > > > +#define    MC_CMD_TSA_CONFIG_IN_APPEND_DATA_NUM(len) (((len)-12)/1)
-> > > > +/* TSA configuration sub-operation code. The value shall be
-> > > > + * MC_CMD_TSA_CONFIG_OP_APPEND.
-> > > > + */
-> > > > +#define       MC_CMD_TSA_CONFIG_IN_APPEND_OP_OFST 0
-> > > > +#define       MC_CMD_TSA_CONFIG_IN_APPEND_OP_LEN 4
-> > > > +/* The tag to be appended */
-> > > > +#define       MC_CMD_TSA_CONFIG_IN_APPEND_TAG_OFST 4
-> > > > +#define       MC_CMD_TSA_CONFIG_IN_APPEND_TAG_LEN 4
-> > > > +/* The length of the data in bytes */
-> > > > +#define       MC_CMD_TSA_CONFIG_IN_APPEND_LENGTH_OFST 8
-> > > > +#define       MC_CMD_TSA_CONFIG_IN_APPEND_LENGTH_LEN 4
-> > > > +/* The item data */
-> > > > +#define       MC_CMD_TSA_CONFIG_IN_APPEND_DATA_OFST 12
-> > > > +#define       MC_CMD_TSA_CONFIG_IN_APPEND_DATA_LEN 1
-> > > > +#define       MC_CMD_TSA_CONFIG_IN_APPEND_DATA_MINNUM 0
-> > > > +#define       MC_CMD_TSA_CONFIG_IN_APPEND_DATA_MAXNUM 240
-> > > > +#define       MC_CMD_TSA_CONFIG_IN_APPEND_DATA_MAXNUM_MCDI2 1008
-> > > > +
-> > > > +/* MC_CMD_TSA_CONFIG_OUT_APPEND msgresponse */
-> > > > +#define    MC_CMD_TSA_CONFIG_OUT_APPEND_LEN 0
-> > > > +
-> > > > +/* MC_CMD_TSA_CONFIG_IN_RESET msgrequest */
-> > > > +#define    MC_CMD_TSA_CONFIG_IN_RESET_LEN 4
-> > > > +/* TSA configuration sub-operation code. The value shall be
-> > > > + * MC_CMD_TSA_CONFIG_OP_RESET.
-> > > > + */
-> > > > +#define       MC_CMD_TSA_CONFIG_IN_RESET_OP_OFST 0
-> > > > +#define       MC_CMD_TSA_CONFIG_IN_RESET_OP_LEN 4
-> > > > +
-> > > > +/* MC_CMD_TSA_CONFIG_OUT_RESET msgresponse */
-> > > > +#define    MC_CMD_TSA_CONFIG_OUT_RESET_LEN 0
-> > > > +
-> > > > +/* MC_CMD_TSA_CONFIG_IN_READ msgrequest */
-> > > > +#define    MC_CMD_TSA_CONFIG_IN_READ_LEN 8
-> > > > +/* TSA configuration sub-operation code. The value shall be
-> > > > + * MC_CMD_TSA_CONFIG_OP_READ.
-> > > > + */
-> > > > +#define       MC_CMD_TSA_CONFIG_IN_READ_OP_OFST 0
-> > > > +#define       MC_CMD_TSA_CONFIG_IN_READ_OP_LEN 4
-> > > > +/* The tag to be read */
-> > > > +#define       MC_CMD_TSA_CONFIG_IN_READ_TAG_OFST 4
-> > > > +#define       MC_CMD_TSA_CONFIG_IN_READ_TAG_LEN 4
-> > > > +
-> > > > +/* MC_CMD_TSA_CONFIG_OUT_READ msgresponse */
-> > > > +#define    MC_CMD_TSA_CONFIG_OUT_READ_LENMIN 8
-> > > > +#define    MC_CMD_TSA_CONFIG_OUT_READ_LENMAX 252
-> > > > +#define    MC_CMD_TSA_CONFIG_OUT_READ_LENMAX_MCDI2 1020
-> > > > +#define    MC_CMD_TSA_CONFIG_OUT_READ_LEN(num) (8+1*(num))
-> > > > +#define    MC_CMD_TSA_CONFIG_OUT_READ_DATA_NUM(len) (((len)-8)/1)
-> > > > +/* The tag that was read */
-> > > > +#define       MC_CMD_TSA_CONFIG_OUT_READ_TAG_OFST 0
-> > > > +#define       MC_CMD_TSA_CONFIG_OUT_READ_TAG_LEN 4
-> > > > +/* The length of the data in bytes */
-> > > > +#define       MC_CMD_TSA_CONFIG_OUT_READ_LENGTH_OFST 4
-> > > > +#define       MC_CMD_TSA_CONFIG_OUT_READ_LENGTH_LEN 4
-> > > > +/* The data of the item. */
-> > > > +#define       MC_CMD_TSA_CONFIG_OUT_READ_DATA_OFST 8
-> > > > +#define       MC_CMD_TSA_CONFIG_OUT_READ_DATA_LEN 1
-> > > > +#define       MC_CMD_TSA_CONFIG_OUT_READ_DATA_MINNUM 0
-> > > > +#define       MC_CMD_TSA_CONFIG_OUT_READ_DATA_MAXNUM 244
-> > > > +#define       MC_CMD_TSA_CONFIG_OUT_READ_DATA_MAXNUM_MCDI2 1012
-> > > > +
-> > > > +/* MC_TSA_IPV4_ITEM structuredef */
-> > > > +#define    MC_TSA_IPV4_ITEM_LEN 8
-> > > > +/* Additional metadata describing the IP address information such as the
-> > > > + * physical port number the address is being used on. Unused space in this
-> > > > + * field is reserved for future expansion.
-> > > > + */
-> > > > +#define       MC_TSA_IPV4_ITEM_IPV4_ADDR_META_OFST 0
-> > > > +#define       MC_TSA_IPV4_ITEM_IPV4_ADDR_META_LEN 4
-> > > > +#define        MC_TSA_IPV4_ITEM_PORT_IDX_OFST 0
-> > > > +#define        MC_TSA_IPV4_ITEM_PORT_IDX_LBN 0
-> > > > +#define        MC_TSA_IPV4_ITEM_PORT_IDX_WIDTH 8
-> > > > +#define       MC_TSA_IPV4_ITEM_IPV4_ADDR_META_LBN 0
-> > > > +#define       MC_TSA_IPV4_ITEM_IPV4_ADDR_META_WIDTH 32
-> > > > +/* The IPv4 address in little endian byte order. */
-> > > > +#define       MC_TSA_IPV4_ITEM_IPV4_ADDR_OFST 4
-> > > > +#define       MC_TSA_IPV4_ITEM_IPV4_ADDR_LEN 4
-> > > > +#define       MC_TSA_IPV4_ITEM_IPV4_ADDR_LBN 32
-> > > > +#define       MC_TSA_IPV4_ITEM_IPV4_ADDR_WIDTH 32
-> > > > +
-> > > > +
-> > > > +/***********************************/
-> > > > +/* MC_CMD_TSA_IPADDR
-> > > > + * TSA operations relating to the monitoring and expiry of local IP addresses
-> > > > + * discovered by the controller. These commands are sent from a TSA controller
-> > > > + * to a TSA adapter.
-> > > > + */
-> > > > +#define MC_CMD_TSA_IPADDR 0x65
-> > > > +#undef MC_CMD_0x65_PRIVILEGE_CTG
-> > > > +
-> > > > +#define MC_CMD_0x65_PRIVILEGE_CTG SRIOV_CTG_ADMIN_TSA_UNBOUND
-> > > > +
-> > > > +/* MC_CMD_TSA_IPADDR_IN msgrequest */
-> > > > +#define    MC_CMD_TSA_IPADDR_IN_LEN 4
-> > > > +/* Header containing information to identify which sub-operation of this
-> > > > + * command to perform. The header contains a 16-bit op-code. Unused space in
-> > > > + * this field is reserved for future expansion.
-> > > > + */
-> > > > +#define       MC_CMD_TSA_IPADDR_IN_OP_HDR_OFST 0
-> > > > +#define       MC_CMD_TSA_IPADDR_IN_OP_HDR_LEN 4
-> > > > +#define        MC_CMD_TSA_IPADDR_IN_OP_OFST 0
-> > > > +#define        MC_CMD_TSA_IPADDR_IN_OP_LBN 0
-> > > > +#define        MC_CMD_TSA_IPADDR_IN_OP_WIDTH 16
-> > > > +/* enum: Request that the adapter verifies that the IPv4 addresses supplied are
-> > > > + * still in use by the host by sending ARP probes to the host. The MC does not
-> > > > + * wait for a response to the probes and sends an MCDI response to the
-> > > > + * controller once the probes have been sent to the host. The response to the
-> > > > + * probes (if there are any) will be forwarded to the controller using
-> > > > + * MC_CMD_TSA_INFO alerts.
-> > > > + */
-> > > > +#define          MC_CMD_TSA_IPADDR_OP_VALIDATE_IPV4 0x1
-> > > > +/* enum: Notify the adapter that one or more IPv4 addresses are no longer valid
-> > > > + * for the host of the adapter. The adapter should remove the IPv4 addresses
-> > > > + * from its local cache.
-> > > > + */
-> > > > +#define          MC_CMD_TSA_IPADDR_OP_REMOVE_IPV4 0x2
-> > > > +
-> > > > +/* MC_CMD_TSA_IPADDR_IN_VALIDATE_IPV4 msgrequest */
-> > > > +#define    MC_CMD_TSA_IPADDR_IN_VALIDATE_IPV4_LENMIN 16
-> > > > +#define    MC_CMD_TSA_IPADDR_IN_VALIDATE_IPV4_LENMAX 248
-> > > > +#define    MC_CMD_TSA_IPADDR_IN_VALIDATE_IPV4_LENMAX_MCDI2 1016
-> > > > +#define    MC_CMD_TSA_IPADDR_IN_VALIDATE_IPV4_LEN(num) (8+8*(num))
-> > > > +#define    MC_CMD_TSA_IPADDR_IN_VALIDATE_IPV4_IPV4_ITEM_NUM(len) (((len)-8)/8)
-> > > > +/* Header containing information to identify which sub-operation of this
-> > > > + * command to perform. The header contains a 16-bit op-code. Unused space in
-> > > > + * this field is reserved for future expansion.
-> > > > + */
-> > > > +#define       MC_CMD_TSA_IPADDR_IN_VALIDATE_IPV4_OP_HDR_OFST 0
-> > > > +#define       MC_CMD_TSA_IPADDR_IN_VALIDATE_IPV4_OP_HDR_LEN 4
-> > > > +#define        MC_CMD_TSA_IPADDR_IN_VALIDATE_IPV4_OP_OFST 0
-> > > > +#define        MC_CMD_TSA_IPADDR_IN_VALIDATE_IPV4_OP_LBN 0
-> > > > +#define        MC_CMD_TSA_IPADDR_IN_VALIDATE_IPV4_OP_WIDTH 16
-> > > > +/* Number of IPv4 addresses to validate. */
-> > > > +#define       MC_CMD_TSA_IPADDR_IN_VALIDATE_IPV4_NUM_ITEMS_OFST 4
-> > > > +#define       MC_CMD_TSA_IPADDR_IN_VALIDATE_IPV4_NUM_ITEMS_LEN 4
-> > > > +/* The IPv4 addresses to validate, in struct MC_TSA_IPV4_ITEM format. */
-> > > > +#define       MC_CMD_TSA_IPADDR_IN_VALIDATE_IPV4_IPV4_ITEM_OFST 8
-> > > > +#define       MC_CMD_TSA_IPADDR_IN_VALIDATE_IPV4_IPV4_ITEM_LEN 8
-> > > > +#define       MC_CMD_TSA_IPADDR_IN_VALIDATE_IPV4_IPV4_ITEM_LO_OFST 8
-> > > > +#define       MC_CMD_TSA_IPADDR_IN_VALIDATE_IPV4_IPV4_ITEM_LO_LEN 4
-> > > > +#define       MC_CMD_TSA_IPADDR_IN_VALIDATE_IPV4_IPV4_ITEM_LO_LBN 64
-> > > > +#define       MC_CMD_TSA_IPADDR_IN_VALIDATE_IPV4_IPV4_ITEM_LO_WIDTH 32
-> > > > +#define       MC_CMD_TSA_IPADDR_IN_VALIDATE_IPV4_IPV4_ITEM_HI_OFST 12
-> > > > +#define       MC_CMD_TSA_IPADDR_IN_VALIDATE_IPV4_IPV4_ITEM_HI_LEN 4
-> > > > +#define       MC_CMD_TSA_IPADDR_IN_VALIDATE_IPV4_IPV4_ITEM_HI_LBN 96
-> > > > +#define       MC_CMD_TSA_IPADDR_IN_VALIDATE_IPV4_IPV4_ITEM_HI_WIDTH 32
-> > > > +#define       MC_CMD_TSA_IPADDR_IN_VALIDATE_IPV4_IPV4_ITEM_MINNUM 1
-> > > > +#define       MC_CMD_TSA_IPADDR_IN_VALIDATE_IPV4_IPV4_ITEM_MAXNUM 30
-> > > > +#define       MC_CMD_TSA_IPADDR_IN_VALIDATE_IPV4_IPV4_ITEM_MAXNUM_MCDI2 126
-> > > > +
-> > > > +/* MC_CMD_TSA_IPADDR_OUT_VALIDATE_IPV4 msgresponse */
-> > > > +#define    MC_CMD_TSA_IPADDR_OUT_VALIDATE_IPV4_LEN 0
-> > > > +
-> > > > +/* MC_CMD_TSA_IPADDR_IN_REMOVE_IPV4 msgrequest */
-> > > > +#define    MC_CMD_TSA_IPADDR_IN_REMOVE_IPV4_LENMIN 16
-> > > > +#define    MC_CMD_TSA_IPADDR_IN_REMOVE_IPV4_LENMAX 248
-> > > > +#define    MC_CMD_TSA_IPADDR_IN_REMOVE_IPV4_LENMAX_MCDI2 1016
-> > > > +#define    MC_CMD_TSA_IPADDR_IN_REMOVE_IPV4_LEN(num) (8+8*(num))
-> > > > +#define    MC_CMD_TSA_IPADDR_IN_REMOVE_IPV4_IPV4_ITEM_NUM(len) (((len)-8)/8)
-> > > > +/* Header containing information to identify which sub-operation of this
-> > > > + * command to perform. The header contains a 16-bit op-code. Unused space in
-> > > > + * this field is reserved for future expansion.
-> > > > + */
-> > > > +#define       MC_CMD_TSA_IPADDR_IN_REMOVE_IPV4_OP_HDR_OFST 0
-> > > > +#define       MC_CMD_TSA_IPADDR_IN_REMOVE_IPV4_OP_HDR_LEN 4
-> > > > +#define        MC_CMD_TSA_IPADDR_IN_REMOVE_IPV4_OP_OFST 0
-> > > > +#define        MC_CMD_TSA_IPADDR_IN_REMOVE_IPV4_OP_LBN 0
-> > > > +#define        MC_CMD_TSA_IPADDR_IN_REMOVE_IPV4_OP_WIDTH 16
-> > > > +/* Number of IPv4 addresses to remove. */
-> > > > +#define       MC_CMD_TSA_IPADDR_IN_REMOVE_IPV4_NUM_ITEMS_OFST 4
-> > > > +#define       MC_CMD_TSA_IPADDR_IN_REMOVE_IPV4_NUM_ITEMS_LEN 4
-> > > > +/* The IPv4 addresses that have expired, in struct MC_TSA_IPV4_ITEM format. */
-> > > > +#define       MC_CMD_TSA_IPADDR_IN_REMOVE_IPV4_IPV4_ITEM_OFST 8
-> > > > +#define       MC_CMD_TSA_IPADDR_IN_REMOVE_IPV4_IPV4_ITEM_LEN 8
-> > > > +#define       MC_CMD_TSA_IPADDR_IN_REMOVE_IPV4_IPV4_ITEM_LO_OFST 8
-> > > > +#define       MC_CMD_TSA_IPADDR_IN_REMOVE_IPV4_IPV4_ITEM_LO_LEN 4
-> > > > +#define       MC_CMD_TSA_IPADDR_IN_REMOVE_IPV4_IPV4_ITEM_LO_LBN 64
-> > > > +#define       MC_CMD_TSA_IPADDR_IN_REMOVE_IPV4_IPV4_ITEM_LO_WIDTH 32
-> > > > +#define       MC_CMD_TSA_IPADDR_IN_REMOVE_IPV4_IPV4_ITEM_HI_OFST 12
-> > > > +#define       MC_CMD_TSA_IPADDR_IN_REMOVE_IPV4_IPV4_ITEM_HI_LEN 4
-> > > > +#define       MC_CMD_TSA_IPADDR_IN_REMOVE_IPV4_IPV4_ITEM_HI_LBN 96
-> > > > +#define       MC_CMD_TSA_IPADDR_IN_REMOVE_IPV4_IPV4_ITEM_HI_WIDTH 32
-> > > > +#define       MC_CMD_TSA_IPADDR_IN_REMOVE_IPV4_IPV4_ITEM_MINNUM 1
-> > > > +#define       MC_CMD_TSA_IPADDR_IN_REMOVE_IPV4_IPV4_ITEM_MAXNUM 30
-> > > > +#define       MC_CMD_TSA_IPADDR_IN_REMOVE_IPV4_IPV4_ITEM_MAXNUM_MCDI2 126
-> > > > +
-> > > > +/* MC_CMD_TSA_IPADDR_OUT_REMOVE_IPV4 msgresponse */
-> > > > +#define    MC_CMD_TSA_IPADDR_OUT_REMOVE_IPV4_LEN 0
-> > > > +
-> > > > +
-> > > > +/***********************************/
-> > > > +/* MC_CMD_SECURE_NIC_INFO
-> > > > + * Get secure NIC information. While many of the features reported by these
-> > > > + * commands are related to TSA, they must be supported in firmware where TSA is
-> > > > + * disabled.
-> > > > + */
-> > > > +#define MC_CMD_SECURE_NIC_INFO 0x132
-> > > > +#undef MC_CMD_0x132_PRIVILEGE_CTG
-> > > > +
-> > > > +#define MC_CMD_0x132_PRIVILEGE_CTG SRIOV_CTG_GENERAL
-> > > > +
-> > > > +/* MC_CMD_SECURE_NIC_INFO_IN msgrequest */
-> > > > +#define    MC_CMD_SECURE_NIC_INFO_IN_LEN 4
-> > > > +/* sub-operation code info */
-> > > > +#define       MC_CMD_SECURE_NIC_INFO_IN_OP_HDR_OFST 0
-> > > > +#define       MC_CMD_SECURE_NIC_INFO_IN_OP_HDR_LEN 4
-> > > > +#define        MC_CMD_SECURE_NIC_INFO_IN_OP_OFST 0
-> > > > +#define        MC_CMD_SECURE_NIC_INFO_IN_OP_LBN 0
-> > > > +#define        MC_CMD_SECURE_NIC_INFO_IN_OP_WIDTH 16
-> > > > +/* enum: Get the status of various security settings, all signed along with a
-> > > > + * challenge chosen by the host.
-> > > > + */
-> > > > +#define          MC_CMD_SECURE_NIC_INFO_OP_STATUS 0x0
-> > > > +
-> > > > +/* MC_CMD_SECURE_NIC_INFO_IN_STATUS msgrequest */
-> > > > +#define    MC_CMD_SECURE_NIC_INFO_IN_STATUS_LEN 24
-> > > > +/* sub-operation code, must be MC_CMD_SECURE_NIC_INFO_OP_STATUS */
-> > > > +#define       MC_CMD_SECURE_NIC_INFO_IN_STATUS_OP_HDR_OFST 0
-> > > > +#define       MC_CMD_SECURE_NIC_INFO_IN_STATUS_OP_HDR_LEN 4
-> > > > +/* Type of key to be used to sign response. */
-> > > > +#define       MC_CMD_SECURE_NIC_INFO_IN_STATUS_KEY_TYPE_OFST 4
-> > > > +#define       MC_CMD_SECURE_NIC_INFO_IN_STATUS_KEY_TYPE_LEN 4
-> > > > +#define          MC_CMD_SECURE_NIC_INFO_IN_STATUS_UNUSED 0x0 /* enum */
-> > > > +/* enum: Solarflare adapter authentication key, installed by Manftest. */
-> > > > +#define          MC_CMD_SECURE_NIC_INFO_IN_STATUS_SF_ADAPTER_AUTH 0x1
-> > > > +/* enum: TSA binding key, installed after adapter is bound to a TSA controller.
-> > > > + * This is not supported in firmware which does not support TSA.
-> > > > + */
-> > > > +#define          MC_CMD_SECURE_NIC_INFO_IN_STATUS_TSA_BINDING 0x2
-> > > > +/* enum: Customer adapter authentication key. Installed by the customer in the
-> > > > + * field, but otherwise similar to the Solarflare adapter authentication key.
-> > > > + */
-> > > > +#define          MC_CMD_SECURE_NIC_INFO_IN_STATUS_CUSTOMER_ADAPTER_AUTH 0x3
-> > > > +/* Random challenge generated by the host. */
-> > > > +#define       MC_CMD_SECURE_NIC_INFO_IN_STATUS_CHALLENGE_OFST 8
-> > > > +#define       MC_CMD_SECURE_NIC_INFO_IN_STATUS_CHALLENGE_LEN 16
-> > > > +
-> > > > +/* MC_CMD_SECURE_NIC_INFO_OUT_STATUS msgresponse */
-> > > > +#define    MC_CMD_SECURE_NIC_INFO_OUT_STATUS_LEN 420
-> > > > +/* Length of the signature in MSG_SIGNATURE. */
-> > > > +#define       MC_CMD_SECURE_NIC_INFO_OUT_STATUS_MSG_SIGNATURE_LEN_OFST 0
-> > > > +#define       MC_CMD_SECURE_NIC_INFO_OUT_STATUS_MSG_SIGNATURE_LEN_LEN 4
-> > > > +/* Signature over the message, starting at MESSAGE_TYPE and continuing to the
-> > > > + * end of the MCDI response, allowing the message format to be extended. The
-> > > > + * signature uses ECDSA 384 encoding in ASN.1 format. It has variable length,
-> > > > + * with a maximum of 384 bytes.
-> > > > + */
-> > > > +#define       MC_CMD_SECURE_NIC_INFO_OUT_STATUS_MSG_SIGNATURE_OFST 4
-> > > > +#define       MC_CMD_SECURE_NIC_INFO_OUT_STATUS_MSG_SIGNATURE_LEN 384
-> > > > +/* Enum value indicating the type of response. This protects against chosen
-> > > > + * message attacks. The enum values are random rather than sequential to make
-> > > > + * it unlikely that values will be reused should other commands in a different
-> > > > + * namespace need to create signed messages.
-> > > > + */
-> > > > +#define       MC_CMD_SECURE_NIC_INFO_OUT_STATUS_MESSAGE_TYPE_OFST 388
-> > > > +#define       MC_CMD_SECURE_NIC_INFO_OUT_STATUS_MESSAGE_TYPE_LEN 4
-> > > > +/* enum: Message type value for the response to a
-> > > > + * MC_CMD_SECURE_NIC_INFO_IN_STATUS message.
-> > > > + */
-> > > > +#define          MC_CMD_SECURE_NIC_INFO_STATUS 0xdb4
-> > > > +/* The challenge provided by the host in the MC_CMD_SECURE_NIC_INFO_IN_STATUS
-> > > > + * message
-> > > > + */
-> > > > +#define       MC_CMD_SECURE_NIC_INFO_OUT_STATUS_CHALLENGE_OFST 392
-> > > > +#define       MC_CMD_SECURE_NIC_INFO_OUT_STATUS_CHALLENGE_LEN 16
-> > > > +/* The first 32 bits of XPM memory, which include security and flag bits, die
-> > > > + * ID and chip ID revision. The meaning of these bits is defined in
-> > > > + * mc/include/mc/xpm.h in the firmwaresrc repository.
-> > > > + */
-> > > > +#define       MC_CMD_SECURE_NIC_INFO_OUT_STATUS_XPM_STATUS_BITS_OFST 408
-> > > > +#define       MC_CMD_SECURE_NIC_INFO_OUT_STATUS_XPM_STATUS_BITS_LEN 4
-> > > > +#define       MC_CMD_SECURE_NIC_INFO_OUT_STATUS_FIRMWARE_VERSION_A_OFST 412
-> > > > +#define       MC_CMD_SECURE_NIC_INFO_OUT_STATUS_FIRMWARE_VERSION_A_LEN 2
-> > > > +#define       MC_CMD_SECURE_NIC_INFO_OUT_STATUS_FIRMWARE_VERSION_B_OFST 414
-> > > > +#define       MC_CMD_SECURE_NIC_INFO_OUT_STATUS_FIRMWARE_VERSION_B_LEN 2
-> > > > +#define       MC_CMD_SECURE_NIC_INFO_OUT_STATUS_FIRMWARE_VERSION_C_OFST 416
-> > > > +#define       MC_CMD_SECURE_NIC_INFO_OUT_STATUS_FIRMWARE_VERSION_C_LEN 2
-> > > > +#define       MC_CMD_SECURE_NIC_INFO_OUT_STATUS_FIRMWARE_VERSION_D_OFST 418
-> > > > +#define       MC_CMD_SECURE_NIC_INFO_OUT_STATUS_FIRMWARE_VERSION_D_LEN 2
-> > > > +
-> > > > +
-> > > > +/***********************************/
-> > > > +/* MC_CMD_TSA_TEST
-> > > > + * A simple ping-pong command just to test the adapter<>controller MCDI
-> > > > + * communication channel. This command makes not changes to the TSA adapter's
-> > > > + * internal state. It is used by the controller just to verify that the MCDI
-> > > > + * communication channel is working fine. This command takes no additonal
-> > > > + * parameters in request or response.
-> > > > + */
-> > > > +#define MC_CMD_TSA_TEST 0x125
-> > > > +#undef MC_CMD_0x125_PRIVILEGE_CTG
-> > > > +
-> > > > +#define MC_CMD_0x125_PRIVILEGE_CTG SRIOV_CTG_ADMIN_TSA_UNBOUND
-> > > > +
-> > > > +/* MC_CMD_TSA_TEST_IN msgrequest */
-> > > > +#define    MC_CMD_TSA_TEST_IN_LEN 0
-> > > > +
-> > > > +/* MC_CMD_TSA_TEST_OUT msgresponse */
-> > > > +#define    MC_CMD_TSA_TEST_OUT_LEN 0
-> > > > +
-> > > > +
-> > > > +/***********************************/
-> > > > +/* MC_CMD_TSA_RULESET_OVERRIDE
-> > > > + * Override TSA ruleset that is currently active on the adapter. This operation
-> > > > + * does not modify the ruleset itself. This operation provides a mechanism to
-> > > > + * apply an allow-all or deny-all operation on all packets, thereby completely
-> > > > + * ignoring the rule-set configured on the adapter. The main purpose of this
-> > > > + * operation is to provide a deterministic state to the TSA firewall during
-> > > > + * rule-set transitions.
-> > > > + */
-> > > > +#define MC_CMD_TSA_RULESET_OVERRIDE 0x12a
-> > > > +#undef MC_CMD_0x12a_PRIVILEGE_CTG
-> > > > +
-> > > > +#define MC_CMD_0x12a_PRIVILEGE_CTG SRIOV_CTG_ADMIN_TSA_UNBOUND
-> > > > +
-> > > > +/* MC_CMD_TSA_RULESET_OVERRIDE_IN msgrequest */
-> > > > +#define    MC_CMD_TSA_RULESET_OVERRIDE_IN_LEN 4
-> > > > +/* The override state to apply. */
-> > > > +#define       MC_CMD_TSA_RULESET_OVERRIDE_IN_STATE_OFST 0
-> > > > +#define       MC_CMD_TSA_RULESET_OVERRIDE_IN_STATE_LEN 4
-> > > > +/* enum: No override in place - the existing ruleset is in operation. */
-> > > > +#define          MC_CMD_TSA_RULESET_OVERRIDE_NONE 0x0
-> > > > +/* enum: Block all packets seen on all datapath channel except those packets
-> > > > + * required for basic configuration of the TSA NIC such as ARPs and TSA-
-> > > > + * communication traffic. Such exceptional traffic is handled differently
-> > > > + * compared to TSA rulesets.
-> > > > + */
-> > > > +#define          MC_CMD_TSA_RULESET_OVERRIDE_BLOCK 0x1
-> > > > +/* enum: Allow all packets through all datapath channel. The TSA adapter
-> > > > + * behaves like a normal NIC without any firewalls.
-> > > > + */
-> > > > +#define          MC_CMD_TSA_RULESET_OVERRIDE_ALLOW 0x2
-> > > > +
-> > > > +/* MC_CMD_TSA_RULESET_OVERRIDE_OUT msgresponse */
-> > > > +#define    MC_CMD_TSA_RULESET_OVERRIDE_OUT_LEN 0
-> > > > +
-> > > > +
-> > > > +/***********************************/
-> > > > +/* MC_CMD_TSAC_REQUEST
-> > > > + * Generic command to send requests from a TSA controller to a TSA adapter.
-> > > > + * Specific usage is determined by the TYPE field.
-> > > > + */
-> > > > +#define MC_CMD_TSAC_REQUEST 0x12b
-> > > > +#undef MC_CMD_0x12b_PRIVILEGE_CTG
-> > > > +
-> > > > +#define MC_CMD_0x12b_PRIVILEGE_CTG SRIOV_CTG_ADMIN_TSA_UNBOUND
-> > > > +
-> > > > +/* MC_CMD_TSAC_REQUEST_IN msgrequest */
-> > > > +#define    MC_CMD_TSAC_REQUEST_IN_LEN 4
-> > > > +/* The type of request from the controller. */
-> > > > +#define       MC_CMD_TSAC_REQUEST_IN_TYPE_OFST 0
-> > > > +#define       MC_CMD_TSAC_REQUEST_IN_TYPE_LEN 4
-> > > > +/* enum: Request the adapter to resend localIP information from it's cache. The
-> > > > + * command does not return any IP address information; IP addresses are sent as
-> > > > + * TSA notifications as descibed in MC_CMD_TSA_INFO_IN_LOCAL_IP.
-> > > > + */
-> > > > +#define          MC_CMD_TSAC_REQUEST_LOCALIP 0x0
-> > > > +
-> > > > +/* MC_CMD_TSAC_REQUEST_OUT msgresponse */
-> > > > +#define    MC_CMD_TSAC_REQUEST_OUT_LEN 0
-> > > > +
-> > > > +
-> > > >    /***********************************/
-> > > >    /* MC_CMD_SUC_VERSION
-> > > >     * Get the version of the SUC
-> > > > @@ -23477,6 +26408,580 @@
-> > > >    #define       MC_CMD_SUC_BOOT_VERSION_OUT_VERSION_LEN 4
-> > > > 
-> > > > 
-> > > > +/***********************************/
-> > > > +/* MC_CMD_SUC_MANFTEST
-> > > > + * Operations to support manftest on SUC based systems.
-> > > > + */
-> > > > +#define MC_CMD_SUC_MANFTEST 0x135
-> > > > +#undef MC_CMD_0x135_PRIVILEGE_CTG
-> > > > +
-> > > > +#define MC_CMD_0x135_PRIVILEGE_CTG SRIOV_CTG_ADMIN_TSA_UNBOUND
-> > > > +
-> > > > +/* MC_CMD_SUC_MANFTEST_IN msgrequest */
-> > > > +#define    MC_CMD_SUC_MANFTEST_IN_LEN 4
-> > > > +/* The manftest operation to be performed. */
-> > > > +#define       MC_CMD_SUC_MANFTEST_IN_OP_OFST 0
-> > > > +#define       MC_CMD_SUC_MANFTEST_IN_OP_LEN 4
-> > > > +/* enum: Read serial number and use count. */
-> > > > +#define          MC_CMD_SUC_MANFTEST_WEAROUT_READ 0x0
-> > > > +/* enum: Update use count on wearout adapter. */
-> > > > +#define          MC_CMD_SUC_MANFTEST_WEAROUT_UPDATE 0x1
-> > > > +/* enum: Start an ADC calibration. */
-> > > > +#define          MC_CMD_SUC_MANFTEST_ADC_CALIBRATE_START 0x2
-> > > > +/* enum: Read the status of an ADC calibration. */
-> > > > +#define          MC_CMD_SUC_MANFTEST_ADC_CALIBRATE_STATUS 0x3
-> > > > +/* enum: Read the results of an ADC calibration. */
-> > > > +#define          MC_CMD_SUC_MANFTEST_ADC_CALIBRATE_RESULT 0x4
-> > > > +/* enum: Read the PCIe configuration. */
-> > > > +#define          MC_CMD_SUC_MANFTEST_CONFIG_PCIE_READ 0x5
-> > > > +/* enum: Write the PCIe configuration. */
-> > > > +#define          MC_CMD_SUC_MANFTEST_CONFIG_PCIE_WRITE 0x6
-> > > > +/* enum: Write FRU information to SUC. The FRU information is taken from the
-> > > > + * FRU_INFORMATION partition. Attempts to write to read-only FRUs are rejected.
-> > > > + */
-> > > > +#define          MC_CMD_SUC_MANFTEST_FRU_WRITE 0x7
-> > > > +/* enum: Read UDID Vendor Specific ID from SUC persistent storage. */
-> > > > +#define          MC_CMD_SUC_MANFTEST_SMBUS_ID_READ 0x8
-> > > > +/* enum: Write UDID Vendor Specific ID to SUC persistent storage for use in
-> > > > + * SMBus ARP.
-> > > > + */
-> > > > +#define          MC_CMD_SUC_MANFTEST_SMBUS_ID_WRITE 0x9
-> > > > +
-> > > > +/* MC_CMD_SUC_MANFTEST_OUT msgresponse */
-> > > > +#define    MC_CMD_SUC_MANFTEST_OUT_LEN 0
-> > > > +
-> > > > +/* MC_CMD_SUC_MANFTEST_WEAROUT_READ_IN msgrequest */
-> > > > +#define    MC_CMD_SUC_MANFTEST_WEAROUT_READ_IN_LEN 4
-> > > > +/* The manftest operation to be performed. This must be
-> > > > + * MC_CMD_SUC_MANFTEST_WEAROUT_READ.
-> > > > + */
-> > > > +#define       MC_CMD_SUC_MANFTEST_WEAROUT_READ_IN_OP_OFST 0
-> > > > +#define       MC_CMD_SUC_MANFTEST_WEAROUT_READ_IN_OP_LEN 4
-> > > > +
-> > > > +/* MC_CMD_SUC_MANFTEST_WEAROUT_READ_OUT msgresponse */
-> > > > +#define    MC_CMD_SUC_MANFTEST_WEAROUT_READ_OUT_LEN 20
-> > > > +/* The serial number of the wearout adapter, see SF-112717-PR for format. */
-> > > > +#define       MC_CMD_SUC_MANFTEST_WEAROUT_READ_OUT_SERIAL_NUMBER_OFST 0
-> > > > +#define       MC_CMD_SUC_MANFTEST_WEAROUT_READ_OUT_SERIAL_NUMBER_LEN 16
-> > > > +/* The use count of the wearout adapter. */
-> > > > +#define       MC_CMD_SUC_MANFTEST_WEAROUT_READ_OUT_USE_COUNT_OFST 16
-> > > > +#define       MC_CMD_SUC_MANFTEST_WEAROUT_READ_OUT_USE_COUNT_LEN 4
-> > > > +
-> > > > +/* MC_CMD_SUC_MANFTEST_WEAROUT_UPDATE_IN msgrequest */
-> > > > +#define    MC_CMD_SUC_MANFTEST_WEAROUT_UPDATE_IN_LEN 4
-> > > > +/* The manftest operation to be performed. This must be
-> > > > + * MC_CMD_SUC_MANFTEST_WEAROUT_UPDATE.
-> > > > + */
-> > > > +#define       MC_CMD_SUC_MANFTEST_WEAROUT_UPDATE_IN_OP_OFST 0
-> > > > +#define       MC_CMD_SUC_MANFTEST_WEAROUT_UPDATE_IN_OP_LEN 4
-> > > > +
-> > > > +/* MC_CMD_SUC_MANFTEST_WEAROUT_UPDATE_OUT msgresponse */
-> > > > +#define    MC_CMD_SUC_MANFTEST_WEAROUT_UPDATE_OUT_LEN 0
-> > > > +
-> > > > +/* MC_CMD_SUC_MANFTEST_ADC_CALIBRATE_START_IN msgrequest */
-> > > > +#define    MC_CMD_SUC_MANFTEST_ADC_CALIBRATE_START_IN_LEN 4
-> > > > +/* The manftest operation to be performed. This must be
-> > > > + * MC_CMD_SUC_MANFTEST_ADC_CALIBRATE_START.
-> > > > + */
-> > > > +#define       MC_CMD_SUC_MANFTEST_ADC_CALIBRATE_START_IN_OP_OFST 0
-> > > > +#define       MC_CMD_SUC_MANFTEST_ADC_CALIBRATE_START_IN_OP_LEN 4
-> > > > +
-> > > > +/* MC_CMD_SUC_MANFTEST_ADC_CALIBRATE_START_OUT msgresponse */
-> > > > +#define    MC_CMD_SUC_MANFTEST_ADC_CALIBRATE_START_OUT_LEN 0
-> > > > +
-> > > > +/* MC_CMD_SUC_MANFTEST_ADC_CALIBRATE_STATUS_IN msgrequest */
-> > > > +#define    MC_CMD_SUC_MANFTEST_ADC_CALIBRATE_STATUS_IN_LEN 4
-> > > > +/* The manftest operation to be performed. This must be
-> > > > + * MC_CMD_SUC_MANFTEST_ADC_CALIBRATE_STATUS.
-> > > > + */
-> > > > +#define       MC_CMD_SUC_MANFTEST_ADC_CALIBRATE_STATUS_IN_OP_OFST 0
-> > > > +#define       MC_CMD_SUC_MANFTEST_ADC_CALIBRATE_STATUS_IN_OP_LEN 4
-> > > > +
-> > > > +/* MC_CMD_SUC_MANFTEST_ADC_CALIBRATE_STATUS_OUT msgresponse */
-> > > > +#define    MC_CMD_SUC_MANFTEST_ADC_CALIBRATE_STATUS_OUT_LEN 4
-> > > > +/* The combined status of the calibration operation. */
-> > > > +#define       MC_CMD_SUC_MANFTEST_ADC_CALIBRATE_STATUS_OUT_FLAGS_OFST 0
-> > > > +#define       MC_CMD_SUC_MANFTEST_ADC_CALIBRATE_STATUS_OUT_FLAGS_LEN 4
-> > > > +#define        MC_CMD_SUC_MANFTEST_ADC_CALIBRATE_STATUS_OUT_CALIBRATING_OFST 0
-> > > > +#define        MC_CMD_SUC_MANFTEST_ADC_CALIBRATE_STATUS_OUT_CALIBRATING_LBN 0
-> > > > +#define        MC_CMD_SUC_MANFTEST_ADC_CALIBRATE_STATUS_OUT_CALIBRATING_WIDTH 1
-> > > > +#define        MC_CMD_SUC_MANFTEST_ADC_CALIBRATE_STATUS_OUT_FAILED_OFST 0
-> > > > +#define        MC_CMD_SUC_MANFTEST_ADC_CALIBRATE_STATUS_OUT_FAILED_LBN 1
-> > > > +#define        MC_CMD_SUC_MANFTEST_ADC_CALIBRATE_STATUS_OUT_FAILED_WIDTH 1
-> > > > +#define        MC_CMD_SUC_MANFTEST_ADC_CALIBRATE_STATUS_OUT_RESULT_OFST 0
-> > > > +#define        MC_CMD_SUC_MANFTEST_ADC_CALIBRATE_STATUS_OUT_RESULT_LBN 2
-> > > > +#define        MC_CMD_SUC_MANFTEST_ADC_CALIBRATE_STATUS_OUT_RESULT_WIDTH 4
-> > > > +#define        MC_CMD_SUC_MANFTEST_ADC_CALIBRATE_STATUS_OUT_INDEX_OFST 0
-> > > > +#define        MC_CMD_SUC_MANFTEST_ADC_CALIBRATE_STATUS_OUT_INDEX_LBN 6
-> > > > +#define        MC_CMD_SUC_MANFTEST_ADC_CALIBRATE_STATUS_OUT_INDEX_WIDTH 2
-> > > > +
-> > > > +/* MC_CMD_SUC_MANFTEST_ADC_CALIBRATE_RESULT_IN msgrequest */
-> > > > +#define    MC_CMD_SUC_MANFTEST_ADC_CALIBRATE_RESULT_IN_LEN 4
-> > > > +/* The manftest operation to be performed. This must be
-> > > > + * MC_CMD_SUC_MANFTEST_ADC_CALIBRATE_RESULT.
-> > > > + */
-> > > > +#define       MC_CMD_SUC_MANFTEST_ADC_CALIBRATE_RESULT_IN_OP_OFST 0
-> > > > +#define       MC_CMD_SUC_MANFTEST_ADC_CALIBRATE_RESULT_IN_OP_LEN 4
-> > > > +
-> > > > +/* MC_CMD_SUC_MANFTEST_ADC_CALIBRATE_RESULT_OUT msgresponse */
-> > > > +#define    MC_CMD_SUC_MANFTEST_ADC_CALIBRATE_RESULT_OUT_LEN 12
-> > > > +/* The set of calibration results. */
-> > > > +#define       MC_CMD_SUC_MANFTEST_ADC_CALIBRATE_RESULT_OUT_VALUE_OFST 0
-> > > > +#define       MC_CMD_SUC_MANFTEST_ADC_CALIBRATE_RESULT_OUT_VALUE_LEN 4
-> > > > +#define       MC_CMD_SUC_MANFTEST_ADC_CALIBRATE_RESULT_OUT_VALUE_NUM 3
-> > > > +
-> > > > +/* MC_CMD_SUC_MANFTEST_CONFIG_PCIE_READ_IN msgrequest */
-> > > > +#define    MC_CMD_SUC_MANFTEST_CONFIG_PCIE_READ_IN_LEN 4
-> > > > +/* The manftest operation to be performed. This must be
-> > > > + * MC_CMD_SUC_MANFTEST_CONFIG_PCIE_READ.
-> > > > + */
-> > > > +#define       MC_CMD_SUC_MANFTEST_CONFIG_PCIE_READ_IN_OP_OFST 0
-> > > > +#define       MC_CMD_SUC_MANFTEST_CONFIG_PCIE_READ_IN_OP_LEN 4
-> > > > +
-> > > > +/* MC_CMD_SUC_MANFTEST_CONFIG_PCIE_READ_OUT msgresponse */
-> > > > +#define    MC_CMD_SUC_MANFTEST_CONFIG_PCIE_READ_OUT_LEN 4
-> > > > +/* The PCIe vendor ID. */
-> > > > +#define       MC_CMD_SUC_MANFTEST_CONFIG_PCIE_READ_OUT_VENDOR_ID_OFST 0
-> > > > +#define       MC_CMD_SUC_MANFTEST_CONFIG_PCIE_READ_OUT_VENDOR_ID_LEN 2
-> > > > +/* The PCIe device ID. */
-> > > > +#define       MC_CMD_SUC_MANFTEST_CONFIG_PCIE_READ_OUT_DEVICE_ID_OFST 2
-> > > > +#define       MC_CMD_SUC_MANFTEST_CONFIG_PCIE_READ_OUT_DEVICE_ID_LEN 2
-> > > > +
-> > > > +/* MC_CMD_SUC_MANFTEST_CONFIG_PCIE_WRITE_IN msgrequest */
-> > > > +#define    MC_CMD_SUC_MANFTEST_CONFIG_PCIE_WRITE_IN_LEN 8
-> > > > +/* The manftest operation to be performed. This must be
-> > > > + * MC_CMD_SUC_MANFTEST_CONFIG_PCIE_WRITE.
-> > > > + */
-> > > > +#define       MC_CMD_SUC_MANFTEST_CONFIG_PCIE_WRITE_IN_OP_OFST 0
-> > > > +#define       MC_CMD_SUC_MANFTEST_CONFIG_PCIE_WRITE_IN_OP_LEN 4
-> > > > +/* The PCIe vendor ID. */
-> > > > +#define       MC_CMD_SUC_MANFTEST_CONFIG_PCIE_WRITE_IN_VENDOR_ID_OFST 4
-> > > > +#define       MC_CMD_SUC_MANFTEST_CONFIG_PCIE_WRITE_IN_VENDOR_ID_LEN 2
-> > > > +/* The PCIe device ID. */
-> > > > +#define       MC_CMD_SUC_MANFTEST_CONFIG_PCIE_WRITE_IN_DEVICE_ID_OFST 6
-> > > > +#define       MC_CMD_SUC_MANFTEST_CONFIG_PCIE_WRITE_IN_DEVICE_ID_LEN 2
-> > > > +
-> > > > +/* MC_CMD_SUC_MANFTEST_CONFIG_PCIE_WRITE_OUT msgresponse */
-> > > > +#define    MC_CMD_SUC_MANFTEST_CONFIG_PCIE_WRITE_OUT_LEN 0
-> > > > +
-> > > > +/* MC_CMD_SUC_MANFTEST_FRU_WRITE_IN msgrequest */
-> > > > +#define    MC_CMD_SUC_MANFTEST_FRU_WRITE_IN_LEN 4
-> > > > +/* The manftest operation to be performed. This must be
-> > > > + * MC_CMD_SUC_MANFTEST_FRU_WRITE
-> > > > + */
-> > > > +#define       MC_CMD_SUC_MANFTEST_FRU_WRITE_IN_OP_OFST 0
-> > > > +#define       MC_CMD_SUC_MANFTEST_FRU_WRITE_IN_OP_LEN 4
-> > > > +
-> > > > +/* MC_CMD_SUC_MANFTEST_FRU_WRITE_OUT msgresponse */
-> > > > +#define    MC_CMD_SUC_MANFTEST_FRU_WRITE_OUT_LEN 0
-> > > > +
-> > > > +/* MC_CMD_SUC_MANFTEST_SMBUS_ID_READ_IN msgrequest */
-> > > > +#define    MC_CMD_SUC_MANFTEST_SMBUS_ID_READ_IN_LEN 4
-> > > > +/* The manftest operation to be performed. This must be
-> > > > + * MC_CMD_SUC_MANFTEST_SMBUS_ID_READ.
-> > > > + */
-> > > > +#define       MC_CMD_SUC_MANFTEST_SMBUS_ID_READ_IN_OP_OFST 0
-> > > > +#define       MC_CMD_SUC_MANFTEST_SMBUS_ID_READ_IN_OP_LEN 4
-> > > > +
-> > > > +/* MC_CMD_SUC_MANFTEST_SMBUS_ID_READ_OUT msgresponse */
-> > > > +#define    MC_CMD_SUC_MANFTEST_SMBUS_ID_READ_OUT_LEN 4
-> > > > +/* The SMBus ID. */
-> > > > +#define       MC_CMD_SUC_MANFTEST_SMBUS_ID_READ_OUT_SMBUS_ID_OFST 0
-> > > > +#define       MC_CMD_SUC_MANFTEST_SMBUS_ID_READ_OUT_SMBUS_ID_LEN 4
-> > > > +
-> > > > +/* MC_CMD_SUC_MANFTEST_SMBUS_ID_WRITE_IN msgrequest */
-> > > > +#define    MC_CMD_SUC_MANFTEST_SMBUS_ID_WRITE_IN_LEN 8
-> > > > +/* The manftest operation to be performed. This must be
-> > > > + * MC_CMD_SUC_MANFTEST_SMBUS_ID_WRITE.
-> > > > + */
-> > > > +#define       MC_CMD_SUC_MANFTEST_SMBUS_ID_WRITE_IN_OP_OFST 0
-> > > > +#define       MC_CMD_SUC_MANFTEST_SMBUS_ID_WRITE_IN_OP_LEN 4
-> > > > +/* The SMBus ID. */
-> > > > +#define       MC_CMD_SUC_MANFTEST_SMBUS_ID_WRITE_IN_SMBUS_ID_OFST 4
-> > > > +#define       MC_CMD_SUC_MANFTEST_SMBUS_ID_WRITE_IN_SMBUS_ID_LEN 4
-> > > > +
-> > > > +/* MC_CMD_SUC_MANFTEST_SMBUS_ID_WRITE_OUT msgresponse */
-> > > > +#define    MC_CMD_SUC_MANFTEST_SMBUS_ID_WRITE_OUT_LEN 0
-> > > > +
-> > > > +
-> > > > +/***********************************/
-> > > > +/* MC_CMD_GET_CERTIFICATE
-> > > > + * Request a certificate.
-> > > > + */
-> > > > +#define MC_CMD_GET_CERTIFICATE 0x12c
-> > > > +#undef MC_CMD_0x12c_PRIVILEGE_CTG
-> > > > +
-> > > > +#define MC_CMD_0x12c_PRIVILEGE_CTG SRIOV_CTG_GENERAL
-> > > > +
-> > > > +/* MC_CMD_GET_CERTIFICATE_IN msgrequest */
-> > > > +#define    MC_CMD_GET_CERTIFICATE_IN_LEN 8
-> > > > +/* Type of the certificate to be retrieved. */
-> > > > +#define       MC_CMD_GET_CERTIFICATE_IN_TYPE_OFST 0
-> > > > +#define       MC_CMD_GET_CERTIFICATE_IN_TYPE_LEN 4
-> > > > +#define          MC_CMD_GET_CERTIFICATE_IN_UNUSED 0x0 /* enum */
-> > > > +#define          MC_CMD_GET_CERTIFICATE_IN_AAC 0x1 /* enum */
-> > > > +/* enum: Adapter Authentication Certificate (AAC). The AAC is unique to each
-> > > > + * adapter and is used to verify its authenticity. It is installed by Manftest.
-> > > > + */
-> > > > +#define          MC_CMD_GET_CERTIFICATE_IN_ADAPTER_AUTH 0x1
-> > > > +#define          MC_CMD_GET_CERTIFICATE_IN_AASC 0x2 /* enum */
-> > > > +/* enum: Adapter Authentication Signing Certificate (AASC). The AASC is shared
-> > > > + * by a group of adapters (typically a purchase order) and is used to verify
-> > > > + * the validity of AAC along with the SF root certificate. It is installed by
-> > > > + * Manftest.
-> > > > + */
-> > > > +#define          MC_CMD_GET_CERTIFICATE_IN_ADAPTER_AUTH_SIGNING 0x2
-> > > > +#define          MC_CMD_GET_CERTIFICATE_IN_CUSTOMER_AAC 0x3 /* enum */
-> > > > +/* enum: Customer Adapter Authentication Certificate. The Customer AAC is
-> > > > + * unique to each adapter and is used to verify its authenticity in cases where
-> > > > + * either the AAC is not installed or a customer desires to use their own
-> > > > + * certificate chain. It is installed by the customer.
-> > > > + */
-> > > > +#define          MC_CMD_GET_CERTIFICATE_IN_CUSTOMER_ADAPTER_AUTH 0x3
-> > > > +#define          MC_CMD_GET_CERTIFICATE_IN_CUSTOMER_AASC 0x4 /* enum */
-> > > > +/* enum: Customer Adapter Authentication Certificate. The Customer AASC is
-> > > > + * shared by a group of adapters and is used to verify the validity of the
-> > > > + * Customer AAC along with the customers root certificate. It is installed by
-> > > > + * the customer.
-> > > > + */
-> > > > +#define          MC_CMD_GET_CERTIFICATE_IN_CUSTOMER_ADAPTER_AUTH_SIGNING 0x4
-> > > > +/* Offset, measured in bytes, relative to the start of the certificate data
-> > > > + * from which the certificate is to be retrieved.
-> > > > + */
-> > > > +#define       MC_CMD_GET_CERTIFICATE_IN_OFFSET_OFST 4
-> > > > +#define       MC_CMD_GET_CERTIFICATE_IN_OFFSET_LEN 4
-> > > > +
-> > > > +/* MC_CMD_GET_CERTIFICATE_OUT msgresponse */
-> > > > +#define    MC_CMD_GET_CERTIFICATE_OUT_LENMIN 13
-> > > > +#define    MC_CMD_GET_CERTIFICATE_OUT_LENMAX 252
-> > > > +#define    MC_CMD_GET_CERTIFICATE_OUT_LENMAX_MCDI2 1020
-> > > > +#define    MC_CMD_GET_CERTIFICATE_OUT_LEN(num) (12+1*(num))
-> > > > +#define    MC_CMD_GET_CERTIFICATE_OUT_DATA_NUM(len) (((len)-12)/1)
-> > > > +/* Type of the certificate. */
-> > > > +#define       MC_CMD_GET_CERTIFICATE_OUT_TYPE_OFST 0
-> > > > +#define       MC_CMD_GET_CERTIFICATE_OUT_TYPE_LEN 4
-> > > > +/*            Enum values, see field(s): */
-> > > > +/*               MC_CMD_GET_CERTIFICATE_IN/TYPE */
-> > > > +/* Offset, measured in bytes, relative to the start of the certificate data
-> > > > + * from which data in this message starts.
-> > > > + */
-> > > > +#define       MC_CMD_GET_CERTIFICATE_OUT_OFFSET_OFST 4
-> > > > +#define       MC_CMD_GET_CERTIFICATE_OUT_OFFSET_LEN 4
-> > > > +/* Total length of the certificate data. */
-> > > > +#define       MC_CMD_GET_CERTIFICATE_OUT_TOTAL_LENGTH_OFST 8
-> > > > +#define       MC_CMD_GET_CERTIFICATE_OUT_TOTAL_LENGTH_LEN 4
-> > > > +/* The certificate data. */
-> > > > +#define       MC_CMD_GET_CERTIFICATE_OUT_DATA_OFST 12
-> > > > +#define       MC_CMD_GET_CERTIFICATE_OUT_DATA_LEN 1
-> > > > +#define       MC_CMD_GET_CERTIFICATE_OUT_DATA_MINNUM 1
-> > > > +#define       MC_CMD_GET_CERTIFICATE_OUT_DATA_MAXNUM 240
-> > > > +#define       MC_CMD_GET_CERTIFICATE_OUT_DATA_MAXNUM_MCDI2 1008
-> > > > +
-> > > > +
-> > > > +/***********************************/
-> > > > +/* MC_CMD_GET_NIC_GLOBAL
-> > > > + * Get a global value which applies to all PCI functions
-> > > > + */
-> > > > +#define MC_CMD_GET_NIC_GLOBAL 0x12d
-> > > > +#undef MC_CMD_0x12d_PRIVILEGE_CTG
-> > > > +
-> > > > +#define MC_CMD_0x12d_PRIVILEGE_CTG SRIOV_CTG_GENERAL
-> > > > +
-> > > > +/* MC_CMD_GET_NIC_GLOBAL_IN msgrequest */
-> > > > +#define    MC_CMD_GET_NIC_GLOBAL_IN_LEN 4
-> > > > +/* Key to request value for, see enum values in MC_CMD_SET_NIC_GLOBAL. If the
-> > > > + * given key is unknown to the current firmware, the call will fail with
-> > > > + * ENOENT.
-> > > > + */
-> > > > +#define       MC_CMD_GET_NIC_GLOBAL_IN_KEY_OFST 0
-> > > > +#define       MC_CMD_GET_NIC_GLOBAL_IN_KEY_LEN 4
-> > > > +
-> > > > +/* MC_CMD_GET_NIC_GLOBAL_OUT msgresponse */
-> > > > +#define    MC_CMD_GET_NIC_GLOBAL_OUT_LEN 4
-> > > > +/* Value of requested key, see key descriptions below. */
-> > > > +#define       MC_CMD_GET_NIC_GLOBAL_OUT_VALUE_OFST 0
-> > > > +#define       MC_CMD_GET_NIC_GLOBAL_OUT_VALUE_LEN 4
-> > > > +
-> > > > +
-> > > > +/***********************************/
-> > > > +/* MC_CMD_SET_NIC_GLOBAL
-> > > > + * Set a global value which applies to all PCI functions. Most global values
-> > > > + * can only be changed under specific conditions, and this call will return an
-> > > > + * appropriate error otherwise (see key descriptions).
-> > > > + */
-> > > > +#define MC_CMD_SET_NIC_GLOBAL 0x12e
-> > > > +#undef MC_CMD_0x12e_PRIVILEGE_CTG
-> > > > +
-> > > > +#define MC_CMD_0x12e_PRIVILEGE_CTG SRIOV_CTG_ADMIN
-> > > > +
-> > > > +/* MC_CMD_SET_NIC_GLOBAL_IN msgrequest */
-> > > > +#define    MC_CMD_SET_NIC_GLOBAL_IN_LEN 8
-> > > > +/* Key to change value of. Firmware will return ENOENT for keys it doesn't know
-> > > > + * about.
-> > > > + */
-> > > > +#define       MC_CMD_SET_NIC_GLOBAL_IN_KEY_OFST 0
-> > > > +#define       MC_CMD_SET_NIC_GLOBAL_IN_KEY_LEN 4
-> > > > +/* enum: Request switching the datapath firmware sub-variant. Currently only
-> > > > + * useful when running the DPDK f/w variant. See key values below, and the DPDK
-> > > > + * section of the EF10 Driver Writers Guide. Note that any driver attaching
-> > > > + * with the SUBVARIANT_AWARE flag cleared is implicitly considered as a request
-> > > > + * to switch back to the default sub-variant, and will thus reset this value.
-> > > > + * If a sub-variant switch happens, all other PCI functions will get their
-> > > > + * resources reset (they will see an MC reboot).
-> > > > + */
-> > > > +#define          MC_CMD_SET_NIC_GLOBAL_IN_FIRMWARE_SUBVARIANT 0x1
-> > > > +/* New value to set, see key descriptions above. */
-> > > > +#define       MC_CMD_SET_NIC_GLOBAL_IN_VALUE_OFST 4
-> > > > +#define       MC_CMD_SET_NIC_GLOBAL_IN_VALUE_LEN 4
-> > > > +/* enum: Only if KEY = FIRMWARE_SUBVARIANT. Default sub-variant with support
-> > > > + * for maximum features for the current f/w variant. A request from a
-> > > > + * privileged function to set this particular value will always succeed.
-> > > > + */
-> > > > +#define          MC_CMD_SET_NIC_GLOBAL_IN_FW_SUBVARIANT_DEFAULT 0x0
-> > > > +/* enum: Only if KEY = FIRMWARE_SUBVARIANT. Increases packet rate at the cost
-> > > > + * of not supporting any TX checksum offloads. Only supported when running some
-> > > > + * f/w variants, others will return ENOTSUP (as reported by the homonymous bit
-> > > > + * in MC_CMD_GET_CAPABILITIES_V2). Can only be set when no other drivers are
-> > > > + * attached, and the calling driver must have no resources allocated. See the
-> > > > + * DPDK section of the EF10 Driver Writers Guide for a more detailed
-> > > > + * description with possible error codes.
-> > > > + */
-> > > > +#define          MC_CMD_SET_NIC_GLOBAL_IN_FW_SUBVARIANT_NO_TX_CSUM 0x1
-> > > > +
-> > > > +
-> > > > +/***********************************/
-> > > > +/* MC_CMD_LTSSM_TRACE_POLL
-> > > > + * Medford2 hardware has support for logging all LTSSM state transitions to a
-> > > > + * hardware buffer. When built with WITH_LTSSM_TRACE=1, the firmware will
-> > > > + * periodially dump the contents of this hardware buffer to an internal
-> > > > + * firmware buffer for later extraction.
-> > > > + */
-> > > > +#define MC_CMD_LTSSM_TRACE_POLL 0x12f
-> > > > +#undef MC_CMD_0x12f_PRIVILEGE_CTG
-> > > > +
-> > > > +#define MC_CMD_0x12f_PRIVILEGE_CTG SRIOV_CTG_ADMIN
-> > > > +
-> > > > +/* MC_CMD_LTSSM_TRACE_POLL_IN msgrequest: Read transitions from the firmware
-> > > > + * internal buffer.
-> > > > + */
-> > > > +#define    MC_CMD_LTSSM_TRACE_POLL_IN_LEN 4
-> > > > +/* The maximum number of row that the caller can accept. The format of each row
-> > > > + * is defined in MC_CMD_LTSSM_TRACE_POLL_OUT.
-> > > > + */
-> > > > +#define       MC_CMD_LTSSM_TRACE_POLL_IN_MAX_ROW_COUNT_OFST 0
-> > > > +#define       MC_CMD_LTSSM_TRACE_POLL_IN_MAX_ROW_COUNT_LEN 4
-> > > > +
-> > > > +/* MC_CMD_LTSSM_TRACE_POLL_OUT msgresponse */
-> > > > +#define    MC_CMD_LTSSM_TRACE_POLL_OUT_LENMIN 16
-> > > > +#define    MC_CMD_LTSSM_TRACE_POLL_OUT_LENMAX 248
-> > > > +#define    MC_CMD_LTSSM_TRACE_POLL_OUT_LENMAX_MCDI2 1016
-> > > > +#define    MC_CMD_LTSSM_TRACE_POLL_OUT_LEN(num) (8+8*(num))
-> > > > +#define    MC_CMD_LTSSM_TRACE_POLL_OUT_ROWS_NUM(len) (((len)-8)/8)
-> > > > +#define       MC_CMD_LTSSM_TRACE_POLL_OUT_FLAGS_OFST 0
-> > > > +#define       MC_CMD_LTSSM_TRACE_POLL_OUT_FLAGS_LEN 4
-> > > > +#define        MC_CMD_LTSSM_TRACE_POLL_OUT_HW_BUFFER_OVERFLOW_OFST 0
-> > > > +#define        MC_CMD_LTSSM_TRACE_POLL_OUT_HW_BUFFER_OVERFLOW_LBN 0
-> > > > +#define        MC_CMD_LTSSM_TRACE_POLL_OUT_HW_BUFFER_OVERFLOW_WIDTH 1
-> > > > +#define        MC_CMD_LTSSM_TRACE_POLL_OUT_FW_BUFFER_OVERFLOW_OFST 0
-> > > > +#define        MC_CMD_LTSSM_TRACE_POLL_OUT_FW_BUFFER_OVERFLOW_LBN 1
-> > > > +#define        MC_CMD_LTSSM_TRACE_POLL_OUT_FW_BUFFER_OVERFLOW_WIDTH 1
-> > > > +#define        MC_CMD_LTSSM_TRACE_POLL_OUT_CONTINUES_OFST 0
-> > > > +#define        MC_CMD_LTSSM_TRACE_POLL_OUT_CONTINUES_LBN 31
-> > > > +#define        MC_CMD_LTSSM_TRACE_POLL_OUT_CONTINUES_WIDTH 1
-> > > > +/* The number of rows present in this response. */
-> > > > +#define       MC_CMD_LTSSM_TRACE_POLL_OUT_ROW_COUNT_OFST 4
-> > > > +#define       MC_CMD_LTSSM_TRACE_POLL_OUT_ROW_COUNT_LEN 4
-> > > > +#define       MC_CMD_LTSSM_TRACE_POLL_OUT_ROWS_OFST 8
-> > > > +#define       MC_CMD_LTSSM_TRACE_POLL_OUT_ROWS_LEN 8
-> > > > +#define       MC_CMD_LTSSM_TRACE_POLL_OUT_ROWS_LO_OFST 8
-> > > > +#define       MC_CMD_LTSSM_TRACE_POLL_OUT_ROWS_LO_LEN 4
-> > > > +#define       MC_CMD_LTSSM_TRACE_POLL_OUT_ROWS_LO_LBN 64
-> > > > +#define       MC_CMD_LTSSM_TRACE_POLL_OUT_ROWS_LO_WIDTH 32
-> > > > +#define       MC_CMD_LTSSM_TRACE_POLL_OUT_ROWS_HI_OFST 12
-> > > > +#define       MC_CMD_LTSSM_TRACE_POLL_OUT_ROWS_HI_LEN 4
-> > > > +#define       MC_CMD_LTSSM_TRACE_POLL_OUT_ROWS_HI_LBN 96
-> > > > +#define       MC_CMD_LTSSM_TRACE_POLL_OUT_ROWS_HI_WIDTH 32
-> > > > +#define       MC_CMD_LTSSM_TRACE_POLL_OUT_ROWS_MINNUM 0
-> > > > +#define       MC_CMD_LTSSM_TRACE_POLL_OUT_ROWS_MAXNUM 30
-> > > > +#define       MC_CMD_LTSSM_TRACE_POLL_OUT_ROWS_MAXNUM_MCDI2 126
-> > > > +#define        MC_CMD_LTSSM_TRACE_POLL_OUT_LTSSM_STATE_OFST 8
-> > > > +#define        MC_CMD_LTSSM_TRACE_POLL_OUT_LTSSM_STATE_LBN 0
-> > > > +#define        MC_CMD_LTSSM_TRACE_POLL_OUT_LTSSM_STATE_WIDTH 6
-> > > > +#define        MC_CMD_LTSSM_TRACE_POLL_OUT_RDLH_LINK_UP_OFST 8
-> > > > +#define        MC_CMD_LTSSM_TRACE_POLL_OUT_RDLH_LINK_UP_LBN 6
-> > > > +#define        MC_CMD_LTSSM_TRACE_POLL_OUT_RDLH_LINK_UP_WIDTH 1
-> > > > +#define        MC_CMD_LTSSM_TRACE_POLL_OUT_WAKE_N_OFST 8
-> > > > +#define        MC_CMD_LTSSM_TRACE_POLL_OUT_WAKE_N_LBN 7
-> > > > +#define        MC_CMD_LTSSM_TRACE_POLL_OUT_WAKE_N_WIDTH 1
-> > > > +#define        MC_CMD_LTSSM_TRACE_POLL_OUT_TIMESTAMP_PS_OFST 8
-> > > > +#define        MC_CMD_LTSSM_TRACE_POLL_OUT_TIMESTAMP_PS_LBN 8
-> > > > +#define        MC_CMD_LTSSM_TRACE_POLL_OUT_TIMESTAMP_PS_WIDTH 24
-> > > > +/* The time of the LTSSM transition. Times are reported as fractional
-> > > > + * microseconds since MC boot (wrapping at 2^32us). The fractional part is
-> > > > + * reported in picoseconds. 0 <= TIMESTAMP_PS < 1000000 timestamp in seconds =
-> > > > + * ((TIMESTAMP_US + TIMESTAMP_PS / 1000000) / 1000000)
-> > > > + */
-> > > > +#define       MC_CMD_LTSSM_TRACE_POLL_OUT_TIMESTAMP_US_OFST 12
-> > > > +#define       MC_CMD_LTSSM_TRACE_POLL_OUT_TIMESTAMP_US_LEN 4
-> > > > +
-> > > > +
-> > > > +/***********************************/
-> > > > +/* MC_CMD_TELEMETRY_ENABLE
-> > > > + * This command enables telemetry processing of packets, allowing a remote host
-> > > > + * to gather information and analytics passing on the card. Enabling telemetry
-> > > > + * will have a performance cost. Not supported on all hardware and datapath
-> > > > + * variants. As of writing, only supported on Medford2 running full-featured
-> > > > + * firmware variant.
-> > > > + */
-> > > > +#define MC_CMD_TELEMETRY_ENABLE 0x138
-> > > > +#undef MC_CMD_0x138_PRIVILEGE_CTG
-> > > > +
-> > > > +#define MC_CMD_0x138_PRIVILEGE_CTG SRIOV_CTG_ADMIN
-> > > > +
-> > > > +/* MC_CMD_TELEMETRY_ENABLE_IN msgrequest */
-> > > > +#define    MC_CMD_TELEMETRY_ENABLE_IN_LEN 4
-> > > > +#define       MC_CMD_TELEMETRY_ENABLE_IN_STATE_OFST 0
-> > > > +#define       MC_CMD_TELEMETRY_ENABLE_IN_STATE_LEN 4
-> > > > +/* enum: Disables telemetry functionality, returns the card to default
-> > > > + * behaviour of the configured datapath variant.
-> > > > + */
-> > > > +#define          MC_CMD_TELEMETRY_ENABLE_IN_DISABLE 0x0
-> > > > +/* enum: Enables telemetry functionality on the currently configured datapath
-> > > > + * variant if supported.
-> > > > + */
-> > > > +#define          MC_CMD_TELEMETRY_ENABLE_IN_ENABLE 0x1
-> > > > +
-> > > > +/* MC_CMD_TELEMETRY_ENABLE_OUT msgresponse */
-> > > > +#define    MC_CMD_TELEMETRY_ENABLE_OUT_LEN 0
-> > > > +
-> > > > +/* TELEMETRY_CONFIG structuredef */
-> > > > +#define    TELEMETRY_CONFIG_LEN 36
-> > > > +/* Bitfields to identify the list of config parameters included in the command.
-> > > > + * A bit-value of 1 indicates that the relevant config parameter field is
-> > > > + * valid; 0 indicates invalid and the config parameter field must be ignored by
-> > > > + * firmware. Firmware may however apply some default values for certain
-> > > > + * parameters.
-> > > > + */
-> > > > +#define       TELEMETRY_CONFIG_FLAGS_OFST 0
-> > > > +#define       TELEMETRY_CONFIG_FLAGS_LEN 4
-> > > > +#define        TELEMETRY_CONFIG_METRICS_COLLECTOR_IP_VALID_OFST 0
-> > > > +#define        TELEMETRY_CONFIG_METRICS_COLLECTOR_IP_VALID_LBN 0
-> > > > +#define        TELEMETRY_CONFIG_METRICS_COLLECTOR_IP_VALID_WIDTH 1
-> > > > +#define        TELEMETRY_CONFIG_METRICS_COLLECTOR_PORT_VALID_OFST 0
-> > > > +#define        TELEMETRY_CONFIG_METRICS_COLLECTOR_PORT_VALID_LBN 1
-> > > > +#define        TELEMETRY_CONFIG_METRICS_COLLECTOR_PORT_VALID_WIDTH 1
-> > > > +#define        TELEMETRY_CONFIG_MONITOR_TIMEOUT_MS_VALID_OFST 0
-> > > > +#define        TELEMETRY_CONFIG_MONITOR_TIMEOUT_MS_VALID_LBN 2
-> > > > +#define        TELEMETRY_CONFIG_MONITOR_TIMEOUT_MS_VALID_WIDTH 1
-> > > > +#define        TELEMETRY_CONFIG_MAX_METRICS_COUNT_VALID_OFST 0
-> > > > +#define        TELEMETRY_CONFIG_MAX_METRICS_COUNT_VALID_LBN 3
-> > > > +#define        TELEMETRY_CONFIG_MAX_METRICS_COUNT_VALID_WIDTH 1
-> > > > +#define        TELEMETRY_CONFIG_RESERVED1_OFST 0
-> > > > +#define        TELEMETRY_CONFIG_RESERVED1_LBN 4
-> > > > +#define        TELEMETRY_CONFIG_RESERVED1_WIDTH 28
-> > > > +#define       TELEMETRY_CONFIG_FLAGS_LBN 0
-> > > > +#define       TELEMETRY_CONFIG_FLAGS_WIDTH 32
-> > > > +/* Collector IPv4/IPv6 address to which latency measurements are forwarded from
-> > > > + * the adapter (as bytes in network order; set last 12 bytes to 0 for IPv4
-> > > > + * address).
-> > > > + */
-> > > > +#define       TELEMETRY_CONFIG_METRICS_COLLECTOR_IP_OFST 4
-> > > > +#define       TELEMETRY_CONFIG_METRICS_COLLECTOR_IP_LEN 16
-> > > > +#define       TELEMETRY_CONFIG_METRICS_COLLECTOR_IP_LBN 32
-> > > > +#define       TELEMETRY_CONFIG_METRICS_COLLECTOR_IP_WIDTH 128
-> > > > +/* Collector Port number to which latency measurements are forwarded from the
-> > > > + * adapter (as bytes in network order).
-> > > > + */
-> > > > +#define       TELEMETRY_CONFIG_METRICS_COLLECTOR_PORT_OFST 20
-> > > > +#define       TELEMETRY_CONFIG_METRICS_COLLECTOR_PORT_LEN 2
-> > > > +#define       TELEMETRY_CONFIG_METRICS_COLLECTOR_PORT_LBN 160
-> > > > +#define       TELEMETRY_CONFIG_METRICS_COLLECTOR_PORT_WIDTH 16
-> > > > +/* Unused - set to 0. */
-> > > > +#define       TELEMETRY_CONFIG_RESERVED2_OFST 22
-> > > > +#define       TELEMETRY_CONFIG_RESERVED2_LEN 2
-> > > > +#define       TELEMETRY_CONFIG_RESERVED2_LBN 176
-> > > > +#define       TELEMETRY_CONFIG_RESERVED2_WIDTH 16
-> > > > +/* MAC address of the collector (as bytes in network order). */
-> > > > +#define       TELEMETRY_CONFIG_METRICS_COLLECTOR_MAC_ADDR_OFST 24
-> > > > +#define       TELEMETRY_CONFIG_METRICS_COLLECTOR_MAC_ADDR_LEN 6
-> > > > +#define       TELEMETRY_CONFIG_METRICS_COLLECTOR_MAC_ADDR_LBN 192
-> > > > +#define       TELEMETRY_CONFIG_METRICS_COLLECTOR_MAC_ADDR_WIDTH 48
-> > > > +/* Maximum number of latency measurements to be made on a telemetry flow. */
-> > > > +#define       TELEMETRY_CONFIG_MAX_METRICS_COUNT_OFST 30
-> > > > +#define       TELEMETRY_CONFIG_MAX_METRICS_COUNT_LEN 2
-> > > > +#define       TELEMETRY_CONFIG_MAX_METRICS_COUNT_LBN 240
-> > > > +#define       TELEMETRY_CONFIG_MAX_METRICS_COUNT_WIDTH 16
-> > > > +/* Maximum duration for which a telemetry flow is monitored (in millisecs). */
-> > > > +#define       TELEMETRY_CONFIG_MONITOR_TIMEOUT_MS_OFST 32
-> > > > +#define       TELEMETRY_CONFIG_MONITOR_TIMEOUT_MS_LEN 4
-> > > > +#define       TELEMETRY_CONFIG_MONITOR_TIMEOUT_MS_LBN 256
-> > > > +#define       TELEMETRY_CONFIG_MONITOR_TIMEOUT_MS_WIDTH 32
-> > > > +
-> > > > +
-> > > > +/***********************************/
-> > > > +/* MC_CMD_TELEMETRY_CONFIG
-> > > > + * This top-level command includes various sub-opcodes that are used to apply
-> > > > + * (and read-back) telemetry related configuration parameters on the NIC.
-> > > > + * Reference - SF-120569-SW Telemetry Firmware Design.
-> > > > + */
-> > > > +#define MC_CMD_TELEMETRY_CONFIG 0x139
-> > > > +#undef MC_CMD_0x139_PRIVILEGE_CTG
-> > > > +
-> > > > +#define MC_CMD_0x139_PRIVILEGE_CTG SRIOV_CTG_ADMIN
-> > > > +
-> > > > +/* MC_CMD_TELEMETRY_CONFIG_IN msgrequest */
-> > > > +#define    MC_CMD_TELEMETRY_CONFIG_IN_LEN 4
-> > > > +/* Telemetry configuration sub-operation code */
-> > > > +#define       MC_CMD_TELEMETRY_CONFIG_IN_OP_OFST 0
-> > > > +#define       MC_CMD_TELEMETRY_CONFIG_IN_OP_LEN 4
-> > > > +/* enum: Configure parameters for telemetry measurements. */
-> > > > +#define          MC_CMD_TELEMETRY_CONFIG_OP_SET 0x1
-> > > > +/* enum: Read current values of parameters for telemetry measurements. */
-> > > > +#define          MC_CMD_TELEMETRY_CONFIG_OP_GET 0x2
-> > > > +
-> > > > +/* MC_CMD_TELEMETRY_CONFIG_IN_SET msgrequest: This command configures the
-> > > > + * parameters necessary for tcp-latency measurements. The adapter adds a filter
-> > > > + * for every new tcp flow seen in both tx and rx directions and tracks the
-> > > > + * telemetry measurements related to the flow in a tracking table. Entries in
-> > > > + * the tracking table live as long as N measurements are made on the flow or
-> > > > + * the flow has been in the tracking table for the maximum configured duration.
-> > > > + * Telemetry measurements in this command refer to tcp-latency measurements for
-> > > > + * data-to-ack latency as well as data-to-data latency. All telemetry
-> > > > + * measurements are bundled into a UDP packet and forwarded to a collector
-> > > > + * whose IP address is configured using this command.
-> > > > + */
-> > > > +#define    MC_CMD_TELEMETRY_CONFIG_IN_SET_LEN 40
-> > > > +/* Telemetry configuration sub-operation code. Must be set to
-> > > > + * MC_CMD_TELEMETRY_CONFIG_OP_SET.
-> > > > + */
-> > > > +#define       MC_CMD_TELEMETRY_CONFIG_IN_SET_OP_OFST 0
-> > > > +#define       MC_CMD_TELEMETRY_CONFIG_IN_SET_OP_LEN 4
-> > > > +/* struct of type TELEMETRY_CONFIG. */
-> > > > +#define       MC_CMD_TELEMETRY_CONFIG_IN_SET_PARAMETERS_OFST 4
-> > > > +#define       MC_CMD_TELEMETRY_CONFIG_IN_SET_PARAMETERS_LEN 36
-> > > > +
-> > > > +/* MC_CMD_TELEMETRY_CONFIG_OUT_SET msgresponse */
-> > > > +#define    MC_CMD_TELEMETRY_CONFIG_OUT_SET_LEN 0
-> > > > +
-> > > > +/* MC_CMD_TELEMETRY_CONFIG_IN_GET msgrequest: This command reads out the
-> > > > + * current values of config parameters necessary for tcp-latency measurements.
-> > > > + * See MC_CMD_TELEMETRY_SET_CONFIG for more information about the configuration
-> > > > + * parameters.
-> > > > + */
-> > > > +#define    MC_CMD_TELEMETRY_CONFIG_IN_GET_LEN 4
-> > > > +/* Telemetry configuration sub-operation code. Must be set to
-> > > > + * MC_CMD_TELEMETRY_CONFIG_OP_GET.
-> > > > + */
-> > > > +#define       MC_CMD_TELEMETRY_CONFIG_IN_GET_OP_OFST 0
-> > > > +#define       MC_CMD_TELEMETRY_CONFIG_IN_GET_OP_LEN 4
-> > > > +
-> > > > +/* MC_CMD_TELEMETRY_CONFIG_OUT_GET msgresponse */
-> > > > +#define    MC_CMD_TELEMETRY_CONFIG_OUT_GET_LEN 36
-> > > > +/* struct of type TELEMETRY_CONFIG. */
-> > > > +#define       MC_CMD_TELEMETRY_CONFIG_OUT_GET_PARAMETERS_OFST 0
-> > > > +#define       MC_CMD_TELEMETRY_CONFIG_OUT_GET_PARAMETERS_LEN 36
-> > > > +
-> > > > +
-> > > >    /***********************************/
-> > > >    /* MC_CMD_GET_RX_PREFIX_ID
-> > > >     * This command is part of the mechanism for configuring the format of the RX
-> > > > @@ -23832,6 +27337,427 @@
-> > > >    #define       MC_CMD_GET_NCSI_INFO_STATISTICS_OUT_AENS_SENT_OFST 24
-> > > >    #define       MC_CMD_GET_NCSI_INFO_STATISTICS_OUT_AENS_SENT_LEN 4
-> > > > 
-> > > > +
-> > > > +/***********************************/
-> > > > +/* MC_CMD_FIRMWARE_SET_LOCKDOWN
-> > > > + * System lockdown, when enabled firmware updates are blocked.
-> > > > + */
-> > > > +#define MC_CMD_FIRMWARE_SET_LOCKDOWN 0x16f
-> > > > +#undef MC_CMD_0x16f_PRIVILEGE_CTG
-> > > > +
-> > > > +#define MC_CMD_0x16f_PRIVILEGE_CTG SRIOV_CTG_ADMIN
-> > > > +
-> > > > +/* MC_CMD_FIRMWARE_SET_LOCKDOWN_IN msgrequest: This MCDI command is to enable
-> > > > + * only because lockdown can only be disabled by a PMCI command or a cold reset
-> > > > + * of the system.
-> > > > + */
-> > > > +#define    MC_CMD_FIRMWARE_SET_LOCKDOWN_IN_LEN 0
-> > > > +
-> > > > +/* MC_CMD_FIRMWARE_SET_LOCKDOWN_OUT msgresponse */
-> > > > +#define    MC_CMD_FIRMWARE_SET_LOCKDOWN_OUT_LEN 0
-> > > > +
-> > > > +
-> > > > +/***********************************/
-> > > > +/* MC_CMD_GET_TEST_FEATURES
-> > > > + * This command returns device details knowledge of which may be required by
-> > > > + * test infrastructure. Although safe, it is not intended to be used by
-> > > > + * production drivers, and the structure returned intentionally has no public
-> > > > + * documentation.
-> > > > + */
-> > > > +#define MC_CMD_GET_TEST_FEATURES 0x1ac
-> > > > +#undef MC_CMD_0x1ac_PRIVILEGE_CTG
-> > > > +
-> > > > +#define MC_CMD_0x1ac_PRIVILEGE_CTG SRIOV_CTG_GENERAL
-> > > > +
-> > > > +/* MC_CMD_GET_TEST_FEATURES_IN msgrequest: Request test features. */
-> > > > +#define    MC_CMD_GET_TEST_FEATURES_IN_LEN 0
-> > > > +
-> > > > +/* MC_CMD_GET_TEST_FEATURE_OUT msgresponse */
-> > > > +#define    MC_CMD_GET_TEST_FEATURE_OUT_LENMIN 4
-> > > > +#define    MC_CMD_GET_TEST_FEATURE_OUT_LENMAX 252
-> > > > +#define    MC_CMD_GET_TEST_FEATURE_OUT_LENMAX_MCDI2 1020
-> > > > +#define    MC_CMD_GET_TEST_FEATURE_OUT_LEN(num) (0+4*(num))
-> > > > +#define    MC_CMD_GET_TEST_FEATURE_OUT_TEST_FEATURES_NUM(len) (((len)-0)/4)
-> > > > +/* Test-specific NIC information. Production drivers must treat this as opaque.
-> > > > + * The layout is defined in the private TEST_FEATURES_LAYOUT structure.
-> > > > + */
-> > > > +#define       MC_CMD_GET_TEST_FEATURE_OUT_TEST_FEATURES_OFST 0
-> > > > +#define       MC_CMD_GET_TEST_FEATURE_OUT_TEST_FEATURES_LEN 4
-> > > > +#define       MC_CMD_GET_TEST_FEATURE_OUT_TEST_FEATURES_MINNUM 1
-> > > > +#define       MC_CMD_GET_TEST_FEATURE_OUT_TEST_FEATURES_MAXNUM 63
-> > > > +#define       MC_CMD_GET_TEST_FEATURE_OUT_TEST_FEATURES_MAXNUM_MCDI2 255
-> > > > +
-> > > > +
-> > > > +/***********************************/
-> > > > +/* MC_CMD_FPGA
-> > > > + * A command to perform various fpga-related operations on platforms that
-> > > > + * include FPGAs. Note that some platforms may only support a subset of these
-> > > > + * operations.
-> > > > + */
-> > > > +#define MC_CMD_FPGA 0x1bf
-> > > > +#undef MC_CMD_0x1bf_PRIVILEGE_CTG
-> > > > +
-> > > > +#define MC_CMD_0x1bf_PRIVILEGE_CTG SRIOV_CTG_GENERAL
-> > > > +
-> > > > +/* MC_CMD_FPGA_IN msgrequest */
-> > > > +#define    MC_CMD_FPGA_IN_LEN 4
-> > > > +/* Sub-command code */
-> > > > +#define       MC_CMD_FPGA_IN_OP_OFST 0
-> > > > +#define       MC_CMD_FPGA_IN_OP_LEN 4
-> > > > +/* enum: Get the FPGA version string. */
-> > > > +#define          MC_CMD_FPGA_IN_OP_GET_VERSION 0x0
-> > > > +/* enum: Read bitmask of features supported in the FPGA image. */
-> > > > +#define          MC_CMD_FPGA_IN_OP_GET_CAPABILITIES 0x1
-> > > > +/* enum: Perform a FPGA reset. */
-> > > > +#define          MC_CMD_FPGA_IN_OP_RESET 0x2
-> > > > +/* enum: Set active flash device. */
-> > > > +#define          MC_CMD_FPGA_IN_OP_SELECT_FLASH 0x3
-> > > > +/* enum: Get active flash device. */
-> > > > +#define          MC_CMD_FPGA_IN_OP_GET_ACTIVE_FLASH 0x4
-> > > > +/* enum: Configure internal link i.e. the FPGA port facing the ASIC. */
-> > > > +#define          MC_CMD_FPGA_IN_OP_SET_INTERNAL_LINK 0x5
-> > > > +/* enum: Read internal link configuration. */
-> > > > +#define          MC_CMD_FPGA_IN_OP_GET_INTERNAL_LINK 0x6
-> > > > +/* enum: Get MAC statistics of FPGA external port. */
-> > > > +#define          MC_CMD_FPGA_IN_OP_GET_MAC_STATS 0x7
-> > > > +/* enum: Set configuration on internal FPGA MAC. */
-> > > > +#define          MC_CMD_FPGA_IN_OP_SET_INTERNAL_MAC 0x8
-> > > > +
-> > > > +/* MC_CMD_FPGA_OP_GET_VERSION_IN msgrequest: Get the FPGA version string. A
-> > > > + * free-format string is returned in response to this command. Any checks on
-> > > > + * supported FPGA operations are based on the response to
-> > > > + * MC_CMD_FPGA_OP_GET_CAPABILITIES.
-> > > > + */
-> > > > +#define    MC_CMD_FPGA_OP_GET_VERSION_IN_LEN 4
-> > > > +/* Sub-command code. Must be OP_GET_VERSION */
-> > > > +#define       MC_CMD_FPGA_OP_GET_VERSION_IN_OP_OFST 0
-> > > > +#define       MC_CMD_FPGA_OP_GET_VERSION_IN_OP_LEN 4
-> > > > +
-> > > > +/* MC_CMD_FPGA_OP_GET_VERSION_OUT msgresponse: Returns the version string. */
-> > > > +#define    MC_CMD_FPGA_OP_GET_VERSION_OUT_LENMIN 0
-> > > > +#define    MC_CMD_FPGA_OP_GET_VERSION_OUT_LENMAX 252
-> > > > +#define    MC_CMD_FPGA_OP_GET_VERSION_OUT_LENMAX_MCDI2 1020
-> > > > +#define    MC_CMD_FPGA_OP_GET_VERSION_OUT_LEN(num) (0+1*(num))
-> > > > +#define    MC_CMD_FPGA_OP_GET_VERSION_OUT_VERSION_NUM(len) (((len)-0)/1)
-> > > > +/* Null-terminated string containing version information. */
-> > > > +#define       MC_CMD_FPGA_OP_GET_VERSION_OUT_VERSION_OFST 0
-> > > > +#define       MC_CMD_FPGA_OP_GET_VERSION_OUT_VERSION_LEN 1
-> > > > +#define       MC_CMD_FPGA_OP_GET_VERSION_OUT_VERSION_MINNUM 0
-> > > > +#define       MC_CMD_FPGA_OP_GET_VERSION_OUT_VERSION_MAXNUM 252
-> > > > +#define       MC_CMD_FPGA_OP_GET_VERSION_OUT_VERSION_MAXNUM_MCDI2 1020
-> > > > +
-> > > > +/* MC_CMD_FPGA_OP_GET_CAPABILITIES_IN msgrequest: Read bitmask of features
-> > > > + * supported in the FPGA image.
-> > > > + */
-> > > > +#define    MC_CMD_FPGA_OP_GET_CAPABILITIES_IN_LEN 4
-> > > > +/* Sub-command code. Must be OP_GET_CAPABILITIES */
-> > > > +#define       MC_CMD_FPGA_OP_GET_CAPABILITIES_IN_OP_OFST 0
-> > > > +#define       MC_CMD_FPGA_OP_GET_CAPABILITIES_IN_OP_LEN 4
-> > > > +
-> > > > +/* MC_CMD_FPGA_OP_GET_CAPABILITIES_OUT msgresponse: Returns the version string.
-> > > > + */
-> > > > +#define    MC_CMD_FPGA_OP_GET_CAPABILITIES_OUT_LEN 4
-> > > > +/* Bit-mask of supported features. */
-> > > > +#define       MC_CMD_FPGA_OP_GET_CAPABILITIES_OUT_CAPABILITIES_OFST 0
-> > > > +#define       MC_CMD_FPGA_OP_GET_CAPABILITIES_OUT_CAPABILITIES_LEN 4
-> > > > +#define        MC_CMD_FPGA_OP_GET_CAPABILITIES_OUT_MAC_OFST 0
-> > > > +#define        MC_CMD_FPGA_OP_GET_CAPABILITIES_OUT_MAC_LBN 0
-> > > > +#define        MC_CMD_FPGA_OP_GET_CAPABILITIES_OUT_MAC_WIDTH 1
-> > > > +#define        MC_CMD_FPGA_OP_GET_CAPABILITIES_OUT_MAE_OFST 0
-> > > > +#define        MC_CMD_FPGA_OP_GET_CAPABILITIES_OUT_MAE_LBN 1
-> > > > +#define        MC_CMD_FPGA_OP_GET_CAPABILITIES_OUT_MAE_WIDTH 1
-> > > > +
-> > > > +/* MC_CMD_FPGA_OP_RESET_IN msgrequest: Perform a FPGA reset operation where
-> > > > + * supported.
-> > > > + */
-> > > > +#define    MC_CMD_FPGA_OP_RESET_IN_LEN 4
-> > > > +/* Sub-command code. Must be OP_RESET */
-> > > > +#define       MC_CMD_FPGA_OP_RESET_IN_OP_OFST 0
-> > > > +#define       MC_CMD_FPGA_OP_RESET_IN_OP_LEN 4
-> > > > +
-> > > > +/* MC_CMD_FPGA_OP_RESET_OUT msgresponse */
-> > > > +#define    MC_CMD_FPGA_OP_RESET_OUT_LEN 0
-> > > > +
-> > > > +/* MC_CMD_FPGA_OP_SELECT_FLASH_IN msgrequest: Set active FPGA flash device.
-> > > > + * Returns EINVAL if selected flash index does not exist on the platform under
-> > > > + * test.
-> > > > + */
-> > > > +#define    MC_CMD_FPGA_OP_SELECT_FLASH_IN_LEN 8
-> > > > +/* Sub-command code. Must be OP_SELECT_FLASH */
-> > > > +#define       MC_CMD_FPGA_OP_SELECT_FLASH_IN_OP_OFST 0
-> > > > +#define       MC_CMD_FPGA_OP_SELECT_FLASH_IN_OP_LEN 4
-> > > > +/* Flash device identifier. */
-> > > > +#define       MC_CMD_FPGA_OP_SELECT_FLASH_IN_FLASH_ID_OFST 4
-> > > > +#define       MC_CMD_FPGA_OP_SELECT_FLASH_IN_FLASH_ID_LEN 4
-> > > > +/*            Enum values, see field(s): */
-> > > > +/*               MC_CMD_FPGA_FLASH_INDEX */
-> > > > +
-> > > > +/* MC_CMD_FPGA_OP_SELECT_FLASH_OUT msgresponse */
-> > > > +#define    MC_CMD_FPGA_OP_SELECT_FLASH_OUT_LEN 0
-> > > > +
-> > > > +/* MC_CMD_FPGA_OP_GET_ACTIVE_FLASH_IN msgrequest: Get active FPGA flash device.
-> > > > + */
-> > > > +#define    MC_CMD_FPGA_OP_GET_ACTIVE_FLASH_IN_LEN 4
-> > > > +/* Sub-command code. Must be OP_GET_ACTIVE_FLASH */
-> > > > +#define       MC_CMD_FPGA_OP_GET_ACTIVE_FLASH_IN_OP_OFST 0
-> > > > +#define       MC_CMD_FPGA_OP_GET_ACTIVE_FLASH_IN_OP_LEN 4
-> > > > +
-> > > > +/* MC_CMD_FPGA_OP_GET_ACTIVE_FLASH_OUT msgresponse: Returns flash identifier
-> > > > + * for current active flash.
-> > > > + */
-> > > > +#define    MC_CMD_FPGA_OP_GET_ACTIVE_FLASH_OUT_LEN 4
-> > > > +/* Flash device identifier. */
-> > > > +#define       MC_CMD_FPGA_OP_GET_ACTIVE_FLASH_OUT_FLASH_ID_OFST 0
-> > > > +#define       MC_CMD_FPGA_OP_GET_ACTIVE_FLASH_OUT_FLASH_ID_LEN 4
-> > > > +/*            Enum values, see field(s): */
-> > > > +/*               MC_CMD_FPGA_FLASH_INDEX */
-> > > > +
-> > > > +/* MC_CMD_FPGA_OP_SET_INTERNAL_LINK_IN msgrequest: Configure FPGA internal
-> > > > + * port, facing the ASIC
-> > > > + */
-> > > > +#define    MC_CMD_FPGA_OP_SET_INTERNAL_LINK_IN_LEN 12
-> > > > +/* Sub-command code. Must be OP_SET_INTERNAL_LINK */
-> > > > +#define       MC_CMD_FPGA_OP_SET_INTERNAL_LINK_IN_OP_OFST 0
-> > > > +#define       MC_CMD_FPGA_OP_SET_INTERNAL_LINK_IN_OP_LEN 4
-> > > > +/* Flags */
-> > > > +#define       MC_CMD_FPGA_OP_SET_INTERNAL_LINK_IN_FLAGS_OFST 4
-> > > > +#define       MC_CMD_FPGA_OP_SET_INTERNAL_LINK_IN_FLAGS_LEN 4
-> > > > +#define        MC_CMD_FPGA_OP_SET_INTERNAL_LINK_IN_LINK_STATE_OFST 4
-> > > > +#define        MC_CMD_FPGA_OP_SET_INTERNAL_LINK_IN_LINK_STATE_LBN 0
-> > > > +#define        MC_CMD_FPGA_OP_SET_INTERNAL_LINK_IN_LINK_STATE_WIDTH 2
-> > > > +/* enum: Unmodified, same as last state set by firmware */
-> > > > +#define          MC_CMD_FPGA_OP_SET_INTERNAL_LINK_IN_AUTO 0x0
-> > > > +/* enum: Configure link-up */
-> > > > +#define          MC_CMD_FPGA_OP_SET_INTERNAL_LINK_IN_UP 0x1
-> > > > +/* enum: Configure link-down */
-> > > > +#define          MC_CMD_FPGA_OP_SET_INTERNAL_LINK_IN_DOWN 0x2
-> > > > +#define        MC_CMD_FPGA_OP_SET_INTERNAL_LINK_IN_FLUSH_OFST 4
-> > > > +#define        MC_CMD_FPGA_OP_SET_INTERNAL_LINK_IN_FLUSH_LBN 2
-> > > > +#define        MC_CMD_FPGA_OP_SET_INTERNAL_LINK_IN_FLUSH_WIDTH 1
-> > > > +/* Link speed to be applied on FPGA internal port MAC. */
-> > > > +#define       MC_CMD_FPGA_OP_SET_INTERNAL_LINK_IN_SPEED_OFST 8
-> > > > +#define       MC_CMD_FPGA_OP_SET_INTERNAL_LINK_IN_SPEED_LEN 4
-> > > > +
-> > > > +/* MC_CMD_FPGA_OP_SET_INTERNAL_LINK_OUT msgresponse */
-> > > > +#define    MC_CMD_FPGA_OP_SET_INTERNAL_LINK_OUT_LEN 0
-> > > > +
-> > > > +/* MC_CMD_FPGA_OP_GET_INTERNAL_LINK_IN msgrequest: Read FPGA internal port
-> > > > + * configuration and status
-> > > > + */
-> > > > +#define    MC_CMD_FPGA_OP_GET_INTERNAL_LINK_IN_LEN 4
-> > > > +/* Sub-command code. Must be OP_GET_INTERNAL_LINK */
-> > > > +#define       MC_CMD_FPGA_OP_GET_INTERNAL_LINK_IN_OP_OFST 0
-> > > > +#define       MC_CMD_FPGA_OP_GET_INTERNAL_LINK_IN_OP_LEN 4
-> > > > +
-> > > > +/* MC_CMD_FPGA_OP_GET_INTERNAL_LINK_OUT msgresponse: Response format for read
-> > > > + * FPGA internal port configuration and status
-> > > > + */
-> > > > +#define    MC_CMD_FPGA_OP_GET_INTERNAL_LINK_OUT_LEN 8
-> > > > +/* Flags */
-> > > > +#define       MC_CMD_FPGA_OP_GET_INTERNAL_LINK_OUT_FLAGS_OFST 0
-> > > > +#define       MC_CMD_FPGA_OP_GET_INTERNAL_LINK_OUT_FLAGS_LEN 4
-> > > > +#define        MC_CMD_FPGA_OP_GET_INTERNAL_LINK_OUT_LINK_STATE_OFST 0
-> > > > +#define        MC_CMD_FPGA_OP_GET_INTERNAL_LINK_OUT_LINK_STATE_LBN 0
-> > > > +#define        MC_CMD_FPGA_OP_GET_INTERNAL_LINK_OUT_LINK_STATE_WIDTH 2
-> > > > +/*             Enum values, see field(s): */
-> > > > +/*                MC_CMD_FPGA_OP_SET_INTERNAL_LINK_IN/FLAGS */
-> > > > +/* Link speed set on FPGA internal port MAC. */
-> > > > +#define       MC_CMD_FPGA_OP_GET_INTERNAL_LINK_OUT_SPEED_OFST 4
-> > > > +#define       MC_CMD_FPGA_OP_GET_INTERNAL_LINK_OUT_SPEED_LEN 4
-> > > > +
-> > > > +/* MC_CMD_FPGA_OP_GET_MAC_STATS_IN msgrequest: Get FPGA external port MAC
-> > > > + * statistics.
-> > > > + */
-> > > > +#define    MC_CMD_FPGA_OP_GET_MAC_STATS_IN_LEN 4
-> > > > +/* Sub-command code. Must be OP_GET_MAC_STATS. */
-> > > > +#define       MC_CMD_FPGA_OP_GET_MAC_STATS_IN_OP_OFST 0
-> > > > +#define       MC_CMD_FPGA_OP_GET_MAC_STATS_IN_OP_LEN 4
-> > > > +
-> > > > +/* MC_CMD_FPGA_OP_GET_MAC_STATS_OUT msgresponse */
-> > > > +#define    MC_CMD_FPGA_OP_GET_MAC_STATS_OUT_LENMIN 4
-> > > > +#define    MC_CMD_FPGA_OP_GET_MAC_STATS_OUT_LENMAX 252
-> > > > +#define    MC_CMD_FPGA_OP_GET_MAC_STATS_OUT_LENMAX_MCDI2 1020
-> > > > +#define    MC_CMD_FPGA_OP_GET_MAC_STATS_OUT_LEN(num) (4+8*(num))
-> > > > +#define    MC_CMD_FPGA_OP_GET_MAC_STATS_OUT_STATISTICS_NUM(len) (((len)-4)/8)
-> > > > +#define       MC_CMD_FPGA_OP_GET_MAC_STATS_OUT_NUM_STATS_OFST 0
-> > > > +#define       MC_CMD_FPGA_OP_GET_MAC_STATS_OUT_NUM_STATS_LEN 4
-> > > > +#define       MC_CMD_FPGA_OP_GET_MAC_STATS_OUT_STATISTICS_OFST 4
-> > > > +#define       MC_CMD_FPGA_OP_GET_MAC_STATS_OUT_STATISTICS_LEN 8
-> > > > +#define       MC_CMD_FPGA_OP_GET_MAC_STATS_OUT_STATISTICS_LO_OFST 4
-> > > > +#define       MC_CMD_FPGA_OP_GET_MAC_STATS_OUT_STATISTICS_LO_LEN 4
-> > > > +#define       MC_CMD_FPGA_OP_GET_MAC_STATS_OUT_STATISTICS_LO_LBN 32
-> > > > +#define       MC_CMD_FPGA_OP_GET_MAC_STATS_OUT_STATISTICS_LO_WIDTH 32
-> > > > +#define       MC_CMD_FPGA_OP_GET_MAC_STATS_OUT_STATISTICS_HI_OFST 8
-> > > > +#define       MC_CMD_FPGA_OP_GET_MAC_STATS_OUT_STATISTICS_HI_LEN 4
-> > > > +#define       MC_CMD_FPGA_OP_GET_MAC_STATS_OUT_STATISTICS_HI_LBN 64
-> > > > +#define       MC_CMD_FPGA_OP_GET_MAC_STATS_OUT_STATISTICS_HI_WIDTH 32
-> > > > +#define       MC_CMD_FPGA_OP_GET_MAC_STATS_OUT_STATISTICS_MINNUM 0
-> > > > +#define       MC_CMD_FPGA_OP_GET_MAC_STATS_OUT_STATISTICS_MAXNUM 31
-> > > > +#define       MC_CMD_FPGA_OP_GET_MAC_STATS_OUT_STATISTICS_MAXNUM_MCDI2 127
-> > > > +#define          MC_CMD_FPGA_MAC_TX_TOTAL_PACKETS 0x0 /* enum */
-> > > > +#define          MC_CMD_FPGA_MAC_TX_TOTAL_BYTES 0x1 /* enum */
-> > > > +#define          MC_CMD_FPGA_MAC_TX_TOTAL_GOOD_PACKETS 0x2 /* enum */
-> > > > +#define          MC_CMD_FPGA_MAC_TX_TOTAL_GOOD_BYTES 0x3 /* enum */
-> > > > +#define          MC_CMD_FPGA_MAC_TX_BAD_FCS 0x4 /* enum */
-> > > > +#define          MC_CMD_FPGA_MAC_TX_PAUSE 0x5 /* enum */
-> > > > +#define          MC_CMD_FPGA_MAC_TX_USER_PAUSE 0x6 /* enum */
-> > > > +#define          MC_CMD_FPGA_MAC_RX_TOTAL_PACKETS 0x7 /* enum */
-> > > > +#define          MC_CMD_FPGA_MAC_RX_TOTAL_BYTES 0x8 /* enum */
-> > > > +#define          MC_CMD_FPGA_MAC_RX_TOTAL_GOOD_PACKETS 0x9 /* enum */
-> > > > +#define          MC_CMD_FPGA_MAC_RX_TOTAL_GOOD_BYTES 0xa /* enum */
-> > > > +#define          MC_CMD_FPGA_MAC_RX_BAD_FCS 0xb /* enum */
-> > > > +#define          MC_CMD_FPGA_MAC_RX_PAUSE 0xc /* enum */
-> > > > +#define          MC_CMD_FPGA_MAC_RX_USER_PAUSE 0xd /* enum */
-> > > > +#define          MC_CMD_FPGA_MAC_RX_UNDERSIZE 0xe /* enum */
-> > > > +#define          MC_CMD_FPGA_MAC_RX_OVERSIZE 0xf /* enum */
-> > > > +#define          MC_CMD_FPGA_MAC_RX_FRAMING_ERR 0x10 /* enum */
-> > > > +#define          MC_CMD_FPGA_MAC_FEC_UNCORRECTED_ERRORS 0x11 /* enum */
-> > > > +#define          MC_CMD_FPGA_MAC_FEC_CORRECTED_ERRORS 0x12 /* enum */
-> > > > +
-> > > > +/* MC_CMD_FPGA_OP_SET_INTERNAL_MAC_IN msgrequest: Configures the internal port
-> > > > + * MAC on the FPGA.
-> > > > + */
-> > > > +#define    MC_CMD_FPGA_OP_SET_INTERNAL_MAC_IN_LEN 20
-> > > > +/* Sub-command code. Must be OP_SET_INTERNAL_MAC. */
-> > > > +#define       MC_CMD_FPGA_OP_SET_INTERNAL_MAC_IN_OP_OFST 0
-> > > > +#define       MC_CMD_FPGA_OP_SET_INTERNAL_MAC_IN_OP_LEN 4
-> > > > +/* Select which parameters to configure. */
-> > > > +#define       MC_CMD_FPGA_OP_SET_INTERNAL_MAC_IN_CONTROL_OFST 4
-> > > > +#define       MC_CMD_FPGA_OP_SET_INTERNAL_MAC_IN_CONTROL_LEN 4
-> > > > +#define        MC_CMD_FPGA_OP_SET_INTERNAL_MAC_IN_CFG_MTU_OFST 4
-> > > > +#define        MC_CMD_FPGA_OP_SET_INTERNAL_MAC_IN_CFG_MTU_LBN 0
-> > > > +#define        MC_CMD_FPGA_OP_SET_INTERNAL_MAC_IN_CFG_MTU_WIDTH 1
-> > > > +#define        MC_CMD_FPGA_OP_SET_INTERNAL_MAC_IN_CFG_DRAIN_OFST 4
-> > > > +#define        MC_CMD_FPGA_OP_SET_INTERNAL_MAC_IN_CFG_DRAIN_LBN 1
-> > > > +#define        MC_CMD_FPGA_OP_SET_INTERNAL_MAC_IN_CFG_DRAIN_WIDTH 1
-> > > > +#define        MC_CMD_FPGA_OP_SET_INTERNAL_MAC_IN_CFG_FCNTL_OFST 4
-> > > > +#define        MC_CMD_FPGA_OP_SET_INTERNAL_MAC_IN_CFG_FCNTL_LBN 2
-> > > > +#define        MC_CMD_FPGA_OP_SET_INTERNAL_MAC_IN_CFG_FCNTL_WIDTH 1
-> > > > +/* The MTU to be programmed into the MAC. */
-> > > > +#define       MC_CMD_FPGA_OP_SET_INTERNAL_MAC_IN_MTU_OFST 8
-> > > > +#define       MC_CMD_FPGA_OP_SET_INTERNAL_MAC_IN_MTU_LEN 4
-> > > > +/* Drain Tx FIFO */
-> > > > +#define       MC_CMD_FPGA_OP_SET_INTERNAL_MAC_IN_DRAIN_OFST 12
-> > > > +#define       MC_CMD_FPGA_OP_SET_INTERNAL_MAC_IN_DRAIN_LEN 4
-> > > > +/* flow control configuration. See MC_CMD_SET_MAC/MC_CMD_SET_MAC_IN/FCNTL. */
-> > > > +#define       MC_CMD_FPGA_OP_SET_INTERNAL_MAC_IN_FCNTL_OFST 16
-> > > > +#define       MC_CMD_FPGA_OP_SET_INTERNAL_MAC_IN_FCNTL_LEN 4
-> > > > +
-> > > > +/* MC_CMD_FPGA_OP_SET_INTERNAL_MAC_OUT msgresponse */
-> > > > +#define    MC_CMD_FPGA_OP_SET_INTERNAL_MAC_OUT_LEN 0
-> > > > +
-> > > > +
-> > > > +/***********************************/
-> > > > +/* MC_CMD_EXTERNAL_MAE_GET_LINK_MODE
-> > > > + * This command is expected to be used on a U25 board with an MAE in the FPGA.
-> > > > + * It does not modify the operational state of the NIC. The modes are described
-> > > > + * in XN-200039-TC - U25 OVS packet formats.
-> > > > + */
-> > > > +#define MC_CMD_EXTERNAL_MAE_GET_LINK_MODE 0x1c0
-> > > > +#undef MC_CMD_0x1c0_PRIVILEGE_CTG
-> > > > +
-> > > > +#define MC_CMD_0x1c0_PRIVILEGE_CTG SRIOV_CTG_GENERAL
-> > > > +
-> > > > +/* MC_CMD_EXTERNAL_MAE_GET_LINK_MODE_IN msgrequest */
-> > > > +#define    MC_CMD_EXTERNAL_MAE_GET_LINK_MODE_IN_LEN 0
-> > > > +
-> > > > +/* MC_CMD_EXTERNAL_MAE_GET_LINK_MODE_OUT msgresponse */
-> > > > +#define    MC_CMD_EXTERNAL_MAE_GET_LINK_MODE_OUT_LEN 4
-> > > > +/* The current link mode */
-> > > > +#define       MC_CMD_EXTERNAL_MAE_GET_LINK_MODE_OUT_MODE_OFST 0
-> > > > +#define       MC_CMD_EXTERNAL_MAE_GET_LINK_MODE_OUT_MODE_LEN 4
-> > > > +/*            Enum values, see field(s): */
-> > > > +/*               MC_CMD_EXTERNAL_MAE_LINK_MODE */
-> > > > +
-> > > > +
-> > > > +/***********************************/
-> > > > +/* MC_CMD_EXTERNAL_MAE_SET_LINK_MODE
-> > > > + * This command is expected to be used on a U25 board with an MAE in the FPGA.
-> > > > + * The modes are described in XN-200039-TC - U25 OVS packet formats. This
-> > > > + * command will set the link between the FPGA and the X2 to the specified new
-> > > > + * mode. It will first enter bootstrap mode, make sure there are no packets in
-> > > > + * flight and then enter the requested mode. In order to make sure there are no
-> > > > + * packets in flight, it will flush the X2 TX path, the FPGA RX path from the
-> > > > + * X2, the FPGA TX path to the X2 and the X2 RX path. The driver is responsible
-> > > > + * for making sure there are no TX or RX descriptors posted on any TXQ or RXQ
-> > > > + * associated with the affected port before invoking this command. This command
-> > > > + * is run implicitly with MODE set to LEGACY when MC_CMD_DRV_ATTACH is
-> > > > + * executed.
-> > > > + */
-> > > > +#define MC_CMD_EXTERNAL_MAE_SET_LINK_MODE 0x1c1
-> > > > +#undef MC_CMD_0x1c1_PRIVILEGE_CTG
-> > > > +
-> > > > +#define MC_CMD_0x1c1_PRIVILEGE_CTG SRIOV_CTG_GENERAL
-> > > > +
-> > > > +/* MC_CMD_EXTERNAL_MAE_SET_LINK_MODE_IN msgrequest */
-> > > > +#define    MC_CMD_EXTERNAL_MAE_SET_LINK_MODE_IN_LEN 4
-> > > > +/* The new link mode. */
-> > > > +#define       MC_CMD_EXTERNAL_MAE_SET_LINK_MODE_IN_MODE_OFST 0
-> > > > +#define       MC_CMD_EXTERNAL_MAE_SET_LINK_MODE_IN_MODE_LEN 4
-> > > > +/*            Enum values, see field(s): */
-> > > > +/*               MC_CMD_EXTERNAL_MAE_LINK_MODE */
-> > > > +
-> > > > +/* MC_CMD_EXTERNAL_MAE_SET_LINK_MODE_OUT msgresponse */
-> > > > +#define    MC_CMD_EXTERNAL_MAE_SET_LINK_MODE_OUT_LEN 0
-> > > > +
-> > > > +
-> > > > +/***********************************/
-> > > > +/* MC_CMD_GET_BUFTBL_STATS
-> > > > + * Currently EF10 only. Read usage and limits for Buffer Table
-> > > > + */
-> > > > +#define MC_CMD_GET_BUFTBL_STATS 0x6a
-> > > > +#undef MC_CMD_0x6a_PRIVILEGE_CTG
-> > > > +
-> > > > +#define MC_CMD_0x6a_PRIVILEGE_CTG SRIOV_CTG_GENERAL
-> > > > +
-> > > > +/* MC_CMD_GET_BUFTBL_STATS_IN msgrequest */
-> > > > +#define    MC_CMD_GET_BUFTBL_STATS_IN_LEN 0
-> > > > +
-> > > > +/* MC_CMD_GET_BUFTBL_STATS_OUT msgresponse */
-> > > > +#define    MC_CMD_GET_BUFTBL_STATS_OUT_LEN 40
-> > > > +/* number of buffer table entries per set */
-> > > > +#define       MC_CMD_GET_BUFTBL_STATS_OUT_BUFTBL_ENTRIES_PER_SET_OFST 0
-> > > > +#define       MC_CMD_GET_BUFTBL_STATS_OUT_BUFTBL_ENTRIES_PER_SET_LEN 4
-> > > > +/* number of buffer table entries per cluster */
-> > > > +#define       MC_CMD_GET_BUFTBL_STATS_OUT_BUFTBL_ENTRIES_PER_CLUSTER_OFST 4
-> > > > +#define       MC_CMD_GET_BUFTBL_STATS_OUT_BUFTBL_ENTRIES_PER_CLUSTER_LEN 4
-> > > > +/* Maximum size buffer table can grow to, in clusters. On EF10, this can
-> > > > + * potentially vary depending on the size of the Descriptor Cache.
-> > > > + */
-> > > > +#define       MC_CMD_GET_BUFTBL_STATS_OUT_BUFTBL_MAX_CLUSTERS_OFST 8
-> > > > +#define       MC_CMD_GET_BUFTBL_STATS_OUT_BUFTBL_MAX_CLUSTERS_LEN 4
-> > > > +/* High water mark for number of buffer table clusters which have been
-> > > > + * allocated.
-> > > > + */
-> > > > +#define       MC_CMD_GET_BUFTBL_STATS_OUT_BUFTBL_HIGH_WATER_CLUSTERS_OFST 12
-> > > > +#define       MC_CMD_GET_BUFTBL_STATS_OUT_BUFTBL_HIGH_WATER_CLUSTERS_LEN 4
-> > > > +/* Number of free buffer table clusters on the free cluster list. */
-> > > > +#define       MC_CMD_GET_BUFTBL_STATS_OUT_BUFTBL_FREE_CLUSTERS_OFST 16
-> > > > +#define       MC_CMD_GET_BUFTBL_STATS_OUT_BUFTBL_FREE_CLUSTERS_LEN 4
-> > > > +/* Number of free buffer table sets on the free set list. */
-> > > > +#define       MC_CMD_GET_BUFTBL_STATS_OUT_BUFTBL_FREE_SETS_OFST 20
-> > > > +#define       MC_CMD_GET_BUFTBL_STATS_OUT_BUFTBL_FREE_SETS_LEN 4
-> > > > +/* Number of chunks of fully-used clusters allocated to the MC for EVQ, RXQ and
-> > > > + * TXQs.
-> > > > + */
-> > > > +#define       MC_CMD_GET_BUFTBL_STATS_OUT_BUFTBL_MC_FULL_CLUSTERS_OFST 24
-> > > > +#define       MC_CMD_GET_BUFTBL_STATS_OUT_BUFTBL_MC_FULL_CLUSTERS_LEN 4
-> > > > +/* Number of chunks in partially-used clusters allocated to the MC for EVQ, RXQ
-> > > > + * and TXQs.
-> > > > + */
-> > > > +#define       MC_CMD_GET_BUFTBL_STATS_OUT_BUFTBL_MC_PART_CLUSTERS_OFST 28
-> > > > +#define       MC_CMD_GET_BUFTBL_STATS_OUT_BUFTBL_MC_PART_CLUSTERS_LEN 4
-> > > > +/* Number of buffer table sets (chunks) allocated to the host via
-> > > > + * MC_CMD_ALLOC_BUFTBL_CHUNK.
-> > > > + */
-> > > > +#define       MC_CMD_GET_BUFTBL_STATS_OUT_BUFTBL_HOST_SETS_OFST 32
-> > > > +#define       MC_CMD_GET_BUFTBL_STATS_OUT_BUFTBL_HOST_SETS_LEN 4
-> > > > +/* Maximum number of VIs per NIC. On EF10 this is the current value as used to
-> > > > + * size the Descriptor Cache in hardware.
-> > > > + */
-> > > > +#define       MC_CMD_GET_BUFTBL_STATS_OUT_VI_MAX_OFST 36
-> > > > +#define       MC_CMD_GET_BUFTBL_STATS_OUT_VI_MAX_LEN 4
-> > > > +
-> > > >    /* CLIENT_HANDLE structuredef: A client is an abstract entity that can make
-> > > >     * requests of the device and that can own resources managed by the device.
-> > > >     * Examples of clients include PCIe functions and dynamic clients. A client
-> > > > @@ -23899,8 +27825,8 @@
-> > > > 
-> > > >    /* SCHED_CREDIT_CHECK_RESULT structuredef */
-> > > >    #define    SCHED_CREDIT_CHECK_RESULT_LEN 16
-> > > > -/* The instance of the scheduler. Refer to XN-200389-AW for the location of
-> > > > - * these schedulers in the hardware.
-> > > > +/* The instance of the scheduler. Refer to XN-200389-AW (snic/hnic) and
-> > > > + * XN-200425-TC (cdx) for the location of these schedulers in the hardware.
-> > > >     */
-> > > >    #define       SCHED_CREDIT_CHECK_RESULT_SCHED_INSTANCE_OFST 0
-> > > >    #define       SCHED_CREDIT_CHECK_RESULT_SCHED_INSTANCE_LEN 1
-> > > > @@ -23914,6 +27840,16 @@
-> > > >    #define          SCHED_CREDIT_CHECK_RESULT_DMAC_H2C 0x7 /* enum */
-> > > >    #define          SCHED_CREDIT_CHECK_RESULT_HUB_NET_B 0x8 /* enum */
-> > > >    #define          SCHED_CREDIT_CHECK_RESULT_HUB_NET_REPLAY 0x9 /* enum */
-> > > > +#define          SCHED_CREDIT_CHECK_RESULT_ADAPTER_C2H_C 0xa /* enum */
-> > > > +#define          SCHED_CREDIT_CHECK_RESULT_A2_H2C_C 0xb /* enum */
-> > > > +#define          SCHED_CREDIT_CHECK_RESULT_A3_SOFT_ADAPTOR_C 0xc /* enum */
-> > > > +#define          SCHED_CREDIT_CHECK_RESULT_A4_DPU_WRITE_C 0xd /* enum */
-> > > > +#define          SCHED_CREDIT_CHECK_RESULT_JRC_RRU 0xe /* enum */
-> > > > +#define          SCHED_CREDIT_CHECK_RESULT_CDM_SINK 0xf /* enum */
-> > > > +#define          SCHED_CREDIT_CHECK_RESULT_PCIE_SINK 0x10 /* enum */
-> > > > +#define          SCHED_CREDIT_CHECK_RESULT_UPORT_SINK 0x11 /* enum */
-> > > > +#define          SCHED_CREDIT_CHECK_RESULT_PSX_SINK 0x12 /* enum */
-> > > > +#define          SCHED_CREDIT_CHECK_RESULT_A5_DPU_READ_C 0x13 /* enum */
-> > > >    #define       SCHED_CREDIT_CHECK_RESULT_SCHED_INSTANCE_LBN 0
-> > > >    #define       SCHED_CREDIT_CHECK_RESULT_SCHED_INSTANCE_WIDTH 8
-> > > >    /* The type of node that this result refers to. */
-> > > > @@ -23923,6 +27859,10 @@
-> > > >    #define          SCHED_CREDIT_CHECK_RESULT_DEST 0x0
-> > > >    /* enum: Source node */
-> > > >    #define          SCHED_CREDIT_CHECK_RESULT_SOURCE 0x1
-> > > > +/* enum: Destination node credit type 1 (new to the Keystone schedulers, see
-> > > > + * SF-120268-TC)
-> > > > + */
-> > > > +#define          SCHED_CREDIT_CHECK_RESULT_DEST_CREDIT1 0x2
-> > > >    #define       SCHED_CREDIT_CHECK_RESULT_NODE_TYPE_LBN 8
-> > > >    #define       SCHED_CREDIT_CHECK_RESULT_NODE_TYPE_WIDTH 8
-> > > >    /* Level of node in scheduler hierarchy (level 0 is the bottom of the
-> > > > @@ -26076,6 +30016,26 @@
-> > > >    #define       MC_CMD_DESC_PROXY_FUNC_ENUM_OUT_FUNC_MAP_MINNUM 0
-> > > >    #define       MC_CMD_DESC_PROXY_FUNC_ENUM_OUT_FUNC_MAP_MAXNUM 4
-> > > >    #define       MC_CMD_DESC_PROXY_FUNC_ENUM_OUT_FUNC_MAP_MAXNUM_MCDI2 19
-> > > > +#define       MC_CMD_DESC_PROXY_FUNC_ENUM_OUT_FUNC_MAP_FUNC_OFST 4
-> > > > +#define       MC_CMD_DESC_PROXY_FUNC_ENUM_OUT_FUNC_MAP_FUNC_LEN 8
-> > > > +#define       MC_CMD_DESC_PROXY_FUNC_ENUM_OUT_FUNC_MAP_FUNC_LO_OFST 4
-> > > > +#define       MC_CMD_DESC_PROXY_FUNC_ENUM_OUT_FUNC_MAP_FUNC_LO_LEN 4
-> > > > +#define       MC_CMD_DESC_PROXY_FUNC_ENUM_OUT_FUNC_MAP_FUNC_LO_LBN 32
-> > > > +#define       MC_CMD_DESC_PROXY_FUNC_ENUM_OUT_FUNC_MAP_FUNC_LO_WIDTH 32
-> > > > +#define       MC_CMD_DESC_PROXY_FUNC_ENUM_OUT_FUNC_MAP_FUNC_HI_OFST 8
-> > > > +#define       MC_CMD_DESC_PROXY_FUNC_ENUM_OUT_FUNC_MAP_FUNC_HI_LEN 4
-> > > > +#define       MC_CMD_DESC_PROXY_FUNC_ENUM_OUT_FUNC_MAP_FUNC_HI_LBN 64
-> > > > +#define       MC_CMD_DESC_PROXY_FUNC_ENUM_OUT_FUNC_MAP_FUNC_HI_WIDTH 32
-> > > > +#define       MC_CMD_DESC_PROXY_FUNC_ENUM_OUT_FUNC_MAP_FUNC_PF_OFST 4
-> > > > +#define       MC_CMD_DESC_PROXY_FUNC_ENUM_OUT_FUNC_MAP_FUNC_PF_LEN 2
-> > > > +#define       MC_CMD_DESC_PROXY_FUNC_ENUM_OUT_FUNC_MAP_FUNC_VF_OFST 6
-> > > > +#define       MC_CMD_DESC_PROXY_FUNC_ENUM_OUT_FUNC_MAP_FUNC_VF_LEN 2
-> > > > +#define       MC_CMD_DESC_PROXY_FUNC_ENUM_OUT_FUNC_MAP_FUNC_INTF_OFST 8
-> > > > +#define       MC_CMD_DESC_PROXY_FUNC_ENUM_OUT_FUNC_MAP_FUNC_INTF_LEN 4
-> > > > +#define       MC_CMD_DESC_PROXY_FUNC_ENUM_OUT_FUNC_MAP_PERSONALITY_OFST 12
-> > > > +#define       MC_CMD_DESC_PROXY_FUNC_ENUM_OUT_FUNC_MAP_PERSONALITY_LEN 4
-> > > > +#define       MC_CMD_DESC_PROXY_FUNC_ENUM_OUT_FUNC_MAP_LABEL_OFST 16
-> > > > +#define       MC_CMD_DESC_PROXY_FUNC_ENUM_OUT_FUNC_MAP_LABEL_LEN 40
-> > > > 
-> > > > 
-> > > >    /***********************************/
-> > > > @@ -27350,7 +31310,7 @@
-> > > >    /* MAE_MPORT_SELECTOR structuredef: MPORTS are identified by an opaque unsigned
-> > > >     * integer value (mport_id) that is guaranteed to be representable within
-> > > >     * 32-bits or within any NIC interface field that needs store the value
-> > > > - * (whichever is narrowers). This selector structure provides a stable way to
-> > > > + * (whichever is narrower). This selector structure provides a stable way to
-> > > >     * refer to m-ports.
-> > > >     */
-> > > >    #define    MAE_MPORT_SELECTOR_LEN 4
-> > > > @@ -27425,10 +31385,22 @@
-> > > >    #define       MAE_MPORT_SELECTOR_FLAT_WIDTH 32
-> > > > 
-> > > >    /* MAE_LINK_ENDPOINT_SELECTOR structuredef: Structure that identifies a real or
-> > > > - * virtual network port by MAE port and link end
-> > > > + * virtual network port by MAE port and link end. Intended to be used by
-> > > > + * network port MCDI commands. Setting FLAT to MAE_LINK_ENDPOINT_COMPAT is
-> > > > + * equivalent to using the previous version of the command. Not all possible
-> > > > + * combinations of MPORT_END and MPORT_SELECTOR in MAE_LINK_ENDPOINT_SELECTOR
-> > > > + * will work in all circumstances. 1. Some will always work (e.g. a VF can
-> > > > + * always address its logical MAC using MPORT_SELECTOR=ASSIGNED,LINK_END=VNIC),
-> > > > + * 2. Some are not meaningful and will always fail with EINVAL (e.g. attempting
-> > > > + * to address the VNIC end of a link to a physical port), 3. Some are
-> > > > + * meaningful but require the MCDI client to have the required permission and
-> > > > + * fail with EPERM otherwise (e.g. trying to set the MAC on a VF the caller
-> > > > + * cannot administer), and 4. Some could be implementation-specific and fail
-> > > > + * with ENOTSUP if not available (no examples exist right now). See
-> > > > + * SF-123581-TC section 4.3 for more details.
-> > > >     */
-> > > >    #define    MAE_LINK_ENDPOINT_SELECTOR_LEN 8
-> > > > -/* The MAE MPORT of interest */
-> > > > +/* Identifier for the MAE MPORT of interest */
-> > > >    #define       MAE_LINK_ENDPOINT_SELECTOR_MPORT_SELECTOR_OFST 0
-> > > >    #define       MAE_LINK_ENDPOINT_SELECTOR_MPORT_SELECTOR_LEN 4
-> > > >    #define       MAE_LINK_ENDPOINT_SELECTOR_MPORT_SELECTOR_LBN 0
-> > > > @@ -27829,6 +31801,8 @@
-> > > >    #define       MC_CMD_MAE_COUNTER_ALLOC_OUT_COUNTER_ID_MAXNUM_MCDI2 253
-> > > >    /* enum: A counter ID that is guaranteed never to represent a real counter */
-> > > >    #define          MC_CMD_MAE_COUNTER_ALLOC_OUT_COUNTER_ID_NULL 0xffffffff
-> > > > +/*            Other enum values, see field(s): */
-> > > > +/*               MAE_COUNTER_ID */
-> > > > 
-> > > > 
-> > > >    /***********************************/
-> > > > @@ -28266,6 +32240,24 @@
-> > > >    #define        MC_CMD_MAE_ACTION_SET_ALLOC_IN_SUPPRESS_SELF_DELIVERY_OFST 0
-> > > >    #define        MC_CMD_MAE_ACTION_SET_ALLOC_IN_SUPPRESS_SELF_DELIVERY_LBN 14
-> > > >    #define        MC_CMD_MAE_ACTION_SET_ALLOC_IN_SUPPRESS_SELF_DELIVERY_WIDTH 1
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_IN_DO_REPLACE_RDP_C_PL_OFST 0
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_IN_DO_REPLACE_RDP_C_PL_LBN 15
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_IN_DO_REPLACE_RDP_C_PL_WIDTH 1
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_IN_DO_REPLACE_RDP_D_PL_OFST 0
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_IN_DO_REPLACE_RDP_D_PL_LBN 16
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_IN_DO_REPLACE_RDP_D_PL_WIDTH 1
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_IN_DO_REPLACE_RDP_OUT_HOST_CHAN_OFST 0
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_IN_DO_REPLACE_RDP_OUT_HOST_CHAN_LBN 17
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_IN_DO_REPLACE_RDP_OUT_HOST_CHAN_WIDTH 1
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_IN_DO_SET_NET_CHAN_OFST 0
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_IN_DO_SET_NET_CHAN_LBN 18
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_IN_DO_SET_NET_CHAN_WIDTH 1
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_IN_LACP_PLUGIN_OFST 0
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_IN_LACP_PLUGIN_LBN 19
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_IN_LACP_PLUGIN_WIDTH 1
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_IN_LACP_INC_L4_OFST 0
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_IN_LACP_INC_L4_LBN 20
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_IN_LACP_INC_L4_WIDTH 1
-> > > >    /* If VLAN_PUSH >= 1, TCI value to be inserted as outermost VLAN. */
-> > > >    #define       MC_CMD_MAE_ACTION_SET_ALLOC_IN_VLAN0_TCI_BE_OFST 4
-> > > >    #define       MC_CMD_MAE_ACTION_SET_ALLOC_IN_VLAN0_TCI_BE_LEN 2
-> > > > @@ -28291,19 +32283,23 @@
-> > > >    #define       MC_CMD_MAE_ACTION_SET_ALLOC_IN_DELIVER_OFST 20
-> > > >    #define       MC_CMD_MAE_ACTION_SET_ALLOC_IN_DELIVER_LEN 4
-> > > >    /* Allows an action set to trigger several counter updates. Set to
-> > > > - * COUNTER_LIST_ID_NULL to request no counter action.
-> > > > + * MAE_COUNTER_ID_NULL to request no counter action.
-> > > >     */
-> > > >    #define       MC_CMD_MAE_ACTION_SET_ALLOC_IN_COUNTER_LIST_ID_OFST 24
-> > > >    #define       MC_CMD_MAE_ACTION_SET_ALLOC_IN_COUNTER_LIST_ID_LEN 4
-> > > > +/*            Enum values, see field(s): */
-> > > > +/*               MAE_COUNTER_ID */
-> > > >    /* If a driver only wished to update one counter within this action set, then
-> > > >     * it can supply a COUNTER_ID instead of allocating a single-element counter
-> > > >     * list. The ID must have been allocated with COUNTER_TYPE=AR. This field
-> > > > - * should be set to COUNTER_ID_NULL if this behaviour is not required. It is
-> > > > - * not valid to supply a non-NULL value for both COUNTER_LIST_ID and
-> > > > + * should be set to MAE_COUNTER_ID_NULL if this behaviour is not required. It
-> > > > + * is not valid to supply a non-NULL value for both COUNTER_LIST_ID and
-> > > >     * COUNTER_ID.
-> > > >     */
-> > > >    #define       MC_CMD_MAE_ACTION_SET_ALLOC_IN_COUNTER_ID_OFST 28
-> > > >    #define       MC_CMD_MAE_ACTION_SET_ALLOC_IN_COUNTER_ID_LEN 4
-> > > > +/*            Enum values, see field(s): */
-> > > > +/*               MAE_COUNTER_ID */
-> > > >    #define       MC_CMD_MAE_ACTION_SET_ALLOC_IN_MARK_VALUE_OFST 32
-> > > >    #define       MC_CMD_MAE_ACTION_SET_ALLOC_IN_MARK_VALUE_LEN 4
-> > > >    /* Set to MAC_ID_NULL to request no source MAC replacement. */
-> > > > @@ -28347,6 +32343,24 @@
-> > > >    #define        MC_CMD_MAE_ACTION_SET_ALLOC_V2_IN_SUPPRESS_SELF_DELIVERY_OFST 0
-> > > >    #define        MC_CMD_MAE_ACTION_SET_ALLOC_V2_IN_SUPPRESS_SELF_DELIVERY_LBN 14
-> > > >    #define        MC_CMD_MAE_ACTION_SET_ALLOC_V2_IN_SUPPRESS_SELF_DELIVERY_WIDTH 1
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V2_IN_DO_REPLACE_RDP_C_PL_OFST 0
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V2_IN_DO_REPLACE_RDP_C_PL_LBN 15
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V2_IN_DO_REPLACE_RDP_C_PL_WIDTH 1
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V2_IN_DO_REPLACE_RDP_D_PL_OFST 0
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V2_IN_DO_REPLACE_RDP_D_PL_LBN 16
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V2_IN_DO_REPLACE_RDP_D_PL_WIDTH 1
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V2_IN_DO_REPLACE_RDP_OUT_HOST_CHAN_OFST 0
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V2_IN_DO_REPLACE_RDP_OUT_HOST_CHAN_LBN 17
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V2_IN_DO_REPLACE_RDP_OUT_HOST_CHAN_WIDTH 1
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V2_IN_DO_SET_NET_CHAN_OFST 0
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V2_IN_DO_SET_NET_CHAN_LBN 18
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V2_IN_DO_SET_NET_CHAN_WIDTH 1
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V2_IN_LACP_PLUGIN_OFST 0
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V2_IN_LACP_PLUGIN_LBN 19
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V2_IN_LACP_PLUGIN_WIDTH 1
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V2_IN_LACP_INC_L4_OFST 0
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V2_IN_LACP_INC_L4_LBN 20
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V2_IN_LACP_INC_L4_WIDTH 1
-> > > >    /* If VLAN_PUSH >= 1, TCI value to be inserted as outermost VLAN. */
-> > > >    #define       MC_CMD_MAE_ACTION_SET_ALLOC_V2_IN_VLAN0_TCI_BE_OFST 4
-> > > >    #define       MC_CMD_MAE_ACTION_SET_ALLOC_V2_IN_VLAN0_TCI_BE_LEN 2
-> > > > @@ -28372,19 +32386,23 @@
-> > > >    #define       MC_CMD_MAE_ACTION_SET_ALLOC_V2_IN_DELIVER_OFST 20
-> > > >    #define       MC_CMD_MAE_ACTION_SET_ALLOC_V2_IN_DELIVER_LEN 4
-> > > >    /* Allows an action set to trigger several counter updates. Set to
-> > > > - * COUNTER_LIST_ID_NULL to request no counter action.
-> > > > + * MAE_COUNTER_ID_NULL to request no counter action.
-> > > >     */
-> > > >    #define       MC_CMD_MAE_ACTION_SET_ALLOC_V2_IN_COUNTER_LIST_ID_OFST 24
-> > > >    #define       MC_CMD_MAE_ACTION_SET_ALLOC_V2_IN_COUNTER_LIST_ID_LEN 4
-> > > > +/*            Enum values, see field(s): */
-> > > > +/*               MAE_COUNTER_ID */
-> > > >    /* If a driver only wished to update one counter within this action set, then
-> > > >     * it can supply a COUNTER_ID instead of allocating a single-element counter
-> > > >     * list. The ID must have been allocated with COUNTER_TYPE=AR. This field
-> > > > - * should be set to COUNTER_ID_NULL if this behaviour is not required. It is
-> > > > - * not valid to supply a non-NULL value for both COUNTER_LIST_ID and
-> > > > + * should be set to MAE_COUNTER_ID_NULL if this behaviour is not required. It
-> > > > + * is not valid to supply a non-NULL value for both COUNTER_LIST_ID and
-> > > >     * COUNTER_ID.
-> > > >     */
-> > > >    #define       MC_CMD_MAE_ACTION_SET_ALLOC_V2_IN_COUNTER_ID_OFST 28
-> > > >    #define       MC_CMD_MAE_ACTION_SET_ALLOC_V2_IN_COUNTER_ID_LEN 4
-> > > > +/*            Enum values, see field(s): */
-> > > > +/*               MAE_COUNTER_ID */
-> > > >    #define       MC_CMD_MAE_ACTION_SET_ALLOC_V2_IN_MARK_VALUE_OFST 32
-> > > >    #define       MC_CMD_MAE_ACTION_SET_ALLOC_V2_IN_MARK_VALUE_LEN 4
-> > > >    /* Set to MAC_ID_NULL to request no source MAC replacement. */
-> > > > @@ -28437,6 +32455,172 @@
-> > > >    #define        MC_CMD_MAE_ACTION_SET_ALLOC_V2_IN_ECN_ECT_1_TO_CE_LBN 6
-> > > >    #define        MC_CMD_MAE_ACTION_SET_ALLOC_V2_IN_ECN_ECT_1_TO_CE_WIDTH 1
-> > > > 
-> > > > +/* MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN msgrequest: Only supported if
-> > > > + * MAE_ACTION_SET_ALLOC_V3_SUPPORTED is advertised in
-> > > > + * MC_CMD_GET_CAPABILITIES_V10_OUT.
-> > > > + */
-> > > > +#define    MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_LEN 53
-> > > > +#define       MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_FLAGS_OFST 0
-> > > > +#define       MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_FLAGS_LEN 4
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_VLAN_PUSH_OFST 0
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_VLAN_PUSH_LBN 0
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_VLAN_PUSH_WIDTH 2
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_VLAN_POP_OFST 0
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_VLAN_POP_LBN 4
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_VLAN_POP_WIDTH 2
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_DECAP_OFST 0
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_DECAP_LBN 8
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_DECAP_WIDTH 1
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_MARK_OFST 0
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_MARK_LBN 9
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_MARK_WIDTH 1
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_FLAG_OFST 0
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_FLAG_LBN 10
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_FLAG_WIDTH 1
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_DO_NAT_OFST 0
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_DO_NAT_LBN 11
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_DO_NAT_WIDTH 1
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_DO_DECR_IP_TTL_OFST 0
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_DO_DECR_IP_TTL_LBN 12
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_DO_DECR_IP_TTL_WIDTH 1
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_DO_SET_SRC_MPORT_OFST 0
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_DO_SET_SRC_MPORT_LBN 13
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_DO_SET_SRC_MPORT_WIDTH 1
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_SUPPRESS_SELF_DELIVERY_OFST 0
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_SUPPRESS_SELF_DELIVERY_LBN 14
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_SUPPRESS_SELF_DELIVERY_WIDTH 1
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_DO_REPLACE_RDP_C_PL_OFST 0
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_DO_REPLACE_RDP_C_PL_LBN 15
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_DO_REPLACE_RDP_C_PL_WIDTH 1
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_DO_REPLACE_RDP_D_PL_OFST 0
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_DO_REPLACE_RDP_D_PL_LBN 16
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_DO_REPLACE_RDP_D_PL_WIDTH 1
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_DO_REPLACE_RDP_OUT_HOST_CHAN_OFST 0
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_DO_REPLACE_RDP_OUT_HOST_CHAN_LBN 17
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_DO_REPLACE_RDP_OUT_HOST_CHAN_WIDTH 1
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_DO_SET_NET_CHAN_OFST 0
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_DO_SET_NET_CHAN_LBN 18
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_DO_SET_NET_CHAN_WIDTH 1
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_LACP_PLUGIN_OFST 0
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_LACP_PLUGIN_LBN 19
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_LACP_PLUGIN_WIDTH 1
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_LACP_INC_L4_OFST 0
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_LACP_INC_L4_LBN 20
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_LACP_INC_L4_WIDTH 1
-> > > > +/* If VLAN_PUSH >= 1, TCI value to be inserted as outermost VLAN. */
-> > > > +#define       MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_VLAN0_TCI_BE_OFST 4
-> > > > +#define       MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_VLAN0_TCI_BE_LEN 2
-> > > > +/* If VLAN_PUSH >= 1, TPID value to be inserted as outermost VLAN. */
-> > > > +#define       MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_VLAN0_PROTO_BE_OFST 6
-> > > > +#define       MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_VLAN0_PROTO_BE_LEN 2
-> > > > +/* If VLAN_PUSH == 2, inner TCI value to be inserted. */
-> > > > +#define       MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_VLAN1_TCI_BE_OFST 8
-> > > > +#define       MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_VLAN1_TCI_BE_LEN 2
-> > > > +/* If VLAN_PUSH == 2, inner TPID value to be inserted. */
-> > > > +#define       MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_VLAN1_PROTO_BE_OFST 10
-> > > > +#define       MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_VLAN1_PROTO_BE_LEN 2
-> > > > +/* Reserved. Ignored by firmware. Should be set to zero or 0xffffffff. */
-> > > > +#define       MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_RSVD_OFST 12
-> > > > +#define       MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_RSVD_LEN 4
-> > > > +/* Set to ENCAP_HEADER_ID_NULL to request no encap action */
-> > > > +#define       MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_ENCAP_HEADER_ID_OFST 16
-> > > > +#define       MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_ENCAP_HEADER_ID_LEN 4
-> > > > +/* An m-port selector identifying the m-port that the modified packet should be
-> > > > + * delivered to. Set to MPORT_SELECTOR_NULL to request no delivery of the
-> > > > + * packet.
-> > > > + */
-> > > > +#define       MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_DELIVER_OFST 20
-> > > > +#define       MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_DELIVER_LEN 4
-> > > > +/* Allows an action set to trigger several counter updates. Set to
-> > > > + * MAE_COUNTER_ID_NULL to request no counter action.
-> > > > + */
-> > > > +#define       MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_COUNTER_LIST_ID_OFST 24
-> > > > +#define       MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_COUNTER_LIST_ID_LEN 4
-> > > > +/*            Enum values, see field(s): */
-> > > > +/*               MAE_COUNTER_ID */
-> > > > +/* If a driver only wished to update one counter within this action set, then
-> > > > + * it can supply a COUNTER_ID instead of allocating a single-element counter
-> > > > + * list. The ID must have been allocated with COUNTER_TYPE=AR. This field
-> > > > + * should be set to MAE_COUNTER_ID_NULL if this behaviour is not required. It
-> > > > + * is not valid to supply a non-NULL value for both COUNTER_LIST_ID and
-> > > > + * COUNTER_ID.
-> > > > + */
-> > > > +#define       MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_COUNTER_ID_OFST 28
-> > > > +#define       MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_COUNTER_ID_LEN 4
-> > > > +/*            Enum values, see field(s): */
-> > > > +/*               MAE_COUNTER_ID */
-> > > > +#define       MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_MARK_VALUE_OFST 32
-> > > > +#define       MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_MARK_VALUE_LEN 4
-> > > > +/* Set to MAC_ID_NULL to request no source MAC replacement. */
-> > > > +#define       MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_SRC_MAC_ID_OFST 36
-> > > > +#define       MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_SRC_MAC_ID_LEN 4
-> > > > +/* Set to MAC_ID_NULL to request no destination MAC replacement. */
-> > > > +#define       MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_DST_MAC_ID_OFST 40
-> > > > +#define       MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_DST_MAC_ID_LEN 4
-> > > > +/* Source m-port ID to be reported for DO_SET_SRC_MPORT action. */
-> > > > +#define       MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_REPORTED_SRC_MPORT_OFST 44
-> > > > +#define       MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_REPORTED_SRC_MPORT_LEN 4
-> > > > +/* Actions for modifying the Differentiated Services Code-Point (DSCP) bits
-> > > > + * within IPv4 and IPv6 headers.
-> > > > + */
-> > > > +#define       MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_DSCP_CONTROL_OFST 48
-> > > > +#define       MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_DSCP_CONTROL_LEN 2
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_DO_DSCP_ENCAP_COPY_OFST 48
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_DO_DSCP_ENCAP_COPY_LBN 0
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_DO_DSCP_ENCAP_COPY_WIDTH 1
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_DO_DSCP_DECAP_COPY_OFST 48
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_DO_DSCP_DECAP_COPY_LBN 1
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_DO_DSCP_DECAP_COPY_WIDTH 1
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_DO_REPLACE_DSCP_OFST 48
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_DO_REPLACE_DSCP_LBN 2
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_DO_REPLACE_DSCP_WIDTH 1
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_DSCP_VALUE_OFST 48
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_DSCP_VALUE_LBN 3
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_DSCP_VALUE_WIDTH 6
-> > > > +/* Actions for modifying the Explicit Congestion Notification (ECN) bits within
-> > > > + * IPv4 and IPv6 headers.
-> > > > + */
-> > > > +#define       MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_ECN_CONTROL_OFST 50
-> > > > +#define       MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_ECN_CONTROL_LEN 1
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_DO_ECN_ENCAP_COPY_OFST 50
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_DO_ECN_ENCAP_COPY_LBN 0
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_DO_ECN_ENCAP_COPY_WIDTH 1
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_DO_ECN_DECAP_COPY_OFST 50
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_DO_ECN_DECAP_COPY_LBN 1
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_DO_ECN_DECAP_COPY_WIDTH 1
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_DO_REPLACE_ECN_OFST 50
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_DO_REPLACE_ECN_LBN 2
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_DO_REPLACE_ECN_WIDTH 1
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_ECN_VALUE_OFST 50
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_ECN_VALUE_LBN 3
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_ECN_VALUE_WIDTH 2
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_ECN_ECT_0_TO_CE_OFST 50
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_ECN_ECT_0_TO_CE_LBN 5
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_ECN_ECT_0_TO_CE_WIDTH 1
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_ECN_ECT_1_TO_CE_OFST 50
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_ECN_ECT_1_TO_CE_LBN 6
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_ECN_ECT_1_TO_CE_WIDTH 1
-> > > > +/* Actions for overwriting CH_ROUTE subfields. */
-> > > > +#define       MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_RDP_OVERWRITE_OFST 51
-> > > > +#define       MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_RDP_OVERWRITE_LEN 1
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_RDP_C_PL_OFST 51
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_RDP_C_PL_LBN 0
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_RDP_C_PL_WIDTH 1
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_RDP_D_PL_OFST 51
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_RDP_D_PL_LBN 1
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_RDP_D_PL_WIDTH 1
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_RDP_PL_CHAN_OFST 51
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_RDP_PL_CHAN_LBN 2
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_RDP_PL_CHAN_WIDTH 1
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_RDP_OUT_HOST_CHAN_OFST 51
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_RDP_OUT_HOST_CHAN_LBN 3
-> > > > +#define        MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_RDP_OUT_HOST_CHAN_WIDTH 1
-> > > > +/* Override outgoing CH_VC to network port for DO_SET_NET_CHAN action. Cannot
-> > > > + * be used in conjunction with DO_SET_SRC_MPORT action.
-> > > > + */
-> > > > +#define       MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_NET_CHAN_OFST 52
-> > > > +#define       MC_CMD_MAE_ACTION_SET_ALLOC_V3_IN_NET_CHAN_LEN 1
-> > > > +
-> > > >    /* MC_CMD_MAE_ACTION_SET_ALLOC_OUT msgresponse */
-> > > >    #define    MC_CMD_MAE_ACTION_SET_ALLOC_OUT_LEN 4
-> > > >    /* The MSB of the AS_ID is guaranteed to be clear if the ID is not
-> > > > diff --git a/drivers/net/ethernet/sfc/mcdi_vdpa.c b/drivers/net/ethernet/sfc/mcdi_vdpa.c
-> > > > index b9668545ca01..f9ee61b84320 100644
-> > > > --- a/drivers/net/ethernet/sfc/mcdi_vdpa.c
-> > > > +++ b/drivers/net/ethernet/sfc/mcdi_vdpa.c
-> > > > @@ -14,14 +14,6 @@
-> > > >    #include "mcdi_vdpa.h"
-> > > >    #include "mcdi_pcol.h"
-> > > > 
-> > > > -/* The value of target_vf in virtio MC commands like
-> > > > - * virtqueue create, delete and get doorbell offset should
-> > > > - * contain the VF index when the calling function is a PF
-> > > > - * and VF_NULL (0xFFFF) otherwise. As the vDPA driver invokes
-> > > > - * MC commands in context of the VF, it uses VF_NULL.
-> > > > - */
-> > > > -#define MC_CMD_VIRTIO_TARGET_VF_NULL 0xFFFF
-> > > > -
-> > > >    struct efx_vring_ctx *efx_vdpa_vring_init(struct efx_nic *efx,  u32 vi,
-> > > >                                           enum ef100_vdpa_vq_type vring_type)
-> > > >    {
-> > > > @@ -47,7 +39,7 @@ struct efx_vring_ctx *efx_vdpa_vring_init(struct efx_nic *efx,  u32 vi,
-> > > >         }
-> > > > 
-> > > >         vring_ctx->efx = efx;
-> > > > -     vring_ctx->vf_index = MC_CMD_VIRTIO_TARGET_VF_NULL;
-> > > > +     vring_ctx->vf_index = MC_CMD_VIRTIO_INIT_QUEUE_REQ_VF_NULL;
-> > > >         vring_ctx->vi_index = vi;
-> > > >         vring_ctx->mcdi_vring_type = queue_cmd;
-> > > >         return vring_ctx;
+	runtime: 300s
+
+test-description: Trinity is a linux system call fuzz tester.
+test-url: http://codemonkey.org.uk/projects/trinity/
+
+on test machine: qemu-system-x86_64 -enable-kvm -cpu SandyBridge -smp 2 -m 16G
+
+caused below changes (please refer to attached dmesg/kmsg for entire log/backtrace):
+
+
+If you fix the issue, kindly add following tag
+| Reported-by: kernel test robot <yujie.liu@intel.com>
+| Link: https://lore.kernel.org/oe-lkp/202303141634.1e64fd76-yujie.liu@intel.com
+
+
+[   91.396522] ------------[ cut here ]------------
+[   91.397797] invalid sysfs_emit_at: buf:000000004ba465f7 at:0
+[   91.399038] WARNING: CPU: 0 PID: 1032 at fs/sysfs/file.c:602 sysfs_emit_at (fs/sysfs/file.c:602 (discriminator 9)) 
+[   91.400702] Modules linked in: crc32c_intel aesni_intel aes_x86_64 pcspkr
+[   91.402049] CPU: 0 PID: 1032 Comm: trinity-c0 Not tainted 4.19.271-00075-g4d00e68cfcfd #1
+[   91.409221] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.0-debian-1.16.0-5 04/01/2014
+[   91.411167] RIP: 0010:sysfs_emit_at (fs/sysfs/file.c:602 (discriminator 9)) 
+[ 91.412300] Code: 31 c9 31 d2 44 89 fe 48 c7 c7 c8 21 3c 84 e8 2b cb d1 ff 45 85 ff 74 14 44 89 e2 48 89 de 48 c7 c7 a0 6a d8 82 e8 31 c5 14 01 <0f> 0b 31 c9 31 d2 44 89 fe 48 c7 c7 98 21 3c 84 e8 ff ca d1 ff 45
+All code
+========
+   0:	31 c9                	xor    %ecx,%ecx
+   2:	31 d2                	xor    %edx,%edx
+   4:	44 89 fe             	mov    %r15d,%esi
+   7:	48 c7 c7 c8 21 3c 84 	mov    $0xffffffff843c21c8,%rdi
+   e:	e8 2b cb d1 ff       	callq  0xffffffffffd1cb3e
+  13:	45 85 ff             	test   %r15d,%r15d
+  16:	74 14                	je     0x2c
+  18:	44 89 e2             	mov    %r12d,%edx
+  1b:	48 89 de             	mov    %rbx,%rsi
+  1e:	48 c7 c7 a0 6a d8 82 	mov    $0xffffffff82d86aa0,%rdi
+  25:	e8 31 c5 14 01       	callq  0x114c55b
+  2a:*	0f 0b                	ud2    		<-- trapping instruction
+  2c:	31 c9                	xor    %ecx,%ecx
+  2e:	31 d2                	xor    %edx,%edx
+  30:	44 89 fe             	mov    %r15d,%esi
+  33:	48 c7 c7 98 21 3c 84 	mov    $0xffffffff843c2198,%rdi
+  3a:	e8 ff ca d1 ff       	callq  0xffffffffffd1cb3e
+  3f:	45                   	rex.RB
+
+Code starting with the faulting instruction
+===========================================
+   0:	0f 0b                	ud2    
+   2:	31 c9                	xor    %ecx,%ecx
+   4:	31 d2                	xor    %edx,%edx
+   6:	44 89 fe             	mov    %r15d,%esi
+   9:	48 c7 c7 98 21 3c 84 	mov    $0xffffffff843c2198,%rdi
+  10:	e8 ff ca d1 ff       	callq  0xffffffffffd1cb14
+  15:	45                   	rex.RB
+[   91.415947] RSP: 0018:ffff88839cc1fa00 EFLAGS: 00010282
+[   91.416980] RAX: 0000000000000000 RBX: ffff88838b769168 RCX: 0000000000000000
+[   91.418321] RDX: 1ffff11071af5000 RSI: ffff88838d7a8888 RDI: ffffed1073983f36
+[   91.419751] RBP: ffff88839cc1fab8 R08: 0000000000000004 R09: 0000000000000000
+[   91.421196] R10: ffffffff81270059 R11: ffffffff84354eeb R12: 0000000000000000
+[   91.422617] R13: 1ffff11073983f40 R14: ffffffff82ca7140 R15: 0000000000000001
+[   91.424162] FS:  000000000109a880(0000) GS:ffffffff836bf000(0000) knlGS:0000000000000000
+[   91.425867] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[   91.427062] CR2: 00007f4f623b2000 CR3: 00000003a8cba000 CR4: 00000000000406b0
+[   91.428458] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+[   91.429858] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+[   91.431301] Call Trace:
+[   91.431996] ? sysfs_emit (fs/sysfs/file.c:598) 
+[   91.432848] ? lock_acquire (kernel/locking/lockdep.c:3910) 
+[   91.433740] ? kernfs_seq_start (fs/kernfs/file.c:113) 
+[   91.434689] ? __lock_is_held (kernel/locking/lockdep.c:3728) 
+[   91.435558] ? klist_remove (lib/kobject.c:793) 
+[   91.436437] pm_show_wakelocks (kernel/power/wakelock.c:53) 
+[   91.437326] sysfs_kf_seq_show (fs/sysfs/file.c:63) 
+[   91.438281] traverse (fs/seq_file.c:116) 
+[   91.439109] seq_read (fs/seq_file.c:191 (discriminator 1)) 
+[   91.439949] do_loop_readv_writev (fs/read_write.c:704) 
+[   91.440833] do_iter_read (fs/read_write.c:925) 
+[   91.441616] vfs_readv (fs/read_write.c:988) 
+[   91.442324] ? rw_copy_check_uvector (fs/read_write.c:979) 
+[   91.443293] ? rcu_read_lock_sched_held (kernel/rcu/update.c:119) 
+[   91.444338] do_preadv (fs/read_write.c:1071) 
+[   91.445142] ? __x64_sys_readv (fs/read_write.c:1060) 
+[   91.446045] ? do_syscall_64 (arch/x86/include/asm/paravirt.h:799 arch/x86/entry/common.c:280) 
+[   91.446944] do_syscall_64 (arch/x86/entry/common.c:293) 
+[   91.447774] entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:244) 
+[   91.448894] RIP: 0033:0x463519
+[ 91.449627] Code: 00 f3 c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 0f 83 db 59 00 00 c3 66 2e 0f 1f 84 00 00 00 00
+All code
+========
+   0:	00 f3                	add    %dh,%bl
+   2:	c3                   	retq   
+   3:	66 2e 0f 1f 84 00 00 	nopw   %cs:0x0(%rax,%rax,1)
+   a:	00 00 00 
+   d:	0f 1f 40 00          	nopl   0x0(%rax)
+  11:	48 89 f8             	mov    %rdi,%rax
+  14:	48 89 f7             	mov    %rsi,%rdi
+  17:	48 89 d6             	mov    %rdx,%rsi
+  1a:	48 89 ca             	mov    %rcx,%rdx
+  1d:	4d 89 c2             	mov    %r8,%r10
+  20:	4d 89 c8             	mov    %r9,%r8
+  23:	4c 8b 4c 24 08       	mov    0x8(%rsp),%r9
+  28:	0f 05                	syscall 
+  2a:*	48 3d 01 f0 ff ff    	cmp    $0xfffffffffffff001,%rax		<-- trapping instruction
+  30:	0f 83 db 59 00 00    	jae    0x5a11
+  36:	c3                   	retq   
+  37:	66                   	data16
+  38:	2e                   	cs
+  39:	0f                   	.byte 0xf
+  3a:	1f                   	(bad)  
+  3b:	84 00                	test   %al,(%rax)
+  3d:	00 00                	add    %al,(%rax)
+	...
+
+Code starting with the faulting instruction
+===========================================
+   0:	48 3d 01 f0 ff ff    	cmp    $0xfffffffffffff001,%rax
+   6:	0f 83 db 59 00 00    	jae    0x59e7
+   c:	c3                   	retq   
+   d:	66                   	data16
+   e:	2e                   	cs
+   f:	0f                   	.byte 0xf
+  10:	1f                   	(bad)  
+  11:	84 00                	test   %al,(%rax)
+  13:	00 00                	add    %al,(%rax)
+	...
+[   91.455329] RSP: 002b:00007ffffd5b9df8 EFLAGS: 00000246 ORIG_RAX: 0000000000000127
+[   91.456888] RAX: ffffffffffffffda RBX: 0000000000000127 RCX: 0000000000463519
+[   91.458335] RDX: 0000000000000001 RSI: 0000000001231800 RDI: 0000000000000078
+[   91.459796] RBP: 00007f4f623c8000 R08: 0000000000002000 R09: 00000000000000e9
+[   91.461235] R10: 0000000000100000 R11: 0000000000000246 R12: 0000000000000002
+[   91.462644] R13: 00007f4f623c8058 R14: 000000000109a850 R15: 00007f4f623c8000
+[   91.464065] irq event stamp: 274688
+[   91.464867] hardirqs last enabled at (274687): console_unlock (arch/x86/include/asm/paravirt.h:789 (discriminator 2) kernel/printk/printk.c:2498 (discriminator 2)) 
+[   91.466659] hardirqs last disabled at (274688): trace_hardirqs_off_thunk (arch/x86/entry/thunk_64.S:43) 
+[   91.468608] softirqs last enabled at (274684): __do_softirq (arch/x86/include/asm/preempt.h:23 kernel/softirq.c:319) 
+[   91.470384] softirqs last disabled at (274677): irq_exit (kernel/softirq.c:372 kernel/softirq.c:412) 
+[   91.472049] ---[ end trace b63cb36c8c6dcdaa ]---
+
+
+To reproduce:
+
+        # build kernel
+	cd linux
+	cp config-4.19.271-00075-g4d00e68cfcfd .config
+	make HOSTCC=gcc-11 CC=gcc-11 ARCH=x86_64 olddefconfig prepare modules_prepare bzImage modules
+	make HOSTCC=gcc-11 CC=gcc-11 ARCH=x86_64 INSTALL_MOD_PATH=<mod-install-dir> modules_install
+	cd <mod-install-dir>
+	find lib/ | cpio -o -H newc --quiet | gzip > modules.cgz
+
+
+        git clone https://github.com/intel/lkp-tests.git
+        cd lkp-tests
+        bin/lkp qemu -k <bzImage> -m modules.cgz job-script # job-script is attached in this email
+
+        # if come across any failure that blocks the test,
+        # please remove ~/.lkp and /lkp dir to run from a clean state.
+
+
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
+
+--pM1j5p9RDJondMxj
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: attachment;
+	filename="config-4.19.271-00075-g4d00e68cfcfd"
+
+#
+# Automatically generated file; DO NOT EDIT.
+# Linux/x86_64 4.19.271 Kernel Configuration
+#
+
+#
+# Compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
+#
+CONFIG_CC_IS_GCC=y
+CONFIG_GCC_VERSION=110300
+CONFIG_CLANG_VERSION=0
+CONFIG_CC_HAS_ASM_GOTO=y
+CONFIG_CONSTRUCTORS=y
+CONFIG_IRQ_WORK=y
+CONFIG_BUILDTIME_EXTABLE_SORT=y
+CONFIG_THREAD_INFO_IN_TASK=y
+
+#
+# General setup
+#
+CONFIG_BROKEN_ON_SMP=y
+CONFIG_INIT_ENV_ARG_LIMIT=32
+# CONFIG_COMPILE_TEST is not set
+CONFIG_LOCALVERSION=""
+CONFIG_LOCALVERSION_AUTO=y
+CONFIG_BUILD_SALT=""
+CONFIG_HAVE_KERNEL_GZIP=y
+CONFIG_HAVE_KERNEL_BZIP2=y
+CONFIG_HAVE_KERNEL_LZMA=y
+CONFIG_HAVE_KERNEL_XZ=y
+CONFIG_HAVE_KERNEL_LZO=y
+CONFIG_HAVE_KERNEL_LZ4=y
+# CONFIG_KERNEL_GZIP is not set
+# CONFIG_KERNEL_BZIP2 is not set
+CONFIG_KERNEL_LZMA=y
+# CONFIG_KERNEL_XZ is not set
+# CONFIG_KERNEL_LZO is not set
+# CONFIG_KERNEL_LZ4 is not set
+CONFIG_DEFAULT_HOSTNAME="(none)"
+# CONFIG_SWAP is not set
+# CONFIG_SYSVIPC is not set
+# CONFIG_POSIX_MQUEUE is not set
+# CONFIG_CROSS_MEMORY_ATTACH is not set
+# CONFIG_USELIB is not set
+# CONFIG_AUDIT is not set
+CONFIG_HAVE_ARCH_AUDITSYSCALL=y
+
+#
+# IRQ subsystem
+#
+CONFIG_GENERIC_IRQ_PROBE=y
+CONFIG_GENERIC_IRQ_SHOW=y
+CONFIG_GENERIC_IRQ_CHIP=y
+CONFIG_IRQ_DOMAIN=y
+CONFIG_IRQ_SIM=y
+CONFIG_IRQ_DOMAIN_HIERARCHY=y
+CONFIG_GENERIC_IRQ_MATRIX_ALLOCATOR=y
+CONFIG_GENERIC_IRQ_RESERVATION_MODE=y
+CONFIG_IRQ_FORCED_THREADING=y
+CONFIG_SPARSE_IRQ=y
+# CONFIG_GENERIC_IRQ_DEBUGFS is not set
+CONFIG_CLOCKSOURCE_WATCHDOG=y
+CONFIG_ARCH_CLOCKSOURCE_DATA=y
+CONFIG_CLOCKSOURCE_VALIDATE_LAST_CYCLE=y
+CONFIG_GENERIC_TIME_VSYSCALL=y
+CONFIG_GENERIC_CLOCKEVENTS=y
+CONFIG_GENERIC_CLOCKEVENTS_BROADCAST=y
+CONFIG_GENERIC_CLOCKEVENTS_MIN_ADJUST=y
+CONFIG_GENERIC_CMOS_UPDATE=y
+
+#
+# Timers subsystem
+#
+CONFIG_HZ_PERIODIC=y
+# CONFIG_NO_HZ_IDLE is not set
+CONFIG_NO_HZ=y
+# CONFIG_HIGH_RES_TIMERS is not set
+# CONFIG_PREEMPT_NONE is not set
+CONFIG_PREEMPT_VOLUNTARY=y
+# CONFIG_PREEMPT is not set
+CONFIG_PREEMPT_COUNT=y
+
+#
+# CPU/Task time and stats accounting
+#
+CONFIG_TICK_CPU_ACCOUNTING=y
+# CONFIG_VIRT_CPU_ACCOUNTING_GEN is not set
+CONFIG_IRQ_TIME_ACCOUNTING=y
+CONFIG_BSD_PROCESS_ACCT=y
+# CONFIG_BSD_PROCESS_ACCT_V3 is not set
+CONFIG_TASKSTATS=y
+# CONFIG_TASK_DELAY_ACCT is not set
+CONFIG_TASK_XACCT=y
+CONFIG_TASK_IO_ACCOUNTING=y
+
+#
+# RCU Subsystem
+#
+CONFIG_TINY_RCU=y
+CONFIG_RCU_EXPERT=y
+CONFIG_SRCU=y
+CONFIG_TINY_SRCU=y
+CONFIG_TASKS_RCU=y
+CONFIG_BUILD_BIN2C=y
+CONFIG_IKCONFIG=y
+CONFIG_IKCONFIG_PROC=y
+CONFIG_LOG_BUF_SHIFT=20
+CONFIG_PRINTK_SAFE_LOG_BUF_SHIFT=13
+CONFIG_HAVE_UNSTABLE_SCHED_CLOCK=y
+CONFIG_ARCH_SUPPORTS_NUMA_BALANCING=y
+CONFIG_ARCH_WANT_BATCHED_UNMAP_TLB_FLUSH=y
+CONFIG_ARCH_SUPPORTS_INT128=y
+CONFIG_CGROUPS=y
+# CONFIG_MEMCG is not set
+CONFIG_BLK_CGROUP=y
+# CONFIG_DEBUG_BLK_CGROUP is not set
+CONFIG_CGROUP_SCHED=y
+CONFIG_FAIR_GROUP_SCHED=y
+CONFIG_CFS_BANDWIDTH=y
+CONFIG_RT_GROUP_SCHED=y
+CONFIG_CGROUP_PIDS=y
+# CONFIG_CGROUP_RDMA is not set
+CONFIG_CGROUP_FREEZER=y
+CONFIG_CGROUP_DEVICE=y
+CONFIG_CGROUP_CPUACCT=y
+CONFIG_CGROUP_PERF=y
+# CONFIG_CGROUP_BPF is not set
+CONFIG_CGROUP_DEBUG=y
+CONFIG_SOCK_CGROUP_DATA=y
+CONFIG_NAMESPACES=y
+# CONFIG_UTS_NS is not set
+CONFIG_USER_NS=y
+# CONFIG_PID_NS is not set
+# CONFIG_NET_NS is not set
+CONFIG_CHECKPOINT_RESTORE=y
+CONFIG_SCHED_AUTOGROUP=y
+# CONFIG_SYSFS_DEPRECATED is not set
+CONFIG_RELAY=y
+CONFIG_BLK_DEV_INITRD=y
+CONFIG_INITRAMFS_SOURCE=""
+CONFIG_RD_GZIP=y
+CONFIG_RD_BZIP2=y
+CONFIG_RD_LZMA=y
+CONFIG_RD_XZ=y
+# CONFIG_RD_LZO is not set
+# CONFIG_RD_LZ4 is not set
+# CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE is not set
+CONFIG_CC_OPTIMIZE_FOR_SIZE=y
+CONFIG_SYSCTL=y
+CONFIG_ANON_INODES=y
+CONFIG_SYSCTL_EXCEPTION_TRACE=y
+CONFIG_HAVE_PCSPKR_PLATFORM=y
+CONFIG_BPF=y
+# CONFIG_EXPERT is not set
+CONFIG_MULTIUSER=y
+CONFIG_SGETMASK_SYSCALL=y
+CONFIG_SYSFS_SYSCALL=y
+CONFIG_FHANDLE=y
+CONFIG_POSIX_TIMERS=y
+CONFIG_PRINTK=y
+CONFIG_PRINTK_NMI=y
+CONFIG_BUG=y
+CONFIG_ELF_CORE=y
+CONFIG_PCSPKR_PLATFORM=y
+CONFIG_BASE_FULL=y
+CONFIG_FUTEX=y
+CONFIG_FUTEX_PI=y
+CONFIG_EPOLL=y
+CONFIG_SIGNALFD=y
+CONFIG_TIMERFD=y
+CONFIG_EVENTFD=y
+CONFIG_SHMEM=y
+CONFIG_AIO=y
+CONFIG_ADVISE_SYSCALLS=y
+CONFIG_MEMBARRIER=y
+CONFIG_KALLSYMS=y
+CONFIG_KALLSYMS_ALL=y
+CONFIG_KALLSYMS_BASE_RELATIVE=y
+CONFIG_BPF_SYSCALL=y
+# CONFIG_BPF_UNPRIV_DEFAULT_OFF is not set
+CONFIG_USERFAULTFD=y
+CONFIG_ARCH_HAS_MEMBARRIER_SYNC_CORE=y
+CONFIG_RSEQ=y
+# CONFIG_EMBEDDED is not set
+CONFIG_HAVE_PERF_EVENTS=y
+CONFIG_PERF_USE_VMALLOC=y
+
+#
+# Kernel Performance Events And Counters
+#
+CONFIG_PERF_EVENTS=y
+CONFIG_DEBUG_PERF_USE_VMALLOC=y
+CONFIG_VM_EVENT_COUNTERS=y
+CONFIG_SLUB_DEBUG=y
+CONFIG_COMPAT_BRK=y
+# CONFIG_SLAB is not set
+CONFIG_SLUB=y
+CONFIG_SLAB_MERGE_DEFAULT=y
+CONFIG_SLAB_FREELIST_RANDOM=y
+# CONFIG_SLAB_FREELIST_HARDENED is not set
+CONFIG_SYSTEM_DATA_VERIFICATION=y
+CONFIG_PROFILING=y
+CONFIG_TRACEPOINTS=y
+CONFIG_64BIT=y
+CONFIG_X86_64=y
+CONFIG_X86=y
+CONFIG_INSTRUCTION_DECODER=y
+CONFIG_OUTPUT_FORMAT="elf64-x86-64"
+CONFIG_ARCH_DEFCONFIG="arch/x86/configs/x86_64_defconfig"
+CONFIG_LOCKDEP_SUPPORT=y
+CONFIG_STACKTRACE_SUPPORT=y
+CONFIG_MMU=y
+CONFIG_ARCH_MMAP_RND_BITS_MIN=28
+CONFIG_ARCH_MMAP_RND_BITS_MAX=32
+CONFIG_ARCH_MMAP_RND_COMPAT_BITS_MIN=8
+CONFIG_ARCH_MMAP_RND_COMPAT_BITS_MAX=16
+CONFIG_GENERIC_ISA_DMA=y
+CONFIG_GENERIC_BUG=y
+CONFIG_GENERIC_BUG_RELATIVE_POINTERS=y
+CONFIG_GENERIC_HWEIGHT=y
+CONFIG_ARCH_MAY_HAVE_PC_FDC=y
+CONFIG_RWSEM_XCHGADD_ALGORITHM=y
+CONFIG_GENERIC_CALIBRATE_DELAY=y
+CONFIG_ARCH_HAS_CPU_RELAX=y
+CONFIG_ARCH_HAS_CACHE_LINE_SIZE=y
+CONFIG_ARCH_HAS_FILTER_PGPROT=y
+CONFIG_HAVE_SETUP_PER_CPU_AREA=y
+CONFIG_NEED_PER_CPU_EMBED_FIRST_CHUNK=y
+CONFIG_NEED_PER_CPU_PAGE_FIRST_CHUNK=y
+CONFIG_ARCH_HIBERNATION_POSSIBLE=y
+CONFIG_ARCH_SUSPEND_POSSIBLE=y
+CONFIG_ARCH_WANT_HUGE_PMD_SHARE=y
+CONFIG_ARCH_WANT_GENERAL_HUGETLB=y
+CONFIG_ZONE_DMA32=y
+CONFIG_AUDIT_ARCH=y
+CONFIG_ARCH_SUPPORTS_OPTIMIZED_INLINING=y
+CONFIG_ARCH_SUPPORTS_DEBUG_PAGEALLOC=y
+CONFIG_KASAN_SHADOW_OFFSET=0xdffffc0000000000
+CONFIG_ARCH_SUPPORTS_UPROBES=y
+CONFIG_FIX_EARLYCON_MEM=y
+CONFIG_PGTABLE_LEVELS=4
+CONFIG_CC_HAS_SANE_STACKPROTECTOR=y
+
+#
+# Processor type and features
+#
+CONFIG_ZONE_DMA=y
+# CONFIG_SMP is not set
+CONFIG_X86_FEATURE_NAMES=y
+# CONFIG_X86_X2APIC is not set
+CONFIG_X86_MPPARSE=y
+# CONFIG_GOLDFISH is not set
+CONFIG_RETPOLINE=y
+# CONFIG_INTEL_RDT is not set
+CONFIG_X86_EXTENDED_PLATFORM=y
+# CONFIG_X86_GOLDFISH is not set
+# CONFIG_X86_INTEL_MID is not set
+# CONFIG_X86_INTEL_LPSS is not set
+# CONFIG_X86_AMD_PLATFORM_DEVICE is not set
+# CONFIG_IOSF_MBI is not set
+# CONFIG_SCHED_OMIT_FRAME_POINTER is not set
+CONFIG_HYPERVISOR_GUEST=y
+CONFIG_PARAVIRT=y
+# CONFIG_PARAVIRT_DEBUG is not set
+# CONFIG_XEN is not set
+CONFIG_KVM_GUEST=y
+# CONFIG_KVM_DEBUG_FS is not set
+# CONFIG_PARAVIRT_TIME_ACCOUNTING is not set
+CONFIG_PARAVIRT_CLOCK=y
+# CONFIG_JAILHOUSE_GUEST is not set
+CONFIG_NO_BOOTMEM=y
+# CONFIG_MK8 is not set
+# CONFIG_MPSC is not set
+# CONFIG_MCORE2 is not set
+# CONFIG_MATOM is not set
+CONFIG_GENERIC_CPU=y
+CONFIG_X86_INTERNODE_CACHE_SHIFT=6
+CONFIG_X86_L1_CACHE_SHIFT=6
+CONFIG_X86_TSC=y
+CONFIG_X86_CMPXCHG64=y
+CONFIG_X86_CMOV=y
+CONFIG_X86_MINIMUM_CPU_FAMILY=64
+CONFIG_X86_DEBUGCTLMSR=y
+CONFIG_CPU_SUP_INTEL=y
+CONFIG_CPU_SUP_AMD=y
+CONFIG_CPU_SUP_CENTAUR=y
+CONFIG_HPET_TIMER=y
+CONFIG_DMI=y
+# CONFIG_GART_IOMMU is not set
+# CONFIG_CALGARY_IOMMU is not set
+CONFIG_NR_CPUS_RANGE_BEGIN=1
+CONFIG_NR_CPUS_RANGE_END=1
+CONFIG_NR_CPUS_DEFAULT=1
+CONFIG_NR_CPUS=1
+CONFIG_UP_LATE_INIT=y
+CONFIG_X86_LOCAL_APIC=y
+CONFIG_X86_IO_APIC=y
+# CONFIG_X86_REROUTE_FOR_BROKEN_BOOT_IRQS is not set
+# CONFIG_X86_MCE is not set
+
+#
+# Performance monitoring
+#
+CONFIG_PERF_EVENTS_INTEL_UNCORE=y
+CONFIG_PERF_EVENTS_INTEL_RAPL=y
+CONFIG_PERF_EVENTS_INTEL_CSTATE=y
+# CONFIG_PERF_EVENTS_AMD_POWER is not set
+CONFIG_X86_16BIT=y
+CONFIG_X86_ESPFIX64=y
+CONFIG_X86_VSYSCALL_EMULATION=y
+CONFIG_I8K=y
+CONFIG_MICROCODE=y
+CONFIG_MICROCODE_INTEL=y
+# CONFIG_MICROCODE_AMD is not set
+CONFIG_MICROCODE_OLD_INTERFACE=y
+CONFIG_X86_MSR=y
+CONFIG_X86_CPUID=m
+# CONFIG_X86_5LEVEL is not set
+CONFIG_X86_DIRECT_GBPAGES=y
+CONFIG_ARCH_HAS_MEM_ENCRYPT=y
+# CONFIG_AMD_MEM_ENCRYPT is not set
+CONFIG_ARCH_SPARSEMEM_ENABLE=y
+CONFIG_ARCH_SPARSEMEM_DEFAULT=y
+CONFIG_ARCH_SELECT_MEMORY_MODEL=y
+CONFIG_ILLEGAL_POINTER_VALUE=0xdead000000000000
+# CONFIG_X86_PMEM_LEGACY is not set
+# CONFIG_X86_CHECK_BIOS_CORRUPTION is not set
+CONFIG_X86_RESERVE_LOW=64
+CONFIG_MTRR=y
+# CONFIG_MTRR_SANITIZER is not set
+CONFIG_X86_PAT=y
+CONFIG_ARCH_USES_PG_UNCACHED=y
+CONFIG_ARCH_RANDOM=y
+CONFIG_X86_SMAP=y
+CONFIG_X86_INTEL_UMIP=y
+# CONFIG_X86_INTEL_MPX is not set
+# CONFIG_X86_INTEL_MEMORY_PROTECTION_KEYS is not set
+CONFIG_X86_INTEL_TSX_MODE_OFF=y
+# CONFIG_X86_INTEL_TSX_MODE_ON is not set
+# CONFIG_X86_INTEL_TSX_MODE_AUTO is not set
+# CONFIG_EFI is not set
+CONFIG_SECCOMP=y
+# CONFIG_HZ_100 is not set
+# CONFIG_HZ_250 is not set
+# CONFIG_HZ_300 is not set
+CONFIG_HZ_1000=y
+CONFIG_HZ=1000
+CONFIG_KEXEC=y
+CONFIG_KEXEC_FILE=y
+CONFIG_ARCH_HAS_KEXEC_PURGATORY=y
+# CONFIG_KEXEC_VERIFY_SIG is not set
+CONFIG_CRASH_DUMP=y
+CONFIG_PHYSICAL_START=0x1000000
+CONFIG_RELOCATABLE=y
+# CONFIG_RANDOMIZE_BASE is not set
+CONFIG_PHYSICAL_ALIGN=0x200000
+CONFIG_LEGACY_VSYSCALL_EMULATE=y
+# CONFIG_LEGACY_VSYSCALL_NONE is not set
+# CONFIG_CMDLINE_BOOL is not set
+CONFIG_MODIFY_LDT_SYSCALL=y
+CONFIG_HAVE_LIVEPATCH=y
+CONFIG_ARCH_HAS_ADD_PAGES=y
+CONFIG_ARCH_ENABLE_MEMORY_HOTPLUG=y
+CONFIG_ARCH_ENABLE_SPLIT_PMD_PTLOCK=y
+CONFIG_ARCH_ENABLE_THP_MIGRATION=y
+
+#
+# Power management and ACPI options
+#
+CONFIG_SUSPEND=y
+CONFIG_SUSPEND_FREEZER=y
+CONFIG_PM_SLEEP=y
+CONFIG_PM_AUTOSLEEP=y
+CONFIG_PM_WAKELOCKS=y
+CONFIG_PM_WAKELOCKS_LIMIT=100
+CONFIG_PM_WAKELOCKS_GC=y
+CONFIG_PM=y
+# CONFIG_PM_DEBUG is not set
+CONFIG_PM_CLK=y
+# CONFIG_WQ_POWER_EFFICIENT_DEFAULT is not set
+CONFIG_ARCH_SUPPORTS_ACPI=y
+CONFIG_ACPI=y
+CONFIG_ACPI_LEGACY_TABLES_LOOKUP=y
+CONFIG_ARCH_MIGHT_HAVE_ACPI_PDC=y
+CONFIG_ACPI_SYSTEM_POWER_STATES_SUPPORT=y
+# CONFIG_ACPI_DEBUGGER is not set
+CONFIG_ACPI_SPCR_TABLE=y
+CONFIG_ACPI_LPIT=y
+CONFIG_ACPI_SLEEP=y
+# CONFIG_ACPI_PROCFS_POWER is not set
+CONFIG_ACPI_REV_OVERRIDE_POSSIBLE=y
+# CONFIG_ACPI_EC_DEBUGFS is not set
+CONFIG_ACPI_AC=y
+CONFIG_ACPI_BATTERY=y
+CONFIG_ACPI_BUTTON=y
+CONFIG_ACPI_FAN=y
+# CONFIG_ACPI_TAD is not set
+# CONFIG_ACPI_DOCK is not set
+CONFIG_ACPI_CPU_FREQ_PSS=y
+CONFIG_ACPI_PROCESSOR_CSTATE=y
+CONFIG_ACPI_PROCESSOR_IDLE=y
+CONFIG_ACPI_PROCESSOR=y
+# CONFIG_ACPI_PROCESSOR_AGGREGATOR is not set
+CONFIG_ACPI_THERMAL=y
+CONFIG_ACPI_CUSTOM_DSDT_FILE=""
+CONFIG_ARCH_HAS_ACPI_TABLE_UPGRADE=y
+CONFIG_ACPI_TABLE_UPGRADE=y
+# CONFIG_ACPI_DEBUG is not set
+# CONFIG_ACPI_PCI_SLOT is not set
+# CONFIG_ACPI_CONTAINER is not set
+CONFIG_ACPI_HOTPLUG_IOAPIC=y
+# CONFIG_ACPI_SBS is not set
+# CONFIG_ACPI_HED is not set
+# CONFIG_ACPI_CUSTOM_METHOD is not set
+# CONFIG_ACPI_NFIT is not set
+CONFIG_HAVE_ACPI_APEI=y
+CONFIG_HAVE_ACPI_APEI_NMI=y
+# CONFIG_ACPI_APEI is not set
+# CONFIG_DPTF_POWER is not set
+# CONFIG_PMIC_OPREGION is not set
+# CONFIG_ACPI_CONFIGFS is not set
+CONFIG_X86_PM_TIMER=y
+# CONFIG_SFI is not set
+
+#
+# CPU Frequency scaling
+#
+# CONFIG_CPU_FREQ is not set
+
+#
+# CPU Idle
+#
+CONFIG_CPU_IDLE=y
+# CONFIG_CPU_IDLE_GOV_LADDER is not set
+CONFIG_CPU_IDLE_GOV_MENU=y
+CONFIG_INTEL_IDLE=y
+
+#
+# Bus options (PCI etc.)
+#
+CONFIG_PCI=y
+CONFIG_PCI_DIRECT=y
+CONFIG_PCI_MMCONFIG=y
+CONFIG_PCI_DOMAINS=y
+CONFIG_MMCONF_FAM10H=y
+# CONFIG_PCIEPORTBUS is not set
+# CONFIG_PCI_MSI is not set
+CONFIG_PCI_QUIRKS=y
+# CONFIG_PCI_DEBUG is not set
+# CONFIG_PCI_STUB is not set
+CONFIG_PCI_LOCKLESS_CONFIG=y
+# CONFIG_PCI_IOV is not set
+# CONFIG_PCI_PRI is not set
+# CONFIG_PCI_PASID is not set
+CONFIG_PCI_LABEL=y
+# CONFIG_HOTPLUG_PCI is not set
+
+#
+# PCI controller drivers
+#
+
+#
+# Cadence PCIe controllers support
+#
+
+#
+# DesignWare PCI Core Support
+#
+
+#
+# PCI Endpoint
+#
+# CONFIG_PCI_ENDPOINT is not set
+
+#
+# PCI switch controller drivers
+#
+# CONFIG_PCI_SW_SWITCHTEC is not set
+CONFIG_ISA_DMA_API=y
+CONFIG_AMD_NB=y
+CONFIG_PCCARD=m
+CONFIG_PCMCIA=m
+# CONFIG_PCMCIA_LOAD_CIS is not set
+CONFIG_CARDBUS=y
+
+#
+# PC-card bridges
+#
+# CONFIG_YENTA is not set
+# CONFIG_PD6729 is not set
+# CONFIG_I82092 is not set
+# CONFIG_RAPIDIO is not set
+# CONFIG_X86_SYSFB is not set
+
+#
+# Binary Emulations
+#
+# CONFIG_IA32_EMULATION is not set
+# CONFIG_X86_X32 is not set
+CONFIG_X86_DEV_DMA_OPS=y
+CONFIG_HAVE_GENERIC_GUP=y
+
+#
+# Firmware Drivers
+#
+# CONFIG_EDD is not set
+CONFIG_FIRMWARE_MEMMAP=y
+# CONFIG_DELL_RBU is not set
+# CONFIG_DCDBAS is not set
+CONFIG_DMIID=y
+CONFIG_DMI_SYSFS=y
+CONFIG_DMI_SCAN_MACHINE_NON_EFI_FALLBACK=y
+CONFIG_FW_CFG_SYSFS=y
+# CONFIG_FW_CFG_SYSFS_CMDLINE is not set
+CONFIG_GOOGLE_FIRMWARE=y
+# CONFIG_GOOGLE_COREBOOT_TABLE_ACPI is not set
+# CONFIG_GOOGLE_MEMCONSOLE_X86_LEGACY is not set
+
+#
+# Tegra firmware driver
+#
+CONFIG_HAVE_KVM=y
+# CONFIG_VIRTUALIZATION is not set
+
+#
+# General architecture-dependent options
+#
+CONFIG_CRASH_CORE=y
+CONFIG_KEXEC_CORE=y
+# CONFIG_OPROFILE is not set
+CONFIG_HAVE_OPROFILE=y
+CONFIG_OPROFILE_NMI_TIMER=y
+CONFIG_KPROBES=y
+# CONFIG_JUMP_LABEL is not set
+CONFIG_OPTPROBES=y
+CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS=y
+CONFIG_ARCH_USE_BUILTIN_BSWAP=y
+CONFIG_KRETPROBES=y
+CONFIG_HAVE_IOREMAP_PROT=y
+CONFIG_HAVE_KPROBES=y
+CONFIG_HAVE_KRETPROBES=y
+CONFIG_HAVE_OPTPROBES=y
+CONFIG_HAVE_KPROBES_ON_FTRACE=y
+CONFIG_HAVE_FUNCTION_ERROR_INJECTION=y
+CONFIG_HAVE_NMI=y
+CONFIG_HAVE_ARCH_TRACEHOOK=y
+CONFIG_HAVE_DMA_CONTIGUOUS=y
+CONFIG_GENERIC_SMP_IDLE_THREAD=y
+CONFIG_ARCH_HAS_FORTIFY_SOURCE=y
+CONFIG_ARCH_HAS_SET_MEMORY=y
+CONFIG_HAVE_ARCH_THREAD_STRUCT_WHITELIST=y
+CONFIG_ARCH_WANTS_DYNAMIC_TASK_STRUCT=y
+CONFIG_HAVE_REGS_AND_STACK_ACCESS_API=y
+CONFIG_HAVE_RSEQ=y
+CONFIG_HAVE_CLK=y
+CONFIG_HAVE_HW_BREAKPOINT=y
+CONFIG_HAVE_MIXED_BREAKPOINTS_REGS=y
+CONFIG_HAVE_USER_RETURN_NOTIFIER=y
+CONFIG_HAVE_PERF_EVENTS_NMI=y
+CONFIG_HAVE_HARDLOCKUP_DETECTOR_PERF=y
+CONFIG_HAVE_PERF_REGS=y
+CONFIG_HAVE_PERF_USER_STACK_DUMP=y
+CONFIG_HAVE_ARCH_JUMP_LABEL=y
+CONFIG_HAVE_RCU_TABLE_FREE=y
+CONFIG_HAVE_RCU_TABLE_INVALIDATE=y
+CONFIG_ARCH_HAVE_NMI_SAFE_CMPXCHG=y
+CONFIG_HAVE_ALIGNED_STRUCT_PAGE=y
+CONFIG_HAVE_CMPXCHG_LOCAL=y
+CONFIG_HAVE_CMPXCHG_DOUBLE=y
+CONFIG_HAVE_ARCH_SECCOMP_FILTER=y
+CONFIG_SECCOMP_FILTER=y
+CONFIG_HAVE_STACKPROTECTOR=y
+CONFIG_CC_HAS_STACKPROTECTOR_NONE=y
+CONFIG_STACKPROTECTOR=y
+# CONFIG_STACKPROTECTOR_STRONG is not set
+CONFIG_HAVE_ARCH_WITHIN_STACK_FRAMES=y
+CONFIG_HAVE_CONTEXT_TRACKING=y
+CONFIG_HAVE_VIRT_CPU_ACCOUNTING_GEN=y
+CONFIG_HAVE_IRQ_TIME_ACCOUNTING=y
+CONFIG_HAVE_ARCH_TRANSPARENT_HUGEPAGE=y
+CONFIG_HAVE_ARCH_TRANSPARENT_HUGEPAGE_PUD=y
+CONFIG_HAVE_ARCH_HUGE_VMAP=y
+CONFIG_HAVE_ARCH_SOFT_DIRTY=y
+CONFIG_HAVE_MOD_ARCH_SPECIFIC=y
+CONFIG_MODULES_USE_ELF_RELA=y
+CONFIG_HAVE_IRQ_EXIT_ON_IRQ_STACK=y
+CONFIG_ARCH_HAS_ELF_RANDOMIZE=y
+CONFIG_HAVE_ARCH_MMAP_RND_BITS=y
+CONFIG_HAVE_EXIT_THREAD=y
+CONFIG_ARCH_MMAP_RND_BITS=28
+CONFIG_HAVE_COPY_THREAD_TLS=y
+CONFIG_HAVE_STACK_VALIDATION=y
+CONFIG_HAVE_RELIABLE_STACKTRACE=y
+CONFIG_HAVE_ARCH_VMAP_STACK=y
+CONFIG_ARCH_HAS_STRICT_KERNEL_RWX=y
+CONFIG_STRICT_KERNEL_RWX=y
+CONFIG_ARCH_HAS_STRICT_MODULE_RWX=y
+CONFIG_STRICT_MODULE_RWX=y
+CONFIG_ARCH_HAS_REFCOUNT=y
+# CONFIG_REFCOUNT_FULL is not set
+CONFIG_HAVE_ARCH_PREL32_RELOCATIONS=y
+
+#
+# GCOV-based kernel profiling
+#
+# CONFIG_GCOV_KERNEL is not set
+CONFIG_ARCH_HAS_GCOV_PROFILE_ALL=y
+CONFIG_PLUGIN_HOSTCC=""
+CONFIG_HAVE_GCC_PLUGINS=y
+CONFIG_RT_MUTEXES=y
+CONFIG_BASE_SMALL=0
+CONFIG_MODULES=y
+CONFIG_MODULE_FORCE_LOAD=y
+CONFIG_MODULE_UNLOAD=y
+# CONFIG_MODULE_FORCE_UNLOAD is not set
+# CONFIG_MODVERSIONS is not set
+# CONFIG_MODULE_SRCVERSION_ALL is not set
+# CONFIG_MODULE_SIG is not set
+# CONFIG_MODULE_COMPRESS is not set
+CONFIG_MODULES_TREE_LOOKUP=y
+CONFIG_BLOCK=y
+CONFIG_BLK_SCSI_REQUEST=y
+CONFIG_BLK_DEV_BSG=y
+CONFIG_BLK_DEV_BSGLIB=y
+# CONFIG_BLK_DEV_INTEGRITY is not set
+CONFIG_BLK_DEV_ZONED=y
+CONFIG_BLK_DEV_THROTTLING=y
+CONFIG_BLK_DEV_THROTTLING_LOW=y
+# CONFIG_BLK_CMDLINE_PARSER is not set
+CONFIG_BLK_WBT=y
+CONFIG_BLK_CGROUP_IOLATENCY=y
+# CONFIG_BLK_WBT_SQ is not set
+CONFIG_BLK_WBT_MQ=y
+CONFIG_BLK_DEBUG_FS=y
+CONFIG_BLK_DEBUG_FS_ZONED=y
+# CONFIG_BLK_SED_OPAL is not set
+
+#
+# Partition Types
+#
+# CONFIG_PARTITION_ADVANCED is not set
+CONFIG_MSDOS_PARTITION=y
+CONFIG_EFI_PARTITION=y
+CONFIG_BLK_MQ_PCI=y
+CONFIG_BLK_MQ_VIRTIO=y
+CONFIG_BLK_MQ_RDMA=y
+
+#
+# IO Schedulers
+#
+CONFIG_IOSCHED_NOOP=y
+CONFIG_IOSCHED_DEADLINE=y
+CONFIG_IOSCHED_CFQ=y
+# CONFIG_CFQ_GROUP_IOSCHED is not set
+# CONFIG_DEFAULT_DEADLINE is not set
+CONFIG_DEFAULT_CFQ=y
+# CONFIG_DEFAULT_NOOP is not set
+CONFIG_DEFAULT_IOSCHED="cfq"
+CONFIG_MQ_IOSCHED_DEADLINE=y
+# CONFIG_MQ_IOSCHED_KYBER is not set
+CONFIG_IOSCHED_BFQ=y
+CONFIG_BFQ_GROUP_IOSCHED=y
+CONFIG_ASN1=y
+CONFIG_UNINLINE_SPIN_UNLOCK=y
+CONFIG_ARCH_SUPPORTS_ATOMIC_RMW=y
+CONFIG_ARCH_USE_QUEUED_SPINLOCKS=y
+CONFIG_ARCH_USE_QUEUED_RWLOCKS=y
+CONFIG_ARCH_HAS_SYNC_CORE_BEFORE_USERMODE=y
+CONFIG_ARCH_HAS_SYSCALL_WRAPPER=y
+CONFIG_FREEZER=y
+
+#
+# Executable file formats
+#
+CONFIG_BINFMT_ELF=y
+CONFIG_ELFCORE=y
+CONFIG_CORE_DUMP_DEFAULT_ELF_HEADERS=y
+CONFIG_BINFMT_SCRIPT=y
+CONFIG_BINFMT_MISC=m
+CONFIG_COREDUMP=y
+
+#
+# Memory Management options
+#
+CONFIG_SELECT_MEMORY_MODEL=y
+CONFIG_SPARSEMEM_MANUAL=y
+CONFIG_SPARSEMEM=y
+CONFIG_HAVE_MEMORY_PRESENT=y
+CONFIG_SPARSEMEM_EXTREME=y
+CONFIG_SPARSEMEM_VMEMMAP_ENABLE=y
+CONFIG_SPARSEMEM_VMEMMAP=y
+CONFIG_HAVE_MEMBLOCK=y
+CONFIG_HAVE_MEMBLOCK_NODE_MAP=y
+CONFIG_ARCH_DISCARD_MEMBLOCK=y
+# CONFIG_MEMORY_HOTPLUG is not set
+CONFIG_SPLIT_PTLOCK_CPUS=4
+CONFIG_COMPACTION=y
+CONFIG_MIGRATION=y
+CONFIG_PHYS_ADDR_T_64BIT=y
+CONFIG_BOUNCE=y
+CONFIG_VIRT_TO_BUS=y
+# CONFIG_KSM is not set
+CONFIG_DEFAULT_MMAP_MIN_ADDR=4096
+CONFIG_TRANSPARENT_HUGEPAGE=y
+# CONFIG_TRANSPARENT_HUGEPAGE_ALWAYS is not set
+CONFIG_TRANSPARENT_HUGEPAGE_MADVISE=y
+CONFIG_ARCH_WANTS_THP_SWAP=y
+CONFIG_TRANSPARENT_HUGE_PAGECACHE=y
+CONFIG_NEED_PER_CPU_KM=y
+# CONFIG_CLEANCACHE is not set
+# CONFIG_CMA is not set
+# CONFIG_MEM_SOFT_DIRTY is not set
+# CONFIG_ZPOOL is not set
+# CONFIG_ZBUD is not set
+# CONFIG_ZSMALLOC is not set
+CONFIG_GENERIC_EARLY_IOREMAP=y
+CONFIG_IDLE_PAGE_TRACKING=y
+CONFIG_ARCH_HAS_ZONE_DEVICE=y
+CONFIG_FRAME_VECTOR=y
+CONFIG_PERCPU_STATS=y
+# CONFIG_GUP_BENCHMARK is not set
+CONFIG_ARCH_HAS_PTE_SPECIAL=y
+CONFIG_NET=y
+
+#
+# Networking options
+#
+CONFIG_PACKET=y
+CONFIG_PACKET_DIAG=m
+CONFIG_UNIX=y
+CONFIG_UNIX_SCM=y
+# CONFIG_UNIX_DIAG is not set
+CONFIG_TLS=y
+# CONFIG_TLS_DEVICE is not set
+CONFIG_XFRM=y
+CONFIG_XFRM_ALGO=y
+CONFIG_XFRM_USER=m
+# CONFIG_XFRM_INTERFACE is not set
+# CONFIG_XFRM_SUB_POLICY is not set
+# CONFIG_XFRM_MIGRATE is not set
+CONFIG_XFRM_STATISTICS=y
+CONFIG_XFRM_IPCOMP=y
+# CONFIG_NET_KEY is not set
+# CONFIG_SMC is not set
+CONFIG_XDP_SOCKETS=y
+CONFIG_INET=y
+CONFIG_IP_MULTICAST=y
+# CONFIG_IP_ADVANCED_ROUTER is not set
+CONFIG_IP_PNP=y
+CONFIG_IP_PNP_DHCP=y
+CONFIG_IP_PNP_BOOTP=y
+CONFIG_IP_PNP_RARP=y
+# CONFIG_NET_IPIP is not set
+CONFIG_NET_IPGRE_DEMUX=m
+CONFIG_NET_IP_TUNNEL=m
+CONFIG_NET_IPGRE=m
+CONFIG_NET_IPGRE_BROADCAST=y
+# CONFIG_IP_MROUTE is not set
+CONFIG_SYN_COOKIES=y
+# CONFIG_NET_IPVTI is not set
+CONFIG_NET_UDP_TUNNEL=m
+# CONFIG_NET_FOU is not set
+# CONFIG_NET_FOU_IP_TUNNELS is not set
+# CONFIG_INET_AH is not set
+CONFIG_INET_ESP=m
+# CONFIG_INET_ESP_OFFLOAD is not set
+CONFIG_INET_IPCOMP=y
+CONFIG_INET_TABLE_PERTURB_ORDER=16
+CONFIG_INET_XFRM_TUNNEL=y
+CONFIG_INET_TUNNEL=y
+CONFIG_INET_XFRM_MODE_TRANSPORT=y
+CONFIG_INET_XFRM_MODE_TUNNEL=y
+CONFIG_INET_XFRM_MODE_BEET=y
+CONFIG_INET_DIAG=y
+CONFIG_INET_TCP_DIAG=y
+CONFIG_INET_UDP_DIAG=m
+# CONFIG_INET_RAW_DIAG is not set
+CONFIG_INET_DIAG_DESTROY=y
+CONFIG_TCP_CONG_ADVANCED=y
+# CONFIG_TCP_CONG_BIC is not set
+CONFIG_TCP_CONG_CUBIC=y
+# CONFIG_TCP_CONG_WESTWOOD is not set
+# CONFIG_TCP_CONG_HTCP is not set
+# CONFIG_TCP_CONG_HSTCP is not set
+CONFIG_TCP_CONG_HYBLA=m
+CONFIG_TCP_CONG_VEGAS=y
+# CONFIG_TCP_CONG_NV is not set
+CONFIG_TCP_CONG_SCALABLE=y
+CONFIG_TCP_CONG_LP=y
+# CONFIG_TCP_CONG_VENO is not set
+# CONFIG_TCP_CONG_YEAH is not set
+CONFIG_TCP_CONG_ILLINOIS=y
+# CONFIG_TCP_CONG_DCTCP is not set
+CONFIG_TCP_CONG_CDG=y
+CONFIG_TCP_CONG_BBR=m
+# CONFIG_DEFAULT_CUBIC is not set
+CONFIG_DEFAULT_VEGAS=y
+# CONFIG_DEFAULT_CDG is not set
+# CONFIG_DEFAULT_RENO is not set
+CONFIG_DEFAULT_TCP_CONG="vegas"
+CONFIG_TCP_MD5SIG=y
+CONFIG_IPV6=m
+CONFIG_IPV6_ROUTER_PREF=y
+# CONFIG_IPV6_ROUTE_INFO is not set
+CONFIG_IPV6_OPTIMISTIC_DAD=y
+CONFIG_INET6_AH=m
+# CONFIG_INET6_ESP is not set
+CONFIG_INET6_IPCOMP=m
+CONFIG_IPV6_MIP6=m
+CONFIG_IPV6_ILA=m
+CONFIG_INET6_XFRM_TUNNEL=m
+CONFIG_INET6_TUNNEL=m
+CONFIG_INET6_XFRM_MODE_TRANSPORT=m
+CONFIG_INET6_XFRM_MODE_TUNNEL=m
+CONFIG_INET6_XFRM_MODE_BEET=m
+# CONFIG_INET6_XFRM_MODE_ROUTEOPTIMIZATION is not set
+CONFIG_IPV6_VTI=m
+CONFIG_IPV6_SIT=m
+CONFIG_IPV6_SIT_6RD=y
+CONFIG_IPV6_NDISC_NODETYPE=y
+CONFIG_IPV6_TUNNEL=m
+CONFIG_IPV6_GRE=m
+# CONFIG_IPV6_MULTIPLE_TABLES is not set
+# CONFIG_IPV6_MROUTE is not set
+# CONFIG_IPV6_SEG6_LWTUNNEL is not set
+CONFIG_IPV6_SEG6_HMAC=y
+# CONFIG_NETLABEL is not set
+CONFIG_NETWORK_SECMARK=y
+CONFIG_NET_PTP_CLASSIFY=y
+# CONFIG_NETWORK_PHY_TIMESTAMPING is not set
+CONFIG_NETFILTER=y
+CONFIG_NETFILTER_ADVANCED=y
+
+#
+# Core Netfilter Configuration
+#
+# CONFIG_NETFILTER_INGRESS is not set
+CONFIG_NETFILTER_NETLINK=y
+CONFIG_NETFILTER_FAMILY_ARP=y
+CONFIG_NETFILTER_NETLINK_ACCT=y
+CONFIG_NETFILTER_NETLINK_QUEUE=y
+# CONFIG_NETFILTER_NETLINK_LOG is not set
+CONFIG_NETFILTER_NETLINK_OSF=y
+CONFIG_NF_CONNTRACK=m
+CONFIG_NF_LOG_COMMON=y
+# CONFIG_NF_LOG_NETDEV is not set
+CONFIG_NETFILTER_CONNCOUNT=m
+CONFIG_NF_CONNTRACK_MARK=y
+# CONFIG_NF_CONNTRACK_SECMARK is not set
+# CONFIG_NF_CONNTRACK_ZONES is not set
+CONFIG_NF_CONNTRACK_PROCFS=y
+# CONFIG_NF_CONNTRACK_EVENTS is not set
+CONFIG_NF_CONNTRACK_TIMEOUT=y
+# CONFIG_NF_CONNTRACK_TIMESTAMP is not set
+CONFIG_NF_CONNTRACK_LABELS=y
+CONFIG_NF_CT_PROTO_DCCP=y
+# CONFIG_NF_CT_PROTO_SCTP is not set
+# CONFIG_NF_CT_PROTO_UDPLITE is not set
+CONFIG_NF_CONNTRACK_AMANDA=m
+CONFIG_NF_CONNTRACK_FTP=m
+CONFIG_NF_CONNTRACK_H323=m
+CONFIG_NF_CONNTRACK_IRC=m
+CONFIG_NF_CONNTRACK_BROADCAST=m
+CONFIG_NF_CONNTRACK_NETBIOS_NS=m
+CONFIG_NF_CONNTRACK_SNMP=m
+# CONFIG_NF_CONNTRACK_PPTP is not set
+# CONFIG_NF_CONNTRACK_SANE is not set
+CONFIG_NF_CONNTRACK_SIP=m
+CONFIG_NF_CONNTRACK_TFTP=m
+# CONFIG_NF_CT_NETLINK is not set
+CONFIG_NF_CT_NETLINK_TIMEOUT=m
+CONFIG_NF_NAT=m
+CONFIG_NF_NAT_NEEDED=y
+CONFIG_NF_NAT_PROTO_DCCP=y
+CONFIG_NF_NAT_AMANDA=m
+CONFIG_NF_NAT_FTP=m
+CONFIG_NF_NAT_IRC=m
+CONFIG_NF_NAT_SIP=m
+CONFIG_NF_NAT_TFTP=m
+CONFIG_NF_NAT_REDIRECT=y
+CONFIG_NETFILTER_SYNPROXY=m
+# CONFIG_NF_TABLES is not set
+CONFIG_NETFILTER_XTABLES=y
+
+#
+# Xtables combined modules
+#
+CONFIG_NETFILTER_XT_MARK=y
+CONFIG_NETFILTER_XT_CONNMARK=m
+CONFIG_NETFILTER_XT_SET=y
+
+#
+# Xtables targets
+#
+CONFIG_NETFILTER_XT_TARGET_CHECKSUM=m
+CONFIG_NETFILTER_XT_TARGET_CLASSIFY=y
+# CONFIG_NETFILTER_XT_TARGET_CONNMARK is not set
+CONFIG_NETFILTER_XT_TARGET_CT=m
+# CONFIG_NETFILTER_XT_TARGET_DSCP is not set
+# CONFIG_NETFILTER_XT_TARGET_HL is not set
+# CONFIG_NETFILTER_XT_TARGET_HMARK is not set
+# CONFIG_NETFILTER_XT_TARGET_IDLETIMER is not set
+CONFIG_NETFILTER_XT_TARGET_LED=m
+CONFIG_NETFILTER_XT_TARGET_LOG=y
+CONFIG_NETFILTER_XT_TARGET_MARK=y
+CONFIG_NETFILTER_XT_NAT=m
+CONFIG_NETFILTER_XT_TARGET_NETMAP=m
+# CONFIG_NETFILTER_XT_TARGET_NFLOG is not set
+CONFIG_NETFILTER_XT_TARGET_NFQUEUE=y
+CONFIG_NETFILTER_XT_TARGET_NOTRACK=m
+CONFIG_NETFILTER_XT_TARGET_RATEEST=m
+CONFIG_NETFILTER_XT_TARGET_REDIRECT=m
+CONFIG_NETFILTER_XT_TARGET_TEE=m
+# CONFIG_NETFILTER_XT_TARGET_TPROXY is not set
+# CONFIG_NETFILTER_XT_TARGET_TRACE is not set
+CONFIG_NETFILTER_XT_TARGET_SECMARK=m
+CONFIG_NETFILTER_XT_TARGET_TCPMSS=m
+# CONFIG_NETFILTER_XT_TARGET_TCPOPTSTRIP is not set
+
+#
+# Xtables matches
+#
+CONFIG_NETFILTER_XT_MATCH_ADDRTYPE=y
+# CONFIG_NETFILTER_XT_MATCH_BPF is not set
+CONFIG_NETFILTER_XT_MATCH_CGROUP=m
+CONFIG_NETFILTER_XT_MATCH_CLUSTER=m
+CONFIG_NETFILTER_XT_MATCH_COMMENT=y
+CONFIG_NETFILTER_XT_MATCH_CONNBYTES=m
+CONFIG_NETFILTER_XT_MATCH_CONNLABEL=m
+CONFIG_NETFILTER_XT_MATCH_CONNLIMIT=m
+CONFIG_NETFILTER_XT_MATCH_CONNMARK=m
+CONFIG_NETFILTER_XT_MATCH_CONNTRACK=m
+CONFIG_NETFILTER_XT_MATCH_CPU=y
+# CONFIG_NETFILTER_XT_MATCH_DCCP is not set
+CONFIG_NETFILTER_XT_MATCH_DEVGROUP=m
+# CONFIG_NETFILTER_XT_MATCH_DSCP is not set
+CONFIG_NETFILTER_XT_MATCH_ECN=y
+CONFIG_NETFILTER_XT_MATCH_ESP=m
+CONFIG_NETFILTER_XT_MATCH_HASHLIMIT=m
+# CONFIG_NETFILTER_XT_MATCH_HELPER is not set
+CONFIG_NETFILTER_XT_MATCH_HL=y
+# CONFIG_NETFILTER_XT_MATCH_IPCOMP is not set
+CONFIG_NETFILTER_XT_MATCH_IPRANGE=m
+# CONFIG_NETFILTER_XT_MATCH_IPVS is not set
+CONFIG_NETFILTER_XT_MATCH_L2TP=y
+CONFIG_NETFILTER_XT_MATCH_LENGTH=m
+# CONFIG_NETFILTER_XT_MATCH_LIMIT is not set
+CONFIG_NETFILTER_XT_MATCH_MAC=y
+# CONFIG_NETFILTER_XT_MATCH_MARK is not set
+# CONFIG_NETFILTER_XT_MATCH_MULTIPORT is not set
+CONFIG_NETFILTER_XT_MATCH_NFACCT=m
+CONFIG_NETFILTER_XT_MATCH_OSF=y
+CONFIG_NETFILTER_XT_MATCH_OWNER=m
+# CONFIG_NETFILTER_XT_MATCH_POLICY is not set
+# CONFIG_NETFILTER_XT_MATCH_PKTTYPE is not set
+# CONFIG_NETFILTER_XT_MATCH_QUOTA is not set
+CONFIG_NETFILTER_XT_MATCH_RATEEST=m
+# CONFIG_NETFILTER_XT_MATCH_REALM is not set
+CONFIG_NETFILTER_XT_MATCH_RECENT=m
+# CONFIG_NETFILTER_XT_MATCH_SCTP is not set
+# CONFIG_NETFILTER_XT_MATCH_SOCKET is not set
+CONFIG_NETFILTER_XT_MATCH_STATE=m
+CONFIG_NETFILTER_XT_MATCH_STATISTIC=m
+# CONFIG_NETFILTER_XT_MATCH_STRING is not set
+CONFIG_NETFILTER_XT_MATCH_TCPMSS=y
+CONFIG_NETFILTER_XT_MATCH_TIME=y
+CONFIG_NETFILTER_XT_MATCH_U32=m
+CONFIG_IP_SET=y
+CONFIG_IP_SET_MAX=256
+# CONFIG_IP_SET_BITMAP_IP is not set
+# CONFIG_IP_SET_BITMAP_IPMAC is not set
+CONFIG_IP_SET_BITMAP_PORT=m
+CONFIG_IP_SET_HASH_IP=y
+CONFIG_IP_SET_HASH_IPMARK=m
+CONFIG_IP_SET_HASH_IPPORT=y
+# CONFIG_IP_SET_HASH_IPPORTIP is not set
+# CONFIG_IP_SET_HASH_IPPORTNET is not set
+CONFIG_IP_SET_HASH_IPMAC=m
+CONFIG_IP_SET_HASH_MAC=y
+# CONFIG_IP_SET_HASH_NETPORTNET is not set
+CONFIG_IP_SET_HASH_NET=m
+CONFIG_IP_SET_HASH_NETNET=y
+CONFIG_IP_SET_HASH_NETPORT=m
+CONFIG_IP_SET_HASH_NETIFACE=y
+# CONFIG_IP_SET_LIST_SET is not set
+CONFIG_IP_VS=m
+CONFIG_IP_VS_IPV6=y
+CONFIG_IP_VS_DEBUG=y
+CONFIG_IP_VS_TAB_BITS=12
+
+#
+# IPVS transport protocol load balancing support
+#
+# CONFIG_IP_VS_PROTO_TCP is not set
+# CONFIG_IP_VS_PROTO_UDP is not set
+CONFIG_IP_VS_PROTO_AH_ESP=y
+CONFIG_IP_VS_PROTO_ESP=y
+CONFIG_IP_VS_PROTO_AH=y
+# CONFIG_IP_VS_PROTO_SCTP is not set
+
+#
+# IPVS scheduler
+#
+# CONFIG_IP_VS_RR is not set
+# CONFIG_IP_VS_WRR is not set
+# CONFIG_IP_VS_LC is not set
+CONFIG_IP_VS_WLC=m
+CONFIG_IP_VS_FO=m
+CONFIG_IP_VS_OVF=m
+CONFIG_IP_VS_LBLC=m
+CONFIG_IP_VS_LBLCR=m
+# CONFIG_IP_VS_DH is not set
+CONFIG_IP_VS_SH=m
+CONFIG_IP_VS_MH=m
+CONFIG_IP_VS_SED=m
+CONFIG_IP_VS_NQ=m
+
+#
+# IPVS SH scheduler
+#
+CONFIG_IP_VS_SH_TAB_BITS=8
+
+#
+# IPVS MH scheduler
+#
+CONFIG_IP_VS_MH_TAB_INDEX=12
+
+#
+# IPVS application helper
+#
+# CONFIG_IP_VS_NFCT is not set
+
+#
+# IP: Netfilter Configuration
+#
+CONFIG_NF_DEFRAG_IPV4=m
+CONFIG_NF_SOCKET_IPV4=y
+# CONFIG_NF_TPROXY_IPV4 is not set
+CONFIG_NF_DUP_IPV4=m
+CONFIG_NF_LOG_ARP=y
+CONFIG_NF_LOG_IPV4=y
+CONFIG_NF_REJECT_IPV4=y
+# CONFIG_NF_NAT_IPV4 is not set
+CONFIG_IP_NF_IPTABLES=y
+CONFIG_IP_NF_MATCH_AH=m
+CONFIG_IP_NF_MATCH_ECN=m
+# CONFIG_IP_NF_MATCH_RPFILTER is not set
+CONFIG_IP_NF_MATCH_TTL=y
+CONFIG_IP_NF_FILTER=m
+CONFIG_IP_NF_TARGET_REJECT=m
+CONFIG_IP_NF_TARGET_SYNPROXY=m
+# CONFIG_IP_NF_NAT is not set
+CONFIG_IP_NF_MANGLE=m
+# CONFIG_IP_NF_TARGET_CLUSTERIP is not set
+# CONFIG_IP_NF_TARGET_ECN is not set
+# CONFIG_IP_NF_TARGET_TTL is not set
+# CONFIG_IP_NF_RAW is not set
+# CONFIG_IP_NF_SECURITY is not set
+CONFIG_IP_NF_ARPTABLES=m
+CONFIG_IP_NF_ARPFILTER=m
+CONFIG_IP_NF_ARP_MANGLE=m
+
+#
+# IPv6: Netfilter Configuration
+#
+CONFIG_NF_SOCKET_IPV6=m
+# CONFIG_NF_TPROXY_IPV6 is not set
+CONFIG_NF_DUP_IPV6=m
+# CONFIG_NF_REJECT_IPV6 is not set
+CONFIG_NF_LOG_IPV6=m
+CONFIG_NF_NAT_IPV6=m
+CONFIG_IP6_NF_IPTABLES=m
+CONFIG_IP6_NF_MATCH_AH=m
+# CONFIG_IP6_NF_MATCH_EUI64 is not set
+CONFIG_IP6_NF_MATCH_FRAG=m
+CONFIG_IP6_NF_MATCH_OPTS=m
+CONFIG_IP6_NF_MATCH_HL=m
+CONFIG_IP6_NF_MATCH_IPV6HEADER=m
+CONFIG_IP6_NF_MATCH_MH=m
+CONFIG_IP6_NF_MATCH_RPFILTER=m
+CONFIG_IP6_NF_MATCH_RT=m
+CONFIG_IP6_NF_MATCH_SRH=m
+# CONFIG_IP6_NF_FILTER is not set
+CONFIG_IP6_NF_TARGET_SYNPROXY=m
+# CONFIG_IP6_NF_MANGLE is not set
+CONFIG_IP6_NF_RAW=m
+# CONFIG_IP6_NF_SECURITY is not set
+CONFIG_IP6_NF_NAT=m
+# CONFIG_IP6_NF_TARGET_MASQUERADE is not set
+CONFIG_IP6_NF_TARGET_NPT=m
+CONFIG_NF_DEFRAG_IPV6=m
+CONFIG_BPFILTER=y
+CONFIG_BPFILTER_UMH=m
+# CONFIG_IP_DCCP is not set
+CONFIG_IP_SCTP=m
+# CONFIG_SCTP_DBG_OBJCNT is not set
+# CONFIG_SCTP_DEFAULT_COOKIE_HMAC_MD5 is not set
+# CONFIG_SCTP_DEFAULT_COOKIE_HMAC_SHA1 is not set
+CONFIG_SCTP_DEFAULT_COOKIE_HMAC_NONE=y
+# CONFIG_SCTP_COOKIE_HMAC_MD5 is not set
+CONFIG_SCTP_COOKIE_HMAC_SHA1=y
+CONFIG_INET_SCTP_DIAG=m
+# CONFIG_RDS is not set
+CONFIG_TIPC=m
+CONFIG_TIPC_MEDIA_UDP=y
+CONFIG_TIPC_DIAG=m
+CONFIG_ATM=y
+CONFIG_ATM_CLIP=m
+CONFIG_ATM_CLIP_NO_ICMP=y
+CONFIG_ATM_LANE=y
+# CONFIG_ATM_MPOA is not set
+CONFIG_ATM_BR2684=y
+# CONFIG_ATM_BR2684_IPFILTER is not set
+# CONFIG_L2TP is not set
+CONFIG_STP=y
+CONFIG_GARP=y
+CONFIG_MRP=y
+# CONFIG_BRIDGE is not set
+CONFIG_HAVE_NET_DSA=y
+# CONFIG_NET_DSA is not set
+CONFIG_VLAN_8021Q=y
+CONFIG_VLAN_8021Q_GVRP=y
+CONFIG_VLAN_8021Q_MVRP=y
+# CONFIG_DECNET is not set
+CONFIG_LLC=y
+CONFIG_LLC2=y
+CONFIG_ATALK=y
+CONFIG_DEV_APPLETALK=m
+CONFIG_IPDDP=m
+# CONFIG_IPDDP_ENCAP is not set
+# CONFIG_X25 is not set
+# CONFIG_LAPB is not set
+CONFIG_PHONET=m
+CONFIG_6LOWPAN=m
+CONFIG_6LOWPAN_DEBUGFS=y
+# CONFIG_6LOWPAN_NHC is not set
+CONFIG_IEEE802154=m
+CONFIG_IEEE802154_NL802154_EXPERIMENTAL=y
+# CONFIG_IEEE802154_SOCKET is not set
+CONFIG_IEEE802154_6LOWPAN=m
+CONFIG_MAC802154=m
+# CONFIG_NET_SCHED is not set
+CONFIG_DCB=y
+# CONFIG_DNS_RESOLVER is not set
+CONFIG_BATMAN_ADV=y
+CONFIG_BATMAN_ADV_BATMAN_V=y
+# CONFIG_BATMAN_ADV_BLA is not set
+# CONFIG_BATMAN_ADV_DAT is not set
+# CONFIG_BATMAN_ADV_NC is not set
+CONFIG_BATMAN_ADV_MCAST=y
+# CONFIG_BATMAN_ADV_DEBUGFS is not set
+CONFIG_OPENVSWITCH=m
+# CONFIG_OPENVSWITCH_GRE is not set
+CONFIG_VSOCKETS=m
+CONFIG_VSOCKETS_DIAG=m
+CONFIG_VIRTIO_VSOCKETS=m
+CONFIG_VIRTIO_VSOCKETS_COMMON=m
+# CONFIG_NETLINK_DIAG is not set
+CONFIG_MPLS=y
+CONFIG_NET_MPLS_GSO=m
+CONFIG_MPLS_ROUTING=m
+CONFIG_MPLS_IPTUNNEL=m
+CONFIG_NET_NSH=m
+CONFIG_HSR=m
+# CONFIG_NET_SWITCHDEV is not set
+# CONFIG_NET_L3_MASTER_DEV is not set
+# CONFIG_NET_NCSI is not set
+# CONFIG_CGROUP_NET_PRIO is not set
+CONFIG_CGROUP_NET_CLASSID=y
+CONFIG_NET_RX_BUSY_POLL=y
+CONFIG_BQL=y
+# CONFIG_BPF_JIT is not set
+CONFIG_BPF_STREAM_PARSER=y
+
+#
+# Network testing
+#
+CONFIG_NET_PKTGEN=y
+CONFIG_NET_DROP_MONITOR=y
+CONFIG_HAMRADIO=y
+
+#
+# Packet Radio protocols
+#
+CONFIG_AX25=y
+CONFIG_AX25_DAMA_SLAVE=y
+CONFIG_NETROM=y
+CONFIG_ROSE=y
+
+#
+# AX.25 network device drivers
+#
+CONFIG_MKISS=m
+CONFIG_6PACK=m
+CONFIG_BPQETHER=y
+CONFIG_BAYCOM_SER_FDX=y
+CONFIG_BAYCOM_SER_HDX=m
+CONFIG_YAM=m
+CONFIG_CAN=m
+# CONFIG_CAN_RAW is not set
+CONFIG_CAN_BCM=m
+# CONFIG_CAN_GW is not set
+
+#
+# CAN Device Drivers
+#
+# CONFIG_CAN_VCAN is not set
+# CONFIG_CAN_VXCAN is not set
+# CONFIG_CAN_SLCAN is not set
+CONFIG_CAN_DEV=m
+CONFIG_CAN_CALC_BITTIMING=y
+# CONFIG_CAN_C_CAN is not set
+# CONFIG_CAN_CC770 is not set
+# CONFIG_CAN_IFI_CANFD is not set
+# CONFIG_CAN_M_CAN is not set
+# CONFIG_CAN_PEAK_PCIEFD is not set
+# CONFIG_CAN_SJA1000 is not set
+# CONFIG_CAN_SOFTING is not set
+# CONFIG_CAN_DEBUG_DEVICES is not set
+CONFIG_BT=m
+# CONFIG_BT_BREDR is not set
+CONFIG_BT_LE=y
+# CONFIG_BT_6LOWPAN is not set
+# CONFIG_BT_LEDS is not set
+# CONFIG_BT_SELFTEST is not set
+# CONFIG_BT_DEBUGFS is not set
+
+#
+# Bluetooth device drivers
+#
+CONFIG_BT_HCIBTSDIO=m
+# CONFIG_BT_HCIUART is not set
+# CONFIG_BT_HCIDTL1 is not set
+# CONFIG_BT_HCIBT3C is not set
+CONFIG_BT_HCIBLUECARD=m
+# CONFIG_BT_HCIVHCI is not set
+CONFIG_BT_MRVL=m
+# CONFIG_BT_MRVL_SDIO is not set
+# CONFIG_BT_WILINK is not set
+# CONFIG_AF_RXRPC is not set
+CONFIG_AF_KCM=m
+CONFIG_STREAM_PARSER=y
+CONFIG_WIRELESS=y
+CONFIG_CFG80211=y
+CONFIG_NL80211_TESTMODE=y
+CONFIG_CFG80211_DEVELOPER_WARNINGS=y
+CONFIG_CFG80211_REQUIRE_SIGNED_REGDB=y
+CONFIG_CFG80211_USE_KERNEL_REGDB_KEYS=y
+# CONFIG_CFG80211_DEFAULT_PS is not set
+# CONFIG_CFG80211_DEBUGFS is not set
+CONFIG_CFG80211_CRDA_SUPPORT=y
+# CONFIG_CFG80211_WEXT is not set
+# CONFIG_MAC80211 is not set
+CONFIG_MAC80211_STA_HASH_MAX_SIZE=0
+# CONFIG_WIMAX is not set
+CONFIG_RFKILL=y
+CONFIG_RFKILL_LEDS=y
+CONFIG_RFKILL_INPUT=y
+CONFIG_RFKILL_GPIO=y
+CONFIG_NET_9P=y
+CONFIG_NET_9P_VIRTIO=y
+CONFIG_NET_9P_DEBUG=y
+CONFIG_CAIF=m
+CONFIG_CAIF_DEBUG=y
+CONFIG_CAIF_NETDEV=m
+CONFIG_CAIF_USB=m
+# CONFIG_CEPH_LIB is not set
+CONFIG_NFC=m
+# CONFIG_NFC_DIGITAL is not set
+CONFIG_NFC_NCI=m
+CONFIG_NFC_NCI_UART=m
+CONFIG_NFC_HCI=m
+CONFIG_NFC_SHDLC=y
+
+#
+# Near Field Communication (NFC) devices
+#
+CONFIG_NFC_FDP=m
+CONFIG_NFC_FDP_I2C=m
+CONFIG_NFC_PN544=m
+CONFIG_NFC_PN544_I2C=m
+# CONFIG_NFC_PN533_I2C is not set
+# CONFIG_NFC_MICROREAD_I2C is not set
+# CONFIG_NFC_MRVL_UART is not set
+CONFIG_NFC_ST21NFCA=m
+CONFIG_NFC_ST21NFCA_I2C=m
+CONFIG_NFC_ST_NCI=m
+CONFIG_NFC_ST_NCI_I2C=m
+# CONFIG_NFC_NXP_NCI is not set
+# CONFIG_NFC_S3FWRN5_I2C is not set
+# CONFIG_PSAMPLE is not set
+CONFIG_NET_IFE=m
+CONFIG_LWTUNNEL=y
+CONFIG_LWTUNNEL_BPF=y
+CONFIG_DST_CACHE=y
+CONFIG_GRO_CELLS=y
+# CONFIG_NET_DEVLINK is not set
+CONFIG_MAY_USE_DEVLINK=y
+CONFIG_FAILOVER=m
+CONFIG_HAVE_EBPF_JIT=y
+
+#
+# Device Drivers
+#
+
+#
+# Generic Driver Options
+#
+# CONFIG_UEVENT_HELPER is not set
+CONFIG_DEVTMPFS=y
+# CONFIG_DEVTMPFS_MOUNT is not set
+# CONFIG_STANDALONE is not set
+# CONFIG_PREVENT_FIRMWARE_BUILD is not set
+
+#
+# Firmware loader
+#
+CONFIG_FW_LOADER=y
+CONFIG_EXTRA_FIRMWARE=""
+# CONFIG_FW_LOADER_USER_HELPER is not set
+CONFIG_ALLOW_DEV_COREDUMP=y
+# CONFIG_DEBUG_DRIVER is not set
+# CONFIG_DEBUG_DEVRES is not set
+# CONFIG_DEBUG_TEST_DRIVER_REMOVE is not set
+# CONFIG_TEST_ASYNC_DRIVER_PROBE is not set
+CONFIG_GENERIC_CPU_AUTOPROBE=y
+CONFIG_GENERIC_CPU_VULNERABILITIES=y
+CONFIG_REGMAP=y
+CONFIG_REGMAP_I2C=y
+CONFIG_REGMAP_MMIO=y
+CONFIG_REGMAP_IRQ=y
+CONFIG_DMA_SHARED_BUFFER=y
+CONFIG_DMA_FENCE_TRACE=y
+
+#
+# Bus devices
+#
+# CONFIG_CONNECTOR is not set
+CONFIG_GNSS=m
+# CONFIG_MTD is not set
+# CONFIG_OF is not set
+CONFIG_ARCH_MIGHT_HAVE_PC_PARPORT=y
+# CONFIG_PARPORT is not set
+CONFIG_PNP=y
+CONFIG_PNP_DEBUG_MESSAGES=y
+
+#
+# Protocols
+#
+CONFIG_PNPACPI=y
+CONFIG_BLK_DEV=y
+# CONFIG_BLK_DEV_NULL_BLK is not set
+# CONFIG_BLK_DEV_FD is not set
+# CONFIG_BLK_DEV_PCIESSD_MTIP32XX is not set
+# CONFIG_BLK_DEV_DAC960 is not set
+# CONFIG_BLK_DEV_UMEM is not set
+# CONFIG_BLK_DEV_LOOP is not set
+# CONFIG_BLK_DEV_DRBD is not set
+# CONFIG_BLK_DEV_NBD is not set
+# CONFIG_BLK_DEV_SKD is not set
+# CONFIG_BLK_DEV_SX8 is not set
+# CONFIG_BLK_DEV_RAM is not set
+# CONFIG_CDROM_PKTCDVD is not set
+# CONFIG_ATA_OVER_ETH is not set
+# CONFIG_VIRTIO_BLK is not set
+# CONFIG_BLK_DEV_RBD is not set
+# CONFIG_BLK_DEV_RSXX is not set
+
+#
+# NVME Support
+#
+# CONFIG_BLK_DEV_NVME is not set
+# CONFIG_NVME_FC is not set
+CONFIG_NVME_TARGET=y
+# CONFIG_NVME_TARGET_LOOP is not set
+CONFIG_NVME_TARGET_FC=m
+
+#
+# Misc devices
+#
+CONFIG_SENSORS_LIS3LV02D=m
+CONFIG_AD525X_DPOT=m
+CONFIG_AD525X_DPOT_I2C=m
+# CONFIG_DUMMY_IRQ is not set
+# CONFIG_IBM_ASM is not set
+# CONFIG_PHANTOM is not set
+# CONFIG_SGI_IOC4 is not set
+# CONFIG_TIFM_CORE is not set
+# CONFIG_ICS932S401 is not set
+CONFIG_ENCLOSURE_SERVICES=m
+# CONFIG_HP_ILO is not set
+# CONFIG_APDS9802ALS is not set
+CONFIG_ISL29003=m
+CONFIG_ISL29020=m
+CONFIG_SENSORS_TSL2550=y
+CONFIG_SENSORS_BH1770=m
+# CONFIG_SENSORS_APDS990X is not set
+CONFIG_HMC6352=y
+CONFIG_DS1682=m
+# CONFIG_USB_SWITCH_FSA9480 is not set
+# CONFIG_SRAM is not set
+# CONFIG_PCI_ENDPOINT_TEST is not set
+CONFIG_C2PORT=y
+CONFIG_C2PORT_DURAMAR_2150=y
+
+#
+# EEPROM support
+#
+CONFIG_EEPROM_AT24=m
+CONFIG_EEPROM_LEGACY=y
+CONFIG_EEPROM_MAX6875=m
+# CONFIG_EEPROM_93CX6 is not set
+CONFIG_EEPROM_IDT_89HPESX=m
+# CONFIG_CB710_CORE is not set
+
+#
+# Texas Instruments shared transport line discipline
+#
+CONFIG_TI_ST=y
+CONFIG_SENSORS_LIS3_I2C=m
+CONFIG_ALTERA_STAPL=y
+# CONFIG_INTEL_MEI is not set
+# CONFIG_INTEL_MEI_ME is not set
+# CONFIG_INTEL_MEI_TXE is not set
+# CONFIG_VMWARE_VMCI is not set
+
+#
+# Intel MIC & related support
+#
+
+#
+# Intel MIC Bus Driver
+#
+# CONFIG_INTEL_MIC_BUS is not set
+
+#
+# SCIF Bus Driver
+#
+# CONFIG_SCIF_BUS is not set
+
+#
+# VOP Bus Driver
+#
+# CONFIG_VOP_BUS is not set
+
+#
+# Intel MIC Host Driver
+#
+
+#
+# Intel MIC Card Driver
+#
+
+#
+# SCIF Driver
+#
+
+#
+# Intel MIC Coprocessor State Management (COSM) Drivers
+#
+
+#
+# VOP Driver
+#
+# CONFIG_GENWQE is not set
+# CONFIG_ECHO is not set
+# CONFIG_MISC_RTSX_PCI is not set
+CONFIG_HAVE_IDE=y
+# CONFIG_IDE is not set
+
+#
+# SCSI device support
+#
+CONFIG_SCSI_MOD=y
+CONFIG_RAID_ATTRS=m
+CONFIG_SCSI=y
+CONFIG_SCSI_DMA=y
+CONFIG_SCSI_MQ_DEFAULT=y
+CONFIG_SCSI_PROC_FS=y
+
+#
+# SCSI support type (disk, tape, CD-ROM)
+#
+# CONFIG_BLK_DEV_SD is not set
+CONFIG_CHR_DEV_ST=y
+# CONFIG_CHR_DEV_OSST is not set
+# CONFIG_BLK_DEV_SR is not set
+# CONFIG_CHR_DEV_SG is not set
+# CONFIG_CHR_DEV_SCH is not set
+CONFIG_SCSI_ENCLOSURE=m
+# CONFIG_SCSI_CONSTANTS is not set
+CONFIG_SCSI_LOGGING=y
+# CONFIG_SCSI_SCAN_ASYNC is not set
+
+#
+# SCSI Transports
+#
+CONFIG_SCSI_SPI_ATTRS=y
+# CONFIG_SCSI_FC_ATTRS is not set
+CONFIG_SCSI_ISCSI_ATTRS=m
+CONFIG_SCSI_SAS_ATTRS=m
+CONFIG_SCSI_SAS_LIBSAS=m
+# CONFIG_SCSI_SAS_ATA is not set
+CONFIG_SCSI_SAS_HOST_SMP=y
+CONFIG_SCSI_SRP_ATTRS=y
+# CONFIG_SCSI_LOWLEVEL is not set
+# CONFIG_SCSI_LOWLEVEL_PCMCIA is not set
+CONFIG_SCSI_DH=y
+# CONFIG_SCSI_DH_RDAC is not set
+CONFIG_SCSI_DH_HP_SW=y
+CONFIG_SCSI_DH_EMC=y
+CONFIG_SCSI_DH_ALUA=m
+# CONFIG_SCSI_OSD_INITIATOR is not set
+CONFIG_ATA=y
+# CONFIG_ATA_VERBOSE_ERROR is not set
+CONFIG_ATA_ACPI=y
+# CONFIG_SATA_ZPODD is not set
+# CONFIG_SATA_PMP is not set
+
+#
+# Controllers with non-SFF native interface
+#
+# CONFIG_SATA_AHCI is not set
+CONFIG_SATA_AHCI_PLATFORM=m
+# CONFIG_SATA_INIC162X is not set
+# CONFIG_SATA_ACARD_AHCI is not set
+# CONFIG_SATA_SIL24 is not set
+CONFIG_ATA_SFF=y
+
+#
+# SFF controllers with custom DMA interface
+#
+# CONFIG_PDC_ADMA is not set
+# CONFIG_SATA_QSTOR is not set
+# CONFIG_SATA_SX4 is not set
+CONFIG_ATA_BMDMA=y
+
+#
+# SATA SFF controllers with BMDMA
+#
+# CONFIG_ATA_PIIX is not set
+CONFIG_SATA_DWC=m
+# CONFIG_SATA_DWC_OLD_DMA is not set
+# CONFIG_SATA_DWC_DEBUG is not set
+CONFIG_SATA_MV=y
+# CONFIG_SATA_NV is not set
+# CONFIG_SATA_PROMISE is not set
+# CONFIG_SATA_SIL is not set
+# CONFIG_SATA_SIS is not set
+# CONFIG_SATA_SVW is not set
+# CONFIG_SATA_ULI is not set
+# CONFIG_SATA_VIA is not set
+# CONFIG_SATA_VITESSE is not set
+
+#
+# PATA SFF controllers with BMDMA
+#
+# CONFIG_PATA_ALI is not set
+# CONFIG_PATA_AMD is not set
+# CONFIG_PATA_ARTOP is not set
+# CONFIG_PATA_ATIIXP is not set
+# CONFIG_PATA_ATP867X is not set
+# CONFIG_PATA_CMD64X is not set
+# CONFIG_PATA_CYPRESS is not set
+# CONFIG_PATA_EFAR is not set
+# CONFIG_PATA_HPT366 is not set
+# CONFIG_PATA_HPT37X is not set
+# CONFIG_PATA_HPT3X2N is not set
+# CONFIG_PATA_HPT3X3 is not set
+# CONFIG_PATA_IT8213 is not set
+# CONFIG_PATA_IT821X is not set
+# CONFIG_PATA_JMICRON is not set
+# CONFIG_PATA_MARVELL is not set
+# CONFIG_PATA_NETCELL is not set
+# CONFIG_PATA_NINJA32 is not set
+# CONFIG_PATA_NS87415 is not set
+# CONFIG_PATA_OLDPIIX is not set
+# CONFIG_PATA_OPTIDMA is not set
+# CONFIG_PATA_PDC2027X is not set
+# CONFIG_PATA_PDC_OLD is not set
+# CONFIG_PATA_RADISYS is not set
+# CONFIG_PATA_RDC is not set
+# CONFIG_PATA_SCH is not set
+# CONFIG_PATA_SERVERWORKS is not set
+# CONFIG_PATA_SIL680 is not set
+# CONFIG_PATA_SIS is not set
+# CONFIG_PATA_TOSHIBA is not set
+# CONFIG_PATA_TRIFLEX is not set
+# CONFIG_PATA_VIA is not set
+# CONFIG_PATA_WINBOND is not set
+
+#
+# PIO-only SFF controllers
+#
+# CONFIG_PATA_CMD640_PCI is not set
+# CONFIG_PATA_MPIIX is not set
+# CONFIG_PATA_NS87410 is not set
+# CONFIG_PATA_OPTI is not set
+CONFIG_PATA_PCMCIA=m
+# CONFIG_PATA_RZ1000 is not set
+
+#
+# Generic fallback / legacy drivers
+#
+# CONFIG_PATA_ACPI is not set
+# CONFIG_ATA_GENERIC is not set
+# CONFIG_PATA_LEGACY is not set
+CONFIG_MD=y
+CONFIG_BLK_DEV_MD=y
+# CONFIG_MD_AUTODETECT is not set
+# CONFIG_MD_LINEAR is not set
+CONFIG_MD_RAID0=m
+CONFIG_MD_RAID1=m
+CONFIG_MD_RAID10=y
+CONFIG_MD_RAID456=m
+CONFIG_MD_MULTIPATH=m
+CONFIG_MD_FAULTY=m
+CONFIG_MD_CLUSTER=m
+# CONFIG_BCACHE is not set
+CONFIG_BLK_DEV_DM_BUILTIN=y
+CONFIG_BLK_DEV_DM=m
+# CONFIG_DM_MQ_DEFAULT is not set
+# CONFIG_DM_DEBUG is not set
+CONFIG_DM_BUFIO=m
+# CONFIG_DM_DEBUG_BLOCK_MANAGER_LOCKING is not set
+CONFIG_DM_BIO_PRISON=m
+CONFIG_DM_PERSISTENT_DATA=m
+CONFIG_DM_UNSTRIPED=m
+CONFIG_DM_CRYPT=m
+# CONFIG_DM_SNAPSHOT is not set
+CONFIG_DM_THIN_PROVISIONING=m
+CONFIG_DM_CACHE=m
+# CONFIG_DM_CACHE_SMQ is not set
+CONFIG_DM_WRITECACHE=m
+CONFIG_DM_ERA=m
+CONFIG_DM_MIRROR=m
+# CONFIG_DM_LOG_USERSPACE is not set
+CONFIG_DM_RAID=m
+CONFIG_DM_ZERO=m
+CONFIG_DM_MULTIPATH=m
+CONFIG_DM_MULTIPATH_QL=m
+# CONFIG_DM_MULTIPATH_ST is not set
+CONFIG_DM_DELAY=m
+# CONFIG_DM_UEVENT is not set
+CONFIG_DM_FLAKEY=m
+CONFIG_DM_VERITY=m
+CONFIG_DM_VERITY_FEC=y
+CONFIG_DM_SWITCH=m
+# CONFIG_DM_LOG_WRITES is not set
+# CONFIG_DM_INTEGRITY is not set
+CONFIG_DM_ZONED=m
+# CONFIG_TARGET_CORE is not set
+# CONFIG_FUSION is not set
+
+#
+# IEEE 1394 (FireWire) support
+#
+CONFIG_FIREWIRE=m
+# CONFIG_FIREWIRE_OHCI is not set
+CONFIG_FIREWIRE_SBP2=m
+CONFIG_FIREWIRE_NET=m
+# CONFIG_FIREWIRE_NOSY is not set
+# CONFIG_MACINTOSH_DRIVERS is not set
+CONFIG_NETDEVICES=y
+CONFIG_NET_CORE=y
+# CONFIG_BONDING is not set
+# CONFIG_DUMMY is not set
+# CONFIG_EQUALIZER is not set
+# CONFIG_NET_FC is not set
+# CONFIG_NET_TEAM is not set
+# CONFIG_MACVLAN is not set
+# CONFIG_IPVLAN is not set
+# CONFIG_VXLAN is not set
+# CONFIG_GENEVE is not set
+# CONFIG_GTP is not set
+# CONFIG_MACSEC is not set
+# CONFIG_NETCONSOLE is not set
+# CONFIG_TUN is not set
+# CONFIG_TUN_VNET_CROSS_LE is not set
+# CONFIG_VETH is not set
+CONFIG_VIRTIO_NET=m
+# CONFIG_NLMON is not set
+# CONFIG_ARCNET is not set
+CONFIG_ATM_DRIVERS=y
+# CONFIG_ATM_DUMMY is not set
+# CONFIG_ATM_TCP is not set
+# CONFIG_ATM_LANAI is not set
+# CONFIG_ATM_ENI is not set
+# CONFIG_ATM_FIRESTREAM is not set
+# CONFIG_ATM_ZATM is not set
+# CONFIG_ATM_NICSTAR is not set
+# CONFIG_ATM_IDT77252 is not set
+# CONFIG_ATM_AMBASSADOR is not set
+# CONFIG_ATM_HORIZON is not set
+# CONFIG_ATM_IA is not set
+# CONFIG_ATM_FORE200E is not set
+# CONFIG_ATM_HE is not set
+# CONFIG_ATM_SOLOS is not set
+
+#
+# CAIF transport drivers
+#
+# CONFIG_CAIF_TTY is not set
+# CONFIG_CAIF_SPI_SLAVE is not set
+# CONFIG_CAIF_HSI is not set
+# CONFIG_CAIF_VIRTIO is not set
+
+#
+# Distributed Switch Architecture drivers
+#
+CONFIG_ETHERNET=y
+CONFIG_NET_VENDOR_3COM=y
+# CONFIG_PCMCIA_3C574 is not set
+# CONFIG_PCMCIA_3C589 is not set
+# CONFIG_VORTEX is not set
+# CONFIG_TYPHOON is not set
+CONFIG_NET_VENDOR_ADAPTEC=y
+# CONFIG_ADAPTEC_STARFIRE is not set
+CONFIG_NET_VENDOR_AGERE=y
+# CONFIG_ET131X is not set
+CONFIG_NET_VENDOR_ALACRITECH=y
+# CONFIG_SLICOSS is not set
+CONFIG_NET_VENDOR_ALTEON=y
+# CONFIG_ACENIC is not set
+# CONFIG_ALTERA_TSE is not set
+CONFIG_NET_VENDOR_AMAZON=y
+# CONFIG_NET_VENDOR_AMD is not set
+CONFIG_NET_VENDOR_AQUANTIA=y
+# CONFIG_AQTION is not set
+CONFIG_NET_VENDOR_ARC=y
+CONFIG_NET_VENDOR_ATHEROS=y
+# CONFIG_ATL2 is not set
+# CONFIG_ATL1 is not set
+# CONFIG_ATL1E is not set
+# CONFIG_ATL1C is not set
+# CONFIG_ALX is not set
+CONFIG_NET_VENDOR_AURORA=y
+# CONFIG_AURORA_NB8800 is not set
+CONFIG_NET_VENDOR_BROADCOM=y
+# CONFIG_B44 is not set
+# CONFIG_BCMGENET is not set
+# CONFIG_BNX2 is not set
+# CONFIG_CNIC is not set
+# CONFIG_TIGON3 is not set
+# CONFIG_BNX2X is not set
+# CONFIG_SYSTEMPORT is not set
+# CONFIG_BNXT is not set
+CONFIG_NET_VENDOR_BROCADE=y
+# CONFIG_BNA is not set
+CONFIG_NET_VENDOR_CADENCE=y
+# CONFIG_MACB is not set
+CONFIG_NET_VENDOR_CAVIUM=y
+# CONFIG_THUNDER_NIC_PF is not set
+# CONFIG_THUNDER_NIC_VF is not set
+# CONFIG_THUNDER_NIC_BGX is not set
+# CONFIG_THUNDER_NIC_RGX is not set
+CONFIG_CAVIUM_PTP=y
+# CONFIG_LIQUIDIO is not set
+CONFIG_NET_VENDOR_CHELSIO=y
+# CONFIG_CHELSIO_T1 is not set
+# CONFIG_CHELSIO_T3 is not set
+# CONFIG_CHELSIO_T4 is not set
+# CONFIG_CHELSIO_T4VF is not set
+CONFIG_NET_VENDOR_CISCO=y
+# CONFIG_ENIC is not set
+CONFIG_NET_VENDOR_CORTINA=y
+# CONFIG_CX_ECAT is not set
+# CONFIG_DNET is not set
+CONFIG_NET_VENDOR_DEC=y
+# CONFIG_NET_TULIP is not set
+CONFIG_NET_VENDOR_DLINK=y
+# CONFIG_DL2K is not set
+# CONFIG_SUNDANCE is not set
+CONFIG_NET_VENDOR_EMULEX=y
+# CONFIG_BE2NET is not set
+CONFIG_NET_VENDOR_EZCHIP=y
+CONFIG_NET_VENDOR_FUJITSU=y
+# CONFIG_PCMCIA_FMVJ18X is not set
+CONFIG_NET_VENDOR_HP=y
+# CONFIG_HP100 is not set
+CONFIG_NET_VENDOR_HUAWEI=y
+CONFIG_NET_VENDOR_I825XX=y
+CONFIG_NET_VENDOR_INTEL=y
+# CONFIG_E100 is not set
+CONFIG_E1000=y
+# CONFIG_E1000E is not set
+# CONFIG_IGB is not set
+# CONFIG_IGBVF is not set
+# CONFIG_IXGB is not set
+# CONFIG_IXGBE is not set
+# CONFIG_I40E is not set
+# CONFIG_JME is not set
+CONFIG_NET_VENDOR_MARVELL=y
+# CONFIG_MVMDIO is not set
+# CONFIG_SKGE is not set
+# CONFIG_SKY2 is not set
+CONFIG_NET_VENDOR_MELLANOX=y
+# CONFIG_MLX4_EN is not set
+# CONFIG_MLX5_CORE is not set
+# CONFIG_MLXSW_CORE is not set
+# CONFIG_MLXFW is not set
+CONFIG_NET_VENDOR_MICREL=y
+# CONFIG_KS8842 is not set
+# CONFIG_KS8851_MLL is not set
+# CONFIG_KSZ884X_PCI is not set
+CONFIG_NET_VENDOR_MICROSEMI=y
+CONFIG_NET_VENDOR_MYRI=y
+# CONFIG_MYRI10GE is not set
+# CONFIG_FEALNX is not set
+CONFIG_NET_VENDOR_NATSEMI=y
+# CONFIG_NATSEMI is not set
+# CONFIG_NS83820 is not set
+CONFIG_NET_VENDOR_NETERION=y
+# CONFIG_S2IO is not set
+# CONFIG_VXGE is not set
+CONFIG_NET_VENDOR_NETRONOME=y
+CONFIG_NET_VENDOR_NI=y
+CONFIG_NET_VENDOR_8390=y
+# CONFIG_PCMCIA_AXNET is not set
+# CONFIG_NE2K_PCI is not set
+# CONFIG_PCMCIA_PCNET is not set
+CONFIG_NET_VENDOR_NVIDIA=y
+# CONFIG_FORCEDETH is not set
+CONFIG_NET_VENDOR_OKI=y
+# CONFIG_ETHOC is not set
+CONFIG_NET_VENDOR_PACKET_ENGINES=y
+# CONFIG_HAMACHI is not set
+# CONFIG_YELLOWFIN is not set
+CONFIG_NET_VENDOR_QLOGIC=y
+# CONFIG_QLA3XXX is not set
+# CONFIG_QLCNIC is not set
+# CONFIG_QLGE is not set
+# CONFIG_NETXEN_NIC is not set
+# CONFIG_QED is not set
+CONFIG_NET_VENDOR_QUALCOMM=y
+# CONFIG_QCOM_EMAC is not set
+# CONFIG_RMNET is not set
+CONFIG_NET_VENDOR_RDC=y
+# CONFIG_R6040 is not set
+CONFIG_NET_VENDOR_REALTEK=y
+# CONFIG_8139CP is not set
+# CONFIG_8139TOO is not set
+# CONFIG_R8169 is not set
+CONFIG_NET_VENDOR_RENESAS=y
+CONFIG_NET_VENDOR_ROCKER=y
+CONFIG_NET_VENDOR_SAMSUNG=y
+# CONFIG_SXGBE_ETH is not set
+CONFIG_NET_VENDOR_SEEQ=y
+CONFIG_NET_VENDOR_SOLARFLARE=y
+# CONFIG_SFC is not set
+# CONFIG_SFC_FALCON is not set
+CONFIG_NET_VENDOR_SILAN=y
+# CONFIG_SC92031 is not set
+CONFIG_NET_VENDOR_SIS=y
+# CONFIG_SIS900 is not set
+# CONFIG_SIS190 is not set
+CONFIG_NET_VENDOR_SMSC=y
+# CONFIG_PCMCIA_SMC91C92 is not set
+# CONFIG_EPIC100 is not set
+# CONFIG_SMSC911X is not set
+# CONFIG_SMSC9420 is not set
+CONFIG_NET_VENDOR_SOCIONEXT=y
+CONFIG_NET_VENDOR_STMICRO=y
+# CONFIG_STMMAC_ETH is not set
+CONFIG_NET_VENDOR_SUN=y
+# CONFIG_HAPPYMEAL is not set
+# CONFIG_SUNGEM is not set
+# CONFIG_CASSINI is not set
+# CONFIG_NIU is not set
+CONFIG_NET_VENDOR_SYNOPSYS=y
+# CONFIG_DWC_XLGMAC is not set
+CONFIG_NET_VENDOR_TEHUTI=y
+# CONFIG_TEHUTI is not set
+CONFIG_NET_VENDOR_TI=y
+# CONFIG_TI_CPSW_ALE is not set
+# CONFIG_TLAN is not set
+CONFIG_NET_VENDOR_VIA=y
+# CONFIG_VIA_RHINE is not set
+# CONFIG_VIA_VELOCITY is not set
+CONFIG_NET_VENDOR_WIZNET=y
+# CONFIG_WIZNET_W5100 is not set
+# CONFIG_WIZNET_W5300 is not set
+CONFIG_NET_VENDOR_XIRCOM=y
+# CONFIG_PCMCIA_XIRC2PS is not set
+# CONFIG_FDDI is not set
+# CONFIG_HIPPI is not set
+# CONFIG_NET_SB1000 is not set
+# CONFIG_MDIO_DEVICE is not set
+# CONFIG_PHYLIB is not set
+# CONFIG_PPP is not set
+# CONFIG_SLIP is not set
+
+#
+# Host-side USB support is needed for USB Network Adapter support
+#
+CONFIG_WLAN=y
+CONFIG_WLAN_VENDOR_ADMTEK=y
+CONFIG_WLAN_VENDOR_ATH=y
+# CONFIG_ATH_DEBUG is not set
+# CONFIG_ATH5K_PCI is not set
+# CONFIG_ATH6KL is not set
+# CONFIG_WIL6210 is not set
+CONFIG_WLAN_VENDOR_ATMEL=y
+# CONFIG_ATMEL is not set
+CONFIG_WLAN_VENDOR_BROADCOM=y
+# CONFIG_BRCMFMAC is not set
+CONFIG_WLAN_VENDOR_CISCO=y
+# CONFIG_AIRO is not set
+# CONFIG_AIRO_CS is not set
+CONFIG_WLAN_VENDOR_INTEL=y
+# CONFIG_IPW2100 is not set
+# CONFIG_IPW2200 is not set
+CONFIG_WLAN_VENDOR_INTERSIL=y
+# CONFIG_HOSTAP is not set
+# CONFIG_HERMES is not set
+# CONFIG_PRISM54 is not set
+CONFIG_WLAN_VENDOR_MARVELL=y
+# CONFIG_LIBERTAS is not set
+# CONFIG_MWIFIEX is not set
+CONFIG_WLAN_VENDOR_MEDIATEK=y
+CONFIG_WLAN_VENDOR_RALINK=y
+CONFIG_WLAN_VENDOR_REALTEK=y
+CONFIG_WLAN_VENDOR_RSI=y
+CONFIG_WLAN_VENDOR_ST=y
+CONFIG_WLAN_VENDOR_TI=y
+CONFIG_WLAN_VENDOR_ZYDAS=y
+CONFIG_WLAN_VENDOR_QUANTENNA=y
+# CONFIG_QTNFMAC_PEARL_PCIE is not set
+# CONFIG_PCMCIA_RAYCS is not set
+# CONFIG_PCMCIA_WL3501 is not set
+
+#
+# Enable WiMAX (Networking options) to see the WiMAX drivers
+#
+# CONFIG_WAN is not set
+CONFIG_IEEE802154_DRIVERS=m
+# CONFIG_IEEE802154_FAKELB is not set
+# CONFIG_IEEE802154_HWSIM is not set
+# CONFIG_VMXNET3 is not set
+# CONFIG_FUJITSU_ES is not set
+# CONFIG_NETDEVSIM is not set
+CONFIG_NET_FAILOVER=m
+# CONFIG_ISDN is not set
+
+#
+# Input device support
+#
+CONFIG_INPUT=y
+# CONFIG_INPUT_LEDS is not set
+CONFIG_INPUT_FF_MEMLESS=y
+CONFIG_INPUT_POLLDEV=y
+CONFIG_INPUT_SPARSEKMAP=m
+CONFIG_INPUT_MATRIXKMAP=y
+
+#
+# Userland interfaces
+#
+# CONFIG_INPUT_MOUSEDEV is not set
+# CONFIG_INPUT_JOYDEV is not set
+CONFIG_INPUT_EVDEV=y
+# CONFIG_INPUT_EVBUG is not set
+
+#
+# Input Device Drivers
+#
+CONFIG_INPUT_KEYBOARD=y
+# CONFIG_KEYBOARD_ADC is not set
+# CONFIG_KEYBOARD_ADP5588 is not set
+# CONFIG_KEYBOARD_ADP5589 is not set
+CONFIG_KEYBOARD_ATKBD=y
+# CONFIG_KEYBOARD_QT1070 is not set
+# CONFIG_KEYBOARD_QT2160 is not set
+# CONFIG_KEYBOARD_DLINK_DIR685 is not set
+# CONFIG_KEYBOARD_LKKBD is not set
+# CONFIG_KEYBOARD_GPIO is not set
+# CONFIG_KEYBOARD_GPIO_POLLED is not set
+# CONFIG_KEYBOARD_TCA6416 is not set
+# CONFIG_KEYBOARD_TCA8418 is not set
+# CONFIG_KEYBOARD_MATRIX is not set
+# CONFIG_KEYBOARD_LM8323 is not set
+# CONFIG_KEYBOARD_LM8333 is not set
+# CONFIG_KEYBOARD_MAX7359 is not set
+# CONFIG_KEYBOARD_MCS is not set
+# CONFIG_KEYBOARD_MPR121 is not set
+# CONFIG_KEYBOARD_NEWTON is not set
+# CONFIG_KEYBOARD_OPENCORES is not set
+# CONFIG_KEYBOARD_SAMSUNG is not set
+# CONFIG_KEYBOARD_STOWAWAY is not set
+# CONFIG_KEYBOARD_SUNKBD is not set
+# CONFIG_KEYBOARD_TM2_TOUCHKEY is not set
+# CONFIG_KEYBOARD_XTKBD is not set
+# CONFIG_KEYBOARD_MTK_PMIC is not set
+# CONFIG_INPUT_MOUSE is not set
+CONFIG_INPUT_JOYSTICK=y
+CONFIG_JOYSTICK_ANALOG=y
+CONFIG_JOYSTICK_A3D=y
+CONFIG_JOYSTICK_ADI=m
+CONFIG_JOYSTICK_COBRA=m
+CONFIG_JOYSTICK_GF2K=y
+CONFIG_JOYSTICK_GRIP=m
+CONFIG_JOYSTICK_GRIP_MP=m
+CONFIG_JOYSTICK_GUILLEMOT=y
+CONFIG_JOYSTICK_INTERACT=y
+# CONFIG_JOYSTICK_SIDEWINDER is not set
+CONFIG_JOYSTICK_TMDC=m
+CONFIG_JOYSTICK_IFORCE=y
+CONFIG_JOYSTICK_IFORCE_232=y
+# CONFIG_JOYSTICK_WARRIOR is not set
+CONFIG_JOYSTICK_MAGELLAN=m
+# CONFIG_JOYSTICK_SPACEORB is not set
+# CONFIG_JOYSTICK_SPACEBALL is not set
+CONFIG_JOYSTICK_STINGER=m
+# CONFIG_JOYSTICK_TWIDJOY is not set
+CONFIG_JOYSTICK_ZHENHUA=y
+CONFIG_JOYSTICK_AS5011=m
+# CONFIG_JOYSTICK_JOYDUMP is not set
+# CONFIG_JOYSTICK_XPAD is not set
+# CONFIG_JOYSTICK_PXRC is not set
+CONFIG_INPUT_TABLET=y
+# CONFIG_TABLET_USB_ACECAD is not set
+# CONFIG_TABLET_USB_AIPTEK is not set
+# CONFIG_TABLET_USB_HANWANG is not set
+# CONFIG_TABLET_USB_KBTAB is not set
+# CONFIG_TABLET_USB_PEGASUS is not set
+CONFIG_TABLET_SERIAL_WACOM4=y
+CONFIG_INPUT_TOUCHSCREEN=y
+CONFIG_TOUCHSCREEN_PROPERTIES=y
+# CONFIG_TOUCHSCREEN_88PM860X is not set
+CONFIG_TOUCHSCREEN_AD7879=m
+# CONFIG_TOUCHSCREEN_AD7879_I2C is not set
+CONFIG_TOUCHSCREEN_ADC=m
+CONFIG_TOUCHSCREEN_ATMEL_MXT=m
+CONFIG_TOUCHSCREEN_ATMEL_MXT_T37=y
+# CONFIG_TOUCHSCREEN_AUO_PIXCIR is not set
+CONFIG_TOUCHSCREEN_BU21013=y
+# CONFIG_TOUCHSCREEN_BU21029 is not set
+# CONFIG_TOUCHSCREEN_CHIPONE_ICN8505 is not set
+# CONFIG_TOUCHSCREEN_CY8CTMG110 is not set
+CONFIG_TOUCHSCREEN_CYTTSP_CORE=m
+CONFIG_TOUCHSCREEN_CYTTSP_I2C=m
+CONFIG_TOUCHSCREEN_CYTTSP4_CORE=m
+# CONFIG_TOUCHSCREEN_CYTTSP4_I2C is not set
+CONFIG_TOUCHSCREEN_DA9052=m
+CONFIG_TOUCHSCREEN_DYNAPRO=y
+CONFIG_TOUCHSCREEN_HAMPSHIRE=m
+CONFIG_TOUCHSCREEN_EETI=m
+CONFIG_TOUCHSCREEN_EGALAX_SERIAL=m
+# CONFIG_TOUCHSCREEN_EXC3000 is not set
+# CONFIG_TOUCHSCREEN_FUJITSU is not set
+CONFIG_TOUCHSCREEN_GOODIX=m
+CONFIG_TOUCHSCREEN_HIDEEP=m
+CONFIG_TOUCHSCREEN_ILI210X=y
+# CONFIG_TOUCHSCREEN_S6SY761 is not set
+CONFIG_TOUCHSCREEN_GUNZE=m
+CONFIG_TOUCHSCREEN_EKTF2127=m
+# CONFIG_TOUCHSCREEN_ELAN is not set
+CONFIG_TOUCHSCREEN_ELO=y
+# CONFIG_TOUCHSCREEN_WACOM_W8001 is not set
+CONFIG_TOUCHSCREEN_WACOM_I2C=m
+# CONFIG_TOUCHSCREEN_MAX11801 is not set
+# CONFIG_TOUCHSCREEN_MCS5000 is not set
+CONFIG_TOUCHSCREEN_MMS114=m
+CONFIG_TOUCHSCREEN_MELFAS_MIP4=m
+CONFIG_TOUCHSCREEN_MTOUCH=m
+CONFIG_TOUCHSCREEN_INEXIO=y
+# CONFIG_TOUCHSCREEN_MK712 is not set
+# CONFIG_TOUCHSCREEN_PENMOUNT is not set
+CONFIG_TOUCHSCREEN_EDT_FT5X06=m
+# CONFIG_TOUCHSCREEN_TOUCHRIGHT is not set
+# CONFIG_TOUCHSCREEN_TOUCHWIN is not set
+CONFIG_TOUCHSCREEN_TI_AM335X_TSC=m
+CONFIG_TOUCHSCREEN_PIXCIR=m
+# CONFIG_TOUCHSCREEN_WDT87XX_I2C is not set
+# CONFIG_TOUCHSCREEN_USB_COMPOSITE is not set
+CONFIG_TOUCHSCREEN_MC13783=m
+CONFIG_TOUCHSCREEN_TOUCHIT213=m
+CONFIG_TOUCHSCREEN_TSC_SERIO=y
+# CONFIG_TOUCHSCREEN_TSC2004 is not set
+CONFIG_TOUCHSCREEN_TSC2007=m
+CONFIG_TOUCHSCREEN_TSC2007_IIO=y
+# CONFIG_TOUCHSCREEN_RM_TS is not set
+CONFIG_TOUCHSCREEN_SILEAD=y
+CONFIG_TOUCHSCREEN_SIS_I2C=y
+# CONFIG_TOUCHSCREEN_ST1232 is not set
+CONFIG_TOUCHSCREEN_STMFTS=m
+CONFIG_TOUCHSCREEN_SX8654=y
+CONFIG_TOUCHSCREEN_TPS6507X=m
+CONFIG_TOUCHSCREEN_ZET6223=m
+CONFIG_TOUCHSCREEN_ZFORCE=m
+CONFIG_TOUCHSCREEN_ROHM_BU21023=y
+CONFIG_INPUT_MISC=y
+CONFIG_INPUT_88PM860X_ONKEY=y
+CONFIG_INPUT_AD714X=y
+# CONFIG_INPUT_AD714X_I2C is not set
+CONFIG_INPUT_BMA150=m
+CONFIG_INPUT_E3X0_BUTTON=m
+CONFIG_INPUT_PCSPKR=m
+CONFIG_INPUT_MAX8925_ONKEY=m
+# CONFIG_INPUT_MC13783_PWRBUTTON is not set
+# CONFIG_INPUT_MMA8450 is not set
+CONFIG_INPUT_APANEL=m
+# CONFIG_INPUT_GP2A is not set
+CONFIG_INPUT_GPIO_BEEPER=m
+CONFIG_INPUT_GPIO_DECODER=y
+# CONFIG_INPUT_ATLAS_BTNS is not set
+# CONFIG_INPUT_ATI_REMOTE2 is not set
+# CONFIG_INPUT_KEYSPAN_REMOTE is not set
+CONFIG_INPUT_KXTJ9=m
+# CONFIG_INPUT_KXTJ9_POLLED_MODE is not set
+# CONFIG_INPUT_POWERMATE is not set
+# CONFIG_INPUT_YEALINK is not set
+# CONFIG_INPUT_CM109 is not set
+CONFIG_INPUT_REGULATOR_HAPTIC=y
+# CONFIG_INPUT_UINPUT is not set
+CONFIG_INPUT_PCF50633_PMU=m
+# CONFIG_INPUT_PCF8574 is not set
+CONFIG_INPUT_GPIO_ROTARY_ENCODER=m
+CONFIG_INPUT_DA9052_ONKEY=y
+CONFIG_INPUT_DA9055_ONKEY=y
+CONFIG_INPUT_DA9063_ONKEY=y
+CONFIG_INPUT_ADXL34X=y
+CONFIG_INPUT_ADXL34X_I2C=y
+CONFIG_INPUT_CMA3000=m
+# CONFIG_INPUT_CMA3000_I2C is not set
+CONFIG_INPUT_IDEAPAD_SLIDEBAR=m
+CONFIG_INPUT_DRV260X_HAPTICS=m
+# CONFIG_INPUT_DRV2665_HAPTICS is not set
+CONFIG_INPUT_DRV2667_HAPTICS=m
+CONFIG_RMI4_CORE=y
+# CONFIG_RMI4_I2C is not set
+# CONFIG_RMI4_SMB is not set
+# CONFIG_RMI4_F03 is not set
+# CONFIG_RMI4_F11 is not set
+# CONFIG_RMI4_F12 is not set
+# CONFIG_RMI4_F30 is not set
+# CONFIG_RMI4_F34 is not set
+# CONFIG_RMI4_F54 is not set
+# CONFIG_RMI4_F55 is not set
+
+#
+# Hardware I/O ports
+#
+CONFIG_SERIO=y
+CONFIG_ARCH_MIGHT_HAVE_PC_SERIO=y
+CONFIG_SERIO_I8042=y
+CONFIG_SERIO_SERPORT=y
+# CONFIG_SERIO_CT82C710 is not set
+# CONFIG_SERIO_PCIPS2 is not set
+CONFIG_SERIO_LIBPS2=y
+# CONFIG_SERIO_RAW is not set
+CONFIG_SERIO_ALTERA_PS2=y
+CONFIG_SERIO_PS2MULT=y
+CONFIG_SERIO_ARC_PS2=m
+# CONFIG_SERIO_GPIO_PS2 is not set
+CONFIG_USERIO=m
+CONFIG_GAMEPORT=y
+CONFIG_GAMEPORT_NS558=y
+# CONFIG_GAMEPORT_L4 is not set
+# CONFIG_GAMEPORT_EMU10K1 is not set
+# CONFIG_GAMEPORT_FM801 is not set
+
+#
+# Character devices
+#
+CONFIG_TTY=y
+CONFIG_VT=y
+CONFIG_CONSOLE_TRANSLATIONS=y
+CONFIG_VT_CONSOLE=y
+CONFIG_VT_CONSOLE_SLEEP=y
+CONFIG_HW_CONSOLE=y
+CONFIG_VT_HW_CONSOLE_BINDING=y
+CONFIG_UNIX98_PTYS=y
+# CONFIG_LEGACY_PTYS is not set
+# CONFIG_SERIAL_NONSTANDARD is not set
+# CONFIG_NOZOMI is not set
+CONFIG_N_GSM=m
+# CONFIG_TRACE_SINK is not set
+CONFIG_LDISC_AUTOLOAD=y
+CONFIG_DEVMEM=y
+# CONFIG_DEVKMEM is not set
+
+#
+# Serial drivers
+#
+CONFIG_SERIAL_EARLYCON=y
+CONFIG_SERIAL_8250=y
+CONFIG_SERIAL_8250_DEPRECATED_OPTIONS=y
+CONFIG_SERIAL_8250_PNP=y
+CONFIG_SERIAL_8250_FINTEK=y
+CONFIG_SERIAL_8250_CONSOLE=y
+CONFIG_SERIAL_8250_DMA=y
+CONFIG_SERIAL_8250_PCI=y
+CONFIG_SERIAL_8250_EXAR=y
+CONFIG_SERIAL_8250_CS=m
+CONFIG_SERIAL_8250_MEN_MCB=m
+CONFIG_SERIAL_8250_NR_UARTS=4
+CONFIG_SERIAL_8250_RUNTIME_UARTS=4
+CONFIG_SERIAL_8250_EXTENDED=y
+CONFIG_SERIAL_8250_MANY_PORTS=y
+CONFIG_SERIAL_8250_SHARE_IRQ=y
+# CONFIG_SERIAL_8250_DETECT_IRQ is not set
+# CONFIG_SERIAL_8250_RSA is not set
+# CONFIG_SERIAL_8250_DW is not set
+# CONFIG_SERIAL_8250_RT288X is not set
+CONFIG_SERIAL_8250_LPSS=y
+CONFIG_SERIAL_8250_MID=y
+# CONFIG_SERIAL_8250_MOXA is not set
+
+#
+# Non-8250 serial port support
+#
+CONFIG_SERIAL_UARTLITE=m
+CONFIG_SERIAL_UARTLITE_NR_UARTS=1
+CONFIG_SERIAL_CORE=y
+CONFIG_SERIAL_CORE_CONSOLE=y
+# CONFIG_SERIAL_JSM is not set
+CONFIG_SERIAL_SCCNXP=y
+CONFIG_SERIAL_SCCNXP_CONSOLE=y
+CONFIG_SERIAL_SC16IS7XX_CORE=m
+CONFIG_SERIAL_SC16IS7XX=m
+CONFIG_SERIAL_SC16IS7XX_I2C=y
+CONFIG_SERIAL_ALTERA_JTAGUART=m
+# CONFIG_SERIAL_ALTERA_UART is not set
+# CONFIG_SERIAL_ARC is not set
+# CONFIG_SERIAL_RP2 is not set
+CONFIG_SERIAL_FSL_LPUART=y
+CONFIG_SERIAL_FSL_LPUART_CONSOLE=y
+# CONFIG_SERIAL_MEN_Z135 is not set
+# CONFIG_SERIAL_DEV_BUS is not set
+# CONFIG_VIRTIO_CONSOLE is not set
+# CONFIG_IPMI_HANDLER is not set
+CONFIG_HW_RANDOM=y
+CONFIG_HW_RANDOM_TIMERIOMEM=m
+CONFIG_HW_RANDOM_INTEL=y
+# CONFIG_HW_RANDOM_AMD is not set
+CONFIG_HW_RANDOM_VIA=y
+# CONFIG_HW_RANDOM_VIRTIO is not set
+# CONFIG_NVRAM is not set
+# CONFIG_APPLICOM is not set
+
+#
+# PCMCIA character devices
+#
+CONFIG_SYNCLINK_CS=m
+CONFIG_CARDMAN_4000=m
+CONFIG_CARDMAN_4040=m
+CONFIG_SCR24X=m
+# CONFIG_IPWIRELESS is not set
+CONFIG_MWAVE=y
+# CONFIG_RAW_DRIVER is not set
+# CONFIG_HPET is not set
+# CONFIG_HANGCHECK_TIMER is not set
+# CONFIG_TCG_TPM is not set
+CONFIG_TELCLOCK=y
+CONFIG_DEVPORT=y
+# CONFIG_XILLYBUS is not set
+CONFIG_RANDOM_TRUST_CPU=y
+CONFIG_RANDOM_TRUST_BOOTLOADER=y
+
+#
+# I2C support
+#
+CONFIG_I2C=y
+CONFIG_ACPI_I2C_OPREGION=y
+CONFIG_I2C_BOARDINFO=y
+# CONFIG_I2C_COMPAT is not set
+# CONFIG_I2C_CHARDEV is not set
+CONFIG_I2C_MUX=y
+
+#
+# Multiplexer I2C Chip support
+#
+CONFIG_I2C_MUX_GPIO=m
+CONFIG_I2C_MUX_LTC4306=m
+CONFIG_I2C_MUX_PCA9541=y
+# CONFIG_I2C_MUX_PCA954x is not set
+CONFIG_I2C_MUX_REG=y
+# CONFIG_I2C_MUX_MLXCPLD is not set
+CONFIG_I2C_HELPER_AUTO=y
+CONFIG_I2C_ALGOBIT=y
+CONFIG_I2C_ALGOPCA=y
+
+#
+# I2C Hardware Bus support
+#
+
+#
+# PC SMBus host controller drivers
+#
+# CONFIG_I2C_ALI1535 is not set
+# CONFIG_I2C_ALI1563 is not set
+# CONFIG_I2C_ALI15X3 is not set
+# CONFIG_I2C_AMD756 is not set
+# CONFIG_I2C_AMD8111 is not set
+# CONFIG_I2C_I801 is not set
+# CONFIG_I2C_ISCH is not set
+# CONFIG_I2C_ISMT is not set
+# CONFIG_I2C_PIIX4 is not set
+# CONFIG_I2C_NFORCE2 is not set
+# CONFIG_I2C_SIS5595 is not set
+# CONFIG_I2C_SIS630 is not set
+# CONFIG_I2C_SIS96X is not set
+# CONFIG_I2C_VIA is not set
+# CONFIG_I2C_VIAPRO is not set
+
+#
+# ACPI drivers
+#
+# CONFIG_I2C_SCMI is not set
+
+#
+# I2C system bus drivers (mostly embedded / system-on-chip)
+#
+CONFIG_I2C_CBUS_GPIO=m
+CONFIG_I2C_DESIGNWARE_CORE=m
+CONFIG_I2C_DESIGNWARE_PLATFORM=m
+CONFIG_I2C_DESIGNWARE_SLAVE=y
+# CONFIG_I2C_DESIGNWARE_PCI is not set
+# CONFIG_I2C_EMEV2 is not set
+CONFIG_I2C_GPIO=y
+# CONFIG_I2C_GPIO_FAULT_INJECTOR is not set
+CONFIG_I2C_OCORES=m
+CONFIG_I2C_PCA_PLATFORM=y
+# CONFIG_I2C_SIMTEC is not set
+CONFIG_I2C_XILINX=y
+
+#
+# External I2C/SMBus adapter drivers
+#
+# CONFIG_I2C_PARPORT_LIGHT is not set
+CONFIG_I2C_TAOS_EVM=y
+
+#
+# Other I2C/SMBus bus drivers
+#
+# CONFIG_I2C_MLXCPLD is not set
+CONFIG_I2C_STUB=m
+CONFIG_I2C_SLAVE=y
+CONFIG_I2C_SLAVE_EEPROM=y
+# CONFIG_I2C_DEBUG_CORE is not set
+# CONFIG_I2C_DEBUG_ALGO is not set
+# CONFIG_I2C_DEBUG_BUS is not set
+# CONFIG_SPI is not set
+# CONFIG_SPMI is not set
+# CONFIG_HSI is not set
+CONFIG_PPS=y
+# CONFIG_PPS_DEBUG is not set
+# CONFIG_NTP_PPS is not set
+
+#
+# PPS clients support
+#
+CONFIG_PPS_CLIENT_KTIMER=m
+CONFIG_PPS_CLIENT_LDISC=m
+CONFIG_PPS_CLIENT_GPIO=m
+
+#
+# PPS generators support
+#
+
+#
+# PTP clock support
+#
+CONFIG_PTP_1588_CLOCK=y
+
+#
+# Enable PHYLIB and NETWORK_PHY_TIMESTAMPING to see the additional clocks.
+#
+CONFIG_PTP_1588_CLOCK_KVM=y
+CONFIG_PINCTRL=y
+CONFIG_PINMUX=y
+CONFIG_PINCONF=y
+CONFIG_GENERIC_PINCONF=y
+CONFIG_DEBUG_PINCTRL=y
+# CONFIG_PINCTRL_AMD is not set
+# CONFIG_PINCTRL_MCP23S08 is not set
+# CONFIG_PINCTRL_SX150X is not set
+# CONFIG_PINCTRL_BAYTRAIL is not set
+# CONFIG_PINCTRL_CHERRYVIEW is not set
+# CONFIG_PINCTRL_BROXTON is not set
+# CONFIG_PINCTRL_CANNONLAKE is not set
+# CONFIG_PINCTRL_CEDARFORK is not set
+# CONFIG_PINCTRL_DENVERTON is not set
+# CONFIG_PINCTRL_GEMINILAKE is not set
+# CONFIG_PINCTRL_ICELAKE is not set
+# CONFIG_PINCTRL_LEWISBURG is not set
+# CONFIG_PINCTRL_SUNRISEPOINT is not set
+CONFIG_PINCTRL_MADERA=m
+CONFIG_PINCTRL_CS47L35=y
+CONFIG_PINCTRL_CS47L90=y
+CONFIG_GPIOLIB=y
+CONFIG_GPIOLIB_FASTPATH_LIMIT=512
+CONFIG_GPIO_ACPI=y
+CONFIG_GPIOLIB_IRQCHIP=y
+CONFIG_DEBUG_GPIO=y
+CONFIG_GPIO_SYSFS=y
+CONFIG_GPIO_GENERIC=m
+
+#
+# Memory mapped GPIO drivers
+#
+# CONFIG_GPIO_AMDPT is not set
+CONFIG_GPIO_DWAPB=m
+# CONFIG_GPIO_EXAR is not set
+# CONFIG_GPIO_GENERIC_PLATFORM is not set
+# CONFIG_GPIO_ICH is not set
+# CONFIG_GPIO_LYNXPOINT is not set
+CONFIG_GPIO_MB86S7X=m
+CONFIG_GPIO_MENZ127=m
+CONFIG_GPIO_MOCKUP=m
+# CONFIG_GPIO_VX855 is not set
+
+#
+# Port-mapped I/O GPIO drivers
+#
+CONFIG_GPIO_F7188X=m
+CONFIG_GPIO_IT87=m
+# CONFIG_GPIO_SCH is not set
+CONFIG_GPIO_SCH311X=y
+# CONFIG_GPIO_WINBOND is not set
+# CONFIG_GPIO_WS16C48 is not set
+
+#
+# I2C GPIO expanders
+#
+# CONFIG_GPIO_ADP5588 is not set
+# CONFIG_GPIO_MAX7300 is not set
+CONFIG_GPIO_MAX732X=m
+# CONFIG_GPIO_PCA953X is not set
+CONFIG_GPIO_PCF857X=y
+# CONFIG_GPIO_TPIC2810 is not set
+
+#
+# MFD GPIO expanders
+#
+CONFIG_GPIO_ARIZONA=y
+CONFIG_GPIO_BD9571MWV=m
+CONFIG_GPIO_DA9052=m
+# CONFIG_GPIO_DA9055 is not set
+# CONFIG_GPIO_LP873X is not set
+CONFIG_GPIO_MADERA=m
+CONFIG_GPIO_TPS65086=m
+# CONFIG_GPIO_TPS65910 is not set
+# CONFIG_GPIO_TPS65912 is not set
+# CONFIG_GPIO_WM8350 is not set
+CONFIG_GPIO_WM8994=y
+
+#
+# PCI GPIO expanders
+#
+# CONFIG_GPIO_AMD8111 is not set
+# CONFIG_GPIO_BT8XX is not set
+# CONFIG_GPIO_ML_IOH is not set
+# CONFIG_GPIO_PCI_IDIO_16 is not set
+# CONFIG_GPIO_PCIE_IDIO_24 is not set
+# CONFIG_GPIO_RDC321X is not set
+CONFIG_W1=y
+
+#
+# 1-wire Bus Masters
+#
+# CONFIG_W1_MASTER_MATROX is not set
+CONFIG_W1_MASTER_DS2482=m
+# CONFIG_W1_MASTER_DS1WM is not set
+# CONFIG_W1_MASTER_GPIO is not set
+
+#
+# 1-wire Slaves
+#
+CONFIG_W1_SLAVE_THERM=m
+# CONFIG_W1_SLAVE_SMEM is not set
+# CONFIG_W1_SLAVE_DS2405 is not set
+CONFIG_W1_SLAVE_DS2408=y
+# CONFIG_W1_SLAVE_DS2408_READBACK is not set
+CONFIG_W1_SLAVE_DS2413=y
+CONFIG_W1_SLAVE_DS2406=m
+CONFIG_W1_SLAVE_DS2423=m
+CONFIG_W1_SLAVE_DS2805=m
+CONFIG_W1_SLAVE_DS2431=y
+CONFIG_W1_SLAVE_DS2433=y
+CONFIG_W1_SLAVE_DS2433_CRC=y
+# CONFIG_W1_SLAVE_DS2438 is not set
+CONFIG_W1_SLAVE_DS2780=y
+CONFIG_W1_SLAVE_DS2781=m
+# CONFIG_W1_SLAVE_DS28E04 is not set
+CONFIG_W1_SLAVE_DS28E17=m
+# CONFIG_POWER_AVS is not set
+CONFIG_POWER_RESET=y
+# CONFIG_POWER_RESET_RESTART is not set
+CONFIG_POWER_SUPPLY=y
+# CONFIG_POWER_SUPPLY_DEBUG is not set
+# CONFIG_PDA_POWER is not set
+# CONFIG_GENERIC_ADC_BATTERY is not set
+# CONFIG_MAX8925_POWER is not set
+# CONFIG_WM8350_POWER is not set
+# CONFIG_TEST_POWER is not set
+# CONFIG_BATTERY_88PM860X is not set
+# CONFIG_CHARGER_ADP5061 is not set
+# CONFIG_BATTERY_DS2760 is not set
+# CONFIG_BATTERY_DS2780 is not set
+# CONFIG_BATTERY_DS2781 is not set
+# CONFIG_BATTERY_DS2782 is not set
+# CONFIG_BATTERY_SBS is not set
+# CONFIG_CHARGER_SBS is not set
+# CONFIG_MANAGER_SBS is not set
+# CONFIG_BATTERY_BQ27XXX is not set
+# CONFIG_BATTERY_DA9052 is not set
+# CONFIG_CHARGER_DA9150 is not set
+# CONFIG_BATTERY_DA9150 is not set
+# CONFIG_BATTERY_MAX17040 is not set
+# CONFIG_BATTERY_MAX17042 is not set
+# CONFIG_BATTERY_MAX1721X is not set
+# CONFIG_CHARGER_PCF50633 is not set
+# CONFIG_CHARGER_MAX8903 is not set
+# CONFIG_CHARGER_LP8727 is not set
+# CONFIG_CHARGER_GPIO is not set
+# CONFIG_CHARGER_MANAGER is not set
+# CONFIG_CHARGER_LTC3651 is not set
+# CONFIG_CHARGER_MAX14577 is not set
+# CONFIG_CHARGER_MAX77693 is not set
+# CONFIG_CHARGER_MAX8998 is not set
+# CONFIG_CHARGER_BQ2415X is not set
+# CONFIG_CHARGER_BQ24190 is not set
+# CONFIG_CHARGER_BQ24257 is not set
+# CONFIG_CHARGER_BQ24735 is not set
+# CONFIG_CHARGER_BQ25890 is not set
+# CONFIG_CHARGER_SMB347 is not set
+# CONFIG_CHARGER_TPS65090 is not set
+# CONFIG_BATTERY_GAUGE_LTC2941 is not set
+# CONFIG_BATTERY_RT5033 is not set
+# CONFIG_CHARGER_RT9455 is not set
+CONFIG_HWMON=y
+CONFIG_HWMON_VID=m
+# CONFIG_HWMON_DEBUG_CHIP is not set
+
+#
+# Native drivers
+#
+CONFIG_SENSORS_ABITUGURU=m
+CONFIG_SENSORS_ABITUGURU3=m
+CONFIG_SENSORS_AD7414=m
+CONFIG_SENSORS_AD7418=m
+# CONFIG_SENSORS_ADM1021 is not set
+CONFIG_SENSORS_ADM1025=m
+CONFIG_SENSORS_ADM1026=m
+CONFIG_SENSORS_ADM1029=m
+CONFIG_SENSORS_ADM1031=m
+# CONFIG_SENSORS_ADM9240 is not set
+CONFIG_SENSORS_ADT7X10=m
+CONFIG_SENSORS_ADT7410=m
+CONFIG_SENSORS_ADT7411=m
+# CONFIG_SENSORS_ADT7462 is not set
+# CONFIG_SENSORS_ADT7470 is not set
+CONFIG_SENSORS_ADT7475=m
+CONFIG_SENSORS_ASC7621=m
+# CONFIG_SENSORS_K8TEMP is not set
+# CONFIG_SENSORS_K10TEMP is not set
+# CONFIG_SENSORS_FAM15H_POWER is not set
+# CONFIG_SENSORS_APPLESMC is not set
+CONFIG_SENSORS_ASB100=m
+CONFIG_SENSORS_ASPEED=m
+CONFIG_SENSORS_ATXP1=m
+# CONFIG_SENSORS_DS620 is not set
+CONFIG_SENSORS_DS1621=m
+CONFIG_SENSORS_DELL_SMM=y
+# CONFIG_SENSORS_DA9052_ADC is not set
+CONFIG_SENSORS_DA9055=m
+# CONFIG_SENSORS_I5K_AMB is not set
+CONFIG_SENSORS_F71805F=m
+CONFIG_SENSORS_F71882FG=m
+CONFIG_SENSORS_F75375S=m
+CONFIG_SENSORS_MC13783_ADC=m
+# CONFIG_SENSORS_FSCHMD is not set
+# CONFIG_SENSORS_GL518SM is not set
+CONFIG_SENSORS_GL520SM=m
+CONFIG_SENSORS_G760A=m
+CONFIG_SENSORS_G762=m
+# CONFIG_SENSORS_HIH6130 is not set
+CONFIG_SENSORS_IIO_HWMON=m
+# CONFIG_SENSORS_I5500 is not set
+CONFIG_SENSORS_CORETEMP=m
+# CONFIG_SENSORS_IT87 is not set
+# CONFIG_SENSORS_JC42 is not set
+CONFIG_SENSORS_POWR1220=m
+CONFIG_SENSORS_LINEAGE=m
+# CONFIG_SENSORS_LTC2945 is not set
+# CONFIG_SENSORS_LTC2990 is not set
+CONFIG_SENSORS_LTC4151=m
+# CONFIG_SENSORS_LTC4215 is not set
+CONFIG_SENSORS_LTC4222=m
+# CONFIG_SENSORS_LTC4245 is not set
+CONFIG_SENSORS_LTC4260=m
+CONFIG_SENSORS_LTC4261=m
+CONFIG_SENSORS_MAX16065=m
+CONFIG_SENSORS_MAX1619=m
+CONFIG_SENSORS_MAX1668=m
+CONFIG_SENSORS_MAX197=m
+CONFIG_SENSORS_MAX6621=m
+# CONFIG_SENSORS_MAX6639 is not set
+# CONFIG_SENSORS_MAX6642 is not set
+# CONFIG_SENSORS_MAX6650 is not set
+CONFIG_SENSORS_MAX6697=m
+CONFIG_SENSORS_MAX31790=m
+# CONFIG_SENSORS_MCP3021 is not set
+# CONFIG_SENSORS_MLXREG_FAN is not set
+CONFIG_SENSORS_TC654=m
+CONFIG_SENSORS_MENF21BMC_HWMON=m
+CONFIG_SENSORS_LM63=m
+# CONFIG_SENSORS_LM73 is not set
+CONFIG_SENSORS_LM75=m
+CONFIG_SENSORS_LM77=m
+# CONFIG_SENSORS_LM78 is not set
+CONFIG_SENSORS_LM80=m
+# CONFIG_SENSORS_LM83 is not set
+CONFIG_SENSORS_LM85=m
+CONFIG_SENSORS_LM87=m
+CONFIG_SENSORS_LM90=m
+CONFIG_SENSORS_LM92=m
+CONFIG_SENSORS_LM93=m
+CONFIG_SENSORS_LM95234=m
+# CONFIG_SENSORS_LM95241 is not set
+# CONFIG_SENSORS_LM95245 is not set
+CONFIG_SENSORS_PC87360=m
+CONFIG_SENSORS_PC87427=m
+CONFIG_SENSORS_NTC_THERMISTOR=m
+# CONFIG_SENSORS_NCT6683 is not set
+CONFIG_SENSORS_NCT6775=m
+# CONFIG_SENSORS_NCT7802 is not set
+# CONFIG_SENSORS_NCT7904 is not set
+# CONFIG_SENSORS_NPCM7XX is not set
+# CONFIG_SENSORS_PCF8591 is not set
+CONFIG_PMBUS=m
+# CONFIG_SENSORS_PMBUS is not set
+CONFIG_SENSORS_ADM1275=m
+CONFIG_SENSORS_IBM_CFFPS=m
+# CONFIG_SENSORS_IR35221 is not set
+# CONFIG_SENSORS_LM25066 is not set
+# CONFIG_SENSORS_LTC2978 is not set
+CONFIG_SENSORS_LTC3815=m
+CONFIG_SENSORS_MAX16064=m
+CONFIG_SENSORS_MAX20751=m
+CONFIG_SENSORS_MAX31785=m
+CONFIG_SENSORS_MAX34440=m
+# CONFIG_SENSORS_MAX8688 is not set
+CONFIG_SENSORS_TPS40422=m
+CONFIG_SENSORS_TPS53679=m
+CONFIG_SENSORS_UCD9000=m
+CONFIG_SENSORS_UCD9200=m
+# CONFIG_SENSORS_ZL6100 is not set
+CONFIG_SENSORS_SHT15=m
+CONFIG_SENSORS_SHT21=m
+# CONFIG_SENSORS_SHT3x is not set
+CONFIG_SENSORS_SHTC1=m
+# CONFIG_SENSORS_SIS5595 is not set
+CONFIG_SENSORS_DME1737=m
+CONFIG_SENSORS_EMC1403=m
+# CONFIG_SENSORS_EMC2103 is not set
+# CONFIG_SENSORS_EMC6W201 is not set
+CONFIG_SENSORS_SMSC47M1=m
+CONFIG_SENSORS_SMSC47M192=m
+# CONFIG_SENSORS_SMSC47B397 is not set
+# CONFIG_SENSORS_STTS751 is not set
+CONFIG_SENSORS_SMM665=m
+# CONFIG_SENSORS_ADC128D818 is not set
+# CONFIG_SENSORS_ADS1015 is not set
+CONFIG_SENSORS_ADS7828=m
+# CONFIG_SENSORS_AMC6821 is not set
+CONFIG_SENSORS_INA209=m
+CONFIG_SENSORS_INA2XX=m
+CONFIG_SENSORS_INA3221=m
+CONFIG_SENSORS_TC74=m
+CONFIG_SENSORS_THMC50=m
+CONFIG_SENSORS_TMP102=m
+CONFIG_SENSORS_TMP103=m
+# CONFIG_SENSORS_TMP108 is not set
+# CONFIG_SENSORS_TMP401 is not set
+CONFIG_SENSORS_TMP421=m
+# CONFIG_SENSORS_VIA_CPUTEMP is not set
+# CONFIG_SENSORS_VIA686A is not set
+# CONFIG_SENSORS_VT1211 is not set
+# CONFIG_SENSORS_VT8231 is not set
+CONFIG_SENSORS_W83773G=m
+CONFIG_SENSORS_W83781D=m
+# CONFIG_SENSORS_W83791D is not set
+CONFIG_SENSORS_W83792D=m
+# CONFIG_SENSORS_W83793 is not set
+CONFIG_SENSORS_W83795=m
+# CONFIG_SENSORS_W83795_FANCTRL is not set
+CONFIG_SENSORS_W83L785TS=m
+CONFIG_SENSORS_W83L786NG=m
+CONFIG_SENSORS_W83627HF=m
+CONFIG_SENSORS_W83627EHF=m
+CONFIG_SENSORS_WM8350=m
+
+#
+# ACPI drivers
+#
+# CONFIG_SENSORS_ACPI_POWER is not set
+# CONFIG_SENSORS_ATK0110 is not set
+CONFIG_THERMAL=y
+# CONFIG_THERMAL_STATISTICS is not set
+CONFIG_THERMAL_EMERGENCY_POWEROFF_DELAY_MS=0
+CONFIG_THERMAL_HWMON=y
+CONFIG_THERMAL_WRITABLE_TRIPS=y
+# CONFIG_THERMAL_DEFAULT_GOV_STEP_WISE is not set
+CONFIG_THERMAL_DEFAULT_GOV_FAIR_SHARE=y
+# CONFIG_THERMAL_DEFAULT_GOV_USER_SPACE is not set
+# CONFIG_THERMAL_DEFAULT_GOV_POWER_ALLOCATOR is not set
+CONFIG_THERMAL_GOV_FAIR_SHARE=y
+CONFIG_THERMAL_GOV_STEP_WISE=y
+CONFIG_THERMAL_GOV_BANG_BANG=y
+# CONFIG_THERMAL_GOV_USER_SPACE is not set
+# CONFIG_THERMAL_GOV_POWER_ALLOCATOR is not set
+# CONFIG_CLOCK_THERMAL is not set
+CONFIG_DEVFREQ_THERMAL=y
+# CONFIG_THERMAL_EMULATION is not set
+CONFIG_INTEL_POWERCLAMP=m
+# CONFIG_INTEL_SOC_DTS_THERMAL is not set
+
+#
+# ACPI INT340X thermal drivers
+#
+# CONFIG_INT340X_THERMAL is not set
+# CONFIG_INTEL_PCH_THERMAL is not set
+# CONFIG_GENERIC_ADC_THERMAL is not set
+# CONFIG_WATCHDOG is not set
+CONFIG_SSB_POSSIBLE=y
+CONFIG_SSB=y
+CONFIG_SSB_SPROM=y
+CONFIG_SSB_PCIHOST_POSSIBLE=y
+CONFIG_SSB_PCIHOST=y
+CONFIG_SSB_DRIVER_PCICORE_POSSIBLE=y
+# CONFIG_SSB_DRIVER_PCICORE is not set
+CONFIG_SSB_DRIVER_GPIO=y
+CONFIG_BCMA_POSSIBLE=y
+CONFIG_BCMA=y
+CONFIG_BCMA_HOST_PCI_POSSIBLE=y
+CONFIG_BCMA_HOST_PCI=y
+# CONFIG_BCMA_HOST_SOC is not set
+CONFIG_BCMA_DRIVER_PCI=y
+CONFIG_BCMA_DRIVER_GMAC_CMN=y
+CONFIG_BCMA_DRIVER_GPIO=y
+# CONFIG_BCMA_DEBUG is not set
+
+#
+# Multifunction device drivers
+#
+CONFIG_MFD_CORE=y
+CONFIG_MFD_AS3711=y
+# CONFIG_PMIC_ADP5520 is not set
+# CONFIG_MFD_AAT2870_CORE is not set
+# CONFIG_MFD_BCM590XX is not set
+CONFIG_MFD_BD9571MWV=m
+# CONFIG_MFD_AXP20X_I2C is not set
+# CONFIG_MFD_CROS_EC is not set
+CONFIG_MFD_MADERA=m
+CONFIG_MFD_MADERA_I2C=m
+CONFIG_MFD_CS47L35=y
+# CONFIG_MFD_CS47L85 is not set
+CONFIG_MFD_CS47L90=y
+# CONFIG_PMIC_DA903X is not set
+CONFIG_PMIC_DA9052=y
+CONFIG_MFD_DA9052_I2C=y
+CONFIG_MFD_DA9055=y
+CONFIG_MFD_DA9062=y
+CONFIG_MFD_DA9063=y
+CONFIG_MFD_DA9150=y
+CONFIG_MFD_MC13XXX=y
+CONFIG_MFD_MC13XXX_I2C=y
+# CONFIG_HTC_PASIC3 is not set
+# CONFIG_HTC_I2CPLD is not set
+# CONFIG_MFD_INTEL_QUARK_I2C_GPIO is not set
+# CONFIG_LPC_ICH is not set
+# CONFIG_LPC_SCH is not set
+# CONFIG_INTEL_SOC_PMIC_CHTDC_TI is not set
+# CONFIG_MFD_INTEL_LPSS_ACPI is not set
+# CONFIG_MFD_INTEL_LPSS_PCI is not set
+# CONFIG_MFD_JANZ_CMODIO is not set
+# CONFIG_MFD_KEMPLD is not set
+# CONFIG_MFD_88PM800 is not set
+CONFIG_MFD_88PM805=y
+CONFIG_MFD_88PM860X=y
+CONFIG_MFD_MAX14577=y
+CONFIG_MFD_MAX77693=m
+CONFIG_MFD_MAX77843=y
+# CONFIG_MFD_MAX8907 is not set
+CONFIG_MFD_MAX8925=y
+# CONFIG_MFD_MAX8997 is not set
+CONFIG_MFD_MAX8998=y
+CONFIG_MFD_MT6397=m
+CONFIG_MFD_MENF21BMC=y
+# CONFIG_MFD_RETU is not set
+CONFIG_MFD_PCF50633=y
+# CONFIG_PCF50633_ADC is not set
+CONFIG_PCF50633_GPIO=m
+# CONFIG_MFD_RDC321X is not set
+# CONFIG_MFD_RT5033 is not set
+# CONFIG_MFD_RC5T583 is not set
+# CONFIG_MFD_SEC_CORE is not set
+CONFIG_MFD_SI476X_CORE=y
+CONFIG_MFD_SM501=y
+CONFIG_MFD_SM501_GPIO=y
+# CONFIG_MFD_SKY81452 is not set
+# CONFIG_MFD_SMSC is not set
+CONFIG_ABX500_CORE=y
+# CONFIG_AB3100_CORE is not set
+CONFIG_MFD_SYSCON=y
+CONFIG_MFD_TI_AM335X_TSCADC=m
+# CONFIG_MFD_LP3943 is not set
+# CONFIG_MFD_LP8788 is not set
+# CONFIG_MFD_TI_LMU is not set
+# CONFIG_MFD_PALMAS is not set
+CONFIG_TPS6105X=y
+# CONFIG_TPS65010 is not set
+# CONFIG_TPS6507X is not set
+CONFIG_MFD_TPS65086=m
+CONFIG_MFD_TPS65090=y
+CONFIG_MFD_TI_LP873X=m
+# CONFIG_MFD_TPS6586X is not set
+CONFIG_MFD_TPS65910=y
+CONFIG_MFD_TPS65912=m
+CONFIG_MFD_TPS65912_I2C=m
+# CONFIG_MFD_TPS80031 is not set
+# CONFIG_TWL4030_CORE is not set
+# CONFIG_TWL6040_CORE is not set
+CONFIG_MFD_WL1273_CORE=m
+CONFIG_MFD_LM3533=y
+# CONFIG_MFD_VX855 is not set
+CONFIG_MFD_ARIZONA=y
+CONFIG_MFD_ARIZONA_I2C=y
+# CONFIG_MFD_CS47L24 is not set
+# CONFIG_MFD_WM5102 is not set
+CONFIG_MFD_WM5110=y
+CONFIG_MFD_WM8997=y
+# CONFIG_MFD_WM8998 is not set
+CONFIG_MFD_WM8400=y
+# CONFIG_MFD_WM831X_I2C is not set
+CONFIG_MFD_WM8350=y
+CONFIG_MFD_WM8350_I2C=y
+CONFIG_MFD_WM8994=y
+CONFIG_REGULATOR=y
+# CONFIG_REGULATOR_DEBUG is not set
+CONFIG_REGULATOR_FIXED_VOLTAGE=y
+# CONFIG_REGULATOR_VIRTUAL_CONSUMER is not set
+CONFIG_REGULATOR_USERSPACE_CONSUMER=m
+CONFIG_REGULATOR_88PG86X=m
+# CONFIG_REGULATOR_88PM8607 is not set
+# CONFIG_REGULATOR_ACT8865 is not set
+# CONFIG_REGULATOR_AD5398 is not set
+CONFIG_REGULATOR_ANATOP=m
+CONFIG_REGULATOR_AS3711=m
+CONFIG_REGULATOR_BD9571MWV=m
+CONFIG_REGULATOR_DA9052=m
+CONFIG_REGULATOR_DA9055=m
+CONFIG_REGULATOR_DA9062=y
+# CONFIG_REGULATOR_DA9063 is not set
+CONFIG_REGULATOR_DA9210=y
+# CONFIG_REGULATOR_DA9211 is not set
+# CONFIG_REGULATOR_FAN53555 is not set
+CONFIG_REGULATOR_GPIO=m
+CONFIG_REGULATOR_ISL9305=y
+CONFIG_REGULATOR_ISL6271A=y
+CONFIG_REGULATOR_LP3971=y
+CONFIG_REGULATOR_LP3972=m
+CONFIG_REGULATOR_LP872X=y
+CONFIG_REGULATOR_LP8755=m
+CONFIG_REGULATOR_LTC3589=m
+CONFIG_REGULATOR_LTC3676=y
+# CONFIG_REGULATOR_MAX14577 is not set
+CONFIG_REGULATOR_MAX1586=m
+# CONFIG_REGULATOR_MAX8649 is not set
+CONFIG_REGULATOR_MAX8660=m
+# CONFIG_REGULATOR_MAX8925 is not set
+# CONFIG_REGULATOR_MAX8952 is not set
+CONFIG_REGULATOR_MAX8998=m
+# CONFIG_REGULATOR_MAX77693 is not set
+CONFIG_REGULATOR_MC13XXX_CORE=y
+CONFIG_REGULATOR_MC13783=y
+# CONFIG_REGULATOR_MC13892 is not set
+# CONFIG_REGULATOR_MT6311 is not set
+CONFIG_REGULATOR_MT6323=m
+CONFIG_REGULATOR_MT6397=m
+# CONFIG_REGULATOR_PCF50633 is not set
+# CONFIG_REGULATOR_PFUZE100 is not set
+CONFIG_REGULATOR_PV88060=m
+CONFIG_REGULATOR_PV88080=m
+CONFIG_REGULATOR_PV88090=y
+# CONFIG_REGULATOR_TPS51632 is not set
+CONFIG_REGULATOR_TPS6105X=m
+# CONFIG_REGULATOR_TPS62360 is not set
+# CONFIG_REGULATOR_TPS65023 is not set
+CONFIG_REGULATOR_TPS6507X=y
+CONFIG_REGULATOR_TPS65086=m
+CONFIG_REGULATOR_TPS65090=m
+CONFIG_REGULATOR_TPS65132=m
+CONFIG_REGULATOR_TPS65910=m
+# CONFIG_REGULATOR_TPS65912 is not set
+# CONFIG_REGULATOR_WM8350 is not set
+# CONFIG_REGULATOR_WM8400 is not set
+# CONFIG_REGULATOR_WM8994 is not set
+CONFIG_CEC_CORE=y
+CONFIG_CEC_NOTIFIER=y
+# CONFIG_RC_CORE is not set
+CONFIG_MEDIA_SUPPORT=y
+
+#
+# Multimedia core support
+#
+CONFIG_MEDIA_CAMERA_SUPPORT=y
+CONFIG_MEDIA_ANALOG_TV_SUPPORT=y
+CONFIG_MEDIA_DIGITAL_TV_SUPPORT=y
+CONFIG_MEDIA_RADIO_SUPPORT=y
+CONFIG_MEDIA_SDR_SUPPORT=y
+# CONFIG_MEDIA_CEC_SUPPORT is not set
+CONFIG_MEDIA_CONTROLLER=y
+# CONFIG_MEDIA_CONTROLLER_DVB is not set
+CONFIG_VIDEO_DEV=y
+CONFIG_VIDEO_V4L2_SUBDEV_API=y
+CONFIG_VIDEO_V4L2=y
+CONFIG_VIDEO_ADV_DEBUG=y
+CONFIG_VIDEO_FIXED_MINOR_RANGES=y
+CONFIG_V4L2_FLASH_LED_CLASS=m
+CONFIG_DVB_CORE=y
+# CONFIG_DVB_MMAP is not set
+CONFIG_DVB_NET=y
+CONFIG_DVB_MAX_ADAPTERS=16
+# CONFIG_DVB_DYNAMIC_MINORS is not set
+# CONFIG_DVB_DEMUX_SECTION_LOSS_LOG is not set
+# CONFIG_DVB_ULE_DEBUG is not set
+
+#
+# Media drivers
+#
+# CONFIG_MEDIA_PCI_SUPPORT is not set
+# CONFIG_V4L_PLATFORM_DRIVERS is not set
+# CONFIG_V4L_MEM2MEM_DRIVERS is not set
+# CONFIG_V4L_TEST_DRIVERS is not set
+# CONFIG_DVB_PLATFORM_DRIVERS is not set
+# CONFIG_SDR_PLATFORM_DRIVERS is not set
+
+#
+# Supported MMC/SDIO adapters
+#
+# CONFIG_SMS_SDIO_DRV is not set
+# CONFIG_RADIO_ADAPTERS is not set
+
+#
+# Supported FireWire (IEEE 1394) Adapters
+#
+# CONFIG_DVB_FIREDTV is not set
+CONFIG_VIDEOBUF2_CORE=m
+CONFIG_VIDEOBUF2_V4L2=m
+CONFIG_VIDEOBUF2_MEMOPS=m
+CONFIG_VIDEOBUF2_VMALLOC=m
+
+#
+# Media ancillary drivers (tuners, sensors, i2c, spi, frontends)
+#
+CONFIG_MEDIA_SUBDRV_AUTOSELECT=y
+CONFIG_MEDIA_ATTACH=y
+
+#
+# Audio decoders, processors and mixers
+#
+
+#
+# RDS decoders
+#
+
+#
+# Video decoders
+#
+
+#
+# Video and audio decoders
+#
+
+#
+# Video encoders
+#
+
+#
+# Camera sensor devices
+#
+
+#
+# Flash devices
+#
+
+#
+# Video improvement chips
+#
+
+#
+# Audio/Video compression chips
+#
+
+#
+# SDR tuner chips
+#
+
+#
+# Miscellaneous helper chips
+#
+
+#
+# Sensors used on soc_camera driver
+#
+CONFIG_MEDIA_TUNER=y
+CONFIG_MEDIA_TUNER_SIMPLE=y
+CONFIG_MEDIA_TUNER_TDA8290=y
+CONFIG_MEDIA_TUNER_TDA827X=y
+CONFIG_MEDIA_TUNER_TDA18271=y
+CONFIG_MEDIA_TUNER_TDA9887=y
+CONFIG_MEDIA_TUNER_TEA5761=y
+CONFIG_MEDIA_TUNER_TEA5767=y
+CONFIG_MEDIA_TUNER_MT20XX=y
+CONFIG_MEDIA_TUNER_XC2028=y
+CONFIG_MEDIA_TUNER_XC5000=y
+CONFIG_MEDIA_TUNER_XC4000=y
+CONFIG_MEDIA_TUNER_MC44S803=y
+
+#
+# Multistandard (satellite) frontends
+#
+
+#
+# Multistandard (cable + terrestrial) frontends
+#
+
+#
+# DVB-S (satellite) frontends
+#
+
+#
+# DVB-T (terrestrial) frontends
+#
+
+#
+# DVB-C (cable) frontends
+#
+
+#
+# ATSC (North American/Korean Terrestrial/Cable DTV) frontends
+#
+
+#
+# ISDB-T (terrestrial) frontends
+#
+
+#
+# ISDB-S (satellite) & ISDB-T (terrestrial) frontends
+#
+
+#
+# Digital terrestrial only tuners/PLL
+#
+
+#
+# SEC control devices for DVB-S
+#
+
+#
+# Common Interface (EN50221) controller drivers
+#
+
+#
+# Tools to develop new frontends
+#
+
+#
+# Graphics support
+#
+# CONFIG_AGP is not set
+CONFIG_VGA_ARB=y
+CONFIG_VGA_ARB_MAX_GPUS=16
+# CONFIG_VGA_SWITCHEROO is not set
+CONFIG_DRM=y
+CONFIG_DRM_DP_AUX_CHARDEV=y
+# CONFIG_DRM_DEBUG_MM is not set
+# CONFIG_DRM_DEBUG_SELFTEST is not set
+CONFIG_DRM_KMS_HELPER=y
+CONFIG_DRM_KMS_FB_HELPER=y
+CONFIG_DRM_FBDEV_EMULATION=y
+CONFIG_DRM_FBDEV_OVERALLOC=100
+# CONFIG_DRM_LOAD_EDID_FIRMWARE is not set
+CONFIG_DRM_DP_CEC=y
+
+#
+# I2C encoder or helper chips
+#
+# CONFIG_DRM_I2C_CH7006 is not set
+# CONFIG_DRM_I2C_SIL164 is not set
+# CONFIG_DRM_I2C_NXP_TDA998X is not set
+CONFIG_DRM_I2C_NXP_TDA9950=m
+# CONFIG_DRM_RADEON is not set
+# CONFIG_DRM_AMDGPU is not set
+
+#
+# ACP (Audio CoProcessor) Configuration
+#
+
+#
+# AMD Library routines
+#
+# CONFIG_DRM_NOUVEAU is not set
+# CONFIG_DRM_I915 is not set
+# CONFIG_DRM_VGEM is not set
+# CONFIG_DRM_VKMS is not set
+# CONFIG_DRM_VMWGFX is not set
+# CONFIG_DRM_GMA500 is not set
+# CONFIG_DRM_UDL is not set
+# CONFIG_DRM_AST is not set
+# CONFIG_DRM_MGAG200 is not set
+# CONFIG_DRM_CIRRUS_QEMU is not set
+# CONFIG_DRM_QXL is not set
+# CONFIG_DRM_BOCHS is not set
+# CONFIG_DRM_VIRTIO_GPU is not set
+CONFIG_DRM_PANEL=y
+
+#
+# Display Panels
+#
+CONFIG_DRM_BRIDGE=y
+CONFIG_DRM_PANEL_BRIDGE=y
+
+#
+# Display Interface Bridges
+#
+CONFIG_DRM_ANALOGIX_ANX78XX=y
+# CONFIG_DRM_HISI_HIBMC is not set
+# CONFIG_DRM_TINYDRM is not set
+# CONFIG_DRM_LEGACY is not set
+CONFIG_DRM_PANEL_ORIENTATION_QUIRKS=y
+
+#
+# Frame buffer Devices
+#
+CONFIG_FB_CMDLINE=y
+CONFIG_FB_NOTIFY=y
+CONFIG_FB=y
+# CONFIG_FIRMWARE_EDID is not set
+CONFIG_FB_CFB_FILLRECT=y
+CONFIG_FB_CFB_COPYAREA=y
+CONFIG_FB_CFB_IMAGEBLIT=y
+CONFIG_FB_SYS_FILLRECT=y
+CONFIG_FB_SYS_COPYAREA=y
+CONFIG_FB_SYS_IMAGEBLIT=y
+CONFIG_FB_FOREIGN_ENDIAN=y
+# CONFIG_FB_BOTH_ENDIAN is not set
+# CONFIG_FB_BIG_ENDIAN is not set
+CONFIG_FB_LITTLE_ENDIAN=y
+CONFIG_FB_SYS_FOPS=y
+CONFIG_FB_DEFERRED_IO=y
+CONFIG_FB_HECUBA=m
+CONFIG_FB_MODE_HELPERS=y
+CONFIG_FB_TILEBLITTING=y
+
+#
+# Frame buffer hardware drivers
+#
+# CONFIG_FB_CIRRUS is not set
+# CONFIG_FB_PM2 is not set
+# CONFIG_FB_CYBER2000 is not set
+CONFIG_FB_ARC=m
+# CONFIG_FB_ASILIANT is not set
+# CONFIG_FB_IMSTT is not set
+# CONFIG_FB_VGA16 is not set
+# CONFIG_FB_VESA is not set
+CONFIG_FB_N411=m
+CONFIG_FB_HGA=m
+CONFIG_FB_OPENCORES=m
+CONFIG_FB_S1D13XXX=m
+# CONFIG_FB_NVIDIA is not set
+# CONFIG_FB_RIVA is not set
+# CONFIG_FB_I740 is not set
+# CONFIG_FB_LE80578 is not set
+# CONFIG_FB_MATROX is not set
+# CONFIG_FB_RADEON is not set
+# CONFIG_FB_ATY128 is not set
+# CONFIG_FB_ATY is not set
+# CONFIG_FB_S3 is not set
+# CONFIG_FB_SAVAGE is not set
+# CONFIG_FB_SIS is not set
+# CONFIG_FB_VIA is not set
+# CONFIG_FB_NEOMAGIC is not set
+# CONFIG_FB_KYRO is not set
+# CONFIG_FB_3DFX is not set
+# CONFIG_FB_VOODOO1 is not set
+# CONFIG_FB_VT8623 is not set
+# CONFIG_FB_TRIDENT is not set
+# CONFIG_FB_ARK is not set
+# CONFIG_FB_PM3 is not set
+# CONFIG_FB_CARMINE is not set
+CONFIG_FB_SM501=m
+CONFIG_FB_IBM_GXT4500=m
+# CONFIG_FB_VIRTUAL is not set
+CONFIG_FB_METRONOME=m
+# CONFIG_FB_MB862XX is not set
+CONFIG_FB_BROADSHEET=m
+# CONFIG_FB_SIMPLE is not set
+# CONFIG_FB_SM712 is not set
+# CONFIG_BACKLIGHT_LCD_SUPPORT is not set
+CONFIG_HDMI=y
+
+#
+# Console display driver support
+#
+CONFIG_VGA_CONSOLE=y
+CONFIG_DUMMY_CONSOLE=y
+CONFIG_DUMMY_CONSOLE_COLUMNS=80
+CONFIG_DUMMY_CONSOLE_ROWS=25
+CONFIG_FRAMEBUFFER_CONSOLE=y
+CONFIG_FRAMEBUFFER_CONSOLE_DETECT_PRIMARY=y
+CONFIG_FRAMEBUFFER_CONSOLE_ROTATION=y
+# CONFIG_FRAMEBUFFER_CONSOLE_DEFERRED_TAKEOVER is not set
+CONFIG_LOGO=y
+CONFIG_LOGO_LINUX_MONO=y
+# CONFIG_LOGO_LINUX_VGA16 is not set
+# CONFIG_LOGO_LINUX_CLUT224 is not set
+# CONFIG_SOUND is not set
+
+#
+# HID support
+#
+CONFIG_HID=y
+# CONFIG_HID_BATTERY_STRENGTH is not set
+# CONFIG_HIDRAW is not set
+# CONFIG_UHID is not set
+CONFIG_HID_GENERIC=y
+
+#
+# Special HID drivers
+#
+CONFIG_HID_A4TECH=y
+# CONFIG_HID_ACRUX is not set
+CONFIG_HID_APPLE=y
+# CONFIG_HID_AUREAL is not set
+CONFIG_HID_BELKIN=y
+CONFIG_HID_CHERRY=y
+# CONFIG_HID_COUGAR is not set
+# CONFIG_HID_CMEDIA is not set
+CONFIG_HID_CYPRESS=y
+# CONFIG_HID_DRAGONRISE is not set
+# CONFIG_HID_EMS_FF is not set
+# CONFIG_HID_ELECOM is not set
+CONFIG_HID_EZKEY=y
+# CONFIG_HID_GEMBIRD is not set
+# CONFIG_HID_GFRM is not set
+# CONFIG_HID_KEYTOUCH is not set
+# CONFIG_HID_KYE is not set
+# CONFIG_HID_WALTOP is not set
+# CONFIG_HID_GYRATION is not set
+# CONFIG_HID_ICADE is not set
+CONFIG_HID_ITE=y
+# CONFIG_HID_JABRA is not set
+# CONFIG_HID_TWINHAN is not set
+CONFIG_HID_KENSINGTON=y
+# CONFIG_HID_LCPOWER is not set
+# CONFIG_HID_LED is not set
+# CONFIG_HID_LENOVO is not set
+# CONFIG_HID_MAGICMOUSE is not set
+# CONFIG_HID_MAYFLASH is not set
+CONFIG_HID_REDRAGON=y
+CONFIG_HID_MICROSOFT=y
+CONFIG_HID_MONTEREY=y
+# CONFIG_HID_MULTITOUCH is not set
+# CONFIG_HID_NTI is not set
+# CONFIG_HID_ORTEK is not set
+# CONFIG_HID_PANTHERLORD is not set
+# CONFIG_HID_PETALYNX is not set
+# CONFIG_HID_PICOLCD is not set
+# CONFIG_HID_PLANTRONICS is not set
+# CONFIG_HID_PRIMAX is not set
+# CONFIG_HID_SAITEK is not set
+# CONFIG_HID_SPEEDLINK is not set
+# CONFIG_HID_STEAM is not set
+# CONFIG_HID_STEELSERIES is not set
+# CONFIG_HID_SUNPLUS is not set
+# CONFIG_HID_RMI is not set
+# CONFIG_HID_GREENASIA is not set
+# CONFIG_HID_SMARTJOYPLUS is not set
+# CONFIG_HID_TIVO is not set
+# CONFIG_HID_TOPSEED is not set
+# CONFIG_HID_THINGM is not set
+# CONFIG_HID_THRUSTMASTER is not set
+# CONFIG_HID_UDRAW_PS3 is not set
+# CONFIG_HID_WIIMOTE is not set
+# CONFIG_HID_XINMO is not set
+# CONFIG_HID_ZEROPLUS is not set
+# CONFIG_HID_ZYDACRON is not set
+# CONFIG_HID_SENSOR_HUB is not set
+# CONFIG_HID_ALPS is not set
+
+#
+# I2C HID support
+#
+# CONFIG_I2C_HID is not set
+
+#
+# Intel ISH HID support
+#
+# CONFIG_INTEL_ISH_HID is not set
+CONFIG_USB_OHCI_LITTLE_ENDIAN=y
+CONFIG_USB_SUPPORT=y
+CONFIG_USB_ARCH_HAS_HCD=y
+# CONFIG_USB is not set
+CONFIG_USB_PCI=y
+
+#
+# USB port drivers
+#
+
+#
+# USB Physical Layer drivers
+#
+# CONFIG_NOP_USB_XCEIV is not set
+# CONFIG_USB_GPIO_VBUS is not set
+# CONFIG_USB_GADGET is not set
+# CONFIG_TYPEC is not set
+# CONFIG_USB_ROLE_SWITCH is not set
+# CONFIG_USB_ULPI_BUS is not set
+# CONFIG_UWB is not set
+CONFIG_MMC=m
+# CONFIG_MMC_BLOCK is not set
+CONFIG_SDIO_UART=m
+# CONFIG_MMC_TEST is not set
+
+#
+# MMC/SD/SDIO Host Controller Drivers
+#
+CONFIG_MMC_DEBUG=y
+CONFIG_MMC_SDHCI=m
+# CONFIG_MMC_SDHCI_PCI is not set
+# CONFIG_MMC_SDHCI_ACPI is not set
+CONFIG_MMC_SDHCI_PLTFM=m
+# CONFIG_MMC_SDHCI_F_SDH30 is not set
+# CONFIG_MMC_WBSD is not set
+# CONFIG_MMC_TIFM_SD is not set
+# CONFIG_MMC_SDRICOH_CS is not set
+# CONFIG_MMC_CB710 is not set
+# CONFIG_MMC_VIA_SDMMC is not set
+# CONFIG_MMC_USDHI6ROL0 is not set
+CONFIG_MMC_CQHCI=m
+# CONFIG_MMC_TOSHIBA_PCI is not set
+# CONFIG_MMC_MTK is not set
+CONFIG_MMC_SDHCI_XENON=m
+CONFIG_MEMSTICK=y
+# CONFIG_MEMSTICK_DEBUG is not set
+
+#
+# MemoryStick drivers
+#
+CONFIG_MEMSTICK_UNSAFE_RESUME=y
+CONFIG_MSPRO_BLOCK=m
+CONFIG_MS_BLOCK=m
+
+#
+# MemoryStick Host Controller Drivers
+#
+# CONFIG_MEMSTICK_TIFM_MS is not set
+# CONFIG_MEMSTICK_JMICRON_38X is not set
+# CONFIG_MEMSTICK_R592 is not set
+CONFIG_NEW_LEDS=y
+CONFIG_LEDS_CLASS=m
+CONFIG_LEDS_CLASS_FLASH=m
+# CONFIG_LEDS_BRIGHTNESS_HW_CHANGED is not set
+
+#
+# LED drivers
+#
+CONFIG_LEDS_88PM860X=m
+# CONFIG_LEDS_APU is not set
+CONFIG_LEDS_AS3645A=m
+CONFIG_LEDS_LM3530=m
+CONFIG_LEDS_LM3533=m
+# CONFIG_LEDS_LM3642 is not set
+CONFIG_LEDS_LM3601X=m
+CONFIG_LEDS_MT6323=m
+CONFIG_LEDS_PCA9532=m
+CONFIG_LEDS_PCA9532_GPIO=y
+CONFIG_LEDS_GPIO=m
+# CONFIG_LEDS_LP3944 is not set
+# CONFIG_LEDS_LP3952 is not set
+# CONFIG_LEDS_LP5521 is not set
+# CONFIG_LEDS_LP5523 is not set
+# CONFIG_LEDS_LP5562 is not set
+# CONFIG_LEDS_LP8501 is not set
+# CONFIG_LEDS_CLEVO_MAIL is not set
+CONFIG_LEDS_PCA955X=m
+# CONFIG_LEDS_PCA955X_GPIO is not set
+CONFIG_LEDS_PCA963X=m
+CONFIG_LEDS_WM8350=m
+CONFIG_LEDS_DA9052=m
+CONFIG_LEDS_REGULATOR=m
+# CONFIG_LEDS_BD2802 is not set
+# CONFIG_LEDS_INTEL_SS4200 is not set
+# CONFIG_LEDS_LT3593 is not set
+# CONFIG_LEDS_MC13783 is not set
+CONFIG_LEDS_TCA6507=m
+CONFIG_LEDS_TLC591XX=m
+# CONFIG_LEDS_LM355x is not set
+# CONFIG_LEDS_MENF21BMC is not set
+
+#
+# LED driver for blink(1) USB RGB LED is under Special HID drivers (HID_THINGM)
+#
+CONFIG_LEDS_BLINKM=m
+CONFIG_LEDS_MLXCPLD=m
+CONFIG_LEDS_MLXREG=m
+CONFIG_LEDS_USER=m
+# CONFIG_LEDS_NIC78BX is not set
+
+#
+# LED Triggers
+#
+CONFIG_LEDS_TRIGGERS=y
+# CONFIG_LEDS_TRIGGER_TIMER is not set
+# CONFIG_LEDS_TRIGGER_ONESHOT is not set
+CONFIG_LEDS_TRIGGER_DISK=y
+CONFIG_LEDS_TRIGGER_HEARTBEAT=y
+# CONFIG_LEDS_TRIGGER_BACKLIGHT is not set
+CONFIG_LEDS_TRIGGER_CPU=y
+# CONFIG_LEDS_TRIGGER_ACTIVITY is not set
+CONFIG_LEDS_TRIGGER_GPIO=m
+CONFIG_LEDS_TRIGGER_DEFAULT_ON=y
+
+#
+# iptables trigger is under Netfilter config (LED target)
+#
+CONFIG_LEDS_TRIGGER_TRANSIENT=y
+CONFIG_LEDS_TRIGGER_CAMERA=y
+# CONFIG_LEDS_TRIGGER_PANIC is not set
+# CONFIG_LEDS_TRIGGER_NETDEV is not set
+CONFIG_ACCESSIBILITY=y
+CONFIG_A11Y_BRAILLE_CONSOLE=y
+CONFIG_INFINIBAND=m
+# CONFIG_INFINIBAND_USER_MAD is not set
+# CONFIG_INFINIBAND_USER_ACCESS is not set
+# CONFIG_INFINIBAND_ADDR_TRANS is not set
+# CONFIG_INFINIBAND_MTHCA is not set
+# CONFIG_MLX4_INFINIBAND is not set
+# CONFIG_INFINIBAND_NES is not set
+# CONFIG_INFINIBAND_OCRDMA is not set
+# CONFIG_INFINIBAND_IPOIB is not set
+CONFIG_INFINIBAND_OPA_VNIC=m
+# CONFIG_INFINIBAND_RDMAVT is not set
+# CONFIG_RDMA_RXE is not set
+# CONFIG_INFINIBAND_BNXT_RE is not set
+CONFIG_EDAC_ATOMIC_SCRUB=y
+CONFIG_EDAC_SUPPORT=y
+CONFIG_EDAC=m
+CONFIG_EDAC_LEGACY_SYSFS=y
+# CONFIG_EDAC_DEBUG is not set
+# CONFIG_EDAC_E752X is not set
+# CONFIG_EDAC_I82975X is not set
+# CONFIG_EDAC_I3000 is not set
+# CONFIG_EDAC_I3200 is not set
+# CONFIG_EDAC_IE31200 is not set
+# CONFIG_EDAC_X38 is not set
+# CONFIG_EDAC_I5400 is not set
+# CONFIG_EDAC_I5000 is not set
+# CONFIG_EDAC_I5100 is not set
+# CONFIG_EDAC_I7300 is not set
+CONFIG_RTC_LIB=y
+CONFIG_RTC_MC146818_LIB=y
+CONFIG_RTC_CLASS=y
+CONFIG_RTC_HCTOSYS=y
+CONFIG_RTC_HCTOSYS_DEVICE="rtc0"
+# CONFIG_RTC_SYSTOHC is not set
+CONFIG_RTC_DEBUG=y
+CONFIG_RTC_NVMEM=y
+
+#
+# RTC interfaces
+#
+CONFIG_RTC_INTF_SYSFS=y
+CONFIG_RTC_INTF_PROC=y
+# CONFIG_RTC_INTF_DEV is not set
+# CONFIG_RTC_DRV_TEST is not set
+
+#
+# I2C RTC drivers
+#
+CONFIG_RTC_DRV_88PM860X=m
+CONFIG_RTC_DRV_ABB5ZES3=m
+CONFIG_RTC_DRV_ABX80X=m
+# CONFIG_RTC_DRV_DS1307 is not set
+CONFIG_RTC_DRV_DS1374=y
+# CONFIG_RTC_DRV_DS1374_WDT is not set
+# CONFIG_RTC_DRV_DS1672 is not set
+# CONFIG_RTC_DRV_MAX6900 is not set
+# CONFIG_RTC_DRV_MAX8925 is not set
+# CONFIG_RTC_DRV_MAX8998 is not set
+CONFIG_RTC_DRV_RS5C372=y
+CONFIG_RTC_DRV_ISL1208=y
+CONFIG_RTC_DRV_ISL12022=m
+# CONFIG_RTC_DRV_X1205 is not set
+# CONFIG_RTC_DRV_PCF8523 is not set
+CONFIG_RTC_DRV_PCF85063=m
+CONFIG_RTC_DRV_PCF85363=y
+CONFIG_RTC_DRV_PCF8563=y
+# CONFIG_RTC_DRV_PCF8583 is not set
+CONFIG_RTC_DRV_M41T80=m
+CONFIG_RTC_DRV_M41T80_WDT=y
+CONFIG_RTC_DRV_BQ32K=y
+CONFIG_RTC_DRV_TPS65910=y
+# CONFIG_RTC_DRV_S35390A is not set
+CONFIG_RTC_DRV_FM3130=y
+CONFIG_RTC_DRV_RX8010=m
+CONFIG_RTC_DRV_RX8581=m
+CONFIG_RTC_DRV_RX8025=y
+CONFIG_RTC_DRV_EM3027=y
+CONFIG_RTC_DRV_RV8803=y
+
+#
+# SPI RTC drivers
+#
+CONFIG_RTC_I2C_AND_SPI=y
+
+#
+# SPI and I2C RTC drivers
+#
+CONFIG_RTC_DRV_DS3232=y
+CONFIG_RTC_DRV_DS3232_HWMON=y
+# CONFIG_RTC_DRV_PCF2127 is not set
+CONFIG_RTC_DRV_RV3029C2=y
+CONFIG_RTC_DRV_RV3029_HWMON=y
+
+#
+# Platform RTC drivers
+#
+# CONFIG_RTC_DRV_CMOS is not set
+CONFIG_RTC_DRV_DS1286=m
+CONFIG_RTC_DRV_DS1511=m
+CONFIG_RTC_DRV_DS1553=y
+# CONFIG_RTC_DRV_DS1685_FAMILY is not set
+# CONFIG_RTC_DRV_DS1742 is not set
+CONFIG_RTC_DRV_DS2404=y
+# CONFIG_RTC_DRV_DA9052 is not set
+CONFIG_RTC_DRV_DA9055=y
+# CONFIG_RTC_DRV_DA9063 is not set
+# CONFIG_RTC_DRV_STK17TA8 is not set
+# CONFIG_RTC_DRV_M48T86 is not set
+# CONFIG_RTC_DRV_M48T35 is not set
+CONFIG_RTC_DRV_M48T59=y
+# CONFIG_RTC_DRV_MSM6242 is not set
+# CONFIG_RTC_DRV_BQ4802 is not set
+# CONFIG_RTC_DRV_RP5C01 is not set
+# CONFIG_RTC_DRV_V3020 is not set
+# CONFIG_RTC_DRV_WM8350 is not set
+# CONFIG_RTC_DRV_PCF50633 is not set
+
+#
+# on-CPU RTC drivers
+#
+CONFIG_RTC_DRV_FTRTC010=m
+CONFIG_RTC_DRV_MC13XXX=m
+CONFIG_RTC_DRV_MT6397=m
+
+#
+# HID Sensor RTC drivers
+#
+CONFIG_DMADEVICES=y
+CONFIG_DMADEVICES_DEBUG=y
+# CONFIG_DMADEVICES_VDEBUG is not set
+
+#
+# DMA Devices
+#
+CONFIG_DMA_ENGINE=y
+CONFIG_DMA_VIRTUAL_CHANNELS=y
+CONFIG_DMA_ACPI=y
+# CONFIG_ALTERA_MSGDMA is not set
+CONFIG_INTEL_IDMA64=y
+# CONFIG_INTEL_IOATDMA is not set
+CONFIG_QCOM_HIDMA_MGMT=m
+CONFIG_QCOM_HIDMA=y
+CONFIG_DW_DMAC_CORE=y
+# CONFIG_DW_DMAC is not set
+# CONFIG_DW_DMAC_PCI is not set
+CONFIG_HSU_DMA=y
+
+#
+# DMA Clients
+#
+CONFIG_ASYNC_TX_DMA=y
+CONFIG_DMATEST=m
+CONFIG_DMA_ENGINE_RAID=y
+
+#
+# DMABUF options
+#
+CONFIG_SYNC_FILE=y
+CONFIG_SW_SYNC=y
+CONFIG_AUXDISPLAY=y
+CONFIG_HD44780=m
+# CONFIG_IMG_ASCII_LCD is not set
+CONFIG_CHARLCD=m
+# CONFIG_UIO is not set
+# CONFIG_VIRT_DRIVERS is not set
+CONFIG_VIRTIO=y
+# CONFIG_VIRTIO_MENU is not set
+
+#
+# Microsoft Hyper-V guest support
+#
+# CONFIG_HYPERV is not set
+# CONFIG_STAGING is not set
+CONFIG_X86_PLATFORM_DEVICES=y
+# CONFIG_ACER_WIRELESS is not set
+# CONFIG_ACERHDF is not set
+# CONFIG_DELL_SMBIOS is not set
+# CONFIG_DELL_SMO8800 is not set
+# CONFIG_DELL_RBTN is not set
+# CONFIG_FUJITSU_TABLET is not set
+CONFIG_AMILO_RFKILL=m
+# CONFIG_GPD_POCKET_FAN is not set
+# CONFIG_HP_ACCEL is not set
+# CONFIG_HP_WIRELESS is not set
+# CONFIG_SENSORS_HDAPS is not set
+# CONFIG_INTEL_MENLOW is not set
+# CONFIG_ASUS_WIRELESS is not set
+# CONFIG_ACPI_WMI is not set
+# CONFIG_TOPSTAR_LAPTOP is not set
+# CONFIG_TOSHIBA_BT_RFKILL is not set
+# CONFIG_TOSHIBA_HAPS is not set
+# CONFIG_INTEL_INT0002_VGPIO is not set
+# CONFIG_INTEL_HID_EVENT is not set
+# CONFIG_INTEL_VBTN is not set
+# CONFIG_INTEL_IPS is not set
+# CONFIG_INTEL_PMC_CORE is not set
+# CONFIG_IBM_RTL is not set
+# CONFIG_INTEL_RST is not set
+# CONFIG_INTEL_SMARTCONNECT is not set
+# CONFIG_PVPANIC is not set
+# CONFIG_INTEL_PMC_IPC is not set
+# CONFIG_SURFACE_PRO3_BUTTON is not set
+CONFIG_INTEL_PUNIT_IPC=m
+# CONFIG_MLX_PLATFORM is not set
+# CONFIG_TOUCHSCREEN_DMI is not set
+# CONFIG_I2C_MULTI_INSTANTIATE is not set
+CONFIG_PMC_ATOM=y
+# CONFIG_CHROME_PLATFORMS is not set
+CONFIG_MELLANOX_PLATFORM=y
+CONFIG_MLXREG_HOTPLUG=m
+CONFIG_MLXREG_IO=m
+CONFIG_CLKDEV_LOOKUP=y
+CONFIG_HAVE_CLK_PREPARE=y
+CONFIG_COMMON_CLK=y
+
+#
+# Common Clock Framework
+#
+# CONFIG_COMMON_CLK_MAX9485 is not set
+# CONFIG_COMMON_CLK_SI5351 is not set
+# CONFIG_COMMON_CLK_SI544 is not set
+# CONFIG_COMMON_CLK_CDCE706 is not set
+# CONFIG_COMMON_CLK_CS2000_CP is not set
+# CONFIG_HWSPINLOCK is not set
+
+#
+# Clock Source drivers
+#
+CONFIG_CLKEVT_I8253=y
+CONFIG_I8253_LOCK=y
+CONFIG_CLKBLD_I8253=y
+# CONFIG_MAILBOX is not set
+# CONFIG_IOMMU_SUPPORT is not set
+
+#
+# Remoteproc drivers
+#
+# CONFIG_REMOTEPROC is not set
+
+#
+# Rpmsg drivers
+#
+CONFIG_RPMSG=y
+CONFIG_RPMSG_CHAR=m
+CONFIG_RPMSG_VIRTIO=y
+# CONFIG_SOUNDWIRE is not set
+
+#
+# SOC (System On Chip) specific Drivers
+#
+
+#
+# Amlogic SoC drivers
+#
+
+#
+# Broadcom SoC drivers
+#
+
+#
+# NXP/Freescale QorIQ SoC drivers
+#
+
+#
+# i.MX SoC drivers
+#
+
+#
+# Qualcomm SoC drivers
+#
+CONFIG_SOC_TI=y
+
+#
+# Xilinx SoC drivers
+#
+# CONFIG_XILINX_VCU is not set
+CONFIG_PM_DEVFREQ=y
+
+#
+# DEVFREQ Governors
+#
+CONFIG_DEVFREQ_GOV_SIMPLE_ONDEMAND=m
+# CONFIG_DEVFREQ_GOV_PERFORMANCE is not set
+CONFIG_DEVFREQ_GOV_POWERSAVE=m
+CONFIG_DEVFREQ_GOV_USERSPACE=y
+CONFIG_DEVFREQ_GOV_PASSIVE=m
+
+#
+# DEVFREQ Drivers
+#
+CONFIG_PM_DEVFREQ_EVENT=y
+CONFIG_EXTCON=y
+
+#
+# Extcon Device Drivers
+#
+CONFIG_EXTCON_ADC_JACK=y
+CONFIG_EXTCON_GPIO=m
+# CONFIG_EXTCON_INTEL_INT3496 is not set
+CONFIG_EXTCON_MAX14577=y
+CONFIG_EXTCON_MAX3355=y
+CONFIG_EXTCON_MAX77693=m
+CONFIG_EXTCON_MAX77843=y
+# CONFIG_EXTCON_RT8973A is not set
+# CONFIG_EXTCON_SM5502 is not set
+# CONFIG_EXTCON_USB_GPIO is not set
+CONFIG_MEMORY=y
+CONFIG_IIO=y
+CONFIG_IIO_BUFFER=y
+CONFIG_IIO_BUFFER_CB=m
+CONFIG_IIO_BUFFER_HW_CONSUMER=m
+CONFIG_IIO_KFIFO_BUF=y
+CONFIG_IIO_TRIGGERED_BUFFER=y
+CONFIG_IIO_CONFIGFS=m
+CONFIG_IIO_TRIGGER=y
+CONFIG_IIO_CONSUMERS_PER_TRIGGER=2
+# CONFIG_IIO_SW_DEVICE is not set
+# CONFIG_IIO_SW_TRIGGER is not set
+
+#
+# Accelerometers
+#
+# CONFIG_BMA180 is not set
+CONFIG_BMC150_ACCEL=y
+CONFIG_BMC150_ACCEL_I2C=y
+# CONFIG_DA280 is not set
+CONFIG_DA311=m
+CONFIG_DMARD09=y
+CONFIG_DMARD10=y
+# CONFIG_IIO_CROS_EC_ACCEL_LEGACY is not set
+CONFIG_IIO_ST_ACCEL_3AXIS=m
+CONFIG_IIO_ST_ACCEL_I2C_3AXIS=m
+CONFIG_KXSD9=m
+CONFIG_KXSD9_I2C=m
+# CONFIG_KXCJK1013 is not set
+# CONFIG_MC3230 is not set
+CONFIG_MMA7455=y
+CONFIG_MMA7455_I2C=y
+# CONFIG_MMA7660 is not set
+# CONFIG_MMA8452 is not set
+CONFIG_MMA9551_CORE=y
+CONFIG_MMA9551=y
+CONFIG_MMA9553=y
+# CONFIG_MXC4005 is not set
+CONFIG_MXC6255=y
+CONFIG_STK8312=y
+CONFIG_STK8BA50=y
+
+#
+# Analog to digital converters
+#
+CONFIG_AD7291=m
+CONFIG_AD799X=y
+# CONFIG_CC10001_ADC is not set
+CONFIG_DA9150_GPADC=m
+# CONFIG_HX711 is not set
+# CONFIG_INA2XX_ADC is not set
+# CONFIG_LTC2471 is not set
+CONFIG_LTC2485=m
+CONFIG_LTC2497=m
+CONFIG_MAX1363=m
+# CONFIG_MAX9611 is not set
+CONFIG_MCP3422=y
+CONFIG_MEN_Z188_ADC=m
+CONFIG_NAU7802=m
+CONFIG_TI_ADC081C=m
+CONFIG_TI_ADS1015=y
+CONFIG_TI_AM335X_ADC=m
+
+#
+# Analog Front Ends
+#
+
+#
+# Amplifiers
+#
+
+#
+# Chemical Sensors
+#
+CONFIG_ATLAS_PH_SENSOR=m
+CONFIG_BME680=m
+CONFIG_BME680_I2C=m
+CONFIG_CCS811=y
+CONFIG_IAQCORE=m
+# CONFIG_VZ89X is not set
+
+#
+# Hid Sensor IIO Common
+#
+CONFIG_IIO_MS_SENSORS_I2C=y
+
+#
+# SSP Sensor Common
+#
+CONFIG_IIO_ST_SENSORS_I2C=y
+CONFIG_IIO_ST_SENSORS_CORE=y
+
+#
+# Counters
+#
+
+#
+# Digital to analog converters
+#
+# CONFIG_AD5064 is not set
+CONFIG_AD5380=m
+# CONFIG_AD5446 is not set
+# CONFIG_AD5593R is not set
+CONFIG_AD5686=y
+CONFIG_AD5696_I2C=y
+# CONFIG_DS4424 is not set
+CONFIG_M62332=m
+CONFIG_MAX517=m
+CONFIG_MCP4725=y
+CONFIG_TI_DAC5571=m
+
+#
+# IIO dummy driver
+#
+
+#
+# Frequency Synthesizers DDS/PLL
+#
+
+#
+# Clock Generator/Distribution
+#
+
+#
+# Phase-Locked Loop (PLL) frequency synthesizers
+#
+
+#
+# Digital gyroscope sensors
+#
+CONFIG_BMG160=y
+CONFIG_BMG160_I2C=y
+CONFIG_MPU3050=m
+CONFIG_MPU3050_I2C=m
+CONFIG_IIO_ST_GYRO_3AXIS=y
+CONFIG_IIO_ST_GYRO_I2C_3AXIS=y
+CONFIG_ITG3200=y
+
+#
+# Health Sensors
+#
+
+#
+# Heart Rate Monitors
+#
+# CONFIG_AFE4404 is not set
+# CONFIG_MAX30100 is not set
+# CONFIG_MAX30102 is not set
+
+#
+# Humidity sensors
+#
+CONFIG_AM2315=m
+# CONFIG_DHT11 is not set
+# CONFIG_HDC100X is not set
+CONFIG_HTS221=m
+CONFIG_HTS221_I2C=m
+CONFIG_HTU21=m
+CONFIG_SI7005=y
+CONFIG_SI7020=y
+
+#
+# Inertial measurement units
+#
+CONFIG_BMI160=m
+CONFIG_BMI160_I2C=m
+# CONFIG_KMX61 is not set
+# CONFIG_INV_MPU6050_I2C is not set
+# CONFIG_IIO_ST_LSM6DSX is not set
+
+#
+# Light sensors
+#
+# CONFIG_ACPI_ALS is not set
+CONFIG_ADJD_S311=y
+CONFIG_AL3320A=m
+CONFIG_APDS9300=m
+CONFIG_APDS9960=m
+# CONFIG_BH1750 is not set
+CONFIG_BH1780=m
+CONFIG_CM32181=m
+# CONFIG_CM3232 is not set
+CONFIG_CM3323=y
+CONFIG_CM36651=y
+CONFIG_GP2AP020A00F=y
+CONFIG_SENSORS_ISL29018=y
+# CONFIG_SENSORS_ISL29028 is not set
+CONFIG_ISL29125=m
+CONFIG_JSA1212=m
+# CONFIG_RPR0521 is not set
+CONFIG_SENSORS_LM3533=m
+CONFIG_LTR501=m
+CONFIG_LV0104CS=m
+# CONFIG_MAX44000 is not set
+# CONFIG_OPT3001 is not set
+# CONFIG_PA12203001 is not set
+CONFIG_SI1133=m
+# CONFIG_SI1145 is not set
+# CONFIG_STK3310 is not set
+CONFIG_ST_UVIS25=m
+CONFIG_ST_UVIS25_I2C=m
+# CONFIG_TCS3414 is not set
+# CONFIG_TCS3472 is not set
+CONFIG_SENSORS_TSL2563=m
+CONFIG_TSL2583=y
+CONFIG_TSL2772=y
+CONFIG_TSL4531=m
+# CONFIG_US5182D is not set
+# CONFIG_VCNL4000 is not set
+CONFIG_VEML6070=y
+# CONFIG_VL6180 is not set
+CONFIG_ZOPT2201=m
+
+#
+# Magnetometer sensors
+#
+CONFIG_AK8975=m
+CONFIG_AK09911=m
+CONFIG_BMC150_MAGN=m
+CONFIG_BMC150_MAGN_I2C=m
+CONFIG_MAG3110=m
+# CONFIG_MMC35240 is not set
+CONFIG_IIO_ST_MAGN_3AXIS=y
+CONFIG_IIO_ST_MAGN_I2C_3AXIS=y
+CONFIG_SENSORS_HMC5843=m
+CONFIG_SENSORS_HMC5843_I2C=m
+
+#
+# Multiplexers
+#
+
+#
+# Inclinometer sensors
+#
+
+#
+# Triggers - standalone
+#
+CONFIG_IIO_INTERRUPT_TRIGGER=m
+# CONFIG_IIO_SYSFS_TRIGGER is not set
+
+#
+# Digital potentiometers
+#
+CONFIG_AD5272=m
+# CONFIG_DS1803 is not set
+CONFIG_MCP4018=m
+# CONFIG_MCP4531 is not set
+CONFIG_TPL0102=y
+
+#
+# Digital potentiostats
+#
+# CONFIG_LMP91000 is not set
+
+#
+# Pressure sensors
+#
+CONFIG_ABP060MG=y
+# CONFIG_BMP280 is not set
+CONFIG_HP03=y
+CONFIG_MPL115=m
+CONFIG_MPL115_I2C=m
+# CONFIG_MPL3115 is not set
+CONFIG_MS5611=m
+CONFIG_MS5611_I2C=m
+CONFIG_MS5637=m
+CONFIG_IIO_ST_PRESS=m
+CONFIG_IIO_ST_PRESS_I2C=m
+CONFIG_T5403=m
+CONFIG_HP206C=y
+CONFIG_ZPA2326=y
+CONFIG_ZPA2326_I2C=y
+
+#
+# Lightning sensors
+#
+
+#
+# Proximity and distance sensors
+#
+# CONFIG_ISL29501 is not set
+CONFIG_LIDAR_LITE_V2=y
+CONFIG_RFD77402=m
+CONFIG_SRF04=y
+# CONFIG_SX9500 is not set
+CONFIG_SRF08=m
+
+#
+# Resolver to digital converters
+#
+
+#
+# Temperature sensors
+#
+CONFIG_MLX90614=y
+CONFIG_MLX90632=m
+CONFIG_TMP006=y
+CONFIG_TMP007=y
+CONFIG_TSYS01=y
+# CONFIG_TSYS02D is not set
+# CONFIG_NTB is not set
+# CONFIG_VME_BUS is not set
+# CONFIG_PWM is not set
+
+#
+# IRQ chip support
+#
+CONFIG_ARM_GIC_MAX_NR=1
+CONFIG_IPACK_BUS=y
+# CONFIG_BOARD_TPCI200 is not set
+CONFIG_SERIAL_IPOCTAL=m
+CONFIG_RESET_CONTROLLER=y
+CONFIG_RESET_TI_SYSCON=m
+# CONFIG_FMC is not set
+
+#
+# PHY Subsystem
+#
+CONFIG_GENERIC_PHY=y
+CONFIG_BCM_KONA_USB2_PHY=y
+CONFIG_PHY_PXA_28NM_HSIC=y
+# CONFIG_PHY_PXA_28NM_USB2 is not set
+# CONFIG_PHY_CPCAP_USB is not set
+CONFIG_POWERCAP=y
+CONFIG_IDLE_INJECT=y
+CONFIG_MCB=m
+# CONFIG_MCB_PCI is not set
+CONFIG_MCB_LPC=m
+
+#
+# Performance monitor support
+#
+CONFIG_RAS=y
+# CONFIG_THUNDERBOLT is not set
+
+#
+# Android
+#
+# CONFIG_ANDROID is not set
+# CONFIG_LIBNVDIMM is not set
+CONFIG_DAX=m
+CONFIG_DEV_DAX=m
+CONFIG_NVMEM=y
+
+#
+# HW tracing support
+#
+CONFIG_STM=m
+# CONFIG_STM_DUMMY is not set
+# CONFIG_STM_SOURCE_CONSOLE is not set
+CONFIG_STM_SOURCE_HEARTBEAT=m
+# CONFIG_STM_SOURCE_FTRACE is not set
+# CONFIG_INTEL_TH is not set
+CONFIG_FPGA=m
+CONFIG_ALTERA_PR_IP_CORE=m
+# CONFIG_FPGA_MGR_ALTERA_CVP is not set
+CONFIG_FPGA_BRIDGE=m
+CONFIG_XILINX_PR_DECOUPLER=m
+CONFIG_FPGA_REGION=m
+CONFIG_FPGA_DFL=m
+# CONFIG_FPGA_DFL_FME is not set
+# CONFIG_FPGA_DFL_AFU is not set
+# CONFIG_FPGA_DFL_PCI is not set
+CONFIG_PM_OPP=y
+# CONFIG_UNISYS_VISORBUS is not set
+# CONFIG_SIOX is not set
+# CONFIG_SLIMBUS is not set
+
+#
+# File systems
+#
+CONFIG_DCACHE_WORD_ACCESS=y
+CONFIG_FS_IOMAP=y
+CONFIG_EXT2_FS=m
+# CONFIG_EXT2_FS_XATTR is not set
+# CONFIG_EXT3_FS is not set
+CONFIG_EXT4_FS=y
+# CONFIG_EXT4_FS_POSIX_ACL is not set
+# CONFIG_EXT4_FS_SECURITY is not set
+# CONFIG_EXT4_ENCRYPTION is not set
+CONFIG_EXT4_DEBUG=y
+CONFIG_JBD2=y
+CONFIG_JBD2_DEBUG=y
+CONFIG_FS_MBCACHE=y
+CONFIG_REISERFS_FS=y
+# CONFIG_REISERFS_CHECK is not set
+# CONFIG_REISERFS_PROC_INFO is not set
+# CONFIG_REISERFS_FS_XATTR is not set
+CONFIG_JFS_FS=y
+# CONFIG_JFS_POSIX_ACL is not set
+# CONFIG_JFS_SECURITY is not set
+CONFIG_JFS_DEBUG=y
+CONFIG_JFS_STATISTICS=y
+# CONFIG_XFS_FS is not set
+# CONFIG_GFS2_FS is not set
+# CONFIG_OCFS2_FS is not set
+CONFIG_BTRFS_FS=m
+# CONFIG_BTRFS_FS_POSIX_ACL is not set
+CONFIG_BTRFS_FS_CHECK_INTEGRITY=y
+# CONFIG_BTRFS_FS_RUN_SANITY_TESTS is not set
+CONFIG_BTRFS_DEBUG=y
+# CONFIG_BTRFS_ASSERT is not set
+CONFIG_BTRFS_FS_REF_VERIFY=y
+CONFIG_NILFS2_FS=y
+# CONFIG_F2FS_FS is not set
+# CONFIG_FS_DAX is not set
+CONFIG_FS_POSIX_ACL=y
+CONFIG_EXPORTFS=y
+CONFIG_EXPORTFS_BLOCK_OPS=y
+CONFIG_FILE_LOCKING=y
+CONFIG_MANDATORY_FILE_LOCKING=y
+CONFIG_FS_ENCRYPTION=y
+CONFIG_FSNOTIFY=y
+# CONFIG_DNOTIFY is not set
+CONFIG_INOTIFY_USER=y
+# CONFIG_FANOTIFY is not set
+CONFIG_QUOTA=y
+CONFIG_QUOTA_NETLINK_INTERFACE=y
+CONFIG_PRINT_QUOTA_WARNING=y
+CONFIG_QUOTA_DEBUG=y
+CONFIG_QFMT_V1=y
+# CONFIG_QFMT_V2 is not set
+CONFIG_QUOTACTL=y
+CONFIG_AUTOFS4_FS=y
+CONFIG_AUTOFS_FS=y
+CONFIG_FUSE_FS=y
+CONFIG_CUSE=m
+CONFIG_OVERLAY_FS=m
+CONFIG_OVERLAY_FS_REDIRECT_DIR=y
+CONFIG_OVERLAY_FS_REDIRECT_ALWAYS_FOLLOW=y
+# CONFIG_OVERLAY_FS_INDEX is not set
+# CONFIG_OVERLAY_FS_XINO_AUTO is not set
+# CONFIG_OVERLAY_FS_METACOPY is not set
+
+#
+# Caches
+#
+# CONFIG_FSCACHE is not set
+
+#
+# CD-ROM/DVD Filesystems
+#
+CONFIG_ISO9660_FS=y
+CONFIG_JOLIET=y
+CONFIG_ZISOFS=y
+CONFIG_UDF_FS=y
+
+#
+# DOS/FAT/NT Filesystems
+#
+# CONFIG_MSDOS_FS is not set
+# CONFIG_VFAT_FS is not set
+CONFIG_NTFS_FS=y
+# CONFIG_NTFS_DEBUG is not set
+CONFIG_NTFS_RW=y
+
+#
+# Pseudo filesystems
+#
+CONFIG_PROC_FS=y
+# CONFIG_PROC_KCORE is not set
+CONFIG_PROC_VMCORE=y
+# CONFIG_PROC_VMCORE_DEVICE_DUMP is not set
+CONFIG_PROC_SYSCTL=y
+CONFIG_PROC_PAGE_MONITOR=y
+CONFIG_PROC_CHILDREN=y
+CONFIG_KERNFS=y
+CONFIG_SYSFS=y
+CONFIG_TMPFS=y
+CONFIG_TMPFS_POSIX_ACL=y
+CONFIG_TMPFS_XATTR=y
+# CONFIG_HUGETLBFS is not set
+CONFIG_MEMFD_CREATE=y
+CONFIG_CONFIGFS_FS=y
+CONFIG_MISC_FILESYSTEMS=y
+CONFIG_ORANGEFS_FS=m
+CONFIG_ADFS_FS=y
+CONFIG_ADFS_FS_RW=y
+# CONFIG_AFFS_FS is not set
+CONFIG_ECRYPT_FS=m
+# CONFIG_ECRYPT_FS_MESSAGING is not set
+CONFIG_HFS_FS=m
+CONFIG_HFSPLUS_FS=m
+# CONFIG_BEFS_FS is not set
+CONFIG_BFS_FS=m
+CONFIG_EFS_FS=m
+# CONFIG_CRAMFS is not set
+CONFIG_SQUASHFS=m
+CONFIG_SQUASHFS_FILE_CACHE=y
+# CONFIG_SQUASHFS_FILE_DIRECT is not set
+CONFIG_SQUASHFS_DECOMP_SINGLE=y
+# CONFIG_SQUASHFS_DECOMP_MULTI is not set
+# CONFIG_SQUASHFS_DECOMP_MULTI_PERCPU is not set
+# CONFIG_SQUASHFS_XATTR is not set
+# CONFIG_SQUASHFS_ZLIB is not set
+# CONFIG_SQUASHFS_LZ4 is not set
+CONFIG_SQUASHFS_LZO=y
+CONFIG_SQUASHFS_XZ=y
+CONFIG_SQUASHFS_ZSTD=y
+# CONFIG_SQUASHFS_4K_DEVBLK_SIZE is not set
+# CONFIG_SQUASHFS_EMBEDDED is not set
+CONFIG_SQUASHFS_FRAGMENT_CACHE_SIZE=3
+# CONFIG_VXFS_FS is not set
+CONFIG_MINIX_FS=y
+CONFIG_OMFS_FS=y
+# CONFIG_HPFS_FS is not set
+CONFIG_QNX4FS_FS=y
+CONFIG_QNX6FS_FS=y
+CONFIG_QNX6FS_DEBUG=y
+CONFIG_ROMFS_FS=m
+CONFIG_ROMFS_BACKED_BY_BLOCK=y
+CONFIG_ROMFS_ON_BLOCK=y
+CONFIG_PSTORE=m
+# CONFIG_PSTORE_DEFLATE_COMPRESS is not set
+# CONFIG_PSTORE_LZO_COMPRESS is not set
+CONFIG_PSTORE_LZ4_COMPRESS=m
+CONFIG_PSTORE_LZ4HC_COMPRESS=m
+# CONFIG_PSTORE_842_COMPRESS is not set
+CONFIG_PSTORE_ZSTD_COMPRESS=y
+CONFIG_PSTORE_COMPRESS=y
+CONFIG_PSTORE_LZ4_COMPRESS_DEFAULT=y
+# CONFIG_PSTORE_LZ4HC_COMPRESS_DEFAULT is not set
+# CONFIG_PSTORE_ZSTD_COMPRESS_DEFAULT is not set
+CONFIG_PSTORE_COMPRESS_DEFAULT="lz4"
+CONFIG_PSTORE_CONSOLE=y
+CONFIG_PSTORE_PMSG=y
+# CONFIG_PSTORE_FTRACE is not set
+CONFIG_PSTORE_RAM=m
+# CONFIG_SYSV_FS is not set
+CONFIG_UFS_FS=m
+# CONFIG_UFS_FS_WRITE is not set
+# CONFIG_UFS_DEBUG is not set
+# CONFIG_NETWORK_FILESYSTEMS is not set
+CONFIG_NLS=y
+CONFIG_NLS_DEFAULT="iso8859-1"
+CONFIG_NLS_CODEPAGE_437=y
+CONFIG_NLS_CODEPAGE_737=m
+CONFIG_NLS_CODEPAGE_775=y
+CONFIG_NLS_CODEPAGE_850=m
+CONFIG_NLS_CODEPAGE_852=m
+CONFIG_NLS_CODEPAGE_855=m
+CONFIG_NLS_CODEPAGE_857=m
+# CONFIG_NLS_CODEPAGE_860 is not set
+CONFIG_NLS_CODEPAGE_861=m
+CONFIG_NLS_CODEPAGE_862=m
+CONFIG_NLS_CODEPAGE_863=y
+CONFIG_NLS_CODEPAGE_864=m
+# CONFIG_NLS_CODEPAGE_865 is not set
+# CONFIG_NLS_CODEPAGE_866 is not set
+# CONFIG_NLS_CODEPAGE_869 is not set
+CONFIG_NLS_CODEPAGE_936=y
+# CONFIG_NLS_CODEPAGE_950 is not set
+# CONFIG_NLS_CODEPAGE_932 is not set
+# CONFIG_NLS_CODEPAGE_949 is not set
+# CONFIG_NLS_CODEPAGE_874 is not set
+CONFIG_NLS_ISO8859_8=m
+CONFIG_NLS_CODEPAGE_1250=y
+CONFIG_NLS_CODEPAGE_1251=y
+# CONFIG_NLS_ASCII is not set
+CONFIG_NLS_ISO8859_1=m
+CONFIG_NLS_ISO8859_2=y
+CONFIG_NLS_ISO8859_3=y
+CONFIG_NLS_ISO8859_4=m
+CONFIG_NLS_ISO8859_5=m
+# CONFIG_NLS_ISO8859_6 is not set
+CONFIG_NLS_ISO8859_7=m
+CONFIG_NLS_ISO8859_9=m
+CONFIG_NLS_ISO8859_13=m
+# CONFIG_NLS_ISO8859_14 is not set
+# CONFIG_NLS_ISO8859_15 is not set
+CONFIG_NLS_KOI8_R=y
+# CONFIG_NLS_KOI8_U is not set
+CONFIG_NLS_MAC_ROMAN=m
+CONFIG_NLS_MAC_CELTIC=m
+# CONFIG_NLS_MAC_CENTEURO is not set
+# CONFIG_NLS_MAC_CROATIAN is not set
+CONFIG_NLS_MAC_CYRILLIC=y
+CONFIG_NLS_MAC_GAELIC=y
+CONFIG_NLS_MAC_GREEK=m
+CONFIG_NLS_MAC_ICELAND=m
+CONFIG_NLS_MAC_INUIT=y
+CONFIG_NLS_MAC_ROMANIAN=y
+# CONFIG_NLS_MAC_TURKISH is not set
+CONFIG_NLS_UTF8=m
+CONFIG_DLM=m
+CONFIG_DLM_DEBUG=y
+
+#
+# Security options
+#
+CONFIG_KEYS=y
+# CONFIG_PERSISTENT_KEYRINGS is not set
+# CONFIG_BIG_KEYS is not set
+CONFIG_ENCRYPTED_KEYS=y
+# CONFIG_KEY_DH_OPERATIONS is not set
+# CONFIG_SECURITY_DMESG_RESTRICT is not set
+CONFIG_SECURITY=y
+# CONFIG_SECURITYFS is not set
+# CONFIG_SECURITY_NETWORK is not set
+CONFIG_PAGE_TABLE_ISOLATION=y
+# CONFIG_SECURITY_INFINIBAND is not set
+# CONFIG_SECURITY_PATH is not set
+CONFIG_HAVE_HARDENED_USERCOPY_ALLOCATOR=y
+CONFIG_HARDENED_USERCOPY=y
+CONFIG_HARDENED_USERCOPY_FALLBACK=y
+CONFIG_FORTIFY_SOURCE=y
+CONFIG_STATIC_USERMODEHELPER=y
+CONFIG_STATIC_USERMODEHELPER_PATH="/sbin/usermode-helper"
+# CONFIG_SECURITY_SMACK is not set
+# CONFIG_SECURITY_TOMOYO is not set
+# CONFIG_SECURITY_APPARMOR is not set
+# CONFIG_SECURITY_LOADPIN is not set
+# CONFIG_SECURITY_YAMA is not set
+CONFIG_INTEGRITY=y
+# CONFIG_INTEGRITY_SIGNATURE is not set
+# CONFIG_IMA is not set
+# CONFIG_EVM is not set
+CONFIG_DEFAULT_SECURITY_DAC=y
+CONFIG_DEFAULT_SECURITY=""
+CONFIG_XOR_BLOCKS=m
+CONFIG_ASYNC_CORE=m
+CONFIG_ASYNC_MEMCPY=m
+CONFIG_ASYNC_XOR=m
+CONFIG_ASYNC_PQ=m
+CONFIG_ASYNC_RAID6_RECOV=m
+CONFIG_CRYPTO=y
+
+#
+# Crypto core or helper
+#
+CONFIG_CRYPTO_ALGAPI=y
+CONFIG_CRYPTO_ALGAPI2=y
+CONFIG_CRYPTO_AEAD=y
+CONFIG_CRYPTO_AEAD2=y
+CONFIG_CRYPTO_BLKCIPHER=y
+CONFIG_CRYPTO_BLKCIPHER2=y
+CONFIG_CRYPTO_HASH=y
+CONFIG_CRYPTO_HASH2=y
+CONFIG_CRYPTO_RNG=y
+CONFIG_CRYPTO_RNG2=y
+CONFIG_CRYPTO_RNG_DEFAULT=y
+CONFIG_CRYPTO_AKCIPHER2=y
+CONFIG_CRYPTO_AKCIPHER=y
+CONFIG_CRYPTO_KPP2=y
+CONFIG_CRYPTO_KPP=y
+CONFIG_CRYPTO_ACOMP2=y
+CONFIG_CRYPTO_RSA=y
+CONFIG_CRYPTO_DH=y
+CONFIG_CRYPTO_ECDH=m
+CONFIG_CRYPTO_MANAGER=y
+CONFIG_CRYPTO_MANAGER2=y
+CONFIG_CRYPTO_USER=y
+CONFIG_CRYPTO_MANAGER_DISABLE_TESTS=y
+CONFIG_CRYPTO_GF128MUL=y
+CONFIG_CRYPTO_NULL=y
+CONFIG_CRYPTO_NULL2=y
+CONFIG_CRYPTO_WORKQUEUE=y
+CONFIG_CRYPTO_CRYPTD=y
+# CONFIG_CRYPTO_MCRYPTD is not set
+CONFIG_CRYPTO_AUTHENC=y
+# CONFIG_CRYPTO_TEST is not set
+CONFIG_CRYPTO_SIMD=y
+CONFIG_CRYPTO_GLUE_HELPER_X86=y
+CONFIG_CRYPTO_ENGINE=m
+
+#
+# Authenticated Encryption with Associated Data
+#
+CONFIG_CRYPTO_CCM=y
+CONFIG_CRYPTO_GCM=y
+# CONFIG_CRYPTO_CHACHA20POLY1305 is not set
+CONFIG_CRYPTO_AEGIS128=y
+# CONFIG_CRYPTO_AEGIS128L is not set
+# CONFIG_CRYPTO_AEGIS256 is not set
+CONFIG_CRYPTO_AEGIS128_AESNI_SSE2=m
+# CONFIG_CRYPTO_AEGIS128L_AESNI_SSE2 is not set
+# CONFIG_CRYPTO_AEGIS256_AESNI_SSE2 is not set
+# CONFIG_CRYPTO_MORUS640 is not set
+# CONFIG_CRYPTO_MORUS640_SSE2 is not set
+# CONFIG_CRYPTO_MORUS1280 is not set
+# CONFIG_CRYPTO_MORUS1280_SSE2 is not set
+# CONFIG_CRYPTO_MORUS1280_AVX2 is not set
+CONFIG_CRYPTO_SEQIV=y
+CONFIG_CRYPTO_ECHAINIV=y
+
+#
+# Block modes
+#
+CONFIG_CRYPTO_CBC=y
+CONFIG_CRYPTO_CFB=y
+CONFIG_CRYPTO_CTR=y
+CONFIG_CRYPTO_CTS=y
+CONFIG_CRYPTO_ECB=y
+CONFIG_CRYPTO_LRW=y
+CONFIG_CRYPTO_PCBC=y
+CONFIG_CRYPTO_XTS=y
+CONFIG_CRYPTO_KEYWRAP=m
+
+#
+# Hash modes
+#
+CONFIG_CRYPTO_CMAC=m
+CONFIG_CRYPTO_HMAC=y
+# CONFIG_CRYPTO_XCBC is not set
+CONFIG_CRYPTO_VMAC=m
+
+#
+# Digest
+#
+CONFIG_CRYPTO_CRC32C=y
+CONFIG_CRYPTO_CRC32C_INTEL=m
+# CONFIG_CRYPTO_CRC32 is not set
+# CONFIG_CRYPTO_CRC32_PCLMUL is not set
+CONFIG_CRYPTO_CRCT10DIF=m
+# CONFIG_CRYPTO_CRCT10DIF_PCLMUL is not set
+CONFIG_CRYPTO_GHASH=y
+# CONFIG_CRYPTO_POLY1305 is not set
+# CONFIG_CRYPTO_POLY1305_X86_64 is not set
+# CONFIG_CRYPTO_MD4 is not set
+CONFIG_CRYPTO_MD5=y
+# CONFIG_CRYPTO_MICHAEL_MIC is not set
+# CONFIG_CRYPTO_RMD128 is not set
+CONFIG_CRYPTO_RMD160=m
+# CONFIG_CRYPTO_RMD256 is not set
+# CONFIG_CRYPTO_RMD320 is not set
+CONFIG_CRYPTO_SHA1=y
+CONFIG_CRYPTO_SHA1_SSSE3=m
+# CONFIG_CRYPTO_SHA256_SSSE3 is not set
+CONFIG_CRYPTO_SHA512_SSSE3=y
+# CONFIG_CRYPTO_SHA1_MB is not set
+# CONFIG_CRYPTO_SHA256_MB is not set
+# CONFIG_CRYPTO_SHA512_MB is not set
+CONFIG_CRYPTO_SHA256=y
+CONFIG_CRYPTO_SHA512=y
+CONFIG_CRYPTO_SHA3=y
+# CONFIG_CRYPTO_SM3 is not set
+# CONFIG_CRYPTO_TGR192 is not set
+CONFIG_CRYPTO_WP512=y
+CONFIG_CRYPTO_GHASH_CLMUL_NI_INTEL=y
+
+#
+# Ciphers
+#
+CONFIG_CRYPTO_AES=y
+CONFIG_CRYPTO_AES_TI=m
+CONFIG_CRYPTO_AES_X86_64=m
+CONFIG_CRYPTO_AES_NI_INTEL=m
+# CONFIG_CRYPTO_ANUBIS is not set
+# CONFIG_CRYPTO_ARC4 is not set
+# CONFIG_CRYPTO_BLOWFISH is not set
+# CONFIG_CRYPTO_BLOWFISH_X86_64 is not set
+CONFIG_CRYPTO_CAMELLIA=y
+CONFIG_CRYPTO_CAMELLIA_X86_64=y
+CONFIG_CRYPTO_CAMELLIA_AESNI_AVX_X86_64=y
+CONFIG_CRYPTO_CAMELLIA_AESNI_AVX2_X86_64=y
+CONFIG_CRYPTO_CAST_COMMON=m
+CONFIG_CRYPTO_CAST5=m
+CONFIG_CRYPTO_CAST5_AVX_X86_64=m
+# CONFIG_CRYPTO_CAST6 is not set
+# CONFIG_CRYPTO_CAST6_AVX_X86_64 is not set
+CONFIG_CRYPTO_DES=y
+CONFIG_CRYPTO_DES3_EDE_X86_64=y
+CONFIG_CRYPTO_FCRYPT=m
+# CONFIG_CRYPTO_KHAZAD is not set
+# CONFIG_CRYPTO_SALSA20 is not set
+CONFIG_CRYPTO_CHACHA20=y
+CONFIG_CRYPTO_CHACHA20_X86_64=m
+# CONFIG_CRYPTO_SEED is not set
+CONFIG_CRYPTO_SERPENT=y
+# CONFIG_CRYPTO_SERPENT_SSE2_X86_64 is not set
+CONFIG_CRYPTO_SERPENT_AVX_X86_64=y
+CONFIG_CRYPTO_SERPENT_AVX2_X86_64=y
+CONFIG_CRYPTO_SM4=m
+# CONFIG_CRYPTO_TEA is not set
+CONFIG_CRYPTO_TWOFISH=m
+CONFIG_CRYPTO_TWOFISH_COMMON=m
+CONFIG_CRYPTO_TWOFISH_X86_64=m
+CONFIG_CRYPTO_TWOFISH_X86_64_3WAY=m
+# CONFIG_CRYPTO_TWOFISH_AVX_X86_64 is not set
+
+#
+# Compression
+#
+CONFIG_CRYPTO_DEFLATE=y
+# CONFIG_CRYPTO_LZO is not set
+CONFIG_CRYPTO_842=y
+CONFIG_CRYPTO_LZ4=m
+CONFIG_CRYPTO_LZ4HC=m
+CONFIG_CRYPTO_ZSTD=m
+
+#
+# Random Number Generation
+#
+CONFIG_CRYPTO_ANSI_CPRNG=y
+CONFIG_CRYPTO_DRBG_MENU=y
+CONFIG_CRYPTO_DRBG_HMAC=y
+CONFIG_CRYPTO_DRBG_HASH=y
+# CONFIG_CRYPTO_DRBG_CTR is not set
+CONFIG_CRYPTO_DRBG=y
+CONFIG_CRYPTO_JITTERENTROPY=y
+CONFIG_CRYPTO_USER_API=y
+# CONFIG_CRYPTO_USER_API_HASH is not set
+CONFIG_CRYPTO_USER_API_SKCIPHER=y
+CONFIG_CRYPTO_USER_API_RNG=m
+CONFIG_CRYPTO_USER_API_AEAD=m
+CONFIG_CRYPTO_HASH_INFO=y
+CONFIG_CRYPTO_HW=y
+CONFIG_CRYPTO_DEV_PADLOCK=m
+CONFIG_CRYPTO_DEV_PADLOCK_AES=m
+CONFIG_CRYPTO_DEV_PADLOCK_SHA=m
+# CONFIG_CRYPTO_DEV_CCP is not set
+# CONFIG_CRYPTO_DEV_QAT_DH895xCC is not set
+# CONFIG_CRYPTO_DEV_QAT_C3XXX is not set
+# CONFIG_CRYPTO_DEV_QAT_C62X is not set
+# CONFIG_CRYPTO_DEV_QAT_DH895xCCVF is not set
+# CONFIG_CRYPTO_DEV_QAT_C3XXXVF is not set
+# CONFIG_CRYPTO_DEV_QAT_C62XVF is not set
+CONFIG_CRYPTO_DEV_VIRTIO=m
+CONFIG_ASYMMETRIC_KEY_TYPE=y
+CONFIG_ASYMMETRIC_PUBLIC_KEY_SUBTYPE=y
+CONFIG_X509_CERTIFICATE_PARSER=y
+CONFIG_PKCS7_MESSAGE_PARSER=y
+# CONFIG_PKCS7_TEST_KEY is not set
+CONFIG_SIGNED_PE_FILE_VERIFICATION=y
+
+#
+# Certificates for signature checking
+#
+CONFIG_SYSTEM_TRUSTED_KEYRING=y
+CONFIG_SYSTEM_TRUSTED_KEYS=""
+CONFIG_SYSTEM_EXTRA_CERTIFICATE=y
+CONFIG_SYSTEM_EXTRA_CERTIFICATE_SIZE=4096
+# CONFIG_SECONDARY_TRUSTED_KEYRING is not set
+CONFIG_SYSTEM_BLACKLIST_KEYRING=y
+CONFIG_SYSTEM_BLACKLIST_HASH_LIST=""
+CONFIG_BINARY_PRINTF=y
+
+#
+# Library routines
+#
+CONFIG_RAID6_PQ=m
+CONFIG_BITREVERSE=y
+CONFIG_RATIONAL=y
+CONFIG_GENERIC_STRNCPY_FROM_USER=y
+CONFIG_GENERIC_STRNLEN_USER=y
+CONFIG_GENERIC_NET_UTILS=y
+CONFIG_GENERIC_FIND_FIRST_BIT=y
+CONFIG_GENERIC_PCI_IOMAP=y
+CONFIG_GENERIC_IOMAP=y
+CONFIG_ARCH_USE_CMPXCHG_LOCKREF=y
+CONFIG_ARCH_HAS_FAST_MULTIPLIER=y
+CONFIG_CRC_CCITT=y
+CONFIG_CRC16=y
+CONFIG_CRC_T10DIF=m
+CONFIG_CRC_ITU_T=y
+CONFIG_CRC32=y
+# CONFIG_CRC32_SELFTEST is not set
+# CONFIG_CRC32_SLICEBY8 is not set
+# CONFIG_CRC32_SLICEBY4 is not set
+CONFIG_CRC32_SARWATE=y
+# CONFIG_CRC32_BIT is not set
+CONFIG_CRC64=y
+CONFIG_CRC4=m
+# CONFIG_CRC7 is not set
+CONFIG_LIBCRC32C=y
+CONFIG_CRC8=y
+CONFIG_XXHASH=m
+# CONFIG_RANDOM32_SELFTEST is not set
+CONFIG_842_COMPRESS=y
+CONFIG_842_DECOMPRESS=y
+CONFIG_ZLIB_INFLATE=y
+CONFIG_ZLIB_DEFLATE=y
+CONFIG_LZO_COMPRESS=m
+CONFIG_LZO_DECOMPRESS=m
+CONFIG_LZ4_COMPRESS=m
+CONFIG_LZ4HC_COMPRESS=m
+CONFIG_LZ4_DECOMPRESS=m
+CONFIG_ZSTD_COMPRESS=m
+CONFIG_ZSTD_DECOMPRESS=m
+CONFIG_XZ_DEC=y
+CONFIG_XZ_DEC_X86=y
+CONFIG_XZ_DEC_POWERPC=y
+CONFIG_XZ_DEC_IA64=y
+CONFIG_XZ_DEC_ARM=y
+CONFIG_XZ_DEC_ARMTHUMB=y
+CONFIG_XZ_DEC_SPARC=y
+CONFIG_XZ_DEC_BCJ=y
+# CONFIG_XZ_DEC_TEST is not set
+CONFIG_DECOMPRESS_GZIP=y
+CONFIG_DECOMPRESS_BZIP2=y
+CONFIG_DECOMPRESS_LZMA=y
+CONFIG_DECOMPRESS_XZ=y
+CONFIG_REED_SOLOMON=m
+CONFIG_REED_SOLOMON_ENC8=y
+CONFIG_REED_SOLOMON_DEC8=y
+CONFIG_TEXTSEARCH=y
+CONFIG_TEXTSEARCH_KMP=m
+CONFIG_RADIX_TREE_MULTIORDER=y
+CONFIG_ASSOCIATIVE_ARRAY=y
+CONFIG_HAS_IOMEM=y
+CONFIG_HAS_IOPORT_MAP=y
+CONFIG_HAS_DMA=y
+CONFIG_NEED_SG_DMA_LENGTH=y
+CONFIG_NEED_DMA_MAP_STATE=y
+CONFIG_ARCH_DMA_ADDR_T_64BIT=y
+CONFIG_DMA_DIRECT_OPS=y
+CONFIG_SWIOTLB=y
+CONFIG_SGL_ALLOC=y
+CONFIG_CHECK_SIGNATURE=y
+CONFIG_DQL=y
+CONFIG_GLOB=y
+# CONFIG_GLOB_SELFTEST is not set
+CONFIG_NLATTR=y
+CONFIG_CLZ_TAB=y
+CONFIG_CORDIC=y
+# CONFIG_DDR is not set
+CONFIG_IRQ_POLL=y
+CONFIG_MPILIB=y
+CONFIG_OID_REGISTRY=y
+CONFIG_FONT_SUPPORT=y
+# CONFIG_FONTS is not set
+CONFIG_FONT_8x8=y
+CONFIG_FONT_8x16=y
+CONFIG_SG_POOL=y
+CONFIG_ARCH_HAS_SG_CHAIN=y
+CONFIG_ARCH_HAS_PMEM_API=y
+CONFIG_ARCH_HAS_UACCESS_FLUSHCACHE=y
+CONFIG_STACKDEPOT=y
+CONFIG_SBITMAP=y
+# CONFIG_STRING_SELFTEST is not set
+
+#
+# Kernel hacking
+#
+
+#
+# printk and dmesg options
+#
+CONFIG_PRINTK_TIME=y
+CONFIG_CONSOLE_LOGLEVEL_DEFAULT=7
+CONFIG_CONSOLE_LOGLEVEL_QUIET=4
+CONFIG_MESSAGE_LOGLEVEL_DEFAULT=4
+CONFIG_BOOT_PRINTK_DELAY=y
+# CONFIG_DYNAMIC_DEBUG is not set
+
+#
+# Compile-time checks and compiler options
+#
+CONFIG_DEBUG_INFO=y
+CONFIG_DEBUG_INFO_REDUCED=y
+# CONFIG_DEBUG_INFO_SPLIT is not set
+CONFIG_DEBUG_INFO_DWARF4=y
+CONFIG_GDB_SCRIPTS=y
+CONFIG_ENABLE_MUST_CHECK=y
+CONFIG_FRAME_WARN=8192
+CONFIG_STRIP_ASM_SYMS=y
+CONFIG_READABLE_ASM=y
+CONFIG_UNUSED_SYMBOLS=y
+CONFIG_PAGE_OWNER=y
+CONFIG_DEBUG_FS=y
+CONFIG_HEADERS_CHECK=y
+CONFIG_DEBUG_SECTION_MISMATCH=y
+CONFIG_SECTION_MISMATCH_WARN_ONLY=y
+CONFIG_STACK_VALIDATION=y
+CONFIG_DEBUG_FORCE_WEAK_PER_CPU=y
+CONFIG_MAGIC_SYSRQ=y
+CONFIG_MAGIC_SYSRQ_DEFAULT_ENABLE=0x1
+CONFIG_MAGIC_SYSRQ_SERIAL=y
+CONFIG_DEBUG_KERNEL=y
+
+#
+# Memory Debugging
+#
+CONFIG_PAGE_EXTENSION=y
+# CONFIG_DEBUG_PAGEALLOC is not set
+CONFIG_PAGE_POISONING=y
+# CONFIG_PAGE_POISONING_NO_SANITY is not set
+# CONFIG_PAGE_POISONING_ZERO is not set
+# CONFIG_DEBUG_PAGE_REF is not set
+# CONFIG_DEBUG_RODATA_TEST is not set
+# CONFIG_DEBUG_OBJECTS is not set
+CONFIG_SLUB_DEBUG_ON=y
+CONFIG_SLUB_STATS=y
+CONFIG_HAVE_DEBUG_KMEMLEAK=y
+# CONFIG_DEBUG_KMEMLEAK is not set
+# CONFIG_DEBUG_STACK_USAGE is not set
+CONFIG_DEBUG_VM=y
+# CONFIG_DEBUG_VM_VMACACHE is not set
+CONFIG_DEBUG_VM_RB=y
+# CONFIG_DEBUG_VM_PGFLAGS is not set
+CONFIG_ARCH_HAS_DEBUG_VIRTUAL=y
+# CONFIG_DEBUG_VIRTUAL is not set
+CONFIG_DEBUG_MEMORY_INIT=y
+CONFIG_HAVE_DEBUG_STACKOVERFLOW=y
+# CONFIG_DEBUG_STACKOVERFLOW is not set
+CONFIG_HAVE_ARCH_KASAN=y
+CONFIG_KASAN=y
+# CONFIG_KASAN_EXTRA is not set
+# CONFIG_KASAN_OUTLINE is not set
+CONFIG_KASAN_INLINE=y
+# CONFIG_TEST_KASAN is not set
+CONFIG_ARCH_HAS_KCOV=y
+CONFIG_CC_HAS_SANCOV_TRACE_PC=y
+CONFIG_KCOV=y
+CONFIG_KCOV_ENABLE_COMPARISONS=y
+# CONFIG_KCOV_INSTRUMENT_ALL is not set
+CONFIG_DEBUG_SHIRQ=y
+
+#
+# Debug Lockups and Hangs
+#
+CONFIG_LOCKUP_DETECTOR=y
+CONFIG_SOFTLOCKUP_DETECTOR=y
+# CONFIG_BOOTPARAM_SOFTLOCKUP_PANIC is not set
+CONFIG_BOOTPARAM_SOFTLOCKUP_PANIC_VALUE=0
+CONFIG_HARDLOCKUP_CHECK_TIMESTAMP=y
+# CONFIG_HARDLOCKUP_DETECTOR is not set
+CONFIG_DETECT_HUNG_TASK=y
+CONFIG_DEFAULT_HUNG_TASK_TIMEOUT=480
+# CONFIG_BOOTPARAM_HUNG_TASK_PANIC is not set
+CONFIG_BOOTPARAM_HUNG_TASK_PANIC_VALUE=0
+CONFIG_WQ_WATCHDOG=y
+CONFIG_PANIC_ON_OOPS=y
+CONFIG_PANIC_ON_OOPS_VALUE=1
+CONFIG_PANIC_TIMEOUT=0
+CONFIG_SCHED_DEBUG=y
+CONFIG_SCHED_INFO=y
+CONFIG_SCHEDSTATS=y
+CONFIG_SCHED_STACK_END_CHECK=y
+# CONFIG_DEBUG_TIMEKEEPING is not set
+
+#
+# Lock Debugging (spinlocks, mutexes, etc...)
+#
+CONFIG_LOCK_DEBUGGING_SUPPORT=y
+CONFIG_PROVE_LOCKING=y
+CONFIG_LOCK_STAT=y
+CONFIG_DEBUG_RT_MUTEXES=y
+CONFIG_DEBUG_SPINLOCK=y
+CONFIG_DEBUG_MUTEXES=y
+CONFIG_DEBUG_WW_MUTEX_SLOWPATH=y
+CONFIG_DEBUG_LOCK_ALLOC=y
+CONFIG_LOCKDEP=y
+# CONFIG_DEBUG_LOCKDEP is not set
+CONFIG_DEBUG_ATOMIC_SLEEP=y
+# CONFIG_DEBUG_LOCKING_API_SELFTESTS is not set
+CONFIG_LOCK_TORTURE_TEST=m
+# CONFIG_WW_MUTEX_SELFTEST is not set
+CONFIG_TRACE_IRQFLAGS=y
+CONFIG_STACKTRACE=y
+# CONFIG_WARN_ALL_UNSEEDED_RANDOM is not set
+# CONFIG_DEBUG_KOBJECT is not set
+CONFIG_DEBUG_BUGVERBOSE=y
+CONFIG_DEBUG_LIST=y
+# CONFIG_DEBUG_PI_LIST is not set
+# CONFIG_DEBUG_SG is not set
+# CONFIG_DEBUG_NOTIFIERS is not set
+CONFIG_DEBUG_CREDENTIALS=y
+
+#
+# RCU Debugging
+#
+CONFIG_PROVE_RCU=y
+CONFIG_TORTURE_TEST=m
+CONFIG_RCU_PERF_TEST=m
+CONFIG_RCU_TORTURE_TEST=m
+# CONFIG_RCU_TRACE is not set
+# CONFIG_RCU_EQS_DEBUG is not set
+# CONFIG_DEBUG_WQ_FORCE_RR_CPU is not set
+# CONFIG_DEBUG_BLOCK_EXT_DEVT is not set
+# CONFIG_NOTIFIER_ERROR_INJECTION is not set
+CONFIG_FUNCTION_ERROR_INJECTION=y
+CONFIG_FAULT_INJECTION=y
+CONFIG_FAILSLAB=y
+CONFIG_FAIL_PAGE_ALLOC=y
+# CONFIG_FAIL_MAKE_REQUEST is not set
+CONFIG_FAIL_IO_TIMEOUT=y
+# CONFIG_FAIL_FUTEX is not set
+# CONFIG_FAULT_INJECTION_DEBUG_FS is not set
+CONFIG_LATENCYTOP=y
+CONFIG_USER_STACKTRACE_SUPPORT=y
+CONFIG_NOP_TRACER=y
+CONFIG_HAVE_FUNCTION_TRACER=y
+CONFIG_HAVE_FUNCTION_GRAPH_TRACER=y
+CONFIG_HAVE_DYNAMIC_FTRACE=y
+CONFIG_HAVE_DYNAMIC_FTRACE_WITH_REGS=y
+CONFIG_HAVE_FTRACE_MCOUNT_RECORD=y
+CONFIG_HAVE_SYSCALL_TRACEPOINTS=y
+CONFIG_HAVE_FENTRY=y
+CONFIG_HAVE_C_RECORDMCOUNT=y
+CONFIG_TRACER_MAX_TRACE=y
+CONFIG_TRACE_CLOCK=y
+CONFIG_RING_BUFFER=y
+CONFIG_EVENT_TRACING=y
+CONFIG_CONTEXT_SWITCH_TRACER=y
+CONFIG_RING_BUFFER_ALLOW_SWAP=y
+CONFIG_PREEMPTIRQ_TRACEPOINTS=y
+CONFIG_TRACING=y
+CONFIG_GENERIC_TRACER=y
+CONFIG_TRACING_SUPPORT=y
+CONFIG_FTRACE=y
+CONFIG_FUNCTION_TRACER=y
+CONFIG_FUNCTION_GRAPH_TRACER=y
+# CONFIG_PREEMPTIRQ_EVENTS is not set
+CONFIG_IRQSOFF_TRACER=y
+# CONFIG_SCHED_TRACER is not set
+# CONFIG_HWLAT_TRACER is not set
+CONFIG_FTRACE_SYSCALLS=y
+CONFIG_TRACER_SNAPSHOT=y
+CONFIG_TRACER_SNAPSHOT_PER_CPU_SWAP=y
+CONFIG_TRACE_BRANCH_PROFILING=y
+# CONFIG_BRANCH_PROFILE_NONE is not set
+CONFIG_PROFILE_ANNOTATED_BRANCHES=y
+# CONFIG_BRANCH_TRACER is not set
+CONFIG_STACK_TRACER=y
+# CONFIG_BLK_DEV_IO_TRACE is not set
+# CONFIG_KPROBE_EVENTS is not set
+# CONFIG_UPROBE_EVENTS is not set
+# CONFIG_DYNAMIC_FTRACE is not set
+# CONFIG_FUNCTION_PROFILER is not set
+# CONFIG_FTRACE_STARTUP_TEST is not set
+# CONFIG_MMIOTRACE is not set
+# CONFIG_HIST_TRIGGERS is not set
+# CONFIG_TRACEPOINT_BENCHMARK is not set
+CONFIG_RING_BUFFER_BENCHMARK=m
+# CONFIG_RING_BUFFER_STARTUP_TEST is not set
+# CONFIG_PREEMPTIRQ_DELAY_TEST is not set
+# CONFIG_TRACE_EVAL_MAP_FILE is not set
+CONFIG_TRACING_EVENTS_GPIO=y
+# CONFIG_PROVIDE_OHCI1394_DMA_INIT is not set
+# CONFIG_DMA_API_DEBUG is not set
+CONFIG_RUNTIME_TESTING_MENU=y
+# CONFIG_LKDTM is not set
+# CONFIG_TEST_LIST_SORT is not set
+# CONFIG_TEST_SORT is not set
+# CONFIG_KPROBES_SANITY_TEST is not set
+# CONFIG_BACKTRACE_SELF_TEST is not set
+# CONFIG_RBTREE_TEST is not set
+# CONFIG_INTERVAL_TREE_TEST is not set
+# CONFIG_PERCPU_TEST is not set
+# CONFIG_ATOMIC64_SELFTEST is not set
+# CONFIG_ASYNC_RAID6_TEST is not set
+# CONFIG_TEST_HEXDUMP is not set
+# CONFIG_TEST_STRING_HELPERS is not set
+# CONFIG_TEST_KSTRTOX is not set
+# CONFIG_TEST_PRINTF is not set
+# CONFIG_TEST_BITMAP is not set
+# CONFIG_TEST_BITFIELD is not set
+# CONFIG_TEST_UUID is not set
+# CONFIG_TEST_OVERFLOW is not set
+# CONFIG_TEST_RHASHTABLE is not set
+# CONFIG_TEST_HASH is not set
+# CONFIG_TEST_IDA is not set
+# CONFIG_TEST_LKM is not set
+# CONFIG_TEST_USER_COPY is not set
+# CONFIG_TEST_BPF is not set
+# CONFIG_FIND_BIT_BENCHMARK is not set
+# CONFIG_TEST_FIRMWARE is not set
+# CONFIG_TEST_SYSCTL is not set
+# CONFIG_TEST_UDELAY is not set
+# CONFIG_TEST_STATIC_KEYS is not set
+# CONFIG_TEST_KMOD is not set
+# CONFIG_MEMTEST is not set
+# CONFIG_BUG_ON_DATA_CORRUPTION is not set
+# CONFIG_SAMPLES is not set
+CONFIG_HAVE_ARCH_KGDB=y
+# CONFIG_KGDB is not set
+CONFIG_ARCH_HAS_UBSAN_SANITIZE_ALL=y
+CONFIG_UBSAN=y
+CONFIG_UBSAN_SANITIZE_ALL=y
+# CONFIG_UBSAN_ALIGNMENT is not set
+# CONFIG_TEST_UBSAN is not set
+CONFIG_ARCH_HAS_DEVMEM_IS_ALLOWED=y
+CONFIG_STRICT_DEVMEM=y
+CONFIG_IO_STRICT_DEVMEM=y
+CONFIG_TRACE_IRQFLAGS_SUPPORT=y
+CONFIG_EARLY_PRINTK_USB=y
+CONFIG_X86_VERBOSE_BOOTUP=y
+CONFIG_EARLY_PRINTK=y
+CONFIG_EARLY_PRINTK_DBGP=y
+CONFIG_EARLY_PRINTK_USB_XDBC=y
+CONFIG_X86_PTDUMP_CORE=y
+# CONFIG_X86_PTDUMP is not set
+CONFIG_DEBUG_WX=y
+CONFIG_DOUBLEFAULT=y
+CONFIG_DEBUG_TLBFLUSH=y
+CONFIG_HAVE_MMIOTRACE_SUPPORT=y
+# CONFIG_X86_DECODER_SELFTEST is not set
+CONFIG_IO_DELAY_TYPE_0X80=0
+CONFIG_IO_DELAY_TYPE_0XED=1
+CONFIG_IO_DELAY_TYPE_UDELAY=2
+CONFIG_IO_DELAY_TYPE_NONE=3
+# CONFIG_IO_DELAY_0X80 is not set
+CONFIG_IO_DELAY_0XED=y
+# CONFIG_IO_DELAY_UDELAY is not set
+# CONFIG_IO_DELAY_NONE is not set
+CONFIG_DEFAULT_IO_DELAY_TYPE=1
+CONFIG_DEBUG_BOOT_PARAMS=y
+# CONFIG_CPA_DEBUG is not set
+# CONFIG_OPTIMIZE_INLINING is not set
+# CONFIG_DEBUG_ENTRY is not set
+# CONFIG_DEBUG_NMI_SELFTEST is not set
+CONFIG_X86_DEBUG_FPU=y
+# CONFIG_PUNIT_ATOM_DEBUG is not set
+CONFIG_UNWINDER_ORC=y
+# CONFIG_UNWINDER_FRAME_POINTER is not set
+
+--pM1j5p9RDJondMxj
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: attachment; filename="job-script"
+
+#!/bin/sh
+
+export_top_env()
+{
+	export suite='trinity'
+	export testcase='trinity'
+	export category='functional'
+	export need_memory='300MB'
+	export runtime=300
+	export job_origin='trinity.yaml'
+	export queue_cmdline_keys=
+	export queue='vip'
+	export testbox='vm-snb'
+	export tbox_group='vm-snb'
+	export branch='linux-stable-rc/queue/4.19'
+	export commit='4d00e68cfcfd91d3a8c794d47617429a96d623ed'
+	export kconfig='x86_64-randconfig-r006-20230306'
+	export nr_vm=300
+	export submit_id='6410215b0b9a9306d1aabb74'
+	export job_file='/lkp/jobs/scheduled/vm-meta-99/trinity-300s-yocto-x86_64-minimal-20190520.cgz-4d00e68cfcfd91d3a8c794d47617429a96d623ed-20230314-67281-b0l3ov-11.yaml'
+	export id='9939896b2afda994350a00eb77be5e114297cfbf'
+	export queuer_version='/lkp/yujie/.src-20230314-091610'
+	export model='qemu-system-x86_64 -enable-kvm -cpu SandyBridge'
+	export nr_cpu=2
+	export memory='16G'
+	export need_kconfig=\{\"KVM_GUEST\"\=\>\"y\"\}
+	export ssh_base_port=23032
+	export kernel_cmdline_hw='vmalloc=256M initramfs_async=0 page_owner=on'
+	export rootfs='yocto-x86_64-minimal-20190520.cgz'
+	export compiler='gcc-11'
+	export enqueue_time='2023-03-14 15:25:15 +0800'
+	export _id='6410215d0b9a9306d1aabb7f'
+	export _rt='/result/trinity/300s/vm-snb/yocto-x86_64-minimal-20190520.cgz/x86_64-randconfig-r006-20230306/gcc-11/4d00e68cfcfd91d3a8c794d47617429a96d623ed'
+	export user='lkp'
+	export LKP_SERVER='internal-lkp-server'
+	export result_root='/result/trinity/300s/vm-snb/yocto-x86_64-minimal-20190520.cgz/x86_64-randconfig-r006-20230306/gcc-11/4d00e68cfcfd91d3a8c794d47617429a96d623ed/21'
+	export scheduler_version='/lkp/lkp/.src-20230313-164509'
+	export arch='x86_64'
+	export max_uptime=1200
+	export initrd='/osimage/yocto/yocto-x86_64-minimal-20190520.cgz'
+	export bootloader_append='root=/dev/ram0
+RESULT_ROOT=/result/trinity/300s/vm-snb/yocto-x86_64-minimal-20190520.cgz/x86_64-randconfig-r006-20230306/gcc-11/4d00e68cfcfd91d3a8c794d47617429a96d623ed/21
+BOOT_IMAGE=/pkg/linux/x86_64-randconfig-r006-20230306/gcc-11/4d00e68cfcfd91d3a8c794d47617429a96d623ed/vmlinuz-4.19.271-00075-g4d00e68cfcfd
+branch=linux-stable-rc/queue/4.19
+job=/lkp/jobs/scheduled/vm-meta-99/trinity-300s-yocto-x86_64-minimal-20190520.cgz-4d00e68cfcfd91d3a8c794d47617429a96d623ed-20230314-67281-b0l3ov-11.yaml
+user=lkp
+ARCH=x86_64
+kconfig=x86_64-randconfig-r006-20230306
+commit=4d00e68cfcfd91d3a8c794d47617429a96d623ed
+initcall_debug
+nmi_watchdog=0
+vmalloc=256M initramfs_async=0 page_owner=on
+max_uptime=1200
+LKP_SERVER=internal-lkp-server
+selinux=0
+debug
+apic=debug
+sysrq_always_enabled
+rcupdate.rcu_cpu_stall_timeout=100
+net.ifnames=0
+printk.devkmsg=on
+panic=-1
+softlockup_panic=1
+nmi_watchdog=panic
+oops=panic
+load_ramdisk=2
+prompt_ramdisk=0
+drbd.minor_count=8
+systemd.log_level=err
+ignore_loglevel
+console=tty0
+earlyprintk=ttyS0,115200
+console=ttyS0,115200
+vga=normal
+rw'
+	export modules_initrd='/pkg/linux/x86_64-randconfig-r006-20230306/gcc-11/4d00e68cfcfd91d3a8c794d47617429a96d623ed/modules.cgz'
+	export bm_initrd='/osimage/pkg/debian-x86_64-20180403.cgz/trinity-static-x86_64-x86_64-1c734c75-1_2020-01-06.cgz'
+	export lkp_initrd='/osimage/user/lkp/lkp-x86_64.cgz'
+	export site='inn'
+	export LKP_CGI_PORT=80
+	export LKP_CIFS_PORT=139
+	export schedule_notify_address=
+	export meta_host='vm-meta-99'
+	export kernel='/pkg/linux/x86_64-randconfig-r006-20230306/gcc-11/4d00e68cfcfd91d3a8c794d47617429a96d623ed/vmlinuz-4.19.271-00075-g4d00e68cfcfd'
+	export dequeue_time='2023-03-14 15:26:17 +0800'
+	export job_initrd='/lkp/jobs/scheduled/vm-meta-99/trinity-300s-yocto-x86_64-minimal-20190520.cgz-4d00e68cfcfd91d3a8c794d47617429a96d623ed-20230314-67281-b0l3ov-11.cgz'
+
+	[ -n "$LKP_SRC" ] ||
+	export LKP_SRC=/lkp/${user:-lkp}/src
+}
+
+run_job()
+{
+	echo $$ > $TMP/run-job.pid
+
+	. $LKP_SRC/lib/http.sh
+	. $LKP_SRC/lib/job.sh
+	. $LKP_SRC/lib/env.sh
+
+	export_top_env
+
+	run_monitor $LKP_SRC/monitors/wrapper kmsg
+	run_monitor $LKP_SRC/monitors/wrapper heartbeat
+	run_monitor $LKP_SRC/monitors/wrapper meminfo
+	run_monitor $LKP_SRC/monitors/wrapper oom-killer
+	run_monitor $LKP_SRC/monitors/plain/watchdog
+
+	run_test $LKP_SRC/tests/wrapper trinity
+}
+
+extract_stats()
+{
+	export stats_part_begin=
+	export stats_part_end=
+
+	$LKP_SRC/stats/wrapper kmsg
+	$LKP_SRC/stats/wrapper meminfo
+
+	$LKP_SRC/stats/wrapper time trinity.time
+	$LKP_SRC/stats/wrapper dmesg
+	$LKP_SRC/stats/wrapper kmsg
+	$LKP_SRC/stats/wrapper last_state
+	$LKP_SRC/stats/wrapper stderr
+	$LKP_SRC/stats/wrapper time
+}
+
+"$@"
+
+--pM1j5p9RDJondMxj
+Content-Type: application/x-xz
+Content-Disposition: attachment; filename="dmesg.xz"
+Content-Transfer-Encoding: base64
+
+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
+Wg==
+
+--pM1j5p9RDJondMxj
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: attachment; filename="trinity"
+
+Seeding trinity by 365707 based on vm-snb/yocto-x86_64-minimal-20190520.cgz/x86_64-randconfig-r006-20230306
+2023-03-14 07:27:11 trinity -q -q -l off -s 365707 -x get_robust_list -x remap_file_pages -N 999999999 -X
+Trinity 2019.06  Dave Jones <davej@codemonkey.org.uk>
+shm:0x7f4f626bf000-0x7f4f6f2bbd00 (4 pages)
+[main] Marking syscall get_robust_list (64bit:274 32bit:312) as to be disabled.
+[main] Marking syscall remap_file_pages (64bit:216 32bit:257) as to be disabled.
+[main] Using user passed random seed: 365707.
+Marking all syscalls as enabled.
+[main] Disabling syscalls marked as disabled by command line options
+[main] Marked 64-bit syscall remap_file_pages (216) as deactivated.
+[main] Marked 64-bit syscall get_robust_list (274) as deactivated.
+[main] Marked 32-bit syscall remap_file_pages (257) as deactivated.
+[main] Marked 32-bit syscall get_robust_list (312) as deactivated.
+[main] 32-bit syscalls: 426 enabled, 3 disabled.  64-bit syscalls: 345 enabled, 91 disabled.
+--dropprivs is still in development, and really shouldn't be used unless you're helping development. Expect crashes.
+Going to run as user nobody (uid:65534 gid:65534)
+ctrl-c now unless you really know what you are doing.
+Continuing in 10 seconds.
+Continuing in 9 seconds.
+Continuing in 8 seconds.
+Continuing in 7 seconds.
+Continuing in 6 seconds.
+Continuing in 5 seconds.
+Continuing in 4 seconds.
+Continuing in 3 seconds.
+Continuing in 2 seconds.
+Continuing in 1 seconds.
+[main] Using pid_max = 32768
+[main] futex: 0 owner:0 global:1
+[main] futex: 0 owner:0 global:1
+[main] futex: 0 owner:0 global:1
+[main] futex: 0 owner:0 global:1
+[main] futex: 0 owner:0 global:1
+[main] Reserved/initialized 5 futexes.
+[main] Added 16 filenames from /dev
+[main] Added 14545 filenames from /proc
+[main] Added 5253 filenames from /sys
+[main] Enabled 14/14 fd providers. initialized:14.
+[main] Opened ftrace tracing_on as fd 412
+[main] Ftrace log will be dumped to /boot/trace.txt
+[child3:744] Tried 8 32-bit syscalls unsuccessfully. Disabling all 32-bit syscalls.
+[child3:745] Tried 8 32-bit syscalls unsuccessfully. Disabling all 32-bit syscalls.
+[child3:746] Tried 8 32-bit syscalls unsuccessfully. Disabling all 32-bit syscalls.
+[child3:747] Tried 8 32-bit syscalls unsuccessfully. Disabling all 32-bit syscalls.
+[main] 10423 iterations. [F:7218 S:3104 HI:1827]
+[main] 20650 iterations. [F:14430 S:6053 HI:3283]
+[child0:1032] Error opening /sys/kernel/debug/tracing/trace : Permission denied
+[main] Dumped trace to /boot/trace.txt
+[main] kernel became tainted! (512/0) Last seed was 365823
+trinity: Detected kernel tainting. Last seed was 365823
+[main] exit_reason=7, but 2 children still running.
+[main] Bailing main loop because kernel became tainted..
+[main] Dumped trace to /boot/trace.txt
+[main] Ran 24460 syscalls. Successes: 7218  Failures: 17050
+1970-01-01 00:06:44 hwclock --hctosys
+
+--pM1j5p9RDJondMxj--
