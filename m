@@ -2,221 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 017866B9B40
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 17:23:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EB286B9B43
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 17:23:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230373AbjCNQX1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 12:23:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57544 "EHLO
+        id S231418AbjCNQXr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 12:23:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230199AbjCNQXQ (ORCPT
+        with ESMTP id S231228AbjCNQX3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 12:23:16 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2126.outbound.protection.outlook.com [40.107.243.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E400B3728;
-        Tue, 14 Mar 2023 09:22:49 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BgjrnXs3INLRFQmwtfMbjRLCvue5SBopqZddHpFxgBP0Oph37Er7VbMx3T4jvAprqfIveJppsImTOZmVWf0VeZatu2ws9rDDLv2bp/R9Ih7+sSmV3uyda/otHlaqdWmSjn1zLx0OvJS8nAvJRMqhFrIrX691+VCJYNYeoMtQ85sof/5gyPgRwNHls7qkGohXUTbE8VQ8iRHdgMiiyQUChlsUawJP9cAdVI4xWJQtAXZEer1JoxdOMkbywUZSLtsTbOv6OU8V8Uyu+ApSHso1WB/RVXbk+dZN9YnAUzxwAQ7kD2p6wTSeIXILlLpJ09srViCzDYvORaVSZ1/V2cbBOQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Is7zNI4Aswa6XomO7soX2/GDpFvELdx93MBBhcHbkz4=;
- b=SlKWFkco1rTMLLTt1v+aqSmW43fEi9x0eAAsFgXmtV5zGoO3BHLsaP3kxymaijoQNqJxqmDuy3izQOTIWwMA/xjvL50oIz6DKKD1GUUNXAdLhAFOfDlrkgi+xBQk99PtWuIpr1r2JoBIN/yk/IKLkkn89uYFw4mvqSu/OGNgjUxmBd9ABqs4Lb5jCO7I5mhWH315M7d/j/oYWMIgrMcE1UjitX2a9bOwKbsTFo326aAe0db7p9/9Pdflq9hlQQTjXqeLQDUpzZmCjJsLLTnwDWQpQBmasWV5jrP0tlkjqyrPh4UCBL9rEr2n2Z+oVhbjJiwTeQFZ73Rt2JqSuK0M8A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
+        Tue, 14 Mar 2023 12:23:29 -0400
+Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDFF87D0B6;
+        Tue, 14 Mar 2023 09:23:03 -0700 (PDT)
+Received: by mail-qk1-x731.google.com with SMTP id bm1so894347qkb.13;
+        Tue, 14 Mar 2023 09:23:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Is7zNI4Aswa6XomO7soX2/GDpFvELdx93MBBhcHbkz4=;
- b=udleYIFXR7XzPTCba2ch7cOwCYweBHREk+/Ze6XsLFFYUCs4xNPEpPBBWXy0gemOZGnqIe1GAqwYxtowHN7ndVEBuMgqtTNy43L2KntKFC11Je5kRV/UKGzZeYrJ0UU+S9VqwcvQd87pNIJ7XXGTg5gEMciPKfx0x3ViwtfXiVQ=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by SJ0PR13MB6122.namprd13.prod.outlook.com (2603:10b6:a03:4eb::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.24; Tue, 14 Mar
- 2023 16:22:08 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::85f5:bdb:fb9e:294c]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::85f5:bdb:fb9e:294c%2]) with mapi id 15.20.6178.026; Tue, 14 Mar 2023
- 16:22:08 +0000
-Date:   Tue, 14 Mar 2023 17:22:02 +0100
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Markus Schneider-Pargmann <msp@baylibre.com>
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
+        d=gmail.com; s=20210112; t=1678810983;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Z8kZtwuGxIk12yKqz/wl+JhxCEqDQP8QUZ0wTg/xOB8=;
+        b=RLc5cEUPpWTb8Xn21aXCkShp9V6a0C4qteMpi68fvyCjdv75/IWci58U/n3VoEhHNl
+         T87CijZgbTsv6u3C3skEG4rHhd4mnauJEss8ASvB/wZTldEqCSZldsPzWSk/9aeJAaPB
+         PHztWtP8eRI21gawlopFOuDWZAEa1tP1ceLz7Lbl7C2ADVPAUNFo/wLS0ioRSYblp8iV
+         9k8EQ0AQXsW5dzpQLZNe5A/qoVR7v4zsUKhZCrfWU7KZlsgzoKvzPaY3bBXhD45tQnaz
+         yM9xllPbOg6Wu5EYFzk1FNtFKHvhTRhqrMYetODL9kDYkULK8askrWTPfLlCs+PtpNs/
+         8Adw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678810983;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Z8kZtwuGxIk12yKqz/wl+JhxCEqDQP8QUZ0wTg/xOB8=;
+        b=lDHVxltRT/mwm3EN5tU3ly9q3ifDRaqNe98j1w2pvUUbJfQzAKAcHR7Qsxii6h9o4b
+         yaM/x7SIXJNnnNv8QngvSlIY5Nfih5vQPf8kloVhh8m+BUWhyakqJnUdUQ1WyM2KN1Dz
+         OWhN9JgTtnQIuLJ9Cq9SOlTZIERcXxYjKAKiufJHMpfkFmaTzKPxAaFHbVq+M1feyAgQ
+         C6ijHXAwWSenwKaiWvaIikmv5I1osuQ5BAmvqkQ2C7OHZx5LlMBCPMQzbEayt8qhMx3j
+         fLNRugUuxQxzVZ6k4ljrcytu45G23wXdNdookKC590S/Y/uByEC6dm4ZKHWlKkJFB3NY
+         w74Q==
+X-Gm-Message-State: AO0yUKVM9THiTK8peYtcc3sIRt7EyZyiB/tX4GXzQ+WNcXyNRibSrQGA
+        1CAOM/PCR8K7jQtnHpgMzNpDBUoWQkQyXWV30tM=
+X-Google-Smtp-Source: AK7set+sCHzPHmJfAJF8JrpFLeIpfnP0JByW7FjEzgXTN/F0v7b5NGwF5GweRVs2bR77cSJR6GT/1LzFWEcCDpAPAUY=
+X-Received: by 2002:ae9:f00d:0:b0:745:6afc:9bb2 with SMTP id
+ l13-20020ae9f00d000000b007456afc9bb2mr2130644qkg.14.1678810982681; Tue, 14
+ Mar 2023 09:23:02 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230314120252.48263-1-mmkurbanov@sberdevices.ru>
+ <20230314120252.48263-3-mmkurbanov@sberdevices.ru> <3b920b9e-07dc-7bda-4fe1-d15d07e708cc@sberdevices.ru>
+In-Reply-To: <3b920b9e-07dc-7bda-4fe1-d15d07e708cc@sberdevices.ru>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 14 Mar 2023 18:22:25 +0200
+Message-ID: <CAHp75VcWuOEWZn2E8dG=Pb_KuEv06jYt_+nZSL-ceAQRPmgeGw@mail.gmail.com>
+Subject: Re: [PATCH v3 2/2] leds: add aw20xx driver
+To:     Martin Kurbanov <mmkurbanov@sberdevices.ru>
+Cc:     Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 5/5] can: tcan4x5x: Add support for tcan4552/4553
-Message-ID: <ZBCfKhPZrIMqvmbO@corigine.com>
-References: <20230314151201.2317134-1-msp@baylibre.com>
- <20230314151201.2317134-6-msp@baylibre.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230314151201.2317134-6-msp@baylibre.com>
-X-ClientProxiedBy: AS4PR10CA0025.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:20b:5d8::14) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|SJ0PR13MB6122:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0a6b4624-6dd8-40f6-a039-08db24a841d9
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ik/A1Edp0egbkPvhW9/tqwRpEwAJVmzp8c/2BWCaUJferP9gHrSHDux9Go2eOGsUaO1uhdqhwVKUm8EffVyBCWOHX6ILk21VnnDK8mdqvG1j6Gp+eyH3/9Frei2hZuA6EFJhIizXzPU8oY9HhavPJYlBWd6FIfTPRMgUZ1b8SXAQazoCVD3Bt36L0tYjIP0maZW6v6QPnZTv23QzvBWqfeoEg4YKuzCClgEJbYz8CbiBehT1ctZvZwZFm2fS9aC0Lswm025QUkwNJ9vAvJPI6anqouppz0Md4njgJOvWaTqP4nG5FFE7lxII4e/nji4bYFBuVfIrf/O8eZie69o6+ntlA8BUXRcF1dEfqGG3x1bmcO9i088fZb4HXfiCJnaTVWxlCTn5bkabsbdHZPDaEZD4kf3r4ljdDb0QzT7glgo9ffRBAL5Br9ujxIrOLYZwyaXCOAkvVjxfHNNy5D4r4M4dfBeZXohKEctwTOPFtRsNx20PHzjO4gPLijIUOt1EUX1ytmDBrBqjcXDvlUXBYBcOjlz+DWPwVSB8fh/RoPek1TcoRNoUzaePQcw+fw/F6Bn9rmRGncil/23OuTnWEa3cHM6WO0iuil3SULND8Dbeeew1YNZPw491gN7kAPhZcx5d+Wcf7z9zCh4C/nyeIWN5gxLx/gJeW2BIWpZZ9KXhzZTD+0BXOf3fU0/+iHoq
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(376002)(366004)(346002)(39840400004)(136003)(451199018)(6512007)(6506007)(2616005)(186003)(6666004)(44832011)(2906002)(6486002)(83380400001)(7416002)(316002)(54906003)(5660300002)(66556008)(66476007)(6916009)(66946007)(41300700001)(38100700002)(36756003)(4326008)(8676002)(478600001)(8936002)(86362001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?053tMdapkSLor23vzhGwFV7N4TTmjtmqAwr7MzTNHCRbYnqUDOwUFyQN4L06?=
- =?us-ascii?Q?USXXQvlF26ONFuufP9ip347hgoFRMAsaVTCHU8F1Y5WXIqTJT2eFCNgxIy85?=
- =?us-ascii?Q?K5jD4nQdg28XnP6FknuJtHNklyNMpKKkVEUQJ0BXe2h4ZjHdcl1BhUWpEfcE?=
- =?us-ascii?Q?UGQaijNfBNTo1cNglBBGP9qB+xUcMoIDcC2i9fpkidF0pZ6vTxGgUpxpgdxN?=
- =?us-ascii?Q?PVlXbg1/hDTPmzCcxY2ICouNJtCrkp5qnkMeQtiopWFck4p+emMALCCX3Hea?=
- =?us-ascii?Q?yI3GRlvzYht2LMLWki1JXpDGldmby2X5GNM7HOvk5gskp76iawBGfVkbd3/c?=
- =?us-ascii?Q?EbQO2Oa28kV0fZLnNAOMp8gNsaV3vrRASWbA0tbGyiM7WajqZBpT7ngCjQ8u?=
- =?us-ascii?Q?io/0xEKDJ+Z07W/DoUi9ysytzWj5AHNWB1nCE1Vjx9+BeaTrJRd1b3eDJkCn?=
- =?us-ascii?Q?TkZ4R5O5HACDr/TvZAClta4FteV2HEvBjTaqi38wJ34BVh3Nnb0VkBLs8B+/?=
- =?us-ascii?Q?y5Ox95Qb6LRljTz9YTl+99FZbGuTY4SWc2CFn221JW0wOV/QjWkM5+ByGmlm?=
- =?us-ascii?Q?flQYjjBsb4JY41XRstbanVxv9Cw+MwEzWyyymPAvglzUHn4qNClImyv1jvw6?=
- =?us-ascii?Q?Ps1zasBx3HuwyYzug03etlW8EoeMwmDjDtIbkZPjtJMyjj5LKv0euM1VikCY?=
- =?us-ascii?Q?hzFB0FSGJ4Wj+KiB5EgoucXh9CP4qNDn9Rg6uGlcuGcyWJFfl+sdq0+SF9nj?=
- =?us-ascii?Q?QqT9FpfKMwDyp8bCEumWv0ztsGqnY7nvo8Abt/L3aaPspEismSeKykcsTX5z?=
- =?us-ascii?Q?f2nRjT9UB6g+CD3o7fhqmwmDsbJFYl7xwiplTVYXlh7HbbcDmnA88dOM8SIm?=
- =?us-ascii?Q?nfl5w9U/hYtNFA03O3FsXurKTpllimCK2y+fp+unU+frrsoU5fMaTOwayhUH?=
- =?us-ascii?Q?8qjrEAGmQYdavXjZ76+lmUJcUVPGhkRV5Ul07v9zNaRui7i+PdVXzyAkbI97?=
- =?us-ascii?Q?07oD3Ixgiy82opanFx4fO6Y0aGFXPkw0NHOzusPf2Ed6xp4awtjlCS03LvHw?=
- =?us-ascii?Q?bf26Q5W4hVZp3ZSsCGioTtGwecPqw/ZtZqDzSPUH36zsN4zj+gWRRD+Y6434?=
- =?us-ascii?Q?0ONMCSBEREjgwKMqP83hW7y7ZOaFC2gX4KKVZq/AtU0TJ6YTL+GhkA56Im6K?=
- =?us-ascii?Q?ZmS2adm8c4uLtFtSTw7lbNcUAAauoMyegFXdssuEeWlBio6nEgefm/HH34Wh?=
- =?us-ascii?Q?0cClU87HlpfX/TUJHDuCVVfUT9gkGR5eOQXBLRCgoxRhJI5Ee4yZitWGEWNF?=
- =?us-ascii?Q?qlp/LsvboNa0TUY73ABg026bnmPg3fsvRjdc9hxxW7Ba6/EXIZgubkF50sLu?=
- =?us-ascii?Q?gC/dWeBkHP4y8EKfM8sI2rle8GOw79uf6OqVCeGpeKf/WZBZYD+3gkudnBod?=
- =?us-ascii?Q?6QjY8/WvGwZ8Y2lt1txp5vY8lAw+bSzxKBhTrLcnilz8Kdea+xF1zCoehbbM?=
- =?us-ascii?Q?NbqTZQnaHI8RAMuP52TVAvBPOCcZMIhPoVIJnAAdmeG9g279owDJHffeWZdZ?=
- =?us-ascii?Q?Mx9SlUDDit6YVKu2FFgvttQiv3xwDA+1VJhmNwo+vC5IdzIRWJYOi4MpIVId?=
- =?us-ascii?Q?GjOHWagZhucHewIjjn0aLEjDxAKVUmlY9wHg7+Udegk7F5ysVEj//CbtVjk5?=
- =?us-ascii?Q?lNiUQQ=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0a6b4624-6dd8-40f6-a039-08db24a841d9
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Mar 2023 16:22:08.2193
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Dv/gZ22lV5wYJoIr6s9VXsA3U0JHItS2ZasUm8IetnZfuwERBEXKEwoJh3Ax3gfpXtGyGUCFoHufiNwO7rUMwq6mSP/mjgpmrUJole8wtH4=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR13MB6122
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@sberdevices.ru, devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 14, 2023 at 04:12:01PM +0100, Markus Schneider-Pargmann wrote:
-> tcan4552 and tcan4553 do not have wake or state pins, so they are
-> currently not compatible with the generic driver. The generic driver
-> uses tcan4x5x_disable_state() and tcan4x5x_disable_wake() if the gpios
-> are not defined. These functions use register bits that are not
-> available in tcan4552/4553.
-> 
-> This patch adds support by introducing version information to reflect if
-> the chip has wake and state pins. Also the version is now checked.
-> 
-> Signed-off-by: Markus Schneider-Pargmann
+On Tue, Mar 14, 2023 at 2:12=E2=80=AFPM Martin Kurbanov
+<mmkurbanov@sberdevices.ru> wrote:
+>
+> Hello Andy. Thank you for review.
+> I have fixed most of your comments. Please take a look below.
 
-Hi Markus,
+Good, but you can postpone issuing a new version before letting me answer.
 
-you forgot your email address in the signed-off-by line.
+> On 2023-03-01 00:51, Andy Shevchenko wrote:
+> >> +       /* The output current of each LED (see p.14 of datasheet for f=
+ormula) */
+> >> +       return (duty * global_imax_microamp) / 1000U;
+> >
+> > units.h ?
+>
+> These constants are needed to improve the accuracy of calculations.
+> units.h doesn=E2=80=99t have any helpful definitions to use here.
 
-> ---
->  drivers/net/can/m_can/tcan4x5x-core.c | 113 ++++++++++++++++++++------
->  1 file changed, 89 insertions(+), 24 deletions(-)
-> 
-> diff --git a/drivers/net/can/m_can/tcan4x5x-core.c b/drivers/net/can/m_can/tcan4x5x-core.c
-> index fb9375fa20ec..e7fa509dacc9 100644
-> --- a/drivers/net/can/m_can/tcan4x5x-core.c
-> +++ b/drivers/net/can/m_can/tcan4x5x-core.c
+Okay, let me look at v3 and I will comment there.
 
 ...
 
-> @@ -254,18 +262,53 @@ static int tcan4x5x_disable_state(struct m_can_classdev *cdev)
->  				  TCAN4X5X_DISABLE_INH_MSK, 0x01);
->  }
->  
-> -static int tcan4x5x_get_gpios(struct m_can_classdev *cdev)
-> +static int tcan4x5x_verify_version(
-> +		struct tcan4x5x_priv *priv,
-> +		const struct tcan4x5x_version_info *version_info)
+> >> +static int aw200xx_set_imax(const struct aw200xx *const chip,
+> >> +                           u32 led_imax_microamp)
+> >> +{
+> >> +       struct imax_global {
+> >> +               u32 regval;
+> >> +               u32 microamp;
+> >> +       } imaxs[] =3D {
+> >> +               { 8,  3300 },
+> >> +               { 9,  6700 },
+> >> +               { 0,  10000 },
+> >> +               { 11, 13300 },
+> >> +               { 1,  20000 },
+> >> +               { 13, 26700 },
+> >> +               { 2,  30000 },
+> >> +               { 3,  40000 },
+> >> +               { 15, 53300 },
+> >> +               { 4,  60000 },
+> >> +               { 5,  80000 },
+> >> +               { 6,  120000 },
+> >> +               { 7,  160000 },
+> >
+> > This looks a bit random. Is there any pattern on how value is
+> > connected to the register value?
+>
+> There is no ability to create any pattern here, because this table data
+> doesn=E2=80=99t have any regularity.
 
-nit:
+There is a clear pattern.
 
-static int
-tcan4x5x_verify_version(struct tcan4x5x_priv *priv,                                                     const struct tcan4x5x_version_info *version_info)
+You have two tables, i.e. with multiplier 10000 and second one with
+multiplier 3333 (table in the datasheet seems bad from a math
+perspective). And it's even shown correctly in the datasheet.
 
-or:
+With this mix you missed 10.
 
-static int tcan4x5x_verify_version(struct tcan4x5x_priv *priv,                                                     const struct tcan4x5x_version_info *version_info)
+The coefficient table is 1,2,3,4,6,8,12,16 for both tables.
 
-Your could make the line shorter by renaming the 'version_info' parameter,
-say to 'info'.
+Hence you need one table and two multipliers.
 
-...
+Please, rewrite accordingly.
 
-> @@ -394,21 +448,32 @@ static void tcan4x5x_can_remove(struct spi_device *spi)
->  	m_can_class_free_dev(priv->cdev.net);
->  }
->  
-> +static const struct tcan4x5x_version_info tcan4x5x_generic = {
-> +	.has_state_pin = true,
-> +	.has_wake_pin = true,
-> +};
-> +
-> +static const struct tcan4x5x_version_info tcan4x5x_tcan4552 = {
-> +	.id2_register = 0x32353534, /* ASCII = 4552 */
-> +};
-> +
-> +static const struct tcan4x5x_version_info tcan4x5x_tcan4553 = {
-> +	.id2_register = 0x33353534, /* ASCII = 4553 */
-> +};
-> +
->  static const struct of_device_id tcan4x5x_of_match[] = {
-> -	{
-> -		.compatible = "ti,tcan4x5x",
-> -	}, {
-> -		/* sentinel */
-> -	},
-> +	{ .compatible = "ti,tcan4x5x", .data = &tcan4x5x_generic },
-> +	{ .compatible = "ti,tcan4552", .data = &tcan4x5x_tcan4552 },
-> +	{ .compatible = "ti,tcan4553", .data = &tcan4x5x_tcan4553 },
-> +	{ /* sentinel */ }
->  };
->  MODULE_DEVICE_TABLE(of, tcan4x5x_of_match);
->  
->  static const struct spi_device_id tcan4x5x_id_table[] = {
-> -	{
-> -		.name = "tcan4x5x",
-> -	}, {
-> -		/* sentinel */
-> -	},
-> +	{ .name = "tcan4x5x", .driver_data = (unsigned long) &tcan4x5x_generic, },
-> +	{ .name = "tcan4552", .driver_data = (unsigned long) &tcan4x5x_tcan4552, },
-> +	{ .name = "tcan4553", .driver_data = (unsigned long) &tcan4x5x_tcan4553, },
-
-nit: checkpatch tells me that no space is necessary after a cast.
-
-> +	{ /* sentinel */ }
->  };
->  MODULE_DEVICE_TABLE(spi, tcan4x5x_id_table);
->  
-> -- 
-> 2.39.2
-> 
+--=20
+With Best Regards,
+Andy Shevchenko
