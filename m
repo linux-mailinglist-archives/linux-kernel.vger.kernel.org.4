@@ -2,392 +2,297 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0A146B8A70
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 06:36:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 325B36B8A7E
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 06:37:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229958AbjCNFgB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 01:36:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50184 "EHLO
+        id S229987AbjCNFhY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 01:37:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229805AbjCNFgA (ORCPT
+        with ESMTP id S229962AbjCNFhW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 01:36:00 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBA5C173C
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 22:35:57 -0700 (PDT)
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32E3duEX023752;
-        Tue, 14 Mar 2023 05:35:37 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=1Cwi2udlyx50NbK3oP5Fm8bj2V8P0DfwAvN9UdcJrxI=;
- b=HsefCAS8voe8rswxAf1xiOnEDuEIH1eAcJPMpnaXbuVuBP5ha5bYMPjCsZ1/rQRwyZYn
- A7Ix3pwAAQjPWY3kLSYsxkwVcquojHOclHrCD4IlEj+b5K2Hsp1P2HO7Jg3D83Av/rBN
- onYJ3BArJGJxpicIC2t8dfIbFLBaUUKJ6CBuoU8VgqIyB7dztsE/0zoIZX/tk4oQ7H0Y
- a/EmGvuESBrnUM2UoWjcz3ur46DuFSx5YfN4VjdMK3iPbxBg1pX+T9WjHDbW4CqT3hAk
- SiH1847SJEgMCcNxUJJkB+bsVXDvLjR3kkCT993WHH077cAo3YO6O9RhMNT1WcOB9zMD BQ== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pa6n31rrb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Mar 2023 05:35:37 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32E5ZCl4021576
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Mar 2023 05:35:12 GMT
-Received: from [10.239.133.9] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Mon, 13 Mar
- 2023 22:35:09 -0700
-Message-ID: <b0cf2f22-1824-bb06-1648-3570fd6540a4@quicinc.com>
-Date:   Tue, 14 Mar 2023 13:35:07 +0800
+        Tue, 14 Mar 2023 01:37:22 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0165C2200D
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 22:36:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678772188;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=CUNqowlHsOHTiRljuMolx/A+uVnVqERrix3vDx9FlvY=;
+        b=TRpoB+rA+WWUCqRFtqaGCCElQtw+StRxm+YwqogZmA2Y+segHSlqQQDL50L2wceBnVmD3G
+        nU5/qYl2i/D7mAcWlx+pmQuhdyo3s3k/N1YRz5xSVK9smSnaMTAfMC7y/apiJqhrxp5hnW
+        1j8PnKonrN6myzDEXj0M7Q7mzQdI2Ak=
+Received: from mail-oa1-f69.google.com (mail-oa1-f69.google.com
+ [209.85.160.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-652-6LFPpg6COd2ChIEpiaA5UQ-1; Tue, 14 Mar 2023 01:36:26 -0400
+X-MC-Unique: 6LFPpg6COd2ChIEpiaA5UQ-1
+Received: by mail-oa1-f69.google.com with SMTP id 586e51a60fabf-177b0f40c4eso2938884fac.12
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 22:36:26 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678772185;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=CUNqowlHsOHTiRljuMolx/A+uVnVqERrix3vDx9FlvY=;
+        b=hycwzmMbgPalOnOHJC42700hr7njGFjssz5p1xxsEvmM1LGMABrltt5/zyxRUMLO2l
+         jp5DYUTo3I7xM0P39zjKHpngOOluBG9GUQ2Mea2i/4p+G/jueJNJg0vnh93PafhCVDaJ
+         mXl6A3/nnLn3kpZ2SPVqf9hSUM86TsULyTkhe6C4+3tFZVkdNEwB2PtT/ycCectMkfmG
+         tyWap7xgLIUOw04VmDEroOhprBCKEyyFS3hOqfenR5aJxxw+1HkL21dkAn0xPwGB40UK
+         UaBoPV0fduEvuK69NO5eZfE9vCof2720BpjvPmtgjn1ZunqLdhSKUW7LeGClfCQmGycg
+         zKxw==
+X-Gm-Message-State: AO0yUKVRrX37BVINebSqSdkm3hpL1Q/6Xu7kWM+iTG5/irqZbiMCvuQh
+        zfBL6SryhNABOSQKCbg7Kuy1dRTZ+6IlH58wMUm7MM6K0eQm1ITAzOxH6mYR0WjYWW4oyrDJUt6
+        vi2QiLxUDxzPrttdYcrCPAaGiX/w2aSAG3R7iuE+l
+X-Received: by 2002:a9d:60d0:0:b0:688:d1d6:2029 with SMTP id b16-20020a9d60d0000000b00688d1d62029mr12568434otk.2.1678772185641;
+        Mon, 13 Mar 2023 22:36:25 -0700 (PDT)
+X-Google-Smtp-Source: AK7set+kN4AtoVa9aWxyktypjoY9bQX/jqJh/j0S1GrS5sbNhOwjiFrtu8xIdNunTOUI244RxuH+n3UiLO9HYeAQIRc=
+X-Received: by 2002:a9d:60d0:0:b0:688:d1d6:2029 with SMTP id
+ b16-20020a9d60d0000000b00688d1d62029mr12568426otk.2.1678772185358; Mon, 13
+ Mar 2023 22:36:25 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH v2 6/9] coresight: Store in-connections as well as
- out-connections
-Content-Language: en-US
-To:     James Clark <james.clark@arm.com>, <coresight@lists.linaro.org>
-CC:     Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Mike Leach <mike.leach@linaro.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20230310160610.742382-1-james.clark@arm.com>
- <20230310160610.742382-7-james.clark@arm.com>
-From:   Jinlong Mao <quic_jinlmao@quicinc.com>
-In-Reply-To: <20230310160610.742382-7-james.clark@arm.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: SXpZOlh1g1iSeRvwi1nZXaCe1BqGiEzp
-X-Proofpoint-GUID: SXpZOlh1g1iSeRvwi1nZXaCe1BqGiEzp
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-13_13,2023-03-14_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 mlxscore=0
- bulkscore=0 mlxlogscore=970 impostorscore=0 priorityscore=1501
- adultscore=0 phishscore=0 spamscore=0 lowpriorityscore=0 clxscore=1011
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2303140050
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230302113421.174582-1-sgarzare@redhat.com> <20230302113421.174582-9-sgarzare@redhat.com>
+In-Reply-To: <20230302113421.174582-9-sgarzare@redhat.com>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Tue, 14 Mar 2023 13:36:13 +0800
+Message-ID: <CACGkMEt1hBcRdh0oQYCs4meRs0mvDu9X9o-zK4aS87hrN+QPxA@mail.gmail.com>
+Subject: Re: [PATCH v2 8/8] vdpa_sim: add support for user VA
+To:     Stefano Garzarella <sgarzare@redhat.com>
+Cc:     virtualization@lists.linux-foundation.org,
+        Andrey Zhadchenko <andrey.zhadchenko@virtuozzo.com>,
+        eperezma@redhat.com, netdev@vger.kernel.org, stefanha@redhat.com,
+        linux-kernel@vger.kernel.org,
+        "Michael S. Tsirkin" <mst@redhat.com>, kvm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 3/11/2023 12:06 AM, James Clark wrote:
-> This will allow CATU to get its associated ETR in a generic way where
-> currently the enable path has some hard coded searches which avoid
-> the need to store input connections.
+On Thu, Mar 2, 2023 at 7:35=E2=80=AFPM Stefano Garzarella <sgarzare@redhat.=
+com> wrote:
 >
-> Signed-off-by: James Clark <james.clark@arm.com>
+> The new "use_va" module parameter (default: false) is used in
+> vdpa_alloc_device() to inform the vDPA framework that the device
+> supports VA.
+>
+> vringh is initialized to use VA only when "use_va" is true and the
+> user's mm has been bound. So, only when the bus supports user VA
+> (e.g. vhost-vdpa).
+>
+> vdpasim_mm_work_fn work is used to attach the kthread to the user
+> address space when the .bind_mm callback is invoked, and to detach
+> it when the .unbind_mm callback is invoked.
+>
+> Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
 > ---
->   drivers/hwtracing/coresight/coresight-core.c  | 56 +++++++++++++++--
->   .../hwtracing/coresight/coresight-platform.c  | 61 ++++++++++++++++---
->   drivers/hwtracing/coresight/coresight-sysfs.c |  1 -
->   include/linux/coresight.h                     | 25 ++++++++
->   4 files changed, 130 insertions(+), 13 deletions(-)
 >
-> diff --git a/drivers/hwtracing/coresight/coresight-core.c b/drivers/hwtracing/coresight/coresight-core.c
-> index f457914e445e..a8ba7493c09a 100644
-> --- a/drivers/hwtracing/coresight/coresight-core.c
-> +++ b/drivers/hwtracing/coresight/coresight-core.c
-> @@ -59,6 +59,7 @@ const u32 coresight_barrier_pkt[4] = {0x7fffffff, 0x7fffffff, 0x7fffffff, 0x7fff
->   EXPORT_SYMBOL_GPL(coresight_barrier_pkt);
->   
->   static const struct cti_assoc_op *cti_assoc_ops;
-> +static int coresight_fixup_inputs(struct coresight_device *csdev);
->   
->   ssize_t coresight_simple_show_pair(struct device *_dev,
->   			      struct device_attribute *attr, char *buf)
-> @@ -1369,6 +1370,35 @@ static int coresight_fixup_orphan_conns(struct coresight_device *csdev)
->   			 csdev, coresight_orphan_match);
->   }
->   
-> +/*
-> + * Device connections are discovered before one/both devices have been created,
-> + * so inputs must be added later.
-> + */
-> +static int coresight_fixup_inputs(struct coresight_device *csdev)
-> +{
-> +	int i, ret = 0;
-> +	struct coresight_connection *out_conn;
-> +	struct coresight_connection in_conn;
+> Notes:
+>     v2:
+>     - `use_va` set to true by default [Eugenio]
+>     - supported the new unbind_mm callback [Jason]
+>     - removed the unbind_mm call in vdpasim_do_reset() [Jason]
+>     - avoided to release the lock while call kthread_flush_work() since w=
+e
+>       are now using a mutex to protect the device state
+>
+>  drivers/vdpa/vdpa_sim/vdpa_sim.h |  1 +
+>  drivers/vdpa/vdpa_sim/vdpa_sim.c | 98 +++++++++++++++++++++++++++++++-
+>  2 files changed, 97 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.h b/drivers/vdpa/vdpa_sim/vdp=
+a_sim.h
+> index 4774292fba8c..3a42887d05d9 100644
+> --- a/drivers/vdpa/vdpa_sim/vdpa_sim.h
+> +++ b/drivers/vdpa/vdpa_sim/vdpa_sim.h
+> @@ -59,6 +59,7 @@ struct vdpasim {
+>         struct vdpasim_virtqueue *vqs;
+>         struct kthread_worker *worker;
+>         struct kthread_work work;
+> +       struct mm_struct *mm_bound;
+>         struct vdpasim_dev_attr dev_attr;
+>         /* mutex to synchronize virtqueue state */
+>         struct mutex mutex;
+> diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.c b/drivers/vdpa/vdpa_sim/vdp=
+a_sim.c
+> index a28103a67ae7..eda26bc33df5 100644
+> --- a/drivers/vdpa/vdpa_sim/vdpa_sim.c
+> +++ b/drivers/vdpa/vdpa_sim/vdpa_sim.c
+> @@ -35,10 +35,77 @@ module_param(max_iotlb_entries, int, 0444);
+>  MODULE_PARM_DESC(max_iotlb_entries,
+>                  "Maximum number of iotlb entries for each address space.=
+ 0 means unlimited. (default: 2048)");
+>
+> +static bool use_va =3D true;
+> +module_param(use_va, bool, 0444);
+> +MODULE_PARM_DESC(use_va, "Enable/disable the device's ability to use VA"=
+);
 > +
-> +	for (i = 0; i < csdev->pdata->nr_outconns; i++) {
-> +		out_conn = &csdev->pdata->out_conns[i];
-> +		if (!out_conn->remote_dev || !out_conn->remote_dev->pdata)
-> +			continue;
+>  #define VDPASIM_QUEUE_ALIGN PAGE_SIZE
+>  #define VDPASIM_QUEUE_MAX 256
+>  #define VDPASIM_VENDOR_ID 0
+>
+> +struct vdpasim_mm_work {
+> +       struct kthread_work work;
+> +       struct mm_struct *mm;
+> +       bool bind;
+> +       int ret;
+> +};
+> +
+> +static void vdpasim_mm_work_fn(struct kthread_work *work)
+> +{
+> +       struct vdpasim_mm_work *mm_work =3D
+> +               container_of(work, struct vdpasim_mm_work, work);
+> +
+> +       mm_work->ret =3D 0;
+> +
+> +       if (mm_work->bind) {
+> +               kthread_use_mm(mm_work->mm);
+> +               //TODO: should we attach the cgroup of the mm owner?
+> +       } else {
+> +               kthread_unuse_mm(mm_work->mm);
+> +       }
+> +}
+> +
+> +static void vdpasim_worker_queue_mm(struct vdpasim *vdpasim,
+> +                                   struct vdpasim_mm_work *mm_work)
+> +{
 
-Hi James,
+Nit: we need to tweak the name as it does flush besides queuing the work.
 
-If out_conn->remote_dev is null here,  the in_conn of 
-out_conn->remote_dev->pdata will never be set.
-For example, device A is connected to in_port 0 of device B. If device A 
-is probed first, the in_conn of device
-B will not be set.
-Do we need to add Defer probe return here ? I tested with defer probe 
-return, it works.
+> +       struct kthread_work *work =3D &mm_work->work;
+> +
+> +       kthread_init_work(work, vdpasim_mm_work_fn);
+> +       kthread_queue_work(vdpasim->worker, work);
+> +
+> +       kthread_flush_work(work);
+> +}
+> +
+> +static int vdpasim_worker_bind_mm(struct vdpasim *vdpasim,
+> +                                 struct mm_struct *new_mm)
+> +{
+> +       struct vdpasim_mm_work mm_work;
+> +
+> +       mm_work.mm =3D new_mm;
+> +       mm_work.bind =3D true;
+> +
+> +       vdpasim_worker_queue_mm(vdpasim, &mm_work);
+> +
+> +       if (!mm_work.ret)
+> +               vdpasim->mm_bound =3D new_mm;
+> +
+> +       return mm_work.ret;
+> +}
+> +
+> +static void vdpasim_worker_unbind_mm(struct vdpasim *vdpasim)
+> +{
+> +       struct vdpasim_mm_work mm_work;
+> +
+> +       if (!vdpasim->mm_bound)
+> +               return;
+> +
+> +       mm_work.mm =3D vdpasim->mm_bound;
+> +       mm_work.bind =3D false;
 
-         for (i = 0; i < csdev->pdata->nr_outconns; i++) {
-                 out_conn = &csdev->pdata->out_conns[i];
-                 if (!out_conn->remote_dev || !out_conn->remote_dev->pdata)
--                       continue;
-+                        return -EPROBE_DEFER;
+Can we simply use mm_work.mm =3D NULL for unbinding?
+
+> +
+> +       vdpasim_worker_queue_mm(vdpasim, &mm_work);
+> +
+> +       vdpasim->mm_bound =3D NULL;
+
+And change the mm_bound in the worker?
 
 Thanks
-Jinlong Mao
 
-> +
-> +		/* Reverse local/remote relationships for inputs */
-> +		in_conn.remote_dev = csdev;
-> +		in_conn.remote_port = out_conn->port;
-> +		in_conn.port = out_conn->remote_port;
-> +		in_conn.remote_fwnode = csdev->dev.fwnode;
-> +		ret = coresight_add_in_conn(out_conn->remote_dev->dev.parent,
-> +					    out_conn->remote_dev->pdata,
-> +					    &in_conn);
-> +		if (ret)
-> +			return ret;
-> +	}
-> +
-> +	return 0;
 > +}
->   
->   static int coresight_fixup_device_conns(struct coresight_device *csdev)
->   {
-> @@ -1427,11 +1457,20 @@ static int coresight_remove_match(struct device *dev, void *data)
->   			 */
->   			fwnode_handle_put(conn->remote_fwnode);
->   			conn->remote_fwnode = NULL;
-> +			conn->remote_dev = NULL;
-> +			/* No need to continue */
-> +			break;
-> +		}
-> +	}
-> +	for (i = 0; i < iterator->pdata->nr_inconns; i++) {
-> +		conn = &iterator->pdata->in_conns[i];
-> +		if (csdev == conn->remote_dev) {
-> +			conn->remote_fwnode = NULL;
-> +			conn->remote_dev = NULL;
->   			/* No need to continue */
->   			break;
->   		}
->   	}
-> -
->   	/*
->   	 * Returning '0' ensures that all known component on the
->   	 * bus will be checked.
-> @@ -1552,21 +1591,28 @@ void coresight_release_platform_data(struct coresight_device *csdev,
->   
->   	for (i = 0; i < pdata->nr_outconns; i++) {
->   		/* If we have made the links, remove them now */
-> -		if (csdev && conns[i].remote_dev)
-> +		if (csdev && conns[i].remote_dev) {
->   			coresight_remove_links(csdev, &conns[i]);
-> +			conns[i].remote_dev = NULL;
-> +		}
-> +
->   		/*
->   		 * Drop the refcount and clear the handle as this device
->   		 * is going away
->   		 */
->   		if (conns[i].remote_fwnode) {
->   			fwnode_handle_put(conns[i].remote_fwnode);
-> -			pdata->out_conns[i].remote_fwnode = NULL;
-> +			conns[i].remote_fwnode = NULL;
->   		}
->   	}
-> +	for (i = 0; i < pdata->nr_inconns; i++) {
-> +		pdata->in_conns[i].remote_dev = NULL;
-> +		pdata->in_conns[i].remote_fwnode = NULL;
-> +	}
-> +
->   	if (csdev)
->   		coresight_remove_conns_sysfs_group(csdev);
->   }
-> -
->   struct coresight_device *coresight_register(struct coresight_desc *desc)
->   {
->   	int ret;
-> @@ -1659,6 +1705,8 @@ struct coresight_device *coresight_register(struct coresight_desc *desc)
->   	ret = coresight_create_conns_sysfs_group(csdev);
->   	if (!ret)
->   		ret = coresight_fixup_device_conns(csdev);
-> +	if (!ret)
-> +		ret = coresight_fixup_inputs(csdev);
->   	if (!ret)
->   		ret = coresight_fixup_orphan_conns(csdev);
->   
-> diff --git a/drivers/hwtracing/coresight/coresight-platform.c b/drivers/hwtracing/coresight/coresight-platform.c
-> index 16553f7dde12..20e3351cbdc2 100644
-> --- a/drivers/hwtracing/coresight/coresight-platform.c
-> +++ b/drivers/hwtracing/coresight/coresight-platform.c
-> @@ -20,8 +20,7 @@
->   
->   #include "coresight-priv.h"
->   /*
-> - * coresight_alloc_conns: Allocate connections record for each output
-> - * port from the device.
-> + * coresight_alloc_conns: Allocate connections record for each input/output device.
->    */
->   static int coresight_alloc_conns(struct device *dev,
->   				 struct coresight_platform_data *pdata)
-> @@ -33,7 +32,14 @@ static int coresight_alloc_conns(struct device *dev,
->   		if (!pdata->out_conns)
->   			return -ENOMEM;
->   	}
-> -
-> +	if (pdata->nr_inconns) {
-> +		pdata->in_conns = devm_krealloc_array(dev, pdata->in_conns,
-> +						      pdata->nr_inconns,
-> +						      sizeof(*pdata->in_conns),
-> +						      GFP_KERNEL | __GFP_ZERO);
-> +		if (!pdata->in_conns)
-> +			return -ENOMEM;
-> +	}
->   	return 0;
->   }
->   
-> @@ -79,6 +85,45 @@ int coresight_add_conn(struct device *dev,
->   }
->   EXPORT_SYMBOL_GPL(coresight_add_conn);
->   
-> +/*
-> + * Add a connection in the first free slot, or realloc
-> + * if there is no space.
-> + *
-> + * Do nothing if the connection already exists because inputs are
-> + * fixed up multiple times.
-> + */
-> +int coresight_add_in_conn(struct device *dev,
-> +			  struct coresight_platform_data *pdata,
-> +			  struct coresight_connection *conn)
+>  static struct vdpasim *vdpa_to_sim(struct vdpa_device *vdpa)
+>  {
+>         return container_of(vdpa, struct vdpasim, vdpa);
+> @@ -59,8 +126,10 @@ static void vdpasim_queue_ready(struct vdpasim *vdpas=
+im, unsigned int idx)
+>  {
+>         struct vdpasim_virtqueue *vq =3D &vdpasim->vqs[idx];
+>         uint16_t last_avail_idx =3D vq->vring.last_avail_idx;
+> +       bool va_enabled =3D use_va && vdpasim->mm_bound;
+>
+> -       vringh_init_iotlb(&vq->vring, vdpasim->features, vq->num, true, f=
+alse,
+> +       vringh_init_iotlb(&vq->vring, vdpasim->features, vq->num, true,
+> +                         va_enabled,
+>                           (struct vring_desc *)(uintptr_t)vq->desc_addr,
+>                           (struct vring_avail *)
+>                           (uintptr_t)vq->driver_addr,
+> @@ -151,7 +220,7 @@ struct vdpasim *vdpasim_create(struct vdpasim_dev_att=
+r *dev_attr,
+>         vdpa =3D __vdpa_alloc_device(NULL, ops,
+>                                    dev_attr->ngroups, dev_attr->nas,
+>                                    dev_attr->alloc_size,
+> -                                  dev_attr->name, false);
+> +                                  dev_attr->name, use_va);
+>         if (IS_ERR(vdpa)) {
+>                 ret =3D PTR_ERR(vdpa);
+>                 goto err_alloc;
+> @@ -571,6 +640,27 @@ static int vdpasim_set_map(struct vdpa_device *vdpa,=
+ unsigned int asid,
+>         return ret;
+>  }
+>
+> +static int vdpasim_bind_mm(struct vdpa_device *vdpa, struct mm_struct *m=
+m)
 > +{
-> +	int ret;
-> +	struct coresight_connection *free_conn = NULL;
-> +	int i;
+> +       struct vdpasim *vdpasim =3D vdpa_to_sim(vdpa);
+> +       int ret;
 > +
-> +	/* Search for a free slot or exit if a duplicate is found */
-> +	if (pdata->in_conns) {
-> +		for (i = 0; i < pdata->nr_inconns; ++i) {
-> +			if (!free_conn && !pdata->in_conns[i].remote_fwnode)
-> +				free_conn = &pdata->in_conns[i];
-> +			if (pdata->in_conns[i].remote_fwnode ==
-> +			    conn->remote_fwnode)
-> +				return 0;
-> +		}
-> +	}
+> +       mutex_lock(&vdpasim->mutex);
+> +       ret =3D vdpasim_worker_bind_mm(vdpasim, mm);
+> +       mutex_unlock(&vdpasim->mutex);
 > +
-> +	if (!free_conn) {
-> +		pdata->nr_inconns++;
-> +		ret = coresight_alloc_conns(dev, pdata);
-> +		if (ret)
-> +			return ret;
-> +		free_conn = &pdata->in_conns[pdata->nr_inconns - 1];
-> +	}
-> +
-> +	*free_conn = *conn;
-> +	return 0;
+> +       return ret;
 > +}
-> +EXPORT_SYMBOL_GPL(coresight_add_in_conn);
 > +
->   static struct device *
->   coresight_find_device_by_fwnode(struct fwnode_handle *fwnode)
->   {
-> @@ -249,7 +294,7 @@ static int of_coresight_get_cpu(struct device *dev)
->   
->   /*
->    * of_coresight_parse_endpoint : Parse the given output endpoint @ep
-> - * and fill the connection information in @conn
-> + * and fill the connection information in @in_conn and @out_conn
->    *
->    * Parses the local port, remote device name and the remote port.
->    *
-> @@ -333,14 +378,14 @@ static int of_get_coresight_platform_data(struct device *dev,
->   	/* Get the number of input and output port for this component */
->   	of_coresight_get_ports(node, &pdata->nr_inconns, &pdata->nr_outconns);
->   
-> -	/* If there are no output connections, we are done */
-> -	if (!pdata->nr_outconns)
-> -		return 0;
-> -
->   	ret = coresight_alloc_conns(dev, pdata);
->   	if (ret)
->   		return ret;
->   
-> +	/* If there are no output connections, we are done */
-> +	if (!pdata->nr_outconns)
-> +		return 0;
+> +static void vdpasim_unbind_mm(struct vdpa_device *vdpa)
+> +{
+> +       struct vdpasim *vdpasim =3D vdpa_to_sim(vdpa);
 > +
->   	parent = of_coresight_get_output_ports_node(node);
->   	/*
->   	 * If the DT uses obsoleted bindings, the ports are listed
-> diff --git a/drivers/hwtracing/coresight/coresight-sysfs.c b/drivers/hwtracing/coresight/coresight-sysfs.c
-> index 3da9868d9237..2abf9639ac0f 100644
-> --- a/drivers/hwtracing/coresight/coresight-sysfs.c
-> +++ b/drivers/hwtracing/coresight/coresight-sysfs.c
-> @@ -202,5 +202,4 @@ void coresight_remove_links(struct coresight_device *orig,
->   	devm_kfree(&orig->dev, conn->link->orig_name);
->   	devm_kfree(&orig->dev, conn->link);
->   	conn->link = NULL;
-> -	conn->remote_dev = NULL;
->   }
-> diff --git a/include/linux/coresight.h b/include/linux/coresight.h
-> index 47fa58d6981d..fd268b24c761 100644
-> --- a/include/linux/coresight.h
-> +++ b/include/linux/coresight.h
-> @@ -110,6 +110,7 @@ struct coresight_platform_data {
->   	int nr_inconns;
->   	int nr_outconns;
->   	struct coresight_connection *out_conns;
-> +	struct coresight_connection *in_conns;
->   };
->   
->   /**
-> @@ -177,6 +178,27 @@ struct coresight_desc {
->    *               @remote_fwnode once the remote's coresight_device has
->    *               been created.
->    * @link: Representation of the connection as a sysfs link.
-> + *
-> + * The full connection structure looks like this, where in_conns store references to
-> + * the parent device in the same remote_dev member as output connections.
-> + *
-> + *       +-----------------------------+            +-----------------------------+
-> + *       |coresight_device             |            |coresight_connection         |
-> + *       |-----------------------------|            |-----------------------------|
-> + *  ---->|                             |            |                             |
-> + *  |    |                             |            |                  remote_dev*|------
-> + *  |    |pdata->out_conns[nr_outconns]|----------->|                             |      |
-> + *  |    |                             |            |                             |      |
-> + *  |    +-----------------------------+            +-----------------------------+      |
-> + *  |                                                                                    |
-> + *  |    +-----------------------------+            +-----------------------------+      |
-> + *  |    |coresight_connection         |            |coresight_device             |      |
-> + *  |    |-----------------------------|            |------------------------------      |
-> + *  |    |                             |            |                             |<-----
-> + *  -----|remote_dev*                  |            |                             |
-> + *       |                             |<-----------|pdata->in_conns[nr_inconns]  |
-> + *       |                             |            |                             |
-> + *       +-----------------------------+            +-----------------------------+
->    */
->   struct coresight_connection {
->   	int port;
-> @@ -619,5 +641,8 @@ struct coresight_platform_data *coresight_get_platform_data(struct device *dev);
->   int coresight_add_conn(struct device *dev,
->   		       struct coresight_platform_data *pdata,
->   		       const struct coresight_connection *conn);
-> +int coresight_add_in_conn(struct device *dev,
-> +			  struct coresight_platform_data *pdata,
-> +			  struct coresight_connection *conn);
->   
->   #endif		/* _LINUX_COREISGHT_H */
+> +       mutex_lock(&vdpasim->mutex);
+> +       vdpasim_worker_unbind_mm(vdpasim);
+> +       mutex_unlock(&vdpasim->mutex);
+> +}
+> +
+>  static int vdpasim_dma_map(struct vdpa_device *vdpa, unsigned int asid,
+>                            u64 iova, u64 size,
+>                            u64 pa, u32 perm, void *opaque)
+> @@ -667,6 +757,8 @@ static const struct vdpa_config_ops vdpasim_config_op=
+s =3D {
+>         .set_group_asid         =3D vdpasim_set_group_asid,
+>         .dma_map                =3D vdpasim_dma_map,
+>         .dma_unmap              =3D vdpasim_dma_unmap,
+> +       .bind_mm                =3D vdpasim_bind_mm,
+> +       .unbind_mm              =3D vdpasim_unbind_mm,
+>         .free                   =3D vdpasim_free,
+>  };
+>
+> @@ -701,6 +793,8 @@ static const struct vdpa_config_ops vdpasim_batch_con=
+fig_ops =3D {
+>         .get_iova_range         =3D vdpasim_get_iova_range,
+>         .set_group_asid         =3D vdpasim_set_group_asid,
+>         .set_map                =3D vdpasim_set_map,
+> +       .bind_mm                =3D vdpasim_bind_mm,
+> +       .unbind_mm              =3D vdpasim_unbind_mm,
+>         .free                   =3D vdpasim_free,
+>  };
+>
+> --
+> 2.39.2
+>
+
