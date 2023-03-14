@@ -2,253 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85B876B8A4F
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 06:29:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC4376B8A4C
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 06:28:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229483AbjCNF3L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 01:29:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37366 "EHLO
+        id S229826AbjCNF2g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 01:28:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbjCNF3I (ORCPT
+        with ESMTP id S229483AbjCNF2e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 01:29:08 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D25918A98
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 22:27:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678771678;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=74YVjMeZYJ/+4qW5PTolxDEnVNnarX5wmoCeaFRiDfA=;
-        b=M3DUhjrPmM0BpOcRrlkM8CMeUFe3cFfPjK/ync8W60eqD3juOdmP+5C4Dr4Ig4Yz+PEjz4
-        PVaV7bMWhxzVQ72+Nowp25qwSvjqIXdoNttAWTz6lLV3bSY9cMwgtieg4+r+32d9BhEtZz
-        Cm74TAW/1ANZOoYVac9ihm9itPzOgGg=
-Received: from mail-ot1-f70.google.com (mail-ot1-f70.google.com
- [209.85.210.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-107-DM_SdaoROQ2_PBgaM-83yQ-1; Tue, 14 Mar 2023 01:27:56 -0400
-X-MC-Unique: DM_SdaoROQ2_PBgaM-83yQ-1
-Received: by mail-ot1-f70.google.com with SMTP id v11-20020a05683011cb00b006945a70256dso6971324otq.1
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 22:27:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678771675;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=74YVjMeZYJ/+4qW5PTolxDEnVNnarX5wmoCeaFRiDfA=;
-        b=EquaGvd/vjYgCiaisEsBSazp/ZQ87p7x6D8hBVmIZTXK6QKGQTQ3BcDvGM03luewbq
-         c7F5uChQK9t/8WGKRZys51fgkIBS2ESBdhf2u4dTumZXrmCBMuslsf/CEQe4wyG75o71
-         2K0znbSn8YqNrH0ugVMPI0A79YjTxshgZCiUk39aIJpOZ/NgCU24U6OoAPSJ5mNlfySw
-         MrQ6gXyhtdIxKPUjkPCM7O+P6QhVAeZggE9m3eRYajFSz6/iq+KkXS32hHB81WjYbxME
-         jwifYGEjVhcLaMX7bJUaP/e1QtQsTtpkdOtOBqj0SMa59WxUhcP14ek+sEEcNFb3wZAQ
-         E9Qg==
-X-Gm-Message-State: AO0yUKUy0h4YkhKdSnQm8VlqcUnrUNWipejRtKdA2vs1uyfoLY/DDPP7
-        g7Z7Bpy5dqmMC7+ZjMeLEH30mmNSzR3qWzAwmlkiYFNPwc4sYgBRaKhX//3CRrX53lPQtRCp/zf
-        /DuvF8sRqaAqF/6Cs3J8qWzOHKyn3nY6dBsxaMtah
-X-Received: by 2002:a05:6870:649f:b0:177:9f9c:dc5 with SMTP id cz31-20020a056870649f00b001779f9c0dc5mr3166809oab.9.1678771675402;
-        Mon, 13 Mar 2023 22:27:55 -0700 (PDT)
-X-Google-Smtp-Source: AK7set9QOJ7ciYFjVW3GiuDKQSvMWlshd6BM1hnDFL4Rhm/47+qNQ38RbqdkPnlBDKyx4GeN0ylotbZjEz8cf6SNE9I=
-X-Received: by 2002:a05:6870:649f:b0:177:9f9c:dc5 with SMTP id
- cz31-20020a056870649f00b001779f9c0dc5mr3166800oab.9.1678771675172; Mon, 13
- Mar 2023 22:27:55 -0700 (PDT)
+        Tue, 14 Mar 2023 01:28:34 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D06DE1815C;
+        Mon, 13 Mar 2023 22:28:32 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32E3WnxR025985;
+        Tue, 14 Mar 2023 05:28:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=0zMo/C/ZBnYtaBHa+bdEoXXpbeMwYZnTOhyA+3iZwpQ=;
+ b=Ip+jVh7m9PYh1BkHYcvn3L6HVpI8Z/1GMLj6kKx6Mm1bzQlTn09yFH5ex13S+dabytRc
+ 5mQkQ4sR3Rwcu27FwYUohh+D8eCUfSybjYJW/JAMI7b1jt6ZaANu2K0uP+o1AyXVQ0GX
+ BkBCvhkdaBWVXzGcPDUVKifqRV7FyPBjnNlFSgiRpUlROEbeNSomRLGCEw63uxlGQn6X
+ SFk3rYZgzvNcfCBu7/dWvRRbHPH6melQAbHo+AD6mVoe/jMvyeSLeE4Lp2MYq62Zwtxn
+ 18WVNT3uJt8S52yCPRNzaGzStK2Auh8Dycg1gZpSDYcQnQbrWPHz/6x86QEjtX9u5jbW fA== 
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3paay393dx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 14 Mar 2023 05:28:19 +0000
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
+        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32E5SIXS003628
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 14 Mar 2023 05:28:18 GMT
+Received: from [10.214.66.81] (10.80.80.8) by nasanex01c.na.qualcomm.com
+ (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Mon, 13 Mar
+ 2023 22:28:16 -0700
+Message-ID: <1bcdc3ec-5329-119e-87b7-c8cf51256dd0@quicinc.com>
+Date:   Tue, 14 Mar 2023 10:58:07 +0530
 MIME-Version: 1.0
-References: <20230302113421.174582-1-sgarzare@redhat.com> <20230302113421.174582-6-sgarzare@redhat.com>
-In-Reply-To: <20230302113421.174582-6-sgarzare@redhat.com>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Tue, 14 Mar 2023 13:27:44 +0800
-Message-ID: <CACGkMEvhpkOH-YAHdt4EGC2qQT0iNw7mhVA9nWuf7bd0yLrchQ@mail.gmail.com>
-Subject: Re: [PATCH v2 5/8] vdpa_sim: make devices agnostic for work management
-To:     Stefano Garzarella <sgarzare@redhat.com>
-Cc:     virtualization@lists.linux-foundation.org,
-        Andrey Zhadchenko <andrey.zhadchenko@virtuozzo.com>,
-        eperezma@redhat.com, netdev@vger.kernel.org, stefanha@redhat.com,
-        linux-kernel@vger.kernel.org,
-        "Michael S. Tsirkin" <mst@redhat.com>, kvm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] mm: mmap: remove newline at the end of the trace
+To:     Minwoo Im <minwoo.im.dev@gmail.com>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-trace-kernel@vger.kernel.org>
+CC:     Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>
+References: <ZAu6qDsNPmk82UjV@minwoo-desktop>
+Content-Language: en-US
+From:   Mukesh Ojha <quic_mojha@quicinc.com>
+In-Reply-To: <ZAu6qDsNPmk82UjV@minwoo-desktop>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 5WD2I_pVau7pKwe017_7CRX-cr7Ra6kp
+X-Proofpoint-GUID: 5WD2I_pVau7pKwe017_7CRX-cr7Ra6kp
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-13_13,2023-03-14_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 mlxscore=0
+ mlxlogscore=821 malwarescore=0 adultscore=0 lowpriorityscore=0 bulkscore=0
+ phishscore=0 spamscore=0 impostorscore=0 priorityscore=1501 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2303140048
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 2, 2023 at 7:35=E2=80=AFPM Stefano Garzarella <sgarzare@redhat.=
-com> wrote:
->
-> Let's move work management inside the vdpa_sim core.
-> This way we can easily change how we manage the works, without
-> having to change the devices each time.
->
-> Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
 
-Acked-by: Jason Wang <jasowang@redhat.com>
 
-Thanks
+On 3/11/2023 4:48 AM, Minwoo Im wrote:
+> We already have newline in TP_printk so remove the redundant newline
+> character at the end of the mmap trace.
+> 
+> <...>-345     [006] .....    95.589290: exit_mmap: mt_mod ...
+> 
+> <...>-345     [006] .....    95.589413: vm_unmapped_area: addr=...
+> 
+> <...>-345     [006] .....    95.589571: vm_unmapped_area: addr=...
+> 
+> <...>-345     [006] .....    95.589606: vm_unmapped_area: addr=...
+> 
+> to
+> 
+> <...>-336     [006] .....    44.762506: exit_mmap: mt_mod ...
+> <...>-336     [006] .....    44.762654: vm_unmapped_area: addr=...
+> <...>-336     [006] .....    44.762794: vm_unmapped_area: addr=...
+> <...>-336     [006] .....    44.762835: vm_unmapped_area: addr=...
+> 
+> Signed-off-by: Minwoo Im <minwoo.im.dev@gmail.com>
+
+Reviewed-by: Mukesh Ojha <quic_mojha@quicinc.com>
+
+-Mukesh
 
 > ---
->  drivers/vdpa/vdpa_sim/vdpa_sim.h     |  3 ++-
->  drivers/vdpa/vdpa_sim/vdpa_sim.c     | 17 +++++++++++++++--
->  drivers/vdpa/vdpa_sim/vdpa_sim_blk.c |  6 ++----
->  drivers/vdpa/vdpa_sim/vdpa_sim_net.c |  6 ++----
->  4 files changed, 21 insertions(+), 11 deletions(-)
->
-> diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.h b/drivers/vdpa/vdpa_sim/vdp=
-a_sim.h
-> index 144858636c10..acee20faaf6a 100644
-> --- a/drivers/vdpa/vdpa_sim/vdpa_sim.h
-> +++ b/drivers/vdpa/vdpa_sim/vdpa_sim.h
-> @@ -45,7 +45,7 @@ struct vdpasim_dev_attr {
->         u32 ngroups;
->         u32 nas;
->
-> -       work_func_t work_fn;
-> +       void (*work_fn)(struct vdpasim *vdpasim);
->         void (*get_config)(struct vdpasim *vdpasim, void *config);
->         void (*set_config)(struct vdpasim *vdpasim, const void *config);
->         int (*get_stats)(struct vdpasim *vdpasim, u16 idx,
-> @@ -78,6 +78,7 @@ struct vdpasim {
->
->  struct vdpasim *vdpasim_create(struct vdpasim_dev_attr *attr,
->                                const struct vdpa_dev_set_config *config);
-> +void vdpasim_schedule_work(struct vdpasim *vdpasim);
->
->  /* TODO: cross-endian support */
->  static inline bool vdpasim_is_little_endian(struct vdpasim *vdpasim)
-> diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.c b/drivers/vdpa/vdpa_sim/vdp=
-a_sim.c
-> index 481eb156658b..a6ee830efc38 100644
-> --- a/drivers/vdpa/vdpa_sim/vdpa_sim.c
-> +++ b/drivers/vdpa/vdpa_sim/vdpa_sim.c
-> @@ -116,6 +116,13 @@ static void vdpasim_do_reset(struct vdpasim *vdpasim=
-)
->  static const struct vdpa_config_ops vdpasim_config_ops;
->  static const struct vdpa_config_ops vdpasim_batch_config_ops;
->
-> +static void vdpasim_work_fn(struct work_struct *work)
-> +{
-> +       struct vdpasim *vdpasim =3D container_of(work, struct vdpasim, wo=
-rk);
-> +
-> +       vdpasim->dev_attr.work_fn(vdpasim);
-> +}
-> +
->  struct vdpasim *vdpasim_create(struct vdpasim_dev_attr *dev_attr,
->                                const struct vdpa_dev_set_config *config)
->  {
-> @@ -152,7 +159,7 @@ struct vdpasim *vdpasim_create(struct vdpasim_dev_att=
-r *dev_attr,
->
->         vdpasim =3D vdpa_to_sim(vdpa);
->         vdpasim->dev_attr =3D *dev_attr;
-> -       INIT_WORK(&vdpasim->work, dev_attr->work_fn);
-> +       INIT_WORK(&vdpasim->work, vdpasim_work_fn);
->         spin_lock_init(&vdpasim->lock);
->         spin_lock_init(&vdpasim->iommu_lock);
->
-> @@ -203,6 +210,12 @@ struct vdpasim *vdpasim_create(struct vdpasim_dev_at=
-tr *dev_attr,
->  }
->  EXPORT_SYMBOL_GPL(vdpasim_create);
->
-> +void vdpasim_schedule_work(struct vdpasim *vdpasim)
-> +{
-> +       schedule_work(&vdpasim->work);
-> +}
-> +EXPORT_SYMBOL_GPL(vdpasim_schedule_work);
-> +
->  static int vdpasim_set_vq_address(struct vdpa_device *vdpa, u16 idx,
->                                   u64 desc_area, u64 driver_area,
->                                   u64 device_area)
-> @@ -237,7 +250,7 @@ static void vdpasim_kick_vq(struct vdpa_device *vdpa,=
- u16 idx)
->         }
->
->         if (vq->ready)
-> -               schedule_work(&vdpasim->work);
-> +               vdpasim_schedule_work(vdpasim);
->  }
->
->  static void vdpasim_set_vq_cb(struct vdpa_device *vdpa, u16 idx,
-> diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c b/drivers/vdpa/vdpa_sim=
-/vdpa_sim_blk.c
-> index 5117959bed8a..eb4897c8541e 100644
-> --- a/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
-> +++ b/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
-> @@ -11,7 +11,6 @@
->  #include <linux/module.h>
->  #include <linux/device.h>
->  #include <linux/kernel.h>
-> -#include <linux/sched.h>
->  #include <linux/blkdev.h>
->  #include <linux/vringh.h>
->  #include <linux/vdpa.h>
-> @@ -286,9 +285,8 @@ static bool vdpasim_blk_handle_req(struct vdpasim *vd=
-pasim,
->         return handled;
->  }
->
-> -static void vdpasim_blk_work(struct work_struct *work)
-> +static void vdpasim_blk_work(struct vdpasim *vdpasim)
->  {
-> -       struct vdpasim *vdpasim =3D container_of(work, struct vdpasim, wo=
-rk);
->         bool reschedule =3D false;
->         int i;
->
-> @@ -326,7 +324,7 @@ static void vdpasim_blk_work(struct work_struct *work=
-)
->         spin_unlock(&vdpasim->lock);
->
->         if (reschedule)
-> -               schedule_work(&vdpasim->work);
-> +               vdpasim_schedule_work(vdpasim);
->  }
->
->  static void vdpasim_blk_get_config(struct vdpasim *vdpasim, void *config=
-)
-> diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim_net.c b/drivers/vdpa/vdpa_sim=
-/vdpa_sim_net.c
-> index 862f405362de..e61a9ecbfafe 100644
-> --- a/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
-> +++ b/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
-> @@ -11,7 +11,6 @@
->  #include <linux/module.h>
->  #include <linux/device.h>
->  #include <linux/kernel.h>
-> -#include <linux/sched.h>
->  #include <linux/etherdevice.h>
->  #include <linux/vringh.h>
->  #include <linux/vdpa.h>
-> @@ -192,9 +191,8 @@ static void vdpasim_handle_cvq(struct vdpasim *vdpasi=
-m)
->         u64_stats_update_end(&net->cq_stats.syncp);
->  }
->
-> -static void vdpasim_net_work(struct work_struct *work)
-> +static void vdpasim_net_work(struct vdpasim *vdpasim)
->  {
-> -       struct vdpasim *vdpasim =3D container_of(work, struct vdpasim, wo=
-rk);
->         struct vdpasim_virtqueue *txq =3D &vdpasim->vqs[1];
->         struct vdpasim_virtqueue *rxq =3D &vdpasim->vqs[0];
->         struct vdpasim_net *net =3D sim_to_net(vdpasim);
-> @@ -260,7 +258,7 @@ static void vdpasim_net_work(struct work_struct *work=
-)
->                 vdpasim_net_complete(rxq, write);
->
->                 if (tx_pkts > 4) {
-> -                       schedule_work(&vdpasim->work);
-> +                       vdpasim_schedule_work(vdpasim);
->                         goto out;
->                 }
->         }
-> --
-> 2.39.2
->
-
+>   include/trace/events/mmap.h | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/include/trace/events/mmap.h b/include/trace/events/mmap.h
+> index 216de5f03621..f8d61485de16 100644
+> --- a/include/trace/events/mmap.h
+> +++ b/include/trace/events/mmap.h
+> @@ -35,7 +35,7 @@ TRACE_EVENT(vm_unmapped_area,
+>   		__entry->align_offset = info->align_offset;
+>   	),
+>   
+> -	TP_printk("addr=0x%lx err=%ld total_vm=0x%lx flags=0x%lx len=0x%lx lo=0x%lx hi=0x%lx mask=0x%lx ofs=0x%lx\n",
+> +	TP_printk("addr=0x%lx err=%ld total_vm=0x%lx flags=0x%lx len=0x%lx lo=0x%lx hi=0x%lx mask=0x%lx ofs=0x%lx",
+>   		IS_ERR_VALUE(__entry->addr) ? 0 : __entry->addr,
+>   		IS_ERR_VALUE(__entry->addr) ? __entry->addr : 0,
+>   		__entry->total_vm, __entry->flags, __entry->length,
+> @@ -110,7 +110,7 @@ TRACE_EVENT(exit_mmap,
+>   		       __entry->mt		= &mm->mm_mt;
+>   	),
+>   
+> -	TP_printk("mt_mod %p, DESTROY\n",
+> +	TP_printk("mt_mod %p, DESTROY",
+>   		  __entry->mt
+>   	)
+>   );
