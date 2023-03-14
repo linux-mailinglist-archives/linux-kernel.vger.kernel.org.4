@@ -2,48 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 800426B916B
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 12:18:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7F2D6B916C
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 12:18:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231393AbjCNLSU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 07:18:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49754 "EHLO
+        id S229676AbjCNLSX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 07:18:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230222AbjCNLRs (ORCPT
+        with ESMTP id S229682AbjCNLRs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 14 Mar 2023 07:17:48 -0400
 Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80D541F5E0;
-        Tue, 14 Mar 2023 04:17:16 -0700 (PDT)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32EASWMV029423;
-        Tue, 14 Mar 2023 11:16:28 GMT
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 596BA22CA2;
+        Tue, 14 Mar 2023 04:17:18 -0700 (PDT)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32EASRkD022089;
+        Tue, 14 Mar 2023 11:16:44 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
  subject : date : message-id; s=qcppdkim1;
- bh=NHEwW0FJdB+IyvXB3jHI0NlsCA9qEE+Vm/1I/vSAtCk=;
- b=FLGcdWCJ7PD1VtvAS7O20YrvP+P7qZm6+6P3tF5Xe6bn06l56urvZ292xB/F1MLbKEEJ
- 0767tW5wm9P1NowvBUXMOdGL3bX694fFbiDr7IVNnd2VdyZ6Lnl5nU+W7VHs+A3Sm0Li
- it2eK0UiTHLGQkyWvZQMTKh+fnVebOzCTvXyJOCyM2rr+0WAWEhNOuksVgKCOw65rabY
- ufndmoGrbQejJPJwMwcU9JbO4FblxVPPOIuFe9WcJrfySr1aXcb6uIHhhG//rtcG1+gd
- ORtv2HrcXB5pccXzzQjUVorOnhjdDwrZ6/vRTcFb0B8ltYKfNnrojA78dw41GdzQo1tB iQ== 
+ bh=g1l3lyZNTBh60xFeKe5WpfcYWJXdi2SY59E6+ExCylA=;
+ b=HuQAWFwhGUPhA92v20L8oPByAdo6IWy3gU8y0IqkFFGt1exGo584P87YDWrlRKxto8mp
+ m+zAW7+uajztzZLaiV3DKvst5bNlEfU5enaWztgLaED3mGbsjbcAqgicKnJueJ1mXvpR
+ GODfdnrZ/5HOGbmRnj8xlMg8+gnV+5ngSM1sLItM75hYLsInD3RDEElRv4P2+KBOuBRy
+ W37XphJxyu//9Jrsu5vME5aBF0xFLeQJ7bXia1o9Y+YbZngCbnMum5LFInFzVkbtCfD9
+ +AHgnC3gNWpBtw1tSV3oiNXLFsRTS2qbsemydTKgy0BuLy26UhZRhHWlsmG+SjmIDCts Rw== 
 Received: from aptaippmta02.qualcomm.com (tpe-colo-wan-fw-bordernet.qualcomm.com [103.229.16.4])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pa9gfj6f7-1
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pa6n32ppa-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Mar 2023 11:16:27 +0000
+        Tue, 14 Mar 2023 11:16:44 +0000
 Received: from pps.filterd (APTAIPPMTA02.qualcomm.com [127.0.0.1])
-        by APTAIPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 32EBGP2E011929;
-        Tue, 14 Mar 2023 11:16:25 GMT
+        by APTAIPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 32EBGfpq013655;
+        Tue, 14 Mar 2023 11:16:41 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-        by APTAIPPMTA02.qualcomm.com (PPS) with ESMTP id 3p8jqmemwe-1;
-        Tue, 14 Mar 2023 11:16:25 +0000
+        by APTAIPPMTA02.qualcomm.com (PPS) with ESMTP id 3p8jqmemx3-1;
+        Tue, 14 Mar 2023 11:16:41 +0000
 Received: from APTAIPPMTA02.qualcomm.com (APTAIPPMTA02.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32EBGO8U011923;
-        Tue, 14 Mar 2023 11:16:24 GMT
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32EBGfAN013516;
+        Tue, 14 Mar 2023 11:16:41 GMT
 Received: from cbsp-sh-gv.qualcomm.com (CBSP-SH-gv.ap.qualcomm.com [10.231.249.68])
-        by APTAIPPMTA02.qualcomm.com (PPS) with ESMTP id 32EBGOwK011921;
-        Tue, 14 Mar 2023 11:16:24 +0000
+        by APTAIPPMTA02.qualcomm.com (PPS) with ESMTP id 32EBGeSI013506;
+        Tue, 14 Mar 2023 11:16:41 +0000
 Received: by cbsp-sh-gv.qualcomm.com (Postfix, from userid 393357)
-        id 1E349452D; Tue, 14 Mar 2023 19:16:23 +0800 (CST)
+        id B523B3E37; Tue, 14 Mar 2023 19:16:39 +0800 (CST)
 From:   Ziqi Chen <quic_ziqichen@quicinc.com>
 To:     quic_asutoshd@quicinc.com, quic_cang@quicinc.com,
         quic_nguyenb@quicinc.com, bvanassche@acm.org, mani@kernel.org,
@@ -52,27 +52,24 @@ To:     quic_asutoshd@quicinc.com, quic_cang@quicinc.com,
         martin.petersen@oracle.com, quic_ziqichen@quicinc.com
 Cc:     linux-scsi@vger.kernel.org, Alim Akhtar <alim.akhtar@samsung.com>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        linux-kernel@vger.kernel.org (open list),
-        linux-trace-kernel@vger.kernel.org (open list:TRACING)
-Subject: [PATCH v6] scsi: ufs: core: Add trace event for MCQ
-Date:   Tue, 14 Mar 2023 19:15:58 +0800
-Message-Id: <1678792580-3178-1-git-send-email-quic_ziqichen@quicinc.com>
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH v2] scsi: ufs: core: print trs for pending requests in MCQ mode
+Date:   Tue, 14 Mar 2023 19:16:32 +0800
+Message-Id: <1678792597-3232-1-git-send-email-quic_ziqichen@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 X-QCInternal: smtphost
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: vi6ZInAyowe2xIiuO1IhoESH2taEogDK
-X-Proofpoint-ORIG-GUID: vi6ZInAyowe2xIiuO1IhoESH2taEogDK
+X-Proofpoint-ORIG-GUID: RspmfyAqmEnJPkDCKwZmhlrHt1iW7LAA
+X-Proofpoint-GUID: RspmfyAqmEnJPkDCKwZmhlrHt1iW7LAA
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
  definitions=2023-03-14_04,2023-03-14_02,2023-02-09_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 mlxscore=0
- mlxlogscore=999 suspectscore=0 adultscore=0 clxscore=1015 phishscore=0
- bulkscore=0 spamscore=0 impostorscore=0 priorityscore=1501
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ bulkscore=0 mlxlogscore=999 impostorscore=0 priorityscore=1501
+ adultscore=0 phishscore=0 spamscore=0 lowpriorityscore=0 clxscore=1015
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2212070000 definitions=main-2303140096
 X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,
@@ -83,124 +80,156 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add MCQ hardware queue ID in the existing trace event
-ufshcd_command().
+We don't have outstanding_reqs bitmap in MCQ mode. And in consideration
+of the queue depth may increase beyond 64 in the future, we reworked
+ufshcd_print_trs() to get rid of usage of bitmap so that we can print
+trs for pending requests in both SDB and MCQ mode.
 
 Signed-off-by: Ziqi Chen <quic_ziqichen@quicinc.com>
 
 ---
-Changes to v5:
-- Changed hwq_id type from u32 to int.
-- Changed printing string of hwq id from "hqid" to "hwq_id".
-- Moved the assignment statement of hwq into the MCQ if-statement.
-
-Changes to v4:
-- Merged MCQ and SDB trace event as one.
-
-Changes to v3:
-- Free trace_ufshcd_command_mcq() from dependency on trace_ufshcd_command().
-
-Changes to v2:
-- Shorten printing strings.
-
 Changes to v1:
-- Adjust the order of fields to keep them aligned.
+- Use blk_mq_tagset_busy_iter() to iterate over pending requests.
 ---
- drivers/ufs/core/ufshcd.c  | 15 ++++++++++++---
- include/trace/events/ufs.h | 24 +++++++++++++-----------
- 2 files changed, 25 insertions(+), 14 deletions(-)
+ drivers/ufs/core/ufshcd.c | 97 ++++++++++++++++++++++++++++-------------------
+ 1 file changed, 58 insertions(+), 39 deletions(-)
 
 diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-index 3b3cf78..1d58cb2 100644
+index 1d58cb2..3ce1be5 100644
 --- a/drivers/ufs/core/ufshcd.c
 +++ b/drivers/ufs/core/ufshcd.c
-@@ -422,7 +422,9 @@ static void ufshcd_add_command_trace(struct ufs_hba *hba, unsigned int tag,
- {
- 	u64 lba = 0;
- 	u8 opcode = 0, group_id = 0;
--	u32 intr, doorbell;
-+	u32 doorbell = 0;
-+	u32 intr;
-+	int hwq_id = -1;
- 	struct ufshcd_lrb *lrbp = &hba->lrb[tag];
- 	struct scsi_cmnd *cmd = lrbp->cmd;
- 	struct request *rq = scsi_cmd_to_rq(cmd);
-@@ -456,9 +458,16 @@ static void ufshcd_add_command_trace(struct ufs_hba *hba, unsigned int tag,
- 	}
- 
- 	intr = ufshcd_readl(hba, REG_INTERRUPT_STATUS);
--	doorbell = ufshcd_readl(hba, REG_UTP_TRANSFER_REQ_DOOR_BELL);
-+
-+	if (is_mcq_enabled(hba)) {
-+		struct ufs_hw_queue *hwq = ufshcd_mcq_req_to_hwq(hba, rq);
-+
-+		hwq_id = hwq->id;
-+	} else {
-+		doorbell = ufshcd_readl(hba, REG_UTP_TRANSFER_REQ_DOOR_BELL);
-+	}
- 	trace_ufshcd_command(dev_name(hba->dev), str_t, tag,
--			doorbell, transfer_len, intr, lba, opcode, group_id);
-+			doorbell, hwq_id, transfer_len, intr, lba, opcode, group_id);
+@@ -542,48 +542,67 @@ static void ufshcd_print_evt_hist(struct ufs_hba *hba)
  }
  
- static void ufshcd_print_clk_freqs(struct ufs_hba *hba)
-diff --git a/include/trace/events/ufs.h b/include/trace/events/ufs.h
-index 599739e..f467472 100644
---- a/include/trace/events/ufs.h
-+++ b/include/trace/events/ufs.h
-@@ -268,20 +268,21 @@ DEFINE_EVENT(ufshcd_template, ufshcd_wl_runtime_resume,
+ static
+-void ufshcd_print_trs(struct ufs_hba *hba, unsigned long bitmap, bool pr_prdt)
++void ufshcd_print_tr(struct ufs_hba *hba, int tag, bool pr_prdt)
+ {
+ 	const struct ufshcd_lrb *lrbp;
+ 	int prdt_length;
+-	int tag;
  
- TRACE_EVENT(ufshcd_command,
- 	TP_PROTO(const char *dev_name, enum ufs_trace_str_t str_t,
--		 unsigned int tag, u32 doorbell, int transfer_len, u32 intr,
--		 u64 lba, u8 opcode, u8 group_id),
-+		 unsigned int tag, u32 doorbell, u32 hwq_id, int transfer_len,
-+		 u32 intr, u64 lba, u8 opcode, u8 group_id),
+-	for_each_set_bit(tag, &bitmap, hba->nutrs) {
+-		lrbp = &hba->lrb[tag];
++	lrbp = &hba->lrb[tag];
  
--	TP_ARGS(dev_name, str_t, tag, doorbell, transfer_len,
--				intr, lba, opcode, group_id),
-+	TP_ARGS(dev_name, str_t, tag, doorbell, hwq_id, transfer_len,
-+			intr, lba, opcode, group_id),
+-		dev_err(hba->dev, "UPIU[%d] - issue time %lld us\n",
+-				tag, div_u64(lrbp->issue_time_stamp_local_clock, 1000));
+-		dev_err(hba->dev, "UPIU[%d] - complete time %lld us\n",
+-				tag, div_u64(lrbp->compl_time_stamp_local_clock, 1000));
+-		dev_err(hba->dev,
+-			"UPIU[%d] - Transfer Request Descriptor phys@0x%llx\n",
+-			tag, (u64)lrbp->utrd_dma_addr);
+-
+-		ufshcd_hex_dump("UPIU TRD: ", lrbp->utr_descriptor_ptr,
+-				sizeof(struct utp_transfer_req_desc));
+-		dev_err(hba->dev, "UPIU[%d] - Request UPIU phys@0x%llx\n", tag,
+-			(u64)lrbp->ucd_req_dma_addr);
+-		ufshcd_hex_dump("UPIU REQ: ", lrbp->ucd_req_ptr,
+-				sizeof(struct utp_upiu_req));
+-		dev_err(hba->dev, "UPIU[%d] - Response UPIU phys@0x%llx\n", tag,
+-			(u64)lrbp->ucd_rsp_dma_addr);
+-		ufshcd_hex_dump("UPIU RSP: ", lrbp->ucd_rsp_ptr,
+-				sizeof(struct utp_upiu_rsp));
+-
+-		prdt_length = le16_to_cpu(
+-			lrbp->utr_descriptor_ptr->prd_table_length);
+-		if (hba->quirks & UFSHCD_QUIRK_PRDT_BYTE_GRAN)
+-			prdt_length /= ufshcd_sg_entry_size(hba);
++	dev_err(hba->dev, "UPIU[%d] - issue time %lld us\n",
++			tag, div_u64(lrbp->issue_time_stamp_local_clock, 1000));
++	dev_err(hba->dev, "UPIU[%d] - complete time %lld us\n",
++			tag, div_u64(lrbp->compl_time_stamp_local_clock, 1000));
++	dev_err(hba->dev,
++		"UPIU[%d] - Transfer Request Descriptor phys@0x%llx\n",
++		tag, (u64)lrbp->utrd_dma_addr);
++
++	ufshcd_hex_dump("UPIU TRD: ", lrbp->utr_descriptor_ptr,
++			sizeof(struct utp_transfer_req_desc));
++	dev_err(hba->dev, "UPIU[%d] - Request UPIU phys@0x%llx\n", tag,
++		(u64)lrbp->ucd_req_dma_addr);
++	ufshcd_hex_dump("UPIU REQ: ", lrbp->ucd_req_ptr,
++			sizeof(struct utp_upiu_req));
++	dev_err(hba->dev, "UPIU[%d] - Response UPIU phys@0x%llx\n", tag,
++		(u64)lrbp->ucd_rsp_dma_addr);
++	ufshcd_hex_dump("UPIU RSP: ", lrbp->ucd_rsp_ptr,
++			sizeof(struct utp_upiu_rsp));
++
++	prdt_length = le16_to_cpu(
++		lrbp->utr_descriptor_ptr->prd_table_length);
++	if (hba->quirks & UFSHCD_QUIRK_PRDT_BYTE_GRAN)
++		prdt_length /= ufshcd_sg_entry_size(hba);
  
- 	TP_STRUCT__entry(
- 		__string(dev_name, dev_name)
- 		__field(enum ufs_trace_str_t, str_t)
- 		__field(unsigned int, tag)
- 		__field(u32, doorbell)
--		__field(int, transfer_len)
-+		__field(u32, hwq_id)
- 		__field(u32, intr)
- 		__field(u64, lba)
-+		__field(int, transfer_len)
- 		__field(u8, opcode)
- 		__field(u8, group_id)
- 	),
-@@ -291,19 +292,20 @@ TRACE_EVENT(ufshcd_command,
- 		__entry->str_t = str_t;
- 		__entry->tag = tag;
- 		__entry->doorbell = doorbell;
--		__entry->transfer_len = transfer_len;
-+		__entry->hwq_id = hwq_id;
- 		__entry->intr = intr;
- 		__entry->lba = lba;
-+		__entry->transfer_len = transfer_len;
- 		__entry->opcode = opcode;
- 		__entry->group_id = group_id;
- 	),
+-		dev_err(hba->dev,
+-			"UPIU[%d] - PRDT - %d entries  phys@0x%llx\n",
+-			tag, prdt_length,
+-			(u64)lrbp->ucd_prdt_dma_addr);
++	dev_err(hba->dev,
++		"UPIU[%d] - PRDT - %d entries  phys@0x%llx\n",
++		tag, prdt_length,
++		(u64)lrbp->ucd_prdt_dma_addr);
  
- 	TP_printk(
--		"%s: %s: tag: %u, DB: 0x%x, size: %d, IS: %u, LBA: %llu, opcode: 0x%x (%s), group_id: 0x%x",
--		show_ufs_cmd_trace_str(__entry->str_t), __get_str(dev_name),
--		__entry->tag, __entry->doorbell, __entry->transfer_len,
--		__entry->intr, __entry->lba, (u32)__entry->opcode,
--		str_opcode(__entry->opcode), (u32)__entry->group_id
-+		"%s: %s: tag: %u, DB: 0x%x, size: %d, IS: %u, LBA: %llu, opcode: 0x%x (%s), group_id: 0x%x, hwq_id: %d",
-+		 show_ufs_cmd_trace_str(__entry->str_t), __get_str(dev_name),
-+		 __entry->tag, __entry->doorbell, __entry->transfer_len, __entry->intr,
-+		 __entry->lba, (u32)__entry->opcode, str_opcode(__entry->opcode),
-+		 (u32)__entry->group_id, __entry->hwq_id
- 	)
- );
+-		if (pr_prdt)
+-			ufshcd_hex_dump("UPIU PRDT: ", lrbp->ucd_prdt_ptr,
+-				ufshcd_sg_entry_size(hba) * prdt_length);
+-	}
++	if (pr_prdt)
++		ufshcd_hex_dump("UPIU PRDT: ", lrbp->ucd_prdt_ptr,
++			ufshcd_sg_entry_size(hba) * prdt_length);
++}
++
++static bool ufshcd_print_tr_iter(struct request *req, void *priv)
++{
++	struct scsi_device *sdev = req->q->queuedata;
++	struct Scsi_Host *shost = sdev->host;
++	struct ufs_hba *hba = shost_priv(shost);
++
++	if (!IS_ERR_OR_NULL(hba))
++		ufshcd_print_tr(hba, req->tag, *(bool *)priv);
++
++	return true;
++}
++
++/**
++ * ufshcd_print_trs_all - print trs for all started requests.
++ * @hba: per-adapter instance.
++ * @pr_prdt: need to print prdt or not.
++ */
++static void ufshcd_print_trs_all(struct ufs_hba *hba, bool pr_prdt)
++{
++	blk_mq_tagset_busy_iter(&hba->host->tag_set, ufshcd_print_tr_iter, &pr_prdt);
+ }
+ 
+ static void ufshcd_print_tmrs(struct ufs_hba *hba, unsigned long bitmap)
+@@ -5332,7 +5351,7 @@ ufshcd_transfer_rsp_status(struct ufs_hba *hba, struct ufshcd_lrb *lrbp,
+ 
+ 	if ((host_byte(result) != DID_OK) &&
+ 	    (host_byte(result) != DID_REQUEUE) && !hba->silence_err_logs)
+-		ufshcd_print_trs(hba, 1 << lrbp->task_tag, true);
++		ufshcd_print_tr(hba, lrbp->task_tag, true);
+ 	return result;
+ }
+ 
+@@ -6406,7 +6425,7 @@ static void ufshcd_err_handler(struct work_struct *work)
+ 		ufshcd_print_pwr_info(hba);
+ 		ufshcd_print_evt_hist(hba);
+ 		ufshcd_print_tmrs(hba, hba->outstanding_tasks);
+-		ufshcd_print_trs(hba, hba->outstanding_reqs, pr_prdt);
++		ufshcd_print_trs_all(hba, pr_prdt);
+ 		spin_lock_irqsave(hba->host->host_lock, flags);
+ 	}
+ 
+@@ -7435,9 +7454,9 @@ static int ufshcd_abort(struct scsi_cmnd *cmd)
+ 		ufshcd_print_evt_hist(hba);
+ 		ufshcd_print_host_state(hba);
+ 		ufshcd_print_pwr_info(hba);
+-		ufshcd_print_trs(hba, 1 << tag, true);
++		ufshcd_print_tr(hba, tag, true);
+ 	} else {
+-		ufshcd_print_trs(hba, 1 << tag, false);
++		ufshcd_print_tr(hba, tag, false);
+ 	}
+ 	hba->req_abort_count++;
  
 -- 
 2.7.4
