@@ -2,86 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC62A6B9DEB
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 19:10:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F097F6B9DF2
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 19:12:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229664AbjCNSKO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 14:10:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58306 "EHLO
+        id S229784AbjCNSMG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 14:12:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbjCNSKM (ORCPT
+        with ESMTP id S229464AbjCNSME (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 14:10:12 -0400
-Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3EA1CDED;
-        Tue, 14 Mar 2023 11:09:58 -0700 (PDT)
-Received: by mail-pg1-f172.google.com with SMTP id s17so9421597pgv.4;
-        Tue, 14 Mar 2023 11:09:58 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678817398;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YeGGg20zttuAcpRVo7sYITEgwV7sLq6I+dideNQqn3s=;
-        b=LmPnM30p1kn2dSlZbBhLv8ntQ3hOh3VouEVLume6lswMkAZPz9cwqMFZwjZ7I4uDHn
-         Gs0SpqITlKYwZsZd4imFycL2JeGohU6xzZeJCBzMgpEEnjnQ3RDU35nhNi8v88KMyu7g
-         GZZgueB/KcWvOvMxtnGt2IEginOCLhrPGNEjxqwXBEGp3Dd+a3eeyZQwRDwyzW3YC2n0
-         1p+PrWRMC13WWo0pAckiBiQPbBwl6Zry17zKSDB6dNYgg6NXmtcxlnI4FPdFIxLQszk1
-         TqkgfQhPeSWCm9Doe76SUEcemXQZz9WYnBaW1U+5S1ZG2pY0Jf5DMit+ILx+fuio5JZt
-         MADQ==
-X-Gm-Message-State: AO0yUKWA3PaxTRU6ZUFJgntbp6ME03IRZz9HeIe31Gma+h8Bin2zj9q5
-        mWRoUkmj06JHxk04O4f4IZdHUi4lLIA=
-X-Google-Smtp-Source: AK7set8XCbSghnShchFszXHMoMq6WB5lGqe5smq6zqbYniRYY49l8NtzU0SSm8Jnndyntd7ZXt8zrA==
-X-Received: by 2002:a62:6242:0:b0:5a9:c535:dba3 with SMTP id w63-20020a626242000000b005a9c535dba3mr28478754pfb.25.1678817398175;
-        Tue, 14 Mar 2023 11:09:58 -0700 (PDT)
-Received: from ?IPV6:2620:15c:211:201:9cdb:df66:226e:e52a? ([2620:15c:211:201:9cdb:df66:226e:e52a])
-        by smtp.gmail.com with ESMTPSA id o6-20020a63f146000000b0050376cedb3asm1871662pgk.24.2023.03.14.11.09.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Mar 2023 11:09:57 -0700 (PDT)
-Message-ID: <bde102c7-ab4f-a301-072f-8d6b7acde8a8@acm.org>
-Date:   Tue, 14 Mar 2023 11:09:55 -0700
+        Tue, 14 Mar 2023 14:12:04 -0400
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B81B26854;
+        Tue, 14 Mar 2023 11:12:02 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id 0823344A;
+        Tue, 14 Mar 2023 18:12:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 0823344A
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1678817522; bh=hZIB3fXbwJyV05G1DqnBxpSsaRU2qVB2wPhuKl4K2+M=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=H0hHeZaKWaEdQZDneY6d4KftcMJ5qnrBC0HkBJZxOMRMiJ6jrM5MV8S4byzRmPWFA
+         eRlH+fggJT06S7QC9EighIoEMm6e5Kcy3uw+khhldE9N/gTfql/zC6EX/eZmjthHRy
+         M5oDWukWVfaWX1zMSLTE7SQj0ztrj5t5JvnI22l2HMfDS/vGcJpd7wgRFJdeoPBpaz
+         7wDpb00DlmsKZPHsUfqHF6yVXVvVKB7IBtv0J4QaBzKc+EgR82mNjJzjPAoOlQdz+D
+         ZBz0fcRDXn7c+qZZqUdxDQ2zeZcJLdQtIChCfPF0Sw3SE2C7kz0pLiDRN/Cl0Xu8Yw
+         NtsCHLdn/57bQ==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH] Documentation: fs/proc: corrections and update
+In-Reply-To: <20230314060347.605-1-rdunlap@infradead.org>
+References: <20230314060347.605-1-rdunlap@infradead.org>
+Date:   Tue, 14 Mar 2023 12:12:01 -0600
+Message-ID: <87zg8frymm.fsf@meer.lwn.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v2] scsi: ufs: core: print trs for pending requests in MCQ
- mode
-Content-Language: en-US
-To:     Ziqi Chen <quic_ziqichen@quicinc.com>, quic_asutoshd@quicinc.com,
-        quic_cang@quicinc.com, quic_nguyenb@quicinc.com, mani@kernel.org,
-        stanley.chu@mediatek.com, adrian.hunter@intel.com,
-        beanhuo@micron.com, avri.altman@wdc.com, junwoo80.lee@samsung.com,
-        martin.petersen@oracle.com
-Cc:     linux-scsi@vger.kernel.org, Alim Akhtar <alim.akhtar@samsung.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        open list <linux-kernel@vger.kernel.org>
-References: <1678792597-3232-1-git-send-email-quic_ziqichen@quicinc.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <1678792597-3232-1-git-send-email-quic_ziqichen@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/14/23 04:16, Ziqi Chen wrote:
-> +static bool ufshcd_print_tr_iter(struct request *req, void *priv)
-> +{
-> +	struct scsi_device *sdev = req->q->queuedata;
-> +	struct Scsi_Host *shost = sdev->host;
-> +	struct ufs_hba *hba = shost_priv(shost);
-> +
-> +	if (!IS_ERR_OR_NULL(hba))
-> +		ufshcd_print_tr(hba, req->tag, *(bool *)priv);
+Randy Dunlap <rdunlap@infradead.org> writes:
 
-I think that the "if (!IS_ERR_OR_NULL(hba))" code can be removed safely. 
-Otherwise this patch looks good to me.
+> Update URL for the latest online version of this document.
+> Correct "files" to "fields" in a few places.
+> Update /proc/scsi, /proc/stat, and /proc/fs/ext4 information.
+> Drop /usr/src/ from the location of the kernel source tree.
+>
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Jonathan Corbet <corbet@lwn.net>
+> Cc: linux-doc@vger.kernel.org
+> Cc: linux-fsdevel@vger.kernel.org
+> ---
+>  Documentation/filesystems/proc.rst |   44 ++++++++++++++-------------
+>  1 file changed, 23 insertions(+), 21 deletions(-)
 
-Thanks,
+Applied, thanks.
 
-Bart.
+jon
