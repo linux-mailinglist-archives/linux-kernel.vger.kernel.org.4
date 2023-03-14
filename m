@@ -2,69 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B7CE6B9763
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 15:11:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8BB06B975E
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 15:10:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231909AbjCNOLE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 10:11:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56842 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232583AbjCNOKu (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S232588AbjCNOKu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Tue, 14 Mar 2023 10:10:50 -0400
-Received: from mail-io1-f41.google.com (mail-io1-f41.google.com [209.85.166.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 285E18E3F2;
-        Tue, 14 Mar 2023 07:10:43 -0700 (PDT)
-Received: by mail-io1-f41.google.com with SMTP id m22so6449809ioy.4;
-        Tue, 14 Mar 2023 07:10:43 -0700 (PDT)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56820 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232291AbjCNOKi (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 14 Mar 2023 10:10:38 -0400
+Received: from mail-io1-f48.google.com (mail-io1-f48.google.com [209.85.166.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4B3C85B36;
+        Tue, 14 Mar 2023 07:10:36 -0700 (PDT)
+Received: by mail-io1-f48.google.com with SMTP id g6so6434995iov.13;
+        Tue, 14 Mar 2023 07:10:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678803042;
+        d=1e100.net; s=20210112; t=1678803036;
         h=date:subject:message-id:references:in-reply-to:cc:to:from
          :mime-version:content-transfer-encoding:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=Kvo3o7iBOZ0SitIt/v03D3djxGZS2cc9kZtOLnMfPWw=;
-        b=p+ynSjweluMYjr9Nu6hpKU+JPB0SwxmYNY8fbVcaBHlnSidYW0cnHr9LjJkcnRIWEZ
-         FI0lulf83n4LiDm4KPbdI1eywJjw+ry2PvUR+G6K98mZjmAQYLvRhwTh9kkKf2h8vSMP
-         3JDXAN5eCmArjgySp7+4YvstKb2XoWCI4Qr1C/gnum7Rrc9USJf+PelybAA6N9OIseJq
-         TvTngHj8Y6q4f0/GVS7IXHk8cyREFOxZzZjQNpko2HW0YQqoIKb80xMgkw7/ZSReCybr
-         kbHkXOAV81itwihO6T6/SppRP/TxWKOxzen4PVuqXF/9CoJcQ6mUhXIlGxBEbTKoO3xi
-         WO+g==
-X-Gm-Message-State: AO0yUKVWezpxp38qI2TCdhSI2rI2jDdubZNWXEAnDS4HaUXa6umRR44G
-        ZsoNJ/E+vgqCZyfGd78uK2rLOlfPHA==
-X-Google-Smtp-Source: AK7set8ACG0kSoQkv6VrxHrp+10R+OZ6fW7tNemyOQje4bekljWOx5pe5rtb2DbjX232JVkUkLxoyg==
-X-Received: by 2002:a6b:cf05:0:b0:74c:9907:e5b4 with SMTP id o5-20020a6bcf05000000b0074c9907e5b4mr8795099ioa.6.1678803042294;
-        Tue, 14 Mar 2023 07:10:42 -0700 (PDT)
+        bh=AO9OtxWO9OtOvd5xefZPHLbbBm6bTV85U6hkSkYPrV8=;
+        b=qfvWYoPONo7+N0dih6SL+t5yGhhiHor2VIxLDrfen9Y2vRWigc7dNEdRR5gxnqKZcS
+         FKHZk5hS4EN5I/RNsxMASwN5X4Aq3oVelvTkkqP/uA71yEnIPM/ADVj6IYy6bq/8C+Ca
+         00qonOUza++I6fZDvQhXfeBsc0o14zcb8HvlEM40ihZ01UNMarweWG4PadYBwImplEx+
+         f0lKLq0HpDMZvtHNgKRPYqNZBUxIM8IYUyNDaAhsZFSPrZ56awgA4nrdRrAMohV26kX9
+         O+qrwGI5/7HzlYHIXMiUPL++Gh7S+6G+ZNtEeg6+tskTWeLcAVs2gwk4ZzXIIl7drA4j
+         yzXg==
+X-Gm-Message-State: AO0yUKW+6Ie1l3A+5rOzJrMzzuWjXjKZgreiPDT8/IEkvXj/DOA1vY47
+        LNMe+4U78TMcu0ikXRt3rg==
+X-Google-Smtp-Source: AK7set9d2oLzX+5QU6qtEvSgErDHV3fNQtwQocr4/uY3w5g3N8Pa9Fta1wUTyAO/xYzhNT6Da8a4Uw==
+X-Received: by 2002:a5d:8594:0:b0:74c:b436:4a9e with SMTP id f20-20020a5d8594000000b0074cb4364a9emr24021636ioj.16.1678803035864;
+        Tue, 14 Mar 2023 07:10:35 -0700 (PDT)
 Received: from robh_at_kernel.org ([64.188.179.249])
-        by smtp.gmail.com with ESMTPSA id a22-20020a02ac16000000b003ed8808d450sm787450jao.161.2023.03.14.07.10.39
+        by smtp.gmail.com with ESMTPSA id g21-20020a02bb95000000b004051a7ef7f3sm800531jan.71.2023.03.14.07.10.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Mar 2023 07:10:40 -0700 (PDT)
-Received: (nullmailer pid 83795 invoked by uid 1000);
+        Tue, 14 Mar 2023 07:10:35 -0700 (PDT)
+Received: (nullmailer pid 83783 invoked by uid 1000);
         Tue, 14 Mar 2023 14:10:19 -0000
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
 From:   Rob Herring <robh@kernel.org>
-To:     Vaishnav Achath <vaishnav.a@ti.com>
-Cc:     bparrot@ti.com, robh+dt@kernel.org, mchehab@kernel.org,
-        tomi.valkeinen@ideasonboard.com, laurent.pinchart@ideasonboard.com,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        martyn.welch@collabora.com, devicetree@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, mripard@kernel.org,
-        u-kumar1@ti.com, praneeth@ti.com, nm@ti.com, j-luthra@ti.com,
-        vigneshr@ti.com, devarsht@ti.com,
-        niklas.soderlund+renesas@ragnatech.se, sakari.ailus@linux.intel.com
-In-Reply-To: <20230314115516.667-13-vaishnav.a@ti.com>
-References: <20230314115516.667-1-vaishnav.a@ti.com>
- <20230314115516.667-13-vaishnav.a@ti.com>
-Message-Id: <167880254910.26054.12313108385082876859.robh@kernel.org>
-Subject: Re: [PATCH v7 12/13] media: dt-bindings: Add DT bindings for TI
- J721E CSI2RX driver
+To:     Komal Bajaj <quic_kbajaj@quicinc.com>
+Cc:     Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rishabh Bhatnagar <rishabhb@codeaurora.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        devicetree@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, Abel Vesa <abel.vesa@linaro.org>
+In-Reply-To: <20230313124040.9463-3-quic_kbajaj@quicinc.com>
+References: <20230313124040.9463-1-quic_kbajaj@quicinc.com>
+ <20230313124040.9463-3-quic_kbajaj@quicinc.com>
+Message-Id: <167880254436.25736.2826081458133350078.robh@kernel.org>
+Subject: Re: [PATCH v2 2/5] dt-bindings: arm: msm: Add bindings for multi
+ channel DDR in LLCC
 Date:   Tue, 14 Mar 2023 09:10:19 -0500
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -72,42 +71,14 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Tue, 14 Mar 2023 17:25:15 +0530, Vaishnav Achath wrote:
-> From: Pratyush Yadav <p.yadav@ti.com>
+On Mon, 13 Mar 2023 18:10:37 +0530, Komal Bajaj wrote:
+> Add description for additional nodes needed to support
+> mulitple channel DDR configurations in LLCC.
 > 
-> TI's J721E uses the Cadence CSI2RX and DPHY peripherals to facilitate
-> capture over a CSI-2 bus. The TI CSI2RX platform driver glues all the
-> parts together.
-> 
-> Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
-> Signed-off-by: Vaishnav Achath <vaishnav.a@ti.com>
-> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> Reviewed-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Komal Bajaj <quic_kbajaj@quicinc.com>
 > ---
-> 
-> (no changes since v5)
-> 
-> Changes in v5:
-> - Add Laurent's and Rob's R-by.
-> 
-> Changes in v2:
-> - Rename to ti,j721e-csi2rx.yaml
-> - Add an entry in MAINTAINERS.
-> - Add a description for the binding.
-> - Change compatible to ti,j721e-csi2rx to make it SoC specific.
-> - Remove description from dmas, reg, power-domains.
-> - Remove a limit of 2 from #address-cells and #size-cells.
-> - Fix add ^ to csi-bridge subnode regex.
-> - Make ranges mandatory.
-> - Add unit address in example.
-> - Add a reference to cdns,csi2rx in csi-bridge subnode.
-> - Expand the example to include the csi-bridge subnode as well.
-> - Re-order subject prefixes.
-> 
->  .../bindings/media/ti,j721e-csi2rx.yaml       | 101 ++++++++++++++++++
->  MAINTAINERS                                   |   1 +
->  2 files changed, 102 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/media/ti,j721e-csi2rx.yaml
+>  Documentation/devicetree/bindings/arm/msm/qcom,llcc.yaml | 9 +++++++++
+>  1 file changed, 9 insertions(+)
 > 
 
 My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
@@ -116,14 +87,14 @@ on your patch (DT_CHECKER_FLAGS is new in v5.13):
 yamllint warnings/errors:
 
 dtschema/dtc warnings/errors:
-./Documentation/devicetree/bindings/media/ti,j721e-csi2rx.yaml: Unable to find schema file matching $id: http://devicetree.org/schemas/media/cdns,csi2rx.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/ti,j721e-csi2rx.example.dtb: ticsi2rx@4500000: csi-bridge@4504000: False schema does not allow {'compatible': ['cdns,csi2rx'], 'reg': [[72368128, 4096]], 'clocks': [[4294967295, 26, 2], [4294967295, 26, 0], [4294967295, 26, 2], [4294967295, 26, 2], [4294967295, 26, 3], [4294967295, 26, 3]], 'clock-names': ['sys_clk', 'p_clk', 'pixel_if0_clk', 'pixel_if1_clk', 'pixel_if2_clk', 'pixel_if3_clk'], 'phys': [[4294967295]], 'phy-names': ['dphy'], 'ports': {'#address-cells': [[1]], '#size-cells': [[0]], 'port@0': {'reg': [[0]], 'endpoint': {'remote-endpoint': [[4294967295]], 'bus-type': [[4]], 'clock-lanes': [[0]], 'data-lanes': [[1, 2]]}}}}
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/media/ti,j721e-csi2rx.yaml
-Documentation/devicetree/bindings/media/ti,j721e-csi2rx.example.dtb: /example-0/ticsi2rx@4500000/csi-bridge@4504000: failed to match any schema with compatible: ['cdns,csi2rx']
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/arm/msm/qcom,llcc.example.dtb: system-cache-controller@1100000: reg: [[17825792, 2097152], [19922944, 327680]] is too short
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/arm/msm/qcom,llcc.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/arm/msm/qcom,llcc.example.dtb: system-cache-controller@1100000: reg-names: ['llcc_base', 'llcc_broadcast_base'] is too short
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/arm/msm/qcom,llcc.yaml
 
 doc reference errors (make refcheckdocs):
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230314115516.667-13-vaishnav.a@ti.com
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230313124040.9463-3-quic_kbajaj@quicinc.com
 
 The base for the series is generally the latest rc1. A different dependency
 should be noted in *this* patch.
