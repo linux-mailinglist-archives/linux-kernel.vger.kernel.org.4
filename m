@@ -2,139 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAE6D6B8F17
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 11:00:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CD586B8F16
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 10:59:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229868AbjCNKAE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 06:00:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38692 "EHLO
+        id S229722AbjCNJ7u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 05:59:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229785AbjCNJ75 (ORCPT
+        with ESMTP id S229632AbjCNJ7r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 05:59:57 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 986862FCCB
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 02:59:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=97VKYwICbOHx1XIKx6Q8BzjIkflBjQMwSUfJuFvg78s=; b=FVu3uUGwKrMzwHNOwcmV/mUtOr
-        xJpVBEw97Jgjnd9hxqq+LEldkAqMskIv1FRrMDx7vrgKw1k4k0jt9WmgVtB9717K+HPYLPq19ujZ+
-        P6LdXW/xqHZtMPbn3VrtkVcZC3W8R86X0tV1C1lcyD0BSKYqfZHRCelyRnPcZ88eqwq4cJbuGARoz
-        oQTdA1UTqS3p6Q7iT8A/nHF5M+0q8KtXpjESNhJznqaMAWSwhrhrNrSXQ+Cp9ldOYcsM0gqn88RXD
-        5TukZQlS8mNRhiG7i5uHswrfW8eOf41DHbD2evDsa7iYHr9pSwsQ/ekWzVgnoTZELl6+DsZQFbPki
-        WRJfGLIA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pc1RR-001jlM-2y;
-        Tue, 14 Mar 2023 09:59:38 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 44819300293;
-        Tue, 14 Mar 2023 10:59:37 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 0179323B4E89E; Tue, 14 Mar 2023 10:59:36 +0100 (CET)
-Date:   Tue, 14 Mar 2023 10:59:36 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Shrikanth Hegde <sshegde@linux.vnet.ibm.com>
-Cc:     mingo@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, bsegall@google.com, tglx@linutronix.de,
-        srikar@linux.vnet.ibm.com, arjan@linux.intel.com,
-        svaidy@linux.ibm.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V3] Interleave cfs bandwidth timers for improved single
- thread performance at low utilization
-Message-ID: <20230314095936.GC1845660@hirez.programming.kicks-ass.net>
-References: <20230223185153.1499710-1-sshegde@linux.vnet.ibm.com>
+        Tue, 14 Mar 2023 05:59:47 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66F0B2A6C6
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 02:59:45 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id r27so19202261lfe.10
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 02:59:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678787983;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gbQPUzNB3ID6pvgwQJH+wME6Ds92/P9woaOtkl2i5u8=;
+        b=GqKgGJ20kMDb5o3ZhnHFpC4sl0f61CUq2USW5m3TGTowgmFFbRGSV+Gifp9aBt3nQe
+         A490DTAu1kS58JZNJT+zUCcPJCInhpXydDUuim6rOyLmDmt+QgTdtzFTCJpLQCsZ/P9S
+         u4JA/MOpMMrJhCbqIypD5LmoJZgnSDXhgXRR5D1m0nLVp4gNHiOoEzzRib9+pdaTmt3p
+         piyKQtALFE1HmJbCq1MvvHYXOZbaa+SWjNAonr96szUrHYUcgF2TI6PvbhcRZEvCaFNo
+         gb4zE6aGs9Wz/bnE6sg1WuG7FfGcQvdnaIZO27jZ90yf8Tv/EVFXzhR/MfN+8YiGvFx7
+         Pn0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678787983;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gbQPUzNB3ID6pvgwQJH+wME6Ds92/P9woaOtkl2i5u8=;
+        b=MfObQv6EwAO7DbpwiUqTk8jWMIJIOJ/YWwTkSDony0vH+TvfkS9BECh1qq9cqlpwQj
+         tSruM8Z3B0aR4sIy0zB9OrI3Kh6cFkJleEmiWa+5oMGtSCMcErilZvzZYIWIiRRTIN+y
+         Fv0mTEnYWscg0ROeM6zlb4k1J5tHsaAczNs2fjflbAf6GvEHtvnfm7piSmTTKhkFaNH7
+         Qt/x6M7E3Yrg2ocyg0ZQj9yHhJzBS1MyJpj0koNABt8bNmvnS5RB3KCuLo9vehIRU0XN
+         EWvcwN3kBWGrmHz05N10d/qnLa4YK5eO9gE4Graw2TS4U79VwKgar3sPal+KQ6fe3V8C
+         Nyuw==
+X-Gm-Message-State: AO0yUKWkGzgJbCoyiLeCLy/qy0cGXGibnmw22/x39TOgBHCqvhLU3AKw
+        Z1PjtJs/qBYB76JNOSL3wvKgdBeR8GK7Bi+yS5I=
+X-Google-Smtp-Source: AK7set9J0jfti/lMPhcprp1dbInMOH8UTlXpjIv9GivdjQJIaKApf44OJfQEjPvxSP5uynMa96SaWQ==
+X-Received: by 2002:a19:740a:0:b0:4cb:2aa:9e58 with SMTP id v10-20020a19740a000000b004cb02aa9e58mr569835lfe.13.1678787983651;
+        Tue, 14 Mar 2023 02:59:43 -0700 (PDT)
+Received: from [192.168.1.101] (abyj16.neoplus.adsl.tpnet.pl. [83.9.29.16])
+        by smtp.gmail.com with ESMTPSA id l13-20020ac2430d000000b004e83fedf354sm332043lfh.122.2023.03.14.02.59.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Mar 2023 02:59:43 -0700 (PDT)
+Message-ID: <efff0988-869b-7ee8-17ea-4b82f6a5205a@linaro.org>
+Date:   Tue, 14 Mar 2023 10:59:41 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230223185153.1499710-1-sshegde@linux.vnet.ibm.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] arm64: dts: qcom: sa8775p: add symbols to dtb
+To:     Prasad Sodagudi <quic_psodagud@quicinc.com>,
+        Eric Chanudet <echanude@redhat.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230309233945.1199358-1-echanude@redhat.com>
+ <43c11038-91d5-cbfd-7349-06fcd61a0661@linaro.org>
+ <1bd61fa7-cd0e-e198-9cee-7485eacbe685@quicinc.com>
+Content-Language: en-US
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <1bd61fa7-cd0e-e198-9cee-7485eacbe685@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Feb 24, 2023 at 12:21:53AM +0530, Shrikanth Hegde wrote:
-> CPU cfs bandwidth controller uses hrtimer. Currently there is no initial
-> value set. Hence all period timers would align at expiry.
-> This happens when there are multiple CPU cgroup's.
-> 
-> There is a performance gain that can be achieved here if the timers are
-> interleaved when the utilization of each CPU cgroup is low and total
-> utilization of all the CPU cgroup's is less than 50%. If the timers are
-> interleaved, then the unthrottled cgroup can run freely without many
-> context switches and can also benefit from SMT Folding. This effect will
-> be further amplified in SPLPAR environment.
-> 
-> This commit adds a random offset after initializing each hrtimer. This
-> would result in interleaving the timers at expiry, which helps in achieving
-> the said performance gain.
-> 
-> This was tested on powerpc platform with 8 core SMT=8. Socket power was
-> measured when the workload. Benchmarked the stress-ng with power
-> information. Throughput oriented benchmarks show significant gain up to
-> 25% while power consumption increases up to 15%.
-> 
-> Workload: stress-ng --cpu=32 --cpu-ops=50000.
-> 1CG - 1 cgroup is running.
-> 2CG - 2 cgroups are running together.
-> Time taken to complete stress-ng in seconds and power is in watts.
-> each cgroup is throttled at 25% with 100ms as the period value.
->            6.2-rc6                     |   with patch
-> 8 core   1CG    power   2CG     power  |  1CG    power  2 CG    power
->         27.5    80.6    40      90     |  27.3    82    32.3    104
->         27.5    81      40.2    91     |  27.5    81    38.7     96
->         27.7    80      40.1    89     |  27.6    80    29.7    106
->         27.7    80.1    40.3    94     |  27.6    80    31.5    105
-> 
-> Latency might be affected by this change. That could happen if the CPU was
-> in a deep idle state which is possible if we interleave the timers. Used
-> schbench for measuring the latency. Each cgroup is throttled at 25% with
-> period value is set to 100ms. Numbers are when both the cgroups are
-> running simultaneously. Latency values don't degrade much. Some
-> improvement is seen in tail latencies.
-> 
-> 		6.2-rc6        with patch
-> Groups: 16
-> 50.0th:          39.5            42.5
-> 75.0th:         924.0           922.0
-> 90.0th:         972.0           968.0
-> 95.0th:        1005.5           994.0
-> 99.0th:        4166.0          2287.0
-> 99.5th:        7314.0          7448.0
-> 99.9th:       15024.0         13600.0
-> 
-> Groups: 32
-> 50.0th:         819.0           463.0
-> 75.0th:        1596.0           918.0
-> 90.0th:        5992.0          1281.5
-> 95.0th:       13184.0          2765.0
-> 99.0th:       21792.0         14240.0
-> 99.5th:       25696.0         18920.0
-> 99.9th:       33280.0         35776.0
-> 
-> Groups: 64
-> 50.0th:        4806.0          3440.0
-> 75.0th:       31136.0         33664.0
-> 90.0th:       54144.0         58752.0
-> 95.0th:       66176.0         67200.0
-> 99.0th:       84736.0         91520.0
-> 99.5th:       97408.0        114048.0
-> 99.9th:      136448.0        140032.0
-> 
-> Signed-off-by: Shrikanth Hegde<sshegde@linux.vnet.ibm.com>
-> Suggested-by: Peter Zijlstra <peterz@infradead.org>
-> Suggested-by: Thomas Gleixner <tglx@linutronix.de>
-> 
-> Initial RFC PATCH, discussions and details on the problem:
-> Link1: https://lore.kernel.org/lkml/5ae3cb09-8c9a-11e8-75a7-cc774d9bc283@linux.vnet.ibm.com/
-> Link2: https://lore.kernel.org/lkml/9c57c92c-3e0c-b8c5-4be9-8f4df344a347@linux.vnet.ibm.com/
 
-Picked up for tip/sched/core.
+
+On 14.03.2023 05:48, Prasad Sodagudi wrote:
+> 
+> 
+> On 3/9/2023 3:47 PM, Konrad Dybcio wrote:
+>>
+>>
+>> On 10.03.2023 00:39, Eric Chanudet wrote:
+>>> ABL uses the __symbols__ section to process the DTB before passing it
+>>> forward. Without it, the bootstrap is interrupted.
+>>>
+>>> Signed-off-by: Eric Chanudet <echanude@redhat.com>
+>>> ---
+>> Fix your ABL.
+> Hi Konrad,
+> 
+> Apps boot-loader need __symbols__ for dynamic overlay operation. Qualcomm firmware passes an overlay file to apps boot-loader to overlay some of the nodes based on firmware configuration. Without __symbols__ apps boot-loader is not able to overlay.
+Yes/no. There are a plenty of libfdt functions that let you do that,
+especially if you know something about the node.
+
+> 
+> Qualcomm hypervisor/gunyah would like to overlay arch timer node with always-on property, So adding __symbols__ helps boot-loader to overlay.
+For the arch timer, you can simply iterate over the top-level nodes (or
+in the worst case scenario, over all nodes which would not take very
+long on cortex-a / cortex-x cores) and look for the specific timer
+compatible that has been with us for like 10 years at this point and
+use libfdt's fdt_add_property without overlays.
+
+> 
+> I think, commit text is misleading here and I will request Eric to fix the commit text.
+Sort of, but then the design you explained is very error-prone as it's
+dependent on the device tree always satisfying your hypervisor's needs.
+
+Konrad
+> 
+> -Thanks, Prasad
+> 
+>>
+>> Konrad
+>>> Depends on initial sa8775p-ride.dts:
+>>> https://lore.kernel.org/all/20230214092713.211054-3-brgl@bgdev.pl/
+>>>
+>>>   arch/arm64/boot/dts/qcom/Makefile | 4 ++++
+>>>   1 file changed, 4 insertions(+)
+>>>
+>>> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
+>>> index b63cd1861e68..72e85ab31d74 100644
+>>> --- a/arch/arm64/boot/dts/qcom/Makefile
+>>> +++ b/arch/arm64/boot/dts/qcom/Makefile
+>>> @@ -1,4 +1,8 @@
+>>>   # SPDX-License-Identifier: GPL-2.0
+>>> +
+>>> +# Enable support for device-tree overlays required on sa8775p-ride.
+>>> +DTC_FLAGS_sa8775p-ride := -@
+>>> +
+>>>   dtb-$(CONFIG_ARCH_QCOM)    += apq8016-sbc.dtb
+>>>   dtb-$(CONFIG_ARCH_QCOM)    += apq8094-sony-xperia-kitakami-karin_windy.dtb
+>>>   dtb-$(CONFIG_ARCH_QCOM)    += apq8096-db820c.dtb
+>>
+>>
