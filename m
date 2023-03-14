@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14CB36B8CCC
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 09:14:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D9D66B8CBA
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 09:13:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230388AbjCNILk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 04:11:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49672 "EHLO
+        id S229464AbjCNILn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 04:11:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229665AbjCNILC (ORCPT
+        with ESMTP id S229475AbjCNILD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 04:11:02 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B5E36B33B
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 01:09:32 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id h8so14673360ede.8
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 01:09:32 -0700 (PDT)
+        Tue, 14 Mar 2023 04:11:03 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 265A595E25
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 01:09:34 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id cn21so28289454edb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 01:09:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678781365;
+        d=linaro.org; s=google; t=1678781366;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=He95HulR5qTSW8eVx84ZNmIqGC4MQP+vdUqUMvy7lbI=;
-        b=XSN0zq5mvOFbl05Jf+UEzWRYL4gGB4aWsS859u+hTqqiWf+sqZAKynyFoB80dQqkFp
-         AQlnro53G867Js9+2dJWdvo2h1+ksKKn2ZsHQuV6kYnRwAs1++PiJQ9m0HdkqJtpy+Q7
-         RhOgTfB2y3gHuGeNkQdNwS23FTlZvZwbxDql2h8BVsxWQbxm7+W0eBsS5kOM6Nqg/UR5
-         2XpJFZjBN/jxkteIzi3f+WDUNz0yyBtgHF0qyONe2vDDSZeadXT2b+8nbtTQlNU4NfTZ
-         0pHdgGrt+ydLEaux6KD0XMwvmJI4m6z/TFq4JBtQGxgHpkGKouM0x7KTQkgB/Y1Fjm82
-         BBwg==
+        bh=EycsgHsbwfkP3uIlxZJiJyuiX0jcH/aXlFkrPkIAzpA=;
+        b=ltdo31t+YukuF1jA0QDI5UOjDY7Zq41+q9sLSGW58vF+U0OAsNSop9ZBxWw7XT9jVr
+         RRkq9ksfmjpyVmYrjijuCs0+o70CQr1kfkj/tI2Pvf60U485d3B6Mg3mXKprOE/luU8s
+         hZgIMkdHI6t5fCHzOtm/BuBAyn6xZL7jR/VbtsU2IO55bwVlm0ZN2m+MVMyCS7S+1B0v
+         USfH7cGujglIfGeiu8UrWtI5WrR4NLiTirZ7y94uvU2Rinw9zsH6BOPT0zUlc1v48Fm+
+         J6hiSm5LzMixH6Lz8W4wn6DsG+22+Z8l+wzVOChZozc6KD+lDiCu9OQQE7z9Si/1duRU
+         xO9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678781365;
+        d=1e100.net; s=20210112; t=1678781366;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=He95HulR5qTSW8eVx84ZNmIqGC4MQP+vdUqUMvy7lbI=;
-        b=7TF4lRFVmzfI6hoQDd24ie7up+RC9jCsVb/wkHCbSn2h6bil6RUDNX/I8d9kJfWkhC
-         A4ABBRxDF66vJX9hjPy2fahvKVNnc4E3fnV2dnmYPjdETGJflqwHIZQ+sJSysvYXjfam
-         zydXOi4lOkNLSfQK/tlfRlExmnW6G5O7wRhqVu2AhbGIKsLI9DZg1vd91H8gZZv1jssY
-         G0h5Mmo/C7IkpVdDa1D9uY5DZWzrdNQhrpJY9mdY6NZ3qoy68klWkKdaIkrzeq+PXc4h
-         diVSSDdtbdKyYAgnbNzBp+4DQr6owIjmZ34b8M786nRJdGOVMIUKbN+FZ7OjkOqPXEK8
-         gPNQ==
-X-Gm-Message-State: AO0yUKUl8NFftBYfT3nFz0w+gWaeCKZDQzkOjNYCU5Fv9jS1LA6+aOwp
-        XGFrul0iFg1GPmySLUk+bnGh/Q==
-X-Google-Smtp-Source: AK7set8l6fseqUu4K/G6Bng1iaHZiiRxcxsgNXBcXAsjH42r0UZ66zKe+c469VyWmpELIl3HCmOXsQ==
-X-Received: by 2002:aa7:ca45:0:b0:4fc:3777:f633 with SMTP id j5-20020aa7ca45000000b004fc3777f633mr6305834edt.0.1678781365255;
-        Tue, 14 Mar 2023 01:09:25 -0700 (PDT)
+        bh=EycsgHsbwfkP3uIlxZJiJyuiX0jcH/aXlFkrPkIAzpA=;
+        b=VLP20Dsn8kqn8VQUlNuWrVbrxhHXP2/QUEOSNEmHbtl9gGbKi4ZZjUf6OFyy3YfPOb
+         vFLfI+l1xod/hDGFTrJj1BjMveFzm8nugRKIsPR2TThQ4mOSLiuUm94LFnqlgMVuEXnP
+         Jrik0JPtv84yaX19MSiFVBH1OU88QaLzQpO7FE5ZDnw64+xwwA8Fomqb9i+uoUWeY1L5
+         AmBwam8xaUKI7HKyvxuPPR6ToNkuinxXceSk7EQ6bmt8a0URA68aeqNq/jEph5B/nIAd
+         0pFV21klNoQR2+sh8LBWBxbu9hEqFuqXYP67ynUOMSJzchQ8IqFL1oqEPltwNQQAjTnc
+         ATxA==
+X-Gm-Message-State: AO0yUKWfeih3dJPFVH7Fr5RObNO7zHrKxY4S+mR9tWWERaX7emiJzgKg
+        GkhqfT8PNx34ngshdhqjPSgi3g==
+X-Google-Smtp-Source: AK7set8gJGAdKEB2as08KnOMNccHrRK4wo2g00p2D9mwzTP5RoHTb8yM9qZAkZEb8hSoU1weuCHi9w==
+X-Received: by 2002:aa7:db98:0:b0:4fa:3b3:c867 with SMTP id u24-20020aa7db98000000b004fa03b3c867mr10366202edt.17.1678781366151;
+        Tue, 14 Mar 2023 01:09:26 -0700 (PDT)
 Received: from krzk-bin.. ([2a02:810d:15c0:828:6932:5570:6254:9edd])
-        by smtp.gmail.com with ESMTPSA id co2-20020a0564020c0200b004fce9ff4830sm584872edb.88.2023.03.14.01.09.24
+        by smtp.gmail.com with ESMTPSA id co2-20020a0564020c0200b004fce9ff4830sm584872edb.88.2023.03.14.01.09.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Mar 2023 01:09:24 -0700 (PDT)
+        Tue, 14 Mar 2023 01:09:25 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -61,9 +61,9 @@ To:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v2 06/13] arm64: dts: qcom: msm8976: add compatible fallback to mailbox
-Date:   Tue, 14 Mar 2023 09:09:10 +0100
-Message-Id: <20230314080917.68246-7-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v2 07/13] arm64: dts: qcom: msm8998: add compatible fallback to mailbox
+Date:   Tue, 14 Mar 2023 09:09:11 +0100
+Message-Id: <20230314080917.68246-8-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230314080917.68246-1-krzysztof.kozlowski@linaro.org>
 References: <20230314080917.68246-1-krzysztof.kozlowski@linaro.org>
@@ -79,27 +79,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-MSM8976 mailbox is compatible with MSM8994.
+MSM8998 mailbox is compatible with MSM8994.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- arch/arm64/boot/dts/qcom/msm8976.dtsi | 3 ++-
+ arch/arm64/boot/dts/qcom/msm8998.dtsi | 3 ++-
  1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/msm8976.dtsi b/arch/arm64/boot/dts/qcom/msm8976.dtsi
-index 2d360d05aa5e..c726d879d6f1 100644
---- a/arch/arm64/boot/dts/qcom/msm8976.dtsi
-+++ b/arch/arm64/boot/dts/qcom/msm8976.dtsi
-@@ -1027,7 +1027,8 @@ intc: interrupt-controller@b000000 {
+diff --git a/arch/arm64/boot/dts/qcom/msm8998.dtsi b/arch/arm64/boot/dts/qcom/msm8998.dtsi
+index 8bc1c59127e5..65f9b56e1dda 100644
+--- a/arch/arm64/boot/dts/qcom/msm8998.dtsi
++++ b/arch/arm64/boot/dts/qcom/msm8998.dtsi
+@@ -2490,7 +2490,8 @@ glink-edge {
  		};
  
- 		apcs: mailbox@b011000 {
--			compatible = "qcom,msm8976-apcs-kpss-global", "syscon";
-+			compatible = "qcom,msm8976-apcs-kpss-global",
-+				     "qcom,msm8994-apcs-kpss-global", "syscon";
- 			reg = <0x0b011000 0x1000>;
+ 		apcs_glb: mailbox@17911000 {
+-			compatible = "qcom,msm8998-apcs-hmss-global";
++			compatible = "qcom,msm8998-apcs-hmss-global",
++				     "qcom,msm8994-apcs-kpss-global";
+ 			reg = <0x17911000 0x1000>;
+ 
  			#mbox-cells = <1>;
- 		};
 -- 
 2.34.1
 
