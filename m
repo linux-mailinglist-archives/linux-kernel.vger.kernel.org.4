@@ -2,156 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B28756B9654
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 14:33:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D13BA6B964A
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 14:32:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232493AbjCNNdc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 09:33:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58986 "EHLO
+        id S231552AbjCNNch (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 09:32:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231473AbjCNNdD (ORCPT
+        with ESMTP id S231144AbjCNNcA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 09:33:03 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8968D88DB5;
-        Tue, 14 Mar 2023 06:29:35 -0700 (PDT)
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32EC0GP4016896;
-        Tue, 14 Mar 2023 13:28:15 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=T9E/WAjs5Rl68PedpiTdn1i4MUKfeBqmE4rYwE6ISEw=;
- b=GWE0qkC5NoVqS5vbWyj/bwUkR4obs1x7mbLe/ShPnL6/muRxYK1Tt3KxJQnGP/giNIUz
- r6M69F5Q9ufk9j0WMkumYfzekGNg9/mCjXCXYz/9xrNbs7+TvW4YuZ/gqvNEmcO9XUJs
- 9KY6ca3PrcqCkxNiDyjgPHBThpdvcxAp8nmYNvMuB4cJ2akvkQadDOYe8cx9yb709aOr
- 4Ym94ZFYmKR1iyRK2QCsqYrezYhaJ5wlMttTWe33bbTEIq8WtioMtkKEq8HOWKAhC+N4
- DfsQVI0O8v8I1PG027vG/ovd3uqmTIqVxCzpIK8IB/AMCNbmihM2aTeJPHQ9CDOgCJnO pg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3paph269dr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Mar 2023 13:28:15 +0000
-Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32ECXefN030864;
-        Tue, 14 Mar 2023 13:28:14 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3paph269d5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Mar 2023 13:28:14 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32E7jONF001023;
-        Tue, 14 Mar 2023 13:28:12 GMT
-Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
-        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3p8h96muxu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Mar 2023 13:28:12 +0000
-Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-        by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32EDS8mP38797768
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 14 Mar 2023 13:28:08 GMT
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 77DDE2004B;
-        Tue, 14 Mar 2023 13:28:08 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 383ED20040;
-        Tue, 14 Mar 2023 13:28:08 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Tue, 14 Mar 2023 13:28:08 +0000 (GMT)
-From:   Heiko Carstens <hca@linux.ibm.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Suren Baghdasaryan <surenb@google.com>
-Cc:     Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: [PATCH -next] s390/mm: try VMA lock-based page fault handling first
-Date:   Tue, 14 Mar 2023 14:28:08 +0100
-Message-Id: <20230314132808.1266335-1-hca@linux.ibm.com>
-X-Mailer: git-send-email 2.37.2
+        Tue, 14 Mar 2023 09:32:00 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B82F97E8A4
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 06:28:42 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id j11so19988871lfg.13
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 06:28:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678800518;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=vXK51qJPH9Eciui7J6f0cshwdEc2yQA6IP/f+sAuhQ8=;
+        b=sqWUxgtT8QYtmQHlOvWEAgqtfaenZqiQo3lN9Mb8ZxVp2DaaxbsZoFYBo0EyWRNayu
+         pWZTDMKzDka/zHz19tPd4UarcNdfc40LCXTbBXoWJg4jNqN7bCSKGKoWsCXx8YdxfVQN
+         BgtImpFdj/310Dy53Uo0NBbg2dLD/uRqVAtZyOd6XSq776xWRUGH5A5XofKoAQVTa61L
+         61BuoPky7WJxnyv1AXT19AaHkiuW7VvjqZP4gZKTRhd/OJBI94OLdsEvftIKmU0ufkNc
+         7UFNOB/lzdiChOpB7ehZ+jDOKm2+gq0YxLK2K1OU/5Np6ujCBsYA/FcI8seAb+Pf3T2v
+         levQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678800518;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vXK51qJPH9Eciui7J6f0cshwdEc2yQA6IP/f+sAuhQ8=;
+        b=nHHDqKHljtPrpmZCTF5KZb3XZze1E7OJLKWPk99l0m1xo4ez3jkY9LFxgB7EBCBA2Y
+         N1dgxGO9xnKD0E2TTku5Z2k17oPDAOE397EI2redYERhceH8l2QgkuLxzXRvAZIzU8fi
+         IFuJMg4Q1vh/9bz7ntdnC6UG4RQR5HlqNTBp9wwW5WxogUAc/C4l3teG66azzIcY9Fy6
+         nRar+miNUotyhD5ZrspMrBrptbUySbsPldF1Pi3IBjf8TQ7wUR0j8yui7l4aBJz8OHg/
+         Y1iVaAPPPgC9R/gTG57cyDCZ70XxyR4r/27WU4gWtfUmhAnvHydN5AomaMMo/zGQU2Xn
+         xo8A==
+X-Gm-Message-State: AO0yUKUmWTLEcYKWNww/8JzoYgsL/5OFiCX/E/lT3l6TH3zpFeExuhQu
+        ArmvUDbPNjtnsmI2JUgeOJaNPg==
+X-Google-Smtp-Source: AK7set+GjBKqxM43JoWLvF94/EfFDm8TwDEEpNaTnvO1qnvEm3OkMuA82aa7D30Mahb+MY/ugCIAEQ==
+X-Received: by 2002:ac2:53a6:0:b0:4e0:2455:3ad8 with SMTP id j6-20020ac253a6000000b004e024553ad8mr917911lfh.52.1678800518164;
+        Tue, 14 Mar 2023 06:28:38 -0700 (PDT)
+Received: from [192.168.1.101] (abyj16.neoplus.adsl.tpnet.pl. [83.9.29.16])
+        by smtp.gmail.com with ESMTPSA id s9-20020a19ad49000000b004dda74eccafsm406012lfd.68.2023.03.14.06.28.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Mar 2023 06:28:37 -0700 (PDT)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: [PATCH v2 0/2] Use actual GPIO names on MSM8998 Yoshino
+Date:   Tue, 14 Mar 2023 14:28:33 +0100
+Message-Id: <20230314-topic-yoshino_gpio-v2-0-4cb80e187e38@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: ew7MVjDN4tjxh4RhkGpyYpIg78MJuw9D
-X-Proofpoint-GUID: SOJQ3uWi9qO_GS7CuxvEIUnoftenHTE2
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-14_06,2023-03-14_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 malwarescore=0
- suspectscore=0 adultscore=0 phishscore=0 bulkscore=0 mlxscore=0
- mlxlogscore=803 spamscore=0 lowpriorityscore=0 priorityscore=1501
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2303140112
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAIF2EGQC/x2N0QqDMAwAf0XyvIKt3YT9yhijdqkNSFoaJw7x3
+ xf2eAfHHSDYCAXu3QENNxIqrOAuHcQceEZDb2VwvRv6wXqzlkrRfItk4vKaKxVj8epvNo1+TAE
+ 0nIKgmVrgmDXlz7KorA0T7f/T43meP1gRCjR5AAAA
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+X-Mailer: b4 0.12.1
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1678800516; l=896;
+ i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
+ bh=TPjCLKdyCtYzQ2xCXHd7Y0gQVdwFkv4C/yTdrfXKLzk=;
+ b=GI+I9siZUXHrki8t+oNyR3wP8Uh8sRqDkeJmhvkppII+DZ2jhz0Pvf070GDT96WCIz10ZYe3MoAJ
+ dnyO5LpMBRCfb0p4sxSAZbwOa8vnhYNOylukx+baCqGj5ncHjaVK
+X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
+X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Attempt VMA lock-based page fault handling first, and fall back to the
-existing mmap_lock-based handling if that fails.
+SONY gives us an in-depth look into the actual GPIO wiring-up. Add and
+use that information in our device trees!
 
-This is the s390 variant of "x86/mm: try VMA lock-based page fault handling
-first".
+v1 -> v2:
+- Split the introduction of gpio-line-names and node/label renaming
 
-Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
+v1: https://lore.kernel.org/lkml/20230102190157.970053-1-konrad.dybcio@linaro.org/T/
+
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- arch/s390/Kconfig    |  1 +
- arch/s390/mm/fault.c | 24 ++++++++++++++++++++++++
- 2 files changed, 25 insertions(+)
+Konrad Dybcio (2):
+      arm64: dts: qcom: msm8998-yoshino: Use SONY GPIO names
+      arm64: dts: qcom: msm8998-yoshino: Use actual pin names for pin nodes
 
-diff --git a/arch/s390/Kconfig b/arch/s390/Kconfig
-index 9809c74e1240..548b5b587003 100644
---- a/arch/s390/Kconfig
-+++ b/arch/s390/Kconfig
-@@ -120,6 +120,7 @@ config S390
- 	select ARCH_SUPPORTS_DEBUG_PAGEALLOC
- 	select ARCH_SUPPORTS_HUGETLBFS
- 	select ARCH_SUPPORTS_NUMA_BALANCING
-+	select ARCH_SUPPORTS_PER_VMA_LOCK
- 	select ARCH_USE_BUILTIN_BSWAP
- 	select ARCH_USE_CMPXCHG_LOCKREF
- 	select ARCH_WANTS_DYNAMIC_TASK_STRUCT
-diff --git a/arch/s390/mm/fault.c b/arch/s390/mm/fault.c
-index a2632fd97d00..b65144c392b0 100644
---- a/arch/s390/mm/fault.c
-+++ b/arch/s390/mm/fault.c
-@@ -407,6 +407,30 @@ static inline vm_fault_t do_exception(struct pt_regs *regs, int access)
- 		access = VM_WRITE;
- 	if (access == VM_WRITE)
- 		flags |= FAULT_FLAG_WRITE;
-+#ifdef CONFIG_PER_VMA_LOCK
-+	if (!(flags & FAULT_FLAG_USER))
-+		goto lock_mmap;
-+	vma = lock_vma_under_rcu(mm, address);
-+	if (!vma)
-+		goto lock_mmap;
-+	if (!(vma->vm_flags & access)) {
-+		vma_end_read(vma);
-+		goto lock_mmap;
-+	}
-+	fault = handle_mm_fault(vma, address, flags | FAULT_FLAG_VMA_LOCK, regs);
-+	vma_end_read(vma);
-+	if (!(fault & VM_FAULT_RETRY)) {
-+		count_vm_vma_lock_event(VMA_LOCK_SUCCESS);
-+		goto out;
-+	}
-+	count_vm_vma_lock_event(VMA_LOCK_RETRY);
-+	/* Quick path to respond to signals */
-+	if (fault_signal_pending(fault, regs)) {
-+		fault = VM_FAULT_SIGNAL;
-+		goto out;
-+	}
-+lock_mmap:
-+#endif /* CONFIG_PER_VMA_LOCK */
- 	mmap_read_lock(mm);
- 
- 	gmap = NULL;
+ .../dts/qcom/msm8998-sony-xperia-yoshino-maple.dts | 179 +++++++++++++-
+ .../boot/dts/qcom/msm8998-sony-xperia-yoshino.dtsi | 260 ++++++++++++++++++---
+ 2 files changed, 406 insertions(+), 33 deletions(-)
+---
+base-commit: ec0fa9a0a6fac454745c930bdb8619d0a354bac9
+change-id: 20230314-topic-yoshino_gpio-1e5461f747fa
+
+Best regards,
 -- 
-2.37.2
+Konrad Dybcio <konrad.dybcio@linaro.org>
 
