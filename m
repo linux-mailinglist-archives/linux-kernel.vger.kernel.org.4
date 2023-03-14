@@ -2,106 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A63516BA192
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 22:49:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C4956BA19A
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 22:51:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229873AbjCNVtz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 17:49:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41864 "EHLO
+        id S230402AbjCNVvI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 17:51:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229666AbjCNVtx (ORCPT
+        with ESMTP id S230380AbjCNVvG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 17:49:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 907B851C89;
-        Tue, 14 Mar 2023 14:49:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 14 Mar 2023 17:51:06 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 406DA51F8C
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 14:50:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678830622;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=KWBL8j9Kw5UJa5rIZGzcpgA4OkzAlidgj6Myi5kTuW4=;
+        b=NmhO5j5sk17P9kJvZzsDugALTp/4OTA83s1iIusZtulttcspa9/zhsbcr48ekppeBnGIyZ
+        QSWNJhp3voXGsjLW2DiBXPf/CCREXAb1Mo5iVQEzZ/TCayuhn5P9Tj9Y8kSst61l7njEe6
+        TqWil1j2PylkPdT9BGS3jj4ABRwcjr0=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-480-URV1ga8lPOq_q_b6t_9rpg-1; Tue, 14 Mar 2023 17:50:16 -0400
+X-MC-Unique: URV1ga8lPOq_q_b6t_9rpg-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 27BEC61A04;
-        Tue, 14 Mar 2023 21:49:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94B21C433EF;
-        Tue, 14 Mar 2023 21:49:50 +0000 (UTC)
-Date:   Tue, 14 Mar 2023 17:49:48 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        stable@vger.kernel.org, Dave Hansen <dave.hansen@linux.intel.com>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>
-Subject: Re: [for-linus][PATCH 5/5] tracing: Make tracepoint lockdep check
- actually test something
-Message-ID: <20230314174948.17a01cd4@gandalf.local.home>
-In-Reply-To: <f4f52692-9f6c-467a-8988-113aced754eb@paulmck-laptop>
-References: <20230314190236.203370742@goodmis.org>
-        <20230314190310.486609095@goodmis.org>
-        <f4f52692-9f6c-467a-8988-113aced754eb@paulmck-laptop>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7DB3385A588;
+        Tue, 14 Mar 2023 21:50:15 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.18])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id DB3572166B26;
+        Tue, 14 Mar 2023 21:50:12 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <CAHk-=wh-OKQdK2AE+CD_Y5bimnoSH=_4+F5EOZoGUf3SGJdxGA@mail.gmail.com>
+References: <CAHk-=wh-OKQdK2AE+CD_Y5bimnoSH=_4+F5EOZoGUf3SGJdxGA@mail.gmail.com> <20230308165251.2078898-1-dhowells@redhat.com> <20230308165251.2078898-4-dhowells@redhat.com> <CAHk-=wjYR3h5Q-_i3Q2Et=P8WsrjwNA20fYpEQf9nafHwBNALA@mail.gmail.com> <ZBCkDvveAIJENA0G@casper.infradead.org> <CAHk-=wiO-Z7QdKnA+yeLCROiVVE6dBK=TaE7wz4hMc0gE2SPRw@mail.gmail.com> <3761465.1678818404@warthog.procyon.org.uk>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     dhowells@redhat.com, Matthew Wilcox <willy@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Hillf Danton <hdanton@sina.com>, linux-fsdevel@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, Daniel Golle <daniel@makrotopia.org>,
+        Guenter Roeck <groeck7@gmail.com>,
+        Christoph Hellwig <hch@lst.de>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Hugh Dickins <hughd@google.com>
+Subject: Re: [PATCH v17 03/14] shmem: Implement splice-read
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <3826545.1678830612.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date:   Tue, 14 Mar 2023 21:50:12 +0000
+Message-ID: <3826546.1678830612@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 14 Mar 2023 14:08:28 -0700
-"Paul E. McKenney" <paulmck@kernel.org> wrote:
+Linus Torvalds <torvalds@linux-foundation.org> wrote:
 
-> On Tue, Mar 14, 2023 at 03:02:41PM -0400, Steven Rostedt wrote:
-> > From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
-> > 
-> > A while ago where the trace events had the following:
-> > 
-> >    rcu_read_lock_sched_notrace();
-> >    rcu_dereference_sched(...);
-> >    rcu_read_unlock_sched_notrace();
-> > 
-> > If the tracepoint is enabled, it could trigger RCU issues if called in
-> > the wrong place. And this warning was only triggered if lockdep was
-> > enabled. If the tracepoint was never enabled with lockdep, the bug would
-> > not be caught. To handle this, the above sequence was done when lockdep
-> > was enabled regardless if the tracepoint was enabled or not (although the
-> > always enabled code really didn't do anything, it would still trigger a
-> > warning).
-> > 
-> > But a lot has changed since that lockdep code was added. One is, that
-> > sequence no longer triggers any warning. Another is, the tracepoint when
-> > enabled doesn't even do that sequence anymore.
-> > 
-> > The main check we care about today is whether RCU is "watching" or not.
-> > So if lockdep is enabled, always check if rcu_is_watching() which will
-> > trigger a warning if it is not (tracepoints require RCU to be watching).
-> > 
-> > Note, that old sequence did add a bit of overhead when lockdep was enabled,
-> > and with the latest kernel updates, would cause the system to slow down
-> > enough to trigger kernel "stalled" warnings.
-> > 
-> > Link: http://lore.kernel.org/lkml/20140806181801.GA4605@redhat.com
-> > Link: http://lore.kernel.org/lkml/20140807175204.C257CAC5@viggo.jf.intel.com
-> > Link: https://lore.kernel.org/lkml/20230307184645.521db5c9@gandalf.local.home/
-> > Link: https://lore.kernel.org/linux-trace-kernel/20230310172856.77406446@gandalf.local.home
-> > 
-> > Cc: stable@vger.kernel.org
-> > Cc: Masami Hiramatsu <mhiramat@kernel.org>
-> > Cc: Dave Hansen <dave.hansen@linux.intel.com>
-> > Cc: "Paul E. McKenney" <paulmck@kernel.org>
-> > Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> > Cc: Joel Fernandes <joel@joelfernandes.org>
-> > Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> > Fixes: e6753f23d961 ("tracepoint: Make rcuidle tracepoint callers use SRCU")
-> > Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>  
-> 
-> Acked-by: Paul E. McKenney <paulmck@kernel.org>
-> 
+> But please at least stop doing the
+> =
 
-Thanks Paul!
+>      get_page(buf->page);
+> =
 
--- Steve
+> on the zero-page (which includes using no-op .get and .put functions
+> in  zero_pipe_buf_ops().
+
+I'll make the attached change.  It seems to work.
+
+David
+---
+diff --git a/mm/shmem.c b/mm/shmem.c
+index 3cbec1d56112..d9b60ab556fe 100644
+--- a/mm/shmem.c
++++ b/mm/shmem.c
+@@ -2719,6 +2719,17 @@ static ssize_t shmem_file_read_iter(struct kiocb *i=
+ocb, struct iov_iter *to)
+ 	return retval ? retval : error;
+ }
+ =
+
++static bool zero_pipe_buf_get(struct pipe_inode_info *pipe,
++			      struct pipe_buffer *buf)
++{
++	return true;
++}
++
++static void zero_pipe_buf_release(struct pipe_inode_info *pipe,
++				  struct pipe_buffer *buf)
++{
++}
++
+ static bool zero_pipe_buf_try_steal(struct pipe_inode_info *pipe,
+ 				    struct pipe_buffer *buf)
+ {
+@@ -2726,9 +2737,9 @@ static bool zero_pipe_buf_try_steal(struct pipe_inod=
+e_info *pipe,
+ }
+ =
+
+ static const struct pipe_buf_operations zero_pipe_buf_ops =3D {
+-	.release	=3D generic_pipe_buf_release,
++	.release	=3D zero_pipe_buf_release,
+ 	.try_steal	=3D zero_pipe_buf_try_steal,
+-	.get		=3D generic_pipe_buf_get,
++	.get		=3D zero_pipe_buf_get,
+ };
+ =
+
+ static size_t splice_zeropage_into_pipe(struct pipe_inode_info *pipe,
+
