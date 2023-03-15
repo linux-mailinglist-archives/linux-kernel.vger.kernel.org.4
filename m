@@ -2,142 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5EDE6BBDF4
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 21:27:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAD666BBDF7
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 21:28:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230078AbjCOU1s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 16:27:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49108 "EHLO
+        id S232235AbjCOU2A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 16:28:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231725AbjCOU1q (ORCPT
+        with ESMTP id S232545AbjCOU16 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 16:27:46 -0400
-Received: from mail-oo1-xc33.google.com (mail-oo1-xc33.google.com [IPv6:2607:f8b0:4864:20::c33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 970DBA5D7
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 13:27:44 -0700 (PDT)
-Received: by mail-oo1-xc33.google.com with SMTP id e12-20020a4ada0c000000b0052cdbbdc803so867967oou.2
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 13:27:44 -0700 (PDT)
+        Wed, 15 Mar 2023 16:27:58 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 426DF231E5
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 13:27:55 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id fm20-20020a05600c0c1400b003ead37e6588so1807492wmb.5
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 13:27:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tessares.net; s=google; t=1678912064;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=YB8bCi0OFAJV1cNy2JUVpeOZKfBWS8MkybFkIp+Rpbk=;
-        b=51uZjduJt9l2N1CJkqQbkRVdaAb3f5hNoLz1BMyG9dU5WFap3z4wpp4gfRYMI6mYIC
-         AeysHEUDWKxo/PyiwsMEawPMMllVgRoFczloet9qzdcgvY3CE4VulYIaz6HWoQZhRnDy
-         t23A8TUFxhudTyEXmCIIKy0Ja8KWxg1UH+LQfvH7Tl8m87IynQ8p351I1J3jo7NujMHw
-         Klq5C5+AD6haKokxGm1ek2ggifkd6YE4qtJS4+McFvrh6l6xhqD390z7poQh+f6uxey4
-         w7lZiQqnKmowXHnLTVOWinw1KCud1SVjx/l1XoieuRkMQydpRw8gIR2KoCGQhdHucqCI
-         /eQw==
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112; t=1678912073;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Fr9J0FxGpasTPmc3K9y6UFyT8zV90z0HoVcry+6uE6E=;
+        b=2L9jwWtjQgMw4Wom5XCjvanMAxWUjvJaBTlUTFrZ57EgTRnL5zTrT4kcfGROxAwolc
+         YfP6EQdhUAwSCxkD7HUA405gTuzmsJG4cXKmfwbY6kEEwWsuag/xTNEnGTwybtdCIN6f
+         EQ1/tJ14wEccoNfklaPktvMV1A75wlBjWVumE8yDY9Tv3tJk6OJmcELD2p4jeqoP/eXZ
+         sIRhM9PyO0NCWH7uTO1VtFBze+debapi0IeEEgqH85y/YVKjc7nN7oLzNUt4qrWbls7O
+         TBGVmDtKpH6SFFxQBvR+wmyf7oYgIXwDLWanH5nlX7YikcBlhq7T5twGH0LkLGlWO8A7
+         J7ug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678912064;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20210112; t=1678912073;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=YB8bCi0OFAJV1cNy2JUVpeOZKfBWS8MkybFkIp+Rpbk=;
-        b=LURSiG1bFbISh7B+GQUquYGRBZ5NULQhMIHdnZ/f72Ek54IocgV7AhJSsHgR7ilh2D
-         TlmeAU6IAFkHZ1j+kvsELj4vmWTJV3GZZJX+FnoAP+5T7PYi/tIFIwRaUImHmGZ655NG
-         blJtfAONrsuCTNb5n2hzmVxhvh2HhJiFDo6VjKjEDvttGchIH1gel/eBfVRT4au21YCd
-         I6k/jNs3GFrVjIxX1ZQfshmfho2EIH7CWzA6CSHRMHgmlWJRPbuICB+/JRahBQEaBQxR
-         Mu5Z8rV787yuaizvxDy0ghp4SxhJdWOS09twcEofILIcAaEkD2MWlw3uSJYFdvj/l5rp
-         rb8g==
-X-Gm-Message-State: AO0yUKWm1zne/kFBVlOYVSIuaHQ+2tDDqrb9J9jtJ9hRtHFRakRaRVdK
-        jXq2wr+/h464DD5Jj/ShcQfq8Q==
-X-Google-Smtp-Source: AK7set9JgcH7RFZcxUhQC2vyLMxD0/MdwkTcPNT6rjc4/UwtMUP8EM4p0QOtSDBhY8RN8QRKSpVHtg==
-X-Received: by 2002:a05:6820:1522:b0:520:f76:11e2 with SMTP id ay34-20020a056820152200b005200f7611e2mr21175882oob.9.1678912062878;
-        Wed, 15 Mar 2023 13:27:42 -0700 (PDT)
-Received: from vdi08.nix.tessares.net (static.219.156.76.144.clients.your-server.de. [144.76.156.219])
-        by smtp.gmail.com with ESMTPSA id n5-20020a4a8485000000b005252d376caesm2614518oog.22.2023.03.15.13.27.38
+        bh=Fr9J0FxGpasTPmc3K9y6UFyT8zV90z0HoVcry+6uE6E=;
+        b=LArIpODO/657c/cGmBKA/UYNEqLcRfaFt/diEaT7zvQMiHcwYDn9++6VetKvxf6o72
+         BriIZztEC/mA2zch6/mEi0MGQRN1KxlTVsC8ctCnpscW/QHYi52soYkqOqkiXX1ru2UE
+         20+6I8UbTp1kNTKM3BSdUja2pw6+n2mN0gsFOWFfN3UDQtVudC2Yyadoc19T1MmHTiyY
+         nTCzxsc1hTeJgnSChIxOk3HO+Z95Y1X45FuUiJay2FlytL01ww1sY1UoIRod2rotO0Vr
+         gJlR7UlPNd2pHjPFo+EVyjV8rz9qFTsBBXDZEjA4XSllsIunH6y/EVOELnt3fnLJ3Bph
+         ylGg==
+X-Gm-Message-State: AO0yUKXp6VW9wf6fjRbWBd1bbGDaawtU+eZmeSi6ljiQvnk1iUCByd1r
+        f+TBFnWdEA+e2HcIMVF/11ggGw==
+X-Google-Smtp-Source: AK7set8feVb5qr4tXzszszSx/y6GB+vQiduw8991Xje8cOUTvcJG+PH0bhx+FBWagDu5Bu/l+pWxIw==
+X-Received: by 2002:a05:600c:1c0a:b0:3ed:22b3:6263 with SMTP id j10-20020a05600c1c0a00b003ed22b36263mr13127306wms.12.1678912073633;
+        Wed, 15 Mar 2023 13:27:53 -0700 (PDT)
+Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:dc34:6420:c408:f64e])
+        by smtp.gmail.com with ESMTPSA id n7-20020a05600c294700b003ebf9e36cd6sm2897478wmd.26.2023.03.15.13.27.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Mar 2023 13:27:42 -0700 (PDT)
-From:   Matthieu Baerts <matthieu.baerts@tessares.net>
-Date:   Wed, 15 Mar 2023 21:25:17 +0100
-Subject: [PATCH net] hsr: ratelimit only when errors are printed
+        Wed, 15 Mar 2023 13:27:53 -0700 (PDT)
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Subject: [PATCH] arm64: dts: qcom: sm8150: fix the uart9 label
+Date:   Wed, 15 Mar 2023 21:27:51 +0100
+Message-Id: <20230315202751.1518543-1-brgl@bgdev.pl>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230315-net-20230315-hsr_framereg-ratelimit-v1-1-61d2ef176d11@tessares.net>
-X-B4-Tracking: v=1; b=H4sIAKwpEmQC/z2NwQrCMBAFf6Xs2YWmaUX8FRFJ05dmwUbZBBFK/
- 920B48zh5mVMlSQ6dqspPhIlleqYE4N+ejSDJapMnVtZ1trBk4o/IeY9RHULVDMrK7gKYsUtv4
- Swhm9HYyhWhpdBo/qko97qyZ2+1YE+R7v2+Hu2/YDFce4/pAAAAA=
-To:     mptcp@lists.linux.dev, "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kristian Overskeid <koverskeid@gmail.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Matthieu Baerts <matthieu.baerts@tessares.net>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2026;
- i=matthieu.baerts@tessares.net; h=from:subject:message-id;
- bh=992nLemSMOYGix02WD9DtzNzaFETn4pgWDlUvy2fi6o=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBkEio6GjK4kj/mz2zubIAqSUbe7RZLNfXBmaxki
- quQEiHNBC6JAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZBIqOgAKCRD2t4JPQmmg
- c8LFD/9Jjda822CqNJnIzNOgj9PmPXHKXfTpSpEnUFS17XyfykO8h5mpUl3khEQnwRmRQkeG30d
- 7MVdQIJD89iA+zCiwNPhxeH4lt1Vf6671/ckE3ERNcIDaGRefOrwd0BLGNyDttcttMY+EY8sDrw
- lrbLKuWQBQ+o26HdYm+bH+nuusIOwRfR/NoSYqwEDhPx++E0YCVpcIx/DIuKeGjNJwbH/MOzidc
- Ed3gyo1RUtlxbHepW4EUiRbgVBkMnYYlWQ/cQ/umc0paMkg4pklnHE/kMvzsCH/5jlOnUYRReRN
- R5HwIWPiM/REVKZHj29nwX3EyfS7KCOms+XozbLUm9WZc+wc03NVy2tB+gFIjPS6UK0oU4+bOfN
- +WYkEjs6T4Cvh6N2MIhT04HCzCfwgksY0W3z5vVWqQzXStfW/eby4P8ZB6Lru7ekGqmI9okXEA3
- Zlx0KH7Xs7KrjoZxSRfHhqtgt6eTmSNlQZJWHWyKPL4potZdrioJqBEvP9RvKc3G8O0pstmx3g5
- vKhotU7HlYDuToiPb3wlNPydwGROlMeBtfYrdlKhfLAwKLfhrcOG35y5pcwkpY7ghrtPvYSveZp
- BKivy9MRWmIo9F6G1T6RLcrdfViFsmU7gD+rmry3tXkEVWVW1aN6xef6aSAMu66WXcfQZKEYPjP
- GL2NoudBREa/jRQ==
-X-Developer-Key: i=matthieu.baerts@tessares.net; a=openpgp;
- fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Recently, when automatically merging -net and net-next in MPTCP devel
-tree, our CI reported [1] a conflict in hsr, the same as the one
-reported by Stephen in netdev [2].
+From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
-When looking at the conflict, I noticed it is in fact the v1 [3] that
-has been applied in -net and the v2 [4] in net-next. Maybe the v1 was
-applied by accident.
+There's a typo in the @<address> part of the uart9 label. Fix it.
 
-As mentioned by Jakub Kicinski [5], the new condition makes more sense
-before the net_ratelimit(), not to update net_ratelimit's state which is
-unnecessary if we're not going to print either way.
-
-Here, this modification applies the v2 but in -net.
-
-Link: https://github.com/multipath-tcp/mptcp_net-next/actions/runs/4423171069 [1]
-Link: https://lore.kernel.org/netdev/20230315100914.53fc1760@canb.auug.org.au/ [2]
-Link: https://lore.kernel.org/netdev/20230307133229.127442-1-koverskeid@gmail.com/ [3]
-Link: https://lore.kernel.org/netdev/20230309092302.179586-1-koverskeid@gmail.com/ [4]
-Link: https://lore.kernel.org/netdev/20230308232001.2fb62013@kernel.org/ [5]
-Fixes: 28e8cabe80f3 ("net: hsr: Don't log netdev_err message on unknown prp dst node")
-Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
+Fixes: 10d900a834da ("arm64: dts: sm8150: add the QUPv3 high-speed UART node")
+Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 ---
- net/hsr/hsr_framereg.c | 2 +-
+ arch/arm64/boot/dts/qcom/sm8150.dtsi | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/hsr/hsr_framereg.c b/net/hsr/hsr_framereg.c
-index 865eda39d601..b77f1189d19d 100644
---- a/net/hsr/hsr_framereg.c
-+++ b/net/hsr/hsr_framereg.c
-@@ -415,7 +415,7 @@ void hsr_addr_subst_dest(struct hsr_node *node_src, struct sk_buff *skb,
- 	node_dst = find_node_by_addr_A(&port->hsr->node_db,
- 				       eth_hdr(skb)->h_dest);
- 	if (!node_dst) {
--		if (net_ratelimit() && port->hsr->prot_version != PRP_V1)
-+		if (port->hsr->prot_version != PRP_V1 && net_ratelimit())
- 			netdev_err(skb->dev, "%s: Unknown node\n", __func__);
- 		return;
- 	}
-
----
-base-commit: 75014826d0826d175aa9e36cd8e118793263e3f4
-change-id: 20230315-net-20230315-hsr_framereg-ratelimit-3c8ff6e43511
-
-Best regards,
+diff --git a/arch/arm64/boot/dts/qcom/sm8150.dtsi b/arch/arm64/boot/dts/qcom/sm8150.dtsi
+index 926f40d85603..4e012c8ce10c 100644
+--- a/arch/arm64/boot/dts/qcom/sm8150.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8150.dtsi
+@@ -1342,7 +1342,7 @@ spi9: spi@a84000 {
+ 				status = "disabled";
+ 			};
+ 
+-			uart9: serial@a8c000 {
++			uart9: serial@a84000 {
+ 				compatible = "qcom,geni-uart";
+ 				reg = <0x0 0x00a84000 0x0 0x4000>;
+ 				reg-names = "se";
 -- 
-Matthieu Baerts <matthieu.baerts@tessares.net>
+2.37.2
 
