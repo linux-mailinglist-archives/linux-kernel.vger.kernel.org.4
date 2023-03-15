@@ -2,66 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D27D6BAF55
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 12:33:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 095316BAF56
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 12:33:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231751AbjCOLd3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 07:33:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60864 "EHLO
+        id S231861AbjCOLdc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 07:33:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231861AbjCOLdG (ORCPT
+        with ESMTP id S231831AbjCOLdH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 07:33:06 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98A9474321
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 04:32:10 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id x3so74086933edb.10
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 04:32:10 -0700 (PDT)
+        Wed, 15 Mar 2023 07:33:07 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 500F070434
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 04:32:12 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id fd5so40279189edb.7
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 04:32:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678879927;
+        d=linaro.org; s=google; t=1678879928;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=HC/PlFDExOPGWP7ccBSw2MJ7jsWGaT3rfynoqRuvsBs=;
-        b=RI3Xhfxt4VfuxDYSMgGMtqUeh8McKLcQW5xqdzouBmcMhG/LV8vNtQ9tD6dkuBY4CM
-         99DCz57Gfx5MeSHJDJ06Cf5AHA/8omgh/ekC4wXfmdpZw7eu0F6kTQltWCaEKTo+4l6d
-         TTwbvArLrBLMCuPpVWwMwZI64Jq5k9TLxlt0lq6ikEP5QeLoZyr7cazKHvAV0hKU3TaL
-         cfYCo96WnTmvkQSZ36Dg5siwMrJ6obBjNCpWIu0lVC0bg99gzt6Exq69UIbzZuX8Ch5n
-         nl5wK90ngawln7nSer/YkeYZCl1pI8Fc4qM9YBiCFBWNmdp+ngwheH4cX2o2gJIMTC+H
-         yv1A==
+        bh=58bQlg5XFWdYEFpUno48HS+VmEV9oIwYieu15PZRLsE=;
+        b=Zjg6N5HdSzLZUuyuDWtsjN0vF7J8ooqEbEvSurifcZJ7MBtxlqvJHJCKvvNdNtA6hZ
+         89vak07pWu3zzFgFtqpE+LX3hqOMF6OOd4tQLeHcbZ1lba/90QhErIcNwqoGk/Uh3Qp7
+         vzFpfVOuQL49nBziENFgAJ2yKINlQvmn44ynl/0prhQudLNX6kmg4Qo7ZXmT90COQedk
+         /qNiFUeqQRDvHXCwOfrC1I2kAzNN22uCLgvCr02eCg8cqguJkO8LiC9OutlCDuEYaLCs
+         YlbDYJ6WMB/02N6uzhniPdL+W0JkzYKe3OZEXRrX45R2d5ssj0Ku1JUigq33g1nZxx8Y
+         ihSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678879927;
+        d=1e100.net; s=20210112; t=1678879928;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=HC/PlFDExOPGWP7ccBSw2MJ7jsWGaT3rfynoqRuvsBs=;
-        b=i/YwoaUqAJqfcPj4v/xxH3GFWLeAbThJZBv+ENvuBwGXwJRQ4r3ozoG/fP00piHgMm
-         JJwwiV+gcQnVmidtG7WSOErVxTpS2+YYYaRKb2oQVkpvKpVTkFr6euwlOIuYkYgvTXDv
-         D7Yv7R3Asxjdk8CkgTj3uvQsUenBOxgaZr1hr2eiHzDpF2RXhaiurKkZnDDslQtrtgNN
-         trhX974KYKIHbeb7O6q1eLxnEDg1xgRk2we8S84XAeHVnjers1v/D2By+lZo68LyPTLN
-         Po1VqnHTzw0d6zHClsPLxe6foOL3uirahdG+A45o2lZsUS19tFxICK4AGxXsj0W8agso
-         W2PQ==
-X-Gm-Message-State: AO0yUKXL1DMt/jTIVvx9eOmwkNl2rqUvfSWrN/nHBF+dSiQJgzzTIFIM
-        YxorOMQpPpg/6JUWLSWOALNoiNMCpCJAgGH03zw=
-X-Google-Smtp-Source: AK7set8ghJbJKuQKwf3/zOV25woqwD6kAQT0lW2w0+MCxRT4ao19nNo5U6nFR967orf24G0oLLbk5w==
-X-Received: by 2002:a05:6402:148d:b0:4fe:9160:6a7b with SMTP id e13-20020a056402148d00b004fe91606a7bmr2251250edv.9.1678879927653;
-        Wed, 15 Mar 2023 04:32:07 -0700 (PDT)
+        bh=58bQlg5XFWdYEFpUno48HS+VmEV9oIwYieu15PZRLsE=;
+        b=PgEZfjnsreNQ2KxkZwvs+QkLy2WsYsQlukYbt6GhE3zaw6+rlDEFoaXbpGCnDyGb7B
+         Np9okfQK8O41E2JKN6JR6+EyPspTtjSpq4ZZofgboyNfg/evupv6C20fq+gy4P7NEQKD
+         OuV4vgYzQctxZ79/+FB4Owao+pTfimF3d4AInqV5uwyP3eTbODmAj94BdKbIxC5axZ/u
+         z+dVeRCjk3HcY/S+Bb0a7T9kUpdWDQIS180bFR5JfaKIJ63tevWltlFVqlYkfWplhW/Z
+         sj6CHKMpQCvFHgCMDngcbgxoMyekbuS0CA1kKWvXnqVxIhvhRUXO312h3r/NIQWyBfsY
+         /80A==
+X-Gm-Message-State: AO0yUKW1+RbG1Vsd4Vk5JO+Ujsi7Mrvvt8EyGnHp6V7laIwPMnMx9dtd
+        nkkk2nS8StOs3X6h0uswsrRPfzaIRYPePafoGdY=
+X-Google-Smtp-Source: AK7set8Bqi0XnV+LtwHzfFf4SEsYO4CeJxiJv2RN5O7vOK24mi0uZaBYSF067yGF7Ul58CBTT0Vxew==
+X-Received: by 2002:a05:6402:687:b0:4fd:1f7b:9fbd with SMTP id f7-20020a056402068700b004fd1f7b9fbdmr2526017edy.6.1678879928584;
+        Wed, 15 Mar 2023 04:32:08 -0700 (PDT)
 Received: from lmecxl1178.lme.st.com ([2a04:cec0:1008:2d39:4d4b:ab19:bc3b:a0cd])
-        by smtp.gmail.com with ESMTPSA id 1-20020a508e41000000b004fb95f51f54sm2264151edx.12.2023.03.15.04.32.06
+        by smtp.gmail.com with ESMTPSA id 1-20020a508e41000000b004fb95f51f54sm2264151edx.12.2023.03.15.04.32.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Mar 2023 04:32:07 -0700 (PDT)
+        Wed, 15 Mar 2023 04:32:08 -0700 (PDT)
 From:   Etienne Carriere <etienne.carriere@linaro.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     linux-arm-kernel@lists.infradead.org,
         Etienne Carriere <etienne.carriere@linaro.org>,
         Jens Wiklander <jens.wiklander@linaro.org>,
         Marc Zyngier <maz@kernel.org>,
-        Sumit Garg <sumit.garg@linaro.org>,
-        Pascal Paillet <p.paillet@foss.st.com>,
-        Fabrice Gasnier <fabrice.gasnier@foss.st.com>
-Subject: [PATCH v3 2/3] optee: multiplex tee interrupt events on optee async notif irq
-Date:   Wed, 15 Mar 2023 12:32:00 +0100
-Message-Id: <20230315113201.1343781-2-etienne.carriere@linaro.org>
+        Sumit Garg <sumit.garg@linaro.org>
+Subject: [PATCH v3 3/3] optee: add enable/disable/set_wake handlers to optee irqs
+Date:   Wed, 15 Mar 2023 12:32:01 +0100
+Message-Id: <20230315113201.1343781-3-etienne.carriere@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230315113201.1343781-1-etienne.carriere@linaro.org>
 References: <20230315113201.1343781-1-etienne.carriere@linaro.org>
@@ -77,440 +75,263 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Implements an irqchip in optee driver for the interrupt events notified
-from OP-TEE world to the Linux OS. Optee registers up to 1 interrupt
-controller and identifies each line with a line number from 0 to
-UINT16_MAX. The identifiers and meaning of the interrupt line number
-are specific to the platform and shall be found in the OP-TEE platform
-documentation
+Implements OP-TEE's It Notif PTA API to deactivate and activate an
+interrupt notifier and to configure the wakeup capability
+of that interrupt. These controls are useful for efficient power
+management of the device when an interrupt controller resources is
+hosted in OP-TEE world.
 
-There already exist an optee asynchronous notification mechanisl using
-an irq for OP-TEE to signal its optee driver in Linux of a pending
-interrupt event. The implementation binds each event to the awaking of
-a thread waiting to call the TEE. The interrupt notification service
-added by this change allows TEE to send interrupt signals to Linux kernel
-on secure event occurrences which end consumer is a Linux sub-system.
-
-When optee driver initializes, TEE tells whether it supports interrupt
-notification services or not.
-
-OP-TEE SMC ABI defines 2 SMC function IDs for non-secure world to
-manage interrupt events.
-
-SMC function OPTEE_SMC_GET_NOTIF_ITR allows non-secure world to
-retrieve pending interrupts by grapes up to 5 lines. For efficiency,
-the function also reports whether there are pending async values
-targeting suspended threaded sequences execution and whether TEE
-has background threaded work to do.
-
-SMC function OPTEE_SMC_NOTIF_ITR_SET_MASK allow Linux irq consumer
-to mask/unmask the irq line.
+When OP-TEE does not implement the It Notif PTA, the related handlers
+simply return with success. If OP-TEE exposes the PTA services, they
+are invoked on enable, disable and set_wake irqchip operations.
 
 Cc: Jens Wiklander <jens.wiklander@linaro.org>
 Cc: Marc Zyngier <maz@kernel.org>
 Cc: Sumit Garg <sumit.garg@linaro.org>
 
-Co-developed-by: Pascal Paillet <p.paillet@foss.st.com>
-Signed-off-by: Pascal Paillet <p.paillet@foss.st.com>
-Co-developed-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
-Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
 Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
 ---
-Changes since v2:
+Changes since v3:
 - Renamed it_notif/IT_NOTIF to itr_notif/ITR_NOTIF.
-- Updated retrieve_pending_irqs() loop from review comments.
-- Changed OP-TEE ABI function CONFIGURE_IT to a only act on interrupt
-  mask state. The function is renamed xxx_NOTIF_ITR_SET_MASK.
-- Don't set OPTEE_SMC_SEC_CAP_IT_NOTIF among non-secure capabilities, the
-  capability is related only to whether secure world supports interrupt
-  notification to normal world.
-- Fixed inline description from review comments.
-- Rephrased commit message and added a sentence about optee irq line
-  number values and meaning.
 
-Changes since v1:
-- Removed dependency on optee per-cpu irq notification.
-- Change SMC function ID API to retrieves up to 5 optee irq events,
-  the optee bottom half event and returns if other async notifications
-  are pending, in a single invocation.
-- Implement only mask/unmask irqchip handlers with a 2nd SMC function
-  to mask/unmask a optee irq in OP-TEE world from an interrupt context.
-- Added Cc: tags.
+Changes since v2:
+- Patch added in v2 series for power-up/down and wakeup configuration
+  of the irq chip.
+
+Patch not present in v1
+- Patch added for power-up/down and wakeup configuration of the irq chip.
 ---
- drivers/tee/optee/optee_private.h |  10 ++
- drivers/tee/optee/optee_smc.h     |  89 ++++++++++++++++-
- drivers/tee/optee/smc_abi.c       | 152 +++++++++++++++++++++++++++++-
- 3 files changed, 245 insertions(+), 6 deletions(-)
+ drivers/tee/optee/optee_private.h |   2 +
+ drivers/tee/optee/smc_abi.c       | 157 ++++++++++++++++++++++++++++++
+ 2 files changed, 159 insertions(+)
 
 diff --git a/drivers/tee/optee/optee_private.h b/drivers/tee/optee/optee_private.h
-index 04ae58892608..f467409e02e9 100644
+index f467409e02e9..4b4002d81315 100644
 --- a/drivers/tee/optee/optee_private.h
 +++ b/drivers/tee/optee/optee_private.h
-@@ -94,11 +94,21 @@ struct optee_supp {
- 	struct completion reqs_c;
+@@ -166,6 +166,7 @@ struct optee_ops {
+  * @scan_bus_done	flag if device registation was already done.
+  * @scan_bus_wq		workqueue to scan optee bus and register optee drivers
+  * @scan_bus_work	workq to scan optee bus and register optee drivers
++ * @notif_itr_pta_ctx   TEE context for invoking interrupt configuration services
+  */
+ struct optee {
+ 	struct tee_device *supp_teedev;
+@@ -185,6 +186,7 @@ struct optee {
+ 	bool   scan_bus_done;
+ 	struct workqueue_struct *scan_bus_wq;
+ 	struct work_struct scan_bus_work;
++	struct tee_context *notif_itr_pta_ctx;
  };
  
-+/*
-+ * struct optee_smc - optee smc communication struct
-+ * @invoke_fn		handler function to invoke secure monitor
-+ * @memremaped_shm	virtual address of memory in shared memory pool
-+ * @sec_caps:		secure world capabilities defined by
-+ *			OPTEE_SMC_SEC_CAP_* in optee_smc.h
-+ * @notif_irq		interrupt used as async notification by OP-TEE or 0
-+ * @domain		interrupt domain registered by OP-TEE driver
-+ */
- struct optee_smc {
- 	optee_invoke_fn *invoke_fn;
- 	void *memremaped_shm;
- 	u32 sec_caps;
- 	unsigned int notif_irq;
-+	struct irq_domain *domain;
- };
- 
- /**
-diff --git a/drivers/tee/optee/optee_smc.h b/drivers/tee/optee/optee_smc.h
-index 73b5e7760d10..3723832771db 100644
---- a/drivers/tee/optee/optee_smc.h
-+++ b/drivers/tee/optee/optee_smc.h
-@@ -226,7 +226,8 @@ struct optee_smc_get_shm_config_result {
-  * a3	Bit[7:0]: Number of parameters needed for RPC to be supplied
-  *		  as the second MSG arg struct for
-  *		  OPTEE_SMC_CALL_WITH_ARG
-- *	Bit[31:8]: Reserved (MBZ)
-+ *	Bit[23:8]: The maximum interrupt event notification number
-+ *	Bit[31:24]: Reserved (MBZ)
-  * a4-7	Preserved
-  *
-  * Error return register usage:
-@@ -254,6 +255,11 @@ struct optee_smc_get_shm_config_result {
- #define OPTEE_SMC_SEC_CAP_ASYNC_NOTIF		BIT(5)
- /* Secure world supports pre-allocating RPC arg struct */
- #define OPTEE_SMC_SEC_CAP_RPC_ARG		BIT(6)
-+/* Secure world supports interrupt events notification to normal world */
-+#define OPTEE_SMC_SEC_CAP_ITR_NOTIF		BIT(7)
-+
-+#define OPTEE_SMC_SEC_CAP_MAX_NOTIF_ITR_MASK	GENMASK(23, 8)
-+#define OPTEE_SMC_SEC_CAP_MAX_NOTIF_ITR_SHIFT	8
- 
- #define OPTEE_SMC_FUNCID_EXCHANGE_CAPABILITIES	9
- #define OPTEE_SMC_EXCHANGE_CAPABILITIES \
-@@ -426,6 +432,87 @@ struct optee_smc_disable_shm_cache_result {
- /* See OPTEE_SMC_CALL_WITH_REGD_ARG above */
- #define OPTEE_SMC_FUNCID_CALL_WITH_REGD_ARG	19
- 
-+/*
-+ * Retrieve up to 5 pending interrupt events notified by OP-TEE world,
-+ * whether bottom half is to be scheduled and if there are pending
-+ * async event for waiting threads, all this since the last call of
-+ * this function.
-+ *
-+ * Interrupts notified by OP-TEE are identified by a number from 0 to
-+ * the interrupt number max value for that platform. Values for each
-+ * interrupt number are platform specific and shall be found in the
-+ * OP-TEE platform documentation.
-+ *
-+ * OP-TEE keeps a record of all posted interrupt notification events.
-+ * When the async notif interrupt is received by normal world,
-+ * this function should be called until all pended interrupt events
-+ * have been retrieved. When an interrupt event is retrieved, it is
-+ * cleared from the record in OP-TEE world. When do bottom half event
-+ * is retrieved (async value 0), it is also cleared from its related
-+ * record in OP-TEE world.
-+ *
-+ * It is expected that this function is called from an interrupt handler
-+ * in normal world.
-+ *
-+ * Call requests usage:
-+ * a0	SMC Function ID, OPTEE_SMC_GET_NOTIF_ITR
-+ * a1-6	Not used
-+ * a7	Hypervisor Client ID register
-+ *
-+ * Normal return register usage:
-+ * a0	OPTEE_SMC_RETURN_OK
-+ * a1	Bit[7:0]: Number of pending interrupt carried in a1..a5
-+ *	Bit[8]: OPTEE_SMC_NOTIF_ITR_PENDING if other interrupt(s) are pending
-+ *	Bit[9]: OPTEE_SMC_NOTIF_ASYNC_PENDING if a threaded event is pending
-+ *		excluding bottom half notification that is retrieved in Bit[10].
-+ *	Bit[10]: OPTEE_SMC_NOTIF_DO_BOTTOM_HALF if retrieved bottom half notif
-+ *	Bit[15:11]: Reserved for future use, MBZ
-+ *	Bit[31:16]: Pending interrupt line value if a1 & 0xFF >= 1
-+ * a2	Bit[15:0]:  Pending interrupt line value if a1 & 0xFF >= 2
-+ *	Bit[31:16]: Pending interrupt line value if a1 & 0xFF >= 3
-+ * a3	Bit[15:0]:  Pending interrupt line value if a1 & 0xFF >= 4
-+ *	Bit[31:16]: Pending interrupt line value if a1 & 0xFF == 5
-+ * a4-7 Preserved
-+ *
-+ * Not supported return register usage:
-+ * a0	OPTEE_SMC_RETURN_ENOTAVAIL
-+ * a1-7	Preserved
-+ */
-+#define OPTEE_SMC_NOTIF_ITR_COUNT_MASK		GENMASK(7, 0)
-+#define OPTEE_SMC_NOTIF_ITR_PENDING		BIT(8)
-+#define OPTEE_SMC_NOTIF_VALUE_PENDING		BIT(9)
-+#define OPTEE_SMC_NOTIF_DO_BOTTOM_HALF		BIT(10)
-+
-+#define OPTEE_SMC_FUNCID_GET_NOTIF_ITR		20
-+#define OPTEE_SMC_GET_NOTIF_ITR \
-+	OPTEE_SMC_FAST_CALL_VAL(OPTEE_SMC_FUNCID_GET_NOTIF_ITR)
-+
-+/*
-+ * Mask/unmask an interrupt notification
-+ *
-+ * Call requests usage:
-+ * a0	SMC Function ID, OPTEE_SMC_NOTIF_ITR_SET_MASK
-+ * a1	Interrupt number identifier value
-+ * a2	1 to mask, 0 to unmask the interrupt notification.
-+ * a3-6	Reserved for future use, MBZ
-+ * a7	Hypervisor Client ID register
-+ *
-+ * Normal return register usage:
-+ * a0	OPTEE_SMC_RETURN_OK
-+ * a1-7	Preserved
-+ *
-+ * Invalid command with provided arguments return usage:
-+ * a0	OPTEE_SMC_RETURN_EBADCMD
-+ * a1-7	Preserved
-+ *
-+ * Not supported return register usage:
-+ * a0	OPTEE_SMC_RETURN_ENOTAVAIL
-+ * a1-7	Preserved
-+ */
-+#define OPTEE_SMC_FUNCID_NOTIF_ITR_SET_MASK	21
-+#define OPTEE_SMC_NOTIF_ITR_SET_MASK \
-+	OPTEE_SMC_FAST_CALL_VAL(OPTEE_SMC_FUNCID_NOTIF_ITR_SET_MASK)
-+
- /*
-  * Resume from RPC (for example after processing a foreign interrupt)
-  *
+ struct optee_session {
 diff --git a/drivers/tee/optee/smc_abi.c b/drivers/tee/optee/smc_abi.c
-index a1c1fa1a9c28..6e6c6979abfd 100644
+index 6e6c6979abfd..046aa242b2ef 100644
 --- a/drivers/tee/optee/smc_abi.c
 +++ b/drivers/tee/optee/smc_abi.c
-@@ -977,6 +977,65 @@ static int optee_smc_stop_async_notif(struct tee_context *ctx)
+@@ -52,6 +52,43 @@
+  */
+ #define OPTEE_MIN_STATIC_POOL_ALIGN    9 /* 512 bytes aligned */
+ 
++/*
++ * Interrupt notification can be configured using Notif-IT PTA services.
++ * Below are the PTA UUID and its API commands.
++ */
++#define PTA_ITR_NOTIF_UUID \
++	UUID_INIT(0x4461e5c7, 0xb523, 0x4b73, 0xac, 0xed, 0x75, 0xad, \
++		  0x2b, 0x9b, 0x59, 0xa1)
++
++/*
++ * PTA_ITR_NOTIF_ACTIVATE_DETECTION - Enable a interrupt notification
++ *
++ * [in]  params[0].value.a     Interrupt ID
++ */
++#define PTA_ITR_NOTIF_ACTIVATE_DETECTION	0
++
++/*
++ * PTA_ITR_NOTIF_DEACTIVATE_DETECTION - Disable a interrupt notification
++ *
++ * [in]  params[0].value.a     Interrupt ID
++ */
++#define PTA_ITR_NOTIF_DEACTIVATE_DETECTION	1
++
++/*
++ * PTA_ITR_NOTIF_ENABLE_WAKEUP_SOURCE - Enable an interrupt wakeup source
++ *
++ * [in]  params[0].value.a     Interrupt ID
++ */
++#define PTA_ITR_NOTIF_ENABLE_WAKEUP_SOURCE	2
++
++/*
++ * PTA_ITR_NOTIF_ENABLE_WAKEUP_SOURCE - Disable an interrupt wakeup source
++ *
++ * [in]  params[0].value.a     Interrupt ID
++ */
++#define PTA_ITR_NOTIF_DISABLE_WAKEUP_SOURCE	3
++
++
+ /*
+  * 1. Convert between struct tee_param and struct optee_msg_param
+  *
+@@ -977,6 +1014,92 @@ static int optee_smc_stop_async_notif(struct tee_context *ctx)
   * 5. Asynchronous notification
   */
  
-+static void optee_itr_notif_mask(struct irq_data *d)
++static int optee_ctx_match(struct tee_ioctl_version_data *ver, const void *data)
 +{
-+	struct optee *optee = d->domain->host_data;
-+	struct arm_smccc_res res = { };
-+
-+	optee->smc.invoke_fn(OPTEE_SMC_NOTIF_ITR_SET_MASK, d->hwirq, 1,
-+			     0, 0, 0, 0, 0, &res);
++	return ver->impl_id == TEE_IMPL_ID_OPTEE;
 +}
 +
-+static void optee_itr_notif_unmask(struct irq_data *d)
++static void init_optee_pta_context(struct optee *optee)
 +{
-+	struct optee *optee = d->domain->host_data;
-+	struct arm_smccc_res res = { };
++	struct tee_context *ctx = NULL;
++	const uuid_t pta_uuid = PTA_ITR_NOTIF_UUID;
++	struct tee_ioctl_open_session_arg sess_arg;
++	int ret;
 +
-+	optee->smc.invoke_fn(OPTEE_SMC_NOTIF_ITR_SET_MASK, d->hwirq, 0,
-+			     0, 0, 0, 0, 0, &res);
-+}
++	ctx = tee_client_open_context(NULL, optee_ctx_match, NULL, NULL);
++	if (IS_ERR(ctx))
++		return;
 +
-+static struct irq_chip optee_irq_chip = {
-+	.name = "optee-it",
-+	.irq_mask = optee_itr_notif_mask,
-+	.irq_unmask = optee_itr_notif_unmask,
-+};
++	memset(&sess_arg, 0, sizeof(sess_arg));
++	export_uuid(sess_arg.uuid, &pta_uuid);
++	sess_arg.clnt_login = TEE_IOCTL_LOGIN_REE_KERNEL;
 +
-+static int optee_itr_alloc(struct irq_domain *d, unsigned int virq,
-+			  unsigned int nr_irqs, void *data)
-+{
-+	struct irq_fwspec *fwspec = data;
-+	irq_hw_number_t hwirq;
-+
-+	hwirq = fwspec->param[0];
-+
-+	irq_domain_set_hwirq_and_chip(d, virq, hwirq, &optee_irq_chip,
-+				      d->host_data);
-+
-+	return 0;
-+}
-+
-+static const struct irq_domain_ops optee_irq_domain_ops = {
-+	.alloc = optee_itr_alloc,
-+	.free = irq_domain_free_irqs_common,
-+};
-+
-+static int optee_irq_domain_init(struct platform_device *pdev,
-+				 struct optee *optee, u_int max_it)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct device_node *np = dev->of_node;
-+
-+	optee->smc.domain = irq_domain_add_linear(np, max_it,
-+						  &optee_irq_domain_ops, optee);
-+	if (!optee->smc.domain) {
-+		dev_err(dev, "Unable to add irq domain\n");
-+		return -ENOMEM;
++	ret = tee_client_open_session(ctx, &sess_arg, NULL);
++	if ((ret < 0) || (sess_arg.ret != 0)) {
++		pr_err("Can't open ITR_NOTIF PTA session: %#x\n", sess_arg.ret);
++		tee_client_close_context(ctx);
++		return;
 +	}
 +
-+	return 0;
++	tee_client_close_session(ctx, sess_arg.session);
++
++	optee->notif_itr_pta_ctx = ctx;
 +}
 +
- static u32 get_async_notif_value(optee_invoke_fn *invoke_fn, bool *value_valid,
- 				 bool *value_pending)
- {
-@@ -991,6 +1050,61 @@ static u32 get_async_notif_value(optee_invoke_fn *invoke_fn, bool *value_valid,
- 	return res.a1;
- }
- 
-+static void forward_irq(struct optee *optee, unsigned int itr_num)
++static void release_optee_pta_context(struct optee *optee)
 +{
-+	if (generic_handle_domain_irq(optee->smc.domain, itr_num)) {
-+		struct arm_smccc_res res = { };
-+
-+		pr_err("No consumer for optee irq %u, masked\n", itr_num);
-+		optee->smc.invoke_fn(OPTEE_SMC_NOTIF_ITR_SET_MASK, itr_num, 1,
-+				     0, 0, 0, 0, 0, &res);
++	if (optee->notif_itr_pta_ctx) {
++		tee_client_close_context(optee->notif_itr_pta_ctx);
++		optee->notif_itr_pta_ctx = NULL;
 +	}
 +}
 +
-+static void retrieve_pending_irqs(struct optee *optee, bool *async_pending,
-+				  bool *do_bottom_half)
-+
++static int invoke_optee_pta(struct optee *optee, unsigned int command,
++			    unsigned int irq_id)
 +{
-+	struct arm_smccc_res res;
-+	bool irq_pending;
-+	ssize_t cnt;
-+	const unsigned int lsb_mask = GENMASK(15, 0);
-+	const unsigned int msb_shift = 16;
++	const uuid_t pta_uuid = PTA_ITR_NOTIF_UUID;
++	struct tee_ioctl_open_session_arg sess_arg;
++	struct tee_ioctl_invoke_arg inv_arg;
++	struct tee_param param[1];
++	int ret;
 +
-+	*do_bottom_half = false;
++	if (!optee->notif_itr_pta_ctx)
++		return -ENOENT;
 +
-+	do {
-+		optee->smc.invoke_fn(OPTEE_SMC_GET_NOTIF_ITR, 0, 0, 0, 0, 0, 0,
-+				     0, &res);
++	memset(&sess_arg, 0, sizeof(sess_arg));
++	export_uuid(sess_arg.uuid, &pta_uuid);
++	sess_arg.clnt_login = TEE_IOCTL_LOGIN_REE_KERNEL;
 +
-+		if (res.a0)
-+			return;
++	ret = tee_client_open_session(optee->notif_itr_pta_ctx, &sess_arg, NULL);
++	if ((ret < 0) || (sess_arg.ret != 0)) {
++		pr_err("tee_client_open_session failed, err: %#x\n", sess_arg.ret);
++		if (!ret)
++			ret = -EINVAL;
++		return ret;
++	}
 +
-+		if (res.a1 & OPTEE_SMC_NOTIF_DO_BOTTOM_HALF)
-+			*do_bottom_half = true;
++	memset(&inv_arg, 0, sizeof(inv_arg));
++	inv_arg.session = sess_arg.session;
++	inv_arg.func = command;
++	inv_arg.num_params = 1;
 +
-+		irq_pending = res.a1 & OPTEE_SMC_NOTIF_ITR_PENDING;
-+		cnt = res.a1 & OPTEE_SMC_NOTIF_ITR_COUNT_MASK;
-+		if (cnt > 5 || (!cnt && irq_pending)) {
-+			WARN_ONCE(0, "Unexpected irq notif count %zi\n", cnt);
-+			break;
-+		}
++	memset(&param, 0, sizeof(param));
++	param[0].attr = TEE_IOCTL_PARAM_ATTR_TYPE_VALUE_INPUT;
++	param[0].u.value.a = irq_id;
 +
-+		if (cnt > 0)
-+			forward_irq(optee, res.a1 >> msb_shift);
-+		if (cnt > 1)
-+			forward_irq(optee, res.a2 & lsb_mask);
-+		if (cnt > 2)
-+			forward_irq(optee, res.a2 >> msb_shift);
-+		if (cnt > 3)
-+			forward_irq(optee, res.a3 & lsb_mask);
-+		if (cnt == 5)
-+			forward_irq(optee, res.a3 >> msb_shift);
-+	} while (irq_pending);
++	ret = tee_client_invoke_func(optee->notif_itr_pta_ctx, &inv_arg, param);
++	if ((ret < 0) || (inv_arg.ret != 0)) {
++		pr_err("tee_client_invoke_func failed, ret: %d, err: %#x\n",
++		       ret, inv_arg.ret);
++		if (!ret)
++			ret = -EINVAL;
++	}
 +
-+	*async_pending = res.a1 & OPTEE_SMC_NOTIF_VALUE_PENDING;
++	tee_client_close_session(optee->notif_itr_pta_ctx, sess_arg.session);
++
++	return ret;
 +}
 +
- static irqreturn_t notif_irq_handler(int irq, void *dev_id)
+ static void optee_itr_notif_mask(struct irq_data *d)
  {
- 	struct optee *optee = dev_id;
-@@ -999,9 +1113,14 @@ static irqreturn_t notif_irq_handler(int irq, void *dev_id)
- 	bool value_pending;
- 	u32 value;
+ 	struct optee *optee = d->domain->host_data;
+@@ -995,10 +1118,40 @@ static void optee_itr_notif_unmask(struct irq_data *d)
+ 			     0, 0, 0, 0, 0, &res);
+ }
  
--	do {
--		value = get_async_notif_value(optee->smc.invoke_fn,
--					      &value_valid, &value_pending);
-+	if (optee->smc.sec_caps & OPTEE_SMC_SEC_CAP_ITR_NOTIF)
-+		retrieve_pending_irqs(optee, &value_pending, &do_bottom_half);
++static void optee_itr_notif_disable(struct irq_data *d)
++{
++	struct optee *optee = d->domain->host_data;
++
++	(void)invoke_optee_pta(optee, PTA_ITR_NOTIF_DEACTIVATE_DETECTION, d->hwirq);
++}
++
++static void optee_itr_notif_enable(struct irq_data *d)
++{
++	struct optee *optee = d->domain->host_data;
++
++	(void)invoke_optee_pta(optee, PTA_ITR_NOTIF_ACTIVATE_DETECTION, d->hwirq);
++}
++
++static int optee_itr_notif_set_wake(struct irq_data *d, unsigned int on)
++{
++	struct optee *optee = d->domain->host_data;
++	u32 command;
++
++	if (on)
++		command = PTA_ITR_NOTIF_ENABLE_WAKEUP_SOURCE;
 +	else
-+		value_pending = true;
++		command = PTA_ITR_NOTIF_DISABLE_WAKEUP_SOURCE;
 +
-+	while (value_pending) {
-+		value = get_async_notif_value(optee->smc.invoke_fn, &value_valid,
-+					      &value_pending);
- 		if (!value_valid)
- 			break;
- 
-@@ -1009,10 +1128,11 @@ static irqreturn_t notif_irq_handler(int irq, void *dev_id)
- 			do_bottom_half = true;
- 		else
- 			optee_notif_send(optee, value);
--	} while (value_pending);
-+	};
- 
- 	if (do_bottom_half)
- 		return IRQ_WAKE_THREAD;
++	return invoke_optee_pta(optee, command, d->hwirq);
++}
 +
- 	return IRQ_HANDLED;
- }
+ static struct irq_chip optee_irq_chip = {
+ 	.name = "optee-it",
+ 	.irq_mask = optee_itr_notif_mask,
+ 	.irq_unmask = optee_itr_notif_unmask,
++	.irq_disable = optee_itr_notif_disable,
++	.irq_enable = optee_itr_notif_enable,
++	.irq_set_wake = optee_itr_notif_set_wake,
+ };
  
-@@ -1048,6 +1168,9 @@ static void optee_smc_notif_uninit_irq(struct optee *optee)
- 			free_irq(optee->smc.notif_irq, optee);
- 			irq_dispose_mapping(optee->smc.notif_irq);
+ static int optee_itr_alloc(struct irq_domain *d, unsigned int virq,
+@@ -1459,6 +1612,7 @@ static int optee_smc_remove(struct platform_device *pdev)
+ 		optee_disable_shm_cache(optee);
+ 
+ 	optee_smc_notif_uninit_irq(optee);
++	release_optee_pta_context(optee);
+ 
+ 	optee_remove_common(optee);
+ 
+@@ -1646,6 +1800,8 @@ static int optee_probe(struct platform_device *pdev)
+ 				irq_dispose_mapping(irq);
+ 				goto err_notif_uninit;
+ 			}
++
++			init_optee_pta_context(optee);
  		}
-+
-+		if (optee->smc.sec_caps & OPTEE_SMC_SEC_CAP_ITR_NOTIF)
-+			irq_domain_remove(optee->smc.domain);
- 	}
- }
  
-@@ -1187,6 +1310,7 @@ static bool optee_msg_api_revision_is_compatible(optee_invoke_fn *invoke_fn)
- 
- static bool optee_msg_exchange_capabilities(optee_invoke_fn *invoke_fn,
- 					    u32 *sec_caps, u32 *max_notif_value,
-+					    u32 *max_notif_it,
- 					    unsigned int *rpc_param_count)
- {
- 	union {
-@@ -1219,6 +1343,13 @@ static bool optee_msg_exchange_capabilities(optee_invoke_fn *invoke_fn,
- 	else
- 		*rpc_param_count = 0;
- 
-+	if (*sec_caps & OPTEE_SMC_SEC_CAP_ITR_NOTIF)
-+		*max_notif_it = (res.result.data &
-+				 OPTEE_SMC_SEC_CAP_MAX_NOTIF_ITR_MASK) >>
-+				OPTEE_SMC_SEC_CAP_MAX_NOTIF_ITR_SHIFT;
-+	else
-+		*max_notif_it = 0;
-+
- 	return true;
- }
- 
-@@ -1364,6 +1495,7 @@ static int optee_probe(struct platform_device *pdev)
- 	struct tee_device *teedev;
- 	struct tee_context *ctx;
- 	u32 max_notif_value;
-+	u32 max_notif_it;
- 	u32 arg_cache_flags;
- 	u32 sec_caps;
- 	int rc;
-@@ -1385,7 +1517,7 @@ static int optee_probe(struct platform_device *pdev)
- 	}
- 
- 	if (!optee_msg_exchange_capabilities(invoke_fn, &sec_caps,
--					     &max_notif_value,
-+					     &max_notif_value, &max_notif_it,
- 					     &rpc_param_count)) {
- 		pr_warn("capabilities mismatch\n");
- 		return -EINVAL;
-@@ -1506,6 +1638,16 @@ static int optee_probe(struct platform_device *pdev)
- 			irq_dispose_mapping(irq);
- 			goto err_notif_uninit;
- 		}
-+
-+		if (sec_caps & OPTEE_SMC_SEC_CAP_ITR_NOTIF) {
-+			rc = optee_irq_domain_init(pdev, optee, max_notif_it);
-+			if (rc) {
-+				free_irq(optee->smc.notif_irq, optee);
-+				irq_dispose_mapping(irq);
-+				goto err_notif_uninit;
-+			}
-+		}
-+
  		enable_async_notif(optee->smc.invoke_fn);
- 		pr_info("Asynchronous notifications enabled\n");
- 	}
+@@ -1683,6 +1839,7 @@ static int optee_probe(struct platform_device *pdev)
+ 		optee_disable_shm_cache(optee);
+ 	optee_smc_notif_uninit_irq(optee);
+ 	optee_unregister_devices();
++	release_optee_pta_context(optee);
+ err_notif_uninit:
+ 	optee_notif_uninit(optee);
+ err_close_ctx:
 -- 
 2.25.1
 
