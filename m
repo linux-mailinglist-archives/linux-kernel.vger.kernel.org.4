@@ -2,126 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B08966BB8A9
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 16:54:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99B446BB915
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 17:07:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231513AbjCOPyd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 11:54:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46890 "EHLO
+        id S232377AbjCOQHm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 12:07:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231220AbjCOPyN (ORCPT
+        with ESMTP id S231955AbjCOQHg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 11:54:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF3527DD27;
-        Wed, 15 Mar 2023 08:53:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 011C56195F;
-        Wed, 15 Mar 2023 15:53:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE4F0C433A1;
-        Wed, 15 Mar 2023 15:53:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678895610;
-        bh=GijnEnwapIxu1USeSwtlaQ6GTo451/9eeqsBEokQgV0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mUhDkUNunOBmj/bilJo0s1rrpOzfTvb+L3Ahg6tBlJhyTI7iiiQ495RQvjRMgqiHr
-         h0z+sZseKdZGUusSd3Iw1apJSJPqpiZwWHHhxg14Ij4Ac0NvhuwI7x934M3IamMdSN
-         VhdwkaTIJG/NeLwpBz3tbHuiSmouqHW7AuGFKMO5r166Oq+yiZ3AqZQS3XZrZjshOT
-         eneERMa+gkdnS0BlwpJTlO+MJs42qCDYwB82TY3lD6sksIsZTleOtAAuPU7fFGDNdo
-         MyIVHt+uTWCjb1myASK2BV5OSmK3f1JIOoRld3kgal+/PNxbaIL8wLUCdp3uaW0taC
-         VKP5B8MskzYCg==
-Date:   Wed, 15 Mar 2023 15:53:24 +0000
-From:   Lee Jones <lee@kernel.org>
-To:     Jean-Jacques Hiblot <jjhiblot@traphandler.com>
-Cc:     lee.jones@linaro.org, pavel@ucw.cz, robh+dt@kernel.org,
-        sven.schwermer@disruptive-technologies.com,
-        krzysztof.kozlowski+dt@linaro.org, johan+linaro@kernel.org,
-        marijn.suijten@somainline.org, andy.shevchenko@gmail.com,
-        jacek.anaszewski@gmail.com, linux-leds@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 0/6] Add a multicolor LED driver for groups of
- monochromatic LEDs
-Message-ID: <20230315155324.GB9667@google.com>
-References: <20230102081021.138648-1-jjhiblot@traphandler.com>
+        Wed, 15 Mar 2023 12:07:36 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2F6D968C0;
+        Wed, 15 Mar 2023 09:07:10 -0700 (PDT)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32FAMX5E030774;
+        Wed, 15 Mar 2023 15:53:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : from : to : cc : references : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=xb5P8YPq/H03NLXOC5oLXz7TjpMuUTiQFudiRNbQavI=;
+ b=eQM1yFz78AdasNBt9QQFKjzjKXR7SUqCfx8dbSQA6vVTCvIxm+lr2OE99VYbHmwU86Dv
+ JeROSJPxkWY4q9V1FSFj9zlc7ZtuGrQeLfm6+2qTE3amLw6TuTYN2ChVFqHQuOKOxorp
+ /kwJOMIwbZ7DE0ig00M7rd3BVDNTTzJFpgqaOT3YRL02dormknWgVD2wn8Lp/wN579j8
+ BMD/l+PCGjPBBVfoYwVS9vjZAH+HcR1ds3O19pdev/6u3w3ESFqAMCo2tN9v17//cxKF
+ pnzit3PRfR3K/tmWmpItEceatKjQtRobdU+6oBsBH2h1dLL+ANFG4LkgpuLo2KSYsRYr dQ== 
+Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pb2ck2558-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 15 Mar 2023 15:53:59 +0000
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
+        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32FFrwha029836
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 15 Mar 2023 15:53:58 GMT
+Received: from [10.216.36.238] (10.80.80.8) by nasanex01c.na.qualcomm.com
+ (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Wed, 15 Mar
+ 2023 08:53:55 -0700
+Message-ID: <1cb12058-f59e-1433-6ba6-f500be250996@quicinc.com>
+Date:   Wed, 15 Mar 2023 21:23:51 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] ring-buffer: remove obsolete comment for
+ free_buffer_page()
+Content-Language: en-US
+From:   Mukesh Ojha <quic_mojha@quicinc.com>
+To:     Vlastimil Babka <vbabka@suse.cz>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Ingo Molnar <mingo@elte.hu>
+CC:     <linux-trace-kernel@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <patches@lists.linux.dev>,
+        Mike Rapoport <mike.rapoport@gmail.com>
+References: <20230315142446.27040-1-vbabka@suse.cz>
+ <72de48c7-014d-80ac-51e9-ba22450f1d5b@quicinc.com>
+In-Reply-To: <72de48c7-014d-80ac-51e9-ba22450f1d5b@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230102081021.138648-1-jjhiblot@traphandler.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: tWTUwyx-G1ue8ABDjRD_AFNaeBsZipo_
+X-Proofpoint-GUID: tWTUwyx-G1ue8ABDjRD_AFNaeBsZipo_
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-15_08,2023-03-15_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 bulkscore=0
+ mlxlogscore=999 clxscore=1015 mlxscore=0 priorityscore=1501 malwarescore=0
+ spamscore=0 suspectscore=0 adultscore=0 phishscore=0 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2302240000
+ definitions=main-2303150133
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 02 Jan 2023, Jean-Jacques Hiblot wrote:
 
->
-> Some HW design implement multicolor LEDs with several monochromatic LEDs.
-> Grouping the monochromatic LEDs allows to configure them in sync and use
-> the triggers.
-> The PWM multicolor LED driver implements such grouping but only for
-> PWM-based LEDs. As this feature is also desirable for the other types of
-> LEDs, this series implements it for any kind of LED device.
->
-> changes v6->v7:
->  - in led_mcg_probe() increment the counter at the end of the loop for
->    clarity.
->
-> changes v5->v6:
->  - restore sysfs access to the leds when the device is removed
->
-> changes v4->v5:
->  - Use "depends on COMPILE_TEST || OF" in Kconfig to indicate that OF
->    is a functional requirement, not just a requirement for the
->    compilation.
->  - in led_mcg_probe() check if devm_of_led_get_optional() returns an
->    error before testing for the end of the list.
->  - use sysfs_emit() instead of sprintf() in color_show().
->  - some grammar fixes in the comments and the commit logs.
->
-> changes v2->v3, only minor changes:
->  - rephrased the Kconfig descritpion
->  - make the sysfs interface of underlying LEDs read-only only if the probe
->    is successful.
->  - sanitize the header files
->  - removed the useless call to dev_set_drvdata()
->  - use dev_fwnode() to get the fwnode to the device.
->
-> changes v1->v2:
->  - Followed Rob Herrings's suggestion to make the dt binding much simpler.
->  - Added a patch to store the color property of a LED in its class
->    structure (struct led_classdev).
->
->
-> Jean-Jacques Hiblot (6):
->   devres: provide devm_krealloc_array()
->   leds: class: simplify the implementation of devm_of_led_get()
->   leds: provide devm_of_led_get_optional()
->   leds: class: store the color index in struct led_classdev
->   dt-bindings: leds: Add binding for a multicolor group of LEDs
->   leds: Add a multicolor LED driver to group monochromatic LEDs
->
->  Documentation/ABI/testing/sysfs-class-led     |   9 +
->  .../bindings/leds/leds-group-multicolor.yaml  |  64 +++++++
->  drivers/leds/led-class.c                      |  65 +++++--
->  drivers/leds/rgb/Kconfig                      |  10 ++
->  drivers/leds/rgb/Makefile                     |   1 +
->  drivers/leds/rgb/leds-group-multicolor.c      | 166 ++++++++++++++++++
->  include/linux/device.h                        |  13 ++
->  include/linux/leds.h                          |   3 +
->  8 files changed, 317 insertions(+), 14 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/leds/leds-group-multicolor.yaml
->  create mode 100644 drivers/leds/rgb/leds-group-multicolor.c
 
-Most patches are good to go.
+On 3/15/2023 9:21 PM, Mukesh Ojha wrote:
+> 
+> 
+> On 3/15/2023 7:54 PM, Vlastimil Babka wrote:
+>> The comment refers to mm/slob.o which is being removed. It comes from
 
-Once you've fixed up patch 6, I'll apply the set.
+nit: mm/slob.c
 
---
-Lee Jones [李琼斯]
+-- Mukesh
+
+> 
+> 
+>> commit ed56829cb319 ("ring_buffer: reset buffer page when freeing") and
+>> according to Steven the borrowed code was a page mapcount and mapping
+>> reset, which was later removed by commit e4c2ce82ca27 ("ring_buffer:
+>> allocate buffer page pointer"). Thus the comment is not accurate anyway,
+>> remove it.
+>>
+>> Reported-by: Mike Rapoport <mike.rapoport@gmail.com>
+>> Suggested-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+>> Fixes: e4c2ce82ca27 ("ring_buffer: allocate buffer page pointer")
+>> Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
+>> ---
+>>   kernel/trace/ring_buffer.c | 4 ----
+>>   1 file changed, 4 deletions(-)
+>>
+>> diff --git a/kernel/trace/ring_buffer.c b/kernel/trace/ring_buffer.c
+>> index af50d931b020..c6f47b6cfd5f 100644
+>> --- a/kernel/trace/ring_buffer.c
+>> +++ b/kernel/trace/ring_buffer.c
+>> @@ -354,10 +354,6 @@ static void rb_init_page(struct buffer_data_page 
+>> *bpage)
+>>       local_set(&bpage->commit, 0);
+>>   }
+>> -/*
+>> - * Also stolen from mm/slob.c. Thanks to Mathieu Desnoyers for pointing
+>> - * this issue out.
+>> - */
+> 
+> Thanks for the clean up.
+> 
+> Reviewed-by: Mukesh Ojha <quic_mojha@quicinc.com>
+> 
+> -- Mukesh
+> 
+>>   static void free_buffer_page(struct buffer_page *bpage)
+>>   {
+>>       free_page((unsigned long)bpage->page);
