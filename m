@@ -2,110 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7301A6BBFBD
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 23:26:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45A976BBFBF
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 23:27:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231167AbjCOW0g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 18:26:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40284 "EHLO
+        id S231303AbjCOW05 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 18:26:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229974AbjCOW0e (ORCPT
+        with ESMTP id S229974AbjCOW04 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 18:26:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B284968D5;
-        Wed, 15 Mar 2023 15:26:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D4E2861E91;
-        Wed, 15 Mar 2023 22:26:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF29CC4339C;
-        Wed, 15 Mar 2023 22:26:30 +0000 (UTC)
-Date:   Wed, 15 Mar 2023 18:26:28 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     Uladzislau Rezki <urezki@gmail.com>, Jens Axboe <axboe@kernel.dk>,
-        LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>,
-        Philipp Reisner <philipp.reisner@linbit.com>,
-        Bryan Tan <bryantan@vmware.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Bob Pearson <rpearsonhpe@gmail.com>,
-        Ariel Levkovich <lariel@nvidia.com>,
-        "Theodore Ts'o" <tytso@mit.edu>, Julian Anastasov <ja@ssi.bg>
-Subject: Re: [PATCH 00/13] Rename k[v]free_rcu() single argument to
- k[v]free_rcu_mightsleep()
-Message-ID: <20230315182628.39329315@gandalf.local.home>
-In-Reply-To: <CAEXW_YTNNJJftsg1QRvhUCRoZpKa3SM6=-0M-cukCGt5=G+row@mail.gmail.com>
-References: <20230201150815.409582-1-urezki@gmail.com>
-        <20230315151415.2534e11c@gandalf.local.home>
-        <e5a1815b-65b5-55ca-9773-ec04378d53c0@kernel.dk>
-        <ZBIbloFMm5xRsjfn@pc636>
-        <20230315153448.6914f85b@gandalf.local.home>
-        <CAEXW_YTLFQ3-LApyCPNNx7Tn2ovFr8YUXL=1WVCm+rE2hRKE8g@mail.gmail.com>
-        <20230315162840.106a5b4f@gandalf.local.home>
-        <CAEXW_YTNNJJftsg1QRvhUCRoZpKa3SM6=-0M-cukCGt5=G+row@mail.gmail.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Wed, 15 Mar 2023 18:26:56 -0400
+Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 730E49E056;
+        Wed, 15 Mar 2023 15:26:49 -0700 (PDT)
+Received: by mail-il1-x130.google.com with SMTP id r4so5192689ilt.8;
+        Wed, 15 Mar 2023 15:26:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678919209;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=glTNUtMFWjiZCDetBfpQcyLtsMmbcSbrV4Z5n8lOfN4=;
+        b=cY6dkWK2ojaquvdJA6Y8gskWtuSpKVvQZvFFVY6RVkkkf68f1M1e6yjspPHRx6gr7p
+         o2j2zT+InUGS9/mlmg+hBq5hTGM+SBDKpOhSwG5ixY4QvcDstwT7s2rgrN3xJqAZp1mr
+         EYQN/2e/ClqYsSgPrs+AGFMVgOE9iAJouXmYJbTTWjBXGI1rGrW6z9irqEVDG5Ytc/Aw
+         XCqI4lTeLOM3yXNDsRbf3stzv14Bvr9+sCt+PauMAyqqcThw4FWpcvweE5dgAtuZiSMq
+         roA63bnZh2UIN8eG7Aby2AgQ0LlaCHqPh1G8n70R9cGeXF2yFKEzcfV9QsObma7umiMq
+         nhKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678919209;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=glTNUtMFWjiZCDetBfpQcyLtsMmbcSbrV4Z5n8lOfN4=;
+        b=5l3KYSyJYeiwDyODjR8nhMqhQf6E0Ed0c4KwMaQEQw2NO6v9ifFLj71+0Hku2fbkto
+         rtYNg2ycYyfOLlN7gwISPhHHAyWz1ixJDWMnSgQ/ZqM7grFZn40CKFgHVnetnM1H0lpk
+         GsO+ah16ADCf96ZIWjQwXn+TszkMPefyGz3BXmsDzELeKx93prfIJrss+0dr12vb5LPi
+         QJTAEDy/0oobtPZNiUzOf8wrjzwgF4GeZCPjvUoltQa/j9NC6FcXPN+WQm1WKjKxaTi7
+         k4uqB0guKPPYMqsFA8BMyvOJ29shl2IwZqwwu/V4bINRW1m4GjYRtF3VRvug4d6IRXB2
+         Tf4A==
+X-Gm-Message-State: AO0yUKW28cllBXNPDNxz2/SzPMOS+wLFvhbzA9L03+XOzfHR0OtAksJa
+        upNXn526n4rYCAxc0TgBIfY=
+X-Google-Smtp-Source: AK7set8sj7wvf99sifD6T3WFl6h2ulXOV/x3X/ayGH3zpQsVK3stFoxL7d0yOmSw8nRQpGxMkbXLWQ==
+X-Received: by 2002:a05:6e02:1c01:b0:323:ad6:5357 with SMTP id l1-20020a056e021c0100b003230ad65357mr6796619ilh.28.1678919208768;
+        Wed, 15 Mar 2023 15:26:48 -0700 (PDT)
+Received: from ?IPV6:2601:282:800:7ed0:4c27:4181:1cd6:29d4? ([2601:282:800:7ed0:4c27:4181:1cd6:29d4])
+        by smtp.googlemail.com with ESMTPSA id v5-20020a92c6c5000000b00313b281ecd2sm1906394ilm.70.2023.03.15.15.26.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Mar 2023 15:26:48 -0700 (PDT)
+Message-ID: <5f97f6d5-d979-d501-a090-b5a69f33fa45@gmail.com>
+Date:   Wed, 15 Mar 2023 16:26:47 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.7.2
+Subject: Re: [patch V2 1/4] net: dst: Prevent false sharing vs.
+ dst_entry::__refcnt
+Content-Language: en-US
+To:     Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org
+References: <20230307125358.772287565@linutronix.de>
+ <20230307125538.818862491@linutronix.de> <20230315133659.4d608eb0@kernel.org>
+From:   David Ahern <dsahern@gmail.com>
+In-Reply-To: <20230315133659.4d608eb0@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 15 Mar 2023 18:08:19 -0400
-Joel Fernandes <joel@joelfernandes.org> wrote:
-
-> I am doubtful there may be a future where it does not sleep. Why?
-> Because you need an rcu_head *somewhere*. Unlike with debubojects,
-> which involves a lock-free per-CPU pool and a locked global pool, and
-> has the liberty to shutdown if it runs out of objects -- in RCU code
-> it doesn't have that liberty and it has to just keep working.  The
-> kfree_rcu code does have pools of rcu_head as well, but that is not
-> thought to be enough to prevent OOM when memory needs to be given
-> back.  AFAIK -- the synchronize_rcu() in there is a last resort and
-> undesirable (supposed to happen only when running out of
-> objects/memory).
-
-And everything you said above is still implementation, and the user of
-kvfree_rcu() doesn't care.
-
-The only thing different about the two cases is that one is headless.
-
+On 3/15/23 2:36 PM, Jakub Kicinski wrote:
+> On Tue,  7 Mar 2023 13:57:42 +0100 (CET) Thomas Gleixner wrote:
+>> Move the rt[6i]_uncached[_list] members out of struct rtable and struct
+>> rt6_info into struct dst_entry to provide padding and move the lwtstate
+>> member after that so it ends up in the same cache line.
 > 
-> Also "mightsleep" means just that -- *might*.  That covers the fact
-> that sleeping may not happen ;-).
+> Eric, David, looks reasonable? 
 
-Yes, and even though you are doubtful of it not ever having a non-sleep
-implementation, there is still a chance that there might be something
-someday.
+Reviewed-by: David Ahern <dsahern@kernel.org>
 
-> 
-> This is just my opinion and I will defer to Uladzislau, Paul and you
-> on how to proceed. Another option is "cansleep" which has the same
-> number of characters as headless. I don't believe expecting users to
-> read comments is practical, since we did already have comments and
-> there was a bug in the usage that triggered this whole series.
-
-The point of "headless" is that is the rational for this version of
-kvfree_rcu(). It doesn't have a head. That's an API name that users care
-about.
-
-Why not call it kvfree_rcu_alloc() ? It allocates right?
-
-We have might_sleep() in lots of places. In fact, the default is things
-might sleep. We don't need to call it out. That's what the might_sleep()
-call is for. Usually it's the non sleep version that is special.
-
-We could call the normal kvfree_rcu() "kvfree_rcu_inatomic()" ;-)
-
-But I guess that would be a bigger change.
-
--- Steve
