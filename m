@@ -2,50 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12F486BA636
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 05:29:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 505216BA63B
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 05:32:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230212AbjCOE3M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 00:29:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53804 "EHLO
+        id S229790AbjCOEcp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 00:32:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229616AbjCOE3I (ORCPT
+        with ESMTP id S229616AbjCOEcn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 00:29:08 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E229C142;
-        Tue, 14 Mar 2023 21:29:05 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32F4Srua010571;
-        Tue, 14 Mar 2023 23:28:53 -0500
+        Wed, 15 Mar 2023 00:32:43 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD55C5B81;
+        Tue, 14 Mar 2023 21:32:41 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32F4WTgc070653;
+        Tue, 14 Mar 2023 23:32:29 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1678854533;
-        bh=pq0vN+QaBsXk7vZDc5tphUuYOmXyug9paHeytQhvPco=;
+        s=ti-com-17Q1; t=1678854749;
+        bh=7nZUFMVyqD2/KV+57P2UE4gMyx692dI3QnbfGkYg4CU=;
         h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=skv73KbtLp1aMAC9E5BJle/JJLet1rUfE8GXcwKQqKvpG2zvMyOdOjdhjRtvhrmFP
-         jgtg/LDFVnD0SnWtVFLRwnGH40yRF6zsjsOnYrJHMheUw7Jdb3xhWc+YqvVY7KfJ0O
-         9SvUTiYxOb0N2qfmwMw4qJoc/wcZJg1qQOENtgbA=
-Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32F4Sr1K056646
+        b=fbOKG/LiP7s02IvI0CDZ8b9D1BUdQGx/evTJ/uUCvDQmWWaE9iX5CfEoy2KBI9LhR
+         gfUzGnhVz1/S894EaR/72x0QTBmdSTJ4iN+Y0Ymkajj3tebzXpyJRND48eFBMwIx0J
+         dN/ZGgTPsVT1FGYyy0lzQJ2lESgyX3sUb2LWpZuw=
+Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32F4WTHV035595
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 14 Mar 2023 23:28:53 -0500
-Received: from DLEE105.ent.ti.com (157.170.170.35) by DLEE100.ent.ti.com
- (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+        Tue, 14 Mar 2023 23:32:29 -0500
+Received: from DFLE113.ent.ti.com (10.64.6.34) by DFLE104.ent.ti.com
+ (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 14
- Mar 2023 23:28:52 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE105.ent.ti.com
- (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
+ Mar 2023 23:32:28 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Tue, 14 Mar 2023 23:28:52 -0500
-Received: from [172.24.145.215] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32F4SmLP010477;
-        Tue, 14 Mar 2023 23:28:49 -0500
-Message-ID: <9b88f21d-d3bd-5780-7cd7-827ff299e7b3@ti.com>
-Date:   Wed, 15 Mar 2023 09:58:48 +0530
+ Frontend Transport; Tue, 14 Mar 2023 23:32:29 -0500
+Received: from [172.24.145.215] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32F4WPUK062856;
+        Tue, 14 Mar 2023 23:32:25 -0500
+Message-ID: <dbc03a80-a1d2-1458-a0b8-f3038db3caf3@ti.com>
+Date:   Wed, 15 Mar 2023 10:02:24 +0530
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-Subject: Re: [PATCH v5 4/6] arm64: dts: ti: k3-am62a-main: Add nodes for McASP
+Subject: Re: [PATCH v5 6/6] arm64: dts: ti: k3-am62a7-sk: Enable audio on
+ AM62A
 Content-Language: en-US
 To:     Jai Luthra <j-luthra@ti.com>, Nishanth Menon <nm@ti.com>,
         Vignesh Raghavendra <vigneshr@ti.com>,
@@ -53,14 +54,13 @@ To:     Jai Luthra <j-luthra@ti.com>, Nishanth Menon <nm@ti.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Andrew Davis <afd@ti.com>
+        Will Deacon <will@kernel.org>, Mark Brown <broonie@kernel.org>
 CC:     <linux-arm-kernel@lists.infradead.org>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
 References: <20230313-mcasp_upstream-v5-0-d6844707aa8a@ti.com>
- <20230313-mcasp_upstream-v5-4-d6844707aa8a@ti.com>
+ <20230313-mcasp_upstream-v5-6-d6844707aa8a@ti.com>
 From:   Jayesh Choudhary <j-choudhary@ti.com>
-In-Reply-To: <20230313-mcasp_upstream-v5-4-d6844707aa8a@ti.com>
+In-Reply-To: <20230313-mcasp_upstream-v5-6-d6844707aa8a@ti.com>
 Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
 X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
@@ -77,90 +77,126 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 On 13/03/23 20:19, Jai Luthra wrote:
-> Same as AM62, AM62A has three instances of McASP which can be used for
-> transmitting or receiving digital audio in various formats.
+> Add nodes for audio codec and sound card, enable the audio serializer
+> (McASP1) under use and update pinmux.
 > 
 > Signed-off-by: Jai Luthra <j-luthra@ti.com>
 > ---
->   arch/arm64/boot/dts/ti/k3-am62a-main.dtsi | 60 +++++++++++++++++++++++++++++++
->   1 file changed, 60 insertions(+)
+>   arch/arm64/boot/dts/ti/k3-am62a7-sk.dts | 77 +++++++++++++++++++++++++++++++++
+>   1 file changed, 77 insertions(+)
 > 
-> diff --git a/arch/arm64/boot/dts/ti/k3-am62a-main.dtsi b/arch/arm64/boot/dts/ti/k3-am62a-main.dtsi
-> index 393a1a40b68b..7b20c07fab77 100644
-> --- a/arch/arm64/boot/dts/ti/k3-am62a-main.dtsi
-> +++ b/arch/arm64/boot/dts/ti/k3-am62a-main.dtsi
-> @@ -660,4 +660,64 @@ ecap2: pwm@23120000 {
->   		clock-names = "fck";
->   		status = "disabled";
+> diff --git a/arch/arm64/boot/dts/ti/k3-am62a7-sk.dts b/arch/arm64/boot/dts/ti/k3-am62a7-sk.dts
+> index 063e69e45163..1775ed154aff 100644
+> --- a/arch/arm64/boot/dts/ti/k3-am62a7-sk.dts
+> +++ b/arch/arm64/boot/dts/ti/k3-am62a7-sk.dts
+> @@ -122,6 +122,41 @@ led-0 {
+>   			default-state = "off";
+>   		};
 >   	};
 > +
-> +	mcasp0: mcasp@2b00000 {
-> +		compatible = "ti,am33xx-mcasp-audio";
-> +		reg = <0x00 0x02b00000 0x00 0x2000>,
-> +		      <0x00 0x02b08000 0x00 0x400>;
-> +		reg-names = "mpu","dat";
-> +		interrupts = <GIC_SPI 236 IRQ_TYPE_LEVEL_HIGH>,
-> +				<GIC_SPI 235 IRQ_TYPE_LEVEL_HIGH>;
+> +	tlv320_mclk: clk-0 {
+> +		#clock-cells = <0>;
+> +		compatible = "fixed-clock";
+> +		clock-frequency = <12288000>;
+> +	};
+> +
+> +	codec_audio: sound {
+> +		compatible = "simple-audio-card";
+> +		simple-audio-card,name = "AM62Ax-SKEVM";
+> +		simple-audio-card,widgets =
+> +			"Headphone",	"Headphone Jack",
+> +			"Line",	"Line In",
+> +			"Microphone",	"Microphone Jack";
+> +		simple-audio-card,routing =
+> +			"Headphone Jack",	"HPLOUT",
+> +			"Headphone Jack",	"HPROUT",
+> +			"LINE1L",		"Line In",
+> +			"LINE1R",		"Line In",
+> +			"MIC3R",		"Microphone Jack",
+> +			"Microphone Jack",	"Mic Bias";
+> +		simple-audio-card,format = "dsp_b";
+> +		simple-audio-card,bitclock-master = <&sound_master>;
+> +		simple-audio-card,frame-master = <&sound_master>;
+> +		simple-audio-card,bitclock-inversion;
+> +
+> +		simple-audio-card,cpu {
+> +			sound-dai = <&mcasp1>;
+> +		};
+> +
+> +		sound_master: simple-audio-card,codec {
+> +			sound-dai = <&tlv320aic3106>;
+> +			clocks = <&tlv320_mclk>;
+> +		};
+> +	};
+>   };
+>   
+>   &main_pmx0 {
+> @@ -200,6 +235,15 @@ AM62AX_IOPAD(0x130, PIN_INPUT, 0) /* (AB17) RGMII1_TXC */
+>   			AM62AX_IOPAD(0x12c, PIN_INPUT, 0) /* (W16) RGMII1_TX_CTL */
+>   		>;
+>   	};
+> +
+> +	main_mcasp1_pins_default: main-mcasp1-pins-default {
+> +		pinctrl-single,pins = <
+> +			AM62AX_IOPAD(0x090, PIN_INPUT, 2) /* (L19) GPMC0_BE0n_CLE.MCASP1_ACLKX */
+> +			AM62AX_IOPAD(0x098, PIN_INPUT, 2) /* (R18) GPMC0_WAIT0.MCASP1_AFSX */
+> +			AM62AX_IOPAD(0x08c, PIN_OUTPUT, 2) /* (K19) GPMC0_WEn.MCASP1_AXR0 */
+> +			AM62AX_IOPAD(0x084, PIN_INPUT, 2) /* (L18) GPMC0_ADVn_ALE.MCASP1_AXR2 */
+> +		>;
+> +	};
+>   };
+>   
+>   &main_i2c0 {
+> @@ -234,6 +278,19 @@ exp1: gpio@22 {
+>   				   "MCASP1_FET_SEL", "UART1_FET_SEL",
+>   				   "PD_I2C_IRQ", "IO_EXP_TEST_LED";
+>   	};
+> +
+> +	tlv320aic3106: audio-codec@1b {
+> +		#sound-dai-cells = <0>;
+> +		compatible = "ti,tlv320aic3106";
+> +		reg = <0x1b>;
+> +		ai3x-micbias-vg = <1>;		/* 2.0V */
+> +		status = "okay";
 
-Andrew's comment for alignment with space is applicable on this patch
-as well for all 3 mcasp nodes.
-<https://lore.kernel.org/all/c4721d5f-a265-f692-2b57-f0cfcd2702b3@ti.com/>
+No need for status property here I guess????
+
+> +
+> +		/* Regulators */
+> +		AVDD-supply = <&vcc_3v3_sys>;
+> +		IOVDD-supply = <&vcc_3v3_sys>;
+> +		DRVDD-supply = <&vcc_3v3_sys>;
+
+DVDD 1.8V supply here looks missing???
 
 Reviewed-by: Jayesh Choudhary <j-choudhary@ti.com>
 
-
-
-> +		interrupt-names = "tx", "rx";
-> +
-> +		dmas = <&main_bcdma 0 0xc500 0>, <&main_bcdma 0 0x4500 0>;
-> +		dma-names = "tx", "rx";
-> +
-> +		clocks = <&k3_clks 190 0>;
-> +		clock-names = "fck";
-> +		assigned-clocks = <&k3_clks 190 0>;
-> +		assigned-clock-parents = <&k3_clks 190 2>;
-> +		power-domains = <&k3_pds 190 TI_SCI_PD_EXCLUSIVE>;
-> +		status = "disabled";
-> +	};
-> +
-> +	mcasp1: mcasp@2b10000 {
-> +		compatible = "ti,am33xx-mcasp-audio";
-> +		reg = <0x00 0x02b10000 0x00 0x2000>,
-> +		      <0x00 0x02b18000 0x00 0x400>;
-> +		reg-names = "mpu","dat";
-> +		interrupts = <GIC_SPI 238 IRQ_TYPE_LEVEL_HIGH>,
-> +				<GIC_SPI 237 IRQ_TYPE_LEVEL_HIGH>;
-> +		interrupt-names = "tx", "rx";
-> +
-> +		dmas = <&main_bcdma 0 0xc501 0>, <&main_bcdma 0 0x4501 0>;
-> +		dma-names = "tx", "rx";
-> +
-> +		clocks = <&k3_clks 191 0>;
-> +		clock-names = "fck";
-> +		assigned-clocks = <&k3_clks 191 0>;
-> +		assigned-clock-parents = <&k3_clks 191 2>;
-> +		power-domains = <&k3_pds 191 TI_SCI_PD_EXCLUSIVE>;
-> +		status = "disabled";
-> +	};
-> +
-> +	mcasp2: mcasp@2b20000 {
-> +		compatible = "ti,am33xx-mcasp-audio";
-> +		reg = <0x00 0x02b20000 0x00 0x2000>,
-> +		      <0x00 0x02b28000 0x00 0x400>;
-> +		reg-names = "mpu","dat";
-> +		interrupts = <GIC_SPI 240 IRQ_TYPE_LEVEL_HIGH>,
-> +				<GIC_SPI 239 IRQ_TYPE_LEVEL_HIGH>;
-> +		interrupt-names = "tx", "rx";
-> +
-> +		dmas = <&main_bcdma 0 0xc502 0>, <&main_bcdma 0 0x4502 0>;
-> +		dma-names = "tx", "rx";
-> +
-> +		clocks = <&k3_clks 192 0>;
-> +		clock-names = "fck";
-> +		assigned-clocks = <&k3_clks 192 0>;
-> +		assigned-clock-parents = <&k3_clks 192 2>;
-> +		power-domains = <&k3_pds 192 TI_SCI_PD_EXCLUSIVE>;
-> +		status = "disabled";
 > +	};
 >   };
+>   
+>   &sdhci1 {
+> @@ -302,3 +359,23 @@ cpsw3g_phy0: ethernet-phy@0 {
+>   		ti,min-output-impedance;
+>   	};
+>   };
+> +
+> +&mcasp1 {
+> +	status = "okay";
+> +	#sound-dai-cells = <0>;
+> +
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&main_mcasp1_pins_default>;
+> +
+> +	op-mode = <0>;          /* MCASP_IIS_MODE */
+> +	tdm-slots = <2>;
+> +
+> +	serial-dir = <  /* 0: INACTIVE, 1: TX, 2: RX */
+> +	       1 0 2 0
+> +	       0 0 0 0
+> +	       0 0 0 0
+> +	       0 0 0 0
+> +	>;
+> +	tx-num-evt = <32>;
+> +	rx-num-evt = <32>;
+> +};
 > 
