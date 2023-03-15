@@ -2,56 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A0956BB05F
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 13:17:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DDCA6BB0E3
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 13:22:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231987AbjCOMRt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 08:17:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41944 "EHLO
+        id S232023AbjCOMWU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 08:22:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231862AbjCOMRm (ORCPT
+        with ESMTP id S232186AbjCOMVv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 08:17:42 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5F669008B;
-        Wed, 15 Mar 2023 05:17:26 -0700 (PDT)
+        Wed, 15 Mar 2023 08:21:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26FD096F00;
+        Wed, 15 Mar 2023 05:21:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 5484ACE1986;
-        Wed, 15 Mar 2023 12:17:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43E8DC433D2;
-        Wed, 15 Mar 2023 12:17:23 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 668B361D4C;
+        Wed, 15 Mar 2023 12:21:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D1DAC433D2;
+        Wed, 15 Mar 2023 12:21:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1678882643;
-        bh=cE/IufYtRz6ELTGTxLKZju/AH5kL6rLLTCzSV8arzB0=;
-        h=From:To:Cc:Subject:Date:From;
-        b=R62B1Zg82uQdzVFvot5DXoEMtwT/egbo9ORrPHqQYrctjGOn2gYIzKGS4a4mzW9Gc
-         1YDuam5EMfnvyIGntMXADgZveYnO0b342eNfA4dmurLjY/rQaxbXzlfiUAOJbEPd/6
-         WFnv/z8e4aKgl4AEqoUQmc8jeTeoBbS92vJ7hxl8=
+        s=korg; t=1678882861;
+        bh=otWQfkOjRcKYmh1VqrfmvrHW/ax92X+qCi+inqN6B9o=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=U34i/BjhfE+Yzktf/id0d0RSafzTXU9cEQrpjFtUg+3o0hAgze+Z696Qpn5tavaBB
+         r7/eyK7Ag8W8OABQykPvy+g1EQ6zDXxBtZSLt8PqR4JZlBzCIPFUnOxZzQoKgeBwvB
+         PBHPagxZiK+ThHy/MlTokrAjcPis+rwo46cIKxB0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Subject: [PATCH 5.4 00/68] 5.4.237-rc1 review
-Date:   Wed, 15 Mar 2023 13:11:54 +0100
-Message-Id: <20230315115726.103942885@linuxfoundation.org>
+        patches@lists.linux.dev, Martin Liska <mliska@suse.cz>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Karol Herbst <kherbst@redhat.com>,
+        Lyude Paul <lyude@redhat.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org,
+        "Jiri Slaby (SUSE)" <jirislaby@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 029/104] drm/nouveau/kms/nv50: fix nv50_wndw_new_ prototype
+Date:   Wed, 15 Mar 2023 13:12:00 +0100
+Message-Id: <20230315115733.261181999@linuxfoundation.org>
 X-Mailer: git-send-email 2.40.0
-MIME-Version: 1.0
+In-Reply-To: <20230315115731.942692602@linuxfoundation.org>
+References: <20230315115731.942692602@linuxfoundation.org>
 User-Agent: quilt/0.67
-X-stable: review
-X-Patchwork-Hint: ignore
-X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.237-rc1.gz
-X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-X-KernelTest-Branch: linux-5.4.y
-X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
-X-KernelTest-Version: 5.4.237-rc1
-X-KernelTest-Deadline: 2023-03-17T11:57+00:00
+MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -64,313 +62,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is the start of the stable review cycle for the 5.4.237 release.
-There are 68 patches in this series, all will be posted as a response
-to this one.  If anyone has any issues with these being applied, please
-let me know.
+From: Jiri Slaby (SUSE) <jirislaby@kernel.org>
+
+[ Upstream commit 3638a820c5c3b52f327cebb174fd4274bee08aa7 ]
+
+gcc-13 warns about mismatching types for enums. That revealed switched
+arguments of nv50_wndw_new_():
+  drivers/gpu/drm/nouveau/dispnv50/wndw.c:696:1: error: conflicting types for 'nv50_wndw_new_' due to enum/integer mismatch; have 'int(const struct nv50_wndw_func *, struct drm_device *, enum drm_plane_type,  const char *, int,  const u32 *, u32,  enum nv50_disp_interlock_type,  u32,  struct nv50_wndw **)'
+  drivers/gpu/drm/nouveau/dispnv50/wndw.h:36:5: note: previous declaration of 'nv50_wndw_new_' with type 'int(const struct nv50_wndw_func *, struct drm_device *, enum drm_plane_type,  const char *, int,  const u32 *, enum nv50_disp_interlock_type,  u32,  u32,  struct nv50_wndw **)'
+
+It can be barely visible, but the declaration says about the parameters
+in the middle:
+  enum nv50_disp_interlock_type,
+  u32 interlock_data,
+  u32 heads,
+
+While the definition states differently:
+  u32 heads,
+  enum nv50_disp_interlock_type interlock_type,
+  u32 interlock_data,
+
+Unify/fix the declaration to match the definition.
+
+Fixes: 53e0a3e70de6 ("drm/nouveau/kms/nv50-: simplify tracking of channel interlocks")
+Cc: Martin Liska <mliska@suse.cz>
+Cc: Ben Skeggs <bskeggs@redhat.com>
+Cc: Karol Herbst <kherbst@redhat.com>
+Cc: Lyude Paul <lyude@redhat.com>
+Cc: David Airlie <airlied@gmail.com>
+Cc: Daniel Vetter <daniel@ffwll.ch>
+Cc: dri-devel@lists.freedesktop.org
+Cc: nouveau@lists.freedesktop.org
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Jiri Slaby (SUSE) <jirislaby@kernel.org>
+Signed-off-by: Karol Herbst <kherbst@redhat.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20221031114229.10289-1-jirislaby@kernel.org
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/gpu/drm/nouveau/dispnv50/wndw.h | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/gpu/drm/nouveau/dispnv50/wndw.h b/drivers/gpu/drm/nouveau/dispnv50/wndw.h
+index 8bed195ae098a..77bf124319fbd 100644
+--- a/drivers/gpu/drm/nouveau/dispnv50/wndw.h
++++ b/drivers/gpu/drm/nouveau/dispnv50/wndw.h
+@@ -38,8 +38,9 @@ struct nv50_wndw {
+ 
+ int nv50_wndw_new_(const struct nv50_wndw_func *, struct drm_device *,
+ 		   enum drm_plane_type, const char *name, int index,
+-		   const u32 *format, enum nv50_disp_interlock_type,
+-		   u32 interlock_data, u32 heads, struct nv50_wndw **);
++		   const u32 *format, u32 heads,
++		   enum nv50_disp_interlock_type, u32 interlock_data,
++		   struct nv50_wndw **);
+ void nv50_wndw_flush_set(struct nv50_wndw *, u32 *interlock,
+ 			 struct nv50_wndw_atom *);
+ void nv50_wndw_flush_clr(struct nv50_wndw *, u32 *interlock, bool flush,
+-- 
+2.39.2
 
-Responses should be made by Fri, 17 Mar 2023 11:57:10 +0000.
-Anything received after that time might be too late.
-
-The whole patch series can be found in one patch at:
-	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.237-rc1.gz
-or in the git tree and branch at:
-	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
-and the diffstat can be found below.
-
-thanks,
-
-greg k-h
-
--------------
-Pseudo-Shortlog of commits:
-
-Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-    Linux 5.4.237-rc1
-
-Stefan Haberland <sth@linux.ibm.com>
-    s390/dasd: add missing discipline function
-
-Masahiro Yamada <masahiroy@kernel.org>
-    UML: define RUNTIME_DISCARD_EXIT
-
-Tom Saeger <tom.saeger@oracle.com>
-    sh: define RUNTIME_DISCARD_EXIT
-
-Masahiro Yamada <masahiroy@kernel.org>
-    s390: define RUNTIME_DISCARD_EXIT to fix link error with GNU ld < 2.36
-
-Michael Ellerman <mpe@ellerman.id.au>
-    powerpc/vmlinux.lds: Don't discard .rela* for relocatable builds
-
-Michael Ellerman <mpe@ellerman.id.au>
-    powerpc/vmlinux.lds: Define RUNTIME_DISCARD_EXIT
-
-Masahiro Yamada <masahiroy@kernel.org>
-    arch: fix broken BuildID for arm64 and riscv
-
-H.J. Lu <hjl.tools@gmail.com>
-    x86, vmlinux.lds: Add RUNTIME_DISCARD_EXIT to generic DISCARDS
-
-John Harrison <John.C.Harrison@Intel.com>
-    drm/i915: Don't use BAR mappings for ring buffers with LLC
-
-Corey Minyard <cminyard@mvista.com>
-    ipmi:watchdog: Set panic count to proper value on a panic
-
-Yejune Deng <yejune.deng@gmail.com>
-    ipmi/watchdog: replace atomic_add() and atomic_sub()
-
-Paul Elder <paul.elder@ideasonboard.com>
-    media: ov5640: Fix analogue gain control
-
-Alvaro Karsz <alvaro.karsz@solid-run.com>
-    PCI: Avoid FLR for SolidRun SNET DPU rev 1
-
-Alvaro Karsz <alvaro.karsz@solid-run.com>
-    PCI: Add SolidRun vendor ID
-
-Nathan Chancellor <nathan@kernel.org>
-    macintosh: windfarm: Use unsigned type for 1-bit bitfields
-
-Edward Humes <aurxenon@lunos.org>
-    alpha: fix R_ALPHA_LITERAL reloc for large modules
-
-Christophe Leroy <christophe.leroy@csgroup.eu>
-    powerpc: Check !irq instead of irq == NO_IRQ and remove NO_IRQ
-
-xurui <xurui@kylinos.cn>
-    MIPS: Fix a compilation issue
-
-Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-    clk: qcom: mmcc-apq8084: remove spdm clocks
-
-Jan Kara <jack@suse.cz>
-    ext4: Fix deadlock during directory rename
-
-Alexandre Ghiti <alexghiti@rivosinc.com>
-    riscv: Use READ_ONCE_NOCHECK in imprecise unwinding stack mode
-
-D. Wythe <alibuda@linux.alibaba.com>
-    net/smc: fix fallback failed while sendmsg with fastopen
-
-Chandrakanth Patil <chandrakanth.patil@broadcom.com>
-    scsi: megaraid_sas: Update max supported LD IDs to 240
-
-Lorenz Bauer <lorenz.bauer@isovalent.com>
-    btf: fix resolving BTF_KIND_VAR after ARRAY, STRUCT, UNION, PTR
-
-Florian Westphal <fw@strlen.de>
-    netfilter: tproxy: fix deadlock due to missing BH disable
-
-Michael Chan <michael.chan@broadcom.com>
-    bnxt_en: Avoid order-5 memory allocation for TPA data
-
-Shigeru Yoshida <syoshida@redhat.com>
-    net: caif: Fix use-after-free in cfusbl_device_notify()
-
-Yuiko Oshino <yuiko.oshino@microchip.com>
-    net: lan78xx: fix accessing the LAN7800's internal phy specific registers from the MAC driver
-
-Lee Jones <lee.jones@linaro.org>
-    net: usb: lan78xx: Remove lots of set but unused 'ret' variables
-
-Hangbin Liu <liuhangbin@gmail.com>
-    selftests: nft_nat: ensuring the listening side is up before starting the client
-
-Eric Dumazet <edumazet@google.com>
-    ila: do not generate empty messages in ila_xlat_nl_cmd_get_mapping()
-
-Kang Chen <void0red@gmail.com>
-    nfc: fdp: add null check of devm_kmalloc_array in fdp_nci_i2c_read_device_properties
-
-Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-    drm/msm/a5xx: fix setting of the CP_PREEMPT_ENABLE_LOCAL register
-
-Jan Kara <jack@suse.cz>
-    ext4: Fix possible corruption when moving a directory
-
-Bart Van Assche <bvanassche@acm.org>
-    scsi: core: Remove the /proc/scsi/${proc_name} directory earlier
-
-Volker Lendecke <vl@samba.org>
-    cifs: Fix uninitialized memory read in smb3_qfs_tcon()
-
-Amir Goldstein <amir73il@gmail.com>
-    SMB3: Backup intent flag missing from some more ops
-
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-    ARM: dts: exynos: correct TMU phandle in Odroid XU3 family
-
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-    ARM: dts: exynos: correct TMU phandle in Odroid HC1
-
-Marek Szyprowski <m.szyprowski@samsung.com>
-    ARM: dts: exynos: Add GPU thermal zone cooling maps for Odroid XU3/XU4/HC1
-
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-    ARM: dts: exynos: correct TMU phandle in Exynos5250
-
-Krzysztof Kozlowski <krzk@kernel.org>
-    ARM: dts: exynos: Override thermal by label in Exynos5250
-
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-    ARM: dts: exynos: correct TMU phandle in Exynos4210
-
-Krzysztof Kozlowski <krzk@kernel.org>
-    ARM: dts: exynos: Override thermal by label in Exynos4210
-
-Jacob Pan <jacob.jun.pan@linux.intel.com>
-    iommu/vt-d: Fix PASID directory pointer coherency
-
-Marc Zyngier <maz@kernel.org>
-    irqdomain: Fix domain registration race
-
-Bixuan Cui <cuibixuan@huawei.com>
-    irqdomain: Change the type of 'size' in __irq_domain_add() to be consistent
-
-Corey Minyard <cminyard@mvista.com>
-    ipmi:ssif: Add a timer between request retries
-
-Corey Minyard <cminyard@mvista.com>
-    ipmi:ssif: Increase the message retry time
-
-Corey Minyard <cminyard@mvista.com>
-    ipmi:ssif: Remove rtc_us_timer
-
-Corey Minyard <cminyard@mvista.com>
-    ipmi:ssif: resend_msg() cannot fail
-
-Liguang Zhang <zhangliguang@linux.alibaba.com>
-    ipmi:ssif: make ssif_i2c_send() void
-
-Gavrilov Ilia <Ilia.Gavrilov@infotecs.ru>
-    iommu/amd: Add a length limitation for the ivrs_acpihid command-line parameter
-
-Kim Phillips <kim.phillips@amd.com>
-    iommu/amd: Fix ill-formed ivrs_ioapic, ivrs_hpet and ivrs_acpihid options
-
-Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
-    iommu/amd: Add PCI segment support for ivrs_[ioapic/hpet/acpihid] commands
-
-Jani Nikula <jani.nikula@intel.com>
-    drm/edid: fix AVI infoframe aspect ratio handling
-
-Wayne Lin <Wayne.Lin@amd.com>
-    drm/edid: Add aspect ratios to HDMI 4K modes
-
-Ville Syrjälä <ville.syrjala@linux.intel.com>
-    drm/edid: Fix HDMI VIC handling
-
-Ville Syrjälä <ville.syrjala@linux.intel.com>
-    drm/edid: Extract drm_mode_cea_vic()
-
-Fedor Pchelkin <pchelkin@ispras.ru>
-    nfc: change order inside nfc_se_io error path
-
-Zhihao Cheng <chengzhihao1@huawei.com>
-    ext4: zero i_disksize when initializing the bootloader inode
-
-Ye Bin <yebin10@huawei.com>
-    ext4: fix WARNING in ext4_update_inline_data
-
-Ye Bin <yebin10@huawei.com>
-    ext4: move where set the MAY_INLINE_DATA flag is set
-
-Darrick J. Wong <djwong@kernel.org>
-    ext4: fix another off-by-one fsmap error on 1k block filesystems
-
-Eric Whitney <enwlinux@gmail.com>
-    ext4: fix RENAME_WHITEOUT handling for inline directories
-
-Harry Wentland <harry.wentland@amd.com>
-    drm/connector: print max_requested_bpc in state debugfs
-
-Andrew Cooper <andrew.cooper3@citrix.com>
-    x86/CPU/AMD: Disable XSAVES on AMD family 0x17
-
-Theodore Ts'o <tytso@mit.edu>
-    fs: prevent out-of-bounds array speculation when closing a file descriptor
-
-
--------------
-
-Diffstat:
-
- Documentation/admin-guide/kernel-parameters.txt    |  51 +++-
- Makefile                                           |   4 +-
- arch/alpha/kernel/module.c                         |   4 +-
- arch/arm/boot/dts/exynos4210.dtsi                  |  35 ++-
- arch/arm/boot/dts/exynos5250.dtsi                  |  38 ++-
- arch/arm/boot/dts/exynos5422-odroidhc1.dts         |  38 ++-
- arch/arm/boot/dts/exynos5422-odroidxu3-common.dtsi |  67 ++++-
- arch/mips/include/asm/mach-rc32434/pci.h           |   2 +-
- arch/powerpc/include/asm/irq.h                     |   3 -
- arch/powerpc/kernel/vmlinux.lds.S                  |   6 +-
- arch/powerpc/platforms/44x/fsp2.c                  |   2 +-
- arch/riscv/kernel/stacktrace.c                     |   2 +-
- arch/s390/kernel/vmlinux.lds.S                     |   2 +
- arch/sh/kernel/vmlinux.lds.S                       |   1 +
- arch/um/kernel/vmlinux.lds.S                       |   2 +-
- arch/x86/kernel/cpu/amd.c                          |   9 +
- arch/x86/kernel/vmlinux.lds.S                      |   2 +
- drivers/char/ipmi/ipmi_ssif.c                      | 146 ++++-------
- drivers/char/ipmi/ipmi_watchdog.c                  |   8 +-
- drivers/clk/qcom/mmcc-apq8084.c                    | 271 ---------------------
- drivers/gpu/drm/drm_atomic.c                       |   1 +
- drivers/gpu/drm/drm_edid.c                         | 130 ++++++----
- drivers/gpu/drm/i915/gt/intel_ringbuffer.c         |   4 +-
- drivers/gpu/drm/msm/adreno/a5xx_gpu.c              |   4 +-
- drivers/iommu/amd_iommu_init.c                     | 105 ++++++--
- drivers/iommu/intel-pasid.c                        |   7 +
- drivers/macintosh/windfarm_lm75_sensor.c           |   4 +-
- drivers/macintosh/windfarm_smu_sensors.c           |   4 +-
- drivers/media/i2c/ov5640.c                         |   2 +-
- drivers/net/ethernet/broadcom/bnxt/bnxt.c          |  23 +-
- drivers/net/phy/microchip.c                        |  32 +++
- drivers/net/usb/lan78xx.c                          | 189 ++++++--------
- drivers/nfc/fdp/i2c.c                              |   4 +
- drivers/pci/quirks.c                               |   8 +
- drivers/s390/block/dasd_diag.c                     |   7 +-
- drivers/s390/block/dasd_fba.c                      |   7 +-
- drivers/s390/block/dasd_int.h                      |   1 -
- drivers/scsi/hosts.c                               |   2 +
- drivers/scsi/megaraid/megaraid_sas.h               |   2 +
- drivers/scsi/megaraid/megaraid_sas_fp.c            |   2 +-
- fs/cifs/cifsacl.c                                  |  14 +-
- fs/cifs/cifsfs.c                                   |   2 +-
- fs/cifs/cifsglob.h                                 |   6 +-
- fs/cifs/cifsproto.h                                |   8 +
- fs/cifs/connect.c                                  |   2 +-
- fs/cifs/dir.c                                      |   5 +-
- fs/cifs/file.c                                     |  10 +-
- fs/cifs/inode.c                                    |   8 +-
- fs/cifs/ioctl.c                                    |   2 +-
- fs/cifs/link.c                                     |  18 +-
- fs/cifs/smb1ops.c                                  |  19 +-
- fs/cifs/smb2inode.c                                |   9 +-
- fs/cifs/smb2ops.c                                  |  92 +++----
- fs/cifs/smb2proto.h                                |   2 +-
- fs/ext4/fsmap.c                                    |   2 +
- fs/ext4/inline.c                                   |   1 -
- fs/ext4/inode.c                                    |   7 +-
- fs/ext4/ioctl.c                                    |   1 +
- fs/ext4/namei.c                                    |  36 ++-
- fs/ext4/xattr.c                                    |   3 +
- fs/file.c                                          |   1 +
- include/asm-generic/vmlinux.lds.h                  |  16 +-
- include/linux/irqdomain.h                          |   2 +-
- include/linux/pci_ids.h                            |   2 +
- include/net/netfilter/nf_tproxy.h                  |   7 +
- kernel/bpf/btf.c                                   |   1 +
- kernel/irq/irqdomain.c                             |  62 +++--
- net/caif/caif_usb.c                                |   3 +
- net/ipv4/netfilter/nf_tproxy_ipv4.c                |   2 +-
- net/ipv6/ila/ila_xlat.c                            |   1 +
- net/ipv6/netfilter/nf_tproxy_ipv6.c                |   2 +-
- net/nfc/netlink.c                                  |   2 +-
- net/smc/af_smc.c                                   |  13 +-
- tools/testing/selftests/netfilter/nft_nat.sh       |   2 +
- 74 files changed, 783 insertions(+), 811 deletions(-)
 
 
