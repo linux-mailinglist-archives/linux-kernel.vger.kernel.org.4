@@ -2,118 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8F016BAAE9
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 09:37:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE1E16BAAEF
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 09:39:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231680AbjCOIhr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 04:37:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37998 "EHLO
+        id S231417AbjCOIjZ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 15 Mar 2023 04:39:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231564AbjCOIhi (ORCPT
+        with ESMTP id S229734AbjCOIjX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 04:37:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E8E0769C0
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 01:37:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0F5B161C22
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 08:37:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7222EC433D2;
-        Wed, 15 Mar 2023 08:37:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678869456;
-        bh=4pZA2ch6tMZtoAsHJihB4/kMMVTpVXQpbWpqS2cZx94=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dckC4qvEYe3d7uEI7SeBTortKL1SkyXl6Szt0jwi0qyH5aPBKI4flbehgZDlSWSPf
-         FC8UKmXkvaQ27GSdofKGrsy3goJX4sa6FnC63Om4YlKwOB9nCpuIECrPodW9Gla4L8
-         txYeO4rufnFt9jb/Bfo4FMcBf6QVxu3iiRsQjRDYJir67sLi0uzm5t1vOFyNt5pnX8
-         MHJCU+jg63wkFgc/+MePU9u2ekkwciplsw1VZHsCYacT2JCioJd/hYXdTHpJyIDw/p
-         +5li/y8sNHWl5beB4OCvYcepMuybRmwz8E0OZ7HByoGPoKa7T6pqqh7dwZ4JZanInv
-         ujEuV0+1nr0Kw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1pcMeg-0004rI-98; Wed, 15 Mar 2023 09:38:42 +0100
-Date:   Wed, 15 Mar 2023 09:38:42 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     will@kernel.org, joro@8bytes.org, robin.murphy@arm.com,
-        andersson@kernel.org, johan+linaro@kernel.org, steev@kali.org,
-        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] iommu/arm-smmu-qcom: Rework the logic finding the
- bypass quirk
-Message-ID: <ZBGEEk1d1WtNq4lT@hovoldconsulting.com>
-References: <20230314184659.176473-1-manivannan.sadhasivam@linaro.org>
- <ZBF1vFBWKXhHeD2v@hovoldconsulting.com>
- <20230315075958.GC25575@thinkpad>
+        Wed, 15 Mar 2023 04:39:23 -0400
+Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com [209.85.219.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7623E1F4AE;
+        Wed, 15 Mar 2023 01:39:21 -0700 (PDT)
+Received: by mail-qv1-f50.google.com with SMTP id op8so15419238qvb.11;
+        Wed, 15 Mar 2023 01:39:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678869560;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=uK8SYGT7bTD8H1jPAKwresu1h0ClqZnQVBVABXZukEk=;
+        b=X05VsDP+z/p1qbx2LcD2S55Mx7xuF5MfFd/lRpxPzU6LXWKlm8NI3raazMoLBn+cs9
+         4SjbnI4NZuEFs+STO0kG9LmOPCU2c3utwXJTYJiJSsNAd8xQjs2s7b/9e+f8ftw4yUlK
+         GkEkTWwY/4gntU8v+jRt+U+XtkJdDWLQRsePT2dlHTovM06az9klA3Mv8PjJMv7KrE7L
+         y6feo2ZXfaDJlHBsW+LLL4k6jh30QcrfOKsgtUvqjRFgNVWmqSlXiuSvblnUMLhNG/kd
+         IQeiv7eGL58ZvfS8MY+hMUEPScGLB6ro7dBPeqpwso4wEFdHhsjVbh0Nh7HWaG2qje/t
+         9DKg==
+X-Gm-Message-State: AO0yUKVsb5Y+0qQGRgNd5bKNtXXb5hIEk5rhFZzh8kCb2mIcdyIP3jIJ
+        hchHxwiM+vR5ur4+u7pZmTrUD4fqhypTmusP
+X-Google-Smtp-Source: AK7set+TIfKWkDNFAqiqL6XRg0WXzPq6qqVeJNIOmKj98qpQnoO8b03j813O1Dy8znNlVtCFo2lsaw==
+X-Received: by 2002:a05:622a:3d1:b0:3c0:40c1:7a71 with SMTP id k17-20020a05622a03d100b003c040c17a71mr36429085qtx.66.1678869560320;
+        Wed, 15 Mar 2023 01:39:20 -0700 (PDT)
+Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com. [209.85.219.174])
+        by smtp.gmail.com with ESMTPSA id s135-20020a37a98d000000b007290be5557bsm3308031qke.38.2023.03.15.01.39.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Mar 2023 01:39:19 -0700 (PDT)
+Received: by mail-yb1-f174.google.com with SMTP id r1so5686758ybu.5;
+        Wed, 15 Mar 2023 01:39:19 -0700 (PDT)
+X-Received: by 2002:a5b:68c:0:b0:b30:d9c:b393 with SMTP id j12-20020a5b068c000000b00b300d9cb393mr11119061ybq.12.1678869558588;
+ Wed, 15 Mar 2023 01:39:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230315075958.GC25575@thinkpad>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230314121216.413434-1-schnelle@linux.ibm.com> <20230314121216.413434-3-schnelle@linux.ibm.com>
+In-Reply-To: <20230314121216.413434-3-schnelle@linux.ibm.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 15 Mar 2023 09:39:06 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVry2YViJ5oFgo9i+uStWbhy7mXKWdWvCX=qgAu1-_Y1w@mail.gmail.com>
+Message-ID: <CAMuHMdVry2YViJ5oFgo9i+uStWbhy7mXKWdWvCX=qgAu1-_Y1w@mail.gmail.com>
+Subject: Re: [PATCH v3 02/38] ata: add HAS_IOPORT dependencies
+To:     Niklas Schnelle <schnelle@linux.ibm.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
+        linux-ide@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 15, 2023 at 01:29:58PM +0530, Manivannan Sadhasivam wrote:
-> On Wed, Mar 15, 2023 at 08:37:32AM +0100, Johan Hovold wrote:
+Hi Niklas,
 
-> > > +static int qcom_smmu_cfg_probe(struct arm_smmu_device *smmu)
-> > > +{
-> > > +	u32 smr;
-> > > +	int i;
-> > > +
-> > > +	/*
-> > > +	 * Limit the number of stream matching groups to 128 as the ARM SMMU architecture
-> > > +	 * specification defines NUMSMRG (Number of Stream Mapping Register Groups) in the
-> > > +	 * range of 0-127, but some Qcom platforms emulate more stream mapping groups. And
-> > > +	 * those groups don't exhibit the same behavior as the architecture supported ones.
-> > > +	 */
-> > 
-> > Please fix your editor so that it wraps lines at 80 columns, which is
-> > still the preferred (soft) limit.
-> > 
-> 
-> If exceeding 80 columns end up making the comment more readable (fewer lines),
-> then why should we limit ourselves?
+On Tue, Mar 14, 2023 at 1:12 PM Niklas Schnelle <schnelle@linux.ibm.com> wrote:
+> In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
+> not being declared. We thus need to add HAS_IOPORT as dependency for
+> those drivers using them.
+>
+> Co-developed-by: Arnd Bergmann <arnd@kernel.org>
+> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
 
-Exceeding 80 column for comments does generally not improve readability.
+Thanks for your patch!
 
-That part of the coding standard has do to with not adding excessive
-line breaks to *code*, where it can sometimes impact readability.
+> --- a/drivers/ata/Kconfig
+> +++ b/drivers/ata/Kconfig
+> @@ -342,6 +342,7 @@ endif # HAS_DMA
+>
+>  config ATA_SFF
+>         bool "ATA SFF support (for legacy IDE and PATA)"
+> +       depends on HAS_IOPORT
+>         default y
+>         help
+>           This option adds support for ATA controllers with SFF
 
-> > > +	if (smmu->num_mapping_groups > 128) {
-> > > +		dev_warn(smmu->dev, "\tLimiting the stream matching groups to 128\n");
-> > 
-> > dev_notice() should do since there's nothing a user can do about this.
-> > 
-> 
-> Ok.
-> 
-> > > +		smmu->num_mapping_groups = 128;
-> > > +	}
-> > 
-> > So this hunk is really all that is needed to make the current quirk
-> > detection work on sc8280xp. Why not simply stick with the current logic
-> > and use the last group until there is a need for anything more?
-> > 
-> 
-> No! What if the bootloader had set up mapping for 128 groups? In that case
-> we'll overwrite the last group. It is still required to find the valid group
-> and use it for quirk detection. If no group is available, we'll skip it.
+ATA_SFF is a dependency for lots of (S)ATA drivers.
+(at least) The following don't use I/O port access:
 
-Yes, but that's also entirely hypothetical (and could perhaps also be
-handled by adding a warning for now).
+    CONFIG_SATA_RCAR (arm/arm64)
+    CONFIG_PATA_FALCON (m68k/atari and m68k/q40)
+    CONFIG_PATA_GAYLE (m68k/amiga)
+    CONFIG_PATA_BUDDHA (m68k/amiga)
 
-If you want to rework the quirk handling for this you should at least do
-so in a separate patch as it is arguably a separate change from fixing
-the current quirk detection for newer SoCs by capping the number of
-groups (a minimal fix that could be backported).
+(at least) The following can use either MMIO or I/O port accesses:
 
-Johan
+    CONFIG_PATA_PLATFORM (m68k/mac)
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
