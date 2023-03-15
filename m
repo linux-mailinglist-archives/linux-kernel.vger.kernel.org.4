@@ -2,146 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15FA26BAC95
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 10:51:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E89C46BAC91
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 10:50:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231426AbjCOJvZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 05:51:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38096 "EHLO
+        id S231842AbjCOJuv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 05:50:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230280AbjCOJuh (ORCPT
+        with ESMTP id S232318AbjCOJuO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 05:50:37 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F09365455;
-        Wed, 15 Mar 2023 02:49:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678873787; x=1710409787;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=QSWH2oZrN6AG+LRQTmSkhiJhJRLWiR4GmeXcU4sJXws=;
-  b=nO+X2Yp8Rg0S3XMDuGd/a1hN0K0WucYhnRO7oquelVhg2hghruYAUL4y
-   tPXM3U9gkSLS1DvQ+lfett9TMsgp2A2Kz3T2bKP1F+jsTkV5dqP4zawNp
-   lX1+hNHifqhrCtll9pypUUxdmL/e9Am1rVvTD+MUSRoIyYtbD4kC6aI79
-   JFSEtkAOxDC4YPEj7fDQKOEmbzvCUsax93cSmi02ogh/LzKHprniG8k9Y
-   GoNFwqugTHCjZ5JYGiVSLV88fLDlQer4KH64F43QmDBSxXZ/W6HNZjCB8
-   SoP0zr1Mpwd2ZcJLu+akvc6jfhUpw5VGh35IJIhdwqQmYCuZzNK758C4p
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="318053410"
-X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
-   d="scan'208";a="318053410"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2023 02:49:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="853553720"
-X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
-   d="scan'208";a="853553720"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 15 Mar 2023 02:49:42 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pcNlN-0007ay-2v;
-        Wed, 15 Mar 2023 09:49:41 +0000
-Date:   Wed, 15 Mar 2023 17:48:45 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jacky Huang <ychuang570808@gmail.com>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
-        mturquette@baylibre.com, sboyd@kernel.org, p.zabel@pengutronix.de,
-        gregkh@linuxfoundation.org, jirislaby@kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-serial@vger.kernel.org, schung@nuvoton.com,
-        Jacky Huang <ychuang3@nuvoton.com>
-Subject: Re: [PATCH 14/15] tty: serial: Add Nuvoton ma35d1 serial driver
- support
-Message-ID: <202303151754.XvPyacT7-lkp@intel.com>
-References: <20230315072902.9298-15-ychuang570808@gmail.com>
+        Wed, 15 Mar 2023 05:50:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71EC9305E2;
+        Wed, 15 Mar 2023 02:49:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ED47C61C36;
+        Wed, 15 Mar 2023 09:49:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 726B6C4339C;
+        Wed, 15 Mar 2023 09:49:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678873768;
+        bh=905lAPt08QRFR8FR2phEdH/qr4W7W6RJu2a1XAXvmfQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qVA4bpKb7d2JG/KjhM8G/2/iPPdIAuE33rZ8yiPVZXPBVehBvfAeQFqDTgH9WobjD
+         Ss9Ca7uAZL+f6RZvebjoxsozRItTQb0nx1PZzlPwfgqPWkZrwwJcJuPnnvKDRCcweR
+         a+QoyiQHknBUjuaxV5v5n1UjMGvl51GmqDsO/j/Ow8n4/0dF8XerHrkcS7yUx9lS2B
+         acP+z4IYMHF8Dvix/Mk8pOK8eLZMQuUxoSs2m26pHjbyoI6/whwfJxSAbbnbSYqRr3
+         3+rmJXmyU8wKMtxT8DdJdNSRCLTlF0EFofWuJh/ndpNOi1G34B6W15OItFlMsxONde
+         jWG+49VqKLV2Q==
+Date:   Wed, 15 Mar 2023 11:49:15 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
+Cc:     linux-arch@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v4 09/36] arm64: Implement the new page table range API
+Message-ID: <ZBGUm4UCLa+URkc3@kernel.org>
+References: <20230315051444.3229621-1-willy@infradead.org>
+ <20230315051444.3229621-10-willy@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230315072902.9298-15-ychuang570808@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230315051444.3229621-10-willy@infradead.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jacky,
+On Wed, Mar 15, 2023 at 05:14:17AM +0000, Matthew Wilcox (Oracle) wrote:
+> Add set_ptes(), update_mmu_cache_range() and flush_dcache_folio().
+> Change the PG_dcache_clean flag from being per-page to per-folio.
+> 
+> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+> Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: linux-arm-kernel@lists.infradead.org
 
-Thank you for the patch! Perhaps something to improve:
+Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
 
-[auto build test WARNING on robh/for-next]
-[also build test WARNING on clk/clk-next tty/tty-testing tty/tty-next tty/tty-linus linus/master v6.3-rc2 next-20230315]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Jacky-Huang/arm64-Kconfig-platforms-Add-config-for-Nuvoton-MA35-platform/20230315-153355
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-patch link:    https://lore.kernel.org/r/20230315072902.9298-15-ychuang570808%40gmail.com
-patch subject: [PATCH 14/15] tty: serial: Add Nuvoton ma35d1 serial driver support
-config: sparc-allyesconfig (https://download.01.org/0day-ci/archive/20230315/202303151754.XvPyacT7-lkp@intel.com/config)
-compiler: sparc64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/064028d2f2d911398012103aef3ce8666342ddfc
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Jacky-Huang/arm64-Kconfig-platforms-Add-config-for-Nuvoton-MA35-platform/20230315-153355
-        git checkout 064028d2f2d911398012103aef3ce8666342ddfc
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc SHELL=/bin/bash drivers/tty/serial/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303151754.XvPyacT7-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/tty/serial/ma35d1_serial.c:672:6: warning: no previous prototype for 'ma35d1serial_suspend_port' [-Wmissing-prototypes]
-     672 | void ma35d1serial_suspend_port(int line)
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/tty/serial/ma35d1_serial.c:681:6: warning: no previous prototype for 'ma35d1serial_resume_port' [-Wmissing-prototypes]
-     681 | void ma35d1serial_resume_port(int line)
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~
---
->> drivers/tty/serial/ma35d1_serial.c:670: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-    *  Suspend one serial port.
-   drivers/tty/serial/ma35d1_serial.c:679: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-    *  Resume one serial port.
-
-
-vim +/ma35d1serial_suspend_port +672 drivers/tty/serial/ma35d1_serial.c
-
-   668	
-   669	/**
- > 670	 *  Suspend one serial port.
-   671	 */
- > 672	void ma35d1serial_suspend_port(int line)
-   673	{
-   674		uart_suspend_port(&ma35d1serial_reg, &ma35d1serial_ports[line].port);
-   675	}
-   676	EXPORT_SYMBOL(ma35d1serial_suspend_port);
-   677	
-   678	/**
-   679	 *  Resume one serial port.
-   680	 */
- > 681	void ma35d1serial_resume_port(int line)
-   682	{
-   683		struct uart_ma35d1_port *up = &ma35d1serial_ports[line];
-   684	
-   685		uart_resume_port(&ma35d1serial_reg, &up->port);
-   686	}
-   687	EXPORT_SYMBOL(ma35d1serial_resume_port);
-   688	
+> ---
+>  arch/arm64/include/asm/cacheflush.h |  4 +++-
+>  arch/arm64/include/asm/pgtable.h    | 25 ++++++++++++++------
+>  arch/arm64/mm/flush.c               | 36 +++++++++++------------------
+>  3 files changed, 35 insertions(+), 30 deletions(-)
+> 
+> diff --git a/arch/arm64/include/asm/cacheflush.h b/arch/arm64/include/asm/cacheflush.h
+> index 37185e978aeb..d115451ed263 100644
+> --- a/arch/arm64/include/asm/cacheflush.h
+> +++ b/arch/arm64/include/asm/cacheflush.h
+> @@ -114,7 +114,7 @@ extern void copy_to_user_page(struct vm_area_struct *, struct page *,
+>  #define copy_to_user_page copy_to_user_page
+>  
+>  /*
+> - * flush_dcache_page is used when the kernel has written to the page
+> + * flush_dcache_folio is used when the kernel has written to the page
+>   * cache page at virtual address page->virtual.
+>   *
+>   * If this page isn't mapped (ie, page_mapping == NULL), or it might
+> @@ -127,6 +127,8 @@ extern void copy_to_user_page(struct vm_area_struct *, struct page *,
+>   */
+>  #define ARCH_IMPLEMENTS_FLUSH_DCACHE_PAGE 1
+>  extern void flush_dcache_page(struct page *);
+> +void flush_dcache_folio(struct folio *);
+> +#define flush_dcache_folio flush_dcache_folio
+>  
+>  static __always_inline void icache_inval_all_pou(void)
+>  {
+> diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
+> index 9428748f4691..6fd012663a01 100644
+> --- a/arch/arm64/include/asm/pgtable.h
+> +++ b/arch/arm64/include/asm/pgtable.h
+> @@ -355,12 +355,21 @@ static inline void __set_pte_at(struct mm_struct *mm, unsigned long addr,
+>  	set_pte(ptep, pte);
+>  }
+>  
+> -static inline void set_pte_at(struct mm_struct *mm, unsigned long addr,
+> -			      pte_t *ptep, pte_t pte)
+> -{
+> -	page_table_check_ptes_set(mm, addr, ptep, pte, 1);
+> -	return __set_pte_at(mm, addr, ptep, pte);
+> +static inline void set_ptes(struct mm_struct *mm, unsigned long addr,
+> +			      pte_t *ptep, pte_t pte, unsigned int nr)
+> +{
+> +	page_table_check_ptes_set(mm, addr, ptep, pte, nr);
+> +
+> +	for (;;) {
+> +		__set_pte_at(mm, addr, ptep, pte);
+> +		if (--nr == 0)
+> +			break;
+> +		ptep++;
+> +		addr += PAGE_SIZE;
+> +		pte_val(pte) += PAGE_SIZE;
+> +	}
+>  }
+> +#define set_ptes set_ptes
+>  
+>  /*
+>   * Huge pte definitions.
+> @@ -1059,8 +1068,8 @@ static inline void arch_swap_restore(swp_entry_t entry, struct folio *folio)
+>  /*
+>   * On AArch64, the cache coherency is handled via the set_pte_at() function.
+>   */
+> -static inline void update_mmu_cache(struct vm_area_struct *vma,
+> -				    unsigned long addr, pte_t *ptep)
+> +static inline void update_mmu_cache_range(struct vm_area_struct *vma,
+> +		unsigned long addr, pte_t *ptep, unsigned int nr)
+>  {
+>  	/*
+>  	 * We don't do anything here, so there's a very small chance of
+> @@ -1069,6 +1078,8 @@ static inline void update_mmu_cache(struct vm_area_struct *vma,
+>  	 */
+>  }
+>  
+> +#define update_mmu_cache(vma, addr, ptep) \
+> +	update_mmu_cache_range(vma, addr, ptep, 1)
+>  #define update_mmu_cache_pmd(vma, address, pmd) do { } while (0)
+>  
+>  #ifdef CONFIG_ARM64_PA_BITS_52
+> diff --git a/arch/arm64/mm/flush.c b/arch/arm64/mm/flush.c
+> index 5f9379b3c8c8..deb781af0a3a 100644
+> --- a/arch/arm64/mm/flush.c
+> +++ b/arch/arm64/mm/flush.c
+> @@ -50,20 +50,13 @@ void copy_to_user_page(struct vm_area_struct *vma, struct page *page,
+>  
+>  void __sync_icache_dcache(pte_t pte)
+>  {
+> -	struct page *page = pte_page(pte);
+> +	struct folio *folio = page_folio(pte_page(pte));
+>  
+> -	/*
+> -	 * HugeTLB pages are always fully mapped, so only setting head page's
+> -	 * PG_dcache_clean flag is enough.
+> -	 */
+> -	if (PageHuge(page))
+> -		page = compound_head(page);
+> -
+> -	if (!test_bit(PG_dcache_clean, &page->flags)) {
+> -		sync_icache_aliases((unsigned long)page_address(page),
+> -				    (unsigned long)page_address(page) +
+> -					    page_size(page));
+> -		set_bit(PG_dcache_clean, &page->flags);
+> +	if (!test_bit(PG_dcache_clean, &folio->flags)) {
+> +		sync_icache_aliases((unsigned long)folio_address(folio),
+> +				    (unsigned long)folio_address(folio) +
+> +					    folio_size(folio));
+> +		set_bit(PG_dcache_clean, &folio->flags);
+>  	}
+>  }
+>  EXPORT_SYMBOL_GPL(__sync_icache_dcache);
+> @@ -73,17 +66,16 @@ EXPORT_SYMBOL_GPL(__sync_icache_dcache);
+>   * it as dirty for later flushing when mapped in user space (if executable,
+>   * see __sync_icache_dcache).
+>   */
+> -void flush_dcache_page(struct page *page)
+> +void flush_dcache_folio(struct folio *folio)
+>  {
+> -	/*
+> -	 * HugeTLB pages are always fully mapped and only head page will be
+> -	 * set PG_dcache_clean (see comments in __sync_icache_dcache()).
+> -	 */
+> -	if (PageHuge(page))
+> -		page = compound_head(page);
+> +	if (test_bit(PG_dcache_clean, &folio->flags))
+> +		clear_bit(PG_dcache_clean, &folio->flags);
+> +}
+> +EXPORT_SYMBOL(flush_dcache_folio);
+>  
+> -	if (test_bit(PG_dcache_clean, &page->flags))
+> -		clear_bit(PG_dcache_clean, &page->flags);
+> +void flush_dcache_page(struct page *page)
+> +{
+> +	flush_dcache_folio(page_folio(page));
+>  }
+>  EXPORT_SYMBOL(flush_dcache_page);
+>  
+> -- 
+> 2.39.2
+> 
+> 
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Sincerely yours,
+Mike.
