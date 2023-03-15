@@ -2,245 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 910366BA6FB
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 06:21:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B8E86BA6DA
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 06:16:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231737AbjCOFVI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 01:21:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59262 "EHLO
+        id S231583AbjCOFQM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 01:16:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231557AbjCOFUg (ORCPT
+        with ESMTP id S231303AbjCOFPI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 01:20:36 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B94B06547C;
-        Tue, 14 Mar 2023 22:17:04 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 74A4116F2;
-        Tue, 14 Mar 2023 22:16:21 -0700 (PDT)
-Received: from a077893.blr.arm.com (unknown [10.162.41.10])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 201983F67D;
-        Tue, 14 Mar 2023 22:15:32 -0700 (PDT)
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        will@kernel.org, catalin.marinas@arm.com, mark.rutland@arm.com
-Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        Mark Brown <broonie@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Suzuki Poulose <suzuki.poulose@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        linux-perf-users@vger.kernel.org
-Subject: [PATCH V9 08/10] arm64/perf: Add struct brbe_regset helper functions
-Date:   Wed, 15 Mar 2023 10:44:42 +0530
-Message-Id: <20230315051444.1683170-9-anshuman.khandual@arm.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230315051444.1683170-1-anshuman.khandual@arm.com>
-References: <20230315051444.1683170-1-anshuman.khandual@arm.com>
+        Wed, 15 Mar 2023 01:15:08 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF3F32A99A;
+        Tue, 14 Mar 2023 22:14:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
+        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
+        Content-Type:Content-ID:Content-Description;
+        bh=wGk85CR/Vctng7oBFjkMJq+NnlgBFRutHAfl1XoD7Y0=; b=g5mC1e+EyDeps/N6wOgNK48uE5
+        NY6T5TtawAzHoLWsQhDILMRhrQX9ZM+D075XgvvrVQWkZJLn7Q8AhVPPqiyi4J11YgM7o+meENJAL
+        Dw16eYKgzteuuxGMuXlRMTH+J9Q6cDtVus0ee7yF2jdGr63Wa0pkqZIiEIL13eC3ASjbCgBqw4l3P
+        PH4awXOcSI2eluFl5bJc028cmRgeBqG1mkXRZyGtFp5+XsRMny84X5Q21WcTuzpnFcvjDwcI7V3M2
+        vdQcdA8eIAXECldrZFJcR39/rd9cfuGhbwfRxGKw1tyhasbwt3TDiuF8/mntoH2cVEgfPhNQRwgF0
+        56XMdsMQ==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pcJTO-00DYE0-MR; Wed, 15 Mar 2023 05:14:50 +0000
+From:   "Matthew Wilcox (Oracle)" <willy@infradead.org>
+To:     linux-arch@vger.kernel.org
+Cc:     Yin Fengwei <fengwei.yin@intel.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Matthew Wilcox <willy@infradead.org>
+Subject: [PATCH v4 34/36] rmap: add folio_add_file_rmap_range()
+Date:   Wed, 15 Mar 2023 05:14:42 +0000
+Message-Id: <20230315051444.3229621-35-willy@infradead.org>
+X-Mailer: git-send-email 2.37.1
+In-Reply-To: <20230315051444.3229621-1-willy@infradead.org>
+References: <20230315051444.3229621-1-willy@infradead.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The primary abstraction level for fetching branch records from BRBE HW has
-been changed as 'struct brbe_regset', which contains storage for all three
-BRBE registers i.e BRBSRC, BRBTGT, BRBINF. Whether branch record processing
-happens in the task sched out path, or in the PMU IRQ handling path, these
-registers need to be extracted from the HW. Afterwards both live and stored
-sets need to be stitched together to create final branch records set. This
-adds required helper functions for such operations.
+From: Yin Fengwei <fengwei.yin@intel.com>
 
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Will Deacon <will@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+folio_add_file_rmap_range() allows to add pte mapping to a specific
+range of file folio. Comparing to page_add_file_rmap(), it batched
+updates __lruvec_stat for large folio.
+
+Signed-off-by: Yin Fengwei <fengwei.yin@intel.com>
+Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
 ---
- arch/arm64/kernel/brbe.c | 163 +++++++++++++++++++++++++++++++++++++++
- 1 file changed, 163 insertions(+)
+ include/linux/rmap.h |  2 ++
+ mm/rmap.c            | 60 +++++++++++++++++++++++++++++++++-----------
+ 2 files changed, 48 insertions(+), 14 deletions(-)
 
-diff --git a/arch/arm64/kernel/brbe.c b/arch/arm64/kernel/brbe.c
-index a8b4f89b5d00..34bc58ef8062 100644
---- a/arch/arm64/kernel/brbe.c
-+++ b/arch/arm64/kernel/brbe.c
-@@ -44,6 +44,169 @@ static void select_brbe_bank(int bank)
- 	isb();
+diff --git a/include/linux/rmap.h b/include/linux/rmap.h
+index b87d01660412..a3825ce81102 100644
+--- a/include/linux/rmap.h
++++ b/include/linux/rmap.h
+@@ -198,6 +198,8 @@ void folio_add_new_anon_rmap(struct folio *, struct vm_area_struct *,
+ 		unsigned long address);
+ void page_add_file_rmap(struct page *, struct vm_area_struct *,
+ 		bool compound);
++void folio_add_file_rmap_range(struct folio *, struct page *, unsigned int nr,
++		struct vm_area_struct *, bool compound);
+ void page_remove_rmap(struct page *, struct vm_area_struct *,
+ 		bool compound);
+ 
+diff --git a/mm/rmap.c b/mm/rmap.c
+index 4898e10c569a..a91906b28835 100644
+--- a/mm/rmap.c
++++ b/mm/rmap.c
+@@ -1301,31 +1301,39 @@ void folio_add_new_anon_rmap(struct folio *folio, struct vm_area_struct *vma,
  }
  
-+/*
-+ * This scans over BRBE register banks and captures individual branch reocrds
-+ * [BRBSRC, BRBTGT, BRBINF] into a pre-allocated 'struct brbe_regset' buffer,
-+ * until an invalid one gets encountered. The caller for this function needs
-+ * to ensure BRBE is an appropriate state before the records can be captured.
-+ */
-+static int capture_brbe_regset(struct brbe_hw_attr *brbe_attr, struct brbe_regset *buf)
-+{
-+	int loop1_idx1, loop1_idx2, loop2_idx1, loop2_idx2;
-+	int idx, count;
-+
-+	loop1_idx1 = BRBE_BANK0_IDX_MIN;
-+	if (brbe_attr->brbe_nr <= BRBE_BANK_MAX_ENTRIES) {
-+		loop1_idx2 = brbe_attr->brbe_nr - 1;
-+		loop2_idx1 = BRBE_BANK1_IDX_MIN;
-+		loop2_idx2 = BRBE_BANK0_IDX_MAX;
-+	} else {
-+		loop1_idx2 = BRBE_BANK0_IDX_MAX;
-+		loop2_idx1 = BRBE_BANK1_IDX_MIN;
-+		loop2_idx2 = brbe_attr->brbe_nr - 1;
-+	}
-+
-+	select_brbe_bank(BRBE_BANK_IDX_0);
-+	for (idx = 0, count = loop1_idx1; count <= loop1_idx2; idx++, count++) {
-+		buf[idx].brbinf = get_brbinf_reg(idx);
-+		/*
-+		 * There are no valid entries anymore on the buffer.
-+		 * Abort the branch record processing to save some
-+		 * cycles and also reduce the capture/process load
-+		 * for the user space as well.
-+		 */
-+		if (brbe_invalid(buf[idx].brbinf))
-+			return idx;
-+
-+		buf[idx].brbsrc = get_brbsrc_reg(idx);
-+		buf[idx].brbtgt = get_brbtgt_reg(idx);
-+	}
-+
-+	select_brbe_bank(BRBE_BANK_IDX_1);
-+	for (count = loop2_idx1; count <= loop2_idx2; idx++, count++) {
-+		buf[idx].brbinf = get_brbinf_reg(idx);
-+		/*
-+		 * There are no valid entries anymore on the buffer.
-+		 * Abort the branch record processing to save some
-+		 * cycles and also reduce the capture/process load
-+		 * for the user space as well.
-+		 */
-+		if (brbe_invalid(buf[idx].brbinf))
-+			return idx;
-+
-+		buf[idx].brbsrc = get_brbsrc_reg(idx);
-+		buf[idx].brbtgt = get_brbtgt_reg(idx);
-+	}
-+	return idx;
-+}
-+
-+static inline void copy_brbe_regset(struct brbe_regset *src, int src_idx,
-+				    struct brbe_regset *dst, int dst_idx)
-+{
-+	dst[dst_idx].brbinf = src[src_idx].brbinf;
-+	dst[dst_idx].brbsrc = src[src_idx].brbsrc;
-+	dst[dst_idx].brbtgt = src[src_idx].brbtgt;
-+}
-+
-+/*
-+ * This function concatenates branch records from stored and live buffer
-+ * up to maximum nr_max records and the stored buffer holds the resultant
-+ * buffer. The concatenated buffer contains all the branch records from
-+ * the live buffer but might contain some from stored buffer considering
-+ * the maximum combined length does not exceed 'nr_max'.
-+ *
-+ *	Stored records	Live records
-+ *	------------------------------------------------^
-+ *	|	S0	|	L0	|	Newest	|
-+ *	---------------------------------		|
-+ *	|	S1	|	L1	|		|
-+ *	---------------------------------		|
-+ *	|	S2	|	L2	|		|
-+ *	---------------------------------		|
-+ *	|	S3	|	L3	|		|
-+ *	---------------------------------		|
-+ *	|	S4	|	L4	|		nr_max
-+ *	---------------------------------		|
-+ *	|		|	L5	|		|
-+ *	---------------------------------		|
-+ *	|		|	L6	|		|
-+ *	---------------------------------		|
-+ *	|		|	L7	|		|
-+ *	---------------------------------		|
-+ *	|		|		|		|
-+ *	---------------------------------		|
-+ *	|		|		|	Oldest	|
-+ *	------------------------------------------------V
-+ *
-+ *
-+ * S0 is the newest in the stored records, where as L7 is the oldest in
-+ * the live reocords. Unless the live buffer is detetcted as being full
-+ * thus potentially dropping off some older records, L7 and S0 records
-+ * are contiguous in time for a user task context. The stitched buffer
-+ * here represents maximum possible branch records, contiguous in time.
-+ *
-+ *	Stored records  Live records
-+ *	------------------------------------------------^
-+ *	|	L0	|	L0	|	Newest	|
-+ *	---------------------------------		|
-+ *	|	L0	|	L1	|		|
-+ *	---------------------------------		|
-+ *	|	L2	|	L2	|		|
-+ *	---------------------------------		|
-+ *	|	L3	|	L3	|		|
-+ *	---------------------------------		|
-+ *	|	L4	|	L4	|	      nr_max
-+ *	---------------------------------		|
-+ *	|	L5	|	L5	|		|
-+ *	---------------------------------		|
-+ *	|	L6	|	L6	|		|
-+ *	---------------------------------		|
-+ *	|	L7	|	L7	|		|
-+ *	---------------------------------		|
-+ *	|	S0	|		|		|
-+ *	---------------------------------		|
-+ *	|	S1	|		|    Oldest	|
-+ *	------------------------------------------------V
-+ *	|	S2	| <----|
-+ *	-----------------      |
-+ *	|	S3	| <----| Dropped off after nr_max
-+ *	-----------------      |
-+ *	|	S4	| <----|
-+ *	-----------------
-+ */
-+static int stitch_stored_live_entries(struct brbe_regset *stored,
-+				      struct brbe_regset *live,
-+				      int nr_stored, int nr_live,
-+				      int nr_max)
-+{
-+	int nr_total, nr_excess, nr_last, i;
-+
-+	nr_total = nr_stored + nr_live;
-+	nr_excess = nr_total - nr_max;
-+
-+	/* Stored branch records in stitched buffer */
-+	if (nr_live == nr_max)
-+		nr_stored = 0;
-+	else if (nr_excess > 0)
-+		nr_stored -= nr_excess;
-+
-+	/* Stitched buffer branch records length */
-+	if (nr_total > nr_max)
-+		nr_last = nr_max;
-+	else
-+		nr_last = nr_total;
-+
-+	/* Move stored branch records */
-+	for (i = 0; i < nr_stored; i++)
-+		copy_brbe_regset(stored, i, stored, nr_last - nr_stored - 1 + i);
-+
-+	/* Copy live branch records */
-+	for (i = 0; i < nr_live; i++)
-+		copy_brbe_regset(live, i, stored, i);
-+
-+	return nr_last;
-+}
-+
- /*
-  * Generic perf branch filters supported on BRBE
+ /**
+- * page_add_file_rmap - add pte mapping to a file page
+- * @page:	the page to add the mapping to
++ * folio_add_file_rmap_range - add pte mapping to page range of a folio
++ * @folio:	The folio to add the mapping to
++ * @page:	The first page to add
++ * @nr_pages:	The number of pages which will be mapped
+  * @vma:	the vm area in which the mapping is added
+  * @compound:	charge the page as compound or small page
   *
++ * The page range of folio is defined by [first_page, first_page + nr_pages)
++ *
+  * The caller needs to hold the pte lock.
+  */
+-void page_add_file_rmap(struct page *page, struct vm_area_struct *vma,
+-		bool compound)
++void folio_add_file_rmap_range(struct folio *folio, struct page *page,
++			unsigned int nr_pages, struct vm_area_struct *vma,
++			bool compound)
+ {
+-	struct folio *folio = page_folio(page);
+ 	atomic_t *mapped = &folio->_nr_pages_mapped;
+-	int nr = 0, nr_pmdmapped = 0;
+-	bool first;
++	unsigned int nr_pmdmapped = 0, first;
++	int nr = 0;
+ 
+-	VM_BUG_ON_PAGE(compound && !PageTransHuge(page), page);
++	VM_WARN_ON_FOLIO(compound && !folio_test_pmd_mappable(folio), folio);
+ 
+ 	/* Is page being mapped by PTE? Is this its first map to be added? */
+ 	if (likely(!compound)) {
+-		first = atomic_inc_and_test(&page->_mapcount);
+-		nr = first;
+-		if (first && folio_test_large(folio)) {
+-			nr = atomic_inc_return_relaxed(mapped);
+-			nr = (nr < COMPOUND_MAPPED);
+-		}
++		do {
++			first = atomic_inc_and_test(&page->_mapcount);
++			if (first && folio_test_large(folio)) {
++				first = atomic_inc_return_relaxed(mapped);
++				first = (nr < COMPOUND_MAPPED);
++			}
++
++			if (first)
++				nr++;
++		} while (page++, --nr_pages > 0);
+ 	} else if (folio_test_pmd_mappable(folio)) {
+ 		/* That test is redundant: it's for safety or to optimize out */
+ 
+@@ -1354,6 +1362,30 @@ void page_add_file_rmap(struct page *page, struct vm_area_struct *vma,
+ 	mlock_vma_folio(folio, vma, compound);
+ }
+ 
++/**
++ * page_add_file_rmap - add pte mapping to a file page
++ * @page:	the page to add the mapping to
++ * @vma:	the vm area in which the mapping is added
++ * @compound:	charge the page as compound or small page
++ *
++ * The caller needs to hold the pte lock.
++ */
++void page_add_file_rmap(struct page *page, struct vm_area_struct *vma,
++		bool compound)
++{
++	struct folio *folio = page_folio(page);
++	unsigned int nr_pages;
++
++	VM_WARN_ON_ONCE_PAGE(compound && !PageTransHuge(page), page);
++
++	if (likely(!compound))
++		nr_pages = 1;
++	else
++		nr_pages = folio_nr_pages(folio);
++
++	folio_add_file_rmap_range(folio, page, nr_pages, vma, compound);
++}
++
+ /**
+  * page_remove_rmap - take down pte mapping from a page
+  * @page:	page to remove mapping from
 -- 
-2.25.1
+2.39.2
 
