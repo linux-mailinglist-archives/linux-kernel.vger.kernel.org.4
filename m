@@ -2,159 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B14756BAB6F
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 10:02:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 866656BABBA
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 10:10:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230009AbjCOJCV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 05:02:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45838 "EHLO
+        id S231354AbjCOJKQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 05:10:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231716AbjCOJCB (ORCPT
+        with ESMTP id S231768AbjCOJJV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 05:02:01 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 753B273AF6;
-        Wed, 15 Mar 2023 02:01:52 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id fd25so11272873pfb.1;
-        Wed, 15 Mar 2023 02:01:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678870912;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=edwNrUkG8Z1dURZMltw+SGhc2MepuRLhhGK+wNS8X9M=;
-        b=TwGV/nwTo3AMauBgkhh2TtKZO6uFMJopYrPuVM33BSLkCBFxxhG2OE3hvjKgRTulMf
-         0ThDJ4rTYrxPEYQLgYxf6K8JcF0GMBd8kP+Tmb8CugJYEvFm9+Wjz5hPVHMoklQ746J5
-         JCL/GNOd0saqdG2TYkdyYFYgdc1bScXe1oI1EPuNuWHmf5qEA+778LJJt+pEVf1wzKLd
-         fBFxc60OeNYCLK4Yi0G5ZkXa5feE0vJn2d7stuSgITw1UJy9QDg94D35RHvSaYu9x272
-         9vFY9sGKERRLo691UsAI/FVctyo/BzIa2Am931iLRjXkyqBSuRhhIFfwbPd5Tk06lDiT
-         z5OA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678870912;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=edwNrUkG8Z1dURZMltw+SGhc2MepuRLhhGK+wNS8X9M=;
-        b=wilCDSdQHnhtRpisKIf1eKoFCtfEP8KEyLyIBziEZfam+wgm38yTuwsfCtl0IzCXWs
-         XKPVRHCGJV8Swn8Kk1DJ4LD30sbtclQ+ceFzOSNYvXWtMGAIHRfHcxV9qDoS/fMMYObM
-         sT81rDQv4X5oNcJ6lYkC7d01KhSXXHFDTOmUfThAsvrUXgGP3kNeZ2dDJxtNAFnimOi0
-         8VgaJ/dWJbdaTHKmYbGQyokXhG4ftjRjIYwqa8vRTczUP5uQS3aVcFRKqRxNr+e9Kp92
-         PAZKzon9JH9qHCYjbAZNCSz0R6QP6+A6ODcAxWMSFFdLr2ID1k448O6TTaxYxMVLVdAT
-         Stng==
-X-Gm-Message-State: AO0yUKVZhp/YMkiJXRNdfysl6TaFvMGK8mW2SnEGU783qNxNYpotOQow
-        E+1jmLIa7Ibp2gTPFdm5hkrXQ0RnNEGRMb+p/3c=
-X-Google-Smtp-Source: AK7set8vtgeDhDK48IZ7Wz2S0KcvCOk/TZaGPh5G5qO7pV2iRCi75BDYPBeUAi7AQLFzoIN6WLjQQazbM9GnhAVdVlY=
-X-Received: by 2002:a63:9f09:0:b0:50b:18ac:fbea with SMTP id
- g9-20020a639f09000000b0050b18acfbeamr3345941pge.9.1678870911853; Wed, 15 Mar
- 2023 02:01:51 -0700 (PDT)
+        Wed, 15 Mar 2023 05:09:21 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A4F823D9A;
+        Wed, 15 Mar 2023 02:08:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678871337; x=1710407337;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   in-reply-to:mime-version;
+  bh=NY4xfpFPYTiH5ydX7sYrVQqrtRs8ubRVth75bfZPwrE=;
+  b=gYa9AeJGfNhvbqRX0hlxreMF76rdj8BEGn5eOmDH5JQpS4i3DBIvonMM
+   NzHGBi3fcg47eb1fMW7jRf3o9oiMuRds/rFmGvKYJETWbeMdZo5H8oKNR
+   ucBN5ydPrAPC/oCSuA+k+8ExFQ2SSMbx3XHJd1Qwj7ncr17/xxRLuftNq
+   M43D8dD16NAh135vM24B3L6tMhGUgqtOfTli3C3JEIqOIEohRsLHQuQq6
+   HYbFwazep4VRazdCaf58tBfHThWE9LIvl2Z7yZPdeTNT9bDIF7mvnlvHv
+   M44sR6PHQA8F3b2bCXkQmWuw8JLTO/0YBMk1+qYSu9CoaD27R4qLcw5e8
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="339193357"
+X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
+   d="scan'208";a="339193357"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2023 02:08:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="789720912"
+X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
+   d="scan'208";a="789720912"
+Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
+  by fmsmga002.fm.intel.com with ESMTP; 15 Mar 2023 02:08:56 -0700
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Wed, 15 Mar 2023 02:08:56 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Wed, 15 Mar 2023 02:08:56 -0700
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21 via Frontend Transport; Wed, 15 Mar 2023 02:08:56 -0700
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (104.47.73.44) by
+ edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.21; Wed, 15 Mar 2023 02:08:54 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HAW8OOG++xX7+EdYI/NgRpMO++IETAs+iMmWdYAYIG7+WUKuRPSjhcBp5m9bYAN3wNSlqkQIU1KmNNSlkyDAJERYQuUhkv9P1gfFFCXARFAHSe7fxgOWgSpAj4O+qscgbLsG5vkKkMEE5bBqRG+hSCBHrkloWporzdEtLmBJkZXla60rfvYXfkLxKE+UAhKzJV1qKro/IcGUSkAaeP7IlMxpuVGADxrJ9slCPmFTdIemcor5wYLNmEqtCLPMQr6knAkpJ462pv8GH0AI6VDy/smTVeJGo2s7uSaVPtlIFk5ooMrO3L0CNC9ClogbcXL/uo07mn1dkjH4SscR64vcLg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=wP4O4W02X7+FbB8VGJbKvjKfDzqv54RQU66G9GnjYLs=;
+ b=BQ5nkG6y2zf+LuuHHWjmMzaXB2K1gRw871maEwzOvykjInRb25s8+rn1EMAwNVZGcHUOjCqjNimMdfe4OSC2zk5ZJZYZHu4SVn57p/7DblxRK0prSQaxctVUSKjU+Tf+saq0CtRzfEOLf+zKvOc0kP8Z03MwZKECXzr0778g1XlejCu7T+tnL70t6dOl6vNBfAPFyVx9pMvLmylcfiUB2KlA5ASKkOvGL/ntSLsYqcRyHhz/YX+0Mx64krUPiuB+yeG/ppJ6mJ+9k9YXYonDo0iHY7/IYrgs/axkfOr81IZ/uKKxJMJgXaXyaDiTFIvPkY3ZHXFtivhVvv7pgBc29w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DS7PR11MB5966.namprd11.prod.outlook.com (2603:10b6:8:71::6) by
+ DS0PR11MB7649.namprd11.prod.outlook.com (2603:10b6:8:146::16) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6178.26; Wed, 15 Mar 2023 09:08:51 +0000
+Received: from DS7PR11MB5966.namprd11.prod.outlook.com
+ ([fe80::b00e:ac74:158e:1c7e]) by DS7PR11MB5966.namprd11.prod.outlook.com
+ ([fe80::b00e:ac74:158e:1c7e%4]) with mapi id 15.20.6178.026; Wed, 15 Mar 2023
+ 09:08:51 +0000
+Date:   Wed, 15 Mar 2023 16:44:14 +0800
+From:   Yan Zhao <yan.y.zhao@intel.com>
+To:     Sean Christopherson <seanjc@google.com>
+CC:     Paolo Bonzini <pbonzini@redhat.com>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Zhi Wang <zhi.a.wang@intel.com>, <kvm@vger.kernel.org>,
+        <intel-gvt-dev@lists.freedesktop.org>,
+        <intel-gfx@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
+        Ben Gardon <bgardon@google.com>
+Subject: Re: [PATCH v2 19/27] KVM: x86/mmu: Move KVM-only page-track
+ declarations to internal header
+Message-ID: <ZBGFXrpSXpF5NUlV@yzhao56-desk.sh.intel.com>
+Reply-To: Yan Zhao <yan.y.zhao@intel.com>
+References: <20230311002258.852397-1-seanjc@google.com>
+ <20230311002258.852397-20-seanjc@google.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230311002258.852397-20-seanjc@google.com>
+X-ClientProxiedBy: SG2PR02CA0044.apcprd02.prod.outlook.com
+ (2603:1096:3:18::32) To DS7PR11MB5966.namprd11.prod.outlook.com
+ (2603:10b6:8:71::6)
 MIME-Version: 1.0
-References: <20230217100223.702330-1-zyytlz.wz@163.com> <CAJedcCxUNBWOpkcaN2aLbwNs_xvqi=LC8mhFWh-jWeh6q-cBCQ@mail.gmail.com>
- <ZBCNY8NoNkrA2nyN@corigine.com> <ZBCRRL8+EtTBH2tl@corigine.com>
-In-Reply-To: <ZBCRRL8+EtTBH2tl@corigine.com>
-From:   Zheng Hacker <hackerzheng666@gmail.com>
-Date:   Wed, 15 Mar 2023 17:01:40 +0800
-Message-ID: <CAJedcCxuaoB8gA5eEnmEdFcxnc4ObrMhvPzu0Ki0SumqrDLz7w@mail.gmail.com>
-Subject: Re: [PATCH v2] Bluetooth: hci_core: Fix poential Use-after-Free bug
- in hci_remove_adv_monitor
-To:     Simon Horman <simon.horman@corigine.com>
-Cc:     Zheng Wang <zyytlz.wz@163.com>, marcel@holtmann.org,
-        alex000young@gmail.com, johan.hedberg@gmail.com,
-        luiz.dentz@gmail.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com,
-        linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, pmenzel@molgen.mpg.de
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS7PR11MB5966:EE_|DS0PR11MB7649:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1d842227-b818-4440-13e9-08db2534e48b
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: pPXz18qk8V62eygpy8WYTRihMGL8Sru+1sOOZscnAh5e6bvURHiapSLGBAy2vHg1gtGPrA/CV2gRnOSHBLuLiCzQjwGlRZ8FD/oy5CSR2Pw6k018la513pNSfDLEHdrSibwZpzvwKTeGEUNjUwLilUPKJqHlk/DmXMyxrTIVfo7Je3r2oHjz7+POdZD1r3yvaufXhUxRLgs3ZwTTN0uoVJ7qwEQpzx+NDfpXooLQ8kNJbxK9vig2EvnDEnH35rBOM6T+eF37aJpeSOrIGmic/p6c3o/Bc0Xowcis88vZoJg8+P+POPC4E/1/kTUezoNVLa0PVszKA94MTkyPqn1DoAbb60MpECiv+fgtBQTRwf5BWSUU1HZTiCZwMjMMzr7HH98eRt6TWfs4Tgy1dg9B/ttHFtXjLbmVT8pokYL+6rTjcgYDpRyW9N9rq8sYc55XPpG0f+Yd3KlLMnaVLih1lS9tgbvXW/my38PhJRUrZY1p16F44S+WjSgCyEc2rcURwdFqR4kPUCvn1ppYANfvuufErn8Xk62gXKub8ez8y96yTaAO3N+Ja7Xe4GXp3Ic4hElvNhMpTRsUI7PUP1Zq6sLmFn2dI0/vDC9v5ILezcqDpQfxLni3Bq3r3Sz5CmSk/UdPrNK04TTJoptrT4L78g==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR11MB5966.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(396003)(39860400002)(136003)(376002)(346002)(366004)(451199018)(38100700002)(2906002)(82960400001)(3450700001)(316002)(478600001)(6666004)(6512007)(6506007)(54906003)(86362001)(26005)(41300700001)(4326008)(66556008)(66476007)(8676002)(6916009)(66946007)(8936002)(6486002)(186003)(83380400001)(5660300002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?MTSQBuwd8bv/nIUeertNd9laLRWlw5gjlYx4ipbcPasN9h5YK8GGAXuSoN1F?=
+ =?us-ascii?Q?LqNn69B7xeYENGEKMaRaRqtri7jkOLZebvNgNA2FZ1zz4PCdYUcbHmIUB1jh?=
+ =?us-ascii?Q?GvyGghVrtg6sJWSM7gd7Bqmj8II0wAHW4eC/kl32tUqynSEPBAX2+FR+aZIg?=
+ =?us-ascii?Q?GkYKRSjz0dp7NEBBFyagnGWJSw9NvYdA7aF94MAvqZ8dBIDFeP++RSPczsms?=
+ =?us-ascii?Q?IY1eQS8vVn7/Ab9VFxj612s+FTGeKSKAlwqI2Uo5IFv1eVj8R5BfNE8h0MWq?=
+ =?us-ascii?Q?yjZfFBpA2LuT81Dq3Glm++uf56M4iV8dfIdHB3sop7icSd2EMwwoOdZM1lcN?=
+ =?us-ascii?Q?L5YzR8JXiMQZ0iaNKB2llc3sSgeImcKZ8N8ks0aKJTRxNM+rVksSIACLJoAG?=
+ =?us-ascii?Q?mrHQtqfcm1eatTRHU8wByz64I1DtLaKkTBpsF+YiUCDkrl0Do8jg9Xaa3WQE?=
+ =?us-ascii?Q?xdGvnvS5z5WTE2/r2uMh0frqVIP0jypAtDros2xoC4L8uH6AFhCg3N0ZNngd?=
+ =?us-ascii?Q?IyyRzX7SpmU06KFR6Z+IrsC1ACh7re/eUlXuxev0FwWjxcr5Ze5GPlnwwjNU?=
+ =?us-ascii?Q?eA2rwuLy47JgDGWg4eBkQEngJXYaUVzM28Bz/dlG7+hZEbETRj4ry6RyhZOm?=
+ =?us-ascii?Q?/N/4CgclnKaQdO9CPE+pT6EIm+T3PcNltrve7BvH4XxCC3ERtvny21hiYF4H?=
+ =?us-ascii?Q?yxaCtz+mZDMl0CDASynrvvDV1fEOMW83Zbxrb4w4uYOOGIAKFTAf8srfBHWZ?=
+ =?us-ascii?Q?uvQfssQFQyBwVDMbEzF5+Vpj4eM+EGrezkkXGFZ7bKIHYBnDnhlBqJKnB/i5?=
+ =?us-ascii?Q?8HktnRYcF0KjwSzL8NNYjHqZ3XBh9JiNMOeq/JetDEW2L+7uce1CEwMKblZJ?=
+ =?us-ascii?Q?VkWuLnHhwLJDXrXWBxUlR60+5VnrBocTLxw35pvAbmB5XkuBKZtk042K1NBl?=
+ =?us-ascii?Q?jKyMhDk5fwIrQAzcW/eTZP76gJd62W+db5hNtyAZdMNDqkULQIiXVLN6wUMs?=
+ =?us-ascii?Q?m3a9LxNNoF5Q9glffIbW8u4Vj/ytulg3qOI6n9/KtBZ5mQv1JEn+NDmMnGJj?=
+ =?us-ascii?Q?GZbBuIW/yd4ynC0LeCHvdMl3ugbhifVTVqRelvGEEBw8mwcgY7+3XgMd4K+7?=
+ =?us-ascii?Q?KtH/l5/mmvwb/VdzBPdYyxXnCv42tzJ7Zwczm/Fx05R9nxVjWOI3M3P102zk?=
+ =?us-ascii?Q?oanESQvMccVkte6J2/aUmHE5MCNgu05I0BoZHSMJ8KpIWNdeSfSJnG/8Bnz3?=
+ =?us-ascii?Q?8CJy6SFs6yADLQUf2cVHexf61gcN1Hc2WkMq+lJtE6tLoZlJEHz1xNeKdFGH?=
+ =?us-ascii?Q?AMrj4F+LwYTV6ZN+FtHcZWsSSncjizxBKCfMoFhlU8oHincBsAfxYH2aEyFN?=
+ =?us-ascii?Q?HP+e+7dpiXd99VrbQU+9p9evVufbWqBMX9iKmtdl1JHD3DINHUqUYNLqoI/R?=
+ =?us-ascii?Q?KgqJZGfMBGGeMO7VPnql5HRg/2YjFW35RP9hk0jPjmgRPtZlbDJeVdy4Zu+6?=
+ =?us-ascii?Q?m/g5Mg6AgKf+lyUM9/da3kO0xqLf2x3LM1BD7JGY5/nx5TxZ4B72q8t0CLAo?=
+ =?us-ascii?Q?hP1saeGnTKH7VozCRSVmQNw3U3LoL20wlg0rs2Qo+TFcSg9s4bloWH+aSEcW?=
+ =?us-ascii?Q?Hw=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1d842227-b818-4440-13e9-08db2534e48b
+X-MS-Exchange-CrossTenant-AuthSource: DS7PR11MB5966.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Mar 2023 09:08:50.7466
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: BYthy5EuaIlbvpMMr0A9GP96MOXodWivWR3EiiI7jHYqH14259jiYUAUgBDP51ziQSlEl/1l/mvgnqho0U1aIA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR11MB7649
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Simon Horman <simon.horman@corigine.com> =E4=BA=8E2023=E5=B9=B43=E6=9C=8814=
-=E6=97=A5=E5=91=A8=E4=BA=8C 23:22=E5=86=99=E9=81=93=EF=BC=9A
->
-> On Tue, Mar 14, 2023 at 04:06:11PM +0100, Simon Horman wrote:
-> > On Mon, Mar 13, 2023 at 05:55:35PM +0800, Zheng Hacker wrote:
-> > > friendly ping
-> > >
-> > > Zheng Wang <zyytlz.wz@163.com> =E4=BA=8E2023=E5=B9=B42=E6=9C=8817=E6=
-=97=A5=E5=91=A8=E4=BA=94 18:05=E5=86=99=E9=81=93=EF=BC=9A
-> > > >
-> > > > In hci_remove_adv_monitor, if it gets into HCI_ADV_MONITOR_EXT_MSFT=
- case,
-> > > > the function will free the monitor and print its handle after that.
-> > > > Fix it by removing the logging into msft_le_cancel_monitor_advertis=
-ement_cb
-> > > > before calling hci_free_adv_monitor.
-> > > >
-> > > > Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
-> > > > ---
-> > > > v2:
-> > > > - move the logging inside msft_remove_monitor suggested by Luiz
-> > > > ---
-> > > >  net/bluetooth/hci_core.c | 2 --
-> > > >  net/bluetooth/msft.c     | 2 ++
-> > > >  2 files changed, 2 insertions(+), 2 deletions(-)
-> > > >
-> > > > diff --git a/net/bluetooth/hci_core.c b/net/bluetooth/hci_core.c
-> > > > index b65c3aabcd53..69b82c2907ff 100644
-> > > > --- a/net/bluetooth/hci_core.c
-> > > > +++ b/net/bluetooth/hci_core.c
-> > > > @@ -1981,8 +1981,6 @@ static int hci_remove_adv_monitor(struct hci_=
-dev *hdev,
-> > > >
-> > > >         case HCI_ADV_MONITOR_EXT_MSFT:
-> > > >                 status =3D msft_remove_monitor(hdev, monitor);
-> > > > -               bt_dev_dbg(hdev, "%s remove monitor %d msft status =
-%d",
-> > > > -                          hdev->name, monitor->handle, status);
-> > > >                 break;
-> >
-> > I'm probably missing something obvious.
-> > But from my perspective a simpler fix would be to
-> > move the msft_remove_monitor() call to below the bt_dev_dbg() call.
->
-> The obvious thing I was missing is that was what was done in v1
-> but Luiz suggested moving the logging to
-> msft_le_cancel_monitor_advertisement_cb().
-> Sorry for the noise.
+On Fri, Mar 10, 2023 at 04:22:50PM -0800, Sean Christopherson wrote:
+> Bury the declaration of the page-track helpers that are intended only for
+> internal KVM use in a "private" header.  In addition to guarding against
+> unwanted usage of the internal-only helpers, dropping their definitions
+> avoids exposing other structures that should be KVM-internal, e.g. for
+> memslots.  This is a baby step toward making kvm_host.h a KVM-internal
+> header in the very distant future.
+> 
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+>  arch/x86/include/asm/kvm_page_track.h | 26 ++++-----------------
+>  arch/x86/kvm/mmu/mmu.c                |  3 ++-
+>  arch/x86/kvm/mmu/page_track.c         |  8 +------
+>  arch/x86/kvm/mmu/page_track.h         | 33 +++++++++++++++++++++++++++
+>  arch/x86/kvm/x86.c                    |  1 +
+>  5 files changed, 42 insertions(+), 29 deletions(-)
+>  create mode 100644 arch/x86/kvm/mmu/page_track.h
+> 
+> diff --git a/arch/x86/include/asm/kvm_page_track.h b/arch/x86/include/asm/kvm_page_track.h
+> index e5eb98ca4fce..deece45936a5 100644
+> --- a/arch/x86/include/asm/kvm_page_track.h
+> +++ b/arch/x86/include/asm/kvm_page_track.h
 
-Hi Simon,
+A curious question:
+are arch/x86/include/asm/kvm_*.h all expected to be external accessible?
 
-Thanks for your reply and detailed review :)
+Thanks
+Yan
 
-Best regards,
-Zheng
-
->
-> Link: https://lore.kernel.org/all/CABBYNZL_gZ+kr_OEqjYgMmt+=3D91=3DjC88g3=
-10F-ScMC=3DkLh0xdw@mail.gmail.com/
->
-> >
-> > > >         }
-> > > >
-> > > > diff --git a/net/bluetooth/msft.c b/net/bluetooth/msft.c
-> > > > index bee6a4c656be..4b35f0ed1360 100644
-> > > > --- a/net/bluetooth/msft.c
-> > > > +++ b/net/bluetooth/msft.c
-> > > > @@ -286,6 +286,8 @@ static int msft_le_cancel_monitor_advertisement=
-_cb(struct hci_dev *hdev,
-> > > >                  * suspend. It will be re-monitored on resume.
-> > > >                  */
-> > > >                 if (!msft->suspending) {
-> > > > +                       bt_dev_dbg(hdev, "%s remove monitor %d stat=
-us %d", hdev->name,
-> > > > +                                  monitor->handle, status);
-> > > >                         hci_free_adv_monitor(hdev, monitor);
-> > > >
-> > > >                         /* Clear any monitored devices by this Adv =
-Monitor */
-> > > > --
-> > > > 2.25.1
-> > > >
-> > >
