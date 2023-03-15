@@ -2,157 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11EC36BAD5B
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 11:16:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86C466BAD5E
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 11:17:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231253AbjCOKQu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 06:16:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57174 "EHLO
+        id S232311AbjCOKQx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 06:16:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232288AbjCOKQq (ORCPT
+        with ESMTP id S232292AbjCOKQs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 06:16:46 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 276AF1ABE2
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 03:16:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678875379; x=1710411379;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=rmJrMBCDLfJET/OCfZDk2lk9cUIq2z0NoHpCnWGNLN4=;
-  b=Rs6zL2DVpRY5W8NYSddePoP1kUDtVqLssiUQMMT1JrACipPMpru/N6af
-   6CAVcuZ+GB1f1aRuYxviyKdILkUSnbSRwCsr9nctMRKV4w1eKz31QH6gP
-   6Ooh07qGYx5Nm6NjAzMBSa5F9LFfGzYA5cUsWEz2PyMH38IXxeGAkdHGg
-   4M0/M/1urSfoCwOZcmYfak08a5ddqDNIOI78Ug+gxvCLGSFw029VRgMDc
-   3+pg96eDovShwTYfzSuaoLFePXeiA5ys7/Fd3HvzraztsQBypJP7vNoez
-   mhe/ILSOabgMI+t0ScQ7iSmQ4lzRhznboHDFHg4XbNeOBmr5dl3devVII
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="337684895"
-X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
-   d="scan'208";a="337684895"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2023 03:15:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="709630303"
-X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
-   d="scan'208";a="709630303"
-Received: from mchanan-mobl.ger.corp.intel.com (HELO [10.213.222.39]) ([10.213.222.39])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2023 03:15:04 -0700
-Message-ID: <caf1095e-8237-c79e-e0fa-27022363ffb2@linux.intel.com>
-Date:   Wed, 15 Mar 2023 10:15:01 +0000
+        Wed, 15 Mar 2023 06:16:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C449762867;
+        Wed, 15 Mar 2023 03:16:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4F97C61CB0;
+        Wed, 15 Mar 2023 10:16:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B750C4339B;
+        Wed, 15 Mar 2023 10:15:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678875359;
+        bh=dU40N6WtaC54YJLo2YP9gjtbpST/CaEE0FGBqpswX2M=;
+        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
+        b=RutcV0T2WyEKQlIYUrbXccGu9CVE+YtsgHnBpiq5+PkpLmwZAWwEkKCeA8tZuac6J
+         +TWMQqIY8qiG6MV9QivS9TfrwD5fF5aV3Kg2LZOG2sVGHjMBl9pLDXAPkwhVejGxdu
+         iq2H2H06ryN2Lwk3nUPZFddiS6yar9vpuKTI/ffbaFtrIvrw1yLEXJlkE4ZnqWqYcl
+         zQ7fgPpShwlaMirz1zRRcAUge7KIlpdok8nyvHQl/hg8nkVxLHGAQSg88M+Q7f9KgL
+         xnxB+9mscB1W10wKq4f7OKFBYNZt+DJywfCG+NRl0ZNHdWgm5TKBhHarvUBwogQkM2
+         3c9sz+9/gduQA==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 30/36] drm/i915/huc: use const struct bus_type pointers
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     rafael@kernel.org, Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>,
-        Alan Previn <alan.previn.teres.alexis@intel.com>,
-        John Harrison <John.C.Harrison@Intel.com>,
-        Tony Ye <tony.ye@intel.com>,
-        Vitaly Lubart <vitaly.lubart@intel.com>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
-References: <20230313182918.1312597-1-gregkh@linuxfoundation.org>
- <20230313182918.1312597-30-gregkh@linuxfoundation.org>
-From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Organization: Intel Corporation UK Plc
-In-Reply-To: <20230313182918.1312597-30-gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
-        NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH 1/1] net: wireless: ath: wcn36xx: add support for
+ pronto-v3
+From:   Kalle Valo <kvalo@kernel.org>
+In-Reply-To: <20230311150647.22935-2-sireeshkodali1@gmail.com>
+References: <20230311150647.22935-2-sireeshkodali1@gmail.com>
+To:     Sireesh Kodali <sireeshkodali1@gmail.com>
+Cc:     loic.poulain@linaro.org, wcn36xx@lists.infradead.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        linux-kernel@vger.kernel.org,
+        Vladimir Lypak <vladimir.lypak@gmail.com>,
+        Sireesh Kodali <sireeshkodali1@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.7.3
+Message-ID: <167887535507.21988.3101268581482537210.kvalo@kernel.org>
+Date:   Wed, 15 Mar 2023 10:15:56 +0000 (UTC)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Sireesh Kodali <sireeshkodali1@gmail.com> wrote:
 
-On 13/03/2023 18:29, Greg Kroah-Hartman wrote:
-> The struct bus_type pointers in the functions
-> intel_huc_register_gsc_notifier() and
-> intel_huc_unregister_gsc_notifier() should be a const pointer, as the
-> structure is not modified anywhere in the functions, and the pointer
-> they are passed will be a const * in the near future.
+> Pronto v3 has a different DXE address than prior Pronto versions. This
+> patch changes the macro to return the correct register address based on
+> the pronto version.
 > 
-> Cc: Jani Nikula <jani.nikula@linux.intel.com>
-> Cc: Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
-> Cc: Rodrigo Vivi <rodrigo.vivi@intel.com>
-> Cc: Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-> Cc: David Airlie <airlied@gmail.com>
-> Cc: Daniel Vetter <daniel@ffwll.ch>
-> Cc: Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>
-> Cc: Alan Previn <alan.previn.teres.alexis@intel.com>
-> Cc: John Harrison <John.C.Harrison@Intel.com>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Tony Ye <tony.ye@intel.com>
-> Cc: Vitaly Lubart <vitaly.lubart@intel.com>
-> Cc: intel-gfx@lists.freedesktop.org
-> Cc: dri-devel@lists.freedesktop.org
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> ---
-> Note, this is a patch that is a prepatory cleanup as part of a larger
-> series of patches that is working on resolving some old driver core
-> design mistakes.  It will build and apply cleanly on top of 6.3-rc2 on
-> its own, but I'd prefer if I could take it through my driver-core tree
-> so that the driver core changes can be taken through there for 6.4-rc1.
+> Signed-off-by: Vladimir Lypak <vladimir.lypak@gmail.com>
+> Signed-off-by: Sireesh Kodali <sireeshkodali1@gmail.com>
+> Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
 
-Sounds fine to me.
+Patch applied to ath-next branch of ath.git, thanks.
 
-Acked-by: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
+f94557154d9f wifi: wcn36xx: add support for pronto-v3
 
-Regards,
+-- 
+https://patchwork.kernel.org/project/linux-wireless/patch/20230311150647.22935-2-sireeshkodali1@gmail.com/
 
-Tvrtko
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
 
-> 
->   drivers/gpu/drm/i915/gt/uc/intel_huc.c | 4 ++--
->   drivers/gpu/drm/i915/gt/uc/intel_huc.h | 4 ++--
->   2 files changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/i915/gt/uc/intel_huc.c b/drivers/gpu/drm/i915/gt/uc/intel_huc.c
-> index 410905da8e97..8b453bd7c953 100644
-> --- a/drivers/gpu/drm/i915/gt/uc/intel_huc.c
-> +++ b/drivers/gpu/drm/i915/gt/uc/intel_huc.c
-> @@ -183,7 +183,7 @@ static int gsc_notifier(struct notifier_block *nb, unsigned long action, void *d
->   	return 0;
->   }
->   
-> -void intel_huc_register_gsc_notifier(struct intel_huc *huc, struct bus_type *bus)
-> +void intel_huc_register_gsc_notifier(struct intel_huc *huc, const struct bus_type *bus)
->   {
->   	int ret;
->   
-> @@ -200,7 +200,7 @@ void intel_huc_register_gsc_notifier(struct intel_huc *huc, struct bus_type *bus
->   	}
->   }
->   
-> -void intel_huc_unregister_gsc_notifier(struct intel_huc *huc, struct bus_type *bus)
-> +void intel_huc_unregister_gsc_notifier(struct intel_huc *huc, const struct bus_type *bus)
->   {
->   	if (!huc->delayed_load.nb.notifier_call)
->   		return;
-> diff --git a/drivers/gpu/drm/i915/gt/uc/intel_huc.h b/drivers/gpu/drm/i915/gt/uc/intel_huc.h
-> index 52db03620c60..05d4832f8461 100644
-> --- a/drivers/gpu/drm/i915/gt/uc/intel_huc.h
-> +++ b/drivers/gpu/drm/i915/gt/uc/intel_huc.h
-> @@ -51,8 +51,8 @@ int intel_huc_check_status(struct intel_huc *huc);
->   void intel_huc_update_auth_status(struct intel_huc *huc);
->   bool intel_huc_is_authenticated(struct intel_huc *huc);
->   
-> -void intel_huc_register_gsc_notifier(struct intel_huc *huc, struct bus_type *bus);
-> -void intel_huc_unregister_gsc_notifier(struct intel_huc *huc, struct bus_type *bus);
-> +void intel_huc_register_gsc_notifier(struct intel_huc *huc, const struct bus_type *bus);
-> +void intel_huc_unregister_gsc_notifier(struct intel_huc *huc, const struct bus_type *bus);
->   
->   static inline int intel_huc_sanitize(struct intel_huc *huc)
->   {
