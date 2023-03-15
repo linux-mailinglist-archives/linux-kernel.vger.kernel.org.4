@@ -2,161 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6201D6BB793
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 16:24:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CFD86BB79F
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 16:25:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232052AbjCOPYD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 11:24:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57802 "EHLO
+        id S232012AbjCOPZT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 11:25:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229597AbjCOPYA (ORCPT
+        with ESMTP id S231673AbjCOPZQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 11:24:00 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94304EC59;
-        Wed, 15 Mar 2023 08:23:59 -0700 (PDT)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32FALA8r022173;
-        Wed, 15 Mar 2023 15:23:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=OdnxiIa2RzAWKpmCWbias4+mruI+Y1nnKYY8NQ/Z9o0=;
- b=MVnkC5v3/s7B3JUuPgAQOnIn8QwlKsx8VvwZqyS0OvtnIN+LRLX6l6NicX407qHKx9WB
- 3TWIDPxcpcrEiFWeOGIjAlJMQXXvIyNsNKFQU1XwU8q1ZtKpXDEL9HdKF1VN2o8IeNpK
- jIgYsCMXid7zJUN+fWRlbCyvdeKMp406t9BIfIsfCApD1CYNvWddOvxJaKLdKh/JW9Vw
- vNMRvqpnmyCkpJnQJVro4SrG0BbhNts8Ja3SfFjKLGAWVZcrZ6CSbrtHiZuoEXAeqMwm
- uuM2Vcm1CWbwkbNiNUHM2+8pEsWuRiEXU3osp+QsGBPtr6WGAko4zILo6ibzp7STvqsN WA== 
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pb2c8a1c8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 15 Mar 2023 15:23:41 +0000
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32FFNfVV012640
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 15 Mar 2023 15:23:41 GMT
-Received: from [10.216.36.238] (10.80.80.8) by nasanex01c.na.qualcomm.com
- (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Wed, 15 Mar
- 2023 08:23:36 -0700
-Message-ID: <f999f9bc-fb87-7716-3f55-9bd68475a667@quicinc.com>
-Date:   Wed, 15 Mar 2023 20:53:31 +0530
+        Wed, 15 Mar 2023 11:25:16 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 125E165BC;
+        Wed, 15 Mar 2023 08:25:15 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id q16so17674661wrw.2;
+        Wed, 15 Mar 2023 08:25:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678893913;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=F1Tjdkcm9ANXGn5qxb6DEQ8TaNVeqrlKXE/a6qrBYv0=;
+        b=O3A6NoI86j6M1Fpyq/29vuO8MJ1QL+z3yixMg1bAnLe5zomimV5D7DYNWho9euqPah
+         hByHOA1i5cD10Pw9EfWJi9b7Lj5zzETcNJahWVEB+wD3qVRES79flC/38q82o3GovdEV
+         5v2lmHSCPKdH3cofEx8//4uuL24GotJ+b6p2Pow91bvFgnOLj5673MG8EM6wt0fzUkPO
+         m54U7YC6gKLmTqiKPJ9jyIOtpKxaiTAyF+8Pa6KCBPFNDz6AVwnwI9vCJOMo0C6i4YPU
+         0A9IXtr8D6cKUO9xYIXItBLcolDb0GA1DjJCrpAY0bcONaY8Dq6QS9fL96teIpos11mq
+         SGbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678893913;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=F1Tjdkcm9ANXGn5qxb6DEQ8TaNVeqrlKXE/a6qrBYv0=;
+        b=tBkwiAxt7XdZFT7AZZlWU5eRpOkegbHI4E/Jo17qYk5i4Ett/p8Or7SE+YdiqoAFBw
+         WMOE7Hl+8V8WR6bOO+QoZO67mb//MkU2Os3VfZwfic60BsEEIGXTRQoViiYoWYdAmixt
+         Akdn9cW+Hof1cJtCO4hLnBwgqndi4zH4reeU71ToZHZhLWVLYOhUlOnTgRZauuaJbLxd
+         f4+qKW02LrzvOLrUs6NwF26zauhycap5Ogkv8oF36BSPJlDv+UlwJhRFjYoJmSRoMBki
+         OHUvZ8n49KIiur0JIavR6C4EraSwj+JhoRpDxUfCvAlT/j02NvC1m8VsQD1u+j+4FNvY
+         76zg==
+X-Gm-Message-State: AO0yUKXwzY8a3DdbedQPts26lG1hN9YheriwutHOh3o0UuJRJFJ8zAAi
+        5BgySB8y5pmslBzUW/hF4Ik=
+X-Google-Smtp-Source: AK7set8aLE6gJUe/UJpmlxdKFlAhVSGfuCFvLfWpHPxZSIXWu4cZ2oh/V5Dcjj07r4qXT8eSJKnIyA==
+X-Received: by 2002:adf:ee4f:0:b0:2cf:ef5d:4ee7 with SMTP id w15-20020adfee4f000000b002cfef5d4ee7mr2401506wro.69.1678893913468;
+        Wed, 15 Mar 2023 08:25:13 -0700 (PDT)
+Received: from ?IPV6:2a02:908:1256:79a0:2e4a:9084:4119:9c9f? ([2a02:908:1256:79a0:2e4a:9084:4119:9c9f])
+        by smtp.gmail.com with ESMTPSA id b6-20020adfde06000000b002cfe466e894sm4795147wrm.38.2023.03.15.08.25.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Mar 2023 08:25:12 -0700 (PDT)
+Message-ID: <07597f3e-0b35-c22b-91ec-fa3875d6fe22@gmail.com>
+Date:   Wed, 15 Mar 2023 16:25:11 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-Subject: Re: [RFC PATCH 3/6] soc: qcom: Add Qualcomm minidump kernel driver
+Subject: Re: [BUG 6.3-rc1] Bad lock in ttm_bo_delayed_delete()
 Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        <agross@kernel.org>, <andersson@kernel.org>,
-        <keescook@chromium.org>, <tony.luck@intel.com>,
-        <gpiccoli@igalia.com>, <catalin.marinas@arm.com>, <will@kernel.org>
-CC:     <linux-arm-msm@vger.kernel.org>,
-        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-hardening@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-References: <1676978713-7394-1-git-send-email-quic_mojha@quicinc.com>
- <1676978713-7394-4-git-send-email-quic_mojha@quicinc.com>
- <00b37174-f19e-ce59-b520-304891f6e2ef@linaro.org>
- <88bd0152-8b53-5ae2-bb16-5060419ca580@linaro.org>
-From:   Mukesh Ojha <quic_mojha@quicinc.com>
-In-Reply-To: <88bd0152-8b53-5ae2-bb16-5060419ca580@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+Cc:     Arunpravin Paneer Selvam <Arunpravin.PaneerSelvam@amd.com>,
+        intel-gfx@lists.freedesktop.org,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        linux-media@vger.kernel.org
+References: <20230307212223.7e49384a@gandalf.local.home>
+ <20230307212615.7a099103@gandalf.local.home>
+ <b919b550-6da8-f9f0-a0eb-0fd8af513817@amd.com>
+ <20230315110949.1e11b3aa@gandalf.local.home>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>
+In-Reply-To: <20230315110949.1e11b3aa@gandalf.local.home>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: CZJpnAapbasNkr7WYu4tv1YLC7bq2jyM
-X-Proofpoint-ORIG-GUID: CZJpnAapbasNkr7WYu4tv1YLC7bq2jyM
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-15_08,2023-03-15_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 bulkscore=0
- priorityscore=1501 impostorscore=0 mlxscore=0 suspectscore=0
- mlxlogscore=999 clxscore=1011 malwarescore=0 lowpriorityscore=0
- adultscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2302240000 definitions=main-2303150129
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks for the review and comment.
+Am 15.03.23 um 16:09 schrieb Steven Rostedt:
+> On Wed, 8 Mar 2023 07:17:38 +0100
+> Christian König <christian.koenig@amd.com> wrote:
+>
+>> Am 08.03.23 um 03:26 schrieb Steven Rostedt:
+>>> On Tue, 7 Mar 2023 21:22:23 -0500
+>>> Steven Rostedt <rostedt@goodmis.org> wrote:
+>>>   
+>>>> Looks like there was a lock possibly used after free. But as commit
+>>>> 9bff18d13473a9fdf81d5158248472a9d8ecf2bd ("drm/ttm: use per BO cleanup
+>>>> workers") changed a lot of this code, I figured it may be the culprit.
+>>> If I bothered to look at the second warning after this one (I usually stop
+>>> after the first), it appears to state there was a use after free issue.
+>> Yeah, that looks like the reference count was somehow messed up.
+>>
+>> What test case/environment do you run to trigger this?
+>>
+>> Thanks for the notice,
+> I'm still getting this on Linus's latest tree.
 
-On 3/9/2023 2:20 AM, Konrad Dybcio wrote:
-> 
-> 
-> On 8.03.2023 21:22, Srinivas Kandagatla wrote:
->>
->>
->> On 21/02/2023 11:25, Mukesh Ojha wrote:
->>> Minidump is a best effort mechanism to collect useful and predefined
->>> data for first level of debugging on end user devices running on
->>> Qualcomm SoCs. It is built on the premise that System on Chip (SoC)
->>> or subsystem part of SoC crashes, due to a range of hardware and
->>> software bugs. Hence, the ability to collect accurate data is only
->>> a best-effort. The data collected could be invalid or corrupted,
->>> data collection itself could fail, and so on.
->>>
->>> Qualcomm devices in engineering mode provides a mechanism for
->>> generating full system ramdumps for post mortem debugging. But in some
->>> cases it's however not feasible to capture the entire content of RAM.
->>> The minidump mechanism provides the means for selecting region should
->>> be included in the ramdump. The solution supports extracting the
->>> ramdump/minidump produced either over USB or stored to an attached
->>> storage device.
->>>
->>> The core of minidump feature is part of Qualcomm's boot firmware code.
->>> It initializes shared memory(SMEM), which is a part of DDR and
->>> allocates a small section of it to minidump table i.e also called
->>> global table of content (G-ToC). Each subsystem (APSS, ADSP, ...) has
->>> their own table of segments to be included in the minidump, all
->>> references from a descriptor in SMEM (G-ToC). Each segment/region has
->>> some details like name, physical address and it's size etc. and it
->>> could be anywhere scattered in the DDR.
->>>
->>> Minidump kernel driver adds the capability to add linux region to be
->>> dumped as part of ram dump collection. It provides appropriate symbol
->>> to check its enablement and register client regions.
->>>
->>> To simplify post mortem debugging, it creates and maintain an ELF
->>> header as first region that gets updated with upon registration
->>> of a new region.
->>>
->>> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
->>> ---
-> [...]
-> 
->>> +int qcom_minidump_ready(void)
->>> +{
->>> +    void *ptr;
->>> +    struct device_node *np;
->>> +    static bool is_smem_available = true;
->>> +
->>> +    if (!is_smem_available || !(np = of_find_compatible_node(NULL, NULL, "qcom,smem"))) {
->>
->> just check for dt node here does not mean that smem device is available, you should probably check if the device is avaliable aswell using of_device_is_available()
->>
->>
->> We should proabably return -EPROBEDEFER incase the node is present and device is not present.
-> qcom_smem_get() seems to handle -EPROBE_DEFER internally, so this check
-> may be entirely redundant.
+This must be some reference counting issue which only happens in your 
+particular use case. We have tested this quite extensively and couldn't 
+reproduce it so far.
 
-The main idea behind checking qcom,smem availability is to not stop 
-client(core kernel) probe if the smem dt node is not present at all
-and qcom_smem_get() will always return  -EPROBE_DEFER for such cases.
+Can you apply this code snippet here and see if you get any warning in 
+the system logs?
 
-For e.g: Again i am taking ramoops example which seems relevant for
-this case, ramoops driver should still probe and not defer forever
-if the smem node is not available at all for non-qcom device tree.
+diff --git a/drivers/gpu/drm/ttm/ttm_bo.c b/drivers/gpu/drm/ttm/ttm_bo.c
+index 459f1b4440da..efc390bfd69c 100644
+--- a/drivers/gpu/drm/ttm/ttm_bo.c
++++ b/drivers/gpu/drm/ttm/ttm_bo.c
+@@ -314,6 +314,7 @@ static void ttm_bo_delayed_delete(struct work_struct 
+*work)
+         dma_resv_lock(bo->base.resv, NULL);
+         ttm_bo_cleanup_memtype_use(bo);
+         dma_resv_unlock(bo->base.resv);
++       bo->delayed_delete.func = NULL;
+         ttm_bo_put(bo);
+  }
 
--Mukesh
-> 
-> Konrad
+@@ -327,6 +328,8 @@ static void ttm_bo_release(struct kref *kref)
+         WARN_ON_ONCE(bo->pin_count);
+         WARN_ON_ONCE(bo->bulk_move);
+
++       WARN_ON(bo->delayed_delete.func != NULL);
++
+         if (!bo->deleted) {
+                 ret = ttm_bo_individualize_resv(bo);
+                 if (ret) {
+
+
+Thanks,
+Christian.
+
+>
+> [  230.530222] ------------[ cut here ]------------
+> [  230.569795] DEBUG_LOCKS_WARN_ON(lock->magic != lock)
+> [  230.569957] WARNING: CPU: 0 PID: 212 at kernel/locking/mutex.c:582 __ww_mutex_lock.constprop.0+0x62a/0x1300
+> [  230.612599] Modules linked in:
+> [  230.632144] CPU: 0 PID: 212 Comm: kworker/0:8H Not tainted 6.3.0-rc2-test-00047-g6015b1aca1a2-dirty #992
+> [  230.654939] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.0-debian-1.16.0-5 04/01/2014
+> [  230.678866] Workqueue: ttm ttm_bo_delayed_delete
+> [  230.699452] EIP: __ww_mutex_lock.constprop.0+0x62a/0x1300
+> [  230.720582] Code: e8 3b 9a 95 ff 85 c0 0f 84 61 fa ff ff 8b 0d 58 bc 3a c4 85 c9 0f 85 53 fa ff ff 68 54 98 06 c4 68 b7 b6 04 c4 e8 46 af 40 ff <0f> 0b 58 5a e9 3b fa ff ff 8d 74 26 00 90 a1 ec 47 b0 c4 85 c0 75
+> [  230.768336] EAX: 00000028 EBX: 00000000 ECX: c51abdd8 EDX: 00000002
+> [  230.792001] ESI: 00000000 EDI: c53856bc EBP: c51abf00 ESP: c51abeac
+> [  230.815944] DS: 007b ES: 007b FS: 00d8 GS: 0000 SS: 0068 EFLAGS: 00010246
+> [  230.840033] CR0: 80050033 CR2: ff9ff000 CR3: 04506000 CR4: 00150ef0
+> [  230.864059] Call Trace:
+> [  230.886369]  ? ttm_bo_delayed_delete+0x30/0x94
+> [  230.909902]  ww_mutex_lock+0x32/0x94
+> [  230.932550]  ttm_bo_delayed_delete+0x30/0x94
+> [  230.955798]  process_one_work+0x21a/0x484
+> [  230.979335]  worker_thread+0x14a/0x39c
+> [  231.002258]  kthread+0xea/0x10c
+> [  231.024769]  ? process_one_work+0x484/0x484
+> [  231.047870]  ? kthread_complete_and_exit+0x1c/0x1c
+> [  231.071498]  ret_from_fork+0x1c/0x28
+> [  231.094701] irq event stamp: 4023
+> [  231.117272] hardirqs last  enabled at (4023): [<c3d1df99>] _raw_spin_unlock_irqrestore+0x2d/0x58
+> [  231.143217] hardirqs last disabled at (4022): [<c31d5a55>] kvfree_call_rcu+0x155/0x2ec
+> [  231.166058] softirqs last  enabled at (3460): [<c3d1f403>] __do_softirq+0x2c3/0x3bb
+> [  231.183104] softirqs last disabled at (3455): [<c30c96a9>] call_on_stack+0x45/0x4c
+> [  231.200336] ---[ end trace 0000000000000000 ]---
+> [  231.216572] ------------[ cut here ]------------
+>
+>
+> This is preventing me from adding any of my own patches on v6.3-rcX due to
+> this bug failing my tests. Which means I can't add anything to linux-next
+> until this is fixed!
+>
+> -- Steve
+
