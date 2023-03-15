@@ -2,173 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBEC56BBD12
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 20:15:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C02D6BBD15
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 20:15:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232846AbjCOTPM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 15:15:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57620 "EHLO
+        id S232837AbjCOTPy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 15:15:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232820AbjCOTPG (ORCPT
+        with ESMTP id S232789AbjCOTPw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 15:15:06 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58DB55BBB;
-        Wed, 15 Mar 2023 12:15:03 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id A189B5C04B5;
-        Wed, 15 Mar 2023 15:15:01 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Wed, 15 Mar 2023 15:15:01 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=anarazel.de; h=
-        cc:cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1678907701; x=1678994101; bh=v6
-        ZoToA1k6gqpn+EgxrEPuv+QScgUq6fxEjc2tGsk1o=; b=g7ukc8xYAkKMllfnY0
-        4QMFQIEk4LwU8sjFkcRie+wOfMrguoqUUjjyqKwy6goZUI1SJAot+4dvU2O1urwI
-        daffMXL+7waw+KpfrFJ351hrKK58bu5cYZipM6wwbeDtdMxFT50Qy+buX0Xiw63y
-        1LUa/Ar+Fy9wAVQARmrSrQsTt+EAO6IXyvgj+A8kgkMnBBbYYVwtULgY+wzLVvb/
-        NQYl7UhDgfbhCgo/Hr1cklZPGgR0zbT4On7UFV1GM6/Ox9Tx09udXTa5n3+TfKJE
-        ks1O7dHi/a9aWBujuWnHy3nLsGVwIFCZI3eD+2Fbufkzq8kqDkJg8h3zajNdpiW0
-        MEMQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1678907701; x=1678994101; bh=v6ZoToA1k6gqp
-        n+EgxrEPuv+QScgUq6fxEjc2tGsk1o=; b=jLaz5Qi/YDTukabJCwaIqer0DU0gt
-        hpBDEaGKEIipdTEK6HYHqeZcgTyKxKSr4DyQdZeaiOijVIAYeGTWDgYcXhgrtTDI
-        h9dmheLfVpqdJIK64sDHaMWXWwA7oXb/xH4m+ZJ6mOARz7HJZjWnhZj0+RtIqWtY
-        PujCvSFSuPl23sEWFlfXTOQ4SRFCBOLOdtmcyAWO+z5GBtS/O6pd83JdykHbvOO7
-        mNejrZu1N+mTlhiNEcyo7xf0r+mry8cchh4XXIy/2jyoyG4aMeRO7oVgjjQeuiag
-        014N0RarIcEW6SYFVejB8NVZRmzJesF3Z+Sd00b2+fYugZzeTtHnA1Vsw==
-X-ME-Sender: <xms:NBkSZL94wlppeLaMWKWUuV_YrGi_bFPUFLwxwMUjWYEKVnV2uvGjDw>
-    <xme:NBkSZHsfU5ex2Jjio89Cxz48XG5tcwubLyOV1JPiuHICQHwRjypcZvAT7TpHZ71gP
-    AFGW9YK9FYf-EYKsg>
-X-ME-Received: <xmr:NBkSZJBBccMufxzHpFL8DPzSgRDYqElSFPBnazHDGS_F8z0mmPKKygAB3vogZ7xapVwmOB9CkLUHyi2KAz-YvS0evSS-9tSrxHBjCXWFVIlJVgmei_N7MCXWpXyc>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvddvkedguddvudcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecunecujfgurhepfffhvfevuffkfhggtggujgesth
-    dtredttddtvdenucfhrhhomheptehnughrvghsucfhrhgvuhhnugcuoegrnhgurhgvshes
-    rghnrghrrgiivghlrdguvgeqnecuggftrfgrthhtvghrnheplefhffdtveeuhfetjefhgf
-    elgeefffdvhfekkeejudehkeffleekteetudefuefhnecuffhomhgrihhnpehlkhhmlhdr
-    ohhrghenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grnhgurhgvshesrghnrghrrgiivghlrdguvg
-X-ME-Proxy: <xmx:NBkSZHe2w42AJuYfKnXOrtnGITQ4EiqDyOz18p_dsBILTCO6Uiyneg>
-    <xmx:NBkSZANfO9bFuEQLVZA3Ogru8Xfx_QVDGJZmAOnMa6pkxOe8y5uzPQ>
-    <xmx:NBkSZJnCTkC-7rAqOsnAeH5iNi0_ajlM_rf02HiwaQ5yDboWuEpT4Q>
-    <xmx:NRkSZBiuM2-Dr0uoSY_309HpRjcmehNiA2xOTMh9qkN8jJ6ohNkbXg>
-Feedback-ID: id4a34324:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 15 Mar 2023 15:15:00 -0400 (EDT)
-Date:   Wed, 15 Mar 2023 12:14:59 -0700
-From:   Andres Freund <andres@anarazel.de>
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Nhat Pham <nphamcs@gmail.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, bfoster@redhat.com,
-        willy@infradead.org, arnd@arndb.de, linux-api@vger.kernel.org,
-        kernel-team@meta.com
-Subject: Re: [PATCH v11 0/3] cachestat: a new syscall for page cache state of
- files
-Message-ID: <20230315191459.f3z3gahxdew4dwrv@awork3.anarazel.de>
-References: <20230308032748.609510-1-nphamcs@gmail.com>
- <20230314160041.960ede03d5f5ff3dbb3e3fd0@linux-foundation.org>
- <20230315170934.GA97793@cmpxchg.org>
+        Wed, 15 Mar 2023 15:15:52 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22ABC59F8;
+        Wed, 15 Mar 2023 12:15:51 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id r27so25578695lfe.10;
+        Wed, 15 Mar 2023 12:15:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678907749;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=s/TbcNqKWN0M5lu3wJAR1U2s2LeA07pOPBmN8acExL0=;
+        b=O5ur8jSvdB/27xbe32AESiRGhcveHvRo5NOaDMOW1kpL0OswesjyshUT7QTDwawvGN
+         vx/xKxwCiKLsKEJkO1qWFU2FXLc4atOFdLRmZ3076bqob4ti2vI1cECaFybQvMKz5pZv
+         /bHto9NZ01y2aSX9adBezC6aYsnn+1b+rY6uhUv2O8/DrGn8KQVVlCVpS/6fGWQbv1uU
+         gWbM7JHpV8JnX5u+M+33xxdoyG7FOo2M5edJsKRthcQfvqf9M8Hk4pwzDp0fjfPmCKxD
+         ZuKfWkLnY3oUfQF5Su3evoeUpfkg6RgrTpD0LLO806HlCoeLQBEc7dPwq5e1BTqIGQD8
+         2vjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678907749;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=s/TbcNqKWN0M5lu3wJAR1U2s2LeA07pOPBmN8acExL0=;
+        b=eoGnHq2Gh/D+nW5uByOcxhHv2/76ZtpmHbaitWt+7LetAtzVPDxLSnudw6LDC+H563
+         3vSPshOB83Ii1n2IxzANbI5O9qRculQE8bXZoHLvE5+QI57QTx0ntJW6NNzKoFnEUWeE
+         MGehsspcEi98SitrXypBhaY70Z8/tpDZBOmDl/DAaywXY/e2fKyjjv7sTTU/mEXvvmwS
+         Uk+pKOmrHTB0oEtZwtDRzEGPdcCRyd3rqRGcrHvZWJ+0WJwMbJHUhzWfTFkxmUMASLBc
+         OcyZPysPPtmQovDZqbKv9jLshX7boVXOj+WaTn43E4A2q8Nsgl2KguEttIa78kLB10wu
+         7Nfw==
+X-Gm-Message-State: AO0yUKUso5JmNCuLQieNNoZEKJ9G+VpnaZOfDZh9UaFpL+2BzL70J2Ts
+        oHik4tS4bXh0rj8M3FEv6llELJHvXwP6y5WUgzA=
+X-Google-Smtp-Source: AK7set+RLtA8GIwiFyS4rsBM8IKpZnaihakScemGdopDS8WcGoKzTe0kT84u6FhuozpIRdVObQcJElU+HSk0NKRv5fk=
+X-Received: by 2002:ac2:5df9:0:b0:4db:2554:93a2 with SMTP id
+ z25-20020ac25df9000000b004db255493a2mr2378777lfq.10.1678907749244; Wed, 15
+ Mar 2023 12:15:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230315170934.GA97793@cmpxchg.org>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230307212223.7e49384a@gandalf.local.home> <20230307212615.7a099103@gandalf.local.home>
+ <b919b550-6da8-f9f0-a0eb-0fd8af513817@amd.com> <20230308074333.49546088@gandalf.local.home>
+ <980021d5-09f7-9fc3-2726-44884a57822f@gmail.com>
+In-Reply-To: <980021d5-09f7-9fc3-2726-44884a57822f@gmail.com>
+From:   Matthew Auld <matthew.william.auld@gmail.com>
+Date:   Wed, 15 Mar 2023 19:15:21 +0000
+Message-ID: <CAM0jSHPf5u4=GGWm6x-zVkLA_LScAxq371ny2NoozuNjHfQefQ@mail.gmail.com>
+Subject: Re: [Intel-gfx] [BUG 6.3-rc1] Bad lock in ttm_bo_delayed_delete()
+To:     =?UTF-8?Q?Christian_K=C3=B6nig?= <ckoenig.leichtzumerken@gmail.com>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        Arunpravin Paneer Selvam <Arunpravin.PaneerSelvam@amd.com>,
+        intel-gfx@lists.freedesktop.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        linux-media@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 2023-03-15 13:09:34 -0400, Johannes Weiner wrote:
-> On Tue, Mar 14, 2023 at 04:00:41PM -0700, Andrew Morton wrote:
-> > A while ago I asked about the security implications - could cachestat()
-> > be used to figure out what parts of a file another user is reading.
-> > This also applies to mincore(), but cachestat() newly permits user A to
-> > work out which parts of a file user B has *written* to.
+On Wed, 15 Mar 2023 at 18:41, Christian K=C3=B6nig
+<ckoenig.leichtzumerken@gmail.com> wrote:
 >
-> The caller of cachestat() must have the file open for reading. If they
-> can read the contents that B has written, is the fact that they can
-> see dirty state really a concern?
-
-Random idea: Only fill ->dirty/writeback if the fd is open for writing.
-
-
-> > Secondly, I'm not seeing description of any use cases.  OK, it's faster
-> > and better than mincore(), but who cares?  In other words, what
-> > end-user value compels us to add this feature to Linux?
+> Am 08.03.23 um 13:43 schrieb Steven Rostedt:
+> > On Wed, 8 Mar 2023 07:17:38 +0100
+> > Christian K=C3=B6nig <christian.koenig@amd.com> wrote:
+> >
+> >> What test case/environment do you run to trigger this?
+> > I'm running a 32bit x86 qemu instance. Attached is the config.
+> >
+> > The libvirt xml file is here: https://rostedt.org/vm-images/tracetest-3=
+2.xml
+> > and the VM image itself is here: https://rostedt.org/vm-images/tracetes=
+t-32.qcow2.bz2
 >
-> Years ago there was a thread about adding dirty bits to mincore(), I
-> don't know if you remember this:
+> I've started to download that, but it will take about an hour. So I
+> tried to avoid that for now.
 >
-> https://lkml.org/lkml/2013/2/10/162
+> But looks like there isn't any other way to reproduce this, the code
+> seems to work with both amdgpu and radeon.
 >
-> In that thread, Rusty described a usecase of maintaining a journaling
-> file alongside a main file. The idea for testing the dirty state isn't
-> to call sync but to see whether the journal needs to be updated.
+> My suspicion is that we just have a reference count issue in qxl or ttm
+> which was never noticed because it didn't caused any problems (except
+> for a minor memory corruption).
+
+Why does ttm_bo_cleanup_refs() do a bo_put() at the end? It doesn't
+make sense to me. Say if the BO is in the process of being delay freed
+(bo->deleted =3D true), and we just did the kref_init() in
+ttm_bo_release(), it might drop that ref hitting ttm_bo_release() yet
+again, this time doing the actual bo->destroy(), which frees the
+object. The worker then fires at some later point calling
+ttm_bo_delayed_delete(), but the BO has already been freed.
+
 >
-> The efficiency of mincore() was touched on too. Andres Freund (CC'd,
-> hopefully I got the email address right) mentioned that Postgres has a
-> usecase for deciding whether to do an index scan or query tables
-> directly, based on whether the index is cached. Postgres works with
-> files rather than memory regions, and Andres mentioned that the index
-> could be quite large.
-
-This is still relevant, FWIW. And not just for deciding on the optimal query
-plan, but also for reporting purposes. We can show the user what part of the
-query has done how much IO, but that can end up being quite confusing because
-we're not aware of how much IO was fullfilled by the page cache.
-
-
-> Most recently, the database team at Meta reached out to us and asked
-> about the ability to query dirty state again. The motivation for this
-> was twofold. One was simply visibility into the writeback algorithm,
-> i.e. trying to figure out what it's doing when investigating
-> performance problems.
+> Now you get a rain of warnings because we try to grab the lock in the
+> delete worker.
 >
-> The second usecase they brought up was to advise writeback from
-> userspace to manage the tradeoff between integrity and IO utilization:
-> if IO capacity is available, sync more frequently; if not, let the
-> work batch up. Blindly syncing through the file in chunks doesn't work
-> because you don't know in advance how much IO they'll end up doing (or
-> how much they've done, afterwards.) So it's difficult to build an
-> algorithm that will reasonably pace through sparsely dirtied regions
-> without the risk of overwhelming the IO device on dense ones. And it's
-> not straight-forward to do this from the kernel, since it doesn't know
-> the IO headroom the application needs for reading (which is dynamic).
-
-We ended up building something very roughly like that in userspace - each
-backend tracks the last N writes, and once the numbers reaches a certain
-limit, we sort and collapse the outstanding ranges and issue
-sync_file_range(SYNC_FILE_RANGE_WRITE) for them. Different types of tasks have
-different limits. Without that latency in write heavy workloads is ... not
-good (to this day, but to a lesser degree than 5-10 years ago).
-
-
-> Another query we get almost monthly is service owners trying to
-> understand where their memory is going and what's causing unexpected
-> pressure on a host. They see the cache in vmstat, but between a
-> complex application, shared libraries or a runtime (jvm, hhvm etc.)
-> and a myriad of host management agents, there is so much going on on
-> the machine that it's hard to find out who is touching which
-> files. When it comes to disk usage, the kernel provides the ability to
-> quickly stat entire filesystem subtrees and drill down with tools like
-> du. It sure would be useful to have the same for memory usage.
-
-+1
-
-Greetings,
-
-Andres Freund
+> Christian.
+>
+> >
+> > It happened again in another test (it's not 100% reproducible).
+> >
+> > [   23.234838] ------------[ cut here ]------------
+> > [   23.236391] DEBUG_LOCKS_WARN_ON(lock->magic !=3D lock)
+> > [   23.236429] WARNING: CPU: 0 PID: 61 at kernel/locking/mutex.c:582 __=
+ww_mutex_lock.constprop.0+0x566/0xfec
+> > [   23.240990] Modules linked in:
+> > [   23.242368] CPU: 0 PID: 61 Comm: kworker/0:1H Not tainted 6.3.0-rc1-=
+test-00001-ga98bd42762ed-dirty #972
+> > [   23.245106] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS=
+ 1.16.0-debian-1.16.0-5 04/01/2014
+> > [   23.247900] Workqueue: ttm ttm_bo_delayed_delete
+> > [   23.249642] EIP: __ww_mutex_lock.constprop.0+0x566/0xfec
+> > [   23.251563] Code: e8 2b 5a 95 ff 85 c0 0f 84 25 fb ff ff 8b 0d 18 71=
+ 3b c8 85 c9 0f 85 17 fb ff ff 68 c0 58 07 c8 68 07 77 05 c8 e8 e6 0a 40 ff=
+ <0f> 0b 58 5a e9 ff fa ff ff e8 f8 59 95 ff 85 c0 74 0e 8b 0d 18 71
+> > [   23.256901] EAX: 00000028 EBX: 00000000 ECX: c1847dd8 EDX: 00000002
+> > [   23.258849] ESI: 00000000 EDI: c12958bc EBP: c1847f00 ESP: c1847eac
+> > [   23.260786] DS: 007b ES: 007b FS: 00d8 GS: 0000 SS: 0068 EFLAGS: 000=
+10286
+> > [   23.262840] CR0: 80050033 CR2: ffbff000 CR3: 0850e000 CR4: 00150ef0
+> > [   23.264781] Call Trace:
+> > [   23.265899]  ? lock_is_held_type+0xbe/0x10c
+> > [   23.267434]  ? ttm_bo_delayed_delete+0x30/0x94
+> > [   23.268971]  ww_mutex_lock+0x32/0x94
+> > [   23.270327]  ttm_bo_delayed_delete+0x30/0x94
+> > [   23.271818]  process_one_work+0x21a/0x538
+> > [   23.273242]  worker_thread+0x146/0x398
+> > [   23.274616]  kthread+0xea/0x10c
+> > [   23.275859]  ? process_one_work+0x538/0x538
+> > [   23.277312]  ? kthread_complete_and_exit+0x1c/0x1c
+> > [   23.278899]  ret_from_fork+0x1c/0x28
+> > [   23.280223] irq event stamp: 33
+> > [   23.281440] hardirqs last  enabled at (33): [<c7d28089>] _raw_spin_u=
+nlock_irqrestore+0x2d/0x58
+> > [   23.283860] hardirqs last disabled at (32): [<c71d4ba5>] kvfree_call=
+_rcu+0x155/0x2ec
+> > [   23.286066] softirqs last  enabled at (0): [<c71217fd>] copy_process=
++0x989/0x2368
+> > [   23.288220] softirqs last disabled at (0): [<00000000>] 0x0
+> > [   23.289952] ---[ end trace 0000000000000000 ]---
+> > [   23.291501] ------------[ cut here ]------------
+> > [   23.293027] refcount_t: underflow; use-after-free.
+> > [   23.294644] WARNING: CPU: 0 PID: 61 at lib/refcount.c:28 refcount_wa=
+rn_saturate+0xb6/0xfc
+> > [   23.296959] Modules linked in:
+> > [   23.298168] CPU: 0 PID: 61 Comm: kworker/0:1H Tainted: G        W   =
+       6.3.0-rc1-test-00001-ga98bd42762ed-dirty #972
+> > [   23.301073] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS=
+ 1.16.0-debian-1.16.0-5 04/01/2014
+> > [   23.303642] Workqueue: ttm ttm_bo_delayed_delete
+> > [   23.305190] EIP: refcount_warn_saturate+0xb6/0xfc
+> > [   23.306767] Code: 68 70 e1 0c c8 e8 f6 d6 a9 ff 0f 0b 58 c9 c3 90 80=
+ 3d 8a 78 38 c8 00 75 8a c6 05 8a 78 38 c8 01 68 9c e1 0c c8 e8 d6 d6 a9 ff=
+ <0f> 0b 59 c9 c3 80 3d 88 78 38 c8 00 0f 85 67 ff ff ff c6 05 88 78
+> > [   23.311935] EAX: 00000026 EBX: c1295950 ECX: c1847e40 EDX: 00000002
+> > [   23.313884] ESI: c12958bc EDI: f7591100 EBP: c1847f18 ESP: c1847f14
+> > [   23.315840] DS: 007b ES: 007b FS: 00d8 GS: 0000 SS: 0068 EFLAGS: 000=
+10246
+> > [   23.317887] CR0: 80050033 CR2: ffbff000 CR3: 0850e000 CR4: 00150ef0
+> > [   23.319859] Call Trace:
+> > [   23.320978]  ttm_bo_delayed_delete+0x8c/0x94
+> > [   23.322492]  process_one_work+0x21a/0x538
+> > [   23.323959]  worker_thread+0x146/0x398
+> > [   23.325353]  kthread+0xea/0x10c
+> > [   23.326609]  ? process_one_work+0x538/0x538
+> > [   23.328081]  ? kthread_complete_and_exit+0x1c/0x1c
+> > [   23.329683]  ret_from_fork+0x1c/0x28
+> > [   23.331011] irq event stamp: 33
+> > [   23.332251] hardirqs last  enabled at (33): [<c7d28089>] _raw_spin_u=
+nlock_irqrestore+0x2d/0x58
+> > [   23.334334] hardirqs last disabled at (32): [<c71d4ba5>] kvfree_call=
+_rcu+0x155/0x2ec
+> > [   23.336176] softirqs last  enabled at (0): [<c71217fd>] copy_process=
++0x989/0x2368
+> > [   23.337904] softirqs last disabled at (0): [<00000000>] 0x0
+> > [   23.339313] ---[ end trace 0000000000000000 ]---
+> >
+> > -- Steve
+>
