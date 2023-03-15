@@ -2,197 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59D936BB9AA
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 17:28:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C9836BB9AE
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 17:29:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231990AbjCOQ20 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 12:28:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55380 "EHLO
+        id S232088AbjCOQ3s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 12:29:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230036AbjCOQ2Y (ORCPT
+        with ESMTP id S230036AbjCOQ3p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 12:28:24 -0400
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D78CB144BE
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 09:28:20 -0700 (PDT)
-Received: by mail-oi1-x22d.google.com with SMTP id bg11so14579948oib.5
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 09:28:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678897700;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=WVYvcAy8dSxQ/ifYmimSGD1exSiUZr0vNmHxHR4sW1M=;
-        b=E5X7b3yylb2zGuLdsnu2FaZg2SVX9HTQSbjTHTH8RL6IR8BdRmyW6dD4stDpUNMDoI
-         Nlb0Y0yzg4PBPbcuDx2lKOl34qBbrl1JVeQLWLIw4HuP/3aOGXq8ymZCP7j/zZRzdKiX
-         vjWL74Cc7TtcTCHb8OvNdnOyGjl6s7zTy9F1Pxi9Kf0DY/sce9GrYs4oYtH85RmwanBs
-         Yw0Nn9FmBZs2A075Q2MYHDgT99Ep841hlSo5XfTNKZDzaJxiHELwI0XzpXkdi4D5JZsN
-         QFpZrHbfcVmF84SSM68VXWlGHaCPivT+cevPiDz6MxkzFdNfkRUAOEcJCAz5eDpjyabp
-         JlsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678897700;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WVYvcAy8dSxQ/ifYmimSGD1exSiUZr0vNmHxHR4sW1M=;
-        b=IXaR4cO9U2YZmd/n+jfCG+QXyv5aPa/G638ptxFoTgG7VA+F7lP8zxXEvo872iuGzV
-         gCiD7UVLNABvW7Z8eTKQ57/BbXCAX9IU76VRLm+ab7WEO2Ae+5aoL76bWV9aEYvtNWnk
-         0L3qwSx6PfZcTk7FYNGupNuxFrHwOFcVxX14rU8sMGZ85MJbSv6HaW8ig9YszHj1H5vu
-         YeIXfq39Rcnb43qgfotWFVbyZ7rwVgHRTso9Yw1R7nndI0HEANPPIx2z9rKd+l3UKqP2
-         4DCbHY1UnKTl0gj7j4Ljb4t5K3S/iR/oRZQkoQjZbBgWhjYyNSM39Qh7QzM7m8TxB+tj
-         pPuA==
-X-Gm-Message-State: AO0yUKUupXi7ude9FjYcMz6+Ce2QzE+q97rYe1NGsysBIIqqzP8A2+Fb
-        4m9cTmIPRNT03L3Uy+8SEHuUVg==
-X-Google-Smtp-Source: AK7set/s/eT7NOgMztjcEqii0UvOGk2DggthUhbrys8Q7BX9HUjtVGNAJmRl0c/ObnPkQxrHFm2I5g==
-X-Received: by 2002:a05:6808:1189:b0:386:9eff:2d62 with SMTP id j9-20020a056808118900b003869eff2d62mr1264417oil.24.1678897698657;
-        Wed, 15 Mar 2023 09:28:18 -0700 (PDT)
-Received: from [192.168.17.16] ([189.219.75.19])
-        by smtp.gmail.com with ESMTPSA id s128-20020acac286000000b00369a721732asm2290756oif.41.2023.03.15.09.28.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Mar 2023 09:28:18 -0700 (PDT)
-Message-ID: <c3b1918b-be90-0a85-6f91-83b2c2805f67@linaro.org>
-Date:   Wed, 15 Mar 2023 10:28:15 -0600
+        Wed, 15 Mar 2023 12:29:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA2BD32CFC;
+        Wed, 15 Mar 2023 09:29:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 65C4861DFC;
+        Wed, 15 Mar 2023 16:29:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF974C433EF;
+        Wed, 15 Mar 2023 16:29:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678897783;
+        bh=jjn5cdVupJ0A22hzLeqblsWGnn86f9oIpQTR3zJXyMs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SrGZE6Sk04Pizzg1tuzcS8CHPA2fWPGLs4KeZnsayQbgSEQA4cnJK0Pfeq0SJeJBK
+         k3vxt0IAld+aKoIhiC1zd5okC/+vL8oWVyyuI6ZfWamyvj388DwIwIYix0jC3bwxmi
+         DkeIXcnQUWjdJXHT/9ZFLPb9Mobk2cNyIzLuPwIw5rsLql0YKamZVRUoXUYTdyODoV
+         Qvri59v7Ipro4ikDj/8KVduqsAhq0rRHgWmjSR1HC0SJWkOuQY5nxeUuemo7vvLdpn
+         GcuwDkUNsFs3zlki+Ro5SvcGO6afswtXZknOUs/tFssFYs5ilBEfvwFoULnPAv3CIu
+         EL6OIvNSFjCYw==
+Date:   Wed, 15 Mar 2023 16:29:36 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Cc:     Wesley Cheng <quic_wcheng@quicinc.com>,
+        srinivas.kandagatla@linaro.org, mathias.nyman@intel.com,
+        perex@perex.cz, lgirdwood@gmail.com,
+        krzysztof.kozlowski+dt@linaro.org, agross@kernel.org,
+        Thinh.Nguyen@synopsys.com, bgoswami@quicinc.com,
+        andersson@kernel.org, robh+dt@kernel.org,
+        gregkh@linuxfoundation.org, tiwai@suse.com,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-usb@vger.kernel.org, quic_jackp@quicinc.com,
+        quic_plai@quicinc.com
+Subject: Re: [PATCH v3 00/28] Introduce QC USB SND audio offloading support
+Message-ID: <e270cffa-d27b-40e0-aed5-104514e4ba94@sirena.org.uk>
+References: <20230308235751.495-1-quic_wcheng@quicinc.com>
+ <4f8a66c0-398f-5655-3aa7-a59bc9ba56cc@linux.intel.com>
+ <8b2f3ce7-3e0c-bdf0-8d9f-9aeabba09a15@quicinc.com>
+ <a211f26d-a045-0729-871f-248d5fce3f3f@linux.intel.com>
+ <684daf86-6c3f-7310-eebf-4ebfc3c480ca@quicinc.com>
+ <8a37ccd3-f19e-b30d-d736-04e81b49f3a0@linux.intel.com>
+ <0810f951-f4a6-a51d-97e3-43691b05f702@quicinc.com>
+ <b671e263-5cb8-18e5-dc28-648ab1133c6c@linux.intel.com>
+ <14d726a7-6ffc-705c-b012-0c08d7dd7b9b@quicinc.com>
+ <6b811766-cd2a-54c0-d090-640812686a45@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 4.19 00/39] 4.19.278-rc1 review
-Content-Language: en-US
-From:   =?UTF-8?Q?Daniel_D=c3=adaz?= <daniel.diaz@linaro.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-References: <20230315115721.234756306@linuxfoundation.org>
- <7e46d536-cc68-4b7c-e56e-cf1b94a925cb@linaro.org>
-In-Reply-To: <7e46d536-cc68-4b7c-e56e-cf1b94a925cb@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Z0fuEYQGMv0a0e38"
+Content-Disposition: inline
+In-Reply-To: <6b811766-cd2a-54c0-d090-640812686a45@linux.intel.com>
+X-Cookie: "Speed is subsittute fo accurancy."
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello!
 
-On 15/03/23 09:44, Daniel Díaz wrote:
-> Hello!
-> 
-> On 15/03/23 06:12, Greg Kroah-Hartman wrote:
->> This is the start of the stable review cycle for the 4.19.278 release.
->> There are 39 patches in this series, all will be posted as a response
->> to this one.  If anyone has any issues with these being applied, please
->> let me know.
->>
->> Responses should be made by Fri, 17 Mar 2023 11:57:10 +0000.
->> Anything received after that time might be too late.
->>
->> The whole patch series can be found in one patch at:
->>     https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.19.278-rc1.gz
->> or in the git tree and branch at:
->>     git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.19.y
->> and the diffstat can be found below.
->>
->> thanks,
->>
->> greg k-h
-> 
-> Lots and lots of failures, mostly Arm.
-> 
-> For Arm, Arm64, MIPS, with GCC-8, GCC-9, GCC-10, GCC-11, GCC-12, Clang-16, for some combinations with:
-> * axm55xx_defconfig
-> * davinci_all_defconfig
-> * defconfig
-> * defconfig-40bc7ee5
-> * lkftconfig-kasan
-> * multi_v5_defconfig
-> * s5pv210_defconfig
-> * sama5_defconfig
-> 
-> -----8<-----
-> /builds/linux/kernel/cgroup/cgroup.c:2237:2: error: implicit declaration of function 'get_online_cpus' [-Werror,-Wimplicit-function-declaration]
->          get_online_cpus();
->          ^
-> /builds/linux/kernel/cgroup/cgroup.c:2237:2: note: did you mean 'get_online_mems'?
-> /builds/linux/include/linux/memory_hotplug.h:258:20: note: 'get_online_mems' declared here
-> static inline void get_online_mems(void) {}
->                     ^
-> /builds/linux/kernel/cgroup/cgroup.c:2248:2: error: implicit declaration of function 'put_online_cpus' [-Werror,-Wimplicit-function-declaration]
->          put_online_cpus();
->          ^
-> /builds/linux/kernel/cgroup/cgroup.c:2248:2: note: did you mean 'put_online_mems'?
-> /builds/linux/include/linux/memory_hotplug.h:259:20: note: 'put_online_mems' declared here
-> static inline void put_online_mems(void) {}
->                     ^
-> 2 errors generated.
-> make[3]: *** [/builds/linux/scripts/Makefile.build:303: kernel/cgroup/cgroup.o] Error 1
-> ----->8-----
-> 
-> 
-> For Arm64, i386 x86, with GCC-11, Perf has a new error:
-> 
-> -----8<-----
-> In function 'ready',
->      inlined from 'sender' at bench/sched-messaging.c:90:2:
-> bench/sched-messaging.c:76:13: error: 'dummy' is used uninitialized [-Werror=uninitialized]
->     76 |         if (write(ready_out, &dummy, 1) != 1)
->        |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-> In file included from bench/../perf-sys.h:5,
->                   from bench/../perf.h:18,
->                   from bench/sched-messaging.c:13:
-> ----->8-----
+--Z0fuEYQGMv0a0e38
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Additionally, there's this on Arm with GCC-10, GCC-12, Clang-16 for:
-* defconfig
-* exynos_defconfig
-* lkftconfig
-* lkftconfig-debug
-* lkftconfig-debug-kmemleak
-* lkftconfig-kasan
-* lkftconfig-kselftest-kernel
-* lkftconfig-kunit
-* lkftconfig-libgpiod
-* lkftconfig-perf
-* lkftconfig-rcutorture
+On Wed, Mar 15, 2023 at 09:30:58AM -0500, Pierre-Louis Bossart wrote:
 
------8<-----
-arch/arm/boot/dts/exynos5422-odroidhc1.dtb: ERROR (phandle_references): /thermal-zones/gpu-thermal/cooling-maps/map0: Reference to non-existent node or label "gpu"
+> That's probably ok then, am I getting this right that the the DSP card
+> would not expose any USB-related kcontrols then, i.e. the ONLY path to
+> change volumes, etc.,  would through the regular USB card kcontrols?
 
-arch/arm/boot/dts/exynos5422-odroidhc1.dtb: ERROR (phandle_references): /thermal-zones/gpu-thermal/cooling-maps/map1: Reference to non-existent node or label "gpu"
+> That would limit the changes in the platform sound card to the addition
+> of a PCM USB device.
 
-ERROR: Input tree has errors, aborting (use -f to force output)
-make[2]: *** [scripts/Makefile.lib:294: arch/arm/boot/dts/exynos5422-odroidhc1.dtb] Error 2
-arch/arm/boot/dts/exynos5422-odroidxu3.dtb: ERROR (phandle_references): /thermal-zones/gpu-thermal/cooling-maps/map3: Reference to non-existent node or label "gpu"
+I'd guess that there might be some volume control in the DSP as part of
+the generic routing to the port (eg, if all ports have some output
+control) but I'm not sure that's an issue, could even be useful for
+normalising the output of DSP algorithms compared to direct PCM
+playback.
 
-arch/arm/boot/dts/exynos5422-odroidxu3.dtb: ERROR (phandle_references): /thermal-zones/gpu-thermal/cooling-maps/map4: Reference to non-existent node or label "gpu"
+--Z0fuEYQGMv0a0e38
+Content-Type: application/pgp-signature; name="signature.asc"
 
-ERROR: Input tree has errors, aborting (use -f to force output)
-make[2]: *** [scripts/Makefile.lib:294: arch/arm/boot/dts/exynos5422-odroidxu3.dtb] Error 2
-arch/arm/boot/dts/exynos5422-odroidxu3-lite.dtb: ERROR (phandle_references): /thermal-zones/gpu-thermal/cooling-maps/map3: Reference to non-existent node or label "gpu"
+-----BEGIN PGP SIGNATURE-----
 
-arch/arm/boot/dts/exynos5422-odroidxu3-lite.dtb: ERROR (phandle_references): /thermal-zones/gpu-thermal/cooling-maps/map4: Reference to non-existent node or label "gpu"
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQR8m8ACgkQJNaLcl1U
+h9Cp3Af/fp7qmzx3dIqaYfXDA3inZKGAJxlBPLnKX7FXrObh2rhSDh/htyeF/xtx
+6tpnHQ1zB2RqEeffKTwu9lobnS2+x/SYkDG2vw5ONFKl3U7L3L87l76a67mR5Hk8
+d7nCQBAdHetX8yl/6H4iVbQztzwFNbuAfT61GYm+zxd98Psps6JucWS8IXwH8lfd
+XGRC/kENH9CPClFzhOCLGnlc+lMRkIGPDH38CN/IGl1GqHr5GgpWlRf6U5dFxpYC
+gAAATPlnhXUSp3o2+qT0bmqjEDpeWXUbeAQuayhdQ3fS0TzGBgoynfR7OyKEHPyl
+X3poldFU1Joz448CW+mSRjG2W9VTpw==
+=+zSv
+-----END PGP SIGNATURE-----
 
-ERROR: Input tree has errors, aborting (use -f to force output)
-make[2]: *** [scripts/Makefile.lib:294: arch/arm/boot/dts/exynos5422-odroidxu3-lite.dtb] Error 2
-arch/arm/boot/dts/exynos5422-odroidxu4.dtb: ERROR (phandle_references): /thermal-zones/gpu-thermal/cooling-maps/map3: Reference to non-existent node or label "gpu"
-
-arch/arm/boot/dts/exynos5422-odroidxu4.dtb: ERROR (phandle_references): /thermal-zones/gpu-thermal/cooling-maps/map4: Reference to non-existent node or label "gpu"
-
-ERROR: Input tree has errors, aborting (use -f to force output)
-make[2]: *** [scripts/Makefile.lib:294: arch/arm/boot/dts/exynos5422-odroidxu4.dtb] Error 2
------>8-----
-
-
-Greetings!
-
-Daniel Díaz
-daniel.diaz@linaro.org
-
+--Z0fuEYQGMv0a0e38--
