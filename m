@@ -2,74 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 445216BABE0
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 10:14:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6223B6BABE6
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 10:16:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232066AbjCOJOr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 05:14:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37102 "EHLO
+        id S231352AbjCOJQ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 05:16:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231781AbjCOJOT (ORCPT
+        with ESMTP id S230091AbjCOJQR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 05:14:19 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C345E7B9AA
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 02:13:50 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id l7-20020a05600c1d0700b003eb5e6d906bso658659wms.5
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 02:13:50 -0700 (PDT)
+        Wed, 15 Mar 2023 05:16:17 -0400
+Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D9A61F912;
+        Wed, 15 Mar 2023 02:16:16 -0700 (PDT)
+Received: by mail-qk1-x731.google.com with SMTP id j10so6466788qkg.12;
+        Wed, 15 Mar 2023 02:16:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678871628;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+        d=gmail.com; s=20210112; t=1678871775;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=xGIgG+nfQ3uyl4drl9en2yuuyKPUqcLJi9WOxBRKmpM=;
-        b=POVA8cuflMM+b1KPOZ+/fjiWcXC+mQMXKztdD1MrgwV/FEb7jjy4lH1/TuLRY7/nYb
-         2zxJGbCq0rzzeYZ9fiHCeBrNFPQWsC4JH0EN6PwMNojafbtgN1DxaRE81irRrMUYJr8u
-         OVb6kpra+GUOAwcWcwWQEmMEz9GCPAUb+4zZbU64YwahtuqQcjmQofa3Xm3x51zPRU4O
-         kqX3nATOm/NdqnT36AL/Nek/vjaRj/Swea1Zhkv0Vv70COhbtzgN4vNtafBtJu56awur
-         j15ULP+voQKu78bUWAHDelMg3opitMCgVQ9dTprkbmM+pzDrlKvsVEO2sGHyPcXtteuT
-         GiGA==
+        bh=LzIIgw7yN+Q6/b/qd+jJvK07cHovtHSbs9Wq8woUHy0=;
+        b=egT23glLgty1DpOum/hx1NeUXuD+cEBHJF5ecFDE5WLTVfuD1XruLvqv5pN30UbRil
+         JsWxI85ibZ/VJZAbTbsL9nOD11P0Ib5v6AGRYGEniBWXF0gFp3qEcF5a2YK4iuyYh7Hd
+         HURvJg/JrTcGF1Zf6OpQlFjBin5mvxCIMmlflLMXP1rW0fUpkovBqXW+4gWIqX46AhaG
+         IqLot3gRb1oP/LkYgOitoHK2b7q9qnXSPFyCwUihjOT6exCjxox71z/ZDPiJvmdZkt1s
+         X7O3Yudhkw+a8LqmOUbVZxaYmsL5QNjYDyrGBzBnDtbyxzahOWllqcgAjkqSq0W+KIaF
+         w3Qg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678871628;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20210112; t=1678871775;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=xGIgG+nfQ3uyl4drl9en2yuuyKPUqcLJi9WOxBRKmpM=;
-        b=BDYCsfdJxhsMtot40o+QGVFKRR8voZAUXQBT8JLfMoXi2TcBNyIC3rf1u99u95y1v2
-         eN5vwYPb2pjDO8v16BJXpxxGJTf3yb8OMZ1WvUW8qqJ91AyyDCn08TIzjxXxLh3W6QKT
-         TnZNnBsAUK6xSUzL1TvcRRDswmkOATkOrKTBgjoq+JmyKBPkllkm9r7AZdSWuYSYwxpt
-         X+bKtqT7H1y3F1jR7k8vQxF8g6IePtr+qcYJqL7/WGfLxs1nRXmi6v5yGMJa+etUs4oZ
-         IYcY7SayCnCCuPuX6lB+TaFOpisR2oxSB7ByuMVA3Rk0YPUKfgqwPCZe6TW1Js4H4Uzd
-         GEjQ==
-X-Gm-Message-State: AO0yUKUH+Fu9OypkGWdMz7mJuWceZFJ2MgY7iUfJzOtEZJMOrjgCQ/i1
-        oejpxjBBeT4bcdxbuqlwaUnKfCeXS4IENchXCY9UeA==
-X-Google-Smtp-Source: AK7set/Dn9l8p8DdE3Dci/nG0+h7h2RMwo75JEjKq6kRPJnyXo0lQGRS9k1C3pTqAw7FS3w+tp2r/A==
-X-Received: by 2002:a05:600c:3503:b0:3ea:e7f6:f8fa with SMTP id h3-20020a05600c350300b003eae7f6f8famr16434518wmq.10.1678871628832;
-        Wed, 15 Mar 2023 02:13:48 -0700 (PDT)
-Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
-        by smtp.gmail.com with ESMTPSA id y16-20020a05600c365000b003ed23845666sm1136212wmq.45.2023.03.15.02.13.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Mar 2023 02:13:48 -0700 (PDT)
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-To:     sam@ravnborg.org, airlied@gmail.com, daniel@ffwll.ch,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        thierry.reding@gmail.com,
-        Ruihai Zhou <zhouruihai@huaqin.corp-partner.google.com>
-Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20230314085034.6380-1-zhouruihai@huaqin.corp-partner.google.com>
-References: <20230314085034.6380-1-zhouruihai@huaqin.corp-partner.google.com>
-Subject: Re: [PATCH 1/2] dt-bindings: display: panel: Add compatible for
- Starry 2081101QFH032011-53G
-Message-Id: <167887162800.2174720.1844367111418757005.b4-ty@linaro.org>
-Date:   Wed, 15 Mar 2023 10:13:48 +0100
+        bh=LzIIgw7yN+Q6/b/qd+jJvK07cHovtHSbs9Wq8woUHy0=;
+        b=TOc513srDCjWE7cQOM/7S8kBBwrqUHQa6zquohpAwtmzCSgucM8CryYH4v8z7H1YNE
+         xmKWNdhTXfniI6GRfa+fVOyIEFkzYlv+m4EbGRuk3lXhoabp2xz1SAoxnmWsVqsBondK
+         4+m40kF5o6uzQuBHNyWmMKxU//KWIGpaBBppLlmMKWtlz8Z6x+Ts4MkFsOT7v528WdVF
+         JXbQ3khXnN012NR4TablOHjt7mHc4r2/EpxTKSBO3/uTKoECbLzW99W2D+F8EjwmYEw9
+         jguxfHh00m6PxvB8etujFFBxkbbtUf6oC7eB2lRUjAeup7nXGwt5KO/qZ/u6JgadMugH
+         +eEA==
+X-Gm-Message-State: AO0yUKVJLYwP9zfDntUxjUB2lv1PiTTElvfgR4azkIbJreIsBFp1u6t8
+        6SSeNCruBlt4Eb0jNSkB3A7p346w8oU6SuwtitbVJJtvnOQ=
+X-Google-Smtp-Source: AK7set8slAWSdnWlrDBWh7O9CO9qc2Hdj8pKVtV4pKnWrGF1NsT4Q1T9Z+jea0Jh7qQdYQ0Xmr624v4o8OS8KcIrWCM=
+X-Received: by 2002:a37:6407:0:b0:745:bd3d:51df with SMTP id
+ y7-20020a376407000000b00745bd3d51dfmr1548293qkb.3.1678871775668; Wed, 15 Mar
+ 2023 02:16:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.12.1
+References: <20230314221609.22433-1-asmaa@nvidia.com> <20230314221609.22433-2-asmaa@nvidia.com>
+In-Reply-To: <20230314221609.22433-2-asmaa@nvidia.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 15 Mar 2023 11:15:38 +0200
+Message-ID: <CAHp75Vd5NhPcgUokJ0i8ftqVXjSB10q4VfxH9A7wcYhei-s2wA@mail.gmail.com>
+Subject: Re: [PATCH v5 1/2] gpio: gpio-mlxbf3: Add gpio driver support
+To:     Asmaa Mnebhi <asmaa@nvidia.com>
+Cc:     linus.walleij@linaro.org, bgolaszewski@baylibre.com,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,20 +70,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Wed, Mar 15, 2023 at 12:16=E2=80=AFAM Asmaa Mnebhi <asmaa@nvidia.com> wr=
+ote:
+>
+> Add support for the BlueField-3 SoC GPIO driver.
+> This driver configures and handles GPIO interrupts. It also enables a use=
+r
+> to manipulate certain GPIO pins via libgpiod tools or other kernel driver=
+s.
+> The usables pins are defined via the "gpio-reserved-ranges" property.
 
-On Tue, 14 Mar 2023 16:50:34 +0800, Ruihai Zhou wrote:
-> The STARRY 2081101QFH032011-53G is a 10.1" WUXGA TFT LCD panel,
-> which fits in nicely with the existing panel-boe-tv101wum-nl6
-> driver. Hence, we add a new compatible with panel specific config.
-> 
-> 
+Thank you for the update, my comments below.
 
-Thanks, Applied to https://anongit.freedesktop.org/git/drm/drm-misc.git (drm-misc-next-fixes)
+...
 
-[1/2] dt-bindings: display: panel: Add compatible for Starry 2081101QFH032011-53G
-      https://cgit.freedesktop.org/drm/drm-misc/commit/?id=c4969c95266c672b5dc0c6a1ac070b6d647fea22
+> +         This controller should be used in parallel with pinctrl-mlxbf t=
+o
+> +         control the desired gpios.
 
--- 
-Neil
+GPIOs
 
+Btw, have you considered renaming that driver to pinctrl-mlxbf3?
+
+...
+
+> +#include <linux/resource.h>
+
+I dunno why you added this one.
+
+The missing ones are:
+err.h
+io.h
+
+...
+
+> +       raw_spin_lock_irqsave(&gs->gc.bgpio_lock, flags);
+> +       gpiochip_enable_irq(gc, offset);
+
+No need to call this under the spin lock, or must be explained why.
+
+> +       writel(BIT(offset), gs->gpio_cause_io + MLXBF_GPIO_CAUSE_OR_CLRCA=
+USE);
+> +
+> +       val =3D readl(gs->gpio_cause_io + MLXBF_GPIO_CAUSE_OR_EVTEN0);
+> +       val |=3D BIT(offset);
+> +       writel(val, gs->gpio_cause_io + MLXBF_GPIO_CAUSE_OR_EVTEN0);
+> +       raw_spin_unlock_irqrestore(&gs->gc.bgpio_lock, flags);
+
+...
+
+> +       raw_spin_lock_irqsave(&gs->gc.bgpio_lock, flags);
+> +       val =3D readl(gs->gpio_cause_io + MLXBF_GPIO_CAUSE_OR_EVTEN0);
+> +       val &=3D ~BIT(offset);
+> +       writel(val, gs->gpio_cause_io + MLXBF_GPIO_CAUSE_OR_EVTEN0);
+> +       gpiochip_disable_irq(gc, offset);
+
+Ditto.
+
+> +       raw_spin_unlock_irqrestore(&gs->gc.bgpio_lock, flags);
+> +}
+
+...
+
+> +/* This function needs to be defined for handle_edge_irq */
+
+handle_edge_irq()
+
+...
+
+> +static const struct acpi_device_id __maybe_unused mlxbf3_gpio_acpi_match=
+[] =3D {
+
+Why __maybe_unused?
+
+> +       { "MLNXBF33", 0 },
+> +       {}
+> +};
+
+--=20
+With Best Regards,
+Andy Shevchenko
