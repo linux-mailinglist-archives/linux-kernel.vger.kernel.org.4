@@ -2,82 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB73F6BB38E
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 13:48:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCE236BB391
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 13:48:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232570AbjCOMsH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 08:48:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47986 "EHLO
+        id S233016AbjCOMs0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 08:48:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232814AbjCOMsA (ORCPT
+        with ESMTP id S232964AbjCOMsX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 08:48:00 -0400
+        Wed, 15 Mar 2023 08:48:23 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FB8A83C0
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 05:46:08 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53D99166F0
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 05:46:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678884367;
+        s=mimecast20190719; t=1678884401;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=HAOu6GreRWRu6ba4nX0ao5vFBWbgQLRTWPfGkR3xwgk=;
-        b=gBxNYIPBDwXhwfMqaCCXrMCFmgilzuSkMAO3GIN8tVIWghDiGDd9SAlMf7ptAslQiLycth
-        /w68WcB0Qoc3ucWIAJ++c5REXNlPOze8Z4S1lfbAXtqLiM50erwGq5ghXytb8bvo9uWBoM
-        0rtRetU8T7BcX5zy4iZdJr5MwIlPLJQ=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=4dxDu1EH9xzCVL/y99BM1/A0FCm7l89PRdNnkV8wtss=;
+        b=HUorWWhgH9yNfmy3CrtOAzfcDF5Vl0fb6gHnwyGdHwYbN062+KnOWK0BOybcxFk0mEcv+V
+        oTq74+evdaXOYTKYp+buO0/sQDU9j9kR0g9f3UsUgXxl/HUoS7PO59l9MbE4WBfCDMC1kg
+        o7MdweSc0I2AaWA7GuORjgmic/rEqtI=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-270-t5mnS9ygOsq0jIpQlDDYsw-1; Wed, 15 Mar 2023 08:46:06 -0400
-X-MC-Unique: t5mnS9ygOsq0jIpQlDDYsw-1
-Received: by mail-ed1-f69.google.com with SMTP id i22-20020a05640242d600b004f5962985f4so26565138edc.12
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 05:46:05 -0700 (PDT)
+ us-mta-454-FlEEw1NLMvSzDKqQotuPmw-1; Wed, 15 Mar 2023 08:46:37 -0400
+X-MC-Unique: FlEEw1NLMvSzDKqQotuPmw-1
+Received: by mail-ed1-f70.google.com with SMTP id e18-20020a056402191200b004fa702d64b3so17541083edz.23
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 05:46:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678884365;
+        d=1e100.net; s=20210112; t=1678884395;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HAOu6GreRWRu6ba4nX0ao5vFBWbgQLRTWPfGkR3xwgk=;
-        b=PgO8nCVm+lX1yEeEsUeSxpZHxdzeNoF41vA+6vMP7EyEKeSM50UWArky4YU9RL8cDv
-         cVXjhK7s6sWaPAUJ1WdUXapzkFGNr6dCSNmfwpJMeLZUGXgrl4WXEUgzm8sfxDu1NHq/
-         GTNzqsFZfPVbeZcXpKkF3GyxG5Dh5b8+US0O9LXGC3/oFC4eiQFHKPn9HcMR4EY3uH4A
-         Kyn9/f7lULGsGBmLUurxYrb3UW+4RfYN+OmgK11+uMimJH0bpphwtGmT5UroOqLGUvEB
-         tflEX/c/H3IHCplxH6kOuymabumPJqSSflTXFAJRJgPZ5Iu9yRyu2lsgzGKukxGwHjca
-         yREg==
-X-Gm-Message-State: AO0yUKXKRJt3oIZrtnFm1u4nz6k6539aivGLh8Yf93MDN0V0yf0ww81o
-        YihWQ3auFpAfYKc5POnDhbT8ZFgMn8j/SzrOwLvIy9HCGw8h/1TVzU1CU89Yeg+ASWvM4lGZ92A
-        DaNwD3M4NkL7b5k6sEGMLXb/Y
-X-Received: by 2002:a17:906:1b09:b0:88e:e498:109b with SMTP id o9-20020a1709061b0900b0088ee498109bmr5920012ejg.5.1678884364966;
-        Wed, 15 Mar 2023 05:46:04 -0700 (PDT)
-X-Google-Smtp-Source: AK7set8OEq3BFBrcLG8/KFs1ITZCvS/IL/+Swv1Lb8TgKsXIb/7EvmChXQfebSgll4X6Ay7VUbiI8A==
-X-Received: by 2002:a17:906:1b09:b0:88e:e498:109b with SMTP id o9-20020a1709061b0900b0088ee498109bmr5919998ejg.5.1678884364753;
-        Wed, 15 Mar 2023 05:46:04 -0700 (PDT)
+        bh=4dxDu1EH9xzCVL/y99BM1/A0FCm7l89PRdNnkV8wtss=;
+        b=xjppj6ACU6v0GIIVnVJLjCEiezXpC7445mAEswthaaC3lv5n1Qh6PSMqNnoI/OwxtR
+         xIcGHhhX6zqvPFFiqFU+EQ9UTWAwnS/TFiuiwrsRYqE0FEpqtwSjSQ8MB+i1DkfKOFFD
+         cMIHegzPwedD1W86DDOZ7FtIHZUdKv1U9JXcidgZrGyKFLvCiMhWRBum5N9qZj9Z14bh
+         03DtOjkxh5OGZbIt562xeVojCfbD1Srs70L9JSK6MQDFPTfq498BA0bFihxaTMbcenJf
+         Bvr5Acriktd3thzSa9VdYKIl4EAsucedueFAaEDTrGfq68RkinCwcH7B7he68X9o40zP
+         p9kw==
+X-Gm-Message-State: AO0yUKXrBQs+bUIcitxxAV29GwZlMk2UR1UXidAWERNasNbYZEQZXMk+
+        wTWbcpEJRwSU0xzFy0GCNrLyp/XW8xBffr0h0rDat8GI4dUA51ZTR2mxZIoLaXpp5/6J4tcgXRG
+        nAe36QDJtTULopDL1l4kArZEUfGP2KpKt
+X-Received: by 2002:a17:906:1553:b0:92b:e330:a79e with SMTP id c19-20020a170906155300b0092be330a79emr6121005ejd.29.1678884395608;
+        Wed, 15 Mar 2023 05:46:35 -0700 (PDT)
+X-Google-Smtp-Source: AK7set8IK7xy9Gyad0ICG5LXH/Wy/T1yn1gap9RxlbxLzdAkT7NnvZGJDrCG4PQyJJggyRytobddmg==
+X-Received: by 2002:a17:906:1553:b0:92b:e330:a79e with SMTP id c19-20020a170906155300b0092be330a79emr6120995ejd.29.1678884395332;
+        Wed, 15 Mar 2023 05:46:35 -0700 (PDT)
 Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id ga31-20020a1709070c1f00b008b904cb2bcdsm2514203ejc.11.2023.03.15.05.46.04
+        by smtp.gmail.com with ESMTPSA id f5-20020a170906c08500b0092babe82cfesm2438183ejz.215.2023.03.15.05.46.34
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Mar 2023 05:46:04 -0700 (PDT)
-Message-ID: <8dde2c71-0c79-50af-e5aa-de3c9ee2955d@redhat.com>
-Date:   Wed, 15 Mar 2023 13:46:03 +0100
+        Wed, 15 Mar 2023 05:46:34 -0700 (PDT)
+Message-ID: <a0cab8a8-dbbf-9335-134c-c5b2751a81b4@redhat.com>
+Date:   Wed, 15 Mar 2023 13:46:34 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
-Subject: Re: [PATCH 04/36] platform/x86: ibm_rtl: move to use
+Subject: Re: [PATCH 05/36] platform/x86: intel-uncore-freq: move to use
  bus_get_dev_root()
 Content-Language: en-US, nl
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-kernel@vger.kernel.org
-Cc:     rafael@kernel.org, Mark Gross <markgross@kernel.org>,
+Cc:     rafael@kernel.org,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Mark Gross <markgross@kernel.org>,
         platform-driver-x86@vger.kernel.org
 References: <20230313182918.1312597-1-gregkh@linuxfoundation.org>
- <20230313182918.1312597-4-gregkh@linuxfoundation.org>
+ <20230313182918.1312597-5-gregkh@linuxfoundation.org>
 From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20230313182918.1312597-4-gregkh@linuxfoundation.org>
+In-Reply-To: <20230313182918.1312597-5-gregkh@linuxfoundation.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -91,6 +93,7 @@ On 3/13/23 19:28, Greg Kroah-Hartman wrote:
 > so replace that with a call to bus_get_dev_root() instead, which is what
 > it is there for.
 > 
+> Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 > Cc: Hans de Goede <hdegoede@redhat.com>
 > Cc: Mark Gross <markgross@kernel.org>
 > Cc: platform-driver-x86@vger.kernel.org
@@ -112,42 +115,28 @@ Hans
 
 
 
->  drivers/platform/x86/ibm_rtl.c | 18 ++++++++++++++----
->  1 file changed, 14 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/platform/x86/ibm_rtl.c b/drivers/platform/x86/ibm_rtl.c
-> index 5fc665f7d9b3..2ab7d9ac542d 100644
-> --- a/drivers/platform/x86/ibm_rtl.c
-> +++ b/drivers/platform/x86/ibm_rtl.c
-> @@ -199,16 +199,26 @@ static int rtl_setup_sysfs(void) {
+
+> diff --git a/drivers/platform/x86/intel/uncore-frequency/uncore-frequency-common.c b/drivers/platform/x86/intel/uncore-frequency/uncore-frequency-common.c
+> index cb24de9e97dc..1a300e14f350 100644
+> --- a/drivers/platform/x86/intel/uncore-frequency/uncore-frequency-common.c
+> +++ b/drivers/platform/x86/intel/uncore-frequency/uncore-frequency-common.c
+> @@ -224,9 +224,15 @@ int uncore_freq_common_init(int (*read_control_freq)(struct uncore_data *data, u
+>  	uncore_write = write_control_freq;
+>  	uncore_read_freq = read_freq;
 >  
->  	ret = subsys_system_register(&rtl_subsys, NULL);
->  	if (!ret) {
-> -		for (i = 0; rtl_attributes[i]; i ++)
-> -			device_create_file(rtl_subsys.dev_root, rtl_attributes[i]);
-> +		struct device *dev_root = bus_get_dev_root(&rtl_subsys);
+> -	if (!uncore_root_kobj)
+> -		uncore_root_kobj = kobject_create_and_add("intel_uncore_frequency",
+> -							    &cpu_subsys.dev_root->kobj);
+> +	if (!uncore_root_kobj) {
+> +		struct device *dev_root = bus_get_dev_root(&cpu_subsys);
 > +
 > +		if (dev_root) {
-> +			for (i = 0; rtl_attributes[i]; i ++)
-> +				device_create_file(dev_root, rtl_attributes[i]);
+> +			uncore_root_kobj = kobject_create_and_add("intel_uncore_frequency",
+> +								  &dev_root->kobj);
 > +			put_device(dev_root);
 > +		}
->  	}
->  	return ret;
->  }
->  
->  static void rtl_teardown_sysfs(void) {
-> +	struct device *dev_root = bus_get_dev_root(&rtl_subsys);
->  	int i;
-> -	for (i = 0; rtl_attributes[i]; i ++)
-> -		device_remove_file(rtl_subsys.dev_root, rtl_attributes[i]);
-> +
-> +	if (dev_root) {
-> +		for (i = 0; rtl_attributes[i]; i ++)
-> +			device_remove_file(dev_root, rtl_attributes[i]);
-> +		put_device(dev_root);
 > +	}
->  	bus_unregister(&rtl_subsys);
->  }
->  
+>  	if (uncore_root_kobj)
+>  		++uncore_instance_count;
+>  	mutex_unlock(&uncore_lock);
 
