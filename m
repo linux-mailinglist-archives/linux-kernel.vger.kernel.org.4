@@ -2,103 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E82216BA8AC
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 08:05:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 364C06BA897
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 08:03:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231545AbjCOHFS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 03:05:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35136 "EHLO
+        id S231354AbjCOHD4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 03:03:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231623AbjCOHE6 (ORCPT
+        with ESMTP id S231313AbjCOHDy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 03:04:58 -0400
-Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA2B427D79;
-        Wed, 15 Mar 2023 00:04:54 -0700 (PDT)
-Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4Pc1c45ym3z8RV7R;
-        Wed, 15 Mar 2023 15:04:52 +0800 (CST)
-Received: from szxlzmapp05.zte.com.cn ([10.5.230.85])
-        by mse-fl2.zte.com.cn with SMTP id 32F74e3W080872;
-        Wed, 15 Mar 2023 15:04:40 +0800 (+08)
-        (envelope-from wang.yi59@zte.com.cn)
-Received: from fox-cloudhost8.zte.com.cn (unknown [10.234.72.110])
-        by smtp (Zmail) with SMTP;
-        Wed, 15 Mar 2023 15:04:42 +0800
-X-Zmail-TransId: 3e8164116e08000-ffc3a
-From:   Yi Wang <wang.yi59@zte.com.cn>
-To:     peterz@infradead.org
-Cc:     mingo@redhat.com, acme@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        namhyung@kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        xue.zhihong@zte.com.cn, wang.yi59@zte.com.cn,
-        wang.liang82@zte.com.cn, "Liu.Xiaoyang" <liu.xiaoyang@zte.com.cn>
-Subject: [PATCH] perf: fix segmentation fault in perf_event__synthesize_one_bpf_prog
-Date:   Wed, 15 Mar 2023 14:58:18 +0800
-Message-Id: <20230315065818.31156-1-wang.yi59@zte.com.cn>
-X-Mailer: git-send-email 2.33.0.rc0.dirty
+        Wed, 15 Mar 2023 03:03:54 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 514DC5507E
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 00:03:41 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id h12so2227873pfh.5
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 00:03:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=shopee.com; s=shopee.com; t=1678863820;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=FpjEne9c/P1n+FoVmzWers86k2xzuSbdMk7FyOXv2PE=;
+        b=OAZCgCrSIApq/wMfToqOvFw+w05e7Doc09CdtGnAZ0mqEpgqc9uid2e5n6I0OnYyT9
+         ji/ZWoFjyPKcY7/Tryduo3EkyXkxZGRaqPn9K1vRTE428IXJ645jmi8fy/eGctizmUsI
+         2OM96XR8DgpW4U49bJKOr2G2bFqPx2YLs79ghV3qzKPfu0y6RyE9KvdZrkSjmBfelh33
+         46udJXAaieKWiz28NKWCbXBlq/bszTr48/Bnu1pm5jY9oE9wFL/ysK2UVjtBNKszcDRy
+         Qx0N8asibaT2bkmmI0/4h/Q3kO6eTDxEYvST23vqHMURUUtD4DoOiCqVpcG8Dfrhz+Ru
+         mhTA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678863820;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FpjEne9c/P1n+FoVmzWers86k2xzuSbdMk7FyOXv2PE=;
+        b=Sb8nutkyT6mT5UomPQlaCU5ybYJIaIYPYkEEEcxttEnRRwPUdGuKUGQ24fgM1lSvdS
+         ThlAw49LgMVSVy/5q07hy28pubxlCy21Q87li66CDT8x0WN6dvH/OMM4Sd/eiDmgKgBZ
+         hjjUnUzjG1Zp5TUbpy0V8dxr4vwJVWLiEF9JSVVgucgCdnkTVgK177MJteeeVBYwKP3R
+         H2sEIw1MlUPF8+LdOf9r0E3ZlINUb8DNFepDO5+MraPRDbhOWH8zE8h2LKBatq7UE7Nw
+         xcpFi+T6BOi4XzROdi7eftfgUvUrjOo52voS09WyPaVrs6Yv9HoJ8NbFugNXyT875gw8
+         kgAw==
+X-Gm-Message-State: AO0yUKUgYGfKmoGNvaY0Etxo6Bep/GP8qdzpYn1zo8bOYRpDUExHIS1n
+        YY34dHLtAY9gezibE2M+MSGd/Q==
+X-Google-Smtp-Source: AK7set96UMPzJLhEUy2mCh6b7CazuoYGL6GJ771LlC6SyR641dqjNw7Z2Nw7HIi1VRZMtvP8oHMxWg==
+X-Received: by 2002:a62:5f46:0:b0:625:55e5:afe4 with SMTP id t67-20020a625f46000000b0062555e5afe4mr4396384pfb.26.1678863820478;
+        Wed, 15 Mar 2023 00:03:40 -0700 (PDT)
+Received: from ubuntu-haifeng.default.svc.cluster.local ([101.127.248.173])
+        by smtp.gmail.com with ESMTPSA id z22-20020aa791d6000000b005ac8a51d591sm2731495pfa.21.2023.03.15.00.03.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Mar 2023 00:03:40 -0700 (PDT)
+From:   Haifeng Xu <haifeng.xu@shopee.com>
+To:     mhocko@kernel.org
+Cc:     hannes@cmpxchg.org, shakeelb@google.com, akpm@linux-foundation.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Haifeng Xu <haifeng.xu@shopee.com>
+Subject: [RFC] memcg, oom: clean up mem_cgroup_oom_synchronize
+Date:   Wed, 15 Mar 2023 07:03:02 +0000
+Message-Id: <20230315070302.268316-1-haifeng.xu@shopee.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl2.zte.com.cn 32F74e3W080872
-X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at cgslv5.04-192.168.250.137.novalocal with ID 64116E14.002 by FangMail milter!
-X-FangMail-Envelope: 1678863892/4Pc1c45ym3z8RV7R/64116E14.002/10.5.228.133/[10.5.228.133]/mse-fl2.zte.com.cn/<wang.yi59@zte.com.cn>
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 64116E14.002/4Pc1c45ym3z8RV7R
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Liu.Xiaoyang" <liu.xiaoyang@zte.com.cn>
+Since commit 29ef680ae7c2 ("memcg, oom: move out_of_memory back to
+the charge path"), only oom_kill_disable is set, oom killer will
+be delayed to page fault path. In the charge patch, even if the
+oom_lock in memcg can't be acquired, the oom handing can also be
+invoked. In order to keep the behavior consistent with it, remove
+the lock check, just leave oom_kill_disable check behind in the
+page fault path.
 
-Description of problem:
-when /proc/sys/kernel/kptr_restrict set to 2 and there are bpf progs
-loaded on system, ptr prog_lens and prog_addrs maybe Null.
-then prog_addrs[i] and prog_lens[i] will case segmentation fault.
+Furthermore, the lock contender won't be scheduled out, this doesn't
+fit the sixth description in commit fb2a6fc56be66 ("mm: memcg:
+rework and document OOM waiting and wakeup"). So remove the explicit
+wakeup for the lock holder.
 
-call trace：
-perf: Segmentation fault
-perf(sighandler_dump_stack+0x48)
-/lib64/libc.so.6(+0x37400)
-perf(perf_event__synthesize_bpf_events+0x23a)
-perf(+0x235b73)
-perf(cmd_record+0xc0d)
-perf(+0x2a8c5d)
-perf(main+0x69a)
-
-Signed-off-by: Liu.Xiaoyang <liu.xiaoyang@zte.com.cn>
-Signed-off-by: Yi Wang <wang.yi59@zte.com.cn>
+Fixes: fb2a6fc56be6 ("mm: memcg: rework and document OOM waiting and wakeup")
+Signed-off-by: Haifeng Xu <haifeng.xu@shopee.com>
 ---
- tools/perf/util/bpf-event.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ mm/memcontrol.c | 11 ++---------
+ 1 file changed, 2 insertions(+), 9 deletions(-)
 
-diff --git a/tools/perf/util/bpf-event.c b/tools/perf/util/bpf-event.c
-index cc7c1f9..7a6ea6d 100644
---- a/tools/perf/util/bpf-event.c
-+++ b/tools/perf/util/bpf-event.c
-@@ -307,6 +307,11 @@ static int perf_event__synthesize_one_bpf_prog(struct perf_session *session,
- 		__u64 *prog_addrs = (__u64 *)(uintptr_t)(info->jited_ksyms);
- 		int name_len;
+diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+index 5abffe6f8389..360fa7cf7879 100644
+--- a/mm/memcontrol.c
++++ b/mm/memcontrol.c
+@@ -1999,7 +1999,7 @@ bool mem_cgroup_oom_synchronize(bool handle)
+ 	if (locked)
+ 		mem_cgroup_oom_notify(memcg);
  
-+		if (!prog_lens || !prog_addrs) {
-+			err = -1;
-+			goto out;
-+		}
-+
- 		*ksymbol_event = (struct perf_record_ksymbol) {
- 			.header = {
- 				.type = PERF_RECORD_KSYMBOL,
+-	if (locked && !memcg->oom_kill_disable) {
++	if (!memcg->oom_kill_disable) {
+ 		mem_cgroup_unmark_under_oom(memcg);
+ 		finish_wait(&memcg_oom_waitq, &owait.wait);
+ 		mem_cgroup_out_of_memory(memcg, current->memcg_oom_gfp_mask,
+@@ -2010,15 +2010,8 @@ bool mem_cgroup_oom_synchronize(bool handle)
+ 		finish_wait(&memcg_oom_waitq, &owait.wait);
+ 	}
+ 
+-	if (locked) {
++	if (locked)
+ 		mem_cgroup_oom_unlock(memcg);
+-		/*
+-		 * There is no guarantee that an OOM-lock contender
+-		 * sees the wakeups triggered by the OOM kill
+-		 * uncharges.  Wake any sleepers explicitly.
+-		 */
+-		memcg_oom_recover(memcg);
+-	}
+ cleanup:
+ 	current->memcg_in_oom = NULL;
+ 	css_put(&memcg->css);
 -- 
-1.8.3.1
+2.25.1
+
