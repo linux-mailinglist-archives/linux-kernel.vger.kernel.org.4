@@ -2,99 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 332EC6BB7A5
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 16:25:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 300CF6BB7B6
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 16:27:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232145AbjCOPZo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 11:25:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60634 "EHLO
+        id S232329AbjCOP1L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 11:27:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231673AbjCOPZl (ORCPT
+        with ESMTP id S232262AbjCOP1J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 11:25:41 -0400
-Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFEFFEC47
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 08:25:40 -0700 (PDT)
-Received: by mail-il1-x12d.google.com with SMTP id r4so10555656ila.2
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 08:25:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112; t=1678893940;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=311tmwoPi+X9O5T0jkqGhTRpiGHy+F0ctJn+X1ijaso=;
-        b=qYE0Yh+Dr6g5FhU3UDIDpBZiS8bSqullsfODEjWgs48s22YaiRWZjhi72NvARPqxA6
-         Mts/ktND9T2CdEZcKS7/GIQvhMpcqWf/XUTxXzqf4ArZpijmzmcLT3Vwaqd7Iqoa6BlH
-         ExzgK2RISR/MkDPFNYNKxg0LZtJ27kwk4q7JdhPLwuYLyU9/Gi2ixKzw7PYz4iFVsUaO
-         3qXmPreckFEdOvvPf1bFULR69krUdEAAVLZkD6q5l1iM5GZLkxHQRS0VpJBvYT34Kngg
-         13HVI6kosHszl3H84XHVeNYdVbgew4iSTjXRIelK6y/iKxWhM4v1ajISD46TzaV9VPcv
-         vDwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678893940;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=311tmwoPi+X9O5T0jkqGhTRpiGHy+F0ctJn+X1ijaso=;
-        b=Nm1pfz9yVuqVi4wInyuXPRn+uYMS1LAvyqxjerA5q+8Am+7omV26kF2nn6E7JLt2GU
-         a6XXY/9RQ/tLi2spmdVXxSMPDSkqLswtHZC6Wt5yArpsBTVQTYT9kjV0xOJllmcoIALN
-         xQogSHaiAvGdmFNvw5iFTOT9zwUPvYPf10uXA81ejCPrd073Njyh9qsy8Vgz38lyD52R
-         39Sa7QadZaEYmnEioCJHyolserarY8CuL0dphVjiP/uzWmSGcSwOXwKaTirGUr8lZlLN
-         ZnECqnaDmw+mJK5tZs9XcXHbKGgga7CdDx21mzxaMHBL4duGj8NfK2hBfruX+vvJnSTX
-         8DeA==
-X-Gm-Message-State: AO0yUKULC74ToqMqy4Eobm49JqcRydfT66aKAyU6YuHCoE/TfaMHg/ax
-        svtjZbiROPchxwKPTC0QihVOXA==
-X-Google-Smtp-Source: AK7set+GXeS45AV6ZCOSt9EJghEpaRhu4keAdlUsc5MciV2dt1MDmCOkfh6V8QLE789iJhm5iwmeYQ==
-X-Received: by 2002:a92:d704:0:b0:317:943c:2280 with SMTP id m4-20020a92d704000000b00317943c2280mr10003193iln.0.1678893940152;
-        Wed, 15 Mar 2023 08:25:40 -0700 (PDT)
-Received: from [127.0.0.1] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id h11-20020a02b60b000000b003e80d0843e4sm1713415jam.78.2023.03.15.08.25.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Mar 2023 08:25:39 -0700 (PDT)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     agk@redhat.com, snitzer@kernel.org, dm-devel@redhat.com,
-        kbusch@kernel.org, hch@lst.de, sagi@grimberg.me,
-        guz.fnst@cn.fujitsu.com, Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-nvme@lists.infradead.org, yukuai3@huawei.com,
-        yi.zhang@huawei.com, yangerkun@huawei.com
-In-Reply-To: <20230223091226.1135678-1-yukuai1@huaweicloud.com>
-References: <20230223091226.1135678-1-yukuai1@huaweicloud.com>
-Subject: Re: [PATCH -next RFC] block: count 'ios' and 'sectors' when io is
- done for bio-based device
-Message-Id: <167889393912.42717.4228399799157411797.b4-ty@kernel.dk>
-Date:   Wed, 15 Mar 2023 09:25:39 -0600
+        Wed, 15 Mar 2023 11:27:09 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D674F22C9F
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 08:27:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=K5ZrtxAQhAg4taBIjn5Ggqft0vr/AgFW0+J9EI0A4Iw=; b=pr2EXFWcfmlInLFnmMlP9TMUSh
+        mFPaikx4ZU2hoTYIBSvcDksRp+NzoLTJNzmhIdUkRyzSGZEcc4+C4JrAxVfn86ARELhqWdbQ2Z6TP
+        ATM7eiYiuvm0YUuXxWGaHGL7CyDHMb7X0yMBVYmNKewESvfX7PZapme8+GulcCwgO+kQyVpyTJ3lF
+        T7dWy9Bv4yRCIE+5nRy6TN8xPnaDC284scJeNmWQbVfly+l1OFB3WCNopAQc+AF2/GW/fOimrQ8Wa
+        sih2vP/PTJPDtahcUTz+zDLs5uHASs3f1MvJXKSBUmgfiqr8eWjlgNlC+Bl3tn6OoTCdGxq/pEpJM
+        RHYfSnQg==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pcT0n-00DwgJ-U1; Wed, 15 Mar 2023 15:25:58 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 25023300237;
+        Wed, 15 Mar 2023 16:25:53 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 0D42B20FF20AC; Wed, 15 Mar 2023 16:25:53 +0100 (CET)
+Date:   Wed, 15 Mar 2023 16:25:52 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Chen Yu <yu.c.chen@intel.com>
+Cc:     Vincent Guittot <vincent.guittot@linaro.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Tim Chen <tim.c.chen@intel.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>,
+        K Prateek Nayak <kprateek.nayak@amd.com>,
+        Abel Wu <wuyun.abel@bytedance.com>,
+        Yicong Yang <yangyicong@hisilicon.com>,
+        "Gautham R . Shenoy" <gautham.shenoy@amd.com>,
+        Honglei Wang <wanghonglei@didichuxing.com>,
+        Len Brown <len.brown@intel.com>,
+        Chen Yu <yu.chen.surf@gmail.com>,
+        Tianchen Ding <dtcccc@linux.alibaba.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Josh Don <joshdon@google.com>, Hillf Danton <hdanton@sina.com>,
+        kernel test robot <yujie.liu@intel.com>,
+        Arjan Van De Ven <arjan.van.de.ven@intel.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 2/2] sched/fair: Introduce SIS_SHORT to wake up short
+ task on current CPU
+Message-ID: <20230315152552.GF2006103@hirez.programming.kicks-ass.net>
+References: <cover.1677069490.git.yu.c.chen@intel.com>
+ <373e6886e274f198608fa1b5f1c254e32b43845d.1677069490.git.yu.c.chen@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-2eb1a
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <373e6886e274f198608fa1b5f1c254e32b43845d.1677069490.git.yu.c.chen@intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Feb 22, 2023 at 10:09:55PM +0800, Chen Yu wrote:
 
-On Thu, 23 Feb 2023 17:12:26 +0800, Yu Kuai wrote:
-> While using iostat for raid, I observed very strange 'await'
-> occasionally, and turns out it's due to that 'ios' and 'sectors' is
-> counted in bdev_start_io_acct(), while 'nsecs' is counted in
-> bdev_end_io_acct(). I'm not sure why they are ccounted like that
-> but I think this behaviour is obviously wrong because user will get
-> wrong disk stats.
+> will-it-scale
+> =============
+> case			load		baseline	compare%
+> context_switch1		224 groups	1.00		+946.68%
 > 
-> [...]
+> There is a huge improvement in fast context switch test case, especially
+> when the number of groups equals the CPUs.
+> 
+> netperf
+> =======
+> case            	load    	baseline(std%)	compare%( std%)
+> TCP_RR          	56-threads	 1.00 (  1.12)	 -0.05 (  0.97)
+> TCP_RR          	112-threads	 1.00 (  0.50)	 +0.31 (  0.35)
+> TCP_RR          	168-threads	 1.00 (  3.46)	 +5.50 (  2.08)
+> TCP_RR          	224-threads	 1.00 (  2.52)	+665.38 (  3.38)
+> TCP_RR          	280-threads	 1.00 ( 38.59)	+22.12 ( 11.36)
+> TCP_RR          	336-threads	 1.00 ( 15.88)	 -0.00 ( 19.96)
+> TCP_RR          	392-threads	 1.00 ( 27.22)	 +0.26 ( 24.26)
+> TCP_RR          	448-threads	 1.00 ( 37.88)	 +0.04 ( 27.87)
+> UDP_RR          	56-threads	 1.00 (  2.39)	 -0.36 (  8.33)
+> UDP_RR          	112-threads	 1.00 ( 22.62)	 -0.65 ( 24.66)
+> UDP_RR          	168-threads	 1.00 ( 15.72)	 +3.97 (  5.02)
+> UDP_RR          	224-threads	 1.00 ( 15.90)	+134.98 ( 28.59)
+> UDP_RR          	280-threads	 1.00 ( 32.43)	 +0.26 ( 29.68)
+> UDP_RR          	336-threads	 1.00 ( 39.21)	 -0.05 ( 39.71)
+> UDP_RR          	392-threads	 1.00 ( 31.76)	 -0.22 ( 32.00)
+> UDP_RR          	448-threads	 1.00 ( 44.90)	 +0.06 ( 31.83)
+> 
+> There is significant 600+% improvement for TCP_RR and 100+% for UDP_RR
+> when the number of threads equals the CPUs.
+> 
+> tbench
+> ======
+> case            	load    	baseline(std%)	compare%( std%)
+> loopback        	56-threads	 1.00 (  0.15)	 +0.88 (  0.08)
+> loopback        	112-threads	 1.00 (  0.06)	 -0.41 (  0.52)
+> loopback        	168-threads	 1.00 (  0.17)	+45.42 ( 39.54)
+> loopback        	224-threads	 1.00 ( 36.93)	+24.10 (  0.06)
+> loopback        	280-threads	 1.00 (  0.04)	 -0.04 (  0.04)
+> loopback        	336-threads	 1.00 (  0.06)	 -0.16 (  0.14)
+> loopback        	392-threads	 1.00 (  0.05)	 +0.06 (  0.02)
+> loopback        	448-threads	 1.00 (  0.07)	 -0.02 (  0.07)
+> 
+> There is no noticeable impact on tbench. Although there is run-to-run variance
+> in 168/224 threads case, with or without this patch applied.
 
-Applied, thanks!
+So there is a very narrow, but significant, win at 4x overload.
+What about 3x/5x overload, they only have very marginal gains.
 
-[1/1] block: count 'ios' and 'sectors' when io is done for bio-based device
-      commit: 5f27571382ca42daa3e3d40d1b252bf18c2b61d2
+So these patches are briliant if you run at exactly 4x overload, and
+very meh otherwise.
 
-Best regards,
--- 
-Jens Axboe
-
-
-
+Why do we care about 4x overload?
