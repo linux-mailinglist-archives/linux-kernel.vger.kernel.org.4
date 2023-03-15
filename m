@@ -2,48 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A0306BC106
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 00:32:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC39C6BC100
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 00:32:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233030AbjCOXcZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 19:32:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44518 "EHLO
+        id S233006AbjCOXcW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 19:32:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232468AbjCOXcQ (ORCPT
+        with ESMTP id S232580AbjCOXcQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 15 Mar 2023 19:32:16 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 205D726C0C;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA37B28E40;
         Wed, 15 Mar 2023 16:32:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 96CEA61E98;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7B4D461EAB;
+        Wed, 15 Mar 2023 23:32:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3639EC433A0;
         Wed, 15 Mar 2023 23:32:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 454D9C4339E;
-        Wed, 15 Mar 2023 23:32:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1678923133;
-        bh=b90fAwRGYTnSjQRuOr59tMiAdhryQor3duVFOrFJSEA=;
+        bh=7qehc5lRPD1XWts0JJ3oW/XGDrs7APtS/t/saNelVRI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uKhVAlU4UhktEyRGdNSKY51v4QRCNHaZGpfnWaeANO8MxEx+0nf81GgiUZHvLVGJh
-         ecF5MmNdhfFqK4tOCxlE2PsqIQLaLMylu0nIF74jsmurFTlejx2KZaj06sKviMSpxn
-         falUO+mnXQ2pO0vuutv7zurDvq92tY0Cdovlhx4SyTiXywaTmcbgqJl/WQM/SAvG3n
-         3pWcsLIX6wj53AhJEUkFyE8mV3VzquwqPhN2SLTKwXKnAVhch6UtP+KmYe8P8b2+bO
-         K2RVWpF9kZU9OrbxxNdWyrx5Vm/CKuZHRqkjKK/QCVcik8ww8IKS5udsliQ4w5mY6L
-         PQRFcRog+NuxQ==
+        b=PaXwbDKxnf+1WRx1Q+gzLx6/az/Io7bJfpKWsjHD9iHFY3+1xP6yzdUwxH4MnV3L6
+         XiZNkfDdBea0xxILXwmsa3JCCPUPVFD25ZAaaOv184rdsTYmAAxlUW0dVlX8M6boUn
+         1la81S2SRToSrRoY6XV/cDuiFw+JTJelMWVVhIE8bIG/xAUBZ+Z8UPr+h4UAPTTI9M
+         gQHQTzBW9jQB47jZzKKg5Kl08HrfR5b4AIsvFPYxA8eoA9Xk45ZDNKD8ToY8jAEFtJ
+         dIYx/cIvjsuYWHyshk2M4PfZIprY0tDSVOEfRmnyiTZ7NE1Ey1umM5t9oiED4WdaKt
+         x/0tU+860Qhzg==
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     Brian Masney <bmasney@redhat.com>
-Cc:     linux-arm-msm@vger.kernel.org, konrad.dybcio@linaro.org,
-        agross@kernel.org, robh+dt@kernel.org, devicetree@vger.kernel.org,
-        quic_shazhuss@quicinc.com, krzysztof.kozlowski+dt@linaro.org,
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Andy Gross <agross@kernel.org>
+Cc:     Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] arm64: dts: qcom: sa8540p-ride: correct name of remoteproc_nsp0 firmware
-Date:   Wed, 15 Mar 2023 16:34:42 -0700
-Message-Id: <167892332562.4030021.10351902419014521818.b4-ty@kernel.org>
+Subject: Re: [PATCH 0/2] arm64: qcom: sa8155-adp: enable the high-speed UART for GNSS
+Date:   Wed, 15 Mar 2023 16:34:43 -0700
+Message-Id: <167892332563.4030021.2619241042716020479.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230307232340.2370476-1-bmasney@redhat.com>
-References: <20230307232340.2370476-1-bmasney@redhat.com>
+In-Reply-To: <20230309143551.200694-1-brgl@bgdev.pl>
+References: <20230309143551.200694-1-brgl@bgdev.pl>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -56,17 +59,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 7 Mar 2023 18:23:40 -0500, Brian Masney wrote:
-> The cdsp.mbn firmware that's referenced in sa8540p-ride.dts is actually
-> named cdsp0.mbn in the deliverables from Qualcomm. Let's go ahead and
-> correct the name to match what's in Qualcomm's deliverable.
+On Thu, 9 Mar 2023 15:35:49 +0100, Bartosz Golaszewski wrote:
+> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 > 
+> Add the relevant QUPv3 node to SoC dtsi and enable it in the board dts for
+> sa8155p-adp.
 > 
+> Bartosz Golaszewski (2):
+>   arm64: dts: sm8150: add the QUPv3 high-speed UART node
+>   arm64: dts: qcom: sa8155p-adp: enable the GNSS high-speed UART
+> 
+> [...]
 
 Applied, thanks!
 
-[1/1] arm64: dts: qcom: sa8540p-ride: correct name of remoteproc_nsp0 firmware
-      commit: b891251b40d4dc4cfd28341f62f6784c02ad3a78
+[1/2] arm64: dts: sm8150: add the QUPv3 high-speed UART node
+      commit: 10d900a834da29cf753f1e45f66982e322a177c1
+[2/2] arm64: dts: qcom: sa8155p-adp: enable the GNSS high-speed UART
+      commit: d97ba0b040b1aee7c2a7a7155b7752413a965d1f
 
 Best regards,
 -- 
