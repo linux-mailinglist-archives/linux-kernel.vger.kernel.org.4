@@ -2,82 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CFD86BB79F
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 16:25:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 332EC6BB7A5
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 16:25:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232012AbjCOPZT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 11:25:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60108 "EHLO
+        id S232145AbjCOPZo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 11:25:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231673AbjCOPZQ (ORCPT
+        with ESMTP id S231673AbjCOPZl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 11:25:16 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 125E165BC;
-        Wed, 15 Mar 2023 08:25:15 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id q16so17674661wrw.2;
-        Wed, 15 Mar 2023 08:25:14 -0700 (PDT)
+        Wed, 15 Mar 2023 11:25:41 -0400
+Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFEFFEC47
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 08:25:40 -0700 (PDT)
+Received: by mail-il1-x12d.google.com with SMTP id r4so10555656ila.2
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 08:25:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678893913;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=F1Tjdkcm9ANXGn5qxb6DEQ8TaNVeqrlKXE/a6qrBYv0=;
-        b=O3A6NoI86j6M1Fpyq/29vuO8MJ1QL+z3yixMg1bAnLe5zomimV5D7DYNWho9euqPah
-         hByHOA1i5cD10Pw9EfWJi9b7Lj5zzETcNJahWVEB+wD3qVRES79flC/38q82o3GovdEV
-         5v2lmHSCPKdH3cofEx8//4uuL24GotJ+b6p2Pow91bvFgnOLj5673MG8EM6wt0fzUkPO
-         m54U7YC6gKLmTqiKPJ9jyIOtpKxaiTAyF+8Pa6KCBPFNDz6AVwnwI9vCJOMo0C6i4YPU
-         0A9IXtr8D6cKUO9xYIXItBLcolDb0GA1DjJCrpAY0bcONaY8Dq6QS9fL96teIpos11mq
-         SGbA==
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112; t=1678893940;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=311tmwoPi+X9O5T0jkqGhTRpiGHy+F0ctJn+X1ijaso=;
+        b=qYE0Yh+Dr6g5FhU3UDIDpBZiS8bSqullsfODEjWgs48s22YaiRWZjhi72NvARPqxA6
+         Mts/ktND9T2CdEZcKS7/GIQvhMpcqWf/XUTxXzqf4ArZpijmzmcLT3Vwaqd7Iqoa6BlH
+         ExzgK2RISR/MkDPFNYNKxg0LZtJ27kwk4q7JdhPLwuYLyU9/Gi2ixKzw7PYz4iFVsUaO
+         3qXmPreckFEdOvvPf1bFULR69krUdEAAVLZkD6q5l1iM5GZLkxHQRS0VpJBvYT34Kngg
+         13HVI6kosHszl3H84XHVeNYdVbgew4iSTjXRIelK6y/iKxWhM4v1ajISD46TzaV9VPcv
+         vDwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678893913;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=F1Tjdkcm9ANXGn5qxb6DEQ8TaNVeqrlKXE/a6qrBYv0=;
-        b=tBkwiAxt7XdZFT7AZZlWU5eRpOkegbHI4E/Jo17qYk5i4Ett/p8Or7SE+YdiqoAFBw
-         WMOE7Hl+8V8WR6bOO+QoZO67mb//MkU2Os3VfZwfic60BsEEIGXTRQoViiYoWYdAmixt
-         Akdn9cW+Hof1cJtCO4hLnBwgqndi4zH4reeU71ToZHZhLWVLYOhUlOnTgRZauuaJbLxd
-         f4+qKW02LrzvOLrUs6NwF26zauhycap5Ogkv8oF36BSPJlDv+UlwJhRFjYoJmSRoMBki
-         OHUvZ8n49KIiur0JIavR6C4EraSwj+JhoRpDxUfCvAlT/j02NvC1m8VsQD1u+j+4FNvY
-         76zg==
-X-Gm-Message-State: AO0yUKXwzY8a3DdbedQPts26lG1hN9YheriwutHOh3o0UuJRJFJ8zAAi
-        5BgySB8y5pmslBzUW/hF4Ik=
-X-Google-Smtp-Source: AK7set8aLE6gJUe/UJpmlxdKFlAhVSGfuCFvLfWpHPxZSIXWu4cZ2oh/V5Dcjj07r4qXT8eSJKnIyA==
-X-Received: by 2002:adf:ee4f:0:b0:2cf:ef5d:4ee7 with SMTP id w15-20020adfee4f000000b002cfef5d4ee7mr2401506wro.69.1678893913468;
-        Wed, 15 Mar 2023 08:25:13 -0700 (PDT)
-Received: from ?IPV6:2a02:908:1256:79a0:2e4a:9084:4119:9c9f? ([2a02:908:1256:79a0:2e4a:9084:4119:9c9f])
-        by smtp.gmail.com with ESMTPSA id b6-20020adfde06000000b002cfe466e894sm4795147wrm.38.2023.03.15.08.25.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Mar 2023 08:25:12 -0700 (PDT)
-Message-ID: <07597f3e-0b35-c22b-91ec-fa3875d6fe22@gmail.com>
-Date:   Wed, 15 Mar 2023 16:25:11 +0100
+        d=1e100.net; s=20210112; t=1678893940;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=311tmwoPi+X9O5T0jkqGhTRpiGHy+F0ctJn+X1ijaso=;
+        b=Nm1pfz9yVuqVi4wInyuXPRn+uYMS1LAvyqxjerA5q+8Am+7omV26kF2nn6E7JLt2GU
+         a6XXY/9RQ/tLi2spmdVXxSMPDSkqLswtHZC6Wt5yArpsBTVQTYT9kjV0xOJllmcoIALN
+         xQogSHaiAvGdmFNvw5iFTOT9zwUPvYPf10uXA81ejCPrd073Njyh9qsy8Vgz38lyD52R
+         39Sa7QadZaEYmnEioCJHyolserarY8CuL0dphVjiP/uzWmSGcSwOXwKaTirGUr8lZlLN
+         ZnECqnaDmw+mJK5tZs9XcXHbKGgga7CdDx21mzxaMHBL4duGj8NfK2hBfruX+vvJnSTX
+         8DeA==
+X-Gm-Message-State: AO0yUKULC74ToqMqy4Eobm49JqcRydfT66aKAyU6YuHCoE/TfaMHg/ax
+        svtjZbiROPchxwKPTC0QihVOXA==
+X-Google-Smtp-Source: AK7set+GXeS45AV6ZCOSt9EJghEpaRhu4keAdlUsc5MciV2dt1MDmCOkfh6V8QLE789iJhm5iwmeYQ==
+X-Received: by 2002:a92:d704:0:b0:317:943c:2280 with SMTP id m4-20020a92d704000000b00317943c2280mr10003193iln.0.1678893940152;
+        Wed, 15 Mar 2023 08:25:40 -0700 (PDT)
+Received: from [127.0.0.1] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id h11-20020a02b60b000000b003e80d0843e4sm1713415jam.78.2023.03.15.08.25.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Mar 2023 08:25:39 -0700 (PDT)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     agk@redhat.com, snitzer@kernel.org, dm-devel@redhat.com,
+        kbusch@kernel.org, hch@lst.de, sagi@grimberg.me,
+        guz.fnst@cn.fujitsu.com, Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-nvme@lists.infradead.org, yukuai3@huawei.com,
+        yi.zhang@huawei.com, yangerkun@huawei.com
+In-Reply-To: <20230223091226.1135678-1-yukuai1@huaweicloud.com>
+References: <20230223091226.1135678-1-yukuai1@huaweicloud.com>
+Subject: Re: [PATCH -next RFC] block: count 'ios' and 'sectors' when io is
+ done for bio-based device
+Message-Id: <167889393912.42717.4228399799157411797.b4-ty@kernel.dk>
+Date:   Wed, 15 Mar 2023 09:25:39 -0600
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [BUG 6.3-rc1] Bad lock in ttm_bo_delayed_delete()
-Content-Language: en-US
-To:     Steven Rostedt <rostedt@goodmis.org>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-Cc:     Arunpravin Paneer Selvam <Arunpravin.PaneerSelvam@amd.com>,
-        intel-gfx@lists.freedesktop.org,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        linux-media@vger.kernel.org
-References: <20230307212223.7e49384a@gandalf.local.home>
- <20230307212615.7a099103@gandalf.local.home>
- <b919b550-6da8-f9f0-a0eb-0fd8af513817@amd.com>
- <20230315110949.1e11b3aa@gandalf.local.home>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>
-In-Reply-To: <20230315110949.1e11b3aa@gandalf.local.home>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-2eb1a
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,96 +76,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 15.03.23 um 16:09 schrieb Steven Rostedt:
-> On Wed, 8 Mar 2023 07:17:38 +0100
-> Christian König <christian.koenig@amd.com> wrote:
->
->> Am 08.03.23 um 03:26 schrieb Steven Rostedt:
->>> On Tue, 7 Mar 2023 21:22:23 -0500
->>> Steven Rostedt <rostedt@goodmis.org> wrote:
->>>   
->>>> Looks like there was a lock possibly used after free. But as commit
->>>> 9bff18d13473a9fdf81d5158248472a9d8ecf2bd ("drm/ttm: use per BO cleanup
->>>> workers") changed a lot of this code, I figured it may be the culprit.
->>> If I bothered to look at the second warning after this one (I usually stop
->>> after the first), it appears to state there was a use after free issue.
->> Yeah, that looks like the reference count was somehow messed up.
->>
->> What test case/environment do you run to trigger this?
->>
->> Thanks for the notice,
-> I'm still getting this on Linus's latest tree.
 
-This must be some reference counting issue which only happens in your 
-particular use case. We have tested this quite extensively and couldn't 
-reproduce it so far.
+On Thu, 23 Feb 2023 17:12:26 +0800, Yu Kuai wrote:
+> While using iostat for raid, I observed very strange 'await'
+> occasionally, and turns out it's due to that 'ios' and 'sectors' is
+> counted in bdev_start_io_acct(), while 'nsecs' is counted in
+> bdev_end_io_acct(). I'm not sure why they are ccounted like that
+> but I think this behaviour is obviously wrong because user will get
+> wrong disk stats.
+> 
+> [...]
 
-Can you apply this code snippet here and see if you get any warning in 
-the system logs?
+Applied, thanks!
 
-diff --git a/drivers/gpu/drm/ttm/ttm_bo.c b/drivers/gpu/drm/ttm/ttm_bo.c
-index 459f1b4440da..efc390bfd69c 100644
---- a/drivers/gpu/drm/ttm/ttm_bo.c
-+++ b/drivers/gpu/drm/ttm/ttm_bo.c
-@@ -314,6 +314,7 @@ static void ttm_bo_delayed_delete(struct work_struct 
-*work)
-         dma_resv_lock(bo->base.resv, NULL);
-         ttm_bo_cleanup_memtype_use(bo);
-         dma_resv_unlock(bo->base.resv);
-+       bo->delayed_delete.func = NULL;
-         ttm_bo_put(bo);
-  }
+[1/1] block: count 'ios' and 'sectors' when io is done for bio-based device
+      commit: 5f27571382ca42daa3e3d40d1b252bf18c2b61d2
 
-@@ -327,6 +328,8 @@ static void ttm_bo_release(struct kref *kref)
-         WARN_ON_ONCE(bo->pin_count);
-         WARN_ON_ONCE(bo->bulk_move);
-
-+       WARN_ON(bo->delayed_delete.func != NULL);
-+
-         if (!bo->deleted) {
-                 ret = ttm_bo_individualize_resv(bo);
-                 if (ret) {
+Best regards,
+-- 
+Jens Axboe
 
 
-Thanks,
-Christian.
-
->
-> [  230.530222] ------------[ cut here ]------------
-> [  230.569795] DEBUG_LOCKS_WARN_ON(lock->magic != lock)
-> [  230.569957] WARNING: CPU: 0 PID: 212 at kernel/locking/mutex.c:582 __ww_mutex_lock.constprop.0+0x62a/0x1300
-> [  230.612599] Modules linked in:
-> [  230.632144] CPU: 0 PID: 212 Comm: kworker/0:8H Not tainted 6.3.0-rc2-test-00047-g6015b1aca1a2-dirty #992
-> [  230.654939] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.0-debian-1.16.0-5 04/01/2014
-> [  230.678866] Workqueue: ttm ttm_bo_delayed_delete
-> [  230.699452] EIP: __ww_mutex_lock.constprop.0+0x62a/0x1300
-> [  230.720582] Code: e8 3b 9a 95 ff 85 c0 0f 84 61 fa ff ff 8b 0d 58 bc 3a c4 85 c9 0f 85 53 fa ff ff 68 54 98 06 c4 68 b7 b6 04 c4 e8 46 af 40 ff <0f> 0b 58 5a e9 3b fa ff ff 8d 74 26 00 90 a1 ec 47 b0 c4 85 c0 75
-> [  230.768336] EAX: 00000028 EBX: 00000000 ECX: c51abdd8 EDX: 00000002
-> [  230.792001] ESI: 00000000 EDI: c53856bc EBP: c51abf00 ESP: c51abeac
-> [  230.815944] DS: 007b ES: 007b FS: 00d8 GS: 0000 SS: 0068 EFLAGS: 00010246
-> [  230.840033] CR0: 80050033 CR2: ff9ff000 CR3: 04506000 CR4: 00150ef0
-> [  230.864059] Call Trace:
-> [  230.886369]  ? ttm_bo_delayed_delete+0x30/0x94
-> [  230.909902]  ww_mutex_lock+0x32/0x94
-> [  230.932550]  ttm_bo_delayed_delete+0x30/0x94
-> [  230.955798]  process_one_work+0x21a/0x484
-> [  230.979335]  worker_thread+0x14a/0x39c
-> [  231.002258]  kthread+0xea/0x10c
-> [  231.024769]  ? process_one_work+0x484/0x484
-> [  231.047870]  ? kthread_complete_and_exit+0x1c/0x1c
-> [  231.071498]  ret_from_fork+0x1c/0x28
-> [  231.094701] irq event stamp: 4023
-> [  231.117272] hardirqs last  enabled at (4023): [<c3d1df99>] _raw_spin_unlock_irqrestore+0x2d/0x58
-> [  231.143217] hardirqs last disabled at (4022): [<c31d5a55>] kvfree_call_rcu+0x155/0x2ec
-> [  231.166058] softirqs last  enabled at (3460): [<c3d1f403>] __do_softirq+0x2c3/0x3bb
-> [  231.183104] softirqs last disabled at (3455): [<c30c96a9>] call_on_stack+0x45/0x4c
-> [  231.200336] ---[ end trace 0000000000000000 ]---
-> [  231.216572] ------------[ cut here ]------------
->
->
-> This is preventing me from adding any of my own patches on v6.3-rcX due to
-> this bug failing my tests. Which means I can't add anything to linux-next
-> until this is fixed!
->
-> -- Steve
 
