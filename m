@@ -2,77 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 091C46BBFAE
+	by mail.lfdr.de (Postfix) with ESMTP id 539ED6BBFAF
 	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 23:18:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232579AbjCOWSF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 18:18:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58074 "EHLO
+        id S232600AbjCOWSI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 18:18:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232223AbjCOWSB (ORCPT
+        with ESMTP id S232511AbjCOWSE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 18:18:01 -0400
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97577359B;
-        Wed, 15 Mar 2023 15:18:00 -0700 (PDT)
-Received: by mail-io1-xd2d.google.com with SMTP id k17so8512878iob.1;
-        Wed, 15 Mar 2023 15:18:00 -0700 (PDT)
+        Wed, 15 Mar 2023 18:18:04 -0400
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 148651E1CD
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 15:18:03 -0700 (PDT)
+Received: by mail-pj1-x104a.google.com with SMTP id nm11-20020a17090b19cb00b0023d0c90d851so4575587pjb.1
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 15:18:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678918679;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DVMB/3d/5mvlYp5jK5eg+JXYkpAvNpppGnciNj1lrN4=;
-        b=QBZdmFY2MFDOHmPKiKocXUdgJTB1HlI4GHPyLY/c0qaBoakt4ZK+bJ6FvcB41aXH4o
-         qhU8m+efoy1vK6w6sDILq/Dk5Rp1ajBeUHDvo3cPurCP8wUOV8Ysi3KSHe2QccVhBfhR
-         PpHa4pmXPS2ajpy2lq+9MO9Zg+noKHHFRG7aKp3awr7imhgh31HB9N9jUzCe3JnI4odC
-         iwDWWdJNUivVxC1BSO/7fmLU3XZRTOBa4EclyvSp/irs/xr/CR1gWAPqyTfvWu1ofHqI
-         cMXvGUpim15n87E7wnQ5eJdlwxqnE7aewKgVEiF3hT2N9YUnUKGfqVQG5yKZysBB65Yh
-         H3YA==
+        d=google.com; s=20210112; t=1678918682;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=MvteDYHsbT9OEr0aq2wdfkYZ5XUVGpFjX1APZCsfOXA=;
+        b=ZPYt8KMXd0uMxI+PxwCFJKwxxitCAIk9LSlZwyGS1P4qAdlt02cvhT0FiokxNE3ARR
+         jhFxSwtS7FIpkh9eWW3mh7Kuqjwlc0ME2MSHiF3jxNJpEcAHV2n2sgVBFhk/wVYdu7th
+         iCETTFBtT8vPh/Lq6MWh1SF6j5hoHTd0NJYZkFsbYy/AE+BvpDnKJLqBZbZcMuMdN6Jo
+         tM5FhSxpATFTHI6PBxsZLs1dQCgLGDS5gHD3b85i3CFfAy+Rm5iI/7GdTbwo0xyK292o
+         1oIq/xNjyYt4OjmM8FBVfAc4bumO0zLPEfN2yyE/GahPpoMejypjJdMS7MUF2DqBpNm8
+         /pMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678918679;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DVMB/3d/5mvlYp5jK5eg+JXYkpAvNpppGnciNj1lrN4=;
-        b=CnSIN8ZjcEdMQk0vBEoEWIvDdgKFHc6e3Oi6fUQN+SwZI2o2iGXBYyKILZkp7OEsQ3
-         WHFnt5QQuEBVQvk3u+4KLommbl14smJXqsp7LGaBU7WeAJqp1KSOMpv2FhhGrphe38P4
-         m+8MMvdIiHJopFdOiAxM58yu+XgoVPsMU7vmFhdvP+Em4Nb7LQx863k+0aPeTnvkfMqI
-         bHIY/gZW+YQSOPW9LOPwZBDVO0HLsMMA1y5Xz9rG4u3TvLY1ikZ0bcRm/uyyjdr+U0fI
-         WTASSI0B2U7MpEYqGTFAGd7hB4HaG4qaBmD1aAiS9LnBjEzs6KuqlaL26FznAvaRfP+u
-         htww==
-X-Gm-Message-State: AO0yUKVYsBd71xDG9kqndlhS2CdYfb9GBZxsSz428Nz+FHBp72WE0D/z
-        cbJzsqI+nh7YAhw5KMYvMAsX2kzhzKo=
-X-Google-Smtp-Source: AK7set+RkVKrE7gZLi4DDS6qZ9mE/Qs+JCpVr5KBbLjpHIne8sdp9eO9GhrTXVQc2Pyq798T9EXSZQ==
-X-Received: by 2002:a05:6602:2188:b0:74c:bb78:25d7 with SMTP id b8-20020a056602218800b0074cbb7825d7mr27182025iob.19.1678918679748;
-        Wed, 15 Mar 2023 15:17:59 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id g17-20020a05663811d100b0040613520534sm1224485jas.118.2023.03.15.15.17.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Mar 2023 15:17:59 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 15 Mar 2023 15:17:58 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Denis Pauk <pauk.denis@gmail.com>
-Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mischief@offblast.org,
-        de99like@mennucci.debian.net, holger.kiehl@dwd.de
-Subject: Re: [PATCH 2/2] hwmon: (nct6775) update ASUS WMI monitoring list
- A520/B360/B460/B550...
-Message-ID: <7176f60a-3c47-4189-9834-e3493f62cd21@roeck-us.net>
-References: <20230315210135.2155-1-pauk.denis@gmail.com>
- <20230315210135.2155-2-pauk.denis@gmail.com>
- <20230315233054.5ac21db0@gmail.com>
- <19097c39-9703-6b7f-6cc4-8a157b00f368@roeck-us.net>
- <20230316000453.553bf6a8@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230316000453.553bf6a8@gmail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        d=1e100.net; s=20210112; t=1678918682;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=MvteDYHsbT9OEr0aq2wdfkYZ5XUVGpFjX1APZCsfOXA=;
+        b=sL0sWNANg21OeHIRhxJzOp/xydv8zEyKG7Iay8Nt0w63Y4/e2KdmNuix/UTA9J3nYG
+         /aUbZ1pdrhWJLOT3s3hkruUPXTYVbbNWIlC2S1QjTS5FiRIWsnPa87PEt89ACjXJUcsB
+         HtgXXRJREXBTwcXKsG8FlXpUDZ3CIiyPt5mkRdqhb/rm76uiMEtGquXMZQtt72XYL40V
+         Q/dlABogPX29SmFmBMm4x3fAHDqBGdNwDmkv8fCRcfbWKF0ZKStQDbFuG+GR9NaI9Q0Y
+         oEi5qfIvkT771mt1wJmKFya4M1bFw2mBfOzCuNFNBrDrY7n4EIi1vbQQ45uICYZEVUsx
+         4qWg==
+X-Gm-Message-State: AO0yUKXGq/Q5pCOD2uzEOEHMdYTCRiBjSEkcZC1jp/ljqTMqZ5rsNbhO
+        2xcG9g08E7xyIMD6cRLaGpV8HT+xuxI=
+X-Google-Smtp-Source: AK7set88u7q7Wr8ez/4JnUvQ+fnn1pMvVwVXQbEbFK6+/7ZjhsMDk40RDVANoVxJ/gAQEunDlMAsjdK7+A0=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a65:61a9:0:b0:4fd:72f3:5859 with SMTP id
+ i9-20020a6561a9000000b004fd72f35859mr401818pgv.2.1678918682510; Wed, 15 Mar
+ 2023 15:18:02 -0700 (PDT)
+Date:   Wed, 15 Mar 2023 15:18:01 -0700
+In-Reply-To: <20230201194604.11135-5-minipli@grsecurity.net>
+Mime-Version: 1.0
+References: <20230201194604.11135-1-minipli@grsecurity.net> <20230201194604.11135-5-minipli@grsecurity.net>
+Message-ID: <ZBJEGfmv42MA6bKh@google.com>
+Subject: Re: [PATCH v3 4/6] KVM: x86: Make use of kvm_read_cr*_bits() when
+ testing bits
+From:   Sean Christopherson <seanjc@google.com>
+To:     Mathias Krause <minipli@grsecurity.net>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,33 +68,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 16, 2023 at 12:04:53AM +0200, Denis Pauk wrote:
-> On Wed, 15 Mar 2023 14:58:24 -0700
-> Guenter Roeck <linux@roeck-us.net> wrote:
+On Wed, Feb 01, 2023, Mathias Krause wrote:
+> Make use of the kvm_read_cr{0,4}_bits() helper functions when we only
+> want to know the state of certain bits instead of the whole register.
 > 
-> > On 3/15/23 14:30, Denis Pauk wrote:
-> > > On Wed, 15 Mar 2023 23:01:35 +0200
-> > > Denis Pauk <pauk.denis@gmail.com> wrote:
-> > > 
-> > > Tested-by: Holger Kiehl <holger.kiehl@dwd.de>
-> > > 
-> > > Pro A520M-C II/CSM is also tested by Holger Kiehl
-> > > https://patchwork.kernel.org/project/linux-hwmon/patch/868bdc4f-9d45-475c-963e-f5232a8b95@praktifix.dwd.de/
-> > > 
-> > > Could it be applied as single patch or need to rebase over "Pro A520M-C II"
-> > > patch?
-> > >   
-> > Sorry, I don't understand what you are trying to say. I just applied all
-> > patches in sequence as received, with no conflicts. Should I undo that ?
-> > 
-> > Guenter
-> > 
+> This not only makes the intend cleaner, it also avoids a VMREAD in case
+> the tested bits aren't guest owned.
 > 
-> No, Thank you!
+> Signed-off-by: Mathias Krause <minipli@grsecurity.net>
+> ---
+>  arch/x86/kvm/pmu.c     | 4 ++--
+>  arch/x86/kvm/vmx/vmx.c | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 > 
-> I just like to mention that Holger Kiehl sent separate patch with
-> "Pro A520M-C II" support and it could create conflicts. I have found it only
+> diff --git a/arch/x86/kvm/pmu.c b/arch/x86/kvm/pmu.c
+> index d939d3b84e6f..d9922277df67 100644
+> --- a/arch/x86/kvm/pmu.c
+> +++ b/arch/x86/kvm/pmu.c
+> @@ -439,9 +439,9 @@ int kvm_pmu_rdpmc(struct kvm_vcpu *vcpu, unsigned idx, u64 *data)
+>  	if (!pmc)
+>  		return 1;
+>  
+> -	if (!(kvm_read_cr4(vcpu) & X86_CR4_PCE) &&
+> +	if (!(kvm_read_cr4_bits(vcpu, X86_CR4_PCE)) &&
 
-It didn't.
+Purely as an FYI, I proposed adding helpers to query single CR0/CR4 bits in a
+separate thread[*].  No need to do anything on your end, I'll plan on applying
+this patch first and will handle whatever conflicts arise.
 
-Guenter
+[*] https://lore.kernel.org/all/ZAuRec2NkC3+4jvD@google.com
