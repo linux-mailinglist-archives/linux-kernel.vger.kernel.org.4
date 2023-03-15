@@ -2,157 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A0766BA626
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 05:26:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 719EA6BA62A
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 05:26:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229616AbjCOE0E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 00:26:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49056 "EHLO
+        id S230508AbjCOE0m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 00:26:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230122AbjCOE0C (ORCPT
+        with ESMTP id S229447AbjCOE0j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 00:26:02 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 630943BD9E;
-        Tue, 14 Mar 2023 21:26:01 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32F4PqCs002367;
-        Tue, 14 Mar 2023 23:25:52 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1678854352;
-        bh=uOYvOBtgQVmSWsQtv6zRNCsrWg9NufUyEPVMx1Ch0/I=;
-        h=From:To:CC:Subject:Date;
-        b=RiMUsBk3aPXuwA8Fg8zqJh541Kl+sQwj+8eucNRyaHuQwB83MYmFA0LwRf+gS9/Nf
-         hcbkD61mu/BEI72DSgypm1b6/YgYy+M2HGPSnl0z8d/soxQo3SrJ7eIbTnzHQCnUGY
-         PJ1y3zr041m8Plx6AYd8gAyhrYujjORPnOREY46U=
-Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32F4PqOu055565
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 14 Mar 2023 23:25:52 -0500
-Received: from DFLE111.ent.ti.com (10.64.6.32) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 14
- Mar 2023 23:25:52 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE111.ent.ti.com
- (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Tue, 14 Mar 2023 23:25:52 -0500
-Received: from uda0492258.dhcp.ti.com (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32F4Pmx8056229;
-        Tue, 14 Mar 2023 23:25:49 -0500
-From:   Siddharth Vadapalli <s-vadapalli@ti.com>
-To:     <nm@ti.com>, <vigneshr@ti.com>, <kristo@kernel.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski@linaro.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <afd@ti.com>
-CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <srk@ti.com>,
-        <s-vadapalli@ti.com>
-Subject: [PATCH v2] arm64: dts: ti: k3-j784s4-evm: Enable MCU CPSW2G
-Date:   Wed, 15 Mar 2023 09:55:48 +0530
-Message-ID: <20230315042548.1500528-1-s-vadapalli@ti.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 15 Mar 2023 00:26:39 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFB3941B49;
+        Tue, 14 Mar 2023 21:26:37 -0700 (PDT)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32F3VLBu028972;
+        Wed, 15 Mar 2023 04:26:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=Xtj7hkdeD+O9adjJ6rML0HI4ghCc+h2O00CkuoEMyeo=;
+ b=SYWuS1E4IwW+OD+v/0WTw6XNaLp/WOYqRY5kgVyH+FQnh6WlZ//9+zsX4Ppa4imkoMww
+ aMuTp76kJM/xnQBLpplJgHJcq2yr+xiJeOUrC+qqYTp4bszLlIKkw9ZoCR9y0vfDuYrd
+ I36+nW1mZ2f/cyF/lvDFvM68e74IHphezC5FBMCLq+mt+V0wlYeUaF1P70tlxLq0NKSm
+ WdZw7g4PUJTpXNVu0Vpk2pqXsElsEcnU8D0AnQrCsqJcHq6Df4MO6jhLoaUiRzEa0A1+
+ uz0tYhD/y9ZbqUGLXakSLooXaM+zpZitRKDqAm4BGTvpE8XFk4/N4ViUJVfyiUnK2qgV vQ== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pb2cs8grm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 15 Mar 2023 04:26:22 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32F4QKgM019540
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 15 Mar 2023 04:26:21 GMT
+Received: from [10.216.43.170] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Tue, 14 Mar
+ 2023 21:26:14 -0700
+Message-ID: <84c3e0ac-c364-4242-b141-bf0b9e198b56@quicinc.com>
+Date:   Wed, 15 Mar 2023 09:56:11 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH 0/8] Add multiport support for DWC3 controllers
+Content-Language: en-US
+To:     Adrien Thierry <athierry@redhat.com>
+CC:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "Andy Gross" <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        "Konrad Dybcio" <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <quic_pkondeti@quicinc.com>,
+        <quic_ppratap@quicinc.com>, <quic_wcheng@quicinc.com>,
+        <quic_jackp@quicinc.com>, <quic_harshq@quicinc.com>,
+        <ahalaney@redhat.com>, <quic_shazhuss@quicinc.com>
+References: <20230310163420.7582-1-quic_kriskura@quicinc.com>
+ <ZBDZ3q6b4+0IBi4s@fedora>
+From:   Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+In-Reply-To: <ZBDZ3q6b4+0IBi4s@fedora>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: ol-sN4eFnM5FQS-TM3PS30AYG_tEoRUm
+X-Proofpoint-GUID: ol-sN4eFnM5FQS-TM3PS30AYG_tEoRUm
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-15_01,2023-03-14_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011
+ lowpriorityscore=0 spamscore=0 mlxscore=0 adultscore=0 impostorscore=0
+ malwarescore=0 phishscore=0 suspectscore=0 mlxlogscore=631
+ priorityscore=1501 bulkscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2302240000 definitions=main-2303150036
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add device tree support to enable MCU CPSW with J784S4 EVM.
 
-Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
----
-Hello,
 
-Please do not merge this patch until the following have been merged:
-1. https://lore.kernel.org/r/20230314085500.10597-1-j-choudhary@ti.com/
-2. https://lore.kernel.org/r/20230314152611.140969-2-j-choudhary@ti.com/
-3. https://lore.kernel.org/r/20230308201513.116638-1-j-choudhary@ti.com/
+On 3/15/2023 2:02 AM, Adrien Thierry wrote:
+> Hi Krishna,
+> 
+> I'm unable to apply your patch series, it looks like patch 2 is malformed.
+> 'git am' prints the following:
+> 
+>    Applying: dt-bindings: usb: Add bindings for multiport properties on DWC3 controller
+>    Applying: usb: dwc3: core: Access XHCI address space temporarily to read port info
+>    error: corrupt patch at line 83
+>    Patch failed at 0002 usb: dwc3: core: Access XHCI address space temporarily to read port info
+> 
+> Are you able to apply the series on your side?
+> 
+> Best,
+> 
+> Adrien
+> 
+Hi Adrien,
 
-Changes from v1:
-1. Drop patch for adding device id property for mcu_navss. This patch is
-   now a part of another series at:
-   https://lore.kernel.org/r/20230314152611.140969-2-j-choudhary@ti.com/
-2. Move "mcu_mdio_pins_default" pinctrl to the "davinci_mdio" node.
+   I rebased them last week before sending them out. Probably code got 
+updated causing conflicts. I will rebase them again this week and send 
+v6 addressing review comments.
 
-v1:
-https://lore.kernel.org/r/20230314104055.1475054-1-s-vadapalli@ti.com/
-
- arch/arm64/boot/dts/ti/k3-j784s4-evm.dts | 50 ++++++++++++++++++++++++
- 1 file changed, 50 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/ti/k3-j784s4-evm.dts b/arch/arm64/boot/dts/ti/k3-j784s4-evm.dts
-index 8cd4a7ecc121..476ad8915c5b 100644
---- a/arch/arm64/boot/dts/ti/k3-j784s4-evm.dts
-+++ b/arch/arm64/boot/dts/ti/k3-j784s4-evm.dts
-@@ -140,6 +140,32 @@ J784S4_IOPAD(0x020, PIN_INPUT, 7) /* (AJ35) MCAN15_RX.GPIO0_8 */
- 	};
- };
- 
-+&wkup_pmx0 {
-+	mcu_cpsw_pins_default: mcu-cpsw-pins-default {
-+		pinctrl-single,pins = <
-+			J784S4_WKUP_IOPAD(0x094, PIN_INPUT, 0) /* (A35) MCU_RGMII1_RD0 */
-+			J784S4_WKUP_IOPAD(0x090, PIN_INPUT, 0) /* (B36) MCU_RGMII1_RD1 */
-+			J784S4_WKUP_IOPAD(0x08c, PIN_INPUT, 0) /* (C36) MCU_RGMII1_RD2 */
-+			J784S4_WKUP_IOPAD(0x088, PIN_INPUT, 0) /* (D36) MCU_RGMII1_RD3 */
-+			J784S4_WKUP_IOPAD(0x084, PIN_INPUT, 0) /* (B37) MCU_RGMII1_RXC */
-+			J784S4_WKUP_IOPAD(0x06c, PIN_INPUT, 0) /* (C37) MCU_RGMII1_RX_CTL */
-+			J784S4_WKUP_IOPAD(0x07c, PIN_OUTPUT, 0) /* (D37) MCU_RGMII1_TD0 */
-+			J784S4_WKUP_IOPAD(0x078, PIN_OUTPUT, 0) /* (D38) MCU_RGMII1_TD1 */
-+			J784S4_WKUP_IOPAD(0x074, PIN_OUTPUT, 0) /* (E37) MCU_RGMII1_TD2 */
-+			J784S4_WKUP_IOPAD(0x070, PIN_OUTPUT, 0) /* (E38) MCU_RGMII1_TD3 */
-+			J784S4_WKUP_IOPAD(0x080, PIN_OUTPUT, 0) /* (E36) MCU_RGMII1_TXC */
-+			J784S4_WKUP_IOPAD(0x068, PIN_OUTPUT, 0) /* (C38) MCU_RGMII1_TX_CTL */
-+		>;
-+	};
-+
-+	mcu_mdio_pins_default: mcu-mdio-pins-default {
-+		pinctrl-single,pins = <
-+			J784S4_WKUP_IOPAD(0x09c, PIN_OUTPUT, 0) /* (A36) MCU_MDIO0_MDC */
-+			J784S4_WKUP_IOPAD(0x098, PIN_INPUT, 0) /* (B35) MCU_MDIO0_MDIO */
-+		>;
-+	};
-+};
-+
- &main_uart8 {
- 	status = "okay";
- 	pinctrl-names = "default";
-@@ -194,3 +220,27 @@ &main_sdhci1 {
- &main_gpio0 {
- 	status = "okay";
- };
-+
-+&mcu_cpsw {
-+	status = "okay";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&mcu_cpsw_pins_default>;
-+};
-+
-+&davinci_mdio {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&mcu_mdio_pins_default>;
-+
-+	mcu_phy0: ethernet-phy@0 {
-+		reg = <0>;
-+		ti,rx-internal-delay = <DP83867_RGMIIDCTL_2_00_NS>;
-+		ti,fifo-depth = <DP83867_PHYCR_FIFO_DEPTH_4_B_NIB>;
-+		ti,min-output-impedance;
-+	};
-+};
-+
-+&mcu_cpsw_port1 {
-+	status = "okay";
-+	phy-mode = "rgmii-rxid";
-+	phy-handle = <&mcu_phy0>;
-+};
--- 
-2.25.1
-
+Regards,
+Krishna,
