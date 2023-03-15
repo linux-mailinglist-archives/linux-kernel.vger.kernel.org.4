@@ -2,117 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D8FC6BAD6A
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 11:18:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF0796BAD6E
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 11:19:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232427AbjCOKS3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 06:18:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60696 "EHLO
+        id S232391AbjCOKS6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 06:18:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232388AbjCOKSN (ORCPT
+        with ESMTP id S232412AbjCOKSq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 06:18:13 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A75C7C3F0
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 03:17:40 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id f18so23642111lfa.3
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 03:17:40 -0700 (PDT)
+        Wed, 15 Mar 2023 06:18:46 -0400
+Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3FFC367C2
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 03:18:20 -0700 (PDT)
+Received: by mail-ot1-x331.google.com with SMTP id o4-20020a9d6d04000000b00694127788f4so9885588otp.6
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 03:18:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678875454;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pBhTi0wfQakwfTrjXohKrvBhPaT5xlPiskZ8ZeR9EQ8=;
-        b=O35DzjOz0ldzAvc4GoFh/iSACZQt2/LDX+dixn+OK5+y94KwDVBdScpI85zji5Xq+L
-         Hbwev3j5/28py1vITcVwscx4/3b2tktibAy/0JJuhv9kLZRtgStG/r3rJxtWJbO9F0A+
-         MxDDWU/vQ6JSKDQMzV2zeby2A1ZE9OH72bxCTgA982GJ38qGcnlZHcFVSElcR6v9qMxp
-         3SRL/3KrGO/tkx33epRQkiIcGi+Y647xXL7Tu7FEj9RYidifRGs+ZpJ9SfbIo1AffxGZ
-         uG+W/DFtTqhOrCHZUKqBg7lPnsu1POY8EuEqTlYdKlZOMAha4dpCiFJVI/s3ztH8yChY
-         86Cg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678875454;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+        d=gmail.com; s=20210112; t=1678875499;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=pBhTi0wfQakwfTrjXohKrvBhPaT5xlPiskZ8ZeR9EQ8=;
-        b=166USPMIgP/i/ZqbKUA+T4HBGCtWS3rvSphAWM1ZWco4F/wHezpIywBY+1TyfNgzzV
-         zaqaJOrMYRxS4eJV5+zDFf2AnnDll+08ZUKc7lXGpzh6Kpxczi+wzXc7QFHSGm7yIrKJ
-         +6IZ3JT6rtu/dipucQAgJA60/miNoaz6lsST5vG1QDnd6VUNl8T529s7907Cwcgq0T9v
-         fFEHNfXY0nSVIiy8wi+C5LBGtBBzqHCKBZWfof21lJ1tYc9mD/Gnyh0VPRRsWteqSGRv
-         hdilA0AHN4frVIelo7yOkMPIrFKR8MuskHSJ2j5ji3FrCYnOfJHLW43SW5LyGngt9Nx/
-         LcKw==
-X-Gm-Message-State: AO0yUKXnS0Sz6ZeZwYaBkstnDvztOBYYoVxwYRXv115VhS5ysYptHbOX
-        ywqD+DoULrYnYg2fG8qBuPzOeA==
-X-Google-Smtp-Source: AK7set/I8kHUjqEEFhseyhfbwHBdT9IFfLGoIePGVpH4pzZqRdxjakFT1vhrYr1gX6zjSnUo6T50Kg==
-X-Received: by 2002:a19:f60a:0:b0:4b5:2bbc:e119 with SMTP id x10-20020a19f60a000000b004b52bbce119mr1953901lfe.65.1678875454619;
-        Wed, 15 Mar 2023 03:17:34 -0700 (PDT)
-Received: from [192.168.1.101] (abyj16.neoplus.adsl.tpnet.pl. [83.9.29.16])
-        by smtp.gmail.com with ESMTPSA id f16-20020a19ae10000000b004ccff7c56a8sm764350lfc.27.2023.03.15.03.17.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Mar 2023 03:17:34 -0700 (PDT)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Wed, 15 Mar 2023 11:17:27 +0100
-Subject: [PATCH v2 2/2] soc: qcom: socinfo: Add IDs for QCM2290/QRB2210
+        bh=C+D7r5o17V7MbRD4rEUKPxc+NqVXUsVJyVbcYC8a9Kg=;
+        b=S9ioBUKruxchmg3LqAudFc5ju0v74S+G2v8jifnB0w5xwCOnD6bo5HwiMEGVvvhtWt
+         xOKv/QYtcSIYBbChJeN9eARRFm7yTOzF0t3UAG2BdzYj2fVsNc8CXajNTVjLNGqaYFR9
+         Ibrq+xcAq43xU7TGCcaH7ppyCH0BUBAOBP7Xd+YI8wdsPkB4Fmey04ezFJQ1FL85ZaBj
+         k+u0wGaZvCsg/8JAg3e2H9TN0Ed1zncjKbIciLhW0b07lSsDxY1AFoiNn8HCC3V3hgtU
+         PXwiWgbbQ/katmwNBeHKfYuxyMfhXu8w4YrUH/gFLO+eStAlHE056Z7P23iMsHpiJQ9V
+         uQqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678875499;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=C+D7r5o17V7MbRD4rEUKPxc+NqVXUsVJyVbcYC8a9Kg=;
+        b=hH+pUltzoI1oIFZkJh0XVVLoyb3xbIfFmozVRgJyQy/WqbYHDZzUOuYA2l5hUJxvDa
+         FgM1Y7zH6fmo6VnJ0ksvlQUUCJHcLe8SFd7VDt7PXdH82acXyCjGbqfC0jEnA7ypQlcP
+         00KkIqp4L96Y/yqizHNaeVox2KQxxWvjtIxdlCUdMOPwX+MnY07wL782ob5HH7imT538
+         CrBs964qUaCzU/wrUkN5/Z29/X5TJcH0fx4DHxGpbYjmaxMt13BQMWDOZjnCWGbu3Tuf
+         gzMa3SLNDaRUl5GZCZQXowcKfH6Dm/bAVassNlcDzXOP6E+wPrvmPws/sS7WW1U3hn/1
+         Gg/w==
+X-Gm-Message-State: AO0yUKUfkAuh4otsVrN6DdTnTbmgvHgLcIP2LH8k4a6jq1u3a7F6rU47
+        CrofhqR0DLTayrdw5VYGPWbgKCY8fCa1GggJuCk=
+X-Google-Smtp-Source: AK7set9hAcqB9bV08yCjwuKfpN9GF7jmVeh9cFKZbN+u/RKFOqemYCQ+gAPPK/1AM053BBuV22jkYDQH36/YBt7/UVI=
+X-Received: by 2002:a9d:7194:0:b0:68b:d3f1:aa1b with SMTP id
+ o20-20020a9d7194000000b0068bd3f1aa1bmr13818045otj.3.1678875499558; Wed, 15
+ Mar 2023 03:18:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230314-topic-scuba_socinfo-v2-2-44fa1256aa6d@linaro.org>
-References: <20230314-topic-scuba_socinfo-v2-0-44fa1256aa6d@linaro.org>
-In-Reply-To: <20230314-topic-scuba_socinfo-v2-0-44fa1256aa6d@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1678875450; l=935;
- i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=olt8C4SWfvtXVuRBDJQWWKcaJ3mN7EBCOIVNBe1RlMc=;
- b=Q7q6cRyFnIN8YG9m1NUSS25LBGMasJ5n6xaHVjRgXIRfLXLXtK7n1cc2atH/BNHz+wEU5TzIvPh+
- oHSjAhGYB1/oMwWJ105MFxIRqedPT8a/eqcWJBWeDG24UkoepB8Z
-X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
- pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
-X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Received: by 2002:a05:6358:1a9c:b0:f6:c472:2ab1 with HTTP; Wed, 15 Mar 2023
+ 03:18:19 -0700 (PDT)
+Reply-To: hitnodeby23@yahoo.com
+From:   Hinda Itno Deby <rebender6@gmail.com>
+Date:   Wed, 15 Mar 2023 03:18:19 -0700
+Message-ID: <CAJ1QMTea23VDpCSQf-Tc+T7y_zE0U_MvyiPYVbfb2-1izuhm-g@mail.gmail.com>
+Subject: Reply
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=7.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM,UNDISC_MONEY,
+        URG_BIZ autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:331 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [rebender6[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [rebender6[at]gmail.com]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [hitnodeby23[at]yahoo.com]
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.6 URG_BIZ Contains urgent matter
+        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+        *  2.0 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the missing IDs for scuba and its QRB variant.
-
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- drivers/soc/qcom/socinfo.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/soc/qcom/socinfo.c b/drivers/soc/qcom/socinfo.c
-index e9012ca1a87b..912e81b2527e 100644
---- a/drivers/soc/qcom/socinfo.c
-+++ b/drivers/soc/qcom/socinfo.c
-@@ -426,6 +426,7 @@ static const struct soc_id soc_id[] = {
- 	{ qcom_board_id(QCM2150) },
- 	{ qcom_board_id(SDA429W) },
- 	{ qcom_board_id(SM8350) },
-+	{ qcom_board_id(QCM2290) },
- 	{ qcom_board_id(SM6115) },
- 	{ qcom_board_id(SC8280XP) },
- 	{ qcom_board_id(IPQ6005) },
-@@ -442,6 +443,7 @@ static const struct soc_id soc_id[] = {
- 	{ qcom_board_id(SC7180P) },
- 	{ qcom_board_id(SM6375) },
- 	{ qcom_board_id(SM8550) },
-+	{ qcom_board_id(QRB2210) },
- 	{ qcom_board_id(QRU1000) },
- 	{ qcom_board_id(QDU1000) },
- 	{ qcom_board_id(QDU1010) },
-
 -- 
-2.39.2
+Hello
 
+My name is Hinda Itno Deby Please I want us to discuss Urgent Business
+Proposal, if you are interested kindly reply to me so i can give you
+all the details
+
+.Thanks and God Bless You.
+Ms Hinda Itno Deby
