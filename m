@@ -2,555 +2,279 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7ABC16BBA1D
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 17:45:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3752E6BBA13
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 17:43:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231838AbjCOQpk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 12:45:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48824 "EHLO
+        id S232661AbjCOQne (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 12:43:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233153AbjCOQpJ (ORCPT
+        with ESMTP id S232364AbjCOQnQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 12:45:09 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B21999F065;
-        Wed, 15 Mar 2023 09:44:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CFE69B81E66;
-        Wed, 15 Mar 2023 16:39:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1EF10C433EF;
-        Wed, 15 Mar 2023 16:39:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678898357;
-        bh=/Rvx7EohIWoBk0GYkeDnKkAMBavM6dOF8wMbHIm8O8I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XQVUjHm9UpqPEaZQZGS5siSGlLxButcigZO2yP/LW+z8QRUGy0tcqH+l4PQ4KV/Kg
-         Ij4UbQEPqmOoAN0kCfdZKEnYYGhfoziLHDg71UjvG8XJq38PbivJKOML78VdHfc4vI
-         ahHMn5qW6WhsafnsZMnFAmOAFoPBZH2iXLUVncSlg8ey4GlunRn/m6DUGaK9jkaJHN
-         eoJTNEyQTF3V2i8pCBrhdySqsKLzKZOe0OZyLw6q2PxMgb0evRcejbQFyxnWU6oQMk
-         S8WHHFbbB5LnyyRruYWTtcqmdLvEUqCaJfngpMKo/aPu5gUnqRbc8YLsiK+hPsRf3H
-         hrq7ozLSLvD7Q==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 16FEA4049F; Wed, 15 Mar 2023 13:39:15 -0300 (-03)
-Date:   Wed, 15 Mar 2023 13:39:15 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Jiri Olsa <jolsa@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Song Liu <song@kernel.org>,
-        Stephane Eranian <eranian@google.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        James Clark <james.clark@arm.com>, Hao Luo <haoluo@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH 02/10] perf bpf filter: Implement event sample filtering
-Message-ID: <ZBH0s5P2KV5bJR3h@kernel.org>
-References: <20230314234237.3008956-1-namhyung@kernel.org>
- <20230314234237.3008956-3-namhyung@kernel.org>
- <ZBHxRaP7BC+qDzJ/@kernel.org>
+        Wed, 15 Mar 2023 12:43:16 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D8E29F23F;
+        Wed, 15 Mar 2023 09:42:07 -0700 (PDT)
+Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32FER3DD013012;
+        Wed, 15 Mar 2023 17:39:51 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=MQWjDBXejnfbBkpJj9p19emeBobj1+hKsaERuT0aCjo=;
+ b=g5mzqg/XRUPbwqKMwB8TSETGKtuKZQBAMcLw+nlgp4PMHoC7ZEuJv2vxCFu7FJAMMqFz
+ aojvoRBrwFmGKTjMYMa9sLwVsw49wzxTKgfbGB8EB2XJ7/bAg6vPAtGcbgpGEbPUnz7u
+ 5wt8POxVG1+h18kmN1zxHyRXhKicu8e+qrrALLKXWAUH/5WNClejhjYLNowqhxGah9bM
+ y+jgAV74hI57J+A/fXbFNT+DKKfPISvQyyyyDEVEbXI+VoreOzycwWbS+9pPJMkOR1i0
+ k9pOIWxqZI6cU1tQ4+R9JVEmKmZEmR0sGs3Qq/kyx5lqzRFH9+Y2LolMNpIQ90oWdPuv WA== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3pb2bawy7b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 15 Mar 2023 17:39:51 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 4EE5310002A;
+        Wed, 15 Mar 2023 17:39:49 +0100 (CET)
+Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 3171421FE9D;
+        Wed, 15 Mar 2023 17:39:49 +0100 (CET)
+Received: from [10.48.1.102] (10.48.1.102) by SHFDAG1NODE2.st.com
+ (10.75.129.70) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.17; Wed, 15 Mar
+ 2023 17:39:48 +0100
+Message-ID: <48b8c84c-b2f6-5876-4855-2f9d70ac5e3e@foss.st.com>
+Date:   Wed, 15 Mar 2023 17:39:47 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <ZBHxRaP7BC+qDzJ/@kernel.org>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NUMERIC_HTTP_ADDR,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v1 0/4] Remove use of fw_devlink_purge_absent_suppliers()
+Content-Language: en-US
+To:     Saravana Kannan <saravanak@google.com>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Len Brown <lenb@kernel.org>,
+        Yongqin Liu <yongqin.liu@linaro.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Martin Kepplinger <martin.kepplinger@puri.sm>,
+        Amelie Delaunay <amelie.delaunay@foss.st.com>,
+        <kernel-team@android.com>, <linux-kernel@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        <linux-stm32@st-md-mailman.stormreply.com>
+References: <20230301214952.2190757-1-saravanak@google.com>
+ <aca28784-c526-566b-dd7c-9cfda17e697a@foss.st.com>
+ <CAGETcx8K47t6X4biCYq+m8NcQFrUMyXvHknCRYUkuUbkw1_i6g@mail.gmail.com>
+From:   Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+In-Reply-To: <CAGETcx8K47t6X4biCYq+m8NcQFrUMyXvHknCRYUkuUbkw1_i6g@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.48.1.102]
+X-ClientProxiedBy: EQNCAS1NODE4.st.com (10.75.129.82) To SHFDAG1NODE2.st.com
+ (10.75.129.70)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-15_08,2023-03-15_01,2023-02-09_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Wed, Mar 15, 2023 at 01:24:37PM -0300, Arnaldo Carvalho de Melo escreveu:
-> Em Tue, Mar 14, 2023 at 04:42:29PM -0700, Namhyung Kim escreveu:
-> > The BPF program will be attached to a perf_event and be triggered when
-> > it overflows.  It'd iterate the filters map and compare the sample
-> > value according to the expression.  If any of them fails, the sample
-> > would be dropped.
-> >=20
-> > Also it needs to have the corresponding sample data for the expression
-> > so it compares data->sample_flags with the given value.  To access the
-> > sample data, it uses the bpf_cast_to_kern_ctx() kfunc which was added
-> > in v6.2 kernel.
-> >=20
-> > Acked-by: Jiri Olsa <jolsa@kernel.org>
-> > Signed-off-by: Namhyung Kim <namhyung@kernel.org>
->=20
->=20
-> I'm noticing this while building on a debian:11 container:
->=20
->   GENSKEL /tmp/build/perf/util/bpf_skel/bperf_leader.skel.h
->   GENSKEL /tmp/build/perf/util/bpf_skel/bperf_follower.skel.h
->   GENSKEL /tmp/build/perf/util/bpf_skel/func_latency.skel.h
->   GENSKEL /tmp/build/perf/util/bpf_skel/bpf_prog_profiler.skel.h
->   GENSKEL /tmp/build/perf/util/bpf_skel/kwork_trace.skel.h
->   GENSKEL /tmp/build/perf/util/bpf_skel/sample_filter.skel.h
-> libbpf: failed to find BTF for extern 'bpf_cast_to_kern_ctx' [21] section=
-: -2
-> Error: failed to open BPF object file: No such file or directory
-> make[2]: *** [Makefile.perf:1085: /tmp/build/perf/util/bpf_skel/sample_fi=
-lter.skel.h] Error 254
-> make[2]: *** Deleting file '/tmp/build/perf/util/bpf_skel/sample_filter.s=
-kel.h'
-> make[2]: *** Waiting for unfinished jobs....
-> make[1]: *** [Makefile.perf:236: sub-make] Error 2
-> make: *** [Makefile:70: all] Error 2
-> make: Leaving directory '/git/perf-6.3.0-rc1/tools/perf'
-> + exit 1
-> [perfbuilder@five 11]$
+On 3/10/23 18:40, Saravana Kannan wrote:
+> On Fri, Mar 10, 2023 at 9:21 AM Fabrice Gasnier
+> <fabrice.gasnier@foss.st.com> wrote:
+>>
+>> On 3/1/23 22:49, Saravana Kannan wrote:
+>>> Yongqin, Martin, Amelie,
+>>>
+>>> We recent refactor of fw_devlink that ends with commit fb42378dcc7f
+>>> ("mtd: mtdpart: Don't create platform device that'll never probe"),
+>>> fw_devlink is smarter and doesn't depend on compatible property. So, I
+>>> don't think these calls are needed anymore. But I don't have these
+>>> devices to test on and be sure and the hardware I use to test changes
+>>> doesn't have this issue either.
+>>>
+>>> Can you please test these changes on the hardware where you hit the
+>>> issue to make sure things work as expected?
+>>
+>>
+>> Hi Saravana,
+>>
+>> Sorry for the late reply,
+> 
+> Thanks for testing!
+> 
+>> On behalf of Amelie, I did some testing on STM32MP15 DK2 board, on top
+>> of commit fb42378dcc7f, and also with your series applied.
+>> For reference, it's based on: arch/arm/boot/dts/stm32mp15xx-dkx.dtsi
+>>
+>> I noticed some error messages on this board, since the 12 patch series,
+>> around the I2C PMIC device links:
+>>
+>> [    3.585514] i2c 1-0033: Failed to create device link with 1-0033
+>> [    3.590115] i2c 1-0033: Failed to create device link with 1-0033
+>> [    3.596278] i2c 1-0033: Failed to create device link with 1-0033
+>> [    3.602188] i2c 1-0033: Failed to create device link with 1-0033
+>> [    3.608165] i2c 1-0033: Failed to create device link with 1-0033
+>> [    3.614278] i2c 1-0033: Failed to create device link with 1-0033
+>> [    3.620256] i2c 1-0033: Failed to create device link with 1-0033
+>> [    3.626253] i2c 1-0033: Failed to create device link with 1-0033
+>> [    3.632252] i2c 1-0033: Failed to create device link with 1-0033
+>> [    3.639001] stpmic1 1-0033: PMIC Chip Version: 0x10
+>> [    3.645398] platform 5c002000.i2c:stpmic@33:regulators: Fixed
+>> dependency cycle(s) with /soc/i2c@5c00200
+>> 0/stpmic@33/regulators/boost
+>> [    3.655937] platform 5c002000.i2c:stpmic@33:regulators: Fixed
+>> dependency cycle(s) with /soc/i2c@5c00200
+>> 0/stpmic@33/regulators/buck2
+>> [    3.667824] platform 5c002000.i2c:stpmic@33:regulators: Fixed
+>> dependency cycle(s) with /soc/i2c@5c00200
+>> 0/stpmic@33/regulators/buck4
+>> [    3.719751] stpmic1-regulator 5c002000.i2c:stpmic@33:regulators:
+>> Failed to create device link with 1-0033
+>> [    3.728099] stpmic1-regulator 5c002000.i2c:stpmic@33:regulators:
+>> Failed to create device link with 1-0033
+>> [    3.737576] stpmic1-regulator 5c002000.i2c:stpmic@33:regulators:
+>> Failed to create device link with 1-0033
+>> [    3.747216] stpmic1-regulator 5c002000.i2c:stpmic@33:regulators:
+>> Failed to create device link with 1-0033
+>> [    3.756750] stpmic1-regulator 5c002000.i2c:stpmic@33:regulators:
+>> Failed to create device link with 1-0033
+>> [    3.766382] stpmic1-regulator 5c002000.i2c:stpmic@33:regulators:
+>> Failed to create device link with 1-0033
+>> [    3.775914] stpmic1-regulator 5c002000.i2c:stpmic@33:regulators:
+>> Failed to create device link with 1-0033
+>> [    3.785545] stpmic1-regulator 5c002000.i2c:stpmic@33:regulators:
+>> Failed to create device link with 1-0033
+> 
+> You can ignore all the "Failed to create device link" errors. They are
+> just error logs for stuff that was being ignored silently before. So
+> that's no functional regression AFAIK. I'll fix them separately if
+> necessary. And I'm sure you'll see these messages even without my
+> fw_devlink refactor series.
 
-Same thing on debian:10
+Hi Saravana,
 
-libbpf: failed to find BTF for extern 'bpf_cast_to_kern_ctx' [21] section: =
--2
-Error: failed to open BPF object file: No such file or directory
-make[2]: *** [Makefile.perf:1085: /tmp/build/perf/util/bpf_skel/sample_filt=
-er.skel.h] Error 254
-make[2]: *** Deleting file '/tmp/build/perf/util/bpf_skel/sample_filter.ske=
-l.h'
-make[2]: *** Waiting for unfinished jobs....
-make[1]: *** [Makefile.perf:236: sub-make] Error 2
-make: *** [Makefile:70: all] Error 2
-make: Leaving directory '/git/perf-6.3.0-rc1/tools/perf'
-+ exit 1
-[perfbuilder@five 10]$
+Thanks for the information.
 
-Works with debian:experimental:
+I tested without the 12 patch series, just before commit 3a2dbc510c43
+"driver core: fw_devlink: Don't purge child fwnode's consumer links".
 
-
-[perfbuilder@five experimental]$ export BUILD_TARBALL=3Dhttp://192.168.86.1=
-0/perf/perf-6.3.0-rc1.tar.xz
-[perfbuilder@five experimental]$ time dm .
-   1   147.54 debian:experimental           : Ok   gcc (Debian 12.2.0-14) 1=
-2.2.0 , Debian clang version 14.0.6
-BUILD_TARBALL_HEAD=3Dd34a77f6cd75d2a75c64e78f3d949a12903a7cf0
-
-Both with:
-
-Debian clang version 14.0.6
-Target: x86_64-pc-linux-gnu
-Thread model: posix
-InstalledDir: /usr/bin
-Found candidate GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/12
-Selected GCC installation: /usr/bin/../lib/gcc/x86_64-linux-gnu/12
-Candidate multilib: .;@m64
-Selected multilib: .;@m64
-+ rm -rf /tmp/build/perf
-+ mkdir /tmp/build/perf
-+ make ARCH=3D CROSS_COMPILE=3D EXTRA_CFLAGS=3D -C tools/perf O=3D/tmp/buil=
-d/perf CC=3Dclang
-
-and:
-
-COLLECT_GCC=3Dgcc
-COLLECT_LTO_WRAPPER=3D/usr/lib/gcc/x86_64-linux-gnu/12/lto-wrapper
-OFFLOAD_TARGET_NAMES=3Dnvptx-none:amdgcn-amdhsa
-OFFLOAD_TARGET_DEFAULT=3D1
-Target: x86_64-linux-gnu
-Configured with: ../src/configure -v --with-pkgversion=3D'Debian 12.2.0-14'=
- --with-bugurl=3Dfile:///usr/share/doc/gcc-12/README.Bugs --enable-language=
-s=3Dc,ada,c++,go,d,fortran,objc,obj-c++,m2 --prefix=3D/usr --with-gcc-major=
--version-only --program-suffix=3D-12 --program-prefix=3Dx86_64-linux-gnu- -=
--enable-shared --enable-linker-build-id --libexecdir=3D/usr/lib --without-i=
-ncluded-gettext --enable-threads=3Dposix --libdir=3D/usr/lib --enable-nls -=
--enable-clocale=3Dgnu --enable-libstdcxx-debug --enable-libstdcxx-time=3Dye=
-s --with-default-libstdcxx-abi=3Dnew --enable-gnu-unique-object --disable-v=
-table-verify --enable-plugin --enable-default-pie --with-system-zlib --enab=
-le-libphobos-checking=3Drelease --with-target-system-zlib=3Dauto --enable-o=
-bjc-gc=3Dauto --enable-multiarch --disable-werror --enable-cet --with-arch-=
-32=3Di686 --with-abi=3Dm64 --with-multilib-list=3Dm32,m64,mx32 --enable-mul=
-tilib --with-tune=3Dgeneric --enable-offload-targets=3Dnvptx-none=3D/build/=
-gcc-12-bTRWOB/gcc-12-12.2.0/debian/tmp-nvptx/usr,amdgcn-amdhsa=3D/build/gcc=
--12-bTRWOB/gcc-12-12.2.0/debian/tmp-gcn/usr --enable-offload-defaulted --wi=
-thout-cuda-driver --enable-checking=3Drelease --build=3Dx86_64-linux-gnu --=
-host=3Dx86_64-linux-gnu --target=3Dx86_64-linux-gnu
-Thread model: posix
-Supported LTO compression algorithms: zlib zstd
-gcc version 12.2.0 (Debian 12.2.0-14)=20
-+ make ARCH=3D CROSS_COMPILE=3D EXTRA_CFLAGS=3D -C tools/perf O=3D/tmp/buil=
-d/perf
-make: Entering directory '/git/perf-6.3.0-rc1/tools/perf'
+I don't see the messages here. But I can see these on top of fb42378dcc7f.
 
 
->=20
-> > ---
-> >  tools/perf/Makefile.perf                     |   2 +-
-> >  tools/perf/util/bpf-filter.c                 |  64 ++++++++++
-> >  tools/perf/util/bpf-filter.h                 |  26 ++--
-> >  tools/perf/util/bpf_skel/sample-filter.h     |  24 ++++
-> >  tools/perf/util/bpf_skel/sample_filter.bpf.c | 126 +++++++++++++++++++
-> >  tools/perf/util/evsel.h                      |   7 +-
-> >  6 files changed, 236 insertions(+), 13 deletions(-)
-> >  create mode 100644 tools/perf/util/bpf_skel/sample-filter.h
-> >  create mode 100644 tools/perf/util/bpf_skel/sample_filter.bpf.c
-> >=20
-> > diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
-> > index dc9dda09b076..ed6b6a070f79 100644
-> > --- a/tools/perf/Makefile.perf
-> > +++ b/tools/perf/Makefile.perf
-> > @@ -1050,7 +1050,7 @@ SKELETONS :=3D $(SKEL_OUT)/bpf_prog_profiler.skel=
-=2Eh
-> >  SKELETONS +=3D $(SKEL_OUT)/bperf_leader.skel.h $(SKEL_OUT)/bperf_follo=
-wer.skel.h
-> >  SKELETONS +=3D $(SKEL_OUT)/bperf_cgroup.skel.h $(SKEL_OUT)/func_latenc=
-y.skel.h
-> >  SKELETONS +=3D $(SKEL_OUT)/off_cpu.skel.h $(SKEL_OUT)/lock_contention.=
-skel.h
-> > -SKELETONS +=3D $(SKEL_OUT)/kwork_trace.skel.h
-> > +SKELETONS +=3D $(SKEL_OUT)/kwork_trace.skel.h $(SKEL_OUT)/sample_filte=
-r.skel.h
-> > =20
-> >  $(SKEL_TMP_OUT) $(LIBAPI_OUTPUT) $(LIBBPF_OUTPUT) $(LIBPERF_OUTPUT) $(=
-LIBSUBCMD_OUTPUT) $(LIBSYMBOL_OUTPUT):
-> >  	$(Q)$(MKDIR) -p $@
-> > diff --git a/tools/perf/util/bpf-filter.c b/tools/perf/util/bpf-filter.c
-> > index c72e35d51240..f20e1bc03778 100644
-> > --- a/tools/perf/util/bpf-filter.c
-> > +++ b/tools/perf/util/bpf-filter.c
-> > @@ -1,10 +1,74 @@
-> >  /* SPDX-License-Identifier: GPL-2.0 */
-> >  #include <stdlib.h>
-> > =20
-> > +#include <bpf/bpf.h>
-> > +#include <linux/err.h>
-> > +#include <internal/xyarray.h>
-> > +
-> > +#include "util/debug.h"
-> > +#include "util/evsel.h"
-> > +
-> >  #include "util/bpf-filter.h"
-> >  #include "util/bpf-filter-flex.h"
-> >  #include "util/bpf-filter-bison.h"
-> > =20
-> > +#include "bpf_skel/sample-filter.h"
-> > +#include "bpf_skel/sample_filter.skel.h"
-> > +
-> > +#define FD(e, x, y) (*(int *)xyarray__entry(e->core.fd, x, y))
-> > +
-> > +int perf_bpf_filter__prepare(struct evsel *evsel)
-> > +{
-> > +	int i, x, y, fd;
-> > +	struct sample_filter_bpf *skel;
-> > +	struct bpf_program *prog;
-> > +	struct bpf_link *link;
-> > +	struct perf_bpf_filter_expr *expr;
-> > +
-> > +	skel =3D sample_filter_bpf__open_and_load();
-> > +	if (!skel) {
-> > +		pr_err("Failed to load perf sample-filter BPF skeleton\n");
-> > +		return -1;
-> > +	}
-> > +
-> > +	i =3D 0;
-> > +	fd =3D bpf_map__fd(skel->maps.filters);
-> > +	list_for_each_entry(expr, &evsel->bpf_filters, list) {
-> > +		struct perf_bpf_filter_entry entry =3D {
-> > +			.op =3D expr->op,
-> > +			.flags =3D expr->sample_flags,
-> > +			.value =3D expr->val,
-> > +		};
-> > +		bpf_map_update_elem(fd, &i, &entry, BPF_ANY);
-> > +		i++;
-> > +	}
-> > +
-> > +	prog =3D skel->progs.perf_sample_filter;
-> > +	for (x =3D 0; x < xyarray__max_x(evsel->core.fd); x++) {
-> > +		for (y =3D 0; y < xyarray__max_y(evsel->core.fd); y++) {
-> > +			link =3D bpf_program__attach_perf_event(prog, FD(evsel, x, y));
-> > +			if (IS_ERR(link)) {
-> > +				pr_err("Failed to attach perf sample-filter program\n");
-> > +				return PTR_ERR(link);
-> > +			}
-> > +		}
-> > +	}
-> > +	evsel->bpf_skel =3D skel;
-> > +	return 0;
-> > +}
-> > +
-> > +int perf_bpf_filter__destroy(struct evsel *evsel)
-> > +{
-> > +	struct perf_bpf_filter_expr *expr, *tmp;
-> > +
-> > +	list_for_each_entry_safe(expr, tmp, &evsel->bpf_filters, list) {
-> > +		list_del(&expr->list);
-> > +		free(expr);
-> > +	}
-> > +	sample_filter_bpf__destroy(evsel->bpf_skel);
-> > +	return 0;
-> > +}
-> > +
-> >  struct perf_bpf_filter_expr *perf_bpf_filter_expr__new(unsigned long s=
-ample_flags,
-> >  						       enum perf_bpf_filter_op op,
-> >  						       unsigned long val)
-> > diff --git a/tools/perf/util/bpf-filter.h b/tools/perf/util/bpf-filter.h
-> > index 93a0d3de038c..eb8e1ac43cdf 100644
-> > --- a/tools/perf/util/bpf-filter.h
-> > +++ b/tools/perf/util/bpf-filter.h
-> > @@ -4,15 +4,7 @@
-> > =20
-> >  #include <linux/list.h>
-> > =20
-> > -enum perf_bpf_filter_op {
-> > -	PBF_OP_EQ,
-> > -	PBF_OP_NEQ,
-> > -	PBF_OP_GT,
-> > -	PBF_OP_GE,
-> > -	PBF_OP_LT,
-> > -	PBF_OP_LE,
-> > -	PBF_OP_AND,
-> > -};
-> > +#include "bpf_skel/sample-filter.h"
-> > =20
-> >  struct perf_bpf_filter_expr {
-> >  	struct list_head list;
-> > @@ -21,16 +13,30 @@ struct perf_bpf_filter_expr {
-> >  	unsigned long val;
-> >  };
-> > =20
-> > +struct evsel;
-> > +
-> >  #ifdef HAVE_BPF_SKEL
-> >  struct perf_bpf_filter_expr *perf_bpf_filter_expr__new(unsigned long s=
-ample_flags,
-> >  						       enum perf_bpf_filter_op op,
-> >  						       unsigned long val);
-> >  int perf_bpf_filter__parse(struct list_head *expr_head, const char *st=
-r);
-> > +int perf_bpf_filter__prepare(struct evsel *evsel);
-> > +int perf_bpf_filter__destroy(struct evsel *evsel);
-> > +
-> >  #else /* !HAVE_BPF_SKEL */
-> > +
-> >  static inline int perf_bpf_filter__parse(struct list_head *expr_head _=
-_maybe_unused,
-> >  					 const char *str __maybe_unused)
-> >  {
-> > -	return -ENOSYS;
-> > +	return -EOPNOTSUPP;
-> > +}
-> > +static inline int perf_bpf_filter__prepare(struct evsel *evsel __maybe=
-_unused)
-> > +{
-> > +	return -EOPNOTSUPP;
-> > +}
-> > +static inline int perf_bpf_filter__destroy(struct evsel *evsel __maybe=
-_unused)
-> > +{
-> > +	return -EOPNOTSUPP;
-> >  }
-> >  #endif /* HAVE_BPF_SKEL*/
-> >  #endif /* PERF_UTIL_BPF_FILTER_H */
-> > diff --git a/tools/perf/util/bpf_skel/sample-filter.h b/tools/perf/util=
-/bpf_skel/sample-filter.h
-> > new file mode 100644
-> > index 000000000000..862060bfda14
-> > --- /dev/null
-> > +++ b/tools/perf/util/bpf_skel/sample-filter.h
-> > @@ -0,0 +1,24 @@
-> > +#ifndef PERF_UTIL_BPF_SKEL_SAMPLE_FILTER_H
-> > +#define PERF_UTIL_BPF_SKEL_SAMPLE_FILTER_H
-> > +
-> > +#define MAX_FILTERS  32
-> > +
-> > +/* supported filter operations */
-> > +enum perf_bpf_filter_op {
-> > +	PBF_OP_EQ,
-> > +	PBF_OP_NEQ,
-> > +	PBF_OP_GT,
-> > +	PBF_OP_GE,
-> > +	PBF_OP_LT,
-> > +	PBF_OP_LE,
-> > +	PBF_OP_AND
-> > +};
-> > +
-> > +/* BPF map entry for filtering */
-> > +struct perf_bpf_filter_entry {
-> > +	enum perf_bpf_filter_op op;
-> > +	__u64 flags;
-> > +	__u64 value;
-> > +};
-> > +
-> > +#endif /* PERF_UTIL_BPF_SKEL_SAMPLE_FILTER_H */
-> > \ No newline at end of file
-> > diff --git a/tools/perf/util/bpf_skel/sample_filter.bpf.c b/tools/perf/=
-util/bpf_skel/sample_filter.bpf.c
-> > new file mode 100644
-> > index 000000000000..c07256279c3e
-> > --- /dev/null
-> > +++ b/tools/perf/util/bpf_skel/sample_filter.bpf.c
-> > @@ -0,0 +1,126 @@
-> > +// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +// Copyright (c) 2023 Google
-> > +#include "vmlinux.h"
-> > +#include <bpf/bpf_helpers.h>
-> > +#include <bpf/bpf_tracing.h>
-> > +#include <bpf/bpf_core_read.h>
-> > +
-> > +#include "sample-filter.h"
-> > +
-> > +/* BPF map that will be filled by user space */
-> > +struct filters {
-> > +	__uint(type, BPF_MAP_TYPE_ARRAY);
-> > +	__type(key, int);
-> > +	__type(value, struct perf_bpf_filter_entry);
-> > +	__uint(max_entries, MAX_FILTERS);
-> > +} filters SEC(".maps");
-> > +
-> > +int dropped;
-> > +
-> > +void *bpf_cast_to_kern_ctx(void *) __ksym;
-> > +
-> > +/* new kernel perf_sample_data definition */
-> > +struct perf_sample_data___new {
-> > +	__u64 sample_flags;
-> > +} __attribute__((preserve_access_index));
-> > +
-> > +/* helper function to return the given perf sample data */
-> > +static inline __u64 perf_get_sample(struct bpf_perf_event_data_kern *k=
-ctx,
-> > +				    struct perf_bpf_filter_entry *entry)
-> > +{
-> > +	struct perf_sample_data___new *data =3D (void *)kctx->data;
-> > +
-> > +	if (!bpf_core_field_exists(data->sample_flags) ||
-> > +	    (data->sample_flags & entry->flags) =3D=3D 0)
-> > +		return 0;
-> > +
-> > +	switch (entry->flags) {
-> > +	case PERF_SAMPLE_IP:
-> > +		return kctx->data->ip;
-> > +	case PERF_SAMPLE_ID:
-> > +		return kctx->data->id;
-> > +	case PERF_SAMPLE_TID:
-> > +		return kctx->data->tid_entry.tid;
-> > +	case PERF_SAMPLE_CPU:
-> > +		return kctx->data->cpu_entry.cpu;
-> > +	case PERF_SAMPLE_TIME:
-> > +		return kctx->data->time;
-> > +	case PERF_SAMPLE_ADDR:
-> > +		return kctx->data->addr;
-> > +	case PERF_SAMPLE_PERIOD:
-> > +		return kctx->data->period;
-> > +	case PERF_SAMPLE_TRANSACTION:
-> > +		return kctx->data->txn;
-> > +	case PERF_SAMPLE_WEIGHT:
-> > +		return kctx->data->weight.full;
-> > +	case PERF_SAMPLE_PHYS_ADDR:
-> > +		return kctx->data->phys_addr;
-> > +	case PERF_SAMPLE_CODE_PAGE_SIZE:
-> > +		return kctx->data->code_page_size;
-> > +	case PERF_SAMPLE_DATA_PAGE_SIZE:
-> > +		return kctx->data->data_page_size;
-> > +	default:
-> > +		break;
-> > +	}
-> > +	return 0;
-> > +}
-> > +
-> > +/* BPF program to be called from perf event overflow handler */
-> > +SEC("perf_event")
-> > +int perf_sample_filter(void *ctx)
-> > +{
-> > +	struct bpf_perf_event_data_kern *kctx;
-> > +	struct perf_bpf_filter_entry *entry;
-> > +	__u64 sample_data;
-> > +	int i;
-> > +
-> > +	kctx =3D bpf_cast_to_kern_ctx(ctx);
-> > +
-> > +	for (i =3D 0; i < MAX_FILTERS; i++) {
-> > +		int key =3D i; /* needed for verifier :( */
-> > +
-> > +		entry =3D bpf_map_lookup_elem(&filters, &key);
-> > +		if (entry =3D=3D NULL)
-> > +			break;
-> > +		sample_data =3D perf_get_sample(kctx, entry);
-> > +
-> > +		switch (entry->op) {
-> > +		case PBF_OP_EQ:
-> > +			if (!(sample_data =3D=3D entry->value))
-> > +				goto drop;
-> > +			break;
-> > +		case PBF_OP_NEQ:
-> > +			if (!(sample_data !=3D entry->value))
-> > +				goto drop;
-> > +			break;
-> > +		case PBF_OP_GT:
-> > +			if (!(sample_data > entry->value))
-> > +				goto drop;
-> > +			break;
-> > +		case PBF_OP_GE:
-> > +			if (!(sample_data >=3D entry->value))
-> > +				goto drop;
-> > +			break;
-> > +		case PBF_OP_LT:
-> > +			if (!(sample_data < entry->value))
-> > +				goto drop;
-> > +			break;
-> > +		case PBF_OP_LE:
-> > +			if (!(sample_data <=3D entry->value))
-> > +				goto drop;
-> > +			break;
-> > +		case PBF_OP_AND:
-> > +			if (!(sample_data & entry->value))
-> > +				goto drop;
-> > +			break;
-> > +		}
-> > +	}
-> > +	/* generate sample data */
-> > +	return 1;
-> > +
-> > +drop:
-> > +	__sync_fetch_and_add(&dropped, 1);
-> > +	return 0;
-> > +}
-> > +
-> > +char LICENSE[] SEC("license") =3D "Dual BSD/GPL";
-> > diff --git a/tools/perf/util/evsel.h b/tools/perf/util/evsel.h
-> > index c272c06565c0..68072ec655ce 100644
-> > --- a/tools/perf/util/evsel.h
-> > +++ b/tools/perf/util/evsel.h
-> > @@ -150,8 +150,10 @@ struct evsel {
-> >  	 */
-> >  	struct bpf_counter_ops	*bpf_counter_ops;
-> > =20
-> > -	/* for perf-stat -b */
-> > -	struct list_head	bpf_counter_list;
-> > +	union {
-> > +		struct list_head	bpf_counter_list; /* for perf-stat -b */
-> > +		struct list_head	bpf_filters; /* for perf-record --filter */
-> > +	};
-> > =20
-> >  	/* for perf-stat --use-bpf */
-> >  	int			bperf_leader_prog_fd;
-> > @@ -159,6 +161,7 @@ struct evsel {
-> >  	union {
-> >  		struct bperf_leader_bpf *leader_skel;
-> >  		struct bperf_follower_bpf *follower_skel;
-> > +		void *bpf_skel;
-> >  	};
-> >  	unsigned long		open_flags;
-> >  	int			precise_ip_original;
-> > --=20
-> > 2.40.0.rc1.284.g88254d51c5-goog
-> >=20
->=20
-> --=20
->=20
-> - Arnaldo
+> 
+>> Strangely some of the regulators seems to have "Fixed dependency", but
+>> not all.
+> 
+> Yeah, that's fine too -- that's just fw_devlink being verbose about
+> not enforcing probe ordering between devices in that cycle because it
+> can't tell which one of the dependencies is not a probe requirement.
+> Maybe I'll make it a dbg log if it's confusing people.
+> 
+>> Regarding the typec stusb160x I noticed the message below. It seems
+>> correct, right ?
+>>
+>> [   15.962771] typec port0: Fixed dependency cycle(s) with
+>> /soc/usb-otg@49000000/port/endpoint
+> 
+> I don't know if there is a cyclic dependency in your DT or not. But
+> this message itself is not an issue.
 
---=20
+Ack,
 
-- Arnaldo
+> 
+>> But sometimes (lets say 1/5 times) during boot, when I have a cable
+>> already plugged in, it looks like there's some race condition. The dwc2
+>> driver reports some error logs in a loop, indefinitely, up to the
+>> watchdog resets the platform :-(.
+> 
+> Can you try this series (the one you are testing) without my
+> fw_devlink refactor that ends with commit fb42378dcc7f? Trying to make
+> sure we can reproduce the issue Amelie was fixing before I claim my
+> refactor series fixes it.
+
+Strangely, I tested without the series, and removed earlier patch from
+Amelie. I don't reproduce the issue she used to hit.
+
+> 
+>> [   16.288458] dwc2 49000000.usb-otg: Mode Mismatch Interrupt: currently
+>> in Host mode
+>> [   16.288490] dwc2 49000000.usb-otg: Mode Mismatch Interrupt: currently
+>> in Host mode
+>> [   16.310429] dwc2 49000000.usb-otg: Mode Mismatch Interrupt: currently
+>> in Host mode
+>>
+>> It probably just points some already existing race condition here. Maybe
+>> it isn't even linked to this patch. But I have no evidence at this
+>> stage. I hope I can investigate further on this one, hopefully I can
+>> free up some time for that.
+> 
+> If you never pick up this series, are you not having any of these 1/5
+> times boot issues? I wouldn't expect my changes to add any races, but
+> I'll wait to see what you find here.
+
+Some good news here is, I've identified a recent change [1], that
+creates the issue pointed above. I just sent a separate patch [2] for this.
+So, it's not related to this series. (I managed to reproduce without
+picking it).
+
+[1]
+https://lore.kernel.org/r/20221206-dwc2-gadget-dual-role-v1-2-36515e1092cd@theobroma-systems.com
+[2]
+https://lore.kernel.org/lkml/20230315144433.3095859-1-fabrice.gasnier@foss.st.com/
+
+So for stusb160x: e.g. PATCH 1, feel free to add on my:
+Tested-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+
+Best Regards,
+Fabrice
+
+> 
+> Thanks,
+> Saravana
+> 
+>>
+>> Best Regards,
+>> Fabrice
+>>
+>>>
+>>> Yongqin, If you didn't have the context, this affected hikey960.
+>>>
+>>> Greg,
+>>>
+>>> Let's wait for some tests before we land these.
+>>>
+>>> Thanks,
+>>> Saravana
+>>>
+>>> Cc: Yongqin Liu <yongqin.liu@linaro.org>
+>>> Cc: Sumit Semwal <sumit.semwal@linaro.org>
+>>> Cc: Martin Kepplinger <martin.kepplinger@puri.sm>
+>>> Cc: Amelie Delaunay <amelie.delaunay@foss.st.com>
+>>>
+>>> Saravana Kannan (4):
+>>>   usb: typec: stusb160x: Remove use of
+>>>     fw_devlink_purge_absent_suppliers()
+>>>   usb: typec: tipd: Remove use of fw_devlink_purge_absent_suppliers()
+>>>   usb: typec: tcpm: Remove use of fw_devlink_purge_absent_suppliers()
+>>>   driver core: Delete fw_devlink_purge_absent_suppliers()
+>>>
+>>>  drivers/base/core.c           | 16 ----------------
+>>>  drivers/usb/typec/stusb160x.c |  9 ---------
+>>>  drivers/usb/typec/tcpm/tcpm.c |  9 ---------
+>>>  drivers/usb/typec/tipd/core.c |  9 ---------
+>>>  include/linux/fwnode.h        |  1 -
+>>>  5 files changed, 44 deletions(-)
+>>>
+>>
+>> --
+>> To unsubscribe from this group and stop receiving emails from it, send an email to kernel-team+unsubscribe@android.com.
+>>
