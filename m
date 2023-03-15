@@ -2,69 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 354E26BA5A3
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 04:32:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF3CE6BA5A5
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 04:34:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229988AbjCODcP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 23:32:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43400 "EHLO
+        id S230205AbjCODee (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 23:34:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229624AbjCODcA (ORCPT
+        with ESMTP id S229673AbjCODeb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 23:32:00 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 271CFB479
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 20:31:59 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id k37so11675642wms.0
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 20:31:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678851117;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+3K7bYVcRRLpPV8fpY3rpueWArs0o2kU2/AdNJpK1ko=;
-        b=cOEu5P/hwLHjlqVidN+tKJXVsEbyMgHEGhh8ltEDz/3VkqILP+s0v59UvSs9sK+gR6
-         kxZfycgE45hMop12s442Zc33kDNccfuNFEj+2SsOAIoMJ29U3vYhHDIzFyeaN1WUSWN9
-         6nkGDPoMSjnRDTbZp3z2i4l4s+bPhDwKcBBw4EBoBj9iMsESgIIi1gfOSpJpqoogFG6K
-         +bsCxcgxj+UMkWikEu14reM0CcxuDgGUbQZwtFG2qrsTBnYAz9MDHjt6QFdupxkurHcb
-         L4Ytg+11Tliv5D0ICoBZqznBwRFXmQVBAIhbH1QmJKp0WS1+7qZ7kJqg/AOGWxoiN9IM
-         6Cjg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678851117;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+3K7bYVcRRLpPV8fpY3rpueWArs0o2kU2/AdNJpK1ko=;
-        b=dNFltPottvzr3RS7xtcJJ3LCmRcFrVUC9amLt0oYdwvPdHbARqqNm8AGgPk60tKHFW
-         WcO6kM+qbrwK1qlpse3MzN3sg8UlFKehhIF8ipYrQHSbaGUccBVb1fWBmpXa8kQRtcBO
-         ITQG3ztAxElxbBVULNYY0xk5R6sIenzjUw07bNraB1bPj44FYJzAfo62VtM5YTialgUC
-         tmTqRsVO8z81M/YoqqcewrT81gc/U5d6SVPxajdzqXWtTQx4vjwpGtTXEBKnZ8x4JG26
-         6QXKUFbmo6IROIH85IuWPD/QTt13J4SUIeAZ9WCaGs/c/52aiQwpisi+t+FYrkc7o5XL
-         Cv0A==
-X-Gm-Message-State: AO0yUKWvSlppiH3sTYFqJ+HL9IvnpOWHCjdx4wd1XecC4YXG+tWy/Aw3
-        j6qBW2TU2wBYQa6Ul0XkvpTWHBsF0XuWZAyIuWNjRLEqfN8=
-X-Google-Smtp-Source: AK7set/T35h/tf031R5686OL6NCAQ0FZAq/RRLVR47zXGIPZVpoQM9p2OR7kE2GLalnttfZU5prsS0VUpTa78MWPf5U=
-X-Received: by 2002:a05:600c:35cd:b0:3eb:8ac:eeab with SMTP id
- r13-20020a05600c35cd00b003eb08aceeabmr4794543wmq.0.1678851117178; Tue, 14 Mar
- 2023 20:31:57 -0700 (PDT)
+        Tue, 14 Mar 2023 23:34:31 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C38A5A6D2
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 20:33:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678851228;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=P8AT5dPnPUO+JypixZa88t/Pmtrax3iyp7vcDArwYms=;
+        b=H4jmaFP0oqIrfy8krpqh4LFFqTWlg099elUbR17nW/skt8ExSQ1TJAyY+LhvHqBx4EScqz
+        HQz8AyDAPlPNIn+jsbWkns68Y9971l5iELbIjPIW8lu1iYpyJ6c81y6/Ov56UO6c6SbjVe
+        26wF8DssnRkpMkjY1BSt0Zf/2R6sTM8=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-638-XmQ9F8K2Pk-Z_PtwFA-QGw-1; Tue, 14 Mar 2023 23:33:45 -0400
+X-MC-Unique: XmQ9F8K2Pk-Z_PtwFA-QGw-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 99C1D1C0418B;
+        Wed, 15 Mar 2023 03:33:44 +0000 (UTC)
+Received: from ovpn-8-22.pek2.redhat.com (ovpn-8-22.pek2.redhat.com [10.72.8.22])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 4B22940B3ED6;
+        Wed, 15 Mar 2023 03:33:37 +0000 (UTC)
+Date:   Wed, 15 Mar 2023 11:33:32 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Eric Blake <eblake@redhat.com>
+Cc:     Nir Soffer <nsoffer@redhat.com>, josef@toxicpanda.com,
+        linux-block@vger.kernel.org, nbd@other.debian.org,
+        philipp.reisner@linbit.com, lars.ellenberg@linbit.com,
+        christoph.boehmwalder@linbit.com, corbet@lwn.net,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ming.lei@redhat.com
+Subject: Re: [PATCH 2/3] uapi nbd: add cookie alias to handle
+Message-ID: <ZBE8jPO5RomMUTmG@ovpn-8-22.pek2.redhat.com>
+References: <20230310201525.2615385-1-eblake@redhat.com>
+ <20230310201525.2615385-3-eblake@redhat.com>
+ <CAMRbyysDE+v_D6Q3tCf_+86T0V57UE4Emw6zc_4vnUu0Yau23A@mail.gmail.com>
+ <20230314195023.bsey5bfq2atz7d66@redhat.com>
 MIME-Version: 1.0
-References: <CAJNi4rNSHf3N6KrBNcVXKo-wjSPmZa2xan9WPmrER8Ttir-MDA@mail.gmail.com>
- <CAJNi4rO6TiZFFKTcW3kGgha2Rc0nTsXRLyeqAyYrN3foLbExSQ@mail.gmail.com>
-In-Reply-To: <CAJNi4rO6TiZFFKTcW3kGgha2Rc0nTsXRLyeqAyYrN3foLbExSQ@mail.gmail.com>
-From:   richard clark <richard.xnu.clark@gmail.com>
-Date:   Wed, 15 Mar 2023 11:31:45 +0800
-Message-ID: <CAJNi4rNyDWY5xrVr0qZADNTSjhTko=OXVUDRmvuDKWTNX-NU1w@mail.gmail.com>
-Subject: Re: Question about select and poll system call
-To:     linux-kernel@vger.kernel.org
-Cc:     torvalds@linux-foundation.org,
-        linux-arm-kernel@lists.infradead.org, vlobanov@speakeasy.net,
-        hch@lst.de, viro@zeniv.linux.org.uk, dipankar@in.ibm.com,
-        akpm@osdl.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230314195023.bsey5bfq2atz7d66@redhat.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,76 +69,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adding more people...
+On Tue, Mar 14, 2023 at 02:50:23PM -0500, Eric Blake wrote:
+> On Sat, Mar 11, 2023 at 02:30:39PM +0200, Nir Soffer wrote:
+> > On Fri, Mar 10, 2023 at 10:16 PM Eric Blake <eblake@redhat.com> wrote:
+> > >
+> > > The uapi <linux/nbd.h> header declares a 'char handle[8]' per request;
+> > > which is overloaded in English (are you referring to "handle" the
+> > > verb, such as handling a signal or writing a callback handler, or
+> > > "handle" the noun, the value used in a lookup table to correlate a
+> > > response back to the request).  Many client-side NBD implementations
+> > > (both servers and clients) have instead used 'u64 cookie' or similar,
+> > > as it is easier to directly assign an integer than to futz around with
+> > > memcpy.  In fact, upstream documentation is now encouraging this shift
+> > > in terminology: https://lists.debian.org/nbd/2023/03/msg00031.html
+> > >
+> > > Accomplish this by use of an anonymous union to provide the alias for
+> > > anyone getting the definition from the uapi; this does not break
+> > > existing clients, while exposing the nicer name for those who prefer
+> > > it.  Note that block/nbd.c still uses the term handle (in fact, it
+> > > actually combines a 32-bit cookie and a 32-bit tag into the 64-bit
+> > > handle), but that internal usage is not changed the public uapi, since
+> > > no compliant NBD server has any reason to inspect or alter the 64
+> > > bits sent over the socket.
+> > >
+> > > Signed-off-by: Eric Blake <eblake@redhat.com>
+> > > ---
+> > >  include/uapi/linux/nbd.h | 10 ++++++++--
+> > >  1 file changed, 8 insertions(+), 2 deletions(-)
+> > >
+> > > diff --git a/include/uapi/linux/nbd.h b/include/uapi/linux/nbd.h
+> > > index 8797387caaf7..f58f2043f62e 100644
+> > > --- a/include/uapi/linux/nbd.h
+> > > +++ b/include/uapi/linux/nbd.h
+> > > @@ -81,7 +81,10 @@ enum {
+> > >  struct nbd_request {
+> > >         __be32 magic;   /* NBD_REQUEST_MAGIC    */
+> > >         __be32 type;    /* See NBD_CMD_*        */
+> > > -       char handle[8];
+> > > +       union {
+> > > +               char handle[8];
+> > > +               __be64 cookie;
+> > > +       };
+> > >         __be64 from;
+> > >         __be32 len;
+> > >  } __attribute__((packed));
+> > > @@ -93,6 +96,9 @@ struct nbd_request {
+> > >  struct nbd_reply {
+> > >         __be32 magic;           /* NBD_REPLY_MAGIC      */
+> > >         __be32 error;           /* 0 = ok, else error   */
+> > > -       char handle[8];         /* handle you got from request  */
+> > > +       union {
+> > > +               char handle[8]; /* handle you got from request  */
+> > > +               __be64 cookie;
+> > 
+> > Should we document like this?
+> > 
+> >     union {
+> >         __be64 cookie; /* cookie you got from request */
+> >         char handle[8]; /* older name */
+> > 
+> > I think we want future code to use the new term.
+> 
+> Sure, swapping the order to favor the preferred name first makes sense.
+> 
+> I'm still not sure on whether cookie should be u64 or __be64 (it's
+> opaque, so endianness over the wire doesn't matter;
 
-I did some homework and found that the FD_SETSIZE question seems
-related with below 2 commits:
-1. 4e6fd33b7560 ("enforce RLIMIT_NOFILE in poll()")
-"POSIX states that poll() shall fail with EINVAL if nfds > OPEN_MAX.
-In this context, POSIX is referring to sysconf(OPEN_MAX), which is the
-value of current->signal->rlim[RLIMIT_NOFILE].rlim_cur in the linux
-kernel...". IOW, the nfds suggested by POSIX is kind of configurable,
-making sense for Linux kernel to link it with rlimit.
-2. bbea9f69668a ("fdtable: Make fdarray and fdsets equal in size")
-This commit uses the fdt->max_fds instead of FD_SETSIZE suggested by
-POSIX, but gives no reason to do that.
+I guess it is 'u64', given ->handle is always copied to nbd_reply from
+nbd_request in nbd server side, so native endian is always applied for
+building and parsing ->handle in nbd client side.
 
-Curiously I did some tests on Linux and macOS, the testing code snippet:
+But it looks odd to mark it as u64.
 
-static int test(void)
-{
-    int err =3D 0;
-    int nfds =3D FD_SETSIZE;
-    fd_set rfds, wfds, efds;
+> and previous code
+> was using memcpy() onto char[8] which may behave differently depending
+> on machine endianness).
 
-    FD_ZERO(&rfds);
-    FD_ZERO(&wfds);
-    FD_ZERO(&efds);
 
-    err =3D select(nfds + 1, &rfds, &wfds, &efds, NULL);
-    if (err < 0)
-        perror("select failed");
-    return err;
 
-}
 
-The test results as:
-Linux
-~~~~
-Blocked at select
+Thanks,
+Ming
 
-macOS
-~~~~~~
-select failed: Invalid argument
-
-Thanks!
-
-On Tue, Mar 14, 2023 at 10:31=E2=80=AFAM richard clark
-<richard.xnu.clark@gmail.com> wrote:
->
-> Adding linux-arm-kernel@lists.infradead.org ... for more possible feedbac=
-k:)
->
-> On Tue, Mar 14, 2023 at 10:28=E2=80=AFAM richard clark
-> <richard.xnu.clark@gmail.com> wrote:
-> >
-> > Hi, (Sorry, not find the maintainers for this subsystem, so to the lkml=
-)
-> >
-> > There're two questions about these system calls:
-> > 1. According to https://pubs.opengroup.org/onlinepubs/7908799/xsh/selec=
-t.html:
-> > ERRORS
-> > [EINVAL]
-> >       The nfds argument is less than 0 or greater than FD_SETSIZE.
-> > But the current implementation in Linux like:
-> >        if (nfds > FD_SETSIZE)
-> >                nfds =3D FD_SETSIZE
-> > What's the rationale behind this?
-> >
-> > 2. Can we unify the two different system calls? For example, using
-> > poll(...) to implement the frontend select call(...), is there
-> > something I'm missing for current implementation? The Cons and Pros,
-> > etc
-> >
-> > Thanks,
