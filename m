@@ -2,99 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05B396BAD93
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 11:24:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA6AF6BAD9D
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 11:26:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232395AbjCOKYH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 06:24:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43726 "EHLO
+        id S231398AbjCOK0A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 06:26:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229765AbjCOKYF (ORCPT
+        with ESMTP id S231536AbjCOKZ4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 06:24:05 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0B4A35AD;
-        Wed, 15 Mar 2023 03:24:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678875844; x=1710411844;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=xYkvbs2h0q7JWA1b+nO3YwUaWDYJLNgu/dGPXzcBNk8=;
-  b=ftWacGeqTmC5kZ0MJVePQJj3yWLT7mSVPKlycQTbiVGVIkvlF6gTzd3B
-   T7MBr0jC7+K4f9IexJH7iuuLDjewSAt4TMjMbyGpOCtS38G/ukthMeAdw
-   zqizWK769DUx1Od54xTDU38sSQZzIHOs7FJUPNvMwCevv/QdrV4GNzdpD
-   bQCVnPZebWnqZaRb+o9LpQevuIS9xD4nIo4rHhU1tq9tcqY6vDY006qNv
-   X4yfzPQUP3Rsh5fNJCB1Xa8r/sbveyU6KLdb+h6/qs4t+sdVAPQHd4wZ2
-   rwXinqwmQNNzP9dsLM+UMI7Mnw/6Jd2y2F9zmvxZzmBGv35SUhgLmFWMS
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="340029683"
-X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
-   d="scan'208";a="340029683"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2023 03:23:54 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="925293739"
-X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
-   d="scan'208";a="925293739"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.251.220.200])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2023 03:23:50 -0700
-Message-ID: <08ce7ccc-5590-1adb-bba9-71e6051e7058@intel.com>
-Date:   Wed, 15 Mar 2023 12:23:45 +0200
+        Wed, 15 Mar 2023 06:25:56 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1919433450;
+        Wed, 15 Mar 2023 03:25:55 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id BF1D42190B;
+        Wed, 15 Mar 2023 10:25:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1678875953; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=PVdllBdZTc9TJG4FCCzyxgIwvd4EqEzACHhmFnamwno=;
+        b=FHX7l7HcyvXr1n6xJlqF0y1ONaapvHcPgQYJxLMQqIzINXjoRjwY87IVYNz+qL0WQpsMbD
+        6IwDgZQKqTyWiXA9O27FKSbsk8HyTO3rm7JRX2M53G0qNryaOtsRG2+E7u04pbq0oYUrXE
+        M+UCa8HNQdhFObJer1Tv4QOa9B+Jl2M=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1678875953;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=PVdllBdZTc9TJG4FCCzyxgIwvd4EqEzACHhmFnamwno=;
+        b=1XZlNg1XVHSiD7OMJWDhb12jQLh8+fmmoOI1uMuCnOKa2Zh0iRNyDxmGd/KOdIdh/ljr7l
+        4fzPIJgIafAdZ2Dw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9BD8913A2F;
+        Wed, 15 Mar 2023 10:25:53 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id uezKJDGdEWRuSAAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Wed, 15 Mar 2023 10:25:53 +0000
+Message-ID: <360b814b-40e0-5444-8d6b-1e29719e4414@suse.de>
+Date:   Wed, 15 Mar 2023 11:25:52 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.9.0
-Subject: Re: [PATCH -next] mmc: sdhci-of-aspeed: Use
- devm_platform_get_and_ioremap_resource()
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] fbdev: au1200fb: Fix potential divide by zero
+To:     Wei Chen <harperchen1110@gmail.com>, deller@gmx.de
+Cc:     linux-fbdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+References: <20230315092254.1042615-1-harperchen1110@gmail.com>
 Content-Language: en-US
-To:     Yang Li <yang.lee@linux.alibaba.com>, ulf.hansson@linaro.org
-Cc:     andrew@aj.id.au, oel@jms.id.au, linux-mmc@vger.kernel.org,
-        linux-aspeed@lists.ozlabs.org, openbmc@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230315055023.61779-1-yang.lee@linux.alibaba.com>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <20230315055023.61779-1-yang.lee@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20230315092254.1042615-1-harperchen1110@gmail.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------oDSShgVebgcxBHZ6xUbeLWEI"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/03/23 07:50, Yang Li wrote:
-> According to commit 890cc39a8799 ("drivers: provide
-> devm_platform_get_and_ioremap_resource()"), convert
-> platform_get_resource(), devm_ioremap_resource() to a single
-> call to devm_platform_get_and_ioremap_resource(), as this is exactly
-> what this function does.
-> 
-> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------oDSShgVebgcxBHZ6xUbeLWEI
+Content-Type: multipart/mixed; boundary="------------WDd0Lhtgw7Duf5JenF0OHZeU";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Wei Chen <harperchen1110@gmail.com>, deller@gmx.de
+Cc: linux-fbdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ dri-devel@lists.freedesktop.org
+Message-ID: <360b814b-40e0-5444-8d6b-1e29719e4414@suse.de>
+Subject: Re: [PATCH] fbdev: au1200fb: Fix potential divide by zero
+References: <20230315092254.1042615-1-harperchen1110@gmail.com>
+In-Reply-To: <20230315092254.1042615-1-harperchen1110@gmail.com>
 
-Acked-by: Adrian Hunter <adrian.hunter@intel.com>
+--------------WDd0Lhtgw7Duf5JenF0OHZeU
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-> ---
->  drivers/mmc/host/sdhci-of-aspeed.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/drivers/mmc/host/sdhci-of-aspeed.c b/drivers/mmc/host/sdhci-of-aspeed.c
-> index ba6677bf7372..25b4073f698b 100644
-> --- a/drivers/mmc/host/sdhci-of-aspeed.c
-> +++ b/drivers/mmc/host/sdhci-of-aspeed.c
-> @@ -547,8 +547,7 @@ static int aspeed_sdc_probe(struct platform_device *pdev)
->  		return ret;
->  	}
->  
-> -	sdc->res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> -	sdc->regs = devm_ioremap_resource(&pdev->dev, sdc->res);
-> +	sdc->regs = devm_platform_get_and_ioremap_resource(pdev, 0, &sdc->res);
->  	if (IS_ERR(sdc->regs)) {
->  		ret = PTR_ERR(sdc->regs);
->  		goto err_clk;
+SGksDQoNCnRoYW5rcyBmb3IgbG9va2luZyB0aHJvdWdoIHRoZXNlIGRyaXZlcnMuDQoNCkFt
+IDE1LjAzLjIzIHVtIDEwOjIyIHNjaHJpZWIgV2VpIENoZW46DQo+IHZhci0+cGl4Y2xvY2sg
+Y2FuIGJlIGFzc2lnbmVkIHRvIHplcm8gYnkgdXNlci4gV2l0aG91dA0KPiBwcm9wZXIgY2hl
+Y2ssIGRpdmlkZSBieSB6ZXJvIHdvdWxkIG9jY3VyIHdoZW4gaW52b2tpbmcNCj4gbWFjcm8g
+UElDT1MyS0haIGluIGF1MTIwMGZiX2ZiX2NoZWNrX3Zhci4NCj4gDQo+IEVycm9yIG91dCBp
+ZiB2YXItPnBpeGNsb2NrIGlzIHplcm8uDQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBXZWkgQ2hl
+biA8aGFycGVyY2hlbjExMTBAZ21haWwuY29tPg0KPiAtLS0NCj4gICBkcml2ZXJzL3ZpZGVv
+L2ZiZGV2L2F1MTIwMGZiLmMgfCAzICsrKw0KPiAgIDEgZmlsZSBjaGFuZ2VkLCAzIGluc2Vy
+dGlvbnMoKykNCj4gDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3ZpZGVvL2ZiZGV2L2F1MTIw
+MGZiLmMgYi9kcml2ZXJzL3ZpZGVvL2ZiZGV2L2F1MTIwMGZiLmMNCj4gaW5kZXggODFjMzE1
+NDU0NDI4Li5iNmIyMmZhNGE4YTAgMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvdmlkZW8vZmJk
+ZXYvYXUxMjAwZmIuYw0KPiArKysgYi9kcml2ZXJzL3ZpZGVvL2ZiZGV2L2F1MTIwMGZiLmMN
+Cj4gQEAgLTEwNDAsNiArMTA0MCw5IEBAIHN0YXRpYyBpbnQgYXUxMjAwZmJfZmJfY2hlY2tf
+dmFyKHN0cnVjdCBmYl92YXJfc2NyZWVuaW5mbyAqdmFyLA0KPiAgIAl1MzIgcGl4Y2xvY2s7
+DQo+ICAgCWludCBzY3JlZW5fc2l6ZSwgcGxhbmU7DQo+ICAgDQo+ICsJaWYgKCF2YXItPnBp
+eGNsb2NrKQ0KPiArCQlyZXR1cm4gLUVJTlZBTDsNCj4gKw0KDQpJbnN0ZWFkIG9mIHRoZSB3
+aGFsZS1hLW1vbGUgYXBwcm9hY2ggb2YgZml4aW5nIGluZGl2aWR1YWwgZHJpdmVycywgY291
+bGQgDQp0aGlzIGJlIHNvbHZlZCBieSB0ZXN0aW5nIGluIGZiX3NldF92YXIgWzFdIGFuZCBm
+Yl90cnlfbW9kZS4/IFsyXQ0KDQpCZXN0IHJlZ2FyZHMNClRob21hcw0KDQpbMV0gDQpodHRw
+czovL2VsaXhpci5ib290bGluLmNvbS9saW51eC9sYXRlc3Qvc291cmNlL2RyaXZlcnMvdmlk
+ZW8vZmJkZXYvY29yZS9mYm1lbS5jI0w5NTgNClsyXSANCmh0dHBzOi8vZWxpeGlyLmJvb3Rs
+aW4uY29tL2xpbnV4L2xhdGVzdC9zb3VyY2UvZHJpdmVycy92aWRlby9mYmRldi9jb3JlL21v
+ZGVkYi5jI0w1NjcNCg0KPiAgIAlwbGFuZSA9IGZiZGV2LT5wbGFuZTsNCj4gICANCj4gICAJ
+LyogTWFrZSBzdXJlIHRoYXQgdGhlIG1vZGUgcmVzcGVjdCBhbGwgTENEIGNvbnRyb2xsZXIg
+YW5kDQoNCi0tIA0KVGhvbWFzIFppbW1lcm1hbm4NCkdyYXBoaWNzIERyaXZlciBEZXZlbG9w
+ZXINClNVU0UgU29mdHdhcmUgU29sdXRpb25zIEdlcm1hbnkgR21iSA0KTWF4ZmVsZHN0ci4g
+NSwgOTA0MDkgTsO8cm5iZXJnLCBHZXJtYW55DQooSFJCIDM2ODA5LCBBRyBOw7xybmJlcmcp
+DQpHZXNjaMOkZnRzZsO8aHJlcjogSXZvIFRvdGV2DQo=
 
+--------------WDd0Lhtgw7Duf5JenF0OHZeU--
+
+--------------oDSShgVebgcxBHZ6xUbeLWEI
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmQRnTAFAwAAAAAACgkQlh/E3EQov+CR
+xQ//bppyKi5hcSUvkpyLIY00pMPfYG/vWWDjMNu+3FYcg/na5v4hJj9htwg7jC3eVdq9ZoHj6Hav
+zDnVw01p/kzoXcHTNczf6OiMYUzJYD0UkuQ2bgHImk+RG5UhRt+TQdwbc0D7+bBVzadVIflFhE3e
+BVLU7qMXONuFb5JOSb0k66DUixE8pjO+bT8s8gUoZaIpYG3QbdoYTO6q9cX7uDGZbh93KfByTg1s
+DJG8MJivfC5xj+w1tbFe6WTgRlWVfG0lGHudHnpu482JBm/4qsgsg2OVcdCRkIUwrxxNo0wz/H3a
+VKG1IfEJ4YDnO12D/XQYsfox4Jbwpg8MhO2jaKZ8iqYC+Z5CTG/Hh/NAFIYlfA4P6TpUPkIOWCmG
+I2zo1DLUxOIJQoSem0kVbDMw7oqRTyqfJLSFI9LnCttMXwLUbQdYdICyBIOie+pdh3NaVD1iikyx
+2rri9Lied+LHsMyo5GKRSHSpuCikeNPqJ02QpqVUfk1iM1fvP7CIpb0+s6ytqz+bfwFoNo0e0Lxl
+EPZf0UkfNI0yWCAwa9ewJvJNDE/aq66bAknw3UX29+3MqFMxRe/CeF43nnwWjqZQufJ6126d5YCv
+Yl5LDQsVr7u9D0/l8x5Xmr4EM9oLPutcGMIHmDUBlKOYNHzDb4Eb7+HZKCQ8a/0gYTQt9iu48mDz
+Qmw=
+=sv0N
+-----END PGP SIGNATURE-----
+
+--------------oDSShgVebgcxBHZ6xUbeLWEI--
