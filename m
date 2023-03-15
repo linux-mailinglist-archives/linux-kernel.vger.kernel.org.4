@@ -2,66 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 150446BAAD6
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 09:34:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 304636BAAE2
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 09:35:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231636AbjCOIeG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 04:34:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33128 "EHLO
+        id S231659AbjCOIfh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 04:35:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231624AbjCOIeC (ORCPT
+        with ESMTP id S231154AbjCOIfY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 04:34:02 -0400
-Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78C43584B7;
-        Wed, 15 Mar 2023 01:33:55 -0700 (PDT)
-Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-17aaa51a911so4807023fac.5;
-        Wed, 15 Mar 2023 01:33:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678869234;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=vjMnP/a9aE6vyFsbxsfjUFQh+LON6M/20fpKlSvWjvs=;
-        b=AAjWq+87+CG048djRPbLX77rjes8Zbq1a+RYd1kDlwqFW4av+0b+qQa4U/FlQshlPR
-         NZRi9A/+Irw42gk4glZZ+oMbYDy+JwRJM3rLrTZUdrCXFVBGuhWdmiS+d7vJOoNNWLT2
-         M+xHGXvDonJFaqRQEfWW/9V9o8aci3bIj8L/2xGXkxDRmrtxV5dfM2y7C/BnDyACPvKw
-         /Deqm3OEl+bqJXELHYbFyA0/I2VNQtIBtYKvUv9ZfKAqdHkqH9tXdBMlo80q5zR8JXBP
-         WiXdRZcTmCnO22eKTqBIc0vSZtIcoqU9ydX7xRRzA1A/Pi17VBexPzpEJWms6168JnBe
-         5aeA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678869234;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vjMnP/a9aE6vyFsbxsfjUFQh+LON6M/20fpKlSvWjvs=;
-        b=J5R5j2wJAnsx1T4wnGNuhAEeRGqzRePxyHjmSaxvXlvmvz18CRM7C1r4rpwnK8+Jl+
-         VHP+K77LpMWoIy0WtOr4aN/gdj9C7cWA5F7+PN/nFF/8qmMV6uiOHix2OkQ+3bGFBfjW
-         FIS99EHiFwqGt1KXYDz2HLuPTRVW49EUIVMDSZVxv26l4AP33VB5XjETdJ7eni/h1whk
-         /Q9a6T0x9RzzPTMEX4t3vAW1farvmYBTJ7PCCuE3qymn4SytFPOHKCKHdm51ASr+j7Lw
-         7pvX8kkPTMeFXeEok96URIWC8EUHS9x3V0eJlw0MI+zlVuhm9i/Ol5/DhQ70lNqeQPVO
-         WHMA==
-X-Gm-Message-State: AO0yUKWKeLLRfT1zLmqHcCFl6tQzHQR2KaVDqhhh9cmTE0rkqSJaZr9O
-        OiwBvt0LkQw4vymw+NncnR0=
-X-Google-Smtp-Source: AK7set/MEDzKoeKy/lXZwpedETkiZQL6yRV797Lp1tGpucxWm4SaDf9LnNNJ1wK34tpbxsZEnGSVXg==
-X-Received: by 2002:a05:6870:6025:b0:17a:6788:e8b8 with SMTP id t37-20020a056870602500b0017a6788e8b8mr3904321oaa.51.1678869234187;
-        Wed, 15 Mar 2023 01:33:54 -0700 (PDT)
-Received: from chcpu13.cse.ust.hk (191host119.mobilenet.cse.ust.hk. [143.89.191.119])
-        by smtp.gmail.com with ESMTPSA id v5-20020a056870e28500b00176209a6d6asm2006912oad.10.2023.03.15.01.33.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Mar 2023 01:33:53 -0700 (PDT)
-From:   Wei Chen <harperchen1110@gmail.com>
-To:     mbroemme@libmpq.org
-Cc:     deller@gmx.de, linux-fbdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Wei Chen <harperchen1110@gmail.com>
-Subject: [PATCH] fbdev: intelfb: Fix potential divide by zero
-Date:   Wed, 15 Mar 2023 08:33:47 +0000
-Message-Id: <20230315083347.3852851-1-harperchen1110@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 15 Mar 2023 04:35:24 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AB0C7286
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 01:34:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678869281;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=nYxoCHhxVb8vTTUPAWKIqDPQNM+xZReJ+iO80NpTGTQ=;
+        b=Ca/K9Ni4W+ZkoO65ZjLBzezQfmTt5fVorMf1oONfFfA5d9QZV/fcrAdq+bRQ1l+OKAs3WX
+        E3bu85TtRpYF820bqKUzYuB4VSISHy0zPoSZdGhA6IBNdzPgs/KWgYi221AAu6YV9hBUOh
+        ZoBXt6mq/ZgY1Lwukq6xVf9BwQhFehw=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-414-5gp0u1ATPV6NuYD_XXJ4nA-1; Wed, 15 Mar 2023 04:34:10 -0400
+X-MC-Unique: 5gp0u1ATPV6NuYD_XXJ4nA-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 14791101A550;
+        Wed, 15 Mar 2023 08:34:10 +0000 (UTC)
+Received: from mail.corp.redhat.com (unknown [10.22.34.160])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 549BAC017D7;
+        Wed, 15 Mar 2023 08:34:09 +0000 (UTC)
+Date:   Wed, 15 Mar 2023 09:34:07 +0100
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, rafael@kernel.org, jikos@kernel.org
+Subject: Re: [PATCH 04/12] driver core: class: remove module * from
+ class_create()
+Message-ID: <20230315083407.pkcqq3igjszuz7ms@mail.corp.redhat.com>
+References: <20230313181843.1207845-1-gregkh@linuxfoundation.org>
+ <20230313181843.1207845-4-gregkh@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230313181843.1207845-4-gregkh@linuxfoundation.org>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,31 +61,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Variable var->pixclock is controlled by user and can be assigned
-to zero. Without proper check, divide by zero would occur in
-intelfbhw_validate_mode and intelfbhw_mode_to_hw.
+On Mar 13 2023, Greg Kroah-Hartman wrote:
+> The module pointer in class_create() never actually did anything, and it
+> shouldn't have been requred to be set as a parameter even if it did
+> something.  So just remove it and fix up all callers of the function in
+> the kernel tree at the same time.
+> 
+> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> ---
+>  arch/mips/kernel/mips-mt.c                       | 2 +-
+>  arch/mips/sibyte/common/sb_tbprof.c              | 2 +-
+>  arch/powerpc/platforms/book3s/vas-api.c          | 2 +-
+>  arch/x86/kernel/cpu/resctrl/pseudo_lock.c        | 2 +-
+>  arch/x86/kernel/cpuid.c                          | 2 +-
+>  arch/x86/kernel/msr.c                            | 2 +-
+>  block/bsg.c                                      | 2 +-
+>  drivers/accel/drm_accel.c                        | 2 +-
+>  drivers/accel/habanalabs/common/habanalabs_drv.c | 2 +-
+>  drivers/base/power/wakeup_stats.c                | 2 +-
+>  drivers/block/aoe/aoechr.c                       | 2 +-
+>  drivers/block/rnbd/rnbd-clt-sysfs.c              | 2 +-
+>  drivers/block/rnbd/rnbd-srv-sysfs.c              | 2 +-
+>  drivers/block/ublk_drv.c                         | 2 +-
+>  drivers/char/bsr.c                               | 2 +-
+>  drivers/char/dsp56k.c                            | 2 +-
+>  drivers/char/ipmi/ipmi_devintf.c                 | 2 +-
+>  drivers/char/lp.c                                | 2 +-
+>  drivers/char/mem.c                               | 2 +-
+>  drivers/char/misc.c                              | 2 +-
+>  drivers/char/pcmcia/cm4000_cs.c                  | 2 +-
+>  drivers/char/pcmcia/cm4040_cs.c                  | 2 +-
+>  drivers/char/pcmcia/scr24x_cs.c                  | 2 +-
+>  drivers/char/ppdev.c                             | 2 +-
+>  drivers/char/tpm/tpm-interface.c                 | 4 ++--
+>  drivers/char/virtio_console.c                    | 2 +-
+>  drivers/char/xilinx_hwicap/xilinx_hwicap.c       | 2 +-
+>  drivers/char/xillybus/xillybus_class.c           | 2 +-
+>  drivers/comedi/comedi_fops.c                     | 2 +-
+>  drivers/comedi/drivers/comedi_test.c             | 2 +-
+>  drivers/crypto/qat/qat_common/adf_ctl_drv.c      | 2 +-
+>  drivers/dca/dca-sysfs.c                          | 2 +-
+>  drivers/devfreq/devfreq-event.c                  | 2 +-
+>  drivers/devfreq/devfreq.c                        | 2 +-
+>  drivers/dma-buf/dma-heap.c                       | 2 +-
+>  drivers/extcon/extcon.c                          | 2 +-
+>  drivers/fpga/fpga-bridge.c                       | 2 +-
+>  drivers/fpga/fpga-mgr.c                          | 2 +-
+>  drivers/fpga/fpga-region.c                       | 2 +-
+>  drivers/gnss/core.c                              | 2 +-
+>  drivers/gpu/drm/amd/amdkfd/kfd_chardev.c         | 2 +-
+>  drivers/gpu/drm/display/drm_dp_aux_dev.c         | 2 +-
+>  drivers/gpu/drm/drm_sysfs.c                      | 2 +-
+>  drivers/hid/hid-roccat-arvo.c                    | 2 +-
+>  drivers/hid/hid-roccat-isku.c                    | 2 +-
+>  drivers/hid/hid-roccat-kone.c                    | 2 +-
+>  drivers/hid/hid-roccat-koneplus.c                | 2 +-
+>  drivers/hid/hid-roccat-konepure.c                | 2 +-
+>  drivers/hid/hid-roccat-kovaplus.c                | 2 +-
+>  drivers/hid/hid-roccat-pyra.c                    | 2 +-
+>  drivers/hid/hid-roccat-ryos.c                    | 2 +-
+>  drivers/hid/hid-roccat-savu.c                    | 2 +-
+>  drivers/hid/hidraw.c                             | 2 +-
 
-Error out if var->pixclock is zero.
+For the HID part:
 
-Signed-off-by: Wei Chen <harperchen1110@gmail.com>
----
- drivers/video/fbdev/intelfb/intelfbdrv.c | 3 +++
- 1 file changed, 3 insertions(+)
+Acked-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
 
-diff --git a/drivers/video/fbdev/intelfb/intelfbdrv.c b/drivers/video/fbdev/intelfb/intelfbdrv.c
-index 0a9e5067b201..a81095b2b1ea 100644
---- a/drivers/video/fbdev/intelfb/intelfbdrv.c
-+++ b/drivers/video/fbdev/intelfb/intelfbdrv.c
-@@ -1222,6 +1222,9 @@ static int intelfb_check_var(struct fb_var_screeninfo *var,
- 
- 	dinfo = GET_DINFO(info);
- 
-+	if (!var->pixclock)
-+		return -EINVAL;
-+
- 	/* update the pitch */
- 	if (intelfbhw_validate_mode(dinfo, var) != 0)
- 		return -EINVAL;
--- 
-2.25.1
+Cheers,
+Benjamin
+
+[...]
 
