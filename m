@@ -2,75 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 766086BBF9C
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 23:08:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C8436BBF9E
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 23:08:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231889AbjCOWIR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 18:08:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47584 "EHLO
+        id S232406AbjCOWIp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 18:08:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230078AbjCOWIP (ORCPT
+        with ESMTP id S232383AbjCOWIl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 18:08:15 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7D455F6C0;
-        Wed, 15 Mar 2023 15:08:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678918093; x=1710454093;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=HOUd777ewJii5EcohIHu/Zr8BYfTt1p6GNO5ZeSEJHc=;
-  b=nJas0jKcrXwTNBxflAGr7P5o1EzEcHVhHuzjzOF4UX/tIr8yxEZFhgsp
-   aJ0Chv2n8RMZfyJX76q9xr+vNULxlG4w/MSHvgsQpzPo0ZfZnd7P3W1uM
-   aLEOReB7sFxlHaeEq1s9mW0QDI/01gD3InM5lzo50yZd/v4L7NY1HZRg9
-   nCZlYhOUsYvnT1BdPJeQz+mjdUWs/TDAN77J/NlZttfH5+KNkE5ndM3GU
-   2CgMw3IDXAIoKB2Mi3rLHQIgQ0IM0yFahOSvi+m8+vF0dpVB+osZdACuN
-   MVENSq533AJQzrUANTuNBiRRfDbmM5IQ6CpqIDrwYDPxLvvFxCGkAq9QX
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="335313886"
-X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
-   d="scan'208";a="335313886"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2023 15:08:13 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="803457572"
-X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
-   d="scan'208";a="803457572"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 15 Mar 2023 15:08:09 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pcZI1-000845-0T;
-        Wed, 15 Mar 2023 22:08:09 +0000
-Date:   Thu, 16 Mar 2023 06:07:28 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Shanker Donthineni <sdonthineni@nvidia.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        Shanker Donthineni <sdonthineni@nvidia.com>,
-        Vikram Sethi <vsethi@nvidia.com>,
-        Thierry Reding <treding@nvidia.com>
-Subject: Re: [PATCH v2] irqchip/gicv3: Workaround for NVIDIA erratum
- T241-FABRIC-4
-Message-ID: <202303160555.3zGOmtIL-lkp@intel.com>
-References: <20230314135128.2930580-1-sdonthineni@nvidia.com>
+        Wed, 15 Mar 2023 18:08:41 -0400
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D916B97FE0
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 15:08:31 -0700 (PDT)
+Received: by mail-yb1-xb2a.google.com with SMTP id e65so12397550ybh.10
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 15:08:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google; t=1678918111;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lEPF+ci+lCAhZpQH0QsTGv5JkbkcgVCFUJGEmHRr3g8=;
+        b=ZgomvdupMFElRj+TryfuiR9T4iOLUGnrL9gSnl3O0LHsh3mZvMR01+r+BFER0g8wD1
+         Qv28oHDhefwHMLC6yVxu+Q3y6JYcuUbdqekUzEfzs+S6WGR5MPfaocscrv/a2Gqdtqrk
+         bHgc8rEm8Cyz8RBd1dnYxUpf1ianlheoYz0GM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678918111;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lEPF+ci+lCAhZpQH0QsTGv5JkbkcgVCFUJGEmHRr3g8=;
+        b=fpmPuDMRm62o7yCJVUctVNhva4EYrfFVjxwp+FX0BUiY6tna1kj0LKYhb5w9J4palL
+         kAftQ3V0rofRQyXtqaihZ7KKZR7oH3O5k1mLlbB0TWl/zR9AoYuVIn7b/EYva4eRzCKT
+         CFRES092V63o2A9aZeg0qtYS6gwpPyjlWkTQ89OF5NyFePvKejWgSS+0VVkSmz0wecoy
+         wopuyWWRTXLXrLUyNghA6ZBzIiCJ7tQawUQb2ppv6tuEj7DUgathw0AEKQ+/0u1A53f1
+         SVlh6TZilFnZjs9r6Gwu8jtTX6/jwX2wjNn+wgw5fV9FmVnJ1SUv/NqLBqmkpn1Dqvp+
+         paeA==
+X-Gm-Message-State: AO0yUKVQ2t98yM9esUFbTtAkw5ryCvKM4qJ8xZQrCD92Q4jJkoZfly24
+        hxgT8m+uYKqJrUKzodWFf0D9Kb7mELtzbU1mFWulvA==
+X-Google-Smtp-Source: AK7set8YXgoMLXmf+AnFd/ws728cQrwINSIjjLxjL6rqrLkj1ny+y5AIRWoXmRC3W4uhwXi0bGdHrxBRs+UPGfzoBcY=
+X-Received: by 2002:a5b:347:0:b0:a06:538f:24b2 with SMTP id
+ q7-20020a5b0347000000b00a06538f24b2mr21358576ybp.2.1678918110834; Wed, 15 Mar
+ 2023 15:08:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230314135128.2930580-1-sdonthineni@nvidia.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+References: <20230201150815.409582-1-urezki@gmail.com> <20230315151415.2534e11c@gandalf.local.home>
+ <e5a1815b-65b5-55ca-9773-ec04378d53c0@kernel.dk> <ZBIbloFMm5xRsjfn@pc636>
+ <20230315153448.6914f85b@gandalf.local.home> <CAEXW_YTLFQ3-LApyCPNNx7Tn2ovFr8YUXL=1WVCm+rE2hRKE8g@mail.gmail.com>
+ <20230315162840.106a5b4f@gandalf.local.home>
+In-Reply-To: <20230315162840.106a5b4f@gandalf.local.home>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Wed, 15 Mar 2023 18:08:19 -0400
+Message-ID: <CAEXW_YTNNJJftsg1QRvhUCRoZpKa3SM6=-0M-cukCGt5=G+row@mail.gmail.com>
+Subject: Re: [PATCH 00/13] Rename k[v]free_rcu() single argument to k[v]free_rcu_mightsleep()
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Uladzislau Rezki <urezki@gmail.com>, Jens Axboe <axboe@kernel.dk>,
+        LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>,
+        Philipp Reisner <philipp.reisner@linbit.com>,
+        Bryan Tan <bryantan@vmware.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Bob Pearson <rpearsonhpe@gmail.com>,
+        Ariel Levkovich <lariel@nvidia.com>,
+        "Theodore Ts'o" <tytso@mit.edu>, Julian Anastasov <ja@ssi.bg>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,89 +77,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Shanker,
+Hey Steve,
 
-Thank you for the patch! Yet something to improve:
+On Wed, Mar 15, 2023 at 4:28=E2=80=AFPM Steven Rostedt <rostedt@goodmis.org=
+> wrote:
+>
+> On Wed, 15 Mar 2023 15:57:02 -0400
+> Joel Fernandes <joel@joelfernandes.org> wrote:
+>
+> > > I was going to suggest "kvfree_rcu_might_synchronize()" but that's ju=
+st
+> > > getting ridiculous.
+> >
+> > No, synchronize() is incorrect. The code really can sleep for other
+> > reasons like memory allocation. It is not that simple of an
+> > implementation as one may imagine. mightsleep is really the correct
+> > wording IMHO.
+> >
+> > > Still, I will replace that code back to a kfree() and rcu_synchonize(=
+) than
+> > > to let that other name get in.
+> >
+> > I think it is too late for that for now, we already have conversions
+> > going into the other subsystems, that means we'll have to redo all
+> > that over again (even if it sounded like a good idea, which it is
+> > not).
+> >
+> > I would rather you just did: "#define kvfree_rcu_tracing
+> > #kvfree_rcu_mightsleep", or something like that, if it is really a
+> > problem. ;-)
+> >
+> > Also you are really the first person I know of who has a problem with t=
+hat name.
+>
+> I guess you didn't read Jens's reply.
 
-[auto build test ERROR on arm64/for-next/core]
-[also build test ERROR on tip/irq/core soc/for-next linus/master v6.3-rc2 next-20230315]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Apologies, I am trying to keep up with email but this week is crazy.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Shanker-Donthineni/irqchip-gicv3-Workaround-for-NVIDIA-erratum-T241-FABRIC-4/20230314-215648
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-next/core
-patch link:    https://lore.kernel.org/r/20230314135128.2930580-1-sdonthineni%40nvidia.com
-patch subject: [PATCH v2] irqchip/gicv3: Workaround for NVIDIA erratum T241-FABRIC-4
-config: arm-buildonly-randconfig-r003-20230312 (https://download.01.org/0day-ci/archive/20230316/202303160555.3zGOmtIL-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/intel-lab-lkp/linux/commit/f796361134151057b68a259013204e8fa5516aee
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Shanker-Donthineni/irqchip-gicv3-Workaround-for-NVIDIA-erratum-T241-FABRIC-4/20230314-215648
-        git checkout f796361134151057b68a259013204e8fa5516aee
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/
+> The main issue I have with this, is that "might_sleep" is just an
+> implementation issue. It has *nothing* to do with what the call is about.
+> It is only about freeing something with RCU. It has nothing to do with
+> sleeping. I don't use it because it might sleep. I use it to free somethi=
+ng.
+>
+> If you don't like kvfree_rcu_synchronization() then call it
+> kvfree_rcu_headless() and note that currently it can sleep. Because in
+> the future, if we come up with an implementation where we it doesn't slee=
+p,
+> then we don't need to go and rename all the users in the future.
+>
+> See where I have the problem with the name "might_sleep"?
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303160555.3zGOmtIL-lkp@intel.com/
+I am doubtful there may be a future where it does not sleep. Why?
+Because you need an rcu_head *somewhere*. Unlike with debubojects,
+which involves a lock-free per-CPU pool and a locked global pool, and
+has the liberty to shutdown if it runs out of objects -- in RCU code
+it doesn't have that liberty and it has to just keep working.  The
+kfree_rcu code does have pools of rcu_head as well, but that is not
+thought to be enough to prevent OOM when memory needs to be given
+back.  AFAIK -- the synchronize_rcu() in there is a last resort and
+undesirable (supposed to happen only when running out of
+objects/memory).
 
-All errors (new ones prefixed by >>):
+Also "mightsleep" means just that -- *might*.  That covers the fact
+that sleeping may not happen ;-).
 
->> drivers/irqchip/irq-gic-v3.c:1775:21: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                   chip_bmask |= BIT(FIELD_GET(T241_CHIPN_MASK,
-                                     ^
->> drivers/irqchip/irq-gic-v3.c:1786:12: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-                           phys |= FIELD_PREP(T241_CHIPN_MASK, i);
-                                   ^
-   2 errors generated.
+This is just my opinion and I will defer to Uladzislau, Paul and you
+on how to proceed. Another option is "cansleep" which has the same
+number of characters as headless. I don't believe expecting users to
+read comments is practical, since we did already have comments and
+there was a bug in the usage that triggered this whole series.
 
+thanks,
 
-vim +/FIELD_GET +1775 drivers/irqchip/irq-gic-v3.c
-
-  1760	
-  1761	static bool gic_enable_quirk_nvidia_t241(void *data)
-  1762	{
-  1763		unsigned long chip_bmask = 0;
-  1764		phys_addr_t phys;
-  1765		u32 i;
-  1766	
-  1767		/* Check JEP106 code for NVIDIA T241 chip (036b:0241) */
-  1768		if ((smccc_soc_id_version < 0) ||
-  1769		    ((smccc_soc_id_version & SMCCC_SOC_ID_MASK) != SMCCC_SOC_ID_T241)) {
-  1770			return false;
-  1771		}
-  1772	
-  1773		/* Find the chips based on GICR regions PHYS addr */
-  1774		for (i = 0; i < gic_data.nr_redist_regions; i++) {
-> 1775			chip_bmask |= BIT(FIELD_GET(T241_CHIPN_MASK,
-  1776					  gic_data.redist_regions[i].phys_base));
-  1777		}
-  1778	
-  1779		if (hweight32(chip_bmask) < 3)
-  1780			return false;
-  1781	
-  1782		/* Setup GICD alias regions */
-  1783		for (i = 0; i < ARRAY_SIZE(t241_dist_base_alias); i++) {
-  1784			if (chip_bmask & BIT(i)) {
-  1785				phys = gic_data.dist_phys_base + T241_CHIP_GICDA_OFFSET;
-> 1786				phys |= FIELD_PREP(T241_CHIPN_MASK, i);
-  1787				t241_dist_base_alias[i] = ioremap(phys, SZ_64K);
-  1788				WARN_ON_ONCE(!t241_dist_base_alias[i]);
-  1789			}
-  1790		}
-  1791		static_branch_enable(&gic_nvidia_t241_erratum);
-  1792		return true;
-  1793	}
-  1794	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+ - Joel
