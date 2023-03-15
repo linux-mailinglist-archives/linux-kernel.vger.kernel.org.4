@@ -2,237 +2,462 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CA5C6BC0E2
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 00:28:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 346B96BC0E5
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 00:28:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232936AbjCOX2f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 19:28:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39350 "EHLO
+        id S232974AbjCOX2u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 19:28:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230296AbjCOX2c (ORCPT
+        with ESMTP id S232602AbjCOX2q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 19:28:32 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BB509FE51
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 16:27:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678922866;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=aLYdfmD7uUlzqBMDh+BqCtiyVRmjFzYdxVqjv+siHvY=;
-        b=WhsDN8yBjGKeBpIYQBQ33jwtckxWIESrAkFhVmK4I2mHzvAkUBZ286WD/LgEaJn9qzpIh0
-        ISvS5EmMrPCC8bNfkVbtw1RCm/GbwU8DIUf9PO8mxQWfUD20+F3UoapvqHImJYE2lvCzgH
-        z/ffkuiCI1EjS8XX7IZu7g8jHDPOqH4=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-454-iQu2fTNxPQWME9ALvR4Hfw-1; Wed, 15 Mar 2023 19:27:43 -0400
-X-MC-Unique: iQu2fTNxPQWME9ALvR4Hfw-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2229B3850557;
-        Wed, 15 Mar 2023 23:27:42 +0000 (UTC)
-Received: from [10.22.34.146] (unknown [10.22.34.146])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 85C3C400F4F;
-        Wed, 15 Mar 2023 23:27:40 +0000 (UTC)
-Message-ID: <379691d7-6926-55aa-5c6e-c6e38002164e@redhat.com>
-Date:   Wed, 15 Mar 2023 19:27:40 -0400
+        Wed, 15 Mar 2023 19:28:46 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB779E051
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 16:28:42 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id ja10so12145153plb.5
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 16:28:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1678922922;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=U/XHH5xA0LiSHgmYOixKxhW3un3ttTrDIMNjVuOodwM=;
+        b=EQqDYUKifkpVFhhYe009xvgIpS5kW2MoYKA2EKF20WKP3IoqH+lrgcRp6AdFuU86Ri
+         +t3f3y/xrpzM7cecPy7bfjJsvQyP348pv1ApkKUxMI2PwHibCy4FlrjLrBBkcAe/azB8
+         0EBKpd1QEtvdcG8+1GxnIdL8PExQSo8RdbB9qENgcJmn4xgYS7VmxAFjI43Q35r1DxhJ
+         RPilI96028csTiByHWTSCP2J3mvWdz89rs/tBRXho3oPBs8eE/4w+PFq9USEOx4jacG7
+         tek8cagIewM6Kv11i6m2XnHJYaYfL5cfUstcKkhd+lwAGqkkR5kES4PpjpBf2yJYk/Rp
+         N9qA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678922922;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=U/XHH5xA0LiSHgmYOixKxhW3un3ttTrDIMNjVuOodwM=;
+        b=dqRfVOSAebHproz8yNn3SdkJSB3mnvzbeVTgS9Jxg9YfgX1GDLFZDgEpK8xlDdDJ58
+         7J6NU3v6iWnR8QAaJfgkUfTRaRu4AvMhBAa5G2M1kOWkYACN385seST0ZD7nlRF1b3xH
+         6FV2H9tGO77Bi8mr0oJFrFOnV+Mdw2c1BxVJkt7EFoClH3sjf7B/U7EOK8dBHUcCFDfY
+         ZWh2hmbo3zpomHDund6anAlOxbHM9rRbFYQcVS4wlQH5ET1eDYy7uBX1TES+Kznoc8/v
+         u6lhlKZL0m4/a5zNAHpBfaOn0Gw86dXGriraOPOZclY38BPZ3AuEDQDfjbZ54eYjz+HT
+         LHHA==
+X-Gm-Message-State: AO0yUKWEJ9fFN/GWWhgnzeZJ3sNBRdGQztB3sOcyeD1xjfnGDXuWwC+o
+        4rQibN5MdsXV2dBLKcWS2kUiJw==
+X-Google-Smtp-Source: AK7set8zTtOuZpy2rQKLjeXy3FUDJGSFpJIg34NtjkmNXizL7dZJ+RPewhrHDA0rNY4no80w4XYPfQ==
+X-Received: by 2002:a17:902:c94b:b0:1a0:563e:b0d1 with SMTP id i11-20020a170902c94b00b001a0563eb0d1mr50590pla.18.1678922922035;
+        Wed, 15 Mar 2023 16:28:42 -0700 (PDT)
+Received: from google.com (33.5.83.34.bc.googleusercontent.com. [34.83.5.33])
+        by smtp.gmail.com with ESMTPSA id v16-20020a62a510000000b005d72e54a7e1sm4002840pfm.215.2023.03.15.16.28.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Mar 2023 16:28:41 -0700 (PDT)
+Date:   Wed, 15 Mar 2023 16:28:37 -0700
+From:   Zach O'Keefe <zokeefe@google.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Hugh Dickins <hughd@google.com>,
+        Peter Xu <peterx@redhat.com>, Vlastimil Babka <vbabka@suse.cz>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Andrea Arcangeli <aarcange@redhat.com>
+Subject: Re: [PATCH mm-unstable v1] selftests/vm: cow: Add COW tests for
+ collapsing of PTE-mapped anon THP
+Message-ID: <CAAa6QmSZTQ6=oxsTvCLoaFMcpamkNa7wY6VkDoipRTDAo5JhoQ@mail.gmail.com>
+References: <20230104144905.460075-1-david@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [RFC PATCH 2/3] sched/cpuset: Keep track of SCHED_DEADLINE tasks
- in cpusets
-Content-Language: en-US
-From:   Waiman Long <longman@redhat.com>
-To:     Juri Lelli <juri.lelli@redhat.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Qais Yousef <qyousef@layalina.io>, Tejun Heo <tj@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Hao Luo <haoluo@google.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-kernel@vger.kernel.org, luca.abeni@santannapisa.it,
-        claudio@evidence.eu.com, tommaso.cucinotta@santannapisa.it,
-        bristot@redhat.com, mathieu.poirier@linaro.org,
-        cgroups@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Wei Wang <wvw@google.com>, Rick Yiu <rickyiu@google.com>,
-        Quentin Perret <qperret@google.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>
-References: <20230315121812.206079-1-juri.lelli@redhat.com>
- <20230315121812.206079-3-juri.lelli@redhat.com>
- <7a3b31bf-4f6a-6525-9c6a-2bae44d7b0af@redhat.com>
- <ZBH9E7lCEXcFDBG4@localhost.localdomain>
- <2739c3ec-1e97-fc4d-8001-50283c94f4ff@redhat.com>
-In-Reply-To: <2739c3ec-1e97-fc4d-8001-50283c94f4ff@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230104144905.460075-1-david@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/15/23 14:01, Waiman Long wrote:
 >
-> On 3/15/23 13:14, Juri Lelli wrote:
->> On 15/03/23 11:46, Waiman Long wrote:
->>> On 3/15/23 08:18, Juri Lelli wrote:
->>>> Qais reported that iterating over all tasks when rebuilding root 
->>>> domains
->>>> for finding out which ones are DEADLINE and need their bandwidth
->>>> correctly restored on such root domains can be a costly operation (10+
->>>> ms delays on suspend-resume).
->>>>
->>>> To fix the problem keep track of the number of DEADLINE tasks 
->>>> belonging
->>>> to each cpuset and then use this information (followup patch) to only
->>>> perform the above iteration if DEADLINE tasks are actually present in
->>>> the cpuset for which a corresponding root domain is being rebuilt.
->>>>
->>>> Reported-by: Qais Yousef <qyousef@layalina.io>
->>>> Signed-off-by: Juri Lelli <juri.lelli@redhat.com>
->>>> ---
->>>>    include/linux/cpuset.h |  4 ++++
->>>>    kernel/cgroup/cgroup.c |  4 ++++
->>>>    kernel/cgroup/cpuset.c | 25 +++++++++++++++++++++++++
->>>>    kernel/sched/core.c    | 10 ++++++++++
->>>>    4 files changed, 43 insertions(+)
->>>>
->>>> diff --git a/include/linux/cpuset.h b/include/linux/cpuset.h
->>>> index 355f796c5f07..0348dba5680e 100644
->>>> --- a/include/linux/cpuset.h
->>>> +++ b/include/linux/cpuset.h
->>>> @@ -71,6 +71,8 @@ extern void cpuset_init_smp(void);
->>>>    extern void cpuset_force_rebuild(void);
->>>>    extern void cpuset_update_active_cpus(void);
->>>>    extern void cpuset_wait_for_hotplug(void);
->>>> +extern void inc_dl_tasks_cs(struct task_struct *task);
->>>> +extern void dec_dl_tasks_cs(struct task_struct *task);
->>>>    extern void cpuset_lock(void);
->>>>    extern void cpuset_unlock(void);
->>>>    extern void cpuset_cpus_allowed(struct task_struct *p, struct 
->>>> cpumask *mask);
->>>> @@ -196,6 +198,8 @@ static inline void cpuset_update_active_cpus(void)
->>>>    static inline void cpuset_wait_for_hotplug(void) { }
->>>> +static inline void inc_dl_tasks_cs(struct task_struct *task) { }
->>>> +static inline void dec_dl_tasks_cs(struct task_struct *task) { }
->>>>    static inline void cpuset_lock(void) { }
->>>>    static inline void cpuset_unlock(void) { }
->>>> diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
->>>> index c099cf3fa02d..357925e1e4af 100644
->>>> --- a/kernel/cgroup/cgroup.c
->>>> +++ b/kernel/cgroup/cgroup.c
->>>> @@ -57,6 +57,7 @@
->>>>    #include <linux/file.h>
->>>>    #include <linux/fs_parser.h>
->>>>    #include <linux/sched/cputime.h>
->>>> +#include <linux/sched/deadline.h>
->>>>    #include <linux/psi.h>
->>>>    #include <net/sock.h>
->>>> @@ -6673,6 +6674,9 @@ void cgroup_exit(struct task_struct *tsk)
->>>>        list_add_tail(&tsk->cg_list, &cset->dying_tasks);
->>>>        cset->nr_tasks--;
->>>> +    if (dl_task(tsk))
->>>> +        dec_dl_tasks_cs(tsk);
->>>> +
->>>>        WARN_ON_ONCE(cgroup_task_frozen(tsk));
->>>>        if (unlikely(!(tsk->flags & PF_KTHREAD) &&
->>>>                 test_bit(CGRP_FREEZE, &task_dfl_cgroup(tsk)->flags)))
->>>> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
->>>> index 8d82d66d432b..57bc60112618 100644
->>>> --- a/kernel/cgroup/cpuset.c
->>>> +++ b/kernel/cgroup/cpuset.c
->>>> @@ -193,6 +193,12 @@ struct cpuset {
->>>>        int use_parent_ecpus;
->>>>        int child_ecpus_count;
->>>> +    /*
->>>> +     * number of SCHED_DEADLINE tasks attached to this cpuset, so 
->>>> that we
->>>> +     * know when to rebuild associated root domain bandwidth 
->>>> information.
->>>> +     */
->>>> +    int nr_deadline_tasks;
->>>> +
->>>>        /* Invalid partition error code, not lock protected */
->>>>        enum prs_errcode prs_err;
->>>> @@ -245,6 +251,20 @@ static inline struct cpuset *parent_cs(struct 
->>>> cpuset *cs)
->>>>        return css_cs(cs->css.parent);
->>>>    }
->>>> +void inc_dl_tasks_cs(struct task_struct *p)
->>>> +{
->>>> +    struct cpuset *cs = task_cs(p);
->>>> +
->>>> +    cs->nr_deadline_tasks++;
->>>> +}
->>>> +
->>>> +void dec_dl_tasks_cs(struct task_struct *p)
->>>> +{
->>>> +    struct cpuset *cs = task_cs(p);
->>>> +
->>>> +    cs->nr_deadline_tasks--;
->>>> +}
->>>> +
->>>>    /* bits in struct cpuset flags field */
->>>>    typedef enum {
->>>>        CS_ONLINE,
->>>> @@ -2472,6 +2492,11 @@ static int cpuset_can_attach(struct 
->>>> cgroup_taskset *tset)
->>>>            ret = security_task_setscheduler(task);
->>>>            if (ret)
->>>>                goto out_unlock;
->>>> +
->>>> +        if (dl_task(task)) {
->>>> +            cs->nr_deadline_tasks++;
->>>> +            cpuset_attach_old_cs->nr_deadline_tasks--;
->>>> +        }
->>>>        }
->>> Any one of the tasks in the cpuset can cause the test to fail and 
->>> abort the
->>> attachment. I would suggest that you keep a deadline task transfer 
->>> count in
->>> the loop and then update cs and cpouset_attach_old_cs only after all 
->>> the
->>> tasks have been iterated successfully.
->> Right, Dietmar I think commented pointing out something along these
->> lines. Think though we already have this problem with current
->> task_can_attach -> dl_cpu_busy which reserves bandwidth for each tasks
->> in the destination cs. Will need to look into that. Do you know which
->> sort of operation would move multiple tasks at once?
+> Currently, anonymous PTE-mapped THPs cannot be collapsed in-place:
+> collapsing (e.g., via MADV_COLLAPSE) implies allocating a fresh THP and
+> mapping that new THP via a PMD: as it's a fresh anon THP, it will get the
+> exclusive flag set on the head page and everybody is happy.
 >
-> Actually, what I said previously may not be enough. There can be 
-> multiple controllers attached to a cgroup. If any of thier 
-> can_attach() calls fails, the whole transaction is aborted and 
-> cancel_attach() will be called. My new suggestion is to add a new 
-> deadline task transfer count into the cpuset structure and store the 
-> information there temporarily. If cpuset_attach() is called, it means 
-> all the can_attach calls succeed. You can then update the dl task 
-> count accordingly and clear the temporary transfer count.
+> However, if the kernel would ever support in-place collapse of anonymous
+> THPs (replacing a page table mapping each sub-page of a THP via PTEs with a
+> single PMD mapping the complete THP), exclusivity information stored for
+> each sub-page would have to be collapsed accordingly:
 >
-> I guess you may have to do something similar with dl_cpu_busy().
+> (1) All PTEs map !exclusive anon sub-pages: the in-place collapsed THP
+>     must not not have the exclusive flag set on the head page mapped by
+>     the PMD. This is the easiest case to handle ("simply don't set any
+>     exclusive flags").
+>
+> (2) All PTEs map exclusive anon sub-pages: when collapsing, we have to
+>     clear the exclusive flag from all tail pages and only leave the
+>     exclusive flag set for the head page. Otherwise, fork() after
+>     collapse would not clear the exclusive flags from the tail pages
+>     and we'd be in trouble once PTE-mapping the shared THP when writing
+>     to shared tail pages that still have the exclusive flag set. This
+>     would effectively revert what the PTE-mapping code does when
+>     propagating the exclusive flag to all sub-pages.
+>
+> (3) PTEs map a mixture of exclusive and !exclusive anon sub-pages (can
+>     happen e.g., due to MADV_DONTFORK before fork()). We must not
+>     collapse the THP in-place, otherwise bad things may happen:
+>     the exclusive flags of sub-pages would get ignored and the
+>     exclusive flag of the head page would get used instead.
+>
+> Now that we have MADV_COLLAPSE in place to trigger collapsing a THP,
+> let's add some test cases that would bail out early, if we'd
+> voluntarily/accidantially unlock in-place collapse for anon THPs and
+> forget about taking proper care of exclusive flags.
 
-Another possibility is that you may record the cpu where the new DL 
-bandwidth is allocated from in the task_struct. Then in 
-cpuset_cancel_attach(), you can revert the dl_cpu_busy() change if DL 
-tasks are in the css_set to be transferred. That will likely require 
-having a DL task transfer count in the cpuset and iterating all the 
-tasks to look for ones with a previously recorded cpu # if the transfer 
-count is non-zero.
+Hey David,
 
-Cheers,
-Longman
+Sorry for the (very) delayed review. As our helpful syncs offline, I'm in a
+better place to understand the intent of these tests.
 
+On Wed, Jan 4, 2023 at 6:49 AM David Hildenbrand <david@redhat.com> wrote:
+
+> Running the test on a kernel with MADV_COLLAPSE support:
+>   # [INFO] Anonymous THP tests
+>   # [RUN] Basic COW after fork() when collapsing before fork()
+>   ok 169 No leak from parent into child
+>   # [RUN] Basic COW after fork() when collapsing after fork() (fully shared)
+>   ok 170 # SKIP MADV_COLLAPSE failed: Invalid argument
+>   # [RUN] Basic COW after fork() when collapsing after fork() (lower shared)
+>   ok 171 No leak from parent into child
+>   # [RUN] Basic COW after fork() when collapsing after fork() (upper shared)
+>   ok 172 No leak from parent into child
+>
+> For now, MADV_COLLAPSE always seems to fail if all PTEs map shared
+> sub-pages.
+
+Thanks for pointing this out. I have had a TODO / pending patch to verify this
+for awhile. It seems this is due to some old requirement of requiring a single
+writeable pte. I don't know this history well here, but I don't think it's
+required anymore, and, as this test shows, prevents collapse of
+pte-mapped-hugepage shared across fork().
+
+>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Shuah Khan <shuah@kernel.org>
+> Cc: Hugh Dickins <hughd@google.com>
+> Cc: Peter Xu <peterx@redhat.com>
+> Cc: Vlastimil Babka <vbabka@suse.cz>
+> Cc: Nadav Amit <nadav.amit@gmail.com>
+> Cc: Zach O'Keefe <zokeefe@google.com>
+> Cc: Andrea Arcangeli <aarcange@redhat.com>
+> Signed-off-by: David Hildenbrand <david@redhat.com>
+> ---
+>
+> A patch from Hugh made me explore the wonderful world of in-place collapse
+> of THP, and I was briefly concerned that it would apply to anon THP as
+> well. After thinking about it a bit, I decided to add test cases, to better
+> be safe than sorry in any case, and to document how PG_anon_exclusive is to
+> be handled in that case.
+>
+> ---
+>  tools/testing/selftests/vm/cow.c | 228 +++++++++++++++++++++++++++++++
+>  1 file changed, 228 insertions(+)
+>
+> diff --git a/tools/testing/selftests/vm/cow.c b/tools/testing/selftests/vm/cow.c
+> index 26f6ea3079e2..16216d893d96 100644
+> --- a/tools/testing/selftests/vm/cow.c
+> +++ b/tools/testing/selftests/vm/cow.c
+> @@ -30,6 +30,10 @@
+>  #include "../kselftest.h"
+>  #include "vm_util.h"
+>
+> +#ifndef MADV_COLLAPSE
+> +#define MADV_COLLAPSE 25
+> +#endif
+> +
+>  static size_t pagesize;
+>  static int pagemap_fd;
+>  static size_t thpsize;
+> @@ -1178,6 +1182,228 @@ static int tests_per_anon_test_case(void)
+>         return tests;
+>  }
+>
+> +enum anon_thp_collapse_test {
+> +       ANON_THP_COLLAPSE_UNSHARED,
+
+OK, so this test checks case 2: we see all PG_anon_exclusive, and need to make
+sure we clear the bit on tails. Had we not, after fork(), the bit would still be
+set on tails (since copy_huge_pmd() -> page_try_dup_anon_rmap() only clears it
+on head), and so write to said tails would go through after wp fault, and since
+collapse was in-place, this leaks data from parent to child.
+
+> +       ANON_THP_COLLAPSE_FULLY_SHARED,
+
+This checks case 1: we see all !PG_anon_exclusive, we aught to set the flag on
+head page in parent, after fork(). Had we not, subsequent write will be allowed
+to go through after wp fault and hit backing page -- which, since collapse was
+in-place, is same as child, leaking data.
+
+> +       ANON_THP_COLLAPSE_LOWER_SHARED,
+> +       ANON_THP_COLLAPSE_UPPER_SHARED,
+
+IIUC, this check only partially tests case 3. Had we introduced a bug where we
+set PG_anon_exclusive on the head in this mixed-case, it's very similar to
+ANON_THP_COLLAPSE_FULLY_SHARED.
+
+However, if we decided to still attempt in-place collapse, and cleared the bit
+in the parent, then the write here will be CoW'd and we won't see data leak
+into the child. In order for problems to occur, we'd need something to trip
+the improper CoW. The example you've shared with me was a io_uring fixed buffer
+mapping the non-shared pages, which, after CoW, would disagree.
+
+That said, I'm not sure the extra work required to catch this case is worth the
+effort.
+
+> +};
+> +
+> +static void do_test_anon_thp_collapse(char *mem, size_t size,
+> +                                     enum anon_thp_collapse_test test)
+> +{
+> +       struct comm_pipes comm_pipes;
+> +       char buf;
+> +       int ret;
+> +
+> +       ret = setup_comm_pipes(&comm_pipes);
+> +       if (ret) {
+> +               ksft_test_result_fail("pipe() failed\n");
+> +               return;
+> +       }
+> +
+> +       /*
+> +        * Trigger PTE-mapping the THP by temporarily mapping a single subpage
+> +        * R/O, such that we can try collapsing it later.
+> +        */
+> +       ret = mprotect(mem + pagesize, pagesize, PROT_READ);
+> +       if (ret) {
+> +               ksft_test_result_fail("mprotect() failed\n");
+> +               goto close_comm_pipes;
+> +       }
+> +       ret = mprotect(mem + pagesize, pagesize, PROT_READ | PROT_WRITE);
+> +       if (ret) {
+> +               ksft_test_result_fail("mprotect() failed\n");
+> +               goto close_comm_pipes;
+> +       }
+
+Might be a good place for a check_huge_anon(mem, 0, ..) to validate pte-mapped.
+
+> +       switch (test) {
+> +       case ANON_THP_COLLAPSE_UNSHARED:
+> +               /* Collapse before actually COW-sharing the page. */
+> +               ret = madvise(mem, size, MADV_COLLAPSE);
+> +               if (ret) {
+> +                       ksft_test_result_skip("MADV_COLLAPSE failed: %s\n",
+> +                                             strerror(errno));
+> +                       goto close_comm_pipes;
+> +               }
+> +               break;
+> +       case ANON_THP_COLLAPSE_FULLY_SHARED:
+> +               /* COW-share the full PTE-mapped THP. */
+> +               break;
+> +       case ANON_THP_COLLAPSE_LOWER_SHARED:
+> +               /* Don't COW-share the upper part of the THP. */
+> +               ret = madvise(mem + size / 2, size / 2, MADV_DONTFORK);
+> +               if (ret) {
+> +                       ksft_test_result_fail("MADV_DONTFORK failed\n");
+> +                       goto close_comm_pipes;
+> +               }
+> +               break;
+> +       case ANON_THP_COLLAPSE_UPPER_SHARED:
+> +               /* Don't COW-share the lower part of the THP. */
+> +               ret = madvise(mem, size / 2, MADV_DONTFORK);
+> +               if (ret) {
+> +                       ksft_test_result_fail("MADV_DONTFORK failed\n");
+> +                       goto close_comm_pipes;
+> +               }
+> +               break;
+> +       default:
+> +               assert(false);
+> +       }
+> +
+> +       ret = fork();
+> +       if (ret < 0) {
+> +               ksft_test_result_fail("fork() failed\n");
+> +               goto close_comm_pipes;
+> +       } else if (!ret) {
+> +               switch (test) {
+> +               case ANON_THP_COLLAPSE_UNSHARED:
+> +               case ANON_THP_COLLAPSE_FULLY_SHARED:
+> +                       exit(child_memcmp_fn(mem, size, &comm_pipes));
+> +                       break;
+> +               case ANON_THP_COLLAPSE_LOWER_SHARED:
+> +                       exit(child_memcmp_fn(mem, size / 2, &comm_pipes));
+> +                       break;
+> +               case ANON_THP_COLLAPSE_UPPER_SHARED:
+> +                       exit(child_memcmp_fn(mem + size / 2, size / 2,
+> +                                            &comm_pipes));
+> +                       break;
+> +               default:
+> +                       assert(false);
+> +               }
+> +       }
+> +
+> +       while (read(comm_pipes.child_ready[0], &buf, 1) != 1)
+> +               ;
+> +
+> +       switch (test) {
+> +       case ANON_THP_COLLAPSE_UNSHARED:
+> +               break;
+> +       case ANON_THP_COLLAPSE_UPPER_SHARED:
+> +       case ANON_THP_COLLAPSE_LOWER_SHARED:
+> +               /*
+> +                * Revert MADV_DONTFORK such that we merge the VMAs and are
+> +                * able to actually collapse.
+> +                */
+> +               ret = madvise(mem, size, MADV_DOFORK);
+> +               if (ret) {
+> +                       ksft_test_result_fail("MADV_DOFORK failed\n");
+> +                       write(comm_pipes.parent_ready[1], "0", 1);
+> +                       wait(&ret);
+> +                       goto close_comm_pipes;
+> +               }
+> +               /* FALLTHROUGH */
+> +       case ANON_THP_COLLAPSE_FULLY_SHARED:
+> +               /* Collapse before anyone modified the COW-shared page. */
+> +               ret = madvise(mem, size, MADV_COLLAPSE);
+> +               if (ret) {
+> +                       ksft_test_result_skip("MADV_COLLAPSE failed: %s\n",
+> +                                             strerror(errno));
+> +                       write(comm_pipes.parent_ready[1], "0", 1);
+> +                       wait(&ret);
+> +                       goto close_comm_pipes;
+> +               }
+> +               break;
+> +       default:
+> +               assert(false);
+> +       }
+> +
+> +       /* Modify the page. */
+> +       memset(mem, 0xff, size);
+> +       write(comm_pipes.parent_ready[1], "0", 1);
+> +
+> +       wait(&ret);
+> +       if (WIFEXITED(ret))
+> +               ret = WEXITSTATUS(ret);
+> +       else
+> +               ret = -EINVAL;
+> +
+> +       ksft_test_result(!ret, "No leak from parent into child\n");
+> +close_comm_pipes:
+> +       close_comm_pipes(&comm_pipes);
+> +}
+> +
+> +static void test_anon_thp_collapse_unshared(char *mem, size_t size)
+> +{
+> +       do_test_anon_thp_collapse(mem, size, ANON_THP_COLLAPSE_UNSHARED);
+> +}
+> +
+> +static void test_anon_thp_collapse_fully_shared(char *mem, size_t size)
+> +{
+> +       do_test_anon_thp_collapse(mem, size, ANON_THP_COLLAPSE_FULLY_SHARED);
+> +}
+> +
+> +static void test_anon_thp_collapse_lower_shared(char *mem, size_t size)
+> +{
+> +       do_test_anon_thp_collapse(mem, size, ANON_THP_COLLAPSE_LOWER_SHARED);
+> +}
+> +
+> +static void test_anon_thp_collapse_upper_shared(char *mem, size_t size)
+> +{
+> +       do_test_anon_thp_collapse(mem, size, ANON_THP_COLLAPSE_UPPER_SHARED);
+> +}
+> +
+> +/*
+> + * Test cases that are specific to anonymous THP: pages in private mappings
+> + * that may get shared via COW during fork().
+> + */
+> +static const struct test_case anon_thp_test_cases[] = {
+> +       /*
+> +        * Basic COW test for fork() without any GUP when collapsing a THP
+> +        * before fork().
+> +        *
+> +        * Re-mapping a PTE-mapped anon THP using a single PMD ("in-place
+> +        * collapse") might easily get COW handling wrong when not collapsing
+> +        * exclusivity information properly.
+> +        */
+> +       {
+> +               "Basic COW after fork() when collapsing before fork()",
+> +               test_anon_thp_collapse_unshared,
+> +       },
+> +       /* Basic COW test, but collapse after COW-sharing a full THP. */
+> +       {
+> +               "Basic COW after fork() when collapsing after fork() (fully shared)",
+> +               test_anon_thp_collapse_fully_shared,
+> +       },
+> +       /*
+> +        * Basic COW test, but collapse after COW-sharing the lower half of a
+> +        * THP.
+> +        */
+> +       {
+> +               "Basic COW after fork() when collapsing after fork() (lower shared)",
+> +               test_anon_thp_collapse_lower_shared,
+> +       },
+> +       /*
+> +        * Basic COW test, but collapse after COW-sharing the upper half of a
+> +        * THP.
+> +        */
+> +       {
+> +               "Basic COW after fork() when collapsing after fork() (upper shared)",
+> +               test_anon_thp_collapse_upper_shared,
+> +       },
+> +};
+> +
+> +static void run_anon_thp_test_cases(void)
+> +{
+> +       int i;
+> +
+> +       if (!thpsize)
+> +               return;
+> +
+> +       ksft_print_msg("[INFO] Anonymous THP tests\n");
+> +
+> +       for (i = 0; i < ARRAY_SIZE(anon_thp_test_cases); i++) {
+> +               struct test_case const *test_case = &anon_thp_test_cases[i];
+> +
+> +               ksft_print_msg("[RUN] %s\n", test_case->desc);
+> +               do_run_with_thp(test_case->fn, THP_RUN_PMD);
+> +       }
+> +}
+> +
+> +static int tests_per_anon_thp_test_case(void)
+> +{
+> +       return thpsize ? 1 : 0;
+> +}
+> +
+>  typedef void (*non_anon_test_fn)(char *mem, const char *smem, size_t size);
+>
+>  static void test_cow(char *mem, const char *smem, size_t size)
+> @@ -1518,6 +1744,7 @@ int main(int argc, char **argv)
+>
+>         ksft_print_header();
+>         ksft_set_plan(ARRAY_SIZE(anon_test_cases) * tests_per_anon_test_case() +
+> +                     ARRAY_SIZE(anon_thp_test_cases) * tests_per_anon_thp_test_case() +
+>                       ARRAY_SIZE(non_anon_test_cases) * tests_per_non_anon_test_case());
+>
+>         gup_fd = open("/sys/kernel/debug/gup_test", O_RDWR);
+> @@ -1526,6 +1753,7 @@ int main(int argc, char **argv)
+>                 ksft_exit_fail_msg("opening pagemap failed\n");
+>
+>         run_anon_test_cases();
+> +       run_anon_thp_test_cases();
+>         run_non_anon_test_cases();
+>
+>         err = ksft_get_fail_cnt();
+> --
+> 2.39.0
+>
+
+Overall the tests look good, though too late to record that in the log. At least
+mail archives will have it.
