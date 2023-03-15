@@ -2,134 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C22AC6BBAEA
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 18:31:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 851A06BBAEF
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 18:32:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231802AbjCORbx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 13:31:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36926 "EHLO
+        id S231967AbjCORcP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 13:32:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231680AbjCORbw (ORCPT
+        with ESMTP id S231743AbjCORcN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 13:31:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6336C5982B;
-        Wed, 15 Mar 2023 10:31:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EA68561E11;
-        Wed, 15 Mar 2023 17:31:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A9D5C433EF;
-        Wed, 15 Mar 2023 17:31:47 +0000 (UTC)
-Date:   Wed, 15 Mar 2023 13:31:46 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Christian =?UTF-8?B?S8O2bmln?= <ckoenig.leichtzumerken@gmail.com>
-Cc:     Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-        Arunpravin Paneer Selvam <Arunpravin.PaneerSelvam@amd.com>,
-        intel-gfx@lists.freedesktop.org,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        linux-media@vger.kernel.org
-Subject: Re: [BUG 6.3-rc1] Bad lock in ttm_bo_delayed_delete()
-Message-ID: <20230315133146.3a48206e@gandalf.local.home>
-In-Reply-To: <20230315115712.56b3c21f@gandalf.local.home>
-References: <20230307212223.7e49384a@gandalf.local.home>
-        <20230307212615.7a099103@gandalf.local.home>
-        <b919b550-6da8-f9f0-a0eb-0fd8af513817@amd.com>
-        <20230315110949.1e11b3aa@gandalf.local.home>
-        <07597f3e-0b35-c22b-91ec-fa3875d6fe22@gmail.com>
-        <20230315115712.56b3c21f@gandalf.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Wed, 15 Mar 2023 13:32:13 -0400
+Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01on2100.outbound.protection.outlook.com [40.107.114.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7606762303;
+        Wed, 15 Mar 2023 10:32:08 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=e6Jzjb+AXNg3hv3tdZ/8wlpxohMVzDy3FMS70F0XyuMW2puNf6JghEDdHDZxTsvCnS+QO2gT6fSVJqCON/vsZ/+wmVb9WAIAtk8FmveJumEajDHJXE2paUHsS7DzEN1embU6EVf9Igf8+m9axBP9KUoqpIP9fHEfOeaUg2a3aR0hmbFDr+d0xvLqQXwf3/vQQikuXQMCHWNrMDzRtvxUJLVlq1YlOV0G0raTwcBoo38PWdEM8EK0mD88Pp8F+qEoUz3VKyhxw2559+kBJAw8mC32d+O0RipM43wE+Bpp5ZOHlvfvZ8QMQvyEHF0wvuTGKMunJ2aLNNrNN9d6hmM7TA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=68JLfB+grcV1BQAcMzWudCnD8ISmO7LXptrqa8aM8i8=;
+ b=QUC3VzMpVvElZJT22xucNfNYOfSNyU1mrIuO4KLcJsHvrm1VjrWUiNDmAxp1AuVKQFIRDzXAQBC9bDuCYfeDDngsdQx7SmKL+35Bowa0brz2x3Svy7DBnl95h8SZahZv/l5ZGNgRwurpPwMYpH4M8j7vdq5It2+vRrSwNv2gXPcoj7K0QLU2WRYlm4CIqDzlLOyJeSOb1trTe2lrD/wCeEjPn3fwUUf5dHh1eaLUksp3t4cVJHHBWv42e+AP7/Bgu0IsbXywlYOdvEFbZwgxe0od33lGbegdYgkWyvpdXOSPgAB0k6tHYcOHnJenMan7qWGSMxZRWasWKqnCGBOoEw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=zenithal.me; dmarc=pass action=none header.from=zenithal.me;
+ dkim=pass header.d=zenithal.me; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zenithal.me;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=68JLfB+grcV1BQAcMzWudCnD8ISmO7LXptrqa8aM8i8=;
+ b=FNfs9uQEz9xe154SOdne2A+f09y0WEwXdfdPtWv6bcPDrUxyBC+w+vyrkJdNZnqYB4YF8h2dYDLZfl+hur7n9FnlVk/MqaAjv9fREi8exffFtuPhw3U9VOTKdHPsr+RLKw01ubnrhFoV1Iuj9iWR4FHyrksu/f3XHJdy6oM0BfA=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=zenithal.me;
+Received: from TYYP286MB1406.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:de::5) by
+ OS3P286MB2312.JPNP286.PROD.OUTLOOK.COM (2603:1096:604:19b::13) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6178.30; Wed, 15 Mar 2023 17:32:05 +0000
+Received: from TYYP286MB1406.JPNP286.PROD.OUTLOOK.COM
+ ([fe80::e93a:aa12:729d:f2da]) by TYYP286MB1406.JPNP286.PROD.OUTLOOK.COM
+ ([fe80::e93a:aa12:729d:f2da%9]) with mapi id 15.20.6178.026; Wed, 15 Mar 2023
+ 17:32:05 +0000
+Date:   Thu, 16 Mar 2023 01:31:53 +0800
+From:   "Hongren (Zenithal) Zheng" <i@zenithal.me>
+To:     Shuah Khan <skhan@linuxfoundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Valentina Manea <valentina.manea.m@gmail.com>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] MAINTAINERS: make me a reviewer of USB/IP
+Message-ID: <ZBIBCRiFGSqQcOon@Sun>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Operating-System: Linux Sun 5.15.67
+X-Mailer: Mutt 2.2.7 (2022-08-07)
+X-ClientProxiedBy: BYAPR07CA0013.namprd07.prod.outlook.com
+ (2603:10b6:a02:bc::26) To TYYP286MB1406.JPNP286.PROD.OUTLOOK.COM
+ (2603:1096:400:de::5)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: TYYP286MB1406:EE_|OS3P286MB2312:EE_
+X-MS-Office365-Filtering-Correlation-Id: 85ceed98-7bd7-45d9-b844-08db257b3211
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: w1cb7kVHBNa/KEE0lmLG5qIPHgYrXBstz09HDZaVapxUQRF3AMOWhXAVWzHZUXbf7VoXS8Z3VGKr/AgtJsRR9rox+QhSmTCJN/bJzw7mdaYO1JvQovgirOwHtufFCEyIVnrYpiOmafUysc2yJdb/zftbBKj8Q4+WZc1GPFLg+spd+ANxAoqB85K9F+eVZhSsyFENWbI/tOynLP94nDLYy5uazvwthpjlqmRLPuo+1W4psMZ4dMQAnxK3KXjMlB2zByIj9WgMr9nZTuLSkGsaJSVoh0KIEeY45KBK5GWiKbVRzDY6hp9tRhZFbhy7kv26ocLArsy+oWDxMOFKsUx4UaKPCfwPVysttB044nSRAzFVdhzdBbcpKhvUka1pZ3RtiDppgUBv723Or9j2uzIPT4k2NYq2G4wxUjD83rhVP/Z5BJJYelUIABWKAjjf9Rk5B/NIedhfwv/IAYAoP006ycGyNcH75sdof10W4KzG/fot5VL2VfAtKxMTVSYyu4XfaXDx1rVLDhs4knKnOxyf7euwKWPDpe6H2mogz5+labhYvQJn2gFcugJbOb/vvml+xNA8WJW2r57yeOGglyOvnjeRPCK+TEZf4uUifgC3KxbOcX6ifnRoKoqyNXbFFtDqobCQOhWz9DINPeKyIeM2LNUCQeREYeX2NRE5etviBtvBr/9bpGjzuX5zsRj4ErZF
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYYP286MB1406.JPNP286.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230025)(7916004)(366004)(346002)(396003)(376002)(39830400003)(136003)(451199018)(5660300002)(2906002)(186003)(478600001)(33716001)(110136005)(9686003)(6666004)(6486002)(6512007)(6506007)(66476007)(66556008)(66946007)(41300700001)(4326008)(8936002)(86362001)(8676002)(41320700001)(966005)(786003)(38100700002)(316002)(49092004);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?3guUoE0XceKCXKXmi/xgqzqRoTRLPLiplCPOZraEKelml6Fe0r5t38ogHeHh?=
+ =?us-ascii?Q?E/gxfOl8I8WSGtrZBdpjKTlS0LxFyFvbaqrUK7GP+MTvbAKoZ1j5doBEwtn1?=
+ =?us-ascii?Q?cPw+HMDfOKEzkxXE96LoQ+oDw3U0Dspzb9cLUxw2CYn5U53ok6HEIVAcBQwv?=
+ =?us-ascii?Q?SjYC9+fQlTlchnXbD/Jd6VNvzeSUmFenax+OlXm2wGFD1dN2KM8MqOEQRGU5?=
+ =?us-ascii?Q?GYcYfSxAP/lve9DCNBk/n6AazkMU//PRNc5xJA/r3ANPdaErhMxVWJvGeJCq?=
+ =?us-ascii?Q?6Oj3BcUCqZUV9g18Yx1vopCoeGPaS70G9W6RLR2bNe6I1zFnsAibOWXPG+vF?=
+ =?us-ascii?Q?6XVXA4Ti0WP0tGagLLPfD0vp+YIQ6W6K4TcrXTEH1JDjjY2G+pGG9CijNFq2?=
+ =?us-ascii?Q?KlgCJZoqDKWKQzqTytgsz1y1MP6/D8/fp7heTYxef1Ei6vCNllBoNN4tKvRS?=
+ =?us-ascii?Q?N759cfMTHQ2oJIiPeX9IaWHC9lnjdnK6SlJ/Dhkmj7gqSAV4Y5UBGEEL1Ynb?=
+ =?us-ascii?Q?RAFWZr89xOJivQ8qCUDT6NVqz0Nk2mB6r+VdoZGDRX8JXiSvb9hBBFDwpaQd?=
+ =?us-ascii?Q?DPnN+VGoQNxQRWqNBTXKqXDx4g04CdM8niiDGXIHkREqZN5lRWuPJse1exrH?=
+ =?us-ascii?Q?fAK8YY1BZXkpXuc+n26JP3/dVRohntPEKJ9UytY591VfI7/1o18Wmf/TaY2V?=
+ =?us-ascii?Q?JWgyodGIQcETxxLROVGlx6MFutHMNFZW6G25AjXxp5IRFf99OCorz7IT3lMp?=
+ =?us-ascii?Q?IVySt+TQbndOL6dkzfNO1KA1VInLh4o1lsMQak1lknkN8MYANYD4ok5qS41P?=
+ =?us-ascii?Q?tKM7Jxnbh9q+vyJJNu3hzrYPG769xDtgSpF2NJrtEisTQEJUl6yiEt8uLiTJ?=
+ =?us-ascii?Q?mD6HVYxPCJ0YIkvoXlETbnYc0beXZUfTtpIHXryLmKTIxG5M1GPRWOAPHwtk?=
+ =?us-ascii?Q?oqjVSNVgnyHL33BXl62D6kmnBLe5uA+zIDK1P6/u3ZMWWWsyWqceV5E3AAge?=
+ =?us-ascii?Q?++EaVwd1CjaZw7YZc2nKbQAfjKAlvnCLEN/o6ysdPnH4WYTRUwWCpd03R7+D?=
+ =?us-ascii?Q?s/WA+uMlDUbLzKfA7klxEKfKN8ob4fiXVXF7pYE37RcIxwxtxTwlJBkWMWn0?=
+ =?us-ascii?Q?bUghuUYbo//h+uj8QfEKwHOkDfmCPDnlVR9pqs/nix5lc3f0CidgYF/fNRyf?=
+ =?us-ascii?Q?8TBpY/HSWRj/IX3T4K+drzJ3VoIsfwossy6PNOAbQbWiXmQ3llDH73nplNPc?=
+ =?us-ascii?Q?vaiiLuAfdSHpYCLA7u/20En2wafRhHh1w1QOQRZzRN9LWx4PwSogb5fHMfdf?=
+ =?us-ascii?Q?ddu+9DQ1N4B9pEPQ131aIUzv8VWn3lu/Pwnr4a0LYrhPEne+Ay1F9FCayyNe?=
+ =?us-ascii?Q?P0b8eEmFE6TK5bRJmkcTWomFTiKL7QPOsvC445IPhFnMYC0xmhALeiXBnz9i?=
+ =?us-ascii?Q?qKIYccllJ5F2Z8RnKmgDID8+pjOcqESCT9IIJYxiiZMit/+sXhec/a9F2SB8?=
+ =?us-ascii?Q?Q9uZxThJZypQccKXj//E2etqsyl0e8r0Ms7YsQmRrxs//adCYC8xcjenM8uR?=
+ =?us-ascii?Q?KWJGqND5pT2/bRT4fTLFIF+ZWbM86zwa+KLU2pSI?=
+X-OriginatorOrg: zenithal.me
+X-MS-Exchange-CrossTenant-Network-Message-Id: 85ceed98-7bd7-45d9-b844-08db257b3211
+X-MS-Exchange-CrossTenant-AuthSource: TYYP286MB1406.JPNP286.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Mar 2023 17:32:05.8346
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 436d481c-43b1-4418-8d7f-84c1e4887cf0
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: dsCech+gTxEFRMrcfocPPYZ8Pdl2j6qVSWd2eOeAARVN9CxZgUciyTWLr8y6UGye
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: OS3P286MB2312
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 15 Mar 2023 11:57:12 -0400
-Steven Rostedt <rostedt@goodmis.org> wrote:
+I think I am familiar enough with USB/IP and is adequate as a reviewer.
 
-So I'm looking at the backtraces.
+Every time there is some patch/bug, I wish I can get pinged
+and I will feedback on that.
 
-> The WARN_ON triggered:
-> 
-> [   21.481449] mpls_gso: MPLS GSO support
-> [   21.488795] IPI shorthand broadcast: enabled
-> [   21.488873] ------------[ cut here ]------------
-> [   21.490101] ------------[ cut here ]------------
-> 
-> [   21.491693] WARNING: CPU: 1 PID: 38 at drivers/gpu/drm/ttm/ttm_bo.c:332 ttm_bo_release+0x2ac/0x2fc  <<<---- Line of the added WARN_ON()
+I had some contributions to USBIP and some support for it.
 
-This happened on CPU 1.
+Contribution:
+Commit 17af79321 ("docs: usbip: Fix major fields and
+    descriptions in protocol")
+Commit b737eecd4 ("usbip: tools: add options and examples
+    in man page related to device mode")
+Commit a58977b2f ("usbip: tools: add usage of device mode in
+    usbip_list.c")
 
-> 
-> [   21.492940] refcount_t: underflow; use-after-free.
-> [   21.492965] WARNING: CPU: 0 PID: 84 at lib/refcount.c:28 refcount_warn_saturate+0xb6/0xfc
+Support:
+Commit 8f36b3b4e1 ("usbip: add USBIP_URB_* URB transfer flags")
+Bug report: https://lore.kernel.org/lkml/ZBHxfUX60EyCMw5l@Sun/
 
-This happened on CPU 0.
+I also have implemented a userspace usbip server in
+https://github.com/canokeys/canokey-usbip
+and maintain a list of usbip implementations
+https://github.com/usbip/implementations
 
-> [   21.496116] Modules linked in:
-> [   21.497197] Modules linked in:
-> [   21.500105] CPU: 1 PID: 38 Comm: kworker/1:1 Not tainted 6.3.0-rc2-test-00047-g6015b1aca1a2-dirty #993
-> [   21.500789] CPU: 0 PID: 84 Comm: kworker/0:1H Not tainted 6.3.0-rc2-test-00047-g6015b1aca1a2-dirty #993
-> [   21.501882] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.0-debian-1.16.0-5 04/01/2014
-> [   21.503533] sched_clock: Marking stable (20788024762, 714243692)->(22140778105, -638509651)
-> [   21.504080] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.0-debian-1.16.0-5 04/01/2014
-> [   21.504089] Workqueue: ttm ttm_bo_delayed_delete
-> [   21.507196] Workqueue: events drm_fb_helper_damage_work
-> [   21.509235] 
-> [   21.510291] registered taskstats version 1
-> [   21.510302] Running ring buffer tests...
-> [   21.511792] 
-> [   21.513870] EIP: refcount_warn_saturate+0xb6/0xfc
-> [   21.515261] EIP: ttm_bo_release+0x2ac/0x2fc
-> [   21.516566] Code: 68 00 27 0c d8 e8 36 3b aa ff 0f 0b 58 c9 c3 90 80 3d 41 c2 37 d8 00 75 8a c6 05 41 c2 37 d8 01 68 2c 27 0c d8 e8 16 3b aa ff <0f> 0b 59 c9 c3 80 3d 3f c2 37 d8 00 0f 85 67 ff ff ff c6 05 3f c2
-> [   21.516998] Code: ff 8d b4 26 00 00 00 00 66 90 0f 0b 8b 43 10 85 c0 0f 84 a1 fd ff ff 8d 76 00 0f 0b 8b 43 28 85 c0 0f 84 9c fd ff ff 8d 76 00 <0f> 0b e9 92 fd ff ff 8d b4 26 00 00 00 00 66 90 c7 43 18 00 00 00
-> [   21.517905] EAX: 00000026 EBX: c129d150 ECX: 00000040 EDX: 00000002
-> [   21.518987] EAX: d78c8550 EBX: c129d134 ECX: c129d134 EDX: 00000001
-> [   21.519337] ESI: c129d0bc EDI: f6f91200 EBP: c2b8bf18 ESP: c2b8bf14
-> [   21.520617] ESI: c129d000 EDI: c126a7a0 EBP: c1839c24 ESP: c1839bec
-> [   21.521546] DS: 007b ES: 007b FS: 00d8 GS: 0000 SS: 0068 EFLAGS: 00010286
-> [   21.526154] DS: 007b ES: 007b FS: 00d8 GS: 0000 SS: 0068 EFLAGS: 00010286
-> [   21.526162] CR0: 80050033 CR2: 00000000 CR3: 18506000 CR4: 00150ef0
-> [   21.526166] Call Trace:
-> [   21.526189]  ? ww_mutex_unlock+0x3a/0x94
-> [   21.530300] CR0: 80050033 CR2: ff9ff000 CR3: 18506000 CR4: 00150ef0
-> [   21.531722]  ? ttm_bo_cleanup_refs+0xc4/0x1e0
-> [   21.533114] Call Trace:
-> [   21.534516]  ttm_mem_evict_first+0x3d3/0x568
-> [   21.535901]  ttm_bo_delayed_delete+0x9c/0xa4
-> [   21.537391]  ? kfree+0x6b/0xdc
-> [   21.538901]  process_one_work+0x21a/0x484
-> [   21.540279]  ? ttm_range_man_alloc+0xe0/0xec
-> [   21.540854]  worker_thread+0x14a/0x39c
-> [   21.541714]  ? ttm_range_man_fini_nocheck+0xe8/0xe8
-> [   21.543332]  kthread+0xea/0x10c
-> [   21.544301]  ttm_bo_mem_space+0x1d0/0x1e4
-> [   21.544942]  ? process_one_work+0x484/0x484
-> [   21.545887]  ttm_bo_validate+0xc5/0x19c
-> [   21.546986]  ? kthread_complete_and_exit+0x1c/0x1c
-> [   21.547680]  ttm_bo_init_reserved+0x15e/0x1fc
-> [   21.548716]  ret_from_fork+0x1c/0x28
-> [   21.549650]  qxl_bo_create+0x145/0x20c
+Signed-off-by: Hongren (Zenithal) Zheng <i@zenithal.me>
+---
+ MAINTAINERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-The qxl_bo_create() calls ttm_bo_init_reserved() as the object in question
-is about to be freed.
-
-I'm guessing what is happening here, is that an object was to be freed by
-the delayed_delete, and in the mean time, something else picked it up.
-
-What's protecting this from not being used again?
-
--- Steve
+diff --git a/MAINTAINERS b/MAINTAINERS
+index a3b14ec33830..45f4fd92126b 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -21645,6 +21645,7 @@ USB OVER IP DRIVER
+ M:	Valentina Manea <valentina.manea.m@gmail.com>
+ M:	Shuah Khan <shuah@kernel.org>
+ M:	Shuah Khan <skhan@linuxfoundation.org>
++R:	Hongren Zheng <i@zenithal.me>
+ L:	linux-usb@vger.kernel.org
+ S:	Maintained
+ F:	Documentation/usb/usbip_protocol.rst
+-- 
+2.37.2
 
