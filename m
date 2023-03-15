@@ -2,250 +2,475 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12FC66BB983
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 17:20:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA2636BB989
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 17:20:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231716AbjCOQUC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 12:20:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41622 "EHLO
+        id S231919AbjCOQUS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 12:20:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232364AbjCOQTd (ORCPT
+        with ESMTP id S231823AbjCOQUG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 12:19:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C326B1CF74;
-        Wed, 15 Mar 2023 09:19:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6199961DF2;
-        Wed, 15 Mar 2023 16:19:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBB12C433A0;
-        Wed, 15 Mar 2023 16:19:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678897140;
-        bh=s/UR+rMqXgjNiMejx6NvJ82ozNlF7r5j28HwdNJ2jWw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=NDxg4L/nDrcff4Dfo4WwNjOWouDATRcxY11eCvYZZPg8C4DQhiAkuqoiG6eoVE5+x
-         WLRd8F0KcAtGJGNKaZylgfcl9EeggpJ+ODSKDwNogU0Xg5dMwflN0+cHobQ8owNLrA
-         4EgxcLnQEC6+cs5Awnoyb9R9eJjEbafkvC9N0ZDj85L8anq3CUzgWcEVafx5AUUU0A
-         vmt8jLkaQ4niH4c0Lh0B4BOvWxDcLXyzwweMZp4fhrSM+6/9TsWkAe3xR+bR/L2Sdj
-         ik2yE9YMGAywxUH6B0ukwq/90zHsHZGGYCS24qJgJ/UdmB0X8VurCe3S+Wem36DgFV
-         p4Tx0fx0sZGTw==
-Received: by mail-ot1-f45.google.com with SMTP id x16-20020a9d6d90000000b0069aa2f33789so982024otp.4;
-        Wed, 15 Mar 2023 09:19:00 -0700 (PDT)
-X-Gm-Message-State: AO0yUKVpRQm+qmCt2wJMjEGyRZcVFGNpux3B5efEZo4tU/t1/1/drMTX
-        sukGuKdzIl21m74/gpMX8TpRjX6I9KI0jEEsxXg=
-X-Google-Smtp-Source: AK7set+RObHaBAeZtiuhCRl8G74EUcjxBryzkMIotLf70CTLQeBIcJJA7IS/IlDDVuY75wqz0efcog66F7wPTEIDA5M=
-X-Received: by 2002:a9d:2b0:0:b0:698:b03a:4fb0 with SMTP id
- 45-20020a9d02b0000000b00698b03a4fb0mr1652071otl.1.1678897139974; Wed, 15 Mar
- 2023 09:18:59 -0700 (PDT)
+        Wed, 15 Mar 2023 12:20:06 -0400
+Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D9D21F935;
+        Wed, 15 Mar 2023 09:20:03 -0700 (PDT)
+Received: by mail-oi1-x22f.google.com with SMTP id r36so790951oiw.7;
+        Wed, 15 Mar 2023 09:20:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678897202;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YHm8aqZXbOB1dA6dvL7Y2xb5VTwjaZrSc/p9oBx6dEA=;
+        b=N1zVk2hvrNavXuOp0eZ0S4QTNcjyoK6izz5OUnEZk+5s+0TkciqgNkLnRBqoarIbX6
+         SjjexBoVyhEIdOhye2JxUIf0Mo+o5kKesS35vENEbwVrqP1Xy/L90MQF+qh1FkFR4abX
+         rNpEXXTNdmuLdlOMqNxRXn2/86iVspJ5+AZzfD631Zqp69XWWUV4dKmVSLiBywNyesv3
+         kU3Y2Z0F7sairDCIBO59D5dxzMX6Fmz3l5UM7IWncS3muFlT118Y7oX8XF92Mp686n7/
+         L5hNSiDUWL76PtdwgnKigbR6CIkiH5ygY+dzJ0Ak/2W1PgON3FSeGR1CDMJri3Vjpwtp
+         uyYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678897202;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YHm8aqZXbOB1dA6dvL7Y2xb5VTwjaZrSc/p9oBx6dEA=;
+        b=7Ri/p6Gia5hdSwfKO0STdSwElp31PO7jdt0TCKkyd11YjpK8Qhip5Br68VkYrZD3uc
+         0jgctzOQcWm4z/mWjds5ZKRnJthYJ4Aqj8aa31wTvRaZRILFJlEs7S2zvzqpZ2L56pDl
+         WxnRV+Bu0gEispM+KO+v5WiEePCJYswieL0xjdwBjHrBgHAJMhWm+mKRV+I2O7jWmwMW
+         Q0c2hYycUGhRpBbb87196HLuQvSKdvoLmhFDgEw1/AHHFQOjdMEKfYngDYQ1b7kDkIZD
+         /2EU1z3cYOT8aYpJJiz2TO5TKCVA1QHxIFYHDTFXsQB+4XXRlbdKn/8iGvdmSs2L4Vff
+         Obeg==
+X-Gm-Message-State: AO0yUKWydFsCPl68xxJliW20McUz4pN3reOO2Ea1aM7oHD+BObr8W3xL
+        KYr3EPz9TpG9ooyswvvgU3rzrQ8W9SJExqTV55Y=
+X-Google-Smtp-Source: AK7set/to1bUzC/px7kYh7s+6isGsQUlr2afjdXliyX/Wzg0C7yiYiykegtboodu2VHL6L5D5MlRKKSUEmHzJDeR9eY=
+X-Received: by 2002:aca:654b:0:b0:384:1cf9:912e with SMTP id
+ j11-20020aca654b000000b003841cf9912emr1028109oiw.5.1678897202265; Wed, 15 Mar
+ 2023 09:20:02 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230111161155.1349375-1-gary@garyguo.net> <ZA+IUIOAgrWH2oZ0@righiandr-XPS-13-7390>
- <20230313214853.GY19419@kitsune.suse.cz> <ZA+bXi0o27XPx3nz@righiandr-XPS-13-7390>
- <20230313220234.GZ19419@kitsune.suse.cz> <ZA+fGpAdnvB5VwKW@righiandr-XPS-13-7390>
- <ZBCG3ykG1q4GEcIf@righiandr-XPS-13-7390>
-In-Reply-To: <ZBCG3ykG1q4GEcIf@righiandr-XPS-13-7390>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Thu, 16 Mar 2023 01:18:23 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASSxfEPp+e1=sP0FAYLMXjyT7T5iqe8=UJB+XNYMt6ogQ@mail.gmail.com>
-Message-ID: <CAK7LNASSxfEPp+e1=sP0FAYLMXjyT7T5iqe8=UJB+XNYMt6ogQ@mail.gmail.com>
-Subject: Re: [PATCH] modpost: support arbitrary symbol length in modversion
-To:     Andrea Righi <andrea.righi@canonical.com>
-Cc:     =?UTF-8?Q?Michal_Such=C3=A1nek?= <msuchanek@suse.de>,
-        Gary Guo <gary@garyguo.net>, Kees Cook <keescook@chromium.org>,
-        linux-kbuild@vger.kernel.org,
-        Wedson Almeida Filho <wedsonaf@google.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        rust-for-linux@vger.kernel.org,
-        Guo Zhengkui <guozhengkui@vivo.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kernel@vger.kernel.org, Julia Lawall <Julia.Lawall@inria.fr>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        linuxppc-dev@lists.ozlabs.org, linux-modules@vger.kernel.org
+References: <20230308155322.344664-1-robdclark@gmail.com> <20230308155322.344664-2-robdclark@gmail.com>
+ <ZAtQspuFjPtGy7ze@gmail.com> <CAF6AEGsGOr5+Q10wX=5ttrWCSUJfn7gzHW8QhxFC0GDLgagMHg@mail.gmail.com>
+ <ZBHNvT3BLgS3qvV5@gmail.com>
+In-Reply-To: <ZBHNvT3BLgS3qvV5@gmail.com>
+From:   Rob Clark <robdclark@gmail.com>
+Date:   Wed, 15 Mar 2023 09:19:49 -0700
+Message-ID: <CAF6AEGu1S2CXzRxV_c5tE_H+XUGiO=n0tXjLZ_u_tW-eMqMsQw@mail.gmail.com>
+Subject: Re: [PATCH v10 01/15] dma-buf/dma-fence: Add deadline awareness
+To:     =?UTF-8?B?Sm9uYXMgw4VkYWhs?= <jadahl@gmail.com>
+Cc:     dri-devel@lists.freedesktop.org,
+        Rob Clark <robdclark@chromium.org>,
+        Pekka Paalanen <pekka.paalanen@collabora.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <ckoenig.leichtzumerken@gmail.com>,
+        intel-gfx@lists.freedesktop.org,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
+        <linaro-mm-sig@lists.linaro.org>,
+        Luben Tuikov <luben.tuikov@amd.com>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Gustavo Padovan <gustavo@padovan.org>,
+        Matt Turner <mattst88@gmail.com>,
+        freedreno@lists.freedesktop.org,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        "open list:DMA BUFFER SHARING FRAMEWORK" 
+        <linux-media@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 14, 2023 at 11:38=E2=80=AFPM Andrea Righi
-<andrea.righi@canonical.com> wrote:
+On Wed, Mar 15, 2023 at 6:53=E2=80=AFAM Jonas =C3=85dahl <jadahl@gmail.com>=
+ wrote:
 >
-> On Mon, Mar 13, 2023 at 11:09:31PM +0100, Andrea Righi wrote:
-> > On Mon, Mar 13, 2023 at 11:02:34PM +0100, Michal Such=C3=A1nek wrote:
-> > > On Mon, Mar 13, 2023 at 10:53:34PM +0100, Andrea Righi wrote:
-> > > > On Mon, Mar 13, 2023 at 10:48:53PM +0100, Michal Such=C3=A1nek wrot=
-e:
-> > > > > Hello,
-> > > > >
-> > > > > On Mon, Mar 13, 2023 at 09:32:16PM +0100, Andrea Righi wrote:
-> > > > > > On Wed, Jan 11, 2023 at 04:11:51PM +0000, Gary Guo wrote:
-> > > > > > > Currently modversion uses a fixed size array of size (64 - si=
-zeof(long))
-> > > > > > > to store symbol names, thus placing a hard limit on length of=
- symbols.
-> > > > > > > Rust symbols (which encodes crate and module names) can be qu=
-ite a bit
-> > > > > > > longer. The length limit in kallsyms is increased to 512 for =
-this reason.
-> > > > > > >
-> > > > > > > It's a waste of space to simply expand the fixed array size t=
-o 512 in
-> > > > > > > modversion info entries. I therefore make it variably sized, =
-with offset
-> > > > > > > to the next entry indicated by the initial "next" field.
-> > > > > > >
-> > > > > > > In addition to supporting longer-than-56/60 byte symbols, thi=
-s patch also
-> > > > > > > reduce the size for short symbols by getting rid of excessive=
- 0 paddings.
-> > > > > > > There are still some zero paddings to ensure "next" and "crc"=
- fields are
-> > > > > > > properly aligned.
-> > > > > > >
-> > > > > > > This patch does have a tiny drawback that it makes ".mod.c" f=
-iles generated
-> > > > > > > a bit less easy to read, as code like
-> > > > > > >
-> > > > > > >     "\x08\x00\x00\x00\x78\x56\x34\x12"
-> > > > > > >     "symbol\0\0"
-> > > > > > >
-> > > > > > > is generated as opposed to
-> > > > > > >
-> > > > > > >     { 0x12345678, "symbol" },
-> > > > > > >
-> > > > > > > because the structure is now variable-length. But hopefully n=
-obody reads
-> > > > > > > the generated file :)
-> > > > > > >
-> > > > > > > Link: b8a94bfb3395 ("kallsyms: increase maximum kernel symbol=
- length to 512")
-> > > > > > > Link: https://github.com/Rust-for-Linux/linux/pull/379
-> > > > > > >
-> > > > > > > Signed-off-by: Gary Guo <gary@garyguo.net>
-> > > > > >
-> > > > > > Is there any newer version of this patch?
-> > > > > >
-> > > > > > I'm doing some tests with it, but I'm getting boot failures on =
-ppc64
-> > > > > > with this applied (at boot kernel is spitting out lots of oops'=
-es and
-> > > > > > unfortunately it's really hard to copy paste or just read them =
-from the
-> > > > > > console).
-> > > > >
-> > > > > Are you using the ELF ABI v1 or v2?
-> > > > >
-> > > > > v1 may have some additional issues when it comes to these symbol =
-tables.
-> > > > >
-> > > > > Thanks
-> > > > >
-> > > > > Michal
-> > > >
-> > > > I have CONFIG_PPC64_ELF_ABI_V2=3Dy in my .config, so I guess I'm us=
-ing v2.
-> > > >
-> > > > BTW, the issue seems to be in dedotify_versions(), as a silly test =
-I
-> > > > tried to comment out this function completely to be a no-op and now=
- my
-> > > > system boots fine (but I guess I'm probably breaking something else=
-).
+> On Fri, Mar 10, 2023 at 09:38:18AM -0800, Rob Clark wrote:
+> > On Fri, Mar 10, 2023 at 7:45=E2=80=AFAM Jonas =C3=85dahl <jadahl@gmail.=
+com> wrote:
 > > >
-> > > Probably not. You should not have the extra leading dot on ABI v2. So=
- if
-> > > dedotify does something that means something generates and then expec=
-ts
-> > > back symbols with a leading dot, and this workaround for ABI v1 break=
-s
-> > > that. Or maybe it is called when it shouldn't.
+> > > On Wed, Mar 08, 2023 at 07:52:52AM -0800, Rob Clark wrote:
+> > > > From: Rob Clark <robdclark@chromium.org>
+> > > >
+> > > > Add a way to hint to the fence signaler of an upcoming deadline, su=
+ch as
+> > > > vblank, which the fence waiter would prefer not to miss.  This is t=
+o aid
+> > > > the fence signaler in making power management decisions, like boost=
+ing
+> > > > frequency as the deadline approaches and awareness of missing deadl=
+ines
+> > > > so that can be factored in to the frequency scaling.
+> > > >
+> > > > v2: Drop dma_fence::deadline and related logic to filter duplicate
+> > > >     deadlines, to avoid increasing dma_fence size.  The fence-conte=
+xt
+> > > >     implementation will need similar logic to track deadlines of al=
+l
+> > > >     the fences on the same timeline.  [ckoenig]
+> > > > v3: Clarify locking wrt. set_deadline callback
+> > > > v4: Clarify in docs comment that this is a hint
+> > > > v5: Drop DMA_FENCE_FLAG_HAS_DEADLINE_BIT.
+> > > > v6: More docs
+> > > > v7: Fix typo, clarify past deadlines
+> > > >
+> > > > Signed-off-by: Rob Clark <robdclark@chromium.org>
+> > > > Reviewed-by: Christian K=C3=B6nig <christian.koenig@amd.com>
+> > > > Acked-by: Pekka Paalanen <pekka.paalanen@collabora.com>
+> > > > Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
+> > > > ---
+> > >
+> > > Hi Rob!
+> > >
+> > > >  Documentation/driver-api/dma-buf.rst |  6 +++
+> > > >  drivers/dma-buf/dma-fence.c          | 59 ++++++++++++++++++++++++=
+++++
+> > > >  include/linux/dma-fence.h            | 22 +++++++++++
+> > > >  3 files changed, 87 insertions(+)
+> > > >
+> > > > diff --git a/Documentation/driver-api/dma-buf.rst b/Documentation/d=
+river-api/dma-buf.rst
+> > > > index 622b8156d212..183e480d8cea 100644
+> > > > --- a/Documentation/driver-api/dma-buf.rst
+> > > > +++ b/Documentation/driver-api/dma-buf.rst
+> > > > @@ -164,6 +164,12 @@ DMA Fence Signalling Annotations
+> > > >  .. kernel-doc:: drivers/dma-buf/dma-fence.c
+> > > >     :doc: fence signalling annotation
+> > > >
+> > > > +DMA Fence Deadline Hints
+> > > > +~~~~~~~~~~~~~~~~~~~~~~~~
+> > > > +
+> > > > +.. kernel-doc:: drivers/dma-buf/dma-fence.c
+> > > > +   :doc: deadline hints
+> > > > +
+> > > >  DMA Fences Functions Reference
+> > > >  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > > >
+> > > > diff --git a/drivers/dma-buf/dma-fence.c b/drivers/dma-buf/dma-fenc=
+e.c
+> > > > index 0de0482cd36e..f177c56269bb 100644
+> > > > --- a/drivers/dma-buf/dma-fence.c
+> > > > +++ b/drivers/dma-buf/dma-fence.c
+> > > > @@ -912,6 +912,65 @@ dma_fence_wait_any_timeout(struct dma_fence **=
+fences, uint32_t count,
+> > > >  }
+> > > >  EXPORT_SYMBOL(dma_fence_wait_any_timeout);
+> > > >
+> > > > +/**
+> > > > + * DOC: deadline hints
+> > > > + *
+> > > > + * In an ideal world, it would be possible to pipeline a workload =
+sufficiently
+> > > > + * that a utilization based device frequency governor could arrive=
+ at a minimum
+> > > > + * frequency that meets the requirements of the use-case, in order=
+ to minimize
+> > > > + * power consumption.  But in the real world there are many worklo=
+ads which
+> > > > + * defy this ideal.  For example, but not limited to:
+> > > > + *
+> > > > + * * Workloads that ping-pong between device and CPU, with alterna=
+ting periods
+> > > > + *   of CPU waiting for device, and device waiting on CPU.  This c=
+an result in
+> > > > + *   devfreq and cpufreq seeing idle time in their respective doma=
+ins and in
+> > > > + *   result reduce frequency.
+> > > > + *
+> > > > + * * Workloads that interact with a periodic time based deadline, =
+such as double
+> > > > + *   buffered GPU rendering vs vblank sync'd page flipping.  In th=
+is scenario,
+> > > > + *   missing a vblank deadline results in an *increase* in idle ti=
+me on the GPU
+> > > > + *   (since it has to wait an additional vblank period), sending a=
+ signal to
+> > > > + *   the GPU's devfreq to reduce frequency, when in fact the oppos=
+ite is what is
+> > > > + *   needed.
+> > >
+> > > This is the use case I'd like to get some better understanding about =
+how
+> > > this series intends to work, as the problematic scheduling behavior
+> > > triggered by missed deadlines has plagued compositing display servers
+> > > for a long time.
+> > >
+> > > I apologize, I'm not a GPU driver developer, nor an OpenGL driver
+> > > developer, so I will need some hand holding when it comes to
+> > > understanding exactly what piece of software is responsible for
+> > > communicating what piece of information.
+> > >
+> > > > + *
+> > > > + * To this end, deadline hint(s) can be set on a &dma_fence via &d=
+ma_fence_set_deadline.
+> > > > + * The deadline hint provides a way for the waiting driver, or use=
+rspace, to
+> > > > + * convey an appropriate sense of urgency to the signaling driver.
+> > > > + *
+> > > > + * A deadline hint is given in absolute ktime (CLOCK_MONOTONIC for=
+ userspace
+> > > > + * facing APIs).  The time could either be some point in the futur=
+e (such as
+> > > > + * the vblank based deadline for page-flipping, or the start of a =
+compositor's
+> > > > + * composition cycle), or the current time to indicate an immediat=
+e deadline
+> > > > + * hint (Ie. forward progress cannot be made until this fence is s=
+ignaled).
+> > >
+> > > Is it guaranteed that a GPU driver will use the actual start of the
+> > > vblank as the effective deadline? I have some memories of seing
+> > > something about vblank evasion browsing driver code, which I might ha=
+ve
+> > > misunderstood, but I have yet to find whether this is something
+> > > userspace can actually expect to be something it can rely on.
 > >
-> > Hm.. I'll add some debugging to this function to see what happens exact=
-ly.
+> > I guess you mean s/GPU driver/display driver/ ?  It makes things more
+> > clear if we talk about them separately even if they happen to be the
+> > same device.
 >
-> Alright I've done more tests across different architectures. My problem
-> with ppc64 is that this architecture is evaluating sechdrs[i].sh_size
-> using get_stubs_size(), that apparently can add some extra padding, so
-> doing (vers + vers->next < end) isn't a reliable check to determine the
-> end of the variable array, because sometimes "end" can be greater than
-> the last "vers + vers->next" entry.
-
-
-I am not familiar enough with ppc, so I may be misundering.
-
-Checking the for-loop in module_frob_arch_sections(),
-they seem to be orthogonal to me.
-
-dedotify_versions() is only called for the "__versions" section.
-get_stubs_size() only affects the ".stubs" section.
-I did not get how they are related to each other.
-
-
-BTW, we decided to not go in this direction in the former discussion.
-I am not sure how much effort is needed to track down the issue
-in this version.
-
-If we add new sections to keep the backward compatibility
-for the current "__versions", this issue may not exist.
-
-
-
-> In general I think it'd be more reliable to add a dummy NULL entry at
-> the end of the modversion array.
+> Sure, sorry about being unclear about that.
 >
-> Moreover, I think we also need to enforce struct modversion_info to be
-> __packed, just to make sure that no extra padding is added (otherwise it
-> may break our logic to determine the offset of the next entry).
+> >
+> > Assuming that is what you mean, nothing strongly defines what the
+> > deadline is.  In practice there is probably some buffering in the
+> > display controller.  For ex, block based (including bandwidth
+> > compressed) formats, you need to buffer up a row of blocks to
+> > efficiently linearize for scanout.  So you probably need to latch some
+> > time before you start sending pixel data to the display.  But details
+> > like this are heavily implementation dependent.  I think the most
+> > reasonable thing to target is start of vblank.
 >
-> > @@ -2062,16 +2066,25 @@ static void add_versions(struct buffer *b, stru=
-ct module *mod)
-> >                               s->name, mod->name);
-> >                       continue;
-> >               }
-> > -             if (strlen(s->name) >=3D MODULE_NAME_LEN) {
-> > -                     error("too long symbol \"%s\" [%s.ko]\n",
-> > -                           s->name, mod->name);
-> > -                     break;
-> > -             }
-> > -             buf_printf(b, "\t{ %#8x, \"%s\" },\n",
-> > -                        s->crc, s->name);
-> > +             name_len =3D strlen(s->name);
-> > +             name_len_padded =3D (name_len + 1 + 3) & ~3;
-> > +
-> > +             /* Offset to next entry */
-> > +             tmp =3D TO_NATIVE(8 + name_len_padded);
->
-> ^ Here's another issue that I found, you can't use TO_NATIVE() in this
-> way, some compilers are complaining (like on s390x this doesn't build).
->
-> So we need to do something like:
->
->         /* Offset to next entry */
->         tmp =3D 8 + name_len_padded
->         tmp =3D TO_NATIVE(tmp);
->
-> I'll do some additional tests with these changes and send an updated
-> patch (for those that are interested).
->
-> -Andrea
+> The driver exposing those details would be quite useful for userspace
+> though, so that it can delay committing updates to late, but not too
+> late. Setting a deadline to be the vblank seems easy enough, but it
+> isn't enough for scheduling the actual commit.
 
+I'm not entirely sure how that would even work.. but OTOH I think you
+are talking about something on the order of 100us?  But that is a bit
+of another topic.
 
+> >
+> > Also, keep in mind the deadline hint is just that.  It won't magically
+> > make the GPU finish by that deadline, but it gives the GPU driver
+> > information about lateness so it can realize if it needs to clock up.
+>
+> Sure, even if the GPU ramped up clocks to the max, if the job queue is
+> too large, it won't magically invent more cycles to squeeze in.
+>
+> >
+> > > Can userspace set a deadline that targets the next vblank deadline
+> > > before GPU work has been flushed e.g. at the start of a paint cycle, =
+and
+> > > still be sure that the kernel has the information it needs to know it=
+ should
+> > > make its clocks increase their speed in time for when the actual work
+> > > has been actually flushed? Or is it needed that the this deadline is =
+set
+> > > at the end?
+> >
+> > You need a fence to set the deadline, and for that work needs to be
+> > flushed.  But you can't associate a deadline with work that the kernel
+> > is unaware of anyways.
+>
+> That makes sense, but it might also a bit inadequate to have it as the
+> only way to tell the kernel it should speed things up. Even with the
+> trick i915 does, with GNOME Shell, we still end up with the feedback
+> loop this series aims to mitigate. Doing triple buffering, i.e. delaying
+> or dropping the first frame is so far the best work around that works,
+> except doing other tricks that makes the kernel to ramp up its clock.
+> Having to rely on choosing between latency and frame drops should
+> ideally not have to be made.
 
---
-Best Regards
-Masahiro Yamada
+Before you have a fence, the thing you want to be speeding up is the
+CPU, not the GPU.  There are existing mechanisms for that.
+
+TBF I'm of the belief that there is still a need for input based cpu
+boost (and early wake-up trigger for GPU).. we have something like
+this in CrOS kernel.  That is a bit of a different topic, but my point
+is that fence deadlines are just one of several things we need to
+optimize power/perf and responsiveness, rather than the single thing
+that solves every problem under the sun ;-)
+
+> >
+> > > What I'm more or less trying to ask is, will a mode setting composito=
+r
+> > > be able to tell the kernel to boost its clocks at the time it knows i=
+s
+> > > best, and how will it in practice achieve this?
+> >
+> > The anticipated usage for a compositor is that, when you receive a
+> > <buf, fence> pair from an app, you immediately set a deadline for
+> > upcoming start-of-vblank on the fence fd passed from the app.  (Or for
+> > implicit sync you can use DMA_BUF_IOCTL_EXPORT_SYNC_FILE).  For the
+> > composite step, no need to set a deadline as this is already done on
+> > the kernel side in drm_atomic_helper_wait_for_fences().
+>
+> So it sounds like the new uapi will help compositors that do not draw
+> with the intention of page flipping anything, and compositors that
+> deliberately delay the commit. I suppose with proper target presentation
+> time integration EGL/Vulkan WSI can set deadlines them as well. All that
+> sounds like a welcomed improvement, but I'm not convinced it's enough to
+> solve the problems we currently face.
+
+Yeah, like I mentioned this addresses one issue, giving the GPU kernel
+driver better information for freq mgmt.  But there probably isn't one
+single solution for everything.
+
+> >
+> > > For example relying on the atomic mode setting commit setting the
+> > > deadline is fundamentally flawed, since user space will at times want=
+ to
+> > > purposefully delay committing until as late as possible, without doin=
+g
+> > > so causing an increased risk of missing the deadline due to the kerne=
+l
+> > > not speeding up clocks at the right time for GPU work that has alread=
+y
+> > > been flushed long ago.
+> >
+> > Right, this is the point for exposing the ioctl to userspace.
+> >
+> > > Relying on commits also has no effect on GPU work queued by
+> > > a compositor drawing only to dma-bufs that are never intended to be
+> > > presented using mode setting. How can we make sure a compositor can
+> > > provide hints that the kernel will know to respect despite the
+> > > compositor not being drm master?
+> >
+> > It doesn't matter if there are indirect dependencies.  Even if the
+> > compositor completely ignores deadline hints and fancy tricks like
+> > delaying composite decisions, the indirect dependency (app rendering)
+> > will delay the direct dependency (compositor rendering) of the page
+> > flip.  So the driver will still see whether it is late or early
+> > compared to the deadline, allowing it to adjust freq in the
+> > appropriate direction for the next frame.
+>
+> Is it expected that WSI's will set their own deadlines, or should that
+> be the job of the compositor? For example by using compositors using
+> DMA_BUF_IOCTL_EXPORT_SYNC_FILE that you mentioned, using it to set a
+> deadline matching the vsync it most ideally will be committed to?
+>
+
+I'm kind of assuming compositors, but if the WSI somehow has more
+information about ideal presentation time, then I suppose it could be
+in the WSI?  I'll defer to folks who spend more time on WSI and
+compositors to hash out the details ;-)
+
+BR,
+-R
+
+>
+> Jonas
+>
+> >
+> > BR,
+> > -R
+> >
+> > >
+> > > Jonas
+> > >
+> > > > + *
+> > > > + * Multiple deadlines may be set on a given fence, even in paralle=
+l.  See the
+> > > > + * documentation for &dma_fence_ops.set_deadline.
+> > > > + *
+> > > > + * The deadline hint is just that, a hint.  The driver that create=
+d the fence
+> > > > + * may react by increasing frequency, making different scheduling =
+choices, etc.
+> > > > + * Or doing nothing at all.
+> > > > + */
+> > > > +
+> > > > +/**
+> > > > + * dma_fence_set_deadline - set desired fence-wait deadline hint
+> > > > + * @fence:    the fence that is to be waited on
+> > > > + * @deadline: the time by which the waiter hopes for the fence to =
+be
+> > > > + *            signaled
+> > > > + *
+> > > > + * Give the fence signaler a hint about an upcoming deadline, such=
+ as
+> > > > + * vblank, by which point the waiter would prefer the fence to be
+> > > > + * signaled by.  This is intended to give feedback to the fence si=
+gnaler
+> > > > + * to aid in power management decisions, such as boosting GPU freq=
+uency
+> > > > + * if a periodic vblank deadline is approaching but the fence is n=
+ot
+> > > > + * yet signaled..
+> > > > + */
+> > > > +void dma_fence_set_deadline(struct dma_fence *fence, ktime_t deadl=
+ine)
+> > > > +{
+> > > > +     if (fence->ops->set_deadline && !dma_fence_is_signaled(fence)=
+)
+> > > > +             fence->ops->set_deadline(fence, deadline);
+> > > > +}
+> > > > +EXPORT_SYMBOL(dma_fence_set_deadline);
+> > > > +
+> > > >  /**
+> > > >   * dma_fence_describe - Dump fence describtion into seq_file
+> > > >   * @fence: the 6fence to describe
+> > > > diff --git a/include/linux/dma-fence.h b/include/linux/dma-fence.h
+> > > > index 775cdc0b4f24..d54b595a0fe0 100644
+> > > > --- a/include/linux/dma-fence.h
+> > > > +++ b/include/linux/dma-fence.h
+> > > > @@ -257,6 +257,26 @@ struct dma_fence_ops {
+> > > >        */
+> > > >       void (*timeline_value_str)(struct dma_fence *fence,
+> > > >                                  char *str, int size);
+> > > > +
+> > > > +     /**
+> > > > +      * @set_deadline:
+> > > > +      *
+> > > > +      * Callback to allow a fence waiter to inform the fence signa=
+ler of
+> > > > +      * an upcoming deadline, such as vblank, by which point the w=
+aiter
+> > > > +      * would prefer the fence to be signaled by.  This is intende=
+d to
+> > > > +      * give feedback to the fence signaler to aid in power manage=
+ment
+> > > > +      * decisions, such as boosting GPU frequency.
+> > > > +      *
+> > > > +      * This is called without &dma_fence.lock held, it can be cal=
+led
+> > > > +      * multiple times and from any context.  Locking is up to the=
+ callee
+> > > > +      * if it has some state to manage.  If multiple deadlines are=
+ set,
+> > > > +      * the expectation is to track the soonest one.  If the deadl=
+ine is
+> > > > +      * before the current time, it should be interpreted as an im=
+mediate
+> > > > +      * deadline.
+> > > > +      *
+> > > > +      * This callback is optional.
+> > > > +      */
+> > > > +     void (*set_deadline)(struct dma_fence *fence, ktime_t deadlin=
+e);
+> > > >  };
+> > > >
+> > > >  void dma_fence_init(struct dma_fence *fence, const struct dma_fenc=
+e_ops *ops,
+> > > > @@ -583,6 +603,8 @@ static inline signed long dma_fence_wait(struct=
+ dma_fence *fence, bool intr)
+> > > >       return ret < 0 ? ret : 0;
+> > > >  }
+> > > >
+> > > > +void dma_fence_set_deadline(struct dma_fence *fence, ktime_t deadl=
+ine);
+> > > > +
+> > > >  struct dma_fence *dma_fence_get_stub(void);
+> > > >  struct dma_fence *dma_fence_allocate_private_stub(void);
+> > > >  u64 dma_fence_context_alloc(unsigned num);
+> > > > --
+> > > > 2.39.2
+> > > >
