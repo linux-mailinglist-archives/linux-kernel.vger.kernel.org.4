@@ -2,160 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A18056BA6E9
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 06:17:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E36846BA745
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 06:41:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231664AbjCOFQ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 01:16:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48736 "EHLO
+        id S231593AbjCOFlt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 01:41:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231338AbjCOFPJ (ORCPT
+        with ESMTP id S231550AbjCOFll (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 01:15:09 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D740301AB;
-        Tue, 14 Mar 2023 22:14:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
-        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
-        Content-Type:Content-ID:Content-Description;
-        bh=ZB/nojsqXTtfSMaj4C8ZgsYbK0b2FnBz3f1ii2GaXkQ=; b=hY0UUqTGJDzLw4RBYtIYxgeVvN
-        63iW/9r3FQoz3cmvNkkqfiUK9D3PXsg4xMaIMPfprUGUdDWLfFX8lqQ3C82dUtIIJbUVjiPS7bkew
-        3SVH8K0ra3lSNQjOGGGVyPINBnyh+l1lpy9vvC+bXrgxroKRo6SBBqMHZ/6OCUELUKsVgdksovkJT
-        OvXxNguIF8woiUKmuJj3JF3fXhM+G7vSEr0sxyhz6N12DAq6wpZJTX8hDZKK1dlve+VZatmATm7Qi
-        Cujmwp3ehFlZS15JwLjFg7ZbiZQcI3M7wVp8XqdQrQfxLY2iEj5jOexlolxHUH/oEfQmY/I+3E1Oo
-        YD831Jww==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pcJTO-00DYEB-U2; Wed, 15 Mar 2023 05:14:50 +0000
-From:   "Matthew Wilcox (Oracle)" <willy@infradead.org>
-To:     linux-arch@vger.kernel.org
-Cc:     Yin Fengwei <fengwei.yin@intel.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Matthew Wilcox <willy@infradead.org>
-Subject: [PATCH v4 36/36] filemap: Batch PTE mappings
-Date:   Wed, 15 Mar 2023 05:14:44 +0000
-Message-Id: <20230315051444.3229621-37-willy@infradead.org>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20230315051444.3229621-1-willy@infradead.org>
-References: <20230315051444.3229621-1-willy@infradead.org>
+        Wed, 15 Mar 2023 01:41:41 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C65424FA9B;
+        Tue, 14 Mar 2023 22:41:29 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B68A116F3;
+        Tue, 14 Mar 2023 22:16:31 -0700 (PDT)
+Received: from a077893.blr.arm.com (unknown [10.162.41.10])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 9545E3F67D;
+        Tue, 14 Mar 2023 22:15:43 -0700 (PDT)
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        will@kernel.org, catalin.marinas@arm.com, mark.rutland@arm.com
+Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        Mark Brown <broonie@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Suzuki Poulose <suzuki.poulose@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        linux-perf-users@vger.kernel.org
+Subject: [PATCH V9 10/10] arm64/perf: Implement branch records save on PMU IRQ
+Date:   Wed, 15 Mar 2023 10:44:44 +0530
+Message-Id: <20230315051444.1683170-11-anshuman.khandual@arm.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230315051444.1683170-1-anshuman.khandual@arm.com>
+References: <20230315051444.1683170-1-anshuman.khandual@arm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yin Fengwei <fengwei.yin@intel.com>
+This modifies armv8pmu_branch_read() to concatenate live entries along with
+task context stored entries and then process the resultant buffer to create
+perf branch entry array for perf_sample_data. It follows the same principle
+like task sched out.
 
-Call set_pte_range() once per contiguous range of the folio instead
-of once per page.  This batches the updates to mm counters and the
-rmap.
-
-With a will-it-scale.page_fault3 like app (change file write
-fault testing to read fault testing. Trying to upstream it to
-will-it-scale at [1]) got 15% performance gain on a 48C/96T
-Cascade Lake test box with 96 processes running against xfs.
-
-Perf data collected before/after the change:
-  18.73%--page_add_file_rmap
-          |
-           --11.60%--__mod_lruvec_page_state
-                     |
-                     |--7.40%--__mod_memcg_lruvec_state
-                     |          |
-                     |           --5.58%--cgroup_rstat_updated
-                     |
-                      --2.53%--__mod_lruvec_state
-                                |
-                                 --1.48%--__mod_node_page_state
-
-  9.93%--page_add_file_rmap_range
-         |
-          --2.67%--__mod_lruvec_page_state
-                    |
-                    |--1.95%--__mod_memcg_lruvec_state
-                    |          |
-                    |           --1.57%--cgroup_rstat_updated
-                    |
-                     --0.61%--__mod_lruvec_state
-                               |
-                                --0.54%--__mod_node_page_state
-
-The running time of __mode_lruvec_page_state() is reduced about 9%.
-
-[1]: https://github.com/antonblanchard/will-it-scale/pull/37
-
-Signed-off-by: Yin Fengwei <fengwei.yin@intel.com>
-Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
 ---
- mm/filemap.c | 36 +++++++++++++++++++++++++-----------
- 1 file changed, 25 insertions(+), 11 deletions(-)
+ arch/arm64/kernel/brbe.c | 75 +++++++++++++++-------------------------
+ 1 file changed, 28 insertions(+), 47 deletions(-)
 
-diff --git a/mm/filemap.c b/mm/filemap.c
-index e2317623dcbf..7a1534460b55 100644
---- a/mm/filemap.c
-+++ b/mm/filemap.c
-@@ -3483,11 +3483,12 @@ static vm_fault_t filemap_map_folio_range(struct vm_fault *vmf,
- 	struct file *file = vma->vm_file;
- 	struct page *page = folio_page(folio, start);
- 	unsigned int mmap_miss = READ_ONCE(file->f_ra.mmap_miss);
--	unsigned int ref_count = 0, count = 0;
-+	unsigned int count = 0;
-+	pte_t *old_ptep = vmf->pte;
+diff --git a/arch/arm64/kernel/brbe.c b/arch/arm64/kernel/brbe.c
+index 3dcb4407b92a..652af6668d37 100644
+--- a/arch/arm64/kernel/brbe.c
++++ b/arch/arm64/kernel/brbe.c
+@@ -693,41 +693,45 @@ void armv8pmu_branch_reset(void)
+ 	isb();
+ }
  
- 	do {
--		if (PageHWPoison(page))
--			continue;
-+		if (PageHWPoison(page + count))
-+			goto skip;
+-static bool capture_branch_entry(struct pmu_hw_events *cpuc,
+-				 struct perf_event *event, int idx)
++static void brbe_regset_branch_entries(struct pmu_hw_events *cpuc, struct perf_event *event,
++				       struct brbe_regset *regset, int idx)
+ {
+ 	struct perf_branch_entry *entry = &cpuc->branches->branch_entries[idx];
+-	u64 brbinf = get_brbinf_reg(idx);
+-
+-	/*
+-	 * There are no valid entries anymore on the buffer.
+-	 * Abort the branch record processing to save some
+-	 * cycles and also reduce the capture/process load
+-	 * for the user space as well.
+-	 */
+-	if (brbe_invalid(brbinf))
+-		return false;
++	u64 brbinf = regset[idx].brbinf;
  
- 		if (mmap_miss > 0)
- 			mmap_miss--;
-@@ -3497,20 +3498,33 @@ static vm_fault_t filemap_map_folio_range(struct vm_fault *vmf,
- 		 * handled in the specific fault path, and it'll prohibit the
- 		 * fault-around logic.
- 		 */
--		if (!pte_none(*vmf->pte))
--			continue;
-+		if (!pte_none(vmf->pte[count]))
-+			goto skip;
- 
- 		if (vmf->address == addr)
- 			ret = VM_FAULT_NOPAGE;
- 
--		ref_count++;
--		set_pte_range(vmf, folio, page, 1, addr);
--	} while (vmf->pte++, page++, addr += PAGE_SIZE, ++count < nr_pages);
-+		count++;
-+		continue;
-+skip:
-+		if (count) {
-+			set_pte_range(vmf, folio, page, count, addr);
-+			folio_ref_add(folio, count);
-+		}
- 
--	/* Restore the vmf->pte */
--	vmf->pte -= nr_pages;
-+		count++;
-+		page += count;
-+		vmf->pte += count;
-+		addr += count * PAGE_SIZE;
-+		count = 0;
-+	} while (--nr_pages > 0);
+ 	perf_clear_branch_entry_bitfields(entry);
+ 	if (brbe_record_is_complete(brbinf)) {
+-		entry->from = get_brbsrc_reg(idx);
+-		entry->to = get_brbtgt_reg(idx);
++		entry->from = regset[idx].brbsrc;
++		entry->to = regset[idx].brbtgt;
+ 	} else if (brbe_record_is_source_only(brbinf)) {
+-		entry->from = get_brbsrc_reg(idx);
++		entry->from = regset[idx].brbsrc;
+ 		entry->to = 0;
+ 	} else if (brbe_record_is_target_only(brbinf)) {
+ 		entry->from = 0;
+-		entry->to = get_brbtgt_reg(idx);
++		entry->to = regset[idx].brbtgt;
+ 	}
+ 	capture_brbe_flags(entry, event, brbinf);
+-	return true;
++}
 +
-+	if (count) {
-+		set_pte_range(vmf, folio, page, count, addr);
-+		folio_ref_add(folio, count);
-+	}
++static void process_branch_entries(struct pmu_hw_events *cpuc, struct perf_event *event,
++				   struct brbe_regset *regset, int nr_regset)
++{
++	int idx;
++
++	for (idx = 0; idx < nr_regset; idx++)
++		brbe_regset_branch_entries(cpuc, event, regset, idx);
++
++	cpuc->branches->branch_stack.nr = nr_regset;
++	cpuc->branches->branch_stack.hw_idx = -1ULL;
+ }
  
--	folio_ref_add(folio, ref_count);
-+	vmf->pte = old_ptep;
- 	WRITE_ONCE(file->f_ra.mmap_miss, mmap_miss);
+ void armv8pmu_branch_read(struct pmu_hw_events *cpuc, struct perf_event *event)
+ {
+ 	struct brbe_hw_attr *brbe_attr = (struct brbe_hw_attr *)cpuc->percpu_pmu->private;
++	struct arm64_perf_task_context *task_ctx = event->pmu_ctx->task_ctx_data;
++	struct brbe_regset live[BRBE_MAX_ENTRIES];
++	int nr_live, nr_store;
+ 	u64 brbfcr, brbcr;
+-	int idx, loop1_idx1, loop1_idx2, loop2_idx1, loop2_idx2, count;
  
- 	return ret;
+ 	brbcr = read_sysreg_s(SYS_BRBCR_EL1);
+ 	brbfcr = read_sysreg_s(SYS_BRBFCR_EL1);
+@@ -739,36 +743,13 @@ void armv8pmu_branch_read(struct pmu_hw_events *cpuc, struct perf_event *event)
+ 	write_sysreg_s(brbfcr | BRBFCR_EL1_PAUSED, SYS_BRBFCR_EL1);
+ 	isb();
+ 
+-	/* Determine the indices for each loop */
+-	loop1_idx1 = BRBE_BANK0_IDX_MIN;
+-	if (brbe_attr->brbe_nr <= BRBE_BANK_MAX_ENTRIES) {
+-		loop1_idx2 = brbe_attr->brbe_nr - 1;
+-		loop2_idx1 = BRBE_BANK1_IDX_MIN;
+-		loop2_idx2 = BRBE_BANK0_IDX_MAX;
+-	} else {
+-		loop1_idx2 = BRBE_BANK0_IDX_MAX;
+-		loop2_idx1 = BRBE_BANK1_IDX_MIN;
+-		loop2_idx2 = brbe_attr->brbe_nr - 1;
+-	}
+-
+-	/* Loop through bank 0 */
+-	select_brbe_bank(BRBE_BANK_IDX_0);
+-	for (idx = 0, count = loop1_idx1; count <= loop1_idx2; idx++, count++) {
+-		if (!capture_branch_entry(cpuc, event, idx))
+-			goto skip_bank_1;
+-	}
+-
+-	/* Loop through bank 1 */
+-	select_brbe_bank(BRBE_BANK_IDX_1);
+-	for (count = loop2_idx1; count <= loop2_idx2; idx++, count++) {
+-		if (!capture_branch_entry(cpuc, event, idx))
+-			break;
+-	}
+-
+-skip_bank_1:
+-	cpuc->branches->branch_stack.nr = idx;
+-	cpuc->branches->branch_stack.hw_idx = -1ULL;
++	nr_live = capture_brbe_regset(brbe_attr, live);
++	nr_store = task_ctx->nr_brbe_records;
++	nr_store = stitch_stored_live_entries(task_ctx->store, live, nr_store,
++					      nr_live, brbe_attr->brbe_nr);
++	process_branch_entries(cpuc, event, task_ctx->store, nr_store);
+ 	process_branch_aborts(cpuc);
++	task_ctx->nr_brbe_records = 0;
+ 
+ 	/* Unpause the buffer */
+ 	write_sysreg_s(brbfcr & ~BRBFCR_EL1_PAUSED, SYS_BRBFCR_EL1);
 -- 
-2.39.2
+2.25.1
 
