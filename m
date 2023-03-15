@@ -2,102 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB8C76BBAE6
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 18:30:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C22AC6BBAEA
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 18:31:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231536AbjCORa6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 13:30:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35970 "EHLO
+        id S231802AbjCORbx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 13:31:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230036AbjCORaz (ORCPT
+        with ESMTP id S231680AbjCORbw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 13:30:55 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 929BD584A7
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 10:30:53 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id f16so20229073ljq.10
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 10:30:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678901451;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=nyHC0VUkupsiuWX2pHsL/65xztoUDBBkuNkC20AficQ=;
-        b=GJ97q5jYvQR8vrr48icXglGbW7rbJfdUHhHBaxDDPZZlMjuR8MS2JnxvjV8cuStFTt
-         6qPpD4iKSjMNHuHp+i9qJ15VUl4IuKII6uZimndhf9u5uDyL4Hm5n9Day/PRXRZDHNm7
-         C6YHj0adBrFhpy24nz+Q+2EBEK7c82TPHA7gQpzDGb9O4PnGemNXrk0p8sZoZbnVquM5
-         bP54KsuOal0w7AKd8/jnsQM5EirCsBB7/Z2c8C/7YgmrpAn1T9WYh3M28XfSgtHZcyuO
-         quvQKTn1rwmVmXlX2gtJQG1Fk4km3eES/RMbwn+KL9WWgPCiypagIjwr4RjYpzuEZe9e
-         jfJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678901451;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=nyHC0VUkupsiuWX2pHsL/65xztoUDBBkuNkC20AficQ=;
-        b=WBGOnzqw2pHOtgWQ8x2jY1a8Z2KQdWyF4qRLMCxn8D/nrs9U1SQ/dk+JAKwRD8u2UK
-         qFN4bsicJy64RXac7w/E5w2a8LeRoAUBvx1yu8VczNY65wR4rbs5uU3OTD+gBwt/z0gS
-         5P4M5GBsz4Mwb4IMPn2fHwWRME5HSf/TuDTb+B4H4DyVVdBbg55P9w2+e4NiSv4WiD53
-         6mInHrHMtgqrOl2HQ0IunbzQ963p9EAgHluns5tm0uFrexREx+0SXGf+bjrMIvBQa60H
-         7qNE+BerFUN5Z10QIjlgpQF1BC3lyXeQf1vFLlGjA3i7oDSeoXNyZz/iAGFZMFtFN0Ww
-         3z1Q==
-X-Gm-Message-State: AO0yUKXaN5uXip+TDtaxJatgmALcaCaTloWET6tsU81JjtTLBI8ZNCZc
-        D71eZGQfz8LjN+1PAnp2yJvY4g==
-X-Google-Smtp-Source: AK7set8qdUTG2izjSNf/ErXIPYQfJRIKDjxOhFSDR7Kjx9V/3mxfJTKO2NEma+EDiR6JfZ0/rg41EA==
-X-Received: by 2002:a2e:850d:0:b0:290:8289:8cc8 with SMTP id j13-20020a2e850d000000b0029082898cc8mr993566lji.22.1678901451666;
-        Wed, 15 Mar 2023 10:30:51 -0700 (PDT)
-Received: from localhost.localdomain (abyj16.neoplus.adsl.tpnet.pl. [83.9.29.16])
-        by smtp.gmail.com with ESMTPSA id d28-20020ac244dc000000b004d85a7e8b17sm887561lfm.269.2023.03.15.10.30.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Mar 2023 10:30:51 -0700 (PDT)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org
-Cc:     marijn.suijten@somainline.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Shawn Guo <shawn.guo@linaro.org>,
-        Rob Herring <robh@kernel.org>, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] clk: qcom: gcc-qcm2290: Fix up gcc_sdcc2_apps_clk_src
-Date:   Wed, 15 Mar 2023 18:30:48 +0100
-Message-Id: <20230315173048.3497655-1-konrad.dybcio@linaro.org>
-X-Mailer: git-send-email 2.39.2
+        Wed, 15 Mar 2023 13:31:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6336C5982B;
+        Wed, 15 Mar 2023 10:31:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EA68561E11;
+        Wed, 15 Mar 2023 17:31:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A9D5C433EF;
+        Wed, 15 Mar 2023 17:31:47 +0000 (UTC)
+Date:   Wed, 15 Mar 2023 13:31:46 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Christian =?UTF-8?B?S8O2bmln?= <ckoenig.leichtzumerken@gmail.com>
+Cc:     Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+        Arunpravin Paneer Selvam <Arunpravin.PaneerSelvam@amd.com>,
+        intel-gfx@lists.freedesktop.org,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        linux-media@vger.kernel.org
+Subject: Re: [BUG 6.3-rc1] Bad lock in ttm_bo_delayed_delete()
+Message-ID: <20230315133146.3a48206e@gandalf.local.home>
+In-Reply-To: <20230315115712.56b3c21f@gandalf.local.home>
+References: <20230307212223.7e49384a@gandalf.local.home>
+        <20230307212615.7a099103@gandalf.local.home>
+        <b919b550-6da8-f9f0-a0eb-0fd8af513817@amd.com>
+        <20230315110949.1e11b3aa@gandalf.local.home>
+        <07597f3e-0b35-c22b-91ec-fa3875d6fe22@gmail.com>
+        <20230315115712.56b3c21f@gandalf.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the PARENT_ENABLE flag to prevent  the clock from getting stuck
-at boot and use floor_ops to avoid SDHCI overclocking.
+On Wed, 15 Mar 2023 11:57:12 -0400
+Steven Rostedt <rostedt@goodmis.org> wrote:
 
-Fixes: 496d1a13d405 ("clk: qcom: Add Global Clock Controller driver for QCM2290")
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- drivers/clk/qcom/gcc-qcm2290.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+So I'm looking at the backtraces.
 
-diff --git a/drivers/clk/qcom/gcc-qcm2290.c b/drivers/clk/qcom/gcc-qcm2290.c
-index 7792b8f23704..096deff2ba25 100644
---- a/drivers/clk/qcom/gcc-qcm2290.c
-+++ b/drivers/clk/qcom/gcc-qcm2290.c
-@@ -1243,7 +1243,8 @@ static struct clk_rcg2 gcc_sdcc2_apps_clk_src = {
- 		.name = "gcc_sdcc2_apps_clk_src",
- 		.parent_data = gcc_parents_12,
- 		.num_parents = ARRAY_SIZE(gcc_parents_12),
--		.ops = &clk_rcg2_ops,
-+		.ops = &clk_rcg2_floor_ops,
-+		.flags = CLK_OPS_PARENT_ENABLE,
- 	},
- };
- 
--- 
-2.39.2
+> The WARN_ON triggered:
+> 
+> [   21.481449] mpls_gso: MPLS GSO support
+> [   21.488795] IPI shorthand broadcast: enabled
+> [   21.488873] ------------[ cut here ]------------
+> [   21.490101] ------------[ cut here ]------------
+> 
+> [   21.491693] WARNING: CPU: 1 PID: 38 at drivers/gpu/drm/ttm/ttm_bo.c:332 ttm_bo_release+0x2ac/0x2fc  <<<---- Line of the added WARN_ON()
+
+This happened on CPU 1.
+
+> 
+> [   21.492940] refcount_t: underflow; use-after-free.
+> [   21.492965] WARNING: CPU: 0 PID: 84 at lib/refcount.c:28 refcount_warn_saturate+0xb6/0xfc
+
+This happened on CPU 0.
+
+> [   21.496116] Modules linked in:
+> [   21.497197] Modules linked in:
+> [   21.500105] CPU: 1 PID: 38 Comm: kworker/1:1 Not tainted 6.3.0-rc2-test-00047-g6015b1aca1a2-dirty #993
+> [   21.500789] CPU: 0 PID: 84 Comm: kworker/0:1H Not tainted 6.3.0-rc2-test-00047-g6015b1aca1a2-dirty #993
+> [   21.501882] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.0-debian-1.16.0-5 04/01/2014
+> [   21.503533] sched_clock: Marking stable (20788024762, 714243692)->(22140778105, -638509651)
+> [   21.504080] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.0-debian-1.16.0-5 04/01/2014
+> [   21.504089] Workqueue: ttm ttm_bo_delayed_delete
+> [   21.507196] Workqueue: events drm_fb_helper_damage_work
+> [   21.509235] 
+> [   21.510291] registered taskstats version 1
+> [   21.510302] Running ring buffer tests...
+> [   21.511792] 
+> [   21.513870] EIP: refcount_warn_saturate+0xb6/0xfc
+> [   21.515261] EIP: ttm_bo_release+0x2ac/0x2fc
+> [   21.516566] Code: 68 00 27 0c d8 e8 36 3b aa ff 0f 0b 58 c9 c3 90 80 3d 41 c2 37 d8 00 75 8a c6 05 41 c2 37 d8 01 68 2c 27 0c d8 e8 16 3b aa ff <0f> 0b 59 c9 c3 80 3d 3f c2 37 d8 00 0f 85 67 ff ff ff c6 05 3f c2
+> [   21.516998] Code: ff 8d b4 26 00 00 00 00 66 90 0f 0b 8b 43 10 85 c0 0f 84 a1 fd ff ff 8d 76 00 0f 0b 8b 43 28 85 c0 0f 84 9c fd ff ff 8d 76 00 <0f> 0b e9 92 fd ff ff 8d b4 26 00 00 00 00 66 90 c7 43 18 00 00 00
+> [   21.517905] EAX: 00000026 EBX: c129d150 ECX: 00000040 EDX: 00000002
+> [   21.518987] EAX: d78c8550 EBX: c129d134 ECX: c129d134 EDX: 00000001
+> [   21.519337] ESI: c129d0bc EDI: f6f91200 EBP: c2b8bf18 ESP: c2b8bf14
+> [   21.520617] ESI: c129d000 EDI: c126a7a0 EBP: c1839c24 ESP: c1839bec
+> [   21.521546] DS: 007b ES: 007b FS: 00d8 GS: 0000 SS: 0068 EFLAGS: 00010286
+> [   21.526154] DS: 007b ES: 007b FS: 00d8 GS: 0000 SS: 0068 EFLAGS: 00010286
+> [   21.526162] CR0: 80050033 CR2: 00000000 CR3: 18506000 CR4: 00150ef0
+> [   21.526166] Call Trace:
+> [   21.526189]  ? ww_mutex_unlock+0x3a/0x94
+> [   21.530300] CR0: 80050033 CR2: ff9ff000 CR3: 18506000 CR4: 00150ef0
+> [   21.531722]  ? ttm_bo_cleanup_refs+0xc4/0x1e0
+> [   21.533114] Call Trace:
+> [   21.534516]  ttm_mem_evict_first+0x3d3/0x568
+> [   21.535901]  ttm_bo_delayed_delete+0x9c/0xa4
+> [   21.537391]  ? kfree+0x6b/0xdc
+> [   21.538901]  process_one_work+0x21a/0x484
+> [   21.540279]  ? ttm_range_man_alloc+0xe0/0xec
+> [   21.540854]  worker_thread+0x14a/0x39c
+> [   21.541714]  ? ttm_range_man_fini_nocheck+0xe8/0xe8
+> [   21.543332]  kthread+0xea/0x10c
+> [   21.544301]  ttm_bo_mem_space+0x1d0/0x1e4
+> [   21.544942]  ? process_one_work+0x484/0x484
+> [   21.545887]  ttm_bo_validate+0xc5/0x19c
+> [   21.546986]  ? kthread_complete_and_exit+0x1c/0x1c
+> [   21.547680]  ttm_bo_init_reserved+0x15e/0x1fc
+> [   21.548716]  ret_from_fork+0x1c/0x28
+> [   21.549650]  qxl_bo_create+0x145/0x20c
+
+The qxl_bo_create() calls ttm_bo_init_reserved() as the object in question
+is about to be freed.
+
+I'm guessing what is happening here, is that an object was to be freed by
+the delayed_delete, and in the mean time, something else picked it up.
+
+What's protecting this from not being used again?
+
+-- Steve
 
