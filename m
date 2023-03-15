@@ -2,77 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BE9E6BB0F7
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 13:23:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EE406BB11F
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 13:24:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232370AbjCOMX2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 08:23:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46264 "EHLO
+        id S232437AbjCOMYn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 08:24:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232032AbjCOMW7 (ORCPT
+        with ESMTP id S232395AbjCOMYY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 08:22:59 -0400
-Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF67C84803
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 05:21:53 -0700 (PDT)
-Received: by mail-qv1-xf34.google.com with SMTP id nv15so16226407qvb.7
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 05:21:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google; t=1678882910;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=MsV1dSmZQh2TX7/derbiKkACl9wwmr90MM8z5+HIK6E=;
-        b=GYaA+pdVbdgjEhemVrCwtlfYBAeN1d4VpjRq95GnqMJMZq1x3za5Q75+BTySA80esv
-         Uf9qvbQVez/QLMGD+pDxoTa7EQmVbNbwskT3h88OqtPifLGc8dbI4ajqUlq5WaaTBQF8
-         cTDoTEC1o8cIidPqzac5QPuJurpO5FBMayST8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678882910;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MsV1dSmZQh2TX7/derbiKkACl9wwmr90MM8z5+HIK6E=;
-        b=njxOMZLLT1jpkrQ8e7VckXAYbCxv0cJhmPbLGgGYcDSsxXGl6XPBoB/P+4xQ6RH2DW
-         QNoaZAWhoHXccFzxE7oPgMSJqyd2dxOJliVKfKfvZMV3NGHxoiDoZ9+Hndwis+LtVoBY
-         F1ddp+/yPvGqqb9iDwkbEBMiItJVmrWxdHXSj8KJtfCDPgE9BIhSQnr7csnGFhrpycAZ
-         iZ69rwuEYorBkVhZ/ZoQj+FVt+3X7KlEIOlXePw7TGDYmpXwT7lkHzMSZBZmn4S1hNnN
-         QpRwQ2l9Ot8ncP3VoFDeP4GrG65hR9u7fgMuCmlwS2c+R5ukEMweVDjoO2gD7l6oVits
-         EltQ==
-X-Gm-Message-State: AO0yUKU4LY+qGerKIuRE94jwsX967CslkvQMqQASB0TIjZZxPiIsN7+E
-        NCscYblF0WXCYXfYHfZ0+qVxow==
-X-Google-Smtp-Source: AK7set+Y3Y7lCVHbdYRmbXrUZPyAmjA3Az7QpROjvnuBgJ5o6K6T6f1lAdt2WLh2u3oCdM/3e6FfxQ==
-X-Received: by 2002:a05:6214:1d2c:b0:577:6271:a035 with SMTP id f12-20020a0562141d2c00b005776271a035mr28473275qvd.1.1678882909589;
-        Wed, 15 Mar 2023 05:21:49 -0700 (PDT)
-Received: from localhost (129.239.188.35.bc.googleusercontent.com. [35.188.239.129])
-        by smtp.gmail.com with ESMTPSA id t62-20020a374641000000b0073b878e3f30sm3571908qka.59.2023.03.15.05.21.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Mar 2023 05:21:49 -0700 (PDT)
-Date:   Wed, 15 Mar 2023 12:21:48 +0000
-From:   Joel Fernandes <joel@joelfernandes.org>
-To:     Uladzislau Rezki <urezki@gmail.com>
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        linux-kernel@vger.kernel.org, Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        linux-doc@vger.kernel.org, rcu@vger.kernel.org
-Subject: Re: [PATCH v3] rcu: Add a minimum time for marking boot as completed
-Message-ID: <20230315122148.GF3784687@google.com>
-References: <ZAc+vVZUhXdhpSki@pc636>
- <CAEXW_YRTLQpQpOW-+n+X59pmB=4TkV=gdsMiQfBkdK_4wO9Jug@mail.gmail.com>
- <20230307173313.GJ1301832@paulmck-ThinkPad-P17-Gen-1>
- <20230307185443.GA516865@google.com>
- <20230307192726.GL1301832@paulmck-ThinkPad-P17-Gen-1>
- <ZAhYP9a8u05hzsOn@pc636>
- <20230308144528.GR1301832@paulmck-ThinkPad-P17-Gen-1>
- <ZAnXxr9OyFT63xSx@pc636>
- <20230309221056.GB148448@google.com>
- <ZArwZjcEYXAYwmqi@pc636>
+        Wed, 15 Mar 2023 08:24:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B8CF94A78;
+        Wed, 15 Mar 2023 05:23:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 376C961D55;
+        Wed, 15 Mar 2023 12:22:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C3ABC4339B;
+        Wed, 15 Mar 2023 12:22:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678882944;
+        bh=4GJSSVGMwZD38/Ejk6Cy5qgk/cy1eMuVjzNzpQ7gzOs=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=TsonW231iv0jJ+vihZdxLLaHHQHIIr77MPaTTDEFCRVthe9u2jV6VIb7oTKZdtJSG
+         RA2WhLyTjGB2NuBTVoYl/VXcOBKWf7gdd1zONoSJf7y7glKaLbP0yoogvZiw8VzsLe
+         IR9UiUWOBRMNLLU2/GAlV/IQECXHinZcaNK9EohcRhLETsuCR/NM8tsoYcizPoaVhu
+         Veg1JTp6tFYPRDRafKnGRlQBhA61WLHcrD691moWlnaBR/2OaChI1Ms95XGwcG+wqh
+         aFu5ykoDA9DqXRPm9AJQx1SOWqGLHoZiv2yTotXOxmV/1hGKXkL4j79DxhAD9YArHn
+         Bdf3J+r8ZnuwQ==
+Message-ID: <d168e7dd-42a0-b728-5c4c-e97209c13871@kernel.org>
+Date:   Wed, 15 Mar 2023 14:22:18 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZArwZjcEYXAYwmqi@pc636>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v4 4/5] soc: ti: pruss: Add helper functions to set GPI
+ mode, MII_RT_event and XFR
+Content-Language: en-US
+To:     MD Danish Anwar <danishanwar@ti.com>,
+        "Andrew F. Davis" <afd@ti.com>, Suman Anna <s-anna@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Nishanth Menon <nm@ti.com>
+Cc:     linux-remoteproc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-omap@vger.kernel.org, srk@ti.com, devicetree@vger.kernel.org,
+        netdev@vger.kernel.org
+References: <20230313111127.1229187-1-danishanwar@ti.com>
+ <20230313111127.1229187-5-danishanwar@ti.com>
+From:   Roger Quadros <rogerq@kernel.org>
+In-Reply-To: <20230313111127.1229187-5-danishanwar@ti.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,68 +67,165 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 10, 2023 at 09:55:02AM +0100, Uladzislau Rezki wrote:
-> On Thu, Mar 09, 2023 at 10:10:56PM +0000, Joel Fernandes wrote:
-> > On Thu, Mar 09, 2023 at 01:57:42PM +0100, Uladzislau Rezki wrote:
-> > [..]
-> > > > > > > > See this commit:
-> > > > > > > > 
-> > > > > > > > 3705b88db0d7cc ("rcu: Add a module parameter to force use of
-> > > > > > > > expedited RCU primitives")
-> > > > > > > > 
-> > > > > > > > Antti provided this commit precisely in order to allow Android
-> > > > > > > > devices to expedite the boot process and to shut off the
-> > > > > > > > expediting at a time of Android userspace's choosing.  So Android
-> > > > > > > > has been making this work for about ten years, which strikes me
-> > > > > > > > as an adequate proof of concept.  ;-)
-> > > > > > > 
-> > > > > > > Thanks for the pointer. That's true. Looking at Android sources, I
-> > > > > > > find that Android Mediatek devices at least are setting
-> > > > > > > rcu_expedited to 1 at late stage of their userspace boot (which is
-> > > > > > > weird, it should be set to 1 as early as possible), and
-> > > > > > > interestingly I cannot find them resetting it back to 0!.  Maybe
-> > > > > > > they set rcu_normal to 1? But I cannot find that either. Vlad? :P
-> > > > > > 
-> > > > > > Interesting.  Though this is consistent with Antti's commit log,
-> > > > > > where he talks about expediting grace periods but not unexpediting
-> > > > > > them.
-> > > > > > 
-> > > > > Do you think we need to unexpedite it? :))))
-> > > > 
-> > > > Android runs on smallish systems, so quite possibly not!
-> > > > 
-> > > We keep it enabled and never unexpedite it. The reason is a performance.  I
-> > > have done some app-launch time analysis with enabling and disabling of it.
-> > > 
-> > > An expedited case is much better when it comes to app launch time. It
-> > > requires ~25% less time to run an app comparing with unexpedited variant.
-> > > So we have a big gain here.
-> > 
-> > Wow, that's huge. I wonder if you can dig deeper and find out why that is so
-> > as the callbacks may need to be synchronize_rcu_expedited() then, as it could
-> > be slowing down other usecases! I find it hard to believe, real-time
-> > workloads will run better without those callbacks being always-expedited if
-> > it actually gives back 25% in performance!
-> > 
-> I can dig further, but on a high level i think there are some spots
-> which show better performance if expedited is set. I mean synchronize_rcu()
-> becomes as "less blocking a context" from a time point of view.
+
+
+On 13/03/2023 13:11, MD Danish Anwar wrote:
+> From: Suman Anna <s-anna@ti.com>
 > 
-> The problem of a regular synchronize_rcu() is - it can trigger a big latency
-> delays for a caller. For example for nocb case we do not know where in a list
-> our callback is located and when it is invoked to unblock a caller.
+> The PRUSS CFG module is represented as a syscon node and is currently
+> managed by the PRUSS platform driver. Add easy accessor functions to set
+> GPI mode, MII_RT event enable/disable and XFR (XIN XOUT) enable/disable
+> to enable the PRUSS Ethernet usecase. These functions reuse the generic
+> pruss_cfg_update() API function.
 > 
-> I have already mentioned somewhere. Probably it makes sense to directly wake-up
-> callers from the GP kthread instead and not via nocb-kthread that invokes our callbacks
-> one by one.
+> Signed-off-by: Suman Anna <s-anna@ti.com>
+> Co-developed-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
+> Signed-off-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
+> Signed-off-by: Puranjay Mohan <p-mohan@ti.com>
+> Signed-off-by: MD Danish Anwar <danishanwar@ti.com>
+> ---
+>  drivers/soc/ti/pruss.c           | 60 ++++++++++++++++++++++++++++++++
+>  include/linux/remoteproc/pruss.h | 22 ++++++++++++
+>  2 files changed, 82 insertions(+)
+> 
+> diff --git a/drivers/soc/ti/pruss.c b/drivers/soc/ti/pruss.c
+> index 26d8129b515c..2f04b7922ddb 100644
+> --- a/drivers/soc/ti/pruss.c
+> +++ b/drivers/soc/ti/pruss.c
+> @@ -203,6 +203,66 @@ static int pruss_cfg_update(struct pruss *pruss, unsigned int reg,
+>  	return regmap_update_bits(pruss->cfg_regmap, reg, mask, val);
+>  }
+>  
+> +/**
+> + * pruss_cfg_gpimode() - set the GPI mode of the PRU
+> + * @pruss: the pruss instance handle
+> + * @pru_id: id of the PRU core within the PRUSS
+> + * @mode: GPI mode to set
+> + *
+> + * Sets the GPI mode for a given PRU by programming the
+> + * corresponding PRUSS_CFG_GPCFGx register
+> + *
+> + * Return: 0 on success, or an error code otherwise
+> + */
+> +int pruss_cfg_gpimode(struct pruss *pruss, enum pruss_pru_id pru_id,
+> +		      enum pruss_gpi_mode mode)
+> +{
+> +	if (pru_id < 0 || pru_id >= PRUSS_NUM_PRUS)
+> +		return -EINVAL;
+> +
+> +	if (mode < 0 || mode > PRUSS_GPI_MODE_MAX)
+> +		return -EINVAL;
+> +
+> +	return pruss_cfg_update(pruss, PRUSS_CFG_GPCFG(pru_id),
+> +				PRUSS_GPCFG_PRU_GPI_MODE_MASK,
+> +				mode << PRUSS_GPCFG_PRU_GPI_MODE_SHIFT);
+> +}
+> +EXPORT_SYMBOL_GPL(pruss_cfg_gpimode);
+> +
+> +/**
+> + * pruss_cfg_miirt_enable() - Enable/disable MII RT Events
+> + * @pruss: the pruss instance
+> + * @enable: enable/disable
+> + *
+> + * Enable/disable the MII RT Events for the PRUSS.
+> + *
+> + * Return: 0 on success, or an error code otherwise
+> + */
+> +int pruss_cfg_miirt_enable(struct pruss *pruss, bool enable)
+> +{
+> +	u32 set = enable ? PRUSS_MII_RT_EVENT_EN : 0;
+> +
+> +	return pruss_cfg_update(pruss, PRUSS_CFG_MII_RT,
+> +				PRUSS_MII_RT_EVENT_EN, set);
+> +}
+> +EXPORT_SYMBOL_GPL(pruss_cfg_miirt_enable);
+> +
+> +/**
+> + * pruss_cfg_xfr_enable() - Enable/disable XIN XOUT shift functionality
+> + * @pruss: the pruss instance
+> + * @enable: enable/disable
+> + * @mask: Mask for PRU / RTU
 
-Looking forward to your optimization, I wonder if to overcome the issue Paul
-mentioned about wake up overhead, whether it is possible to find out how many
-tasks there are to wake without much overhead, and for the common case of
-likely one task to wake up which is doing a synchronize_rcu(), wake that up.
-But there could be dragons..
+You should not expect the user to provide the mask but only
+the core type e.g. 
 
-thanks,
+enum pru_type {
+        PRU_TYPE_PRU = 0,
+        PRU_TYPE_RTU,
+        PRU_TYPE_TX_PRU,
+        PRU_TYPE_MAX,
+};
 
- - Joel
+Then you figure out the mask in the function.
+Also check for invalid pru_type and return error if so.
 
+> + *
+> + * Return: 0 on success, or an error code otherwise
+> + */
+> +int pruss_cfg_xfr_enable(struct pruss *pruss, bool enable, u32 mask)
+
+re-arrange so it is (struct pruss, enum pru_type, bool enable)
+
+> +{
+> +	u32 set = enable ? mask : 0;
+> +
+> +	return pruss_cfg_update(pruss, PRUSS_CFG_SPP, mask, set);
+> +}
+> +EXPORT_SYMBOL_GPL(pruss_cfg_xfr_enable);
+> +
+>  static void pruss_of_free_clk_provider(void *data)
+>  {
+>  	struct device_node *clk_mux_np = data;
+> diff --git a/include/linux/remoteproc/pruss.h b/include/linux/remoteproc/pruss.h
+> index 12ef10b9fe9a..51a3eedd2be6 100644
+> --- a/include/linux/remoteproc/pruss.h
+> +++ b/include/linux/remoteproc/pruss.h
+> @@ -101,6 +101,7 @@ enum pruss_gpi_mode {
+>  	PRUSS_GPI_MODE_PARALLEL,
+>  	PRUSS_GPI_MODE_28BIT_SHIFT,
+>  	PRUSS_GPI_MODE_MII,
+> +	PRUSS_GPI_MODE_MAX,
+
+This could have come as part of patch 3.
+
+>  };
+>  
+>  /**
+> @@ -165,6 +166,10 @@ int pruss_request_mem_region(struct pruss *pruss, enum pruss_mem mem_id,
+>  			     struct pruss_mem_region *region);
+>  int pruss_release_mem_region(struct pruss *pruss,
+>  			     struct pruss_mem_region *region);
+> +int pruss_cfg_gpimode(struct pruss *pruss, enum pruss_pru_id pru_id,
+> +		      enum pruss_gpi_mode mode);
+> +int pruss_cfg_miirt_enable(struct pruss *pruss, bool enable);
+> +int pruss_cfg_xfr_enable(struct pruss *pruss, bool enable, u32 mask);
+>  
+>  #else
+>  
+> @@ -188,6 +193,23 @@ static inline int pruss_release_mem_region(struct pruss *pruss,
+>  	return -EOPNOTSUPP;
+>  }
+>  
+> +static inline int pruss_cfg_gpimode(struct pruss *pruss,
+> +				    enum pruss_pru_id pru_id,
+> +				    enum pruss_gpi_mode mode)
+> +{
+> +	return ERR_PTR(-EOPNOTSUPP);
+> +}
+> +
+> +static inline int pruss_cfg_miirt_enable(struct pruss *pruss, bool enable)
+> +{
+> +	return ERR_PTR(-EOPNOTSUPP);
+> +}
+> +
+> +static inline int pruss_cfg_xfr_enable(struct pruss *pruss, bool enable, u32 mask)
+> +{
+> +	return ERR_PTR(-EOPNOTSUPP);
+> +}
+> +
+>  #endif /* CONFIG_TI_PRUSS */
+>  
+>  #if IS_ENABLED(CONFIG_PRU_REMOTEPROC)
+
+cheers,
+-roger
