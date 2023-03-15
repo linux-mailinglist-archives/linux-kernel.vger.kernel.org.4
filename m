@@ -2,65 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A73A6BBFA3
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 23:11:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 414E66BBFAC
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 23:18:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230197AbjCOWLR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 18:11:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51118 "EHLO
+        id S232207AbjCOWSD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 18:18:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229751AbjCOWLQ (ORCPT
+        with ESMTP id S232358AbjCOWSA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 18:11:16 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 661CD4E5EF
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 15:11:14 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-54463468d06so63485447b3.7
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 15:11:14 -0700 (PDT)
+        Wed, 15 Mar 2023 18:18:00 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60366211F;
+        Wed, 15 Mar 2023 15:17:59 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id y15so16633862lfa.7;
+        Wed, 15 Mar 2023 15:17:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678918273;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=gCEVwhMsnCNBhroQq0PksbnuOcAT6DZi9De9lSt4IwU=;
-        b=UoCusXmLUWCe6yj0B3xqAo/e2gP0N3l66LAiPV7qbv1FXtcqD8hON9ildeCpsWSyns
-         9HvXarlx5C5NN3zftMPb7YQZw0u95t+MR/v9AFKQP+o+gHanxi//X71O0uStrHXqX4/Q
-         OnzqXqJPxSE/0R9uw3lz52EoSwn0x8gALTxQwBRj93QNNAQLcHXUnvXMXDBxfe2DhLZQ
-         hgkSTNrThiVng5IytZ/P1Jc1MRGEfxjzy2jQ67FCEUQzq36W/H71+Zqn7ae6SJO2nNEt
-         pwgW5Xygxj2fK9cSkq9zPIPif8Q/FiYqS4is28kVLt8utmM3okTkVKlSgzWQg7LEHnOv
-         BvFA==
+        d=gmail.com; s=20210112; t=1678918677;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ohh0sNko5t8OAsphcRpCNrGFt9h2wrYQQBp+YtBOx6U=;
+        b=ZziAGsDMwqsRuMQZvA11+qbBfioHGZMUCMGfFrWn9YcgZAJPvqZwZ6w9idxuJ1Y1RZ
+         1MhT5b6r8MMgeTVzce+FpNcVFjB+YwJ7yfWptNkk24e6ZMhiiqH3jx3xDHX8/6eOeHPm
+         WmIraLRFkw7RixwZpiMvRyPW3OfYh/RmIPjOouOIGlWDOjMz9ngojtQdSal0ZKtamiCs
+         kvOHjzUcbQqS0psZjHp+gstc57RdE3PNJzTBEt2rgHzV9H2lEnbUXvmfRVnLmPR21tt9
+         7CyLUKgxSp9bJXaEi/wVi3EZh8H7YotOb7an/UFtjBbrKDT+gOfAnMzDL9+lpV3+V/Bt
+         ZY9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678918273;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gCEVwhMsnCNBhroQq0PksbnuOcAT6DZi9De9lSt4IwU=;
-        b=zfTGQZReTvOC6emBG1qE947Zn3kmRC+SYgEfLsY3kWJ+9kMfusvQafOcPmJn4xHVEr
-         CGcNR+EqSw6cmi5MU3zt2rmbh6f1szAPDiSTOhvPU1sjK2ZiePv2TlQ/1hfO5Wgq8IXN
-         0ORmJL+vABa823QGmXedHVqo2Dvq+LFrWOh7gJFNJIhRLBTpUgDCJ8Ci1ukIHnMgIP9c
-         oXKhGM9Oqcy6i7BMIucuSgY8BMG+/gTvqwd5kd87GKQTpa5QdFIK39lw0d3wglRPBipU
-         MsSR1UPucWDLhNYv1ePjLFDn/rAm7f3/bZcStczLnQKSwoDOmZG8IuLtt/0SOykrdEpA
-         x2nA==
-X-Gm-Message-State: AO0yUKUvv5H099tG1lYcQ1XxmYB5WwZrCGlVyFVEGBN78iYZpL5njB94
-        fItAdG8u1KjNrOSmDNLqrni7OhKUR8g=
-X-Google-Smtp-Source: AK7set9scqUadowaVlc0TWWMBSscLvdaL3SvbEDl4+28cp+izN7KJ3h05ZnpUGy+GyG+po/ozmVdQolkEWA=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a81:d84d:0:b0:541:69bc:8626 with SMTP id
- n13-20020a81d84d000000b0054169bc8626mr888877ywl.10.1678918273681; Wed, 15 Mar
- 2023 15:11:13 -0700 (PDT)
-Date:   Wed, 15 Mar 2023 15:11:12 -0700
-In-Reply-To: <20230201194604.11135-4-minipli@grsecurity.net>
-Mime-Version: 1.0
-References: <20230201194604.11135-1-minipli@grsecurity.net> <20230201194604.11135-4-minipli@grsecurity.net>
-Message-ID: <ZBJCgG5leMwT22o8@google.com>
-Subject: Re: [PATCH v3 3/6] KVM: x86: Do not unload MMU roots when only
- toggling CR0.WP
-From:   Sean Christopherson <seanjc@google.com>
-To:     Mathias Krause <minipli@grsecurity.net>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        d=1e100.net; s=20210112; t=1678918677;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ohh0sNko5t8OAsphcRpCNrGFt9h2wrYQQBp+YtBOx6U=;
+        b=8CHKjoalAvOIGkkABxEGtffHt+6nU5hwrRCTiCW2PYB9CNIqVlt6gJLXJ6qbIzmFQv
+         I8GTK6nV6TF7uBgPXhLRpBvio/Va8QFmmKmUpgPD+D2LXAO5+MhHrg9UkWPHKjBz5vKX
+         +xEMzWlvtDZbJuXKD+0tJNh2XSYr9i/UkNeT8oMcdqvpQxdW1gpJGOEByyB9R4U2Tez2
+         x09ZFSAGhN6LSV/9MfmIjFoAgK9cKC5dEiK9KMrc8rqFsMFLc9bVmiHazc/ZtC1jbo5O
+         zB/jpML+dduIQBBGLmHqSwGPQT5McrBLjzDrKcSbAvU+9T6xa3yf6AhlnUrrELXouVEG
+         tiWQ==
+X-Gm-Message-State: AO0yUKWpnrRAIFHImxs8qvrdpSAM3G06Dd22tfX9f8fuI0v+VCgzwS69
+        1JMUTwvI4surGpM8Z0HoQE8=
+X-Google-Smtp-Source: AK7set8egnxWqeQOwdnQervf5UH/p6hmFz0ct3UOIP5lYa5zmJS3YvP8Yr1kRxodIC21cfY6bRo6xA==
+X-Received: by 2002:a05:6512:3910:b0:4dd:af74:acef with SMTP id a16-20020a056512391000b004ddaf74acefmr2157265lfu.35.1678918677485;
+        Wed, 15 Mar 2023 15:17:57 -0700 (PDT)
+Received: from localhost ([46.211.236.75])
+        by smtp.gmail.com with ESMTPSA id m3-20020ac24243000000b004d291dcee7fsm978044lfl.55.2023.03.15.15.17.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Mar 2023 15:17:57 -0700 (PDT)
+Date:   Thu, 16 Mar 2023 00:17:49 +0200
+From:   Denis Pauk <pauk.denis@gmail.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mischief@offblast.org,
+        de99like@mennucci.debian.net, holger.kiehl@dwd.de
+Subject: Re: [PATCH 2/2] hwmon: (nct6775) update ASUS WMI monitoring list
+ A520/B360/B460/B550...
+Message-ID: <20230316001749.44e51d08@gmail.com>
+In-Reply-To: <20230316000453.553bf6a8@gmail.com>
+References: <20230315210135.2155-1-pauk.denis@gmail.com>
+        <20230315210135.2155-2-pauk.denis@gmail.com>
+        <20230315233054.5ac21db0@gmail.com>
+        <19097c39-9703-6b7f-6cc4-8a157b00f368@roeck-us.net>
+        <20230316000453.553bf6a8@gmail.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; aarch64-unknown-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,107 +79,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Can you tweak the shortlog to something like this?  I want to make it very clear
-that this applies only to the TDP case (more below).  I did a double take when I
-first read the subject :-)
+On Thu, 16 Mar 2023 00:04:53 +0200
+Denis Pauk <pauk.denis@gmail.com> wrote:
 
-  KVM: x86: Do not unload MMU roots when only toggling CR0.WP with TDP enabled
-
-On Wed, Feb 01, 2023, Mathias Krause wrote:
-> There is no need to unload the MMU roots for a direct MMU role when only
-> CR0.WP has changed -- the paging structures are still valid, only the
-> permission bitmap needs to be updated.
+> On Wed, 15 Mar 2023 14:58:24 -0700
+> Guenter Roeck <linux@roeck-us.net> wrote:
 > 
-> One heavy user of toggling CR0.WP is grsecurity's KERNEXEC feature to
-> implement kernel W^X.
+> > On 3/15/23 14:30, Denis Pauk wrote:  
+> > > On Wed, 15 Mar 2023 23:01:35 +0200
+> > > Denis Pauk <pauk.denis@gmail.com> wrote:
+> > > 
+> > > Tested-by: Holger Kiehl <holger.kiehl@dwd.de>
+> > > 
+> > > Pro A520M-C II/CSM is also tested by Holger Kiehl
+> > > https://patchwork.kernel.org/project/linux-hwmon/patch/868bdc4f-9d45-475c-963e-f5232a8b95@praktifix.dwd.de/
+> > > 
+> > > Could it be applied as single patch or need to rebase over "Pro A520M-C
+> > > II" patch?
+> > >     
+> > Sorry, I don't understand what you are trying to say. I just applied all
+> > patches in sequence as received, with no conflicts. Should I undo that ?
+> > 
+> > Guenter
+> >   
 > 
-> The optimization brings a huge performance gain for this case as the
-> following micro-benchmark running 'ssdd 10 50000' from rt-tests[1] on a
-> grsecurity L1 VM shows (runtime in seconds, lower is better):
+> No, Thank you!
 > 
->                        legacy     TDP    shadow
-> kvm.git/queue          11.55s   13.91s    75.2s
-> kvm.git/queue+patch     7.32s    7.31s    74.6s
+> I just like to mention that Holger Kiehl sent separate patch with
+> "Pro A520M-C II" support and it could create conflicts. I have found it only
+> when I have sent my patches.
 > 
-> For legacy MMU this is ~36% faster, for TTP MMU even ~47% faster. Also
-> TDP and legacy MMU now both have around the same runtime which vanishes
-> the need to disable TDP MMU for grsecurity.
-> 
-> Shadow MMU sees no measurable difference and is still slow, as expected.
-> 
-> [1] https://git.kernel.org/pub/scm/utils/rt-tests/rt-tests.git
-> 
-> Co-developed-by: Sean Christopherson <seanjc@google.com>
 
-No need for this, I just threw a snippet at you as part of code review.  And IMO,
-if someone goes through the pain of running benchmarks, they get full credit no
-matter what ;-)
-
-> Signed-off-by: Mathias Krause <minipli@grsecurity.net>
-> ---
-> v2: handle the CR0.WP case directly in kvm_post_set_cr0() and only for
-> the direct MMU role -- Sean
-> 
-> I re-ran the benchmark and it's even faster than with my patch, as the
-> critical path is now the first one handled and is now inline. Thanks a
-> lot for the suggestion, Sean!
-> 
->  arch/x86/kvm/x86.c | 9 +++++++++
->  1 file changed, 9 insertions(+)
-> 
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index 508074e47bc0..f09bfc0a3cc1 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -902,6 +902,15 @@ EXPORT_SYMBOL_GPL(load_pdptrs);
->  
->  void kvm_post_set_cr0(struct kvm_vcpu *vcpu, unsigned long old_cr0, unsigned long cr0)
->  {
-> +	/*
-> +	 * Toggling just CR0.WP doesn't invalidate page tables per se, only the
-> +	 * permission bits.
-> +	 */
-> +	if (vcpu->arch.mmu->root_role.direct && (cr0 ^ old_cr0) == X86_CR0_WP) {
-
-Past me was wrong, which is a very good thing in this case.  Per the APM,
-
-  The host hCR0.WP bit is ignored under nested paging.
-
-which means that CR0.WP doesn't need to be incorporated into the role.  Ha!  And
-really-past me even wrote a very nice comment to call that out in commit 31e96bc63655
-("KVM: nSVM: Add a comment to document why nNPT uses vmcb01, not vCPU state").
-
-Double ha!  That's all moot, because if this code is reached for a nested MMU,
-it means L2 is active and the CR0 being changed is gCR0, not L1's hCR0.
-
-So more simply, this can be
-
-	if (tdp_enabled && (cr0 ^ old_cr0) == X86_CR0_WP)
-
-or if we want to exempt non-paging mode for the shadow MMU as well...
-
-	if ((cr0 ^ old_cr0) == X86_CR0_WP && (tdp_enabled || !(cr0 & X86_CR0_PG)))
-
-Actually, if we bother to check CR0.PG, then we might as well get greedy and
-skip _all_ updates when paging is disabled.  E.g. end up with this over two
-patches?  First one exempts the tdp_enabled case, second one completely exempts
-paging disabled.
-
-	/*
-	 * CR0.WP is incorporated into the MMU role, but only for non-nested,
-	 * indirect shadow MMUs.  If paging is disabled, no updates are needed
-	 * as there are no permission bits to emulate.  If TDP is enabled, the
-	 * MMU's metadata needs to be updated, e.g. so that emulating guest
-	 * translations does the right thing, but there's no need to unload the
-	 * root as CR0.WP doesn't affect SPTEs when TDP is enabled.
-	 */
-	if ((cr0 ^ old_cr0) == X86_CR0_WP) {
-		if (!(cr0 & X86_CR0_PG))
-			return;
-
-		if (tdp_enabled) {
-			kvm_init_mmu(vcpu);
-			return;
-		}
-	}
-
+I have rechecked repo and "Pro A520M-C II" is added twice after apply both of
+patches (my and from Holger Kiehl), could you please remove one of mention of
+it?
