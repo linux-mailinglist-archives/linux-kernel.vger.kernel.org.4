@@ -2,115 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 574096BB8DF
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 17:00:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34F156BB8E0
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 17:00:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232659AbjCOQAL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 12:00:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59186 "EHLO
+        id S232685AbjCOQAP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 12:00:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232901AbjCOP7t (ORCPT
+        with ESMTP id S233058AbjCOQAI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 11:59:49 -0400
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2072c.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e8d::72c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 485D9898E1;
-        Wed, 15 Mar 2023 08:59:19 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=g0LENK6RYhXZtgNnAYRdQ6Zgox1+vs9Nr4I1l4Y7ulbrDCBzy+YknkQPrbVN9QMRFrz6lcSrF2kej4GSJhUBgacg4rFPjZ5em0Ja+4bgWadw5xdvdgqQ/eAt9aOyLHdly82O+3lwInjikwc4ZOw0Ef+ctHm/BmTrglRZtW9TUl0mRHf6Ot+6L4qcYua8Bqvt0jOTMYI5J3dP2junb5MfhsxZGEMUXbRQ5Lh9DSeM0mvDCbjYB49H3Zc/htqytYCEsY0tGELHPclkvPbVphNqrZ0FNBrLfwgc666b977V94oettdzjwZoIrYDlCouJMXoms/Pr9PNRIclzu4rFrIeVA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=h57UFzWqDi+19uHPNvWdPNul1EzqW1V+IAxBQHiR7WY=;
- b=ZIvZMvym5AdoHm6YDAZZYy8u2//mqqsyFBGKMDkPmbZzh5qZEA1YASlQJVLjSH7IYaA6ECGvzm/HF0wwtt7vyuOF3Y1q5+SGplWBueUNGNdDN5DDxMqUuCM25wBMkW6l7RW2HPa+uQrN4ojFlS5ciPHeUEemm6JPRB6pshQfAwgMjyC7sZu1Agj6rXwHsK5vaZ8UrmbFne983SPo+I1XF92wLsRhW4p11wWtFJ4B5UUFP7Tm7UQGqf1yYwGiDXYh92+3jvbOWJJwmteRU/lbVLB4ekRvqg67q21TE7njNCXkHVAHBZBc84xk9RpieVyCmN+M+qQJUv8Q0xOK8SXzXg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
+        Wed, 15 Mar 2023 12:00:08 -0400
+Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC6191ADE1;
+        Wed, 15 Mar 2023 08:59:31 -0700 (PDT)
+Received: by mail-il1-x12f.google.com with SMTP id w4so10641550ilv.0;
+        Wed, 15 Mar 2023 08:59:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=h57UFzWqDi+19uHPNvWdPNul1EzqW1V+IAxBQHiR7WY=;
- b=PW1IC1WZuQxXitbyuqLpISEPja0EcxUkLqzl7/IlgPQ5YNi3tfl9UjQiJ5luM/Npi53FiH2gd9d6MF86lbwfQ6p/dM6GuMSFanQtZgznpY4gnKkPgY6cC+uX+Rx9QpUgcFQz/hlNT+BKox7wUcRbv/Niy9/kIFiYtdOsAm+StOk=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by SA1PR13MB5037.namprd13.prod.outlook.com (2603:10b6:806:1aa::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.29; Wed, 15 Mar
- 2023 15:58:54 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::85f5:bdb:fb9e:294c]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::85f5:bdb:fb9e:294c%2]) with mapi id 15.20.6178.030; Wed, 15 Mar 2023
- 15:58:54 +0000
-Date:   Wed, 15 Mar 2023 16:58:48 +0100
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Sean Anderson <seanga2@gmail.com>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next v3 2/9] net: sunhme: Remove residual polling code
-Message-ID: <ZBHrOD8Wfr4GPx46@corigine.com>
-References: <20230314003613.3874089-1-seanga2@gmail.com>
- <20230314003613.3874089-3-seanga2@gmail.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230314003613.3874089-3-seanga2@gmail.com>
-X-ClientProxiedBy: AM0PR02CA0003.eurprd02.prod.outlook.com
- (2603:10a6:208:3e::16) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        d=gmail.com; s=20210112; t=1678895956;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=mwFEZMuMScsLlZA1DsDqm1/V+MycUBRzLGSOja/IOcQ=;
+        b=V+LJijXRV9IGnqoktWLHNtDnhJMaOVMarwgYVaC7IHV+9KHjgw9Smm1o9GefaTjaiR
+         DfU7hQkYi1JETYj4/5uNHDv1i/3uX2fzVmfatCadsD5MWr83/pAIrWWl4cLLxiLpTDQz
+         eDsLOFM6DW3S/qheyyEth+nfUXU80HXkZuiQJNSVkqRQUT0n9wS+ss9y+fM925Q1Fvtk
+         YRizGeXLAcZ2J5zy4JY10CMAeL4yPE6Nt1/g2+dtVdiIex3m6mugLFOxqqmlKxLNPDBn
+         dvIRE5jXrnIILDwf5Awb9FJ8NULuGXCvDFHw4bcVO6yq2v1x1CaDNSeH/7ENOwdyqELO
+         frFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678895956;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mwFEZMuMScsLlZA1DsDqm1/V+MycUBRzLGSOja/IOcQ=;
+        b=wBP2CH6FOXxr+3c8T6HRrWkvW/YQURDR3YmWgRa0uQjXnJz+pAEn2kTXJmN/kAWEvy
+         NLMotHQ+J5rqE/+a5ES5dlui4fZYMFmb4XhHNMeo5w7tTxXv3d9ahnJFRYEIcS7yPTzK
+         6CYe4aS7cF6FOppROVIY5kzHlO3bo/VQ5zmfcrrmuJy+xs5HlHJ+5BPznGybezss9WKz
+         lWY0zKst2z/eHx00lDQJEUFXxeXjaI3DzLV1d11tpCeTDbfDzQNnr9StuBb8AfmXhVlm
+         wP0fGAPePDHefrLF4Pr3tsAhLFvHRRbgT73CizD+b1NsslCSyKxmSSxVJSGGSjN6NmFz
+         RnEA==
+X-Gm-Message-State: AO0yUKXUqf8r2Tj3L75w115LHV93EOS7NJonsOmHI+kF1t7kFvRrU9gl
+        /GfCmN8xrxBkOMzcKueBkgI=
+X-Google-Smtp-Source: AK7set8LadlfBIzS7eiLYiABvmbeEZEqP78tzHNUThoKyE/2SjzzdcVz0HdArT4sXxKmDjCqU5KQzQ==
+X-Received: by 2002:a05:6e02:10d2:b0:316:4174:b065 with SMTP id s18-20020a056e0210d200b003164174b065mr4787739ilj.15.1678895956624;
+        Wed, 15 Mar 2023 08:59:16 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id g2-20020a02c542000000b004054d7eede5sm1332429jaj.22.2023.03.15.08.59.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Mar 2023 08:59:16 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <166de5e6-3911-cbda-8b36-624e396decaa@roeck-us.net>
+Date:   Wed, 15 Mar 2023 08:59:14 -0700
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|SA1PR13MB5037:EE_
-X-MS-Office365-Filtering-Correlation-Id: c59f30cf-9088-4778-043c-08db256e2da3
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ppbG1ROXBjBUFUqSfd2o990ld0Hk7DgT4aXD3WvDXTixLOw6hHivbz3eeI5KNo7kD1Gwzb3tR3wUPYYEYojivCnfZW/5ab/cm5M7zw6LO2eq38QM6Ia+F6gEeDlBzK2N1h2tpI+keMjoaPcSY616j/5NTxk7LEtgo4bEvRu26RTpVuSV/BNZGSjN0Wh3azwqzBFQPmQ+AEN7Rj++IaCDsk6Y1uCi6H4pqiXclrqau7o3nUHKR9ptwaHUqFPUKv2cYGZFoUQEmE+ugTkNIO1IlFptX425Dmh+Ft58ft953lPEw34cZDU+CwMA2x+Jxo+exbbIQIkVDLTKwES609ezzYeFXW9p/K0eZMHXxhA39DZbaLAio8soZkgv5U5GVRafZetz+W75D9G8Jy5S0dntow2JBzkDOYbambJ+tI/CxFlTdn9l3xi7ulXgQwcmwQN3xoHJQLc2t3WF7aJsaX0hw/jt3V9yn6GTPC3xfHeBK8ad1xrJHT4tH6vaBKpcTG/LvtaqjOXL3YGGqAX5SYg8UVKJq83w1XBtza+R2yPuWxMUh4CepOKW0avS+kZB+MyCAwPiARBXVxEVfkRkJTfd4VV0p/QJgqoaDE8a54mLrhSkBC5SgapMFXB5cpoy8ZUX
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(346002)(136003)(366004)(376002)(39840400004)(451199018)(8676002)(6916009)(4326008)(66476007)(66556008)(41300700001)(2906002)(66946007)(38100700002)(8936002)(5660300002)(4744005)(44832011)(6666004)(966005)(6486002)(6506007)(6512007)(86362001)(186003)(36756003)(2616005)(316002)(54906003)(478600001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?EsPcGVdTlvWfzrDb/inGJjO05IZY12emVgJHeQA2quUAcQzOGt+YOVu11ZBe?=
- =?us-ascii?Q?eVufxGt2aJUAlZubYWuDJIK1nmVSLg1seDOUtfD2MrY4UZf9yjA5ljxVun9b?=
- =?us-ascii?Q?PZtofIzMF15a3z0VNO+soto3OpE9L+3L1GAzu2rQ9LGqE7Z6KC2C1JdbvEiu?=
- =?us-ascii?Q?gJiKuIFQXVpfFrawoePHiZozaTLSj0DCYvFLloHxIJUo4z7JDRMIR5g+lFAx?=
- =?us-ascii?Q?62RPysT8aNy27dYI0bm+ZjRwM1c+KEccZVAuMv9HfDEe9pK290H/BL43Bi8i?=
- =?us-ascii?Q?IvepWiBvteS+igM5aFrLLD7PVlbOxo71/jiwkokgdZa3sRqZcXFTilyvmGG8?=
- =?us-ascii?Q?qUiag+WPYgXr+MEZsH3Du6S3zJSrIogMq4Sl+mlDm4R98bp//gNYeE69/V3B?=
- =?us-ascii?Q?KPAW37eoUT2RhUD1YmiTXxKkYEWB7s7TBndWjtf0GnTTXRU/v76h1t1PzfJb?=
- =?us-ascii?Q?/ggE/zTzq2Y2vpMq42+ZKSnoeCcJAwjLGGJHCfNJvownMRX8pfXwWvrIVymN?=
- =?us-ascii?Q?HcJvBfG0Be24BPS0DU52dRkfY7bykTmlJEhYhoJWLY05UG6N6Tgkf4WghEM/?=
- =?us-ascii?Q?4lu3GaeGRVd455sk+GGJTYGCi3W6P5AlD/Uqn9moSkdssinWuNawYYnceNF0?=
- =?us-ascii?Q?StqL4LdmEOLEJDp9A6D8wjYnhJEWHwB3h5kpPfGQBcucIv8e2mTx6OwQ6YfQ?=
- =?us-ascii?Q?QlaVn1JW/+f8FyAmDkSzr2fOClDLedefYeRyMMrki6eFtEHJDJWJvzyZZ2fo?=
- =?us-ascii?Q?4XUv4rStKe/fDtWfFJxC9GQHPi2Mj34CzUq9ITxG0avgCg/0faSFMCYooCSI?=
- =?us-ascii?Q?MCXpkUjU0PY81E6/gNEM6gfiLCYmcxsG+ovxMISwaH1WSGIlEjI10qQ+YPDy?=
- =?us-ascii?Q?f2FauNgQDYmtXcVMVN2s4Isti5j0JU/jfcffj1APH/KFSIm3nqIiLQ9Iu/y/?=
- =?us-ascii?Q?oEfzxRdV/UU03iUEaHCNT1aKN1PbM/cBubwxKY70ffUskc8EqkmEG5subLBU?=
- =?us-ascii?Q?KAQUcYUb6h6BngWcVH5L7j6WLHZhAJKy00hwPJ5tpUv3ViDzrwL1gobk4IE+?=
- =?us-ascii?Q?JYp0YuqpFF5X4+7ksx/gM8xaDGfel5HNDhvu6EI3WcvQz7toKfH0ZgT5X4Sv?=
- =?us-ascii?Q?/45tSbhTQIFVaHQgGFA21aRkBfww6RRVoaCQ8vxGyOqD7OXxJyfvAb9clOrC?=
- =?us-ascii?Q?l27Sgcdp21ra4OWbzz8nx7rg/IVOkxOpxbFyfbuaM8tcUi5wv35cYCMO9PbI?=
- =?us-ascii?Q?B0vfjjm5AiHjs/MbGf7bxFnKvtf/wpC8wsHeCEQC8H5Dfe1IvVG4nlPZYGj1?=
- =?us-ascii?Q?yJKIevz5751xAfDrExEI6JhyzZEkkyiYQafkg7gO9U/b5e9xXqogueFZkUJc?=
- =?us-ascii?Q?Kh7VrJ2FuYYaM3+CBGcs804LNS8azMoP4QGXxBqGpi4h1Nq54rOLxxCnuBvv?=
- =?us-ascii?Q?V643SPF5oF0z2UUYa0tlyaNmhhas3p2o6VUiozEfo0KWO80IO4l2cskLnX23?=
- =?us-ascii?Q?4+6zqq+fxLBFEctw4FKAL+DgDySabaxuqAUA9oYSQp2/XHS3oZY2BD8tHrPr?=
- =?us-ascii?Q?Gq8qq24v/6WfQmGQTeH25MQQauvPk4lqYAJXHa+mTjEGdX1x6PjoifZAf0p+?=
- =?us-ascii?Q?2+rFTO1frSd2nZ+vJ5BzubPj2qo3Zq/ODwkaufVNaOBOv0kr0dBXCy9Arvod?=
- =?us-ascii?Q?wjFI1g=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c59f30cf-9088-4778-043c-08db256e2da3
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Mar 2023 15:58:54.6907
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: eE9ptInp5kVnMvIbloRndPkgdHjKe7Kc2bDDUr8XR/N/7+6D1C78jlY3oGqCS6mYwObEyHaOpKi2jfCL2XqF/jtb7jdiq0KleUACE8+XETo=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR13MB5037
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 4.19 00/39] 4.19.278-rc1 review
+Content-Language: en-US
+To:     =?UTF-8?Q?Daniel_D=c3=adaz?= <daniel.diaz@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+References: <20230315115721.234756306@linuxfoundation.org>
+ <7e46d536-cc68-4b7c-e56e-cf1b94a925cb@linaro.org>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <7e46d536-cc68-4b7c-e56e-cf1b94a925cb@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -118,15 +85,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 13, 2023 at 08:36:06PM -0400, Sean Anderson wrote:
-> The sunhme driver never used the hardware MII polling feature. Even the
-> if-def'd out happy_meal_poll_start was removed by 2002 [1]. Remove the
-> various places in the driver which needlessly guard against MII interrupts
-> which will never be enabled.
+On 3/15/23 08:44, Daniel Díaz wrote:
+> Hello!
 > 
-> [1] https://lwn.net/2002/0411/a/2.5.8-pre3.php3
+> On 15/03/23 06:12, Greg Kroah-Hartman wrote:
+>> This is the start of the stable review cycle for the 4.19.278 release.
+>> There are 39 patches in this series, all will be posted as a response
+>> to this one.  If anyone has any issues with these being applied, please
+>> let me know.
+>>
+>> Responses should be made by Fri, 17 Mar 2023 11:57:10 +0000.
+>> Anything received after that time might be too late.
+>>
+>> The whole patch series can be found in one patch at:
+>>     https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.19.278-rc1.gz
+>> or in the git tree and branch at:
+>>     git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.19.y
+>> and the diffstat can be found below.
+>>
+>> thanks,
+>>
+>> greg k-h
 > 
-> Signed-off-by: Sean Anderson <seanga2@gmail.com>
+> Lots and lots of failures, mostly Arm.
+> 
+> For Arm, Arm64, MIPS, with GCC-8, GCC-9, GCC-10, GCC-11, GCC-12, Clang-16, for some combinations with:
+> * axm55xx_defconfig
+> * davinci_all_defconfig
+> * defconfig
+> * defconfig-40bc7ee5
+> * lkftconfig-kasan
+> * multi_v5_defconfig
+> * s5pv210_defconfig
+> * sama5_defconfig
+> 
+> -----8<-----
+> /builds/linux/kernel/cgroup/cgroup.c:2237:2: error: implicit declaration of function 'get_online_cpus' [-Werror,-Wimplicit-function-declaration]
+>          get_online_cpus();
+>          ^
+> /builds/linux/kernel/cgroup/cgroup.c:2237:2: note: did you mean 'get_online_mems'?
+> /builds/linux/include/linux/memory_hotplug.h:258:20: note: 'get_online_mems' declared here
+> static inline void get_online_mems(void) {}
+>                     ^
+> /builds/linux/kernel/cgroup/cgroup.c:2248:2: error: implicit declaration of function 'put_online_cpus' [-Werror,-Wimplicit-function-declaration]
+>          put_online_cpus();
+>          ^
+> /builds/linux/kernel/cgroup/cgroup.c:2248:2: note: did you mean 'put_online_mems'?
+> /builds/linux/include/linux/memory_hotplug.h:259:20: note: 'put_online_mems' declared here
+> static inline void put_online_mems(void) {}
+>                     ^
+> 2 errors generated.
+> make[3]: *** [/builds/linux/scripts/Makefile.build:303: kernel/cgroup/cgroup.o] Error 1
+> ----->8-----
+> 
+> 
+> For Arm64, i386 x86, with GCC-11, Perf has a new error:
+> 
+> -----8<-----
+> In function 'ready',
+>      inlined from 'sender' at bench/sched-messaging.c:90:2:
+> bench/sched-messaging.c:76:13: error: 'dummy' is used uninitialized [-Werror=uninitialized]
+>     76 |         if (write(ready_out, &dummy, 1) != 1)
+>        |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+> In file included from bench/../perf-sys.h:5,
+>                   from bench/../perf.h:18,
+>                   from bench/sched-messaging.c:13:
+> ----->8-----
+> 
+> 
+> Greetings!
+> 
+> Daniel Díaz
+> daniel.diaz@linaro.org
+> 
 
-Reviewed-by: Simon Horman <simon.horman@corigine.com>
+Looks like this whole set of release candidates is a disaster. I have stopped
+my testbed for the time being (no point in wasting energy), so there won't be
+any further updates from me for the time being.
+
+Guenter
 
