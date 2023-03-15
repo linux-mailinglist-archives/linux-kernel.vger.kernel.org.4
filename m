@@ -2,131 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6453D6BC0C6
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 00:21:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F5796BC0D2
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 00:24:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233001AbjCOXVQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 19:21:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58372 "EHLO
+        id S232951AbjCOXYg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 19:24:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232956AbjCOXVH (ORCPT
+        with ESMTP id S231972AbjCOXYd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 19:21:07 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 302C09B9AA
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 16:21:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678922465; x=1710458465;
-  h=from:date:subject:mime-version:content-transfer-encoding:
-   message-id:references:in-reply-to:to:cc;
-  bh=oUNGwFKGfCNeFmEzlWbIjgeX9cjyVruIm7Nzwqf6dqc=;
-  b=auhUUXaOe0ygPY+iguRGPZEcpI1d3Hc7HaAYqodTtli+OOOzydjGNm4Y
-   2VIWouPa8DdtakXVsID3wUeLvSLf5sJxjTrGTJNCLd8Y9qV8uldm1TQ/0
-   MFyAhD5lhsMJ8njzh97PxacSQ+VoqXIURIoZmN6fLd0oS88f4RJJqXa6i
-   wDRwsy5xJFgSkamrYc9HWTGNMFgCC973NGQ2BzIesXCwlqcGO6FOmWBVa
-   AV07Pv+ORRewWTYDNEujjvEBtsKOypEPzvJaNSX7P8beCSE0y5uG4/Lju
-   75RwOXmIMkglvzI/UAKwHy09+PWhw7ex0H2SA1/xY1hkzzjaD2Fi2vDn6
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="365527073"
-X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
-   d="scan'208";a="365527073"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2023 16:21:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="672915107"
-X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
-   d="scan'208";a="672915107"
-Received: from iweiny-desk3.amr.corp.intel.com (HELO localhost) ([10.212.196.133])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2023 16:21:03 -0700
-From:   Ira Weiny <ira.weiny@intel.com>
-Date:   Wed, 15 Mar 2023 16:20:56 -0700
-Subject: [PATCH 3/3] arm: uaccess: Remove memcpy_page_flushcache()
+        Wed, 15 Mar 2023 19:24:33 -0400
+Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 897B3CA36;
+        Wed, 15 Mar 2023 16:24:31 -0700 (PDT)
+Received: by mail-qt1-x833.google.com with SMTP id n2so56018qtp.0;
+        Wed, 15 Mar 2023 16:24:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678922670;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=L+/XUg/IzalimXO/qn496/8CAVgsZbcEk4sHUDhLJEw=;
+        b=JQfM9tEUYpiKlNt4eoxk39sxVPrldWly2scJs6iZcmGuWluZ3KNzqK6DcE2aKB/r8T
+         wUuBZxZCNFwjXu9W9KBda1fkD8OqYF8TTGXsIl6WbTnr+sojsi+BfsgVprlpYR6OmA3u
+         rr0/ay5JpNgxTGyLZncCWCGpJ1/oCF0OD3PczZivbLnm8Y12PtDxcPoVlOJ899/kBXPw
+         yLaa5D0HL6CAaI47+rlIO/xAuyVAOXSCWAOz9ZQue2CbbaBwg678vJWUHdymWs9ywwrj
+         kJREgR81ZkST9+clb4ihWriPfZoZ2aDlxXN/zwZCis9J3FVaAUBT021Sz5fvP/MmxRSO
+         oLeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678922670;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=L+/XUg/IzalimXO/qn496/8CAVgsZbcEk4sHUDhLJEw=;
+        b=VgeRbpfIiKGRfpzTXtoC/MnoMgTv8VO0QVRN8Uia6crGlSEFdAq59ogKzmDwtjkg2A
+         l3RLKgrOJchHsZpPL2MmTQ/6H1AMslEGMP39SeruJuoSIOOGq4uZ73JljGxCOY7T9JOd
+         +cdFcpVA3Yl9e4eYevBB7GWs4lwyV5W9T3AMnFbjV26ujJOXbPRAqqg8gOLqD3h2b5+j
+         zFOavRnjBjEk7RIshXnUF7kuRWzcAxDe5MHyh1Soqj/dM6HMjI4TLD9bK9e5Lms2nHtY
+         m0xue94QXFD8581/V3XuulpJH41rzsOYAUeafdoLE6+GWK/lB2iGrJ81MhlUzFuyLokV
+         iShQ==
+X-Gm-Message-State: AO0yUKXUfcLcJn5cZEI7UOh+CadG4XjT82kYILCVLWZWTOtr6a5w5cnz
+        D+4ilDeH1UaydklmcD4rwjs=
+X-Google-Smtp-Source: AK7set8739KdPX3AaAIpO3+R9MHd61PnmKgIblrEnn5huSW3lCeTfORP2mzTfbVR0bgF/YHA4cCEAA==
+X-Received: by 2002:a05:622a:1348:b0:3bf:be20:544c with SMTP id w8-20020a05622a134800b003bfbe20544cmr3000547qtk.39.1678922670325;
+        Wed, 15 Mar 2023 16:24:30 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id c15-20020ac8660f000000b003b86b088755sm4673327qtp.15.2023.03.15.16.23.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Mar 2023 16:24:29 -0700 (PDT)
+Message-ID: <e18a490e-02cd-ae2a-37ac-e6731e149aa3@gmail.com>
+Date:   Wed, 15 Mar 2023 16:23:57 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v2 net] net: dsa: microchip: fix RGMII delay configuration
+ on KSZ8765/KSZ8794/KSZ8795
+Content-Language: en-US
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>, netdev@vger.kernel.org
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com,
+        Arun Ramadoss <arun.ramadoss@microchip.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Marek Vasut <marex@denx.de>, linux-kernel@vger.kernel.org
+References: <20230315231916.2998480-1-vladimir.oltean@nxp.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20230315231916.2998480-1-vladimir.oltean@nxp.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20221230-kmap-x86-v1-3-15f1ecccab50@intel.com>
-References: <20221230-kmap-x86-v1-0-15f1ecccab50@intel.com>
-In-Reply-To: <20221230-kmap-x86-v1-0-15f1ecccab50@intel.com>
-To:     Dave Hansen <dave.hansen@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>
-Cc:     Dan Williams <dan.j.williams@intel.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org,
-        Ira Weiny <ira.weiny@intel.com>
-X-Mailer: b4 0.13-dev-ada30
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1678922459; l=1951;
- i=ira.weiny@intel.com; s=20221222; h=from:subject:message-id;
- bh=oUNGwFKGfCNeFmEzlWbIjgeX9cjyVruIm7Nzwqf6dqc=;
- b=029LLrpbd7VMZrAQfKYKO6kviK6io7TXxDI1OO3rXTtKEVFcqP25qXdcWxYdxjw/HbQDbRkgI
- tKmFt4wL/zHCVE+R+u24nRdfFvw80JCiCHp6v+2+M42Wcom5uYjWOyD
-X-Developer-Key: i=ira.weiny@intel.com; a=ed25519;
- pk=brwqReAJklzu/xZ9FpSsMPSQ/qkSalbg6scP3w809Ec=
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 21b56c847753 ("iov_iter: get rid of separate bvec and xarray
-callbacks") removed the calls to memcpy_page_flushcache().
+On 3/15/23 16:19, Vladimir Oltean wrote:
+> From: Marek Vasut <marex@denx.de>
+> 
+> The blamed commit has replaced a ksz_write8() call to address
+> REG_PORT_5_CTRL_6 (0x56) with a ksz_set_xmii() -> ksz_pwrite8() call to
+> regs[P_XMII_CTRL_1], which is also defined as 0x56 for ksz8795_regs[].
+> 
+> The trouble is that, when compared to ksz_write8(), ksz_pwrite8() also
+> adjusts the register offset with the port base address. So in reality,
+> ksz_pwrite8(offset=0x56) accesses register 0x56 + 0x50 = 0xa6, which in
+> this switch appears to be unmapped, and the RGMII delay configuration on
+> the CPU port does nothing.
+> 
+> So if the switch wasn't fine with the RGMII delay configuration done
+> through pin strapping and relied on Linux to apply a different one in
+> order to pass traffic, this is now broken.
+> 
+> Using the offset translation logic imposed by ksz_pwrite8(), the correct
+> value for regs[P_XMII_CTRL_1] should have been 0x6 on ksz8795_regs[], in
+> order to really end up accessing register 0x56.
+> 
+> Static code analysis shows that, despite there being multiple other
+> accesses to regs[P_XMII_CTRL_1] in this driver, the only code path that
+> is applicable to ksz8795_regs[] and ksz8_dev_ops is ksz_set_xmii().
+> Therefore, the problem is isolated to RGMII delays.
+> 
+> In its current form, ksz8795_regs[] contains the same value for
+> P_XMII_CTRL_0 and for P_XMII_CTRL_1, and this raises valid suspicions
+> that writes made by the driver to regs[P_XMII_CTRL_0] might overwrite
+> writes made to regs[P_XMII_CTRL_1] or vice versa.
+> 
+> Again, static analysis shows that the only accesses to P_XMII_CTRL_0
+> from the driver are made from code paths which are not reachable with
+> ksz8_dev_ops. So the accesses made by ksz_set_xmii() are safe for this
+> switch family.
+> 
+> [ vladimiroltean: rewrote commit message ]
+> 
+> Fixes: c476bede4b0f ("net: dsa: microchip: ksz8795: use common xmii function")
+> Signed-off-by: Marek Vasut <marex@denx.de>
+> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+> Acked-by: Arun Ramadoss <arun.ramadoss@microchip.com>
 
-Remove the unnecessary memcpy_page_flushcache() call.
-
-Cc: Al Viro <viro@zeniv.linux.org.uk>
-Cc: "Dan Williams" <dan.j.williams@intel.com>
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Will Deacon <will@kernel.org>
-Cc: linux-arm-kernel@lists.infradead.org
-Signed-off-by: Ira Weiny <ira.weiny@intel.com>
----
- arch/arm64/include/asm/uaccess.h    | 2 --
- arch/arm64/lib/uaccess_flushcache.c | 6 ------
- 2 files changed, 8 deletions(-)
-
-diff --git a/arch/arm64/include/asm/uaccess.h b/arch/arm64/include/asm/uaccess.h
-index 5c7b2f9d5913..4bf2c0975a82 100644
---- a/arch/arm64/include/asm/uaccess.h
-+++ b/arch/arm64/include/asm/uaccess.h
-@@ -449,8 +449,6 @@ extern long strncpy_from_user(char *dest, const char __user *src, long count);
- extern __must_check long strnlen_user(const char __user *str, long n);
- 
- #ifdef CONFIG_ARCH_HAS_UACCESS_FLUSHCACHE
--struct page;
--void memcpy_page_flushcache(char *to, struct page *page, size_t offset, size_t len);
- extern unsigned long __must_check __copy_user_flushcache(void *to, const void __user *from, unsigned long n);
- 
- static inline int __copy_from_user_flushcache(void *dst, const void __user *src, unsigned size)
-diff --git a/arch/arm64/lib/uaccess_flushcache.c b/arch/arm64/lib/uaccess_flushcache.c
-index baee22961bdb..7510d1a23124 100644
---- a/arch/arm64/lib/uaccess_flushcache.c
-+++ b/arch/arm64/lib/uaccess_flushcache.c
-@@ -19,12 +19,6 @@ void memcpy_flushcache(void *dst, const void *src, size_t cnt)
- }
- EXPORT_SYMBOL_GPL(memcpy_flushcache);
- 
--void memcpy_page_flushcache(char *to, struct page *page, size_t offset,
--			    size_t len)
--{
--	memcpy_flushcache(to, page_address(page) + offset, len);
--}
--
- unsigned long __copy_user_flushcache(void *to, const void __user *from,
- 				     unsigned long n)
- {
-
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 
-2.39.2
+Florian
 
