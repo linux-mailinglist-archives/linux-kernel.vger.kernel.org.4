@@ -2,128 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0BA36BBF64
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 22:49:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A56356BBF67
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 22:49:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229854AbjCOVtN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 17:49:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53212 "EHLO
+        id S230296AbjCOVtv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 17:49:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230266AbjCOVtL (ORCPT
+        with ESMTP id S232601AbjCOVts (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 17:49:11 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA9171B2CE;
-        Wed, 15 Mar 2023 14:49:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678916949; x=1710452949;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=24PS3cJVVwtntovVEKNFBbt4dw17GWbJ3h+PsnU0CIw=;
-  b=if5h6dhCNz+Qs5/2TDgp82aCWMRuNcpYWz2ETb30MdUBRhQQ/WXDa1Rk
-   AVs6miBz+g5hz2644WX6FoaSoN7Y8om7U0f+BsX/gJczMsHbSEFoIEkDZ
-   GijPeaOv+FOWnL8ffBaVHggL/O7I/aS9CBDsGYoSzw+1hRIeNgutJqcQb
-   yddZi9Vv+KweE1bqWo2CXOPLH7OqqvZsEoIt0C0f1/jrr80svcg17NWTz
-   dWf0w6In2UUIjs/Z8hSltylig4wnHzgN6+WMYi1GCexZEFvIwj0JDifG0
-   ZqVaxgxElvNlKDRFuwODU3i9ekh2q+U8eAEMD8xfASK6urhyTY4N4WfbS
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="326184863"
-X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
-   d="scan'208";a="326184863"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2023 14:49:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="822951124"
-X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
-   d="scan'208";a="822951124"
-Received: from dtfrankl-mobl1.amr.corp.intel.com (HELO [10.212.10.122]) ([10.212.10.122])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2023 14:49:08 -0700
-Message-ID: <2325a961-02a6-ac50-624d-0a3c97e89c7d@linux.intel.com>
-Date:   Wed, 15 Mar 2023 14:49:04 -0700
+        Wed, 15 Mar 2023 17:49:48 -0400
+Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45ADC30D9;
+        Wed, 15 Mar 2023 14:49:47 -0700 (PDT)
+Received: by mail-il1-x12a.google.com with SMTP id w4so11177249ilv.0;
+        Wed, 15 Mar 2023 14:49:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678916986;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=E9/4Xc/PzCfJtouwsKgyP22po2ulc0oevszQIyPl3QU=;
+        b=IVfby+N57zhlO/lS/5Tlw/MkzNb2SSfQgFV2fN4y3Zi6By7+ZEhnjUaJHMx+h1Pjc/
+         GtkymPCqg7C2j6CmW/rmF6ote6Jb944j9FcYA7BDzsu0n47MIIPUZZSGO9sYtsX8Hhqo
+         cztUCOso8hURad+E4dz8lgoMKspcEK23e767ooSYBTtqZmzEIwJRJzrxrd1jMlEc6/mK
+         GLrq327ieuccIc+JETXH70+YtSMz7mk4IVplz1ytNVdbnf2FiyVwvXf3BnqNJyVtJfsn
+         8XZAmnuNn0ppN0o0kUEtIVTPHOWPK9HzXq+RHjEIJ+RyZlg8T2JBCCWhhpCgAuSXd3j/
+         q2kw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678916986;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=E9/4Xc/PzCfJtouwsKgyP22po2ulc0oevszQIyPl3QU=;
+        b=G8zD6P51EEttavpqkoVRYVYG6N1zud36dDZPhzmRhqmWEJaw+yghNpDI2F7TEwwTj4
+         X//bRIiuVGPlHOlMN5SVzzY5z5uI0jR5bWhW+6KmP4c21AbZQ1Vm1alb8wviUlyZ79fg
+         DEpWo6WO/Z9O5BaG86nmeFJcBL3XPggsWrjBXLckZrpMV9CCEc4xVkJnfdAUvJEllqw1
+         uoASvIe2H0NyWScRj8Q9Kvray9DvaxrS4SU57eU/9v3VtgVdzSFUBvK75/GDcrUTvhXs
+         taAHo1fXbcCzRnDovpJLdYlmqqI0Cyiy+1FFZ3alUyiDwm8W+v8+2fQaF4V/EU5QCpIb
+         6ChQ==
+X-Gm-Message-State: AO0yUKU+CgARXFDlqGSzTy0C5m6VYO/Z292KUpx+0DkR70Cm4v8wC5qd
+        +dztAoo5QWhtVqeSjz29YhU=
+X-Google-Smtp-Source: AK7set+XpUQTsmPrdSiKjc3wYPDM5cDuVj/eVRgaHuCABtp6FEdqFF9QxQCA4Up/Epc817T0KnycnA==
+X-Received: by 2002:a92:ce12:0:b0:313:fea2:be5c with SMTP id b18-20020a92ce12000000b00313fea2be5cmr5492196ilo.11.1678916986566;
+        Wed, 15 Mar 2023 14:49:46 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id j4-20020a02cc64000000b004035b26b6d8sm2057636jaq.2.2023.03.15.14.49.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Mar 2023 14:49:46 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 15 Mar 2023 14:49:45 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Holger Kiehl <Holger.Kiehl@dwd.de>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] hwmon: (nct6775) add Asus Pro A520M-C II/CSM
+Message-ID: <f8e1c010-c11e-4cd4-a2f8-a074b6983e0a@roeck-us.net>
+References: <868bdc4f-9d45-475c-963e-f5232a8b95@praktifix.dwd.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2] PCI:vmd: add the module param to adjust msi mode
-Content-Language: en-US
-To:     Xinghui Li <korantwork@gmail.com>,
-        Bjorn Helgaas <helgaas@kernel.org>
-Cc:     kbusch@kernel.org, lpieralisi@kernel.org,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xinghui Li <korantli@tencent.com>
-References: <20230307083559.2379758-1-korantwork@gmail.com>
- <20230308225718.GA1054189@bhelgaas>
- <CAEm4hYXeNR5by3ZX9V1y=ebOFcQ+JD1AgHGmFiJ3UE3xBJvRCw@mail.gmail.com>
-From:   "Patel, Nirmal" <nirmal.patel@linux.intel.com>
-In-Reply-To: <CAEm4hYXeNR5by3ZX9V1y=ebOFcQ+JD1AgHGmFiJ3UE3xBJvRCw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <868bdc4f-9d45-475c-963e-f5232a8b95@praktifix.dwd.de>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/9/2023 5:31 AM, Xinghui Li wrote:
-> Bjorn Helgaas <helgaas@kernel.org> äºŽ2023å¹´3æœˆ9æ—¥å‘¨å›› 06:57å†™é“ï¼š
->> Please adjust the subject line to match previous history, e.g.,
->>
->>   PCI: vmd: Add ... MSI ...
->>
-> OK. I will fix it. Sorry for ignoring the subject format.
->
->>> In the legacy, the vmd msi-mode can only be adjusted by configing
->>> vmd_ids table.This patch adds another way to adjust msi mode by
->>> adjusting module param, which allow users easier to adjust the vmd
->>> according to the I/O scenario without rebuilding driver.There are two
->>> params could be recognized: on, off. The default param is "NULL",
->>> the goal is not to affect the existing settings of the device.
->> Please add a space after the period that ends each sentence.
->> Capitalize "MSI" to match usage in spec.
->>
-> Sorry for the format issue. I neglected them. My bad~
->
->>> Signed-off-by: Xinghui Li <korantli@tencent.com>
->>> Reviewed-by: Nirmal Patel <nirmal.patel@linux.intel.com>
->> I didn't see a response from Nirmal on the mailing list with the
->> Reviewed-by.  I think it's better if Nirmal responds to the patch
->> directly on the mailing list with the Reviewed-by, and whoever applies
->> the patch can incorporate it.  Otherwise we have no visibility into
->> any interaction between you and Nirmal.
->>
-> I pinged Nirmal to reply to this patch, It seems he forgot to cc the
-> mail list in the previous version's discussion.
->
->>> +/*
->>> + * The VMD msi_remap module parameter provides the alternative way
->>> + * to adjust msi mode when loading vmd.ko other than vmd_ids table.
->>> + * There are two params could be recognized:
->>> + *
->>> + * 1-off
->>> + * 2-on
->> It looks like your code matches either "on" or "off", not "1" or "2".
->>
-> I will change the comment. It does mislead the reader. I mean the No.1
-> param is "on" and the No.2 param is "off"
->
->>> + * The default param is "NULL", the goal is not to affect the existing
->>> + * settings of the device.
->>> + */
->>> +char *msi_remap = "NULL";
->> Looks like this should be static?  And using "NULL" (as opposed to
->> something like the empty string "") suggests some intrinsic meaning of
->> "NULL", but I think there is no intrinsic meaning and the only point
->> is that "NULL" doesn't match either "on" or "off".
->>
-> The "static" one is better, I will add it.
-> Initial parameters with "NULL" just aim to mismatch "on" or "off". Do
-> you prefer to init it without the default string?
+On Mon, Mar 13, 2023 at 01:10:31PM +0000, Holger Kiehl wrote:
+> An NCT6798D chip is now detected:
+> 
+>    dmesg|grep nct6775
+>    [   23.765392] nct6775: Found NCT6798D or compatible chip at 0x2e:0x290
+> 
+> And sensors now shows:
+> 
+>    nct6798-isa-0290
+>    Adapter: ISA adapter
+>    in0:                      312.00 mV (min =  +0.00 V, max =  +1.74 V)
+>    in1:                        1.02 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
+>    in2:                        3.42 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
+>    in3:                        3.38 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
+>    in4:                        1.03 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
+>    in5:                        1.02 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
+>    in6:                      200.00 mV (min =  +0.00 V, max =  +0.00 V)  ALARM
+>    in7:                        3.42 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
+>    in8:                        3.28 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
+>    in9:                      920.00 mV (min =  +0.00 V, max =  +0.00 V)  ALARM
+>    in10:                     512.00 mV (min =  +0.00 V, max =  +0.00 V)  ALARM
+>    in11:                     504.00 mV (min =  +0.00 V, max =  +0.00 V)  ALARM
+>    in12:                       1.03 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
+>    in13:                     256.00 mV (min =  +0.00 V, max =  +0.00 V)  ALARM
+>    in14:                       1.47 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
+>    fan1:                        0 RPM  (min =    0 RPM)
+>    fan2:                        0 RPM  (min =    0 RPM)
+>    fan3:                      355 RPM  (min =    0 RPM)
+>    fan7:                        0 RPM  (min =    0 RPM)
+>    SYSTIN:                    +25.0°C  (high = +80.0°C, hyst = +75.0°C)  sensor = thermistor
+>    CPUTIN:                    +26.5°C  (high = +80.0°C, hyst = +75.0°C)  sensor = thermistor
+>    AUXTIN0:                   +97.0°C    sensor = thermistor
+>    AUXTIN1:                   +25.0°C    sensor = thermistor
+>    AUXTIN2:                   +25.0°C    sensor = thermistor
+>    AUXTIN3:                    +1.0°C    sensor = thermistor
+>    PECI Agent 0 Calibration:  +26.0°C
+>    PCH_CHIP_CPU_MAX_TEMP:      +0.0°C
+>    PCH_CHIP_TEMP:              +0.0°C
+>    PCH_CPU_TEMP:               +0.0°C
+>    TSI0_TEMP:                 +27.9°C
+>    intrusion0:               ALARM
+>    intrusion1:               OK
+>    beep_enable:              disabled
+> 
+> Signed-off-by: Holger Kiehl <holger.kiehl@dwd.de>
+> Tested-by: Holger Kiehl <holger.kiehl@dwd.de>
 
-Please address Bjorn's comments. Thank you.
+Applied. In the future, please watch out for:
 
-Reviewed-by: Nirmal Patel <nirmal.patel@linux.intel.com>
+CHECK: From:/Signed-off-by: email comments mismatch: 'From: Holger Kiehl <Holger.Kiehl@dwd.de>' != 'Signed-off-by: Holger Kiehl <holger.kiehl@dwd.de>'
 
+Little discrepancies like this just make my life harder.
+
+Guenter
+
+> 
+> diff --git a/drivers/hwmon/nct6775-platform.c b/drivers/hwmon/nct6775-platform.c
+> index 76c6b564d7fc..1e6abfc7974d 100644
+> --- a/drivers/hwmon/nct6775-platform.c
+> +++ b/drivers/hwmon/nct6775-platform.c
+> @@ -1052,6 +1052,7 @@ static int __init nct6775_find(int sioaddr, struct nct6775_sio_data *sio_data)
+>  static struct platform_device *pdev[2];
+>  
+>  static const char * const asus_wmi_boards[] = {
+> +	"Pro A520M-C II",
+>  	"PRO H410T",
+>  	"ProArt B550-CREATOR",
+>  	"ProArt X570-CREATOR WIFI",
