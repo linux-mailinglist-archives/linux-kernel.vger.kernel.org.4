@@ -2,109 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 872B56BB3A0
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 13:52:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3EE86BB3A7
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 13:53:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233075AbjCOMwj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 08:52:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58980 "EHLO
+        id S233090AbjCOMxS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 08:53:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232754AbjCOMwh (ORCPT
+        with ESMTP id S233105AbjCOMxK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 08:52:37 -0400
-Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 697D88C536
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 05:52:36 -0700 (PDT)
-Received: by mail-qv1-xf31.google.com with SMTP id x8so1296291qvr.9
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 05:52:36 -0700 (PDT)
+        Wed, 15 Mar 2023 08:53:10 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1CFA99268;
+        Wed, 15 Mar 2023 05:53:03 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id c8-20020a05600c0ac800b003ed2f97a63eso1015224wmr.3;
+        Wed, 15 Mar 2023 05:53:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678884755;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qLFRsJOsX2F5yOtRt6kLMkQ8BWCMUvEvwx1aLA2wN+k=;
-        b=Yl19KL1JyiKv1FYtXuyMf5QOmtFAkm/oVbflUHFhB/HO3D5/kr5vf2vr5HPPzXHhDl
-         X4DgzmYShsdCV2uE9X4FW381cReiZCoZTfCNuzUBNELf0mWOlSbiP/yq6jAkHd9wt1we
-         zIpOq70eeIfjLORJO370ZQwVVg3svAhRd3KvpDpPJLGX8X/uSlkBGg3DlIWnQeJXTtp7
-         NMkA3LWJF4uLwQ+Vsp+8oz2NDUXWqHu3ZoY4b0+EPkhPJoocFo+i298nNOVMvdL6/A+I
-         7gjOYTGWRCBe9unp9Y8/XRXOpOEGZ+sdgaudWhmCuzgjOSvRwI33HoZ5Artiwe83e+J4
-         mTaA==
+        d=gmail.com; s=20210112; t=1678884782;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=OmyRdtH3qiSO5QWPBLWz/8v2lIwyybKSmrlaokl//yI=;
+        b=IKjEROzVMXRIH2jmXhG0/7c8b2IOHgUL6F+2j+hWDlKOJt/JE1CMxqsmVUaTSZ/ZII
+         dKxHynYor0Co5ohMyb3jBPd3zTrvQxj0esnBH5bKxoki7lGTb2Pkw+/vx901t66bJvUM
+         loxVftu+i7vhzZJi4xrspTeYOoe1S1Fms95gRioUAdgmxAhGxEFQQ3t2kw3Lox6vAFSR
+         NL9aWBYFpdcq5c/DpZbhv6wECLhIiyxvF0A1juR88OjXaQAM2DEcGIudZwH3c1pLWPCj
+         pTpj9gmfbneGj4wRu8aPNV6Kr5SIcTiI87VPALaqWD3/U818FxvX8qsZnfVBC/hs2hAE
+         AeEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678884755;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qLFRsJOsX2F5yOtRt6kLMkQ8BWCMUvEvwx1aLA2wN+k=;
-        b=iC307U4M6lGSAYGWykt88RcRMN9fFCGfZSDyYMJaZ9j58r8Gxkz0uPjfkE8ElhoJyO
-         5TwzhhpqQn7K9OMLmc5QewxdqjAGpyFuviiNP/dLV/ZETVb/8/3sa4h2BJJPkoG9xxnk
-         iQzV91f+bSZajBqMKfkQj5R0lY5LDzVS5+WxQyxvz19mqR4VmCXqs+l+x+5RjXwwtJkw
-         jfXM95bbZURm8coN5vhsCa/EgYwGz9UDMApX/uaYLsiBOMSTB2GNBG7opytrZ5ZLy4ws
-         PXRq3sCRuaH6phao0iodI6gh9OtUioxcEx+9wKYsaEF4+6OSfM0we9S0WG4dBPAMRAP4
-         rowQ==
-X-Gm-Message-State: AO0yUKXTMYVz7OyviTP60FCg4Jix+SMwSDz3u9J9F6NTiEWZ5UT+91lU
-        CGCJEcCJ5P5mdpNPXXWHa9MyQfJI6HRJRI+yKPY=
-X-Google-Smtp-Source: AK7set+2q0Vdy60Z3FMxrL5u94t1E4JKUteaAhBEbCyppbfKte0GjdYJ7JKgLaGNCuJfl3keUSg6/rxpzyTqlrA/K44=
-X-Received: by 2002:ac8:1e8d:0:b0:3d5:3d76:df74 with SMTP id
- c13-20020ac81e8d000000b003d53d76df74mr510179qtm.0.1678884755473; Wed, 15 Mar
- 2023 05:52:35 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1678884782;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OmyRdtH3qiSO5QWPBLWz/8v2lIwyybKSmrlaokl//yI=;
+        b=OT9O4AoJDAw6T4/8u3SUE1c4+2zBH+nKpe+rjF1mW6akYwdaz79C0b6bnohF1Xy0IM
+         xudEcl3F+KFroX60sGj33QPjz7xP+kL5ctLt+by+RwAnEvM0X+8bc559bbCfDua4/m7r
+         yHnxSGwTDWv3yW1/cKVCBTuPaJjJ+4pzK5IVVyZcvtCVTAz+kqx/ly6nyuhCFinJWQDI
+         153S8vgbqMpDi+6Y4T8xvMfKRfj9MyMzvwPsCVI4rdCUKkfbcr8lPROYHuWGDJZcaALM
+         +eE1BarMK+iMhjFX/6mNNF6MfOvRyaSNbsBaG3Qw0wYtVdtNi3hyPh9Bv/Gfk4DxXiCL
+         UF+w==
+X-Gm-Message-State: AO0yUKUTeho28MfYGct6VJW+II/SPGr0fmo/rcN6W4z7pSO6Gtz/sxz3
+        Jqt72ro58rSK4v6dReSQQXY=
+X-Google-Smtp-Source: AK7set99tKxZBFxqdMlw/6z3DNaJbvpo8WlRdBy5s/IULVxadkVRlZINUgSsb6joz/S+1AnBv0uW2g==
+X-Received: by 2002:a05:600c:198f:b0:3ea:f6c4:5f26 with SMTP id t15-20020a05600c198f00b003eaf6c45f26mr17240294wmq.17.1678884782269;
+        Wed, 15 Mar 2023 05:53:02 -0700 (PDT)
+Received: from localhost.localdomain (host-79-35-102-94.retail.telecomitalia.it. [79.35.102.94])
+        by smtp.gmail.com with ESMTPSA id k26-20020a7bc31a000000b003eb596cbc54sm1936761wmj.0.2023.03.15.05.52.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Mar 2023 05:53:01 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Luis Chamberlain <mcgrof@kernel.org>,
+        Jason Wessel <jason.wessel@windriver.com>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Chris Down <chris@chrisdown.name>,
+        Nick Terrell <terrelln@fb.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kgdb-bugreport@lists.sourceforge.net,
+        live-patching@vger.kernel.org, bpf@vger.kernel.org,
+        llvm@lists.linux.dev
+Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Piotr Gorski <piotrgorski@cachyos.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Ira Weiny <ira.weiny@intel.com>
+Subject: [PATCH] module/decompress: Never use kunmap() for local un-mappings
+Date:   Wed, 15 Mar 2023 13:52:56 +0100
+Message-Id: <20230315125256.22772-1-fmdefrancesco@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Received: by 2002:ab3:cacd:0:b0:4ce:79b9:d02b with HTTP; Wed, 15 Mar 2023
- 05:52:34 -0700 (PDT)
-Reply-To: zongokari01@yahoo.com
-From:   "Mrs, Zongo Kari" <abdoulkarimsemde72@gmail.com>
-Date:   Wed, 15 Mar 2023 05:52:34 -0700
-Message-ID: <CAFf6P72GrSqJ-DrCNRwD8NMnjxCVyZUK5BpNyMoNG5YXWJz=tA@mail.gmail.com>
-Subject: May the good God bless you
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=7.7 required=5.0 tests=BAYES_99,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:f31 listed in]
-        [list.dnswl.org]
-        *  3.5 BAYES_99 BODY: Bayes spam probability is 99 to 100%
-        *      [score: 0.9981]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [abdoulkarimsemde72[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [abdoulkarimsemde72[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [zongokari01[at]yahoo.com]
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
-        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *******
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I'm a dying woman here in the hospital, I was diagnosed as a Cancer
-patient over 2 Years ago. I am a business woman
-dealing with Gold Exportation. I Am from Us California
-I have a charitable and unfulfillment
+Use kunmap_local() to unmap pages locally mapped with kmap_local_page().
 
-project that am about to handover to you, if you are interested please
-Reply, hope to hear from you.
+kunmap_local() must be called on the kernel virtual address returned by
+kmap_local_page(), differently from how we use kunmap() which instead
+expects the mapped page as its argument.
 
-Please Reply Me with my private Email for Faster Communication
+In module_zstd_decompress() we currently map with kmap_local_page() and
+unmap with kunmap(). This breaks the code and so it should be fixed.
 
- zongokari01@yahoo.com
+Cc: Piotr Gorski <piotrgorski@cachyos.org>
+Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc: Luis Chamberlain <mcgrof@kernel.org>
+Cc: Stephen Boyd <swboyd@chromium.org>
+Cc: Ira Weiny <ira.weiny@intel.com>
+Fixes: 169a58ad824d ("module/decompress: Support zstd in-kernel decompression")
+Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+---
+ kernel/module/decompress.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-From Zongo Kari
+diff --git a/kernel/module/decompress.c b/kernel/module/decompress.c
+index bb79ac1a6d8f..7ddc87bee274 100644
+--- a/kernel/module/decompress.c
++++ b/kernel/module/decompress.c
+@@ -267,7 +267,7 @@ static ssize_t module_zstd_decompress(struct load_info *info,
+ 		zstd_dec.size = PAGE_SIZE;
+ 
+ 		ret = zstd_decompress_stream(dstream, &zstd_dec, &zstd_buf);
+-		kunmap(page);
++		kunmap_local(zstd_dec.dst);
+ 		retval = zstd_get_error_code(ret);
+ 		if (retval)
+ 			break;
+-- 
+2.39.2
+
