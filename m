@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E12C6BBC25
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 19:34:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15CF86BBC27
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 19:34:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231990AbjCOSeV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 14:34:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48532 "EHLO
+        id S232031AbjCOSeY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 14:34:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231725AbjCOSeM (ORCPT
+        with ESMTP id S231751AbjCOSeM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 15 Mar 2023 14:34:12 -0400
 Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F32ABDFB;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F55615CAB;
         Wed, 15 Mar 2023 11:34:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1678905250; x=1710441250;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=+M93RTmQljP8okVyTKg1YF0nbH2IJeJvC34zMCSMUuA=;
-  b=TeS5Z0iIqGhZf5RvX8zIjroIlUrGZBp2uqc04cnbhLb927eF43az2FnC
-   C8GKS6SoULy8tw2odpCVRPoNUrsqhRsW9UEiCfHjEfvybO/Os14ERmhhm
-   M9RIkztLfrZt70nhY390B7iIZAt/5SsPzuUJeV0kHJbjPsgditShelh7w
-   eh4bP6WbttxnZRUKQ8vA5mP3ksJ/oCfye6sb9cK2zILibIpZFVz7f1K1b
-   Mg2CMmkexHJBGM3euRsgaSXbFZR+5FudFzQnRAIJrpR3cYTPps0FVikCD
-   KiduWAbybgQTCGeWPla7xVCLp8bvlfi2LU2dmV6p9a8Po+pZJogaqUP2G
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="340154528"
+  bh=tiBxACl1aCLc9qaOAQl3+p3ktpJtGcq9KNcC9SlIB0c=;
+  b=W+Ydu8WopGlDsAQbUOsq0rQsWlVnGIe9lCFf8d1lWshEIHMmprTOypS8
+   6cmHpYw0kO9E5qdV4Lcf05wwcf6dEkwDFSAjoDuAtXngYipL9BD0N+IB1
+   ZjgtSp+7HI3S0DKSOT8NsDhmbdLq/O9xJ1be0LRvLsOA2rBg06wnUby7p
+   DjK4NWut8A82PoVxgGX+vI3/47I6X6eLn04Ht52HDVR9F1n7i43/L96pc
+   4XOT0cZWmlKy7Ex4enEbRI/n5amDnFpSAWNyniy3MapzuYU7/Jq1dIqCW
+   odATeYIGcLAbmZ1/3hcz6OzMmbDboBSk6hx7wbVcm93oqYtlfOIgiwZ9l
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="340154532"
 X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
-   d="scan'208";a="340154528"
+   d="scan'208";a="340154532"
 Received: from fmsmga006.fm.intel.com ([10.253.24.20])
   by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2023 11:34:07 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="925435202"
+X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="925435205"
 X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
-   d="scan'208";a="925435202"
+   d="scan'208";a="925435205"
 Received: from linux.intel.com ([10.54.29.200])
-  by fmsmga006.fm.intel.com with ESMTP; 15 Mar 2023 11:34:06 -0700
+  by fmsmga006.fm.intel.com with ESMTP; 15 Mar 2023 11:34:07 -0700
 Received: from debox1-desk4.intel.com (unknown [10.209.75.205])
-        by linux.intel.com (Postfix) with ESMTP id A01C5580D29;
+        by linux.intel.com (Postfix) with ESMTP id D3C8F580C6E;
         Wed, 15 Mar 2023 11:34:06 -0700 (PDT)
 From:   "David E. Box" <david.e.box@linux.intel.com>
 To:     irenic.rajneesh@gmail.com, david.e.box@linux.intel.com,
@@ -48,9 +48,9 @@ To:     irenic.rajneesh@gmail.com, david.e.box@linux.intel.com,
         andy.shevchenko@gmail.com, rajvi.jingar@linux.intel.com,
         xi.pardee@intel.com
 Cc:     linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org
-Subject: [PATCH 02/11] platform/x86/intel/vsec: Explicitly enable capabilities
-Date:   Wed, 15 Mar 2023 11:33:56 -0700
-Message-Id: <20230315183405.2465630-3-david.e.box@linux.intel.com>
+Subject: [PATCH 03/11] platform/x86/intel/vsec: Add base address field
+Date:   Wed, 15 Mar 2023 11:33:57 -0700
+Message-Id: <20230315183405.2465630-4-david.e.box@linux.intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230315183405.2465630-1-david.e.box@linux.intel.com>
 References: <20230315183405.2465630-1-david.e.box@linux.intel.com>
@@ -65,180 +65,119 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Any discovered Intel VSEC/DVSEC capabilities are enabled by default and
-only get disabled by quirk. Instead, remove such quirks and only enable
-support for capabilities that have been explicitly added to a new
-capabilities field. While here, also reorder the device info structures
-alphabetically.
+Some Intel PCIe VSEC capabilities may be emulated in MMIO. In such cases
+the BAR is not readable from config space. Provide a field for drivers to
+indicate the base address that is to be used.
 
 Signed-off-by: David E. Box <david.e.box@linux.intel.com>
 ---
- drivers/platform/x86/intel/vsec.c | 65 +++++++++++++------------------
- drivers/platform/x86/intel/vsec.h | 11 +++++-
- 2 files changed, 38 insertions(+), 38 deletions(-)
+ drivers/platform/x86/intel/pmt/class.c | 14 +++++++++++---
+ drivers/platform/x86/intel/vsec.c      | 10 ++++++++--
+ drivers/platform/x86/intel/vsec.h      |  2 ++
+ 3 files changed, 21 insertions(+), 5 deletions(-)
 
+diff --git a/drivers/platform/x86/intel/pmt/class.c b/drivers/platform/x86/intel/pmt/class.c
+index 9f505c6ef278..7136475d4ab5 100644
+--- a/drivers/platform/x86/intel/pmt/class.c
++++ b/drivers/platform/x86/intel/pmt/class.c
+@@ -161,10 +161,11 @@ static struct class intel_pmt_class = {
+ 
+ static int intel_pmt_populate_entry(struct intel_pmt_entry *entry,
+ 				    struct intel_pmt_header *header,
+-				    struct device *dev,
++				    struct intel_vsec_device *ivdev,
+ 				    struct resource *disc_res)
+ {
+-	struct pci_dev *pci_dev = to_pci_dev(dev->parent);
++	struct pci_dev *pci_dev = ivdev->pcidev;
++	struct device *dev = &ivdev->auxdev.dev;
+ 	u8 bir;
+ 
+ 	/*
+@@ -216,6 +217,13 @@ static int intel_pmt_populate_entry(struct intel_pmt_entry *entry,
+ 
+ 		break;
+ 	case ACCESS_BARID:
++		/* Use the provided base address if it exists */
++		if (ivdev->base_addr) {
++			entry->base_addr = ivdev->base_addr +
++				   GET_ADDRESS(header->base_offset);
++			break;
++		}
++
+ 		/*
+ 		 * If another BAR was specified then the base offset
+ 		 * represents the offset within that BAR. SO retrieve the
+@@ -320,7 +328,7 @@ int intel_pmt_dev_create(struct intel_pmt_entry *entry, struct intel_pmt_namespa
+ 	if (ret)
+ 		return ret;
+ 
+-	ret = intel_pmt_populate_entry(entry, &header, dev, disc_res);
++	ret = intel_pmt_populate_entry(entry, &header, intel_vsec_dev, disc_res);
+ 	if (ret)
+ 		return ret;
+ 
 diff --git a/drivers/platform/x86/intel/vsec.c b/drivers/platform/x86/intel/vsec.c
-index a22354ee6ce3..0d5cf250e288 100644
+index 0d5cf250e288..77063f699a1d 100644
 --- a/drivers/platform/x86/intel/vsec.c
 +++ b/drivers/platform/x86/intel/vsec.c
-@@ -32,14 +32,6 @@ static DEFINE_IDA(intel_vsec_ida);
- static DEFINE_IDA(intel_vsec_sdsi_ida);
- static DEFINE_XARRAY_ALLOC(auxdev_array);
- 
--static enum intel_vsec_id intel_vsec_allow_list[] = {
--	VSEC_ID_TELEMETRY,
--	VSEC_ID_WATCHER,
--	VSEC_ID_CRASHLOG,
--	VSEC_ID_SDSI,
--	VSEC_ID_TPMI,
--};
--
- static const char *intel_vsec_name(enum intel_vsec_id id)
- {
- 	switch (id) {
-@@ -63,26 +55,19 @@ static const char *intel_vsec_name(enum intel_vsec_id id)
- 	}
- }
- 
--static bool intel_vsec_allowed(u16 id)
--{
--	int i;
--
--	for (i = 0; i < ARRAY_SIZE(intel_vsec_allow_list); i++)
--		if (intel_vsec_allow_list[i] == id)
--			return true;
--
--	return false;
--}
--
--static bool intel_vsec_disabled(u16 id, unsigned long quirks)
-+static bool intel_vsec_supported(u16 id, unsigned long caps)
- {
- 	switch (id) {
-+	case VSEC_ID_TELEMETRY:
-+		return !!(caps & VSEC_CAP_TELEMETRY);
- 	case VSEC_ID_WATCHER:
--		return !!(quirks & VSEC_QUIRK_NO_WATCHER);
--
-+		return !!(caps & VSEC_CAP_WATCHER);
- 	case VSEC_ID_CRASHLOG:
--		return !!(quirks & VSEC_QUIRK_NO_CRASHLOG);
--
-+		return !!(caps & VSEC_CAP_CRASHLOG);
-+	case VSEC_ID_SDSI:
-+		return !!(caps & VSEC_CAP_SDSI);
-+	case VSEC_ID_TPMI:
-+		return !!(caps & VSEC_CAP_TPMI);
- 	default:
- 		return false;
- 	}
-@@ -170,7 +155,7 @@ static int intel_vsec_add_dev(struct pci_dev *pdev, struct intel_vsec_header *he
+@@ -153,6 +153,7 @@ static int intel_vsec_add_dev(struct pci_dev *pdev, struct intel_vsec_header *he
+ 	struct intel_vsec_device *intel_vsec_dev;
+ 	struct resource *res, *tmp;
  	unsigned long quirks = info->quirks;
++	u64 base_addr;
  	int i;
  
--	if (!intel_vsec_allowed(header->id) || intel_vsec_disabled(header->id, quirks))
-+	if (!intel_vsec_supported(header->id, info->caps))
- 		return -EINVAL;
+ 	if (!intel_vsec_supported(header->id, info->caps))
+@@ -181,14 +182,18 @@ static int intel_vsec_add_dev(struct pci_dev *pdev, struct intel_vsec_header *he
+ 	if (quirks & VSEC_QUIRK_TABLE_SHIFT)
+ 		header->offset >>= TABLE_OFFSET_SHIFT;
  
- 	if (!header->num_entries) {
-@@ -234,14 +219,14 @@ static int intel_vsec_add_dev(struct pci_dev *pdev, struct intel_vsec_header *he
- static bool intel_vsec_walk_header(struct pci_dev *pdev,
- 				   struct intel_vsec_platform_info *info)
- {
--	struct intel_vsec_header **header = info->capabilities;
-+	struct intel_vsec_header **header = info->headers;
- 	bool have_devices = false;
- 	int ret;
- 
- 	for ( ; *header; header++) {
- 		ret = intel_vsec_add_dev(pdev, *header, info);
- 		if (ret)
--			dev_info(&pdev->dev, "Could not add device for DVSEC id %d\n",
-+			dev_info(&pdev->dev, "Could not add device for VSEC id %d\n",
- 				 (*header)->id);
- 		else
- 			have_devices = true;
-@@ -386,12 +371,6 @@ static int intel_vsec_pci_probe(struct pci_dev *pdev, const struct pci_device_id
- 	return 0;
- }
- 
--/* TGL info */
--static const struct intel_vsec_platform_info tgl_info = {
--	.quirks = VSEC_QUIRK_NO_WATCHER | VSEC_QUIRK_NO_CRASHLOG |
--		  VSEC_QUIRK_TABLE_SHIFT | VSEC_QUIRK_EARLY_HW,
--};
--
- /* DG1 info */
- static struct intel_vsec_header dg1_telemetry = {
- 	.length = 0x10,
-@@ -402,19 +381,31 @@ static struct intel_vsec_header dg1_telemetry = {
- 	.offset = 0x466000,
- };
- 
--static struct intel_vsec_header *dg1_capabilities[] = {
-+static struct intel_vsec_header *dg1_headers[] = {
- 	&dg1_telemetry,
- 	NULL
- };
- 
- static const struct intel_vsec_platform_info dg1_info = {
--	.capabilities = dg1_capabilities,
-+	.caps = VSEC_CAP_TELEMETRY,
-+	.headers = dg1_headers,
- 	.quirks = VSEC_QUIRK_NO_DVSEC | VSEC_QUIRK_EARLY_HW,
- };
- 
- /* MTL info */
- static const struct intel_vsec_platform_info mtl_info = {
--	.quirks = VSEC_QUIRK_NO_WATCHER | VSEC_QUIRK_NO_CRASHLOG,
-+	.caps = VSEC_CAP_TELEMETRY,
-+};
++	if (info->base_addr)
++		base_addr = info->base_addr;
++	else
++		base_addr = pdev->resource[header->tbir].start;
 +
-+/* OOBMSM info */
-+static const struct intel_vsec_platform_info oobmsm_info = {
-+	.caps = VSEC_CAP_TELEMETRY | VSEC_CAP_SDSI | VSEC_CAP_TPMI,
-+};
-+
-+/* TGL info */
-+static const struct intel_vsec_platform_info tgl_info = {
-+	.caps = VSEC_CAP_TELEMETRY,
-+	.quirks = VSEC_QUIRK_TABLE_SHIFT | VSEC_QUIRK_EARLY_HW,
- };
+ 	/*
+ 	 * The DVSEC/VSEC contains the starting offset and count for a block of
+ 	 * discovery tables. Create a resource array of these tables to the
+ 	 * auxiliary device driver.
+ 	 */
+ 	for (i = 0, tmp = res; i < header->num_entries; i++, tmp++) {
+-		tmp->start = pdev->resource[header->tbir].start +
+-			     header->offset + i * (header->entry_size * sizeof(u32));
++		tmp->start = base_addr + header->offset + i * (header->entry_size * sizeof(u32));
+ 		tmp->end = tmp->start + (header->entry_size * sizeof(u32)) - 1;
+ 		tmp->flags = IORESOURCE_MEM;
  
- #define PCI_DEVICE_ID_INTEL_VSEC_ADL		0x467d
-@@ -429,7 +420,7 @@ static const struct pci_device_id intel_vsec_pci_ids[] = {
- 	{ PCI_DEVICE_DATA(INTEL, VSEC_DG1, &dg1_info) },
- 	{ PCI_DEVICE_DATA(INTEL, VSEC_MTL_M, &mtl_info) },
- 	{ PCI_DEVICE_DATA(INTEL, VSEC_MTL_S, &mtl_info) },
--	{ PCI_DEVICE_DATA(INTEL, VSEC_OOBMSM, &(struct intel_vsec_platform_info) {}) },
-+	{ PCI_DEVICE_DATA(INTEL, VSEC_OOBMSM, &oobmsm_info) },
- 	{ PCI_DEVICE_DATA(INTEL, VSEC_RPL, &tgl_info) },
- 	{ PCI_DEVICE_DATA(INTEL, VSEC_TGL, &tgl_info) },
- 	{ }
+@@ -206,6 +211,7 @@ static int intel_vsec_add_dev(struct pci_dev *pdev, struct intel_vsec_header *he
+ 	intel_vsec_dev->resource = res;
+ 	intel_vsec_dev->num_resources = header->num_entries;
+ 	intel_vsec_dev->quirks = info->quirks;
++	intel_vsec_dev->base_addr = info->base_addr;
+ 
+ 	if (header->id == VSEC_ID_SDSI)
+ 		intel_vsec_dev->ida = &intel_vsec_sdsi_ida;
 diff --git a/drivers/platform/x86/intel/vsec.h b/drivers/platform/x86/intel/vsec.h
-index f600d6fe0830..54fdea93f762 100644
+index 54fdea93f762..4157ec546cd3 100644
 --- a/drivers/platform/x86/intel/vsec.h
 +++ b/drivers/platform/x86/intel/vsec.h
-@@ -61,9 +61,18 @@ enum intel_vsec_quirks {
- 	VSEC_QUIRK_EARLY_HW     = BIT(4),
- };
- 
-+enum intel_vsec_capabilities {
-+	VSEC_CAP_TELEMETRY	= BIT(0),
-+	VSEC_CAP_WATCHER	= BIT(1),
-+	VSEC_CAP_CRASHLOG	= BIT(2),
-+	VSEC_CAP_SDSI		= BIT(3),
-+	VSEC_CAP_TPMI		= BIT(4),
-+};
-+
- /* Platform specific data */
- struct intel_vsec_platform_info {
--	struct intel_vsec_header **capabilities;
-+	struct intel_vsec_header **headers;
-+	unsigned long caps;
+@@ -74,6 +74,7 @@ struct intel_vsec_platform_info {
+ 	struct intel_vsec_header **headers;
+ 	unsigned long caps;
  	unsigned long quirks;
++	u64 base_addr;
  };
  
+ struct intel_vsec_device {
+@@ -86,6 +87,7 @@ struct intel_vsec_device {
+ 	void *priv_data;
+ 	size_t priv_data_size;
+ 	unsigned long quirks;
++	u64 base_addr;
+ };
+ 
+ int intel_vsec_add_aux(struct pci_dev *pdev, struct device *parent,
 -- 
 2.34.1
 
