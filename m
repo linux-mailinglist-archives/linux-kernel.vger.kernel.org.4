@@ -2,93 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B36E6BA7E1
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 07:33:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA8C86BA7E5
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 07:36:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231325AbjCOGdV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 02:33:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44262 "EHLO
+        id S230255AbjCOGg2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 02:36:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231316AbjCOGdS (ORCPT
+        with ESMTP id S229488AbjCOGg0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 02:33:18 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80D383866B
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 23:33:08 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id cy23so71221757edb.12
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 23:33:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678861987;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6O+67IztLcbRdjfu86x4TR9bmaGpYkae+Z81ttWc3M8=;
-        b=Y+d3Zqw+fnjc7vYA1qMfkSqWuIeZYJdDandLuNEvaB+6vdi6Y6vSVKdUlSYPq8+hCY
-         ZuC7C61pBisMr2BPWVyRCGTX64XQwIFZowNaZpKNQaOwTACXuyhdaxz4n5V4cnHzBZQh
-         G9v1hSnfNrdG5VNCvMu9H1aYXpOmfdAx8hQt/WAITu0GzVywwa0thzO7JRUr7s2Oe1GU
-         mnHWsXdhFiOhQOA5UutAxfEBTdl1be2aXU+TpJtXgBz1nNy4WoNPgieGwkeYEMnuN9PF
-         QvN/nEGmburnbA/8QPtkz0iY3y79KDJiiK0dzXX30+zlfHEmqoYZlO4RZzmFx8x3GBUY
-         B0oQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678861987;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6O+67IztLcbRdjfu86x4TR9bmaGpYkae+Z81ttWc3M8=;
-        b=Nx04v3DR8hKLQp/WQOmrmu9vu/EtehE0Zh3rp1Javkxtghlwm/0UQDpx9Vx7TH15jS
-         loj9I0moO8hcPOsqYM9Cwiv3+pZAKWmVCjXGvvk/K+U3Lf8/XSJ9LjPxwqegMOA23hMy
-         36Qaf4chVb1mIysbH1OcZmTSEWnk3k1+nZMJP51DtRYrWp51enXfCcrRF231vAnxRE04
-         rDABiFLaL9siNkkxnuzXvZX6MKuMf/DDgNYdrr/L2ENj434v485O/vdtOYghVW66Q7uj
-         fZ3RpyX6AuJUApYGwWku9gr4wUxjpW2s5xwsVMoSIVh/r+b5Si81D7P7GqubRF8q+ieC
-         empA==
-X-Gm-Message-State: AO0yUKWZ9BYrdkNO0lKzlHGj1Tq/vt9PfEtu3vQcBXlguS5sbi6jYedI
-        49FMplIwZLdSbchdUmjElG8oug==
-X-Google-Smtp-Source: AK7set8R3aSi2Th6BvPjjIeopEtwlzinsZKsEuhAPfo29wLWmghjVsTwGenPQqIgIKmjM5LAa0VpFg==
-X-Received: by 2002:a17:907:8e9a:b0:92f:3fbb:a077 with SMTP id tx26-20020a1709078e9a00b0092f3fbba077mr334014ejc.72.1678861986970;
-        Tue, 14 Mar 2023 23:33:06 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:940e:8615:37dc:c2bd? ([2a02:810d:15c0:828:940e:8615:37dc:c2bd])
-        by smtp.gmail.com with ESMTPSA id kg27-20020a17090776fb00b008c9b44b7851sm2039897ejc.182.2023.03.14.23.33.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Mar 2023 23:33:06 -0700 (PDT)
-Message-ID: <33607509-e714-2f35-6331-d193d0dd89f6@linaro.org>
-Date:   Wed, 15 Mar 2023 07:33:05 +0100
+        Wed, 15 Mar 2023 02:36:26 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77BF03BDB1;
+        Tue, 14 Mar 2023 23:36:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1C808B81BFD;
+        Wed, 15 Mar 2023 06:36:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 629D8C433D2;
+        Wed, 15 Mar 2023 06:36:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1678862182;
+        bh=WwlkMPoTr7BtqZZplFY4E95heUdFj/Fz74AR3mmmC24=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=awdNmW6vLrlHNIdqn6ZpKdZBFl+/GcVjIdYiv8bUK8bqTRrNhNSLS5qwf4knQZKQ0
+         5HOj7lCJ+tHjZb6SfCByVxMDK7aS8G6r3X1RXRgMs13b+o1dLxavlUfZQdRerHXYTK
+         ZQnOEnJwo8lnV+6gtdEBVcgfHp2wEOvZfYWVTI7M=
+Date:   Wed, 15 Mar 2023 07:36:19 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     "Seymour, Shane M" <shane.seymour@hpe.com>
+Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>
+Subject: Re: [PATCH for-next] scsi: Implement host state statistics
+Message-ID: <ZBFnYwtr+2bfjvcY@kroah.com>
+References: <DM4PR84MB1373DCD07EABD28D88129C50FDBF9@DM4PR84MB1373.NAMPRD84.PROD.OUTLOOK.COM>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2 1/2] dt-bindings: arm: qcom: Add Acer Aspire 1
-Content-Language: en-US
-To:     Nikita Travkin <nikita@trvn.ru>, agross@kernel.org,
-        andersson@kernel.org
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        konrad.dybcio@linaro.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht
-References: <20230315051220.5614-1-nikita@trvn.ru>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230315051220.5614-1-nikita@trvn.ru>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DM4PR84MB1373DCD07EABD28D88129C50FDBF9@DM4PR84MB1373.NAMPRD84.PROD.OUTLOOK.COM>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/03/2023 06:12, Nikita Travkin wrote:
-> Acer Aspire 1 is a laptop based on sc7180. Document it's compatible.
+On Wed, Mar 15, 2023 at 06:08:19AM +0000, Seymour, Shane M wrote:
+> The following patch implements host state statistics via sysfs. The intent
+> is to allow user space to see the state changes and be able to report when
+> a host changes state. The files do not separate out the time spent into
+> each state but only into three:
+
+Why does userspace care about these things at all?  What tool needs them
+and what can userspace do with the information?
+
 > 
-> Signed-off-by: Nikita Travkin <nikita@trvn.ru>
-> ---
-> Changes in v2:
->  - Merge with IDP (Krzysztof)
+> $ ll /sys/class/scsi_host/host0/stats
+> total 0
+> -r--r--r--. 1 root root 4096 Mar 13 22:43 state_first_change_time
+> -r--r--r--. 1 root root 4096 Mar 13 22:43 state_last_change_time
+> -r--r--r--. 1 root root 4096 Mar 13 22:43 state_other_count
+> -r--r--r--. 1 root root 4096 Mar 13 22:43 state_other_ns
+> -r--r--r--. 1 root root 4096 Mar 13 22:43 state_recovery_count
+> -r--r--r--. 1 root root 4096 Mar 13 22:43 state_recovery_ns
+> -r--r--r--. 1 root root 4096 Mar 13 22:43 state_running_count
+> -r--r--r--. 1 root root 4096 Mar 13 22:43 state_running_ns
+> 
+> They are running, recovery and other. The running state is SHOST_CREATED
+> and SHOST_RUNNING. The recovery state is SHOST_RECOVERY,
+> SHOST_CANCEL_RECOVERY, and SHOST_DEL_RECOVERY. Any other state gets
+> accounted for in other.
+> 
+> The current state is not accounted for in the information read. Because
+> of that you must read:
+> 
+> 1. The last_change_time for that host
+> 2. the current state of a host and the uptime
+> 3. each of the above *count and *ns files
+> 4. Re-read the last_change_time
+> 5. Compare the two last_change_time values read and if different try again.
+> 6. The total time read from the *ns files is subtracted from the uptime and
+>    that time is then allocated to the current state time.
+> 
+> The first change time is to determine when the host was created so programs
+> can determine if it was newly created or not.
+> 
+> A (GPLv2) program called hostmond will be released in a few months that
+> will monitor these interfaces and report (local host only via syslog(3C))
+> when hosts change state.
 
+We kind of need to see this before the kernel changes can be accepted
+for obvious reasons, what is preventing that from happening now?
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> +static ssize_t state_first_change_time_show(struct device *dev,
+> +	struct device_attribute *attr, char *buf)
+> +{
+> +	struct Scsi_Host *shost = class_to_shost(dev);
+> +
+> +	return scnprintf(buf, PAGE_SIZE, "%lld",
+> +		ktime_to_ns(shost->stats->state_first_change_time));
 
-Best regards,
-Krzysztof
+Please always use sysfs_emit() instead of the crazy scnprintf() for
+sysfs entries.
 
+> +struct scsi_host_stats {
+> +	ktime_t state_running_ns;
+> +	ktime_t state_recovery_ns;
+> +	ktime_t state_other_ns;
+> +	ktime_t state_first_change_time;
+> +	ktime_t state_last_change_time;
+> +	uint32_t state_running_count;
+> +	uint32_t state_recovery_count;
+> +	uint32_t state_other_count;
+
+u32 is a kernel type, not uint32_t please, but I don't know what the
+scsi layer is used to.
+
+thanks,
+
+greg k-h
