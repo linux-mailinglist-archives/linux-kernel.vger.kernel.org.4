@@ -2,87 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F19D86BA548
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 03:37:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FF7C6BA54E
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 03:41:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229847AbjCOChH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 22:37:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40724 "EHLO
+        id S230184AbjCOClZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 22:41:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229784AbjCOCg4 (ORCPT
+        with ESMTP id S230111AbjCOClX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 22:36:56 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 105A3222E8
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 19:36:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678847770;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=liFrkbl8/pWAAeZ9NlRPA0XwLoQCiHNQ8AUuy28xdJw=;
-        b=exQPjWBpIIIeE56l9ENRer2E0MJwPag0byFXHFVI1LoV2b2h3OyL68omKzMXt5tZGDiZCU
-        OOCgzRKIVsmL/uhHIORCd2ttU/p5GyvFW4yCiExW8JI+1g8cQx7YKinbq4oewemwMeQDFU
-        aZkBGmpQXsmUi0TEPIXYo5ysATttK1E=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-230-66xJvKqrNgyD-S4fHovT8w-1; Tue, 14 Mar 2023 22:36:08 -0400
-X-MC-Unique: 66xJvKqrNgyD-S4fHovT8w-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Tue, 14 Mar 2023 22:41:23 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07A7334020;
+        Tue, 14 Mar 2023 19:41:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 441608027FD;
-        Wed, 15 Mar 2023 02:36:08 +0000 (UTC)
-Received: from ovpn-8-22.pek2.redhat.com (ovpn-8-22.pek2.redhat.com [10.72.8.22])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id DDC0D40C6E67;
-        Wed, 15 Mar 2023 02:36:04 +0000 (UTC)
-Date:   Wed, 15 Mar 2023 10:35:59 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Pavel Begunkov <asml.silence@gmail.com>
-Cc:     io-uring@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        linux-kernel@vger.kernel.org, ming.lei@redhat.com
-Subject: Re: [RFC 0/2] optimise local-tw task resheduling
-Message-ID: <ZBEvD04sH/JzN7MJ@ovpn-8-22.pek2.redhat.com>
-References: <cover.1678474375.git.asml.silence@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1678474375.git.asml.silence@gmail.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8B8FFB81BBD;
+        Wed, 15 Mar 2023 02:41:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 4D0C1C433EF;
+        Wed, 15 Mar 2023 02:41:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678848079;
+        bh=h3J4HEJI4W2lctfe9G8Y3rHE+SQmJmji2y22Oimd2JU=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=sdJ7GzwNEfBUvfMEyjsnWAykD1GrkewaVCnF4UaSVPOwkK2izKwQW+Mt666ecQcoq
+         ycuIogfDZO3iCMUyVMrI0Nb5zS9bq+TFtDEGn85MKIk7QEUrnhmWYiSyKxWDMml+x0
+         9ISe5apdxYpTU0qy0oEVp+npjhckg/o5pL15HbwWhkszEpeCy6gEjVKoAwffBuybWT
+         5wj07ZJWowI2vOlERj3NxyBZ5vvSO36lwX6paUUpG9pvZgYEvjJq05/upItpjaPaRj
+         NXQxXgTW/IOvXH3fby/4M3C1ByhulgWC0+nb+R5pA5g3jaN7FgMH7A+ORF73A7j0YF
+         /SbDdyMOI44oA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3BC50E66CBA;
+        Wed, 15 Mar 2023 02:41:19 +0000 (UTC)
+Subject: Re: [GIT PULL] hotfixes for 6.3-rc1
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20230314165437.a2d992731a970582fe36aaba@linux-foundation.org>
+References: <20230314165437.a2d992731a970582fe36aaba@linux-foundation.org>
+X-PR-Tracked-List-Id: <mm-commits.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20230314165437.a2d992731a970582fe36aaba@linux-foundation.org>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm tags/mm-hotfixes-stable-2023-03-14-16-51
+X-PR-Tracked-Commit-Id: dd52a61da0dd8bab8b90e808f0e5ad507b61ad6d
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 26e2878b3e18530c6198354a561be202235bd325
+Message-Id: <167884807923.332.13367805991971100767.pr-tracker-bot@kernel.org>
+Date:   Wed, 15 Mar 2023 02:41:19 +0000
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>, linux-mm@kvack.org,
+        mm-commits@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Pavel
+The pull request you sent on Tue, 14 Mar 2023 16:54:37 -0700:
 
-On Fri, Mar 10, 2023 at 07:04:14PM +0000, Pavel Begunkov wrote:
-> io_uring extensively uses task_work, but when a task is waiting
-> for multiple CQEs it causes lots of rescheduling. This series
-> is an attempt to optimise it and be a base for future improvements.
-> 
-> For some zc network tests eventually waiting for a portion of 
-> buffers I've got 10x descrease in the number of context switches,
-> which reduced the CPU consumption more than twice (17% -> 8%).
-> It also helps storage cases, while running fio/t/io_uring against
-> a low performant drive it got 2x descrease of the number of context
-> switches for QD8 and ~4 times for QD32.
+> git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm tags/mm-hotfixes-stable-2023-03-14-16-51
 
-ublk uses io_uring_cmd_complete_in_task()(io_req_task_work_add())
-heavily. So I tried this patchset, looks not see obvious change
-on both IOPS and context switches when running 't/io_uring /dev/ublkb0',
-and it is one null ublk target(ublk add -t null -z -u 1 -q 2), IOPS
-is ~2.8M.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/26e2878b3e18530c6198354a561be202235bd325
 
-But ublk applies batch schedule similar with io_uring before calling
-io_uring_cmd_complete_in_task().
+Thank you!
 
-thanks,
-Ming
-
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
