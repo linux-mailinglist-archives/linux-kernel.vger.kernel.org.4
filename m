@@ -2,137 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FAFE6BBAD1
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 18:25:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB8C76BBAE6
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 18:30:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231468AbjCORZn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 13:25:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59776 "EHLO
+        id S231536AbjCORa6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 13:30:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230332AbjCORZl (ORCPT
+        with ESMTP id S230036AbjCORaz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 13:25:41 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB46525E1F;
-        Wed, 15 Mar 2023 10:25:39 -0700 (PDT)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32FHC6U9017486;
-        Wed, 15 Mar 2023 17:25:39 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=mime-version : date :
- from : to : cc : subject : reply-to : in-reply-to : references :
- message-id : content-type : content-transfer-encoding; s=pp1;
- bh=bqXdSA4gmJf83mPxDDULhIgnmTET1iw6/02WOGu6qBk=;
- b=iYgTYmWYFUCqgGqR4xzaxqoSesru94n3yvzojsBf02d5vkbAImwbCKFAFVgGPq2SFcVT
- Zc10UOpuwIeaONJICEeABNYaHFLFHXJ5dvRSTN7Z0dtIQgSeHbKPtJPnXkGU3DX1g8xX
- 6NmZhb1v+G0SS+dMhDv6faYQFs/ginCaVMr6+l9s+3rBEFm65G0PrUD6Owgp3WJkIriL
- vE+Y7BfqOtRxtQ/O63bmqq5RFJfoVB40Lm2Qlcn7JMxAdzAvdLpELz0i7YdRakYqXeXS
- 9w5u1bHFLPQq45vOqUTMboJu8hfB0q+UdLiDVDf3P0EQDXlnIMXX85WO13yUe1+A0uSs Aw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pbj740am9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 15 Mar 2023 17:25:39 +0000
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32FHCJ5r018632;
-        Wed, 15 Mar 2023 17:25:38 GMT
-Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pbj740akm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 15 Mar 2023 17:25:38 +0000
-Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
-        by ppma01wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32FH6dqF031172;
-        Wed, 15 Mar 2023 17:25:37 GMT
-Received: from smtprelay05.wdc07v.mail.ibm.com ([9.208.129.117])
-        by ppma01wdc.us.ibm.com (PPS) with ESMTPS id 3pb29r4f0g-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 15 Mar 2023 17:25:37 +0000
-Received: from smtpav02.wdc07v.mail.ibm.com (smtpav02.wdc07v.mail.ibm.com [10.39.53.229])
-        by smtprelay05.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32FHPahK31457994
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 15 Mar 2023 17:25:36 GMT
-Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id F2A7E5805C;
-        Wed, 15 Mar 2023 17:25:35 +0000 (GMT)
-Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5206958058;
-        Wed, 15 Mar 2023 17:25:35 +0000 (GMT)
-Received: from ltc.linux.ibm.com (unknown [9.5.196.140])
-        by smtpav02.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Wed, 15 Mar 2023 17:25:35 +0000 (GMT)
+        Wed, 15 Mar 2023 13:30:55 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 929BD584A7
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 10:30:53 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id f16so20229073ljq.10
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 10:30:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678901451;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=nyHC0VUkupsiuWX2pHsL/65xztoUDBBkuNkC20AficQ=;
+        b=GJ97q5jYvQR8vrr48icXglGbW7rbJfdUHhHBaxDDPZZlMjuR8MS2JnxvjV8cuStFTt
+         6qPpD4iKSjMNHuHp+i9qJ15VUl4IuKII6uZimndhf9u5uDyL4Hm5n9Day/PRXRZDHNm7
+         C6YHj0adBrFhpy24nz+Q+2EBEK7c82TPHA7gQpzDGb9O4PnGemNXrk0p8sZoZbnVquM5
+         bP54KsuOal0w7AKd8/jnsQM5EirCsBB7/Z2c8C/7YgmrpAn1T9WYh3M28XfSgtHZcyuO
+         quvQKTn1rwmVmXlX2gtJQG1Fk4km3eES/RMbwn+KL9WWgPCiypagIjwr4RjYpzuEZe9e
+         jfJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678901451;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nyHC0VUkupsiuWX2pHsL/65xztoUDBBkuNkC20AficQ=;
+        b=WBGOnzqw2pHOtgWQ8x2jY1a8Z2KQdWyF4qRLMCxn8D/nrs9U1SQ/dk+JAKwRD8u2UK
+         qFN4bsicJy64RXac7w/E5w2a8LeRoAUBvx1yu8VczNY65wR4rbs5uU3OTD+gBwt/z0gS
+         5P4M5GBsz4Mwb4IMPn2fHwWRME5HSf/TuDTb+B4H4DyVVdBbg55P9w2+e4NiSv4WiD53
+         6mInHrHMtgqrOl2HQ0IunbzQ963p9EAgHluns5tm0uFrexREx+0SXGf+bjrMIvBQa60H
+         7qNE+BerFUN5Z10QIjlgpQF1BC3lyXeQf1vFLlGjA3i7oDSeoXNyZz/iAGFZMFtFN0Ww
+         3z1Q==
+X-Gm-Message-State: AO0yUKXaN5uXip+TDtaxJatgmALcaCaTloWET6tsU81JjtTLBI8ZNCZc
+        D71eZGQfz8LjN+1PAnp2yJvY4g==
+X-Google-Smtp-Source: AK7set8qdUTG2izjSNf/ErXIPYQfJRIKDjxOhFSDR7Kjx9V/3mxfJTKO2NEma+EDiR6JfZ0/rg41EA==
+X-Received: by 2002:a2e:850d:0:b0:290:8289:8cc8 with SMTP id j13-20020a2e850d000000b0029082898cc8mr993566lji.22.1678901451666;
+        Wed, 15 Mar 2023 10:30:51 -0700 (PDT)
+Received: from localhost.localdomain (abyj16.neoplus.adsl.tpnet.pl. [83.9.29.16])
+        by smtp.gmail.com with ESMTPSA id d28-20020ac244dc000000b004d85a7e8b17sm887561lfm.269.2023.03.15.10.30.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Mar 2023 10:30:51 -0700 (PDT)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org
+Cc:     marijn.suijten@somainline.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Shawn Guo <shawn.guo@linaro.org>,
+        Rob Herring <robh@kernel.org>, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] clk: qcom: gcc-qcm2290: Fix up gcc_sdcc2_apps_clk_src
+Date:   Wed, 15 Mar 2023 18:30:48 +0100
+Message-Id: <20230315173048.3497655-1-konrad.dybcio@linaro.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Date:   Wed, 15 Mar 2023 18:25:34 +0100
-From:   Harald Freudenberger <freude@linux.ibm.com>
-To:     Tony Krowiak <akrowiak@linux.ibm.com>
-Cc:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, jjherne@linux.ibm.com, pasic@linux.ibm.com,
-        alex.williamson@redhat.com, borntraeger@linux.ibm.com
-Subject: Re: [PATCH] s390/vfio_ap: fix memory leak in vfio_ap device driver
-Reply-To: freude@linux.ibm.com
-Mail-Reply-To: freude@linux.ibm.com
-In-Reply-To: <20230315153932.165031-1-akrowiak@linux.ibm.com>
-References: <20230315153932.165031-1-akrowiak@linux.ibm.com>
-Message-ID: <b9be5d298de3ca70f8fa86a1b58cb4f2@linux.ibm.com>
-X-Sender: freude@linux.ibm.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 6h2Pzb7nBv1MTOxSFrtCzJgv--NFTbbH
-X-Proofpoint-ORIG-GUID: VJZLKbXykvzvXzQu4UE-4DiBcxp-8qdV
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-15_08,2023-03-15_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- mlxlogscore=999 malwarescore=0 spamscore=0 clxscore=1011
- lowpriorityscore=0 mlxscore=0 phishscore=0 adultscore=0 priorityscore=1501
- bulkscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2302240000 definitions=main-2303150142
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-03-15 16:39, Tony Krowiak wrote:
-> The device release callback function invoked to release the matrix 
-> device
-> uses the dev_get_drvdata(device *dev) function to retrieve the
-> pointer to the vfio_matrix_dev object in order to free its storage. The
-> problem is, this object is not stored as drvdata with the device; since 
-> the
-> kfree function will accept a NULL pointer, the memory for the
-> vfio_matrix_dev object is never freed.
-> 
-> Since the device being released is contained within the vfio_matrix_dev
-> object, the container_of macro will be used to retrieve its pointer.
-> 
-> Fixes: 1fde573413b5 ("s390: vfio-ap: base implementation of VFIO AP
-> device driver")
-> Signed-off-by: Tony Krowiak <akrowiak@linux.ibm.com>
-> ---
->  drivers/s390/crypto/vfio_ap_drv.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/s390/crypto/vfio_ap_drv.c
-> b/drivers/s390/crypto/vfio_ap_drv.c
-> index 997b524bdd2b..15e9de9f4574 100644
-> --- a/drivers/s390/crypto/vfio_ap_drv.c
-> +++ b/drivers/s390/crypto/vfio_ap_drv.c
-> @@ -54,8 +54,9 @@ static struct ap_driver vfio_ap_drv = {
-> 
->  static void vfio_ap_matrix_dev_release(struct device *dev)
->  {
-> -	struct ap_matrix_dev *matrix_dev = dev_get_drvdata(dev);
-> -
-> +	struct ap_matrix_dev *matrix_dev = container_of(dev,
-> +							struct ap_matrix_dev,
-> +							device);
->  	kfree(matrix_dev);
->  }
+Add the PARENT_ENABLE flag to prevent  the clock from getting stuck
+at boot and use floor_ops to avoid SDHCI overclocking.
 
-I needed some indirections to follow what exactly happens here and how 
-you
-fix it, but finally I got it.
-Reviewed-by: Harald Freudenberger <freude@linux.ibm.com>
+Fixes: 496d1a13d405 ("clk: qcom: Add Global Clock Controller driver for QCM2290")
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+ drivers/clk/qcom/gcc-qcm2290.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/clk/qcom/gcc-qcm2290.c b/drivers/clk/qcom/gcc-qcm2290.c
+index 7792b8f23704..096deff2ba25 100644
+--- a/drivers/clk/qcom/gcc-qcm2290.c
++++ b/drivers/clk/qcom/gcc-qcm2290.c
+@@ -1243,7 +1243,8 @@ static struct clk_rcg2 gcc_sdcc2_apps_clk_src = {
+ 		.name = "gcc_sdcc2_apps_clk_src",
+ 		.parent_data = gcc_parents_12,
+ 		.num_parents = ARRAY_SIZE(gcc_parents_12),
+-		.ops = &clk_rcg2_ops,
++		.ops = &clk_rcg2_floor_ops,
++		.flags = CLK_OPS_PARENT_ENABLE,
+ 	},
+ };
+ 
+-- 
+2.39.2
+
