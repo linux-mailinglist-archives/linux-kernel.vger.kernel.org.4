@@ -2,189 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26FE86BB924
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 17:09:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE1EC6BB92B
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 17:10:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232740AbjCOQJU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 12:09:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46688 "EHLO
+        id S232433AbjCOQKW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 12:10:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232648AbjCOQIs (ORCPT
+        with ESMTP id S232190AbjCOQJg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 12:08:48 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 09E5C6189;
-        Wed, 15 Mar 2023 09:08:11 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 322B04B3;
-        Wed, 15 Mar 2023 09:08:49 -0700 (PDT)
-Received: from [10.57.64.236] (unknown [10.57.64.236])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B3C7B3F67D;
-        Wed, 15 Mar 2023 09:08:04 -0700 (PDT)
-Message-ID: <01071d9c-483f-2d95-87a6-e1030acaf8dd@arm.com>
-Date:   Wed, 15 Mar 2023 16:08:03 +0000
+        Wed, 15 Mar 2023 12:09:36 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E4D3A27F;
+        Wed, 15 Mar 2023 09:08:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=narI0Kzzf814XY8EFz2CHLlHOwVpJgEJht5/vy7eNPg=; b=QPZrdM9w8rQ7+F0DIyWNH69HBa
+        WqivpYrlq9+bf1aQAZoGwRpPki/msVvMlC4cxTdD1gfLpnjd5mZdjVLDT8K92whqduduTJqUQgQ9X
+        M824RtUrRn6WaRvqVtJApcVFhdluWsjwQ6hedSKpBzGqDwzol58496pVh0GaYlatw5hHJN8k/APLJ
+        TFgOp2+UlsQyp0qsU+3pso9VgwhHaqt8EDBNe3cpPlHlNyRGk8Zlg332G3lXfZXG2Pc/uTCpLkcCT
+        7wYPygjWvJ7DtE/qMescqFHNE8cNf70qCP4nu6PltvUWhE1CPrd2muYclIdjQo1LCx+D+pcUPVGFl
+        6vDnlirQ==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pcTgE-00DyRp-IK; Wed, 15 Mar 2023 16:08:46 +0000
+Date:   Wed, 15 Mar 2023 16:08:46 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Hannes Reinecke <hare@suse.de>
+Cc:     Pankaj Raghav <p.raghav@samsung.com>, hubcap@omnibond.com,
+        senozhatsky@chromium.org, martin@omnibond.com, minchan@kernel.org,
+        viro@zeniv.linux.org.uk, brauner@kernel.org, axboe@kernel.dk,
+        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, gost.dev@samsung.com, mcgrof@kernel.org,
+        devel@lists.orangefs.org
+Subject: Re: [RFC PATCH 2/3] mpage: use bio_for_each_folio_all in
+ mpage_end_io()
+Message-ID: <ZBHtjrk52/TTPU/F@casper.infradead.org>
+References: <20230315123233.121593-1-p.raghav@samsung.com>
+ <CGME20230315123235eucas1p1bd62cb2aab435727880769f2e57624fd@eucas1p1.samsung.com>
+ <20230315123233.121593-3-p.raghav@samsung.com>
+ <64a5e85e-4018-ed7d-29d4-db12af290899@suse.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.8.0
-Subject: Re: [PATCH v4 34/36] rmap: add folio_add_file_rmap_range()
-Content-Language: en-US
-From:   Ryan Roberts <ryan.roberts@arm.com>
-To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        linux-arch@vger.kernel.org
-Cc:     Yin Fengwei <fengwei.yin@intel.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-References: <20230315051444.3229621-1-willy@infradead.org>
- <20230315051444.3229621-35-willy@infradead.org>
- <387dc921-de2b-f244-985c-d1e6336d5909@arm.com>
-In-Reply-To: <387dc921-de2b-f244-985c-d1e6336d5909@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <64a5e85e-4018-ed7d-29d4-db12af290899@suse.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/03/2023 13:34, Ryan Roberts wrote:
-> On 15/03/2023 05:14, Matthew Wilcox (Oracle) wrote:
->> From: Yin Fengwei <fengwei.yin@intel.com>
->>
->> folio_add_file_rmap_range() allows to add pte mapping to a specific
->> range of file folio. Comparing to page_add_file_rmap(), it batched
->> updates __lruvec_stat for large folio.
->>
->> Signed-off-by: Yin Fengwei <fengwei.yin@intel.com>
->> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
->> ---
->>  include/linux/rmap.h |  2 ++
->>  mm/rmap.c            | 60 +++++++++++++++++++++++++++++++++-----------
->>  2 files changed, 48 insertions(+), 14 deletions(-)
->>
->> diff --git a/include/linux/rmap.h b/include/linux/rmap.h
->> index b87d01660412..a3825ce81102 100644
->> --- a/include/linux/rmap.h
->> +++ b/include/linux/rmap.h
->> @@ -198,6 +198,8 @@ void folio_add_new_anon_rmap(struct folio *, struct vm_area_struct *,
->>  		unsigned long address);
->>  void page_add_file_rmap(struct page *, struct vm_area_struct *,
->>  		bool compound);
->> +void folio_add_file_rmap_range(struct folio *, struct page *, unsigned int nr,
->> +		struct vm_area_struct *, bool compound);
->>  void page_remove_rmap(struct page *, struct vm_area_struct *,
->>  		bool compound);
->>  
->> diff --git a/mm/rmap.c b/mm/rmap.c
->> index 4898e10c569a..a91906b28835 100644
->> --- a/mm/rmap.c
->> +++ b/mm/rmap.c
->> @@ -1301,31 +1301,39 @@ void folio_add_new_anon_rmap(struct folio *folio, struct vm_area_struct *vma,
->>  }
->>  
->>  /**
->> - * page_add_file_rmap - add pte mapping to a file page
->> - * @page:	the page to add the mapping to
->> + * folio_add_file_rmap_range - add pte mapping to page range of a folio
->> + * @folio:	The folio to add the mapping to
->> + * @page:	The first page to add
->> + * @nr_pages:	The number of pages which will be mapped
->>   * @vma:	the vm area in which the mapping is added
->>   * @compound:	charge the page as compound or small page
->>   *
->> + * The page range of folio is defined by [first_page, first_page + nr_pages)
->> + *
->>   * The caller needs to hold the pte lock.
->>   */
->> -void page_add_file_rmap(struct page *page, struct vm_area_struct *vma,
->> -		bool compound)
->> +void folio_add_file_rmap_range(struct folio *folio, struct page *page,
->> +			unsigned int nr_pages, struct vm_area_struct *vma,
->> +			bool compound)
->>  {
->> -	struct folio *folio = page_folio(page);
->>  	atomic_t *mapped = &folio->_nr_pages_mapped;
->> -	int nr = 0, nr_pmdmapped = 0;
->> -	bool first;
->> +	unsigned int nr_pmdmapped = 0, first;
->> +	int nr = 0;
->>  
->> -	VM_BUG_ON_PAGE(compound && !PageTransHuge(page), page);
->> +	VM_WARN_ON_FOLIO(compound && !folio_test_pmd_mappable(folio), folio);
->>  
->>  	/* Is page being mapped by PTE? Is this its first map to be added? */
->>  	if (likely(!compound)) {
->> -		first = atomic_inc_and_test(&page->_mapcount);
->> -		nr = first;
->> -		if (first && folio_test_large(folio)) {
->> -			nr = atomic_inc_return_relaxed(mapped);
->> -			nr = (nr < COMPOUND_MAPPED);
->> -		}
->> +		do {
->> +			first = atomic_inc_and_test(&page->_mapcount);
->> +			if (first && folio_test_large(folio)) {
->> +				first = atomic_inc_return_relaxed(mapped);
->> +				first = (nr < COMPOUND_MAPPED);
+On Wed, Mar 15, 2023 at 03:52:15PM +0100, Hannes Reinecke wrote:
+> On 3/15/23 13:32, Pankaj Raghav wrote:
+> > Use bio_for_each_folio_all to iterate through folios in a bio so that
+> > the folios can be directly passed to the folio_endio() function.
+> > +	bio_for_each_folio_all(fi, bio)
+> > +		folio_endio(fi.folio, bio_op(bio),
+> > +			    blk_status_to_errno(bio->bi_status));
+> >   	bio_put(bio);
+> >   }
 > 
-> This still contains the typo that Yin Fengwei spotted in the previous version:
-> https://lore.kernel.org/linux-mm/20230228213738.272178-1-willy@infradead.org/T/#m84673899e25bc31356093a1177941f2cc35e5da8
+> Ah. Here it is.
 > 
-> FYI, I'm seeing a perf regression of about 1% when compiling the kernel on
-> Ampere Altra (arm64) with this whole series on top of v6.3-rc1 (In a VM using
-> ext4 filesystem). Looks like instruction aborts are taking much longer and a
-> selection of syscalls are a bit slower. Still hunting down the root cause. Will
-> report once I have conclusive diagnosis.
+> I would suggest merge these two patches.
 
-I'm sorry - I'm struggling to find the exact cause. But its spending over 2x the
-amount of time in the instruction abort handling code once patches 32-36 are
-included. Everything in the flame graph is just taking longer. Perhaps we are
-getting more instruction aborts somehow? I have the flamegraphs if anyone wants
-them - just shout and I'll email them separately.
+The right way to have handled this patch series was:
 
-> 
-> Thanks,
-> Ryan
-> 
-> 
->> +			}
->> +
->> +			if (first)
->> +				nr++;
->> +		} while (page++, --nr_pages > 0);
->>  	} else if (folio_test_pmd_mappable(folio)) {
->>  		/* That test is redundant: it's for safety or to optimize out */
->>  
->> @@ -1354,6 +1362,30 @@ void page_add_file_rmap(struct page *page, struct vm_area_struct *vma,
->>  	mlock_vma_folio(folio, vma, compound);
->>  }
->>  
->> +/**
->> + * page_add_file_rmap - add pte mapping to a file page
->> + * @page:	the page to add the mapping to
->> + * @vma:	the vm area in which the mapping is added
->> + * @compound:	charge the page as compound or small page
->> + *
->> + * The caller needs to hold the pte lock.
->> + */
->> +void page_add_file_rmap(struct page *page, struct vm_area_struct *vma,
->> +		bool compound)
->> +{
->> +	struct folio *folio = page_folio(page);
->> +	unsigned int nr_pages;
->> +
->> +	VM_WARN_ON_ONCE_PAGE(compound && !PageTransHuge(page), page);
->> +
->> +	if (likely(!compound))
->> +		nr_pages = 1;
->> +	else
->> +		nr_pages = folio_nr_pages(folio);
->> +
->> +	folio_add_file_rmap_range(folio, page, nr_pages, vma, compound);
->> +}
->> +
->>  /**
->>   * page_remove_rmap - take down pte mapping from a page
->>   * @page:	page to remove mapping from
-> 
+1. Introduce a new folio_endio() [but see Christoph's mail on why we
+shouldn't do that]
+2-n convert callers to use folios directly
+n+1 remove page_endio() entirely.
 
+Note that patch n+1 might not be part of this patch series; sometimes
+it takes a while to convert all callers to use folios.
+
+I very much dislike the way this was done by pushing the page_folio()
+call into each of the callers because it makes the entire series hard to
+review.
