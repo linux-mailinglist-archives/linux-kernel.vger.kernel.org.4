@@ -2,118 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C2C96BAB76
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 10:03:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EB7A6BAB74
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 10:03:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231899AbjCOJDX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 05:03:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46630 "EHLO
+        id S231889AbjCOJDC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 05:03:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231550AbjCOJDM (ORCPT
+        with ESMTP id S231536AbjCOJCp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 05:03:12 -0400
-Received: from EUR01-VE1-obe.outbound.protection.outlook.com (mail-ve1eur01on2078.outbound.protection.outlook.com [40.107.14.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05C1A7430E
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 02:02:50 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SptzClbNMKOQhyRvvEtskaM2xqTx6jPcKKRl52NfuRgr6Cg95M3cnlYltDh8HuDevZtOthGxC/9mrXUqQyM9CXSmhsH9GAfz9wlSH4XtLCKO4VQuO/T+YzkqVLils+1yntwnhTYscmWVClChmgZ1/t+U5iEljNrCEUqFPzLR8FhPz44iVQNZl3AA/ProoMIPgdBkrPjb7Ku/XsxFGYtuuMlReRH5xZo12u7xI6HfXMgyIPjuxf/QaCCmOD9hSAzYyNf4bP2+zBCKxNMQ2Lk+tOMFZuVemQNvsVK/cAGfN9swfffElfIMlTZEiYys44BreMhP7/kvgALik7VQDOj9Yg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Yq0umAmUPl9tT/qdthTgg+GTSYvNtb7u+7kP+f4Kwxk=;
- b=kQYElQ9IJXi88oANIfn3wpDaeeAWEV5cMvChEc9dtoVXa9jupAszjVhweoZqhdGvGvoiHpXOPIBjTfT0Kwho3Eo6fAs3Hmf44s8/Vw+4KrUzuSTt/rI/G0w7AuTZiaDx1VL5HW1fcQlU1unInOYXiQWHRQMGNBtwUWjjkAB9Inqs5jmUBEyfy5TfpzttM7MLb5wGSey9vRSzV30cIhO0pO4v1qX9WtTFoBjY5qPh2eVMUN3sR+s2il7a+or8TD81VHievJ0LCaF814M9jX+hjqfLePB6SrqjbEA1zOZh5P+LY4TKcm79ovjhorOWnMqQq7ZhWtsMjacuEcfuHraE5g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=wolfvision.net; dmarc=pass action=none
- header.from=wolfvision.net; dkim=pass header.d=wolfvision.net; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wolfvision.net;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Yq0umAmUPl9tT/qdthTgg+GTSYvNtb7u+7kP+f4Kwxk=;
- b=squHl0/JMU9GqkzhyIi4vp7U99Q8aOA/0aQ0WfZ3OVekkD824amVXLsj1PRP/wZiyLHt2l7t7EBDeuEcEwbunSnBUwG0hq9a9XG2LWClFJnOLenoXWzUbXl7+utc6uxUDJCkesj+471imJbL8Pu3LCarFYvP/9cy3mNFaTTff4o=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=wolfvision.net;
-Received: from DU0PR08MB9155.eurprd08.prod.outlook.com (2603:10a6:10:416::5)
- by AS8PR08MB9932.eurprd08.prod.outlook.com (2603:10a6:20b:562::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.26; Wed, 15 Mar
- 2023 09:02:47 +0000
-Received: from DU0PR08MB9155.eurprd08.prod.outlook.com
- ([fe80::6f4d:f868:c89:4db1]) by DU0PR08MB9155.eurprd08.prod.outlook.com
- ([fe80::6f4d:f868:c89:4db1%5]) with mapi id 15.20.6178.026; Wed, 15 Mar 2023
- 09:02:47 +0000
-From:   Michael Riesch <michael.riesch@wolfvision.net>
-To:     dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Sandy Huang <hjc@rock-chips.com>,
-        =?UTF-8?q?Heiko=20St=C3=BCbner?= <heiko@sntech.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        kernel test robot <lkp@intel.com>,
-        Nathan Chancellor <nathan@kernel.org>
-Subject: [PATCH] drm/rockchip: vop2: fix initialization of possible_crtcs variable
-Date:   Wed, 15 Mar 2023 10:01:58 +0100
-Message-Id: <20230315090158.2442771-1-michael.riesch@wolfvision.net>
-X-Mailer: git-send-email 2.30.2
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: VI1PR09CA0098.eurprd09.prod.outlook.com
- (2603:10a6:803:78::21) To DU0PR08MB9155.eurprd08.prod.outlook.com
- (2603:10a6:10:416::5)
+        Wed, 15 Mar 2023 05:02:45 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCD5F74DDD;
+        Wed, 15 Mar 2023 02:02:34 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id rj10so7500655pjb.4;
+        Wed, 15 Mar 2023 02:02:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678870954;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8CEcDEmXoRVWl82ME6fHeckhCMMz/JzH8Qe2yY0Hg9w=;
+        b=JVEmSIMaQANB8xk77I+aEsBYyJy8eUt9ONydenSb6zd28LvVN+c1ukvfhKyZtHk34C
+         6aEfo27NkX9f9ZsbyOLMYI7uSenfECx59QVpnEzlF4rCTXD1dCpa4hxcZTrgWXoy57zI
+         Wf/EZjtDyG93VU7YbbLoZG5PBS3l8VFaa0FSmGCePCy/Hztw4Cfu264NqNot3ETrAETA
+         vNIgUVXYLCZfruN1qzjkSttec6SdFwts56hNPqZgcC5GMd37umrdrUI2XwRLAVzakSaI
+         aibKpept9EuTe/ADkIXrBDyPThVdOAp11/kCVMvCFUfZWIgMj6x+nCxgm446W8UamVgs
+         zYiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678870954;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8CEcDEmXoRVWl82ME6fHeckhCMMz/JzH8Qe2yY0Hg9w=;
+        b=HO5GVAs9SwToP/hVa+dbUyBcfmEy6TIMNAKaGjZoENPy6Fr9Xrl291B3x/5ng914Hg
+         3dF3/mmX9uMafBZLqS+dXmIng7sBb1K7EI6vPGy/cNpg54oF9Umvvwb+T6M9yzvOcrR+
+         tSTQfKfnhlECRbP29aUI944QD6BJGZE9fXdabslO2GTWsjBSCTL4CT/hJzxH2mODGL4y
+         pqOWcn537EoRPVmkTXMzTk3PlRoRJemLcAcYClPuzKBWRr+Ys2U5k1a3gapYVu82zpHe
+         B+pIx96INV8witvL01mWmbj7rc3ptnQDHw2OcSBY4lwVP5YJZXjZDVvr99dV+C7mhN77
+         IIyQ==
+X-Gm-Message-State: AO0yUKXpoS5Uk2bkIt591+ON6ILEJcDT7uI/F+nJRDwQ5xv7EwpYJJtL
+        Y3mfJnVw1MGhHcLfZzQT5nQzBusVMnqv31SlrTc=
+X-Google-Smtp-Source: AK7set/wrbW0WOs81wp7/aYaD0/sSyDQBhq/b/bFgLbMDJLvM9oaPVrZIgoGdl+L5ysV8rV433iVAg2AX2WW/cj0cfw=
+X-Received: by 2002:a17:90b:3794:b0:23d:360:8771 with SMTP id
+ mz20-20020a17090b379400b0023d03608771mr3435547pjb.9.1678870954142; Wed, 15
+ Mar 2023 02:02:34 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU0PR08MB9155:EE_|AS8PR08MB9932:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3a311ea6-62cb-400f-a0c7-08db25340c09
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: uThRqHTCOLoHcRoUqAfYzRDF0eDWDcHAvhiZPmkRMOwUUir0eskuQIYFO7aZ2HoMdIXJ3m2A12qewPT3EAVpGpSaqEPCXZ9iSIWn2a0YqgFLVXQWRQUwYpwjR/chDxMC1YK6fK1LJxDtW7xUfWw9JE0/EOiYCJRLewgbQUuZCEV0LTDECqilPEsL5Ch/7sNSppuE5EeKTucshdUFfqHX9S60e2UYSCupeJW9ys7j4H8jBKDB0J0Y/U0xMSOu2x9+i3oswN7xsDUqzNAbg1x3WOuCJueywVYz4fxlyQ2gScBWD3P939lydMOYOPpzA47mdWufMlJCBDgaoFw9vSPUz7pyhw/M03dHBZOKnJEEL2xyRfppGZ7HvQJUDsYnBLsDNdnddOi4KROB1+Pk7Wc3bXg9Qj3reuxXTXXvI2Z+DHRVt3hUTLEd5t+7hAco032w6zpDeKX9jb5sjWxEZsgd5IwRVBZE6+WyQLRnaKDIbdV9JSeLNpUdfEcDiPS0qE1xUWPs+nybGOzNDXWBVx8IaGMwoQlFiiSo8dz4GyytO+0fF67lFA+Rkhr2+lJ/V7/6qpfPB5zqU3PCSPx0kcgo5m9z2pjTAvDJoLz0dytYIJxZmqWNQjxS8g358CNRlh2hxr1rcXOwPtxzqCJV5CoeTcZ0pjyOJE74yCjH46PAnS0ezts1LeqNRD/0CCQyf4s4oSvdekkHNkdfC3mMhvjUNQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR08MB9155.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(346002)(136003)(366004)(39850400004)(396003)(451199018)(36756003)(83380400001)(54906003)(316002)(38100700002)(26005)(6666004)(52116002)(478600001)(8936002)(186003)(6506007)(5660300002)(7416002)(41300700001)(66556008)(66476007)(86362001)(44832011)(6512007)(2906002)(1076003)(4326008)(38350700002)(8676002)(2616005)(6486002)(66946007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?AKCAsoQFGNOTDDBTlEIXXTcCq6TIFi0qVkeR1kEuHuWN0v41SR3KNa01w3Kl?=
- =?us-ascii?Q?b+vP/UmTI9fH5vKy6OxvvtX+wneq0+AkvigFS1DhPYjwcGUVhkAL12Jj6yEV?=
- =?us-ascii?Q?iNhr93NxHcAkjhWa43cLN3VdCnJNMtt17fFPFm4dZBlUqKuy4GGfH2JfI8l8?=
- =?us-ascii?Q?Mh501322vUY8wqGI53dMnJW+p0I4Rnu3OjCXrZ5CbrrZIOXuZw0kldo9qwQb?=
- =?us-ascii?Q?ECOmPDfmST7vhv0Boxx/yaHMOULGr/XOKd73lct9BroplsIAVO7xiPzEQkL4?=
- =?us-ascii?Q?5H9zVGH1B/0Ej+kQNspOIKQMXflBNSUiGlN6H9f9rrac4ZsrCRq7xYe8LFHD?=
- =?us-ascii?Q?Iaggfbp/OkkWY1JLgzOwvd/KV1Sksw9EdlB8DSvdvzq0xKRb0myH8WmAMH20?=
- =?us-ascii?Q?S+s48DjZDbPRrObWKaWQpfLK3Kz5wDVfY2z7WSqiFLXdCOOfK+cFboMy1F9r?=
- =?us-ascii?Q?omrPBi6wjXPr5LhCkmt3iLfo3oPJ5zhDN0hJzK4KT3LHr6UlEre6L/0V5Fpw?=
- =?us-ascii?Q?WuL1BHEpBzLA6s/UoLhsNJrFVVHikIX0aEoOU3h6MZ74ftf3d8gMpd9P7WZr?=
- =?us-ascii?Q?kwONplJzATzPVstSN6+Z3mucRFNzZpBznZjJACrHwKTnQ5fmHnTNHa2SB3hU?=
- =?us-ascii?Q?gT46k7cdlKDKfPy2FQHYdD5MPIcEkeWEV08J5ltN4PaDRflXYm8iKN0fr/Fi?=
- =?us-ascii?Q?VANi72D3pLFlhiVpkRNK644unaFWt7rQIJYMRaUZmegM32uAZq1LoKa3vmjb?=
- =?us-ascii?Q?Tnuta5FB1EtCBUzt0V6JtoDY1w9GSgEdIOgEP5XTNbmOZTQe0kaHkWLqpKrF?=
- =?us-ascii?Q?2OGhPq0IvOVZ27i4795UvexqYAIEjRS3Ghy6X7Dx6UY2I2R5oKOmC9AmW5kX?=
- =?us-ascii?Q?9ms/VkUy03pKEQK08xb8X3e+eD4A4HnxD3vh+b8YH6k8eUGk2bleLBkqwWfq?=
- =?us-ascii?Q?aIh6WqgWyMBzNB/+YnDPNsJ0dZEqGiEoKC22+7e2Ng0hL1YQZCigBXuToHrs?=
- =?us-ascii?Q?oFadQsiOQYkovfO7Vxy8qHF02edHJXOtANGwAStEh9hRo2aCOrGgoM9vYeAS?=
- =?us-ascii?Q?ChvPYDdjxQxjyvD4LjsbLGjLGLeNUdZqnD6tuE5ubLWvgdh9oN7XSugf/VmC?=
- =?us-ascii?Q?bKUoYeZkdX2qedB+droAVxm9yikOWgVxfTyMQIjJ47Clqkj2vUXgEQEc5uuR?=
- =?us-ascii?Q?c2agDn4C4K22BBNcwa/l7kxECrFzeTg6drflnJt/H6NYvBdThCmPA8kXYrAx?=
- =?us-ascii?Q?pjWf/sBLidK1g8FhZQTEj7fDEisQQ2OmgaPngQgJNrZkf+5qYeL+ir4q/Byr?=
- =?us-ascii?Q?X65DyFRkYJgV/1/yWiiDQusUhijTwrwH5Cclwx+fhiMPZlLMPIOWiXeZMLuo?=
- =?us-ascii?Q?gqxYAqc3tzvgyCdeRKUma3KDbBPUJ9AWGClZfxNDbI9rT8ttRuHB91vEKMQp?=
- =?us-ascii?Q?yc23PYbMbSzGsJtwgIiP8u2mLfBw3tmd8FNLzBfO1u0/dm7pMxx2oC2ykXLG?=
- =?us-ascii?Q?6Yjec5tJCAQda831WCahy2+HjozxYbP81MFH7KEybWO+wMLri8SX0eYb0E+e?=
- =?us-ascii?Q?DFczF3rorMYMBKxrE4UFQtDq6C+grgQvgcFl1mdm8W3pfl478FoFEAfPU7Xr?=
- =?us-ascii?Q?WkFK6eHIuce0aIEo3L6ZI/4=3D?=
-X-OriginatorOrg: wolfvision.net
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3a311ea6-62cb-400f-a0c7-08db25340c09
-X-MS-Exchange-CrossTenant-AuthSource: DU0PR08MB9155.eurprd08.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Mar 2023 09:02:47.4479
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: e94ec9da-9183-471e-83b3-51baa8eb804f
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: pNzcpwfRjHFFaFHvv3iabw2N1BoyZvoDyKRZFdg/knyLY2yDBkRgPeI5xgt0S55v+yvX8iGXm3VX2Paoo8aBYa76MR/XDA/ImS2g9hHpEuQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR08MB9932
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
+References: <20230313154856.3691660-1-zyytlz.wz@163.com> <CAAEAJfAtwguO-EpbCLkdOBu96U9mD+mq4PxBLsLAVZLuhC6Mtw@mail.gmail.com>
+In-Reply-To: <CAAEAJfAtwguO-EpbCLkdOBu96U9mD+mq4PxBLsLAVZLuhC6Mtw@mail.gmail.com>
+From:   Zheng Hacker <hackerzheng666@gmail.com>
+Date:   Wed, 15 Mar 2023 17:02:22 +0800
+Message-ID: <CAJedcCxn7nOVJMJ2U9Q-PL9M2cnKgJ_YqN801zfLyz-7TeFh1Q@mail.gmail.com>
+Subject: Re: [PATCH v4] media: hantro: fix use after free bug in hantro_remove
+ due to race condition
+To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
+Cc:     Zheng Wang <zyytlz.wz@163.com>, p.zabel@pengutronix.de,
+        mchehab@kernel.org, linux-media@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        1395428693sheep@gmail.com, alex000young@gmail.com,
+        hverkuil@xs4all.nl
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -121,42 +73,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The variable possible_crtcs is not initialized properly since commit
-604be85547ce ("drm/rockchip: Add VOP2 driver"). A first attempt to fix this
-issue has been made in commit 368419a2d429 ("drm/rockchip: vop2: initialize
-possible_crtcs properly") but turned out to be incomplete. Initialize the
-variable with zero to cover all possible paths.
+Ezequiel Garcia <ezequiel@vanguardiasur.com.ar> =E4=BA=8E2023=E5=B9=B43=E6=
+=9C=8814=E6=97=A5=E5=91=A8=E4=BA=8C 20:05=E5=86=99=E9=81=93=EF=BC=9A
+>
+> Hi Zheng, Hans,
+>
+> On Mon, Mar 13, 2023 at 12:49=E2=80=AFPM Zheng Wang <zyytlz.wz@163.com> w=
+rote:
+> >
+> > In hantro_probe, vpu->watchdog_work is bound with
+> > hantro_watchdog. Then hantro_end_prepare_run may
+> > be called to start the work.
+> >
+> > If we close the file or remove the module which will
+> > call hantro_release and hantro_remove to make cleanup,
+> > there may be an unfinished work. The possible sequence
+> > is as follows, which will cause a typical UAF bug.
+> >
+> > The same thing will happen in hantro_release, and use
+> > ctx after freeing it.
+> >
+> > Fix it by canceling the work before cleanup in hantro_release.
+> >
+> > CPU0                  CPU1
+> >
+> >                     |hantro_watchdog
+> > hantro_remove     |
+> >   v4l2_m2m_release  |
+> >     kfree(m2m_dev); |
+> >                     |
+> >                     | v4l2_m2m_get_curr_priv
+> >                     |   m2m_dev->curr_ctx //use
+> >
+> > Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+> > Fixes: 932a9317ac49 ("media: hantro: Add helpers to prepare/finish a ru=
+n")
+>
+> Thanks for the patch.
+>
+> Give me a few days to take a closer look.
+>
 
-Fixes: 368419a2d429 ("drm/rockchip: vop2: initialize possible_crtcs properly")
-Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: Nathan Chancellor <nathan@kernel.org>
-Signed-off-by: Michael Riesch <michael.riesch@wolfvision.net>
----
- drivers/gpu/drm/rockchip/rockchip_drm_vop2.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+Thanks for your reply. Hope you have a nice day :)
 
-diff --git a/drivers/gpu/drm/rockchip/rockchip_drm_vop2.c b/drivers/gpu/drm/rockchip/rockchip_drm_vop2.c
-index 1667e5324b29..0569f1211d9b 100644
---- a/drivers/gpu/drm/rockchip/rockchip_drm_vop2.c
-+++ b/drivers/gpu/drm/rockchip/rockchip_drm_vop2.c
-@@ -2301,7 +2301,7 @@ static int vop2_create_crtcs(struct vop2 *vop2)
- 	nvp = 0;
- 	for (i = 0; i < vop2->registered_num_wins; i++) {
- 		struct vop2_win *win = &vop2->win[i];
--		u32 possible_crtcs;
-+		u32 possible_crtcs = 0;
- 
- 		if (vop2->data->soc_id == 3566) {
- 			/*
-@@ -2329,8 +2329,6 @@ static int vop2_create_crtcs(struct vop2 *vop2)
- 			}
- 		} else if (win->type == DRM_PLANE_TYPE_OVERLAY) {
- 			possible_crtcs = (1 << nvps) - 1;
--		} else {
--			possible_crtcs = 0;
- 		}
- 
- 		ret = vop2_plane_init(vop2, win, possible_crtcs);
--- 
-2.30.2
+Best regards,
+Zheng
 
+> Thanks,
+> Ezequiel
+>
+> > ---
+> > v4:
+> > - add Fixes label to help with the fix
+> >
+> > v3:
+> > - use cancel_delayed_work_sync instead of cancel_delayed_work and add i=
+t to
+> > hantro_release suggested by Hans Verkuil
+> >
+> > v2:
+> > - move the cancel-work-related code to hantro_remove suggested by Hans =
+Verkuil
+> > ---
+> >  drivers/media/platform/verisilicon/hantro_drv.c | 2 ++
+> >  1 file changed, 2 insertions(+)
+> >
+> > diff --git a/drivers/media/platform/verisilicon/hantro_drv.c b/drivers/=
+media/platform/verisilicon/hantro_drv.c
+> > index b0aeedae7b65..86a4c0fa8c7d 100644
+> > --- a/drivers/media/platform/verisilicon/hantro_drv.c
+> > +++ b/drivers/media/platform/verisilicon/hantro_drv.c
+> > @@ -597,6 +597,7 @@ static int hantro_release(struct file *filp)
+> >         struct hantro_ctx *ctx =3D
+> >                 container_of(filp->private_data, struct hantro_ctx, fh)=
+;
+> >
+> > +       cancel_delayed_work_sync(&ctx->dev->watchdog_work);
+> >         /*
+> >          * No need for extra locking because this was the last referenc=
+e
+> >          * to this file.
+> > @@ -1099,6 +1100,7 @@ static int hantro_remove(struct platform_device *=
+pdev)
+> >
+> >         v4l2_info(&vpu->v4l2_dev, "Removing %s\n", pdev->name);
+> >
+> > +       cancel_delayed_work_sync(&vpu->watchdog_work);
+> >         media_device_unregister(&vpu->mdev);
+> >         hantro_remove_dec_func(vpu);
+> >         hantro_remove_enc_func(vpu);
+> > --
+> > 2.25.1
+> >
