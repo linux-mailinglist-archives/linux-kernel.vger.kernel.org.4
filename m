@@ -2,117 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BBA86BA60B
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 05:12:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08F5E6BA5EB
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 05:10:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231303AbjCOEMN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 00:12:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60992 "EHLO
+        id S230359AbjCOEKg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 00:10:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231142AbjCOELu (ORCPT
+        with ESMTP id S229631AbjCOEKd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 00:11:50 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 338624ECD1;
-        Tue, 14 Mar 2023 21:11:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678853472; x=1710389472;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=NmlTEcB7miDnUD/zT191iNoKNj9ysREtbMNV9yeHARU=;
-  b=JQeK6C6dF9PG3BnMhgJ7DjzuBWXHKhP71rtMDgZ1TNulTsGw95bOss8T
-   neDSHD7gtpk0cUzg3HxlVh7A6NDrgGpYTVSpghXY/QUiS16+dYqI6ZZ9N
-   awfV8TwRjJi21ZgHCQNZMvgePLPQMu9tqIxaF0Xp3334IbtEZn4R+2yNz
-   WHHThrwJkyWNgDr2H0gvg2l5AjofPX2E3rKZVhuiPJVFAPMqrraRAZUcS
-   ZyNPYJ6uqjACOiKc6P4tvFN9/IxAhXb1F/2G6x8eyIbwxqgndsVlqXVw9
-   efpc8Ay1JUr5S3IIGY5Wvvi+y56+eggrtzo61b49wAJzbyFUGA7y4oCBE
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="400191839"
-X-IronPort-AV: E=Sophos;i="5.98,261,1673942400"; 
-   d="scan'208";a="400191839"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2023 21:11:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="672591554"
-X-IronPort-AV: E=Sophos;i="5.98,261,1673942400"; 
-   d="scan'208";a="672591554"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 14 Mar 2023 21:11:08 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pcITj-0007Pz-0h;
-        Wed, 15 Mar 2023 04:11:07 +0000
-Date:   Wed, 15 Mar 2023 12:10:07 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Paul Cercueil <paul@crapouillou.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
-Cc:     oe-kbuild-all@lists.linux.dev,
-        Paul Cercueil <paul@crapouillou.net>,
-        michael.hennerich@analog.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        nuno.sa@analog.com, linaro-mm-sig@lists.linaro.org,
-        linux-media@vger.kernel.org
-Subject: Re: [PATCH 2/2] usb: gadget: functionfs: Add DMABUF import interface
-Message-ID: <202303151116.lxbyxGM6-lkp@intel.com>
-References: <20230314105257.17345-3-paul@crapouillou.net>
+        Wed, 15 Mar 2023 00:10:33 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BCD13E631;
+        Tue, 14 Mar 2023 21:10:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 32480B81BC1;
+        Wed, 15 Mar 2023 04:10:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0195C433D2;
+        Wed, 15 Mar 2023 04:10:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678853429;
+        bh=ntjkd5ecWuLKH9Sa/6T6Lz65wiAmBbJRc4QFXD440lA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=nzJS2fTD3ItSldIrXvK1bybRMUC8QxOQMHHiviZkAM0QoS3MkXwMfRY6m7F6H37lj
+         N7UVRJK+ZYOibo9+MsVYRk9CWyrwnnevTlwZhdf/omL4y+6Zynz6xpfWf7ACnZi/SE
+         KWCCpsoh48g/AlJO7Mshs0OM0SNtZdEvoBGTVxkrlTPOMPq8w0tZ593Wi1Xe/U9yjF
+         CWKOWoIYq9H6kW3yRxaQryMf5bMj/MxldO+PZp9AESvh78iLd7woWv3mrOztle/GE8
+         kRwqCap6r0Hyb983hnUQIm8wYDEvE+lOwHM0vllCX+2J2j+BNaQmSym8EAbv9rsNuH
+         lTQWRJ0AtRr7w==
+Date:   Tue, 14 Mar 2023 21:10:28 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Zheng Hacker <hackerzheng666@gmail.com>
+Cc:     Zheng Wang <zyytlz.wz@163.com>, davem@davemloft.net,
+        edumazet@google.com, pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, 1395428693sheep@gmail.com,
+        alex000young@gmail.com
+Subject: Re: [PATCH net] net: ethernet: fix use after free bug in
+ ns83820_remove_one due to race condition
+Message-ID: <20230314211028.6e9cbbcf@kernel.org>
+In-Reply-To: <CAJedcCxBn=GE_pQ4xzpnvUmMA6rDuwn_AiE7S7d1EqGF9cHkNw@mail.gmail.com>
+References: <20230309094231.3808770-1-zyytlz.wz@163.com>
+        <20230313162630.225f6a86@kernel.org>
+        <CAJedcCxBn=GE_pQ4xzpnvUmMA6rDuwn_AiE7S7d1EqGF9cHkNw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230314105257.17345-3-paul@crapouillou.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Paul,
+On Tue, 14 Mar 2023 09:59:09 +0800 Zheng Hacker wrote:
+> Jakub Kicinski <kuba@kernel.org> =E4=BA=8E2023=E5=B9=B43=E6=9C=8814=E6=97=
+=A5=E5=91=A8=E4=BA=8C 07:26=E5=86=99=E9=81=93=EF=BC=9A
+> > On Thu,  9 Mar 2023 17:42:31 +0800 Zheng Wang wrote: =20
+> > > +     cancel_work_sync(&dev->tq_refill);
+> > >       ns83820_disable_interrupts(dev); /* paranoia */
+> > >
+> > >       unregister_netdev(ndev); =20
+> >
+> > Canceling the work before unregister can't work.
+> > Please take a closer look, the work to refill a ring should be
+> > canceled when the ring itself is dismantled. =20
+>=20
+> Hi Jakub,
+>=20
+> Thanks for your review! After seeing code again, I found when handling
+> IRQ request, it will finally call ns83820_irq->ns83820_do_isr->
+> ns83820_rx_kick->schedule_work to start work. So I think we should
+> move the code after free_irq. What do you think?
 
-I love your patch! Yet something to improve:
+Sorry, we have over 300 patches which need reviews. I don't have=20
+the time to help you. Perhaps someone else will.
 
-[auto build test ERROR on usb/usb-testing]
-[also build test ERROR on usb/usb-next usb/usb-linus linus/master v6.3-rc2 next-20230314]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Paul-Cercueil/usb-gadget-Support-already-mapped-DMA-SGs/20230314-185522
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-patch link:    https://lore.kernel.org/r/20230314105257.17345-3-paul%40crapouillou.net
-patch subject: [PATCH 2/2] usb: gadget: functionfs: Add DMABUF import interface
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20230315/202303151116.lxbyxGM6-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/4ee364ed5d112c4550344fd037f4e1ef7cc41878
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Paul-Cercueil/usb-gadget-Support-already-mapped-DMA-SGs/20230314-185522
-        git checkout 4ee364ed5d112c4550344fd037f4e1ef7cc41878
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303151116.lxbyxGM6-lkp@intel.com/
-
-All errors (new ones prefixed by >>, old ones prefixed by <<):
-
->> ERROR: modpost: module usb_f_fs uses symbol dma_buf_attach from namespace DMA_BUF, but does not import it.
->> ERROR: modpost: module usb_f_fs uses symbol dma_buf_map_attachment from namespace DMA_BUF, but does not import it.
->> ERROR: modpost: module usb_f_fs uses symbol dma_buf_unmap_attachment from namespace DMA_BUF, but does not import it.
->> ERROR: modpost: module usb_f_fs uses symbol dma_buf_get from namespace DMA_BUF, but does not import it.
->> ERROR: modpost: module usb_f_fs uses symbol dma_buf_put from namespace DMA_BUF, but does not import it.
->> ERROR: modpost: module usb_f_fs uses symbol dma_buf_detach from namespace DMA_BUF, but does not import it.
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Please make sure you work on a single networking fix at a time.
+All the patches you posted had the same issues.
