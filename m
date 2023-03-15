@@ -2,241 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DE176BB545
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 14:55:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BD916BB549
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 14:55:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232867AbjCONzV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 09:55:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55048 "EHLO
+        id S232716AbjCONzv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 09:55:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232480AbjCONzP (ORCPT
+        with ESMTP id S232562AbjCONzs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 09:55:15 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD5DA3BD9A;
-        Wed, 15 Mar 2023 06:55:12 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 9478E1FD6C;
-        Wed, 15 Mar 2023 13:55:11 +0000 (UTC)
-Received: from adalid.arch.suse.de (adalid.arch.suse.de [10.161.8.13])
-        by relay2.suse.de (Postfix) with ESMTP id 7A42F2C141;
-        Wed, 15 Mar 2023 13:55:11 +0000 (UTC)
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] MIPS: sibyte: Remove unused config option SIBYTE_BCM1x55
-Date:   Wed, 15 Mar 2023 14:55:09 +0100
-Message-Id: <20230315135509.102542-1-tsbogend@alpha.franken.de>
-X-Mailer: git-send-email 2.35.3
+        Wed, 15 Mar 2023 09:55:48 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A706D60D7B
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 06:55:32 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id x3so75809505edb.10
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 06:55:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678888530;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=FL2PPYlA0uRNBqiWUXPuYQTCMqk2pdi/oLiMTHLvsic=;
+        b=AFOfedjgXSfHm0FNU0hZ/CmUqoER/e89nK2ng2txWLf8ICWj/nGtq3b/d4mfuSpGrW
+         O1HFmqgN3bjP55Fw9LczQKBO9y8ysPn/4E8XIHPMmsTLH1Qj5KfsMERSzXpwkAdcfU0+
+         5U9ovU2dPH8JnPl0IcdTabZ9/22tWBkASeY1GS1lkgwoKk2gacKxD7jUcduxW7/cpSJj
+         Qe3KUT1L/bLAGL+r9ZXuv4kMKRLdDGBmsOjCuHO702yfNuh926onLw1V2+7WWmOAJknY
+         JNoZnJBvuEF4gn4pVRVZnFzYrnj6wEgUb4LD91L/gVfUfTMdgGI7ojADK+oQMceGPboA
+         +7BQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678888530;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FL2PPYlA0uRNBqiWUXPuYQTCMqk2pdi/oLiMTHLvsic=;
+        b=3VgtCAv2bvodxAwkY1NIzFU4/w6FEqNRpoFNl7X+jReTt8n29B4ZeQYALl54LnzIC6
+         4X+RuyqY8wOj4VJQb56mH3L0cH8B+TDczMHaXY+Bcq9iIBkWQN5EpIP8bwWqd/1A1DCj
+         B+xAQM+ojgpviwZpldTKHJNC+loLUbzTwJQ7jCLWwyZkMw/igNoqUmZmwvaC0EPOjxJ8
+         lXh6Lr0+EV7yJL4HPtQSMT0x/Wgg/hqO/zEHBvvioKqpUUW3aPfhgWmX3Wq+SgOM89Qz
+         SbEuO0UD/LpulQwjuDdqxhAselEvxLyeWt0dnzC9L8wefP3fRiy5pJSTmwgfLk4LAtBK
+         J2Bw==
+X-Gm-Message-State: AO0yUKUp/jNywtXCGSwRfhkjInG/2L0HT7OZHRmlFWGpwpkZvZ2dOsFN
+        QuOTvlHMjYixE40h2mHEax5MrA==
+X-Google-Smtp-Source: AK7set9f42lDPAauaA03LEFsdxyf5keK13/YIZ6Me3D3oy6UAB45VczN3jJ7dfbB7drXgjK46lX3aQ==
+X-Received: by 2002:a17:906:3986:b0:91f:32f9:82f0 with SMTP id h6-20020a170906398600b0091f32f982f0mr6253293eje.29.1678888530287;
+        Wed, 15 Mar 2023 06:55:30 -0700 (PDT)
+Received: from [192.168.1.195] ([5.133.47.210])
+        by smtp.googlemail.com with ESMTPSA id ot10-20020a170906ccca00b008e51a1fd7bfsm2580448ejb.172.2023.03.15.06.55.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Mar 2023 06:55:29 -0700 (PDT)
+Message-ID: <7de97b6f-1318-5c40-2e42-3cc4774c9905@linaro.org>
+Date:   Wed, 15 Mar 2023 13:55:25 +0000
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_FAIL,SPF_HELO_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 1/2] soundwire: qcom: define hardcoded version magic
+ numbers
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Sanyog Kale <sanyog.r.kale@intel.com>,
+        linux-arm-msm@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+References: <20230222144412.237832-1-krzysztof.kozlowski@linaro.org>
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+In-Reply-To: <20230222144412.237832-1-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SIBYTE_BCM1x55 is not selected anywhere, so let's get rid of it.
 
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
----
- arch/mips/Kbuild.platforms            |  1 -
- arch/mips/sibyte/Kconfig              | 13 +------------
- arch/mips/sibyte/Makefile             |  2 --
- arch/mips/sibyte/Platform             |  4 ----
- arch/mips/sibyte/common/bus_watcher.c |  4 ++--
- arch/mips/sibyte/common/cfe.c         |  2 +-
- arch/mips/sibyte/common/sb_tbprof.c   | 10 +++++-----
- arch/mips/sibyte/swarm/setup.c        |  6 +++---
- 8 files changed, 12 insertions(+), 30 deletions(-)
 
-diff --git a/arch/mips/Kbuild.platforms b/arch/mips/Kbuild.platforms
-index 5d04438ee12e..caad195ba5c1 100644
---- a/arch/mips/Kbuild.platforms
-+++ b/arch/mips/Kbuild.platforms
-@@ -29,7 +29,6 @@ platform-$(CONFIG_SGI_IP30)		+= sgi-ip30/
- platform-$(CONFIG_SGI_IP32)		+= sgi-ip32/
- platform-$(CONFIG_SIBYTE_BCM112X)	+= sibyte/
- platform-$(CONFIG_SIBYTE_SB1250)	+= sibyte/
--platform-$(CONFIG_SIBYTE_BCM1x55)	+= sibyte/
- platform-$(CONFIG_SIBYTE_BCM1x80)	+= sibyte/
- platform-$(CONFIG_SNI_RM)		+= sni/
- platform-$(CONFIG_MACH_TX49XX)		+= txx9/
-diff --git a/arch/mips/sibyte/Kconfig b/arch/mips/sibyte/Kconfig
-index 470d46183677..c437bc02dd08 100644
---- a/arch/mips/sibyte/Kconfig
-+++ b/arch/mips/sibyte/Kconfig
-@@ -58,16 +58,6 @@ config SIBYTE_BCM1x80
- 	select SIBYTE_SB1xxx_SOC
- 	select SYS_SUPPORTS_SMP
- 
--config SIBYTE_BCM1x55
--	bool
--	select CEVT_BCM1480
--	select CSRC_BCM1480
--	select HAVE_PCI
--	select IRQ_MIPS_CPU
--	select SIBYTE_SB1xxx_SOC
--	select SIBYTE_HAS_ZBUS_PROFILING
--	select SYS_SUPPORTS_SMP
--
- config SIBYTE_SB1xxx_SOC
- 	bool
- 	select IRQ_MIPS_CPU
-@@ -143,8 +133,7 @@ config SIBYTE_CFE_CONSOLE
- config SIBYTE_BUS_WATCHER
- 	bool "Support for Bus Watcher statistics"
- 	depends on SIBYTE_SB1xxx_SOC && \
--		(SIBYTE_BCM112X || SIBYTE_SB1250 || \
--		 SIBYTE_BCM1x55 || SIBYTE_BCM1x80)
-+		(SIBYTE_BCM112X || SIBYTE_SB1250 || SIBYTE_BCM1x80)
- 	help
- 	  Handle and keep statistics on the bus error interrupts (COR_ECC,
- 	  BAD_ECC, IO_BUS).
-diff --git a/arch/mips/sibyte/Makefile b/arch/mips/sibyte/Makefile
-index d015c4d79c3e..ca0d57824d56 100644
---- a/arch/mips/sibyte/Makefile
-+++ b/arch/mips/sibyte/Makefile
-@@ -6,8 +6,6 @@ obj-$(CONFIG_SIBYTE_BCM112X)	+= sb1250/
- obj-$(CONFIG_SIBYTE_BCM112X)	+= common/
- obj-$(CONFIG_SIBYTE_SB1250)	+= sb1250/
- obj-$(CONFIG_SIBYTE_SB1250)	+= common/
--obj-$(CONFIG_SIBYTE_BCM1x55)	+= bcm1480/
--obj-$(CONFIG_SIBYTE_BCM1x55)	+= common/
- obj-$(CONFIG_SIBYTE_BCM1x80)	+= bcm1480/
- obj-$(CONFIG_SIBYTE_BCM1x80)	+= common/
- 
-diff --git a/arch/mips/sibyte/Platform b/arch/mips/sibyte/Platform
-index 65b2225b76b2..304b4d16dfbf 100644
---- a/arch/mips/sibyte/Platform
-+++ b/arch/mips/sibyte/Platform
-@@ -13,10 +13,6 @@ cflags-$(CONFIG_SIBYTE_SB1250)	+=					\
- 		-I$(srctree)/arch/mips/include/asm/mach-sibyte		\
- 		-DSIBYTE_HDR_FEATURES=SIBYTE_HDR_FMASK_1250_112x_ALL
- 
--cflags-$(CONFIG_SIBYTE_BCM1x55) +=					\
--		-I$(srctree)/arch/mips/include/asm/mach-sibyte		\
--		-DSIBYTE_HDR_FEATURES=SIBYTE_HDR_FMASK_1480_ALL
--
- cflags-$(CONFIG_SIBYTE_BCM1x80) +=					\
- 		-I$(srctree)/arch/mips/include/asm/mach-sibyte		\
- 		-DSIBYTE_HDR_FEATURES=SIBYTE_HDR_FMASK_1480_ALL
-diff --git a/arch/mips/sibyte/common/bus_watcher.c b/arch/mips/sibyte/common/bus_watcher.c
-index d43291473f76..a296d2c51841 100644
---- a/arch/mips/sibyte/common/bus_watcher.c
-+++ b/arch/mips/sibyte/common/bus_watcher.c
-@@ -24,7 +24,7 @@
- #include <asm/sibyte/sb1250_regs.h>
- #include <asm/sibyte/sb1250_int.h>
- #include <asm/sibyte/sb1250_scd.h>
--#if defined(CONFIG_SIBYTE_BCM1x55) || defined(CONFIG_SIBYTE_BCM1x80)
-+#ifdef CONFIG_SIBYTE_BCM1x80
- #include <asm/sibyte/bcm1480_regs.h>
- #endif
- 
-@@ -71,7 +71,7 @@ void check_bus_watcher(void)
- #if defined(CONFIG_SIBYTE_BCM112X) || defined(CONFIG_SIBYTE_SB1250)
- 	/* Use non-destructive register */
- 	status = csr_in32(IOADDR(A_SCD_BUS_ERR_STATUS_DEBUG));
--#elif defined(CONFIG_SIBYTE_BCM1x55) || defined(CONFIG_SIBYTE_BCM1x80)
-+#elif defined(CONFIG_SIBYTE_BCM1x80)
- 	/* Use non-destructive register */
- 	/* Same as 1250 except BUS_ERR_STATUS_DEBUG is in a different place. */
- 	status = csr_in32(IOADDR(A_BCM1480_BUS_ERR_STATUS_DEBUG));
-diff --git a/arch/mips/sibyte/common/cfe.c b/arch/mips/sibyte/common/cfe.c
-index 2503f60271e8..2cb90dbbe843 100644
---- a/arch/mips/sibyte/common/cfe.c
-+++ b/arch/mips/sibyte/common/cfe.c
-@@ -295,7 +295,7 @@ void __init prom_init(void)
- #if defined(CONFIG_SIBYTE_BCM112X) || defined(CONFIG_SIBYTE_SB1250)
- 	register_smp_ops(&sb_smp_ops);
- #endif
--#if defined(CONFIG_SIBYTE_BCM1x55) || defined(CONFIG_SIBYTE_BCM1x80)
-+#ifdef CONFIG_SIBYTE_BCM1x80
- 	register_smp_ops(&bcm1480_smp_ops);
- #endif
- }
-diff --git a/arch/mips/sibyte/common/sb_tbprof.c b/arch/mips/sibyte/common/sb_tbprof.c
-index bc47681e825a..004a08469a39 100644
---- a/arch/mips/sibyte/common/sb_tbprof.c
-+++ b/arch/mips/sibyte/common/sb_tbprof.c
-@@ -23,7 +23,7 @@
- #include <asm/io.h>
- #include <asm/sibyte/sb1250.h>
- 
--#if defined(CONFIG_SIBYTE_BCM1x55) || defined(CONFIG_SIBYTE_BCM1x80)
-+#ifdef CONFIG_SIBYTE_BCM1x80
- #include <asm/sibyte/bcm1480_regs.h>
- #include <asm/sibyte/bcm1480_scd.h>
- #include <asm/sibyte/bcm1480_int.h>
-@@ -35,7 +35,7 @@
- #error invalid SiByte UART configuration
- #endif
- 
--#if defined(CONFIG_SIBYTE_BCM1x55) || defined(CONFIG_SIBYTE_BCM1x80)
-+#ifdef CONFIG_SIBYTE_BCM1x80
- #undef K_INT_TRACE_FREEZE
- #define K_INT_TRACE_FREEZE K_BCM1480_INT_TRACE_FREEZE
- #undef K_INT_PERF_CNT
-@@ -157,7 +157,7 @@ static void arm_tb(void)
- 	 * a previous interrupt request.  This means that bus profiling
- 	 * requires ALL of the SCD perf counters.
- 	 */
--#if defined(CONFIG_SIBYTE_BCM1x55) || defined(CONFIG_SIBYTE_BCM1x80)
-+#ifdef CONFIG_SIBYTE_BCM1x80
- 	__raw_writeq((scdperfcnt & ~M_SPC_CFG_SRC1) |
- 						/* keep counters 0,2,3,4,5,6,7 as is */
- 		     V_SPC_CFG_SRC1(1),		/* counter 1 counts cycles */
-@@ -290,7 +290,7 @@ static int sbprof_zbprof_start(struct file *filp)
- 	 *  pass them through.	I am exploiting my knowledge that
- 	 *  cp0_status masks out IP[5]. krw
- 	 */
--#if defined(CONFIG_SIBYTE_BCM1x55) || defined(CONFIG_SIBYTE_BCM1x80)
-+#ifdef CONFIG_SIBYTE_BCM1x80
- 	__raw_writeq(K_BCM1480_INT_MAP_I3,
- 		     IOADDR(A_BCM1480_IMR_REGISTER(0, R_BCM1480_IMR_INTERRUPT_MAP_BASE_L) +
- 			    ((K_BCM1480_INT_PERF_CNT & 0x3f) << 3)));
-@@ -343,7 +343,7 @@ static int sbprof_zbprof_start(struct file *filp)
- 	__raw_writeq(0, IOADDR(A_SCD_TRACE_SEQUENCE_7));
- 
- 	/* Now indicate the PERF_CNT interrupt as a trace-relevant interrupt */
--#if defined(CONFIG_SIBYTE_BCM1x55) || defined(CONFIG_SIBYTE_BCM1x80)
-+#ifdef CONFIG_SIBYTE_BCM1x80
- 	__raw_writeq(1ULL << (K_BCM1480_INT_PERF_CNT & 0x3f),
- 		     IOADDR(A_BCM1480_IMR_REGISTER(0, R_BCM1480_IMR_INTERRUPT_TRACE_L)));
- #else
-diff --git a/arch/mips/sibyte/swarm/setup.c b/arch/mips/sibyte/swarm/setup.c
-index 72a31eeeebba..9e7a1e305f61 100644
---- a/arch/mips/sibyte/swarm/setup.c
-+++ b/arch/mips/sibyte/swarm/setup.c
-@@ -24,7 +24,7 @@
- #include <asm/time.h>
- #include <asm/traps.h>
- #include <asm/sibyte/sb1250.h>
--#if defined(CONFIG_SIBYTE_BCM1x55) || defined(CONFIG_SIBYTE_BCM1x80)
-+#ifdef CONFIG_SIBYTE_BCM1x80
- #include <asm/sibyte/bcm1480_regs.h>
- #elif defined(CONFIG_SIBYTE_SB1250) || defined(CONFIG_SIBYTE_BCM112X)
- #include <asm/sibyte/sb1250_regs.h>
-@@ -34,7 +34,7 @@
- #include <asm/sibyte/sb1250_genbus.h>
- #include <asm/sibyte/board.h>
- 
--#if defined(CONFIG_SIBYTE_BCM1x55) || defined(CONFIG_SIBYTE_BCM1x80)
-+#ifdef CONFIG_SIBYTE_BCM1x80
- extern void bcm1480_setup(void);
- #elif defined(CONFIG_SIBYTE_SB1250) || defined(CONFIG_SIBYTE_BCM112X)
- extern void sb1250_setup(void);
-@@ -114,7 +114,7 @@ int update_persistent_clock64(struct timespec64 now)
- 
- void __init plat_mem_setup(void)
- {
--#if defined(CONFIG_SIBYTE_BCM1x55) || defined(CONFIG_SIBYTE_BCM1x80)
-+#ifdef CONFIG_SIBYTE_BCM1x80
- 	bcm1480_setup();
- #elif defined(CONFIG_SIBYTE_SB1250) || defined(CONFIG_SIBYTE_BCM112X)
- 	sb1250_setup();
--- 
-2.35.3
+On 22/02/2023 14:44, Krzysztof Kozlowski wrote:
+> Use a define instead of hard-coded register values for Soundwire
+> hardware version number, because it is a bit easier to read and allows
+> to drop explaining comment.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
 
+Thanks Krzysztof,
+
+Reviewed-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+
+
+--srini
+
+>   drivers/soundwire/qcom.c | 17 +++++++++--------
+>   1 file changed, 9 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/soundwire/qcom.c b/drivers/soundwire/qcom.c
+> index ba502129150d..79bebcecde6d 100644
+> --- a/drivers/soundwire/qcom.c
+> +++ b/drivers/soundwire/qcom.c
+> @@ -28,6 +28,9 @@
+>   #define SWRM_LINK_MANAGER_EE					0x018
+>   #define SWRM_EE_CPU						1
+>   #define SWRM_FRM_GEN_ENABLED					BIT(0)
+> +#define SWRM_VERSION_1_3_0					0x01030000
+> +#define SWRM_VERSION_1_5_1					0x01050001
+> +#define SWRM_VERSION_1_7_0					0x01070000
+>   #define SWRM_COMP_HW_VERSION					0x00
+>   #define SWRM_COMP_CFG_ADDR					0x04
+>   #define SWRM_COMP_CFG_IRQ_LEVEL_OR_PULSE_MSK			BIT(1)
+> @@ -351,8 +354,7 @@ static int qcom_swrm_cmd_fifo_wr_cmd(struct qcom_swrm_ctrl *swrm, u8 cmd_data,
+>   	/* Its assumed that write is okay as we do not get any status back */
+>   	swrm->reg_write(swrm, SWRM_CMD_FIFO_WR_CMD, val);
+>   
+> -	/* version 1.3 or less */
+> -	if (swrm->version <= 0x01030000)
+> +	if (swrm->version <= SWRM_VERSION_1_3_0)
+>   		usleep_range(150, 155);
+>   
+>   	if (cmd_id == SWR_BROADCAST_CMD_ID) {
+> @@ -695,7 +697,7 @@ static int qcom_swrm_init(struct qcom_swrm_ctrl *ctrl)
+>   	u32p_replace_bits(&val, SWRM_DEF_CMD_NO_PINGS, SWRM_MCP_CFG_MAX_NUM_OF_CMD_NO_PINGS_BMSK);
+>   	ctrl->reg_write(ctrl, SWRM_MCP_CFG_ADDR, val);
+>   
+> -	if (ctrl->version >= 0x01070000) {
+> +	if (ctrl->version >= SWRM_VERSION_1_7_0) {
+>   		ctrl->reg_write(ctrl, SWRM_LINK_MANAGER_EE, SWRM_EE_CPU);
+>   		ctrl->reg_write(ctrl, SWRM_MCP_BUS_CTRL,
+>   				SWRM_MCP_BUS_CLK_START << SWRM_EE_CPU);
+> @@ -704,8 +706,7 @@ static int qcom_swrm_init(struct qcom_swrm_ctrl *ctrl)
+>   	}
+>   
+>   	/* Configure number of retries of a read/write cmd */
+> -	if (ctrl->version >= 0x01050001) {
+> -		/* Only for versions >= 1.5.1 */
+> +	if (ctrl->version >= SWRM_VERSION_1_5_1) {
+>   		ctrl->reg_write(ctrl, SWRM_CMD_FIFO_CFG_ADDR,
+>   				SWRM_RD_WR_CMD_RETRIES |
+>   				SWRM_CONTINUE_EXEC_ON_CMD_IGNORE);
+> @@ -1239,7 +1240,7 @@ static int qcom_swrm_get_port_config(struct qcom_swrm_ctrl *ctrl)
+>   	ret = of_property_read_u8_array(np, "qcom,ports-block-pack-mode",
+>   					bp_mode, nports);
+>   	if (ret) {
+> -		if (ctrl->version <= 0x01030000)
+> +		if (ctrl->version <= SWRM_VERSION_1_3_0)
+>   			memset(bp_mode, SWR_INVALID_PARAM, QCOM_SDW_MAX_PORTS);
+>   		else
+>   			return ret;
+> @@ -1442,7 +1443,7 @@ static int qcom_swrm_probe(struct platform_device *pdev)
+>   	pm_runtime_enable(dev);
+>   
+>   	/* Clk stop is not supported on WSA Soundwire masters */
+> -	if (ctrl->version <= 0x01030000) {
+> +	if (ctrl->version <= SWRM_VERSION_1_3_0) {
+>   		ctrl->clock_stop_not_supported = true;
+>   	} else {
+>   		ctrl->reg_read(ctrl, SWRM_COMP_MASTER_ID, &val);
+> @@ -1527,7 +1528,7 @@ static int __maybe_unused swrm_runtime_resume(struct device *dev)
+>   	} else {
+>   		reset_control_reset(ctrl->audio_cgcr);
+>   
+> -		if (ctrl->version >= 0x01070000) {
+> +		if (ctrl->version >= SWRM_VERSION_1_7_0) {
+>   			ctrl->reg_write(ctrl, SWRM_LINK_MANAGER_EE, SWRM_EE_CPU);
+>   			ctrl->reg_write(ctrl, SWRM_MCP_BUS_CTRL,
+>   					SWRM_MCP_BUS_CLK_START << SWRM_EE_CPU);
