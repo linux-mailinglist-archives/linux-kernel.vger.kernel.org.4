@@ -2,96 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0638E6BA8CC
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 08:11:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C1A76BA8D4
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 08:15:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231256AbjCOHLS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 03:11:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44400 "EHLO
+        id S231297AbjCOHPO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 03:15:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230516AbjCOHLP (ORCPT
+        with ESMTP id S230352AbjCOHPK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 03:11:15 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 044446A69
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 00:11:12 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id ek18so40470527edb.6
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 00:11:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678864270;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=RJKjy9eK5wZQcLG5fFeMeaK9idc1WueAlGl5cn4lHVQ=;
-        b=Bsyq91aeeTKsmlxTlYJI010C+B/lkrmiPlzr++t5RiGJkiL9FWgJQAMu4ndc0dD+qt
-         bEyp1MWTUlzNQHtaC2+56g8+iWouWBuRidMKrm2RUOdt6+3iAfCmPd6IY+SP59Fp+coY
-         oZkjnHSaUlA6DtLSvwYNivKPiKWBC8j52WMFZiitR7bz62y11hQ1c2IrhCXVGnLV1NwZ
-         zQHiswP6WArtrzrbxtmHYCe5SCUCGS9tYVy6SGZMoBXzxjg62E/GdCHaqDufA0ieDEM5
-         EOKs7EC6GXQNpkpvS50aAVqarob3qGI1wwL8dt7TT5vv9io2zPkKrG01Hwg9AmHHoxb8
-         iqBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678864270;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RJKjy9eK5wZQcLG5fFeMeaK9idc1WueAlGl5cn4lHVQ=;
-        b=2k7btQPBK7Nc5cLzq3p5deamJtw6yV032HIO89BARWYhXSCt0tq00Fo1Q69wGrLCXW
-         QknaHWtVdSoD3yTaZIYHTVY1kvi0BxiC+qWcmLiyiaqOlXH7TanRFJ7CVjxkHzAyOhXS
-         yNPU3aXLLt0Q3Vd14rAKCjZl3qjioLePmAPmf9ro903dGcyTBSCcoQNWeBiVp636p9fP
-         NxYWsg1E2ESP6YvPMxfmT9rxFp/8Wpe9E5NKrelh7Qkx8qtvkdRAg2xz+nmvpUWxfVHu
-         vBj5TDmGom2NcdphzVDUTfXIWvvxGw2AUk2BJh6Z1L2BpVE990E91i3UQ0KdLMKBJRdC
-         NEBg==
-X-Gm-Message-State: AO0yUKUfMPnMiaqAaV7Y5MWGYMs7T/wL7boIVscVkzsF35BDWn00QDYk
-        E8IQZIjQZ+BpbZu/47hNIRmiqg==
-X-Google-Smtp-Source: AK7set/qDWN5EGtvyO4q718AHYQ/mq+PNb2Tfe4xtM7aMrCVi4QxJZNgnoNyQ52prNArRS2/pT1mwg==
-X-Received: by 2002:a05:6402:453:b0:4ea:a9b0:a518 with SMTP id p19-20020a056402045300b004eaa9b0a518mr1200057edw.17.1678864270104;
-        Wed, 15 Mar 2023 00:11:10 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:940e:8615:37dc:c2bd? ([2a02:810d:15c0:828:940e:8615:37dc:c2bd])
-        by smtp.gmail.com with ESMTPSA id u14-20020a50a40e000000b004bbb691a334sm1960301edb.2.2023.03.15.00.11.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Mar 2023 00:11:09 -0700 (PDT)
-Message-ID: <19ca470e-8219-5ba9-3de6-f4560278f87b@linaro.org>
-Date:   Wed, 15 Mar 2023 08:11:07 +0100
+        Wed, 15 Mar 2023 03:15:10 -0400
+Received: from esa4.hgst.iphmx.com (esa4.hgst.iphmx.com [216.71.154.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B36351CBEB
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 00:15:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1678864509; x=1710400509;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=ECXmvGTKdjS+g5nINwMxwrG3TsMXwaXm1L9ClyYuU+4=;
+  b=AirLimBvw/AAe0EQllGK3shPv2aJz/taHz7SV6C7+hczBC819Zzr7cIY
+   wX9SHfm+wRubqs82Hlp0px3NnCMQP0PKfmCibZpj6Hd6+QUfueb7wets+
+   Cir9dQ6/uXqE7ROCD1weHArLr/kik3A7KfkQvPJdN3CRALUqHNs4ruKQS
+   JIJbKqGMypCO7J9lsxSSvO+OcPyB//PyoIAtNuEkRFT2fwa6lsNwWFo5F
+   5C4jFJpWA6mGIr5BPqJjddtaD7foRyv7BmR26prfr3dg39MIzxAFZkQ9i
+   NlBOgG6JMGbgv5S745v/wXUeT9sKrI4vx3NlhKBe43/34pwvvAhGtGhYe
+   A==;
+X-IronPort-AV: E=Sophos;i="5.98,262,1673884800"; 
+   d="scan'208";a="223952357"
+Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 15 Mar 2023 15:15:07 +0800
+IronPort-SDR: V4mPeGg3tv8EDoDQZfGh684KK3IU0ijs2NOJEB4l+G+/PM4pP4Ylq+ZecrhSmUscQBUsXi3Bbk
+ ogrRVbGmnGKoBNwsmosugTP+pSHYWtoN07ggJKhT/cGFOvOqANUCfCgI/IduEmlrXYnrRfvuQv
+ gH8clB2FVoAfQu+ZdHKIMocuxhpxz550n0w/jmjE7fa4ASAFVnfDa6wFvH9JugBETxeaIKUnmx
+ qUEHG7K2Fsf++LrA2o0sknBQ9z67uxsbGqR/vYGzgxRPWzFujvxvcccRnn4fImYOihzSjvrp7F
+ iw8=
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 14 Mar 2023 23:31:34 -0700
+IronPort-SDR: p1F6mYnS8vnJIhjnYKaUFUha+iFOISaZWRpMXHqBBrR0tk5kBB827ocGzK/rD8umWkJTlH33ga
+ lOG5BTNdExAmTD2dfnWVkuCn1hCQj/3Q21o4wa7CUXVVJjFEnJLFBuLs8cieU58RVzG3ThAZ9g
+ aq3ny9LRLEdlcLQ0/YORHRiTLSFIw79TCx+AdmQbMorxhvuu3Z/92YOtCVp30Q25RTT4nlDyqq
+ 2nA1QwhmpYz/n+5ChiZJA96caAKu4KxbNmNUs1jCurBhob9Jir2mQisVjEyi21lIlSmp+Jwwwi
+ DC8=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 15 Mar 2023 00:15:08 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4Pc1qt6kJ0z1RtW1
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 00:15:06 -0700 (PDT)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1678864505; x=1681456506; bh=ECXmvGTKdjS+g5nINwMxwrG3TsMXwaXm1L9
+        ClyYuU+4=; b=GWScIxt5MSCwyNJaxKaaEEtsmxiAc0PYy89tdGXtLpfIHq5QdyD
+        NQObiyUoid1/ks9Txugu9YwZSR9nE1xSQmPhGCcOxnozFKeP5nH0h3Fa7ACOLt64
+        L2XKljMl2F5pgV7bJ1O1p9HC5N06fX9uyOdawD08C9E4PDWqXHywEGb+g1Ibd6eI
+        09y1+uqVd5gnrUxxtqKKig1Rh1UXfAwhYREgzQvJarNjSl3L73h5GB5yY5V4exTW
+        zoqsD9Ebe1rqlAuvePtHiPFwmeLsk3ZIi3K+f2b3tuZc7Or0zTKhNi1Pm8LEH1At
+        hJKOVcNFt6YDujQfjTfmnVym4wEUq+XQj6w==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 3OsWiboLqKDE for <linux-kernel@vger.kernel.org>;
+        Wed, 15 Mar 2023 00:15:05 -0700 (PDT)
+Received: from [10.225.163.84] (unknown [10.225.163.84])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4Pc1qq0zrxz1RtVm;
+        Wed, 15 Mar 2023 00:15:03 -0700 (PDT)
+Message-ID: <47046373-3d35-5f40-e0f4-6352f95fa8b4@opensource.wdc.com>
+Date:   Wed, 15 Mar 2023 16:15:02 +0900
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-Subject: Re: [PATCH] p54spi: convert to devicetree
+Subject: Re: [PATCH v3 02/38] ata: add HAS_IOPORT dependencies
 Content-Language: en-US
-To:     Arnd Bergmann <arnd@arndb.de>, Arnd Bergmann <arnd@kernel.org>,
-        Christian Lamparter <chunkeey@googlemail.com>,
-        Kalle Valo <kvalo@kernel.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux-OMAP <linux-omap@vger.kernel.org>,
-        Tony Lindgren <tony@atomide.com>,
-        Aaro Koskinen <aaro.koskinen@iki.fi>,
-        Felipe Balbi <balbi@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        =?UTF-8?Q?Beno=c3=aet_Cousson?= <bcousson@baylibre.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-wireless@vger.kernel.org, Netdev <netdev@vger.kernel.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20230314163201.955689-1-arnd@kernel.org>
- <4ac809d2-3924-3839-479f-0b4be9f18a1f@linaro.org>
- <e19fd8bc-5944-409d-a4a1-3a3d53691634@app.fastmail.com>
- <57c42604-38b0-61ce-2fc4-2284fbb9d708@linaro.org>
- <afee6a67-2406-4f52-99a2-ee7eb26e587b@app.fastmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <afee6a67-2406-4f52-99a2-ee7eb26e587b@app.fastmail.com>
+To:     Arnd Bergmann <arnd@arndb.de>,
+        Niklas Schnelle <schnelle@linux.ibm.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-kernel@vger.kernel.org,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
+        linux-ide@vger.kernel.org
+References: <20230314121216.413434-1-schnelle@linux.ibm.com>
+ <20230314121216.413434-3-schnelle@linux.ibm.com>
+ <7453aba3-9f2a-4723-3039-a85652883b48@opensource.wdc.com>
+ <e31e32f0-86bf-4178-afad-b731ea49e673@app.fastmail.com>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <e31e32f0-86bf-4178-afad-b731ea49e673@app.fastmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -99,33 +114,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/03/2023 07:50, Arnd Bergmann wrote:
-> On Wed, Mar 15, 2023, at 07:32, Krzysztof Kozlowski wrote:
->> On 14/03/2023 22:40, Arnd Bergmann wrote:
+On 3/15/23 15:46, Arnd Bergmann wrote:
+> On Wed, Mar 15, 2023, at 02:23, Damien Le Moal wrote:
+>> On 3/14/23 21:11, Niklas Schnelle wrote:
+>>> In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
+>>> not being declared. We thus need to add HAS_IOPORT as dependency for
+>>> those drivers using them.
 >>
->>>>> +
->>>>> +  power-gpios:
->>>>
->>>> If this is GPIO driving some power pin, then it should be
->>>> "powerdown-gpios" (like in /bindings/gpio/gpio-consumer-common.yaml)
->>>
->>> As far as I can tell, it's the opposite: the gpio turns the power on
->>> in 'high' state. I could make it GPIO_ACTIVE_LOW and call it powerdown,
->>> if you think that's better, but I don't think that is how it was
->>> meant.
->>
->> Whether this is active low or high, I think does not matter. If this is
->> pin responsible to control the power, then we use the name
->> "powerdown-gpios". Effectively powerup GPIO is the same as powerdown,
->> just reversed.
+>> I do not see HAS_IOPORT=y defined anywhere in 6.3-rc. Is that in linux-next ?
+>> There is a HAS_IOPORT_MAP, but I guess it is different.
 > 
-> Ok, so should I make this GPIO_ACTIVE_LOW and adapt the patch to
-> call it powerdown in both the code and dt for consistency?
+> It's defined in patch 1 of the series, so the later patches
+> can't be applied into subsystem trees without that.
+> 
+> We can either merge patch 1 as a preparation first, or keep it
+> all together as a series.
 
-If you have schematics (or datasheet) then this should reflect truth. If
-not, then judging by the old code it is something like powerdown, so yes
-- ACTIVE_LOW and reverse values in the code.
+Got it. Either is fine with me. To allow option 2, I will send my ack.
+Thanks !
 
-Best regards,
-Krzysztof
+> 
+>       Arnd
+
+-- 
+Damien Le Moal
+Western Digital Research
 
