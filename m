@@ -2,179 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BD046BB4C4
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 14:35:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 201AF6BB4CB
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 14:36:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232117AbjCONfF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 09:35:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42680 "EHLO
+        id S232330AbjCONgB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 09:36:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232442AbjCONe6 (ORCPT
+        with ESMTP id S232286AbjCONf6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 09:34:58 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D535E35BC;
-        Wed, 15 Mar 2023 06:34:43 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 831762F4;
-        Wed, 15 Mar 2023 06:35:26 -0700 (PDT)
-Received: from [10.57.64.236] (unknown [10.57.64.236])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F15173F8C6;
-        Wed, 15 Mar 2023 06:34:41 -0700 (PDT)
-Message-ID: <387dc921-de2b-f244-985c-d1e6336d5909@arm.com>
-Date:   Wed, 15 Mar 2023 13:34:40 +0000
+        Wed, 15 Mar 2023 09:35:58 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E0D1974B6
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 06:35:47 -0700 (PDT)
+Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <a.fatoum@pengutronix.de>)
+        id 1pcRI0-0000e2-Fy; Wed, 15 Mar 2023 14:35:36 +0100
+Message-ID: <4ad22818-6304-f00d-fa58-ad8b5de10495@pengutronix.de>
+Date:   Wed, 15 Mar 2023 14:35:34 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.8.0
-Subject: Re: [PATCH v4 34/36] rmap: add folio_add_file_rmap_range()
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [PATCH net 1/2] net: dsa: realtek: fix out-of-bounds access
 Content-Language: en-US
-To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        linux-arch@vger.kernel.org
-Cc:     Yin Fengwei <fengwei.yin@intel.com>, linux-mm@kvack.org,
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        =?UTF-8?Q?Alvin_=c5=a0ipraga?= <alsi@bang-olufsen.dk>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>, kernel@pengutronix.de,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20230315051444.3229621-1-willy@infradead.org>
- <20230315051444.3229621-35-willy@infradead.org>
-From:   Ryan Roberts <ryan.roberts@arm.com>
-In-Reply-To: <20230315051444.3229621-35-willy@infradead.org>
+References: <20230315130917.3633491-1-a.fatoum@pengutronix.de>
+ <2f0cb0a4-5611-4c61-9165-30cf1b1ef543@lunn.ch>
+From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
+In-Reply-To: <2f0cb0a4-5611-4c61-9165-30cf1b1ef543@lunn.ch>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
+X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/03/2023 05:14, Matthew Wilcox (Oracle) wrote:
-> From: Yin Fengwei <fengwei.yin@intel.com>
+Hello Andrew,
+
+On 15.03.23 14:30, Andrew Lunn wrote:
+> On Wed, Mar 15, 2023 at 02:09:15PM +0100, Ahmad Fatoum wrote:
+>> The probe function sets priv->chip_data to (void *)priv + sizeof(*priv)
+>> with the expectation that priv has enough trailing space.
+>>
+>> However, only realtek-smi actually allocated this chip_data space.
+>> Do likewise in realtek-mdio to fix out-of-bounds accesses.
 > 
-> folio_add_file_rmap_range() allows to add pte mapping to a specific
-> range of file folio. Comparing to page_add_file_rmap(), it batched
-> updates __lruvec_stat for large folio.
+> Hi Ahmad
 > 
-> Signed-off-by: Yin Fengwei <fengwei.yin@intel.com>
-> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-> ---
->  include/linux/rmap.h |  2 ++
->  mm/rmap.c            | 60 +++++++++++++++++++++++++++++++++-----------
->  2 files changed, 48 insertions(+), 14 deletions(-)
+> It is normal to include a patch 0/X which gives the big picture, what
+> does this patch set do as a whole.
 > 
-> diff --git a/include/linux/rmap.h b/include/linux/rmap.h
-> index b87d01660412..a3825ce81102 100644
-> --- a/include/linux/rmap.h
-> +++ b/include/linux/rmap.h
-> @@ -198,6 +198,8 @@ void folio_add_new_anon_rmap(struct folio *, struct vm_area_struct *,
->  		unsigned long address);
->  void page_add_file_rmap(struct page *, struct vm_area_struct *,
->  		bool compound);
-> +void folio_add_file_rmap_range(struct folio *, struct page *, unsigned int nr,
-> +		struct vm_area_struct *, bool compound);
->  void page_remove_rmap(struct page *, struct vm_area_struct *,
->  		bool compound);
->  
-> diff --git a/mm/rmap.c b/mm/rmap.c
-> index 4898e10c569a..a91906b28835 100644
-> --- a/mm/rmap.c
-> +++ b/mm/rmap.c
-> @@ -1301,31 +1301,39 @@ void folio_add_new_anon_rmap(struct folio *folio, struct vm_area_struct *vma,
->  }
->  
->  /**
-> - * page_add_file_rmap - add pte mapping to a file page
-> - * @page:	the page to add the mapping to
-> + * folio_add_file_rmap_range - add pte mapping to page range of a folio
-> + * @folio:	The folio to add the mapping to
-> + * @page:	The first page to add
-> + * @nr_pages:	The number of pages which will be mapped
->   * @vma:	the vm area in which the mapping is added
->   * @compound:	charge the page as compound or small page
->   *
-> + * The page range of folio is defined by [first_page, first_page + nr_pages)
-> + *
->   * The caller needs to hold the pte lock.
->   */
-> -void page_add_file_rmap(struct page *page, struct vm_area_struct *vma,
-> -		bool compound)
-> +void folio_add_file_rmap_range(struct folio *folio, struct page *page,
-> +			unsigned int nr_pages, struct vm_area_struct *vma,
-> +			bool compound)
->  {
-> -	struct folio *folio = page_folio(page);
->  	atomic_t *mapped = &folio->_nr_pages_mapped;
-> -	int nr = 0, nr_pmdmapped = 0;
-> -	bool first;
-> +	unsigned int nr_pmdmapped = 0, first;
-> +	int nr = 0;
->  
-> -	VM_BUG_ON_PAGE(compound && !PageTransHuge(page), page);
-> +	VM_WARN_ON_FOLIO(compound && !folio_test_pmd_mappable(folio), folio);
->  
->  	/* Is page being mapped by PTE? Is this its first map to be added? */
->  	if (likely(!compound)) {
-> -		first = atomic_inc_and_test(&page->_mapcount);
-> -		nr = first;
-> -		if (first && folio_test_large(folio)) {
-> -			nr = atomic_inc_return_relaxed(mapped);
-> -			nr = (nr < COMPOUND_MAPPED);
-> -		}
-> +		do {
-> +			first = atomic_inc_and_test(&page->_mapcount);
-> +			if (first && folio_test_large(folio)) {
-> +				first = atomic_inc_return_relaxed(mapped);
-> +				first = (nr < COMPOUND_MAPPED);
+> Please try to remember this for the next set you post.
 
-This still contains the typo that Yin Fengwei spotted in the previous version:
-https://lore.kernel.org/linux-mm/20230228213738.272178-1-willy@infradead.org/T/#m84673899e25bc31356093a1177941f2cc35e5da8
+Ok, will do next time. I didn't include one this time, because there's
+no big picture here; Just two fixes for the same driver.
 
-FYI, I'm seeing a perf regression of about 1% when compiling the kernel on
-Ampere Altra (arm64) with this whole series on top of v6.3-rc1 (In a VM using
-ext4 filesystem). Looks like instruction aborts are taking much longer and a
-selection of syscalls are a bit slower. Still hunting down the root cause. Will
-report once I have conclusive diagnosis.
+Cheers,
+Ahmad
 
-Thanks,
-Ryan
+> 
+>        Andrew
+> 
 
-
-> +			}
-> +
-> +			if (first)
-> +				nr++;
-> +		} while (page++, --nr_pages > 0);
->  	} else if (folio_test_pmd_mappable(folio)) {
->  		/* That test is redundant: it's for safety or to optimize out */
->  
-> @@ -1354,6 +1362,30 @@ void page_add_file_rmap(struct page *page, struct vm_area_struct *vma,
->  	mlock_vma_folio(folio, vma, compound);
->  }
->  
-> +/**
-> + * page_add_file_rmap - add pte mapping to a file page
-> + * @page:	the page to add the mapping to
-> + * @vma:	the vm area in which the mapping is added
-> + * @compound:	charge the page as compound or small page
-> + *
-> + * The caller needs to hold the pte lock.
-> + */
-> +void page_add_file_rmap(struct page *page, struct vm_area_struct *vma,
-> +		bool compound)
-> +{
-> +	struct folio *folio = page_folio(page);
-> +	unsigned int nr_pages;
-> +
-> +	VM_WARN_ON_ONCE_PAGE(compound && !PageTransHuge(page), page);
-> +
-> +	if (likely(!compound))
-> +		nr_pages = 1;
-> +	else
-> +		nr_pages = folio_nr_pages(folio);
-> +
-> +	folio_add_file_rmap_range(folio, page, nr_pages, vma, compound);
-> +}
-> +
->  /**
->   * page_remove_rmap - take down pte mapping from a page
->   * @page:	page to remove mapping from
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
 
