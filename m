@@ -2,122 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3272E6BAC1C
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 10:26:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 122BF6BAC1E
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 10:27:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231874AbjCOJ0q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 05:26:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58402 "EHLO
+        id S229790AbjCOJ11 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 05:27:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230212AbjCOJ0l (ORCPT
+        with ESMTP id S230212AbjCOJ1X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 05:26:41 -0400
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C354353700
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 02:26:35 -0700 (PDT)
-Received: by mail-yb1-xb34.google.com with SMTP id e194so18483072ybf.1
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 02:26:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1678872395;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ah3hCHxRKLhXbUb0/zDpGbrf+oZe//U+DP3mMWw+T8c=;
-        b=d5zFDRwPxETDMQPbed+EfhECDqFpfx8TgxdVjJLVO33pllTKXnCeZ6Hk9QAQn7Dw4+
-         oWwetYLyd4CtHpCifM8AroVKcjrw/2ujfEkNx21G9ysAvCmRlxgPsHRPxWKrE2hdexcp
-         2idemqhli6FqtgkUkuZRShsSSKCkHav0hjtzcnLS7vLs5njq0I3+r1M58wEZWZSRe/5w
-         MCX69ZCeDYaPs4V+n656TCYSZm7Bait5OLJkSVV06dPD39msVSlk9Vj+T+JqXAaZEp+K
-         GA8c9VFqG4DPd1462qMWj+Lsk0Zv64cNfsfFiHVdem5Z+73jTMqu/Y35+PZOiQVe4uUq
-         AS9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678872395;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Ah3hCHxRKLhXbUb0/zDpGbrf+oZe//U+DP3mMWw+T8c=;
-        b=i6zVAnsOpVPkc0DELWYEyt/UjbR61/GiZVO1VdnhQy2qOYqxZW2sir8M7vNWKzUbO3
-         t1bIVf/lBqEigasSMyc9AnlXrFiikhIuu1jeuhjXO99ZfCshhGvVWkbLxwZhskTyDZgU
-         SiXnR5jbiZqyyZHhgd9OI7JcAlpCDdilCC9V1XTg72ZuCBpSmR0c+4+N0mHuoQg571En
-         9fNHRvYryqSLNixZtx44hrWbxdJaIG3d4PB2OCW4FS7vEn8lsn/WGXeIc/p04h+2LpP4
-         +O1muyKye/2U9GnBtCqvs8qce2UKGTMdYfVSPdt4wNz6I/4Gk17AfMefPBzbO6uD4kkw
-         uOCQ==
-X-Gm-Message-State: AO0yUKWhy9xKkwmFfGWln8tCwiT4KEyPo9nL7nDpPvA1NOe1X6U9QwJU
-        n9aelKubPMGh14FcPSRiTmUJ5CJbLf8A7Rdb5x3IPQ==
-X-Google-Smtp-Source: AK7set85Tksbs5R01RThGTgUkuOcBof0bxceE3ivDeTB4gA3qDm/+jVks8dAQC4UN3fTwJGP5ML+MUn6x7iNEe2KU4g=
-X-Received: by 2002:a05:6902:10e:b0:98e:6280:74ca with SMTP id
- o14-20020a056902010e00b0098e628074camr23209983ybh.1.1678872394826; Wed, 15
- Mar 2023 02:26:34 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230220-display-v1-0-45cbc68e188b@baylibre.com>
- <20230220-display-v1-7-45cbc68e188b@baylibre.com> <CAAOTY_819JuuidLgTOm+Ps=WnueW0Quos+abEDjrx8q8GifGKA@mail.gmail.com>
-In-Reply-To: <CAAOTY_819JuuidLgTOm+Ps=WnueW0Quos+abEDjrx8q8GifGKA@mail.gmail.com>
-From:   Alexandre Mergnat <amergnat@baylibre.com>
-Date:   Wed, 15 Mar 2023 10:26:23 +0100
-Message-ID: <CAFGrd9qVhJb--COXJmGHuW6NxDnXZGdQnxbHGRvaA5Jqhx-yNg@mail.gmail.com>
-Subject: Re: [PATCH 07/21] dt-bindings: display: mediatek: dpi: add binding
- for MT8365
-To:     Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Cc:     Daniel Vetter <daniel@ffwll.ch>, CK Hu <ck.hu@mediatek.com>,
-        Jitao Shi <jitao.shi@mediatek.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Xinlei Lee <xinlei.lee@mediatek.com>,
-        Guillaume La Roque <glaroque@baylibre.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        dri-devel@lists.freedesktop.org,
-        Fabien Parent <fparent@baylibre.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
+        Wed, 15 Mar 2023 05:27:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 177CC52F75;
+        Wed, 15 Mar 2023 02:27:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A599861ABD;
+        Wed, 15 Mar 2023 09:27:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B76AC433D2;
+        Wed, 15 Mar 2023 09:27:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678872441;
+        bh=w+J8gucSlfSu3xi4ruapy/hNtDvk5NYHt9AxAbkHP2Y=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=D18IvsKQQ9L5V4uTkOLzo7MrZqxnmEgzsXlep3LHdUJh+J07Tpiv8BkZUf/NZ99G2
+         RppyUvZKVA773EwBQT1DchLMTboYO/75iEoxXenBf1n64UZBzxJXQ+iF+Yf5OnALwy
+         n4Cz1QNywLpftpwOghTcDxmArWpaLoP44WvKPG+zmt8mFMNjXWW+jJROzwlr3yAmJr
+         l4DDII8x2NlaDlIqL1TC2fijEJNksy9lrYYhtJcyWjFSuRObeKSyYW3gRKhtj41IDZ
+         /gLtH0JaOqgHMx2CIlaNhtF9B925CBeWVFsha0VHVk6TlTsiv8xBftlNFsi8mKMtkB
+         z67Z53tc/o6Hw==
+Date:   Wed, 15 Mar 2023 11:27:08 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
+Cc:     linux-mm@kvack.org, linux-arch@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v3 02/34] mm: Add generic flush_icache_pages() and
+ documentation
+Message-ID: <ZBGPbCcUDFBQOx3W@kernel.org>
+References: <20230228213738.272178-1-willy@infradead.org>
+ <20230228213738.272178-3-willy@infradead.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230228213738.272178-3-willy@infradead.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Chun-Kuang,
+On Tue, Feb 28, 2023 at 09:37:05PM +0000, Matthew Wilcox (Oracle) wrote:
+> flush_icache_page() is deprecated but not yet removed, so add
+> a range version of it.  Change the documentation to refer to
+> update_mmu_cache_range() instead of update_mmu_cache().
+> 
+> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
 
-Le lun. 13 mars 2023 =C3=A0 16:17, Chun-Kuang Hu <chunkuang.hu@kernel.org> =
-a =C3=A9crit :
->
-> Hi, Alexandre:
->
-> Alexandre Mergnat <amergnat@baylibre.com> =E6=96=BC 2023=E5=B9=B43=E6=9C=
-=889=E6=97=A5 =E9=80=B1=E5=9B=9B =E4=B8=8B=E5=8D=8810:23=E5=AF=AB=E9=81=93=
-=EF=BC=9A
-> >
-> > From: Fabien Parent <fparent@baylibre.com>
-> >
-> > DPI for MT8365 is compatible with MT8192 but requires an additional
-> > clock. Modify the documentation to requires this clock only on MT8365 S=
-oCs.
->
-> If MT8365 DPI has additional clock, why it is compatible with MT8192 DPI?
-> I think some part of MT8165 DPI works under the speed control by the
-> DPI clock and this is different with MT8192 DPI, how could these two
-> are compatible?
+Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
 
-AFAII, The mtk_dpi driver manage the 4th clock as optional
-dpi->dpi_clk =3D devm_clk_get_optional(dev, "dpi");
-And all configuration variables for mt8192 are the same for mt8365.
-These configuration clock variables (like cal_factor) aren't
-correlated with the 4th clock.
-The clock number doesn't impact the configuration variable because the
-4th clock is simply retrieved from DTS, saved in the driver structure
-and prepare/unprepare/enable/disable, like other clocks.
+> ---
+>  Documentation/core-api/cachetlb.rst | 35 +++++++++++++++--------------
+>  include/asm-generic/cacheflush.h    |  5 +++++
+>  2 files changed, 23 insertions(+), 17 deletions(-)
+> 
+> diff --git a/Documentation/core-api/cachetlb.rst b/Documentation/core-api/cachetlb.rst
+> index 5c0552e78c58..d4c9e2a28d36 100644
+> --- a/Documentation/core-api/cachetlb.rst
+> +++ b/Documentation/core-api/cachetlb.rst
+> @@ -88,13 +88,13 @@ changes occur:
+>  
+>  	This is used primarily during fault processing.
+>  
+> -5) ``void update_mmu_cache(struct vm_area_struct *vma,
+> -   unsigned long address, pte_t *ptep)``
+> +5) ``void update_mmu_cache_range(struct vm_area_struct *vma,
+> +   unsigned long address, pte_t *ptep, unsigned int nr)``
+>  
+> -	At the end of every page fault, this routine is invoked to
+> -	tell the architecture specific code that a translation
+> -	now exists at virtual address "address" for address space
+> -	"vma->vm_mm", in the software page tables.
+> +	At the end of every page fault, this routine is invoked to tell
+> +	the architecture specific code that translations now exists
+> +	in the software page tables for address space "vma->vm_mm"
+> +	at virtual address "address" for "nr" consecutive pages.
+>  
+>  	A port may use this information in any way it so chooses.
+>  	For example, it could use this event to pre-load TLB
+> @@ -306,17 +306,18 @@ maps this page at its virtual address.
+>  	private".  The kernel guarantees that, for pagecache pages, it will
+>  	clear this bit when such a page first enters the pagecache.
+>  
+> -	This allows these interfaces to be implemented much more efficiently.
+> -	It allows one to "defer" (perhaps indefinitely) the actual flush if
+> -	there are currently no user processes mapping this page.  See sparc64's
+> -	flush_dcache_page and update_mmu_cache implementations for an example
+> -	of how to go about doing this.
+> +	This allows these interfaces to be implemented much more
+> +	efficiently.  It allows one to "defer" (perhaps indefinitely) the
+> +	actual flush if there are currently no user processes mapping this
+> +	page.  See sparc64's flush_dcache_page and update_mmu_cache_range
+> +	implementations for an example of how to go about doing this.
+>  
+> -	The idea is, first at flush_dcache_page() time, if page_file_mapping()
+> -	returns a mapping, and mapping_mapped on that mapping returns %false,
+> -	just mark the architecture private page flag bit.  Later, in
+> -	update_mmu_cache(), a check is made of this flag bit, and if set the
+> -	flush is done and the flag bit is cleared.
+> +	The idea is, first at flush_dcache_page() time, if
+> +	page_file_mapping() returns a mapping, and mapping_mapped on that
+> +	mapping returns %false, just mark the architecture private page
+> +	flag bit.  Later, in update_mmu_cache_range(), a check is made
+> +	of this flag bit, and if set the flush is done and the flag bit
+> +	is cleared.
+>  
+>  	.. important::
+>  
+> @@ -369,7 +370,7 @@ maps this page at its virtual address.
+>    ``void flush_icache_page(struct vm_area_struct *vma, struct page *page)``
+>  
+>  	All the functionality of flush_icache_page can be implemented in
+> -	flush_dcache_page and update_mmu_cache. In the future, the hope
+> +	flush_dcache_page and update_mmu_cache_range. In the future, the hope
+>  	is to remove this interface completely.
+>  
+>  The final category of APIs is for I/O to deliberately aliased address
+> diff --git a/include/asm-generic/cacheflush.h b/include/asm-generic/cacheflush.h
+> index f46258d1a080..09d51a680765 100644
+> --- a/include/asm-generic/cacheflush.h
+> +++ b/include/asm-generic/cacheflush.h
+> @@ -78,6 +78,11 @@ static inline void flush_icache_range(unsigned long start, unsigned long end)
+>  #endif
+>  
+>  #ifndef flush_icache_page
+> +static inline void flush_icache_pages(struct vm_area_struct *vma,
+> +				     struct page *page, unsigned int nr)
+> +{
+> +}
+> +
+>  static inline void flush_icache_page(struct vm_area_struct *vma,
+>  				     struct page *page)
+>  {
+> -- 
+> 2.39.1
+> 
+> 
 
-Regards,
-Alex
+-- 
+Sincerely yours,
+Mike.
