@@ -2,49 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75FD06BC172
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 00:35:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DD8D6BC195
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 00:37:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233344AbjCOXf3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 19:35:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46076 "EHLO
+        id S233050AbjCOXh2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 19:37:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233340AbjCOXeu (ORCPT
+        with ESMTP id S233147AbjCOXhK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 19:34:50 -0400
+        Wed, 15 Mar 2023 19:37:10 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51B38A8C40;
-        Wed, 15 Mar 2023 16:33:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3832A76AC;
+        Wed, 15 Mar 2023 16:35:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 629F4B81F9A;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3776FB81FAD;
         Wed, 15 Mar 2023 23:32:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40613C433D2;
-        Wed, 15 Mar 2023 23:32:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DB78C43443;
+        Wed, 15 Mar 2023 23:32:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1678923176;
-        bh=aoz2bnbiFrBxlSw6q0XxgH+8ryhNBVBOEYUuwtxFdQM=;
+        bh=EbRrw49NitE7LOxv+q9uhmdSyh1k8xyQhVVyAh7Ip00=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YvPpbXMkjrmQVwvQaBYqfnhvkekanx11vUo31RXxBu5OGLj6kWpapyqgnNcwrme7t
-         otesIGB1z+mSBUfq76W5e30FZOMzFxS4N2nBj/a5HQDs4PIydryzbK7S8fmhMx56ks
-         f/1vXeFFNp22KOMx5jHekYndfKGv/irSuB17lmQkMy/TlhTXNEJruYq2TMeN1N5lYL
-         MIEXbii9n2sx/cSxMZHc4GSWY48i/C+YbeawcSnOarei9pZfZIiUYnv8eVB6G/GTh9
-         uI2MKZCAfETqafs8b40dcddc2Rhvf4EErFEoQfAmpMGlCX+VqPCGwGfrSN1s4D0RAM
-         k9ezEB9LcrtOw==
+        b=ecWgw4qky3NfLh5+ywf4Eym9iaUC/q83yI6royAbOwS37LdmznfBk+Cpkk74NF9w9
+         +XZO26WDBLPAz7bFjgfqSXoZAjJwIo46Dh0qzB3KuPRZzFjoDKBjklJNGbowa6BFYb
+         WW/BF/jB4RRpPDPjrvhcx6ZzmHel1+utAMKGQMOJ0o5jOuBQMEG3t3npUFScBg+he2
+         x97bpMkYiUUZDmZx3Hl6glV/W0yabssS853KQ/q8qnj+Sx4CdchETKSD9rW7oU4juC
+         /8keJudyn6//voQ1nt0JpkwH9ohyvUOTJCwwmM8/suYbhwH3uJMpheMMJgFfG3c1SC
+         efQ3HWGM90P7Q==
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     linux-arm-msm@vger.kernel.org, sboyd@kernel.org,
-        konrad.dybcio@linaro.org, Robert Marko <robert.marko@sartura.hr>,
-        robh+dt@kernel.org, agross@kernel.org, devicetree@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, mturquette@baylibre.com
-Cc:     luka.perkov@sartura.hr
-Subject: Re: (subset) [PATCH 1/7] dt-bindings: clock: split qcom,gcc-ipq4019 to separate file
-Date:   Wed, 15 Mar 2023 16:35:26 -0700
-Message-Id: <167892332566.4030021.2066671633508562447.b4-ty@kernel.org>
+To:     Rob Herring <robh@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Gross <agross@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] soc: qcom: Use of_property_present() for testing DT property presence
+Date:   Wed, 15 Mar 2023 16:35:27 -0700
+Message-Id: <167892332563.4030021.7924548893649204338.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230214162325.312057-1-robert.marko@sartura.hr>
-References: <20230214162325.312057-1-robert.marko@sartura.hr>
+In-Reply-To: <20230310144724.1545153-1-robh@kernel.org>
+References: <20230310144724.1545153-1-robh@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -57,18 +56,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 14 Feb 2023 17:23:19 +0100, Robert Marko wrote:
-> Move schema for the GCC on IPQ4019 platform to a separate file to be able
-> to allow passing XO and sleep clks directly to GCC.
+On Fri, 10 Mar 2023 08:47:24 -0600, Rob Herring wrote:
+> It is preferred to use typed property access functions (i.e.
+> of_property_read_<type> functions) rather than low-level
+> of_get_property/of_find_property functions for reading properties. As
+> part of this, convert of_get_property/of_find_property calls to the
+> recently added of_property_present() helper when we just want to test
+> for presence of a property and nothing more.
 > 
-> 
+> [...]
 
 Applied, thanks!
 
-[3/7] ARM: dts: qcom: ipq4019: pass XO and sleep clocks to GCC
-      commit: 66e4811ab3967332c52a72f04d615f0faabb145e
-[4/7] ARM: dts: qcom: ipq4019: remove clk-output-names for sleep clock
-      commit: 2a41c611f21751150cf4c0132a02828700e58e2d
+[1/1] soc: qcom: Use of_property_present() for testing DT property presence
+      commit: 4a1b9f4eb122f3e36fdfe62dce96091d3e45132f
 
 Best regards,
 -- 
