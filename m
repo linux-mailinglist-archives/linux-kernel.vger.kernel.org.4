@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F41906BA9F4
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 08:50:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38D2B6BA9F3
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 08:50:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231937AbjCOHuY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 03:50:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50118 "EHLO
+        id S231903AbjCOHuU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 03:50:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231946AbjCOHtj (ORCPT
+        with ESMTP id S231940AbjCOHtq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 03:49:39 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F26361502
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 00:49:16 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id eg48so12677681edb.13
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 00:49:16 -0700 (PDT)
+        Wed, 15 Mar 2023 03:49:46 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47B82234D3
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 00:49:24 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id cy23so71790352edb.12
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 00:49:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678866553;
+        d=linaro.org; s=google; t=1678866559;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=4jTWKZT/WqK/PAs/34gwzyyEXZKpB6B+ZKyGmn/bWSw=;
-        b=zvSL1dmtje9KlvoS18mXITCAtA8dBTg1/qyaofpxO3gfhJEP4Icdb2yW6MrsUj2fQX
-         cgKc/vbBujVjOgS6Ke7OrPWaZC0zv1Ozgp46CbAeRg9y7GtCx/983snoyv3m1NaGFlOE
-         3piJsSfdR2Huw7I2vnSiVUlOV6VYZmcDe6c4ww0CZenr3q3xbhVAbDG4MP3acbeXMKiF
-         0Mll6kucBj6d+wNq/rN1AeXvu/t3h+yznLTfwzjvYPbLcaVimGHQhF3J0YXmq1nL6HaV
-         c8tKjY3cIKMuq6uMR5RFL7vWpqoqwZ2jOwVU8DaXCTBKKs/Nzq7wqFkRNnMlSU9N5uep
-         UHQw==
+        bh=XDpWcZg4twEdNBGcq0+KsEzyNCUQHbULyPH+z4NvFWw=;
+        b=E7GyIClNRbP5bTFjqGupUc/UTTrxHfn0lgI1lnBYnbsASTCSO6EbrXGZiigl/AwhJc
+         IYgOc+O+77v+diPYdhj+c5JzavNdcIOXRWzZEtx+L93RcjqmPFkt9NEG6aRJ9zU7NYfE
+         eRTjLzpkoPFRWzg8yd97UqPSMYgZsdLSUnJbtkqyxBTnP5vwOBjHOdqMlEP5ZCONGLyj
+         3MrGj2E72v8Tq+tQToGXyVvL3h7BsanIqhI8oez/3+0F4xs16RnL/o1KvypV2xp+SbtW
+         vEUaA1gKr2opDT7cvYD2a0cFUmw/jmfeVJmsvVzNBqgupABaryeEGq9KnxpOLVUQXFMi
+         P7Cw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678866553;
+        d=1e100.net; s=20210112; t=1678866559;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4jTWKZT/WqK/PAs/34gwzyyEXZKpB6B+ZKyGmn/bWSw=;
-        b=hequI/raHH2uvvTKBNp96Lv377DlEWLlQ/hy3YWfsYADmgPaDiTxg1VKWHf3g9GG7A
-         rfdG8T1cd60gkGEnRv+38kReU3nR6/lNTmSXZdvq6lnipx2sk2sgyXIzKStwpuue9S5f
-         0HZz/9NPG7u9ZEthNhAQoH+0AAx2vSSQ5ZEXBUDN3C8+upkPbirWs0tgPs4KXK5oVNVJ
-         r7aMt3IBNnfz8AZgLUyB5mF5Ihd9QdbvV76HCQhComoIFSUkwd8/IZ2rRazVXh2iulAZ
-         ieHSGWj4NAoc1ywa38+c5SURG0aYmE0+xjNCMPngkfkEiWAQ2H8M04KmUj5tYp25mT3O
-         8P8g==
-X-Gm-Message-State: AO0yUKWq44ngwEGL3K4suOtJTn3g6aUwq29y1u7XPhcGQbsCbr/Gt93V
-        DzDq8GCoI2YWbcTgiy2klfHT2w==
-X-Google-Smtp-Source: AK7set/DufcKRoaW3Yr1mrSAa8vL1Txs9RfHYAyniHtkwEHOoaVXzllk/DIHe3ZZckGfl7GwJ+U5kw==
-X-Received: by 2002:a17:906:b2d3:b0:926:320c:cd98 with SMTP id cf19-20020a170906b2d300b00926320ccd98mr5198999ejb.36.1678866553616;
-        Wed, 15 Mar 2023 00:49:13 -0700 (PDT)
+        bh=XDpWcZg4twEdNBGcq0+KsEzyNCUQHbULyPH+z4NvFWw=;
+        b=fiMiP1sJBdbP3uxoQ5qhPXF3GoPWpDQ96lpLOWh/hDsdlNIFKbWIUHbZhnYtdofOrl
+         dy2kfhQGdvy3Kt5oDRj/sPWJvJSRejnPXYaxtevwvVWWKlypdWGOTqJtGyAu6QaejkyZ
+         JO9PlUtt8y3irLxnIGZOVgBxFCHyPh48vRaiJoQRyTDJd86SwXgxB7qPhBha13XNB0Kf
+         Ehq/6SdcAlGZjlVmL1R0hZZl3OUU53+hl/dBxE8sutNkeDCWrzAaEVjJZ3yP5I897tc0
+         yKPCjff2KjjW7CQAfAieYRh5ObStOBQS31aeeHTXIo4d1MssoHP4WIHLQ4Ve7WGFBabx
+         PuWA==
+X-Gm-Message-State: AO0yUKULvJSSfa14yT1smhVrHm5/DTuSQ/0JTtDCHjJqzODjWEpz7TU3
+        H0pM+xM/xANc/JC1VvtMaff/Zw==
+X-Google-Smtp-Source: AK7set/RAdM7J4v+2ABv6n/FC+LZMZae511W0v8//or7jIXmB6xIKtXurPebiR686Q25Jb3lZZoaeg==
+X-Received: by 2002:a17:906:b28b:b0:8b1:15ab:f4cd with SMTP id q11-20020a170906b28b00b008b115abf4cdmr5418394ejz.53.1678866559506;
+        Wed, 15 Mar 2023 00:49:19 -0700 (PDT)
 Received: from ?IPV6:2a02:810d:15c0:828:940e:8615:37dc:c2bd? ([2a02:810d:15c0:828:940e:8615:37dc:c2bd])
-        by smtp.gmail.com with ESMTPSA id hp38-20020a1709073e2600b0092d16623eeasm1693786ejc.138.2023.03.15.00.49.12
+        by smtp.gmail.com with ESMTPSA id qa14-20020a170907868e00b008f702684c51sm2105119ejc.161.2023.03.15.00.49.18
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Mar 2023 00:49:13 -0700 (PDT)
-Message-ID: <d3e20d58-3448-3f70-eba1-f4c126e85a83@linaro.org>
-Date:   Wed, 15 Mar 2023 08:49:11 +0100
+        Wed, 15 Mar 2023 00:49:19 -0700 (PDT)
+Message-ID: <42cb9de7-0dc7-e2b1-59b1-2c6dec1d1f28@linaro.org>
+Date:   Wed, 15 Mar 2023 08:49:17 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-Subject: Re: [PATCH 5/6] dt-bindings: usb: dwc3: Add QCM2290 compatible
+Subject: Re: [PATCH 6/6] dt-bindings: thermal: tsens: Add QCM2290
 Content-Language: en-US
 To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
         Andy Gross <agross@kernel.org>,
@@ -81,9 +81,9 @@ Cc:     linux-arm-msm@vger.kernel.org, linux-watchdog@vger.kernel.org,
         dmaengine@vger.kernel.org, linux-mmc@vger.kernel.org,
         linux-usb@vger.kernel.org, linux-pm@vger.kernel.org
 References: <20230314-topic-2290_compats-v1-0-47e26c3c0365@linaro.org>
- <20230314-topic-2290_compats-v1-5-47e26c3c0365@linaro.org>
+ <20230314-topic-2290_compats-v1-6-47e26c3c0365@linaro.org>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230314-topic-2290_compats-v1-5-47e26c3c0365@linaro.org>
+In-Reply-To: <20230314-topic-2290_compats-v1-6-47e26c3c0365@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -97,13 +97,9 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 14/03/2023 13:53, Konrad Dybcio wrote:
-> Document the QCM2290 DWC3 controller.
+> Add the TSENS v2.x controller found on QCM2290.
 > 
 > Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
->  Documentation/devicetree/bindings/usb/qcom,dwc3.yaml | 2 ++
->  1 file changed, 2 insertions(+)
-> 
 
 Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
