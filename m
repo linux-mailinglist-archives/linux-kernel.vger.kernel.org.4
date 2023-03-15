@@ -2,83 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C364F6BBC0C
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 19:29:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E46F6BBC0F
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 19:29:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231246AbjCOS3G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 14:29:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39494 "EHLO
+        id S231707AbjCOS3M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 14:29:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230059AbjCOS3E (ORCPT
+        with ESMTP id S230059AbjCOS3K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 14:29:04 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74EAB1514C
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 11:29:02 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id eg48so19890088edb.13
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 11:29:02 -0700 (PDT)
+        Wed, 15 Mar 2023 14:29:10 -0400
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2576F2BED4;
+        Wed, 15 Mar 2023 11:29:08 -0700 (PDT)
+Received: by mail-qt1-x830.google.com with SMTP id x1so1500947qtr.7;
+        Wed, 15 Mar 2023 11:29:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tessares.net; s=google; t=1678904941;
+        d=gmail.com; s=20210112; t=1678904947;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=gUbRckqd0nEijMwKi1AIDAn2hV+bXi7xjztBWswsvno=;
-        b=rOXXdIV6t7rljnncFqewGcYEYMM70vXXYp1QPHopmQYJ+W2fffSxGPF4twuMFSOxU7
-         o7VtNKS/bBt/SwRcQ86S/7ezQ+8nulUvIzlDEG6kgzkXGAwgbYfEEzkNnXqySdlJVGu8
-         q34WpynDiyOgNTA824I7uRpRbDcWqWZtxTUi4QO9GdpHwDSYPoFqrA/IqbN6ZJyeWKSf
-         bp5wndn8wY/IkprgrzI83ByQ8n9u+fUd4WhHtVoOzg8/MhwAh9O0TwIbUCbYvdsLqmJw
-         4CqFhXr4pZD95k9Rc8oMOmSUrA2D5t0+8YsPCQ3d6al8KyGtq+VMsXCjaIIRTvubsDh4
-         +fZw==
+        bh=5kzsUfENqklMypk3rlgkphVzQ7vT68BMj3sk6qrsws8=;
+        b=YD9ov6NYByOdc/DoNnoawPb5vi+rp+mpiCOr38jFVMmmzFgkQrf/RZdZyrVQxhVU0S
+         nEzSS86G0GmQ1pJxYpNRrAp5kMhD7BORIzM3QpgpCZpGAj++7l/LBTcS7OOKIqaOnRii
+         h1b/MU5B5Yv+CMqHQhxwAm12fbCIlOoQmVNX27QkUH4F+Zwovn5yWl8kEQ7odlOv+8fo
+         DFw0f+W6DxhqTLcCnTjQsesvI21I/zzME41P/MJXPXk43LHpMpQ1CEJ0TAjqEEwU0xiA
+         r5TWub55fVYhSKTUPdAtL01AnEQ96aCDpowwUsdi/FFhxd6xxAncmh/22RUNjaD4Soyi
+         fvZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678904941;
+        d=1e100.net; s=20210112; t=1678904947;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gUbRckqd0nEijMwKi1AIDAn2hV+bXi7xjztBWswsvno=;
-        b=zmAL2iFVdKwF4N7ZCBTqW4VCyNeVWAMuXywktT273K6pmfxrBSNBqYyh+dgCfUkaMt
-         rLs1KaFljbbu7jpmaWTC23+pdlVjGffz7NA77dG+ARUZpvTnqlQN2wyJrHFUG/YAmC5B
-         WVENfubyLW4gcI2s748aw6LMhMBa1vUkUiYawtCa51W1AxLDY1vEiG3OB7B03TExmzGS
-         FKEYfHugwrlM9MmURGvWK6YOBT322XaVgI3NwXEpwu2tNyU7XnM+elQa8wbf+G0KtBkv
-         LDSH/hFmV5ysZ0d7cfE0fkLQ1b4I9yzH3I1lurNRmpbvBoOpiVg2Zx+/5ErsIPIzZ+yO
-         ryxg==
-X-Gm-Message-State: AO0yUKVl3yVZMRbx0M9MnuZFfbumbJ4MlCrrTIeyPsiJlV97BihmrmWS
-        VkPYydEigPYNm+r3Jb7LH+bSvw==
-X-Google-Smtp-Source: AK7set+YP4V7cNq9/LxvoeWy/yAlU4Q7AJ72zkkjPFDlO66C88+wzpH46jOzXNM2f55n5KV7XVlmHA==
-X-Received: by 2002:aa7:c515:0:b0:4fc:c7c8:e78e with SMTP id o21-20020aa7c515000000b004fcc7c8e78emr3655713edq.25.1678904940825;
-        Wed, 15 Mar 2023 11:29:00 -0700 (PDT)
-Received: from [10.124.6.19] ([195.181.172.151])
-        by smtp.gmail.com with ESMTPSA id b4-20020a50b404000000b004fcd78d1215sm2840392edh.36.2023.03.15.11.28.59
+        bh=5kzsUfENqklMypk3rlgkphVzQ7vT68BMj3sk6qrsws8=;
+        b=7x+KSRDl/m2vD3JpujcZ4iNFPsIo9wS4rgIRGIwtpOZ2FC5EBvsKWV5P76josKIT7T
+         zCiilf0hhO+0AdQ125qimU0PRZHZ2PKAyb3LwBNv4KJqqfrA8jvdzLvRlmYT+kyvfSE8
+         SoaeLQFEvQfcbCPkRGQZX8g086ImUl9GDAZjtjnbcGiFbBNxfZtK2WKQEPdPaKzXqo25
+         f+qTpwzqvCZ9fw5LRYHa1PLflsrOO6atcsqVudAl4cozhSwQV4tz8BCzH/A9bJh9g8fm
+         cVLi2sBwxrUAVZRi981EQjRSMPwuaBVSxXy2Bq0MpZuTubfCjjg3Fz+Z0qHjnx1n0MX3
+         yCIQ==
+X-Gm-Message-State: AO0yUKUTiESV+7oqu6e9gN7WiGhrJkfsWnB1XNtwW6BNG0qX0eSclmRY
+        lv0wT/Xk25NT3x2BdxFDLBw=
+X-Google-Smtp-Source: AK7set8kiZVc0pCyC2w42NxdgsDntWFtwUrzV+DCpdLI1iFxWPgxNqbeQ5HzxJjLs/EOvFw3MhB5sg==
+X-Received: by 2002:a05:622a:144e:b0:3bf:e415:5cc3 with SMTP id v14-20020a05622a144e00b003bfe4155cc3mr1261916qtx.58.1678904947200;
+        Wed, 15 Mar 2023 11:29:07 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id 17-20020ac85951000000b003b9a426d626sm4321789qtz.22.2023.03.15.11.29.04
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Mar 2023 11:29:00 -0700 (PDT)
-Message-ID: <5b92ed08-5a0c-7fcd-a75d-61cee3f28192@tessares.net>
-Date:   Wed, 15 Mar 2023 19:28:58 +0100
+        Wed, 15 Mar 2023 11:29:06 -0700 (PDT)
+Message-ID: <df32b84d-a39d-7dfe-c172-040ecf16f9c5@gmail.com>
+Date:   Wed, 15 Mar 2023 11:29:02 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 1/2] docs: process: allow Closes tags with links
-Content-Language: en-GB
-To:     Jonathan Corbet <corbet@lwn.net>,
-        Andy Whitcroft <apw@canonical.com>,
-        Joe Perches <joe@perches.com>,
-        Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        =?UTF-8?Q?Kai_Wasserb=c3=a4ch?= <kai@dev.carbon-project.org>,
-        Thorsten Leemhuis <linux@leemhuis.info>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, mptcp@lists.linux.dev
-References: <20230314-doc-checkpatch-closes-tag-v1-0-1b83072e9a9a@tessares.net>
- <20230314-doc-checkpatch-closes-tag-v1-1-1b83072e9a9a@tessares.net>
- <87zg8dop1f.fsf@meer.lwn.net>
-From:   Matthieu Baerts <matthieu.baerts@tessares.net>
-In-Reply-To: <87zg8dop1f.fsf@meer.lwn.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+ Thunderbird/102.7.1
+Subject: Re: [PATCH] net: dsa: b53: mmap: fix device tree support
+Content-Language: en-US
+To:     Jakub Kicinski <kuba@kernel.org>,
+        =?UTF-8?Q?=c3=81lvaro_Fern=c3=a1ndez_Rojas?= <noltari@gmail.com>
+Cc:     jonas.gorski@gmail.com, andrew@lunn.ch, olteanv@gmail.com,
+        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230310121059.4498-1-noltari@gmail.com>
+ <20230315000657.1ab9d9f4@kernel.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20230315000657.1ab9d9f4@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,37 +78,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jon,
-
-On 15/03/2023 19:19, Jonathan Corbet wrote:
-> Matthieu Baerts <matthieu.baerts@tessares.net> writes:
+On 3/15/23 00:06, Jakub Kicinski wrote:
+> On Fri, 10 Mar 2023 13:10:59 +0100 Álvaro Fernández Rojas wrote:
+>> diff --git a/drivers/net/dsa/b53/b53_mmap.c b/drivers/net/dsa/b53/b53_mmap.c
+>> index e968322dfbf0..24ea2e19dfa6 100644
+>> --- a/drivers/net/dsa/b53/b53_mmap.c
+>> +++ b/drivers/net/dsa/b53/b53_mmap.c
+>> @@ -263,7 +263,7 @@ static int b53_mmap_probe_of(struct platform_device *pdev,
+>>   		if (of_property_read_u32(of_port, "reg", &reg))
+>>   			continue;
+>>   
+>> -		if (reg < B53_CPU_PORT)
+>> +		if (reg <= B53_CPU_PORT)
+>>   			pdata->enabled_ports |= BIT(reg);
 > 
->> +In the same category as linking web pages, a special tag is also used to close
->> +issues but only when the mentioned ticketing system can do this operation
->> +automatically::
->> +
->> +        Closes: https://example.com/issues/1234
->> +
->> +Please use this 'Closes:' tag only if it helps managing issues thanks to
->> +automations. If not, pick the 'Link:' one.
+> Should we switch to B53_N_PORTS instead?
+> That's the bound used by the local "for each port" macro:
 > 
-> So if there is a consensus for this, I can certainly apply the patch.
-> 
-> I do think, though, that if we accept this tag, we should ask that it
-> only be used for *public* trackers.  A bunch of tags referring to
-> internal trackers and such aren't going to be all that helpful.
+> #define b53_for_each_port(dev, i) \
+>          for (i = 0; i < B53_N_PORTS; i++) \
+>                  if (dev->enabled_ports & BIT(i))
 
-Thank you for this feedback!
-
-I agree, this should only refer to public bug trackers otherwise the
-link is useless for most people.
-
-In fact, that's what I wrote in submitting-patches.rst but I just
-noticed I forgot to duplicate this into 5.Posting.rst. I can do that in
-a v2 if there is no objection to allow this "Closes:" tag.
-
-Cheers,
-Matt
+Yes, checking against B53_N_PORTS would be a better check.
 -- 
-Tessares | Belgium | Hybrid Access Solutions
-www.tessares.net
+Florian
+
