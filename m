@@ -2,95 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 624C16BAB75
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 10:03:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5EE16BAB8A
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 10:05:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231851AbjCOJDO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 05:03:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46912 "EHLO
+        id S231961AbjCOJEt convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 15 Mar 2023 05:04:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231343AbjCOJDB (ORCPT
+        with ESMTP id S231907AbjCOJEb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 05:03:01 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81FD9738BC
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 02:02:40 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id y14so3914570wrq.4
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 02:02:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678870958;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LTpZF54k+xhywB6mdq1sWhw9d24/H6HoiMghTWdRi8M=;
-        b=b7TMtw6j9VNG4+HGhgrsPVgdvOVXTtN7rwuY8+AwPOrzAA++UurS+LCh4uu14Z5VJP
-         Xwo2i7nKfSP0+WS7YYT1Gh/BmlW4osTAU3lNe8u/SU1KMLUYzk9Rv8srKHcglfPSU0B6
-         /7sdwLW09wxIb8b7hgp2lkDJnGTxupLHFZUdo7+9qkN4oRD96ACbV+oqqUsi4YMStyzi
-         ruptsZ7vobD2jSoaN4FCPyZKhNPZd3JOxkQbUgEFyXXcQSbqvqhDrsIfQg/imEgZ2GmC
-         +ER1nclVaC8ZvE1u0DAjkwuccwI0tEV6S03q0q6VPRrz2HQWxq+vJR+qPMk4A2Nobov2
-         UOlg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678870958;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=LTpZF54k+xhywB6mdq1sWhw9d24/H6HoiMghTWdRi8M=;
-        b=m6npt1YV5ntsNKevU3Y2weX0ezHcFDvoUd5HC4WCQlsjU45BG74BJo3yrR7E74XhxN
-         lSiQaEugp8VkaU/n+vEwLzlGcrD1eQbwHljFbHiNHp5we6qTiHqfwqfMIhP8aL1WDjVv
-         gh91zsHLjDhF3YRcbwrUbUdhcQdN9Ol9JOQFwr10fTvqJZ5zXaZTvPDdcAio+x1DLwwf
-         O2lcW7AuUslingehZGi7jWnNIj55mqmzhk5H8KwobwkZ2CjirKQr6DvKPVcT7YpKTBJl
-         7bxkb9HoKhfjk+mplZdWIO15bJKdmPrLNjDHN27TEdatNBWHWGrlAU595VlvMEo3xClv
-         PBzA==
-X-Gm-Message-State: AO0yUKWNdfC/dXkv7aLl0v8oRRQx13evdSq0BU18q1Onas+0TV87l/uz
-        PXz0U0Vu/QvEKD0Du3nral2rHA==
-X-Google-Smtp-Source: AK7set+3V/awLn5LeF8ya6otksI0/6+P1J1OzThA1KAIoKIixtHnkD3dfPQqu7lSmnj98Pv88QlytA==
-X-Received: by 2002:adf:dfc6:0:b0:2ce:a8f4:2b01 with SMTP id q6-20020adfdfc6000000b002cea8f42b01mr1216119wrn.32.1678870958383;
-        Wed, 15 Mar 2023 02:02:38 -0700 (PDT)
-Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
-        by smtp.gmail.com with ESMTPSA id f2-20020a0560001b0200b002c57384dfe0sm4113750wrz.113.2023.03.15.02.02.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Mar 2023 02:02:38 -0700 (PDT)
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-To:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Liu Ying <victor.liu@nxp.com>
-Cc:     maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-        tzimmermann@suse.de, andrzej.hajda@intel.com, rfoss@kernel.org,
-        Laurent.pinchart@ideasonboard.com, jonas@kwiboo.se,
-        jernej.skrabec@gmail.com, airlied@gmail.com, daniel@ffwll.ch
-In-Reply-To: <20230313055951.2997299-1-victor.liu@nxp.com>
-References: <20230313055951.2997299-1-victor.liu@nxp.com>
-Subject: Re: [PATCH] MAINTAINERS: Add include/drm/drm_bridge.h to DRM
- DRIVERS FOR BRIDGE CHIPS
-Message-Id: <167887095753.2129381.13470724371681580958.b4-ty@linaro.org>
-Date:   Wed, 15 Mar 2023 10:02:37 +0100
-MIME-Version: 1.0
+        Wed, 15 Mar 2023 05:04:31 -0400
+Received: from mail1.bemta35.messagelabs.com (mail1.bemta35.messagelabs.com [67.219.250.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 955EA1910B
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 02:04:05 -0700 (PDT)
+Authentication-Results: mx.messagelabs.com; dkim=none (message not 
+  signed); dmarc=none (no record) header.from=nova-world.com
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpjk+JIrShJLcpLzFFi42KZW/G7SZehSzD
+  FYNk8Toue29uZLSb+b2G1mPvG3mJLM5PFq9bDjBYdF9QtNt18xG5x/9RVFou2ydvYLdbeOsts
+  0bB2BaPF6XMr2S0u75rDZjHnwFMWi9mdc5ksth+dw26x9d1OJot367ewWpw9cYDR4uqcx4wOI
+  h49rww9Pvb+ZfHYOKePxWPu/L9MHp/W/2D0+PdlPrPHxOX7WDx6v81m8zg2bzO7x9Srs5k9ps
+  w9wurR1r2eyWP6tGmsHnuv7mL3WH/jDJtH++Ju9gDhKNbMvKT8igTWjJ1/97AWHOCqWLjgJGs
+  D402OLkYuDiGBz4wSm5Z/ZoJwDjBKvGyfztjFyMHBLKApsX6XfhcjJwevgKDEyZlPWEBsZgFt
+  iWULXzNDlKhJfO0qAQkLC6hKnJz3jRnEFhFQl7h64zgriM0moC+x/+oEdhCbBajm/ZefTCC2E
+  FDrnB+PWSDG+0lMufWFESKuLPG06THTBEbeWQhHzEJyxCwkR8xCOGIBI8sqRrPi1KKy1CJdIw
+  O9pKLM9IyS3MTMHL3EKt1EvdJi3fLU4hJdI73E8mK91OJiveLK3OScFL281JJNjMCITilKmLC
+  Dsavvr94hRkkOJiVR3j9rBFKE+JLyUyozEosz4otKc1KLDzHqcXAIXDj78BOjwJUPn5qYpFjy
+  8vNSlSR4u5oFU4QEi1LTUyvSMnOACQimQYKDR0mEN6IeKM1bXJCYW5yZDpE6xejKsX3n/r3MH
+  J8+XgGSs/6DyO0XrgHJr9u6DjALgc2WEued2AHULADSnFGaBzcaljwvMcpKCfMyMjAwCPEUpB
+  blZpagyr9iFOdgVBLmfdYKNIUnM68E7oJXQMcxAR3HO08A5LiSRISUVANTAm+CXMTCSWbKBg+
+  OX6hyP63N6vCueL690I74SN0DGf4b2PsWLVA30Pt3YlYFy877SopGn3cdKYy5ELmm+vr6Q8an
+  br7/bDTh3SJntaJvXVkLWXZ5C/JW8E29NSPCtGsj2+NrpnYz1vlsDtn4g+ek8v6ZwULHLrD9i
+  t+9Xu62qLC6uJXGuuUGsnl9Mg+9FrTXb5TRWain1vb9yAyRPh+nTRxT2veuMa9pOHhPPOH+ie
+  BCpfBjD4Jt+xdxBz7xnta49G5/GN/v7Kf31b/JaUWcc5pRpNZiJNBZKbg+oeHsmus7zSdOmeY
+  YXrwlMUA3OsTx5EqnVwH3jlTrO4Quyl2s+Pb4aeUv5h5289f2vGxVYinOSDTUYi4qTgQAhjj4
+  9BkEAAA=
+X-Env-Sender: jeffynw@nova-world.com
+X-Msg-Ref: server-2.tower-640.messagelabs.com!1678871027!67033!13
+X-Originating-IP: [157.120.251.130]
+X-SYMC-ESS-Client-Auth: outbound-route-from=fail
+X-StarScan-Received: 
+X-StarScan-Version: 9.104.1; banners=-,-,-
+X-VirusChecked: Checked
+Received: (qmail 11768 invoked from network); 15 Mar 2023 09:03:59 -0000
+Received: from unknown (HELO mail.kvbkunlun.com) (157.120.251.130)
+  by server-2.tower-640.messagelabs.com with AES256-GCM-SHA384 encrypted SMTP; 15 Mar 2023 09:03:59 -0000
+Received: from SGVSWEXMB101A.kvbkunlun.net (10.2.104.65) by
+ SGVSWEXMB101B.kvbkunlun.net (10.2.104.66) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Wed, 15 Mar 2023 17:03:29 +0800
+Received: from [87.120.84.163] (87.120.84.163) by SGVSWEXMB101A.kvbkunlun.net
+ (10.2.104.65) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Wed, 15 Mar 2023 17:03:23 +0800
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.12.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: RE: INVESTMENT PROPOSITION: 
+To:     Recipients <jeffynw@nova-world.com>
+From:   Edward Stevenson <jeffynw@nova-world.com>
+Date:   Wed, 15 Mar 2023 02:03:18 -0700
+Reply-To: <edwardstevenson279@aol.com>
+Message-ID: <d9ffcc53-7d90-4078-ba85-4aa52cc8949f@SGVSWEXMB101A.kvbkunlun.net>
+X-Spam-Status: No, score=3.8 required=5.0 tests=BAYES_50,
+        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,RCVD_IN_SBL,SPF_HELO_NONE,SPF_NONE,SUBJ_ALL_CAPS
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+RE: INVESTMENT PROPOSITION:
 
-On Mon, 13 Mar 2023 13:59:51 +0800, Liu Ying wrote:
-> Appropriate maintainers should be suggested for changes to the
-> include/drm/drm_bridge.h header file, so add the header file to the
-> 'DRM DRIVERS FOR BRIDGE CHIPS' section.
-> 
-> 
+To Whom It May Concern:
 
-Thanks, Applied to https://anongit.freedesktop.org/git/drm/drm-misc.git (drm-misc-next-fixes)
+My name is Edward Stevenson. I am a Certified Outsourcing Specialist {COS} based in the Republic of Ghana. By virtue of my profession,I have my client’s mandate to source for Investment/Fund Manager or Entrepreneur with wealth of experience from any part of the World  that will be willing and ready to manage my client's  Investment Capital for a long period of 10 years and above without interference from the ultimate beneficial owner either directly or indirectly.
 
-[1/1] MAINTAINERS: Add include/drm/drm_bridge.h to DRM DRIVERS FOR BRIDGE CHIPS
-      https://cgit.freedesktop.org/drm/drm-misc/commit/?id=b28ee4476219b47604b860bd579bd9ce3979a67e
+Furthermore, you shall retain 15% of the Investment Capital as your Gratification, Commission and Investment Management Fees should you find this offer interesting. In addition, you will at the same time ratain 30% Net Profit from the client's Investment Capital for managing the Investment satisfactorily. The Return on Investment {ROI} payable annually to my client will be determined by you and finally, you will have a Grace Period of 18 months before ROI will be paid to my client annually. If you are eminently qualified to work with us as specified herein, kindly introduce yourself, your company and what type of business you  do in order to assess your qualifications. Moreso, add your WhatsApp Number for more effective communication.
 
--- 
-Neil
 
+Truly Yours,
+
+Edward Stevenson,CSO
