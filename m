@@ -2,236 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6234F6BBBB9
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 19:11:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 816476BBBC0
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 19:12:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231953AbjCOSLA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 14:11:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40124 "EHLO
+        id S232319AbjCOSMg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 14:12:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229769AbjCOSK6 (ORCPT
+        with ESMTP id S232292AbjCOSMd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 14:10:58 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEE9729E2B
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 11:10:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678903811;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4X/wrMSZCXuFYj1706DRuW1G14LU6Q5fNjxWldjHQZ4=;
-        b=M18zBinn3LtAK9Y59iNzY/4BxSM8MaDSdJg20hDV5/3jcugoPOQLrNPvXYD+P5khtn/Ynk
-        DPLWT2p4I7k/HNhZCX3hIChUdEKMwMOadYstIbSDbyCl316/CJgS1/k2nnk3YPDbLmQ4pI
-        9Gbe+mU2Sapyq5oIoyicHFB5h7+eZ8w=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-344-k9muBPQAN4uUpkP4diqvpw-1; Wed, 15 Mar 2023 14:10:09 -0400
-X-MC-Unique: k9muBPQAN4uUpkP4diqvpw-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 067B5185A790;
-        Wed, 15 Mar 2023 18:10:06 +0000 (UTC)
-Received: from [10.22.34.146] (unknown [10.22.34.146])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id EA082492B02;
-        Wed, 15 Mar 2023 18:10:04 +0000 (UTC)
-Message-ID: <16161eea-1e43-bf59-8c36-971e066ae634@redhat.com>
-Date:   Wed, 15 Mar 2023 14:10:04 -0400
+        Wed, 15 Mar 2023 14:12:33 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EADD56A9EE;
+        Wed, 15 Mar 2023 11:12:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678903948; x=1710439948;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=SVfMHUwmEKO+Fr050Pn8QFsGsLpr2+wEss4RkCURRyA=;
+  b=Vg4jQP1zbSWFz+UkgXDwjq8Bg1S3RWtLlcAgVZJozuBu3K6C8qwQG3Bs
+   Q1gqjHPhFnhpS6NL34hgrvatSWBPSqJ2UhK2FYmwAZHh7mDnGTag510hk
+   049io2RX95/L8+6lXYm3/pZ2VTC9VZmAu29vjm9exAedVIRSJ5/z561Mh
+   TQ6r/9N4KRiMazBveXoAYRbibvNwecZs3WE3k0/1NYQYCIhqPWpelPsgO
+   wuZTo/FQ1q1AkNS6pFbYYbz5ilsOHi3Tf0nNkoVQ1nPk/gF64Qy9fTOjq
+   R8XVkTF+Yj2hLObLLlzr6EUJD+vgi87Md26J4W5cyHheYtDpGX9onj45s
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="317438921"
+X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
+   d="scan'208";a="317438921"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2023 11:12:17 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="822898317"
+X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
+   d="scan'208";a="822898317"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by fmsmga001.fm.intel.com with ESMTP; 15 Mar 2023 11:12:17 -0700
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Wed, 15 Mar 2023 11:12:16 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Wed, 15 Mar 2023 11:12:16 -0700
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21 via Frontend Transport; Wed, 15 Mar 2023 11:12:16 -0700
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.171)
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.21; Wed, 15 Mar 2023 11:12:16 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=gDHjmf8WHmwPSEaSUeSLHHKlJpHTjAR/X72S4P2vlVxbriAeQT2bTrOo9QUBfvhj1zbTfWKyKV4eABBYePhT7c8o9GESQGas3/UggY65Nsf7LKi9AgJuD+UUT5M7EsuLAr1cyQEjBBBRD5zGyH0nitDkpVzx2YidT9cfniKCUJKn3+cQk2Dlm+49Ls2wQS83Vi3fid2HbLcl4EMiYGob2i8LOoywwMcuQB76kkyFSG6+CkLk5T6VUsziXurThBQd6lpZsjl0Dh6GlmYC5GD5GYLdarA2rq4VaCzWb4UhMGT5Xkx2DLz41LLKa88CwlfsPdAODMMejMm2uqn1Em1COA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=3h8L1x6wl796DVMRDBYatDKbBrXHPxF2XjXsDdGk/M0=;
+ b=EtE0zQuN6z7H6HuN8ZoKofWQ01sr86d8bOIlHDlLoXwUchWh/S24M6u4N1xW1AWIWwfkyr2IhMTLUZ/SWNO+3eWzf4gaTfVANiCNTNKiNX5i0yfB02C21Mvi4NsGLDsuv4hLa0d6P58DjQBVLtEKP4eNyFMl1qoqWSe4df9KVSCe3JpSnFB5wrOPJx2aob2cv2jZDCBo9ZcJVHEIts40Rd8ZG9v7HdTLIUB4DlbtxYOAc+JhgOb2I6KrVg+kdb313s1ORMibBrb/Mr5BbYKjD2LQ6SNI1cbUytCGnv6v9Dh98baL33JLusPBmpzumOuhmqdHTubMN0ffbRxh54gaEA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DM6PR11MB2937.namprd11.prod.outlook.com (2603:10b6:5:62::13) by
+ SA2PR11MB5210.namprd11.prod.outlook.com (2603:10b6:806:fa::23) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6178.26; Wed, 15 Mar 2023 18:12:14 +0000
+Received: from DM6PR11MB2937.namprd11.prod.outlook.com
+ ([fe80::cece:5e80:b74f:9448]) by DM6PR11MB2937.namprd11.prod.outlook.com
+ ([fe80::cece:5e80:b74f:9448%7]) with mapi id 15.20.6178.026; Wed, 15 Mar 2023
+ 18:12:14 +0000
+Date:   Wed, 15 Mar 2023 19:12:03 +0100
+From:   Michal Kubiak <michal.kubiak@intel.com>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+CC:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH net] i825xx: sni_82596: use eth_hw_addr_set()
+Message-ID: <ZBIKcx6/77aePZUE@localhost.localdomain>
+References: <20230315134117.79511-1-tsbogend@alpha.franken.de>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230315134117.79511-1-tsbogend@alpha.franken.de>
+X-ClientProxiedBy: FR0P281CA0146.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:96::20) To DM6PR11MB2937.namprd11.prod.outlook.com
+ (2603:10b6:5:62::13)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [RFC PATCH 2/3] sched/cpuset: Keep track of SCHED_DEADLINE tasks
- in cpusets
-Content-Language: en-US
-From:   Waiman Long <longman@redhat.com>
-To:     Juri Lelli <juri.lelli@redhat.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Qais Yousef <qyousef@layalina.io>, Tejun Heo <tj@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Hao Luo <haoluo@google.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-kernel@vger.kernel.org, luca.abeni@santannapisa.it,
-        claudio@evidence.eu.com, tommaso.cucinotta@santannapisa.it,
-        bristot@redhat.com, mathieu.poirier@linaro.org,
-        cgroups@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Wei Wang <wvw@google.com>, Rick Yiu <rickyiu@google.com>,
-        Quentin Perret <qperret@google.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>
-References: <20230315121812.206079-1-juri.lelli@redhat.com>
- <20230315121812.206079-3-juri.lelli@redhat.com>
- <7a3b31bf-4f6a-6525-9c6a-2bae44d7b0af@redhat.com>
- <ZBH9E7lCEXcFDBG4@localhost.localdomain>
- <2739c3ec-1e97-fc4d-8001-50283c94f4ff@redhat.com>
-In-Reply-To: <2739c3ec-1e97-fc4d-8001-50283c94f4ff@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR11MB2937:EE_|SA2PR11MB5210:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1ec74a07-3e7c-4f5f-45bf-08db2580cdda
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: /HVACcnld004XKM7ICgVx9cmqU3zF7vlDxRi7AhBqTpN1VetxxXDXfzXUNQH+x8nq8NBbEU1FLpdrwh3F3bqUfUcL/ZxoPIOeuYKfxVerjDqrhaGuKMUJCRfUwxUpqTK0eVannO212EyaPOpCpcYK0lxUOFnwwXSlolkriYpHUkso1AdhvonsHU00Qy8M+3OejXXiY8ZChDc//NLKq3mMzRQLbLBTQPDLmGNwlHewMOqV1BBx/QlH1ia6HnJOLlVYduyvP5bmiFb5Cq5FdBW8SkzSI4Zk6/y6clt874kUL4xk52vAVpH1TsEJxmIWBZw2lSn5Kxt0My1j3Rhk4S5EfwjpUQt+7D7tHKZdQhPe6F2DJUIUKDxlpFfZkL3JzdhfEVzNhxU1nsO1JoZGvvb82zkefdHXSnW7BdA0VxAq7GuZ+DP0DT+bARpBFwf2JgS8WrSuEVha17GNVCHoWNWTo035OqCA1Tn2utwkrxEKJ34kS46hzkWYz+ZZeYdG1PGJv/Kxp5KYlWzoEUL4BZ8yjrnCKJbkx1YGiaiwqh3hgg9/lCTjqDzFYT+O2zfOskkcAf9f6jkgK3BGWTK8Yq/UpIYm4wnd/24LojlDM+JTcHlzsG50Wzw3PNHmo2ApoOpggUEzIcHFTN9QpscLXayyg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB2937.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(396003)(39860400002)(376002)(136003)(366004)(346002)(451199018)(86362001)(4326008)(8676002)(66476007)(6916009)(66946007)(44832011)(66556008)(5660300002)(2906002)(41300700001)(8936002)(82960400001)(6506007)(6666004)(26005)(186003)(478600001)(9686003)(83380400001)(54906003)(316002)(6512007)(6486002)(38100700002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?YWMfNekLiTvwCsjAQyL0BR8x+T8gWgwLoFLM65lqrr25jpzHFePIa6PoHz5Q?=
+ =?us-ascii?Q?eDvW/BdNBxsvIB98dl9KyKEoRoocDld6YxeFXvARtxvztgmdh4u18F5tnHl7?=
+ =?us-ascii?Q?Yyv6qLoIDt+42Ve+cPTGXXkeWC5S9r8fQ+kNuue0iBJHl+58EppWdrsC9GBm?=
+ =?us-ascii?Q?NZonL+i5s9I2+F25DSyVEUUg2VwFrqBfKUx0IqrrP+ms4Pn1abVhrlajwa60?=
+ =?us-ascii?Q?OD9ZHBYxUf9UYPmlOePAyX43tRtYtt6PvA9OdKyWYfYtVaFdpzzdwVSXOjh8?=
+ =?us-ascii?Q?BCWy+GQO/6kqDv4E7SbsVeaU3ACMohmVlAzmOCiYYs5UJQsY6GAfBCrxAqqT?=
+ =?us-ascii?Q?QEX8BWq+6mxyezOIDg0QR5IlqAwrMkwfcT5iMhKOnLhpVdAOMLHwXI4vWD2f?=
+ =?us-ascii?Q?7UPvuBX1ac1wOnrwvH9FAuxjZW62y8F1ktjJywHWfFxSmZLGRwwkEmJiOK6p?=
+ =?us-ascii?Q?gwY9DBWQ8Q0kDnGc5wct1D7yYE+rNH0Y2oucExVwXJDSqyd6d9/vrGbD7a6U?=
+ =?us-ascii?Q?btYqqEHW2qEV7G1Y1AutfkYx45kJlN9bQCi5/WTBhbWLO/nLAwnCVv4B47gc?=
+ =?us-ascii?Q?DcywI0pAsSjhI3E+M+cr/uODnAYgRm+Uu1KzA4KLcMo6VZDbYtFyK5dG3Y+A?=
+ =?us-ascii?Q?6oX6Djf8CXiFEUDAJiyPkUtBBDqoIlK5FEKp1QHTPTvdPqh8Y31YmbcM12ne?=
+ =?us-ascii?Q?M4jF9hCz/kuhTf4lTxwpETNpqYaTiecRvUnd0761De+pQbSnMHFWjgXez8Nw?=
+ =?us-ascii?Q?ekSanF1DJPndurEiPvq2W30Zcp3arQV9O3UuIqAgsAMgWuQS5ELeADSYSBRg?=
+ =?us-ascii?Q?hFHANIqYHUQ1HLec0EeR1zMz4fest5S6UaLBM89UEd9Mlr4F1HnYvliTN++N?=
+ =?us-ascii?Q?xYLVb5L7wgM4eBK7t6ojylQBAWEYaDa0i4rakpnniEDNHCn+Raq0KFemDq/P?=
+ =?us-ascii?Q?HlDWvLUF2SBBTFaLEJ1/xixU7bT94cgWj4agsYdPx9ha4Z50ee7Sp8UghNd2?=
+ =?us-ascii?Q?syrZrfEJm2Fc/yR0/utrucp+udIPvioA3Nfkr5VK0AWFgCpOGJhCkCCMbSnS?=
+ =?us-ascii?Q?W54pcYUSFH4h4pxYrf8HYUdSTGh6xy0hI7+Q2zu8aV38rk+PhTlsQfp80T6v?=
+ =?us-ascii?Q?wwq0uTJeGCYKFhneN4ZbhrFLLl4x/vJRmPUpoUjyRmIvbMKWasAI+HbPd/fj?=
+ =?us-ascii?Q?+uutmqTuovo0FVqgULzjMZ/Yd78+Pagob4GGy+4LpGVQiSTzBisI7LkRCXtz?=
+ =?us-ascii?Q?Vxkn+F/xFpue4AD6SeefR/6pMKYcEqnhpoEODAQhoNF+W6an62Ov2Lp3WrIp?=
+ =?us-ascii?Q?dCZCJHhMT3LAqY9UfmltISb5C+majCJUNA05zJUOdwlRJ7wOXrqhwvdbLtVy?=
+ =?us-ascii?Q?FNkxbVW04EF+M1LwqAS/uQjQYIwbZwtzxhBy3b4igQwEh/mZgKZmIvKa8Ftf?=
+ =?us-ascii?Q?Fm5gGBO+3jycFURfx/NA7zOvfsV6JMAkq6yKmZAklYX071i5zc+bnkRmJqni?=
+ =?us-ascii?Q?qOiHzMjKxhlpbqXV2qw/LgmXoj9wiuqFIFQ/k45u9NLfyPwjMZtmKdL5U7j5?=
+ =?us-ascii?Q?hZfX95SvSjKr36ubjG38jyUyicw0ETElcZoJsEhTltxinKD/RTf2V9yWUHes?=
+ =?us-ascii?Q?vg=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1ec74a07-3e7c-4f5f-45bf-08db2580cdda
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB2937.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Mar 2023 18:12:14.4451
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: xvHZYcXl9Y663bftw4+BkPcr0HqPmFzDoAt8Sq2cJlmcFnReTC1JpgusYjuHBmFj0T2yVBVdea1/l0DvIeTscg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR11MB5210
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/15/23 14:01, Waiman Long wrote:
->
-> On 3/15/23 13:14, Juri Lelli wrote:
->> On 15/03/23 11:46, Waiman Long wrote:
->>> On 3/15/23 08:18, Juri Lelli wrote:
->>>> Qais reported that iterating over all tasks when rebuilding root 
->>>> domains
->>>> for finding out which ones are DEADLINE and need their bandwidth
->>>> correctly restored on such root domains can be a costly operation (10+
->>>> ms delays on suspend-resume).
->>>>
->>>> To fix the problem keep track of the number of DEADLINE tasks 
->>>> belonging
->>>> to each cpuset and then use this information (followup patch) to only
->>>> perform the above iteration if DEADLINE tasks are actually present in
->>>> the cpuset for which a corresponding root domain is being rebuilt.
->>>>
->>>> Reported-by: Qais Yousef <qyousef@layalina.io>
->>>> Signed-off-by: Juri Lelli <juri.lelli@redhat.com>
->>>> ---
->>>>    include/linux/cpuset.h |  4 ++++
->>>>    kernel/cgroup/cgroup.c |  4 ++++
->>>>    kernel/cgroup/cpuset.c | 25 +++++++++++++++++++++++++
->>>>    kernel/sched/core.c    | 10 ++++++++++
->>>>    4 files changed, 43 insertions(+)
->>>>
->>>> diff --git a/include/linux/cpuset.h b/include/linux/cpuset.h
->>>> index 355f796c5f07..0348dba5680e 100644
->>>> --- a/include/linux/cpuset.h
->>>> +++ b/include/linux/cpuset.h
->>>> @@ -71,6 +71,8 @@ extern void cpuset_init_smp(void);
->>>>    extern void cpuset_force_rebuild(void);
->>>>    extern void cpuset_update_active_cpus(void);
->>>>    extern void cpuset_wait_for_hotplug(void);
->>>> +extern void inc_dl_tasks_cs(struct task_struct *task);
->>>> +extern void dec_dl_tasks_cs(struct task_struct *task);
->>>>    extern void cpuset_lock(void);
->>>>    extern void cpuset_unlock(void);
->>>>    extern void cpuset_cpus_allowed(struct task_struct *p, struct 
->>>> cpumask *mask);
->>>> @@ -196,6 +198,8 @@ static inline void cpuset_update_active_cpus(void)
->>>>    static inline void cpuset_wait_for_hotplug(void) { }
->>>> +static inline void inc_dl_tasks_cs(struct task_struct *task) { }
->>>> +static inline void dec_dl_tasks_cs(struct task_struct *task) { }
->>>>    static inline void cpuset_lock(void) { }
->>>>    static inline void cpuset_unlock(void) { }
->>>> diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
->>>> index c099cf3fa02d..357925e1e4af 100644
->>>> --- a/kernel/cgroup/cgroup.c
->>>> +++ b/kernel/cgroup/cgroup.c
->>>> @@ -57,6 +57,7 @@
->>>>    #include <linux/file.h>
->>>>    #include <linux/fs_parser.h>
->>>>    #include <linux/sched/cputime.h>
->>>> +#include <linux/sched/deadline.h>
->>>>    #include <linux/psi.h>
->>>>    #include <net/sock.h>
->>>> @@ -6673,6 +6674,9 @@ void cgroup_exit(struct task_struct *tsk)
->>>>        list_add_tail(&tsk->cg_list, &cset->dying_tasks);
->>>>        cset->nr_tasks--;
->>>> +    if (dl_task(tsk))
->>>> +        dec_dl_tasks_cs(tsk);
->>>> +
->>>>        WARN_ON_ONCE(cgroup_task_frozen(tsk));
->>>>        if (unlikely(!(tsk->flags & PF_KTHREAD) &&
->>>>                 test_bit(CGRP_FREEZE, &task_dfl_cgroup(tsk)->flags)))
->>>> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
->>>> index 8d82d66d432b..57bc60112618 100644
->>>> --- a/kernel/cgroup/cpuset.c
->>>> +++ b/kernel/cgroup/cpuset.c
->>>> @@ -193,6 +193,12 @@ struct cpuset {
->>>>        int use_parent_ecpus;
->>>>        int child_ecpus_count;
->>>> +    /*
->>>> +     * number of SCHED_DEADLINE tasks attached to this cpuset, so 
->>>> that we
->>>> +     * know when to rebuild associated root domain bandwidth 
->>>> information.
->>>> +     */
->>>> +    int nr_deadline_tasks;
->>>> +
->>>>        /* Invalid partition error code, not lock protected */
->>>>        enum prs_errcode prs_err;
->>>> @@ -245,6 +251,20 @@ static inline struct cpuset *parent_cs(struct 
->>>> cpuset *cs)
->>>>        return css_cs(cs->css.parent);
->>>>    }
->>>> +void inc_dl_tasks_cs(struct task_struct *p)
->>>> +{
->>>> +    struct cpuset *cs = task_cs(p);
->>>> +
->>>> +    cs->nr_deadline_tasks++;
->>>> +}
->>>> +
->>>> +void dec_dl_tasks_cs(struct task_struct *p)
->>>> +{
->>>> +    struct cpuset *cs = task_cs(p);
->>>> +
->>>> +    cs->nr_deadline_tasks--;
->>>> +}
->>>> +
->>>>    /* bits in struct cpuset flags field */
->>>>    typedef enum {
->>>>        CS_ONLINE,
->>>> @@ -2472,6 +2492,11 @@ static int cpuset_can_attach(struct 
->>>> cgroup_taskset *tset)
->>>>            ret = security_task_setscheduler(task);
->>>>            if (ret)
->>>>                goto out_unlock;
->>>> +
->>>> +        if (dl_task(task)) {
->>>> +            cs->nr_deadline_tasks++;
->>>> +            cpuset_attach_old_cs->nr_deadline_tasks--;
->>>> +        }
->>>>        }
->>> Any one of the tasks in the cpuset can cause the test to fail and 
->>> abort the
->>> attachment. I would suggest that you keep a deadline task transfer 
->>> count in
->>> the loop and then update cs and cpouset_attach_old_cs only after all 
->>> the
->>> tasks have been iterated successfully.
->> Right, Dietmar I think commented pointing out something along these
->> lines. Think though we already have this problem with current
->> task_can_attach -> dl_cpu_busy which reserves bandwidth for each tasks
->> in the destination cs. Will need to look into that. Do you know which
->> sort of operation would move multiple tasks at once?
->
-> Actually, what I said previously may not be enough. There can be 
-> multiple controllers attached to a cgroup. If any of thier 
-> can_attach() calls fails, the whole transaction is aborted and 
-> cancel_attach() will be called. My new suggestion is to add a new 
-> deadline task transfer count into the cpuset structure and store the 
-> information there temporarily. If cpuset_attach() is called, it means 
-> all the can_attach calls succeed. You can then update the dl task 
-> count accordingly and clear the temporary transfer count.
->
-> I guess you may have to do something similar with dl_cpu_busy().
->
-> My 2 cents.
+On Wed, Mar 15, 2023 at 02:41:17PM +0100, Thomas Bogendoerfer wrote:
+> Copy scrambled mac address octects into an array then eth_hw_addr_set().
+> 
+> Fixes: adeef3e32146 ("net: constify netdev->dev_addr")
+> Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> ---
+>  drivers/net/ethernet/i825xx/sni_82596.c | 14 ++++++++------
+>  1 file changed, 8 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/i825xx/sni_82596.c b/drivers/net/ethernet/i825xx/sni_82596.c
+> index daec9ce04531..54bb4d9a0d1e 100644
+> --- a/drivers/net/ethernet/i825xx/sni_82596.c
+> +++ b/drivers/net/ethernet/i825xx/sni_82596.c
+> @@ -78,6 +78,7 @@ static int sni_82596_probe(struct platform_device *dev)
+>  	void __iomem *mpu_addr;
+>  	void __iomem *ca_addr;
+>  	u8 __iomem *eth_addr;
+> +	u8 mac[ETH_ALEN];
+>  
+>  	res = platform_get_resource(dev, IORESOURCE_MEM, 0);
+>  	ca = platform_get_resource(dev, IORESOURCE_MEM, 1);
+> @@ -109,12 +110,13 @@ static int sni_82596_probe(struct platform_device *dev)
+>  		goto probe_failed;
+>  
+>  	/* someone seems to like messed up stuff */
+> -	netdevice->dev_addr[0] = readb(eth_addr + 0x0b);
+> -	netdevice->dev_addr[1] = readb(eth_addr + 0x0a);
+> -	netdevice->dev_addr[2] = readb(eth_addr + 0x09);
+> -	netdevice->dev_addr[3] = readb(eth_addr + 0x08);
+> -	netdevice->dev_addr[4] = readb(eth_addr + 0x07);
+> -	netdevice->dev_addr[5] = readb(eth_addr + 0x06);
+> +	mac[0] = readb(eth_addr + 0x0b);
+> +	mac[1] = readb(eth_addr + 0x0a);
+> +	mac[2] = readb(eth_addr + 0x09);
+> +	mac[3] = readb(eth_addr + 0x08);
+> +	mac[4] = readb(eth_addr + 0x07);
+> +	mac[5] = readb(eth_addr + 0x06);
+> +	eth_hw_addr_set(netdevice, mac);
+>  	iounmap(eth_addr);
+>  
+>  	if (netdevice->irq < 0) {
+> -- 
+> 2.35.3
+> 
 
-Alternatively, you can do the nr_deadline_tasks update in 
-cpuset_attach(). However, there is an optimization to skip the task 
-iteration if the cpu and memory list haven't changed. You will have to 
-skip that optimization if there are DL tasks in the cpuset.
+The fix looks fine. Good catch!
+I would only suggest to add more description why it needed to be
+changed.
+(The current version of the commit message only contains information what
+was done, but it is quite obvious by looking at the code).
 
-Cheers,
-Longman
+Thanks,
+Michal
+
+Reviewed-by: Michal Kubiak <michal.kubiak@intel.com>
 
