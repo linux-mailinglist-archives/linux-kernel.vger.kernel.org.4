@@ -2,112 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F0606BB7F8
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 16:35:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38FAB6BB7FB
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 16:35:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232629AbjCOPfe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 11:35:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47632 "EHLO
+        id S232550AbjCOPfw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 11:35:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232830AbjCOPfW (ORCPT
+        with ESMTP id S232660AbjCOPff (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 11:35:22 -0400
-Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 920CF38648;
-        Wed, 15 Mar 2023 08:35:21 -0700 (PDT)
-Received: by mail-qv1-xf2e.google.com with SMTP id mg14so1153578qvb.12;
-        Wed, 15 Mar 2023 08:35:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678894520;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=YcFqNcNOQFyK8M0Bg6u2CF1KIEClFjxJotNtkabpSfQ=;
-        b=NfT+tfWo4zYwBmLLayk/HYeliqkWhZoWyReFNr9whV1D5k4aDJ6poZn4PyuWXrSgFT
-         pATmqe9w5uy7G9Wzy/VNF4aEXvfvDILvMq4CF8ox+CMYtX0qhpLyya86cfr5lHw3mIhe
-         kj1EXeUipXhesJyrQzDuk9xLP8lKpMhucdCUrZlyYwMvcJmL67xhOItxm0qSYhplDASQ
-         m1R0HTYg3XqUKy9Q8YZERq2l8fuoYAtN4IcATAd068RKlPg+ivEh/jMoMloSMmvkrNM5
-         hwEiAV4PJjToeext8xyDmSnxca0jZconG+FbG67QLSbpCk9SCTfrIRePTCIVcdIIzCbp
-         rUzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678894520;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YcFqNcNOQFyK8M0Bg6u2CF1KIEClFjxJotNtkabpSfQ=;
-        b=tAzBjabnm8BSgOQydJSZVUQ0tw28IuP1ciyLKkX2/P/hHyEEdFpqNTSUBacmOhsulf
-         GKW3Ritj3D+lq17Txgdat2T+lKeHTnObZxMm/KyMpP076FniJQsNm8EmVjKkIBHwfE2R
-         GsdLetwypSbMWNRHDsbO/z3tm2ExJj8+2P6JMDng3Y9iZEAOFViSw8lZlLIl/KdD9AVr
-         VB1ZE7kJ6+2chGJFRmjFqx42LI7F2vJFlO8edaM3OXk18WPUAMbmhw28uFPdfBzDBs1i
-         NPI9/fb2rdpwtLNigbESMXyH5CFIG/k1gvf+HlSEIFgcms0kodWaxGk9vKTxgdMIMtdS
-         5usA==
-X-Gm-Message-State: AO0yUKUlR3AHVbnBZstmYFVIQo+Bid3ru4SjYqhHPwkNG4OMwm1npjN7
-        F1mKPPp7zY3edc89M5BEYQ0=
-X-Google-Smtp-Source: AK7set9AF+gTWCSQ/CTM6RbI8c7LsuTudICO9uEFswpUE9N/v8w+JwXI9EPJXJkasKYBYD8m2EoOVQ==
-X-Received: by 2002:a05:6214:d89:b0:56e:ac97:85da with SMTP id e9-20020a0562140d8900b0056eac9785damr25868272qve.30.1678894520675;
-        Wed, 15 Mar 2023 08:35:20 -0700 (PDT)
-Received: from [192.168.1.201] (pool-173-73-95-180.washdc.fios.verizon.net. [173.73.95.180])
-        by smtp.gmail.com with ESMTPSA id t9-20020a37ea09000000b0074357fa9e15sm3925085qkj.42.2023.03.15.08.35.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Mar 2023 08:35:20 -0700 (PDT)
-Message-ID: <a5eea573-2418-d4dd-94b7-72bda4978666@gmail.com>
-Date:   Wed, 15 Mar 2023 11:35:19 -0400
+        Wed, 15 Mar 2023 11:35:35 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5922A5FA49;
+        Wed, 15 Mar 2023 08:35:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678894532; x=1710430532;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=XVCvNq00AzxeDiW1CII0hPanv823+0JJywCY93Le2ww=;
+  b=H/rQgEV1cIk28+BLMd7HcT5xVTZjh7kj0PhTFG962CtyTQwkUCo0IJ7R
+   7xxC59OwwsaVCurCiq24MzIuurFUhe+t462/QxnyQmc+LuKDLK6T3nF4h
+   HXBG1svPrf85FWavUpmwmV8P1mHJpxYurv5AmyoXjqOyR8QJILl60T9Tc
+   rP1w3HUWe8v5RkAWGZ8b6nGmIvPxXwsFwAiV/3yQDicNO4aMZjg5udxhl
+   gzcNDJXy5ZdjZhBf8ZANSi4phsPE949K96L35WndJsYnE3jgC9FBnMo10
+   D7CxLloq0KGZl7maNK9zu2iDJ8hzIOCe/IeCzZvy0Z1aT9nVfXe/VqTDB
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="365422302"
+X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
+   d="scan'208";a="365422302"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2023 08:35:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="1008877812"
+X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
+   d="scan'208";a="1008877812"
+Received: from rhdahlex-mobl2.amr.corp.intel.com (HELO [10.212.59.168]) ([10.212.59.168])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2023 08:35:25 -0700
+Message-ID: <f2f35037-d662-19c4-722a-02ec10f86f85@linux.intel.com>
+Date:   Wed, 15 Mar 2023 15:35:23 +0000
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH net-next v3 1/9] net: sunhme: Just restart autonegotiation
- if we can't bring the link up
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 04/10] drm/i915: Fix MAX_ORDER usage in
+ i915_gem_object_get_pages_internal()
 Content-Language: en-US
-To:     Simon Horman <simon.horman@corigine.com>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230314003613.3874089-1-seanga2@gmail.com>
- <20230314003613.3874089-2-seanga2@gmail.com> <ZBF/wr8HUg49gWZK@corigine.com>
-From:   Sean Anderson <seanga2@gmail.com>
-In-Reply-To: <ZBF/wr8HUg49gWZK@corigine.com>
+To:     "Kirill A. Shutemov" <kirill@shutemov.name>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mel Gorman <mgorman@suse.de>, Vlastimil Babka <vbabka@suse.cz>,
+        David Hildenbrand <david@redhat.com>, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>
+References: <20230315113133.11326-1-kirill.shutemov@linux.intel.com>
+ <20230315113133.11326-5-kirill.shutemov@linux.intel.com>
+ <7fe9a4a0-9b30-38db-e739-1dc1f7a8f74e@linux.intel.com>
+ <20230315152802.gr2olzji5zhu6vdo@box>
+From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+Organization: Intel Corporation UK Plc
+In-Reply-To: <20230315152802.gr2olzji5zhu6vdo@box>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
+        NICE_REPLY_A,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/15/23 04:20, Simon Horman wrote:
-> On Mon, Mar 13, 2023 at 08:36:05PM -0400, Sean Anderson wrote:
->> If we've tried regular autonegotiation and forcing the link mode, just
->> restart autonegotiation instead of reinitializing the whole NIC.
+
+On 15/03/2023 15:28, Kirill A. Shutemov wrote:
+> On Wed, Mar 15, 2023 at 02:18:52PM +0000, Tvrtko Ursulin wrote:
 >>
->> Signed-off-by: Sean Anderson <seanga2@gmail.com>
+>> On 15/03/2023 11:31, Kirill A. Shutemov wrote:
+>>> MAX_ORDER is not inclusive: the maximum allocation order buddy allocator
+>>> can deliver is MAX_ORDER-1.
+>>
+>> This looks to be true on inspection:
+>>
+>> __alloc_pages():
+>> ..
+>> 	if (WARN_ON_ONCE_GFP(order >= MAX_ORDER, gfp))
+>>
+>> So a bit of a misleading name "max".. For the i915 patch:
+>>
+>> Acked-by: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
+>>
+>> I don't however see the whole series to understand the context, or how you
+>> want to handle the individual patches. Is it a tree wide cleanup of the same
+>> mistake?
 > 
-> Hi Sean,
+> The whole patchset can be seen here:
 > 
-> This patch looks fine to me, as do patches 3 - 4, which is as far as I have
-> got with my review.
+> https://lore.kernel.org/all/20230315113133.11326-1-kirill.shutemov@linux.intel.com/
 > 
-> I do, however, have a general question regarding most of the patches in this
-> series: to what extent have they been tested on HW?
+> The idea is to fix all MAX_ORDER bugs first and then re-define MAX_ORDER
+> more sensibly.
 
-I have tested them with some PCI cards, mostly with the other end autonegotiating
-100M. This series doesn't really touch the phy state machines, so I think it is
-fine to just make sure the link comes up (and things work after bringing the
-interface down and up).
+Sounds good.
 
-> And my follow-up question is: to what extent should we consider removing
-> support for hardware that isn't being tested and therefore has/will likely
-> have become broken break at some point? Quattro, the subject of a latter
-> patch in this series, seems to be a case in point.
+Would you like i915 to take this patch or you will be bringing the whole 
+lot via some other route? Former is okay and latter should also be fine 
+for i915 since I don't envisage any conflicts here.
 
-Well, I ordered a quattro card (this hardware is quite cheap on ebay) so
-hopefully I can test that. The real question is whether there's anyone using this
-on sparc. I tried CCing some sparc users mailing lists in the cover letter, but no
-luck so far.
+Regards,
 
---Sean
+Tvrtko
+
