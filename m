@@ -2,96 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 649C46BBA3C
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 17:52:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B0386BBA3E
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 17:53:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232130AbjCOQww (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 12:52:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39620 "EHLO
+        id S232330AbjCOQxK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 12:53:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231775AbjCOQwt (ORCPT
+        with ESMTP id S232324AbjCOQxH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 12:52:49 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4009176F76;
-        Wed, 15 Mar 2023 09:52:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 92AE2B81E55;
-        Wed, 15 Mar 2023 16:52:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 391F6C4339C;
-        Wed, 15 Mar 2023 16:52:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678899133;
-        bh=lAk6q9BPmfU5faABtNcJsbeZfWrztSY2pScV2iGveJM=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=UB0srgvPYO6aeU+N0xk3vAQP0+ep6URTFB9wDudAGvVuSxbz0K2Q8pgzfONJzx9Dp
-         s5mqWYgOI/P5Rkpneu6gtQqMoWPNVkBHb0e2u+B9IKjBs80LgEYd2LFCfhz5TGwjrZ
-         TlMiaHZunmQvw4NTEf4hXyiRJJD/Qq5r2DCLkw6YxFixwLfe8VtKaEfynElGXtSc9Q
-         z39g7VuTvETlpfTw04O3ngftKV3jRhmjRKeEbEWXmLY/f5fjGLj+Rce12btAzOuKo3
-         zXUXPpp5KLsS0Mcm9QSCEKNuwaB6DXBSid7GcGDB3mwk+zcEB9NxiMrtOEj1uOAHLe
-         nInCAiW/CEoOw==
-Received: by mail-oi1-f170.google.com with SMTP id bh20so14628607oib.9;
-        Wed, 15 Mar 2023 09:52:12 -0700 (PDT)
-X-Gm-Message-State: AO0yUKXNxZm/fDTgFyGpyDmXrh9WZ9JzM6wTssDK4AcJJ16MqJkOd1Ce
-        gcKRzfKa2owG0Ge6FcONDnR/Mt6y2vKb2ilKss8=
-X-Google-Smtp-Source: AK7set+3X1QLdLSyQeOPPaxKEucdsGmRuXbnPVmFT9ptmDIZOyO/5ZC2igD2tyql7/ArA7GoN5zE7aRY7ytNCEPNrcI=
-X-Received: by 2002:aca:1308:0:b0:383:eebf:19bc with SMTP id
- e8-20020aca1308000000b00383eebf19bcmr1003048oii.11.1678899131490; Wed, 15 Mar
- 2023 09:52:11 -0700 (PDT)
+        Wed, 15 Mar 2023 12:53:07 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A719193CF;
+        Wed, 15 Mar 2023 09:52:56 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id f18so25138695lfa.3;
+        Wed, 15 Mar 2023 09:52:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678899175;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :reply-to:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=A9HHWcHJilZYaElLvCLlKtriSwWxAD0z2lhiz3S5JS4=;
+        b=Z5KS8MJBYwG8OuxVc1j0A3pSPn2Ic6qEaRx9EK6W+HKjxNWZzjEl6ZpKpdABtpndBi
+         hEbDcMaoZlSdHCTZmFyIdww7LCwEcg5eqEaaBWS2gll/I6HaHiF3FQYc0TovnSwXvh7e
+         SJIyup9731+gVTkipnEkgspqUAELuSV0AzhyRxOzxOuS7nBTJ5W2MlN5u08lhfjeep8J
+         AVG957NoVmb05/nEDhENGQ6Z0O5Q1/5rWO0KVeKq7dv/l3+zWrq4AcI7wgPRHpk89Dyp
+         2d9PhAekAkDpP4rHLy4FzqL7RM7o3LVyhFJhA5kZMMhMeFy9RldOxOz4hfLGXU7NOGrH
+         ncJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678899175;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :reply-to:in-reply-to:references:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=A9HHWcHJilZYaElLvCLlKtriSwWxAD0z2lhiz3S5JS4=;
+        b=Zqh5OcqAeLuugAJCwIG/Nk0fo6FpEHbTCZV5rqTmBNogwzh1s4uHhMqmmhXc7XGnXb
+         30Uznt62M2uWv1acTuuGad2iWku6rJvA7PTeTYDFYxP8TRCaeWVWsHY0Rqyq0+twolf4
+         HjiC05uJbAa4pmNk6A+Z1Ii1KRokb62UjYsi1Pdg3B+CKLsPYA29nf3w+pLPlDUVDSUj
+         vfiPSdT36bJdMISubQiZMPe0mkLOAjtLdcYy8bRlJRnMIP275xHI1EKXuEvIihz8ICtW
+         5zOVVrsU9ptvqYyE9CqcNLD9ZSujW1W+UVlomk0N6cdD0UXWs3hg3IR1K8mpOCx0AS5X
+         Vgpg==
+X-Gm-Message-State: AO0yUKVyBlSO5aIq3rOhO0uFl4976zjfF8Flhht3YTeDjEtco5YUuY3A
+        zBqSVmDIAJuKkdIIOFVqdwHvlPlOh6E6X5a+6UqEvN6AXcb1nQ==
+X-Google-Smtp-Source: AK7set+zxQ8UFJ5v2od/PjOFf7Z3vLpjaGldFCybbfn+d6dFcfyCr2pXaVp+BCkJjy8VVD454ZuP7RDtwkG/hbXZiMI=
+X-Received: by 2002:ac2:4c3c:0:b0:4dd:fd4e:5a21 with SMTP id
+ u28-20020ac24c3c000000b004ddfd4e5a21mr2198532lfq.11.1678899174955; Wed, 15
+ Mar 2023 09:52:54 -0700 (PDT)
 MIME-Version: 1.0
 References: <20230315162944.39542-1-bage@linutronix.de> <20230315162944.39542-2-bage@linutronix.de>
 In-Reply-To: <20230315162944.39542-2-bage@linutronix.de>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Thu, 16 Mar 2023 01:51:35 +0900
-X-Gmail-Original-Message-ID: <CAK7LNATbSW+W=XazFXiHqObTm8EUk8T6jHDQoj1PBJdgH6x5LA@mail.gmail.com>
-Message-ID: <CAK7LNATbSW+W=XazFXiHqObTm8EUk8T6jHDQoj1PBJdgH6x5LA@mail.gmail.com>
+Reply-To: sedat.dilek@gmail.com
+From:   Sedat Dilek <sedat.dilek@gmail.com>
+Date:   Wed, 15 Mar 2023 17:52:18 +0100
+Message-ID: <CA+icZUULJVVtsdaHkPGdy=8ezU=7BiOCrfosGeRiY9dOEaf-nA@mail.gmail.com>
 Subject: Re: [PATCH v2 1/1] kbuild: deb-pkg: Build parallely with current dpkg-buildpackage
 To:     Bastian Germann <bage@linutronix.de>
-Cc:     Nathan Chancellor <nathan@kernel.org>,
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
         Nick Desaulniers <ndesaulniers@google.com>,
         linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 16, 2023 at 1:29=E2=80=AFAM Bastian Germann <bage@linutronix.de=
+On Wed, Mar 15, 2023 at 5:38=E2=80=AFPM Bastian Germann <bage@linutronix.de=
 > wrote:
 >
 > With dpkg-buildpackage v1.21.10 or later, the only way to build the
-
-
-Please include the commit hash.
-
-I guess
-
-Commit 1d0ea9b2ba3f ("dpkg-buildpackage: Change -j, --jobs semantics
-to non-force mode")
-
-is the one.
-
-
 > deb-pkg generated package parallely is adding -j<N> to the MAKEFLAGS
 > environment variable or using the --jobs-force option. The package ignore=
 s
 > the usual parallel build option that is described in Debian Policy =C2=A7=
 4.9.1.
-
-If a new section is inserted before, the section number '4.9.1'
-may not be true in the future.
-
-I think you can drop the section number
-if you add the Link: tag close to the relevant section.
-
-
 >
 > Derive make's -j parameter from the DEB_BUILD_OPTIONS environment variabl=
 e
@@ -99,17 +88,34 @@ e
 >
 > Link: https://www.debian.org/doc/debian-policy/ch-source.html
 
+Thanks for the patch v2 and clarifications.
 
+Substitute above link? Or add as a 2nd link?
 
-Link: https://www.debian.org/doc/debian-policy/ch-source.html#debian-rules-=
-and-deb-build-options
+Link: https://www.debian.org/doc/debian-policy/ch-source.html#s-debianrules=
+-options
 
-  might be better - it points to the relevant section.
+-Sedat-
 
-
-
-
-
+> Signed-off-by: Bastian Germann <bage@linutronix.de>
+> ---
+>  scripts/package/mkdebian | 10 +++++++---
+>  1 file changed, 7 insertions(+), 3 deletions(-)
+>
+> diff --git a/scripts/package/mkdebian b/scripts/package/mkdebian
+> index f74380036bb5..0217790e7a26 100755
+> --- a/scripts/package/mkdebian
+> +++ b/scripts/package/mkdebian
+> @@ -238,11 +238,15 @@ fi
+>  cat <<EOF > debian/rules
+>  #!$(command -v $MAKE) -f
+>
+> +ifneq (,\$(filter parallel=3D%,\$(DEB_BUILD_OPTIONS)))
+> +       JOBS =3D -j\$(subst parallel=3D,,\$(filter parallel=3D%,\$(DEB_BU=
+ILD_OPTIONS)))
+> +endif
+> +
+>  srctree ?=3D .
 >
 >  build-indep:
 >  build-arch:
@@ -135,20 +141,3 @@ kg
 > --
 > 2.39.2
 >
-
-I prefer appending it to MAKEFLAGS instead of touching every target.
-(or is there any reason why MAKEFLAGS does not work here?)
-
-The reference code exists in the link you mentioned.
-
-ifneq (,$(filter parallel=3D%,$(DEB_BUILD_OPTIONS)))
-    NUMJOBS =3D $(patsubst parallel=3D%,%,$(filter parallel=3D%,$(DEB_BUILD=
-_OPTIONS)))
-    MAKEFLAGS +=3D -j$(NUMJOBS)
-endif
-
-
-
---=20
-Best Regards
-Masahiro Yamada
