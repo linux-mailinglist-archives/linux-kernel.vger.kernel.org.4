@@ -2,72 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 338EF6BAF5F
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 12:35:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 091F76BAF65
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 12:37:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229616AbjCOLft (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 07:35:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60054 "EHLO
+        id S231455AbjCOLhP convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 15 Mar 2023 07:37:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231504AbjCOLf1 (ORCPT
+        with ESMTP id S231743AbjCOLhF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 07:35:27 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62D691E9DF;
-        Wed, 15 Mar 2023 04:34:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6BA81B818E7;
-        Wed, 15 Mar 2023 11:34:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AAF2EC433D2;
-        Wed, 15 Mar 2023 11:34:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1678880089;
-        bh=DkN8+5TAyEZUWL+rBe778x9Ih1mzAhT3eM0Oe0+aTXM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KH+101ZMTqJgfpFD12xDL+3dY8j3RGXchEriC91Rd2CoVCcIrTnBKqyFvsKfckuLN
-         DM20LGsFMwiuwazW8rNdWc/A2JHLAAlFQ7KUzKe3p+QNQ+oaHkh1dC8HD3LLLFvL0S
-         C5bzIT9xOon46lCrkkzLVL+eX0i6aVbPxzsKyLFU=
-Date:   Wed, 15 Mar 2023 12:34:46 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Julien Panis <jpanis@baylibre.com>
-Cc:     lee@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, corbet@lwn.net, arnd@arndb.de,
-        derek.kiernan@xilinx.com, dragan.cvetic@xilinx.com,
-        eric.auger@redhat.com, jgg@ziepe.ca, razor@blackwall.org,
-        stephen@networkplumber.org, davem@davemloft.net,
-        christian.koenig@amd.com, contact@emersion.fr,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, sterzik@ti.com, u-kumar1@ti.com,
-        eblanc@baylibre.com, jneanne@baylibre.com
-Subject: Re: [PATCH v2 4/4] misc: tps6594-pfsm: Add driver for TI TPS6594 PFSM
-Message-ID: <ZBGtVuI6YTfENUNr@kroah.com>
-References: <20230315110736.35506-1-jpanis@baylibre.com>
- <20230315110736.35506-5-jpanis@baylibre.com>
+        Wed, 15 Mar 2023 07:37:05 -0400
+Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com [209.85.219.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F3AE9EFB;
+        Wed, 15 Mar 2023 04:36:56 -0700 (PDT)
+Received: by mail-qv1-f49.google.com with SMTP id op8so16015896qvb.11;
+        Wed, 15 Mar 2023 04:36:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678880215;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6Dh9RfBVfufckGOxFsJtj6xeJ0iEcugscI3TEV8zxpY=;
+        b=GfCPc69Aur30v3YKuHqrCJJojWH4ELZ0fSJuQDr86C8opMJACIw2QxEbfIIzcBAvBl
+         lpV0VOPBFOFMAtGtvUSLAnJW1n76Xjb1PqCLBrwXOp9CjNLIXgf1MGwjPKUWEbgyzTH4
+         dYkKFxqXvCWgtB83nuumhKv8ZHrptT7R/usDJoIUHkACEXqFqA2ndxGVNI4BjSoENb9B
+         YeJbtM7O9A2wsSPWOKttKefgZOZRkBLqK1t9oKfddYwM2XJxtzNqvJF4KHkmMZWW9JMC
+         MYZ5Q3qu2h9CGCY1G87+A4/6PM8LJhXARfIXl6ShdDQs0+/+OFEOCV49TQXue03BY4+F
+         La5w==
+X-Gm-Message-State: AO0yUKV9tmk31kXvgcjn9G+pmkw44GMo+y5EYMgGS6yQIYE71FT6dD1m
+        1G99kXgBIOohbPzVvNgAzpdKGCoVYeOX/map
+X-Google-Smtp-Source: AK7set9aCTesaiE+jQUrhDZiju1MXoyoItoELO1KteTsES08mTYHc1wYeW0Plup7v0eWfbbJWCOF7w==
+X-Received: by 2002:a05:6214:224a:b0:56b:f061:c3c6 with SMTP id c10-20020a056214224a00b0056bf061c3c6mr26478482qvc.33.1678880215178;
+        Wed, 15 Mar 2023 04:36:55 -0700 (PDT)
+Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com. [209.85.128.182])
+        by smtp.gmail.com with ESMTPSA id t202-20020a3746d3000000b0074341cb30d0sm3539878qka.62.2023.03.15.04.36.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Mar 2023 04:36:54 -0700 (PDT)
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-544787916d9so34713087b3.13;
+        Wed, 15 Mar 2023 04:36:54 -0700 (PDT)
+X-Received: by 2002:a81:ac62:0:b0:544:8bc1:a179 with SMTP id
+ z34-20020a81ac62000000b005448bc1a179mr582287ywj.4.1678880213966; Wed, 15 Mar
+ 2023 04:36:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230315110736.35506-5-jpanis@baylibre.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230314121216.413434-1-schnelle@linux.ibm.com>
+ <20230314121216.413434-3-schnelle@linux.ibm.com> <CAMuHMdVry2YViJ5oFgo9i+uStWbhy7mXKWdWvCX=qgAu1-_Y1w@mail.gmail.com>
+ <c7315ca2-3ebf-7f3b-da64-9a74a995b0ae@opensource.wdc.com>
+In-Reply-To: <c7315ca2-3ebf-7f3b-da64-9a74a995b0ae@opensource.wdc.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 15 Mar 2023 12:36:42 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVajEYsw8HrKw0GwV+09gbtkhjVMuKZ6RSBvq6got=jAg@mail.gmail.com>
+Message-ID: <CAMuHMdVajEYsw8HrKw0GwV+09gbtkhjVMuKZ6RSBvq6got=jAg@mail.gmail.com>
+Subject: Re: [PATCH v3 02/38] ata: add HAS_IOPORT dependencies
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Cc:     Niklas Schnelle <schnelle@linux.ibm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
+        linux-ide@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 15, 2023 at 12:07:36PM +0100, Julien Panis wrote:
-> +// SPDX-License-Identifier: GPL-2.0-or-later
+Hi Damien,
 
-Are you sure about "or-later"?  (I have to ask.)
+On Wed, Mar 15, 2023 at 10:12 AM Damien Le Moal
+<damien.lemoal@opensource.wdc.com> wrote:
+> On 3/15/23 17:39, Geert Uytterhoeven wrote:
+> > On Tue, Mar 14, 2023 at 1:12 PM Niklas Schnelle <schnelle@linux.ibm.com> wrote:
+> >> In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
+> >> not being declared. We thus need to add HAS_IOPORT as dependency for
+> >> those drivers using them.
+> >>
+> >> Co-developed-by: Arnd Bergmann <arnd@kernel.org>
+> >> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+> >
+> > Thanks for your patch!
+> >
+> >> --- a/drivers/ata/Kconfig
+> >> +++ b/drivers/ata/Kconfig
+> >> @@ -342,6 +342,7 @@ endif # HAS_DMA
+> >>
+> >>  config ATA_SFF
+> >>         bool "ATA SFF support (for legacy IDE and PATA)"
+> >> +       depends on HAS_IOPORT
+> >>         default y
+> >>         help
+> >>           This option adds support for ATA controllers with SFF
+> >
+> > ATA_SFF is a dependency for lots of (S)ATA drivers.
+> > (at least) The following don't use I/O port access:
+> >
+> >     CONFIG_SATA_RCAR (arm/arm64)
+> >     CONFIG_PATA_FALCON (m68k/atari and m68k/q40)
+> >     CONFIG_PATA_GAYLE (m68k/amiga)
+> >     CONFIG_PATA_BUDDHA (m68k/amiga)
+> >
+> > (at least) The following can use either MMIO or I/O port accesses:
+> >
+> >     CONFIG_PATA_PLATFORM (m68k/mac)
+>
+> But for these arch/platforms, would there be any reason to not have HAS_IOPORT ?
+> It is supported right now, so we should have HAS_IOPORT for them.
 
-> +/*
-> + * PFSM (Pre-configurable Finite State Machine) driver for TI TPS6594/TPS6593/LP8764X PMICs
-> + *
-> + * Copyright (C) 2022 BayLibre Incorporated - https://www.baylibre.com/
+That's the point: on Amiga and Atari, HAS_IOPORT is optional, and
+not related to IDE support. On Mac, it is never present.
 
-It's 2023 now :)
+Gr{oetje,eeting}s,
 
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
