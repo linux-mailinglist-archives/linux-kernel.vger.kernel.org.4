@@ -2,92 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 277CA6BAD7C
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 11:20:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E198A6BAD87
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 11:21:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232204AbjCOKU1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 06:20:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34692 "EHLO
+        id S232498AbjCOKV3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 06:21:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232463AbjCOKTp (ORCPT
+        with ESMTP id S232464AbjCOKVE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 06:19:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80F8D70434;
-        Wed, 15 Mar 2023 03:19:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C8A4961CB0;
-        Wed, 15 Mar 2023 10:19:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0373C433EF;
-        Wed, 15 Mar 2023 10:19:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678875553;
-        bh=VRoiTmWaz2biO8bfxNbnjYigMHFcTYcPttbArQsA2po=;
-        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
-        b=YYPpbIq8YPV8QKLN6mqMua6A6EH/aqP9wN0P9tWrRNOob498Pv0jiL+uyYN8mN/pe
-         28PJKB3aGj0LhcIcTm70m6h3OHjAH0+cPJMwtfuqLMsg/XA/SMZizB8ZOhcwm3K1Rc
-         9XOPkk4DZDsUV5pj5GjSntFrhzehvZ5siec4dxVL83ePBlVTFnti4nBm/haPSrzSTv
-         T6MbhQDu1Enob/WSixB6+wj/R3MWmRTwF2wRTmW8bQF+jsEuCu2xaErxgiaKYU7cYg
-         a1JHiUatQk8ojc7cDwVS3UMo4qp6zBXjhYUL/E3JfFd0vVMhs4K23jPuBQXcNYQq5f
-         xVvmv9TIvEINA==
-Content-Type: text/plain; charset="utf-8"
+        Wed, 15 Mar 2023 06:21:04 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F062385B1D;
+        Wed, 15 Mar 2023 03:20:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678875630; x=1710411630;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=AZu0G5MJgXhilc9n2aaLZyeOdNLiwJBTw+hEvyBlZ5c=;
+  b=T8kZEwVhIINEHEl+0mRmwwPrRzsXLF7FUm3SCX3oSTSTp5JL/gHm1uAs
+   8vpPE8rHK9FSRmlEo3AGDxskwrjRN3EHThEvUJBoij9xWOEXXKmFJkPN5
+   wzMN/QYlDYeeP1//cEiWaMeyBXJ6vqxjl9UtY5u1Q3LWNigiUps+LujNT
+   AnTBHR9PewSj+N57HdftyM5XJMDJOTP3bJ8G9NKjV/B9hLB8FwUb0Zf3k
+   PRAAfrAPOmnYFYRois5zQ/oBnBITYKpQuaIvbvlYNNEACgsGCWYPCJ3R0
+   LLVn36dm1ezKX9cHq2wI9j9Bz7UgHU5L5v9c/duuRLyZVQicp7Naa0mdI
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="400246109"
+X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
+   d="scan'208";a="400246109"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2023 03:19:56 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="672684150"
+X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
+   d="scan'208";a="672684150"
+Received: from stinkpipe.fi.intel.com (HELO stinkbox) ([10.237.72.70])
+  by orsmga007.jf.intel.com with SMTP; 15 Mar 2023 03:19:49 -0700
+Received: by stinkbox (sSMTP sendmail emulation); Wed, 15 Mar 2023 12:19:48 +0200
+Date:   Wed, 15 Mar 2023 12:19:48 +0200
+From:   Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Niklas Schnelle <schnelle@linux.ibm.com>,
+        linux-arch@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
+        linux-fbdev@vger.kernel.org, Albert Ou <aou@eecs.berkeley.edu>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Helge Deller <deller@gmx.de>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Subject: Re: [PATCH v3 35/38] video: handle HAS_IOPORT dependencies
+Message-ID: <ZBGbxDWEhqr8hhgU@intel.com>
+References: <20230314121216.413434-1-schnelle@linux.ibm.com>
+ <20230314121216.413434-36-schnelle@linux.ibm.com>
+ <CAMuHMdW4f8GJ-kFDPg6Ao=g3ZAXq79u9nUZ_dW1LonHu+vxk8Q@mail.gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH][next] wifi: ath11k: Replace fake flex-array with
- flexible-array member
-From:   Kalle Valo <kvalo@kernel.org>
-In-Reply-To: <ZAe5L5DtmsQxzqRH@work>
-References: <ZAe5L5DtmsQxzqRH@work>
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, ath11k@lists.infradead.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-hardening@vger.kernel.org
-User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.7.3
-Message-ID: <167887554899.27926.8193942719912747095.kvalo@kernel.org>
-Date:   Wed, 15 Mar 2023 10:19:10 +0000 (UTC)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <CAMuHMdW4f8GJ-kFDPg6Ao=g3ZAXq79u9nUZ_dW1LonHu+vxk8Q@mail.gmail.com>
+X-Patchwork-Hint: comment
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"Gustavo A. R. Silva" <gustavoars@kernel.org> wrote:
-
-> Zero-length arrays as fake flexible arrays are deprecated and we are
-> moving towards adopting C99 flexible-array members instead.
+On Wed, Mar 15, 2023 at 09:16:50AM +0100, Geert Uytterhoeven wrote:
+> Hi Niklas,
 > 
-> Address 25 of the following warnings found with GCC-13 and
-> -fstrict-flex-arrays=3 enabled:
-> drivers/net/wireless/ath/ath11k/debugfs_htt_stats.c:30:51: warning: array subscript <unknown> is outside array bounds of ‘const u32[0]’ {aka ‘const unsigned int[]’} [-Warray-bounds=]
+> On Tue, Mar 14, 2023 at 1:13 PM Niklas Schnelle <schnelle@linux.ibm.com> wrote:
+> > In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
+> > not being declared. We thus need to add HAS_IOPORT as dependency for
+> > those drivers using them and guard inline code in headers.
+> >
+> > Co-developed-by: Arnd Bergmann <arnd@kernel.org>
+> > Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
 > 
-> This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
-> routines on memcpy() and help us make progress towards globally
-> enabling -fstrict-flex-arrays=3 [1].
+> Thanks for your patch!
 > 
-> Link: https://github.com/KSPP/linux/issues/21
-> Link: https://github.com/KSPP/linux/issues/266
-> Link: https://gcc.gnu.org/pipermail/gcc-patches/2022-October/602902.html [1]
-> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
-> Reviewed-by: Simon Horman <simon.horman@corigine.com>
-> Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
+> > --- a/drivers/video/fbdev/Kconfig
+> > +++ b/drivers/video/fbdev/Kconfig
+> 
+> > @@ -1284,7 +1285,7 @@ config FB_ATY128_BACKLIGHT
+> >
+> >  config FB_ATY
+> >         tristate "ATI Mach64 display support" if PCI || ATARI
+> > -       depends on FB && !SPARC32
+> > +       depends on FB && HAS_IOPORT && !SPARC32
+> 
+> On Atari, this works without ATARI_ROM_ISA, hence it must not depend
+> on HAS_IOPORT.
+> The only call to inb() is inside a section protected by #ifdef
+> CONFIG_PCI. So:
 
-Patch applied to ath-next branch of ath.git, thanks.
+That piece of code is a nop anyway. We immediately overwrite
+clk_wr_offset with a hardcoded selection after the register reads.
+So if you nuke that nop code then no IOPORT dependency required
+at all.
 
-3b1088a09ec9 wifi: ath11k: Replace fake flex-array with flexible-array member
+> 
+>     depends on FB && !SPARC32
+>     depends on ATARI || HAS_IOPORT
+> 
+> >         select FB_CFB_FILLRECT
+> >         select FB_CFB_COPYAREA
+> >         select FB_CFB_IMAGEBLIT
+> 
+> Gr{oetje,eeting}s,
+> 
+>                         Geert
+> 
+> -- 
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+> 
+> In personal conversations with technical people, I call myself a hacker. But
+> when I'm talking to journalists I just say "programmer" or something like that.
+>                                 -- Linus Torvalds
 
 -- 
-https://patchwork.kernel.org/project/linux-wireless/patch/ZAe5L5DtmsQxzqRH@work/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
-
+Ville Syrjälä
+Intel
