@@ -2,50 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1985D6BBA45
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 17:54:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39EBF6BBA50
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 17:56:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232086AbjCOQyf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 12:54:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43458 "EHLO
+        id S232186AbjCOQ4b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 12:56:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231892AbjCOQyd (ORCPT
+        with ESMTP id S232048AbjCOQ43 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 12:54:33 -0400
-Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CF8E3756F;
-        Wed, 15 Mar 2023 09:54:29 -0700 (PDT)
-Received: from localhost.localdomain (1.general.phlin.uk.vpn [10.172.194.38])
+        Wed, 15 Mar 2023 12:56:29 -0400
+Received: from faui40.informatik.uni-erlangen.de (faui40.informatik.uni-erlangen.de [131.188.34.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03E437B106;
+        Wed, 15 Mar 2023 09:56:11 -0700 (PDT)
+Received: from luis-i4.informatik.uni-erlangen.de (i4laptop35.informatik.uni-erlangen.de [10.188.34.202])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id CACE13F266;
-        Wed, 15 Mar 2023 16:54:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1678899267;
-        bh=7Gpkd6P+6YNkelCqQOhn5hB0lRXFLPaQ6/DNa54+FU8=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=svXy0sEbbMZjulAkZzWtfH7WicxBtyfQqoCKE09ye6b3iDbNQAbHjzTDQr8ESjXJA
-         H4YS2i3cLDkqEcFehIrehhSZUg8AaIU2lYYcPJ3fe5AzEaFui3+gDx8yNCUqdZq/rn
-         uyUvtcCj+It1AXMLV9oJ8DrThCmFRtjYsJ4gMVq8pok2RTvAoY+XcsN1ZmGAVd06yS
-         H2ttQTESTYbr93E/KbCZvzK3F8FD7SEwORepAEeRoAXnTpBZtpZbrh2WETpzj3axsM
-         bg/mU7hyjZTPlYuqPRCqZzwPzFdb5Su5UrkC+DRWXak+TTBLVMh4t9OEyJ55rlyYHo
-         eXi/8jQs846GQ==
-From:   Po-Hsu Lin <po-hsu.lin@canonical.com>
-To:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        netdev@vger.kernel.org
-Cc:     danieller@mellanox.com, petrm@mellanox.com, idosch@mellanox.com,
-        shuah@kernel.org, pabeni@redhat.com, kuba@kernel.org,
-        edumazet@google.com, davem@davemloft.net, jiri@resnulli.us,
-        po-hsu.lin@canonical.com
-Subject: [PATCHv3] selftests: net: devlink_port_split.py: skip test if no suitable device available
-Date:   Thu, 16 Mar 2023 00:53:53 +0800
-Message-Id: <20230315165353.229590-1-po-hsu.lin@canonical.com>
-X-Mailer: git-send-email 2.25.1
+        (Authenticated sender: gerhorst)
+        by faui40.informatik.uni-erlangen.de (Postfix) with ESMTPSA id 4PcGkH5cMdznkbm;
+        Wed, 15 Mar 2023 17:56:07 +0100 (CET)
+From:   Luis Gerhorst <gerhorst@cs.fau.de>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Andrei Matei <andreimatei1@gmail.com>, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Luis Gerhorst <gerhorst@cs.fau.de>
+Subject: [PATCH] bpf: remove misleading spec_v1 check on var-offset stack read
+Date:   Wed, 15 Mar 2023 17:54:00 +0100
+Message-Id: <20230315165358.23701-1-gerhorst@cs.fau.de>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <ff8135a6-506f-330f-89fb-f98672467b27@cs.fau.de>
+References: 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -54,113 +52,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The `devlink -j port show` command output may not contain the "flavour"
-key, an example from Ubuntu 22.10 s390x LPAR(5.19.0-37-generic), with
-mlx4 driver and iproute2-5.15.0:
-  {"port":{"pci/0001:00:00.0/1":{"type":"eth","netdev":"ens301"},
-           "pci/0001:00:00.0/2":{"type":"eth","netdev":"ens301d1"},
-           "pci/0002:00:00.0/1":{"type":"eth","netdev":"ens317"},
-           "pci/0002:00:00.0/2":{"type":"eth","netdev":"ens317d1"}}}
+For every BPF_ADD/SUB involving a pointer, adjust_ptr_min_max_vals()
+ensures that the resulting pointer has a constant offset if
+bypass_spec_v1 is false. This is ensured by calling
+sanitize_check_bounds() which in turn calls
+check_stack_access_for_ptr_arithmetic(). There, -EACCESS is returned if
+the register's offset is not constant, thereby rejecting the program.
 
-This will cause a KeyError exception.
+In summary, an unprivileged user must never be able to create stack
+pointers with a variable offset. That is also the case, because a
+respective check in check_stack_write() is missing. If they were able to
+create a variable-offset pointer, users could still use it in a
+stack-write operation to trigger unsafe speculative behavior [1].
 
-Create a validate_devlink_output() to check for this "flavour" from
-devlink command output to avoid this KeyError exception. Also let
-it handle the check for `devlink -j dev show` output in main().
+Because unprivileged users must already be prevented from creating
+variable-offset stack pointers, viable options are to either remove this
+check (replacing it with a clarifying comment), or to turn it into a
+"verifier BUG"-message, also adding a similar check in
+check_stack_write() (for consistency, as a second-level defense). This
+patch implements the first option to reduce verifier bloat.
 
-Apart from this, if the test was not started because the max lanes of
-the designated device is 0. The script will still return 0 and thus
-causing a false-negative test result.
+This check was introduced by commit 01f810ace9ed ("bpf: Allow
+variable-offset stack access") which correctly notes that
+"variable-offset reads and writes are disallowed (they were already
+disallowed for the indirect access case) because the speculative
+execution checking code doesn't support them". However, it does not
+further discuss why the check in check_stack_read() is necessary. The
+code which made this check obsolete was also introduced in this commit.
 
-Use a found_max_lanes flag to determine if these tests were skipped
-due to this reason and return KSFT_SKIP to make it more clear.
+I have compiled ~650 programs from the Linux selftests, Linux samples,
+Cilium, and libbpf/examples projects and confirmed that none of these
+trigger the check in check_stack_read() [2]. Instead, all of these
+programs are, as expected, already rejected when constructing the
+variable-offset pointers. Note that the check in
+check_stack_access_for_ptr_arithmetic() also prints "off=%d" while the
+code removed by this patch does not (the error removed does not appear
+in the "verification_error" values). For reproducibility, the repository
+linked includes the raw data and scripts used to create the plot.
 
-V2: factor out the skip logic from main(), update commit message and
-    skip reasons accordingly.
-V3: rename flag as Jakub suggested, update commit message
-Link: https://bugs.launchpad.net/bugs/1937133
-Fixes: f3348a82e727 ("selftests: net: Add port split test")
-Signed-off-by: Po-Hsu Lin <po-hsu.lin@canonical.com>
+[1] https://arxiv.org/pdf/1807.03757.pdf
+[2] https://gitlab.cs.fau.de/un65esoq/bpf-spectre/-/raw/53dc19fcf459c186613b1156a81504b39c8d49db/data/plots/23-02-26_23-56_bpftool/bpftool/0004-errors.pdf?inline=false
+
+Fixes: 01f810ace9ed ("bpf: Allow variable-offset stack access")
+Signed-off-by: Luis Gerhorst <gerhorst@cs.fau.de>
 ---
- tools/testing/selftests/net/devlink_port_split.py | 36 +++++++++++++++++++----
- 1 file changed, 31 insertions(+), 5 deletions(-)
+ kernel/bpf/verifier.c | 15 ++++++---------
+ 1 file changed, 6 insertions(+), 9 deletions(-)
 
-diff --git a/tools/testing/selftests/net/devlink_port_split.py b/tools/testing/selftests/net/devlink_port_split.py
-index 2b5d6ff..2d84c7a 100755
---- a/tools/testing/selftests/net/devlink_port_split.py
-+++ b/tools/testing/selftests/net/devlink_port_split.py
-@@ -59,6 +59,8 @@ class devlink_ports(object):
-         assert stderr == ""
-         ports = json.loads(stdout)['port']
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 8c13dd0f73e5..c1dc7fed655c 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -3958,16 +3958,13 @@ static int check_stack_read(struct bpf_verifier_env *env,
+ 	}
+ 	/* Variable offset is prohibited for unprivileged mode for simplicity
+ 	 * since it requires corresponding support in Spectre masking for stack
+-	 * ALU. See also retrieve_ptr_limit().
++	 * ALU. See also retrieve_ptr_limit(). The check in
++	 * check_stack_access_for_ptr_arithmetic() called by
++	 * adjust_ptr_min_max_vals() prevents users from creating stack pointers
++	 * with variable offsets, therefore no check is required here. Further,
++	 * just checking it here would be insufficient as speculative stack
++	 * writes could still lead to unsafe speculative behaviour.
+ 	 */
+-	if (!env->bypass_spec_v1 && var_off) {
+-		char tn_buf[48];
+-
+-		tnum_strn(tn_buf, sizeof(tn_buf), reg->var_off);
+-		verbose(env, "R%d variable offset stack access prohibited for !root, var_off=%s\n",
+-				ptr_regno, tn_buf);
+-		return -EACCES;
+-	}
  
-+        validate_devlink_output(ports, 'flavour')
-+
-         for port in ports:
-             if dev in port:
-                 if ports[port]['flavour'] == 'physical':
-@@ -220,6 +222,27 @@ def split_splittable_port(port, k, lanes, dev):
-     unsplit(port.bus_info)
- 
- 
-+def validate_devlink_output(devlink_data, target_property=None):
-+    """
-+    Determine if test should be skipped by checking:
-+      1. devlink_data contains values
-+      2. The target_property exist in devlink_data
-+    """
-+    skip_reason = None
-+    if any(devlink_data.values()):
-+        if target_property:
-+            skip_reason = "{} not found in devlink output, test skipped".format(target_property)
-+            for key in devlink_data:
-+                if target_property in devlink_data[key]:
-+                    skip_reason = None
-+    else:
-+        skip_reason = 'devlink output is empty, test skipped'
-+
-+    if skip_reason:
-+        print(skip_reason)
-+        sys.exit(KSFT_SKIP)
-+
-+
- def make_parser():
-     parser = argparse.ArgumentParser(description='A test for port splitting.')
-     parser.add_argument('--dev',
-@@ -240,12 +263,9 @@ def main(cmdline=None):
-         stdout, stderr = run_command(cmd)
-         assert stderr == ""
- 
-+        validate_devlink_output(json.loads(stdout))
-         devs = json.loads(stdout)['dev']
--        if devs:
--            dev = list(devs.keys())[0]
--        else:
--            print("no devlink device was found, test skipped")
--            sys.exit(KSFT_SKIP)
-+        dev = list(devs.keys())[0]
- 
-     cmd = "devlink dev show %s" % dev
-     stdout, stderr = run_command(cmd)
-@@ -255,6 +275,7 @@ def main(cmdline=None):
- 
-     ports = devlink_ports(dev)
- 
-+    found_max_lanes = False
-     for port in ports.if_names:
-         max_lanes = get_max_lanes(port.name)
- 
-@@ -277,6 +298,11 @@ def main(cmdline=None):
-                 split_splittable_port(port, lane, max_lanes, dev)
- 
-                 lane //= 2
-+        found_max_lanes = True
-+
-+    if not found_max_lanes:
-+        print(f"Test not started, no port of device {dev} reports max_lanes")
-+        sys.exit(KSFT_SKIP)
- 
- 
- if __name__ == "__main__":
+ 	if (!var_off) {
+ 		off += reg->var_off.value;
 -- 
-2.7.4
+2.34.1
 
