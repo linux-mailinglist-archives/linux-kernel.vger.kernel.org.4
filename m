@@ -2,116 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBCCD6BA90A
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 08:27:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A97046BA90E
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 08:28:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231527AbjCOH1d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 03:27:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36310 "EHLO
+        id S231646AbjCOH2Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 03:28:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231367AbjCOH1W (ORCPT
+        with ESMTP id S231634AbjCOH2H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 03:27:22 -0400
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41C465AB41
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 00:27:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=g4ixwWgZk+hP0glUWWvMJ/9M6sji
-        gmZC1jxuIW+OZ58=; b=w60xD37kBYH8CBw80xumkxpT/t6adPa+4Lb3NjHMB9if
-        8/bWvrSxo5btxN7eAk+6hbI0a5zmcdB7HLRMzzVHRtNLWno8xfprnZ9wkMulEkeL
-        ENfr9IcoVjDVC2QUsCLfvAwgdRY/4uwNOS6d2VVp7tdaIHHnjfrE9pqzFf4MCrY=
-Received: (qmail 3356968 invoked from network); 15 Mar 2023 08:27:18 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 15 Mar 2023 08:27:18 +0100
-X-UD-Smtp-Session: l3s3148p1@VVcuRuv26Nkujnvb
-Date:   Wed, 15 Mar 2023 08:27:18 +0100
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     Wei Fang <wei.fang@nxp.com>
-Cc:     "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        Shenwei Wang <shenwei.wang@nxp.com>,
-        Clark Wang <xiaoning.wang@nxp.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-Subject: Re: [PATCH net-next 3/4] fec: add FIXME to move 'mac_managed_pm' to
- probe
-Message-ID: <ZBFzVjaRjcITP0bA@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Wei Fang <wei.fang@nxp.com>,
-        "linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        Shenwei Wang <shenwei.wang@nxp.com>,
-        Clark Wang <xiaoning.wang@nxp.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-References: <20230314131443.46342-1-wsa+renesas@sang-engineering.com>
- <20230314131443.46342-4-wsa+renesas@sang-engineering.com>
- <DB9PR04MB8106C492FAAE4D7BE9CB731688BF9@DB9PR04MB8106.eurprd04.prod.outlook.com>
+        Wed, 15 Mar 2023 03:28:07 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBAEE6BDFD
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 00:27:45 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id y4so42299255edo.2
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 00:27:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678865263;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=z/SkUyeN7JdTEy0Qj/mCWvQVY1KWwS71k9YnqXB1log=;
+        b=S2I/Bovwk6MD9GJQjboOjwMp7wQw/1opGFz7T3V3hJIPFx9NUNtD4TN3EWbvhJmPqk
+         xcNxmbKfp+LJa9POA1MYrim3pOtAnkflGv2Ux9gmb4nrcWb4ZIVt2fO1BDmmBNnVxDwO
+         XsxSbKVXE2WVnDXM6pYeN5cfyZ3VVavHYIOkCxjiWG46pFZSd04YUCl3i6EoiQVPVsBB
+         LafRosFum2Z1jwxbGgpbnVYdB3w2TfjoJ0WHqt1At7bQQae8XMH6eyeChYydGO/GCqdr
+         PIiXy5/FebWwy82UY9XeYB1aHhYjb6crarvTuqHhZV5moKnPRrZZ9PscFV+MHZTKijfb
+         6Szw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678865263;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=z/SkUyeN7JdTEy0Qj/mCWvQVY1KWwS71k9YnqXB1log=;
+        b=kiiGLh82Wy/wAwF4UY0Km4qejllS3dq6fY7eivgbujVDUb7vZ0OMfuvUmawH8cLojX
+         kU0rSpMoSOyfjnHkxcP6Ho+OSFPhd/671WZN3q9oxxM2TJd0B32/va2uXuYEvVKJ+f1Y
+         dbWsTKSEvuvlexdVYvKyZv2GIaFBFxbDnhf125x/1IvGXiebDUHJaEZtZ1xvSHcOVtRc
+         f2nKTBBPz7+f/c6ZnJfEuCvFFiGedfrXumDfEs8RKMxKhtqkZPC3poMfDZXyf5a69xZU
+         3e9pLAl128Rtogjpk+QKtM82cLH3fcfs+GNsyWPloD1C+VBEqdkxXLkB+U+mp+xUpD28
+         5H7Q==
+X-Gm-Message-State: AO0yUKVwrXtSVti28nFaAqjAPysyPMi0au3YkC2X3rL6hIRSZA+deeD7
+        jrXjLxPpg0X9zUnGswWmchO8ig==
+X-Google-Smtp-Source: AK7set95mU87LP7BJtlTCh8X9w/xZKiLz6SptUVXxrzORn0KiScE3DK4zBfeDCVnvE1elmkagwoosA==
+X-Received: by 2002:a17:906:dc91:b0:8de:acd1:90f0 with SMTP id cs17-20020a170906dc9100b008deacd190f0mr6639628ejc.3.1678865263555;
+        Wed, 15 Mar 2023 00:27:43 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:940e:8615:37dc:c2bd? ([2a02:810d:15c0:828:940e:8615:37dc:c2bd])
+        by smtp.gmail.com with ESMTPSA id ja19-20020a170907989300b008cf8c6f5c43sm2087815ejc.83.2023.03.15.00.27.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Mar 2023 00:27:43 -0700 (PDT)
+Message-ID: <71d2e391-9949-db3e-e206-7cabd4aad406@linaro.org>
+Date:   Wed, 15 Mar 2023 08:27:42 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="DAgezE5i+dVbrDpK"
-Content-Disposition: inline
-In-Reply-To: <DB9PR04MB8106C492FAAE4D7BE9CB731688BF9@DB9PR04MB8106.eurprd04.prod.outlook.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v2 3/7] soc: qcom: icc-bwmon: Remove unused struct member
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230304-topic-ddr_bwmon-v2-0-04db989db059@linaro.org>
+ <20230304-topic-ddr_bwmon-v2-3-04db989db059@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230304-topic-ddr_bwmon-v2-3-04db989db059@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 13/03/2023 12:41, Konrad Dybcio wrote:
+> bwmon->regmap was never used, as the regmap for bwmon is registered
+> through devres and accessed through bwmon's regmap_field members.
+> Remove it
+> 
+> Fixes: ec63dcd3c863 ("soc: qcom: icc-bwmon: use regmap and prepare for BWMON v5")
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+>  drivers/soc/qcom/icc-bwmon.c | 1 -
+>  1 file changed, 1 deletion(-)
+> 
 
---DAgezE5i+dVbrDpK
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Put it as second patch in the patchset - after bindings.
 
+Best regards,
+Krzysztof
 
-> > On Renesas hardware, we had issues because the above flag was set during
-> > 'open'. It was concluded that it needs to be set during 'probe'. It loo=
-ks like FEC
-> > needs the same fix but I can't test it because I don't have the hardwar=
-e. At
-> > least, leave a note about the issue.
-> >=20
->=20
-> Could you describe this issue in more details? So that I can reproduce an=
-d fix this
-> issue and test it. Thanks!
-
-Yes, I will resend the series as RFC with more explanations.
-
-
---DAgezE5i+dVbrDpK
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmQRc1YACgkQFA3kzBSg
-KbYIUg/5AYrq7VV325fjSMJh0iT7yGzYJRrrsnkBsHsy4U6UvaRyoyk8o2EbjLQu
-qLvwRpSUkr8DCYEnkllzKUMg9S4q1lf6NO3PBxwDpQw025CJwakruWEIdSKUdVHj
-jZeka8m+Y77aXhRP5tmoqKcRCfZktgxnlOK3TN+FONyFCQPtn5WEFHRmb6rPxm6B
-hI+oz6NhH5Elwaz76XcW9frge3Q0z+Aq2EOhE4jYWgX2hZth0fNCsMfdbQ5xBnrb
-YLYmTWEAQoR/zYIkvjk3iAsqXsar67bgbaff2posseGaJRIOVEXXs2p9MCT9V7iG
-4OcT0muZnZXrhtnQlQRGlF30VGZBAf8uT11A4rCsga3LJPzF7zGiaXrJC1zkPmMP
-ReCX7oP7t7imBwGDsFc46lTEHgC7HeYFRi5Y00+0YQ3dn5fUo0fPW36/v2x/UgU6
-DfYA7o2MTAi1aXM+gaPrKTTkUlNVsHXRk6ufksnNo3014HEIh9duzpg0vcA4vIfz
-EsOEoh8XU+Zd/lddnXDd7G+VYNO5WjFh/RFKEq/K7zrLkRPmY4lYUuXo1wkSHpEz
-/iFHFNPk372MYUiWCoRGy5ei28HG1QKXAvcW+OJrLBTJ9Yh2bkwh3IVnsV/XtRr7
-hLXMv19SQ47X+Nf5H//a8aPsIMMyCc36RmxMO627x2ZJp7JuHjI=
-=UTgG
------END PGP SIGNATURE-----
-
---DAgezE5i+dVbrDpK--
