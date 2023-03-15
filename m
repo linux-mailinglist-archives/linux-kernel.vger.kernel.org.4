@@ -2,153 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 799AF6BBD7B
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 20:44:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE90A6BBD83
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 20:45:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231238AbjCOToW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 15:44:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46534 "EHLO
+        id S232511AbjCOTpY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 15:45:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbjCOToU (ORCPT
+        with ESMTP id S232670AbjCOTor (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 15:44:20 -0400
-Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF098E192;
-        Wed, 15 Mar 2023 12:44:17 -0700 (PDT)
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32FJZs8l008235;
-        Wed, 15 Mar 2023 14:44:16 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=PODMain02222019;
- bh=Kzw+l8cqcJr1TSQ6WJDIEKu8YNtPoQdgFhRljLL9mF4=;
- b=QqIS5jloX/fG4fXNvugksYi2rctNr25TfrONuwGOD/5T1cUSMqV2v+SMImGU6okdBE2L
- +mdIYZYwbgOnQVPupgyK2z2YVMPN6uQC+OEzyRIuEAgvGod0/B77nPhmdMXpf146qWN0
- J/8pEr8cCgCS4M6Fc08BvgVFFg8pDWmAo/bF44+pJcd/0u+lDBcZmkNDFtc4ObhMJrcw
- 8HultaCiuNIPlP+Bf9RJXLMlSHid8EOfSN5mbbLncmCkKil0QTGIPxwrM9bhqzl50zwN
- gvCxO2Br3ThY6fRVYDuym5wU4A8/ZzV715ekhP88EYmNmKl4IeiSqETfrlUsjZ+UAaqJ XA== 
-Received: from ediex02.ad.cirrus.com ([84.19.233.68])
-        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3pb2cr91ct-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 15 Mar 2023 14:44:15 -0500
-Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex02.ad.cirrus.com
- (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.25; Wed, 15 Mar
- 2023 14:44:13 -0500
-Received: from aus-sw-rshr002.ad.cirrus.com (141.131.206.14) by
- anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
- 15.2.1118.25 via Frontend Transport; Wed, 15 Mar 2023 14:44:13 -0500
-Received: by aus-sw-rshr002.ad.cirrus.com (Postfix, from userid 46936)
-        id 214064C1266; Wed, 15 Mar 2023 19:44:13 +0000 (UTC)
-From:   James Ogletree <james.ogletree@cirrus.com>
-To:     <dmitry.torokhov@gmail.com>
-CC:     <linux-input@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "James Ogletree" <james.ogletree@cirrus.com>
-Subject: [PATCH] Input: support pre-stored effects
-Date:   Wed, 15 Mar 2023 19:43:45 +0000
-Message-ID: <20230315194345.1848427-1-james.ogletree@cirrus.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 15 Mar 2023 15:44:47 -0400
+Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC750311D4
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 12:44:35 -0700 (PDT)
+Received: by mail-qt1-x829.google.com with SMTP id c18so17507935qte.5
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 12:44:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google; t=1678909475;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3K8lekfNTHeJ4C0iv99fjGghn93IIX905cIt06EpTfQ=;
+        b=cKuWC+aHDyxATa6HN+YqE2E5Okxl3eR7i8zhoQiYjbzAOf2vN+cKz3FWTds5n8vFyZ
+         4FHsCNQavFITJZv8en/rMnQhzx8Bu1Ufn4X/caDxoFZldJHM/1+37+83SF2L6Q6HM4me
+         bh0PyPNf3ZJ5AH49Aq7N5gzNJEuxy5pZTENp0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678909475;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3K8lekfNTHeJ4C0iv99fjGghn93IIX905cIt06EpTfQ=;
+        b=PuoMuObrcNYjjQGdIN/5wTDIDzp22wL6bGUK4g4Zb3/GW9Q/KcyaNOe6XmxpO7cyEN
+         iZ+Ttoxjr6x/aqrvnz0zVm5Sm04sXWnl3RD82oof/lcDQKNJ6FoQ50JGG18vRHYf+SZp
+         IxerqY6Gp9zhgJpG8sH7neSEzomakket3xDx5MQbeWU43ukGLBY9bnUMSuTCJGuPGnpj
+         X9GvMsRe4fVXGrpY/vhwx0Rw6lHKtbVJipGiadaOgO4YJBi5xhgzpi6oy9Yd7obat166
+         9NQcyK4AuMcjxghlenpWBAgdcutDQqicHqaVV6rSXtDLEjaH2mgQeS7GT6qCYCVjlGWp
+         z7KQ==
+X-Gm-Message-State: AO0yUKU+v0jk9NKS/s/hwp4PVhK2OVSUXLYa0nJtl7iJyJ6UfUM5CIVf
+        txtq5z0ckSKiB6m/xHrXZBax1zeHmB/e2iFqXlM=
+X-Google-Smtp-Source: AK7set+LT+EegIShwTd4ywC4A9b7O5vXSYEk4EuLY9iyTgGFwjNnq/dG6dMyVv6nragGJ8LRGB3skQ==
+X-Received: by 2002:a05:622a:30d:b0:3bf:c407:10ca with SMTP id q13-20020a05622a030d00b003bfc40710camr1981909qtw.10.1678909474756;
+        Wed, 15 Mar 2023 12:44:34 -0700 (PDT)
+Received: from joelboxx.c.googlers.com.com (129.239.188.35.bc.googleusercontent.com. [35.188.239.129])
+        by smtp.gmail.com with ESMTPSA id c15-20020ac8660f000000b003b86b088755sm4346666qtp.15.2023.03.15.12.44.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Mar 2023 12:44:34 -0700 (PDT)
+From:   "Joel Fernandes (Google)" <joel@joelfernandes.org>
+To:     linux-kernel@vger.kernel.org,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>
+Cc:     Zqiang <qiang1.zhang@intel.com>, rcu@vger.kernel.org
+Subject: [PATCH 6/9] rcu: Permit start_poll_synchronize_rcu_expedited() to be invoked early
+Date:   Wed, 15 Mar 2023 19:43:46 +0000
+Message-Id: <20230315194349.10798-6-joel@joelfernandes.org>
+X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
+In-Reply-To: <20230315194349.10798-1-joel@joelfernandes.org>
+References: <20230315194349.10798-1-joel@joelfernandes.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: g6oMvsgP7Lf9hTueMbDN0cMSzPBFiNLl
-X-Proofpoint-GUID: g6oMvsgP7Lf9hTueMbDN0cMSzPBFiNLl
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-At present, the best way to define effects that
-pre-exist in device memory is by utilizing
-the custom_data field, which it was not intended
-for, and requires arbitrary interpretation by
-the driver to make meaningful.
+From: Zqiang <qiang1.zhang@intel.com>
 
-Provide option for defining pre-stored effects in
-device memory.
+According to the commit log of the patch that added it to the kernel,
+start_poll_synchronize_rcu_expedited() can be invoked very early, as
+in long before rcu_init() has been invoked.  But before rcu_init(),
+the rcu_data structure's ->mynode field has not yet been initialized.
+This means that the start_poll_synchronize_rcu_expedited() function's
+attempt to set the CPU's leaf rcu_node structure's ->exp_seq_poll_rq
+field will result in a segmentation fault.
 
-Signed-off-by: James Ogletree <james.ogletree@cirrus.com>
+This commit therefore causes start_poll_synchronize_rcu_expedited() to
+set ->exp_seq_poll_rq only after rcu_init() has initialized all CPUs'
+rcu_data structures' ->mynode fields.  It also removes the check from
+the rcu_init() function so that start_poll_synchronize_rcu_expedited(
+is unconditionally invoked.  Yes, this might result in an unnecessary
+boot-time grace period, but this is down in the noise.
+
+Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+Reviewed-by: Frederic Weisbecker <frederic@kernel.org>
+Reviewed-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
 ---
- include/uapi/linux/input.h | 32 ++++++++++++++++++++++----------
- 1 file changed, 22 insertions(+), 10 deletions(-)
+ kernel/rcu/tree.c     | 5 ++---
+ kernel/rcu/tree_exp.h | 5 +++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/include/uapi/linux/input.h b/include/uapi/linux/input.h
-index 2557eb7b0561..689e5fa10647 100644
---- a/include/uapi/linux/input.h
-+++ b/include/uapi/linux/input.h
-@@ -428,17 +428,27 @@ struct ff_rumble_effect {
- 	__u16 weak_magnitude;
- };
+diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+index e80e8f128c57..90d54571126a 100644
+--- a/kernel/rcu/tree.c
++++ b/kernel/rcu/tree.c
+@@ -4942,9 +4942,8 @@ void __init rcu_init(void)
+ 	else
+ 		qovld_calc = qovld;
  
-+/**
-+ * struct ff_prestored_effect - defines parameters of a pre-stored force-feedback effect
-+ * @index: index of effect
-+ * @bank: memory bank of effect
-+ */
-+struct ff_prestored_effect {
-+	__u16 index;
-+	__u16 bank;
-+};
-+
- /**
-  * struct ff_effect - defines force feedback effect
-  * @type: type of the effect (FF_CONSTANT, FF_PERIODIC, FF_RAMP, FF_SPRING,
-- *	FF_FRICTION, FF_DAMPER, FF_RUMBLE, FF_INERTIA, or FF_CUSTOM)
-+ *	FF_FRICTION, FF_DAMPER, FF_RUMBLE, FF_INERTIA, FF_PRESTORED, or FF_CUSTOM)
-  * @id: an unique id assigned to an effect
-  * @direction: direction of the effect
-  * @trigger: trigger conditions (struct ff_trigger)
-  * @replay: scheduling of the effect (struct ff_replay)
-  * @u: effect-specific structure (one of ff_constant_effect, ff_ramp_effect,
-- *	ff_periodic_effect, ff_condition_effect, ff_rumble_effect) further
-- *	defining effect parameters
-+ *	ff_periodic_effect, ff_condition_effect, ff_rumble_effect, ff_prestored_effect)
-+ *	further defining effect parameters
-  *
-  * This structure is sent through ioctl from the application to the driver.
-  * To create a new effect application should set its @id to -1; the kernel
-@@ -464,6 +474,7 @@ struct ff_effect {
- 		struct ff_periodic_effect periodic;
- 		struct ff_condition_effect condition[2]; /* One for each axis */
- 		struct ff_rumble_effect rumble;
-+		struct ff_prestored_effect prestored;
- 	} u;
- };
+-	// Kick-start any polled grace periods that started early.
+-	if (!(per_cpu_ptr(&rcu_data, cpu)->mynode->exp_seq_poll_rq & 0x1))
+-		(void)start_poll_synchronize_rcu_expedited();
++	// Kick-start in case any polled grace periods started early.
++	(void)start_poll_synchronize_rcu_expedited();
  
-@@ -479,20 +490,21 @@ struct ff_effect {
- #define FF_DAMPER	0x55
- #define FF_INERTIA	0x56
- #define FF_RAMP		0x57
-+#define FF_PRESTORED	0x58
- 
- #define FF_EFFECT_MIN	FF_RUMBLE
--#define FF_EFFECT_MAX	FF_RAMP
-+#define FF_EFFECT_MAX	FF_PRESTORED
- 
- /*
-  * Force feedback periodic effect types
-  */
- 
--#define FF_SQUARE	0x58
--#define FF_TRIANGLE	0x59
--#define FF_SINE		0x5a
--#define FF_SAW_UP	0x5b
--#define FF_SAW_DOWN	0x5c
--#define FF_CUSTOM	0x5d
-+#define FF_SQUARE	0x59
-+#define FF_TRIANGLE	0x5a
-+#define FF_SINE		0x5b
-+#define FF_SAW_UP	0x5c
-+#define FF_SAW_DOWN	0x5d
-+#define FF_CUSTOM	0x5e
- 
- #define FF_WAVEFORM_MIN	FF_SQUARE
- #define FF_WAVEFORM_MAX	FF_CUSTOM
+ 	rcu_test_sync_prims();
+ }
+diff --git a/kernel/rcu/tree_exp.h b/kernel/rcu/tree_exp.h
+index 7cc4856da081..5343f32e7d67 100644
+--- a/kernel/rcu/tree_exp.h
++++ b/kernel/rcu/tree_exp.h
+@@ -1066,9 +1066,10 @@ unsigned long start_poll_synchronize_rcu_expedited(void)
+ 	if (rcu_init_invoked())
+ 		raw_spin_lock_irqsave(&rnp->exp_poll_lock, flags);
+ 	if (!poll_state_synchronize_rcu(s)) {
+-		rnp->exp_seq_poll_rq = s;
+-		if (rcu_init_invoked())
++		if (rcu_init_invoked()) {
++			rnp->exp_seq_poll_rq = s;
+ 			queue_work(rcu_gp_wq, &rnp->exp_poll_wq);
++		}
+ 	}
+ 	if (rcu_init_invoked())
+ 		raw_spin_unlock_irqrestore(&rnp->exp_poll_lock, flags);
 -- 
-2.25.1
+2.40.0.rc1.284.g88254d51c5-goog
 
