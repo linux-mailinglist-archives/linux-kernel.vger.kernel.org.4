@@ -2,162 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6571D6BAB0A
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 09:46:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD3196BAAC4
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 09:29:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231220AbjCOIqM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 04:46:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49696 "EHLO
+        id S231381AbjCOI3U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 04:29:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230096AbjCOIqK (ORCPT
+        with ESMTP id S229850AbjCOI3S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 04:46:10 -0400
-X-Greylist: delayed 600 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 15 Mar 2023 01:46:07 PDT
-Received: from wnew1-smtp.messagingengine.com (wnew1-smtp.messagingengine.com [64.147.123.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3A0F72019;
-        Wed, 15 Mar 2023 01:46:06 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailnew.west.internal (Postfix) with ESMTP id 9E7482B05BCC;
-        Wed, 15 Mar 2023 04:28:01 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Wed, 15 Mar 2023 04:28:04 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1678868881; x=1678876081; bh=sm
-        BXPA4tzaw5CWmCbZopn1Nv/tcbeL+d7+B00EOaE7Q=; b=n2jAfdmkzr4/x+CsBm
-        W3h1fdrXzPUm2M6yIwhfuUk5NhMWT/Re0vBrmd65xKAFLeiEY/BPKjvG849fGvop
-        r6lZ+pB/zktfi8PfRRRsZZxxY+cJG9Y8XIUnSYR9FzjNY1hbRY7wB2Ioqdk4Xy3J
-        +zrsJ8pM3pJUgMLZjLnB8owsf1EKqCBVtyimEGpJnrWHHZ3GZnmthFkeDTmiy15O
-        wCZ248asyrS8sfn/G2SctX82+c9wYjoqkwx6H14GvynjhkvaV69ZxuBKI07kZWqS
-        2BAIxwRWGRkc/xYuv+WUF6S3KnnkiwzWwTt5cjAY1pXxu+1AGKpNS0+LHt0g4mQo
-        YeYQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1678868881; x=1678876081; bh=smBXPA4tzaw5C
-        WmCbZopn1Nv/tcbeL+d7+B00EOaE7Q=; b=F9iSSzvNOuBHmzJ/Fjk/0R6964S6p
-        odwOiiFpi55tKtu3VaUMm/rZY8Hu73NPU/2nn66mTZdMKLH8z/G73bZUoVgOWQFM
-        lEWHDM0Q2GsVNtwgXiIvtw2V6JnAQICZbxMDCGFQDJZ/8O21qcOEE8PnqOSr5G9A
-        3wQswbd0yMxi8kTTJn0befLjm5ZI/PjqJc8f8Uxh70MlAUPiQgVdyUXZGbE9DRPc
-        Bn+XLdW5kusQNFnzzSJbTu7HS1CQJggtArNUcghVl+C6huIpTLQmhFd8CeMpgu4n
-        2H/PoTPP4AVPhupCfieoBLln5iLfbSLiVx/apAN0+A5evGjnGtX8rK5yg==
-X-ME-Sender: <xms:j4ERZN7n63PUVZA5NQrmfriOeymxN4S23oD5CkVe-P3ocMm_vkMwlQ>
-    <xme:j4ERZK5JYdqTXwxHgRekqf6m27BGyMd_lx9Ec8m9TYMiyd5PZcUPhlqfa71AtXer5
-    wk4VwFJLw8gv0WXAO0>
-X-ME-Received: <xmr:j4ERZEcLZytM7Ewc974LmNDKPijeBjzfR8JPNjQs-XBCokHRLLKVOWLF7SN8FXMBglnYsw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvddvjedguddujecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgig
-    ihhmvgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrf
-    grthhtvghrnheptdelkeejiedufedvhfeiffetlefhiedvleeigfeiuefghfdvleeiffej
-    ieegteejnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiii
-    gvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrgigihhmvgestggvrhhnohdrthgv
-    tghh
-X-ME-Proxy: <xmx:kIERZGIDWUucWnPXTT6Llkt_3om4aQKgR9mx6sRYPcZI6RP9JmCYlw>
-    <xmx:kIERZBJBjGTvnhJuADp3ZCN0-GwhVdn4XlaIdYwb_uE-SevZEmx0jA>
-    <xmx:kIERZPx8rOuY_jmxv_1O3qoQ0Sr341i5gKbvpdvQiYLdBZegosqI7Q>
-    <xmx:kYERZJcsvqLRjqXppPj219cma-IgLDluKHxkQFfUdPILE_e9JwFd8mgOnf8>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 15 Mar 2023 04:27:59 -0400 (EDT)
-Date:   Wed, 15 Mar 2023 09:27:56 +0100
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     David Gow <davidgow@google.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        patches@lists.linux.dev,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-um@lists.infradead.org,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
-Subject: Re: [PATCH 3/8] kunit: Add test managed platform_device/driver APIs
-Message-ID: <20230315082756.ynq3dpbv7udrcbds@houat>
-References: <20230302013822.1808711-1-sboyd@kernel.org>
- <20230302013822.1808711-4-sboyd@kernel.org>
- <CABVgOSmR0_u8Tw0E8C1mRFxSiGKwdKG5ka_+X_36Hj4VNLdg2g@mail.gmail.com>
- <20230303143528.2dovipmqlms74vp2@houat>
- <dea61f59ea83c772b693b18db43c3eb7.sboyd@kernel.org>
+        Wed, 15 Mar 2023 04:29:18 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 834AE2FCEE;
+        Wed, 15 Mar 2023 01:29:16 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id cn21so42098216edb.0;
+        Wed, 15 Mar 2023 01:29:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678868955;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=h3YJQ7G2Y1Bq5IEPvjKg8xL3l8kSzXrXpjCsFCFMtpk=;
+        b=geCe+Kc4/wlPBqFrZLSN5pHIXzurZqEwmpqD7aFR3LRnVVxY8p+MepwqJhFVzVN2Ev
+         CAp+pA6D/2euZEc6NB1mNWhPV7QRRhGwLb3qQ8uA41jVpIc31yr0Pc2Qug1+QZKhQijB
+         ZWICG4NhgCOYIcNQGRmTipCUVWF+RCOhkGwfD/Usg9PqJKuNl7BmC0+J2dky6O3BeiwY
+         RBYQJcoTh9oEOMupKC8MJ4pY2+eU3AgB87Oem8lk9Ds85wIfDu1MX1o/eYlCqFR0RBXP
+         Hlbc/s3brn6DA7PAVrZSZ9OD3yRbzy9ynl8TQuJe2u/XjKO6VVuX8V6BB6+jKrhWBboq
+         Rlbg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678868955;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=h3YJQ7G2Y1Bq5IEPvjKg8xL3l8kSzXrXpjCsFCFMtpk=;
+        b=lUm8O40+bfOHnmZ57qb11gbGuUgMOt8Yebw0uSDlTMfB+ga9YwZhIJHK2OPOwUC/Ks
+         cxJYQjtlZKtPfvE/q+V8rrfjdcBxZKuCBLtN1LhFwzJtStdW5EGen0qTsXbHMzvsM3bR
+         snoZWodaFlhiLNUkk/Wd893Cz+0pwxqNplGmVpxZ3hxlIsQpO5qVod0QTXd27quqkJS8
+         /chB4OCJE8aqUNuw1CskQKvihHrBSNIdAFGSa8H2XDSy65MeFm6SkmK2JrOA4wk9t5rr
+         CN+U3BW7jjuxH31FJYOaYeOSHOs9rP56q0/6pxZF7U2j+CUUd3kWUSYyjYRul5NACCkl
+         Efiw==
+X-Gm-Message-State: AO0yUKUjgO9m1o5d8v+sf0LF65QqptAYePCopyCFNi0tr7cOzl000pRE
+        uYZTYt+udBITqoXnmNrbaLw3noeOFU3fEbjNv2Y=
+X-Google-Smtp-Source: AK7set8oOeqy1yFA3HoBF4clzdt8VbL3z2Es98Fx3qfkBseTEF3TuUWl/mm/SduX6LersBkxjGFZXQTlpIUBevJZH40=
+X-Received: by 2002:a50:8d11:0:b0:4bb:e549:a2ad with SMTP id
+ s17-20020a508d11000000b004bbe549a2admr1013316eds.4.1678868955010; Wed, 15 Mar
+ 2023 01:29:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="mrd2rsrmiq2ziig6"
-Content-Disposition: inline
-In-Reply-To: <dea61f59ea83c772b693b18db43c3eb7.sboyd@kernel.org>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230314131427.85135-1-kerneljasonxing@gmail.com>
+ <20230314131427.85135-3-kerneljasonxing@gmail.com> <20230314220924.52dfb803@kernel.org>
+In-Reply-To: <20230314220924.52dfb803@kernel.org>
+From:   Jason Xing <kerneljasonxing@gmail.com>
+Date:   Wed, 15 Mar 2023 16:28:38 +0800
+Message-ID: <CAL+tcoCOKwR-xPNO2Pb9sFAujb_nb60saJHjvXS6tM-7uqimtA@mail.gmail.com>
+Subject: Re: [PATCH v3 net-next 2/2] net: introduce budget_squeeze to help us
+ tune rx behavior
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+        ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
+        john.fastabend@gmail.com, stephen@networkplumber.org,
+        simon.horman@corigine.com, sinquersw@gmail.com,
+        bpf@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jason Xing <kernelxing@tencent.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---mrd2rsrmiq2ziig6
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hi Stephen,
-
-On Thu, Mar 09, 2023 at 03:31:15PM -0800, Stephen Boyd wrote:
-> Quoting Maxime Ripard (2023-03-03 06:35:28)
-> > On Fri, Mar 03, 2023 at 03:15:31PM +0800, David Gow wrote:
-> > >=20
-> > > DRM has a similar thing already (albeit with a root_device, which is
-> > > more common with KUnit tests generally):
-> > > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tr=
-ee/include/drm/drm_kunit_helpers.h
-> > >=20
-> > > But that's reasonably drm-specific, so it makes sense that it lives
-> > > with DRM stuff. platform_device is a bit more generic.
-> >=20
-> > I'd be very happy to get something from the core to address the same
-> > thing.
-> >=20
-> > I think the main thing we needed that isn't covered by this patch is we
-> > wanted the device to be bound to its driver, so with probe being called
-> > before calling the test (see 57a84a97bbda).
+On Wed, Mar 15, 2023 at 1:09=E2=80=AFPM Jakub Kicinski <kuba@kernel.org> wr=
+ote:
 >
-> Can you clarify? This patch makes a poor attempt at waiting for the
-> platform driver to bind, but in reality it may not be bound by the time
-> the driver register function returns.
+> On Tue, 14 Mar 2023 21:14:27 +0800 Jason Xing wrote:
+> > When we encounter some performance issue and then get lost on how
+> > to tune the budget limit and time limit in net_rx_action() function,
+> > we can separately counting both of them to avoid the confusion.
+>
+[...]
+> More details please, we can't tell whether your solution makes sense
+> if we don't know what your problem is.
 
-The issue was that devm will only clean up the resources if the device
-was bound to a driver so we were exhausting resources when running
-dozens of test in a sequence.
+Roger that. I'll write more details into the commit message.
 
-The way I solved it for vc4 was to create a dumb platform driver with a
-waitqueue, and wait for probe to be called.
-
-I think we could make it more generic by allowing a pointer to a probe
-function and calling it into our own probe implementation. What do you
-think?
-
-Maxime
-
---mrd2rsrmiq2ziig6
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZBGBhwAKCRDj7w1vZxhR
-xQfJAP9d8Mk6W6LsnZWjdC2ZVCNtlVeMbIMPi7JwuKzAFKJrnwD+P0T5lH1uMYyg
-Q4LeS+MNoLW1jvZenhi+zkdv6wRJswU=
-=1NPj
------END PGP SIGNATURE-----
-
---mrd2rsrmiq2ziig6--
+Thanks,
+Jason
