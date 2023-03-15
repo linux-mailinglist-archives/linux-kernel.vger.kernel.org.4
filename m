@@ -2,72 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECC216BA616
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 05:17:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82E036BA61B
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 05:19:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230169AbjCOERk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 00:17:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38220 "EHLO
+        id S230359AbjCOETX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 00:19:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbjCOERi (ORCPT
+        with ESMTP id S230255AbjCOETT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 00:17:38 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C61A54AFE9;
-        Tue, 14 Mar 2023 21:17:37 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id h12-20020a17090aea8c00b0023d1311fab3so594138pjz.1;
-        Tue, 14 Mar 2023 21:17:37 -0700 (PDT)
+        Wed, 15 Mar 2023 00:19:19 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E1DF19113;
+        Tue, 14 Mar 2023 21:19:17 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id om3-20020a17090b3a8300b0023efab0e3bfso438889pjb.3;
+        Tue, 14 Mar 2023 21:19:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678853857;
+        d=gmail.com; s=20210112; t=1678853957;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=RSY7ZnRAjnFNpdEXKG3EtcXLc39AjD4AR33fsspA2yA=;
-        b=bCiza7sav1BaTufFra7tPZ6Ig2ZI0Y13oB8l86Bx3oeJyArlgGVC3NY8TcQeuJdCMN
-         50V7FDkWmj8k8Ga8RnwZ4aCgNwg+4ue2EsDIDb5mJ5589Xou3Vq94pKYJWGAqekLCc2x
-         /tRlZ6+Sp4s0lHR6Od5WkOgR3Z3eCXPuifMAyLRxyue28PDDcMtlCvyqOYSoQWG1fq4w
-         r4v1529wXxQhgfCQ5Z2vPz9nbkLQ3e+/lcFbmLMoMD4JzdF5yfYY4uJOWzA5CzWWo2HS
-         HX+7WzkGgK2fyv9JxNN9QdkCzsWQmndAQx+kPnALarcyO8uVh3CwTCzQxqrrioYT0WUj
-         YKQg==
+        bh=cNnbqGfLu+o/M/CLOMGQSt4vsNyS8ctukFJ1QgLUxMY=;
+        b=fNfb9RTDkf2k+i47u5Mb/JB7RG6jUw1ftN8pLPTN20kpQ7JejxL5324BKHRRNaNoxy
+         QGdKhYPqFYsvAMv3aNwZluAUNH6fID9/ylNwEbFEUv2xuZQ5/Mdxx/VtnzkD/6/V8yIg
+         HBWYzOKU2K++7jZKA6FW50xTo6hQAQbE47s2liOTtj6a0fjzBsI+RP5FVz51WsZthF3c
+         y+CLz/QrSrkz2BANi8fYbL+D6Hmi1XhyMWxM6GDn3ESZFUbTKk2dMrOgD+vCaMmdxrAK
+         k9nlxLza9GNZDhK3r/vdoXaZxNbobGv5ZXQTh7h9/RsYclgVmnuQTlT4hvk+bQDxmdjg
+         hY9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678853857;
+        d=1e100.net; s=20210112; t=1678853957;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=RSY7ZnRAjnFNpdEXKG3EtcXLc39AjD4AR33fsspA2yA=;
-        b=O1GYRtPpZx+Ggi8FYPZYat/Ps8r8YMZGnx9qRDAPOmRWtv/02SVjtGbJ6ZAgFtde30
-         gEzJOEpWNEN80JwsbW7aCvLNV41EC8/0TwMWpmAlm8HODUfp03c8WrqdcZrrB8Xn874t
-         q7x1TrjAOUm034iJpT3ze/EUbwesXhSiuvoPfjtvCm2+sd79W2wfhb40dhhlWHcbPMGl
-         nKY+2C3SjKHxvsCi4QKpUkSLlV8y92zRbkc5Lyjb1NjdzxO5TFBymvHUIst2l4fiW2Qj
-         o6DZD7WIvB+G9Dzs2euLMzbaOY+YwY6w8gRxK79IxSpC7nhGoVGEU7VLOlMcviLj63OX
-         cf4A==
-X-Gm-Message-State: AO0yUKWa0tQXj8ifTjNF8xVCdc30k+WYxhl5ZG3VFXSc+qMldLP45PwB
-        tsFgxim352l/FQv2XGejgV3xa+xN2RY=
-X-Google-Smtp-Source: AK7set/puAAI6Gqe6/gQITar+hr2kLsp/NA2NiJ78deWvGvXm+c8gBviEscu8yzbAjfeLlldM5wL2w==
-X-Received: by 2002:a05:6a20:4286:b0:d4:8879:6f33 with SMTP id o6-20020a056a20428600b000d488796f33mr10211511pzj.15.1678853857189;
-        Tue, 14 Mar 2023 21:17:37 -0700 (PDT)
+        bh=cNnbqGfLu+o/M/CLOMGQSt4vsNyS8ctukFJ1QgLUxMY=;
+        b=SDCH5Zsc1r23qIvISoXl3Z07xkpZ84LmKI75nEclEAamMdwWcjAqvVmNXINp33+RKV
+         Lsh2Vo6LrWbphRKs/hSGO8LJFAz6X2HZjZ0RGIAr00gsPCQIO+x64rC6FjcIv1vxFrr2
+         1SHHp231HaQIqFn/pbYJWiPq0LD/qpR9Qn9GxV48x+bRZFgoVM7xTX0Rkv4diR5r6Q8g
+         pCpmokF3OZwZSrazTQdPazxUe9x2c9O0xi4N+idhJNTtR6il1kpiwHd1s+e4E0GcEGua
+         vl029J9HIpqjS/DRa0Df8i4Wa9AFDhK+NBfLruUpcaWNdIM6QGZMKCIOxXoJ/hyKbh9M
+         N1xw==
+X-Gm-Message-State: AO0yUKVT6tngRo7a4QNz09cVkGgdqU9ZZxn/ewAI5XndRyBMBWeGPCZ/
+        nRMs63C5+5hlLJy6uVKOZ7o=
+X-Google-Smtp-Source: AK7set/UsX9pMyP/MKPF7KUtYJ+zB8rFptz/fFP9Mw2ZjMZv6k5TTtI1Ru3Zz6qJ82ZIZpwFeU17/Q==
+X-Received: by 2002:a05:6a20:54a1:b0:d5:10ca:5264 with SMTP id i33-20020a056a2054a100b000d510ca5264mr7862186pzk.59.1678853956874;
+        Tue, 14 Mar 2023 21:19:16 -0700 (PDT)
 Received: from debian.me (subs02-180-214-232-17.three.co.id. [180.214.232.17])
-        by smtp.gmail.com with ESMTPSA id d10-20020a63fd0a000000b004fba32949c3sm2292591pgh.16.2023.03.14.21.17.35
+        by smtp.gmail.com with ESMTPSA id g12-20020aa7874c000000b006227c3d5e29sm2486932pfo.16.2023.03.14.21.19.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Mar 2023 21:17:36 -0700 (PDT)
+        Tue, 14 Mar 2023 21:19:16 -0700 (PDT)
 Received: by debian.me (Postfix, from userid 1000)
-        id 2D453106195; Wed, 15 Mar 2023 11:17:33 +0700 (WIB)
-Date:   Wed, 15 Mar 2023 11:17:33 +0700
+        id DD51010619F; Wed, 15 Mar 2023 11:19:12 +0700 (WIB)
+Date:   Wed, 15 Mar 2023 11:19:12 +0700
 From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Jonathan Corbet <corbet@lwn.net>,
-        Thorsten Leemhuis <linux@leemhuis.info>
+To:     Thorsten Leemhuis <linux@leemhuis.info>,
+        Jonathan Corbet <corbet@lwn.net>
 Cc:     Randy Dunlap <rdunlap@infradead.org>,
         Lukas Bulwahn <lukas.bulwahn@gmail.com>,
         linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
         regressions@lists.linux.dev
 Subject: Re: [PATCH v3] docs: describe how to quickly build a trimmed kernel
-Message-ID: <ZBFG3UqcS7IhGP6t@debian.me>
+Message-ID: <ZBFHQICkPe0tMent@debian.me>
 References: <1a788a8e7ba8a2063df08668f565efa832016032.1678021408.git.linux@leemhuis.info>
- <87a60frxk0.fsf@meer.lwn.net>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="8zDsjomzav6C/tyN"
+        protocol="application/pgp-signature"; boundary="6JXQS39TaU+pYy8I"
 Content-Disposition: inline
-In-Reply-To: <87a60frxk0.fsf@meer.lwn.net>
+In-Reply-To: <1a788a8e7ba8a2063df08668f565efa832016032.1678021408.git.linux@leemhuis.info>
 X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
@@ -79,49 +78,64 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---8zDsjomzav6C/tyN
+--6JXQS39TaU+pYy8I
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Mar 14, 2023 at 12:35:11PM -0600, Jonathan Corbet wrote:
-> This caused me to wonder if we shouldn't create a new book called
-> "tutorials" for this kind of stuff, with an explicit proviso that a more
-> web-oriented approach is OK in that section?  Tutorial documentation
-> *is* quite different from reference material, but we've really made no
-> effort to treat the two differently so far.
+On Sun, Mar 05, 2023 at 02:04:44PM +0100, Thorsten Leemhuis wrote:
+> Add a text explaining how to quickly build a kernel, as that's something
+> users will often have to do when they want to report an issue or test
+> proposed fixes. This is a huge and frightening task for quite a few
+> users these days, as many rely on pre-compiled kernels and have never
+> built their own. They find help on quite a few websites explaining the
+> process in various ways, but those howtos often omit important details
+> or make things too hard for the 'quickly build just for testing' case
+> that 'localmodconfig' is really useful for. Hence give users something
+> at hand to guide them, as that makes it easier for them to help with
+> testing, debugging, and fixing the kernel.
+>=20
+> To keep the complexity at bay, the document explicitly focuses on how to
+> compile the kernel on commodity distributions running on commodity
+> hardware. People that deal with less common distributions or hardware
+> will often know their way around already anyway.
+>=20
+> The text describes a few oddities of Arch and Debian that were found by
+> the author and a few volunteers that tested the described procedure.
+> There are likely more such quirks that need to be covered as well as a
+> few things the author will have missed -- but one has to start
+> somewhere.
+>=20
+> The document heavily uses anchors and links to them, which makes things
+> slightly harder to read in the source form. But the intended target
+> audience is way more likely to read rendered versions of this text on
+> pages like docs.kernel.org anyway -- and there those anchors and links
+> allow easy jumps to the reference section and back, which makes the
+> document a lot easier to work with for the intended target audience.
+>=20
+> Aspects relevant for bisection were left out on purpose, as that is a
+> related, but in the end different use case. The rough plan is to have a
+> second document with a similar style to cover bisection. The idea is to
+> reuse a few bits from this document and link quite often to entries in
+> the reference section with the help of the anchors in this text.
 >=20
 
-I think so, but I guess "web-oriented" means doing a lot of searching
-the Internet to accomplish kernel-related tasks, right?
+After considering all reviews,
 
-For the initial tutorial contents, I'd like to see:
-
-  * this one (for end users and tester)
-  * kernel building with development environment setup and
-    patch submission (for developers)
-  * kernel bisection (as in v1)
-  * reporting bugs (tldr: make sure to include info as detail as you can
-    get and Cc: related mailing lists [scripts/get_maintainer.pl
-    helps]).
-
-Other tutorial-style docs across Documentation/ can be candidate of
-moving to Documentation/tutorials/.
-
-Thanks.
+Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
 
 --=20
 An old man doll... just what I always wanted! - Clara
 
---8zDsjomzav6C/tyN
+--6JXQS39TaU+pYy8I
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZBFG1wAKCRD2uYlJVVFO
-oxycAQDxmtnjJWLDKQcG+mAZm5hcoXqW4pbWc8L8JQcJIfVUOwEAl11xXNiO8swY
-I+guj/o/klc20PKSltN5JZ4eQbnkQwo=
-=dkCF
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZBFHQAAKCRD2uYlJVVFO
+o9ajAP46+jE2amws3QYz7rVm9TaQ5muRI2YaMJ4c/GT4KLzRVAEA6m/maSAGqCZy
+Gvl5z2OIXStHbiGJ2xAK3TnXKGilfQQ=
+=5nof
 -----END PGP SIGNATURE-----
 
---8zDsjomzav6C/tyN--
+--6JXQS39TaU+pYy8I--
