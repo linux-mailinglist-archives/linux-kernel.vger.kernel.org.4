@@ -2,97 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B14246BACBE
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 10:56:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0004C6BACC2
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 10:56:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231967AbjCOJ4G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 05:56:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45898 "EHLO
+        id S231936AbjCOJ4s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 05:56:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232086AbjCOJzl (ORCPT
+        with ESMTP id S231952AbjCOJ40 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 05:55:41 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DA0A82376
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 02:53:48 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id d22so4212692pgw.2
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 02:53:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678874027;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Yf06OZ7wRPY8MKmtaErAxCAJ30Q+ZppQW5ABseJw3Z4=;
-        b=HtBHRC6vrQ5Vu+s96LHiLlLjxc5xxRTp5UrdteKLJmA1o8KdqSPsyEQF0xOmX8KF7f
-         b5xnCJ0TCAaE/MyghruONCtWmCeb2Vy8+jLClRzJV0YDY8wKh0qcT/uLO8brv4R3MdoQ
-         KdU9TH2e3qki0yo7H6bzYYk/UotFd+VlbBMfJ98qEUejYIKy9AZDPGIN+2hO5UAgAumc
-         Umv/uCmC5qbrMx7RqU1sImRylKdc39nPZjcOMZFb0oYy3rIMgdoNGz9r5tvA5tXpr/0B
-         QNR1FhFH3QvVPM2GLwPGl0E36f1miKL3FKW0hhSWtSd1xtspAG09vVT+1VuKNp782V73
-         q2Pg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678874027;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Yf06OZ7wRPY8MKmtaErAxCAJ30Q+ZppQW5ABseJw3Z4=;
-        b=kqqzVs/rvEe8iw/Dz8F8QHrb+oKjMdbhA5trFSsYtYzvvFtWAw0u7NMbva/e40BpHN
-         jAcvmtVJsIB0cL5JaC289jJHSEBjdXKF+RLzCvd5cw/vYub5VXQrBX1dDmLenKvhqh9I
-         GN7UoL4ohiVdGtElydlWzvtCZtL6oht8dxuOX8cnc/fbszu50/Cce5lSksfFF2h2dIei
-         cMj2rnoNv4M1qDyoRgm7f17Odpc72/35rVajjUIs0yUyO/+r3wjhnGhONhFTg2DY0SZs
-         YZPXmaC7PJPqhrHf4MswUh9LL00AGXU0/bN1+3SqzMs5ARTvxqybH9pvqs2/7F0PF2jU
-         KZJA==
-X-Gm-Message-State: AO0yUKW961ksTKqe1Qk/2OGKCj6RQzZHKp8UHxz1rd9y647kp4FOax2t
-        hSQbyoXAqVPrLId0eYJgz61dFMETG+pDXHn4i4w=
-X-Google-Smtp-Source: AK7set+noPcg0fln9W2Idoc3QyKDYVrUaSvBuDG8K6jH3w3qJ4MhxvxZjxQ0KuCxvDp6WFmZoimBUTEgls9g4u09zUs=
-X-Received: by 2002:a05:6a00:14d6:b0:5aa:310c:e65b with SMTP id
- w22-20020a056a0014d600b005aa310ce65bmr16611886pfu.2.1678874027555; Wed, 15
- Mar 2023 02:53:47 -0700 (PDT)
+        Wed, 15 Mar 2023 05:56:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C61F591D8;
+        Wed, 15 Mar 2023 02:54:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A194361CAC;
+        Wed, 15 Mar 2023 09:54:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5708BC433EF;
+        Wed, 15 Mar 2023 09:54:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678874079;
+        bh=UPGSk+5zktSkQHlM1EsT/d9MKHUsVB44bqN+4h6y90g=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XC5w9ktwzv0KtrbuxuLbJTDg2kuUjk3TNktAQOjE/AOHk4SByNzVyYhHK6/cfJRkq
+         wocrXxvM3dGU7M2+gQPpRiznCPhfP/hkwkH6NmxcG7Qcs7Dvg8r289VPUC21vEx1sQ
+         x+3l6j3qSWvuvGcWOToYQbU8NCyFpLCnYyAvtfcREzye+03z9HGbuowCepc3S0KXA6
+         d5NxGSVYNzenULUslt+gwAgAcrn7NLdM45212/qpiCoTQTJLU8wB75OYGhDd3KjnN6
+         C6L6k7d6sjL4TTUnyOJuUY2GyNk+HTI11GVz/v3Vw1ORCOHMTkjwapV2l3HKJ2hHlc
+         KiCO9ySnXBG2w==
+Date:   Wed, 15 Mar 2023 11:54:26 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
+Cc:     linux-arch@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Brian Cain <bcain@quicinc.com>
+Subject: Re: [PATCH v4 11/36] hexagon: Implement the new page table range API
+Message-ID: <ZBGV0lFu+1c5E5jE@kernel.org>
+References: <20230315051444.3229621-1-willy@infradead.org>
+ <20230315051444.3229621-12-willy@infradead.org>
 MIME-Version: 1.0
-Received: by 2002:a05:6a10:1294:b0:3bc:b806:4340 with HTTP; Wed, 15 Mar 2023
- 02:53:47 -0700 (PDT)
-Reply-To: fionahill.2023@outlook.com
-From:   FIONA HILL <ibrahimangela820@gmail.com>
-Date:   Wed, 15 Mar 2023 02:53:47 -0700
-Message-ID: <CAJFyUJYt-i9_N-L0eXktyMUtCsK5BbwesMmN+ZweoW9yBdcw7w@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=7.7 required=5.0 tests=BAYES_99,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:536 listed in]
-        [list.dnswl.org]
-        *  3.5 BAYES_99 BODY: Bayes spam probability is 99 to 100%
-        *      [score: 0.9985]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [ibrahimangela820[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [ibrahimangela820[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [fionahill.2023[at]outlook.com]
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *******
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230315051444.3229621-12-willy@infradead.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Mar 15, 2023 at 05:14:19AM +0000, Matthew Wilcox (Oracle) wrote:
+> Add PFN_PTE_SHIFT and update_mmu_cache_range().
+> 
+> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+> Acked-by: Brian Cain <bcain@quicinc.com>
+
+Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
+
+> ---
+>  arch/hexagon/include/asm/cacheflush.h | 7 +++++--
+>  arch/hexagon/include/asm/pgtable.h    | 9 +--------
+>  2 files changed, 6 insertions(+), 10 deletions(-)
+> 
+> diff --git a/arch/hexagon/include/asm/cacheflush.h b/arch/hexagon/include/asm/cacheflush.h
+> index 6eff0730e6ef..63ca314ede89 100644
+> --- a/arch/hexagon/include/asm/cacheflush.h
+> +++ b/arch/hexagon/include/asm/cacheflush.h
+> @@ -58,12 +58,15 @@ extern void flush_cache_all_hexagon(void);
+>   * clean the cache when the PTE is set.
+>   *
+>   */
+> -static inline void update_mmu_cache(struct vm_area_struct *vma,
+> -					unsigned long address, pte_t *ptep)
+> +static inline void update_mmu_cache_range(struct vm_area_struct *vma,
+> +		unsigned long address, pte_t *ptep, unsigned int nr)
+>  {
+>  	/*  generic_ptrace_pokedata doesn't wind up here, does it?  */
+>  }
+>  
+> +#define update_mmu_cache(vma, addr, ptep) \
+> +	update_mmu_cache_range(vma, addr, ptep, 1)
+> +
+>  void copy_to_user_page(struct vm_area_struct *vma, struct page *page,
+>  		       unsigned long vaddr, void *dst, void *src, int len);
+>  #define copy_to_user_page copy_to_user_page
+> diff --git a/arch/hexagon/include/asm/pgtable.h b/arch/hexagon/include/asm/pgtable.h
+> index 59393613d086..dd05dd71b8ec 100644
+> --- a/arch/hexagon/include/asm/pgtable.h
+> +++ b/arch/hexagon/include/asm/pgtable.h
+> @@ -338,6 +338,7 @@ static inline int pte_exec(pte_t pte)
+>  /* __swp_entry_to_pte - extract PTE from swap entry */
+>  #define __swp_entry_to_pte(x) ((pte_t) { (x).val })
+>  
+> +#define PFN_PTE_SHIFT	PAGE_SHIFT
+>  /* pfn_pte - convert page number and protection value to page table entry */
+>  #define pfn_pte(pfn, pgprot) __pte((pfn << PAGE_SHIFT) | pgprot_val(pgprot))
+>  
+> @@ -345,14 +346,6 @@ static inline int pte_exec(pte_t pte)
+>  #define pte_pfn(pte) (pte_val(pte) >> PAGE_SHIFT)
+>  #define set_pmd(pmdptr, pmdval) (*(pmdptr) = (pmdval))
+>  
+> -/*
+> - * set_pte_at - update page table and do whatever magic may be
+> - * necessary to make the underlying hardware/firmware take note.
+> - *
+> - * VM may require a virtual instruction to alert the MMU.
+> - */
+> -#define set_pte_at(mm, addr, ptep, pte) set_pte(ptep, pte)
+> -
+>  static inline unsigned long pmd_page_vaddr(pmd_t pmd)
+>  {
+>  	return (unsigned long)__va(pmd_val(pmd) & PAGE_MASK);
+> -- 
+> 2.39.2
+> 
+
 -- 
-Hello did you received my message i send to you?
+Sincerely yours,
+Mike.
