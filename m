@@ -2,154 +2,301 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED5046BB516
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 14:48:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 807296BB51A
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 14:48:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229459AbjCONsB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 09:48:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35036 "EHLO
+        id S231984AbjCONs3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 09:48:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232297AbjCONr5 (ORCPT
+        with ESMTP id S231921AbjCONs1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 09:47:57 -0400
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33D4672B28
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 06:47:24 -0700 (PDT)
-Received: from fpc (unknown [10.10.165.16])
-        by mail.ispras.ru (Postfix) with ESMTPSA id 6FACF40737A0;
-        Wed, 15 Mar 2023 13:47:05 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru 6FACF40737A0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
-        s=default; t=1678888025;
-        bh=Fu0DZqdhTXrpbcvEJF009OVu9YVP0WfEeRQxbBuqVT8=;
-        h=Date:From:To:Cc:Subject:From;
-        b=DVvewTP38uxIqXxTTns59BpqTgYCBXKiO12CE/V5DcaHANTqOZGLjggwjPhIPr9Wz
-         9ytQPh8tLdlIof//6YgHFjBfat1gwf8x0BKqatIZNgD5Xwb89m+cvtBeb8RUySYCCc
-         GsMmL8ZquEtBVEdFhOrxdmxCqD8UeKZvTXTyiNOU=
-Date:   Wed, 15 Mar 2023 16:47:01 +0300
-From:   Fedor Pchelkin <pchelkin@ispras.ru>
-To:     syzbot+df61b36319e045c00a08@syzkaller.appspotmail.com
-Cc:     syzkaller-bugs@googlegroups.com, linux-kernel@vger.kernel.org
-Subject: Re: [syzbot] [wireless?] KMSAN: uninit-value in ath9k_hw_init
-Message-ID: <20230315134701.ojj2nzlbdbslheaz@fpc>
+        Wed, 15 Mar 2023 09:48:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA8A68C805;
+        Wed, 15 Mar 2023 06:47:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8AED661DA5;
+        Wed, 15 Mar 2023 13:47:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87A72C433EF;
+        Wed, 15 Mar 2023 13:47:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678888052;
+        bh=pLTTdcysDE6MuWCJgZEr33nFmAHkj+/laic2uRWrGpM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=B4U2NIwt7leQZluMD/1StUmSwXjtb7crTNxEWND78mybiE/jkjbRmPVRWBqiV/0hr
+         pvd/GlHX0B7o5RYG3q75x9TSm0qmsdnbFlP21RfX2TiECpaT59PSYSpDxiSCI4GTK3
+         GW7ZGf3L76aO5Jb+eBHFaheNocqhj5BxNENo26FssKz+W7dPowaKZEFyXDtVB68p0t
+         7YDiZv97KrC7cGRK4kq3BbS7D153xybPbAYrzozMNMsBzzX7eYIh56YD2KrBHS74qd
+         1oebLvwTncCKM6chZcsYTy7vWbi9Z3jjUKLT2YZK6e6RnEkg2vMOCgx7psu3tpi4aw
+         lCREf0Tz9FgQw==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 76FFD4049F; Wed, 15 Mar 2023 10:47:29 -0300 (-03)
+Date:   Wed, 15 Mar 2023 10:47:29 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Jiri Olsa <jolsa@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Song Liu <song@kernel.org>,
+        Stephane Eranian <eranian@google.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        James Clark <james.clark@arm.com>, Hao Luo <haoluo@google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH 03/10] perf record: Add BPF event filter support
+Message-ID: <ZBHMcfCr+GeQJ9Sz@kernel.org>
+References: <20230314234237.3008956-1-namhyung@kernel.org>
+ <20230314234237.3008956-4-namhyung@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230314234237.3008956-4-namhyung@kernel.org>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-#syz test: https://github.com/google/kmsan.git master
+Em Tue, Mar 14, 2023 at 04:42:30PM -0700, Namhyung Kim escreveu:
+> Use --filter option to set BPF filter for generic events other than the
+> tracepoints or Intel PT.  The BPF program will check the sample data and
+> filter according to the expression.
+> 
+> For example, the below is the typical perf record for frequency mode.
+> The sample period started from 1 and increased gradually.
+> 
+> $ sudo ./perf record -e cycles true
+> $ sudo ./perf script
+>        perf-exec 2272336 546683.916875:          1 cycles:  ffffffff828499b8 perf_event_exec+0x298 ([kernel.kallsyms])
+>        perf-exec 2272336 546683.916892:          1 cycles:  ffffffff828499b8 perf_event_exec+0x298 ([kernel.kallsyms])
+>        perf-exec 2272336 546683.916899:          3 cycles:  ffffffff828499b8 perf_event_exec+0x298 ([kernel.kallsyms])
+>        perf-exec 2272336 546683.916905:         17 cycles:  ffffffff828499b8 perf_event_exec+0x298 ([kernel.kallsyms])
+>        perf-exec 2272336 546683.916911:        100 cycles:  ffffffff828499b8 perf_event_exec+0x298 ([kernel.kallsyms])
+>        perf-exec 2272336 546683.916917:        589 cycles:  ffffffff828499b8 perf_event_exec+0x298 ([kernel.kallsyms])
+>        perf-exec 2272336 546683.916924:       3470 cycles:  ffffffff828499b8 perf_event_exec+0x298 ([kernel.kallsyms])
+>        perf-exec 2272336 546683.916930:      20465 cycles:  ffffffff828499b8 perf_event_exec+0x298 ([kernel.kallsyms])
+>             true 2272336 546683.916940:     119873 cycles:  ffffffff8283afdd perf_iterate_ctx+0x2d ([kernel.kallsyms])
+>             true 2272336 546683.917003:     461349 cycles:  ffffffff82892517 vma_interval_tree_insert+0x37 ([kernel.kallsyms])
+>             true 2272336 546683.917237:     635778 cycles:  ffffffff82a11400 security_mmap_file+0x20 ([kernel.kallsyms])
+> 
+> When you add a BPF filter to get samples having periods greater than 1000,
+> the output would look like below:
 
---- a/drivers/net/wireless/ath/ath9k/wmi.c
-+++ b/drivers/net/wireless/ath/ath9k/wmi.c
-@@ -200,16 +200,6 @@ void ath9k_fatal_work(struct work_struct *work)
- 	ath9k_htc_reset(priv);
+Had to add:
+
+diff --git a/tools/perf/util/python.c b/tools/perf/util/python.c
+index be336f1b2b689602..153a13cdca9df1ea 100644
+--- a/tools/perf/util/python.c
++++ b/tools/perf/util/python.c
+@@ -19,6 +19,7 @@
+ #include "mmap.h"
+ #include "stat.h"
+ #include "metricgroup.h"
++#include "util/bpf-filter.h"
+ #include "util/env.h"
+ #include "util/pmu.h"
+ #include <internal/lib.h>
+@@ -135,6 +136,18 @@ int bpf_counter__disable(struct evsel *evsel __maybe_unused)
+ 	return 0;
  }
  
--static void ath9k_wmi_rsp_callback(struct wmi *wmi, struct sk_buff *skb)
--{
--	skb_pull(skb, sizeof(struct wmi_cmd_hdr));
--
--	if (wmi->cmd_rsp_buf != NULL && wmi->cmd_rsp_len != 0)
--		memcpy(wmi->cmd_rsp_buf, skb->data, wmi->cmd_rsp_len);
--
--	complete(&wmi->cmd_wait);
--}
--
- static void ath9k_wmi_ctrl_rx(void *priv, struct sk_buff *skb,
- 			      enum htc_endpoint_id epid)
- {
-@@ -221,6 +211,9 @@ static void ath9k_wmi_ctrl_rx(void *priv, struct sk_buff *skb,
- 	if (unlikely(wmi->stopped))
- 		goto free_skb;
- 
-+	if (unlikely(skb->len < sizeof(struct wmi_cmd_hdr)))
-+		goto free_skb;
++// not to drag util/bpf-filter.c
 +
- 	hdr = (struct wmi_cmd_hdr *) skb->data;
- 	cmd_id = be16_to_cpu(hdr->command_id);
- 
-@@ -234,14 +227,24 @@ static void ath9k_wmi_ctrl_rx(void *priv, struct sk_buff *skb,
- 
- 	/* Check if there has been a timeout. */
- 	spin_lock_irqsave(&wmi->wmi_lock, flags);
--	if (be16_to_cpu(hdr->seq_no) != wmi->last_seq_id) {
-+	if (be16_to_cpu(hdr->seq_no) != wmi->last_seq_id ||
-+	    be16_to_cpu(hdr->seq_no) == 0) {
- 		spin_unlock_irqrestore(&wmi->wmi_lock, flags);
- 		goto free_skb;
- 	}
--	spin_unlock_irqrestore(&wmi->wmi_lock, flags);
- 
--	/* WMI command response */
--	ath9k_wmi_rsp_callback(wmi, skb);
-+	skb_pull(skb, sizeof(struct wmi_cmd_hdr));
++int perf_bpf_filter__prepare(struct evsel *evsel __maybe_unused)
++{
++	return 0;
++}
 +
-+	if (unlikely(skb->len < wmi->cmd_rsp_len)) {
-+		spin_unlock_irqrestore(&wmi->wmi_lock, flags);
-+		goto free_skb;
-+	}
++int perf_bpf_filter__destroy(struct evsel *evsel __maybe_unused)
++{
++	return 0;
++}
 +
-+	if (wmi->cmd_rsp_buf != NULL && wmi->cmd_rsp_len != 0)
-+		memcpy(wmi->cmd_rsp_buf, skb->data, wmi->cmd_rsp_len);
-+
-+	complete(&wmi->cmd_wait);
-+	spin_unlock_irqrestore(&wmi->wmi_lock, flags);
+ /*
+  * Support debug printing even though util/debug.c is not linked.  That means
+  * implementing 'verbose' and 'eprintf'.
+
+
+Please run 'perf test' before submitting patches,
+
+- Arnaldo
  
- free_skb:
- 	kfree_skb(skb);
-@@ -279,7 +282,8 @@ int ath9k_wmi_connect(struct htc_target *htc, struct wmi *wmi,
- 
- static int ath9k_wmi_cmd_issue(struct wmi *wmi,
- 			       struct sk_buff *skb,
--			       enum wmi_cmd_id cmd, u16 len)
-+			       enum wmi_cmd_id cmd, u16 len,
-+			       u8 *rsp_buf, u32 rsp_len)
- {
- 	struct wmi_cmd_hdr *hdr;
- 	unsigned long flags;
-@@ -289,6 +293,10 @@ static int ath9k_wmi_cmd_issue(struct wmi *wmi,
- 	hdr->seq_no = cpu_to_be16(++wmi->tx_seq_id);
- 
- 	spin_lock_irqsave(&wmi->wmi_lock, flags);
-+	/* record the rsp buffer and length */
-+	wmi->cmd_rsp_buf = rsp_buf;
-+	wmi->cmd_rsp_len = rsp_len;
-+
- 	wmi->last_seq_id = wmi->tx_seq_id;
- 	spin_unlock_irqrestore(&wmi->wmi_lock, flags);
- 
-@@ -308,8 +316,11 @@ int ath9k_wmi_cmd(struct wmi *wmi, enum wmi_cmd_id cmd_id,
- 	unsigned long time_left;
- 	int ret = 0;
- 
--	if (ah->ah_flags & AH_UNPLUGGED)
--		return 0;
-+	if (ah->ah_flags & AH_UNPLUGGED) {
-+		ath_dbg(common, WMI, "Device unplugged for WMI command: %s\n",
-+			wmi_cmd_to_name(cmd_id));
-+		return -ENODEV;
-+	}
- 
- 	skb = alloc_skb(headroom + cmd_len, GFP_ATOMIC);
- 	if (!skb)
-@@ -329,11 +340,7 @@ int ath9k_wmi_cmd(struct wmi *wmi, enum wmi_cmd_id cmd_id,
- 		goto out;
- 	}
- 
--	/* record the rsp buffer and length */
--	wmi->cmd_rsp_buf = rsp_buf;
--	wmi->cmd_rsp_len = rsp_len;
--
--	ret = ath9k_wmi_cmd_issue(wmi, skb, cmd_id, cmd_len);
-+	ret = ath9k_wmi_cmd_issue(wmi, skb, cmd_id, cmd_len, rsp_buf, rsp_len);
- 	if (ret)
- 		goto out;
- 
+> $ sudo ./perf record -e cycles --filter 'period > 1000' true
+> $ sudo ./perf script
+>        perf-exec 2273949 546850.708501:       5029 cycles:  ffffffff826f9e25 finish_wait+0x5 ([kernel.kallsyms])
+>        perf-exec 2273949 546850.708508:      32409 cycles:  ffffffff826f9e25 finish_wait+0x5 ([kernel.kallsyms])
+>        perf-exec 2273949 546850.708526:     143369 cycles:  ffffffff82b4cdbf xas_start+0x5f ([kernel.kallsyms])
+>        perf-exec 2273949 546850.708600:     372650 cycles:  ffffffff8286b8f7 __pagevec_lru_add+0x117 ([kernel.kallsyms])
+>        perf-exec 2273949 546850.708791:     482953 cycles:  ffffffff829190de __mod_memcg_lruvec_state+0x4e ([kernel.kallsyms])
+>             true 2273949 546850.709036:     501985 cycles:  ffffffff828add7c tlb_gather_mmu+0x4c ([kernel.kallsyms])
+>             true 2273949 546850.709292:     503065 cycles:      7f2446d97c03 _dl_map_object_deps+0x973 (/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2)
+> 
+> Acked-by: Jiri Olsa <jolsa@kernel.org>
+> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+> ---
+>  tools/perf/Documentation/perf-record.txt | 15 +++++++++++---
+>  tools/perf/util/bpf_counter.c            |  3 +--
+>  tools/perf/util/evlist.c                 | 25 +++++++++++++++++-------
+>  tools/perf/util/evsel.c                  |  2 ++
+>  tools/perf/util/parse-events.c           |  8 +++-----
+>  5 files changed, 36 insertions(+), 17 deletions(-)
+> 
+> diff --git a/tools/perf/Documentation/perf-record.txt b/tools/perf/Documentation/perf-record.txt
+> index ff815c2f67e8..122f71726eaa 100644
+> --- a/tools/perf/Documentation/perf-record.txt
+> +++ b/tools/perf/Documentation/perf-record.txt
+> @@ -119,9 +119,12 @@ OPTIONS
+>  	  "perf report" to view group events together.
+>  
+>  --filter=<filter>::
+> -        Event filter. This option should follow an event selector (-e) which
+> -	selects either tracepoint event(s) or a hardware trace PMU
+> -	(e.g. Intel PT or CoreSight).
+> +	Event filter.  This option should follow an event selector (-e).
+> +	If the event is a tracepoint, the filter string will be parsed by
+> +	the kernel.  If the event is a hardware trace PMU (e.g. Intel PT
+> +	or CoreSight), it'll be processed as an address filter.  Otherwise
+> +	it means a general filter using BPF which can be applied for any
+> +	kind of event.
+>  
+>  	- tracepoint filters
+>  
+> @@ -176,6 +179,12 @@ OPTIONS
+>  
+>  	Multiple filters can be separated with space or comma.
+>  
+> +	- bpf filters
+> +
+> +	A BPF filter can access the sample data and make a decision based on the
+> +	data.  Users need to set an appropriate sample type to use the BPF
+> +	filter.
+> +
+>  --exclude-perf::
+>  	Don't record events issued by perf itself. This option should follow
+>  	an event selector (-e) which selects tracepoint event(s). It adds a
+> diff --git a/tools/perf/util/bpf_counter.c b/tools/perf/util/bpf_counter.c
+> index aa78a15a6f0a..1b77436e067e 100644
+> --- a/tools/perf/util/bpf_counter.c
+> +++ b/tools/perf/util/bpf_counter.c
+> @@ -763,8 +763,7 @@ extern struct bpf_counter_ops bperf_cgrp_ops;
+>  
+>  static inline bool bpf_counter_skip(struct evsel *evsel)
+>  {
+> -	return list_empty(&evsel->bpf_counter_list) &&
+> -		evsel->follower_skel == NULL;
+> +	return evsel->bpf_counter_ops == NULL;
+>  }
+>  
+>  int bpf_counter__install_pe(struct evsel *evsel, int cpu_map_idx, int fd)
+> diff --git a/tools/perf/util/evlist.c b/tools/perf/util/evlist.c
+> index b74e12239aec..cc491a037836 100644
+> --- a/tools/perf/util/evlist.c
+> +++ b/tools/perf/util/evlist.c
+> @@ -31,6 +31,7 @@
+>  #include "util/evlist-hybrid.h"
+>  #include "util/pmu.h"
+>  #include "util/sample.h"
+> +#include "util/bpf-filter.h"
+>  #include <signal.h>
+>  #include <unistd.h>
+>  #include <sched.h>
+> @@ -1086,17 +1087,27 @@ int evlist__apply_filters(struct evlist *evlist, struct evsel **err_evsel)
+>  	int err = 0;
+>  
+>  	evlist__for_each_entry(evlist, evsel) {
+> -		if (evsel->filter == NULL)
+> -			continue;
+> -
+>  		/*
+>  		 * filters only work for tracepoint event, which doesn't have cpu limit.
+>  		 * So evlist and evsel should always be same.
+>  		 */
+> -		err = perf_evsel__apply_filter(&evsel->core, evsel->filter);
+> -		if (err) {
+> -			*err_evsel = evsel;
+> -			break;
+> +		if (evsel->filter) {
+> +			err = perf_evsel__apply_filter(&evsel->core, evsel->filter);
+> +			if (err) {
+> +				*err_evsel = evsel;
+> +				break;
+> +			}
+> +		}
+> +
+> +		/*
+> +		 * non-tracepoint events can have BPF filters.
+> +		 */
+> +		if (!list_empty(&evsel->bpf_filters)) {
+> +			err = perf_bpf_filter__prepare(evsel);
+> +			if (err) {
+> +				*err_evsel = evsel;
+> +				break;
+> +			}
+>  		}
+>  	}
+>  
+> diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
+> index a83d8cd5eb51..dc3faf005c3b 100644
+> --- a/tools/perf/util/evsel.c
+> +++ b/tools/perf/util/evsel.c
+> @@ -50,6 +50,7 @@
+>  #include "off_cpu.h"
+>  #include "../perf-sys.h"
+>  #include "util/parse-branch-options.h"
+> +#include "util/bpf-filter.h"
+>  #include <internal/xyarray.h>
+>  #include <internal/lib.h>
+>  #include <internal/threadmap.h>
+> @@ -1517,6 +1518,7 @@ void evsel__exit(struct evsel *evsel)
+>  	assert(list_empty(&evsel->core.node));
+>  	assert(evsel->evlist == NULL);
+>  	bpf_counter__destroy(evsel);
+> +	perf_bpf_filter__destroy(evsel);
+>  	evsel__free_counts(evsel);
+>  	perf_evsel__free_fd(&evsel->core);
+>  	perf_evsel__free_id(&evsel->core);
+> diff --git a/tools/perf/util/parse-events.c b/tools/perf/util/parse-events.c
+> index 3b2e5bb3e852..6c5cf5244486 100644
+> --- a/tools/perf/util/parse-events.c
+> +++ b/tools/perf/util/parse-events.c
+> @@ -28,6 +28,7 @@
+>  #include "perf.h"
+>  #include "util/parse-events-hybrid.h"
+>  #include "util/pmu-hybrid.h"
+> +#include "util/bpf-filter.h"
+>  #include "tracepoint.h"
+>  #include "thread_map.h"
+>  
+> @@ -2542,11 +2543,8 @@ static int set_filter(struct evsel *evsel, const void *arg)
+>  		perf_pmu__scan_file(pmu, "nr_addr_filters",
+>  				    "%d", &nr_addr_filters);
+>  
+> -	if (!nr_addr_filters) {
+> -		fprintf(stderr,
+> -			"This CPU does not support address filtering\n");
+> -		return -1;
+> -	}
+> +	if (!nr_addr_filters)
+> +		return perf_bpf_filter__parse(&evsel->bpf_filters, str);
+>  
+>  	if (evsel__append_addr_filter(evsel, str) < 0) {
+>  		fprintf(stderr,
+> -- 
+> 2.40.0.rc1.284.g88254d51c5-goog
+> 
+
 -- 
+
+- Arnaldo
