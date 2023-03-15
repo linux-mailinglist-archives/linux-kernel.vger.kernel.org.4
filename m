@@ -2,68 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF0746BA61F
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 05:22:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 013596BA622
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 05:23:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230376AbjCOEWM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 00:22:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44958 "EHLO
+        id S230472AbjCOEXv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 00:23:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230170AbjCOEWK (ORCPT
+        with ESMTP id S230170AbjCOEXt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 00:22:10 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96C9E31E17;
-        Tue, 14 Mar 2023 21:22:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678854129; x=1710390129;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=O1b/vZwXDv9P3fE6hz6f8P7YAE0JUZNpzgRhOi7jUrs=;
-  b=lWlcsv4eDtLEo5kBFIb2wbxR0cvmwKal4wrLodYUDKiz7Cz0gwTibciA
-   oB3tgELdTnrgi49d7sPUukYigu82CVI35NeqvHuedBZu3HEGm/E1uGfxk
-   PZBh4xoeYVhQEWEqhtT4ZdlOsu9MMXI3FSxLShJMd48c5GD0WJf8/J/U7
-   zi+EiwGHAiK/W2kg9eM9zribProrFcvQ7HRAVN5EfustWvYLI0ZlpIWRb
-   i3vFJNhz7o1S6BHOX3LV6oGQvpCqmd9lczMgoHRsiOwX0H3VOqdoOVQh7
-   CGD+lvI8d4humKsmUiNz0NCZwouav2+cbjmkZS1L1LzrTMmkrJRH2ATm8
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="400192927"
-X-IronPort-AV: E=Sophos;i="5.98,261,1673942400"; 
-   d="scan'208";a="400192927"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2023 21:22:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="672593121"
-X-IronPort-AV: E=Sophos;i="5.98,261,1673942400"; 
-   d="scan'208";a="672593121"
-Received: from cfwielan-mobl.amr.corp.intel.com (HELO [10.209.88.145]) ([10.209.88.145])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2023 21:22:08 -0700
-Message-ID: <de9c80fe-d857-c0e8-4950-1607ca3712fe@linux.intel.com>
-Date:   Tue, 14 Mar 2023 21:22:08 -0700
+        Wed, 15 Mar 2023 00:23:49 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CDEE3BD9E;
+        Tue, 14 Mar 2023 21:23:47 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32F4Na6F066164;
+        Tue, 14 Mar 2023 23:23:36 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1678854216;
+        bh=ZSV0W2dXKv2SlArPeCt+Qvh+W7Ngp8fUG1gBZOMtR3o=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=XXwR9J8nSTscyqJr+seO3wke/x5e6OdADjbheDsj539Ts1D0xbkJiAz6g91irnFNZ
+         h9YQ7kBNyA2eTlAlJe2jz95quzUmeuFqySItThcfbFkDHeWhLQ2dxVbJE87Za0qyGQ
+         odqOfUrC8JDNviu2qKLt5fen1Wkc1OTpBVQLHvcY=
+Received: from DFLE102.ent.ti.com (dfle102.ent.ti.com [10.64.6.23])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32F4Na3I012950
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 14 Mar 2023 23:23:36 -0500
+Received: from DFLE104.ent.ti.com (10.64.6.25) by DFLE102.ent.ti.com
+ (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 14
+ Mar 2023 23:23:35 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE104.ent.ti.com
+ (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Tue, 14 Mar 2023 23:23:35 -0500
+Received: from [172.24.145.215] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32F4NWw4054424;
+        Tue, 14 Mar 2023 23:23:32 -0500
+Message-ID: <49dde766-7e60-52cf-4c62-5e037164a75e@ti.com>
+Date:   Wed, 15 Mar 2023 09:53:31 +0530
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.8.0
-Subject: Re: [PATCH v2 1/2] PCI/ATS: Add a helper function to configure ATS
- STU of a PF
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v5 3/6] arm64: dts: ti: k3-am625-sk: Enable audio on AM62
+ SK
+To:     Jai Luthra <j-luthra@ti.com>, Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Mark Brown <broonie@kernel.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20230313-mcasp_upstream-v5-0-d6844707aa8a@ti.com>
+ <20230313-mcasp_upstream-v5-3-d6844707aa8a@ti.com>
 Content-Language: en-US
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
-        joro@8bytes.org, bhelgaas@google.com, robin.murphy@arm.com,
-        will@kernel.org, jean-philippe@linaro.org,
-        darren@os.amperecomputing.com, scott@os.amperecomputing.com
-References: <20230314211739.GA1679724@bhelgaas>
-From:   Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <20230314211739.GA1679724@bhelgaas>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+From:   Jayesh Choudhary <j-choudhary@ti.com>
+In-Reply-To: <20230313-mcasp_upstream-v5-3-d6844707aa8a@ti.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -72,121 +76,144 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 3/14/23 2:17 PM, Bjorn Helgaas wrote:
-> On Tue, Mar 14, 2023 at 11:12:11AM -0700, Sathyanarayanan Kuppuswamy wrote:
->> On 3/14/23 10:10 AM, Bjorn Helgaas wrote:
->>> On Tue, Mar 14, 2023 at 09:50:06AM -0700, Sathyanarayanan Kuppuswamy wrote:
->>>> On 3/14/23 9:02 AM, Bjorn Helgaas wrote:
->>>>> On Tue, Mar 14, 2023 at 08:06:07PM +0530, Ganapatrao Kulkarni wrote:
->>>>>> On 14-03-2023 06:22 pm, Sathyanarayanan Kuppuswamy wrote:
->>>>>>> On 3/14/23 3:08 AM, Ganapatrao Kulkarni wrote:
->>>>>>>> On 14-03-2023 04:00 am, Sathyanarayanan Kuppuswamy wrote:
->>>>>>>>> On 3/13/23 2:12 PM, Bjorn Helgaas wrote:
->>>>>>>>>> On Mon, Feb 27, 2023 at 08:21:36PM -0800, Ganapatrao Kulkarni wrote:
->>>>>>>>>>> As per PCI specification (PCI Express Base Specification
->>>>>>>>>>> Revision 6.0, Section 10.5) both PF and VFs of a PCI EP
->>>>>>>>>>> are permitted to be enabled independently for ATS
->>>>>>>>>>> capability, however the STU(Smallest Translation Unit) is
->>>>>>>>>>> shared between PF and VFs. For VFs, it is hardwired to
->>>>>>>>>>> Zero and the associated PF's value applies to VFs.
->>>>>>>>>>>
->>>>>>>>>>> In the current code, the STU is being configured while
->>>>>>>>>>> enabling the PF ATS.  Hence, it is not able to enable ATS
->>>>>>>>>>> for VFs, if it is not enabled on the associated PF
->>>>>>>>>>> already.
->>>>>>>>>>>
->>>>>>>>>>> Adding a function pci_ats_stu_configure(), which can be
->>>>>>>>>>> called to configure the STU during PF enumeration.  Latter
->>>>>>>>>>> enumerations of VFs can successfully enable ATS
->>>>>>>>>>> independently.
->>>>>
->>>>>>>>>>> @@ -46,6 +46,35 @@ bool pci_ats_supported(struct pci_dev *dev)
->>>>>>>>>>>    }
->>>>>>>>>>>    EXPORT_SYMBOL_GPL(pci_ats_supported);
->>>>>>>>>>>    +/**
->>>>>>>>>>> + * pci_ats_stu_configure - Configure STU of a PF.
->>>>>>>>>>> + * @dev: the PCI device
->>>>>>>>>>> + * @ps: the IOMMU page shift
->>>>>>>>>>> + *
->>>>>>>>>>> + * Returns 0 on success, or negative on failure.
->>>>>>>>>>> + */
->>>>>>>>>>> +int pci_ats_stu_configure(struct pci_dev *dev, int ps)
->>>>>>>>>>> +{
->>>>>>>>>>> +    u16 ctrl;
->>>>>>>>>>> +
->>>>>>>>>>> +    if (dev->ats_enabled || dev->is_virtfn)
->>>>>>>>>>> +        return 0;
->>>>>>>>>>
->>>>>>>>>> I might return an error for the VF case on the assumption
->>>>>>>>>> that it's likely an error in the caller.  I guess one could
->>>>>>>>>> argue that it simplifies the caller if it doesn't have to
->>>>>>>>>> check for PF vs VF.  But the fact that STU is shared between
->>>>>>>>>> PF and VFs is an important part of understanding how ATS
->>>>>>>>>> works, so the caller should be aware of the distinction
->>>>>>>>>> anyway.
->>>>>>>>>
->>>>>>>>> I have already asked this question. But let me repeat it.
->>>>>>>>>
->>>>>>>>> We don't have any checks for the PF case here. That means you
->>>>>>>>> can re-configure the STU as many times as you want until ATS
->>>>>>>>> is enabled in PF. So, if there are active VFs which uses this
->>>>>>>>> STU, can PF re-configure the STU at will?
->>>>>>>>
->>>>>>>> IMO, Since STU is shared, programming it multiple times is not expected from callers code do it, however we can add below check to allow to program STU once from a PF.
->>>>>>>>
->>>>>>>> diff --git a/drivers/pci/ats.c b/drivers/pci/ats.c
->>>>>>>> index 1611bfa1d5da..f7bb01068e18 100644
->>>>>>>> --- a/drivers/pci/ats.c
->>>>>>>> +++ b/drivers/pci/ats.c
->>>>>>>> @@ -60,6 +60,10 @@ int pci_ats_stu_configure(struct pci_dev *dev, int ps)
->>>>>>>>          if (dev->ats_enabled || dev->is_virtfn)
->>>>>>>>                  return 0;
->>>>>>>>
->>>>>>>> +       /* Configured already */
->>>>>>>> +       if (dev->ats_stu)
->>>>>>>> +               return 0;
->>>>>>>
->>>>>>> Theoretically, you can re-configure STU as long as no one is using
->>>>>>> it. Instead of this check, is there a way to check whether there
->>>>>>> are active VMs which enables ATS?
->>>>>>
->>>>>> Yes I agree, there is no limitation on how many times you write STU
->>>>>> bits, but practically it is happening while PF is enumerated.
->>>>>>
->>>>>> The usage of function pci_ats_stu_configure is almost
->>>>>> similar(subset) to pci_enable_ats and only difference is one does
->>>>>> ATS enable + STU program and another does only STU program.
->>>>>
->>>>> What would you think of removing the STU update feature from
->>>>> pci_enable_ats() so it always fails if pci_ats_stu_configure() has not
->>>>> been called, even when called on the PF, e.g.,
->>>>>
->>>>>   if (ps != pci_physfn(dev)->ats_stu)
->>>>>     return -EINVAL;
->>>>
->>>> If we are removing the STU update from pci_enable_ats(), why
->>>> even allow passing "ps (page shift)" parameter? IMO, we can assume that
->>>> for STU reconfigure, users will call pci_ats_stu_configure().
->>>
->>> The reason to pass "ps" would be to verify that the STU the caller
->>> plans to use matches the actual STU.
->>
->> Do we really need to verify it? My thinking is, by introducing
->> pci_ats_stu_configure() we are already trying to decouple the STU config
->> from pci_enable_ats(). So why again check for it when enabling ATS?
+On 13/03/23 20:19, Jai Luthra wrote:
+> Add nodes for audio codec and sound card, enable the audio serializer
+> (McASP1) under use and update pinmux.
 > 
-> Yeah, maybe we don't need to.  I was thinking that STU would be
-> configured by the host, while the caller of pci_enable_ats() for a VF
-> might be in a guest, but I guess that's not the case, right?
-
-I think the idea is to configure the STU during PF enumeration in the
-host. So, when VF enables ATS in the VM, it does not need to worry about
-the STU configuration. So I don't think we need to re-check the STU in
-the VF case.
-
+> Signed-off-by: Jai Luthra <j-luthra@ti.com>
+> ---
+>   arch/arm64/boot/dts/ti/k3-am625-sk.dts | 88 ++++++++++++++++++++++++++++++++++
+>   1 file changed, 88 insertions(+)
 > 
-> Bjorn
+> diff --git a/arch/arm64/boot/dts/ti/k3-am625-sk.dts b/arch/arm64/boot/dts/ti/k3-am625-sk.dts
+> index 6bc7d63cf52f..3199042f3687 100644
+> --- a/arch/arm64/boot/dts/ti/k3-am625-sk.dts
+> +++ b/arch/arm64/boot/dts/ti/k3-am625-sk.dts
+> @@ -141,6 +141,52 @@ vdd_sd_dv: regulator-4 {
+>   			 <3300000 0x1>;
+>   	};
+>   
+> +	vcc_1v8: regulator-5 {
+> +		/* output of TPS6282518DMQ */
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "vcc_1v8";
+> +		regulator-min-microvolt = <1800000>;
+> +		regulator-max-microvolt = <1800000>;
+> +		vin-supply = <&vcc_3v3_sys>;
+> +		regulator-always-on;
+> +		regulator-boot-on;
+> +	};
+> +
+> +	tlv320_mclk: clk-0 {
+> +		#clock-cells = <0>;
+> +		compatible = "fixed-clock";
+> +		clock-frequency = <12288000>;
+> +	};
+> +
+> +	sound {
 
--- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
+Should we put label 'codec_audio' here similar to am62a7-sk???
+
+> +		compatible = "simple-audio-card";
+> +		simple-audio-card,name = "AM62x-SKEVM";
+> +		simple-audio-card,widgets =
+> +			"Headphone",	"Headphone Jack",
+> +			"Line",	"Line In",
+> +			"Microphone", "Microphone Jack";
+
+Space/tab inconsistency after "Microphone",
+
+> +		simple-audio-card,routing =
+> +			"Headphone Jack",	"HPLOUT",
+> +			"Headphone Jack",	"HPROUT",
+> +			"LINE1L",		"Line In",
+> +			"LINE1R",		"Line In",
+> +			"MIC3R",		"Microphone Jack",
+> +			"Microphone Jack",	"Mic Bias";
+> +		simple-audio-card,format = "dsp_b";
+> +		simple-audio-card,bitclock-master = <&sound_master>;
+> +		simple-audio-card,frame-master = <&sound_master>;
+> +		simple-audio-card,bitclock-inversion;
+> +
+> +		simple-audio-card,cpu {
+> +			sound-dai = <&mcasp1>;
+> +		};
+> +
+> +		sound_master: simple-audio-card,codec {
+> +			sound-dai = <&tlv320aic3106>;
+> +			clocks = <&tlv320_mclk>;
+> +		};
+> +	};
+> +
+>   	leds {
+>   		compatible = "gpio-leds";
+>   		pinctrl-names = "default";
+> @@ -292,6 +338,15 @@ main_usb1_pins_default: main-usb1-pins-default {
+>   			AM62X_IOPAD(0x0258, PIN_OUTPUT, 0) /* (F18) USB1_DRVVBUS */
+>   		>;
+>   	};
+> +
+> +	main_mcasp1_pins_default: main-mcasp1-pins-default {
+> +		pinctrl-single,pins = <
+> +			AM62X_IOPAD(0x0090, PIN_INPUT, 2) /* (M24) GPMC0_BE0N_CLE.MCASP1_ACLKX */
+> +			AM62X_IOPAD(0x0098, PIN_INPUT, 2) /* (U23) GPMC0_WAIT0.MCASP1_AFSX */
+> +			AM62X_IOPAD(0x008c, PIN_OUTPUT, 2) /* (L25) GPMC0_WEN.MCASP1_AXR0 */
+> +			AM62X_IOPAD(0x0084, PIN_INPUT, 2) /* (L23) GPMC0_ADVN_ALE.MCASP1_AXR2 */
+
+Better to have padding for the offsets here consistent across dt.
+
+Reviewed-by: Jayesh Choudhary <j-choudhary@ti.com>
+
+> +		>;
+> +	};
+>   };
+>   
+>   &wkup_uart0 {
+> @@ -349,6 +404,19 @@ exp1: gpio@22 {
+>   		pinctrl-names = "default";
+>   		pinctrl-0 = <&main_gpio1_ioexp_intr_pins_default>;
+>   	};
+> +
+> +	tlv320aic3106: audio-codec@1b {
+> +		#sound-dai-cells = <0>;
+> +		compatible = "ti,tlv320aic3106";
+> +		reg = <0x1b>;
+> +		ai3x-micbias-vg = <1>;	/* 2.0V */
+> +
+> +		/* Regulators */
+> +		AVDD-supply = <&vcc_3v3_sys>;
+> +		IOVDD-supply = <&vcc_3v3_sys>;
+> +		DRVDD-supply = <&vcc_3v3_sys>;
+> +		DVDD-supply = <&vcc_1v8>;
+> +	};
+>   };
+>   
+>   &sdhci0 {
+> @@ -406,6 +474,26 @@ cpsw3g_phy1: ethernet-phy@1 {
+>   	};
+>   };
+>   
+> +&mcasp1 {
+> +	status = "okay";
+> +	#sound-dai-cells = <0>;
+> +
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&main_mcasp1_pins_default>;
+> +
+> +	op-mode = <0>;          /* MCASP_IIS_MODE */
+> +	tdm-slots = <2>;
+> +
+> +	serial-dir = <  /* 0: INACTIVE, 1: TX, 2: RX */
+> +	       1 0 2 0
+> +	       0 0 0 0
+> +	       0 0 0 0
+> +	       0 0 0 0
+> +	>;
+> +	tx-num-evt = <32>;
+> +	rx-num-evt = <32>;
+> +};
+> +
+>   &mailbox0_cluster0 {
+>   	mbox_m4_0: mbox-m4-0 {
+>   		ti,mbox-rx = <0 0 0>;
+> 
