@@ -2,98 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F36986BAAC9
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 09:30:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32BA66BAAC6
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 09:30:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231600AbjCOIa0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 04:30:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56300 "EHLO
+        id S231451AbjCOIaW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 04:30:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231475AbjCOIaV (ORCPT
+        with ESMTP id S231372AbjCOIaT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 04:30:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71E8338030;
-        Wed, 15 Mar 2023 01:30:20 -0700 (PDT)
+        Wed, 15 Mar 2023 04:30:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C0DB38030;
+        Wed, 15 Mar 2023 01:30:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0979761C11;
-        Wed, 15 Mar 2023 08:30:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA1A8C433EF;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0D5B761B68;
         Wed, 15 Mar 2023 08:30:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1678869019;
-        bh=hE3fyUKCNJmb98hi99Yf0nUKlq4P8XUaLti7/cHlkAo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WPz9bRlf9fJg6WWMO2QCT6ZiS+HD6KIaORlrD5kSzQHVsUyDsHDVCUkyChJRzcW53
-         aiDdOSHkhfGaBKm3fV5Um97lcnuBwe6OysqlsaXKUEYChQDH6whtwEE6l7HmhsE489
-         O7eszhammUP47bNxQ8lDeHipaWXJdrraqC8aA1JY=
-Date:   Wed, 15 Mar 2023 09:30:10 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Cai Xinchen <caixinchen1@huawei.com>
-Cc:     longman@redhat.com, lizefan.x@bytedance.com, tj@kernel.org,
-        hannes@cmpxchg.org, sashal@kernel.org, mkoutny@suse.com,
-        zhangqiao22@huawei.com, juri.lelli@redhat.com,
-        penguin-kernel@i-love.sakura.ne.jp, stable@vger.kernel.org,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4.19 0/3] Backport patches to fix threadgroup_rwsem <->
- cpus_read_lock() deadlock
-Message-ID: <ZBGCEgB7wEe0pCNk@kroah.com>
-References: <20230303045050.139985-1-caixinchen1@huawei.com>
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 691CBC4339B;
+        Wed, 15 Mar 2023 08:30:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678869017;
+        bh=Z5slyDD6RPYiIxn4gPNIEOc30z1vuenQXP5Yc5ZgU3c=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=teh/IDY0hpqObAJtKpkxG7mpYDbEX6sLgHTUjPU00TW2sSgf+908T3IwbnuPg00Uv
+         c6qsmNAcNnF9j1aDDt0oyaSWo4VUD7AWYreqvFYFfN0sykyGDKyzdo49h6OnhJX8wt
+         X1WVeBHzVlaPliZU/nKfg6KFpbOFmH8y1Asmxy0QPqZD3nJPosgRAt8gRBgCB1kPh8
+         IEmyuyknt9iYosRZ2xtYRaRy3xHFrPyOop6WOqfkBSYwMK2fLden57ycKiN1jsFbZr
+         I4vib5pzLr+xOXvmhreBPazNW8IgYU5IPWhKV/Ssur/NRqBkGYnbI93UV/pWJ6pamv
+         XU0FmqpchN7Gw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4E6E0E66CBA;
+        Wed, 15 Mar 2023 08:30:17 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230303045050.139985-1-caixinchen1@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v2] scm: fix MSG_CTRUNC setting condition for
+ SO_PASSSEC
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167886901731.1055.14504007440539285248.git-patchwork-notify@kernel.org>
+Date:   Wed, 15 Mar 2023 08:30:17 +0000
+References: <20230313113211.178010-1-aleksandr.mikhalitsyn@canonical.com>
+In-Reply-To: <20230313113211.178010-1-aleksandr.mikhalitsyn@canonical.com>
+To:     Aleksandr Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+Cc:     davem@davemloft.net, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, leon@kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 03, 2023 at 04:50:47AM +0000, Cai Xinchen wrote:
-> We have a deadlock problem which can be solved by commit 4f7e7236435ca
-> ("cgroup: Fix threadgroup_rwsem <-> cpus_read_lock() deadlock").
-> However, it makes lock order of cpus_read_lock and cpuset_mutex
-> wrong in v4.19. The call sequence is as follows:
-> cgroup_procs_write()
->         cgroup_procs_write_start()
->                 get_online_cpus(); // cpus_read_lock()
->                 percpu_down_write(&cgroup_threadgroup_rwsem)
->         cgroup_attach_task
->                 cgroup_migrate
->                         cgroup_migrate_execute
->                                 ss->attach (cpust_attach)
->                                         mutex_lock(&cpuset_mutex)
-> 
-> it seems hard to make cpus_read_lock is locked before
-> cgroup_threadgroup_rwsem and cpuset_mutex is locked before
-> cpus_read_lock unless backport the commit d74b27d63a8beb
-> ("cgroup/cpuset: Change cpuset_rwsem and hotplug lock order")
-> 
-> Juri Lelli (1):
->   cgroup/cpuset: Change cpuset_rwsem and hotplug lock order
-> 
-> Tejun Heo (1):
->   cgroup: Fix threadgroup_rwsem <-> cpus_read_lock() deadlock
-> 
-> Tetsuo Handa (1):
->   cgroup: Add missing cpus_read_lock() to cgroup_attach_task_all()
-> 
->  include/linux/cpuset.h    |  8 +++----
->  kernel/cgroup/cgroup-v1.c |  3 +++
->  kernel/cgroup/cgroup.c    | 49 +++++++++++++++++++++++++++++++++++----
->  kernel/cgroup/cpuset.c    | 25 ++++++++++++--------
->  4 files changed, 66 insertions(+), 19 deletions(-)
-> 
-> -- 
-> 2.17.1
-> 
+Hello:
 
-Now queued up, thanks.
+This patch was applied to netdev/net-next.git (main)
+by David S. Miller <davem@davemloft.net>:
 
-greg k-h
+On Mon, 13 Mar 2023 12:32:11 +0100 you wrote:
+> Currently, kernel would set MSG_CTRUNC flag if msg_control buffer
+> wasn't provided and SO_PASSCRED was set or if there was pending SCM_RIGHTS.
+> 
+> For some reason we have no corresponding check for SO_PASSSEC.
+> 
+> In the recvmsg(2) doc we have:
+>        MSG_CTRUNC
+>               indicates that some control data was discarded due to lack
+>               of space in the buffer for ancillary data.
+> 
+> [...]
+
+Here is the summary with links:
+  - [net-next,v2] scm: fix MSG_CTRUNC setting condition for SO_PASSSEC
+    https://git.kernel.org/netdev/net-next/c/a02d83f9947d
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
