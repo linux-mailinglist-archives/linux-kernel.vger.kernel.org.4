@@ -2,215 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E6886BB5BB
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 15:16:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AD146BB5C0
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 15:17:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232131AbjCOOQr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 10:16:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59518 "EHLO
+        id S233007AbjCOORA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 10:17:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233065AbjCOOQa (ORCPT
+        with ESMTP id S232994AbjCOOQn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 10:16:30 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 334DE3433D
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 07:16:01 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id eh3so20233241edb.11
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 07:16:01 -0700 (PDT)
+        Wed, 15 Mar 2023 10:16:43 -0400
+Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34A3F1BF4;
+        Wed, 15 Mar 2023 07:16:23 -0700 (PDT)
+Received: by mail-il1-x12a.google.com with SMTP id bp11so5014203ilb.3;
+        Wed, 15 Mar 2023 07:16:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=pqrs.dk; s=google; t=1678889759;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=oFlsa6HtfdlDO+5W0pHOXKXz4uVBrG6uhwA+mTGh/F4=;
-        b=UGMpDSGL8X5RFbzk+SEfLtR+9GJKEnTWGNIdPmBJGWII5fmtVJp57KaAbMkCgDbJb+
-         +8GCmf9p0z3p6oHvimw007lQGVU/hqtHOT1SAewubK0Ucm6lG0u2Eg+J6aal9KzsMyXv
-         Lw6KTdWkHzGq95NRgsqVjI/+4RQWYPFFYUiWY=
+        d=gmail.com; s=20210112; t=1678889782;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=9PqS0is4BFBhZIUbIafMoHIoQlBBc9tsQxTd/4r4m0Y=;
+        b=bf4qG4jUwR6UAlaHoe9a6UH/FV/HHFjeNypHVurJVbp569Uurn6uKxILTeF1YbHAVi
+         dhNbTl8PP2yq4hcYyhrSp71hQHQHv0++5uP2q8cVLJGiiP3w5tp8skdPDcSGHn9SO8q7
+         jgg3JrLv+i4emcTEsIqDAdlZ7VZ8yXLg/9O1S73TACzgYNnm+65xARK+Dm6z/xVLLjLQ
+         1u4eumikZGNOJg8AjB9db4f3RP50/uBd8PBBS/UiYqbFh2xTc/PwBrI8z3DNw1xPEXgn
+         kMPmI3gk6qLA3ApW8Jddjz7NW/jB3+z7CBUJtXySVPA/4Bal793sWOIX1J2zETxz3LSP
+         A5CQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678889759;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20210112; t=1678889782;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=oFlsa6HtfdlDO+5W0pHOXKXz4uVBrG6uhwA+mTGh/F4=;
-        b=J+hX1VAZ9RS8h2tjFxQIdTJyqsYKF3MU+epJ0kxObm8kCvjc12UJt4YjQ8a0Y/GgQ4
-         5aIF4OrMOztXUljwzDjdrvSwEUp0hqu1DSR2CYYFOAnEHdp64wFk/ijkRCqrJ2nena/f
-         8BgBAWpkGFykeIJrJsnypuAXQetHFqyV13cdvBYL3Rm2RneGvVZupGWS11jpgDXzNLbG
-         Hya8LMXfiYxTgh+ox4tgRMNblAdgAEPVRsrX+aSusGzxdp2ldHNPpsWAZJ8RE5BXB8IL
-         IpdH4NXZgfBTrd8CdzxXpRXGIQZyK/rOfBkLhJ8H2WUyf1/kqa/rfA0iMgTNg/zebtCo
-         PCog==
-X-Gm-Message-State: AO0yUKWCuR/KUg6L6e/9i29p2mJ/jIZ/61PMtExuhS+9q4Rw80Fr7m65
-        caaQadW3UVFtiHLDJ2HywJFprw==
-X-Google-Smtp-Source: AK7set8oPIsIHljWEG7Btn7/oqvtoKP54iIoNGcUixTywJ0v44k5S6228+JMg1jI54PO01KBJ+54IA==
-X-Received: by 2002:a17:907:a804:b0:92a:edd4:638 with SMTP id vo4-20020a170907a80400b0092aedd40638mr2911718ejc.22.1678889758698;
-        Wed, 15 Mar 2023 07:15:58 -0700 (PDT)
-Received: from localhost.localdomain (80.71.142.18.ipv4.parknet.dk. [80.71.142.18])
-        by smtp.gmail.com with ESMTPSA id m20-20020a509994000000b004aef147add6sm2532280edb.47.2023.03.15.07.15.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Mar 2023 07:15:58 -0700 (PDT)
-From:   =?UTF-8?q?Alvin=20=C5=A0ipraga?= <alvin@pqrs.dk>
-To:     MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Marek Vasut <marex@denx.de>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        =?UTF-8?q?Alvin=20=C5=A0ipraga?= <alsi@bang-olufsen.dk>
-Cc:     linux-usb@vger.kernel.org, stable@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] extcon: usbc-tusb320: unregister typec port on driver removal
-Date:   Wed, 15 Mar 2023 15:15:47 +0100
-Message-Id: <20230315141547.825057-1-alvin@pqrs.dk>
-X-Mailer: git-send-email 2.39.2
+        bh=9PqS0is4BFBhZIUbIafMoHIoQlBBc9tsQxTd/4r4m0Y=;
+        b=ShB8FnBFpPKoF/Aez05RckSUWxWjp2Bn0IjkSet9//GD5+i0xSYZH040ruL8YU3wNI
+         3f3dsaJwey5eHf/Vvuy659570n8cVHffUWKFmdSIt0bj9Iok2lOCK48YqbPA0lrjEE6w
+         fWdCJQut4eTPlG79QqyOOMOt3IxWKk9oFYjGNZAmg7BfAmrNVHHNcZEWIQmh+yiw4HlX
+         hyVazIqzmfdjkfx7jQaiCq9MS+sGl1eAG6ZiafQ4WvnD4k6YDOvYXkoJUWWyd5OW2d8N
+         PYUlaNqhe4EpJXg1p86yQh30LyuxbxUALk57ZfGY3LABdv2LmjZCWvs99T6ibmR2ZZRK
+         d/pA==
+X-Gm-Message-State: AO0yUKUO69Eb6JyTSjn5TctmW9K9FfSN+qnx2zz+SxJZvK3PPml4L3pV
+        ow0OQT+tmOcTDJBhxEfwF/8U3ZmvdSs=
+X-Google-Smtp-Source: AK7set+Io//LtO6XKCL4IkO6kufc4biv6gHKOY+tK5XbcN4sTqh9/Z7Z9+LbNtv9Gpv3OSG/DVlh4Q==
+X-Received: by 2002:a05:6e02:1294:b0:323:140f:a72e with SMTP id y20-20020a056e02129400b00323140fa72emr4786141ilq.1.1678889782181;
+        Wed, 15 Mar 2023 07:16:22 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id f4-20020a056638022400b0040535426261sm1691486jaq.37.2023.03.15.07.16.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Mar 2023 07:16:21 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <64e3ecac-6684-1989-02c5-06fc0e755631@roeck-us.net>
+Date:   Wed, 15 Mar 2023 07:16:20 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v1] hwmon: drivetemp: support to be a platform driver for
+ thermal_of
+Content-Language: en-US
+To:     phinex <phinex@realtek.com>, jdelvare@suse.com
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230315121606.GA71707@threadripper>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20230315121606.GA71707@threadripper>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alvin Šipraga <alsi@bang-olufsen.dk>
+On 3/15/23 05:16, phinex wrote:
+> Support thermal zone so that we can just rely on dts to describe a
+> thermal zone and do the cooling operations.
+> 
+> You can define a comptible string "drivetemp,hdd-sensors" to enable
+> this, such as
+> 
+> 	sata_port0: sata-port@0 {
+> 		compatible = "drivetemp,hdd-sensors";
+> 		#thermal-sensor-cells = <0>;
+> 	}
+> 
+> Then define a thermal with this sensor to get it work.
+> 
+>                 hdd_thermal: hdd-thermal {
+>                         thermal-sensors = <&sata_port0>;
+> 		}
+> 
+> In most of the SoC systems, using dts to handle cooling is common.
+> This can eliminate the usage of user space application to check
+> the value exported in hwmon and then through sysfs to cooling.
+> 
+> Signed-off-by: phinex <phinex@realtek.com>
+> 
 
-The driver can register a typec port if suitable firmware properties are
-present. But if the driver is removed through sysfs unbind, rmmod or
-similar, then it does not clean up after itself and the typec port
-device remains registered. This can be seen in sysfs, where stale typec
-ports get left over in /sys/class/typec.
+The driver registers drivetemp instances with the hwmon core using
+HWMON_C_REGISTER_TZ. That means there should already be a thermal zone
+for each instance. If that doesn't work, please find out why and fix it
+instead of replicating what the hwmon core already is supposed to be
+doing.
 
-In order to fix this we have to add an i2c_driver remove function and
-call typec_unregister_port(), which is a no-op in the case where no
-typec port is created and the pointer remains NULL.
-
-In the process we should also put the fwnode_handle when the typec port
-isn't registered anymore, including if an error occurs during probe. The
-typec subsystem does not increase or decrease the reference counter for
-us, so we track it in the driver's private data.
-
-Note that the conditional check on TYPEC_PWR_MODE_PD was removed in the
-probe path because a call to tusb320_set_adv_pwr_mode() will perform an
-even more robust validation immediately after, hence there is no
-functional change here.
-
-Fixes: bf7571c00dca ("extcon: usbc-tusb320: Add USB TYPE-C support")
-Cc: stable@vger.kernel.org
-Signed-off-by: Alvin Šipraga <alsi@bang-olufsen.dk>
----
-v2: properly assign priv->connector_fwnode = connector;
----
- drivers/extcon/extcon-usbc-tusb320.c | 42 ++++++++++++++++++++++------
- 1 file changed, 34 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/extcon/extcon-usbc-tusb320.c b/drivers/extcon/extcon-usbc-tusb320.c
-index b408ce989c22..10dff1c512c4 100644
---- a/drivers/extcon/extcon-usbc-tusb320.c
-+++ b/drivers/extcon/extcon-usbc-tusb320.c
-@@ -78,6 +78,7 @@ struct tusb320_priv {
- 	struct typec_capability	cap;
- 	enum typec_port_type port_type;
- 	enum typec_pwr_opmode pwr_opmode;
-+	struct fwnode_handle *connector_fwnode;
- };
- 
- static const char * const tusb_attached_states[] = {
-@@ -391,27 +392,25 @@ static int tusb320_typec_probe(struct i2c_client *client,
- 	/* Type-C connector found. */
- 	ret = typec_get_fw_cap(&priv->cap, connector);
- 	if (ret)
--		return ret;
-+		goto err_put;
- 
- 	priv->port_type = priv->cap.type;
- 
- 	/* This goes into register 0x8 field CURRENT_MODE_ADVERTISE */
- 	ret = fwnode_property_read_string(connector, "typec-power-opmode", &cap_str);
- 	if (ret)
--		return ret;
-+		goto err_put;
- 
- 	ret = typec_find_pwr_opmode(cap_str);
- 	if (ret < 0)
--		return ret;
--	if (ret == TYPEC_PWR_MODE_PD)
--		return -EINVAL;
-+		goto err_put;
- 
- 	priv->pwr_opmode = ret;
- 
- 	/* Initialize the hardware with the devicetree settings. */
- 	ret = tusb320_set_adv_pwr_mode(priv);
- 	if (ret)
--		return ret;
-+		goto err_put;
- 
- 	priv->cap.revision		= USB_TYPEC_REV_1_1;
- 	priv->cap.accessory[0]		= TYPEC_ACCESSORY_AUDIO;
-@@ -422,10 +421,25 @@ static int tusb320_typec_probe(struct i2c_client *client,
- 	priv->cap.fwnode		= connector;
- 
- 	priv->port = typec_register_port(&client->dev, &priv->cap);
--	if (IS_ERR(priv->port))
--		return PTR_ERR(priv->port);
-+	if (IS_ERR(priv->port)) {
-+		ret = PTR_ERR(priv->port);
-+		goto err_put;
-+	}
-+
-+	priv->connector_fwnode = connector;
- 
- 	return 0;
-+
-+err_put:
-+	fwnode_handle_put(connector);
-+
-+	return ret;
-+}
-+
-+static void tusb320_typec_remove(struct tusb320_priv *priv)
-+{
-+	typec_unregister_port(priv->port);
-+	fwnode_handle_put(priv->connector_fwnode);
- }
- 
- static int tusb320_probe(struct i2c_client *client)
-@@ -438,7 +452,9 @@ static int tusb320_probe(struct i2c_client *client)
- 	priv = devm_kzalloc(&client->dev, sizeof(*priv), GFP_KERNEL);
- 	if (!priv)
- 		return -ENOMEM;
-+
- 	priv->dev = &client->dev;
-+	i2c_set_clientdata(client, priv);
- 
- 	priv->regmap = devm_regmap_init_i2c(client, &tusb320_regmap_config);
- 	if (IS_ERR(priv->regmap))
-@@ -489,10 +505,19 @@ static int tusb320_probe(struct i2c_client *client)
- 					tusb320_irq_handler,
- 					IRQF_TRIGGER_FALLING | IRQF_ONESHOT,
- 					client->name, priv);
-+	if (ret)
-+		tusb320_typec_remove(priv);
- 
- 	return ret;
- }
- 
-+static void tusb320_remove(struct i2c_client *client)
-+{
-+	struct tusb320_priv *priv = i2c_get_clientdata(client);
-+
-+	tusb320_typec_remove(priv);
-+}
-+
- static const struct of_device_id tusb320_extcon_dt_match[] = {
- 	{ .compatible = "ti,tusb320", .data = &tusb320_ops, },
- 	{ .compatible = "ti,tusb320l", .data = &tusb320l_ops, },
-@@ -502,6 +527,7 @@ MODULE_DEVICE_TABLE(of, tusb320_extcon_dt_match);
- 
- static struct i2c_driver tusb320_extcon_driver = {
- 	.probe_new	= tusb320_probe,
-+	.remove		= tusb320_remove,
- 	.driver		= {
- 		.name	= "extcon-tusb320",
- 		.of_match_table = tusb320_extcon_dt_match,
--- 
-2.39.2
+Guenter
 
