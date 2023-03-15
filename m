@@ -2,126 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B92086BBD94
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 20:50:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59DBF6BBDA2
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 20:53:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232424AbjCOTuL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 15:50:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58160 "EHLO
+        id S232424AbjCOTxM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 15:53:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232116AbjCOTuI (ORCPT
+        with ESMTP id S229547AbjCOTxK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 15:50:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 548D75FEC;
-        Wed, 15 Mar 2023 12:50:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E216761D90;
-        Wed, 15 Mar 2023 19:50:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5068C433D2;
-        Wed, 15 Mar 2023 19:50:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678909806;
-        bh=al5UOANFHtnpNCLQ/B2KpizIrzaQPYdmI8m2JBI6XXM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=YFg4YtgDl6U0tZMxILxyZEbz8ZoEYvFuADZRUEZGLgAvWmW7N7gZIGt0yH6esuTwO
-         D3TIdKRJkeuiv9wUsxAdc9YF+30W3BWIEQNlO993VcRK8FCcUNRIQMlu3u3q9j3+Bc
-         7Fx9e8eAujUdihE277UiGbpheXWbcIHjflz3gTgAeGSRE44XSJgT/zrJh9Y/j7LZ6B
-         SiMUy0KJBb46fTxNlOrd4uBU+pFecRwktkttoqVzU9oTX3pJc0fib2bhrG5Kd202tv
-         8M9f1k3IH2kFzwpONOfqMiuCd1ESjsBeMCgPMY5iCuAIgXtSTvhwsPPXy8RufZYZ8y
-         FlxcWh3hCfiUg==
-Date:   Wed, 15 Mar 2023 12:50:04 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Anjali Kulkarni <anjali.k.kulkarni@oracle.com>
-Cc:     "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "zbr@ioremap.net" <zbr@ioremap.net>,
-        "brauner@kernel.org" <brauner@kernel.org>,
-        "johannes@sipsolutions.net" <johannes@sipsolutions.net>,
-        "ecree.xilinx@gmail.com" <ecree.xilinx@gmail.com>,
-        "leon@kernel.org" <leon@kernel.org>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "socketcan@hartkopp.net" <socketcan@hartkopp.net>,
-        "petrm@nvidia.com" <petrm@nvidia.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-Subject: Re: [PATCH v1 2/5] connector/cn_proc: Add filtering to fix some
- bugs
-Message-ID: <20230315125004.5b203529@kernel.org>
-In-Reply-To: <F553A86D-966E-4EE4-83FB-DB42CD83E81B@oracle.com>
-References: <20230310221547.3656194-1-anjali.k.kulkarni@oracle.com>
-        <20230310221547.3656194-3-anjali.k.kulkarni@oracle.com>
-        <20230313172441.480c9ec7@kernel.org>
-        <BY5PR10MB41295AF42563F023651E109FC4BE9@BY5PR10MB4129.namprd10.prod.outlook.com>
-        <20230314215945.3336aeb3@kernel.org>
-        <F553A86D-966E-4EE4-83FB-DB42CD83E81B@oracle.com>
+        Wed, 15 Mar 2023 15:53:10 -0400
+X-Greylist: delayed 90 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 15 Mar 2023 12:53:07 PDT
+Received: from forwardcorp1c.mail.yandex.net (forwardcorp1c.mail.yandex.net [178.154.239.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F297CD539;
+        Wed, 15 Mar 2023 12:53:07 -0700 (PDT)
+Received: from mail-nwsmtp-smtp-corp-main-11.iva.yp-c.yandex.net (mail-nwsmtp-smtp-corp-main-11.iva.yp-c.yandex.net [IPv6:2a02:6b8:c0c:2cab:0:640:424b:0])
+        by forwardcorp1c.mail.yandex.net (Yandex) with ESMTP id E61F05EA33;
+        Wed, 15 Mar 2023 22:51:35 +0300 (MSK)
+Received: from d-tatianin-nix.HomeLAN (unknown [2a02:6b8:b081:b711::1:2a])
+        by mail-nwsmtp-smtp-corp-main-11.iva.yp-c.yandex.net (smtpcorp/Yandex) with ESMTPSA id Tppha50fxuQ0-tgCuJSe1;
+        Wed, 15 Mar 2023 22:51:35 +0300
+X-Yandex-Fwd: 1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex-team.ru; s=default;
+        t=1678909895; bh=Gw2gGaMBR/kL++RD1Kxfdvw3JCgSYG8IVp4wdEhSV38=;
+        h=Message-Id:Date:Cc:Subject:To:From;
+        b=C/aVTJuJ9Y8LoATy0YhpqZpI3gEKyo5EduCRA6y6MbCNz8jmZPIcsOxClrHydUWIp
+         i0ftgx0ObaHdm4VjfQtDoCkhJbzOkqiCOvbMkOYsjEAQJq+AG2jZlyrEwvH2xkAy5Z
+         o/W9xEqnj1ItvZe25tuUGFVUJXED3hKrukONr3fw=
+Authentication-Results: mail-nwsmtp-smtp-corp-main-11.iva.yp-c.yandex.net; dkim=pass header.i=@yandex-team.ru
+From:   Daniil Tatianin <d-tatianin@yandex-team.ru>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Daniil Tatianin <d-tatianin@yandex-team.ru>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] kvm/x86: actually verify that reading MSR_IA32_UCODE_REV succeeds
+Date:   Wed, 15 Mar 2023 22:51:09 +0300
+Message-Id: <20230315195109.580333-1-d-tatianin@yandex-team.ru>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 15 Mar 2023 19:08:34 +0000 Anjali Kulkarni wrote:
-> > On Mar 14, 2023, at 9:59 PM, Jakub Kicinski <kuba@kernel.org> wrote:
-> >=20
-> > On Tue, 14 Mar 2023 02:32:13 +0000 Anjali Kulkarni wrote: =20
-> >> This is clearly a layering violation, right?
-> >> Please don't add "if (family_x)" to the core netlink code.
-> >> The other option is to add a flag in netlink_sock, something like
-> >> NETLINK_F_SK_USER_DATA_FREE, which will free the sk_user_data, if
-> >> this flag is set. But it does not solve the above scenario. =20
-> >=20
-> > Please fix your email setup, it's really hard to read your replies.
-> >  =20
->=20
-> I have changed my email client, let me know if this does not fix the issu=
-e you see.
+...and return KVM_MSR_RET_INVALID otherwise.
 
-Quite a bit better, thanks!
+Found by Linux Verification Center (linuxtesting.org) with the SVACE
+static analysis tool.
 
-> > There is an unbind callback, and a notifier. Can neither of those=20
-> > be made to work? ->sk_user_data is not a great choice of a field,
-> > either, does any other netlink family use it this way?
-> > Adding a new field for family use to struct netlink_sock may be better.=
- =20
->=20
-> The unbind call will not work because it is for the case of adding and de=
-leting group memberships and hence called from netlink_setsockopt() when  N=
-ETLINK_DROP_MEMBERSHIP option is given. We would not be able to distinguish=
- between the drop membership & release cases.
-> The notifier call seems to be for blocked clients? Am not sure if the we =
-need to block/wait on this call to be notified to free/release. Also, the A=
-PI does not pass in struct sock to free what we want, so we will need to ch=
-ange that everywhere it is currently used.
+Fixes: cd28325249a1 ("KVM: VMX: support MSR_IA32_ARCH_CAPABILITIES as a feature MSR")
+Signed-off-by: Daniil Tatianin <d-tatianin@yandex-team.ru>
+---
+ arch/x86/kvm/x86.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-I think that adding the new release callback is acceptable.
-I haven't seen your v2 before replying.
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index 7713420abab0..7de6939fc371 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -1661,7 +1661,8 @@ static int kvm_get_msr_feature(struct kvm_msr_entry *msr)
+ 		msr->data = kvm_caps.supported_perf_cap;
+ 		break;
+ 	case MSR_IA32_UCODE_REV:
+-		rdmsrl_safe(msr->index, &msr->data);
++		if (rdmsrl_safe(msr->index, &msr->data))
++			return KVM_MSR_RET_INVALID;
+ 		break;
+ 	default:
+ 		return static_call(kvm_x86_get_msr_feature)(msr);
+-- 
+2.25.1
 
-> As for using sk_user_data - this field seems to be used by different appl=
-ications in different ways depending on how they need to use data. If we us=
-e a new field in netlink_sock, we would need to add a new API function to a=
-llocate this member, similar to release, because it seems you cannot access=
- netlink_sock outside of af_netlink, or at least I do not see any current a=
-ccess to it, and functions like nlk_sk are static. Also, if we add an alloc=
-ation function, we won=E2=80=99t know the first time the client sends it=E2=
-=80=99s data (we need to know =E2=80=9Cinitial=E2=80=9D in the patches), so=
- we will need to add a new field in the socket to indicate first access or =
-add a lot more infrastructure in cn_proc to store each client=E2=80=99s inf=
-ormation.
-
-Alright, I guess we can risk the sk_user_data, and see if anything
-explodes. Normally higher protocol wraps the socket structure in its
-own structure and the sk_user_data pointer is for an in-kernel user
-of the socket (i.e. in kernel client). But "classic netlink" is all
-legacy code (new subsystem use the generic netlink overlay) so trying
-to decode now why things are the way they are and fixing the structure
-would be a major effort :(
