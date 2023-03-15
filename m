@@ -2,155 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF1BF6BB255
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 13:35:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBA146BB244
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 13:34:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232806AbjCOMfb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 08:35:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52700 "EHLO
+        id S232783AbjCOMet (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 08:34:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232570AbjCOMfI (ORCPT
+        with ESMTP id S232651AbjCOMeP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 08:35:08 -0400
-Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 714225D766
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 05:33:36 -0700 (PDT)
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20230315123238euoutp0271741289e1b665298cc166c27e25e418~Ml7N1VJQZ2729527295euoutp020
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 12:32:38 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20230315123238euoutp0271741289e1b665298cc166c27e25e418~Ml7N1VJQZ2729527295euoutp020
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1678883558;
-        bh=TULy0kQ0Ifdivo2QO7TanxedWWhPvjo0gfRuQDzW2ng=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WG5nv/yIUioUZMemmI/vXGBGCC4mPMP4y7q7hrLObungT2ku5O7R3EVoS3PfQSHj3
-         I8MTWMnapaCRQJHG/BY21xHO7gKzTp9LHWWniksNA49VFZcApTLwGa93cuuQGrIhsO
-         o/AjQ5qm6e1N7LRsiufjhXZOGYU4eNMfrw8QvWkw=
-Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20230315123236eucas1p26b7742c95fa09b82c73c845d74efce5e~Ml7MbQpp61818518185eucas1p2w;
-        Wed, 15 Mar 2023 12:32:36 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges3new.samsung.com (EUCPMTA) with SMTP id 21.94.10014.4EAB1146; Wed, 15
-        Mar 2023 12:32:36 +0000 (GMT)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20230315123236eucas1p1116e1b8537191310bd03dd267b9f8eb8~Ml7MCxzO32770827708eucas1p15;
-        Wed, 15 Mar 2023 12:32:36 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20230315123236eusmtrp1df4436f51fa48eb1490ddbb6b35c616f~Ml7MBtYA-1056310563eusmtrp13;
-        Wed, 15 Mar 2023 12:32:36 +0000 (GMT)
-X-AuditID: cbfec7f5-ba1ff7000000271e-6e-6411bae42153
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id D1.BF.09583.4EAB1146; Wed, 15
-        Mar 2023 12:32:36 +0000 (GMT)
-Received: from localhost (unknown [106.210.248.172]) by eusmtip2.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20230315123235eusmtip24e5b07e7103e1457f04af28b9d08add0~Ml7LyK5g50183701837eusmtip2M;
-        Wed, 15 Mar 2023 12:32:35 +0000 (GMT)
-From:   Pankaj Raghav <p.raghav@samsung.com>
-To:     hubcap@omnibond.com, senozhatsky@chromium.org, martin@omnibond.com,
-        willy@infradead.org, minchan@kernel.org, viro@zeniv.linux.org.uk,
-        brauner@kernel.org, axboe@kernel.dk, akpm@linux-foundation.org
-Cc:     linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        gost.dev@samsung.com, mcgrof@kernel.org, devel@lists.orangefs.org,
-        Pankaj Raghav <p.raghav@samsung.com>
-Subject: [RFC PATCH 3/3] orangefs: use folio in orangefs_readahead()
-Date:   Wed, 15 Mar 2023 13:32:33 +0100
-Message-Id: <20230315123233.121593-4-p.raghav@samsung.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230315123233.121593-1-p.raghav@samsung.com>
+        Wed, 15 Mar 2023 08:34:15 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3C9A77CA8
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 05:33:02 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id fd5so40977881edb.7
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 05:33:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678883578;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=WZjdpphXUkCIeOsAshqqMccwRvEJmRQmkPCnHCBSLVY=;
+        b=mN6vTQffkA2oxTCVIyKNb3P7G+VZT3pF6mrlw/VKjz1MiJRrai6M/kWQI4IMOXfyaM
+         Vdzsbeoj1aWdTRLI01Gp6XeClUICCJqHQOY69ElR5vo/PxdcWEr17oOiH+XD69pZEiVP
+         69kI59clgZFjkJvwj3PeLWjeSIohiFDybI3zSBxjfWuKmlFZhct2KC5EjShq25Mrvo6w
+         dpmggolBuhJAj3vEkl0DsvAoCoS9zp8zrqm7BDelGfhUHAo/7r9K614Smp77wH+M1bs7
+         d5QXHRTSL3Z+8KdPkcJfmY7q6EqkB9fh+rucSkEKYuuJpptvJuP67KdGkHymlb0aW2en
+         Q7eQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678883578;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=WZjdpphXUkCIeOsAshqqMccwRvEJmRQmkPCnHCBSLVY=;
+        b=RzEGd9TRP7IQKXcIIek59RUlA8QKCk3IL0NUlVHqgA2BW6/5YET8LeyfYmwEdzHpt2
+         O9mUxYe5ss5Ks8s9cxDMhSNgXX8aV1S/8H3j2nVBeJPBVK30N5rIaVVxav9qMkQJhm1W
+         DUYcXoKy26/vlrHfJXHbI8PJJSdGE05fjeFIHFmP9a2FjwhqZschw/LQpe9H5VmNYyvp
+         34x/kLNaJkG9oR1SybdMsNWzmBTWEufvpqKfkn56Hz+ndoICt7AY1rx7ZRowCbJMorIR
+         tbrFV5x9pcCCYWLzqjs9MMv/ynP9Tb2G/kct3bDg2XAczw8RxBgnLiSmx1mi9zc06KHX
+         0Ekw==
+X-Gm-Message-State: AO0yUKXYorYrWTsdIwr7s/+4rZaQUy6mOc/ENUy0Wjy8Btfv+IvJo3KM
+        81eDBghMSaHqCD/g1qHAHyM=
+X-Google-Smtp-Source: AK7set+JL6cT7QO2X4VH6wWpLr26eoixZuY2wbd1Ws3ljy2d52tkQGrNrsfNnlcLEKnmd9jSzZKdig==
+X-Received: by 2002:a17:907:9882:b0:91f:5845:4e31 with SMTP id ja2-20020a170907988200b0091f58454e31mr6633204ejc.26.1678883578321;
+        Wed, 15 Mar 2023 05:32:58 -0700 (PDT)
+Received: from khadija-virtual-machine ([39.41.209.88])
+        by smtp.gmail.com with ESMTPSA id p2-20020a170906140200b0092be5f60dd5sm2434136ejc.150.2023.03.15.05.32.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Mar 2023 05:32:58 -0700 (PDT)
+Date:   Wed, 15 Mar 2023 17:32:55 +0500
+From:   Khadija Kamran <kamrankhadijadj@gmail.com>
+To:     Alison Schofield <alison.schofield@intel.com>
+Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        outreachy@lists.linux.dev,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>
+Subject: Re: [PATCH] staging: axis-fifo: initialize timeouts in probe only
+Message-ID: <ZBG699SriXWy1I2K@khadija-virtual-machine>
+References: <ZA9mThZ7NyRrQAMX@khadija-virtual-machine>
+ <ZBDcfNOXmGeN2tlb@aschofie-mobl2>
+ <3376017.mWHT0XuiSF@suse>
+ <ZBEJ+8DbhADSBTLr@aschofie-mobl2>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrDKsWRmVeSWpSXmKPExsWy7djP87pPdgmmGOz8o2gxZ/0aNovVd/vZ
-        LF4f/sRosX/zFCaLmwd2Mlm03+1jsth7S9tiz96TLBaXd81hs7i35j+rxcn1/5ktbkx4ymix
-        7Ot7dovPS1vYLXZvXMRmcf7vcVaL3z/msDkIesxuuMjisXmFlsfls6Uem1Z1snls+jSJ3ePE
-        jN8sHg1Tb7F5/Lp9h9Wjb8sqRo/Pm+Q8Nj15yxTAHcVlk5Kak1mWWqRvl8CVceTGE8aCPRwV
-        Px+zNjB+Y+ti5OSQEDCRWNYxkRXEFhJYwSjx4112FyMXkP2FUWLzvodsEM5nRokHH1qZYTr+
-        7L/GBNGxnFFie781RNFLRokD6x8DdXBwsAloSTR2soPERQTOMEo8aZkINolZ4D6jxPWm3+wg
-        3cICLhIXN60Bm8oioCpx78tnMJtXwEqi4clLqPvkJfYfPAsW5xSwlli9cjobRI2gxMmZT1hA
-        bGagmuats5lBFkgIrOaU+PH5GdSpLhJ3n+1ggbCFJV4d38IOYctInJ7cAxWvlnh64zdUcwuj
-        RP/O9WAvSABt6zuTA2IyC2hKrN+lD1HuKNF19wk7RAWfxI23ghAn8ElM2jadGSLMK9HRJgRR
-        rSSx8+cTqKUSEpeb5kAt9ZB40zCLfQKj4iwkz8xC8swshL0LGJlXMYqnlhbnpqcWG+ellusV
-        J+YWl+al6yXn525iBCbA0/+Of93BuOLVR71DjEwcjIcYJTiYlUR4w1kEUoR4UxIrq1KL8uOL
-        SnNSiw8xSnOwKInzatueTBYSSE8sSc1OTS1ILYLJMnFwSjUwGR58dUekeLrKqb/3VyxlWj5d
-        gvlVQ1Dcpqkp8j2JQd05qp93iWjvvTLvv/jk2vQ7eZXGVvcv/X3FulJ0ewv3RY63PAXXfutE
-        l1kHa/0RN4vfp/rnr7KtyUmtn7VOxcy/Bfdo9d04PX+nvNmtnUut26wizp7kerZ7YtbdjkLu
-        qg+5hm+rVrjMFEsLLetvdGssu7w7T/1a5x6Phcma5qdP6Zzm0ljxk3nGt9nasemWa04K11gW
-        H+W7uaduzld986Ivt/gkuhqr67fEfwgISl7ieLRnWWBw47FjAvozDz2aISUdW//g49NQidiP
-        ammWiVa3ppdnG3bsMdy3f+HclQsXVB3nW+Bs233unX+gurejEktxRqKhFnNRcSIAJJ8D/O8D
-        AAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrLIsWRmVeSWpSXmKPExsVy+t/xe7pPdgmmGKydyW4xZ/0aNovVd/vZ
-        LF4f/sRosX/zFCaLmwd2Mlm03+1jsth7S9tiz96TLBaXd81hs7i35j+rxcn1/5ktbkx4ymix
-        7Ot7dovPS1vYLXZvXMRmcf7vcVaL3z/msDkIesxuuMjisXmFlsfls6Uem1Z1snls+jSJ3ePE
-        jN8sHg1Tb7F5/Lp9h9Wjb8sqRo/Pm+Q8Nj15yxTAHaVnU5RfWpKqkJFfXGKrFG1oYaRnaGmh
-        Z2RiqWdobB5rZWSqpG9nk5Kak1mWWqRvl6CXceTGE8aCPRwVPx+zNjB+Y+ti5OSQEDCR+LP/
-        GlMXIxeHkMBSRomePROYIRISErcXNjFC2MISf651sUEUPWeUONu7hLWLkYODTUBLorGTHSQu
-        InCDUWLqpV+MIA4zSNGzm3dYQbqFBVwkLm5aAzaVRUBV4t6Xz2A2r4CVRMOTl1BnyEvsP3gW
-        LM4pYC2xeuV0sLgQUM39e7uYIOoFJU7OfMICYjMD1Tdvnc08gVFgFpLULCSpBYxMqxhFUkuL
-        c9Nzi430ihNzi0vz0vWS83M3MQLjdduxn1t2MK589VHvECMTB+MhRgkOZiUR3nAWgRQh3pTE
-        yqrUovz4otKc1OJDjKZAd09klhJNzgcmjLySeEMzA1NDEzNLA1NLM2MlcV7Pgo5EIYH0xJLU
-        7NTUgtQimD4mDk6pBqad3btWbtv3zqCizPyUK0t4RO/fhdvV/19bHR/DN/lp0xWxNUnJogJz
-        dZ89uhN5yOXb41NyT00XXz+meGO6a8r9eXndm1kMrNj+1OSuXfDq1blnD4pZA9+FmTa8/fT4
-        80yJ7Ukuzn9ybkWtFbSt4+lkjN6rfOLCbCm9jZv7Cw5Z30irqqvn5ig42/fSbXKcb69E/KNb
-        u/qYlPxfpRwr4L660PvOUpW0yCtS87cn8fCc3LfTx/iC0pcNC8XFn6/J/SP8/2SM55qmzT+8
-        Hm+XuK8scCuz5ROLy33Wh/2OR5YxsSZeLHH0+i0peFJ2RdIy128XjxctblwhXHBVKOKP0bnD
-        HQonuJ5OM3Z2PrdSOmmjEktxRqKhFnNRcSIAw1K8PGADAAA=
-X-CMS-MailID: 20230315123236eucas1p1116e1b8537191310bd03dd267b9f8eb8
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20230315123236eucas1p1116e1b8537191310bd03dd267b9f8eb8
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20230315123236eucas1p1116e1b8537191310bd03dd267b9f8eb8
-References: <20230315123233.121593-1-p.raghav@samsung.com>
-        <CGME20230315123236eucas1p1116e1b8537191310bd03dd267b9f8eb8@eucas1p1.samsung.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <ZBEJ+8DbhADSBTLr@aschofie-mobl2>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use folio and its corresponding function in orangefs_readahead() so that
-folios can be directly passed to the folio_endio().
+On Tue, Mar 14, 2023 at 04:57:47PM -0700, Alison Schofield wrote:
+> On Tue, Mar 14, 2023 at 10:31:21PM +0100, Fabio wrote:
+> > On martedì 14 marzo 2023 21:43:40 CET Alison Schofield wrote:
+> > > On Mon, Mar 13, 2023 at 11:07:10PM +0500, Khadija Kamran wrote:
+> > > > Module parameter, read_timeout, can only be set at the loading time. As
+> > > > it can only be modified once, initialize read_timeout once in the probe
+> > > > function.
+> > > > As a result, only use read_timeout as the last argument in
+> > > > wait_event_interruptible_timeout() call.
+> > > > 
+> > > > Same goes for write_timeout.
+> > > > 
+> > > > Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > > > Signed-off-by: Khadija Kamran <kamrankhadijadj@gmail.com>
+> > > > ---
+> > > 
+> > > Looks like this is [PATCH v5] and needs a changelog.
+> > >
+> > Alison,
+> > 
+> > In fact, this is only the second patch that addresses Greg's suggested 
+> > refactoring. 
+> > 
+> > Khadija moved from v3 of "staging: axis-fifo: remove tabs to align arguments" 
+> > to v4 of this completely independent patch. And then back to v1, because (at 
+> > the time of v4) I pointed out to her that she had started working on a project 
+> > that has a completely different purpose than the previous one.
+> > 
+> > The best course of action would have been to ask Greg to drop the previous 
+> > patches and then reset the numbering of the new job to v1. Unfortunately I did 
+> > not pay attention to how she then managed the numbering following my 
+> > observation.
+> > 
+> > What would be the best course of action at this point?
+> 
+> My guess is that this patch gets ignored because it has a lower version
+> number than a previous patch.
+> 
+> Take the feedback given here, and rev to
+> [PATCH v5] staging: axis-fifo: initialize timeouts in probe only
+> 
+> Be sure the Changelog, below the --- explains the journey.
+> 
+> Changes in v5:
+> 
+> Changes in v4:
+> 
+> Changes in v3:
+> 
+> Changes in v2:
+> 
 
-Signed-off-by: Pankaj Raghav <p.raghav@samsung.com>
----
- fs/orangefs/inode.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+Hey Alison!
+Based on Nathan's feedback I am trying to recompile and send a patch
+without any warnings.
+As suggested by Fabio, I am running "make w=1 -jX" command to see if I
+get any warnings. But it is taking a lot of time, is there any way of
+speeding it up?
+If this doesn't work then I have to follow the steps to reproduce in lkp
+mail as you said before. 
+After dealing with these warnings I will send a [PATCH v5], following
+your instructions above.
+Kindly, let me know if I am on the wrong track.
+Thank you!
 
-diff --git a/fs/orangefs/inode.c b/fs/orangefs/inode.c
-index b12d099510ea..7e03d60bd406 100644
---- a/fs/orangefs/inode.c
-+++ b/fs/orangefs/inode.c
-@@ -244,7 +244,7 @@ static void orangefs_readahead(struct readahead_control *rac)
- 	struct iov_iter iter;
- 	struct inode *inode = rac->mapping->host;
- 	struct xarray *i_pages;
--	struct page *page;
-+	struct folio *folio;
- 	loff_t new_start = readahead_pos(rac);
- 	int ret;
- 	size_t new_len = 0;
-@@ -275,9 +275,9 @@ static void orangefs_readahead(struct readahead_control *rac)
- 		ret = 0;
- 
- 	/* clean up. */
--	while ((page = readahead_page(rac))) {
--		folio_endio(page_folio(page), false, ret);
--		put_page(page);
-+	while ((folio = readahead_folio(rac))) {
-+		folio_endio(folio, false, ret);
-+		folio_put(folio);
- 	}
- }
- 
--- 
-2.34.1
+Regards,
+Khadija
 
+> 
+> > 
+> > Fabio
+> > 
+> > 
