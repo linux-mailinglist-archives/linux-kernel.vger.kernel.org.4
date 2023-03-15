@@ -2,64 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1672C6BBFCA
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 23:30:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D6736BBFD9
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 23:35:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232196AbjCOWad (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 18:30:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46120 "EHLO
+        id S230134AbjCOWfd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 18:35:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231769AbjCOWa0 (ORCPT
+        with ESMTP id S230283AbjCOWf3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 18:30:26 -0400
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E253D11177
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 15:30:24 -0700 (PDT)
-Received: by mail-pj1-x104a.google.com with SMTP id nn7-20020a17090b38c700b0023d370b2cc4so3213748pjb.9
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 15:30:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678919424;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=22X6Zx4KNZb9Sf8A8SNAZMsps5hJubV8kYjmzxrplYg=;
-        b=pKBU7mkgCKxh5lE5n0QCtkJiWtPJpxxbLwB1/5WEqaudMpvWogQ+bwtwXzqL6MGLpW
-         DzV8vfuSwoZVXwnkC1qKoqkx9OuzOyh0ZbldHaeg6jFAEANpz07/3WArgjWw0NWml1rU
-         JMvVTrXh0TysCbDYMbi3RT0JxjNiHnIEu/tBl3QP+YpOZiOW1aZEAsIo/KFUnKLdZG7B
-         BVGQYpIZAhjk4+LgtsiMtYtRQoYSvdWgFPtyi1olTPY5gzHxYwboqWv9Hefy04WR2OvI
-         rue7TKWZZyF/NbVJ0LRqS2ZndcdDrW39C2zQFlTxXgvRnutBpe7GqhbHoNMMkyL4usc5
-         3xOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678919424;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=22X6Zx4KNZb9Sf8A8SNAZMsps5hJubV8kYjmzxrplYg=;
-        b=4vNI+ovYPja6Xtlr6ajs0sNeBqChMlhNWUDHOzIFCFxAQxEMA+CGPYyprQJohuJxKH
-         NSnh9FOpVGD0y0vvt+XGWdUKOFuC+fbPnT5JEstaOtogErQirtJgpfdNtR7lvfrmga3K
-         AvVDfA9MZPJfW/uVN/J4ng34joEM6DlzH6zhoUu5sOdG8SCJ0MccfCpv6QKu4RfxCcSr
-         uTxNXdtROrBbjktv7kCiaAmq6/j+dnMY02do2aG9EcaOkhLOVHcUzg5kC8mO+Wixxx3w
-         o45qzD7MVO4rExX62vBM4I1A4i7v7Wd+EG8Wv1JThZXgoV+XKLKfiy5imqIQC29WpAUz
-         JDyg==
-X-Gm-Message-State: AO0yUKUoE1KtQ+Dw1xvk7sk1DMdpn95YhvTjkVU5JkMITfw2erhkH/PZ
-        vQ9TKGm1irfYscqcwoHCTaHI4aCE0IY=
-X-Google-Smtp-Source: AK7set+onMJnO09y1+kVTiR0GHp66Yw8O3dF5yIlz9xC24TxV7NXuycwnkPP6SPvjU1VmUC3z3CN/1vJKGw=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a63:924d:0:b0:502:f4c6:305e with SMTP id
- s13-20020a63924d000000b00502f4c6305emr236788pgn.7.1678919424403; Wed, 15 Mar
- 2023 15:30:24 -0700 (PDT)
-Date:   Wed, 15 Mar 2023 15:30:23 -0700
-In-Reply-To: <20230201194604.11135-7-minipli@grsecurity.net>
-Mime-Version: 1.0
-References: <20230201194604.11135-1-minipli@grsecurity.net> <20230201194604.11135-7-minipli@grsecurity.net>
-Message-ID: <ZBJG//wpKUf9I8lE@google.com>
-Subject: Re: [PATCH v3 6/6] KVM: VMX: Make CR0.WP a guest owned bit
-From:   Sean Christopherson <seanjc@google.com>
-To:     Mathias Krause <minipli@grsecurity.net>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL autolearn=ham
+        Wed, 15 Mar 2023 18:35:29 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BE3019C70;
+        Wed, 15 Mar 2023 15:35:28 -0700 (PDT)
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32FMIaDt012449;
+        Wed, 15 Mar 2023 22:35:10 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding;
+ s=corp-2022-7-12; bh=BLJJy1+ZgwpNRd9swz3xcy/irzTsB/Fy3caGqVsf+bo=;
+ b=cY3x5ZOWY+3lie5X/xtgZRXu/WcBc+CEjhYemSws5LlIjFnbuEMz4DOGPeDeyFpe67/4
+ jIrJsvYSC9RSyu6lc6sgPXVlfQjy22UaLc/MDd1s/ZcklcYwNR34K68fXx9zKTh006nn
+ MgHCnVmEuGjshSt++1NwTziH0DFH8ENruyi7z+wp1qoFg5Ibe6hnWfTA3SSvKfCt/fIQ
+ wC5sYfC1hDKJPdva/Z+Vxo1qzS6AWOpepZZmWF4r9MEod8azp2nDe1IXMXHbvVg0jQSY
+ Rk1fOpi8XPs3UPFxJ+AauCM/nkI0FQrafxlH0xHL07g36pRDp7ZNozyLPqY+y9L0F2Tk tQ== 
+Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3pbp4q0297-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 15 Mar 2023 22:35:09 +0000
+Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 32FLwQIL033432;
+        Wed, 15 Mar 2023 22:35:09 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3pbpde96dy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 15 Mar 2023 22:35:09 +0000
+Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32FMZ8a5020420;
+        Wed, 15 Mar 2023 22:35:08 GMT
+Received: from ca-dev112.us.oracle.com (ca-dev112.us.oracle.com [10.129.136.47])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3pbpde96dj-1;
+        Wed, 15 Mar 2023 22:35:08 +0000
+From:   Saeed Mirzamohammadi <saeed.mirzamohammadi@oracle.com>
+To:     stable@vger.kernel.org
+Cc:     saeed.mirzamohammadi@oracle.com, Keith Busch <kbusch@kernel.org>,
+        Jens Axboe <axboe@fb.com>, Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/1] nvme-pci: add NVME_QUIRK_BOGUS_NID for Samsung PM173X
+Date:   Wed, 15 Mar 2023 15:34:36 -0700
+Message-Id: <20230315223436.2857712-1-saeed.mirzamohammadi@oracle.com>
+X-Mailer: git-send-email 2.39.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-15_12,2023-03-15_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 adultscore=0 mlxscore=0
+ phishscore=0 mlxlogscore=999 malwarescore=0 bulkscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303150001
+ definitions=main-2303150184
+X-Proofpoint-GUID: KZ1i8VvTwu8FNn7ESSBIxWJoDwD4WcPy
+X-Proofpoint-ORIG-GUID: KZ1i8VvTwu8FNn7ESSBIxWJoDwD4WcPy
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,194 +74,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 01, 2023, Mathias Krause wrote:
-> Guests like grsecurity that make heavy use of CR0.WP to implement kernel
-> level W^X will suffer from the implied VMEXITs.
-> 
-> For a direct MMU role there is no need to intercept a guest change of
-> CR0.WP, so simply make it a guest owned bit if we can do so.
-> 
-> This implies that a read of a guest's CR0.WP bit might need a VMREAD.
-> However, the only potentially affected user seems to be kvm_init_mmu()
-> which is a heavy operation to begin with. But also most callers already
-> cache the full value of CR0 anyway, so no additional VMREAD is needed.
-> The only exception is nested_vmx_load_cr3().
-> 
-> Add a new module parameter 'lazycr0' to allow users to revert back to
-> the old behaviour by loading kvm-intel.ko with 'lazycr0=0'.
-> 
-> This change is VMX-specific, as SVM has no such fine grained control
-> register intercept control.
-> 
-> Suggested-by: Sean Christopherson <seanjc@google.com>
-> Signed-off-by: Mathias Krause <minipli@grsecurity.net>
-> ---
-> 
-> Initially I wanted to implement the scheme Sean sketched[1]: having a
-> threshold where we would switch from eager to lazy CR0.WP tracking after
-> toggling the bit often enough, make the bit guest owned afterwards and
-> VMREAD CR0 when needed. However, when starting to look for users that
-> would be affected, I only found kvm_init_mmu() (via kvm_init_mmu() ->
-> vcpu_to_role_regs() -> kvm_read_cr0_bits(KVM_MMU_CR0_ROLE_BITS)). It has
-> only these three interesting callers:
-> 1/ kvm_mmu_reset_context(), which isn't all that interesting, as it's a
->    heavy weight operation anyway and many of the control flows leading
->    to it already cache the value of CR0, so no additional VMREAD is
->    needed,
-> 2/ nested_vmx_load_cr3() and
-> 3/ kvm_post_set_cr0(), only when CR0.WP was toggled and the MMU is in
->    direct mode (optimization introduced by patch 3).
-> 
-> The last case's most interesting caller is likely kvm_set_cr0(), which
-> already caches the written CR0 value, thereby vanishes the need for
-> another VMREAD in vcpu_to_role_regs().
-> 
-> That's why I went with the much simpler approach and always allow CR0.WP
-> to be guest owned if EPT is enabled as well.
+This adds a quirk to fix the Samsung PM1733a and PM173X reporting
+bogus eui64 so they are not marked as "non globally unique" duplicates.
 
-Nice!
-
-> There's nothing we can do for SVM, though :/
-
-:/ indeed
-
-> [1] https://lore.kernel.org/kvm/Y8cTMnyBzNdO5dY3@google.com/
-> ---
-> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> index d3b49e0b6c32..1969360d2744 100644
-> --- a/arch/x86/kvm/vmx/vmx.c
-> +++ b/arch/x86/kvm/vmx/vmx.c
-> @@ -91,6 +91,9 @@ module_param_named(flexpriority, flexpriority_enabled, bool, S_IRUGO);
->  bool __read_mostly enable_ept = 1;
->  module_param_named(ept, enable_ept, bool, S_IRUGO);
->  
-> +bool __read_mostly enable_lazy_cr0 = 1;
-> +module_param_named(lazycr0, enable_lazy_cr0, bool, S_IRUGO);
-
-Unless someone crawls out of the woodworks to object, let's omit the module param
-and make this unconditional.  We typically add module params for behavior where
-there are legitimate downsides even if KVM is bug free, or for features that are
-dependent on hardware.  E.g. testing shadow paging without a knob to disable EPT
-would require acces to really ancient CPUs.
-
-The one exception that comes to mind is force_flush_and_sync_on_reuse, but TLB
-bugs tend to be subtle and hard to hit, whereas if we break something with CR0.WP
-emulation, the breakage should be immediate and obvious.
-
->  bool __read_mostly enable_unrestricted_guest = 1;
->  module_param_named(unrestricted_guest,
->  			enable_unrestricted_guest, bool, S_IRUGO);
-> @@ -4765,7 +4768,7 @@ static void init_vmcs(struct vcpu_vmx *vmx)
->  	/* 22.2.1, 20.8.1 */
->  	vm_entry_controls_set(vmx, vmx_vmentry_ctrl());
->  
-> -	vmx->vcpu.arch.cr0_guest_owned_bits = KVM_POSSIBLE_CR0_GUEST_BITS;
-> +	vmx->vcpu.arch.cr0_guest_owned_bits = vmx_guest_owned_cr0_bits();
->  	vmcs_writel(CR0_GUEST_HOST_MASK, ~vmx->vcpu.arch.cr0_guest_owned_bits);
->  
->  	set_cr4_guest_host_mask(vmx);
-> @@ -8370,6 +8373,10 @@ static __init int hardware_setup(void)
->  		return -EOPNOTSUPP;
->  	}
->  
-> +	/* Need EPT for lazy CR0.WP synchronization. */
-> +	if (!enable_ept)
-> +		enable_lazy_cr0 = 0;
-
-Heh, just realized that this code would be broken if nested TDP wasn't exempt
-from including CR0.WP in the MMU role.  Better to be lucky than good :-)
-
-And similar to similar to kvm_post_set_cr0(), the CR0.PG=0 case _could_ let
-CR0.WP be guest-owned, but I don't think that's worth doing as it introduces a
-subtle dependency on CR0 being up-to-date (or passed in).
-
-So this?
-
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Saeed Mirzamohammadi <saeed.mirzamohammadi@oracle.com>
 ---
- arch/x86/kvm/kvm_cache_regs.h |  2 +-
- arch/x86/kvm/vmx/nested.c     |  4 ++--
- arch/x86/kvm/vmx/vmx.c        |  2 +-
- arch/x86/kvm/vmx/vmx.h        | 18 ++++++++++++++++++
- 4 files changed, 22 insertions(+), 4 deletions(-)
+ drivers/nvme/host/pci.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/arch/x86/kvm/kvm_cache_regs.h b/arch/x86/kvm/kvm_cache_regs.h
-index 4c91f626c058..e50d353b5c1c 100644
---- a/arch/x86/kvm/kvm_cache_regs.h
-+++ b/arch/x86/kvm/kvm_cache_regs.h
-@@ -4,7 +4,7 @@
- 
- #include <linux/kvm_host.h>
- 
--#define KVM_POSSIBLE_CR0_GUEST_BITS X86_CR0_TS
-+#define KVM_POSSIBLE_CR0_GUEST_BITS	(X86_CR0_TS | X86_CR0_WP)
- #define KVM_POSSIBLE_CR4_GUEST_BITS				  \
- 	(X86_CR4_PVI | X86_CR4_DE | X86_CR4_PCE | X86_CR4_OSFXSR  \
- 	 | X86_CR4_OSXMMEXCPT | X86_CR4_PGE | X86_CR4_TSD | X86_CR4_FSGSBASE)
-diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
-index 7c4f5ca405c7..a0c92a2b3f65 100644
---- a/arch/x86/kvm/vmx/nested.c
-+++ b/arch/x86/kvm/vmx/nested.c
-@@ -4478,7 +4478,7 @@ static void load_vmcs12_host_state(struct kvm_vcpu *vcpu,
- 	 * CR0_GUEST_HOST_MASK is already set in the original vmcs01
- 	 * (KVM doesn't change it);
- 	 */
--	vcpu->arch.cr0_guest_owned_bits = KVM_POSSIBLE_CR0_GUEST_BITS;
-+	vcpu->arch.cr0_guest_owned_bits = vmx_l1_guest_owned_cr0_bits();
- 	vmx_set_cr0(vcpu, vmcs12->host_cr0);
- 
- 	/* Same as above - no reason to call set_cr4_guest_host_mask().  */
-@@ -4629,7 +4629,7 @@ static void nested_vmx_restore_host_state(struct kvm_vcpu *vcpu)
- 	 */
- 	vmx_set_efer(vcpu, nested_vmx_get_vmcs01_guest_efer(vmx));
- 
--	vcpu->arch.cr0_guest_owned_bits = KVM_POSSIBLE_CR0_GUEST_BITS;
-+	vcpu->arch.cr0_guest_owned_bits = vmx_l1_guest_owned_cr0_bits();
- 	vmx_set_cr0(vcpu, vmcs_readl(CR0_READ_SHADOW));
- 
- 	vcpu->arch.cr4_guest_owned_bits = ~vmcs_readl(CR4_GUEST_HOST_MASK);
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index da65d90984ae..136adccffc4b 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -4773,7 +4773,7 @@ static void init_vmcs(struct vcpu_vmx *vmx)
- 	/* 22.2.1, 20.8.1 */
- 	vm_entry_controls_set(vmx, vmx_vmentry_ctrl());
- 
--	vmx->vcpu.arch.cr0_guest_owned_bits = KVM_POSSIBLE_CR0_GUEST_BITS;
-+	vmx->vcpu.arch.cr0_guest_owned_bits = vmx_l1_guest_owned_cr0_bits();
- 	vmcs_writel(CR0_GUEST_HOST_MASK, ~vmx->vcpu.arch.cr0_guest_owned_bits);
- 
- 	set_cr4_guest_host_mask(vmx);
-diff --git a/arch/x86/kvm/vmx/vmx.h b/arch/x86/kvm/vmx/vmx.h
-index 2acdc54bc34b..423e9d3c9c40 100644
---- a/arch/x86/kvm/vmx/vmx.h
-+++ b/arch/x86/kvm/vmx/vmx.h
-@@ -640,6 +640,24 @@ BUILD_CONTROLS_SHADOW(tertiary_exec, TERTIARY_VM_EXEC_CONTROL, 64)
- 				(1 << VCPU_EXREG_EXIT_INFO_1) | \
- 				(1 << VCPU_EXREG_EXIT_INFO_2))
- 
-+static inline unsigned long vmx_l1_guest_owned_cr0_bits(void)
-+{
-+	unsigned long bits = KVM_POSSIBLE_CR0_GUEST_BITS;
-+
-+	/*
-+	 * CR0.WP needs to be intercepted when KVM is shadowing legacy paging
-+	 * in order to construct shadow PTEs with the correct protections.
-+	 * Note!  CR0.WP technically can be passed through to the guest if
-+	 * paging is disabled, but checking CR0.PG would generate a cyclical
-+	 * dependency of sorts due to forcing the caller to ensure CR0 holds
-+	 * the correct value prior to determining which CR0 bits can be owned
-+	 * by L1.  Keep it simple and limit the optimization to EPT.
-+	 */
-+	if (!enable_ept)
-+		bits &= ~X86_CR0_WP;
-+	return bits;
-+}
-+
- static __always_inline struct kvm_vmx *to_kvm_vmx(struct kvm *kvm)
- {
- 	return container_of(kvm, struct kvm_vmx, kvm);
-
-base-commit: 0b39948a802b5e76d65989b47ae36fe0dfbc10ad
+diff --git a/drivers/nvme/host/pci.c b/drivers/nvme/host/pci.c
+index 5b95c94ee40f2..c0b1caba1c893 100644
+--- a/drivers/nvme/host/pci.c
++++ b/drivers/nvme/host/pci.c
+@@ -3359,6 +3359,10 @@ static const struct pci_device_id nvme_id_table[] = {
+ 		.driver_data = NVME_QUIRK_DELAY_BEFORE_CHK_RDY |
+ 				NVME_QUIRK_DISABLE_WRITE_ZEROES|
+ 				NVME_QUIRK_IGNORE_DEV_SUBNQN, },
++	{ PCI_DEVICE(0x144d, 0xa824),   /* Samsung PM173X */
++		.driver_data = NVME_QUIRK_BOGUS_NID, },
++	{ PCI_DEVICE(0x144d, 0xa825),   /* Samsung PM1733a */
++		.driver_data = NVME_QUIRK_BOGUS_NID, },
+ 	{ PCI_DEVICE(0x1987, 0x5012),	/* Phison E12 */
+ 		.driver_data = NVME_QUIRK_BOGUS_NID, },
+ 	{ PCI_DEVICE(0x1987, 0x5016),	/* Phison E16 */
 -- 
+2.39.2
 
