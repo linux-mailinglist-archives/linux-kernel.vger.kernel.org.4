@@ -2,89 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3D006BB5D2
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 15:20:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BB3A6BB5D5
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 15:21:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232464AbjCOOUx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 10:20:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39638 "EHLO
+        id S232564AbjCOOVc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 10:21:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229941AbjCOOUv (ORCPT
+        with ESMTP id S229941AbjCOOVa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 10:20:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C90956526;
-        Wed, 15 Mar 2023 07:20:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 74AE261D7F;
-        Wed, 15 Mar 2023 14:20:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC94DC4339C;
-        Wed, 15 Mar 2023 14:20:45 +0000 (UTC)
-Date:   Wed, 15 Mar 2023 10:20:44 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     Mike Rapoport <mike.rapoport@gmail.com>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        rcu@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        netdev@vger.kernel.org, linux-doc@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>
-Subject: Re: [PATCH 0/7] remove SLOB and allow kfree() with
- kmem_cache_alloc()
-Message-ID: <20230315102031.29585157@gandalf.local.home>
-In-Reply-To: <3018fb77-68d0-fb67-2595-7c58c6cf7a76@suse.cz>
-References: <20230310103210.22372-1-vbabka@suse.cz>
-        <ZA2gofYkXRcJ8cLA@kernel.org>
-        <20230313123147.6d28c47e@gandalf.local.home>
-        <3018fb77-68d0-fb67-2595-7c58c6cf7a76@suse.cz>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Wed, 15 Mar 2023 10:21:30 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D72FE67031;
+        Wed, 15 Mar 2023 07:21:29 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 97BB0219BD;
+        Wed, 15 Mar 2023 14:21:28 +0000 (UTC)
+Received: from adalid.arch.suse.de (adalid.arch.suse.de [10.161.8.13])
+        by relay2.suse.de (Postfix) with ESMTP id 7E6D92C141;
+        Wed, 15 Mar 2023 14:21:28 +0000 (UTC)
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] MIPS: sibyte: Replace BCM1125H with SB1250 option
+Date:   Wed, 15 Mar 2023 15:21:24 +0100
+Message-Id: <20230315142124.110732-1-tsbogend@alpha.franken.de>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_FAIL,SPF_HELO_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 15 Mar 2023 14:53:14 +0100
-Vlastimil Babka <vbabka@suse.cz> wrote:
+SIBYTE_BCM1125H is identical to SIBYTE_SB1250, so remove one of them.
 
-> On 3/13/23 17:31, Steven Rostedt wrote:
-> > Just remove that comment. And you could even add:
-> > 
-> > Suggested-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-> > Fixes: e4c2ce82ca27 ("ring_buffer: allocate buffer page pointer")  
-> 
-> Thanks for the analysis. Want to take the following patch to your tree or
-> should I make it part of the series?
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+---
+ arch/mips/Kconfig        |  2 +-
+ arch/mips/sibyte/Kconfig | 11 -----------
+ 2 files changed, 1 insertion(+), 12 deletions(-)
 
-I can take it if you send it as a proper patch and Cc
-linux-trace-kernel@vger.kernel.org.
+diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+index 277daaab1b0d..e1e67b1eae3e 100644
+--- a/arch/mips/Kconfig
++++ b/arch/mips/Kconfig
+@@ -808,7 +808,7 @@ config SIBYTE_CRHONE
+ config SIBYTE_RHONE
+ 	bool "Sibyte BCM91125E-Rhone"
+ 	select BOOT_ELF32
+-	select SIBYTE_BCM1125H
++	select SIBYTE_SB1250
+ 	select SWAP_IO_SPACE
+ 	select SYS_HAS_CPU_SB1
+ 	select SYS_SUPPORTS_BIG_ENDIAN
+diff --git a/arch/mips/sibyte/Kconfig b/arch/mips/sibyte/Kconfig
+index c4596d49edf1..5fb92fe84149 100644
+--- a/arch/mips/sibyte/Kconfig
++++ b/arch/mips/sibyte/Kconfig
+@@ -20,17 +20,6 @@ config SIBYTE_BCM1125
+ 	select SIBYTE_HAS_ZBUS_PROFILING
+ 	select SIBYTE_SB1xxx_SOC
+ 
+-config SIBYTE_BCM1125H
+-	bool
+-	select CEVT_SB1250
+-	select CSRC_SB1250
+-	select HAVE_PCI
+-	select IRQ_MIPS_CPU
+-	select SIBYTE_BCM112X
+-	select SIBYTE_ENABLE_LDT_IF_PCI
+-	select SIBYTE_HAS_ZBUS_PROFILING
+-	select SIBYTE_SB1xxx_SOC
+-
+ config SIBYTE_BCM112X
+ 	bool
+ 	select CEVT_SB1250
+-- 
+2.35.3
 
-I'm guessing it's not required for stable.
-
--- Steve
