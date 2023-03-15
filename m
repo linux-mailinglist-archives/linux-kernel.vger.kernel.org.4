@@ -2,103 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C0A66BAF97
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 12:49:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E904C6BAFEB
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 13:08:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231831AbjCOLth (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 07:49:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56400 "EHLO
+        id S231143AbjCOMIW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 08:08:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231896AbjCOLtF (ORCPT
+        with ESMTP id S230205AbjCOMIR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 07:49:05 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BF63838B0
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 04:48:33 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id m35so2815189wms.4
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 04:48:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1678880912;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=NO4JHw+ZVAfkOsRA/oTSKnVgRkH4XwkA1j+W0BL/pdw=;
-        b=NpEBwtpN5e9qvCAKYLSSfGOCoxZ5Gx8bYsIsUoLwksUrXDVusK6rewjy+4zlzFKnKl
-         zwOJL3D7vBoQEIVfS25/c+6atqDZM7CngruUJ17Lj7f64CJ5PXBq43fF4vL41lCY3UPD
-         zrbrnpShRX6VFGbQ4tg7xu0DDz8Ii6pSjG+386b3M6OE3REuGZnsW/HNLUdSnO8RcCaV
-         zX28x13VqPR+Pki8i34qXiEyPw8+jdtIFONO8aZXvy1UhkZDKzn56K/LfsoQz7nBc2Px
-         eKhSpYBmT0sDJYyxM4zUzYPUiJOZp2DZVhblpjNfOf512dENf3VgHOEjf/Hdc9jVypQt
-         uWnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678880912;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NO4JHw+ZVAfkOsRA/oTSKnVgRkH4XwkA1j+W0BL/pdw=;
-        b=ugNK0DJD5uN2BGAmuNdGrt2GNRZsYzew3y+SC/x8gDcggwtmbIHQcLxy5rWdbEZ/qx
-         Md86mQghQlTjK7UAyABtIRd3hvJhNDppQh4MIlXe74Qbvsf1caI8H3SPgjpgwru0x5jU
-         gGzarZ30COr/pZQ4CpvRNs/uub0NYEnQ69tJZvE4QHfZU4T1uHpVM5S47Omo+eSa2i9q
-         IzGGzh5cubwQXLu7WX279zz+VfGHh77XEuYfenu5Lv9YmvXWsiogfbToBwWRDcADQJqN
-         XqVmPVR/Jo9iqkIJpgSFzQTfx/L83KUVhD2qmbqLlOcq///gVSmGenZnYSA9Dbq0sy+9
-         oEpw==
-X-Gm-Message-State: AO0yUKUVthddx16x3BpB2jq8k4/A2K2HeYpYJUw/tFzVUPmRliTp0fxO
-        wQeLgnfA/H9MUiss5NzEOBk2uw==
-X-Google-Smtp-Source: AK7set+GokxbwRmBEQRMy2g7A1M53ZwF41ApR9RS3SgvL6woujcHid/lb0fuLuYXyG+4/rgnwcRbiw==
-X-Received: by 2002:a05:600c:45d0:b0:3ed:2382:d2fc with SMTP id s16-20020a05600c45d000b003ed2382d2fcmr4448665wmo.4.1678880912390;
-        Wed, 15 Mar 2023 04:48:32 -0700 (PDT)
-Received: from [192.168.1.70] (151.31.102.84.rev.sfr.net. [84.102.31.151])
-        by smtp.gmail.com with ESMTPSA id 1-20020a05600c234100b003ed2c0a0f37sm1601734wmq.35.2023.03.15.04.48.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Mar 2023 04:48:32 -0700 (PDT)
-Message-ID: <8fbd38d7-841e-2b9d-714b-753c66931707@baylibre.com>
-Date:   Wed, 15 Mar 2023 12:48:29 +0100
+        Wed, 15 Mar 2023 08:08:17 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73A83222C3;
+        Wed, 15 Mar 2023 05:07:35 -0700 (PDT)
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32FBSuMY029989;
+        Wed, 15 Mar 2023 12:07:13 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : reply-to : to : cc : date : in-reply-to : references : content-type
+ : mime-version : content-transfer-encoding; s=pp1;
+ bh=5gFL/nxSnjkVO4MBThs2A5kD6yMxkINEPE6ry3QkYlg=;
+ b=szDok60mVjzc0H5jH7aKLBf9kciQHVb4JYVU4OR8YLTUXoYQh3zb2NijRNeMAYF+Z+c6
+ nv+veyUMghHcNES5d7QfFB/Hpj/wOjqKYSbJJUCtf2j/LxY4EhjSyAbBYVzs3v/B6HtL
+ OrHBI1DFZjazYoXDdZOoGWY5yVJacPKZnEXV1TQkyL7BxmBorqs53iAEn3jbxSGPyLvN
+ uLlyeb6ChJjJWZJ9AP+O5IZV01jj14wzc+MUD36XPwSislNPCdXHZd08swOxtiCA9fBH
+ 1+4oLIeoNMl29OGx04IGp96dcOUiCG1G/zLKyLTNmntnz1s01/FfKMorNopDBF+CPb2Y TA== 
+Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3pbbmyuby5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 15 Mar 2023 12:07:12 +0000
+Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
+        by ppma02wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32FAN7VQ026430;
+        Wed, 15 Mar 2023 12:07:12 GMT
+Received: from smtprelay02.dal12v.mail.ibm.com ([9.208.130.97])
+        by ppma02wdc.us.ibm.com (PPS) with ESMTPS id 3pb29ru1w1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 15 Mar 2023 12:07:12 +0000
+Received: from smtpav01.dal12v.mail.ibm.com (smtpav01.dal12v.mail.ibm.com [10.241.53.100])
+        by smtprelay02.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32FC7BTe34800234
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 15 Mar 2023 12:07:11 GMT
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B1B6358552;
+        Wed, 15 Mar 2023 11:49:00 +0000 (GMT)
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D3D9B5854C;
+        Wed, 15 Mar 2023 11:48:59 +0000 (GMT)
+Received: from lingrow.int.hansenpartnership.com (unknown [9.211.76.184])
+        by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Wed, 15 Mar 2023 11:48:59 +0000 (GMT)
+Message-ID: <0be9002bbc7feea0bfd0dc8ad2dccc52bbf34834.camel@linux.ibm.com>
+Subject: Re: [PATCH for-next] scsi: Implement host state statistics
+From:   James Bottomley <jejb@linux.ibm.com>
+Reply-To: jejb@linux.ibm.com
+To:     Greg KH <gregkh@linuxfoundation.org>,
+        "Seymour, Shane M" <shane.seymour@hpe.com>
+Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>
+Date:   Wed, 15 Mar 2023 07:48:58 -0400
+In-Reply-To: <ZBFnYwtr+2bfjvcY@kroah.com>
+References: <DM4PR84MB1373DCD07EABD28D88129C50FDBF9@DM4PR84MB1373.NAMPRD84.PROD.OUTLOOK.COM>
+         <ZBFnYwtr+2bfjvcY@kroah.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2 4/4] misc: tps6594-pfsm: Add driver for TI TPS6594 PFSM
-Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     lee@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, corbet@lwn.net, arnd@arndb.de,
-        derek.kiernan@xilinx.com, dragan.cvetic@xilinx.com,
-        eric.auger@redhat.com, jgg@ziepe.ca, razor@blackwall.org,
-        stephen@networkplumber.org, davem@davemloft.net,
-        christian.koenig@amd.com, contact@emersion.fr,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, sterzik@ti.com, u-kumar1@ti.com,
-        eblanc@baylibre.com, jneanne@baylibre.com
-References: <20230315110736.35506-1-jpanis@baylibre.com>
- <20230315110736.35506-5-jpanis@baylibre.com> <ZBGtVuI6YTfENUNr@kroah.com>
-From:   Julien Panis <jpanis@baylibre.com>
-In-Reply-To: <ZBGtVuI6YTfENUNr@kroah.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: m5IiWuspWVXFrK3jAlNjAPRD88u9mn-W
+X-Proofpoint-ORIG-GUID: m5IiWuspWVXFrK3jAlNjAPRD88u9mn-W
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-15_06,2023-03-15_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
+ priorityscore=1501 spamscore=0 suspectscore=0 adultscore=0 impostorscore=0
+ malwarescore=0 mlxscore=0 mlxlogscore=895 clxscore=1011 phishscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2302240000 definitions=main-2303150104
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, 2023-03-15 at 07:36 +0100, Greg KH wrote:
+> On Wed, Mar 15, 2023 at 06:08:19AM +0000, Seymour, Shane M wrote:
+> > The following patch implements host state statistics via sysfs. The
+> > intent is to allow user space to see the state changes and be able
+> > to report when a host changes state. The files do not separate out
+> > the time spent into each state but only into three:
+> 
+> Why does userspace care about these things at all?
 
+This is the most important question: Why are times spent in various
+states and transition counts important?  Is this some kind of
+predictive failure system, or is it simply logging? If it's logging,
+wouldn't you get better information if we output state changes as they
+occur then they'd appear as timestamped entries in the syslog from
+which all these statistics could be deduced?
 
-On 3/15/23 12:34, Greg KH wrote:
-> On Wed, Mar 15, 2023 at 12:07:36PM +0100, Julien Panis wrote:
->> +// SPDX-License-Identifier: GPL-2.0-or-later
-> Are you sure about "or-later"?  (I have to ask.)
+>   What tool needs them and what can userspace do with the
+> information?
+> > 
+[...]
+> > A (GPLv2) program called hostmond will be released in a few months
+> > that will monitor these interfaces and report (local host only via
+> > syslog(3C)) when hosts change state.
+> 
+> We kind of need to see this before the kernel changes can be accepted
+> for obvious reasons, what is preventing that from happening now?
 
-Some others drivers are used with it ("or-later"),
-even in misc directory.
-But to be honest I'm not sure about the restrictions, if any.
-I will ask that as well.
+I don't think that's a requirement.  The whole point of sysfs is it's
+user readable, so we don't need a tool to make use of its entries.  On
+the other hand if this tool can help elucidate the use case for these
+statistics, then publishing it now would be useful to help everyone
+else understand why this is useful.
 
->> +/*
->> + * PFSM (Pre-configurable Finite State Machine) driver for TI TPS6594/TPS6593/LP8764X PMICs
->> + *
->> + * Copyright (C) 2022 BayLibre Incorporated - https://www.baylibre.com/
-> It's 2023 now :)
->
+James
 
-OK, hehe. :) I'll fix that for next version.
