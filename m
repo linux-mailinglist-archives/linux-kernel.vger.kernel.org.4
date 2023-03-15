@@ -2,88 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F1746BA985
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 08:40:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A7486BA98B
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 08:41:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230461AbjCOHku (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 03:40:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57248 "EHLO
+        id S231191AbjCOHlt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 03:41:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232079AbjCOHkV (ORCPT
+        with ESMTP id S231671AbjCOHlb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 03:40:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2201E5D764;
-        Wed, 15 Mar 2023 00:39:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 90D08B81CCE;
-        Wed, 15 Mar 2023 07:39:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D956FC433EF;
-        Wed, 15 Mar 2023 07:39:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1678865986;
-        bh=dzJZVX7qXok/wVkIoDDwcPhllpR8Nts/9I1KfQjODTQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CsCCP1Bs3BR1yeSflXsHMQWLyZtp1zOzoFigrQiGKq8OWEmQIiJX1n9g1qanRbqo4
-         0ehihlw+8vPNigx9yglrYQDHBdg1iYrKXlngXVjv5u5B3K5/sGaDWHDFpvffopb3o1
-         +c01Bu/uK2o32GlvmYDr/tIOq8bYUkt9nRhq56Ok=
-Date:   Wed, 15 Mar 2023 08:39:43 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Sherry Sun <sherry.sun@nxp.com>
-Cc:     jirislaby@kernel.org, robh@kernel.org,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-imx@nxp.com
-Subject: Re: [PATCH] tty: serdev: serdev-ttyport: set correct tty->dev for
- serdev framework
-Message-ID: <ZBF2Pyd4VSZq3HoA@kroah.com>
-References: <20230315072143.7815-1-sherry.sun@nxp.com>
+        Wed, 15 Mar 2023 03:41:31 -0400
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A43981114B
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 00:41:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        from:to:cc:subject:date:message-id:in-reply-to:references
+        :mime-version:content-transfer-encoding; s=k1; bh=m7UEnYSG6OR+ed
+        oEfclQR+s4WbTHqh7EZ3BJ4PdJrU0=; b=KhIQ3ll1W8AM6b4pQ83K3+GY7XIjlk
+        zSUMld3QD9amKUy+FdCXF/9qTRNkRCXUttxSjJqfnHC0KdEIKMWRApFW/QgHvSyi
+        uUGGvwWSsIXBVKjJtaZiT66xbAicU93YgEX5CbQoeJXmtuT7XCNVyHdKW8eMSaJY
+        4i5N7c156kxko=
+Received: (qmail 3360682 invoked from network); 15 Mar 2023 08:41:17 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 15 Mar 2023 08:41:17 +0100
+X-UD-Smtp-Session: l3s3148p1@C3woeOv2Jo0ujnvb
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     netdev@vger.kernel.org
+Cc:     linux-renesas-soc@vger.kernel.org,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Michal Kubiak <michal.kubiak@intel.com>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH net v2 1/2] ravb: avoid PHY being resumed when interface is not up
+Date:   Wed, 15 Mar 2023 08:41:14 +0100
+Message-Id: <20230315074115.3008-2-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230315074115.3008-1-wsa+renesas@sang-engineering.com>
+References: <20230315074115.3008-1-wsa+renesas@sang-engineering.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230315072143.7815-1-sherry.sun@nxp.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 15, 2023 at 03:21:43PM +0800, Sherry Sun wrote:
-> ttyport_open() calls tty_init_dev() to initialize a tty device, but
-> tty_get_device() cannot get the correct tty->dev for serdev tty in
-> alloc_tty_struct(), because serdev framework does not set tty_class, so
-> class_find_device_by_devt(tty_class, devt) may always return NULL.
-> 
-> For serdev framework, we need to assign the correct ctrl->dev to
-> tty->dev.
-> 
-> Fixes: bed35c6dfa6a ("serdev: add a tty port controller driver")
-> Signed-off-by: Sherry Sun <sherry.sun@nxp.com>
-> ---
->  drivers/tty/serdev/serdev-ttyport.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/tty/serdev/serdev-ttyport.c b/drivers/tty/serdev/serdev-ttyport.c
-> index d367803e2044..bba37ab90215 100644
-> --- a/drivers/tty/serdev/serdev-ttyport.c
-> +++ b/drivers/tty/serdev/serdev-ttyport.c
-> @@ -112,6 +112,7 @@ static int ttyport_open(struct serdev_controller *ctrl)
->  	tty = tty_init_dev(serport->tty_drv, serport->tty_idx);
->  	if (IS_ERR(tty))
->  		return PTR_ERR(tty);
-> +	tty->dev = &ctrl->dev;
+RAVB doesn't need mdiobus suspend/resume, that's why it sets
+'mac_managed_pm'. However, setting it needs to be moved from init to
+probe, so mdiobus PM functions will really never be called (e.g. when
+the interface is not up yet during suspend/resume).
 
-What in-kernel driver needs this change?  How has it not been a problem
-so far?
+Fixes: 4924c0cdce75 ("net: ravb: Fix PHY state warning splat during system resume")
+Suggested-by: Heiner Kallweit <hkallweit1@gmail.com>
+Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Reviewed-by: Michal Kubiak <michal.kubiak@intel.com>
+---
+ drivers/net/ethernet/renesas/ravb_main.c | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
 
-And why are you saving off a reference counted pointer without
-incrementing the reference to the pointer?
+diff --git a/drivers/net/ethernet/renesas/ravb_main.c b/drivers/net/ethernet/renesas/ravb_main.c
+index 0f54849a3823..894e2690c643 100644
+--- a/drivers/net/ethernet/renesas/ravb_main.c
++++ b/drivers/net/ethernet/renesas/ravb_main.c
+@@ -1455,8 +1455,6 @@ static int ravb_phy_init(struct net_device *ndev)
+ 		phy_remove_link_mode(phydev, ETHTOOL_LINK_MODE_100baseT_Half_BIT);
+ 	}
+ 
+-	/* Indicate that the MAC is responsible for managing PHY PM */
+-	phydev->mac_managed_pm = true;
+ 	phy_attached_info(phydev);
+ 
+ 	return 0;
+@@ -2379,6 +2377,8 @@ static int ravb_mdio_init(struct ravb_private *priv)
+ {
+ 	struct platform_device *pdev = priv->pdev;
+ 	struct device *dev = &pdev->dev;
++	struct phy_device *phydev;
++	struct device_node *pn;
+ 	int error;
+ 
+ 	/* Bitbang init */
+@@ -2400,6 +2400,14 @@ static int ravb_mdio_init(struct ravb_private *priv)
+ 	if (error)
+ 		goto out_free_bus;
+ 
++	pn = of_parse_phandle(dev->of_node, "phy-handle", 0);
++	phydev = of_phy_find_device(pn);
++	if (phydev) {
++		phydev->mac_managed_pm = true;
++		put_device(&phydev->mdio.dev);
++	}
++	of_node_put(pn);
++
+ 	return 0;
+ 
+ out_free_bus:
+-- 
+2.30.2
 
-thanks,
-
-greg k-h
