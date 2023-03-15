@@ -2,68 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B0386BBA3E
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 17:53:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C36BE6BBA52
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 17:56:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232330AbjCOQxK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 12:53:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40304 "EHLO
+        id S232341AbjCOQ4n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 12:56:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232324AbjCOQxH (ORCPT
+        with ESMTP id S232238AbjCOQ4i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 12:53:07 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A719193CF;
-        Wed, 15 Mar 2023 09:52:56 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id f18so25138695lfa.3;
-        Wed, 15 Mar 2023 09:52:56 -0700 (PDT)
+        Wed, 15 Mar 2023 12:56:38 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 537BB1E9C4;
+        Wed, 15 Mar 2023 09:56:36 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id h8so34326753ede.8;
+        Wed, 15 Mar 2023 09:56:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678899175;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :reply-to:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=A9HHWcHJilZYaElLvCLlKtriSwWxAD0z2lhiz3S5JS4=;
-        b=Z5KS8MJBYwG8OuxVc1j0A3pSPn2Ic6qEaRx9EK6W+HKjxNWZzjEl6ZpKpdABtpndBi
-         hEbDcMaoZlSdHCTZmFyIdww7LCwEcg5eqEaaBWS2gll/I6HaHiF3FQYc0TovnSwXvh7e
-         SJIyup9731+gVTkipnEkgspqUAELuSV0AzhyRxOzxOuS7nBTJ5W2MlN5u08lhfjeep8J
-         AVG957NoVmb05/nEDhENGQ6Z0O5Q1/5rWO0KVeKq7dv/l3+zWrq4AcI7wgPRHpk89Dyp
-         2d9PhAekAkDpP4rHLy4FzqL7RM7o3LVyhFJhA5kZMMhMeFy9RldOxOz4hfLGXU7NOGrH
-         ncJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678899175;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :reply-to:in-reply-to:references:mime-version:x-gm-message-state
+        d=gmail.com; s=20210112; t=1678899395;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=A9HHWcHJilZYaElLvCLlKtriSwWxAD0z2lhiz3S5JS4=;
-        b=Zqh5OcqAeLuugAJCwIG/Nk0fo6FpEHbTCZV5rqTmBNogwzh1s4uHhMqmmhXc7XGnXb
-         30Uznt62M2uWv1acTuuGad2iWku6rJvA7PTeTYDFYxP8TRCaeWVWsHY0Rqyq0+twolf4
-         HjiC05uJbAa4pmNk6A+Z1Ii1KRokb62UjYsi1Pdg3B+CKLsPYA29nf3w+pLPlDUVDSUj
-         vfiPSdT36bJdMISubQiZMPe0mkLOAjtLdcYy8bRlJRnMIP275xHI1EKXuEvIihz8ICtW
-         5zOVVrsU9ptvqYyE9CqcNLD9ZSujW1W+UVlomk0N6cdD0UXWs3hg3IR1K8mpOCx0AS5X
-         Vgpg==
-X-Gm-Message-State: AO0yUKVyBlSO5aIq3rOhO0uFl4976zjfF8Flhht3YTeDjEtco5YUuY3A
-        zBqSVmDIAJuKkdIIOFVqdwHvlPlOh6E6X5a+6UqEvN6AXcb1nQ==
-X-Google-Smtp-Source: AK7set+zxQ8UFJ5v2od/PjOFf7Z3vLpjaGldFCybbfn+d6dFcfyCr2pXaVp+BCkJjy8VVD454ZuP7RDtwkG/hbXZiMI=
-X-Received: by 2002:ac2:4c3c:0:b0:4dd:fd4e:5a21 with SMTP id
- u28-20020ac24c3c000000b004ddfd4e5a21mr2198532lfq.11.1678899174955; Wed, 15
- Mar 2023 09:52:54 -0700 (PDT)
+        bh=9TQxcK9OaPYsertMuppkBMhe3ksHgbNWBHBNJuD/3SM=;
+        b=bf++em/WSxTAwx8Jt2VK4uGWuaZuyXvqcOVhTxis3lSgx7N5+fkXw9aYA85T5G/g6X
+         IaRhtYqMS5V29bctv8MUwIyDFms+yIOwvicMa6Xu3cUBmsLFDGOgT445O1I9KAg7tQ6w
+         LW7aPN2n0Ig4nt6ecB0pyx7QhcxJMMyjPeRIaNxTwzldk/Gu0RsuBK3jFMrVW+jXp7rH
+         H0x4yEkFvfZYOso0rpDbu2qqVUdS21oyMgYdAVa4hLmkyCDlu2Plzj+g+uPPThHSxQJt
+         Vk5jzt/UdIbS7tAa4OOaGKx42DEath5a9JUmzLWavHBVyCG8o45tsbgl9FT4XML7wuep
+         8GKQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678899395;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9TQxcK9OaPYsertMuppkBMhe3ksHgbNWBHBNJuD/3SM=;
+        b=VtutT1pJUiiN4lukpSQa/tzNrhgvQP/Crd/uRzzkuEA8urSxeWdf6chLfplkhjzmDw
+         KE+IKX9QtTiCDtdquPfPpG/q//L5ckV5PY31zooZNM+BOWXgykCx3hW4EO6AOvKOfuLy
+         gxPrmyKxxUwuCLe8w2TfWFi6v3RPx5uneq/bXQaxCij5lZgIYWUVCExzc17DgCht6fI5
+         H3dZXpmS0SQZFfTTzr7mfkJ8zYE8Gbj306hbhG8l9otKlAd/83hPgtydHQCnRrUXjeyO
+         3Xdb9N6yCM9bGoD3quR0+CSN/LZhKVymh3yX/QKl9IO3E29kzrtiip1VkXxAK5YBeUCY
+         aooQ==
+X-Gm-Message-State: AO0yUKXHqDj3i2EIHKh9Rd7uzB22yaZd263hVXo4D6a2Uyvsd7af6zXj
+        k9Hp7bHSP2mfINpp9gKDhVd6ZcP7Tmw=
+X-Google-Smtp-Source: AK7set/pn6NtBkwziMZ2k+MPhC4lRt2y2JTW+VqQug37QPJA/AWaL0QGO1soOyI/zun5Tooo0/dchg==
+X-Received: by 2002:a17:907:20f1:b0:924:943d:7181 with SMTP id rh17-20020a17090720f100b00924943d7181mr6198534ejb.51.1678899394771;
+        Wed, 15 Mar 2023 09:56:34 -0700 (PDT)
+Received: from [192.168.8.100] (94.196.116.3.threembb.co.uk. [94.196.116.3])
+        by smtp.gmail.com with ESMTPSA id u21-20020a170906409500b00928de86245fsm2729586ejj.135.2023.03.15.09.56.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Mar 2023 09:56:34 -0700 (PDT)
+Message-ID: <f3d1faef-dc0e-48e2-ab08-3ac1c7e7bcbb@gmail.com>
+Date:   Wed, 15 Mar 2023 16:53:09 +0000
 MIME-Version: 1.0
-References: <20230315162944.39542-1-bage@linutronix.de> <20230315162944.39542-2-bage@linutronix.de>
-In-Reply-To: <20230315162944.39542-2-bage@linutronix.de>
-Reply-To: sedat.dilek@gmail.com
-From:   Sedat Dilek <sedat.dilek@gmail.com>
-Date:   Wed, 15 Mar 2023 17:52:18 +0100
-Message-ID: <CA+icZUULJVVtsdaHkPGdy=8ezU=7BiOCrfosGeRiY9dOEaf-nA@mail.gmail.com>
-Subject: Re: [PATCH v2 1/1] kbuild: deb-pkg: Build parallely with current dpkg-buildpackage
-To:     Bastian Germann <bage@linutronix.de>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [RFC 0/2] optimise local-tw task resheduling
+Content-Language: en-US
+To:     Ming Lei <ming.lei@redhat.com>
+Cc:     io-uring@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        linux-kernel@vger.kernel.org
+References: <cover.1678474375.git.asml.silence@gmail.com>
+ <ZBEvD04sH/JzN7MJ@ovpn-8-22.pek2.redhat.com>
+From:   Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <ZBEvD04sH/JzN7MJ@ovpn-8-22.pek2.redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,72 +76,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 15, 2023 at 5:38=E2=80=AFPM Bastian Germann <bage@linutronix.de=
-> wrote:
->
-> With dpkg-buildpackage v1.21.10 or later, the only way to build the
-> deb-pkg generated package parallely is adding -j<N> to the MAKEFLAGS
-> environment variable or using the --jobs-force option. The package ignore=
-s
-> the usual parallel build option that is described in Debian Policy =C2=A7=
-4.9.1.
->
-> Derive make's -j parameter from the DEB_BUILD_OPTIONS environment variabl=
-e
-> that ends up being set by dpkg-buildpackage -j<N>.
->
-> Link: https://www.debian.org/doc/debian-policy/ch-source.html
+On 3/15/23 02:35, Ming Lei wrote:
+> Hi Pavel
+> 
+> On Fri, Mar 10, 2023 at 07:04:14PM +0000, Pavel Begunkov wrote:
+>> io_uring extensively uses task_work, but when a task is waiting
+>> for multiple CQEs it causes lots of rescheduling. This series
+>> is an attempt to optimise it and be a base for future improvements.
+>>
+>> For some zc network tests eventually waiting for a portion of
+>> buffers I've got 10x descrease in the number of context switches,
+>> which reduced the CPU consumption more than twice (17% -> 8%).
+>> It also helps storage cases, while running fio/t/io_uring against
+>> a low performant drive it got 2x descrease of the number of context
+>> switches for QD8 and ~4 times for QD32.
+> 
+> ublk uses io_uring_cmd_complete_in_task()(io_req_task_work_add())
+> heavily. So I tried this patchset, looks not see obvious change
+> on both IOPS and context switches when running 't/io_uring /dev/ublkb0',
+> and it is one null ublk target(ublk add -t null -z -u 1 -q 2), IOPS
+> is ~2.8M.
 
-Thanks for the patch v2 and clarifications.
+Hi Ming,
 
-Substitute above link? Or add as a 2nd link?
+It's enabled for rw requests and send-zc notifications, but
+io_uring_cmd_complete_in_task() is not covered. I'll be enabling
+it for more cases, including pass through.
 
-Link: https://www.debian.org/doc/debian-policy/ch-source.html#s-debianrules=
--options
+> But ublk applies batch schedule similar with io_uring before calling
+> io_uring_cmd_complete_in_task().
 
--Sedat-
+The feature doesn't tolerate tw that produce multiple CQEs, so
+it can't be applied to this batching and the task would stuck
+waiting.
 
-> Signed-off-by: Bastian Germann <bage@linutronix.de>
-> ---
->  scripts/package/mkdebian | 10 +++++++---
->  1 file changed, 7 insertions(+), 3 deletions(-)
->
-> diff --git a/scripts/package/mkdebian b/scripts/package/mkdebian
-> index f74380036bb5..0217790e7a26 100755
-> --- a/scripts/package/mkdebian
-> +++ b/scripts/package/mkdebian
-> @@ -238,11 +238,15 @@ fi
->  cat <<EOF > debian/rules
->  #!$(command -v $MAKE) -f
->
-> +ifneq (,\$(filter parallel=3D%,\$(DEB_BUILD_OPTIONS)))
-> +       JOBS =3D -j\$(subst parallel=3D,,\$(filter parallel=3D%,\$(DEB_BU=
-ILD_OPTIONS)))
-> +endif
-> +
->  srctree ?=3D .
->
->  build-indep:
->  build-arch:
-> -       \$(MAKE) -f \$(srctree)/Makefile ARCH=3D${ARCH} \
-> +       \$(MAKE) -f \$(srctree)/Makefile ARCH=3D${ARCH} \$(JOBS) \
->         \$(shell \$(srctree)/scripts/package/deb-build-option) \
->         olddefconfig all
->
-> @@ -250,10 +254,10 @@ build: build-arch
->
->  binary-indep:
->  binary-arch: build-arch
-> -       \$(MAKE) -f \$(srctree)/Makefile ARCH=3D${ARCH} intdeb-pkg
-> +       \$(MAKE) -f \$(srctree)/Makefile ARCH=3D${ARCH} \$(JOBS) intdeb-p=
-kg
->  clean:
->         rm -rf debian/files debian/linux-*
-> -       \$(MAKE) -f \$(srctree)/Makefile ARCH=3D${ARCH} clean
-> +       \$(MAKE) -f \$(srctree)/Makefile ARCH=3D${ARCH} \$(JOBS) clean
->
->  binary: binary-arch
->  EOF
-> --
-> 2.39.2
->
+btw, from a quick look it appeared that ublk batching is there
+to keep requests together but not to improve batching. And if so,
+I think we can get rid of it, rely on io_uring batching and
+let ublk to gather its requests from tw list, which sounds
+cleaner. I'll elaborate on that later
+
+-- 
+Pavel Begunkov
