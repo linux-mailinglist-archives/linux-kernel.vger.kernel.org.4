@@ -2,106 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21A1F6BBCF1
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 20:07:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 939A96BBCF3
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 20:08:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232011AbjCOTHl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 15:07:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46160 "EHLO
+        id S232233AbjCOTIM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 15:08:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229988AbjCOTHk (ORCPT
+        with ESMTP id S231290AbjCOTIJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 15:07:40 -0400
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B66725B80;
-        Wed, 15 Mar 2023 12:07:39 -0700 (PDT)
-Received: by mail-qt1-x82c.google.com with SMTP id y10so17412262qtj.2;
-        Wed, 15 Mar 2023 12:07:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678907258;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wZ0/zvOMdFiNo5uPOMOj+D7ZIX4bpE2IJFKlYivIZk0=;
-        b=Ct7Q0t12NaUwy+6LgJEcxRSgnz0UJT51Vbym5LRMAXXrj0ByrUwbZPBpGQitY4Lmmr
-         noLg/gXxspqX42LQM39zoZh9R/lzLps2cKcu8gK055aQe7vGo3fDC+q1BOdw3xHcTtj/
-         d+5kLqqqTpVopV9Alv62scMm3WjUdw9XLG/Sv8M1ZNufyHtvUM+xHi6DDp/g7GibddPg
-         ZbJMRl2Jnl6zZKcaKerZdD0TywJjIhWeZod+/M962ycZnB3fhNTdV4CgEHO7FyrZzRHj
-         xtH8VHv1ZVLzTpJzksqWhUdy/n3Jz8bPe58qz2TvzaegzG0J83aZ2/fEN7YDpZ3DTdoT
-         SsQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678907258;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wZ0/zvOMdFiNo5uPOMOj+D7ZIX4bpE2IJFKlYivIZk0=;
-        b=GtPdFrgaI33b/GI5NgU9/EQAx1LQFeEghOFpSP2mNdJKLbHj+kB4s6nnrJrOhArd0E
-         Wmuh10bcIQf5j9QkuCkvwhcWX5OAClK5pcmVQsxeXBNDgnuhKRxkkGPnTRCyKwzJ6itI
-         0ApLT5Y+uO0XOZ0zDrYNgAlV3S4FuJeZwyyN+rPvodJ+zKj4IVaJ36kg2gXYxoT2UcRt
-         Enxx55nIR5nWsBX7wEViYDvaibTyM/1pFEGQ+QVQwNmUmciM3YboT2HwJqDncMWA01UN
-         ytR46G8wq/0zT4dvCOB+jzt4IQrW+AHpGx0YLQ2UDAugN97mK11Hw7aXRwctbpeJ4ATd
-         nPnQ==
-X-Gm-Message-State: AO0yUKUX58U1yOdZzxrcXwUFHvwEo81Msyqlcm93GPDiJbjg5c9MhCKm
-        9Xqx/uyiR19zNWlSsUNoSis=
-X-Google-Smtp-Source: AK7set8QJkutBm83311/qDFwLT9le+gtecQs+6Z/VnXQHJ6QunJlnDoWxtDKDLfrXOb1ByrbcI4+IQ==
-X-Received: by 2002:a05:622a:1:b0:3b9:bf7f:66ff with SMTP id x1-20020a05622a000100b003b9bf7f66ffmr1223839qtw.67.1678907258344;
-        Wed, 15 Mar 2023 12:07:38 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id cp4-20020a05622a420400b003bfb0ea8094sm4103899qtb.83.2023.03.15.12.07.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Mar 2023 12:07:37 -0700 (PDT)
-Message-ID: <2ff0d13e-ed75-6b89-1aad-6e45f7a6a00c@gmail.com>
-Date:   Wed, 15 Mar 2023 12:07:30 -0700
+        Wed, 15 Mar 2023 15:08:09 -0400
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A9D8211FA
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 12:08:08 -0700 (PDT)
+Received: from cwcc.thunk.org (pool-173-48-120-46.bstnma.fios.verizon.net [173.48.120.46])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 32FJ7raZ017918
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 15 Mar 2023 15:07:54 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+        t=1678907275; bh=SipF4mXr0SWwKv19CTpPSkrDCfup+1l9M2ULmlF7psE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=RZXSv2q5hkkz+kTvm5706zGU0f1l0md+vE6VEFqzZuX0OHDHLPQ9PUpF2NUudM91+
+         TMlYT95o3Mu9Dvs/ih0RY/84uJvvbz0xUpA2ivWmKHO2phAfWpZsMzGHtb9dML9PpD
+         aUvD1Yjv0xnSDsYiId1wMCn0SOU0MQbYpl7VkndYqPqbVPY25uXwnpkOqFkCHHqyD6
+         OerKuZ1wdNcBQYBWuFsYigPaQfeMClEIzGr+QIy8xo17RTQGFpcjPLBM5pag0Zxlkm
+         hLdgQaDH6ASPfcd8hN3TwRDNbA1H3F7QQP69ykC1Skh+qG0WIPN7+xrIjkEf7zVgNi
+         sDTh7JJ2J7M1Q==
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id 2E18F15C5830; Wed, 15 Mar 2023 15:07:53 -0400 (EDT)
+Date:   Wed, 15 Mar 2023 15:07:53 -0400
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     "Joel Fernandes (Google)" <joel@joelfernandes.org>
+Cc:     Andreas Dilger <adilger.kernel@dilger.ca>,
+        "Uladzislau Rezki (Sony)" <urezki@gmail.com>,
+        Lukas Czerner <lczerner@redhat.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 07/14] ext4/super: Rename kfree_rcu() to
+ kfree_rcu_mightsleep()
+Message-ID: <20230315190753.GC3024297@mit.edu>
+References: <20230315181902.4177819-1-joel@joelfernandes.org>
+ <20230315181902.4177819-7-joel@joelfernandes.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 5.4 00/68] 5.4.237-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-References: <20230315115726.103942885@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20230315115726.103942885@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230315181902.4177819-7-joel@joelfernandes.org>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/15/23 05:11, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.4.237 release.
-> There are 68 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Wed, Mar 15, 2023 at 06:18:54PM +0000, Joel Fernandes (Google) wrote:
+> From: "Uladzislau Rezki (Sony)" <urezki@gmail.com>
 > 
-> Responses should be made by Fri, 17 Mar 2023 11:57:10 +0000.
-> Anything received after that time might be too late.
+> The kfree_rcu() and kvfree_rcu() macros' single-argument forms are
+> deprecated.  Therefore switch to the new kfree_rcu_mightsleep() and
+> kvfree_rcu_mightsleep() variants. The goal is to avoid accidental use
+> of the single-argument forms, which can introduce functionality bugs in
+> atomic contexts and latency bugs in non-atomic contexts.
 > 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.237-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+> Cc: Theodore Ts'o <tytso@mit.edu>
+> Cc: Lukas Czerner <lczerner@redhat.com>
+> Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
+> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
-BMIPS_GENERIC:
-
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+Acked-by: Theodore Ts'o <tytso@mit.edu>
 
