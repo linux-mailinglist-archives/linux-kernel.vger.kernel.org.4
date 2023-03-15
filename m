@@ -2,75 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 160C86BBEA4
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 22:12:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 465C16BBEA7
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 22:14:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231803AbjCOVMu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 17:12:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54182 "EHLO
+        id S231803AbjCOVOo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 17:14:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230283AbjCOVMr (ORCPT
+        with ESMTP id S232400AbjCOVOh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 17:12:47 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B7E179B00;
-        Wed, 15 Mar 2023 14:12:08 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id r19-20020a05600c459300b003eb3e2a5e7bso2174627wmo.0;
-        Wed, 15 Mar 2023 14:12:08 -0700 (PDT)
+        Wed, 15 Mar 2023 17:14:37 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C21A65BDA2;
+        Wed, 15 Mar 2023 14:14:06 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id eg48so21506947edb.13;
+        Wed, 15 Mar 2023 14:14:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678914726;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2i5cac6o/xZLVm7XeUiTqPlva/u9/ef/H/9FhTqfK9o=;
-        b=cLentCqPxmTvmDUyZbKwCngMuk2qvFHZ5bu/Uf4wRCziSGcYgEOsZer1drCGIZQfP3
-         Sx0Eh/i2KujfDHDKnCv3EgSJBjeR0ic1ZXdMgDein9U99QyjwxZqVhAopzkNXnr7t7N5
-         6L3CE5aR/weZujaZ6Ortiob4ecXB0WEuTH+1G74yn681MrEKCSZkS1H8Vrii+RJKXSvl
-         1Vdkzgb6WvuSJiEjgzKJcmjmd/l8h0KsB1FDRccYVPYIgSNaK1PCbmxZKDXH+lSbg+Fa
-         0/ZAhgPxxrQH+vvFCsrHJb6PysFHWH77dVoIQxE4uud9b1GfLehs2bjtqs25Bi6iHhpb
-         FjiQ==
+        d=gmail.com; s=20210112; t=1678914844;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ErOHFFfZLiBU7fvFPTfb/G/jVk1aWQz0RyiO/Y7ixFM=;
+        b=jea2BpSYboa38wLSkbg+RAA+ULoibbS9K8kkQQvQV2gEZB0wU1wo1S9dkhdvM1Vi26
+         WHoUysFF5sJoAkY8Fa3a2RlFxAezlU2mZbzjtCIncRlRObmQOIU2K1K3F/CjoNZQfYwn
+         qZt2FJt90ez6yCooLVlzPtw27UnLYTlagu3TGgSzhrdR8l7vi6rRj1pBa47djPiQtaaN
+         Flp2GyQb1hEDAdD5Udg7YKLrJQ5Z4BqIf78R/ojDetsNns8T0v8Sn/sZYX2RJh/rpro0
+         /YuYFnH5T7ZsGNj4PxqWAH+FugcekWAH59mpNfJdzN4jDs6nVf8y5f/Z9jPBRHST1ctk
+         yWUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678914726;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2i5cac6o/xZLVm7XeUiTqPlva/u9/ef/H/9FhTqfK9o=;
-        b=tEf1QSFl3YG80A69EEeum4eMDz6GpzH4YEEmdO3IRNTZnak5NY/ZaSncsYDK1SqQ2s
-         ns+nq7W5/IlxP5JqfPH6RYoh5BnihH61RHKaEZLumPa+M/B55dfg5vwaLkXDLk3gZy2T
-         m92jlnv5bBfkTGDbV4GiocfPSjLtybue6m7j2TL7CNhCsGtM+zQqd+h81dWP92xYXF7W
-         UdPdGlXcO6CJWwL98w1UkN57Ptd3PJbfAwi/rXphzMCIiABmjd1vLzX6/CqDBaL2xGDR
-         67jZ/mS/c41zMuFMz5m4zq68Z7ZrgJ+lytbqZuZiW6YeLbLSnM0b2McYZQieeSLD3721
-         WaPg==
-X-Gm-Message-State: AO0yUKVRhdK9ymgEPJ2p6cNIfPg41QT50v6pznp8/mwLrfzhww3Gbrjg
-        I42yBJKTekYCUlAOlJoNJQY=
-X-Google-Smtp-Source: AK7set+Y8+6ubqTJVxlfpG7xBGOOToD283CtFly+Uxd2XpNq7xBq7IOpqPFQu68D4a3Dsfl+LHJN4A==
-X-Received: by 2002:a05:600c:4693:b0:3dc:4b87:a570 with SMTP id p19-20020a05600c469300b003dc4b87a570mr21412739wmo.35.1678914726460;
-        Wed, 15 Mar 2023 14:12:06 -0700 (PDT)
-Received: from suse.localnet (host-79-35-102-94.retail.telecomitalia.it. [79.35.102.94])
-        by smtp.gmail.com with ESMTPSA id v7-20020a05600c214700b003eaf666cbe0sm2963099wml.27.2023.03.15.14.12.04
+        d=1e100.net; s=20210112; t=1678914844;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ErOHFFfZLiBU7fvFPTfb/G/jVk1aWQz0RyiO/Y7ixFM=;
+        b=TXq6gc6Iz3aDOX7Mo2UEa9E7eKl4Z5Kl5/EYBr/u3GIkqcjVLDGmvE69JZsrAlncXI
+         83LJ8Nt/Lpz3qac4bBUGZtcXjgcSvFD6JjlooeSBPT16gcbBZhuzdB12P007qKoZLB4C
+         5AmvF18AREsT5gO4s6R38i3tN7Xr9in0T8v2elnR8ozIVv+wtcVMKisQU1CeAeBc+jQl
+         rgSJiFWQTPD4YYb72EIcQzWc2ieC2aMjkyZkHE3SvO6Fea1BffzmINe5B9ZV+OfWhbBu
+         5Q7av2YlvCFV7FPNBtiNKzwwXZhtlzW5bTTREFi/ODUoT/qHblLD+5p598VjEu9flKrb
+         rXeQ==
+X-Gm-Message-State: AO0yUKWBfwI1dpWf8KwcIbiDgXgqOCnQvAudURMjXORDqHwYXyDrdGSg
+        xHma15osulDBqCbHTbXa6FE=
+X-Google-Smtp-Source: AK7set9OP3+L58MFHm0uUycxLPt9A8ha+Zci0ugvBmE4uCM/6aniJQDwnmVJv+/WJpq6/6m7H+Rcrg==
+X-Received: by 2002:a17:907:c60a:b0:92f:e40d:1489 with SMTP id ud10-20020a170907c60a00b0092fe40d1489mr1409847ejc.61.1678914844452;
+        Wed, 15 Mar 2023 14:14:04 -0700 (PDT)
+Received: from pc636 ([155.137.26.201])
+        by smtp.gmail.com with ESMTPSA id rq4-20020a17090788c400b00927341bf69dsm2975472ejc.88.2023.03.15.14.14.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Mar 2023 14:12:05 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Stefano Garzarella <sgarzare@redhat.com>,
-        Jason Wang <jasowang@redhat.com>
-Cc:     virtualization@lists.linux-foundation.org,
-        Andrey Zhadchenko <andrey.zhadchenko@virtuozzo.com>,
-        eperezma@redhat.com, netdev@vger.kernel.org, stefanha@redhat.com,
-        linux-kernel@vger.kernel.org,
-        "Michael S. Tsirkin" <mst@redhat.com>, kvm@vger.kernel.org
-Subject: Re: [PATCH v2 3/8] vringh: replace kmap_atomic() with kmap_local_page()
-Date:   Wed, 15 Mar 2023 22:12:04 +0100
-Message-ID: <1980067.5pFmK94fv0@suse>
-In-Reply-To: <CACGkMEs6cW7LdpCdWQnX4Pif2gGOu=f3bjNeYQ6MVcdQe=X--Q@mail.gmail.com>
-References: <20230302113421.174582-1-sgarzare@redhat.com>
- <20230302113421.174582-4-sgarzare@redhat.com>
- <CACGkMEs6cW7LdpCdWQnX4Pif2gGOu=f3bjNeYQ6MVcdQe=X--Q@mail.gmail.com>
+        Wed, 15 Mar 2023 14:14:04 -0700 (PDT)
+From:   Uladzislau Rezki <urezki@gmail.com>
+X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
+Date:   Wed, 15 Mar 2023 22:14:02 +0100
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>,
+        Philipp Reisner <philipp.reisner@linbit.com>,
+        Bryan Tan <bryantan@vmware.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Bob Pearson <rpearsonhpe@gmail.com>,
+        Ariel Levkovich <lariel@nvidia.com>,
+        Theodore Ts'o <tytso@mit.edu>, Julian Anastasov <ja@ssi.bg>
+Subject: Re: [PATCH 00/13] Rename k[v]free_rcu() single argument to
+ k[v]free_rcu_mightsleep()
+Message-ID: <ZBI1GhEepro6sufK@pc636>
+References: <20230201150815.409582-1-urezki@gmail.com>
+ <20230315151415.2534e11c@gandalf.local.home>
+ <e5a1815b-65b5-55ca-9773-ec04378d53c0@kernel.dk>
+ <ZBIbloFMm5xRsjfn@pc636>
+ <20230315153448.6914f85b@gandalf.local.home>
+ <CAEXW_YTLFQ3-LApyCPNNx7Tn2ovFr8YUXL=1WVCm+rE2hRKE8g@mail.gmail.com>
+ <20230315162840.106a5b4f@gandalf.local.home>
+ <ZBIzihsxOZwuSoYZ@pc636>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZBIzihsxOZwuSoYZ@pc636>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,136 +90,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On marted=C3=AC 14 marzo 2023 04:56:08 CET Jason Wang wrote:
-> On Thu, Mar 2, 2023 at 7:34=E2=80=AFPM Stefano Garzarella <sgarzare@redha=
-t.com>=20
-wrote:
-> > kmap_atomic() is deprecated in favor of kmap_local_page().
->=20
-> It's better to mention the commit or code that introduces this.
->=20
-> > With kmap_local_page() the mappings are per thread, CPU local, can take
-> > page-faults, and can be called from any context (including interrupts).
-> > Furthermore, the tasks can be preempted and, when they are scheduled to
-> > run again, the kernel virtual addresses are restored and still valid.
-> >=20
-> > kmap_atomic() is implemented like a kmap_local_page() which also disabl=
-es
-> > page-faults and preemption (the latter only for !PREEMPT_RT kernels,
-> > otherwise it only disables migration).
-> >=20
-> > The code within the mappings/un-mappings in getu16_iotlb() and
-> > putu16_iotlb() don't depend on the above-mentioned side effects of
-> > kmap_atomic(),
->=20
-> Note we used to use spinlock to protect simulators (at least until
-> patch 7, so we probably need to re-order the patches at least) so I
-> think this is only valid when:
->=20
-> The vringh IOTLB helpers are not used in atomic context (e.g spinlock,
-> interrupts).
+On Wed, Mar 15, 2023 at 10:07:22PM +0100, Uladzislau Rezki wrote:
+> On Wed, Mar 15, 2023 at 04:28:40PM -0400, Steven Rostedt wrote:
+> > On Wed, 15 Mar 2023 15:57:02 -0400
+> > Joel Fernandes <joel@joelfernandes.org> wrote:
+> > 
+> > > > I was going to suggest "kvfree_rcu_might_synchronize()" but that's just
+> > > > getting ridiculous.  
+> > > 
+> > > No, synchronize() is incorrect. The code really can sleep for other
+> > > reasons like memory allocation. It is not that simple of an
+> > > implementation as one may imagine. mightsleep is really the correct
+> > > wording IMHO.
+> > > 
+> > > > Still, I will replace that code back to a kfree() and rcu_synchonize() than
+> > > > to let that other name get in.  
+> > > 
+> > > I think it is too late for that for now, we already have conversions
+> > > going into the other subsystems, that means we'll have to redo all
+> > > that over again (even if it sounded like a good idea, which it is
+> > > not).
+> > > 
+> > > I would rather you just did: "#define kvfree_rcu_tracing
+> > > #kvfree_rcu_mightsleep", or something like that, if it is really a
+> > > problem. ;-)
+> > > 
+> > > Also you are really the first person I know of who has a problem with that name.
+> > 
+> > I guess you didn't read Jens's reply.
+> > 
+> > The main issue I have with this, is that "might_sleep" is just an
+> > implementation issue. It has *nothing* to do with what the call is about.
+> > It is only about freeing something with RCU. It has nothing to do with
+> > sleeping. I don't use it because it might sleep. I use it to free something.
+> > 
+> > If you don't like kvfree_rcu_synchronization() then call it
+> > kvfree_rcu_headless() and note that currently it can sleep. Because in
+> > the future, if we come up with an implementation where we it doesn't sleep,
+> > then we don't need to go and rename all the users in the future.
+> > 
+> > See where I have the problem with the name "might_sleep"?
+> > 
+> In that sense there is no need in renaming it. The current name of
+> single argument is kvfree_rcu(ptr). It is documented that it can sleep.
+> 
+> According to its name it is clear that it is headless since there
+> is no a second argument.
+> 
+Forgot to add. I agree with you that currently it can sleep but it
+does not mean that a future stays the same, thus there might be an
+extra need in renaming again.
 
-I'm probably missing some context but it looks that you are saying that=20
-kmap_local_page() is not suited for any use in atomic context (you are=20
-mentioning spinlocks).
-
-The commit message (that I know pretty well since it's the exact copy, word=
- by=20
-word, of my boiler plate commits) explains that kmap_local_page() is perfec=
-tly=20
-usable in atomic context (including interrupts).
-
-I don't know this code, however I am not able to see why these vringh IOTLB=
-=20
-helpers cannot work if used under spinlocks. Can you please elaborate a lit=
-tle=20
-more?
-
-> If yes, should we document this? (Or should we introduce a boolean to
-> say whether an IOTLB variant can be used in an atomic context)?
-
-Again, you'll have no problems from the use of kmap_local_page() and so you=
-=20
-don't need any boolean to tell whether or not the code is running in atomic=
-=20
-context.=20
-
-Please take a look at the Highmem documentation which has been recently=20
-reworked and extended by me: https://docs.kernel.org/mm/highmem.html
-
-Anyway, I have been ATK 12 or 13 hours in a row. So I'm probably missing th=
-e=20
-whole picture.
-
-Thanks,=20
-
-=46abio
-
-> Thanks
->=20
-> > so that mere replacements of the old API with the new one
-> > is all that is required (i.e., there is no need to explicitly add calls
-> > to pagefault_disable() and/or preempt_disable()).
-> >=20
-> > Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
-> > ---
-> >=20
-> > Notes:
-> >     v2:
-> >     - added this patch since checkpatch.pl complained about deprecation
-> >    =20
-> >       of kmap_atomic() touched by next patch
-> > =20
-> >  drivers/vhost/vringh.c | 8 ++++----
-> >  1 file changed, 4 insertions(+), 4 deletions(-)
-> >=20
-> > diff --git a/drivers/vhost/vringh.c b/drivers/vhost/vringh.c
-> > index a1e27da54481..0ba3ef809e48 100644
-> > --- a/drivers/vhost/vringh.c
-> > +++ b/drivers/vhost/vringh.c
-> > @@ -1220,10 +1220,10 @@ static inline int getu16_iotlb(const struct vri=
-ngh
-> > *vrh,>=20
-> >         if (ret < 0)
-> >        =20
-> >                 return ret;
-> >=20
-> > -       kaddr =3D kmap_atomic(iov.bv_page);
-> > +       kaddr =3D kmap_local_page(iov.bv_page);
-> >=20
-> >         from =3D kaddr + iov.bv_offset;
-> >         *val =3D vringh16_to_cpu(vrh, READ_ONCE(*(__virtio16 *)from));
-> >=20
-> > -       kunmap_atomic(kaddr);
-> > +       kunmap_local(kaddr);
-> >=20
-> >         return 0;
-> > =20
-> >  }
-> >=20
-> > @@ -1241,10 +1241,10 @@ static inline int putu16_iotlb(const struct vri=
-ngh
-> > *vrh,>=20
-> >         if (ret < 0)
-> >        =20
-> >                 return ret;
-> >=20
-> > -       kaddr =3D kmap_atomic(iov.bv_page);
-> > +       kaddr =3D kmap_local_page(iov.bv_page);
-> >=20
-> >         to =3D kaddr + iov.bv_offset;
-> >         WRITE_ONCE(*(__virtio16 *)to, cpu_to_vringh16(vrh, val));
-> >=20
-> > -       kunmap_atomic(kaddr);
-> > +       kunmap_local(kaddr);
-> >=20
-> >         return 0;
-> > =20
-> >  }
-> >=20
-> > --
-> > 2.39.2
-
-
-
-
+--
+Uladzislau Rezki
