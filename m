@@ -2,282 +2,354 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2AAD6BA6D5
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 06:16:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 649A56BA6F4
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 06:19:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231547AbjCOFQD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 01:16:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48660 "EHLO
+        id S231660AbjCOFTM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 01:19:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231284AbjCOFPH (ORCPT
+        with ESMTP id S231691AbjCOFRP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 01:15:07 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0335B28865;
-        Tue, 14 Mar 2023 22:14:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
-        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
-        Content-Type:Content-ID:Content-Description;
-        bh=Iif1EIg10x/fk8vQ/H01s5moA0vWLGq/BoHe3AMK43I=; b=bWldaHg1l/WRZ/9mfqI0gUQhJK
-        yGthN77nxm2deTK2owJ6wBIIB/cb8rzWW+4uhkf87ONURUW/pReVxrFD/vlPnoif/fbcylqW9+pL6
-        6w5bR5vbCMtV7HAP90Hpat/BmkNe608dCt90QTH/8aCTN5vX7Uf9GLj0TD4OHSkQyH1judEqaWA8q
-        O7w9d/pqPkjbq7gpFCveKoMr2Mdzm1AWgAnqA7geqnLRD0Pr1Khs75UI5okoChPXG0Ka68xqbXBoF
-        KZPIPQABPzDzzrt5C+nv/QyaqU6T7RJrXHpfoH3tEAbxWXoTF5pee5VZd0b2QOJ2Jc9sEaToITsg3
-        6SUOP6Iw==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pcJTN-00DYD9-Po; Wed, 15 Mar 2023 05:14:49 +0000
-From:   "Matthew Wilcox (Oracle)" <willy@infradead.org>
-To:     linux-arch@vger.kernel.org
-Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        linux-xtensa@linux-xtensa.org
-Subject: [PATCH v4 28/36] xtensa: Implement the new page table range API
-Date:   Wed, 15 Mar 2023 05:14:36 +0000
-Message-Id: <20230315051444.3229621-29-willy@infradead.org>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20230315051444.3229621-1-willy@infradead.org>
-References: <20230315051444.3229621-1-willy@infradead.org>
+        Wed, 15 Mar 2023 01:17:15 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A6E4C410A5;
+        Tue, 14 Mar 2023 22:15:11 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D40F3165C;
+        Tue, 14 Mar 2023 22:15:51 -0700 (PDT)
+Received: from a077893.blr.arm.com (unknown [10.162.41.10])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id F0FB73F67D;
+        Tue, 14 Mar 2023 22:15:03 -0700 (PDT)
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        will@kernel.org, catalin.marinas@arm.com, mark.rutland@arm.com
+Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        Mark Brown <broonie@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Suzuki Poulose <suzuki.poulose@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        linux-perf-users@vger.kernel.org
+Subject: [PATCH V9 02/10] arm64/perf: Add BRBE registers and fields
+Date:   Wed, 15 Mar 2023 10:44:36 +0530
+Message-Id: <20230315051444.1683170-3-anshuman.khandual@arm.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230315051444.1683170-1-anshuman.khandual@arm.com>
+References: <20230315051444.1683170-1-anshuman.khandual@arm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add PFN_PTE_SHIFT, update_mmu_cache_range(), flush_dcache_folio() and
-flush_icache_pages().
+This adds BRBE related register definitions and various other related field
+macros there in. These will be used subsequently in a BRBE driver which is
+being added later on.
 
-Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-Cc: Max Filippov <jcmvbkbc@gmail.com>
-Cc: linux-xtensa@linux-xtensa.org
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: Marc Zyngier <maz@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-kernel@vger.kernel.org
+Reviewed-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
 ---
- arch/xtensa/include/asm/cacheflush.h |  9 ++-
- arch/xtensa/include/asm/pgtable.h    | 17 +++---
- arch/xtensa/mm/cache.c               | 83 ++++++++++++++++------------
- 3 files changed, 62 insertions(+), 47 deletions(-)
+ arch/arm64/include/asm/sysreg.h | 103 +++++++++++++++++++++
+ arch/arm64/tools/sysreg         | 159 ++++++++++++++++++++++++++++++++
+ 2 files changed, 262 insertions(+)
 
-diff --git a/arch/xtensa/include/asm/cacheflush.h b/arch/xtensa/include/asm/cacheflush.h
-index 7b4359312c25..35153f6725e4 100644
---- a/arch/xtensa/include/asm/cacheflush.h
-+++ b/arch/xtensa/include/asm/cacheflush.h
-@@ -119,8 +119,14 @@ void flush_cache_page(struct vm_area_struct*,
- #define flush_cache_vmap(start,end)	flush_cache_all()
- #define flush_cache_vunmap(start,end)	flush_cache_all()
+diff --git a/arch/arm64/include/asm/sysreg.h b/arch/arm64/include/asm/sysreg.h
+index 9e3ecba3c4e6..b3bc03ee22bd 100644
+--- a/arch/arm64/include/asm/sysreg.h
++++ b/arch/arm64/include/asm/sysreg.h
+@@ -165,6 +165,109 @@
+ #define SYS_DBGDTRTX_EL0		sys_reg(2, 3, 0, 5, 0)
+ #define SYS_DBGVCR32_EL2		sys_reg(2, 4, 0, 7, 0)
  
-+void flush_dcache_folio(struct folio *folio);
-+#define flush_dcache_folio flush_dcache_folio
++#define __SYS_BRBINFO(n)		sys_reg(2, 1, 8, ((n) & 0xf), ((((n) & 0x10)) >> 2 + 0))
++#define __SYS_BRBSRC(n)			sys_reg(2, 1, 8, ((n) & 0xf), ((((n) & 0x10)) >> 2 + 1))
++#define __SYS_BRBTGT(n)			sys_reg(2, 1, 8, ((n) & 0xf), ((((n) & 0x10)) >> 2 + 2))
 +
- #define ARCH_IMPLEMENTS_FLUSH_DCACHE_PAGE 1
--void flush_dcache_page(struct page *);
-+static inline void flush_dcache_page(struct page *page)
-+{
-+	flush_dcache_folio(page_folio(page));
-+}
++#define SYS_BRBINF0_EL1			__SYS_BRBINFO(0)
++#define SYS_BRBINF1_EL1			__SYS_BRBINFO(1)
++#define SYS_BRBINF2_EL1			__SYS_BRBINFO(2)
++#define SYS_BRBINF3_EL1			__SYS_BRBINFO(3)
++#define SYS_BRBINF4_EL1			__SYS_BRBINFO(4)
++#define SYS_BRBINF5_EL1			__SYS_BRBINFO(5)
++#define SYS_BRBINF6_EL1			__SYS_BRBINFO(6)
++#define SYS_BRBINF7_EL1			__SYS_BRBINFO(7)
++#define SYS_BRBINF8_EL1			__SYS_BRBINFO(8)
++#define SYS_BRBINF9_EL1			__SYS_BRBINFO(9)
++#define SYS_BRBINF10_EL1		__SYS_BRBINFO(10)
++#define SYS_BRBINF11_EL1		__SYS_BRBINFO(11)
++#define SYS_BRBINF12_EL1		__SYS_BRBINFO(12)
++#define SYS_BRBINF13_EL1		__SYS_BRBINFO(13)
++#define SYS_BRBINF14_EL1		__SYS_BRBINFO(14)
++#define SYS_BRBINF15_EL1		__SYS_BRBINFO(15)
++#define SYS_BRBINF16_EL1		__SYS_BRBINFO(16)
++#define SYS_BRBINF17_EL1		__SYS_BRBINFO(17)
++#define SYS_BRBINF18_EL1		__SYS_BRBINFO(18)
++#define SYS_BRBINF19_EL1		__SYS_BRBINFO(19)
++#define SYS_BRBINF20_EL1		__SYS_BRBINFO(20)
++#define SYS_BRBINF21_EL1		__SYS_BRBINFO(21)
++#define SYS_BRBINF22_EL1		__SYS_BRBINFO(22)
++#define SYS_BRBINF23_EL1		__SYS_BRBINFO(23)
++#define SYS_BRBINF24_EL1		__SYS_BRBINFO(24)
++#define SYS_BRBINF25_EL1		__SYS_BRBINFO(25)
++#define SYS_BRBINF26_EL1		__SYS_BRBINFO(26)
++#define SYS_BRBINF27_EL1		__SYS_BRBINFO(27)
++#define SYS_BRBINF28_EL1		__SYS_BRBINFO(28)
++#define SYS_BRBINF29_EL1		__SYS_BRBINFO(29)
++#define SYS_BRBINF30_EL1		__SYS_BRBINFO(30)
++#define SYS_BRBINF31_EL1		__SYS_BRBINFO(31)
++
++#define SYS_BRBSRC0_EL1			__SYS_BRBSRC(0)
++#define SYS_BRBSRC1_EL1			__SYS_BRBSRC(1)
++#define SYS_BRBSRC2_EL1			__SYS_BRBSRC(2)
++#define SYS_BRBSRC3_EL1			__SYS_BRBSRC(3)
++#define SYS_BRBSRC4_EL1			__SYS_BRBSRC(4)
++#define SYS_BRBSRC5_EL1			__SYS_BRBSRC(5)
++#define SYS_BRBSRC6_EL1			__SYS_BRBSRC(6)
++#define SYS_BRBSRC7_EL1			__SYS_BRBSRC(7)
++#define SYS_BRBSRC8_EL1			__SYS_BRBSRC(8)
++#define SYS_BRBSRC9_EL1			__SYS_BRBSRC(9)
++#define SYS_BRBSRC10_EL1		__SYS_BRBSRC(10)
++#define SYS_BRBSRC11_EL1		__SYS_BRBSRC(11)
++#define SYS_BRBSRC12_EL1		__SYS_BRBSRC(12)
++#define SYS_BRBSRC13_EL1		__SYS_BRBSRC(13)
++#define SYS_BRBSRC14_EL1		__SYS_BRBSRC(14)
++#define SYS_BRBSRC15_EL1		__SYS_BRBSRC(15)
++#define SYS_BRBSRC16_EL1		__SYS_BRBSRC(16)
++#define SYS_BRBSRC17_EL1		__SYS_BRBSRC(17)
++#define SYS_BRBSRC18_EL1		__SYS_BRBSRC(18)
++#define SYS_BRBSRC19_EL1		__SYS_BRBSRC(19)
++#define SYS_BRBSRC20_EL1		__SYS_BRBSRC(20)
++#define SYS_BRBSRC21_EL1		__SYS_BRBSRC(21)
++#define SYS_BRBSRC22_EL1		__SYS_BRBSRC(22)
++#define SYS_BRBSRC23_EL1		__SYS_BRBSRC(23)
++#define SYS_BRBSRC24_EL1		__SYS_BRBSRC(24)
++#define SYS_BRBSRC25_EL1		__SYS_BRBSRC(25)
++#define SYS_BRBSRC26_EL1		__SYS_BRBSRC(26)
++#define SYS_BRBSRC27_EL1		__SYS_BRBSRC(27)
++#define SYS_BRBSRC28_EL1		__SYS_BRBSRC(28)
++#define SYS_BRBSRC29_EL1		__SYS_BRBSRC(29)
++#define SYS_BRBSRC30_EL1		__SYS_BRBSRC(30)
++#define SYS_BRBSRC31_EL1		__SYS_BRBSRC(31)
++
++#define SYS_BRBTGT0_EL1			__SYS_BRBTGT(0)
++#define SYS_BRBTGT1_EL1			__SYS_BRBTGT(1)
++#define SYS_BRBTGT2_EL1			__SYS_BRBTGT(2)
++#define SYS_BRBTGT3_EL1			__SYS_BRBTGT(3)
++#define SYS_BRBTGT4_EL1			__SYS_BRBTGT(4)
++#define SYS_BRBTGT5_EL1			__SYS_BRBTGT(5)
++#define SYS_BRBTGT6_EL1			__SYS_BRBTGT(6)
++#define SYS_BRBTGT7_EL1			__SYS_BRBTGT(7)
++#define SYS_BRBTGT8_EL1			__SYS_BRBTGT(8)
++#define SYS_BRBTGT9_EL1			__SYS_BRBTGT(9)
++#define SYS_BRBTGT10_EL1		__SYS_BRBTGT(10)
++#define SYS_BRBTGT11_EL1		__SYS_BRBTGT(11)
++#define SYS_BRBTGT12_EL1		__SYS_BRBTGT(12)
++#define SYS_BRBTGT13_EL1		__SYS_BRBTGT(13)
++#define SYS_BRBTGT14_EL1		__SYS_BRBTGT(14)
++#define SYS_BRBTGT15_EL1		__SYS_BRBTGT(15)
++#define SYS_BRBTGT16_EL1		__SYS_BRBTGT(16)
++#define SYS_BRBTGT17_EL1		__SYS_BRBTGT(17)
++#define SYS_BRBTGT18_EL1		__SYS_BRBTGT(18)
++#define SYS_BRBTGT19_EL1		__SYS_BRBTGT(19)
++#define SYS_BRBTGT20_EL1		__SYS_BRBTGT(20)
++#define SYS_BRBTGT21_EL1		__SYS_BRBTGT(21)
++#define SYS_BRBTGT22_EL1		__SYS_BRBTGT(22)
++#define SYS_BRBTGT23_EL1		__SYS_BRBTGT(23)
++#define SYS_BRBTGT24_EL1		__SYS_BRBTGT(24)
++#define SYS_BRBTGT25_EL1		__SYS_BRBTGT(25)
++#define SYS_BRBTGT26_EL1		__SYS_BRBTGT(26)
++#define SYS_BRBTGT27_EL1		__SYS_BRBTGT(27)
++#define SYS_BRBTGT28_EL1		__SYS_BRBTGT(28)
++#define SYS_BRBTGT29_EL1		__SYS_BRBTGT(29)
++#define SYS_BRBTGT30_EL1		__SYS_BRBTGT(30)
++#define SYS_BRBTGT31_EL1		__SYS_BRBTGT(31)
++
+ #define SYS_MIDR_EL1			sys_reg(3, 0, 0, 0, 0)
+ #define SYS_MPIDR_EL1			sys_reg(3, 0, 0, 0, 5)
+ #define SYS_REVIDR_EL1			sys_reg(3, 0, 0, 0, 6)
+diff --git a/arch/arm64/tools/sysreg b/arch/arm64/tools/sysreg
+index dd5a9c7e310f..d74d9dbe18a7 100644
+--- a/arch/arm64/tools/sysreg
++++ b/arch/arm64/tools/sysreg
+@@ -924,6 +924,165 @@ UnsignedEnum	3:0	BT
+ EndEnum
+ EndSysreg
  
- void local_flush_cache_range(struct vm_area_struct *vma,
- 		unsigned long start, unsigned long end);
-@@ -156,6 +162,7 @@ void local_flush_cache_page(struct vm_area_struct *vma,
- 
- /* This is not required, see Documentation/core-api/cachetlb.rst */
- #define	flush_icache_page(vma,page)			do { } while (0)
-+#define	flush_icache_pages(vma, page, nr)		do { } while (0)
- 
- #define flush_dcache_mmap_lock(mapping)			do { } while (0)
- #define flush_dcache_mmap_unlock(mapping)		do { } while (0)
-diff --git a/arch/xtensa/include/asm/pgtable.h b/arch/xtensa/include/asm/pgtable.h
-index fc7a14884c6c..80bc70251aad 100644
---- a/arch/xtensa/include/asm/pgtable.h
-+++ b/arch/xtensa/include/asm/pgtable.h
-@@ -274,6 +274,7 @@ static inline pte_t pte_mkwrite(pte_t pte)
-  * and a page entry and page directory to the page they refer to.
-  */
- 
-+#define PFN_PTE_SHIFT		PAGE_SHIFT
- #define pte_pfn(pte)		(pte_val(pte) >> PAGE_SHIFT)
- #define pte_same(a,b)		(pte_val(a) == pte_val(b))
- #define pte_page(x)		pfn_to_page(pte_pfn(x))
-@@ -301,15 +302,9 @@ static inline void update_pte(pte_t *ptep, pte_t pteval)
- 
- struct mm_struct;
- 
--static inline void
--set_pte_at(struct mm_struct *mm, unsigned long addr, pte_t *ptep, pte_t pteval)
--{
--	update_pte(ptep, pteval);
--}
--
--static inline void set_pte(pte_t *ptep, pte_t pteval)
-+static inline void set_pte(pte_t *ptep, pte_t pte)
- {
--	update_pte(ptep, pteval);
-+	update_pte(ptep, pte);
- }
- 
- static inline void
-@@ -407,8 +402,10 @@ static inline pte_t pte_swp_clear_exclusive(pte_t pte)
- 
- #else
- 
--extern  void update_mmu_cache(struct vm_area_struct * vma,
--			      unsigned long address, pte_t *ptep);
-+void update_mmu_cache_range(struct vm_area_struct *vma,
-+		unsigned long address, pte_t *ptep, unsigned int nr);
-+#define update_mmu_cache(vma, address, ptep) \
-+	update_mmu_cache_range(vma, address, ptep, 1)
- 
- typedef pte_t *pte_addr_t;
- 
-diff --git a/arch/xtensa/mm/cache.c b/arch/xtensa/mm/cache.c
-index 19e5a478a7e8..27bd798e4d89 100644
---- a/arch/xtensa/mm/cache.c
-+++ b/arch/xtensa/mm/cache.c
-@@ -121,9 +121,9 @@ EXPORT_SYMBOL(copy_user_highpage);
-  *
-  */
- 
--void flush_dcache_page(struct page *page)
-+void flush_dcache_folio(struct folio *folio)
- {
--	struct address_space *mapping = page_mapping_file(page);
-+	struct address_space *mapping = folio_flush_mapping(folio);
- 
- 	/*
- 	 * If we have a mapping but the page is not mapped to user-space
-@@ -132,14 +132,14 @@ void flush_dcache_page(struct page *page)
- 	 */
- 
- 	if (mapping && !mapping_mapped(mapping)) {
--		if (!test_bit(PG_arch_1, &page->flags))
--			set_bit(PG_arch_1, &page->flags);
-+		if (!test_bit(PG_arch_1, &folio->flags))
-+			set_bit(PG_arch_1, &folio->flags);
- 		return;
- 
- 	} else {
--
--		unsigned long phys = page_to_phys(page);
--		unsigned long temp = page->index << PAGE_SHIFT;
-+		unsigned long phys = folio_pfn(folio) * PAGE_SIZE;
-+		unsigned long temp = folio_pos(folio);
-+		unsigned int i, nr = folio_nr_pages(folio);
- 		unsigned long alias = !(DCACHE_ALIAS_EQ(temp, phys));
- 		unsigned long virt;
- 
-@@ -154,22 +154,26 @@ void flush_dcache_page(struct page *page)
- 			return;
- 
- 		preempt_disable();
--		virt = TLBTEMP_BASE_1 + (phys & DCACHE_ALIAS_MASK);
--		__flush_invalidate_dcache_page_alias(virt, phys);
-+		for (i = 0; i < nr; i++) {
-+			virt = TLBTEMP_BASE_1 + (phys & DCACHE_ALIAS_MASK);
-+			__flush_invalidate_dcache_page_alias(virt, phys);
- 
--		virt = TLBTEMP_BASE_1 + (temp & DCACHE_ALIAS_MASK);
-+			virt = TLBTEMP_BASE_1 + (temp & DCACHE_ALIAS_MASK);
- 
--		if (alias)
--			__flush_invalidate_dcache_page_alias(virt, phys);
-+			if (alias)
-+				__flush_invalidate_dcache_page_alias(virt, phys);
- 
--		if (mapping)
--			__invalidate_icache_page_alias(virt, phys);
-+			if (mapping)
-+				__invalidate_icache_page_alias(virt, phys);
-+			phys += PAGE_SIZE;
-+			temp += PAGE_SIZE;
-+		}
- 		preempt_enable();
- 	}
- 
- 	/* There shouldn't be an entry in the cache for this page anymore. */
- }
--EXPORT_SYMBOL(flush_dcache_page);
-+EXPORT_SYMBOL(flush_dcache_folio);
- 
- /*
-  * For now, flush the whole cache. FIXME??
-@@ -207,45 +211,52 @@ EXPORT_SYMBOL(local_flush_cache_page);
- 
- #endif /* DCACHE_WAY_SIZE > PAGE_SIZE */
- 
--void
--update_mmu_cache(struct vm_area_struct * vma, unsigned long addr, pte_t *ptep)
-+void update_mmu_cache_range(struct vm_area_struct *vma, unsigned long addr,
-+		pte_t *ptep, unsigned int nr)
- {
- 	unsigned long pfn = pte_pfn(*ptep);
--	struct page *page;
-+	struct folio *folio;
-+	unsigned int i;
- 
- 	if (!pfn_valid(pfn))
- 		return;
- 
--	page = pfn_to_page(pfn);
-+	folio = page_folio(pfn_to_page(pfn));
- 
--	/* Invalidate old entry in TLBs */
--
--	flush_tlb_page(vma, addr);
-+	/* Invalidate old entries in TLBs */
-+	for (i = 0; i < nr; i++)
-+		flush_tlb_page(vma, addr + i * PAGE_SIZE);
-+	nr = folio_nr_pages(folio);
- 
- #if (DCACHE_WAY_SIZE > PAGE_SIZE)
- 
--	if (!PageReserved(page) && test_bit(PG_arch_1, &page->flags)) {
--		unsigned long phys = page_to_phys(page);
-+	if (!folio_test_reserved(folio) && test_bit(PG_arch_1, &folio->flags)) {
-+		unsigned long phys = folio_pfn(folio) * PAGE_SIZE;
- 		unsigned long tmp;
- 
- 		preempt_disable();
--		tmp = TLBTEMP_BASE_1 + (phys & DCACHE_ALIAS_MASK);
--		__flush_invalidate_dcache_page_alias(tmp, phys);
--		tmp = TLBTEMP_BASE_1 + (addr & DCACHE_ALIAS_MASK);
--		__flush_invalidate_dcache_page_alias(tmp, phys);
--		__invalidate_icache_page_alias(tmp, phys);
-+		for (i = 0; i < nr; i++) {
-+			tmp = TLBTEMP_BASE_1 + (phys & DCACHE_ALIAS_MASK);
-+			__flush_invalidate_dcache_page_alias(tmp, phys);
-+			tmp = TLBTEMP_BASE_1 + (addr & DCACHE_ALIAS_MASK);
-+			__flush_invalidate_dcache_page_alias(tmp, phys);
-+			__invalidate_icache_page_alias(tmp, phys);
-+			phys += PAGE_SIZE;
-+		}
- 		preempt_enable();
- 
--		clear_bit(PG_arch_1, &page->flags);
-+		clear_bit(PG_arch_1, &folio->flags);
- 	}
- #else
--	if (!PageReserved(page) && !test_bit(PG_arch_1, &page->flags)
-+	if (!folio_test_reserved(folio) && !test_bit(PG_arch_1, &folio->flags)
- 	    && (vma->vm_flags & VM_EXEC) != 0) {
--		unsigned long paddr = (unsigned long)kmap_atomic(page);
--		__flush_dcache_page(paddr);
--		__invalidate_icache_page(paddr);
--		set_bit(PG_arch_1, &page->flags);
--		kunmap_atomic((void *)paddr);
-+		for (i = 0; i < nr; i++) {
-+			void *paddr = kmap_local_folio(folio, i * PAGE_SIZE);
-+			__flush_dcache_page((unsigned long)paddr);
-+			__invalidate_icache_page((unsigned long)paddr);
-+			kunmap_local(paddr);
-+		}
-+		set_bit(PG_arch_1, &folio->flags);
- 	}
- #endif
- }
++
++SysregFields BRBINFx_EL1
++Res0	63:47
++Field	46	CCU
++Field	45:32	CC
++Res0	31:18
++Field	17	LASTFAILED
++Field	16	T
++Res0	15:14
++Enum	13:8		TYPE
++	0b000000	UNCOND_DIR
++	0b000001	INDIR
++	0b000010	DIR_LINK
++	0b000011	INDIR_LINK
++	0b000101	RET_SUB
++	0b000111	RET_EXCPT
++	0b001000	COND_DIR
++	0b100001	DEBUG_HALT
++	0b100010	CALL
++	0b100011	TRAP
++	0b100100	SERROR
++	0b100110	INST_DEBUG
++	0b100111	DATA_DEBUG
++	0b101010	ALGN_FAULT
++	0b101011	INST_FAULT
++	0b101100	DATA_FAULT
++	0b101110	IRQ
++	0b101111	FIQ
++	0b111001	DEBUG_EXIT
++EndEnum
++Enum	7:6	EL
++	0b00	EL0
++	0b01	EL1
++	0b10	EL2
++	0b11	EL3
++EndEnum
++Field	5	MPRED
++Res0	4:2
++Enum	1:0	VALID
++	0b00	NONE
++	0b01	TARGET
++	0b10	SOURCE
++	0b11	FULL
++EndEnum
++EndSysregFields
++
++Sysreg	BRBCR_EL1	2	1	9	0	0
++Res0	63:24
++Field	23 	EXCEPTION
++Field	22 	ERTN
++Res0	21:9
++Field	8 	FZP
++Res0	7
++Enum	6:5	TS
++	0b01	VIRTUAL
++	0b10	GST_PHYSICAL
++	0b11	PHYSICAL
++EndEnum
++Field	4	MPRED
++Field	3	CC
++Res0	2
++Field	1	E1BRE
++Field	0	E0BRE
++EndSysreg
++
++Sysreg	BRBFCR_EL1	2	1	9	0	1
++Res0	63:30
++Enum	29:28	BANK
++	0b0	FIRST
++	0b1	SECOND
++EndEnum
++Res0	27:23
++Field	22	CONDDIR
++Field	21	DIRCALL
++Field	20	INDCALL
++Field	19	RTN
++Field	18	INDIRECT
++Field	17	DIRECT
++Field	16	EnI
++Res0	15:8
++Field	7	PAUSED
++Field	6	LASTFAILED
++Res0	5:0
++EndSysreg
++
++Sysreg	BRBTS_EL1	2	1	9	0	2
++Field	63:0	TS
++EndSysreg
++
++Sysreg	BRBINFINJ_EL1	2	1	9	1	0
++Res0	63:47
++Field	46	CCU
++Field	45:32	CC
++Res0	31:18
++Field	17	LASTFAILED
++Field	16	T
++Res0	15:14
++Enum	13:8		TYPE
++	0b000000	UNCOND_DIR
++	0b000001	INDIR
++	0b000010	DIR_LINK
++	0b000011	INDIR_LINK
++	0b000100	RET_SUB
++	0b000100	RET_SUB
++	0b000111	RET_EXCPT
++	0b001000	COND_DIR
++	0b100001	DEBUG_HALT
++	0b100010	CALL
++	0b100011	TRAP
++	0b100100	SERROR
++	0b100110	INST_DEBUG
++	0b100111	DATA_DEBUG
++	0b101010	ALGN_FAULT
++	0b101011	INST_FAULT
++	0b101100	DATA_FAULT
++	0b101110	IRQ
++	0b101111	FIQ
++	0b111001	DEBUG_EXIT
++EndEnum
++Enum	7:6	EL
++	0b00	EL0
++	0b01	EL1
++	0b10	EL2
++	0b11	EL3
++EndEnum
++Field	5	MPRED
++Res0	4:2
++Enum	1:0	VALID
++	0b00	NONE
++	0b01	TARGET
++	0b10	SOURCE
++	0b00	FULL
++EndEnum
++EndSysreg
++
++Sysreg	BRBSRCINJ_EL1	2	1	9	1	1
++Field	63:0 ADDRESS
++EndSysreg
++
++Sysreg	BRBTGTINJ_EL1	2	1	9	1	2
++Field	63:0 ADDRESS
++EndSysreg
++
++Sysreg	BRBIDR0_EL1	2	1	9	2	0
++Res0	63:16
++Enum	15:12	CC
++	0b101	20_BIT
++EndEnum
++Enum	11:8	FORMAT
++	0b0	0
++EndEnum
++Enum	7:0		NUMREC
++	0b1000		8
++	0b10000		16
++	0b100000	32
++	0b1000000	64
++EndEnum
++EndSysreg
++
+ Sysreg	ID_AA64ZFR0_EL1	3	0	0	4	4
+ Res0	63:60
+ UnsignedEnum	59:56	F64MM
 -- 
-2.39.2
+2.25.1
 
