@@ -2,71 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D6736BBFD9
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 23:35:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECCE36BBFD5
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 23:35:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230134AbjCOWfd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 18:35:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53320 "EHLO
+        id S231513AbjCOWfb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 18:35:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230283AbjCOWf3 (ORCPT
+        with ESMTP id S229769AbjCOWf3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 15 Mar 2023 18:35:29 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BE3019C70;
-        Wed, 15 Mar 2023 15:35:28 -0700 (PDT)
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32FMIaDt012449;
-        Wed, 15 Mar 2023 22:35:10 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding;
- s=corp-2022-7-12; bh=BLJJy1+ZgwpNRd9swz3xcy/irzTsB/Fy3caGqVsf+bo=;
- b=cY3x5ZOWY+3lie5X/xtgZRXu/WcBc+CEjhYemSws5LlIjFnbuEMz4DOGPeDeyFpe67/4
- jIrJsvYSC9RSyu6lc6sgPXVlfQjy22UaLc/MDd1s/ZcklcYwNR34K68fXx9zKTh006nn
- MgHCnVmEuGjshSt++1NwTziH0DFH8ENruyi7z+wp1qoFg5Ibe6hnWfTA3SSvKfCt/fIQ
- wC5sYfC1hDKJPdva/Z+Vxo1qzS6AWOpepZZmWF4r9MEod8azp2nDe1IXMXHbvVg0jQSY
- Rk1fOpi8XPs3UPFxJ+AauCM/nkI0FQrafxlH0xHL07g36pRDp7ZNozyLPqY+y9L0F2Tk tQ== 
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3pbp4q0297-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 15 Mar 2023 22:35:09 +0000
-Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 32FLwQIL033432;
-        Wed, 15 Mar 2023 22:35:09 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3pbpde96dy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 15 Mar 2023 22:35:09 +0000
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32FMZ8a5020420;
-        Wed, 15 Mar 2023 22:35:08 GMT
-Received: from ca-dev112.us.oracle.com (ca-dev112.us.oracle.com [10.129.136.47])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3pbpde96dj-1;
-        Wed, 15 Mar 2023 22:35:08 +0000
-From:   Saeed Mirzamohammadi <saeed.mirzamohammadi@oracle.com>
-To:     stable@vger.kernel.org
-Cc:     saeed.mirzamohammadi@oracle.com, Keith Busch <kbusch@kernel.org>,
-        Jens Axboe <axboe@fb.com>, Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/1] nvme-pci: add NVME_QUIRK_BOGUS_NID for Samsung PM173X
-Date:   Wed, 15 Mar 2023 15:34:36 -0700
-Message-Id: <20230315223436.2857712-1-saeed.mirzamohammadi@oracle.com>
-X-Mailer: git-send-email 2.39.2
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7BBF17CFE;
+        Wed, 15 Mar 2023 15:35:27 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id br6so8026131lfb.11;
+        Wed, 15 Mar 2023 15:35:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678919726;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RBQi+5dIqeDwFMprehG3XMTRCEtSR7cljAPsT8mERhk=;
+        b=YCJc6deBGJJ0Y+WxJydUOrby+y1BUvA6LG5OzvLuJnMngDsMna+5JWeRXS9rr5wFkW
+         b2JjY9DitehAG7pqFeA26E2wM2yjQIBncu0M9cqP1ZMF3DfIcPJUBCGNxtchK+Tudrc5
+         0aF5Ndk9D6SB9R1ROSTFhrarCLDupMNfBSU3GElbRNx8v5Z+j6fssqU24N50tPZqN1AO
+         D85YKcV8XZqTLabmrDK0JFgMTVmtg+BtZmOnM3Q9IBI+cA/KWHok2Pr+Xl6tz9q6Lk4m
+         OaHBnvZ/FDNlbuwayCr9ishQU0452978OTzo5hmEk96X45E5edUUoY4N6cRNRHA9BXfk
+         TqBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678919726;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=RBQi+5dIqeDwFMprehG3XMTRCEtSR7cljAPsT8mERhk=;
+        b=PFPN16n27MeEbn2zFTPcDksbnNKGQ4fbQyIzrmjEBMJPCGEgBtbBQS71krJNRmGDSY
+         KwH4gv/dSeB2gv2YJMHhMnIX7VAG3t6Q9yu9eq4EWn/yZ6GXNwAeGDi3W9SXyxjUtnQb
+         nD9QcUPTr2c665pXh7v1TDs3acf1FnXbWqi/z5K2OahdHHQJEpHVNI2+HjeiZnE5cLmN
+         tzRJGr31gFwM2LO0Sl8uyw89VjzQljiiNwbQGX0vuExaqvCUctEDy3A7FFVe5hCdbzMk
+         EvpMHJfoPGL/UcUJ6BEbVvw/hcT3ciGYYctem+wlhBY/Wh6plPuNGiGTDB5yj7D1hQ9w
+         k0sg==
+X-Gm-Message-State: AO0yUKUmS3VcnckkIBeNDQUpoXAya/R6ox+kXn+pdJ7udqZBZl3HSitD
+        4RtUeBJpTW7MFoHcZRGgfAE=
+X-Google-Smtp-Source: AK7set+NlbH77yCQNdZ8cQG/2ZLDYZrC5HNJPl6aMu2YmKjuOC6m/7SKRDYPZQ7NSWveOqb0a16ZQg==
+X-Received: by 2002:ac2:547b:0:b0:4ca:fac4:5a34 with SMTP id e27-20020ac2547b000000b004cafac45a34mr2376916lfn.61.1678919726067;
+        Wed, 15 Mar 2023 15:35:26 -0700 (PDT)
+Received: from localhost ([46.211.236.75])
+        by smtp.gmail.com with ESMTPSA id t24-20020ac24c18000000b004cca1658a41sm963226lfq.300.2023.03.15.15.35.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Mar 2023 15:35:25 -0700 (PDT)
+Date:   Thu, 16 Mar 2023 00:35:19 +0200
+From:   Denis Pauk <pauk.denis@gmail.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mischief@offblast.org,
+        de99like@mennucci.debian.net, holger.kiehl@dwd.de
+Subject: Re: [PATCH 2/2] hwmon: (nct6775) update ASUS WMI monitoring list
+ A520/B360/B460/B550...
+Message-ID: <20230316003519.27224216@gmail.com>
+In-Reply-To: <20230316001749.44e51d08@gmail.com>
+References: <20230315210135.2155-1-pauk.denis@gmail.com>
+        <20230315210135.2155-2-pauk.denis@gmail.com>
+        <20230315233054.5ac21db0@gmail.com>
+        <19097c39-9703-6b7f-6cc4-8a157b00f368@roeck-us.net>
+        <20230316000453.553bf6a8@gmail.com>
+        <20230316001749.44e51d08@gmail.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; aarch64-unknown-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-15_12,2023-03-15_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 adultscore=0 mlxscore=0
- phishscore=0 mlxlogscore=999 malwarescore=0 bulkscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303150001
- definitions=main-2303150184
-X-Proofpoint-GUID: KZ1i8VvTwu8FNn7ESSBIxWJoDwD4WcPy
-X-Proofpoint-ORIG-GUID: KZ1i8VvTwu8FNn7ESSBIxWJoDwD4WcPy
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,30 +80,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This adds a quirk to fix the Samsung PM1733a and PM173X reporting
-bogus eui64 so they are not marked as "non globally unique" duplicates.
+On Thu, 16 Mar 2023 00:17:49 +0200
+Denis Pauk <pauk.denis@gmail.com> wrote:
 
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Saeed Mirzamohammadi <saeed.mirzamohammadi@oracle.com>
----
- drivers/nvme/host/pci.c | 4 ++++
- 1 file changed, 4 insertions(+)
+> On Thu, 16 Mar 2023 00:04:53 +0200
+> Denis Pauk <pauk.denis@gmail.com> wrote:
+>=20
+> > On Wed, 15 Mar 2023 14:58:24 -0700
+> > Guenter Roeck <linux@roeck-us.net> wrote:
+> >  =20
+> > > On 3/15/23 14:30, Denis Pauk wrote:   =20
+> > > > On Wed, 15 Mar 2023 23:01:35 +0200
+> > > > Denis Pauk <pauk.denis@gmail.com> wrote:
+> > > >=20
+> > > > Tested-by: Holger Kiehl <holger.kiehl@dwd.de>
+> > > >=20
+> > > > Pro A520M-C II/CSM is also tested by Holger Kiehl
+> > > > https://patchwork.kernel.org/project/linux-hwmon/patch/868bdc4f-9d4=
+5-475c-963e-f5232a8b95@praktifix.dwd.de/
+> > > >=20
+> > > > Could it be applied as single patch or need to rebase over "Pro A52=
+0M-C
+> > > > II" patch?
+> > > >      =20
+> > > Sorry, I don't understand what you are trying to say. I just applied =
+all
+> > > patches in sequence as received, with no conflicts. Should I undo tha=
+t ?
+> > >=20
+> > > Guenter
+> > >    =20
+> >=20
+> > No, Thank you!
+> >=20
+> > I just like to mention that Holger Kiehl sent separate patch with
+> > "Pro A520M-C II" support and it could create conflicts. I have found it=
+ only
+> > when I have sent my patches.
+> >  =20
+>=20
+> I have rechecked repo and "Pro A520M-C II" is added twice after apply bot=
+h of
+> patches (my and from Holger Kiehl), could you please remove one of mentio=
+n of
+> it?
 
-diff --git a/drivers/nvme/host/pci.c b/drivers/nvme/host/pci.c
-index 5b95c94ee40f2..c0b1caba1c893 100644
---- a/drivers/nvme/host/pci.c
-+++ b/drivers/nvme/host/pci.c
-@@ -3359,6 +3359,10 @@ static const struct pci_device_id nvme_id_table[] = {
- 		.driver_data = NVME_QUIRK_DELAY_BEFORE_CHK_RDY |
- 				NVME_QUIRK_DISABLE_WRITE_ZEROES|
- 				NVME_QUIRK_IGNORE_DEV_SUBNQN, },
-+	{ PCI_DEVICE(0x144d, 0xa824),   /* Samsung PM173X */
-+		.driver_data = NVME_QUIRK_BOGUS_NID, },
-+	{ PCI_DEVICE(0x144d, 0xa825),   /* Samsung PM1733a */
-+		.driver_data = NVME_QUIRK_BOGUS_NID, },
- 	{ PCI_DEVICE(0x1987, 0x5012),	/* Phison E12 */
- 		.driver_data = NVME_QUIRK_BOGUS_NID, },
- 	{ PCI_DEVICE(0x1987, 0x5016),	/* Phison E16 */
--- 
-2.39.2
+I have resent updated version of this patch without duplication of adding "=
+Pro
+A520M-C II",=20
+https://patchwork.kernel.org/project/linux-hwmon/patch/20230315222702.1803-=
+1-pauk.denis@gmail.com/
 
+you could revert this patch and add apply new one, or fix this one.=20
+
+Thank you!
+
+Best regards,
+ =C2=A0 =C2=A0 =C2=A0	Denis.
