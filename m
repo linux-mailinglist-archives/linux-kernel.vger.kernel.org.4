@@ -2,71 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CBA46BBD7C
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 20:44:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7F0D6BBD7D
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 20:45:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232270AbjCOTog (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 15:44:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47364 "EHLO
+        id S231636AbjCOTon (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 15:44:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232082AbjCOTod (ORCPT
+        with ESMTP id S232375AbjCOTog (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 15:44:33 -0400
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69C53F756
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 12:44:30 -0700 (PDT)
-Received: by mail-qt1-x832.google.com with SMTP id s12so17450351qtq.11
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 12:44:30 -0700 (PDT)
+        Wed, 15 Mar 2023 15:44:36 -0400
+Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0A8ACA0B
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 12:44:31 -0700 (PDT)
+Received: by mail-qt1-x82d.google.com with SMTP id r5so17505135qtp.4
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 12:44:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google; t=1678909469;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=jqFrNqITGGDLlhPYnkJjrrLRlwOYf2ibTxsThXGpk8A=;
-        b=VEyLp9OjLmJF5YzG1BBVxZJwxAFxMj+a4hkb4juSICDtdMWn8iT2nSGV1mAMg+JGAf
-         usO9i856r9iQFDut5RGxvV/cwJqOKC6yQiQqrFSVmBrJqPxApDUBvZ0+dfZ3iMEtsCLO
-         XfvJmsZnSgkJMKtqKzf1Wmk2eEKQgYX45tu9c=
+        d=joelfernandes.org; s=google; t=1678909470;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=v18L/HyzbX8RIGPkv74gEAaNuKF2umfPmevTB4XROmQ=;
+        b=LAK5vaKQ7yNuOXwJ/bmj+BxFvK6WV9egm/yBtxMZRQ86LkU+ecP3uQvSIt9nrBkN+u
+         Zx3IzVf7Qvxjmyq2vNKFl9qY9SmA2yHS3dUcZJYtGNJdYLUNEp14r4a9nDEFBOf2I51P
+         K36kb3x302AK7FfweoSCaIdBujCIksdSNSirg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678909469;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jqFrNqITGGDLlhPYnkJjrrLRlwOYf2ibTxsThXGpk8A=;
-        b=0NLZ9wH4oeZD6AelT24To12kN7qsTbLECnj8SngmxoP6N/wqfwJ6xupgTbWMH7h/yN
-         SaVPJ5Q1KVv/gdpFAo2QIAp7tJQ5Rkule4T6c+UPoZc9sGimLWRa9MPyCX028nog+Hlk
-         Rd0m53XFYUcXg5SD0Ui1PUyp83vZ+CYaY6A4u2r2siLo/T8YXBSC9rqe8+LWnfFwRrIV
-         mOUTZ0k23Q2RzsE3pkwcic4SIVwg/XX6FXFl5nRB/6unRO608UlzWURMIzw0rkCPetAi
-         hWR6kpkCm6/36NfK0P6xGZusG6zgWdS6Hi4Z8nr/XNMtKSrtcOHwPwBD8W0P9faI0iX8
-         T3xw==
-X-Gm-Message-State: AO0yUKX8hwA3LGul97sCkB+r5/UeqcO7pMtDPO7Z4DInYrfd2+95RdDD
-        H+ol/yL+q9oQ+ksggsxDcwW/UeTQnRmWINIfL2U=
-X-Google-Smtp-Source: AK7set9dfK434dXDr0yIat6SPxVU8XoMS5ZcP+FDLE+fW7L96CzOkOycO/RXcxTtUb42myef7phsBQ==
-X-Received: by 2002:a05:622a:60f:b0:3b7:ec70:30af with SMTP id z15-20020a05622a060f00b003b7ec7030afmr1753785qta.46.1678909468933;
-        Wed, 15 Mar 2023 12:44:28 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1678909470;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=v18L/HyzbX8RIGPkv74gEAaNuKF2umfPmevTB4XROmQ=;
+        b=M8oV4xLsK7P6zFpwteiJoXb6gSY9PKxwDGJxixRbz+dYxrX94JpipncPHEEv00Xgid
+         RZLwUZMDG2qP5hGPeA1HWQpAk6qPLAHHgbdvWHS6LtyFhSqc4+c0HEReVNytBkOGjkDI
+         EfDQXGhVWfjmwpRSghnXZDxntS/1+cNnMYeGJ9AW7RPpfXarUWCGgVFXHhsOF5mjyb4f
+         ezVSNJaCrt3crrC8jRDCNRT1+NchUbu+iPsBfSXhtm9SNeZCNJd0z1Z+BdkwDoXVTG3i
+         gDz9vueQi9NwVD9m8m0hLfxpkNzPYSNp5QjAXdkMNcfNZJ3aId7BSrMhFhUZ4xQzr8cP
+         /Flw==
+X-Gm-Message-State: AO0yUKWHVBcBO6Ps8k88WbOHdl4P0Q/6sa3BTYW622BbRw/4eJnINCn6
+        tmEOdh3+RJnmVCdiUzPUCjo4y0znVL/xhF20lS0=
+X-Google-Smtp-Source: AK7set+1xJxMyUYjCwPpkgFMm3z1hwMdYE1QZynRvOo/9xx1oGT3RffTi7vAUfXL1hJQUwX5WJAIMg==
+X-Received: by 2002:a05:622a:174c:b0:3bf:d1b3:2bbb with SMTP id l12-20020a05622a174c00b003bfd1b32bbbmr2125188qtk.13.1678909470197;
+        Wed, 15 Mar 2023 12:44:30 -0700 (PDT)
 Received: from joelboxx.c.googlers.com.com (129.239.188.35.bc.googleusercontent.com. [35.188.239.129])
-        by smtp.gmail.com with ESMTPSA id c15-20020ac8660f000000b003b86b088755sm4346666qtp.15.2023.03.15.12.44.28
+        by smtp.gmail.com with ESMTPSA id c15-20020ac8660f000000b003b86b088755sm4346666qtp.15.2023.03.15.12.44.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Mar 2023 12:44:28 -0700 (PDT)
+        Wed, 15 Mar 2023 12:44:29 -0700 (PDT)
 From:   "Joel Fernandes (Google)" <joel@joelfernandes.org>
-To:     linux-kernel@vger.kernel.org,
-        "Paul E. McKenney" <paulmck@kernel.org>,
+To:     linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Frederic Weisbecker <fweisbec@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Zqiang <qiang1.zhang@intel.com>,
+        Anna-Maria Behnsen <anna-maria@linutronix.de>,
         Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>
-Cc:     Zqiang <qiang1.zhang@intel.com>, rcu@vger.kernel.org
-Subject: [PATCH 1/9] rcu: Fix set/clear TICK_DEP_BIT_RCU_EXP bitmask race
-Date:   Wed, 15 Mar 2023 19:43:41 +0000
-Message-Id: <20230315194349.10798-1-joel@joelfernandes.org>
+        Joel Fernandes <joel@joelfernandes.org>,
+        linux-trace-kernel@vger.kernel.org
+Subject: [PATCH 2/9] rcu: Fix missing TICK_DEP_MASK_RCU_EXP dependency check
+Date:   Wed, 15 Mar 2023 19:43:42 +0000
+Message-Id: <20230315194349.10798-2-joel@joelfernandes.org>
 X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
+In-Reply-To: <20230315194349.10798-1-joel@joelfernandes.org>
+References: <20230315194349.10798-1-joel@joelfernandes.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -75,80 +79,56 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Zqiang <qiang1.zhang@intel.com>
 
-For kernels built with CONFIG_NO_HZ_FULL=y, the following scenario can result
-in the scheduling-clock interrupt remaining enabled on a holdout CPU after
-its quiescent state has been reported:
+This commit adds checks for the TICK_DEP_MASK_RCU_EXP bit, thus enabling
+RCU expedited grace periods to actually force-enable scheduling-clock
+interrupts on holdout CPUs.
 
-	CPU1                                                 CPU2
-rcu_report_exp_cpu_mult                          synchronize_rcu_expedited_wait
-   acquires rnp->lock                               mask = rnp->expmask;
-                                                    for_each_leaf_node_cpu_mask(rnp, cpu, mask)
-   rnp->expmask = rnp->expmask & ~mask;                rdp = per_cpu_ptr(&rcu_data, cpu1);
-   for_each_leaf_node_cpu_mask(rnp, cpu, mask)
-      rdp = per_cpu_ptr(&rcu_data, cpu1);
-      if (!rdp->rcu_forced_tick_exp)
-             continue;                                 rdp->rcu_forced_tick_exp = true;
-                                                       tick_dep_set_cpu(cpu1, TICK_DEP_BIT_RCU_EXP);
-
-The problem is that CPU2's sampling of rnp->expmask is obsolete by the
-time it invokes tick_dep_set_cpu(), and CPU1 is not guaranteed to see
-CPU2's store to ->rcu_forced_tick_exp in time to clear it.  And even if
-CPU1 does see that store, it might invoke tick_dep_clear_cpu() before
-CPU2 got around to executing its tick_dep_set_cpu(), which would still
-leave the victim CPU with its scheduler-clock tick running.
-
-Either way, an nohz_full real-time application running on the victim
-CPU would have its latency needlessly degraded.
-
-Note that expedited RCU grace periods look at context-tracking
-information, and so if the CPU is executing in nohz_full usermode
-throughout, that CPU cannot be victimized in this manner.
-
-This commit therefore causes synchronize_rcu_expedited_wait to hold
-the rcu_node structure's ->lock when checking for holdout CPUs, setting
-TICK_DEP_BIT_RCU_EXP, and invoking tick_dep_set_cpu(), thus preventing
-this race.
-
+Fixes: df1e849ae455 ("rcu: Enable tick for nohz_full CPUs slow to provide expedited QS")
 Signed-off-by: Zqiang <qiang1.zhang@intel.com>
-Reviewed-by: Frederic Weisbecker <frederic@kernel.org>
+Cc: Steven Rostedt <rostedt@goodmis.org>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>
+Cc: Frederic Weisbecker <fweisbec@gmail.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Ingo Molnar <mingo@kernel.org>
+Cc: Anna-Maria Behnsen <anna-maria@linutronix.de>
+Acked-by: Frederic Weisbecker <frederic@kernel.org>
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
 ---
- kernel/rcu/tree_exp.h | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ include/trace/events/timer.h | 3 ++-
+ kernel/time/tick-sched.c     | 5 +++++
+ 2 files changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/rcu/tree_exp.h b/kernel/rcu/tree_exp.h
-index 249c2967d9e6..7cc4856da081 100644
---- a/kernel/rcu/tree_exp.h
-+++ b/kernel/rcu/tree_exp.h
-@@ -594,6 +594,7 @@ static void synchronize_rcu_expedited_wait(void)
- 	struct rcu_data *rdp;
- 	struct rcu_node *rnp;
- 	struct rcu_node *rnp_root = rcu_get_root();
-+	unsigned long flags;
+diff --git a/include/trace/events/timer.h b/include/trace/events/timer.h
+index 2e713a7d9aa3..3e8619c72f77 100644
+--- a/include/trace/events/timer.h
++++ b/include/trace/events/timer.h
+@@ -371,7 +371,8 @@ TRACE_EVENT(itimer_expire,
+ 		tick_dep_name(PERF_EVENTS)		\
+ 		tick_dep_name(SCHED)			\
+ 		tick_dep_name(CLOCK_UNSTABLE)		\
+-		tick_dep_name_end(RCU)
++		tick_dep_name(RCU)			\
++		tick_dep_name_end(RCU_EXP)
  
- 	trace_rcu_exp_grace_period(rcu_state.name, rcu_exp_gp_seq_endval(), TPS("startwait"));
- 	jiffies_stall = rcu_exp_jiffies_till_stall_check();
-@@ -602,17 +603,17 @@ static void synchronize_rcu_expedited_wait(void)
- 		if (synchronize_rcu_expedited_wait_once(1))
- 			return;
- 		rcu_for_each_leaf_node(rnp) {
-+			raw_spin_lock_irqsave_rcu_node(rnp, flags);
- 			mask = READ_ONCE(rnp->expmask);
- 			for_each_leaf_node_cpu_mask(rnp, cpu, mask) {
- 				rdp = per_cpu_ptr(&rcu_data, cpu);
- 				if (rdp->rcu_forced_tick_exp)
- 					continue;
- 				rdp->rcu_forced_tick_exp = true;
--				preempt_disable();
- 				if (cpu_online(cpu))
- 					tick_dep_set_cpu(cpu, TICK_DEP_BIT_RCU_EXP);
--				preempt_enable();
- 			}
-+			raw_spin_unlock_irqrestore_rcu_node(rnp, flags);
- 		}
- 		j = READ_ONCE(jiffies_till_first_fqs);
- 		if (synchronize_rcu_expedited_wait_once(j + HZ))
+ #undef tick_dep_name
+ #undef tick_dep_mask_name
+diff --git a/kernel/time/tick-sched.c b/kernel/time/tick-sched.c
+index b0e3c9205946..ba2ac1469d47 100644
+--- a/kernel/time/tick-sched.c
++++ b/kernel/time/tick-sched.c
+@@ -281,6 +281,11 @@ static bool check_tick_dependency(atomic_t *dep)
+ 		return true;
+ 	}
+ 
++	if (val & TICK_DEP_MASK_RCU_EXP) {
++		trace_tick_stop(0, TICK_DEP_MASK_RCU_EXP);
++		return true;
++	}
++
+ 	return false;
+ }
+ 
 -- 
 2.40.0.rc1.284.g88254d51c5-goog
 
