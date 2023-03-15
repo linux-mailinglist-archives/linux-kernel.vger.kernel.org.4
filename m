@@ -2,251 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CE1B6BB67C
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 15:49:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D1786BB683
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 15:51:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232541AbjCOOtl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 10:49:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56046 "EHLO
+        id S232690AbjCOOvB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 10:51:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232690AbjCOOte (ORCPT
+        with ESMTP id S232263AbjCOOu6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 10:49:34 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19394EF85
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 07:49:32 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id c8-20020a05600c0ac800b003ed2f97a63eso1245370wmr.3
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 07:49:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20210112.gappssmtp.com; s=20210112; t=1678891770;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=NDMF/9Jk1Ma//xyCPXZ0qcrhqF6+x2N5EgrMZjwbDtI=;
-        b=blOAgwk5isbC6BMGXRH31cyaygGh3ZX2UwPp/2h+oSnCkdRkVPsEEzk5uiDt3b9R0B
-         OFJsxYV1t22+fE0rbMSmmVOJIEw/K4VbbRnBfQitsZg/mue8xZp3ocHdDEXQ0/Qafz4t
-         xqWr+x5sX6Q9UmhHwswAYPcSxwWZmPo3wQQ+tsz9LngznP1yfmHY9BrpDoqzd3Du+2xf
-         /crzOqW8FQTYcX3kJXzXzw4Vlhly6AwVuXnIQfWtAl93XF2ADLFEObBqMqkuyk8mo/yR
-         TYSwEJTXceaHn43z4ScbCODJSFdYfo+erf0M47AbYbCztISEMbHSZNambWkixXzpDwmh
-         OMmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678891770;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NDMF/9Jk1Ma//xyCPXZ0qcrhqF6+x2N5EgrMZjwbDtI=;
-        b=32iuSxmPGnYFEh9ZBL70k3B98H7cO8VcDiv0eemrauDu+1qcZNrVNxQviGrvBG8gTx
-         bBDLruGpb5SxBTGSanuswPqZFFIZKAZ/7hq8ckq9wq0SPaklY2FpTL+UzYpuAyiWNLqX
-         K0+W2nbG3y/oPpWRLyeC9JxdvgL3BFLC2K+wqWkvy3KPQ/wByxfJcwRCYjBy0fc93bv3
-         dyLen3KfHHIUXAoglTrGPCqMgR4QxN89q34K4zRgQDl1wlg3OLvt4dNM6FsybJjb/vBa
-         /1BtvVQdD1sdce4NUgTkJiKA1/FMxEWe/bAaONbkk4MkdGenbyXmZ1KM6HNXgxxj0pDx
-         q2Hw==
-X-Gm-Message-State: AO0yUKWQwPZOsMUmjXLpAMk2tFXcYuYi7h4Q8EntbQO+7YkGt1Yt4TR3
-        34uqrkNL2+VKeYnKzXA0IcMfJw==
-X-Google-Smtp-Source: AK7set8yh7EPUWvcwlsc+RuEBHXyD/aW6OMeVcr/+X2341eatiOAFb5k+Cx2kZXcOkEz1FF36JdFLQ==
-X-Received: by 2002:a05:600c:35ce:b0:3eb:2b88:9adc with SMTP id r14-20020a05600c35ce00b003eb2b889adcmr18836483wmq.25.1678891770300;
-        Wed, 15 Mar 2023 07:49:30 -0700 (PDT)
-Received: from airbuntu (host86-168-251-3.range86-168.btcentralplus.com. [86.168.251.3])
-        by smtp.gmail.com with ESMTPSA id p15-20020a7bcdef000000b003dc4480df80sm2007514wmj.34.2023.03.15.07.49.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Mar 2023 07:49:29 -0700 (PDT)
-Date:   Wed, 15 Mar 2023 14:49:27 +0000
-From:   Qais Yousef <qyousef@layalina.io>
-To:     Juri Lelli <juri.lelli@redhat.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Waiman Long <longman@redhat.com>, Tejun Heo <tj@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Hao Luo <haoluo@google.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Wed, 15 Mar 2023 10:50:58 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D14260ABB;
+        Wed, 15 Mar 2023 07:50:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9E718B81DED;
+        Wed, 15 Mar 2023 14:50:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C04E0C433D2;
+        Wed, 15 Mar 2023 14:50:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678891853;
+        bh=wu9HXojxuH3AtIIT++MDX+kORwbWO7Y7OZ2upGm0F4g=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ni/Hy4a5bJJNljjXzq8+c+485351OSOzfK6nHpUHJ4HBGlkidr8j4Ww1Q2RuUYgEe
+         lM5RbzfsBlmTzMjurrLTYOKIicKITAeEXSadq2NXDNsMcKwXsyPhg3vCx7v0CyTaak
+         Z1qShw49YNGDF0tf6+ts62FOZRD9PlrCnILgFgnC35g53MgiBu90OrC3zTB/FcmJEK
+         PKsfzxa0MxPOdZDiIZPNF+SDQExt+L394j+lmThmbsIPDvHm+0Tf3KZO/wl52yIt2d
+         qMM0Wh8SIAXaTwmSBaHY3xxbfGMEQcmci4HTUz6ClZ9Ais/uNviMgqBYxzb83kZopJ
+         6jQsgqvSec0DQ==
+Date:   Wed, 15 Mar 2023 16:50:34 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     Mike Rapoport <mike.rapoport@gmail.com>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        rcu@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        netdev@vger.kernel.org, linux-doc@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Josh Triplett <josh@joshtriplett.org>,
         Steven Rostedt <rostedt@goodmis.org>,
-        linux-kernel@vger.kernel.org, luca.abeni@santannapisa.it,
-        claudio@evidence.eu.com, tommaso.cucinotta@santannapisa.it,
-        bristot@redhat.com, mathieu.poirier@linaro.org,
-        cgroups@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Wei Wang <wvw@google.com>, Rick Yiu <rickyiu@google.com>,
-        Quentin Perret <qperret@google.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>
-Subject: Re: [RFC PATCH 2/3] sched/cpuset: Keep track of SCHED_DEADLINE tasks
- in cpusets
-Message-ID: <20230315144927.624cbwc3yep3fwor@airbuntu>
-References: <20230315121812.206079-1-juri.lelli@redhat.com>
- <20230315121812.206079-3-juri.lelli@redhat.com>
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>
+Subject: Re: [PATCH 7/7] mm/slab: document kfree() as allowed for
+ kmem_cache_alloc() objects
+Message-ID: <ZBHbOrk3P3TXSkK8@kernel.org>
+References: <20230310103210.22372-1-vbabka@suse.cz>
+ <20230310103210.22372-8-vbabka@suse.cz>
+ <ZA2ic9JYXGVzps1+@kernel.org>
+ <14043bee-af7d-38f3-5a46-f63940e56c1e@suse.cz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230315121812.206079-3-juri.lelli@redhat.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <14043bee-af7d-38f3-5a46-f63940e56c1e@suse.cz>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/15/23 12:18, Juri Lelli wrote:
-> Qais reported that iterating over all tasks when rebuilding root domains
-> for finding out which ones are DEADLINE and need their bandwidth
-> correctly restored on such root domains can be a costly operation (10+
-> ms delays on suspend-resume).
+On Wed, Mar 15, 2023 at 02:38:47PM +0100, Vlastimil Babka wrote:
+> On 3/12/23 10:59, Mike Rapoport wrote:
+> > On Fri, Mar 10, 2023 at 11:32:09AM +0100, Vlastimil Babka wrote:
+> >> This will make it easier to free objects in situations when they can
+> >> come from either kmalloc() or kmem_cache_alloc(), and also allow
+> >> kfree_rcu() for freeing objects from kmem_cache_alloc().
+> >> 
+> >> For the SLAB and SLUB allocators this was always possible so with SLOB
+> >> gone, we can document it as supported.
+> >> 
+> >> Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
+> >> Cc: Mike Rapoport <rppt@kernel.org>
+> >> Cc: Jonathan Corbet <corbet@lwn.net>
+> >> Cc: "Paul E. McKenney" <paulmck@kernel.org>
+> >> Cc: Frederic Weisbecker <frederic@kernel.org>
+> >> Cc: Neeraj Upadhyay <quic_neeraju@quicinc.com>
+> >> Cc: Josh Triplett <josh@joshtriplett.org>
+> >> Cc: Steven Rostedt <rostedt@goodmis.org>
+> >> Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> >> Cc: Lai Jiangshan <jiangshanlai@gmail.com>
+> >> Cc: Joel Fernandes <joel@joelfernandes.org>
+> >> ---
+> >>  Documentation/core-api/memory-allocation.rst | 15 +++++++++++----
+> >>  include/linux/rcupdate.h                     |  6 ++++--
+> >>  mm/slab_common.c                             |  5 +----
+> >>  3 files changed, 16 insertions(+), 10 deletions(-)
+> >> 
+> >> diff --git a/Documentation/core-api/memory-allocation.rst b/Documentation/core-api/memory-allocation.rst
+> >> index 5954ddf6ee13..f9e8d352ed67 100644
+> >> --- a/Documentation/core-api/memory-allocation.rst
+> >> +++ b/Documentation/core-api/memory-allocation.rst
+> >> @@ -170,7 +170,14 @@ should be used if a part of the cache might be copied to the userspace.
+> >>  After the cache is created kmem_cache_alloc() and its convenience
+> >>  wrappers can allocate memory from that cache.
+> >>  
+> >> -When the allocated memory is no longer needed it must be freed. You can
+> >> -use kvfree() for the memory allocated with `kmalloc`, `vmalloc` and
+> >> -`kvmalloc`. The slab caches should be freed with kmem_cache_free(). And
+> >> -don't forget to destroy the cache with kmem_cache_destroy().
+> >> +When the allocated memory is no longer needed it must be freed. Objects
+> > 
+> > I'd add a line break before Objects                               ^
+> > 
+> >> +allocated by `kmalloc` can be freed by `kfree` or `kvfree`.
+> >> +Objects allocated by `kmem_cache_alloc` can be freed with `kmem_cache_free`
+> >> +or also by `kfree` or `kvfree`, which can be more convenient as it does
+> > 
+> > Maybe replace 'or also by' with a coma:
+> > 
+> > Objects allocated by `kmem_cache_alloc` can be freed with `kmem_cache_free`,
+> > `kfree` or `kvfree`, which can be more convenient as it does
 > 
-> To fix the problem keep track of the number of DEADLINE tasks belonging
-> to each cpuset and then use this information (followup patch) to only
-> perform the above iteration if DEADLINE tasks are actually present in
-> the cpuset for which a corresponding root domain is being rebuilt.
+> But then I need to clarify what the "which" applies to?
+
+Yeah, I kinda missed that...
+
+> > 
+> >> +not require the kmem_cache pointed.
+> > 
+> >                              ^ pointer.
+> > 
+> >> +The rules for _bulk and _rcu flavors of freeing functions are analogical.
+> > 
+> > Maybe 
+> > 
+> > The same rules apply to _bulk and _rcu flavors of freeing functions.
 > 
-> Reported-by: Qais Yousef <qyousef@layalina.io>
-> Signed-off-by: Juri Lelli <juri.lelli@redhat.com>
-> ---
->  include/linux/cpuset.h |  4 ++++
->  kernel/cgroup/cgroup.c |  4 ++++
->  kernel/cgroup/cpuset.c | 25 +++++++++++++++++++++++++
->  kernel/sched/core.c    | 10 ++++++++++
->  4 files changed, 43 insertions(+)
+> So like this incremental diff?
+ 
+> diff --git a/Documentation/core-api/memory-allocation.rst b/Documentation/core-api/memory-allocation.rst
+> index f9e8d352ed67..1c58d883b273 100644
+> --- a/Documentation/core-api/memory-allocation.rst
+> +++ b/Documentation/core-api/memory-allocation.rst
+> @@ -170,12 +170,14 @@ should be used if a part of the cache might be copied to the userspace.
+>  After the cache is created kmem_cache_alloc() and its convenience
+>  wrappers can allocate memory from that cache.
+>  
+> -When the allocated memory is no longer needed it must be freed. Objects
+> -allocated by `kmalloc` can be freed by `kfree` or `kvfree`.
+> -Objects allocated by `kmem_cache_alloc` can be freed with `kmem_cache_free`
+> -or also by `kfree` or `kvfree`, which can be more convenient as it does
+> -not require the kmem_cache pointed.
+> -The rules for _bulk and _rcu flavors of freeing functions are analogical.
+> +When the allocated memory is no longer needed it must be freed.
+> +
+> +Objects allocated by `kmalloc` can be freed by `kfree` or `kvfree`. Objects
+> +allocated by `kmem_cache_alloc` can be freed with `kmem_cache_free`, `kfree`
+> +or `kvfree`, where the latter two might be more convenient thanks to not
+> +needing the kmem_cache pointer.
+
+... but this way it's more explicit that kfree and kvfree don't need
+kmem_cache pointer.
+
+> +
+> +The same rules apply to _bulk and _rcu flavors of freeing functions.
+>  
+>  Memory allocated by `vmalloc` can be freed with `vfree` or `kvfree`.
+>  Memory allocated by `kvmalloc` can be freed with `kvfree`.
 > 
-> diff --git a/include/linux/cpuset.h b/include/linux/cpuset.h
-> index 355f796c5f07..0348dba5680e 100644
-> --- a/include/linux/cpuset.h
-> +++ b/include/linux/cpuset.h
-> @@ -71,6 +71,8 @@ extern void cpuset_init_smp(void);
->  extern void cpuset_force_rebuild(void);
->  extern void cpuset_update_active_cpus(void);
->  extern void cpuset_wait_for_hotplug(void);
-> +extern void inc_dl_tasks_cs(struct task_struct *task);
-> +extern void dec_dl_tasks_cs(struct task_struct *task);
->  extern void cpuset_lock(void);
->  extern void cpuset_unlock(void);
->  extern void cpuset_cpus_allowed(struct task_struct *p, struct cpumask *mask);
-> @@ -196,6 +198,8 @@ static inline void cpuset_update_active_cpus(void)
->  
->  static inline void cpuset_wait_for_hotplug(void) { }
->  
-> +static inline void inc_dl_tasks_cs(struct task_struct *task) { }
-> +static inline void dec_dl_tasks_cs(struct task_struct *task) { }
->  static inline void cpuset_lock(void) { }
->  static inline void cpuset_unlock(void) { }
->  
-> diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
-> index c099cf3fa02d..357925e1e4af 100644
-> --- a/kernel/cgroup/cgroup.c
-> +++ b/kernel/cgroup/cgroup.c
-> @@ -57,6 +57,7 @@
->  #include <linux/file.h>
->  #include <linux/fs_parser.h>
->  #include <linux/sched/cputime.h>
-> +#include <linux/sched/deadline.h>
->  #include <linux/psi.h>
->  #include <net/sock.h>
->  
-> @@ -6673,6 +6674,9 @@ void cgroup_exit(struct task_struct *tsk)
->  	list_add_tail(&tsk->cg_list, &cset->dying_tasks);
->  	cset->nr_tasks--;
->  
-> +	if (dl_task(tsk))
-> +		dec_dl_tasks_cs(tsk);
-> +
->  	WARN_ON_ONCE(cgroup_task_frozen(tsk));
->  	if (unlikely(!(tsk->flags & PF_KTHREAD) &&
->  		     test_bit(CGRP_FREEZE, &task_dfl_cgroup(tsk)->flags)))
-> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-> index 8d82d66d432b..57bc60112618 100644
-> --- a/kernel/cgroup/cpuset.c
-> +++ b/kernel/cgroup/cpuset.c
-> @@ -193,6 +193,12 @@ struct cpuset {
->  	int use_parent_ecpus;
->  	int child_ecpus_count;
->  
-> +	/*
-> +	 * number of SCHED_DEADLINE tasks attached to this cpuset, so that we
-> +	 * know when to rebuild associated root domain bandwidth information.
-> +	 */
-> +	int nr_deadline_tasks;
-> +
->  	/* Invalid partition error code, not lock protected */
->  	enum prs_errcode prs_err;
->  
-> @@ -245,6 +251,20 @@ static inline struct cpuset *parent_cs(struct cpuset *cs)
->  	return css_cs(cs->css.parent);
->  }
->  
-> +void inc_dl_tasks_cs(struct task_struct *p)
-> +{
-> +	struct cpuset *cs = task_cs(p);
 
-nit:
-
-I *think* task_cs() assumes rcu_read_lock() is held, right?
-
-Would it make sense to WARN_ON(!rcu_read_lock_held()) to at least
-annotate the deps?
-
-Or maybe task_cs() should do that..
-
-> +
-> +	cs->nr_deadline_tasks++;
-> +}
-> +
-> +void dec_dl_tasks_cs(struct task_struct *p)
-> +{
-> +	struct cpuset *cs = task_cs(p);
-
-nit: ditto
-
-> +
-> +	cs->nr_deadline_tasks--;
-> +}
-> +
->  /* bits in struct cpuset flags field */
->  typedef enum {
->  	CS_ONLINE,
-> @@ -2472,6 +2492,11 @@ static int cpuset_can_attach(struct cgroup_taskset *tset)
->  		ret = security_task_setscheduler(task);
->  		if (ret)
->  			goto out_unlock;
-> +
-> +		if (dl_task(task)) {
-> +			cs->nr_deadline_tasks++;
-> +			cpuset_attach_old_cs->nr_deadline_tasks--;
-> +		}
->  	}
->  
->  	/*
-> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> index 5902cbb5e751..d586a8440348 100644
-> --- a/kernel/sched/core.c
-> +++ b/kernel/sched/core.c
-> @@ -7683,6 +7683,16 @@ static int __sched_setscheduler(struct task_struct *p,
->  		goto unlock;
->  	}
->  
-> +	/*
-> +	 * In case a task is setscheduled to SCHED_DEADLINE, or if a task is
-> +	 * moved to a different sched policy, we need to keep track of that on
-> +	 * its cpuset (for correct bandwidth tracking).
-> +	 */
-> +	if (dl_policy(policy) && !dl_task(p))
-> +		inc_dl_tasks_cs(p);
-> +	else if (dl_task(p) && !dl_policy(policy))
-> +		dec_dl_tasks_cs(p);
-> +
-
-Would it be better to use switched_to_dl()/switched_from_dl() instead to
-inc/dec_dl_tasks_cs()?
-
-
-Thanks!
-
---
-Qais Yousef
-
->  	p->sched_reset_on_fork = reset_on_fork;
->  	oldprio = p->prio;
->  
-> -- 
-> 2.39.2
-> 
+-- 
+Sincerely yours,
+Mike.
