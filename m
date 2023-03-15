@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93C506BBD5A
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 20:36:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58EEE6BBD61
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 20:36:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232881AbjCOTgE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 15:36:04 -0400
+        id S232902AbjCOTgH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 15:36:07 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232760AbjCOTgA (ORCPT
+        with ESMTP id S232850AbjCOTgB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 15:36:00 -0400
-Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72CA38A3AF
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 12:35:58 -0700 (PDT)
-Received: by mail-qt1-x834.google.com with SMTP id t9so1322914qtx.8
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 12:35:58 -0700 (PDT)
+        Wed, 15 Mar 2023 15:36:01 -0400
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D88EC60D65
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 12:35:59 -0700 (PDT)
+Received: by mail-qt1-x82b.google.com with SMTP id cf14so17435324qtb.10
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 12:35:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678908957;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=rRD8NgEN/2xMDJaIifHiAB1EaiS+DmHgSj8/md0pHg8=;
-        b=CmOpWXQ2K/Z3Cnfqvvaj8KMNOtuU+3KOAomRx76CMAdc9hV3od7Ix3EXd7lt3v1aCg
-         quyBuXk6dlhcKIaU9/YP2DouDib9HFf3A/tyadabjAgEN8xdccth5oiVgvBjIyolNWbM
-         owG4dEmR5Aqo2h1lQZ7lqJGDSsvZtLJuczogXTklZIRnb6/7sLbOJJZJOFsf+NLQb+H5
-         sLlODqcPKoafDN9SznODbLHxSOtPPeLJbL9tRIVio9Gk6qQ25AYP2jcvATo6y7+OpfJo
-         +1O6WQnxFcli7P3pdMI6ILSqO4nU4WoZgLpNFewR4BejrT/BpaRORc14CoipR/8V3rHz
-         BZqA==
+        d=linaro.org; s=google; t=1678908959;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=erRl2xavC/v8RCG0iGxQtKfxSfjcWRGZhzPnMxXYyms=;
+        b=syf2MHuNA5s5VBnyIDPYogKU3AXFQCUZgbXRKEzUafSRlVP/42EQWCyRl4OHJYHcFW
+         Wk+2eOgSe/kzjvo5bjj4D8CARFP7tVYdNo4v5xJFIBh8tz2QYXIAwMPmb9EwvnZi2ujU
+         5jwaQXIILl9/IZiuwUJA4deWfxjK1KZYhxFbheAxDvg4KAsbYVHO4XBgC4P4NU9F2Hve
+         xvPRTyU3SL1mtQEYCi1cRedp4hxxzEfDWTOQ/MbecgEX1z+yRSMCK/+mABl1uGiUluYJ
+         LKS45G3TKGpoq6cRabFFhn7my6UJamjGj4yfu/hwSS9m14XPDBfYIVNlfDTzCFeGVnbh
+         XVbg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678908957;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rRD8NgEN/2xMDJaIifHiAB1EaiS+DmHgSj8/md0pHg8=;
-        b=MF2U2tBkdTRTreaSmxLV6yasFgLEDURhkOfe9+qBPB6QGdNy3H1an9apb/SMj+3rCG
-         GVyyNBZGIQNVxfyk8VbBR/p8Rt0Jw8WQNSFIWRwLWfw4KUqF6i6y5VdyfnTBV2zpFa03
-         Fedu6Acl/LiUH0VjVCLYS7J0+dlJtT8dK6nBqQ6oJfnWcIZF63FcIZYB0rnH8x2oyfh+
-         N+10rbUoleFyQuvc9j8hFVz6RDZ05euFhUioDIORhYwX7iNIVuX4wIdeXHkwuqPlyAXf
-         W6x/D6deDmlwCgGOsIh9ZCJv5cdCDKcgrEJG7LH4dOAX1/kS/jqNrY1tPHQCmAHA8QsS
-         6DJQ==
-X-Gm-Message-State: AO0yUKXrqERtx2r6waC/PCctdPnWNGzivGCq5AgZN3hJ5Mr5+YIhMXJX
-        6QGEp1An/8BEyvPkOzM0AxJa1Q==
-X-Google-Smtp-Source: AK7set/im7ReWlbjUTTel/CadvtzywtBv/u+FOd9kH8CWrLzc78P9mWW7EPTdeZgGLZ/JVPe9OI5cw==
-X-Received: by 2002:a05:622a:1309:b0:3bf:d366:50e1 with SMTP id v9-20020a05622a130900b003bfd36650e1mr1659021qtk.45.1678908957392;
-        Wed, 15 Mar 2023 12:35:57 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1678908959;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=erRl2xavC/v8RCG0iGxQtKfxSfjcWRGZhzPnMxXYyms=;
+        b=3AZw1lP2wr/AnU5b0uTT4B98khKYwKjzUx3jsJATAD1O4IPVsFheR2Q7EXoaKUsxZn
+         mGPzADVkKHX8XGApN9nm6J9s4CH4ydthrNmplwuwvKfMjmLhb4q5tjVW6UXflbQSCDf1
+         vJZlRlOZJUHBQ9/cla3nzLotdrsa8+ZHLih1O2BbsqjmeA3HLFJF6fjVEBjmmvcFmhPr
+         s1g038za9Z8y2zXgRE92D5VZgxqNeWzQgBDMUdULOmk4zgAChqG/WgVXTs5MEtFpHsln
+         a6YIzz2gkFLdMZ2/q7+Tat0dUzBghnY8ug5uIqzXbMaOhDi1CSoD6SWDBZxyGoTRyFak
+         q9qA==
+X-Gm-Message-State: AO0yUKW5wABCozUSWrl5QdMEU/9akteljK57wOC0H9lqz/MnDLRXTqxo
+        OyQLxACwDTNAolCETjysxRUrig==
+X-Google-Smtp-Source: AK7set9dHEALzKOulqYYDBAhnymWtF4QNOfjv1Gy30FmFLGHtk9RA6oXYi2QQMTXY2e5Mu323NL4aw==
+X-Received: by 2002:a05:622a:34d:b0:3d0:7bdf:42c4 with SMTP id r13-20020a05622a034d00b003d07bdf42c4mr1586720qtw.59.1678908958994;
+        Wed, 15 Mar 2023 12:35:58 -0700 (PDT)
 Received: from localhost.localdomain ([98.61.227.136])
-        by smtp.gmail.com with ESMTPSA id q9-20020a05620a024900b0071eddd3bebbsm4369462qkn.81.2023.03.15.12.35.55
+        by smtp.gmail.com with ESMTPSA id q9-20020a05620a024900b0071eddd3bebbsm4369462qkn.81.2023.03.15.12.35.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Mar 2023 12:35:56 -0700 (PDT)
+        Wed, 15 Mar 2023 12:35:58 -0700 (PDT)
 From:   Alex Elder <elder@linaro.org>
 To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
         pabeni@redhat.com
@@ -58,10 +59,12 @@ Cc:     caleb.connolly@linaro.org, mka@chromium.org, evgreen@chromium.org,
         quic_subashab@quicinc.com, elder@kernel.org,
         netdev@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH net v2 0/4] net: ipa: minor bug fixes
-Date:   Wed, 15 Mar 2023 14:35:48 -0500
-Message-Id: <20230315193552.1646892-1-elder@linaro.org>
+Subject: [PATCH net v2 1/4] net: ipa: reg: include <linux/bug.h>
+Date:   Wed, 15 Mar 2023 14:35:49 -0500
+Message-Id: <20230315193552.1646892-2-elder@linaro.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230315193552.1646892-1-elder@linaro.org>
+References: <20230315193552.1646892-1-elder@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -74,42 +77,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The four patches in this series fix some errors, though none of them
-cause any compile or runtime problems.
+When "reg.h" got created, it included calls to WARN() and WARN_ON().
+Those macros are defined via <linux/bug.h>.  In addition, it uses
+is_power_of_2(), which is defined in <linux/log2.h>.  Include those
+files so IPA "reg.h" has access to all definitions it requires.
 
-The first changes the files included by "drivers/net/ipa/reg.h" to
-ensure everything it requires is included with the file.  It also
-stops unnecessarily including another file.  The prerequisites are
-apparently satisfied other ways, currently.
+Meanwhile, <linux/bits.h> is included but nothing defined therein
+is required directly in "reg.h", so get rid of that.
 
-The second adds two struct declarations to "gsi_reg.h", to ensure
-they're declared before they're used later in the file.  Again, it
-seems these declarations are currently resolved wherever this file
-is included.
+Fixes: 81772e444dbe ("net: ipa: start generalizing "ipa_reg"")
+Signed-off-by: Alex Elder <elder@linaro.org>
+---
+v2: Correct the "Fixes" commit hash.
 
-The third removes register definitions that were added for IPA v5.0
-that are not needed.  And the last updates some validity checks for
-IPA v5.0 registers.  No IPA v5.0 platforms are yet supported, so the
-issues resolved here were never harmful.
+ drivers/net/ipa/reg.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Version 2 of this series changes the "Fixes" tags in the first two
-patches so they supply legitimate commit hashes.
-
-					-Alex
-
-Alex Elder (4):
-  net: ipa: reg: include <linux/bug.h>
-  net: ipa: add two missing declarations
-  net: ipa: kill FILT_ROUT_CACHE_CFG IPA register
-  net: ipa: fix some register validity checks
-
- drivers/net/ipa/gsi_reg.c |  9 ++++++++-
- drivers/net/ipa/gsi_reg.h |  4 ++++
- drivers/net/ipa/ipa_reg.c | 28 ++++++++++++++++++----------
- drivers/net/ipa/ipa_reg.h | 21 ++++++---------------
- drivers/net/ipa/reg.h     |  3 ++-
- 5 files changed, 38 insertions(+), 27 deletions(-)
-
+diff --git a/drivers/net/ipa/reg.h b/drivers/net/ipa/reg.h
+index 57b457f39b6e2..2ee07eebca677 100644
+--- a/drivers/net/ipa/reg.h
++++ b/drivers/net/ipa/reg.h
+@@ -6,7 +6,8 @@
+ #define _REG_H_
+ 
+ #include <linux/types.h>
+-#include <linux/bits.h>
++#include <linux/log2.h>
++#include <linux/bug.h>
+ 
+ /**
+  * struct reg - A register descriptor
 -- 
 2.34.1
 
