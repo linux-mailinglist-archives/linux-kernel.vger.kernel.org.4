@@ -2,127 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1AE86BBBB4
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 19:09:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6234F6BBBB9
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 19:11:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231244AbjCOSJG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 14:09:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37346 "EHLO
+        id S231953AbjCOSLA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 14:11:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229769AbjCOSJC (ORCPT
+        with ESMTP id S229769AbjCOSK6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 14:09:02 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7FD61B578;
-        Wed, 15 Mar 2023 11:09:00 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id fm20-20020a05600c0c1400b003ead37e6588so1607242wmb.5;
-        Wed, 15 Mar 2023 11:09:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678903739;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qBCF9cqRw4//6g0u+mI/EVuBZjaNX/B1r61yKNDclCs=;
-        b=qpQ1v2gyXUCH71U7z2QzOW3U6u4Blf+RAcEIYyql4uAAgr6XUT+/PiWeKmioyWONo3
-         uX+PBqBzOVo64H2ZRV67FZOchfuqosVisOPSEActmD9IECcArStURK0iGUnHhoXJecb3
-         EAZIK7NvZyMrg0AW3ABD+ZCFrCsamfKiPUV1yv7zy+LZyD21gjxYHDVHJCTC/4po4YRr
-         aQeNrNUObp4qI2dclVofqfij6m/e3MatKMXCrHI06EJu/TOGlzVXhXIMhyISnSi/WrBs
-         ghTEvf7J40MkAPWhFwaCZ7OvQozmDljjjy1+O/2YyDPWJa6cFWmh3d8b9hRLRNlW5JIn
-         c5RQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678903739;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qBCF9cqRw4//6g0u+mI/EVuBZjaNX/B1r61yKNDclCs=;
-        b=txkOE4Rlbgk/KcxQpr9ZS/mvEDUxG3ymAFuIG9wCcvGvgwlIUjQ3xZ6Og9wD05dsoi
-         WW4oiYcye7EuXiy7vGknuo5zwvdOuCaL1X0qHeoD9y01OMNDRU8AA5bOEUyQb1lnY7bv
-         w6YiWsun8rkAONySKcppcqMbUkEG3R0oRsWm4I7FJHg75HBURDFZdCuJEjjldA4JAlkf
-         bs7T3h8Pwv6eAjPHdxj1ZC5dvEFnKC95aUqKDR2A17Pyx3+qmkgK/yfaw/7Tm5vxI1QF
-         5gol4c+IMbJuNGsvunl0V0whwy+Mr5/YFuMVGOvClnLgdTUkYGp0AJQYvi3vyxqSVnaL
-         wF2Q==
-X-Gm-Message-State: AO0yUKVzT9xRDrP+NTQArUmGtk79NzEXJWfn9LTmTgSgMgJklLxSTEuL
-        f8IKnCg99apT6KxlAAjD0ho=
-X-Google-Smtp-Source: AK7set9FZx+p7o40TkVE4eWZX5rluRX08y33bd+HqnyMbHx5qtRZKpex0WkoI0ytCvJ1Q+K9tId6ag==
-X-Received: by 2002:a05:600c:4753:b0:3dd:1c46:b92 with SMTP id w19-20020a05600c475300b003dd1c460b92mr20772979wmo.16.1678903739013;
-        Wed, 15 Mar 2023 11:08:59 -0700 (PDT)
-Received: from suse.localnet (host-79-35-102-94.retail.telecomitalia.it. [79.35.102.94])
-        by smtp.gmail.com with ESMTPSA id 12-20020a05600c240c00b003dc521f336esm2567770wmp.14.2023.03.15.11.08.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Mar 2023 11:08:58 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Jan Kara <jack@suse.cz>, Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Jan Kara <jack@suse.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Subject: Re: [git pull] vfs.git sysv pile
-Date:   Wed, 15 Mar 2023 19:08:57 +0100
-Message-ID: <3019063.4lk9UinFSI@suse>
-In-Reply-To: <Y/9duET0Mt5hPu2L@ZenIV>
-References: <Y/gugbqq858QXJBY@ZenIV> <20230301130018.yqds5yvqj7q26f7e@quack3>
- <Y/9duET0Mt5hPu2L@ZenIV>
+        Wed, 15 Mar 2023 14:10:58 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEE9729E2B
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 11:10:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678903811;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=4X/wrMSZCXuFYj1706DRuW1G14LU6Q5fNjxWldjHQZ4=;
+        b=M18zBinn3LtAK9Y59iNzY/4BxSM8MaDSdJg20hDV5/3jcugoPOQLrNPvXYD+P5khtn/Ynk
+        DPLWT2p4I7k/HNhZCX3hIChUdEKMwMOadYstIbSDbyCl316/CJgS1/k2nnk3YPDbLmQ4pI
+        9Gbe+mU2Sapyq5oIoyicHFB5h7+eZ8w=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-344-k9muBPQAN4uUpkP4diqvpw-1; Wed, 15 Mar 2023 14:10:09 -0400
+X-MC-Unique: k9muBPQAN4uUpkP4diqvpw-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 067B5185A790;
+        Wed, 15 Mar 2023 18:10:06 +0000 (UTC)
+Received: from [10.22.34.146] (unknown [10.22.34.146])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id EA082492B02;
+        Wed, 15 Mar 2023 18:10:04 +0000 (UTC)
+Message-ID: <16161eea-1e43-bf59-8c36-971e066ae634@redhat.com>
+Date:   Wed, 15 Mar 2023 14:10:04 -0400
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [RFC PATCH 2/3] sched/cpuset: Keep track of SCHED_DEADLINE tasks
+ in cpusets
+Content-Language: en-US
+From:   Waiman Long <longman@redhat.com>
+To:     Juri Lelli <juri.lelli@redhat.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Qais Yousef <qyousef@layalina.io>, Tejun Heo <tj@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Hao Luo <haoluo@google.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        linux-kernel@vger.kernel.org, luca.abeni@santannapisa.it,
+        claudio@evidence.eu.com, tommaso.cucinotta@santannapisa.it,
+        bristot@redhat.com, mathieu.poirier@linaro.org,
+        cgroups@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Wei Wang <wvw@google.com>, Rick Yiu <rickyiu@google.com>,
+        Quentin Perret <qperret@google.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>
+References: <20230315121812.206079-1-juri.lelli@redhat.com>
+ <20230315121812.206079-3-juri.lelli@redhat.com>
+ <7a3b31bf-4f6a-6525-9c6a-2bae44d7b0af@redhat.com>
+ <ZBH9E7lCEXcFDBG4@localhost.localdomain>
+ <2739c3ec-1e97-fc4d-8001-50283c94f4ff@redhat.com>
+In-Reply-To: <2739c3ec-1e97-fc4d-8001-50283c94f4ff@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On mercoled=EC 1 marzo 2023 15:14:16 CET Al Viro wrote:
-> On Wed, Mar 01, 2023 at 02:00:18PM +0100, Jan Kara wrote:
-> > On Wed 01-03-23 12:20:56, Fabio M. De Francesco wrote:
-> > > On venerd=EC 24 febbraio 2023 04:26:57 CET Al Viro wrote:
-> > > > 	Fabio's "switch to kmap_local_page()" patchset (originally after t=
-he
-> > > >=20
-> > > > ext2 counterpart, with a lot of cleaning up done to it; as the matt=
-er=20
-of
-> > > > fact, ext2 side is in need of similar cleanups - calling conventions
-> > > > there
-> > > > are bloody awful).
-> > >=20
+On 3/15/23 14:01, Waiman Long wrote:
+>
+> On 3/15/23 13:14, Juri Lelli wrote:
+>> On 15/03/23 11:46, Waiman Long wrote:
+>>> On 3/15/23 08:18, Juri Lelli wrote:
+>>>> Qais reported that iterating over all tasks when rebuilding root 
+>>>> domains
+>>>> for finding out which ones are DEADLINE and need their bandwidth
+>>>> correctly restored on such root domains can be a costly operation (10+
+>>>> ms delays on suspend-resume).
+>>>>
+>>>> To fix the problem keep track of the number of DEADLINE tasks 
+>>>> belonging
+>>>> to each cpuset and then use this information (followup patch) to only
+>>>> perform the above iteration if DEADLINE tasks are actually present in
+>>>> the cpuset for which a corresponding root domain is being rebuilt.
+>>>>
+>>>> Reported-by: Qais Yousef <qyousef@layalina.io>
+>>>> Signed-off-by: Juri Lelli <juri.lelli@redhat.com>
+>>>> ---
+>>>>    include/linux/cpuset.h |  4 ++++
+>>>>    kernel/cgroup/cgroup.c |  4 ++++
+>>>>    kernel/cgroup/cpuset.c | 25 +++++++++++++++++++++++++
+>>>>    kernel/sched/core.c    | 10 ++++++++++
+>>>>    4 files changed, 43 insertions(+)
+>>>>
+>>>> diff --git a/include/linux/cpuset.h b/include/linux/cpuset.h
+>>>> index 355f796c5f07..0348dba5680e 100644
+>>>> --- a/include/linux/cpuset.h
+>>>> +++ b/include/linux/cpuset.h
+>>>> @@ -71,6 +71,8 @@ extern void cpuset_init_smp(void);
+>>>>    extern void cpuset_force_rebuild(void);
+>>>>    extern void cpuset_update_active_cpus(void);
+>>>>    extern void cpuset_wait_for_hotplug(void);
+>>>> +extern void inc_dl_tasks_cs(struct task_struct *task);
+>>>> +extern void dec_dl_tasks_cs(struct task_struct *task);
+>>>>    extern void cpuset_lock(void);
+>>>>    extern void cpuset_unlock(void);
+>>>>    extern void cpuset_cpus_allowed(struct task_struct *p, struct 
+>>>> cpumask *mask);
+>>>> @@ -196,6 +198,8 @@ static inline void cpuset_update_active_cpus(void)
+>>>>    static inline void cpuset_wait_for_hotplug(void) { }
+>>>> +static inline void inc_dl_tasks_cs(struct task_struct *task) { }
+>>>> +static inline void dec_dl_tasks_cs(struct task_struct *task) { }
+>>>>    static inline void cpuset_lock(void) { }
+>>>>    static inline void cpuset_unlock(void) { }
+>>>> diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
+>>>> index c099cf3fa02d..357925e1e4af 100644
+>>>> --- a/kernel/cgroup/cgroup.c
+>>>> +++ b/kernel/cgroup/cgroup.c
+>>>> @@ -57,6 +57,7 @@
+>>>>    #include <linux/file.h>
+>>>>    #include <linux/fs_parser.h>
+>>>>    #include <linux/sched/cputime.h>
+>>>> +#include <linux/sched/deadline.h>
+>>>>    #include <linux/psi.h>
+>>>>    #include <net/sock.h>
+>>>> @@ -6673,6 +6674,9 @@ void cgroup_exit(struct task_struct *tsk)
+>>>>        list_add_tail(&tsk->cg_list, &cset->dying_tasks);
+>>>>        cset->nr_tasks--;
+>>>> +    if (dl_task(tsk))
+>>>> +        dec_dl_tasks_cs(tsk);
+>>>> +
+>>>>        WARN_ON_ONCE(cgroup_task_frozen(tsk));
+>>>>        if (unlikely(!(tsk->flags & PF_KTHREAD) &&
+>>>>                 test_bit(CGRP_FREEZE, &task_dfl_cgroup(tsk)->flags)))
+>>>> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+>>>> index 8d82d66d432b..57bc60112618 100644
+>>>> --- a/kernel/cgroup/cpuset.c
+>>>> +++ b/kernel/cgroup/cpuset.c
+>>>> @@ -193,6 +193,12 @@ struct cpuset {
+>>>>        int use_parent_ecpus;
+>>>>        int child_ecpus_count;
+>>>> +    /*
+>>>> +     * number of SCHED_DEADLINE tasks attached to this cpuset, so 
+>>>> that we
+>>>> +     * know when to rebuild associated root domain bandwidth 
+>>>> information.
+>>>> +     */
+>>>> +    int nr_deadline_tasks;
+>>>> +
+>>>>        /* Invalid partition error code, not lock protected */
+>>>>        enum prs_errcode prs_err;
+>>>> @@ -245,6 +251,20 @@ static inline struct cpuset *parent_cs(struct 
+>>>> cpuset *cs)
+>>>>        return css_cs(cs->css.parent);
+>>>>    }
+>>>> +void inc_dl_tasks_cs(struct task_struct *p)
+>>>> +{
+>>>> +    struct cpuset *cs = task_cs(p);
+>>>> +
+>>>> +    cs->nr_deadline_tasks++;
+>>>> +}
+>>>> +
+>>>> +void dec_dl_tasks_cs(struct task_struct *p)
+>>>> +{
+>>>> +    struct cpuset *cs = task_cs(p);
+>>>> +
+>>>> +    cs->nr_deadline_tasks--;
+>>>> +}
+>>>> +
+>>>>    /* bits in struct cpuset flags field */
+>>>>    typedef enum {
+>>>>        CS_ONLINE,
+>>>> @@ -2472,6 +2492,11 @@ static int cpuset_can_attach(struct 
+>>>> cgroup_taskset *tset)
+>>>>            ret = security_task_setscheduler(task);
+>>>>            if (ret)
+>>>>                goto out_unlock;
+>>>> +
+>>>> +        if (dl_task(task)) {
+>>>> +            cs->nr_deadline_tasks++;
+>>>> +            cpuset_attach_old_cs->nr_deadline_tasks--;
+>>>> +        }
+>>>>        }
+>>> Any one of the tasks in the cpuset can cause the test to fail and 
+>>> abort the
+>>> attachment. I would suggest that you keep a deadline task transfer 
+>>> count in
+>>> the loop and then update cs and cpouset_attach_old_cs only after all 
+>>> the
+>>> tasks have been iterated successfully.
+>> Right, Dietmar I think commented pointing out something along these
+>> lines. Think though we already have this problem with current
+>> task_can_attach -> dl_cpu_busy which reserves bandwidth for each tasks
+>> in the destination cs. Will need to look into that. Do you know which
+>> sort of operation would move multiple tasks at once?
+>
+> Actually, what I said previously may not be enough. There can be 
+> multiple controllers attached to a cgroup. If any of thier 
+> can_attach() calls fails, the whole transaction is aborted and 
+> cancel_attach() will be called. My new suggestion is to add a new 
+> deadline task transfer count into the cpuset structure and store the 
+> information there temporarily. If cpuset_attach() is called, it means 
+> all the can_attach calls succeed. You can then update the dl task 
+> count accordingly and clear the temporary transfer count.
+>
+> I guess you may have to do something similar with dl_cpu_busy().
+>
+> My 2 cents.
 
-[snip]
+Alternatively, you can do the nr_deadline_tasks update in 
+cpuset_attach(). However, there is an optimization to skip the task 
+iteration if the cpu and memory list haven't changed. You will have to 
+skip that optimization if there are DL tasks in the cpuset.
 
->=20
-> I think I've pushed a demo patchset to vfs.git at some point back in
-> January... Yep - see #work.ext2 in there; completely untested, though.
-
-The following commits from the VFS tree, #work.ext2 look good to me.
-
-f5b399373756 ("ext2: use offset_in_page() instead of open-coding it as=20
-subtraction")
-c7248e221fb5 ("ext2_get_page(): saner type")
-470e54a09898 ("ext2_put_page(): accept any pointer within the page")
-15abcc147cf7 ("ext2_{set_link,delete_entry}(): don't bother with page_addr")
-16a5ee2027b7 ("ext2_find_entry()/ext2_dotdot(): callers don't need page_add=
-r=20
-anymore")
-
-Reviewed-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
-
-I could only read the code but I could not test it in the same QEMU/KVM x86=
-_32=20
-VM where I test all my HIGHMEM related work.=20
-
-Btrfs as well as all the other filesystems I converted to kmap_local_page()=
-=20
-don't make the processes in the VM to crash, whereas the xfstests on ext2 =
-=20
-trigger the OOM killer at random tests (only sometimes they exit gracefully=
-).
-
-=46YI, I tried to run the tests with 6GB of RAM, booting a kernel with=20
-HIGHMEM64GB enabled. I cannot add my "Tested-by" tag.
-
-=46abio
-
-
+Cheers,
+Longman
 
