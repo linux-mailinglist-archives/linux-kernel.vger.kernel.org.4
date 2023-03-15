@@ -2,74 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 469736BC1C9
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 00:53:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 807856BC1D0
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 00:54:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232820AbjCOXxZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 19:53:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58414 "EHLO
+        id S233108AbjCOXyu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 19:54:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232082AbjCOXxX (ORCPT
+        with ESMTP id S230147AbjCOXys (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 19:53:23 -0400
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAC80CDFE
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 16:53:21 -0700 (PDT)
-Received: by mail-io1-xd2c.google.com with SMTP id o14so70590ioa.3
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 16:53:21 -0700 (PDT)
+        Wed, 15 Mar 2023 19:54:48 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 121894B824;
+        Wed, 15 Mar 2023 16:54:47 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id bg16-20020a05600c3c9000b003eb34e21bdfso2079944wmb.0;
+        Wed, 15 Mar 2023 16:54:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1678924401;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Vd84AnaoqgffLltxoJ8OX+oSLpNPg+Q/OHum9kFhYu4=;
-        b=gOyCS30SFVW6sTveg5ZHcXeE6gWMPyuqbyjPATNISsBAnROJmjwGRjCYyKcWGRqXkn
-         Q69c70ipIwyUxTE/geusAYoXPHFEQR2S6JuHCLRceUSGDQ8XLsp9j0ZviAXzxID0Ii+O
-         g/jvY/0C5+MaALCLLPkWVtYtfzaW2SGQrerMI=
+        d=gmail.com; s=20210112; t=1678924485;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VaBC8VbXPeoS4Rhzpa1x7rfgBVJkXDyo8VEwCQbyxgY=;
+        b=KRagSc0q5Ts39y9KYANs228UbpMEAjveR9gsU9dG9HY8+V2/OSekEJS2J0bBDWqyVI
+         l7vrGExr1bsZS2sN3M22EavsRQXv8z0w+06kcWBwV1K1ES3hh8VoY7R6h9nGa63Aarjk
+         7SNLTfoPpTsveVczJ/vHV2/QVzUlEm+UqlHh5V0yta61BCbZl9gaZnUohhAKjgfggFAV
+         dzLElYqNNkatAF0S87bOvVOTFcqwtyIHhm3AiXvY0JVxGjag6Nu8+evXFwT65Jn83ILF
+         qczmuwbUwdluhSfZGcYSssriD0qoLBboM+8+Avfua94OrP4sefDHExsW+DGrL68NFzuK
+         tvoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678924401;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Vd84AnaoqgffLltxoJ8OX+oSLpNPg+Q/OHum9kFhYu4=;
-        b=EE8GcpIBezvwvIRo+mqCWZ62m0ar/p8tPfpTfHJl+FXarGBrxVkZPfHsDeVJqBOqEw
-         aLv8HUhRjX65sTHNwwf8J7oFuKffDPR07LVdPym04/lXirttAqS/VzTCAC41zXZ7rhc5
-         bC1CFfqiXVQPaD3/zRGKrbGp8D7R4TA94NrG/MBwL+RsAVrm7hCqqjOOtJEpuYc1OxLL
-         7sQhRLuZ2Bk1+kwzofu5fjlRR5yzPxolMiKw1RTji5niBz++MgeIJeHQOsBhcRka40Xt
-         XTQsXrKjhvaS5CQPqwS5FTeVe/mWU9w3ur5rAB2wcuB6yXEGIdLzkzt1EJvh2WT+LgRN
-         M1dg==
-X-Gm-Message-State: AO0yUKXXYSsRws4uwhc8+I7wS6EkgPxFfoeQbFJObxctknDWl+t876YA
-        ZdJ1mE4TsvdYdeUr0VlvXR0JEw==
-X-Google-Smtp-Source: AK7set+9r02RFtx+5x1+uLhD5DXcNqJleEdP7NFpP2nqpfoRY8f0irMrHrwt+9+fddL4+SBIzfZdLQ==
-X-Received: by 2002:a6b:dd0c:0:b0:74c:99e8:7f44 with SMTP id f12-20020a6bdd0c000000b0074c99e87f44mr556896ioc.2.1678924401244;
-        Wed, 15 Mar 2023 16:53:21 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id k11-20020a02a70b000000b003c4f7dd7554sm2126614jam.5.2023.03.15.16.53.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Mar 2023 16:53:20 -0700 (PDT)
-Message-ID: <9985fb4c-4e10-e1c2-110b-8003fea0ff30@linuxfoundation.org>
-Date:   Wed, 15 Mar 2023 17:53:20 -0600
+        d=1e100.net; s=20210112; t=1678924485;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VaBC8VbXPeoS4Rhzpa1x7rfgBVJkXDyo8VEwCQbyxgY=;
+        b=BckD2fiQhayDpYoFFyfybRItqSls9PRbJ7lcLDxJWnUqxgXQ6gCCj/C7sJnaqMqFR2
+         +DtPMmQtRKSDOp7lAsqhxvw1nT8oq67keCROp6NoeoK2yrWAKzoCFerDkmoq6KqkhKii
+         JtYTkr6YjUEGkwkSfc+pvJrUijQmL0/GJ7sb5wPfzfcoNukfAuyNAwQUwkIQvpfIJqFM
+         pFZoJZKIE1F9dQV/ePUlN9v1awrsNePYFBsyQ6WjlG6L2S6tAAi6YBdqjBZ9x9FNCuYD
+         VPKF73X3OIhVgJOhcrAVqfUsTez35+N+8+3+0o1TuWX0EDKy1uxyOrn0mz2Rtu5Oxqed
+         dHdQ==
+X-Gm-Message-State: AO0yUKXpZ3sEEBZoST+1ml8VKpPZF6yXEmFoHPlmxXM8th81ObApp1BG
+        74HLMdAEd1Z+XP64ltTGFxcyqAwUJRkpKNP+5Rk=
+X-Google-Smtp-Source: AK7set9KWyqo4l8uXCJJtkj2AlRPkIOnFBuxBmSkyLnEZIV4Mw+VWV8nkO0wKXUaQZ0aClFi8oLMzH7dSRAdQenQRqs=
+X-Received: by 2002:a05:600c:5114:b0:3ea:8ed9:8e4b with SMTP id
+ o20-20020a05600c511400b003ea8ed98e4bmr5590816wms.6.1678924485358; Wed, 15 Mar
+ 2023 16:54:45 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 6.2 000/141] 6.2.7-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20230315115739.932786806@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20230315115739.932786806@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+References: <20230315160228.2362-1-cnsztl@gmail.com> <20230315160228.2362-6-cnsztl@gmail.com>
+In-Reply-To: <20230315160228.2362-6-cnsztl@gmail.com>
+From:   Vasily Khoruzhick <anarsoul@gmail.com>
+Date:   Wed, 15 Mar 2023 16:54:18 -0700
+Message-ID: <CA+E=qVcL1PNMcJ5M1zHQhZNpajxLJWWGQoXYeLER+OmV5Qz33A@mail.gmail.com>
+Subject: Re: [PATCH 5/5] arm64: dts: rockchip: enable rk809 audio codec on the
+ NanoPi R5 series
+To:     Tianling Shen <cnsztl@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Peter Geis <pgwipeout@gmail.com>, Andy Yan <andyshrk@163.com>,
+        Brian Norris <briannorris@chromium.org>,
+        Chris Morgan <macromorgan@hotmail.com>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        Maya Matuszczyk <maccraft123mc@gmail.com>,
+        Andrew Powers-Holmes <aholmes@omnom.net>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,29 +83,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/15/23 06:11, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.2.7 release.
-> There are 141 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Fri, 17 Mar 2023 11:57:10 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.2.7-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.2.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
+On Wed, Mar 15, 2023 at 9:03=E2=80=AFAM Tianling Shen <cnsztl@gmail.com> wr=
+ote:
 
-Compiled and booted on my test system. No dmesg regressions.
+Hi Tianling,
 
-Tested-by: Shuah Khan <skhan@linuxfoundation.org>
+> +       rk809-sound {
 
-thanks,
--- Shuah
+There is no audio jack on my R5S, see [1] and I don't see it on R5C
+either, see [2]. I don't see audio output on the pin header either.
+How is it supposed to work?
+
+> +               compatible =3D "simple-audio-card";
+> +               simple-audio-card,format =3D "i2s";
+> +               simple-audio-card,name =3D "Analog RK809";
+> +               simple-audio-card,mclk-fs =3D <256>;
+> +
+> +               simple-audio-card,cpu {
+> +                       sound-dai =3D <&i2s1_8ch>;
+> +               };
+> +
+> +               simple-audio-card,codec {
+> +                       sound-dai =3D <&rk809>;
+
+It looks like rk809 doesn't have #sound-dai-cells property and it
+results in a warning:
+
+arch/arm64/boot/dts/rockchip/rk3568-nanopi-r5s.dtsi:48.27-50.5:
+Warning (sound_dai_property): /rk809-sound/simple-audio-card,codec:
+Missing property '#sound-dai-cells' in node /i2c@fdd40000/pmic@20 or
+bad phandle (referred from sound-dai[0])
+
+Regards,
+Vasily
+
+[1] https://wiki.friendlyelec.com/wiki/index.php/NanoPi_R5S
+[2] https://wiki.friendlyelec.com/wiki/index.php/NanoPi_R5C
