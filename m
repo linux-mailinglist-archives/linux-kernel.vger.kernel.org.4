@@ -2,48 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB4C96BC186
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 00:36:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D34CB6BC182
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 00:35:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233349AbjCOXf7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 19:35:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45164 "EHLO
+        id S233398AbjCOXfy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 19:35:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233006AbjCOXfH (ORCPT
+        with ESMTP id S233238AbjCOXfI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 19:35:07 -0400
+        Wed, 15 Mar 2023 19:35:08 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 178DEA8EB0;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D599BA17F7;
         Wed, 15 Mar 2023 16:34:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C01C461EAB;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DAA3161EB0;
+        Wed, 15 Mar 2023 23:32:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 679E0C433EF;
         Wed, 15 Mar 2023 23:32:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BD95C433D2;
-        Wed, 15 Mar 2023 23:32:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678923170;
-        bh=t7+Fc3/HfjcAPtm2VleZ2987TXjNK3lB5tjbiH6eVv0=;
+        s=k20201202; t=1678923172;
+        bh=7mM/1jbUaMBx1fplfRcx8nVmkPYBxzHaUaXdFxqx4FQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aS3ilp4S+z6QOY/Kyr2O/+gzKybdn5wBJ1iCnsJfmfWl/hinqkdHuI1CsjUwurlVv
-         6zGKtLdgmymsUIy+2T6gJaGlAIRNXyE3altUwGlGzvzGibvrughr3MvvdGWSYwKHf7
-         V00LuQGtDkDVSrTugMF6IfVhp/ob22ywPQtg+FheSeDJzQNdz8hgCiHvtnel+p+bQW
-         H8NKK+3FQILT1Ef7ebWPMXrwZvIvwsH8KuAOHEp+VcE5ByI7oF41NFz1/TVgh520m+
-         7+cC01jEOaFZCaJGXsA/Lc+1WXKp1QmIV2ZAkSxfUVc33/3vQgKmhvC/TuW9b66s/Q
-         jJEjtkc+YouIg==
+        b=Rotv1d9fnf362cjtb5vj8HiZKtANcCw1Sf1Fx8d1kXaPzZ4CyHss0KkbNarj/BXwD
+         LBHMlxkJguvoHI195HFOLIdEx/6KN6fiV+FvzmfU7eJlEhEPAFwMvvdNSpCKIhW0iF
+         SCV8GVoQiCkom4c4f6rZNVk/SM1hd6pL1YP6iBJzBq8L6eYnV6FFejDMo+LbxBVpTU
+         3FXISiXvdlUlF+FmjPwfApj5JC/jh32L8e8TBFJNpA/TPN98Ogw8mXYW2ihDIzt6v2
+         q1oMVtsPTL5SwJ5ujfuLIMs+Zj6/zYwYPhnW4Un0FjfpZHrMimjzhTfB7wx3RZJY5t
+         HQF3tN9jlHDWA==
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     Mukesh Ojha <quic_mojha@quicinc.com>, konrad.dybcio@linaro.org,
-        robh+dt@kernel.org, agross@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, elder@linaro.org
-Cc:     devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] arm64: dts: qcom: sm8450: Add IMEM and PIL info region
-Date:   Wed, 15 Mar 2023 16:35:21 -0700
-Message-Id: <167892332567.4030021.9263636003654841857.b4-ty@kernel.org>
+To:     broonie@kernel.org, marcel.ziswiler@toradex.com, agross@kernel.org,
+        linux-arm-kernel@lists.infradead.org, catalin.marinas@arm.com,
+        devicetree@vger.kernel.org, will@kernel.org,
+        Poovendhan Selvaraj <quic_poovendh@quicinc.com>,
+        dmitry.baryshkov@linaro.org, linux-arm-msm@vger.kernel.org,
+        robimarko@gmail.com, robh+dt@kernel.org, lee@kernel.org,
+        nfraprado@collabora.com, shawnguo@kernel.org,
+        konrad.dybcio@linaro.org, quic_gurus@quicinc.com, arnd@arndb.de,
+        krzysztof.kozlowski+dt@linaro.org, linux-kernel@vger.kernel.org
+Cc:     quic_srichara@quicinc.com, quic_gokulsri@quicinc.com,
+        quic_kathirav@quicinc.com, quic_anusha@quicinc.com,
+        quic_sjaganat@quicinc.com, quic_arajkuma@quicinc.com,
+        quic_devipriy@quicinc.com
+Subject: Re: (subset) [PATCH V5 0/5] Enable crashdump collection support for IPQ9574
+Date:   Wed, 15 Mar 2023 16:35:22 -0700
+Message-Id: <167892332568.4030021.4457316512942679175.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <1677079845-17650-1-git-send-email-quic_mojha@quicinc.com>
-References: <1677079845-17650-1-git-send-email-quic_mojha@quicinc.com>
+In-Reply-To: <20230216120012.28357-1-quic_poovendh@quicinc.com>
+References: <20230216120012.28357-1-quic_poovendh@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -56,17 +64,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 22 Feb 2023 21:00:45 +0530, Mukesh Ojha wrote:
-> Add a simple-mfd representing IMEM on SM8450 and define the PIL
-> relocation info region, so that post mortem tools will be able
-> to locate the loaded remoteprocs.
+On Thu, 16 Feb 2023 17:30:07 +0530, Poovendhan Selvaraj wrote:
+> Crashdump collection is enabled based on the DLOAD bit in the TCSR register.
+> This bit is set during bootup and clearing during shutdown. During crash,
+> dload bit is not cleared, due to which uboot starts crashdump collection.
 > 
+> Enable the support for download mode to collect the crashdumps if
+> system crashes, to debug crashes extensively.
 > 
+> [...]
 
 Applied, thanks!
 
-[1/1] arm64: dts: qcom: sm8450: Add IMEM and PIL info region
-      commit: d39469f5ce81b2cabf07b1cad3deddeafb7b8a8d
+[1/5] dt-bindings: scm: Add compatible for IPQ9574
+      commit: 81ac39144bf65c5f8ee00e61308fe1f3399b347c
 
 Best regards,
 -- 
