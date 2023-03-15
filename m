@@ -2,75 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 563896BA497
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 02:27:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14F9A6BA49A
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 02:28:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229814AbjCOB1u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 21:27:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34328 "EHLO
+        id S229853AbjCOB2y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 21:28:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229687AbjCOB1s (ORCPT
+        with ESMTP id S229571AbjCOB2w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 21:27:48 -0400
-Received: from out30-111.freemail.mail.aliyun.com (out30-111.freemail.mail.aliyun.com [115.124.30.111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 801EC2DE45
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 18:27:45 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R801e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0Vdtx.Pd_1678843662;
-Received: from 30.221.128.163(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0Vdtx.Pd_1678843662)
-          by smtp.aliyun-inc.com;
-          Wed, 15 Mar 2023 09:27:42 +0800
-Message-ID: <4ed1ebe6-0579-1f1b-6dae-7fd04f40b3d1@linux.alibaba.com>
-Date:   Wed, 15 Mar 2023 09:27:42 +0800
+        Tue, 14 Mar 2023 21:28:52 -0400
+Received: from out-62.mta1.migadu.com (out-62.mta1.migadu.com [IPv6:2001:41d0:203:375::3e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C66116AF8
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 18:28:48 -0700 (PDT)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1678843726;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=SbhNB0cfLDO3HtuutBQ598/LzaRS6h4ccRnDWxuQ86I=;
+        b=oSHp16b9M+WrfR1yGZCG7/6dHjG0AKOnISXP5kGNnGVPjLSgNJe4i8vJP7lTaS62fNhjse
+        3aJEne0h7bxxPnXJQDrCopbmF67nhLTQga9fB8yto7zS5iEixOrnwwNyE67juKqNIbGR2n
+        ZL0JdLqQQ/oqb0XABKwBDyWAkWjClBQ=
+From:   Cai Huoqing <cai.huoqing@linux.dev>
+To:     fancer.lancer@gmail.com
+Cc:     Cai Huoqing <cai.huoqing@linux.dev>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-pci@vger.kernel.org
+Subject: [PATCH v7 0/5] dmaengine: dw-edma: Add support for native HDMA
+Date:   Wed, 15 Mar 2023 09:28:31 +0800
+Message-Id: <20230315012840.6986-1-cai.huoqing@linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 2/2] mm: compaction: fix the possible deadlock when
- isolating hugetlb pages
-To:     Mike Kravetz <mike.kravetz@oracle.com>
-Cc:     akpm@linux-foundation.org, mgorman@techsingularity.net,
-        osalvador@suse.de, vbabka@suse.cz, william.lam@bytedance.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <1bc1c955b03603c4e14f56dfbbef9f637f18dbbd.1678703534.git.baolin.wang@linux.alibaba.com>
- <a24a86fbae09711e61dc4424aa7aebff718e9995.1678703534.git.baolin.wang@linux.alibaba.com>
- <20230313170838.GA3044@monkey>
- <db50d82c-07f1-6a87-6960-7810c54f8093@linux.alibaba.com>
- <20230314172725.GA4769@monkey>
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <20230314172725.GA4769@monkey>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Add support for HDMA NATIVE, as long the IP design has set
+the compatible register map parameter-HDMA_NATIVE,
+which allows compatibility for native HDMA register configuration.
 
+The HDMA Hyper-DMA IP is an enhancement of the eDMA embedded-DMA IP.
+And the native HDMA registers are different from eDMA,
+so this patch add support for HDMA NATIVE mode.
 
-On 3/15/2023 1:27 AM, Mike Kravetz wrote:
-> On 03/14/23 12:11, Baolin Wang wrote:
->> On 3/14/2023 1:08 AM, Mike Kravetz wrote:
->>> On 03/13/23 18:37, Baolin Wang wrote:
->>>
->>> It would seem that the pfn of a hugetlb page would always be a multiple of
->>> COMPACT_CLUSTER_MAX so we would drop the lock.  However, I am not sure if
->>> that is ALWAYS true and would prefer something like the code you suggested.
->>
->> Well, this is not always true, suppose the CONT-PTE hugetlb on ARM arch,
->> which contains 16 contiguous normal pages.
->>
-> 
-> Right.  I keep forgetting about the CONT-* page sizes on arm :(
-> 
-> In any case, I think explicitly dropping the lock as you have done is a
-> good idea.
-> 
-> Feel free to add,
-> 
-> Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
+HDMA write and read channels operate independently to maximize
+the performance of the HDMA read and write data transfer over
+the link When you configure the HDMA with multiple read channels,
+then it uses a round robin (RR) arbitration scheme to select
+the next read channel to be serviced.The same applies when
+youhave multiple write channels.
 
-Thanks for reviewing.
+The native HDMA driver also supports a maximum of 16 independent
+channels (8 write + 8 read), which can run simultaneously.
+Both SAR (Source Address Register) and DAR (Destination Address Register)
+are aligned to byte.
+
+Cai Huoqing (2):
+  dmaengine: dw-edma: Add support for native HDMA
+  dmaengine: dw-edma: Optimization in dw_edma_v0_core_handle_int
+
+Cai huoqing (3):
+  dmaengine: dw-edma: Rename dw_edma_core_ops structure to
+    dw_edma_plat_ops
+  dmaengine: dw-edma: Create a new dw_edma_core_ops structure to
+    abstract controller operation
+  dmaengine: dw-edma: Add HDMA DebugFS support
+
+v6->v7:
+  [1/5]
+  1.Update the commit log.
+  [2/5]
+  2.Revert dw_edma_core_handle_int back to dw-edma-core.h.
+  3.Fix code style.
+  [3/5]
+  4.Move the change of register file from patch[4/5] to patch[3/5].
+  5.Fix code style.
+
+v6 link:
+  https://lore.kernel.org/lkml/20230310032342.17395-1-cai.huoqing@linux.dev/
+
+ drivers/dma/dw-edma/Makefile                 |   8 +-
+ drivers/dma/dw-edma/dw-edma-core.c           |  86 ++----
+ drivers/dma/dw-edma/dw-edma-core.h           |  58 ++++
+ drivers/dma/dw-edma/dw-edma-pcie.c           |   4 +-
+ drivers/dma/dw-edma/dw-edma-v0-core.c        |  91 ++++--
+ drivers/dma/dw-edma/dw-edma-v0-core.h        |  14 +-
+ drivers/dma/dw-edma/dw-hdma-v0-core.c        | 277 +++++++++++++++++++
+ drivers/dma/dw-edma/dw-hdma-v0-core.h        |  17 ++
+ drivers/dma/dw-edma/dw-hdma-v0-debugfs.c     | 176 ++++++++++++
+ drivers/dma/dw-edma/dw-hdma-v0-debugfs.h     |  22 ++
+ drivers/dma/dw-edma/dw-hdma-v0-regs.h        | 130 +++++++++
+ drivers/pci/controller/dwc/pcie-designware.c |   2 +-
+ include/linux/dma/edma.h                     |   7 +-
+ 13 files changed, 785 insertions(+), 107 deletions(-)
+ create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-core.c
+ create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-core.h
+ create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-debugfs.c
+ create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-debugfs.h
+ create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-regs.h
+
+-- 
+2.34.1
+
