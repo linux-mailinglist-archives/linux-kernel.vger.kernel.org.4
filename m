@@ -2,263 +2,332 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 350156BAEE5
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 12:10:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2892C6BAFC1
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 12:58:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232185AbjCOLKm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 07:10:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45736 "EHLO
+        id S231238AbjCOL6t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 07:58:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232172AbjCOLJ4 (ORCPT
+        with ESMTP id S229616AbjCOL6r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 07:09:56 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2247360D76
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 04:08:04 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id j2so16905654wrh.9
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 04:08:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1678878465;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6vvEoJHcciKif3PVTSFotDU3SKpAzbw5nYXY47EELYQ=;
-        b=aSYfaBX6FrrUUH6A1DPYYmngJqc75EF81PWRZqoJlfoez47wnUczbdlO/4HnXmkCZP
-         xunMDib1kBB5jDJV5rLlroQAQHmtq/2sDAuPF7LZtdzD/xzBE8R9Sizz6v1Y67Nrt288
-         Uf38socscAQSHZ6GpMeRr8Ba7LREkRQyRJ85GlD3a1A8NHr1PI03r64l11ipWcQs2UXJ
-         NBDwk6v3U5WMYMY1hXNGpY0xSAgfGcBPcidsNJeze4TaXYxABGDhMm6IH1XtcD93qeHI
-         lRuNLSxxp24aFPzFIIdyo6vlz5V9QZLmIlxfKh9A2Q5dmiwgQd9BdbIj6uDqIHcQfl2x
-         4Vlg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678878465;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6vvEoJHcciKif3PVTSFotDU3SKpAzbw5nYXY47EELYQ=;
-        b=wdm3ip6ODsxJkb2madqDdtUPrlSW4vgSg0ltk75ZCvJreMpfHfGLlCgRqlP8yjME7V
-         OWlKUxhUMUzESAcFU6sr5g5B6zOBijT0WQXpEOJSorGhTSn8mEvOSR7rm1q8iATUKuIx
-         2dWul5GG5rvyx2SVmAD+IfBhioK5geiED1pNYuMqEyOI8pZG830TsZiQymCpOUeMNlb+
-         pGzaZrCVEguYLyM7stB+dnXAQmIAWC+l9asuaIi94wKQNbww3YdWBFScgpFewc5elOr8
-         GM6RAiM6IcHpDkaHT+3O/BYAz0tHHcoshyhzK7agLmcFm9ZCayykAiQ+XW8/GLsfjrYV
-         fsaw==
-X-Gm-Message-State: AO0yUKVuBxV/Y1zELOCnJ4Yf1tpKdeLs8kvkapXiu3t4lun2ZQv5fB2c
-        T1IeSLGEO9avHEPBA6aQ2YcisQ==
-X-Google-Smtp-Source: AK7set9HamkJy5VJEje2CKT4k5HaGH1s2Ny8IwnEXoBk5/OXSsOF94qRWloIRehkoZNeM0lcGrHSQg==
-X-Received: by 2002:a5d:4f82:0:b0:2cf:e655:f0f1 with SMTP id d2-20020a5d4f82000000b002cfe655f0f1mr1496208wru.67.1678878465763;
-        Wed, 15 Mar 2023 04:07:45 -0700 (PDT)
-Received: from baylibre-ThinkPad-T14s-Gen-2i.. (151.31.102.84.rev.sfr.net. [84.102.31.151])
-        by smtp.gmail.com with ESMTPSA id n5-20020adfe785000000b002c7066a6f77sm4339745wrm.31.2023.03.15.04.07.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Mar 2023 04:07:45 -0700 (PDT)
-From:   Julien Panis <jpanis@baylibre.com>
-To:     lee@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, corbet@lwn.net, arnd@arndb.de,
-        gregkh@linuxfoundation.org, derek.kiernan@xilinx.com,
-        dragan.cvetic@xilinx.com
-Cc:     eric.auger@redhat.com, jgg@ziepe.ca, razor@blackwall.org,
-        stephen@networkplumber.org, davem@davemloft.net,
-        christian.koenig@amd.com, contact@emersion.fr,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, sterzik@ti.com, u-kumar1@ti.com,
-        eblanc@baylibre.com, jneanne@baylibre.com
-Subject: [PATCH v2 3/4] misc: tps6594-esm: Add driver for TI TPS6594 ESM
+        Wed, 15 Mar 2023 07:58:47 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D78A313DE1;
+        Wed, 15 Mar 2023 04:58:43 -0700 (PDT)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1pcOym-0003F0-4Z; Wed, 15 Mar 2023 12:07:36 +0100
+Message-ID: <7c29bd74-075f-cf07-6d40-e5b46359f40a@leemhuis.info>
 Date:   Wed, 15 Mar 2023 12:07:35 +0100
-Message-Id: <20230315110736.35506-4-jpanis@baylibre.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20230315110736.35506-1-jpanis@baylibre.com>
-References: <20230315110736.35506-1-jpanis@baylibre.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: Regression: at24 eeprom writing times out on sama5d3
+Content-Language: en-US, de-DE
+To:     Conor.Dooley@microchip.com, peda@axentia.se,
+        Codrin.Ciubotariu@microchip.com, Nicolas.Ferre@microchip.com,
+        wsa@kernel.org
+Cc:     kamel.bouhara@bootlin.com, linux-i2c@vger.kernel.org,
+        alexandre.belloni@bootlin.com, Ludovic.Desroches@microchip.com,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        robh+dt@kernel.org, regressions@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+References: <074b39c5-55fc-2bc1-072d-aef1070e284d@axentia.se>
+ <2bb4868b-90ab-887e-bf13-9de8b79231bd@microchip.com>
+ <38dedc92-62a2-7365-6fda-95d6404be749@axentia.se>
+ <3503471d-2d5e-572b-39e7-d715a909749d@axentia.se>
+ <5800be99-3569-6edd-5c71-9e6f1498dc3b@leemhuis.info>
+ <2fcfa811-ce5c-9fc8-9837-753299794560@axentia.se>
+ <338128fa-69dc-1eaa-3a18-c94565ec8380@leemhuis.info>
+ <d9f307f6-7d88-f88d-d619-8786b71eff0b@microchip.com>
+From:   "Linux regression tracking (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+In-Reply-To: <d9f307f6-7d88-f88d-d619-8786b71eff0b@microchip.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1678881523;ee331d2c;
+X-HE-SMSGID: 1pcOym-0003F0-4Z
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds support for TPS6594 ESM (Error Signal Monitor).
-This device monitors the SoC error output signal at its nERR_SOC input pin.
-In error condition, ESM toggles its nRSTOUT_SOC pin to reset the SoC.
+Hi, Thorsten here, the Linux kernel's regression tracker. Seems this
+regression is still unfixed (please correct me if I'm wrong), so I'm
+back with another comment:
 
-Signed-off-by: Julien Panis <jpanis@baylibre.com>
----
- drivers/misc/Kconfig       |  11 ++++
- drivers/misc/Makefile      |   1 +
- drivers/misc/tps6594-esm.c | 132 +++++++++++++++++++++++++++++++++++++
- 3 files changed, 144 insertions(+)
- create mode 100644 drivers/misc/tps6594-esm.c
+On 15.12.22 19:50, Conor.Dooley@microchip.com wrote:
+> On 15/12/2022 17:53, Thorsten Leemhuis wrote:
+>> On 08.09.22 15:59, Peter Rosin wrote:
+>>> 2022-09-08 at 14:06, Thorsten Leemhuis wrote:
+>>>>
+>>>> Peter, Codrin, could you help me out here please: I still have the
+>>>> regression report from Peter that started this thread in the list of
+>>>> tracked issues. From Peter's last msg quoted below it seems the thread
+>>>> just faded out without the regression being fixed. Or was it? If not:
+>>>> what can we do to finally get this resolved?
+>>>
+>>> No, it is not resolved that I know of. We are only writing during
+>>> production, but are working around it by verifying and looping back.
+>>> Sometimes it takes surprisingly long for the loop to finish, but
+>>> it's not a huge deal. But it is of course not completely satisfying
+>>> either...
+>>>
+>>> Reading is never a problem, so post-production behavior is sane.
+>>
+>> I still have this regression that Peter reported in late July on my
+>> list. :-(
+>>
+>> Codrin (and maybe Wolfram), could you provide a update please? Afaics
+>> this is the state of things (please correct me if I'm wrong!): In an
+>> earlier mail
+>> (https://lore.kernel.org/lkml/38dedc92-62a2-7365-6fda-95d6404be749@axentia.se/
+>> ) of this thread Peter stated that the following patch set Codrin posted
+>> mid 2021 helped:
+>> https://lore.kernel.org/all/20210727111554.1338832-1-codrin.ciubotariu@microchip.com/
+> 
+> IIRC (and I may well be wrong as it is not my neck of the woods) Codrin is
+> no longer at Microchip. Nicolas, do you know who has taken over this driver?
 
-diff --git a/drivers/misc/Kconfig b/drivers/misc/Kconfig
-index 433aa4197785..c73c02801330 100644
---- a/drivers/misc/Kconfig
-+++ b/drivers/misc/Kconfig
-@@ -538,6 +538,17 @@ config TMR_INJECT
- 
- 	  Say N here unless you know what you are doing.
- 
-+config TPS6594_ESM
-+	tristate "TI TPS6594 Error Signal Monitor support"
-+	depends on MFD_TPS6594
-+	default MFD_TPS6594
-+	help
-+	  Support ESM (Error Signal Monitor) on TPS6594 PMIC devices.
-+	  ESM is used typically to reboot the board in error condition.
-+
-+	  This driver can also be built as a module.  If so, the module
-+	  will be called tps6594-esm.
-+
- source "drivers/misc/c2port/Kconfig"
- source "drivers/misc/eeprom/Kconfig"
- source "drivers/misc/cb710/Kconfig"
-diff --git a/drivers/misc/Makefile b/drivers/misc/Makefile
-index 56de43943cd5..3dc69ec69912 100644
---- a/drivers/misc/Makefile
-+++ b/drivers/misc/Makefile
-@@ -65,3 +65,4 @@ obj-$(CONFIG_GP_PCI1XXXX)	+= mchp_pci1xxxx/
- obj-$(CONFIG_VCPU_STALL_DETECTOR)	+= vcpu_stall_detector.o
- obj-$(CONFIG_TMR_MANAGER)      += xilinx_tmr_manager.o
- obj-$(CONFIG_TMR_INJECT)	+= xilinx_tmr_inject.o
-+obj-$(CONFIG_TPS6594_ESM)	+= tps6594-esm.o
-diff --git a/drivers/misc/tps6594-esm.c b/drivers/misc/tps6594-esm.c
-new file mode 100644
-index 000000000000..db242b50846f
---- /dev/null
-+++ b/drivers/misc/tps6594-esm.c
-@@ -0,0 +1,132 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * ESM (Error Signal Monitor) driver for TI TPS6594/TPS6593/LP8764X PMICs
-+ *
-+ * Copyright (C) 2022 BayLibre Incorporated - https://www.baylibre.com/
-+ */
-+
-+#include <linux/interrupt.h>
-+#include <linux/module.h>
-+#include <linux/platform_device.h>
-+#include <linux/pm_runtime.h>
-+#include <linux/regmap.h>
-+
-+#include <linux/mfd/tps6594.h>
-+
-+static irqreturn_t tps6594_esm_isr(int irq, void *dev_id)
-+{
-+	struct platform_device *pdev = dev_id;
-+	int i;
-+
-+	for (i = 0 ; i < pdev->num_resources ; i++) {
-+		if (irq == platform_get_irq_byname(pdev, pdev->resource[i].name)) {
-+			dev_err(pdev->dev.parent, "%s error detected\n", pdev->resource[i].name);
-+			return IRQ_HANDLED;
-+		}
-+	}
-+
-+	return IRQ_NONE;
-+}
-+
-+static int tps6594_esm_probe(struct platform_device *pdev)
-+{
-+	struct tps6594 *tps = dev_get_drvdata(pdev->dev.parent);
-+	struct device *dev = &pdev->dev;
-+	int irq;
-+	int ret;
-+	int i;
-+
-+	for (i = 0 ; i < pdev->num_resources ; i++) {
-+		irq = platform_get_irq_byname(pdev, pdev->resource[i].name);
-+		if (irq < 0)
-+			return dev_err_probe(dev, irq, "Failed to get %s irq\n",
-+					     pdev->resource[i].name);
-+
-+		ret = devm_request_threaded_irq(dev, irq, NULL,
-+						tps6594_esm_isr, IRQF_ONESHOT,
-+						pdev->resource[i].name, pdev);
-+		if (ret)
-+			return dev_err_probe(dev, ret, "Failed to request irq\n");
-+	}
-+
-+	ret = regmap_set_bits(tps->regmap, TPS6594_REG_ESM_SOC_MODE_CFG,
-+			      TPS6594_BIT_ESM_SOC_EN | TPS6594_BIT_ESM_SOC_ENDRV);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "Failed to configure ESM\n");
-+
-+	ret = regmap_set_bits(tps->regmap, TPS6594_REG_ESM_SOC_START_REG,
-+			      TPS6594_BIT_ESM_SOC_START);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "Failed to start ESM\n");
-+
-+	pm_runtime_enable(dev);
-+	pm_runtime_get_sync(dev);
-+
-+	return 0;
-+}
-+
-+static int tps6594_esm_remove(struct platform_device *pdev)
-+{
-+	struct tps6594 *tps = dev_get_drvdata(pdev->dev.parent);
-+	struct device *dev = &pdev->dev;
-+	int ret;
-+
-+	ret = regmap_clear_bits(tps->regmap, TPS6594_REG_ESM_SOC_START_REG,
-+				TPS6594_BIT_ESM_SOC_START);
-+	if (ret) {
-+		dev_err(dev, "Failed to stop ESM\n");
-+		goto out;
-+	}
-+
-+	ret = regmap_clear_bits(tps->regmap, TPS6594_REG_ESM_SOC_MODE_CFG,
-+				TPS6594_BIT_ESM_SOC_EN | TPS6594_BIT_ESM_SOC_ENDRV);
-+	if (ret)
-+		dev_err(dev, "Failed to unconfigure ESM\n");
-+
-+out:
-+	pm_runtime_put_sync(dev);
-+	pm_runtime_disable(dev);
-+
-+	return ret;
-+}
-+
-+static int tps6594_esm_suspend(struct device *dev)
-+{
-+	struct tps6594 *tps = dev_get_drvdata(dev->parent);
-+	int ret;
-+
-+	ret = regmap_clear_bits(tps->regmap, TPS6594_REG_ESM_SOC_START_REG,
-+				TPS6594_BIT_ESM_SOC_START);
-+
-+	pm_runtime_put_sync(dev);
-+
-+	return ret;
-+}
-+
-+static int tps6594_esm_resume(struct device *dev)
-+{
-+	struct tps6594 *tps = dev_get_drvdata(dev->parent);
-+
-+	pm_runtime_get_sync(dev);
-+
-+	return regmap_set_bits(tps->regmap, TPS6594_REG_ESM_SOC_START_REG,
-+			       TPS6594_BIT_ESM_SOC_START);
-+}
-+
-+static DEFINE_SIMPLE_DEV_PM_OPS(tps6594_esm_pm_ops, tps6594_esm_suspend, tps6594_esm_resume);
-+
-+static struct platform_driver tps6594_esm_driver = {
-+	.driver	= {
-+		.name = "tps6594-esm",
-+		.pm = pm_sleep_ptr(&tps6594_esm_pm_ops),
-+	},
-+	.probe = tps6594_esm_probe,
-+	.remove = tps6594_esm_remove,
-+};
-+
-+module_platform_driver(tps6594_esm_driver);
-+
-+MODULE_ALIAS("platform:tps6594-esm");
-+MODULE_AUTHOR("Julien Panis <jpanis@baylibre.com>");
-+MODULE_DESCRIPTION("TPS6594 Error Signal Monitor Driver");
-+MODULE_LICENSE("GPL");
--- 
-2.37.3
+Nicolas didn't reply afaics, but I just found he in
+https://lore.kernel.org/all/176099e2-cbff-1987-f59a-2ca618a9c92a@microchip.com/
+mentioned that Codrin left.
 
+Did anyone else take over his duties and that patchset? Or should I file
+this under "regressions that were bisected[1], but nevertheless fixed"?
+I'd hate to do that when patches to resolve it are actually available
+and got stuck in review...
+
+[1] to a change from Kamel Bouhara iirc
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+If I did something stupid, please tell me, as explained on that page.
+
+#regzbot poke
+
+
+>> There where a few review comments from Wolfram, but looks like then
+>> things stalled. Can we somehow get this rolling again to finally get
+>> this regression fixed?
+>>
+>> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+>>
+>> P.S.: As the Linux kernel's regression tracker I deal with a lot of
+>> reports and sometimes miss something important when writing mails like
+>> this. If that's the case here, don't hesitate to tell me in a public
+>> reply, it's in everyone's interest to set the public record straight.
+>>
+>>>> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+>>>>
+>>>> P.S.: As the Linux kernel's regression tracker I deal with a lot of
+>>>> reports and sometimes miss something important when writing mails like
+>>>> this. If that's the case here, don't hesitate to tell me in a public
+>>>> reply, it's in everyone's interest to set the public record straight.
+>>>>
+>>>> On 30.06.22 09:44, Peter Rosin wrote:
+>>>>> 2022-06-10 at 22:51, Peter Rosin wrote:
+>>>>>> 2022-06-10 at 09:35, Codrin.Ciubotariu@microchip.com wrote:
+>>>>>>> On 09.06.2022 17:28, Peter Rosin wrote:
+>>>>>>>>
+>>>>>>>> I have not actually bisected this issue but reverting the effects of
+>>>>>>>> patch a4bd8da893a3 ("ARM: dts: at91: sama5d3: add i2c gpio pinctrl")
+>>>>>>>> makes the problem go away.
+>>>>>>>>
+>>>>>>>> I.e. I need something like this in my dts
+>>>>>>>>
+>>>>>>>> &i2c2 {
+>>>>>>>>           status = "okay";
+>>>>>>>>
+>>>>>>>>           pinctrl-names = "default";
+>>>>>>>>           /delete-property/ pinctrl-1;
+>>>>>>>>           /delete-property/ sda-gpios;
+>>>>>>>>           /delete-property/ scl-gpios;
+>>>>>>>>
+>>>>>>>>           eeprom@50 {
+>>>>>>>>                   compatible = "st,24c64", "atmel,24c64";
+>>>>>>>>                   reg = <0x50>;
+>>>>>>>>                   wp-gpios = <&filter_gpio 7 GPIO_ACTIVE_HIGH>;
+>>>>>>>>           };
+>>>>>>>> };
+>>>>>>>>
+>>>>>>>> for multi-page eeprom writes to not time out (a page is 32 bytes on this
+>>>>>>>> eeprom).
+>>>>>>>>
+>>>>>>>> For reference, the current defaults for this SoC/I2C-bus, that I modify,
+>>>>>>>> are:
+>>>>>>>>
+>>>>>>>>           pinctrl-names = "default", "gpio";
+>>>>>>>>           pinctrl-0 = <&pinctrl_i2c2>;
+>>>>>>>>           pinctrl-1 = <&pinctrl_i2c2_gpio>;
+>>>>>>>>           sda-gpios = <&pioA 18 GPIO_ACTIVE_HIGH>;
+>>>>>>>>           scl-gpios = <&pioA 19 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
+>>>>>>>>
+>>>>>>>> I suspect that the underlying reason is that the bus recovery takes
+>>>>>>>> too long and that the at24 eeprom driver gives up prematurely. I doubt
+>>>>>>>> that this is chip specific, but I don't know that.
+>>>>>>>>
+>>>>>>>> I can work around the issue in user space with by writing in 4 byte
+>>>>>>>> chunks, like so
+>>>>>>>>
+>>>>>>>> dd if=source.file of=/sys/bus/i2c/devices/2-0050/eeprom obs=4
+>>>>>>>>
+>>>>>>>> but that is really ugly and gets slow too, about 20 seconds to program
+>>>>>>>> the full 8kB eeprom. With the above in my dts it takes a second or
+>>>>>>>> so (a bit more with dynamic debug active).
+>>>>>>>>
+>>>>>>>>
+>>>>>>>> If I run
+>>>>>>>>
+>>>>>>>> dd if=source.file of=/sys/bus/i2c/devices/2-0050/eeprom
+>>>>>>>>
+>>>>>>>> with a source.file of 8kB and the upstream dts properties in place, I can
+>>>>>>>> collect the following debug output from at24, i2c-core and i2c-at91:
+>>>>>>>>
+>>>>>>>> Jun  9 15:56:34 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: transfer complete
+>>>>>>>> Jun  9 15:56:34 me20 kernel: at24 2-0050: write 32@0 --> 0 (-23170)
+>>>>>>>> Jun  9 15:56:34 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: received nack
+>>>>>>>> Jun  9 15:56:34 me20 kernel: i2c i2c-2: Trying i2c bus recovery
+>>>>>>>> Jun  9 15:56:34 me20 kernel: at24 2-0050: write 32@32 --> -121 (-23169)
+>>>>>>>> Jun  9 15:56:34 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: transfer complete
+>>>>>>>> Jun  9 15:56:34 me20 kernel: at24 2-0050: write 32@32 --> 0 (-23168)
+>>>>>>>> Jun  9 15:56:34 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: received nack
+>>>>>>>> Jun  9 15:56:34 me20 kernel: i2c i2c-2: Trying i2c bus recovery
+>>>>>>>> Jun  9 15:56:34 me20 kernel: at24 2-0050: write 32@64 --> -121 (-23168)
+>>>>>>>> Jun  9 15:56:34 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: transfer complete
+>>>>>>>> Jun  9 15:56:34 me20 kernel: at24 2-0050: write 32@64 --> 0 (-23167)
+>>>>>>>> Jun  9 15:56:34 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: received nack
+>>>>>>>> Jun  9 15:56:34 me20 kernel: i2c i2c-2: Trying i2c bus recovery
+>>>>>>>> Jun  9 15:56:34 me20 kernel: at24 2-0050: write 32@96 --> -121 (-23167)
+>>>>>>>> Jun  9 15:56:34 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: controller timed out
+>>>>>>>> Jun  9 15:56:34 me20 kernel: i2c i2c-2: Trying i2c bus recovery
+>>>>>>>> Jun  9 15:56:34 me20 kernel: at24 2-0050: write 32@96 --> -110 (-23155)
+>>>>>>>> Jun  9 15:56:34 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>>>>> Jun  9 15:56:34 me20 kernel: at91_i2c f801c000.i2c: controller timed out
+>>>>>>>> Jun  9 15:56:34 me20 kernel: i2c i2c-2: Trying i2c bus recovery
+>>>>>>>> Jun  9 15:56:34 me20 kernel: at24 2-0050: write 32@96 --> -110 (-23143)
+>>>>>>>>
+>>>>>>>> And then there is no more action. I.e. only a couple of 32 byte pages
+>>>>>>>> are written.
+>>>>>>>>
+>>>>>>>> With the above mentioned dts override in place I instead get this, which is
+>>>>>>>> a lot more sensible:
+>>>>>>>>
+>>>>>>>> Jun  9 15:48:53 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer complete
+>>>>>>>> Jun  9 15:48:53 me20 kernel: at24 2-0050: write 32@0 --> 0 (753629)
+>>>>>>>> Jun  9 15:48:53 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: received nack
+>>>>>>>> Jun  9 15:48:53 me20 kernel: at24 2-0050: write 32@32 --> -121 (753629)
+>>>>>>>> Jun  9 15:48:53 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer complete
+>>>>>>>> Jun  9 15:48:53 me20 kernel: at24 2-0050: write 32@32 --> 0 (753630)
+>>>>>>>> Jun  9 15:48:53 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: received nack
+>>>>>>>> Jun  9 15:48:53 me20 kernel: at24 2-0050: write 32@64 --> -121 (753630)
+>>>>>>>> Jun  9 15:48:53 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer complete
+>>>>>>>> Jun  9 15:48:53 me20 kernel: at24 2-0050: write 32@64 --> 0 (753631)
+>>>>>>>> Jun  9 15:48:53 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: received nack
+>>>>>>>> Jun  9 15:48:53 me20 kernel: at24 2-0050: write 32@96 --> -121 (753631)
+>>>>>>>> Jun  9 15:48:53 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer complete
+>>>>>>>> Jun  9 15:48:53 me20 kernel: at24 2-0050: write 32@96 --> 0 (753632)
+>>>>>>>> Jun  9 15:48:53 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: received nack
+>>>>>>>> Jun  9 15:48:53 me20 kernel: at24 2-0050: write 32@128 --> -121 (753632)
+>>>>>>>> Jun  9 15:48:53 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer complete
+>>>>>>>> Jun  9 15:48:53 me20 kernel: at24 2-0050: write 32@128 --> 0 (753633)
+>>>>>>>> Jun  9 15:48:53 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: received nack
+>>>>>>>> Jun  9 15:48:53 me20 kernel: at24 2-0050: write 32@160 --> -121 (753633)
+>>>>>>>> Jun  9 15:48:53 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>>>>> Jun  9 15:48:53 me20 kernel: at91_i2c f801c000.i2c: transfer complete
+>>>>>>>> Jun  9 15:48:53 me20 kernel: at24 2-0050: write 32@160 --> 0 (753634)
+>>>>>>>> ... snip ...
+>>>>>>>> Jun  9 15:48:55 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>>>>> Jun  9 15:48:55 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>>>>> Jun  9 15:48:55 me20 kernel: at91_i2c f801c000.i2c: received nack
+>>>>>>>> Jun  9 15:48:55 me20 kernel: at24 2-0050: write 32@8128 --> -121 (753883)
+>>>>>>>> Jun  9 15:48:55 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>>>>> Jun  9 15:48:55 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>>>>> Jun  9 15:48:55 me20 kernel: at91_i2c f801c000.i2c: transfer complete
+>>>>>>>> Jun  9 15:48:55 me20 kernel: at24 2-0050: write 32@8128 --> 0 (753884)
+>>>>>>>> Jun  9 15:48:55 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>>>>> Jun  9 15:48:55 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>>>>> Jun  9 15:48:55 me20 kernel: at91_i2c f801c000.i2c: received nack
+>>>>>>>> Jun  9 15:48:55 me20 kernel: at24 2-0050: write 32@8160 --> -121 (753884)
+>>>>>>>> Jun  9 15:48:55 me20 kernel: i2c i2c-2: at91_xfer: processing 1 messages:
+>>>>>>>> Jun  9 15:48:55 me20 kernel: at91_i2c f801c000.i2c: transfer: write 34 bytes.
+>>>>>>>> Jun  9 15:48:55 me20 kernel: at91_i2c f801c000.i2c: transfer complete
+>>>>>>>> Jun  9 15:48:55 me20 kernel: at24 2-0050: write 32@8160 --> 0 (753885)
+>>>>>>>
+>>>>>>> could you please apply this patch-set [1] and let us know if it
+>>>>>>> addresses your issue?
+>>>>>>>
+>>>>>>> Thanks and best regards,
+>>>>>>> Codrin
+>>>>>>>
+>>>>>>> https://patchwork.ozlabs.org/project/linux-i2c/list/?series=255408
+>>>>>>
+>>>>>> That series does indeed help! I'll reply with a tested-by etc on the
+>>>>>> first two patches, I can't test patch 3/3 with my sama5d3 board...
+>>>>>>
+>>>>>> Thank you very much!
+>>>>>
+>>>>> Since replying to the actual patches do not work for me, I'm writing here
+>>>>> instead. Sorry about that. As stated above, it /seems/ to work much better
+>>>>> with these patches. But I fooled myself and there is still some remaining
+>>>>> trouble. It is not uncommon that the second (32-byte) page in the eeprom
+>>>>> is not written correctly for whatever reason. I do not know why it's
+>>>>> always the second page that gets corrupted, but this is a bad problem since
+>>>>> the failure is completely silent.
+>>>>>
+>>>>> Cheers,
+>>>>> Peter
+>>>>
+>>>> #regzbot poke
+>>>
+>>> _______________________________________________
+>>> linux-arm-kernel mailing list
+>>> linux-arm-kernel@lists.infradead.org
+>>> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+>>
+>> #regzbot poke
+> 
