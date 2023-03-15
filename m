@@ -2,107 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D4BA6BA6DC
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 06:16:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DF346BA6EF
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 06:17:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231596AbjCOFQS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 01:16:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48692 "EHLO
+        id S231701AbjCOFRS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 01:17:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231307AbjCOFPI (ORCPT
+        with ESMTP id S231511AbjCOFPr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 01:15:08 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 818952748D;
-        Tue, 14 Mar 2023 22:14:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
-        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
-        Content-Type:Content-ID:Content-Description;
-        bh=RJm37s6exHMhL80A15n5dqXB4pKNus7yxXTpBOkgNUI=; b=CgXM4A7XHbUEAmUDTF22UPLVCd
-        zvb+5FvXwSGpI2Q/Z66mghrtiyZmHXJIph19KRPz/fBfzE/+9CCB0Bmt+elDnjhZ1YDKbiVhfyd3c
-        hHd/olfBHzkGv7CkRoS0Vyr5N43mJTWVKq1Ua7jzhPGE8cb1a8qDACgRemAqw2HCP7Y1BbC00UouK
-        oZ5b5pVsjuyhG9FxOwaQOqDZ3hceid7bahSI+fqwNsM26XOCuKFQcm3DGZ0GpA0pBkwsxmwsYwIOH
-        4FgZp/0MyQGgy6+/6Ma10Q/XbKrp8wIQ1qmoahbMNU/lEca8Nm5MawGg0fp5nL86jr4kr2FyClPHI
-        GqqqmsoQ==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pcJTN-00DYD4-MQ; Wed, 15 Mar 2023 05:14:49 +0000
-From:   "Matthew Wilcox (Oracle)" <willy@infradead.org>
-To:     linux-arch@vger.kernel.org
-Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>
-Subject: [PATCH v4 27/36] x86: Implement the new page table range API
-Date:   Wed, 15 Mar 2023 05:14:35 +0000
-Message-Id: <20230315051444.3229621-28-willy@infradead.org>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20230315051444.3229621-1-willy@infradead.org>
-References: <20230315051444.3229621-1-willy@infradead.org>
+        Wed, 15 Mar 2023 01:15:47 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1C6D539292;
+        Tue, 14 Mar 2023 22:15:04 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 159C14B3;
+        Tue, 14 Mar 2023 22:15:47 -0700 (PDT)
+Received: from a077893.blr.arm.com (unknown [10.162.41.10])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id A07B43F67D;
+        Tue, 14 Mar 2023 22:14:58 -0700 (PDT)
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        will@kernel.org, catalin.marinas@arm.com, mark.rutland@arm.com
+Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        Mark Brown <broonie@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Suzuki Poulose <suzuki.poulose@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        linux-perf-users@vger.kernel.org
+Subject: [PATCH V9 01/10] drivers: perf: arm_pmu: Add new sched_task() callback
+Date:   Wed, 15 Mar 2023 10:44:35 +0530
+Message-Id: <20230315051444.1683170-2-anshuman.khandual@arm.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230315051444.1683170-1-anshuman.khandual@arm.com>
+References: <20230315051444.1683170-1-anshuman.khandual@arm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add PFN_PTE_SHIFT and a noop update_mmu_cache_range().
+This adds armpmu_sched_task(), as generic pmu's sched_task() override which
+in turn can utilize a new arm_pmu.sched_task() callback when available from
+the arm_pmu instance. This new callback will be used while enabling BRBE in
+ARMV8 PMU.
 
-Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
-Cc: x86@kernel.org
-Cc: "H. Peter Anvin" <hpa@zytor.com>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
 ---
- arch/x86/include/asm/pgtable.h | 13 ++++++-------
- 1 file changed, 6 insertions(+), 7 deletions(-)
+ drivers/perf/arm_pmu.c       | 9 +++++++++
+ include/linux/perf/arm_pmu.h | 1 +
+ 2 files changed, 10 insertions(+)
 
-diff --git a/arch/x86/include/asm/pgtable.h b/arch/x86/include/asm/pgtable.h
-index 1031025730d0..b237878061c4 100644
---- a/arch/x86/include/asm/pgtable.h
-+++ b/arch/x86/include/asm/pgtable.h
-@@ -184,6 +184,8 @@ static inline int pte_special(pte_t pte)
- 
- static inline u64 protnone_mask(u64 val);
- 
-+#define PFN_PTE_SHIFT	PAGE_SHIFT
-+
- static inline unsigned long pte_pfn(pte_t pte)
- {
- 	phys_addr_t pfn = pte_val(pte);
-@@ -1019,13 +1021,6 @@ static inline pud_t native_local_pudp_get_and_clear(pud_t *pudp)
- 	return res;
+diff --git a/drivers/perf/arm_pmu.c b/drivers/perf/arm_pmu.c
+index 15bd1e34a88e..aada47e3b126 100644
+--- a/drivers/perf/arm_pmu.c
++++ b/drivers/perf/arm_pmu.c
+@@ -517,6 +517,14 @@ static int armpmu_event_init(struct perf_event *event)
+ 	return __hw_perf_event_init(event);
  }
  
--static inline void set_pte_at(struct mm_struct *mm, unsigned long addr,
--			      pte_t *ptep, pte_t pte)
--{
--	page_table_check_ptes_set(mm, addr, ptep, pte, 1);
--	set_pte(ptep, pte);
--}
--
- static inline void set_pmd_at(struct mm_struct *mm, unsigned long addr,
- 			      pmd_t *pmdp, pmd_t pmd)
- {
-@@ -1291,6 +1286,10 @@ static inline void update_mmu_cache(struct vm_area_struct *vma,
- 		unsigned long addr, pte_t *ptep)
- {
- }
-+static inline void update_mmu_cache_range(struct vm_area_struct *vma,
-+		unsigned long addr, pte_t *ptep, unsigned int nr)
++static void armpmu_sched_task(struct perf_event_pmu_context *pmu_ctx, bool sched_in)
 +{
++	struct arm_pmu *armpmu = to_arm_pmu(pmu_ctx->pmu);
++
++	if (armpmu->sched_task)
++		armpmu->sched_task(pmu_ctx, sched_in);
 +}
- static inline void update_mmu_cache_pmd(struct vm_area_struct *vma,
- 		unsigned long addr, pmd_t *pmd)
++
+ static void armpmu_enable(struct pmu *pmu)
  {
+ 	struct arm_pmu *armpmu = to_arm_pmu(pmu);
+@@ -858,6 +866,7 @@ struct arm_pmu *armpmu_alloc(void)
+ 	}
+ 
+ 	pmu->pmu = (struct pmu) {
++		.sched_task	= armpmu_sched_task,
+ 		.pmu_enable	= armpmu_enable,
+ 		.pmu_disable	= armpmu_disable,
+ 		.event_init	= armpmu_event_init,
+diff --git a/include/linux/perf/arm_pmu.h b/include/linux/perf/arm_pmu.h
+index 525b5d64e394..f7fbd162ca4c 100644
+--- a/include/linux/perf/arm_pmu.h
++++ b/include/linux/perf/arm_pmu.h
+@@ -100,6 +100,7 @@ struct arm_pmu {
+ 	void		(*stop)(struct arm_pmu *);
+ 	void		(*reset)(void *);
+ 	int		(*map_event)(struct perf_event *event);
++	void		(*sched_task)(struct perf_event_pmu_context *pmu_ctx, bool sched_in);
+ 	int		num_events;
+ 	bool		secure_access; /* 32-bit ARM only */
+ #define ARMV8_PMUV3_MAX_COMMON_EVENTS		0x40
 -- 
-2.39.2
+2.25.1
 
