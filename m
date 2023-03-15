@@ -2,122 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6DCE6BA501
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 03:08:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80A806BA505
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 03:13:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230152AbjCOCID (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 22:08:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60100 "EHLO
+        id S230170AbjCOCNG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 22:13:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229786AbjCOCIB (ORCPT
+        with ESMTP id S229789AbjCOCNF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 22:08:01 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EB701ABED
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 19:07:59 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id d13so7225425pjh.0
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 19:07:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20210112.gappssmtp.com; s=20210112; t=1678846079;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=UqJu2BEDPepML92DLQ5OvgUAstRMzlQ9eysHMa3CrAA=;
-        b=aHXf6zaUqySAf91usVWsf/WPytJ4oo/lfPrjMEou8J7jlCioJJeomAO3TJ0SF+P2/j
-         qsCSNUhsTR/Z2z030RVnKEFmTuo0uTA3ussyQY+I/iEvHM+AdQdQRPxsd7+joss3SxvX
-         7s1xa2PoRXTmeO9NJLI7tapu+jtfRK74DUiMc+33O3nhyTWPQUYtBVUs6hsTwgG3K5Bd
-         sBRRA8JIkvIQ40yMTQ4RAz7yHXH2+KBETJHXuXjm1asXSDM02eKCMNFV9r9vJ8fqhS3B
-         Lvw6Q0GmvlDhElQXD1UKYjST0kh/VoRQ8ufQ4YZqly44ZaISBLXOPjSE0cXB+yNTk88x
-         N2Ww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678846079;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UqJu2BEDPepML92DLQ5OvgUAstRMzlQ9eysHMa3CrAA=;
-        b=nkKudPrASJTMWS2G5+9bR68NNnD1lGownsOkPTybxpWLaJiohQXO3fLg6/VtOrjFWj
-         idoLI+9Oeg2yWRbwgqy7Hj2KPmAA9YyeGWv4IYDthNtreVFpSrgRxh1krOZf7eYRM2dW
-         dzgMoBI9aUJGF7hpfQrYGFd1RwL70CpE74oE3YLXHiUZeZlXi568DSjICfHE7tOsmco/
-         SNVN10Az2mrzNaIiibWEMiuwIZoi9S8i3q+YCF2b2vgsio4bIlA6p0MNjVkqVp7V4cSZ
-         OtBrdEy4Ymj7jZbyyJoJxX4rWoddMLX9xUKaieaVYXB78GMaEFlEW2dAqOK3VhR2AAwx
-         A+FQ==
-X-Gm-Message-State: AO0yUKV7WPiY1mLlRe2rj+8lIR+RNbOKpL2ECmICIEhzqfLGGjkDrJAg
-        llpCOqlLceD1ssKdDmbEfEgxuw==
-X-Google-Smtp-Source: AK7set/4d4meE0FaW+MSNz3OomO/EWSt91fL4Ho/JVwVfKyJpvpuMlf/6fPVmbw8HNSfdZgm+emhBQ==
-X-Received: by 2002:a17:902:e54c:b0:1a0:428b:d8c5 with SMTP id n12-20020a170902e54c00b001a0428bd8c5mr1055599plf.45.1678846078774;
-        Tue, 14 Mar 2023 19:07:58 -0700 (PDT)
-Received: from localhost ([50.221.140.188])
-        by smtp.gmail.com with ESMTPSA id a23-20020a170902b59700b00192aa53a7d5sm2400503pls.8.2023.03.14.19.07.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Mar 2023 19:07:58 -0700 (PDT)
-Date:   Tue, 14 Mar 2023 19:07:58 -0700 (PDT)
-X-Google-Original-Date: Tue, 14 Mar 2023 19:07:05 PDT (-0700)
-Subject:     Re: [PATCH v2 4/5] riscv: Select ARCH_DMA_DEFAULT_COHERENT
-In-Reply-To: <Y/fmqwboOv/JhWf/@spud>
-CC:     jiaxun.yang@flygoat.com, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        tsbogend@alpha.franken.de, mpe@ellerman.id.au,
-        Paul Walmsley <paul.walmsley@sifive.com>, robh+dt@kernel.org,
-        Christoph Hellwig <hch@lst.de>, m.szyprowski@samsung.com,
-        robin.murphy@arm.com, linux-riscv@lists.infradead.org
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     Conor Dooley <conor@kernel.org>
-Message-ID: <mhng-9bf3f6be-12f9-466e-90b8-50f2d96971fe@palmer-ri-x1c9a>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 14 Mar 2023 22:13:05 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97221CC29;
+        Tue, 14 Mar 2023 19:13:03 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Pbv7K339kz4xDq;
+        Wed, 15 Mar 2023 13:13:01 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1678846381;
+        bh=WQQg7X4YBFQFZIPkw+RXCtY8FwqACXRBodhmDceWuS4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=KMMKvvkC32k+PRqu5LnQaifW5tGa3lhqNO9+GbqY1wPjauAuqu+Rb5szlX2DSAcUw
+         AvMO/jzpfxFL61Cn6zCXRdtI08AlvQbUM2Qrs7zVsuUeC5hAYq0RhIwy3HU1gxTmRO
+         34OPaFjqWgCkpPA+hSvAr0ycZ9PD6n4MdzjwRaWSU69tBYMoj76xrSCmlEamEBJo4c
+         BUzTx7uh5vr++h8rpHb9dJdTgJvDQ3d76ob98QJ92HqndLfpmfwDBOGIVpAODuqnyG
+         5EaFfQq4NccZiVieHmAqf37I1g9RV+EESLVTjW0fLb6C9TYPrsXa56ngpvRaLLBa1I
+         NoJ8GvlKdCElg==
+Date:   Wed, 15 Mar 2023 13:13:00 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Joey Gouly <joey.gouly@arm.com>, Peter Xu <peterx@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: duplicate patch in the mm-hotfixes tree
+Message-ID: <20230315131300.7776ce0e@canb.auug.org.au>
+In-Reply-To: <20230314082447.46640d77@canb.auug.org.au>
+References: <20230314082447.46640d77@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/DLKFTa4/r=SVi=3YNShFacl";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 23 Feb 2023 14:20:27 PST (-0800), Conor Dooley wrote:
-> On Thu, Feb 23, 2023 at 11:36:43AM +0000, Jiaxun Yang wrote:
->> For riscv our assumption is unless a device states it is non-coherent,
->> we take it to be DMA coherent.
->> 
->> Select ARCH_DMA_DEFAULT_COHERENT to ensure dma_default_coherent
->> is always initialized to true.
->> 
->> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
->> ---
->>  arch/riscv/Kconfig | 1 +
->>  1 file changed, 1 insertion(+)
->> 
->> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
->> index 1d46a268ce16..b71ce992c0c0 100644
->> --- a/arch/riscv/Kconfig
->> +++ b/arch/riscv/Kconfig
->> @@ -233,6 +233,7 @@ config LOCKDEP_SUPPORT
->>  
->>  config RISCV_DMA_NONCOHERENT
->>  	bool
->> +	select ARCH_DMA_DEFAULT_COHERENT
+--Sig_/DLKFTa4/r=SVi=3YNShFacl
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+
+Hi all,
+
+On Tue, 14 Mar 2023 08:24:47 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
 >
-> Since we are always coherent by default, I feel like you should put this
-> in the main "config RISCV" section, where OF_DMA_DEFAULT_COHERENT
-> currently is, no?
+> The following commit is also in Linus Torvalds' tree as a different commit
+> (but the same patch):
+>=20
+>   a1713ab0740f ("tools headers UAPI: Sync linux/prctl.h with the kernel s=
+ources")
 
-Seems reasonable to me.  With that
+The above is now commit
 
-Reviewed-by: Palmer Dabbelt <palmer@rivosinc.com>
-Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+  36714de4fa54 ("tools headers UAPI: sync linux/prctl.h with the kernel sou=
+rces")
 
-as I'm assuming these should all stay together.
+> This is commit
+>=20
+>   df4b933e0e51 ("tools headers UAPI: Sync linux/prctl.h with the kernel s=
+ources")
+>=20
+> in Linus' tree.
 
-Thanks!
+--=20
+Cheers,
+Stephen Rothwell
 
->
-> Wouldn't bother respinning for that unless the dma folk have comments
-> for you.
->
->>  	select ARCH_HAS_DMA_PREP_COHERENT
->>  	select ARCH_HAS_SETUP_DMA_OPS
->>  	select ARCH_HAS_SYNC_DMA_FOR_CPU
->> -- 
->> 2.37.1 (Apple Git-137.1)
->> 
+--Sig_/DLKFTa4/r=SVi=3YNShFacl
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQRKawACgkQAVBC80lX
+0GwEvggAjY2ihCUqj8eq7SlXCg4ZFeuRBfOmHK/cYbTPboyn5tlpdYeZ4b6Mbzlt
+mFRLvslOlJS/mgFPjJ8+zRwiF87H+6pVBDFdDoOboYN9bEZ2f0wGnvrmNMKtkGZV
+pn1IWXsmPM8PlPtZz4sLFMe5l3Ki8PGKbigHbo2bloLDTky6DGBDJ54IgR3yV70C
+47f7c9iQhtsU14LwOPXwDfb/6W/6jhL30IzOtH0VFcmP3JJg6gfPIt+tpyRjYXZj
+uKb6pmCG0BO9tlN7CdMi8UhYpQyZGxgzoygSgi3IceCAsM2pjjpKJEmBkspvIA7E
+muisR6QkWwxOBt58gTNB7bFcjek4Zw==
+=l2Ox
+-----END PGP SIGNATURE-----
+
+--Sig_/DLKFTa4/r=SVi=3YNShFacl--
