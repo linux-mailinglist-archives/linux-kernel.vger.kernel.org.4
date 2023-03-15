@@ -2,52 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BF6A6BAB5B
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 10:00:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31A7D6BAB63
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 10:00:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231877AbjCOJAR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 05:00:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43190 "EHLO
+        id S231892AbjCOJAi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 05:00:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231963AbjCOJAC (ORCPT
+        with ESMTP id S231922AbjCOJA1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 05:00:02 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C169264220
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 01:59:39 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-321-8KLqB0VTNH6q28Tcl8blTg-1; Wed, 15 Mar 2023 08:59:36 +0000
-X-MC-Unique: 8KLqB0VTNH6q28Tcl8blTg-1
-Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
- (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.47; Wed, 15 Mar
- 2023 08:59:34 +0000
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.047; Wed, 15 Mar 2023 08:59:34 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'richard clark' <richard.xnu.clark@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>
-Subject: RE: Question about select and poll system call
-Thread-Topic: Question about select and poll system call
-Thread-Index: AQHZVhzW15NaHXL3bku7XbgbJ/Iq0a77izHg
-Date:   Wed, 15 Mar 2023 08:59:34 +0000
-Message-ID: <c708bced26624078842ff7d83e8597d7@AcuMS.aculab.com>
-References: <CAJNi4rNSHf3N6KrBNcVXKo-wjSPmZa2xan9WPmrER8Ttir-MDA@mail.gmail.com>
-In-Reply-To: <CAJNi4rNSHf3N6KrBNcVXKo-wjSPmZa2xan9WPmrER8Ttir-MDA@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Wed, 15 Mar 2023 05:00:27 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0129F2ED4C;
+        Wed, 15 Mar 2023 02:00:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2D346B81DA8;
+        Wed, 15 Mar 2023 09:00:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id DBF3BC433D2;
+        Wed, 15 Mar 2023 09:00:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678870818;
+        bh=G0QmhIrqWNMWYnwuDWWxUtqhxaLGtT1V9FNUycJGtYk=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=JlEggPefmq7amPGtcXIOBHdnf62gtOgXRhY6kU2RKlipDRO/RLi57WV9O4QnL9pfQ
+         nhOEHggknDx86n6IddrLB16p8uGNq3gOQ1+T/FjcpWHcArm1Ik31QAP7uMg0GaaOA1
+         +u3ncufibFHgW0H5WBLwZAE9vKY2354TQmKYI0MygK0az7g7qSCwWDEb/Xy+QuEW63
+         798kpORkRUHhF5wGGzB/GCMtz/S2imqzQFmnTCv0zuy0Xw+jrjEosV+c5cXyFSAWm4
+         anelk/W5xQFjprzzy1Tt9hsbc2xI029AXo6Qg361G7bScu11KrhS7EHWyABEBaY9iI
+         moX1INtx35cuw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C2CBCE66CBC;
+        Wed, 15 Mar 2023 09:00:18 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] net: usb: smsc75xx: Limit packet length to skb->len
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167887081879.17591.15568032796714316923.git-patchwork-notify@kernel.org>
+Date:   Wed, 15 Mar 2023 09:00:18 +0000
+References: <20230313220045.52394-1-szymon.heidrich@gmail.com>
+In-Reply-To: <20230313220045.52394-1-szymon.heidrich@gmail.com>
+To:     Szymon Heidrich <szymon.heidrich@gmail.com>
+Cc:     steve.glendinning@shawell.net, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,19 +58,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiAyLiBDYW4gd2UgdW5pZnkgdGhlIHR3byBkaWZmZXJlbnQgc3lzdGVtIGNhbGxzPyBGb3IgZXhh
-bXBsZSwgdXNpbmcNCj4gcG9sbCguLi4pIHRvIGltcGxlbWVudCB0aGUgZnJvbnRlbmQgc2VsZWN0
-IGNhbGwoLi4uKSwgaXMgdGhlcmUNCj4gc29tZXRoaW5nIEknbSBtaXNzaW5nIGZvciBjdXJyZW50
-IGltcGxlbWVudGF0aW9uPyBUaGUgQ29ucyBhbmQgUHJvcywNCj4gZXRjDQoNClRoZSB1bmRlcmx5
-aW5nIGNvZGUgdGhhdCBpbXBsZW1lbnRzIHRoZW0gaXMgY29tbW9uLg0KDQpCZXdhcmUgdGhhdCB0
-aGUgZ2xpYmMgc2VsZWN0KCkgd3JhcHBlcnMgaGF2ZSB0aGVpciBvd24gbGltaXQNCm9uIHRoZSBo
-aWdoZXN0IGZkLg0KRXhjZWVkaW5nIHRoYXQgbGltaXQgKHByb2JhYmx5IDEwMjQpIHdpbGwgY2F1
-c2UgYnVmZmVyIG92ZXJydW5zDQppbiB0aGUgYXBwbGljYXRpb24gKE9uZSBvZiB0aGUgQW5kcm9p
-ZCBhcHBzIEkgdXNlcyBjcmFzaGVzIHRoYXQgd2F5KS4NCg0Kc2VsZWN0KCkgYWxzbyBkb2Vzbid0
-IHNjYWxlIHdlbGwgZm9yIHNwYXJzZSBsaXN0cyBvZiBmZHMuDQpTbyBpdCByZWFsbHkgaXMgYmVz
-dCB0byB1c2UgcG9sbCgpIGFuZCBuZXZlciBzZWxlY3QoKS4NCihBbHRob3VnaCBmb3IgdmVyeSBs
-YXJnZSBmZCBsaXN0cyBlcG9sbCgpIG1heSBiZSBhIGJldHRlciBjaG9pY2UuKQ0KDQoJRGF2aWQN
-Cg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNzIExha2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50IEZh
-cm0sIE1pbHRvbiBLZXluZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3RyYXRpb24gTm86IDEzOTczODYg
-KFdhbGVzKQ0K
+Hello:
+
+This patch was applied to netdev/net.git (main)
+by David S. Miller <davem@davemloft.net>:
+
+On Mon, 13 Mar 2023 23:00:45 +0100 you wrote:
+> Packet length retrieved from skb data may be larger than
+> the actual socket buffer length (up to 9026 bytes). In such
+> case the cloned skb passed up the network stack will leak
+> kernel memory contents.
+> 
+> Fixes: d0cad871703b ("smsc75xx: SMSC LAN75xx USB gigabit ethernet adapter driver")
+> Signed-off-by: Szymon Heidrich <szymon.heidrich@gmail.com>
+> 
+> [...]
+
+Here is the summary with links:
+  - net: usb: smsc75xx: Limit packet length to skb->len
+    https://git.kernel.org/netdev/net/c/d8b228318935
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
