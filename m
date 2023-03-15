@@ -2,123 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 894576BBDB1
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 20:57:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D5DE6BBDD7
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 21:19:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232424AbjCOT5R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 15:57:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41218 "EHLO
+        id S232615AbjCOUS6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 16:18:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232038AbjCOT5P (ORCPT
+        with ESMTP id S231889AbjCOUSy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 15:57:15 -0400
-Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8673E359F
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 12:57:14 -0700 (PDT)
-Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-544787916d9so61755177b3.13
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 12:57:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google; t=1678910233;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cWpTabGy6QLogyA9n745re/JJmzh/5d9dyJhDfcEfl4=;
-        b=Lpe59DpwZs9pQF/TmsfrmgkvqZ0K3A/XUYL0fNgV07LpOAxVq7cGpuv6SQ83pKBTEm
-         MhTTjW8D5MQ3YTn18WGmoozAuGkvGMZPW13GulOi2OoZ4WFj8qWAtwgoKNzDYcIVJh+x
-         g+CbMBx+hDRKFCbkDK1KA4mq5olc85IXG0avA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678910233;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cWpTabGy6QLogyA9n745re/JJmzh/5d9dyJhDfcEfl4=;
-        b=aUatxr6l7gDNe5KS+YMBfcxqGkMnTovo0+oM6Ey+HWvjwLoJ/fmzRcbRKJDpHbDb2o
-         YaVfHm1p+9XCw49oigfyszNORHJ1n9GWAnEB3mCuw5VJJMvLNXkHZiy1sblcUeDtQi1V
-         AxTGzYfG8zebw5b6b07GTvEkG2TYrPxiLb3KN0rJTBtcs3dowa4fQ0d31QOuiBQtMGeB
-         3S2vu/x9Apb9u3fMFtFp/ejDezkZm7dd5bMcwiCkE9XZO1bR+71J5GmP1aQP8Eg7NUL1
-         zWZuBLvafMOs8XhNQWwwVwGJY1mgxMTedjTxQZQE6fhIgHMRi+R6o1n4rHiAuSkSFuMH
-         R5Gg==
-X-Gm-Message-State: AO0yUKWdIacBrJrWXMO335d/au0j2Y8l7KpHeH8fz5H68TUtbe/6OLDb
-        HNQs1dCwjoeWHoTKWQxtpkfG+j27f5Q5jbYRZT+Puw==
-X-Google-Smtp-Source: AK7set+pGKWCyoCQbm2+A59THlc6hWu8pXoM0CYg/D+t+xU3PMcVQu9wwx4y4vZXdfb62v049FzI2x4zlkO63ATF2yA=
-X-Received: by 2002:a81:ae5f:0:b0:532:e887:2c23 with SMTP id
- g31-20020a81ae5f000000b00532e8872c23mr695840ywk.9.1678910233685; Wed, 15 Mar
- 2023 12:57:13 -0700 (PDT)
+        Wed, 15 Mar 2023 16:18:54 -0400
+X-Greylist: delayed 1264 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 15 Mar 2023 13:18:52 PDT
+Received: from tu.jetro.fi (tu.jetro.fi [IPv6:2a01:4f9:c010:1a1b::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8638237F17
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 13:18:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=jetro.fi;
+        s=170418; h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:
+        In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=L/3f0niBe+n8QtNjT0soQtqCZoQEjpVo14Zv9dQPrTU=; b=d7D1qcKlDOF6w58pcKFC+1HK+y
+        Zn9aIASzbsmR0P1qmAI4pJ6Gs//Fe2fYk04FFQ1Z4Dr1WaZbBB4m5lMW8gLhBbDscHRqjrLbYJoGK
+        4aj9Xv6qAUsN+ABpF1Br2UX0JHxRfb8sBSK4AJ8HZHAMgIq1v9RdeeH7jM21R5+eLSTo=;
+Received: from [2001:470:28:7b9::190] (port=51694 helo=mopti)
+        by tu.jetro.fi with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.96)
+        (envelope-from <jje-lxkl@jetro.fi>)
+        id 1pcXFh-00CQu9-0R;
+        Wed, 15 Mar 2023 21:57:37 +0200
+Date:   Wed, 15 Mar 2023 21:57:36 +0200
+From:   Jetro Jormalainen <jje-lxkl@jetro.fi>
+To:     Takashi Iwai <tiwai@suse.de>
+Cc:     Meng Tang <tangmeng@uniontech.com>, regressions@lists.linux.dev,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [REGRESSION] External mic not working on Lenovo Ideapad U310,
+ ALSA: hda/conexant: Add quirk for LENOVO 20149 Notebook model
+Message-ID: <20230315215736.419ac9eb@mopti>
+In-Reply-To: <87o7ou9jfi.wl-tiwai@suse.de>
+References: <20230308215009.4d3e58a6@mopti>
+        <87o7ou9jfi.wl-tiwai@suse.de>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.36; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20230201150815.409582-1-urezki@gmail.com> <20230315151415.2534e11c@gandalf.local.home>
- <e5a1815b-65b5-55ca-9773-ec04378d53c0@kernel.dk> <ZBIbloFMm5xRsjfn@pc636> <20230315153448.6914f85b@gandalf.local.home>
-In-Reply-To: <20230315153448.6914f85b@gandalf.local.home>
-From:   Joel Fernandes <joel@joelfernandes.org>
-Date:   Wed, 15 Mar 2023 15:57:02 -0400
-Message-ID: <CAEXW_YTLFQ3-LApyCPNNx7Tn2ovFr8YUXL=1WVCm+rE2hRKE8g@mail.gmail.com>
-Subject: Re: [PATCH 00/13] Rename k[v]free_rcu() single argument to k[v]free_rcu_mightsleep()
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Uladzislau Rezki <urezki@gmail.com>, Jens Axboe <axboe@kernel.dk>,
-        LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>,
-        Philipp Reisner <philipp.reisner@linbit.com>,
-        Bryan Tan <bryantan@vmware.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Bob Pearson <rpearsonhpe@gmail.com>,
-        Ariel Levkovich <lariel@nvidia.com>,
-        "Theodore Ts'o" <tytso@mit.edu>, Julian Anastasov <ja@ssi.bg>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Steve,
+Wed, 15 Mar 2023 15:29:53 +0100
+Takashi Iwai <tiwai@suse.de> kirjoitti:
 
-On Wed, Mar 15, 2023 at 3:35=E2=80=AFPM Steven Rostedt <rostedt@goodmis.org=
-> wrote:
->
-> On Wed, 15 Mar 2023 20:25:10 +0100
-> Uladzislau Rezki <urezki@gmail.com> wrote:
->
-> > > This was my main complaint too, kvfree_rcu_mightsleep() is an absolut=
-ely
-> > > horrible name for an API... But nobody seemed to care about that!
-> > >
-> > > I like the _synchronize() suggestion, as it matches other RCU naming.
-> > >
-> > This is basically about what it does. If you renamed it to "_synchroniz=
-e()"
-> > in reality it would not mean that it always a synchronous call, most of=
- the
-> > time it is not whereas the name would point that it is.
->
-> No, just comment it.
->
-> I was going to suggest "kvfree_rcu_might_synchronize()" but that's just
-> getting ridiculous.
+> On Wed, 08 Mar 2023 20:50:09 +0100,
+> Jetro Jormalainen wrote:
+> > 
+> > External mic on Lenovo Ideapad U310 has not been working with and
+> > after 5.19.2 release. Same problem still exists on 6.3.0-rc1.
+> > Reverting this commit makes external mic to work on 6.3.0-rc1.
+> > These were tested on vanilla kernels.
+> > 
+> > Bisecting shows that this commit breaks external mic:
+> > f83bb2592482fe94c6eea07a8121763c80f36ce5
+> > ALSA: hda/conexant: Add quirk for LENOVO 20149 Notebook model  
+> 
+> Sounds like multiple models using the same PCI SSID.
+> Could you share the alsa-info.sh output?
 
-No, synchronize() is incorrect. The code really can sleep for other
-reasons like memory allocation. It is not that simple of an
-implementation as one may imagine. mightsleep is really the correct
-wording IMHO.
+I added alsa-info.sh output on non-working kernel to here:
+https://e.pcloud.link/publink/show?code=XZjUqhZVP3JPN9gcyyh9lG23r5g3pKwaD8k
 
-> Still, I will replace that code back to a kfree() and rcu_synchonize() th=
-an
-> to let that other name get in.
+If it's any use here is also output on same kernel with the commit
+reverted:
+https://e.pcloud.link/publink/show?code=XZ9UqhZ90gGNhCqiEkFwsKoQ6LWI0ECt8a7
 
-I think it is too late for that for now, we already have conversions
-going into the other subsystems, that means we'll have to redo all
-that over again (even if it sounded like a good idea, which it is
-not).
+BR Jetro
 
-I would rather you just did: "#define kvfree_rcu_tracing
-#kvfree_rcu_mightsleep", or something like that, if it is really a
-problem. ;-)
 
-Also you are really the first person I know of who has a problem with that =
-name.
+> Meng, also could you give alsa-info.sh output of Lenovo 20149, too?
+> 
+> 
+> thanks,
+> 
+> Takashi
+> 
+> 
+> > After this commit Pulseaudio only shows "Microphone" port as before
+> > there was "Internal microphone" and "Microphone". However when
+> > recording this "Microphone" port that seems to record internal
+> > microphone. External mic cannot be recorded at all after this
+> > commit.
+> > 
+> > External mic not working (dmesg):
+> > 
+> > [    7.565222] snd_hda_codec_conexant hdaudioC1D0: CX20590: BIOS
+> > auto-probing. [    7.566141] snd_hda_codec_conexant hdaudioC1D0:
+> > autoconfig for CX20590: line_outs=1 (0x1f/0x0/0x0/0x0/0x0)
+> > type:speaker [    7.566152] snd_hda_codec_conexant hdaudioC1D0:
+> > speaker_outs=0 (0x0/0x0/0x0/0x0/0x0) [    7.566158]
+> > snd_hda_codec_conexant hdaudioC1D0:    hp_outs=1
+> > (0x19/0x0/0x0/0x0/0x0) [    7.566162] snd_hda_codec_conexant
+> > hdaudioC1D0:    mono: mono_out=0x0 [    7.566166]
+> > snd_hda_codec_conexant hdaudioC1D0:    inputs: [    7.566169]
+> > snd_hda_codec_conexant hdaudioC1D0:      Mic=0x23 [    7.566172]
+> > snd_hda_codec_conexant hdaudioC1D0:    dig-in=0x1a
+> > 
+> > External mic working (dmesg):
+> > 
+> > [    8.381160] snd_hda_codec_conexant hdaudioC1D0: CX20590: BIOS
+> > auto-probing. [    8.381691] snd_hda_codec_conexant hdaudioC1D0:
+> > autoconfig for CX20590: line_outs=1 (0x1f/0x0/0x0/0x0/0x0)
+> > type:speaker [    8.381700] snd_hda_codec_conexant hdaudioC1D0:
+> > speaker_outs=0 (0x0/0x0/0x0/0x0/0x0) [    8.381705]
+> > snd_hda_codec_conexant hdaudioC1D0:    hp_outs=1
+> > (0x19/0x0/0x0/0x0/0x0) [    8.381710] snd_hda_codec_conexant
+> > hdaudioC1D0:    mono: mono_out=0x0 [    8.381714]
+> > snd_hda_codec_conexant hdaudioC1D0:    inputs: [    8.381717]
+> > snd_hda_codec_conexant hdaudioC1D0:      Internal Mic=0x23 [
+> > 8.381721] snd_hda_codec_conexant hdaudioC1D0:      Mic=0x1a
+> > 
+> > 
+> > cat /proc/version:
+> > Linux version 6.3.0-rc1-1 (linux@archlinux) (gcc (GCC) 12.2.1
+> > 20230201, GNU ld (GNU Binutils) 2.40) #10 SMP PREEMPT_DYNAMIC Wed,
+> > 08 Mar 2023 17:45:22 +0000
+> > 
+> > hostnamectl | grep "Operating System":
+> > Operating System: Arch Linux
+> > 
+> > uname -mi:
+> > x86_64 unknown
+> > 
+> > #regzbot introduced: f83bb2592482  
+> 
 
- - Joel
