@@ -2,204 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4C976BAFFC
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 13:13:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 650046BB03C
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 13:16:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229487AbjCOMNc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 08:13:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34634 "EHLO
+        id S231979AbjCOMQg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 08:16:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229734AbjCOMNa (ORCPT
+        with ESMTP id S231877AbjCOMQ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 08:13:30 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 678AB1FEB;
-        Wed, 15 Mar 2023 05:13:28 -0700 (PDT)
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32FBdlT1016756;
-        Wed, 15 Mar 2023 12:13:20 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=j0p3XaXWcGUZYuh4Y5vSdyab6x2UuLWlOkMnbG1Md24=;
- b=b3nfJDo7Zepm2NJZRMqL3tOVju40YVz/cCH9giate+53EjvhN0oNY9oeYmtedTyxa6/j
- p9jV6xK/U3b8FuKEhV+qRbc45hpmBgCx1ygJGoPrLK1x39gXRffH03bnDm8wCpRI/FaN
- IUFGtz13ewZwTuXd/K/Q9B+rlBdHbzN2RbqDt8vwJZ8/qPdaaM4ivzQVVSKkCPZG/cOK
- /Gl8p8KCk4xpi9sTUO89YRQOVnD0C9UWYkAZm1Aohu3bd9el8QL3UgxGmzZlSBUiD14D
- rioLGfhwOYZjvSArqvaq26b0Kq9PVPZVgsSxIOyZ/nHnyaw7S/Xdn3qrR4/rLaYCPHud zA== 
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pbak5n8tv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 15 Mar 2023 12:13:19 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32EN65jf032370;
-        Wed, 15 Mar 2023 12:13:17 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3pb29u8rmd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 15 Mar 2023 12:13:17 +0000
-Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
-        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32FCDEoL32375256
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 15 Mar 2023 12:13:14 GMT
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3638F20043;
-        Wed, 15 Mar 2023 12:13:14 +0000 (GMT)
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EB63C20040;
-        Wed, 15 Mar 2023 12:13:13 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-        by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Wed, 15 Mar 2023 12:13:13 +0000 (GMT)
-From:   Thomas Richter <tmricht@linux.ibm.com>
-To:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        acme@kernel.org, robh@kernel.org, jolsa@kernel.org
-Cc:     svens@linux.ibm.com, gor@linux.ibm.com, sumanthk@linux.ibm.com,
-        hca@linux.ibm.com, Thomas Richter <tmricht@linux.ibm.com>
-Subject: [PATCH] perf/test: Fix wrong size for perf test Setup struct perf_event_attr
-Date:   Wed, 15 Mar 2023 13:13:03 +0100
-Message-Id: <20230315121303.3358416-1-tmricht@linux.ibm.com>
-X-Mailer: git-send-email 2.37.2
+        Wed, 15 Mar 2023 08:16:27 -0400
+Received: from mail-ua1-x931.google.com (mail-ua1-x931.google.com [IPv6:2607:f8b0:4864:20::931])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2EDD8F70B
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 05:16:11 -0700 (PDT)
+Received: by mail-ua1-x931.google.com with SMTP id q42so2992066uac.3
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 05:16:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112; t=1678882570;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PzgtuMSfYssFcR6AaTEq8LEPYe/fsdaQKwPpEYrgic4=;
+        b=k3Rp96Q41gIHkxWl46EzvcWsbg9XDbuPnEwhG1PjwX6Xr1s+nIM7LYjeM9B2UORuSW
+         VI+IpGXP8JadT0gZJHx6i86d+SVB/6zvk8f12f6vLgeXgooy/yAT5jecP3GtLuBXepJ0
+         ExKTOOQ4Ai6fyKLRkB8MirMRjkAWnQaD0Z+QTiigFQcd4pOX4F8wHUeRbscZJovG9PAp
+         pn/x4i30NMz802/Qe6pVcWg011WMldRe8NUQTDslX0drhhMrTJsjh+tKyf4+uqLGxKIt
+         OHakhlV/CKY+yb0Ypg2Q+pY9l9SC9/yXJjR8+8PWP678oiPOlKCtiLcVCNegFGmAeKnN
+         xe3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678882570;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PzgtuMSfYssFcR6AaTEq8LEPYe/fsdaQKwPpEYrgic4=;
+        b=h4+Dz6N63UXd3TJp8plE4mCvgWWYlioLws8A+lno74duTmELkYaMGy6Tmz6+8ddiSC
+         f6eM4YlAGI5fNQlsWPYjx83D/fh7MWRON7Z4tK2F8EfPBeSrDlb4VjaTKdpz9rN6NCID
+         X0yrFCVWa2WukWglZ9TFx9qNRHk6kBgb7R7A+bbtUEx+JyIu+AFOyU4Yb4Nvvo1kvF61
+         JLXd2qOrCzbUMGmu+cERtrSii6aUpc8qmzcshp06L99MjEGhJ5hpGTC+/SBJXTAFFBKM
+         RcNiDhjI74VUgmZA2PZbWtvaOeV2ktmSkIhuCx+JVwBM3P+9iOG8of9rZSmrBAJna8od
+         yarQ==
+X-Gm-Message-State: AO0yUKXSGsTovrg9BAirrD+VZeHJ5Xc9Y53MCYPh4H9K5NDpFc4BB3tW
+        KSQGAZebqKdGKn2fQQVU4Gz8Lc78gh6ALm9Z+ntqgo7djkss/qgh
+X-Google-Smtp-Source: AK7set/aG+bFALcuRIRUQTR6qqfdF0rarM40hOIYBqY24ynLEqKWSLA6YkzVNlk2cI4HcNeuGu1jAfrbV+hUwnjZZqo=
+X-Received: by 2002:ab0:5402:0:b0:68a:6c1e:1aab with SMTP id
+ n2-20020ab05402000000b0068a6c1e1aabmr25631831uaa.2.1678882570399; Wed, 15 Mar
+ 2023 05:16:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: hqVPdD_roCM9jfVXpW0rr2tqrngw4ump
-X-Proofpoint-GUID: hqVPdD_roCM9jfVXpW0rr2tqrngw4ump
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-15_06,2023-03-15_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- impostorscore=0 clxscore=1011 spamscore=0 bulkscore=0 malwarescore=0
- phishscore=0 lowpriorityscore=0 mlxscore=0 mlxlogscore=999 adultscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2302240000 definitions=main-2303150104
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230310190634.5053-1-dipenp@nvidia.com> <20230310190634.5053-6-dipenp@nvidia.com>
+In-Reply-To: <20230310190634.5053-6-dipenp@nvidia.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Wed, 15 Mar 2023 13:15:59 +0100
+Message-ID: <CAMRc=MfG0de07p7nJMya5RfK6a_wQhrKSDZxGMk2L=vhw=_oUQ@mail.gmail.com>
+Subject: Re: [PATCH V3 5/6] gpio: tegra186: Add Tegra234 hte support
+To:     Dipen Patel <dipenp@nvidia.com>
+Cc:     thierry.reding@gmail.com, jonathanh@nvidia.com,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linus.walleij@linaro.org,
+        devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
+        robh+dt@kernel.org, timestamp@lists.linux.dev,
+        krzysztof.kozlowski+dt@linaro.org, corbet@lwn.net,
+        gregkh@linuxfoundation.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The test case ./perf test 'Setup struct perf_event_attr' fails.
-On s390 this output is observed:
+On Fri, Mar 10, 2023 at 8:06=E2=80=AFPM Dipen Patel <dipenp@nvidia.com> wro=
+te:
+>
+> To enable timestamp support for the Tegra234, has_gte variable needs
+> to be set true.
+>
+> Signed-off-by: Dipen Patel <dipenp@nvidia.com>
+> Acked-by: Thierry Reding <treding@nvidia.com>
+> ---
+>  drivers/gpio/gpio-tegra186.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/drivers/gpio/gpio-tegra186.c b/drivers/gpio/gpio-tegra186.c
+> index 14c872b6ad05..b904de0b1784 100644
+> --- a/drivers/gpio/gpio-tegra186.c
+> +++ b/drivers/gpio/gpio-tegra186.c
+> @@ -1134,6 +1134,7 @@ static const struct tegra_gpio_soc tegra234_aon_soc=
+ =3D {
+>         .name =3D "tegra234-gpio-aon",
+>         .instance =3D 1,
+>         .num_irqs_per_bank =3D 8,
+> +       .has_gte =3D true,
+>  };
+>
+>  #define TEGRA241_MAIN_GPIO_PORT(_name, _bank, _port, _pins)    \
+> --
+> 2.17.1
+>
 
- # ./perf test -Fvvvv 17
- 17: Setup struct perf_event_attr                                    :
- --- start ---
- running './tests/attr/test-stat-C0'
- Using CPUID IBM,8561,703,T01,3.6,002f
- .....
- Event event:base-stat
-      fd = 1
-      group_fd = -1
-      flags = 0|8
-      cpu = *
-      type = 0
-      size = 128     <<<--- wrong, specified in file base-stat
-      config = 0
-      sample_period = 0
-      sample_type = 65536
-      ...
- 'PERF_TEST_ATTR=/tmp/tmpgw574wvg ./perf stat -o \
-	/tmp/tmpgw574wvg/perf.data -e cycles -C 0 kill >/dev/null \
-	2>&1 ret '1', expected '1'
-  loading result events
-    Event event-0-0-4
-      fd = 4
-      group_fd = -1
-      cpu = 0
-      pid = -1
-      flags = 8
-      type = 0
-      size = 136     <<<--- actual size used in system call
-      .....
-  compare
-    matching [event-0-0-4]
-      to [event:base-stat]
-      [cpu] 0 *
-      [flags] 8 0|8
-      [type] 0 0
-      [size] 136 128
-    ->FAIL
-    match: [event-0-0-4] matches []
-  expected size=136, got 128
-  FAILED './tests/attr/test-stat-C0' - match failure
-
-This mismatch is caused by
-commit 09519ec3b19e ("perf: Add perf_event_attr::config3")
-which enlarges the structure perf_event_attr by 8 bytes.
-
-Fix this by adjusting the expected value of size.
-
-Output after:
- # ./perf test -Fvvvv 17
- 17: Setup struct perf_event_attr                                    :
- --- start ---
- running './tests/attr/test-stat-C0'
- Using CPUID IBM,8561,703,T01,3.6,002f
- ...
-  matched
-  compare
-    matching [event-0-0-4]
-      to [event:base-stat]
-      [cpu] 0 *
-      [flags] 8 0|8
-      [type] 0 0
-      [size] 136 136
-      ....
-   ->OK
-   match: [event-0-0-4] matches ['event:base-stat']
- matched
-
-Fixes: 09519ec3b19e ("perf: Add perf_event_attr::config3")
-
-Signed-off-by: Thomas Richter <tmricht@linux.ibm.com>
----
- tools/perf/tests/attr/base-record       | 2 +-
- tools/perf/tests/attr/base-stat         | 2 +-
- tools/perf/tests/attr/system-wide-dummy | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/tools/perf/tests/attr/base-record b/tools/perf/tests/attr/base-record
-index 3ef07a12aa14..27c21271a16c 100644
---- a/tools/perf/tests/attr/base-record
-+++ b/tools/perf/tests/attr/base-record
-@@ -5,7 +5,7 @@ group_fd=-1
- flags=0|8
- cpu=*
- type=0|1
--size=128
-+size=136
- config=0
- sample_period=*
- sample_type=263
-diff --git a/tools/perf/tests/attr/base-stat b/tools/perf/tests/attr/base-stat
-index 408164456530..a21fb65bc012 100644
---- a/tools/perf/tests/attr/base-stat
-+++ b/tools/perf/tests/attr/base-stat
-@@ -5,7 +5,7 @@ group_fd=-1
- flags=0|8
- cpu=*
- type=0
--size=128
-+size=136
- config=0
- sample_period=0
- sample_type=65536
-diff --git a/tools/perf/tests/attr/system-wide-dummy b/tools/perf/tests/attr/system-wide-dummy
-index 8fec06eda5f9..2f3e3eb728eb 100644
---- a/tools/perf/tests/attr/system-wide-dummy
-+++ b/tools/perf/tests/attr/system-wide-dummy
-@@ -7,7 +7,7 @@ cpu=*
- pid=-1
- flags=8
- type=1
--size=128
-+size=136
- config=9
- sample_period=4000
- sample_type=455
--- 
-2.39.1
-
+Acked-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
