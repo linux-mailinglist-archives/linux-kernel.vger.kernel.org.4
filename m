@@ -2,74 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFFAC6BBECE
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 22:18:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C82476BBEE6
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 22:20:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232593AbjCOVSs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 17:18:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36640 "EHLO
+        id S232989AbjCOVU1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 17:20:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230473AbjCOVSi (ORCPT
+        with ESMTP id S232223AbjCOVUN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 17:18:38 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE4E9A3B76;
-        Wed, 15 Mar 2023 14:17:55 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id l9-20020a17090a3f0900b0023d32684e7fso4262176pjc.1;
-        Wed, 15 Mar 2023 14:17:55 -0700 (PDT)
+        Wed, 15 Mar 2023 17:20:13 -0400
+Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7604895BDF
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 14:19:42 -0700 (PDT)
+Received: by mail-il1-x12d.google.com with SMTP id h7so11093645ila.5
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 14:19:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678915074;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nSX/fEnnalVAeOYQThdq5TF63kgG4Qs/Ci0lR/INyEk=;
-        b=LtUsLt4Mz28poV022GnTaIe+/PdE8Eq3nNhevRm97TD4b3ySchsu0lWV36DgCzwISe
-         D48dNf1tDZ2M1Ifba+03CskzrYf1ovpvfCTsdp8Bxgtmg5YwAAuEVHD5VTMsUNGqsZ+R
-         PEvltDh7inWIZarmGXOFND0r3Z4nq4n+AUl6N5kDSbdrsxfyDwx8FlqmP2/n2WPFPcOu
-         gUE0zXkDqJphNm7bTzspGnjvD0vuz2CMexXpP0kN2K1ey+w6/oMnblD6aSh0JwFUU0DX
-         7SkeoeQKw+05T0OVxe/d6uN8GwSBh+tL5eur8rqK75eJ+SoSlC+sa0BYmng3CKxvY6ne
-         DYhQ==
+        d=linaro.org; s=google; t=1678915177;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gEgaBMSBWRa1FO8K+pq3htlZswyE7CJJoK0ovlchw1I=;
+        b=YiIhOeyY02wE3ltLusHCbz2wl5P8AO473XBp+MtFRPXivqiKfkeZzqZ/H1fjbgRraP
+         jW3e+Xsfe4fPQi6EmjNlET7dKGGJNEJLl12vT2makAx1vagr3ZrTvAJzXM7pUEpzuqi7
+         c8rLC7CQwAR7o/OXnSVjM/bQJBvgTQCoesQca0j31GkhuASIwKX6fJW6ixK8uJI/rZLW
+         MyEIwUfn0FYP8emCY2ksTXttu7RpoEZXCFrlLk29zSpfWSBhMgi1nWTLMkUeKHuXix4h
+         FJaMgVh8HCp87XEOGhHfPohCBvDIcVR9UO/EXCRYEU4ewIblG9NXCNd0LJU0edY4DTuH
+         mzTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678915074;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=nSX/fEnnalVAeOYQThdq5TF63kgG4Qs/Ci0lR/INyEk=;
-        b=FW3o9UC9Y3hO9BAa8SIVqjaGRSo5qQcsfFde3O6fg+MSil6jTgeO0Fx79ZKGCmZ1sI
-         BPbghOETiEIWEymeCK15nmR1KqnccofmIEwdTtq8O0q5R90MOMwQUz1UcDbgF9FWSsUI
-         NUGdSsltkYODaJoVMxzrT0a3tbEPPxXeWiXCLgQrwqpva7o5GgdNEETDCc0OO4z28Vne
-         f/YjG+PyABtEt9Dx0959lT2lWRm9MDWf1GV5nebbBmS4dWMIPHD/VZNxvMRxdaC35OjV
-         WFaOVoZTpZ3/6EaaQ4hvHSCkgq1vduHyCtXJVgV3vVQ+Nqu4F+R5pZPoCqqfztnyyXUi
-         Al6Q==
-X-Gm-Message-State: AO0yUKXpqyODfhEi6fjlf6KkMl+UbyMvTYYf6+X8Agqp0AXt+vy387KC
-        yTVHL9XRCbMt0aLxyHaMSX8=
-X-Google-Smtp-Source: AK7set+rxgJDU7o23PYQ3njqALfK8HAT6LClLXPp3icfiOHeReVTCwXXzWQBy92RMnG7t6QNNuGy2Q==
-X-Received: by 2002:a17:902:f547:b0:19c:a9b8:4349 with SMTP id h7-20020a170902f54700b0019ca9b84349mr1046598plf.32.1678915074441;
-        Wed, 15 Mar 2023 14:17:54 -0700 (PDT)
-Received: from localhost ([98.97.36.54])
-        by smtp.gmail.com with ESMTPSA id n14-20020a170902968e00b001992e74d058sm4099393plp.7.2023.03.15.14.17.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Mar 2023 14:17:53 -0700 (PDT)
-Date:   Wed, 15 Mar 2023 14:17:52 -0700
-From:   John Fastabend <john.fastabend@gmail.com>
-To:     starmiku1207184332@gmail.com, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
-        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
-        sdf@google.com, haoluo@google.com, jolsa@kernel.org
-Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        baijiaju1990@outlook.com, Teng Qi <starmiku1207184332@gmail.com>
-Message-ID: <641236007b4ca_63dce208c7@john.notmuch>
-In-Reply-To: <20230315041721.1034794-1-starmiku1207184332@gmail.com>
-References: <20230315041721.1034794-1-starmiku1207184332@gmail.com>
-Subject: RE: [PATCH] kernel: bpf: stackmap: fix a possible sleep-in-atomic bug
- in bpf_mmap_unlock_get_irq_work()
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
+        d=1e100.net; s=20210112; t=1678915177;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gEgaBMSBWRa1FO8K+pq3htlZswyE7CJJoK0ovlchw1I=;
+        b=V4MBmjYQ9BSzfQdgYDp+Y7/q7ld9m4IJ3uXZOyyCAYKnm0Nr2xxO4+bmM87MGtpCkA
+         9DZ2HMH/4goYIzzJLZ8WPqcA0bfyNMpqcXr6X7nz1ehDRqj7OMtVMd+np/2P9wagzQJO
+         vZ2ZhABWY+fICkFfeR7rlbjm7FuGJOgrtWOTXawfdxacv2ecC7kVKNVuMYqdkprClcr5
+         LhnD6Fmbbto4jG/e606X39m36GvtetWXfHf7n6P9wviB6culNm6f/50EFAF20XZf7fA6
+         BP8dZuJoXGgZKPsUEorPyGOeF4p5VyQMOx/FXaT1njTPzYzbi6cpnplg8P4NYRmEDk7D
+         PAEw==
+X-Gm-Message-State: AO0yUKVduf0CGZDigxNKRS5JmNFpIckDYapTJqIJTakX6zbfP1cDn+8s
+        dd8uKiOyuwhMJ+SkB9DrC/A9nw==
+X-Google-Smtp-Source: AK7set+mA5+bm+Q3QV52tP9dqfqAndeYtOlfo1M/58Toaw3iZ2GC6/onU19J8i39HhN2+Rgw4BsTuQ==
+X-Received: by 2002:a05:6e02:1bc3:b0:323:2468:ba20 with SMTP id x3-20020a056e021bc300b003232468ba20mr5145198ilv.10.1678915176745;
+        Wed, 15 Mar 2023 14:19:36 -0700 (PDT)
+Received: from [172.22.22.4] ([98.61.227.136])
+        by smtp.googlemail.com with ESMTPSA id a12-20020a92ce4c000000b0032304e1814bsm1881527ilr.40.2023.03.15.14.19.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Mar 2023 14:19:36 -0700 (PDT)
+Message-ID: <6f7fa54c-6743-509b-a5d2-2d70ffb8c0e2@linaro.org>
+Date:   Wed, 15 Mar 2023 16:19:35 -0500
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH net v2 3/4] net: ipa: kill FILT_ROUT_CACHE_CFG IPA
+ register
+Content-Language: en-US
+From:   Alex Elder <elder@linaro.org>
+To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com
+Cc:     caleb.connolly@linaro.org, mka@chromium.org, evgreen@chromium.org,
+        andersson@kernel.org, quic_cpratapa@quicinc.com,
+        quic_avuyyuru@quicinc.com, quic_jponduru@quicinc.com,
+        quic_subashab@quicinc.com, elder@kernel.org,
+        netdev@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230315193552.1646892-1-elder@linaro.org>
+ <20230315193552.1646892-4-elder@linaro.org>
+In-Reply-To: <20230315193552.1646892-4-elder@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,86 +82,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-starmiku1207184332@ wrote:
-> From: Teng Qi <starmiku1207184332@gmail.com>
+On 3/15/23 2:35 PM, Alex Elder wrote:
+> A recent commit defined a few IPA registers used for IPA v5.0+.
+> One of those was a mistake.  Although the filter and router caches
+> get *flushed* using a single register, they use distinct registers
+> (ENDP_FILTER_CACHE_CFG and ENDP_ROUTER_CACHE_CFG) for configuration.
 > 
-> bpf_mmap_unlock_get_irq_work() and bpf_mmap_unlock_mm() cooperate to safely
-> acquire mm->mmap_lock safely. The code in bpf_mmap_unlock_get_irq_work():
->  struct mmap_unlock_irq_work *work = NULL;
->  bool irq_work_busy = false;
->  if (irqs_disabled()) {
->  	if (!IS_ENABLED(CONFIG_PREEMPT_RT)) {
->  		work = this_cpu_ptr(&mmap_unlock_work);
->  		if (irq_work_is_busy(&work->irq_work)) {
->  			irq_work_busy = true;
->  		}
->  	} else {
->  		irq_work_busy = true;
->  	}
->  }
->  *work_ptr = work;
+> And although there *exists* a FILT_ROUT_CACHE_CFG register, it is
+> not needed in upstream code.  So get rid of definitions related to
+> FILT_ROUT_CACHE_CFG, because they are not needed.
 > 
-> shows that the pointer of struct mmap_unlock_irq_work "work" is not NULL if
-> irqs_disabled() == true and IS_ENABLED(CONFIG_PREEMPT_RT) == false or NULL in
-> other cases. The "work" will be passed to bpf_mmap_unlock_mm() as the argument.
-> The code in bpf_mmap_unlock_mm():
->  if (!work) {
->  	mmap_read_unlock(mm);
->  } else {
->  	work->mm = mm;
->  	rwsem_release(&mm->mmap_lock.dep_map, _RET_IP_);
->  	irq_work_queue(&work->irq_work);
->  }
-> 
-> shows that mm->mmap_lock is released directly if "work" is NULL. Otherwise,
-> irq_work_queue is called to avoid calling mmap_read_unlock() in an irq disabled
-> context because of its possible sleep operation. However, mmap_read_unlock()
-> is unsafely called in a preempt disabled context when spin_lock() or
-> rcu_read_lock() has been called.
-> 
-> We found that some ebpf helpers that call these two functions may be invoked in
-> preempt disabled contexts through various hooks. We can give an example:
+> Fixes: de101ca79f97 ("net: ipa: define IPA v5.0+ registers")'
 
-Did you get a stack trace we could add to the commit message would be nice
-to have.
+AGAIN!  This is a bad commit ID.  It should be 8ba59716d16a.
 
->  SEC("kprobe/kmem_cache_free")
->  int bpf_prog1(struct pt_regs *ctx)
->  {
->  	char buff[50];
->  	bpf_get_stack(ctx, buff, sizeof(struct bpf_stack_build_id),
-> 	              BPF_F_USER_BUILD_ID | BPF_F_USER_STACK);
->  	return 0;
->  }
+I've got a new series ready to go but I'll wait until
+tomorrow to post it.
 
-How about add this as a selftest so we can ensure we keep this working.
+Sorry for the noise.
 
-> 
-> The hook "kprobe/kmem_cache_free" is often called in preempt disabled contexts
-> by many modules. To fix this possible bug, we add in_atomic() in
-> bpf_mmap_unlock_get_irq_work().
-> 
-> 
-> Signed-off-by: Teng Qi <starmiku1207184332@gmail.com>
+					-Alex
 
-And a fixes tag so we get backports correct.
 
+> Signed-off-by: Alex Elder <elder@linaro.org>
 > ---
->  kernel/bpf/mmap_unlock_work.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>   drivers/net/ipa/ipa_reg.c | 4 ++--
+>   drivers/net/ipa/ipa_reg.h | 9 ---------
+>   2 files changed, 2 insertions(+), 11 deletions(-)
 > 
-> diff --git a/kernel/bpf/mmap_unlock_work.h b/kernel/bpf/mmap_unlock_work.h
-> index 5d18d7d85bef..3d472d24d88f 100644
-> --- a/kernel/bpf/mmap_unlock_work.h
-> +++ b/kernel/bpf/mmap_unlock_work.h
-> @@ -26,7 +26,7 @@ static inline bool bpf_mmap_unlock_get_irq_work(struct mmap_unlock_irq_work **wo
->  	struct mmap_unlock_irq_work *work = NULL;
->  	bool irq_work_busy = false;
->  
-> -	if (irqs_disabled()) {
-> +	if (in_atomic() || irqs_disabled()) {
->  		if (!IS_ENABLED(CONFIG_PREEMPT_RT)) {
->  			work = this_cpu_ptr(&mmap_unlock_work);
->  			if (irq_work_is_busy(&work->irq_work)) {
+> diff --git a/drivers/net/ipa/ipa_reg.c b/drivers/net/ipa/ipa_reg.c
+> index 735fa65916097..463a31dfa9f47 100644
+> --- a/drivers/net/ipa/ipa_reg.c
+> +++ b/drivers/net/ipa/ipa_reg.c
+> @@ -39,7 +39,8 @@ static bool ipa_reg_id_valid(struct ipa *ipa, enum ipa_reg_id reg_id)
+>   		return version <= IPA_VERSION_3_1;
+>   
+>   	case ENDP_FILTER_ROUTER_HSH_CFG:
+> -		return version != IPA_VERSION_4_2;
+> +		return version < IPA_VERSION_5_0 &&
+> +			version != IPA_VERSION_4_2;
+>   
+>   	case IRQ_SUSPEND_EN:
+>   	case IRQ_SUSPEND_CLR:
+> @@ -52,7 +53,6 @@ static bool ipa_reg_id_valid(struct ipa *ipa, enum ipa_reg_id reg_id)
+>   	case QSB_MAX_WRITES:
+>   	case QSB_MAX_READS:
+>   	case FILT_ROUT_HASH_EN:
+> -	case FILT_ROUT_CACHE_CFG:
+>   	case FILT_ROUT_HASH_FLUSH:
+>   	case FILT_ROUT_CACHE_FLUSH:
+>   	case STATE_AGGR_ACTIVE:
+> diff --git a/drivers/net/ipa/ipa_reg.h b/drivers/net/ipa/ipa_reg.h
+> index 28aa1351dd488..ff2be8be0f683 100644
+> --- a/drivers/net/ipa/ipa_reg.h
+> +++ b/drivers/net/ipa/ipa_reg.h
+> @@ -61,7 +61,6 @@ enum ipa_reg_id {
+>   	QSB_MAX_WRITES,
+>   	QSB_MAX_READS,
+>   	FILT_ROUT_HASH_EN,				/* Not IPA v5.0+ */
+> -	FILT_ROUT_CACHE_CFG,				/* IPA v5.0+ */
+>   	FILT_ROUT_HASH_FLUSH,				/* Not IPA v5.0+ */
+>   	FILT_ROUT_CACHE_FLUSH,				/* IPA v5.0+ */
+>   	STATE_AGGR_ACTIVE,
+> @@ -206,14 +205,6 @@ enum ipa_reg_qsb_max_reads_field_id {
+>   	GEN_QMB_1_MAX_READS_BEATS,			/* IPA v4.0+ */
+>   };
+>   
+> -/* FILT_ROUT_CACHE_CFG register */
+> -enum ipa_reg_filt_rout_cache_cfg_field_id {
+> -	ROUTER_CACHE_EN,
+> -	FILTER_CACHE_EN,
+> -	LOW_PRI_HASH_HIT_DISABLE,
+> -	LRU_EVICTION_THRESHOLD,
+> -};
+> -
+>   /* FILT_ROUT_HASH_EN and FILT_ROUT_HASH_FLUSH registers */
+>   enum ipa_reg_filt_rout_hash_field_id {
+>   	IPV6_ROUTER_HASH,
 
-Thanks.
