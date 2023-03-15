@@ -2,209 +2,355 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 429626BA9B1
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 08:46:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EE2D6BA9B2
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 08:46:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231707AbjCOHqL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 03:46:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42724 "EHLO
+        id S231664AbjCOHqa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 03:46:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231436AbjCOHqE (ORCPT
+        with ESMTP id S231767AbjCOHqX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 03:46:04 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38CD114E93;
-        Wed, 15 Mar 2023 00:46:01 -0700 (PDT)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32F4pwqU005693;
-        Wed, 15 Mar 2023 07:44:38 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id; s=qcppdkim1;
- bh=AJYsQZ0FLOCikvAnnI11GMMUIAhEsvxRaRKOF41W4UM=;
- b=HW/0nJda9mZzs1IcrAYi1h9HuLJEZUSEChdpKtRy4V99YD9yy7JmzqodWNywsGkqDLkB
- RChrOIQgiUpYNGDNLJWEFzUjQahlOJyx0ugHTMLyeTzIaTxankga2rpIeXMSB9Ukj640
- 9X8ZxoHr/CmWIzLx84+HXOonjWx9m1jt8gSGfSKHzLQ02NGsbJvaWdyBH1kYrFwaq8DK
- WUAhcv7kK6NqtI3jnZbIgCqZIQaRChJoMHRVdFuXcJAS0KkGHt9jAAifpEF8E+XVSTmY
- xLwy8r3/CSCAJa30cvhaH19f+tdMtBUc9V4N5avKzV9Ij5wFBlo7qy+NopyhVt0wIu3W UA== 
-Received: from aptaippmta02.qualcomm.com (tpe-colo-wan-fw-bordernet.qualcomm.com [103.229.16.4])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pb2c98vqr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 15 Mar 2023 07:44:37 +0000
-Received: from pps.filterd (APTAIPPMTA02.qualcomm.com [127.0.0.1])
-        by APTAIPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 32F7iZeR017552;
-        Wed, 15 Mar 2023 07:44:35 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by APTAIPPMTA02.qualcomm.com (PPS) with ESMTP id 3p8jqmjam9-1;
-        Wed, 15 Mar 2023 07:44:35 +0000
-Received: from APTAIPPMTA02.qualcomm.com (APTAIPPMTA02.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32F7iZ8g017547;
-        Wed, 15 Mar 2023 07:44:35 GMT
-Received: from cbsp-sh-gv.qualcomm.com (CBSP-SH-gv.ap.qualcomm.com [10.231.249.68])
-        by APTAIPPMTA02.qualcomm.com (PPS) with ESMTP id 32F7iYqN017543;
-        Wed, 15 Mar 2023 07:44:35 +0000
-Received: by cbsp-sh-gv.qualcomm.com (Postfix, from userid 393357)
-        id D9E53455E; Wed, 15 Mar 2023 15:44:33 +0800 (CST)
-From:   Ziqi Chen <quic_ziqichen@quicinc.com>
-To:     quic_asutoshd@quicinc.com, quic_cang@quicinc.com,
-        quic_nguyenb@quicinc.com, bvanassche@acm.org, mani@kernel.org,
-        stanley.chu@mediatek.com, adrian.hunter@intel.com,
-        beanhuo@micron.com, avri.altman@wdc.com, junwoo80.lee@samsung.com,
-        martin.petersen@oracle.com, quic_ziqichen@quicinc.com
-Cc:     linux-scsi@vger.kernel.org, Alim Akhtar <alim.akhtar@samsung.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        linux-kernel@vger.kernel.org (open list),
-        linux-trace-kernel@vger.kernel.org (open list:TRACING)
-Subject: [PATCH v7] scsi: ufs: core: Add trace event for MCQ
-Date:   Wed, 15 Mar 2023 15:44:25 +0800
-Message-Id: <1678866271-49601-1-git-send-email-quic_ziqichen@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: MWBWMsQ2yBUp1nqbQAeaHN8KC79GQfDS
-X-Proofpoint-GUID: MWBWMsQ2yBUp1nqbQAeaHN8KC79GQfDS
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-15_04,2023-03-14_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- phishscore=0 mlxlogscore=999 clxscore=1015 spamscore=0 mlxscore=0
- lowpriorityscore=0 malwarescore=0 bulkscore=0 impostorscore=0
- suspectscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2302240000 definitions=main-2303150064
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 15 Mar 2023 03:46:23 -0400
+X-Greylist: delayed 61 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 15 Mar 2023 00:46:10 PDT
+Received: from smtpcmd13147.aruba.it (smtpcmd13147.aruba.it [62.149.156.147])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21C6F6232D
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 00:46:09 -0700 (PDT)
+Received: from [192.168.1.56] ([79.0.204.227])
+        by Aruba Outgoing Smtp  with ESMTPSA
+        id cLoapvaAafh9HcLobpfOgx; Wed, 15 Mar 2023 08:44:53 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+        t=1678866293; bh=yoSSGYFU22O2ZazTZx+mbzO7CwYf2U/0MC+T7chl2JQ=;
+        h=Date:MIME-Version:Subject:To:From:Content-Type;
+        b=V7O7V4Rgp54zf7uEsYCj5yUKRe9EuDJ9qj8Xl/7S6veTIdZwyToINF7+CjY2rb+xh
+         oyoMow4bxkUoZjLhgk1LQchslyX21ZLVKbnAh7GU0fW7Bhg0t7vIpGWTjBoGNpG2mo
+         YjaEK6jP71pqbE7Y9lwTarNkAMJ/YGvLH/zWu+VeTBR5WtUkHk4kpx/9I7gPTA0UM4
+         6sAEIljIp88hN7+c1ztL3RYTyOtfXGOyKVygjbauQXjkymY5jruCEtBWttVgomEWgu
+         +EiJOGa5Zw0nINKIy5/T7P2PpOZWprLj3jh7RGHchOfUSXHz4GsOWC4oJ7H0NBZHns
+         //1Mi8N1j5FNg==
+Message-ID: <62222431-2693-4130-03ea-e0fad5d272ce@enneenne.com>
+Date:   Wed, 15 Mar 2023 08:44:52 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v3] pps: Add elapsed realtime timestamping
+Content-Language: en-US
+To:     Alexander Komrakov <alexander.komrakov@broadcom.com>,
+        Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org
+References: <20230315005226.80347-1-alexander.komrakov@broadcom.com>
+ <ZBFRUWumrQ0u2Sk4@kroah.com>
+From:   Rodolfo Giometti <giometti@enneenne.com>
+In-Reply-To: <ZBFRUWumrQ0u2Sk4@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4xfMLkZ5B7OpHhwItKT+ZUT4QwM72MxrqubTYAjGp3ZiyDnL68hshRScXfLnLFD32DtDU9R1bv+fA8TpsIUl4uzzcSU+w3BOFeAEgTt+p/+Y6eGCSSgvXL
+ hZIQ9OJllaMr94Ga+oayYd6Mmp2aB6UgbeNs3jCJy9P1cIJaUgVYnuSJkM6PM2qp7MZ2w0/WWIlLGhFRcLyqM9CuuUgofzitK1xQsJUypPeuKL6YzLR/E9Sn
+ GbWflv2jDya5EAzW4owi6p1wM1cxeASt3t7tpjPd0zrt+fsLJ/Rz1VdwZOC59v/N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add MCQ hardware queue ID in the existing trace event
-ufshcd_command().
+On 15/03/23 06:02, Greg KH wrote:
+> On Tue, Mar 14, 2023 at 05:52:26PM -0700, Alexander Komrakov wrote:
+>> Some applications like Android needs elapsed realtime timestamping
+>> to PPS pulse for its clock management. Add sysfs node for this.
+> 
+> What exact applications will use this?
 
-Signed-off-by: Ziqi Chen <quic_ziqichen@quicinc.com>
+You should also prove a little documentation about what a "realtime 
+timestamping" is and why we need it.
 
----
-Changes to v6:
-- Corrected the alignment of the TP_printk() arguments.
+>> Signed-off-by: Alexander Komrakov <alexander.komrakov@broadcom.com>
+>> ---
+>> Changes in v3:
+>>    - Remove "staging",wrap changelog text at 72 columns and remove sysfs_emit()
+> 
+> Why are you not using sysfs_emit()?  That is the correct call to use.
+> 
+>>    - .gittconfg updated, clock_gettime removed, trailing whitespaces remvoved
+> 
+> What .gitconfig?
+> 
+>>    - COONFIG_ELAPSED_REALTIME_PPS added to enable elapsed assert/clear sysfs
+> 
+> "OO"?  And as I say below, just use the config option as-is, do not
+> create a new one without a Kconfig change.
 
-Changes to v5:
-- Changed hwq_id type from u32 to int.
-- Changed printing string of hwq id from "hqid" to "hwq_id".
-- Moved the assignment statement of hwq into the MCQ if-statement.
+I suppose we can just drop this CONFIG entry.
 
-Changes to v4:
-- Merged MCQ and SDB trace event as one.
+>>   Documentation/ABI/testing/sysfs-pps | 27 ++++++++++++++++++
+>>   drivers/pps/Makefile                |  4 +++
+>>   drivers/pps/kapi.c                  | 24 ++++++++++++++--
+>>   drivers/pps/sysfs.c                 | 44 +++++++++++++++++++++++++++--
+>>   include/linux/pps_kernel.h          |  2 ++
+>>   5 files changed, 96 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/Documentation/ABI/testing/sysfs-pps b/Documentation/ABI/testing/sysfs-pps
+>> index 25028c7bc37d..031ec89e1ed6 100644
+>> --- a/Documentation/ABI/testing/sysfs-pps
+>> +++ b/Documentation/ABI/testing/sysfs-pps
+>> @@ -1,3 +1,30 @@
+>> +What:		/sys/class/pps/pps0/assert_elapsed
+>> +Date:		October 2021
+>> +Contact:	Alexander Komrakov <alexander.komrakov@broadcom.com>
+>> +Description:
+>> +		The /sys/class/pps/ppsX/assert_elapsed file reports the
+>> +		elapsed real-time assert events and the elapsed
+>> +		real-time assert sequence number of the X-th source
+>> +		in the form:
+>> +
+>> +			<secs>.<nsec>#<sequence>
+>> +
+>> +		If the source has no elapsed real-time assert events
+>> +		the content of this file is empty.
+> 
+> What is a "real-time assert event"?
 
-Changes to v3:
-- Free trace_ufshcd_command_mcq() from dependency on trace_ufshcd_command().
+Please add these information to Documentation/driver-api/pps.rst too (maybe add 
+a note a the end of the "SYSFS support" section.
 
-Changes to v2:
-- Shorten printing strings.
+>> +
+>> +What:		/sys/class/pps/ppsX/clear_elapsed
+>> +Date:		October 2021
+>> +Contact:	Alexander Komrakov <alexander.komrakov@broadcom.com>
+>> +Description:
+>> +		The /sys/class/pps/ppsX/clear_elapsed file reports the elapsed
+>> +		real-time clear events and the elapsed real-time clear
+>> +		sequence number of the X-th source in the form:
+>> +
+>> +			<secs>.<nsec>#<sequence>
+>> +
+>> +		If the source has no elapsed real-time clear events the
+>> +		content of this file is empty.
+>> +
+>>   What:		/sys/class/pps/
+>>   Date:		February 2008
+>>   Contact:	Rodolfo Giometti <giometti@linux.it>
+>> diff --git a/drivers/pps/Makefile b/drivers/pps/Makefile
+>> index ceaf65cc1f1d..443501310445 100644
+>> --- a/drivers/pps/Makefile
+>> +++ b/drivers/pps/Makefile
+>> @@ -8,4 +8,8 @@ pps_core-$(CONFIG_NTP_PPS)	+= kc.o
+>>   obj-$(CONFIG_PPS)		:= pps_core.o
+>>   obj-y				+= clients/ generators/
+>>   
+>> +ifeq ($(CONFIG_ELAPSED_REALTIME_PPS),y)
+>> +EXTRA_CFLAGS += -DENABLE_ELAPSED_REALTIME_PPS
+> 
+> Why are you defining a new flag just for a config option?  Why not just
+> check that config option in the code instead?  That removes a different
+> flag that will be impossible to track down over time.
+> 
+>> +endif
+>> +
+>>   ccflags-$(CONFIG_PPS_DEBUG) := -DDEBUG
+>> diff --git a/drivers/pps/kapi.c b/drivers/pps/kapi.c
+>> index d9d566f70ed1..69b432873ce7 100644
+>> --- a/drivers/pps/kapi.c
+>> +++ b/drivers/pps/kapi.c
+>> @@ -23,6 +23,7 @@
+>>   /*
+>>    * Local functions
+>>    */
+>> + #define NANOSEC_PER_SEC 1000000000 /* 10^9 */
+> 
+> Why isn't this in units.h?  (hint, it is already, use that one.)
+> 
+> 
+>>   
+>>   static void pps_add_offset(struct pps_ktime *ts, struct pps_ktime *offset)
+>>   {
+>> @@ -162,11 +163,20 @@ void pps_event(struct pps_device *pps, struct pps_event_time *ts, int event,
+>>   	unsigned long flags;
+>>   	int captured = 0;
+>>   	struct pps_ktime ts_real = { .sec = 0, .nsec = 0, .flags = 0 };
+>> +	struct pps_ktime ts_real_elapsed = { .sec = 0, .nsec = 0, .flags = 0 };
+>> +	struct timespec64 ts64 = { .tv_sec = 0, .tv_nsec = 0 };
+>>   
+>>   	/* check event type */
+>>   	BUG_ON((event & (PPS_CAPTUREASSERT | PPS_CAPTURECLEAR)) == 0);
+> 
+> You are willing to crash a system because of a tiny driver issue?  That
+> is not good, please fix up in a later patch.
 
-Changes to v1:
-- Adjust the order of fields to keep them aligned.
----
- drivers/ufs/core/ufshcd.c  | 15 ++++++++++++---
- include/trace/events/ufs.h | 22 ++++++++++++----------
- 2 files changed, 24 insertions(+), 13 deletions(-)
+@Greg: I suppose you address this comment to me... :) Do you prefere a WARN_ON() 
+here?
 
-diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-index 3b3cf78..1d58cb2 100644
---- a/drivers/ufs/core/ufshcd.c
-+++ b/drivers/ufs/core/ufshcd.c
-@@ -422,7 +422,9 @@ static void ufshcd_add_command_trace(struct ufs_hba *hba, unsigned int tag,
- {
- 	u64 lba = 0;
- 	u8 opcode = 0, group_id = 0;
--	u32 intr, doorbell;
-+	u32 doorbell = 0;
-+	u32 intr;
-+	int hwq_id = -1;
- 	struct ufshcd_lrb *lrbp = &hba->lrb[tag];
- 	struct scsi_cmnd *cmd = lrbp->cmd;
- 	struct request *rq = scsi_cmd_to_rq(cmd);
-@@ -456,9 +458,16 @@ static void ufshcd_add_command_trace(struct ufs_hba *hba, unsigned int tag,
- 	}
- 
- 	intr = ufshcd_readl(hba, REG_INTERRUPT_STATUS);
--	doorbell = ufshcd_readl(hba, REG_UTP_TRANSFER_REQ_DOOR_BELL);
-+
-+	if (is_mcq_enabled(hba)) {
-+		struct ufs_hw_queue *hwq = ufshcd_mcq_req_to_hwq(hba, rq);
-+
-+		hwq_id = hwq->id;
-+	} else {
-+		doorbell = ufshcd_readl(hba, REG_UTP_TRANSFER_REQ_DOOR_BELL);
-+	}
- 	trace_ufshcd_command(dev_name(hba->dev), str_t, tag,
--			doorbell, transfer_len, intr, lba, opcode, group_id);
-+			doorbell, hwq_id, transfer_len, intr, lba, opcode, group_id);
- }
- 
- static void ufshcd_print_clk_freqs(struct ufs_hba *hba)
-diff --git a/include/trace/events/ufs.h b/include/trace/events/ufs.h
-index 599739e..992517ac 100644
---- a/include/trace/events/ufs.h
-+++ b/include/trace/events/ufs.h
-@@ -268,20 +268,21 @@ DEFINE_EVENT(ufshcd_template, ufshcd_wl_runtime_resume,
- 
- TRACE_EVENT(ufshcd_command,
- 	TP_PROTO(const char *dev_name, enum ufs_trace_str_t str_t,
--		 unsigned int tag, u32 doorbell, int transfer_len, u32 intr,
--		 u64 lba, u8 opcode, u8 group_id),
-+		 unsigned int tag, u32 doorbell, u32 hwq_id, int transfer_len,
-+		 u32 intr, u64 lba, u8 opcode, u8 group_id),
- 
--	TP_ARGS(dev_name, str_t, tag, doorbell, transfer_len,
--				intr, lba, opcode, group_id),
-+	TP_ARGS(dev_name, str_t, tag, doorbell, hwq_id, transfer_len,
-+			intr, lba, opcode, group_id),
- 
- 	TP_STRUCT__entry(
- 		__string(dev_name, dev_name)
- 		__field(enum ufs_trace_str_t, str_t)
- 		__field(unsigned int, tag)
- 		__field(u32, doorbell)
--		__field(int, transfer_len)
-+		__field(u32, hwq_id)
- 		__field(u32, intr)
- 		__field(u64, lba)
-+		__field(int, transfer_len)
- 		__field(u8, opcode)
- 		__field(u8, group_id)
- 	),
-@@ -291,19 +292,20 @@ TRACE_EVENT(ufshcd_command,
- 		__entry->str_t = str_t;
- 		__entry->tag = tag;
- 		__entry->doorbell = doorbell;
--		__entry->transfer_len = transfer_len;
-+		__entry->hwq_id = hwq_id;
- 		__entry->intr = intr;
- 		__entry->lba = lba;
-+		__entry->transfer_len = transfer_len;
- 		__entry->opcode = opcode;
- 		__entry->group_id = group_id;
- 	),
- 
- 	TP_printk(
--		"%s: %s: tag: %u, DB: 0x%x, size: %d, IS: %u, LBA: %llu, opcode: 0x%x (%s), group_id: 0x%x",
-+		"%s: %s: tag: %u, DB: 0x%x, size: %d, IS: %u, LBA: %llu, opcode: 0x%x (%s), group_id: 0x%x, hwq_id: %d",
- 		show_ufs_cmd_trace_str(__entry->str_t), __get_str(dev_name),
--		__entry->tag, __entry->doorbell, __entry->transfer_len,
--		__entry->intr, __entry->lba, (u32)__entry->opcode,
--		str_opcode(__entry->opcode), (u32)__entry->group_id
-+		__entry->tag, __entry->doorbell, __entry->transfer_len, __entry->intr,
-+		__entry->lba, (u32)__entry->opcode, str_opcode(__entry->opcode),
-+		(u32)__entry->group_id, __entry->hwq_id
- 	)
- );
- 
+>> +	/* Calculate the monotonic clock from the timespec clock and stores the result in pps_ktime format
+>> +	   ktime_get_boottime_ts64() : because elapsed realtime includes time spent in sleep */
+>> +	ktime_get_boottime_ts64(&ts64);
+>> +	timespec_to_pps_ktime(&ts_real_elapsed,ts64);
+>>   
+>> -	dev_dbg(pps->dev, "PPS event at %lld.%09ld\n",
+>> +	dev_dbg(pps->dev, "PPS event (monotonic) at %lld.%09d\n",
+>> +			(s64)ts_real_elapsed.sec, ts_real_elapsed.nsec);
+>> +
+>> +	dev_dbg(pps->dev, "PPS event (timestamp) at %lld.%09ld\n",
+>>   			(s64)ts->ts_real.tv_sec, ts->ts_real.tv_nsec);
+>>   
+>>   	timespec_to_pps_ktime(&ts_real, ts->ts_real);
+>> @@ -181,11 +191,15 @@ void pps_event(struct pps_device *pps, struct pps_event_time *ts, int event,
+>>   	pps->current_mode = pps->params.mode;
+>>   	if (event & pps->params.mode & PPS_CAPTUREASSERT) {
+>>   		/* We have to add an offset? */
+>> -		if (pps->params.mode & PPS_OFFSETASSERT)
+>> +		if (pps->params.mode & PPS_OFFSETASSERT) {
+>> +			pps_add_offset(&ts_real_elapsed,
+>> +					&pps->params.assert_off_tu);
+>>   			pps_add_offset(&ts_real,
+>>   					&pps->params.assert_off_tu);
+>> +		}
+>>   
+>>   		/* Save the time stamp */
+>> +		pps->assert_elapsed_tu = ts_real_elapsed;
+>>   		pps->assert_tu = ts_real;
+>>   		pps->assert_sequence++;
+>>   		dev_dbg(pps->dev, "capture assert seq #%u\n",
+>> @@ -195,11 +209,15 @@ void pps_event(struct pps_device *pps, struct pps_event_time *ts, int event,
+>>   	}
+>>   	if (event & pps->params.mode & PPS_CAPTURECLEAR) {
+>>   		/* We have to add an offset? */
+>> -		if (pps->params.mode & PPS_OFFSETCLEAR)
+>> +		if (pps->params.mode & PPS_OFFSETCLEAR)	{
+>> +			pps_add_offset(&ts_real_elapsed,
+>> +					&pps->params.clear_off_tu);
+>>   			pps_add_offset(&ts_real,
+>>   					&pps->params.clear_off_tu);
+>> +		}
+>>   
+>>   		/* Save the time stamp */
+>> +		pps->clear_elapsed_tu = ts_real_elapsed;
+>>   		pps->clear_tu = ts_real;
+>>   		pps->clear_sequence++;
+>>   		dev_dbg(pps->dev, "capture clear seq #%u\n",
+>> diff --git a/drivers/pps/sysfs.c b/drivers/pps/sysfs.c
+>> index 134bc33f6ad0..9e100e287ba7 100644
+>> --- a/drivers/pps/sysfs.c
+>> +++ b/drivers/pps/sysfs.c
+>> @@ -10,6 +10,7 @@
+>>   #include <linux/module.h>
+>>   #include <linux/string.h>
+>>   #include <linux/pps_kernel.h>
+>> +#include <linux/sysfs.h>
+> 
+> Why is this now needed and it wasn't before?
+> 
+>>   
+>>   /*
+>>    * Attribute functions
+>> @@ -24,11 +25,28 @@ static ssize_t assert_show(struct device *dev, struct device_attribute *attr,
+>>   		return 0;
+>>   
+>>   	return sprintf(buf, "%lld.%09d#%d\n",
+>> -			(long long) pps->assert_tu.sec, pps->assert_tu.nsec,
+>> -			pps->assert_sequence);
+>> +			   (long long) pps->assert_tu.sec, pps->assert_tu.nsec,
+>> +			   pps->assert_sequence);
+> 
+> Why make this change?
+> 
+> 
+> 
+>>   }
+>>   static DEVICE_ATTR_RO(assert);
+>>   
+>> +#ifdef ENABLE_ELAPSED_REALTIME_PPS
+>> +static ssize_t assert_elapsed_show(struct device *dev,
+>> +			   struct device_attribute *attr, char *buf)
+>> +{
+>> +	struct pps_device *pps = dev_get_drvdata(dev);
+>> +
+>> +	if (!(pps->info.mode & PPS_CAPTUREASSERT))
+>> +		return 0;
+>> +
+>> +	return sprintf(buf, "%lld.%09d#%d\n",
+> 
+> sysfs files should be using sysfs_emit()
+> 
+>> +			   (long long) pps->assert_elapsed_tu.sec,
+>> +			   pps->assert_elapsed_tu.nsec,
+>> +			   pps->assert_sequence);
+>> +}
+>> +static DEVICE_ATTR_RO(assert_elapsed);
+>> +#endif
+>> +
+>>   static ssize_t clear_show(struct device *dev, struct device_attribute *attr,
+>>   			  char *buf)
+>>   {
+>> @@ -43,6 +61,24 @@ static ssize_t clear_show(struct device *dev, struct device_attribute *attr,
+>>   }
+>>   static DEVICE_ATTR_RO(clear);
+>>   
+>> +#ifdef ENABLE_ELAPSED_REALTIME_PPS
+>> +static ssize_t clear_elapsed_show(struct device *dev,
+>> +			  struct device_attribute *attr,
+>> +			  char *buf)
+>> +{
+>> +	struct pps_device *pps = dev_get_drvdata(dev);
+>> +
+>> +	if (!(pps->info.mode & PPS_CAPTURECLEAR))
+>> +		return 0;
+>> +
+>> +	return sprintf(buf, "%lld.%09d#%d\n",
+>> +			(long long) pps->clear_elapsed_tu.sec,
+>> +			pps->clear_elapsed_tu.nsec,
+>> +			pps->clear_sequence);
+>> +}
+>> +static DEVICE_ATTR_RO(clear_elapsed);
+>> +#endif
+>> +
+>>   static ssize_t mode_show(struct device *dev, struct device_attribute *attr,
+>>   			 char *buf)
+>>   {
+>> @@ -82,6 +118,10 @@ static DEVICE_ATTR_RO(path);
+>>   static struct attribute *pps_attrs[] = {
+>>   	&dev_attr_assert.attr,
+>>   	&dev_attr_clear.attr,
+>> +#ifdef ENABLE_ELAPSED_REALTIME_PPS
+>> +	&dev_attr_assert_elapsed.attr,
+>> +	&dev_attr_clear_elapsed.attr,
+>> +#endif
+> 
+> Don't use #ifdef in a .c file, these attributes should only show up if
+> you determine at runtime they should not be there.
+> 
+> But why woudn't they just always be there all the time anyway?  Why do
+> you need a new config option?
+> 
+> 
+>>   	&dev_attr_mode.attr,
+>>   	&dev_attr_echo.attr,
+>>   	&dev_attr_name.attr,
+>> diff --git a/include/linux/pps_kernel.h b/include/linux/pps_kernel.h
+>> index 78c8ac4951b5..1fecaaf4c8b9 100644
+>> --- a/include/linux/pps_kernel.h
+>> +++ b/include/linux/pps_kernel.h
+>> @@ -47,6 +47,8 @@ struct pps_device {
+>>   
+>>   	__u32 assert_sequence;			/* PPS assert event seq # */
+>>   	__u32 clear_sequence;			/* PPS clear event seq # */
+>> +	struct pps_ktime assert_elapsed_tu; /* PPS elapsed rt assert seq # */
+>> +	struct pps_ktime clear_elapsed_tu;  /* PPS elapsed rt clear event seq */
+> 
+> no tabs?
+> 
+> thanks,
+> 
+> greg k-h
+
+Ciao,
+
+Rodolfo
+
 -- 
-2.7.4
+GNU/Linux Solutions                  e-mail: giometti@enneenne.com
+Linux Device Driver                          giometti@linux.it
+Embedded Systems                     phone:  +39 349 2432127
+UNIX programming                     skype:  rodolfo.giometti
 
