@@ -2,70 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9E246BB393
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 13:49:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B19E6BB39C
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 13:51:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233058AbjCOMtL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 08:49:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55778 "EHLO
+        id S233073AbjCOMvT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 08:51:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232964AbjCOMtJ (ORCPT
+        with ESMTP id S232134AbjCOMvR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 08:49:09 -0400
-Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 516B06421E
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 05:49:07 -0700 (PDT)
-Received: by mail-vs1-xe2a.google.com with SMTP id o2so16819006vss.8
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 05:49:07 -0700 (PDT)
+        Wed, 15 Mar 2023 08:51:17 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60DC38C536
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 05:51:13 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id y2so18678493pjg.3
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 05:51:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112; t=1678884546;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112; t=1678884672; x=1681476672;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=tyeo9bZDdUn8Ag++MxxQW4gy5l8ih4AUy9Ax3AbAFac=;
-        b=5Z6F7G8o1cvgOSQSrP+FSL6jy8y+0ZtBg5RwdH+p2pR1mEKk6vhPNQlicw47hvE7F9
-         +aW66gdb9GQp9geeeQUv80sWk66VcgBqwH7ZOnOhvpn6G/h1Ap50o6nCAnyOGDJkbYcz
-         TdzK2CwTF0Y1ooUFCZaB9oUyqAy9nzu4IYX8lXLQBRyP8qEyjek1H1g6KPelJrPHcEMt
-         sQ7qLXYnEpIaqD/307em+QbENU/vDiEi82jxsLvPIIhl9JyXpDuH1TornsAfKAjFI/Tf
-         lpKhdLehSzl8sLVFWriCl1iPaw9CnSPe+fUNNVN+E9glZxjinnVBzZvJB+sFcCIeTXoP
-         VAqw==
+        bh=cZkbtoWja85fMLAbjXK98n41T/e7K5OhmawF7QD5eFY=;
+        b=bF+iZZkg40UqrsVEUQ/fdqKax2RZLHQVGPSVjvFW4QDzwVaPa6RrvqjDS5UEoX/wpi
+         o/VnZDCP288oppcit1QsMrBMIM4BVDfcEt4JgypAr/JIjyCqVFtah0iWYN2xhnPir9Cz
+         sKtw8Qf5K0UgbzktJxeq1B0bG4oqgGtU58K3kWkTBhhEGeq4grRGDga3ocWxvwnRxrvk
+         pEPQR0v2cxDvyz/HZqTEDr4AvjQj/BhyZm5M+ZDfps6IT1xaz1DeFBUAL1u5eivcP16q
+         /jGik346ZKOzg3ufG7iUiSaRLzNfgMZQi6VoehmHoPZ16b2RGSdLZjJA0Tu58Bo5IF3A
+         GP/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678884546;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20210112; t=1678884672; x=1681476672;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=tyeo9bZDdUn8Ag++MxxQW4gy5l8ih4AUy9Ax3AbAFac=;
-        b=Nf6suNEVimbBY71mOzPDEL2yywnwB5YRb980MfuY2LNfkAL0XHYU0scNHtYnBxS5i9
-         hjmkMgZ58d9hJ9YPN0E+INWKI2CY6JneLgXisGiHSe2e6/Jk5PSWmrfscydaJV5rHCun
-         zkOPQRHxnNEHFAurF327XtvrK8obAiD0oa6bNz3LxvRWZla1lHnJLVPInpDiTeoXOXC3
-         BASKBQTWNfsNefjFBIzdrr2krVaQBGnabOvWqpp67N3QbAk1MZTO+peGbuNUYuCMEkUk
-         0CT0TyQT2u4NVrYPPQFBJyxMR7uVFwFMVIS5inL84lTcbc+1Kukeh8HKjDP3pY2kd/e2
-         GFEQ==
-X-Gm-Message-State: AO0yUKVn6T5b/8cHKVo0T8kB7QP6jCjOJUv6wkgD9/aCZvux/6bl7TTy
-        7X/rMZxYwvCcafWqgadogFtzefSPkT/CmCr1x6Y5WA==
-X-Google-Smtp-Source: AK7set+864Q3cBxX613w2AgbDemFRJUVS4DrOSx/mi7YYQodmoOzm/NQfQbJsSqoHEgFU0UqYnkST/nLys9rt12Xq1I=
-X-Received: by 2002:a67:df8e:0:b0:411:b4c2:c6c0 with SMTP id
- x14-20020a67df8e000000b00411b4c2c6c0mr26516691vsk.0.1678884546416; Wed, 15
- Mar 2023 05:49:06 -0700 (PDT)
+        bh=cZkbtoWja85fMLAbjXK98n41T/e7K5OhmawF7QD5eFY=;
+        b=XmDfK+/mzsxtvoCOcJskM/VWTkkQwMGV36E6N2pMSWq6KyCLCa9olUNckK/GFvgKg1
+         GYYMUaxYq5tcKcn7dgaA0jnH5uaIO9tswkJ+W91WU48lbGw+21QEf5/PjEv2sEtEUV7x
+         c3IT64D2HME/xuA3OcQseODFSSiWgRGo2mSviPYSjLN7FstcKlowztXk4uSSW6AvXvvI
+         w+3aoP5oj/cu1ZrIz1vXryC70aYe008RkDJBUk+EK6ru/xH6tPItFWTfLMB8LVSnQuG5
+         fa/KV2mq8EVuA40oARNlWgwHrdr859uorrVWUYLu9fwE/R7Ium/zwaSZqj8IUcxkdGce
+         ZiIw==
+X-Gm-Message-State: AO0yUKWkgLSRRP1rZEDrhWTZtLb6iFpvO+yZWEbrXL7t7jNiO+qdvZhs
+        /vCQIEhv7FWruOtc6Lb12i+qj6JWpMbt9rMayUcvtg==
+X-Google-Smtp-Source: AK7set8mvMQnqXHAGVcsRNhmtQR25abfMXdfnIlu0KcIHFJ9oK72G+0n3KhChD9cmn8b8rdohn+sbQ==
+X-Received: by 2002:a17:902:b713:b0:19a:7439:3e98 with SMTP id d19-20020a170902b71300b0019a74393e98mr2565786pls.4.1678884672475;
+        Wed, 15 Mar 2023 05:51:12 -0700 (PDT)
+Received: from [127.0.0.1] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id kx15-20020a170902f94f00b0019f387f2dc3sm3618298plb.24.2023.03.15.05.51.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Mar 2023 05:51:12 -0700 (PDT)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     io-uring@vger.kernel.org,
+        =?utf-8?q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>
+Cc:     linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Daniel Dao <dqminh@cloudflare.com>,
+        Waiman Long <longman@redhat.com>
+In-Reply-To: <20230314183332.25834-1-mkoutny@suse.com>
+References: <20230314183332.25834-1-mkoutny@suse.com>
+Subject: Re: [PATCH] io_uring/sqpoll: Do not set PF_NO_SETAFFINITY on
+ sqpoll threads
+Message-Id: <167888467141.25248.3419360093103116663.b4-ty@kernel.dk>
+Date:   Wed, 15 Mar 2023 06:51:11 -0600
 MIME-Version: 1.0
-References: <20230313170950.256964-1-francesco@dolcini.it> <20230313170950.256964-3-francesco@dolcini.it>
- <CAHp75VetwU3pr59sE5zHPf5jPxYb6yJnXZWpD_qn4o6d5Dnmog@mail.gmail.com> <ZA9iPnmgNO7PSv6O@francesco-nb.int.toradex.com>
-In-Reply-To: <ZA9iPnmgNO7PSv6O@francesco-nb.int.toradex.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Wed, 15 Mar 2023 13:48:55 +0100
-Message-ID: <CAMRc=Me4vBGCL0ctm87Xioky55gnsUm0DkmJkN8V6XRLSEkJNw@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] gpio: fxl6408: add I2C GPIO expander driver
-To:     Francesco Dolcini <francesco@dolcini.it>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        linux-gpio@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Emanuele Ghidoli <emanuele.ghidoli@toradex.com>,
-        linux-kernel@vger.kernel.org,
-        Francesco Dolcini <francesco.dolcini@toradex.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.13-dev-2eb1a
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,46 +76,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 13, 2023 at 6:49=E2=80=AFPM Francesco Dolcini <francesco@dolcin=
-i.it> wrote:
->
-> On Mon, Mar 13, 2023 at 07:35:20PM +0200, Andy Shevchenko wrote:
-> > On Mon, Mar 13, 2023 at 7:09=E2=80=AFPM Francesco Dolcini <francesco@do=
-lcini.it> wrote:
-> > >
-> > > From: Emanuele Ghidoli <emanuele.ghidoli@toradex.com>
-> > >
-> > > Add minimal driver for Fairchild FXL6408 8-bit I2C-controlled GPIO ex=
-pander
-> > > using the generic regmap based GPIO driver (GPIO_REGMAP).
-> > >
-> > > The driver implements setting the GPIO direction, reading inputs
-> > > and writing outputs.
-> > >
-> > > In addition to that the FXL6408 has the following functionalities:
-> > > - allows to monitor input ports for data transitions with an interrup=
-t pin
-> > > - all inputs can be configured with pull-up or pull-down resistors
-> >
-> > Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
->
-> Thanks for the review, appreciated.
->
-> > > +#include <linux/err.h>
-> > > +#include <linux/gpio/regmap.h>
-> > > +#include <linux/kernel.h>
-> > > +#include <linux/i2c.h>
-> >
-> > Seems unordered?
->
-> Whoops :-/
->
-> Bartosz: if you or others have additional comments I'll change this for
-> sure, if not up to you - please let me know.
->
-> Francesco
->
 
-I ordered them manually and applied the series.
+On Tue, 14 Mar 2023 19:33:32 +0100, Michal Koutný wrote:
+> Users may specify a CPU where the sqpoll thread would run. This may
+> conflict with cpuset operations because of strict PF_NO_SETAFFINITY
+> requirement. That flag is unnecessary for polling "kernel" threads, see
+> the reasoning in commit 01e68ce08a30 ("io_uring/io-wq: stop setting
+> PF_NO_SETAFFINITY on io-wq workers"). Drop the flag on poll threads too.
+> 
+> 
+> [...]
 
-Bart
+Applied, thanks!
+
+[1/1] io_uring/sqpoll: Do not set PF_NO_SETAFFINITY on sqpoll threads
+      commit: a5fc1441af7719e93dc7a638a960befb694ade89
+
+Best regards,
+-- 
+Jens Axboe
+
+
+
