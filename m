@@ -2,148 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 020FE6BA8C2
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 08:08:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0638E6BA8CC
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 08:11:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231504AbjCOHIv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 03:08:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41862 "EHLO
+        id S231256AbjCOHLS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 03:11:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231466AbjCOHIn (ORCPT
+        with ESMTP id S230516AbjCOHLP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 03:08:43 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A0E53598;
-        Wed, 15 Mar 2023 00:08:18 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32F786MJ036272;
-        Wed, 15 Mar 2023 02:08:06 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1678864086;
-        bh=Y18TfdZ9UcOs8PgvRlhk/5KZLVg2KXw3NBwCUnjeA0Y=;
-        h=From:To:CC:Subject:Date;
-        b=Y55cy1Gklo0gWCSCKdlVHczsNEUpR/XOD9Lw73xpFIPTmQOZysXnrJA97gLr4Rmnk
-         3beG9zw0FVJC8jBnnovx3xM9ArkNeFHIxaxR6ZofuqLyRzonC4Zu6xMRU0S2R+Ccjs
-         KJNfwrc9rthHRb7C+A6f+NQ5xd4sX5K2eI9erD/c=
-Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32F7860p020997
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 15 Mar 2023 02:08:06 -0500
-Received: from DFLE106.ent.ti.com (10.64.6.27) by DFLE104.ent.ti.com
- (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Wed, 15
- Mar 2023 02:08:05 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE106.ent.ti.com
- (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Wed, 15 Mar 2023 02:08:05 -0500
-Received: from uda0492258.dhcp.ti.com (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32F781WT081702;
-        Wed, 15 Mar 2023 02:08:02 -0500
-From:   Siddharth Vadapalli <s-vadapalli@ti.com>
-To:     <tjoseph@cadence.com>, <lpieralisi@kernel.org>, <robh@kernel.org>,
-        <kw@linux.com>, <bhelgaas@google.com>, <nadeem@cadence.com>
-CC:     <linux-pci@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <vigneshr@ti.com>,
-        <srk@ti.com>, <nm@ti.com>, <s-vadapalli@ti.com>
-Subject: [PATCH v2] PCI: cadence: Fix Gen2 Link Retraining process
-Date:   Wed, 15 Mar 2023 12:38:00 +0530
-Message-ID: <20230315070800.1615527-1-s-vadapalli@ti.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 15 Mar 2023 03:11:15 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 044446A69
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 00:11:12 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id ek18so40470527edb.6
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 00:11:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678864270;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=RJKjy9eK5wZQcLG5fFeMeaK9idc1WueAlGl5cn4lHVQ=;
+        b=Bsyq91aeeTKsmlxTlYJI010C+B/lkrmiPlzr++t5RiGJkiL9FWgJQAMu4ndc0dD+qt
+         bEyp1MWTUlzNQHtaC2+56g8+iWouWBuRidMKrm2RUOdt6+3iAfCmPd6IY+SP59Fp+coY
+         oZkjnHSaUlA6DtLSvwYNivKPiKWBC8j52WMFZiitR7bz62y11hQ1c2IrhCXVGnLV1NwZ
+         zQHiswP6WArtrzrbxtmHYCe5SCUCGS9tYVy6SGZMoBXzxjg62E/GdCHaqDufA0ieDEM5
+         EOKs7EC6GXQNpkpvS50aAVqarob3qGI1wwL8dt7TT5vv9io2zPkKrG01Hwg9AmHHoxb8
+         iqBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678864270;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=RJKjy9eK5wZQcLG5fFeMeaK9idc1WueAlGl5cn4lHVQ=;
+        b=2k7btQPBK7Nc5cLzq3p5deamJtw6yV032HIO89BARWYhXSCt0tq00Fo1Q69wGrLCXW
+         QknaHWtVdSoD3yTaZIYHTVY1kvi0BxiC+qWcmLiyiaqOlXH7TanRFJ7CVjxkHzAyOhXS
+         yNPU3aXLLt0Q3Vd14rAKCjZl3qjioLePmAPmf9ro903dGcyTBSCcoQNWeBiVp636p9fP
+         NxYWsg1E2ESP6YvPMxfmT9rxFp/8Wpe9E5NKrelh7Qkx8qtvkdRAg2xz+nmvpUWxfVHu
+         vBj5TDmGom2NcdphzVDUTfXIWvvxGw2AUk2BJh6Z1L2BpVE990E91i3UQ0KdLMKBJRdC
+         NEBg==
+X-Gm-Message-State: AO0yUKUfMPnMiaqAaV7Y5MWGYMs7T/wL7boIVscVkzsF35BDWn00QDYk
+        E8IQZIjQZ+BpbZu/47hNIRmiqg==
+X-Google-Smtp-Source: AK7set/qDWN5EGtvyO4q718AHYQ/mq+PNb2Tfe4xtM7aMrCVi4QxJZNgnoNyQ52prNArRS2/pT1mwg==
+X-Received: by 2002:a05:6402:453:b0:4ea:a9b0:a518 with SMTP id p19-20020a056402045300b004eaa9b0a518mr1200057edw.17.1678864270104;
+        Wed, 15 Mar 2023 00:11:10 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:940e:8615:37dc:c2bd? ([2a02:810d:15c0:828:940e:8615:37dc:c2bd])
+        by smtp.gmail.com with ESMTPSA id u14-20020a50a40e000000b004bbb691a334sm1960301edb.2.2023.03.15.00.11.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Mar 2023 00:11:09 -0700 (PDT)
+Message-ID: <19ca470e-8219-5ba9-3de6-f4560278f87b@linaro.org>
+Date:   Wed, 15 Mar 2023 08:11:07 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] p54spi: convert to devicetree
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@arndb.de>, Arnd Bergmann <arnd@kernel.org>,
+        Christian Lamparter <chunkeey@googlemail.com>,
+        Kalle Valo <kvalo@kernel.org>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux-OMAP <linux-omap@vger.kernel.org>,
+        Tony Lindgren <tony@atomide.com>,
+        Aaro Koskinen <aaro.koskinen@iki.fi>,
+        Felipe Balbi <balbi@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        =?UTF-8?Q?Beno=c3=aet_Cousson?= <bcousson@baylibre.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        linux-wireless@vger.kernel.org, Netdev <netdev@vger.kernel.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20230314163201.955689-1-arnd@kernel.org>
+ <4ac809d2-3924-3839-479f-0b4be9f18a1f@linaro.org>
+ <e19fd8bc-5944-409d-a4a1-3a3d53691634@app.fastmail.com>
+ <57c42604-38b0-61ce-2fc4-2284fbb9d708@linaro.org>
+ <afee6a67-2406-4f52-99a2-ee7eb26e587b@app.fastmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <afee6a67-2406-4f52-99a2-ee7eb26e587b@app.fastmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Link Retraining process is initiated to account for the Gen2 defect in
-the Cadence PCIe controller in J721E SoC. The errata corresponding to this
-is i2085, documented at:
-https://www.ti.com/lit/er/sprz455c/sprz455c.pdf
+On 15/03/2023 07:50, Arnd Bergmann wrote:
+> On Wed, Mar 15, 2023, at 07:32, Krzysztof Kozlowski wrote:
+>> On 14/03/2023 22:40, Arnd Bergmann wrote:
+>>
+>>>>> +
+>>>>> +  power-gpios:
+>>>>
+>>>> If this is GPIO driving some power pin, then it should be
+>>>> "powerdown-gpios" (like in /bindings/gpio/gpio-consumer-common.yaml)
+>>>
+>>> As far as I can tell, it's the opposite: the gpio turns the power on
+>>> in 'high' state. I could make it GPIO_ACTIVE_LOW and call it powerdown,
+>>> if you think that's better, but I don't think that is how it was
+>>> meant.
+>>
+>> Whether this is active low or high, I think does not matter. If this is
+>> pin responsible to control the power, then we use the name
+>> "powerdown-gpios". Effectively powerup GPIO is the same as powerdown,
+>> just reversed.
+> 
+> Ok, so should I make this GPIO_ACTIVE_LOW and adapt the patch to
+> call it powerdown in both the code and dt for consistency?
 
-The existing workaround implemented for the errata waits for the Data Link
-initialization to complete and assumes that the link retraining process
-at the Physical Layer has completed. However, it is possible that the
-Physical Layer training might be ongoing as indicated by the
-PCI_EXP_LNKSTA_LT bit in the PCI_EXP_LNKSTA register.
+If you have schematics (or datasheet) then this should reflect truth. If
+not, then judging by the old code it is something like powerdown, so yes
+- ACTIVE_LOW and reverse values in the code.
 
-Fix the existing workaround, to ensure that the Physical Layer training
-has also completed, in addition to the Data Link initialization.
-
-Fixes: 4740b969aaf5 ("PCI: cadence: Retrain Link to work around Gen2 training defect")
-Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
-Reviewed-by: Vignesh Raghavendra <vigneshr@ti.com>
----
-Changes from v1:
-1. Collect Reviewed-by tag from Vignesh Raghavendra.
-2. Rebase on next-20230315.
-
-v1:
-https://lore.kernel.org/r/20230102075656.260333-1-s-vadapalli@ti.com
-
- .../controller/cadence/pcie-cadence-host.c    | 27 +++++++++++++++++++
- 1 file changed, 27 insertions(+)
-
-diff --git a/drivers/pci/controller/cadence/pcie-cadence-host.c b/drivers/pci/controller/cadence/pcie-cadence-host.c
-index 940c7dd701d6..5b14f7ee3c79 100644
---- a/drivers/pci/controller/cadence/pcie-cadence-host.c
-+++ b/drivers/pci/controller/cadence/pcie-cadence-host.c
-@@ -12,6 +12,8 @@
- 
- #include "pcie-cadence.h"
- 
-+#define LINK_RETRAIN_TIMEOUT HZ
-+
- static u64 bar_max_size[] = {
- 	[RP_BAR0] = _ULL(128 * SZ_2G),
- 	[RP_BAR1] = SZ_2G,
-@@ -77,6 +79,27 @@ static struct pci_ops cdns_pcie_host_ops = {
- 	.write		= pci_generic_config_write,
- };
- 
-+static int cdns_pcie_host_training_complete(struct cdns_pcie *pcie)
-+{
-+	u32 pcie_cap_off = CDNS_PCIE_RP_CAP_OFFSET;
-+	unsigned long end_jiffies;
-+	u16 lnk_stat;
-+
-+	/* Wait for link training to complete. Exit after timeout. */
-+	end_jiffies = jiffies + LINK_RETRAIN_TIMEOUT;
-+	do {
-+		lnk_stat = cdns_pcie_rp_readw(pcie, pcie_cap_off + PCI_EXP_LNKSTA);
-+		if (!(lnk_stat & PCI_EXP_LNKSTA_LT))
-+			break;
-+		usleep_range(0, 1000);
-+	} while (time_before(jiffies, end_jiffies));
-+
-+	if (!(lnk_stat & PCI_EXP_LNKSTA_LT))
-+		return 0;
-+
-+	return -ETIMEDOUT;
-+}
-+
- static int cdns_pcie_host_wait_for_link(struct cdns_pcie *pcie)
- {
- 	struct device *dev = pcie->dev;
-@@ -118,6 +141,10 @@ static int cdns_pcie_retrain(struct cdns_pcie *pcie)
- 		cdns_pcie_rp_writew(pcie, pcie_cap_off + PCI_EXP_LNKCTL,
- 				    lnk_ctl);
- 
-+		ret = cdns_pcie_host_training_complete(pcie);
-+		if (ret)
-+			return ret;
-+
- 		ret = cdns_pcie_host_wait_for_link(pcie);
- 	}
- 	return ret;
--- 
-2.25.1
+Best regards,
+Krzysztof
 
