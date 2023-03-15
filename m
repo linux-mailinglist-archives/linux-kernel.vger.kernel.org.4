@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B242C6BBEDB
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 22:19:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D99036BBEDE
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 22:19:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233051AbjCOVTT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 17:19:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37808 "EHLO
+        id S233040AbjCOVTX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 17:19:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232840AbjCOVTN (ORCPT
+        with ESMTP id S233038AbjCOVTP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 17:19:13 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C67645B409;
-        Wed, 15 Mar 2023 14:18:28 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id l14so1634470pfc.11;
-        Wed, 15 Mar 2023 14:18:28 -0700 (PDT)
+        Wed, 15 Mar 2023 17:19:15 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EC3D8A42;
+        Wed, 15 Mar 2023 14:18:41 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id p6so21544701plf.0;
+        Wed, 15 Mar 2023 14:18:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678915108;
+        d=gmail.com; s=20210112; t=1678915117;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=nkthGZ8hQmB63+z0P86zjPOZhKQbhtrGN77pfJie3Dc=;
-        b=Uqw1OdDon8R7nt8R3YbuCX9D6lQLDYLF8E5VdtfTZBqeuN9deIdBkWIB8XD3w3hpIK
-         B5SGU7puKaNrb9hwaTjmhTrCrqOFTlpN9GaGmKgZgu/DmFHfCfLXBaYc1wXgcDEHCdss
-         dDxePc/1jjS3dHeaVmTW4+swoo0Vx8AaDgeLcfvr69L9HkWVTUtQJnSTopalRPLRKQPo
-         tZzBMYQjG3ZmgV/BuYjeTTW432jQ+VG5ITCtK5o5M/T0Enje+xxPSHYT8kUScVVeNJiu
-         fZFaHkXpoixaf+7liPoposwgt4kEHq+QGyl+C5N3ulexA1Bh3KzgaajVpH7yLlX5uqhS
-         lc6A==
+        bh=Xxt4LuCxlszUcIHaA9c1/MXjkoSkJcmaannzFKOFoWA=;
+        b=jw/5yZ+PC4ZhgprqPLctkKtf7zRMG/Lx3sPKN/L9gNqyC7YpTz9y65ImwIgC4BMGg0
+         vYNJwfP5+s6NWBeZoDLrpeD6+ahK62DEsQDMDRhfCPHtM1Uhxng8pavsbnGVEb7my4hr
+         AD00LAkXF9lL06WmQh3kUkpdD3wfAg05yjCrcwJKqCu0XYDNLVYi2drGoSqSduFgxkZ6
+         L8mp5GTmM/2s3MU+AI65qw5uSdZ2R5rhiTRMs85OkyEwRYdf8FPtEer6EGJjKnIUE3uU
+         8E5hbI66P5T6s879Mwu+RAsZr+4QS4m/r+HMSsF0aAgMjpF8MBC3bvJteIkrumPs0v+U
+         l8gg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678915108;
+        d=1e100.net; s=20210112; t=1678915117;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=nkthGZ8hQmB63+z0P86zjPOZhKQbhtrGN77pfJie3Dc=;
-        b=raWcM44J4q9IwCMOZSvJ86THSJSF4Yz1V0di3L3dv/BTuBs/u51PEWNjoH+yZ2Pn27
-         WWvfjiV48pWNRiCh9KCd+OzieY6u8yx8beca0DO0gk94yu4zuJ9lilGkB7yw0z3Z1Wia
-         dExCHvKPPvf1R+CQJUcGu2DG2J2u+WnxDYn7uc3askwWUyJQkjlXbNETp3Ls/wxHEXuz
-         qoZpr69vcGA4Kv3xbMF3gPpuAy8mCGDleSKlo4nwScerwc5WHpZd/KcUZvUrKC+gw7EQ
-         TTkgfq8Z2wB/1Ui2MqVgFzBOJWy6vDtSoaTraPeHkiKyk6KiCRG/dfk6KiVWPP3/QWnB
-         NCoQ==
-X-Gm-Message-State: AO0yUKUA7EZn9nKiaWJzsSjAbunNbQ8NGwuOraElAc6iujII8a+nyrHp
-        YUCvZoAdNbc8Ag9OrLGF6pM=
-X-Google-Smtp-Source: AK7set/TrV+6hliN6CQDVj/ljn2+ruF5vFyzZbvcSX7rU1S0ibmyYNFvErhIVnx3e5nGWmEe8yBPnQ==
-X-Received: by 2002:a62:8457:0:b0:625:eacf:caf9 with SMTP id k84-20020a628457000000b00625eacfcaf9mr36542pfd.7.1678915107897;
-        Wed, 15 Mar 2023 14:18:27 -0700 (PDT)
+        bh=Xxt4LuCxlszUcIHaA9c1/MXjkoSkJcmaannzFKOFoWA=;
+        b=5igOejH/LCgPTnKMtKo6D3ZnVG4m7jvI98u5MXFap3XlpwLRUMpVIAAyrif0C75sDC
+         TEamzvZXpZcFBVMKG8urLRJ13G4r6IVAcijWPnqoVtBE9EYzKq6Fx2t6QkygGGaChfth
+         Ryrn6d8C2bfvXXcrsIxvIKqAeotrTLOGH2eOxcgBSJCC58YOL5Kvkos8mfThzOmWiocZ
+         d4AOVZfsvUe09Ov+j/MFSdMQx/zFeWPQjsvSft7QfkcgMevCrpJQLYMTR5gHF7wCgzW8
+         ZureSMPnnMdu+38tGT58Uk0zI2bxANW60MaqdhrULyGdRRKjOUW0CmEmGNYry2k52b72
+         nZ8g==
+X-Gm-Message-State: AO0yUKW46pAEDuzFtR19UUnUU1xoziNL5RPaaFGoDMe9gu67kmE0Q2Mo
+        l6jC5ZEfeeU48BLzeUfpuMg=
+X-Google-Smtp-Source: AK7set+szA0j2B23AyV0+EbIwuaJOlhCmgGfUruIUC4kbYGl34aKKksLBQ0UfkLyI+4IrRUcuBg+Uw==
+X-Received: by 2002:a05:6a20:6904:b0:bf:8a97:6e48 with SMTP id q4-20020a056a20690400b000bf8a976e48mr1305164pzj.37.1678915117583;
+        Wed, 15 Mar 2023 14:18:37 -0700 (PDT)
 Received: from d.home.yangfl.dn42 ([104.28.213.199])
-        by smtp.gmail.com with ESMTPSA id i17-20020aa787d1000000b005897f5436c0sm3981695pfo.118.2023.03.15.14.18.23
+        by smtp.gmail.com with ESMTPSA id i17-20020aa787d1000000b005897f5436c0sm3981695pfo.118.2023.03.15.14.18.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Mar 2023 14:18:27 -0700 (PDT)
+        Wed, 15 Mar 2023 14:18:37 -0700 (PDT)
 From:   David Yang <mmyangfl@gmail.com>
 To:     mmyangfl@gmail.com
 Cc:     Michael Turquette <mturquette@baylibre.com>,
@@ -57,10 +57,11 @@ Cc:     Michael Turquette <mturquette@baylibre.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v4 2/4] clk: hisilicon: Extract common functions
-Date:   Thu, 16 Mar 2023 05:16:21 +0800
-Message-Id: <20230315211628.963205-3-mmyangfl@gmail.com>
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v4 3/4] dt-bindings: clock: Add Hi3798MV100 CRG
+Date:   Thu, 16 Mar 2023 05:16:22 +0800
+Message-Id: <20230315211628.963205-4-mmyangfl@gmail.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230315211628.963205-1-mmyangfl@gmail.com>
 References: <20230315211628.963205-1-mmyangfl@gmail.com>
@@ -76,292 +77,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To be reused with other Hi3798 series SoCs.
+Add CRG bindings for Hi3798MV100 SoC. CRG (Clock and Reset Generator)
+module generates clock and reset signals used by other module blocks on
+SoC.
 
 Signed-off-by: David Yang <mmyangfl@gmail.com>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- drivers/clk/hisilicon/crg-hi3798.c | 233 ++++++++++++++++-------------
- 1 file changed, 131 insertions(+), 102 deletions(-)
+ .../devicetree/bindings/clock/hisi-crg.txt          |  2 ++
+ include/dt-bindings/clock/histb-clock.h             | 13 +++++++++++++
+ 2 files changed, 15 insertions(+)
 
-diff --git a/drivers/clk/hisilicon/crg-hi3798.c b/drivers/clk/hisilicon/crg-hi3798.c
-index 7e9507de2..2f8f14e73 100644
---- a/drivers/clk/hisilicon/crg-hi3798.c
-+++ b/drivers/clk/hisilicon/crg-hi3798.c
-@@ -59,6 +59,119 @@ static const struct hisi_fixed_rate_clock hi3798_fixed_rate_clks[] = {
- 	{ HI3798_FIXED_250M, "250m", NULL, 0, 250000000, },
- };
+diff --git a/Documentation/devicetree/bindings/clock/hisi-crg.txt b/Documentation/devicetree/bindings/clock/hisi-crg.txt
+index cc60b3d42..972c038c8 100644
+--- a/Documentation/devicetree/bindings/clock/hisi-crg.txt
++++ b/Documentation/devicetree/bindings/clock/hisi-crg.txt
+@@ -13,6 +13,8 @@ Required Properties:
+   - "hisilicon,hi3516cv300-crg"
+   - "hisilicon,hi3516cv300-sysctrl"
+   - "hisilicon,hi3519-crg"
++  - "hisilicon,hi3798mv100-crg"
++  - "hisilicon,hi3798mv100-sysctrl"
+   - "hisilicon,hi3798cv200-crg"
+   - "hisilicon,hi3798cv200-sysctrl"
  
-+struct hi3798_clks {
-+	const struct hisi_gate_clock *gate_clks;
-+	int gate_clks_nums;
-+	const struct hisi_mux_clock *mux_clks;
-+	int mux_clks_nums;
-+	const struct hisi_phase_clock *phase_clks;
-+	int phase_clks_nums;
-+};
-+
-+static struct hisi_clock_data *hi3798_clk_register(
-+		struct platform_device *pdev, const struct hi3798_clks *clks)
-+{
-+	struct hisi_clock_data *clk_data;
-+	int ret;
-+
-+	clk_data = hisi_clk_alloc(pdev, HI3798_CRG_NR_CLKS);
-+	if (!clk_data)
-+		return ERR_PTR(-ENOMEM);
-+
-+	/* hisi_phase_clock is resource managed */
-+	ret = hisi_clk_register_phase(&pdev->dev, clks->phase_clks,
-+				      clks->phase_clks_nums, clk_data);
-+	if (ret)
-+		return ERR_PTR(ret);
-+
-+	ret = hisi_clk_register_fixed_rate(hi3798_fixed_rate_clks,
-+					   ARRAY_SIZE(hi3798_fixed_rate_clks),
-+					   clk_data);
-+	if (ret)
-+		return ERR_PTR(ret);
-+
-+	ret = hisi_clk_register_mux(clks->mux_clks, clks->mux_clks_nums, clk_data);
-+	if (ret)
-+		goto unregister_fixed_rate;
-+
-+	ret = hisi_clk_register_gate(clks->gate_clks, clks->gate_clks_nums, clk_data);
-+	if (ret)
-+		goto unregister_mux;
-+
-+	ret = of_clk_add_provider(pdev->dev.of_node,
-+			of_clk_src_onecell_get, &clk_data->clk_data);
-+	if (ret)
-+		goto unregister_gate;
-+
-+	return clk_data;
-+
-+unregister_gate:
-+	hisi_clk_unregister_gate(clks->gate_clks, clks->gate_clks_nums, clk_data);
-+unregister_mux:
-+	hisi_clk_unregister_mux(clks->mux_clks, clks->mux_clks_nums, clk_data);
-+unregister_fixed_rate:
-+	hisi_clk_unregister_fixed_rate(hi3798_fixed_rate_clks,
-+				       ARRAY_SIZE(hi3798_fixed_rate_clks),
-+				       clk_data);
-+	return ERR_PTR(ret);
-+}
-+
-+static void hi3798_clk_unregister(
-+		struct platform_device *pdev, const struct hi3798_clks *clks)
-+{
-+	struct hisi_crg_dev *crg = platform_get_drvdata(pdev);
-+
-+	of_clk_del_provider(pdev->dev.of_node);
-+
-+	hisi_clk_unregister_gate(clks->gate_clks, clks->gate_clks_nums, crg->clk_data);
-+	hisi_clk_unregister_mux(clks->mux_clks, clks->mux_clks_nums, crg->clk_data);
-+	hisi_clk_unregister_fixed_rate(hi3798_fixed_rate_clks,
-+				       ARRAY_SIZE(hi3798_fixed_rate_clks),
-+				       crg->clk_data);
-+}
-+
-+/* hi3798 sysctrl CRG */
-+
-+#define HI3798_SYSCTRL_NR_CLKS 16
-+
-+static struct hisi_clock_data *hi3798_sysctrl_clk_register(
-+		struct platform_device *pdev, const struct hi3798_clks *clks)
-+{
-+	struct hisi_clock_data *clk_data;
-+	int ret;
-+
-+	clk_data = hisi_clk_alloc(pdev, HI3798_SYSCTRL_NR_CLKS);
-+	if (!clk_data)
-+		return ERR_PTR(-ENOMEM);
-+
-+	ret = hisi_clk_register_gate(clks->gate_clks, clks->gate_clks_nums, clk_data);
-+	if (ret)
-+		return ERR_PTR(ret);
-+
-+	ret = of_clk_add_provider(pdev->dev.of_node,
-+			of_clk_src_onecell_get, &clk_data->clk_data);
-+	if (ret)
-+		goto unregister_gate;
-+
-+	return clk_data;
-+
-+unregister_gate:
-+	hisi_clk_unregister_gate(clks->gate_clks, clks->gate_clks_nums, clk_data);
-+	return ERR_PTR(ret);
-+}
-+
-+static void hi3798_sysctrl_clk_unregister(
-+		struct platform_device *pdev, const struct hi3798_clks *clks)
-+{
-+	struct hisi_crg_dev *crg = platform_get_drvdata(pdev);
-+
-+	of_clk_del_provider(pdev->dev.of_node);
-+
-+	hisi_clk_unregister_gate(clks->gate_clks, clks->gate_clks_nums, crg->clk_data);
-+}
-+
-+/* hi3798CV200 */
-+
- static const char *const hi3798cv200_mmc_mux_p[] = {
- 		"100m", "50m", "25m", "200m", "150m" };
- static u32 hi3798cv200_mmc_mux_table[] = {0, 1, 2, 3, 6};
-@@ -194,79 +307,24 @@ static const struct hisi_gate_clock hi3798cv200_gate_clks[] = {
- 		CLK_SET_RATE_PARENT, 0xb0, 18, 0 },
- };
+diff --git a/include/dt-bindings/clock/histb-clock.h b/include/dt-bindings/clock/histb-clock.h
+index e64e5770a..704770ac8 100644
+--- a/include/dt-bindings/clock/histb-clock.h
++++ b/include/dt-bindings/clock/histb-clock.h
+@@ -58,6 +58,19 @@
+ #define HISTB_USB3_UTMI_CLK1		48
+ #define HISTB_USB3_PIPE_CLK1		49
+ #define HISTB_USB3_SUSPEND_CLK1		50
++#define HISTB_USB2_UTMI_CLK1		51
++#define HISTB_USB2_2_BUS_CLK		52
++#define HISTB_USB2_2_PHY_CLK		53
++#define HISTB_USB2_2_UTMI_CLK		54
++#define HISTB_USB2_2_UTMI_CLK1		55
++#define HISTB_USB2_2_12M_CLK		56
++#define HISTB_USB2_2_48M_CLK		57
++#define HISTB_USB2_2_OTG_UTMI_CLK	58
++#define HISTB_USB2_2_PHY1_REF_CLK	59
++#define HISTB_USB2_2_PHY2_REF_CLK	60
++#define HISTB_FEPHY_CLK			61
++#define HISTB_GPU_BUS_CLK		62
++#define HISTB_GPU_GP_CLK		63
  
-+static const struct hi3798_clks hi3798cv200_crg_clks = {
-+	.gate_clks = hi3798cv200_gate_clks,
-+	.gate_clks_nums = ARRAY_SIZE(hi3798cv200_gate_clks),
-+	.mux_clks = hi3798cv200_mux_clks,
-+	.mux_clks_nums = ARRAY_SIZE(hi3798cv200_mux_clks),
-+	.phase_clks = hi3798cv200_phase_clks,
-+	.phase_clks_nums = ARRAY_SIZE(hi3798cv200_phase_clks),
-+};
-+
- static struct hisi_clock_data *hi3798cv200_clk_register(
- 				struct platform_device *pdev)
- {
--	struct hisi_clock_data *clk_data;
--	int ret;
--
--	clk_data = hisi_clk_alloc(pdev, HI3798_CRG_NR_CLKS);
--	if (!clk_data)
--		return ERR_PTR(-ENOMEM);
--
--	/* hisi_phase_clock is resource managed */
--	ret = hisi_clk_register_phase(&pdev->dev,
--				hi3798cv200_phase_clks,
--				ARRAY_SIZE(hi3798cv200_phase_clks),
--				clk_data);
--	if (ret)
--		return ERR_PTR(ret);
--
--	ret = hisi_clk_register_fixed_rate(hi3798_fixed_rate_clks,
--				     ARRAY_SIZE(hi3798_fixed_rate_clks),
--				     clk_data);
--	if (ret)
--		return ERR_PTR(ret);
--
--	ret = hisi_clk_register_mux(hi3798cv200_mux_clks,
--				ARRAY_SIZE(hi3798cv200_mux_clks),
--				clk_data);
--	if (ret)
--		goto unregister_fixed_rate;
--
--	ret = hisi_clk_register_gate(hi3798cv200_gate_clks,
--				ARRAY_SIZE(hi3798cv200_gate_clks),
--				clk_data);
--	if (ret)
--		goto unregister_mux;
--
--	ret = of_clk_add_provider(pdev->dev.of_node,
--			of_clk_src_onecell_get, &clk_data->clk_data);
--	if (ret)
--		goto unregister_gate;
--
--	return clk_data;
--
--unregister_gate:
--	hisi_clk_unregister_gate(hi3798cv200_gate_clks,
--				ARRAY_SIZE(hi3798cv200_gate_clks),
--				clk_data);
--unregister_mux:
--	hisi_clk_unregister_mux(hi3798cv200_mux_clks,
--				ARRAY_SIZE(hi3798cv200_mux_clks),
--				clk_data);
--unregister_fixed_rate:
--	hisi_clk_unregister_fixed_rate(hi3798_fixed_rate_clks,
--				ARRAY_SIZE(hi3798_fixed_rate_clks),
--				clk_data);
--	return ERR_PTR(ret);
-+	return hi3798_clk_register(pdev, &hi3798cv200_crg_clks);
- }
- 
- static void hi3798cv200_clk_unregister(struct platform_device *pdev)
- {
--	struct hisi_crg_dev *crg = platform_get_drvdata(pdev);
--
--	of_clk_del_provider(pdev->dev.of_node);
--
--	hisi_clk_unregister_gate(hi3798cv200_gate_clks,
--				ARRAY_SIZE(hi3798cv200_gate_clks),
--				crg->clk_data);
--	hisi_clk_unregister_mux(hi3798cv200_mux_clks,
--				ARRAY_SIZE(hi3798cv200_mux_clks),
--				crg->clk_data);
--	hisi_clk_unregister_fixed_rate(hi3798_fixed_rate_clks,
--				ARRAY_SIZE(hi3798_fixed_rate_clks),
--				crg->clk_data);
-+	hi3798_clk_unregister(pdev, &hi3798cv200_crg_clks);
- }
- 
- static const struct hisi_crg_funcs hi3798cv200_crg_funcs = {
-@@ -274,10 +332,6 @@ static const struct hisi_crg_funcs hi3798cv200_crg_funcs = {
- 	.unregister_clks = hi3798cv200_clk_unregister,
- };
- 
--/* hi3798 sysctrl CRG */
--
--#define HI3798_SYSCTRL_NR_CLKS 16
--
- static const struct hisi_gate_clock hi3798cv200_sysctrl_gate_clks[] = {
- 	{ HISTB_IR_CLK, "clk_ir", "24m",
- 		CLK_SET_RATE_PARENT, 0x48, 4, 0, },
-@@ -287,45 +341,20 @@ static const struct hisi_gate_clock hi3798cv200_sysctrl_gate_clks[] = {
- 		CLK_SET_RATE_PARENT, 0x48, 10, 0, },
- };
- 
-+static const struct hi3798_clks hi3798cv200_sysctrl_clks = {
-+	.gate_clks = hi3798cv200_sysctrl_gate_clks,
-+	.gate_clks_nums = ARRAY_SIZE(hi3798cv200_sysctrl_gate_clks),
-+};
-+
- static struct hisi_clock_data *hi3798cv200_sysctrl_clk_register(
- 					struct platform_device *pdev)
- {
--	struct hisi_clock_data *clk_data;
--	int ret;
--
--	clk_data = hisi_clk_alloc(pdev, HI3798_SYSCTRL_NR_CLKS);
--	if (!clk_data)
--		return ERR_PTR(-ENOMEM);
--
--	ret = hisi_clk_register_gate(hi3798cv200_sysctrl_gate_clks,
--				ARRAY_SIZE(hi3798cv200_sysctrl_gate_clks),
--				clk_data);
--	if (ret)
--		return ERR_PTR(ret);
--
--	ret = of_clk_add_provider(pdev->dev.of_node,
--			of_clk_src_onecell_get, &clk_data->clk_data);
--	if (ret)
--		goto unregister_gate;
--
--	return clk_data;
--
--unregister_gate:
--	hisi_clk_unregister_gate(hi3798cv200_sysctrl_gate_clks,
--				ARRAY_SIZE(hi3798cv200_sysctrl_gate_clks),
--				clk_data);
--	return ERR_PTR(ret);
-+	return hi3798_sysctrl_clk_register(pdev, &hi3798cv200_sysctrl_clks);
- }
- 
- static void hi3798cv200_sysctrl_clk_unregister(struct platform_device *pdev)
- {
--	struct hisi_crg_dev *crg = platform_get_drvdata(pdev);
--
--	of_clk_del_provider(pdev->dev.of_node);
--
--	hisi_clk_unregister_gate(hi3798cv200_sysctrl_gate_clks,
--				ARRAY_SIZE(hi3798cv200_sysctrl_gate_clks),
--				crg->clk_data);
-+	hi3798_sysctrl_clk_unregister(pdev, &hi3798cv200_sysctrl_clks);
- }
- 
- static const struct hisi_crg_funcs hi3798cv200_sysctrl_funcs = {
+ /* clocks provided by mcu CRG */
+ #define HISTB_MCE_CLK			1
 -- 
 2.39.2
 
