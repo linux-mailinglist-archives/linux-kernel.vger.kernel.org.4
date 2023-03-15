@@ -2,230 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0A2C6BA423
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 01:40:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C2EB6BA41A
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 01:39:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230169AbjCOAkD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 20:40:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39534 "EHLO
+        id S229769AbjCOAju (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 20:39:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230018AbjCOAjz (ORCPT
+        with ESMTP id S229487AbjCOAjs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 20:39:55 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7F5A5614E;
-        Tue, 14 Mar 2023 17:39:51 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32F0S8Mv004061;
-        Wed, 15 Mar 2023 00:39:46 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references; s=qcppdkim1;
- bh=74OtDDXmuBHNX13+OI7QCQcfaElb4rop3VSjcF/eEJE=;
- b=eXeTybrhsVqfmw+N19xnlaS0dKfpm2+P4lUYaO8iBed1h1KNv0iA2lb+PFkwqlM4mNWJ
- 7BzjUd9p5wprnw1CVKJRVEfvf5sKpMjrs2JHQRtTe+v/Y+O4IBc3Q2JnPKw1jIlrQtyX
- vUtsVZQktTIYWrZAm9uuJjOXC4yMt+/2+5P+U8DqK3vwXFD8iExVFRhvMFSd8MYS4sS1
- cprigp13VBZnAQQZjKy9nGB7VyE15MvFwsOvhZYoGQXXGp26bLgLF/X9JgFYDFR+qMeg
- yMxph86ZQq+KOTaTUDYK0Pr6lwkFd4x9yLyz8IyJfE3bdO5c8F8g4OaIuGHziTurJfvN Zw== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pb2by843f-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 15 Mar 2023 00:39:46 +0000
-Received: from pps.filterd (NALASPPMTA05.qualcomm.com [127.0.0.1])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 32F0djOD016568;
-        Wed, 15 Mar 2023 00:39:45 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by NALASPPMTA05.qualcomm.com (PPS) with ESMTP id 3p8jqkvxbd-1;
-        Wed, 15 Mar 2023 00:39:45 +0000
-Received: from NALASPPMTA05.qualcomm.com (NALASPPMTA05.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32F0dj85016563;
-        Wed, 15 Mar 2023 00:39:45 GMT
-Received: from hu-devc-lv-c.qualcomm.com (hu-eserrao-lv.qualcomm.com [10.47.235.164])
-        by NALASPPMTA05.qualcomm.com (PPS) with ESMTP id 32F0dj4S016561;
-        Wed, 15 Mar 2023 00:39:45 +0000
-Received: by hu-devc-lv-c.qualcomm.com (Postfix, from userid 464172)
-        id E28E020E5E; Tue, 14 Mar 2023 17:39:44 -0700 (PDT)
-From:   Elson Roy Serrao <quic_eserrao@quicinc.com>
-To:     gregkh@linuxfoundation.org, Thinh.Nguyen@synopsys.com,
-        balbi@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        quic_wcheng@quicinc.com, quic_jackp@quicinc.com,
-        Elson Roy Serrao <quic_eserrao@quicinc.com>
-Subject: [PATCH v9 4/5] usb: dwc3: Add function suspend and function wakeup support
+        Tue, 14 Mar 2023 20:39:48 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E86755054;
+        Tue, 14 Mar 2023 17:39:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C30E5B81C34;
+        Wed, 15 Mar 2023 00:39:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D80FC433EF;
+        Wed, 15 Mar 2023 00:39:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678840784;
+        bh=QbdQK8fuMA0AQYd4R9yTEMkNUpAWMytrnBo8zpO8IkY=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=cNJQI8MZTYS6D+HbzEhZBJGz3I6HPnt7JP2A430h3R2uz9YzZongqBIt4o/p4m8wO
+         fR6C26Ra7Psqgz85ywWQiRTUi07GxXAsM4CkW632wLAbwEl56rKwSpr2jVl81OGGDF
+         9r0YCwRSDczTikGIeE7Dsna3K2zOk8A3LeMu/4rJw4wo0jDPKjAKfziflqukZtkP6O
+         ZR6wyDZd5Bs0pc1HZ0GoOE/HvYTMggXRInhr+L7mREbxPTxlnKbPvGbwcHQxDQqb6s
+         P1OVV4fKChhfhD6+bXLVrEQ7KCj3cOHy+QgeELrDcPUibCHBYzupr1WCknfb0wipc4
+         0rIKdfyea3eiA==
+Message-ID: <21d82a853f1a8be64349b0f94e8429cb.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20230310144701.1541504-1-robh@kernel.org>
+References: <20230310144701.1541504-1-robh@kernel.org>
+Subject: Re: [PATCH] clk: Use of_property_present() for testing DT property presence
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+To:     Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Orson Zhai <orsonzhai@gmail.com>, Rob Herring <robh@kernel.org>
 Date:   Tue, 14 Mar 2023 17:39:42 -0700
-Message-Id: <1678840783-15472-5-git-send-email-quic_eserrao@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1678840783-15472-1-git-send-email-quic_eserrao@quicinc.com>
-References: <1678840783-15472-1-git-send-email-quic_eserrao@quicinc.com>
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: AymK20tOyxm0_13npZTsvmwiDADxBLd8
-X-Proofpoint-GUID: AymK20tOyxm0_13npZTsvmwiDADxBLd8
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-14_16,2023-03-14_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- priorityscore=1501 suspectscore=0 adultscore=0 mlxlogscore=938 bulkscore=0
- spamscore=0 lowpriorityscore=0 impostorscore=0 clxscore=1015 mlxscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2302240000 definitions=main-2303150004
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: alot/0.10
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-USB host sends function suspend and function resume notifications to
-the interface through SET_FEATURE/CLEAR_FEATURE setup packets.
-Add support to handle these packets by delegating the requests to
-composite layer. Also add support to handle function wake notification
-requests to exit from function suspend state.
+Quoting Rob Herring (2023-03-10 06:47:01)
+> It is preferred to use typed property access functions (i.e.
+> of_property_read_<type> functions) rather than low-level
+> of_get_property/of_find_property functions for reading properties. As
+> part of this, convert of_get_property/of_find_property calls to the
+> recently added of_property_present() helper when we just want to test
+> for presence of a property and nothing more.
+>=20
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
 
-Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Signed-off-by: Elson Roy Serrao <quic_eserrao@quicinc.com>
----
- drivers/usb/dwc3/core.h   |  3 +++
- drivers/usb/dwc3/debug.h  |  2 ++
- drivers/usb/dwc3/ep0.c    | 12 ++++--------
- drivers/usb/dwc3/gadget.c | 42 ++++++++++++++++++++++++++++++++++++++++++
- 4 files changed, 51 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-index 416e0ef..3412ebb 100644
---- a/drivers/usb/dwc3/core.h
-+++ b/drivers/usb/dwc3/core.h
-@@ -527,6 +527,7 @@
- #define DWC3_DGCMD_SET_ENDPOINT_NRDY	0x0c
- #define DWC3_DGCMD_SET_ENDPOINT_PRIME	0x0d
- #define DWC3_DGCMD_RUN_SOC_BUS_LOOPBACK	0x10
-+#define DWC3_DGCMD_DEV_NOTIFICATION	0x07
- 
- #define DWC3_DGCMD_STATUS(n)		(((n) >> 12) & 0x0F)
- #define DWC3_DGCMD_CMDACT		BIT(10)
-@@ -539,6 +540,8 @@
- #define DWC3_DGCMDPAR_TX_FIFO			BIT(5)
- #define DWC3_DGCMDPAR_LOOPBACK_DIS		(0 << 0)
- #define DWC3_DGCMDPAR_LOOPBACK_ENA		BIT(0)
-+#define DWC3_DGCMDPAR_DN_FUNC_WAKE		BIT(0)
-+#define DWC3_DGCMDPAR_INTF_SEL(n)		((n) << 4)
- 
- /* Device Endpoint Command Register */
- #define DWC3_DEPCMD_PARAM_SHIFT		16
-diff --git a/drivers/usb/dwc3/debug.h b/drivers/usb/dwc3/debug.h
-index 8bb2c9e..09d7038 100644
---- a/drivers/usb/dwc3/debug.h
-+++ b/drivers/usb/dwc3/debug.h
-@@ -72,6 +72,8 @@ dwc3_gadget_generic_cmd_string(u8 cmd)
- 		return "Set Endpoint Prime";
- 	case DWC3_DGCMD_RUN_SOC_BUS_LOOPBACK:
- 		return "Run SoC Bus Loopback Test";
-+	case DWC3_DGCMD_DEV_NOTIFICATION:
-+		return "Device Notification";
- 	default:
- 		return "UNKNOWN";
- 	}
-diff --git a/drivers/usb/dwc3/ep0.c b/drivers/usb/dwc3/ep0.c
-index 8aa14a5..953b752 100644
---- a/drivers/usb/dwc3/ep0.c
-+++ b/drivers/usb/dwc3/ep0.c
-@@ -30,6 +30,8 @@
- static void __dwc3_ep0_do_control_status(struct dwc3 *dwc, struct dwc3_ep *dep);
- static void __dwc3_ep0_do_control_data(struct dwc3 *dwc,
- 		struct dwc3_ep *dep, struct dwc3_request *req);
-+static int dwc3_ep0_delegate_req(struct dwc3 *dwc,
-+				 struct usb_ctrlrequest *ctrl);
- 
- static void dwc3_ep0_prepare_one_trb(struct dwc3_ep *dep,
- 		dma_addr_t buf_dma, u32 len, u32 type, bool chain)
-@@ -368,7 +370,7 @@ static int dwc3_ep0_handle_status(struct dwc3 *dwc,
- 		 * Function Remote Wake Capable	D0
- 		 * Function Remote Wakeup	D1
- 		 */
--		break;
-+		return dwc3_ep0_delegate_req(dwc, ctrl);
- 
- 	case USB_RECIP_ENDPOINT:
- 		dep = dwc3_wIndex_to_dep(dwc, ctrl->wIndex);
-@@ -517,13 +519,7 @@ static int dwc3_ep0_handle_intf(struct dwc3 *dwc,
- 
- 	switch (wValue) {
- 	case USB_INTRF_FUNC_SUSPEND:
--		/*
--		 * REVISIT: Ideally we would enable some low power mode here,
--		 * however it's unclear what we should be doing here.
--		 *
--		 * For now, we're not doing anything, just making sure we return
--		 * 0 so USB Command Verifier tests pass without any errors.
--		 */
-+		ret = dwc3_ep0_delegate_req(dwc, ctrl);
- 		break;
- 	default:
- 		ret = -EINVAL;
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index f37f949..b72d5c8 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -2391,6 +2391,47 @@ static int dwc3_gadget_wakeup(struct usb_gadget *g)
- 	return ret;
- }
- 
-+static void dwc3_resume_gadget(struct dwc3 *dwc);
-+
-+static int dwc3_gadget_func_wakeup(struct usb_gadget *g, int intf_id)
-+{
-+	struct  dwc3		*dwc = gadget_to_dwc(g);
-+	unsigned long		flags;
-+	int			ret;
-+	int			link_state;
-+
-+	if (!dwc->wakeup_configured) {
-+		dev_err(dwc->dev, "remote wakeup not configured\n");
-+		return -EINVAL;
-+	}
-+
-+	spin_lock_irqsave(&dwc->lock, flags);
-+	/*
-+	 * If the link is in U3, signal for remote wakeup and wait for the
-+	 * link to transition to U0 before sending device notification.
-+	 */
-+	link_state = dwc3_gadget_get_link_state(dwc);
-+	if (link_state == DWC3_LINK_STATE_U3) {
-+		ret = __dwc3_gadget_wakeup(dwc, false);
-+		if (ret) {
-+			spin_unlock_irqrestore(&dwc->lock, flags);
-+			return -EINVAL;
-+		}
-+		dwc3_resume_gadget(dwc);
-+		dwc->link_state = DWC3_LINK_STATE_U0;
-+	}
-+
-+	ret = dwc3_send_gadget_generic_command(dwc, DWC3_DGCMD_DEV_NOTIFICATION,
-+					       DWC3_DGCMDPAR_DN_FUNC_WAKE |
-+					       DWC3_DGCMDPAR_INTF_SEL(intf_id));
-+	if (ret)
-+		dev_err(dwc->dev, "function remote wakeup failed, ret:%d\n", ret);
-+
-+	spin_unlock_irqrestore(&dwc->lock, flags);
-+
-+	return ret;
-+}
-+
- static int dwc3_gadget_set_remote_wakeup(struct usb_gadget *g, int set)
- {
- 	struct dwc3		*dwc = gadget_to_dwc(g);
-@@ -3028,6 +3069,7 @@ static void dwc3_gadget_async_callbacks(struct usb_gadget *g, bool enable)
- static const struct usb_gadget_ops dwc3_gadget_ops = {
- 	.get_frame		= dwc3_gadget_get_frame,
- 	.wakeup			= dwc3_gadget_wakeup,
-+	.func_wakeup		= dwc3_gadget_func_wakeup,
- 	.set_remote_wakeup	= dwc3_gadget_set_remote_wakeup,
- 	.set_selfpowered	= dwc3_gadget_set_selfpowered,
- 	.pullup			= dwc3_gadget_pullup,
--- 
-2.7.4
-
+Applied to clk-next
