@@ -2,170 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC6336BB52C
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 14:51:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98A226BB52F
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 14:51:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232454AbjCONvK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 09:51:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46788 "EHLO
+        id S232329AbjCONvd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 09:51:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232329AbjCONvH (ORCPT
+        with ESMTP id S231979AbjCONva (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 09:51:07 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F7F81C33C
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 06:51:01 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id o8so4427195lfo.0
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 06:51:00 -0700 (PDT)
+        Wed, 15 Mar 2023 09:51:30 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E16391B54D;
+        Wed, 15 Mar 2023 06:51:23 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id d36so24392832lfv.8;
+        Wed, 15 Mar 2023 06:51:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678888259;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=N6h4ERbssRm4LMMhoCr7ocyGUGSfvn0Dwi4wvvYbcJ8=;
-        b=tUrMhx/EWygjkZ9/hDSlhoGrmjiQ++CTz7r0V0DOGzdDbI8IPqCBuv9E6jTMw6zXjH
-         y+ILtfGZgeiehKRbPqJos+7ob+xi2Bb9Q+3sIRtkLZGjbo0ohLtLIAcIu5xnl1Qv4mTs
-         Uv3kD2R4peNCUw8dZOZr7xeIZ0pwyqRg20FYUxoNVcrnCPxtIaQm63Y2pBC4L6YYKWu9
-         /Q+LNdC4HsUjMUtcSfZSehUw27dV0XpyhIkLgbBuGQMIFrSZztWtIRqYHOwmS+bGb9XE
-         DK/19zKI81E76XOyDXXwHamkYVc1garQPgFV8GVfzCq0Eehv2foHdd4v39eR97uwXPSD
-         FG3g==
+        d=gmail.com; s=20210112; t=1678888282;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/LPqzmTzeR64UgWjKdiepqf9072TIZPdOTEG0IRI2qM=;
+        b=KW8A7CP/ivTmXI71sqXwlrPI6QQ0bjZkFCk79qvwLFGrCnfOoV6IDva97eDzyzwUh1
+         sAMDAwrkuV8ByrzsRbS/dCgbWBdQUTFpZ3fJrbhCHQWflqjS0u9pmCcXVDExu8CU+yC8
+         3XrZ/GhiVqmWT5PX6lU8Qam4jpPy52stRfl4UBXkOTZe6TyUOisqeZIdkTBw35ESC/Pk
+         oBmQrA4huxgXFMusp8ggXyjabGhOdatFlZRHWOW/aAsRX9a6Hp+qf+OhNULFisy+VQUu
+         FjzhutNu8kHI6+56QZZZZNVoAZ+1t/J+IvA63tPD/+RJPHOFR6deL91n2gs/TZ0loSmF
+         siVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678888259;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=N6h4ERbssRm4LMMhoCr7ocyGUGSfvn0Dwi4wvvYbcJ8=;
-        b=Fi+iNdTyqVfKBNRbq3e+bTKh9z15Cy00O6Bx41+cvfHFnyu3YcQ/XVXV9aH1uFiFFc
-         SFkWRLOrpr+Ir/wFJcvCyHej7+/NGb+liw516nqBXMqEjVofHAUItCVaOYnGADoNqdGr
-         oBJyZyFwn7WUoqzqQGDfVxl3DDDn2rgAXXEb3z9DEdLbPekfOV3o5geziySGXIoS7M59
-         2irjjbWEQBrCvofCqLL0w+cSWisEAjM9Z6oLwWXJ+9Jwu+biijIGwsE2Fo5hviEL1TXA
-         H0jJlK1jkFznKHeerTPm4PXM+3iqQcAmyupku9zevDZzvZ2GsBPC7SLuGL5A9ashZkZa
-         tUmQ==
-X-Gm-Message-State: AO0yUKVtwUgwnQP4ysjynWTOy1gPjx5rqoeB3weXnsKwD24jXEP+Xr3o
-        rjVSeQMPrJxHQ7HmFZd8kRBQ+PCpeQI4tHWpcFcWnw==
-X-Google-Smtp-Source: AK7set+NNTkYt2/d+MgEjUvarKLQKaS8YVNi6mXQadcgIPQNNFZDexhH24VlBFoWVdIbuy/oPMYT5XonhlGPvPlh0TI=
-X-Received: by 2002:ac2:48ac:0:b0:4db:b4:c8d7 with SMTP id u12-20020ac248ac000000b004db00b4c8d7mr2010159lfg.2.1678888259137;
- Wed, 15 Mar 2023 06:50:59 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1678888282;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/LPqzmTzeR64UgWjKdiepqf9072TIZPdOTEG0IRI2qM=;
+        b=nqCdcJ1L5HHeQnGBFdYskeaum9Cx1Al/hncsV42YItd2vlrmxHmKrSX4TTJnD4OOK7
+         16Zxsz3NsqGx+Zh6iQS4/vEPqD9DLOOw/u4MA+KOauOU7aJYmE3Wts9yp9O/JzjdRRbc
+         0btBT2Jjtxi6N7efkUqAse2IsV5IT+lBzMpAJ2aRJUQh24VdwKWq0iM56U63e0SnkLak
+         ZH6xbBWKhwbS1CModrr9SQcbTrFoYv/N9L/Fxb1zrX3Mz2+/0hK2d2MO58J2FxgVjQNn
+         HrUZ6jbFVFpFBjSsQveQILIXy7QEduM4m44REH/ZCDiuq3VMt+KiRVYfUls2IO5sWI4s
+         AlWg==
+X-Gm-Message-State: AO0yUKXNtH9+YVx2eMOyaoXffEA/M+AuvRmzHP1Rl0hOzWzy1lZP1030
+        ykko7hAA6MoHURzS5apNNiM=
+X-Google-Smtp-Source: AK7set8tgh0+uDN6B3KQerWnMOpSS8b5YgkQbTwrdGp4i+L3fO1DABQN5i3lRHWdlEbI1RIx+cVjHQ==
+X-Received: by 2002:ac2:46c7:0:b0:4e8:5392:492c with SMTP id p7-20020ac246c7000000b004e85392492cmr1456797lfo.43.1678888281632;
+        Wed, 15 Mar 2023 06:51:21 -0700 (PDT)
+Received: from ruslan.. ([178.176.76.115])
+        by smtp.gmail.com with ESMTPSA id b5-20020ac25625000000b004e84a8c3d86sm832460lff.42.2023.03.15.06.51.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Mar 2023 06:51:21 -0700 (PDT)
+From:   Kasumov Ruslan <xhxgldhlpfy@gmail.com>
+To:     Andy Gross <agross@kernel.org>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Andi Shyti <andi.shyti@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org,
+        Kasumov Ruslan <s02210418@gse.cs.msu.ru>
+Subject: [PATCH v2] iio: adc: qcom-pm8xxx-xoadc: Remove useless condition in pm8xxx_xoadc_parse_channel()
+Date:   Wed, 15 Mar 2023 16:51:14 +0300
+Message-Id: <20230315135114.22684-1-xhxgldhlpfy@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230314193709.15208-1-xhxgldhlpfy@gmail.com>
+References: 
 MIME-Version: 1.0
-References: <20221214194056.161492-1-michael.roth@amd.com> <20221214194056.161492-39-michael.roth@amd.com>
-In-Reply-To: <20221214194056.161492-39-michael.roth@amd.com>
-From:   Peter Gonda <pgonda@google.com>
-Date:   Wed, 15 Mar 2023 07:50:47 -0600
-Message-ID: <CAMkAt6oYxP0S7WQmVx-z+jjpjPDZQSKdEM5pvXKU3kao4WNjgg@mail.gmail.com>
-Subject: Re: [PATCH RFC v7 38/64] KVM: SVM: Add KVM_SEV_SNP_LAUNCH_START command
-To:     Michael Roth <michael.roth@amd.com>
-Cc:     kvm@vger.kernel.org, linux-coco@lists.linux.dev,
-        linux-mm@kvack.org, linux-crypto@vger.kernel.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
-        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
-        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
-        luto@kernel.org, dave.hansen@linux.intel.com, slp@redhat.com,
-        peterz@infradead.org, srinivas.pandruvada@linux.intel.com,
-        rientjes@google.com, dovmurik@linux.ibm.com, tobin@ibm.com,
-        bp@alien8.de, vbabka@suse.cz, kirill@shutemov.name,
-        ak@linux.intel.com, tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
-        dgilbert@redhat.com, jarkko@kernel.org, ashish.kalra@amd.com,
-        harald@profian.com, Brijesh Singh <brijesh.singh@amd.com>,
-        Josh Eads <josheads@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->
-> +/*
-> + * The guest context contains all the information, keys and metadata
-> + * associated with the guest that the firmware tracks to implement SEV
-> + * and SNP features. The firmware stores the guest context in hypervisor
-> + * provide page via the SNP_GCTX_CREATE command.
-> + */
-> +static void *snp_context_create(struct kvm *kvm, struct kvm_sev_cmd *argp)
-> +{
-> +       struct sev_data_snp_addr data = {};
-> +       void *context;
-> +       int rc;
-> +
-> +       /* Allocate memory for context page */
-> +       context = snp_alloc_firmware_page(GFP_KERNEL_ACCOUNT);
-> +       if (!context)
-> +               return NULL;
-> +
-> +       data.gctx_paddr = __psp_pa(context);
-> +       rc = __sev_issue_cmd(argp->sev_fd, SEV_CMD_SNP_GCTX_CREATE, &data, &argp->error);
-> +       if (rc) {
-> +               snp_free_firmware_page(context);
-> +               return NULL;
-> +       }
-> +
-> +       return context;
-> +}
-> +
-> +static int snp_bind_asid(struct kvm *kvm, int *error)
-> +{
-> +       struct kvm_sev_info *sev = &to_kvm_svm(kvm)->sev_info;
-> +       struct sev_data_snp_activate data = {0};
-> +
-> +       data.gctx_paddr = __psp_pa(sev->snp_context);
-> +       data.asid   = sev_get_asid(kvm);
-> +       return sev_issue_cmd(kvm, SEV_CMD_SNP_ACTIVATE, &data, error);
-> +}
-> +
-> +static int snp_launch_start(struct kvm *kvm, struct kvm_sev_cmd *argp)
-> +{
-> +       struct kvm_sev_info *sev = &to_kvm_svm(kvm)->sev_info;
-> +       struct sev_data_snp_launch_start start = {0};
-> +       struct kvm_sev_snp_launch_start params;
-> +       int rc;
-> +
-> +       if (!sev_snp_guest(kvm))
-> +               return -ENOTTY;
-> +
-> +       if (copy_from_user(&params, (void __user *)(uintptr_t)argp->data, sizeof(params)))
-> +               return -EFAULT;
-> +
-> +       sev->snp_context = snp_context_create(kvm, argp);
-> +       if (!sev->snp_context)
-> +               return -ENOTTY;
+The left side of the loop condition never becomes false.
+hwchan cannot be NULL, because it points to elements of the
+hw_channels array that takes one of 4 predefined values:
+pm8018_xoadc_channels, pm8038_xoadc_channels,
+pm8058_xoadc_channels, pm8921_xoadc_channels.
 
-This was reported-by josheads@. Its possible that userspace can
-repeatedly call snp_launch_start() causing the leak of memory from
-repeated snp_context_create() calls, leaking SNP contexts in the ASP,
-and leaking ASIDs.
+Found by Linux Verification Center (linuxtesting.org) with SVACE.
 
-A possible solution could be to just error out if snp_context already exists?
+Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Signed-off-by: Kasumov Ruslan <s02210418@gse.cs.msu.ru>
+---
+v2: Removed "Fixes" tag as Andi Shyti <andi.shyti@kernel.org> suggested.
+ drivers/iio/adc/qcom-pm8xxx-xoadc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/drivers/iio/adc/qcom-pm8xxx-xoadc.c b/drivers/iio/adc/qcom-pm8xxx-xoadc.c
+index eb424496ee1d..64a3aeb6261c 100644
+--- a/drivers/iio/adc/qcom-pm8xxx-xoadc.c
++++ b/drivers/iio/adc/qcom-pm8xxx-xoadc.c
+@@ -758,7 +758,7 @@ static int pm8xxx_xoadc_parse_channel(struct device *dev,
+ 	/* Find the right channel setting */
+ 	chid = 0;
+ 	hwchan = &hw_channels[0];
+-	while (hwchan && hwchan->datasheet_name) {
++	while (hwchan->datasheet_name) {
+ 		if (hwchan->pre_scale_mux == pre_scale_mux &&
+ 		    hwchan->amux_channel == amux_channel)
+ 			break;
+-- 
+2.34.1
 
-+       if (sev->snp_context)
-+               return -EINVAL;
-+
-
-
-
-> +
-> +       start.gctx_paddr = __psp_pa(sev->snp_context);
-> +       start.policy = params.policy;
-> +       memcpy(start.gosvw, params.gosvw, sizeof(params.gosvw));
-> +       rc = __sev_issue_cmd(argp->sev_fd, SEV_CMD_SNP_LAUNCH_START, &start, &argp->error);
-> +       if (rc)
-> +               goto e_free_context;
-> +
-> +       sev->fd = argp->sev_fd;
-> +       rc = snp_bind_asid(kvm, &argp->error);
-> +       if (rc)
-> +               goto e_free_context;
-> +
-> +       return 0;
-> +
-> +e_free_context:
-> +       snp_decommission_context(kvm);
-> +
-> +       return rc;
-> +}
-> +
