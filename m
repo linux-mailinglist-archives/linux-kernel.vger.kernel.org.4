@@ -2,82 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98B356BA8F4
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 08:23:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F14A6BA901
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 08:26:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231565AbjCOHXK convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 15 Mar 2023 03:23:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59040 "EHLO
+        id S229720AbjCOH0o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 03:26:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231613AbjCOHWz (ORCPT
+        with ESMTP id S230491AbjCOH0l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 03:22:55 -0400
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 995F369237;
-        Wed, 15 Mar 2023 00:22:41 -0700 (PDT)
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.95)
-          with esmtps (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1pcLT4-002bjm-Cw; Wed, 15 Mar 2023 08:22:38 +0100
-Received: from p57bd9bc2.dip0.t-ipconnect.de ([87.189.155.194] helo=[192.168.178.81])
-          by inpost2.zedat.fu-berlin.de (Exim 4.95)
-          with esmtpsa (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1pcLT4-003hOw-3X; Wed, 15 Mar 2023 08:22:38 +0100
-Message-ID: <892ce42a36bf1f1eac809f0e564d22b5f11c268f.camel@physik.fu-berlin.de>
-Subject: Re: [PATCH v4 23/36] superh: Implement the new page table range API
-From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        linux-arch@vger.kernel.org
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, linux-sh@vger.kernel.org
-Date:   Wed, 15 Mar 2023 08:22:36 +0100
-In-Reply-To: <20230315051444.3229621-24-willy@infradead.org>
-References: <20230315051444.3229621-1-willy@infradead.org>
-         <20230315051444.3229621-24-willy@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.46.4 
+        Wed, 15 Mar 2023 03:26:41 -0400
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF92D5BD86
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 00:26:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=3Xdv1SPbFc/MN2Ud+h68Jqnms20u
+        TaYbcPiPwRPC3OM=; b=YhPRDN7zgscr4r86aBuDgHCDy7jB6/NxmsCzY0ZXtGAq
+        9ANttIHepX+qDY0HO9EJa8NXzN+ci/JEAYRGeHPXT2GHYBDLDk9hxt+srFoIv0Ch
+        AeRjjNSiMYq7c908uOqERGiSflbY1y6QrVwsnqBfogUG3qkB73YzFNaezHlMgrg=
+Received: (qmail 3356775 invoked from network); 15 Mar 2023 08:26:33 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 15 Mar 2023 08:26:33 +0100
+X-UD-Smtp-Session: l3s3148p1@2Rx8Q+v2/K0ujnvb
+Date:   Wed, 15 Mar 2023 08:26:33 +0100
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     Simon Horman <simon.horman@corigine.com>
+Cc:     netdev@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        kernel@pengutronix.de, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net 0/4] net: set 'mac_managed_pm' at probe time
+Message-ID: <ZBFzKatnFs7MraVn@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Simon Horman <simon.horman@corigine.com>, netdev@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org
+References: <20230314131443.46342-1-wsa+renesas@sang-engineering.com>
+ <ZBCjj6btYod38O7g@corigine.com>
 MIME-Version: 1.0
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-Originating-IP: 87.189.155.194
-X-ZEDAT-Hint: PO
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="0ST3wKXCq3p6447a"
+Content-Disposition: inline
+In-Reply-To: <ZBCjj6btYod38O7g@corigine.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Matthew!
 
-On Wed, 2023-03-15 at 05:14 +0000, Matthew Wilcox (Oracle) wrote:
-> Add PFN_PTE_SHIFT, update_mmu_cache_range(), flush_dcache_folio() and
-> flush_icache_pages().  Change the PG_dcache_clean flag from being
-> per-page to per-folio.  Flush the entire folio containing the pages in
-> flush_icache_pages() for ease of implementation.
-> 
-> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-> Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
-> Cc: Rich Felker <dalias@libc.org>
-> Cc: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-> Cc: linux-sh@vger.kernel.org
+--0ST3wKXCq3p6447a
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-I'm going to test this patch later today and report back.
+Hi Simon!
 
-In the meantime, could you change "superh" in the subject to "sh"?
+> an initial comment is, and I know this is a bit of a pain,
+> that 'net' and 'net-next' patches need to be split into separate serries.
 
-Thanks,
-Adrian
+Thanks for the heads up. I will refactor the series. First a part which
+shall go into "net" and I will make the second part RFC with more
+explanations how to reproduce the issue.
 
--- 
- .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer
-`. `'   Physicist
-  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
+All the best,
+
+   Wolfram
+
+
+--0ST3wKXCq3p6447a
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmQRcyUACgkQFA3kzBSg
+Kbb8MhAAoD66iQdGbZKz5RIMU4gpMkjw5rI7U0pE4DQJZncI/sPciVWOT495o20F
+Z0+g9lrHUU93dyne3M3bvWMJ6eKZxh92L02qIaBvE0F+2+gSh50zgGiaGrxCa6mP
+fq/n2g2+0uDk1b0PsaCN9F1ED+5EKpfvN5sNuHdK6Qn4qX7jPy/dVkj2CpyUCDRF
+YCEBIp8w7My3xMxupdQvsEpf2JMEVOE2rFtZmQiaj1IMhNlS/de+vWLQVfhrCx5Y
+886Zl0qEc3hwUR2rrp8tMsXD8TBvSpD9JfvHjQJivGhxlpWKyj/bYcgFo+4tVr/Y
+uW6nzKT06bYcarHsPVHahXAzz+Pp4K2ec4w64fzn9nIl9tershKZTViuG0exNesL
+Ct4TsLIHjDYen8PfdcVv+f0DErlT+1V2egaFa57Q3VhnJiZQmkFyf8skUp8G+RbM
+/0qPYna9Leq4IjyAygBKZ/lRHuQ1hT1PkDLfqpSqD2CG3eoRuNGawetAEC0ZoBaX
+2hYnrc7oCuVQo8PHAOGQmwLEEHxI5nQS8T81Izk0uyFBJgN9bn/eC7mHWYBKfMW5
+lBRj+antcVgJvXC1t23GPeucPdreybqlNYTY6NPTp+qnk1ggR4t4qcAFV48RBMWa
+MWSGy5sUbIw7vIPcObkcs1qy7iI4s5vKXh5gasUabiF6AYP/wLI=
+=8+zk
+-----END PGP SIGNATURE-----
+
+--0ST3wKXCq3p6447a--
