@@ -2,211 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E89C46BAC91
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 10:50:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 550A76BAC9C
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 10:51:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231842AbjCOJuv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 05:50:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38146 "EHLO
+        id S231769AbjCOJvi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 05:51:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232318AbjCOJuO (ORCPT
+        with ESMTP id S231686AbjCOJur (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 05:50:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71EC9305E2;
-        Wed, 15 Mar 2023 02:49:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ED47C61C36;
-        Wed, 15 Mar 2023 09:49:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 726B6C4339C;
-        Wed, 15 Mar 2023 09:49:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678873768;
-        bh=905lAPt08QRFR8FR2phEdH/qr4W7W6RJu2a1XAXvmfQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qVA4bpKb7d2JG/KjhM8G/2/iPPdIAuE33rZ8yiPVZXPBVehBvfAeQFqDTgH9WobjD
-         Ss9Ca7uAZL+f6RZvebjoxsozRItTQb0nx1PZzlPwfgqPWkZrwwJcJuPnnvKDRCcweR
-         a+QoyiQHknBUjuaxV5v5n1UjMGvl51GmqDsO/j/Ow8n4/0dF8XerHrkcS7yUx9lS2B
-         acP+z4IYMHF8Dvix/Mk8pOK8eLZMQuUxoSs2m26pHjbyoI6/whwfJxSAbbnbSYqRr3
-         3+rmJXmyU8wKMtxT8DdJdNSRCLTlF0EFofWuJh/ndpNOi1G34B6W15OItFlMsxONde
-         jWG+49VqKLV2Q==
-Date:   Wed, 15 Mar 2023 11:49:15 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Cc:     linux-arch@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v4 09/36] arm64: Implement the new page table range API
-Message-ID: <ZBGUm4UCLa+URkc3@kernel.org>
-References: <20230315051444.3229621-1-willy@infradead.org>
- <20230315051444.3229621-10-willy@infradead.org>
+        Wed, 15 Mar 2023 05:50:47 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FFB481CD7
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 02:49:50 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id h3so18776696lja.12
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 02:49:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678873788;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=i8+OBFMHUqSZ5z1YaHCvkK/kxvR+7HJ17A1AzYgKFRQ=;
+        b=uq9x0jumOYOVgQaT+BS8CFb2Zbt/rPcVSFl30E1PpihJxIT7JAqTr+6dmb/4GpwZQA
+         9Tbwy4xZ56wf/IpS5TyQEjDfJYniIp88ri+YVhGvd+PPS21831TlBFj/t+yYp9VknmQr
+         Lpl1XA5tzX7anr0szpik5JfuBbfbDleXfif4ksZ1tmbdpk1zjZa+c68HDNrTISupBs6z
+         FnaOsxe5UQl4wKAB88la1BKKeaem6VV+Xq3/0AcIfvBVY2JP1kYE0vBA4Uob584gtQD5
+         7+eGxjp6lk7BdakX7Orm27YWs0tA2J1tLzP4TwfJC/MkSZHhMUbhj6ENcrH9DAgGB+TU
+         kghg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678873788;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=i8+OBFMHUqSZ5z1YaHCvkK/kxvR+7HJ17A1AzYgKFRQ=;
+        b=6jS1oLo6HGePJfvKgfPJq8swttOeUQxnx02+U6ohtqt9z2AdqDMU/ixpN/LcsYRaAl
+         L/GFrKhdsPxHmlaDrdJ5yLyPQ0RDAuKoRa9k4bvFlAKhl8amodGZVJMDf7kO4TQi5Nr7
+         RBbU+Jjp+maePtsUdfFskrGUoBqKLV3nXJSeO+3qpHzZYUs9xzaMAAlD6FcIotLrvrG1
+         Viom9O4NE2sESzQ70+vN+/UV6e9zfXmJLcZml6np/waHDI7PFtp4eyGXiDfPxJzDppEM
+         sR/w+yfn4v96J9KjwP/OEiBJnXvm2z5c+fMDiu7dxWq344sTjgquYE09K8DtdG0kmLE+
+         PGzA==
+X-Gm-Message-State: AO0yUKWpBre5pZU/USderAHPMAwxpq00cQcCX3TfzcYt+un/KyPiXs/7
+        4mq53lzSe/t8RxxMu7n8QB9CdQ==
+X-Google-Smtp-Source: AK7set9YBZAkod0KIa27E7sPHHRoFxRok5uIBVImIJbZw9bS1TMrn/bu1HL00PJTcECy00Pfxdj0dg==
+X-Received: by 2002:a2e:8e7a:0:b0:293:45dc:8b0f with SMTP id t26-20020a2e8e7a000000b0029345dc8b0fmr573112ljk.26.1678873788291;
+        Wed, 15 Mar 2023 02:49:48 -0700 (PDT)
+Received: from [192.168.1.101] (abyj16.neoplus.adsl.tpnet.pl. [83.9.29.16])
+        by smtp.gmail.com with ESMTPSA id a1-20020a2e9801000000b00293534d9760sm782175ljj.127.2023.03.15.02.49.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Mar 2023 02:49:47 -0700 (PDT)
+Message-ID: <933da956-27fa-f1ca-674f-af049d86e6fb@linaro.org>
+Date:   Wed, 15 Mar 2023 10:49:45 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230315051444.3229621-10-willy@infradead.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 0/6] QCM2290 compatibles
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>
+Cc:     linux-arm-msm@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dmaengine@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-pm@vger.kernel.org
+References: <20230314-topic-2290_compats-v1-0-47e26c3c0365@linaro.org>
+ <33ae98be-480e-8951-88d8-7624a695fcc9@linaro.org>
+Content-Language: en-US
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <33ae98be-480e-8951-88d8-7624a695fcc9@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 15, 2023 at 05:14:17AM +0000, Matthew Wilcox (Oracle) wrote:
-> Add set_ptes(), update_mmu_cache_range() and flush_dcache_folio().
-> Change the PG_dcache_clean flag from being per-page to per-folio.
-> 
-> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-> Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: linux-arm-kernel@lists.infradead.org
 
-Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
 
-> ---
->  arch/arm64/include/asm/cacheflush.h |  4 +++-
->  arch/arm64/include/asm/pgtable.h    | 25 ++++++++++++++------
->  arch/arm64/mm/flush.c               | 36 +++++++++++------------------
->  3 files changed, 35 insertions(+), 30 deletions(-)
+On 15.03.2023 08:47, Krzysztof Kozlowski wrote:
+> On 14/03/2023 13:52, Konrad Dybcio wrote:
+>> Document a couple of compatibles for IPs found on the QCM2290 that don't
+>> require any specific driver changes
+>>
+>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 > 
-> diff --git a/arch/arm64/include/asm/cacheflush.h b/arch/arm64/include/asm/cacheflush.h
-> index 37185e978aeb..d115451ed263 100644
-> --- a/arch/arm64/include/asm/cacheflush.h
-> +++ b/arch/arm64/include/asm/cacheflush.h
-> @@ -114,7 +114,7 @@ extern void copy_to_user_page(struct vm_area_struct *, struct page *,
->  #define copy_to_user_page copy_to_user_page
->  
->  /*
-> - * flush_dcache_page is used when the kernel has written to the page
-> + * flush_dcache_folio is used when the kernel has written to the page
->   * cache page at virtual address page->virtual.
->   *
->   * If this page isn't mapped (ie, page_mapping == NULL), or it might
-> @@ -127,6 +127,8 @@ extern void copy_to_user_page(struct vm_area_struct *, struct page *,
->   */
->  #define ARCH_IMPLEMENTS_FLUSH_DCACHE_PAGE 1
->  extern void flush_dcache_page(struct page *);
-> +void flush_dcache_folio(struct folio *);
-> +#define flush_dcache_folio flush_dcache_folio
->  
->  static __always_inline void icache_inval_all_pou(void)
->  {
-> diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
-> index 9428748f4691..6fd012663a01 100644
-> --- a/arch/arm64/include/asm/pgtable.h
-> +++ b/arch/arm64/include/asm/pgtable.h
-> @@ -355,12 +355,21 @@ static inline void __set_pte_at(struct mm_struct *mm, unsigned long addr,
->  	set_pte(ptep, pte);
->  }
->  
-> -static inline void set_pte_at(struct mm_struct *mm, unsigned long addr,
-> -			      pte_t *ptep, pte_t pte)
-> -{
-> -	page_table_check_ptes_set(mm, addr, ptep, pte, 1);
-> -	return __set_pte_at(mm, addr, ptep, pte);
-> +static inline void set_ptes(struct mm_struct *mm, unsigned long addr,
-> +			      pte_t *ptep, pte_t pte, unsigned int nr)
-> +{
-> +	page_table_check_ptes_set(mm, addr, ptep, pte, nr);
-> +
-> +	for (;;) {
-> +		__set_pte_at(mm, addr, ptep, pte);
-> +		if (--nr == 0)
-> +			break;
-> +		ptep++;
-> +		addr += PAGE_SIZE;
-> +		pte_val(pte) += PAGE_SIZE;
-> +	}
->  }
-> +#define set_ptes set_ptes
->  
->  /*
->   * Huge pte definitions.
-> @@ -1059,8 +1068,8 @@ static inline void arch_swap_restore(swp_entry_t entry, struct folio *folio)
->  /*
->   * On AArch64, the cache coherency is handled via the set_pte_at() function.
->   */
-> -static inline void update_mmu_cache(struct vm_area_struct *vma,
-> -				    unsigned long addr, pte_t *ptep)
-> +static inline void update_mmu_cache_range(struct vm_area_struct *vma,
-> +		unsigned long addr, pte_t *ptep, unsigned int nr)
->  {
->  	/*
->  	 * We don't do anything here, so there's a very small chance of
-> @@ -1069,6 +1078,8 @@ static inline void update_mmu_cache(struct vm_area_struct *vma,
->  	 */
->  }
->  
-> +#define update_mmu_cache(vma, addr, ptep) \
-> +	update_mmu_cache_range(vma, addr, ptep, 1)
->  #define update_mmu_cache_pmd(vma, address, pmd) do { } while (0)
->  
->  #ifdef CONFIG_ARM64_PA_BITS_52
-> diff --git a/arch/arm64/mm/flush.c b/arch/arm64/mm/flush.c
-> index 5f9379b3c8c8..deb781af0a3a 100644
-> --- a/arch/arm64/mm/flush.c
-> +++ b/arch/arm64/mm/flush.c
-> @@ -50,20 +50,13 @@ void copy_to_user_page(struct vm_area_struct *vma, struct page *page,
->  
->  void __sync_icache_dcache(pte_t pte)
->  {
-> -	struct page *page = pte_page(pte);
-> +	struct folio *folio = page_folio(pte_page(pte));
->  
-> -	/*
-> -	 * HugeTLB pages are always fully mapped, so only setting head page's
-> -	 * PG_dcache_clean flag is enough.
-> -	 */
-> -	if (PageHuge(page))
-> -		page = compound_head(page);
-> -
-> -	if (!test_bit(PG_dcache_clean, &page->flags)) {
-> -		sync_icache_aliases((unsigned long)page_address(page),
-> -				    (unsigned long)page_address(page) +
-> -					    page_size(page));
-> -		set_bit(PG_dcache_clean, &page->flags);
-> +	if (!test_bit(PG_dcache_clean, &folio->flags)) {
-> +		sync_icache_aliases((unsigned long)folio_address(folio),
-> +				    (unsigned long)folio_address(folio) +
-> +					    folio_size(folio));
-> +		set_bit(PG_dcache_clean, &folio->flags);
->  	}
->  }
->  EXPORT_SYMBOL_GPL(__sync_icache_dcache);
-> @@ -73,17 +66,16 @@ EXPORT_SYMBOL_GPL(__sync_icache_dcache);
->   * it as dirty for later flushing when mapped in user space (if executable,
->   * see __sync_icache_dcache).
->   */
-> -void flush_dcache_page(struct page *page)
-> +void flush_dcache_folio(struct folio *folio)
->  {
-> -	/*
-> -	 * HugeTLB pages are always fully mapped and only head page will be
-> -	 * set PG_dcache_clean (see comments in __sync_icache_dcache()).
-> -	 */
-> -	if (PageHuge(page))
-> -		page = compound_head(page);
-> +	if (test_bit(PG_dcache_clean, &folio->flags))
-> +		clear_bit(PG_dcache_clean, &folio->flags);
-> +}
-> +EXPORT_SYMBOL(flush_dcache_folio);
->  
-> -	if (test_bit(PG_dcache_clean, &page->flags))
-> -		clear_bit(PG_dcache_clean, &page->flags);
-> +void flush_dcache_page(struct page *page)
-> +{
-> +	flush_dcache_folio(page_folio(page));
->  }
->  EXPORT_SYMBOL(flush_dcache_page);
->  
-> -- 
-> 2.39.2
-> 
-> 
+> I assume this is what you talked about that DTS will follow a bit later?
+Yep, right after we resolve the RPM MSG RAM situation!
 
--- 
-Sincerely yours,
-Mike.
+Konrad
+> 
+> Best regards,
+> Krzysztof
+> 
