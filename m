@@ -2,146 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D8BC6BA631
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 05:28:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12F486BA636
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 05:29:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231127AbjCOE2M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 00:28:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51706 "EHLO
+        id S230212AbjCOE3M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 00:29:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbjCOE2I (ORCPT
+        with ESMTP id S229616AbjCOE3I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 00:28:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BA8B1DBA0;
-        Tue, 14 Mar 2023 21:28:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E446461AE3;
-        Wed, 15 Mar 2023 04:28:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC318C433D2;
-        Wed, 15 Mar 2023 04:28:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1678854486;
-        bh=LAK7Ux218jJKDKVTmRf0R9iRAT4prcpZ1FxGOQoWDwg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Meg8cAsSQxJ7QxAuSZLPP3N2IuvTug41TVw+4NUkBgdNygxnFtsRmCtn/OOC6i1AA
-         tENroIg/6Yu2qFS7vMD2C7KdJMIUajdU65LKHg1rZNYqJVyf12remllOOELwcqkWwM
-         edNvhYYOcqd9SpbyhnoxGx2zG8UUj7Jiy0mqO640=
-Date:   Wed, 15 Mar 2023 05:28:03 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Bjorn Andersson <andersson@kernel.org>
-Cc:     Elliot Berman <quic_eberman@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Amol Maheshwari <amahesh@qti.qualcomm.com>,
-        Arnd Bergmann <arnd@arndb.de>, Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Gokul krishna Krishnakumar <quic_gokukris@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ath10k@lists.infradead.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, linux-remoteproc@vger.kernel.org
-Subject: Re: [PATCH] firmware: qcom_scm: Use fixed width src vm bitmap
-Message-ID: <ZBFJU3Lp4+/EgSr5@kroah.com>
-References: <20230213181832.3489174-1-quic_eberman@quicinc.com>
- <20230213214417.mtcpeultvynyls6s@ripper>
- <Y+tNRPf0PGdShf5l@kroah.com>
- <20230214172325.lplxgbprhj3bzvr3@ripper>
- <bdda82f7-933d-443b-614a-6befad2899b5@quicinc.com>
- <2ae96b75-82f1-165a-e56d-7446c90bb7af@quicinc.com>
- <20230315041119.fp7npwa5bia5hck3@ripper>
+        Wed, 15 Mar 2023 00:29:08 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E229C142;
+        Tue, 14 Mar 2023 21:29:05 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32F4Srua010571;
+        Tue, 14 Mar 2023 23:28:53 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1678854533;
+        bh=pq0vN+QaBsXk7vZDc5tphUuYOmXyug9paHeytQhvPco=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=skv73KbtLp1aMAC9E5BJle/JJLet1rUfE8GXcwKQqKvpG2zvMyOdOjdhjRtvhrmFP
+         jgtg/LDFVnD0SnWtVFLRwnGH40yRF6zsjsOnYrJHMheUw7Jdb3xhWc+YqvVY7KfJ0O
+         9SvUTiYxOb0N2qfmwMw4qJoc/wcZJg1qQOENtgbA=
+Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32F4Sr1K056646
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 14 Mar 2023 23:28:53 -0500
+Received: from DLEE105.ent.ti.com (157.170.170.35) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 14
+ Mar 2023 23:28:52 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Tue, 14 Mar 2023 23:28:52 -0500
+Received: from [172.24.145.215] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32F4SmLP010477;
+        Tue, 14 Mar 2023 23:28:49 -0500
+Message-ID: <9b88f21d-d3bd-5780-7cd7-827ff299e7b3@ti.com>
+Date:   Wed, 15 Mar 2023 09:58:48 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230315041119.fp7npwa5bia5hck3@ripper>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v5 4/6] arm64: dts: ti: k3-am62a-main: Add nodes for McASP
+Content-Language: en-US
+To:     Jai Luthra <j-luthra@ti.com>, Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Andrew Davis <afd@ti.com>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20230313-mcasp_upstream-v5-0-d6844707aa8a@ti.com>
+ <20230313-mcasp_upstream-v5-4-d6844707aa8a@ti.com>
+From:   Jayesh Choudhary <j-choudhary@ti.com>
+In-Reply-To: <20230313-mcasp_upstream-v5-4-d6844707aa8a@ti.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 14, 2023 at 09:11:19PM -0700, Bjorn Andersson wrote:
-> On Fri, Mar 03, 2023 at 01:09:08PM -0800, Elliot Berman wrote:
-> > 
-> > 
-> > On 2/14/2023 10:52 AM, Elliot Berman wrote:
-> > > 
-> > > 
-> > > On 2/14/2023 9:23 AM, Bjorn Andersson wrote:
-> > > > On Tue, Feb 14, 2023 at 09:58:44AM +0100, Greg Kroah-Hartman wrote:
-> > > > > On Mon, Feb 13, 2023 at 01:44:17PM -0800, Bjorn Andersson wrote:
-> > > > > > On Mon, Feb 13, 2023 at 10:18:29AM -0800, Elliot Berman wrote:
-> > > > > > > The maximum VMID for assign_mem is 63. Use a u64 to represent this
-> > > > > > > bitmap instead of architecture-dependent "unsigned int"
-> > > > > > > which varies in
-> > > > > > > size on 32-bit and 64-bit platforms.
-> > > > > > > 
-> > > > > > > Acked-by: Kalle Valo <kvalo@kernel.org> (ath10k)
-> > > > > > > Tested-by: Gokul krishna Krishnakumar <quic_gokukris@quicinc.com>
-> > > > > > > Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
-> > > > > > 
-> > > > > > Reviewed-by: Bjorn Andersson <andersson@kernel.org>
-> > > > > > 
-> > > > > > @Greg, would you mind taking this through your tree for v6.3, you
-> > > > > > already have a related change in fastrpc.c in your tree...
-> > > > > 
-> > > > > I tried, but it doesn't apply to my char-misc tree at all:
-> > > > > 
-> > > > > checking file drivers/firmware/qcom_scm.c
-> > > > > Hunk #1 succeeded at 898 (offset -7 lines).
-> > > > > Hunk #2 succeeded at 915 (offset -7 lines).
-> > > > > Hunk #3 succeeded at 930 (offset -7 lines).
-> > > > > checking file drivers/misc/fastrpc.c
-> > > > > checking file drivers/net/wireless/ath/ath10k/qmi.c
-> > > > > checking file drivers/remoteproc/qcom_q6v5_mss.c
-> > > > > Hunk #1 succeeded at 227 (offset -8 lines).
-> > > > > Hunk #2 succeeded at 404 (offset -10 lines).
-> > > > > Hunk #3 succeeded at 939 with fuzz 1 (offset -28 lines).
-> > > > > checking file drivers/remoteproc/qcom_q6v5_pas.c
-> > > > > Hunk #1 FAILED at 94.
-> > > > > 1 out of 1 hunk FAILED
-> > > > > checking file drivers/soc/qcom/rmtfs_mem.c
-> > > > > Hunk #1 succeeded at 30 (offset -1 lines).
-> > > > > can't find file to patch at input line 167
-> > > > > Perhaps you used the wrong -p or --strip option?
-> > > > > The text leading up to this was:
-> > > > > --------------------------
-> > > > > |diff --git a/include/linux/firmware/qcom/qcom_scm.h
-> > > > > b/include/linux/firmware/qcom/qcom_scm.h
-> > > > > |index 1e449a5d7f5c..250ea4efb7cb 100644
-> > > > > |--- a/include/linux/firmware/qcom/qcom_scm.h
-> > > > > |+++ b/include/linux/firmware/qcom/qcom_scm.h
-> > > > > --------------------------
-> > > > > 
-> > > > > What tree is this patch made against?
-> > > > > 
-> > > > 
-> > > > Sorry about that, I missed the previous changes in qcom_q6v5_pas in the
-> > > > remoteproc tree. Elliot said he based it on linux-next, so I expect that
-> > > > it will merge fine on top of -rc1, once that arrives.
-> > > > 
-> > > 
-> > > Yes, this patch applies on next-20230213. I guess there are enough
-> > > changes were coming from QCOM side (via Bjorn's qcom tree) as well as
-> > > the fastrpc change (via Greg's char-misc tree).
-> > > 
-> > > Let me know if I should do anything once -rc1 arrives. Happy to post
-> > > version on the -rc1 if it helps.
-> > > 
-> > 
-> > The patch now applies on tip of Linus's tree and on char-misc.
-> 
-> Greg, I have a couple more patches in the scm driver in my inbox. Would
-> you be okay with me pulling this through the Qualcomm tree for v6.4?
 
-Please do!
+
+On 13/03/23 20:19, Jai Luthra wrote:
+> Same as AM62, AM62A has three instances of McASP which can be used for
+> transmitting or receiving digital audio in various formats.
+> 
+> Signed-off-by: Jai Luthra <j-luthra@ti.com>
+> ---
+>   arch/arm64/boot/dts/ti/k3-am62a-main.dtsi | 60 +++++++++++++++++++++++++++++++
+>   1 file changed, 60 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/ti/k3-am62a-main.dtsi b/arch/arm64/boot/dts/ti/k3-am62a-main.dtsi
+> index 393a1a40b68b..7b20c07fab77 100644
+> --- a/arch/arm64/boot/dts/ti/k3-am62a-main.dtsi
+> +++ b/arch/arm64/boot/dts/ti/k3-am62a-main.dtsi
+> @@ -660,4 +660,64 @@ ecap2: pwm@23120000 {
+>   		clock-names = "fck";
+>   		status = "disabled";
+>   	};
+> +
+> +	mcasp0: mcasp@2b00000 {
+> +		compatible = "ti,am33xx-mcasp-audio";
+> +		reg = <0x00 0x02b00000 0x00 0x2000>,
+> +		      <0x00 0x02b08000 0x00 0x400>;
+> +		reg-names = "mpu","dat";
+> +		interrupts = <GIC_SPI 236 IRQ_TYPE_LEVEL_HIGH>,
+> +				<GIC_SPI 235 IRQ_TYPE_LEVEL_HIGH>;
+
+Andrew's comment for alignment with space is applicable on this patch
+as well for all 3 mcasp nodes.
+<https://lore.kernel.org/all/c4721d5f-a265-f692-2b57-f0cfcd2702b3@ti.com/>
+
+Reviewed-by: Jayesh Choudhary <j-choudhary@ti.com>
+
+
+
+> +		interrupt-names = "tx", "rx";
+> +
+> +		dmas = <&main_bcdma 0 0xc500 0>, <&main_bcdma 0 0x4500 0>;
+> +		dma-names = "tx", "rx";
+> +
+> +		clocks = <&k3_clks 190 0>;
+> +		clock-names = "fck";
+> +		assigned-clocks = <&k3_clks 190 0>;
+> +		assigned-clock-parents = <&k3_clks 190 2>;
+> +		power-domains = <&k3_pds 190 TI_SCI_PD_EXCLUSIVE>;
+> +		status = "disabled";
+> +	};
+> +
+> +	mcasp1: mcasp@2b10000 {
+> +		compatible = "ti,am33xx-mcasp-audio";
+> +		reg = <0x00 0x02b10000 0x00 0x2000>,
+> +		      <0x00 0x02b18000 0x00 0x400>;
+> +		reg-names = "mpu","dat";
+> +		interrupts = <GIC_SPI 238 IRQ_TYPE_LEVEL_HIGH>,
+> +				<GIC_SPI 237 IRQ_TYPE_LEVEL_HIGH>;
+> +		interrupt-names = "tx", "rx";
+> +
+> +		dmas = <&main_bcdma 0 0xc501 0>, <&main_bcdma 0 0x4501 0>;
+> +		dma-names = "tx", "rx";
+> +
+> +		clocks = <&k3_clks 191 0>;
+> +		clock-names = "fck";
+> +		assigned-clocks = <&k3_clks 191 0>;
+> +		assigned-clock-parents = <&k3_clks 191 2>;
+> +		power-domains = <&k3_pds 191 TI_SCI_PD_EXCLUSIVE>;
+> +		status = "disabled";
+> +	};
+> +
+> +	mcasp2: mcasp@2b20000 {
+> +		compatible = "ti,am33xx-mcasp-audio";
+> +		reg = <0x00 0x02b20000 0x00 0x2000>,
+> +		      <0x00 0x02b28000 0x00 0x400>;
+> +		reg-names = "mpu","dat";
+> +		interrupts = <GIC_SPI 240 IRQ_TYPE_LEVEL_HIGH>,
+> +				<GIC_SPI 239 IRQ_TYPE_LEVEL_HIGH>;
+> +		interrupt-names = "tx", "rx";
+> +
+> +		dmas = <&main_bcdma 0 0xc502 0>, <&main_bcdma 0 0x4502 0>;
+> +		dma-names = "tx", "rx";
+> +
+> +		clocks = <&k3_clks 192 0>;
+> +		clock-names = "fck";
+> +		assigned-clocks = <&k3_clks 192 0>;
+> +		assigned-clock-parents = <&k3_clks 192 2>;
+> +		power-domains = <&k3_pds 192 TI_SCI_PD_EXCLUSIVE>;
+> +		status = "disabled";
+> +	};
+>   };
+> 
