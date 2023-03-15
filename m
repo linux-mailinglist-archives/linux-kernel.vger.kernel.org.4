@@ -2,128 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B07206BB64E
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 15:39:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2BFA6BB653
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 15:40:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232156AbjCOOjP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 10:39:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41488 "EHLO
+        id S232277AbjCOOk1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 10:40:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232493AbjCOOjK (ORCPT
+        with ESMTP id S232113AbjCOOkW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 10:39:10 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0441EF80;
-        Wed, 15 Mar 2023 07:39:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678891149; x=1710427149;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=rbEtsZqcCxnAkv7v46t+kyfgD1hi/rzwe9N8/sucaPk=;
-  b=N4EwodQnOJ06yGSy9HYuPRSCGgRkxeH3eWr6vJ2EDdtgdddw1B4qFhp+
-   JFfBkcSUt9Nng/b/IyX5B120FHzRhmPxD1vLFkh0SfI1OXibrbduXgUKA
-   CFT6n2qIyVP+Z4dSbjot93coK6bnDHibRCvXZ7f+SvvTDlMYpKtyfZ98W
-   q1Djdcpjt8UwrVhAJq/ObcRMcZ8CcziA6E/+ffyNTDMsUwlRbysFl5bfx
-   ZmswvFkMyOKikeHaFeC8bzj1wgzUFSKF2XbJu0JmZFc6Bw0qvpRi+A9Kd
-   /gpwArFFpJDbHmH3JxzxAp4+FeBDRnqn/O8CG5uvVj2fnlqVUiRBnLU/c
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="339257806"
-X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
-   d="scan'208";a="339257806"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2023 07:39:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="711937077"
-X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
-   d="scan'208";a="711937077"
-Received: from stevenpa-mobl2.amr.corp.intel.com (HELO [10.212.47.53]) ([10.212.47.53])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2023 07:39:08 -0700
-Message-ID: <49907fd5-3069-dc19-1388-590e08600037@linux.intel.com>
-Date:   Wed, 15 Mar 2023 07:39:03 -0700
+        Wed, 15 Mar 2023 10:40:22 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A43628857
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 07:39:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678891165;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=8BCUc6FRTKyx+sOtOfHV9snVAAhP2PxsXPnne/KgjKI=;
+        b=Q2HnJv8wBkGR9yMPjwsUweDS6ZQMFU9Ap3OUGWunczgX87HsdWcjW9zSKaL/BDhXC52zQN
+        mhOftvtq/85vtGgB3PcmKnoFrd0HeLSmRSeW8YkFXHgeuFvucFOaBOWFc8gaR68CNUkLH1
+        mo3GN2JIvIjWVTtWR74L2lN0JNF6+d8=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-231-yMXmGqd_ORqiLMz4wE42pA-1; Wed, 15 Mar 2023 10:39:20 -0400
+X-MC-Unique: yMXmGqd_ORqiLMz4wE42pA-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2FAB6280BF66;
+        Wed, 15 Mar 2023 14:39:19 +0000 (UTC)
+Received: from [10.22.34.146] (unknown [10.22.34.146])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id A8B7A18EC7;
+        Wed, 15 Mar 2023 14:39:18 +0000 (UTC)
+Message-ID: <c9f2f526-5df1-ab13-27a5-12593fd4fb77@redhat.com>
+Date:   Wed, 15 Mar 2023 10:39:18 -0400
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] PCI: vmd: guard device addition and removal
-To:     "You-Sheng Yang (vicamo)" <vicamo.yang@canonical.com>,
-        Jonathan Derrick <jonathan.derrick@linux.dev>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Keith Busch <kbusch@kernel.org>
-Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230313173733.1815277-1-vicamo.yang@canonical.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 2/5] cgroup/cpuset: Include offline CPUs when tasks'
+ cpumasks in top_cpuset are updated
 Content-Language: en-US
-From:   "Patel, Nirmal" <nirmal.patel@linux.intel.com>
-In-Reply-To: <20230313173733.1815277-1-vicamo.yang@canonical.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+To:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
+Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+References: <20230306200849.376804-1-longman@redhat.com>
+ <20230306200849.376804-3-longman@redhat.com>
+ <20230314173411.fqaxoa2tfifnj6i3@blackpad>
+ <957bd5c2-1bae-de95-f119-483ef64dab60@redhat.com>
+ <20230315100618.6cypp4l3vjpg2p7r@blackpad>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20230315100618.6cypp4l3vjpg2p7r@blackpad>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/13/2023 10:37 AM, You-Sheng Yang (vicamo) wrote:
-> VMD may fail to create sysfs entries while `pci_rescan_bus()` called in
-> some other drivers like t7xx wwan driver:
->
->   sysfs: cannot create duplicate filename '/devices/.../resource0'
->   Call Trace:
->    <TASK>
->    sysfs_warn_dup.cold+0x17/0x34
->    sysfs_add_bin_file_mode_ns+0xc0/0xf0
->    sysfs_create_bin_file+0x6d/0xb0
->    pci_create_attr+0x117/0x260
->    pci_create_resource_files+0x6b/0x150
->    pci_create_sysfs_dev_files+0x18/0x30
->    pci_bus_add_device+0x30/0x80
->    pci_bus_add_devices+0x31/0x80
->    pci_bus_add_devices+0x5b/0x80
->    vmd_enable_domain.constprop.0+0x6b7/0x880 [vmd]
->    vmd_probe+0x16d/0x193 [vmd]
->
-> Fixes: 185a383ada2e ("x86/PCI: Add driver for Intel Volume Management Device (VMD)")
-> Signed-off-by: You-Sheng Yang (vicamo) <vicamo.yang@canonical.com>
-> ---
->  drivers/pci/controller/vmd.c | 6 ++++++
->  1 file changed, 6 insertions(+)
->
-> diff --git a/drivers/pci/controller/vmd.c b/drivers/pci/controller/vmd.c
-> index 769eedeb8802..f050991bd1e9 100644
-> --- a/drivers/pci/controller/vmd.c
-> +++ b/drivers/pci/controller/vmd.c
-> @@ -838,9 +838,13 @@ static int vmd_enable_domain(struct vmd_dev *vmd, unsigned long features)
->  	pci_add_resource_offset(&resources, &vmd->resources[1], offset[0]);
->  	pci_add_resource_offset(&resources, &vmd->resources[2], offset[1]);
->  
-> +	pci_lock_rescan_remove();
-> +
->  	vmd->bus = pci_create_root_bus(&vmd->dev->dev, vmd->busn_start,
->  				       &vmd_ops, sd, &resources);
->  	if (!vmd->bus) {
-> +		pci_unlock_rescan_remove();
-> +
->  		pci_free_resource_list(&resources);
->  		vmd_remove_irq_domain(vmd);
->  		return -ENODEV;
-> @@ -893,6 +897,8 @@ static int vmd_enable_domain(struct vmd_dev *vmd, unsigned long features)
->  
->  	vmd_acpi_end();
->  
-> +	pci_unlock_rescan_remove();
-> +
->  	WARN(sysfs_create_link(&vmd->dev->dev.kobj, &vmd->bus->dev.kobj,
->  			       "domain"), "Can't create symlink to domain\n");
->  	return 0;
 
-Reviewed-by: Nirmal Patel <nirmal.patel@linux.intel.com>
+On 3/15/23 06:06, Michal Koutný wrote:
+> On Tue, Mar 14, 2023 at 03:02:53PM -0400, Waiman Long <longman@redhat.com> wrote:
+>>>> +			cpumask_andnot(new_cpus, possible_mask, cs->subparts_cpus);
+>>>> +		} else {
+>>>> +			cpumask_and(new_cpus, cs->effective_cpus, possible_mask);
+>>>> +		}
+>>> I'm wrapping my head around this slightly.
+>>> 1) I'd suggest swapping args in of cpumask_and() to have possible_mask
+>>>      consistently first.
+>> I don't quite understand what you meant by "swapping args". It is effective
+>> new_cpus = cs->effective_cpus ∩ possible_mask. What is the point of swapping
+>> cs->effective_cpus and possible_mask.
+> No effect except better readability (possible_mask comes first in the
+> other branch above too, left hand arg as the "base" that's modified).
+OK, I got it now. I will swap it as suggested.
+>
+>>> 2) Then I'm wondering whether two branches are truly different when
+>>>      effective_cpus := cpus_allowed - subparts_cpus
+>>>      top_cpuset.cpus_allowed == possible_mask        (1)
+>> effective_cpus may not be equal "cpus_allowed - subparts_cpus" if some of
+>> the CPUs are offline as effective_cpus contains only online CPUs.
+>> subparts_cpu can include offline cpus too. That is why I choose that
+>> expression. I will add a comment to clarify that.
+> I see now that it returns offlined cpus to top cpuset's tasks.
+>
+>>> IOW, can you see a difference in what affinities are set to eligible
+>>> top_cpuset tasks before and after this patch upon CPU hotplug?
+>>> (Hm, (1) holds only in v2. So is this a fix for v1 only?)
+>> This is due to the fact that cpu hotplug code currently doesn't update the
+>> cpu affinity of tasks in the top cpuset. Tasks not in the top cpuset can
+>> rely on the hotplug code to update the cpu affinity appropriately.
+> Oh, I mistook this for hotplug changing behavior but it's actually for
+> updating top_cpuset when its children becomes a partition root.
+>
+> 	IIUC, top cpuset + hotplug has been treated specially because
+> 	hotplug must have taken care of affinity regardless of cpuset.
+> 	v1 allowed modification of top cpuset's mask (not sure if that
+> 	worked), v2 won't allow direct top cpuset's mask modificiation
+> 	but indirectly via partition root children.
+>
+> So this is a continuation for 3fb906e7fabb ("cgroup/cpuset: Don't filter
+> offline CPUs in cpuset_cpus_allowed() for top cpuset tasks") to ensure
+> hotplug offline/online cycle won't overwrite top_cpuset tasks'
+> affinities (when partition change during offlined period).
+> This looks correct in this regard then.
+> (I wish it were simpler but that's for a different/broader top
+> cpuset+hotplug approach.)
 
-Thanks
+You can't change the content of "cpuset.cpus" in the top cpuset (both v1 
+& v2). I believe the CPU hotplug does not attempt to update the cpumask 
+of tasks in the top cpuset mainly due to potential locking issue as 
+hotplug is triggered by hardware event. Partition change, however, is a 
+userspace event. So there shouldn't be any locking implication other 
+than the fact per-cpu kthreads should not have their cpumasks changed.
+
+To be consistent with commit 3fb906e7fabb ("cgroup/cpuset: Don't filter 
+offline CPUs in cpuset_cpus_allowed() for top cpuset tasks"), similar 
+logic needs to be applied in the later case.
+
+Cheers,
+Longman
 
