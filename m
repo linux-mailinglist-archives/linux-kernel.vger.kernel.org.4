@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4900B6BB034
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 13:16:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFF216BB014
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 13:15:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231792AbjCOMQH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 08:16:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39164 "EHLO
+        id S231751AbjCOMPG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 08:15:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231779AbjCOMQE (ORCPT
+        with ESMTP id S231343AbjCOMPD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 08:16:04 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED14D8ABD5;
-        Wed, 15 Mar 2023 05:16:01 -0700 (PDT)
+        Wed, 15 Mar 2023 08:15:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EB8A7DF9C;
+        Wed, 15 Mar 2023 05:15:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 59FC0B81DF8;
-        Wed, 15 Mar 2023 12:16:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80F9DC433D2;
-        Wed, 15 Mar 2023 12:15:58 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E6C1761D13;
+        Wed, 15 Mar 2023 12:15:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D181DC433EF;
+        Wed, 15 Mar 2023 12:15:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1678882559;
-        bh=isJiHw7P+624z2y7JAVlWit9O/egsbTFuB99+7S24Ek=;
+        s=korg; t=1678882501;
+        bh=pxhJVqWJBbgiL+m3yUqsKzYrPva8CDb+w279R5bYCGc=;
         h=From:To:Cc:Subject:Date:From;
-        b=Mq2P+yo13g42fAPxqnyeBZVoXqQi3WCvfB/hh00Vh9O/HpJ9FwipRgASE6oXtPdug
-         gxySPetjHaYXmjjSQMtssKjAvddtRhCJIMxBQelby5vuDDFlLFVLnas+/8DAZugRO5
-         B5lJITFbc43fi0dpPcpgWoFN5EsCJ+NWeQEp15Vg=
+        b=avXvPJ2nVv8wPArxfcWqtsvglrJlh3foHGUBm0bOG0ElARampqc794OrXzyzYc5z/
+         sOy31nw8yGBYGnCyqkp0iSmt+/I0PeTBrnK+Nf9evnPqraR9ZhZgK2T/tA+a8RIAK0
+         +LbCRFBIBeg9jYT0xn6zOV8M3I8mm+7YNgSqRXIY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -38,23 +38,23 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
         f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
         srw@sladewatkins.net, rwarsow@gmx.de
-Subject: [PATCH 4.19 00/39] 4.19.278-rc1 review
-Date:   Wed, 15 Mar 2023 13:12:14 +0100
-Message-Id: <20230315115721.234756306@linuxfoundation.org>
+Subject: [PATCH 4.14 00/21] 4.14.310-rc1 review
+Date:   Wed, 15 Mar 2023 13:12:23 +0100
+Message-Id: <20230315115718.796692048@linuxfoundation.org>
 X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
 User-Agent: quilt/0.67
 X-stable: review
 X-Patchwork-Hint: ignore
-X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.19.278-rc1.gz
+X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.14.310-rc1.gz
 X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-X-KernelTest-Branch: linux-4.19.y
+X-KernelTest-Branch: linux-4.14.y
 X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
-X-KernelTest-Version: 4.19.278-rc1
+X-KernelTest-Version: 4.14.310-rc1
 X-KernelTest-Deadline: 2023-03-17T11:57+00:00
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,8 +63,8 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is the start of the stable review cycle for the 4.19.278 release.
-There are 39 patches in this series, all will be posted as a response
+This is the start of the stable review cycle for the 4.14.310 release.
+There are 21 patches in this series, all will be posted as a response
 to this one.  If anyone has any issues with these being applied, please
 let me know.
 
@@ -72,9 +72,9 @@ Responses should be made by Fri, 17 Mar 2023 11:57:10 +0000.
 Anything received after that time might be too late.
 
 The whole patch series can be found in one patch at:
-	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.19.278-rc1.gz
+	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.14.310-rc1.gz
 or in the git tree and branch at:
-	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.19.y
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.14.y
 and the diffstat can be found below.
 
 thanks,
@@ -85,16 +85,10 @@ greg k-h
 Pseudo-Shortlog of commits:
 
 Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-    Linux 4.19.278-rc1
+    Linux 4.14.310-rc1
 
-Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-    cgroup: Add missing cpus_read_lock() to cgroup_attach_task_all()
-
-Tejun Heo <tj@kernel.org>
-    cgroup: Fix threadgroup_rwsem <-> cpus_read_lock() deadlock
-
-Juri Lelli <juri.lelli@redhat.com>
-    cgroup/cpuset: Change cpuset_rwsem and hotplug lock order
+Rhythm Mahajan <rhythm.m.mahajan@oracle.com>
+    x86/cpu: Fix LFENCE serialization check in init_amd()
 
 John Harrison <John.C.Harrison@Intel.com>
     drm/i915: Don't use BAR mappings for ring buffers with LLC
@@ -123,62 +117,14 @@ xurui <xurui@kylinos.cn>
 Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
     clk: qcom: mmcc-apq8084: remove spdm clocks
 
-Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
-    Revert "spi: mt7621: Fix an error message in mt7621_spi_probe()"
+Shigeru Yoshida <syoshida@redhat.com>
+    net: caif: Fix use-after-free in cfusbl_device_notify()
 
-Bart Van Assche <bvanassche@acm.org>
-    scsi: core: Remove the /proc/scsi/${proc_name} directory earlier
+Eric Dumazet <edumazet@google.com>
+    ila: do not generate empty messages in ila_xlat_nl_cmd_get_mapping()
 
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-    ARM: dts: exynos: correct TMU phandle in Odroid XU3 family
-
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-    ARM: dts: exynos: correct TMU phandle in Odroid HC1
-
-Marek Szyprowski <m.szyprowski@samsung.com>
-    ARM: dts: exynos: Add GPU thermal zone cooling maps for Odroid XU3/XU4/HC1
-
-Masahiro Yamada <yamada.masahiro@socionext.com>
-    kbuild: generate modules.order only in directories visited by obj-y/m
-
-Masahiro Yamada <yamada.masahiro@socionext.com>
-    kbuild: fix false-positive need-builtin calculation
-
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-    ARM: dts: exynos: correct TMU phandle in Exynos5250
-
-Krzysztof Kozlowski <krzk@kernel.org>
-    ARM: dts: exynos: Override thermal by label in Exynos5250
-
-Krzysztof Kozlowski <krzk@kernel.org>
-    ARM: dts: exynos: Move pmu and timer nodes out of soc
-
-Viresh Kumar <viresh.kumar@linaro.org>
-    ARM: dts: exynos: Add all CPUs in cooling maps
-
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-    ARM: dts: exynos: correct TMU phandle in Exynos4210
-
-Krzysztof Kozlowski <krzk@kernel.org>
-    ARM: dts: exynos: Override thermal by label in Exynos4210
-
-Krzysztof Kozlowski <krzk@kernel.org>
-    ARM: dts: exynos: Fix language typo and indentation
-
-Jan Kara <jack@suse.cz>
-    udf: Detect system inodes linked into directory hierarchy
-
-Jan Kara <jack@suse.cz>
-    udf: Preserve link count of system files
-
-Jan Kara <jack@suse.cz>
-    udf: Remove pointless union in udf_inode_info
-
-Steven J. Magnani <steve.magnani@digidescorp.com>
-    udf: reduce leakage of blocks related to named streams
-
-Jan Kara <jack@suse.cz>
-    udf: Explain handling of load_nls() failure
+Kang Chen <void0red@gmail.com>
+    nfc: fdp: add null check of devm_kmalloc_array in fdp_nci_i2c_read_device_properties
 
 Fedor Pchelkin <pchelkin@ispras.ru>
     nfc: change order inside nfc_se_io error path
@@ -209,59 +155,29 @@ Theodore Ts'o <tytso@mit.edu>
 
 Diffstat:
 
- Makefile                                           |   4 +-
- arch/alpha/kernel/module.c                         |   4 +-
- arch/arm/boot/dts/exynos3250-artik5.dtsi           |   6 +-
- arch/arm/boot/dts/exynos3250-monk.dts              |   6 +-
- arch/arm/boot/dts/exynos3250-rinato.dts            |   6 +-
- arch/arm/boot/dts/exynos3250.dtsi                  |  12 +-
- arch/arm/boot/dts/exynos4.dtsi                     |  12 +-
- arch/arm/boot/dts/exynos4210-trats.dts             |   4 +-
- arch/arm/boot/dts/exynos4210.dtsi                  |  39 ++-
- arch/arm/boot/dts/exynos4412-itop-scp-core.dtsi    |   8 +-
- arch/arm/boot/dts/exynos4412-midas.dtsi            |   8 +-
- arch/arm/boot/dts/exynos4412-odroid-common.dtsi    |   8 +-
- arch/arm/boot/dts/exynos4412-odroidu3.dts          |  18 +-
- arch/arm/boot/dts/exynos4412.dtsi                  |   6 +-
- arch/arm/boot/dts/exynos5250.dtsi                  |  73 +++---
- arch/arm/boot/dts/exynos5422-odroidhc1.dts         | 142 +++++++----
- arch/arm/boot/dts/exynos5422-odroidxu3-common.dtsi | 171 +++++++++----
- arch/arm/boot/dts/exynos54xx.dtsi                  |  38 +--
- arch/mips/include/asm/mach-rc32434/pci.h           |   2 +-
- arch/x86/kernel/cpu/amd.c                          |   9 +
- drivers/clk/qcom/mmcc-apq8084.c                    | 271 ---------------------
- drivers/gpu/drm/i915/intel_ringbuffer.c            |   4 +-
- drivers/macintosh/windfarm_lm75_sensor.c           |   4 +-
- drivers/macintosh/windfarm_smu_sensors.c           |   4 +-
- drivers/media/i2c/ov5640.c                         |   2 +-
- drivers/pci/quirks.c                               |   8 +
- drivers/scsi/hosts.c                               |   2 +
- drivers/staging/mt7621-spi/spi-mt7621.c            |   8 +-
- fs/ext4/fsmap.c                                    |   2 +
- fs/ext4/inline.c                                   |   1 -
- fs/ext4/inode.c                                    |   7 +-
- fs/ext4/ioctl.c                                    |   1 +
- fs/ext4/namei.c                                    |  13 +-
- fs/ext4/xattr.c                                    |   3 +
- fs/file.c                                          |   1 +
- fs/udf/directory.c                                 |   2 +-
- fs/udf/file.c                                      |   7 +-
- fs/udf/ialloc.c                                    |  14 +-
- fs/udf/inode.c                                     |  76 ++++--
- fs/udf/misc.c                                      |   6 +-
- fs/udf/namei.c                                     |   7 +-
- fs/udf/partition.c                                 |   2 +-
- fs/udf/super.c                                     |  12 +-
- fs/udf/symlink.c                                   |   2 +-
- fs/udf/udf_i.h                                     |  12 +-
- include/linux/cpuset.h                             |   8 +-
- include/linux/pci_ids.h                            |   2 +
- kernel/cgroup/cgroup-v1.c                          |   3 +
- kernel/cgroup/cgroup.c                             |  49 +++-
- kernel/cgroup/cpuset.c                             |  25 +-
- net/nfc/netlink.c                                  |   2 +-
- net/tipc/socket.c                                  |   2 +-
- scripts/Makefile.build                             |   4 +-
- 53 files changed, 569 insertions(+), 573 deletions(-)
+ Makefile                                 |   4 +-
+ arch/alpha/kernel/module.c               |   4 +-
+ arch/mips/include/asm/mach-rc32434/pci.h |   2 +-
+ arch/x86/kernel/cpu/amd.c                |  11 +-
+ drivers/clk/qcom/mmcc-apq8084.c          | 271 -------------------------------
+ drivers/gpu/drm/i915/intel_ringbuffer.c  |   4 +-
+ drivers/macintosh/windfarm_lm75_sensor.c |   4 +-
+ drivers/macintosh/windfarm_smu_sensors.c |   4 +-
+ drivers/media/i2c/ov5640.c               |   2 +-
+ drivers/nfc/fdp/i2c.c                    |   4 +
+ drivers/pci/quirks.c                     |   8 +
+ fs/ext4/fsmap.c                          |   2 +
+ fs/ext4/inline.c                         |   1 -
+ fs/ext4/inode.c                          |   7 +-
+ fs/ext4/ioctl.c                          |   1 +
+ fs/ext4/namei.c                          |  13 +-
+ fs/ext4/xattr.c                          |   3 +
+ fs/file.c                                |   1 +
+ include/linux/pci_ids.h                  |   2 +
+ net/caif/caif_usb.c                      |   3 +
+ net/ipv6/ila/ila_xlat.c                  |   1 +
+ net/nfc/netlink.c                        |   2 +-
+ net/tipc/socket.c                        |   2 +-
+ 23 files changed, 61 insertions(+), 295 deletions(-)
 
 
