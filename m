@@ -2,121 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3328C6BACF1
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 11:03:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09C036BACF5
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 11:04:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231536AbjCOKDz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 06:03:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55288 "EHLO
+        id S230170AbjCOKEO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 06:04:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231708AbjCOKDd (ORCPT
+        with ESMTP id S231325AbjCOKDo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 06:03:33 -0400
-Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D37D7CA12;
-        Wed, 15 Mar 2023 03:02:12 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.169])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4Pc5XW3LVSz4f3s6R;
-        Wed, 15 Mar 2023 18:02:03 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP3 (Coremail) with SMTP id _Ch0CgDX0R+clxFkayjWEw--.46752S3;
-        Wed, 15 Mar 2023 18:02:05 +0800 (CST)
-Subject: Re: [PATCH v2 5/5] md: protect md_thread with a new disk level spin
- lock
-To:     Guoqing Jiang <guoqing.jiang@linux.dev>,
-        Yu Kuai <yukuai1@huaweicloud.com>, agk@redhat.com,
-        snitzer@kernel.org, song@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-raid@vger.kernel.org,
-        yi.zhang@huawei.com, yangerkun@huawei.com,
-        "yukuai (C)" <yukuai3@huawei.com>
-References: <20230315061810.653263-1-yukuai1@huaweicloud.com>
- <20230315061810.653263-6-yukuai1@huaweicloud.com>
- <16613534-5482-23c5-fa97-cfaedecab3d7@linux.dev>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <7cc22b63-a2f7-67ed-1a50-9fb415fadb81@huaweicloud.com>
-Date:   Wed, 15 Mar 2023 18:02:04 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Wed, 15 Mar 2023 06:03:44 -0400
+Received: from mail-ua1-x934.google.com (mail-ua1-x934.google.com [IPv6:2607:f8b0:4864:20::934])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF46825290
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 03:02:56 -0700 (PDT)
+Received: by mail-ua1-x934.google.com with SMTP id g23so8820118uak.7
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 03:02:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112; t=1678874576;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TF6LBLKlsT6uT4Hak2vOqFMzvPLvdsa/UHZ3r6EJWvE=;
+        b=erG0GtDtO6s1Iq5EloXAvSzFqpHnKqnX2G6uN3ILHe6gHt9SB1qPM6sbLXkQMtwm68
+         cnoMVUaWWBqvoBydH9Vl+aVXv7jPdcojydxM6qwNS/hDM64VXgKsqHKcb8DoscrN7/TP
+         1eFBPnOBAMeS8YgwQMtSto5wvzY8ayk9sPQXZU7y4UIhbXAl3IpFQCX/wee5tvMNGnxp
+         EHde934aJWCU8oHJfx+264PoH3RuZ4sgdoGO0dYj0un1GoA/j8KpRDFnzxTL9u/bpkc7
+         rdP4uhnzAAQ614qTtovXlv05O1zbTreNwZLul/sJ0j8itRfb21kj55p2vkKKImR9bnUY
+         VRog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678874576;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=TF6LBLKlsT6uT4Hak2vOqFMzvPLvdsa/UHZ3r6EJWvE=;
+        b=o87ibXOltu88M0n/QTAb31hF2e+5iFATrobUUrtxnJchpNDIx8Sov/hxaybF2ijEPe
+         DxD+gA+RlT2+xrC0fykIN7seQcKoJ+MqHf2Wib279E3P3KwmPutR1usOX7GWS0WwRtL1
+         yF6lgg98ZV2T1s17MrFhEeA+jcKy0h6+Tz7jtQwTdA0rg94ROjivOM0ntUzaSNJ0bqb/
+         fjCB//j8GAfTikni+za10H/xvNV6L4kYfEQnQoP/CmRRkNhJCNeZbFeXw3cAaHvQD7IK
+         yGSzaQOrdgb7zTyZv0K7phMFWoPfORuJas6ZqzHfhCvYfD7jRi0itDS/ZHdgBOsPPlRn
+         3a1g==
+X-Gm-Message-State: AO0yUKWNyF7r4UyqyA8Nc5SwmFA42keQVfr604qBHGD+u6uXfcvO+VuY
+        y1PrTuEyZ0cGCSBKal+SgZigYWaRJMVRFoMkyZD7Pg==
+X-Google-Smtp-Source: AK7set/qkuKoVcngfib97GKcYJc9/yISAk/PKjRHQUasazdErdyzZQKMIM8sMTTNGAmM6n9NhfAB3+I5c9OL16Rbdc8=
+X-Received: by 2002:a1f:7c8b:0:b0:432:5951:176a with SMTP id
+ x133-20020a1f7c8b000000b004325951176amr1739375vkc.2.1678874575897; Wed, 15
+ Mar 2023 03:02:55 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <16613534-5482-23c5-fa97-cfaedecab3d7@linux.dev>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _Ch0CgDX0R+clxFkayjWEw--.46752S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7Kw1fWw4DArWxJw13JF43KFg_yoW8Gr4rpr
-        yxXFy5JrWUCr1kAr18J3WUJa4Yyr1Iq3WUAry5WF17Jw15GryaqryjvFyjgF1DXF48Jr4D
-        Jr15tF4fZryDJr7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9214x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
-        0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7x
-        kEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
-        67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCw
-        CI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWr
-        Zr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYx
-        BIdaVFxhVjvjDU0xZFpf9x0JUZa9-UUUUU=
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        MAY_BE_FORGED,NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE autolearn=no
-        autolearn_force=no version=3.4.6
+References: <cover.1677515341.git.william.gray@linaro.org> <CACRpkdbAMQ0OAMnxuyf6gMFu8qJakmT=WvRzBTXavXFmnJ9ObA@mail.gmail.com>
+In-Reply-To: <CACRpkdbAMQ0OAMnxuyf6gMFu8qJakmT=WvRzBTXavXFmnJ9ObA@mail.gmail.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Wed, 15 Mar 2023 11:02:45 +0100
+Message-ID: <CAMRc=Mem3TsNM5coFLKAFQ74Rk4vvXLscuBhWoR-G6mLtxaSPQ@mail.gmail.com>
+Subject: Re: [PATCH v2 0/6] Migrate IDIO-16 GPIO drivers to regmap API
+To:     broonie@kernel.org
+Cc:     William Breathitt Gray <william.gray@linaro.org>,
+        andriy.shevchenko@linux.intel.com, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Mon, Mar 6, 2023 at 3:13=E2=80=AFPM Linus Walleij <linus.walleij@linaro.=
+org> wrote:
+>
+> On Mon, Feb 27, 2023 at 5:54 PM William Breathitt Gray
+> <william.gray@linaro.org> wrote:
+>
+> This looks good to me.
+> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+>
+> Bartosz, of you merge this you can drop the corresponding
+> patches to immutable irqchip conversion for these chips
+> that I will be posting shortly (currently on the build servers).
+>
+> Yours,
+> Linus Walleij
 
-在 2023/03/15 17:39, Guoqing Jiang 写道:
-> 
-> 
-> On 3/15/23 14:18, Yu Kuai wrote:
->> From: Yu Kuai <yukuai3@huawei.com>
->>
->> Our test reports a uaf for 'mddev->sync_thread':
->>
->> T1                      T2
->> md_start_sync
->>   md_register_thread
->>             raid1d
->>              md_check_recovery
->>               md_reap_sync_thread
->>                md_unregister_thread
->>                 kfree
->>
->>   md_wakeup_thread
->>    wake_up
->>    ->sync_thread was freed
-> 
-> Better to provide the relevant uaf (user after free perhaps you mean)
-> log from the test.
-Ok, I'll add uaf report(the report is from v5.10) in the next version.
-> 
->> Currently, a global spinlock 'pers_lock' is borrowed to protect
->> 'mddev->thread', this problem can be fixed likewise, however, there might
->> be similar problem for other md_thread, and I really don't like the 
->> idea to
->> borrow a global lock.
->>
->> This patch use a disk level spinlock to protect md_thread in relevant 
->> apis.
-> 
-> It is array level I think, and you probably want to remove the comment.
-> 
-> * pers_lockdoes extra service to protect accesses to
-> * mddev->thread when the mutex cannot be held.
+Mark, can you provide me with an immutable tag for the regmap tree
+containing commit 1/6 from this series, please?
 
-Yes, I missed this.
-
-Thanks,
-Kuai
-> 
-> Thanks,
-> Guoqing
-> .
-> 
-
+Bartosz
