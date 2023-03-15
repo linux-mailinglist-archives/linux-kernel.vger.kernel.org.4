@@ -2,79 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C82476BBEE6
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 22:20:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 019E56BBEE8
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 22:21:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232989AbjCOVU1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 17:20:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38344 "EHLO
+        id S232891AbjCOVV1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 17:21:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232223AbjCOVUN (ORCPT
+        with ESMTP id S230413AbjCOVVZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 17:20:13 -0400
-Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7604895BDF
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 14:19:42 -0700 (PDT)
-Received: by mail-il1-x12d.google.com with SMTP id h7so11093645ila.5
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 14:19:42 -0700 (PDT)
+        Wed, 15 Mar 2023 17:21:25 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FB6786AD;
+        Wed, 15 Mar 2023 14:20:54 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id y19so11610044pgk.5;
+        Wed, 15 Mar 2023 14:20:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678915177;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=gEgaBMSBWRa1FO8K+pq3htlZswyE7CJJoK0ovlchw1I=;
-        b=YiIhOeyY02wE3ltLusHCbz2wl5P8AO473XBp+MtFRPXivqiKfkeZzqZ/H1fjbgRraP
-         jW3e+Xsfe4fPQi6EmjNlET7dKGGJNEJLl12vT2makAx1vagr3ZrTvAJzXM7pUEpzuqi7
-         c8rLC7CQwAR7o/OXnSVjM/bQJBvgTQCoesQca0j31GkhuASIwKX6fJW6ixK8uJI/rZLW
-         MyEIwUfn0FYP8emCY2ksTXttu7RpoEZXCFrlLk29zSpfWSBhMgi1nWTLMkUeKHuXix4h
-         FJaMgVh8HCp87XEOGhHfPohCBvDIcVR9UO/EXCRYEU4ewIblG9NXCNd0LJU0edY4DTuH
-         mzTw==
+        d=gmail.com; s=20210112; t=1678915250;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yljKuAczGYt4Ja4FPBcd9N4OqR/KKOBeL7coSkUeCGI=;
+        b=hPnXTgdm6YGEeV4tLP9B+vNhAVCfCnbJf+RDz5geD4j5r4kLzEVVN7LherzmYQD+Z1
+         ZpKKRQljZ+VvGi6RV7RiQ35LNyRJ5X1RSpmr0Qs/XxzemW39WIflraTSB7wS78a9DcOE
+         KNDjB7mnB4QoA9SafkPpwk8RBTSVq+Ici3KwFmZJsdjgR2SwDgT1cYKqDt0Kuc1gD1LJ
+         JsOWmDTwhtLXpmFmDQrhpGbwdaAPAfid5EbTTRuF50zN5YdRMg9VfnoglTr/z7pWNi57
+         YCNq8/Ox2gMHCoV8CImK1mDXbCXflPNwrtWOfZR8I89WRcWXVZw6+kkczzhA/FAifZt3
+         ZSNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678915177;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gEgaBMSBWRa1FO8K+pq3htlZswyE7CJJoK0ovlchw1I=;
-        b=V4MBmjYQ9BSzfQdgYDp+Y7/q7ld9m4IJ3uXZOyyCAYKnm0Nr2xxO4+bmM87MGtpCkA
-         9DZ2HMH/4goYIzzJLZ8WPqcA0bfyNMpqcXr6X7nz1ehDRqj7OMtVMd+np/2P9wagzQJO
-         vZ2ZhABWY+fICkFfeR7rlbjm7FuGJOgrtWOTXawfdxacv2ecC7kVKNVuMYqdkprClcr5
-         LhnD6Fmbbto4jG/e606X39m36GvtetWXfHf7n6P9wviB6culNm6f/50EFAF20XZf7fA6
-         BP8dZuJoXGgZKPsUEorPyGOeF4p5VyQMOx/FXaT1njTPzYzbi6cpnplg8P4NYRmEDk7D
-         PAEw==
-X-Gm-Message-State: AO0yUKVduf0CGZDigxNKRS5JmNFpIckDYapTJqIJTakX6zbfP1cDn+8s
-        dd8uKiOyuwhMJ+SkB9DrC/A9nw==
-X-Google-Smtp-Source: AK7set+mA5+bm+Q3QV52tP9dqfqAndeYtOlfo1M/58Toaw3iZ2GC6/onU19J8i39HhN2+Rgw4BsTuQ==
-X-Received: by 2002:a05:6e02:1bc3:b0:323:2468:ba20 with SMTP id x3-20020a056e021bc300b003232468ba20mr5145198ilv.10.1678915176745;
-        Wed, 15 Mar 2023 14:19:36 -0700 (PDT)
-Received: from [172.22.22.4] ([98.61.227.136])
-        by smtp.googlemail.com with ESMTPSA id a12-20020a92ce4c000000b0032304e1814bsm1881527ilr.40.2023.03.15.14.19.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Mar 2023 14:19:36 -0700 (PDT)
-Message-ID: <6f7fa54c-6743-509b-a5d2-2d70ffb8c0e2@linaro.org>
-Date:   Wed, 15 Mar 2023 16:19:35 -0500
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH net v2 3/4] net: ipa: kill FILT_ROUT_CACHE_CFG IPA
- register
-Content-Language: en-US
-From:   Alex Elder <elder@linaro.org>
-To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com
-Cc:     caleb.connolly@linaro.org, mka@chromium.org, evgreen@chromium.org,
-        andersson@kernel.org, quic_cpratapa@quicinc.com,
-        quic_avuyyuru@quicinc.com, quic_jponduru@quicinc.com,
-        quic_subashab@quicinc.com, elder@kernel.org,
-        netdev@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230315193552.1646892-1-elder@linaro.org>
- <20230315193552.1646892-4-elder@linaro.org>
-In-Reply-To: <20230315193552.1646892-4-elder@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        d=1e100.net; s=20210112; t=1678915250;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=yljKuAczGYt4Ja4FPBcd9N4OqR/KKOBeL7coSkUeCGI=;
+        b=ZwtkQHQLXTB/YPHyKr8Z+z73cA2R/4srG3Zk9wAlMCG8uVcG/6MREvTfL9B2j/qr4M
+         4sqQOT5bSOmh0BSBWU8QlDspMwmRJt/M2cdZQIXXnuVjN4qUo9UIHJy25MD+pmyxFFrZ
+         VJ2Gq/2WIchMf8XKj4Q6bJY/ELDWGjcttI1mIJii+LwFkanNCQeRyK3MRylRBQud4ZG7
+         cJ+Rlqy/0zAoTZLJMn98KOfIiIv1VXSP1wMaLJTuIPxiAgsCWnLi155QgklkMwRJOcFa
+         Mqhq9o9d3g1jz168Cq5FEiXXvmWSgT3EcXAA2q0V7GUk5LSdbkEzck0MvK9gpNf3ZaB0
+         ZdLg==
+X-Gm-Message-State: AO0yUKXmHK8kiEpadoCHSnz/lr6iaMGAGKb0t9MiEKy8I5/rQ8PEmeoB
+        KPPcafYJ2aT6VGgp+BBvW8w=
+X-Google-Smtp-Source: AK7set86DXYC1k8HBLiZGq1z7YSeqqcu05dxBpS/bUleqxZZeiZsX/oxzNHOSQ30Kdl1cr1tZH3pRA==
+X-Received: by 2002:aa7:96c5:0:b0:625:6e2f:defa with SMTP id h5-20020aa796c5000000b006256e2fdefamr762998pfq.31.1678915250148;
+        Wed, 15 Mar 2023 14:20:50 -0700 (PDT)
+Received: from localhost ([98.97.36.54])
+        by smtp.gmail.com with ESMTPSA id l190-20020a6388c7000000b00502ea97cbc0sm3779958pgd.40.2023.03.15.14.20.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Mar 2023 14:20:49 -0700 (PDT)
+Date:   Wed, 15 Mar 2023 14:20:48 -0700
+From:   John Fastabend <john.fastabend@gmail.com>
+To:     Greg Thelen <gthelen@google.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Ian Rogers <irogers@google.com>
+Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Greg Thelen <gthelen@google.com>
+Message-ID: <641236b06baa1_63dce208a1@john.notmuch>
+In-Reply-To: <20230315054932.1639169-1-gthelen@google.com>
+References: <20230315054932.1639169-1-gthelen@google.com>
+Subject: RE: [PATCH] tools/resolve_btfids: Add libsubcmd to .gitignore
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,81 +83,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/15/23 2:35 PM, Alex Elder wrote:
-> A recent commit defined a few IPA registers used for IPA v5.0+.
-> One of those was a mistake.  Although the filter and router caches
-> get *flushed* using a single register, they use distinct registers
-> (ENDP_FILTER_CACHE_CFG and ENDP_ROUTER_CACHE_CFG) for configuration.
+Greg Thelen wrote:
+> After building the kernel I see:
+>   $ git status -s
+>   ?? tools/bpf/resolve_btfids/libbpf/
 > 
-> And although there *exists* a FILT_ROUT_CACHE_CFG register, it is
-> not needed in upstream code.  So get rid of definitions related to
-> FILT_ROUT_CACHE_CFG, because they are not needed.
+> Commit af03299d8536 ("tools/resolve_btfids: Install subcmd headers")
+> started copying header files into
+> tools/bpf/resolve_btfids/libsubcmd/include/subcmd. These *.h files are
+> not covered by higher level wildcard gitignores.
 > 
-> Fixes: de101ca79f97 ("net: ipa: define IPA v5.0+ registers")'
-
-AGAIN!  This is a bad commit ID.  It should be 8ba59716d16a.
-
-I've got a new series ready to go but I'll wait until
-tomorrow to post it.
-
-Sorry for the noise.
-
-					-Alex
-
-
-> Signed-off-by: Alex Elder <elder@linaro.org>
+> gitignore the entire libsubcmd directory. It's created as part of build
+> and removed by clean.
+> 
+> Fixes: af03299d8536 ("tools/resolve_btfids: Install subcmd headers")
+> Signed-off-by: Greg Thelen <gthelen@google.com>
 > ---
->   drivers/net/ipa/ipa_reg.c | 4 ++--
->   drivers/net/ipa/ipa_reg.h | 9 ---------
->   2 files changed, 2 insertions(+), 11 deletions(-)
+>  tools/bpf/resolve_btfids/.gitignore | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/drivers/net/ipa/ipa_reg.c b/drivers/net/ipa/ipa_reg.c
-> index 735fa65916097..463a31dfa9f47 100644
-> --- a/drivers/net/ipa/ipa_reg.c
-> +++ b/drivers/net/ipa/ipa_reg.c
-> @@ -39,7 +39,8 @@ static bool ipa_reg_id_valid(struct ipa *ipa, enum ipa_reg_id reg_id)
->   		return version <= IPA_VERSION_3_1;
->   
->   	case ENDP_FILTER_ROUTER_HSH_CFG:
-> -		return version != IPA_VERSION_4_2;
-> +		return version < IPA_VERSION_5_0 &&
-> +			version != IPA_VERSION_4_2;
->   
->   	case IRQ_SUSPEND_EN:
->   	case IRQ_SUSPEND_CLR:
-> @@ -52,7 +53,6 @@ static bool ipa_reg_id_valid(struct ipa *ipa, enum ipa_reg_id reg_id)
->   	case QSB_MAX_WRITES:
->   	case QSB_MAX_READS:
->   	case FILT_ROUT_HASH_EN:
-> -	case FILT_ROUT_CACHE_CFG:
->   	case FILT_ROUT_HASH_FLUSH:
->   	case FILT_ROUT_CACHE_FLUSH:
->   	case STATE_AGGR_ACTIVE:
-> diff --git a/drivers/net/ipa/ipa_reg.h b/drivers/net/ipa/ipa_reg.h
-> index 28aa1351dd488..ff2be8be0f683 100644
-> --- a/drivers/net/ipa/ipa_reg.h
-> +++ b/drivers/net/ipa/ipa_reg.h
-> @@ -61,7 +61,6 @@ enum ipa_reg_id {
->   	QSB_MAX_WRITES,
->   	QSB_MAX_READS,
->   	FILT_ROUT_HASH_EN,				/* Not IPA v5.0+ */
-> -	FILT_ROUT_CACHE_CFG,				/* IPA v5.0+ */
->   	FILT_ROUT_HASH_FLUSH,				/* Not IPA v5.0+ */
->   	FILT_ROUT_CACHE_FLUSH,				/* IPA v5.0+ */
->   	STATE_AGGR_ACTIVE,
-> @@ -206,14 +205,6 @@ enum ipa_reg_qsb_max_reads_field_id {
->   	GEN_QMB_1_MAX_READS_BEATS,			/* IPA v4.0+ */
->   };
->   
-> -/* FILT_ROUT_CACHE_CFG register */
-> -enum ipa_reg_filt_rout_cache_cfg_field_id {
-> -	ROUTER_CACHE_EN,
-> -	FILTER_CACHE_EN,
-> -	LOW_PRI_HASH_HIT_DISABLE,
-> -	LRU_EVICTION_THRESHOLD,
-> -};
-> -
->   /* FILT_ROUT_HASH_EN and FILT_ROUT_HASH_FLUSH registers */
->   enum ipa_reg_filt_rout_hash_field_id {
->   	IPV6_ROUTER_HASH,
+> diff --git a/tools/bpf/resolve_btfids/.gitignore b/tools/bpf/resolve_btfids/.gitignore
+> index 16913fffc985..52d5e9721d92 100644
+> --- a/tools/bpf/resolve_btfids/.gitignore
+> +++ b/tools/bpf/resolve_btfids/.gitignore
+> @@ -1,3 +1,4 @@
+>  /fixdep
+>  /resolve_btfids
+>  /libbpf/
+> +/libsubcmd/
+> -- 
+> 2.40.0.rc1.284.g88254d51c5-goog
+> 
 
+Thanks.
+
+Acked-by: John Fastabend <john.fastabend@gmail.com>
