@@ -2,172 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A1E76BC1AF
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 00:45:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7635C6BC1C0
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 00:51:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232076AbjCOXp4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 19:45:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45400 "EHLO
+        id S233001AbjCOXu6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 19:50:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232661AbjCOXpw (ORCPT
+        with ESMTP id S230333AbjCOXuz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 19:45:52 -0400
-Received: from MW2PR02CU001-vft-obe.outbound.protection.outlook.com (mail-westus2azlp170120001.outbound.protection.outlook.com [IPv6:2a01:111:f403:c005::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5030DEB48;
-        Wed, 15 Mar 2023 16:45:25 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RfH9Ma5tGLSxQXpgEdmWB1CZuW+MAbezYeQYIhZNlB17jSCRkTwQFSIXjLNcBqRyl4BWq1MXqe9dvoUS5BJDq6GeumtYDv7vxc0pUAa17XicXlNAglBjC+h3iTmF1ibK8/E3S3VWVaJeDu9tOt1NFx5xc+5HAzFUESIHtxgu28/9iMaVETi2coU1uT2K2FhL7OuMQLiI5cJvx/sggBZf1HVG3bRoNWehJW2tDfg7LqpFmsssgbPw6gPlKllFtwyUQQXBfv/A4Dw+F1s5FjPWJ5uUBbKcUwty2US6cQR2pFz6c7dTZasDpbED0NpLMvK0a811/o76jNHudxEuukE4Dg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=32RPgAaW1Dx7JZZfZaRiWQ9J0t6MQftMHF/5pHQcdh8=;
- b=ALAxo273nsDUbASqIaAmi0CT4G9pVBq5e7ktsI71po8pMkdSUqQI+q86yx+TmrGjs6hRWm+bPrexZ+WycqEY3jQQ3098wA2FT5PINwGri24+0fqbRLaka1f9NWAmbY7+mOAzrSexyit48Pe+tF8KOJmHhe5B9+QV7P/Rb8Zg2X4a+8qJSy7DtQKyUdZDsGKr6kzQ1wsdi77yLCDw8jaW2pdP6NNgG3GIiaRmrSAGbRsdzb1UVUyYFZZ4XVwkOAH0Agi3uwL4oSNK58rW0XiRCYOC8MyN8AdWsw37cGF026V07bJ1yJF51ifVBTqdaT8v+bjqr0LDvdWkMYWLFf3+Bw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vmware.com; dmarc=pass action=none header.from=vmware.com;
- dkim=pass header.d=vmware.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vmware.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=32RPgAaW1Dx7JZZfZaRiWQ9J0t6MQftMHF/5pHQcdh8=;
- b=1orFfgP6OMpgY79QU4MQPWq/1dMHl8ufv3HbwwR67pe5SUFqQO2Sp5zLbcADF/rbCcHCVzPl5EioCV0PspNmEwSc9c7L0fLLRrIgJiplcZtTDduSx+kgngm5LiVRI86SC2ftLuBZ10d8C+je7REZV5j0PaNg9Kn+wGKOsPnXjNY=
-Received: from BYAPR05MB4470.namprd05.prod.outlook.com (2603:10b6:a02:fc::24)
- by BYAPR05MB5846.namprd05.prod.outlook.com (2603:10b6:a03:cd::32) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.29; Wed, 15 Mar
- 2023 23:44:37 +0000
-Received: from BYAPR05MB4470.namprd05.prod.outlook.com
- ([fe80::4d4a:e1d0:6add:81eb]) by BYAPR05MB4470.namprd05.prod.outlook.com
- ([fe80::4d4a:e1d0:6add:81eb%7]) with mapi id 15.20.6178.029; Wed, 15 Mar 2023
- 23:44:37 +0000
-From:   Ronak Doshi <doshir@vmware.com>
-To:     Yunsheng Lin <linyunsheng@huawei.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-CC:     "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        Pv-drivers <Pv-drivers@vmware.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Guolin Yang <gyang@vmware.com>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH net] vmxnet3: use gro callback when UPT is enabled
-Thread-Topic: [PATCH net] vmxnet3: use gro callback when UPT is enabled
-Thread-Index: AQHZUgzlNAVJE7qL50u4mFq6JoP4Ta7xmZqAgADvKQCAAKsUgIAHJTAAgADERoD//5SOgIAAf+AAgADlBQA=
-Date:   Wed, 15 Mar 2023 23:44:37 +0000
-Message-ID: <AA320ADE-E149-4C0D-80D5-338B19AD31A2@vmware.com>
-References: <20230308222504.25675-1-doshir@vmware.com>
- <e3768ae9-6a2b-3b5e-9381-21407f96dd63@huawei.com>
- <4DF8ED21-92C2-404F-9766-691AEA5C4E8B@vmware.com>
- <252026f5-f979-2c8d-90d9-7ba396d495c8@huawei.com>
- <0389636C-F179-48E1-89D2-48DE0B34FD30@vmware.com>
- <2e2ae42b-4f10-048e-4828-5cb6dd8558f5@huawei.com>
- <3EF78217-44AA-44F6-99DC-86FF1CC03A94@vmware.com>
- <207a0919-1a5a-dee6-1877-ee0b27fc744a@huawei.com>
-In-Reply-To: <207a0919-1a5a-dee6-1877-ee0b27fc744a@huawei.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Microsoft-MacOutlook/16.70.23021201
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vmware.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BYAPR05MB4470:EE_|BYAPR05MB5846:EE_
-x-ms-office365-filtering-correlation-id: 1117b982-51f2-400b-fc8c-08db25af3cee
-x-ld-processed: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: h+jqcKqlGFxVPZJvvCewMWFVYYjw95GRC+fuy6SBLOqmeRgEvyMWMkkdRlOeieuh1T/N5s8DUF6D1+PBmdSK5BNR8UCuN8FRNTMQydnp4dT0PGVMTYl8ibCqPCuWjX8N3RfhOzlJMgxf1wV7zEp4jKr/XJZ5n9VyYWkKZVahgiPwT0wy9uEg9WEN2xsjri27DF0O/T6Ynzg/kat/R9J+iOs9DhfxWdzJ8rhwWYzqA+V6pZyw2Uwx4seoSivm/L9mCY/MfO2S7ECN0ge24Z4OYkEasg6dbR968zScspRNHWRStMoEZeB09ytlg6y1Vg7eQyohACR2qasTMwObuQ/Gl3JTlWmex/jRHPv2CddYxu2spUIpgQnVJeDHTDTNG2uvAD64FWSwdfDHjVtG/Ip39GUsJZeKJGrumlMUH1kzkYB0Zx/azxDssmUT6eDG2dtdvtyO9O5/fqq8OIpGjGl70g78f9vKstA+gEWH8sgTfQBVS2bkPNuNoh0r/Npx5A5ovshoR8eVCh3TD4KBGTIYETBMeQ6VXlJ+3BBtY8yPzkDwSzIZooKAaxmduqD8n0kfkrxp2KdL7xAxQtN68hxBnwHzcoICpGwVHbjKtMfeojRagg5ZbSCWuBRhUPizifAQoJ6029Ih9/IUWvVkWi0SSfUDwL5rx/ZEApg1sOTihc94l8GTYTmycf74VL8EYcuEBdIw+l+3S595muy4mlMpGR7RUv5LTuFVqeSj5vSCJoE=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR05MB4470.namprd05.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(136003)(396003)(39860400002)(366004)(346002)(451199018)(8936002)(8676002)(2906002)(5660300002)(41300700001)(4326008)(36756003)(33656002)(86362001)(38070700005)(122000001)(38100700002)(83380400001)(6506007)(478600001)(6512007)(71200400001)(6486002)(316002)(64756008)(66476007)(66446008)(66556008)(66946007)(186003)(2616005)(76116006)(110136005)(54906003)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?MUVRTXNZUlQwVGgvZlJtMGc2Zk1TTnhESk9YMFFoU0JGczZhM0MreXZPZ3hu?=
- =?utf-8?B?SXlvRTBpeENLV0wxcURkenlkTWVsTVJaczRWdWR4TFE3d1VEc1BZNE1qS0hS?=
- =?utf-8?B?c3BLaDZNK1krV3hrTHFjMFY2T0U3cHNEcTQwZ1EySnFORlNGaXBIN0JmbitV?=
- =?utf-8?B?U0xMc3R4eDFBRTQ1V0FKZzBid0JnclJPYjlsQ1pteThRSTRkcksrMDkxRDNl?=
- =?utf-8?B?aU1hUkJsOExyOGFjbGFoZU5XUFVQbVVoU3NoaUJHMjhpY3NmV1V2SXdwMVJY?=
- =?utf-8?B?WlROTTJuQVprdFAxVVJxU09JbitwRGVUMWlsd1U5YnBWSGR2WVFBU2FzZTdy?=
- =?utf-8?B?cmJLd2JYdVM0TmJYa0tnaTc1NGxXZlFoTTR1azlWeG56QUxkazROYk1CdFVr?=
- =?utf-8?B?dkRxeUg2OVJkNmJ0QUhkRjhKZ0Z0dGQ5ellmVkpQeHpESjUvN3UwMUFPMWhF?=
- =?utf-8?B?dlpzMmpvNmIzeHlUMW1kMFFvbFc0VkVzUlhkOHR1em5ueDJhN0VUT0hFQW8v?=
- =?utf-8?B?WE0wMzB4bUpzNG9XY0tXTEx3dDVHNmVEeWE5UG9LOTQyQTNtYmlYZkhTRWp4?=
- =?utf-8?B?UXJJK2w1THV2aDJRbndPMGp6dUYyQjJ1V0xNeG9NbnFhVndueHFZdWFzYzRQ?=
- =?utf-8?B?WXBRTFBXVnN5WW9JSGFXcEpVNGJoOFJwazNrVlpiNG9MaVBkdW8vdGhWWlYr?=
- =?utf-8?B?UllLY1E2R3VHZzJyT0hoSlIwY0s5c0lTSFc4WTBmdE1CRVpkaGRqREh6YnJz?=
- =?utf-8?B?cXppOVV4bTJDcFhhRVdVdUVha2xqTXo5VE95Z205ZjJXZGQzdEZoTnhFNDQ4?=
- =?utf-8?B?Y3hSWUh6alAwb1MrS01UcDNWaUo1K05FNUJHVzFjRWptQjlmMzV2eWYyWXdp?=
- =?utf-8?B?WHp1bkJQbStVOURmZnVaVTlkNXBkQ29NM2J1dWJRa01WQlZJcytYZnlmSFJ0?=
- =?utf-8?B?cWROT3ZrdzI4bm5HVk9iNTlTWC9NRlEwRXZIUEpHU1oxYWw1SFVmdVBrRjlt?=
- =?utf-8?B?cWRDOTNLU0xUYTMrODR5VlFxaXA4dk1XSWg4L1E0UUtYM01kSDNlUnJMZlNF?=
- =?utf-8?B?TzRhZEVnOUNxUW15SkRYTjlVeTZTQ2w3am5VcVFtekY5L2IxT0UvdmZndnZX?=
- =?utf-8?B?L1FleW5Uc21pTkUzUXR1alRneE1RR0Y1NnhwTTBEWUhjRVpraHQrRHZQeExJ?=
- =?utf-8?B?eG1HVUpyRVFzRzkzR2FyTHJZdkxSMS9JdkM0UkM2WUFMT0ZVUE5aVzc2cmVE?=
- =?utf-8?B?MWI5QjdXS2huVW40YXhFTzVoK1N5R3dvcnBtTEovbFZjNlV4c3FSSEdMczJr?=
- =?utf-8?B?MlhzVngrMzdDelo5eXQ3SFZrSitWOThMNTMwTklNd0VCT0ZlZEhrT0JLQnF2?=
- =?utf-8?B?a1c2b3hjQXVwNFlReTNmVmJlSEp2SmRha2trKzdTZldQVzRjbHRrbC9oK2Nn?=
- =?utf-8?B?SHE5eXM1dE9Zci9xdzFWakpsMllwUE41YVlqWHNRNzJjcml1NjFaM0VxTUxZ?=
- =?utf-8?B?bTdTSE5pcE5MRXFhN1BaQ0VwWjhxVVVIV0w0b2JHbW1PMEVQTnlXYnFvU0d3?=
- =?utf-8?B?MVZWbG1kWko4RjdOZW1rYmJjSU9mY0tEOWMwQW81dUJ4YlpIZHVWT0s2SGtz?=
- =?utf-8?B?VnZEQytLb0QxeEdBcUpudXk3NEtlSURUd0VWTmxZNE11akwzVHJYTWFBL3Zj?=
- =?utf-8?B?MlUxenpJcEc4VjZhYmd2aU5ZQUJsZkJZZGJHMlZUdGEvV2hTbFE5QjZVZXpH?=
- =?utf-8?B?Z3lwbFQzUWZjNWlOY3AwU0psQit2UkJzVmFWaVQzUTBxZmdQT01IZHdhNjhx?=
- =?utf-8?B?VG9DNDlDQ01PYitob1pJeEkyTWk0b3pYNXFycjRTUWVLV3RXUlVVM09rUFAz?=
- =?utf-8?B?djcyRFBtalh5Z2tuN0dZajQ4aDJ1c2dnelhMNitEUFVCRS9TZExoelpaTSt4?=
- =?utf-8?B?bGE3NDh6a3N6RXpuME5PeFNQUHN6YVg4M21jdzRmT2pJY1VGNWs5NlEzc1la?=
- =?utf-8?B?UGVHNFdudmJMZGdyYmRDN01aYVU5d3pBSzlOdFJRa0xMVWFqQ21xd2tRUnRS?=
- =?utf-8?B?cVFUdnk3SFpSMjhuR1NPVW1QZlBRZ2s5RG5DNGxzbXZrVHp0UUU1dVVZcnhB?=
- =?utf-8?B?Ym41enBZaUczMjJmM3k3ckZyL0pCR0d5cUJiYk42aTN5RUk5QkQ1b2FobHJQ?=
- =?utf-8?Q?QGnynqQMH35NAmkXxNeStUHMIICvLc3+bpgmaaTNgj2W?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <242C9BA368594E42AECA3EE65F2D4A85@namprd05.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Wed, 15 Mar 2023 19:50:55 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB0CB1E2B4
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 16:50:52 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id f16so21173015ljq.10
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 16:50:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678924251;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=p2+chdbkCkcfVI7TFnoEGlsYgaxLzqaNOF9QoTF6c+I=;
+        b=kemRYaBVdzjOq+qh0tyhmGO7RqAMpnw29HNfxqCH/yddvN6lvgHi8MR/+iaQenx3Hi
+         jfE/SP3tIishMHAabxa0tr8UKJZ6xP2YwqKSZ9eu9xRwYb3yHQplM3gH9fEVsB7QS9EN
+         LHevtJMf+N5FvafiQs33Fb6ZnSJLXBKfTDMHOw8zUnwkv1hpfRSJV6WHJgnuyhccxHY9
+         PQSx2mDeMvmk8SDURaMW/UMEvKX6b9co4A4kAf2Ono9pXcqWLlFpbcrMYTIt0vgR6yK4
+         6KwV4dL87+WNUk7Ea8ejMn4GnK7z70HuBtGIDAhLfl11bgbohRHzIQpJ838EtfDTTO+4
+         T70Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678924251;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=p2+chdbkCkcfVI7TFnoEGlsYgaxLzqaNOF9QoTF6c+I=;
+        b=jsbUDBvJZp6WZpSTRcbGNXz4i2kO0pQCQnDHHDp5xdUsRpm4yPoc/KAqdsIfZvTJKx
+         tNRXwZtrqsaicrKlfwFv/jvW+fDL2TxQJTcgGDK/tG+D5LySoSaXViP2ge4XfQwucutt
+         o1vMJeVMONgfOcURaDlRCrG23sJ5W5UvCnEY9uJJhFEg0LagzLrhhxj0BMSKtFLjhFY9
+         TfdomItaM2y9I6SZougR3WH4+y8RUQPudcCrEyFA9GSsN9+mTNBnOa1hbBFiyumSqhK7
+         2Lgo3ihMIZjkjKK5S1M75mosmA2DGrv3foGdCDiVUwR2xbME1I838qh/gsH47nljkp8h
+         FH7w==
+X-Gm-Message-State: AO0yUKXZYfM+4mo85D2bpMsqd2VgZIR4d8ns3wcN5Ncd7ncxVn5sO2Kh
+        JCxsTtS/lEH8iWpMk/ecUN7H2Q==
+X-Google-Smtp-Source: AK7set8rrRlZyHwlnVDSAf2JsH8d351/YFfJdfIxeI2qB/sXMb0J/ZH+ILqYjiYcad3mfkriUT4T6Q==
+X-Received: by 2002:a2e:740d:0:b0:294:7427:4ec4 with SMTP id p13-20020a2e740d000000b0029474274ec4mr1378919ljc.41.1678924250983;
+        Wed, 15 Mar 2023 16:50:50 -0700 (PDT)
+Received: from [192.168.1.101] (abyj16.neoplus.adsl.tpnet.pl. [83.9.29.16])
+        by smtp.gmail.com with ESMTPSA id h9-20020a2e9ec9000000b0029352fc39fbsm1010140ljk.63.2023.03.15.16.50.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Mar 2023 16:50:50 -0700 (PDT)
+Message-ID: <3d3117d2-b3eb-1174-7061-b899cdcdf6ce@linaro.org>
+Date:   Thu, 16 Mar 2023 00:50:49 +0100
 MIME-Version: 1.0
-X-OriginatorOrg: vmware.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR05MB4470.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1117b982-51f2-400b-fc8c-08db25af3cee
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Mar 2023 23:44:37.4231
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: /+ZyiFK70IaFiNKpp+XtV50fR4j2XUiFmjc5L0/1ceRwqPr4D2xzIKsZ4A3pH4E+mqCUFGUJPYuMnox6eDz6tQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR05MB5846
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 3/3] arm64: dts: qcom: Split out SA8155P and use correct
+ RPMh power domains
+Content-Language: en-US
+To:     Bjorn Andersson <andersson@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, agross@kernel.org,
+        krzysztof.kozlowski@linaro.org, marijn.suijten@somainline.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230214095435.2192153-1-konrad.dybcio@linaro.org>
+ <20230214095435.2192153-3-konrad.dybcio@linaro.org>
+ <20230314001052.7qvgbwkl73x22oll@ripper>
+ <eaf2ca0d-4d90-b68b-3b36-8bb0148cfb95@linaro.org>
+ <ee1ebac4-bf18-019a-f770-5cb88703d06b@linaro.org>
+ <20230315230024.wxuqthay74i5zgrq@ripper>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230315230024.wxuqthay74i5zgrq@ripper>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQo+IO+7v09uIDMvMTQvMjMsIDg6MDUgUE0sICJZdW5zaGVuZyBMaW4iIDxsaW55dW5zaGVuZ0Bo
-dWF3ZWkuY29tIDxtYWlsdG86bGlueXVuc2hlbmdAaHVhd2VpLmNvbT4+IHdyb3RlOg0KPg0KPiBJ
-IGFtIG5vdCBzdXJlIGhvdyB3ZSBjYW4gaGFuZGxlIHRoZSBydW50aW1lIGh3IGNhcGFiaWxpdHkg
-Y2hhbmdpbmcgdGhpbmcgeWV0LCB0aGF0IGlzIHdoeQ0KPiBJIHN1Z2dlc3RlZCBzZXR0aW5nIHRo
-ZSBodyBjYXBhYmlsaXR5IGR1cmluZyB0aGUgZHJpdmVyIGluaXQgcHJvY2VzcywgdGhlbiB1c2Vy
-IGNhbiBlbmFibGUNCj4gb3IgZGlzYWJsZSBHUk8gaWYgbmVlZCB0by4NCj4NCkl0IGlzIG5vdCBh
-Ym91dCBlbmFibGluZyBvciBkaXNhYmxpbmcgdGhlIExSTy9HUk8uIEl0IGlzIGFib3V0IHdoaWNo
-IGNhbGxiYWNrIHRvIGJlIHVzZWQgdG8NCmRlbGl2ZXIgdGhlIHBhY2tldHMgdG8gdGhlIHN0YWNr
-Lg0KDQpEdXJpbmcgaW5pdCwgdGhlIHZuaWMgd2lsbCBhbHdheXMgY29tZSB1cCBpbiBlbXVsYXRp
-b24gKG5vbi1VUFQpIG1vZGUgYW5kIHVzZXIgY2FuIHJlcXVlc3QgDQp3aGljaGV2ZXIgZmVhdHVy
-ZSB0aGV5IHdhbnQgKGxybyBvciBncm8gb3IgYm90aCkuIElmIGl0IGlzIGluIFVQVCBtb2RlLCBh
-cyB3ZSBrbm93IFVQVCBkZXZpY2UNCmRvZXMgbm90IHN1cHBvcnQgTFJPLCB3ZSB1c2UgZ3JvIEFQ
-SSB0byBkZWxpdmVyLiBJZiBHUk8gaXMgZGlzYWJsZWQgYnkgdGhlIHVzZXIsIHRoZW4gaXQgY2Fu
-IHN0aWxsDQp0YWtlIHRoZSBub3JtYWwgcGF0aC4gSWYgaW4gZW11bGF0aW9uIChub24tVVBUKSBt
-b2RlLCBFU1hpIHdpbGwgcGVyZm9ybSBMUk8uDQoNCj4gU3VwcG9zZSB1c2VyIGVuYWJsZSB0aGUg
-c29mdHdhcmUgR1JPIHVzaW5nIGV0aHRvb2wsIGRpc2FibGluZyB0aGUgR1JPIHRocm91Z2ggc29t
-ZSBydW50aW1lDQo+IGNoZWNraW5nIHNlZW1zIGFnYWluc3QgdGhlIHdpbGwgb2YgdGhlIHVzZXIu
-DQo+DQpXZSBhcmUgbm90IGRpc2FibGluZyBHUk8gaGVyZSwgaXQncyBlaXRoZXIgd2UgcGVyZm9y
-bSBMUk8gb24gRVNYaSBvciBHUk8gaW4gZ3Vlc3Qgc3RhY2suDQoNCg0KPiBBbHNvLCBpZiB5b3Ug
-YXJlIGFibGUgdG8gImFkZCBhbiBldmVudCB0byBub3RpZnkgdGhlIGd1ZXN0IGFib3V0IHRoaXMi
-LCBJIHN1cHBvc2UgdGhlDQo+IHBhcmEtdmlydHVhbGl6ZWQgZHJpdmVyIHdpbGwgY2xlYXIgdGhl
-IHNwZWNpZmljIGJpdCBpbiBuZXRkZXYtPmh3X2ZlYXR1cmVzIGFuZA0KPiBuZXRkZXYtPmZlYXR1
-cmVzIHdoZW4gaGFuZGxpbmcgdGhlIGV2ZW50PyBkb2VzIHVzZXIgbmVlZCB0byBiZSBub3RpZmll
-ZCBhYm91dCB0aGlzLCBkb2VzDQo+IHVzZXIgZ2V0IGNvbmZ1c2lvbiBhYm91dCB0aGlzIGNoYW5n
-ZSB3aXRob3V0IG5vdGlmaWNhdGlvbj8NCj4NCldlIHdvbuKAmXQgYmUgY2hhbmdpbmcgYW55IGZl
-YXR1cmUgYml0cy4gSXQgaXMganVzdCB0byBsZXQga25vdyB0aGUgZHJpdmVyIHRoYXQgVVBUIGlz
-IGFjdGl2ZSBhbmQgaXQNCnNob3VsZCB1c2UgR1JPIHBhdGggaW5zdGVhZCBvZiByZWx5aW5nIG9u
-IEVTWGkgTFJPLg0KDQpUaGFua3MsDQpSb25haw0KDQo=
+
+
+On 16.03.2023 00:00, Bjorn Andersson wrote:
+> On Tue, Mar 14, 2023 at 12:41:45PM +0100, Konrad Dybcio wrote:
+>>
+>>
+>> On 14.03.2023 12:36, Konrad Dybcio wrote:
+>>>
+>>>
+>>> On 14.03.2023 01:10, Bjorn Andersson wrote:
+>>>> On Tue, Feb 14, 2023 at 10:54:35AM +0100, Konrad Dybcio wrote:
+>>>>> The RPMhPD setup on SA8155P is different compared to SM8150. Correct
+>>>>> it to ensure the platform will not try accessing forbidden/missing
+>>>>> RPMh entries at boot, as a bad vote will hang the machine.
+>>>>>
+>>>>
+>>>> I don't see that this will scale, as soon as someone adds a new device
+>>>> in sm8150.dtsi that has the need to scale a power rail this will be
+>>>> forgotten and we will have a mix of references to the SM8150 and SA8155P
+>>>> value space.
+>>>>
+>>>> That said, I think it's reasonable to avoid duplicating the entire
+>>>> sm8150.dtsi.
+>>> Yeah, this problem has no obvious good solutions and even though it's
+>>> not very elegant, this seems to be the less bad one..
+>>>
+>>>>
+>>>> How about making the SA8155P_* macros match the SM8150_* macros?
+>>>> That way things will fail gracefully if a device node references a
+>>>> resource not defined for either platform...
+>>> Okay, let's do that
+>> Re-thinking it, it's good that the indices don't match, as this way the
+>> board will (should) refuse to function properly if there's an oversight,
+>> which may have gone unnoticed if they were matching, so this only guards
+>> us against programmer error which is not great :/
+>>
+> 
+> Right, ensuring that the resource indices never collides would be a good
+> way to capture this issue, as well as copy-paste errors etc. My
+> pragmatic proposal is that we make SA8155P_x == SM8150_x where a match
+> exist, and for the ones that doesn't match we pick numbers that doesn't
+> collide between the platforms.
+> 
+> The alternative is to start SA8155P_x at 11, but it's different and
+> forces sa8155p.dtsi to redefine every single power-domains property...
+> 
+> 
+> This does bring back the feeling that it was a mistake to include the
+> platform name in these defines in the first place... Not sure if it's
+> worth mixing generic defines into the picture at this point, given that
+> we I don't see a way to use them on any existing platform.
+TBF we could, think:
+
+sm1234_rpmpds[] = {
+	[CX] = &foobar1,
+	[CX_AO] = &foobar1_ao,
+
+	[...]
+
+	/* Legacy DT bindings */
+	[SM1234_CX] = &foobar1,
+	[SM1234_CX_AO] = &foobar1_ao,
+};
+
+WDYT?
+
+Konrad
+> 
+> Regards,
+> Bjorn
+> 
+>> Konrad
+>>>
+>>> Konrad
+>>>>
+>>>> Regards,
+>>>> Bjorn
+>>>>
+>>>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>>>>> ---
+>>>>>  arch/arm64/boot/dts/qcom/sa8155p-adp.dts |  2 +-
+>>>>>  arch/arm64/boot/dts/qcom/sa8155p.dtsi    | 51 ++++++++++++++++++++++++
+>>>>>  2 files changed, 52 insertions(+), 1 deletion(-)
+>>>>>  create mode 100644 arch/arm64/boot/dts/qcom/sa8155p.dtsi
+>>>>>
+>>>>> diff --git a/arch/arm64/boot/dts/qcom/sa8155p-adp.dts b/arch/arm64/boot/dts/qcom/sa8155p-adp.dts
+>>>>> index 459384ec8f23..9454e8e4e517 100644
+>>>>> --- a/arch/arm64/boot/dts/qcom/sa8155p-adp.dts
+>>>>> +++ b/arch/arm64/boot/dts/qcom/sa8155p-adp.dts
+>>>>> @@ -7,7 +7,7 @@
+>>>>>  
+>>>>>  #include <dt-bindings/regulator/qcom,rpmh-regulator.h>
+>>>>>  #include <dt-bindings/gpio/gpio.h>
+>>>>> -#include "sm8150.dtsi"
+>>>>> +#include "sa8155p.dtsi"
+>>>>>  #include "pmm8155au_1.dtsi"
+>>>>>  #include "pmm8155au_2.dtsi"
+>>>>>  
+>>>>> diff --git a/arch/arm64/boot/dts/qcom/sa8155p.dtsi b/arch/arm64/boot/dts/qcom/sa8155p.dtsi
+>>>>> new file mode 100644
+>>>>> index 000000000000..f2fd7c28764e
+>>>>> --- /dev/null
+>>>>> +++ b/arch/arm64/boot/dts/qcom/sa8155p.dtsi
+>>>>> @@ -0,0 +1,51 @@
+>>>>> +// SPDX-License-Identifier: BSD-3-Clause
+>>>>> +/*
+>>>>> + * Copyright (c) 2023, Linaro Limited
+>>>>> + *
+>>>>> + * SA8155P is an automotive variant of SM8150, with some minor changes.
+>>>>> + * Most notably, the RPMhPD setup differs: MMCX and LCX/LMX rails are gone.
+>>>>> + */
+>>>>> +
+>>>>> +#include "sm8150.dtsi"
+>>>>> +
+>>>>> +&dispcc {
+>>>>> +	power-domains = <&rpmhpd SA8155P_CX>;
+>>>>> +};
+>>>>> +
+>>>>> +&mdss_mdp {
+>>>>> +	power-domains = <&rpmhpd SA8155P_CX>;
+>>>>> +};
+>>>>> +
+>>>>> +&mdss_dsi0 {
+>>>>> +	power-domains = <&rpmhpd SA8155P_CX>;
+>>>>> +};
+>>>>> +
+>>>>> +&mdss_dsi1 {
+>>>>> +	power-domains = <&rpmhpd SA8155P_CX>;
+>>>>> +};
+>>>>> +
+>>>>> +&remoteproc_adsp {
+>>>>> +	power-domains = <&rpmhpd SA8155P_CX>;
+>>>>> +};
+>>>>> +
+>>>>> +&remoteproc_cdsp {
+>>>>> +	power-domains = <&rpmhpd SA8155P_CX>;
+>>>>> +};
+>>>>> +
+>>>>> +&remoteproc_mpss {
+>>>>> +	power-domains = <&rpmhpd SA8155P_CX>,
+>>>>> +			<&rpmhpd SA8155P_MSS>;
+>>>>> +};
+>>>>> +
+>>>>> +&remoteproc_slpi {
+>>>>> +	power-domains = <&rpmhpd SA8155P_CX>,
+>>>>> +			<&rpmhpd SA8155P_MX>;
+>>>>> +};
+>>>>> +
+>>>>> +&rpmhpd {
+>>>>> +	compatible = "qcom,sa8155p-rpmhpd";
+>>>>> +};
+>>>>> +
+>>>>> +&sdhc_2 {
+>>>>> +	power-domains = <&rpmhpd SA8155P_CX>;
+>>>>> +};
+>>>>> -- 
+>>>>> 2.39.1
+>>>>>
