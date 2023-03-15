@@ -2,210 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 429CC6BA47D
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 02:16:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 951A06BA486
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 02:23:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230079AbjCOBP6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 21:15:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53328 "EHLO
+        id S229955AbjCOBXw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 21:23:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbjCOBP4 (ORCPT
+        with ESMTP id S229790AbjCOBXs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 21:15:56 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EE9329E25
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 18:15:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678842955; x=1710378955;
-  h=message-id:date:mime-version:cc:subject:to:references:
+        Tue, 14 Mar 2023 21:23:48 -0400
+Received: from esa5.hgst.iphmx.com (esa5.hgst.iphmx.com [216.71.153.144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 055ACEFAF
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 18:23:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1678843426; x=1710379426;
+  h=message-id:date:mime-version:subject:to:cc:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=9vK4DMJA04GP+L4LXClAQFNWHErH0unzYpP3P+0wgFM=;
-  b=ayJ9kElrKXo9tKgO2zIVEymHIDuzGolmMXdLxXnpNhAc0cMVTbtNZq21
-   TyoQmt+jcF4+cc2og0uwuqpX8CiJDDR0PDwUiSRXxOJqMUWWfPfndFdEH
-   Rt5vjEann3NCWjz5nNcPsgeur/h0WYi1bWigRPxYCankAYt9uSdsT7WEQ
-   jwVn+0glBOi/djVtGZ4IngXogWBIiCCyCvUuvaAig/SBwel9L4pk9Mz6U
-   MGjuIh/5nAcKjy+A6GVMG+lu5RLbf4vYBExdDtv0kjfCfVnzhEg3bUedj
-   ZA2CX4YpiBhw9k+kMGWezQ+HqskP61bqGYLV8GXUzhCjaRQkDnGoJfJzs
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="423857632"
-X-IronPort-AV: E=Sophos;i="5.98,261,1673942400"; 
-   d="scan'208";a="423857632"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2023 18:15:55 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="822583676"
-X-IronPort-AV: E=Sophos;i="5.98,261,1673942400"; 
-   d="scan'208";a="822583676"
-Received: from allen-box.sh.intel.com (HELO [10.239.159.48]) ([10.239.159.48])
-  by fmsmga001.fm.intel.com with ESMTP; 14 Mar 2023 18:15:52 -0700
-Message-ID: <3547b3a8-0ea4-bfe7-2bdc-2213ec89b7e5@linux.intel.com>
-Date:   Wed, 15 Mar 2023 09:14:48 +0800
+  bh=X8UKkBh1V1RorkgsXH+xOkeiIn0TdvaVPn4IWxodiyw=;
+  b=pr3O9YvgceoSM9UUvYxrGr7MkuNYWWv7+sBWdwjGhILx0m4varfxlvA+
+   6XUlS49Pz8VSddVW9S4YGnOM+Tg1pwbgFHpdhqUwFfY8qkgQpf3dX74f2
+   nLnZGb/4bFON3nI7AT9wzu+PG9K+0olLK/VkZrJPBIllp+iYhIl/Uu03T
+   K7+0Xvd9n4hvY1v/1sChm43evMUFBC3jugbSpOICgrWW7+pCyM17r2CBk
+   /JC6rT8z60fca20sqnHZ/xWohbSN5W2TcYNEAtwTx249Eoy/2oBe6AGuA
+   pc1d4a1rHGg+y7Sva4Bd9g07lOK9GDEHXBh9jqMEr+RerZtNztozJUx9+
+   w==;
+X-IronPort-AV: E=Sophos;i="5.98,261,1673884800"; 
+   d="scan'208";a="225433067"
+Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 15 Mar 2023 09:23:43 +0800
+IronPort-SDR: 9LK/OnKFXhDxpSWjwqkooV7sFxNzq+2qoQZhYrGUodtnbJA6R+P0PJmiNEmk3kIKwL4U8tnr3W
+ t2WXAAODoq6qv9FR0SA/j0q5e8RP/Bef8+7CBMafbTPLkB4/vKJpwsN7Ll5uaxrDGKtGvwIVLj
+ 6FdcRKhmA/hoTSi8BaBQ026RyiFN1a8IbQGs86wXoEuEoH5kd1TeY0WFJWpEVFiTTlRHFnYeT4
+ fJf7+gRC7Z5KdsZYOxbLvi0rkN02YEJ2n4H1wIxzdmaVTSl1rf0Q/pwMaH+IdTpz+92lQRBzN9
+ qYs=
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 14 Mar 2023 17:34:30 -0700
+IronPort-SDR: 6MYjDq52A/XP5aJczbvRMXwlOISf1ALWvUqv+wVPQWd8jq1Lm9ubc8uLa6pR6331Lg5FCITMn+
+ n/+ZhdLXwCIFjhO8T2p5bBG1ch4fXfvufWw/1BsE2MekatobLQDojqQuNHW1yKVekRDW7EL/f5
+ rz8RlH6BoR/I/lB4Koo99e1VfegbD2xn7uLgIJBB/VM8/Zm+KvUp76xUW5lRH/0EXu9sEs1ovO
+ DL6Z9UzgMcJIqr/0qb8hszPyn7SqE0siYUPySoYkTsZkt/2SDnI+gCO74yAYxRp1f91N9NjMc8
+ 8v8=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 14 Mar 2023 18:23:43 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4Pbt2R3Rnnz1RtW0
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 18:23:43 -0700 (PDT)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1678843422; x=1681435423; bh=X8UKkBh1V1RorkgsXH+xOkeiIn0TdvaVPn4
+        IWxodiyw=; b=bP6jbEKa2LNYrQ3e2NilGHdksmnc/IQsbBc+wU7S6SEmh0bR14o
+        jUoM4OkcwGn6CJSOfiLj7omJ37O3WflH2smKKwby8OecIU9bS+scfEFuatS+5YSo
+        btf1DwxXuMgoYlEkDcHu0bG4P8Myae0M+2qX9XcONMEwigtdRRYJj1Mk+dxKzft3
+        NzEEK6GZ9eThmQNJAZ2qwKqE3RQnIgdi5bzritBbeL8k7Z4uaqvRBgs7nC//ELG0
+        +8keKTfSIAlsvvLmQgqzjSIX4oG9R5B1zvxJyEKE/5iGt1mdm+pQO+2SoDl12O3M
+        j5krO7MQQgFns5Rd6rXn7bEuC5UGnEofB2g==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id RRFeq1G4ebEb for <linux-kernel@vger.kernel.org>;
+        Tue, 14 Mar 2023 18:23:42 -0700 (PDT)
+Received: from [10.225.163.84] (unknown [10.225.163.84])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4Pbt2M4kD6z1RtVm;
+        Tue, 14 Mar 2023 18:23:39 -0700 (PDT)
+Message-ID: <7453aba3-9f2a-4723-3039-a85652883b48@opensource.wdc.com>
+Date:   Wed, 15 Mar 2023 10:23:38 +0900
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Cc:     baolu.lu@linux.intel.com, iommu@lists.linux.dev,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Kevin Tian <kevin.tian@intel.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] iommu/vt-d: Remove unnecessary locking in
- intel_irq_remapping_alloc()
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v3 02/38] ata: add HAS_IOPORT dependencies
 Content-Language: en-US
-To:     Jacob Pan <jacob.jun.pan@linux.intel.com>
-References: <20230314051836.23817-1-baolu.lu@linux.intel.com>
- <20230314085424.3e6141d1@jacob-builder>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <20230314085424.3e6141d1@jacob-builder>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Niklas Schnelle <schnelle@linux.ibm.com>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
+        linux-ide@vger.kernel.org
+References: <20230314121216.413434-1-schnelle@linux.ibm.com>
+ <20230314121216.413434-3-schnelle@linux.ibm.com>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <20230314121216.413434-3-schnelle@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/14/23 11:54 PM, Jacob Pan wrote:
-> Hi BaoLu,
-> 
-> On Tue, 14 Mar 2023 13:18:36 +0800, Lu Baolu <baolu.lu@linux.intel.com>
-> wrote:
-> 
->> The global rwsem dmar_global_lock was introduced by commit 3a5670e8ac932
->> ("iommu/vt-d: Introduce a rwsem to protect global data structures"). It
->> is used to protect DMAR related global data from DMAR hotplug operations.
->>
->> Using dmar_global_lock in intel_irq_remapping_alloc() is unnecessary as
->> the DMAR global data structures are not touched there. Remove it to avoid
->> below lockdep warning.
->>
->>   ======================================================
->>   WARNING: possible circular locking dependency detected
->>   6.3.0-rc2 #468 Not tainted
->>   ------------------------------------------------------
->>   swapper/0/1 is trying to acquire lock:
->>   ff1db4cb40178698 (&domain->mutex){+.+.}-{3:3},
->>     at: __irq_domain_alloc_irqs+0x3b/0xa0
->>
->>   but task is already holding lock:
->>   ffffffffa0c1cdf0 (dmar_global_lock){++++}-{3:3},
->>     at: intel_iommu_init+0x58e/0x880
->>
->>   which lock already depends on the new lock.
->>
->>   the existing dependency chain (in reverse order) is:
->>
->>   -> #1 (dmar_global_lock){++++}-{3:3}:
->>          lock_acquire+0xd6/0x320
->>          down_read+0x42/0x180
->>          intel_irq_remapping_alloc+0xad/0x750
->>          mp_irqdomain_alloc+0xb8/0x2b0
->>          irq_domain_alloc_irqs_locked+0x12f/0x2d0
->>          __irq_domain_alloc_irqs+0x56/0xa0
->>          alloc_isa_irq_from_domain.isra.7+0xa0/0xe0
->>          mp_map_pin_to_irq+0x1dc/0x330
->>          setup_IO_APIC+0x128/0x210
->>          apic_intr_mode_init+0x67/0x110
->>          x86_late_time_init+0x24/0x40
->>          start_kernel+0x41e/0x7e0
->>          secondary_startup_64_no_verify+0xe0/0xeb
->>
->>   -> #0 (&domain->mutex){+.+.}-{3:3}:
->>          check_prevs_add+0x160/0xef0
->>          __lock_acquire+0x147d/0x1950
->>          lock_acquire+0xd6/0x320
->>          __mutex_lock+0x9c/0xfc0
->>          __irq_domain_alloc_irqs+0x3b/0xa0
->>          dmar_alloc_hwirq+0x9e/0x120
->>          iommu_pmu_register+0x11d/0x200
->>          intel_iommu_init+0x5de/0x880
->>          pci_iommu_init+0x12/0x40
->>          do_one_initcall+0x65/0x350
->>          kernel_init_freeable+0x3ca/0x610
->>          kernel_init+0x1a/0x140
->>          ret_from_fork+0x29/0x50
->>
->>   other info that might help us debug this:
->>
->>   Possible unsafe locking scenario:
->>
->>          CPU0                    CPU1
->>          ----                    ----
->>     lock(dmar_global_lock);
->>                                  lock(&domain->mutex);
->>                                  lock(dmar_global_lock);
->>     lock(&domain->mutex);
->>
->>                  *** DEADLOCK ***
->>
->> Fixes: 9dbb8e3452ab ("irqdomain: Switch to per-domain locking")
->> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
->> ---
->>   drivers/iommu/intel/irq_remapping.c | 6 ------
->>   1 file changed, 6 deletions(-)
->>
->> diff --git a/drivers/iommu/intel/irq_remapping.c
->> b/drivers/iommu/intel/irq_remapping.c index 6d01fa078c36..df9e261af0b5
->> 100644 --- a/drivers/iommu/intel/irq_remapping.c
->> +++ b/drivers/iommu/intel/irq_remapping.c
->> @@ -311,14 +311,12 @@ static int set_ioapic_sid(struct irte *irte, int
->> apic) if (!irte)
->>   		return -1;
->>   
->> -	down_read(&dmar_global_lock);
->>   	for (i = 0; i < MAX_IO_APICS; i++) {
->>   		if (ir_ioapic[i].iommu && ir_ioapic[i].id == apic) {
->>   			sid = (ir_ioapic[i].bus << 8) |
->> ir_ioapic[i].devfn; break;
->>   		}
->>   	}
->> -	up_read(&dmar_global_lock);
->>   
->>   	if (sid == 0) {
->>   		pr_warn("Failed to set source-id of IOAPIC (%d)\n",
->> apic); @@ -338,14 +336,12 @@ static int set_hpet_sid(struct irte *irte,
->> u8 id) if (!irte)
->>   		return -1;
->>   
->> -	down_read(&dmar_global_lock);
->>   	for (i = 0; i < MAX_HPET_TBS; i++) {
->>   		if (ir_hpet[i].iommu && ir_hpet[i].id == id) {
->>   			sid = (ir_hpet[i].bus << 8) | ir_hpet[i].devfn;
->>   			break;
->>   		}
->>   	}
->> -	up_read(&dmar_global_lock);
->>   
->>   	if (sid == 0) {
->>   		pr_warn("Failed to set source-id of HPET block (%d)\n",
->> id); @@ -1339,9 +1335,7 @@ static int intel_irq_remapping_alloc(struct
->> irq_domain *domain, if (!data)
->>   		goto out_free_parent;
->>   
->> -	down_read(&dmar_global_lock);
->>   	index = alloc_irte(iommu, &data->irq_2_iommu, nr_irqs);
->> -	up_read(&dmar_global_lock);
->>   	if (index < 0) {
->>   		pr_warn("Failed to allocate IRTE\n");
->>   		kfree(data);
-> Reviewed-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
-> 
-> slightly beyond the scope of this, do we need to take dmar_global_lock
-> below? shouldn't it be in single threaded context?
-> 
-> 	down_write(&dmar_global_lock);
-> 	ret = dmar_dev_scope_init();
-> 	up_write(&dmar_global_lock);
-> 
-> 	return ret;
-> }
-> rootfs_initcall(ir_dev_scope_init);
+On 3/14/23 21:11, Niklas Schnelle wrote:
+> In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
+> not being declared. We thus need to add HAS_IOPORT as dependency for
+> those drivers using them.
 
-Yes, agreed. This runs in a single threaded context. I will remove the
-locking in a cleanup patch.
+I do not see HAS_IOPORT=y defined anywhere in 6.3-rc. Is that in linux-next ?
+There is a HAS_IOPORT_MAP, but I guess it is different.
 
-Best regards,
-baolu
+> 
+> Co-developed-by: Arnd Bergmann <arnd@kernel.org>
+> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+> ---
+>  drivers/ata/Kconfig | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/ata/Kconfig b/drivers/ata/Kconfig
+> index b56fba76b43f..e5e67bdc2dff 100644
+> --- a/drivers/ata/Kconfig
+> +++ b/drivers/ata/Kconfig
+> @@ -342,6 +342,7 @@ endif # HAS_DMA
+>  
+>  config ATA_SFF
+>  	bool "ATA SFF support (for legacy IDE and PATA)"
+> +	depends on HAS_IOPORT
+>  	default y
+>  	help
+>  	  This option adds support for ATA controllers with SFF
+
+-- 
+Damien Le Moal
+Western Digital Research
+
