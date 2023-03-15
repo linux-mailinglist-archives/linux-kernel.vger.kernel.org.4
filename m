@@ -2,66 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D5246BBD1C
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 20:19:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF98D6BBD0E
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 20:14:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232837AbjCOTTS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 15:19:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35448 "EHLO
+        id S232800AbjCOTOf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 15:14:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230134AbjCOTTP (ORCPT
+        with ESMTP id S232730AbjCOTOc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 15:19:15 -0400
-X-Greylist: delayed 307 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 15 Mar 2023 12:19:12 PDT
-Received: from zucker.schokokeks.org (zucker.schokokeks.org [IPv6:2a01:4f8:121:1ffe:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 528BD26CCA
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 12:19:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hboeck.de; s=key1;
-        t=1678907641; bh=1DWkxK5CAV8IeLaaAvIOToX7szsnovvJb0D8dKIkFac=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type:
-         Content-Transfer-Encoding;
-        b=gO36HlPFwu3ZBeidjPBn6lfUUgqlJqUr+zD395USNW8jEzap1zRg9GQULfTTV3d/W
-         U8/rxdK4RBN/1vZjD4nz6NAfr5fqJdipqxudOCRfmZRA5vAmX79N+s3A2cAzvlQj7F
-         DnWKKMWYhhQaJwOBJd1L1iYYLWiDHzXMpDpP2RX6oN3mfu9huju4zjnvWqsB0HiR0m
-         2fBXGY/rS0xdDWNtq0uM0oSJW9oEDqid+d/O8TPjjeJt+XW+etUtO+RmU44IX32MVi
-         h1DqvgS/0wEvH5334ezG3RuQzfzaOX2wePGrUl0LNHCKJvfNr0sd1bgTcqtiP6T3QQ
-         e2N8SdNKbfLrg==
-Original-Content-Transfer-Encoding: 7bit
-Original-Subject: [PATCH]Fix typo in LEGACY_TIOCSTI Kconfig description
-Author: Hanno =?iso-8859-1?q?B=F6ck?= <hanno@hboeck.de>
-Date:   Wed, 15 Mar 2023 20:14:00 +0100
-From:   Hanno =?iso-8859-1?q?B=F6ck?= <hanno@hboeck.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>, linux-kernel@vger.kernel.org
-Subject: [PATCH]Fix typo in LEGACY_TIOCSTI Kconfig description
-Message-ID: <20230315201400.7bb07d47.hanno@hboeck.de>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
+        Wed, 15 Mar 2023 15:14:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D7249B2F6;
+        Wed, 15 Mar 2023 12:14:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AFBBF61120;
+        Wed, 15 Mar 2023 19:14:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DE03C433D2;
+        Wed, 15 Mar 2023 19:14:17 +0000 (UTC)
+Date:   Wed, 15 Mar 2023 15:14:15 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     "Uladzislau Rezki (Sony)" <urezki@gmail.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Philipp Reisner <philipp.reisner@linbit.com>,
+        Bryan Tan <bryantan@vmware.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Bob Pearson <rpearsonhpe@gmail.com>,
+        Ariel Levkovich <lariel@nvidia.com>,
+        Theodore Ts'o <tytso@mit.edu>, Julian Anastasov <ja@ssi.bg>
+Subject: Re: [PATCH 00/13] Rename k[v]free_rcu() single argument to
+ k[v]free_rcu_mightsleep()
+Message-ID: <20230315151415.2534e11c@gandalf.local.home>
+In-Reply-To: <20230201150815.409582-1-urezki@gmail.com>
+References: <20230201150815.409582-1-urezki@gmail.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a stray ' in the description before the Y. It appears this was
-meant as a quote for the 'Y'. However, it is more common to use
-unquoted Y in Kconfig descriptions.
+On Wed,  1 Feb 2023 16:08:06 +0100
+"Uladzislau Rezki (Sony)" <urezki@gmail.com> wrote:
 
-diff --git a/drivers/tty/Kconfig b/drivers/tty/Kconfig
-index d35fc068d..84caac32f 100644
---- a/drivers/tty/Kconfig
-+++ b/drivers/tty/Kconfig
-@@ -160,7 +160,7 @@ config LEGACY_TIOCSTI
- 	  a dangerous legacy operation, and can be disabled on most
- 	  systems.
- 
--	  Say 'Y here only if you have confirmed that your system's
-+	  Say Y here only if you have confirmed that your system's
- 	  userspace depends on this functionality to continue operating
- 	  normally.
- 
+> This small series is based on Paul's "dev" branch. Head is 6002817348a1c610dc1b1c01ff81654cdec12be4
+> it renames a single argument of k[v]free_rcu() to its new k[v]free_rcu_mightsleep() name.
+> 
+> 1.
+> The problem is that, recently we have run into a precedent when
+> a user intended to give a second argument to kfree_rcu() API but
+> forgot to do it in a code so a call became as a single argument
+> of kfree_rcu() API.
+> 
+> 2.
+> Such mistyping can lead to hidden bags where sleeping is forbidden.
+> 
+> 3.
+> _mightsleep() prefix gives much more information for which contexts
+> it can be used for.
+
+My honest opinion is that I hate that name "kvfree_rcu_mightsleep()" ;-)
+
+As I honestly don't know why it might sleep.
+
+I didn't care about the name before, but now that it's touching code I
+maintain I do care ;-)
+
+Why not call it:
+
+ kvfree_rcu_synchronize()
+
+?
+
+As that is much more descriptive of what it does. Especially since these
+ugly names are popping up in my code because kvfree_rcu() replaced a
+rcu_synchronize() in the first place.
+
+-- Steve
