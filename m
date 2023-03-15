@@ -2,158 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEA086BB92A
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 17:10:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55A406BB937
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 17:12:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232324AbjCOQKS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 12:10:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48554 "EHLO
+        id S232659AbjCOQMY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 12:12:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232474AbjCOQJr (ORCPT
+        with ESMTP id S232680AbjCOQL6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 12:09:47 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A192F20690
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 09:09:15 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id r11so25911156edd.5
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 09:09:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678896551;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=YGlOw94M1bjV558+SSqH2l1uEWI6x6BMDe5Gqn6Ht4o=;
-        b=iELiNFHPcviGR6KfXPNwBddxGNJi5S2lRxo6xkuHqim9zJSyRx1SDoxqzFgt4yr4qb
-         j3mRtXcaJjjUqF54bdk/OfbPw8IfdfvbhIbgd4Sr8+lqtKlIzAX3D276PIOyM8JZ2Y/j
-         5hnN6owOgO0ShEb+rsseYEtfRM1+trw1sBXD/7sXCirhV3ICWu5OhTHFks03veLFGf+/
-         2b9K5PR34t0W52nT9JN73/Wmrrn6gall2fFOC93+bWiUBZkW2lD7nBje9TZHsWuQBhWb
-         8TpJUwU8ehs+3p13Pjb2x6WTbq6BbFRfLqKpPfRAm5a6Ds6N/hDRJ5SIZ6UlayU8aDvO
-         Xf1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678896551;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YGlOw94M1bjV558+SSqH2l1uEWI6x6BMDe5Gqn6Ht4o=;
-        b=TxsvWmg0VdW/T8du1psl4cTs33YgmCz9Ti2t7O8PKwdFs7cwyMteAetT1n6ncflzIl
-         oK1mmP5O8gi6Fuskls3BEYurXnQqgAX/WieCdy7CoLx5HlyUs5h4qjwDd5BkhRMvUFpI
-         tAvCdnIFlD6xWLrpfv+Rx+DsbHHnVGTIh23aA2Aq1Wy100eOLjXBQV6UyvM8Fyi69WPZ
-         +dul7tK9BjFJ8nwxW1hQTewpcHo5g4ekhlIFUYxVoJGwGTRTQSoctnaHv5dfTZH+OVud
-         F3csE1B1/uF/3Tiz4NdMGrTLFcKkXKyQp3rdLCG5Y3zs8y+GSBJ6LucuhvFY9hEWMo6+
-         gbUA==
-X-Gm-Message-State: AO0yUKU+KL7rE0uM95N72hYRCYsOUzsTM9A5OipxHGLuJkQK0zdFYb2n
-        b/cydmDb2AJg4ZW2L19Pc9mKLA==
-X-Google-Smtp-Source: AK7set8LUkWeJloO5KR5GyPPOMoKiiOcGekqj2CyNfvSioiDmDjUmwnMAhyBOqaN6/icF6ds1q4JkA==
-X-Received: by 2002:a17:907:d13:b0:922:8fc9:d235 with SMTP id gn19-20020a1709070d1300b009228fc9d235mr8669194ejc.9.1678896551674;
-        Wed, 15 Mar 2023 09:09:11 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:940e:8615:37dc:c2bd? ([2a02:810d:15c0:828:940e:8615:37dc:c2bd])
-        by smtp.gmail.com with ESMTPSA id rq4-20020a17090788c400b00927341bf69dsm2701737ejc.88.2023.03.15.09.09.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Mar 2023 09:09:11 -0700 (PDT)
-Message-ID: <b8805711-d720-8f91-c198-10b0553417a4@linaro.org>
-Date:   Wed, 15 Mar 2023 17:09:10 +0100
+        Wed, 15 Mar 2023 12:11:58 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB75E97FE0
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 09:11:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678896670; x=1710432670;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=jFuhWlXO/qjo6QWUILbvKSvhqgBdyjVOn4Kb+6B5HvQ=;
+  b=m+gCxtwsu6/bIryVYMQgedkQ4rgpwXm76IJZ0RdKE46WmVDipW53J+7n
+   jypobV7AVHMHExXbVy0N82X3kDtxMgUnam7tZ9nMYCRrTffQ7m4bg8Hub
+   oG7whAR9mD1q7N5iY2HszSHuQQxbLQGjKgyvk5CY3sfTIC7yJgc4NFhyd
+   dyc7DimcIKpcrknLva69/zn2/+34KisoCHpd1/xmY8rPxv2Yh1bIpI4nM
+   U9ChxTKs2nH1UMILif/6iw9xCAYA9mPH+yeq65E7xgDeU9GXiG6/2pN34
+   ++KaFmlhh0MpENKQC5RemImdeVzBgmnbtcddiQBYOytTMm85Z64dDcBpq
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="337769868"
+X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
+   d="scan'208";a="337769868"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2023 09:09:18 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="711982160"
+X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
+   d="scan'208";a="711982160"
+Received: from aschofie-mobl2.amr.corp.intel.com (HELO aschofie-mobl2) ([10.209.59.168])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2023 09:09:17 -0700
+Date:   Wed, 15 Mar 2023 09:09:16 -0700
+From:   Alison Schofield <alison.schofield@intel.com>
+To:     Khadija Kamran <kamrankhadijadj@gmail.com>
+Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        outreachy@lists.linux.dev,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>
+Subject: Re: [PATCH] staging: axis-fifo: initialize timeouts in probe only
+Message-ID: <ZBHtrGjgKOiVwjSF@aschofie-mobl2>
+References: <ZA9mThZ7NyRrQAMX@khadija-virtual-machine>
+ <ZBEJ+8DbhADSBTLr@aschofie-mobl2>
+ <ZBG699SriXWy1I2K@khadija-virtual-machine>
+ <16148020.1MiD057Pog@suse>
+ <ZBHUr7bANuhnOnIV@khadija-virtual-machine>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v3 4/4] arm64: dts: qcom: Add Acer Aspire 1
-Content-Language: en-US
-To:     Nikita Travkin <nikita@trvn.ru>, agross@kernel.org,
-        andersson@kernel.org
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        konrad.dybcio@linaro.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht
-References: <20230315154311.37299-1-nikita@trvn.ru>
- <20230315154311.37299-5-nikita@trvn.ru>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230315154311.37299-5-nikita@trvn.ru>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZBHUr7bANuhnOnIV@khadija-virtual-machine>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/03/2023 16:43, Nikita Travkin wrote:
-> Acer Aspire 1 is a WoA laptop based on Snapdragon 7c gen1 platform.
+On Wed, Mar 15, 2023 at 07:22:39PM +0500, Khadija Kamran wrote:
+> On Wed, Mar 15, 2023 at 02:34:31PM +0100, Fabio M. De Francesco wrote:
+> > Aside from what I said and asked for with the other message of this same 
+> > thread, please take note that you can build a specific module if you prefer 
+> > not to re-build the whole kernel and other modules at the same time. 
+> > 
+> > I'm pretty sure that the instructions to do so are in the OutreachyFirstPatch 
+> > tutorial.
+> > 
+> > If they are not there, please let us know.
+> > 
+> > Fabio
 > 
-> The laptop design is similar to trogdor in the choice of primary
-> components but the specifics on usage of those differ slightly.
+> Hey Fabio!
 > 
-> Add the devicetree for the laptop with support for most of the
-> hardware present.
+> In the Outreachy FirstPatchTutorial under the 'Compiling only part of
+> the kernel' section there are ways to compile only some part of the
+> kernel.
 > 
-> Signed-off-by: Nikita Travkin <nikita@trvn.ru>
-> ---
-> Changed in v2:
->  - Various styling, ordering and node naming issues fixed. (Krzysztof)
+> I have tried using "make W=1 drivers/staging/axis-fifo/" and it says
+> 'nothing to be done for'. 
 > 
-> Changed in v3:
->  - Kepp camcc on, wakeup on touchpad, minor style issues. (Konrad)
-> ---
->  arch/arm64/boot/dts/qcom/Makefile             |   1 +
->  .../boot/dts/qcom/sc7180-acer-aspire1.dts     | 859 ++++++++++++++++++
->  2 files changed, 860 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/qcom/sc7180-acer-aspire1.dts
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-> index 89e23a74bc7f..4bd4b4079b17 100644
-> --- a/arch/arm64/boot/dts/qcom/Makefile
-> +++ b/arch/arm64/boot/dts/qcom/Makefile
-> @@ -76,6 +76,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= sa8155p-adp.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sa8295p-adp.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sa8540p-ride.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sa8775p-ride.dtb
-> +dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-acer-aspire1.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-idp.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-coachz-r1.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-coachz-r1-lte.dtb
-> diff --git a/arch/arm64/boot/dts/qcom/sc7180-acer-aspire1.dts b/arch/arm64/boot/dts/qcom/sc7180-acer-aspire1.dts
-> new file mode 100644
-> index 000000000000..b4161f1f21a7
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/qcom/sc7180-acer-aspire1.dts
-> @@ -0,0 +1,859 @@
-> +// SPDX-License-Identifier: BSD-3-Clause
-> +
-> +/dts-v1/;
-> +
-> +#include <dt-bindings/gpio/gpio.h>
-> +#include <dt-bindings/regulator/qcom,rpmh-regulator.h>
-> +
-> +#include "sc7180.dtsi"
-> +
-> +#include "pm6150.dtsi"
-> +#include "pm6150l.dtsi"
-> +
-> +/delete-node/ &tz_mem;
-> +/delete-node/ &ipa_fw_mem;
-> +
-> +/ {
-> +	model = "Acer Aspire 1";
-> +	compatible = "acer,aspire1", "qcom,sc7180";
-> +	chassis-type = "laptop";
-> +
-> +	aliases {
-> +		bluetooth0 = &bluetooth;
-> +		hsuart0 = &uart3;
-> +		serial0 = &uart8;
-> +		wifi0 = &wifi;
-> +	};
-> +
-> +	chosen {
-> +		stdout-path = "serial0:115200n8";
-> +	};
-> +
-> +	reserved-memory {
+> Should I start with the steps to reproduce? :'(
 
-I still don't think it is ordered by name.... "r" is definitely after "a".
+Khadija,
 
-Best regards,
-Krzysztof
+I've applied your patch and it fails to compile with the warnings
+that LKP reports.
 
+If you are doing: $ make drivers/staging/axis-fifo/
+
+and it is saying 'nothing to be done...'
+
+You either have not changed anything since the last compile, or you
+do not have the module configured.
+
+I suspect it has never compiled for you and you need to look at
+the direction in the tutorial for 'Recompiling the driver' section
+and learn how to use make menuconfig.
+
+This driver has a couple of dependencies described in the Kconfig
+file. You will not even see the 'XIL_AXIS_FIFO' option until you
+turn on 'OF' and HAS_'IOMEM'.
+
+See the drivers/staging/axis-fifo/Kconfig
+
+Please confirm that you have compiled the driver before chasing
+after the build env that lkp reports.
+
+Thanks,
+Alison
+
+
+> 
+> Thank you!
+> 
+> Regards,
+> Khadija
+> 
+> 
+> > 
+> > 
+> > 
