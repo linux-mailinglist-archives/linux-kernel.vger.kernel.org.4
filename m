@@ -2,74 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 867306BB8B0
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 16:56:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D7C36BB8C7
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 16:57:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231636AbjCOP4K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 11:56:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51180 "EHLO
+        id S232604AbjCOP5x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 11:57:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232168AbjCOPzp (ORCPT
+        with ESMTP id S232557AbjCOP5r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 11:55:45 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA0B35A6D2
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 08:54:58 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 538C81FD83;
-        Wed, 15 Mar 2023 15:54:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1678895672; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Wed, 15 Mar 2023 11:57:47 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6A1F76078
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 08:56:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678895761;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=0aCWIYa326RLpPY8ttk7CVUTnd7Pxqk529d3RaeNXEE=;
-        b=LNprHW6je3Q1tHksvit1HEMnsj2ETDtXJwenQb8e4i5HOGhIKicTwAI9WzeRa2pr8gvoC6
-        uldV5obRZgq0u9QuavELGSxizYkwh3TEhgCB3MfOFOevzKWF/eDx0kmQlE8VL3zlSCFzJT
-        pYLyRC9EIPRqgNYIsvEr58CO1YY/Acw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1678895672;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=0aCWIYa326RLpPY8ttk7CVUTnd7Pxqk529d3RaeNXEE=;
-        b=2rviSpn+CAaLS96h24uEf8u23NeHFc6ga7pBYDAHxab2Lc0STY63KIoGO4hiHFR8KudjCR
-        5f7dHuaKdjL5qmDQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 36ACB13A2F;
-        Wed, 15 Mar 2023 15:54:32 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 0B2kDDjqEWQCeAAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Wed, 15 Mar 2023 15:54:32 +0000
-Message-ID: <258932e0-a2a6-7f17-014c-05676bfad456@suse.cz>
-Date:   Wed, 15 Mar 2023 16:54:31 +0100
+        bh=Pw4eRnmgxAQbUslf97rTqSt6QU+YteWEHOJqAmSsx5g=;
+        b=f1LWL7IMIis4SAKly7yDRpHblrZHwqCbK8FMuuy2EhwFSdc+gS6KYGX+q+89u2bhLQLtNB
+        T14rMaeFHoLc2e/s/cmfrwdxAwyCqLimIYJXW2MIImM3bQe0I50+QSLhA1Pe/5YhKijSNV
+        VG6lv0nPsg38HNQLSULjamHojRc6kd8=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-372-iA5yAAPzPLaxWvY2IYhunQ-1; Wed, 15 Mar 2023 11:55:59 -0400
+X-MC-Unique: iA5yAAPzPLaxWvY2IYhunQ-1
+Received: by mail-qt1-f198.google.com with SMTP id ga17-20020a05622a591100b003bfdf586476so8661332qtb.7
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 08:55:59 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678895759; x=1681487759;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Pw4eRnmgxAQbUslf97rTqSt6QU+YteWEHOJqAmSsx5g=;
+        b=xqn6m+7frvgBffPY2a9k0IZOachewwiomkGvcYgzLvTjVUT2lmucu1KYMm17jcGIIf
+         AcWGbc2alzCtx2S1qOftzkMn6s3TbPAQD9D4i7AohAwj2KEfADCxxixfRlzceg9knqNJ
+         B2w7aqENileUXiqU2iGtbE34VMh0bmkM7fQu1K1TsRM/LFeOL/t+nwZ8I2Y3GzEqAMBj
+         dgg79AAsJm1Sx3bzvZNn4pnGkzeRwD8Oer7CAWtZQ1Yf1o8nESNtzGu6M/e3VS9p2Pk6
+         olGIafBNV9GYtVhdEzwLDJ1i+didCG2RBHmDX/yevLMAAQlMBog+7AZjAS2vgsSI4Soi
+         yNFg==
+X-Gm-Message-State: AO0yUKUraJwiGGM8HGFaB9bFCwdkmioWuVr8QScAsgf9Bl4K7TSOiHL9
+        pPTyBUsprTOT3l2JsTiFhvUAiz++pqmbGpIT+E7S8kYwMHcYAVONLDEnZnDB4qIRzgb2IrrCroC
+        l753pkkS8t1X+AlUrltc7CBR2
+X-Received: by 2002:ac8:5f0f:0:b0:3b9:a4d4:7f37 with SMTP id x15-20020ac85f0f000000b003b9a4d47f37mr7256614qta.3.1678895759080;
+        Wed, 15 Mar 2023 08:55:59 -0700 (PDT)
+X-Google-Smtp-Source: AK7set/eKRMHgAx+CwCeLiCbX9cigeSt/aHmp3juRyE7h21eLYSzPFiMLvDtztWo7Q/hFkgkseO21A==
+X-Received: by 2002:ac8:5f0f:0:b0:3b9:a4d4:7f37 with SMTP id x15-20020ac85f0f000000b003b9a4d47f37mr7256562qta.3.1678895758790;
+        Wed, 15 Mar 2023 08:55:58 -0700 (PDT)
+Received: from x1n (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
+        by smtp.gmail.com with ESMTPSA id t30-20020a05622a181e00b003ba2a15f93dsm4125741qtc.26.2023.03.15.08.55.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Mar 2023 08:55:58 -0700 (PDT)
+Date:   Wed, 15 Mar 2023 11:55:56 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
+        Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
+Subject: Re: [PATCH v11 4/7] fs/proc/task_mmu: Implement IOCTL to get and
+ optionally clear info about PTEs
+Message-ID: <ZBHqjBjj6nn1xeTM@x1n>
+References: <20230309135718.1490461-1-usama.anjum@collabora.com>
+ <20230309135718.1490461-5-usama.anjum@collabora.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 1/2] mm: compaction: consider the number of scanning
- compound pages in isolate fail path
-Content-Language: en-US
-To:     Baolin Wang <baolin.wang@linux.alibaba.com>,
-        akpm@linux-foundation.org
-Cc:     mgorman@techsingularity.net, osalvador@suse.de,
-        william.lam@bytedance.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-References: <1bc1c955b03603c4e14f56dfbbef9f637f18dbbd.1678703534.git.baolin.wang@linux.alibaba.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <1bc1c955b03603c4e14f56dfbbef9f637f18dbbd.1678703534.git.baolin.wang@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_SOFTFAIL,URIBL_BLOCKED autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230309135718.1490461-5-usama.anjum@collabora.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,76 +102,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/13/23 11:37, Baolin Wang wrote:
-> The commit b717d6b93b54 ("mm: compaction: include compound page count
-> for scanning in pageblock isolation") had added compound page statistics
-> for scanning in pageblock isolation, to make sure the number of scanned
-> pages are always larger than the number of isolated pages when isolating
-> mirgratable or free pageblock.
-> 
-> However, when failed to isolate the pages when scanning the mirgratable or
-> free pageblock, the isolation failure path did not consider the scanning
-> statistics of the compound pages, which can show the incorrect number of
-> scanned pages in tracepoints or the vmstats to make people confusing about
-> the page scanning pressure in memory compaction.
-> 
-> Thus we should take into account the number of scanning pages when failed
-> to isolate the compound pages to make the statistics accurate.
-> 
-> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-> ---
->  mm/compaction.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/mm/compaction.c b/mm/compaction.c
-> index 5a9501e0ae01..c9d9ad958e2a 100644
-> --- a/mm/compaction.c
-> +++ b/mm/compaction.c
-> @@ -587,6 +587,7 @@ static unsigned long isolate_freepages_block(struct compact_control *cc,
->  				blockpfn += (1UL << order) - 1;
->  				cursor += (1UL << order) - 1;
->  			}
-> +			nr_scanned += (1UL << order) - 1;
+On Thu, Mar 09, 2023 at 06:57:15PM +0500, Muhammad Usama Anjum wrote:
+> +	for (addr = start; !ret && addr < end; pte++, addr += PAGE_SIZE) {
+> +		pte = pte_offset_map_lock(vma->vm_mm, pmd, addr, &ptl);
+> +
+> +		is_writ = !is_pte_uffd_wp(*pte);
+> +		is_file = vma->vm_file;
+> +		is_pres = pte_present(*pte);
+> +		is_swap = is_swap_pte(*pte);
+> +
+> +		pte_unmap_unlock(pte, ptl);
+> +
+> +		ret = pagemap_scan_output(is_writ, is_file, is_pres, is_swap,
+> +					  p, addr, 1);
+> +		if (ret)
+> +			break;
+> +
+> +		if (PM_SCAN_OP_IS_WP(p) && is_writ &&
+> +		    uffd_wp_range(walk->mm, vma, addr, PAGE_SIZE, true) < 0)
+> +			ret = -EINVAL;
+> +	}
 
-I'd rather put it in the block above that tests order < MAX_ORDER. Otherwise
-as the comments say, the value can be bogus as it's racy.
+This is not real atomic..
 
->  			goto isolate_fail;
->  		}
->  
-> @@ -873,9 +874,8 @@ isolate_migratepages_block(struct compact_control *cc, unsigned long low_pfn,
->  			cond_resched();
->  		}
->  
-> -		nr_scanned++;
-> -
->  		page = pfn_to_page(low_pfn);
-> +		nr_scanned += compound_nr(page);
+Taking the spinlock for eacy pte is not only overkill but wrong in
+atomicity because the pte can change right after spinlock unlocked.
 
-For the same reason, I'd rather leave the nr_scanned adjustment by order in
-the specific code blocks where we know/think we have a compound or huge page
-and have sanity checked the order/nr_pages, and not add an unchecked
-compound_nr() here.
+Unfortunately you also cannot reuse uffd_wp_range() because that's not
+atomic either, my fault here.  Probably I was thinking mostly from
+soft-dirty pov on batching the collect+reset.
 
-Thanks.
+You need to take the spin lock, collect whatever bits, set/clear whatever
+bits, only until then release the spin lock.
 
->  
->  		/*
->  		 * Check if the pageblock has already been marked skipped.
-> @@ -1077,6 +1077,7 @@ isolate_migratepages_block(struct compact_control *cc, unsigned long low_pfn,
->  			 */
->  			if (unlikely(PageCompound(page) && !cc->alloc_contig)) {
->  				low_pfn += compound_nr(page) - 1;
-> +				nr_scanned += compound_nr(page) - 1;
->  				SetPageLRU(page);
->  				goto isolate_fail_put;
->  			}
-> @@ -1097,7 +1098,6 @@ isolate_migratepages_block(struct compact_control *cc, unsigned long low_pfn,
->  isolate_success_no_list:
->  		cc->nr_migratepages += compound_nr(page);
->  		nr_isolated += compound_nr(page);
-> -		nr_scanned += compound_nr(page) - 1;
->  
->  		/*
->  		 * Avoid isolating too much unless this block is being
+"Not atomic" means you can have some page got dirtied but you could miss
+it.  Depending on how strict you want, I think it'll break apps like CRIU
+if strict atomicity needed for migrating a process.  If we want to have a
+new interface anyway, IMHO we'd better do that in the strict way.
+
+Same comment applies to the THP handling (where I cut from the context).
+
+-- 
+Peter Xu
 
