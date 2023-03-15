@@ -2,721 +2,328 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84DF26BA66F
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 06:01:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5663B6BA671
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 06:02:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230293AbjCOFBh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 01:01:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58706 "EHLO
+        id S230359AbjCOFC1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 01:02:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229974AbjCOFBf (ORCPT
+        with ESMTP id S229631AbjCOFCZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 01:01:35 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 589445D258
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 22:00:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678856447;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=z24A5FJASFqmD/XcLMfMx2NIcTC5TC4NJTVxq1zW8iQ=;
-        b=Ej6B89HWd+oSa6mxM73FpfJyO7nkD1ZSOunb5lJ/Uzuth2IpQifFV3Aowv3IZcX9cZw7zK
-        CGUn6UPX2gvu6UXTtpf43vyc7V+WdYZ1bq2+lmni/GLo7x183LaOl5sNNHTHC7ehYlhtCZ
-        XRDpDgSu5dZqXzTvEzjJLudIoCsMZWg=
-Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com
- [209.85.215.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-196-p59EQF1BOY-9LesCjVxciw-1; Wed, 15 Mar 2023 01:00:45 -0400
-X-MC-Unique: p59EQF1BOY-9LesCjVxciw-1
-Received: by mail-pg1-f197.google.com with SMTP id s3-20020a632c03000000b0050300a8089aso4145313pgs.0
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 22:00:45 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678856445;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=z24A5FJASFqmD/XcLMfMx2NIcTC5TC4NJTVxq1zW8iQ=;
-        b=w5qyl5hbwT9MkM1x8N4B3Qs662pOSYIZVGRmCVKp5stNAdrw1xzgNj5zRJusHTmnmt
-         obSHoSiwK34ehKy1OO7BqzIONfZ7XS72iPKtGYX6RBsDp/HPp6SYrRkxGpd3WWj8jYC8
-         suoGIUc2nVW993j2gBGj8Row3AyNAGQ/+UARs1L68WJJPzzhoMvoamnWzNnikdVidAi4
-         v4iFeOXJe+87oDwnqfDqLuf5VIGJVQZtQEYw/JdrH2XGEuCiQJQ6NKNNpO9+UrtHjdvK
-         Z+opQ7PpN4UHVpRSbYDon986s4aRUvv0bZic9bEJd4ReZ8DC3vxPtRycYLuf8LjJhmft
-         fgnA==
-X-Gm-Message-State: AO0yUKVi8AB8XP6C1SFFd+mayxS6wZ9QYx5PF+4Ji/j2U/n+lQgpVJnn
-        3MrPNTqtMic3CVJx1GzzF7l5ydfdJYx4feGn2NEiPcNUWccviFR2ICa98jphv5J8+WGCrA1fmUk
-        vpdX24SKtY5cmaDkn3seqbrt5
-X-Received: by 2002:a17:90a:b89:b0:23b:5537:8c99 with SMTP id 9-20020a17090a0b8900b0023b55378c99mr10311154pjr.45.1678856444661;
-        Tue, 14 Mar 2023 22:00:44 -0700 (PDT)
-X-Google-Smtp-Source: AK7set/kvXF7cLuVo4/bh1m0vtkR1Y73mMDyIOiDkBLY0RT5Q4ZycaavrYrzuWysN7o3SXqIjCVFYQ==
-X-Received: by 2002:a17:90a:b89:b0:23b:5537:8c99 with SMTP id 9-20020a17090a0b8900b0023b55378c99mr10311126pjr.45.1678856444238;
-        Tue, 14 Mar 2023 22:00:44 -0700 (PDT)
-Received: from [10.72.12.84] ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id d17-20020a17090ae29100b0023b2bc8ebc4sm378544pjz.9.2023.03.14.22.00.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Mar 2023 22:00:43 -0700 (PDT)
-Message-ID: <a6562f42-7bb1-0e0d-3990-7d5962efe6b9@redhat.com>
-Date:   Wed, 15 Mar 2023 13:00:37 +0800
+        Wed, 15 Mar 2023 01:02:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B46E5FA4D
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 22:02:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 96F3461AE1
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 05:02:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A77D6C433EF;
+        Wed, 15 Mar 2023 05:02:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1678856532;
+        bh=B300D3j1yDGg/VXwIxSgRJ0yXpqi8TdFk0gitHUYOmQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Q21gQ8mBUNXLaBCcuMOt5baAoJpM/cypy3P4QRBpWqTPx0+AsXmgD5YvtHZfuZfPq
+         Q0JY7z2aQ7uQ2CQtC8tFH5IYHbU7GI9DXuNyIRR07Kgd+5PHjW6i8BPQf6O74q/vCJ
+         8qbTSndUSj6nhKBECQYk1mXo311H0DZCHowNlkx4=
+Date:   Wed, 15 Mar 2023 06:02:09 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Alexander Komrakov <alexander.komrakov@broadcom.com>
+Cc:     linux-kernel@vger.kernel.org, giometti@enneenne.com
+Subject: Re: [PATCH v3] pps: Add elapsed realtime timestamping
+Message-ID: <ZBFRUWumrQ0u2Sk4@kroah.com>
+References: <20230315005226.80347-1-alexander.komrakov@broadcom.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.8.0
-Subject: Re: [PATCH net-next v2 09/14] sfc: implement device status related
- vdpa config operations
-Content-Language: en-US
-To:     Gautam Dawar <gdawar@amd.com>, Gautam Dawar <gautam.dawar@amd.com>
-Cc:     linux-net-drivers@amd.com, Edward Cree <ecree.xilinx@gmail.com>,
-        Martin Habets <habetsm.xilinx@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        eperezma@redhat.com, harpreet.anand@amd.com, tanuj.kamde@amd.com,
-        koushik.dutta@amd.com
-References: <20230307113621.64153-1-gautam.dawar@amd.com>
- <20230307113621.64153-10-gautam.dawar@amd.com>
- <CACGkMEvpK4P1TTAO2bZ+YMXuNFMk_hJHQBPszCwOTzbQX70s7w@mail.gmail.com>
- <3a3b63f5-66a9-47aa-ba0d-3bb99c928a60@amd.com>
-From:   Jason Wang <jasowang@redhat.com>
-In-Reply-To: <3a3b63f5-66a9-47aa-ba0d-3bb99c928a60@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230315005226.80347-1-alexander.komrakov@broadcom.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Mar 14, 2023 at 05:52:26PM -0700, Alexander Komrakov wrote:
+> Some applications like Android needs elapsed realtime timestamping
+> to PPS pulse for its clock management. Add sysfs node for this.
 
-在 2023/3/13 20:10, Gautam Dawar 写道:
->
-> On 3/10/23 10:35, Jason Wang wrote:
->> Caution: This message originated from an External Source. Use proper 
->> caution when opening attachments, clicking links, or responding.
->>
->>
->> On Tue, Mar 7, 2023 at 7:38 PM Gautam Dawar <gautam.dawar@amd.com> 
->> wrote:
->>> vDPA config opertions to handle get/set device status and device
->>> reset have been implemented. Also .suspend config operation is
->>> implemented to support Live Migration.
->>>
->>> Signed-off-by: Gautam Dawar <gautam.dawar@amd.com>
->>> ---
->>>   drivers/net/ethernet/sfc/ef100_vdpa.c     |  16 +-
->>>   drivers/net/ethernet/sfc/ef100_vdpa.h     |   2 +
->>>   drivers/net/ethernet/sfc/ef100_vdpa_ops.c | 367 
->>> ++++++++++++++++++++--
->>>   3 files changed, 355 insertions(+), 30 deletions(-)
->>>
->>> diff --git a/drivers/net/ethernet/sfc/ef100_vdpa.c 
->>> b/drivers/net/ethernet/sfc/ef100_vdpa.c
->>> index c66e5aef69ea..4ba57827a6cd 100644
->>> --- a/drivers/net/ethernet/sfc/ef100_vdpa.c
->>> +++ b/drivers/net/ethernet/sfc/ef100_vdpa.c
->>> @@ -68,9 +68,14 @@ static int vdpa_allocate_vis(struct efx_nic *efx, 
->>> unsigned int *allocated_vis)
->>>
->>>   static void ef100_vdpa_delete(struct efx_nic *efx)
->>>   {
->>> +       struct vdpa_device *vdpa_dev;
->>> +
->>>          if (efx->vdpa_nic) {
->>> +               vdpa_dev = &efx->vdpa_nic->vdpa_dev;
->>> +               ef100_vdpa_reset(vdpa_dev);
->>> +
->>>                  /* replace with _vdpa_unregister_device later */
->>> - put_device(&efx->vdpa_nic->vdpa_dev.dev);
->>> +               put_device(&vdpa_dev->dev);
->>>          }
->>>          efx_mcdi_free_vis(efx);
->>>   }
->>> @@ -171,6 +176,15 @@ static struct ef100_vdpa_nic 
->>> *ef100_vdpa_create(struct efx_nic *efx,
->>>                  }
->>>          }
->>>
->>> +       rc = devm_add_action_or_reset(&efx->pci_dev->dev,
->>> + ef100_vdpa_irq_vectors_free,
->>> +                                     efx->pci_dev);
->>> +       if (rc) {
->>> +               pci_err(efx->pci_dev,
->>> +                       "Failed adding devres for freeing irq 
->>> vectors\n");
->>> +               goto err_put_device;
->>> +       }
->>> +
->>>          rc = get_net_config(vdpa_nic);
->>>          if (rc)
->>>                  goto err_put_device;
->>> diff --git a/drivers/net/ethernet/sfc/ef100_vdpa.h 
->>> b/drivers/net/ethernet/sfc/ef100_vdpa.h
->>> index 348ca8a7404b..58791402e454 100644
->>> --- a/drivers/net/ethernet/sfc/ef100_vdpa.h
->>> +++ b/drivers/net/ethernet/sfc/ef100_vdpa.h
->>> @@ -149,6 +149,8 @@ int ef100_vdpa_register_mgmtdev(struct efx_nic 
->>> *efx);
->>>   void ef100_vdpa_unregister_mgmtdev(struct efx_nic *efx);
->>>   void ef100_vdpa_irq_vectors_free(void *data);
->>>   int ef100_vdpa_init_vring(struct ef100_vdpa_nic *vdpa_nic, u16 idx);
->>> +void ef100_vdpa_irq_vectors_free(void *data);
->>> +int ef100_vdpa_reset(struct vdpa_device *vdev);
->>>
->>>   static inline bool efx_vdpa_is_little_endian(struct ef100_vdpa_nic 
->>> *vdpa_nic)
->>>   {
->>> diff --git a/drivers/net/ethernet/sfc/ef100_vdpa_ops.c 
->>> b/drivers/net/ethernet/sfc/ef100_vdpa_ops.c
->>> index 0051c4c0e47c..95a2177f85a2 100644
->>> --- a/drivers/net/ethernet/sfc/ef100_vdpa_ops.c
->>> +++ b/drivers/net/ethernet/sfc/ef100_vdpa_ops.c
->>> @@ -22,11 +22,6 @@ static struct ef100_vdpa_nic *get_vdpa_nic(struct 
->>> vdpa_device *vdev)
->>>          return container_of(vdev, struct ef100_vdpa_nic, vdpa_dev);
->>>   }
->>>
->>> -void ef100_vdpa_irq_vectors_free(void *data)
->>> -{
->>> -       pci_free_irq_vectors(data);
->>> -}
->>> -
->>>   static int create_vring_ctx(struct ef100_vdpa_nic *vdpa_nic, u16 idx)
->>>   {
->>>          struct efx_vring_ctx *vring_ctx;
->>> @@ -52,14 +47,6 @@ static void delete_vring_ctx(struct 
->>> ef100_vdpa_nic *vdpa_nic, u16 idx)
->>>          vdpa_nic->vring[idx].vring_ctx = NULL;
->>>   }
->>>
->>> -static void reset_vring(struct ef100_vdpa_nic *vdpa_nic, u16 idx)
->>> -{
->>> -       vdpa_nic->vring[idx].vring_type = EF100_VDPA_VQ_NTYPES;
->>> -       vdpa_nic->vring[idx].vring_state = 0;
->>> -       vdpa_nic->vring[idx].last_avail_idx = 0;
->>> -       vdpa_nic->vring[idx].last_used_idx = 0;
->>> -}
->>> -
->>>   int ef100_vdpa_init_vring(struct ef100_vdpa_nic *vdpa_nic, u16 idx)
->>>   {
->>>          u32 offset;
->>> @@ -103,6 +90,236 @@ static bool is_qid_invalid(struct 
->>> ef100_vdpa_nic *vdpa_nic, u16 idx,
->>>          return false;
->>>   }
->>>
->>> +static void irq_vring_fini(struct ef100_vdpa_nic *vdpa_nic, u16 idx)
->>> +{
->>> +       struct ef100_vdpa_vring_info *vring = &vdpa_nic->vring[idx];
->>> +       struct pci_dev *pci_dev = vdpa_nic->efx->pci_dev;
->>> +
->>> +       devm_free_irq(&pci_dev->dev, vring->irq, vring);
->>> +       vring->irq = -EINVAL;
->>> +}
->>> +
->>> +static irqreturn_t vring_intr_handler(int irq, void *arg)
->>> +{
->>> +       struct ef100_vdpa_vring_info *vring = arg;
->>> +
->>> +       if (vring->cb.callback)
->>> +               return vring->cb.callback(vring->cb.private);
->>> +
->>> +       return IRQ_NONE;
->>> +}
->>> +
->>> +static int ef100_vdpa_irq_vectors_alloc(struct pci_dev *pci_dev, 
->>> u16 nvqs)
->>> +{
->>> +       int rc;
->>> +
->>> +       rc = pci_alloc_irq_vectors(pci_dev, nvqs, nvqs, PCI_IRQ_MSIX);
->>> +       if (rc < 0)
->>> +               pci_err(pci_dev,
->>> +                       "Failed to alloc %d IRQ vectors, err:%d\n", 
->>> nvqs, rc);
->>> +       return rc;
->>> +}
->>> +
->>> +void ef100_vdpa_irq_vectors_free(void *data)
->>> +{
->>> +       pci_free_irq_vectors(data);
->>> +}
->>> +
->>> +static int irq_vring_init(struct ef100_vdpa_nic *vdpa_nic, u16 idx)
->>> +{
->>> +       struct ef100_vdpa_vring_info *vring = &vdpa_nic->vring[idx];
->>> +       struct pci_dev *pci_dev = vdpa_nic->efx->pci_dev;
->>> +       int irq;
->>> +       int rc;
->>> +
->>> +       snprintf(vring->msix_name, 256, "x_vdpa[%s]-%d\n",
->>> +                pci_name(pci_dev), idx);
->>> +       irq = pci_irq_vector(pci_dev, idx);
->>> +       rc = devm_request_irq(&pci_dev->dev, irq, 
->>> vring_intr_handler, 0,
->>> +                             vring->msix_name, vring);
->>> +       if (rc)
->>> +               pci_err(pci_dev,
->>> +                       "devm_request_irq failed for vring %d, rc 
->>> %d\n",
->>> +                       idx, rc);
->>> +       else
->>> +               vring->irq = irq;
->>> +
->>> +       return rc;
->>> +}
->>> +
->>> +static int delete_vring(struct ef100_vdpa_nic *vdpa_nic, u16 idx)
->>> +{
->>> +       struct efx_vring_dyn_cfg vring_dyn_cfg;
->>> +       int rc;
->>> +
->>> +       if (!(vdpa_nic->vring[idx].vring_state & EF100_VRING_CREATED))
->>> +               return 0;
->>> +
->>> +       rc = efx_vdpa_vring_destroy(vdpa_nic->vring[idx].vring_ctx,
->>> +                                   &vring_dyn_cfg);
->>> +       if (rc)
->>> +               dev_err(&vdpa_nic->vdpa_dev.dev,
->>> +                       "%s: delete vring failed index:%u, err:%d\n",
->>> +                       __func__, idx, rc);
->>> +       vdpa_nic->vring[idx].last_avail_idx = vring_dyn_cfg.avail_idx;
->>> +       vdpa_nic->vring[idx].last_used_idx = vring_dyn_cfg.used_idx;
->>> +       vdpa_nic->vring[idx].vring_state &= ~EF100_VRING_CREATED;
->>> +
->>> +       irq_vring_fini(vdpa_nic, idx);
->>> +
->>> +       return rc;
->>> +}
->>> +
->>> +static void ef100_vdpa_kick_vq(struct vdpa_device *vdev, u16 idx)
->>> +{
->>> +       struct ef100_vdpa_nic *vdpa_nic = get_vdpa_nic(vdev);
->>> +       u32 idx_val;
->>> +
->>> +       if (is_qid_invalid(vdpa_nic, idx, __func__))
->>> +               return;
->>> +
->>> +       if (!(vdpa_nic->vring[idx].vring_state & EF100_VRING_CREATED))
->>> +               return;
->>> +
->>> +       idx_val = idx;
->>> +       _efx_writed(vdpa_nic->efx, cpu_to_le32(idx_val),
->>> +                   vdpa_nic->vring[idx].doorbell_offset);
->>> +}
->>> +
->>> +static bool can_create_vring(struct ef100_vdpa_nic *vdpa_nic, u16 idx)
->>> +{
->>> +       if (vdpa_nic->vring[idx].vring_state == 
->>> EF100_VRING_CONFIGURED &&
->>> +           vdpa_nic->status & VIRTIO_CONFIG_S_DRIVER_OK &&
->>> +           !(vdpa_nic->vring[idx].vring_state & EF100_VRING_CREATED))
->>> +               return true;
->>> +
->>> +       return false;
->>> +}
->>> +
->>> +static int create_vring(struct ef100_vdpa_nic *vdpa_nic, u16 idx)
->>> +{
->>> +       struct efx_vring_dyn_cfg vring_dyn_cfg;
->>> +       struct efx_vring_cfg vring_cfg;
->>> +       int rc;
->>> +
->>> +       rc = irq_vring_init(vdpa_nic, idx);
->>> +       if (rc) {
->>> +               dev_err(&vdpa_nic->vdpa_dev.dev,
->>> +                       "%s: irq_vring_init failed. index:%u, 
->>> err:%d\n",
->>> +                       __func__, idx, rc);
->>> +               return rc;
->>> +       }
->>> +       vring_cfg.desc = vdpa_nic->vring[idx].desc;
->>> +       vring_cfg.avail = vdpa_nic->vring[idx].avail;
->>> +       vring_cfg.used = vdpa_nic->vring[idx].used;
->>> +       vring_cfg.size = vdpa_nic->vring[idx].size;
->>> +       vring_cfg.features = vdpa_nic->features;
->>> +       vring_cfg.msix_vector = idx;
->>> +       vring_dyn_cfg.avail_idx = vdpa_nic->vring[idx].last_avail_idx;
->>> +       vring_dyn_cfg.used_idx = vdpa_nic->vring[idx].last_used_idx;
->>> +
->>> +       rc = efx_vdpa_vring_create(vdpa_nic->vring[idx].vring_ctx,
->>> +                                  &vring_cfg, &vring_dyn_cfg);
->>> +       if (rc) {
->>> +               dev_err(&vdpa_nic->vdpa_dev.dev,
->>> +                       "%s: vring_create failed index:%u, err:%d\n",
->>> +                       __func__, idx, rc);
->>> +               goto err_vring_create;
->>> +       }
->>> +       vdpa_nic->vring[idx].vring_state |= EF100_VRING_CREATED;
->>> +
->>> +       /* A VQ kick allows the device to read the avail_idx, which 
->>> will be
->>> +        * required at the destination after live migration.
->>> +        */
->>> +       ef100_vdpa_kick_vq(&vdpa_nic->vdpa_dev, idx);
->>> +
->>> +       return 0;
->>> +
->>> +err_vring_create:
->>> +       irq_vring_fini(vdpa_nic, idx);
->>> +       return rc;
->>> +}
->>> +
->>> +static void reset_vring(struct ef100_vdpa_nic *vdpa_nic, u16 idx)
->>> +{
->>> +       delete_vring(vdpa_nic, idx);
->>> +       vdpa_nic->vring[idx].vring_type = EF100_VDPA_VQ_NTYPES;
->>> +       vdpa_nic->vring[idx].vring_state = 0;
->>> +       vdpa_nic->vring[idx].last_avail_idx = 0;
->>> +       vdpa_nic->vring[idx].last_used_idx = 0;
->>> +}
->>> +
->>> +static void ef100_reset_vdpa_device(struct ef100_vdpa_nic *vdpa_nic)
->>> +{
->>> +       int i;
->>> +
->>> +       WARN_ON(!mutex_is_locked(&vdpa_nic->lock));
->>> +
->>> +       if (!vdpa_nic->status)
->>> +               return;
->>> +
->>> +       vdpa_nic->vdpa_state = EF100_VDPA_STATE_INITIALIZED;
->>> +       vdpa_nic->status = 0;
->>> +       vdpa_nic->features = 0;
->>> +       for (i = 0; i < (vdpa_nic->max_queue_pairs * 2); i++)
->>> +               reset_vring(vdpa_nic, i);
->>> + ef100_vdpa_irq_vectors_free(vdpa_nic->efx->pci_dev);
->>> +}
->>> +
->>> +/* May be called under the rtnl lock */
->>> +int ef100_vdpa_reset(struct vdpa_device *vdev)
->>> +{
->>> +       struct ef100_vdpa_nic *vdpa_nic = get_vdpa_nic(vdev);
->>> +
->>> +       /* vdpa device can be deleted anytime but the bar_config
->>> +        * could still be vdpa and hence efx->state would be 
->>> STATE_VDPA.
->>> +        * Accordingly, ensure vdpa device exists before reset handling
->>> +        */
->>> +       if (!vdpa_nic)
->>> +               return -ENODEV;
->>> +
->>> +       mutex_lock(&vdpa_nic->lock);
->>> +       ef100_reset_vdpa_device(vdpa_nic);
->>> +       mutex_unlock(&vdpa_nic->lock);
->>> +       return 0;
->>> +}
->>> +
->>> +static int start_vdpa_device(struct ef100_vdpa_nic *vdpa_nic)
->>> +{
->>> +       struct efx_nic *efx = vdpa_nic->efx;
->>> +       struct ef100_nic_data *nic_data;
->>> +       int i, j;
->>> +       int rc;
->>> +
->>> +       nic_data = efx->nic_data;
->>> +       rc = ef100_vdpa_irq_vectors_alloc(efx->pci_dev,
->>> + vdpa_nic->max_queue_pairs * 2);
->>> +       if (rc < 0) {
->>> +               pci_err(efx->pci_dev,
->>> +                       "vDPA IRQ alloc failed for vf: %u err:%d\n",
->>> +                       nic_data->vf_index, rc);
->>> +               return rc;
->>> +       }
->>> +
->>> +       for (i = 0; i < (vdpa_nic->max_queue_pairs * 2); i++) {
->>> +               if (can_create_vring(vdpa_nic, i)) {
->>> +                       rc = create_vring(vdpa_nic, i);
->>> +                       if (rc)
->>> +                               goto clear_vring;
->>> +               }
->>> +       }
->>> +
->>> +       vdpa_nic->vdpa_state = EF100_VDPA_STATE_STARTED;
->> It looks to me that this duplicates with the DRIVER_OK status bit.
-> vdpa_state is set EF100_VDPA_STATE_STARTED during DRIVER_OK handling. 
-> See my later response for its purpose.
->>
->>> +       return 0;
->>> +
->>> +clear_vring:
->>> +       for (j = 0; j < i; j++)
->>> +               delete_vring(vdpa_nic, j);
->>> +
->>> +       ef100_vdpa_irq_vectors_free(efx->pci_dev);
->>> +       return rc;
->>> +}
->>> +
->>>   static int ef100_vdpa_set_vq_address(struct vdpa_device *vdev,
->>>                                       u16 idx, u64 desc_area, u64 
->>> driver_area,
->>>                                       u64 device_area)
->>> @@ -144,22 +361,6 @@ static void ef100_vdpa_set_vq_num(struct 
->>> vdpa_device *vdev, u16 idx, u32 num)
->>>          mutex_unlock(&vdpa_nic->lock);
->>>   }
->>>
->>> -static void ef100_vdpa_kick_vq(struct vdpa_device *vdev, u16 idx)
->>> -{
->>> -       struct ef100_vdpa_nic *vdpa_nic = get_vdpa_nic(vdev);
->>> -       u32 idx_val;
->>> -
->>> -       if (is_qid_invalid(vdpa_nic, idx, __func__))
->>> -               return;
->>> -
->>> -       if (!(vdpa_nic->vring[idx].vring_state & EF100_VRING_CREATED))
->>> -               return;
->>> -
->>> -       idx_val = idx;
->>> -       _efx_writed(vdpa_nic->efx, cpu_to_le32(idx_val),
->>> -                   vdpa_nic->vring[idx].doorbell_offset);
->>> -}
->>> -
->>>   static void ef100_vdpa_set_vq_cb(struct vdpa_device *vdev, u16 idx,
->>>                                   struct vdpa_callback *cb)
->>>   {
->>> @@ -176,6 +377,7 @@ static void ef100_vdpa_set_vq_ready(struct 
->>> vdpa_device *vdev, u16 idx,
->>>                                      bool ready)
->>>   {
->>>          struct ef100_vdpa_nic *vdpa_nic = get_vdpa_nic(vdev);
->>> +       int rc;
->>>
->>>          if (is_qid_invalid(vdpa_nic, idx, __func__))
->>>                  return;
->>> @@ -184,9 +386,21 @@ static void ef100_vdpa_set_vq_ready(struct 
->>> vdpa_device *vdev, u16 idx,
->>>          if (ready) {
->>>                  vdpa_nic->vring[idx].vring_state |=
->>> EF100_VRING_READY_CONFIGURED;
->>> +               if (vdpa_nic->vdpa_state == EF100_VDPA_STATE_STARTED &&
->>> +                   can_create_vring(vdpa_nic, idx)) {
->>> +                       rc = create_vring(vdpa_nic, idx);
->>> +                       if (rc)
->>> +                               /* Rollback ready configuration
->>> +                                * So that the above layer driver
->>> +                                * can make another attempt to set 
->>> ready
->>> +                                */
->>> + vdpa_nic->vring[idx].vring_state &=
->>> + ~EF100_VRING_READY_CONFIGURED;
->>> +               }
->>>          } else {
->>>                  vdpa_nic->vring[idx].vring_state &=
->>> ~EF100_VRING_READY_CONFIGURED;
->>> +               delete_vring(vdpa_nic, idx);
->>>          }
->>>          mutex_unlock(&vdpa_nic->lock);
->>>   }
->>> @@ -296,6 +510,12 @@ static u64 
->>> ef100_vdpa_get_device_features(struct vdpa_device *vdev)
->>>          }
->>>
->>>          features |= BIT_ULL(VIRTIO_NET_F_MAC);
->>> +       /* As QEMU SVQ doesn't implement the following features,
->>> +        * masking them off to allow Live Migration
->>> +        */
->>> +       features &= ~BIT_ULL(VIRTIO_F_IN_ORDER);
->>> +       features &= ~BIT_ULL(VIRTIO_F_ORDER_PLATFORM);
->> It's better not to work around userspace bugs in the kernel. We should
->> fix Qemu instead.
->
-> There's already a QEMU patch [1] submitted to support 
-> VIRTIO_F_ORDER_PLATFORM but it hasn't concluded yet. Also, there is no 
-> support for VIRTIO_F_IN_ORDER in the kernel virtio driver. The motive 
-> of this change is to have VM Live Migration working with the kernel 
-> in-tree driver without requiring any changes.
->
-> Once QEMU is able to handle these features, we can submit a patch to 
-> undo these changes.
+What exact applications will use this?
+
+> 
+> Signed-off-by: Alexander Komrakov <alexander.komrakov@broadcom.com>
+> ---
+> Changes in v3:
+>   - Remove "staging",wrap changelog text at 72 columns and remove sysfs_emit()
+
+Why are you not using sysfs_emit()?  That is the correct call to use.
+
+>   - .gittconfg updated, clock_gettime removed, trailing whitespaces remvoved
+
+What .gitconfig?
+
+>   - COONFIG_ELAPSED_REALTIME_PPS added to enable elapsed assert/clear sysfs
+
+"OO"?  And as I say below, just use the config option as-is, do not
+create a new one without a Kconfig change.
+
+> 
+>  Documentation/ABI/testing/sysfs-pps | 27 ++++++++++++++++++
+>  drivers/pps/Makefile                |  4 +++
+>  drivers/pps/kapi.c                  | 24 ++++++++++++++--
+>  drivers/pps/sysfs.c                 | 44 +++++++++++++++++++++++++++--
+>  include/linux/pps_kernel.h          |  2 ++
+>  5 files changed, 96 insertions(+), 5 deletions(-)
+> 
+> diff --git a/Documentation/ABI/testing/sysfs-pps b/Documentation/ABI/testing/sysfs-pps
+> index 25028c7bc37d..031ec89e1ed6 100644
+> --- a/Documentation/ABI/testing/sysfs-pps
+> +++ b/Documentation/ABI/testing/sysfs-pps
+> @@ -1,3 +1,30 @@
+> +What:		/sys/class/pps/pps0/assert_elapsed
+> +Date:		October 2021
+> +Contact:	Alexander Komrakov <alexander.komrakov@broadcom.com>
+> +Description:
+> +		The /sys/class/pps/ppsX/assert_elapsed file reports the
+> +		elapsed real-time assert events and the elapsed
+> +		real-time assert sequence number of the X-th source
+> +		in the form:
+> +
+> +			<secs>.<nsec>#<sequence>
+> +
+> +		If the source has no elapsed real-time assert events
+> +		the content of this file is empty.
+
+What is a "real-time assert event"?
+
+> +
+> +What:		/sys/class/pps/ppsX/clear_elapsed
+> +Date:		October 2021
+> +Contact:	Alexander Komrakov <alexander.komrakov@broadcom.com>
+> +Description:
+> +		The /sys/class/pps/ppsX/clear_elapsed file reports the elapsed
+> +		real-time clear events and the elapsed real-time clear
+> +		sequence number of the X-th source in the form:
+> +
+> +			<secs>.<nsec>#<sequence>
+> +
+> +		If the source has no elapsed real-time clear events the
+> +		content of this file is empty.
+> +
+>  What:		/sys/class/pps/
+>  Date:		February 2008
+>  Contact:	Rodolfo Giometti <giometti@linux.it>
+> diff --git a/drivers/pps/Makefile b/drivers/pps/Makefile
+> index ceaf65cc1f1d..443501310445 100644
+> --- a/drivers/pps/Makefile
+> +++ b/drivers/pps/Makefile
+> @@ -8,4 +8,8 @@ pps_core-$(CONFIG_NTP_PPS)	+= kc.o
+>  obj-$(CONFIG_PPS)		:= pps_core.o
+>  obj-y				+= clients/ generators/
+>  
+> +ifeq ($(CONFIG_ELAPSED_REALTIME_PPS),y)
+> +EXTRA_CFLAGS += -DENABLE_ELAPSED_REALTIME_PPS
+
+Why are you defining a new flag just for a config option?  Why not just
+check that config option in the code instead?  That removes a different
+flag that will be impossible to track down over time.
+
+> +endif
+> +
+>  ccflags-$(CONFIG_PPS_DEBUG) := -DDEBUG
+> diff --git a/drivers/pps/kapi.c b/drivers/pps/kapi.c
+> index d9d566f70ed1..69b432873ce7 100644
+> --- a/drivers/pps/kapi.c
+> +++ b/drivers/pps/kapi.c
+> @@ -23,6 +23,7 @@
+>  /*
+>   * Local functions
+>   */
+> + #define NANOSEC_PER_SEC 1000000000 /* 10^9 */
+
+Why isn't this in units.h?  (hint, it is already, use that one.)
 
 
-I can understand the motivation, but it works for prototyping but not 
-formal kernel code (especially consider SVQ is not mature and still 
-being development). What's more, we can not assume Qemu is the only 
-user, we have other users like DPDK and cloud-hypervisors.
+>  
+>  static void pps_add_offset(struct pps_ktime *ts, struct pps_ktime *offset)
+>  {
+> @@ -162,11 +163,20 @@ void pps_event(struct pps_device *pps, struct pps_event_time *ts, int event,
+>  	unsigned long flags;
+>  	int captured = 0;
+>  	struct pps_ktime ts_real = { .sec = 0, .nsec = 0, .flags = 0 };
+> +	struct pps_ktime ts_real_elapsed = { .sec = 0, .nsec = 0, .flags = 0 };
+> +	struct timespec64 ts64 = { .tv_sec = 0, .tv_nsec = 0 };
+>  
+>  	/* check event type */
+>  	BUG_ON((event & (PPS_CAPTUREASSERT | PPS_CAPTURECLEAR)) == 0);
 
-Thanks
+You are willing to crash a system because of a tiny driver issue?  That
+is not good, please fix up in a later patch.
 
+> +	/* Calculate the monotonic clock from the timespec clock and stores the result in pps_ktime format
+> +	   ktime_get_boottime_ts64() : because elapsed realtime includes time spent in sleep */
+> +	ktime_get_boottime_ts64(&ts64);
+> +	timespec_to_pps_ktime(&ts_real_elapsed,ts64);
+>  
+> -	dev_dbg(pps->dev, "PPS event at %lld.%09ld\n",
+> +	dev_dbg(pps->dev, "PPS event (monotonic) at %lld.%09d\n",
+> +			(s64)ts_real_elapsed.sec, ts_real_elapsed.nsec);
+> +
+> +	dev_dbg(pps->dev, "PPS event (timestamp) at %lld.%09ld\n",
+>  			(s64)ts->ts_real.tv_sec, ts->ts_real.tv_nsec);
+>  
+>  	timespec_to_pps_ktime(&ts_real, ts->ts_real);
+> @@ -181,11 +191,15 @@ void pps_event(struct pps_device *pps, struct pps_event_time *ts, int event,
+>  	pps->current_mode = pps->params.mode;
+>  	if (event & pps->params.mode & PPS_CAPTUREASSERT) {
+>  		/* We have to add an offset? */
+> -		if (pps->params.mode & PPS_OFFSETASSERT)
+> +		if (pps->params.mode & PPS_OFFSETASSERT) {
+> +			pps_add_offset(&ts_real_elapsed,
+> +					&pps->params.assert_off_tu);
+>  			pps_add_offset(&ts_real,
+>  					&pps->params.assert_off_tu);
+> +		}
+>  
+>  		/* Save the time stamp */
+> +		pps->assert_elapsed_tu = ts_real_elapsed;
+>  		pps->assert_tu = ts_real;
+>  		pps->assert_sequence++;
+>  		dev_dbg(pps->dev, "capture assert seq #%u\n",
+> @@ -195,11 +209,15 @@ void pps_event(struct pps_device *pps, struct pps_event_time *ts, int event,
+>  	}
+>  	if (event & pps->params.mode & PPS_CAPTURECLEAR) {
+>  		/* We have to add an offset? */
+> -		if (pps->params.mode & PPS_OFFSETCLEAR)
+> +		if (pps->params.mode & PPS_OFFSETCLEAR)	{
+> +			pps_add_offset(&ts_real_elapsed,
+> +					&pps->params.clear_off_tu);
+>  			pps_add_offset(&ts_real,
+>  					&pps->params.clear_off_tu);
+> +		}
+>  
+>  		/* Save the time stamp */
+> +		pps->clear_elapsed_tu = ts_real_elapsed;
+>  		pps->clear_tu = ts_real;
+>  		pps->clear_sequence++;
+>  		dev_dbg(pps->dev, "capture clear seq #%u\n",
+> diff --git a/drivers/pps/sysfs.c b/drivers/pps/sysfs.c
+> index 134bc33f6ad0..9e100e287ba7 100644
+> --- a/drivers/pps/sysfs.c
+> +++ b/drivers/pps/sysfs.c
+> @@ -10,6 +10,7 @@
+>  #include <linux/module.h>
+>  #include <linux/string.h>
+>  #include <linux/pps_kernel.h>
+> +#include <linux/sysfs.h>
 
->
->>
->>> +
->>>          return features;
->>>   }
->>>
->>> @@ -356,6 +576,77 @@ static u32 ef100_vdpa_get_vendor_id(struct 
->>> vdpa_device *vdev)
->>>          return EF100_VDPA_VENDOR_ID;
->>>   }
->>>
->>> +static u8 ef100_vdpa_get_status(struct vdpa_device *vdev)
->>> +{
->>> +       struct ef100_vdpa_nic *vdpa_nic = get_vdpa_nic(vdev);
->>> +       u8 status;
->>> +
->>> +       mutex_lock(&vdpa_nic->lock);
->>> +       status = vdpa_nic->status;
->>> +       mutex_unlock(&vdpa_nic->lock);
->>> +       return status;
->>> +}
->>> +
->>> +static void ef100_vdpa_set_status(struct vdpa_device *vdev, u8 status)
->>> +{
->>> +       struct ef100_vdpa_nic *vdpa_nic = get_vdpa_nic(vdev);
->>> +       u8 new_status;
->>> +       int rc;
->>> +
->>> +       mutex_lock(&vdpa_nic->lock);
->>> +       if (!status) {
->>> +               dev_info(&vdev->dev,
->>> +                        "%s: Status received is 0. Device reset 
->>> being done\n",
->>> +                        __func__);
->> This is trigger-able by the userspace. It might be better to use
->> dev_dbg() instead.
-> Will change.
->>
->>> + ef100_reset_vdpa_device(vdpa_nic);
->>> +               goto unlock_return;
->>> +       }
->>> +       new_status = status & ~vdpa_nic->status;
->>> +       if (new_status == 0) {
->>> +               dev_info(&vdev->dev,
->>> +                        "%s: New status same as current status\n", 
->>> __func__);
->> Same here.
-> Ok.
->>
->>> +               goto unlock_return;
->>> +       }
->>> +       if (new_status & VIRTIO_CONFIG_S_FAILED) {
->>> +               ef100_reset_vdpa_device(vdpa_nic);
->>> +               goto unlock_return;
->>> +       }
->>> +
->>> +       if (new_status & VIRTIO_CONFIG_S_ACKNOWLEDGE) {
->>> +               vdpa_nic->status |= VIRTIO_CONFIG_S_ACKNOWLEDGE;
->>> +               new_status &= ~VIRTIO_CONFIG_S_ACKNOWLEDGE;
->>> +       }
->>> +       if (new_status & VIRTIO_CONFIG_S_DRIVER) {
->>> +               vdpa_nic->status |= VIRTIO_CONFIG_S_DRIVER;
->>> +               new_status &= ~VIRTIO_CONFIG_S_DRIVER;
->>> +       }
->>> +       if (new_status & VIRTIO_CONFIG_S_FEATURES_OK) {
->>> +               vdpa_nic->status |= VIRTIO_CONFIG_S_FEATURES_OK;
->>> +               vdpa_nic->vdpa_state = EF100_VDPA_STATE_NEGOTIATED;
->> It might be better to explain the reason we need to track another
->> state in vdpa_state instead of simply using the device status.
-> vdpa_state helps to ensure correct status transitions in the 
-> .set_status callback and safe-guards against incorrect/malicious 
-> user-space driver.
+Why is this now needed and it wasn't before?
 
+>  
+>  /*
+>   * Attribute functions
+> @@ -24,11 +25,28 @@ static ssize_t assert_show(struct device *dev, struct device_attribute *attr,
+>  		return 0;
+>  
+>  	return sprintf(buf, "%lld.%09d#%d\n",
+> -			(long long) pps->assert_tu.sec, pps->assert_tu.nsec,
+> -			pps->assert_sequence);
+> +			   (long long) pps->assert_tu.sec, pps->assert_tu.nsec,
+> +			   pps->assert_sequence);
 
-Ok, let's document this in the definition of vdpa_state.
-
-
->>
->>> +               new_status &= ~VIRTIO_CONFIG_S_FEATURES_OK;
->>> +       }
->>> +       if (new_status & VIRTIO_CONFIG_S_DRIVER_OK &&
->>> +           vdpa_nic->vdpa_state == EF100_VDPA_STATE_NEGOTIATED) {
->>> +               vdpa_nic->status |= VIRTIO_CONFIG_S_DRIVER_OK;
->>> +               rc = start_vdpa_device(vdpa_nic);
->>> +               if (rc) {
->>> + dev_err(&vdpa_nic->vdpa_dev.dev,
->>> +                               "%s: vDPA device failed:%d\n", 
->>> __func__, rc);
->>> +                       vdpa_nic->status &= ~VIRTIO_CONFIG_S_DRIVER_OK;
->>> +                       goto unlock_return;
->>> +               }
->>> +               new_status &= ~VIRTIO_CONFIG_S_DRIVER_OK;
->>> +       }
->>> +       if (new_status) {
->>> +               dev_warn(&vdev->dev,
->>> +                        "%s: Mismatch Status: %x & State: %u\n",
->>> +                        __func__, new_status, vdpa_nic->vdpa_state);
->>> +       }
->>> +
->>> +unlock_return:
->>> +       mutex_unlock(&vdpa_nic->lock);
->>> +}
->>> +
->>>   static size_t ef100_vdpa_get_config_size(struct vdpa_device *vdev)
->>>   {
->>>          return sizeof(struct virtio_net_config);
->>> @@ -393,6 +684,20 @@ static void ef100_vdpa_set_config(struct 
->>> vdpa_device *vdev, unsigned int offset,
->>>                  vdpa_nic->mac_configured = true;
->>>   }
->>>
->>> +static int ef100_vdpa_suspend(struct vdpa_device *vdev)
->>> +{
->>> +       struct ef100_vdpa_nic *vdpa_nic = get_vdpa_nic(vdev);
->>> +       int i, rc;
->>> +
->>> +       mutex_lock(&vdpa_nic->lock);
->>> +       for (i = 0; i < (vdpa_nic->max_queue_pairs * 2); i++) {
->>> +               rc = delete_vring(vdpa_nic, i);
->> Note that the suspension matters for the whole device. It means the
->> config space should not be changed. But the code here only suspends
->> the vring, is this intende/d?
-> Are you referring to the possibility of updating device configuration 
-> (eg. MAC address) using .set_config() after suspend operation? Is 
-> there any other user triggered operation that falls in this category?
+Why make this change?
 
 
-Updating MAC should be prohibited, one typical use case is the link status.
+
+>  }
+>  static DEVICE_ATTR_RO(assert);
+>  
+> +#ifdef ENABLE_ELAPSED_REALTIME_PPS
+> +static ssize_t assert_elapsed_show(struct device *dev,
+> +			   struct device_attribute *attr, char *buf)
+> +{
+> +	struct pps_device *pps = dev_get_drvdata(dev);
+> +
+> +	if (!(pps->info.mode & PPS_CAPTUREASSERT))
+> +		return 0;
+> +
+> +	return sprintf(buf, "%lld.%09d#%d\n",
+
+sysfs files should be using sysfs_emit()
+
+> +			   (long long) pps->assert_elapsed_tu.sec,
+> +			   pps->assert_elapsed_tu.nsec,
+> +			   pps->assert_sequence);
+> +}
+> +static DEVICE_ATTR_RO(assert_elapsed);
+> +#endif
+> +
+>  static ssize_t clear_show(struct device *dev, struct device_attribute *attr,
+>  			  char *buf)
+>  {
+> @@ -43,6 +61,24 @@ static ssize_t clear_show(struct device *dev, struct device_attribute *attr,
+>  }
+>  static DEVICE_ATTR_RO(clear);
+>  
+> +#ifdef ENABLE_ELAPSED_REALTIME_PPS
+> +static ssize_t clear_elapsed_show(struct device *dev,
+> +			  struct device_attribute *attr,
+> +			  char *buf)
+> +{
+> +	struct pps_device *pps = dev_get_drvdata(dev);
+> +
+> +	if (!(pps->info.mode & PPS_CAPTURECLEAR))
+> +		return 0;
+> +
+> +	return sprintf(buf, "%lld.%09d#%d\n",
+> +			(long long) pps->clear_elapsed_tu.sec,
+> +			pps->clear_elapsed_tu.nsec,
+> +			pps->clear_sequence);
+> +}
+> +static DEVICE_ATTR_RO(clear_elapsed);
+> +#endif
+> +
+>  static ssize_t mode_show(struct device *dev, struct device_attribute *attr,
+>  			 char *buf)
+>  {
+> @@ -82,6 +118,10 @@ static DEVICE_ATTR_RO(path);
+>  static struct attribute *pps_attrs[] = {
+>  	&dev_attr_assert.attr,
+>  	&dev_attr_clear.attr,
+> +#ifdef ENABLE_ELAPSED_REALTIME_PPS
+> +	&dev_attr_assert_elapsed.attr,
+> +	&dev_attr_clear_elapsed.attr,
+> +#endif
+
+Don't use #ifdef in a .c file, these attributes should only show up if
+you determine at runtime they should not be there.
+
+But why woudn't they just always be there all the time anyway?  Why do
+you need a new config option?
 
 
->>
->> Reset may have the same issue.
-> Could you pls elaborate on the requirement during device reset?
+>  	&dev_attr_mode.attr,
+>  	&dev_attr_echo.attr,
+>  	&dev_attr_name.attr,
+> diff --git a/include/linux/pps_kernel.h b/include/linux/pps_kernel.h
+> index 78c8ac4951b5..1fecaaf4c8b9 100644
+> --- a/include/linux/pps_kernel.h
+> +++ b/include/linux/pps_kernel.h
+> @@ -47,6 +47,8 @@ struct pps_device {
+>  
+>  	__u32 assert_sequence;			/* PPS assert event seq # */
+>  	__u32 clear_sequence;			/* PPS clear event seq # */
+> +	struct pps_ktime assert_elapsed_tu; /* PPS elapsed rt assert seq # */
+> +	struct pps_ktime clear_elapsed_tu;  /* PPS elapsed rt clear event seq */
 
+no tabs?
 
-I meant ef100_reset_vdpa_device() may suffer from the same issue:
+thanks,
 
-It only reset all the vring but not the config space?
-
-Thanks
-
-
->>
->> Thanks
-> [1] 
-> https://patchew.org/QEMU/20230213191929.1547497-1-eperezma@redhat.com/
->>
->>> +               if (rc)
->>> +                       break;
->>> +       }
->>> +       mutex_unlock(&vdpa_nic->lock);
->>> +       return rc;
->>> +}
->>>   static void ef100_vdpa_free(struct vdpa_device *vdev)
->>>   {
->>>          struct ef100_vdpa_nic *vdpa_nic = get_vdpa_nic(vdev);
->>> @@ -428,9 +733,13 @@ const struct vdpa_config_ops 
->>> ef100_vdpa_config_ops = {
->>>          .get_vq_num_max      = ef100_vdpa_get_vq_num_max,
->>>          .get_device_id       = ef100_vdpa_get_device_id,
->>>          .get_vendor_id       = ef100_vdpa_get_vendor_id,
->>> +       .get_status          = ef100_vdpa_get_status,
->>> +       .set_status          = ef100_vdpa_set_status,
->>> +       .reset               = ef100_vdpa_reset,
->>>          .get_config_size     = ef100_vdpa_get_config_size,
->>>          .get_config          = ef100_vdpa_get_config,
->>>          .set_config          = ef100_vdpa_set_config,
->>>          .get_generation      = NULL,
->>> +       .suspend             = ef100_vdpa_suspend,
->>>          .free                = ef100_vdpa_free,
->>>   };
->>> -- 
->>> 2.30.1
->>>
->
-
+greg k-h
