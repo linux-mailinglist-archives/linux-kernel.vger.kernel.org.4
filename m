@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0687D6BBA29
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 17:49:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A894A6BBA2D
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 17:49:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231892AbjCOQtU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 12:49:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60586 "EHLO
+        id S232221AbjCOQt2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 12:49:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230044AbjCOQtM (ORCPT
+        with ESMTP id S232005AbjCOQtX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 12:49:12 -0400
+        Wed, 15 Mar 2023 12:49:23 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E934E3C3B
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 09:48:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C64AA7EE5
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 09:48:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678898898;
+        s=mimecast20190719; t=1678898903;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=nm5gfruTLsdagm9njmR29/Ig/a6aY+NuRLyWyFUeNqo=;
-        b=FQSiS9fdfUyaG1punQWH9LZA1+RfMd2cNJ5xsSQWz4yr1SqzdJzwjeJk3CzHqpGOPcdHcb
-        wXMlog5vwafcEpMz7RW41+nwhiKjjVKfatODIxalzyuwzenfWPnBDqwTPfDFx3fjJRGH08
-        CqeYrwW6HcbE4mC3s9oQHaZZUtH5X3E=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=jN7gBsIIz2o+DPuOLs3beGrkWCBpTBuHN9nwm3qigXs=;
+        b=L4NXvBqdZaqJ/JaMa/SdSJ9Z4La/kKmDhHNXTBux8Ag+BuIIOforbyRs+tyYO6R3flAbkN
+        zmp28tv/yjt64Bzyij7Y1PtUl83qde0ubd3Y5Y8qVqUTjWaNo2IuZ8F5aipzvGSSIfT18m
+        L6jlmF4Uj6CO6SQpAeU2144pOl90Aww=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-654-OrOHAQrROeedLzyEuGOZ-w-1; Wed, 15 Mar 2023 12:48:17 -0400
-X-MC-Unique: OrOHAQrROeedLzyEuGOZ-w-1
-Received: by mail-wr1-f72.google.com with SMTP id bn9-20020a056000060900b002cfe8493fe6so1170273wrb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 09:48:16 -0700 (PDT)
+ us-mta-362-DKEXMlZaPrmcgPVTdAF1og-1; Wed, 15 Mar 2023 12:48:21 -0400
+X-MC-Unique: DKEXMlZaPrmcgPVTdAF1og-1
+Received: by mail-wm1-f70.google.com with SMTP id l20-20020a05600c1d1400b003e10d3e1c23so1255176wms.1
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 09:48:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678898896;
+        d=1e100.net; s=20210112; t=1678898900;
         h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
          :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nm5gfruTLsdagm9njmR29/Ig/a6aY+NuRLyWyFUeNqo=;
-        b=sqLDhFVtcfqfrZeAicE/FwaQNnCJXubbkudcYjzY4Apxn6e6rocjaUavJ0UQvxrKMW
-         wKP5vhdVZ7hfqwY+gCod8rndHiagxX3Un3GlspvTLnyUBrRbosJhITyFu4acKujAipty
-         KT+DwA348Kz54ENvbGgrHW5IpRS2Ma72J+A+4EmOx6fDVSg4nL+0PjuRsh+AYvqOwSdM
-         mKXn2/wJK1bL4enjBuATEvkZSvH3w4XqwJi66kJ4KkjvooALLshGhJGBB6+kj9cQIcvV
-         RIamdSomi7GAdmqKTLAqB0Hg5EV79TuoC/H+u3K/f5siP+Sbbem3y8rmWQLqdpyiLcZt
-         0bAQ==
-X-Gm-Message-State: AO0yUKXPZGtzRM/1464qRDXV1PYYdy2QsY5T2Js9grQfdbmqt0bsH7CY
-        YNHSyYVFxCBT9VRZpndSnuoUOQXfQSDTA0THBCJctv6EgYnJBHWPGja6VRfrL+UGMwxgjYdQhPr
-        9Jk4DKPXyr1KjMTg9qMetnA7T
-X-Received: by 2002:adf:f209:0:b0:2d0:27dd:9c40 with SMTP id p9-20020adff209000000b002d027dd9c40mr2037092wro.26.1678898895832;
-        Wed, 15 Mar 2023 09:48:15 -0700 (PDT)
-X-Google-Smtp-Source: AK7set9jfn/9WqJrQVlsKAuBzHsI/W7q2SC2Q1SzV+VIJZiJybGCBhMLfTelmL18XXOCJLm0rYHCmQ==
-X-Received: by 2002:adf:f209:0:b0:2d0:27dd:9c40 with SMTP id p9-20020adff209000000b002d027dd9c40mr2037086wro.26.1678898895600;
-        Wed, 15 Mar 2023 09:48:15 -0700 (PDT)
+        bh=jN7gBsIIz2o+DPuOLs3beGrkWCBpTBuHN9nwm3qigXs=;
+        b=HyzvmXYd1tLvPIUpM7D+lbMUjn5tEcsYc/3wwjHU0eaoMGMAodgvN8wCrDcbp6ysNe
+         30G9bozrCyaqlNDy5MITBweqRkoLs/bJz85ng15VQUG6OY8+0y0sYaLoJGE8E3VVrqt2
+         eIJqLCioCbnkzhu3lBjb50rdyaDLjwxZhpTNHV7VrxfAZgwsqVie1mT0hRH2rJKF8aLa
+         YOF8NfwErXXzQvb/42V3rW1nlRGWAEOhK39UTBQIKj9dyxpF7oO/R8dHRX8aPNuME/JL
+         pgszpSWDp4dBIzLFeTu7gujssqsSTcTxozZxTKPaliqlBWTvZ2vzj+YSmo0iVGYVZ0z+
+         EP/A==
+X-Gm-Message-State: AO0yUKXgXlN4OjOMO3U7RLw4dqGofq6jwffZ9QAH8IkVk8chnVNg9IMP
+        d4JzO5XW1H1pN+3Jvsho53WM9h81BdgGR1qxo9FuwpwehoR2aCuSvTyzFbz5HNjMQjQf9DvyUU3
+        WzmTASPoKPIoSb8DF9Tp8mOHS
+X-Received: by 2002:a5d:5090:0:b0:2ce:a8d6:5427 with SMTP id a16-20020a5d5090000000b002cea8d65427mr2284839wrt.15.1678898900830;
+        Wed, 15 Mar 2023 09:48:20 -0700 (PDT)
+X-Google-Smtp-Source: AK7set/7yCT9DzLtDjuAkonvARDw7EiuzZU1jup24r5YSYMqq3/If+0deo0/FhmbO4gSj7aLlCTntw==
+X-Received: by 2002:a5d:5090:0:b0:2ce:a8d6:5427 with SMTP id a16-20020a5d5090000000b002cea8d65427mr2284831wrt.15.1678898900561;
+        Wed, 15 Mar 2023 09:48:20 -0700 (PDT)
 Received: from vschneid.remote.csb ([154.57.232.159])
-        by smtp.gmail.com with ESMTPSA id h13-20020a056000000d00b002cfec8b7f89sm4560610wrx.77.2023.03.15.09.48.13
+        by smtp.gmail.com with ESMTPSA id a11-20020a5d508b000000b002c55b0e6ef1sm5210847wrt.4.2023.03.15.09.48.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Mar 2023 09:48:15 -0700 (PDT)
+        Wed, 15 Mar 2023 09:48:19 -0700 (PDT)
 From:   Valentin Schneider <vschneid@redhat.com>
 To:     Yury Norov <yury.norov@gmail.com>, linuxppc-dev@lists.ozlabs.org,
         linux-kernel@vger.kernel.org
@@ -64,11 +64,12 @@ Cc:     Yury Norov <yury.norov@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
         Jeremy Kerr <jk@ozlabs.org>, Jakub Kicinski <kuba@kernel.org>,
         Dietmar Eggemann <dietmar.eggemann@arm.com>,
         Barry Song <baohua@kernel.org>
-Subject: Re: [PATCH 1/2] sched/topology: introduce node_has_cpus() macro
-In-Reply-To: <20230222025029.453834-1-yury.norov@gmail.com>
+Subject: Re: [PATCH 2/2] powerpc: use node_has_cpus() instead of nr_cpus_node()
+In-Reply-To: <20230222025029.453834-2-yury.norov@gmail.com>
 References: <20230222025029.453834-1-yury.norov@gmail.com>
-Date:   Wed, 15 Mar 2023 16:48:12 +0000
-Message-ID: <xhsmhbkkum04z.mognet@vschneid.remote.csb>
+ <20230222025029.453834-2-yury.norov@gmail.com>
+Date:   Wed, 15 Mar 2023 16:48:17 +0000
+Message-ID: <xhsmha60em04u.mognet@vschneid.remote.csb>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -82,12 +83,8 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 21/02/23 18:50, Yury Norov wrote:
-> Currently, to check if NUMA node has CPUs, one has to use the
-> nr_cpus_node() macro, which ends up with cpumask_weight. We can do it
-> better with cpumask_empty(), because the latter can potentially return
-> earlier - as soon as 1st set bit found.
->
-> This patch adds a node_has_cpus() macro to implement that.
+> Use node_has_cpus() as more efficient alternative to nr_cpus_node()
+> where possible.
 >
 > Signed-off-by: Yury Norov <yury.norov@gmail.com>
 
