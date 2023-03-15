@@ -2,76 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5624E6BAAB4
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 09:23:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E19906BAABD
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 09:27:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231406AbjCOIXk convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 15 Mar 2023 04:23:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47160 "EHLO
+        id S230448AbjCOI1l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 04:27:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230324AbjCOIXg (ORCPT
+        with ESMTP id S229631AbjCOI1j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 04:23:36 -0400
-Received: from mail-qv1-f52.google.com (mail-qv1-f52.google.com [209.85.219.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4D3B40C2;
-        Wed, 15 Mar 2023 01:23:30 -0700 (PDT)
-Received: by mail-qv1-f52.google.com with SMTP id nv15so15384045qvb.7;
-        Wed, 15 Mar 2023 01:23:30 -0700 (PDT)
+        Wed, 15 Mar 2023 04:27:39 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA7BC22004
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 01:27:38 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id o11so110993ple.1
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 01:27:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678868858;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=GvusehUWrfc+/66ASlnNjlCPuPY5wXOImDMvoYp/fQ0=;
+        b=b0+CCgmuim/LJMpI+1XEMUV+egXJuxybJv47FXV6QaM5cQ6eGSui32XGbEIXO7Fl1O
+         ls2azq9pMBcSoNmho287e6ZKCLBWjFb2QAFTdAdphWSeQjDWEL5YpHa6uQysglgg0YC9
+         UgCKhy1mffMMqgipSAglwGVrjfSc7xIwcrEaacXjc02GxiTFToZhRMmqY1dVp+fffmjg
+         09ofhKqwk6sTzvUDfrTdjtU5CumLFYh71DmsAxMBUY0RXsxD6O5eAGAfsPps6hniPDCA
+         FOIHV7863+GyCtjwZPKO5Keo/gNMIn4gfay3pHLNsR3YEeixOVW+hNy3BIZHRFVSIyNX
+         3hXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678868610;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SaoW6/JdJH8lfXUx6KbDnZfqvHebZRWorOeb874e6r4=;
-        b=VchdIcvTTDhOatXzudnq1ZkAdPGKKvInlXw69joXHFRjbeg3GVBgLndWnI71OICvBc
-         4iL0XkHG6DG34nofJ7RBOvbyumYDO+j8RVlO148xksYdYKylc0kpR8rgfNmAmFb4YBr1
-         lNYTIrTPfWYlI3wm5/sCOdf6YYoA97gT/1EjltUNFM89dbk5wepTuWtQzfMA7t4yFx5C
-         7/ruJ/6ic3NCEXFxCDSXQ5HJw4o1ROs/4kJSS+c9KY1JofR7ohEPOw7Au1LZIZuBjczi
-         GPDnxaqs3ssfoF9YYaZLshr5AEL9lJxVjWONUD7B0MxAuw/ohMHg7RljfpuFLLZ6ocif
-         0GaQ==
-X-Gm-Message-State: AO0yUKWH+gzShfWrDf13OCYeZS5YWCLxomab2LCNCLg1MrgQSvFC3coF
-        BAhJv1ccIH7u7XYJDdf2WtteB9HvEcytoues
-X-Google-Smtp-Source: AK7set+/QuD48RBcMyneZTsffzUy8QoPqxNYBNUGSYYkwcT6k3aWzfa7JjHPNwxHsGsGTJhS/xfNFg==
-X-Received: by 2002:a05:6214:27c6:b0:5a1:451a:8d31 with SMTP id ge6-20020a05621427c600b005a1451a8d31mr22473603qvb.10.1678868609803;
-        Wed, 15 Mar 2023 01:23:29 -0700 (PDT)
-Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com. [209.85.219.173])
-        by smtp.gmail.com with ESMTPSA id bs37-20020a05620a472500b00738e8e81dc9sm3368797qkb.75.2023.03.15.01.23.04
+        d=1e100.net; s=20210112; t=1678868858;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=GvusehUWrfc+/66ASlnNjlCPuPY5wXOImDMvoYp/fQ0=;
+        b=iE3IJmbWYMs5zN0E9dhGt/SsON8kuRpfhHed0MLiSsaiZQhnlRvqVrQ+TzAOtZl/fR
+         b/1BZlskx68eeZcTbtQbi2V6BPKOm6tnmcmccB8B3yMx3Q/hsxMNYMACWv6yviJTqoBq
+         xEyhUbS3j6FQ/XtXYPJ8MwGC6isbCZ4mA9ujaK/utRU0KehD2lcDJgikcp2xgy/6x3lh
+         6gcecbPeT/p+s8vXmD8AZUpGnS59ZsGUVngTfStbtXFYjOL9g9Y3xzhM/3hcICfGs7RJ
+         qhVp/4StYzMwxaxf1whKl0eX52q2upzF+IrrVpIk5+m4XiAtZJSri/Vo0ZlR4WaUndkF
+         SAnQ==
+X-Gm-Message-State: AO0yUKXX4vAw7cpJhhRGXpIv9DRHjp+pjv0sE9eetHcWPmGSIClebki2
+        7cAF+KFt9ytWHASjmGv2Oi8=
+X-Google-Smtp-Source: AK7set/s9DyM1IvIoJZp/5FCKzk1RL4bAAZfu6rRARRGJOJc8MnUCdLhy0CFwafIHI2dxVOoP6eOVQ==
+X-Received: by 2002:a17:903:2311:b0:1a0:7446:ed98 with SMTP id d17-20020a170903231100b001a07446ed98mr2175603plh.47.1678868858342;
+        Wed, 15 Mar 2023 01:27:38 -0700 (PDT)
+Received: from [192.168.43.80] (subs32-116-206-28-41.three.co.id. [116.206.28.41])
+        by smtp.gmail.com with ESMTPSA id o12-20020a1709026b0c00b0019a97f180fcsm3048943plk.37.2023.03.15.01.27.35
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Mar 2023 01:23:07 -0700 (PDT)
-Received: by mail-yb1-f173.google.com with SMTP id r1so5649845ybu.5;
-        Wed, 15 Mar 2023 01:23:04 -0700 (PDT)
-X-Received: by 2002:a5b:2cc:0:b0:a02:a3a6:78fa with SMTP id
- h12-20020a5b02cc000000b00a02a3a678famr20093284ybp.12.1678868583785; Wed, 15
- Mar 2023 01:23:03 -0700 (PDT)
+        Wed, 15 Mar 2023 01:27:38 -0700 (PDT)
+Message-ID: <32c49665-73a7-b506-172e-975d55f423ba@gmail.com>
+Date:   Wed, 15 Mar 2023 15:27:34 +0700
 MIME-Version: 1.0
-References: <20230314121216.413434-1-schnelle@linux.ibm.com> <20230314121216.413434-14-schnelle@linux.ibm.com>
-In-Reply-To: <20230314121216.413434-14-schnelle@linux.ibm.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 15 Mar 2023 09:22:51 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUbaFhb3HURhSfrkDyq_cz6z=S3TtTr0-5f6svho9MftQ@mail.gmail.com>
-Message-ID: <CAMuHMdUbaFhb3HURhSfrkDyq_cz6z=S3TtTr0-5f6svho9MftQ@mail.gmail.com>
-Subject: Re: [PATCH v3 13/38] Input: add HAS_IOPORT dependencies
-To:     Niklas Schnelle <schnelle@linux.ibm.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
-        linux-input@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v2] staging: sm750: Rename function to avoid CamelCase
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Alison Schofield <alison.schofield@intel.com>,
+        Kloudifold <cloudifold.3125@gmail.com>,
+        teddy.wang@siliconmotion.com, sudipm.mukherjee@gmail.com,
+        linux-staging@lists.linux.dev, outreachy@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+References: <ZA+K6OdPe21k8F2k@CloudiRingWorld> <ZA/+JlgWfdg2wH8B@debian.me>
+ <ZBCS7DR9dZH1yds8@aschofie-mobl2>
+ <5fd67671-8e21-ffa8-8571-d8b5533b4758@gmail.com> <ZBFPnZbvdI46Ah6r@kroah.com>
+Content-Language: en-US
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <ZBFPnZbvdI46Ah6r@kroah.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
         autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,39 +80,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Niklas,
+On 3/15/23 11:54, Greg KH wrote:
+>> I thought this style cleanup also warrants Fixes: since
+>> it fixes coding style problem on existing code (see
+>> Documentation/process/submitting-patches.rst).
+> 
+> No, sorry, Fixes: is for real bugs, not style issues.
 
-On Tue, Mar 14, 2023 at 1:12 PM Niklas Schnelle <schnelle@linux.ibm.com> wrote:
-> In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
-> not being declared. We thus need to add HAS_IOPORT as dependency for
-> those drivers using them.
->
-> Co-developed-by: Arnd Bergmann <arnd@kernel.org>
-> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
-
-Thanks for your patch!
-
-> --- a/drivers/input/serio/Kconfig
-> +++ b/drivers/input/serio/Kconfig
-> @@ -75,6 +75,7 @@ config SERIO_Q40KBD
->  config SERIO_PARKBD
->         tristate "Parallel port keyboard adapter"
->         depends on PARPORT
-> +       depends on HAS_IOPORT
->         help
->           Say Y here if you built a simple parallel port adapter to attach
->           an additional AT keyboard, XT keyboard or PS/2 mouse.
-
-This driver seems to use only the parport and serio APIs, so it might
-work on systems without HAS_IOPORT.  Dunno for sure.
-
-Gr{oetje,eeting}s,
-
-                        Geert
+OK, renouncing the tag.
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+An old man doll... just what I always wanted! - Clara
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
