@@ -2,88 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FBEF6BBE27
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 21:50:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1EA96BBE25
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 21:50:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231290AbjCOUum (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 16:50:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46360 "EHLO
+        id S231990AbjCOUuW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 16:50:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232314AbjCOUug (ORCPT
+        with ESMTP id S229547AbjCOUuT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 16:50:36 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D06411DB91
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 13:49:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678913391;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=6t0t5Iv2bD47uL2A95ufn+9Sx0u6l51PcnjxQgGARxw=;
-        b=c3haIYcYcBX6mo3XIS7IFc05s8viSXWpbHX0gwyNx7bUZQQAfTwCgVrc6Xic9EGShQqVK4
-        Q0UQ4ht934G9MaopSl+eX5CTKTp8rVUleLM6UBudERv5tujF3A1Tj6V8Txplu9lryuIn7U
-        UUGbMNyk25Apj+1rhDHbbvyY8JqCGuo=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-199-AdBYETmLO8ymtkZ6oqkjRA-1; Wed, 15 Mar 2023 16:49:48 -0400
-X-MC-Unique: AdBYETmLO8ymtkZ6oqkjRA-1
-Received: by mail-wm1-f69.google.com with SMTP id bi21-20020a05600c3d9500b003e836e354e0so1196095wmb.5
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 13:49:48 -0700 (PDT)
+        Wed, 15 Mar 2023 16:50:19 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AEB619112;
+        Wed, 15 Mar 2023 13:50:18 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id c10so12503536pfv.13;
+        Wed, 15 Mar 2023 13:50:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678913417;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=RBuA/oviiAKogWaalHUVA/HWn23TAnJcudZ+udGzOjA=;
+        b=btpyzlJvp3OkMxIs8sPoD5lm/PvHCCw+Hk0w0ikpXkP8VnMBVHXlJ4BWcwJs8Z+Tbu
+         CHpxSFKrkWJ/kEen5IpqdptGTPVtLUucZVrMJmGGNiUkkWezNNAqRN4hJBOtAjM4Iq/J
+         aWIE0kZuWqjcEBF68OSi+CTE8r9dLgGg2KCfccCOBvgRBdIKXxE6c8YxGV4McIvQVaQ3
+         dD83CC0HZu9klNOqrnwTiHMiCzPHiBOvnF9YFU+/nlIScHVRV0BHbP+70W6YTrJP6icu
+         fecUn4HsgtePlxhxScIOLTcejRT9+O5MvnXkk5asOO9jTWIKm22TKf+pTU6ZBmRVD3QN
+         CYCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678913387;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20210112; t=1678913417;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6t0t5Iv2bD47uL2A95ufn+9Sx0u6l51PcnjxQgGARxw=;
-        b=VLe7IzLFlaj9FSIRN1FAlmziXHUPqdDeEK3LhudG1vXnTmc072H/J0fH1gIbNwLE3d
-         ZtkoS4vO69kByuMdvUAVzSKksWZ0SR48vyFphUN/2j62qqImWoAwJi8J+uxIkGkwhl45
-         LDa3Ok59BE4hHJLyT0m/vrsiAeCWDFqRkshLqKEcDdZb7QN8ZxgI7BAb4LzO8HEodE8F
-         66z2bqKienaeqDwyEveWOUl1y6aQQuuURIf2gjQ8eDbgXcoRG6sBS8TdsuscRiH8hcpU
-         W6FMWdtl26r1irgxaUfkRgkxVw1GwvVQHdKZSJVqsqlkFUsQjCk+qq7NaWHq9204i11A
-         zArw==
-X-Gm-Message-State: AO0yUKXJ3LHJjiFxR2pHk2TjScYRUWyZa+YJH7RBI1v8ZHi9LrbQraRT
-        JcOoVyxUpbKGbmGWjAQWunoqSNQEKRAsSbeNVrru5xdXvmrnvCiS0TFp8PZ1jMUdM76Er2tDKCM
-        jFmI0qTZCY1Lyo/QEEW5tOvPS
-X-Received: by 2002:adf:fc87:0:b0:2cb:5b58:74a with SMTP id g7-20020adffc87000000b002cb5b58074amr3005978wrr.56.1678913387487;
-        Wed, 15 Mar 2023 13:49:47 -0700 (PDT)
-X-Google-Smtp-Source: AK7set/f3Yj/rHER0QrCQC6NJ2Yg4faXcicmXXK9BRt3t8AK+QzAEoTQFerFOG9rD+XVbf7VoSg1lg==
-X-Received: by 2002:adf:fc87:0:b0:2cb:5b58:74a with SMTP id g7-20020adffc87000000b002cb5b58074amr3005964wrr.56.1678913387123;
-        Wed, 15 Mar 2023 13:49:47 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
-        by smtp.googlemail.com with ESMTPSA id bg7-20020a05600c3c8700b003eb2e33f327sm8517638wmb.2.2023.03.15.13.49.46
+        bh=RBuA/oviiAKogWaalHUVA/HWn23TAnJcudZ+udGzOjA=;
+        b=vVMso20ERCj1LQlMcND+Xl0GA4jQwocS7ulNKacqhjHYaMR0JVx65iBxb7wutpoopb
+         s/jgvi8c3iPD2gSsYOn4+bPnhVFSrIdgE9uYCQDJHN0mikwD8GR/wM4MOS3byEWa54eN
+         SCdadj3oyKO7SsqmsZgIjg5OcYGlemoltA60ki9aBpKoMsuCQXuqLKjzzrtsABVAsUmz
+         Ym9tB1fIfUwEorO4bhbPwxWsvO7ZALvH1Cd9hi8aMgRqCozqTU/F16wxW3wKI7QE7qBf
+         oVP4z2bTwvzT5c26LmSRZEegk3YK0lW4pg0qSI8ShoBF8hR2FZAteuO/lOetRffF4o6W
+         IGUA==
+X-Gm-Message-State: AO0yUKXWtxJJIUaVcMiWRzIJIk+umqzPumpBRm3YiQW0aTwXENolBV5M
+        sFmhgnOaWldGz7vESExxKBTXTGfmo+jJLw==
+X-Google-Smtp-Source: AK7set/K2Xlza1JfWQR1HoQteInsv7KAx1jfAT6OLX50J7CXJ3jYGGD3DlXRfV00qZwOXqWarEK4nw==
+X-Received: by 2002:aa7:8f3a:0:b0:5a8:bbac:1cf2 with SMTP id y26-20020aa78f3a000000b005a8bbac1cf2mr762553pfr.1.1678913417209;
+        Wed, 15 Mar 2023 13:50:17 -0700 (PDT)
+Received: from [172.30.1.89] ([14.32.163.5])
+        by smtp.gmail.com with ESMTPSA id t15-20020aa7938f000000b005a817f72c21sm3963317pfe.131.2023.03.15.13.50.13
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Mar 2023 13:49:46 -0700 (PDT)
-Message-ID: <2164b29f-ab4e-c08d-58e8-adccdb9124ae@redhat.com>
-Date:   Wed, 15 Mar 2023 21:49:45 +0100
+        Wed, 15 Mar 2023 13:50:16 -0700 (PDT)
+Message-ID: <794faacb-b3b3-9d9e-8620-ab2067851f88@gmail.com>
+Date:   Thu, 16 Mar 2023 05:50:11 +0900
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-Subject: Re: [PATCH V5 0/2] selftests: KVM: Add a test for eager page
- splitting
+Subject: Re: [PATCH v2] extcon: usbc-tusb320: unregister typec port on driver
+ removal
+To:     =?UTF-8?Q?Alvin_=c5=a0ipraga?= <alvin@pqrs.dk>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Marek Vasut <marex@denx.de>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        =?UTF-8?Q?Alvin_=c5=a0ipraga?= <alsi@bang-olufsen.dk>
+Cc:     linux-usb@vger.kernel.org, stable@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230315141547.825057-1-alvin@pqrs.dk>
+From:   Chanwoo Choi <cwchoi00@gmail.com>
 Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     David Matlack <dmatlack@google.com>,
-        Ben Gardon <bgardon@google.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, Peter Xu <peterx@redhat.com>,
-        Vipin Sharma <vipinsh@google.com>,
-        Ricardo Koller <ricarkol@google.com>
-References: <20230131181820.179033-1-bgardon@google.com>
- <CABgObfaP7P7fk66-EGF-zPEk0H14u3YkM42FRXrEvU=hwFSYgg@mail.gmail.com>
- <CABgObfYAStAC5FgJfGUiJ=BBFtN7drD+NGHLFJY5fP3hQzVOBw@mail.gmail.com>
- <CALzav=c-wtJiz9M6hpPtcoBMFvFP5_2BNYoY66NzF-J+8_W6NA@mail.gmail.com>
- <CABgObfYm6roWVR0myT5rHUWRe7k09TkXgZ7rYAr019QZ80oQXQ@mail.gmail.com>
- <199f404d-c08e-3895-6ce3-36b21514f487@redhat.com>
- <ZBIa7NQI4qRP6uON@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <ZBIa7NQI4qRP6uON@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+In-Reply-To: <20230315141547.825057-1-alvin@pqrs.dk>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,65 +81,153 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/15/23 20:22, Sean Christopherson wrote:
-> On Wed, Mar 15, 2023, Paolo Bonzini wrote:
->> On 3/15/23 13:24, Paolo Bonzini wrote:
->>> On Tue, Mar 14, 2023 at 5:00 PM David Matlack <dmatlack@google.com> wrote:
->>>> I wonder if pages are getting swapped, especially if running on a
->>>> workstation. If so, mlock()ing all guest memory VMAs might be
->>>> necessary to be able to assert exact page counts.
->>>
->>> I don't think so, it's 100% reproducible and the machine is idle and
->>> only accessed via network. Also has 64 GB of RAM. :)
->>
->> It also reproduces on Intel with pml=0 and eptad=0; the reason is due
->> to the different semantics of dirty bits for page-table pages on AMD
->> and Intel.  Both AMD and eptad=0 Intel treat those as writes, therefore
->> more pages are dropped before the repopulation phase when dirty logging
->> is disabled.
->>
->> The "missing" page had been included in the population phase because it
->> hosts the page tables for vcpu_args, but repopulation does not need it.
->>
->> This fixes it:
->>
->> -------------------- 8< ---------------
->> From: Paolo Bonzini <pbonzini@redhat.com>
->> Subject: [PATCH] selftests: KVM: perform the same memory accesses on every memstress iteration
->>
->> Perform the same memory accesses including the initialization steps
->> that read from args and vcpu_args.  This ensures that the state of
->> KVM's page tables is the same after every iteration, including the
->> pages that host the guest page tables for args and vcpu_args.
->>
->> This fixes a failure of dirty_log_page_splitting_test on AMD machines,
->> as well as on Intel if PML and EPT A/D bits are both disabled.
->>
->> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
->>
->> diff --git a/tools/testing/selftests/kvm/lib/memstress.c b/tools/testing/selftests/kvm/lib/memstress.c
->> index 3632956c6bcf..8a429f4c86db 100644
->> --- a/tools/testing/selftests/kvm/lib/memstress.c
->> +++ b/tools/testing/selftests/kvm/lib/memstress.c
->> @@ -56,15 +56,15 @@ void memstress_guest_code(uint32_t vcpu_idx)
->>   	uint64_t page;
->>   	int i;
->> -	rand_state = new_guest_random_state(args->random_seed + vcpu_idx);
->> +	while (true) {
->> +		rand_state = new_guest_random_state(args->random_seed + vcpu_idx);
+On 23. 3. 15. 23:15, Alvin Šipraga wrote:
+> From: Alvin Šipraga <alsi@bang-olufsen.dk>
 > 
-> Doesn't this partially defeat the randomization that some tests like want?  E.g.
-> a test that wants to heavily randomize state will get the same pRNG for every
-> iteration.  Seems like we should have a knob to control whether or not each
-> iteration needs to be identical.
+> The driver can register a typec port if suitable firmware properties are
+> present. But if the driver is removed through sysfs unbind, rmmod or
+> similar, then it does not clean up after itself and the typec port
+> device remains registered. This can be seen in sysfs, where stale typec
+> ports get left over in /sys/class/typec.
+> 
+> In order to fix this we have to add an i2c_driver remove function and
+> call typec_unregister_port(), which is a no-op in the case where no
+> typec port is created and the pointer remains NULL.
+> 
+> In the process we should also put the fwnode_handle when the typec port
+> isn't registered anymore, including if an error occurs during probe. The
+> typec subsystem does not increase or decrease the reference counter for
+> us, so we track it in the driver's private data.
+> 
+> Note that the conditional check on TYPEC_PWR_MODE_PD was removed in the
+> probe path because a call to tusb320_set_adv_pwr_mode() will perform an
+> even more robust validation immediately after, hence there is no
+> functional change here.
+> 
+> Fixes: bf7571c00dca ("extcon: usbc-tusb320: Add USB TYPE-C support")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Alvin Šipraga <alsi@bang-olufsen.dk>
+> ---
+> v2: properly assign priv->connector_fwnode = connector;
+> ---
+>  drivers/extcon/extcon-usbc-tusb320.c | 42 ++++++++++++++++++++++------
+>  1 file changed, 34 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/extcon/extcon-usbc-tusb320.c b/drivers/extcon/extcon-usbc-tusb320.c
+> index b408ce989c22..10dff1c512c4 100644
+> --- a/drivers/extcon/extcon-usbc-tusb320.c
+> +++ b/drivers/extcon/extcon-usbc-tusb320.c
+> @@ -78,6 +78,7 @@ struct tusb320_priv {
+>  	struct typec_capability	cap;
+>  	enum typec_port_type port_type;
+>  	enum typec_pwr_opmode pwr_opmode;
+> +	struct fwnode_handle *connector_fwnode;
+>  };
+>  
+>  static const char * const tusb_attached_states[] = {
+> @@ -391,27 +392,25 @@ static int tusb320_typec_probe(struct i2c_client *client,
+>  	/* Type-C connector found. */
+>  	ret = typec_get_fw_cap(&priv->cap, connector);
+>  	if (ret)
+> -		return ret;
+> +		goto err_put;
+>  
+>  	priv->port_type = priv->cap.type;
+>  
+>  	/* This goes into register 0x8 field CURRENT_MODE_ADVERTISE */
+>  	ret = fwnode_property_read_string(connector, "typec-power-opmode", &cap_str);
+>  	if (ret)
+> -		return ret;
+> +		goto err_put;
+>  
+>  	ret = typec_find_pwr_opmode(cap_str);
+>  	if (ret < 0)
+> -		return ret;
+> -	if (ret == TYPEC_PWR_MODE_PD)
+> -		return -EINVAL;
+> +		goto err_put;
+>  
+>  	priv->pwr_opmode = ret;
+>  
+>  	/* Initialize the hardware with the devicetree settings. */
+>  	ret = tusb320_set_adv_pwr_mode(priv);
+>  	if (ret)
+> -		return ret;
+> +		goto err_put;
+>  
+>  	priv->cap.revision		= USB_TYPEC_REV_1_1;
+>  	priv->cap.accessory[0]		= TYPEC_ACCESSORY_AUDIO;
+> @@ -422,10 +421,25 @@ static int tusb320_typec_probe(struct i2c_client *client,
+>  	priv->cap.fwnode		= connector;
+>  
+>  	priv->port = typec_register_port(&client->dev, &priv->cap);
+> -	if (IS_ERR(priv->port))
+> -		return PTR_ERR(priv->port);
+> +	if (IS_ERR(priv->port)) {
+> +		ret = PTR_ERR(priv->port);
+> +		goto err_put;
+> +	}
+> +
+> +	priv->connector_fwnode = connector;
+>  
+>  	return 0;
+> +
+> +err_put:
+> +	fwnode_handle_put(connector);
+> +
+> +	return ret;
+> +}
+> +
+> +static void tusb320_typec_remove(struct tusb320_priv *priv)
+> +{
+> +	typec_unregister_port(priv->port);
+> +	fwnode_handle_put(priv->connector_fwnode);
+>  }
+>  
+>  static int tusb320_probe(struct i2c_client *client)
+> @@ -438,7 +452,9 @@ static int tusb320_probe(struct i2c_client *client)
+>  	priv = devm_kzalloc(&client->dev, sizeof(*priv), GFP_KERNEL);
+>  	if (!priv)
+>  		return -ENOMEM;
+> +
+>  	priv->dev = &client->dev;
+> +	i2c_set_clientdata(client, priv);
+>  
+>  	priv->regmap = devm_regmap_init_i2c(client, &tusb320_regmap_config);
+>  	if (IS_ERR(priv->regmap))
+> @@ -489,10 +505,19 @@ static int tusb320_probe(struct i2c_client *client)
+>  					tusb320_irq_handler,
+>  					IRQF_TRIGGER_FALLING | IRQF_ONESHOT,
+>  					client->name, priv);
+> +	if (ret)
+> +		tusb320_typec_remove(priv);
+>  
+>  	return ret;
+>  }
+>  
+> +static void tusb320_remove(struct i2c_client *client)
+> +{
+> +	struct tusb320_priv *priv = i2c_get_clientdata(client);
+> +
+> +	tusb320_typec_remove(priv);
+> +}
+> +
+>  static const struct of_device_id tusb320_extcon_dt_match[] = {
+>  	{ .compatible = "ti,tusb320", .data = &tusb320_ops, },
+>  	{ .compatible = "ti,tusb320l", .data = &tusb320l_ops, },
+> @@ -502,6 +527,7 @@ MODULE_DEVICE_TABLE(of, tusb320_extcon_dt_match);
+>  
+>  static struct i2c_driver tusb320_extcon_driver = {
+>  	.probe_new	= tusb320_probe,
+> +	.remove		= tusb320_remove,
+>  	.driver		= {
+>  		.name	= "extcon-tusb320",
+>  		.of_match_table = tusb320_extcon_dt_match,
 
-Yes, this wasn't really a full patch, just to prove what the bug is.
+Applied it. Thanks.
 
-One possibility to avoid adding a new knob is to do something like:
-
-unsigned iteration = 0;
-rand_state = new_guest_random_state(args->random_seed
-	+ vcpu_idx + iteration++);
-
-Paolo
+-- 
+Best Regards,
+Samsung Electronics
+Chanwoo Choi
 
