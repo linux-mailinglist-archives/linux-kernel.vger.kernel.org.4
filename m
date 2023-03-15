@@ -2,153 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C596E6BB854
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 16:45:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 407E46BB864
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 16:48:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232532AbjCOPpn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 11:45:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35328 "EHLO
+        id S232600AbjCOPru (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 11:47:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232495AbjCOPp2 (ORCPT
+        with ESMTP id S232495AbjCOPrr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 11:45:28 -0400
-Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFE6B10256
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 08:45:02 -0700 (PDT)
-Received: by mail-oi1-x234.google.com with SMTP id r36so706563oiw.7
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 08:45:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678895101;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=E6sAgqQ4tUM3/2nNIAr1J1jXcot8viEl3eXcZAX7ehI=;
-        b=n85Fo1qMrqx41Xp8nt8ry4U3yrXUumJ9e3tZ+BEFRjL83JtVYjqzacklbP3ObwzvKj
-         mp1qGdrzBMHfLUZU4emgg6rlTZ1/h7scIgShP+kUfsxrsdI1O1r8CR2lbfjnd1ukJkoC
-         07CWieSwn+x0gXDIUliJiYn71oFeq2Q6QlI/Ym6hmUSRO6XWLGdL8o3ac30HVbO499nD
-         gigcMcfM1RI5AYNHDq1oI34YVazsOaN7eOzrymrY50PvU9LIFIQKv9GLRoH8N6iYL5Ti
-         g/d4ETZONGyk18SehktZYlnmwFAoVXkziT+ZeGmkhlC4X3v0ZQIm1J+7VATAkLnthXF5
-         Mr1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678895101;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=E6sAgqQ4tUM3/2nNIAr1J1jXcot8viEl3eXcZAX7ehI=;
-        b=X3icVpBEMhTyOSEdsmVvyZONRJfJuon/hlDjntr0EFuZFUC3BX59vKK17nG8hMrs5p
-         te9Ndm9b1O0bKfjVZ3jnNaoBRKgezg/W1uZ+tY711XYK86IU6WBKILMWX2U6FQewA/cT
-         /WayGc9DE70DCqFCVRBrPkCLUpFx1XkRrN6Qndg6uJq7nnkCvLO2qOmsvA61PjxCEwC4
-         HhTptVliH5bL1RFTN7Au3VvZtY6Kow1ajbS7w/evHNkXezpSGIr8djS7SDq4Gx138FnQ
-         I1hO4he5ORvEqnpx/qWtkhO9PkZdutRcsrbyW6G7/0xeczz8KzYwfS0trnRmwpWvKo2u
-         WCfw==
-X-Gm-Message-State: AO0yUKXPCzi1fkfCj0B8wLliKv4thBhedeZYCoegD8VHTLhzz1Nz6zNZ
-        2fY0wu9mok1gE8LXOc4wRCk3tg==
-X-Google-Smtp-Source: AK7set+3Fm8PLpXAgtycnefk9Q9haiAZeDCnBXcFHhOyJbtzZ7VUwtmV4DJAofUAskcOiLt5atHjMA==
-X-Received: by 2002:a05:6808:486:b0:383:ce80:6c28 with SMTP id z6-20020a056808048600b00383ce806c28mr1384800oid.51.1678895100595;
-        Wed, 15 Mar 2023 08:45:00 -0700 (PDT)
-Received: from [192.168.17.16] ([189.219.75.19])
-        by smtp.gmail.com with ESMTPSA id q15-20020a05683031af00b00690e6d56670sm2471107ots.25.2023.03.15.08.44.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Mar 2023 08:45:00 -0700 (PDT)
-Message-ID: <7e46d536-cc68-4b7c-e56e-cf1b94a925cb@linaro.org>
-Date:   Wed, 15 Mar 2023 09:44:59 -0600
+        Wed, 15 Mar 2023 11:47:47 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D71C06E97
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 08:47:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678895220;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=G/Dxhyw2OvQGnfASfvPy6mJlOrvrV/O/zIhgC4SLY1o=;
+        b=jLFVRD3PV8ZQ4HtwMqr7WoIWTLWO427Hmv9ME4A0QxIGLZ+rrLDee+4XrSihn4+9QKHgsY
+        cXWyBYjxbbEpYFYYix18Tdw5V+i56mss3ht8UFfKFoxDFHLfvPENcwCvapHOXVkL/BE+Ys
+        lhQgYLM+jAuQP6TS/tvbo1IOQgWEE/w=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-144-lqQCNhc4Mniyqx_70xDwZQ-1; Wed, 15 Mar 2023 11:46:52 -0400
+X-MC-Unique: lqQCNhc4Mniyqx_70xDwZQ-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6FDFF101A551;
+        Wed, 15 Mar 2023 15:46:51 +0000 (UTC)
+Received: from [10.22.34.146] (unknown [10.22.34.146])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 44E7F406AA66;
+        Wed, 15 Mar 2023 15:46:48 +0000 (UTC)
+Message-ID: <7a3b31bf-4f6a-6525-9c6a-2bae44d7b0af@redhat.com>
+Date:   Wed, 15 Mar 2023 11:46:48 -0400
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 4.19 00/39] 4.19.278-rc1 review
+ Thunderbird/102.7.1
+Subject: Re: [RFC PATCH 2/3] sched/cpuset: Keep track of SCHED_DEADLINE tasks
+ in cpusets
 Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-References: <20230315115721.234756306@linuxfoundation.org>
-From:   =?UTF-8?Q?Daniel_D=c3=adaz?= <daniel.diaz@linaro.org>
-In-Reply-To: <20230315115721.234756306@linuxfoundation.org>
+To:     Juri Lelli <juri.lelli@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Qais Yousef <qyousef@layalina.io>, Tejun Heo <tj@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Hao Luo <haoluo@google.com>
+Cc:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        linux-kernel@vger.kernel.org, luca.abeni@santannapisa.it,
+        claudio@evidence.eu.com, tommaso.cucinotta@santannapisa.it,
+        bristot@redhat.com, mathieu.poirier@linaro.org,
+        cgroups@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Wei Wang <wvw@google.com>, Rick Yiu <rickyiu@google.com>,
+        Quentin Perret <qperret@google.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>
+References: <20230315121812.206079-1-juri.lelli@redhat.com>
+ <20230315121812.206079-3-juri.lelli@redhat.com>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20230315121812.206079-3-juri.lelli@redhat.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello!
 
-On 15/03/23 06:12, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 4.19.278 release.
-> There are 39 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Fri, 17 Mar 2023 11:57:10 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.19.278-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.19.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+On 3/15/23 08:18, Juri Lelli wrote:
+> Qais reported that iterating over all tasks when rebuilding root domains
+> for finding out which ones are DEADLINE and need their bandwidth
+> correctly restored on such root domains can be a costly operation (10+
+> ms delays on suspend-resume).
+>
+> To fix the problem keep track of the number of DEADLINE tasks belonging
+> to each cpuset and then use this information (followup patch) to only
+> perform the above iteration if DEADLINE tasks are actually present in
+> the cpuset for which a corresponding root domain is being rebuilt.
+>
+> Reported-by: Qais Yousef <qyousef@layalina.io>
+> Signed-off-by: Juri Lelli <juri.lelli@redhat.com>
+> ---
+>   include/linux/cpuset.h |  4 ++++
+>   kernel/cgroup/cgroup.c |  4 ++++
+>   kernel/cgroup/cpuset.c | 25 +++++++++++++++++++++++++
+>   kernel/sched/core.c    | 10 ++++++++++
+>   4 files changed, 43 insertions(+)
+>
+> diff --git a/include/linux/cpuset.h b/include/linux/cpuset.h
+> index 355f796c5f07..0348dba5680e 100644
+> --- a/include/linux/cpuset.h
+> +++ b/include/linux/cpuset.h
+> @@ -71,6 +71,8 @@ extern void cpuset_init_smp(void);
+>   extern void cpuset_force_rebuild(void);
+>   extern void cpuset_update_active_cpus(void);
+>   extern void cpuset_wait_for_hotplug(void);
+> +extern void inc_dl_tasks_cs(struct task_struct *task);
+> +extern void dec_dl_tasks_cs(struct task_struct *task);
+>   extern void cpuset_lock(void);
+>   extern void cpuset_unlock(void);
+>   extern void cpuset_cpus_allowed(struct task_struct *p, struct cpumask *mask);
+> @@ -196,6 +198,8 @@ static inline void cpuset_update_active_cpus(void)
+>   
+>   static inline void cpuset_wait_for_hotplug(void) { }
+>   
+> +static inline void inc_dl_tasks_cs(struct task_struct *task) { }
+> +static inline void dec_dl_tasks_cs(struct task_struct *task) { }
+>   static inline void cpuset_lock(void) { }
+>   static inline void cpuset_unlock(void) { }
+>   
+> diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
+> index c099cf3fa02d..357925e1e4af 100644
+> --- a/kernel/cgroup/cgroup.c
+> +++ b/kernel/cgroup/cgroup.c
+> @@ -57,6 +57,7 @@
+>   #include <linux/file.h>
+>   #include <linux/fs_parser.h>
+>   #include <linux/sched/cputime.h>
+> +#include <linux/sched/deadline.h>
+>   #include <linux/psi.h>
+>   #include <net/sock.h>
+>   
+> @@ -6673,6 +6674,9 @@ void cgroup_exit(struct task_struct *tsk)
+>   	list_add_tail(&tsk->cg_list, &cset->dying_tasks);
+>   	cset->nr_tasks--;
+>   
+> +	if (dl_task(tsk))
+> +		dec_dl_tasks_cs(tsk);
+> +
+>   	WARN_ON_ONCE(cgroup_task_frozen(tsk));
+>   	if (unlikely(!(tsk->flags & PF_KTHREAD) &&
+>   		     test_bit(CGRP_FREEZE, &task_dfl_cgroup(tsk)->flags)))
+> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+> index 8d82d66d432b..57bc60112618 100644
+> --- a/kernel/cgroup/cpuset.c
+> +++ b/kernel/cgroup/cpuset.c
+> @@ -193,6 +193,12 @@ struct cpuset {
+>   	int use_parent_ecpus;
+>   	int child_ecpus_count;
+>   
+> +	/*
+> +	 * number of SCHED_DEADLINE tasks attached to this cpuset, so that we
+> +	 * know when to rebuild associated root domain bandwidth information.
+> +	 */
+> +	int nr_deadline_tasks;
+> +
+>   	/* Invalid partition error code, not lock protected */
+>   	enum prs_errcode prs_err;
+>   
+> @@ -245,6 +251,20 @@ static inline struct cpuset *parent_cs(struct cpuset *cs)
+>   	return css_cs(cs->css.parent);
+>   }
+>   
+> +void inc_dl_tasks_cs(struct task_struct *p)
+> +{
+> +	struct cpuset *cs = task_cs(p);
+> +
+> +	cs->nr_deadline_tasks++;
+> +}
+> +
+> +void dec_dl_tasks_cs(struct task_struct *p)
+> +{
+> +	struct cpuset *cs = task_cs(p);
+> +
+> +	cs->nr_deadline_tasks--;
+> +}
+> +
+>   /* bits in struct cpuset flags field */
+>   typedef enum {
+>   	CS_ONLINE,
+> @@ -2472,6 +2492,11 @@ static int cpuset_can_attach(struct cgroup_taskset *tset)
+>   		ret = security_task_setscheduler(task);
+>   		if (ret)
+>   			goto out_unlock;
+> +
+> +		if (dl_task(task)) {
+> +			cs->nr_deadline_tasks++;
+> +			cpuset_attach_old_cs->nr_deadline_tasks--;
+> +		}
+>   	}
 
-Lots and lots of failures, mostly Arm.
+Any one of the tasks in the cpuset can cause the test to fail and abort 
+the attachment. I would suggest that you keep a deadline task transfer 
+count in the loop and then update cs and cpouset_attach_old_cs only 
+after all the tasks have been iterated successfully.
 
-For Arm, Arm64, MIPS, with GCC-8, GCC-9, GCC-10, GCC-11, GCC-12, Clang-16, for some combinations with:
-* axm55xx_defconfig
-* davinci_all_defconfig
-* defconfig
-* defconfig-40bc7ee5
-* lkftconfig-kasan
-* multi_v5_defconfig
-* s5pv210_defconfig
-* sama5_defconfig
-
------8<-----
-/builds/linux/kernel/cgroup/cgroup.c:2237:2: error: implicit declaration of function 'get_online_cpus' [-Werror,-Wimplicit-function-declaration]
-         get_online_cpus();
-         ^
-/builds/linux/kernel/cgroup/cgroup.c:2237:2: note: did you mean 'get_online_mems'?
-/builds/linux/include/linux/memory_hotplug.h:258:20: note: 'get_online_mems' declared here
-static inline void get_online_mems(void) {}
-                    ^
-/builds/linux/kernel/cgroup/cgroup.c:2248:2: error: implicit declaration of function 'put_online_cpus' [-Werror,-Wimplicit-function-declaration]
-         put_online_cpus();
-         ^
-/builds/linux/kernel/cgroup/cgroup.c:2248:2: note: did you mean 'put_online_mems'?
-/builds/linux/include/linux/memory_hotplug.h:259:20: note: 'put_online_mems' declared here
-static inline void put_online_mems(void) {}
-                    ^
-2 errors generated.
-make[3]: *** [/builds/linux/scripts/Makefile.build:303: kernel/cgroup/cgroup.o] Error 1
------>8-----
-
-
-For Arm64, i386 x86, with GCC-11, Perf has a new error:
-
------8<-----
-In function 'ready',
-     inlined from 'sender' at bench/sched-messaging.c:90:2:
-bench/sched-messaging.c:76:13: error: 'dummy' is used uninitialized [-Werror=uninitialized]
-    76 |         if (write(ready_out, &dummy, 1) != 1)
-       |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-In file included from bench/../perf-sys.h:5,
-                  from bench/../perf.h:18,
-                  from bench/sched-messaging.c:13:
------>8-----
-
-
-Greetings!
-
-Daniel Díaz
-daniel.diaz@linaro.org
+Cheers,
+Longman
 
