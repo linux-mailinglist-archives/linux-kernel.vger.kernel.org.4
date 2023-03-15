@@ -2,56 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26DEF6BAD0B
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 11:07:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A1FF6BAD11
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 11:08:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232204AbjCOKHr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 06:07:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36690 "EHLO
+        id S232249AbjCOKIE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 06:08:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231821AbjCOKH2 (ORCPT
+        with ESMTP id S232170AbjCOKHj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 06:07:28 -0400
+        Wed, 15 Mar 2023 06:07:39 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25A864BE8F
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 03:06:54 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D6883C30;
+        Wed, 15 Mar 2023 03:07:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A8B2361CC3
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 10:06:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FB50C433EF;
-        Wed, 15 Mar 2023 10:06:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 092FC61CBB;
+        Wed, 15 Mar 2023 10:07:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 213D2C433D2;
+        Wed, 15 Mar 2023 10:07:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678874813;
-        bh=a1mBgV1xiO8Grnca7MjKIp4dVrfIFe61NhyeSSkXJvg=;
+        s=k20201202; t=1678874838;
+        bh=bdbwPo52/Ppp+QyPqw237wZWKSnBlkdHlTk0ENeNb/A=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=COg5KEa4yQ+1jyzTij5CZJvyoDVHmbYd48Dsty1NHaKfFNASUDoxWEFMna0I5OQEM
-         DO8HD9OwxjZCjvWx/W6t28J0zpjAIDNxmRDpzHNRHVub+QL+j3aMDnQRmquPGpXZ9y
-         YWHpFfexpcEs0unxHMTqcYAFS/AIWYRf9leHNS1kPNGJkj0zHMiyKKvumJweusEV9C
-         pjgzaDm84fRnPTwj3X+1WvTmajaYTWLddZNxHkqCi4wG8+AEscHJsLkmhjlqDA9k8o
-         w2pdnan8ZRwpCQHxc5Eyk7GUeQclaURJjqlqAYv7HW6XSA6Bzs0UXI7L01aXw3uWf5
-         xrNZSugTNASqg==
-Date:   Wed, 15 Mar 2023 15:36:49 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Vijendar Mukunda <Vijendar.Mukunda@amd.com>
-Cc:     alsa-devel@alsa-project.org, pierre-louis.bossart@linux.intel.com,
-        Basavaraj.Hiregoudar@amd.com, Sunil-kumar.Dommati@amd.com,
-        Mario.Limonciello@amd.com, amadeuszx.slawinski@linux.intel.com,
-        Mastan.Katragadda@amd.com, Arungopal.kondaveeti@amd.com,
-        claudiu.beznea@microchip.com,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Sanyog Kale <sanyog.r.kale@intel.com>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH V6 5/8] soundwire: amd: add SoundWire manager interrupt
- handling
-Message-ID: <ZBGYubOYyu7E8ueo@matsya>
-References: <20230307133135.545952-1-Vijendar.Mukunda@amd.com>
- <20230307133135.545952-6-Vijendar.Mukunda@amd.com>
+        b=ZyvkiQnDQbYDPMcUjI6+iuVI5RCFEjszOjFF+VhMTt7FVKPxZNMk6gFjMgIjhzN7l
+         Zvcn7Oxzf5yWR8BllhU+NahKG1sExq1bpZDhpCzmg9+10tZgFXSkXUEKkUypGNxSfK
+         dEdMeA7NCtj3fKbenKhnMTbtULmPax5c2w1stHzzFwcp8UZ2OFsm+W0Z4mHSW00ToH
+         awXTUSTyMhRbVZ4J/EyRTdWzpcOiPBg9TnWRVQIRZSO5UysDcAKHNwqxenKJk9g25H
+         3F1uFsJcSfZmnfKMSKUJPyEqw4ulY7JutOnSuCgK0Fp6oWVAlI2QklzVaFs0P42CB7
+         fzV55O5eLddHQ==
+Date:   Wed, 15 Mar 2023 12:07:05 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
+Cc:     linux-arch@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>, loongarch@lists.linux.dev
+Subject: Re: [PATCH v4 13/36] loongarch: Implement the new page table range
+ API
+Message-ID: <ZBGYyY2WJa2TfSRD@kernel.org>
+References: <20230315051444.3229621-1-willy@infradead.org>
+ <20230315051444.3229621-14-willy@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230307133135.545952-6-Vijendar.Mukunda@amd.com>
+In-Reply-To: <20230315051444.3229621-14-willy@infradead.org>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -61,232 +56,153 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07-03-23, 19:01, Vijendar Mukunda wrote:
-> Add support for handling SoundWire manager interrupts.
+On Wed, Mar 15, 2023 at 05:14:21AM +0000, Matthew Wilcox (Oracle) wrote:
+> Add update_mmu_cache_range() and change _PFN_SHIFT to PFN_PTE_SHIFT.
+> It would probably be more efficient to implement __update_tlb() by
+> flushing the entire folio instead of calling __update_tlb() N times,
+> but I'll leave that for someone who understands the architecture better.
 > 
-> Signed-off-by: Vijendar Mukunda <Vijendar.Mukunda@amd.com>
-> Signed-off-by: Mastan Katragadda <Mastan.Katragadda@amd.com>
-> Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-> Link: https://lore.kernel.org/lkml/20230227154801.50319-6-Vijendar.Mukunda@amd.com
+> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+> Cc: Huacai Chen <chenhuacai@kernel.org>
+> Cc: WANG Xuerui <kernel@xen0n.name>
+> Cc: loongarch@lists.linux.dev
+
+Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
+
 > ---
->  drivers/soundwire/amd_manager.c   | 130 ++++++++++++++++++++++++++++++
->  drivers/soundwire/amd_manager.h   |   1 +
->  include/linux/soundwire/sdw_amd.h |   7 ++
->  3 files changed, 138 insertions(+)
+>  arch/loongarch/include/asm/cacheflush.h   |  2 ++
+>  arch/loongarch/include/asm/pgtable-bits.h |  4 ++--
+>  arch/loongarch/include/asm/pgtable.h      | 28 ++++++++++++-----------
+>  arch/loongarch/mm/pgtable.c               |  2 +-
+>  arch/loongarch/mm/tlb.c                   |  2 +-
+>  5 files changed, 21 insertions(+), 17 deletions(-)
 > 
-> diff --git a/drivers/soundwire/amd_manager.c b/drivers/soundwire/amd_manager.c
-> index dd7fd4036d89..165078beca2e 100644
-> --- a/drivers/soundwire/amd_manager.c
-> +++ b/drivers/soundwire/amd_manager.c
-> @@ -357,6 +357,51 @@ static enum sdw_command_response amd_sdw_xfer_msg(struct sdw_bus *bus, struct sd
->  	return SDW_CMD_OK;
->  }
+> diff --git a/arch/loongarch/include/asm/cacheflush.h b/arch/loongarch/include/asm/cacheflush.h
+> index 0681788eb474..7907eb42bfbd 100644
+> --- a/arch/loongarch/include/asm/cacheflush.h
+> +++ b/arch/loongarch/include/asm/cacheflush.h
+> @@ -47,8 +47,10 @@ void local_flush_icache_range(unsigned long start, unsigned long end);
+>  #define flush_cache_vmap(start, end)			do { } while (0)
+>  #define flush_cache_vunmap(start, end)			do { } while (0)
+>  #define flush_icache_page(vma, page)			do { } while (0)
+> +#define flush_icache_pages(vma, page)			do { } while (0)
+>  #define flush_icache_user_page(vma, page, addr, len)	do { } while (0)
+>  #define flush_dcache_page(page)				do { } while (0)
+> +#define flush_dcache_folio(folio)			do { } while (0)
+>  #define flush_dcache_mmap_lock(mapping)			do { } while (0)
+>  #define flush_dcache_mmap_unlock(mapping)		do { } while (0)
 >  
-> +static void amd_sdw_fill_slave_status(struct amd_sdw_manager *amd_manager, u16 index, u32 status)
-> +{
-> +	switch (status) {
-> +	case SDW_SLAVE_ATTACHED:
-> +		amd_manager->status[index] = SDW_SLAVE_ATTACHED;
-> +		break;
-> +	case SDW_SLAVE_UNATTACHED:
-> +		amd_manager->status[index] = SDW_SLAVE_UNATTACHED;
-> +		break;
-> +	case SDW_SLAVE_ALERT:
-> +		amd_manager->status[index] = SDW_SLAVE_ALERT;
-> +		break;
-
-why not:
-
-        case SDW_SLAVE_ATTACHED:
-        case SDW_SLAVE_UNATTACHED:
-        case SDW_SLAVE_ALERT:
-                amd_manager->status[index] = status;
-                break;
-
-> +	default:
-> +		amd_manager->status[index] = SDW_SLAVE_RESERVED;
-> +		break;
-> +	}
-> +}
-> +
-> +static void amd_sdw_process_ping_status(u64 response, struct amd_sdw_manager *amd_manager)
-> +{
-> +	u64 slave_stat;
-> +	u32 val;
-> +	u16 dev_index;
-> +
-> +	/* slave status response */
-> +	slave_stat = FIELD_GET(AMD_SDW_MCP_SLAVE_STAT_0_3, response);
-> +	slave_stat |= FIELD_GET(AMD_SDW_MCP_SLAVE_STAT_4_11, response) << 8;
-> +	dev_dbg(amd_manager->dev, "slave_stat:0x%llx\n", slave_stat);
-> +	for (dev_index = 0; dev_index <= SDW_MAX_DEVICES; ++dev_index) {
-> +		val = (slave_stat >> (dev_index * 2)) & AMD_SDW_MCP_SLAVE_STATUS_MASK;
-> +		dev_dbg(amd_manager->dev, "val:0x%x\n", val);
-> +		amd_sdw_fill_slave_status(amd_manager, dev_index, val);
-> +	}
-> +}
-> +
-> +static void amd_sdw_read_and_process_ping_status(struct amd_sdw_manager *amd_manager)
-> +{
-> +	u64 response;
-> +
-> +	mutex_lock(&amd_manager->bus.msg_lock);
-> +	response = amd_sdw_send_cmd_get_resp(amd_manager, 0, 0);
-> +	mutex_unlock(&amd_manager->bus.msg_lock);
-> +	amd_sdw_process_ping_status(response, amd_manager);
-> +}
-> +
->  static u32 amd_sdw_read_ping_status(struct sdw_bus *bus)
->  {
->  	struct amd_sdw_manager *amd_manager = to_amd_sdw(bus);
-> @@ -757,6 +802,89 @@ static int amd_sdw_register_dais(struct amd_sdw_manager *amd_manager)
->  					       dais, num_dais);
->  }
+> diff --git a/arch/loongarch/include/asm/pgtable-bits.h b/arch/loongarch/include/asm/pgtable-bits.h
+> index 8b98d22a145b..a1eb2e25446b 100644
+> --- a/arch/loongarch/include/asm/pgtable-bits.h
+> +++ b/arch/loongarch/include/asm/pgtable-bits.h
+> @@ -48,12 +48,12 @@
+>  #define _PAGE_NO_EXEC		(_ULCAST_(1) << _PAGE_NO_EXEC_SHIFT)
+>  #define _PAGE_RPLV		(_ULCAST_(1) << _PAGE_RPLV_SHIFT)
+>  #define _CACHE_MASK		(_ULCAST_(3) << _CACHE_SHIFT)
+> -#define _PFN_SHIFT		(PAGE_SHIFT - 12 + _PAGE_PFN_SHIFT)
+> +#define PFN_PTE_SHIFT		(PAGE_SHIFT - 12 + _PAGE_PFN_SHIFT)
 >  
-> +static void amd_sdw_update_slave_status_work(struct work_struct *work)
-> +{
-> +	struct amd_sdw_manager *amd_manager =
-> +		container_of(work, struct amd_sdw_manager, amd_sdw_work);
-> +	int retry_count = 0;
-> +
-> +	if (amd_manager->status[0] == SDW_SLAVE_ATTACHED) {
-> +		acp_reg_writel(0, amd_manager->mmio + ACP_SW_STATE_CHANGE_STATUS_MASK_0TO7);
-> +		acp_reg_writel(0, amd_manager->mmio + ACP_SW_STATE_CHANGE_STATUS_MASK_8TO11);
-> +	}
-> +
-> +update_status:
-> +	sdw_handle_slave_status(&amd_manager->bus, amd_manager->status);
-> +	/*
-> +	 * During the peripheral enumeration sequence, the SoundWire manager interrupts
-> +	 * are masked. Once the device number programming is done for all peripherals,
-> +	 * interrupts will be unmasked. Read the peripheral device status from ping command
-> +	 * and process the response. This sequence will ensure all peripheral devices enumerated
-> +	 * and initialized properly.
-> +	 */
-> +	if (amd_manager->status[0] == SDW_SLAVE_ATTACHED) {
-> +		if (retry_count++ < SDW_MAX_DEVICES) {
-> +			acp_reg_writel(AMD_SDW_IRQ_MASK_0TO7, amd_manager->mmio +
-> +				       ACP_SW_STATE_CHANGE_STATUS_MASK_0TO7);
-> +			acp_reg_writel(AMD_SDW_IRQ_MASK_8TO11,
-> +				       amd_manager->mmio + ACP_SW_STATE_CHANGE_STATUS_MASK_8TO11);
-> +			amd_sdw_read_and_process_ping_status(amd_manager);
-> +			goto update_status;
-
-goto are mostly used for error handling, i dont thing case here deserves
-a goto, can you please change this...
-
-> +		} else {
-> +			dev_err_ratelimited(amd_manager->dev,
-> +					    "Device0 detected after %d iterations\n",
-> +					    retry_count);
-> +		}
-> +	}
-> +}
-> +
-> +static void amd_sdw_update_slave_status(u32 status_change_0to7, u32 status_change_8to11,
-> +					struct amd_sdw_manager *amd_manager)
-> +{
-> +	u64 slave_stat;
-> +	u32 val;
-> +	int dev_index;
-> +
-> +	if (status_change_0to7 == AMD_SDW_SLAVE_0_ATTACHED)
-> +		memset(amd_manager->status, 0, sizeof(amd_manager->status));
-> +	slave_stat = status_change_0to7;
-> +	slave_stat |= FIELD_GET(AMD_SDW_MCP_SLAVE_STATUS_8TO_11, status_change_8to11) << 32;
-> +	dev_dbg(amd_manager->dev, "status_change_0to7:0x%x status_change_8to11:0x%x\n",
-> +		status_change_0to7, status_change_8to11);
-> +	if (slave_stat) {
-> +		for (dev_index = 0; dev_index <= SDW_MAX_DEVICES; ++dev_index) {
-> +			if (slave_stat & AMD_SDW_MCP_SLAVE_STATUS_VALID_MASK(dev_index)) {
-> +				val = (slave_stat >> AMD_SDW_MCP_SLAVE_STAT_SHIFT_MASK(dev_index)) &
-> +				      AMD_SDW_MCP_SLAVE_STATUS_MASK;
-> +				amd_sdw_fill_slave_status(amd_manager, dev_index, val);
-> +			}
-> +		}
-> +	}
-> +}
-> +
-> +static void amd_sdw_irq_thread(struct work_struct *work)
-> +{
-> +	struct amd_sdw_manager *amd_manager =
-> +			container_of(work, struct amd_sdw_manager, amd_sdw_irq_thread);
-> +	u32 status_change_8to11;
-> +	u32 status_change_0to7;
-> +
-> +	status_change_8to11 = acp_reg_readl(amd_manager->mmio + ACP_SW_STATE_CHANGE_STATUS_8TO11);
-> +	status_change_0to7 = acp_reg_readl(amd_manager->mmio + ACP_SW_STATE_CHANGE_STATUS_0TO7);
-> +	dev_dbg(amd_manager->dev, "[SDW%d] SDW INT: 0to7=0x%x, 8to11=0x%x\n",
-> +		amd_manager->instance, status_change_0to7, status_change_8to11);
-> +	if (status_change_8to11 & AMD_SDW_PREQ_INTR_STAT) {
-> +		amd_sdw_read_and_process_ping_status(amd_manager);
-> +	} else {
-> +		/* Check for the updated status on peripheral device */
-> +		amd_sdw_update_slave_status(status_change_0to7, status_change_8to11, amd_manager);
-> +	}
-> +	if (status_change_8to11 || status_change_0to7)
-> +		schedule_work(&amd_manager->amd_sdw_work);
-> +	acp_reg_writel(0x00, amd_manager->mmio + ACP_SW_STATE_CHANGE_STATUS_8TO11);
-> +	acp_reg_writel(0x00, amd_manager->mmio + ACP_SW_STATE_CHANGE_STATUS_0TO7);
-> +}
-> +
->  static void amd_sdw_probe_work(struct work_struct *work)
->  {
->  	struct amd_sdw_manager *amd_manager = container_of(work, struct amd_sdw_manager,
-> @@ -847,6 +975,8 @@ static int amd_sdw_manager_probe(struct platform_device *pdev)
->  		return ret;
+>  #define _PAGE_USER	(PLV_USER << _PAGE_PLV_SHIFT)
+>  #define _PAGE_KERN	(PLV_KERN << _PAGE_PLV_SHIFT)
+>  
+> -#define _PFN_MASK (~((_ULCAST_(1) << (_PFN_SHIFT)) - 1) & \
+> +#define _PFN_MASK (~((_ULCAST_(1) << (PFN_PTE_SHIFT)) - 1) & \
+>  		  ((_ULCAST_(1) << (_PAGE_PFN_END_SHIFT)) - 1))
+>  
+>  /*
+> diff --git a/arch/loongarch/include/asm/pgtable.h b/arch/loongarch/include/asm/pgtable.h
+> index d28fb9dbec59..13aad0003e9a 100644
+> --- a/arch/loongarch/include/asm/pgtable.h
+> +++ b/arch/loongarch/include/asm/pgtable.h
+> @@ -237,9 +237,9 @@ extern pmd_t mk_pmd(struct page *page, pgprot_t prot);
+>  extern void set_pmd_at(struct mm_struct *mm, unsigned long addr, pmd_t *pmdp, pmd_t pmd);
+>  
+>  #define pte_page(x)		pfn_to_page(pte_pfn(x))
+> -#define pte_pfn(x)		((unsigned long)(((x).pte & _PFN_MASK) >> _PFN_SHIFT))
+> -#define pfn_pte(pfn, prot)	__pte(((pfn) << _PFN_SHIFT) | pgprot_val(prot))
+> -#define pfn_pmd(pfn, prot)	__pmd(((pfn) << _PFN_SHIFT) | pgprot_val(prot))
+> +#define pte_pfn(x)		((unsigned long)(((x).pte & _PFN_MASK) >> PFN_PTE_SHIFT))
+> +#define pfn_pte(pfn, prot)	__pte(((pfn) << PFN_PTE_SHIFT) | pgprot_val(prot))
+> +#define pfn_pmd(pfn, prot)	__pmd(((pfn) << PFN_PTE_SHIFT) | pgprot_val(prot))
+>  
+>  /*
+>   * Initialize a new pgd / pud / pmd table with invalid pointers.
+> @@ -334,12 +334,6 @@ static inline void set_pte(pte_t *ptep, pte_t pteval)
 >  	}
->  	dev_set_drvdata(dev, amd_manager);
-> +	INIT_WORK(&amd_manager->amd_sdw_irq_thread, amd_sdw_irq_thread);
-> +	INIT_WORK(&amd_manager->amd_sdw_work, amd_sdw_update_slave_status_work);
->  	INIT_WORK(&amd_manager->probe_work, amd_sdw_probe_work);
->  	/*
->  	 * Instead of having lengthy probe sequence, use deferred probe.
-> diff --git a/drivers/soundwire/amd_manager.h b/drivers/soundwire/amd_manager.h
-> index cad26034087b..807bc5a314d8 100644
-> --- a/drivers/soundwire/amd_manager.h
-> +++ b/drivers/soundwire/amd_manager.h
-> @@ -185,6 +185,7 @@
->  #define AMD_SDW1_PAD_KEEPER_EN_MASK			0x10
->  #define AMD_SDW0_PAD_KEEPER_DISABLE_MASK		0x1E
->  #define AMD_SDW1_PAD_KEEPER_DISABLE_MASK		0xF
-> +#define AMD_SDW_PREQ_INTR_STAT				BIT(19)
+>  }
 >  
->  enum amd_sdw_cmd_type {
->  	AMD_SDW_CMD_PING = 0,
-> diff --git a/include/linux/soundwire/sdw_amd.h b/include/linux/soundwire/sdw_amd.h
-> index ac537419301d..df60bc0de6fc 100644
-> --- a/include/linux/soundwire/sdw_amd.h
-> +++ b/include/linux/soundwire/sdw_amd.h
-> @@ -45,8 +45,11 @@ struct sdw_amd_dai_runtime {
->   * @mmio: SoundWire registers mmio base
->   * @acp_mmio: acp registers mmio base
->   * @reg_mask: register mask structure per manager instance
-> + * @amd_sdw_irq_thread: SoundWire manager irq workqueue
-> + * @amd_sdw_work: peripheral status work queue
->   * @probe_work: SoundWire manager probe workqueue
->   * @acp_sdw_lock: mutex to protect acp share register access
-> + * @status: peripheral devices status array
->   * @num_din_ports: number of input ports
->   * @num_dout_ports: number of output ports
->   * @cols_index: Column index in frame shape
-> @@ -65,10 +68,14 @@ struct amd_sdw_manager {
->  	void __iomem *acp_mmio;
+> -static inline void set_pte_at(struct mm_struct *mm, unsigned long addr,
+> -			      pte_t *ptep, pte_t pteval)
+> -{
+> -	set_pte(ptep, pteval);
+> -}
+> -
+>  static inline void pte_clear(struct mm_struct *mm, unsigned long addr, pte_t *ptep)
+>  {
+>  	/* Preserve global status for the pair */
+> @@ -445,11 +439,19 @@ static inline pte_t pte_modify(pte_t pte, pgprot_t newprot)
+>  extern void __update_tlb(struct vm_area_struct *vma,
+>  			unsigned long address, pte_t *ptep);
 >  
->  	struct sdw_manager_reg_mask *reg_mask;
-> +	struct work_struct amd_sdw_irq_thread;
-> +	struct work_struct amd_sdw_work;
->  	struct work_struct probe_work;
->  	/* mutex to protect acp common register access */
->  	struct mutex *acp_sdw_lock;
+> -static inline void update_mmu_cache(struct vm_area_struct *vma,
+> -			unsigned long address, pte_t *ptep)
+> +static inline void update_mmu_cache_range(struct vm_area_struct *vma,
+> +		unsigned long address, pte_t *ptep, unsigned int nr)
+>  {
+> -	__update_tlb(vma, address, ptep);
+> +	for (;;) {
+> +		__update_tlb(vma, address, ptep);
+> +		if (--nr == 0)
+> +			break;
+> +		address += PAGE_SIZE;
+> +		ptep++;
+> +	}
+>  }
+> +#define update_mmu_cache(vma, addr, ptep) \
+> +	update_mmu_cache_range(vma, addr, ptep, 1)
 >  
-> +	enum sdw_slave_status status[SDW_MAX_DEVICES + 1];
-> +
->  	int num_din_ports;
->  	int num_dout_ports;
+>  #define __HAVE_ARCH_UPDATE_MMU_TLB
+>  #define update_mmu_tlb	update_mmu_cache
+> @@ -462,7 +464,7 @@ static inline void update_mmu_cache_pmd(struct vm_area_struct *vma,
+>  
+>  static inline unsigned long pmd_pfn(pmd_t pmd)
+>  {
+> -	return (pmd_val(pmd) & _PFN_MASK) >> _PFN_SHIFT;
+> +	return (pmd_val(pmd) & _PFN_MASK) >> PFN_PTE_SHIFT;
+>  }
+>  
+>  #ifdef CONFIG_TRANSPARENT_HUGEPAGE
+> diff --git a/arch/loongarch/mm/pgtable.c b/arch/loongarch/mm/pgtable.c
+> index 36a6dc0148ae..1260cf30e3ee 100644
+> --- a/arch/loongarch/mm/pgtable.c
+> +++ b/arch/loongarch/mm/pgtable.c
+> @@ -107,7 +107,7 @@ pmd_t mk_pmd(struct page *page, pgprot_t prot)
+>  {
+>  	pmd_t pmd;
+>  
+> -	pmd_val(pmd) = (page_to_pfn(page) << _PFN_SHIFT) | pgprot_val(prot);
+> +	pmd_val(pmd) = (page_to_pfn(page) << PFN_PTE_SHIFT) | pgprot_val(prot);
+>  
+>  	return pmd;
+>  }
+> diff --git a/arch/loongarch/mm/tlb.c b/arch/loongarch/mm/tlb.c
+> index 8bad6b0cff59..73652930b268 100644
+> --- a/arch/loongarch/mm/tlb.c
+> +++ b/arch/loongarch/mm/tlb.c
+> @@ -246,7 +246,7 @@ static void output_pgtable_bits_defines(void)
+>  	pr_define("_PAGE_WRITE_SHIFT %d\n", _PAGE_WRITE_SHIFT);
+>  	pr_define("_PAGE_NO_READ_SHIFT %d\n", _PAGE_NO_READ_SHIFT);
+>  	pr_define("_PAGE_NO_EXEC_SHIFT %d\n", _PAGE_NO_EXEC_SHIFT);
+> -	pr_define("_PFN_SHIFT %d\n", _PFN_SHIFT);
+> +	pr_define("PFN_PTE_SHIFT %d\n", PFN_PTE_SHIFT);
+>  	pr_debug("\n");
+>  }
 >  
 > -- 
-> 2.34.1
+> 2.39.2
+> 
 
 -- 
-~Vinod
+Sincerely yours,
+Mike.
