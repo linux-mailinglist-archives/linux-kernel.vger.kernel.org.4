@@ -2,334 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C49DC6BB3B3
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 13:54:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 731AA6BB3BB
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 13:56:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233133AbjCOMyz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 08:54:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35992 "EHLO
+        id S233139AbjCOM4E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 08:56:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233141AbjCOMyv (ORCPT
+        with ESMTP id S233090AbjCOM4B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 08:54:51 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7407199D55;
-        Wed, 15 Mar 2023 05:54:49 -0700 (PDT)
+        Wed, 15 Mar 2023 08:56:01 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F28801EBF5;
+        Wed, 15 Mar 2023 05:55:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678884889; x=1710420889;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=PmN515W/2mq3hBjB/cyy5WpgL1t4bB08Urxg0WllqhU=;
-  b=YqE6FwL8sSMLAP+OZlMSD+QFduC/M+wCUW0iodnT9Sd5ZVGJk7C4vgvh
-   4Dn5mOUYJSOVp1eRhBY5GWhtmy8ylyoXNlLxa8hrk8YtrGLEPbAlUEg4d
-   rcA0cS2I47E9SFXQEYVXcb7kT3MPw0xewU7kShIVPnYVuOiDcOUfn8ENc
-   xYgnYLVY2M8gT01HNgR7YXYx1uKPjmJsby9SI1qceva2S4I8znoIpT/X5
-   GdfzKTX/4ygq+MqE287F/JhH5AK0+/sjV6MrcctLbiaCimclzBszYOD/u
-   dWE7MHzZRG2titoO2Dx5DEQgdk8tOi44UQKkHvR5R9VJ35nmH99hWtd9Q
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="335179434"
+  t=1678884959; x=1710420959;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=IQyA5s2mZ5GkgfdPfJrfWwpt0qKRDLb/ZoxL3Ot+OS0=;
+  b=H7bQg9dAhYFf4uEwM7hAH3iGeFSw49RZQXJdRpjvu0P6fnGZqfW4xuoj
+   VNK4S1y0gxJBgHXY3QkzhkgyxOEuO3rXhb9BzT5jHSVsEOwu8+Ui4hnmO
+   ogCSG+Pwj2SVAISppjQp0UhqiaQB6XIlwexw9vVZOFnhNAeME7IA66RXW
+   EDEYq5wNX9Ay4mNW79ucmtpTVdGKp5XuiKHXjmgdivS2+31hF1taV2NX2
+   ZiKTUqVNdSEHkxd6gv8kuz3dTBbL7uuXQNtqf1W/TOuaA4OkjSmrd6nwv
+   8x9cTllzQSw+xAFqhSLgUDXH5WBOOTmAWTf4RTFUb+SzQhx8+P03/b2kT
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="318086871"
 X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
-   d="scan'208";a="335179434"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2023 05:54:49 -0700
+   d="scan'208";a="318086871"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2023 05:55:59 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="629447017"
+X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="925332809"
 X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
-   d="scan'208";a="629447017"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 15 Mar 2023 05:54:46 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pcQeT-0007g8-2Z;
-        Wed, 15 Mar 2023 12:54:45 +0000
-Date:   Wed, 15 Mar 2023 20:54:01 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        rui.zhang@intel.com, amitk@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 10/11] thermal/core: Alloc-copy-free the thermal zone
- parameters structure
-Message-ID: <202303152025.rVv9btko-lkp@intel.com>
-References: <20230307133735.90772-11-daniel.lezcano@linaro.org>
+   d="scan'208";a="925332809"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by fmsmga006.fm.intel.com with ESMTP; 15 Mar 2023 05:55:59 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Wed, 15 Mar 2023 05:55:59 -0700
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21 via Frontend Transport; Wed, 15 Mar 2023 05:55:59 -0700
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.109)
+ by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.21; Wed, 15 Mar 2023 05:55:58 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=e2oIcZVnZDOwaBCAqbqtTQbdo39IbdcnyBH2uhZ9ANQsUxW2882/20O3YryM9EFtX7fnSJDbMFUsLNICxS4HIr6Y+M9ILFBJ/sdQXXz7GxezMF8ZEh2vmdS4NuINhUJbCyYRU1vtGeNscpT4dC1KP+eHndghCjCW/ARwkY9uljsaoQxP2c4/0zD3HQBZ+rsoR3ZLMwg00ziA8cxChdH28tLKt5yH8GWbNCwzj0rsREnjp3up/SYlIReknm82WNACs2BPB9sCFBOUoDYgKJ2G8esFdrZKDUoAojEJiWrYbtjW+k6HvFLk//0vcVoorSbdjm7bUekxCSRg+D1cXe9dMw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=MnU2Rd115zuI/PcDVbbwapBx7Sa6WkEjKMrLs96l6qM=;
+ b=eatPdx8lb5jVKJB7kDu9mPvMK3KEIt3ou3/SaziXBwfIcPOioqQrEitk8+GvqkuxDD/sfsWrvIHmCuL5eymm+VK6PSqJz3SFOtWTNIOOaegplPZvLSrIwNEpAS5br9OP18AvQpdVD1mEDDNKgqtjbdHaVzsNOaFC+fZut8pgMkPExQ9yjAHw8i8Ut74nCsOttZ8TZ5E+SayplS3W1pLiGEy6qryIqV2Xpp0rVNfK/pXY/vFyWdu8XpsnrTvvLUytCbTt/LbURvhCcYrBSbOYjHrJd77oppAByslU5aI4iqToxpdd2kzDA/ESWO4yCha8UNupLF8fYId6xm2FGIG33g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DM6PR11MB3625.namprd11.prod.outlook.com (2603:10b6:5:13a::21)
+ by PH0PR11MB5110.namprd11.prod.outlook.com (2603:10b6:510:3f::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.26; Wed, 15 Mar
+ 2023 12:55:56 +0000
+Received: from DM6PR11MB3625.namprd11.prod.outlook.com
+ ([fe80::7911:de29:ded:224]) by DM6PR11MB3625.namprd11.prod.outlook.com
+ ([fe80::7911:de29:ded:224%5]) with mapi id 15.20.6178.029; Wed, 15 Mar 2023
+ 12:55:56 +0000
+Message-ID: <9acb9b6e-d998-fd7e-c370-3b6160cfda40@intel.com>
+Date:   Wed, 15 Mar 2023 13:54:41 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [syzbot] [bpf?] [net?] BUG: unable to handle kernel NULL pointer
+ dereference in __build_skb_around
+Content-Language: en-US
+To:     <ast@kernel.org>,
+        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>
+CC:     syzbot <syzbot+e1d1b65f7c32f2a86a9f@syzkaller.appspotmail.com>,
+        <bpf@vger.kernel.org>, <daniel@iogearbox.net>,
+        <davem@davemloft.net>, <edumazet@google.com>, <hawk@kernel.org>,
+        <john.fastabend@gmail.com>, <kuba@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <pabeni@redhat.com>, <syzkaller-bugs@googlegroups.com>
+References: <000000000000f1985705f6ef2243@google.com>
+ <6b48673b-33a2-877d-dadd-b43a1364b330@intel.com>
+ <ec94dad7-188b-96d8-9005-74f507d96967@intel.com>
+From:   Alexander Lobakin <aleksander.lobakin@intel.com>
+In-Reply-To: <ec94dad7-188b-96d8-9005-74f507d96967@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: LO2P265CA0482.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:13a::7) To DM6PR11MB3625.namprd11.prod.outlook.com
+ (2603:10b6:5:13a::21)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230307133735.90772-11-daniel.lezcano@linaro.org>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR11MB3625:EE_|PH0PR11MB5110:EE_
+X-MS-Office365-Filtering-Correlation-Id: fc4aa16a-d0b9-49f5-f5b1-08db25549dd8
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: B5CnlHg64Xv86xS4eJ3fvLFG+3b2Q68D9lLnGyCZKT02RxYDSwdlAfcKGbRwUXR84JNCBrmDhCwMPKX4PzDCgryz8XGu2WuDL6ODgyXyBjGgHnNY5vTQg4rX8HZ5v+D35Zb6b3tZmlSPd80OT/mhGxFY4nEc7lzGjl4Pq3uP3VGjWBxlthgt4whgUNkAobWls4baA8KBDZ+Qd1zjLeykSTIh7J3tF7m29QHCnY0WZxcgjDsiT9cp1Ruy6cQtvjhjh3Z373WiGGs1DGxKbAumg9ECLxfE0IN2qJXNM10vo0miB+HzGDJMmRTItONVJw1/0Z/8QVZl4DKeA9l8A+zFuhEr6ouSwh7LqHnHZz2awJaTLOUr/EjupDQxZLPckD3KYdWN18mOzp2zBUidGzU3RtoCDPT8AqFl146gr85tg0g6QzhS4PGKRNdFZIvXbs5/Vxc0LGWvixovRwwUtmjbreqCNMxkyw0kbps6SgKxHpD07B4cXoqoyij8J69IpOYS5yCWL6GhVbA86bFtNfMJNib+KQnwQBrBwXqzNMvfmUzjEwhz2foAwY+vc830bNkXU/5y+VXEOoFgwjbj1UBdF/BhRJxQsf8Cww7L6DxLe9yRBOT43BIIs+VhyCiEz5g6noJa/25zlxbPtOWlleIShtOTyNKakZB4+BEYKeVvZDFWljxb19tzMdBpYG0DZmHyknhYNwGHQyd4Eu/fv5BZKCOcgH0lWFNKQ6R3Lip8vfA=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB3625.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(396003)(376002)(136003)(366004)(346002)(39860400002)(451199018)(36756003)(316002)(478600001)(6486002)(5660300002)(8936002)(7416002)(66476007)(66556008)(6916009)(4326008)(2906002)(66946007)(6666004)(8676002)(41300700001)(82960400001)(86362001)(31696002)(38100700002)(6506007)(2616005)(6512007)(186003)(26005)(83380400001)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?U3l6SXlISWh6clJadUlmNjQ2YW5acjhQdXZmSGo5cWZpdE42enNBZHJyS21F?=
+ =?utf-8?B?eTBoclZkR044OU1waGF0dm90WVFEaU9uSXhjdGkxOW12dk9BQ01PT0t6Umhi?=
+ =?utf-8?B?UldrUGFTOE5mSStEZGZtaXM0ZGpXc05kRzR1Ykw2S3ZIcXBkZFBIdW9BZk0r?=
+ =?utf-8?B?R2hWSHMyM1AwNTZrZ2xFY2ZUQUpnS2tjRW9rUjBCSDMyaHFXZ2dwZXg0VmtH?=
+ =?utf-8?B?REd3R1J0ZmgvSDNBczhkRndKeWoraGxDbDQrdkhHMXYvNmJsK0lHa2xxNjd3?=
+ =?utf-8?B?a2JxK2FQMlpaNGg3VmRGeHV3WFJVWU5JWWdDL0pZYUJxNzlKeEhCQmxKanh5?=
+ =?utf-8?B?OWhwNFpKRTBOaTFIdXRKVEw2ODZhV3JFNjhZc3Y3Q1I4amxmRHhkdlJSUUxo?=
+ =?utf-8?B?VWppbXVzRlFaQlhqdUsvcVF1cUd6b3NHMTYwTEdkVXhKSVB5cFdQRjlocUw1?=
+ =?utf-8?B?SDVHRGY2MGFmWDZYdXNHRUVZRDBSMW9EaDA4Y1ZJTTFkejdSN1hYZzJoZ0hZ?=
+ =?utf-8?B?aVpaem9CUVVUaFFQYU5LY2RtUXNZY1Y0RlJZUXZtcWNMU2RaUzlDNVRkZmNC?=
+ =?utf-8?B?bktLWkVqQy93eDhBYkZRUjU4QTVvaHpBcDhGNTJybUtaa0JEdHkrOXNmbnJU?=
+ =?utf-8?B?NFRhTUhuRkVZZzJ5VEFiNHhtZFdNTW9taEx6WXp3bUErdTVtbjgrNlRkeHk0?=
+ =?utf-8?B?b09tQ3JoYkttL1daM21hWXRjMUx4c25UdFd3Z2gwQlMrM0xWTXhrWmM0OEtS?=
+ =?utf-8?B?SmNLYkRLajNpS0tPQ0Q1TnNmTUVXa1NBeTVOQTVteS9aaUZ0bEJMNTF6WU5v?=
+ =?utf-8?B?VENtK2hrc2RYY283TTlyQmpEMDJ2djlCNTh1QVF5ZTE5SFpCM1RZTWtaQXdH?=
+ =?utf-8?B?empzbGZaNVY3WXhoM0xMMG5hck83Vk5jNmwwc3NOdURIRFBrR0RYUEkrTk5r?=
+ =?utf-8?B?ejdJOVR2bXF4U3VLalVHSE5LOGF2cEp2K09OeVBDSXZrRWRBQW9GN0ZGVnFx?=
+ =?utf-8?B?TGJacTJjQjl6QndPekNFTjB5Q2NXZWlRUm9hTDJDVktUSFpxcVRiTllRMzc5?=
+ =?utf-8?B?OU5uQjFTeGhEWWFwTzhIdjJCZTAweUxwbVNHSDgwbXprVmdzTHVQMjBZSndu?=
+ =?utf-8?B?U0Myb29MSWVBSi95SUJnd3Y0UDNmd0piY3NhZ3FSNWkrQ054dHJPNVNEdWMz?=
+ =?utf-8?B?NXlqaTEySTErYmZtamhxM0I2TXJXdGJhYS95UmtZcElrQzQzU0NCQktMTmRo?=
+ =?utf-8?B?bkFRMDdJVVEzbjRMUnE0L1JXVjVTTkJvM3RMMHVWeFVuYldpekRURHhkYm9m?=
+ =?utf-8?B?Y3VXTDRhUDlyZmxWVlF2S1pHYk5zemNPWEJ0TW9DTmdRZS9vUzZvcm5jL3Bs?=
+ =?utf-8?B?eFg3TzVWbTVsMit2N3FQeXJ0Sk1xQ0o0VnExRFJlWmFuNGttTkU4ODQzak5w?=
+ =?utf-8?B?RnFqNXdud1A0V2JmU25PRFlEL1RBS1hUUWN3NngySHhZZU9pZFVWTHhVby9H?=
+ =?utf-8?B?VlFWTFduYmcxM052bjhPTWI0MERzb2NKVzhYdGhDQkFQVFRaalRiQ29sVWNz?=
+ =?utf-8?B?M2ttTlBEbllzb3pNK01ucGZZUjBmZURhTGw2d21wNFNRMGNIY2N2NW9QWk45?=
+ =?utf-8?B?K3dxVHRLRWFPMWtKQlZsZlNtR3gyUUhkYWhyOUVzSnVybmhFaCtaWklsdlY0?=
+ =?utf-8?B?TXYwWWdpQ2ZmTy9lR2F0UEp4cERsbEpTYmdiOVVKZExZZUJDTUFucDEvaTFI?=
+ =?utf-8?B?OGVXNlVLcEtUdEhkOWNES3JFUUlVNjhTVlV6K3ZibUplYmVuNmFBczhQeWhL?=
+ =?utf-8?B?WGlQRHVwRFVKdklzc29QOGdXMjJLZmpCa2RCb0gyZmY1OTBlTkV5cTk1bStl?=
+ =?utf-8?B?Wk5nRG9zZ1dyM3dwWlRJaU5wazlaUGhodWNMb2pnYnFhRDNTSnFBZ2psMFlj?=
+ =?utf-8?B?cE15eWZZNUMzcnNiaHEreXVlTE5tODFZVzRiZ015cFcrTzBUOWlIejcwZTRa?=
+ =?utf-8?B?K3orV2xaMGU5VW83VmczUmw5andTc3MvSXV5eXQrVG9NT3JMbFpqbmlybndW?=
+ =?utf-8?B?WmpmRFdYUDZwck1EQUdsSFlhdW9URkRKUEx5QXhCaHl4c01OVm1tU3pjRFhk?=
+ =?utf-8?B?OVlFR2d0WVhOakNJSVc0Ym1sMUdTR0QwQ29NbmtUZ3loWWRDR0VvaEFZcVRD?=
+ =?utf-8?Q?A53FfOMVzcu9+mCASa4bCYo=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: fc4aa16a-d0b9-49f5-f5b1-08db25549dd8
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB3625.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Mar 2023 12:55:56.0966
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: WHttMKF9c1gvrMV0fzaLMqn7wJqi9cM30UMjGTn0a3OT/reI//jASkkL430GnKPERWYt240wUJg/v/gG4g8H9XSLbVbrohnRIV5X/YK0Fl0=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB5110
+X-OriginatorOrg: intel.com
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Daniel,
+From: Alexander Lobakin <aleksander.lobakin@intel.com>
+Date: Wed, 15 Mar 2023 13:51:23 +0100
 
-I love your patch! Perhaps something to improve:
+> From: Alexander Lobakin <aleksander.lobakin@intel.com>
+> Date: Wed, 15 Mar 2023 13:10:44 +0100
+> 
+>> From: Syzbot <syzbot+e1d1b65f7c32f2a86a9f@syzkaller.appspotmail.com>
+>> Date: Wed, 15 Mar 2023 05:03:47 -0700
+>>
+>>> Hello,
 
-[auto build test WARNING on rafael-pm/linux-next]
-[also build test WARNING on linus/master v6.3-rc2 next-20230315]
-[cannot apply to rafael-pm/thermal]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[...]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Lezcano/thermal-drivers-intel_pch_thermal-Use-thermal-driver-device-to-write-a-trace/20230307-223759
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
-patch link:    https://lore.kernel.org/r/20230307133735.90772-11-daniel.lezcano%40linaro.org
-patch subject: [PATCH v1 10/11] thermal/core: Alloc-copy-free the thermal zone parameters structure
-config: i386-randconfig-a011-20230313 (https://download.01.org/0day-ci/archive/20230315/202303152025.rVv9btko-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/a9813bacf3531491cb02c13aafe358e6b5423aa0
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Daniel-Lezcano/thermal-drivers-intel_pch_thermal-Use-thermal-driver-device-to-write-a-trace/20230307-223759
-        git checkout a9813bacf3531491cb02c13aafe358e6b5423aa0
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/thermal/
+> diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+> index 6a8b33a103a4..5b9ca36ff21d 100644
+> --- a/net/bpf/test_run.c
+> +++ b/net/bpf/test_run.c
+> @@ -217,12 +217,12 @@ static bool ctx_was_changed(struct xdp_page_head *head)
+>  
+>  static void reset_ctx(struct xdp_page_head *head)
+>  {
+> -	if (likely(!ctx_was_changed(head)))
+> -		return;
+> +	if (unlikely(!ctx_was_changed(head))) {
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303152025.rVv9btko-lkp@intel.com/
+Must be `unlikely(ctx_was_changed(head))` obviously, I've got attention
+deficit or what :D
 
-All warnings (new ones prefixed by >>):
+> +		head->ctx.data = head->orig_ctx.data;
+> +		head->ctx.data_meta = head->orig_ctx.data_meta;
+> +		head->ctx.data_end = head->orig_ctx.data_end;
+> +	}
+>  
+> -	head->ctx.data = head->orig_ctx.data;
+> -	head->ctx.data_meta = head->orig_ctx.data_meta;
+> -	head->ctx.data_end = head->orig_ctx.data_end;
+>  	xdp_update_frame_from_buff(&head->ctx, &head->frm);
+>  }
+>  
+> ---
+> Alternative version, which fixes only this particular problem, but is
+> less safe as still assumes only xdpf->data could be nulled-out. It can
+> save a bunch o'cycles on hotpath tho, thus attaching it as well:
+> 
+> diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+> index 6a8b33a103a4..55789772f039 100644
+> --- a/net/bpf/test_run.c
+> +++ b/net/bpf/test_run.c
+> @@ -217,13 +217,15 @@ static bool ctx_was_changed(struct xdp_page_head *head)
+>  
+>  static void reset_ctx(struct xdp_page_head *head)
+>  {
+> -	if (likely(!ctx_was_changed(head)))
+> -		return;
+> +	if (unlikely(ctx_was_changed(head))) {
 
->> drivers/thermal/thermal_core.c:1267:7: warning: variable 'result' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-                   if (!tz->tzp)
-                       ^~~~~~~~
-   drivers/thermal/thermal_core.c:1388:17: note: uninitialized use occurs here
-           return ERR_PTR(result);
-                          ^~~~~~
-   drivers/thermal/thermal_core.c:1267:3: note: remove the 'if' if its condition is always false
-                   if (!tz->tzp)
-                   ^~~~~~~~~~~~~
-   drivers/thermal/thermal_core.c:1217:12: note: initialize the variable 'result' to silence this warning
-           int result;
-                     ^
-                      = 0
-   1 warning generated.
+(here it's correct)
 
+> +		head->ctx.data = head->orig_ctx.data;
+> +		head->ctx.data_meta = head->orig_ctx.data_meta;
+> +		head->ctx.data_end = head->orig_ctx.data_end;
+> +		head->frm.data = NULL;
+> +	}
+>  
+> -	head->ctx.data = head->orig_ctx.data;
+> -	head->ctx.data_meta = head->orig_ctx.data_meta;
+> -	head->ctx.data_end = head->orig_ctx.data_end;
+> -	xdp_update_frame_from_buff(&head->ctx, &head->frm);
+> +	if (head->frm.data != head->ctx.data)
+> +		xdp_update_frame_from_buff(&head->ctx, &head->frm);
+>  }
+>  
+>  static int xdp_recv_frames(struct xdp_frame **frames, int nframes,
 
-vim +1267 drivers/thermal/thermal_core.c
-
-  1183	
-  1184	/**
-  1185	 * thermal_zone_device_register_with_trips() - register a new thermal zone device
-  1186	 * @type:	the thermal zone device type
-  1187	 * @trips:	a pointer to an array of thermal trips
-  1188	 * @num_trips:	the number of trip points the thermal zone support
-  1189	 * @mask:	a bit string indicating the writeablility of trip points
-  1190	 * @devdata:	private device data
-  1191	 * @ops:	standard thermal zone device callbacks
-  1192	 * @tzp:	thermal zone platform parameters
-  1193	 * @passive_delay: number of milliseconds to wait between polls when
-  1194	 *		   performing passive cooling
-  1195	 * @polling_delay: number of milliseconds to wait between polls when checking
-  1196	 *		   whether trip points have been crossed (0 for interrupt
-  1197	 *		   driven systems)
-  1198	 *
-  1199	 * This interface function adds a new thermal zone device (sensor) to
-  1200	 * /sys/class/thermal folder as thermal_zone[0-*]. It tries to bind all the
-  1201	 * thermal cooling devices registered at the same time.
-  1202	 * thermal_zone_device_unregister() must be called when the device is no
-  1203	 * longer needed. The passive cooling depends on the .get_trend() return value.
-  1204	 *
-  1205	 * Return: a pointer to the created struct thermal_zone_device or an
-  1206	 * in case of error, an ERR_PTR. Caller must check return value with
-  1207	 * IS_ERR*() helpers.
-  1208	 */
-  1209	struct thermal_zone_device *
-  1210	thermal_zone_device_register_with_trips(const char *type, struct thermal_trip *trips, int num_trips, int mask,
-  1211						void *devdata, struct thermal_zone_device_ops *ops,
-  1212						struct thermal_zone_params *tzp, int passive_delay,
-  1213						int polling_delay)
-  1214	{
-  1215		struct thermal_zone_device *tz;
-  1216		int id;
-  1217		int result;
-  1218		int count;
-  1219		struct thermal_governor *governor;
-  1220	
-  1221		if (!type || strlen(type) == 0) {
-  1222			pr_err("No thermal zone type defined\n");
-  1223			return ERR_PTR(-EINVAL);
-  1224		}
-  1225	
-  1226		if (strlen(type) >= THERMAL_NAME_LENGTH) {
-  1227			pr_err("Thermal zone name (%s) too long, should be under %d chars\n",
-  1228			       type, THERMAL_NAME_LENGTH);
-  1229			return ERR_PTR(-EINVAL);
-  1230		}
-  1231	
-  1232		/*
-  1233		 * Max trip count can't exceed 31 as the "mask >> num_trips" condition.
-  1234		 * For example, shifting by 32 will result in compiler warning:
-  1235		 * warning: right shift count >= width of type [-Wshift-count- overflow]
-  1236		 *
-  1237		 * Also "mask >> num_trips" will always be true with 32 bit shift.
-  1238		 * E.g. mask = 0x80000000 for trip id 31 to be RW. Then
-  1239		 * mask >> 32 = 0x80000000
-  1240		 * This will result in failure for the below condition.
-  1241		 *
-  1242		 * Check will be true when the bit 31 of the mask is set.
-  1243		 * 32 bit shift will cause overflow of 4 byte integer.
-  1244		 */
-  1245		if (num_trips > (BITS_PER_TYPE(int) - 1) || num_trips < 0 || mask >> num_trips) {
-  1246			pr_err("Incorrect number of thermal trips\n");
-  1247			return ERR_PTR(-EINVAL);
-  1248		}
-  1249	
-  1250		if (!ops) {
-  1251			pr_err("Thermal zone device ops not defined\n");
-  1252			return ERR_PTR(-EINVAL);
-  1253		}
-  1254	
-  1255		if (num_trips > 0 && (!ops->get_trip_type || !ops->get_trip_temp) && !trips)
-  1256			return ERR_PTR(-EINVAL);
-  1257	
-  1258		if (!thermal_class)
-  1259			return ERR_PTR(-ENODEV);
-  1260	
-  1261		tz = kzalloc(sizeof(*tz), GFP_KERNEL);
-  1262		if (!tz)
-  1263			return ERR_PTR(-ENOMEM);
-  1264	
-  1265		if (tzp) {
-  1266			tz->tzp = kmemdup(tzp, sizeof(*tzp), GFP_KERNEL);
-> 1267			if (!tz->tzp)
-  1268				goto free_tz;
-  1269		}
-  1270		
-  1271		INIT_LIST_HEAD(&tz->thermal_instances);
-  1272		ida_init(&tz->ida);
-  1273		mutex_init(&tz->lock);
-  1274		id = ida_alloc(&thermal_tz_ida, GFP_KERNEL);
-  1275		if (id < 0) {
-  1276			result = id;
-  1277			goto free_tzp;
-  1278		}
-  1279	
-  1280		tz->id = id;
-  1281		strscpy(tz->type, type, sizeof(tz->type));
-  1282	
-  1283		if (!ops->critical)
-  1284			ops->critical = thermal_zone_device_critical;
-  1285	
-  1286		tz->ops = ops;
-  1287		tz->device.class = thermal_class;
-  1288		tz->devdata = devdata;
-  1289		tz->trips = trips;
-  1290		tz->num_trips = num_trips;
-  1291	
-  1292		thermal_set_delay_jiffies(&tz->passive_delay_jiffies, passive_delay);
-  1293		thermal_set_delay_jiffies(&tz->polling_delay_jiffies, polling_delay);
-  1294	
-  1295		/* sys I/F */
-  1296		/* Add nodes that are always present via .groups */
-  1297		result = thermal_zone_create_device_groups(tz, mask);
-  1298		if (result)
-  1299			goto remove_id;
-  1300	
-  1301		/* A new thermal zone needs to be updated anyway. */
-  1302		atomic_set(&tz->need_update, 1);
-  1303	
-  1304		result = dev_set_name(&tz->device, "thermal_zone%d", tz->id);
-  1305		if (result) {
-  1306			thermal_zone_destroy_device_groups(tz);
-  1307			goto remove_id;
-  1308		}
-  1309		result = device_register(&tz->device);
-  1310		if (result)
-  1311			goto release_device;
-  1312	
-  1313		for (count = 0; count < num_trips; count++) {
-  1314			struct thermal_trip trip;
-  1315	
-  1316			result = thermal_zone_get_trip(tz, count, &trip);
-  1317			if (result)
-  1318				set_bit(count, &tz->trips_disabled);
-  1319		}
-  1320	
-  1321		/* Update 'this' zone's governor information */
-  1322		mutex_lock(&thermal_governor_lock);
-  1323	
-  1324		if (tz->tzp)
-  1325			governor = __find_governor(tz->tzp->governor_name);
-  1326		else
-  1327			governor = def_governor;
-  1328	
-  1329		result = thermal_set_governor(tz, governor);
-  1330		if (result) {
-  1331			mutex_unlock(&thermal_governor_lock);
-  1332			goto unregister;
-  1333		}
-  1334	
-  1335		mutex_unlock(&thermal_governor_lock);
-  1336	
-  1337		if (!tz->tzp || !tz->tzp->no_hwmon) {
-  1338			result = thermal_add_hwmon_sysfs(tz);
-  1339			if (result)
-  1340				goto unregister;
-  1341		}
-  1342	
-  1343		mutex_lock(&thermal_list_lock);
-  1344		list_add_tail(&tz->node, &thermal_tz_list);
-  1345		mutex_unlock(&thermal_list_lock);
-  1346	
-  1347		if (tzp && tzp->linked_dev) {
-  1348			result = sysfs_create_link(&tzp->linked_dev->kobj,
-  1349						   &tz->device.kobj, "thermal_zone");
-  1350			if (result)
-  1351				goto out_list_del;
-  1352	
-  1353			result = sysfs_create_link(&tz->device.kobj,
-  1354						   &tzp->linked_dev->kobj, "device");
-  1355			if (result)
-  1356				goto out_del_link;
-  1357		}
-  1358	
-  1359		/* Bind cooling devices for this zone */
-  1360		bind_tz(tz);
-  1361	
-  1362		INIT_DELAYED_WORK(&tz->poll_queue, thermal_zone_device_check);
-  1363	
-  1364		thermal_zone_device_init(tz);
-  1365		/* Update the new thermal zone and mark it as already updated. */
-  1366		if (atomic_cmpxchg(&tz->need_update, 1, 0))
-  1367			thermal_zone_device_update(tz, THERMAL_EVENT_UNSPECIFIED);
-  1368	
-  1369		thermal_notify_tz_create(tz->id, tz->type);
-  1370	
-  1371		return tz;
-  1372	
-  1373	out_del_link:
-  1374		sysfs_remove_link(&tz->device.kobj, "thermal_zone");
-  1375	out_list_del:
-  1376		list_del(&tz->node);
-  1377	unregister:
-  1378		device_del(&tz->device);
-  1379	release_device:
-  1380		put_device(&tz->device);
-  1381		tz = NULL;
-  1382	remove_id:
-  1383		ida_free(&thermal_tz_ida, id);
-  1384	free_tzp:
-  1385		kfree(tz->tzp);
-  1386	free_tz:
-  1387		kfree(tz);
-  1388		return ERR_PTR(result);
-  1389	}
-  1390	EXPORT_SYMBOL_GPL(thermal_zone_device_register_with_trips);
-  1391	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Olek
