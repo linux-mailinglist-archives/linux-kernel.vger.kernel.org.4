@@ -2,206 +2,249 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 306D66BA7C8
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 07:25:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D81A06BA7CC
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 07:29:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230475AbjCOGZg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 02:25:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34828 "EHLO
+        id S230432AbjCOG3X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 02:29:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231290AbjCOGZb (ORCPT
+        with ESMTP id S229542AbjCOG3W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 02:25:31 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9A3B5DEE8;
-        Tue, 14 Mar 2023 23:25:23 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id fy10-20020a17090b020a00b0023b4bcf0727so853378pjb.0;
-        Tue, 14 Mar 2023 23:25:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678861522;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Yqg9UOvMn1L0rQXxvk61iocEZu2DUFx0FwMOPUnewaI=;
-        b=ME/iO5Y6VMo3RqPjqRofvfqz9Uy81WnFOHMAINqqpFFuSV6wiy0466QZecudnp0UCm
-         f8yPjsMKvgGyEJcGYQhMAUibAm8HQZoS0ZlLZPkU9FMRLiqZfCWSrbvdDvf6D2yV2Yh6
-         F5w7nHEBnX4QT30vLks0/xIruVIO9bBBN/zau8KoYNpbGkHpptZp6VLIwqrXA0CfjZKy
-         2OCl51h9gJeSXPKvcD8srMnJyYS/AwoHskb5vSi4vAyq/Gm4yT1apxq6j+RZWVVTZRMk
-         L42vp2pw4FfWRGULU1CRJTONebK/qjTDQ7KhpPyQbMX9PPLqU4BJW8J2r4ET1mLn3cgy
-         k9wQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678861522;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Yqg9UOvMn1L0rQXxvk61iocEZu2DUFx0FwMOPUnewaI=;
-        b=VIoj7+uOomiOsyXomn7gUpdOilwlAKson51Od5QcejZCApnegSzHgZgmDhaFCp1xkA
-         EC8G4ZiLD5w3pmbu+Cuk04FHWB94TT2oYznzbePRzpUshds67z4NaVHVphd6t/H9z6Zv
-         pOaX0SX/tlbdhvXogGgYJ1hInXZu9mfdrBcntwXZ65+7d3B8FEDy2A9KCMu2H9ltZ/tI
-         TWOc6KcE4KDXZyW1olY1XmM/m7oHCu+t3ontt66rq9Z0U9uZw2RthUTgfwfSH6TFcUy4
-         m8ID9mRIFPulqWpFcgArW4ZWKMgby8oA5JlZrmYhqNIDdl4RMoWzDAL9Oqv/j/NyMrof
-         wvcg==
-X-Gm-Message-State: AO0yUKXQzXJoTfllKJpDs2E82P/e6J+eqKtbkFoS9q3+UiKjiYmNQ4+O
-        vKrf9KkcaFmR8Jtjj6bImMM=
-X-Google-Smtp-Source: AK7set/7DhDummJvy+aE+ltOWhLaVwiKkrOW71Ob1kKcOqCgVorjo6PI6m93ZBONsN5aEw8M6hWoqw==
-X-Received: by 2002:a17:902:c641:b0:19a:8636:9e2c with SMTP id s1-20020a170902c64100b0019a86369e2cmr1218704pls.57.1678861522403;
-        Tue, 14 Mar 2023 23:25:22 -0700 (PDT)
-Received: from Tiny (076-050-196-152.res.spectrum.com. [76.50.196.152])
-        by smtp.gmail.com with ESMTPSA id b15-20020a170902b60f00b00198b01b412csm2722822pls.303.2023.03.14.23.25.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Mar 2023 23:25:22 -0700 (PDT)
-Received: by Tiny (sSMTP sendmail emulation); Tue, 14 Mar 2023 23:25:19 -0700
-From:   Michael Harris <michaelharriscode@gmail.com>
-To:     davem@davemloft.net
-Cc:     sparclinux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Michael Harris <michaelharriscode@gmail.com>
-Subject: [PATCH] sbus: bbc_i2c.c: fixed various coding style issues
-Date:   Tue, 14 Mar 2023 23:25:18 -0700
-Message-Id: <20230315062518.256368-1-michaelharriscode@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Wed, 15 Mar 2023 02:29:22 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6BBA60AB8;
+        Tue, 14 Mar 2023 23:29:20 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32F6T8IA095166;
+        Wed, 15 Mar 2023 01:29:08 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1678861748;
+        bh=yxe3ti58WqVJaW+zMRXIOiM5AQ3EUbOUVooNJTq4Xwk=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=Q5ouiBQFKJ7v5ShqZ7oarf6xIhVHn+fKqs02bEFxtvHelMkO1cqn+tHgkXJjRQ//p
+         qgKq9pRn8SV+mO9G+UZidGi8kviouLVA0U0J2qQeLOh/YIZWg4jggRDpD6Ysu1oFI8
+         S0fGGUi47K9O+UeTP9oQKDWbhMFALSEhYEB11//Y=
+Received: from DFLE103.ent.ti.com (dfle103.ent.ti.com [10.64.6.24])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32F6T8Z5129435
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 15 Mar 2023 01:29:08 -0500
+Received: from DFLE103.ent.ti.com (10.64.6.24) by DFLE103.ent.ti.com
+ (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Wed, 15
+ Mar 2023 01:29:08 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE103.ent.ti.com
+ (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Wed, 15 Mar 2023 01:29:08 -0500
+Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32F6T7AC046378;
+        Wed, 15 Mar 2023 01:29:08 -0500
+Date:   Wed, 15 Mar 2023 11:59:08 +0530
+From:   Jai Luthra <j-luthra@ti.com>
+To:     Jayesh Choudhary <j-choudhary@ti.com>
+CC:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Mark Brown <broonie@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v5 6/6] arm64: dts: ti: k3-am62a7-sk: Enable audio on
+ AM62A
+Message-ID: <20230315062908.gms3h3llook4z2tg@uda0497096>
+References: <20230313-mcasp_upstream-v5-0-d6844707aa8a@ti.com>
+ <20230313-mcasp_upstream-v5-6-d6844707aa8a@ti.com>
+ <dbc03a80-a1d2-1458-a0b8-f3038db3caf3@ti.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="tqcxlnxpd74hcokz"
+Content-Disposition: inline
+In-Reply-To: <dbc03a80-a1d2-1458-a0b8-f3038db3caf3@ti.com>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fixed various issues given from checkpatch.pl
+--tqcxlnxpd74hcokz
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Michael Harris <michaelharriscode@gmail.com>
----
- drivers/sbus/char/bbc_i2c.c | 29 +++++++++++++++--------------
- 1 file changed, 15 insertions(+), 14 deletions(-)
+Hi Jayesh,
 
-diff --git a/drivers/sbus/char/bbc_i2c.c b/drivers/sbus/char/bbc_i2c.c
-index 537e55cd038d..c0df890f1aec 100644
---- a/drivers/sbus/char/bbc_i2c.c
-+++ b/drivers/sbus/char/bbc_i2c.c
-@@ -16,7 +16,7 @@
- #include <linux/of.h>
- #include <linux/of_device.h>
- #include <asm/bbc.h>
--#include <asm/io.h>
-+#include <linux/io.h>
- 
- #include "bbc_i2c.h"
- 
-@@ -32,7 +32,7 @@
- 
- #define I2C_PCF_START    (I2C_PCF_PIN | I2C_PCF_ESO | I2C_PCF_ENI | I2C_PCF_STA | I2C_PCF_ACK)
- #define I2C_PCF_STOP     (I2C_PCF_PIN | I2C_PCF_ESO | I2C_PCF_STO | I2C_PCF_ACK)
--#define I2C_PCF_REPSTART (              I2C_PCF_ESO | I2C_PCF_STA | I2C_PCF_ACK)
-+#define I2C_PCF_REPSTART (I2C_PCF_ESO | I2C_PCF_STA | I2C_PCF_ACK)
- #define I2C_PCF_IDLE     (I2C_PCF_PIN | I2C_PCF_ESO               | I2C_PCF_ACK)
- 
- #define I2C_PCF_INI 0x40   /* 1 if not initialized */
-@@ -63,8 +63,8 @@ static void set_device_claimage(struct bbc_i2c_bus *bp, struct platform_device *
- 	}
- }
- 
--#define claim_device(BP,ECHILD)		set_device_claimage(BP,ECHILD,1)
--#define release_device(BP,ECHILD)	set_device_claimage(BP,ECHILD,0)
-+#define claim_device(BP, ECHILD)		set_device_claimage(BP, ECHILD, 1)
-+#define release_device(BP, ECHILD)	set_device_claimage(BP, ECHILD, 0)
- 
- struct platform_device *bbc_i2c_getdev(struct bbc_i2c_bus *bp, int index)
- {
-@@ -72,8 +72,10 @@ struct platform_device *bbc_i2c_getdev(struct bbc_i2c_bus *bp, int index)
- 	int curidx = 0, i;
- 
- 	for (i = 0; i < NUM_CHILDREN; i++) {
--		if (!(op = bp->devs[i].device))
-+		if (!bp->devs[i].device) {
-+			op = bp->devs[i].device;
- 			break;
-+		}
- 		if (curidx == index)
- 			goto out;
- 		op = NULL;
-@@ -85,6 +87,7 @@ struct platform_device *bbc_i2c_getdev(struct bbc_i2c_bus *bp, int index)
- 		return op;
- 	return NULL;
- }
-+EXPORT_SYMBOL(bbc_i2c_getdev);
- 
- struct bbc_i2c_client *bbc_i2c_attach(struct bbc_i2c_bus *bp, struct platform_device *op)
- {
-@@ -110,6 +113,7 @@ struct bbc_i2c_client *bbc_i2c_attach(struct bbc_i2c_bus *bp, struct platform_de
- 
- 	return client;
- }
-+EXPORT_SYMBOL(bbc_i2c_attach);
- 
- void bbc_i2c_detach(struct bbc_i2c_client *client)
- {
-@@ -119,6 +123,7 @@ void bbc_i2c_detach(struct bbc_i2c_client *client)
- 	release_device(bp, op);
- 	kfree(client);
- }
-+EXPORT_SYMBOL(bbc_i2c_detach);
- 
- static int wait_for_pin(struct bbc_i2c_bus *bp, u8 *status)
- {
-@@ -177,6 +182,7 @@ int bbc_i2c_writeb(struct bbc_i2c_client *client, unsigned char val, int off)
- 	writeb(I2C_PCF_STOP, bp->i2c_control_regs + 0x0);
- 	return ret;
- }
-+EXPORT_SYMBOL(bbc_i2c_writeb);
- 
- int bbc_i2c_readb(struct bbc_i2c_client *client, unsigned char *byte, int off)
- {
-@@ -226,6 +232,7 @@ int bbc_i2c_readb(struct bbc_i2c_client *client, unsigned char *byte, int off)
- 
- 	return ret;
- }
-+EXPORT_SYMBOL(bbc_i2c_readb);
- 
- int bbc_i2c_write_buf(struct bbc_i2c_client *client,
- 		      char *buf, int len, int off)
-@@ -242,6 +249,7 @@ int bbc_i2c_write_buf(struct bbc_i2c_client *client,
- 	}
- 	return ret;
- }
-+EXPORT_SYMBOL(bbc_i2c_write_buf);
- 
- int bbc_i2c_read_buf(struct bbc_i2c_client *client,
- 		     char *buf, int len, int off)
-@@ -259,13 +267,6 @@ int bbc_i2c_read_buf(struct bbc_i2c_client *client,
- 
- 	return ret;
- }
--
--EXPORT_SYMBOL(bbc_i2c_getdev);
--EXPORT_SYMBOL(bbc_i2c_attach);
--EXPORT_SYMBOL(bbc_i2c_detach);
--EXPORT_SYMBOL(bbc_i2c_writeb);
--EXPORT_SYMBOL(bbc_i2c_readb);
--EXPORT_SYMBOL(bbc_i2c_write_buf);
- EXPORT_SYMBOL(bbc_i2c_read_buf);
- 
- static irqreturn_t bbc_i2c_interrupt(int irq, void *dev_id)
-@@ -291,7 +292,7 @@ static void reset_one_i2c(struct bbc_i2c_bus *bp)
- 	writeb(I2C_PCF_IDLE, bp->i2c_control_regs + 0x0);
- }
- 
--static struct bbc_i2c_bus * attach_one_i2c(struct platform_device *op, int index)
-+static struct bbc_i2c_bus *attach_one_i2c(struct platform_device *op, int index)
- {
- 	struct bbc_i2c_bus *bp;
- 	struct device_node *dp;
-@@ -341,7 +342,7 @@ static struct bbc_i2c_bus * attach_one_i2c(struct platform_device *op, int index
- 	writeb(I2C_PCF_PIN | I2C_PCF_ES1, bp->i2c_control_regs + 0x0);
- 	bp->clock = readb(bp->i2c_control_regs + 0x01);
- 
--	printk(KERN_INFO "i2c-%d: Regs at %p, %d devices, own %02x, clock %02x.\n",
-+	pr_info("i2c-%d: Regs at %p, %d devices, own %02x, clock %02x.\n",
- 	       bp->index, bp->i2c_control_regs, entry, bp->own, bp->clock);
- 
- 	reset_one_i2c(bp);
--- 
-2.34.1
+Thanks for the comments on the series.
 
+On Mar 15, 2023 at 10:02:24 +0530, Jayesh Choudhary wrote:
+>=20
+>=20
+> On 13/03/23 20:19, Jai Luthra wrote:
+> > Add nodes for audio codec and sound card, enable the audio serializer
+> > (McASP1) under use and update pinmux.
+> >=20
+> > Signed-off-by: Jai Luthra <j-luthra@ti.com>
+> > ---
+> >   arch/arm64/boot/dts/ti/k3-am62a7-sk.dts | 77 ++++++++++++++++++++++++=
++++++++++
+> >   1 file changed, 77 insertions(+)
+> >=20
+> > diff --git a/arch/arm64/boot/dts/ti/k3-am62a7-sk.dts b/arch/arm64/boot/=
+dts/ti/k3-am62a7-sk.dts
+> > index 063e69e45163..1775ed154aff 100644
+> > --- a/arch/arm64/boot/dts/ti/k3-am62a7-sk.dts
+> > +++ b/arch/arm64/boot/dts/ti/k3-am62a7-sk.dts
+> > @@ -122,6 +122,41 @@ led-0 {
+> >   			default-state =3D "off";
+> >   		};
+> >   	};
+> > +
+> > +	tlv320_mclk: clk-0 {
+> > +		#clock-cells =3D <0>;
+> > +		compatible =3D "fixed-clock";
+> > +		clock-frequency =3D <12288000>;
+> > +	};
+> > +
+> > +	codec_audio: sound {
+> > +		compatible =3D "simple-audio-card";
+> > +		simple-audio-card,name =3D "AM62Ax-SKEVM";
+> > +		simple-audio-card,widgets =3D
+> > +			"Headphone",	"Headphone Jack",
+> > +			"Line",	"Line In",
+> > +			"Microphone",	"Microphone Jack";
+> > +		simple-audio-card,routing =3D
+> > +			"Headphone Jack",	"HPLOUT",
+> > +			"Headphone Jack",	"HPROUT",
+> > +			"LINE1L",		"Line In",
+> > +			"LINE1R",		"Line In",
+> > +			"MIC3R",		"Microphone Jack",
+> > +			"Microphone Jack",	"Mic Bias";
+> > +		simple-audio-card,format =3D "dsp_b";
+> > +		simple-audio-card,bitclock-master =3D <&sound_master>;
+> > +		simple-audio-card,frame-master =3D <&sound_master>;
+> > +		simple-audio-card,bitclock-inversion;
+> > +
+> > +		simple-audio-card,cpu {
+> > +			sound-dai =3D <&mcasp1>;
+> > +		};
+> > +
+> > +		sound_master: simple-audio-card,codec {
+> > +			sound-dai =3D <&tlv320aic3106>;
+> > +			clocks =3D <&tlv320_mclk>;
+> > +		};
+> > +	};
+> >   };
+> >   &main_pmx0 {
+> > @@ -200,6 +235,15 @@ AM62AX_IOPAD(0x130, PIN_INPUT, 0) /* (AB17) RGMII1=
+_TXC */
+> >   			AM62AX_IOPAD(0x12c, PIN_INPUT, 0) /* (W16) RGMII1_TX_CTL */
+> >   		>;
+> >   	};
+> > +
+> > +	main_mcasp1_pins_default: main-mcasp1-pins-default {
+> > +		pinctrl-single,pins =3D <
+> > +			AM62AX_IOPAD(0x090, PIN_INPUT, 2) /* (L19) GPMC0_BE0n_CLE.MCASP1_AC=
+LKX */
+> > +			AM62AX_IOPAD(0x098, PIN_INPUT, 2) /* (R18) GPMC0_WAIT0.MCASP1_AFSX =
+*/
+> > +			AM62AX_IOPAD(0x08c, PIN_OUTPUT, 2) /* (K19) GPMC0_WEn.MCASP1_AXR0 */
+> > +			AM62AX_IOPAD(0x084, PIN_INPUT, 2) /* (L18) GPMC0_ADVn_ALE.MCASP1_AX=
+R2 */
+> > +		>;
+> > +	};
+> >   };
+> >   &main_i2c0 {
+> > @@ -234,6 +278,19 @@ exp1: gpio@22 {
+> >   				   "MCASP1_FET_SEL", "UART1_FET_SEL",
+> >   				   "PD_I2C_IRQ", "IO_EXP_TEST_LED";
+> >   	};
+> > +
+> > +	tlv320aic3106: audio-codec@1b {
+> > +		#sound-dai-cells =3D <0>;
+> > +		compatible =3D "ti,tlv320aic3106";
+> > +		reg =3D <0x1b>;
+> > +		ai3x-micbias-vg =3D <1>;		/* 2.0V */
+> > +		status =3D "okay";
+>=20
+> No need for status property here I guess????
+
+Will fix.
+
+>=20
+> > +
+> > +		/* Regulators */
+> > +		AVDD-supply =3D <&vcc_3v3_sys>;
+> > +		IOVDD-supply =3D <&vcc_3v3_sys>;
+> > +		DRVDD-supply =3D <&vcc_3v3_sys>;
+>=20
+> DVDD 1.8V supply here looks missing???
+
+Sorry I missed to add a note in the commit message, will add in v6.
+
+DVDD 1.8V is supplied by the PMIC (TPS6593x-Q1) on the SK, the driver=20
+and dt-bindings for it are still being worked on:
+https://lore.kernel.org/all/20230216114410.183489-1-jpanis@baylibre.com/
+
+The codec can be enabled without it for now, as it only uses the=20
+regulators to calculate the OCMV, which I will supply manually to the=20
+codec through DT in v6.
+
+>=20
+> Reviewed-by: Jayesh Choudhary <j-choudhary@ti.com>
+>=20
+> > +	};
+> >   };
+> >   &sdhci1 {
+> > @@ -302,3 +359,23 @@ cpsw3g_phy0: ethernet-phy@0 {
+> >   		ti,min-output-impedance;
+> >   	};
+> >   };
+> > +
+> > +&mcasp1 {
+> > +	status =3D "okay";
+> > +	#sound-dai-cells =3D <0>;
+> > +
+> > +	pinctrl-names =3D "default";
+> > +	pinctrl-0 =3D <&main_mcasp1_pins_default>;
+> > +
+> > +	op-mode =3D <0>;          /* MCASP_IIS_MODE */
+> > +	tdm-slots =3D <2>;
+> > +
+> > +	serial-dir =3D <  /* 0: INACTIVE, 1: TX, 2: RX */
+> > +	       1 0 2 0
+> > +	       0 0 0 0
+> > +	       0 0 0 0
+> > +	       0 0 0 0
+> > +	>;
+> > +	tx-num-evt =3D <32>;
+> > +	rx-num-evt =3D <32>;
+> > +};
+> >=20
+
+--tqcxlnxpd74hcokz
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEETeDYGOXVdejUWq/FQ96R+SSacUUFAmQRZbMACgkQQ96R+SSa
+cUWZPw//etXu0RmsV61gujO5HWKf+EuQB6BceQjGvnKUfMXLI5rgja/rAv1/eCzU
++nWnmDB28lnjzceiVajdpujzDU+Mu7TsHv/ZAcFou934VjKCZa73pVESzdPUCudq
+80jFNty52TZqnPVunzX/QOTODA3WeIJ1K5Jub9VzQZuhiytvhDGdxr8DhSjY3gpd
+jdBjQmJxFnAtieSQzvJBoMFrO84R3YXTcH/wi8qK04dAt6H24hu5XO/KPVxLBTFL
+6WuSmzSrxPr8F1IyaBwkFIwUaHQFfCi2T0ITmAUacpxhfAWHPC0o6THg5B9JnGS6
+wrNvHfWs5i6k07YPbg2EpgQcrJXbGtoR43l5dsReUSXhd2IBEorxGGgiN+yf3XKs
++zXSYoemgl9SkPXstZXgwE/EMkbh2YJe3pAodCQN+k150fuRkZ9NBxeBlKEDxfBH
+843/Uf29Y9wl6NAiiBBgMULF29prgxaLoUXlkUyAEx0uxk6VZTbSUq0D7UuutIB9
+iSXZRMTis1Ba6OaMShcJBbBU92jJpdY1luBIiXeXv9+o2TBZTfb94QK7qFveU5Xu
+SxUYDfVruR1xCoq2G4bDCFJlnRWOH8NVEYGMmEYySlA3EUMHUwSDhZf28EdF+75H
+8tZ9xsovKMmXRKl2KAhwaqTQhHYPxIlUlWlCgK5RcIT8tigRBvc=
+=7wdq
+-----END PGP SIGNATURE-----
+
+--tqcxlnxpd74hcokz--
