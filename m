@@ -2,67 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 158DA6BA5BB
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 04:45:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C0596BA5B9
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 04:45:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230287AbjCODp3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 23:45:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59602 "EHLO
+        id S229542AbjCODpC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 23:45:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230094AbjCODp0 (ORCPT
+        with ESMTP id S229734AbjCODo7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 23:45:26 -0400
+        Tue, 14 Mar 2023 23:44:59 -0400
 Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E36A721979
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 20:45:22 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id v21so8584811ple.9
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 20:45:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 427C91BAC9
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 20:44:57 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id u5so18695616plq.7
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 20:44:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1678851922;
+        d=chromium.org; s=google; t=1678851897;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ufxsYZFIRnn+ldduLkLg4bGkJpmUn4VR4A6IuCdxW00=;
-        b=dg0Zc85b60uFcQsEyeM2HVp7VR5yCO0uH+/OtvELnMEXmhdyLWg2ruNnFhZFXdae8P
-         ffJj8SmJ1khEYn2U/Y55FPgRSradkCKkRXpgYo+VKEvu+gL+v+Qo+8zex0hIIJmm5JYH
-         5GVaklNdvGCs3sJU2le+AGtIIRluUZttDQN6cKwf4c5Qong2+OwlYqbDTxv/8hKyo4ox
-         VzbD8KXs4Q0UhAqGhCETsw5e8Xd1Fs/dJ6Re+e64Mn0eS+ZLBfCMZGWtH1WteoSpmA5S
-         mtgehdbtBfqoZ2AQPuES5dqrIB6BYkp0I9wPOVkZkO7zy/0gepYkaBPOOdypQPLldeUo
-         QQOA==
+        bh=NCgOQZSMS8pPlt6XQyt85uPffzzE60v4WG1PXi+ygQM=;
+        b=lgxwc8QzbhhRGX2ipj56laXav+/xC1sxXICdT3C8eFkuHwW7YsZ78gsYfY/vNm3QUr
+         O4/kgZsxsEqYxWg3rcEzsyYMG+Hq5f8qZeHL4LasPHHVmha1rEtpLUzp88o2jPsrHxUj
+         0WQblNF7LH6ij+/Qtk9t+MLRQOQVDCv4DdUrI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678851922;
+        d=1e100.net; s=20210112; t=1678851897;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=ufxsYZFIRnn+ldduLkLg4bGkJpmUn4VR4A6IuCdxW00=;
-        b=Rd0rTcduDzOgc9AGhGD8O8xLfvJPueEX7g18Dw4StTNa/zfe3cK2CGvUVPeuwVi0Lj
-         7/t9eXGVtJCXKn776OcaAevWuoVNG1CBl52mD4kuDE9MUJ1kAz8U/U2VsdebQw/4A3vs
-         dnXmLtt0EjMvk+psV2ovamDweji3kbmbsfRMguWtdw7bUYJCyD4EC+GbRopsPLcl8ZJB
-         2syUDxcL/MLDCHgnRTc2+C68vn3gjbvwMflq/W40AsYTMy7xZOi7T+0sW7GwGcbsm0Ze
-         pB4aab4FULubPhwBp4pb1eyy30qZH9MbbfPdyAwUAlkJH+KGJGjItwk6paH3CF15f8nF
-         qq+w==
-X-Gm-Message-State: AO0yUKV0ROJ51MvJhR5tOqMMW9XoDGtuZZSs3FMMw5zk7Elv6zuDFIr+
-        y4J/b7JVZNYJ2wnp8oB+eGNGEw==
-X-Google-Smtp-Source: AK7set8NPpPy05CtArxi3hzNCU0RjupArdPbdOOSdf5EjczXQxGFxpPVHURTwlD4xAtYVBIjwNxKtg==
-X-Received: by 2002:a17:903:187:b0:19c:1455:d588 with SMTP id z7-20020a170903018700b0019c1455d588mr1227815plg.0.1678851922251;
-        Tue, 14 Mar 2023 20:45:22 -0700 (PDT)
-Received: from PXLDJ45XCM.bytedance.net ([139.177.225.245])
-        by smtp.gmail.com with ESMTPSA id q23-20020a170902789700b0019f0e766809sm2436258pll.306.2023.03.14.20.45.17
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Tue, 14 Mar 2023 20:45:21 -0700 (PDT)
-From:   Muchun Song <songmuchun@bytedance.com>
-To:     glider@google.com, elver@google.com, dvyukov@google.com,
-        akpm@linux-foundation.org, jannh@google.com, sjpark@amazon.de
-Cc:     kasan-dev@googlegroups.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, muchun.song@linux.dev,
-        Muchun Song <songmuchun@bytedance.com>
-Subject: [PATCH] mm: kfence: fix using kfence_metadata without initialization in show_object()
-Date:   Wed, 15 Mar 2023 11:44:41 +0800
-Message-Id: <20230315034441.44321-1-songmuchun@bytedance.com>
-X-Mailer: git-send-email 2.37.1 (Apple Git-137.1)
+        bh=NCgOQZSMS8pPlt6XQyt85uPffzzE60v4WG1PXi+ygQM=;
+        b=0JwJgum7NjSCgFb8Mko3bwr7gdl9XBQJx5VRmfnNdwwl+p1884kg/uZH4RiWbc9Ygl
+         8xtiVXNTacs++1z6F93f2iSGu9kQy+hLD4SOlSm4ZIQnbIvV1dd7eB10z8Q5xIyU+VRq
+         ja/5IruR+2yfpXvCl0atRMKq5prDk49MLRIquGwNQljKGS31/CfSIs0anJ1dmc2Y5SO/
+         vThcGoSn7cAfXIo49WO+m6hMrnr1jJ3liSUvojdUqQm007vhvgcfJ+UamXNGpGxgHDXM
+         NmvDpcLJa8wDUBvy4TWuFqkjKyCmbRWZK7HO49jggxB3XypQ47yi41XRlXmZ6LfZZ8ir
+         kNxQ==
+X-Gm-Message-State: AO0yUKWEXjEQjuH9Epipy4Fuyw+xK+eWwM/ybkgnfqNVZ0cT1FYhJvnY
+        BRel/u/BlsmVRXZ+kKzWHkOPfA==
+X-Google-Smtp-Source: AK7set8vm6w9RioA2nfhGaRBt/IA500jhyRIi/xVskISt1EDsZtETEiCXHOgMd0uL/e3yQrbH3RrAg==
+X-Received: by 2002:a05:6a20:5493:b0:d5:e681:15c2 with SMTP id i19-20020a056a20549300b000d5e68115c2mr2170861pzk.0.1678851896791;
+        Tue, 14 Mar 2023 20:44:56 -0700 (PDT)
+Received: from wenstp920.tpe.corp.google.com ([2401:fa00:1:10:d05c:f360:99cd:4be2])
+        by smtp.gmail.com with ESMTPSA id c11-20020a62e80b000000b005abbfa874d9sm2349107pfi.88.2023.03.14.20.44.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Mar 2023 20:44:56 -0700 (PDT)
+From:   Chen-Yu Tsai <wenst@chromium.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>
+Cc:     Chen-Yu Tsai <wenst@chromium.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Balsam CHIHI <bchihi@baylibre.com>, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH RESEND] thermal/drivers/mediatek/lvts_thermal: Register thermal zones as hwmon sensors
+Date:   Wed, 15 Mar 2023 11:44:49 +0800
+Message-Id: <20230315034449.2604197-1-wenst@chromium.org>
+X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,48 +74,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The variable kfence_metadata is initialized in kfence_init_pool(), then, it is
-not initialized if kfence is disabled after booting. In this case, kfence_metadata
-will be used (e.g. ->lock and ->state fields) without initialization when reading
-/sys/kernel/debug/kfence/objects. There will be a warning if you enable
-CONFIG_DEBUG_SPINLOCK. Fix it by creating debugfs files when necessary.
+Register thermal zones as hwmon sensors to let userspace read
+temperatures using standard hwmon interface.
 
-Fixes: 0ce20dd84089 ("mm: add Kernel Electric-Fence infrastructure")
-Signed-off-by: Muchun Song <songmuchun@bytedance.com>
+Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
 ---
- mm/kfence/core.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+Resending due to lists.infradead.org outage yesterday.
 
-diff --git a/mm/kfence/core.c b/mm/kfence/core.c
-index 5349c37a5dac..79c94ee55f97 100644
---- a/mm/kfence/core.c
-+++ b/mm/kfence/core.c
-@@ -726,10 +726,14 @@ static const struct seq_operations objects_sops = {
- };
- DEFINE_SEQ_ATTRIBUTE(objects);
+ drivers/thermal/mediatek/lvts_thermal.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/drivers/thermal/mediatek/lvts_thermal.c b/drivers/thermal/mediatek/lvts_thermal.c
+index 0557d1c61b9e..15f317c42718 100644
+--- a/drivers/thermal/mediatek/lvts_thermal.c
++++ b/drivers/thermal/mediatek/lvts_thermal.c
+@@ -19,6 +19,8 @@
+ #include <linux/thermal.h>
+ #include <dt-bindings/thermal/mediatek,lvts-thermal.h>
  
--static int __init kfence_debugfs_init(void)
-+static int kfence_debugfs_init(void)
- {
--	struct dentry *kfence_dir = debugfs_create_dir("kfence", NULL);
-+	struct dentry *kfence_dir;
- 
-+	if (!READ_ONCE(kfence_enabled))
-+		return 0;
++#include "../thermal_hwmon.h"
 +
-+	kfence_dir = debugfs_create_dir("kfence", NULL);
- 	debugfs_create_file("stats", 0444, kfence_dir, NULL, &stats_fops);
- 	debugfs_create_file("objects", 0400, kfence_dir, NULL, &objects_fops);
- 	return 0;
-@@ -883,6 +887,8 @@ static int kfence_init_late(void)
- 	}
+ #define LVTS_MONCTL0(__base)	(__base + 0x0000)
+ #define LVTS_MONCTL1(__base)	(__base + 0x0004)
+ #define LVTS_MONCTL2(__base)	(__base + 0x0008)
+@@ -996,6 +998,9 @@ static int lvts_ctrl_start(struct device *dev, struct lvts_ctrl *lvts_ctrl)
+ 			return PTR_ERR(tz);
+ 		}
  
- 	kfence_init_enable();
-+	kfence_debugfs_init();
++		if (devm_thermal_add_hwmon_sysfs(dev, chip->tz_dev))
++			dev_warn(dev, "zone %d: Failed to add hwmon sysfs attributes\n", dt_id);
 +
- 	return 0;
- }
- 
+ 		/*
+ 		 * The thermal zone pointer will be needed in the
+ 		 * interrupt handler, we store it in the sensor
 -- 
-2.11.0
+2.40.0.rc1.284.g88254d51c5-goog
 
