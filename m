@@ -2,98 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 104DA6BB578
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 15:03:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 716806BB575
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 15:03:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232535AbjCOODc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 10:03:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38798 "EHLO
+        id S232505AbjCOODR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 10:03:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232814AbjCOOD1 (ORCPT
+        with ESMTP id S231731AbjCOODO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 10:03:27 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 969488A387;
-        Wed, 15 Mar 2023 07:03:24 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 32FE2ehzE032190, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 32FE2ehzE032190
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
-        Wed, 15 Mar 2023 22:02:40 +0800
-Received: from RTEXDAG01.realtek.com.tw (172.21.6.100) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.32; Wed, 15 Mar 2023 22:02:32 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXDAG01.realtek.com.tw (172.21.6.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Wed, 15 Mar 2023 22:02:31 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::b4a2:2bcc:48d1:8b02]) by
- RTEXMBS04.realtek.com.tw ([fe80::b4a2:2bcc:48d1:8b02%5]) with mapi id
- 15.01.2375.007; Wed, 15 Mar 2023 22:02:31 +0800
-From:   Phinex Hung <phinex@realtek.com>
-To:     Krzysztof Kozlowski <krzk@kernel.org>,
-        "jdelvare@suse.com" <jdelvare@suse.com>
-CC:     "linux@roeck-us.net" <linux@roeck-us.net>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v1] hwmon: drivetemp: support to be a platform driver for thermal_of
-Thread-Topic: [PATCH v1] hwmon: drivetemp: support to be a platform driver for
- thermal_of
-Thread-Index: AQHZVzfsuBPt1OfUHEer519nIXIgnK77StGAgACUUIA=
-Date:   Wed, 15 Mar 2023 14:02:31 +0000
-Message-ID: <9DA1C2E5-C9EB-48AD-846D-92CC0C434BFE@realtek.com>
-References: <20230315121606.GA71707@threadripper>
- <30d2ab9a-c3d1-c9d9-3cc6-02ef7af8981a@kernel.org>
-In-Reply-To: <30d2ab9a-c3d1-c9d9-3cc6-02ef7af8981a@kernel.org>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.16.20.168]
-x-kse-serverinfo: RTEXDAG01.realtek.com.tw, 9
-x-kse-antispam-interceptor-info: fallback
-x-kse-antivirus-interceptor-info: fallback
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <ED260BB4B9CD21468DBB952A52FD347E@realtek.com>
-Content-Transfer-Encoding: base64
+        Wed, 15 Mar 2023 10:03:14 -0400
+Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 027C623C62
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 07:03:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=inria.fr; s=dc;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=lqJvBi858bb2oCsrQI9F4clr12DZvtkfiaPExOH0Vyg=;
+  b=WiB95KWSAXw+EhwqHlXKEmCTvbkFFCxsAfeEnRL3vTuAhBcBM+oveVif
+   CBAnocox3Uzk3lI/nT/69bKHYHsHP39GmWyKjE+Uxh2xfYCs3JBVFr9lc
+   Nv6rGbsjiAGzTuw4Qx1HAIux1muUfA3J3vyc5MyyWspOYvfgIzYg+krzF
+   Q=;
+Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
+X-IronPort-AV: E=Sophos;i="5.98,262,1673910000"; 
+   d="scan'208";a="97372769"
+Received: from dt-lawall.paris.inria.fr ([128.93.67.65])
+  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2023 15:03:10 +0100
+Date:   Wed, 15 Mar 2023 15:03:11 +0100 (CET)
+From:   Julia Lawall <julia.lawall@inria.fr>
+To:     Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>
+cc:     gregkh@linuxfoundation.org, outreachy@lists.linux.dev,
+        martyn@welchs.me.uk, manohar.vanga@gmail.com, zoo868e@gmail.com,
+        jerrykang026@gmail.com, cuigaosheng1@huawei.com, arnd@arndb.de,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
+Subject: Re: [PATCH v3 1/2] staging: vme_user: add space around operators
+In-Reply-To: <078be1ba242950f31d0aa13fe9815d92fe96468b.1678888612.git.eng.mennamahmoud.mm@gmail.com>
+Message-ID: <3cb654df-c08-881-f1c-52364ce2ad2b@inria.fr>
+References: <078be1ba242950f31d0aa13fe9815d92fe96468b.1678888612.git.eng.mennamahmoud.mm@gmail.com>
 MIME-Version: 1.0
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-Antivirus-Interceptor-Info: fallback
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCk9uIDE1LzAzLzIwMjMgMjE6MTEsICJLcnp5c3p0b2YgS296bG93c2tpIiA8a3J6a0BrZXJu
-ZWwub3JnIDxtYWlsdG86a3J6a0BrZXJuZWwub3JnPj4gd3JvdGU6DQoNCkhpIEtyenlzenRvZiwN
-Cg0KVGhhbmtzIGZvciB5b3VyIGNvbW1lbnQuDQoNCj5QbGVhc2UgdXNlIHNjcmlwdHMvZ2V0X21h
-aW50YWluZXJzLnBsIHRvIGdldCBhIGxpc3Qgb2YgbmVjZXNzYXJ5IHBlb3BsZQ0KPmFuZCBsaXN0
-cyB0byBDQy4gSXQgbWlnaHQgaGFwcGVuLCB0aGF0IGNvbW1hbmQgd2hlbiBydW4gb24gYW4gb2xk
-ZXINCj5rZXJuZWwsIGdpdmVzIHlvdSBvdXRkYXRlZCBlbnRyaWVzLiBUaGVyZWZvcmUgcGxlYXNl
-IGJlIHN1cmUgeW91IGJhc2UNCj55b3VyIHBhdGNoZXMgb24gcmVjZW50IExpbnV4IGtlcm5lbC4N
-Cg0KSSBhbSB3b3JraW5nIG9uIGdpdDovL2dpdC5rZXJuZWwub3JnL3B1Yi9zY20vbGludXgva2Vy
-bmVsL2dpdC9zdGFibGUvbGludXgtc3RhYmxlLmdpdA0KDQpGb3IgbWFzdGVyIGJyYW5jaC4NCg0K
-SXMgdGhlcmUgYW55IHVwZGF0ZWQgZ2l0IHJlcG8gdGhhdCBJIHNob3VsZCByZWJhc2UgbXkgcGF0
-Y2g/DQoNCg0KPkJpbmRpbmdzIGFyZSBhbHdheXMgc2VwYXJhdGUuDQoNCldvdWxkIHNlcGFyYXRl
-IGluIHRoZSBuZXh0IHBhdGNoLg0KDQoNCj5ObyBzdWNoIHZlbmRvciBwcmVmaXguIEFyZSB5b3Ug
-c3VyZSB5b3UgYXJlIGRlc2NyaWJpbmcgcmVhbCBoYXJkd2FyZT8NCj5BbHNvIGRldmljZSBzcGVj
-aWZpYyBwYXJ0IGxvb2tzIHRvbyBnZW5lcmljLiBXaGF0IGRldmljZSBpcyBpdCBleGFjdGx5Pw0K
-DQpJdCdzIGEgZ2VuZXJpYyBwYXRjaCwganVzdCB3YW50IHRvIHN1cHBvcnQgdGhlcm1hbCB6b25l
-IHVzaW5nIGEgc2ltcGxlIGRldmljZSB0cmVlLg0KQW55IFNvQyB3aXRoIFNDU0kgaW50ZXJmYWNl
-IGFuZCBhdHRhY2hlZCBoYXJkIGRyaXZlcyBjYW4gYmVuZWZpdCB0aGlzIGNoYW5nZS4NCg0KTm9y
-bWFsbHkgYSBUSEVSTUFMX09GIHJlcXVpcmUgYSBwbGF0Zm9ybSBkZXZpY2UgdG8gYWRkIGEgdGhl
-cm1hbCB6b25lLg0KDQpPcmlnaW5hbCBkcml2ZXRlbXAuYyB3b3JrcyBxdWl0ZSB3ZWxsIGFzIGEg
-aHdtb24gZGV2aWNlLCBidXQgbm8gdGhlcm1hbCB6b25lIHN1cHBvcnQuDQoNCk15IHBhdGNoIGp1
-c3QgZXh0ZW5kIGl0cyBjYXBhYmlsaXR5IHRvIHN1cHBvcnQgYSBzaW1wbGUgdGhlcm1hbCB6b25l
-IGNyZWF0ZWQgd2l0aCB0aGlzIGh3bW9uLg0KDQpUaGlzIGlzIGJpbmQgdG8gYW55IHNwZWNpZmlj
-IHZlbmRvciwganVzdCB0byBwcm92aWRlIGFuIGVhc3kgd2F5IHRvIGhhbmRsZSBjb29saW5nIHdo
-ZW4gaGFyZCBkcml2ZXMnIHRlbXBlcmF0dXJlIGdldHMgaGlnaC4NCg0KQmVzdCBSZWdhcmRzLA0K
-UGhpbmV4DQoNCg0KDQo=
+
+
+On Wed, 15 Mar 2023, Menna Mahmoud wrote:
+
+> add a space before and after the operator, for readability.
+
+add -> Add
+That is, start the sentence with a capital letter.
+
+>
+> Reported By checkpatch script:
+
+By -> by
+No need for capital letters in the middle of a sentence, unless you are
+referring to a proper noun (name of someone or something).
+
+julia
+
+> " CHECK: spaces preferred around that '+', '<<' and '>>' ".
+>
+> Signed-off-by: Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>
+> ---
+> change in v2:
+>         edit commit message
+> ---
+> change in v3:
+>         edit commit message
+> ---
+>  drivers/staging/vme_user/vme_tsi148.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/staging/vme_user/vme_tsi148.c b/drivers/staging/vme_user/vme_tsi148.c
+> index 482049cfc664..bfa604043355 100644
+> --- a/drivers/staging/vme_user/vme_tsi148.c
+> +++ b/drivers/staging/vme_user/vme_tsi148.c
+> @@ -737,7 +737,7 @@ static int tsi148_alloc_resource(struct vme_master_resource *image,
+>  		return 0;
+>
+>  	if (!image->bus_resource.name) {
+> -		image->bus_resource.name = kmalloc(VMENAMSIZ+3, GFP_ATOMIC);
+> +		image->bus_resource.name = kmalloc(VMENAMSIZ + 3, GFP_ATOMIC);
+>  		if (!image->bus_resource.name) {
+>  			retval = -ENOMEM;
+>  			goto err_name;
+> @@ -983,7 +983,7 @@ static int tsi148_master_set(struct vme_master_resource *image, int enabled,
+>  		goto err_aspace;
+>  	}
+>
+> -	temp_ctl &= ~(3<<4);
+> +	temp_ctl &= ~(3 << 4);
+>  	if (cycle & VME_SUPER)
+>  		temp_ctl |= TSI148_LCSR_OTAT_SUP;
+>  	if (cycle & VME_PROG)
+> @@ -2187,14 +2187,14 @@ static int tsi148_crcsr_init(struct vme_bridge *tsi148_bridge,
+>
+>  	/* Ensure that the CR/CSR is configured at the correct offset */
+>  	cbar = ioread32be(bridge->base + TSI148_CBAR);
+> -	cbar = (cbar & TSI148_CRCSR_CBAR_M)>>3;
+> +	cbar = (cbar & TSI148_CRCSR_CBAR_M) >> 3;
+>
+>  	vstat = tsi148_slot_get(tsi148_bridge);
+>
+>  	if (cbar != vstat) {
+>  		cbar = vstat;
+>  		dev_info(tsi148_bridge->parent, "Setting CR/CSR offset\n");
+> -		iowrite32be(cbar<<3, bridge->base + TSI148_CBAR);
+> +		iowrite32be(cbar << 3, bridge->base + TSI148_CBAR);
+>  	}
+>  	dev_info(tsi148_bridge->parent, "CR/CSR Offset: %d\n", cbar);
+>
+> --
+> 2.34.1
+>
+>
+>
