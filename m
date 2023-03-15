@@ -2,106 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BAB26BBB84
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 18:57:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E63D6BBB8E
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 18:58:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232106AbjCOR5f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 13:57:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50650 "EHLO
+        id S232207AbjCOR6l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 13:58:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230124AbjCOR5c (ORCPT
+        with ESMTP id S230209AbjCOR6i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 13:57:32 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5D6E2C64C;
-        Wed, 15 Mar 2023 10:57:31 -0700 (PDT)
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32FHgf6v038090;
-        Wed, 15 Mar 2023 17:57:31 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=2L9voBsmfYrGPUbXcC4Da6Sws5+0ftbCvBKodcR+X8Y=;
- b=YPwBk6BCQGukzruEtG9oqQmlemjBEPaM4AQ+n2+tuAAsM7rSMeo5RevAtalrX5JbIyTa
- UR7bIwscDReM6RPDjWTEmaDPrICWCWDVhYNtxJDTP8w8KGMkjKgWH3t3xU08X/ZcM55L
- FEQurLuN+PcwkZsQ8OkWcye65TIVzA4vk9zhJTswBAGMKk43rEPinjmb7aSiIt6UMtKa
- WfM/2eM43eC1dwCoaso+ivSisdcI9NQKX3ibpkKDtPEu5g53y5zuvhjoIzX9D+4Wsqvc
- b5zurjl4Op+WikAvOW/ozlRHcqZ0edeo85u3Qgt4EO5zXPYuaFo1Rx+mkYbX+mr9Yapr Uw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pbf9fy3vm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 15 Mar 2023 17:57:31 +0000
-Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32FHurN6030984;
-        Wed, 15 Mar 2023 17:57:31 GMT
-Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pbf9fy3va-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 15 Mar 2023 17:57:30 +0000
-Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
-        by ppma03dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32FGLApd018985;
-        Wed, 15 Mar 2023 17:57:30 GMT
-Received: from smtprelay06.dal12v.mail.ibm.com ([9.208.130.100])
-        by ppma03dal.us.ibm.com (PPS) with ESMTPS id 3pb29pdpyv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 15 Mar 2023 17:57:30 +0000
-Received: from smtpav05.wdc07v.mail.ibm.com (smtpav05.wdc07v.mail.ibm.com [10.39.53.232])
-        by smtprelay06.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32FHvSc57471804
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 15 Mar 2023 17:57:28 GMT
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 543D958053;
-        Wed, 15 Mar 2023 17:57:28 +0000 (GMT)
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 70FBD58043;
-        Wed, 15 Mar 2023 17:57:27 +0000 (GMT)
-Received: from [9.60.85.43] (unknown [9.60.85.43])
-        by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Wed, 15 Mar 2023 17:57:27 +0000 (GMT)
-Message-ID: <3accd046-0dee-db7c-7e60-287bf2792a8e@linux.ibm.com>
-Date:   Wed, 15 Mar 2023 13:57:26 -0400
+        Wed, 15 Mar 2023 13:58:38 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FAA149883
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 10:57:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678903064;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=d+QEuJRmUpE8YOJGSMTzR0yeIC0gMbNde13EIE8mzH8=;
+        b=CwAxfqZJRwOm0uml/7T7D/N/NqrSr6RJ8qqPdJ3Nvldd34yI0goDQjQlFGn66SLOhju3MJ
+        V6uvRV6s05MADpcucfSNDn2lBK7ngsgrqrQe6sifhr1FRvBYb8q4tu3hT/jcj7clCPKFAb
+        K38kV/DqbM30l+4+8P/fPOiC8KZ4Fug=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-294-U3aX0hBBN_-pWEgVJFCBfQ-1; Wed, 15 Mar 2023 13:57:39 -0400
+X-MC-Unique: U3aX0hBBN_-pWEgVJFCBfQ-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id EF1F328043D3;
+        Wed, 15 Mar 2023 17:57:36 +0000 (UTC)
+Received: from redhat.com (unknown [10.2.17.7])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 55F54492B00;
+        Wed, 15 Mar 2023 17:57:35 +0000 (UTC)
+Date:   Wed, 15 Mar 2023 13:57:33 -0400
+From:   Peter Jones <pjones@redhat.com>
+To:     Andy Lutomirski <luto@kernel.org>
+Cc:     Evgeniy Baskov <baskov@ispras.ru>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        "Limonciello, Mario" <mario.limonciello@amd.com>,
+        joeyli <jlee@suse.com>, lvc-project@linuxtesting.org,
+        the arch/x86 maintainers <x86@kernel.org>,
+        linux-efi@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v5 00/27] x86_64: Improvements at compressed kernel stage
+Message-ID: <8493680a-0bad-43de-a7a0-caa48e430139@uncooperative.org>
+References: <cover.1678785672.git.baskov@ispras.ru>
+ <d575db7f-bad3-477e-a501-19d2d84527cd@app.fastmail.com>
+ <ea1b6e36-c434-49e9-bede-b4bd2b41868d@app.fastmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] s390/vfio_ap: fix memory leak in vfio_ap device driver
-Content-Language: en-US
-To:     freude@linux.ibm.com
-Cc:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, jjherne@linux.ibm.com, pasic@linux.ibm.com,
-        alex.williamson@redhat.com, borntraeger@linux.ibm.com
-References: <20230315153932.165031-1-akrowiak@linux.ibm.com>
- <b9be5d298de3ca70f8fa86a1b58cb4f2@linux.ibm.com>
-From:   Anthony Krowiak <akrowiak@linux.ibm.com>
-In-Reply-To: <b9be5d298de3ca70f8fa86a1b58cb4f2@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 3pRQytibEx_EBahlmUqJwos3yI27kAd8
-X-Proofpoint-ORIG-GUID: m-DXF8pXbb5dq_D-H5YCrHF2iWipyk1U
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-15_09,2023-03-15_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
- clxscore=1015 priorityscore=1501 mlxscore=0 malwarescore=0 adultscore=0
- impostorscore=0 mlxlogscore=889 lowpriorityscore=0 spamscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2302240000
- definitions=main-2303150147
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <ea1b6e36-c434-49e9-bede-b4bd2b41868d@app.fastmail.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-snip ...
+On Tue, Mar 14, 2023 at 04:20:43PM -0700, Andy Lutomirski wrote:
+> 
+> 
+> On Tue, Mar 14, 2023, at 2:23 PM, Andy Lutomirski wrote:
+> > On Tue, Mar 14, 2023, at 3:13 AM, Evgeniy Baskov wrote:
+> >>
+> >> Kernel is made to be more compatible with PE image specification [3],
+> >> allowing it to be successfully loaded by stricter PE loader
+> >> implementations like the one from [2]. There is at least one
+> >> known implementation that uses that loader in production [4].
+> >> There are also ongoing efforts to upstream these changes.
+> >
+> > Can you clarify 
+> 
+> Sorry, lost part of a sentence.  Can you clarify in what respect the loader is stricter?
+> 
+> 
+> Anyway, I did some research.  I found:
+> 
+> https://github.com/rhboot/shim/pull/459/commits/99a8d19326f69665e0b86bcfa6a59d554f662fba
+> 
+> which gives a somewhat incoherent-sounding description in which
+> setting EFI_IMAGE_DLLCHARACTERISTICS_NX_COMPAT apparently enables
+> allocating memory that isn't RWX.  But this seems odd
+> EFI_IMAGE_DLLCHARACTERISTICS_NX_COMPAT is a property of the EFI
+> *program*, not the boot services implementation.
 
+Well, "is this binary compatible" is a property of the program, yes.
+It's up to the loader to decide if it *cares*, and the compatibility
+flag allows it to do that.
 
-> I needed some indirections to follow what exactly happens here and how 
-> you
-> fix it, but finally I got it.
-> Reviewed-by: Harald Freudenberger <freude@linux.ibm.com>
+> And I'd be surprised if a flag on the application changes the behavior
+> of boot services, but, OTOH, this is Microsoft.
 
-Sorry about the indirections. Thanks for the review.
+There has been discussion of implementing a compatibility mode that
+allows you to enable NX support by default, but only breaks the old
+assumptions that the stack and memory allocations will be executable if
+the flag is set, so that newer OSes get the mitigations we need, but
+older OSes still work.  I don't think anyone has actually implemented
+this *yet*, but some hardware vendors have made noises that sound like
+they may intend to.  (I realize that sounds cagey as hell.  Sorry.)
+
+Currently I think the only shipping systems that implement
+NX-requirements are from Microsoft - the Surface product line and
+Windows Dev Kit - and they don't allow you to disable it at all.  Other
+vendors have produced firmware that isn't shipping yet (I *think*) that
+has it as a setting in the firmware menu, and they're looking to move to
+enabling it by default on some product lines.  We'd like to not be left
+behind.
+
+> And the PE 89 spec does say that
+> EFI_IMAGE_DLLCHARACTERISTICS_NX_COMPAT means "Image is NX compatible"
+> and that is the sole mention of NX in the document.
+
+Yeah, the PE spec is not very good in a lot of ways unrelated to how
+abominable the thing it's describing is.
+
+> And *this* seems to be the actual issue:
+> 
+> https://github.com/rhboot/shim/pull/459/commits/825d99361b4aaa16144392dc6cea43e24c8472ae
+> 
+> I assume that MS required this change as a condition for signing, but
+> what do I know?
+
+Yes, they have, but it's not as if they did it in a vacuum.  I think the
+idea was originally Kees Cook's actually, and there's been a significant
+effort on the firmware and bootloader side to enable it.  And there's
+good reason to do this, too - more and more of this surface is being
+attacked, and recently we've seen the first "bootkit" that actually
+includes a Secure Boot breakout in the wild: https://www.welivesecurity.com/2023/03/01/blacklotus-uefi-bootkit-myth-confirmed/
+
+While that particular malware (somewhat ironically) only uses code
+developed for linux systems *after* the exploit, it could easily have
+gone the other way, and we're definitely a target here.  We need NX in
+our boot path, and soon.
+
+> Anyway, the rules appear to be that the PE sections
+> must not be both W and X at the same size.  (For those who are
+> familiar with the abomination known as ELF but not with the
+> abomination known as PE, a "section" is a range in the file that gets
+> mapped into memory.  Like a PT_LOAD segment in ELF.)
+> 
+> Now I don't know whether anything prevents us from doing something
+> awful like mapping the EFI stuf RX and then immediately *re*mapping
+> everything RWX.  (Not that I'm seriously suggesting that.)
+
+Once we've taken over paging, nothing stops us at all.  Until then,
+SetMemoryAttributes() (which is more or less mprotect()) might prevent
+it.
+
+> And it's not immediately clear to me how the rest of this series fits
+> in, what this has to do with the identity map, etc.
+
+I'll let Evgeniy address that and the rest of this.
+
+-- 
+        Peter
 
