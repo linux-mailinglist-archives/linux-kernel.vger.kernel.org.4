@@ -2,122 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94D516BA6F5
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 06:19:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 041686BA6DF
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 06:16:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231706AbjCOFTW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 01:19:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49278 "EHLO
+        id S231611AbjCOFQf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 01:16:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231576AbjCOFST (ORCPT
+        with ESMTP id S231316AbjCOFPI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 01:18:19 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 60D4A60AA4;
-        Tue, 14 Mar 2023 22:15:18 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DE9382F4;
-        Tue, 14 Mar 2023 22:15:56 -0700 (PDT)
-Received: from a077893.blr.arm.com (unknown [10.162.41.10])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id A90AB3F67D;
-        Tue, 14 Mar 2023 22:15:08 -0700 (PDT)
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        will@kernel.org, catalin.marinas@arm.com, mark.rutland@arm.com
-Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        Mark Brown <broonie@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Suzuki Poulose <suzuki.poulose@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        linux-perf-users@vger.kernel.org
-Subject: [PATCH V9 03/10] arm64/perf: Add branch stack support in struct arm_pmu
-Date:   Wed, 15 Mar 2023 10:44:37 +0530
-Message-Id: <20230315051444.1683170-4-anshuman.khandual@arm.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230315051444.1683170-1-anshuman.khandual@arm.com>
-References: <20230315051444.1683170-1-anshuman.khandual@arm.com>
+        Wed, 15 Mar 2023 01:15:08 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A170327982;
+        Tue, 14 Mar 2023 22:14:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
+        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
+        Content-Type:Content-ID:Content-Description;
+        bh=rzzYbuX4ToR4PRSGg4gxiQg60PZuy1bmg30AVicE5lc=; b=LFipvvEQakTIInjheUdNgkYGQq
+        PQlNsLrLwxSeSBjE9GBWTNlVTV5an9fUmN4eHue46GVqBu5wp0EHoeKdB7HoGOszydP0kOyYoL7bP
+        +57XeupqJHTvYryjfwkHT24Dg5ZN1CWuVA5nyVaBITI8APSFSLXxKCji+zmpN6kJA9usBKnKqayRz
+        JyLjpYf4dbg9w5l7JG2bNPpcYuiSr/Mimk1ikLjZaFxwxNy2ipQ2GMaqWQ6LhcXNQh9DeYzFrF2qm
+        EoaJ5MFMLwBA2cGyS1jlYi3Q8wFWnbrRNwhLuGPfDc3318NHAlhNGbsAaVKOfBb0yrbztvVx4p/3d
+        rLZekx0g==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pcJTN-00DYDB-U3; Wed, 15 Mar 2023 05:14:49 +0000
+From:   "Matthew Wilcox (Oracle)" <willy@infradead.org>
+To:     linux-arch@vger.kernel.org
+Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v4 29/36] mm: Remove page_mapping_file()
+Date:   Wed, 15 Mar 2023 05:14:37 +0000
+Message-Id: <20230315051444.3229621-30-willy@infradead.org>
+X-Mailer: git-send-email 2.37.1
+In-Reply-To: <20230315051444.3229621-1-willy@infradead.org>
+References: <20230315051444.3229621-1-willy@infradead.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This updates 'struct arm_pmu' for branch stack sampling support later. This
-adds a new 'features' element in the structure to track supported features,
-and another 'private' element to encapsulate implementation attributes on a
-given 'struct arm_pmu'. These updates here will help in tracking any branch
-stack sampling support, which is being added later. This also adds a helper
-arm_pmu_branch_stack_supported().
+This function has no more users.
 
-This also enables perf branch stack sampling event on all 'struct arm pmu',
-supporting the feature but after removing the current gate that blocks such
-events unconditionally in armpmu_event_init(). Instead a quick probe can be
-initiated via arm_pmu_branch_stack_supported() to ascertain the support.
-
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Will Deacon <will@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
 ---
- drivers/perf/arm_pmu.c       |  3 +--
- include/linux/perf/arm_pmu.h | 12 +++++++++++-
- 2 files changed, 12 insertions(+), 3 deletions(-)
+ include/linux/pagemap.h | 8 --------
+ 1 file changed, 8 deletions(-)
 
-diff --git a/drivers/perf/arm_pmu.c b/drivers/perf/arm_pmu.c
-index aada47e3b126..d4a4f2bd89a5 100644
---- a/drivers/perf/arm_pmu.c
-+++ b/drivers/perf/arm_pmu.c
-@@ -510,8 +510,7 @@ static int armpmu_event_init(struct perf_event *event)
- 		!cpumask_test_cpu(event->cpu, &armpmu->supported_cpus))
- 		return -ENOENT;
+diff --git a/include/linux/pagemap.h b/include/linux/pagemap.h
+index e56c2023aa0e..a87113055b9c 100644
+--- a/include/linux/pagemap.h
++++ b/include/linux/pagemap.h
+@@ -394,14 +394,6 @@ static inline struct address_space *page_file_mapping(struct page *page)
+ 	return folio_file_mapping(page_folio(page));
+ }
  
--	/* does not support taken branch sampling */
--	if (has_branch_stack(event))
-+	if (has_branch_stack(event) && !arm_pmu_branch_stack_supported(armpmu))
- 		return -EOPNOTSUPP;
- 
- 	return __hw_perf_event_init(event);
-diff --git a/include/linux/perf/arm_pmu.h b/include/linux/perf/arm_pmu.h
-index f7fbd162ca4c..0da745eaf426 100644
---- a/include/linux/perf/arm_pmu.h
-+++ b/include/linux/perf/arm_pmu.h
-@@ -102,7 +102,9 @@ struct arm_pmu {
- 	int		(*map_event)(struct perf_event *event);
- 	void		(*sched_task)(struct perf_event_pmu_context *pmu_ctx, bool sched_in);
- 	int		num_events;
--	bool		secure_access; /* 32-bit ARM only */
-+	unsigned int	secure_access	: 1, /* 32-bit ARM only */
-+			has_branch_stack: 1, /* 64-bit ARM only */
-+			reserved	: 30;
- #define ARMV8_PMUV3_MAX_COMMON_EVENTS		0x40
- 	DECLARE_BITMAP(pmceid_bitmap, ARMV8_PMUV3_MAX_COMMON_EVENTS);
- #define ARMV8_PMUV3_EXT_COMMON_EVENT_BASE	0x4000
-@@ -118,8 +120,16 @@ struct arm_pmu {
- 
- 	/* Only to be used by ACPI probing code */
- 	unsigned long acpi_cpuid;
-+
-+	/* Implementation specific attributes */
-+	void		*private;
- };
- 
-+static inline bool arm_pmu_branch_stack_supported(struct arm_pmu *armpmu)
-+{
-+	return armpmu->has_branch_stack;
-+}
-+
- #define to_arm_pmu(p) (container_of(p, struct arm_pmu, pmu))
- 
- u64 armpmu_event_update(struct perf_event *event);
+-/*
+- * For file cache pages, return the address_space, otherwise return NULL
+- */
+-static inline struct address_space *page_mapping_file(struct page *page)
+-{
+-	return folio_flush_mapping(page_folio(page));
+-}
+-
+ /**
+  * folio_inode - Get the host inode for this folio.
+  * @folio: The folio.
 -- 
-2.25.1
+2.39.2
 
