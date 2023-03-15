@@ -2,293 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E0046BB3A3
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 13:53:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 872B56BB3A0
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 13:52:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233104AbjCOMw6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 08:52:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59422 "EHLO
+        id S233075AbjCOMwj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 08:52:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232754AbjCOMw4 (ORCPT
+        with ESMTP id S232754AbjCOMwh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 08:52:56 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C4D88569E;
-        Wed, 15 Mar 2023 05:52:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678884772; x=1710420772;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=SUsnUofbnZ17R3vhZK0KxvR7Ggj2IlHgALrzBei3N10=;
-  b=Bz6a9LT01vKKue9/zPqyv4ouuspG3D+BLkfKJC3mFmZTNTUXI8EckEeS
-   N3By8lR2wnj6qr850vRdmEnzW79mmv3v+aI5LBbclIqX9KBgvGJ9fOtUt
-   NO5WeRqRHqF2b0i8uZStK3DbAWEI+2sdW/6tX6cK2Opdax/a6Xa61WdmJ
-   4YMusc6ebYjbatV31WQ05zZJF3MR5fV4WAcy/amuaKt+LGO3B3et8CQL4
-   v1nBQZue1f+ESoef5EdmAYr9ZP6/AC8O2v85ZxBkqhDY6LDTiEUQ1T1ro
-   uNdFsf730VPC35VZJZBjt36IXvkov9q0ZDxl1adhAc0uuJ5jfIpp8gll/
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="318085855"
-X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
-   d="scan'208";a="318085855"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2023 05:52:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="925331748"
-X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
-   d="scan'208";a="925331748"
-Received: from newjersey.igk.intel.com ([10.102.20.203])
-  by fmsmga006.fm.intel.com with ESMTP; 15 Mar 2023 05:52:45 -0700
-From:   Alexander Lobakin <aleksander.lobakin@intel.com>
-To:     ast@kernel.org,
-        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>
-Cc:     Alexander Lobakin <aleksander.lobakin@intel.com>,
-        syzbot <syzbot+e1d1b65f7c32f2a86a9f@syzkaller.appspotmail.com>,
-        bpf@vger.kernel.org, daniel@iogearbox.net, davem@davemloft.net,
-        edumazet@google.com, hawk@kernel.org, john.fastabend@gmail.com,
-        kuba@kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] [bpf?] [net?] BUG: unable to handle kernel NULL pointer dereference in __build_skb_around
-Date:   Wed, 15 Mar 2023 13:51:23 +0100
-Message-Id: <ec94dad7-188b-96d8-9005-74f507d96967@intel.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <6b48673b-33a2-877d-dadd-b43a1364b330@intel.com>
-References: <000000000000f1985705f6ef2243@google.com> <6b48673b-33a2-877d-dadd-b43a1364b330@intel.com>
-Content-Type: text/plain; charset=UTF-8
+        Wed, 15 Mar 2023 08:52:37 -0400
+Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 697D88C536
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 05:52:36 -0700 (PDT)
+Received: by mail-qv1-xf31.google.com with SMTP id x8so1296291qvr.9
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 05:52:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678884755;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qLFRsJOsX2F5yOtRt6kLMkQ8BWCMUvEvwx1aLA2wN+k=;
+        b=Yl19KL1JyiKv1FYtXuyMf5QOmtFAkm/oVbflUHFhB/HO3D5/kr5vf2vr5HPPzXHhDl
+         X4DgzmYShsdCV2uE9X4FW381cReiZCoZTfCNuzUBNELf0mWOlSbiP/yq6jAkHd9wt1we
+         zIpOq70eeIfjLORJO370ZQwVVg3svAhRd3KvpDpPJLGX8X/uSlkBGg3DlIWnQeJXTtp7
+         NMkA3LWJF4uLwQ+Vsp+8oz2NDUXWqHu3ZoY4b0+EPkhPJoocFo+i298nNOVMvdL6/A+I
+         7gjOYTGWRCBe9unp9Y8/XRXOpOEGZ+sdgaudWhmCuzgjOSvRwI33HoZ5Artiwe83e+J4
+         mTaA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678884755;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qLFRsJOsX2F5yOtRt6kLMkQ8BWCMUvEvwx1aLA2wN+k=;
+        b=iC307U4M6lGSAYGWykt88RcRMN9fFCGfZSDyYMJaZ9j58r8Gxkz0uPjfkE8ElhoJyO
+         5TwzhhpqQn7K9OMLmc5QewxdqjAGpyFuviiNP/dLV/ZETVb/8/3sa4h2BJJPkoG9xxnk
+         iQzV91f+bSZajBqMKfkQj5R0lY5LDzVS5+WxQyxvz19mqR4VmCXqs+l+x+5RjXwwtJkw
+         jfXM95bbZURm8coN5vhsCa/EgYwGz9UDMApX/uaYLsiBOMSTB2GNBG7opytrZ5ZLy4ws
+         PXRq3sCRuaH6phao0iodI6gh9OtUioxcEx+9wKYsaEF4+6OSfM0we9S0WG4dBPAMRAP4
+         rowQ==
+X-Gm-Message-State: AO0yUKXTMYVz7OyviTP60FCg4Jix+SMwSDz3u9J9F6NTiEWZ5UT+91lU
+        CGCJEcCJ5P5mdpNPXXWHa9MyQfJI6HRJRI+yKPY=
+X-Google-Smtp-Source: AK7set+2q0Vdy60Z3FMxrL5u94t1E4JKUteaAhBEbCyppbfKte0GjdYJ7JKgLaGNCuJfl3keUSg6/rxpzyTqlrA/K44=
+X-Received: by 2002:ac8:1e8d:0:b0:3d5:3d76:df74 with SMTP id
+ c13-20020ac81e8d000000b003d53d76df74mr510179qtm.0.1678884755473; Wed, 15 Mar
+ 2023 05:52:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Received: by 2002:ab3:cacd:0:b0:4ce:79b9:d02b with HTTP; Wed, 15 Mar 2023
+ 05:52:34 -0700 (PDT)
+Reply-To: zongokari01@yahoo.com
+From:   "Mrs, Zongo Kari" <abdoulkarimsemde72@gmail.com>
+Date:   Wed, 15 Mar 2023 05:52:34 -0700
+Message-ID: <CAFf6P72GrSqJ-DrCNRwD8NMnjxCVyZUK5BpNyMoNG5YXWJz=tA@mail.gmail.com>
+Subject: May the good God bless you
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=7.7 required=5.0 tests=BAYES_99,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:f31 listed in]
+        [list.dnswl.org]
+        *  3.5 BAYES_99 BODY: Bayes spam probability is 99 to 100%
+        *      [score: 0.9981]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [abdoulkarimsemde72[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [abdoulkarimsemde72[at]gmail.com]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [zongokari01[at]yahoo.com]
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
+        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexander Lobakin <aleksander.lobakin@intel.com>
-Date: Wed, 15 Mar 2023 13:10:44 +0100
+I'm a dying woman here in the hospital, I was diagnosed as a Cancer
+patient over 2 Years ago. I am a business woman
+dealing with Gold Exportation. I Am from Us California
+I have a charitable and unfulfillment
 
-> From: Syzbot <syzbot+e1d1b65f7c32f2a86a9f@syzkaller.appspotmail.com>
-> Date: Wed, 15 Mar 2023 05:03:47 -0700
-> 
->> Hello,
->>
->> syzbot found the following issue on:
->>
->> HEAD commit:    3c2611bac08a selftests/bpf: Fix trace_virtqueue_add_sgs te..
->> git tree:       bpf-next
->> console+strace: https://syzkaller.appspot.com/x/log.txt?x=1026d472c80000
->> kernel config:  https://syzkaller.appspot.com/x/.config?x=cab35c936731a347
->> dashboard link: https://syzkaller.appspot.com/bug?extid=e1d1b65f7c32f2a86a9f
->> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
->> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15826bc6c80000
->> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15cd12e2c80000
->>
->> Downloadable assets:
->> disk image: https://storage.googleapis.com/syzbot-assets/36a32f4d222a/disk-3c2611ba.raw.xz
->> vmlinux: https://storage.googleapis.com/syzbot-assets/f5c0da04f143/vmlinux-3c2611ba.xz
->> kernel image: https://storage.googleapis.com/syzbot-assets/ae2ca9bce51a/bzImage-3c2611ba.xz
->>
->> The issue was bisected to:
->>
->> commit 9c94bbf9a87b264294f42e6cc0f76d87854733ec
->> Author: Alexander Lobakin <aleksander.lobakin@intel.com>
->> Date:   Mon Mar 13 21:55:52 2023 +0000
->>
->>     xdp: recycle Page Pool backed skbs built from XDP frames
->>
->> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=11deec2ac80000
->> final oops:     https://syzkaller.appspot.com/x/report.txt?x=13deec2ac80000
->> console output: https://syzkaller.appspot.com/x/log.txt?x=15deec2ac80000
->>
->> IMPORTANT: if you fix the issue, please add the following tag to the commit:
->> Reported-by: syzbot+e1d1b65f7c32f2a86a9f@syzkaller.appspotmail.com
->> Fixes: 9c94bbf9a87b ("xdp: recycle Page Pool backed skbs built from XDP frames")
->>
->> BUG: kernel NULL pointer dereference, address: 0000000000000d28
->> #PF: supervisor write access in kernel mode
->> #PF: error_code(0x0002) - not-present page
->> PGD 7b741067 P4D 7b741067 PUD 7c1ca067 PMD 0 
->> Oops: 0002 [#1] PREEMPT SMP KASAN
->> CPU: 1 PID: 5080 Comm: syz-executor371 Not tainted 6.2.0-syzkaller-13030-g3c2611bac08a #0
->> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/02/2023
->> RIP: 0010:memset_erms+0xd/0x20 arch/x86/lib/memset_64.S:66
->> Code: 01 48 0f af c6 f3 48 ab 89 d1 f3 aa 4c 89 c8 c3 66 66 2e 0f 1f 84 00 00 00 00 00 66 90 66 0f 1f 00 49 89 f9 40 88 f0 48 89 d1 <f3> aa 4c 89 c8 c3 66 66 2e 0f 1f 84 00 00 00 00 00 66 90 66 0f 1f
->> RSP: 0018:ffffc90003baf730 EFLAGS: 00010246
->> RAX: 0000000000000000 RBX: ffff888028b94000 RCX: 0000000000000020
->> RDX: 0000000000000020 RSI: 0000000000000000 RDI: 0000000000000d28
->> RBP: 0000000000000001 R08: 0000000000000001 R09: 0000000000000d28
->> R10: ffffed100517281c R11: 0000000000094001 R12: 0000000000000d48
->> R13: 0000000000000d28 R14: 0000000000000f68 R15: 0000000000000100
->> FS:  0000555555979300(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
->> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->> CR2: 0000000000000d28 CR3: 0000000028e2d000 CR4: 00000000003506e0
->> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
->> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
->> Call Trace:
->>  <TASK>
->>  __finalize_skb_around net/core/skbuff.c:321 [inline]
->>  __build_skb_around+0x232/0x3a0 net/core/skbuff.c:379
->>  build_skb_around+0x32/0x290 net/core/skbuff.c:444
->>  __xdp_build_skb_from_frame+0x121/0x760 net/core/xdp.c:622
->>  xdp_recv_frames net/bpf/test_run.c:248 [inline]
->>  xdp_test_run_batch net/bpf/test_run.c:334 [inline]
->>  bpf_test_run_xdp_live+0x1289/0x1930 net/bpf/test_run.c:362
->>  bpf_prog_test_run_xdp+0xa05/0x14e0 net/bpf/test_run.c:1418
->>  bpf_prog_test_run kernel/bpf/syscall.c:3675 [inline]
->>  __sys_bpf+0x1598/0x5100 kernel/bpf/syscall.c:5028
->>  __do_sys_bpf kernel/bpf/syscall.c:5114 [inline]
->>  __se_sys_bpf kernel/bpf/syscall.c:5112 [inline]
->>  __x64_sys_bpf+0x79/0xc0 kernel/bpf/syscall.c:5112
->>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->>  do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
->>  entry_SYSCALL_64_after_hwframe+0x63/0xcd
->> RIP: 0033:0x7f320b4efca9
->> Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
->> RSP: 002b:00007ffd2c9924d8 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
->> RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f320b4efca9
->> RDX: 0000000000000048 RSI: 0000000020000080 RDI: 000000000000000a
->> RBP: 00007f320b4b3e50 R08: 0000000000000000 R09: 0000000000000000
->> R10: 0000000000000000 R11: 0000000000000246 R12: 00007f320b4b3ee0
->> R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
->>  </TASK>
->> Modules linked in:
->> CR2: 0000000000000d28
->> ---[ end trace 0000000000000000 ]---
->> RIP: 0010:memset_erms+0xd/0x20 arch/x86/lib/memset_64.S:66
->> Code: 01 48 0f af c6 f3 48 ab 89 d1 f3 aa 4c 89 c8 c3 66 66 2e 0f 1f 84 00 00 00 00 00 66 90 66 0f 1f 00 49 89 f9 40 88 f0 48 89 d1 <f3> aa 4c 89 c8 c3 66 66 2e 0f 1f 84 00 00 00 00 00 66 90 66 0f 1f
->> RSP: 0018:ffffc90003baf730 EFLAGS: 00010246
->> RAX: 0000000000000000 RBX: ffff888028b94000 RCX: 0000000000000020
->> RDX: 0000000000000020 RSI: 0000000000000000 RDI: 0000000000000d28
->> RBP: 0000000000000001 R08: 0000000000000001 R09: 0000000000000d28
->> R10: ffffed100517281c R11: 0000000000094001 R12: 0000000000000d48
->> R13: 0000000000000d28 R14: 0000000000000f68 R15: 0000000000000100
->> FS:  0000555555979300(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
->> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->> CR2: 0000000000000d28 CR3: 0000000028e2d000 CR4: 00000000003506e0
->> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
->> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
->> ----------------
->> Code disassembly (best guess), 1 bytes skipped:
->>    0:	48 0f af c6          	imul   %rsi,%rax
->>    4:	f3 48 ab             	rep stos %rax,%es:(%rdi)
->>    7:	89 d1                	mov    %edx,%ecx
->>    9:	f3 aa                	rep stos %al,%es:(%rdi)
->>    b:	4c 89 c8             	mov    %r9,%rax
->>    e:	c3                   	retq
->>    f:	66 66 2e 0f 1f 84 00 	data16 nopw %cs:0x0(%rax,%rax,1)
->>   16:	00 00 00 00
->>   1a:	66 90                	xchg   %ax,%ax
->>   1c:	66 0f 1f 00          	nopw   (%rax)
->>   20:	49 89 f9             	mov    %rdi,%r9
->>   23:	40 88 f0             	mov    %sil,%al
->>   26:	48 89 d1             	mov    %rdx,%rcx
->> * 29:	f3 aa                	rep stos %al,%es:(%rdi) <-- trapping instruction
-> 
-> Looks like skb_shinfo() returns %NULL inside __finalize_skb_around(). My
-> code didn't touch this at all, but I'm digging this already anyway :s
+project that am about to handover to you, if you are interested please
+Reply, hope to hear from you.
 
-Ok got it.
-So previously, on %XDP_PASS a page was released from the Pool and then a
-new one allocated and its context filled. Now, the page gets recycled,
-and when it gets recycled, PP doesn't reinit its context. But
-xdp_scrub_frame() sets xdpf->data to %NULL, which means the ctx needs to
-be reinitialized. Plus the &xdp_frame itself is located in the place
-which might easily get overwritten when skb is wandering around the stack.
-I'm curious then how it's been working on my side for several weeks
-already and I've been using XDP trafgen extensively :D
-Thus, I'd change it like that (see below). It's in general unsafe to
-assume &xdp_frame residing at the beginning of data_hard_start is still
-valid after the frame was cruising around. But let's wait for Toke's
-comment.
+Please Reply Me with my private Email for Faster Communication
 
-Also, please merge bpf into bpf-next. I see it doesn't contain my fix
-for ctx->frame. This will add merge conflicts after this one is fixed
-and also can provoke additional bugs.
+ zongokari01@yahoo.com
 
-> 
-> + Toke, test_run author :p
-> 
->>   2b:	4c 89 c8             	mov    %r9,%rax
->>   2e:	c3                   	retq
->>   2f:	66 66 2e 0f 1f 84 00 	data16 nopw %cs:0x0(%rax,%rax,1)
->>   36:	00 00 00 00
->>   3a:	66 90                	xchg   %ax,%ax
->>   3c:	66                   	data16
->>   3d:	0f                   	.byte 0xf
->>   3e:	1f                   	(bad)
->>
->>
->> ---
->> This report is generated by a bot. It may contain errors.
->> See https://goo.gl/tpsmEJ for more information about syzbot.
->> syzbot engineers can be reached at syzkaller@googlegroups.com.
->>
->> syzbot will keep track of this issue. See:
->> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
->> For information about bisection process see: https://goo.gl/tpsmEJ#bisection
->> syzbot can test patches for this issue, for details see:
->> https://goo.gl/tpsmEJ#testing-patches
-> 
-> Thanks,
-> Olek
-
-Thanks,
-Olek
----
-diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-index 6a8b33a103a4..5b9ca36ff21d 100644
---- a/net/bpf/test_run.c
-+++ b/net/bpf/test_run.c
-@@ -217,12 +217,12 @@ static bool ctx_was_changed(struct xdp_page_head *head)
- 
- static void reset_ctx(struct xdp_page_head *head)
- {
--	if (likely(!ctx_was_changed(head)))
--		return;
-+	if (unlikely(!ctx_was_changed(head))) {
-+		head->ctx.data = head->orig_ctx.data;
-+		head->ctx.data_meta = head->orig_ctx.data_meta;
-+		head->ctx.data_end = head->orig_ctx.data_end;
-+	}
- 
--	head->ctx.data = head->orig_ctx.data;
--	head->ctx.data_meta = head->orig_ctx.data_meta;
--	head->ctx.data_end = head->orig_ctx.data_end;
- 	xdp_update_frame_from_buff(&head->ctx, &head->frm);
- }
- 
----
-Alternative version, which fixes only this particular problem, but is
-less safe as still assumes only xdpf->data could be nulled-out. It can
-save a bunch o'cycles on hotpath tho, thus attaching it as well:
-
-diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-index 6a8b33a103a4..55789772f039 100644
---- a/net/bpf/test_run.c
-+++ b/net/bpf/test_run.c
-@@ -217,13 +217,15 @@ static bool ctx_was_changed(struct xdp_page_head *head)
- 
- static void reset_ctx(struct xdp_page_head *head)
- {
--	if (likely(!ctx_was_changed(head)))
--		return;
-+	if (unlikely(ctx_was_changed(head))) {
-+		head->ctx.data = head->orig_ctx.data;
-+		head->ctx.data_meta = head->orig_ctx.data_meta;
-+		head->ctx.data_end = head->orig_ctx.data_end;
-+		head->frm.data = NULL;
-+	}
- 
--	head->ctx.data = head->orig_ctx.data;
--	head->ctx.data_meta = head->orig_ctx.data_meta;
--	head->ctx.data_end = head->orig_ctx.data_end;
--	xdp_update_frame_from_buff(&head->ctx, &head->frm);
-+	if (head->frm.data != head->ctx.data)
-+		xdp_update_frame_from_buff(&head->ctx, &head->frm);
- }
- 
- static int xdp_recv_frames(struct xdp_frame **frames, int nframes,
+From Zongo Kari
