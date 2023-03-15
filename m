@@ -2,102 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC0656BAA63
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 09:04:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7E706BAA66
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 09:05:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231522AbjCOIEh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 04:04:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49202 "EHLO
+        id S231656AbjCOIFh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 04:05:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231398AbjCOIEf (ORCPT
+        with ESMTP id S230455AbjCOIFf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 04:04:35 -0400
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3310823306
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 01:04:27 -0700 (PDT)
-Received: by mail-yb1-xb30.google.com with SMTP id n125so4541956ybg.7
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 01:04:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678867466;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=V+zV0RFa8oIGvR8so6Lb7nDRwP3ctkQ16ptH6NCpKUY=;
-        b=qY5/Bw8dUq8MYbVZia3UMIeCV7qmnjHMeYaTOQE7JWUOdLDOKn/fJcIYEeF6Z38rs/
-         deLSzQtS7C1TnR/+RkrI/pTtP7iHJXvo1DWjAN1eoxk650NuTFz4TC7s+pZgRjVBdctc
-         us9fn/LfZxkpV+RoH5rGoSJqHyyJyrcG9RNFwomxDFBpEi4f6xB5r1X4ONTnw6Al4GEK
-         Zu5K5kA2Zt6f3RVWqsN1xjC6LX1nAgGk3yjMI9A/1VMsRqVpLnEzpZSVA+YwAMi9AVZi
-         b8OsJDhv0ahJgtgNFF3T9brcT1oduLiHHMXrmIUE/zInum9bpOBb8kC588KZS/l4O+fe
-         H0sA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678867466;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=V+zV0RFa8oIGvR8so6Lb7nDRwP3ctkQ16ptH6NCpKUY=;
-        b=Hdzx2FzQh4PndVf6ocbeRyObz6oAk04DxqdkKOfyPCDPAM5cRR+hBM39Jio25JfX5F
-         FnAYEZOf0bsdDjskgpBkn1x/vaStEl5olEKClrMnbpTzV0SFGpE4HsaY4LOkBt/bKhGu
-         MKtg6jJhg7POJnv6GQR4FuYS3MdCaOl/v6Gyl9dwnG03v2pX7Q4Ks5O4QexKn6uDsBSr
-         BPftrq2vpJ9KM8H2rxgIPn9HEUzLbpfslC8oUVikcG/C5GeWi4uNdqEOafoKNBBYMN4M
-         W4eOPdz9D3BoyywPd+wThOxSMyljMWUMxEbyoUV57RoNt+ctDZ5IhYKlIi7afdyqvEEc
-         6kUg==
-X-Gm-Message-State: AO0yUKXWO2woLB8BowE2JBA2jqDCOSOT8T0ECWHCqivEXlhum0bjAqOa
-        fQaqbD6yKEmIxo+qVYgKQt8irtRZkj0sjWLzXictdg==
-X-Google-Smtp-Source: AK7set8OklXSPGzCdENW3Fmdkp8oZ9PjQvODAAlE8618tRjhBD249J3mc0P/EGE19AQZWSLy35WGJ+YXjJy+I1PHQD4=
-X-Received: by 2002:a5b:1cb:0:b0:a6b:bc64:a0af with SMTP id
- f11-20020a5b01cb000000b00a6bbc64a0afmr25410441ybp.4.1678867466394; Wed, 15
- Mar 2023 01:04:26 -0700 (PDT)
+        Wed, 15 Mar 2023 04:05:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CF2283EF;
+        Wed, 15 Mar 2023 01:05:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DD2A061BD4;
+        Wed, 15 Mar 2023 08:05:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDCA3C433EF;
+        Wed, 15 Mar 2023 08:05:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678867533;
+        bh=618xVakUuQY56VYlwblOZrd2g51QvZP/REjgIIwHOZQ=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=iTqQl28wKHaYHKVlT5GZdQUWOM6vJdRPU3nlEVrpMsHcNM5OMi4g4LQ0+6qvPVaoB
+         5sveWtu5mD6I7KJWSgysqP0O++CFbbAlStkY/3+QAQzCvbwAa+F+SFHkeEGX/jdE8I
+         MbszItbAgjEaF7ClWVqNgXVk3Epwwsldehu8cqJbioqnJAD5JE6ttI3hbzCsztkzz6
+         vQg792V5Ipi3iftTVD8MgecuAcr2Qg1h4riKRJp5xA2Iaowa+ZJifG5uR2o9vdSwMV
+         8z4N0PocO2+eRK7mxS3bXDCm8UFtjIuQJ5eUuyvEyLu7H7vTpZ091LQUCaUyqE9y6y
+         jWutp9CTBy9EA==
+From:   Christian Brauner <brauner@kernel.org>
+To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>
+Subject: Re: [PATCH v1 1/1] fs/namespace: fnic: Switch to use %ptTd
+Date:   Wed, 15 Mar 2023 09:05:07 +0100
+Message-Id: <167886710880.1081057.9449101039224999346.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230314150906.52318-1-andriy.shevchenko@linux.intel.com>
+References: <20230314150906.52318-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-References: <20230314225535.1321736-1-sre@kernel.org> <20230314225535.1321736-11-sre@kernel.org>
-In-Reply-To: <20230314225535.1321736-11-sre@kernel.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 15 Mar 2023 09:04:15 +0100
-Message-ID: <CACRpkdZ0j8HQzzXtDbVcxAJkBsdRXUKNJm3BmLB583JfnetAWw@mail.gmail.com>
-Subject: Re: [PATCHv2 10/12] power: supply: generic-adc-battery: add
- temperature support
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Sebastian Reichel <sebastian.reichel@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+X-Developer-Signature: v=1; a=openpgp-sha256; l=554; i=brauner@kernel.org; h=from:subject:message-id; bh=470UWTI0/anR7TZBGfhRKWDxs9zZzmvJgntL5Gb9AJw=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMaQIVi8q2bOcvTJH8vfqU/uvZ52ofDxtVXV5DN+saSflPSsv CV6c3lHKwiDGxSArpsji0G4SLrecp2KzUaYGzBxWJpAhDFycAjCRFWKMDK+3TuZ4bNP2aeOXwsDPe+ d9e6UaWLe9X71s8dbdh0P+Wh1n+Ctg67h6W7ZE5Aa9/9F7NvbnPld623DO1+Tm8sM73eunFjACAA==
+X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 14, 2023 at 11:55=E2=80=AFPM Sebastian Reichel <sre@kernel.org>=
- wrote:
+From: Christian Brauner (Microsoft) <brauner@kernel.org>
 
-> From: Sebastian Reichel <sebastian.reichel@collabora.com>
->
-> Another typical thing to monitor via an ADC line is
-> the battery temperature.
->
-> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+On Tue, 14 Mar 2023 17:09:06 +0200, Andy Shevchenko wrote:
+> Use %ptTd instead of open-coded variant to print contents
+> of time64_t type in human readable form.
+> 
+> 
 
->  static bool gab_charge_finished(struct gab *adc_bat)
-> @@ -115,6 +118,8 @@ static int gab_get_property(struct power_supply *psy,
->                 return read_channel(adc_bat, GAB_CURRENT, &val->intval);
->         case POWER_SUPPLY_PROP_POWER_NOW:
->                 return read_channel(adc_bat, GAB_POWER, &val->intval);
-> +       case POWER_SUPPLY_PROP_TEMP:
-> +               return read_channel(adc_bat, GAB_TEMP, &val->intval);
+Ok, looking at lib/vsprintf.c
 
-Hm. I wonder if these should rather all use read_channel_processed()?
+pointer(t)
+-> time_and_date(T)
+   -> time64_str()
+      -> time64_to_tm()
+      -> rtc_str(d)
+	 -> date_str()
 
-The difference is that you will then support ADCs with internal scaling
-which is beneficial. Most of the time it doesn't matter.
+ends up with the same helper and four digits for the year so this seems
+like a good cleanup. Thanks!
 
-Yours,
-Linus Walleij
+tree: git://git.kernel.org/pub/scm/linux/kernel/git/vfs/idmapping.git
+branch: fs.misc
+[1/1] fs/namespace: fnic: Switch to use %ptTd
+      commit: 74e60b8b2f0fe3702710e648a31725ee8224dbdf
