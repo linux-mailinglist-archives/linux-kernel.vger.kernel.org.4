@@ -2,462 +2,264 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 346B96BC0E5
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 00:28:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EE256BC191
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 00:37:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232974AbjCOX2u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 19:28:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40994 "EHLO
+        id S233438AbjCOXhM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 19:37:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232602AbjCOX2q (ORCPT
+        with ESMTP id S233216AbjCOXgn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 19:28:46 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB779E051
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 16:28:42 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id ja10so12145153plb.5
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 16:28:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678922922;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=U/XHH5xA0LiSHgmYOixKxhW3un3ttTrDIMNjVuOodwM=;
-        b=EQqDYUKifkpVFhhYe009xvgIpS5kW2MoYKA2EKF20WKP3IoqH+lrgcRp6AdFuU86Ri
-         +t3f3y/xrpzM7cecPy7bfjJsvQyP348pv1ApkKUxMI2PwHibCy4FlrjLrBBkcAe/azB8
-         0EBKpd1QEtvdcG8+1GxnIdL8PExQSo8RdbB9qENgcJmn4xgYS7VmxAFjI43Q35r1DxhJ
-         RPilI96028csTiByHWTSCP2J3mvWdz89rs/tBRXho3oPBs8eE/4w+PFq9USEOx4jacG7
-         tek8cagIewM6Kv11i6m2XnHJYaYfL5cfUstcKkhd+lwAGqkkR5kES4PpjpBf2yJYk/Rp
-         N9qA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678922922;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=U/XHH5xA0LiSHgmYOixKxhW3un3ttTrDIMNjVuOodwM=;
-        b=dqRfVOSAebHproz8yNn3SdkJSB3mnvzbeVTgS9Jxg9YfgX1GDLFZDgEpK8xlDdDJ58
-         7J6NU3v6iWnR8QAaJfgkUfTRaRu4AvMhBAa5G2M1kOWkYACN385seST0ZD7nlRF1b3xH
-         6FV2H9tGO77Bi8mr0oJFrFOnV+Mdw2c1BxVJkt7EFoClH3sjf7B/U7EOK8dBHUcCFDfY
-         ZWh2hmbo3zpomHDund6anAlOxbHM9rRbFYQcVS4wlQH5ET1eDYy7uBX1TES+Kznoc8/v
-         u6lhlKZL0m4/a5zNAHpBfaOn0Gw86dXGriraOPOZclY38BPZ3AuEDQDfjbZ54eYjz+HT
-         LHHA==
-X-Gm-Message-State: AO0yUKWEJ9fFN/GWWhgnzeZJ3sNBRdGQztB3sOcyeD1xjfnGDXuWwC+o
-        4rQibN5MdsXV2dBLKcWS2kUiJw==
-X-Google-Smtp-Source: AK7set8zTtOuZpy2rQKLjeXy3FUDJGSFpJIg34NtjkmNXizL7dZJ+RPewhrHDA0rNY4no80w4XYPfQ==
-X-Received: by 2002:a17:902:c94b:b0:1a0:563e:b0d1 with SMTP id i11-20020a170902c94b00b001a0563eb0d1mr50590pla.18.1678922922035;
-        Wed, 15 Mar 2023 16:28:42 -0700 (PDT)
-Received: from google.com (33.5.83.34.bc.googleusercontent.com. [34.83.5.33])
-        by smtp.gmail.com with ESMTPSA id v16-20020a62a510000000b005d72e54a7e1sm4002840pfm.215.2023.03.15.16.28.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Mar 2023 16:28:41 -0700 (PDT)
-Date:   Wed, 15 Mar 2023 16:28:37 -0700
-From:   Zach O'Keefe <zokeefe@google.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Hugh Dickins <hughd@google.com>,
-        Peter Xu <peterx@redhat.com>, Vlastimil Babka <vbabka@suse.cz>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Andrea Arcangeli <aarcange@redhat.com>
-Subject: Re: [PATCH mm-unstable v1] selftests/vm: cow: Add COW tests for
- collapsing of PTE-mapped anon THP
-Message-ID: <CAAa6QmSZTQ6=oxsTvCLoaFMcpamkNa7wY6VkDoipRTDAo5JhoQ@mail.gmail.com>
-References: <20230104144905.460075-1-david@redhat.com>
+        Wed, 15 Mar 2023 19:36:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1F1B6F61F;
+        Wed, 15 Mar 2023 16:35:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1166E61E91;
+        Wed, 15 Mar 2023 23:33:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8B08C433D2;
+        Wed, 15 Mar 2023 23:33:56 +0000 (UTC)
+Date:   Wed, 15 Mar 2023 19:33:55 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Florent Revest <revest@chromium.org>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        catalin.marinas@arm.com, will@kernel.org, mhiramat@kernel.org,
+        mark.rutland@arm.com, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, kpsingh@kernel.org, jolsa@kernel.org,
+        xukuohai@huaweicloud.com, lihuafei1@huawei.com
+Subject: Re: [PATCH v2 01/10] ftrace: Replace uses of _ftrace_direct APIs
+ with _ftrace_direct_multi
+Message-ID: <20230315193355.30c48764@gandalf.local.home>
+In-Reply-To: <20230207182135.2671106-2-revest@chromium.org>
+References: <20230207182135.2671106-1-revest@chromium.org>
+        <20230207182135.2671106-2-revest@chromium.org>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230104144905.460075-1-david@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->
-> Currently, anonymous PTE-mapped THPs cannot be collapsed in-place:
-> collapsing (e.g., via MADV_COLLAPSE) implies allocating a fresh THP and
-> mapping that new THP via a PMD: as it's a fresh anon THP, it will get the
-> exclusive flag set on the head page and everybody is happy.
->
-> However, if the kernel would ever support in-place collapse of anonymous
-> THPs (replacing a page table mapping each sub-page of a THP via PTEs with a
-> single PMD mapping the complete THP), exclusivity information stored for
-> each sub-page would have to be collapsed accordingly:
->
-> (1) All PTEs map !exclusive anon sub-pages: the in-place collapsed THP
->     must not not have the exclusive flag set on the head page mapped by
->     the PMD. This is the easiest case to handle ("simply don't set any
->     exclusive flags").
->
-> (2) All PTEs map exclusive anon sub-pages: when collapsing, we have to
->     clear the exclusive flag from all tail pages and only leave the
->     exclusive flag set for the head page. Otherwise, fork() after
->     collapse would not clear the exclusive flags from the tail pages
->     and we'd be in trouble once PTE-mapping the shared THP when writing
->     to shared tail pages that still have the exclusive flag set. This
->     would effectively revert what the PTE-mapping code does when
->     propagating the exclusive flag to all sub-pages.
->
-> (3) PTEs map a mixture of exclusive and !exclusive anon sub-pages (can
->     happen e.g., due to MADV_DONTFORK before fork()). We must not
->     collapse the THP in-place, otherwise bad things may happen:
->     the exclusive flags of sub-pages would get ignored and the
->     exclusive flag of the head page would get used instead.
->
-> Now that we have MADV_COLLAPSE in place to trigger collapsing a THP,
-> let's add some test cases that would bail out early, if we'd
-> voluntarily/accidantially unlock in-place collapse for anon THPs and
-> forget about taking proper care of exclusive flags.
+On Tue,  7 Feb 2023 19:21:26 +0100
+Florent Revest <revest@chromium.org> wrote:
 
-Hey David,
-
-Sorry for the (very) delayed review. As our helpful syncs offline, I'm in a
-better place to understand the intent of these tests.
-
-On Wed, Jan 4, 2023 at 6:49 AM David Hildenbrand <david@redhat.com> wrote:
-
-> Running the test on a kernel with MADV_COLLAPSE support:
->   # [INFO] Anonymous THP tests
->   # [RUN] Basic COW after fork() when collapsing before fork()
->   ok 169 No leak from parent into child
->   # [RUN] Basic COW after fork() when collapsing after fork() (fully shared)
->   ok 170 # SKIP MADV_COLLAPSE failed: Invalid argument
->   # [RUN] Basic COW after fork() when collapsing after fork() (lower shared)
->   ok 171 No leak from parent into child
->   # [RUN] Basic COW after fork() when collapsing after fork() (upper shared)
->   ok 172 No leak from parent into child
->
-> For now, MADV_COLLAPSE always seems to fail if all PTEs map shared
-> sub-pages.
-
-Thanks for pointing this out. I have had a TODO / pending patch to verify this
-for awhile. It seems this is due to some old requirement of requiring a single
-writeable pte. I don't know this history well here, but I don't think it's
-required anymore, and, as this test shows, prevents collapse of
-pte-mapped-hugepage shared across fork().
-
->
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: Shuah Khan <shuah@kernel.org>
-> Cc: Hugh Dickins <hughd@google.com>
-> Cc: Peter Xu <peterx@redhat.com>
-> Cc: Vlastimil Babka <vbabka@suse.cz>
-> Cc: Nadav Amit <nadav.amit@gmail.com>
-> Cc: Zach O'Keefe <zokeefe@google.com>
-> Cc: Andrea Arcangeli <aarcange@redhat.com>
-> Signed-off-by: David Hildenbrand <david@redhat.com>
+> The _multi API requires that users keep their own ops but can enforce
+> that an op is only associated to one direct call.
+> 
+> Signed-off-by: Florent Revest <revest@chromium.org>
+> Acked-by: Mark Rutland <mark.rutland@arm.com>
+> Tested-by: Mark Rutland <mark.rutland@arm.com>
 > ---
->
-> A patch from Hugh made me explore the wonderful world of in-place collapse
-> of THP, and I was briefly concerned that it would apply to anon THP as
-> well. After thinking about it a bit, I decided to add test cases, to better
-> be safe than sorry in any case, and to document how PG_anon_exclusive is to
-> be handled in that case.
->
-> ---
->  tools/testing/selftests/vm/cow.c | 228 +++++++++++++++++++++++++++++++
->  1 file changed, 228 insertions(+)
->
-> diff --git a/tools/testing/selftests/vm/cow.c b/tools/testing/selftests/vm/cow.c
-> index 26f6ea3079e2..16216d893d96 100644
-> --- a/tools/testing/selftests/vm/cow.c
-> +++ b/tools/testing/selftests/vm/cow.c
-> @@ -30,6 +30,10 @@
->  #include "../kselftest.h"
->  #include "vm_util.h"
->
-> +#ifndef MADV_COLLAPSE
-> +#define MADV_COLLAPSE 25
+>  kernel/trace/trace_selftest.c         | 11 +++++++----
+>  samples/ftrace/ftrace-direct-modify.c | 12 ++++++++----
+>  samples/ftrace/ftrace-direct-too.c    | 12 +++++++-----
+>  samples/ftrace/ftrace-direct.c        | 12 +++++++-----
+>  4 files changed, 29 insertions(+), 18 deletions(-)
+> 
+> diff --git a/kernel/trace/trace_selftest.c b/kernel/trace/trace_selftest.c
+> index ff0536cea968..57221f69a33b 100644
+> --- a/kernel/trace/trace_selftest.c
+> +++ b/kernel/trace/trace_selftest.c
+> @@ -806,6 +806,9 @@ trace_selftest_startup_function_graph(struct tracer *trace,
+>  	int ret;
+>  	unsigned long count;
+>  	char *func_name __maybe_unused;
+> +#ifdef CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
+> +	struct ftrace_ops direct = {};
+
+Make this static to the file and move it above to where there's already an
+#ifdef CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS block.
+
+Less #ifdef is better, and also, I don't like having as an example an
+ftrace_ops structure allocated on the stack. It can become increasingly
+larger as time goes by. I don't want to encourage placing it on stacks.
+
 > +#endif
+>  
+>  #ifdef CONFIG_DYNAMIC_FTRACE
+>  	if (ftrace_filter_param) {
+> @@ -870,8 +873,8 @@ trace_selftest_startup_function_graph(struct tracer *trace,
+>  	 * Register direct function together with graph tracer
+>  	 * and make sure we get graph trace.
+>  	 */
+> -	ret = register_ftrace_direct((unsigned long) DYN_FTRACE_TEST_NAME,
+> -				     (unsigned long) trace_direct_tramp);
+> +	ftrace_set_filter_ip(&direct, (unsigned long)DYN_FTRACE_TEST_NAME, 0, 0);
+> +	ret = register_ftrace_direct_multi(&direct, (unsigned long)trace_direct_tramp);
+>  	if (ret)
+>  		goto out;
+
+I had to rebase this code on top of the latest tree because of updates.
+Which is good, because this patch requires those same. When using
+ftrace_set_filter_ip() one needs to call
+
+   ftrace_free_filter(&direct);
+
+Because the ftrace_set_filter_ip() allocates hashs on the ftrace_ops and
+those need to be freed.
+
+
+>  
+> @@ -891,8 +894,8 @@ trace_selftest_startup_function_graph(struct tracer *trace,
+>  
+>  	unregister_ftrace_graph(&fgraph_ops);
+>  
+> -	ret = unregister_ftrace_direct((unsigned long) DYN_FTRACE_TEST_NAME,
+> -				       (unsigned long) trace_direct_tramp);
+> +	ret = unregister_ftrace_direct_multi(&direct,
+> +					     (unsigned long) trace_direct_tramp);
+>  	if (ret)
+>  		goto out;
+>  
+> diff --git a/samples/ftrace/ftrace-direct-modify.c b/samples/ftrace/ftrace-direct-modify.c
+> index de5a0f67f320..ecd76f75cb80 100644
+> --- a/samples/ftrace/ftrace-direct-modify.c
+> +++ b/samples/ftrace/ftrace-direct-modify.c
+> @@ -96,6 +96,8 @@ asm (
+>  
+>  #endif /* CONFIG_S390 */
+>  
+> +static struct ftrace_ops direct;
 > +
->  static size_t pagesize;
->  static int pagemap_fd;
->  static size_t thpsize;
-> @@ -1178,6 +1182,228 @@ static int tests_per_anon_test_case(void)
->         return tests;
+>  static unsigned long my_tramp = (unsigned long)my_tramp1;
+>  static unsigned long tramps[2] = {
+>  	(unsigned long)my_tramp1,
+> @@ -114,7 +116,7 @@ static int simple_thread(void *arg)
+>  		if (ret)
+>  			continue;
+>  		t ^= 1;
+> -		ret = modify_ftrace_direct(my_ip, my_tramp, tramps[t]);
+> +		ret = modify_ftrace_direct_multi(&direct, tramps[t]);
+>  		if (!ret)
+>  			my_tramp = tramps[t];
+>  		WARN_ON_ONCE(ret);
+> @@ -129,7 +131,9 @@ static int __init ftrace_direct_init(void)
+>  {
+>  	int ret;
+>  
+> -	ret = register_ftrace_direct(my_ip, my_tramp);
+> +	ftrace_set_filter_ip(&direct, (unsigned long) my_ip, 0, 0);
+> +	ret = register_ftrace_direct_multi(&direct, my_tramp);
+> +
+>  	if (!ret)
+>  		simple_tsk = kthread_run(simple_thread, NULL, "event-sample-fn");
+>  	return ret;
+> @@ -138,12 +142,12 @@ static int __init ftrace_direct_init(void)
+>  static void __exit ftrace_direct_exit(void)
+>  {
+>  	kthread_stop(simple_tsk);
+> -	unregister_ftrace_direct(my_ip, my_tramp);
+> +	unregister_ftrace_direct_multi(&direct, my_tramp);
+
+Same here.
+
 >  }
->
-> +enum anon_thp_collapse_test {
-> +       ANON_THP_COLLAPSE_UNSHARED,
+>  
+>  module_init(ftrace_direct_init);
+>  module_exit(ftrace_direct_exit);
+>  
+>  MODULE_AUTHOR("Steven Rostedt");
+> -MODULE_DESCRIPTION("Example use case of using modify_ftrace_direct()");
+> +MODULE_DESCRIPTION("Example use case of using modify_ftrace_direct_multi()");
+>  MODULE_LICENSE("GPL");
+> diff --git a/samples/ftrace/ftrace-direct-too.c b/samples/ftrace/ftrace-direct-too.c
+> index e13fb59a2b47..0e907092e2c0 100644
+> --- a/samples/ftrace/ftrace-direct-too.c
+> +++ b/samples/ftrace/ftrace-direct-too.c
+> @@ -70,21 +70,23 @@ asm (
+>  
+>  #endif /* CONFIG_S390 */
+>  
+> +static struct ftrace_ops direct;
+> +
+>  static int __init ftrace_direct_init(void)
+>  {
+> -	return register_ftrace_direct((unsigned long)handle_mm_fault,
+> -				     (unsigned long)my_tramp);
+> +	ftrace_set_filter_ip(&direct, (unsigned long) handle_mm_fault, 0, 0);
+> +
+> +	return register_ftrace_direct_multi(&direct, (unsigned long) my_tramp);
+>  }
+>  
+>  static void __exit ftrace_direct_exit(void)
+>  {
+> -	unregister_ftrace_direct((unsigned long)handle_mm_fault,
+> -				 (unsigned long)my_tramp);
+> +	unregister_ftrace_direct_multi(&direct, (unsigned long)my_tramp);
 
-OK, so this test checks case 2: we see all PG_anon_exclusive, and need to make
-sure we clear the bit on tails. Had we not, after fork(), the bit would still be
-set on tails (since copy_huge_pmd() -> page_try_dup_anon_rmap() only clears it
-on head), and so write to said tails would go through after wp fault, and since
-collapse was in-place, this leaks data from parent to child.
+And here.
 
-> +       ANON_THP_COLLAPSE_FULLY_SHARED,
+>  }
+>  
+>  module_init(ftrace_direct_init);
+>  module_exit(ftrace_direct_exit);
+>  
+>  MODULE_AUTHOR("Steven Rostedt");
+> -MODULE_DESCRIPTION("Another example use case of using register_ftrace_direct()");
+> +MODULE_DESCRIPTION("Another example use case of using register_ftrace_direct_multi()");
+>  MODULE_LICENSE("GPL");
+> diff --git a/samples/ftrace/ftrace-direct.c b/samples/ftrace/ftrace-direct.c
+> index 1f769d0db20f..e446c38f6b58 100644
+> --- a/samples/ftrace/ftrace-direct.c
+> +++ b/samples/ftrace/ftrace-direct.c
+> @@ -63,21 +63,23 @@ asm (
+>  
+>  #endif /* CONFIG_S390 */
+>  
+> +static struct ftrace_ops direct;
+> +
+>  static int __init ftrace_direct_init(void)
+>  {
+> -	return register_ftrace_direct((unsigned long)wake_up_process,
+> -				     (unsigned long)my_tramp);
+> +	ftrace_set_filter_ip(&direct, (unsigned long) wake_up_process, 0, 0);
+> +
+> +	return register_ftrace_direct_multi(&direct, (unsigned long) my_tramp);
+>  }
+>  
+>  static void __exit ftrace_direct_exit(void)
+>  {
+> -	unregister_ftrace_direct((unsigned long)wake_up_process,
+> -				 (unsigned long)my_tramp);
+> +	unregister_ftrace_direct_multi(&direct, (unsigned long)my_tramp);
 
-This checks case 1: we see all !PG_anon_exclusive, we aught to set the flag on
-head page in parent, after fork(). Had we not, subsequent write will be allowed
-to go through after wp fault and hit backing page -- which, since collapse was
-in-place, is same as child, leaking data.
+And here.
 
-> +       ANON_THP_COLLAPSE_LOWER_SHARED,
-> +       ANON_THP_COLLAPSE_UPPER_SHARED,
+Maybe we could add a parameter to unregister_ftrace_direct_multi():
 
-IIUC, this check only partially tests case 3. Had we introduced a bug where we
-set PG_anon_exclusive on the head in this mixed-case, it's very similar to
-ANON_THP_COLLAPSE_FULLY_SHARED.
+  bool free_filters
 
-However, if we decided to still attempt in-place collapse, and cleared the bit
-in the parent, then the write here will be CoW'd and we won't see data leak
-into the child. In order for problems to occur, we'd need something to trip
-the improper CoW. The example you've shared with me was a io_uring fixed buffer
-mapping the non-shared pages, which, after CoW, would disagree.
+when set, it will call the ftrace_free_filter(), as it looks like there's a
+common code path here:
 
-That said, I'm not sure the extra work required to catch this case is worth the
-effort.
+	ftrace_set_filter_ip();
+	register_ftrace_direct_multi();
+	[..]
+	unregister_ftrace_direct_multi();
+	ftrace_free_filter();
 
-> +};
-> +
-> +static void do_test_anon_thp_collapse(char *mem, size_t size,
-> +                                     enum anon_thp_collapse_test test)
-> +{
-> +       struct comm_pipes comm_pipes;
-> +       char buf;
-> +       int ret;
-> +
-> +       ret = setup_comm_pipes(&comm_pipes);
-> +       if (ret) {
-> +               ksft_test_result_fail("pipe() failed\n");
-> +               return;
-> +       }
-> +
-> +       /*
-> +        * Trigger PTE-mapping the THP by temporarily mapping a single subpage
-> +        * R/O, such that we can try collapsing it later.
-> +        */
-> +       ret = mprotect(mem + pagesize, pagesize, PROT_READ);
-> +       if (ret) {
-> +               ksft_test_result_fail("mprotect() failed\n");
-> +               goto close_comm_pipes;
-> +       }
-> +       ret = mprotect(mem + pagesize, pagesize, PROT_READ | PROT_WRITE);
-> +       if (ret) {
-> +               ksft_test_result_fail("mprotect() failed\n");
-> +               goto close_comm_pipes;
-> +       }
+Add the option will save people from having to do that last step, and also
+remind people that the filters need to be freed.
 
-Might be a good place for a check_huge_anon(mem, 0, ..) to validate pte-mapped.
+-- Steve
 
-> +       switch (test) {
-> +       case ANON_THP_COLLAPSE_UNSHARED:
-> +               /* Collapse before actually COW-sharing the page. */
-> +               ret = madvise(mem, size, MADV_COLLAPSE);
-> +               if (ret) {
-> +                       ksft_test_result_skip("MADV_COLLAPSE failed: %s\n",
-> +                                             strerror(errno));
-> +                       goto close_comm_pipes;
-> +               }
-> +               break;
-> +       case ANON_THP_COLLAPSE_FULLY_SHARED:
-> +               /* COW-share the full PTE-mapped THP. */
-> +               break;
-> +       case ANON_THP_COLLAPSE_LOWER_SHARED:
-> +               /* Don't COW-share the upper part of the THP. */
-> +               ret = madvise(mem + size / 2, size / 2, MADV_DONTFORK);
-> +               if (ret) {
-> +                       ksft_test_result_fail("MADV_DONTFORK failed\n");
-> +                       goto close_comm_pipes;
-> +               }
-> +               break;
-> +       case ANON_THP_COLLAPSE_UPPER_SHARED:
-> +               /* Don't COW-share the lower part of the THP. */
-> +               ret = madvise(mem, size / 2, MADV_DONTFORK);
-> +               if (ret) {
-> +                       ksft_test_result_fail("MADV_DONTFORK failed\n");
-> +                       goto close_comm_pipes;
-> +               }
-> +               break;
-> +       default:
-> +               assert(false);
-> +       }
-> +
-> +       ret = fork();
-> +       if (ret < 0) {
-> +               ksft_test_result_fail("fork() failed\n");
-> +               goto close_comm_pipes;
-> +       } else if (!ret) {
-> +               switch (test) {
-> +               case ANON_THP_COLLAPSE_UNSHARED:
-> +               case ANON_THP_COLLAPSE_FULLY_SHARED:
-> +                       exit(child_memcmp_fn(mem, size, &comm_pipes));
-> +                       break;
-> +               case ANON_THP_COLLAPSE_LOWER_SHARED:
-> +                       exit(child_memcmp_fn(mem, size / 2, &comm_pipes));
-> +                       break;
-> +               case ANON_THP_COLLAPSE_UPPER_SHARED:
-> +                       exit(child_memcmp_fn(mem + size / 2, size / 2,
-> +                                            &comm_pipes));
-> +                       break;
-> +               default:
-> +                       assert(false);
-> +               }
-> +       }
-> +
-> +       while (read(comm_pipes.child_ready[0], &buf, 1) != 1)
-> +               ;
-> +
-> +       switch (test) {
-> +       case ANON_THP_COLLAPSE_UNSHARED:
-> +               break;
-> +       case ANON_THP_COLLAPSE_UPPER_SHARED:
-> +       case ANON_THP_COLLAPSE_LOWER_SHARED:
-> +               /*
-> +                * Revert MADV_DONTFORK such that we merge the VMAs and are
-> +                * able to actually collapse.
-> +                */
-> +               ret = madvise(mem, size, MADV_DOFORK);
-> +               if (ret) {
-> +                       ksft_test_result_fail("MADV_DOFORK failed\n");
-> +                       write(comm_pipes.parent_ready[1], "0", 1);
-> +                       wait(&ret);
-> +                       goto close_comm_pipes;
-> +               }
-> +               /* FALLTHROUGH */
-> +       case ANON_THP_COLLAPSE_FULLY_SHARED:
-> +               /* Collapse before anyone modified the COW-shared page. */
-> +               ret = madvise(mem, size, MADV_COLLAPSE);
-> +               if (ret) {
-> +                       ksft_test_result_skip("MADV_COLLAPSE failed: %s\n",
-> +                                             strerror(errno));
-> +                       write(comm_pipes.parent_ready[1], "0", 1);
-> +                       wait(&ret);
-> +                       goto close_comm_pipes;
-> +               }
-> +               break;
-> +       default:
-> +               assert(false);
-> +       }
-> +
-> +       /* Modify the page. */
-> +       memset(mem, 0xff, size);
-> +       write(comm_pipes.parent_ready[1], "0", 1);
-> +
-> +       wait(&ret);
-> +       if (WIFEXITED(ret))
-> +               ret = WEXITSTATUS(ret);
-> +       else
-> +               ret = -EINVAL;
-> +
-> +       ksft_test_result(!ret, "No leak from parent into child\n");
-> +close_comm_pipes:
-> +       close_comm_pipes(&comm_pipes);
-> +}
-> +
-> +static void test_anon_thp_collapse_unshared(char *mem, size_t size)
-> +{
-> +       do_test_anon_thp_collapse(mem, size, ANON_THP_COLLAPSE_UNSHARED);
-> +}
-> +
-> +static void test_anon_thp_collapse_fully_shared(char *mem, size_t size)
-> +{
-> +       do_test_anon_thp_collapse(mem, size, ANON_THP_COLLAPSE_FULLY_SHARED);
-> +}
-> +
-> +static void test_anon_thp_collapse_lower_shared(char *mem, size_t size)
-> +{
-> +       do_test_anon_thp_collapse(mem, size, ANON_THP_COLLAPSE_LOWER_SHARED);
-> +}
-> +
-> +static void test_anon_thp_collapse_upper_shared(char *mem, size_t size)
-> +{
-> +       do_test_anon_thp_collapse(mem, size, ANON_THP_COLLAPSE_UPPER_SHARED);
-> +}
-> +
-> +/*
-> + * Test cases that are specific to anonymous THP: pages in private mappings
-> + * that may get shared via COW during fork().
-> + */
-> +static const struct test_case anon_thp_test_cases[] = {
-> +       /*
-> +        * Basic COW test for fork() without any GUP when collapsing a THP
-> +        * before fork().
-> +        *
-> +        * Re-mapping a PTE-mapped anon THP using a single PMD ("in-place
-> +        * collapse") might easily get COW handling wrong when not collapsing
-> +        * exclusivity information properly.
-> +        */
-> +       {
-> +               "Basic COW after fork() when collapsing before fork()",
-> +               test_anon_thp_collapse_unshared,
-> +       },
-> +       /* Basic COW test, but collapse after COW-sharing a full THP. */
-> +       {
-> +               "Basic COW after fork() when collapsing after fork() (fully shared)",
-> +               test_anon_thp_collapse_fully_shared,
-> +       },
-> +       /*
-> +        * Basic COW test, but collapse after COW-sharing the lower half of a
-> +        * THP.
-> +        */
-> +       {
-> +               "Basic COW after fork() when collapsing after fork() (lower shared)",
-> +               test_anon_thp_collapse_lower_shared,
-> +       },
-> +       /*
-> +        * Basic COW test, but collapse after COW-sharing the upper half of a
-> +        * THP.
-> +        */
-> +       {
-> +               "Basic COW after fork() when collapsing after fork() (upper shared)",
-> +               test_anon_thp_collapse_upper_shared,
-> +       },
-> +};
-> +
-> +static void run_anon_thp_test_cases(void)
-> +{
-> +       int i;
-> +
-> +       if (!thpsize)
-> +               return;
-> +
-> +       ksft_print_msg("[INFO] Anonymous THP tests\n");
-> +
-> +       for (i = 0; i < ARRAY_SIZE(anon_thp_test_cases); i++) {
-> +               struct test_case const *test_case = &anon_thp_test_cases[i];
-> +
-> +               ksft_print_msg("[RUN] %s\n", test_case->desc);
-> +               do_run_with_thp(test_case->fn, THP_RUN_PMD);
-> +       }
-> +}
-> +
-> +static int tests_per_anon_thp_test_case(void)
-> +{
-> +       return thpsize ? 1 : 0;
-> +}
-> +
->  typedef void (*non_anon_test_fn)(char *mem, const char *smem, size_t size);
->
->  static void test_cow(char *mem, const char *smem, size_t size)
-> @@ -1518,6 +1744,7 @@ int main(int argc, char **argv)
->
->         ksft_print_header();
->         ksft_set_plan(ARRAY_SIZE(anon_test_cases) * tests_per_anon_test_case() +
-> +                     ARRAY_SIZE(anon_thp_test_cases) * tests_per_anon_thp_test_case() +
->                       ARRAY_SIZE(non_anon_test_cases) * tests_per_non_anon_test_case());
->
->         gup_fd = open("/sys/kernel/debug/gup_test", O_RDWR);
-> @@ -1526,6 +1753,7 @@ int main(int argc, char **argv)
->                 ksft_exit_fail_msg("opening pagemap failed\n");
->
->         run_anon_test_cases();
-> +       run_anon_thp_test_cases();
->         run_non_anon_test_cases();
->
->         err = ksft_get_fail_cnt();
-> --
-> 2.39.0
->
+>  }
+>  
+>  module_init(ftrace_direct_init);
+>  module_exit(ftrace_direct_exit);
+>  
+>  MODULE_AUTHOR("Steven Rostedt");
+> -MODULE_DESCRIPTION("Example use case of using register_ftrace_direct()");
+> +MODULE_DESCRIPTION("Example use case of using register_ftrace_direct_multi()");
+>  MODULE_LICENSE("GPL");
 
-Overall the tests look good, though too late to record that in the log. At least
-mail archives will have it.
