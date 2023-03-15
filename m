@@ -2,147 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4F0C6BB450
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 14:17:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B69A46BB452
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 14:17:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231971AbjCONRi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 09:17:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40942 "EHLO
+        id S231563AbjCONRv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 09:17:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232113AbjCONR0 (ORCPT
+        with ESMTP id S232111AbjCONRk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 09:17:26 -0400
+        Wed, 15 Mar 2023 09:17:40 -0400
 Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F0591CF72
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 06:17:24 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id o12so75388688edb.9
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 06:17:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43B3CA4031;
+        Wed, 15 Mar 2023 06:17:32 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id fd5so41528401edb.7;
+        Wed, 15 Mar 2023 06:17:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678886242;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=xb3QrMvZd6yXgo618qylfqMF5lEqCyijeAUK/t+b8pY=;
-        b=tllWpTVkNiFevbCV6hrsro8EDioioGuXMk8U7uog+O3LTKQ+iwWPKkRrK2a6/gFt5T
-         KwLk2WSdmaLSw+gfle9g2We2K7WaRPNyZefDvVsHAna15v3BHpv77DQTr9pWOkmNC4Fa
-         /BgHTwnJJ9jluRuRVQULjJbYi5tK3ItpWVTJBKEmpsz/nkG3RIRNcGGKCsMrhxjGhIL1
-         RXGOIpfj/3xbldFNygvv8MeKNPspTZ6uEJahOCtvAvU16zTpPJIFPt8K0LF8Rl3rOBrF
-         4E9YCPTFe/5T1pbj4Z8UQEI0WAdq8sKV3npKVuuklm/+UvBjD02NfY57buCnifJZWVoW
-         OQ+A==
+        d=gmail.com; s=20210112; t=1678886250;
+        h=content-transfer-encoding:subject:from:to:content-language
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rxURf+psBqe1s2q26pfxC4QOrHgw3rDqBW2xfMo8qjE=;
+        b=ZbpCbllL5NG5xKpwbFyUvB9kj3Gd2mgMQwGrxsNn8opc98RzOSeOsdkpfZBYJ8Hoi2
+         J7XE7+sEp0Ls+A3kGgJOHbgCeBwXhFSgkFs6Nab0UPvqyMEKRXD7YysnFYmIcfdKXfq1
+         rttuTphm8XPZg7hkmQYHUWROHMAAQjkh3dzBMm3JVLzrM6Dw7pqDACOYLqRGzYhhMrVD
+         MEEsjVDI5dXY4rdBip8lLSqJ1cgFhv2tj08w4xtpC0fPFT6jzuOj7QGjKB4gvzZu/Neu
+         8/fQ8a8yAPK6Ke+48lrANUwyPJvWhYjGr/18vlQ+uZzRzMnZosbJymqpEda2SQIIuNRI
+         CjhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678886242;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xb3QrMvZd6yXgo618qylfqMF5lEqCyijeAUK/t+b8pY=;
-        b=vlI7ngkE1ewC5D6vPWKStR/KnXO4nUz/X/kS25eyZ8N8kRnYk/7Qnnn1z4z4ptDfun
-         hoDCPZymAxTUgpr88qsMomppcz79aNcj9bRaO+Pte6DhEl7fprMusZLQrWVmPVC7NRRe
-         K6pEHi04xZ7TOaWzOxQwlNeTEPADbSR1H/VhrEKYx6ta2eTlpyFA6q/NJ5/+focWZ3rk
-         H++BofWriuB5UIdZ9N5dop7lU+Rjydj4TZh1IlZfPxtvGDWyVf8+27lyY2QDfIqqzTSI
-         fw4XdnHoivCgPNU+Vqqm1GLg6q7UhVmDMejaugdh2UQkHhM33AXP8geMwtmFFPXc/EwE
-         JLuA==
-X-Gm-Message-State: AO0yUKWITZnE66fjzqMn40gmuBR10GVNKjFnhoxvtJ14JVNI5MNkus79
-        y0R5xUX7x0h/R4QD4bMEEnGKEg==
-X-Google-Smtp-Source: AK7set8XLwvi0YYJ2zeYnMe04uDSQnmdw08tghX2TWXAj6C5xYII9tMdLb9fM2JagC5ZFNQlGrwrlA==
-X-Received: by 2002:a05:6402:455:b0:4fc:b83d:c31f with SMTP id p21-20020a056402045500b004fcb83dc31fmr2560472edw.16.1678886242456;
-        Wed, 15 Mar 2023 06:17:22 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:940e:8615:37dc:c2bd? ([2a02:810d:15c0:828:940e:8615:37dc:c2bd])
-        by smtp.gmail.com with ESMTPSA id r9-20020a50c009000000b004c13fe8fabfsm2414078edb.84.2023.03.15.06.17.20
+        d=1e100.net; s=20210112; t=1678886250;
+        h=content-transfer-encoding:subject:from:to:content-language
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=rxURf+psBqe1s2q26pfxC4QOrHgw3rDqBW2xfMo8qjE=;
+        b=ZXw0weO50TeoxI6Pp2ZlkmMx9Mcyxsdg2JphfDMyv2UnxuohY/9J0H10PGjLl2kuHT
+         MKvbeMAZGTrXgp+lNhjki6bSwibKAUvMHcs+bKkkVJVh9knWqP/RbOGX0q/gFhFmz1MC
+         fqiN+UEc5i6DlYiDzbbZWJ9FSQ/ZQ/gdgk2SLMRxIfWv8kD+T87/p3YtzSpk9U2ly+gP
+         0RcpMPrRN/BzYniaLzM6XkkuDLiR50g3IcfuTqvwUH/K5WrTnvYymfPXJ20LuozE/NP7
+         qqsPSPtJTZC4aPw7gXN3idfIfnsQR3geDzVHr06rADnKjpow2V6+72pQbPl4+17HgYbw
+         yp6g==
+X-Gm-Message-State: AO0yUKVou468J9tVi0QLJ3Cq7ASysj3dIvoEqxDyfK5AIAZU9bltrMXm
+        /wOSUTn6aMP49KzMD5TIDW73M3BOhP4=
+X-Google-Smtp-Source: AK7set91wtHjhXetIVBcBhjO6ED4bASi3NFH/TWqHxikavMlL85x4i+gvUsCw5stT7YBbbyv+/iEBQ==
+X-Received: by 2002:a17:907:385:b0:8f1:da18:c6ca with SMTP id ss5-20020a170907038500b008f1da18c6camr5658278ejb.3.1678886250262;
+        Wed, 15 Mar 2023 06:17:30 -0700 (PDT)
+Received: from [192.168.1.16] ([41.42.177.251])
+        by smtp.gmail.com with ESMTPSA id sd5-20020a170906ce2500b009222eec8097sm2500281ejb.75.2023.03.15.06.17.29
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Mar 2023 06:17:21 -0700 (PDT)
-Message-ID: <37c2c7de-792e-0289-4551-24bbb9fe31d9@linaro.org>
-Date:   Wed, 15 Mar 2023 14:17:19 +0100
+        Wed, 15 Mar 2023 06:17:29 -0700 (PDT)
+Message-ID: <ec13bbba-88ec-64b0-58ae-eee8617990b8@gmail.com>
+Date:   Wed, 15 Mar 2023 15:17:28 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-Subject: Re: [PATCH 15/21] dt-bindings: soc: mediatek: add display mutex for
- MT8365 SoC
 Content-Language: en-US
-To:     Alexandre Mergnat <amergnat@baylibre.com>
-Cc:     Daniel Vetter <daniel@ffwll.ch>, CK Hu <ck.hu@mediatek.com>,
-        Jitao Shi <jitao.shi@mediatek.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Xinlei Lee <xinlei.lee@mediatek.com>,
-        Guillaume La Roque <glaroque@baylibre.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        dri-devel@lists.freedesktop.org,
-        Fabien Parent <fparent@baylibre.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230220-display-v1-0-45cbc68e188b@baylibre.com>
- <20230220-display-v1-15-45cbc68e188b@baylibre.com>
- <ea8aaec1-948d-832b-ff24-b35abd3a59a2@linaro.org>
- <CAFGrd9p0qmfypP2DDJN1vEhJYciVfgFXZWLmvQOdpE=qgSDvKQ@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAFGrd9p0qmfypP2DDJN1vEhJYciVfgFXZWLmvQOdpE=qgSDvKQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Michael.Hennerich@analog.com, lars@metafoo.de, jic23@kernel.org,
+        gregkh@linuxfoundation.org, linux-iio@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Outreachy Linux Kernel <outreachy@lists.linux.dev>
+From:   Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>
+Subject: Outreachy
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        LOCALPART_IN_SUBJECT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/03/2023 09:01, Alexandre Mergnat wrote:
-> Le ven. 10 mars 2023 à 09:39, Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> a écrit :
->>
->> On 09/03/2023 15:23, Alexandre Mergnat wrote:
->>> Add compatible for the MT8365 SoC.
->>>
->>> Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
->>> ---
->>>  Documentation/devicetree/bindings/soc/mediatek/mediatek,mutex.yaml | 1 +
->>>  1 file changed, 1 insertion(+)
->>>
->>> diff --git a/Documentation/devicetree/bindings/soc/mediatek/mediatek,mutex.yaml b/Documentation/devicetree/bindings/soc/mediatek/mediatek,mutex.yaml
->>> index ca0ca549257d..931d66893dff 100644
->>> --- a/Documentation/devicetree/bindings/soc/mediatek/mediatek,mutex.yaml
->>> +++ b/Documentation/devicetree/bindings/soc/mediatek/mediatek,mutex.yaml
->>> @@ -34,6 +34,7 @@ properties:
->>>        - mediatek,mt8186-mdp3-mutex
->>>        - mediatek,mt8192-disp-mutex
->>>        - mediatek,mt8195-disp-mutex
->>> +      - mediatek,mt8365-disp-mutex
->>
->> All these look compatible. Either make mt8635 compatible with something
->> or even rework entire list and make everything compatible.
-> 
-> All of them use "mtk_mutec.c" but have specific data.
-> 
->       .data = &mt8173_mutex_driver_data},
->     { .compatible = "mediatek,mt8183-disp-mutex",
->       .data = &mt8183_mutex_driver_data},
->     { .compatible = "mediatek,mt8186-disp-mutex",
->       .data = &mt8186_mutex_driver_data},
->     { .compatible = "mediatek,mt8186-mdp3-mutex",
->       .data = &mt8186_mdp_mutex_driver_data},
->     { .compatible = "mediatek,mt8192-disp-mutex",
->       .data = &mt8192_mutex_driver_data},
->     { .compatible = "mediatek,mt8195-disp-mutex",
->       .data = &mt8195_mutex_driver_data},
->     { .compatible = "mediatek,mt8365-disp-mutex",
->       .data = &mt8365_mutex_driver_data},
-> 
-> I don't see any SoC compatible with mt8635, and I have no idea which
-> rework you have in mind. Can you please point me an example ?
+Hi Mentors,
 
-You are right, I looked at wrong of_device_id.
 
-Best regards,
-Krzysztof
+I am Menna, Outreachy applicant and I work on my clean-up patches.
+
+Is it Okay to work on this error reported by checkpatch script?
+
+
+drivers/staging/iio/frequency/ad9832.c
+--------------------------------------
+ERROR: Use 4 digit octal (0777) not decimal permissions
+#256: FILE: drivers/staging/iio/frequency/ad9832.c:256:
++static IIO_DEV_ATTR_FREQ(0, 1, 0200, NULL, ad9832_write, AD9832_FREQ1HM);
+ERROR: Use 4 digit octal (0777) not decimal permissions
+#257: FILE: drivers/staging/iio/frequency/ad9832.c:257:
++static IIO_DEV_ATTR_FREQSYMBOL(0, 0200, NULL, ad9832_write, 
+AD9832_FREQ_SYM);
+ERROR: Use 4 digit octal (0777) not decimal permissions
+#260: FILE: drivers/staging/iio/frequency/ad9832.c:260:
++static IIO_DEV_ATTR_PHASE(0, 0, 0200, NULL, ad9832_write, AD9832_PHASE0H);
+ERROR: Use 4 digit octal (0777) not decimal permissions
+#261: FILE: drivers/staging/iio/frequency/ad9832.c:261:
++static IIO_DEV_ATTR_PHASE(0, 1, 0200, NULL, ad9832_write, AD9832_PHASE1H);
+ERROR: Use 4 digit octal (0777) not decimal permissions
+#262: FILE: drivers/staging/iio/frequency/ad9832.c:262:
++static IIO_DEV_ATTR_PHASE(0, 2, 0200, NULL, ad9832_write, AD9832_PHASE2H);
+ERROR: Use 4 digit octal (0777) not decimal permissions
+#263: FILE: drivers/staging/iio/frequency/ad9832.c:263:
++static IIO_DEV_ATTR_PHASE(0, 3, 0200, NULL, ad9832_write, AD9832_PHASE3H);
+ERROR: Use 4 digit octal (0777) not decimal permissions
+#264: FILE: drivers/staging/iio/frequency/ad9832.c:264:
++static IIO_DEV_ATTR_PHASESYMBOL(0, 0200, NULL,
++                ad9832_write, AD9832_PHASE_SYM);
+ERROR: Use 4 digit octal (0777) not decimal permissions
+#268: FILE: drivers/staging/iio/frequency/ad9832.c:268:
++static IIO_DEV_ATTR_PINCONTROL_EN(0, 0200, NULL,
++                ad9832_write, AD9832_PINCTRL_EN);
+ERROR: Use 4 digit octal (0777) not decimal permissions
+#270: FILE: drivers/staging/iio/frequency/ad9832.c:270:
++static IIO_DEV_ATTR_OUT_ENABLE(0, 0200, NULL,
++                ad9832_write, AD9832_OUTPUT_EN);
+total: 9 errors, 0 warnings, 0 checks, 462 lines checked
+
+
+
+Thanks in advance,
+
+Menna
+
+
 
