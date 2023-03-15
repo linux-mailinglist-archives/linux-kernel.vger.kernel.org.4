@@ -2,91 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09C036BACF5
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 11:04:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59D266BACF4
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 11:04:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230170AbjCOKEO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 06:04:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56190 "EHLO
+        id S231871AbjCOKEL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 06:04:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231325AbjCOKDo (ORCPT
+        with ESMTP id S231822AbjCOKDk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 06:03:44 -0400
-Received: from mail-ua1-x934.google.com (mail-ua1-x934.google.com [IPv6:2607:f8b0:4864:20::934])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF46825290
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 03:02:56 -0700 (PDT)
-Received: by mail-ua1-x934.google.com with SMTP id g23so8820118uak.7
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 03:02:56 -0700 (PDT)
+        Wed, 15 Mar 2023 06:03:40 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C8491A49C;
+        Wed, 15 Mar 2023 03:02:53 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id k2so11563893pll.8;
+        Wed, 15 Mar 2023 03:02:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112; t=1678874576;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TF6LBLKlsT6uT4Hak2vOqFMzvPLvdsa/UHZ3r6EJWvE=;
-        b=erG0GtDtO6s1Iq5EloXAvSzFqpHnKqnX2G6uN3ILHe6gHt9SB1qPM6sbLXkQMtwm68
-         cnoMVUaWWBqvoBydH9Vl+aVXv7jPdcojydxM6qwNS/hDM64VXgKsqHKcb8DoscrN7/TP
-         1eFBPnOBAMeS8YgwQMtSto5wvzY8ayk9sPQXZU7y4UIhbXAl3IpFQCX/wee5tvMNGnxp
-         EHde934aJWCU8oHJfx+264PoH3RuZ4sgdoGO0dYj0un1GoA/j8KpRDFnzxTL9u/bpkc7
-         rdP4uhnzAAQ614qTtovXlv05O1zbTreNwZLul/sJ0j8itRfb21kj55p2vkKKImR9bnUY
-         VRog==
+        d=gmail.com; s=20210112; t=1678874573;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=E6BuA3/IaA3KWYlTwYpc4ySsD7kuUXxU+Kj5w0UtdhE=;
+        b=SLTsblRQDj3hkyp3w7oJr7oob7FDAHKjv2+Mreuy9faOMpQ7icqe5dw5uCylZCciyJ
+         Xx7cvS6o7nhMbC6NBIS4bqtP+Wo3In5uefBukxOSquIk1W73whijpnXXEYAF3evfY2oA
+         15PBs1SkBZorbn3pGJz6dNwsdRAmW2A26fuZjQkUW1cgAcq0vQjauOmpEjhmVpNXxsia
+         NWNA1MulpyMl9p1oqL741Kt9ZJCk5oLTHOId2Njqp0O5tbrTPHKVO1KyAsLCDG36o1za
+         85dtDX7pDAbZH4kxejKGLPsBMtzlYMc6RQcmpik72VDm4Ed1eX5ee0gwLONpgrn2gr4k
+         ssKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678874576;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TF6LBLKlsT6uT4Hak2vOqFMzvPLvdsa/UHZ3r6EJWvE=;
-        b=o87ibXOltu88M0n/QTAb31hF2e+5iFATrobUUrtxnJchpNDIx8Sov/hxaybF2ijEPe
-         DxD+gA+RlT2+xrC0fykIN7seQcKoJ+MqHf2Wib279E3P3KwmPutR1usOX7GWS0WwRtL1
-         yF6lgg98ZV2T1s17MrFhEeA+jcKy0h6+Tz7jtQwTdA0rg94ROjivOM0ntUzaSNJ0bqb/
-         fjCB//j8GAfTikni+za10H/xvNV6L4kYfEQnQoP/CmRRkNhJCNeZbFeXw3cAaHvQD7IK
-         yGSzaQOrdgb7zTyZv0K7phMFWoPfORuJas6ZqzHfhCvYfD7jRi0itDS/ZHdgBOsPPlRn
-         3a1g==
-X-Gm-Message-State: AO0yUKWNyF7r4UyqyA8Nc5SwmFA42keQVfr604qBHGD+u6uXfcvO+VuY
-        y1PrTuEyZ0cGCSBKal+SgZigYWaRJMVRFoMkyZD7Pg==
-X-Google-Smtp-Source: AK7set/qkuKoVcngfib97GKcYJc9/yISAk/PKjRHQUasazdErdyzZQKMIM8sMTTNGAmM6n9NhfAB3+I5c9OL16Rbdc8=
-X-Received: by 2002:a1f:7c8b:0:b0:432:5951:176a with SMTP id
- x133-20020a1f7c8b000000b004325951176amr1739375vkc.2.1678874575897; Wed, 15
- Mar 2023 03:02:55 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1678874573;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=E6BuA3/IaA3KWYlTwYpc4ySsD7kuUXxU+Kj5w0UtdhE=;
+        b=5beM/ZBGsQCeamwbgXJPRyyM/rFBws16HPrThKYw+S3pZwlN0tQjVFCVv36VN17XzD
+         +GUHEeXe8bZpiYBFkVdcz+GoFEQ28jkdV7GYeP+f+ok2WlUJbqzh4KvMwYPI6sWhvOIn
+         2ABf709fTwb4s39H+OKXyQ/0U5mAI+Ml866Hj4cGFaGvcEMDtfO3bDESWgWVq8Y2v2gu
+         OkiL0xT5V1x6K4jXKofdQ9NlYxJI7ADsLjTwJvtyoHiTDIWTUw8z3ONAdV+RK+KPODiD
+         UPTwBdyhXVQGefHvkoOuaMfA831+iC+bObjYqc7WtRjzljQRfXirv7SXmjTATvrl4Yae
+         /wmQ==
+X-Gm-Message-State: AO0yUKUY0cxKDI2hJyLnWb1d4tcjhUvsa7cE533IMMYaxLwn2+RmjFxT
+        TVV87g9lDbofNdprBf0u6Cs=
+X-Google-Smtp-Source: AK7set81/JklFphaEtwIIoFmsuM5gRmI6FUFj9z2LVAn9V3Ecdj2lCJC9Wnd8qKsGwmL3O9zPhtvAQ==
+X-Received: by 2002:a17:902:f687:b0:19c:e440:9256 with SMTP id l7-20020a170902f68700b0019ce4409256mr2673849plg.35.1678874572753;
+        Wed, 15 Mar 2023 03:02:52 -0700 (PDT)
+Received: from debian.me (subs09b-223-255-225-224.three.co.id. [223.255.225.224])
+        by smtp.gmail.com with ESMTPSA id kc13-20020a17090333cd00b0019a82ff8c38sm3269378plb.29.2023.03.15.03.02.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Mar 2023 03:02:52 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 0925510653F; Wed, 15 Mar 2023 17:02:48 +0700 (WIB)
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Linux Documentation <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Staging Drivers <linux-staging@lists.linux.dev>
+Cc:     Jonathan Corbet <corbet@lwn.net>, Borislav Petkov <bp@suse.de>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH] Documentation: kernel-parameters: Remove meye entry
+Date:   Wed, 15 Mar 2023 17:02:46 +0700
+Message-Id: <20230315100246.62324-1-bagasdotme@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-References: <cover.1677515341.git.william.gray@linaro.org> <CACRpkdbAMQ0OAMnxuyf6gMFu8qJakmT=WvRzBTXavXFmnJ9ObA@mail.gmail.com>
-In-Reply-To: <CACRpkdbAMQ0OAMnxuyf6gMFu8qJakmT=WvRzBTXavXFmnJ9ObA@mail.gmail.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Wed, 15 Mar 2023 11:02:45 +0100
-Message-ID: <CAMRc=Mem3TsNM5coFLKAFQ74Rk4vvXLscuBhWoR-G6mLtxaSPQ@mail.gmail.com>
-Subject: Re: [PATCH v2 0/6] Migrate IDIO-16 GPIO drivers to regmap API
-To:     broonie@kernel.org
-Cc:     William Breathitt Gray <william.gray@linaro.org>,
-        andriy.shevchenko@linux.intel.com, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1388; i=bagasdotme@gmail.com; h=from:subject; bh=avfJeM8iBKx7EY1UHi3pTSAbm1wMcUWal73uKqAUeY8=; b=owGbwMvMwCX2bWenZ2ig32LG02pJDCmC0/d8vt5u6LT2o/pedX42YbZ6FW79kzLX3rDVGuxst PM1UWrtKGVhEONikBVTZJmUyNd0epeRyIX2tY4wc1iZQIYwcHEKwEQ6uxj+Kbs9OSl663765V3r 5qTnhPJcLvvya077/29avGd+9QVLFzH84Zef/42Le5Wrp87unKJb/x0ffrBP3278Y7PLy8v5s/Y p8AEA
+X-Developer-Key: i=bagasdotme@gmail.com; a=openpgp; fpr=701B806FDCA5D3A58FFB8F7D7C276C64A5E44A1D
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 6, 2023 at 3:13=E2=80=AFPM Linus Walleij <linus.walleij@linaro.=
-org> wrote:
->
-> On Mon, Feb 27, 2023 at 5:54 PM William Breathitt Gray
-> <william.gray@linaro.org> wrote:
->
-> This looks good to me.
-> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
->
-> Bartosz, of you merge this you can drop the corresponding
-> patches to immutable irqchip conversion for these chips
-> that I will be posting shortly (currently on the build servers).
->
-> Yours,
-> Linus Walleij
+Commit ba47652ba65523 ("media: meye: remove this deprecated driver")
+removes meye driver but forgets to purge its kernel-parameters.txt
+entry, hence broken reference.
 
-Mark, can you provide me with an immutable tag for the regmap tree
-containing commit 1/6 from this series, please?
+Remove the entry.
 
-Bartosz
+Link: https://lore.kernel.org/all/202302070341.OVqstpMM-lkp@intel.com/
+Fixes: ba47652ba65523 ("media: meye: remove this deprecated driver")
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+---
+ This patch is based on staging-next tree, because the driver removal
+ touched drivers/staging/.
+
+ Documentation/admin-guide/kernel-parameters.txt | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index 6221a1d057dd58..e54d4ce7870c00 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -3184,9 +3184,6 @@
+ 			deep    - Suspend-To-RAM or equivalent (if supported)
+ 			See Documentation/admin-guide/pm/sleep-states.rst.
+ 
+-	meye.*=		[HW] Set MotionEye Camera parameters
+-			See Documentation/admin-guide/media/meye.rst.
+-
+ 	mfgpt_irq=	[IA-32] Specify the IRQ to use for the
+ 			Multi-Function General Purpose Timers on AMD Geode
+ 			platforms.
+
+base-commit: 458219ca9246076971961d695eef9eb56e05fcf7
+-- 
+An old man doll... just what I always wanted! - Clara
+
