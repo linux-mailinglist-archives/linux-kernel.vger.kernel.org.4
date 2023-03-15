@@ -2,153 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBA146BB244
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 13:34:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96E056BB270
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 13:36:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232783AbjCOMet (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 08:34:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51636 "EHLO
+        id S232840AbjCOMgW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 08:36:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232651AbjCOMeP (ORCPT
+        with ESMTP id S232771AbjCOMf6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 08:34:15 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3C9A77CA8
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 05:33:02 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id fd5so40977881edb.7
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 05:33:02 -0700 (PDT)
+        Wed, 15 Mar 2023 08:35:58 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6940A0B33
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 05:35:00 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id k2so11954126pll.8
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 05:35:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678883578;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=WZjdpphXUkCIeOsAshqqMccwRvEJmRQmkPCnHCBSLVY=;
-        b=mN6vTQffkA2oxTCVIyKNb3P7G+VZT3pF6mrlw/VKjz1MiJRrai6M/kWQI4IMOXfyaM
-         Vdzsbeoj1aWdTRLI01Gp6XeClUICCJqHQOY69ElR5vo/PxdcWEr17oOiH+XD69pZEiVP
-         69kI59clgZFjkJvwj3PeLWjeSIohiFDybI3zSBxjfWuKmlFZhct2KC5EjShq25Mrvo6w
-         dpmggolBuhJAj3vEkl0DsvAoCoS9zp8zrqm7BDelGfhUHAo/7r9K614Smp77wH+M1bs7
-         d5QXHRTSL3Z+8KdPkcJfmY7q6EqkB9fh+rucSkEKYuuJpptvJuP67KdGkHymlb0aW2en
-         Q7eQ==
+        d=chromium.org; s=google; t=1678883696;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=d6hMqbzr+2QKD7iB2OFXLRZx5MGmp0t3ch1cv5eJ1gw=;
+        b=GKTN4BoUo5bgP76roytLGlmYeYjQVEqcVO+jv76sWg4R3ZZhbmABv2SwhWZypVHKzp
+         TBXkfmrykcbxY1oM8ppnvhopObZ4J9sg+5PGE22Z9buw35pFj6Ewic4LNcDsHeDJJ9iA
+         rsjnyFWMCwVSQsgqlJRZFbXmOX5JBK4trSZu4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678883578;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WZjdpphXUkCIeOsAshqqMccwRvEJmRQmkPCnHCBSLVY=;
-        b=RzEGd9TRP7IQKXcIIek59RUlA8QKCk3IL0NUlVHqgA2BW6/5YET8LeyfYmwEdzHpt2
-         O9mUxYe5ss5Ks8s9cxDMhSNgXX8aV1S/8H3j2nVBeJPBVK30N5rIaVVxav9qMkQJhm1W
-         DUYcXoKy26/vlrHfJXHbI8PJJSdGE05fjeFIHFmP9a2FjwhqZschw/LQpe9H5VmNYyvp
-         34x/kLNaJkG9oR1SybdMsNWzmBTWEufvpqKfkn56Hz+ndoICt7AY1rx7ZRowCbJMorIR
-         tbrFV5x9pcCCYWLzqjs9MMv/ynP9Tb2G/kct3bDg2XAczw8RxBgnLiSmx1mi9zc06KHX
-         0Ekw==
-X-Gm-Message-State: AO0yUKXYorYrWTsdIwr7s/+4rZaQUy6mOc/ENUy0Wjy8Btfv+IvJo3KM
-        81eDBghMSaHqCD/g1qHAHyM=
-X-Google-Smtp-Source: AK7set+JL6cT7QO2X4VH6wWpLr26eoixZuY2wbd1Ws3ljy2d52tkQGrNrsfNnlcLEKnmd9jSzZKdig==
-X-Received: by 2002:a17:907:9882:b0:91f:5845:4e31 with SMTP id ja2-20020a170907988200b0091f58454e31mr6633204ejc.26.1678883578321;
-        Wed, 15 Mar 2023 05:32:58 -0700 (PDT)
-Received: from khadija-virtual-machine ([39.41.209.88])
-        by smtp.gmail.com with ESMTPSA id p2-20020a170906140200b0092be5f60dd5sm2434136ejc.150.2023.03.15.05.32.57
+        d=1e100.net; s=20210112; t=1678883696;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=d6hMqbzr+2QKD7iB2OFXLRZx5MGmp0t3ch1cv5eJ1gw=;
+        b=KDoGHAqnm0TwSuxUPhlXHvDL0RmWx9R60Ku+OZmOEaDBDIWOwGvK53AsnMN/86aJby
+         QxVu7jROHYI9vpXG6SuAbepos3EGZfg1PXKtXKDHbi7lThV/HRPcwl4e5lBnc7aWSK+l
+         Rn6LKyKgt+7gBTNXsCe7sgyy31WCxOi19zOMPHlPRRPLbnUOWS2Ui+SmyNOc+t/7UwFR
+         Y6v7ipdy0iaZXWH5ZWjZxVGu5HYYmLo7vUmVDWmY5sSYs2vqUvj7jmWYIe88fQfJ4Pw5
+         hF/GlIKNJlqYzAV+4JSHclU+iySgmrtM+A/sMMakaRZpbP94FMry84ybtbaUCTEv1Kmv
+         L1wg==
+X-Gm-Message-State: AO0yUKVCFp2GPL6CZdc3WgScnED2TF6fubUF4hQOWHqdbLubxjhw58dT
+        /AMzyPf9VWPOvGP12LroJCr29A==
+X-Google-Smtp-Source: AK7set8GvobddgjpVu3fQSdhVar92/aE5NPVv1tR39OuqsCoW+dMd3V9AEWjpyn4dyDeH7svtT+v5g==
+X-Received: by 2002:a05:6a20:6914:b0:cb:867d:1594 with SMTP id q20-20020a056a20691400b000cb867d1594mr44353492pzj.6.1678883696547;
+        Wed, 15 Mar 2023 05:34:56 -0700 (PDT)
+Received: from google.com (KD124209188001.ppp-bb.dion.ne.jp. [124.209.188.1])
+        by smtp.gmail.com with ESMTPSA id d6-20020a630e06000000b00508e7bd761fsm3265190pgl.87.2023.03.15.05.34.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Mar 2023 05:32:58 -0700 (PDT)
-Date:   Wed, 15 Mar 2023 17:32:55 +0500
-From:   Khadija Kamran <kamrankhadijadj@gmail.com>
-To:     Alison Schofield <alison.schofield@intel.com>
-Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        outreachy@lists.linux.dev,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>
-Subject: Re: [PATCH] staging: axis-fifo: initialize timeouts in probe only
-Message-ID: <ZBG699SriXWy1I2K@khadija-virtual-machine>
-References: <ZA9mThZ7NyRrQAMX@khadija-virtual-machine>
- <ZBDcfNOXmGeN2tlb@aschofie-mobl2>
- <3376017.mWHT0XuiSF@suse>
- <ZBEJ+8DbhADSBTLr@aschofie-mobl2>
+        Wed, 15 Mar 2023 05:34:56 -0700 (PDT)
+Date:   Wed, 15 Mar 2023 21:34:52 +0900
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Ricardo Ribalda <ribalda@chromium.org>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        "hn.chen" <hn.chen@sunplusit.com>
+Subject: Re: [PATCH v7 6/6] media: uvcvideo: Fix hw timestamp handling for
+ slow FPS
+Message-ID: <20230315123452.GA1927922@google.com>
+References: <20220920-resend-hwtimestamp-v7-0-cf1d78bb8821@chromium.org>
+ <20220920-resend-hwtimestamp-v7-6-cf1d78bb8821@chromium.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZBEJ+8DbhADSBTLr@aschofie-mobl2>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220920-resend-hwtimestamp-v7-6-cf1d78bb8821@chromium.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 14, 2023 at 04:57:47PM -0700, Alison Schofield wrote:
-> On Tue, Mar 14, 2023 at 10:31:21PM +0100, Fabio wrote:
-> > On martedì 14 marzo 2023 21:43:40 CET Alison Schofield wrote:
-> > > On Mon, Mar 13, 2023 at 11:07:10PM +0500, Khadija Kamran wrote:
-> > > > Module parameter, read_timeout, can only be set at the loading time. As
-> > > > it can only be modified once, initialize read_timeout once in the probe
-> > > > function.
-> > > > As a result, only use read_timeout as the last argument in
-> > > > wait_event_interruptible_timeout() call.
-> > > > 
-> > > > Same goes for write_timeout.
-> > > > 
-> > > > Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > > > Signed-off-by: Khadija Kamran <kamrankhadijadj@gmail.com>
-> > > > ---
-> > > 
-> > > Looks like this is [PATCH v5] and needs a changelog.
-> > >
-> > Alison,
-> > 
-> > In fact, this is only the second patch that addresses Greg's suggested 
-> > refactoring. 
-> > 
-> > Khadija moved from v3 of "staging: axis-fifo: remove tabs to align arguments" 
-> > to v4 of this completely independent patch. And then back to v1, because (at 
-> > the time of v4) I pointed out to her that she had started working on a project 
-> > that has a completely different purpose than the previous one.
-> > 
-> > The best course of action would have been to ask Greg to drop the previous 
-> > patches and then reset the numbering of the new job to v1. Unfortunately I did 
-> > not pay attention to how she then managed the numbering following my 
-> > observation.
-> > 
-> > What would be the best course of action at this point?
-> 
-> My guess is that this patch gets ignored because it has a lower version
-> number than a previous patch.
-> 
-> Take the feedback given here, and rev to
-> [PATCH v5] staging: axis-fifo: initialize timeouts in probe only
-> 
-> Be sure the Changelog, below the --- explains the journey.
-> 
-> Changes in v5:
-> 
-> Changes in v4:
-> 
-> Changes in v3:
-> 
-> Changes in v2:
-> 
+On (23/03/10 10:01), Ricardo Ribalda wrote:
+[..]
+> +++ b/drivers/media/usb/uvc/uvc_video.c
+> @@ -473,6 +473,21 @@ static void uvc_video_clock_add_sample(struct uvc_clock *clock,
+>  
+>  	spin_lock_irqsave(&clock->lock, flags);
+>  
+> +	/* Delete last overflows */
+> +	if (clock->head == clock->last_sof_overflow)
+> +		clock->last_sof_overflow = -1;
+> +
+> +	/* Handle overflows */
+> +	if (clock->count > 0 && clock->last_sof > sample->dev_sof) {
 
-Hey Alison!
-Based on Nathan's feedback I am trying to recompile and send a patch
-without any warnings.
-As suggested by Fabio, I am running "make w=1 -jX" command to see if I
-get any warnings. But it is taking a lot of time, is there any way of
-speeding it up?
-If this doesn't work then I have to follow the steps to reproduce in lkp
-mail as you said before. 
-After dealing with these warnings I will send a [PATCH v5], following
-your instructions above.
-Kindly, let me know if I am on the wrong track.
-Thank you!
-
-Regards,
-Khadija
-
-> 
-> > 
-> > Fabio
-> > 
-> > 
+Per offline discussion, we set clock->last_sof to sameple->dev_sof
+right before uvc_video_clock_add_sample() so this condition is always
+false. clock->sof needs to be updated after overflow handling checks.
