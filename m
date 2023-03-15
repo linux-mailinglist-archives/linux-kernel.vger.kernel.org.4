@@ -2,83 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59DBF6BBDA2
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 20:53:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49B0A6BBD98
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 20:51:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232424AbjCOTxM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 15:53:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33890 "EHLO
+        id S232704AbjCOTvf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 15:51:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbjCOTxK (ORCPT
+        with ESMTP id S231716AbjCOTve (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 15:53:10 -0400
-X-Greylist: delayed 90 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 15 Mar 2023 12:53:07 PDT
-Received: from forwardcorp1c.mail.yandex.net (forwardcorp1c.mail.yandex.net [178.154.239.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F297CD539;
-        Wed, 15 Mar 2023 12:53:07 -0700 (PDT)
-Received: from mail-nwsmtp-smtp-corp-main-11.iva.yp-c.yandex.net (mail-nwsmtp-smtp-corp-main-11.iva.yp-c.yandex.net [IPv6:2a02:6b8:c0c:2cab:0:640:424b:0])
-        by forwardcorp1c.mail.yandex.net (Yandex) with ESMTP id E61F05EA33;
-        Wed, 15 Mar 2023 22:51:35 +0300 (MSK)
-Received: from d-tatianin-nix.HomeLAN (unknown [2a02:6b8:b081:b711::1:2a])
-        by mail-nwsmtp-smtp-corp-main-11.iva.yp-c.yandex.net (smtpcorp/Yandex) with ESMTPSA id Tppha50fxuQ0-tgCuJSe1;
-        Wed, 15 Mar 2023 22:51:35 +0300
-X-Yandex-Fwd: 1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex-team.ru; s=default;
-        t=1678909895; bh=Gw2gGaMBR/kL++RD1Kxfdvw3JCgSYG8IVp4wdEhSV38=;
-        h=Message-Id:Date:Cc:Subject:To:From;
-        b=C/aVTJuJ9Y8LoATy0YhpqZpI3gEKyo5EduCRA6y6MbCNz8jmZPIcsOxClrHydUWIp
-         i0ftgx0ObaHdm4VjfQtDoCkhJbzOkqiCOvbMkOYsjEAQJq+AG2jZlyrEwvH2xkAy5Z
-         o/W9xEqnj1ItvZe25tuUGFVUJXED3hKrukONr3fw=
-Authentication-Results: mail-nwsmtp-smtp-corp-main-11.iva.yp-c.yandex.net; dkim=pass header.i=@yandex-team.ru
-From:   Daniil Tatianin <d-tatianin@yandex-team.ru>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Daniil Tatianin <d-tatianin@yandex-team.ru>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] kvm/x86: actually verify that reading MSR_IA32_UCODE_REV succeeds
-Date:   Wed, 15 Mar 2023 22:51:09 +0300
-Message-Id: <20230315195109.580333-1-d-tatianin@yandex-team.ru>
-X-Mailer: git-send-email 2.25.1
+        Wed, 15 Mar 2023 15:51:34 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54766A5E2;
+        Wed, 15 Mar 2023 12:51:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 045E5B81F20;
+        Wed, 15 Mar 2023 19:51:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2B71C433D2;
+        Wed, 15 Mar 2023 19:51:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678909890;
+        bh=l5A3kT8PPPRXMpDnSmkQkzIl6qsFMDQpORaaSvOA6KE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=L9cTXeFNnPx7JkvNHLXN+kt5Rv/F/0Bv+3dbCcVHalkEaevOSSsuVdDTpgfLvEfgX
+         9Dg8wrWKXx3q8IRDz0KEMm356qiY2knyX7+rWwEcTgbLUOP2Q0y08WVxT/6MsbFNFU
+         gRWU6seXEA5RYKiENdUyJQYPxNCeIVb7LP2bGzRMgXziMxj7XsFs7XjpjrKaYGpSyl
+         8gCrJcKf1vjtimXAx5Bb0sKZti12+CIPnXGqucmtIh2O/XS+Erl9TJUpMNRzPMbgRS
+         6oADOgJSEtNCUNdPtHXKLKyUPLubO28MXYcGQW7j7uQcaUi36IPYH9LBHfQXnQIgnk
+         GQKKJph/nNn9Q==
+Date:   Wed, 15 Mar 2023 12:51:29 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     patchwork-bot+netdevbpf@kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        andrew@lunn.ch, f.fainelli@gmail.com, olteanv@gmail.com,
+        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+        hauke@hauke-m.de, woojung.huh@microchip.com,
+        UNGLinuxDriver@microchip.com, claudiu.manoil@nxp.com,
+        alexandre.belloni@bootlin.com, colin.foster@in-advantage.com,
+        michael.hennerich@analog.com, alex.aring@gmail.com,
+        stefan@datenfreihafen.org, miquel.raynal@bootlin.com,
+        hkallweit1@gmail.com, linux@armlinux.org.uk,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-wpan@vger.kernel.org
+Subject: Re: [PATCH 01/12] net: dsa: lantiq_gswip: mark OF related data as
+ maybe unused
+Message-ID: <20230315125129.39c02f9c@kernel.org>
+In-Reply-To: <167886842083.29094.15777402773268782712.git-patchwork-notify@kernel.org>
+References: <20230311173303.262618-1-krzysztof.kozlowski@linaro.org>
+        <167886842083.29094.15777402773268782712.git-patchwork-notify@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-...and return KVM_MSR_RET_INVALID otherwise.
+On Wed, 15 Mar 2023 08:20:20 +0000 patchwork-bot+netdevbpf@kernel.org
+wrote:
+> This series was applied to netdev/net-next.git (main)
+> by David S. Miller <davem@davemloft.net>:
 
-Found by Linux Verification Center (linuxtesting.org) with the SVACE
-static analysis tool.
-
-Fixes: cd28325249a1 ("KVM: VMX: support MSR_IA32_ARCH_CAPABILITIES as a feature MSR")
-Signed-off-by: Daniil Tatianin <d-tatianin@yandex-team.ru>
----
- arch/x86/kvm/x86.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 7713420abab0..7de6939fc371 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -1661,7 +1661,8 @@ static int kvm_get_msr_feature(struct kvm_msr_entry *msr)
- 		msr->data = kvm_caps.supported_perf_cap;
- 		break;
- 	case MSR_IA32_UCODE_REV:
--		rdmsrl_safe(msr->index, &msr->data);
-+		if (rdmsrl_safe(msr->index, &msr->data))
-+			return KVM_MSR_RET_INVALID;
- 		break;
- 	default:
- 		return static_call(kvm_x86_get_msr_feature)(msr);
--- 
-2.25.1
-
+:) :) :)
