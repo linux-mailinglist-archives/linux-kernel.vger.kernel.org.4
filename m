@@ -2,76 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E7466BA44A
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 01:51:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 108476BA446
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 01:50:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229955AbjCOAvE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 20:51:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55822 "EHLO
+        id S229946AbjCOAuI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 20:50:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbjCOAvC (ORCPT
+        with ESMTP id S229511AbjCOAuG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 20:51:02 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C0CF2E833
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 17:50:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678841411;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=H+V2OenhBTZO+D4X2yTvwE20arRuy3dfWbSmOimZmE0=;
-        b=TbryaQDdfaCOaAOzHsA3B/ZE1TqESrTcMpCxN6k6udZP9RZLUSPU0A7Z5KqwAb5KqEUkLf
-        W0XwgvKYTQjaY8eeiMmS/Gt7kjkk4Y1h+8toe8KKRIrlLLMJlpMObdSPw9RXzoFw6BReir
-        qe1Krc9EuohzuPh4G8PtGds9tuNYuwc=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-221-lAQsurbtNuCcZXpZ9h2LkQ-1; Tue, 14 Mar 2023 20:50:06 -0400
-X-MC-Unique: lAQsurbtNuCcZXpZ9h2LkQ-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 151B3857A87;
-        Wed, 15 Mar 2023 00:50:05 +0000 (UTC)
-Received: from localhost (ovpn-12-81.pek2.redhat.com [10.72.12.81])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 19BE0400F52;
-        Wed, 15 Mar 2023 00:49:57 +0000 (UTC)
-Date:   Wed, 15 Mar 2023 08:49:53 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-kernel@vger.kernel.org,
-        Linux-Arch <linux-arch@vger.kernel.org>, linux-mm@kvack.org,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Helge Deller <deller@gmx.de>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-mips@vger.kernel.org
-Subject: Re: [PATCH v4 2/4] mips: add <asm-generic/io.h> including
-Message-ID: <ZBEWMSdzzvsYCAnd@MiWiFi-R3L-srv>
-References: <20230308130710.368085-1-bhe@redhat.com>
- <20230308130710.368085-3-bhe@redhat.com>
- <20230313175521.GA14404@alpha.franken.de>
- <ZA/iZHEHaQ2WR+HL@MiWiFi-R3L-srv>
- <20230314153421.GA13322@alpha.franken.de>
- <7f39daad-05b0-46f8-bc89-185b336d8fd4@gmail.com>
- <3fd94bd7-ab10-4d50-bcb6-7c13a3346d6a@app.fastmail.com>
+        Tue, 14 Mar 2023 20:50:06 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF7082799B;
+        Tue, 14 Mar 2023 17:50:04 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id o12so69283611edb.9;
+        Tue, 14 Mar 2023 17:50:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678841403;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=eTaI6oLBvIWrQBcdvPr8QslmdKZi9k5sOZurX5juDoU=;
+        b=TJTxgwKGXlPcohU5vHvrPKVNnynCZGsyGbXDCtRkAijHVosgjxKLzgccWP5KtwwodJ
+         YMerE7KWSJXRKYQ70TjE/EGwZAHEB990CI0MSu9RBKZ2RJT/n5EOAk2NlM84cNdEEVYH
+         BnzELAwYcRzOpfV0+15d9PSk0jC77cKzsRotV7FmvRMSlNy/aEvv3i2aGUU5+uNTSs/b
+         hnqfUZAvch+c09iC0efWIlY7jT+XiNPUsADsTZi80gbJqVAXcJJc/C8zohBAlhn4nAMg
+         S3sOX9hvQkOEpF0LrZtzx/ZfDdSR5jJvzV5SKc3TU/VzSK9lWOetwiWzXbp54exwAnZN
+         2DDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678841403;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eTaI6oLBvIWrQBcdvPr8QslmdKZi9k5sOZurX5juDoU=;
+        b=Z47+ZJQd3tv+5vn6M1Cfn+g2s84Jju3yhFSRZzaYtoIIU7/jJx2nbILdv8f5pANWcb
+         NxD2ctn1Lcl0OaTFZYPRA3u5NMowIelQ63Z8ysHCIN1bu+M5CEIcVTSeGr1/SCD5sbR+
+         auBbT97bag+chmcd983Z1n76LtRwEmEqL1gLwOSQzFphmxB+0M+R2ROIE202AcXskakJ
+         XU5cn23TL76v1xtQi+1GiTu2GLP6jBUTJUYVnSHGBikpy9wSBWlNgs/sW3+rLEHp7SHi
+         BzHLgOmN4j6PBVLaR7jnJ3xNwXKmSLjy5s+XzIKa8mI6JsHEGB1uMs++R2N2aDpVQGZo
+         AeQw==
+X-Gm-Message-State: AO0yUKUv/2YoxnOI2XyMsP9AuM094g8Kzft7p4QnaFY1eqWMA0tqGbFN
+        ceBa/PDNGY9RfMQ9GRPkjQU=
+X-Google-Smtp-Source: AK7set/F2ZR4puIh6B+EqpLBjQeqN42t7YhXpKQWNql2xnUPsCyhGWrmMl701j4uKGz4aaEAf91pkA==
+X-Received: by 2002:a17:907:a2ce:b0:8a9:e031:c4b7 with SMTP id re14-20020a170907a2ce00b008a9e031c4b7mr4171885ejc.4.1678841403233;
+        Tue, 14 Mar 2023 17:50:03 -0700 (PDT)
+Received: from skbuf ([188.27.184.189])
+        by smtp.gmail.com with ESMTPSA id y11-20020a17090629cb00b008e17dc10decsm1791873eje.52.2023.03.14.17.50.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Mar 2023 17:50:03 -0700 (PDT)
+Date:   Wed, 15 Mar 2023 02:50:00 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Christian Marangi <ansuelsmth@gmail.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        John Crispin <john@phrozen.org>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, Lee Jones <lee@kernel.org>,
+        linux-leds@vger.kernel.org
+Subject: Re: [net-next PATCH v3 09/14] dt-bindings: net: dsa: dsa-port:
+ Document support for LEDs node
+Message-ID: <20230315005000.co4in33amy3t3xbx@skbuf>
+References: <20230314101516.20427-1-ansuelsmth@gmail.com>
+ <20230314101516.20427-1-ansuelsmth@gmail.com>
+ <20230314101516.20427-10-ansuelsmth@gmail.com>
+ <20230314101516.20427-10-ansuelsmth@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <3fd94bd7-ab10-4d50-bcb6-7c13a3346d6a@app.fastmail.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+In-Reply-To: <20230314101516.20427-10-ansuelsmth@gmail.com>
+ <20230314101516.20427-10-ansuelsmth@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,75 +94,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/14/23 at 06:19pm, Arnd Bergmann wrote:
-> On Tue, Mar 14, 2023, at 17:31, Florian Fainelli wrote:
-> > On 3/14/23 08:34, Thomas Bogendoerfer wrote:
-> >> On Tue, Mar 14, 2023 at 10:56:36AM +0800, Baoquan He wrote:
-> >>>> In file included from /local/tbogendoerfer/korg/linux/include/linux/spinlock.h:311:0,
-> >>>>                   from /local/tbogendoerfer/korg/linux/include/linux/vmalloc.h:5,
-> >>>>                   from /local/tbogendoerfer/korg/linux/include/asm-generic/io.h:994,
-> >>>>                   from /local/tbogendoerfer/korg/linux/arch/mips/include/asm/io.h:618,
-> >>>>                   from /local/tbogendoerfer/korg/linux/include/linux/io.h:13,
-> >>>>                   from /local/tbogendoerfer/korg/linux/arch/mips/include/asm/mips-cps.h:11,
-> >>>>                   from /local/tbogendoerfer/korg/linux/arch/mips/include/asm/smp-ops.h:16,
-> >>>>                   from /local/tbogendoerfer/korg/linux/arch/mips/include/asm/smp.h:21,
-> >>>>                   from /local/tbogendoerfer/korg/linux/include/linux/smp.h:113,
-> >>>>                   from /local/tbogendoerfer/korg/linux/include/linux/lockdep.h:14,
-> >>>>                   from /local/tbogendoerfer/korg/linux/include/linux/rcupdate.h:29,
-> >>>>                   from /local/tbogendoerfer/korg/linux/include/linux/rculist.h:11,
-> >>>>                   from /local/tbogendoerfer/korg/linux/include/linux/pid.h:5,
-> >>>>                   from /local/tbogendoerfer/korg/linux/include/linux/sched.h:14,
-> >>>>                   from /local/tbogendoerfer/korg/linux/include/linux/utsname.h:6,
-> >>>>                   from /local/tbogendoerfer/korg/linux/init/version.c:17:
-> >> 
-> >> already tried it, but it doesn't fix the issue. I've attached the
-> >> config.
-> >
-> > I had attempted a similar approach before as Baoquan did, but met the 
-> > same build issue as Thomas that was not immediately clear to me why it 
-> > popped up. I would be curious to see how this can be resolved.
+On Tue, Mar 14, 2023 at 11:15:11AM +0100, Christian Marangi wrote:
+> Document support for LEDs node in dsa port.
+> Switch may support different LEDs that can be configured for different
+> operation like blinking on traffic event or port link.
 > 
-> I think this is the result of recursive header inclusion:
-> spinlock.h includes lockdep.h, but its header guard is already
-> there from the include chain.
+> Also add some Documentation to describe the difference of these nodes
+> compared to PHY LEDs, since dsa-port LEDs are controllable by the switch
+> regs and the possible intergated PHY doesn't have control on them.
 > 
-> There is probably something in one of the mips asm/*.h headers that
-> causes this recursion that is not present elsewhere.
-> 
-> I think this should fix it, but is likely to cause another problem elsewhere:
-> 
-> --- a/arch/mips/include/asm/smp-ops.h
-> +++ b/arch/mips/include/asm/smp-ops.h
-> @@ -13,8 +13,6 @@
->  
->  #include <linux/errno.h>
->  
-> -#include <asm/mips-cps.h>
-> -
->  #ifdef CONFIG_SMP
->  
->  #include <linux/cpumask.h>
+> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> ---
+>  .../devicetree/bindings/net/dsa/dsa-port.yaml | 21 +++++++++++++++++++
+>  1 file changed, 21 insertions(+)
 
-Will meet below compiling error after appllying above patch. Adding
-asm/mips-cps.h including in arch/mips/kernel/setup.c will fix it as below.
-
-arch/mips/kernel/setup.c: In function ‘setup_arch’:
-arch/mips/kernel/setup.c:781:9: error: implicit declaration of function ‘mips_cm_probe’ [-Werror=implicit-function-declaration]
-  781 |         mips_cm_probe();
-      |         ^~~~~~~~~~~~~
-cc1: all warnings being treated as errors
-
-
-diff --git a/arch/mips/kernel/setup.c b/arch/mips/kernel/setup.c
-index f1c88f8a1dc5..e8c4020ef367 100644
---- a/arch/mips/kernel/setup.c
-+++ b/arch/mips/kernel/setup.c
-@@ -43,6 +43,7 @@
- #include <asm/smp-ops.h>
- #include <asm/prom.h>
- #include <asm/fw/fw.h>
-+#include <asm/mips-cps.h>
- 
- #ifdef CONFIG_MIPS_ELF_APPENDED_DTB
- char __section(".appended_dtb") __appended_dtb[0x100000];
-
+Of all schemas, why did you choose dsa-port.yaml? Why not either something
+hardware specific (qca8k.yaml) or more generic (ethernet-controller.yaml)?
