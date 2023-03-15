@@ -2,73 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB6F06BBB81
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 18:55:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BAB26BBB84
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 18:57:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232107AbjCORzs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 13:55:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48610 "EHLO
+        id S232106AbjCOR5f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 13:57:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230489AbjCORzl (ORCPT
+        with ESMTP id S230124AbjCOR5c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 13:55:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94B891DB86;
-        Wed, 15 Mar 2023 10:55:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1702F61E16;
-        Wed, 15 Mar 2023 17:55:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C454C433D2;
-        Wed, 15 Mar 2023 17:55:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678902938;
-        bh=JuXgiW41uiDV3hd/zp6PO0gSqvlFUmnfNa4jKuk8rDE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uEoUunSRhmYmTEU3KwzT/KMX5SLXZaB6bOX4At3kCw0XTX7NT0IpLs9k7IdVT+5Op
-         0U3kCUz1jyUtbu5zHjw6ANP4p2/+RuwhvXxPcRqTJJ31ojhZgsBILSktsod9pveLl+
-         ziDIw90mZSWcqAHav5L9HdVwY/tnGnbeDRompkCkz0MFtBOQKI0l72WwlJbmEdv9MR
-         3Rnm6FBx6AKGJ8r65gd7bausjvBrax7let+p5nG8VOyJThLdhlIhhMfiVBW7g0iuZU
-         zfJxMvF+KB1/um0Couxwr36G0cesDkj81mgCm/fytcBrYhrn42tdOJEMNaiOPbHt4o
-         0QCmD6KwP8NXQ==
-Date:   Wed, 15 Mar 2023 17:55:33 +0000
-From:   Lee Jones <lee@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: mfd: qcom,tcsr: document SDX55 TCSR
-Message-ID: <20230315175533.GK9667@google.com>
-References: <20230306072618.10770-1-krzysztof.kozlowski@linaro.org>
+        Wed, 15 Mar 2023 13:57:32 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5D6E2C64C;
+        Wed, 15 Mar 2023 10:57:31 -0700 (PDT)
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32FHgf6v038090;
+        Wed, 15 Mar 2023 17:57:31 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=2L9voBsmfYrGPUbXcC4Da6Sws5+0ftbCvBKodcR+X8Y=;
+ b=YPwBk6BCQGukzruEtG9oqQmlemjBEPaM4AQ+n2+tuAAsM7rSMeo5RevAtalrX5JbIyTa
+ UR7bIwscDReM6RPDjWTEmaDPrICWCWDVhYNtxJDTP8w8KGMkjKgWH3t3xU08X/ZcM55L
+ FEQurLuN+PcwkZsQ8OkWcye65TIVzA4vk9zhJTswBAGMKk43rEPinjmb7aSiIt6UMtKa
+ WfM/2eM43eC1dwCoaso+ivSisdcI9NQKX3ibpkKDtPEu5g53y5zuvhjoIzX9D+4Wsqvc
+ b5zurjl4Op+WikAvOW/ozlRHcqZ0edeo85u3Qgt4EO5zXPYuaFo1Rx+mkYbX+mr9Yapr Uw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pbf9fy3vm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 15 Mar 2023 17:57:31 +0000
+Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32FHurN6030984;
+        Wed, 15 Mar 2023 17:57:31 GMT
+Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pbf9fy3va-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 15 Mar 2023 17:57:30 +0000
+Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
+        by ppma03dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32FGLApd018985;
+        Wed, 15 Mar 2023 17:57:30 GMT
+Received: from smtprelay06.dal12v.mail.ibm.com ([9.208.130.100])
+        by ppma03dal.us.ibm.com (PPS) with ESMTPS id 3pb29pdpyv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 15 Mar 2023 17:57:30 +0000
+Received: from smtpav05.wdc07v.mail.ibm.com (smtpav05.wdc07v.mail.ibm.com [10.39.53.232])
+        by smtprelay06.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32FHvSc57471804
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 15 Mar 2023 17:57:28 GMT
+Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 543D958053;
+        Wed, 15 Mar 2023 17:57:28 +0000 (GMT)
+Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 70FBD58043;
+        Wed, 15 Mar 2023 17:57:27 +0000 (GMT)
+Received: from [9.60.85.43] (unknown [9.60.85.43])
+        by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Wed, 15 Mar 2023 17:57:27 +0000 (GMT)
+Message-ID: <3accd046-0dee-db7c-7e60-287bf2792a8e@linux.ibm.com>
+Date:   Wed, 15 Mar 2023 13:57:26 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230306072618.10770-1-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH] s390/vfio_ap: fix memory leak in vfio_ap device driver
+Content-Language: en-US
+To:     freude@linux.ibm.com
+Cc:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, jjherne@linux.ibm.com, pasic@linux.ibm.com,
+        alex.williamson@redhat.com, borntraeger@linux.ibm.com
+References: <20230315153932.165031-1-akrowiak@linux.ibm.com>
+ <b9be5d298de3ca70f8fa86a1b58cb4f2@linux.ibm.com>
+From:   Anthony Krowiak <akrowiak@linux.ibm.com>
+In-Reply-To: <b9be5d298de3ca70f8fa86a1b58cb4f2@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 3pRQytibEx_EBahlmUqJwos3yI27kAd8
+X-Proofpoint-ORIG-GUID: m-DXF8pXbb5dq_D-H5YCrHF2iWipyk1U
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-15_09,2023-03-15_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
+ clxscore=1015 priorityscore=1501 mlxscore=0 malwarescore=0 adultscore=0
+ impostorscore=0 mlxlogscore=889 lowpriorityscore=0 spamscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2302240000
+ definitions=main-2303150147
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 06 Mar 2023, Krzysztof Kozlowski wrote:
+snip ...
 
-> Add compatible for SDX55 TCSR block.
->
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  Documentation/devicetree/bindings/mfd/qcom,tcsr.yaml | 1 +
->  1 file changed, 1 insertion(+)
 
-Applied, thanks
+> I needed some indirections to follow what exactly happens here and how 
+> you
+> fix it, but finally I got it.
+> Reviewed-by: Harald Freudenberger <freude@linux.ibm.com>
 
---
-Lee Jones [李琼斯]
+Sorry about the indirections. Thanks for the review.
+
