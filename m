@@ -2,83 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCE236BB391
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 13:48:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9E246BB393
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 13:49:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233016AbjCOMs0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 08:48:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48400 "EHLO
+        id S233058AbjCOMtL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 08:49:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232964AbjCOMsX (ORCPT
+        with ESMTP id S232964AbjCOMtJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 08:48:23 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53D99166F0
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 05:46:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678884401;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4dxDu1EH9xzCVL/y99BM1/A0FCm7l89PRdNnkV8wtss=;
-        b=HUorWWhgH9yNfmy3CrtOAzfcDF5Vl0fb6gHnwyGdHwYbN062+KnOWK0BOybcxFk0mEcv+V
-        oTq74+evdaXOYTKYp+buO0/sQDU9j9kR0g9f3UsUgXxl/HUoS7PO59l9MbE4WBfCDMC1kg
-        o7MdweSc0I2AaWA7GuORjgmic/rEqtI=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-454-FlEEw1NLMvSzDKqQotuPmw-1; Wed, 15 Mar 2023 08:46:37 -0400
-X-MC-Unique: FlEEw1NLMvSzDKqQotuPmw-1
-Received: by mail-ed1-f70.google.com with SMTP id e18-20020a056402191200b004fa702d64b3so17541083edz.23
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 05:46:36 -0700 (PDT)
+        Wed, 15 Mar 2023 08:49:09 -0400
+Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 516B06421E
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 05:49:07 -0700 (PDT)
+Received: by mail-vs1-xe2a.google.com with SMTP id o2so16819006vss.8
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 05:49:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112; t=1678884546;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tyeo9bZDdUn8Ag++MxxQW4gy5l8ih4AUy9Ax3AbAFac=;
+        b=5Z6F7G8o1cvgOSQSrP+FSL6jy8y+0ZtBg5RwdH+p2pR1mEKk6vhPNQlicw47hvE7F9
+         +aW66gdb9GQp9geeeQUv80sWk66VcgBqwH7ZOnOhvpn6G/h1Ap50o6nCAnyOGDJkbYcz
+         TdzK2CwTF0Y1ooUFCZaB9oUyqAy9nzu4IYX8lXLQBRyP8qEyjek1H1g6KPelJrPHcEMt
+         sQ7qLXYnEpIaqD/307em+QbENU/vDiEi82jxsLvPIIhl9JyXpDuH1TornsAfKAjFI/Tf
+         lpKhdLehSzl8sLVFWriCl1iPaw9CnSPe+fUNNVN+E9glZxjinnVBzZvJB+sFcCIeTXoP
+         VAqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678884395;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4dxDu1EH9xzCVL/y99BM1/A0FCm7l89PRdNnkV8wtss=;
-        b=xjppj6ACU6v0GIIVnVJLjCEiezXpC7445mAEswthaaC3lv5n1Qh6PSMqNnoI/OwxtR
-         xIcGHhhX6zqvPFFiqFU+EQ9UTWAwnS/TFiuiwrsRYqE0FEpqtwSjSQ8MB+i1DkfKOFFD
-         cMIHegzPwedD1W86DDOZ7FtIHZUdKv1U9JXcidgZrGyKFLvCiMhWRBum5N9qZj9Z14bh
-         03DtOjkxh5OGZbIt562xeVojCfbD1Srs70L9JSK6MQDFPTfq498BA0bFihxaTMbcenJf
-         Bvr5Acriktd3thzSa9VdYKIl4EAsucedueFAaEDTrGfq68RkinCwcH7B7he68X9o40zP
-         p9kw==
-X-Gm-Message-State: AO0yUKXrBQs+bUIcitxxAV29GwZlMk2UR1UXidAWERNasNbYZEQZXMk+
-        wTWbcpEJRwSU0xzFy0GCNrLyp/XW8xBffr0h0rDat8GI4dUA51ZTR2mxZIoLaXpp5/6J4tcgXRG
-        nAe36QDJtTULopDL1l4kArZEUfGP2KpKt
-X-Received: by 2002:a17:906:1553:b0:92b:e330:a79e with SMTP id c19-20020a170906155300b0092be330a79emr6121005ejd.29.1678884395608;
-        Wed, 15 Mar 2023 05:46:35 -0700 (PDT)
-X-Google-Smtp-Source: AK7set8IK7xy9Gyad0ICG5LXH/Wy/T1yn1gap9RxlbxLzdAkT7NnvZGJDrCG4PQyJJggyRytobddmg==
-X-Received: by 2002:a17:906:1553:b0:92b:e330:a79e with SMTP id c19-20020a170906155300b0092be330a79emr6120995ejd.29.1678884395332;
-        Wed, 15 Mar 2023 05:46:35 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id f5-20020a170906c08500b0092babe82cfesm2438183ejz.215.2023.03.15.05.46.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Mar 2023 05:46:34 -0700 (PDT)
-Message-ID: <a0cab8a8-dbbf-9335-134c-c5b2751a81b4@redhat.com>
-Date:   Wed, 15 Mar 2023 13:46:34 +0100
+        d=1e100.net; s=20210112; t=1678884546;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=tyeo9bZDdUn8Ag++MxxQW4gy5l8ih4AUy9Ax3AbAFac=;
+        b=Nf6suNEVimbBY71mOzPDEL2yywnwB5YRb980MfuY2LNfkAL0XHYU0scNHtYnBxS5i9
+         hjmkMgZ58d9hJ9YPN0E+INWKI2CY6JneLgXisGiHSe2e6/Jk5PSWmrfscydaJV5rHCun
+         zkOPQRHxnNEHFAurF327XtvrK8obAiD0oa6bNz3LxvRWZla1lHnJLVPInpDiTeoXOXC3
+         BASKBQTWNfsNefjFBIzdrr2krVaQBGnabOvWqpp67N3QbAk1MZTO+peGbuNUYuCMEkUk
+         0CT0TyQT2u4NVrYPPQFBJyxMR7uVFwFMVIS5inL84lTcbc+1Kukeh8HKjDP3pY2kd/e2
+         GFEQ==
+X-Gm-Message-State: AO0yUKVn6T5b/8cHKVo0T8kB7QP6jCjOJUv6wkgD9/aCZvux/6bl7TTy
+        7X/rMZxYwvCcafWqgadogFtzefSPkT/CmCr1x6Y5WA==
+X-Google-Smtp-Source: AK7set+864Q3cBxX613w2AgbDemFRJUVS4DrOSx/mi7YYQodmoOzm/NQfQbJsSqoHEgFU0UqYnkST/nLys9rt12Xq1I=
+X-Received: by 2002:a67:df8e:0:b0:411:b4c2:c6c0 with SMTP id
+ x14-20020a67df8e000000b00411b4c2c6c0mr26516691vsk.0.1678884546416; Wed, 15
+ Mar 2023 05:49:06 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 05/36] platform/x86: intel-uncore-freq: move to use
- bus_get_dev_root()
-Content-Language: en-US, nl
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     rafael@kernel.org,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Mark Gross <markgross@kernel.org>,
-        platform-driver-x86@vger.kernel.org
-References: <20230313182918.1312597-1-gregkh@linuxfoundation.org>
- <20230313182918.1312597-5-gregkh@linuxfoundation.org>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20230313182918.1312597-5-gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+References: <20230313170950.256964-1-francesco@dolcini.it> <20230313170950.256964-3-francesco@dolcini.it>
+ <CAHp75VetwU3pr59sE5zHPf5jPxYb6yJnXZWpD_qn4o6d5Dnmog@mail.gmail.com> <ZA9iPnmgNO7PSv6O@francesco-nb.int.toradex.com>
+In-Reply-To: <ZA9iPnmgNO7PSv6O@francesco-nb.int.toradex.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Wed, 15 Mar 2023 13:48:55 +0100
+Message-ID: <CAMRc=Me4vBGCL0ctm87Xioky55gnsUm0DkmJkN8V6XRLSEkJNw@mail.gmail.com>
+Subject: Re: [PATCH v3 2/2] gpio: fxl6408: add I2C GPIO expander driver
+To:     Francesco Dolcini <francesco@dolcini.it>
+Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        linux-gpio@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Emanuele Ghidoli <emanuele.ghidoli@toradex.com>,
+        linux-kernel@vger.kernel.org,
+        Francesco Dolcini <francesco.dolcini@toradex.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,57 +73,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Mon, Mar 13, 2023 at 6:49=E2=80=AFPM Francesco Dolcini <francesco@dolcin=
+i.it> wrote:
+>
+> On Mon, Mar 13, 2023 at 07:35:20PM +0200, Andy Shevchenko wrote:
+> > On Mon, Mar 13, 2023 at 7:09=E2=80=AFPM Francesco Dolcini <francesco@do=
+lcini.it> wrote:
+> > >
+> > > From: Emanuele Ghidoli <emanuele.ghidoli@toradex.com>
+> > >
+> > > Add minimal driver for Fairchild FXL6408 8-bit I2C-controlled GPIO ex=
+pander
+> > > using the generic regmap based GPIO driver (GPIO_REGMAP).
+> > >
+> > > The driver implements setting the GPIO direction, reading inputs
+> > > and writing outputs.
+> > >
+> > > In addition to that the FXL6408 has the following functionalities:
+> > > - allows to monitor input ports for data transitions with an interrup=
+t pin
+> > > - all inputs can be configured with pull-up or pull-down resistors
+> >
+> > Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+>
+> Thanks for the review, appreciated.
+>
+> > > +#include <linux/err.h>
+> > > +#include <linux/gpio/regmap.h>
+> > > +#include <linux/kernel.h>
+> > > +#include <linux/i2c.h>
+> >
+> > Seems unordered?
+>
+> Whoops :-/
+>
+> Bartosz: if you or others have additional comments I'll change this for
+> sure, if not up to you - please let me know.
+>
+> Francesco
+>
 
-On 3/13/23 19:28, Greg Kroah-Hartman wrote:
-> Direct access to the struct bus_type dev_root pointer is going away soon
-> so replace that with a call to bus_get_dev_root() instead, which is what
-> it is there for.
-> 
-> Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> Cc: Hans de Goede <hdegoede@redhat.com>
-> Cc: Mark Gross <markgross@kernel.org>
-> Cc: platform-driver-x86@vger.kernel.org
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> ---
-> Note, this is a patch that is a prepatory cleanup as part of a larger
-> series of patches that is working on resolving some old driver core
-> design mistakes.  It will build and apply cleanly on top of 6.3-rc2 on
-> its own, but I'd prefer if I could take it through my driver-core tree
-> so that the driver core changes can be taken through there for 6.4-rc1.
+I ordered them manually and applied the series.
 
-Taking this upstream through the driver-core tree is fine by me:
-
-Acked-by: Hans de Goede <hdegoede@redhat.com>
-
-Regards,
-
-Hans
-
-
-
-
-> diff --git a/drivers/platform/x86/intel/uncore-frequency/uncore-frequency-common.c b/drivers/platform/x86/intel/uncore-frequency/uncore-frequency-common.c
-> index cb24de9e97dc..1a300e14f350 100644
-> --- a/drivers/platform/x86/intel/uncore-frequency/uncore-frequency-common.c
-> +++ b/drivers/platform/x86/intel/uncore-frequency/uncore-frequency-common.c
-> @@ -224,9 +224,15 @@ int uncore_freq_common_init(int (*read_control_freq)(struct uncore_data *data, u
->  	uncore_write = write_control_freq;
->  	uncore_read_freq = read_freq;
->  
-> -	if (!uncore_root_kobj)
-> -		uncore_root_kobj = kobject_create_and_add("intel_uncore_frequency",
-> -							    &cpu_subsys.dev_root->kobj);
-> +	if (!uncore_root_kobj) {
-> +		struct device *dev_root = bus_get_dev_root(&cpu_subsys);
-> +
-> +		if (dev_root) {
-> +			uncore_root_kobj = kobject_create_and_add("intel_uncore_frequency",
-> +								  &dev_root->kobj);
-> +			put_device(dev_root);
-> +		}
-> +	}
->  	if (uncore_root_kobj)
->  		++uncore_instance_count;
->  	mutex_unlock(&uncore_lock);
-
+Bart
