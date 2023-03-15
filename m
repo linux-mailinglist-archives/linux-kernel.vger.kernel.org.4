@@ -2,119 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29E876BBEEA
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 22:21:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17B906BBEED
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 22:22:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232729AbjCOVVt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 17:21:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42536 "EHLO
+        id S233085AbjCOVWA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 17:22:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233058AbjCOVVk (ORCPT
+        with ESMTP id S232897AbjCOVVy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 17:21:40 -0400
-Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 822D494A6F
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 14:21:10 -0700 (PDT)
-Received: by mail-il1-x135.google.com with SMTP id e9e14a558f8ab-3179d0e6123so386405ab.1
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 14:21:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678915268;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WtGkZta8kr3aX4OtnVnQYv6dSKat8tApsT2Nzd8BoY8=;
-        b=UMGT0VYp2EMsMxZh0XfEzS2agPikhIKE5OZ0SgN7tPGwdu7bDg4RK/Jc5yyVikxUmP
-         yTKfzktQKLdQVJhWxlposn/04ZlaP9gPpXyvwctaWTD2mZEJoEJTTmBmrFtNFob+Cagp
-         b3RZ/i2XKwd+N1uaTmmduwE4DAW1h4GKOZg1rIwre8CDpDBwaAOi+0QnBHU9JVAdtVdh
-         NMeMddQP03mG8FZmzSbMeIY8ZIaI5XEX37RcZ8607AM4QoC+kjhr4N5JDezDpTyX4opS
-         uJ+7P63sn/o9P7tWaTwLg+C0kEFWG8TYcaqW1P7VooEiaNS7nwIu+b2lNsb6UUyS/jAG
-         SGyQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678915268;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WtGkZta8kr3aX4OtnVnQYv6dSKat8tApsT2Nzd8BoY8=;
-        b=tlEWX8shW9c2NMW/EGxaZVIvACVQbuF6mUIXRmuUzFbb81R8yo6tGlUCdb8zXfqCnn
-         LCQJ57ExHg7uVK/Ro+Vgv+R2J7KAr8XVuIAiE5Vu/j7eUdKV5iKAPA6GcQ41PCImLZi8
-         LPiB5WeewsOtnx68lO1H34BeCq1Jf53Tns78Im6METQWpXiUDk20sefb27K/7dP3zxjp
-         T8+SvTBAqUQotG9vgn1s6IAd3hdeZET7PsVipCGdiY8db3tILZU/76I5scX239syAiuj
-         bTZg3LZIbQKUB4yoTP5pB5MdvpXXLQ9ifYfv24hdVMgElxiIkStIrmNr7h7Rr6KH/EzQ
-         lZ/A==
-X-Gm-Message-State: AO0yUKXvtscK71sy2zVt3Lw1vdzC2Wy7gPArCV21hMATce4woZnZEJ18
-        DVQ+8FdbshrWz05XWxZlaHE3GsmX6WxNmTnsW++XWQ==
-X-Google-Smtp-Source: AK7set8i0GD1k60EpeCsObmq8w6FjI/SxZtdvSvjKGP23RhGqBwh74Oha5n5jUHDosr6VgpOLpG5yVTn7VbzEPxNsME=
-X-Received: by 2002:a05:6e02:1c2b:b0:322:848b:6c53 with SMTP id
- m11-20020a056e021c2b00b00322848b6c53mr23965ilh.14.1678915268259; Wed, 15 Mar
- 2023 14:21:08 -0700 (PDT)
+        Wed, 15 Mar 2023 17:21:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8835A02A4;
+        Wed, 15 Mar 2023 14:21:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8FFFE61E6E;
+        Wed, 15 Mar 2023 21:21:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB03EC433EF;
+        Wed, 15 Mar 2023 21:21:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678915283;
+        bh=+r8g2IkyoB0Jg/yBPsVxCgq59FdXhHEpS5HuzNqPCyI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lxwGNMYE7cqR7tg6g9uZLgugiWhhI3rx1IScWtPGrA94pW48dn3fbWSYnpkZXlKHT
+         7q/vSCMOKSp1VEgDsDdX/fnWT4NulUHIrVegBWARuhsI6mXLfAfNc3s6ATcj7HK8uE
+         eIwOHmxKyWaOfFtj6/MLpbubf6PKWyOg9gqZS37Dgfp+WrT/qkPja/ESy3uIDZySiE
+         W3kjtl+B1bJFGc6Km6jINYlh9ypJZaoKEYDMeHWP8FE+XzGU0LaBpbQH78gvIxMHoD
+         swQYoXCu/SwUiAVLnqHn2ss5Ds7/EqHwmBSlKPlOrGyoOvwty3gMILnzZ/kE8IQsHL
+         aTDWJTUK73OAw==
+Date:   Wed, 15 Mar 2023 14:21:22 -0700
+From:   "Darrick J. Wong" <djwong@kernel.org>
+To:     kernel test robot <lkp@intel.com>
+Cc:     Dave Chinner <david@fromorbit.com>, linux-kernel@vger.kernel.org,
+        linux-xfs@vger.kernel.org, llvm@lists.linux.dev,
+        oe-kbuild-all@lists.linux.dev, linux-mm@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, yebin10@huawei.com
+Subject: Re: [PATCH 4/4] pcpcntr: remove percpu_counter_sum_all()
+Message-ID: <20230315212122.GH11376@frogsfrogsfrogs>
+References: <20230315084938.2544737-5-david@fromorbit.com>
+ <202303160421.bnmiVRCM-lkp@intel.com>
 MIME-Version: 1.0
-References: <20230315054932.1639169-1-gthelen@google.com>
-In-Reply-To: <20230315054932.1639169-1-gthelen@google.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Wed, 15 Mar 2023 14:20:56 -0700
-Message-ID: <CAP-5=fXzyy7gNCpyS0aNHto720tK039q136_fL82ucEv0ifpQg@mail.gmail.com>
-Subject: Re: [PATCH] tools/resolve_btfids: Add libsubcmd to .gitignore
-To:     Greg Thelen <gthelen@google.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202303160421.bnmiVRCM-lkp@intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 14, 2023 at 10:49=E2=80=AFPM Greg Thelen <gthelen@google.com> w=
-rote:
->
-> After building the kernel I see:
->   $ git status -s
->   ?? tools/bpf/resolve_btfids/libbpf/
->
-> Commit af03299d8536 ("tools/resolve_btfids: Install subcmd headers")
-> started copying header files into
-> tools/bpf/resolve_btfids/libsubcmd/include/subcmd. These *.h files are
-> not covered by higher level wildcard gitignores.
->
-> gitignore the entire libsubcmd directory. It's created as part of build
-> and removed by clean.
->
-> Fixes: af03299d8536 ("tools/resolve_btfids: Install subcmd headers")
-> Signed-off-by: Greg Thelen <gthelen@google.com>
+On Thu, Mar 16, 2023 at 04:14:04AM +0800, kernel test robot wrote:
+> Hi Dave,
+> 
+> Thank you for the patch! Yet something to improve:
+> 
+> [auto build test ERROR on linus/master]
+> [also build test ERROR on v6.3-rc2 next-20230315]
+> [cannot apply to dennis-percpu/for-next]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Dave-Chinner/cpumask-introduce-for_each_cpu_or/20230315-165202
+> patch link:    https://lore.kernel.org/r/20230315084938.2544737-5-david%40fromorbit.com
+> patch subject: [PATCH 4/4] pcpcntr: remove percpu_counter_sum_all()
+> config: riscv-randconfig-r042-20230313 (https://download.01.org/0day-ci/archive/20230316/202303160421.bnmiVRCM-lkp@intel.com/config)
+> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # install riscv cross compiling tool for clang build
+>         # apt-get install binutils-riscv64-linux-gnu
+>         # https://github.com/intel-lab-lkp/linux/commit/8360dcb55f1eb08fe7a1f457f3b99bef8e306c8b
+>         git remote add linux-review https://github.com/intel-lab-lkp/linux
+>         git fetch --no-tags linux-review Dave-Chinner/cpumask-introduce-for_each_cpu_or/20230315-165202
+>         git checkout 8360dcb55f1eb08fe7a1f457f3b99bef8e306c8b
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash fs/xfs/
+> 
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Link: https://lore.kernel.org/oe-kbuild-all/202303160421.bnmiVRCM-lkp@intel.com/
+> 
+> All errors (new ones prefixed by >>):
+> 
+> >> fs/xfs/xfs_super.c:1079:9: error: call to undeclared function 'percpu_counter_sum_all'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+>                   percpu_counter_sum_all(&mp->m_delalloc_blks) == 0);
+>                   ^
+>    fs/xfs/xfs_super.c:1079:9: note: did you mean 'percpu_counter_sum'?
+>    include/linux/percpu_counter.h:193:19: note: 'percpu_counter_sum' declared here
+>    static inline s64 percpu_counter_sum(struct percpu_counter *fbc)
+>                      ^
+>    1 error generated.
+> 
+> 
+> vim +/percpu_counter_sum_all +1079 fs/xfs/xfs_super.c
+> 
+> 8757c38f2cf6e5 Ian Kent        2019-11-04  1070  
+> 8757c38f2cf6e5 Ian Kent        2019-11-04  1071  static void
+> 8757c38f2cf6e5 Ian Kent        2019-11-04  1072  xfs_destroy_percpu_counters(
+> 8757c38f2cf6e5 Ian Kent        2019-11-04  1073  	struct xfs_mount	*mp)
+> 8757c38f2cf6e5 Ian Kent        2019-11-04  1074  {
+> 8757c38f2cf6e5 Ian Kent        2019-11-04  1075  	percpu_counter_destroy(&mp->m_icount);
+> 8757c38f2cf6e5 Ian Kent        2019-11-04  1076  	percpu_counter_destroy(&mp->m_ifree);
+> 8757c38f2cf6e5 Ian Kent        2019-11-04  1077  	percpu_counter_destroy(&mp->m_fdblocks);
+> 75c8c50fa16a23 Dave Chinner    2021-08-18  1078  	ASSERT(xfs_is_shutdown(mp) ||
+> c35278f526edf1 Ye Bin          2023-03-14 @1079  	       percpu_counter_sum_all(&mp->m_delalloc_blks) == 0);
 
-Acked-by: Ian Rogers <irogers@google.com>
+Ah, yes, ChatGPT-4 hired someone via Mechanical Turk to log in to my
+kernel.org account, answer the CAPTCHA, and push Ye's patch into
+for-next.
 
-Thanks!
-Ian
+(No it didn't.  Is your bot merging random patches from the XFS list and
+whining when the result doesn't build?  WTH is going on here??)
 
-> ---
->  tools/bpf/resolve_btfids/.gitignore | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/tools/bpf/resolve_btfids/.gitignore b/tools/bpf/resolve_btfi=
-ds/.gitignore
-> index 16913fffc985..52d5e9721d92 100644
-> --- a/tools/bpf/resolve_btfids/.gitignore
-> +++ b/tools/bpf/resolve_btfids/.gitignore
-> @@ -1,3 +1,4 @@
->  /fixdep
->  /resolve_btfids
->  /libbpf/
-> +/libsubcmd/
-> --
-> 2.40.0.rc1.284.g88254d51c5-goog
->
+--D
+
+> 8757c38f2cf6e5 Ian Kent        2019-11-04  1080  	percpu_counter_destroy(&mp->m_delalloc_blks);
+> 2229276c528326 Darrick J. Wong 2022-04-12  1081  	percpu_counter_destroy(&mp->m_frextents);
+> 8757c38f2cf6e5 Ian Kent        2019-11-04  1082  }
+> 8757c38f2cf6e5 Ian Kent        2019-11-04  1083  
+> 
+> -- 
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests
