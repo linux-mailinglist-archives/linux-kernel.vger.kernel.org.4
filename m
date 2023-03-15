@@ -2,355 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 921EF6BAC7B
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 10:46:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 343A96BAC7F
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 10:48:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232183AbjCOJqJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 05:46:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56734 "EHLO
+        id S232154AbjCOJsX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 05:48:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232178AbjCOJpe (ORCPT
+        with ESMTP id S230455AbjCOJrx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 05:45:34 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D5955A906;
-        Wed, 15 Mar 2023 02:44:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 96D00B81BFC;
-        Wed, 15 Mar 2023 09:44:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 578C9C433EF;
-        Wed, 15 Mar 2023 09:44:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678873488;
-        bh=M2xel86ktjLhT1UX9BpG2llyrMdosP+5Re+OqtGNJEQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pmFdut1/QKxihfW9eNyuPsrzfu3VouwXDoiuVMeWuCf3uUeM5d58rCZGH4F2Xdcex
-         +yHwM3+OwvOOYbq6rKo7bEhWHFj2BlJqmtMxyJhWKAeqXtoOxEHMOv0gjO7s2wPgjd
-         QDMpR58ycdcdQA2NBXkn5kP/48zSZQ86J9sR0itaKQLr/+GDHHB2nrWxdDtLGuxVmx
-         5lNpuIdfWYEaaSD6R4AbcMLY/hxrAKUEKgpCbFSu5N+iNZtikE2Lrll/1T1aA6pXeu
-         J9A/fLlGxrPAP6s34VS4ngMhjMrgCao6XgIgotrgyL+SzhXit3Ilr3AXXlejfrA75v
-         0wmF6z1RDLsmg==
-Date:   Wed, 15 Mar 2023 11:44:36 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Cc:     linux-arch@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Vineet Gupta <vgupta@kernel.org>,
-        linux-snps-arc@lists.infradead.org
-Subject: Re: [PATCH v4 07/36] arc: Implement the new page table range API
-Message-ID: <ZBGThM2oRL13NrUY@kernel.org>
-References: <20230315051444.3229621-1-willy@infradead.org>
- <20230315051444.3229621-8-willy@infradead.org>
+        Wed, 15 Mar 2023 05:47:53 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43C7725E37;
+        Wed, 15 Mar 2023 02:46:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678873617; x=1710409617;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=Cwl0mY8WmILENga07vjabl8btFhUU/xjyMN13sZklWg=;
+  b=kgTTtM3eLsVYxWQGUJhWakk3fFYKeVpQaK5Wlg3BqQnSsoO2D3SqDLt8
+   I1G94G2yeVN9LnJg7cxBVxETSLVU8uopnt8Dn9ceUjMXEz9M9lbh4j9Nt
+   p6hpEQ1XYKyRJS3u/a9q5GZKJ7O0NNbOQ7IlWQjecoLlmmjLwbNVn6/1U
+   QgYLTpNr6aG1tfcMUgduBl8bJmAAqP6PdPztqUwIICudSclooXBpQ13tL
+   GO0Uokrm9SufOLvkoe0mOGcditRU1bX+hIp1ihKhfd2puVznhJ1pF9I/k
+   zYgytdp4lgYk4QCqcH1vXVNsAv6yBk7h6Kf7O8RM4a3YDicSgG1PXjsoG
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="339199999"
+X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
+   d="scan'208";a="339199999"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2023 02:46:05 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="672672567"
+X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
+   d="scan'208";a="672672567"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by orsmga007.jf.intel.com with ESMTP; 15 Mar 2023 02:46:03 -0700
+Received: from fmsmsx603.amr.corp.intel.com (10.18.126.83) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Wed, 15 Mar 2023 02:46:03 -0700
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21 via Frontend Transport; Wed, 15 Mar 2023 02:46:03 -0700
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.103)
+ by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.21; Wed, 15 Mar 2023 02:46:02 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=cdb90H1ewaARJEApsh0j8m2iq1Xdo+RCng5leTHkJS1KcTuRkVSR80x/Aiycd04F+SklJRJ+7HOCQyMX1PpS3s6To1X28Py8chtUuA5d0TKmieSAbk/SuAeMZKoqujyvhFINcyykyQ/jp2GMd5QPsUCDvtf+Jb8zTkxk8ygS1x5o5hJACGbYsBw9jhrLje/QyGJhJDx7d+jNA1ZzB6qGxzgGpHPIur7Vtmhno+/85TLKOJeCb9IuXPnBJGilu/IPMjOdWxB/L96IwV0N/AgNMD2ba7iOfUQdpVuIBRePVfs/L/afs8BHHeTA26ASQDAGP1F6EhGcAP5yieR6wShzIg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Cwl0mY8WmILENga07vjabl8btFhUU/xjyMN13sZklWg=;
+ b=E8p45UjKCGf12G+ZVCZr3AnTbo+RG8aapDBOZQlIhpmvuyHHdHBqBVZ5esu6UEz82MrgdZuKQJw2IVAzRp4Neiya0ohpnVfX2qt2ZhVx+IgnV6FAf1luh+WPE3SiDvkH5HaTZ9sJthjgpvHQ7fyIHNhgwREgf/0QhwmZf7KNhb26R3hUVflbcBl0c/lkdBRdcDBpgPj9BGUWHZP3eUUvNhQ2EzFEVwdUrtyfNMy2+XLk+GLdyKCln5y35fot4rhsaDM9hwvHkD5XL2t4ngEguZCR9ZxyB3Onj33M8YqTLDN+ninFOnCmCa/fNTEB9xEO3fCOETmsUCh76DCmQe6PXw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BL1PR11MB5978.namprd11.prod.outlook.com (2603:10b6:208:385::18)
+ by CO1PR11MB5186.namprd11.prod.outlook.com (2603:10b6:303:9b::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.29; Wed, 15 Mar
+ 2023 09:46:00 +0000
+Received: from BL1PR11MB5978.namprd11.prod.outlook.com
+ ([fe80::f403:a0a2:e468:c1e9]) by BL1PR11MB5978.namprd11.prod.outlook.com
+ ([fe80::f403:a0a2:e468:c1e9%5]) with mapi id 15.20.6178.024; Wed, 15 Mar 2023
+ 09:46:00 +0000
+From:   "Huang, Kai" <kai.huang@intel.com>
+To:     "isaku.yamahata@gmail.com" <isaku.yamahata@gmail.com>
+CC:     "Christopherson,, Sean" <seanjc@google.com>,
+        "Shahar, Sagi" <sagis@google.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Aktas, Erdem" <erdemaktas@google.com>,
+        "dmatlack@google.com" <dmatlack@google.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "zhi.wang.linux@gmail.com" <zhi.wang.linux@gmail.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "Yamahata, Isaku" <isaku.yamahata@intel.com>
+Subject: Re: [PATCH v13 003/113] KVM: TDX: Initialize the TDX module when
+ loading the KVM intel kernel module
+Thread-Topic: [PATCH v13 003/113] KVM: TDX: Initialize the TDX module when
+ loading the KVM intel kernel module
+Thread-Index: AQHZVQwsPOGReWj5Uka2uRq42SaKMa75keeAgAHjHYCAACbFgA==
+Date:   Wed, 15 Mar 2023 09:46:00 +0000
+Message-ID: <8ee89a1376babf0a5dbc2feb614890b7e2ccf2f8.camel@intel.com>
+References: <cover.1678643051.git.isaku.yamahata@intel.com>
+         <44f7fe9f235e29f2193eaac5890a4dede22c324c.1678643052.git.isaku.yamahata@intel.com>
+         <20ebae70fd625f8a0fe87f98c25613a2d4dc5792.camel@intel.com>
+         <20230315072711.GF3922605@ls.amr.corp.intel.com>
+In-Reply-To: <20230315072711.GF3922605@ls.amr.corp.intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BL1PR11MB5978:EE_|CO1PR11MB5186:EE_
+x-ms-office365-filtering-correlation-id: 57739521-b8d2-4b7f-7549-08db253a157b
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: cyPlhdYynoqdXvW8+NsrPuDqXuU/73iaCF/yAoBxd88SaLpoVq4o61ThVuiedi0Nrce8DAkJC78c0/xkmkOusJ8PeNAwDRo9ZJnxl9sYvXCbmw6vDcmatZNo28v7T6b5fcZsUisHOPXXcHgiOd8YSY9wR1s6WYQsuxREJ4t/axUlgHs/joirg0L4r2UHmN3s8RYIK/3B3kbHRIGQY9LIwUi7Z+WTEQfqXnV47UHrCGOcuqbw4c8hRltxI5OB5/iJfL/X0RRHpoKXbswDIGxJ/IL9KKagKtucCG6tRSXyRlmrPHpYKw/gMRv+rkWK9ueQdOsfCh0FGy8eVnHYC7MsRol6uI98OLxle6iwiDRho85+yV5tnT3EaJZHoKzL/6UB25QIOrPHa61GIlaml79eCbcABgF8nJOBID/G0xoO5f5p8bmjcZCf+458CZN/QbxekceVZsEct7LrJ42/e1hhqGAXtMX3PIVvf0JUPi0sHEm0UsddYRQooQDABhtjL62QkQnTxBItvjTRz33M/E9nbvjo4nSKxy2Op46cDKiIuYB3zPTzR/RR7p8VaRK00OANcw8SaVbVTL6A5iPQ6sOtPjwjHpLvAg583ttN+uPAoKC43UnmMcYdjByDrz8ZIMeRzrw4OAVdn0lredwLp/p/6S0D+t3pHrVPWelgycelFwYeoXt7Brg45Asovou6fkBactik6il96tS0Vl9H4Dq9jg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR11MB5978.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(39860400002)(396003)(346002)(376002)(136003)(366004)(451199018)(4326008)(8676002)(66556008)(66476007)(66946007)(76116006)(6916009)(41300700001)(91956017)(5660300002)(8936002)(64756008)(66446008)(316002)(38100700002)(122000001)(54906003)(82960400001)(38070700005)(83380400001)(478600001)(6486002)(186003)(71200400001)(26005)(36756003)(86362001)(2616005)(107886003)(2906002)(6512007)(6506007);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?NGFUTHAyREpMRWFjV044REVEdUg3aW5XWkxvTm9TN3RBWUdaNXpkK21VSSth?=
+ =?utf-8?B?eVcwbFUrK0h0bFBBQWtBY0xRRjJ3ME96N08zRVpNa1U4N3NSeU82bC9ubjNw?=
+ =?utf-8?B?QWZTenhaTDB5QThKSW5CYXArOXRGTXdnZkZIWUdHQXB4RGhqamtvODNJc3J0?=
+ =?utf-8?B?TUpEdjB3Vnh4Njhzb2pxblhZUzZEWDNwdVIrSXdMbVk4S0ZOQVNwaSs4QlBW?=
+ =?utf-8?B?TXNUQjZxVjlMVDVkeUNyVFFsbW1KeGNUbkVBam9VdVMyMGJqYmpRZms1dXFL?=
+ =?utf-8?B?TGRqWitqaytTKzBzZk1vcEtsRi8zM2RIeG8xRytSVzNuMS9rajhXSHR5WGhE?=
+ =?utf-8?B?NXRzU0J6NkxWbitBUUtzdlQraU5LZlVMYWtZWmdqTTFtRjdmMUVlRTVFdVVu?=
+ =?utf-8?B?RFFMQkxYSEFMcjA0ZS9NcHdLKzYrQmI4OUxUS2V4VUtESWhSdDBEcFA1VnBR?=
+ =?utf-8?B?bExBaHBLQ3lPdkNQZXVlMm14Q2lWZTZTTHFIQ2FzUUZYd2gveUZ4MTN5Zmx3?=
+ =?utf-8?B?WWNhVExKdkFaZ0xZZ1BtMDk3UWlxTm56dkVOZWVvK21mcGNMNmxFeU1rTDFu?=
+ =?utf-8?B?c3NIZS9XR1lNeDhkOFM0NHE4Sis3NzVxVmxIcG1JWnl6amx4bWwvTTVHaFdG?=
+ =?utf-8?B?cEM2WmJ5bHZXdVRQTXJkTnZZZi9jeC8zd0tDeFlZTHlLV3pwZnVrQTJXRHh1?=
+ =?utf-8?B?Mi9EdnRlSUFaY01VUXJMSHFHNk5UK1BKam5lOFJ0VFhZeTF1SVpDcXZtRWxq?=
+ =?utf-8?B?Y0czL2xVUXJjWDc4NXk0K0RTNWZ2dGwwbTdGNGdZRHVDdDNSRU5lMkV4TSsr?=
+ =?utf-8?B?U1BDSU51VTFFUk0xczB5WUZGTWZ3L2dqZ1dKWkdnZHRJMUxkZHVPWmlNV2ha?=
+ =?utf-8?B?TXo5STA3dmpZY2laNWFmTzdxckc0Tk5BaDJUT3ZSOEJnTUMzZEFwckR3Rlg2?=
+ =?utf-8?B?UW82SSt2c2VxQldCT01CTlkvL0ZtMW1Kc3NZbnk2MFF1ZDZoczViMVRpd0h4?=
+ =?utf-8?B?UnB5ckVGeGEyVldNS3k1WkVrODZ4blJ3RkhLRUp3MmxpYzBkRHFxNUJYUkdL?=
+ =?utf-8?B?WjR6OUhRUEVrRlVacTJQMkVjZVRObmREVUJkeDJST0tmUE9McGJlQ1B5M1ZW?=
+ =?utf-8?B?WTRwV2JaSHUvME5SZ1FvditqQ2lXZEl1U3JnbE1yczBvVXBERXJucTQ0bmNj?=
+ =?utf-8?B?THl4ZDRzdExDMU1DOFVxRE1UMHBLaEEzVTAzSWpLMnB1cEwvaUlkOUNzMHhS?=
+ =?utf-8?B?djFUaDR6eW8xRnJpS3lBdExoYWZISDJFa3dvaW4xWVFwWW9ON3RJK2VlT0JL?=
+ =?utf-8?B?bXZpd0svTDBPRjF6cTlPeHNuaW5sdEVISndDUEV3L2srei9aLzU5Vzk2dWRF?=
+ =?utf-8?B?UGUwMXg1UitRdkJ5bVBXbm1ybmVMbXFUcTZEbUVud3orclRiZWlyY1dkWWxO?=
+ =?utf-8?B?SnAvTGJFNjJ6QU1Yc3NIWGtYRlJXbU83amlsTVBKSy9VTndTaVZGS2Y0Umxw?=
+ =?utf-8?B?Ulg5RHIyQTVJYUZOK3pUK3VMSy9YaTQyOVVnSENsQVJkcU1lcERVVGpJRFhm?=
+ =?utf-8?B?aGxQQXREejN2TVc3NjNxdkdKVEZ6endZdXlnZHBJeEk1aDI2Nk9majVsYldy?=
+ =?utf-8?B?TUtaZHlFTmdGK041UnRJQzh6RFltd2Nnb1dLblozQVZ2YmN5YUMxMXF2WThl?=
+ =?utf-8?B?d2dSQlVZRUhEdk5pQ0ZndVNQelF5Qk4rRmJ6MlhCUzBrelNkQWJkdGlzd3o4?=
+ =?utf-8?B?NUxQUW9pb2QweHBHa1oxY2ExQ2hvSDhKMExjWUh0OW5nMzJ3OVl0VVIyRlNk?=
+ =?utf-8?B?ZUR1TFNPd21GVXIxRnlrTU45clVhMWVIVGRVZkVPcUd2WUJLNUhvekVZRXVR?=
+ =?utf-8?B?Q08wd1BrUHpCbDRTLzhsR1A1Q2RxS1N5VkNNOCthUlZ0WkE0emFXc0FaNEtj?=
+ =?utf-8?B?a29aYy8zU2ZMeEJON3IzRnAxYzRtcGVBbWNOTkgvM0k2VTV3cWpncU5ZVzhS?=
+ =?utf-8?B?T2tNNWJKbXA5L01Rd2JVT2JLQ0hCMGx1NmpLU0psTjVxS1FCNm9zVURsc1dC?=
+ =?utf-8?B?YmwxcHc1UWJFaVUwYjFMWWVrcGhhck82VlpLc1l6eGdTR2Q3M1ZqVW80QlhY?=
+ =?utf-8?B?UW5SdDJpSVdJQjcxR2VYNGVsNkRwZFhOZDBNV0svNnpFTDVheUpLQUpnbGVK?=
+ =?utf-8?B?SHc9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <98454FF1A2BE1349ABA6B8CE11507F21@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230315051444.3229621-8-willy@infradead.org>
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BL1PR11MB5978.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 57739521-b8d2-4b7f-7549-08db253a157b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Mar 2023 09:46:00.1644
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: YjjPAggOIhik0Er0a8LdZYFyHM5x5gjUG044TCFZFCpj3vym3wZMbkQLj9Tn7tNJJX6DcYYKrGFehy59uFCErA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR11MB5186
+X-OriginatorOrg: intel.com
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 15, 2023 at 05:14:15AM +0000, Matthew Wilcox (Oracle) wrote:
-> Add PFN_PTE_SHIFT, update_mmu_cache_range(), flush_dcache_folio()
-> and flush_icache_pages().
-> 
-> Change the PG_dc_clean flag from being per-page to per-folio (which
-> means it cannot always be set as we don't know that all pages in this
-> folio were cleaned).  Enhance the internal flush routines to take the
-> number of pages to flush.
-> 
-> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-> Cc: Vineet Gupta <vgupta@kernel.org>
-> Cc: linux-snps-arc@lists.infradead.org
-
-Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
-
-> ---
->  arch/arc/include/asm/cacheflush.h         |  7 ++-
->  arch/arc/include/asm/pgtable-bits-arcv2.h | 11 ++--
->  arch/arc/include/asm/pgtable-levels.h     |  1 +
->  arch/arc/mm/cache.c                       | 61 ++++++++++++++---------
->  arch/arc/mm/tlb.c                         | 18 ++++---
->  5 files changed, 58 insertions(+), 40 deletions(-)
-> 
-> diff --git a/arch/arc/include/asm/cacheflush.h b/arch/arc/include/asm/cacheflush.h
-> index e201b4b1655a..04f65f588510 100644
-> --- a/arch/arc/include/asm/cacheflush.h
-> +++ b/arch/arc/include/asm/cacheflush.h
-> @@ -25,17 +25,20 @@
->   * in update_mmu_cache()
->   */
->  #define flush_icache_page(vma, page)
-> +#define flush_icache_pages(vma, page, nr)
->  
->  void flush_cache_all(void);
->  
->  void flush_icache_range(unsigned long kstart, unsigned long kend);
->  void __sync_icache_dcache(phys_addr_t paddr, unsigned long vaddr, int len);
-> -void __inv_icache_page(phys_addr_t paddr, unsigned long vaddr);
-> -void __flush_dcache_page(phys_addr_t paddr, unsigned long vaddr);
-> +void __inv_icache_pages(phys_addr_t paddr, unsigned long vaddr, unsigned nr);
-> +void __flush_dcache_pages(phys_addr_t paddr, unsigned long vaddr, unsigned nr);
->  
->  #define ARCH_IMPLEMENTS_FLUSH_DCACHE_PAGE 1
->  
->  void flush_dcache_page(struct page *page);
-> +void flush_dcache_folio(struct folio *folio);
-> +#define flush_dcache_folio flush_dcache_folio
->  
->  void dma_cache_wback_inv(phys_addr_t start, unsigned long sz);
->  void dma_cache_inv(phys_addr_t start, unsigned long sz);
-> diff --git a/arch/arc/include/asm/pgtable-bits-arcv2.h b/arch/arc/include/asm/pgtable-bits-arcv2.h
-> index 6e9f8ca6d6a1..06d8039180c0 100644
-> --- a/arch/arc/include/asm/pgtable-bits-arcv2.h
-> +++ b/arch/arc/include/asm/pgtable-bits-arcv2.h
-> @@ -100,14 +100,11 @@ static inline pte_t pte_modify(pte_t pte, pgprot_t newprot)
->  	return __pte((pte_val(pte) & _PAGE_CHG_MASK) | pgprot_val(newprot));
->  }
->  
-> -static inline void set_pte_at(struct mm_struct *mm, unsigned long addr,
-> -			      pte_t *ptep, pte_t pteval)
-> -{
-> -	set_pte(ptep, pteval);
-> -}
-> +void update_mmu_cache_range(struct vm_area_struct *vma, unsigned long address,
-> +		      pte_t *ptep, unsigned int nr);
->  
-> -void update_mmu_cache(struct vm_area_struct *vma, unsigned long address,
-> -		      pte_t *ptep);
-> +#define update_mmu_cache(vma, addr, ptep) \
-> +	update_mmu_cache_range(vma, addr, ptep, 1)
->  
->  /*
->   * Encode/decode swap entries and swap PTEs. Swap PTEs are all PTEs that
-> diff --git a/arch/arc/include/asm/pgtable-levels.h b/arch/arc/include/asm/pgtable-levels.h
-> index ef68758b69f7..fc417c75c24d 100644
-> --- a/arch/arc/include/asm/pgtable-levels.h
-> +++ b/arch/arc/include/asm/pgtable-levels.h
-> @@ -169,6 +169,7 @@
->  #define pte_ERROR(e) \
->  	pr_crit("%s:%d: bad pte %08lx.\n", __FILE__, __LINE__, pte_val(e))
->  
-> +#define PFN_PTE_SHIFT		PAGE_SHIFT
->  #define pte_none(x)		(!pte_val(x))
->  #define pte_present(x)		(pte_val(x) & _PAGE_PRESENT)
->  #define pte_clear(mm,addr,ptep)	set_pte_at(mm, addr, ptep, __pte(0))
-> diff --git a/arch/arc/mm/cache.c b/arch/arc/mm/cache.c
-> index 55c6de138eae..3c16ee942a5c 100644
-> --- a/arch/arc/mm/cache.c
-> +++ b/arch/arc/mm/cache.c
-> @@ -752,17 +752,17 @@ static inline void arc_slc_enable(void)
->   * There's a corollary case, where kernel READs from a userspace mapped page.
->   * If the U-mapping is not congruent to K-mapping, former needs flushing.
->   */
-> -void flush_dcache_page(struct page *page)
-> +void flush_dcache_folio(struct folio *folio)
->  {
->  	struct address_space *mapping;
->  
->  	if (!cache_is_vipt_aliasing()) {
-> -		clear_bit(PG_dc_clean, &page->flags);
-> +		clear_bit(PG_dc_clean, &folio->flags);
->  		return;
->  	}
->  
->  	/* don't handle anon pages here */
-> -	mapping = page_mapping_file(page);
-> +	mapping = folio_flush_mapping(folio);
->  	if (!mapping)
->  		return;
->  
-> @@ -771,17 +771,27 @@ void flush_dcache_page(struct page *page)
->  	 * Make a note that K-mapping is dirty
->  	 */
->  	if (!mapping_mapped(mapping)) {
-> -		clear_bit(PG_dc_clean, &page->flags);
-> -	} else if (page_mapcount(page)) {
-> -
-> +		clear_bit(PG_dc_clean, &folio->flags);
-> +	} else if (folio_mapped(folio)) {
->  		/* kernel reading from page with U-mapping */
-> -		phys_addr_t paddr = (unsigned long)page_address(page);
-> -		unsigned long vaddr = page->index << PAGE_SHIFT;
-> +		phys_addr_t paddr = (unsigned long)folio_address(folio);
-> +		unsigned long vaddr = folio_pos(folio);
->  
-> +		/*
-> +		 * vaddr is not actually the virtual address, but is
-> +		 * congruent to every user mapping.
-> +		 */
->  		if (addr_not_cache_congruent(paddr, vaddr))
-> -			__flush_dcache_page(paddr, vaddr);
-> +			__flush_dcache_pages(paddr, vaddr,
-> +						folio_nr_pages(folio));
->  	}
->  }
-> +EXPORT_SYMBOL(flush_dcache_folio);
-> +
-> +void flush_dcache_page(struct page *page)
-> +{
-> +	return flush_dcache_folio(page_folio(page));
-> +}
->  EXPORT_SYMBOL(flush_dcache_page);
->  
->  /*
-> @@ -921,18 +931,18 @@ void __sync_icache_dcache(phys_addr_t paddr, unsigned long vaddr, int len)
->  }
->  
->  /* wrapper to compile time eliminate alignment checks in flush loop */
-> -void __inv_icache_page(phys_addr_t paddr, unsigned long vaddr)
-> +void __inv_icache_pages(phys_addr_t paddr, unsigned long vaddr, unsigned nr)
->  {
-> -	__ic_line_inv_vaddr(paddr, vaddr, PAGE_SIZE);
-> +	__ic_line_inv_vaddr(paddr, vaddr, nr * PAGE_SIZE);
->  }
->  
->  /*
->   * wrapper to clearout kernel or userspace mappings of a page
->   * For kernel mappings @vaddr == @paddr
->   */
-> -void __flush_dcache_page(phys_addr_t paddr, unsigned long vaddr)
-> +void __flush_dcache_pages(phys_addr_t paddr, unsigned long vaddr, unsigned nr)
->  {
-> -	__dc_line_op(paddr, vaddr & PAGE_MASK, PAGE_SIZE, OP_FLUSH_N_INV);
-> +	__dc_line_op(paddr, vaddr & PAGE_MASK, nr * PAGE_SIZE, OP_FLUSH_N_INV);
->  }
->  
->  noinline void flush_cache_all(void)
-> @@ -962,10 +972,10 @@ void flush_cache_page(struct vm_area_struct *vma, unsigned long u_vaddr,
->  
->  	u_vaddr &= PAGE_MASK;
->  
-> -	__flush_dcache_page(paddr, u_vaddr);
-> +	__flush_dcache_pages(paddr, u_vaddr, 1);
->  
->  	if (vma->vm_flags & VM_EXEC)
-> -		__inv_icache_page(paddr, u_vaddr);
-> +		__inv_icache_pages(paddr, u_vaddr, 1);
->  }
->  
->  void flush_cache_range(struct vm_area_struct *vma, unsigned long start,
-> @@ -978,9 +988,9 @@ void flush_anon_page(struct vm_area_struct *vma, struct page *page,
->  		     unsigned long u_vaddr)
->  {
->  	/* TBD: do we really need to clear the kernel mapping */
-> -	__flush_dcache_page((phys_addr_t)page_address(page), u_vaddr);
-> -	__flush_dcache_page((phys_addr_t)page_address(page),
-> -			    (phys_addr_t)page_address(page));
-> +	__flush_dcache_pages((phys_addr_t)page_address(page), u_vaddr, 1);
-> +	__flush_dcache_pages((phys_addr_t)page_address(page),
-> +			    (phys_addr_t)page_address(page), 1);
->  
->  }
->  
-> @@ -989,6 +999,8 @@ void flush_anon_page(struct vm_area_struct *vma, struct page *page,
->  void copy_user_highpage(struct page *to, struct page *from,
->  	unsigned long u_vaddr, struct vm_area_struct *vma)
->  {
-> +	struct folio *src = page_folio(from);
-> +	struct folio *dst = page_folio(to);
->  	void *kfrom = kmap_atomic(from);
->  	void *kto = kmap_atomic(to);
->  	int clean_src_k_mappings = 0;
-> @@ -1005,7 +1017,7 @@ void copy_user_highpage(struct page *to, struct page *from,
->  	 * addr_not_cache_congruent() is 0
->  	 */
->  	if (page_mapcount(from) && addr_not_cache_congruent(kfrom, u_vaddr)) {
-> -		__flush_dcache_page((unsigned long)kfrom, u_vaddr);
-> +		__flush_dcache_pages((unsigned long)kfrom, u_vaddr, 1);
->  		clean_src_k_mappings = 1;
->  	}
->  
-> @@ -1019,17 +1031,17 @@ void copy_user_highpage(struct page *to, struct page *from,
->  	 * non copied user pages (e.g. read faults which wire in pagecache page
->  	 * directly).
->  	 */
-> -	clear_bit(PG_dc_clean, &to->flags);
-> +	clear_bit(PG_dc_clean, &dst->flags);
->  
->  	/*
->  	 * if SRC was already usermapped and non-congruent to kernel mapping
->  	 * sync the kernel mapping back to physical page
->  	 */
->  	if (clean_src_k_mappings) {
-> -		__flush_dcache_page((unsigned long)kfrom, (unsigned long)kfrom);
-> -		set_bit(PG_dc_clean, &from->flags);
-> +		__flush_dcache_pages((unsigned long)kfrom,
-> +					(unsigned long)kfrom, 1);
->  	} else {
-> -		clear_bit(PG_dc_clean, &from->flags);
-> +		clear_bit(PG_dc_clean, &src->flags);
->  	}
->  
->  	kunmap_atomic(kto);
-> @@ -1038,8 +1050,9 @@ void copy_user_highpage(struct page *to, struct page *from,
->  
->  void clear_user_page(void *to, unsigned long u_vaddr, struct page *page)
->  {
-> +	struct folio *folio = page_folio(page);
->  	clear_page(to);
-> -	clear_bit(PG_dc_clean, &page->flags);
-> +	clear_bit(PG_dc_clean, &folio->flags);
->  }
->  EXPORT_SYMBOL(clear_user_page);
->  
-> diff --git a/arch/arc/mm/tlb.c b/arch/arc/mm/tlb.c
-> index 5f71445f26bd..0a996b65bb4e 100644
-> --- a/arch/arc/mm/tlb.c
-> +++ b/arch/arc/mm/tlb.c
-> @@ -467,8 +467,8 @@ void create_tlb(struct vm_area_struct *vma, unsigned long vaddr, pte_t *ptep)
->   * Note that flush (when done) involves both WBACK - so physical page is
->   * in sync as well as INV - so any non-congruent aliases don't remain
->   */
-> -void update_mmu_cache(struct vm_area_struct *vma, unsigned long vaddr_unaligned,
-> -		      pte_t *ptep)
-> +void update_mmu_cache_range(struct vm_area_struct *vma,
-> +		unsigned long vaddr_unaligned, pte_t *ptep, unsigned int nr)
->  {
->  	unsigned long vaddr = vaddr_unaligned & PAGE_MASK;
->  	phys_addr_t paddr = pte_val(*ptep) & PAGE_MASK_PHYS;
-> @@ -491,15 +491,19 @@ void update_mmu_cache(struct vm_area_struct *vma, unsigned long vaddr_unaligned,
->  	 */
->  	if ((vma->vm_flags & VM_EXEC) ||
->  	     addr_not_cache_congruent(paddr, vaddr)) {
-> -
-> -		int dirty = !test_and_set_bit(PG_dc_clean, &page->flags);
-> +		struct folio *folio = page_folio(page);
-> +		int dirty = !test_and_set_bit(PG_dc_clean, &folio->flags);
->  		if (dirty) {
-> +			unsigned long offset = offset_in_folio(folio, paddr);
-> +			nr = folio_nr_pages(folio);
-> +			paddr -= offset;
-> +			vaddr -= offset;
->  			/* wback + inv dcache lines (K-mapping) */
-> -			__flush_dcache_page(paddr, paddr);
-> +			__flush_dcache_pages(paddr, paddr, nr);
->  
->  			/* invalidate any existing icache lines (U-mapping) */
->  			if (vma->vm_flags & VM_EXEC)
-> -				__inv_icache_page(paddr, vaddr);
-> +				__inv_icache_pages(paddr, vaddr, nr);
->  		}
->  	}
->  }
-> @@ -531,7 +535,7 @@ void update_mmu_cache_pmd(struct vm_area_struct *vma, unsigned long addr,
->  				 pmd_t *pmd)
->  {
->  	pte_t pte = __pte(pmd_val(*pmd));
-> -	update_mmu_cache(vma, addr, &pte);
-> +	update_mmu_cache_range(vma, addr, &pte, HPAGE_PMD_NR);
->  }
->  
->  void local_flush_pmd_tlb_range(struct vm_area_struct *vma, unsigned long start,
-> -- 
-> 2.39.2
-> 
-
--- 
-Sincerely yours,
-Mike.
+DQo+ID4gDQo+ID4gSSB0aGluayB5b3Ugc2hvdWxkIHVzZSBoYXJkd2FyZV9lbmFibGVfYWxsKCks
+IGFuZCBqdXN0IGRvIHNvbWV0aGluZyBzaW1pbGFyIHRvDQo+ID4gYmVsb3cgaW4gdm14X2hhcmR3
+YXJlX2VuYWJsZSgpOg0KPiANCj4gVGhlIHVzZSBvZiBoYXJkd2FyZV9lbmFibGVfYWxsKCkgbWFr
+ZSB1cyBjaXJjbGUgYmFjayB0byByZWZhY3RvcmluZyBLVk0NCj4gaGFyZHdhcmUgaW5pdGlhbGl6
+YXRpb24gdG9waWMuICBJJ2QgbGlrZSB0byBzdGF5IGF3YXkgZnJvbSBpdCBmb3Igbm93IGZvciBU
+RFguDQoNClNlYW4ncyBzZXJpZXMgdG8gaW1wcm92ZSBoYXJkd2FyZSBlbmFibGUgaGFzIGJlZW4g
+bWVyZ2VkIHRvIHVwc3RyZWFtIGFscmVhZHkuICANCg0KQ2FuIHlvdSBlbGFib3JhdGUgd2hhdCdz
+IHRoZSBpc3N1ZSBoZXJlPw0KDQpbLi4uXQ0KDQo+ICtzdGF0aWMgYm9vbCBlbmFibGVfdGR4IF9f
+cm9fYWZ0ZXJfaW5pdDsNCj4gK21vZHVsZV9wYXJhbV9uYW1lZCh0ZHgsIGVuYWJsZV90ZHgsIGJv
+b2wsIDA0NDQpOw0KPiArDQo+ICtzdGF0aWMgX19pbml0IGludCB2dF9oYXJkd2FyZV9zZXR1cCh2
+b2lkKQ0KPiArew0KPiArCWludCByZXQ7DQo+ICsNCj4gKwlyZXQgPSB2bXhfaGFyZHdhcmVfc2V0
+dXAoKTsNCj4gKwlpZiAocmV0KQ0KPiArCQlyZXR1cm4gcmV0Ow0KPiArDQo+ICsJZW5hYmxlX3Rk
+eCA9IGVuYWJsZV90ZHggJiYgIXRkeF9oYXJkd2FyZV9zZXR1cCgmdnRfeDg2X29wcyk7DQoNClVu
+Zm9ydHVuYXRlbHksIHRoZSBlbmFibGVfdGR4IHNob3VsZCBhbHNvIGJlIHByb3RlY3RlZCBieSB0
+aGUgY3B1c19yZWFkX2xvY2soKSwNCmJlY2F1c2UgQ1BVIGhvdHBsdWcgY29kZSBwYXRoIGNoZWNr
+cyBpdCB0b28gKGFzIHNlZW4gaW4geW91ciBuZXh0IHBhdGNoKS4NCg0KPiArDQo+ICsJcmV0dXJu
+IDA7DQo+ICt9DQo+ICsNCj4gICNkZWZpbmUgVk1YX1JFUVVJUkVEX0FQSUNWX0lOSElCSVRTCQkg
+ICAgICAgXA0KPiAgKAkJCQkJCSAgICAgICBcDQo+ICAgICAgICAgQklUKEFQSUNWX0lOSElCSVRf
+UkVBU09OX0RJU0FCTEUpfAkgICAgICAgXA0KPiBAQCAtMTU5LDcgKzE3NSw3IEBAIHN0cnVjdCBr
+dm1feDg2X29wcyB2dF94ODZfb3BzIF9faW5pdGRhdGEgPSB7DQo+ICB9Ow0KPiAgDQo+ICBzdHJ1
+Y3Qga3ZtX3g4Nl9pbml0X29wcyB2dF9pbml0X29wcyBfX2luaXRkYXRhID0gew0KPiAtCS5oYXJk
+d2FyZV9zZXR1cCA9IHZteF9oYXJkd2FyZV9zZXR1cCwNCj4gKwkuaGFyZHdhcmVfc2V0dXAgPSB2
+dF9oYXJkd2FyZV9zZXR1cCwNCj4gIAkuaGFuZGxlX2ludGVsX3B0X2ludHIgPSBOVUxMLA0KPiAg
+DQo+ICAJLnJ1bnRpbWVfb3BzID0gJnZ0X3g4Nl9vcHMsDQo+IGRpZmYgLS1naXQgYS9hcmNoL3g4
+Ni9rdm0vdm14L3RkeC5jIGIvYXJjaC94ODYva3ZtL3ZteC90ZHguYw0KPiBuZXcgZmlsZSBtb2Rl
+IDEwMDY0NA0KPiBpbmRleCAwMDAwMDAwMDAwMDAuLjhkMjY1ZDdhZTZmYg0KPiAtLS0gL2Rldi9u
+dWxsDQo+ICsrKyBiL2FyY2gveDg2L2t2bS92bXgvdGR4LmMNCj4gQEAgLTAsMCArMSw3NCBAQA0K
+PiArLy8gU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0yLjANCj4gKyNpbmNsdWRlIDxsaW51
+eC9jcHUuaD4NCj4gKw0KPiArI2luY2x1ZGUgPGFzbS90ZHguaD4NCj4gKw0KPiArI2luY2x1ZGUg
+ImNhcGFiaWxpdGllcy5oIg0KPiArI2luY2x1ZGUgIng4Nl9vcHMuaCINCj4gKyNpbmNsdWRlICJ4
+ODYuaCINCj4gKw0KPiArI3VuZGVmIHByX2ZtdA0KPiArI2RlZmluZSBwcl9mbXQoZm10KSBLQlVJ
+TERfTU9ETkFNRSAiOiAiIGZtdA0KPiArDQo+ICtzdGF0aWMgaW50IF9faW5pdCB0ZHhfbW9kdWxl
+X3NldHVwKHZvaWQpDQo+ICt7DQo+ICsJaW50IHJldDsNCj4gKw0KPiArCXJldCA9IHRkeF9lbmFi
+bGUoKTsNCj4gKwlpZiAocmV0KSB7DQo+ICsJCXByX2luZm8oIkZhaWxlZCB0byBpbml0aWFsaXpl
+IFREWCBtb2R1bGUuXG4iKTsNCj4gKwkJcmV0dXJuIHJldDsNCj4gKwl9DQo+ICsNCj4gKwlwcl9p
+bmZvKCJURFggaXMgc3VwcG9ydGVkLlxuIik7DQo+ICsJcmV0dXJuIDA7DQo+ICt9DQo+ICsNCj4g
+K3N0YXRpYyBpbnQgX19pbml0IHRkeF9jcHVfZW5hYmxlX2NwdSh2b2lkICp1bnVzZWQpDQo+ICt7
+DQo+ICsJaW50IHI7DQo+ICsNCj4gKwkvKg0KPiArCSAqIFREWCByZXF1aXJlcyBWTVguIEJlY2F1
+c2UgdGhyZWFkIGNhbiBiZSBtaWdyYXRlZCwga2VlcCBWTVhPTiBvbg0KPiArCSAqIGFsbCBvbmxp
+bmUgY3B1cyB1bnRpbCBhbGwgVERYIG1vZHVsZSBpbml0aWFsaXphdGlvbiBpcyBkb25lLg0KPiAr
+CSAqLw0KDQpUaGUgc2Vjb25kIHNlbnRlbmNlIGluIHRoaXMgY29tbWVudCBzaG91bGQgYmUgc29t
+ZXdoZXJlIGVsc2UsIGJ1dCBub3QgaGVyZS4NCg0KPiArCXIgPSB2bXhvbigpOw0KPiArCWlmIChy
+KQ0KPiArCQlyZXR1cm4gcjsNCj4gKwlyZXR1cm4gdGR4X2NwdV9lbmFibGUoKTsNCj4gK30NCj4g
+Kw0KPiArc3RhdGljIHZvaWQgX19pbml0IHRkeF92bXhvZmZfY3B1KHZvaWQgKnVudXNlZCkNCj4g
+K3sNCj4gKwlXQVJOX09OX09OQ0UoY3B1X3ZteG9mZigpKTsNCj4gK30NCj4gKw0KPiAraW50IF9f
+aW5pdCB0ZHhfaGFyZHdhcmVfc2V0dXAoc3RydWN0IGt2bV94ODZfb3BzICp4ODZfb3BzKQ0KPiAr
+ew0KPiArCWludCBjcHU7DQo+ICsJaW50IHIgPSAwOw0KPiArDQo+ICsJaWYgKCFlbmFibGVfZXB0
+KSB7DQo+ICsJCXByX3dhcm4oIkNhbm5vdCBlbmFibGUgVERYIHdpdGggRVBUIGRpc2FibGVkXG4i
+KTsNCj4gKwkJcmV0dXJuIC1FSU5WQUw7DQo+ICsJfQ0KPiArDQo+ICsJLyogdGR4X2VuYWJsZSgp
+IGluIHRkeF9tb2R1bGVfc2V0dXAoKSByZXF1aXJlcyBjcHVzIGxvY2suICovDQo+ICsJY3B1c19y
+ZWFkX2xvY2soKTsNCj4gKwkvKg0KPiArCSAqIEJlY2F1c2UgdGR4X2NwdV9lbmFibGUoKSBhY3F1
+aXJlcyBzcGluIGxvY2tzLCBvbl9lYWNoX2NwdSgpDQo+ICsJICogY2FuJ3QgYmUgdXNlZC4NCj4g
+KwkgKi8NCg0KSGVyZSB5b3UgaGF2ZSBjcHVzX3JlYWRfbG9jaygpIHByb3RlY3Rpb24sIHNvIHRk
+eF9jcHVfZW5hYmxlKCkgY2Fubm90IGJlIGNhbGxlZA0KZnJvbSBDUFUgaG90cGx1ZyBjb2RlIHBh
+dGggd2hlbiB5b3UgYXJlIGRvaW5nIGhlcmUuDQoNClNvLCB1c2luZyBvbl9lYWNoX2NwdSgpIHRv
+IGRvIHRkeF9jcHVfZW5hYmxlKCkgaXMgT0sgaGVyZSwgYmVjYXVzZSBvbiBvbmUNCnBhcnRpY3Vs
+YXIgY3B1LCB3aGVuIGl0IGFscmVhZHkgaGFzIHRha2VuIHRoZSBzcGlubG9jaywgaXQgY2Fubm90
+IHJlY2VpdmUgSVBJDQphbnltb3JlIHdoaWNoIGNhbiB0cnkgdG8gdGFrZSB0aGUgc3BpbmxvY2sg
+YWdhaW4uDQoNCj4gKwlmb3JfZWFjaF9vbmxpbmVfY3B1KGNwdSkgew0KPiArCQlpZiAoc21wX2Nh
+bGxfb25fY3B1KGNwdSwgdGR4X2NwdV9lbmFibGVfY3B1LCBOVUxMLCBmYWxzZSkpIHsNCj4gKwkJ
+CXIgPSAtRUlPOw0KPiArCQkJYnJlYWs7DQo+ICsJCX0NCj4gKwl9DQo+ICsJaWYgKCFyKQ0KPiAr
+CQlyID0gdGR4X21vZHVsZV9zZXR1cCgpOw0KPiArCW9uX2VhY2hfY3B1KHRkeF92bXhvZmZfY3B1
+LCBOVUxMLCAxKTsNCj4gKwljcHVzX3JlYWRfdW5sb2NrKCk7DQo+ICsNCj4gKwlyZXR1cm4gcjsN
+Cj4gK30NCg0KSSB0aGluayB5b3UgY2FuIG1lcmdlIG5leHQgcGF0Y2ggd2l0aCB0aGlzIG9uZSBi
+ZWNhdXNlIHRoZXkgYXJlIGtpbmRhIHJlbGF0ZWQuIMKgDQoNClB1dHRpbmcgdGhlbSB0b2dldGhl
+ciBhbGxvd3MgcGVvcGxlIHRvIHJldmlldyBtb3JlIGVhc2lseS4NCg==
