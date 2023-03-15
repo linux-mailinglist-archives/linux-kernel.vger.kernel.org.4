@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 069C26BA7BA
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 07:23:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D35E36BA7BC
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 07:23:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230475AbjCOGX1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 02:23:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58518 "EHLO
+        id S231201AbjCOGXa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 02:23:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230421AbjCOGXZ (ORCPT
+        with ESMTP id S230494AbjCOGX1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 02:23:25 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D16F30EA8;
-        Tue, 14 Mar 2023 23:23:22 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32F6NCrl033939;
-        Wed, 15 Mar 2023 01:23:12 -0500
+        Wed, 15 Mar 2023 02:23:27 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E93B25C9D9;
+        Tue, 14 Mar 2023 23:23:25 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32F6NFfh090610;
+        Wed, 15 Mar 2023 01:23:15 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1678861392;
-        bh=aEgd9XPuLQCR59sQocm1j89Ty0kcJwLrMZIDQCf67fQ=;
-        h=From:To:CC:Subject:Date;
-        b=gykANu25PYJv0FTC/bkyN5pldAFBEJjn4+n9mO3DTk/loMbdJN5L0B0iOoN9sHp/9
-         bTManLCL5sCdOg/17uwe4Oiin8l6q1HrH9M7L/4vpVTHZm/J5VNhXZkJxf+YmhMLKN
-         0/jdFPBCpV64nTmdyrN8Gkuo1u+OGkuTTxBtyj28=
+        s=ti-com-17Q1; t=1678861395;
+        bh=eLo46IzbsOYCRryf+5dtB+lxf//RU+jJSuDqsVB1sH0=;
+        h=From:To:CC:Subject:Date:In-Reply-To:References;
+        b=hnBYD99WwvlIN/VRenk99jVy0jsHkSctMhHvgyp7jSUb4tg8gle3HNk00EJWQEG+7
+         xrUAEY7Z9F2JLbsynxKSPgo6XmmJq9xfmgsXc8Nd6l0nkOPdg0ezG/xbIF/jMGC9G1
+         TwdX//BrcTK5/VfdMQom33ZZdDX84xU1z2ymTeWI=
 Received: from DLEE102.ent.ti.com (dlee102.ent.ti.com [157.170.170.32])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32F6NCnY104448
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32F6NF7C105452
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 15 Mar 2023 01:23:12 -0500
-Received: from DLEE112.ent.ti.com (157.170.170.23) by DLEE102.ent.ti.com
+        Wed, 15 Mar 2023 01:23:15 -0500
+Received: from DLEE105.ent.ti.com (157.170.170.35) by DLEE102.ent.ti.com
  (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Wed, 15
- Mar 2023 01:23:11 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE112.ent.ti.com
- (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
+ Mar 2023 01:23:15 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Wed, 15 Mar 2023 01:23:11 -0500
+ Frontend Transport; Wed, 15 Mar 2023 01:23:15 -0500
 Received: from uda0492258.dhcp.ti.com (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32F6N7br024744;
-        Wed, 15 Mar 2023 01:23:08 -0500
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32F6N7bs024744;
+        Wed, 15 Mar 2023 01:23:12 -0500
 From:   Siddharth Vadapalli <s-vadapalli@ti.com>
 To:     <nm@ti.com>, <vigneshr@ti.com>, <kristo@kernel.org>,
         <robh+dt@kernel.org>, <krzysztof.kozlowski@linaro.org>,
@@ -47,10 +47,12 @@ To:     <nm@ti.com>, <vigneshr@ti.com>, <kristo@kernel.org>,
 CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>, <srk@ti.com>,
         <s-vadapalli@ti.com>
-Subject: [PATCH v3 0/4] Add DT support for J721E CPSW9G and J7200 CPSW5G
-Date:   Wed, 15 Mar 2023 11:53:03 +0530
-Message-ID: <20230315062307.1612220-1-s-vadapalli@ti.com>
+Subject: [PATCH v3 1/4] arm64: dts: ti: k3-j721e: Add CPSW9G nodes
+Date:   Wed, 15 Mar 2023 11:53:04 +0530
+Message-ID: <20230315062307.1612220-2-s-vadapalli@ti.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230315062307.1612220-1-s-vadapalli@ti.com>
+References: <20230315062307.1612220-1-s-vadapalli@ti.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -65,82 +67,164 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+TI's J721E SoC has a 9 port Ethernet Switch instance with 8 external
+ports and 1 host port, referred to as CPSW9G.
 
-This series adds the device-tree nodes for the CPSW9G instance of CPSW
-Ethernet Switch on TI's J721E SoC and the CPSW5G instance of CPSW
-Ethernet Switch on TI's J7200 SoC. Additionally, overlays are also added
-to individually enable CPSW9G on J721E SoC and CPSW5G on J7200 SoC in
-QSGMII mode with the Add-On J7 QUAD Port Ethernet expansion QSGMII
-daughtercard.
+Add device-tree nodes for CPSW9G and disable it by default. Device-tree
+overlays will be used to enable it.
 
-This series combines the v2 series for J721E CPSW9G at:
-https://lore.kernel.org/r/20230310103504.731845-1-s-vadapalli@ti.com/
-and the v1 series for J7200 CPSW5G at:
-https://lore.kernel.org/r/20230310101407.722334-1-s-vadapalli@ti.com/
-
-The suggestions for the v2 series for J721E are implemented for the J7200
-series as well in this patch series.
-
+Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
 ---
-Changes from v2 for J721E CPSW9G series:
-1. Rename the overlay k3-j721e-quad-port-eth-exp.dtso as
-   k3-j721e-evm-quad-port-eth-exp.dtso.
-2. Update arch/arm64/boot/dts/ti/Makefile to build k3-j721e-evm.dtb as the
-   result of applying k3-j721e-evm-quad-port-eth-exp.dtbo to
-   k3-j721e-common-proc-board.dtb.
-3. Use the newer "&{/} {" style instead of the "fragments" style in
-   k3-j721e-evm-quad-port-eth-exp.dtso.
-4. Move the "mdio0_pins_default" pinctrl from cpsw0 node into the
-   "cpsw9g_mdio" node.
-5. Disable individual "cpsw0_port" nodes in the main.dtsi file, enabling
-   only the required nodes in the overlay.
-6. Disable the "cpsw9g_mdio" node in the main.dtsi file.
+ arch/arm64/boot/dts/ti/k3-j721e-main.dtsi | 116 ++++++++++++++++++++++
+ arch/arm64/boot/dts/ti/k3-j721e.dtsi      |   1 +
+ 2 files changed, 117 insertions(+)
 
-Changes from v1 for J721E CPSW9G series:
-1. Rename node name "mdio_pins_default" to "mdio0-pins-default", since
-   node names shouldn't contain underscores.
-2. Change node label "mdio_pins_default" to "mdio0_pins_default".
-
-Changes from v1 for J7200 CPSW5G series:
-1. Rename the overlay k3-j7200-quad-port-eth-exp.dtso as
-   k3-j7200-evm-quad-port-eth-exp.dtso.
-2. Update arch/arm64/boot/dts/ti/Makefile to build k3-j7200-evm.dtb as the
-   result of applying k3-j7200-evm-quad-port-eth-exp.dtbo to
-   k3-j7200-common-proc-board.dtb.
-3. Use the newer "&{/} {" style instead of the "fragments" style in
-   k3-j7200-evm-quad-port-eth-exp.dtso.
-4. Move the "mdio0_pins_default" pinctrl from cpsw0 node into the
-   "cpsw5g_mdio" node.
-5. Disable individual "cpsw0_port" nodes in the main.dtsi file, enabling
-   only the required nodes in the overlay.
-6. Disable the "cpsw5g_mdio" node in the main.dtsi file.
-
-J721E CPSW9G v2 series:
-https://lore.kernel.org/r/20230310103504.731845-1-s-vadapalli@ti.com/
-J721E CPSW9G v1 series:
-https://lore.kernel.org/r/20230310092804.692303-1-s-vadapalli@ti.com/
-J7200 CPSW5G v1 series:
-https://lore.kernel.org/r/20230310101407.722334-1-s-vadapalli@ti.com/
-
-Siddharth Vadapalli (4):
-  arm64: dts: ti: k3-j721e: Add CPSW9G nodes
-  arm64: dts: ti: k3-j721e: Add overlay to enable CPSW9G ports in QSGMII
-    mode
-  arm64: dts: ti: j7200-main: Add CPSW5G nodes
-  arm64: dts: ti: k3-j7200: Add overlay to enable CPSW5G ports in QSGMII
-    mode
-
- arch/arm64/boot/dts/ti/Makefile               |   6 +-
- .../ti/k3-j7200-evm-quad-port-eth-exp.dtso    | 100 +++++++++++++
- arch/arm64/boot/dts/ti/k3-j7200-main.dtsi     |  88 ++++++++++++
- .../ti/k3-j721e-evm-quad-port-eth-exp.dtso    | 132 ++++++++++++++++++
- arch/arm64/boot/dts/ti/k3-j721e-main.dtsi     | 116 +++++++++++++++
- arch/arm64/boot/dts/ti/k3-j721e.dtsi          |   1 +
- 6 files changed, 441 insertions(+), 2 deletions(-)
- create mode 100644 arch/arm64/boot/dts/ti/k3-j7200-evm-quad-port-eth-exp.dtso
- create mode 100644 arch/arm64/boot/dts/ti/k3-j721e-evm-quad-port-eth-exp.dtso
-
+diff --git a/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi b/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi
+index c935622f0102..44f2833c5187 100644
+--- a/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi
++++ b/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi
+@@ -61,6 +61,13 @@ serdes_ln_ctrl: mux-controller@4080 {
+ 				      <J721E_SERDES4_LANE2_EDP_LANE2>, <J721E_SERDES4_LANE3_EDP_LANE3>;
+ 		};
+ 
++		cpsw0_phy_gmii_sel: phy@4044 {
++			compatible = "ti,j721e-cpsw9g-phy-gmii-sel";
++			ti,qsgmii-main-ports = <2>, <2>;
++			reg = <0x4044 0x20>;
++			#phy-cells = <1>;
++		};
++
+ 		usb_serdes_mux: mux-controller@4000 {
+ 			compatible = "mmio-mux";
+ 			#mux-control-cells = <1>;
+@@ -404,6 +411,115 @@ cpts@310d0000 {
+ 		};
+ 	};
+ 
++	cpsw0: ethernet@c000000 {
++		compatible = "ti,j721e-cpswxg-nuss";
++		#address-cells = <2>;
++		#size-cells = <2>;
++		reg = <0x0 0xc000000 0x0 0x200000>;
++		reg-names = "cpsw_nuss";
++		ranges = <0x0 0x0 0x0 0x0c000000 0x0 0x200000>;
++		clocks = <&k3_clks 19 89>;
++		clock-names = "fck";
++		power-domains = <&k3_pds 19 TI_SCI_PD_EXCLUSIVE>;
++
++		dmas = <&main_udmap 0xca00>,
++		       <&main_udmap 0xca01>,
++		       <&main_udmap 0xca02>,
++		       <&main_udmap 0xca03>,
++		       <&main_udmap 0xca04>,
++		       <&main_udmap 0xca05>,
++		       <&main_udmap 0xca06>,
++		       <&main_udmap 0xca07>,
++		       <&main_udmap 0x4a00>;
++		dma-names = "tx0", "tx1", "tx2", "tx3",
++			    "tx4", "tx5", "tx6", "tx7",
++			    "rx";
++
++		status = "disabled";
++
++		ethernet-ports {
++			#address-cells = <1>;
++			#size-cells = <0>;
++			cpsw0_port1: port@1 {
++				reg = <1>;
++				ti,mac-only;
++				label = "port1";
++				status = "disabled";
++			};
++
++			cpsw0_port2: port@2 {
++				reg = <2>;
++				ti,mac-only;
++				label = "port2";
++				status = "disabled";
++			};
++
++			cpsw0_port3: port@3 {
++				reg = <3>;
++				ti,mac-only;
++				label = "port3";
++				status = "disabled";
++			};
++
++			cpsw0_port4: port@4 {
++				reg = <4>;
++				ti,mac-only;
++				label = "port4";
++				status = "disabled";
++			};
++
++			cpsw0_port5: port@5 {
++				reg = <5>;
++				ti,mac-only;
++				label = "port5";
++				status = "disabled";
++			};
++
++			cpsw0_port6: port@6 {
++				reg = <6>;
++				ti,mac-only;
++				label = "port6";
++				status = "disabled";
++			};
++
++			cpsw0_port7: port@7 {
++				reg = <7>;
++				ti,mac-only;
++				label = "port7";
++				status = "disabled";
++			};
++
++			cpsw0_port8: port@8 {
++				reg = <8>;
++				ti,mac-only;
++				label = "port8";
++				status = "disabled";
++			};
++		};
++
++		cpsw9g_mdio: mdio@f00 {
++			compatible = "ti,cpsw-mdio","ti,davinci_mdio";
++			reg = <0x0 0xf00 0x0 0x100>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++			clocks = <&k3_clks 19 89>;
++			clock-names = "fck";
++			bus_freq = <1000000>;
++			status = "disabled";
++		};
++
++		cpts@3d000 {
++			compatible = "ti,j721e-cpts";
++			reg = <0x0 0x3d000 0x0 0x400>;
++			clocks = <&k3_clks 19 16>;
++			clock-names = "cpts";
++			interrupts-extended = <&gic500 GIC_SPI 16 IRQ_TYPE_LEVEL_HIGH>;
++			interrupt-names = "cpts";
++			ti,cpts-ext-ts-inputs = <4>;
++			ti,cpts-periodic-outputs = <2>;
++		};
++	};
++
+ 	main_crypto: crypto@4e00000 {
+ 		compatible = "ti,j721e-sa2ul";
+ 		reg = <0x0 0x4e00000 0x0 0x1200>;
+diff --git a/arch/arm64/boot/dts/ti/k3-j721e.dtsi b/arch/arm64/boot/dts/ti/k3-j721e.dtsi
+index 6975cae644d9..ddbaa06e21bd 100644
+--- a/arch/arm64/boot/dts/ti/k3-j721e.dtsi
++++ b/arch/arm64/boot/dts/ti/k3-j721e.dtsi
+@@ -135,6 +135,7 @@ cbass_main: bus@100000 {
+ 			 <0x00 0x06000000 0x00 0x06000000 0x00 0x00400000>, /* USBSS0 */
+ 			 <0x00 0x06400000 0x00 0x06400000 0x00 0x00400000>, /* USBSS1 */
+ 			 <0x00 0x01000000 0x00 0x01000000 0x00 0x0af02400>, /* Most peripherals */
++			 <0x00 0x0c000000 0x00 0x0c000000 0x00 0x0d000000>, /* CPSW9G */
+ 			 <0x00 0x30000000 0x00 0x30000000 0x00 0x0c400000>, /* MAIN NAVSS */
+ 			 <0x00 0x0d000000 0x00 0x0d000000 0x00 0x01800000>, /* PCIe Core*/
+ 			 <0x00 0x0e000000 0x00 0x0e000000 0x00 0x01800000>, /* PCIe Core*/
 -- 
 2.25.1
 
