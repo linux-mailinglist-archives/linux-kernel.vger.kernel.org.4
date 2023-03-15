@@ -2,68 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9680E6BAA6F
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 09:08:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A5016BAA72
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 09:08:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231274AbjCOII0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 04:08:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54284 "EHLO
+        id S231727AbjCOIIe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 04:08:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229892AbjCOIIY (ORCPT
+        with ESMTP id S231534AbjCOIIa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 04:08:24 -0400
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B97D1B336
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 01:08:22 -0700 (PDT)
-Received: by mail-io1-xd29.google.com with SMTP id o12so1493531iow.6
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 01:08:22 -0700 (PDT)
+        Wed, 15 Mar 2023 04:08:30 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6921820A2F
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 01:08:28 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id qe8-20020a17090b4f8800b0023f07253a2cso125946pjb.3
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 01:08:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678867702;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=LT6Ia3vKrU2zpUQTyPaL1FAau/PMFoHjbq3HdkvqDrE=;
-        b=K0QKzfSsUasx51OPzdvhrTCXOOSEw8cM0ekR2+W9mJXPhKFEjFD77h1gulBGNguYpI
-         l0mnOSUakFgLepYHwLyIMPNFZrG4EDnTp1GrEhvOlbQrRlDZZP6upWC5FodYfhC3S7HO
-         QGrGozZea6ofdvV/OA4RSZLwJs8XhXDNg0avOtkb3W17mCJwCn2bZbu7YgvIs8xK1GWg
-         zhaK1BJbhD3eMQrPAmX+euybgH8fEnv+uU4H/amXXUYbAeOJfq5byfVyGpyKYscy4ItW
-         2HVepeWSWq/HcZ4WSpRCQAjm1iMmaxGYmqfRYROLO2RS8ol8vyRlO6g6f0246foykH8a
-         xAsg==
+        d=linaro.org; s=google; t=1678867708;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=zf3SxA1nvFsp+aFJOgDiIaFeqD0uKMLVMNAFYzhVXhY=;
+        b=NddB9feiL1/IHj0GWjT60uDVka3Coer/8QqM++x5QCJ4AUdYzHQ1ZmXgIlgRBFmI8X
+         vj4FdOqUWme3kwggjcL21D4384w100HngzyCxLHJjksA2CATht/g77//QzSpXm+dG3ke
+         XaSwyEfJYikUNUn1MhOj7LZfqQtArIIRl1x0ABE+gZxtlNzkkQY9n3cDaDMAN/m4Lpdq
+         FkK/yQH7Y2jtO9wWz++8rSM9cLdvJZ/2pKlJ4nJbdN191rRpgFbeAF9E02SQn7jHOtv8
+         8f1B6GKwx297IGiqZbB9a8lkEYxk6iG1hnJhjdhWN8mW6niN5hY7kdQGGA7EXf/B9/Ae
+         9CFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678867702;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=LT6Ia3vKrU2zpUQTyPaL1FAau/PMFoHjbq3HdkvqDrE=;
-        b=tjMybIGG8jQZd5+2Qa36ptwgTlalENHxkotsY26XKjwoNznsQZq9LaKzKhnMIXvi/Z
-         vGrRPbvsN05egxHssBgejxUHrpkKUYtS32wHS6NIWjVsGvUF0PzjEgR/VEYwU5SWRAqA
-         lKC5rfBXUSm4bQ9Vfo0UVUgBPLReZuk2zmc8sGH7DK5QJTpLeA+nn2JTs9dcLzAbsuw8
-         aaC40QUantWgOMbVtWn2tZ9+Hmih/KgOwavqpupnta5xTaxrPkBeQKDYeE0aZEGWQbu/
-         TWsqg+WaED9E1v0CaKxmtLg6liYBuP8gMSu8dm17RXeb53gqIkObqs3uWSyVJ4EJ+bQv
-         qB9Q==
-X-Gm-Message-State: AO0yUKV++JT4OFP4jY9RnLedgnSwhDLvLfdIq+SsT2gqQk8iER+rcYdt
-        L2jE8KzYYRpPY4rhpxay9yJUZ8PVrd41Mif6hwR0jg==
-X-Google-Smtp-Source: AK7set+2ERjNr/4s9bDE/AXPsf/E/3VBNBKN1x3c8nrK5xEHr+GHeuWZM0XnWyyGwX6AO5laeBNcEtuNMc2+AMs/d6s=
-X-Received: by 2002:a6b:fc05:0:b0:744:d7fc:7a4f with SMTP id
- r5-20020a6bfc05000000b00744d7fc7a4fmr18528284ioh.1.1678867701817; Wed, 15 Mar
- 2023 01:08:21 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1678867708;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zf3SxA1nvFsp+aFJOgDiIaFeqD0uKMLVMNAFYzhVXhY=;
+        b=OkzZ3pjl1Bk4P7izr2LHJh8xIHyvdXHKA3RuSvzX2ofne/WiYWFM47xqFebnQLScQB
+         a7Oa30J0/eMghQD2/cnc4z+q/jKIFu3R46Sh8wX6wnAWHFYzVAZnEYl2QZUTdRs/9D3s
+         W1436wvZLJKhIeYHhDN0ZAaY2VsOK7llsHWXxxt8WUuF0znuN015FvE0wLKcA2Ge0Hso
+         Md6Ct2JWuZ0jxWrbgeNYTA0wTiqpwcyr2bhkBoMFv1Nvp2ay0B08G4Ntr+9+O4XXE3dX
+         CnV9QxWK0ZTBmHaRo2A8bsYkyFro0bz61OwOq0NZQS0N6H5a7kiVrdKGaFgD45tXB/Ft
+         J1VQ==
+X-Gm-Message-State: AO0yUKXIKx/omPo6BfKKWoKXN/N0OFpt6TWHP4o3pTFPGnOI4YeAyiKQ
+        IKkbSqYfvTdHM6Vmm/O7Ixl7cA==
+X-Google-Smtp-Source: AK7set9WhF84SIf5aXDDBaPgWwRatZNX9vVlgGWyHt2WrilP2gD6F91uKuAeYewh/yYjTj8F8aXAgg==
+X-Received: by 2002:a17:903:283:b0:1a0:4341:4cd9 with SMTP id j3-20020a170903028300b001a043414cd9mr2220842plr.31.1678867707615;
+        Wed, 15 Mar 2023 01:08:27 -0700 (PDT)
+Received: from ?IPV6:2401:4900:1c61:1acb:9af6:bd7f:78e7:7ae6? ([2401:4900:1c61:1acb:9af6:bd7f:78e7:7ae6])
+        by smtp.gmail.com with ESMTPSA id p16-20020a170902ebd000b001994e74c094sm2961131plg.275.2023.03.15.01.08.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Mar 2023 01:08:27 -0700 (PDT)
+Message-ID: <6d7f60b6-bdb4-a22d-4396-c72fd9114d84@linaro.org>
+Date:   Wed, 15 Mar 2023 13:38:23 +0530
 MIME-Version: 1.0
-References: <20230315034441.44321-1-songmuchun@bytedance.com>
-In-Reply-To: <20230315034441.44321-1-songmuchun@bytedance.com>
-From:   Marco Elver <elver@google.com>
-Date:   Wed, 15 Mar 2023 09:07:40 +0100
-Message-ID: <CANpmjNMxDT+AHBZra9ryhm6aw+WqBsdJ_SKdcdZr6CBsh97LyQ@mail.gmail.com>
-Subject: Re: [PATCH] mm: kfence: fix using kfence_metadata without
- initialization in show_object()
-To:     Muchun Song <songmuchun@bytedance.com>
-Cc:     glider@google.com, dvyukov@google.com, akpm@linux-foundation.org,
-        jannh@google.com, sjpark@amazon.de, kasan-dev@googlegroups.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        muchun.song@linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH 1/2] dt-bindings: arm: qcom: Document the Qualcomm
+ qrb4210-rb2 board
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        linux-kernel@vger.kernel.org, bhupesh.linux@gmail.com,
+        robh+dt@kernel.org
+References: <20230314210828.2049720-1-bhupesh.sharma@linaro.org>
+ <20230314210828.2049720-2-bhupesh.sharma@linaro.org>
+ <3104977d-b93f-3c55-70d0-cb54cb48da81@linaro.org>
+Content-Language: en-US
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+In-Reply-To: <3104977d-b93f-3c55-70d0-cb54cb48da81@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,56 +80,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 15 Mar 2023 at 04:45, Muchun Song <songmuchun@bytedance.com> wrote:
->
-> The variable kfence_metadata is initialized in kfence_init_pool(), then, it is
-> not initialized if kfence is disabled after booting. In this case, kfence_metadata
-> will be used (e.g. ->lock and ->state fields) without initialization when reading
-> /sys/kernel/debug/kfence/objects. There will be a warning if you enable
-> CONFIG_DEBUG_SPINLOCK. Fix it by creating debugfs files when necessary.
->
-> Fixes: 0ce20dd84089 ("mm: add Kernel Electric-Fence infrastructure")
-> Signed-off-by: Muchun Song <songmuchun@bytedance.com>
 
-Tested-by: Marco Elver <elver@google.com>
-Reviewed-by: Marco Elver <elver@google.com>
+On 3/15/23 12:07 PM, Krzysztof Kozlowski wrote:
+> On 14/03/2023 22:08, Bhupesh Sharma wrote:
+>> Document the Qualcomm qrb4210-rb2 board based on SM4250 SoC.
+>>
+>> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+>> ---
+>>   Documentation/devicetree/bindings/arm/qcom.yaml | 1 +
+> 
+> Subject: fix double space before "Qualcomm"
 
-Good catch!
+Sure, I will fix this in v2.
 
-> ---
->  mm/kfence/core.c | 10 ++++++++--
->  1 file changed, 8 insertions(+), 2 deletions(-)
->
-> diff --git a/mm/kfence/core.c b/mm/kfence/core.c
-> index 5349c37a5dac..79c94ee55f97 100644
-> --- a/mm/kfence/core.c
-> +++ b/mm/kfence/core.c
-> @@ -726,10 +726,14 @@ static const struct seq_operations objects_sops = {
->  };
->  DEFINE_SEQ_ATTRIBUTE(objects);
->
-> -static int __init kfence_debugfs_init(void)
-> +static int kfence_debugfs_init(void)
->  {
-> -       struct dentry *kfence_dir = debugfs_create_dir("kfence", NULL);
-> +       struct dentry *kfence_dir;
->
-> +       if (!READ_ONCE(kfence_enabled))
-> +               return 0;
-> +
-> +       kfence_dir = debugfs_create_dir("kfence", NULL);
->         debugfs_create_file("stats", 0444, kfence_dir, NULL, &stats_fops);
->         debugfs_create_file("objects", 0400, kfence_dir, NULL, &objects_fops);
->         return 0;
-> @@ -883,6 +887,8 @@ static int kfence_init_late(void)
->         }
->
->         kfence_init_enable();
-> +       kfence_debugfs_init();
-> +
->         return 0;
->  }
->
-> --
-> 2.11.0
->
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Thanks.
