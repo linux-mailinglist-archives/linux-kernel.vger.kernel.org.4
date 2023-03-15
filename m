@@ -2,83 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75A886BB50D
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 14:46:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60C0C6BB510
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 14:46:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232713AbjCONqd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 09:46:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36594 "EHLO
+        id S232797AbjCONql (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 09:46:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232655AbjCONqP (ORCPT
+        with ESMTP id S232377AbjCONqS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 09:46:15 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2F6772B28;
-        Wed, 15 Mar 2023 06:45:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=Ultoh+izloFNi3nqswAf85U56f1iSt1KCWgkHSrwPjU=; b=vK4sJzzT1qySmwWg9jWsqknRBW
-        VhfZ7o8tP2obRj2KBJAZ74lgPZMBOdhLuJAyhbYq8n56kJwNSg4Xgh4HXFuiZlbH1J4zodWOP/8iw
-        8QTfZxhWW0pyURukxMmdwXyOIJ9rtnCXu8SOQWqVI6MJRN0dWMhN8FLdRTEE9IrXkfR4=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1pcRRo-007Ouz-Ny; Wed, 15 Mar 2023 14:45:44 +0100
-Date:   Wed, 15 Mar 2023 14:45:44 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Ahmad Fatoum <a.fatoum@pengutronix.de>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Alvin =?utf-8?Q?=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>, kernel@pengutronix.de,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net 1/2] net: dsa: realtek: fix out-of-bounds access
-Message-ID: <5c11a9b5-80f9-4b59-938b-4061d0756aba@lunn.ch>
-References: <20230315130917.3633491-1-a.fatoum@pengutronix.de>
- <2f0cb0a4-5611-4c61-9165-30cf1b1ef543@lunn.ch>
- <4ad22818-6304-f00d-fa58-ad8b5de10495@pengutronix.de>
+        Wed, 15 Mar 2023 09:46:18 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E716B6BC22;
+        Wed, 15 Mar 2023 06:45:53 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 662351FD76;
+        Wed, 15 Mar 2023 13:45:52 +0000 (UTC)
+Received: from adalid.arch.suse.de (adalid.arch.suse.de [10.161.8.13])
+        by relay2.suse.de (Postfix) with ESMTP id 4E21C2C141;
+        Wed, 15 Mar 2023 13:45:52 +0000 (UTC)
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] MIPS: sibyte: remove no longer needed board_mem_region
+Date:   Wed, 15 Mar 2023 14:45:48 +0100
+Message-Id: <20230315134548.79898-1-tsbogend@alpha.franken.de>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4ad22818-6304-f00d-fa58-ad8b5de10495@pengutronix.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_FAIL,SPF_HELO_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 15, 2023 at 02:35:34PM +0100, Ahmad Fatoum wrote:
-> Hello Andrew,
-> 
-> On 15.03.23 14:30, Andrew Lunn wrote:
-> > On Wed, Mar 15, 2023 at 02:09:15PM +0100, Ahmad Fatoum wrote:
-> >> The probe function sets priv->chip_data to (void *)priv + sizeof(*priv)
-> >> with the expectation that priv has enough trailing space.
-> >>
-> >> However, only realtek-smi actually allocated this chip_data space.
-> >> Do likewise in realtek-mdio to fix out-of-bounds accesses.
-> > 
-> > Hi Ahmad
-> > 
-> > It is normal to include a patch 0/X which gives the big picture, what
-> > does this patch set do as a whole.
-> > 
-> > Please try to remember this for the next set you post.
-> 
-> Ok, will do next time. I didn't include one this time, because there's
-> no big picture here; Just two fixes for the same driver.
+With the direct use of memblock interface board_mem_region is no
+longer needed.
 
-Fine. You could just say that. Patch 0/X is then used as the merge
-commit messages.
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+---
+ arch/mips/sibyte/common/cfe.c | 15 ---------------
+ 1 file changed, 15 deletions(-)
 
-       Andrew
+diff --git a/arch/mips/sibyte/common/cfe.c b/arch/mips/sibyte/common/cfe.c
+index 1a504294d85f..2503f60271e8 100644
+--- a/arch/mips/sibyte/common/cfe.c
++++ b/arch/mips/sibyte/common/cfe.c
+@@ -35,11 +35,6 @@
+ #endif
+ #endif
+ 
+-#define SIBYTE_MAX_MEM_REGIONS 8
+-phys_addr_t board_mem_region_addrs[SIBYTE_MAX_MEM_REGIONS];
+-phys_addr_t board_mem_region_sizes[SIBYTE_MAX_MEM_REGIONS];
+-unsigned int board_mem_region_count;
+-
+ int cfe_cons_handle;
+ 
+ #ifdef CONFIG_BLK_DEV_INITRD
+@@ -141,16 +136,6 @@ static __init void prom_meminit(void)
+ 					size -= 512;
+ 				memblock_add(addr, size);
+ 			}
+-			board_mem_region_addrs[board_mem_region_count] = addr;
+-			board_mem_region_sizes[board_mem_region_count] = size;
+-			board_mem_region_count++;
+-			if (board_mem_region_count ==
+-			    SIBYTE_MAX_MEM_REGIONS) {
+-				/*
+-				 * Too many regions.  Need to configure more
+-				 */
+-				while(1);
+-			}
+ 		}
+ 	}
+ #ifdef CONFIG_BLK_DEV_INITRD
+-- 
+2.35.3
+
