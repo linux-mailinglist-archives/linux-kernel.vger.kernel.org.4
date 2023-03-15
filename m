@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E7136BA946
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 08:31:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 916E86BA94B
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 08:31:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231776AbjCOHbk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 03:31:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39530 "EHLO
+        id S231785AbjCOHbr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 03:31:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231664AbjCOHa2 (ORCPT
+        with ESMTP id S231231AbjCOHaa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 03:30:28 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EBD0222E2;
-        Wed, 15 Mar 2023 00:29:35 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id v21so8986843ple.9;
-        Wed, 15 Mar 2023 00:29:35 -0700 (PDT)
+        Wed, 15 Mar 2023 03:30:30 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 573F86189;
+        Wed, 15 Mar 2023 00:29:36 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id u3-20020a17090a450300b00239db6d7d47so959428pjg.4;
+        Wed, 15 Mar 2023 00:29:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678865369;
+        d=gmail.com; s=20210112; t=1678865371;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=FPFgK3X39dXISj3hHbLpDm92COtr7gUeJ96GRH4aaGI=;
-        b=dqmoNOyoISBXej1LzyLk9c0SV7voNOz6xI5VYdwXghfpDb+7NY7367qwlzCD8T5DnK
-         pRJAjbGHPsnoPCyUWw5ud/p+X6MT3PNO74Bo+dkX14sywhikAGVeh7KT6TQkY+HfwRaA
-         ODnoQs087B5BDuXRk/0xVHv5zXmZrGlo2yWaacweoc+Ns7jHJ24VshckqbBr1xYrRUcp
-         pqo9/JGuej454709jck82NMtsalxfQ9f1oVVsL6RbAhxY+sWiEpImfLokFqHRB6gx9sH
-         5cmcFOuZh0Fo4ET9jI7tuIa84REuwnw4IglHhdyKfMVaJIz5pvIuzaJg1Xr31PKovObC
-         ZcFQ==
+        bh=kE/RI5yAOmxYBkNdq6c6SaQJoz6IKg1o0eGLwh6Y5Vk=;
+        b=KR3aumpweHk0yvAaO6rW2bGN3V9OFwxsn6B1VNC/0BKjPFik3L0UomGuopEKhDEUjj
+         hPA4WCwG6TZF2d5Z1BaVQiWBdCHfumy0UiP6emCEjfRbnOb0tlD142w18syChlDnLWCD
+         Nzl1v+bW+N4F8aR0R/5Yd+fTpzp8yiQbD0yE0G30Fv2js6kiiVLRLSFOQkGgmCWXvMnF
+         e0mBrgk2+Zynmy8osmHYpmhr6EppSJ4BZ56Ap505SDMjZV61dnsq2r3XTldTjqVjB/EE
+         qhhtdwp7csWy2Tkd0V/YzbwFFzogR1Xa3wOdItVDIlwiogHGphV1n6UMWe5lBd8HBrX/
+         Ii+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678865369;
+        d=1e100.net; s=20210112; t=1678865371;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=FPFgK3X39dXISj3hHbLpDm92COtr7gUeJ96GRH4aaGI=;
-        b=LUxy89qZE/FXNwYSFwrZnoNfY4pJc4BY3rf5IXoAAdVLjq73itNkOEbCUoLawu4Rkf
-         MwhR5A/AGRWTiShXDrVaRgu1M/fngcfQ2g5zJAYSGRxuT+AQW4Q0GH1FughsQyqDXhG8
-         1McUwYplmYnJL1pKMV/vPS1D5nqBLOmcdT/udLW6BzxjNPuvV0XlpROGKPTWskv6X6SS
-         bcH4ibaJ94cXGBH91qmmtgCfvmG+mMI4pEwFPTPDflN5htu8/QoDErrWA2sqMyZDIS7G
-         jIoAaqIHJOLsywiETL+sbwsBv2jkkW8B4cXXFblR+NRClrb5sVE5oR4B2WEBGYz+4lSW
-         f9QA==
-X-Gm-Message-State: AO0yUKVO9cUyjfVdBVvzg319LJR1ew2M+GTOU/XyWN4L8gP1mklCcRM7
-        7MISga8Yfbqfgq0pLIvK/3X+kiK/xearaQ==
-X-Google-Smtp-Source: AK7set/NEiW1gw0LNrWPpFDF68I/JNL/D6y70q7WPUviYQItpE0Io/gzbliw1Zt0QigRdAbwjY7tQg==
-X-Received: by 2002:a17:903:2310:b0:19a:b588:6fe2 with SMTP id d16-20020a170903231000b0019ab5886fe2mr1453175plh.13.1678865368810;
-        Wed, 15 Mar 2023 00:29:28 -0700 (PDT)
+        bh=kE/RI5yAOmxYBkNdq6c6SaQJoz6IKg1o0eGLwh6Y5Vk=;
+        b=ibVSBpce0KYB0Z/nEjnmgrAEzBMnUW8vZu3fCdquTA26Wc/i6tRWTiQdnFr1Luw+T6
+         wXmCbjwq2sBnBwkhuMSe7UKJ3w+hHSTN7q+ZUqtVvd7k1avw2K57BGrB8XZwv+g99Bm0
+         +NLRoINmJI3AmA6BZjEQf8d+ZJF71GwADSZGVymqS9wK3RM4tcnPLlGiNCxdO2pYZVC7
+         UpyGWPyEdyy0ULH1wix5VL6p/wUHX2lnpA3fKI5J6tcYDDze4DxwZw4dTEr79HL3u6uH
+         Va9tssPLK2HbOD/4MhmJoFUQeyfx19/MT/lKesLaqGihuxScZSqRRGTTn4IxVorHJmEH
+         Ou6g==
+X-Gm-Message-State: AO0yUKXGPn5MEqksPf/YCqzsLXdTAffFlZUq2WNI4A4aYSyKtGflcsk3
+        VIB27bdTuhnIhLEVVzU5w0U=
+X-Google-Smtp-Source: AK7set8W0U2XX7TDLAyXOn6kzIRDZWJHkurE6WdftDOlmtmeqlTt5pP9O1KblsUaYDqQqny9rVZkUQ==
+X-Received: by 2002:a17:902:dac8:b0:1a0:763f:2445 with SMTP id q8-20020a170902dac800b001a0763f2445mr2031945plx.11.1678865371300;
+        Wed, 15 Mar 2023 00:29:31 -0700 (PDT)
 Received: from a28aa0606c51.. (60-250-192-107.hinet-ip.hinet.net. [60.250.192.107])
-        by smtp.gmail.com with ESMTPSA id kz11-20020a170902f9cb00b001a0667822c8sm2740003plb.94.2023.03.15.00.29.26
+        by smtp.gmail.com with ESMTPSA id kz11-20020a170902f9cb00b001a0667822c8sm2740003plb.94.2023.03.15.00.29.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Mar 2023 00:29:28 -0700 (PDT)
+        Wed, 15 Mar 2023 00:29:31 -0700 (PDT)
 From:   Jacky Huang <ychuang570808@gmail.com>
 To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         lee@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
@@ -58,9 +58,9 @@ To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
 Cc:     devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
         schung@nuvoton.com, Jacky Huang <ychuang3@nuvoton.com>
-Subject: [PATCH 08/15] dt-bindings: clock: Document ma35d1 clock controller bindings
-Date:   Wed, 15 Mar 2023 07:28:55 +0000
-Message-Id: <20230315072902.9298-9-ychuang570808@gmail.com>
+Subject: [PATCH 09/15] dt-bindings: reset: Document ma35d1 reset controller bindings
+Date:   Wed, 15 Mar 2023 07:28:56 +0000
+Message-Id: <20230315072902.9298-10-ychuang570808@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230315072902.9298-1-ychuang570808@gmail.com>
 References: <20230315072902.9298-1-ychuang570808@gmail.com>
@@ -78,101 +78,68 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Jacky Huang <ychuang3@nuvoton.com>
 
-Add documentation to describe nuvoton ma35d1 clock driver bindings.
+Add documentation to describe nuvoton ma35d1 reset driver bindings.
 
 Signed-off-by: Jacky Huang <ychuang3@nuvoton.com>
 ---
- .../bindings/clock/nuvoton,ma35d1-clk.yaml    | 83 +++++++++++++++++++
- 1 file changed, 83 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/clock/nuvoton,ma35d1-clk.yaml
+ .../bindings/reset/nuvoton,ma35d1-reset.yaml  | 50 +++++++++++++++++++
+ 1 file changed, 50 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/reset/nuvoton,ma35d1-reset.yaml
 
-diff --git a/Documentation/devicetree/bindings/clock/nuvoton,ma35d1-clk.yaml b/Documentation/devicetree/bindings/clock/nuvoton,ma35d1-clk.yaml
+diff --git a/Documentation/devicetree/bindings/reset/nuvoton,ma35d1-reset.yaml b/Documentation/devicetree/bindings/reset/nuvoton,ma35d1-reset.yaml
 new file mode 100644
-index 000000000000..5c2dea071b38
+index 000000000000..f66c566c6dce
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/clock/nuvoton,ma35d1-clk.yaml
-@@ -0,0 +1,83 @@
++++ b/Documentation/devicetree/bindings/reset/nuvoton,ma35d1-reset.yaml
+@@ -0,0 +1,50 @@
 +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 +%YAML 1.2
 +---
-+$id: http://devicetree.org/schemas/clock/nuvoton,ma35d1-clk.yaml#
++$id: http://devicetree.org/schemas/reset/nuvoton,ma35d1-reset.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: Nuvoton MA35D1 Clock Controller Module Binding
++title: Nuvoton MA35D1 Reset Controller
 +
 +maintainers:
 +  - Chi-Fang Li <cfli0@nuvoton.com>
 +  - Jacky Huang <ychuang3@nuvoton.com>
 +
-+description: |
-+  The MA35D1 clock controller generates clocks for the whole chip,
-+  including system clocks and all peripheral clocks.
-+
-+  See also:
-+    include/dt-bindings/clock/ma35d1-clk.h
++description:
++  The system reset controller can be used to reset various peripheral
++  controllers in MA35D1 SoC.
 +
 +properties:
 +  compatible:
-+    items:
-+      - const: nuvoton,ma35d1-clk
-+      - const: syscon
++    const: nuvoton,ma35d1-reset
 +
-+  reg:
-+    maxItems: 1
++  regmap:
++    $ref: /schemas/types.yaml#/definitions/phandle
++    description: Phandle to the register map node.
 +
-+  "#clock-cells":
++  '#reset-cells':
 +    const: 1
-+
-+  clocks:
-+    maxItems: 1
-+
-+  clock-names:
-+    const: clk_hxt
-+
-+  assigned-clocks:
-+    maxItems: 5
-+
-+  assigned-clock-rates:
-+    maxItems: 5
-+
-+  nuvoton,pll-mode:
-+    description:
-+      A list of PLL operation mode corresponding to CAPLL, DDRPLL, APLL,
-+      EPLL, and VPLL in sequential. The operation mode value 0 is for
-+      integer mode, 1 is for fractional mode, and 2 is for spread
-+      spectrum mode.
-+    $ref: /schemas/types.yaml#/definitions/uint32-array
-+    maxItems: 5
-+    items:
-+      minimum: 0
-+      maximum: 2
-+
-+  nuvoton,sys:
-+    description:
-+      Phandle to the system management controller.
-+    $ref: "/schemas/types.yaml#/definitions/phandle-array"
 +
 +required:
 +  - compatible
-+  - reg
-+  - "#clock-cells"
-+  - clocks
-+  - clock-names
-+  - nuvoton,sys
++  - regmap
++  - '#reset-cells'
 +
 +additionalProperties: false
 +
 +examples:
++  # system reset controller node:
 +  - |
-+    #include <dt-bindings/clock/nuvoton,ma35d1-clk.h>
++    #include <dt-bindings/reset/nuvoton,ma35d1-reset.h>
 +
-+    clk: clock-controller@40460200 {
-+        compatible = "nuvoton,ma35d1-clk", "syscon";
-+        reg = <0x40460200 0x100>;
-+        #clock-cells = <1>;
-+        clocks = <&clk_hxt>;
-+        clock-names = "clk_hxt";
-+        nuvoton,sys = <&sys>;
++    sys: system-management@40460000 {
++        compatible = "nuvoton,ma35d1-sys", "syscon", "simple-mfd";
++        reg = <0x40460000 0x200>;
++
++        reset: reset-controller {
++            compatible = "nuvoton,ma35d1-reset";
++            regmap = <&sys>;
++            #reset-cells = <1>;
++        };
 +    };
 +...
 -- 
