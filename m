@@ -2,130 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19C8B6BA99D
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 08:44:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 429626BA9B1
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 08:46:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231299AbjCOHo0 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 15 Mar 2023 03:44:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39982 "EHLO
+        id S231707AbjCOHqL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 03:46:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231191AbjCOHoV (ORCPT
+        with ESMTP id S231436AbjCOHqE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 03:44:21 -0400
-Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7344B3B678;
-        Wed, 15 Mar 2023 00:43:58 -0700 (PDT)
-Received: by mail-qv1-f54.google.com with SMTP id y3so15297098qvn.4;
-        Wed, 15 Mar 2023 00:43:58 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678866237;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=irw1UVNowl4JF0FKbWda8y5x3cm6gsUP6fVPn73ScMA=;
-        b=q4GvK29S6qWDh6WY8ujEn5dSQ2ltQs45+8zhGyX5qULm0LGndsE2xTFo5JhVumNVyQ
-         jmMinDzzMhVJ2ve08rNkALpfBt/cpQ+GVi0GOn93+NPvTS/cUbamfiKwMNaXg6VHMq2X
-         Q+3zskxoQKMSsTQVneYZhc02VxwXf7+USHghuCFKwZvKkijE+BpDyKRduYdprKkQKsey
-         ADrLpZ7rlnfrgzF4aCEyY7MAxChKwavhrnq3iR7rT7GIHLPNaJYBOr0FCDhITZ1/7i0x
-         kILZ64XkUH4SuJlr+8L+n+Zs6+O4wqv7fyjWaNlTY6CnVfq+c+gHIOukoejevfXjTnPf
-         6hgA==
-X-Gm-Message-State: AO0yUKUUUzg2SRKJTR3pydjQw2AQXulKh0Ki7YyhvQunccLWBkddauAO
-        Pf8rBnG++V31cZ7rOhEkN/sETqhSuLm94JVT
-X-Google-Smtp-Source: AK7set8udUSzoAOHD3joiBJcDRJyzWTYPiykA8vQz7ARwji56cDqg/Y6pQ4motNLvMyeaDu/937hLw==
-X-Received: by 2002:a05:622a:120f:b0:3bf:cf9d:cc97 with SMTP id y15-20020a05622a120f00b003bfcf9dcc97mr29875399qtx.47.1678866237388;
-        Wed, 15 Mar 2023 00:43:57 -0700 (PDT)
-Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com. [209.85.219.180])
-        by smtp.gmail.com with ESMTPSA id p11-20020ac8460b000000b003d4008dccb7sm1542603qtn.48.2023.03.15.00.43.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Mar 2023 00:43:57 -0700 (PDT)
-Received: by mail-yb1-f180.google.com with SMTP id t4so18214426ybg.11;
-        Wed, 15 Mar 2023 00:43:56 -0700 (PDT)
-X-Received: by 2002:a05:6902:188:b0:a99:de9d:d504 with SMTP id
- t8-20020a056902018800b00a99de9dd504mr25136921ybh.12.1678866236647; Wed, 15
- Mar 2023 00:43:56 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230315051444.3229621-1-willy@infradead.org> <20230315051444.3229621-15-willy@infradead.org>
-In-Reply-To: <20230315051444.3229621-15-willy@infradead.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 15 Mar 2023 08:43:44 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdULvhry_pGap0J0FLH8TMXG1smanQjUNzPoyKsWh1FZBQ@mail.gmail.com>
-Message-ID: <CAMuHMdULvhry_pGap0J0FLH8TMXG1smanQjUNzPoyKsWh1FZBQ@mail.gmail.com>
-Subject: Re: [PATCH v4 14/36] m68k: Implement the new page table range API
-To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Cc:     linux-arch@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        Wed, 15 Mar 2023 03:46:04 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38CD114E93;
+        Wed, 15 Mar 2023 00:46:01 -0700 (PDT)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32F4pwqU005693;
+        Wed, 15 Mar 2023 07:44:38 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id; s=qcppdkim1;
+ bh=AJYsQZ0FLOCikvAnnI11GMMUIAhEsvxRaRKOF41W4UM=;
+ b=HW/0nJda9mZzs1IcrAYi1h9HuLJEZUSEChdpKtRy4V99YD9yy7JmzqodWNywsGkqDLkB
+ RChrOIQgiUpYNGDNLJWEFzUjQahlOJyx0ugHTMLyeTzIaTxankga2rpIeXMSB9Ukj640
+ 9X8ZxoHr/CmWIzLx84+HXOonjWx9m1jt8gSGfSKHzLQ02NGsbJvaWdyBH1kYrFwaq8DK
+ WUAhcv7kK6NqtI3jnZbIgCqZIQaRChJoMHRVdFuXcJAS0KkGHt9jAAifpEF8E+XVSTmY
+ xLwy8r3/CSCAJa30cvhaH19f+tdMtBUc9V4N5avKzV9Ij5wFBlo7qy+NopyhVt0wIu3W UA== 
+Received: from aptaippmta02.qualcomm.com (tpe-colo-wan-fw-bordernet.qualcomm.com [103.229.16.4])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pb2c98vqr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 15 Mar 2023 07:44:37 +0000
+Received: from pps.filterd (APTAIPPMTA02.qualcomm.com [127.0.0.1])
+        by APTAIPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 32F7iZeR017552;
+        Wed, 15 Mar 2023 07:44:35 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by APTAIPPMTA02.qualcomm.com (PPS) with ESMTP id 3p8jqmjam9-1;
+        Wed, 15 Mar 2023 07:44:35 +0000
+Received: from APTAIPPMTA02.qualcomm.com (APTAIPPMTA02.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32F7iZ8g017547;
+        Wed, 15 Mar 2023 07:44:35 GMT
+Received: from cbsp-sh-gv.qualcomm.com (CBSP-SH-gv.ap.qualcomm.com [10.231.249.68])
+        by APTAIPPMTA02.qualcomm.com (PPS) with ESMTP id 32F7iYqN017543;
+        Wed, 15 Mar 2023 07:44:35 +0000
+Received: by cbsp-sh-gv.qualcomm.com (Postfix, from userid 393357)
+        id D9E53455E; Wed, 15 Mar 2023 15:44:33 +0800 (CST)
+From:   Ziqi Chen <quic_ziqichen@quicinc.com>
+To:     quic_asutoshd@quicinc.com, quic_cang@quicinc.com,
+        quic_nguyenb@quicinc.com, bvanassche@acm.org, mani@kernel.org,
+        stanley.chu@mediatek.com, adrian.hunter@intel.com,
+        beanhuo@micron.com, avri.altman@wdc.com, junwoo80.lee@samsung.com,
+        martin.petersen@oracle.com, quic_ziqichen@quicinc.com
+Cc:     linux-scsi@vger.kernel.org, Alim Akhtar <alim.akhtar@samsung.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        linux-kernel@vger.kernel.org (open list),
+        linux-trace-kernel@vger.kernel.org (open list:TRACING)
+Subject: [PATCH v7] scsi: ufs: core: Add trace event for MCQ
+Date:   Wed, 15 Mar 2023 15:44:25 +0800
+Message-Id: <1678866271-49601-1-git-send-email-quic_ziqichen@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: MWBWMsQ2yBUp1nqbQAeaHN8KC79GQfDS
+X-Proofpoint-GUID: MWBWMsQ2yBUp1nqbQAeaHN8KC79GQfDS
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-15_04,2023-03-14_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ phishscore=0 mlxlogscore=999 clxscore=1015 spamscore=0 mlxscore=0
+ lowpriorityscore=0 malwarescore=0 bulkscore=0 impostorscore=0
+ suspectscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2302240000 definitions=main-2303150064
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Willy,
+Add MCQ hardware queue ID in the existing trace event
+ufshcd_command().
 
-On Wed, Mar 15, 2023 at 6:14 AM Matthew Wilcox (Oracle)
-<willy@infradead.org> wrote:
-> Add PFN_PTE_SHIFT, update_mmu_cache_range(), flush_icache_pages() and
-> flush_dcache_folio().
->
-> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+Signed-off-by: Ziqi Chen <quic_ziqichen@quicinc.com>
 
-Thanks for your patch!
+---
+Changes to v6:
+- Corrected the alignment of the TP_printk() arguments.
 
-> --- a/arch/m68k/include/asm/cacheflush_mm.h
-> +++ b/arch/m68k/include/asm/cacheflush_mm.h
-> @@ -220,24 +220,29 @@ static inline void flush_cache_page(struct vm_area_struct *vma, unsigned long vm
->
->  /* Push the page at kernel virtual address and clear the icache */
->  /* RZ: use cpush %bc instead of cpush %dc, cinv %ic */
-> -static inline void __flush_page_to_ram(void *vaddr)
-> +static inline void __flush_pages_to_ram(void *vaddr, unsigned int nr)
->  {
->         if (CPU_IS_COLDFIRE) {
->                 unsigned long addr, start, end;
->                 addr = ((unsigned long) vaddr) & ~(PAGE_SIZE - 1);
->                 start = addr & ICACHE_SET_MASK;
-> -               end = (addr + PAGE_SIZE - 1) & ICACHE_SET_MASK;
-> +               end = (addr + nr * PAGE_SIZE - 1) & ICACHE_SET_MASK;
->                 if (start > end) {
->                         flush_cf_bcache(0, end);
->                         end = ICACHE_MAX_ADDR;
->                 }
->                 flush_cf_bcache(start, end);
->         } else if (CPU_IS_040_OR_060) {
-> -               __asm__ __volatile__("nop\n\t"
-> -                                    ".chip 68040\n\t"
-> -                                    "cpushp %%bc,(%0)\n\t"
-> -                                    ".chip 68k"
-> -                                    : : "a" (__pa(vaddr)));
-> +               unsigned long paddr = __pa(vaddr);
-> +
-> +               do {
-> +                       __asm__ __volatile__("nop\n\t"
-> +                                            ".chip 68040\n\t"
-> +                                            "cpushp %%bc,(%0)\n\t"
-> +                                            ".chip 68k"
-> +                                            : : "a" (paddr));
-> +                       paddr += PAGE_SIZE;
-> +               } while (--nr);
+Changes to v5:
+- Changed hwq_id type from u32 to int.
+- Changed printing string of hwq id from "hqid" to "hwq_id".
+- Moved the assignment statement of hwq into the MCQ if-statement.
 
-Please use "while (nr--) { ... }", to protect against anyone ever
-calling this with nr == 0.
+Changes to v4:
+- Merged MCQ and SDB trace event as one.
 
-The rest LGTM, I'll give it a try shortly...
+Changes to v3:
+- Free trace_ufshcd_command_mcq() from dependency on trace_ufshcd_command().
 
-Gr{oetje,eeting}s,
+Changes to v2:
+- Shorten printing strings.
 
-                        Geert
+Changes to v1:
+- Adjust the order of fields to keep them aligned.
+---
+ drivers/ufs/core/ufshcd.c  | 15 ++++++++++++---
+ include/trace/events/ufs.h | 22 ++++++++++++----------
+ 2 files changed, 24 insertions(+), 13 deletions(-)
 
+diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+index 3b3cf78..1d58cb2 100644
+--- a/drivers/ufs/core/ufshcd.c
++++ b/drivers/ufs/core/ufshcd.c
+@@ -422,7 +422,9 @@ static void ufshcd_add_command_trace(struct ufs_hba *hba, unsigned int tag,
+ {
+ 	u64 lba = 0;
+ 	u8 opcode = 0, group_id = 0;
+-	u32 intr, doorbell;
++	u32 doorbell = 0;
++	u32 intr;
++	int hwq_id = -1;
+ 	struct ufshcd_lrb *lrbp = &hba->lrb[tag];
+ 	struct scsi_cmnd *cmd = lrbp->cmd;
+ 	struct request *rq = scsi_cmd_to_rq(cmd);
+@@ -456,9 +458,16 @@ static void ufshcd_add_command_trace(struct ufs_hba *hba, unsigned int tag,
+ 	}
+ 
+ 	intr = ufshcd_readl(hba, REG_INTERRUPT_STATUS);
+-	doorbell = ufshcd_readl(hba, REG_UTP_TRANSFER_REQ_DOOR_BELL);
++
++	if (is_mcq_enabled(hba)) {
++		struct ufs_hw_queue *hwq = ufshcd_mcq_req_to_hwq(hba, rq);
++
++		hwq_id = hwq->id;
++	} else {
++		doorbell = ufshcd_readl(hba, REG_UTP_TRANSFER_REQ_DOOR_BELL);
++	}
+ 	trace_ufshcd_command(dev_name(hba->dev), str_t, tag,
+-			doorbell, transfer_len, intr, lba, opcode, group_id);
++			doorbell, hwq_id, transfer_len, intr, lba, opcode, group_id);
+ }
+ 
+ static void ufshcd_print_clk_freqs(struct ufs_hba *hba)
+diff --git a/include/trace/events/ufs.h b/include/trace/events/ufs.h
+index 599739e..992517ac 100644
+--- a/include/trace/events/ufs.h
++++ b/include/trace/events/ufs.h
+@@ -268,20 +268,21 @@ DEFINE_EVENT(ufshcd_template, ufshcd_wl_runtime_resume,
+ 
+ TRACE_EVENT(ufshcd_command,
+ 	TP_PROTO(const char *dev_name, enum ufs_trace_str_t str_t,
+-		 unsigned int tag, u32 doorbell, int transfer_len, u32 intr,
+-		 u64 lba, u8 opcode, u8 group_id),
++		 unsigned int tag, u32 doorbell, u32 hwq_id, int transfer_len,
++		 u32 intr, u64 lba, u8 opcode, u8 group_id),
+ 
+-	TP_ARGS(dev_name, str_t, tag, doorbell, transfer_len,
+-				intr, lba, opcode, group_id),
++	TP_ARGS(dev_name, str_t, tag, doorbell, hwq_id, transfer_len,
++			intr, lba, opcode, group_id),
+ 
+ 	TP_STRUCT__entry(
+ 		__string(dev_name, dev_name)
+ 		__field(enum ufs_trace_str_t, str_t)
+ 		__field(unsigned int, tag)
+ 		__field(u32, doorbell)
+-		__field(int, transfer_len)
++		__field(u32, hwq_id)
+ 		__field(u32, intr)
+ 		__field(u64, lba)
++		__field(int, transfer_len)
+ 		__field(u8, opcode)
+ 		__field(u8, group_id)
+ 	),
+@@ -291,19 +292,20 @@ TRACE_EVENT(ufshcd_command,
+ 		__entry->str_t = str_t;
+ 		__entry->tag = tag;
+ 		__entry->doorbell = doorbell;
+-		__entry->transfer_len = transfer_len;
++		__entry->hwq_id = hwq_id;
+ 		__entry->intr = intr;
+ 		__entry->lba = lba;
++		__entry->transfer_len = transfer_len;
+ 		__entry->opcode = opcode;
+ 		__entry->group_id = group_id;
+ 	),
+ 
+ 	TP_printk(
+-		"%s: %s: tag: %u, DB: 0x%x, size: %d, IS: %u, LBA: %llu, opcode: 0x%x (%s), group_id: 0x%x",
++		"%s: %s: tag: %u, DB: 0x%x, size: %d, IS: %u, LBA: %llu, opcode: 0x%x (%s), group_id: 0x%x, hwq_id: %d",
+ 		show_ufs_cmd_trace_str(__entry->str_t), __get_str(dev_name),
+-		__entry->tag, __entry->doorbell, __entry->transfer_len,
+-		__entry->intr, __entry->lba, (u32)__entry->opcode,
+-		str_opcode(__entry->opcode), (u32)__entry->group_id
++		__entry->tag, __entry->doorbell, __entry->transfer_len, __entry->intr,
++		__entry->lba, (u32)__entry->opcode, str_opcode(__entry->opcode),
++		(u32)__entry->group_id, __entry->hwq_id
+ 	)
+ );
+ 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+2.7.4
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
