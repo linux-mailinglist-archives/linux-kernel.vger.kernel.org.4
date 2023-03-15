@@ -2,80 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C636C6BBC3E
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 19:35:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 068C76BBC42
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 19:36:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232653AbjCOSfs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 14:35:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51048 "EHLO
+        id S232056AbjCOSga (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 14:36:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232493AbjCOSf1 (ORCPT
+        with ESMTP id S232559AbjCOSgR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 14:35:27 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D7812798C;
-        Wed, 15 Mar 2023 11:34:44 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id bi20so3298511wmb.2;
-        Wed, 15 Mar 2023 11:34:44 -0700 (PDT)
+        Wed, 15 Mar 2023 14:36:17 -0400
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91226911F3;
+        Wed, 15 Mar 2023 11:35:38 -0700 (PDT)
+Received: by mail-qt1-x82a.google.com with SMTP id d7so17207033qtr.12;
+        Wed, 15 Mar 2023 11:35:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678905279;
+        d=gmail.com; s=20210112; t=1678905316;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=CtOt4k+OA7BRYZzOf48URPO0GcAncf4iHV2OjY+5sf0=;
-        b=MQN9M+e8go8FI4ny8BDXc1LSAsz2gjMmKT/F0Sd7C7iz9YMMqs5wJGFa2lBP3V5+hU
-         AoZ/WGcXgpC0Xvmm9V5KewSH8Lo8Kx5tCbofldlsApeP65IiwgeW0WbDnNGDhCkXs8+O
-         qmG02wTyT2mCjQCiA44UTCAihv6AqedY7h3991+qaiMfWah8GQ0b8W3mJVq6Jv89J7vu
-         JS3MmkvKUcBIHHH6SPETQE1zTc2+tN7hpBloGvBuZjwELicbmnODZCQiNaFMTpg+L+z5
-         +ZrAPRvjMvYF5xcB2uw9ZTIgKinz7/LwGm4/QUBuKd4uMng0kYjh2IoxiRBFmNSzBcqv
-         D+8Q==
+        bh=m749fDtbrwnbtsdbSR3iTym7V0AHJvTvz+0m46zxJQA=;
+        b=py0F/+uO1s9taxL+qiIsLsRJGbq4tgLbGeY3r8fsYrX83XpqAItfpFJmr8MeSBT4ee
+         aTy1By1IOGejChNJl6R/q1PZ1iBHcCPq6RoXf4yEkvMQUeqZ11PSakMYNteqvY4u2mHF
+         uk9hiyOcNbAJ9U3KHVLRGQLDcV1NWFPsTCjevk+qGsfNJCP0KqwXEI4uQoOFJaKG7Y2v
+         GdVwJHy1eulKyvlr2GB1Asy4I5+T4U1EBN3EOR6eaRjj7d+lg9bqo8pCCwSQ+N3QWBMs
+         h3970gEf0tobyE1pa3uGCSZuMdZOuhs2Hl3Bcjf3tV44k/T673vv/UNlOtE2x/XPJkxu
+         1QCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678905279;
+        d=1e100.net; s=20210112; t=1678905316;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CtOt4k+OA7BRYZzOf48URPO0GcAncf4iHV2OjY+5sf0=;
-        b=Ve0MZdFVlss7tCJ7bAKxae4juZ+Uu/vfqoGA3TLRQ2EIizAXJ3+ePbNUn24q+m3Dop
-         xEA8CQ8j5wh2pm7sfKvouxElALcjsdwRs6Zwky11GmE7Y/nHdPJyJODkTAdASfprKpNJ
-         beIZUQ2eYO/qwD1YxJH12fQzwevVXbiK8gon68gApJtQZ5kws+9N0ieiXohmPnmveWbV
-         ESgndXGTf6wCwJk8pvqAW4VuodrvcA+nmuAQrReglC0HcIZMlegvOcytNl5XVB4yxGQH
-         8kP6gTbzS9x/9kcQaCwKLwhmaODi5JngO/lslOgempEiUWnFxsSmNhIJURjkMphgkxFx
-         NcWw==
-X-Gm-Message-State: AO0yUKVUEDdsQWxmdvcCEMwLTcUl+P1dWE1A02nMq6Y8y9lDAZ2zBDAE
-        5XYKxraqbY62FLY9m+zbVv4=
-X-Google-Smtp-Source: AK7set+2LomhmjBH70rgb2Oj8RhcZvpraCp5q19+6NSqH6yHcsC8h6T2Bf0CmjfM7Ac4w4xPBXqh+w==
-X-Received: by 2002:a05:600c:3503:b0:3ea:e7f6:f8fa with SMTP id h3-20020a05600c350300b003eae7f6f8famr18076778wmq.10.1678905279017;
-        Wed, 15 Mar 2023 11:34:39 -0700 (PDT)
-Received: from ?IPV6:2a02:908:1256:79a0:bb77:36d:cdaf:f7f2? ([2a02:908:1256:79a0:bb77:36d:cdaf:f7f2])
-        by smtp.gmail.com with ESMTPSA id g17-20020a05600c311100b003e733a973d2sm2668415wmo.39.2023.03.15.11.34.38
+        bh=m749fDtbrwnbtsdbSR3iTym7V0AHJvTvz+0m46zxJQA=;
+        b=b+22XLf2QEsQ4Z+a8zK5eEyZirgB20kNZ0w2RiaxyxfMvAPlaYd1myCf1epJUGNXYI
+         RkEhALPqAFBtjoBPAFRqJJlYI9MOK/DqnynOhSpWG+et6hOFnZ/vqj/E7hq3cvkE5n4d
+         Kq+oE+0VLgu12ZtAgRYGnLmklcr/xe3hr/m6QVh0uCLtu/jV+NLqsxJ8qkbkRcobep1n
+         L+ycIVGIaMpnD7upPztOf/1CdtTjWk5zMNhTydVMMk3mRWfcWyLGPE95Wr3Lb2VavKSS
+         abQL1US7XIXv6MVJJTxkoVvpurY1J6IxnkFqDwbbsLAnhmfi9yGJaE86deUaDwpIectg
+         YbpQ==
+X-Gm-Message-State: AO0yUKXfluPQqCLQ+X1Td9/zDZNZBe8pPBwVwWCGIGWHDtiFDlI0qEIU
+        P7BX37T/KAfg2q2EVSyB16E=
+X-Google-Smtp-Source: AK7set+QNmug8jooNtpKuNS14ABi91L3keZQT7KpiNrvi+ztPfTXD58T4sF7k1fVpHSX37CBNg6/pg==
+X-Received: by 2002:a05:622a:c9:b0:3c0:3d56:8c40 with SMTP id p9-20020a05622a00c900b003c03d568c40mr1380096qtw.62.1678905316027;
+        Wed, 15 Mar 2023 11:35:16 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id x1-20020ac87ec1000000b003bfb6ddc49dsm4142144qtj.1.2023.03.15.11.35.10
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Mar 2023 11:34:38 -0700 (PDT)
-Message-ID: <b6bf19b1-1265-a5cc-7a82-300fe7bdd15b@gmail.com>
-Date:   Wed, 15 Mar 2023 19:34:37 +0100
+        Wed, 15 Mar 2023 11:35:15 -0700 (PDT)
+Message-ID: <a5eff8f8-aa9c-90d2-a960-fa462bf3dd00@gmail.com>
+Date:   Wed, 15 Mar 2023 11:35:08 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [BUG 6.3-rc1] Bad lock in ttm_bo_delayed_delete()
+ Thunderbird/102.7.1
+Subject: Re: [PATCH net 2/2] net: dsa: mv88e6xxx: fix max_mtu of 1492 on 6165,
+ 6191, 6220, 6250, 6290
 Content-Language: en-US
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        Arunpravin Paneer Selvam <Arunpravin.PaneerSelvam@amd.com>,
-        intel-gfx@lists.freedesktop.org,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        linux-media@vger.kernel.org
-References: <20230307212223.7e49384a@gandalf.local.home>
- <20230307212615.7a099103@gandalf.local.home>
- <b919b550-6da8-f9f0-a0eb-0fd8af513817@amd.com>
- <20230315110949.1e11b3aa@gandalf.local.home>
- <07597f3e-0b35-c22b-91ec-fa3875d6fe22@gmail.com>
- <20230315115712.56b3c21f@gandalf.local.home>
- <20230315133146.3a48206e@gandalf.local.home>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>
-In-Reply-To: <20230315133146.3a48206e@gandalf.local.home>
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>, netdev@vger.kernel.org
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Murali Krishna Policharla <murali.policharla@broadcom.com>,
+        Lukasz Majewski <lukma@denx.de>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org
+References: <20230314182405.2449898-1-vladimir.oltean@nxp.com>
+ <20230314182405.2449898-3-vladimir.oltean@nxp.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20230314182405.2449898-3-vladimir.oltean@nxp.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -88,91 +83,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 15.03.23 um 18:31 schrieb Steven Rostedt:
-> On Wed, 15 Mar 2023 11:57:12 -0400
-> Steven Rostedt <rostedt@goodmis.org> wrote:
->
-> So I'm looking at the backtraces.
->
->> The WARN_ON triggered:
->>
->> [   21.481449] mpls_gso: MPLS GSO support
->> [   21.488795] IPI shorthand broadcast: enabled
->> [   21.488873] ------------[ cut here ]------------
->> [   21.490101] ------------[ cut here ]------------
->>
->> [   21.491693] WARNING: CPU: 1 PID: 38 at drivers/gpu/drm/ttm/ttm_bo.c:332 ttm_bo_release+0x2ac/0x2fc  <<<---- Line of the added WARN_ON()
-> This happened on CPU 1.
->
->> [   21.492940] refcount_t: underflow; use-after-free.
->> [   21.492965] WARNING: CPU: 0 PID: 84 at lib/refcount.c:28 refcount_warn_saturate+0xb6/0xfc
-> This happened on CPU 0.
->
->> [   21.496116] Modules linked in:
->> [   21.497197] Modules linked in:
->> [   21.500105] CPU: 1 PID: 38 Comm: kworker/1:1 Not tainted 6.3.0-rc2-test-00047-g6015b1aca1a2-dirty #993
->> [   21.500789] CPU: 0 PID: 84 Comm: kworker/0:1H Not tainted 6.3.0-rc2-test-00047-g6015b1aca1a2-dirty #993
->> [   21.501882] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.0-debian-1.16.0-5 04/01/2014
->> [   21.503533] sched_clock: Marking stable (20788024762, 714243692)->(22140778105, -638509651)
->> [   21.504080] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.0-debian-1.16.0-5 04/01/2014
->> [   21.504089] Workqueue: ttm ttm_bo_delayed_delete
->> [   21.507196] Workqueue: events drm_fb_helper_damage_work
->> [   21.509235]
->> [   21.510291] registered taskstats version 1
->> [   21.510302] Running ring buffer tests...
->> [   21.511792]
->> [   21.513870] EIP: refcount_warn_saturate+0xb6/0xfc
->> [   21.515261] EIP: ttm_bo_release+0x2ac/0x2fc
->> [   21.516566] Code: 68 00 27 0c d8 e8 36 3b aa ff 0f 0b 58 c9 c3 90 80 3d 41 c2 37 d8 00 75 8a c6 05 41 c2 37 d8 01 68 2c 27 0c d8 e8 16 3b aa ff <0f> 0b 59 c9 c3 80 3d 3f c2 37 d8 00 0f 85 67 ff ff ff c6 05 3f c2
->> [   21.516998] Code: ff 8d b4 26 00 00 00 00 66 90 0f 0b 8b 43 10 85 c0 0f 84 a1 fd ff ff 8d 76 00 0f 0b 8b 43 28 85 c0 0f 84 9c fd ff ff 8d 76 00 <0f> 0b e9 92 fd ff ff 8d b4 26 00 00 00 00 66 90 c7 43 18 00 00 00
->> [   21.517905] EAX: 00000026 EBX: c129d150 ECX: 00000040 EDX: 00000002
->> [   21.518987] EAX: d78c8550 EBX: c129d134 ECX: c129d134 EDX: 00000001
->> [   21.519337] ESI: c129d0bc EDI: f6f91200 EBP: c2b8bf18 ESP: c2b8bf14
->> [   21.520617] ESI: c129d000 EDI: c126a7a0 EBP: c1839c24 ESP: c1839bec
->> [   21.521546] DS: 007b ES: 007b FS: 00d8 GS: 0000 SS: 0068 EFLAGS: 00010286
->> [   21.526154] DS: 007b ES: 007b FS: 00d8 GS: 0000 SS: 0068 EFLAGS: 00010286
->> [   21.526162] CR0: 80050033 CR2: 00000000 CR3: 18506000 CR4: 00150ef0
->> [   21.526166] Call Trace:
->> [   21.526189]  ? ww_mutex_unlock+0x3a/0x94
->> [   21.530300] CR0: 80050033 CR2: ff9ff000 CR3: 18506000 CR4: 00150ef0
->> [   21.531722]  ? ttm_bo_cleanup_refs+0xc4/0x1e0
->> [   21.533114] Call Trace:
->> [   21.534516]  ttm_mem_evict_first+0x3d3/0x568
->> [   21.535901]  ttm_bo_delayed_delete+0x9c/0xa4
->> [   21.537391]  ? kfree+0x6b/0xdc
->> [   21.538901]  process_one_work+0x21a/0x484
->> [   21.540279]  ? ttm_range_man_alloc+0xe0/0xec
->> [   21.540854]  worker_thread+0x14a/0x39c
->> [   21.541714]  ? ttm_range_man_fini_nocheck+0xe8/0xe8
->> [   21.543332]  kthread+0xea/0x10c
->> [   21.544301]  ttm_bo_mem_space+0x1d0/0x1e4
->> [   21.544942]  ? process_one_work+0x484/0x484
->> [   21.545887]  ttm_bo_validate+0xc5/0x19c
->> [   21.546986]  ? kthread_complete_and_exit+0x1c/0x1c
->> [   21.547680]  ttm_bo_init_reserved+0x15e/0x1fc
->> [   21.548716]  ret_from_fork+0x1c/0x28
->> [   21.549650]  qxl_bo_create+0x145/0x20c
-> The qxl_bo_create() calls ttm_bo_init_reserved() as the object in question
-> is about to be freed.
->
-> I'm guessing what is happening here, is that an object was to be freed by
-> the delayed_delete, and in the mean time, something else picked it up.
->
-> What's protecting this from not being used again?
+On 3/14/23 11:24, Vladimir Oltean wrote:
+> There are 3 classes of switch families that the driver is aware of, as
+> far as mv88e6xxx_change_mtu() is concerned:
+> 
+> - MTU configuration is available per port. Here, the
+>    chip->info->ops->port_set_jumbo_size() method will be present.
+> 
+> - MTU configuration is global to the switch. Here, the
+>    chip->info->ops->set_max_frame_size() method will be present.
+> 
+> - We don't know how to change the MTU. Here, none of the above methods
+>    will be present.
+> 
+> Switch families MV88E6165, MV88E6191, MV88E6220, MV88E6250 and MV88E6290
+> fall in category 3.
+> 
+> The blamed commit has adjusted the MTU for all 3 categories by EDSA_HLEN
+> (8 bytes), resulting in a new maximum MTU of 1492 being reported by the
+> driver for these switches.
+> 
+> I don't have the hardware to test, but I do have a MV88E6390 switch on
+> which I can simulate this by commenting out its .port_set_jumbo_size
+> definition from mv88e6390_ops. The result is this set of messages at
+> probe time:
+> 
+> mv88e6085 d0032004.mdio-mii:10: nonfatal error -34 setting MTU to 1500 on port 1
+> mv88e6085 d0032004.mdio-mii:10: nonfatal error -34 setting MTU to 1500 on port 2
+> mv88e6085 d0032004.mdio-mii:10: nonfatal error -34 setting MTU to 1500 on port 3
+> mv88e6085 d0032004.mdio-mii:10: nonfatal error -34 setting MTU to 1500 on port 4
+> mv88e6085 d0032004.mdio-mii:10: nonfatal error -34 setting MTU to 1500 on port 5
+> mv88e6085 d0032004.mdio-mii:10: nonfatal error -34 setting MTU to 1500 on port 6
+> mv88e6085 d0032004.mdio-mii:10: nonfatal error -34 setting MTU to 1500 on port 7
+> mv88e6085 d0032004.mdio-mii:10: nonfatal error -34 setting MTU to 1500 on port 8
+> 
+> It is highly implausible that there exist Ethernet switches which don't
+> support the standard MTU of 1500 octets, and this is what the DSA
+> framework says as well - the error comes from dsa_slave_create() ->
+> dsa_slave_change_mtu(slave_dev, ETH_DATA_LEN).
+> 
+> But the error messages are alarming, and it would be good to suppress
+> them.
+> 
+> As a consequence of this unlikeliness, we reimplement mv88e6xxx_get_max_mtu()
+> and mv88e6xxx_change_mtu() on switches from the 3rd category as follows:
+> the maximum supported MTU is 1500, and any request to set the MTU to a
+> value larger than that fails in dev_validate_mtu().
+> 
+> Fixes: b9c587fed61c ("dsa: mv88e6xxx: Include tagger overhead when setting MTU for DSA and CPU ports")
+> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
 
-The reference count. This is pretty clearly an unbalanced reference 
-counting issue.
-
-It's just that previously you wouldn't notice it much because we were 
-just silently removing the BO from the LRU list without checking if it 
-was already removed (and so just damaging a bit of memory).
-
-While now we get tons of errors because the delayed worker actually runs 
-no matter if the BO is already freed or not.
-
-Christian.
-
->
-> -- Steve
->
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian
 
