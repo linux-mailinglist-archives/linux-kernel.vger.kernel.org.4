@@ -2,205 +2,397 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C91A56BAFB5
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 12:55:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0C166BAFBA
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 12:55:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230491AbjCOLzH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 07:55:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38520 "EHLO
+        id S231168AbjCOLzk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 07:55:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231781AbjCOLzB (ORCPT
+        with ESMTP id S229597AbjCOLzi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 07:55:01 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A59173029;
-        Wed, 15 Mar 2023 04:55:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678881300; x=1710417300;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=oPJSnVJBwKqGK8ZAqvFY8WXT8H4giRQeUz42yfh764o=;
-  b=jWO4iEZhcmTEqoKXFDsD9dXNWzOae0K3WGhQpmmTqA3G4QgK8Rgcbsn9
-   5g5uN5ieW7imrJvFMA5BIP6wr/BkRwdlHLR0G1WKilTATQcVSyksLNhuB
-   9WLvmGZt6H/MrLhnp4Fi3X5emAGuwK/cjzFNSNEEn53uX8nNRqZHcyEo6
-   Im1mPlV7PVTB9jYvcMpeSHtuRlhV5h1EDrHL5pwqTISv/S2Nn1ysEsl4p
-   FRHELA1znvZwH4aUI7YPVosWDL8reaz9MG1yRh46HzJgaKtW4tH0IMuzz
-   ksUfnCjm+LauBgMs+GRiOUJDVWv5LgFPhCHCc8DEgq+omWgohdqPCBA6g
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="335166518"
-X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
-   d="scan'208";a="335166518"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2023 04:54:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="803256923"
-X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
-   d="scan'208";a="803256923"
-Received: from wujunyox-mobl.ger.corp.intel.com (HELO localhost) ([10.252.59.32])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2023 04:54:52 -0700
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Niklas Schnelle <schnelle@linux.ibm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Dave Airlie <airlied@redhat.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     linux-arch@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        virtualization@lists.linux-foundation.org,
-        Alan Stern <stern@rowland.harvard.edu>,
-        spice-devel@lists.freedesktop.org,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>
-Subject: Re: [PATCH v3 07/38] drm: handle HAS_IOPORT dependencies
-In-Reply-To: <20230314121216.413434-8-schnelle@linux.ibm.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20230314121216.413434-1-schnelle@linux.ibm.com>
- <20230314121216.413434-8-schnelle@linux.ibm.com>
-Date:   Wed, 15 Mar 2023 13:54:49 +0200
-Message-ID: <87fsa65iwm.fsf@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 15 Mar 2023 07:55:38 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8F0B879B2D;
+        Wed, 15 Mar 2023 04:55:33 -0700 (PDT)
+Received: by linux.microsoft.com (Postfix, from userid 1134)
+        id 036352057015; Wed, 15 Mar 2023 04:55:33 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 036352057015
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1678881333;
+        bh=DI49uRvbB5da/uJ7V+8Surl8hQV8kIq2ta6EEmC3qT0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=idYipUzV+UJoJZNenfFmkuVCm4m4d3csNeSZ/SQtBLwwtFQxaJVlHL8IpNoZ+lJML
+         8MhY7rKwpAvVHjZZK2uX2PsiKSkBt1MhT/LiJJ4A/Lhs9c4RypKepCLloDzQausdco
+         jlV+9x2FTn96oHup5ngmXBfYmJRW44GQFSy3lgj0=
+From:   Shradha Gupta <shradhagupta@linux.microsoft.com>
+To:     linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-rdma@vger.kernel.org, netdev@vger.kernel.org
+Cc:     Shradha Gupta <shradhagupta@linux.microsoft.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Ajay Sharma <sharmaajay@microsoft.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Long Li <longli@microsoft.com>,
+        Michael Kelley <mikelley@microsoft.com>
+Subject: [PATCH v2] net: mana: Add new MANA VF performance counters for easier troubleshooting
+Date:   Wed, 15 Mar 2023 04:55:13 -0700
+Message-Id: <1678881313-20468-1-git-send-email-shradhagupta@linux.microsoft.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 14 Mar 2023, Niklas Schnelle <schnelle@linux.ibm.com> wrote:
-> In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
-> not being declared. We thus need to add HAS_IOPORT as dependency for
-> those drivers using them. In the bochs driver there is optional MMIO
-> support detected at runtime, warn if this isn't taken when
-> HAS_IOPORT is not defined.
+Extended performance counter stats in 'ethtool -S <interface>' output
+for MANA VF to facilitate troubleshooting.
 
-Not that I care a whole lot, but there should really only be one warning
-or even failure to probe at bochs_hw_init() for !bochs->mmio &&
-!IS_ENABLED(CONFIG_HAS_IOPORT), not warnings all over the place.
+Tested-on: Ubuntu22
+Signed-off-by: Shradha Gupta <shradhagupta@linux.microsoft.com>
+---
 
-Moreover, the config macro is CONFIG_HAS_IOPORT instead of HAS_IOPORT
-that you check for below.
+Changes in v2:
+* fixed the tso_bytes stat calculation
+* fixed RCT in variable declarations
 
-BR,
-Jani.
+---
+ drivers/net/ethernet/microsoft/mana/mana_en.c | 62 ++++++++++++++++++-
+ .../ethernet/microsoft/mana/mana_ethtool.c    | 52 +++++++++++++++-
+ include/net/mana/mana.h                       | 18 ++++++
+ 3 files changed, 128 insertions(+), 4 deletions(-)
 
-> There is also a direct and hard coded use in cirrus.c which according to
-> the comment is only necessary during resume.  Let's just skip this as
-> for example s390 which doesn't have I/O port support also doesen't
-> support suspend/resume.
->
-> Co-developed-by: Arnd Bergmann <arnd@kernel.org>
-> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
-> ---
->  drivers/gpu/drm/qxl/Kconfig   |  1 +
->  drivers/gpu/drm/tiny/bochs.c  | 19 +++++++++++++++++++
->  drivers/gpu/drm/tiny/cirrus.c |  2 ++
->  3 files changed, 22 insertions(+)
->
-> diff --git a/drivers/gpu/drm/qxl/Kconfig b/drivers/gpu/drm/qxl/Kconfig
-> index ca3f51c2a8fe..d0e0d440c8d9 100644
-> --- a/drivers/gpu/drm/qxl/Kconfig
-> +++ b/drivers/gpu/drm/qxl/Kconfig
-> @@ -2,6 +2,7 @@
->  config DRM_QXL
->  	tristate "QXL virtual GPU"
->  	depends on DRM && PCI && MMU
-> +	depends on HAS_IOPORT
->  	select DRM_KMS_HELPER
->  	select DRM_TTM
->  	select DRM_TTM_HELPER
-> diff --git a/drivers/gpu/drm/tiny/bochs.c b/drivers/gpu/drm/tiny/bochs.c
-> index 024346054c70..da4a5d53b003 100644
-> --- a/drivers/gpu/drm/tiny/bochs.c
-> +++ b/drivers/gpu/drm/tiny/bochs.c
-> @@ -2,6 +2,7 @@
->  
->  #include <linux/module.h>
->  #include <linux/pci.h>
-> +#include <asm/bug.h>
->  
->  #include <drm/drm_aperture.h>
->  #include <drm/drm_atomic_helper.h>
-> @@ -105,7 +106,11 @@ static void bochs_vga_writeb(struct bochs_device *bochs, u16 ioport, u8 val)
->  
->  		writeb(val, bochs->mmio + offset);
->  	} else {
-> +#ifdef HAS_IOPORT
->  		outb(val, ioport);
-> +#else
-> +		WARN_ONCE(1, "Non-MMIO bochs device needs HAS_IOPORT");
-> +#endif
->  	}
->  }
->  
-> @@ -119,7 +124,12 @@ static u8 bochs_vga_readb(struct bochs_device *bochs, u16 ioport)
->  
->  		return readb(bochs->mmio + offset);
->  	} else {
-> +#ifdef HAS_IOPORT
->  		return inb(ioport);
-> +#else
-> +		WARN_ONCE(1, "Non-MMIO bochs device needs HAS_IOPORT");
-> +		return 0xff;
-> +#endif
->  	}
->  }
->  
-> @@ -132,8 +142,13 @@ static u16 bochs_dispi_read(struct bochs_device *bochs, u16 reg)
->  
->  		ret = readw(bochs->mmio + offset);
->  	} else {
-> +#ifdef HAS_IOPORT
->  		outw(reg, VBE_DISPI_IOPORT_INDEX);
->  		ret = inw(VBE_DISPI_IOPORT_DATA);
-> +#else
-> +		WARN_ONCE(1, "Non-MMIO bochs device needs HAS_IOPORT");
-> +		ret = 0xffff;
-> +#endif
->  	}
->  	return ret;
->  }
-> @@ -145,8 +160,12 @@ static void bochs_dispi_write(struct bochs_device *bochs, u16 reg, u16 val)
->  
->  		writew(val, bochs->mmio + offset);
->  	} else {
-> +#ifdef HAS_IOPORT
->  		outw(reg, VBE_DISPI_IOPORT_INDEX);
->  		outw(val, VBE_DISPI_IOPORT_DATA);
-> +#else
-> +		WARN_ONCE(1, "Non-MMIO bochs device needs HAS_IOPORT");
-> +#endif
->  	}
->  }
->  
-> diff --git a/drivers/gpu/drm/tiny/cirrus.c b/drivers/gpu/drm/tiny/cirrus.c
-> index accfa52e78c5..9da89732c5ac 100644
-> --- a/drivers/gpu/drm/tiny/cirrus.c
-> +++ b/drivers/gpu/drm/tiny/cirrus.c
-> @@ -308,8 +308,10 @@ static int cirrus_mode_set(struct cirrus_device *cirrus,
->  
->  	cirrus_set_start_address(cirrus, 0);
->  
-> +#ifdef CONFIG_HAS_IOPORT
->  	/* Unblank (needed on S3 resume, vgabios doesn't do it then) */
->  	outb(0x20, 0x3c0);
-> +#endif
->  
->  	drm_dev_exit(idx);
->  	return 0;
-
+diff --git a/drivers/net/ethernet/microsoft/mana/mana_en.c b/drivers/net/ethernet/microsoft/mana/mana_en.c
+index 6120f2b6684f..492474b4d8aa 100644
+--- a/drivers/net/ethernet/microsoft/mana/mana_en.c
++++ b/drivers/net/ethernet/microsoft/mana/mana_en.c
+@@ -156,6 +156,7 @@ netdev_tx_t mana_start_xmit(struct sk_buff *skb, struct net_device *ndev)
+ 	struct mana_txq *txq;
+ 	struct mana_cq *cq;
+ 	int err, len;
++	u16 ihs;
+ 
+ 	if (unlikely(!apc->port_is_up))
+ 		goto tx_drop;
+@@ -166,6 +167,7 @@ netdev_tx_t mana_start_xmit(struct sk_buff *skb, struct net_device *ndev)
+ 	txq = &apc->tx_qp[txq_idx].txq;
+ 	gdma_sq = txq->gdma_sq;
+ 	cq = &apc->tx_qp[txq_idx].tx_cq;
++	tx_stats = &txq->stats;
+ 
+ 	pkg.tx_oob.s_oob.vcq_num = cq->gdma_id;
+ 	pkg.tx_oob.s_oob.vsq_frame = txq->vsq_frame;
+@@ -179,10 +181,17 @@ netdev_tx_t mana_start_xmit(struct sk_buff *skb, struct net_device *ndev)
+ 
+ 	pkg.tx_oob.s_oob.pkt_fmt = pkt_fmt;
+ 
+-	if (pkt_fmt == MANA_SHORT_PKT_FMT)
++	if (pkt_fmt == MANA_SHORT_PKT_FMT) {
+ 		pkg.wqe_req.inline_oob_size = sizeof(struct mana_tx_short_oob);
+-	else
++		u64_stats_update_begin(&tx_stats->syncp);
++		tx_stats->short_pkt_fmt++;
++		u64_stats_update_end(&tx_stats->syncp);
++	} else {
+ 		pkg.wqe_req.inline_oob_size = sizeof(struct mana_tx_oob);
++		u64_stats_update_begin(&tx_stats->syncp);
++		tx_stats->long_pkt_fmt++;
++		u64_stats_update_end(&tx_stats->syncp);
++	}
+ 
+ 	pkg.wqe_req.inline_oob_data = &pkg.tx_oob;
+ 	pkg.wqe_req.flags = 0;
+@@ -232,9 +241,35 @@ netdev_tx_t mana_start_xmit(struct sk_buff *skb, struct net_device *ndev)
+ 						 &ipv6_hdr(skb)->daddr, 0,
+ 						 IPPROTO_TCP, 0);
+ 		}
++
++		if (skb->encapsulation) {
++			ihs = skb_inner_tcp_all_headers(skb);
++			u64_stats_update_begin(&tx_stats->syncp);
++			tx_stats->tso_inner_packets++;
++			tx_stats->tso_inner_bytes += skb->len - ihs;
++			u64_stats_update_end(&tx_stats->syncp);
++		} else {
++			if (skb_shinfo(skb)->gso_type & SKB_GSO_UDP_L4) {
++				ihs = skb_transport_offset(skb) + sizeof(struct udphdr);
++			} else {
++				ihs = skb_tcp_all_headers(skb);
++				if (ipv6_has_hopopt_jumbo(skb))
++					ihs -= sizeof(struct hop_jumbo_hdr);
++			}
++
++			u64_stats_update_begin(&tx_stats->syncp);
++			tx_stats->tso_packets++;
++			tx_stats->tso_bytes += skb->len - ihs;
++			u64_stats_update_end(&tx_stats->syncp);
++		}
++
+ 	} else if (skb->ip_summed == CHECKSUM_PARTIAL) {
+ 		csum_type = mana_checksum_info(skb);
+ 
++		u64_stats_update_begin(&tx_stats->syncp);
++		tx_stats->csum_partial++;
++		u64_stats_update_end(&tx_stats->syncp);
++
+ 		if (csum_type == IPPROTO_TCP) {
+ 			pkg.tx_oob.s_oob.is_outer_ipv4 = ipv4;
+ 			pkg.tx_oob.s_oob.is_outer_ipv6 = ipv6;
+@@ -254,8 +289,12 @@ netdev_tx_t mana_start_xmit(struct sk_buff *skb, struct net_device *ndev)
+ 		}
+ 	}
+ 
+-	if (mana_map_skb(skb, apc, &pkg))
++	if (mana_map_skb(skb, apc, &pkg)) {
++		u64_stats_update_begin(&tx_stats->syncp);
++		tx_stats->mana_map_err++;
++		u64_stats_update_end(&tx_stats->syncp);
+ 		goto free_sgl_ptr;
++	}
+ 
+ 	skb_queue_tail(&txq->pending_skbs, skb);
+ 
+@@ -1038,6 +1077,8 @@ static void mana_poll_tx_cq(struct mana_cq *cq)
+ 	if (comp_read < 1)
+ 		return;
+ 
++	apc->eth_stats.tx_cqes = comp_read;
++
+ 	for (i = 0; i < comp_read; i++) {
+ 		struct mana_tx_comp_oob *cqe_oob;
+ 
+@@ -1064,6 +1105,7 @@ static void mana_poll_tx_cq(struct mana_cq *cq)
+ 		case CQE_TX_VLAN_TAGGING_VIOLATION:
+ 			WARN_ONCE(1, "TX: CQE error %d: ignored.\n",
+ 				  cqe_oob->cqe_hdr.cqe_type);
++			apc->eth_stats.tx_cqe_err++;
+ 			break;
+ 
+ 		default:
+@@ -1072,6 +1114,7 @@ static void mana_poll_tx_cq(struct mana_cq *cq)
+ 			 */
+ 			WARN_ONCE(1, "TX: Unexpected CQE type %d: HW BUG?\n",
+ 				  cqe_oob->cqe_hdr.cqe_type);
++			apc->eth_stats.tx_cqe_unknown_type++;
+ 			return;
+ 		}
+ 
+@@ -1118,6 +1161,8 @@ static void mana_poll_tx_cq(struct mana_cq *cq)
+ 		WARN_ON_ONCE(1);
+ 
+ 	cq->work_done = pkt_transmitted;
++
++	apc->eth_stats.tx_cqes -= pkt_transmitted;
+ }
+ 
+ static void mana_post_pkt_rxq(struct mana_rxq *rxq)
+@@ -1252,12 +1297,15 @@ static void mana_process_rx_cqe(struct mana_rxq *rxq, struct mana_cq *cq,
+ 	struct gdma_context *gc = rxq->gdma_rq->gdma_dev->gdma_context;
+ 	struct net_device *ndev = rxq->ndev;
+ 	struct mana_recv_buf_oob *rxbuf_oob;
++	struct mana_port_context *apc;
+ 	struct device *dev = gc->dev;
+ 	void *new_buf, *old_buf;
+ 	struct page *new_page;
+ 	u32 curr, pktlen;
+ 	dma_addr_t da;
+ 
++	apc = netdev_priv(ndev);
++
+ 	switch (oob->cqe_hdr.cqe_type) {
+ 	case CQE_RX_OKAY:
+ 		break;
+@@ -1270,6 +1318,7 @@ static void mana_process_rx_cqe(struct mana_rxq *rxq, struct mana_cq *cq,
+ 
+ 	case CQE_RX_COALESCED_4:
+ 		netdev_err(ndev, "RX coalescing is unsupported\n");
++		apc->eth_stats.rx_coalesced_err++;
+ 		return;
+ 
+ 	case CQE_RX_OBJECT_FENCE:
+@@ -1279,6 +1328,7 @@ static void mana_process_rx_cqe(struct mana_rxq *rxq, struct mana_cq *cq,
+ 	default:
+ 		netdev_err(ndev, "Unknown RX CQE type = %d\n",
+ 			   oob->cqe_hdr.cqe_type);
++		apc->eth_stats.rx_cqe_unknown_type++;
+ 		return;
+ 	}
+ 
+@@ -1341,11 +1391,15 @@ static void mana_poll_rx_cq(struct mana_cq *cq)
+ {
+ 	struct gdma_comp *comp = cq->gdma_comp_buf;
+ 	struct mana_rxq *rxq = cq->rxq;
++	struct mana_port_context *apc;
+ 	int comp_read, i;
+ 
++	apc = netdev_priv(rxq->ndev);
++
+ 	comp_read = mana_gd_poll_cq(cq->gdma_cq, comp, CQE_POLLING_BUFFER);
+ 	WARN_ON_ONCE(comp_read > CQE_POLLING_BUFFER);
+ 
++	apc->eth_stats.rx_cqes = comp_read;
+ 	rxq->xdp_flush = false;
+ 
+ 	for (i = 0; i < comp_read; i++) {
+@@ -1357,6 +1411,8 @@ static void mana_poll_rx_cq(struct mana_cq *cq)
+ 			return;
+ 
+ 		mana_process_rx_cqe(rxq, cq, &comp[i]);
++
++		apc->eth_stats.rx_cqes--;
+ 	}
+ 
+ 	if (rxq->xdp_flush)
+diff --git a/drivers/net/ethernet/microsoft/mana/mana_ethtool.c b/drivers/net/ethernet/microsoft/mana/mana_ethtool.c
+index 5b776a33a817..a64c81410dc1 100644
+--- a/drivers/net/ethernet/microsoft/mana/mana_ethtool.c
++++ b/drivers/net/ethernet/microsoft/mana/mana_ethtool.c
+@@ -13,6 +13,15 @@ static const struct {
+ } mana_eth_stats[] = {
+ 	{"stop_queue", offsetof(struct mana_ethtool_stats, stop_queue)},
+ 	{"wake_queue", offsetof(struct mana_ethtool_stats, wake_queue)},
++	{"tx_cqes", offsetof(struct mana_ethtool_stats, tx_cqes)},
++	{"tx_cq_err", offsetof(struct mana_ethtool_stats, tx_cqe_err)},
++	{"tx_cqe_unknown_type", offsetof(struct mana_ethtool_stats,
++					tx_cqe_unknown_type)},
++	{"rx_cqes", offsetof(struct mana_ethtool_stats, rx_cqes)},
++	{"rx_coalesced_err", offsetof(struct mana_ethtool_stats,
++					rx_coalesced_err)},
++	{"rx_cqe_unknown_type", offsetof(struct mana_ethtool_stats,
++					rx_cqe_unknown_type)},
+ };
+ 
+ static int mana_get_sset_count(struct net_device *ndev, int stringset)
+@@ -23,7 +32,8 @@ static int mana_get_sset_count(struct net_device *ndev, int stringset)
+ 	if (stringset != ETH_SS_STATS)
+ 		return -EINVAL;
+ 
+-	return ARRAY_SIZE(mana_eth_stats) + num_queues * 8;
++	return ARRAY_SIZE(mana_eth_stats) + num_queues *
++				(MANA_STATS_RX_COUNT + MANA_STATS_TX_COUNT);
+ }
+ 
+ static void mana_get_strings(struct net_device *ndev, u32 stringset, u8 *data)
+@@ -61,6 +71,22 @@ static void mana_get_strings(struct net_device *ndev, u32 stringset, u8 *data)
+ 		p += ETH_GSTRING_LEN;
+ 		sprintf(p, "tx_%d_xdp_xmit", i);
+ 		p += ETH_GSTRING_LEN;
++		sprintf(p, "tx_%d_tso_packets", i);
++		p += ETH_GSTRING_LEN;
++		sprintf(p, "tx_%d_tso_bytes", i);
++		p += ETH_GSTRING_LEN;
++		sprintf(p, "tx_%d_tso_inner_packets", i);
++		p += ETH_GSTRING_LEN;
++		sprintf(p, "tx_%d_tso_inner_bytes", i);
++		p += ETH_GSTRING_LEN;
++		sprintf(p, "tx_%d_long_pkt_fmt", i);
++		p += ETH_GSTRING_LEN;
++		sprintf(p, "tx_%d_short_pkt_fmt", i);
++		p += ETH_GSTRING_LEN;
++		sprintf(p, "tx_%d_csum_partial", i);
++		p += ETH_GSTRING_LEN;
++		sprintf(p, "tx_%d_mana_map_err", i);
++		p += ETH_GSTRING_LEN;
+ 	}
+ }
+ 
+@@ -78,6 +104,14 @@ static void mana_get_ethtool_stats(struct net_device *ndev,
+ 	u64 xdp_xmit;
+ 	u64 xdp_drop;
+ 	u64 xdp_tx;
++	u64 tso_packets;
++	u64 tso_bytes;
++	u64 tso_inner_packets;
++	u64 tso_inner_bytes;
++	u64 long_pkt_fmt;
++	u64 short_pkt_fmt;
++	u64 csum_partial;
++	u64 mana_map_err;
+ 	int q, i = 0;
+ 
+ 	if (!apc->port_is_up)
+@@ -113,11 +147,27 @@ static void mana_get_ethtool_stats(struct net_device *ndev,
+ 			packets = tx_stats->packets;
+ 			bytes = tx_stats->bytes;
+ 			xdp_xmit = tx_stats->xdp_xmit;
++			tso_packets = tx_stats->tso_packets;
++			tso_bytes = tx_stats->tso_bytes;
++			tso_inner_packets = tx_stats->tso_inner_packets;
++			tso_inner_bytes = tx_stats->tso_inner_bytes;
++			long_pkt_fmt = tx_stats->long_pkt_fmt;
++			short_pkt_fmt = tx_stats->short_pkt_fmt;
++			csum_partial = tx_stats->csum_partial;
++			mana_map_err = tx_stats->mana_map_err;
+ 		} while (u64_stats_fetch_retry(&tx_stats->syncp, start));
+ 
+ 		data[i++] = packets;
+ 		data[i++] = bytes;
+ 		data[i++] = xdp_xmit;
++		data[i++] = tso_packets;
++		data[i++] = tso_bytes;
++		data[i++] = tso_inner_packets;
++		data[i++] = tso_inner_bytes;
++		data[i++] = long_pkt_fmt;
++		data[i++] = short_pkt_fmt;
++		data[i++] = csum_partial;
++		data[i++] = mana_map_err;
+ 	}
+ }
+ 
+diff --git a/include/net/mana/mana.h b/include/net/mana/mana.h
+index 3bb579962a14..bb11a6535d80 100644
+--- a/include/net/mana/mana.h
++++ b/include/net/mana/mana.h
+@@ -48,6 +48,10 @@ enum TRI_STATE {
+ 
+ #define MAX_PORTS_IN_MANA_DEV 256
+ 
++/* Update this count whenever the respective structures are changed */
++#define MANA_STATS_RX_COUNT 5
++#define MANA_STATS_TX_COUNT 11
++
+ struct mana_stats_rx {
+ 	u64 packets;
+ 	u64 bytes;
+@@ -61,6 +65,14 @@ struct mana_stats_tx {
+ 	u64 packets;
+ 	u64 bytes;
+ 	u64 xdp_xmit;
++	u64 tso_packets;
++	u64 tso_bytes;
++	u64 tso_inner_packets;
++	u64 tso_inner_bytes;
++	u64 short_pkt_fmt;
++	u64 long_pkt_fmt;
++	u64 csum_partial;
++	u64 mana_map_err;
+ 	struct u64_stats_sync syncp;
+ };
+ 
+@@ -331,6 +343,12 @@ struct mana_tx_qp {
+ struct mana_ethtool_stats {
+ 	u64 stop_queue;
+ 	u64 wake_queue;
++	u64 tx_cqes;
++	u64 tx_cqe_err;
++	u64 tx_cqe_unknown_type;
++	u64 rx_cqes;
++	u64 rx_coalesced_err;
++	u64 rx_cqe_unknown_type;
+ };
+ 
+ struct mana_context {
 -- 
-Jani Nikula, Intel Open Source Graphics Center
+2.37.2
+
