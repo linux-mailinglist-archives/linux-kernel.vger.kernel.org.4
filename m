@@ -2,155 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DC796BB542
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 14:55:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DE176BB545
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 14:55:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232514AbjCONzL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 09:55:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54748 "EHLO
+        id S232867AbjCONzV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 09:55:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232480AbjCONzJ (ORCPT
+        with ESMTP id S232480AbjCONzP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 09:55:09 -0400
-Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01on20712.outbound.protection.outlook.com [IPv6:2a01:111:f403:700c::712])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BAB038652;
-        Wed, 15 Mar 2023 06:55:07 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=POO+Jh643uhHKt0mV1ZkCEs+bVsbydL3vuumT0nPgG/oIklGSLU/TvmRDZpcK14pY2H410ev4UsVm/CDPayYRpZWW71zIByQ64Iqk9NL3XRUlwKIQPF3gABgG0V0Zinb/mc5i8Sg0jztSFPwhrewvRnSYiCcYJz/CVblun4KdCsCe/sKQHSRU++o3lIpXUy3rfK3WZRcLJ//c+IsS44/vGrFrU2dhUtlw9lbY1ZJA7IIiRPk9dzAwy5h7SkKjy1OTpkBQgNC9vKm2pDucGL+JOHCcBnbBgAErr19UZY2bdZEmoj7urEYNAVwMvkcD5hw1COWfXIXwg7yP0xaUqzRww==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cG362mOuKw+rbNGCzHf//9QXI/jBLWh2913Pc4ENtU0=;
- b=agTzCLMOc94wex6q3amV+45u4tLUZ2P5Acr/NexGSvctvfmeu9l20gtIzA9VN/JdM44JySIo2G0miQpk8LrLF+4+Pb39nk9RRJqZh7MsmfK5lJ6sABCPeSxIv2WOj86fcV5qJGFp/oUj7kX2eGDpSdRg4cJ9an1crB2xk/A7ZCcN/7VPMlst/vyF9Rgy1ywOQU664N0D4MKyBEIXEhaNlsg8Rppm30CMBHJe3mLW9lD+SgRM4ZI5WqgOvnFlbnkBaf67JlO9tQO+k85howo3cGjWbF59TU6oF10P/VNal80nysKZDRINxz6yjCMzzg+bELoihCxHQ0MT/QGdacKkPg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
- dkim=pass header.d=renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=renesas.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cG362mOuKw+rbNGCzHf//9QXI/jBLWh2913Pc4ENtU0=;
- b=bRYpGiR6L+O95rPDo/6TRGXaUD5RAFA4D5/50ArG048+vWfOa3Kc+UCh7XOqyuSvpVj3S7gZnlrBh5X4q8/jFVbQ4skk80Yp4fUwfoPlBG+jHGamVdzgOvx6cEqegg9Kx6XPfFQnNILl9BDu49nUtDyU4tsaXUOkzQ7roUfoTI8=
-Received: from TYCPR01MB10588.jpnprd01.prod.outlook.com (2603:1096:400:309::8)
- by OS3PR01MB9977.jpnprd01.prod.outlook.com (2603:1096:604:1de::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.30; Wed, 15 Mar
- 2023 13:55:01 +0000
-Received: from TYCPR01MB10588.jpnprd01.prod.outlook.com
- ([fe80::dc49:e307:b424:4a53]) by TYCPR01MB10588.jpnprd01.prod.outlook.com
- ([fe80::dc49:e307:b424:4a53%5]) with mapi id 15.20.6178.026; Wed, 15 Mar 2023
- 13:55:01 +0000
-From:   Chris Paterson <Chris.Paterson2@renesas.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-CC:     "patches@lists.linux.dev" <patches@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "patches@kernelci.org" <patches@kernelci.org>,
-        "lkft-triage@lists.linaro.org" <lkft-triage@lists.linaro.org>,
-        "pavel@denx.de" <pavel@denx.de>,
-        "jonathanh@nvidia.com" <jonathanh@nvidia.com>,
-        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
-        "sudipm.mukherjee@gmail.com" <sudipm.mukherjee@gmail.com>,
-        "srw@sladewatkins.net" <srw@sladewatkins.net>,
-        "rwarsow@gmx.de" <rwarsow@gmx.de>
-Subject: RE: [PATCH 4.14 00/21] 4.14.310-rc1 review
-Thread-Topic: [PATCH 4.14 00/21] 4.14.310-rc1 review
-Thread-Index: AQHZVzfV6/eb0jknbkCimRmYoxhXlK772+qQ
-Date:   Wed, 15 Mar 2023 13:55:01 +0000
-Message-ID: <TYCPR01MB10588B1641FDE1D7718BA523DB7BF9@TYCPR01MB10588.jpnprd01.prod.outlook.com>
-References: <20230315115718.796692048@linuxfoundation.org>
-In-Reply-To: <20230315115718.796692048@linuxfoundation.org>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=renesas.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: TYCPR01MB10588:EE_|OS3PR01MB9977:EE_
-x-ms-office365-filtering-correlation-id: 14618780-b72c-4e2b-fe1c-08db255cdf1e
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: sYBw4VKybavXSColfHDAqOVGMUZcmpqCJk49o8UGe6mtck+27cAF8Sh0UCBfqoDjk3qyCyXP7IKoaVAjc/Oy5seQHqZzvbMQVBXgitJl6Hu+qgmL8Vw+6MGhM+sX8YLpIBzqTP5VRrQFM/ByeH6FgEAlZjx4T/lbLY/nUmoTydg0K1Bw4UzThC223Tmed4Rnmit5yCMJ4l2lf1DuZaVZb3HQ1WrYUqrXODoNsEycRVSibEqO9XObJ8Lx7qYeaXrfWs+z+KXOwqCxRRtbCMnjUrs9+iGJvJDvgc8kOuZnCiDVe1e4/gTsIILqTpzFmGGINneTTBIXxJaFNVTT0Gy1VPzWK7oxtGwbLq+WFhzW1ThZwLKL6CV+GiCemtev6l0cuSgIoBqWU6VxWFQ7GISrn+H8LgFZrRjkzHK5OY5lfw09aF7qkyZF1t/T0gQ3pp0tDgBo+vMlC9AoD8jng4P7S324AQa4tRaQxwuY5cA9e7P4HoYk5uVsNDCt2TiVXg/OKiivw0j6tJMeNOSGIq2Gh3O87ZVUs3k0BVK6EYynzk9N9HcXKmTc9O/BLsnO0uyEcHniXWYX3JrE1czmR6MGThy30+SLgRULUqc254oqCkUr7qBPVpRWxKK48HcbR31R/kBH1/4RxUyei+r5BGK6LEEATws74Ojfy5MmDv5JH1wn3ufWxWdOvRGUR8bPCOsot7V1qacpYdyvQaBtZxnU7oja2qA3Qoi3VMFB7gEh1hI=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYCPR01MB10588.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(136003)(346002)(376002)(366004)(396003)(39860400002)(451199018)(33656002)(86362001)(38070700005)(38100700002)(122000001)(2906002)(41300700001)(52536014)(7416002)(4744005)(5660300002)(8936002)(55016003)(4326008)(186003)(9686003)(26005)(6506007)(54906003)(316002)(110136005)(76116006)(66946007)(66476007)(66446008)(64756008)(8676002)(66556008)(966005)(71200400001)(7696005)(478600001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?Windows-1252?Q?yy3iuUO7dUcwO0Iy+lk71tSPsDk8qMbPGrg5L+zOzjWGjsJY/C7DT+HQ?=
- =?Windows-1252?Q?Yc0YQQZ2egl7MPcGj9B00vU0YEMwJdQvwXexXSLlixBmhkc/6c6kocIr?=
- =?Windows-1252?Q?DkXWxZcdfz+LbgHLbMYGsstr47Y6NQSOsV3Tr8ANGExObF5Fwh2eoclQ?=
- =?Windows-1252?Q?foUerbkey4Eq8LXDgAi/FdutEdq3p/GUteX9c7e/aWh+2ISZXU74fp/3?=
- =?Windows-1252?Q?ZHBmuo5xjO3YnID6cQVKAguCimS04AAaGSV+hFt+Fq0ASlLpfg99uDJ7?=
- =?Windows-1252?Q?pyIJYBFJ1K7yWPn6FX2FdewXY1gOknsei98x/P8Gds/6K8z7SVkew/YZ?=
- =?Windows-1252?Q?dPP7g11fPWnqhrBW712hmVL2ycsrTZeMf2c+8tCGMa8lNEI8cDsN8KlY?=
- =?Windows-1252?Q?LacM8qO0pMltIT+ulHnDELMKjd9zlJ287i0ogR5oy1L0PdxlKqMEhFV2?=
- =?Windows-1252?Q?5H1u+eQHmIk+6sWNxfqVma+U1jUblXFOmvAIDCtoK5ymVs4g6V8LWocI?=
- =?Windows-1252?Q?vPIhE1Qry5F+y+ik312cZEzuTAdzNonXYS7IfRbmElwOmfaLjXHFI3pB?=
- =?Windows-1252?Q?p1RCUoC1YnuzJxrARoeyMplO7yhpXd2mmleQDztzeZj1tgbijlLYzbZB?=
- =?Windows-1252?Q?GyGtzDMHU5boKjaee2wjwPE+frA85s3YTT/sLQEWUeY2HoHM9TMIJQsF?=
- =?Windows-1252?Q?lPGapj2tqxy10YlLHoQrUIB6+9zKCh3CAD6S5UCaqNRziWQwgbQMjPOq?=
- =?Windows-1252?Q?OgjKpu/jHfnXaxzihUDo+uTukxuO/H1nggvVV6xHn92B4Vd7XqgPAwBN?=
- =?Windows-1252?Q?PUKuKJKWAefO3U8QoLXHydM7Zxav9OOE4dVF8gnHnOfLaiUefWYm4Ell?=
- =?Windows-1252?Q?N+fXlDgZBJsQJ/hpsfdx//8xmYNk8kHfrWDS+3vpyf4i/DmeHBsNYSvp?=
- =?Windows-1252?Q?GckNnkNHkvPp5JwD9uJcGgHKuFJeENIN+gbeYPC54QcuNRJo2uCF1S1Q?=
- =?Windows-1252?Q?udlUBO/h/1ZnaVwjU5ud9GmKZZ9lZr4mHaL37h+OB5qmX+aP4ls1G2xz?=
- =?Windows-1252?Q?pTVUAan+2Qk8pqoVmgDerQv4b3mpoavH4U/7HWLP1t0E2PgYqYIwoaxj?=
- =?Windows-1252?Q?HZTARnfpHVyGhOGfOCY42Sh5yQU4qd7WkgxJoL+Sfy8hsY+zM26K4ruP?=
- =?Windows-1252?Q?sn+yavdDAPtgwq3d8/dmYJBXECwhWZZBeKaBJSEWP84GxF+xHPLb9EJS?=
- =?Windows-1252?Q?um5F0t5ANgW3SmnhBwhqMQy+H7GRk92JmGyGYNbsHGDdKCOs7o0iMxuy?=
- =?Windows-1252?Q?I3YgsshY1DXKcE9wuEKdWWafP6P1ueVmlMmIuf8HKx65swHcBNi3Ob9f?=
- =?Windows-1252?Q?BpI9NKo464LDFYmhk/SeJGUD922wdZC43mQqZ4k1RtyJGP/xFmhW4ZjN?=
- =?Windows-1252?Q?Bnqzk5BeX/idSa3UQYmT1UIX/fuFAxL0kS4Vghp8Fyn8Ifb073F7Ukgy?=
- =?Windows-1252?Q?+zMRU7rrGIiFuxD1CkaYfQaLVQOtc+h9rvkh+oFSfjGy43AfyH3rWSVx?=
- =?Windows-1252?Q?hviW2O17vsi3tL/BCbj3Z74lLVJ2xiyJ11C8o4NfPUC3Brae40NEMvnd?=
- =?Windows-1252?Q?gf2fnsdYWSmWClI8TWtfWUmfCwGPesn8icSpqgX1ZrGCSWA3nZsBrgpO?=
- =?Windows-1252?Q?nYb3DEoczPF1lym0qMbv6Qt9iNuA+oD0EbgBf0pa/s2/dzM9xV09pQ?=
- =?Windows-1252?Q?=3D=3D?=
-Content-Type: text/plain; charset="Windows-1252"
-Content-Transfer-Encoding: quoted-printable
+        Wed, 15 Mar 2023 09:55:15 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD5DA3BD9A;
+        Wed, 15 Mar 2023 06:55:12 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 9478E1FD6C;
+        Wed, 15 Mar 2023 13:55:11 +0000 (UTC)
+Received: from adalid.arch.suse.de (adalid.arch.suse.de [10.161.8.13])
+        by relay2.suse.de (Postfix) with ESMTP id 7A42F2C141;
+        Wed, 15 Mar 2023 13:55:11 +0000 (UTC)
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] MIPS: sibyte: Remove unused config option SIBYTE_BCM1x55
+Date:   Wed, 15 Mar 2023 14:55:09 +0100
+Message-Id: <20230315135509.102542-1-tsbogend@alpha.franken.de>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-X-OriginatorOrg: renesas.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TYCPR01MB10588.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 14618780-b72c-4e2b-fe1c-08db255cdf1e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Mar 2023 13:55:01.3470
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: FetKq/ToQOM+lySgr/Tx/y+JjqbE4lrTmAyyhTA05NZBGwM8dwUe+b/Z4/a5VBGOohRMqnWmRaBxRFMrtzZr0VWWNUM1h3aWqnoYcqSx6jA=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: OS3PR01MB9977
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_FAIL,SPF_HELO_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Greg,
+SIBYTE_BCM1x55 is not selected anywhere, so let's get rid of it.
 
-> From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Sent: 15 March 2023 12:12
->=20
-> This is the start of the stable review cycle for the 4.14.310 release.
-> There are 21 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->=20
-> Responses should be made by Fri, 17 Mar 2023 11:57:10 +0000.
-> Anything received after that time might be too late.
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+---
+ arch/mips/Kbuild.platforms            |  1 -
+ arch/mips/sibyte/Kconfig              | 13 +------------
+ arch/mips/sibyte/Makefile             |  2 --
+ arch/mips/sibyte/Platform             |  4 ----
+ arch/mips/sibyte/common/bus_watcher.c |  4 ++--
+ arch/mips/sibyte/common/cfe.c         |  2 +-
+ arch/mips/sibyte/common/sb_tbprof.c   | 10 +++++-----
+ arch/mips/sibyte/swarm/setup.c        |  6 +++---
+ 8 files changed, 12 insertions(+), 30 deletions(-)
 
-CIP configurations built and booted with Linux 4.14.310-rc1 (1f84872fb75a):
-https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/pipelines/8=
-07195539
-https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/commits/lin=
-ux-4.14.y
-
-Tested-by: Chris Paterson (CIP) <chris.paterson2@renesas.com>
-
-Kind regards, Chris
+diff --git a/arch/mips/Kbuild.platforms b/arch/mips/Kbuild.platforms
+index 5d04438ee12e..caad195ba5c1 100644
+--- a/arch/mips/Kbuild.platforms
++++ b/arch/mips/Kbuild.platforms
+@@ -29,7 +29,6 @@ platform-$(CONFIG_SGI_IP30)		+= sgi-ip30/
+ platform-$(CONFIG_SGI_IP32)		+= sgi-ip32/
+ platform-$(CONFIG_SIBYTE_BCM112X)	+= sibyte/
+ platform-$(CONFIG_SIBYTE_SB1250)	+= sibyte/
+-platform-$(CONFIG_SIBYTE_BCM1x55)	+= sibyte/
+ platform-$(CONFIG_SIBYTE_BCM1x80)	+= sibyte/
+ platform-$(CONFIG_SNI_RM)		+= sni/
+ platform-$(CONFIG_MACH_TX49XX)		+= txx9/
+diff --git a/arch/mips/sibyte/Kconfig b/arch/mips/sibyte/Kconfig
+index 470d46183677..c437bc02dd08 100644
+--- a/arch/mips/sibyte/Kconfig
++++ b/arch/mips/sibyte/Kconfig
+@@ -58,16 +58,6 @@ config SIBYTE_BCM1x80
+ 	select SIBYTE_SB1xxx_SOC
+ 	select SYS_SUPPORTS_SMP
+ 
+-config SIBYTE_BCM1x55
+-	bool
+-	select CEVT_BCM1480
+-	select CSRC_BCM1480
+-	select HAVE_PCI
+-	select IRQ_MIPS_CPU
+-	select SIBYTE_SB1xxx_SOC
+-	select SIBYTE_HAS_ZBUS_PROFILING
+-	select SYS_SUPPORTS_SMP
+-
+ config SIBYTE_SB1xxx_SOC
+ 	bool
+ 	select IRQ_MIPS_CPU
+@@ -143,8 +133,7 @@ config SIBYTE_CFE_CONSOLE
+ config SIBYTE_BUS_WATCHER
+ 	bool "Support for Bus Watcher statistics"
+ 	depends on SIBYTE_SB1xxx_SOC && \
+-		(SIBYTE_BCM112X || SIBYTE_SB1250 || \
+-		 SIBYTE_BCM1x55 || SIBYTE_BCM1x80)
++		(SIBYTE_BCM112X || SIBYTE_SB1250 || SIBYTE_BCM1x80)
+ 	help
+ 	  Handle and keep statistics on the bus error interrupts (COR_ECC,
+ 	  BAD_ECC, IO_BUS).
+diff --git a/arch/mips/sibyte/Makefile b/arch/mips/sibyte/Makefile
+index d015c4d79c3e..ca0d57824d56 100644
+--- a/arch/mips/sibyte/Makefile
++++ b/arch/mips/sibyte/Makefile
+@@ -6,8 +6,6 @@ obj-$(CONFIG_SIBYTE_BCM112X)	+= sb1250/
+ obj-$(CONFIG_SIBYTE_BCM112X)	+= common/
+ obj-$(CONFIG_SIBYTE_SB1250)	+= sb1250/
+ obj-$(CONFIG_SIBYTE_SB1250)	+= common/
+-obj-$(CONFIG_SIBYTE_BCM1x55)	+= bcm1480/
+-obj-$(CONFIG_SIBYTE_BCM1x55)	+= common/
+ obj-$(CONFIG_SIBYTE_BCM1x80)	+= bcm1480/
+ obj-$(CONFIG_SIBYTE_BCM1x80)	+= common/
+ 
+diff --git a/arch/mips/sibyte/Platform b/arch/mips/sibyte/Platform
+index 65b2225b76b2..304b4d16dfbf 100644
+--- a/arch/mips/sibyte/Platform
++++ b/arch/mips/sibyte/Platform
+@@ -13,10 +13,6 @@ cflags-$(CONFIG_SIBYTE_SB1250)	+=					\
+ 		-I$(srctree)/arch/mips/include/asm/mach-sibyte		\
+ 		-DSIBYTE_HDR_FEATURES=SIBYTE_HDR_FMASK_1250_112x_ALL
+ 
+-cflags-$(CONFIG_SIBYTE_BCM1x55) +=					\
+-		-I$(srctree)/arch/mips/include/asm/mach-sibyte		\
+-		-DSIBYTE_HDR_FEATURES=SIBYTE_HDR_FMASK_1480_ALL
+-
+ cflags-$(CONFIG_SIBYTE_BCM1x80) +=					\
+ 		-I$(srctree)/arch/mips/include/asm/mach-sibyte		\
+ 		-DSIBYTE_HDR_FEATURES=SIBYTE_HDR_FMASK_1480_ALL
+diff --git a/arch/mips/sibyte/common/bus_watcher.c b/arch/mips/sibyte/common/bus_watcher.c
+index d43291473f76..a296d2c51841 100644
+--- a/arch/mips/sibyte/common/bus_watcher.c
++++ b/arch/mips/sibyte/common/bus_watcher.c
+@@ -24,7 +24,7 @@
+ #include <asm/sibyte/sb1250_regs.h>
+ #include <asm/sibyte/sb1250_int.h>
+ #include <asm/sibyte/sb1250_scd.h>
+-#if defined(CONFIG_SIBYTE_BCM1x55) || defined(CONFIG_SIBYTE_BCM1x80)
++#ifdef CONFIG_SIBYTE_BCM1x80
+ #include <asm/sibyte/bcm1480_regs.h>
+ #endif
+ 
+@@ -71,7 +71,7 @@ void check_bus_watcher(void)
+ #if defined(CONFIG_SIBYTE_BCM112X) || defined(CONFIG_SIBYTE_SB1250)
+ 	/* Use non-destructive register */
+ 	status = csr_in32(IOADDR(A_SCD_BUS_ERR_STATUS_DEBUG));
+-#elif defined(CONFIG_SIBYTE_BCM1x55) || defined(CONFIG_SIBYTE_BCM1x80)
++#elif defined(CONFIG_SIBYTE_BCM1x80)
+ 	/* Use non-destructive register */
+ 	/* Same as 1250 except BUS_ERR_STATUS_DEBUG is in a different place. */
+ 	status = csr_in32(IOADDR(A_BCM1480_BUS_ERR_STATUS_DEBUG));
+diff --git a/arch/mips/sibyte/common/cfe.c b/arch/mips/sibyte/common/cfe.c
+index 2503f60271e8..2cb90dbbe843 100644
+--- a/arch/mips/sibyte/common/cfe.c
++++ b/arch/mips/sibyte/common/cfe.c
+@@ -295,7 +295,7 @@ void __init prom_init(void)
+ #if defined(CONFIG_SIBYTE_BCM112X) || defined(CONFIG_SIBYTE_SB1250)
+ 	register_smp_ops(&sb_smp_ops);
+ #endif
+-#if defined(CONFIG_SIBYTE_BCM1x55) || defined(CONFIG_SIBYTE_BCM1x80)
++#ifdef CONFIG_SIBYTE_BCM1x80
+ 	register_smp_ops(&bcm1480_smp_ops);
+ #endif
+ }
+diff --git a/arch/mips/sibyte/common/sb_tbprof.c b/arch/mips/sibyte/common/sb_tbprof.c
+index bc47681e825a..004a08469a39 100644
+--- a/arch/mips/sibyte/common/sb_tbprof.c
++++ b/arch/mips/sibyte/common/sb_tbprof.c
+@@ -23,7 +23,7 @@
+ #include <asm/io.h>
+ #include <asm/sibyte/sb1250.h>
+ 
+-#if defined(CONFIG_SIBYTE_BCM1x55) || defined(CONFIG_SIBYTE_BCM1x80)
++#ifdef CONFIG_SIBYTE_BCM1x80
+ #include <asm/sibyte/bcm1480_regs.h>
+ #include <asm/sibyte/bcm1480_scd.h>
+ #include <asm/sibyte/bcm1480_int.h>
+@@ -35,7 +35,7 @@
+ #error invalid SiByte UART configuration
+ #endif
+ 
+-#if defined(CONFIG_SIBYTE_BCM1x55) || defined(CONFIG_SIBYTE_BCM1x80)
++#ifdef CONFIG_SIBYTE_BCM1x80
+ #undef K_INT_TRACE_FREEZE
+ #define K_INT_TRACE_FREEZE K_BCM1480_INT_TRACE_FREEZE
+ #undef K_INT_PERF_CNT
+@@ -157,7 +157,7 @@ static void arm_tb(void)
+ 	 * a previous interrupt request.  This means that bus profiling
+ 	 * requires ALL of the SCD perf counters.
+ 	 */
+-#if defined(CONFIG_SIBYTE_BCM1x55) || defined(CONFIG_SIBYTE_BCM1x80)
++#ifdef CONFIG_SIBYTE_BCM1x80
+ 	__raw_writeq((scdperfcnt & ~M_SPC_CFG_SRC1) |
+ 						/* keep counters 0,2,3,4,5,6,7 as is */
+ 		     V_SPC_CFG_SRC1(1),		/* counter 1 counts cycles */
+@@ -290,7 +290,7 @@ static int sbprof_zbprof_start(struct file *filp)
+ 	 *  pass them through.	I am exploiting my knowledge that
+ 	 *  cp0_status masks out IP[5]. krw
+ 	 */
+-#if defined(CONFIG_SIBYTE_BCM1x55) || defined(CONFIG_SIBYTE_BCM1x80)
++#ifdef CONFIG_SIBYTE_BCM1x80
+ 	__raw_writeq(K_BCM1480_INT_MAP_I3,
+ 		     IOADDR(A_BCM1480_IMR_REGISTER(0, R_BCM1480_IMR_INTERRUPT_MAP_BASE_L) +
+ 			    ((K_BCM1480_INT_PERF_CNT & 0x3f) << 3)));
+@@ -343,7 +343,7 @@ static int sbprof_zbprof_start(struct file *filp)
+ 	__raw_writeq(0, IOADDR(A_SCD_TRACE_SEQUENCE_7));
+ 
+ 	/* Now indicate the PERF_CNT interrupt as a trace-relevant interrupt */
+-#if defined(CONFIG_SIBYTE_BCM1x55) || defined(CONFIG_SIBYTE_BCM1x80)
++#ifdef CONFIG_SIBYTE_BCM1x80
+ 	__raw_writeq(1ULL << (K_BCM1480_INT_PERF_CNT & 0x3f),
+ 		     IOADDR(A_BCM1480_IMR_REGISTER(0, R_BCM1480_IMR_INTERRUPT_TRACE_L)));
+ #else
+diff --git a/arch/mips/sibyte/swarm/setup.c b/arch/mips/sibyte/swarm/setup.c
+index 72a31eeeebba..9e7a1e305f61 100644
+--- a/arch/mips/sibyte/swarm/setup.c
++++ b/arch/mips/sibyte/swarm/setup.c
+@@ -24,7 +24,7 @@
+ #include <asm/time.h>
+ #include <asm/traps.h>
+ #include <asm/sibyte/sb1250.h>
+-#if defined(CONFIG_SIBYTE_BCM1x55) || defined(CONFIG_SIBYTE_BCM1x80)
++#ifdef CONFIG_SIBYTE_BCM1x80
+ #include <asm/sibyte/bcm1480_regs.h>
+ #elif defined(CONFIG_SIBYTE_SB1250) || defined(CONFIG_SIBYTE_BCM112X)
+ #include <asm/sibyte/sb1250_regs.h>
+@@ -34,7 +34,7 @@
+ #include <asm/sibyte/sb1250_genbus.h>
+ #include <asm/sibyte/board.h>
+ 
+-#if defined(CONFIG_SIBYTE_BCM1x55) || defined(CONFIG_SIBYTE_BCM1x80)
++#ifdef CONFIG_SIBYTE_BCM1x80
+ extern void bcm1480_setup(void);
+ #elif defined(CONFIG_SIBYTE_SB1250) || defined(CONFIG_SIBYTE_BCM112X)
+ extern void sb1250_setup(void);
+@@ -114,7 +114,7 @@ int update_persistent_clock64(struct timespec64 now)
+ 
+ void __init plat_mem_setup(void)
+ {
+-#if defined(CONFIG_SIBYTE_BCM1x55) || defined(CONFIG_SIBYTE_BCM1x80)
++#ifdef CONFIG_SIBYTE_BCM1x80
+ 	bcm1480_setup();
+ #elif defined(CONFIG_SIBYTE_SB1250) || defined(CONFIG_SIBYTE_BCM112X)
+ 	sb1250_setup();
+-- 
+2.35.3
 
