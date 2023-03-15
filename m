@@ -2,112 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AD146BB5C0
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 15:17:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1A5B6BB5C7
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 15:17:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233007AbjCOORA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 10:17:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53170 "EHLO
+        id S232536AbjCOORx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 10:17:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232994AbjCOOQn (ORCPT
+        with ESMTP id S231983AbjCOORs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 10:16:43 -0400
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34A3F1BF4;
-        Wed, 15 Mar 2023 07:16:23 -0700 (PDT)
-Received: by mail-il1-x12a.google.com with SMTP id bp11so5014203ilb.3;
-        Wed, 15 Mar 2023 07:16:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678889782;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=9PqS0is4BFBhZIUbIafMoHIoQlBBc9tsQxTd/4r4m0Y=;
-        b=bf4qG4jUwR6UAlaHoe9a6UH/FV/HHFjeNypHVurJVbp569Uurn6uKxILTeF1YbHAVi
-         dhNbTl8PP2yq4hcYyhrSp71hQHQHv0++5uP2q8cVLJGiiP3w5tp8skdPDcSGHn9SO8q7
-         jgg3JrLv+i4emcTEsIqDAdlZ7VZ8yXLg/9O1S73TACzgYNnm+65xARK+Dm6z/xVLLjLQ
-         1u4eumikZGNOJg8AjB9db4f3RP50/uBd8PBBS/UiYqbFh2xTc/PwBrI8z3DNw1xPEXgn
-         kMPmI3gk6qLA3ApW8Jddjz7NW/jB3+z7CBUJtXySVPA/4Bal793sWOIX1J2zETxz3LSP
-         A5CQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678889782;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9PqS0is4BFBhZIUbIafMoHIoQlBBc9tsQxTd/4r4m0Y=;
-        b=ShB8FnBFpPKoF/Aez05RckSUWxWjp2Bn0IjkSet9//GD5+i0xSYZH040ruL8YU3wNI
-         3f3dsaJwey5eHf/Vvuy659570n8cVHffUWKFmdSIt0bj9Iok2lOCK48YqbPA0lrjEE6w
-         fWdCJQut4eTPlG79QqyOOMOt3IxWKk9oFYjGNZAmg7BfAmrNVHHNcZEWIQmh+yiw4HlX
-         hyVazIqzmfdjkfx7jQaiCq9MS+sGl1eAG6ZiafQ4WvnD4k6YDOvYXkoJUWWyd5OW2d8N
-         PYUlaNqhe4EpJXg1p86yQh30LyuxbxUALk57ZfGY3LABdv2LmjZCWvs99T6ibmR2ZZRK
-         d/pA==
-X-Gm-Message-State: AO0yUKUO69Eb6JyTSjn5TctmW9K9FfSN+qnx2zz+SxJZvK3PPml4L3pV
-        ow0OQT+tmOcTDJBhxEfwF/8U3ZmvdSs=
-X-Google-Smtp-Source: AK7set+Io//LtO6XKCL4IkO6kufc4biv6gHKOY+tK5XbcN4sTqh9/Z7Z9+LbNtv9Gpv3OSG/DVlh4Q==
-X-Received: by 2002:a05:6e02:1294:b0:323:140f:a72e with SMTP id y20-20020a056e02129400b00323140fa72emr4786141ilq.1.1678889782181;
-        Wed, 15 Mar 2023 07:16:22 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id f4-20020a056638022400b0040535426261sm1691486jaq.37.2023.03.15.07.16.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Mar 2023 07:16:21 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <64e3ecac-6684-1989-02c5-06fc0e755631@roeck-us.net>
-Date:   Wed, 15 Mar 2023 07:16:20 -0700
+        Wed, 15 Mar 2023 10:17:48 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 543A76EAA;
+        Wed, 15 Mar 2023 07:17:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 04C8BB81E40;
+        Wed, 15 Mar 2023 14:17:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7763C433A0;
+        Wed, 15 Mar 2023 14:17:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678889847;
+        bh=CQun5NYvCzgck8mLcoHCcDks/YPrwVLykREvoC7nBKI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=XJWjqUEkahmrvngFt9oyfNfcK+J2smZ7aM21uO/o+ojEQjxERR7bgSDu+m5Op9YpW
+         NN2ALZolAGYGgCSxDzmSIGcMjp2YOMPSAr/LAvddBCtAFBM4utuK9P9Lu1EYR5pNtM
+         4pKKHg43gq+2vs4C/p39gOAsAwzHharXQa76ru1K9aBMMfwrl+I3uQ2nE9oKtUm3QL
+         JHpqRrlE1rjCWcgwgnTrnCI8vZIjTEcdovAAZXp0v/dswlba3bEcxe1d+qjAzz7kXh
+         wJ1SCB6MwupEKZGO9r+yQmqxysPGV6POLcLMF9It+ojiQydZfDwSdhYGT3hM4dMieZ
+         Y4/5Adbg3tk8g==
+Received: by mail-lf1-f48.google.com with SMTP id d36so24499302lfv.8;
+        Wed, 15 Mar 2023 07:17:27 -0700 (PDT)
+X-Gm-Message-State: AO0yUKX2kL7EuLHPe2WslQPHO6CuFgxpFqIFNZtJXmNz/rqpiELchSTQ
+        cewH7BKFXBYMwo1ZHiWmmL39mz+cfOKLmhPV8Q==
+X-Google-Smtp-Source: AK7set8Vnq294J+j4qqKSVvr2jzh7ZWYNwCdOd39eacfnl/Ca01w31d255eKrfrDZr8PTwI+xUi8SrZq75uayJmH64s=
+X-Received: by 2002:ac2:484f:0:b0:4dd:af74:fe17 with SMTP id
+ 15-20020ac2484f000000b004ddaf74fe17mr2074084lfy.7.1678889845688; Wed, 15 Mar
+ 2023 07:17:25 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v1] hwmon: drivetemp: support to be a platform driver for
- thermal_of
-Content-Language: en-US
-To:     phinex <phinex@realtek.com>, jdelvare@suse.com
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230315121606.GA71707@threadripper>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20230315121606.GA71707@threadripper>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20230220-display-v1-0-45cbc68e188b@baylibre.com>
+ <20230220-display-v1-19-45cbc68e188b@baylibre.com> <CAAOTY_-wEzu6JavEAyRo8njOLRMq3i3wEcemNsuMaK00W9QqpQ@mail.gmail.com>
+ <CAFGrd9pa3c3eZcuGg7AmHL8kOAkyx96hwjwnMuO-G9BR1ORJ_w@mail.gmail.com>
+In-Reply-To: <CAFGrd9pa3c3eZcuGg7AmHL8kOAkyx96hwjwnMuO-G9BR1ORJ_w@mail.gmail.com>
+From:   Chun-Kuang Hu <chunkuang.hu@kernel.org>
+Date:   Wed, 15 Mar 2023 22:17:11 +0800
+X-Gmail-Original-Message-ID: <CAAOTY_-TfXBpVbWw54yORqQ9Ubft-6PKofS2VznMi4-jfbA7Mg@mail.gmail.com>
+Message-ID: <CAAOTY_-TfXBpVbWw54yORqQ9Ubft-6PKofS2VznMi4-jfbA7Mg@mail.gmail.com>
+Subject: Re: [PATCH 19/21] drm/mediatek: dpi: add support for dpi clock
+To:     Alexandre Mergnat <amergnat@baylibre.com>
+Cc:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Daniel Vetter <daniel@ffwll.ch>, CK Hu <ck.hu@mediatek.com>,
+        Jitao Shi <jitao.shi@mediatek.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Xinlei Lee <xinlei.lee@mediatek.com>,
+        Guillaume La Roque <glaroque@baylibre.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        dri-devel@lists.freedesktop.org,
+        Fabien Parent <fparent@baylibre.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/15/23 05:16, phinex wrote:
-> Support thermal zone so that we can just rely on dts to describe a
-> thermal zone and do the cooling operations.
-> 
-> You can define a comptible string "drivetemp,hdd-sensors" to enable
-> this, such as
-> 
-> 	sata_port0: sata-port@0 {
-> 		compatible = "drivetemp,hdd-sensors";
-> 		#thermal-sensor-cells = <0>;
-> 	}
-> 
-> Then define a thermal with this sensor to get it work.
-> 
->                 hdd_thermal: hdd-thermal {
->                         thermal-sensors = <&sata_port0>;
-> 		}
-> 
-> In most of the SoC systems, using dts to handle cooling is common.
-> This can eliminate the usage of user space application to check
-> the value exported in hwmon and then through sysfs to cooling.
-> 
-> Signed-off-by: phinex <phinex@realtek.com>
-> 
+Hi, Alexandre:
 
-The driver registers drivetemp instances with the hwmon core using
-HWMON_C_REGISTER_TZ. That means there should already be a thermal zone
-for each instance. If that doesn't work, please find out why and fix it
-instead of replicating what the hwmon core already is supposed to be
-doing.
+Alexandre Mergnat <amergnat@baylibre.com> =E6=96=BC 2023=E5=B9=B43=E6=9C=88=
+15=E6=97=A5 =E9=80=B1=E4=B8=89 =E4=B8=8B=E5=8D=885:36=E5=AF=AB=E9=81=93=EF=
+=BC=9A
+>
+> Le lun. 13 mars 2023 =C3=A0 16:21, Chun-Kuang Hu <chunkuang.hu@kernel.org=
+> a =C3=A9crit :
+> >
+> > >
+> > > +       dpi->dpi_clk =3D devm_clk_get_optional(dev, "dpi");
+> >
+> > For MT8365, DPI clock is not optional, so make sure that MT8365 DPI
+> > should have this clock.
+>
+> This should be check and notified at build time thanks to the
+> device-tree binding. Do you prefer this?:
+> #IF MT8365_SOC
+>     dpi->dpi_clk =3D devm_clk_get(dev, "dpi");
 
-Guenter
+Add one member in struct mtk_dpi_conf for dpi_clk. In
+mtk_dpi_of_ids[], add one item for mt8365
 
+{ .compatible =3D "mediatek,mt8365-dpi",
+ .data =3D &mt8365_conf,
+},
+
+Regards,
+Chun-Kuang.
+
+>
+> Regards,
+> Alex
