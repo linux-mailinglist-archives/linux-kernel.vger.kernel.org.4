@@ -2,130 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D97A86BBF2F
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 22:35:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B4E06BBF34
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 22:36:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232495AbjCOVfs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 17:35:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35946 "EHLO
+        id S232474AbjCOVgk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 17:36:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229584AbjCOVfo (ORCPT
+        with ESMTP id S232713AbjCOVgd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 17:35:44 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED7D21CAD9;
-        Wed, 15 Mar 2023 14:35:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 44596B81F70;
-        Wed, 15 Mar 2023 21:35:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA479C433D2;
-        Wed, 15 Mar 2023 21:35:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678916139;
-        bh=t0slNnDqTTBxM4l7m1MnXen0WkpNYZ0Oy+EHtd/aI48=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=ee4tuRcbXCIIJpJjWwyj+PthOSZjP+cV02hFdIB+CY44Ndgd7JemYu5LWnmFbnzPD
-         fh0xBbyvkoWL9olg24id/P+qgY5U2xCobnkIDjpQ8ejKgLyHXKnIRj6tXj6Fqg/5SU
-         9Oo7bNxYbYNqpiS3NY5B1VnIwPnTWVidVt0Y0PAZe6i9ijtXmyLTNjcKwXFP719nOl
-         UFJuaQ/8Gq2tKexMFgdo+dunvJKB9f8DUpZ7Vl10xRrh9Nv0YHkCCw9WWjGTQQxN90
-         7wsUToadu9eL5M/bxkjVkXP7GuX8Kh9sQGh61aKWmwNRciKzF6gR1s5s9IhLoZ1ewl
-         olPyRlmEk9EYw==
-Date:   Wed, 15 Mar 2023 16:35:37 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Zhuo Chen <chenzhuo.1@bytedance.com>,
-        James Smart <james.smart@broadcom.com>,
-        Dick Kennedy <dick.kennedy@broadcom.com>
-Cc:     sathyanarayanan.kuppuswamy@linux.intel.com, bhelgaas@google.com,
-        ruscur@russell.cc, oohall@gmail.com, fancer.lancer@gmail.com,
-        jdmason@kudzu.us, dave.jiang@intel.com, allenbh@gmail.com,
-        jejb@linux.ibm.com, martin.petersen@oracle.com,
-        linux-scsi@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ntb@lists.linux.dev,
-        linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH v3 4/9] scsi: lpfc: Change to use
- pci_aer_clear_uncorrect_error_status()
-Message-ID: <20230315213537.GA1788623@bhelgaas>
+        Wed, 15 Mar 2023 17:36:33 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84246A54CC;
+        Wed, 15 Mar 2023 14:36:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678916173; x=1710452173;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=bN4ryWZxzvEFPRc6DSLUskI5Lq1cF0UDC0McBXRKWV0=;
+  b=iEEwfh66LkM1WE5LEVbkzk+2k03cN0X1t5YokZeDwSEBfWc+r+nW+tDq
+   qCXKzbgkdcvhJj+6ANvc0WI89qnfgxL+kY1gMtwtQzO0M0koBVczFY9Py
+   qcz0SMH8MwVJNk43ZoCrO8kGBOJ/qX5LOjkbzYan1Ey4Q7haexlaSVI52
+   EOqh8bcKhUck7H3wh3A+qj++J2AvKL5WA9Ru3KOzsZXQ52pNKyZFG1YHP
+   z/ZgVMqt+6Yf8LBIVJjWi0sAGh9+nfN3tOnshgRTs8bGdJY0fBRd3Lr6j
+   vP2ZRIi1iuDr0/UBiY75LvTaoHMAG7nhac6cCn6MHx67g/8+HQ3+UpRRf
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="402693621"
+X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
+   d="scan'208";a="402693621"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2023 14:36:12 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="709822609"
+X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
+   d="scan'208";a="709822609"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 15 Mar 2023 14:36:09 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pcYn2-00083D-1R;
+        Wed, 15 Mar 2023 21:36:08 +0000
+Date:   Thu, 16 Mar 2023 05:36:05 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Paul Cercueil <paul@crapouillou.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        Paul Cercueil <paul@crapouillou.net>,
+        michael.hennerich@analog.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        nuno.sa@analog.com, linaro-mm-sig@lists.linaro.org,
+        linux-media@vger.kernel.org
+Subject: Re: [PATCH 2/2] usb: gadget: functionfs: Add DMABUF import interface
+Message-ID: <202303160514.ZHer8I6t-lkp@intel.com>
+References: <20230314105257.17345-3-paul@crapouillou.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221206221335.GA1363005@bhelgaas>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230314105257.17345-3-paul@crapouillou.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 06, 2022 at 04:13:35PM -0600, Bjorn Helgaas wrote:
-> On Wed, Sep 28, 2022 at 06:59:41PM +0800, Zhuo Chen wrote:
-> > lpfc_aer_cleanup_state() requires clearing both fatal and non-fatal
-> > uncorrectable error status.
-> 
-> I don't know what the point of lpfc_aer_cleanup_state() is.  AER
-> errors should be handled and cleared by the PCI core, not by
-> individual drivers.  Only lpfc, liquidio, and sky2 touch
-> PCI_ERR_UNCOR_STATUS.
-> 
-> But lpfc_aer_cleanup_state() is visible in the
-> "lpfc_aer_state_cleanup" sysfs file, so removing it would break any
-> userspace that uses it.
-> 
-> If we can rely on the PCI core to clean up AER errors itself
-> (admittedly, that might be a big "if"), maybe lpfc_aer_cleanup_state()
-> could just become a no-op?
-> 
-> Any comment from the LPFC folks?
-> 
-> Ideally, I would rather not export pci_aer_clear_nonfatal_status() or
-> pci_aer_clear_uncorrect_error_status() outside the PCI core at all.
+Hi Paul,
 
-Resurrecting this old thread.  Zhuo, can you figure out where the PCI
-core clears these errors, include that in the commit log, and propose
-a patch that makes lpfc_aer_cleanup_state() a no-op, by removing the
-pci_aer_clear_nonfatal_status() call completely?
+I love your patch! Yet something to improve:
 
-Such a patch could be sent to the SCSI maintainers since it doesn't
-involve the PCI core.
+[auto build test ERROR on usb/usb-testing]
+[also build test ERROR on usb/usb-next usb/usb-linus linus/master v6.3-rc2 next-20230315]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-If it turns out that the PCI core *doesn't* clear these errors, we
-should figure out *why* it doesn't and try to change the PCI core so
-it does.
+url:    https://github.com/intel-lab-lkp/linux/commits/Paul-Cercueil/usb-gadget-Support-already-mapped-DMA-SGs/20230314-185522
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+patch link:    https://lore.kernel.org/r/20230314105257.17345-3-paul%40crapouillou.net
+patch subject: [PATCH 2/2] usb: gadget: functionfs: Add DMABUF import interface
+config: i386-randconfig-a014-20230313 (https://download.01.org/0day-ci/archive/20230316/202303160514.ZHer8I6t-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/4ee364ed5d112c4550344fd037f4e1ef7cc41878
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Paul-Cercueil/usb-gadget-Support-already-mapped-DMA-SGs/20230314-185522
+        git checkout 4ee364ed5d112c4550344fd037f4e1ef7cc41878
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-> > But using pci_aer_clear_nonfatal_status()
-> > will only clear non-fatal error status. To clear both fatal and
-> > non-fatal error status, use pci_aer_clear_uncorrect_error_status().
-> > 
-> > Signed-off-by: Zhuo Chen <chenzhuo.1@bytedance.com>
-> > ---
-> >  drivers/scsi/lpfc/lpfc_attr.c | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/drivers/scsi/lpfc/lpfc_attr.c b/drivers/scsi/lpfc/lpfc_attr.c
-> > index 09cf2cd0ae60..d835cc0ba153 100644
-> > --- a/drivers/scsi/lpfc/lpfc_attr.c
-> > +++ b/drivers/scsi/lpfc/lpfc_attr.c
-> > @@ -4689,7 +4689,7 @@ static DEVICE_ATTR_RW(lpfc_aer_support);
-> >   * Description:
-> >   * If the @buf contains 1 and the device currently has the AER support
-> >   * enabled, then invokes the kernel AER helper routine
-> > - * pci_aer_clear_nonfatal_status() to clean up the uncorrectable
-> > + * pci_aer_clear_uncorrect_error_status() to clean up the uncorrectable
-> >   * error status register.
-> >   *
-> >   * Notes:
-> > @@ -4715,7 +4715,7 @@ lpfc_aer_cleanup_state(struct device *dev, struct device_attribute *attr,
-> >  		return -EINVAL;
-> >  
-> >  	if (phba->hba_flag & HBA_AER_ENABLED)
-> > -		rc = pci_aer_clear_nonfatal_status(phba->pcidev);
-> > +		rc = pci_aer_clear_uncorrect_error_status(phba->pcidev);
-> >  
-> >  	if (rc == 0)
-> >  		return strlen(buf);
-> > -- 
-> > 2.30.1 (Apple Git-130)
-> > 
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303160514.ZHer8I6t-lkp@intel.com/
+
+All errors (new ones prefixed by >>, old ones prefixed by <<):
+
+>> ERROR: modpost: module usb_f_fs uses symbol dma_buf_get from namespace DMA_BUF, but does not import it.
+>> ERROR: modpost: module usb_f_fs uses symbol dma_buf_attach from namespace DMA_BUF, but does not import it.
+>> ERROR: modpost: module usb_f_fs uses symbol dma_buf_detach from namespace DMA_BUF, but does not import it.
+>> ERROR: modpost: module usb_f_fs uses symbol dma_buf_put from namespace DMA_BUF, but does not import it.
+>> ERROR: modpost: module usb_f_fs uses symbol dma_buf_map_attachment from namespace DMA_BUF, but does not import it.
+>> ERROR: modpost: module usb_f_fs uses symbol dma_buf_unmap_attachment from namespace DMA_BUF, but does not import it.
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
