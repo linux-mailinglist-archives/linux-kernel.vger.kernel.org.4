@@ -2,199 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C02D6BBD15
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 20:15:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BC046BBD18
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 20:16:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232837AbjCOTPy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 15:15:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58950 "EHLO
+        id S232646AbjCOTQ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 15:16:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232789AbjCOTPw (ORCPT
+        with ESMTP id S231232AbjCOTQY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 15:15:52 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22ABC59F8;
-        Wed, 15 Mar 2023 12:15:51 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id r27so25578695lfe.10;
-        Wed, 15 Mar 2023 12:15:51 -0700 (PDT)
+        Wed, 15 Mar 2023 15:16:24 -0400
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 687717ABA
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 12:16:23 -0700 (PDT)
+Received: by mail-io1-xd2e.google.com with SMTP id b5so8304336iow.0
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 12:16:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678907749;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=s/TbcNqKWN0M5lu3wJAR1U2s2LeA07pOPBmN8acExL0=;
-        b=O5ur8jSvdB/27xbe32AESiRGhcveHvRo5NOaDMOW1kpL0OswesjyshUT7QTDwawvGN
-         vx/xKxwCiKLsKEJkO1qWFU2FXLc4atOFdLRmZ3076bqob4ti2vI1cECaFybQvMKz5pZv
-         /bHto9NZ01y2aSX9adBezC6aYsnn+1b+rY6uhUv2O8/DrGn8KQVVlCVpS/6fGWQbv1uU
-         gWbM7JHpV8JnX5u+M+33xxdoyG7FOo2M5edJsKRthcQfvqf9M8Hk4pwzDp0fjfPmCKxD
-         ZuKfWkLnY3oUfQF5Su3evoeUpfkg6RgrTpD0LLO806HlCoeLQBEc7dPwq5e1BTqIGQD8
-         2vjg==
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112; t=1678907783;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=zjib63I4/E2+bLbON0FvXB9InrxpaQrzV2uNVZmxACg=;
+        b=4wDw2+LMGXQ1PK0U+9MqhBl0HOt2MkVZ28iAQWE6z/yOqgANBCjqvBocCG9ExaTEkI
+         bmqIxAGXWJuZJxYdfJEe0rtm0E115npaWy1VcmJuv3dFM1cuUjv/1Zjht3/dLTrtQCfl
+         mMOpNkDZxp0HsumZpOPJ9Fj7v+QqI4kFAWP9ACbC58axn5n6aCwe0YlX12OnWiJB8FKX
+         K7LNbo3pJz1c/iBksxWNYavYk220EnA5Alp0KcV3flz3eIOPJUsqEk2AWx1YGZ8QtU6M
+         c1W1/5Shqz+8fnoIa2AGw+j9RTPf2KgAu1LggsN5mXiABmusrPWMhO7uHQv7hgq+Wn+m
+         tD5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678907749;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=s/TbcNqKWN0M5lu3wJAR1U2s2LeA07pOPBmN8acExL0=;
-        b=eoGnHq2Gh/D+nW5uByOcxhHv2/76ZtpmHbaitWt+7LetAtzVPDxLSnudw6LDC+H563
-         3vSPshOB83Ii1n2IxzANbI5O9qRculQE8bXZoHLvE5+QI57QTx0ntJW6NNzKoFnEUWeE
-         MGehsspcEi98SitrXypBhaY70Z8/tpDZBOmDl/DAaywXY/e2fKyjjv7sTTU/mEXvvmwS
-         Uk+pKOmrHTB0oEtZwtDRzEGPdcCRyd3rqRGcrHvZWJ+0WJwMbJHUhzWfTFkxmUMASLBc
-         OcyZPysPPtmQovDZqbKv9jLshX7boVXOj+WaTn43E4A2q8Nsgl2KguEttIa78kLB10wu
-         7Nfw==
-X-Gm-Message-State: AO0yUKUso5JmNCuLQieNNoZEKJ9G+VpnaZOfDZh9UaFpL+2BzL70J2Ts
-        oHik4tS4bXh0rj8M3FEv6llELJHvXwP6y5WUgzA=
-X-Google-Smtp-Source: AK7set+RLtA8GIwiFyS4rsBM8IKpZnaihakScemGdopDS8WcGoKzTe0kT84u6FhuozpIRdVObQcJElU+HSk0NKRv5fk=
-X-Received: by 2002:ac2:5df9:0:b0:4db:2554:93a2 with SMTP id
- z25-20020ac25df9000000b004db255493a2mr2378777lfq.10.1678907749244; Wed, 15
- Mar 2023 12:15:49 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1678907783;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zjib63I4/E2+bLbON0FvXB9InrxpaQrzV2uNVZmxACg=;
+        b=MzyAI1qtrfrIG2tnDetcgJI/9NKSaLv32MEzhX5UICfE0NHujpGK5Pg4G8/BDLCH4n
+         frT+KTs63WVJL2PeXVo/ReHIkWWaSDeR+oSSGqB3SmIvmM6Js8ZFPEcE9b2KYXSMMSei
+         6AAm9z0dSRNmNrD8ssFq1Nk2SbGYsAzUIbr5nxlVnC8hRePRfokpeeZUdgwJ7SV53SHV
+         VMRAUc939Lo3U0RQv8Z4Vdkz/qxzfemTjWpTIFvdSLUrGaHOenN0m0UQm/UNcebHWLG7
+         RnPLCsmXsSKB/qbw6bWA5WZO4KW+3PQ1cAB9HOQKNQ68umTcD+PZrhxlRgefJ3FBkE1Z
+         WqqA==
+X-Gm-Message-State: AO0yUKWyGsZqlXHGpmih3OfISCy6/Q3LweT21rq0NTjwssOE4KuDCgbo
+        PIllolCgeHasq7x399dFBB0aXg==
+X-Google-Smtp-Source: AK7set8Wd5bI1U8OwOnqY75pljVHUxJz0I71aibZ56JieXMkrHFAe99lgCAPANpc+qYnQPMoCBMTMA==
+X-Received: by 2002:a6b:dd0c:0:b0:74c:99e8:7f44 with SMTP id f12-20020a6bdd0c000000b0074c99e87f44mr210198ioc.2.1678907782700;
+        Wed, 15 Mar 2023 12:16:22 -0700 (PDT)
+Received: from [192.168.1.94] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id dj5-20020a0566384b8500b004061d3cce02sm527098jab.67.2023.03.15.12.16.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Mar 2023 12:16:22 -0700 (PDT)
+Message-ID: <e5a1815b-65b5-55ca-9773-ec04378d53c0@kernel.dk>
+Date:   Wed, 15 Mar 2023 13:16:20 -0600
 MIME-Version: 1.0
-References: <20230307212223.7e49384a@gandalf.local.home> <20230307212615.7a099103@gandalf.local.home>
- <b919b550-6da8-f9f0-a0eb-0fd8af513817@amd.com> <20230308074333.49546088@gandalf.local.home>
- <980021d5-09f7-9fc3-2726-44884a57822f@gmail.com>
-In-Reply-To: <980021d5-09f7-9fc3-2726-44884a57822f@gmail.com>
-From:   Matthew Auld <matthew.william.auld@gmail.com>
-Date:   Wed, 15 Mar 2023 19:15:21 +0000
-Message-ID: <CAM0jSHPf5u4=GGWm6x-zVkLA_LScAxq371ny2NoozuNjHfQefQ@mail.gmail.com>
-Subject: Re: [Intel-gfx] [BUG 6.3-rc1] Bad lock in ttm_bo_delayed_delete()
-To:     =?UTF-8?Q?Christian_K=C3=B6nig?= <ckoenig.leichtzumerken@gmail.com>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Arunpravin Paneer Selvam <Arunpravin.PaneerSelvam@amd.com>,
-        intel-gfx@lists.freedesktop.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        linux-media@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 00/13] Rename k[v]free_rcu() single argument to
+ k[v]free_rcu_mightsleep()
+Content-Language: en-US
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        "Uladzislau Rezki (Sony)" <urezki@gmail.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>,
+        Philipp Reisner <philipp.reisner@linbit.com>,
+        Bryan Tan <bryantan@vmware.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Bob Pearson <rpearsonhpe@gmail.com>,
+        Ariel Levkovich <lariel@nvidia.com>,
+        Theodore Ts'o <tytso@mit.edu>, Julian Anastasov <ja@ssi.bg>
+References: <20230201150815.409582-1-urezki@gmail.com>
+ <20230315151415.2534e11c@gandalf.local.home>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20230315151415.2534e11c@gandalf.local.home>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 15 Mar 2023 at 18:41, Christian K=C3=B6nig
-<ckoenig.leichtzumerken@gmail.com> wrote:
->
-> Am 08.03.23 um 13:43 schrieb Steven Rostedt:
-> > On Wed, 8 Mar 2023 07:17:38 +0100
-> > Christian K=C3=B6nig <christian.koenig@amd.com> wrote:
-> >
-> >> What test case/environment do you run to trigger this?
-> > I'm running a 32bit x86 qemu instance. Attached is the config.
-> >
-> > The libvirt xml file is here: https://rostedt.org/vm-images/tracetest-3=
-2.xml
-> > and the VM image itself is here: https://rostedt.org/vm-images/tracetes=
-t-32.qcow2.bz2
->
-> I've started to download that, but it will take about an hour. So I
-> tried to avoid that for now.
->
-> But looks like there isn't any other way to reproduce this, the code
-> seems to work with both amdgpu and radeon.
->
-> My suspicion is that we just have a reference count issue in qxl or ttm
-> which was never noticed because it didn't caused any problems (except
-> for a minor memory corruption).
+On 3/15/23 1:14?PM, Steven Rostedt wrote:
+> On Wed,  1 Feb 2023 16:08:06 +0100
+> "Uladzislau Rezki (Sony)" <urezki@gmail.com> wrote:
+> 
+>> This small series is based on Paul's "dev" branch. Head is 6002817348a1c610dc1b1c01ff81654cdec12be4
+>> it renames a single argument of k[v]free_rcu() to its new k[v]free_rcu_mightsleep() name.
+>>
+>> 1.
+>> The problem is that, recently we have run into a precedent when
+>> a user intended to give a second argument to kfree_rcu() API but
+>> forgot to do it in a code so a call became as a single argument
+>> of kfree_rcu() API.
+>>
+>> 2.
+>> Such mistyping can lead to hidden bags where sleeping is forbidden.
+>>
+>> 3.
+>> _mightsleep() prefix gives much more information for which contexts
+>> it can be used for.
+> 
+> My honest opinion is that I hate that name "kvfree_rcu_mightsleep()" ;-)
+> 
+> As I honestly don't know why it might sleep.
+> 
+> I didn't care about the name before, but now that it's touching code I
+> maintain I do care ;-)
+> 
+> Why not call it:
+> 
+>  kvfree_rcu_synchronize()
+> 
+> ?
+> 
+> As that is much more descriptive of what it does. Especially since these
+> ugly names are popping up in my code because kvfree_rcu() replaced a
+> rcu_synchronize() in the first place.
 
-Why does ttm_bo_cleanup_refs() do a bo_put() at the end? It doesn't
-make sense to me. Say if the BO is in the process of being delay freed
-(bo->deleted =3D true), and we just did the kref_init() in
-ttm_bo_release(), it might drop that ref hitting ttm_bo_release() yet
-again, this time doing the actual bo->destroy(), which frees the
-object. The worker then fires at some later point calling
-ttm_bo_delayed_delete(), but the BO has already been freed.
+This was my main complaint too, kvfree_rcu_mightsleep() is an absolutely
+horrible name for an API... But nobody seemed to care about that!
 
->
-> Now you get a rain of warnings because we try to grab the lock in the
-> delete worker.
->
-> Christian.
->
-> >
-> > It happened again in another test (it's not 100% reproducible).
-> >
-> > [   23.234838] ------------[ cut here ]------------
-> > [   23.236391] DEBUG_LOCKS_WARN_ON(lock->magic !=3D lock)
-> > [   23.236429] WARNING: CPU: 0 PID: 61 at kernel/locking/mutex.c:582 __=
-ww_mutex_lock.constprop.0+0x566/0xfec
-> > [   23.240990] Modules linked in:
-> > [   23.242368] CPU: 0 PID: 61 Comm: kworker/0:1H Not tainted 6.3.0-rc1-=
-test-00001-ga98bd42762ed-dirty #972
-> > [   23.245106] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS=
- 1.16.0-debian-1.16.0-5 04/01/2014
-> > [   23.247900] Workqueue: ttm ttm_bo_delayed_delete
-> > [   23.249642] EIP: __ww_mutex_lock.constprop.0+0x566/0xfec
-> > [   23.251563] Code: e8 2b 5a 95 ff 85 c0 0f 84 25 fb ff ff 8b 0d 18 71=
- 3b c8 85 c9 0f 85 17 fb ff ff 68 c0 58 07 c8 68 07 77 05 c8 e8 e6 0a 40 ff=
- <0f> 0b 58 5a e9 ff fa ff ff e8 f8 59 95 ff 85 c0 74 0e 8b 0d 18 71
-> > [   23.256901] EAX: 00000028 EBX: 00000000 ECX: c1847dd8 EDX: 00000002
-> > [   23.258849] ESI: 00000000 EDI: c12958bc EBP: c1847f00 ESP: c1847eac
-> > [   23.260786] DS: 007b ES: 007b FS: 00d8 GS: 0000 SS: 0068 EFLAGS: 000=
-10286
-> > [   23.262840] CR0: 80050033 CR2: ffbff000 CR3: 0850e000 CR4: 00150ef0
-> > [   23.264781] Call Trace:
-> > [   23.265899]  ? lock_is_held_type+0xbe/0x10c
-> > [   23.267434]  ? ttm_bo_delayed_delete+0x30/0x94
-> > [   23.268971]  ww_mutex_lock+0x32/0x94
-> > [   23.270327]  ttm_bo_delayed_delete+0x30/0x94
-> > [   23.271818]  process_one_work+0x21a/0x538
-> > [   23.273242]  worker_thread+0x146/0x398
-> > [   23.274616]  kthread+0xea/0x10c
-> > [   23.275859]  ? process_one_work+0x538/0x538
-> > [   23.277312]  ? kthread_complete_and_exit+0x1c/0x1c
-> > [   23.278899]  ret_from_fork+0x1c/0x28
-> > [   23.280223] irq event stamp: 33
-> > [   23.281440] hardirqs last  enabled at (33): [<c7d28089>] _raw_spin_u=
-nlock_irqrestore+0x2d/0x58
-> > [   23.283860] hardirqs last disabled at (32): [<c71d4ba5>] kvfree_call=
-_rcu+0x155/0x2ec
-> > [   23.286066] softirqs last  enabled at (0): [<c71217fd>] copy_process=
-+0x989/0x2368
-> > [   23.288220] softirqs last disabled at (0): [<00000000>] 0x0
-> > [   23.289952] ---[ end trace 0000000000000000 ]---
-> > [   23.291501] ------------[ cut here ]------------
-> > [   23.293027] refcount_t: underflow; use-after-free.
-> > [   23.294644] WARNING: CPU: 0 PID: 61 at lib/refcount.c:28 refcount_wa=
-rn_saturate+0xb6/0xfc
-> > [   23.296959] Modules linked in:
-> > [   23.298168] CPU: 0 PID: 61 Comm: kworker/0:1H Tainted: G        W   =
-       6.3.0-rc1-test-00001-ga98bd42762ed-dirty #972
-> > [   23.301073] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS=
- 1.16.0-debian-1.16.0-5 04/01/2014
-> > [   23.303642] Workqueue: ttm ttm_bo_delayed_delete
-> > [   23.305190] EIP: refcount_warn_saturate+0xb6/0xfc
-> > [   23.306767] Code: 68 70 e1 0c c8 e8 f6 d6 a9 ff 0f 0b 58 c9 c3 90 80=
- 3d 8a 78 38 c8 00 75 8a c6 05 8a 78 38 c8 01 68 9c e1 0c c8 e8 d6 d6 a9 ff=
- <0f> 0b 59 c9 c3 80 3d 88 78 38 c8 00 0f 85 67 ff ff ff c6 05 88 78
-> > [   23.311935] EAX: 00000026 EBX: c1295950 ECX: c1847e40 EDX: 00000002
-> > [   23.313884] ESI: c12958bc EDI: f7591100 EBP: c1847f18 ESP: c1847f14
-> > [   23.315840] DS: 007b ES: 007b FS: 00d8 GS: 0000 SS: 0068 EFLAGS: 000=
-10246
-> > [   23.317887] CR0: 80050033 CR2: ffbff000 CR3: 0850e000 CR4: 00150ef0
-> > [   23.319859] Call Trace:
-> > [   23.320978]  ttm_bo_delayed_delete+0x8c/0x94
-> > [   23.322492]  process_one_work+0x21a/0x538
-> > [   23.323959]  worker_thread+0x146/0x398
-> > [   23.325353]  kthread+0xea/0x10c
-> > [   23.326609]  ? process_one_work+0x538/0x538
-> > [   23.328081]  ? kthread_complete_and_exit+0x1c/0x1c
-> > [   23.329683]  ret_from_fork+0x1c/0x28
-> > [   23.331011] irq event stamp: 33
-> > [   23.332251] hardirqs last  enabled at (33): [<c7d28089>] _raw_spin_u=
-nlock_irqrestore+0x2d/0x58
-> > [   23.334334] hardirqs last disabled at (32): [<c71d4ba5>] kvfree_call=
-_rcu+0x155/0x2ec
-> > [   23.336176] softirqs last  enabled at (0): [<c71217fd>] copy_process=
-+0x989/0x2368
-> > [   23.337904] softirqs last disabled at (0): [<00000000>] 0x0
-> > [   23.339313] ---[ end trace 0000000000000000 ]---
-> >
-> > -- Steve
->
+I like the _synchronize() suggestion, as it matches other RCU naming.
+
+-- 
+Jens Axboe
+
