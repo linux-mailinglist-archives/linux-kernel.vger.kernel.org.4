@@ -2,83 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA5216BA968
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 08:33:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BB586BA96F
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 08:36:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231836AbjCOHdn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 03:33:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38830 "EHLO
+        id S231778AbjCOHgk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 03:36:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231340AbjCOHcx (ORCPT
+        with ESMTP id S231628AbjCOHgR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 03:32:53 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B7B85C9FB;
-        Wed, 15 Mar 2023 00:30:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B70C4B81CC0;
-        Wed, 15 Mar 2023 07:30:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 4C4D6C433A7;
-        Wed, 15 Mar 2023 07:30:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678865419;
-        bh=7zGI6N4tHJK845F9zP3r7bSEDP0Q4Lzfdush2LqEOqc=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=rTVU/6Ndc8uBFrp4oC4ooc+KQN8OdtuQg6mHhVjKFU93+xqx21cGanDp4FIdtd74W
-         z8RmnCTe7cwwEIM6ywi8Tr26B8vCrMhN5rhrpzEQ5R8CefVwgRm0SaNepd0A7PeAGi
-         MYF0kgGrvuL5gxOp/xWZUhrzSLGoU95K7DZskLsO+kOKXhTL5Mp7cOufP02bRBwWXe
-         sPfpZHzaY9vhJc6BhDuP1kQJ9nOzT/j0flHSSipIxV1WRr/1ydl65a0KSKGMREKOeT
-         hL33Zrhpl1+XGEF1QhRpZL1sSzXtI+XoiiqfktCuc+Keppwke63yJ6jbGnDeeD5x2b
-         DqAUjZcMnE8hw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 32180E66CBA;
-        Wed, 15 Mar 2023 07:30:19 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Wed, 15 Mar 2023 03:36:17 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1797F2597C;
+        Wed, 15 Mar 2023 00:33:19 -0700 (PDT)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32F6mvEs017010;
+        Wed, 15 Mar 2023 07:31:18 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=LH+TSvTjRGvXKwA78t2b1ZRjLec2Gy2NWtX1+MviS8k=;
+ b=YCuWAkTqCAK3AtTsKsm8mv996en94G02v4IkyEbt5sjf6fIIn771kQDGhc8StQg3BZSB
+ Tdlbi9EYNyxPXmwB45ZX5t10Jfur30WXQhRdrM6gDPytuCT6ezHp1t63tAGqJP+wx0JA
+ MHj1jASEveBduvjVNNTRDUNO0fog0MhnYqBlKg77ithx8uZyYuzjcjxMr4tKHKK31g4O
+ Lt9m3FHKyli0a/bLs4Blh+XVRSW9ZIORa+dxFqJ9YP/s7TpyGkdU/EhHpgy/e8Qxlcg2
+ 4uj19i+SHO6z5h1ZJwxUywNO21ZZO4u5kZadP/Z5UQ6/St7YjAmJm8H3RN7eHdSusjv5 aw== 
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pb2cr0ub9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 15 Mar 2023 07:31:17 +0000
+Received: from nasanex01a.na.qualcomm.com ([10.52.223.231])
+        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32F7VGjZ002580
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 15 Mar 2023 07:31:16 GMT
+Received: from [10.239.155.136] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Wed, 15 Mar
+ 2023 00:31:12 -0700
+Message-ID: <52bd8c2d-31f6-1f69-1d83-cf21ee66aec8@quicinc.com>
+Date:   Wed, 15 Mar 2023 15:31:10 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v2] scsi: ufs: core: print trs for pending requests in MCQ
+ mode
+Content-Language: en-US
+To:     Bart Van Assche <bvanassche@acm.org>, <quic_asutoshd@quicinc.com>,
+        <quic_cang@quicinc.com>, <quic_nguyenb@quicinc.com>,
+        <mani@kernel.org>, <stanley.chu@mediatek.com>,
+        <adrian.hunter@intel.com>, <beanhuo@micron.com>,
+        <avri.altman@wdc.com>, <junwoo80.lee@samsung.com>,
+        <martin.petersen@oracle.com>
+CC:     <linux-scsi@vger.kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        open list <linux-kernel@vger.kernel.org>
+References: <1678792597-3232-1-git-send-email-quic_ziqichen@quicinc.com>
+ <bde102c7-ab4f-a301-072f-8d6b7acde8a8@acm.org>
+From:   Ziqi Chen <quic_ziqichen@quicinc.com>
+In-Reply-To: <bde102c7-ab4f-a301-072f-8d6b7acde8a8@acm.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next] net: lan966x: Change lan966x_police_del return type
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167886541919.32297.4150082080810118759.git-patchwork-notify@kernel.org>
-Date:   Wed, 15 Mar 2023 07:30:19 +0000
-References: <20230312195155.1492881-1-horatiu.vultur@microchip.com>
-In-Reply-To: <20230312195155.1492881-1-horatiu.vultur@microchip.com>
-To:     Horatiu Vultur <horatiu.vultur@microchip.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: AsiB4Ym38SApLA7cckQgK6xKoVWTq-WD
+X-Proofpoint-GUID: AsiB4Ym38SApLA7cckQgK6xKoVWTq-WD
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-15_03,2023-03-14_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
+ malwarescore=0 phishscore=0 bulkscore=0 clxscore=1015 lowpriorityscore=0
+ spamscore=0 impostorscore=0 mlxscore=0 suspectscore=0 priorityscore=1501
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2302240000 definitions=main-2303150063
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+sure
 
-This patch was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+Best Regards,
+Ziqi
 
-On Sun, 12 Mar 2023 20:51:55 +0100 you wrote:
-> As the function always returns 0 change the return type to be
-> void instead of int. In this way also remove a wrong message
-> in case of error which would never happen.
+On 3/15/2023 2:09 AM, Bart Van Assche wrote:
+> On 3/14/23 04:16, Ziqi Chen wrote:
+>> +static bool ufshcd_print_tr_iter(struct request *req, void *priv)
+>> +{
+>> +    struct scsi_device *sdev = req->q->queuedata;
+>> +    struct Scsi_Host *shost = sdev->host;
+>> +    struct ufs_hba *hba = shost_priv(shost);
+>> +
+>> +    if (!IS_ERR_OR_NULL(hba))
+>> +        ufshcd_print_tr(hba, req->tag, *(bool *)priv);
 > 
-> Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
-> ---
->  .../net/ethernet/microchip/lan966x/lan966x_police.c | 13 ++-----------
->  1 file changed, 2 insertions(+), 11 deletions(-)
-
-Here is the summary with links:
-  - [net-next] net: lan966x: Change lan966x_police_del return type
-    https://git.kernel.org/netdev/net-next/c/68a84a127bb0
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+> I think that the "if (!IS_ERR_OR_NULL(hba))" code can be removed safely. 
+> Otherwise this patch looks good to me.
+> 
+> Thanks,
+> 
+> Bart.
