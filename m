@@ -2,640 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 392D76BB472
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 14:22:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17F426BB476
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 14:23:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229900AbjCONWj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 09:22:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48302 "EHLO
+        id S232008AbjCONXj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 09:23:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231859AbjCONWh (ORCPT
+        with ESMTP id S230421AbjCONXh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 09:22:37 -0400
-Received: from box.trvn.ru (box.trvn.ru [194.87.146.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C43C7EA1C;
-        Wed, 15 Mar 2023 06:22:17 -0700 (PDT)
-Received: from authenticated-user (box.trvn.ru [194.87.146.52])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by box.trvn.ru (Postfix) with ESMTPSA id 28B3B40AC9;
-        Wed, 15 Mar 2023 18:22:14 +0500 (+05)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=trvn.ru; s=mail;
-        t=1678886534; bh=207VNANZ73QdqrRfmDys/vt9ElFqJCOqQCanwPkBVd8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=mvoTAm6mvV2sbJti5d4BDnmZdgbXhzMFn6wRZP/t517+eZFWnB88z45F0Z2lOPhkO
-         sVIq9ZiypQPKiI1AulB5ATWjJspwfPf1DuYb76AMuQLz76d1AcPLEXPJD1yCI0NI24
-         FYCJVCfCQtW7Py3eeF39rgmWqSne/wx30FMFJnI+MWukcBkHhBzs7UycjPXBFKeV4M
-         J1LB551UEaZDp+wcBbH+eh5Af5+tXn5W296orh3aEYdDOrXt9LOWDk/HamO3plSvwB
-         +kl5ZxUPJrdBcjn3MVtP8t/PzJCIirvH2rD7gqBHXnfDxHhT5ISLki4jplo28KiSLg
-         wcl37ejkXoTkQ==
+        Wed, 15 Mar 2023 09:23:37 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9881126BD
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 06:23:35 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id cn21so45311497edb.0
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 06:23:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678886614;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=dtiqQT9nTV40DMGtvhdCFZjllJ6LweZkSNTJ7S06oqQ=;
+        b=ZrKz8ly+NS7Hqwl2lWmXNnT17/vsi92/+UUxZsVJqbbf5pXvdJqoqvuH55yItOQTfO
+         8PO9IFt4aphG5Y8rL0Oe0MsvCpnecI8RdNDhUiJFKeBtKZ6kBFegrfEFTDvnNuqyBPv/
+         R5H4DiBQxzjMgK9tfhF2hjQOEOLjryilpbw6tpPrHuSdek9KUKRhlbbR+7VZfK6EKSGo
+         bMjkhBBaKtzkzS1ZEvnhj6P4HtBJo9xqVqmDnvyNuz2kYIixlNY4OdWRIJ1B6xYv2MCM
+         6z9hP89/khEk8ollehcKOu8F8Po2sBqTI1zr3cWokrgewQPK17YsHyel9oZLTFL+g7Gq
+         J8gw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678886614;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dtiqQT9nTV40DMGtvhdCFZjllJ6LweZkSNTJ7S06oqQ=;
+        b=k+r9NrOmTLxzdozye9hBoCCjGDCeX1icq7qLjAgDnbRX9VGwjOieSMN+kTv/frMmrv
+         084AW5umkWsQL2g8jQR9LVJpGmHNQcFrydB2MvHgO31yMmflZg9emIRQVcKiSV+ok2y8
+         2C6CiBwlJOBc68XRZEVqlRebIcpRwOayEj+3F9MR9o2lMlO/JyzwXmkClE0UT2CcFZBV
+         WXjtkppCZDCilkkjehu5qrqN31IknFKQIzfK0HReYOPCHzGhjl8uWz0ghm3YR/wS6GCl
+         Zi/Xs+TkQTtWDr57Q26NHeYEDka+YnUmDdba8815IuEwxLZcgFcS1xzP860H2ZvaCW9Z
+         AqLw==
+X-Gm-Message-State: AO0yUKXF7e3ca94gN2pHfwQn5ywDkh+f2cH7HpcX8W53wVz6bpsYjTgQ
+        hAVSMIegQx4xhECtqyfrbz5QBQ==
+X-Google-Smtp-Source: AK7set+i/cYxKNr8y2dFpzx+Hv9vji6LJl3S0j9kXazbXdf5x3x3d25QEsG9uaexDUYc9GUTa+q21A==
+X-Received: by 2002:a17:906:8489:b0:878:4a5e:3a56 with SMTP id m9-20020a170906848900b008784a5e3a56mr5991339ejx.15.1678886614047;
+        Wed, 15 Mar 2023 06:23:34 -0700 (PDT)
+Received: from localhost.localdomain ([94.52.112.99])
+        by smtp.gmail.com with ESMTPSA id pj18-20020a170906d79200b008b133f9b33dsm2497365ejb.169.2023.03.15.06.23.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Mar 2023 06:23:33 -0700 (PDT)
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Mike Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Saravana Kannan <saravanak@google.com>
+Cc:     linux-pm@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>
+Subject: [RFC PATCH 0/5] Allow genpd providers to power off domains on sync state
+Date:   Wed, 15 Mar 2023 15:23:25 +0200
+Message-Id: <20230315132330.450877-1-abel.vesa@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Date:   Wed, 15 Mar 2023 18:22:13 +0500
-From:   Nikita Travkin <nikita@trvn.ru>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     agross@kernel.org, andersson@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht
-Subject: Re: [PATCH v2 2/2] arm64: dts: qcom: Add Acer Aspire 1
-In-Reply-To: <b39dadeb-12d2-9f36-c749-c1f1a17bf90e@linaro.org>
-References: <20230315051220.5614-1-nikita@trvn.ru>
- <20230315051220.5614-2-nikita@trvn.ru>
- <b39dadeb-12d2-9f36-c749-c1f1a17bf90e@linaro.org>
-Message-ID: <9be0242117cfe9086d94132f4abbe290@trvn.ru>
-X-Sender: nikita@trvn.ru
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Konrad Dybcio писал(а) 15.03.2023 15:33:
-> On 15.03.2023 06:12, Nikita Travkin wrote:
->> Acer Aspire 1 is a WoA laptop based on Snapdragon 7c gen1 platform.
->>
->> The laptop design is similar to trogdor in the choice of primary
->> components but the specifics on usage of those differ slightly.
->>
->> Add the devicetree for the laptop with support for most of the
->> hardware present.
->>
->> Signed-off-by: Nikita Travkin <nikita@trvn.ru>
->> ---
-> [...]
-> 
->> +
->> +&camcc {
->> +	status = "disabled";
->> +};
-> Any particular reason? The clocks should park themselves and
-> not even waste power
+There have been already a couple of tries to make the genpd "disable
+unused" late initcall skip the powering off of domains that might be
+needed until later on (i.e. until some consumer probes). The conclusion
+was that the provider could return -EBUSY from the power_off callback
+until the provider's sync state has been reached. This patch series tries
+to provide a proof-of-concept that is working on Qualcomm platforms.
 
-Just on the basis of it not being used.
-Will drop the disable if you say it stops the block properly.
+I've been doing extensive testing on SM8450, but I've also spinned this
+on my X13s (SC8280XP). Both patches that add the sync state callback to
+the SC8280XP and SM8450 are here to provide context. Once we agree on
+the form, I intend to add the sync state callback to all gdsc providers.
 
-> 
->> +
->> +&dsi0 {
->> +	vdda-supply = <&vreg_l3c_1p2>;
->> +	status = "okay";
->> +};
-> 
-> [...]
-> 
->> +
->> +	touchpad@2c {
->> +		compatible = "hid-over-i2c";
->> +		reg = <0x2c>;
->> +		hid-descr-addr = <0x20>;
->> +
->> +		vdd-supply = <&reg_tp_3p3>;
->> +
->> +		interrupts-extended = <&tlmm 94 IRQ_TYPE_LEVEL_LOW>;
->> +
->> +		pinctrl-0 = <&hid_touchpad_default>;
->> +		pinctrl-names = "default";
->> +	};
-> No wakeup-source on the touchpad? My (different) laptop wakes
-> up when I press on it
+Currently, some of the gdsc providers might not reach sync state due to
+list of consumers not probing yet (or at all). The sync state can be
+enforced by writing 1 to the state_synced sysfs attribute of the
+provider, thanks to Saravana's commit [1] which has been already merged.
 
-Deliberately omitted it but I guess it was based on a personal
-preference than on something objective. Will add.
+[1] https://lore.kernel.org/r/20230304005355.746421-3-saravanak@google.com
 
-> 
->> +
->> +	keyboard@3a {
->> +		compatible = "hid-over-i2c";
->> +		reg = <0x3a>;
-> [...]
-> 
->> +&gpu {
->> +	status = "okay";
->> +
->> +	zap-shader {
->> +		memory-region = <&zap_mem>;
->> +		firmware-name = "qcom/sc7180-acer-aspire1/qcdxkmsuc7180.mbn";
-> qcom/sc7180/acer/(aspire1|alice)/qc..
-> 
-> ?
+Abel Vesa (5):
+  PM: domains: Allow power off queuing from providers
+  soc: qcom: rpmhpd: Do proper power off when state synced
+  clk: qcom: gdsc: Avoid actual power off until sync state
+  clk: qcom: Add sync state callback to all SC8280XP providers
+  clk: qcom: Add sync state callback to all SM8450 providers
 
-Will change.
+ drivers/base/power/domain.c        |  3 ++-
+ drivers/clk/qcom/camcc-sm8450.c    |  1 +
+ drivers/clk/qcom/common.c          | 13 +++++++++++++
+ drivers/clk/qcom/common.h          |  1 +
+ drivers/clk/qcom/dispcc-sc8280xp.c |  1 +
+ drivers/clk/qcom/dispcc-sm8450.c   |  1 +
+ drivers/clk/qcom/gcc-sc8280xp.c    |  1 +
+ drivers/clk/qcom/gcc-sm8450.c      |  1 +
+ drivers/clk/qcom/gdsc.c            | 26 ++++++++++++++++++++++++++
+ drivers/clk/qcom/gdsc.h            |  6 ++++++
+ drivers/clk/qcom/gpucc-sc8280xp.c  |  1 +
+ drivers/soc/qcom/rpmhpd.c          | 19 +++++++------------
+ include/linux/pm_domain.h          |  6 ++++++
+ 13 files changed, 67 insertions(+), 13 deletions(-)
 
-> 
->> +	};
->> +};
->> +
->> +/* Seems like ADSP really insists on managing those lpass bits itself */
->> +&lpasscc {
->> +	status = "disabled";
->> +};
->> +
->> +&lpass_hm {
->> +	status = "disabled";
->> +};
-> These clocks are only accessible from HLOS on Chrome devices. I'd say
-> disabling them by default in sc7180.dtsi would be sensible.
-> 
+-- 
+2.34.1
 
-I can add a patch to v3 doing that over all 7c1 boards.
-
-> 
->> +
->> +&mdp {
->> +	status = "okay";
->> +};
-> Remove the status=disabled from SoC DT, MDSS is useless without MDP and
-> one toggle is enough.
-
-... and for that too.
-
-> 
->> +
->> +&mdss {
->> +	status = "okay";
->> +};
->> +
->> +&pm6150_adc {
->> +	thermistor@4e {
->> +		reg = <ADC5_AMUX_THM2_100K_PU>;
->> +		qcom,ratiometric;
->> +		qcom,hw-settle-time = <200>;
->> +	};
->> +
->> +	charger-thermistor@4f {
->> +		reg = <ADC5_AMUX_THM3_100K_PU>;
->> +		qcom,ratiometric;
->> +		qcom,hw-settle-time = <200>;
->> +	};
->> +};
->> +
->> +&pm6150_adc_tm {
->> +	status = "okay";
->> +
->> +	charger-thermistor@0 {
->> +		reg = <0>;
->> +		io-channels = <&pm6150_adc ADC5_AMUX_THM3_100K_PU>;
->> +		qcom,ratiometric;
->> +		qcom,hw-settle-time-us = <200>;
->> +	};
->> +
->> +	thermistor@1 {
->> +		reg = <1>;
->> +		io-channels = <&pm6150_adc ADC5_AMUX_THM2_100K_PU>;
->> +		qcom,ratiometric;
->> +		qcom,hw-settle-time-us = <200>;
->> +	};
->> +};
->> +
->> +&pm6150_pon { status = "disabled"; };
-> Not even for reboot control?
-
-The power key never arrives (even on Windows...) so I disabled it,
-mimicking trogdor. I suppose I could drop the pwrkey instead but
-not sure how much useful the pon registers are with the EFI on this
-board...
-
-> 
->> +
->> +&qupv3_id_0 {
->> +	status = "okay";
->> +};
-> 
-> [...]
-> 
->> +
->> +&usb_1_hsphy {
->> +	vdd-supply = <&vreg_l4a_0p8>;
->> +	vdda-pll-supply = <&vreg_l11a_1p8>;
->> +	vdda-phy-dpdm-supply = <&vreg_l17a_3p0>;
->> +	qcom,imp-res-offset-value = <8>;
->> +	qcom,preemphasis-level = <QUSB2_V2_PREEMPHASIS_15_PERCENT>;
->> +	qcom,preemphasis-width = <QUSB2_V2_PREEMPHASIS_WIDTH_HALF_BIT>;
->> +	qcom,bias-ctrl-value = <0x22>;
->> +	qcom,charge-ctrl-value = <3>;
->> +	qcom,hsdisc-trim-value = <0>;
->> +
->> +	status = "okay";
->> +};
->> +
->> +&usb_1_qmpphy {
->> +	vdda-phy-supply = <&vreg_l3c_1p2>;
->> +	vdda-pll-supply = <&vreg_l4a_0p8>;
->> +	status = "okay";
-> Please be consistent with newlines before status.
-
-Will fix.
-
-> 
->> +};
->> +
->> +&venus {
->> +	firmware-name = "qcom/sc7180-acer-aspire1/qcvss7180.mbn";
-> See previous note about the firmware path
-
-Ack.
-
-> 
->> +};
->> +
->> +&wifi {
->> +	vdd-0.8-cx-mx-supply = <&vreg_l9a_0p6>;
->> +	vdd-1.8-xo-supply = <&vreg_l1c_1p8>;
->> +	vdd-1.3-rfa-supply = <&vreg_l2c_1p3>;
->> +	vdd-3.3-ch0-supply = <&vreg_l10c_3p3>;
->> +	vdd-3.3-ch1-supply = <&vreg_l11c_3p3>;
->> +	status = "okay";
->> +};
-> 
-> [...]
-> 
->> +
->> +		vreg_l10a_1p8: ldo10 {
->> +			regulator-min-microvolt = <1800000>;
->> +			regulator-max-microvolt = <1800000>;
->> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
->> +
-> Unexpected newline
-> 
-
-Will drop.
-
-Thanks!
-Nikita
-
-> 
-> Konrad
->> +			regulator-always-on;
->> +			regulator-boot-on;
->> +		};
->> +
->> +		vreg_l11a_1p8: ldo11 {
->> +			regulator-min-microvolt = <1800000>;
->> +			regulator-max-microvolt = <1800000>;
->> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
->> +		};
->> +
->> +		vreg_l12a_1p8: ldo12 {
->> +			regulator-min-microvolt = <1800000>;
->> +			regulator-max-microvolt = <1800000>;
->> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
->> +		};
->> +
->> +		vreg_l13a_1p8: ldo13 {
->> +			regulator-min-microvolt = <1800000>;
->> +			regulator-max-microvolt = <1800000>;
->> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
->> +		};
->> +
->> +		vreg_l14a_1p8: ldo14 {
->> +			regulator-min-microvolt = <1800000>;
->> +			regulator-max-microvolt = <1800000>;
->> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
->> +		};
->> +
->> +		vreg_l15a_1p8: ldo15 {
->> +			regulator-min-microvolt = <1800000>;
->> +			regulator-max-microvolt = <1800000>;
->> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
->> +		};
->> +
->> +		vreg_l16a_2p7: ldo16 {
->> +			regulator-min-microvolt = <2496000>;
->> +			regulator-max-microvolt = <3304000>;
->> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
->> +		};
->> +
->> +		vreg_l17a_3p0: ldo17 {
->> +			regulator-min-microvolt = <2920000>;
->> +			regulator-max-microvolt = <3232000>;
->> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
->> +		};
->> +
->> +		vreg_l18a_2p8: ldo18 {
->> +			regulator-min-microvolt = <2496000>;
->> +			regulator-max-microvolt = <3304000>;
->> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
->> +		};
->> +
->> +		vreg_l19a_2p9: ldo19 {
->> +			regulator-min-microvolt = <2960000>;
->> +			regulator-max-microvolt = <2960000>;
->> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
->> +		};
->> +	};
->> +
->> +	regulators-1 {
->> +		compatible = "qcom,pm6150l-rpmh-regulators";
->> +		qcom,pmic-id = "c";
->> +
->> +		vreg_s8c_1p3: smps8 {
->> +			regulator-min-microvolt = <1120000>;
->> +			regulator-max-microvolt = <1408000>;
->> +		};
->> +
->> +		vreg_l1c_1p8: ldo1 {
->> +			regulator-min-microvolt = <1616000>;
->> +			regulator-max-microvolt = <1984000>;
->> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
->> +		};
->> +
->> +		vreg_l2c_1p3: ldo2 {
->> +			regulator-min-microvolt = <1168000>;
->> +			regulator-max-microvolt = <1304000>;
->> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
->> +		};
->> +
->> +		vreg_l3c_1p2: ldo3 {
->> +			regulator-min-microvolt = <1144000>;
->> +			regulator-max-microvolt = <1304000>;
->> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
->> +		};
->> +
->> +		vreg_l4c_1p8: ldo4 {
->> +			regulator-min-microvolt = <1648000>;
->> +			regulator-max-microvolt = <3304000>;
->> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_LPM>;
->> +		};
->> +
->> +		vreg_l5c_1p8: ldo5 {
->> +			regulator-min-microvolt = <1648000>;
->> +			regulator-max-microvolt = <3304000>;
->> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_LPM>;
->> +		};
->> +
->> +		vreg_l6c_2p9: ldo6 {
->> +			regulator-min-microvolt = <1800000>;
->> +			regulator-max-microvolt = <2950000>;
->> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
->> +		};
->> +
->> +		vreg_l7c_3p0: ldo7 {
->> +			regulator-min-microvolt = <3000000>;
->> +			regulator-max-microvolt = <3312000>;
->> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_LPM>;
->> +		};
->> +
->> +		vreg_l8c_1p8: ldo8 {
->> +			regulator-min-microvolt = <1800000>;
->> +			regulator-max-microvolt = <1800000>;
->> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
->> +		};
->> +
->> +		vreg_l9c_2p9: ldo9 {
->> +			regulator-min-microvolt = <2952000>;
->> +			regulator-max-microvolt = <2952000>;
->> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
->> +		};
->> +
->> +		vreg_l10c_3p3: ldo10 {
->> +			regulator-min-microvolt = <3000000>;
->> +			regulator-max-microvolt = <3400000>;
->> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
->> +		};
->> +
->> +		vreg_l11c_3p3: ldo11 {
->> +			regulator-min-microvolt = <3000000>;
->> +			regulator-max-microvolt = <3400000>;
->> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
->> +		};
->> +
->> +		vreg_bob: bob {
->> +			regulator-min-microvolt = <3008000>;
->> +			regulator-max-microvolt = <3960000>;
->> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_AUTO>;
->> +		};
->> +	};
->> +};
->> +
->> +&qup_i2c2_default {
->> +	drive-strength = <2>;
->> +
->> +	/* Has external pullup */
->> +	bias-disable;
->> +};
->> +
->> +&qup_i2c4_default {
->> +	drive-strength = <2>;
->> +
->> +	/* Has external pullup */
->> +	bias-disable;
->> +};
->> +
->> +&qup_i2c9_default {
->> +	drive-strength = <2>;
->> +
->> +	/* Has external pullup */
->> +	bias-disable;
->> +};
->> +
->> +&qup_i2c10_default {
->> +	drive-strength = <2>;
->> +
->> +	/* Has external pullup */
->> +	bias-disable;
->> +};
->> +
->> +&tlmm {
->> +	/*
->> +	 * The TZ seem to protect those because some boards can have
->> +	 * fingerprint sensor connected to this range. Not connected
->> +	 * on this board
->> +	 */
->> +	gpio-reserved-ranges = <58 5>;
->> +
->> +	amp_sd_mode_default: amp-sd-mode-deault-state {
->> +		pins = "gpio23";
->> +		function = "gpio";
->> +		drive-strength = <16>;
->> +		bias-disable;
->> +	};
->> +
->> +	bridge_en_default: bridge-en-default-state {
->> +		pins = "gpio51";
->> +		function = "gpio";
->> +		drive-strength = <16>;
->> +		bias-disable;
->> +	};
->> +
->> +	bridge_suspend_default: bridge-suspend-default-state {
->> +		pins = "gpio22";
->> +		function = "gpio";
->> +		drive-strength = <16>;
->> +		bias-pull-up;
->> +	};
->> +
->> +	codec_irq_default: codec-irq-deault-state {
->> +		pins = "gpio28";
->> +		function = "gpio";
->> +		drive-strength = <2>;
->> +		bias-disable;
->> +	};
->> +
->> +	edp_bridge_irq_default: edp-bridge-irq-default-state {
->> +		pins = "gpio11";
->> +		function = "gpio";
->> +		drive-strength = <2>;
->> +		bias-pull-down;
->> +	};
->> +
->> +	hid_keyboard_default: hid-keyboard-default-state {
->> +		pins = "gpio33";
->> +		function = "gpio";
->> +		drive-strength = <2>;
->> +		bias-disable;
->> +	};
->> +
->> +	hid_touchpad_default: hid-touchpad-default-state {
->> +		pins = "gpio94";
->> +		function = "gpio";
->> +		drive-strength = <2>;
->> +		bias-disable;
->> +	};
->> +
->> +	qup_uart3_sleep: qup-uart3-sleep-state {
->> +		cts-pins {
->> +			/*
->> +			 * Configure a pull-down on CTS to match the pull of
->> +			 * the Bluetooth module.
->> +			 */
->> +			pins = "gpio38";
->> +			function = "gpio";
->> +			bias-pull-down;
->> +		};
->> +
->> +		rts-pins {
->> +			/*
->> +			 * Configure pull-down on RTS. As RTS is active low
->> +			 * signal, pull it low to indicate the BT SoC that it
->> +			 * can wakeup the system anytime from suspend state by
->> +			 * pulling RX low (by sending wakeup bytes).
->> +			 */
->> +			pins = "gpio39";
->> +			function = "gpio";
->> +			bias-pull-down;
->> +		};
->> +
->> +		tx-pins {
->> +			/*
->> +			 * Configure pull-up on TX when it isn't actively driven
->> +			 * to prevent BT SoC from receiving garbage during sleep.
->> +			 */
->> +			pins = "gpio40";
->> +			function = "gpio";
->> +			bias-pull-up;
->> +		};
->> +
->> +		rx-pins {
->> +			/*
->> +			 * Configure a pull-up on RX. This is needed to avoid
->> +			 * garbage data when the TX pin of the Bluetooth module
->> +			 * is floating which may cause spurious wakeups.
->> +			 */
->> +			pins = "gpio41";
->> +			function = "gpio";
->> +			bias-pull-up;
->> +		};
->> +	};
->> +
->> +	reg_edp_1p2_en_default: reg-edp-1p2-en-deault-state {
->> +		pins = "gpio19";
->> +		function = "gpio";
->> +		drive-strength = <16>;
->> +		bias-disable;
->> +	};
->> +
->> +	reg_edp_1p8_en_default: reg-edp-1p8-en-deault-state {
->> +		pins = "gpio20";
->> +		function = "gpio";
->> +		drive-strength = <16>;
->> +		bias-disable;
->> +	};
->> +
->> +	reg_lcm_en_default: reg-lcm-en-deault-state {
->> +		pins = "gpio26";
->> +		function = "gpio";
->> +		drive-strength = <16>;
->> +		bias-disable;
->> +	};
->> +
->> +	reg_audio_en_default: reg-audio-en-deault-state {
->> +		pins = "gpio83";
->> +		function = "gpio";
->> +		drive-strength = <2>;
->> +		bias-disable;
->> +	};
->> +
->> +	reg_tp_en_default: reg-tp-en-deault-state {
->> +		pins = "gpio25";
->> +		function = "gpio";
->> +		drive-strength = <2>;
->> +		bias-disable;
->> +	};
->> +
->> +	soc_bkoff_default: soc-bkoff-deault-state {
->> +		pins = "gpio10";
->> +		function = "gpio";
->> +		drive-strength = <16>;
->> +		bias-disable;
->> +	};
->> +
->> +	sdc1_default: sdc1-default-state {
->> +		clk-pins {
->> +			pins = "sdc1_clk";
->> +			bias-disable;
->> +			drive-strength = <16>;
->> +		};
->> +
->> +		cmd-pins {
->> +			pins = "sdc1_cmd";
->> +			bias-pull-up;
->> +			drive-strength = <16>;
->> +		};
->> +
->> +		data-pins {
->> +			pins = "sdc1_data";
->> +			bias-pull-up;
->> +			drive-strength = <16>;
->> +		};
->> +
->> +		rclk-pins {
->> +			pins = "sdc1_rclk";
->> +			bias-pull-down;
->> +		};
->> +	};
->> +
->> +	sdc1_sleep: sdc1-sleep-state {
->> +		clk-pins {
->> +			pins = "sdc1_clk";
->> +			bias-disable;
->> +			drive-strength = <2>;
->> +		};
->> +
->> +		cmd-pins {
->> +			pins = "sdc1_cmd";
->> +			bias-pull-up;
->> +			drive-strength = <2>;
->> +		};
->> +
->> +		data-pins {
->> +			pins = "sdc1_data";
->> +			bias-pull-up;
->> +			drive-strength = <2>;
->> +		};
->> +
->> +		rclk-pins {
->> +			pins = "sdc1_rclk";
->> +			bias-pull-down;
->> +		};
->> +	};
->> +
->> +	ter_mi2s_active: ter-mi2s-active-state {
->> +		pins = "gpio63", "gpio64", "gpio65";
->> +		function = "mi2s_2";
->> +	};
->> +};
