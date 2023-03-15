@@ -2,317 +2,278 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F09B6BB9C3
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 17:36:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1384B6BB9C6
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 17:36:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232107AbjCOQgQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 12:36:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36642 "EHLO
+        id S231465AbjCOQgl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 12:36:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230106AbjCOQgO (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 12:36:14 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 34BE41ADC7
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 09:36:09 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2A37C4B3;
-        Wed, 15 Mar 2023 09:36:53 -0700 (PDT)
-Received: from [10.57.53.168] (unknown [10.57.53.168])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 318643F67D;
-        Wed, 15 Mar 2023 09:36:04 -0700 (PDT)
-Message-ID: <56c16706-4e2d-7ab8-6325-48d06b129c50@arm.com>
-Date:   Wed, 15 Mar 2023 16:36:04 +0000
+        with ESMTP id S229988AbjCOQgj (ORCPT
+        <rfc822;Linux-kernel@vger.kernel.org>);
+        Wed, 15 Mar 2023 12:36:39 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA53B6A062;
+        Wed, 15 Mar 2023 09:36:23 -0700 (PDT)
+Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32F6csus007578;
+        Wed, 15 Mar 2023 09:36:22 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-id :
+ content-type : mime-version; s=s2048-2021-q4;
+ bh=oTLW3wvZC96guW6n+tvLYnnu4mw//I+opho4Tt0Dqvk=;
+ b=mjecSHdh2Fw9Ys0FcR2wZZY2MYEPflQBb1oxccCV9ofo+VpxzKo5cWbZuK468mtrquuC
+ 6qfip9gz6OfPT/5ZLXDd3vW/G0Atxlj4zChed1kVRgfcFvryQR1djnDQIWvs7LfVWWwx
+ TXGgb3sSsXsSB0QrI0/LU6Xv+kacCVqu8BoR9fly0lbBeFDCjBtiKqGd3L18Byi/5+ip
+ s+CFQQm6LDgNikDvbRpCFn2tXHmlfxaWPW7cAbkocedwLKKrW9/sLXUfJhEUhUStuTY1
+ HkNfUoWYyYbECNh8VzOsx9uTZx+dAZ1q8aS3kPKyfrnOSpcnhUNjV6k4MWNRplTFN82X 7g== 
+Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2168.outbound.protection.outlook.com [104.47.56.168])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3pb2c65c45-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 15 Mar 2023 09:36:22 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hNza0E9p7UEQaiWM2vYmGxhU/BwMXJ0ZIgXXMVpp0JUvrZH2nmtIoj60cy3WaoHuyB3aB4gjAIB2NSukqD5pFk7PzzDWengmXj1fMIAtc0K8RMnZWAL5C29Y/ueEZGrqE5Cf/zOvYVENIMlqg3Qwd2Sk22udGnZrA2MyIWSSHP3btoFDlKgu8/dpvIh6kImYf/XqilyU0c34AluZ+iowKMMO94C/ufjCBPaGqheQ+IS4BC5KIt1eFDdPQPmaBsUQ8IWtP7Dxu3d9v7qE6c8wPwGdhCzSMXeWRI17ybQHUtanH4CpOSLAK7xYMvuHRvOEiktytIUoQ6OJa+n51uvE4Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=SPzmA6faAuxSZraUm6qbiaopgx0PFf67pwSfJiIgtwA=;
+ b=JZc40lQL2r+439ZxlmuQ+CqqX4mRBe8o17yHBJbrECTbCieotyNkIlUtQP0z9z+dPr5fz7Lg8u1NLoN462xA6zYfYluSlQ6tGlTx/xkFejYMtqAcdH6ebMdhPYQ4FQHfpdDlY/dud5OYMfdxEfvnXzQrXo9SLOCFh35NZRY/mOBLaSHAHu1Al7zm9TbMGoJPyyUG1oPwSFB5hXkgfw8jP0+BfTYnsCCLwHs4WtoeeGDbqpVgLz30fW7tuqMY08zB3OfF+aRibOkISU6ujQJdcu5eRvFP0EtKq4OQVYRtCv/Go/jPIfqFCTJTaJCKe7daTtt3oaKdhY//zg++6ESy2w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=meta.com; dmarc=pass action=none header.from=meta.com;
+ dkim=pass header.d=meta.com; arc=none
+Received: from DM4PR15MB5354.namprd15.prod.outlook.com (2603:10b6:8:5d::18) by
+ DM6PR15MB3813.namprd15.prod.outlook.com (2603:10b6:5:2b0::20) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6178.29; Wed, 15 Mar 2023 16:36:19 +0000
+Received: from DM4PR15MB5354.namprd15.prod.outlook.com
+ ([fe80::8c04:a4a9:241e:2ec1]) by DM4PR15MB5354.namprd15.prod.outlook.com
+ ([fe80::8c04:a4a9:241e:2ec1%4]) with mapi id 15.20.6178.029; Wed, 15 Mar 2023
+ 16:36:19 +0000
+From:   Sreevani Sreejith <ssreevani@meta.com>
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+CC:     Sreevani Sreejith <ssreevani@meta.com>,
+        "psreep@gmail.com" <psreep@gmail.com>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "Linux-kernel@vger.kernel.org" <Linux-kernel@vger.kernel.org>,
+        "andrii@kernel.org" <andrii@kernel.org>,
+        "mykola@meta.com" <mykola@meta.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        David Vernet <void@manifault.com>
+Subject: Re: [PATCH V3 bpf-next] BPF, docs: libbpf Overview Document
+Thread-Topic: [PATCH V3 bpf-next] BPF, docs: libbpf Overview Document
+Thread-Index: AQHZU3uIPS1/hSPDT0upU7tPQaXGO674efyAgAA2bYCAAoUrAIAAKHuAgACzdgA=
+Date:   Wed, 15 Mar 2023 16:36:19 +0000
+Message-ID: <C5E014CB-1A9D-4A29-93AC-1025CBCFC2BF@fb.com>
+References: <20230310180928.2462527-1-ssreevani@meta.com>
+ <ZA7wm8scokV+XPav@debian.me> <20230313125947.GB2392@maniforge>
+ <ZBE7eMsAifEQgRQv@debian.me> <20230315055349.GA20638@maniforge>
+In-Reply-To: <20230315055349.GA20638@maniforge>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DM4PR15MB5354:EE_|DM6PR15MB3813:EE_
+x-ms-office365-filtering-correlation-id: e5408e1a-2e2a-4592-99bd-08db257367bf
+x-fb-source: Internal
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: BKwX2WpioOFAO/YKj50wrhAUu8R49WYKBo5LcJtjrqeXYQ0tMAu/cruj9o+KkFvuOWhbwzAbU3x3R3LqXFJmparlN9qItj9KYk865VdbvyNwSEnRMrjKt1AfOx0FEpA3E5pOoy78HpYEPdgFU1JecUbF9Uku/hr3S6HyS+RwwfkHO2JbPr7FeXOBRKfVHvBfleNPq3Py5+5IdqPD61HGlqRsmBgJfnIEom9EaYqSGnEu6+9AQCUp5clT2PWVKJ4ty6XHmH7bWU3h3utGJaNbrDSi0sMVceptUst8M3Yv9Ew1+pHbmQS8guvhOZgdCLNdZFMueAefw69l5o/AfSJvg1ZPH86mgKUQApWEn2Vx5zdfkcBHdtSMDDPhuWgpnDDoRqxwRf4+3M3LuoFwGdfY4+RGDZZTeP1d3R5E3gO5aQu8xDJxcdhM5cIveX6RNDXWtCkumw04gTgbWcg8fdLpzc4XaRhkCsE8P25INRGIqprHK3K8WjV5n8UXq8WsMF81TpOzYRP/oA+y1Ir3qeOX//ep5rsC/KXheNz67G+UtimN7CWsGPQQqpRPpvL94OVmrCGM2Ny6IkRJqCnxi/N6G9011PWs0XxBUBbjRuutDs1FzhH8ZiOS46bgVU9qpRqBe/ICX/7wibJczA+jDLB6qNUk2lUDMEMoEVj7ObvjQ2Jmeuett/hk3JJU6lnSrho1TkgfYFzsO/UraJO0vKMfYJJ0e+gPFQeaW5mSE8xi4ho=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR15MB5354.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(346002)(376002)(136003)(39860400002)(396003)(451199018)(2906002)(122000001)(83380400001)(64756008)(36756003)(5660300002)(6916009)(66556008)(66476007)(66946007)(8936002)(33656002)(66446008)(4326008)(8676002)(76116006)(38070700005)(91956017)(38100700002)(316002)(86362001)(54906003)(478600001)(186003)(41300700001)(9686003)(53546011)(71200400001)(6486002)(966005)(6512007)(6506007);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?tjTn/UK6htE8suGv5NHEdu0q981CfF5WfgXsOukb6M2FWVH3kuXlvjmfZ9l2?=
+ =?us-ascii?Q?kpvS7t4jYLPmY1vYWa4P/bkhpMDMxwjigSP40bxmoqwIac5HXbb7qasvdmjz?=
+ =?us-ascii?Q?65KvgvaBYAq7JntXh0x7AL1JLs63o0QnNVzYdlYZMSAxYO6GO4LDE+2HBFXb?=
+ =?us-ascii?Q?1Kcpqn/O6CDO4qO4aJNVTGKSzM/XZiKt9/2Dp2k3KNNRUgglqmg9LLHdXQLC?=
+ =?us-ascii?Q?1Jx1ogUVHqj7ZwcSTc3T1xnWZFy6ls/b9JopY5qCD3ljo2oGdwkWzqukFrpL?=
+ =?us-ascii?Q?bLfCdPzq4HdaerbtanctONIIOLrphW8zI4B1juJU8OoqCoEXbziwqdgKG1rX?=
+ =?us-ascii?Q?HgabD04M3ATwyU81T4r4d3UmLKDpDmI2CvHLuN5B9H2J+8qKlVmLZRCDuXLR?=
+ =?us-ascii?Q?dXtcbnMlyx0NZvDFwPh/zVuXonyrQg7dOa4Kjpu0ru3U13OHf30mpdq1BCGM?=
+ =?us-ascii?Q?G8/BgtpqmN6hzHoa4CIwZMANugq+o15UJkUhg4cS8XVvQN2HPBchS8cyA45W?=
+ =?us-ascii?Q?KRRFvEtjCkBemKUgliYI8MB0woTV8FBdJmyTKuMecv0Q2hIGWdgha3093O9C?=
+ =?us-ascii?Q?eWtIAzlUAE92v+uLZKg52NhGe2vLRyCkh0S0cfC12VH+f4oplLOA3noSyKCF?=
+ =?us-ascii?Q?5pzL2Iw5e0ipslS5xoyKA3vN9277+VN050xXt3B0MDl9xs17OhSRTe7236sq?=
+ =?us-ascii?Q?lAq44+c6IImQL7LuYXxo/wfJRdq6O2W6DJZeus2oFnuAoYKJFxHMeGdkdbTI?=
+ =?us-ascii?Q?OKdG+y1w8K52im7drzvlYkV6+LXVgyX+Zk6qTXK7cFIJ071j+g02OsQZWTTC?=
+ =?us-ascii?Q?AL4Lbvh2zxld94T6z+7J7wbd6pm4PWAghn1ptT+gkjfjvCnALZSrZMasMoQH?=
+ =?us-ascii?Q?0hcvuc+LP98X6OyDSoQQJZiKyhNGeGmKpgMXYWepWQqg0iDF2cjDNspj0r3j?=
+ =?us-ascii?Q?403wjw/Yzf6P0Y5/w5LewhabrqyTFSlPVW4qingJTIu2lgwAUHehtfXe0/1n?=
+ =?us-ascii?Q?iezRO+DRcQDoeH/8/o35ve3RtQwRBZec4cedxfaKz1bWN5YtOcooEnKAL7VW?=
+ =?us-ascii?Q?4aI8iObAFJtgEhHwdQmBsIy1c9n4y9v1E5taekivMHrpEvOMM6X9ME+Kg0oX?=
+ =?us-ascii?Q?I0fry6g3hWKc7NYXngRBxSE9Y0xpAaPgqUBvzx+Gwdyihk+0QCBJ4op6w85c?=
+ =?us-ascii?Q?Ja7BF+8IVmQMbTUG7Tw/3A+GQTgv2qh4JdHQO3RUl9ujIF/Ox2AvjpKRnBPb?=
+ =?us-ascii?Q?snp3bpDcGIO7VqPpGhf7wvWx3p3pAFUst18yyQV0pwkylwQBCcXvgw6fqOb5?=
+ =?us-ascii?Q?+nIxsS9BTgQFSxHGqKfKcvB32V5DtnXvp+B6qE+6TlSSryCsEaUTim92yXtD?=
+ =?us-ascii?Q?sbnmEXRT4GREsKFRcDmfHmEthzf5zqunhsM4WRaVIRfyfklpA1yIJiuYTeMn?=
+ =?us-ascii?Q?ktxHFg+6es0sJ1QrevPaNMBsybf4i/TGeah6XHCGVt312aJgFapm6mVsCj9c?=
+ =?us-ascii?Q?jE/CEuwU4yOCvyU5WEJHvWueaVM6kqxrhaa17ej7tOXkjvV2ax4yeVwY7Nf5?=
+ =?us-ascii?Q?E7c4an4bvWgcqKvytmMJ6DmdrjRmBxlqTjQo7ozRfKYpNCAMY6kYibk0ljdz?=
+ =?us-ascii?Q?9uIz/tKfLUC1AgMtFp6R2L4=3D?=
+Content-ID: <9229BB9BEB3D714F822A90DE58D530B0@namprd15.prod.outlook.com>
+X-OriginatorOrg: meta.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR15MB5354.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e5408e1a-2e2a-4592-99bd-08db257367bf
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Mar 2023 16:36:19.4821
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: rAnULjKxD6IEsNXN/owhlyR3XTFOwHXpKHXIptZMrMcc78W2Lx+538hGNtqtUW7t2BauG7Bd5gwWZOHc4K8O3A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR15MB3813
+X-Proofpoint-GUID: fG1dK5uky--z2FzXuhAqUGN7W2dl1zBh
+X-Proofpoint-ORIG-GUID: fG1dK5uky--z2FzXuhAqUGN7W2dl1zBh
+Content-Type: text/plain; charset="us-ascii"
+X-Proofpoint-UnRewURL: 2 URL's were un-rewritten
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v5 0/5] iommu: Retire detach_dev callback
-Content-Language: en-GB
-To:     Robin Murphy <robin.murphy@arm.com>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Will Deacon <will@kernel.org>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>
-Cc:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        Vasant Hegde <vasant.hegde@amd.com>,
-        Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>,
-        Rob Clark <robdclark@gmail.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Yong Wu <yong.wu@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        iommu@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <20230110025408.667767-1-baolu.lu@linux.intel.com>
- <26a5d1b8-40b3-b1e4-bc85-740409c26838@arm.com>
- <1f697bcf-31f9-7e04-a8e7-1609cf330af3@arm.com>
-From:   Steven Price <steven.price@arm.com>
-In-Reply-To: <1f697bcf-31f9-7e04-a8e7-1609cf330af3@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-15_08,2023-03-15_01,2023-02-09_01
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/03/2023 15:57, Robin Murphy wrote:
-> On 2023-03-15 15:49, Steven Price wrote:
->> On 10/01/2023 02:54, Lu Baolu wrote:
->>> Hi folks,
->>>
->>> The iommu core calls the driver's detach_dev domain op callback only
->>> when
->>> a device is finished assigning to user space and
->>> iommu_group_release_dma_owner() is called to return the device to the
->>> kernel, where iommu core wants to set the default domain to the
->>> device but
->>> the driver didn't provide one. The code looks like:
->>>
->>>          /*
->>>           * New drivers should support default domains and so the
->>> detach_dev() op
->>>           * will never be called. Otherwise the NULL domain
->>> represents some
->>>           * platform specific behavior.
->>>           */
->>>          if (!new_domain) {
->>>                  if (WARN_ON(!group->domain->ops->detach_dev))
->>>                          return -EINVAL;
->>>                  __iommu_group_for_each_dev(group, group->domain,
->>>                                            
->>> iommu_group_do_detach_device);
->>>                  group->domain = NULL;
->>>                  return 0;
->>>          }
->>>
->>> In other words, if the iommu driver provides default domains, the
->>> .detach_dev callback will never be called; Otherwise, the .detach_dev
->>> callback is actually called to return control back to the platform DMA
->>> ops, other than detaching the domain from device.
->>>
->>> This series cleanups this by:
->>>
->>> - If the IOMMU driver provides default domains, remove .detach_dev
->>>    callback.
->>> - Adds a new set_platform_dma iommu op. Any IOMMU driver that doesn't
->>>    provide default domain should implement set_platform_dma callback
->>>    instead.
->>> - Retire .detach_dev callback.
->>>
->>> This series originates from various discussion in the community. Thanks
->>> to Jason, Robin and all others for their ideas.
->>>
->>> The whole series is available on github:
->>> https://github.com/LuBaolu/intel-iommu/commits/iommu-retire-detach_dev-v5
->>>
->>> Change log:
->>> v5:
->>>   - Merge some patches to make the series cute. No functionality
->>> changes.
->>>   - Check the op directly and WARN_ON the lack of any necessary
->>>     callbacks. Get rid of the ret and EINVAL.
->>>
->>> v4:
->>>   -
->>> https://lore.kernel.org/linux-iommu/20230104125725.271850-1-baolu.lu@linux.intel.com/
->>>   - Drop the patch which renamed .attach_dev to .set_dev. As Robin said,
->>>     "... I also wouldn't say that "attach" loses its meaning in a
->>> context
->>>     where an equivalent "detach" operation is only ever implicit in
->>>     reattaching to something else...". If we have a better name in the
->>>     future, we can do it in other series.
->>>   - Adjust the patch of "iommu: Add set_platform_dma_ops iommu ops"
->>>     according to Jason's following suggestion " ... This is a bit ugly,
->>>     it would be better to make the previous patch call set_platform_dma
->>>     if it is set instead of detach_dev and then these patches should
->>> just
->>>     rename the driver's fsl_pamu_detach_device to
->>>     fsl_pamu_set_platform_dma ..."
->>>   - Add a new patch to remove deferred attach check from
->>>     __iommu_detach_domain() path. Make it a separate patch as the
->>>     prerequisite to remove __iommu_detach_device() helper.
->>>   - Rename set_platform_dma to set_platform_dma_ops to make it more
->>>     meaningful.
->>>
->>> v3:
->>>   -
->>> https://lore.kernel.org/linux-iommu/20221128064648.1934720-1-baolu.lu@linux.intel.com/
->>>   - Setting blocking domain is not conceptually equal to detach_dev.
->>>     Dropped all blocking domain related staffs in the previous version.
->>>
->>> v2:
->>>   -
->>> https://lore.kernel.org/linux-iommu/20220826123014.52709-1-baolu.lu@linux.intel.com/
->>>   - Replace .detach_dev callback with static block domain ops;
->>>   - Rename .attach_dev to .set_dev.
->>>
->>> v1:
->>>   -
->>> https://lore.kernel.org/linux-iommu/20220516015759.2952771-1-baolu.lu@linux.intel.com/
->>>
->>> Jason Gunthorpe (1):
->>>    iommu: Remove deferred attach check from __iommu_detach_device()
->>>
->>> Lu Baolu (4):
->>>    iommu: Remove detach_dev callbacks
->>>    iommu: Add set_platform_dma_ops iommu ops
->>>    iommu: Add set_platform_dma_ops callbacks
->>>    iommu: Remove detach_dev callback
->>>
->>>   include/linux/iommu.h                   |  8 ++-
->>>   include/trace/events/iommu.h            |  7 --
->>>   drivers/iommu/amd/iommu.c               | 26 -------
->>>   drivers/iommu/apple-dart.c              | 24 -------
->>>   drivers/iommu/arm/arm-smmu/qcom_iommu.c | 23 ------
->>>   drivers/iommu/exynos-iommu.c            |  1 -
->>>   drivers/iommu/fsl_pamu_domain.c         |  6 +-
->>>   drivers/iommu/iommu-traces.c            |  1 -
->>>   drivers/iommu/iommu.c                   | 94 ++++++++++++-------------
->>>   drivers/iommu/ipmmu-vmsa.c              | 16 -----
->>>   drivers/iommu/msm_iommu.c               |  6 +-
->>>   drivers/iommu/mtk_iommu.c               |  9 ---
->>>   drivers/iommu/mtk_iommu_v1.c            |  4 +-
->>>   drivers/iommu/omap-iommu.c              |  6 +-
->>>   drivers/iommu/rockchip-iommu.c          |  1 -
->>>   drivers/iommu/s390-iommu.c              |  7 +-
->>>   drivers/iommu/sprd-iommu.c              | 16 -----
->>>   drivers/iommu/sun50i-iommu.c            |  1 -
->>>   drivers/iommu/tegra-gart.c              |  6 +-
->>>   drivers/iommu/tegra-smmu.c              |  5 +-
->>>   20 files changed, 69 insertions(+), 198 deletions(-)
->>>
->>
->> I hit a problem with this series on a Firefly-RK3288, I bisected down to
->> 1b932ceddd19 ("iommu: Remove detach_dev callbacks"). The first splat is:
->>
->> [    7.227853] ------------[ cut here ]------------
->> [    7.227900] WARNING: CPU: 0 PID: 9 at drivers/iommu/iommu.c:2198
->> __iommu_group_set_domain+0xb4/0xc8
->> [    7.227920] Modules linked in:
->> [    7.227935] CPU: 0 PID: 9 Comm: kworker/u8:0 Not tainted 6.3.0-rc1 #1
->> [    7.227942] Hardware name: Rockchip (Device Tree)
->> [    7.227948] Workqueue: events_unbound deferred_probe_work_func
->> [    7.227964]  unwind_backtrace from show_stack+0x10/0x14
->> [    7.227978]  show_stack from dump_stack_lvl+0x58/0x70
->> [    7.227992]  dump_stack_lvl from __warn+0x7c/0x1dc
->> [    7.228008]  __warn from warn_slowpath_fmt+0xbc/0x1a0
->> [    7.228022]  warn_slowpath_fmt from __iommu_group_set_domain+0xb4/0xc8
->> [    7.228035]  __iommu_group_set_domain from
->> iommu_detach_device+0x84/0xf8
->> [    7.228046]  iommu_detach_device from
->> arm_iommu_detach_device+0x24/0xc4
->> [    7.228057]  arm_iommu_detach_device from
->> rockchip_drm_dma_attach_device+0x30/0x74
->> [    7.228073]  rockchip_drm_dma_attach_device from
->> vop_crtc_atomic_enable+0xf8/0xab0
->> [    7.228085]  vop_crtc_atomic_enable from
->> drm_atomic_helper_commit_modeset_enables+0xb0/0x2a0
->> [    7.228097]  drm_atomic_helper_commit_modeset_enables from
->> drm_atomic_helper_commit_tail_rpm+0x44/0x8c
->> [    7.228111]  drm_atomic_helper_commit_tail_rpm from
->> commit_tail+0x9c/0x184
->> [    7.228124]  commit_tail from drm_atomic_helper_commit+0x164/0x18c
->> [    7.228137]  drm_atomic_helper_commit from drm_atomic_commit+0xb0/0xe8
->> [    7.228153]  drm_atomic_commit from
->> drm_client_modeset_commit_atomic+0x240/0x288
->> [    7.228166]  drm_client_modeset_commit_atomic from
->> drm_client_modeset_commit_locked+0x60/0x1cc
->> [    7.228174]  drm_client_modeset_commit_locked from
->> drm_client_modeset_commit+0x24/0x40
->> [    7.228183]  drm_client_modeset_commit from
->> drm_fb_helper_set_par+0xb8/0xf8
->> [    7.228197]  drm_fb_helper_set_par from fbcon_init+0x2a0/0x534
->> [    7.228211]  fbcon_init from visual_init+0xc0/0x108
->> [    7.228224]  visual_init from do_bind_con_driver+0x1bc/0x3a8
->> [    7.228237]  do_bind_con_driver from do_take_over_console+0x134/0x1d4
->> [    7.228251]  do_take_over_console from do_fbcon_takeover+0x6c/0xcc
->> [    7.228264]  do_fbcon_takeover from fbcon_fb_registered+0x198/0x1a8
->> [    7.228277]  fbcon_fb_registered from register_framebuffer+0x1d0/0x268
->> [    7.228292]  register_framebuffer from
->> __drm_fb_helper_initial_config_and_unlock+0x358/0x578
->> [    7.228308]  __drm_fb_helper_initial_config_and_unlock from
->> drm_fbdev_client_hotplug+0x6c/0xa8
->> [    7.228322]  drm_fbdev_client_hotplug from
->> drm_fbdev_generic_setup+0x84/0x174
->> [    7.228335]  drm_fbdev_generic_setup from
->> rockchip_drm_bind+0x1dc/0x200
->> [    7.228349]  rockchip_drm_bind from
->> try_to_bring_up_aggregate_device+0x200/0x2d8
->> [    7.228368]  try_to_bring_up_aggregate_device from
->> component_master_add_with_match+0xc4/0xf8
->> [    7.228380]  component_master_add_with_match from
->> rockchip_drm_platform_probe+0x150/0x254
->> [    7.228392]  rockchip_drm_platform_probe from platform_probe+0x5c/0xb8
->> [    7.228405]  platform_probe from really_probe+0xe0/0x400
->> [    7.228417]  really_probe from __driver_probe_device+0x9c/0x1fc
->> [    7.228431]  __driver_probe_device from driver_probe_device+0x30/0xc0
->> [    7.228445]  driver_probe_device from
->> __device_attach_driver+0xa8/0x120
->> [    7.228460]  __device_attach_driver from bus_for_each_drv+0x84/0xdc
->> [    7.228474]  bus_for_each_drv from __device_attach+0xb0/0x20c
->> [    7.228488]  __device_attach from bus_probe_device+0x8c/0x90
->> [    7.228502]  bus_probe_device from deferred_probe_work_func+0x98/0xe0
->> [    7.228515]  deferred_probe_work_func from
->> process_one_work+0x290/0x740
->> [    7.228528]  process_one_work from worker_thread+0x54/0x518
->> [    7.228536]  worker_thread from kthread+0xf0/0x110
->> [    7.228548]  kthread from ret_from_fork+0x14/0x2c
->> [    7.228561] Exception stack(0xf084dfb0 to 0xf084dff8)
->> [    7.228567] dfa0:                                     00000000
->> 00000000 00000000 00000000
->> [    7.228573] dfc0: 00000000 00000000 00000000 00000000 00000000
->> 00000000 00000000 00000000
->> [    7.228579] dfe0: 00000000 00000000 00000000 00000000 00000013
->> 00000000
->> [    7.228585] irq event stamp: 138379
->> [    7.228592] hardirqs last  enabled at (138385): [<c03c42ac>]
->> vprintk_emit+0x330/0x354
->> [    7.228606] hardirqs last disabled at (138390): [<c03c4268>]
->> vprintk_emit+0x2ec/0x354
->> [    7.228617] softirqs last  enabled at (137258): [<c03016ac>]
->> __do_softirq+0x2f8/0x548
->> [    7.228628] softirqs last disabled at (137253): [<c0350218>]
->> __irq_exit_rcu+0x14c/0x170
->> [    7.228639] ---[ end trace 0000000000000000 ]---
->>
->> (complete log attached)
->>
->> I'm not sure how to debug this. From the callstack I can see that
->> __iommu_group_set_domain is getting a NULL new_domain which triggers
->> a call to __iommu_group_do_set_platform_dma which is WARNing because
->> there is no set_platform_dma_ops callback. The NULL new_domain is
->> because group->default_domain is NULL in __iommu_group_set_core_domain.
->>
->> So is the logic in the first patch that there is a default domain
->> incorrect for this rockchip driver? Or is this callpath just hitting
->> the function before the default domain can be created?
->>
->> Help debugging this would be appreciated - I'm not very familiar
->> with this area of code.
+
+
+> On Mar 14, 2023, at 10:53 PM, David Vernet <void@manifault.com> wrote:
 > 
-> It's the same thing Marek hit on Exynos: drivers which run on 32-bit Arm
-> need a .set_platform_dma op, regardless of whether they support default
-> domains on other platforms which use those.
+> !-------------------------------------------------------------------|
+>  This Message Is From an External Sender
+> 
+> |-------------------------------------------------------------------!
+> 
+> On Wed, Mar 15, 2023 at 10:28:56AM +0700, Bagas Sanjaya wrote:
+>> On Mon, Mar 13, 2023 at 07:59:47AM -0500, David Vernet wrote:
+>>> On Mon, Mar 13, 2023 at 04:44:59PM +0700, Bagas Sanjaya wrote:
+>>>> On Fri, Mar 10, 2023 at 10:09:28AM -0800, Sreevani Sreejith wrote:
+>>>>> From: Sreevani <ssreevani@meta.com>
+>>>>> 
+>>>>> Summary: Document that provides an overview of libbpf features for BPF
+>>>>> application development.
+>>>> 
+>>>> It seems like you ignore some of my reviews at [1]. Anyway, I
+>>>> repeat them here, augmenting my new comments.
+>>> 
+>>> Sreevani, please be sure to reply to and address all reviewers'
+>>> comments. I've also requested that we not use these internal Meta tags
+>>> on more than one occasion, so please be mindful of it for future
+>>> patches, and take a bit of extra time to double check that you've
+>>> addressed all reviewers' concerns. I also suggest reading over [0],
+>>> which specifies that new versions of patches should include descriptions
+>>> of what's changed from prior versions. Please see Joanne's patch set in
+>>> [1] which serves as a very nice example.
+>>> 
+>>> [0]: https://www.kernel.org/doc/html/latest/process/submitting-patches.html#the-canonical-patch-format
+>>> [1]: https://lore.kernel.org/all/20230301154953.641654-1-joannelkoong@gmail.com/
+>>> 
+>>> Bagas -- just FYI, a quick git log would have shown that this is only
+>>> Sreevani's second patch. I don't think she intentionally ignored
+>>> anything. It's likely just an artifact of getting used to the kernel
+>>> review process.
+>> 
+>> Oops, you mean this v3 is actually v2, right?
+> 
+> Oh, I just meant that this is her second patch submission to the Linux
+> kernel in general, (the first was [0]), so she likely just accidentally
+> forgot to address your comments rather than intentionally ignoring them.
+> Of course, it's good that you highlighted them again here in v3, as they
+> certainly need to be addressed.
+> 
+> [0]: https://lore.kernel.org/all/20221202221710.320810-2-ssreevani@meta.com/
 
-Ah, that seems to be it. I'll post a patch.
-
-Thanks,
-
-Steve
+Bagas, apologies for not addressing one of your comments. As David mentioned,
+ it was not intentional. I am still getting used to filtering out comments from the rest
+ of the documentation. 
+> 
+>> 
+>>>> Why did you add heading overline and change the heading character marker?
+>>> 
+>>> I assume that Sreevani is following python documentation conventions [0], which
+>>> suggest that #### with overline refers to the highest-level heading in a page.
+>>> This is suggested in Sphinx documentation [1] as well.
+>>> 
+>>> [0]: https://devguide.python.org/documentation/markup/#sections 
+>>> [1]: https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html#sections 
+>> 
+>> OK.
+>> 
+>>>> You may want to also add :lineos: option or manually add line numbers
+>>>> if you add :emphasize-lines: so that readers can see the line number
+>>>> it refers to.
+>>> 
+>>> What is :lineos:? I don't see it anywhere else in Documentation/ and if
+>>> I add it, the docs build complains:
+>>> 
+>>> Documentation/bpf/libbpf/libbpf_overview.rst:177: WARNING: Error in "code-block" directive:
+>>> unknown option: "lineos".
+>>> 
+>>> .. code-block:: C
+>>>  :lineos:
+>>>  :emphasize-lines: 6
+>> 
+>> You forget to indent both options (see [1]).
+> 
+> The indentation was correct ;-) The option is actually ":linenos", not
+> ":lineos:". That said, it's a neat option, so thank you for pointing it
+> out.
+> 
+>>> 
+>>>  //...
+>>>  struct task_struct *task = (void *)bpf_get_current_task();
+>>>  struct task_struct *parent_task;
+>>>  int err;
+>>> 
+>>>  err = bpf_core_read(&parent_task, sizeof(void *), &task->parent);
+>>>  if (err) {
+>>>    /* handle error */
+>>>  }
+>>> 
+>>>  /* parent_task contains the value of task->parent pointer */
+>>> 
+>>> I personally think adding line numbers is overkill. The highlighting is
+>>> already a nice touch, and gets the point across without the additional
+>>> visual cue of line numbers.
+>> 
+>> But if the snippet above is instead long, how can one looking for the
+>> emphasized line number when reading doc (especially in .rst source) other
+>> than manually counting from the first line of the snippet? See
+>> Documentation/RCU/rcubarrier.rst for example of manual line numbering
+>> (and [2] for the related patch).
+> 
+> Well, that's a bit of a hypothetical problem given that in this case
+> we're only talking about 6 lines ;-) In any case, I don't really mind
+> one way or the other, but given that none of the other example
+> codeblocks in the BPF docs have line numbers, I'd personally err on the
+> side of not adding them here.
+> 
+>>>> BPF apps are application that use BPF program, right? I thought that
+>>>> despite there is libbpf-rs, I still have to develop BPF apps in C.
+>>> 
+>>> It says that at the end of the paragraph?
+>>> 
+>> 
+>> I was confused between BPF apps and BPF programs, since I was accustomed
+>> that apps and programs refer to the same thing.
+> 
+> This is alluded to a bit earlier in this document:
+> 
+>> A BPF application consists of one or more BPF programs (either
+>> cooperating or completely independent), BPF maps, and global
+>> variables.
+> 
+> "Program" in the context of BPF has a very specific meaning. We need to
+> improve our documentation on them, but see [1] for a bit more detail.
+> The TL;DR is that the BPF program is the part that runs in kernel space.
+> 
+> [1]: https://www.kernel.org/doc/html/latest/bpf/libbpf/program_types.html#program-types-and-elf
+> 
+> Thanks,
+> David
 
