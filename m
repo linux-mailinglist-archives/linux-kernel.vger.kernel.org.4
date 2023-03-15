@@ -2,82 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16F786BB434
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 14:15:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98FB96BB43E
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 14:15:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231823AbjCONPV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 09:15:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35696 "EHLO
+        id S232039AbjCONPw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 09:15:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232009AbjCONO6 (ORCPT
+        with ESMTP id S231987AbjCONPl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 09:14:58 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06FA1A0B29
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 06:14:31 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id h8so31580495ede.8
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 06:14:30 -0700 (PDT)
+        Wed, 15 Mar 2023 09:15:41 -0400
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36644A2270
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 06:15:26 -0700 (PDT)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-54184571389so218460187b3.4
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 06:15:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678886069;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ko8uIaVTtfK98OPtq0RbCtmBQ5zzSH/lzWDgsNNPcGE=;
-        b=kssdTtT8POAG8MVoPg4E3KHsJGK4vMa/mFMHgzOQKrLzka5xTyBd4krZ2yg6dBB3Jl
-         mIANJsj8iYfru04IwdD4CvNg7Ej8rUELE7sLJp4bnOjZnaZPdDjlGtEu+6A7ZiVMypgf
-         5jRcg+HDExItHNTgZ+3q0CmDdNoVjpupKMOgV7DaB/D6/rlyuR3jHynwZSW1MXh8d58h
-         biNcc98lJafN6jrub5MpB1uayIwcqpfeLhKS1xreOU+1nRjWp4l5DrrSYimArdUYwL6T
-         ZTGFOEgaqS7ls51CIc0Xic+SCpbOahiMqVCyzWUqRwDwEG9jnjpEF65T5m2Yn3ksiMPe
-         w8/Q==
+        d=linaro.org; s=google; t=1678886125;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qKgeEmw/6W0SWieMcWQ02VSSFIpAhVBllMmTeozBA90=;
+        b=vnKbivHAWG4rRuutoxN8eNw484KPYMNhikRTBCt8G/nWJuT69AWcQiGAq8f69sOa6u
+         z0xnNp6NlQJ+5qJQ5XNP1rwgAEwQkJaWScn+EXWKbsPqx/VDj2x3Kbs8usgF/oxIIyOD
+         thzxE07NGt8bNJsMIpQ8TDvtzffeR47nm0n70N2+rpwrjyhwSUgxwNU/liuL8+3UFEi2
+         2vok6HunFiuEViEPIohmbPY9mVjHqCY+tN6e9Z2EZiHfhgwo5xor2AemgU0zrwpVzlKu
+         iVMffQO0GexUOU7LAIn9v/lVZ2wreHQyVOCiGbXnQzCpAqN05aJAo7UxjcUWuqY+CC45
+         8NAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678886069;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ko8uIaVTtfK98OPtq0RbCtmBQ5zzSH/lzWDgsNNPcGE=;
-        b=Een1TWCpVs4I5JD65CB7wfCDu4OCfp+BhS/yQ3ZcNPokROiPP2UDRs+u6dWfl4nrHp
-         y7XdjaboTkIfCMTyHb7bT8tIdsw3AOWvmAgOh4prixsedMB9nvzaG1weyvFlNjM0ecfK
-         KDLNZfod3ZrrghufXKko0PIPUVZkByVuS2RB/8KGjiburbG5R0QjNVBq8LEte7kVMbNE
-         cpACFloUBb9wYJdatAuMgMambmJKNLEbdFj2zdUEqiH7YIsI4XRzXm1Zwys/f/uDKAnI
-         0V4AYQB+UhgRCwmHnx1zWx7fG7ttFmnxU4Y0E48pzU9+hSAlNyIBtXdKP0xq5SYRIr6u
-         9UEg==
-X-Gm-Message-State: AO0yUKW1mDhULQmDzpN63nI+PAvCGbf4x8bS9u6IG/M0lQc2S7YlQYEg
-        6ZATw/9oD3UWHLAZh6lx38xUXQ==
-X-Google-Smtp-Source: AK7set/zo2nQvhu3yQ8tXP5JkC8OVGgJOgcta7DN6Bw6XOHhr8ldC9OwaIy35bcMX3a5DV02+BT8uA==
-X-Received: by 2002:a17:907:a582:b0:92f:3e2b:fbb7 with SMTP id vs2-20020a170907a58200b0092f3e2bfbb7mr1805219ejc.14.1678886069514;
-        Wed, 15 Mar 2023 06:14:29 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:940e:8615:37dc:c2bd? ([2a02:810d:15c0:828:940e:8615:37dc:c2bd])
-        by smtp.gmail.com with ESMTPSA id g12-20020a1709064e4c00b008df7d2e122dsm2511882ejw.45.2023.03.15.06.14.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Mar 2023 06:14:28 -0700 (PDT)
-Message-ID: <54aae3b8-ee85-c7eb-ecda-f574cb140675@linaro.org>
-Date:   Wed, 15 Mar 2023 14:14:27 +0100
+        d=1e100.net; s=20210112; t=1678886125;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qKgeEmw/6W0SWieMcWQ02VSSFIpAhVBllMmTeozBA90=;
+        b=h1SU7cX55yNvyv+s7q11qd6O18ovZDcJh4skF4WeRMnZEMN33cY43TcSHEWQtDCeil
+         wUb67W1DHcu+9qBvkbVXJAjTcIQKOUg7bv7QcCK8c5aLKPNZcPCBmuniqJoPRHsu2unz
+         Nb6naHLnv+5bI+sHvPhf0fZsAiu/FDPpvPF6panzia5+hp/cRCqDxrrVJs4LaeUCHbSh
+         9a6zXDyxweQuVhCeZqVljDRBCHSpaN+73TeLB2Pdte+Uz187wOrkA/srQoNoE6ONt8nC
+         K/rwcHrFlis1JPNPFwHySq3EpRVzN4vCSpHYLaVAItVp62AsMYUv8H+j9mm7w9J9OcDp
+         9FvA==
+X-Gm-Message-State: AO0yUKW7UUvVI2ycv+vnXZX/+yj0JC4h91/83pXI/CABpn9r2fkR20of
+        nayUAfSb8lkAaJNb+7vsqmJGYH6lQPM1gCVbMaiXaw==
+X-Google-Smtp-Source: AK7set8wwlb4JftADZ2nivxvmDTdDwmo8imStsXd2xZrBkPcNMUIXCXOSzOGwgYGRe3Ii1cmgJgP/sIa1U6H5U0/7wQ=
+X-Received: by 2002:a05:690c:445:b0:53d:2dcf:890d with SMTP id
+ bj5-20020a05690c044500b0053d2dcf890dmr13772804ywb.4.1678886125155; Wed, 15
+ Mar 2023 06:15:25 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 1/5] dt-bindings: can: tcan4x5x: Add tcan4552 and tcan4553
- variants
-Content-Language: en-US
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     Markus Schneider-Pargmann <msp@baylibre.com>,
-        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
-        Simon Horman <simon.horman@corigine.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+References: <20230315130917.3633491-1-a.fatoum@pengutronix.de>
+In-Reply-To: <20230315130917.3633491-1-a.fatoum@pengutronix.de>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Wed, 15 Mar 2023 14:15:13 +0100
+Message-ID: <CACRpkdbowrfYZpNKA32S8GT=8x_h+ZW4gd2Kj6FZkP1SZmDEPw@mail.gmail.com>
+Subject: Re: [PATCH net 1/2] net: dsa: realtek: fix out-of-bounds access
+To:     Ahmad Fatoum <a.fatoum@pengutronix.de>
+Cc:     =?UTF-8?Q?Alvin_=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>, kernel@pengutronix.de,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20230314151201.2317134-1-msp@baylibre.com>
- <20230314151201.2317134-2-msp@baylibre.com>
- <680053bc-66fb-729f-ecdc-2f5fe511cecd@linaro.org>
- <20230315112508.6q52rekhmk66uiwj@pengutronix.de>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230315112508.6q52rekhmk66uiwj@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -86,42 +77,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/03/2023 12:25, Marc Kleine-Budde wrote:
-> On 14.03.2023 21:01:10, Krzysztof Kozlowski wrote:
->> On 14/03/2023 16:11, Markus Schneider-Pargmann wrote:
->>> These two new chips do not have state or wake pins.
->>>
->>> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
->>> ---
->>>  .../devicetree/bindings/net/can/tcan4x5x.txt          | 11 ++++++++---
->>>  1 file changed, 8 insertions(+), 3 deletions(-)
->>>
->>> diff --git a/Documentation/devicetree/bindings/net/can/tcan4x5x.txt b/Documentation/devicetree/bindings/net/can/tcan4x5x.txt
->>> index e3501bfa22e9..38a2b5369b44 100644
->>> --- a/Documentation/devicetree/bindings/net/can/tcan4x5x.txt
->>> +++ b/Documentation/devicetree/bindings/net/can/tcan4x5x.txt
->>> @@ -4,7 +4,10 @@ Texas Instruments TCAN4x5x CAN Controller
->>>  This file provides device node information for the TCAN4x5x interface contains.
->>>  
->>>  Required properties:
->>> -	- compatible: "ti,tcan4x5x"
->>> +	- compatible:
->>> +		"ti,tcan4x5x" or
->>> +		"ti,tcan4552" or
->>> +		"ti,tcan4553"
->>
->> Awesome, they nicely fit into wildcard... Would be useful to deprecate
->> the wildcard at some point and switch to proper compatibles in such
->> case, because now they became confusing.
-> 
-> I plead for DT stability!
-> 
-> As I understand correctly, the exact version of the chip (4550, 4552, or
-> 4553) can be detected via the ID2 register.
+On Wed, Mar 15, 2023 at 2:09=E2=80=AFPM Ahmad Fatoum <a.fatoum@pengutronix.=
+de> wrote:
 
-So maybe there is no need for this patch at all? Or the new compatibles
-should be made compatible with generic fallback?
+> The probe function sets priv->chip_data to (void *)priv + sizeof(*priv)
+> with the expectation that priv has enough trailing space.
+>
+> However, only realtek-smi actually allocated this chip_data space.
+> Do likewise in realtek-mdio to fix out-of-bounds accesses.
+>
+> Fixes: aac94001067d ("net: dsa: realtek: add new mdio interface for drive=
+rs")
+> Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
 
-Best regards,
-Krzysztof
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
+That this worked for so long is kind of scary, and the reason why we run Ka=
+san
+over so much code, I don't know if Kasan would have found this one.
+
+Rewriting the whole world in Rust will fix this problem, but it will
+take a while...
+
+Yours,
+Linus Walleij
