@@ -2,89 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2686C6BA7D8
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 07:32:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B36E6BA7E1
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 07:33:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231303AbjCOGcy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 02:32:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43132 "EHLO
+        id S231325AbjCOGdV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 02:33:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229778AbjCOGcv (ORCPT
+        with ESMTP id S231316AbjCOGdS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 02:32:51 -0400
+        Wed, 15 Mar 2023 02:33:18 -0400
 Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6EBC62850
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 23:32:47 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id cn21so41187551edb.0
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 23:32:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80D383866B
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 23:33:08 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id cy23so71221757edb.12
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 23:33:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678861966;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=linaro.org; s=google; t=1678861987;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=QvFKljKO0WMF10425trbTqfWVjsV5fmlF9IxkwLDpAQ=;
-        b=qNA4JejxVNs9t+Gh7Hf+Qj5kfknpfiv/6cR6xDvH2K/IKalKT/Y3J0793KIx/D1NJY
-         pgvNrTZQkGqGt/Z8XdiJtPBpl7+7aemYQgFNIax++hJFJbffoAtDQRcOL1adIBDoVyg3
-         DBq18A7g+37/8hCbK8jUigRLjJ2bhK+jw43wLT8e95fdTFSQZGCa1IWp4ATfX9o4SaeI
-         K2QWaYlcePsZIv7z06WgfXykM197rcY2NpzEILKyouYsvzwnqLqQjjCCxsfhJeySGjzC
-         kLIf502IyP3BMNVZjg7kF4Jek20Q69Ny619Yt4R1PqmnfM1WJ17kCRTkL4/HN7EmkpOa
-         WQhw==
+        bh=6O+67IztLcbRdjfu86x4TR9bmaGpYkae+Z81ttWc3M8=;
+        b=Y+d3Zqw+fnjc7vYA1qMfkSqWuIeZYJdDandLuNEvaB+6vdi6Y6vSVKdUlSYPq8+hCY
+         ZuC7C61pBisMr2BPWVyRCGTX64XQwIFZowNaZpKNQaOwTACXuyhdaxz4n5V4cnHzBZQh
+         G9v1hSnfNrdG5VNCvMu9H1aYXpOmfdAx8hQt/WAITu0GzVywwa0thzO7JRUr7s2Oe1GU
+         mnHWsXdhFiOhQOA5UutAxfEBTdl1be2aXU+TpJtXgBz1nNy4WoNPgieGwkeYEMnuN9PF
+         QvN/nEGmburnbA/8QPtkz0iY3y79KDJiiK0dzXX30+zlfHEmqoYZlO4RZzmFx8x3GBUY
+         B0oQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678861966;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20210112; t=1678861987;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QvFKljKO0WMF10425trbTqfWVjsV5fmlF9IxkwLDpAQ=;
-        b=ex2h4GXvAAyKqZ6mLPe0Sb0QNL8vIeYvVRp+MSNypsSJulDYSwDlrvXHsFDqKr62dT
-         iCwNv3GM5zg0ymErlr0PwZ6zaDJ/yxpWLv6H8H7U2eLCS7hdUY36gsMJWXUZ/hFe8fQS
-         VDBOvD+1hSCvhJzgXEnboelN9KfLTVVP8DVDkcwL6eZOBM5EqO7E1+gmBZQFk3q8hSD4
-         VuMg9qUkB+JgLqwMMghzoVm6mMwJowo7Sk5wslBH+d9KTyXq11gEB/JnNC+59FUIDl0X
-         OOnRFnKkPSDDeRB06nBi8Sr0n50ZQbERB0RDbMej4+gVKAgAx1XGUUcwUWiHKx7hyU1b
-         Ed5g==
-X-Gm-Message-State: AO0yUKVT/k1oj1afIkU4p76uKNNT7JDZjl1S2AB8ppq/fxCWdsu0pQcP
-        AIvPh9FDFw9qNw8eOjVfMjuudg==
-X-Google-Smtp-Source: AK7set/Zh8cjRrDKfOLXp5lqghOjBaoH4KoRkWd6HaXgr8CUCFLcU31eQkh01dDJ/9XZZaJYSQzDoA==
-X-Received: by 2002:a17:906:60d2:b0:877:8a55:2a26 with SMTP id f18-20020a17090660d200b008778a552a26mr4596388ejk.60.1678861966182;
-        Tue, 14 Mar 2023 23:32:46 -0700 (PDT)
+        bh=6O+67IztLcbRdjfu86x4TR9bmaGpYkae+Z81ttWc3M8=;
+        b=Nx04v3DR8hKLQp/WQOmrmu9vu/EtehE0Zh3rp1Javkxtghlwm/0UQDpx9Vx7TH15jS
+         loj9I0moO8hcPOsqYM9Cwiv3+pZAKWmVCjXGvvk/K+U3Lf8/XSJ9LjPxwqegMOA23hMy
+         36Qaf4chVb1mIysbH1OcZmTSEWnk3k1+nZMJP51DtRYrWp51enXfCcrRF231vAnxRE04
+         rDABiFLaL9siNkkxnuzXvZX6MKuMf/DDgNYdrr/L2ENj434v485O/vdtOYghVW66Q7uj
+         fZ3RpyX6AuJUApYGwWku9gr4wUxjpW2s5xwsVMoSIVh/r+b5Si81D7P7GqubRF8q+ieC
+         empA==
+X-Gm-Message-State: AO0yUKWZ9BYrdkNO0lKzlHGj1Tq/vt9PfEtu3vQcBXlguS5sbi6jYedI
+        49FMplIwZLdSbchdUmjElG8oug==
+X-Google-Smtp-Source: AK7set8R3aSi2Th6BvPjjIeopEtwlzinsZKsEuhAPfo29wLWmghjVsTwGenPQqIgIKmjM5LAa0VpFg==
+X-Received: by 2002:a17:907:8e9a:b0:92f:3fbb:a077 with SMTP id tx26-20020a1709078e9a00b0092f3fbba077mr334014ejc.72.1678861986970;
+        Tue, 14 Mar 2023 23:33:06 -0700 (PDT)
 Received: from ?IPV6:2a02:810d:15c0:828:940e:8615:37dc:c2bd? ([2a02:810d:15c0:828:940e:8615:37dc:c2bd])
-        by smtp.gmail.com with ESMTPSA id m22-20020a170906259600b008f883765c9asm2026303ejb.136.2023.03.14.23.32.44
+        by smtp.gmail.com with ESMTPSA id kg27-20020a17090776fb00b008c9b44b7851sm2039897ejc.182.2023.03.14.23.33.06
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Mar 2023 23:32:45 -0700 (PDT)
-Message-ID: <57c42604-38b0-61ce-2fc4-2284fbb9d708@linaro.org>
-Date:   Wed, 15 Mar 2023 07:32:44 +0100
+        Tue, 14 Mar 2023 23:33:06 -0700 (PDT)
+Message-ID: <33607509-e714-2f35-6331-d193d0dd89f6@linaro.org>
+Date:   Wed, 15 Mar 2023 07:33:05 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-Subject: Re: [PATCH] p54spi: convert to devicetree
-To:     Arnd Bergmann <arnd@arndb.de>, Arnd Bergmann <arnd@kernel.org>,
-        Christian Lamparter <chunkeey@googlemail.com>,
-        Kalle Valo <kvalo@kernel.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux-OMAP <linux-omap@vger.kernel.org>,
-        Tony Lindgren <tony@atomide.com>,
-        Aaro Koskinen <aaro.koskinen@iki.fi>,
-        Felipe Balbi <balbi@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        =?UTF-8?Q?Beno=c3=aet_Cousson?= <bcousson@baylibre.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-wireless@vger.kernel.org, Netdev <netdev@vger.kernel.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20230314163201.955689-1-arnd@kernel.org>
- <4ac809d2-3924-3839-479f-0b4be9f18a1f@linaro.org>
- <e19fd8bc-5944-409d-a4a1-3a3d53691634@app.fastmail.com>
+Subject: Re: [PATCH v2 1/2] dt-bindings: arm: qcom: Add Acer Aspire 1
 Content-Language: en-US
+To:     Nikita Travkin <nikita@trvn.ru>, agross@kernel.org,
+        andersson@kernel.org
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        konrad.dybcio@linaro.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht
+References: <20230315051220.5614-1-nikita@trvn.ru>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <e19fd8bc-5944-409d-a4a1-3a3d53691634@app.fastmail.com>
+In-Reply-To: <20230315051220.5614-1-nikita@trvn.ru>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -97,25 +78,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/03/2023 22:40, Arnd Bergmann wrote:
-
->>> +
->>> +  power-gpios:
->>
->> If this is GPIO driving some power pin, then it should be
->> "powerdown-gpios" (like in /bindings/gpio/gpio-consumer-common.yaml)
+On 15/03/2023 06:12, Nikita Travkin wrote:
+> Acer Aspire 1 is a laptop based on sc7180. Document it's compatible.
 > 
-> As far as I can tell, it's the opposite: the gpio turns the power on
-> in 'high' state. I could make it GPIO_ACTIVE_LOW and call it powerdown,
-> if you think that's better, but I don't think that is how it was
-> meant.
-
-Whether this is active low or high, I think does not matter. If this is
-pin responsible to control the power, then we use the name
-"powerdown-gpios". Effectively powerup GPIO is the same as powerdown,
-just reversed.
+> Signed-off-by: Nikita Travkin <nikita@trvn.ru>
+> ---
+> Changes in v2:
+>  - Merge with IDP (Krzysztof)
 
 
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
 Krzysztof
