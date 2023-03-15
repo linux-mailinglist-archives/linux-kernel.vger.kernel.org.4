@@ -2,97 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 992B36BBC6C
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 19:39:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1504B6BBC70
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 19:40:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231623AbjCOSjf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 14:39:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56274 "EHLO
+        id S230147AbjCOSjl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 14:39:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232682AbjCOSjK (ORCPT
+        with ESMTP id S231983AbjCOSjO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 14:39:10 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D5FB1F5EE
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 11:38:37 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id f16so20422906ljq.10
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 11:38:37 -0700 (PDT)
+        Wed, 15 Mar 2023 14:39:14 -0400
+Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2A3F911C3;
+        Wed, 15 Mar 2023 11:38:42 -0700 (PDT)
+Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-176261d7f45so22016445fac.11;
+        Wed, 15 Mar 2023 11:38:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678905504;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=cVubaIqvmyZcVmODQ4m0c66Rfjv3Ax4FAubBWjKvyUI=;
-        b=NbsCYa1ped90PCQfFoECGkBtGykaKc5PmrnpfStkvX1VprhPanvIWZBTfNi629EIxy
-         YDtrJwiS6hNH4l5Axz3ZUCkTGvqAx2kIntIExbPwW4IJaYuULXML/7y8gQCEd5o7UFqs
-         nWRYcFfZ/Xoa7XfcYucXBbTRgN+/Uf/cQ16OiO+7Y/ztTOTewBf8szDUH4VXWML9ncce
-         n/+YV9CFW0h+4g3Om1s5/BvB4yTE0E6JpNNLRtoY7ylYb4x6I8G2I2ZyR3C6asdUSsac
-         JcDHfGzS7tv02fCXxuDY2CHGFX/OQ0DtahpZfF+p/f2V62+qSaTGqq+4QR0hoVZG5p4D
-         l0BQ==
+        d=gmail.com; s=20210112; t=1678905513;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6PBxAqUYC1d2NeePHsywjLI1ZNjzs6EbD+eFasw3hF0=;
+        b=jAhjiTdw1S0xLiI98uNO6vWygWmr3Rfjfh0WCXHfEXInbOSXIAejEOsGcBMnnHb/30
+         S5b/MTfKUrCyxFnJiFj5026v5kNoxLqJP92/Y9cd2YJERHNU1pFxovqz0hvJSzyTABwW
+         P8rCYBl4EQOUZu8ePtWyrRB0wsYBoAsJ7krnij5FkKa6ddqSugUugLGctymzFAC6hBxV
+         BxEwyibXu/+6gyead+hj2DNChbcpyz3JxxLLnxzLpq1SYOvZZBPlvIgbLvyKQ5BWJfU/
+         CcRrESIrA3oq6NphaUBSGtz8xNGaPEg7bDrCMfuXqyNmEISf8suFF2rinIRdGFy/kiFe
+         k4XA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678905505;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cVubaIqvmyZcVmODQ4m0c66Rfjv3Ax4FAubBWjKvyUI=;
-        b=fciDblofq451RD3sDon94J0E6O3x/WU3v8ByaRYeKIhC3Vn9wrqxFIBi3i68f3+52E
-         ooEmQBDhLGTG6leaNOpde9moh8HL+QYOYATK3bT1ZzoSpXL+trBQ1YGk57LJnLcxWGtZ
-         qIyWtbkIqa3Q3Id8JW8gmaXrQsw8PysT5vTkzF2p5ucLYDoDgQZuVEMMmxlim4x2vpkL
-         aIhWK2+aGcxGn1XdAeOq95J7MT1gLPBbjn8jRGtQgaU3D+oR3hDikZck+Uus16D5/pfY
-         EOaKvll0OWvDUgGNQ9MAD7fyEbjedN5J4hKPeuWJ3Up9NpQjCI6uaKqfdCtdRC2dZKxo
-         JCDQ==
-X-Gm-Message-State: AO0yUKUx6UDf/qRAJvEvQqEZmtSabbH46K7dHqlnHIXACTqaK3Z9Bsmw
-        OAstHN5nE1fVp/WWuEOPQbc6Lw==
-X-Google-Smtp-Source: AK7set84NzHICTZHh+Hel5/BN/OKTrtw1DK3YnyugJrhQvB1cG5i0IemvtS8crWDlETL4lCsusCg3A==
-X-Received: by 2002:a2e:a58e:0:b0:295:a280:45e4 with SMTP id m14-20020a2ea58e000000b00295a28045e4mr1760515ljp.36.1678905504709;
-        Wed, 15 Mar 2023 11:38:24 -0700 (PDT)
-Received: from localhost.localdomain (abyj16.neoplus.adsl.tpnet.pl. [83.9.29.16])
-        by smtp.gmail.com with ESMTPSA id k7-20020a2e2407000000b00298699aad60sm951261ljk.52.2023.03.15.11.38.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Mar 2023 11:38:24 -0700 (PDT)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org
-Cc:     marijn.suijten@somainline.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] dt-bindings: mfd: qcom,spmi-pmic: Add PM2250
-Date:   Wed, 15 Mar 2023 19:38:19 +0100
-Message-Id: <20230315183819.3563704-1-konrad.dybcio@linaro.org>
-X-Mailer: git-send-email 2.39.2
+        d=1e100.net; s=20210112; t=1678905513;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6PBxAqUYC1d2NeePHsywjLI1ZNjzs6EbD+eFasw3hF0=;
+        b=jtY0ywjIGN0Q2m1UXbT3FC+xGQpUujUD4sXFHo0+xjqjg+AHdqtRvrD8AWRAMZZilg
+         weiWafxvxeThks5VO6qlvfe8OkZpvvPThYxm07zbUYv8SqbdI4Tqt/AZWAIsnnQDItj5
+         +bk5j2InCLplAhEp/e0bC8QfzThP4OSRpHQ6mhe173EXH9lmhmLSJvFw/0fgc7OLmiBG
+         MyiUbQcK8EMjm7AooiF3jf/urvlmifIqfznEeK3UosO0loWEoWwFy7Vpx9RkJWRsZIIk
+         AZqspK/8TX0Ox4J8OBOPZRpWte99Ib96fyPA04OtpQYbAW5gY5MYYd/6wLEV0kpcncTR
+         y1uQ==
+X-Gm-Message-State: AO0yUKWNHOi8FZ1jdi2t30Wo9Cdfa4LSQSdb5cpjQ9pEAFXtFDWas4qV
+        UvAFp8snEjRnqB9iEBfB8i0=
+X-Google-Smtp-Source: AK7set9zWjruvjDfiFFSK0di4SUOkg4iI97Ot8mfFvdX+eFq9YT8MKCyCUUDfPQRGKqRpDzF19KDew==
+X-Received: by 2002:a05:6870:588d:b0:177:8991:38f2 with SMTP id be13-20020a056870588d00b00177899138f2mr11664205oab.24.1678905513029;
+        Wed, 15 Mar 2023 11:38:33 -0700 (PDT)
+Received: from ?IPV6:2603:8081:140c:1a00:ebd0:e160:a3dd:fe9a? (2603-8081-140c-1a00-ebd0-e160-a3dd-fe9a.res6.spectrum.com. [2603:8081:140c:1a00:ebd0:e160:a3dd:fe9a])
+        by smtp.gmail.com with ESMTPSA id s44-20020a05687050ec00b001729072f759sm2561065oaf.0.2023.03.15.11.38.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Mar 2023 11:38:32 -0700 (PDT)
+Message-ID: <e704127e-1bfe-f351-db95-bfea6916e8f9@gmail.com>
+Date:   Wed, 15 Mar 2023 13:38:31 -0500
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v2 13/14] RDMA/rxe: Rename kfree_rcu() to
+ kvfree_rcu_mightsleep()
+Content-Language: en-US
+To:     "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        Zhu Yanjun <zyjzyj2000@gmail.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Leon Romanovsky <leon@kernel.org>,
+        Devesh Sharma <devesh.s.sharma@oracle.com>
+Cc:     "Paul E . McKenney" <paulmck@kernel.org>,
+        Zhu Yanjun <yanjun.zhu@linux.dev>, linux-rdma@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230315181902.4177819-1-joel@joelfernandes.org>
+ <20230315181902.4177819-13-joel@joelfernandes.org>
+From:   Bob Pearson <rpearsonhpe@gmail.com>
+In-Reply-To: <20230315181902.4177819-13-joel@joelfernandes.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a compatible for PM2250, commonly found with QCM2290.
+On 3/15/23 13:19, Joel Fernandes (Google) wrote:
+> The k[v]free_rcu() macro's single-argument form is deprecated.
+> Therefore switch to the new k[v]free_rcu_mightsleep() variant. The goal
+> is to avoid accidental use of the single-argument forms, which can
+> introduce functionality bugs in atomic contexts and latency bugs in
+> non-atomic contexts.
+> 
+> There is no functionality change with this patch.
+> 
+> Link: https://lore.kernel.org/rcu/20230201150815.409582-1-urezki@gmail.com
+> Acked-by: Zhu Yanjun <zyjzyj2000@gmail.com>
+> Reviewed-by: Bob Pearson <rpearsonhpe@gmail.com>
+> Reviewed-by: Paul E. McKenney <paulmck@kernel.org>
+> Fixes: 72a03627443d ("RDMA/rxe: Remove rxe_alloc()")
+> Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+> ---
+>  drivers/infiniband/sw/rxe/rxe_mr.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/infiniband/sw/rxe/rxe_mr.c b/drivers/infiniband/sw/rxe/rxe_mr.c
+> index b10aa1580a64..ae3a100e18fb 100644
+> --- a/drivers/infiniband/sw/rxe/rxe_mr.c
+> +++ b/drivers/infiniband/sw/rxe/rxe_mr.c
+> @@ -731,7 +731,7 @@ int rxe_dereg_mr(struct ib_mr *ibmr, struct ib_udata *udata)
+>  		return -EINVAL;
+>  
+>  	rxe_cleanup(mr);
+> -	kfree_rcu(mr);
+> +	kfree_rcu_mightsleep(mr);
+>  	return 0;
+>  }
+>  
+Please replace kfree_rcu_mightsleep() by kfree(). There is no need to delay the kfree(mr).
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml b/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml
-index 8f076bb622b1..975c30aad23c 100644
---- a/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml
-+++ b/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml
-@@ -33,6 +33,7 @@ properties:
-   compatible:
-     items:
-       - enum:
-+          - qcom,pm2250
-           - qcom,pm6125
-           - qcom,pm6150
-           - qcom,pm6150l
--- 
-2.39.2
-
+Bob
