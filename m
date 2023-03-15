@@ -2,171 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 728596BA6FA
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 06:21:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C1B26BA6EE
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 06:17:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231515AbjCOFVE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 01:21:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49630 "EHLO
+        id S231696AbjCOFRQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 01:17:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231404AbjCOFUb (ORCPT
+        with ESMTP id S231492AbjCOFPj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 01:20:31 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DB300664E4;
-        Tue, 14 Mar 2023 22:16:59 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 56C9E16A3;
-        Tue, 14 Mar 2023 22:16:16 -0700 (PDT)
-Received: from a077893.blr.arm.com (unknown [10.162.41.10])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 568363F67D;
-        Tue, 14 Mar 2023 22:15:28 -0700 (PDT)
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        will@kernel.org, catalin.marinas@arm.com, mark.rutland@arm.com
-Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        Mark Brown <broonie@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Suzuki Poulose <suzuki.poulose@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        linux-perf-users@vger.kernel.org
-Subject: [PATCH V9 07/10] arm64/perf: Add PERF_ATTACH_TASK_DATA to events with has_branch_stack()
-Date:   Wed, 15 Mar 2023 10:44:41 +0530
-Message-Id: <20230315051444.1683170-8-anshuman.khandual@arm.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230315051444.1683170-1-anshuman.khandual@arm.com>
-References: <20230315051444.1683170-1-anshuman.khandual@arm.com>
+        Wed, 15 Mar 2023 01:15:39 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC2A63E612;
+        Tue, 14 Mar 2023 22:15:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
+        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
+        Content-Type:Content-ID:Content-Description;
+        bh=PaqUJoSuStWz+a+eZ6H5Czv2RDkRGCSPMhY7d1rRpLQ=; b=vvhYyf+z+JwQ/j/pQJl+0gs8Cg
+        Z7U9+n33E4ya8Rs6VKmmnqEH28jdQ4DqxJoZzM5mdflmtSMd+yi4QD5DY7G6MwTu/aY/fxbFfqpzA
+        GNRHXJsPYag8wyB2MsDXq0FNR167SZ8hfIU8jfQYsAEEWY7xVUG2EUAiHGSR8zgrURZk0SBcC/tw3
+        /zcFkUw5x8LSpC4C5WwfSqdey12gZW0dngWQsr7691RQiTnLYh7PJh4w2M+kkStz9lDF4v7fY+LUA
+        HFBny6CHlaD22KncUJZ6rWt/MD07tTSoYRCHZOIQywVMEC83Jj2z/yp/0ev2MTAuRFR9j6kKg88OI
+        cmYZqZ9g==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pcJTO-00DYDm-Gh; Wed, 15 Mar 2023 05:14:50 +0000
+From:   "Matthew Wilcox (Oracle)" <willy@infradead.org>
+To:     linux-arch@vger.kernel.org
+Cc:     Yin Fengwei <fengwei.yin@intel.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Matthew Wilcox <willy@infradead.org>
+Subject: [PATCH v4 33/36] filemap: Add filemap_map_folio_range()
+Date:   Wed, 15 Mar 2023 05:14:41 +0000
+Message-Id: <20230315051444.3229621-34-willy@infradead.org>
+X-Mailer: git-send-email 2.37.1
+In-Reply-To: <20230315051444.3229621-1-willy@infradead.org>
+References: <20230315051444.3229621-1-willy@infradead.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Short running processes i.e those getting very small cpu run time each time
-when they get scheduled on, might not accumulate much branch records before
-a PMU IRQ really happens. This increases possibility, for such processes to
-loose much of its branch records, while being scheduled in-out of various
-cpus on the system.
+From: Yin Fengwei <fengwei.yin@intel.com>
 
-There is a need to save all occurred branch records during the cpu run time
-while the process gets scheduled out. It requires an event context specific
-buffer for such storage.
+filemap_map_folio_range() maps partial/full folio. Comparing to original
+filemap_map_pages(), it updates refcount once per folio instead of per
+page and gets minor performance improvement for large folio.
 
-This adds PERF_ATTACH_TASK_DATA flag unconditionally, for all branch stack
-sampling events, which would allocate task_ctx_data during its event init.
-This also creates a platform specific task_ctx_data kmem cache which will
-serve such allocation requests.
+With a will-it-scale.page_fault3 like app (change file write
+fault testing to read fault testing. Trying to upstream it to
+will-it-scale at [1]), got 2% performance gain on a 48C/96T
+Cascade Lake test box with 96 processes running against xfs.
 
-This adds a new structure 'arm64_perf_task_context' which encapsulates brbe
-register set for maximum possible BRBE entries on the HW along with a valid
-records tracking element.
+[1]: https://github.com/antonblanchard/will-it-scale/pull/37
 
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Will Deacon <will@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+Signed-off-by: Yin Fengwei <fengwei.yin@intel.com>
+Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
 ---
- arch/arm64/kernel/brbe.c       | 13 +++++++++++++
- arch/arm64/kernel/brbe.h       | 13 +++++++++++++
- arch/arm64/kernel/perf_event.c |  8 ++++++--
- 3 files changed, 32 insertions(+), 2 deletions(-)
+ mm/filemap.c | 98 +++++++++++++++++++++++++++++-----------------------
+ 1 file changed, 54 insertions(+), 44 deletions(-)
 
-diff --git a/arch/arm64/kernel/brbe.c b/arch/arm64/kernel/brbe.c
-index c37118983751..a8b4f89b5d00 100644
---- a/arch/arm64/kernel/brbe.c
-+++ b/arch/arm64/kernel/brbe.c
-@@ -109,20 +109,33 @@ bool armv8pmu_branch_valid(struct perf_event *event)
- 	return true;
+diff --git a/mm/filemap.c b/mm/filemap.c
+index a34abfe8c654..6e2b0778db45 100644
+--- a/mm/filemap.c
++++ b/mm/filemap.c
+@@ -2199,16 +2199,6 @@ unsigned filemap_get_folios(struct address_space *mapping, pgoff_t *start,
+ }
+ EXPORT_SYMBOL(filemap_get_folios);
+ 
+-static inline
+-bool folio_more_pages(struct folio *folio, pgoff_t index, pgoff_t max)
+-{
+-	if (!folio_test_large(folio) || folio_test_hugetlb(folio))
+-		return false;
+-	if (index >= max)
+-		return false;
+-	return index < folio->index + folio_nr_pages(folio) - 1;
+-}
+-
+ /**
+  * filemap_get_folios_contig - Get a batch of contiguous folios
+  * @mapping:	The address_space to search
+@@ -3480,6 +3470,53 @@ static inline struct folio *next_map_page(struct address_space *mapping,
+ 				  mapping, xas, end_pgoff);
  }
  
-+static inline struct kmem_cache *
-+arm64_create_brbe_task_ctx_kmem_cache(size_t size)
++/*
++ * Map page range [start_page, start_page + nr_pages) of folio.
++ * start_page is gotten from start by folio_page(folio, start)
++ */
++static vm_fault_t filemap_map_folio_range(struct vm_fault *vmf,
++			struct folio *folio, unsigned long start,
++			unsigned long addr, unsigned int nr_pages)
 +{
-+	return kmem_cache_create("arm64_brbe_task_ctx", size, 0, 0, NULL);
++	vm_fault_t ret = 0;
++	struct vm_area_struct *vma = vmf->vma;
++	struct file *file = vma->vm_file;
++	struct page *page = folio_page(folio, start);
++	unsigned int mmap_miss = READ_ONCE(file->f_ra.mmap_miss);
++	unsigned int ref_count = 0, count = 0;
++
++	do {
++		if (PageHWPoison(page))
++			continue;
++
++		if (mmap_miss > 0)
++			mmap_miss--;
++
++		/*
++		 * NOTE: If there're PTE markers, we'll leave them to be
++		 * handled in the specific fault path, and it'll prohibit the
++		 * fault-around logic.
++		 */
++		if (!pte_none(*vmf->pte))
++			continue;
++
++		if (vmf->address == addr)
++			ret = VM_FAULT_NOPAGE;
++
++		ref_count++;
++		do_set_pte(vmf, page, addr);
++		update_mmu_cache(vma, addr, vmf->pte);
++	} while (vmf->pte++, page++, addr += PAGE_SIZE, ++count < nr_pages);
++
++	/* Restore the vmf->pte */
++	vmf->pte -= nr_pages;
++
++	folio_ref_add(folio, ref_count);
++	WRITE_ONCE(file->f_ra.mmap_miss, mmap_miss);
++
++	return ret;
 +}
 +
- int armv8pmu_private_alloc(struct arm_pmu *arm_pmu)
+ vm_fault_t filemap_map_pages(struct vm_fault *vmf,
+ 			     pgoff_t start_pgoff, pgoff_t end_pgoff)
  {
- 	struct brbe_hw_attr *brbe_attr = kzalloc(sizeof(struct brbe_hw_attr), GFP_KERNEL);
-+	size_t size = sizeof(struct arm64_perf_task_context);
+@@ -3490,9 +3527,9 @@ vm_fault_t filemap_map_pages(struct vm_fault *vmf,
+ 	unsigned long addr;
+ 	XA_STATE(xas, &mapping->i_pages, start_pgoff);
+ 	struct folio *folio;
+-	struct page *page;
+ 	unsigned int mmap_miss = READ_ONCE(file->f_ra.mmap_miss);
+ 	vm_fault_t ret = 0;
++	int nr_pages = 0;
  
- 	if (!brbe_attr)
- 		return -ENOMEM;
+ 	rcu_read_lock();
+ 	folio = first_map_page(mapping, &xas, end_pgoff);
+@@ -3507,45 +3544,18 @@ vm_fault_t filemap_map_pages(struct vm_fault *vmf,
+ 	addr = vma->vm_start + ((start_pgoff - vma->vm_pgoff) << PAGE_SHIFT);
+ 	vmf->pte = pte_offset_map_lock(vma->vm_mm, vmf->pmd, addr, &vmf->ptl);
+ 	do {
+-again:
+-		page = folio_file_page(folio, xas.xa_index);
+-		if (PageHWPoison(page))
+-			goto unlock;
+-
+-		if (mmap_miss > 0)
+-			mmap_miss--;
++		unsigned long end;
  
- 	arm_pmu->private = brbe_attr;
-+	arm_pmu->pmu.task_ctx_cache = arm64_create_brbe_task_ctx_kmem_cache(size);
-+	if (!arm_pmu->pmu.task_ctx_cache) {
-+		kfree(arm_pmu->private);
-+		return -ENOMEM;
-+	}
- 	return 0;
- }
+ 		addr += (xas.xa_index - last_pgoff) << PAGE_SHIFT;
+ 		vmf->pte += xas.xa_index - last_pgoff;
+ 		last_pgoff = xas.xa_index;
++		end = folio->index + folio_nr_pages(folio) - 1;
++		nr_pages = min(end, end_pgoff) - xas.xa_index + 1;
  
- void armv8pmu_private_free(struct arm_pmu *arm_pmu)
- {
- 	kfree(arm_pmu->private);
-+	kmem_cache_destroy(arm_pmu->pmu.task_ctx_cache);
- }
+-		/*
+-		 * NOTE: If there're PTE markers, we'll leave them to be
+-		 * handled in the specific fault path, and it'll prohibit the
+-		 * fault-around logic.
+-		 */
+-		if (!pte_none(*vmf->pte))
+-			goto unlock;
++		ret |= filemap_map_folio_range(vmf, folio,
++				xas.xa_index - folio->index, addr, nr_pages);
++		xas.xa_index += nr_pages;
  
- static int brbe_attributes_probe(struct arm_pmu *armpmu, u32 brbe)
-diff --git a/arch/arm64/kernel/brbe.h b/arch/arm64/kernel/brbe.h
-index a47480eec070..4a72c2ba7140 100644
---- a/arch/arm64/kernel/brbe.h
-+++ b/arch/arm64/kernel/brbe.h
-@@ -80,12 +80,25 @@
-  *	---------------------------------	------
-  */
- #define BRBE_BANK_MAX_ENTRIES 32
-+#define BRBE_MAX_BANK 2
-+#define BRBE_MAX_ENTRIES (BRBE_BANK_MAX_ENTRIES * BRBE_MAX_BANK)
- 
- #define BRBE_BANK0_IDX_MIN 0
- #define BRBE_BANK0_IDX_MAX 31
- #define BRBE_BANK1_IDX_MIN 32
- #define BRBE_BANK1_IDX_MAX 63
- 
-+struct brbe_regset {
-+	unsigned long brbsrc;
-+	unsigned long brbtgt;
-+	unsigned long brbinf;
-+};
-+
-+struct arm64_perf_task_context {
-+	struct brbe_regset store[BRBE_MAX_ENTRIES];
-+	int nr_brbe_records;
-+};
-+
- struct brbe_hw_attr {
- 	int	brbe_version;
- 	int	brbe_cc;
-diff --git a/arch/arm64/kernel/perf_event.c b/arch/arm64/kernel/perf_event.c
-index b074502835a2..c100731c52a0 100644
---- a/arch/arm64/kernel/perf_event.c
-+++ b/arch/arm64/kernel/perf_event.c
-@@ -1067,8 +1067,12 @@ static int __armv8_pmuv3_map_event(struct perf_event *event,
- 				       &armv8_pmuv3_perf_cache_map,
- 				       ARMV8_PMU_EVTYPE_EVENT);
- 
--	if (has_branch_stack(event) && !armv8pmu_branch_valid(event))
--		return -EOPNOTSUPP;
-+	if (has_branch_stack(event)) {
-+		if (!armv8pmu_branch_valid(event))
-+			return -EOPNOTSUPP;
-+
-+		event->attach_state |= PERF_ATTACH_TASK_DATA;
-+	}
- 
- 	/*
- 	 * CHAIN events only work when paired with an adjacent counter, and it
+-		/* We're about to handle the fault */
+-		if (vmf->address == addr)
+-			ret = VM_FAULT_NOPAGE;
+-
+-		do_set_pte(vmf, page, addr);
+-		/* no need to invalidate: a not-present page won't be cached */
+-		update_mmu_cache(vma, addr, vmf->pte);
+-		if (folio_more_pages(folio, xas.xa_index, end_pgoff)) {
+-			xas.xa_index++;
+-			folio_ref_inc(folio);
+-			goto again;
+-		}
+-		folio_unlock(folio);
+-		continue;
+-unlock:
+-		if (folio_more_pages(folio, xas.xa_index, end_pgoff)) {
+-			xas.xa_index++;
+-			goto again;
+-		}
+ 		folio_unlock(folio);
+ 		folio_put(folio);
+ 	} while ((folio = next_map_page(mapping, &xas, end_pgoff)) != NULL);
 -- 
-2.25.1
+2.39.2
 
