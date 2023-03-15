@@ -2,149 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AB386BA785
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 07:08:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9880B6BA788
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 07:10:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230253AbjCOGIp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 02:08:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41172 "EHLO
+        id S230259AbjCOGKa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 02:10:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230096AbjCOGIm (ORCPT
+        with ESMTP id S229666AbjCOGK2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 02:08:42 -0400
-Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D36ED1FE0;
-        Tue, 14 Mar 2023 23:08:38 -0700 (PDT)
-Received: from pps.filterd (m0134420.ppops.net [127.0.0.1])
-        by mx0b-002e3701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32F5xnSf012042;
-        Wed, 15 Mar 2023 06:08:35 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
- : date : message-id : content-type : content-transfer-encoding :
- mime-version; s=pps0720; bh=k19s+03om2lx/PE8c1eeHo6ZijEK4kzbvIjQ7gXbisY=;
- b=X5AH0l5O4iqcUpk1xpt/XjjFXYmboBOtdUvF0ziBi+qD9C+rSLrIbrYS4ulRKqNcbOLj
- oBQlzHjSn8yX8VQc2bDED85JZDy9k7DIEwlj7CnOvCX4DUcomhAsmKB1DIqz/lIm74CS
- eVZFuxx4R8ms4VxPM9m0wozaljHlrlnVgqUsxnVeMr3JIxSQPxcFVp4AHxwlM/Ad91gh
- sV+rZ3Ai/xARXntowREACrijtDXTncyv8OUl1ALoEpCX3jupt71j4hPmwW6BXzAW+IKY
- EPYXc6jm9p1Pp3oljtEfOBMM8L1Q01nlrotxrWOBej7E0vi/zppI/MVKn5k54cFxqZXm bQ== 
-Received: from p1lg14881.it.hpe.com (p1lg14881.it.hpe.com [16.230.97.202])
-        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3pb5x8s3e3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 15 Mar 2023 06:08:35 +0000
-Received: from p1wg14926.americas.hpqcorp.net (unknown [10.119.18.115])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 15 Mar 2023 02:10:28 -0400
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 808B55B41B
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 23:10:27 -0700 (PDT)
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by p1lg14881.it.hpe.com (Postfix) with ESMTPS id 0C7A7806B45;
-        Wed, 15 Mar 2023 06:08:34 +0000 (UTC)
-Received: from p1wg14927.americas.hpqcorp.net (10.119.18.117) by
- p1wg14926.americas.hpqcorp.net (10.119.18.115) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Tue, 14 Mar 2023 18:08:21 -1200
-Received: from p1wg14921.americas.hpqcorp.net (16.230.19.124) by
- p1wg14927.americas.hpqcorp.net (10.119.18.117) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36
- via Frontend Transport; Tue, 14 Mar 2023 18:08:21 -1200
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (192.58.206.38)
- by edge.it.hpe.com (16.230.19.124) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Tue, 14 Mar 2023 18:08:21 -1200
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=e+Jueebau4EuR25kxVFKaBpfSPJxdmY2En6Ef+hmYExwGxHD7Ur0exj0O3lujgmwd2XdRwtw0d1+jU6wDZk8/XkQ3jrJCRibO2AV4diLbiANTjZq62Qp5+XMO9smuzwU08fXWTuglryuuqT9juJfyOzWozn7FIoxWF1KOUbQnXViG0N728CldkzGkt8mCm2VdVQv/XV/iCP/gkogpGf1QqNk5KpdIi68Wr0ac2fIbjev1gwhHZC5rp71ep3gpVH6SGFQd/6NUAL5QtSrXAklpsOn3MNN9ZPs9cquXIkHQyeyF1IHUmZBqt58Lr8wYx4eKhBJIXiW0vYw2eKdfPrUqg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=k19s+03om2lx/PE8c1eeHo6ZijEK4kzbvIjQ7gXbisY=;
- b=f3rfMM756DPCpj8Ly0Bi9a8COKRg0OAT/yybcGzldX1K395hewL6RO6sl6zBM1l0qZlpLAfA4qH3MEw2/ri2HiVI8GBDCJrD5JEciLM3gYRMGOKcmn4PYRzhyCAHKAorkQFBa2Oten4EXaE45uXL0PK59c8t5WkYexmwlAi4PRluS7cbA6XVoUcYT0d/KW4BNDmKCkcp5vGSA4spfkLQVJUm3RR6BCWSitiSyN8IwKuaKYCCbjwwDq59EoLD6lYqFmSHNS5Os0XG9YhWXnRAJqAHEoPOv4tqvk5V4L9QPCVELnIMJZLgS6mGtgDBLzQ8/qrbzTEKo5wWvJtSDYeZ7w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=hpe.com; dmarc=pass action=none header.from=hpe.com; dkim=pass
- header.d=hpe.com; arc=none
-Received: from DM4PR84MB1373.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:8:48::7) by
- PH7PR84MB1535.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:510:152::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.24; Wed, 15 Mar
- 2023 06:08:20 +0000
-Received: from DM4PR84MB1373.NAMPRD84.PROD.OUTLOOK.COM
- ([fe80::7040:7ebe:4715:31fe]) by DM4PR84MB1373.NAMPRD84.PROD.OUTLOOK.COM
- ([fe80::7040:7ebe:4715:31fe%7]) with mapi id 15.20.6178.026; Wed, 15 Mar 2023
- 06:08:19 +0000
-From:   "Seymour, Shane M" <shane.seymour@hpe.com>
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>
-Subject: [PATCH for-next] scsi: Implement host state statistics
-Thread-Topic: [PATCH for-next] scsi: Implement host state statistics
-Thread-Index: AdlW08zNHKI7PyClSKC1+KomWCdnWg==
-Date:   Wed, 15 Mar 2023 06:08:19 +0000
-Message-ID: <DM4PR84MB1373DCD07EABD28D88129C50FDBF9@DM4PR84MB1373.NAMPRD84.PROD.OUTLOOK.COM>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DM4PR84MB1373:EE_|PH7PR84MB1535:EE_
-x-ms-office365-filtering-correlation-id: 6a371f80-1e8e-481a-1112-08db251bacf8
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: iqifadiZ99BmblEIQBTEnPdJnaQ9T5Dtq+h9BTXQsq0nqKBGraY+EUqvhPdwZMp4OA2lp9ndDaatWhvBuAmDmnlzZ3H2Y9/GB41u2ddlSvFgNWr1fciKQKYc/hcuXXC3sbnsULagTZgX/JEA+XV4zW0uOr4EC06bx9u1A8mSvlRLNiP6E84+ygQZ2vT2HQpmSY6FED+8wuTef99g0i2ytszgTUFnI2SS7NSIv/soYmCrog7nnDGIYI5dKPBD2rELtrIR2LgmbHGxqIT8Nigyj6Nr2/28nG37Hq3+NmLXqpxYbfGbZewz2sl2LQeVI9NX4fjzDmR2/1mDFJh0pc9HVTvsf1KYpUu0a47HIAVZ2BCQq14Hx5UsVdlU4XlBXBjYU4QKf5PfwZBwh/mtMVoylK5VaxC287HMVrHGK5v6HJYNHP+nmyEUewL1SVB7JA2tiLcsH4KcwuBex+RdXoKmIhJlRdf7+4bwoTU2EZpgaKF9PhYWWuo0I6Iv7py3ndbA7RQ2Vg2ACQPZaXwvwg0tRYORteBPrNhMx/QSaBXMINzGX12qwVr62pX+RFsynT9pLJCNAfQO9seoWdgiKuShP2B1b/tKaPbOQmC6jaakWQeZr5jmDfa+xcH0iTh+nia31VH2xA3P9qhWhiHyFIEbLUMcJh+kJn5IpBvom4MaA1N/boiVDdSnHWeHHPUwJnqktgEAtXmDv5SogUV/wsnWRg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR84MB1373.NAMPRD84.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230025)(346002)(376002)(366004)(136003)(396003)(39860400002)(451199018)(2906002)(122000001)(82960400001)(83380400001)(30864003)(55016003)(5660300002)(8936002)(8676002)(66556008)(66446008)(76116006)(86362001)(4326008)(64756008)(41300700001)(38100700002)(54906003)(316002)(110136005)(33656002)(38070700005)(478600001)(66946007)(66476007)(52536014)(186003)(9686003)(26005)(71200400001)(6506007)(7696005);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?hmP3wjz0gt2pf5Ml8b7mouvqESYOObOYbkHfWBlnc9NwhPsmVDwnLym2GNKy?=
- =?us-ascii?Q?SyQ7IVjjwp5HhY5JNXi3NEqzq1eK3+qRFS+wTeoynVYqg3/qiCVmPC3YkVIR?=
- =?us-ascii?Q?zfa5kGKhwUDe7zp+KxNghT+YUgeaaywE5fJ/lt5NBrcNNYet2cH8Gb3nm+mg?=
- =?us-ascii?Q?jlXeRUtoHOp9jnXmxDTVR9QPjlGXQvCBGfPHX6mhjqQM2Nb4Ap3GOG87tdZ5?=
- =?us-ascii?Q?5cHSZqe9dW6fk+Bqqi1l28Ed/+w69g3LQSBCx5YNfkazj6uJS3wDjStv2V65?=
- =?us-ascii?Q?BdjZ+ekH6/iFb8KAg251CW1opQMQrWbNcamCfmcvhOG2y74GVGXhTh+4yEJC?=
- =?us-ascii?Q?5+RvKyFqS6FOtHLKNVufq3XeDL71PwpZtKVansDMwsCwCZ62lYYOVRjmwLKi?=
- =?us-ascii?Q?GPVnisDwjEokadizsoe5E+szMDn5AiPj22AzS78iUejAWS8/gBv3vjwtfTqT?=
- =?us-ascii?Q?CGVCEu1gYOyJ3oBjytWB7BReV4iIYkoLU9pNARAu/WBUpBrvJjgG8ZVoqMxG?=
- =?us-ascii?Q?JZe00Kgc595CyubGPrGb3y1M4IgXSTwiSMDeOBwOw+GgFu+WrfizlpICyEdn?=
- =?us-ascii?Q?q7dhZXqasvrQ758I3RRSdJzQZzSJf4iYMJYNOKiees4g6Axa4AsxjES2iLBS?=
- =?us-ascii?Q?EtgNUVGqfUfar2FOSMBhc4f7x0/Orra9QD4MgB4f1wVdXgZnr7QAQibgnB+r?=
- =?us-ascii?Q?3Rq1bLmY+Wwhz1unDx+K8r6O9yil+oaRBZgInZcO43sK/MqU/Zb1fVmL+JsZ?=
- =?us-ascii?Q?oovyVjyReFMr/dkT19VU1M4SOgZHKRDfiTAFhFaKPE3ySVVq04aBT1qgt1sj?=
- =?us-ascii?Q?MNfHb22AAActnhFyEDzpQ6rEo14Mj5lP6OLzYvHj6IZwaFh5bTQibtT6acUQ?=
- =?us-ascii?Q?UPa7iyRYuNvGHv5Zfhk2dXXGEBYBlXd8ir4P3wbCo1UsbHOxecezxCmCvg5R?=
- =?us-ascii?Q?yvPnOu/m8Bt/56XtbGUSt7gSZjca3CJYHu9AAi6odX7SribnmWWH5vnCqMn5?=
- =?us-ascii?Q?uVEnlecqVte5Fvoj28/9LO7nFzzMOC85PphexluuNPJEeJ6WyxEcmU8Pplwq?=
- =?us-ascii?Q?09vbfLsLZBDbvjOl20eRao7PVlkeV5hWa3U0FNiFPzi7LtxXQ+pxHZuZF4M9?=
- =?us-ascii?Q?ba8JB4gn3vHzt2cZNrshVQVo6kUtyukfgKA8fNeg6T5ky1MFnjRzJ0mAqyzw?=
- =?us-ascii?Q?lThNAUoQo5EvYLd6MvR58aqqbPYeBDIFJMHhQIhgHHE4GjHXVco1y1xrAkrL?=
- =?us-ascii?Q?nXblWiZl+9VlO6HRPA5GbNAom5pR0LYogjBoHbVWcshl779Fnf9hWndlZfku?=
- =?us-ascii?Q?aMNJe1PNkdXmuo55jgMytgq0qjjh122Af8lxzhXzqUZlXR1OHIt7Q7/R4cBA?=
- =?us-ascii?Q?BuF9FNY933mefMocKNldEld53hh0T1zCGKq5TQL1FqpJ2eXkRjrY1ju98DGX?=
- =?us-ascii?Q?FFKuVLTppodQW71tlgbK+3gQkTvRxja4VQVwLYrUHx9jwndrgAfRxfhuBp5c?=
- =?us-ascii?Q?1S+GKZwqhK/udp8C8dKTnOBT5AjuHQIJE5AnaMtAVbztOHFrpwCRYyRz7ZRr?=
- =?us-ascii?Q?b6snrCcNdjFjtBf+n4Wgz7pIZAqFLKJHXYU21+Nh?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 644683F201
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 06:10:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1678860626;
+        bh=qMeoUKhYzDgnizP/GQ28Ev1EYvBAg9BQEuvFR6NeagM=;
+        h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+         Content-Type:In-Reply-To;
+        b=AUzD4Vp5hZW8ip2KmLv9lnb5oSuEQzkWdh+LK3/sM9t3K2cmE2MFiDXMk650PtSvl
+         mElF6GaSOVVOg12BCJaXzYfOFEkb66WMxAdY5aEi5v3wfdXFP5fa9c5Wyc3s6lG+Ci
+         tGks7751+axvGgqKC/Dakt8Z6seq6MCaibt9ZtYLQFpV1Q3CDvjopgLuXmOiplFo0z
+         99/TgYnoQmf4Djb4EfIWTBTxm1sRuCF0oDV0GCt19Z6ACnxtqNv51sP4IdaeGqeqPX
+         1yXGUXj89BA7uDyVGC6UVQkB6t6qy/4Yvx/e5wGuVv8Q2hzBe/Ws6QXtID3qlJCDvC
+         N3VuBsNmr4Uqg==
+Received: by mail-ed1-f69.google.com with SMTP id en6-20020a056402528600b004fa01232e6aso16800045edb.16
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 23:10:26 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678860626;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qMeoUKhYzDgnizP/GQ28Ev1EYvBAg9BQEuvFR6NeagM=;
+        b=cRDoGIKGczacWB7X5N9vGM75ocMERMDgizril6XQ1yAYW/b8c3Voswk0MgaclY9NrW
+         O7xy60MICe/dCsCDmglrLGhS1NYmw7LpkqmCiLmwQ+DQmv2NbaWQSIb7rtefhffYTRXh
+         /9FKGfGrfjBjoIZllNB/28xano98tgTEZGhdFP7G4hUImVv/XfhCMJWcytNVkZJ0w/hU
+         3lS1ypQSYVkNH+pt7LodDCjKBDrQjIvrc3A1kwbiHRty7deB85RE2y55SznBaxXwjFeY
+         R+0I6dWp/bzu9THuJM9semwzSFg54k8SakEZNORAuY6SQJe3bPNvMUVeDpDBISph5/bT
+         Fy2w==
+X-Gm-Message-State: AO0yUKUas+At2Y+SylAenyS9tGEVh3Df5qnB12MMk83Avvu9F3Obv7Vv
+        HXKkkjjv3i9BlrkXiIy69WqQrew7G9dEYk3FFEkfmd4mf2LdSfOI7rb035CYsbZIEqwTWSjbsBp
+        ZNjMSyI24M/c97MaLBz5yEFW+tjKh1ulDVB22QLKTug==
+X-Received: by 2002:a17:906:5d16:b0:87b:d2b3:67ca with SMTP id g22-20020a1709065d1600b0087bd2b367camr5884288ejt.75.1678860626031;
+        Tue, 14 Mar 2023 23:10:26 -0700 (PDT)
+X-Google-Smtp-Source: AK7set9Lssfla0yupVlH322DngUHEvV18c7m/g5JbvnjN5WZYfVNUjJiiQxIZIPUM0DZytL7yheCaw==
+X-Received: by 2002:a17:906:5d16:b0:87b:d2b3:67ca with SMTP id g22-20020a1709065d1600b0087bd2b367camr5884268ejt.75.1678860625751;
+        Tue, 14 Mar 2023 23:10:25 -0700 (PDT)
+Received: from localhost (host-79-53-23-214.retail.telecomitalia.it. [79.53.23.214])
+        by smtp.gmail.com with ESMTPSA id y4-20020a170906558400b008bfe95c46c3sm2003469ejp.220.2023.03.14.23.10.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Mar 2023 23:10:25 -0700 (PDT)
+Date:   Wed, 15 Mar 2023 07:10:24 +0100
+From:   Andrea Righi <andrea.righi@canonical.com>
+To:     Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Oleg Nesterov <oleg@redhat.com>, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: boot regression on ppc64 with linux 6.2
+Message-ID: <ZBFhUAlL+1ZVKcwQ@righiandr-XPS-13-7390>
+References: <ZA7oJr1/Z4vzWy4N@righiandr-XPS-13-7390>
+ <878rfyofma.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR84MB1373.NAMPRD84.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6a371f80-1e8e-481a-1112-08db251bacf8
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Mar 2023 06:08:19.9184
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 105b2061-b669-4b31-92ac-24d304d195dc
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: kCYx+AKrRC43IpMKla+RUgJQ7+B+iIJQ3U3dGesC/S7rGhXZgEaoeuYTSOxksDLDW6FQ80uPeSCcIeFoMhGkuw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR84MB1535
-X-OriginatorOrg: hpe.com
-X-Proofpoint-GUID: tNkmDJuSTA6BGzPW_XS8zGeagVRO9SdI
-X-Proofpoint-ORIG-GUID: tNkmDJuSTA6BGzPW_XS8zGeagVRO9SdI
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-15_02,2023-03-14_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- adultscore=0 spamscore=0 mlxscore=0 clxscore=1011 malwarescore=0
- suspectscore=0 phishscore=0 lowpriorityscore=0 bulkscore=0 impostorscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2302240000 definitions=main-2303150053
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <878rfyofma.fsf@mpe.ellerman.id.au>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -152,371 +83,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following patch implements host state statistics via sysfs. The intent
-is to allow user space to see the state changes and be able to report when
-a host changes state. The files do not separate out the time spent into
-each state but only into three:
+On Wed, Mar 15, 2023 at 02:30:53PM +1100, Michael Ellerman wrote:
+> Andrea Righi <andrea.righi@canonical.com> writes:
+> > I'm triggering the following bug when booting my qemu powerpc VM:
+> 
+> I'm not seeing that here :/
+> 
+> Can you give a bit more detail?
+>  - qemu version
+>  - qemu command line
+>  - what userspace are you using?
+>  - full dmesg of the failing case
 
-$ ll /sys/class/scsi_host/host0/stats
-total 0
--r--r--r--. 1 root root 4096 Mar 13 22:43 state_first_change_time
--r--r--r--. 1 root root 4096 Mar 13 22:43 state_last_change_time
--r--r--r--. 1 root root 4096 Mar 13 22:43 state_other_count
--r--r--r--. 1 root root 4096 Mar 13 22:43 state_other_ns
--r--r--r--. 1 root root 4096 Mar 13 22:43 state_recovery_count
--r--r--r--. 1 root root 4096 Mar 13 22:43 state_recovery_ns
--r--r--r--. 1 root root 4096 Mar 13 22:43 state_running_count
--r--r--r--. 1 root root 4096 Mar 13 22:43 state_running_ns
+Yeah, ignore this for now, it could be related to another custom patch
+that I had applied (and forgot about it sorry), this one:
+https://lore.kernel.org/lkml/20230119155709.20d87e35.gary@garyguo.net/T/
 
-They are running, recovery and other. The running state is SHOST_CREATED
-and SHOST_RUNNING. The recovery state is SHOST_RECOVERY,
-SHOST_CANCEL_RECOVERY, and SHOST_DEL_RECOVERY. Any other state gets
-accounted for in other.
+That is causing other issues on ppc64, so I think it might be related to
+that, I'll do more tests making sure I use a vanilla kernel.
 
-The current state is not accounted for in the information read. Because
-of that you must read:
+Sorry for the noise.
 
-1. The last_change_time for that host
-2. the current state of a host and the uptime
-3. each of the above *count and *ns files
-4. Re-read the last_change_time
-5. Compare the two last_change_time values read and if different try again.
-6. The total time read from the *ns files is subtracted from the uptime and
-   that time is then allocated to the current state time.
+-Andrea
 
-The first change time is to determine when the host was created so programs
-can determine if it was newly created or not.
-
-A (GPLv2) program called hostmond will be released in a few months that
-will monitor these interfaces and report (local host only via syslog(3C))
-when hosts change state.
-
-Signed-off-by: Shane Seymour <shane.seymour@hpe.com>
----
-diff --git a/Documentation/ABI/testing/sysfs-class-scsi_host b/Documentatio=
-n/ABI/testing/sysfs-class-scsi_host
-index 7c98d8f43c45..2ce266df812f 100644
---- a/Documentation/ABI/testing/sysfs-class-scsi_host
-+++ b/Documentation/ABI/testing/sysfs-class-scsi_host
-@@ -117,3 +117,75 @@ KernelVersion:	v2.6.39
- Contact:	linux-ide@vger.kernel.org
- Description:
- 		(RO) Displays supported enclosure management message types.
-+
-+What:		/sys/class/scsi_host/hostX/stats/state_first_change_time
-+Date:		March 2023
-+Kernel Version:	6.4
-+Contact:	shane.seymour@hpe.com
-+Description:
-+		(RO) This is the time since boot where this SCSI host saw it's
-+		initial state change. For most SCSI hosts this should be
-+		relatively close to the time the system booted up (if the
-+		Low Level Driver (LLD) was loaded at boot).
-+
-+		Looking at this file will help you determine when the host
-+		was created.  The time value read from this file is the
-+		number of nanoseconds since boot.
-+
-+What:		/sys/class/scsi_host/hostX/stats/state_last_change_time
-+Date:		March 2023
-+Kernel Version:	6.4
-+Contact:	shane.seymour@hpe.com
-+Description:
-+		(RO) This is the last time that the state of the SCSI host
-+		changed. This can be used in two ways. You can read it
-+		twice - once before reading any statistics and once after.
-+
-+		If the value has changed between reads you might consider
-+		re-reading the statistics files again as the data will
-+		have changed.
-+
-+What:		/sys/class/scsi_host/hostX/stats/state_other_count
-+Date:		March 2023
-+Kernel Version:	6.4
-+Contact:	shane.seymour@hpe.com
-+Description:
-+		(RO) This is a simple count of the number of times this SCSI
-+		host has transitioned out of this state.
-+
-+What:		/sys/class/scsi_host/hostX/stats/state_other_ns
-+Date:		March 2023
-+Kernel Version:	6.4
-+Contact:	shane.seymour@hpe.com
-+Description:
-+		(RO) This is the amount of time spent in a state of other.
-+
-+What:		/sys/class/scsi_host/hostX/stats/state_recovery_count
-+Date:		March 2023
-+Kernel Version:	6.4
-+Contact:	shane.seymour@hpe.com
-+Description:
-+		(RO) This is a simple count of the number of times this SCSI
-+		host has transitioned out of this state.
-+
-+What:		/sys/class/scsi_host/hostX/stats/state_recovery_ns
-+Date:		March 2023
-+Kernel Version:	6.4
-+Contact:	shane.seymour@hpe.com
-+Description:
-+		(RO) This is the amount of time spent in a state of recovery.
-+
-+What:		/sys/class/scsi_host/hostX/stats/state_running_count
-+Date:		March 2023
-+Kernel Version:	6.4
-+Contact:	shane.seymour@hpe.com
-+Description:
-+		(RO) This is a simple count of the number of times this SCSI
-+		host has transitioned out of this state.
-+
-+What:		/sys/class/scsi_host/hostX/stats/state_running_ns
-+Date:		March 2023
-+Kernel Version:	6.4
-+Contact:	shane.seymour@hpe.com
-+Description:
-+		(RO) This is the amount of time spent in a state of running.
-diff --git a/drivers/scsi/hosts.c b/drivers/scsi/hosts.c
-index f7f62e56afca..1a010488b52b 100644
---- a/drivers/scsi/hosts.c
-+++ b/drivers/scsi/hosts.c
-@@ -64,6 +64,49 @@ static struct class shost_class =3D {
- 	.dev_groups	=3D scsi_shost_groups,
- };
-=20
-+/**
-+ *
-+ *	scsi_host_do_state_stats - Maintains statistics for presentation
-+ *	via sysfs of host state changes per host.
-+ *	@shost - scsi host to track state change stats for.
-+ *	@oldstate - the previous state that the host was in.
-+ *
-+ **/
-+static void scsi_host_do_state_stats(struct Scsi_Host *shost,
-+	enum scsi_host_state oldstate)
-+{
-+	ktime_t now, last;
-+
-+	now =3D ktime_get();
-+	last =3D shost->stats->state_last_change_time;
-+
-+	if (last =3D=3D 0) {
-+		shost->stats->state_first_change_time =3D now;
-+		shost->stats->state_last_change_time =3D now;
-+		last =3D now;
-+	}
-+
-+	switch (oldstate) {
-+
-+	case SHOST_CREATED:
-+	case SHOST_RUNNING:
-+		shost->stats->state_running_ns +=3D ktime_sub(now, last);
-+		shost->stats->state_running_count++;
-+		break;
-+	case SHOST_RECOVERY:
-+	case SHOST_CANCEL_RECOVERY:
-+	case SHOST_DEL_RECOVERY:
-+		shost->stats->state_recovery_ns +=3D ktime_sub(now, last);
-+		shost->stats->state_recovery_count++;
-+		break;
-+	default:
-+		shost->stats->state_other_ns +=3D ktime_sub(now, last);
-+		shost->stats->state_other_count++;
-+		break;
-+	}
-+	shost->stats->state_last_change_time =3D now;
-+}
-+
- /**
-  *	scsi_host_set_state - Take the given host through the host state model.
-  *	@shost:	scsi host to change the state of.
-@@ -146,6 +189,7 @@ int scsi_host_set_state(struct Scsi_Host *shost, enum s=
-csi_host_state state)
- 		break;
- 	}
- 	shost->shost_state =3D state;
-+	scsi_host_do_state_stats(shost, oldstate);
- 	return 0;
-=20
-  illegal:
-@@ -369,6 +413,8 @@ static void scsi_host_dev_release(struct device *dev)
-=20
- 	ida_free(&host_index_ida, shost->host_no);
-=20
-+	kfree(shost->stats);
-+
- 	if (shost->shost_state !=3D SHOST_CREATED)
- 		put_device(parent);
- 	kfree(shost);
-@@ -401,6 +447,12 @@ struct Scsi_Host *scsi_host_alloc(struct scsi_host_tem=
-plate *sht, int privsize)
- 	if (!shost)
- 		return NULL;
-=20
-+	shost->stats =3D kzalloc(sizeof(struct scsi_host_stats), GFP_KERNEL);
-+	if (!shost->stats) {
-+		kfree(shost);
-+		return NULL;
-+	}
-+
- 	shost->host_lock =3D &shost->default_lock;
- 	spin_lock_init(shost->host_lock);
- 	shost->shost_state =3D SHOST_CREATED;
-diff --git a/drivers/scsi/scsi_sysfs.c b/drivers/scsi/scsi_sysfs.c
-index ee28f73af4d4..00d41c8820aa 100644
---- a/drivers/scsi/scsi_sysfs.c
-+++ b/drivers/scsi/scsi_sysfs.c
-@@ -428,8 +428,110 @@ static const struct attribute_group scsi_shost_attr_g=
-roup =3D {
- 	.attrs =3D	scsi_sysfs_shost_attrs,
- };
-=20
-+/*
-+ *	sysfs functions for shost state statistics.
-+ */
-+
-+static ssize_t state_first_change_time_show(struct device *dev,
-+	struct device_attribute *attr, char *buf)
-+{
-+	struct Scsi_Host *shost =3D class_to_shost(dev);
-+
-+	return scnprintf(buf, PAGE_SIZE, "%lld",
-+		ktime_to_ns(shost->stats->state_first_change_time));
-+}
-+static DEVICE_ATTR_RO(state_first_change_time);
-+
-+static ssize_t state_last_change_time_show(struct device *dev,
-+	struct device_attribute *attr, char *buf)
-+{
-+	struct Scsi_Host *shost =3D class_to_shost(dev);
-+
-+	return scnprintf(buf, PAGE_SIZE, "%lld",
-+		ktime_to_ns(shost->stats->state_last_change_time));
-+}
-+static DEVICE_ATTR_RO(state_last_change_time);
-+
-+static ssize_t state_running_ns_show(struct device *dev,
-+	struct device_attribute *attr, char *buf)
-+{
-+	struct Scsi_Host *shost =3D class_to_shost(dev);
-+
-+	return scnprintf(buf, PAGE_SIZE, "%lld",
-+		ktime_to_ns(shost->stats->state_running_ns));
-+}
-+static DEVICE_ATTR_RO(state_running_ns);
-+
-+static ssize_t state_recovery_ns_show(struct device *dev,
-+	struct device_attribute *attr, char *buf)
-+{
-+	struct Scsi_Host *shost =3D class_to_shost(dev);
-+
-+	return scnprintf(buf, PAGE_SIZE, "%lld",
-+		ktime_to_ns(shost->stats->state_recovery_ns));
-+}
-+static DEVICE_ATTR_RO(state_recovery_ns);
-+
-+static ssize_t state_other_ns_show(struct device *dev,
-+	struct device_attribute *attr, char *buf)
-+{
-+	struct Scsi_Host *shost =3D class_to_shost(dev);
-+
-+	return scnprintf(buf, PAGE_SIZE, "%lld",
-+		ktime_to_ns(shost->stats->state_other_ns));
-+}
-+static DEVICE_ATTR_RO(state_other_ns);
-+
-+static ssize_t state_running_count_show(struct device *dev,
-+	struct device_attribute *attr, char *buf)
-+{
-+	struct Scsi_Host *shost =3D class_to_shost(dev);
-+
-+	return scnprintf(buf, PAGE_SIZE, "%d",
-+		shost->stats->state_running_count);
-+}
-+static DEVICE_ATTR_RO(state_running_count);
-+
-+static ssize_t state_recovery_count_show(struct device *dev,
-+	struct device_attribute *attr, char *buf)
-+{
-+	struct Scsi_Host *shost =3D class_to_shost(dev);
-+
-+	return scnprintf(buf, PAGE_SIZE, "%d",
-+		shost->stats->state_recovery_count);
-+}
-+static DEVICE_ATTR_RO(state_recovery_count);
-+
-+static ssize_t state_other_count_show(struct device *dev,
-+	struct device_attribute *attr, char *buf)
-+{
-+	struct Scsi_Host *shost =3D class_to_shost(dev);
-+
-+	return scnprintf(buf, PAGE_SIZE, "%d",
-+		shost->stats->state_other_count);
-+}
-+static DEVICE_ATTR_RO(state_other_count);
-+
-+static struct attribute *scsi_shost_stats[] =3D {
-+	&dev_attr_state_last_change_time.attr,
-+	&dev_attr_state_first_change_time.attr,
-+	&dev_attr_state_running_ns.attr,
-+	&dev_attr_state_recovery_ns.attr,
-+	&dev_attr_state_other_ns.attr,
-+	&dev_attr_state_running_count.attr,
-+	&dev_attr_state_recovery_count.attr,
-+	&dev_attr_state_other_count.attr,
-+	NULL
-+};
-+
-+static struct attribute_group scsi_shost_stats_group =3D {
-+	.name =3D "stats",
-+	.attrs =3D scsi_shost_stats,
-+};
-+
- const struct attribute_group *scsi_shost_groups[] =3D {
- 	&scsi_shost_attr_group,
-+	&scsi_shost_stats_group,
- 	NULL
- };
-=20
-diff --git a/include/scsi/scsi_host.h b/include/scsi/scsi_host.h
-index 587cc767bb67..e6229567a295 100644
---- a/include/scsi/scsi_host.h
-+++ b/include/scsi/scsi_host.h
-@@ -513,11 +513,26 @@ struct scsi_host_template {
- 		return rc;						\
- 	}
-=20
-+/*
-+ * host statistics
-+ */
-+
-+struct scsi_host_stats {
-+	ktime_t state_running_ns;
-+	ktime_t state_recovery_ns;
-+	ktime_t state_other_ns;
-+	ktime_t state_first_change_time;
-+	ktime_t state_last_change_time;
-+	uint32_t state_running_count;
-+	uint32_t state_recovery_count;
-+	uint32_t state_other_count;
-+};
-=20
- /*
-  * shost state: If you alter this, you also need to alter scsi_sysfs.c
-  * (for the ascii descriptions) and the state model enforcer:
-- * scsi_host_set_state()
-+ * scsi_host_set_state() and if host state statistics are accounted
-+ * for correctly in scsi_host_do_state_stats()
-  */
- enum scsi_host_state {
- 	SHOST_CREATED =3D 1,
-@@ -704,6 +719,11 @@ struct Scsi_Host {
- 	 */
- 	struct device *dma_dev;
-=20
-+	/*
-+	 * Host statistics
-+	 */
-+	struct scsi_host_stats *stats;
-+
- 	/*
- 	 * We should ensure that this is aligned, both for better performance
- 	 * and also because some compilers (m68k) don't automatically force
+> 
+> > event-sources: Unable to request interrupt 23 for /event-sources/hot-plug-events
+> > WARNING: CPU: 0 PID: 1 at arch/powerpc/platforms/pseries/event_sources.c:26 request_event_sources_irqs+0xbc/0xf0
+> > Modules linked in:
+> > CPU: 0 PID: 1 Comm: swapper/0 Tainted: G        W          6.2.2-kc #1
+> > Hardware name: IBM pSeries (emulated by qemu) POWER9 (raw) 0x4e1200 0xf000005 of:SLOF,HEAD pSeries
+> > NIP:  c000000002022eec LR: c000000002022ee8 CTR: 0000000000000000
+> > REGS: c000000003483910 TRAP: 0700   Tainted: G        W           (6.2.2-kc)
+> > MSR:  8000000002029033 <SF,VEC,EE,ME,IR,DR,RI,LE>  CR: 24483200  XER: 00000000
+> > CFAR: c000000000180838 IRQMASK: 0 
+> > GPR00: c000000002022ee8 c000000003483bb0 c000000001a5ce00 0000000000000050 
+> > GPR04: c000000002437d78 c000000002437e28 0000000000000001 0000000000000001 
+> > GPR08: c000000002437d00 0000000000000001 0000000000000000 0000000044483200 
+> > GPR12: 0000000000000000 c000000002720000 c000000000012758 0000000000000000 
+> > GPR16: 0000000000000000 0000000000000000 0000000000000000 0000000000000000 
+> > GPR20: 0000000000000000 0000000000000000 0000000000000000 0000000000000000 
+> > GPR24: 0000000000000000 c0000000020033fc cccccccccccccccd c0000000000e07f0 
+> > GPR28: c000000000db0520 0000000000000000 c0000000fff92ac0 0000000000000017 
+> > NIP [c000000002022eec] request_event_sources_irqs+0xbc/0xf0
+> > LR [c000000002022ee8] request_event_sources_irqs+0xb8/0xf0
+> > Call Trace:
+> > [c000000003483bb0] [c000000002022ee8] request_event_sources_irqs+0xb8/0xf0 (unreliable)
+> > [c000000003483c40] [c000000002022fa0] __machine_initcall_pseries_init_ras_hotplug_IRQ+0x80/0xb0
+> > [c000000003483c70] [c0000000000121b8] do_one_initcall+0x98/0x300
+> > [c000000003483d50] [c000000002004b28] kernel_init_freeable+0x2ec/0x370
+> > [c000000003483df0] [c000000000012780] kernel_init+0x30/0x190
+> > [c000000003483e50] [c00000000000cf5c] ret_from_kernel_thread+0x5c/0x64
+> > --- interrupt: 0 at 0x0
+> >
+> > I did a bisect it and it seems that the offending commit is:
+> > baa49d81a94b ("powerpc/pseries: hvcall stack frame overhead")
+> >
+> > Reverting that and also dfecd06bc552 ("powerpc: remove
+> > STACK_FRAME_OVERHEAD"), because we need to re-introduce
+> > STACK_FRAME_OVERHEAD, seems to fix everything.
+> 
+> That function doesn't make a hcall, so presumably there was some earlier
+> problem which we only detect here.
+> 
+> cheers
