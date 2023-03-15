@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 229E46BB842
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 16:43:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78B026BB843
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 16:43:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232600AbjCOPnx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 11:43:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59946 "EHLO
+        id S232622AbjCOPn5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 11:43:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232286AbjCOPnq (ORCPT
+        with ESMTP id S232361AbjCOPnq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 15 Mar 2023 11:43:46 -0400
 Received: from box.trvn.ru (box.trvn.ru [194.87.146.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81D75664D3;
-        Wed, 15 Mar 2023 08:43:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C2107B124;
+        Wed, 15 Mar 2023 08:43:24 -0700 (PDT)
 Received: from authenticated-user (box.trvn.ru [194.87.146.52])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
-        by box.trvn.ru (Postfix) with ESMTPSA id 0BA7B40AC9;
-        Wed, 15 Mar 2023 20:43:19 +0500 (+05)
+        by box.trvn.ru (Postfix) with ESMTPSA id 8F98D41853;
+        Wed, 15 Mar 2023 20:43:20 +0500 (+05)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=trvn.ru; s=mail;
-        t=1678894999; bh=bHma5jkgRzcDX6jZxn7KcOr5IxK0IUPT6jvQbfkxZKs=;
+        t=1678895001; bh=xX7EYL7wXsayPKP8zgaIQPK4KiM6Req4Uxirxf+cywE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yBn4xK9IC4H97jwGWZrl2EaeztgwsGf0MzvdXtcK77AvXSHCxZ+7edYzGL7gdkG68
-         LucwaFoZDh5qKq/KbT5LmwmaHbkWQP8n7WOTIEYgqrKygvMVE0Zjcv+F4tNB/wi/z3
-         jx0LfDRJanrD99fbpatmQS0uVMbQHChRZv4pybmxbYYv/2jCF2ND5VgsMpQmqGqdrQ
-         QVUyDJgbwKYjFnfPW2t1447OaImnx9o0WOWitpGe49302ZKqW0lImHhUIMbhE5XZyd
-         u/01DYJzU5tRO1+8IWDKN1RrfbpuscZ2mTCaAp3Pz3vZyQ6lacMupRQeUtZbpYeOnf
-         X7XyixaAWGCnw==
+        b=IrA+D0VtP03Lkdms5G5i3OsiTMFo6u+dGSV2HyZ9KX1oFjuc0Z6To2bSIOvMkYu/H
+         o8r4rCbqfZAIP11oSFE3v/tnwpmOp3sTZu8dguT8G+liUKqVvgG53XUCuq0Z8ZNZk2
+         m1bqQ0ydAL2LWb+QV4XHTkrwtL8R0L180ShSPPZ8md05F3pfQXXhQXVS8amUo7k5bO
+         QRgJpJbxTble8Mdc5aXMrRBmAzSTZUVkzznF7t+xhuRiv6Ba/zHgD+46U5jHptF2My
+         Jpuiv2jGdK1RKw5IRIW+HN6Bosfi1a6Vsnq8Tm8nUrsaLuza/0uY8mxshNLgCB3XSM
+         KWpBbfRAxP9+A==
 From:   Nikita Travkin <nikita@trvn.ru>
 To:     agross@kernel.org, andersson@kernel.org
 Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
@@ -36,9 +36,9 @@ Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         ~postmarketos/upstreaming@lists.sr.ht,
         Nikita Travkin <nikita@trvn.ru>
-Subject: [PATCH v3 1/4] arm64: dts: qcom: sc7180: Don't enable lpass clocks by default
-Date:   Wed, 15 Mar 2023 20:43:08 +0500
-Message-Id: <20230315154311.37299-2-nikita@trvn.ru>
+Subject: [PATCH v3 2/4] arm64: dts: qcom: sc7180: Drop redundant disable in mdp
+Date:   Wed, 15 Mar 2023 20:43:09 +0500
+Message-Id: <20230315154311.37299-3-nikita@trvn.ru>
 In-Reply-To: <20230315154311.37299-1-nikita@trvn.ru>
 References: <20230315154311.37299-1-nikita@trvn.ru>
 MIME-Version: 1.0
@@ -52,57 +52,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-lpass clocks are usually blocked from HLOS by the firmware and
-instead are managed by the ADSP. Mark them as reserved and explicitly
-enable in the CrOS boards that have special, cooperative firmware.
+mdss is useless without a display controller which makes explicitly
+enabling mdp redundant. Have it enabled by default to drop the extra
+node for all users.
 
 Signed-off-by: Nikita Travkin <nikita@trvn.ru>
 ---
- arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi | 8 ++++++++
- arch/arm64/boot/dts/qcom/sc7180.dtsi         | 4 ++++
- 2 files changed, 12 insertions(+)
+ arch/arm64/boot/dts/qcom/sc7180-idp.dts      | 4 ----
+ arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi | 4 ----
+ arch/arm64/boot/dts/qcom/sc7180.dtsi         | 2 --
+ 3 files changed, 10 deletions(-)
 
+diff --git a/arch/arm64/boot/dts/qcom/sc7180-idp.dts b/arch/arm64/boot/dts/qcom/sc7180-idp.dts
+index c3bdd3295c02..828c8b55d925 100644
+--- a/arch/arm64/boot/dts/qcom/sc7180-idp.dts
++++ b/arch/arm64/boot/dts/qcom/sc7180-idp.dts
+@@ -339,10 +339,6 @@ &dsi_phy {
+ 	vdds-supply = <&vreg_l4a_0p8>;
+ };
+ 
+-&mdp {
+-	status = "okay";
+-};
+-
+ &mdss {
+ 	status = "okay";
+ };
 diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
-index 423630c4d02c..26def6e12723 100644
+index 26def6e12723..e72d49a3d97d 100644
 --- a/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
 +++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
-@@ -785,6 +785,14 @@ alc5682: codec@1a {
+@@ -818,10 +818,6 @@ dai-link@5 {
  	};
  };
  
-+&lpasscc {
-+	status = "okay";
-+};
-+
-+&lpass_hm {
-+	status = "okay";
-+};
-+
- &lpass_cpu {
+-&mdp {
+-	status = "okay";
+-};
+-
+ &mdss {
  	status = "okay";
- 
+ };
 diff --git a/arch/arm64/boot/dts/qcom/sc7180.dtsi b/arch/arm64/boot/dts/qcom/sc7180.dtsi
-index 53f0076f20f6..f0de177981f9 100644
+index f0de177981f9..4ee64ee824b3 100644
 --- a/arch/arm64/boot/dts/qcom/sc7180.dtsi
 +++ b/arch/arm64/boot/dts/qcom/sc7180.dtsi
-@@ -3623,6 +3623,8 @@ lpasscc: clock-controller@62d00000 {
- 			power-domains = <&lpass_hm LPASS_CORE_HM_GDSCR>;
- 			#clock-cells = <1>;
- 			#power-domain-cells = <1>;
-+
-+			status = "reserved"; /* Controlled by ADSP */
- 		};
+@@ -2983,8 +2983,6 @@ mdp: display-controller@ae01000 {
+ 				interrupt-parent = <&mdss>;
+ 				interrupts = <0>;
  
- 		lpass_cpu: lpass@62d87000 {
-@@ -3671,6 +3673,8 @@ lpass_hm: clock-controller@63000000 {
- 
- 			#clock-cells = <1>;
- 			#power-domain-cells = <1>;
-+
-+			status = "reserved"; /* Controlled by ADSP */
- 		};
- 	};
- 
+-				status = "disabled";
+-
+ 				ports {
+ 					#address-cells = <1>;
+ 					#size-cells = <0>;
 -- 
 2.39.2
 
