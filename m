@@ -2,104 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A1D66BA5A1
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 04:31:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 354E26BA5A3
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 04:32:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230336AbjCODbU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 23:31:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40936 "EHLO
+        id S229988AbjCODcP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 23:32:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230356AbjCODbB (ORCPT
+        with ESMTP id S229624AbjCODcA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 23:31:01 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 260885A6FB
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 20:30:59 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PbwsD5yWpz4x84;
-        Wed, 15 Mar 2023 14:30:56 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1678851057;
-        bh=C7o8lZh3la+ARp61z8zX6UlIB4h8fhIN+XU5tYi7KB0=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=Y4Xfb9GPvbRw5uGbXL63+VlFYKqkhM0em93sqrwXQ3jtjVdQG7I5/RRzdywXnxaLv
-         Qs86OVOrG4x2xmskRRROfNwCbWG+f+WYsRgHdGoA61lhSC7syfhItgq1J4OPpu+N05
-         xgrEkm1H8u41Gaa01iPVxR01SoQPyk/z6pAsgUCIfGG2nnMY9lx0bzjt1ZioQRhxkj
-         BK5mNLbp68pLzx9GdxsBIBatRkWEi35qjme6bdZclGD3j46IZT7Dai3oE+iNXDgFoa
-         2AIqdYbkJ56scPzCt0U4ps1z4d5/4TU3CqQtfrN3YoWWg8vycJqF6uPKZQUAJISHKR
-         jpBKKO4r0ih6A==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Andrea Righi <andrea.righi@canonical.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Oleg Nesterov <oleg@redhat.com>, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: boot regression on ppc64 with linux 6.2
-In-Reply-To: <ZA7oJr1/Z4vzWy4N@righiandr-XPS-13-7390>
-References: <ZA7oJr1/Z4vzWy4N@righiandr-XPS-13-7390>
-Date:   Wed, 15 Mar 2023 14:30:53 +1100
-Message-ID: <878rfyofma.fsf@mpe.ellerman.id.au>
+        Tue, 14 Mar 2023 23:32:00 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 271CFB479
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 20:31:59 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id k37so11675642wms.0
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 20:31:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678851117;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+3K7bYVcRRLpPV8fpY3rpueWArs0o2kU2/AdNJpK1ko=;
+        b=cOEu5P/hwLHjlqVidN+tKJXVsEbyMgHEGhh8ltEDz/3VkqILP+s0v59UvSs9sK+gR6
+         kxZfycgE45hMop12s442Zc33kDNccfuNFEj+2SsOAIoMJ29U3vYhHDIzFyeaN1WUSWN9
+         6nkGDPoMSjnRDTbZp3z2i4l4s+bPhDwKcBBw4EBoBj9iMsESgIIi1gfOSpJpqoogFG6K
+         +bsCxcgxj+UMkWikEu14reM0CcxuDgGUbQZwtFG2qrsTBnYAz9MDHjt6QFdupxkurHcb
+         L4Ytg+11Tliv5D0ICoBZqznBwRFXmQVBAIhbH1QmJKp0WS1+7qZ7kJqg/AOGWxoiN9IM
+         6Cjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678851117;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+3K7bYVcRRLpPV8fpY3rpueWArs0o2kU2/AdNJpK1ko=;
+        b=dNFltPottvzr3RS7xtcJJ3LCmRcFrVUC9amLt0oYdwvPdHbARqqNm8AGgPk60tKHFW
+         WcO6kM+qbrwK1qlpse3MzN3sg8UlFKehhIF8ipYrQHSbaGUccBVb1fWBmpXa8kQRtcBO
+         ITQG3ztAxElxbBVULNYY0xk5R6sIenzjUw07bNraB1bPj44FYJzAfo62VtM5YTialgUC
+         tmTqRsVO8z81M/YoqqcewrT81gc/U5d6SVPxajdzqXWtTQx4vjwpGtTXEBKnZ8x4JG26
+         6QXKUFbmo6IROIH85IuWPD/QTt13J4SUIeAZ9WCaGs/c/52aiQwpisi+t+FYrkc7o5XL
+         Cv0A==
+X-Gm-Message-State: AO0yUKWvSlppiH3sTYFqJ+HL9IvnpOWHCjdx4wd1XecC4YXG+tWy/Aw3
+        j6qBW2TU2wBYQa6Ul0XkvpTWHBsF0XuWZAyIuWNjRLEqfN8=
+X-Google-Smtp-Source: AK7set/T35h/tf031R5686OL6NCAQ0FZAq/RRLVR47zXGIPZVpoQM9p2OR7kE2GLalnttfZU5prsS0VUpTa78MWPf5U=
+X-Received: by 2002:a05:600c:35cd:b0:3eb:8ac:eeab with SMTP id
+ r13-20020a05600c35cd00b003eb08aceeabmr4794543wmq.0.1678851117178; Tue, 14 Mar
+ 2023 20:31:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <CAJNi4rNSHf3N6KrBNcVXKo-wjSPmZa2xan9WPmrER8Ttir-MDA@mail.gmail.com>
+ <CAJNi4rO6TiZFFKTcW3kGgha2Rc0nTsXRLyeqAyYrN3foLbExSQ@mail.gmail.com>
+In-Reply-To: <CAJNi4rO6TiZFFKTcW3kGgha2Rc0nTsXRLyeqAyYrN3foLbExSQ@mail.gmail.com>
+From:   richard clark <richard.xnu.clark@gmail.com>
+Date:   Wed, 15 Mar 2023 11:31:45 +0800
+Message-ID: <CAJNi4rNyDWY5xrVr0qZADNTSjhTko=OXVUDRmvuDKWTNX-NU1w@mail.gmail.com>
+Subject: Re: Question about select and poll system call
+To:     linux-kernel@vger.kernel.org
+Cc:     torvalds@linux-foundation.org,
+        linux-arm-kernel@lists.infradead.org, vlobanov@speakeasy.net,
+        hch@lst.de, viro@zeniv.linux.org.uk, dipankar@in.ibm.com,
+        akpm@osdl.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Andrea Righi <andrea.righi@canonical.com> writes:
-> I'm triggering the following bug when booting my qemu powerpc VM:
+Adding more people...
 
-I'm not seeing that here :/
+I did some homework and found that the FD_SETSIZE question seems
+related with below 2 commits:
+1. 4e6fd33b7560 ("enforce RLIMIT_NOFILE in poll()")
+"POSIX states that poll() shall fail with EINVAL if nfds > OPEN_MAX.
+In this context, POSIX is referring to sysconf(OPEN_MAX), which is the
+value of current->signal->rlim[RLIMIT_NOFILE].rlim_cur in the linux
+kernel...". IOW, the nfds suggested by POSIX is kind of configurable,
+making sense for Linux kernel to link it with rlimit.
+2. bbea9f69668a ("fdtable: Make fdarray and fdsets equal in size")
+This commit uses the fdt->max_fds instead of FD_SETSIZE suggested by
+POSIX, but gives no reason to do that.
 
-Can you give a bit more detail?
- - qemu version
- - qemu command line
- - what userspace are you using?
- - full dmesg of the failing case
+Curiously I did some tests on Linux and macOS, the testing code snippet:
 
-> event-sources: Unable to request interrupt 23 for /event-sources/hot-plug-events
-> WARNING: CPU: 0 PID: 1 at arch/powerpc/platforms/pseries/event_sources.c:26 request_event_sources_irqs+0xbc/0xf0
-> Modules linked in:
-> CPU: 0 PID: 1 Comm: swapper/0 Tainted: G        W          6.2.2-kc #1
-> Hardware name: IBM pSeries (emulated by qemu) POWER9 (raw) 0x4e1200 0xf000005 of:SLOF,HEAD pSeries
-> NIP:  c000000002022eec LR: c000000002022ee8 CTR: 0000000000000000
-> REGS: c000000003483910 TRAP: 0700   Tainted: G        W           (6.2.2-kc)
-> MSR:  8000000002029033 <SF,VEC,EE,ME,IR,DR,RI,LE>  CR: 24483200  XER: 00000000
-> CFAR: c000000000180838 IRQMASK: 0 
-> GPR00: c000000002022ee8 c000000003483bb0 c000000001a5ce00 0000000000000050 
-> GPR04: c000000002437d78 c000000002437e28 0000000000000001 0000000000000001 
-> GPR08: c000000002437d00 0000000000000001 0000000000000000 0000000044483200 
-> GPR12: 0000000000000000 c000000002720000 c000000000012758 0000000000000000 
-> GPR16: 0000000000000000 0000000000000000 0000000000000000 0000000000000000 
-> GPR20: 0000000000000000 0000000000000000 0000000000000000 0000000000000000 
-> GPR24: 0000000000000000 c0000000020033fc cccccccccccccccd c0000000000e07f0 
-> GPR28: c000000000db0520 0000000000000000 c0000000fff92ac0 0000000000000017 
-> NIP [c000000002022eec] request_event_sources_irqs+0xbc/0xf0
-> LR [c000000002022ee8] request_event_sources_irqs+0xb8/0xf0
-> Call Trace:
-> [c000000003483bb0] [c000000002022ee8] request_event_sources_irqs+0xb8/0xf0 (unreliable)
-> [c000000003483c40] [c000000002022fa0] __machine_initcall_pseries_init_ras_hotplug_IRQ+0x80/0xb0
-> [c000000003483c70] [c0000000000121b8] do_one_initcall+0x98/0x300
-> [c000000003483d50] [c000000002004b28] kernel_init_freeable+0x2ec/0x370
-> [c000000003483df0] [c000000000012780] kernel_init+0x30/0x190
-> [c000000003483e50] [c00000000000cf5c] ret_from_kernel_thread+0x5c/0x64
-> --- interrupt: 0 at 0x0
+static int test(void)
+{
+    int err =3D 0;
+    int nfds =3D FD_SETSIZE;
+    fd_set rfds, wfds, efds;
+
+    FD_ZERO(&rfds);
+    FD_ZERO(&wfds);
+    FD_ZERO(&efds);
+
+    err =3D select(nfds + 1, &rfds, &wfds, &efds, NULL);
+    if (err < 0)
+        perror("select failed");
+    return err;
+
+}
+
+The test results as:
+Linux
+~~~~
+Blocked at select
+
+macOS
+~~~~~~
+select failed: Invalid argument
+
+Thanks!
+
+On Tue, Mar 14, 2023 at 10:31=E2=80=AFAM richard clark
+<richard.xnu.clark@gmail.com> wrote:
 >
-> I did a bisect it and it seems that the offending commit is:
-> baa49d81a94b ("powerpc/pseries: hvcall stack frame overhead")
+> Adding linux-arm-kernel@lists.infradead.org ... for more possible feedbac=
+k:)
 >
-> Reverting that and also dfecd06bc552 ("powerpc: remove
-> STACK_FRAME_OVERHEAD"), because we need to re-introduce
-> STACK_FRAME_OVERHEAD, seems to fix everything.
-
-That function doesn't make a hcall, so presumably there was some earlier
-problem which we only detect here.
-
-cheers
+> On Tue, Mar 14, 2023 at 10:28=E2=80=AFAM richard clark
+> <richard.xnu.clark@gmail.com> wrote:
+> >
+> > Hi, (Sorry, not find the maintainers for this subsystem, so to the lkml=
+)
+> >
+> > There're two questions about these system calls:
+> > 1. According to https://pubs.opengroup.org/onlinepubs/7908799/xsh/selec=
+t.html:
+> > ERRORS
+> > [EINVAL]
+> >       The nfds argument is less than 0 or greater than FD_SETSIZE.
+> > But the current implementation in Linux like:
+> >        if (nfds > FD_SETSIZE)
+> >                nfds =3D FD_SETSIZE
+> > What's the rationale behind this?
+> >
+> > 2. Can we unify the two different system calls? For example, using
+> > poll(...) to implement the frontend select call(...), is there
+> > something I'm missing for current implementation? The Cons and Pros,
+> > etc
+> >
+> > Thanks,
