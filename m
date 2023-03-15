@@ -2,102 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98FB96BB43E
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 14:15:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B0446BB444
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 14:16:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232039AbjCONPw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 09:15:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36988 "EHLO
+        id S231784AbjCONQT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 09:16:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231987AbjCONPl (ORCPT
+        with ESMTP id S229878AbjCONQH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 09:15:41 -0400
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36644A2270
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 06:15:26 -0700 (PDT)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-54184571389so218460187b3.4
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 06:15:26 -0700 (PDT)
+        Wed, 15 Mar 2023 09:16:07 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCFDFA4B1C
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 06:15:39 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id z21so10055946edb.4
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 06:15:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678886125;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qKgeEmw/6W0SWieMcWQ02VSSFIpAhVBllMmTeozBA90=;
-        b=vnKbivHAWG4rRuutoxN8eNw484KPYMNhikRTBCt8G/nWJuT69AWcQiGAq8f69sOa6u
-         z0xnNp6NlQJ+5qJQ5XNP1rwgAEwQkJaWScn+EXWKbsPqx/VDj2x3Kbs8usgF/oxIIyOD
-         thzxE07NGt8bNJsMIpQ8TDvtzffeR47nm0n70N2+rpwrjyhwSUgxwNU/liuL8+3UFEi2
-         2vok6HunFiuEViEPIohmbPY9mVjHqCY+tN6e9Z2EZiHfhgwo5xor2AemgU0zrwpVzlKu
-         iVMffQO0GexUOU7LAIn9v/lVZ2wreHQyVOCiGbXnQzCpAqN05aJAo7UxjcUWuqY+CC45
-         8NAQ==
+        d=linaro.org; s=google; t=1678886138;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=sh/0lfXx2YGCfUW8P5NOZDeAvWoK41WrCTMwsh/Wj/M=;
+        b=cA/Lke8j9AwLAJVu8tB2KZKoMBwahpyKQIP6vfQihqmAfLlzBhMYZZn1QJBMK0rotA
+         8uy79PoXvGcO7j/nBlK1woapvgYGHT0rRCwJxXV3lY3EaMbzogH4x+5n6GIV9w/OPhqq
+         cHmzj7yk8RJ5J1jevNRi+31nQ6sAOft15CS76opGJ0vVY7sqr3fT08rJ0CfKilP30Oq5
+         TAf0Qchm+zJ8lkhdFW5Q7+1NNckrltUIXIlVFEVVuGg89d+jCflLaD6UvnA500auC4T0
+         lLnhFqVV4JZMOsrrTPY8PaWRTpKT86NYAyOiI1vbJMRc9xGRAD080c7PJYwLwRguoTCF
+         aA+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678886125;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qKgeEmw/6W0SWieMcWQ02VSSFIpAhVBllMmTeozBA90=;
-        b=h1SU7cX55yNvyv+s7q11qd6O18ovZDcJh4skF4WeRMnZEMN33cY43TcSHEWQtDCeil
-         wUb67W1DHcu+9qBvkbVXJAjTcIQKOUg7bv7QcCK8c5aLKPNZcPCBmuniqJoPRHsu2unz
-         Nb6naHLnv+5bI+sHvPhf0fZsAiu/FDPpvPF6panzia5+hp/cRCqDxrrVJs4LaeUCHbSh
-         9a6zXDyxweQuVhCeZqVljDRBCHSpaN+73TeLB2Pdte+Uz187wOrkA/srQoNoE6ONt8nC
-         K/rwcHrFlis1JPNPFwHySq3EpRVzN4vCSpHYLaVAItVp62AsMYUv8H+j9mm7w9J9OcDp
-         9FvA==
-X-Gm-Message-State: AO0yUKW7UUvVI2ycv+vnXZX/+yj0JC4h91/83pXI/CABpn9r2fkR20of
-        nayUAfSb8lkAaJNb+7vsqmJGYH6lQPM1gCVbMaiXaw==
-X-Google-Smtp-Source: AK7set8wwlb4JftADZ2nivxvmDTdDwmo8imStsXd2xZrBkPcNMUIXCXOSzOGwgYGRe3Ii1cmgJgP/sIa1U6H5U0/7wQ=
-X-Received: by 2002:a05:690c:445:b0:53d:2dcf:890d with SMTP id
- bj5-20020a05690c044500b0053d2dcf890dmr13772804ywb.4.1678886125155; Wed, 15
- Mar 2023 06:15:25 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1678886138;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=sh/0lfXx2YGCfUW8P5NOZDeAvWoK41WrCTMwsh/Wj/M=;
+        b=oEsQjA9XjQZ/ejMLmsnJrFe/DnNdIZMEF5svqS+ufu2pPiKNBbGe5yRSVRPoQBuyCc
+         jxrKKFQSI+7Y8/tHMtzfpuSSl08K6WmDTgGWQXp+SeMOxpBXZGg+eAdH13+aIEDJFeRS
+         X/gD0FsKOsKLPxEhfAUinlxecyuQ/awVVoNegopuqP8ptMz2gWmCCOA2mutVQwS+9fsw
+         k0CWyaB1eh8CmJxptwJOPKw376fUt/mpfP2HFXtIMjlki0wLJXp26LjzBpRaGUoG93cU
+         DyXp+4+EYOFVBr7TJcHU5wclLO5uiO8pPiIGlUKg2LuiSFw1mgusg3XEdkGXaBUCzCuv
+         LVGg==
+X-Gm-Message-State: AO0yUKXWpsSBHBhsNncApfntNZlncC1OUch4gT+wfwu3Znvq35MgunTC
+        bZS2WgG1E+3CTD+ENyb+M0qHcA==
+X-Google-Smtp-Source: AK7set9m7wcnRkjdKqJAYCge+cDpe0LdwADbdp1K85HBJ1bZ79ULzEuutWk+UWdrVw8UYdcQFgLY/w==
+X-Received: by 2002:a17:906:58c6:b0:92b:e87a:5d8b with SMTP id e6-20020a17090658c600b0092be87a5d8bmr7809675ejs.35.1678886138083;
+        Wed, 15 Mar 2023 06:15:38 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:940e:8615:37dc:c2bd? ([2a02:810d:15c0:828:940e:8615:37dc:c2bd])
+        by smtp.gmail.com with ESMTPSA id gt16-20020a1709072d9000b008c327bef167sm2498458ejc.7.2023.03.15.06.15.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Mar 2023 06:15:37 -0700 (PDT)
+Message-ID: <8c441aca-3676-60bd-9303-230c1410eb41@linaro.org>
+Date:   Wed, 15 Mar 2023 14:15:36 +0100
 MIME-Version: 1.0
-References: <20230315130917.3633491-1-a.fatoum@pengutronix.de>
-In-Reply-To: <20230315130917.3633491-1-a.fatoum@pengutronix.de>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 15 Mar 2023 14:15:13 +0100
-Message-ID: <CACRpkdbowrfYZpNKA32S8GT=8x_h+ZW4gd2Kj6FZkP1SZmDEPw@mail.gmail.com>
-Subject: Re: [PATCH net 1/2] net: dsa: realtek: fix out-of-bounds access
-To:     Ahmad Fatoum <a.fatoum@pengutronix.de>
-Cc:     =?UTF-8?Q?Alvin_=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>, kernel@pengutronix.de,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v2 2/7] soc: qcom: icc-bwmon: Handle global registers
+ correctly
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230304-topic-ddr_bwmon-v2-0-04db989db059@linaro.org>
+ <20230304-topic-ddr_bwmon-v2-2-04db989db059@linaro.org>
+ <7a143671-372a-3af8-7804-fe12f858f853@linaro.org>
+ <dc831034-98ec-9d8c-1220-9934c9d5b79e@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <dc831034-98ec-9d8c-1220-9934c9d5b79e@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 15, 2023 at 2:09=E2=80=AFPM Ahmad Fatoum <a.fatoum@pengutronix.=
-de> wrote:
+On 15/03/2023 11:13, Konrad Dybcio wrote:
+>>>  }
+>>>  
+>>>  static int bwmon_probe(struct platform_device *pdev)
+>>> @@ -645,6 +816,21 @@ static const struct icc_bwmon_data msm8998_bwmon_data = {
+>>>  	.quirks = BWMON_HAS_GLOBAL_IRQ,
+>>>  	.regmap_fields = msm8998_bwmon_reg_fields,
+>>>  	.regmap_cfg = &msm8998_bwmon_regmap_cfg,
+>>> +	.global_regmap_fields = msm8998_bwmon_global_reg_fields,
+>>> +	.global_regmap_cfg = &msm8998_bwmon_global_regmap_cfg,
+>>> +};
+>>> +
+>>> +static const struct icc_bwmon_data sdm845_ddr_bwmon_data = {
+>>
+>> The name "ddr" is here (and other places) confusing. This is not the DDR
+>> bwmon.
+> I suppose cpu_bwmon could make more sense?
 
-> The probe function sets priv->chip_data to (void *)priv + sizeof(*priv)
-> with the expectation that priv has enough trailing space.
->
-> However, only realtek-smi actually allocated this chip_data space.
-> Do likewise in realtek-mdio to fix out-of-bounds accesses.
->
-> Fixes: aac94001067d ("net: dsa: realtek: add new mdio interface for drive=
-rs")
-> Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
+Yes, we keep calling it CPU.
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Best regards,
+Krzysztof
 
-That this worked for so long is kind of scary, and the reason why we run Ka=
-san
-over so much code, I don't know if Kasan would have found this one.
-
-Rewriting the whole world in Rust will fix this problem, but it will
-take a while...
-
-Yours,
-Linus Walleij
