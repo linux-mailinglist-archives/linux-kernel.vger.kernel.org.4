@@ -2,74 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8061B6BAB9F
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 10:07:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 787116BAB8D
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 10:06:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230009AbjCOJH3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 05:07:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51736 "EHLO
+        id S231907AbjCOJGj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 05:06:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231974AbjCOJG7 (ORCPT
+        with ESMTP id S231854AbjCOJGI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 05:06:59 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FBA97C3DE
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 02:05:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678871101;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=5Mqz4aBhLPd8yTktiuvKtk7CpkmrnJC3LuH6Fk/wXuQ=;
-        b=CqamNLfdb/JYLpDLGnkdNHYzqXkhnsLkKIaDbAqxlQyP0LnF88cGHbRssuamrJbIobpMcA
-        GUskOTJrhxqRlMUa3FF7h7kHm1PmLSWXXCmq5H2bmA4QP8OE+Pd/SIrURT18Asw8Igs4/e
-        LjRFjGi7OE6i6bAZw8dGkIQKpGlrdxM=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-370-y8ENYj6HMtqbxEJlqJBR-A-1; Wed, 15 Mar 2023 05:05:00 -0400
-X-MC-Unique: y8ENYj6HMtqbxEJlqJBR-A-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6EF6B801206;
-        Wed, 15 Mar 2023 09:04:59 +0000 (UTC)
-Received: from sirius.home.kraxel.org (unknown [10.39.192.211])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id CFF601410F1B;
-        Wed, 15 Mar 2023 09:04:58 +0000 (UTC)
-Received: by sirius.home.kraxel.org (Postfix, from userid 1000)
-        id 5C88A1800393; Wed, 15 Mar 2023 10:04:57 +0100 (CET)
-Date:   Wed, 15 Mar 2023 10:04:57 +0100
-From:   Gerd Hoffmann <kraxel@redhat.com>
-To:     Andy Lutomirski <luto@kernel.org>
-Cc:     Evgeniy Baskov <baskov@ispras.ru>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        Peter Jones <pjones@redhat.com>,
-        "Limonciello, Mario" <mario.limonciello@amd.com>,
-        joeyli <jlee@suse.com>, lvc-project@linuxtesting.org,
-        the arch/x86 maintainers <x86@kernel.org>,
-        linux-efi@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v5 00/27] x86_64: Improvements at compressed kernel stage
-Message-ID: <20230315090457.6spo4f4v2l4qwdu2@sirius.home.kraxel.org>
-References: <cover.1678785672.git.baskov@ispras.ru>
- <d575db7f-bad3-477e-a501-19d2d84527cd@app.fastmail.com>
- <ea1b6e36-c434-49e9-bede-b4bd2b41868d@app.fastmail.com>
+        Wed, 15 Mar 2023 05:06:08 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 610AE76174;
+        Wed, 15 Mar 2023 02:05:27 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id gp15-20020a17090adf0f00b0023d1bbd9f9eso1161332pjb.0;
+        Wed, 15 Mar 2023 02:05:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678871124;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ugYL4TNtZvwrVkLduJBp9Mq9b8UJmnrNVU/4mmVcPg0=;
+        b=RwYVOEKud4H6FfMOxVCyC7xeqK63iZXfuB7LiwcmKzNjZvLojhRlIgnoIK7pcdnv4G
+         xt31v1sDDk1UqkRWo4OBlJGOQ6XemZAuHfsNZBOdTGsK8/BIIixccCm0KpsR1HbaSNo8
+         zX/pljBKEo+XPpGyi1WY3UqFBzu5uCEDeDcMAYq1syaA8lA9cBDB3q6XAB91Df1lR+7H
+         rPajgmAZ7uk5/KDCA1nQjWRUq/truKiAWCuX6OEBYY7L+vkzqTr8Jp5x11hz/0fm3gTK
+         ucORaHf8rp4hyqSAxnztPqMQW4ilt8OrfVXDTBjf6qB2D+ZZ2Tcnln3NtdZcuttsUe+R
+         37aw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678871124;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ugYL4TNtZvwrVkLduJBp9Mq9b8UJmnrNVU/4mmVcPg0=;
+        b=h2z4KjHLlTQ97/IbmQNlEOrwFcZ7hKLHMFpAslC5SQGamls8WilrHSEOmPgq0YP/Kj
+         IaQs8N3389R0/xR/DPz7vt3HURaiZZtx95k6GYERt1febuzbtfNVkxCsIdmK3VEkY5g5
+         ekbNbOKN2Gcgh0UfTGZJdZF/81pzaA8/Er3TN/VweJNmW/boPnw2dBxCyNenp6T2LWig
+         p+qSdG4E8VsU0IMnD3dpIPH5Ud4GtjiXPA8CgyIb89oWpad29eta7+8YPTWxN8fKiMht
+         9vBxWB4106ohAY0TO/nmoBLtVe3iVolfK3UdkzQOHopZfhLNGLdhH51mTB6e25QknsO+
+         9mHg==
+X-Gm-Message-State: AO0yUKXh50tweZrdoZ27ymk6pwRHKVEIxopS8t0btb4vPnacJbh92mKv
+        V6ceYYd04L6h161KIhy/9tk=
+X-Google-Smtp-Source: AK7set9XMoP5ypO0me4udx1ZPpoo3BETNGUFYvDOvil4trx5wm/3hqbffm4zvy4f71yn3y7FbxpyaQ==
+X-Received: by 2002:a05:6a20:4b0f:b0:d3:5c72:8fb4 with SMTP id fp15-20020a056a204b0f00b000d35c728fb4mr11757239pzb.60.1678871124369;
+        Wed, 15 Mar 2023 02:05:24 -0700 (PDT)
+Received: from chcpu13.cse.ust.hk (191host119.mobilenet.cse.ust.hk. [143.89.191.119])
+        by smtp.gmail.com with ESMTPSA id q25-20020a62e119000000b005d6999eec90sm3006884pfh.120.2023.03.15.02.05.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Mar 2023 02:05:23 -0700 (PDT)
+From:   Wei Chen <harperchen1110@gmail.com>
+To:     dilinger@queued.net
+Cc:     deller@gmx.de, linux-geode@lists.infradead.org,
+        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, Wei Chen <harperchen1110@gmail.com>
+Subject: [PATCH] fbdev: lxfb: Fix potential divide by zero
+Date:   Wed, 15 Mar 2023 09:05:18 +0000
+Message-Id: <20230315090518.1037674-1-harperchen1110@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ea1b6e36-c434-49e9-bede-b4bd2b41868d@app.fastmail.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,49 +70,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  Hi,
+var->pixclock can be assigned to zero by user. Without proper
+check, divide by zero would occur in lx_set_clock.
 
-> And *this* seems to be the actual issue:
-> 
-> https://github.com/rhboot/shim/pull/459/commits/825d99361b4aaa16144392dc6cea43e24c8472ae
-> 
-> I assume that MS required this change as a condition for signing, but what do I know?
+Error out if var->pixclock is zero.
 
-Your guess is correct.  UEFI world is moving to being stricter, for
-example set page permissions according to the allocation type (RW for
-data, RX for code).
+Signed-off-by: Wei Chen <harperchen1110@gmail.com>
+---
+ drivers/video/fbdev/geode/lxfb_core.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Microsoft raised the bar for PE binaries when it comes to secure boot
-signing as part of that effort.  Being a valid PE binary according to
-the PE spec is not good enough, some additional constrains like sections
-not overlapping and sections with different load flags not sharing pages
-(so setting strict page permissions is actually possible) are required
-now.  Stuff which is standard since years elsewhere.
-
->  Anyway, the rules appear to be that the PE sections must not be both W and X at the same size.
-
-That too.
-
-> But I still think we should keep the demand-faulting code as a
-> fallback, even if it's hardcoded as RW, and just log the fault mode
-> and address.  We certainly shouldn't be *executing* code that wasn't
-> identity mapped.  Unless that code is boot services and we're creating
-> the boot services mappings!
-
-Agree.
-
-> For that matter, how confident are we that there aren't crappy boot
-> services implementations out there that require that we fix up page
-> faults? After all, it's not like EFI implementations, especially early
-> ones, are any good.
-
-I don't expect much problems here.  Early EFI implementations don't
-bother setting page permissions and just identity-map everything using
-rwx huge pages, or run with paging turned off (hello ia32).
-
-But playing safe (and keep demand-faulting just in case) is a good idea
-nevertheless.
-
-take care,
-  Gerd
+diff --git a/drivers/video/fbdev/geode/lxfb_core.c b/drivers/video/fbdev/geode/lxfb_core.c
+index 8130e9eee2b4..556d8b1a9e06 100644
+--- a/drivers/video/fbdev/geode/lxfb_core.c
++++ b/drivers/video/fbdev/geode/lxfb_core.c
+@@ -235,6 +235,9 @@ static void get_modedb(struct fb_videomode **modedb, unsigned int *size)
+ 
+ static int lxfb_check_var(struct fb_var_screeninfo *var, struct fb_info *info)
+ {
++	if (!var->pixclock)
++		return -EINVAL;
++
+ 	if (var->xres > 1920 || var->yres > 1440)
+ 		return -EINVAL;
+ 
+-- 
+2.25.1
 
