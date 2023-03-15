@@ -2,257 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCF696BC024
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 23:52:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AE826BC036
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 23:54:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231791AbjCOWwe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 18:52:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49370 "EHLO
+        id S229546AbjCOWyV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 18:54:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbjCOWwc (ORCPT
+        with ESMTP id S232270AbjCOWyR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 18:52:32 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8183B591D8;
-        Wed, 15 Mar 2023 15:51:57 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id h9so21087173ljq.2;
-        Wed, 15 Mar 2023 15:51:57 -0700 (PDT)
+        Wed, 15 Mar 2023 18:54:17 -0400
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BE5C50FB7
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 15:53:41 -0700 (PDT)
+Received: by mail-pj1-x1049.google.com with SMTP id d3-20020a17090acd0300b00237659aae8dso1624523pju.1
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 15:53:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678920711;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=GRAxQ44/xEha2xjWe0KQcS5iudbixD7wXTc+nBeJq0k=;
-        b=R9FtGSo5kh/ru5IcdulU22LTXr+vuqLWwfZpHQ0wYrBGmEtQjowK1Pv2waw9jCda+t
-         ea4n/W7iKN4WKkAQNYuLWPwuOG6foMzcD6YMLCKvUzMyVsa0EtkrYkPsNwmckKVeK4WJ
-         dwx0UaHi4ZLfFUyLqAUpyKMt124m7FwU4LeP3gPIudZGI+7sA2jtE+zcaPRv1akEXQ3V
-         gzycAaKJcUm8f2mBOSf6iacSe0oEabTPilbUlJharI9y2r34//AEK+zZ9qiuwRHcNMZH
-         p0fWKtmqut4pWdLyGAL3RXMmImzTrRSOvqJmE1xgnVAZjH3Q1bKYbjTxT5EnzadSr7Z2
-         +RRw==
+        d=google.com; s=20210112; t=1678920821;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=5IjZBzmYfOxuUAk9Wp5OhIFThytGtbjuPg10gNWTiKg=;
+        b=X710boA9PzUplR36EbJVYxlgU9RIibRuaPj4iN/Wb8gbsQ1YhtJrm3VwiSCCojuXeY
+         vGOMq9qQPnCcPFPOKX78tRTAMsBjLOqOiE6s5CkZqOB1+aEGy2QN4TFABssKFl3W/p1m
+         mxwNLqYid90p/PlEkCPASmIXyqGQpYBYZbNCQ4tPu8YnQS5AnZq+ljOtzqmNhASgFmTC
+         tcigX5oluffGxEV5WwrpY5QONuhzkJN8atG5CxsqlPpyzRRmBwIq6U4kKUA5M+KD11tm
+         Vsd2lvyyBw1cSQnJBa5gY3+Z+tIIqHuNenKDQ954bJ4tWEZgN9OMFdzwITGoeZI6LAG4
+         V2Mw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678920711;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=GRAxQ44/xEha2xjWe0KQcS5iudbixD7wXTc+nBeJq0k=;
-        b=MmrzbtN51W2Mdf2utHuR8OULHYINeT9qU4ZjvXpVR8QsaALOBEIqu84chkjYn+CPtg
-         UYOzs0764ihzoZknBa5QZr0zkHCKTMiQhIkT/4zXA7N4uSW3LVeRs/+lCqkSi9LRnj4l
-         7c+FR69vQCUmf3nSYLBCqq86D7PVsl49mFV4rigbAmZwkD5E9bpTx34tmf87EG/0R4l/
-         JFTC2dXlGUN/a1fT1XdZRL9g6w3+tXmeyEaz1jh6WRZCFQ1YrNK8ZWIA2xC2DXK+l9He
-         3diGyVNnN0gPpsKnly3RHpISYpUgUrkyHBvzeXml1bdEsRns9c0LFKw7G8jENIjpgRBE
-         3CvA==
-X-Gm-Message-State: AO0yUKWWqsVXsYw2uN1AEuXbz8PQUNAvmVkGqFssHwPxSwESYRhKmI0a
-        CHd0xGv+pKFEc4PO5pm4pnI=
-X-Google-Smtp-Source: AK7set8MBg80yoMbCikXcU7UUzOvdz+moNHgcLpLOrtwKUGCX+berfCaQ1F8DFajDjaTuNztX/D6qA==
-X-Received: by 2002:a05:651c:19a4:b0:293:a444:f70f with SMTP id bx36-20020a05651c19a400b00293a444f70fmr1976749ljb.33.1678920711090;
-        Wed, 15 Mar 2023 15:51:51 -0700 (PDT)
-Received: from localhost.localdomain ([46.211.236.70])
-        by smtp.googlemail.com with ESMTPSA id a1-20020a2e9801000000b00293534d9760sm1023803ljj.127.2023.03.15.15.51.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Mar 2023 15:51:50 -0700 (PDT)
-From:   Denis Pauk <pauk.denis@gmail.com>
-Cc:     linux@roeck-us.net, jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, pauk.denis@gmail.com,
-        mischief@offblast.org, de99like@mennucci.debian.net
-Subject: [PATCH v3] hwmon: (nct6775) update ASUS WMI monitoring list A520/B360/B460/B550...
-Date:   Thu, 16 Mar 2023 00:51:28 +0200
-Message-Id: <20230315225128.1236-1-pauk.denis@gmail.com>
-X-Mailer: git-send-email 2.39.2
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,
-        UPPERCASE_50_75 autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+        d=1e100.net; s=20210112; t=1678920821;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5IjZBzmYfOxuUAk9Wp5OhIFThytGtbjuPg10gNWTiKg=;
+        b=B6Wt5597mIu+NvEY1KnaT6B/ZFaj5JrKJRGKcVFj7aEO9deOPaJ0GjITOVmDFxrg1n
+         6FU2nDCvOXq6mUrGqT+S6AHTuDV2YPaaw5CXGeVgUC9/GUkvWNW6NTsjZ/aw6TzNvINF
+         ITh490CwBKjRhfD4CAqMi8mhZaCvpovOZutXGpVivvVjIz6VPIZWteBNw9zfRyfcTrFi
+         GtQPwORg0HjO7mSADcHINu9wq1r3kj+tmg18h2Hv8HewzOOnlSt5dAM8P+CAoVL93rQG
+         9SyqiTSwJOGtSbPLhF8+BY6sT8UQZBuCrbsgSokkabaqaXxia+xrgNLfelQMsT/BrTi3
+         +X0w==
+X-Gm-Message-State: AO0yUKVOO6ky/LnywTfi//7HYfO02tx3a1zuQkJrfNsJ0KDbKMUTqI2W
+        FFZ/MhzhziQhggXMmdgbd2TwJt45s0g=
+X-Google-Smtp-Source: AK7set8tX2kO0D/KT+tsILppg4BLvkxjQlZpG+8xkPe1JsJ5viaTykbZT3C8Woss1pFF9vrbc5j0C1x/1nc=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a17:90a:eb08:b0:23b:4e6e:aed9 with SMTP id
+ j8-20020a17090aeb0800b0023b4e6eaed9mr472733pjz.9.1678920820723; Wed, 15 Mar
+ 2023 15:53:40 -0700 (PDT)
+Date:   Wed, 15 Mar 2023 15:53:39 -0700
+In-Reply-To: <20230127133601.1165472-1-yu.c.zhang@linux.intel.com>
+Mime-Version: 1.0
+References: <20230127133601.1165472-1-yu.c.zhang@linux.intel.com>
+Message-ID: <ZBJMc24vyL3X9RHa@google.com>
+Subject: Re: [PATCH] KVM: selftest: Add dependency rules in makefile for C
+ source code
+From:   Sean Christopherson <seanjc@google.com>
+To:     Yu Zhang <yu.c.zhang@linux.intel.com>
+Cc:     pbonzini@redhat.com, shuah@kernel.org, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Boards such as
-* EX-B660M-V5 D4,
-* PRIME A520M-A,
-* PRIME A520M-A II,
-* PRIME A520M-E,
-* PRIME A520M-K,
-* PRIME B360M-A,
-* PRIME B360M-C,
-* PRIME B460M-A R2.0,
-* PRIME B550M-A AC,
-* PRIME B550M-A WIFI II,
-* PRIME B550M-K,
-* PRIME B650M-A AX II,
-* PRIME Z590-P WIFI,
-* PRIME Z590-V,
-* Pro A520M-C,
-* ProArt B650-CREATOR,
-* ProArt Z790-CREATOR WIFI,
-* Pro B660M-C,
-* Pro WS W680-ACE,
-* Pro WS W680-ACE IPMI,
-* ROG MAXIMUS XIII APEX,
-* ROG MAXIMUS XIII EXTREME,
-* ROG MAXIMUS XIII HERO,
-* ROG MAXIMUS Z690 APEX,
-* ROG MAXIMUS Z790 EXTREME,
-* ROG STRIX B660-A GAMING WIFI,
-* ROG STRIX Z590-A GAMING WIFI,
-* ROG STRIX Z590-E GAMING WIFI,
-* ROG STRIX Z590-F GAMING WIFI,
-* ROG STRIX Z590-I GAMING WIFI,
-* TUF GAMING A520M-PLUS,
-* TUF GAMING A520M-PLUS II,
-* TUF GAMING A520M-PLUS WIFI,
-* TUF GAMING B660M-E D4,
-* TUF GAMING B660-PLUS WIFI D4,
-* TUF GAMING X570-PLUS_BR,
-* TUF GAMING Z590-PLUS,
-* Z490-GUNDAM (WI-FI),
-* Z590 WIFI GUNDAM EDITION
-have got a nct6775 chip, but by default there's no use of it
-because of resource conflict with WMI method.
+On Fri, Jan 27, 2023, Yu Zhang wrote:
+> Currently, KVM selftests have to run "make clean && make" to rebuild the
+> entire test suite each time a header file is modified. Define "-MD" as
+> an EXTRA_CFLAGS, so we can generate the dependency rules for each target
+> object, whose prerequisites contains the source file and the included header
+> files as well. And including those dependency files in KVM selftests' makefile
+> will release us from such annoyance.
+> 
+> Signed-off-by: Yu Zhang <yu.c.zhang@linux.intel.com>
+> ---
+>  tools/testing/selftests/kvm/Makefile | 21 ++++++++++++++++++---
+>  1 file changed, 18 insertions(+), 3 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
+> index 1750f91dd936..b329e0d1a460 100644
+> --- a/tools/testing/selftests/kvm/Makefile
+> +++ b/tools/testing/selftests/kvm/Makefile
+> @@ -180,6 +180,8 @@ TEST_GEN_PROGS += $(TEST_GEN_PROGS_$(ARCH_DIR))
+>  TEST_GEN_PROGS_EXTENDED += $(TEST_GEN_PROGS_EXTENDED_$(ARCH_DIR))
+>  LIBKVM += $(LIBKVM_$(ARCH_DIR))
+>  
+> +OVERRIDE_TARGETS = 1
+> +
+>  # lib.mak defines $(OUTPUT), prepends $(OUTPUT)/ to $(TEST_GEN_PROGS), and most
+>  # importantly defines, i.e. overwrites, $(CC) (unless `make -e` or `make CC=`,
+>  # which causes the environment variable to override the makefile).
+> @@ -198,9 +200,11 @@ CFLAGS += -Wall -Wstrict-prototypes -Wuninitialized -O2 -g -std=gnu99 \
+>  	-fno-builtin-memcmp -fno-builtin-memcpy -fno-builtin-memset \
+>  	-fno-stack-protector -fno-PIE -I$(LINUX_TOOL_INCLUDE) \
+>  	-I$(LINUX_TOOL_ARCH_INCLUDE) -I$(LINUX_HDR_PATH) -Iinclude \
+> -	-I$(<D) -Iinclude/$(ARCH_DIR) -I ../rseq -I.. $(EXTRA_CFLAGS) \
+> +	-I$(<D) -Iinclude/$(ARCH_DIR) -I ../rseq -I.. \
+>  	$(KHDR_INCLUDES)
+>  
+> +EXTRA_CFLAGS += -MD
+> +
+>  no-pie-option := $(call try-run, echo 'int main(void) { return 0; }' | \
+>          $(CC) -Werror $(CFLAGS) -no-pie -x c - -o "$$TMP", -no-pie)
+>  
+> @@ -218,11 +222,22 @@ LIBKVM_S_OBJ := $(patsubst %.S, $(OUTPUT)/%.o, $(LIBKVM_S))
+>  LIBKVM_STRING_OBJ := $(patsubst %.c, $(OUTPUT)/%.o, $(LIBKVM_STRING))
+>  LIBKVM_OBJS = $(LIBKVM_C_OBJ) $(LIBKVM_S_OBJ) $(LIBKVM_STRING_OBJ)
+>  
+> -EXTRA_CLEAN += $(LIBKVM_OBJS) cscope.*
+> +TEST_GEN_OBJ = $(patsubst %, %.o, $(TEST_GEN_PROGS))
+> +TEST_GEN_OBJ += $(patsubst %, %.o, $(TEST_GEN_PROGS_EXTENDED))
+> +TEST_DEP_FILES = $(patsubst %.o, %.d, $(TEST_GEN_OBJ))
+> +TEST_DEP_FILES += $(patsubst %.o, %.d, $(LIBKVM_OBJS))
+> +-include $(TEST_DEP_FILES)
+> +
+> +$(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED): %: %.o
+> +	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) $(TARGET_ARCH) $< $(LIBKVM_OBJS) $(LDLIBS) -o $@
 
-This commit adds such boards to the WMI monitoring list.
+Do we actually need to omit -MD here?  IIUC, it just means that the .d file will
+get redundantly generated when building the final executable.  I would much prefer
+to build everything with the same options unless there's a good reason not to,
+e.g. this patch doesn't feed -MD into the LIBKVM_STRING_OBJ target, which seems
+wrong.
 
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=204807
-Signed-off-by: Denis Pauk <pauk.denis@gmail.com>
-Tested-by: Nick Owens <mischief@offblast.org>
-Tested-by: A. M. <de99like@mennucci.debian.net>
+I.e. why not simply
+
 ---
-Changes:
-v3: cleanup list Tested-by and Signed-off-by headers
-v2: remove already added "Pro A520M-C II" from patch
----
+ tools/testing/selftests/kvm/Makefile | 17 +++++++++++++++--
+ 1 file changed, 15 insertions(+), 2 deletions(-)
 
- drivers/hwmon/nct6775-platform.c | 39 ++++++++++++++++++++++++++++++++
- 1 file changed, 39 insertions(+)
+diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
+index 152c1a988e42..faaf65aa7621 100644
+--- a/tools/testing/selftests/kvm/Makefile
++++ b/tools/testing/selftests/kvm/Makefile
+@@ -182,6 +182,8 @@ TEST_GEN_PROGS += $(TEST_GEN_PROGS_$(ARCH_DIR))
+ TEST_GEN_PROGS_EXTENDED += $(TEST_GEN_PROGS_EXTENDED_$(ARCH_DIR))
+ LIBKVM += $(LIBKVM_$(ARCH_DIR))
+ 
++OVERRIDE_TARGETS = 1
++
+ # lib.mak defines $(OUTPUT), prepends $(OUTPUT)/ to $(TEST_GEN_PROGS), and most
+ # importantly defines, i.e. overwrites, $(CC) (unless `make -e` or `make CC=`,
+ # which causes the environment variable to override the makefile).
+@@ -196,7 +198,7 @@ else
+ LINUX_TOOL_ARCH_INCLUDE = $(top_srcdir)/tools/arch/$(ARCH)/include
+ endif
+ CFLAGS += -Wall -Wstrict-prototypes -Wuninitialized -O2 -g -std=gnu99 \
+-	-Wno-gnu-variable-sized-type-not-at-end \
++	-Wno-gnu-variable-sized-type-not-at-end -MD \
+ 	-fno-builtin-memcmp -fno-builtin-memcpy -fno-builtin-memset \
+ 	-fno-stack-protector -fno-PIE -I$(LINUX_TOOL_INCLUDE) \
+ 	-I$(LINUX_TOOL_ARCH_INCLUDE) -I$(LINUX_HDR_PATH) -Iinclude \
+@@ -223,7 +225,18 @@ LIBKVM_S_OBJ := $(patsubst %.S, $(OUTPUT)/%.o, $(LIBKVM_S))
+ LIBKVM_STRING_OBJ := $(patsubst %.c, $(OUTPUT)/%.o, $(LIBKVM_STRING))
+ LIBKVM_OBJS = $(LIBKVM_C_OBJ) $(LIBKVM_S_OBJ) $(LIBKVM_STRING_OBJ)
+ 
+-EXTRA_CLEAN += $(LIBKVM_OBJS) cscope.*
++TEST_GEN_OBJ = $(patsubst %, %.o, $(TEST_GEN_PROGS))
++TEST_GEN_OBJ += $(patsubst %, %.o, $(TEST_GEN_PROGS_EXTENDED))
++TEST_DEP_FILES = $(patsubst %.o, %.d, $(TEST_GEN_OBJ))
++TEST_DEP_FILES += $(patsubst %.o, %.d, $(LIBKVM_OBJS))
++-include $(TEST_DEP_FILES)
++
++$(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED): %: %.o
++	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) $(TARGET_ARCH) $< $(LIBKVM_OBJS) $(LDLIBS) -o $@
++$(TEST_GEN_OBJ): %.o: %.c
++	$(CC) $(CFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c $< -o $@
++
++EXTRA_CLEAN += $(LIBKVM_OBJS) $(TEST_DEP_FILES) $(TEST_GEN_OBJ) cscope.*
+ 
+ x := $(shell mkdir -p $(sort $(dir $(LIBKVM_C_OBJ) $(LIBKVM_S_OBJ))))
+ $(LIBKVM_C_OBJ): $(OUTPUT)/%.o: %.c
 
-diff --git a/drivers/hwmon/nct6775-platform.c b/drivers/hwmon/nct6775-platform.c
-index 02e9241a98bf0..2db71b62e03d4 100644
---- a/drivers/hwmon/nct6775-platform.c
-+++ b/drivers/hwmon/nct6775-platform.c
-@@ -1052,6 +1052,7 @@ static int __init nct6775_find(int sioaddr, struct nct6775_sio_data *sio_data)
- static struct platform_device *pdev[2];
- 
- static const char * const asus_wmi_boards[] = {
-+	"Pro A520M-C",
- 	"Pro A520M-C II",
- 	"PRO H410T",
- 	"ProArt B550-CREATOR",
-@@ -1059,11 +1060,21 @@ static const char * const asus_wmi_boards[] = {
- 	"ProArt Z490-CREATOR 10G",
- 	"Pro B550M-C",
- 	"Pro WS X570-ACE",
-+	"PRIME A520M-A",
-+	"PRIME A520M-A II",
-+	"PRIME A520M-E",
-+	"PRIME A520M-K",
- 	"PRIME B360-PLUS",
-+	"PRIME B360M-A",
-+	"PRIME B360M-C",
- 	"PRIME B460-PLUS",
-+	"PRIME B460M-A R2.0",
- 	"PRIME B550-PLUS",
- 	"PRIME B550M-A",
- 	"PRIME B550M-A (WI-FI)",
-+	"PRIME B550M-A AC",
-+	"PRIME B550M-A WIFI II",
-+	"PRIME B550M-K",
- 	"PRIME H410M-R",
- 	"PRIME X570-P",
- 	"PRIME X570-PRO",
-@@ -1095,6 +1106,9 @@ static const char * const asus_wmi_boards[] = {
- 	"ROG STRIX Z490-G GAMING (WI-FI)",
- 	"ROG STRIX Z490-H GAMING",
- 	"ROG STRIX Z490-I GAMING",
-+	"TUF GAMING A520M-PLUS",
-+	"TUF GAMING A520M-PLUS II",
-+	"TUF GAMING A520M-PLUS WIFI",
- 	"TUF GAMING B550M-E",
- 	"TUF GAMING B550M-E WIFI",
- 	"TUF GAMING B550M-PLUS",
-@@ -1105,16 +1119,20 @@ static const char * const asus_wmi_boards[] = {
- 	"TUF GAMING B550-PRO",
- 	"TUF GAMING X570-PLUS",
- 	"TUF GAMING X570-PLUS (WI-FI)",
-+	"TUF GAMING X570-PLUS_BR",
- 	"TUF GAMING X570-PRO (WI-FI)",
- 	"TUF GAMING Z490-PLUS",
- 	"TUF GAMING Z490-PLUS (WI-FI)",
-+	"Z490-GUNDAM (WI-FI)",
- };
- 
- static const char * const asus_msi_boards[] = {
-+	"EX-B660M-V5 D4",
- 	"EX-B660M-V5 PRO D4",
- 	"PRIME B650-PLUS",
- 	"PRIME B650M-A",
- 	"PRIME B650M-A AX",
-+	"PRIME B650M-A AX II",
- 	"PRIME B650M-A II",
- 	"PRIME B650M-A WIFI",
- 	"PRIME B650M-A WIFI II",
-@@ -1125,20 +1143,33 @@ static const char * const asus_msi_boards[] = {
- 	"PRIME X670E-PRO WIFI",
- 	"PRIME Z590-A",
- 	"PRIME Z590-P",
-+	"PRIME Z590-P WIFI",
-+	"PRIME Z590-V",
- 	"PRIME Z590M-PLUS",
-+	"Pro B660M-C",
- 	"Pro B660M-C-D4",
-+	"Pro WS W680-ACE",
-+	"Pro WS W680-ACE IPMI",
-+	"ProArt B650-CREATOR",
- 	"ProArt B660-CREATOR D4",
- 	"ProArt X670E-CREATOR WIFI",
-+	"ProArt Z790-CREATOR WIFI",
- 	"ROG CROSSHAIR X670E EXTREME",
- 	"ROG CROSSHAIR X670E GENE",
- 	"ROG CROSSHAIR X670E HERO",
-+	"ROG MAXIMUS XIII APEX",
-+	"ROG MAXIMUS XIII EXTREME",
- 	"ROG MAXIMUS XIII EXTREME GLACIAL",
-+	"ROG MAXIMUS XIII HERO",
-+	"ROG MAXIMUS Z690 APEX",
- 	"ROG MAXIMUS Z690 EXTREME",
- 	"ROG MAXIMUS Z690 EXTREME GLACIAL",
-+	"ROG MAXIMUS Z790 EXTREME",
- 	"ROG STRIX B650-A GAMING WIFI",
- 	"ROG STRIX B650E-E GAMING WIFI",
- 	"ROG STRIX B650E-F GAMING WIFI",
- 	"ROG STRIX B650E-I GAMING WIFI",
-+	"ROG STRIX B660-A GAMING WIFI",
- 	"ROG STRIX B660-A GAMING WIFI D4",
- 	"ROG STRIX B660-F GAMING WIFI",
- 	"ROG STRIX B660-G GAMING WIFI",
-@@ -1147,16 +1178,24 @@ static const char * const asus_msi_boards[] = {
- 	"ROG STRIX X670E-E GAMING WIFI",
- 	"ROG STRIX X670E-F GAMING WIFI",
- 	"ROG STRIX X670E-I GAMING WIFI",
-+	"ROG STRIX Z590-A GAMING WIFI",
- 	"ROG STRIX Z590-A GAMING WIFI II",
-+	"ROG STRIX Z590-E GAMING WIFI",
-+	"ROG STRIX Z590-F GAMING WIFI",
-+	"ROG STRIX Z590-I GAMING WIFI",
- 	"ROG STRIX Z690-A GAMING WIFI D4",
- 	"TUF GAMING B650-PLUS",
- 	"TUF GAMING B650-PLUS WIFI",
- 	"TUF GAMING B650M-PLUS",
- 	"TUF GAMING B650M-PLUS WIFI",
-+	"TUF GAMING B660-PLUS WIFI D4",
-+	"TUF GAMING B660M-E D4",
- 	"TUF GAMING B660M-PLUS WIFI",
- 	"TUF GAMING X670E-PLUS",
- 	"TUF GAMING X670E-PLUS WIFI",
-+	"TUF GAMING Z590-PLUS",
- 	"TUF GAMING Z590-PLUS WIFI",
-+	"Z590 WIFI GUNDAM EDITION",
- };
- 
- #if IS_ENABLED(CONFIG_ACPI)
+base-commit: 95b9779c1758f03cf494e8550d6249a40089ed1c
 -- 
-2.39.2
 
