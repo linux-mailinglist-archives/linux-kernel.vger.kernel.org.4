@@ -2,163 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C91566BC1B1
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 00:46:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2C4A6BC1A2
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 00:42:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232895AbjCOXq3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 19:46:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47592 "EHLO
+        id S233033AbjCOXmB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 19:42:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232661AbjCOXq0 (ORCPT
+        with ESMTP id S233182AbjCOXlq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 19:46:26 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEA3D15540;
-        Wed, 15 Mar 2023 16:45:57 -0700 (PDT)
-Date:   Wed, 15 Mar 2023 23:36:18 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1678923379;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=41dIEGEGewUxp2qWhqXvFItcme40IVFHqdBSwxA8Mg4=;
-        b=oSw0bUclzmXJy5ukltY/PYfkqMioLCRNAIYazgnPvBaw9j12Y+xQF4jTq/pohCkIwqTEG9
-        xme3sssPl7onc30B/+mOF+3BQ4OsLrOUpKswlrsOXDOzCZgpKQDwlc0XOl9OMLtB/7IqE/
-        FIaAi4b/xSz4mLjCWet8Bs3ZybcmqmI0cQSYkLV4luzYe0Rt03SOau3+59OUqnV1kOTptt
-        HtE6Jayr4o2pQCkflFKfIDLuFUdOACic0w8S/ZhrBVgOpyMhuXMNU0EnipT7yZ+lOjqymz
-        DEyRGm1elovo5W9+4DM2jqe+JMwbqHzL6CTw37cmElf09uRtEEO13g3fnFYRKg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1678923379;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=41dIEGEGewUxp2qWhqXvFItcme40IVFHqdBSwxA8Mg4=;
-        b=TXJVi1UZOcZBV50a2x3ao2DTC9q4/7jpIvkBb1a8q6YTiMVvZBLmeITrnXVFxo0kuRWDRJ
-        uYYj8aY2DrJP5XCQ==
-From:   "tip-bot2 for Peter Newman" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/cache] x86/resctrl: Avoid redundant counter read in
- __mon_event_count()
-Cc:     Peter Newman <peternewman@google.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Babu Moger <babu.moger@amd.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
+        Wed, 15 Mar 2023 19:41:46 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA221A676E;
+        Wed, 15 Mar 2023 16:40:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D74A5B81E92;
+        Wed, 15 Mar 2023 23:39:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55682C433EF;
+        Wed, 15 Mar 2023 23:39:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678923566;
+        bh=HF+8Bo+oSK76QvKqEQTGyvfPu3BTSjpOqnEATCDSp/Q=;
+        h=From:To:Cc:Subject:Date:From;
+        b=NrocMtD9jzHuAP+2J9aGrwleB7geFU/qV2gLjCIKktagruw7OlFwfFHUlHpYFL1Fi
+         jDFiMKKXu1ZzupdZq9jZuozJUwTGg3Z5lOB2FRuwe5PDtKMKv9r1C/47NFej5Q6vqA
+         R7qcGdo0dkJ+Iz4iwQYvtO/YVD54tfQkxo952+oNGlcDUR67FlboqPtCdc8f1N1QvF
+         F0b2OqzRAmU7EVt9DMB7xZMKhfqOGZ7K+Ryibwt3XX4I0cEnq5zQgTJuAtjYN+9IIr
+         B8r48SwasDul4ZOVn4xiUMdEI9bC55AEcJABZ5rtXCSU/HM++iR+ea9lbt2HGTnA2u
+         y3weP7k5EaB2g==
+From:   Stephen Boyd <sboyd@kernel.org>
+To:     Brendan Higgins <brendanhiggins@google.com>,
+        David Gow <davidgow@google.com>
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com
+Subject: [PATCH] kunit: Use gfp in kunit_alloc_resource() kernel-doc
+Date:   Wed, 15 Mar 2023 16:39:25 -0700
+Message-Id: <20230315233925.2416516-1-sboyd@kernel.org>
+X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
 MIME-Version: 1.0
-Message-ID: <167892337886.5837.12368110501318980479.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/cache branch of tip:
+Copy/pasting the code from the kernel-doc here doesn't compile because
+kunit_alloc_resource() takes a gfp flags argument. Pass the gfp
+argument from the caller to complete the example.
 
-Commit-ID:     322b72e0fd10101f2da8985b31b4af70f184bf79
-Gitweb:        https://git.kernel.org/tip/322b72e0fd10101f2da8985b31b4af70f184bf79
-Author:        Peter Newman <peternewman@google.com>
-AuthorDate:    Tue, 20 Dec 2022 17:41:32 +01:00
-Committer:     Dave Hansen <dave.hansen@linux.intel.com>
-CommitterDate: Wed, 15 Mar 2023 15:44:15 -07:00
-
-x86/resctrl: Avoid redundant counter read in __mon_event_count()
-
-__mon_event_count() does the per-RMID, per-domain work for
-user-initiated event count reads and the initialization of new monitor
-groups.
-
-In the initialization case, after resctrl_arch_reset_rmid() calls
-__rmid_read() to record an initial count for a new monitor group, it
-immediately calls resctrl_arch_rmid_read(). This re-read of the hardware
-counter is unnecessary and the following computations are ignored by the
-caller during initialization.
-
-Following return from resctrl_arch_reset_rmid(), just clear the
-mbm_state and return. This involves moving the mbm_state lookup into the
-rr->first case, as it's not needed for regular event count reads: the
-QOS_L3_OCCUP_EVENT_ID case was redundant with the accumulating logic at
-the end of the function.
-
-Signed-off-by: Peter Newman <peternewman@google.com>
-Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
-Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
-Tested-by: Babu Moger <babu.moger@amd.com>
-Link: https://lore.kernel.org/all/20221220164132.443083-2-peternewman%40google.com
+Signed-off-by: Stephen Boyd <sboyd@kernel.org>
 ---
- arch/x86/kernel/cpu/resctrl/monitor.c | 43 +++++++++++---------------
- 1 file changed, 19 insertions(+), 24 deletions(-)
+ include/kunit/resource.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/x86/kernel/cpu/resctrl/monitor.c b/arch/x86/kernel/cpu/resctrl/monitor.c
-index 7fe5148..2095241 100644
---- a/arch/x86/kernel/cpu/resctrl/monitor.c
-+++ b/arch/x86/kernel/cpu/resctrl/monitor.c
-@@ -383,41 +383,36 @@ void free_rmid(u32 rmid)
- 		list_add_tail(&entry->list, &rmid_free_lru);
- }
- 
-+static struct mbm_state *get_mbm_state(struct rdt_domain *d, u32 rmid,
-+				       enum resctrl_event_id evtid)
-+{
-+	switch (evtid) {
-+	case QOS_L3_MBM_TOTAL_EVENT_ID:
-+		return &d->mbm_total[rmid];
-+	case QOS_L3_MBM_LOCAL_EVENT_ID:
-+		return &d->mbm_local[rmid];
-+	default:
-+		return NULL;
-+	}
-+}
-+
- static int __mon_event_count(u32 rmid, struct rmid_read *rr)
- {
- 	struct mbm_state *m;
- 	u64 tval = 0;
- 
--	if (rr->first)
-+	if (rr->first) {
- 		resctrl_arch_reset_rmid(rr->r, rr->d, rmid, rr->evtid);
-+		m = get_mbm_state(rr->d, rmid, rr->evtid);
-+		if (m)
-+			memset(m, 0, sizeof(struct mbm_state));
-+		return 0;
-+	}
- 
- 	rr->err = resctrl_arch_rmid_read(rr->r, rr->d, rmid, rr->evtid, &tval);
- 	if (rr->err)
- 		return rr->err;
- 
--	switch (rr->evtid) {
--	case QOS_L3_OCCUP_EVENT_ID:
--		rr->val += tval;
--		return 0;
--	case QOS_L3_MBM_TOTAL_EVENT_ID:
--		m = &rr->d->mbm_total[rmid];
--		break;
--	case QOS_L3_MBM_LOCAL_EVENT_ID:
--		m = &rr->d->mbm_local[rmid];
--		break;
--	default:
--		/*
--		 * Code would never reach here because an invalid
--		 * event id would fail in resctrl_arch_rmid_read().
--		 */
--		return -EINVAL;
--	}
--
--	if (rr->first) {
--		memset(m, 0, sizeof(struct mbm_state));
--		return 0;
--	}
--
- 	rr->val += tval;
- 
- 	return 0;
+diff --git a/include/kunit/resource.h b/include/kunit/resource.h
+index cf6fb8f2ac1b..c0d88b318e90 100644
+--- a/include/kunit/resource.h
++++ b/include/kunit/resource.h
+@@ -72,7 +72,7 @@ typedef void (*kunit_resource_free_t)(struct kunit_resource *);
+  *		params.gfp = gfp;
+  *
+  *		return kunit_alloc_resource(test, kunit_kmalloc_init,
+- *			kunit_kmalloc_free, &params);
++ *			kunit_kmalloc_free, gfp, &params);
+  *	}
+  *
+  * Resources can also be named, with lookup/removal done on a name
+
+base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
+-- 
+https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git/
+https://git.kernel.org/pub/scm/linux/kernel/git/sboyd/spmi.git
+
