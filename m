@@ -2,141 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D5DE6BBDD7
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 21:19:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC8AE6BBDB4
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 20:59:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232615AbjCOUS6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 16:18:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37880 "EHLO
+        id S232424AbjCOT7d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 15:59:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231889AbjCOUSy (ORCPT
+        with ESMTP id S230134AbjCOT7c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 16:18:54 -0400
-X-Greylist: delayed 1264 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 15 Mar 2023 13:18:52 PDT
-Received: from tu.jetro.fi (tu.jetro.fi [IPv6:2a01:4f9:c010:1a1b::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8638237F17
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 13:18:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=jetro.fi;
-        s=170418; h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:
-        In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=L/3f0niBe+n8QtNjT0soQtqCZoQEjpVo14Zv9dQPrTU=; b=d7D1qcKlDOF6w58pcKFC+1HK+y
-        Zn9aIASzbsmR0P1qmAI4pJ6Gs//Fe2fYk04FFQ1Z4Dr1WaZbBB4m5lMW8gLhBbDscHRqjrLbYJoGK
-        4aj9Xv6qAUsN+ABpF1Br2UX0JHxRfb8sBSK4AJ8HZHAMgIq1v9RdeeH7jM21R5+eLSTo=;
-Received: from [2001:470:28:7b9::190] (port=51694 helo=mopti)
-        by tu.jetro.fi with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.96)
-        (envelope-from <jje-lxkl@jetro.fi>)
-        id 1pcXFh-00CQu9-0R;
-        Wed, 15 Mar 2023 21:57:37 +0200
-Date:   Wed, 15 Mar 2023 21:57:36 +0200
-From:   Jetro Jormalainen <jje-lxkl@jetro.fi>
-To:     Takashi Iwai <tiwai@suse.de>
-Cc:     Meng Tang <tangmeng@uniontech.com>, regressions@lists.linux.dev,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [REGRESSION] External mic not working on Lenovo Ideapad U310,
- ALSA: hda/conexant: Add quirk for LENOVO 20149 Notebook model
-Message-ID: <20230315215736.419ac9eb@mopti>
-In-Reply-To: <87o7ou9jfi.wl-tiwai@suse.de>
-References: <20230308215009.4d3e58a6@mopti>
-        <87o7ou9jfi.wl-tiwai@suse.de>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.36; x86_64-pc-linux-gnu)
+        Wed, 15 Mar 2023 15:59:32 -0400
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F69F15C87
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 12:59:31 -0700 (PDT)
+Received: by mail-il1-f198.google.com with SMTP id w8-20020a92db48000000b00322124084f3so10309501ilq.3
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 12:59:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678910370;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4fkZBsQnQsPMHFjuCax8E+9PdzPaJ0fVJSl3B/XiDi4=;
+        b=wA4KPMcTafvX3rz4UsGCCEJnPOqnDBcnqsU5LGxf43oPMffsJJnD7pDN1i3xiqytEW
+         CDJWT9hKfPYqRoPZbH4USc2HGkR5cZnsYgyvtQkqeCWH2sa3ykvK4OD8e864ioV1lVNe
+         yw87G0FEbMKNq3B/WCVxkA7RYU7ZOakCukfHL1Wj2oNf4kzW21Qnyi3O7sfllW2ovTft
+         +SbOTdzH87b+z0av7/xa7g0CknRbf3vjMflKNMGo+46M8+cLOWjsEYXi8h0TRBpwGjBV
+         81klieSFHorpMo4lsmWGL5LnzS7Ks45Cr8IYgCGGTM1seoMLm8mnDQNSXcIOiD3xpLEv
+         29Dw==
+X-Gm-Message-State: AO0yUKWV1YzDUjWsJV4857Xf56d/VrowcJDZIY04PX2sp2BIYPZuny5W
+        LoskLBUJy5/UABAtKgI7Hdc0EWUovZY1iP6vSl4e5yrDPyqt
+X-Google-Smtp-Source: AK7set+S0MaWIAa2y4YQnpaRrDpAFV+J3szFnDvOl9MfMxZvAtJruVS2OKvj2XNbMJaeGCEJS2wJvW56ImFjJGHPK5mrh87PQ90W
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:106c:b0:316:a9c6:c486 with SMTP id
+ q12-20020a056e02106c00b00316a9c6c486mr3814441ilj.3.1678910370545; Wed, 15 Mar
+ 2023 12:59:30 -0700 (PDT)
+Date:   Wed, 15 Mar 2023 12:59:30 -0700
+In-Reply-To: <20230315193335.7doao26b2u3lzvq3@fpc>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000003f071105f6f5c8a2@google.com>
+Subject: Re: [syzbot] [wireless?] KMSAN: uninit-value in ath9k_wmi_ctrl_rx
+From:   syzbot <syzbot+f2cb6e0ffdb961921e4d@syzkaller.appspotmail.com>
+To:     glider@google.com, linux-kernel@vger.kernel.org,
+        pchelkin@ispras.ru, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Wed, 15 Mar 2023 15:29:53 +0100
-Takashi Iwai <tiwai@suse.de> kirjoitti:
+Hello,
 
-> On Wed, 08 Mar 2023 20:50:09 +0100,
-> Jetro Jormalainen wrote:
-> > 
-> > External mic on Lenovo Ideapad U310 has not been working with and
-> > after 5.19.2 release. Same problem still exists on 6.3.0-rc1.
-> > Reverting this commit makes external mic to work on 6.3.0-rc1.
-> > These were tested on vanilla kernels.
-> > 
-> > Bisecting shows that this commit breaks external mic:
-> > f83bb2592482fe94c6eea07a8121763c80f36ce5
-> > ALSA: hda/conexant: Add quirk for LENOVO 20149 Notebook model  
-> 
-> Sounds like multiple models using the same PCI SSID.
-> Could you share the alsa-info.sh output?
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-I added alsa-info.sh output on non-working kernel to here:
-https://e.pcloud.link/publink/show?code=XZjUqhZVP3JPN9gcyyh9lG23r5g3pKwaD8k
+Reported-and-tested-by: syzbot+f2cb6e0ffdb961921e4d@syzkaller.appspotmail.com
 
-If it's any use here is also output on same kernel with the commit
-reverted:
-https://e.pcloud.link/publink/show?code=XZ9UqhZ90gGNhCqiEkFwsKoQ6LWI0ECt8a7
+Tested on:
 
-BR Jetro
+commit:         34add094 kmsan: add test_stackdepot_roundtrip
+git tree:       https://github.com/google/kmsan.git master
+console output: https://syzkaller.appspot.com/x/log.txt?x=167ddd34c80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=76a9330669c37355
+dashboard link: https://syzkaller.appspot.com/bug?extid=f2cb6e0ffdb961921e4d
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=120bdbdcc80000
 
-
-> Meng, also could you give alsa-info.sh output of Lenovo 20149, too?
-> 
-> 
-> thanks,
-> 
-> Takashi
-> 
-> 
-> > After this commit Pulseaudio only shows "Microphone" port as before
-> > there was "Internal microphone" and "Microphone". However when
-> > recording this "Microphone" port that seems to record internal
-> > microphone. External mic cannot be recorded at all after this
-> > commit.
-> > 
-> > External mic not working (dmesg):
-> > 
-> > [    7.565222] snd_hda_codec_conexant hdaudioC1D0: CX20590: BIOS
-> > auto-probing. [    7.566141] snd_hda_codec_conexant hdaudioC1D0:
-> > autoconfig for CX20590: line_outs=1 (0x1f/0x0/0x0/0x0/0x0)
-> > type:speaker [    7.566152] snd_hda_codec_conexant hdaudioC1D0:
-> > speaker_outs=0 (0x0/0x0/0x0/0x0/0x0) [    7.566158]
-> > snd_hda_codec_conexant hdaudioC1D0:    hp_outs=1
-> > (0x19/0x0/0x0/0x0/0x0) [    7.566162] snd_hda_codec_conexant
-> > hdaudioC1D0:    mono: mono_out=0x0 [    7.566166]
-> > snd_hda_codec_conexant hdaudioC1D0:    inputs: [    7.566169]
-> > snd_hda_codec_conexant hdaudioC1D0:      Mic=0x23 [    7.566172]
-> > snd_hda_codec_conexant hdaudioC1D0:    dig-in=0x1a
-> > 
-> > External mic working (dmesg):
-> > 
-> > [    8.381160] snd_hda_codec_conexant hdaudioC1D0: CX20590: BIOS
-> > auto-probing. [    8.381691] snd_hda_codec_conexant hdaudioC1D0:
-> > autoconfig for CX20590: line_outs=1 (0x1f/0x0/0x0/0x0/0x0)
-> > type:speaker [    8.381700] snd_hda_codec_conexant hdaudioC1D0:
-> > speaker_outs=0 (0x0/0x0/0x0/0x0/0x0) [    8.381705]
-> > snd_hda_codec_conexant hdaudioC1D0:    hp_outs=1
-> > (0x19/0x0/0x0/0x0/0x0) [    8.381710] snd_hda_codec_conexant
-> > hdaudioC1D0:    mono: mono_out=0x0 [    8.381714]
-> > snd_hda_codec_conexant hdaudioC1D0:    inputs: [    8.381717]
-> > snd_hda_codec_conexant hdaudioC1D0:      Internal Mic=0x23 [
-> > 8.381721] snd_hda_codec_conexant hdaudioC1D0:      Mic=0x1a
-> > 
-> > 
-> > cat /proc/version:
-> > Linux version 6.3.0-rc1-1 (linux@archlinux) (gcc (GCC) 12.2.1
-> > 20230201, GNU ld (GNU Binutils) 2.40) #10 SMP PREEMPT_DYNAMIC Wed,
-> > 08 Mar 2023 17:45:22 +0000
-> > 
-> > hostnamectl | grep "Operating System":
-> > Operating System: Arch Linux
-> > 
-> > uname -mi:
-> > x86_64 unknown
-> > 
-> > #regzbot introduced: f83bb2592482  
-> 
-
+Note: testing is done by a robot and is best-effort only.
