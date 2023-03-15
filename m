@@ -2,131 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 106976BBF3A
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 22:39:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3722E6BBF3D
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 22:40:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231971AbjCOVj0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 17:39:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42006 "EHLO
+        id S232648AbjCOVkh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 17:40:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232400AbjCOVjX (ORCPT
+        with ESMTP id S232400AbjCOVkf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 17:39:23 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0757559E
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 14:39:17 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id g17so26052981lfv.4
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 14:39:17 -0700 (PDT)
+        Wed, 15 Mar 2023 17:40:35 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AEC7559E
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 14:40:34 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-541a39df9f4so105547817b3.20
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 14:40:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1678916356;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Xpb1J1NQ6EcmoUdHknfKnhbMa93N3wEHpyW+bdyQONg=;
-        b=LbnrbqYotsDEftqvLOrYJFCfLK5i4oqISnGrGn6agxzw8/YnPyrS2vxPYqM+1z/vQF
-         wINDblmUBDxiKsig19Csd5SheO95lETJnskgZFHG0aI8waJ6sg7tXZrgjMo9S6s1gXg8
-         hOEJ6A7EDOSdDDFObXNkYXRcynmHJTDjemnMo=
+        d=google.com; s=20210112; t=1678916433;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=0vT5pZgC3odOnq/dCWudlRqWXNT/3pXxM4U4p7g/Zps=;
+        b=GBOhli6DgB6C2e3UwLY3hOUyIJJCYvBv89mVgUJNI9rwDtzV+xfm8MeOiM6FEn49Og
+         dac3udvhEPDGv68VxZ6KhmgYa4bE5Dz2pnI3o8WNC7zwpdH+SXm0yGK2BrWrxEibNsx8
+         QKnsQoEIsXs+afDVgCAFeywJEHRVjsD4xI8bX3UKIZ4GhZqHkz0b+XtP5oLct1tiKV/F
+         iYR9De56Y/qllKPi2/15D5E/kuCmnylV9fo3Kt/lp51pvJt+dzgVvcEIMWJNH5RgUhn3
+         wmDFBrCXDyMivyyL/lELOeFVcxU8TifaiKU3oAM6dlFLK+vrPqZNEe2nDCphqMJtMcz7
+         t7tg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678916356;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Xpb1J1NQ6EcmoUdHknfKnhbMa93N3wEHpyW+bdyQONg=;
-        b=jyzt/2Waw06IEZbFsY+8UQDBv9rlKKRk0yK4QT3FNdArkOU3VX2EdDwcJkju6DnTxD
-         IYRPDPxoLaaSm26ZEiCIwmss+RHoT17K7ir6U5CQUa0bIgaogQ4ocXLFyq/1Z2WZ6Weu
-         nmIhzI1EPsaza/ZRlqFQxh1Zx2uEXjNneYJAGZdBR86ztWVb6HdZF+O1ZWznXNvf+22k
-         AgsogNkrnRWmrNkPsm921IyuZISw1u6FrDcqO+Q3rsSC0XL8MkbzGPonfj+IOYoL/xfH
-         Jn0GB6ToYT84tN+Ws3xgHj08I4vdVaFfW2qvaPGBjPut9ss1GgQR8Ox8HVlJ3Gzeyyzw
-         WgGw==
-X-Gm-Message-State: AO0yUKXB7heOx1Mhpm9EUf7orT3RwxU4dhmLX4BfQzV0uX4/Ch7TETJH
-        1tPgKBbs1cTHKCvwCRksVuZNwvIyRPDne+MwqSn4jYUqsKqXMIyYd+I=
-X-Google-Smtp-Source: AK7set+mP/RuDHK+N/Y6H+PENikTQrRb0WwxcH0GLjHAjy6KeV/C6zmPe7FvsqJU2zV137xoXpWUGB+f3Rnz3qEEY7g=
-X-Received: by 2002:ac2:4a65:0:b0:4db:1a8b:1b87 with SMTP id
- q5-20020ac24a65000000b004db1a8b1b87mr2468829lfp.8.1678916355956; Wed, 15 Mar
- 2023 14:39:15 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230303152623.45859-1-jdenose@google.com> <e8f5e2aa-d7fa-88ff-6306-4c1ee8feeade@redhat.com>
-In-Reply-To: <e8f5e2aa-d7fa-88ff-6306-4c1ee8feeade@redhat.com>
-From:   Jonathan Denose <jdenose@chromium.org>
-Date:   Wed, 15 Mar 2023 16:39:04 -0500
-Message-ID: <CALNJtpWsvZEdGJFA30cv0cSq43Djm7q+trDQVxx5aRDzg7u3Gw@mail.gmail.com>
-Subject: Re: [PATCH] Input: i8042 - Add quirk for Fujitsu Lifebook A574/H
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Jonathan Denose <jdenose@google.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Mattijs Korpershoek <mkorpershoek@baylibre.com>,
-        Takashi Iwai <tiwai@suse.de>,
-        Werner Sembach <wse@tuxedocomputers.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-input@vger.kernel.org
+        d=1e100.net; s=20210112; t=1678916433;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0vT5pZgC3odOnq/dCWudlRqWXNT/3pXxM4U4p7g/Zps=;
+        b=dhoY56DtDIbpYGgg5dBjm+41rACsAX7ecR+xPyssNvr6dWno7MJjOEkr7TyUkkfbIS
+         D2EQMktlao38Ic9KvgOvOq1BXaw+FACOD9dmEHvn8Z3QNaifNHDzcaNqdMsOgimPiPW7
+         dc/mAXnQ9SvZY7ToKsefR30t+kBiGQTtmwqj4QdkuGHLzvBEEsh0UMiVXf5KajjlZjSn
+         H+oHSdTDkV68/qyfa/0jMJ/b/q1y0SX6Fn501DptaLutPRWm++to7h9N+2UFGeN2afuQ
+         f50P2wfSrJXnU6yQ+tnyzaQ2xRMJ3UN1RTfoHGGRW32H3iAUUoBJ1SQIK2+7Z9w4UvA+
+         QHdg==
+X-Gm-Message-State: AO0yUKVJ0STY1O/uEXcfDPOEPJznIfewtb27z3AkuHBGRNRig8/x8eBF
+        mxYti57ganQIZx8prBHiLkYz9Wjfzeyd
+X-Google-Smtp-Source: AK7set+CKIA9ZIEye56laL62srsDkRhvodbIp2AR/zSjX2tYwzng91U5EIxkNpMgpy6cESV4UeWNIkmL36mi
+X-Received: from joshdon-desktop.svl.corp.google.com ([2620:15c:2d4:203:d03e:7c5d:386a:dce3])
+ (user=joshdon job=sendgmr) by 2002:a05:690c:68d:b0:521:daa4:d687 with SMTP id
+ bp13-20020a05690c068d00b00521daa4d687mr1098786ywb.0.1678916433410; Wed, 15
+ Mar 2023 14:40:33 -0700 (PDT)
+Date:   Wed, 15 Mar 2023 14:40:29 -0700
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
+Message-ID: <20230315214029.899573-1-joshdon@google.com>
+Subject: [PATCH] cgroup: fix display of forceidle time at root
+From:   Josh Don <joshdon@google.com>
+To:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>
+Cc:     cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Josh Don <joshdon@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Hans,
+We need to reset forceidle_sum to 0 when reading from root, since the
+bstat we accumulate into is stack allocated.
 
-Thank you very much for your review.
+To make this more robust, just replace the existing cputime reset with a
+memset of the overall bstat.
 
-For my knowledge, what is the timeline for patches in the input
-mailing list getting applied to a maintainer branch after review?
+Signed-off-by: Josh Don <joshdon@google.com>
+---
+ kernel/cgroup/rstat.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-Best,
-Jonathan
+diff --git a/kernel/cgroup/rstat.c b/kernel/cgroup/rstat.c
+index 831f1f472bb8..0a2b4967e333 100644
+--- a/kernel/cgroup/rstat.c
++++ b/kernel/cgroup/rstat.c
+@@ -457,9 +457,7 @@ static void root_cgroup_cputime(struct cgroup_base_stat *bstat)
+ 	struct task_cputime *cputime = &bstat->cputime;
+ 	int i;
+ 
+-	cputime->stime = 0;
+-	cputime->utime = 0;
+-	cputime->sum_exec_runtime = 0;
++	memset(bstat, 0, sizeof(*bstat));
+ 	for_each_possible_cpu(i) {
+ 		struct kernel_cpustat kcpustat;
+ 		u64 *cpustat = kcpustat.cpustat;
+-- 
+2.40.0.rc1.284.g88254d51c5-goog
 
-On Mon, Mar 6, 2023 at 5:00=E2=80=AFAM Hans de Goede <hdegoede@redhat.com> =
-wrote:
->
-> Hi,
->
-> On 3/3/23 16:26, Jonathan Denose wrote:
-> > Fujitsu Lifebook A574/H requires the nomux option to properly
-> > probe the touchpad, especially when waking from sleep.
-> >
-> > Signed-off-by: Jonathan Denose <jdenose@google.com>
->
-> Thanks, patch looks good to me:
->
-> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
->
-> Regards,
->
-> Hans
->
->
-> > ---
-> >
-> >  drivers/input/serio/i8042-acpipnpio.h | 8 ++++++++
-> >  1 file changed, 8 insertions(+)
-> >
-> > diff --git a/drivers/input/serio/i8042-acpipnpio.h b/drivers/input/seri=
-o/i8042-acpipnpio.h
-> > index efc61736099b..fe7ffe30997c 100644
-> > --- a/drivers/input/serio/i8042-acpipnpio.h
-> > +++ b/drivers/input/serio/i8042-acpipnpio.h
-> > @@ -610,6 +610,14 @@ static const struct dmi_system_id i8042_dmi_quirk_=
-table[] __initconst =3D {
-> >               },
-> >               .driver_data =3D (void *)(SERIO_QUIRK_NOMUX)
-> >       },
-> > +     {
-> > +             /* Fujitsu Lifebook A574/H */
-> > +             .matches =3D {
-> > +                     DMI_MATCH(DMI_SYS_VENDOR, "FUJITSU"),
-> > +                     DMI_MATCH(DMI_PRODUCT_NAME, "FMVA0501PZ"),
-> > +             },
-> > +             .driver_data =3D (void *)(SERIO_QUIRK_NOMUX)
-> > +     },
-> >       {
-> >               /* Gigabyte M912 */
-> >               .matches =3D {
->
