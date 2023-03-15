@@ -2,125 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A19E6BA542
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 03:34:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F19D86BA548
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 03:37:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229866AbjCOCeT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 22:34:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38858 "EHLO
+        id S229847AbjCOChH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 22:37:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229624AbjCOCeS (ORCPT
+        with ESMTP id S229784AbjCOCg4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 22:34:18 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 456932332B;
-        Tue, 14 Mar 2023 19:34:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=7Vv4GgSfma1E5qLrWxU5RdcBiWgWp2FnAi3GPVQ18Ss=; b=SLmnrq2XsLK5/HI1e14JtHv48Z
-        9lJI6Coc6TQxc8NkcClaWb5A1K493NFd59PGXwCuFktp80ltuHzl/U0BY/8DftGWL/DU3WGlgnGMZ
-        epLWoP6vG7vB7TOq+z+G7Za8CJFBNxtfT6ZDVqXvk5yeqKRy820uEngUMmr2Dzfj+Av9QgYH/R3DT
-        DUKka9wCjiZVrR6Ow8kx44gCjLqmO7aK7qyI2BrvINaU8Jv7GRDzC4cpkiOXL+p8yRQeCBVs/QPY7
-        PzP8ToPUOedAPCEAvptxCUNg+kI8Em318hIevBNzbyZvuojMcsZaTa4pdbI127oAsyiFrvHGqWRtn
-        GE2TaO7g==;
-Received: from [2601:1c2:980:9ec0::df2f]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pcGxx-00C3uO-00;
-        Wed, 15 Mar 2023 02:34:13 +0000
-Message-ID: <e262ea00-a027-9073-812e-7e034d75e718@infradead.org>
-Date:   Tue, 14 Mar 2023 19:34:11 -0700
+        Tue, 14 Mar 2023 22:36:56 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 105A3222E8
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 19:36:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678847770;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=liFrkbl8/pWAAeZ9NlRPA0XwLoQCiHNQ8AUuy28xdJw=;
+        b=exQPjWBpIIIeE56l9ENRer2E0MJwPag0byFXHFVI1LoV2b2h3OyL68omKzMXt5tZGDiZCU
+        OOCgzRKIVsmL/uhHIORCd2ttU/p5GyvFW4yCiExW8JI+1g8cQx7YKinbq4oewemwMeQDFU
+        aZkBGmpQXsmUi0TEPIXYo5ysATttK1E=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-230-66xJvKqrNgyD-S4fHovT8w-1; Tue, 14 Mar 2023 22:36:08 -0400
+X-MC-Unique: 66xJvKqrNgyD-S4fHovT8w-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 441608027FD;
+        Wed, 15 Mar 2023 02:36:08 +0000 (UTC)
+Received: from ovpn-8-22.pek2.redhat.com (ovpn-8-22.pek2.redhat.com [10.72.8.22])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id DDC0D40C6E67;
+        Wed, 15 Mar 2023 02:36:04 +0000 (UTC)
+Date:   Wed, 15 Mar 2023 10:35:59 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Pavel Begunkov <asml.silence@gmail.com>
+Cc:     io-uring@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        linux-kernel@vger.kernel.org, ming.lei@redhat.com
+Subject: Re: [RFC 0/2] optimise local-tw task resheduling
+Message-ID: <ZBEvD04sH/JzN7MJ@ovpn-8-22.pek2.redhat.com>
+References: <cover.1678474375.git.asml.silence@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] ELF: document some de-facto PT_* ABI quirks
-Content-Language: en-US
-To:     Alexey Dobriyan <adobriyan@gmail.com>, akpm@linux-foundation.org
-Cc:     linux-kernel@vger.kernel.org,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>
-References: <2acb586c-08a9-42d9-a41e-7986cc1383ea@p183>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <2acb586c-08a9-42d9-a41e-7986cc1383ea@p183>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1678474375.git.asml.silence@gmail.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Pavel
 
-[adding linux-doc for other interested parties]
-
-
-On 3/14/23 10:02, Alexey Dobriyan wrote:
-> Turns out rules about PT_INTERP, PT_GNU_STACK and PT_GNU_PROPERTY
-> segment headers are slightly different.
+On Fri, Mar 10, 2023 at 07:04:14PM +0000, Pavel Begunkov wrote:
+> io_uring extensively uses task_work, but when a task is waiting
+> for multiple CQEs it causes lots of rescheduling. This series
+> is an attempt to optimise it and be a base for future improvements.
 > 
-> Signed-off-by: Alexey Dobriyan <adobriyan@gmail.com>
-> ---
-> 
->  Documentation/ELF/ELF.rst |   28 ++++++++++++++++++++++++++++
->  1 file changed, 28 insertions(+)
-> 
-> new file mode 100644
-> --- /dev/null
-> +++ b/Documentation/ELF/ELF.rst
-> @@ -0,0 +1,28 @@
-> +.. SPDX-License-Identifier: GPL-2.0
+> For some zc network tests eventually waiting for a portion of 
+> buffers I've got 10x descrease in the number of context switches,
+> which reduced the CPU consumption more than twice (17% -> 8%).
+> It also helps storage cases, while running fio/t/io_uring against
+> a low performant drive it got 2x descrease of the number of context
+> switches for QD8 and ~4 times for QD32.
 
-According to Documentation/doc-guide/sphinx.rst, "=" underlines are used
-for chapters (by convention).
+ublk uses io_uring_cmd_complete_in_task()(io_req_task_work_add())
+heavily. So I tried this patchset, looks not see obvious change
+on both IOPS and context switches when running 't/io_uring /dev/ublkb0',
+and it is one null ublk target(ublk add -t null -z -u 1 -q 2), IOPS
+is ~2.8M.
 
-And could the document have a title, like:
+But ublk applies batch schedule similar with io_uring before calling
+io_uring_cmd_complete_in_task().
 
-=========================
-ELF header usage in Linux
-=========================
+thanks,
+Ming
 
-(I just made that up. Feel free to change it. :)
-
-Also, the .rst file should be added to some chapter in the current
-documentation tree, such as under "Other documentation", so add this file name
-to Documentation/staging/index.rst. In fact this file could live in
-Documentation/staging instead of in Documentation/ELF/ (IMO of course).
-
-
-> +
-> +Definitions
-> +===========
-> +
-> +"First" program header is the one with the smallest offset in the file:
-> +e_phoff. "Last" program header is the one with the biggest offset:
-> +e_phoff + (e_phnum - 1) * sizeof(Elf_Phdr).
-> +
-> +PT_INTERP
-> +=========
-> +
-> +First PT_INTERP program header is used to locate the filename of ELF
-> +interpreter. Other PT_INTERP headers are ignored (since Linux 2.4.11).
-> +
-> +PT_GNU_STACK
-> +============
-> +
-> +Last PT_GNU_STACK program header defines userspace stack executability
-> +(since Linux 2.6.6). Other PT_GNU_STACK headers are ignored.
-> +
-> +PT_GNU_PROPERTY
-> +===============
-> +
-> +ELF interpreter's last PT_GNU_PROPERTY program header is used (since
-> +Linux 5.8). If interpreter doesn't have one, then the last PT_GNU_PROPERTY
-> +program header of an executable is used. Other PT_GNU_PROPERTY headers
-> +are ignored.
-
-Thanks.
--- 
-~Randy
