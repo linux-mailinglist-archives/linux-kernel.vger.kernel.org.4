@@ -2,69 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B4E06BBF34
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 22:36:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 023616BBF36
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 22:38:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232474AbjCOVgk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 17:36:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36934 "EHLO
+        id S232011AbjCOVij (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 17:38:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232713AbjCOVgd (ORCPT
+        with ESMTP id S230088AbjCOVih (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 17:36:33 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84246A54CC;
-        Wed, 15 Mar 2023 14:36:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678916173; x=1710452173;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=bN4ryWZxzvEFPRc6DSLUskI5Lq1cF0UDC0McBXRKWV0=;
-  b=iEEwfh66LkM1WE5LEVbkzk+2k03cN0X1t5YokZeDwSEBfWc+r+nW+tDq
-   qCXKzbgkdcvhJj+6ANvc0WI89qnfgxL+kY1gMtwtQzO0M0koBVczFY9Py
-   qcz0SMH8MwVJNk43ZoCrO8kGBOJ/qX5LOjkbzYan1Ey4Q7haexlaSVI52
-   EOqh8bcKhUck7H3wh3A+qj++J2AvKL5WA9Ru3KOzsZXQ52pNKyZFG1YHP
-   z/ZgVMqt+6Yf8LBIVJjWi0sAGh9+nfN3tOnshgRTs8bGdJY0fBRd3Lr6j
-   vP2ZRIi1iuDr0/UBiY75LvTaoHMAG7nhac6cCn6MHx67g/8+HQ3+UpRRf
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="402693621"
-X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
-   d="scan'208";a="402693621"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2023 14:36:12 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="709822609"
-X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
-   d="scan'208";a="709822609"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 15 Mar 2023 14:36:09 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pcYn2-00083D-1R;
-        Wed, 15 Mar 2023 21:36:08 +0000
-Date:   Thu, 16 Mar 2023 05:36:05 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Paul Cercueil <paul@crapouillou.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        Paul Cercueil <paul@crapouillou.net>,
-        michael.hennerich@analog.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        nuno.sa@analog.com, linaro-mm-sig@lists.linaro.org,
-        linux-media@vger.kernel.org
-Subject: Re: [PATCH 2/2] usb: gadget: functionfs: Add DMABUF import interface
-Message-ID: <202303160514.ZHer8I6t-lkp@intel.com>
-References: <20230314105257.17345-3-paul@crapouillou.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230314105257.17345-3-paul@crapouillou.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
+        Wed, 15 Mar 2023 17:38:37 -0400
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDAD22D173
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 14:38:34 -0700 (PDT)
+Received: by mail-pl1-x64a.google.com with SMTP id z16-20020a170902d55000b001a06f9b5e31so2856711plf.21
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 14:38:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1678916314;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=17FwLFWdQiR1VYab7un9+S1vvzYQFaeJL0pOXU3AT7k=;
+        b=hu9hUloADcly+RV/r01SUQSuSRN4l6zDp0ru74uehocwbLYMpdVm2MEt9ao2SDVcaV
+         u2zXq1wA0BHYVuhdifOE3d8OzuFpW0k1GbGK1DZK+M+1sT4ZYaunrGetx7w6YTHmIonE
+         woUKkOA3gBPItmEq5n+XtCWSBcJ9hkUFs6By04SbBMtEz7HvmzF73V5cOvn8BgwUrXrO
+         DmTZqhlIFuKRVQ3LEOOOAYJFAvM6AiIAZ9X0DpB11HgvLtBbDxrH4K1yUu8fm4uBEx7v
+         aTQqQBC7dUMoWbT0TRs+YrxfnCD+Hrd9/B9yvGiDi+4ZzXdC+k31pqi1/6spNjdH4+k4
+         LcXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678916314;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=17FwLFWdQiR1VYab7un9+S1vvzYQFaeJL0pOXU3AT7k=;
+        b=WVPo7G8P8VLIgS6e1LtKQgbCkTjyQrUGWYoH7kC1EUTtcC88Q/nj+Ya5AqGDHF/lLT
+         nP1VX3IqxU9WE3ZUCCem0R0caxesd2MMscUo19+O6NpMFLGi2DC/gh1VMBM8Wt5aD319
+         A5BdjyTnisZwlrTeu0K/5ayk6oLKYFvIehlYjr0iwzjH0qlWtgxNh0mLPjHWYk5Ig6ez
+         SaepwCn8AgiWDZHHXfzWmtXQgHxMIAEYGsNXgVOu71PocBc1JH1iIvJWnM/RNT6ch2D+
+         x/XN6Ew2W4HIyRbekzP5PUxdryJvA3WLxRg/zn7efWFrTqZMDyTBSs8IjZYq+cYxzNIP
+         VT9Q==
+X-Gm-Message-State: AO0yUKUKhkhTnnZ3mqa/KAug+Ewu4CiP+LklMEfYe7jIjUSmwgVpJWDd
+        M5xyVCk1WGPMHFJGYN19zw4BloeHqNQ=
+X-Google-Smtp-Source: AK7set8Y5rLJ2c5prUD3VByMG5Z756K9IInJTv0Hhc2VG2bUyh3AXuAyMkdgiaMNgGGQ6rZa4n9afBdg5rM=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a17:902:d2c7:b0:1a0:763d:6c2a with SMTP id
+ n7-20020a170902d2c700b001a0763d6c2amr396848plc.10.1678916314471; Wed, 15 Mar
+ 2023 14:38:34 -0700 (PDT)
+Date:   Wed, 15 Mar 2023 14:38:33 -0700
+In-Reply-To: <20230201194604.11135-3-minipli@grsecurity.net>
+Mime-Version: 1.0
+References: <20230201194604.11135-1-minipli@grsecurity.net> <20230201194604.11135-3-minipli@grsecurity.net>
+Message-ID: <ZBI62RUnMB3ppRqO@google.com>
+Subject: Re: [PATCH v3 2/6] KVM: VMX: Avoid retpoline call for control
+ register caused exits
+From:   Sean Christopherson <seanjc@google.com>
+To:     Mathias Krause <minipli@grsecurity.net>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,47 +68,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Paul,
+On Wed, Feb 01, 2023, Mathias Krause wrote:
+> Complement commit 4289d2728664 ("KVM: retpolines: x86: eliminate
+> retpoline from vmx.c exit handlers") and avoid a retpoline call for
+> control register accesses as well.
+> 
+> This speeds up guests that make heavy use of it, like grsecurity
+> kernels toggling CR0.WP to implement kernel W^X.
 
-I love your patch! Yet something to improve:
+I would rather drop this patch for VMX and instead unconditionally make CR0.WP
+guest owned when TDP (EPT) is enabled, i.e. drop the module param from patch 6.
 
-[auto build test ERROR on usb/usb-testing]
-[also build test ERROR on usb/usb-next usb/usb-linus linus/master v6.3-rc2 next-20230315]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> Signed-off-by: Mathias Krause <minipli@grsecurity.net>
+> ---
+> 
+> Meanwhile I got my hands on a AMD system and while doing a similar change
+> for SVM gives a small measurable win (1.1% faster for grsecurity guests),
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Paul-Cercueil/usb-gadget-Support-already-mapped-DMA-SGs/20230314-185522
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-patch link:    https://lore.kernel.org/r/20230314105257.17345-3-paul%40crapouillou.net
-patch subject: [PATCH 2/2] usb: gadget: functionfs: Add DMABUF import interface
-config: i386-randconfig-a014-20230313 (https://download.01.org/0day-ci/archive/20230316/202303160514.ZHer8I6t-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/4ee364ed5d112c4550344fd037f4e1ef7cc41878
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Paul-Cercueil/usb-gadget-Support-already-mapped-DMA-SGs/20230314-185522
-        git checkout 4ee364ed5d112c4550344fd037f4e1ef7cc41878
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+Mostly out of curiosity...
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303160514.ZHer8I6t-lkp@intel.com/
+Is the 1.1% roughly aligned with the gains for VMX?  If VMX sees a significantly
+larger improvement, any idea why SVM doesn't benefit as much?  E.g. did you double
+check that the kernel was actually using RETPOLINE?
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+> it would provide nothing for other guests, as the change I was testing was
+> specifically targeting CR0 caused exits.
+> 
+> A more general approach would instead cover CR3 and, maybe, CR4 as well.
+> However, that would require a lot more exit code compares, likely
+> vanishing the gains in the general case. So this tweak is VMX only.
 
->> ERROR: modpost: module usb_f_fs uses symbol dma_buf_get from namespace DMA_BUF, but does not import it.
->> ERROR: modpost: module usb_f_fs uses symbol dma_buf_attach from namespace DMA_BUF, but does not import it.
->> ERROR: modpost: module usb_f_fs uses symbol dma_buf_detach from namespace DMA_BUF, but does not import it.
->> ERROR: modpost: module usb_f_fs uses symbol dma_buf_put from namespace DMA_BUF, but does not import it.
->> ERROR: modpost: module usb_f_fs uses symbol dma_buf_map_attachment from namespace DMA_BUF, but does not import it.
->> ERROR: modpost: module usb_f_fs uses symbol dma_buf_unmap_attachment from namespace DMA_BUF, but does not import it.
+I don't think targeting on CR0 exits is a reason to not do this for SVM.  With
+NPT enabled, CR3 isn't intercepted, and CR4 exits should be very rare.  If the
+performance benefits are marginal (I don't have a good frame of reference for the
+1.1%), then _that's_ a good reason to leave SVM alone.  But not giving CR3 and CR4
+priority is a non-issue.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+>  arch/x86/kvm/vmx/vmx.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> index c788aa382611..c8198c8a9b55 100644
+> --- a/arch/x86/kvm/vmx/vmx.c
+> +++ b/arch/x86/kvm/vmx/vmx.c
+> @@ -6538,6 +6538,8 @@ static int __vmx_handle_exit(struct kvm_vcpu *vcpu, fastpath_t exit_fastpath)
+>  		return handle_external_interrupt(vcpu);
+>  	else if (exit_reason.basic == EXIT_REASON_HLT)
+>  		return kvm_emulate_halt(vcpu);
+> +	else if (exit_reason.basic == EXIT_REASON_CR_ACCESS)
+> +		return handle_cr(vcpu);
+>  	else if (exit_reason.basic == EXIT_REASON_EPT_MISCONFIG)
+>  		return handle_ept_misconfig(vcpu);
+>  #endif
+> -- 
+> 2.39.1
+> 
