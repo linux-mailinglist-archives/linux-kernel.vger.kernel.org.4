@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 148336BBD85
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 20:45:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F8CB6BBD84
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 20:45:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231716AbjCOTpb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 15:45:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47952 "EHLO
+        id S232082AbjCOTp1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 15:45:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232736AbjCOTor (ORCPT
+        with ESMTP id S232746AbjCOTor (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 15 Mar 2023 15:44:47 -0400
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2267F298EA
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D6646C6A5
         for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 12:44:38 -0700 (PDT)
-Received: by mail-qt1-x830.google.com with SMTP id l13so17525326qtv.3
+Received: by mail-qt1-x82c.google.com with SMTP id r5so17505561qtp.4
         for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 12:44:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google; t=1678909477;
+        d=joelfernandes.org; s=google; t=1678909478;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=kmL3NaGdkJr0Bc+bh875hISga550hRk4RtUTBtwwn0w=;
-        b=bnBx2KLF4/8ayT1hsKRH/YELY31dEXlopSuwsSIBqqg+vaXM/EzMzHk3VEelU5122J
-         jwQb+81WA0fyC2BsjfFRu6dch564OgwoXcO8sX+yjQIZbugkKoJ2HG34dTE3ocYhrCar
-         8S/A3URcPENhyHM0kLeY152ccpK6HGiSkJAnw=
+        bh=4B9TRjdncmXbZW5HDxJoPgY1Lgs+0sxOKkTAY/VF78g=;
+        b=dqOfXnxHTLjoCGihltc9NkJBBAVuV0+9aZqiLbjL4hII42e0QglBr/nfEAbRs2bOkJ
+         GJMPOjeYCEpzI+Scjv/06JFOBqgaiyJfIHVZH/2XR0pVlXRzCzTggamJVGUci2HlXgXm
+         tuGi6ULhvXLuP1gdGRXg0ylLcoiFMYJdJDCmk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678909477;
+        d=1e100.net; s=20210112; t=1678909478;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=kmL3NaGdkJr0Bc+bh875hISga550hRk4RtUTBtwwn0w=;
-        b=zu8fqmkYNf5WtbJAVAbP03AbeP7wU7lZiux8VU39ybdHF/3M83OrPzaWtvTldMQZoZ
-         hEMPzJJ9D5oRLo70lKeDuHeNb+du9wslgHCDyi9gYxjLubKb1R8OlbAvPTYfW8W2PnAt
-         KYgY7+Tz3Ex6RoyX1P8zQo3p5DUmekAxrpDoLc0gIN/3L+QgAWG7THCQy5pJWMaGLwgy
-         p0WRAEjFRdpMj0kQTha5ZnPTWETxSwBct094099/LvLTsozIqu9QFCORgSOqD+/bEdTJ
-         biPer5tHYzldTyFHWVFI07TeOdmAY28r0A/LmbAyi+cUCKODpt1QbbUGp5Fhq+8QtHY4
-         vTpg==
-X-Gm-Message-State: AO0yUKVN/VDzwNjiSijyFJ0o7Aa2dB3Wvp14YlutEsf7IZBzmSb+tv6t
-        zTRDvwKW5pC+LuMfn6bs27dIGs89e/JqToZJaj0=
-X-Google-Smtp-Source: AK7set/ClKfiibjlVpcqax3G+t0GuqIKsox+SDD/jjB1WY+e+c9YqxkMfF3ISk2g3yWXShpXuSq1zg==
-X-Received: by 2002:ac8:5989:0:b0:3bf:c5a7:595f with SMTP id e9-20020ac85989000000b003bfc5a7595fmr1903191qte.21.1678909476912;
-        Wed, 15 Mar 2023 12:44:36 -0700 (PDT)
+        bh=4B9TRjdncmXbZW5HDxJoPgY1Lgs+0sxOKkTAY/VF78g=;
+        b=5xsZRpKGOV9W6f1ARhZ+CzXdSpdAGjaScHNPfvRsVbucddFJDXgSV71mtZ34QLYoOw
+         b7MfmC1nZy2az/luMoGDMvVV6kVcXn79VL5YEjXYD+rFafusX+CuIS5X09iWvRSKYTyG
+         Zzi7UtJq/VVqNQfEdS2Q3xKELthcjSwsEVGwuo3o2T4M98xK27M3MbEO+6LcCF8y5lzT
+         aBZ/syv3CbSMhEHhex9zQ33XDvSQqqK8yK6lh4D5ziq5OIiL80HQaKgSIbQnifGPCFoQ
+         GSraSEvIWMqedx/3457f6gnFbENzKBQzhQOWY/0MJrcVYqIvYSPzosw9JuKMd24QFjDO
+         93jw==
+X-Gm-Message-State: AO0yUKWvgt/lJXeb3Sd9oUNJkdhvcIv8o5Llsw3hRdmeIL11bbfr8ZJS
+        P5/JRtS5cEfcU6a5A9VW7rlw5axbVlzkSwr9FKU=
+X-Google-Smtp-Source: AK7set/vWDGY32rblTovY6ftZOnuWh8zkM0Wz+Ch7gWDOOg0NQXco/uUREG10n6H7kQ6zngLdzVBHg==
+X-Received: by 2002:a05:622a:44f:b0:3b8:340b:1aab with SMTP id o15-20020a05622a044f00b003b8340b1aabmr1820256qtx.25.1678909477913;
+        Wed, 15 Mar 2023 12:44:37 -0700 (PDT)
 Received: from joelboxx.c.googlers.com.com (129.239.188.35.bc.googleusercontent.com. [35.188.239.129])
-        by smtp.gmail.com with ESMTPSA id c15-20020ac8660f000000b003b86b088755sm4346666qtp.15.2023.03.15.12.44.36
+        by smtp.gmail.com with ESMTPSA id c15-20020ac8660f000000b003b86b088755sm4346666qtp.15.2023.03.15.12.44.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Mar 2023 12:44:36 -0700 (PDT)
+        Wed, 15 Mar 2023 12:44:37 -0700 (PDT)
 From:   "Joel Fernandes (Google)" <joel@joelfernandes.org>
 To:     linux-kernel@vger.kernel.org,
         "Paul E. McKenney" <paulmck@kernel.org>,
@@ -56,14 +56,11 @@ To:     linux-kernel@vger.kernel.org,
         Steven Rostedt <rostedt@goodmis.org>,
         Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
         Lai Jiangshan <jiangshanlai@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Cc:     Zheng Yejian <zhengyejian1@huawei.com>, stable@vger.kernel.org,
-        rcu@vger.kernel.org
-Subject: [PATCH 8/9] rcu: Avoid stack overflow due to __rcu_irq_enter_check_tick() being kprobe-ed
-Date:   Wed, 15 Mar 2023 19:43:48 +0000
-Message-Id: <20230315194349.10798-8-joel@joelfernandes.org>
+        Joel Fernandes <joel@joelfernandes.org>
+Cc:     Zqiang <qiang1.zhang@intel.com>, rcu@vger.kernel.org
+Subject: [PATCH 9/9] rcu: Protect rcu_print_task_exp_stall() ->exp_tasks access
+Date:   Wed, 15 Mar 2023 19:43:49 +0000
+Message-Id: <20230315194349.10798-9-joel@joelfernandes.org>
 X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
 In-Reply-To: <20230315194349.10798-1-joel@joelfernandes.org>
 References: <20230315194349.10798-1-joel@joelfernandes.org>
@@ -71,137 +68,70 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zheng Yejian <zhengyejian1@huawei.com>
+From: Zqiang <qiang1.zhang@intel.com>
 
-Registering a kprobe on __rcu_irq_enter_check_tick() can cause kernel
-stack overflow as shown below. This issue can be reproduced by enabling
-CONFIG_NO_HZ_FULL and booting the kernel with argument "nohz_full=",
-and then giving the following commands at the shell prompt:
+For kernels built with CONFIG_PREEMPT_RCU=y, the following scenario can
+result in a NULL-pointer dereference:
 
-  # cd /sys/kernel/tracing/
-  # echo 'p:mp1 __rcu_irq_enter_check_tick' >> kprobe_events
-  # echo 1 > events/kprobes/enable
+           CPU1                                           CPU2
+rcu_preempt_deferred_qs_irqrestore                rcu_print_task_exp_stall
+  if (special.b.blocked)                            READ_ONCE(rnp->exp_tasks) != NULL
+    raw_spin_lock_rcu_node
+    np = rcu_next_node_entry(t, rnp)
+    if (&t->rcu_node_entry == rnp->exp_tasks)
+      WRITE_ONCE(rnp->exp_tasks, np)
+      ....
+      raw_spin_unlock_irqrestore_rcu_node
+                                                    raw_spin_lock_irqsave_rcu_node
+                                                    t = list_entry(rnp->exp_tasks->prev,
+                                                        struct task_struct, rcu_node_entry)
+                                                    (if rnp->exp_tasks is NULL, this
+                                                       will dereference a NULL pointer)
 
-This commit therefore adds __rcu_irq_enter_check_tick() to the kprobes
-blacklist using NOKPROBE_SYMBOL().
+The problem is that CPU2 accesses the rcu_node structure's->exp_tasks
+field without holding the rcu_node structure's ->lock and CPU2 did
+not observe CPU1's change to rcu_node structure's ->exp_tasks in time.
+Therefore, if CPU1 sets rcu_node structure's->exp_tasks pointer to NULL,
+then CPU2 might dereference that NULL pointer.
 
-Insufficient stack space to handle exception!
-ESR: 0x00000000f2000004 -- BRK (AArch64)
-FAR: 0x0000ffffccf3e510
-Task stack:     [0xffff80000ad30000..0xffff80000ad38000]
-IRQ stack:      [0xffff800008050000..0xffff800008058000]
-Overflow stack: [0xffff089c36f9f310..0xffff089c36fa0310]
-CPU: 5 PID: 190 Comm: bash Not tainted 6.2.0-rc2-00320-g1f5abbd77e2c #19
-Hardware name: linux,dummy-virt (DT)
-pstate: 400003c5 (nZcv DAIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : __rcu_irq_enter_check_tick+0x0/0x1b8
-lr : ct_nmi_enter+0x11c/0x138
-sp : ffff80000ad30080
-x29: ffff80000ad30080 x28: ffff089c82e20000 x27: 0000000000000000
-x26: 0000000000000000 x25: ffff089c02a8d100 x24: 0000000000000000
-x23: 00000000400003c5 x22: 0000ffffccf3e510 x21: ffff089c36fae148
-x20: ffff80000ad30120 x19: ffffa8da8fcce148 x18: 0000000000000000
-x17: 0000000000000000 x16: 0000000000000000 x15: ffffa8da8e44ea6c
-x14: ffffa8da8e44e968 x13: ffffa8da8e03136c x12: 1fffe113804d6809
-x11: ffff6113804d6809 x10: 0000000000000a60 x9 : dfff800000000000
-x8 : ffff089c026b404f x7 : 00009eec7fb297f7 x6 : 0000000000000001
-x5 : ffff80000ad30120 x4 : dfff800000000000 x3 : ffffa8da8e3016f4
-x2 : 0000000000000003 x1 : 0000000000000000 x0 : 0000000000000000
-Kernel panic - not syncing: kernel stack overflow
-CPU: 5 PID: 190 Comm: bash Not tainted 6.2.0-rc2-00320-g1f5abbd77e2c #19
-Hardware name: linux,dummy-virt (DT)
-Call trace:
- dump_backtrace+0xf8/0x108
- show_stack+0x20/0x30
- dump_stack_lvl+0x68/0x84
- dump_stack+0x1c/0x38
- panic+0x214/0x404
- add_taint+0x0/0xf8
- panic_bad_stack+0x144/0x160
- handle_bad_stack+0x38/0x58
- __bad_stack+0x78/0x7c
- __rcu_irq_enter_check_tick+0x0/0x1b8
- arm64_enter_el1_dbg.isra.0+0x14/0x20
- el1_dbg+0x2c/0x90
- el1h_64_sync_handler+0xcc/0xe8
- el1h_64_sync+0x64/0x68
- __rcu_irq_enter_check_tick+0x0/0x1b8
- arm64_enter_el1_dbg.isra.0+0x14/0x20
- el1_dbg+0x2c/0x90
- el1h_64_sync_handler+0xcc/0xe8
- el1h_64_sync+0x64/0x68
- __rcu_irq_enter_check_tick+0x0/0x1b8
- arm64_enter_el1_dbg.isra.0+0x14/0x20
- el1_dbg+0x2c/0x90
- el1h_64_sync_handler+0xcc/0xe8
- el1h_64_sync+0x64/0x68
- __rcu_irq_enter_check_tick+0x0/0x1b8
- [...]
- el1_dbg+0x2c/0x90
- el1h_64_sync_handler+0xcc/0xe8
- el1h_64_sync+0x64/0x68
- __rcu_irq_enter_check_tick+0x0/0x1b8
- arm64_enter_el1_dbg.isra.0+0x14/0x20
- el1_dbg+0x2c/0x90
- el1h_64_sync_handler+0xcc/0xe8
- el1h_64_sync+0x64/0x68
- __rcu_irq_enter_check_tick+0x0/0x1b8
- arm64_enter_el1_dbg.isra.0+0x14/0x20
- el1_dbg+0x2c/0x90
- el1h_64_sync_handler+0xcc/0xe8
- el1h_64_sync+0x64/0x68
- __rcu_irq_enter_check_tick+0x0/0x1b8
- el1_interrupt+0x28/0x60
- el1h_64_irq_handler+0x18/0x28
- el1h_64_irq+0x64/0x68
- __ftrace_set_clr_event_nolock+0x98/0x198
- __ftrace_set_clr_event+0x58/0x80
- system_enable_write+0x144/0x178
- vfs_write+0x174/0x738
- ksys_write+0xd0/0x188
- __arm64_sys_write+0x4c/0x60
- invoke_syscall+0x64/0x180
- el0_svc_common.constprop.0+0x84/0x160
- do_el0_svc+0x48/0xe8
- el0_svc+0x34/0xd0
- el0t_64_sync_handler+0xb8/0xc0
- el0t_64_sync+0x190/0x194
-SMP: stopping secondary CPUs
-Kernel Offset: 0x28da86000000 from 0xffff800008000000
-PHYS_OFFSET: 0xfffff76600000000
-CPU features: 0x00000,01a00100,0000421b
-Memory Limit: none
+This commit therefore holds the rcu_node structure's ->lock while
+accessing that structure's->exp_tasks field.
 
-Link: https://lore.kernel.org/all/20221119040049.795065-1-zhengyejian1@huawei.com/
-Fixes: aaf2bc50df1f ("rcu: Abstract out rcu_irq_enter_check_tick() from rcu_nmi_enter()")
-Signed-off-by: Zheng Yejian <zhengyejian1@huawei.com>
-Cc: stable@vger.kernel.org
+[ paulmck: Apply Frederic Weisbecker feedback. ]
+
+Signed-off-by: Zqiang <qiang1.zhang@intel.com>
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
 ---
- kernel/rcu/tree.c | 1 +
- 1 file changed, 1 insertion(+)
+ kernel/rcu/tree_exp.h | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-index 90d54571126a..ee27a03d7576 100644
---- a/kernel/rcu/tree.c
-+++ b/kernel/rcu/tree.c
-@@ -640,6 +640,7 @@ void __rcu_irq_enter_check_tick(void)
- 	}
- 	raw_spin_unlock_rcu_node(rdp->mynode);
- }
-+NOKPROBE_SYMBOL(__rcu_irq_enter_check_tick);
- #endif /* CONFIG_NO_HZ_FULL */
+diff --git a/kernel/rcu/tree_exp.h b/kernel/rcu/tree_exp.h
+index 5343f32e7d67..3b7abb58157d 100644
+--- a/kernel/rcu/tree_exp.h
++++ b/kernel/rcu/tree_exp.h
+@@ -803,9 +803,11 @@ static int rcu_print_task_exp_stall(struct rcu_node *rnp)
+ 	int ndetected = 0;
+ 	struct task_struct *t;
  
- /*
+-	if (!READ_ONCE(rnp->exp_tasks))
+-		return 0;
+ 	raw_spin_lock_irqsave_rcu_node(rnp, flags);
++	if (!rnp->exp_tasks) {
++		raw_spin_unlock_irqrestore_rcu_node(rnp, flags);
++		return 0;
++	}
+ 	t = list_entry(rnp->exp_tasks->prev,
+ 		       struct task_struct, rcu_node_entry);
+ 	list_for_each_entry_continue(t, &rnp->blkd_tasks, rcu_node_entry) {
 -- 
 2.40.0.rc1.284.g88254d51c5-goog
 
