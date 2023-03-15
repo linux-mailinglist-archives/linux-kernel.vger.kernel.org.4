@@ -2,105 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE6016BA4F6
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 02:58:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4C126BA4F7
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 03:00:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230166AbjCOB6i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 21:58:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50826 "EHLO
+        id S229705AbjCOCAa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 22:00:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjCOB6g (ORCPT
+        with ESMTP id S229447AbjCOCA3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 21:58:36 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 793E11D93C;
-        Tue, 14 Mar 2023 18:58:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=cZXJ8oSjvlAjO9dl8hZv7ony8k6kk06ukLqbV6cbeyE=; b=h5ySyWe0uaxLa/3IUKIQLGTuF9
-        lOnVTz8EMh+eph5z5jTnybcMy91yjf58GU7sg92/8AUjqcgMkX1teEJHr9lDAcaH0J3umrf/r5bJG
-        WdiV8kZwFWxPujviN8EmnbGK7eClvEjudS7TbXxPaAT8IuyJReQud7hJgTeLE9BPtA/A=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1pcGPH-007Llj-7v; Wed, 15 Mar 2023 02:58:23 +0100
-Date:   Wed, 15 Mar 2023 02:58:23 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     Christian Marangi <ansuelsmth@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        John Crispin <john@phrozen.org>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, Lee Jones <lee@kernel.org>,
-        linux-leds@vger.kernel.org
-Subject: Re: [net-next PATCH v3 09/14] dt-bindings: net: dsa: dsa-port:
- Document support for LEDs node
-Message-ID: <afd1f052-6bb6-4388-9620-1adb02e6d607@lunn.ch>
-References: <20230314101516.20427-1-ansuelsmth@gmail.com>
- <20230314101516.20427-1-ansuelsmth@gmail.com>
- <20230314101516.20427-10-ansuelsmth@gmail.com>
- <20230314101516.20427-10-ansuelsmth@gmail.com>
- <20230315005000.co4in33amy3t3xbx@skbuf>
+        Tue, 14 Mar 2023 22:00:29 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2172B2887B
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 19:00:27 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Pbtrk2zHtz4xDp;
+        Wed, 15 Mar 2023 13:00:22 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1678845623;
+        bh=zUCpIP8eMjrN8etQOwCOEXDVZhq5NHF0PZNHwLjUDmU=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=D0rK86NmKbcJ+X9Ku6Qdk07mr2ceuEl3hAvcGnMcECSO6GxPRP3ecOPMCzlsq0mQY
+         WdN0CgkfEyVb58TsHWzE/UPY6HlmpCBIDlInImAEKREsP9QpnSQUdjipzGlZ8SA7b0
+         MWuGx1T/dgc3UUr2XgZWDByJ13OJm0n6afDOyyfv9dddJfGxwKB3iyubb3xMCU0GdD
+         giZ9ccXRwEzJptULR60dRmDVlFV7jrldUlRcLX1rhA9aHJDmNqGzuItVGHVXjL6gvN
+         fEHONjOfqwMaHRqoT8eOJ17MgOCAb4e90HqU/qvLxku9/GU27DAv4jtoDwIL26NMQy
+         LP3HRf+O19XZw==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     rafael@kernel.org, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH 14/36] powerpc/pseries: move to use bus_get_dev_root()
+In-Reply-To: <20230313182918.1312597-14-gregkh@linuxfoundation.org>
+References: <20230313182918.1312597-1-gregkh@linuxfoundation.org>
+ <20230313182918.1312597-14-gregkh@linuxfoundation.org>
+Date:   Wed, 15 Mar 2023 13:00:21 +1100
+Message-ID: <87bkkuojt6.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230315005000.co4in33amy3t3xbx@skbuf>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 15, 2023 at 02:50:00AM +0200, Vladimir Oltean wrote:
-> On Tue, Mar 14, 2023 at 11:15:11AM +0100, Christian Marangi wrote:
-> > Document support for LEDs node in dsa port.
-> > Switch may support different LEDs that can be configured for different
-> > operation like blinking on traffic event or port link.
-> > 
-> > Also add some Documentation to describe the difference of these nodes
-> > compared to PHY LEDs, since dsa-port LEDs are controllable by the switch
-> > regs and the possible intergated PHY doesn't have control on them.
-> > 
-> > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> > ---
-> >  .../devicetree/bindings/net/dsa/dsa-port.yaml | 21 +++++++++++++++++++
-> >  1 file changed, 21 insertions(+)
-> 
-> Of all schemas, why did you choose dsa-port.yaml? Why not either something
-> hardware specific (qca8k.yaml) or more generic (ethernet-controller.yaml)?
+Greg Kroah-Hartman <gregkh@linuxfoundation.org> writes:
+> Direct access to the struct bus_type dev_root pointer is going away soon
+> so replace that with a call to bus_get_dev_root() instead, which is what
+> it is there for.
+>
+> Cc: Michael Ellerman <mpe@ellerman.id.au>
+> Cc: Nicholas Piggin <npiggin@gmail.com>
+> Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: linuxppc-dev@lists.ozlabs.org
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> ---
+> Note, this is a patch that is a prepatory cleanup as part of a larger
+> series of patches that is working on resolving some old driver core
+> design mistakes.  It will build and apply cleanly on top of 6.3-rc2 on
+> its own, but I'd prefer if I could take it through my driver-core tree
+> so that the driver core changes can be taken through there for 6.4-rc1.
+>
+>  .../platforms/pseries/pseries_energy.c        | 28 +++++++++++--------
+>  arch/powerpc/platforms/pseries/suspend.c      | 10 +++++--
+>  2 files changed, 25 insertions(+), 13 deletions(-)
 
-The binding should be generic. So qca8k.yaml is way to specific. The
-Marvell switch should re-use it at some point.
+Acked-by: Michael Ellerman <mpe@ellerman.id.au> (powerpc)
 
-Looking at the hierarchy, ethernet-controller.yaml would work since
-dsa-port includes ethernet-switch-port, which includes
-ethernet-controller.
+The other powerpc changes look OK too.
 
-These are MAC LEDs, and there is no reason why a standalone MAC in a
-NIC could not implement such LEDs. So yes,
-ethernet-controller.yaml.
-
-Is there actually anything above ethernet-controller.yaml? This is
-about a netdev really, so a wifi MAC, or even a CAN MAC could also use
-the binding....
-
-    Andrew
+cheers
