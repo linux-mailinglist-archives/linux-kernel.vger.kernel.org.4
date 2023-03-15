@@ -2,75 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F87A6BBD4E
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 20:33:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7CF16BBD4F
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 20:33:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230473AbjCOTd2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 15:33:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55194 "EHLO
+        id S232116AbjCOTds (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 15:33:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229742AbjCOTd0 (ORCPT
+        with ESMTP id S229742AbjCOTdq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 15:33:26 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13ADC7DD2E;
-        Wed, 15 Mar 2023 12:33:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B3709B81F13;
-        Wed, 15 Mar 2023 19:33:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 7C887C433EF;
-        Wed, 15 Mar 2023 19:33:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678908800;
-        bh=+2XMoGg6ymRXMsT0pfT+7Qtw+D27bg0qpFJW1pRbnAA=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=V4ERdTl5zuOOWvS9JboGZJaT0YW8h3yd6kWvouJdjXAIh+Oyex2uB5WrAAeDkULDg
-         3ZcJAahGV1JDgYumdI93Yxd3dRgWzGam5Y9Bkcguxn4ppij8MfABBcRb+LcwmlaLEi
-         HObJYTyrhIB3g9KHpAf1edeGSMjqv7wohcY7Wsroa+diLtmwbshLRGLatihHDm/ZDO
-         jPo45ermlvnjpS6NkACFbfmcJn64ShWy0yPIagpWzjRqLwa5HSncJUsK1ZYHDR0Qi/
-         3Pd9Zb8ramv/fk7zWvk3CVnSR5yrQ3tP/dT0kHsrRwCG8PvoVgdAeelAETyC5J72VE
-         GK29cl3wZcECg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 61704E66CBA;
-        Wed, 15 Mar 2023 19:33:20 +0000 (UTC)
-Subject: Re: [GIT PULL] Kselftest fixes update for Linux 6.3-rc3
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <2628e459-597b-3ab7-f330-e0f4659f3efc@linuxfoundation.org>
-References: <2628e459-597b-3ab7-f330-e0f4659f3efc@linuxfoundation.org>
-X-PR-Tracked-List-Id: <linux-kselftest.vger.kernel.org>
-X-PR-Tracked-Message-Id: <2628e459-597b-3ab7-f330-e0f4659f3efc@linuxfoundation.org>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-fixes-6.3-rc3
-X-PR-Tracked-Commit-Id: 624c60f326c6e5a80b008e8a5c7feffe8c27dc72
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 9c1bec9c0b08abeac72ed6214b723adc224013bf
-Message-Id: <167890880039.11733.1191821424667941921.pr-tracker-bot@kernel.org>
-Date:   Wed, 15 Mar 2023 19:33:20 +0000
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 15 Mar 2023 15:33:46 -0400
+Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A89C0618B3
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 12:33:42 -0700 (PDT)
+Received: from fpc (unknown [10.10.165.16])
+        by mail.ispras.ru (Postfix) with ESMTPSA id 8554144C100F;
+        Wed, 15 Mar 2023 19:33:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru 8554144C100F
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
+        s=default; t=1678908819;
+        bh=GBHDW8IQ1HO6elN8PiKG6USdry3dR3Epa0+PVvmsvIg=;
+        h=Date:From:To:Cc:Subject:From;
+        b=PgiSRVYUMGpPyT5ocnDRNP0NREniKd5iDhXCAVA97iSp9thMOupubowOt2Y44fKt6
+         /HerXihyDX6xuIIx9CZ8atSJv1kt6IHiIg3/Ef5NvcTUhuqwatQN29Qhwhbww0pubG
+         lYbeYv3bacqzaYxfWJPCQJbA4DAl16Q3VA50tFSI=
+Date:   Wed, 15 Mar 2023 22:33:35 +0300
+From:   Fedor Pchelkin <pchelkin@ispras.ru>
+To:     syzbot+f2cb6e0ffdb961921e4d@syzkaller.appspotmail.com
+Cc:     syzkaller-bugs@googlegroups.com, linux-kernel@vger.kernel.org
+Subject: Re: [syzbot] [wireless?] KMSAN: uninit-value in ath9k_wmi_ctrl_rx
+Message-ID: <20230315193335.7doao26b2u3lzvq3@fpc>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Wed, 15 Mar 2023 13:13:43 -0600:
+#syz test: https://github.com/google/kmsan.git master
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-fixes-6.3-rc3
-
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/9c1bec9c0b08abeac72ed6214b723adc224013bf
-
-Thank you!
-
+--- a/drivers/net/wireless/ath/ath9k/htc_drv_txrx.c
++++ b/drivers/net/wireless/ath/ath9k/htc_drv_txrx.c
+@@ -1147,6 +1147,12 @@ void ath9k_htc_rxep(void *drv_priv, struct sk_buff *skb,
+ 	if (!data_race(priv->rx.initialized))
+ 		goto err;
+ 
++	/* Validate the obtained SKB so that it is handled without error
++	 * inside rx_tasklet handler.
++	 */
++	if (unlikely(skb->len < sizeof(struct ieee80211_hdr)))
++		goto err;
++
+ 	spin_lock_irqsave(&priv->rx.rxbuflock, flags);
+ 	list_for_each_entry(tmp_buf, &priv->rx.rxbuf, list) {
+ 		if (!tmp_buf->in_process) {
+diff --git a/drivers/net/wireless/ath/ath9k/htc_hst.c b/drivers/net/wireless/ath/ath9k/htc_hst.c
+index fe62ff668f75..9d0d9d0e1aa8 100644
+--- a/drivers/net/wireless/ath/ath9k/htc_hst.c
++++ b/drivers/net/wireless/ath/ath9k/htc_hst.c
+@@ -475,6 +475,10 @@ void ath9k_htc_rx_msg(struct htc_target *htc_handle,
+ 		skb_pull(skb, sizeof(struct htc_frame_hdr));
+ 
+ 		endpoint = &htc_handle->endpoint[epid];
++
++		/* The endpoint RX handlers should implement their own
++		 * additional SKB sanity checking
++		 */
+ 		if (endpoint->ep_callbacks.rx)
+ 			endpoint->ep_callbacks.rx(endpoint->ep_callbacks.priv,
+ 						  skb, epid);
+diff --git a/drivers/net/wireless/ath/ath9k/wmi.c b/drivers/net/wireless/ath/ath9k/wmi.c
+index 19345b8f7bfd..2e7c361b62f5 100644
+--- a/drivers/net/wireless/ath/ath9k/wmi.c
++++ b/drivers/net/wireless/ath/ath9k/wmi.c
+@@ -204,6 +204,10 @@ static void ath9k_wmi_rsp_callback(struct wmi *wmi, struct sk_buff *skb)
+ {
+ 	skb_pull(skb, sizeof(struct wmi_cmd_hdr));
+ 
++	/* Once again validate the SKB. */
++	if (unlikely(skb->len < wmi->cmd_rsp_len))
++		return;
++
+ 	if (wmi->cmd_rsp_buf != NULL && wmi->cmd_rsp_len != 0)
+ 		memcpy(wmi->cmd_rsp_buf, skb->data, wmi->cmd_rsp_len);
+ 
+@@ -221,6 +225,10 @@ static void ath9k_wmi_ctrl_rx(void *priv, struct sk_buff *skb,
+ 	if (unlikely(wmi->stopped))
+ 		goto free_skb;
+ 
++	/* Validate the obtained SKB. */
++	if (unlikely(skb->len < sizeof(struct wmi_cmd_hdr)))
++		goto free_skb;
++
+ 	hdr = (struct wmi_cmd_hdr *) skb->data;
+ 	cmd_id = be16_to_cpu(hdr->command_id);
+ 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
