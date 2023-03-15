@@ -2,117 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12EC46BAA34
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 08:59:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87F276BAA3C
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 09:00:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231701AbjCOH7M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 03:59:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39144 "EHLO
+        id S231860AbjCOIAS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 04:00:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231586AbjCOH7K (ORCPT
+        with ESMTP id S231741AbjCOIAO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 03:59:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F9C442BCE;
-        Wed, 15 Mar 2023 00:59:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CED3561BDD;
-        Wed, 15 Mar 2023 07:59:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CFF9C433EF;
-        Wed, 15 Mar 2023 07:59:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678867148;
-        bh=vRFR481Q9774JGel+N5ZkZPT18QV5YRBoXfvxt1cumY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=KcpVndpJ8/eCcRy26ZDTUjvEX040VPQs2cXEpNU5dnmaiN/nUoUS/z6GYvMmy5wm7
-         Jqk36hLkhsvNuB40Q0+XYVAQ66E+z3lrgkeR1vgfC/VU1lirwRIP4iMmwmJj/DaENm
-         7oypyGwzoZPtjGIu1tfA5PtzTWCPNmUhc0eRItCYxUKMmASDev/C8cx/fTQOiQ6Q5u
-         jjXz73thMqRZO/dhRFG9vAGItnJSG1gHPtN9Q0tpnIXtZkoKkt/B2RJZ/7vdcEFL+P
-         9YU4lRfVp5WlLrvoN1+JwyvNl51UGMlcIyVOiFZ2FtCirH034xozA/9yMI/CUnaGzn
-         VWOW7UlgJDSFA==
-Date:   Wed, 15 Mar 2023 16:59:05 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     linux-trace-kernel@vger.kernel.org,
-        Heinz Wiesinger <pprkut@slackware.com>, andersson@kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_rjendra@quicinc.com, quic_saipraka@quicinc.com,
-        quic_sibis@quicinc.com
-Subject: Re: [PATCH] bootconfig: Fix testcase to increase max node
-Message-Id: <20230315165905.4bb2a464b2ffe4fb640cfbdd@kernel.org>
-In-Reply-To: <20230314111213.08f33839@gandalf.local.home>
-References: <167871576880.783280.2390717518955954275.stgit@devnote2>
-        <20230314111213.08f33839@gandalf.local.home>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 15 Mar 2023 04:00:14 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA1E366D3D;
+        Wed, 15 Mar 2023 01:00:12 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32F7xrH9054826;
+        Wed, 15 Mar 2023 02:59:53 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1678867193;
+        bh=/chdimC1GrtyDSZ38Uw6LyuDnCvg7dvq6j5vQRR9ksc=;
+        h=From:To:CC:Subject:Date;
+        b=BcBukwp+o9XXJfaK8N90ZB5UnVz8TzJi1BFEAj8JW/4HTYpiSTC9ho4ruN6Qnd38T
+         FdGOiA4ieRyA9cRfVoM7q+jvb9IzHB1aWyk/vxnc8BFuIs1CL6deH+geBbCKw1FZ8r
+         u80Gj9VxMYrbG52KNxMftLa7hF30TapZUNbPVos0=
+Received: from DFLE103.ent.ti.com (dfle103.ent.ti.com [10.64.6.24])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32F7xr3b048296
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 15 Mar 2023 02:59:53 -0500
+Received: from DFLE109.ent.ti.com (10.64.6.30) by DFLE103.ent.ti.com
+ (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Wed, 15
+ Mar 2023 02:59:53 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE109.ent.ti.com
+ (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Wed, 15 Mar 2023 02:59:53 -0500
+Received: from uda0492258.dhcp.ti.com (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32F7xmKb042755;
+        Wed, 15 Mar 2023 02:59:49 -0500
+From:   Siddharth Vadapalli <s-vadapalli@ti.com>
+To:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski@linaro.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <nsekhar@ti.com>,
+        <rogerq@kernel.org>
+CC:     <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <srk@ti.com>,
+        <s-vadapalli@ti.com>
+Subject: [PATCH net-next 0/2] Add J784S4 CPSW9G NET Bindings
+Date:   Wed, 15 Mar 2023 13:29:46 +0530
+Message-ID: <20230315075948.1683120-1-s-vadapalli@ti.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 14 Mar 2023 11:12:13 -0400
-Steven Rostedt <rostedt@goodmis.org> wrote:
+Hello,
 
-> On Mon, 13 Mar 2023 22:56:09 +0900
-> "Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
-> 
-> > @@ -87,10 +88,16 @@ xfail grep -i "error" $OUTFILE
-> >  
-> >  echo "Max node number check"
-> >  
-> > -echo -n > $TEMPCONF
-> > -for i in `seq 1 1024` ; do
-> > -   echo "node$i" >> $TEMPCONF
-> 
-> Do you need this extra file?
-> 
-> > -done
-> > +cat > $AWKFILE << EOF
-> > +BEGIN {
-> > +  for (i = 0; i < 26; i += 1)
-> > +      printf("%c\n", 65 + i % 26)
-> > +  for (i = 26; i < 8192; i += 1)
-> > +      printf("%c%c%c\n", 65 + i % 26, 65 + (i / 26) % 26, 65 + (i / 26 / 26))
-> > +}
-> > +EOF
-> > +awk -f "$AWKFILE" > $TEMPCONF
-> 
-> Couldn't the above just be:
-> 
-> awk '
-> 	BEGIN {
-> 		for (i = 0; i < 26; i += 1)
-> 			printf("%c\n", 65 + i % 26)
-> 		for (i = 26; i < 8192; i += 1)
-> 			printf("%c%c%c\n", 65 + i % 26, 65 + (i / 26) % 26, 65 + (i / 26 / 26))
-> 	}
-> ' > $TEMPCONF
-> 
-> and not need the extra file?
+This series cleans up the bindings by reordering the compatibles, followed
+by adding the bindings for CPSW9G instance of CPSW Ethernet Switch on TI's
+J784S4 SoC.
 
-Indeed. Let me update this.
+Siddharth Vadapalli (2):
+  dt-bindings: net: ti: k3-am654-cpsw-nuss: Fix compatible order
+  dt-bindings: net: ti: k3-am654-cpsw-nuss: Add J784S4 CPSW9G support
 
-Thank you!
-
-> 
-> -- Steve
-> 
-> 
-> >  xpass $BOOTCONF -a $TEMPCONF $INITRD
-> >  
-> >  echo "badnode" >> $TEMPCONF
-> 
-
+ .../devicetree/bindings/net/ti,k3-am654-cpsw-nuss.yaml | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
 -- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+2.25.1
+
