@@ -2,53 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECE276BAB0C
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 09:48:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6A226BAB1E
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 09:50:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231354AbjCOIsv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 04:48:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52820 "EHLO
+        id S231822AbjCOIuF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 04:50:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbjCOIsu (ORCPT
+        with ESMTP id S231748AbjCOIt6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 04:48:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9907B5FD9;
-        Wed, 15 Mar 2023 01:48:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 36B9161AC1;
-        Wed, 15 Mar 2023 08:48:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63D49C433EF;
-        Wed, 15 Mar 2023 08:48:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678870128;
-        bh=J2k08xWudvUCv6nsO7U+IrEa2txCfR0J8IVe5Z7YUlY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=VU8ZJa8E0er6C6d+JYQXuCR4sr/CHUTWqeyuXoPW2bG/hl7UPHeDjb/Jj3VjI7AXg
-         GUCoOnLQ9nGBi66+jUFkDxwCDyXkNEr3Kv5kFlDK7Loqx11VMFiHJGb/sJXxoQB7gZ
-         r4P9kyOFilh80LN7le7EMqH4UJYb8YgDtidke75P1oUp780SBPN7ui6mDk/dVNE/qa
-         gJtEDJnDZDzCCtkFz0TjxqEQ10B/sPZuXto80CJuFuAIxA4sSVMaJCZvN09/Q70Ima
-         rztg0GqPF/gfoupCt82gRKk2R3+7mrHxNOlWLyCVsxuHFqaVcYavATbX3mMIuYKqSG
-         MpEMIRi8JdrPw==
-Date:   Wed, 15 Mar 2023 17:48:45 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Tom Rix <trix@redhat.com>
-Cc:     rostedt@goodmis.org, mark.rutland@arm.com,
-        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org
-Subject: Re: [PATCH] ftrace: set direct_ops storage-class-specifier to
- static
-Message-Id: <20230315174845.c4bcf7a75ff5f644bef7b07a@kernel.org>
-In-Reply-To: <20230311135113.711824-1-trix@redhat.com>
-References: <20230311135113.711824-1-trix@redhat.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Wed, 15 Mar 2023 04:49:58 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB14A5D892
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 01:49:53 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id k18-20020a17090a591200b0023d36e30cb5so1104228pji.1
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 01:49:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fromorbit-com.20210112.gappssmtp.com; s=20210112; t=1678870192;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=vsWY3tiIVy0Yn9JroDJe+huBkL6FjkeIMN/r3FyXd5s=;
+        b=Tu1W0IEoh/utfOJuP49Ei0GgUJlOB7C4ob0dWEffMNAq9WjXgZb9jjYQe8No3saiVO
+         bwxNSDjsO64+ejJHsAztdOAUMEOk70GsqiXzzyzN61ovBkH2bktkJXQ/IrOmUXEXUaJC
+         0u9Iv5t8PBcWw61N6NelKZggBjMrf7xlJ5RkUMJL7oLMTpG4iHWP1fRuEFbwt9WFCDyi
+         JxObnAJVTK8vxtpEfm4Rg4gY6h7yTtKOSgNDFGo3zHkJglspgPi534ltLU/OGPH7Uk0W
+         HU1RImDREGGnttx0PKa96eby1VamA1Hr05aCpF/dsFTr8G4sDbFTP/o5Jjx2yJyIwsaU
+         3+Uw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678870192;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vsWY3tiIVy0Yn9JroDJe+huBkL6FjkeIMN/r3FyXd5s=;
+        b=dcEFmEUHQR3e4Y3eeD30e13Ll3qRafoTFfehyE/T1+Amb53cCEap48FFs9nEV2XraB
+         Y8fmGEnlJMXweSCmGTHj+PbYEU8ZFMPfYxff9X/dsEwRzLoLzJ/U4oCfQIy70KS9Uwop
+         vgqmxdNLx9uy2+4gRrnk8QgC3AWvY/m3KJiN1/fDQ+5+FC8XM/JlaGtUY+7WcW2MWLAm
+         kgsJaSPLOxriAllyY53P6plLs6dcFeOllRWzJBDOxNEl16xidZT3olZUWgFsO2mmP0x8
+         GkUODqNpHHrshM4CgloLFC6uIMvxRdUVuaY9k2jtBl9r2GuYXM9OZnBbTctRByzMiidc
+         3udw==
+X-Gm-Message-State: AO0yUKVEfcNf/9uI/PSY8Ctp6a8dAMdOV4iWXbFAzs37NtZQ67+eJTHQ
+        cfKLupPHzcUqmYghd/LbAs8uDYoQxKKNcE4d7m0=
+X-Google-Smtp-Source: AK7set+bs54csdRPLZxehylIRo4Xa5sAjj4gyGLb/tRk34uFP8c932/ih+zIiD18/7b0oBgOUsyMZg==
+X-Received: by 2002:a05:6a20:1b1f:b0:d3:7aa2:edb3 with SMTP id ch31-20020a056a201b1f00b000d37aa2edb3mr11528330pzb.55.1678870192441;
+        Wed, 15 Mar 2023 01:49:52 -0700 (PDT)
+Received: from dread.disaster.area (pa49-186-4-237.pa.vic.optusnet.com.au. [49.186.4.237])
+        by smtp.gmail.com with ESMTPSA id c11-20020a62e80b000000b005abbfa874d9sm2986079pfi.88.2023.03.15.01.49.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Mar 2023 01:49:51 -0700 (PDT)
+Received: from [192.168.253.23] (helo=devoid.disaster.area)
+        by dread.disaster.area with esmtp (Exim 4.92.3)
+        (envelope-from <dave@fromorbit.com>)
+        id 1pcMpQ-008zeR-1Z; Wed, 15 Mar 2023 19:49:48 +1100
+Received: from dave by devoid.disaster.area with local (Exim 4.96)
+        (envelope-from <dave@devoid.disaster.area>)
+        id 1pcMpQ-00Ag6I-03;
+        Wed, 15 Mar 2023 19:49:48 +1100
+From:   Dave Chinner <david@fromorbit.com>
+To:     linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org
+Cc:     linux-mm@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        yebin10@huawei.com
+Subject: [PATCH 0/4] pcpctr: fix percpu_counter_sum vs cpu offline race
+Date:   Wed, 15 Mar 2023 19:49:34 +1100
+Message-Id: <20230315084938.2544737-1-david@fromorbit.com>
+X-Mailer: git-send-email 2.39.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,44 +76,114 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 11 Mar 2023 08:51:13 -0500
-Tom Rix <trix@redhat.com> wrote:
+Ye Bin reported an XFS assert failure when testing CPU hotplug
+recently. During unmount, XFs was asserting that a percpu counter
+value should be zero because at that point in time a non-zero value
+indicates a space accounting leak which is a bug. The details of
+that failure can be found here:
 
-> smatch reports this warning
-> kernel/trace/ftrace.c:2594:19: warning:
->   symbol 'direct_ops' was not declared. Should it be static?
-> 
-> The variable direct_ops is only used in ftrace.c, so it should be static
-> 
-> Signed-off-by: Tom Rix <trix@redhat.com>
+https://lore.kernel.org/linux-kernel/20230314090649.326642-1-yebin@huaweicloud.com/
 
-This looks good to me.
+Ye Bin then proposed changing the XFS code to use
+percpu_counter_sum_all(), which surprised me because I didn't know
+that function existed at all. Indeed, it was only merged in the
+recent 6.3-rc1 merge window because someone else had noticed a
+pcpctr sum race with hotplug.
 
-Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+commit f689054aace2 ("percpu_counter: add percpu_counter_sum_all
+interface") was introduced via the mm tree. Nobody outside that
+scope knew about this, because who bothers to even try to read LKML
+these days? There was little list discussion, and I don't see
+anything other than a cursory review done on the patch.
 
-Thank you!
+At minimum, linux-fsdevel should have been cc'd because multiple
+filesystems use percpu counters for both threshold and ENOSPC
+accounting in filesystems.  Hence if there is a problem with
+percpu_counter_sum() leaking, filesystem developers kinda need to
+know about it because leaks like this (as per the XFS bug report)
+can actually result in on-disk corruption occurring.
 
-> ---
->  kernel/trace/ftrace.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-> index 29baa97d0d53..05f76dc1f0c5 100644
-> --- a/kernel/trace/ftrace.c
-> +++ b/kernel/trace/ftrace.c
-> @@ -2591,7 +2591,7 @@ static void call_direct_funcs(unsigned long ip, unsigned long pip,
->  	arch_ftrace_set_direct_caller(fregs, addr);
->  }
->  
-> -struct ftrace_ops direct_ops = {
-> +static struct ftrace_ops direct_ops = {
->  	.func		= call_direct_funcs,
->  	.flags		= FTRACE_OPS_FL_DIRECT | FTRACE_OPS_FL_SAVE_REGS
->  			  | FTRACE_OPS_FL_PERMANENT,
-> -- 
-> 2.27.0
-> 
+So, now I know that there is an accuracy problem with
+percpu_counter_sum(), I will assert that we need to fix it properly
+rathern than hack around it by adding a new variant. Leaving people
+who know nothing about cpu hotplug to try to work out if they have a
+hotplug related issue with their use of percpu_counter_sum() is just
+bad code; percpu_counter_sum() should just Do The Right Thing.
 
+Use of the cpu_dying_mask should effectively close this race
+condition.  That is, when we take a CPU offline we effectively do:
 
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+	mark cpu dying
+	clear cpu from cpu_online_mask
+	run cpu dead callbacks
+	  ....
+	  <lock counter>
+	  fold pcp count into fbc->count
+	  clear pcp count
+	  <unlock counter>
+	  ...
+	mark CPU dead
+	clear cpu dying
+
+The race condition occurs because we can run a _sum operation
+between the "clear cpu online" mask update and the "pcpctr cpu dead"
+notification runs and fold the pcp counter values back into the
+global count.  The sum sees that the CPU is not online, so it skips
+that CPU even though the count is not zero and hasn't been folded by
+the CPU dead notifier. Hence it skips something that it shouldn't.
+
+However, that race condition doesn't exist if we take cpu_dying_mask
+into account during the sum.  i.e. percpu_counter_sum() should
+iterate every CPU set in either the cpu_online_mask and the
+cpu_dying_mask to capture CPUs that are being taken offline.
+
+If the cpu is not set in the dying mask, then the online or offline
+state of the CPU is correct an there is no notifier pending over
+running and we will skip/sum it correctly.
+
+If the CPU is set in the dying mask, then we need to sum it
+regardless of the online mask state or even whether the cpu dead
+notifier has run.  If the sum wins the race to the pcp counter on
+the dying CPU, it is included in the local sum from the pcp
+variable. If the notifier wins the race, it gets folded back into
+the global count and zeroed before the sum runs. Then the sum
+includes the count in the local sum from the global counter sum
+rather than the percpu counter.
+
+Either way, we get the same correct sum value from
+percpu_counter_sum() regardless of how it races with a CPU being
+removed from the system. And there is no need for
+percpu_count_sum_all() anymore.
+
+This series introduces bitmap operations for finding bits set in
+either of two bitmasks and adds the for_each_cpu_or() wrapper to
+iterate CPUs set in either of the two supplied cpu masks. It then
+converts __percpu_counter_sum_mask() to use this, and have
+__percpu_counter_sum() pass the cpu_dying_mask as the second mask.
+This fixes the race condition with CPUs dying.
+
+It then converts the only user of percpu_counter_sum_all() to use
+percpu_counter_sum() as percpu_counter_sum_all() is now redundant,
+then it removes percpu_counter_sum_all() and recombines
+__percpu_counter_sum_mask() and __percpu_counter_sum().
+
+This effectively undoes all the changes in commit f689054aace2
+except for the small change to use for_each_cpu_or() to fold in the
+cpu_dying_mask made in this patch set to avoid the problematic race
+condition. Hence the cpu unplug race condition is now correctly
+handled by percpu_counter_sum(), and people can go back to being
+blissfully ignorant of how pcpctrs interact with CPU hotplug (which
+is how it should be!).
+
+This has spent the last siz hours running generic/650 on XFS on a
+couple of VMs (on 4p, the other 16p) which stresses the filesystem
+by running a multi-process fsstress invocation whilst randomly
+onlining and offlining CPUs. Hence it's exercising all the percpu
+counter cpu dead paths whilst the filesystem is randomly modifying,
+reading and summing summing the critical counters that XFS needs for
+accurate accounting of resource consumption within the filesystem.
+
+Thoughts, comments and testing welcome!
+
+-Dave.
+
