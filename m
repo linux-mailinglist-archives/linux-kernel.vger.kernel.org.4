@@ -2,177 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A6C16BB5CA
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 15:18:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DC796BB542
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 14:55:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232925AbjCOOSN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 10:18:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33768 "EHLO
+        id S232514AbjCONzL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 09:55:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232809AbjCOOSC (ORCPT
+        with ESMTP id S232480AbjCONzJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 10:18:02 -0400
-X-Greylist: delayed 1386 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 15 Mar 2023 07:17:55 PDT
-Received: from egress-ip4b.ess.de.barracuda.com (egress-ip4b.ess.de.barracuda.com [18.185.115.208])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A254E39B92
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 07:17:55 -0700 (PDT)
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71]) by mx-outbound18-193.eu-central-1b.ess.aws.cudaops.com (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO); Wed, 15 Mar 2023 14:17:53 +0000
-Received: by mail-ed1-f71.google.com with SMTP id i42-20020a0564020f2a00b004fd23c238beso11117455eda.0
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 07:17:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mistralsolutions.com; s=google; t=1678889873;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BtDnCZh4EzHEMb/EfbyOFogrbL5+iaRwEv2S7+7Vv5I=;
-        b=PdiRPHOsY6zJm58ccIUXvdpDpg4QQw+wCCdabdb0zmPyhXiISbICgQ99b1aBfpLogr
-         OCYWQ8aQWh61UDNf4L1I9VMrOuVjFHAaCCNKOUtXFCsHas3kPvse43694qYUjdQXP0Ci
-         i3cX4EqZkmb0VgBhcry2Kk9FYuNOhA518dqOU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678889873;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BtDnCZh4EzHEMb/EfbyOFogrbL5+iaRwEv2S7+7Vv5I=;
-        b=NV0NOGwOhRx/tyyRWVoiF4mIKW+13wYQ4oqiV2rqHeLIbRE719INrQ6H1A84arS5Uz
-         G5n170TSNhEHIVfK+/Xu7Jgxd+5m2ixW2DJ1x1qnOA7Q6MsXbL6JVLMhk8VKjLm14HfS
-         hKYvETlFaijE7H3nkKKPgK6NaFgjdFEWGg0/IBMtAqFqp4AXKLJNB305c7fSYPvOrU2a
-         5f0XSTMdBX6xGhOjraIoygVsjstoCbcIpHbUcsvXAVzeCRR4CXBF1C06LsOJdB2pq+fH
-         Vh4GPCF4plo4nGjm4uKkRW0iliT9e2vnS5lB6QV6CWRUCqsgRAPolDDokv9dgUxf/vRg
-         tJhw==
-X-Gm-Message-State: AO0yUKVOKcRVTKcS2NLDKvNb3chRWYDpxNbSuRyJBdHeK87FZNFq++GU
-        NmvLmfvK5Xz/vdCEW+z5ZCAC0wPItvd9uNGrpCOLJ3V5kSbti07a/Z64PJgZ5Z4/8Bxe/7NBIwT
-        JrJgGERDOkjLdLCSRu/5qHaiY9/eWb8etFIM4MBZ6QIOADLpSu9Iz+o8BvaBRY5XE6IUJyGdifS
-        CQ
-X-Received: by 2002:ac2:5977:0:b0:4db:1ceb:dc38 with SMTP id h23-20020ac25977000000b004db1cebdc38mr1980289lfp.9.1678888487049;
-        Wed, 15 Mar 2023 06:54:47 -0700 (PDT)
-X-Google-Smtp-Source: AK7set9IH8D280aEoocF/A7gXgQbTaixQ+IuO2Hq+LIITinB2Z3WM1lPZzlJQ8Oi5IzqiFLxAnBOBmi1Wg80q1n6vN4=
-X-Received: by 2002:ac2:5977:0:b0:4db:1ceb:dc38 with SMTP id
- h23-20020ac25977000000b004db1cebdc38mr1980279lfp.9.1678888486724; Wed, 15 Mar
- 2023 06:54:46 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230315120934.16954-1-sinthu.raja@ti.com> <20230315134656.bt3mczw73h3z2j57@privacy>
-In-Reply-To: <20230315134656.bt3mczw73h3z2j57@privacy>
-From:   Sinthu Raja M <sinthu.raja@mistralsolutions.com>
-Date:   Wed, 15 Mar 2023 19:24:33 +0530
-Message-ID: <CAEd-yTQV2k=-W3LXYgq-4jrLCtR_ncij8UAPWWfd4xsJzGU2tg@mail.gmail.com>
-Subject: Re: [PATCH] arm64: dts: ti: k3-am68-sk-base-board: Update IO EXP GPIO
- lines for Rev E2
-To:     Nishanth Menon <nm@ti.com>
-Cc:     Tero Kristo <kristo@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Sinthu Raja <sinthu.raja@ti.com>
-Content-Type: text/plain; charset="UTF-8"
+        Wed, 15 Mar 2023 09:55:09 -0400
+Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01on20712.outbound.protection.outlook.com [IPv6:2a01:111:f403:700c::712])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BAB038652;
+        Wed, 15 Mar 2023 06:55:07 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=POO+Jh643uhHKt0mV1ZkCEs+bVsbydL3vuumT0nPgG/oIklGSLU/TvmRDZpcK14pY2H410ev4UsVm/CDPayYRpZWW71zIByQ64Iqk9NL3XRUlwKIQPF3gABgG0V0Zinb/mc5i8Sg0jztSFPwhrewvRnSYiCcYJz/CVblun4KdCsCe/sKQHSRU++o3lIpXUy3rfK3WZRcLJ//c+IsS44/vGrFrU2dhUtlw9lbY1ZJA7IIiRPk9dzAwy5h7SkKjy1OTpkBQgNC9vKm2pDucGL+JOHCcBnbBgAErr19UZY2bdZEmoj7urEYNAVwMvkcD5hw1COWfXIXwg7yP0xaUqzRww==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=cG362mOuKw+rbNGCzHf//9QXI/jBLWh2913Pc4ENtU0=;
+ b=agTzCLMOc94wex6q3amV+45u4tLUZ2P5Acr/NexGSvctvfmeu9l20gtIzA9VN/JdM44JySIo2G0miQpk8LrLF+4+Pb39nk9RRJqZh7MsmfK5lJ6sABCPeSxIv2WOj86fcV5qJGFp/oUj7kX2eGDpSdRg4cJ9an1crB2xk/A7ZCcN/7VPMlst/vyF9Rgy1ywOQU664N0D4MKyBEIXEhaNlsg8Rppm30CMBHJe3mLW9lD+SgRM4ZI5WqgOvnFlbnkBaf67JlO9tQO+k85howo3cGjWbF59TU6oF10P/VNal80nysKZDRINxz6yjCMzzg+bELoihCxHQ0MT/QGdacKkPg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
+ dkim=pass header.d=renesas.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=renesas.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=cG362mOuKw+rbNGCzHf//9QXI/jBLWh2913Pc4ENtU0=;
+ b=bRYpGiR6L+O95rPDo/6TRGXaUD5RAFA4D5/50ArG048+vWfOa3Kc+UCh7XOqyuSvpVj3S7gZnlrBh5X4q8/jFVbQ4skk80Yp4fUwfoPlBG+jHGamVdzgOvx6cEqegg9Kx6XPfFQnNILl9BDu49nUtDyU4tsaXUOkzQ7roUfoTI8=
+Received: from TYCPR01MB10588.jpnprd01.prod.outlook.com (2603:1096:400:309::8)
+ by OS3PR01MB9977.jpnprd01.prod.outlook.com (2603:1096:604:1de::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.30; Wed, 15 Mar
+ 2023 13:55:01 +0000
+Received: from TYCPR01MB10588.jpnprd01.prod.outlook.com
+ ([fe80::dc49:e307:b424:4a53]) by TYCPR01MB10588.jpnprd01.prod.outlook.com
+ ([fe80::dc49:e307:b424:4a53%5]) with mapi id 15.20.6178.026; Wed, 15 Mar 2023
+ 13:55:01 +0000
+From:   Chris Paterson <Chris.Paterson2@renesas.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+CC:     "patches@lists.linux.dev" <patches@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "linux@roeck-us.net" <linux@roeck-us.net>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "patches@kernelci.org" <patches@kernelci.org>,
+        "lkft-triage@lists.linaro.org" <lkft-triage@lists.linaro.org>,
+        "pavel@denx.de" <pavel@denx.de>,
+        "jonathanh@nvidia.com" <jonathanh@nvidia.com>,
+        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
+        "sudipm.mukherjee@gmail.com" <sudipm.mukherjee@gmail.com>,
+        "srw@sladewatkins.net" <srw@sladewatkins.net>,
+        "rwarsow@gmx.de" <rwarsow@gmx.de>
+Subject: RE: [PATCH 4.14 00/21] 4.14.310-rc1 review
+Thread-Topic: [PATCH 4.14 00/21] 4.14.310-rc1 review
+Thread-Index: AQHZVzfV6/eb0jknbkCimRmYoxhXlK772+qQ
+Date:   Wed, 15 Mar 2023 13:55:01 +0000
+Message-ID: <TYCPR01MB10588B1641FDE1D7718BA523DB7BF9@TYCPR01MB10588.jpnprd01.prod.outlook.com>
+References: <20230315115718.796692048@linuxfoundation.org>
+In-Reply-To: <20230315115718.796692048@linuxfoundation.org>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=renesas.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: TYCPR01MB10588:EE_|OS3PR01MB9977:EE_
+x-ms-office365-filtering-correlation-id: 14618780-b72c-4e2b-fe1c-08db255cdf1e
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: sYBw4VKybavXSColfHDAqOVGMUZcmpqCJk49o8UGe6mtck+27cAF8Sh0UCBfqoDjk3qyCyXP7IKoaVAjc/Oy5seQHqZzvbMQVBXgitJl6Hu+qgmL8Vw+6MGhM+sX8YLpIBzqTP5VRrQFM/ByeH6FgEAlZjx4T/lbLY/nUmoTydg0K1Bw4UzThC223Tmed4Rnmit5yCMJ4l2lf1DuZaVZb3HQ1WrYUqrXODoNsEycRVSibEqO9XObJ8Lx7qYeaXrfWs+z+KXOwqCxRRtbCMnjUrs9+iGJvJDvgc8kOuZnCiDVe1e4/gTsIILqTpzFmGGINneTTBIXxJaFNVTT0Gy1VPzWK7oxtGwbLq+WFhzW1ThZwLKL6CV+GiCemtev6l0cuSgIoBqWU6VxWFQ7GISrn+H8LgFZrRjkzHK5OY5lfw09aF7qkyZF1t/T0gQ3pp0tDgBo+vMlC9AoD8jng4P7S324AQa4tRaQxwuY5cA9e7P4HoYk5uVsNDCt2TiVXg/OKiivw0j6tJMeNOSGIq2Gh3O87ZVUs3k0BVK6EYynzk9N9HcXKmTc9O/BLsnO0uyEcHniXWYX3JrE1czmR6MGThy30+SLgRULUqc254oqCkUr7qBPVpRWxKK48HcbR31R/kBH1/4RxUyei+r5BGK6LEEATws74Ojfy5MmDv5JH1wn3ufWxWdOvRGUR8bPCOsot7V1qacpYdyvQaBtZxnU7oja2qA3Qoi3VMFB7gEh1hI=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYCPR01MB10588.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(136003)(346002)(376002)(366004)(396003)(39860400002)(451199018)(33656002)(86362001)(38070700005)(38100700002)(122000001)(2906002)(41300700001)(52536014)(7416002)(4744005)(5660300002)(8936002)(55016003)(4326008)(186003)(9686003)(26005)(6506007)(54906003)(316002)(110136005)(76116006)(66946007)(66476007)(66446008)(64756008)(8676002)(66556008)(966005)(71200400001)(7696005)(478600001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?Windows-1252?Q?yy3iuUO7dUcwO0Iy+lk71tSPsDk8qMbPGrg5L+zOzjWGjsJY/C7DT+HQ?=
+ =?Windows-1252?Q?Yc0YQQZ2egl7MPcGj9B00vU0YEMwJdQvwXexXSLlixBmhkc/6c6kocIr?=
+ =?Windows-1252?Q?DkXWxZcdfz+LbgHLbMYGsstr47Y6NQSOsV3Tr8ANGExObF5Fwh2eoclQ?=
+ =?Windows-1252?Q?foUerbkey4Eq8LXDgAi/FdutEdq3p/GUteX9c7e/aWh+2ISZXU74fp/3?=
+ =?Windows-1252?Q?ZHBmuo5xjO3YnID6cQVKAguCimS04AAaGSV+hFt+Fq0ASlLpfg99uDJ7?=
+ =?Windows-1252?Q?pyIJYBFJ1K7yWPn6FX2FdewXY1gOknsei98x/P8Gds/6K8z7SVkew/YZ?=
+ =?Windows-1252?Q?dPP7g11fPWnqhrBW712hmVL2ycsrTZeMf2c+8tCGMa8lNEI8cDsN8KlY?=
+ =?Windows-1252?Q?LacM8qO0pMltIT+ulHnDELMKjd9zlJ287i0ogR5oy1L0PdxlKqMEhFV2?=
+ =?Windows-1252?Q?5H1u+eQHmIk+6sWNxfqVma+U1jUblXFOmvAIDCtoK5ymVs4g6V8LWocI?=
+ =?Windows-1252?Q?vPIhE1Qry5F+y+ik312cZEzuTAdzNonXYS7IfRbmElwOmfaLjXHFI3pB?=
+ =?Windows-1252?Q?p1RCUoC1YnuzJxrARoeyMplO7yhpXd2mmleQDztzeZj1tgbijlLYzbZB?=
+ =?Windows-1252?Q?GyGtzDMHU5boKjaee2wjwPE+frA85s3YTT/sLQEWUeY2HoHM9TMIJQsF?=
+ =?Windows-1252?Q?lPGapj2tqxy10YlLHoQrUIB6+9zKCh3CAD6S5UCaqNRziWQwgbQMjPOq?=
+ =?Windows-1252?Q?OgjKpu/jHfnXaxzihUDo+uTukxuO/H1nggvVV6xHn92B4Vd7XqgPAwBN?=
+ =?Windows-1252?Q?PUKuKJKWAefO3U8QoLXHydM7Zxav9OOE4dVF8gnHnOfLaiUefWYm4Ell?=
+ =?Windows-1252?Q?N+fXlDgZBJsQJ/hpsfdx//8xmYNk8kHfrWDS+3vpyf4i/DmeHBsNYSvp?=
+ =?Windows-1252?Q?GckNnkNHkvPp5JwD9uJcGgHKuFJeENIN+gbeYPC54QcuNRJo2uCF1S1Q?=
+ =?Windows-1252?Q?udlUBO/h/1ZnaVwjU5ud9GmKZZ9lZr4mHaL37h+OB5qmX+aP4ls1G2xz?=
+ =?Windows-1252?Q?pTVUAan+2Qk8pqoVmgDerQv4b3mpoavH4U/7HWLP1t0E2PgYqYIwoaxj?=
+ =?Windows-1252?Q?HZTARnfpHVyGhOGfOCY42Sh5yQU4qd7WkgxJoL+Sfy8hsY+zM26K4ruP?=
+ =?Windows-1252?Q?sn+yavdDAPtgwq3d8/dmYJBXECwhWZZBeKaBJSEWP84GxF+xHPLb9EJS?=
+ =?Windows-1252?Q?um5F0t5ANgW3SmnhBwhqMQy+H7GRk92JmGyGYNbsHGDdKCOs7o0iMxuy?=
+ =?Windows-1252?Q?I3YgsshY1DXKcE9wuEKdWWafP6P1ueVmlMmIuf8HKx65swHcBNi3Ob9f?=
+ =?Windows-1252?Q?BpI9NKo464LDFYmhk/SeJGUD922wdZC43mQqZ4k1RtyJGP/xFmhW4ZjN?=
+ =?Windows-1252?Q?Bnqzk5BeX/idSa3UQYmT1UIX/fuFAxL0kS4Vghp8Fyn8Ifb073F7Ukgy?=
+ =?Windows-1252?Q?+zMRU7rrGIiFuxD1CkaYfQaLVQOtc+h9rvkh+oFSfjGy43AfyH3rWSVx?=
+ =?Windows-1252?Q?hviW2O17vsi3tL/BCbj3Z74lLVJ2xiyJ11C8o4NfPUC3Brae40NEMvnd?=
+ =?Windows-1252?Q?gf2fnsdYWSmWClI8TWtfWUmfCwGPesn8icSpqgX1ZrGCSWA3nZsBrgpO?=
+ =?Windows-1252?Q?nYb3DEoczPF1lym0qMbv6Qt9iNuA+oD0EbgBf0pa/s2/dzM9xV09pQ?=
+ =?Windows-1252?Q?=3D=3D?=
+Content-Type: text/plain; charset="Windows-1252"
 Content-Transfer-Encoding: quoted-printable
-X-BESS-ID: 1678889873-304801-5459-24085-1
-X-BESS-VER: 2019.1_20230310.1716
-X-BESS-Apparent-Source-IP: 209.85.208.71
-X-BESS-Parts: H4sIAAAAAAACA4uuVkqtKFGyUioBkjpK+cVKVkZmFpZAVgZQMDnZyCIl0cAgyS
-        LJyDjNwszU3DjZ0tTMKNEi2Sw5ydhIqTYWAGBiANRBAAAA
-X-BESS-Outbound-Spam-Score: 0.00
-X-BESS-Outbound-Spam-Report: Code version 3.2, rules version 3.2.2.246814 [from 
-        cloudscan23-152.eu-central-1b.ess.aws.cudaops.com]
-        Rule breakdown below
-         pts rule name              description
-        ---- ---------------------- --------------------------------
-        0.00 BSF_SC0_MISMATCH_TO    META: Envelope rcpt doesn't match header 
-        0.00 BSF_BESS_OUTBOUND      META: BESS Outbound 
-X-BESS-Outbound-Spam-Status: SCORE=0.00 using account:ESS91090 scores of KILL_LEVEL=7.0 tests=BSF_SC0_MISMATCH_TO, BSF_BESS_OUTBOUND
-X-BESS-BRTS-Status: 1
+MIME-Version: 1.0
+X-OriginatorOrg: renesas.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TYCPR01MB10588.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 14618780-b72c-4e2b-fe1c-08db255cdf1e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Mar 2023 13:55:01.3470
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: FetKq/ToQOM+lySgr/Tx/y+JjqbE4lrTmAyyhTA05NZBGwM8dwUe+b/Z4/a5VBGOohRMqnWmRaBxRFMrtzZr0VWWNUM1h3aWqnoYcqSx6jA=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: OS3PR01MB9977
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 15, 2023 at 7:17=E2=80=AFPM Nishanth Menon <nm@ti.com> wrote:
->
-> On 17:39-20230315, Sinthu Raja wrote:
-> > From: Sinthu Raja <sinthu.raja@ti.com>
-> >
-> > Rev E2 of the AM68 SK baseboard has updated the GPIO IO expander pins
-> > functionality. To match the Rev E2 schematics, update existing IO expan=
-der
-> > GPIO line names and the corresponding node which uses the expansion(exp=
-1)
-> > node.
-> >
-> > Signed-off-by: Sinthu Raja <sinthu.raja@ti.com>
-> > ---
-> >
-> > Schematics Ref: https://www.ti.com/lit/zip/sprr463
->
-> Looking at https://www.ti.com/tool/SK-AM68 looks like E1 never hit
-> production, is that correct?
-Yes, E1 didn't hit production.
->
-> Does this need a "Fixes" tag?
-It is a migration from E1 to E2 so I assume that a Fixes tag is not require=
-d.
+Hello Greg,
 
-Regards
-Sinthu Raja
->
-> >
-> >  arch/arm64/boot/dts/ti/k3-am68-sk-base-board.dts | 12 +++++-------
-> >  1 file changed, 5 insertions(+), 7 deletions(-)
-> >
-> > diff --git a/arch/arm64/boot/dts/ti/k3-am68-sk-base-board.dts b/arch/ar=
-m64/boot/dts/ti/k3-am68-sk-base-board.dts
-> > index 2091cd2431fb..27a43a8ecffd 100644
-> > --- a/arch/arm64/boot/dts/ti/k3-am68-sk-base-board.dts
-> > +++ b/arch/arm64/boot/dts/ti/k3-am68-sk-base-board.dts
-> > @@ -60,7 +60,7 @@ vdd_mmc1: regulator-sd {
-> >               regulator-boot-on;
-> >               enable-active-high;
-> >               vin-supply =3D <&vsys_3v3>;
-> > -             gpio =3D <&exp1 10 GPIO_ACTIVE_HIGH>;
-> > +             gpio =3D <&exp1 8 GPIO_ACTIVE_HIGH>;
-> >       };
-> >
-> >       vdd_sd_dv: regulator-tlv71033 {
-> > @@ -264,12 +264,10 @@ exp1: gpio@21 {
-> >               reg =3D <0x21>;
-> >               gpio-controller;
-> >               #gpio-cells =3D <2>;
-> > -             gpio-line-names =3D "CSI_VIO_SEL", "CSI_SEL_FPC_EXPn", "H=
-DMI_PDn",
-> > -                                     "HDMI_LS_OE", "DP0_3V3 _EN", "BOA=
-RDID_EEPROM_WP",
-> > -                                     "CAN_STB", " ", "GPIO_uSD_PWR_EN"=
-, "eDP_ENABLE",
-> > -                                     "IO_EXP_PCIe1_M.2_RTSz", "IO_EXP_=
-MCU_RGMII_RSTz",
-> > -                                     "IO_EXP_CSI2_EXP_RSTz", " ", "CSI=
-0_B_GPIO1",
-> > -                                     "CSI1_B_GPIO1";
-> > +             gpio-line-names =3D " ", " ", " ", " ", " ",
-> > +                               "BOARDID_EEPROM_WP", "CAN_STB", " ",
-> > +                               "GPIO_uSD_PWR_EN", " ", "IO_EXP_PCIe1_M=
-.2_RTSz",
-> > +                               "IO_EXP_MCU_RGMII_RST#", " ", " ", " ",=
- " ";
-> >       };
-> >  };
-> >
-> > --
-> > 2.36.1
-> >
->
-> --
-> Regards,
-> Nishanth Menon
-> Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DD=
-B5 849D 1736 249D
+> From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Sent: 15 March 2023 12:12
+>=20
+> This is the start of the stable review cycle for the 4.14.310 release.
+> There are 21 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>=20
+> Responses should be made by Fri, 17 Mar 2023 11:57:10 +0000.
+> Anything received after that time might be too late.
 
+CIP configurations built and booted with Linux 4.14.310-rc1 (1f84872fb75a):
+https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/pipelines/8=
+07195539
+https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/commits/lin=
+ux-4.14.y
 
+Tested-by: Chris Paterson (CIP) <chris.paterson2@renesas.com>
 
---=20
-With Regards
-Sinthu Raja
+Kind regards, Chris
+
