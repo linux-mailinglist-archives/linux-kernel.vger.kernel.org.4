@@ -2,163 +2,280 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 501AA6BACE1
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 11:00:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BCFC6BAC3E
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 10:35:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231708AbjCOKAw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 06:00:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55872 "EHLO
+        id S232031AbjCOJfG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 05:35:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231631AbjCOKAZ (ORCPT
+        with ESMTP id S232102AbjCOJes (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 06:00:25 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E57E67038;
-        Wed, 15 Mar 2023 02:59:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678874354; x=1710410354;
-  h=date:from:to:cc:subject:message-id:reply-to:references:
-   in-reply-to:mime-version;
-  bh=KEvmmopAOBQJfLWOSR4/G1tSbhe3hxUoqxMoulNnuyg=;
-  b=ApoN1pDBOvRnafVcGfHgFNDdCh9oxAm7ocwVrvOm04WAvbeTwLZxioU1
-   3qX8xoBre9ojjBjInjxQSw5ICxgbobeKf3UBlHCAiXYvjVxlWeE++MxiQ
-   ozkjI6reRYuXvc+Dp5bEy0TP3rSs6qQK0+SUQtMrgZQMp60WClePlsaHE
-   yFhZdDbZGGaRYQo5p5wCyUZKzhY5mLSA8zCpz/HinfUFz1nOpN7vFXXEX
-   R+htiTgrZhpXUG0Ts9cXZ8FC6Dd8MjR2rt84aZwbZA6S+gSPZH+iluU+d
-   cb4sR+gay6AHBRbywDUhg7dmlz/xbH3zXvbtdENX6+OohxqXOkjd8pirt
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="335146350"
-X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
-   d="scan'208";a="335146350"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2023 02:59:13 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="822714823"
-X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
-   d="scan'208";a="822714823"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by fmsmga001.fm.intel.com with ESMTP; 15 Mar 2023 02:59:13 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+        Wed, 15 Mar 2023 05:34:48 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 616894C02
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 02:34:46 -0700 (PDT)
+Received: from canpemm500009.china.huawei.com (unknown [172.30.72.57])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Pc4sb13Rfz17KWQ;
+        Wed, 15 Mar 2023 17:31:47 +0800 (CST)
+Received: from [10.67.102.169] (10.67.102.169) by
+ canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Wed, 15 Mar 2023 02:59:12 -0700
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21 via Frontend Transport; Wed, 15 Mar 2023 02:59:12 -0700
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.108)
- by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.21; Wed, 15 Mar 2023 02:59:12 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=g86s7Kto/OUCBQpRV00UX/nFsD2r8HGOar8nXvzNc0jnjJEiBAL42hwzTvseBVCRjCUqDAJ6nO9iGfh29X0FKuGdYi+QYLZBO/FoYrr+mqmh6ZnY4Tmp2FEGbcwAcXZQ5cvSmI7F0sk9HWPWTw2MifV9n4QsghqMs2nujwUcvhmSQoUpp6j1XOwWL8Y+V2dLJdlM4h372yM7s+r2HdeVnq9GS7O/AL3Y8XVKvid/0vtHQtTBIstkYcV84iGoFGTOb6nB8T4jnEHbvA66vs0bnKqYiHwx0m+I7YZf+thJSu2Zinyc3iXbHuyHnL6xXqsp/zv7reT9c7xQG68p8VuqUQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7qN6hn7K1ItB5UAGg0PFpx/0wirNeYeFtr+0oAdV6Is=;
- b=FWQm04zu1dMFz1EF/v//G0vn01MdeO0fc5xE6n4RzpZIvwrLUy3yG/VQrLfJFdKhCQyMobCKOdmpCmbAuWsv76rPvoR+my8DpYjLXEGcpjUnP2P00ucLOC/3t3DHSZJKT0NThasGsDXqKvVSe85qKLxJXeLVyMIlhGeCKHC/SGj6dYrsbhwKaDgshBKTiMgOoF+40r/O5Wh601Cl/CTa1yPuJ4bYLbDcVSgff+ZWq2xGNMHIQT1ZiVFx8rRIDR57d6rvk1BPfzhgkFp/BpRsYCVbDkvnmzox9H49BvMrZe4Au6kVyh+A8VfAVsQQAlTitlWMjEZQ6c82iO+YpucV0A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DS7PR11MB5966.namprd11.prod.outlook.com (2603:10b6:8:71::6) by
- IA1PR11MB6169.namprd11.prod.outlook.com (2603:10b6:208:3eb::9) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6178.26; Wed, 15 Mar 2023 09:59:05 +0000
-Received: from DS7PR11MB5966.namprd11.prod.outlook.com
- ([fe80::b00e:ac74:158e:1c7e]) by DS7PR11MB5966.namprd11.prod.outlook.com
- ([fe80::b00e:ac74:158e:1c7e%4]) with mapi id 15.20.6178.026; Wed, 15 Mar 2023
- 09:59:05 +0000
-Date:   Wed, 15 Mar 2023 17:34:29 +0800
-From:   Yan Zhao <yan.y.zhao@intel.com>
-To:     Sean Christopherson <seanjc@google.com>
-CC:     Paolo Bonzini <pbonzini@redhat.com>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>,
-        Zhi Wang <zhi.a.wang@intel.com>, <kvm@vger.kernel.org>,
-        <intel-gvt-dev@lists.freedesktop.org>,
-        <intel-gfx@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
-        Ben Gardon <bgardon@google.com>
-Subject: Re: [PATCH v2 20/27] KVM: x86/mmu: Use page-track notifiers iff
- there are external users
-Message-ID: <ZBGRJaV3tDTVyE/q@yzhao56-desk.sh.intel.com>
-Reply-To: Yan Zhao <yan.y.zhao@intel.com>
-References: <20230311002258.852397-1-seanjc@google.com>
- <20230311002258.852397-21-seanjc@google.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20230311002258.852397-21-seanjc@google.com>
-X-ClientProxiedBy: KL1P15301CA0030.APCP153.PROD.OUTLOOK.COM
- (2603:1096:820:6::18) To DS7PR11MB5966.namprd11.prod.outlook.com
- (2603:10b6:8:71::6)
+ 15.1.2507.21; Wed, 15 Mar 2023 17:34:43 +0800
+CC:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Juri Lelli <juri.lelli@redhat.com>, <yangyicong@hisilicon.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Tim Chen <tim.c.chen@intel.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>,
+        K Prateek Nayak <kprateek.nayak@amd.com>,
+        Abel Wu <wuyun.abel@bytedance.com>,
+        "Gautham R . Shenoy" <gautham.shenoy@amd.com>,
+        Honglei Wang <wanghonglei@didichuxing.com>,
+        Len Brown <len.brown@intel.com>,
+        Chen Yu <yu.chen.surf@gmail.com>,
+        Tianchen Ding <dtcccc@linux.alibaba.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Josh Don <joshdon@google.com>, Hillf Danton <hdanton@sina.com>,
+        kernel test robot <yujie.liu@intel.com>,
+        Arjan Van De Ven <arjan.van.de.ven@intel.com>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v6 0/2] sched/fair: Wake short task on current CPU
+To:     Chen Yu <yu.c.chen@intel.com>
+References: <cover.1677069490.git.yu.c.chen@intel.com>
+From:   Yicong Yang <yangyicong@huawei.com>
+Message-ID: <718acf0e-2c98-cff3-98f4-da43d49f776b@huawei.com>
+Date:   Wed, 15 Mar 2023 17:34:43 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS7PR11MB5966:EE_|IA1PR11MB6169:EE_
-X-MS-Office365-Filtering-Correlation-Id: 34c97ef9-9aeb-489e-0999-08db253be934
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Kc1xt2+7+pbqcfgldzacXzxRQbQoQp8/LPoNiP/ZbVR6OvY/HoAgTYbf9vem51S5Ziz58tEJfKDaRYxiHC5NOwOHQ7Jqhkg0goK2obcZmuGdxWkkjwlLbQ9ig2SCkalINNyNg19wGByH8LoEKCcRLhut1VbB7kKE+hMuMF7u4w+g3m3rQdz0H+GXi9hDFk7tC4cBuOdY5YdF4bnHruhC5Tz2hsOU/xrsRQDsSNbjjb6VUXOO2xLHoS+dHsfB0o8lZ3bUMAeP55Srv0qilv/lKzoKbovsM40/XN6Jll6CBZfs+/38ewZVZkc1walmG4CW6pAd3I+R/bg7G6nkBCMiol/DoxG1TfcKICmcC0QgIF1GfoKSXiIGs0RWH1OLGMAJX2We8hhjZ9KKD8+atf+dVAqjTUo3QE6BNE1hkBuDKXqS366kLTEfgWK+QGniA1hg/vHx79Ln2IgqCVFIObUTHgIp1H5120pUQXkpLGJQZky3z8hf6e8+q+l8+XcVwWIg/bm2s7lq/uPWsOXFT/F9V2saLQrRZ+wsQhMUtKAmBOQXTnRSN+vJNt3ErDssBbzgyEGadctZdpBCRTwcFfNg2P+laObtwRE/Kddyt9T0zTdbU3fjLRIj4ZFvdu3SADVatvzRKlFK0PPLy8PNl67PYfHEFLZ5dfM3vrm54dFCWyDor3OdWkJaHQXiJVibxAEEtNM8s7X3X3QqNmd0wZE1zNFeHmXHygOucwpO6LPlwRI=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR11MB5966.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(39860400002)(376002)(366004)(136003)(346002)(396003)(451199018)(5660300002)(4744005)(66476007)(6512007)(478600001)(6486002)(26005)(6666004)(6506007)(4326008)(66946007)(6916009)(41300700001)(66556008)(8936002)(8676002)(186003)(86362001)(316002)(54906003)(38100700002)(2906002)(3450700001)(82960400001)(26730200005)(19860200003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ILDWmNN+s7QlydClF2TDArve67WmE/DCZZH4je2d9hPWAw/mhD1QDWZmseFS?=
- =?us-ascii?Q?74K17lKXheyUixxQlH0fDrZct4XmPnwMGvYum6gvjJj6ti65azHvsZ9F25Xn?=
- =?us-ascii?Q?/+1McWnx+0TGu0XiayqTG/CxVCfdyfxJu0fXvPRtmT+d4Qo5jEQaYZ8hUssg?=
- =?us-ascii?Q?yAwW38w1O5wzwgW3EQXQ9ctL1DtI7Qzq9ojXGYk8omgJdbdHe/W3wD3FU3Zv?=
- =?us-ascii?Q?u0QWxS57KMdJYItUg5vKLr4nAhMlIccTTe1tQV60rNpQ4ZiczZ2YJBGQwBfd?=
- =?us-ascii?Q?ksOhY/OhpsH3WdQsJLcxpOFse3UmdT1D4KIhh/AF+mzTwMaHMtInzyLMeTrn?=
- =?us-ascii?Q?cc0mzkXqdcE3Vtgch72cFxyrzggzh3ISitEU8wTsRci37U0UL79dDqW3szC2?=
- =?us-ascii?Q?8z2R/QJd0zKX87sjkMTcRffNL69+2QHH1z8l7h0ZPja+Emo8OP5aKU4MtL8K?=
- =?us-ascii?Q?Z4BvhAMftmch2hVaVgKKtloB3AhnUXGbe90AP2zmRaQlhA9tQuVahsmKhvYL?=
- =?us-ascii?Q?NGUpW8sh056utGe49vzTsT4aa2NXOpzpkJO/ZPz2ZJ3f7TSc2fFHUFfaOlwt?=
- =?us-ascii?Q?UarvTp+eYTLmUWEjnHk9a4Bz8LiHuSJNdGoBYCubk1OgH7yRyT27boAzh1m8?=
- =?us-ascii?Q?QWtlblMsQsMmKjDgCxSNME/m+cMOA7iairSucNzqeNZCIyR0HHzkI+8UCJ38?=
- =?us-ascii?Q?XybShyHTpkAnP3UN/JwY8jY7DgpRnvRmzn+RKYCXHCJurrk80PYKQpDtZxMx?=
- =?us-ascii?Q?/wctTbrjkhhKqv1Ojv7Q1bqSXRX7Z54Lj6vFZEI8rJD1wb4XVPmaAZh2nfgz?=
- =?us-ascii?Q?dY8Fp2Mub3IwwO1sd2BJlAV1lS2Ne3jRsvijUkwHUD3D4BEpmP2A46QHOnfT?=
- =?us-ascii?Q?2j5JEoI/a8LQWQ5Ai611ylCN+htHxegtGhMXH0EzIkOvgjfTf26KvPVgj8yJ?=
- =?us-ascii?Q?PSw/Y3xu7obE5KGAovvcz3fK60l5opWAY/wTnxXVyGltbCygbeSqWApwpWD1?=
- =?us-ascii?Q?He6MZ5m1bZypNvtV2WlE2dmRTzSXfxEr4+ATY4A2ZO3Q2Na1LVEb1FvsKrnn?=
- =?us-ascii?Q?sLsoXBawE7aps7TLzSj4xpBpHNiOif4UlwLAmbQYIzJnMXXAyxQ/ok5CEf7r?=
- =?us-ascii?Q?eVXv2Q3cxomfcxiNEk3vjQ0wncHnugliNWcGh+Z7OgQ6G/U0LknGKCDdTHc8?=
- =?us-ascii?Q?aFkMBlplWNPB0Rel/CEfuojmEp22wChjhz1C34CiyhW9W3cLVEIOsy5cnMX3?=
- =?us-ascii?Q?j8FxR22vG0GJNhLDrzzZK+/mNejgec/gQLWP1xEB8ghqht1vb4BckFWJBEnI?=
- =?us-ascii?Q?vHe0tVrO2mJp0W7oU3CsTmgjtncHhZrTdebIZYU5ekui3/2ZyUlR3N9cTwhh?=
- =?us-ascii?Q?yxTCPXv2rVni6a40BGcODLvwaXvqqKD716uM2SkaZ/bXMr1kW6RkCE1wDvCH?=
- =?us-ascii?Q?6cnGHy1Xw4r13zn9ELjSxnm7PHqfCroqSqIRy55+R1KJhAcDh4CwD56hbfmh?=
- =?us-ascii?Q?SnDCZfNdRzRSYSEMDqZ6Li8OLBy0Gw8GUyQxJyqftcZhgCyAMg12P2LAQ7To?=
- =?us-ascii?Q?ZsFVE+dUreI0ElQ53V76pXb8NTI7353RGbDmukqcRqrHtH0qhkJIB4vR8XOX?=
- =?us-ascii?Q?Kg=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 34c97ef9-9aeb-489e-0999-08db253be934
-X-MS-Exchange-CrossTenant-AuthSource: DS7PR11MB5966.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Mar 2023 09:59:05.0262
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: xkkJWrXG2/x/mktcWVywn7RhjUjsNiPJulbNOudepF0VS/bDQyWQVMxKhqP0g0QGReRQsylOCON3QDtHoOhd5g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR11MB6169
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <cover.1677069490.git.yu.c.chen@intel.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.102.169]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ canpemm500009.china.huawei.com (7.192.105.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Nit: there is a typo in the commit header: "iff" -> "if"
+Hi Chenyu,
 
-> -void kvm_page_track_write(struct kvm_vcpu *vcpu, gpa_t gpa, const u8 *new,
-> -			  int bytes)
-> +void __kvm_page_track_write(struct kvm *kvm, gpa_t gpa, const u8 *new, int bytes)
-Line length is 81 characters. A little longer than 80 :)
+On 2023/2/22 22:09, Chen Yu wrote:
+> The main purpose is to avoid too many cross CPU wake up when it is
+> unnecessary. The frequent cross CPU wake up brings significant damage
+> to some workloads, especially on high core count systems.
+> 
+> Inhibits the cross CPU wake-up by placing the wakee on waking CPU,
+> if both the waker and wakee are short-duration tasks. The short
+> duration task could become a trouble maker on high-load system,
+> because it could bring frequent context switch. This strategy
+> only takes effect when the system is busy. Because it is unreasonable
+> to inhibit the idle CPU scan when there are still idle CPUs.
+> 
+> First, introduce the definition of a short-duration task. Then
+> leverages the first patch to choose a local CPU for wakee.
+> 
+> Overall there is performance improvement on some overloaded case.
+> Such as will-it-scale, netperf. And no noticeable impact on
+> schbench, hackbench, tbench and a OLTP workload with a commercial
+> RDBMS, tested on a Intel Xeon 2 x 56C machine.
+> 
+> Per the test on Zen3 from Prateek, most benchmarks result saw small
+> wins or are comparable to sched:tip. SpecJBB Critical-jOps improved while
+> Max-jOPS saw a small hit, but it might be in the expected range.
+> ycsb-mongodb saw small uplift in NPS1 mode.
+> 
+> Throughput improvement of netperf(localhost) was observed on a
+> Rome 2 x 64C machine, when the number of clients equals the CPUs.
+> 
+> Abel reported against a latency regression from Redis on an overloaded
+> system. Inspired by his description, v5 added the check of wakee_flips
+> to mitigate task stacking.
+> 
+> Changes since v5:
+> 1. Check the wakee_flips of the waker/wakee. If the wakee_flips
+>    of waker/wakee are both 0, it indicates that the waker and the wakee
+>    are waking up each other. In this case, put them together on the
+>    same CPU. This is to avoid that too many wakees are stacked on
+>    one CPU, which might cause regression on redis.
+> 
 
-> +static inline bool kvm_page_track_has_external_user(struct kvm *kvm) { return false; }
-This line is also too long.
+The patch looks good to me. And for the v6 version there's no significant
+regression on our server. :)
 
+Detailed results below. The setup are the same as what used on v4. There're
+some gain for UDP_RR. For mysql no significant regression, there're ~2%
+loss for 128 threads case but the proportion is within the fluctuation
+range so it should be ok.
+
+Thanks,
+Yicong
+
+tbench results (node 0):
+Compare
+      6.3-rc1-vanilla                sis-short-v6
+  1:        322.2940        324.6750 (    0.74%)
+  4:       1293.4000       1294.2900 (    0.07%)
+  8:       2568.7700       2606.9200 (    1.49%)
+ 16:       5158.0800       5254.5500 (    1.87%)
+ 32:      10074.2000      10286.9000 (    2.11%)
+ 64:       7910.5000       7969.1000 (    0.74%)
+128:       6670.3900       6699.7600 (    0.44%)
+tbench results (node 0-1):
+Compare
+      6.3-rc1-vanilla                sis-short-v6
+  1:        324.5650        330.9840 (    1.98%)
+  4:       1302.9000       1311.3300 (    0.65%)
+  8:       2573.7200       2615.5500 (    1.63%)
+ 16:       5092.7900       5178.4200 (    1.68%)
+ 32:       8766.8000       9466.6700 (    7.98%)
+ 64:      16859.5000      16535.2000 (   -1.92%)
+128:      13673.6000      11960.7000 (  -12.53%)
+128:      13673.6000      13066.6000 (   -4.43%) [verification]
+
+netperf results TCP_RR (node 0):
+Compare
+      6.3-rc1-vanilla                sis-short-v6
+  1:      74952.4633      74964.7067 (    0.02%)
+  4:      76020.1192      75984.1158 (   -0.05%)
+  8:      76698.5804      76846.1312 (    0.19%)
+ 16:      77713.0350      77858.9752 (    0.19%)
+ 32:      65947.7090      66124.5758 (    0.27%)
+ 64:      25195.1539      25374.4948 (    0.71%)
+128:      10602.2112      10703.6223 (    0.96%)
+netperf results TCP_RR (node 0-1):
+Compare
+      6.3-rc1-vanilla                sis-short-v6
+  1:      76229.5167      76178.0700 (   -0.07%)
+  4:      77196.7558      76546.3333 (   -0.84%)
+  8:      76340.5733      76612.0829 (    0.36%)
+ 16:      75808.3848      75132.6454 (   -0.89%)
+ 32:      75178.5653      71464.7628 (   -4.94%)
+ 64:      75222.3510      76028.7949 (    1.07%)
+128:      28552.5946      28830.6498 (    0.97%)
+netperf results UDP_RR (node 0):
+Compare
+      6.3-rc1-vanilla                sis-short-v6
+  1:      90744.2900      94082.3967 (    3.68%)
+  4:      92323.3100      95160.6525 (    3.07%)
+  8:      92951.3996      96303.9783 (    3.61%)
+ 16:      93418.8117      97358.5925 (    4.22%)
+ 32:      78725.5393      84363.7384 (    7.16%)
+ 64:      30069.7350      30929.4379 (    2.86%)
+128:      12501.6386      12695.0588 (    1.55%)
+netperf results UDP_RR (node 0-1):
+Compare
+      6.3-rc1-vanilla                sis-short-v6
+  1:      92030.0200      95568.9767 (    3.85%)
+  4:      90041.0042      94265.9775 (    4.69%)
+  8:      90273.7354      94055.1283 (    4.19%)
+ 16:      90404.9869      95233.8633 (    5.34%)
+ 32:      74813.0918      83538.5368 (   11.66%) [*]
+ 64:      57494.5351      74612.3866 (   29.77%) [*]
+128:      24803.3562      16420.1439 (  -33.80%) [*]
+[*] untrustworthy due to large fluactuation
+
+               6.3.0-rc1-vanilla     6.3.0-rc1-sis-short-v6
+                       Avg                 Avg (%)
+     TPS-8       4496.25         4520.99 (0.55%)
+     QPS-8      71940.01        72335.93 (0.55%)
+ avg_lat-8          1.78            1.77 (0.38%)
+95th_lat-8          2.10            2.11 (-0.48%)
+     TPS-16      8905.41         8844.63 (-0.68%)
+     QPS-16     142486.59       141514.08 (-0.68%)
+ avg_lat-16         1.80            1.81 (-0.56%)
+95th_lat-16         2.18            2.23 (-2.45%)
+     TPS-32     14214.88        14378.30 (1.15%)
+     QPS-32     227438.14       230052.76 (1.15%)
+ avg_lat-32         2.25            2.22 (1.19%)
+95th_lat-32         3.06            2.95 (3.70%)
+     TPS-64     14697.57        14801.04 (0.70%)
+     QPS-64     235161.20       236816.57 (0.70%)
+ avg_lat-64         4.35            4.32 (0.69%)
+95th_lat-64         6.51            6.39 (1.79%)
+     TPS-128    18417.83        18010.42 (-2.21%)
+     QPS-128    294685.24       288166.68 (-2.21%)
+ avg_lat-128        6.97            7.13 (-2.30%)
+95th_lat-128       10.22           10.46 (-2.35%)
+     TPS-256    29940.82        30491.62 (1.84%)
+     QPS-256    479053.21       487865.89 (1.84%)
+ avg_lat-256        8.54            8.41 (1.60%)
+95th_lat-256       13.22           13.55 (-2.50%)
+
+> Changes since v4:
+> 1. Dietmar has commented on the task duration calculation. So refined
+>    the commit log to reduce confusion.
+> 2. Change [PATCH 1/2] to only record the average duration of a task.
+>    So this change could benefit UTIL_EST_FASTER[1].
+> 3. As v4 reported regression on Zen3 and Kunpeng Arm64, add back
+>    the system average utilization restriction that, if the system
+>    is not busy, do not enable the short wake up. Above logic has
+>    shown improvment on Zen3[2].
+> 4. Restrict the wakeup target to be current CPU, rather than both
+>    current CPU and task's previous CPU. This could also benefit
+>    wakeup optimization from interrupt in the future, which is
+>    suggested by Yicong.
+> 
+> Changes since v3:
+> 1. Honglei and Josh have concern that the threshold of short
+>    task duration could be too long. Decreased the threshold from
+>    sysctl_sched_min_granularity to (sysctl_sched_min_granularity / 8),
+>    and the '8' comes from get_update_sysctl_factor().
+> 2. Export p->se.dur_avg to /proc/{pid}/sched per Yicong's suggestion.
+> 3. Move the calculation of average duration from put_prev_task_fair()
+>    to dequeue_task_fair(). Because there is an issue in v3 that,
+>    put_prev_task_fair() will not be invoked by pick_next_task_fair()
+>    in fast path, thus the dur_avg could not be updated timely.
+> 4. Fix the comment in PATCH 2/2, that "WRITE_ONCE(CPU1->ttwu_pending, 1);"
+>    on CPU0 is earlier than CPU1 getting "ttwu_list->p0", per Tianchen.
+> 5. Move the scan for CPU with short duration task from select_idle_cpu()
+>    to select_idle_siblings(), because there is no CPU scan involved, per
+>    Yicong.
+> 
+> Changes since v2:
+> 
+> 1. Peter suggested comparing the duration of waker and the cost to
+>    scan for an idle CPU: If the cost is higher than the task duration,
+>    do not waste time finding an idle CPU, choose the local or previous
+>    CPU directly. A prototype was created based on this suggestion.
+>    However, according to the test result, this prototype does not inhibit
+>    the cross CPU wakeup and did not bring improvement. Because the cost
+>    to find an idle CPU is small in the problematic scenario. The root
+>    cause of the problem is a race condition between scanning for an idle
+>    CPU and task enqueue(please refer to the commit log in PATCH 2/2).
+>    So v3 does not change the core logic of v2, with some refinement based
+>    on Peter's suggestion.
+> 
+> 2. Simplify the logic to record the task duration per Peter and Abel's suggestion.
+> 
+> 
+> [1] https://lore.kernel.org/lkml/c56855a7-14fd-4737-fc8b-8ea21487c5f6@arm.com/
+> [2] https://lore.kernel.org/all/cover.1666531576.git.yu.c.chen@intel.com/
+> 
+> v5: https://lore.kernel.org/lkml/cover.1675361144.git.yu.c.chen@intel.com/
+> v4: https://lore.kernel.org/lkml/cover.1671158588.git.yu.c.chen@intel.com/
+> v3: https://lore.kernel.org/lkml/cover.1669862147.git.yu.c.chen@intel.com/
+> v2: https://lore.kernel.org/all/cover.1666531576.git.yu.c.chen@intel.com/
+> v1: https://lore.kernel.org/lkml/20220915165407.1776363-1-yu.c.chen@intel.com/
+> 
+> Chen Yu (2):
+>   sched/fair: Record the average duration of a task
+>   sched/fair: Introduce SIS_SHORT to wake up short task on current CPU
+> 
+>  include/linux/sched.h   |  3 +++
+>  kernel/sched/core.c     |  2 ++
+>  kernel/sched/debug.c    |  1 +
+>  kernel/sched/fair.c     | 49 +++++++++++++++++++++++++++++++++++++++++
+>  kernel/sched/features.h |  1 +
+>  5 files changed, 56 insertions(+)
+> 
