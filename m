@@ -2,91 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 560A36BB806
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 16:37:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 263E76BB80E
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 16:38:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230266AbjCOPhB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 11:37:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50222 "EHLO
+        id S232506AbjCOPiN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 11:38:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232339AbjCOPgy (ORCPT
+        with ESMTP id S232339AbjCOPiK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 11:36:54 -0400
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 730EC65474;
-        Wed, 15 Mar 2023 08:36:29 -0700 (PDT)
-Received: by mail-qt1-x82f.google.com with SMTP id y10so16652816qtj.2;
-        Wed, 15 Mar 2023 08:36:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678894586;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=u7B79q5XzmIhwSEssat0gkxT+yZ3PWxvIGwk0QStaLY=;
-        b=hrPUdwXNzNrTWF81fr9l0YT9NO6JsZJI7DLogoNM99lsegt8gooJ7EO431R/fVR3HN
-         IShw/h/Tw1i1ltljp1GbEq4VJFlDBr5qGfEbsAvkZSwY3i5N2p/N/739r6sglpLrj9BY
-         tgAaIb1PiSU/Luw4xoMAU91XudTC51NcGvPQjRSJIRfo6B33I6dM4B5dHqnQfmDfuaZ4
-         ydp0PXBx//FloDfulxofW1TluMC7wViZru4OuVJg19Oj37ZC6eyAsKqRVgCFl3jFnYDC
-         ju1sWCMrE2lxDePm3yjugigJBY3Qw2jvpfTPhsoUKF2St6VGAOE8XoYwWGXDYiYchro0
-         Ya8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678894586;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=u7B79q5XzmIhwSEssat0gkxT+yZ3PWxvIGwk0QStaLY=;
-        b=uZOB2JGsf9TLWhiPKAjKYMykxI7g81j+ZUZ4Kf34Zrb7nP9Y9eIK1a6//2QSmmmPAu
-         rPFiL3JFyTT5+rbIQui6P5N3mioqh7D865O0WtFDUK7dzGaWymjII0rsDHiKvQoOlGRv
-         T5Jigm62iVN1XVUADe1HEhOTQ07Vsi1h1MlL7P9oFtIxXhQhek5XBB5WaB1geoueS5Eb
-         Pj1ZdmYcfn/9JpnbDGA9ZJfEnJEakgUp3mItglsZyMVpDF7zDomFnN87cF7W4FRgOXjj
-         y5V/wOExYSslTY6pGsEoBfnsqE6vbstejFs/8fU/wJY5Le+/Jn9OLMvsv27b5FVeHGLy
-         PKlA==
-X-Gm-Message-State: AO0yUKVxza6g0IphR/x2NGKIAeM+cNKVX8lxxLPFN/HDYV4Th69AEHuw
-        zUKEHazfTOJNDOS+CUQCag0=
-X-Google-Smtp-Source: AK7set9PvdK/lK7rQ6a6B6OzQUFglSOufyiN79iiVFrD7JQZuFJ/JJRo2TYRsC5VPlhT9Hw+XtxMqg==
-X-Received: by 2002:ac8:7d0a:0:b0:3b9:bc8c:c20f with SMTP id g10-20020ac87d0a000000b003b9bc8cc20fmr506448qtb.26.1678894586614;
-        Wed, 15 Mar 2023 08:36:26 -0700 (PDT)
-Received: from [192.168.1.201] (pool-173-73-95-180.washdc.fios.verizon.net. [173.73.95.180])
-        by smtp.gmail.com with ESMTPSA id c1-20020ae9ed01000000b007461fe6d6e3sm2577qkg.49.2023.03.15.08.36.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Mar 2023 08:36:26 -0700 (PDT)
-Message-ID: <8ea1c66e-e4c2-b30d-b8d0-9740ecb8bd6e@gmail.com>
-Date:   Wed, 15 Mar 2023 11:36:25 -0400
+        Wed, 15 Mar 2023 11:38:10 -0400
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88862298C0;
+        Wed, 15 Mar 2023 08:38:03 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 003AC5C0526;
+        Wed, 15 Mar 2023 11:38:03 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute6.internal (MEProxy); Wed, 15 Mar 2023 11:38:02 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+         h=cc:cc:content-type:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1678894682; x=
+        1678981082; bh=1WqZaUC1BX2jDHLQT1f8EPKFG28amlSPpC4LzmJo0xw=; b=B
+        8mDvLt4m06diWCXnmFzG8qHso0n6hCAnFLzB3jmFnhT9crLjB/lUso0oQlr9dOIw
+        MAUCb97fdvmi+JrVFEm+CVtIcnr21eVi7SlebOJRzGnXmti3ZY+WNRP0u6FjfLl3
+        nnSID1TbuLU/hRS7hFs+47lPSz2x7aLfg3bqYpzJko6VDLZytzsrwSdfyLW3Ya/o
+        vDqq9i/Wn4mrEAJ9pzmOP1+wJ/U0QViA3CvbzavspioYwjITcEfd82po5Fuiuv5N
+        C9Hzl+dpFvC1qenHchdZ4ElTrHNEKdFn784m4xA/R1GU6Xx5eGtU+8Aj1JPF0A8n
+        8PqCU7Kr4uXVgLL2hgOVg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1678894682; x=1678981082; bh=1WqZaUC1BX2jD
+        HLQT1f8EPKFG28amlSPpC4LzmJo0xw=; b=l0lZ75eJIewsD9UND+Wf7ktKL1tqB
+        XIeEM1Gdraiu+l3BRCGdZ31MKP+wt3/xUX+HsfjDqQME0xsxx7OUC+PYizmmW+Hc
+        fG5nRabgkQtJm36yfKHDKVzD240zu68qgtveVVtL0rfuC3HhdOAODGfNFkfqsuxC
+        yk9y8Vp/a62FW9sJtUObOzfUgGXz5tdNsqBKl+UTmOHEflJC3v/vyWsMAMfEcMAR
+        /l2aacM4q9266ccuRXut1B8JELm5OCiTsPrgUHaZKk67ufzD7lXVfRXr7XTmQL6o
+        wY4KyU5oU5goTiwbxhlBNAJo0Ctk5nOe7LAx3qBXEBEJ7cDvFjS6tLZ7g==
+X-ME-Sender: <xms:WuYRZMCmgxK6g9V07jemgEixzcuM8j99YCkjKLlJna7of5Ii6ylKFg>
+    <xme:WuYRZOib1KpdkvVueJ_Lb2qSH3J77-9Fc0QdZF6XvePqUecH_wdjZBwVWG8KzI-9b
+    -TITkF_m_WmrzrP9WU>
+X-ME-Received: <xmr:WuYRZPkp2aF9fB6vs5P9OTxoD6zikuAt6TdIMIapMSsf4_fFdh5g1uBqbljrz_qD2HFX8w>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvddvkedgjeejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepfdfmihhr
+    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
+    grmhgvqeenucggtffrrghtthgvrhhnpeekveegudeuheffteelfefffeehleffgefhtdej
+    vdeufedtvedvjeevfeekjeeggfenucffohhmrghinhepghhithdqshgtmhdrtghomhdpgh
+    hithhhuhgsrdgtohhmpdhkvghrnhgvlhdrohhrghdptddurdhorhhgpdhgihhthhhusghu
+    shgvrhgtohhnthgvnhhtrdgtohhmnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
+    hmpehmrghilhhfrhhomhepkhhirhhilhhlsehshhhuthgvmhhovhdrnhgrmhgv
+X-ME-Proxy: <xmx:WuYRZCwBnOlO7sexhEmWJZXAc07g828xy3iR7HM3BKZTt7JkaF0UTQ>
+    <xmx:WuYRZBTMTRlkCXgiHZjczi9pxWL4QtpO8uL6ojSrrrWfY0Ukx-nG2g>
+    <xmx:WuYRZNZ40KbZBF9RRNWswm3sRFKuSaVgsq2UwHgWGO_7JXbQmuQb4g>
+    <xmx:WuYRZO_Eo62fW7IgzBAD-fvYvCEyBhrC1Mf9xhUAHV3lV2xPiPGZDw>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 15 Mar 2023 11:38:02 -0400 (EDT)
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 520A610C8DF; Wed, 15 Mar 2023 18:38:00 +0300 (+03)
+Date:   Wed, 15 Mar 2023 18:38:00 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     kernel test robot <lkp@intel.com>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mel Gorman <mgorman@suse.de>, Vlastimil Babka <vbabka@suse.cz>,
+        David Hildenbrand <david@redhat.com>, llvm@lists.linux.dev,
+        oe-kbuild-all@lists.linux.dev,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 10/10] mm, treewide: Redefine MAX_ORDER sanely
+Message-ID: <20230315153800.32wib3n5rickolvh@box>
+References: <20230315113133.11326-11-kirill.shutemov@linux.intel.com>
+ <202303152343.D93IbJmn-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH net-next v3 8/9] net: sunhme: Inline error returns
-Content-Language: en-US
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        Simon Horman <simon.horman@corigine.com>,
-        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Dan Carpenter <error27@gmail.com>
-References: <20230314003613.3874089-1-seanga2@gmail.com>
- <20230314003613.3874089-9-seanga2@gmail.com>
- <20230315005149.6e06c2bb@kernel.org>
-From:   Sean Anderson <seanga2@gmail.com>
-In-Reply-To: <20230315005149.6e06c2bb@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202303152343.D93IbJmn-lkp@intel.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/15/23 03:51, Jakub Kicinski wrote:
-> On Mon, 13 Mar 2023 20:36:12 -0400 Sean Anderson wrote:
->> Fixes: 96c6e9faecf1 ("sunhme: forward the error code from pci_enable_device()")
+On Wed, Mar 15, 2023 at 11:26:51PM +0800, kernel test robot wrote:
+> Hi Kirill,
 > 
-> No such	commit in our trees :(
+> Thank you for the patch! Perhaps something to improve:
+> 
+> [auto build test WARNING on akpm-mm/mm-everything]
+> [also build test WARNING on powerpc/next powerpc/fixes linus/master v6.3-rc2 next-20230315]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Kirill-A-Shutemov/sparc-mm-Fix-MAX_ORDER-usage-in-tsb_grow/20230315-193254
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+> patch link:    https://lore.kernel.org/r/20230315113133.11326-11-kirill.shutemov%40linux.intel.com
+> patch subject: [PATCH 10/10] mm, treewide: Redefine MAX_ORDER sanely
+> config: arm-randconfig-r033-20230313 (https://download.01.org/0day-ci/archive/20230315/202303152343.D93IbJmn-lkp@intel.com/config)
+> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # install arm cross compiling tool for clang build
+>         # apt-get install binutils-arm-linux-gnueabi
+>         # https://github.com/intel-lab-lkp/linux/commit/ccefb5df94c3c6c966f6f583d60c9d9c832b7a34
+>         git remote add linux-review https://github.com/intel-lab-lkp/linux
+>         git fetch --no-tags linux-review Kirill-A-Shutemov/sparc-mm-Fix-MAX_ORDER-usage-in-tsb_grow/20230315-193254
+>         git checkout ccefb5df94c3c6c966f6f583d60c9d9c832b7a34
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+> 
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Link: https://lore.kernel.org/oe-kbuild-all/202303152343.D93IbJmn-lkp@intel.com/
+> 
+> All warnings (new ones prefixed by >>):
+> 
+> >> mm/memblock.c:2046:11: warning: comparison of distinct pointer types ('typeof (11) *' (aka 'int *') and 'typeof (__ffs(start)) *' (aka 'unsigned long *')) [-Wcompare-distinct-pointer-types]
+>                    order = min(MAX_ORDER, __ffs(start));
 
-Ah, looks like I forgot this was bad when copying the other commit. It should be acb3f35f920b.
+The fixup:
 
---Sean
+diff --git a/mm/memblock.c b/mm/memblock.c
+index 338b8cb0793e..7911224b1ed3 100644
+--- a/mm/memblock.c
++++ b/mm/memblock.c
+@@ -2043,7 +2043,7 @@ static void __init __free_pages_memory(unsigned long start, unsigned long end)
+ 	int order;
+ 
+ 	while (start < end) {
+-		order = min(MAX_ORDER, __ffs(start));
++		order = min_t(int, MAX_ORDER, __ffs(start));
+ 
+ 		while (start + (1UL << order) > end)
+ 			order--;
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
