@@ -2,80 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 259F56BAD56
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 11:16:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EE7D6BAD57
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 11:16:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232171AbjCOKQC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 06:16:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56690 "EHLO
+        id S232271AbjCOKQN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 06:16:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231234AbjCOKQA (ORCPT
+        with ESMTP id S232103AbjCOKQL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 06:16:00 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 440394C6C9;
-        Wed, 15 Mar 2023 03:15:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4D235B81DC2;
-        Wed, 15 Mar 2023 10:15:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AADCEC433EF;
-        Wed, 15 Mar 2023 10:14:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678875301;
-        bh=ayiZu6co1Nt0oF8/9K2DyHZxjmr6VDHH0+zwgOu2Gs4=;
-        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
-        b=g08dBd0S1ztIYGmKAPI86fz/y8r1lcjRRqYaAjMSmG7MhUkhFVWMzNTiD42N7sGaJ
-         F7eb6/cpEF76NGuZZ/SqURqsAbbAmHOk0JBE8iKARUd1EcnS5muAIKgy9OcTGpbrC7
-         T1c5cTzVnCxjRzfXzjnN4y9Tbi7iH6hRNYzTGe/bs/VNKb75EAuumL8xhrvMYVkcP1
-         W/t3Dg2L12kMKzDqdmHHBqf+dMbeQglu+UeZbt4ROPZ6qfqeDItavKQXG9miTmOIQe
-         2eRiNMurChJqZVYP1is0WWJ6sYMjKH8kfU1GTLB39j0b0b5VjbRMPb61YWZ96mEz0M
-         HT+6496A6Pt9w==
-Content-Type: text/plain; charset="utf-8"
+        Wed, 15 Mar 2023 06:16:11 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 802232A6E5
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 03:15:19 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BC0342F4;
+        Wed, 15 Mar 2023 03:15:55 -0700 (PDT)
+Received: from [192.168.178.6] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3F8BC3F67D;
+        Wed, 15 Mar 2023 03:15:10 -0700 (PDT)
+Message-ID: <5527ad0e-0f6d-fb4c-7505-a1c80192ed3b@arm.com>
+Date:   Wed, 15 Mar 2023 11:15:01 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH 1/1] wifi: ath9k: Remove Qwest/Actiontec 802AIN ID
-From:   Kalle Valo <kvalo@kernel.org>
-In-Reply-To: <20230306125041.2221-1-bage@debian.org>
-References: <20230306125041.2221-1-bage@debian.org>
-To:     Bastian Germann <bage@debian.org>
-Cc:     toke@toke.dk, Bastian Germann <bage@debian.org>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.7.3
-Message-ID: <167887529700.21988.13525749000670884909.kvalo@kernel.org>
-Date:   Wed, 15 Mar 2023 10:14:59 +0000 (UTC)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v2] sched/fair: sanitize vruntime of entity being migrated
+Content-Language: en-US
+To:     Vincent Guittot <vincent.guittot@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Zhang Qiao <zhangqiao22@huawei.com>, linux-kernel@vger.kernel.org,
+        mingo@redhat.com, juri.lelli@redhat.com, rostedt@goodmis.org,
+        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
+        vschneid@redhat.com, rkagan@amazon.de
+References: <CAKfTPtAf5RrzZRSHtfK+r3QvnFQ-oM3+rJ-z5SB8T4+nUv1aQw@mail.gmail.com>
+ <20230309142825.GB273121@hirez.programming.kicks-ass.net>
+ <ZAnvCGdlOrWbIC/o@hirez.programming.kicks-ass.net>
+ <CAKfTPtADUas2QHZCQyu0ad-JTKRQ=PcsB=o7+PuJNVxHwAzkCQ@mail.gmail.com>
+ <ZAs+zV0o9ShO7nLT@vingu-book> <02a08042-e7c4-464d-bc20-9ec4ccdab1ff@arm.com>
+ <8c093661-7431-00d8-d703-b8f7a7c8e747@arm.com>
+ <CAKfTPtBw9SJxVBcN1qff7jRzE81kXSjbc-rXD6goEBFiXEwbyg@mail.gmail.com>
+ <20230314120726.GG1845660@hirez.programming.kicks-ass.net>
+ <CAKfTPtBHocw4N-YMHeqfMj78Ro=aF8sJPanxVCN=tM70hr6r8g@mail.gmail.com>
+ <20230314171607.GN2017917@hirez.programming.kicks-ass.net>
+ <CAKfTPtBurhAxcykDWQHoSZ0aiokgK4jhamdh-F29643cL1jVsw@mail.gmail.com>
+ <CAKfTPtCra1QV32w1MZQY2SHVDv58m2MT2QwpHu0huJJ3B1wcCA@mail.gmail.com>
+From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
+In-Reply-To: <CAKfTPtCra1QV32w1MZQY2SHVDv58m2MT2QwpHu0huJJ3B1wcCA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Bastian Germann <bage@debian.org> wrote:
-
-> The USB device 1668:1200 is Qwest/Actiontec 802AIN which is also
-> correctly claimed to be supported by carl9170.
+On 15/03/2023 09:42, Vincent Guittot wrote:
+> On Wed, 15 Mar 2023 at 08:18, Vincent Guittot
+> <vincent.guittot@linaro.org> wrote:
+>>
+>> On Tue, 14 Mar 2023 at 18:16, Peter Zijlstra <peterz@infradead.org> wrote:
+>>>
+>>> On Tue, Mar 14, 2023 at 02:24:37PM +0100, Vincent Guittot wrote:
+>>>
+>>>>> @@ -7632,11 +7646,8 @@ static void migrate_task_rq_fair(struct task_struct *p, int new_cpu)
+>>>>>          * min_vruntime -- the latter is done by enqueue_entity() when placing
+>>>>>          * the task on the new runqueue.
+>>>>>          */
+>>>>> -       if (READ_ONCE(p->__state) == TASK_WAKING) {
+>>>>> -               struct cfs_rq *cfs_rq = cfs_rq_of(se);
+>>>>> -
+>>>>> +       if (READ_ONCE(p->__state) == TASK_WAKING || reset_vruntime(cfs_rq, se))
+>>>>
+>>>> That's somehow what was proposed in one of the previous proposals but
+>>>> we can't call rq_clock_task(rq_of(cfs_rq)) because rq lock might not
+>>>> be hold and rq task clock has not been updated before being used
+>>>
+>>> Argh indeed. I spend a lot of time ensuring we didn't take the old rq
+>>> lock on wakeup -- and then a lot of time cursing about how we don't :-)
+>>>
+>>> Now, if we could rely on the rq-clock being no more than 1 tick behind
+>>> current, this would still be entirely sufficient to catch the long sleep
+>>> case.
+>>
+>> We should also take care when loading rq_clock_task that we are not
+>> racing with an update especially for a 32bits system like pelt
+>> last_update_time
 > 
-> Supposedly, the successor 802AIN2 has an ath9k compatible chip
-> whose USB ID (unknown) could be inserted instead.
+> We still have this possibility:
+> https://lore.kernel.org/lkml/ZAiFxWLSb9HDazSI@vingu-book/
 > 
-> Drop the ID from the wrong driver. I happened to find this by chance while
-> packaging the ath9k and carl9170 firmware for Debian.
-> 
-> Signed-off-by: Bastian Germann <bage@debian.org>
-> Acked-by: Toke Høiland-Jørgensen <toke@toke.dk>
-> Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
+> which uses pelt last_update_time when migrating and keep using
+> rq_clock_task in place_entity
 
-Patch applied to ath-next branch of ath.git, thanks.
+Isn't there an issue with this approach on asymmetric CPU capacity systems?
 
-f94d7a3a5107 wifi: ath9k: Remove Qwest/Actiontec 802AIN ID
+We do a sync_entity_load_avg() in select_task_rq_fair()
+(find_energy_efficient_cpu() for EAS and select_idle_sibling() for CAS)
+to sync cfs_rq and se.
 
--- 
-https://patchwork.kernel.org/project/linux-wireless/patch/20230306125041.2221-1-bage@debian.org/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+[...]
 
