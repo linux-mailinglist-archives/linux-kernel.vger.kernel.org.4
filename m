@@ -2,137 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10F1F6BBD55
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 20:35:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93C506BBD5A
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 20:36:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230106AbjCOTfk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 15:35:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58990 "EHLO
+        id S232881AbjCOTgE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 15:36:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232688AbjCOTfg (ORCPT
+        with ESMTP id S232760AbjCOTgA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 15:35:36 -0400
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 950538ABCF
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 12:35:30 -0700 (PDT)
-Received: from fpc (unknown [10.10.165.16])
-        by mail.ispras.ru (Postfix) with ESMTPSA id 9E4ED44C100F;
-        Wed, 15 Mar 2023 19:35:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru 9E4ED44C100F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
-        s=default; t=1678908928;
-        bh=aqQ96mk6bjNY5p/8x2uV3oa0ZhGJDmI+dFV4k3UcAyM=;
-        h=Date:From:To:Cc:Subject:From;
-        b=bLau1QyGJV0Qh5MPDbB/J8Cyb7E8iI/97+VKGxcYmABkUQtmWkAV5Js7345CH0vvy
-         Et+I24WQRs+5ltW+vvFeOiKwrPhGfxRVkSDPUCN/STux/ueVsIKDpqlbj+ml/VN1rS
-         YHzR7OLvcaK3oT0I6h9NT9L1uAXz19d5XqRheQPE=
-Date:   Wed, 15 Mar 2023 22:35:21 +0300
-From:   Fedor Pchelkin <pchelkin@ispras.ru>
-To:     syzbot+df61b36319e045c00a08@syzkaller.appspotmail.com
-Cc:     syzkaller-bugs@googlegroups.com, linux-kernel@vger.kernel.org
-Subject: Re: [syzbot] [wireless?] KMSAN: uninit-value in ath9k_hw_init
-Message-ID: <20230315193521.jcox7j3is24gk6mj@fpc>
+        Wed, 15 Mar 2023 15:36:00 -0400
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72CA38A3AF
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 12:35:58 -0700 (PDT)
+Received: by mail-qt1-x834.google.com with SMTP id t9so1322914qtx.8
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 12:35:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678908957;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=rRD8NgEN/2xMDJaIifHiAB1EaiS+DmHgSj8/md0pHg8=;
+        b=CmOpWXQ2K/Z3Cnfqvvaj8KMNOtuU+3KOAomRx76CMAdc9hV3od7Ix3EXd7lt3v1aCg
+         quyBuXk6dlhcKIaU9/YP2DouDib9HFf3A/tyadabjAgEN8xdccth5oiVgvBjIyolNWbM
+         owG4dEmR5Aqo2h1lQZ7lqJGDSsvZtLJuczogXTklZIRnb6/7sLbOJJZJOFsf+NLQb+H5
+         sLlODqcPKoafDN9SznODbLHxSOtPPeLJbL9tRIVio9Gk6qQ25AYP2jcvATo6y7+OpfJo
+         +1O6WQnxFcli7P3pdMI6ILSqO4nU4WoZgLpNFewR4BejrT/BpaRORc14CoipR/8V3rHz
+         BZqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678908957;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rRD8NgEN/2xMDJaIifHiAB1EaiS+DmHgSj8/md0pHg8=;
+        b=MF2U2tBkdTRTreaSmxLV6yasFgLEDURhkOfe9+qBPB6QGdNy3H1an9apb/SMj+3rCG
+         GVyyNBZGIQNVxfyk8VbBR/p8Rt0Jw8WQNSFIWRwLWfw4KUqF6i6y5VdyfnTBV2zpFa03
+         Fedu6Acl/LiUH0VjVCLYS7J0+dlJtT8dK6nBqQ6oJfnWcIZF63FcIZYB0rnH8x2oyfh+
+         N+10rbUoleFyQuvc9j8hFVz6RDZ05euFhUioDIORhYwX7iNIVuX4wIdeXHkwuqPlyAXf
+         W6x/D6deDmlwCgGOsIh9ZCJv5cdCDKcgrEJG7LH4dOAX1/kS/jqNrY1tPHQCmAHA8QsS
+         6DJQ==
+X-Gm-Message-State: AO0yUKXrqERtx2r6waC/PCctdPnWNGzivGCq5AgZN3hJ5Mr5+YIhMXJX
+        6QGEp1An/8BEyvPkOzM0AxJa1Q==
+X-Google-Smtp-Source: AK7set/im7ReWlbjUTTel/CadvtzywtBv/u+FOd9kH8CWrLzc78P9mWW7EPTdeZgGLZ/JVPe9OI5cw==
+X-Received: by 2002:a05:622a:1309:b0:3bf:d366:50e1 with SMTP id v9-20020a05622a130900b003bfd36650e1mr1659021qtk.45.1678908957392;
+        Wed, 15 Mar 2023 12:35:57 -0700 (PDT)
+Received: from localhost.localdomain ([98.61.227.136])
+        by smtp.gmail.com with ESMTPSA id q9-20020a05620a024900b0071eddd3bebbsm4369462qkn.81.2023.03.15.12.35.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Mar 2023 12:35:56 -0700 (PDT)
+From:   Alex Elder <elder@linaro.org>
+To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com
+Cc:     caleb.connolly@linaro.org, mka@chromium.org, evgreen@chromium.org,
+        andersson@kernel.org, quic_cpratapa@quicinc.com,
+        quic_avuyyuru@quicinc.com, quic_jponduru@quicinc.com,
+        quic_subashab@quicinc.com, elder@kernel.org,
+        netdev@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH net v2 0/4] net: ipa: minor bug fixes
+Date:   Wed, 15 Mar 2023 14:35:48 -0500
+Message-Id: <20230315193552.1646892-1-elder@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-#syz test: https://github.com/google/kmsan.git master
+The four patches in this series fix some errors, though none of them
+cause any compile or runtime problems.
 
---- a/drivers/net/wireless/ath/ath9k/wmi.c
-+++ b/drivers/net/wireless/ath/ath9k/wmi.c
-@@ -200,20 +200,6 @@ void ath9k_fatal_work(struct work_struct *work)
- 	ath9k_htc_reset(priv);
- }
- 
--static void ath9k_wmi_rsp_callback(struct wmi *wmi, struct sk_buff *skb)
--{
--	skb_pull(skb, sizeof(struct wmi_cmd_hdr));
--
--	/* Once again validate the SKB. */
--	if (unlikely(skb->len < wmi->cmd_rsp_len))
--		return;
--
--	if (wmi->cmd_rsp_buf != NULL && wmi->cmd_rsp_len != 0)
--		memcpy(wmi->cmd_rsp_buf, skb->data, wmi->cmd_rsp_len);
--
--	complete(&wmi->cmd_wait);
--}
--
- static void ath9k_wmi_ctrl_rx(void *priv, struct sk_buff *skb,
- 			      enum htc_endpoint_id epid)
- {
-@@ -242,14 +228,26 @@ static void ath9k_wmi_ctrl_rx(void *priv, struct sk_buff *skb,
- 
- 	/* Check if there has been a timeout. */
- 	spin_lock_irqsave(&wmi->wmi_lock, flags);
--	if (be16_to_cpu(hdr->seq_no) != wmi->last_seq_id) {
-+	if (be16_to_cpu(hdr->seq_no) != wmi->last_seq_id ||
-+	    be16_to_cpu(hdr->seq_no) == 0) {
-+		spin_unlock_irqrestore(&wmi->wmi_lock, flags);
-+		goto free_skb;
-+	}
-+
-+	/* Next, process WMI command response */
-+	skb_pull(skb, sizeof(struct wmi_cmd_hdr));
-+
-+	/* Once again validate the SKB. */
-+	if (unlikely(skb->len < wmi->cmd_rsp_len)) {
- 		spin_unlock_irqrestore(&wmi->wmi_lock, flags);
- 		goto free_skb;
- 	}
--	spin_unlock_irqrestore(&wmi->wmi_lock, flags);
- 
--	/* WMI command response */
--	ath9k_wmi_rsp_callback(wmi, skb);
-+	if (wmi->cmd_rsp_buf != NULL && wmi->cmd_rsp_len != 0)
-+		memcpy(wmi->cmd_rsp_buf, skb->data, wmi->cmd_rsp_len);
-+
-+	complete(&wmi->cmd_wait);
-+	spin_unlock_irqrestore(&wmi->wmi_lock, flags);
- 
- free_skb:
- 	kfree_skb(skb);
-@@ -287,7 +285,8 @@ int ath9k_wmi_connect(struct htc_target *htc, struct wmi *wmi,
- 
- static int ath9k_wmi_cmd_issue(struct wmi *wmi,
- 			       struct sk_buff *skb,
--			       enum wmi_cmd_id cmd, u16 len)
-+			       enum wmi_cmd_id cmd, u16 len,
-+			       u8 *rsp_buf, u32 rsp_len)
- {
- 	struct wmi_cmd_hdr *hdr;
- 	unsigned long flags;
-@@ -297,6 +296,11 @@ static int ath9k_wmi_cmd_issue(struct wmi *wmi,
- 	hdr->seq_no = cpu_to_be16(++wmi->tx_seq_id);
- 
- 	spin_lock_irqsave(&wmi->wmi_lock, flags);
-+
-+	/* record the rsp buffer and length */
-+	wmi->cmd_rsp_buf = rsp_buf;
-+	wmi->cmd_rsp_len = rsp_len;
-+
- 	wmi->last_seq_id = wmi->tx_seq_id;
- 	spin_unlock_irqrestore(&wmi->wmi_lock, flags);
- 
-@@ -337,11 +341,7 @@ int ath9k_wmi_cmd(struct wmi *wmi, enum wmi_cmd_id cmd_id,
- 		goto out;
- 	}
- 
--	/* record the rsp buffer and length */
--	wmi->cmd_rsp_buf = rsp_buf;
--	wmi->cmd_rsp_len = rsp_len;
--
--	ret = ath9k_wmi_cmd_issue(wmi, skb, cmd_id, cmd_len);
-+	ret = ath9k_wmi_cmd_issue(wmi, skb, cmd_id, cmd_len, rsp_buf, rsp_len);
- 	if (ret)
- 		goto out;
- 
+The first changes the files included by "drivers/net/ipa/reg.h" to
+ensure everything it requires is included with the file.  It also
+stops unnecessarily including another file.  The prerequisites are
+apparently satisfied other ways, currently.
+
+The second adds two struct declarations to "gsi_reg.h", to ensure
+they're declared before they're used later in the file.  Again, it
+seems these declarations are currently resolved wherever this file
+is included.
+
+The third removes register definitions that were added for IPA v5.0
+that are not needed.  And the last updates some validity checks for
+IPA v5.0 registers.  No IPA v5.0 platforms are yet supported, so the
+issues resolved here were never harmful.
+
+Version 2 of this series changes the "Fixes" tags in the first two
+patches so they supply legitimate commit hashes.
+
+					-Alex
+
+Alex Elder (4):
+  net: ipa: reg: include <linux/bug.h>
+  net: ipa: add two missing declarations
+  net: ipa: kill FILT_ROUT_CACHE_CFG IPA register
+  net: ipa: fix some register validity checks
+
+ drivers/net/ipa/gsi_reg.c |  9 ++++++++-
+ drivers/net/ipa/gsi_reg.h |  4 ++++
+ drivers/net/ipa/ipa_reg.c | 28 ++++++++++++++++++----------
+ drivers/net/ipa/ipa_reg.h | 21 ++++++---------------
+ drivers/net/ipa/reg.h     |  3 ++-
+ 5 files changed, 38 insertions(+), 27 deletions(-)
+
 -- 
+2.34.1
+
