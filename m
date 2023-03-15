@@ -2,72 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADFE66BB500
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 14:45:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E54E16BB507
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 14:46:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232496AbjCONpM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 09:45:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58520 "EHLO
+        id S231783AbjCONqF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 09:46:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232655AbjCONoZ (ORCPT
+        with ESMTP id S232598AbjCONpu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 09:44:25 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 818FD9C984
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 06:43:49 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id h8so31948877ede.8
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 06:43:49 -0700 (PDT)
+        Wed, 15 Mar 2023 09:45:50 -0400
+Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 423A388EE9;
+        Wed, 15 Mar 2023 06:45:32 -0700 (PDT)
+Received: by mail-ot1-x32f.google.com with SMTP id x16-20020a9d6d90000000b0069aa2f33789so715940otp.4;
+        Wed, 15 Mar 2023 06:45:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678887826;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=T8nh4Kc6jJ9l/Mp0JruEeJEXn/89g6G123aMhw5HP3k=;
-        b=OipumGshDKwsZwzV4aU+QHJNrrpy/7K9lhhshAN9OE7SVKmxV+go2d/XqE8WOSq8/j
-         E2JNKsUG2JuukEtHIqSWIJGuuEgiTStO7cvsZp3P0qnRGJJZ0mKf9iiW6PQ4hHXflBej
-         0IzbRvMaItVXSJC9UJ9vVvBfbYBsxlgjpC4rOLH12WbZoISFbxFoB48E5h4MVW2S4ADg
-         4C7Jp0/o9qlH008hyn+p1/MHdd/yoz6/8uaeVI9vw3+e0RFlso2ZZiQIj56M3luUjEhs
-         dAKDkhueZXzDSmMJwBif3gwza1EnH8cSBVXBDgpQhF7v2VdJ9rC+Dcc0WKIf1TS2FKlU
-         /MSg==
+        d=gmail.com; s=20210112; t=1678887925;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=3zPTmMSigH4zCpLbxZwF96+6D9FBn+T3fklI431Xv3c=;
+        b=qUnn/B8plVaCz3cFDgWQptSnqfXUYFCAqKVU8of/b+rz8+8SWLBOmDvhk/qMwZ/l4w
+         WPqdNLPjCYEKei+hRg2L8VDjAFARbxZYhEfgl6W2co05mF5c2eL6oP9IJ0WL/S7yf+pF
+         aebJGQFTlc9n1luOBel0MFl64a7aGvBEqsjRg4vURB7+emlwYvbMVMVRCp/kDcQ3Nx8f
+         gqLyO42yRK59yQ38x7aXPSobKVf7OCZxtZLWNBGzSJPA4VlPgQhAmQJGWzLV4XyWejS1
+         hiXJfTa4124CIerOrUIey98lmH/63ejKeiU9XoLZE4TQx1gK22XUbPegP9UyNwpkfa4g
+         HE8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678887826;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=T8nh4Kc6jJ9l/Mp0JruEeJEXn/89g6G123aMhw5HP3k=;
-        b=6oiF4/dXWxKnMPzYXuczU+ci8ENNnYX9RVhsAIgi4/2mXC5vAsPx+Z3F78uZ97ajNl
-         i+jnPGCzcVgvieCBTA/BGeSPqZ4biYYMc93ZFP4gzYYpL2Gf7UvJ8mg/bIgH3pryaFIY
-         dKkEokfScfMf1jc+Vtjqn15I8pBhXxwVHaSPRsX86U63c4dpPaF29Q8lLK6OAgxKy6h4
-         vAohYNYcMC89xmHbHc0nHbV1CaqUp0pQxVfWCjgIw2C4HZrcX9Z21Bw+ETtGNgSWTTah
-         mD6fTY5Hv/7wiWSw5orWMKc9xe4RyLDV2nIqz1OVyUWDPXEqo9wB2j3Z+Qp33/cc5dAM
-         fPIA==
-X-Gm-Message-State: AO0yUKWVSS0ueQkSeXzcykekewYtsREZFakysS3nyOeS5rT0y7TGy/v/
-        TTwKmQUk4zM/QryoRoQfQqE=
-X-Google-Smtp-Source: AK7set9QobhoIVVuJG/Pjp3I8olNsGgGSkQlozO6tUIt8bmpIs0i24ILEUFNFfhwoSt6fE7y9SE9Fw==
-X-Received: by 2002:a17:906:c18b:b0:8f0:143d:fa4b with SMTP id g11-20020a170906c18b00b008f0143dfa4bmr6001641ejz.7.1678887826138;
-        Wed, 15 Mar 2023 06:43:46 -0700 (PDT)
-Received: from alaa-emad.. ([41.42.177.251])
-        by smtp.gmail.com with ESMTPSA id a12-20020a1709066d4c00b00914001c91fcsm2546201ejt.86.2023.03.15.06.43.44
+        d=1e100.net; s=20210112; t=1678887925;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3zPTmMSigH4zCpLbxZwF96+6D9FBn+T3fklI431Xv3c=;
+        b=jeKDa4nRLqbdnN63oyyBfpX/zQVe/gNtYplbwIqnblPVmiUAyMtsZXuDBsneogn0xv
+         LSHPZOX0BOfunz2KnnkIuzDO3z5V1FmleycyFiRoryFPcSAUPPEd/EAVECi/7EOyLj7B
+         T4mgqRf41vvVsbPx7R+Pd9ri+z3J/SD+5IVWDwBuMalVVUmon4Xed8BDs3GIFWAKFora
+         OUVG2MAy3gc4MNlk88poUoFmWiK9VAeW0F1hHqTArP51SZhbcG0Hze/3bp28og+pQ52i
+         fdhom12GBJD3vA6MPkLsUCKxh9+Za81crKxdRgNoy4bP2NDk2afuVnJ9JfGFgJ7XIZNP
+         vebw==
+X-Gm-Message-State: AO0yUKVZkEHwDHoVpQyUS8Ji0WuFL1hNO8+Fg/AFLZCUplX+dB2DIxQ6
+        XD6QsMl5xQuMJNL0fNII/1mmfUk3j9JwrepG
+X-Google-Smtp-Source: AK7set+qBqS3qPT1Oh9d0cmDvZHGAKH00ajqglYX5d4net8biEhJsdkDQT3W/e0bK61tWsm3QgfBLg==
+X-Received: by 2002:a9d:610:0:b0:694:359e:b9c8 with SMTP id 16-20020a9d0610000000b00694359eb9c8mr21048309otn.22.1678887925063;
+        Wed, 15 Mar 2023 06:45:25 -0700 (PDT)
+Received: from chcpu13.cse.ust.hk (191host119.mobilenet.cse.ust.hk. [143.89.191.119])
+        by smtp.gmail.com with ESMTPSA id r189-20020a4a4ec6000000b004a3d98b2ccdsm2194108ooa.42.2023.03.15.06.45.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Mar 2023 06:43:45 -0700 (PDT)
-From:   Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>
-To:     gregkh@linuxfoundation.org
-Cc:     outreachy@lists.linux.dev, martyn@welchs.me.uk,
-        manohar.vanga@gmail.com, zoo868e@gmail.com, jerrykang026@gmail.com,
-        cuigaosheng1@huawei.com, arnd@arndb.de,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
-        eng.mennamahmoud.mm@gmail.com
-Subject: [PATCH v2 2/2] staging: vme_user: remove unnecessary blank lines
-Date:   Wed, 15 Mar 2023 15:43:29 +0200
-Message-Id: <15b80b699315993d7f0da638f805446f6dc0b480.1678887330.git.eng.mennamahmoud.mm@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <4bdfd864b573c164df30ec738afc93b06ce0d573.1678887330.git.eng.mennamahmoud.mm@gmail.com>
-References: <4bdfd864b573c164df30ec738afc93b06ce0d573.1678887330.git.eng.mennamahmoud.mm@gmail.com>
+        Wed, 15 Mar 2023 06:45:24 -0700 (PDT)
+From:   Wei Chen <harperchen1110@gmail.com>
+To:     serjk@netup.ru
+Cc:     aospan@netup.ru, mchehab@kernel.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Wei Chen <harperchen1110@gmail.com>
+Subject: [PATCH] media: netup_unidvb: Register the irq at the end of probe
+Date:   Wed, 15 Mar 2023 13:45:18 +0000
+Message-Id: <20230315134518.1074497-1-harperchen1110@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,63 +69,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-remove unnecessary blank lines before a close brace
-as reported by checkpatch script
+IRQ handler netup_spi_interrupt() takes spinlock spi->lock. The lock
+is initialized in netup_spi_init(). However, irq handler is registered
+before initializing the lock.
 
-"CHECK: Blank lines aren't necessary before a close brace '}'"
+Spinlock dma->lock and i2c->lock suffer from the same problem.
 
-Signed-off-by: Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>
-----
-changes in v2:
-	edit commit message
+Fix this by registering the irq at the end of probe.
+
+Signed-off-by: Wei Chen <harperchen1110@gmail.com>
 ---
- drivers/staging/vme_user/vme_tsi148.c | 5 -----
- 1 file changed, 5 deletions(-)
+ .../media/pci/netup_unidvb/netup_unidvb_core.c  | 17 +++++++++--------
+ 1 file changed, 9 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/staging/vme_user/vme_tsi148.c b/drivers/staging/vme_user/vme_tsi148.c
-index bfa604043355..2f5eafd50934 100644
---- a/drivers/staging/vme_user/vme_tsi148.c
-+++ b/drivers/staging/vme_user/vme_tsi148.c
-@@ -1023,7 +1023,6 @@ static int tsi148_master_set(struct vme_master_resource *image, int enabled,
- err_res:
- err_window:
- 	return retval;
--
- }
- 
- /*
-@@ -1741,7 +1740,6 @@ static int tsi148_dma_list_add(struct vme_dma_list *list,
- 				  list);
- 		prev->descriptor.dnlau = cpu_to_be32(address_high);
- 		prev->descriptor.dnlal = cpu_to_be32(address_low);
--
+diff --git a/drivers/media/pci/netup_unidvb/netup_unidvb_core.c b/drivers/media/pci/netup_unidvb/netup_unidvb_core.c
+index 8287851b5ffd..751a954baf65 100644
+--- a/drivers/media/pci/netup_unidvb/netup_unidvb_core.c
++++ b/drivers/media/pci/netup_unidvb/netup_unidvb_core.c
+@@ -887,12 +887,7 @@ static int netup_unidvb_initdev(struct pci_dev *pci_dev,
+ 		ndev->lmmio0, (u32)pci_resource_len(pci_dev, 0),
+ 		ndev->lmmio1, (u32)pci_resource_len(pci_dev, 1),
+ 		pci_dev->irq);
+-	if (request_irq(pci_dev->irq, netup_unidvb_isr, IRQF_SHARED,
+-			"netup_unidvb", pci_dev) < 0) {
+-		dev_err(&pci_dev->dev,
+-			"%s(): can't get IRQ %d\n", __func__, pci_dev->irq);
+-		goto irq_request_err;
+-	}
++
+ 	ndev->dma_size = 2 * 188 *
+ 		NETUP_DMA_BLOCKS_COUNT * NETUP_DMA_PACKETS_COUNT;
+ 	ndev->dma_virt = dma_alloc_coherent(&pci_dev->dev,
+@@ -933,6 +928,14 @@ static int netup_unidvb_initdev(struct pci_dev *pci_dev,
+ 		dev_err(&pci_dev->dev, "netup_unidvb: DMA setup failed\n");
+ 		goto dma_setup_err;
  	}
- 
++
++	if (request_irq(pci_dev->irq, netup_unidvb_isr, IRQF_SHARED,
++			"netup_unidvb", pci_dev) < 0) {
++		dev_err(&pci_dev->dev,
++			"%s(): can't get IRQ %d\n", __func__, pci_dev->irq);
++		goto dma_setup_err;
++	}
++
+ 	dev_info(&pci_dev->dev,
+ 		"netup_unidvb: device has been initialized\n");
  	return 0;
-@@ -1773,7 +1771,6 @@ static int tsi148_dma_busy(struct vme_bridge *tsi148_bridge, int channel)
- 		return 0;
- 	else
- 		return 1;
--
- }
- 
- /*
-@@ -2220,7 +2217,6 @@ static int tsi148_crcsr_init(struct vme_bridge *tsi148_bridge,
- 	}
- 
- 	return 0;
--
- }
- 
- static void tsi148_crcsr_exit(struct vme_bridge *tsi148_bridge,
-@@ -2530,7 +2526,6 @@ static int tsi148_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- 	kfree(tsi148_bridge);
- err_struct:
- 	return retval;
--
- }
- 
- static void tsi148_remove(struct pci_dev *pdev)
+@@ -951,8 +954,6 @@ static int netup_unidvb_initdev(struct pci_dev *pci_dev,
+ 	dma_free_coherent(&pci_dev->dev, ndev->dma_size,
+ 			ndev->dma_virt, ndev->dma_phys);
+ dma_alloc_err:
+-	free_irq(pci_dev->irq, pci_dev);
+-irq_request_err:
+ 	iounmap(ndev->lmmio1);
+ pci_bar1_error:
+ 	iounmap(ndev->lmmio0);
 -- 
-2.34.1
+2.25.1
 
