@@ -2,102 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1EA56BAB2C
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 09:52:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9EA66BAB36
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 09:53:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231882AbjCOIwl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 04:52:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59700 "EHLO
+        id S231664AbjCOIxj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 04:53:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231826AbjCOIwh (ORCPT
+        with ESMTP id S231401AbjCOIxh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 04:52:37 -0400
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ED696133A
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 01:52:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=p9WY1RdyYLmbwG3tcnjinpq3FolR
-        mCwaBad4ZRar/TI=; b=qrQE9RiARpW/Xu8+C1eTs85kTQrtWuSkRVP4yjSapswG
-        2U+CWP7JyfMQNSCGdnUVm1S2jcN2WNRc9IuwFoMRG2Q/066Ztc0A6Sw3TFdiQD1A
-        +Mf0y88OA1SVVwzMLyJBbQYjbZHo2MO0pUfhZitkc7cTLYuJIrrYQydZtYu5Ifs=
-Received: (qmail 3381861 invoked from network); 15 Mar 2023 09:52:02 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 15 Mar 2023 09:52:02 +0100
-X-UD-Smtp-Session: l3s3148p1@Gc80dez2oN4ujnvb
-Date:   Wed, 15 Mar 2023 09:52:02 +0100
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     netdev@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        kernel@pengutronix.de,
-        Steve Glendinning <steve.glendinning@shawell.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next 4/4] smsc911x: add FIXME to move
- 'mac_managed_pm' to probe
-Message-ID: <ZBGHMn6xX5giT6fH@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>, netdev@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, kernel@pengutronix.de,
-        Steve Glendinning <steve.glendinning@shawell.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-        linux-kernel@vger.kernel.org
-References: <20230314131443.46342-1-wsa+renesas@sang-engineering.com>
- <20230314131443.46342-5-wsa+renesas@sang-engineering.com>
- <CAMuHMdWhKfw93Fyukr=kguMAmZCnynk=-96+BKBPB8PDZkE9gg@mail.gmail.com>
+        Wed, 15 Mar 2023 04:53:37 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 778F412BC2
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 01:53:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EF9B6B81D9A
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 08:53:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BC82C433EF;
+        Wed, 15 Mar 2023 08:53:30 +0000 (UTC)
+From:   Huacai Chen <chenhuacai@loongson.cn>
+To:     Huacai Chen <chenhuacai@kernel.org>
+Cc:     loongarch@lists.linux.dev, Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn,
+        Huacai Chen <chenhuacai@loongson.cn>
+Subject: [PATCH V3] LoongArch: Make WriteCombine configurable for ioremap()
+Date:   Wed, 15 Mar 2023 16:53:14 +0800
+Message-Id: <20230315085314.1083141-1-chenhuacai@loongson.cn>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="uxTA4kgouIK70B4O"
-Content-Disposition: inline
-In-Reply-To: <CAMuHMdWhKfw93Fyukr=kguMAmZCnynk=-96+BKBPB8PDZkE9gg@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+LoongArch maintains cache coherency in hardware, but when paired with
+LS7A chipsets the WUC attribute (Weak-ordered UnCached, which is similar
+to WriteCombine) is out of the scope of cache coherency machanism for
+PCIe devices (this is a PCIe protocol violation, which may be fixed in
+newer chipsets).
 
---uxTA4kgouIK70B4O
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This means WUC can only used for write-only memory regions now, so this
+option is disabled by default, making WUC silently fallback to SUC for
+ioremap(). You can enable this option if the kernel is ensured to run on
+hardware without this bug.
 
+Kernel parameter writecombine=on/off can be used to override the Kconfig
+option.
 
-> > On Renesas hardware, we had issues because the above flag was set during
-> > 'open'. It was concluded that it needs to be set during 'probe'. It
-> > looks like SMS911x needs the same fix but I can't test it because I
-> > don't have the hardware. At least, leave a note about the issue.
->=20
-> You no longer have the APE6-EVM?
+Suggested-by: WANG Xuerui <kernel@xen0n.name>
+Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+---
+V2: Add kernel prameter and update commit messages.
+V3: Add a warning message for invalid kernel parameters.
 
-I should have it somewhere. Cool, thanks for the pointer!
+ arch/loongarch/Kconfig          | 16 ++++++++++++++++
+ arch/loongarch/include/asm/io.h |  4 +++-
+ arch/loongarch/kernel/setup.c   | 21 +++++++++++++++++++++
+ 3 files changed, 40 insertions(+), 1 deletion(-)
 
+diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
+index 7fd51257e0ed..3ddde336e6a5 100644
+--- a/arch/loongarch/Kconfig
++++ b/arch/loongarch/Kconfig
+@@ -447,6 +447,22 @@ config ARCH_IOREMAP
+ 	  protection support. However, you can enable LoongArch DMW-based
+ 	  ioremap() for better performance.
+ 
++config ARCH_WRITECOMBINE
++	bool "Enable WriteCombine (WUC) for ioremap()"
++	help
++	  LoongArch maintains cache coherency in hardware, but when paired
++	  with LS7A chipsets the WUC attribute (Weak-ordered UnCached, which
++	  is similar to WriteCombine) is out of the scope of cache coherency
++	  machanism for PCIe devices (this is a PCIe protocol violation, which
++	  may be fixed in newer chipsets).
++
++	  This means WUC can only used for write-only memory regions now, so
++	  this option is disabled by default, making WUC silently fallback to
++	  SUC for ioremap(). You can enable this option if the kernel is ensured
++	  to run on hardware without this bug.
++
++	  You can override this setting via writecombine=on/off boot parameter.
++
+ config ARCH_STRICT_ALIGN
+ 	bool "Enable -mstrict-align to prevent unaligned accesses" if EXPERT
+ 	default y
+diff --git a/arch/loongarch/include/asm/io.h b/arch/loongarch/include/asm/io.h
+index 402a7d9e3a53..545e2708fbf7 100644
+--- a/arch/loongarch/include/asm/io.h
++++ b/arch/loongarch/include/asm/io.h
+@@ -54,8 +54,10 @@ static inline void __iomem *ioremap_prot(phys_addr_t offset, unsigned long size,
+  * @offset:    bus address of the memory
+  * @size:      size of the resource to map
+  */
++extern pgprot_t pgprot_wc;
++
+ #define ioremap_wc(offset, size)	\
+-	ioremap_prot((offset), (size), pgprot_val(PAGE_KERNEL_WUC))
++	ioremap_prot((offset), (size), pgprot_val(pgprot_wc))
+ 
+ #define ioremap_cache(offset, size)	\
+ 	ioremap_prot((offset), (size), pgprot_val(PAGE_KERNEL))
+diff --git a/arch/loongarch/kernel/setup.c b/arch/loongarch/kernel/setup.c
+index bae84ccf6d36..27f71f9531e1 100644
+--- a/arch/loongarch/kernel/setup.c
++++ b/arch/loongarch/kernel/setup.c
+@@ -160,6 +160,27 @@ static void __init smbios_parse(void)
+ 	dmi_walk(find_tokens, NULL);
+ }
+ 
++#ifdef CONFIG_ARCH_WRITECOMBINE
++pgprot_t pgprot_wc = PAGE_KERNEL_WUC;
++#else
++pgprot_t pgprot_wc = PAGE_KERNEL_SUC;
++#endif
++
++EXPORT_SYMBOL(pgprot_wc);
++
++static int __init setup_writecombine(char *p)
++{
++	if (!strcmp(p, "on"))
++		pgprot_wc = PAGE_KERNEL_WUC;
++	else if (!strcmp(p, "off"))
++		pgprot_wc = PAGE_KERNEL_SUC;
++	else
++		pr_warn("Unknown writecombine setting \"%s\".\n", p);
++
++	return 0;
++}
++early_param("writecombine", setup_writecombine);
++
+ static int usermem __initdata;
+ 
+ static int __init early_parse_mem(char *p)
+-- 
+2.39.1
 
---uxTA4kgouIK70B4O
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmQRhy4ACgkQFA3kzBSg
-KbZ15xAAouD2VI/VKsM6jupar4Qy8yGfcrEdu6sCD4tmq9DwZWSoBPlELQiqLKd1
-+CSYrH5rMJHCGqcjefz7VWiGUvxXr8DpJu5bpbV69jUXfaWrN3HPusmuPXMtVhMd
-1p2TAT7kotFtO89LuI+PEkVvZWYHZRfTdLuiwDTMn6YDOWtOY7K8ufcvWfs2EwdG
-8Iq3ZMhCznrNTeh337suwBfvjiVAlF0qptwU714ZxcIwPUc63+xrSFMJmSF6NuCG
-qby0dGUG0hJGnriDQsM8NUeS3ihg61GC4Tp8myeLDuSNTyzkyhKJ0FMu+gf4PQIx
-wgISxEAwMoYQ1YcgLKF3QRQXyr00Xve+c448e/3hZ37OVF4xYOQfFclH2f7rA5Zy
-lWw6QhvNuq4U6GlWECHdd0PDHJMZ4iT1ajGnh55XqlYHkbt63pleJ19UMRVE4J9H
-/+TzMsqLmVqygeQT76LQPtp1xjpXgZRTx3556qvdUBW/+jnQb/438S8Qs6y7aPal
-yMcJkl87t8ZuKyX/GeIpoFsnPIS1oLktEBgw/ojD+Ao9PK3491vs68tSvucvrLPo
-5qRlCyreE4KJdQu64QrhZW0FdG3Rmm6wWZXuu2CqKzNseWlESXp63GUw1b1o0kO0
-/my7ygULjALOA8zY516ztjDNE9IdXrhWrZQ16vzRcXIdMZ2ZKeY=
-=Ukni
------END PGP SIGNATURE-----
-
---uxTA4kgouIK70B4O--
