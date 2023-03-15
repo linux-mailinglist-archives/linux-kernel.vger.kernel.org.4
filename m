@@ -2,140 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 899326BA879
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 07:53:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 514616BA891
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 08:02:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231278AbjCOGxk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 02:53:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49024 "EHLO
+        id S231267AbjCOHB6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 03:01:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229571AbjCOGxe (ORCPT
+        with ESMTP id S230348AbjCOHBz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 02:53:34 -0400
-Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-he1eur04on2071.outbound.protection.outlook.com [40.107.7.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0750823317
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 23:53:01 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HnIGa4bkFquuXCrxE9+j1anhsQC1T3IhzNm12CL1d/B/jHPSDI+WPapCM8BoUt6XoGKCKvzzfevryT28+RInI3rU5kF2qo04iCaoi+Hpvu8ulWCeTVts/wNRdCzQBLCMe54efLTI63QgMJQkD+qOWXQUg831yqxGZAAuARIsCmVfnpKSGt3WKzaZnwtlWp8qbF2rHWj4YCBmB20t4czlVX5XCLGB3H1C31U5kHn6iy3PgyV73gzurpqsQDnmlf00oDabSSoii3zIf3RKnf4Hk31N7BsMGVBU3QZZWPKOZKmqlpD5FrUq7u9xRV9TdLTPc9zNHLGtRhXAXf7Hw+6qmg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=CgJ/4y+3OdzOCLSAi9fZwcyeMn10s23vUP6pYpL7MAc=;
- b=ImUVv61nHY2pHMVtIhadU9+xT9XJCzt6HkHkDm9VQfslw/squVeUgfG1KePdO8LU+7w8DYhB+VMPjjXyy1zROv1bvf3iwK8iBmn+nn63DnckOnU0Qq+qGLRjP0KQDUleGpHPsWSNIWLBrHCPwN7i7BTrvYCY1tcv83W71Fs+K+x5bZ2vwOIKFPzUDGj49C6iZtcJtjSo5KJUVPu9fNvhm9atvQrNRve+QE+Da/YUdQPd4BQvJ4CuU8XUFPb8SjQcKrjyYDA4fxfkpy3bMRJpnrucbwiwnfzX4omUmDMj1rtPlku8Fyj47BLTHYvZU72Ch2t4RsaKfZkE5b4UWp5bPQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CgJ/4y+3OdzOCLSAi9fZwcyeMn10s23vUP6pYpL7MAc=;
- b=qatN1BYY9FSGqHsaFx+s2cKIQxO7tp51yot3GrHfM4JB9AePCjdCHJqTrmc5o2qmQx07+q3178WL0FGkSB+GYYGK9RlUYk3/LgndaZphixx+BCcsIXh3+MMS3rM3I8Mj0bDql35rzzcq49dJiE1cdWFCpoxlY+8EeObAOJcj1fMJK8lh1q2j9ot14WHvP0xJN+CfieltFwT9Jexr6vAJvglzm+ycCAav7ABdns+lVilK2SCCnSAlOKjjDHUOiln37JjSrTpEKESPXfArwq2DMHebd98m/tGAasj78L1zAR93IECqziFXHano5HI28N2jzib56oq069acRXc4uStHtQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=suse.com;
-Received: from VE1PR04MB6560.eurprd04.prod.outlook.com (2603:10a6:803:122::25)
- by DBAPR04MB7445.eurprd04.prod.outlook.com (2603:10a6:10:1a7::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.29; Wed, 15 Mar
- 2023 06:52:23 +0000
-Received: from VE1PR04MB6560.eurprd04.prod.outlook.com
- ([fe80::154e:166d:ec25:531b]) by VE1PR04MB6560.eurprd04.prod.outlook.com
- ([fe80::154e:166d:ec25:531b%5]) with mapi id 15.20.6178.026; Wed, 15 Mar 2023
- 06:52:23 +0000
-Message-ID: <d7ce665c-8fd9-30b4-bf86-8d6907a2c17a@suse.com>
-Date:   Wed, 15 Mar 2023 07:52:21 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [RFC PATCH 1/5] x86/xen: disable swiotlb for xen pvh
-Content-Language: en-US
-To:     Huang Rui <ray.huang@amd.com>
-Cc:     Juergen Gross <jgross@suse.com>,
-        "Huang, Honglei1" <Honglei1.Huang@amd.com>,
-        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Hildebrand, Stewart" <Stewart.Hildebrand@amd.com>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        "Chen, Jiqian" <Jiqian.Chen@amd.com>,
-        Xenia Ragiadakou <burzalodowa@gmail.com>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
-        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        "Zhang, Julia" <Julia.Zhang@amd.com>,
-        =?UTF-8?Q?Roger_Pau_Monn=ef=bf=bd?= <roger.pau@citrix.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        "Koenig, Christian" <Christian.Koenig@amd.com>
-References: <20230312120157.452859-1-ray.huang@amd.com>
- <20230312120157.452859-2-ray.huang@amd.com>
- <ea0e3852-87ba-984b-4010-5eeac3d6c507@suse.com>
- <alpine.DEB.2.22.394.2303141747350.863724@ubuntu-linux-20-04-desktop>
- <ZBFGJUE0ahA4R9gr@amd.com>
-From:   Jan Beulich <jbeulich@suse.com>
-In-Reply-To: <ZBFGJUE0ahA4R9gr@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR2P281CA0082.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:9b::9) To VE1PR04MB6560.eurprd04.prod.outlook.com
- (2603:10a6:803:122::25)
+        Wed, 15 Mar 2023 03:01:55 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A16253734;
+        Wed, 15 Mar 2023 00:01:53 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id bi9so878925lfb.12;
+        Wed, 15 Mar 2023 00:01:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678863712;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=fOJ4Yjw15bXt8teuteIjQCFacvp8fUsGlorwX7mWOk8=;
+        b=EkVePWOSMUjO1PNVxm8tPramhXLllEvMmo/nL0wbaaqQea5pyECtkBXSPur7lqHxY9
+         CKU58KdKADjaWiqRiYwNtx56pXop7WPvSrY4WwPzuHrCjEzbrVAEbCaNT03Zt+h1oppH
+         QaSX9oIrpPzlxOrBCE6Rc4gTIUvbYqD4YPinblJCWOX+9NGM9z3oxU/1UbH0DqORulFb
+         CE3VUIVP/qFte6CMWWe5d9SjGSDcdLQl5tl9emh18AfHcz4VqPhrKJmAaSyuy30t4z8q
+         VqeDmmZaSeXfvD8UB3HqfrgeeBjuoXLCY+ORYUwoxf7hsVG5SwkfbmVRn1s1PuwXaKB/
+         dJBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678863712;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fOJ4Yjw15bXt8teuteIjQCFacvp8fUsGlorwX7mWOk8=;
+        b=4+vRCPvw2h3sL0I6Zvlvfsr/K/H8eIDA0FTlmBmwuDhYxZRPI2xZox4Xv5ZTco5Gqf
+         mf2WeaUlEBrtHqj/pxeCpTX3dFCn3u79alDutdZB2EGJ3ogENLSQ7WeX0sCDLr6fkKXC
+         u5KYTGxL8Azx3dI9GBgwHcrh9RfzhoWSOMZ2/fJclV1umPiyLtl9WzWh45OeB0K5EoAg
+         X/+ZPZwwdkVxGQ7zL0rJ2t0Khb7sl70PRvnJdoolSd0QruY2nz3Qgfn6FVa2T++LGdo5
+         2adQiHsbe7Yn2UUuytyO2Ssdda5kBTgxu40uWzadAth0Sp7W5kUtjvxfzKjLZH/080Kr
+         mPtA==
+X-Gm-Message-State: AO0yUKUw+xDfG2sqwtBRF8LdXlbOiouKJoDa88+325qCxeraQw7QTItc
+        csyV8AXrLA39UBfs51auVhGgY5pWhjc=
+X-Google-Smtp-Source: AK7set+Le96Ei9X8pGQ8GCIQj7+LF5VqFgqqIKlT4lY4wFjLuvJQoh73vOluRShcn0dO0u+MB+vEYw==
+X-Received: by 2002:a05:6512:24f:b0:4dd:998b:4dc7 with SMTP id b15-20020a056512024f00b004dd998b4dc7mr1636411lfo.21.1678863711531;
+        Wed, 15 Mar 2023 00:01:51 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:16f3:4a00::6? (dc75zzyyyyyyyyyyyyydy-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::6])
+        by smtp.gmail.com with ESMTPSA id x16-20020ac259d0000000b004dc4b00a1eesm709675lfn.261.2023.03.15.00.01.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Mar 2023 00:01:50 -0700 (PDT)
+Message-ID: <baffa307-173c-6ba1-0289-e7287049c0f5@gmail.com>
+Date:   Wed, 15 Mar 2023 09:01:50 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VE1PR04MB6560:EE_|DBAPR04MB7445:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5ab30859-5335-404a-e1e7-08db2521d48f
-X-LD-Processed: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba,ExtFwd
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: n+1ZWZD0Sb2Exclqn0QVvcLfOIxb2pLTBEeGlUnxDPzgdikS+yBII6WTM/0XRUPJc+gCShZDIo02xkeZEzANGOm1lo4beQRF821W98yKue1+mPl9y0bte97VCZrzs2tKaZgcXQV5Ztc3I8r5y4yVixPY7yCwn3lr5csiOifQ5RWohJFPByXO8HfqUJ7AAataIPP1nU1CF4hpauVs5c5GlY3+NdNBWhd0cOrXj7jt5vREkdKnbc1xgoknZrtAdha45foBZ2JsaqCqw6RSDvZmScmKZcY7UZ/cijivC2N+e4/2Lp/tDTHbBKkfubJtjxKA5rvwA9Gim8yHGHS7Y+v4h6ZyYngzexha5EdqbFNETd/I6hGxAohK2qB9jtz7xsTEYQugEaRcItkmYlUU3ETArWqWUT6NvyZ9+17fbGsfFEPnOXcR5YOTl1tvSYtQcYwRpivno+BQRmi9cqC1+gAHxMZzw/YKNJmmDWMh2mP/sss1a1uruFmYXDVW/1Nvivm9XP2yGzbiLxGkrN70THCr2muLwKwIoiKyuffKf1KfPOnaoUlf4mDeGBbJQm2e+F1ynyBy7mFtRDIlmUZkyr3TmBW12Sxg/fx4+jox15vM+x6AkiA9QxhkKT9YvRCT9loT7QMy9X6ldqOel1fS7s+lLV5xZjMUg4QOHGkfnwVwPNyyHax+90XDh8vdne/DQzhH2lDeQsjKv/D1cBnDzZzdzcVL755dV0pNsQiQTIHXg7Y=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR04MB6560.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(396003)(376002)(346002)(366004)(39850400004)(136003)(451199018)(36756003)(7416002)(5660300002)(83380400001)(478600001)(6486002)(6506007)(26005)(53546011)(6512007)(2616005)(186003)(66476007)(66556008)(66946007)(8676002)(6916009)(41300700001)(4326008)(8936002)(31696002)(86362001)(54906003)(316002)(38100700002)(2906002)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UFZxOElXbFVHMU5FOWlIcVBmdWJBK2dSKzl0TisvdFhZS2dUVXZpRnlMSktt?=
- =?utf-8?B?ZXJYRlZQSUo5OWhBS0ExQysyaXkxdHdWZmFCT1MrRXNwdm5ydHRSU2lkSC9O?=
- =?utf-8?B?cGxwNUNPNHpDajY0a1UwcTlFWkRvWk9taE92RStzK1RYT2ZSVDBreVhNK3ZX?=
- =?utf-8?B?aW5XWTNQYmFFaWNLcmkreEE4OVoyMFA1MnMvMy9LNnkxOVBTWndFd2tHckxm?=
- =?utf-8?B?RDhYQ0lRejh6cjNXVjNOYTF2VUwrbGhxQXUzVWxsN1F6ZDYrcUJMWm5TMjdx?=
- =?utf-8?B?YUE3Wko5MU5LUHF6TEg1UkxRemVZRDYzM01wU09Dc3VsTVlJODM5dS9pQUp3?=
- =?utf-8?B?Q1FIQUoxRUFHR05yUmpIeFdVWDJSaFFpc3A2SlYxZXNOTS85VUV2RE1DRmpr?=
- =?utf-8?B?TlVDWS9wcXFFKy9FalhMMjI4dWpFOXJ5elpPaHg2NDJ5U1BpdURldWtSRmNV?=
- =?utf-8?B?cmNuUHpvOEtCWmd5WEN4WXNjT2hkVStKRGtIUTV5a0xnTVBsZVhKMVJVU3N0?=
- =?utf-8?B?bksySmpVU2YrSkJHSzdFQVJuTVc1RlJ6VmtHVXJLcFovbVdOaGgwbElhdzlz?=
- =?utf-8?B?RWFoeWVsZ0RkakVIcjNNQlp0bllOZHdIek1nZVVNK1NhZnlRMEwxZUlISEpy?=
- =?utf-8?B?OXBaYThJaFp1bnVJQitMaklEb0htRHQ3dHBlbXR1OXdsUGVEY1BQUkMrRGpt?=
- =?utf-8?B?cm8renJudU9oOUttWWd1ZkZDMUpmdC9OSThFSzJaaW40YTVRQ1lKdzhVbDFz?=
- =?utf-8?B?QlNNcWxEcXByejFEUGJGb0sweFBjL2pHWEtTTzFSU3VTa1Rlc1RrUTNUS0k2?=
- =?utf-8?B?dnRkdDBKM2svcE9ieHIzUlBqbFMwdXBHWUhkenc5R2tnL2NyT1FhODV4TVlU?=
- =?utf-8?B?UzgrZHhvSy9DOGhoR0U3aGI4VXpJSW53ZWVKazRYNC9mcjhsWHJuTXorNjAv?=
- =?utf-8?B?TC9ndW1hZktmRXVIMmp2R0FTbTRSUEF3M09pei9HeExQZ1IvUEVCdzhZTkxD?=
- =?utf-8?B?REQ1dzMwRy80M2RsSzFpcndwMlZqeW95VFlRNE9BL1Vmd1d0S0lNWGRLNExB?=
- =?utf-8?B?MndjN1FXS2hkS0pjL1VXUldWOEp6ZGY5UUxxQ2g1bGthcTFvanBNdmJTaG85?=
- =?utf-8?B?S0JBc1JGVG9IeGozQUlNNkxmSXpxbVJxRUt0VjZKV2hCdmJKd21vTUgxRTIz?=
- =?utf-8?B?VHFYckhLQ3RkT0ZKN3N1YVRvaEVCN3lNSVFJL1dnTHVlYnNDeWJPNVdFanRT?=
- =?utf-8?B?TmVuTGU4a0tycGNMSDdpZE9IMnBTWjhQZXNqOCs4OFlZWjFyUTJLWldPQVA5?=
- =?utf-8?B?QUpST3pQQWVXNDBiUlVKUGdBWHFKcHJ5VFZHWldqOFNXL3BNcUN6SkpMUW9V?=
- =?utf-8?B?bmc3UzBhNjI3UFpWYlVaK1IwRUJISzhYcld0SzBqcGZpdGNzeHVKQUVoMTJ0?=
- =?utf-8?B?d1hEYjByNmFoR2w4T2VxdDlJd1NITWNyZHFKL2lNMjFZNTU5eDR5eExGSDJE?=
- =?utf-8?B?bmc1R3lGdEdTSDl6OEgvdHVUT0NNVEpUNDlsRzk3VGoxbWdUeGhiS3RRZzVv?=
- =?utf-8?B?SnhReWxHbzdybFg4b3BPNG00Nk9wSmRqbWNHNW1DeGhmdjZ1NEpoaE82QVJj?=
- =?utf-8?B?UDkvRk5qcGRiS0ExY1laemJLYmlBcStaK01JNFdRSkdxYmVPWG00bEZqa2tp?=
- =?utf-8?B?ZC9kRTdoL1JXVUw5dHI2ZFQ4dGdLeFZTZzNBSVFrREFHbUlGTjQ0U3VoaktK?=
- =?utf-8?B?VFBwUEZ3d0tQYmJFSkZiZzkvVmxUamtQRVBmY3pJeHJ5YTk1cy82RWkxcm9W?=
- =?utf-8?B?b2gxeE5ad1d3RGdnUnc0YytEMDh3eFRTVG91ckpwRVdTZXVubkg1ZCtBVERT?=
- =?utf-8?B?bTNqTUdrTjNzTVM1UFZrV2hCZnlDSEorcHA4UFZDUjZDRGpQbHVZSFlMZ1NQ?=
- =?utf-8?B?WThkdFRYM09hTW1zYXhxWTdBZVNPcENKMDQ5cG1NbUJwa3VjeDJ5SG9DSFB6?=
- =?utf-8?B?a3ZPbEt4U0U0ejFtZ1BLckNqQWxyVk4zaU5wUCtrdDB3VHVudithQWFKS25T?=
- =?utf-8?B?dmhVejZQcDdxaEhOdjZUZlZGdkYwTG15S1RFVE9NNXJCYnBaVnh3OTk4emQ3?=
- =?utf-8?Q?P2WZO67KXr6oqNfqShydK7MC7?=
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5ab30859-5335-404a-e1e7-08db2521d48f
-X-MS-Exchange-CrossTenant-AuthSource: VE1PR04MB6560.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Mar 2023 06:52:23.6373
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: wr4FUz3W7QSC9tI9ic70Pzda7tkaVKP1LzrYWRXKqav1dVtehgFBqtJQDjjYRCAdjixh+btX8ceg8rXymBYJFw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBAPR04MB7445
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Content-Language: en-US, en-GB
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20230314225535.1321736-1-sre@kernel.org>
+ <20230314225535.1321736-3-sre@kernel.org>
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+Subject: Re: [PATCHv2 02/12] power: supply: core: auto-exposure of
+ simple-battery data
+In-Reply-To: <20230314225535.1321736-3-sre@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -143,35 +80,356 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15.03.2023 05:14, Huang Rui wrote:
-> On Wed, Mar 15, 2023 at 08:52:30AM +0800, Stefano Stabellini wrote:
->> On Mon, 13 Mar 2023, Jan Beulich wrote:
->>> On 12.03.2023 13:01, Huang Rui wrote:
->>>> Xen PVH is the paravirtualized mode and takes advantage of hardware
->>>> virtualization support when possible. It will using the hardware IOMMU
->>>> support instead of xen-swiotlb, so disable swiotlb if current domain is
->>>> Xen PVH.
->>>
->>> But the kernel has no way (yet) to drive the IOMMU, so how can it get
->>> away without resorting to swiotlb in certain cases (like I/O to an
->>> address-restricted device)?
->>
->> I think Ray meant that, thanks to the IOMMU setup by Xen, there is no
->> need for swiotlb-xen in Dom0. Address translations are done by the IOMMU
->> so we can use guest physical addresses instead of machine addresses for
->> DMA. This is a similar case to Dom0 on ARM when the IOMMU is available
->> (see include/xen/arm/swiotlb-xen.h:xen_swiotlb_detect, the corresponding
->> case is XENFEAT_not_direct_mapped).
+On 3/15/23 00:55, Sebastian Reichel wrote:
+> Add support for automatically exposing data from the
+> simple-battery firmware node with a single configuration
+> option in the power-supply device.
 > 
-> Hi Jan, sorry to late reply. We are using the native kernel amdgpu and ttm
-> driver on Dom0, amdgpu/ttm would like to use IOMMU to allocate coherent
-> buffers for userptr that map the user space memory to gpu access, however,
-> swiotlb doesn't support this. In other words, with swiotlb, we only can
-> handle the buffer page by page.
+> Signed-off-by: Sebastian Reichel <sre@kernel.org>
+> ---
+>   drivers/power/supply/power_supply_core.c  | 173 +++++++++++++++++++---
+>   drivers/power/supply/power_supply_sysfs.c |  15 ++
+>   include/linux/power_supply.h              |   8 +
+>   3 files changed, 178 insertions(+), 18 deletions(-)
+> 
+> diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/supply/power_supply_core.c
+> index f3d7c1da299f..842c27de4fac 100644
+> --- a/drivers/power/supply/power_supply_core.c
+> +++ b/drivers/power/supply/power_supply_core.c
+> @@ -388,7 +388,7 @@ static int __power_supply_get_supplier_property(struct device *dev, void *_data)
+>   	struct psy_get_supplier_prop_data *data = _data;
+>   
+>   	if (__power_supply_is_supplied_by(epsy, data->psy))
+> -		if (!epsy->desc->get_property(epsy, data->psp, data->val))
+> +		if (!power_supply_get_property(epsy, data->psp, data->val))
+>   			return 1; /* Success */
+>   
+>   	return 0; /* Continue iterating */
+> @@ -832,6 +832,133 @@ void power_supply_put_battery_info(struct power_supply *psy,
+>   }
+>   EXPORT_SYMBOL_GPL(power_supply_put_battery_info);
+>   
+> +const enum power_supply_property power_supply_battery_info_properties[] = {
+> +	POWER_SUPPLY_PROP_TECHNOLOGY,
+> +	POWER_SUPPLY_PROP_ENERGY_FULL_DESIGN,
+> +	POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN,
+> +	POWER_SUPPLY_PROP_VOLTAGE_MIN_DESIGN,
+> +	POWER_SUPPLY_PROP_VOLTAGE_MAX_DESIGN,
+> +	POWER_SUPPLY_PROP_PRECHARGE_CURRENT,
+> +	POWER_SUPPLY_PROP_CHARGE_TERM_CURRENT,
+> +	POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT_MAX,
+> +	POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE_MAX,
+> +	POWER_SUPPLY_PROP_TEMP_AMBIENT_ALERT_MIN,
+> +	POWER_SUPPLY_PROP_TEMP_AMBIENT_ALERT_MAX,
+> +	POWER_SUPPLY_PROP_TEMP_ALERT_MIN,
+> +	POWER_SUPPLY_PROP_TEMP_ALERT_MAX,
+> +	POWER_SUPPLY_PROP_TEMP_MIN,
+> +	POWER_SUPPLY_PROP_TEMP_MAX,
+> +};
+> +EXPORT_SYMBOL_GPL(power_supply_battery_info_properties);
+> +
+> +const size_t power_supply_battery_info_properties_size = ARRAY_SIZE(power_supply_battery_info_properties);
+> +EXPORT_SYMBOL_GPL(power_supply_battery_info_properties_size);
+> +
+> +bool power_supply_battery_info_has_prop(struct power_supply_battery_info *info,
+> +				        enum power_supply_property psp)
+> +{
+> +	if (!info)
+> +		return false;
+> +
+> +	switch (psp) {
+> +		case POWER_SUPPLY_PROP_TECHNOLOGY:
+> +			return info->technology != POWER_SUPPLY_TECHNOLOGY_UNKNOWN;
+> +		case POWER_SUPPLY_PROP_ENERGY_FULL_DESIGN:
+> +			return info->energy_full_design_uwh >= 0;
+> +		case POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN:
+> +			return info->charge_full_design_uah >= 0;
+> +		case POWER_SUPPLY_PROP_VOLTAGE_MIN_DESIGN:
+> +			return info->voltage_min_design_uv >= 0;
+> +		case POWER_SUPPLY_PROP_VOLTAGE_MAX_DESIGN:
+> +			return info->voltage_max_design_uv >= 0;
+> +		case POWER_SUPPLY_PROP_PRECHARGE_CURRENT:
+> +			return info->precharge_current_ua >= 0;
+> +		case POWER_SUPPLY_PROP_CHARGE_TERM_CURRENT:
+> +			return info->charge_term_current_ua >= 0;
+> +		case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT_MAX:
+> +			return info->constant_charge_current_max_ua >= 0;
+> +		case POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE_MAX:
+> +			return info->constant_charge_voltage_max_uv >= 0;
+> +		case POWER_SUPPLY_PROP_TEMP_AMBIENT_ALERT_MIN:
+> +			return info->temp_ambient_alert_min > INT_MIN;
+> +		case POWER_SUPPLY_PROP_TEMP_AMBIENT_ALERT_MAX:
+> +			return info->temp_ambient_alert_max < INT_MAX;
+> +		case POWER_SUPPLY_PROP_TEMP_ALERT_MIN:
+> +			return info->temp_alert_min > INT_MIN;
+> +		case POWER_SUPPLY_PROP_TEMP_ALERT_MAX:
+> +			return info->temp_alert_max < INT_MAX;
+> +		case POWER_SUPPLY_PROP_TEMP_MIN:
+> +			return info->temp_min > INT_MIN;
+> +		case POWER_SUPPLY_PROP_TEMP_MAX:
+> +			return info->temp_max < INT_MAX;
+> +		default:
+> +			return false;
+> +	}
+> +}
+> +EXPORT_SYMBOL_GPL(power_supply_battery_info_has_prop);
+> +
+> +int power_supply_battery_info_get_prop(struct power_supply_battery_info *info,
+> +				       enum power_supply_property psp,
+> +				       union power_supply_propval *val)
+> +{
+> +	if (!info)
+> +		return -EINVAL;
+> +
+> +	if (!power_supply_battery_info_has_prop(info, psp))
+> +		return -EINVAL;
+> +
+> +	switch (psp) {
+> +		case POWER_SUPPLY_PROP_TECHNOLOGY:
+> +			val->intval = info->technology;
+> +			return 0;
+> +		case POWER_SUPPLY_PROP_ENERGY_FULL_DESIGN:
+> +			val->intval = info->energy_full_design_uwh;
+> +			return 0;
+> +		case POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN:
+> +			val->intval = info->charge_full_design_uah;
+> +			return 0;
+> +		case POWER_SUPPLY_PROP_VOLTAGE_MIN_DESIGN:
+> +			val->intval = info->voltage_min_design_uv;
+> +			return 0;
+> +		case POWER_SUPPLY_PROP_VOLTAGE_MAX_DESIGN:
+> +			val->intval = info->voltage_max_design_uv;
+> +			return 0;
+> +		case POWER_SUPPLY_PROP_PRECHARGE_CURRENT:
+> +			val->intval = info->precharge_current_ua;
+> +			return 0;
+> +		case POWER_SUPPLY_PROP_CHARGE_TERM_CURRENT:
+> +			val->intval = info->charge_term_current_ua;
+> +			return 0;
+> +		case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT_MAX:
+> +			val->intval = info->constant_charge_current_max_ua;
+> +			return 0;
+> +		case POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE_MAX:
+> +			val->intval = info->constant_charge_voltage_max_uv;
+> +			return 0;
+> +		case POWER_SUPPLY_PROP_TEMP_AMBIENT_ALERT_MIN:
+> +			val->intval = info->temp_ambient_alert_min;
+> +			return 0;
+> +		case POWER_SUPPLY_PROP_TEMP_AMBIENT_ALERT_MAX:
+> +			val->intval = info->temp_ambient_alert_max;
+> +			return 0;
+> +		case POWER_SUPPLY_PROP_TEMP_ALERT_MIN:
+> +			val->intval = info->temp_alert_min;
+> +			return 0;
+> +		case POWER_SUPPLY_PROP_TEMP_ALERT_MAX:
+> +			val->intval = info->temp_alert_max;
+> +			return 0;
+> +		case POWER_SUPPLY_PROP_TEMP_MIN:
+> +			val->intval = info->temp_min;
+> +			return 0;
+> +		case POWER_SUPPLY_PROP_TEMP_MAX:
+> +			val->intval = info->temp_max;
+> +			return 0;
+> +		default:
+> +			return -EINVAL;
+> +	}
+> +}
+> +EXPORT_SYMBOL_GPL(power_supply_battery_info_get_prop);
+> +
+>   /**
+>    * power_supply_temp2resist_simple() - find the battery internal resistance
+>    * percent from temperature
+> @@ -1046,6 +1173,22 @@ bool power_supply_battery_bti_in_range(struct power_supply_battery_info *info,
+>   }
+>   EXPORT_SYMBOL_GPL(power_supply_battery_bti_in_range);
+>   
+> +static bool psy_has_property(const struct power_supply_desc *psy_desc,
+> +			     enum power_supply_property psp)
+> +{
+> +	bool found = false;
+> +	int i;
+> +
+> +	for (i = 0; i < psy_desc->num_properties; i++) {
+> +		if (psy_desc->properties[i] == psp) {
+> +			found = true;
+> +			break;
+> +		}
+> +	}
+> +
+> +	return found;
+> +}
+> +
+>   int power_supply_get_property(struct power_supply *psy,
+>   			    enum power_supply_property psp,
+>   			    union power_supply_propval *val)
+> @@ -1056,7 +1199,12 @@ int power_supply_get_property(struct power_supply *psy,
+>   		return -ENODEV;
+>   	}
+>   
+> -	return psy->desc->get_property(psy, psp, val);
+> +	if (psy_has_property(psy->desc, psp))
+> +		return psy->desc->get_property(psy, psp, val);
+> +	else if (power_supply_battery_info_has_prop(psy->battery_info, psp))
+> +		return power_supply_battery_info_get_prop(psy->battery_info, psp, val);
+> +	else
+> +		return -EINVAL;
+>   }
+>   EXPORT_SYMBOL_GPL(power_supply_get_property);
+>   
+> @@ -1117,22 +1265,6 @@ void power_supply_unreg_notifier(struct notifier_block *nb)
+>   }
+>   EXPORT_SYMBOL_GPL(power_supply_unreg_notifier);
+>   
+> -static bool psy_has_property(const struct power_supply_desc *psy_desc,
+> -			     enum power_supply_property psp)
+> -{
+> -	bool found = false;
+> -	int i;
+> -
+> -	for (i = 0; i < psy_desc->num_properties; i++) {
+> -		if (psy_desc->properties[i] == psp) {
+> -			found = true;
+> -			break;
+> -		}
+> -	}
+> -
+> -	return found;
+> -}
+> -
 
-But how does outright disabling swiotlb help with this? There still wouldn't
-be an IOMMU that your kernel has control over. Looks like you want something
-like pvIOMMU, but that work was never completed. And even then the swiotlb
-may continue to be needed for other purposes.
+I do really like everything in this patch up to this point :) Core 
+providing properties to the user based on the battery-info seems great 
+to me.
 
-Jan
+>   #ifdef CONFIG_THERMAL
+>   static int power_supply_read_temp(struct thermal_zone_device *tzd,
+>   		int *temp)
+> @@ -1255,6 +1387,11 @@ __power_supply_register(struct device *parent,
+>   		goto check_supplies_failed;
+>   	}
+>   
+> +	/* psy->battery_info is optional */
+> +	rc = power_supply_get_battery_info(psy, &psy->battery_info);
+> +	if (rc && rc != -ENODEV)
+> +		goto check_supplies_failed;
+> +
+
+This is what rubs me in a slightly wrong way - but again, you probably 
+know better than I what's the direction things are heading so please 
+ignore me if I am talking nonsense :)
+
+Anyways, I think the battery information may be relevant to the driver 
+which is registering the power-supply. It may be there is a fuel-gauge 
+which needs to know the capacity and OCV tables etc. Or some other 
+thingy. And - I may be wrong - but I have a feeling it might be 
+something that should be known prior registering the power-supply.
+
+So, in my head it should be the driver which is getting the information 
+about the battery (whether it is in the DT node or coded in some tables 
+and fetched by battery type) - using helpers provided by core.
+
+I further think it should be the driver who can pass the battery 
+information to core at registration - core may 'fall-back' finding 
+information itself if driver did not provide it.
+
+So, I think the core should not unconditionally populate the 
+battery-info here but it should first check if the driver had it already 
+filled.
+
+Well, as I said, I recognize I may not (do not) know all the dirty 
+details and I do trust you to evaluate if what I wrote here makes any 
+sense :) All in all, I think this auto-exposure is great.
+
+Please, bear with me if what I wrote above does not make sense to you 
+and just assume I don't see the big picture :)
+
+>   	spin_lock_init(&psy->changed_lock);
+>   	rc = device_add(dev);
+>   	if (rc)
+> diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/supply/power_supply_sysfs.c
+> index c228205e0953..5842dfe5dfb7 100644
+> --- a/drivers/power/supply/power_supply_sysfs.c
+> +++ b/drivers/power/supply/power_supply_sysfs.c
+> @@ -380,6 +380,9 @@ static umode_t power_supply_attr_is_visible(struct kobject *kobj,
+>   		}
+>   	}
+>   
+> +	if (power_supply_battery_info_has_prop(psy->battery_info, attrno))
+> +		return mode;
+> +
+>   	return 0;
+>   }
+>   
+> @@ -461,6 +464,8 @@ static int add_prop_uevent(const struct device *dev, struct kobj_uevent_env *env
+>   int power_supply_uevent(const struct device *dev, struct kobj_uevent_env *env)
+>   {
+>   	const struct power_supply *psy = dev_get_drvdata(dev);
+> +	const enum power_supply_property *battery_props =
+> +		power_supply_battery_info_properties;
+>   	int ret = 0, j;
+>   	char *prop_buf;
+>   
+> @@ -488,6 +493,16 @@ int power_supply_uevent(const struct device *dev, struct kobj_uevent_env *env)
+>   			goto out;
+>   	}
+>   
+> +	for (j = 0; j < power_supply_battery_info_properties_size; j++) {
+> +		if (!power_supply_battery_info_has_prop(psy->battery_info,
+> +				battery_props[j]))
+> +			continue;
+
+Hmm. I just noticed that there can probably be same properties in the 
+psy->desc->properties and in the battery-info. I didn't cascade deep 
+into the code so I can't say if it is a problem to add duplicates?
+
+So, if this is safe, and if what I wrote above is not something you want 
+to consider:
+Reviewed-by: Matti Vaittinen <mazziesaccount@gmail.com>
+
+> +		ret = add_prop_uevent(dev, env, battery_props[j],
+> +			      prop_buf);
+> +		if (ret)
+> +			goto out;
+> +	}
+> +
+>   out:
+>   	free_page((unsigned long)prop_buf);
+>   
+> diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
+> index aa2c4a7c4826..a427f13c757f 100644
+> --- a/include/linux/power_supply.h
+> +++ b/include/linux/power_supply.h
+> @@ -301,6 +301,7 @@ struct power_supply {
+>   	bool initialized;
+>   	bool removing;
+>   	atomic_t use_cnt;
+> +	struct power_supply_battery_info *battery_info;
+>   #ifdef CONFIG_THERMAL
+>   	struct thermal_zone_device *tzd;
+>   	struct thermal_cooling_device *tcd;
+> @@ -791,10 +792,17 @@ devm_power_supply_get_by_phandle(struct device *dev, const char *property)
+>   { return NULL; }
+>   #endif /* CONFIG_OF */
+>   
+> +extern const enum power_supply_property power_supply_battery_info_properties[];
+> +extern const size_t power_supply_battery_info_properties_size;
+>   extern int power_supply_get_battery_info(struct power_supply *psy,
+>   					 struct power_supply_battery_info **info_out);
+>   extern void power_supply_put_battery_info(struct power_supply *psy,
+>   					  struct power_supply_battery_info *info);
+> +extern bool power_supply_battery_info_has_prop(struct power_supply_battery_info *info,
+> +					       enum power_supply_property psp);
+> +extern int power_supply_battery_info_get_prop(struct power_supply_battery_info *info,
+> +					      enum power_supply_property psp,
+> +					      union power_supply_propval *val);
+>   extern int power_supply_ocv2cap_simple(struct power_supply_battery_ocv_table *table,
+>   				       int table_len, int ocv);
+>   extern struct power_supply_battery_ocv_table *
+
+-- 
+Matti Vaittinen
+Linux kernel developer at ROHM Semiconductors
+Oulu Finland
+
+~~ When things go utterly wrong vim users can always type :help! ~~
+
