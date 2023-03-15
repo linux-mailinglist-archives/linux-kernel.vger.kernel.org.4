@@ -2,179 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88FE36BBA4B
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 17:55:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11F6E6BBA4E
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 17:55:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231892AbjCOQzN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 12:55:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44494 "EHLO
+        id S232349AbjCOQzm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 12:55:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229751AbjCOQzL (ORCPT
+        with ESMTP id S231701AbjCOQzf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 12:55:11 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8B595A193;
-        Wed, 15 Mar 2023 09:54:54 -0700 (PDT)
-Received: from [192.168.10.39] (unknown [39.37.168.222])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 3BBA56602065;
-        Wed, 15 Mar 2023 16:54:46 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1678899292;
-        bh=EyXR2YxwFVjBAcx1rUVLdzVeq5GifyBb6Z8dID0brCk=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=SHQ3SHGgunZCD9CQKxkcMrkNu82y/hn/LXDp+BkqMXc7hJnD5qh+gIhMIMTiEOxR7
-         EkaldNLGjTXTymZH3QmhQwWDCVW4Jeb9n47yKYEdRiLYkghf+cXEAC/nsxUXsFOU2Y
-         m/EqUEI/mHPFRT+cSK436ppqmBN5zq99BRVK8+99lGAz0dYSBatwE8U9psqRXg6OLB
-         XOXxGInAuGnjbKNFohYXlKgAy4J29WtLirHCECYN9Iz1eno/uOz+mTJgqF8rDdp3F6
-         UevrNe3irtE7kpeBmhfQ8nWRofKmCdG/rCgthAST7DOfk8vKWFLJRi7wtbLiQFdarr
-         GzoyGjH6cfBCw==
-Message-ID: <3d2d1ba4-bfab-6b3d-f0d6-ae0920ebdcb0@collabora.com>
-Date:   Wed, 15 Mar 2023 21:54:40 +0500
+        Wed, 15 Mar 2023 12:55:35 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B7D67C3E7;
+        Wed, 15 Mar 2023 09:55:20 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id o12so78081263edb.9;
+        Wed, 15 Mar 2023 09:55:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678899319;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mgS8VFFM3FOHWNwMGzUjyUFSlBOOEnmdBLa6dghYuqY=;
+        b=okplCCD2Rlw+ZLxfIDG4JxtgR5IuDMndqcMJElzGNW77Lv8Dqc65iSTrnrU27ogwYZ
+         SIW1z1Z7LGfy7nBf+X18RTdyVPmuMNYzgDHu0KC1CmzGYpgcROkiRmT4DsiJmCXhPgjs
+         vzGoaz/vsa6I3XE1EXUTImHLBw7QGciY7o00KixcbMpAIo/AsM87blamQjazgjeMLINK
+         YwI9BbHd3VV/8Ur3jUVdVyvewRQ/xQ/Kje1AlWNBGqMfgt9BXr30blpaS4DB2sqE22Sb
+         m7WOb2JVrH17ZtdpcE28rxIapXVZMFmpaAcLrR3iWFs/4kNklwovpRMDIuItvkiyULyE
+         hDBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678899319;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mgS8VFFM3FOHWNwMGzUjyUFSlBOOEnmdBLa6dghYuqY=;
+        b=jYZA1UBOsl23M8i0xD1J3mNLON9vYFPspdhQ/qi7U0eIP8NYETgGfW0neM91H+F3p/
+         Axj/u7T/02vxGpEYS8ZTQcRn3+efvOeKObUX30OBgwZmNthxuwAJy5S/+AekZDLpv6Ck
+         0+Zt8G2CAYkxiyQHak6fM/FyAj12wK4jvxchRy4sd3YrtHhwT+pqX8OP/fCY14w+3CvR
+         mqa8XYVvlwL7yjUY+wzdcrxJazFr7v2BuvEagRXvM9+vQQ5HwVE3LJo5l8looMR7mFO7
+         yGXMF+E2fqfPTY8qG8MQshKaJtkzy2V3v69m2vC1bkAf1kYoaxf+/Csgu55D2VE5Xt1Y
+         UKvw==
+X-Gm-Message-State: AO0yUKW4nHRrvYX9oI5aH889Pw6s6xYl/WrTXKGH+vI9AR0dHRmRdByM
+        0B6NXYG+D32zteBayowuK4HVRoLaWoRXGi7tIMs=
+X-Google-Smtp-Source: AK7set/8htQNDu9vw6MqBmuHITLHgilvlNICkFVmVWaeqbVwlQe53D0I/DfeboAQL7oGJRUHoen+ASl5vxGniJLKHkM=
+X-Received: by 2002:a17:906:8552:b0:8ae:9f1e:a1c5 with SMTP id
+ h18-20020a170906855200b008ae9f1ea1c5mr3436507ejy.3.1678899318811; Wed, 15 Mar
+ 2023 09:55:18 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WC?= =?UTF-8?Q?aw?= 
-        <emmir@google.com>, Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Subject: Re: [PATCH v11 4/7] fs/proc/task_mmu: Implement IOCTL to get and
- optionally clear info about PTEs
-Content-Language: en-US
-To:     Peter Xu <peterx@redhat.com>
-References: <20230309135718.1490461-1-usama.anjum@collabora.com>
- <20230309135718.1490461-5-usama.anjum@collabora.com> <ZBHqjBjj6nn1xeTM@x1n>
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <ZBHqjBjj6nn1xeTM@x1n>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20230313215553.1045175-1-aleksander.lobakin@intel.com>
+ <ca1385b5-b3f8-73f3-276c-a2a08ec09aa0@intel.com> <CAADnVQJDz3hBEJ7kohXJ4HUZWZdbRRamfJbrZ6KUaRubBKQmfA@mail.gmail.com>
+ <CAADnVQ+B_JOU+EpP=DKhbY9yXdN6GiRPnpTTXfEZ9sNkUeb-yQ@mail.gmail.com>
+ <5b360c35-1671-c0b8-78ca-517c7cd535ae@intel.com> <2bda95d8-6238-f9ef-7dce-aa9320013a13@intel.com>
+In-Reply-To: <2bda95d8-6238-f9ef-7dce-aa9320013a13@intel.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Wed, 15 Mar 2023 09:55:07 -0700
+Message-ID: <CAADnVQLRq7H_-L_agV1Dh9mkdvekZZt9inbbXYFdTRumcBy85g@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 0/4] xdp: recycle Page Pool backed skbs built
+ from XDP frames
+To:     Alexander Lobakin <aleksander.lobakin@intel.com>
+Cc:     Ilya Leoshkevich <iii@linux.ibm.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Larysa Zaremba <larysa.zaremba@intel.com>,
+        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
+        Song Liu <song@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Menglong Dong <imagedong@tencent.com>,
+        Mykola Lysenko <mykolal@fb.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, bpf <bpf@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/15/23 8:55 PM, Peter Xu wrote:
-> On Thu, Mar 09, 2023 at 06:57:15PM +0500, Muhammad Usama Anjum wrote:
->> +	for (addr = start; !ret && addr < end; pte++, addr += PAGE_SIZE) {
->> +		pte = pte_offset_map_lock(vma->vm_mm, pmd, addr, &ptl);
->> +
->> +		is_writ = !is_pte_uffd_wp(*pte);
->> +		is_file = vma->vm_file;
->> +		is_pres = pte_present(*pte);
->> +		is_swap = is_swap_pte(*pte);
->> +
->> +		pte_unmap_unlock(pte, ptl);
->> +
->> +		ret = pagemap_scan_output(is_writ, is_file, is_pres, is_swap,
->> +					  p, addr, 1);
->> +		if (ret)
->> +			break;
->> +
->> +		if (PM_SCAN_OP_IS_WP(p) && is_writ &&
->> +		    uffd_wp_range(walk->mm, vma, addr, PAGE_SIZE, true) < 0)
->> +			ret = -EINVAL;
->> +	}
-> 
-> This is not real atomic..
-> 
-> Taking the spinlock for eacy pte is not only overkill but wrong in
-> atomicity because the pte can change right after spinlock unlocked.
-Let me explain. It seems like wrong, but it isn't. In my rigorous testing,
-it didn't show any side-effect.  Here we are finding out if a page is
-written. If page is written, only then we clear it. Lets look at the
-different possibilities here:
-- If a page isn't written, we'll not clear it.
-- If a page is written and there isn't any race, we'll clear written-to
-flag by write protecting it.
-- If a page is written but before clearing it, data is written again to the
-page. The page would remain written and we'll clear it.
-- If a page is written but before clearing it, it gets write protected,
-we'll still write protected it. There is double right protection here, but
-no side-effect.
+On Wed, Mar 15, 2023 at 3:55=E2=80=AFAM Alexander Lobakin
+<aleksander.lobakin@intel.com> wrote:
+>
+> From: Alexander Lobakin <aleksander.lobakin@intel.com>
+> Date: Wed, 15 Mar 2023 10:56:25 +0100
+>
+> > From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+> > Date: Tue, 14 Mar 2023 16:54:25 -0700
+> >
+> >> On Tue, Mar 14, 2023 at 11:52=E2=80=AFAM Alexei Starovoitov
+> >> <alexei.starovoitov@gmail.com> wrote:
+> >
+> > [...]
+> >
+> >> test_xdp_do_redirect:PASS:prog_run 0 nsec
+> >> test_xdp_do_redirect:PASS:pkt_count_xdp 0 nsec
+> >> test_xdp_do_redirect:PASS:pkt_count_zero 0 nsec
+> >> test_xdp_do_redirect:FAIL:pkt_count_tc unexpected pkt_count_tc: actual
+> >> 220 !=3D expected 9998
+> >> test_max_pkt_size:PASS:prog_run_max_size 0 nsec
+> >> test_max_pkt_size:PASS:prog_run_too_big 0 nsec
+> >> close_netns:PASS:setns 0 nsec
+> >> #289 xdp_do_redirect:FAIL
+> >> Summary: 270/1674 PASSED, 30 SKIPPED, 1 FAILED
+> >>
+> >> Alex,
+> >> could you please take a look at why it's happening?
+> >>
+> >> I suspect it's an endianness issue in:
+> >>         if (*metadata !=3D 0x42)
+> >>                 return XDP_ABORTED;
+> >> but your patch didn't change that,
+> >> so I'm not sure why it worked before.
+> >
+> > Sure, lemme fix it real quick.
+>
+> Hi Ilya,
+>
+> Do you have s390 testing setups? Maybe you could take a look, since I
+> don't have one and can't debug it? Doesn't seem to be Endianness issue.
+> I mean, I have this (the below patch), but not sure it will fix
+> anything -- IIRC eBPF arch always matches the host arch ._.
+> I can't figure out from the code what does happen wrongly :s And it
+> happens only on s390.
+>
+> Thanks,
+> Olek
+> ---
+> diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_do_redirect.c b/t=
+ools/testing/selftests/bpf/prog_tests/xdp_do_redirect.c
+> index 662b6c6c5ed7..b21371668447 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/xdp_do_redirect.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/xdp_do_redirect.c
+> @@ -107,7 +107,7 @@ void test_xdp_do_redirect(void)
+>                             .attach_point =3D BPF_TC_INGRESS);
+>
+>         memcpy(&data[sizeof(__u32)], &pkt_udp, sizeof(pkt_udp));
+> -       *((__u32 *)data) =3D 0x42; /* metadata test value */
+> +       *((__u32 *)data) =3D htonl(0x42); /* metadata test value */
+>
+>         skel =3D test_xdp_do_redirect__open();
+>         if (!ASSERT_OK_PTR(skel, "skel"))
+> diff --git a/tools/testing/selftests/bpf/progs/test_xdp_do_redirect.c b/t=
+ools/testing/selftests/bpf/progs/test_xdp_do_redirect.c
+> index cd2d4e3258b8..2475bc30ced2 100644
+> --- a/tools/testing/selftests/bpf/progs/test_xdp_do_redirect.c
+> +++ b/tools/testing/selftests/bpf/progs/test_xdp_do_redirect.c
+> @@ -1,5 +1,6 @@
+>  // SPDX-License-Identifier: GPL-2.0
+>  #include <vmlinux.h>
+> +#include <bpf/bpf_endian.h>
+>  #include <bpf/bpf_helpers.h>
+>
+>  #define ETH_ALEN 6
+> @@ -28,7 +29,7 @@ volatile int retcode =3D XDP_REDIRECT;
+>  SEC("xdp")
+>  int xdp_redirect(struct xdp_md *xdp)
+>  {
+> -       __u32 *metadata =3D (void *)(long)xdp->data_meta;
+> +       __be32 *metadata =3D (void *)(long)xdp->data_meta;
+>         void *data_end =3D (void *)(long)xdp->data_end;
+>         void *data =3D (void *)(long)xdp->data;
+>
+> @@ -44,7 +45,7 @@ int xdp_redirect(struct xdp_md *xdp)
+>         if (metadata + 1 > data)
+>                 return XDP_ABORTED;
+>
+> -       if (*metadata !=3D 0x42)
+> +       if (*metadata !=3D __bpf_htonl(0x42))
+>                 return XDP_ABORTED;
 
-Lets turn this into a truth table for easier understanding. Here first
-coulmn and thrid column represents this above code. 2nd column represents
-any other thread interacting with the page.
-
-If page is written/dirty	some other task interacts	wp_page
-no				does nothing			no
-no				writes to page			no
-no				wp the page			no
-yes				does nothing			yes
-yes				write to page			yes
-yes				wp the page			yes
-
-As you can see there isn't any side-effect happening. We aren't over doing
-the wp or under-doing the write-protect.
-
-Even if we were doing something wrong here and I bring the lock over all of
-this, the pages get become written or wp just after unlocking. It is
-expected. This current implementation doesn't seem to be breaking this.
-
-Is my understanding wrong somewhere here? Can you point out?
-
-Previous to this current locking design were either buggy or slower when
-multiple threads were working on same pages. Current implementation removes
-the limitations:
-- The memcpy inside pagemap_scan_output is happening with pte unlocked.
-- We are only wp a page if we have noted this page to be dirty
-- No mm write lock is required. Only read lock works fine just like
-userfaultfd_writeprotect() takes only read lock.
-
-There is only one con here that we are locking and unlocking the pte lock
-again and again.
-
-Please have a look at my explanation and let me know what do you think.
-
-> 
-> Unfortunately you also cannot reuse uffd_wp_range() because that's not
-> atomic either, my fault here.  Probably I was thinking mostly from
-> soft-dirty pov on batching the collect+reset.
-> 
-> You need to take the spin lock, collect whatever bits, set/clear whatever
-> bits, only until then release the spin lock.
-> 
-> "Not atomic" means you can have some page got dirtied but you could miss
-> it.  Depending on how strict you want, I think it'll break apps like CRIU
-> if strict atomicity needed for migrating a process.  If we want to have a
-> new interface anyway, IMHO we'd better do that in the strict way.
-In my rigorous multi-threaded testing where a lots of threads are working
-on same set of pages, we aren't losing even a single update. I can share
-the test if you want.
-
-> 
-> Same comment applies to the THP handling (where I cut from the context).
-> 
-
--- 
-BR,
-Muhammad Usama Anjum
+Looks sane to me.
+I'd probably use 'u8 * metadata' instead. Both in bpf and user space
+just not to worry about endianness.
+Could you please submit an official patch and let CI judge?
