@@ -2,167 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10DBA6BAF09
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 12:18:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21A246BAF08
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 12:18:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232062AbjCOLSb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 07:18:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36552 "EHLO
+        id S231928AbjCOLS2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 07:18:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231895AbjCOLSH (ORCPT
+        with ESMTP id S229542AbjCOLSH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 15 Mar 2023 07:18:07 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4582F4489;
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C06D12F1E;
         Wed, 15 Mar 2023 04:17:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=fLp/3lhmGZhhr6T35BEOzQ7BwCL8lH8JN5yPMH5YQqA=; b=fkBu5WFzLh5l28dnaby02Efvus
-        9kFvQpTolF5xxKpH5rjq4/xTE8Bn4Z0Jqxl0BsbtaRhl6WyfYGsdf4/x/8GDVQx6/xGpba/kzd0Rm
-        Fm+u0KpufOzhUK/oMlrlMt19uIS4yPmndYnwlLbdGqyiNHjv2kVykldjkEnArTBsHgl9C3WeR/kM5
-        o4FkQkjT1K25hmReMEyHmR9KTRSUHT5Qiu8Zx0fLzjr5+XjLZlwQea00S/W6xVocHoN/XYVTA6p4W
-        4Ych9bWQ6vyzbeMpeWlUYV0Gie1ywZZNPGdrCgeleMDxmKGukAunjxbezWWoQjCkEpRUZdxpd2jjU
-        84C02fuQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pcP73-0025TW-0p;
-        Wed, 15 Mar 2023 11:16:10 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id AA5E13001F7;
-        Wed, 15 Mar 2023 12:16:06 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 680F2212F1AE1; Wed, 15 Mar 2023 12:16:06 +0100 (CET)
-Date:   Wed, 15 Mar 2023 12:16:06 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Alexey Klimov <alexey.klimov@linaro.org>
-Cc:     draszik@google.com, peter.griffin@linaro.org,
-        willmcvicker@google.com, mingo@kernel.org, ulf.hansson@linaro.org,
-        tony@atomide.com, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, axboe@kernel.dk,
-        alim.akhtar@samsung.com, regressions@lists.linux.dev,
-        avri.altman@wdc.com, bvanassche@acm.org, klimova@google.com
-Subject: Re: [REGRESSION] CPUIDLE_FLAG_RCU_IDLE, blk_mq_freeze_queue_wait()
- and slow-stuck reboots
-Message-ID: <20230315111606.GB2006103@hirez.programming.kicks-ass.net>
-References: <20230314230004.961993-1-alexey.klimov@linaro.org>
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 90321B81DDA;
+        Wed, 15 Mar 2023 11:16:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C3B5C433EF;
+        Wed, 15 Mar 2023 11:16:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678878999;
+        bh=6qnXmLvpgW1dKuRejebdDAlmRA6DSSuhtauL3YzHJEc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=P6SboyT9BZ+Khj+LLT3W2kU0ZHohELN+EMUyzCjU0HKSQ7x8CxQwxLS0LJU8qrBXx
+         u6T/qcL5a5lodS3bTdSUEk5rETDLxkPprF1wnmpCss4kf/lR4i3tq+QTCWDYwdUJwe
+         nA2xURtKRyPlr2rjCrBQX1QyUqW3le9UwYG169nQLbSJx5+MIys/i2qFK0qKKPPmvu
+         L9Lf9F0vnXAIu3zKCp7p3t34Chrp0zo7Z7eB23GJTm2lT3GJ7VXn5qZuL4Iyc6Z+kF
+         k//33TWF/xvl90OR3EyeOAIMvADhZCkkgMnCXaYCgPpyDSaVvvw05mHjDvLqnVnPxq
+         9yNhs6sjyPQkA==
+Date:   Wed, 15 Mar 2023 13:16:24 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>
+Subject: Re: [PATCH v4 27/36] x86: Implement the new page table range API
+Message-ID: <ZBGpCC21vygomEkr@kernel.org>
+References: <20230315051444.3229621-1-willy@infradead.org>
+ <20230315051444.3229621-28-willy@infradead.org>
+ <20230315103436.GA2006103@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230314230004.961993-1-alexey.klimov@linaro.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230315103436.GA2006103@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-(could you wrap your email please)
-
-On Tue, Mar 14, 2023 at 11:00:04PM +0000, Alexey Klimov wrote:
-> #regzbot introduced: 0c5ffc3d7b15 #regzbot title:
-> CPUIDLE_FLAG_RCU_IDLE, blk_mq_freeze_queue_wait() and slow-stuck
-> reboots
+On Wed, Mar 15, 2023 at 11:34:36AM +0100, Peter Zijlstra wrote:
+> On Wed, Mar 15, 2023 at 05:14:35AM +0000, Matthew Wilcox (Oracle) wrote:
+> > Add PFN_PTE_SHIFT and a noop update_mmu_cache_range().
+> > 
+> > Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+> > Cc: Thomas Gleixner <tglx@linutronix.de>
+> > Cc: Ingo Molnar <mingo@redhat.com>
+> > Cc: Borislav Petkov <bp@alien8.de>
+> > Cc: Dave Hansen <dave.hansen@linux.intel.com>
+> > Cc: x86@kernel.org
+> > Cc: "H. Peter Anvin" <hpa@zytor.com>
+> > ---
+> >  arch/x86/include/asm/pgtable.h | 13 ++++++-------
+> >  1 file changed, 6 insertions(+), 7 deletions(-)
+> > 
+> > diff --git a/arch/x86/include/asm/pgtable.h b/arch/x86/include/asm/pgtable.h
+> > index 1031025730d0..b237878061c4 100644
+> > --- a/arch/x86/include/asm/pgtable.h
+> > +++ b/arch/x86/include/asm/pgtable.h
+> > @@ -184,6 +184,8 @@ static inline int pte_special(pte_t pte)
+> >  
+> >  static inline u64 protnone_mask(u64 val);
+> >  
+> > +#define PFN_PTE_SHIFT	PAGE_SHIFT
+> > +
+> >  static inline unsigned long pte_pfn(pte_t pte)
+> >  {
+> >  	phys_addr_t pfn = pte_val(pte);
+> > @@ -1019,13 +1021,6 @@ static inline pud_t native_local_pudp_get_and_clear(pud_t *pudp)
+> >  	return res;
+> >  }
+> >  
+> > -static inline void set_pte_at(struct mm_struct *mm, unsigned long addr,
+> > -			      pte_t *ptep, pte_t pte)
+> > -{
+> > -	page_table_check_ptes_set(mm, addr, ptep, pte, 1);
+> > -	set_pte(ptep, pte);
+> > -}
+> > -
 > 
-> The upstream changes are being merged into android-mainline repo and
-> at some point we started to observe kernel panics on reboot or long
-> reboot times.
+> And remove set_pte_at() apparently.. whut?!?
 
-On what hardware? I find it somewhat hard to follow this DT code :/
-
-> Looks like adding CPUIDLE_FLAG_RCU_IDLE flag to idle driver caused
-> this behaviour.  The minimal change that is required for this system
-> to avoid the regression would be one liner that removes the flag
-> (below).
+It's now in include/linux/pgtable.h
+ 
+> >  static inline void set_pmd_at(struct mm_struct *mm, unsigned long addr,
+> >  			      pmd_t *pmdp, pmd_t pmd)
+> >  {
+> > @@ -1291,6 +1286,10 @@ static inline void update_mmu_cache(struct vm_area_struct *vma,
+> >  		unsigned long addr, pte_t *ptep)
+> >  {
+> >  }
+> > +static inline void update_mmu_cache_range(struct vm_area_struct *vma,
+> > +		unsigned long addr, pte_t *ptep, unsigned int nr)
+> > +{
+> > +}
+> >  static inline void update_mmu_cache_pmd(struct vm_area_struct *vma,
+> >  		unsigned long addr, pmd_t *pmd)
+> >  {
+> > -- 
+> > 2.39.2
+> > 
 > 
-> But if it is a real regression, then other idle drivers if used will
-> likely cause this regression too withe same ufshcd driver. There is
-> also a suspicion that CPUIDLE_FLAG_RCU_IDLE just revealed or uncovered
-> some other problem.
-> 
-> Any thoughts on this? 
 
-So ARM has a weird 'rule' in that idle state 0 (wfi) should not have
-RCU_IDLE set, while others should have.
-
-Of the dt_init_idle_driver() users:
-
- - cpuidle-arm: arm_enter_idle_state()
- - cpuidle-big_little: bl_enter_powerdown() does ct_cpuidle_{enter,exit}()
- - cpuidle-psci: psci_enter_idle_state() uses CPU_PM_CPU_IDLE_ENTER_PARAM_RCU()
- - cpuidle-qcom-spm: spm_enter_idle_state() uses CPU_PM_CPU_IDLE_ENTER_PARAM()
- - cpuidle-riscv-sbi: sbi_cpuidle_enter_state() uses CPU_PM_CPU_IDLE_ENTER_*_PARAM()
-
-All of them start on index 1 and hence should have RCU_IDLE set, but at
-least the arm, qcom-spm and riscv-sbi don't actually appear to abide by
-the rules.
-
-Fixing that gives me the below; does that help?
-
----
-
-diff --git a/drivers/cpuidle/cpuidle-arm.c b/drivers/cpuidle/cpuidle-arm.c
-index 7cfb980a357d..58fa81f0fa7d 100644
---- a/drivers/cpuidle/cpuidle-arm.c
-+++ b/drivers/cpuidle/cpuidle-arm.c
-@@ -39,7 +39,7 @@ static __cpuidle int arm_enter_idle_state(struct cpuidle_device *dev,
- 	 * will call the CPU ops suspend protocol with idle index as a
- 	 * parameter.
- 	 */
--	return CPU_PM_CPU_IDLE_ENTER(arm_cpuidle_suspend, idx);
-+	return CPU_PM_CPU_IDLE_ENTER_RCU(arm_cpuidle_suspend, idx);
- }
- 
- static struct cpuidle_driver arm_idle_driver __initdata = {
-diff --git a/drivers/cpuidle/cpuidle-qcom-spm.c b/drivers/cpuidle/cpuidle-qcom-spm.c
-index c6e2e91bb4c3..429db2d40114 100644
---- a/drivers/cpuidle/cpuidle-qcom-spm.c
-+++ b/drivers/cpuidle/cpuidle-qcom-spm.c
-@@ -64,7 +64,7 @@ static __cpuidle int spm_enter_idle_state(struct cpuidle_device *dev,
- 	struct cpuidle_qcom_spm_data *data = container_of(drv, struct cpuidle_qcom_spm_data,
- 							  cpuidle_driver);
- 
--	return CPU_PM_CPU_IDLE_ENTER_PARAM(qcom_cpu_spc, idx, data->spm);
-+	return CPU_PM_CPU_IDLE_ENTER_PARAM_RCU(qcom_cpu_spc, idx, data->spm);
- }
- 
- static struct cpuidle_driver qcom_spm_idle_driver = {
-diff --git a/drivers/cpuidle/cpuidle-riscv-sbi.c b/drivers/cpuidle/cpuidle-riscv-sbi.c
-index be383f4b6855..04a601cda06b 100644
---- a/drivers/cpuidle/cpuidle-riscv-sbi.c
-+++ b/drivers/cpuidle/cpuidle-riscv-sbi.c
-@@ -100,10 +100,9 @@ static __cpuidle int sbi_cpuidle_enter_state(struct cpuidle_device *dev,
- 	u32 state = states[idx];
- 
- 	if (state & SBI_HSM_SUSP_NON_RET_BIT)
--		return CPU_PM_CPU_IDLE_ENTER_PARAM(sbi_suspend, idx, state);
--	else
--		return CPU_PM_CPU_IDLE_ENTER_RETENTION_PARAM(sbi_suspend,
--							     idx, state);
-+		return CPU_PM_CPU_IDLE_ENTER_PARAM_RCU(sbi_suspend, idx, state);
-+
-+	return CPU_PM_CPU_IDLE_ENTER_RETENTION_PARAM_RCU(sbi_suspend, idx, state);
- }
- 
- static __cpuidle int __sbi_enter_domain_idle_state(struct cpuidle_device *dev,
-diff --git a/include/linux/cpuidle.h b/include/linux/cpuidle.h
-index 3183aeb7f5b4..dd92bdafe2d3 100644
---- a/include/linux/cpuidle.h
-+++ b/include/linux/cpuidle.h
-@@ -334,6 +334,9 @@ extern s64 cpuidle_governor_latency_req(unsigned int cpu);
- #define CPU_PM_CPU_IDLE_ENTER(low_level_idle_enter, idx)	\
- 	__CPU_PM_CPU_IDLE_ENTER(low_level_idle_enter, idx, idx, 0, 0)
- 
-+#define CPU_PM_CPU_IDLE_ENTER_RCU(low_level_idle_enter, idx)	\
-+	__CPU_PM_CPU_IDLE_ENTER(low_level_idle_enter, idx, idx, 0, 1)
-+
- #define CPU_PM_CPU_IDLE_ENTER_RETENTION(low_level_idle_enter, idx)	\
- 	__CPU_PM_CPU_IDLE_ENTER(low_level_idle_enter, idx, idx, 1, 0)
- 
+-- 
+Sincerely yours,
+Mike.
