@@ -2,186 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11F6E6BBA4E
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 17:55:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 788466BBA59
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 18:00:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232349AbjCOQzm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 12:55:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44892 "EHLO
+        id S232341AbjCORAL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 13:00:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231701AbjCOQzf (ORCPT
+        with ESMTP id S232062AbjCORAI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 12:55:35 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B7D67C3E7;
-        Wed, 15 Mar 2023 09:55:20 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id o12so78081263edb.9;
-        Wed, 15 Mar 2023 09:55:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678899319;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mgS8VFFM3FOHWNwMGzUjyUFSlBOOEnmdBLa6dghYuqY=;
-        b=okplCCD2Rlw+ZLxfIDG4JxtgR5IuDMndqcMJElzGNW77Lv8Dqc65iSTrnrU27ogwYZ
-         SIW1z1Z7LGfy7nBf+X18RTdyVPmuMNYzgDHu0KC1CmzGYpgcROkiRmT4DsiJmCXhPgjs
-         vzGoaz/vsa6I3XE1EXUTImHLBw7QGciY7o00KixcbMpAIo/AsM87blamQjazgjeMLINK
-         YwI9BbHd3VV/8Ur3jUVdVyvewRQ/xQ/Kje1AlWNBGqMfgt9BXr30blpaS4DB2sqE22Sb
-         m7WOb2JVrH17ZtdpcE28rxIapXVZMFmpaAcLrR3iWFs/4kNklwovpRMDIuItvkiyULyE
-         hDBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678899319;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mgS8VFFM3FOHWNwMGzUjyUFSlBOOEnmdBLa6dghYuqY=;
-        b=jYZA1UBOsl23M8i0xD1J3mNLON9vYFPspdhQ/qi7U0eIP8NYETgGfW0neM91H+F3p/
-         Axj/u7T/02vxGpEYS8ZTQcRn3+efvOeKObUX30OBgwZmNthxuwAJy5S/+AekZDLpv6Ck
-         0+Zt8G2CAYkxiyQHak6fM/FyAj12wK4jvxchRy4sd3YrtHhwT+pqX8OP/fCY14w+3CvR
-         mqa8XYVvlwL7yjUY+wzdcrxJazFr7v2BuvEagRXvM9+vQQ5HwVE3LJo5l8looMR7mFO7
-         yGXMF+E2fqfPTY8qG8MQshKaJtkzy2V3v69m2vC1bkAf1kYoaxf+/Csgu55D2VE5Xt1Y
-         UKvw==
-X-Gm-Message-State: AO0yUKW4nHRrvYX9oI5aH889Pw6s6xYl/WrTXKGH+vI9AR0dHRmRdByM
-        0B6NXYG+D32zteBayowuK4HVRoLaWoRXGi7tIMs=
-X-Google-Smtp-Source: AK7set/8htQNDu9vw6MqBmuHITLHgilvlNICkFVmVWaeqbVwlQe53D0I/DfeboAQL7oGJRUHoen+ASl5vxGniJLKHkM=
-X-Received: by 2002:a17:906:8552:b0:8ae:9f1e:a1c5 with SMTP id
- h18-20020a170906855200b008ae9f1ea1c5mr3436507ejy.3.1678899318811; Wed, 15 Mar
- 2023 09:55:18 -0700 (PDT)
+        Wed, 15 Mar 2023 13:00:08 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7271D1CF4C
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 09:59:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678899560;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=mo4/ufj5aP4JcG4WHWN3/PJ1VlRuoKnOT1MocwMtouQ=;
+        b=itWDuQMeobWcyfbXODiCPtJ1hqQSLQZDCu7DUNtfK4jtsq6dsQK2pKoRxTZE0NRnWHOX/M
+        qeZZM2JH94Jik+dZSN7aUp8NbBn+3HRxyCFWEfcsTh8vohvd4zUPKvaVN4MkMkddUeD6fN
+        HvaOQ6mqlCg9GMjt7IGKr7reqP5QO70=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-486-k0Oy4AX3PwuBr33IhirytA-1; Wed, 15 Mar 2023 12:59:14 -0400
+X-MC-Unique: k0Oy4AX3PwuBr33IhirytA-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E836A805F76;
+        Wed, 15 Mar 2023 16:59:13 +0000 (UTC)
+Received: from [10.22.34.146] (unknown [10.22.34.146])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 3FE4B492B02;
+        Wed, 15 Mar 2023 16:59:13 +0000 (UTC)
+Message-ID: <bba0ed25-1130-d272-45cf-b14c95aa991f@redhat.com>
+Date:   Wed, 15 Mar 2023 12:59:13 -0400
 MIME-Version: 1.0
-References: <20230313215553.1045175-1-aleksander.lobakin@intel.com>
- <ca1385b5-b3f8-73f3-276c-a2a08ec09aa0@intel.com> <CAADnVQJDz3hBEJ7kohXJ4HUZWZdbRRamfJbrZ6KUaRubBKQmfA@mail.gmail.com>
- <CAADnVQ+B_JOU+EpP=DKhbY9yXdN6GiRPnpTTXfEZ9sNkUeb-yQ@mail.gmail.com>
- <5b360c35-1671-c0b8-78ca-517c7cd535ae@intel.com> <2bda95d8-6238-f9ef-7dce-aa9320013a13@intel.com>
-In-Reply-To: <2bda95d8-6238-f9ef-7dce-aa9320013a13@intel.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Wed, 15 Mar 2023 09:55:07 -0700
-Message-ID: <CAADnVQLRq7H_-L_agV1Dh9mkdvekZZt9inbbXYFdTRumcBy85g@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 0/4] xdp: recycle Page Pool backed skbs built
- from XDP frames
-To:     Alexander Lobakin <aleksander.lobakin@intel.com>
-Cc:     Ilya Leoshkevich <iii@linux.ibm.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Larysa Zaremba <larysa.zaremba@intel.com>,
-        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
-        Song Liu <song@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Menglong Dong <imagedong@tencent.com>,
-        Mykola Lysenko <mykolal@fb.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, bpf <bpf@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 0/5] cgroup/cpuset: Miscellaneous updates
+Content-Language: en-US
+To:     Will Deacon <will@kernel.org>
+Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>
+References: <20230306200849.376804-1-longman@redhat.com>
+ <20230315162436.GA19015@willie-the-truck>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20230315162436.GA19015@willie-the-truck>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 15, 2023 at 3:55=E2=80=AFAM Alexander Lobakin
-<aleksander.lobakin@intel.com> wrote:
->
-> From: Alexander Lobakin <aleksander.lobakin@intel.com>
-> Date: Wed, 15 Mar 2023 10:56:25 +0100
->
-> > From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-> > Date: Tue, 14 Mar 2023 16:54:25 -0700
-> >
-> >> On Tue, Mar 14, 2023 at 11:52=E2=80=AFAM Alexei Starovoitov
-> >> <alexei.starovoitov@gmail.com> wrote:
-> >
-> > [...]
-> >
-> >> test_xdp_do_redirect:PASS:prog_run 0 nsec
-> >> test_xdp_do_redirect:PASS:pkt_count_xdp 0 nsec
-> >> test_xdp_do_redirect:PASS:pkt_count_zero 0 nsec
-> >> test_xdp_do_redirect:FAIL:pkt_count_tc unexpected pkt_count_tc: actual
-> >> 220 !=3D expected 9998
-> >> test_max_pkt_size:PASS:prog_run_max_size 0 nsec
-> >> test_max_pkt_size:PASS:prog_run_too_big 0 nsec
-> >> close_netns:PASS:setns 0 nsec
-> >> #289 xdp_do_redirect:FAIL
-> >> Summary: 270/1674 PASSED, 30 SKIPPED, 1 FAILED
-> >>
-> >> Alex,
-> >> could you please take a look at why it's happening?
-> >>
-> >> I suspect it's an endianness issue in:
-> >>         if (*metadata !=3D 0x42)
-> >>                 return XDP_ABORTED;
-> >> but your patch didn't change that,
-> >> so I'm not sure why it worked before.
-> >
-> > Sure, lemme fix it real quick.
->
-> Hi Ilya,
->
-> Do you have s390 testing setups? Maybe you could take a look, since I
-> don't have one and can't debug it? Doesn't seem to be Endianness issue.
-> I mean, I have this (the below patch), but not sure it will fix
-> anything -- IIRC eBPF arch always matches the host arch ._.
-> I can't figure out from the code what does happen wrongly :s And it
-> happens only on s390.
->
-> Thanks,
-> Olek
-> ---
-> diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_do_redirect.c b/t=
-ools/testing/selftests/bpf/prog_tests/xdp_do_redirect.c
-> index 662b6c6c5ed7..b21371668447 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/xdp_do_redirect.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/xdp_do_redirect.c
-> @@ -107,7 +107,7 @@ void test_xdp_do_redirect(void)
->                             .attach_point =3D BPF_TC_INGRESS);
->
->         memcpy(&data[sizeof(__u32)], &pkt_udp, sizeof(pkt_udp));
-> -       *((__u32 *)data) =3D 0x42; /* metadata test value */
-> +       *((__u32 *)data) =3D htonl(0x42); /* metadata test value */
->
->         skel =3D test_xdp_do_redirect__open();
->         if (!ASSERT_OK_PTR(skel, "skel"))
-> diff --git a/tools/testing/selftests/bpf/progs/test_xdp_do_redirect.c b/t=
-ools/testing/selftests/bpf/progs/test_xdp_do_redirect.c
-> index cd2d4e3258b8..2475bc30ced2 100644
-> --- a/tools/testing/selftests/bpf/progs/test_xdp_do_redirect.c
-> +++ b/tools/testing/selftests/bpf/progs/test_xdp_do_redirect.c
-> @@ -1,5 +1,6 @@
->  // SPDX-License-Identifier: GPL-2.0
->  #include <vmlinux.h>
-> +#include <bpf/bpf_endian.h>
->  #include <bpf/bpf_helpers.h>
->
->  #define ETH_ALEN 6
-> @@ -28,7 +29,7 @@ volatile int retcode =3D XDP_REDIRECT;
->  SEC("xdp")
->  int xdp_redirect(struct xdp_md *xdp)
->  {
-> -       __u32 *metadata =3D (void *)(long)xdp->data_meta;
-> +       __be32 *metadata =3D (void *)(long)xdp->data_meta;
->         void *data_end =3D (void *)(long)xdp->data_end;
->         void *data =3D (void *)(long)xdp->data;
->
-> @@ -44,7 +45,7 @@ int xdp_redirect(struct xdp_md *xdp)
->         if (metadata + 1 > data)
->                 return XDP_ABORTED;
->
-> -       if (*metadata !=3D 0x42)
-> +       if (*metadata !=3D __bpf_htonl(0x42))
->                 return XDP_ABORTED;
 
-Looks sane to me.
-I'd probably use 'u8 * metadata' instead. Both in bpf and user space
-just not to worry about endianness.
-Could you please submit an official patch and let CI judge?
+On 3/15/23 12:24, Will Deacon wrote:
+> Hi Waiman,
+>
+> On Mon, Mar 06, 2023 at 03:08:44PM -0500, Waiman Long wrote:
+>> This patch series includes miscellaneous update to the cpuset and its
+>> testing code.
+>>
+>> Patch 2 is actually a follow-up of commit 3fb906e7fabb ("cgroup/cpuset:
+>> Don't filter offline CPUs in cpuset_cpus_allowed() for top cpuset tasks").
+>>
+>> Patches 3-4 are for handling corner cases when dealing with
+>> task_cpu_possible_mask().
+> Thanks for cc'ing me on these. I ran my arm64 asymmetric tests and, fwiw,
+> I get the same results as vanilla -rc2, so that's good.
+>
+> One behaviour that persists (and which I thought might be addressed by this
+> series) is the following. Imagine a 4-CPU system with CPUs 0-1 being 64-bit
+> only. If I configure a parent cpuset with 'cpuset.cpus' of "0-2" and a
+> child cpuset with 'cpuset.cpus' of "0-1", then attaching a 32-bit task
+> to the child cpuset will result in an affinity mask of 4. If I then change
+> 'cpuset.cpus' of the parent cpuset to "0-1,3", the affinity mask of the
+> task remains at '4' whereas it might be nice to update it to '8', in-line
+> with the new affinity mask of the parent cpuset.
+>
+> Anyway, I'm not complaining (this is certainly _not_ a regression), but
+> I thought I'd highlight it in case you were aiming to address this with
+> your changes.
+
+I believe it is because changes in parent cpuset only won't cause the 
+tasks in the child cpuset to be re-evaluated unless it causes a change 
+in the effective_cpus of the child cpuset. This is the case here. We 
+currently don't track how many tasks in the child cpusets are using 
+parent's cpumask due to lacking runnable CPUs in the child cpuset. We 
+can only fix this if we track those special tasks. It can be fixable, 
+but I don't know if it is a problem that is worth fixing.
+
+Cheers,
+Longman
+
