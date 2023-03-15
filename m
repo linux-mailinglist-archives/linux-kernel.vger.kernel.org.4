@@ -2,58 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 270E56BB3F5
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 14:10:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9CE96BB3FB
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 14:11:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232301AbjCONKG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 09:10:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54888 "EHLO
+        id S231841AbjCONK5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 09:10:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232062AbjCONJz (ORCPT
+        with ESMTP id S231143AbjCONKw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 09:09:55 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55329206B5
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 06:09:51 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <afa@pengutronix.de>)
-        id 1pcQst-0004p7-00; Wed, 15 Mar 2023 14:09:39 +0100
-Received: from [2a0a:edc0:0:1101:1d::54] (helo=dude05.red.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <afa@pengutronix.de>)
-        id 1pcQss-004JKX-9z; Wed, 15 Mar 2023 14:09:38 +0100
-Received: from afa by dude05.red.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <afa@pengutronix.de>)
-        id 1pcQsr-00FFHG-Kl; Wed, 15 Mar 2023 14:09:37 +0100
-From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        =?UTF-8?q?Alvin=20=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Luiz Angelo Daros de Luca <luizluca@gmail.com>
-Cc:     kernel@pengutronix.de, Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH net 2/2] net: dsa: realtek: fix missing new lines in error messages
-Date:   Wed, 15 Mar 2023 14:09:16 +0100
-Message-Id: <20230315130917.3633491-2-a.fatoum@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230315130917.3633491-1-a.fatoum@pengutronix.de>
-References: <20230315130917.3633491-1-a.fatoum@pengutronix.de>
+        Wed, 15 Mar 2023 09:10:52 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3808122002
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 06:10:51 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id d13so8713205pjh.0
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 06:10:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1678885850;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=4iM7UqGaYvm7BzQmjPzFTbD+VCi1s05wVU7R+PFPtIQ=;
+        b=d2XRh/0jnDbb8BJSVteBA7TvOKV8xbk6pdCqTOQcoOrShowab5iwHiCFFnz0/Pshsz
+         vS5a48SIWacvJ8o9s8pgarz8rU7Nk6EQDTx80rj/4iNeASMVgpVtyCttdLykp0wEcbMO
+         9ZpYnG0Kd3+JCmpIYNaYbqk+Ms4jtktRfLBDw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678885850;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4iM7UqGaYvm7BzQmjPzFTbD+VCi1s05wVU7R+PFPtIQ=;
+        b=b5SxNGhKfq+6RPZVNu9roC+NEUsTpHt7G/ivi9SCX665fZndhPf81F38ynw28pkwkx
+         EM1FWxIp6t5ib7mUgfD9/3EG9NZRx2fYH6x42rMuidl58AxyEQyoWn1vEtAGRj6thTDN
+         P8Z78bdQ6AzX5QgTPfbCV+Ez4ziQ4/+OfI7MVv2XWU6O2roe6yYw8i3U+Ph6AMKMVUk/
+         zcMrs91D481vQ1jiQOvJiRLsHV43mHwSge3iNM2jWXdulTzNjKB0VRKg6HGUYgeagAya
+         fVC7i/5jRFfr1QO6ZCcTfXCRz/tK7M1KYoiEyquS55xm89SCyPM1rxqf1FT+2iIosCLc
+         cT4Q==
+X-Gm-Message-State: AO0yUKUHK1TuZvH7l4q/oaNHsQmg+vhYV8sd0cNFJdjizzW+pI9+a2Qj
+        2dsAh1vcikN4Gf30ad0MUbfb1g==
+X-Google-Smtp-Source: AK7set9dN3OnjgQ1zJzmAaDS5Ava8qB+TCv5SKJAmAnQ8LoY5y/PvI+b/14sPf9bRAqmxxxgI5nUMw==
+X-Received: by 2002:a17:902:e5d0:b0:19e:29bd:8411 with SMTP id u16-20020a170902e5d000b0019e29bd8411mr2794015plf.30.1678885850225;
+        Wed, 15 Mar 2023 06:10:50 -0700 (PDT)
+Received: from google.com (KD124209188001.ppp-bb.dion.ne.jp. [124.209.188.1])
+        by smtp.gmail.com with ESMTPSA id d10-20020a170902854a00b001a05bc70e97sm3574903plo.189.2023.03.15.06.10.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Mar 2023 06:10:49 -0700 (PDT)
+Date:   Wed, 15 Mar 2023 22:10:43 +0900
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     kernel test robot <yujie.liu@intel.com>, oe-lkp@lists.linux.dev,
+        lkp@intel.com, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Keith Busch <kbusch@kernel.org>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>, Jens Axboe <axboe@kernel.dk>,
+        Minchan Kim <minchan@kernel.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        linux-fsdevel@vger.kernel.org, ying.huang@intel.com,
+        feng.tang@intel.com, zhengjun.xing@linux.intel.com,
+        fengwei.yin@intel.com
+Subject: Re: [linus:master] [mpage] 7d28631786: fio.write_iops 27.8%
+ improvement
+Message-ID: <20230315131043.GA1927891@google.com>
+References: <202303101630.ef282023-yujie.liu@intel.com>
+ <20230315075816.GA32694@lst.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: afa@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230315075816.GA32694@lst.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,51 +81,10 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some error messages lack a new line, add them.
+On (23/03/15 08:58), Christoph Hellwig wrote:
+> 
+> I think this simply accounts for the I/Os now that were skipped
+> when using the bdev_read/write path before.
 
-Fixes: d40f607c181f ("net: dsa: realtek: rtl8365mb: add RTL8367S support")
-Fixes: d8652956cf37 ("net: dsa: realtek-smi: Add Realtek SMI driver")
-Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
----
- drivers/net/dsa/realtek/rtl8365mb.c    | 2 +-
- drivers/net/dsa/realtek/rtl8366-core.c | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/net/dsa/realtek/rtl8365mb.c b/drivers/net/dsa/realtek/rtl8365mb.c
-index da31d8b839ac..33d28951f461 100644
---- a/drivers/net/dsa/realtek/rtl8365mb.c
-+++ b/drivers/net/dsa/realtek/rtl8365mb.c
-@@ -2068,7 +2068,7 @@ static int rtl8365mb_detect(struct realtek_priv *priv)
- 
- 	if (!mb->chip_info) {
- 		dev_err(priv->dev,
--			"unrecognized switch (id=0x%04x, ver=0x%04x)", chip_id,
-+			"unrecognized switch (id=0x%04x, ver=0x%04x)\n", chip_id,
- 			chip_ver);
- 		return -ENODEV;
- 	}
-diff --git a/drivers/net/dsa/realtek/rtl8366-core.c b/drivers/net/dsa/realtek/rtl8366-core.c
-index dc5f75be3017..f353483b281b 100644
---- a/drivers/net/dsa/realtek/rtl8366-core.c
-+++ b/drivers/net/dsa/realtek/rtl8366-core.c
-@@ -329,7 +329,7 @@ int rtl8366_vlan_add(struct dsa_switch *ds, int port,
- 
- 	ret = rtl8366_set_vlan(priv, vlan->vid, member, untag, 0);
- 	if (ret) {
--		dev_err(priv->dev, "failed to set up VLAN %04x", vlan->vid);
-+		dev_err(priv->dev, "failed to set up VLAN %04x\n", vlan->vid);
- 		return ret;
- 	}
- 
-@@ -338,7 +338,7 @@ int rtl8366_vlan_add(struct dsa_switch *ds, int port,
- 
- 	ret = rtl8366_set_pvid(priv, port, vlan->vid);
- 	if (ret) {
--		dev_err(priv->dev, "failed to set PVID on port %d to VLAN %04x",
-+		dev_err(priv->dev, "failed to set PVID on port %d to VLAN %04x\n",
- 			port, vlan->vid);
- 		return ret;
- 	}
--- 
-2.30.2
-
+Oh, that would explain it. Otherwise I was slightly surprised (in a good
+way) and puzzled.
