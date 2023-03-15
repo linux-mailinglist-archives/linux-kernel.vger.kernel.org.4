@@ -2,127 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECD076BBE69
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 22:03:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93E166BBE6C
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 22:03:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232821AbjCOVDN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 17:03:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36244 "EHLO
+        id S232845AbjCOVDX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 17:03:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232492AbjCOVDH (ORCPT
+        with ESMTP id S232661AbjCOVDP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 17:03:07 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 846B9A3B5A;
-        Wed, 15 Mar 2023 14:02:38 -0700 (PDT)
-Date:   Wed, 15 Mar 2023 21:01:26 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1678914086;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=XniifjN8MQzq952qxQ6M0YB9CHpC2Jk7NmP1AxZwCpI=;
-        b=tuhSMAtuu0xvXURw6OCbAvdPeDU4C2EHsXpudIqyeefldWoYxZrPvLYohbn8uWwJCCgJaa
-        zoTG1+2raAVxFhW8mckTRtIdDFDv8Oz3NK69RZIaWn4PoS1JvuccIvvfoQklTPN2m+mZtN
-        gxsz+VTABFta3s5kVaYin2bhKxhhBTvdzkxWPF5pfJbQOS9blI3rpdjcq/vYG73r1GexBR
-        ssa+nikXsY2pepaqHKsyIjiN/kioewVFpREQgP+THfDCJpNBvl19LCGElDWs5jRDiH0+47
-        bYCmmjaYjal9AKtrQuoBxEU6pe2rud9e77n76tvwxUpVonbvk88wFO3R9x+vJQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1678914086;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=XniifjN8MQzq952qxQ6M0YB9CHpC2Jk7NmP1AxZwCpI=;
-        b=4Ytn/jcPWX93151BUwlcCDw0mlmBnEw7e1RAwC8syjox2ErFCBzXdSbmIwFn2bWHCkO9uO
-        /a69gklcoIiip5AA==
-From:   "tip-bot2 for Yang Jihong" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: perf/urgent] perf/core: Fix perf_output_begin parameter is
- incorrectly invoked in perf_event_bpf_output
-Cc:     Yang Jihong <yangjihong1@huawei.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20230314044735.56551-1-yangjihong1@huawei.com>
-References: <20230314044735.56551-1-yangjihong1@huawei.com>
+        Wed, 15 Mar 2023 17:03:15 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F022762862;
+        Wed, 15 Mar 2023 14:02:46 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id t11so25930014lfr.1;
+        Wed, 15 Mar 2023 14:02:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678914113;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=uGfKora0XMUGhJlq+KTNPtbqhjZTdnly+3GHzi+iIMw=;
+        b=GwjFYu8KxUWiC2uQPe2KjnXp+V3ECU8n1BiBIrggqPHFoq4u2mVEq9bW7uVL+dyYBR
+         d34fVatv1M36XzHicKdJlpFUJwrnKym+79nylYOxjiW3uAnZb6Azup5FM1GT2qBZJnGU
+         p61l8k7ljbyXUE19Hn+j5bKnBYnUbeS42eF8k1bciEkvElyQIrSnSnuv3dUGJyHh2Wct
+         8MiCAFzKzIGQ69qEcEWhtH4hgLfeNfeRFgR1saOxWGp7wsFrqlmW+6YJvxWGOlNmh7aP
+         4ow2uikCbw2r/2F60LMZ0f/7OW2ZB3iScswTnrFVM7Z5pB93CsT7WiCLG3hoeuH3dWyO
+         SJew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678914113;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uGfKora0XMUGhJlq+KTNPtbqhjZTdnly+3GHzi+iIMw=;
+        b=Wn+nOFjh7/t0neyhoD8YQItWDVS7x4jBcDP0GS/9CW6xlkGg8m5wClPuvsCuQCFbs2
+         EcU2XN7Nvr6LDYfnk9P9hxRbGCV5BI4CO3pGkgHM5QI/t1peWxKZUiYDc05ab8HfS3Ak
+         1MQP89LdJA44F3A0AQQ9nkoWLtBMVWj84WHMxSjyrbR+/0hBe7KKp5/WBgjo5vXEBc0B
+         KU+i7mItYSBhBNtgmYjYOmJMBK7sG5hSnC8C+LASBfejJNJS26qq2IEceHl7RclSrP7k
+         OS5AvUPyAE4bNY3PHwxwVr6KcHVvTYZ3YponyhW0Ipz6sd+0xdChSsmVVjE3TSyk7Cpc
+         Km/w==
+X-Gm-Message-State: AO0yUKXuwctHGImjHPQT+4njTPc18MeFN7IiV0lhHN7jMO+26Ja6Xl6U
+        y+YQm9jydgb76WK26WvfnnM=
+X-Google-Smtp-Source: AK7set9eJV6RmHvyFLWF7Rj+PRD1Tno4Wx5sCfjAOOVL3HPX/CH+RGzhAqKioifxnksvW4btwus19Q==
+X-Received: by 2002:ac2:597c:0:b0:4a4:68b9:19da with SMTP id h28-20020ac2597c000000b004a468b919damr2326982lfp.2.1678914113119;
+        Wed, 15 Mar 2023 14:01:53 -0700 (PDT)
+Received: from localhost.localdomain ([46.211.236.75])
+        by smtp.googlemail.com with ESMTPSA id p17-20020a05651238d100b0047f7722b73csm936396lft.142.2023.03.15.14.01.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Mar 2023 14:01:52 -0700 (PDT)
+From:   Denis Pauk <pauk.denis@gmail.com>
+Cc:     linux@roeck-us.net, jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, pauk.denis@gmail.com,
+        mischief@offblast.org, de99like@mennucci.debian.net
+Subject: [PATCH 1/2] hwmon: (nct6775) Fix TUF GAMING B550M-E WIFI name
+Date:   Wed, 15 Mar 2023 23:01:34 +0200
+Message-Id: <20230315210135.2155-1-pauk.denis@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Message-ID: <167891408605.5837.5971862418041833851.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the perf/urgent branch of tip:
+TUF GAMING B550M-E WIFI motherboard is incorrectly named as
+TUF GAMING B550M-E (WI-FI).
 
-Commit-ID:     eb81a2ed4f52be831c9fb879752d89645a312c13
-Gitweb:        https://git.kernel.org/tip/eb81a2ed4f52be831c9fb879752d89645a312c13
-Author:        Yang Jihong <yangjihong1@huawei.com>
-AuthorDate:    Tue, 14 Mar 2023 04:47:35 
-Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Wed, 15 Mar 2023 21:49:46 +01:00
+Validated by dmidecode output from https://github.com/linuxhw/DMI/
 
-perf/core: Fix perf_output_begin parameter is incorrectly invoked in perf_event_bpf_output
-
-syzkaller reportes a KASAN issue with stack-out-of-bounds.
-The call trace is as follows:
-  dump_stack+0x9c/0xd3
-  print_address_description.constprop.0+0x19/0x170
-  __kasan_report.cold+0x6c/0x84
-  kasan_report+0x3a/0x50
-  __perf_event_header__init_id+0x34/0x290
-  perf_event_header__init_id+0x48/0x60
-  perf_output_begin+0x4a4/0x560
-  perf_event_bpf_output+0x161/0x1e0
-  perf_iterate_sb_cpu+0x29e/0x340
-  perf_iterate_sb+0x4c/0xc0
-  perf_event_bpf_event+0x194/0x2c0
-  __bpf_prog_put.constprop.0+0x55/0xf0
-  __cls_bpf_delete_prog+0xea/0x120 [cls_bpf]
-  cls_bpf_delete_prog_work+0x1c/0x30 [cls_bpf]
-  process_one_work+0x3c2/0x730
-  worker_thread+0x93/0x650
-  kthread+0x1b8/0x210
-  ret_from_fork+0x1f/0x30
-
-commit 267fb27352b6 ("perf: Reduce stack usage of perf_output_begin()")
-use on-stack struct perf_sample_data of the caller function.
-
-However, perf_event_bpf_output uses incorrect parameter to convert
-small-sized data (struct perf_bpf_event) into large-sized data
-(struct perf_sample_data), which causes memory overwriting occurs in
-__perf_event_header__init_id.
-
-Fixes: 267fb27352b6 ("perf: Reduce stack usage of perf_output_begin()")
-Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/20230314044735.56551-1-yangjihong1@huawei.com
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=204807
+Signed-off-by: Denis Pauk <pauk.denis@gmail.com>
 ---
- kernel/events/core.c | 2 +-
+ drivers/hwmon/nct6775-platform.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/kernel/events/core.c b/kernel/events/core.c
-index f79fd8b..296617e 100644
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -9187,7 +9187,7 @@ static void perf_event_bpf_output(struct perf_event *event, void *data)
- 
- 	perf_event_header__init_id(&bpf_event->event_id.header,
- 				   &sample, event);
--	ret = perf_output_begin(&handle, data, event,
-+	ret = perf_output_begin(&handle, &sample, event,
- 				bpf_event->event_id.header.size);
- 	if (ret)
- 		return;
+diff --git a/drivers/hwmon/nct6775-platform.c b/drivers/hwmon/nct6775-platform.c
+index 24c67dbfa8ab2..0ded82ac7fd31 100644
+--- a/drivers/hwmon/nct6775-platform.c
++++ b/drivers/hwmon/nct6775-platform.c
+@@ -1095,7 +1095,7 @@ static const char * const asus_wmi_boards[] = {
+ 	"ROG STRIX Z490-H GAMING",
+ 	"ROG STRIX Z490-I GAMING",
+ 	"TUF GAMING B550M-E",
+-	"TUF GAMING B550M-E (WI-FI)",
++	"TUF GAMING B550M-E WIFI",
+ 	"TUF GAMING B550M-PLUS",
+ 	"TUF GAMING B550M-PLUS (WI-FI)",
+ 	"TUF GAMING B550M-PLUS WIFI II",
+-- 
+2.39.2
+
