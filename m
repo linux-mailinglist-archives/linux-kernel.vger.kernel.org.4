@@ -2,100 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 674A36BBF83
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 22:58:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60CB86BBF87
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 23:00:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231201AbjCOV6b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 17:58:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35142 "EHLO
+        id S231859AbjCOV77 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 17:59:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229941AbjCOV62 (ORCPT
+        with ESMTP id S229941AbjCOV76 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 17:58:28 -0400
-Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3310E6232B;
-        Wed, 15 Mar 2023 14:58:27 -0700 (PDT)
-Received: by mail-il1-x129.google.com with SMTP id s7so3530214ilv.12;
-        Wed, 15 Mar 2023 14:58:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678917506;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=egyhGDt+hlqX/Z0LgBGD0IU2L4ojDg9iZKbAvFb0XXA=;
-        b=BTbGGU5rUrP/fJWymUjjpoKoTUG0Cwn7TlACvuypQAgNlHvmxviexrpOdlC9EPNE/z
-         o3a8wB934/eanv3D7KWPaxpK+IvgAnfY7V3tbjNI0/kGZAIRZRKeqowPILxa7+zmzelJ
-         kHxjt6cSxYL8p17/jpwz1/BkJtQHRTnyFXBrZ/2xn75mJFNpzXQ2gThfy6yL/fyI8rRo
-         wKkN2zmD4/LuEdYb9y+PLPS1AZ6/V+/QZDmjXWnmiuit6fRcuTH28IeiAJz6/QOKnpKL
-         KZG0d9MmNaCP4hD7oGKY0AVdMiR359M67DIPsPa19utmwPlcDw2m6tPZVuXo8qry5Lj9
-         0PDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678917506;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=egyhGDt+hlqX/Z0LgBGD0IU2L4ojDg9iZKbAvFb0XXA=;
-        b=j8aAjUBhMi3Ktd+hShIFi7hxUjhOPi/m24fW1mapJwiVQRleP1jc1EBEhT1LGG6SI/
-         m531umKujg1St+hKEDsYeykzX95ant6FVA3749/RQquB59pN9e1GattYpO0OSrU+Q5Jx
-         iqBml6TGKhog3mBPOIpacZnB7sTZEZVFtyYPX02o1i6bWTvN5SnYe9obzYPF4RbmsAZh
-         VF/FiXdfOfFneBXfQpWY7zLLXOGMawmxKjd5tFENtT3LxuA8aGjGq14cG0pc10cKKuua
-         hnJE6h+jph1aChJX5H+ZDXSIc9bBYvdDZFyfX/9p01L+piN5p2Cmvmt3b8f7T4BMkDky
-         Tn+Q==
-X-Gm-Message-State: AO0yUKVV1feHe6u4CMXuQxkbU3FzopNU2akhRyht2ckXmL+sUB40srTT
-        HjWSi+6UVeunFH/m2YILP/F/yZMh+6c=
-X-Google-Smtp-Source: AK7set/TOld09oomPcPWCwggPJMzRNFT7G2Y7AL62OGq/4nnFIZohB0DfhGNa1Jh13k1MRtsqogLdQ==
-X-Received: by 2002:a92:d98a:0:b0:322:ffb2:db80 with SMTP id r10-20020a92d98a000000b00322ffb2db80mr5341802iln.6.1678917506436;
-        Wed, 15 Mar 2023 14:58:26 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id c21-20020a02a615000000b0040618ad53aesm882936jam.31.2023.03.15.14.58.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Mar 2023 14:58:26 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <19097c39-9703-6b7f-6cc4-8a157b00f368@roeck-us.net>
-Date:   Wed, 15 Mar 2023 14:58:24 -0700
+        Wed, 15 Mar 2023 17:59:58 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBA8AD53F;
+        Wed, 15 Mar 2023 14:59:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 994A4B81F7B;
+        Wed, 15 Mar 2023 21:59:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22C8DC433EF;
+        Wed, 15 Mar 2023 21:59:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678917594;
+        bh=CZ5/qZGOWTYOHm7Ab0ij+kWvNIhmv5rGavd0NfyLMlk=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=NGelrNzSz83nQNvVFj+CCY+DZfSmmghJNUix/l7bbSL5+q406ZqArJQoyLpOTzKSG
+         ctD9ogE5lC18Ee0Tft14U61jgKB+9KaRGnaTWW1/8LVNH9kyiqgSKG/USgAIvrsE7K
+         9Yi1gFD3/PV5SZVSbFgLgq3I5iFIFZKb/gtO56qAGghPophL+ng3oszQhWEPTU46Y+
+         vJGEpEPsC/9ewjPHqR7ngOA8W4JA7/yHgz20OeoAkY8Dtg4KIQRi82PejJ/NxF0wZ7
+         05uA6TphfD8uJltoUylSZmWdIVnCRgCXI/1ngjL5HA8Ei1m4dflGzYlwg0B6BuAt3z
+         f2AdwUmuZQEZw==
+Message-ID: <d181a7bffc22be4b690f95f594ecbf5c.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 2/2] hwmon: (nct6775) update ASUS WMI monitoring list
- A520/B360/B460/B550...
-Content-Language: en-US
-To:     Denis Pauk <pauk.denis@gmail.com>
-Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mischief@offblast.org,
-        de99like@mennucci.debian.net, holger.kiehl@dwd.de
-References: <20230315210135.2155-1-pauk.denis@gmail.com>
- <20230315210135.2155-2-pauk.denis@gmail.com>
- <20230315233054.5ac21db0@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20230315233054.5ac21db0@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20230315072902.9298-9-ychuang570808@gmail.com>
+References: <20230315072902.9298-1-ychuang570808@gmail.com> <20230315072902.9298-9-ychuang570808@gmail.com>
+Subject: Re: [PATCH 08/15] dt-bindings: clock: Document ma35d1 clock controller bindings
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+        schung@nuvoton.com, Jacky Huang <ychuang3@nuvoton.com>
+To:     Jacky Huang <ychuang570808@gmail.com>, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        lee@kernel.org, mturquette@baylibre.com, p.zabel@pengutronix.de,
+        robh+dt@kernel.org
+Date:   Wed, 15 Mar 2023 14:59:51 -0700
+User-Agent: alot/0.10
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/15/23 14:30, Denis Pauk wrote:
-> On Wed, 15 Mar 2023 23:01:35 +0200
-> Denis Pauk <pauk.denis@gmail.com> wrote:
-> 
-> Tested-by: Holger Kiehl <holger.kiehl@dwd.de>
-> 
-> Pro A520M-C II/CSM is also tested by Holger Kiehl
-> https://patchwork.kernel.org/project/linux-hwmon/patch/868bdc4f-9d45-475c-963e-f5232a8b95@praktifix.dwd.de/
-> 
-> Could it be applied as single patch or need to rebase over "Pro A520M-C II"
-> patch?
-> 
-Sorry, I don't understand what you are trying to say. I just applied all patches
-in sequence as received, with no conflicts. Should I undo that ?
+Quoting Jacky Huang (2023-03-15 00:28:55)
+> diff --git a/Documentation/devicetree/bindings/clock/nuvoton,ma35d1-clk.y=
+aml b/Documentation/devicetree/bindings/clock/nuvoton,ma35d1-clk.yaml
+> new file mode 100644
+> index 000000000000..5c2dea071b38
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/clock/nuvoton,ma35d1-clk.yaml
+> @@ -0,0 +1,83 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/clock/nuvoton,ma35d1-clk.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Nuvoton MA35D1 Clock Controller Module Binding
 
-Guenter
+Binding is redundant.
 
+> +
+> +maintainers:
+> +  - Chi-Fang Li <cfli0@nuvoton.com>
+> +  - Jacky Huang <ychuang3@nuvoton.com>
+> +
+> +description: |
+> +  The MA35D1 clock controller generates clocks for the whole chip,
+> +  including system clocks and all peripheral clocks.
+> +
+> +  See also:
+> +    include/dt-bindings/clock/ma35d1-clk.h
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - const: nuvoton,ma35d1-clk
+> +      - const: syscon
+
+Does it really need to be a syscon?
+
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  "#clock-cells":
+> +    const: 1
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  clock-names:
+> +    const: clk_hxt
+> +
+> +  assigned-clocks:
+> +    maxItems: 5
+> +
+> +  assigned-clock-rates:
+> +    maxItems: 5
+
+I hope the assigned clocks properties can be left out of this doc.
+
+> +
+> +  nuvoton,pll-mode:
+> +    description:
+> +      A list of PLL operation mode corresponding to CAPLL, DDRPLL, APLL,
+> +      EPLL, and VPLL in sequential. The operation mode value 0 is for
+> +      integer mode, 1 is for fractional mode, and 2 is for spread
+> +      spectrum mode.
+> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+> +    maxItems: 5
+> +    items:
+> +      minimum: 0
+> +      maximum: 2
+
+Why not use a string?
+
+> +
+> +  nuvoton,sys:
+> +    description:
+> +      Phandle to the system management controller.
+> +    $ref: "/schemas/types.yaml#/definitions/phandle-array"
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - "#clock-cells"
+> +  - clocks
+> +  - clock-names
+> +  - nuvoton,sys
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/nuvoton,ma35d1-clk.h>
+
+No need to include this header right?
+
+> +
+> +    clk: clock-controller@40460200 {
+
+Drop the label?
+
+> +        compatible =3D "nuvoton,ma35d1-clk", "syscon";
+> +        reg =3D <0x40460200 0x100>;
+> +        #clock-cells =3D <1>;
+> +        clocks =3D <&clk_hxt>;
+> +        clock-names =3D "clk_hxt";
+> +        nuvoton,sys =3D <&sys>;
+> +    };
