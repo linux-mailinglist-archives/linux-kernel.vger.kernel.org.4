@@ -2,122 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D87686BB69F
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 15:54:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 551A86BB6AE
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 15:55:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233304AbjCOOyG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 10:54:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36586 "EHLO
+        id S233254AbjCOOzW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 10:55:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233228AbjCOOxj (ORCPT
+        with ESMTP id S233353AbjCOOyw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 10:53:39 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4FBD61AAB;
-        Wed, 15 Mar 2023 07:52:57 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Wed, 15 Mar 2023 10:54:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C394198873
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 07:54:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id AD4801FD7D;
-        Wed, 15 Mar 2023 14:52:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1678891938; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=EeXuBT5re30n3EyAvxraZ4YKC162yAT2h8vBulDZHfg=;
-        b=BRQirtO4JiHFW+e/VMG4fmjhkpXqE53I2/DwtbxDAN2K4v4x3js+Fu4XOMb3a9w9IvT8k3
-        EVkJ+YUb01F9L7oYqRBgPJJNiZELGGTZAgLdH+AwSGXSGlQhu6BT5GwTuRocsHs3C9wQ+e
-        8vmTENppyygkG+LGDpNylglnfJbH7+0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1678891938;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=EeXuBT5re30n3EyAvxraZ4YKC162yAT2h8vBulDZHfg=;
-        b=tV4w+HvqB4FUzJ2fUhT1gqgQjMumf9KQcoHfwajPgkzztoNGnc4vjWZR6BCCD5Ln7h1WJu
-        uen4gD7+EXJcHjBw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E5EED13A00;
-        Wed, 15 Mar 2023 14:52:16 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id VZi4I6DbEWRLVgAAMHmgww
-        (envelope-from <hare@suse.de>); Wed, 15 Mar 2023 14:52:16 +0000
-Message-ID: <64a5e85e-4018-ed7d-29d4-db12af290899@suse.de>
-Date:   Wed, 15 Mar 2023 15:52:15 +0100
+        by ams.source.kernel.org (Postfix) with ESMTPS id 824F9B81E59
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 14:52:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6C28C433EF;
+        Wed, 15 Mar 2023 14:52:54 +0000 (UTC)
+Date:   Wed, 15 Mar 2023 14:52:51 +0000
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Baoquan He <bhe@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, horms@kernel.org,
+        thunder.leizhen@huawei.com, John.p.donnelly@oracle.com,
+        will@kernel.org, kexec@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v4] arm64: kdump: simplify the reservation behaviour of
+ crashkernel=,high
+Message-ID: <ZBHbw3Vp4dxukGOD@arm.com>
+References: <20230306084124.300584-1-bhe@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [RFC PATCH 2/3] mpage: use bio_for_each_folio_all in
- mpage_end_io()
-Content-Language: en-US
-To:     Pankaj Raghav <p.raghav@samsung.com>, hubcap@omnibond.com,
-        senozhatsky@chromium.org, martin@omnibond.com, willy@infradead.org,
-        minchan@kernel.org, viro@zeniv.linux.org.uk, brauner@kernel.org,
-        axboe@kernel.dk, akpm@linux-foundation.org
-Cc:     linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        gost.dev@samsung.com, mcgrof@kernel.org, devel@lists.orangefs.org
-References: <20230315123233.121593-1-p.raghav@samsung.com>
- <CGME20230315123235eucas1p1bd62cb2aab435727880769f2e57624fd@eucas1p1.samsung.com>
- <20230315123233.121593-3-p.raghav@samsung.com>
-From:   Hannes Reinecke <hare@suse.de>
-In-Reply-To: <20230315123233.121593-3-p.raghav@samsung.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230306084124.300584-1-bhe@redhat.com>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/15/23 13:32, Pankaj Raghav wrote:
-> Use bio_for_each_folio_all to iterate through folios in a bio so that
-> the folios can be directly passed to the folio_endio() function.
+On Mon, Mar 06, 2023 at 04:41:24PM +0800, Baoquan He wrote:
+> On arm64, reservation for 'crashkernel=xM,high' is taken by searching for
+> suitable memory region top down. If the 'xM' of crashkernel high memory
+> is reserved from high memory successfully, it will try to reserve
+> crashkernel low memory later accoringly. Otherwise, it will try to search
+> low memory area for the 'xM' suitable region. Please see the details in
+> Documentation/admin-guide/kernel-parameters.txt.
 > 
-> Signed-off-by: Pankaj Raghav <p.raghav@samsung.com>
-> ---
->   fs/mpage.c | 11 ++++-------
->   1 file changed, 4 insertions(+), 7 deletions(-)
-> 
-> diff --git a/fs/mpage.c b/fs/mpage.c
-> index 40e86e839e77..bfcc139938a8 100644
-> --- a/fs/mpage.c
-> +++ b/fs/mpage.c
-> @@ -45,14 +45,11 @@
->    */
->   static void mpage_end_io(struct bio *bio)
->   {
-> -	struct bio_vec *bv;
-> -	struct bvec_iter_all iter_all;
-> +	struct folio_iter fi;
->   
-> -	bio_for_each_segment_all(bv, bio, iter_all) {
-> -		struct page *page = bv->bv_page;
-> -		folio_endio(page_folio(page), bio_op(bio),
-> -			   blk_status_to_errno(bio->bi_status));
-> -	}
-> +	bio_for_each_folio_all(fi, bio)
-> +		folio_endio(fi.folio, bio_op(bio),
-> +			    blk_status_to_errno(bio->bi_status));
->   
->   	bio_put(bio);
->   }
+> While we observed an unexpected case where a reserved region crosses the
+> high and low meomry boundary. E.g on a system with 4G as low memory end,
+> user added the kernel parameters like: 'crashkernel=512M,high', it could
+> finally have [4G-126M, 4G+386M], [1G, 1G+128M] regions in running kernel.
+> The crashkernel high region crossing low and high memory boudary will bring
+> issues:
+[...]
+> Note: On arm64, the high and low memory boudary could be 1G if it's RPi4
+> system, or 4G if other normal systems.
 
-Ah. Here it is.
+I'm mostly ok with the reworking but I'm not sure about the non-fixed
+low memory boundary. As I mentioned on v2, the user doesn't (need to)
+know about the ZONE_DMA limit on a specific platform, that's supposed to
+be fairly transparent. So on RPi4, specifying 'high' still allows
+allocation below 4G which some users may treat as 'low'. The
+kernel-parameters.txt doc also only talks about the 4G limit.
 
-I would suggest merge these two patches.
+> +		/*
+> +		 * For crashkernel=size[KMG], if the first attempt was for
+> +		 * low memory, fall back to high memory, the minimum required
+> +		 * low memory will be reserved later.
+> +		 */
+> +		if (!high && crash_max == CRASH_ADDR_LOW_MAX) {
+>  			crash_max = CRASH_ADDR_HIGH_MAX;
+> +			search_base = CRASH_ADDR_LOW_MAX;
+>  			crash_low_size = DEFAULT_CRASH_KERNEL_LOW_SIZE;
+>  			goto retry;
+>  		}
 
-Cheers,
+So I'm more tempted to set the search_base to 4G here rather than
+CRASH_ADDR_LOW_MAX. The crashkernel=x,high option on a RPi4 with all
+memory below 4G will fall back to low allocation. But RPi4 is the odd
+one out, so I think we can live with this.
 
-Hannes
+-- 
+Catalin
