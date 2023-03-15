@@ -2,89 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97C476BA5B7
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 04:44:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 158DA6BA5BB
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 04:45:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229494AbjCODoP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 23:44:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57114 "EHLO
+        id S230287AbjCODp3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 23:45:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229946AbjCODoL (ORCPT
+        with ESMTP id S230094AbjCODp0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 23:44:11 -0400
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CE0319F2E;
-        Tue, 14 Mar 2023 20:44:06 -0700 (PDT)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 2F8E924E1A6;
-        Wed, 15 Mar 2023 11:44:04 +0800 (CST)
-Received: from EXMBX061.cuchost.com (172.16.6.61) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 15 Mar
- 2023 11:44:04 +0800
-Received: from [192.168.125.128] (113.72.145.194) by EXMBX061.cuchost.com
- (172.16.6.61) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 15 Mar
- 2023 11:44:03 +0800
-Message-ID: <729b1b69-aba6-4623-cf78-b08562d30d76@starfivetech.com>
-Date:   Wed, 15 Mar 2023 11:44:00 +0800
+        Tue, 14 Mar 2023 23:45:26 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E36A721979
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 20:45:22 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id v21so8584811ple.9
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 20:45:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1678851922;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ufxsYZFIRnn+ldduLkLg4bGkJpmUn4VR4A6IuCdxW00=;
+        b=dg0Zc85b60uFcQsEyeM2HVp7VR5yCO0uH+/OtvELnMEXmhdyLWg2ruNnFhZFXdae8P
+         ffJj8SmJ1khEYn2U/Y55FPgRSradkCKkRXpgYo+VKEvu+gL+v+Qo+8zex0hIIJmm5JYH
+         5GVaklNdvGCs3sJU2le+AGtIIRluUZttDQN6cKwf4c5Qong2+OwlYqbDTxv/8hKyo4ox
+         VzbD8KXs4Q0UhAqGhCETsw5e8Xd1Fs/dJ6Re+e64Mn0eS+ZLBfCMZGWtH1WteoSpmA5S
+         mtgehdbtBfqoZ2AQPuES5dqrIB6BYkp0I9wPOVkZkO7zy/0gepYkaBPOOdypQPLldeUo
+         QQOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678851922;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ufxsYZFIRnn+ldduLkLg4bGkJpmUn4VR4A6IuCdxW00=;
+        b=Rd0rTcduDzOgc9AGhGD8O8xLfvJPueEX7g18Dw4StTNa/zfe3cK2CGvUVPeuwVi0Lj
+         7/t9eXGVtJCXKn776OcaAevWuoVNG1CBl52mD4kuDE9MUJ1kAz8U/U2VsdebQw/4A3vs
+         dnXmLtt0EjMvk+psV2ovamDweji3kbmbsfRMguWtdw7bUYJCyD4EC+GbRopsPLcl8ZJB
+         2syUDxcL/MLDCHgnRTc2+C68vn3gjbvwMflq/W40AsYTMy7xZOi7T+0sW7GwGcbsm0Ze
+         pB4aab4FULubPhwBp4pb1eyy30qZH9MbbfPdyAwUAlkJH+KGJGjItwk6paH3CF15f8nF
+         qq+w==
+X-Gm-Message-State: AO0yUKV0ROJ51MvJhR5tOqMMW9XoDGtuZZSs3FMMw5zk7Elv6zuDFIr+
+        y4J/b7JVZNYJ2wnp8oB+eGNGEw==
+X-Google-Smtp-Source: AK7set8NPpPy05CtArxi3hzNCU0RjupArdPbdOOSdf5EjczXQxGFxpPVHURTwlD4xAtYVBIjwNxKtg==
+X-Received: by 2002:a17:903:187:b0:19c:1455:d588 with SMTP id z7-20020a170903018700b0019c1455d588mr1227815plg.0.1678851922251;
+        Tue, 14 Mar 2023 20:45:22 -0700 (PDT)
+Received: from PXLDJ45XCM.bytedance.net ([139.177.225.245])
+        by smtp.gmail.com with ESMTPSA id q23-20020a170902789700b0019f0e766809sm2436258pll.306.2023.03.14.20.45.17
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Tue, 14 Mar 2023 20:45:21 -0700 (PDT)
+From:   Muchun Song <songmuchun@bytedance.com>
+To:     glider@google.com, elver@google.com, dvyukov@google.com,
+        akpm@linux-foundation.org, jannh@google.com, sjpark@amazon.de
+Cc:     kasan-dev@googlegroups.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, muchun.song@linux.dev,
+        Muchun Song <songmuchun@bytedance.com>
+Subject: [PATCH] mm: kfence: fix using kfence_metadata without initialization in show_object()
+Date:   Wed, 15 Mar 2023 11:44:41 +0800
+Message-Id: <20230315034441.44321-1-songmuchun@bytedance.com>
+X-Mailer: git-send-email 2.37.1 (Apple Git-137.1)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v3 00/11] Add new partial clock and reset drivers for
- StarFive JH7110
-Content-Language: en-US
-To:     Stephen Boyd <sboyd@kernel.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        <devicetree@vger.kernel.org>, <linux-riscv@lists.infradead.org>
-CC:     Rob Herring <robh+dt@kernel.org>, Conor Dooley <conor@kernel.org>,
-        "Paul Walmsley" <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Hal Feng <hal.feng@starfivetech.com>,
-        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>
-References: <20230314124404.117592-1-xingyu.wu@starfivetech.com>
- <de14f63beb2b3e424ec2375187c8087f.sboyd@kernel.org>
-From:   Xingyu Wu <xingyu.wu@starfivetech.com>
-In-Reply-To: <de14f63beb2b3e424ec2375187c8087f.sboyd@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [113.72.145.194]
-X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX061.cuchost.com
- (172.16.6.61)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/3/15 8:30, Stephen Boyd wrote:
-> Quoting Xingyu Wu (2023-03-14 05:43:53)
->> This patch serises are to add new partial clock drivers and reset
->> supports about System-Top-Group(STG), Image-Signal-Process(ISP)
->> and Video-Output(VOUT) for the StarFive JH7110 RISC-V SoC.
-> 
-> What is your merge plan for this series? Did you intend for clk tree to
-> take the majority of patches? We won't take the dts changes through the
-> clk tree.
-> 
-> I think Philipp Zabel reviewed some earlier version of the patches and
-> provided reviewed-by tags. Can you check if they can be added here? If
-> so, please resend again, or get those merged through the reset tree.
+The variable kfence_metadata is initialized in kfence_init_pool(), then, it is
+not initialized if kfence is disabled after booting. In this case, kfence_metadata
+will be used (e.g. ->lock and ->state fields) without initialization when reading
+/sys/kernel/debug/kfence/objects. There will be a warning if you enable
+CONFIG_DEBUG_SPINLOCK. Fix it by creating debugfs files when necessary.
 
-These patches add new clock & reset providers based on the basic clock & reset
-of the minimal system which Hal.feng had submitted[1], which are used in USB, DMA,
-VIN and Display modules that are merging.
-[1]: https://lore.kernel.org/all/20230311090733.56918-1-hal.feng@starfivetech.com/
+Fixes: 0ce20dd84089 ("mm: add Kernel Electric-Fence infrastructure")
+Signed-off-by: Muchun Song <songmuchun@bytedance.com>
+---
+ mm/kfence/core.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-Oh I checked and had not received any comments from Philipp Zabel in earlier version
-of these patches. Maybe it was confused with the patches of the minimal system.
+diff --git a/mm/kfence/core.c b/mm/kfence/core.c
+index 5349c37a5dac..79c94ee55f97 100644
+--- a/mm/kfence/core.c
++++ b/mm/kfence/core.c
+@@ -726,10 +726,14 @@ static const struct seq_operations objects_sops = {
+ };
+ DEFINE_SEQ_ATTRIBUTE(objects);
+ 
+-static int __init kfence_debugfs_init(void)
++static int kfence_debugfs_init(void)
+ {
+-	struct dentry *kfence_dir = debugfs_create_dir("kfence", NULL);
++	struct dentry *kfence_dir;
+ 
++	if (!READ_ONCE(kfence_enabled))
++		return 0;
++
++	kfence_dir = debugfs_create_dir("kfence", NULL);
+ 	debugfs_create_file("stats", 0444, kfence_dir, NULL, &stats_fops);
+ 	debugfs_create_file("objects", 0400, kfence_dir, NULL, &objects_fops);
+ 	return 0;
+@@ -883,6 +887,8 @@ static int kfence_init_late(void)
+ 	}
+ 
+ 	kfence_init_enable();
++	kfence_debugfs_init();
++
+ 	return 0;
+ }
+ 
+-- 
+2.11.0
 
-Best regards,
-Xingyu Wu
