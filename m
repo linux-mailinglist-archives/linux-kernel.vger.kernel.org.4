@@ -2,200 +2,263 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2A616BC001
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 23:47:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A2686BC00A
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 23:49:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232481AbjCOWrV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 18:47:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39002 "EHLO
+        id S232588AbjCOWs5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 18:48:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230467AbjCOWrQ (ORCPT
+        with ESMTP id S232207AbjCOWsv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 18:47:16 -0400
-Received: from sonic309-27.consmr.mail.ne1.yahoo.com (sonic309-27.consmr.mail.ne1.yahoo.com [66.163.184.153])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BD6E1CAE6
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 15:47:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1678920431; bh=/2Zaeol0Iwtqz9/tpey1RWc75JtXtsn2fpgSNdIqNQA=; h=From:To:Cc:Subject:Date:In-Reply-To:References:From:Subject:Reply-To; b=NFbl1xxKOyLrCN4zovN3yckiRFtVY2GhrDVEWGjEPhA/3OluAjezmPo/HjsW/CZ98KKRqXEyDUd0nd2M98NP2a34FzwGOPsojfZuKKuKtIH2+Pz7TPek6tkXn96t2/+IFiQXMEWNSZaemNw7H1MCsKwNBOEqBsnvDjX5e94sYjlwTabbRiqHYLOc145fAoQVG81oiBZOqV9rB4kfGzeYPHbDNCdNPOLwUCwYX3XrNSTqnkRCnNXREfZlFX6V2wIlYqITwC/fyvzkXuokLV9lguF3nOG4QNCZG6JIcuPNwSriXf1UhOFxXADs2/mqrptw07HH3jAxWJF6JcwxBfYT3g==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1678920431; bh=J6vSfVr/MTJi5KhH/Y3rVysZMb6/3fwsPG7N3l21tCv=; h=X-Sonic-MF:From:To:Subject:Date:From:Subject; b=DPXXs5gqqJRbRRwo9f9CkEYlV2YTaoXwF0RW7v6JyYdhhA7Qxr322dm801l93RssXfsqmuMISPs5X28ZlFRBSBRdsBZfHa6gwRk690H40loBY4W6mhYlDDZdQvT605iEdralL8bEVbEuNJXAHtYGBo6G6ruVf10poRCZhF/O/92D2H0I5oPnJoEGMNBTT+kiZnU/FfBDlvNLrQJNbAlaP+Lq8R+r9tggz3sq7o1baSEVAYOCgAm4x40BsfR+0YWimb3VSb0vowMGYytVymQQ0aji/s+PoUKiwgswDO52MGhSuRTZ7bZqFeorezd15G9xlaVvQHY7vu0auPh82gS6ng==
-X-YMail-OSG: sk1nTLEVM1llPfrptzFLedbwuJf82y1ZUKjnUrhN8r5iyXXQffH8Kg2A6hGPZcT
- coTGplhQpTAhpY6IfyeGYXi1SdpXNTnWP93S1zHuTbl12oicQ_qUNGOHJhuKe6.FAGipY7Dnyy1G
- cp2JhPf.gs16YQejDRjYKrzRqBhPvuJww.ra5GVV0sBoLpDJWjfSHVMy_UmhSLxh.CvP2_xSGe3F
- SeuUC0meugq.F0LwJ13Fxbs.uyppeUZ4tKjpz37e9BsfNN7DsTTjCQIBAjUXaW_iMx1MD7tPMPSU
- apB_OYfCB7jkrXcpYHKMis8YYdPPElFOPU9JsJGppw4NzkVlqfHewyz7uuWh_b80pDrQNgH46hTm
- T4M4o3g4Nsp1GXQe6te.ZWTe0KMLeB95JeSJpadEWGutwiS3qJYl30je4V.1QLAaKXTR3rfviloo
- x_Tj76uCx4qPU4A8qb0CEsOG3il8JPPgLQieHTT31YY_Gykg6VsulJ3Y1uBoLcjIWTcwqLrvrFMe
- P1dvs8LIz.FMlzYhw3uIEvvkorpMk8HGUxqJwdyTWjycvQXVsufXyD4j5_JUjR4G.d3vIRnbvhbx
- S_mlvnI4vrl3mWAJ8.JRyP34JwX19NDqhF1MNMA2ZD5vfVCtjdPo_r8wCTmButSHwtRVqNyZOA4C
- F16G6F6xp1FGuIu4ispj09QyEgNUvuWFAfa_stiQoYHVANG2EVGk4TZYKFIsp94szY0J7._aeL2b
- 2JWxXUKfomK6frcVcX9jxRnFmYFlT6iCk7QLXYeeuYeCdMHSlvitSUpk9.wTIffmCIfg4_97vR3c
- .pciW.3wXVpPf_fDGxS5vNZgG6XuUq0m49pwrkhnKMfzsnxBEQYw1U2mdHf2WCUqwlDOO8M7MStx
- Cmqrx5k4sHA2oTBhWJufSd2JJCLV9KIX8D_JglStjMksIH7h2bkU04VljQ57S7Hoop5DsEwd7wkv
- jNNfX6HFKOibogOrFGQUJMIGYUJP9G9CQHcsd.kBuUCV_wucMtCu6OadJxu_TLdwCQBkEk7daFgt
- GzFe4O_6dwP1ghmA8hGrYWvLVpLj.9uvvmSLLkvaz45k5mk.BX2WYSh8M7er5upQBfPlwY1mKuqX
- 2.Eu5pSLLjD4MY_TotnTa7ZqQllNA71e9NhyGKFhAS.qMWXWGzexNAEvZFuq4CU_BLB7yRM9bg.b
- ei6AKNJRKBDfhFekTZtQ4uA7RXQlB9EYWG97PbZXcGKv9Yyd._NDez2fsjd.Y.vY.7a3DjJ2_OaX
- X9k6zWRRZDzOU4GISZj7O0SmrVW1Sgb3Mow74NqbZ6MWKCtb3XqmIpfVVuMOGydhu2JgXYMGHUha
- oStRqChDTezvuuI2lZdrg2doQZ4lcw08st0kyx3vbdwI5eVMD6abwvcW3zMfTKhF_Lwg9zavPKvk
- 2MHX1H44JIZnQXYM1QIb8JNYnNwJTeI8zVcEU_Gyx35iCfrkkrzBLlAybp_rGnWzcOxU20EjVgl7
- 4O_1uWx7OeGGlRS6jS3608pl3d2U6tZvKI0UzDql2WDG6EyBpmOTHrougEID4QFcoy_ke2ImNq9.
- DwAXrzriqZb2gXE3_kgFb2jn8b6E212LJlKDY3CpKaMq3f6u5SVLIBX.rF9S9gN4pALnQ71Efozw
- mworCNMOZoiibjDVr_G_eMtmHB5GxPvajnRwSgcjnglK7fAmm5tba9wbM1wtBoNTlVDTArfFQT45
- cJnGsaRta55vyKFI8JRaLorsABim7MXkiBjjQK9tI3a4s120kJcrwWPMSjTbFIvyB9Ir2DNRRimw
- 1ti.cJpqZhBSkPjXs2191J65FDeTDRk59xovInUFT.40fcuaK8xJqq7Zq1GjaOva2WqGeTfsIvGI
- .nvS_u3QV.ZXxYOYExIKKwf2MBl6Tca5Bo8SOvXgc8xqfJhsroZhUxhg7npXz_FyTIuc3dJZiXts
- 4TLR4Uy45a..tE.AziNn8bwxcW9ouCa2OTNbjlmpv0essUvusZMneY_Asf99p_.c34V.aqDXi_IT
- OSMDsvIsSObpKKM1snubZNSkdAEwkkWANb5Oy9OFUulRpmYWvS_SK3x8ZDTVVUs63PMoG4zIthWf
- y_S2bPQvAgrGKOtIHHJVM3pYHTTAetIkGIjqybBNmk7S30giOYqGVtSuPjMfo2zHhFoIz6whvImd
- uOc2pTj6LlAlbCwIzwAOMkxIlg0JYARumqMlRrduqHbjBgRFmhiky.MK070vQp7Xe8RQIfOT1TaV
- 35ZrqcbamRVTgoo23e9uoxzfOv_EUjQo03VqrOlf263sjOyZNUwtog7BEvHQ1s5QLSRPqRmFbw5b
- 63P6pf3D3SU.FRrdc
+        Wed, 15 Mar 2023 18:48:51 -0400
+Received: from sonic314-27.consmr.mail.ne1.yahoo.com (sonic314-27.consmr.mail.ne1.yahoo.com [66.163.189.153])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6F42231E5
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 15:48:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1678920525; bh=FMVFAxqJdW5LB5HmBRy6lGCH894a+0dyKnb8QZDxt3I=; h=From:To:Cc:Subject:Date:In-Reply-To:References:From:Subject:Reply-To; b=aAznSEjc2F6NJ7uaMR1ZQi9modsveslJXmjOAyZvMCjrknsnnMTc0DzyR2Cc+H9ui1iXlsRFGtCl4eSRMAX9GoXH/NYHDxoQq+fi7dwTkh8cz1dUjf5TRse8Iy6zjcYLvOYtmikR4/wD55uVkuLsfjnvk1o6dPn0Sl3miBFpu7iuVPrXXVIPyX3ouJrs4LUOWhBcrD6LNG6nPWS2Fk+BTY8RkFSzFdMbliIS60SkWMwrVjfxrh95ErLW3QNI8kgQkIitMy7CpUwC+MOhM0dZp7xpi6zvVpCLjtsRpSysDeTPXwkdLpS8+dgt8NAbhRfO4IchgmwwItJjDHpPh/LoyQ==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1678920525; bh=d7lVY9W9tMwABm0YRNC6vvbP/sryM4aC9W5mkbzmsn5=; h=X-Sonic-MF:From:To:Subject:Date:From:Subject; b=sI+ncWp1O1/gNyH1pNZ0WwAsgbblYeP7ojpdAeUV4PcfHapgEztmtiKvWtPqffGMcUyLT405/gq++0+Qe3GpKCMGm4dAznvupWSx7Btb7jMg15ZPA/sZVeBl7X6XfoSt84/wbcqZbkefoLPuCK5eXIYdMOklHVE2/QHpRlCxmE7+V/aC8aYGA81yDQ+06YnrJe8sHFz1FrbzOLKWLTcKT76EnUpXd51L9XDX26SZh8u+3Q2gI1T7X4uCN0Tug8J9/rkKrV6fH6zg7GNf/86ZJ9US/pidUAyyGsgWLLk8tO6C33vQs2u4WNajt55HbFUToS1YMrczeuDeMUqKJbweCQ==
+X-YMail-OSG: Lph3bxgVM1mae997hMuryZDgdzOaxVB_4hRDRazerWErtgI8l7o7Sr708Ugsq5p
+ qqb2S.W9TWL5AtPJZn_eD8jbW.rp6FilF_A3zb6GeJNSvQn34FJkSV0qzW7NN6Fq6Q.D8Mn1aAwJ
+ umDn500aAQpssjiDp7s8rYFVhv9XNiTT9hh_YVSsmCsxn1wiazjy7Y4E_fi019dcUQoIRv_WrbuB
+ VKV14qiczBT7aHIdwatGt2SyKH3cXdE_DTU20eirZ03NtejQzPCwO26FYcErEbfCI5Dd0soarkFP
+ LKfOJMYAOBY3eS_o2S78YWcMz_FUpuzp4YwEbXHWxY3fKGG_F7pyGM04I43xb9X8is8pEBKogHKl
+ reFoCAka_xg2TQQGOwiNCMp2LH2WygN1pPDDQ1T63b5e378lgl7wSZtG.arr2FSfCqqX7SmGNqb5
+ cg4ZUZskEqFo_2KkBkxrvn2mgU5UvlO_d.g4B0ZbPp4XE1VixdocA6eDo7UbMPWzzXJ371hhzMug
+ C5k5yNnP64IR6MZtR2gU0.kIvoGomP1FT3qK.GdPisT6a3PfWj95zyMaEumqKiF7Wh55wDspvI0A
+ 6083qPXHJ__TZ1PvX4Tb8R642y30YZ3H0waVLTRgzeFBUwIxFIc1EDJWGMQ__e7PHsgUkmmO23wX
+ IUzkKr6LHdaXZGkF6i_YY6JcDBUL6cg3waBlqgzWskKHyNnhsD_4PumHu_xNAIRzXgo1SwN_e5rS
+ PrUnigj7U2b4WELoQMZEcH_bfOA3r1t6shc0uqWDMlOirTDEhTm_JkPDqwoUQ1.hQHm2qnw4FpVR
+ T5wu6i_x9L4M1J2_EAUG_MuBZbZXo0Vtt8CduXQJQwePC8nXQkc4ILSexnXQBD57GvSXiCmKB6UB
+ eQK.SvuHaxhKMtvXN4swkDf8vnvbbR_RGP6IqOX.q8VyMOSJ24r5vy3xn8OgLa1aC0VKShNGkewp
+ g_bBxy55yIUhA6zRT.nzvjrXIRltIlvgfdBMe_U2_AhebdnYsf8UZlaoCWUqb2cesZBSYlcG63Aw
+ rGX8edHRrpusrZ6Ytp_K8Bs_haeUu_i0dD2Kwb12k29dCzmbyNQmvJmuGvFvus53rn79RZM87oqu
+ S_aVAh6FZad9QeO9fow2WGnkyqQu0Q6KMDFt_AqJwu31NMICaezE8eFhtAt5qCxW0YNo16q1_P77
+ UE7HVaHcQn3skUrEoqFWUR8LU8FwD_RuPgk0hwtowtyrZgACX2kd4SL99rW0Ja6QEUNut5NJjCPN
+ cy.NZitFACmYv6edvhmN7LEet2q9m_QLg6iZ6RYr2RbUEUhK02NmMjO456jo4Pj3jEmxpbWB0gBr
+ prEFiVYWkBqewvVwa8TerxaEIITjXVpnqZ1ZQfvRNsxzRO6niT1I4tarRSvUoHnzboCr4MwkHtfz
+ VuzIhd3yyh6KwRnobHZrtvY6Apavx8Hy4VCC5rXvP8Sy4g5uCx3M2KBN.1T7OrtR0Pu8gATct1LK
+ cMr9MIw4jkN9NInQKbkttjCi5CtaTNy38lRfhHXO7Td06SwiIl.KEf5ZOBAiyBckPdihDoPnlw2Z
+ fPmc85Cp61fsRGKNQ_zUedrk9TMxI9rkoqB3xH053BvIQ12tiF_wKg3CDy0JmPuNzvnJ5EWDLZdx
+ 4K5F1TFw3B6OnDlVysOoN0CgiTKjUz.RzYNQ42vFodKlsRkLWedPSPbB.fWMP4xlrF61oGtwiODM
+ F8mWGGv58yfG151E4MCAMExwbYlJ2Mu9Qywf62TYzNinzIhbyCfJAGoCzxhGV9Cx6mgyRlcwVUxe
+ P_ZbUwYcdUUctBKf3Z6mQPA36C0Cja6hqVmZqCrFuXG1W.WP86OkQv17Dqbit_ON8FoGXpTsy3yF
+ nZr0O7e1JkR4_6OqIuwNLwfsmOQUnmx.xWng0nBVGMfyXxouf56gMniMXVwPaPjnt3vB.rTgEXLa
+ mi31HtfAvVLiLgZ1lMahtHKLW7iSMWKbTE5_wJ9Wz.6kBAyK7gtfP3vyOIuWh3MvGjkuTuaj3vNT
+ p0KVTdhw0H1VRghKIz8WcGtbs6MV6kRL931eCc_713I.VbTLCtyKYd0JsdhpDbeG_6x5Kg6Und3X
+ PRkUDZcIeCizRmT7EggKOIwGoBzZLsYS4fFYmUMlJnvBwVKwLCBnTgEdBwiydnF9N7Enp0ihqZKB
+ .VZQf2gfYM_Q94wnGTMYKt4GMZinmRbjC1cSDLnqtCsgGONBe8Xv1dJudIes9ZgLWyM_YB4wpmS0
+ epBB.0qarynn9VZIaOXj9Ohv3w1xS0JZBw6hSEMMb1bSv3uL_dBLlgVPrMMkHpBqZUoJ7RMhe4l7
+ 1Co9lUW1rxcpjl18L.7s-
 X-Sonic-MF: <casey@schaufler-ca.com>
-X-Sonic-ID: e2c54d68-96e3-4789-9ebf-6f68938f13ff
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic309.consmr.mail.ne1.yahoo.com with HTTP; Wed, 15 Mar 2023 22:47:11 +0000
-Received: by hermes--production-ne1-759c9b8c64-7lgm5 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID a598a9259311ec92faa24ca803c3eea5;
-          Wed, 15 Mar 2023 22:47:09 +0000 (UTC)
+X-Sonic-ID: b353b499-8fc4-4618-9168-04fbbc2ead2b
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic314.consmr.mail.ne1.yahoo.com with HTTP; Wed, 15 Mar 2023 22:48:45 +0000
+Received: by hermes--production-gq1-6cf7749bc8-pgxdl (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 85e66b2f7435f9f3ba08ad33962dc8cf;
+          Wed, 15 Mar 2023 22:48:42 +0000 (UTC)
 From:   Casey Schaufler <casey@schaufler-ca.com>
 To:     casey@schaufler-ca.com, paul@paul-moore.com,
         linux-security-module@vger.kernel.org
 Cc:     jmorris@namei.org, keescook@chromium.org,
         john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
         stephen.smalley.work@gmail.com, linux-kernel@vger.kernel.org,
-        linux-api@vger.kernel.org, mic@digikod.net
-Subject: [PATCH v7 02/11] LSM: Maintain a table of LSM attribute data
-Date:   Wed, 15 Mar 2023 15:46:55 -0700
-Message-Id: <20230315224704.2672-3-casey@schaufler-ca.com>
+        linux-api@vger.kernel.org, mic@digikod.net,
+        linux-fsdevel@vger.kernel.org
+Subject: [PATCH v7 03/11] proc: Use lsmids instead of lsm names for attrs
+Date:   Wed, 15 Mar 2023 15:46:56 -0700
+Message-Id: <20230315224704.2672-4-casey@schaufler-ca.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230315224704.2672-1-casey@schaufler-ca.com>
 References: <20230315224704.2672-1-casey@schaufler-ca.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As LSMs are registered add their lsm_id pointers to a table.
-This will be used later for attribute reporting.
-
-Determine the number of possible security modules based on
-their respective CONFIG options. This allows the number to be
-known at build time. This allows data structures and tables
-to use the constant.
+Use the LSM ID number instead of the LSM name to identify which
+security module's attibute data should be shown in /proc/self/attr.
+The security_[gs]etprocattr() functions have been changed to expect
+the LSM ID. The change from a string comparison to an integer comparison
+in these functions will provide a minor performance improvement.
 
 Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
+Cc: linux-fsdevel@vger.kernel.org
 ---
- include/linux/security.h |  2 ++
- security/security.c      | 44 ++++++++++++++++++++++++++++++++--------
- 2 files changed, 38 insertions(+), 8 deletions(-)
+ fs/proc/base.c           | 29 +++++++++++++++--------------
+ fs/proc/internal.h       |  2 +-
+ include/linux/security.h | 11 +++++------
+ security/security.c      | 11 +++++------
+ 4 files changed, 26 insertions(+), 27 deletions(-)
 
-diff --git a/include/linux/security.h b/include/linux/security.h
-index 5984d0d550b4..e70fc863b04a 100644
---- a/include/linux/security.h
-+++ b/include/linux/security.h
-@@ -138,6 +138,8 @@ enum lockdown_reason {
- };
- 
- extern const char *const lockdown_reasons[LOCKDOWN_CONFIDENTIALITY_MAX+1];
-+extern u32 lsm_active_cnt;
-+extern struct lsm_id *lsm_idlist[];
- 
- /* These functions are in security/commoncap.c */
- extern int cap_capable(const struct cred *cred, struct user_namespace *ns,
-diff --git a/security/security.c b/security/security.c
-index 58828a326024..aa84b1cf4253 100644
---- a/security/security.c
-+++ b/security/security.c
-@@ -28,12 +28,29 @@
- #include <linux/backing-dev.h>
- #include <linux/string.h>
- #include <linux/msg.h>
+diff --git a/fs/proc/base.c b/fs/proc/base.c
+index 5e0e0ccd47aa..cb6dec7473fe 100644
+--- a/fs/proc/base.c
++++ b/fs/proc/base.c
+@@ -96,6 +96,7 @@
+ #include <linux/time_namespace.h>
+ #include <linux/resctrl.h>
+ #include <linux/cn_proc.h>
 +#include <uapi/linux/lsm.h>
- #include <net/flow.h>
- 
- #define MAX_LSM_EVM_XATTR	2
- 
--/* How many LSMs were built into the kernel? */
--#define LSM_COUNT (__end_lsm_info - __start_lsm_info)
-+/*
-+ * How many LSMs are built into the kernel as determined at
-+ * build time. Used to determine fixed array sizes.
-+ * The capability module is accounted for by CONFIG_SECURITY
-+ */
-+#define LSM_COUNT ( \
-+	(IS_ENABLED(CONFIG_SECURITY) ? 1 : 0) + \
-+	(IS_ENABLED(CONFIG_SECURITY_SELINUX) ? 1 : 0) + \
-+	(IS_ENABLED(CONFIG_SECURITY_SMACK) ? 1 : 0) + \
-+	(IS_ENABLED(CONFIG_SECURITY_TOMOYO) ? 1 : 0) + \
-+	(IS_ENABLED(CONFIG_IMA) ? 1 : 0) + \
-+	(IS_ENABLED(CONFIG_SECURITY_APPARMOR) ? 1 : 0) + \
-+	(IS_ENABLED(CONFIG_SECURITY_YAMA) ? 1 : 0) + \
-+	(IS_ENABLED(CONFIG_SECURITY_LOADPIN) ? 1 : 0) + \
-+	(IS_ENABLED(CONFIG_SECURITY_SAFESETID) ? 1 : 0) + \
-+	(IS_ENABLED(CONFIG_SECURITY_LOCKDOWN_LSM) ? 1 : 0) + \
-+	(IS_ENABLED(CONFIG_BPF_LSM) ? 1 : 0) + \
-+	(IS_ENABLED(CONFIG_SECURITY_LANDLOCK) ? 1 : 0))
+ #include <trace/events/oom.h>
+ #include "internal.h"
+ #include "fd.h"
+@@ -145,10 +146,10 @@ struct pid_entry {
+ 	NOD(NAME, (S_IFREG|(MODE)),			\
+ 		NULL, &proc_single_file_operations,	\
+ 		{ .proc_show = show } )
+-#define ATTR(LSM, NAME, MODE)				\
++#define ATTR(LSMID, NAME, MODE)				\
+ 	NOD(NAME, (S_IFREG|(MODE)),			\
+ 		NULL, &proc_pid_attr_operations,	\
+-		{ .lsm = LSM })
++		{ .lsmid = LSMID })
  
  /*
-  * These are descriptions of the reasons that can be passed to the
-@@ -90,7 +107,7 @@ static __initdata const char *chosen_major_lsm;
- static __initconst const char * const builtin_lsm_order = CONFIG_LSM;
+  * Count the number of hardlinks for the pid_entry table, excluding the .
+@@ -2730,7 +2731,7 @@ static ssize_t proc_pid_attr_read(struct file * file, char __user * buf,
+ 	if (!task)
+ 		return -ESRCH;
  
- /* Ordered list of LSMs to initialize. */
--static __initdata struct lsm_info **ordered_lsms;
-+static __initdata struct lsm_info *ordered_lsms[LSM_COUNT];
- static __initdata struct lsm_info *exclusive;
+-	length = security_getprocattr(task, PROC_I(inode)->op.lsm,
++	length = security_getprocattr(task, PROC_I(inode)->op.lsmid,
+ 				      file->f_path.dentry->d_name.name,
+ 				      &p);
+ 	put_task_struct(task);
+@@ -2788,7 +2789,7 @@ static ssize_t proc_pid_attr_write(struct file * file, const char __user * buf,
+ 	if (rv < 0)
+ 		goto out_free;
  
- static __initdata bool debug;
-@@ -341,13 +358,16 @@ static void __init report_lsm_order(void)
- 	pr_cont("\n");
+-	rv = security_setprocattr(PROC_I(inode)->op.lsm,
++	rv = security_setprocattr(PROC_I(inode)->op.lsmid,
+ 				  file->f_path.dentry->d_name.name, page,
+ 				  count);
+ 	mutex_unlock(&current->signal->cred_guard_mutex);
+@@ -2837,27 +2838,27 @@ static const struct inode_operations proc_##LSM##_attr_dir_inode_ops = { \
+ 
+ #ifdef CONFIG_SECURITY_SMACK
+ static const struct pid_entry smack_attr_dir_stuff[] = {
+-	ATTR("smack", "current",	0666),
++	ATTR(LSM_ID_SMACK, "current",	0666),
+ };
+ LSM_DIR_OPS(smack);
+ #endif
+ 
+ #ifdef CONFIG_SECURITY_APPARMOR
+ static const struct pid_entry apparmor_attr_dir_stuff[] = {
+-	ATTR("apparmor", "current",	0666),
+-	ATTR("apparmor", "prev",	0444),
+-	ATTR("apparmor", "exec",	0666),
++	ATTR(LSM_ID_APPARMOR, "current",	0666),
++	ATTR(LSM_ID_APPARMOR, "prev",		0444),
++	ATTR(LSM_ID_APPARMOR, "exec",		0666),
+ };
+ LSM_DIR_OPS(apparmor);
+ #endif
+ 
+ static const struct pid_entry attr_dir_stuff[] = {
+-	ATTR(NULL, "current",		0666),
+-	ATTR(NULL, "prev",		0444),
+-	ATTR(NULL, "exec",		0666),
+-	ATTR(NULL, "fscreate",		0666),
+-	ATTR(NULL, "keycreate",		0666),
+-	ATTR(NULL, "sockcreate",	0666),
++	ATTR(LSM_ID_UNDEF, "current",	0666),
++	ATTR(LSM_ID_UNDEF, "prev",		0444),
++	ATTR(LSM_ID_UNDEF, "exec",		0666),
++	ATTR(LSM_ID_UNDEF, "fscreate",	0666),
++	ATTR(LSM_ID_UNDEF, "keycreate",	0666),
++	ATTR(LSM_ID_UNDEF, "sockcreate",	0666),
+ #ifdef CONFIG_SECURITY_SMACK
+ 	DIR("smack",			0555,
+ 	    proc_smack_attr_dir_inode_ops, proc_smack_attr_dir_ops),
+diff --git a/fs/proc/internal.h b/fs/proc/internal.h
+index 9dda7e54b2d0..a889d9ef9584 100644
+--- a/fs/proc/internal.h
++++ b/fs/proc/internal.h
+@@ -92,7 +92,7 @@ union proc_op {
+ 	int (*proc_show)(struct seq_file *m,
+ 		struct pid_namespace *ns, struct pid *pid,
+ 		struct task_struct *task);
+-	const char *lsm;
++	int lsmid;
+ };
+ 
+ struct proc_inode {
+diff --git a/include/linux/security.h b/include/linux/security.h
+index e70fc863b04a..8faed81fc3b4 100644
+--- a/include/linux/security.h
++++ b/include/linux/security.h
+@@ -473,10 +473,9 @@ int security_sem_semctl(struct kern_ipc_perm *sma, int cmd);
+ int security_sem_semop(struct kern_ipc_perm *sma, struct sembuf *sops,
+ 			unsigned nsops, int alter);
+ void security_d_instantiate(struct dentry *dentry, struct inode *inode);
+-int security_getprocattr(struct task_struct *p, const char *lsm, const char *name,
++int security_getprocattr(struct task_struct *p, int lsmid, const char *name,
+ 			 char **value);
+-int security_setprocattr(const char *lsm, const char *name, void *value,
+-			 size_t size);
++int security_setprocattr(int lsmid, const char *name, void *value, size_t size);
+ int security_netlink_send(struct sock *sk, struct sk_buff *skb);
+ int security_ismaclabel(const char *name);
+ int security_secid_to_secctx(u32 secid, char **secdata, u32 *seclen);
+@@ -1344,14 +1343,14 @@ static inline void security_d_instantiate(struct dentry *dentry,
+ 					  struct inode *inode)
+ { }
+ 
+-static inline int security_getprocattr(struct task_struct *p, const char *lsm,
++static inline int security_getprocattr(struct task_struct *p, int lsmid,
+ 				       const char *name, char **value)
+ {
+ 	return -EINVAL;
  }
  
-+/*
-+ * Current index to use while initializing the lsm id list.
-+ */
-+u32 lsm_active_cnt __lsm_ro_after_init;
-+struct lsm_id *lsm_idlist[LSM_COUNT] __lsm_ro_after_init;
-+
- static void __init ordered_lsm_init(void)
+-static inline int security_setprocattr(const char *lsm, char *name,
+-				       void *value, size_t size)
++static inline int security_setprocattr(int lsmid, char *name, void *value,
++				       size_t size)
  {
- 	struct lsm_info **lsm;
+ 	return -EINVAL;
+ }
+diff --git a/security/security.c b/security/security.c
+index aa84b1cf4253..87c8796c3c46 100644
+--- a/security/security.c
++++ b/security/security.c
+@@ -2168,26 +2168,25 @@ void security_d_instantiate(struct dentry *dentry, struct inode *inode)
+ }
+ EXPORT_SYMBOL(security_d_instantiate);
  
--	ordered_lsms = kcalloc(LSM_COUNT + 1, sizeof(*ordered_lsms),
--				GFP_KERNEL);
--
- 	if (chosen_lsm_order) {
- 		if (chosen_major_lsm) {
- 			pr_warn("security=%s is ignored because it is superseded by lsm=%s\n",
-@@ -387,8 +407,6 @@ static void __init ordered_lsm_init(void)
- 	lsm_early_task(current);
- 	for (lsm = ordered_lsms; *lsm; lsm++)
- 		initialize_lsm(*lsm);
--
--	kfree(ordered_lsms);
+-int security_getprocattr(struct task_struct *p, const char *lsm,
+-			 const char *name, char **value)
++int security_getprocattr(struct task_struct *p, int lsmid, const char *name,
++			 char **value)
+ {
+ 	struct security_hook_list *hp;
+ 
+ 	hlist_for_each_entry(hp, &security_hook_heads.getprocattr, list) {
+-		if (lsm != NULL && strcmp(lsm, hp->lsmid->lsm))
++		if (lsmid != 0 && lsmid != hp->lsmid->id)
+ 			continue;
+ 		return hp->hook.getprocattr(p, name, value);
+ 	}
+ 	return LSM_RET_DEFAULT(getprocattr);
  }
  
- int __init early_security_init(void)
-@@ -513,6 +531,16 @@ void __init security_add_hooks(struct security_hook_list *hooks, int count,
+-int security_setprocattr(const char *lsm, const char *name, void *value,
+-			 size_t size)
++int security_setprocattr(int lsmid, const char *name, void *value, size_t size)
  {
- 	int i;
+ 	struct security_hook_list *hp;
  
-+	/*
-+	 * A security module may call security_add_hooks() more
-+	 * than once. Landlock is one such case.
-+	 */
-+	if (lsm_active_cnt == 0 || lsm_idlist[lsm_active_cnt - 1] != lsmid)
-+		lsm_idlist[lsm_active_cnt++] = lsmid;
-+
-+	if (lsm_active_cnt > LSM_COUNT)
-+		panic("%s Too many LSMs registered.\n", __func__);
-+
- 	for (i = 0; i < count; i++) {
- 		hooks[i].lsmid = lsmid;
- 		hlist_add_tail_rcu(&hooks[i].list, hooks[i].head);
+ 	hlist_for_each_entry(hp, &security_hook_heads.setprocattr, list) {
+-		if (lsm != NULL && strcmp(lsm, hp->lsmid->lsm))
++		if (lsmid != 0 && lsmid != hp->lsmid->id)
+ 			continue;
+ 		return hp->hook.setprocattr(name, value, size);
+ 	}
 -- 
 2.39.2
 
