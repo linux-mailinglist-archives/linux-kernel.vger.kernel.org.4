@@ -2,146 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D7C36BB8C7
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 16:57:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2F9E6BB8C5
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 16:57:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232604AbjCOP5x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 11:57:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53062 "EHLO
+        id S232543AbjCOP5p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 11:57:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232557AbjCOP5r (ORCPT
+        with ESMTP id S232642AbjCOP5U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 11:57:47 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6A1F76078
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 08:56:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678895761;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Pw4eRnmgxAQbUslf97rTqSt6QU+YteWEHOJqAmSsx5g=;
-        b=f1LWL7IMIis4SAKly7yDRpHblrZHwqCbK8FMuuy2EhwFSdc+gS6KYGX+q+89u2bhLQLtNB
-        T14rMaeFHoLc2e/s/cmfrwdxAwyCqLimIYJXW2MIImM3bQe0I50+QSLhA1Pe/5YhKijSNV
-        VG6lv0nPsg38HNQLSULjamHojRc6kd8=
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
- [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-372-iA5yAAPzPLaxWvY2IYhunQ-1; Wed, 15 Mar 2023 11:55:59 -0400
-X-MC-Unique: iA5yAAPzPLaxWvY2IYhunQ-1
-Received: by mail-qt1-f198.google.com with SMTP id ga17-20020a05622a591100b003bfdf586476so8661332qtb.7
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 08:55:59 -0700 (PDT)
+        Wed, 15 Mar 2023 11:57:20 -0400
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E3D760D66;
+        Wed, 15 Mar 2023 08:56:54 -0700 (PDT)
+Received: by mail-pj1-f41.google.com with SMTP id u3-20020a17090a450300b00239db6d7d47so2518520pjg.4;
+        Wed, 15 Mar 2023 08:56:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678895759; x=1681487759;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Pw4eRnmgxAQbUslf97rTqSt6QU+YteWEHOJqAmSsx5g=;
-        b=xqn6m+7frvgBffPY2a9k0IZOachewwiomkGvcYgzLvTjVUT2lmucu1KYMm17jcGIIf
-         AcWGbc2alzCtx2S1qOftzkMn6s3TbPAQD9D4i7AohAwj2KEfADCxxixfRlzceg9knqNJ
-         B2w7aqENileUXiqU2iGtbE34VMh0bmkM7fQu1K1TsRM/LFeOL/t+nwZ8I2Y3GzEqAMBj
-         dgg79AAsJm1Sx3bzvZNn4pnGkzeRwD8Oer7CAWtZQ1Yf1o8nESNtzGu6M/e3VS9p2Pk6
-         olGIafBNV9GYtVhdEzwLDJ1i+didCG2RBHmDX/yevLMAAQlMBog+7AZjAS2vgsSI4Soi
-         yNFg==
-X-Gm-Message-State: AO0yUKUraJwiGGM8HGFaB9bFCwdkmioWuVr8QScAsgf9Bl4K7TSOiHL9
-        pPTyBUsprTOT3l2JsTiFhvUAiz++pqmbGpIT+E7S8kYwMHcYAVONLDEnZnDB4qIRzgb2IrrCroC
-        l753pkkS8t1X+AlUrltc7CBR2
-X-Received: by 2002:ac8:5f0f:0:b0:3b9:a4d4:7f37 with SMTP id x15-20020ac85f0f000000b003b9a4d47f37mr7256614qta.3.1678895759080;
-        Wed, 15 Mar 2023 08:55:59 -0700 (PDT)
-X-Google-Smtp-Source: AK7set/eKRMHgAx+CwCeLiCbX9cigeSt/aHmp3juRyE7h21eLYSzPFiMLvDtztWo7Q/hFkgkseO21A==
-X-Received: by 2002:ac8:5f0f:0:b0:3b9:a4d4:7f37 with SMTP id x15-20020ac85f0f000000b003b9a4d47f37mr7256562qta.3.1678895758790;
-        Wed, 15 Mar 2023 08:55:58 -0700 (PDT)
-Received: from x1n (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
-        by smtp.gmail.com with ESMTPSA id t30-20020a05622a181e00b003ba2a15f93dsm4125741qtc.26.2023.03.15.08.55.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Mar 2023 08:55:58 -0700 (PDT)
-Date:   Wed, 15 Mar 2023 11:55:56 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
-        Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Subject: Re: [PATCH v11 4/7] fs/proc/task_mmu: Implement IOCTL to get and
- optionally clear info about PTEs
-Message-ID: <ZBHqjBjj6nn1xeTM@x1n>
-References: <20230309135718.1490461-1-usama.anjum@collabora.com>
- <20230309135718.1490461-5-usama.anjum@collabora.com>
+        d=1e100.net; s=20210112; t=1678895789;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VLyRa659ppZfr00XgXbmuzNUZ7mOL5EaQxAMAj2ecCE=;
+        b=UA1AJwe7Lud1kXe08YqG6yOUT0nCebGYXcouW/0KHeMxoJKkwBuXbd1rKymFYXeyME
+         iD9rj5poFmkiLOLgW70M1ZFlEDU711C2x+JP33zfWUca4O0rr5DQtMaWuRL9Wd7ScguA
+         lOYnF7MixFOCIKa2FQ/xfBT5G2NClLxH6lqkBlPn9G3SDKOaAY6OHuDOza8SkZET2jg4
+         S58wdMl2f2EgjSb4rQPE7o4eNF0Dy2MxBLtNcmZtHRS3+R+yVn/odXGAmWHHR08Hi/Lr
+         r59XEpioNasp38yV3J9e3DFAwgCOqAcF/7YS08fSOdqebr5z6Vp/obB+vYks9P4lra5S
+         cGOg==
+X-Gm-Message-State: AO0yUKWk6IClywsQstkD9Q5ZFfANSp18VEcAOoKt+VFWYwAMzRx9cFzY
+        iMbRUHlaPeoUD4zsZrRaM30=
+X-Google-Smtp-Source: AK7set/0V5JL2LKWGKw+Y/5UKZF8d55Rr6cupu0hHWB4V3dlqgHhnpvW/wPfEywuY4yoTqrjeFkO7w==
+X-Received: by 2002:a17:90b:3ec5:b0:23b:50ff:59ba with SMTP id rm5-20020a17090b3ec500b0023b50ff59bamr251840pjb.21.1678895789629;
+        Wed, 15 Mar 2023 08:56:29 -0700 (PDT)
+Received: from ?IPV6:2620:15c:211:201:558a:e74:a7b9:2212? ([2620:15c:211:201:558a:e74:a7b9:2212])
+        by smtp.gmail.com with ESMTPSA id b11-20020a170902ed0b00b0019e81c8fd01sm3810169pld.249.2023.03.15.08.56.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Mar 2023 08:56:29 -0700 (PDT)
+Message-ID: <0aa8141d-52e2-de27-7805-71395c01f015@acm.org>
+Date:   Wed, 15 Mar 2023 08:56:26 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230309135718.1490461-5-usama.anjum@collabora.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v7] scsi: ufs: core: Add trace event for MCQ
+Content-Language: en-US
+To:     Ziqi Chen <quic_ziqichen@quicinc.com>, quic_asutoshd@quicinc.com,
+        quic_cang@quicinc.com, quic_nguyenb@quicinc.com, mani@kernel.org,
+        stanley.chu@mediatek.com, adrian.hunter@intel.com,
+        beanhuo@micron.com, avri.altman@wdc.com, junwoo80.lee@samsung.com,
+        martin.petersen@oracle.com
+Cc:     linux-scsi@vger.kernel.org, Alim Akhtar <alim.akhtar@samsung.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:TRACING" <linux-trace-kernel@vger.kernel.org>
+References: <1678866271-49601-1-git-send-email-quic_ziqichen@quicinc.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <1678866271-49601-1-git-send-email-quic_ziqichen@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 09, 2023 at 06:57:15PM +0500, Muhammad Usama Anjum wrote:
-> +	for (addr = start; !ret && addr < end; pte++, addr += PAGE_SIZE) {
-> +		pte = pte_offset_map_lock(vma->vm_mm, pmd, addr, &ptl);
-> +
-> +		is_writ = !is_pte_uffd_wp(*pte);
-> +		is_file = vma->vm_file;
-> +		is_pres = pte_present(*pte);
-> +		is_swap = is_swap_pte(*pte);
-> +
-> +		pte_unmap_unlock(pte, ptl);
-> +
-> +		ret = pagemap_scan_output(is_writ, is_file, is_pres, is_swap,
-> +					  p, addr, 1);
-> +		if (ret)
-> +			break;
-> +
-> +		if (PM_SCAN_OP_IS_WP(p) && is_writ &&
-> +		    uffd_wp_range(walk->mm, vma, addr, PAGE_SIZE, true) < 0)
-> +			ret = -EINVAL;
-> +	}
+On 3/15/23 00:44, Ziqi Chen wrote:
+> Add MCQ hardware queue ID in the existing trace event
+> ufshcd_command().
 
-This is not real atomic..
-
-Taking the spinlock for eacy pte is not only overkill but wrong in
-atomicity because the pte can change right after spinlock unlocked.
-
-Unfortunately you also cannot reuse uffd_wp_range() because that's not
-atomic either, my fault here.  Probably I was thinking mostly from
-soft-dirty pov on batching the collect+reset.
-
-You need to take the spin lock, collect whatever bits, set/clear whatever
-bits, only until then release the spin lock.
-
-"Not atomic" means you can have some page got dirtied but you could miss
-it.  Depending on how strict you want, I think it'll break apps like CRIU
-if strict atomicity needed for migrating a process.  If we want to have a
-new interface anyway, IMHO we'd better do that in the strict way.
-
-Same comment applies to the THP handling (where I cut from the context).
-
--- 
-Peter Xu
-
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>
