@@ -2,166 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34F156BB8E0
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 17:00:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9128F6BB8E2
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 17:00:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232685AbjCOQAP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 12:00:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59666 "EHLO
+        id S232308AbjCOQAk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 12:00:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233058AbjCOQAI (ORCPT
+        with ESMTP id S232800AbjCOQA3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 12:00:08 -0400
-Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC6191ADE1;
-        Wed, 15 Mar 2023 08:59:31 -0700 (PDT)
-Received: by mail-il1-x12f.google.com with SMTP id w4so10641550ilv.0;
-        Wed, 15 Mar 2023 08:59:31 -0700 (PDT)
+        Wed, 15 Mar 2023 12:00:29 -0400
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2072c.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e8d::72c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0EF424BC1;
+        Wed, 15 Mar 2023 08:59:49 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=AbGK64u4uIot0HHS3fO80h/F7DwkvIqHCn028dv6Nc51xhFRBAbd6MfpFP80bqaXuYKo/G9EEccumBVLr4yxX0vY3tphFgpkUtsnbLcSpICCn10yLcwjEPwVzeji0unYIecEtaXy9cJxPHAMtqJ9Bdpin2+5EGuQPGhfl2frp/q0MBuGmBve8FzvQS7u+XiPcHwginXQli3fa4EHMCV4bu5mzj+o4sxrATq0BSqxtwdefFPJrIYMGnnsLLCcbrCRjeYlIrMU0tZjKGzPcCCZkIKx/teybof6Y4LsA9Ep5kOc7f5gl6bbQXK0UqHqyl5jTqIZiyd2HukZIeb1PRDY4A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=MrlltfBB+6fiFRuVhTtn93wtMG7gfkb1JRrT4JdHZ5Q=;
+ b=BK6bDtQw5X1ZZIhCVhCeOKFZVSIvPKEtSV9ocbahn7YnIsnzz1iY1UfVNWh+I6VOq8SnywmyEf77YSQ00ZyXV1d6KN1mCqg02niQ0gS7Z1Rq13DV7NDbyTNy/e54eccap9kDHRrLDgJEr9qiZkALe6X6kXMilbMzVTfv5W/6E3hDsiR/iN48VtLZnhwBkaqEQ/J904LVEeGUj3/2Q2Rx5oNNsvdiir4KTDqoSnb8GDkZDOr7eSBX/Q6gSvaYzfGIzsUf1RKjyxpamGQnpLEQ8HFBUsRbB1BaHj1QQ5/NLjy1LDg0EuodVSIJojY307PsrauLY7ojmCC20J/U6HhAwA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678895956;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=mwFEZMuMScsLlZA1DsDqm1/V+MycUBRzLGSOja/IOcQ=;
-        b=V+LJijXRV9IGnqoktWLHNtDnhJMaOVMarwgYVaC7IHV+9KHjgw9Smm1o9GefaTjaiR
-         DfU7hQkYi1JETYj4/5uNHDv1i/3uX2fzVmfatCadsD5MWr83/pAIrWWl4cLLxiLpTDQz
-         eDsLOFM6DW3S/qheyyEth+nfUXU80HXkZuiQJNSVkqRQUT0n9wS+ss9y+fM925Q1Fvtk
-         YRizGeXLAcZ2J5zy4JY10CMAeL4yPE6Nt1/g2+dtVdiIex3m6mugLFOxqqmlKxLNPDBn
-         dvIRE5jXrnIILDwf5Awb9FJ8NULuGXCvDFHw4bcVO6yq2v1x1CaDNSeH/7ENOwdyqELO
-         frFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678895956;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mwFEZMuMScsLlZA1DsDqm1/V+MycUBRzLGSOja/IOcQ=;
-        b=wBP2CH6FOXxr+3c8T6HRrWkvW/YQURDR3YmWgRa0uQjXnJz+pAEn2kTXJmN/kAWEvy
-         NLMotHQ+J5rqE/+a5ES5dlui4fZYMFmb4XhHNMeo5w7tTxXv3d9ahnJFRYEIcS7yPTzK
-         6CYe4aS7cF6FOppROVIY5kzHlO3bo/VQ5zmfcrrmuJy+xs5HlHJ+5BPznGybezss9WKz
-         lWY0zKst2z/eHx00lDQJEUFXxeXjaI3DzLV1d11tpCeTDbfDzQNnr9StuBb8AfmXhVlm
-         wP0fGAPePDHefrLF4Pr3tsAhLFvHRRbgT73CizD+b1NsslCSyKxmSSxVJSGGSjN6NmFz
-         RnEA==
-X-Gm-Message-State: AO0yUKXUqf8r2Tj3L75w115LHV93EOS7NJonsOmHI+kF1t7kFvRrU9gl
-        /GfCmN8xrxBkOMzcKueBkgI=
-X-Google-Smtp-Source: AK7set8LadlfBIzS7eiLYiABvmbeEZEqP78tzHNUThoKyE/2SjzzdcVz0HdArT4sXxKmDjCqU5KQzQ==
-X-Received: by 2002:a05:6e02:10d2:b0:316:4174:b065 with SMTP id s18-20020a056e0210d200b003164174b065mr4787739ilj.15.1678895956624;
-        Wed, 15 Mar 2023 08:59:16 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id g2-20020a02c542000000b004054d7eede5sm1332429jaj.22.2023.03.15.08.59.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Mar 2023 08:59:16 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <166de5e6-3911-cbda-8b36-624e396decaa@roeck-us.net>
-Date:   Wed, 15 Mar 2023 08:59:14 -0700
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=MrlltfBB+6fiFRuVhTtn93wtMG7gfkb1JRrT4JdHZ5Q=;
+ b=wbkLTsuuUAPyQYiWoARgQjk3iCAriVFbpkDdyyKGM1xlZNYkOLA6VwaK+hCvmbzY7bgs7FAw7x1bo849PqEWC9ZbtVnO1Klowreh+NmZ9zVwUiQt1KWQ9+VdFWqFGRxAAsN1VYLMCGOvCTG9+gfTaXLryxzjT0LC7z1S4yuMzoU=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by SA1PR13MB5037.namprd13.prod.outlook.com (2603:10b6:806:1aa::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.29; Wed, 15 Mar
+ 2023 15:59:25 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::85f5:bdb:fb9e:294c]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::85f5:bdb:fb9e:294c%2]) with mapi id 15.20.6178.030; Wed, 15 Mar 2023
+ 15:59:25 +0000
+Date:   Wed, 15 Mar 2023 16:59:19 +0100
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Sean Anderson <seanga2@gmail.com>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next v3 3/9] net: sunhme: Unify IRQ requesting
+Message-ID: <ZBHrVz18X00K88S8@corigine.com>
+References: <20230314003613.3874089-1-seanga2@gmail.com>
+ <20230314003613.3874089-4-seanga2@gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230314003613.3874089-4-seanga2@gmail.com>
+X-ClientProxiedBy: AS4P190CA0044.EURP190.PROD.OUTLOOK.COM
+ (2603:10a6:20b:5d1::8) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 4.19 00/39] 4.19.278-rc1 review
-Content-Language: en-US
-To:     =?UTF-8?Q?Daniel_D=c3=adaz?= <daniel.diaz@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-References: <20230315115721.234756306@linuxfoundation.org>
- <7e46d536-cc68-4b7c-e56e-cf1b94a925cb@linaro.org>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <7e46d536-cc68-4b7c-e56e-cf1b94a925cb@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|SA1PR13MB5037:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6e08d4eb-65ba-433e-12b7-08db256e401e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: WQ38Zer6M4vb2no+4jd4OktQM+RhFiprO5pdtqMSQLztHsqcB6/maqw2qBw2qwvyEeveDrIcIybg47QxcgE1gCxaJxwB71eO9+EcPpYetaGRZlNQRkscsjsBAtQscqkenCURi3DT2glf0JHp+LkEeEiCNJz8d069QvqImLp9PVLd+XBr9R2iHFlTvl1cvul/FXMzAlLrRgnAZS89d/eDPuSjI8DkowGAmtTegXj0gA5FTAh2h4zotawlK1aHryIE72SMMQnFHksEnsqMQ5IaDe1+GuLJyDF+ic2O8VE41wrQwrngo02z4014PL4vHZmp2S0ET8wp5TWa+LT8pGG9OzVMYuIOcZb6p1pFwSsmBcW/jbb7rM1V0KJcVopXhSZbKFdN0SvA/gM1V5cdqp2aec6h1ScLh/U4EpzCSy840BrbDbliTpNK6DYni5ezCmQmxJemPDOA1NfuwjeFJPJg4sxm0HflM4F9LVzL2/AYzKBt1RxpqsJyG03jJ+x+JohxDle7rkFqJiJl6a0sSn+mNsF0PmFBqdOhPh/+ezbdGAQjW/jpV2Eruz6hy9Sd5bPy5O0lrVXJxZgGi/XWb27wWgX1n8SODOAcl94qZPsI3jPFXhZkLddBJg8fo7Nd1SX/UO4QXy252tFljLOtO4j7Mg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(346002)(136003)(366004)(376002)(39840400004)(451199018)(8676002)(6916009)(4326008)(66476007)(66556008)(41300700001)(2906002)(66946007)(38100700002)(8936002)(5660300002)(4744005)(44832011)(6666004)(6486002)(6506007)(6512007)(86362001)(186003)(36756003)(2616005)(316002)(54906003)(83380400001)(478600001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?8gGtWujEYawG17YtEm0IRZo4QFbz75+/Ro5/N5ClZaVN8bnvJS7hTr+vEDfw?=
+ =?us-ascii?Q?qTo0h4uuR8WDbPRvSeXV4mMikk9paEZm1m9+CB9kIPXflOUwjwSZNRXLCL5c?=
+ =?us-ascii?Q?hfiNiEtv9GciWPp8hGyYtS354gicw102Ksuu84WfJmOHwdmYiyfh2mdaqhgh?=
+ =?us-ascii?Q?dmSJ7W5ktLicr9KZlcAb9jt9/K0+zWf/4iNifL9Cnwlm1ZlYuZ3QvjvvYU6H?=
+ =?us-ascii?Q?X5uo+/jDLra/5dOSgAcWD8YwdQDTGRM9FxPBN1oKS/39pg22VCO8k8iwW7km?=
+ =?us-ascii?Q?7whzbcw6CDVzwWxPLy9GH3gL2ArX6PPslKT7lm54hSRlZICz9rg649aJUyl+?=
+ =?us-ascii?Q?rg6bN0ZD0Isnmrejl/q0tC0J0BiUVQJqL0kRav6TsDW/rcRoLiZjvSMasKqq?=
+ =?us-ascii?Q?rm7Hw1qkWeaedF0LnoCyczNmDo+7SGk0TbgdV8A/nDJhLEBWr9s0ICPN6FyX?=
+ =?us-ascii?Q?7+T+Z4yuR9ETQYxl5s8DKcVhJxZypyCLC55VLzVHWumk9ZSUUpZdfpCij36c?=
+ =?us-ascii?Q?RziqsP8UQnC4/RUtOqY315iEEzqD+yYYMVtDhD/WnJCnsbz1PtjlU3EPqueu?=
+ =?us-ascii?Q?0DpBTzeYuVzEMoVj5Xwnt7HnebxBVboN2e4C8dJZK+FB+lWFatu0He6g2u3y?=
+ =?us-ascii?Q?xG+pzAjUIFgPBa1tAs8r+FiYTLa3pzzXvDifQFgQFyKYeY4Fxgl2S3R3yjkU?=
+ =?us-ascii?Q?FD6W4neuRQJZUa+rmyqAVxUPgPQ97hE3bkhmtxctzd1i1nOxo1mAwNvITNNu?=
+ =?us-ascii?Q?c14IFQHHiRv/dlILx2xmZXDIforulBNPPR0+lTvbffqWt5WvzbjUT8twptir?=
+ =?us-ascii?Q?PyrXjyg0SaJRqMfiTUGXQyeVZDqM8XUbbhjjwBmS+RQ3yh23jBvsQT4H8nHH?=
+ =?us-ascii?Q?ejvVRekpGSphCsc/icuLrGZAxZrCAfWRw/2iyISRP544Oc73ljx79WF/mIag?=
+ =?us-ascii?Q?Fw/oqGU8HabKqLldBxjTxN699VX6PzY6go4lfSGXQmteHQj6o1XUAWZJuOxB?=
+ =?us-ascii?Q?JFTwFzMAhebyp/DI377tkivHrTsiJinW3ynNVWTcpxdnMkq9ODuaaXRfz1/F?=
+ =?us-ascii?Q?Jz3XkyaO3DDx+H0pIqO3EQslnDducq0De58lv/TebcSuQr7WEYJWzQba7k/H?=
+ =?us-ascii?Q?G4oSdjqxIARBwzE11vS4U4t9aT7IlYkTgFOVuEfONsnWKcs9tE7RKIbmaV3u?=
+ =?us-ascii?Q?AWXxbIgeAqoBTsSm+DEOA1fv8XIO5++gono3qtFq0y771NHbz67Sg4GVaotB?=
+ =?us-ascii?Q?bExcjSWOpP0hJpAF8DFKr2rbt/wVsIa+MRat2eR4da2swHZu3MYNhhufpsuk?=
+ =?us-ascii?Q?yVyj3nk5IwX2R86mYA/8b8ZV6j6WojQdWWEFw3U3R9wWwnf8fVcHw3UWfU17?=
+ =?us-ascii?Q?QHnQzbJbzFJSQUULztyOEnuJzkPcyV9YBqWbKm/jnmi8KTaA+6ZQ5w7EEBi+?=
+ =?us-ascii?Q?Z/CnaNNzpnzSOB8Fxy47R4DREklKgSKM338t8Qf3zZ1Mrp7OhsxVo/nS5vDs?=
+ =?us-ascii?Q?u2eYre+qxm4Mc8xG6RRShlJ7pLaaB9bLeisFU6g97hRSa9syKKW5uHiPFdO1?=
+ =?us-ascii?Q?ZOS0/VragV59Ix8nY3802UsL1jfhOCbOgvfkcKdzrM85XvmZe9w2I2VxAZej?=
+ =?us-ascii?Q?31SYw/efYreSTrSz5LuTAXhx+H6Sju/lfcMVft4fafa0r8cFOvLudG1aVtDs?=
+ =?us-ascii?Q?8WQ0uA=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6e08d4eb-65ba-433e-12b7-08db256e401e
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Mar 2023 15:59:25.6649
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: P0oryEUmFTTL5CLTIox3gYxMwqKgSxMHvEsF5Ucbp5gwUKvlK/Dt1y/opPpn3M/GtRvJUbo+1a34H0jQ6X7RcxdxVCtbdhpO0JbOD5fK0hY=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR13MB5037
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/15/23 08:44, Daniel Díaz wrote:
-> Hello!
+On Mon, Mar 13, 2023 at 08:36:07PM -0400, Sean Anderson wrote:
+> Instead of registering one interrupt handler for all four SBUS Quattro
+> HMEs, let each HME register its own handler. To make this work, we don't
+> handle the IRQ if none of the status bits are set. This reduces the
+> complexity of the driver, and makes it easier to ensure things happen
+> before/after enabling IRQs.
 > 
-> On 15/03/23 06:12, Greg Kroah-Hartman wrote:
->> This is the start of the stable review cycle for the 4.19.278 release.
->> There are 39 patches in this series, all will be posted as a response
->> to this one.  If anyone has any issues with these being applied, please
->> let me know.
->>
->> Responses should be made by Fri, 17 Mar 2023 11:57:10 +0000.
->> Anything received after that time might be too late.
->>
->> The whole patch series can be found in one patch at:
->>     https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.19.278-rc1.gz
->> or in the git tree and branch at:
->>     git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.19.y
->> and the diffstat can be found below.
->>
->> thanks,
->>
->> greg k-h
+> I'm not really sure why we request IRQs in two different places (and leave
+> them running after removing the driver!). A lot of things in this driver
+> seem to just be crusty, and not necessarily intentional. I'm assuming
+> that's the case here as well.
 > 
-> Lots and lots of failures, mostly Arm.
+> This really needs to be tested by someone with an SBUS Quattro card.
 > 
-> For Arm, Arm64, MIPS, with GCC-8, GCC-9, GCC-10, GCC-11, GCC-12, Clang-16, for some combinations with:
-> * axm55xx_defconfig
-> * davinci_all_defconfig
-> * defconfig
-> * defconfig-40bc7ee5
-> * lkftconfig-kasan
-> * multi_v5_defconfig
-> * s5pv210_defconfig
-> * sama5_defconfig
-> 
-> -----8<-----
-> /builds/linux/kernel/cgroup/cgroup.c:2237:2: error: implicit declaration of function 'get_online_cpus' [-Werror,-Wimplicit-function-declaration]
->          get_online_cpus();
->          ^
-> /builds/linux/kernel/cgroup/cgroup.c:2237:2: note: did you mean 'get_online_mems'?
-> /builds/linux/include/linux/memory_hotplug.h:258:20: note: 'get_online_mems' declared here
-> static inline void get_online_mems(void) {}
->                     ^
-> /builds/linux/kernel/cgroup/cgroup.c:2248:2: error: implicit declaration of function 'put_online_cpus' [-Werror,-Wimplicit-function-declaration]
->          put_online_cpus();
->          ^
-> /builds/linux/kernel/cgroup/cgroup.c:2248:2: note: did you mean 'put_online_mems'?
-> /builds/linux/include/linux/memory_hotplug.h:259:20: note: 'put_online_mems' declared here
-> static inline void put_online_mems(void) {}
->                     ^
-> 2 errors generated.
-> make[3]: *** [/builds/linux/scripts/Makefile.build:303: kernel/cgroup/cgroup.o] Error 1
-> ----->8-----
-> 
-> 
-> For Arm64, i386 x86, with GCC-11, Perf has a new error:
-> 
-> -----8<-----
-> In function 'ready',
->      inlined from 'sender' at bench/sched-messaging.c:90:2:
-> bench/sched-messaging.c:76:13: error: 'dummy' is used uninitialized [-Werror=uninitialized]
->     76 |         if (write(ready_out, &dummy, 1) != 1)
->        |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-> In file included from bench/../perf-sys.h:5,
->                   from bench/../perf.h:18,
->                   from bench/sched-messaging.c:13:
-> ----->8-----
-> 
-> 
-> Greetings!
-> 
-> Daniel Díaz
-> daniel.diaz@linaro.org
-> 
+> Signed-off-by: Sean Anderson <seanga2@gmail.com>
 
-Looks like this whole set of release candidates is a disaster. I have stopped
-my testbed for the time being (no point in wasting energy), so there won't be
-any further updates from me for the time being.
-
-Guenter
+Reviewed-by: Simon Horman <simon.horman@corigine.com>
 
