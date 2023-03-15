@@ -2,34 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA2586BA4B8
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 02:33:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4F216BA4BA
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 02:33:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230287AbjCOBdD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 21:33:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43460 "EHLO
+        id S230310AbjCOBdI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 21:33:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230133AbjCOBcw (ORCPT
+        with ESMTP id S230038AbjCOBcv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 21:32:52 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CD293865D;
+        Tue, 14 Mar 2023 21:32:51 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA8BB1F920;
         Tue, 14 Mar 2023 18:32:19 -0700 (PDT)
-Received: from kwepemm600013.china.huawei.com (unknown [172.30.72.57])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4PbtD2607KzKmrn;
-        Wed, 15 Mar 2023 09:32:02 +0800 (CST)
+Received: from kwepemm600013.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Pbt9p5srhzHwwT;
+        Wed, 15 Mar 2023 09:30:06 +0800 (CST)
 Received: from huawei.com (10.175.127.227) by kwepemm600013.china.huawei.com
  (7.193.23.68) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Wed, 15 Mar
- 2023 09:32:16 +0800
+ 2023 09:32:17 +0800
 From:   Zhihao Cheng <chengzhihao1@huawei.com>
 To:     <tytso@mit.edu>, <adilger.kernel@dilger.ca>, <jack@suse.com>,
         <tudor.ambarus@linaro.org>
 CC:     <linux-ext4@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <chengzhihao1@huawei.com>, <yi.zhang@huawei.com>
-Subject: [PATCH v3 2/6] ext4: ext4_put_super: Remove redundant checking for 'sbi->s_journal_bdev'
-Date:   Wed, 15 Mar 2023 09:31:24 +0800
-Message-ID: <20230315013128.3911115-3-chengzhihao1@huawei.com>
+Subject: [PATCH v3 3/6] jbd2: remove unused feature macros
+Date:   Wed, 15 Mar 2023 09:31:25 +0800
+Message-ID: <20230315013128.3911115-4-chengzhihao1@huawei.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20230315013128.3911115-1-chengzhihao1@huawei.com>
 References: <20230315013128.3911115-1-chengzhihao1@huawei.com>
@@ -48,32 +48,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As discussed in [1], 'sbi->s_journal_bdev != sb->s_bdev' will always
-become true if sbi->s_journal_bdev exists. Filesystem block device and
-journal block device are both opened with 'FMODE_EXCL' mode, so these
-two devices can't be same one. Then we can remove the redundant checking
-'sbi->s_journal_bdev != sb->s_bdev' if 'sbi->s_journal_bdev' exists.
+From: Zhang Yi <yi.zhang@huawei.com>
 
-[1] https://lore.kernel.org/lkml/f86584f6-3877-ff18-47a1-2efaa12d18b2@huawei.com/
+JBD2_HAS_[IN|RO_]COMPAT_FEATURE macros are no longer used, just remove
+them.
 
+Signed-off-by: Zhang Yi <yi.zhang@huawei.com>
 Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
+Reviewed-by: Jan Kara <jack@suse.cz>
 ---
- fs/ext4/super.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ include/linux/jbd2.h | 11 -----------
+ 1 file changed, 11 deletions(-)
 
-diff --git a/fs/ext4/super.c b/fs/ext4/super.c
-index 61511b7ba017..a22417d113ca 100644
---- a/fs/ext4/super.c
-+++ b/fs/ext4/super.c
-@@ -1277,7 +1277,7 @@ static void ext4_put_super(struct super_block *sb)
+diff --git a/include/linux/jbd2.h b/include/linux/jbd2.h
+index f619bae1dcc5..a91cf9c7a94b 100644
+--- a/include/linux/jbd2.h
++++ b/include/linux/jbd2.h
+@@ -274,17 +274,6 @@ typedef struct journal_superblock_s
+ /* 0x0400 */
+ } journal_superblock_t;
  
- 	sync_blockdev(sb->s_bdev);
- 	invalidate_bdev(sb->s_bdev);
--	if (sbi->s_journal_bdev && sbi->s_journal_bdev != sb->s_bdev) {
-+	if (sbi->s_journal_bdev) {
- 		sync_blockdev(sbi->s_journal_bdev);
- 		ext4_blkdev_remove(sbi);
- 	}
+-/* Use the jbd2_{has,set,clear}_feature_* helpers; these will be removed */
+-#define JBD2_HAS_COMPAT_FEATURE(j,mask)					\
+-	((j)->j_format_version >= 2 &&					\
+-	 ((j)->j_superblock->s_feature_compat & cpu_to_be32((mask))))
+-#define JBD2_HAS_RO_COMPAT_FEATURE(j,mask)				\
+-	((j)->j_format_version >= 2 &&					\
+-	 ((j)->j_superblock->s_feature_ro_compat & cpu_to_be32((mask))))
+-#define JBD2_HAS_INCOMPAT_FEATURE(j,mask)				\
+-	((j)->j_format_version >= 2 &&					\
+-	 ((j)->j_superblock->s_feature_incompat & cpu_to_be32((mask))))
+-
+ #define JBD2_FEATURE_COMPAT_CHECKSUM		0x00000001
+ 
+ #define JBD2_FEATURE_INCOMPAT_REVOKE		0x00000001
 -- 
 2.31.1
 
