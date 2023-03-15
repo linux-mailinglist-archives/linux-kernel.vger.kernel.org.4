@@ -2,47 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9C706BC1A0
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 00:41:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 908586BC18A
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 00:36:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233186AbjCOXli (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 19:41:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59500 "EHLO
+        id S233425AbjCOXgJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 19:36:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233147AbjCOXlW (ORCPT
+        with ESMTP id S233342AbjCOXf3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 19:41:22 -0400
+        Wed, 15 Mar 2023 19:35:29 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FD3CACB9D;
-        Wed, 15 Mar 2023 16:39:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A657BA8E9A;
+        Wed, 15 Mar 2023 16:34:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 70B0DB81FB5;
-        Wed, 15 Mar 2023 23:32:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 803A3C43325;
-        Wed, 15 Mar 2023 23:32:52 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 51A8BB81FA5;
+        Wed, 15 Mar 2023 23:32:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52F31C433A4;
+        Wed, 15 Mar 2023 23:32:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678923173;
-        bh=v2/8J7xGzzoMS4ou1QINsReCB09bsP+fjMnbDKHp+4c=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=Veqdk3XcW4vIj+sOlJIX8TWVFhG2TaQbp+9XCLQXeWKP1YGYYXv+Tz4qkqL922qRM
-         7YaVPwUBeCxGpvmw+i5TGJzeaeB9Ql+RHrkwmX4nZ4Sm0bx/kOiqZ4+b5e/meuWG9k
-         VaI5C1H8sTqwX5c/OhPaNVkOxxBd/fFjrttoZI5+7632Lg8UOqgFdoqo9GNiMn6Bau
-         1ToYdovEixnFJtUPxEfshWeNk+EP2Do+8EuAVzD/F3+QYSzNpTciidPVWZwdTgzISY
-         lkJ8Nb3903ejYMy2viyoEF6raiqg8bQ18vN5J/ow84W09Ea0KWShxnjX9SR/vbxnI+
-         EHjCakwTuywhA==
+        s=k20201202; t=1678923174;
+        bh=tGgmkyW9sOQppytiiGm2ywKzt51IycdB5ZhlIdtaeTc=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Rjv+YCq4rsWz8IKZCpJBwNsMKHP7rvAFdYflUq306+e6QDASRtNZAHlZAU7mmXS3j
+         VxG1jUcG8usAn8kvMHliv0kxQ9nUdmbcOWUBUyGsJybp1eA01E1ikoYM8zDosTzjat
+         GE15HALAh2pxDJuxa1rmD1Lezg78KGXL1ceNvotm/WtkdX1QImSyM99DG6mAZ9F+se
+         OCsuxVA4oVqRCgj8aGNLfx4TYm7fbIxabTP2U5lc9v+CpbikcehPbydQNPLB6rx5wO
+         wcjf+p08H956IaAtndHG4RJZqBIG6XcJ6+WtiKT/PvWeGYAuJyeJ2nrtBp690ssBZG
+         jwgyxGtB9Kxtg==
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     linux-arm-msm@vger.kernel.org, konrad.dybcio@linaro.org,
-        agross@kernel.org, robh+dt@kernel.org, devicetree@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-kernel@vger.kernel.org,
-        Varadarajan Narayanan <quic_varada@quicinc.com>
-Subject: Re: [PATCH 0/2] socinfo support for IPQ9574 family of SoCs
-Date:   Wed, 15 Mar 2023 16:35:23 -0700
-Message-Id: <167892332567.4030021.2869386250711103647.b4-ty@kernel.org>
+To:     agross@kernel.org, Visweswara Tanuku <quic_vtanuku@quicinc.com>,
+        konrad.dybcio@linaro.org, gregkh@linuxfoundation.org
+Cc:     quic_vnivarth@quicinc.com, linux-arm-msm@vger.kernel.org,
+        quic_eberman@quicinc.com, quic_msavaliy@quicinc.com,
+        linux-kernel@vger.kernel.org, quic_satyap@quicinc.com
+Subject: Re: [PATCH] soc: qcom: geni-se: Update Tx and Rx fifo depth based on QUP HW version
+Date:   Wed, 15 Mar 2023 16:35:24 -0700
+Message-Id: <167892332566.4030021.1142374899502045448.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <1678774414-14414-1-git-send-email-quic_varada@quicinc.com>
-References: <1678774414-14414-1-git-send-email-quic_varada@quicinc.com>
+In-Reply-To: <20230215050528.9507-1-quic_vtanuku@quicinc.com>
+References: <20230215050528.9507-1-quic_vtanuku@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -55,24 +56,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 14 Mar 2023 11:43:32 +0530, Varadarajan Narayanan wrote:
-> This series adds support for qcom-socinfo for IPQ9574 family of SoCs.
+On Tue, 14 Feb 2023 21:05:28 -0800, Visweswara Tanuku wrote:
+> From QUP HW Version 3.10 and above the Tx and Rx
+> fifo depth bits are increased to 23:16 bits from
+> 21:16 bits in SE_HW_PARAM registers accomodating
+> 256bytes of fifo depth.
 > 
-> Functionally this series needs SMEM support added in
-> https://lore.kernel.org/linux-arm-kernel/20230216120012.28357-1-quic_poovendh@quicinc.com/
-> 
-> Varadarajan Narayanan (2):
->   dt-bindings: arm: qcom,ids: Add IDs for IPQ9574 and its variants
->   soc: qcom: socinfo: Add IDs for IPQ9574 and its variants
+> Updated geni_se_get_tx_fifo_depth and
+> geni_se_get_rx_fifo_depth to retrieve right fifo
+> depth based on QUP HW version.
 > 
 > [...]
 
 Applied, thanks!
 
-[1/2] dt-bindings: arm: qcom,ids: Add IDs for IPQ9574 and its variants
-      commit: fd972da1b228974f788c115d37abe209828ca5a9
-[2/2] soc: qcom: socinfo: Add IDs for IPQ9574 and its variants
-      commit: c6653d8f24f4bcc255e3ffb28c629ff5d0e0ba13
+[1/1] soc: qcom: geni-se: Update Tx and Rx fifo depth based on QUP HW version
+      commit: fe8aa1ba078366ba23fc676efab57183b12a3a81
 
 Best regards,
 -- 
