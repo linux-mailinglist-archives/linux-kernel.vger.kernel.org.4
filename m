@@ -2,77 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E2316BA440
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 01:47:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E7466BA44A
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 01:51:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229447AbjCOArs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 20:47:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50838 "EHLO
+        id S229955AbjCOAvE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 20:51:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbjCOArq (ORCPT
+        with ESMTP id S229525AbjCOAvC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 20:47:46 -0400
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF97F40F8
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 17:47:45 -0700 (PDT)
-Received: by mail-pl1-x64a.google.com with SMTP id n4-20020a170902f60400b0019f287674d3so5941250plg.1
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 17:47:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678841265;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=EwBPx+UqTO7grWmvIHxQBcyLrYQZ/vCH68LZPZ9S27k=;
-        b=PpujC94juOdIxalzZNUL4tG38/HNR2WGhAGj9T1fvOcxs2slzb10featCWd873gRxJ
-         bkZp7WhjdLIw3jJWE7qsd03ysV7ptnc33mhSgilPFlHkZrrM+67GV2i5MY+jT4kdepKy
-         lHoVlgDV9IaZP1TKAsFzUF4bOcjIeqJCtaV6tYKjCclel8wqSorc2bCWleFDpKshIRkd
-         zCQJkxdCe2QVwjs23XRmX8bhnI5cLCTNdCcs2Dy86/hZ3j8APwbvdEUu4yTGcFq1wvn1
-         i5CQsNX/SOlk1oekGZxN1NS+WtB3FEKhNqrT75ElUEbLEd4JFj3ZDE7VHt93kwn6k/OT
-         KF5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678841265;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=EwBPx+UqTO7grWmvIHxQBcyLrYQZ/vCH68LZPZ9S27k=;
-        b=7wlfxJfGY2zkH5XJfn3kVKyixYEAyKoxLeAfUnekf63glBI2UqNNvTPbKWePBiWZXu
-         daLFgGj8egbvzmO0x+4qjt0qGqt7d/0aImNDG/VNEv24hWrlaVI6p7lV6Y7uLR+AhdlW
-         8A/qhFsIFey8XjpkHhhJ4+WpbPMIw2ehZYNWD4s/eGae5qf1WHKZghUEuZhSzKX2L845
-         hFRCHs252uA6YmcAohfzPEBkKoWJ7xn3PW9DwTaTmosK6CRS5B66ohDM6hRAeWnC/aaC
-         KosJudxPxM65IlcMLToSn4k52V2AD8fGcp4Vn2fNCq0/Sq0kpjRsW+V6zHJXB+0Q0pTI
-         RzOQ==
-X-Gm-Message-State: AO0yUKWzXSaCE1A0WbgLIDyqLW6+iw2mhhyQ6bdg4C607T49KktAQHIN
-        DWxYXqJ0XpfZtaeVdSomgGZzx4gbIH0=
-X-Google-Smtp-Source: AK7set+Ego0QgpRq74ayNUnPPG6DkSW/keRy1zLO+iY+AOV355NsEY8KkhW5jZcxHtbLJcx+p9Hh5wyQN1c=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:903:1312:b0:1a0:5402:b17b with SMTP id
- iy18-20020a170903131200b001a05402b17bmr444844plb.0.1678841265253; Tue, 14 Mar
- 2023 17:47:45 -0700 (PDT)
-Date:   Tue, 14 Mar 2023 17:47:43 -0700
-In-Reply-To: <9f8c89bf44a8eb68407369d26956c24082562cd2.camel@intel.com>
-Mime-Version: 1.0
-References: <20230310214232.806108-1-seanjc@google.com> <20230310214232.806108-6-seanjc@google.com>
- <ce2330db94b05605a0649a3da0595211c5bd71dd.camel@intel.com>
- <ZA9avcHRPoIqZP/n@google.com> <9f8c89bf44a8eb68407369d26956c24082562cd2.camel@intel.com>
-Message-ID: <ZBEVc0/vD5tEj29e@google.com>
-Subject: Re: [PATCH v2 05/18] x86/reboot: KVM: Disable SVM during reboot via
- virt/KVM reboot callback
-From:   Sean Christopherson <seanjc@google.com>
-To:     Kai Huang <kai.huang@intel.com>
-Cc:     Chao Gao <chao.gao@intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "bp@alien8.de" <bp@alien8.de>, "x86@kernel.org" <x86@kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        Tue, 14 Mar 2023 20:51:02 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C0CF2E833
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 17:50:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678841411;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=H+V2OenhBTZO+D4X2yTvwE20arRuy3dfWbSmOimZmE0=;
+        b=TbryaQDdfaCOaAOzHsA3B/ZE1TqESrTcMpCxN6k6udZP9RZLUSPU0A7Z5KqwAb5KqEUkLf
+        W0XwgvKYTQjaY8eeiMmS/Gt7kjkk4Y1h+8toe8KKRIrlLLMJlpMObdSPw9RXzoFw6BReir
+        qe1Krc9EuohzuPh4G8PtGds9tuNYuwc=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-221-lAQsurbtNuCcZXpZ9h2LkQ-1; Tue, 14 Mar 2023 20:50:06 -0400
+X-MC-Unique: lAQsurbtNuCcZXpZ9h2LkQ-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 151B3857A87;
+        Wed, 15 Mar 2023 00:50:05 +0000 (UTC)
+Received: from localhost (ovpn-12-81.pek2.redhat.com [10.72.12.81])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 19BE0400F52;
+        Wed, 15 Mar 2023 00:49:57 +0000 (UTC)
+Date:   Wed, 15 Mar 2023 08:49:53 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-kernel@vger.kernel.org,
+        Linux-Arch <linux-arch@vger.kernel.org>, linux-mm@kvack.org,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Helge Deller <deller@gmx.de>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-mips@vger.kernel.org
+Subject: Re: [PATCH v4 2/4] mips: add <asm-generic/io.h> including
+Message-ID: <ZBEWMSdzzvsYCAnd@MiWiFi-R3L-srv>
+References: <20230308130710.368085-1-bhe@redhat.com>
+ <20230308130710.368085-3-bhe@redhat.com>
+ <20230313175521.GA14404@alpha.franken.de>
+ <ZA/iZHEHaQ2WR+HL@MiWiFi-R3L-srv>
+ <20230314153421.GA13322@alpha.franken.de>
+ <7f39daad-05b0-46f8-bc89-185b336d8fd4@gmail.com>
+ <3fd94bd7-ab10-4d50-bcb6-7c13a3346d6a@app.fastmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <3fd94bd7-ab10-4d50-bcb6-7c13a3346d6a@app.fastmail.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,116 +79,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 14, 2023, Huang, Kai wrote:
-> On Mon, 2023-03-13 at 10:18 -0700, Sean Christopherson wrote:
-> > On Mon, Mar 13, 2023, Huang, Kai wrote:
-> > > On Fri, 2023-03-10 at 13:42 -0800, Sean Christopherson wrote:
-> > > > Use the virt callback to disable SVM (and set GIF=3D1) during an em=
-ergency
-> > > > instead of blindly attempting to disable SVM.=EF=BF=BD Like the VMX=
- case, if KVM
-> > > > (or an out-of-tree hypervisor) isn't loaded/active, SVM can't be in=
- use.
-> > > >=20
-> > > > Signed-off-by: Sean Christopherson <seanjc@google.com>
-> > >=20
-> > > [...]
-> > >=20
-> > > > -#if IS_ENABLED(CONFIG_KVM_INTEL)
-> > > > +#if IS_ENABLED(CONFIG_KVM_INTEL) || IS_ENABLED(CONFIG_KVM_AMD)
-> > > > =EF=BF=BD/* RCU-protected callback to disable virtualization prior =
-to reboot. */
-> > > > =EF=BF=BDstatic cpu_emergency_virt_cb __rcu *cpu_emergency_virt_cal=
-lback;
-> > > > =EF=BF=BD
-> > > > @@ -821,7 +821,7 @@ int crashing_cpu =3D -1;
-> > > > =EF=BF=BD */
-> > > > =EF=BF=BDvoid cpu_emergency_disable_virtualization(void)
-> > > > =EF=BF=BD{
-> > > > -#if IS_ENABLED(CONFIG_KVM_INTEL)
-> > > > +#if IS_ENABLED(CONFIG_KVM_INTEL) || IS_ENABLED(CONFIG_KVM_AMD)
-> > > > =EF=BF=BD	cpu_emergency_virt_cb *callback;
-> > > > =EF=BF=BD
-> > > > =EF=BF=BD	rcu_read_lock();
-> > > > @@ -830,8 +830,6 @@ void cpu_emergency_disable_virtualization(void)
-> > > > =EF=BF=BD		callback();
-> > > > =EF=BF=BD	rcu_read_unlock();
-> > > > =EF=BF=BD#endif
-> > > > -	/* KVM_AMD doesn't yet utilize the common callback. */
-> > > > -	cpu_emergency_svm_disable();
-> > > > =EF=BF=BD}
-> > >=20
-> > > Shouldn't the callback be always present since you want to consider '=
-out-of-
-> > > tree' hypervisor case?
-> >=20
-> > No?  The kernel doesn't provide any guarantees for out-of-tree code.  I=
- don't have
-> > a super strong preference, though I do like the effective documentation=
- the checks
-> > provide.  Buy more importantly, my understanding is that the x86 mainta=
-iners want
-> > to limit the exposure for these types of interfaces, e.g. `git grep IS_=
-ENABLED\(CONFIG_KVM`
-> > for a variety of hooks that are enabled iff KVM is enabled in the kerne=
-l config.
->=20
-> How about doing the embracing the code to do the emergency virt callback =
-as the
-> last step?
+On 03/14/23 at 06:19pm, Arnd Bergmann wrote:
+> On Tue, Mar 14, 2023, at 17:31, Florian Fainelli wrote:
+> > On 3/14/23 08:34, Thomas Bogendoerfer wrote:
+> >> On Tue, Mar 14, 2023 at 10:56:36AM +0800, Baoquan He wrote:
+> >>>> In file included from /local/tbogendoerfer/korg/linux/include/linux/spinlock.h:311:0,
+> >>>>                   from /local/tbogendoerfer/korg/linux/include/linux/vmalloc.h:5,
+> >>>>                   from /local/tbogendoerfer/korg/linux/include/asm-generic/io.h:994,
+> >>>>                   from /local/tbogendoerfer/korg/linux/arch/mips/include/asm/io.h:618,
+> >>>>                   from /local/tbogendoerfer/korg/linux/include/linux/io.h:13,
+> >>>>                   from /local/tbogendoerfer/korg/linux/arch/mips/include/asm/mips-cps.h:11,
+> >>>>                   from /local/tbogendoerfer/korg/linux/arch/mips/include/asm/smp-ops.h:16,
+> >>>>                   from /local/tbogendoerfer/korg/linux/arch/mips/include/asm/smp.h:21,
+> >>>>                   from /local/tbogendoerfer/korg/linux/include/linux/smp.h:113,
+> >>>>                   from /local/tbogendoerfer/korg/linux/include/linux/lockdep.h:14,
+> >>>>                   from /local/tbogendoerfer/korg/linux/include/linux/rcupdate.h:29,
+> >>>>                   from /local/tbogendoerfer/korg/linux/include/linux/rculist.h:11,
+> >>>>                   from /local/tbogendoerfer/korg/linux/include/linux/pid.h:5,
+> >>>>                   from /local/tbogendoerfer/korg/linux/include/linux/sched.h:14,
+> >>>>                   from /local/tbogendoerfer/korg/linux/include/linux/utsname.h:6,
+> >>>>                   from /local/tbogendoerfer/korg/linux/init/version.c:17:
+> >> 
+> >> already tried it, but it doesn't fix the issue. I've attached the
+> >> config.
+> >
+> > I had attempted a similar approach before as Baoquan did, but met the 
+> > same build issue as Thomas that was not immediately clear to me why it 
+> > popped up. I would be curious to see how this can be resolved.
+> 
+> I think this is the result of recursive header inclusion:
+> spinlock.h includes lockdep.h, but its header guard is already
+> there from the include chain.
+> 
+> There is probably something in one of the mips asm/*.h headers that
+> causes this recursion that is not present elsewhere.
+> 
+> I think this should fix it, but is likely to cause another problem elsewhere:
+> 
+> --- a/arch/mips/include/asm/smp-ops.h
+> +++ b/arch/mips/include/asm/smp-ops.h
+> @@ -13,8 +13,6 @@
+>  
+>  #include <linux/errno.h>
+>  
+> -#include <asm/mips-cps.h>
+> -
+>  #ifdef CONFIG_SMP
+>  
+>  #include <linux/cpumask.h>
 
-I like that idea, it also makes a few other patches a bit cleaner.
+Will meet below compiling error after appllying above patch. Adding
+asm/mips-cps.h including in arch/mips/kernel/setup.c will fix it as below.
 
-> I like the "cleanup" work in this series regardless whether we should gua=
-rd the
-> emergency virt callback with CONFIG_KVM_INTEL || CONFIG_KVM_AMD.  If we d=
-o the
-> actual "cleanup" work first, and put the CONFIG_KVM_INTEL || CONFIG_KVM_A=
-MD as
-> the last step, it is also easier to review I guess, because it's kinda a
-> separate logic independent to the actual "cleanup" work.
->=20
-> Also, personally I don't particularly like the middle state in patch 04:
->=20
->  void cpu_emergency_disable_virtualization(void)
->  {
->  #if IS_ENABLED(CONFIG_KVM_INTEL)
-> -	cpu_crash_vmclear_loaded_vmcss();
-> -#endif
-> +	cpu_emergency_virt_cb *callback;
-> =20
-> -	cpu_emergency_vmxoff();
-> +	rcu_read_lock();
-> +	callback =3D rcu_dereference(cpu_emergency_virt_callback);
-> +	if (callback)
-> +		callback();
-> +	rcu_read_unlock();
-> +#endif
-> +	/* KVM_AMD doesn't yet utilize the common callback. */
->  	cpu_emergency_svm_disable();
->  }
->=20
-> Which eventually got fixed up in patch 05:
->=20
->  void cpu_emergency_disable_virtualization(void)
->  {
-> -#if IS_ENABLED(CONFIG_KVM_INTEL)
-> +#if IS_ENABLED(CONFIG_KVM_INTEL) || IS_ENABLED(CONFIG_KVM_AMD)
->  	cpu_emergency_virt_cb *callback;
-> =20
->  	rcu_read_lock();
-> @@ -830,8 +830,6 @@ void cpu_emergency_disable_virtualization(void)
->  		callback();
->  	rcu_read_unlock();
->  #endif
-> -	/* KVM_AMD doesn't yet utilize the common callback. */
-> -	cpu_emergency_svm_disable();
->  }
-> =20
-> Could we just merge the two patches together?=20
+arch/mips/kernel/setup.c: In function ‘setup_arch’:
+arch/mips/kernel/setup.c:781:9: error: implicit declaration of function ‘mips_cm_probe’ [-Werror=implicit-function-declaration]
+  781 |         mips_cm_probe();
+      |         ^~~~~~~~~~~~~
+cc1: all warnings being treated as errors
 
-I'd prefer not to squash the two.  I agree it's ugly, but I dislike convert=
-ing
-VMX and SVM at the same time.  I'm not totally opposed to moving everything=
- in
-one fell swoop, but my preference is to keep them separate.
+
+diff --git a/arch/mips/kernel/setup.c b/arch/mips/kernel/setup.c
+index f1c88f8a1dc5..e8c4020ef367 100644
+--- a/arch/mips/kernel/setup.c
++++ b/arch/mips/kernel/setup.c
+@@ -43,6 +43,7 @@
+ #include <asm/smp-ops.h>
+ #include <asm/prom.h>
+ #include <asm/fw/fw.h>
++#include <asm/mips-cps.h>
+ 
+ #ifdef CONFIG_MIPS_ELF_APPENDED_DTB
+ char __section(".appended_dtb") __appended_dtb[0x100000];
+
