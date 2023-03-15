@@ -2,75 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADC9C6B88D1
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 04:01:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B02D16B88AE
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 03:41:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229673AbjCNDB2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 23:01:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43282 "EHLO
+        id S229784AbjCNCl2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 22:41:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbjCNDBZ (ORCPT
+        with ESMTP id S229475AbjCNCl0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 23:01:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C51DD1E9C7;
-        Mon, 13 Mar 2023 20:01:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5E947B811DA;
-        Tue, 14 Mar 2023 03:01:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCB8DC433EF;
-        Tue, 14 Mar 2023 03:01:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678762881;
-        bh=f620CqCwGXqr8TZeAJQjlq7Il+ZtFOFopAaFMsR+9Yc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=iVnNFK0lyWTiFdIMAMPcPXV+DqeTaUB6bZMuh0l42caxl3jQGJQVrHAgYc+dwdR8I
-         2fYIRWVtRM8aYKYJ4tKlDFGlDICciZJVYFjYfmHFYyqeLxu1VU/lHaXvU1dtAVkjAk
-         Fu2SgaxWskMqcyFD/QekNOcSeJaZ7kG0QyUo51FRLAfqHRLWUEhxBA1Lhsnxfiq+Wl
-         3VZ30jlJhZkyePfdXq/OAwsOxlA9eqB0YdAsV7XhxFhljqM8PbfN7GvBfQiEC6fu8A
-         yvKWwMCl3xaHHpjrx2cwGUzLtQ83I6W6iilv8dQl1qG1PFAor5rVX/ilWMP3J2/V2G
-         hKeihT0tN0xkg==
-Date:   Tue, 14 Mar 2023 11:01:14 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     Alistair Francis <alistair@alistair23.me>
-Cc:     devicetree@vger.kernel.org, s.hauer@pengutronix.de,
-        krzysztof.kozlowski+dt@linaro.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, robh+dt@kernel.org,
-        linux-imx@nxp.com, linux@armlinux.org.uk, arnd@arndb.de,
-        alistair23@gmail.com, kernel@pengutronix.de, festevam@gmail.com,
-        jernej.skrabec@gmail.com
-Subject: Re: [PATCH v4 0/3] imx7d-remarkable2: Enable cyttsp5 and rohm,bd71815
-Message-ID: <20230314030114.GK143566@dragon>
-References: <20230227045023.560319-1-alistair@alistair23.me>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230227045023.560319-1-alistair@alistair23.me>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 13 Mar 2023 22:41:26 -0400
+Received: from mail.nfschina.com (unknown [42.101.60.237])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE21683890
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 19:41:25 -0700 (PDT)
+Received: from localhost (unknown [127.0.0.1])
+        by mail.nfschina.com (Postfix) with ESMTP id 869141A00A24;
+        Tue, 14 Mar 2023 10:42:16 +0800 (CST)
+X-Virus-Scanned: amavisd-new at nfschina.com
+Received: from mail.nfschina.com ([127.0.0.1])
+        by localhost (localhost.localdomain [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id y9sF5mFJskeq; Tue, 14 Mar 2023 10:42:15 +0800 (CST)
+Received: from localhost.localdomain (unknown [219.141.250.2])
+        (Authenticated sender: zeming@nfschina.com)
+        by mail.nfschina.com (Postfix) with ESMTPA id A8B791A0099A;
+        Tue, 14 Mar 2023 10:42:15 +0800 (CST)
+From:   Li zeming <zeming@nfschina.com>
+To:     akpm@linux-foundation.org
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Li zeming <zeming@nfschina.com>
+Subject: [PATCH] mm: mempool: Optimize the mempool_create_node function
+Date:   Thu, 16 Mar 2023 03:12:43 +0800
+Message-Id: <20230315191243.3289-1-zeming@nfschina.com>
+X-Mailer: git-send-email 2.18.2
+X-Spam-Status: No, score=2.3 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_24_48,
+        RCVD_IN_VALIDITY_RPBL,RDNS_NONE,SPF_HELO_NONE,SPF_NONE autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 27, 2023 at 02:50:20PM +1000, Alistair Francis wrote:
-> Enable the cyttsp5 and rohm,bd71815 in the device trees and
-> defconfig for the reMarkable 2.
-> 
-> v4:
->  - Fixup the rohm changes to match DT schema
-> v3:
->  - Remove unused sleep states
-> v2:
->  - Fixup DT formatting issues in path 3
-> 
-> Alistair Francis (3):
->   ARM: dts: imx7d-remarkable2: Enable the cyttsp5
->   ARM: imx_v6_v7_defconfig: Enable rohm,bd71815
->   ARM: dts: imx7d-remarkable2: Enable the rohm,bd71815
+The pool pointer variable gets the kzalloc_node function return value
+directly at definition time, which should be more concise.
 
-Applied all, thanks!
+Signed-off-by: Li zeming <zeming@nfschina.com>
+---
+ mm/mempool.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/mm/mempool.c b/mm/mempool.c
+index 734bcf5afbb7..9a4db6efc9ab 100644
+--- a/mm/mempool.c
++++ b/mm/mempool.c
+@@ -267,9 +267,7 @@ mempool_t *mempool_create_node(int min_nr, mempool_alloc_t *alloc_fn,
+ 			       mempool_free_t *free_fn, void *pool_data,
+ 			       gfp_t gfp_mask, int node_id)
+ {
+-	mempool_t *pool;
+-
+-	pool = kzalloc_node(sizeof(*pool), gfp_mask, node_id);
++	mempool_t *pool = kzalloc_node(sizeof(*pool), gfp_mask, node_id);
+ 	if (!pool)
+ 		return NULL;
+ 
+-- 
+2.18.2
+
