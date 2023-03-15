@@ -2,181 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C08A6BBF56
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 22:47:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4AD56BBF58
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 22:47:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232475AbjCOVrQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 17:47:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50500 "EHLO
+        id S230124AbjCOVro (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 17:47:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229941AbjCOVrO (ORCPT
+        with ESMTP id S229941AbjCOVrm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 17:47:14 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F81F6B977;
-        Wed, 15 Mar 2023 14:47:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678916833; x=1710452833;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=cHzP/3Tzs/wORixRirXSEWJE6PYaNKurlGF+KU1RKV8=;
-  b=WJ+8Wk09AcGeT/eFJ7FgD2efy1oPn1aRK8GX7wEW+svWzJdsKCsYe3fl
-   VCqRShqYyEHkD19BLPUztcyQqBOdRW8DYgxTu/0gZBM0kjd3lmDt5sK7Z
-   UWAkBhM8INu+gDhSnJzPT3JI3qMgqvsvhwq494v8bE+5CHjsAUUxjwzcu
-   6EZp7UJWvvT4LuwnaEaTdsAiVqxMqkJiIdjwYob0ggqXW1QvY2BwhLL2R
-   dKlOW1Y7nhhcmsPTgujQQ5Y6rvD6TcnRdmtpCgX3+T6qn04nZSHYMo19V
-   G33MmD8vtun3+8zhOPnqgbyya5r+KooXOyzHFZAMgrSeI3J5b50G/5nik
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="337842525"
-X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
-   d="scan'208";a="337842525"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2023 14:47:13 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="748604027"
-X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
-   d="scan'208";a="748604027"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 15 Mar 2023 14:47:09 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pcYxg-00083T-2T;
-        Wed, 15 Mar 2023 21:47:08 +0000
-Date:   Thu, 16 Mar 2023 05:46:29 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Desnes Nunes <desnesn@redhat.com>, iommu@lists.linux.dev,
-        linux-scsi@vger.kernel.org, storagedev@microchip.com,
-        linux-kernel@vger.kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev, hch@lst.de,
-        martin.petersen@oracle.com, don.brace@microchip.com,
-        m.szyprowski@samsung.com, robin.murphy@arm.com, jejb@linux.ibm.com,
-        jsnitsel@redhat.com, Desnes Nunes <desnesn@redhat.com>
-Subject: Re: [PATCH 2/3] dma-debug: add cacheline to user/kernel space dump
- messages
-Message-ID: <202303160548.ReyuTsGD-lkp@intel.com>
-References: <20230315192130.970021-3-desnesn@redhat.com>
+        Wed, 15 Mar 2023 17:47:42 -0400
+Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76BD99F200
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 14:47:35 -0700 (PDT)
+Received: by mail-oi1-x22a.google.com with SMTP id be16so54822oib.0
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 14:47:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxtx.org; s=google; t=1678916855;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XNu/ZDxd1c/2898bC2pLvfVOQzHQvYoBI/Zo5PqnfbQ=;
+        b=ZYA5aFwKbsbVsNtXAHs6cAkaw0w7EOg1zjhs+M794aOamSW/TRd+V0NONSBmPL9alm
+         nNz3VG9ItXgvY87IrtgzL/bWuBi8MxsiHWPHXIXLJrpBHk8dIYudpF14aVtxkS1uEgG5
+         64ZhuDD1A2NfeNINR56jDSjnzF55vnfed793g=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678916855;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=XNu/ZDxd1c/2898bC2pLvfVOQzHQvYoBI/Zo5PqnfbQ=;
+        b=Fmz/SVgs66s24VcXanFbUT06I3Tuf0oeZIyBs6glS29WSlr/I2pD9J8rgk5NJ9w+Qg
+         OkvNBQM8SDf7dmyd5ntyb3rILL6UsJw5qSU1Wt4dOU3QV3Gr8IoxuuZCir4cNMpQp3r4
+         t1+Ms2BqD5djwliiW+HuCjzICpoaUTsICIuF20jwETAwOdm8vyukh1RDEPs7aE2xEB6L
+         qX2npfxhbBYJPgun0uCZj6Vtoe4ZLvNUMMVbNpevU1aobU7j33oJAUgZ7I6P/VNyypOe
+         LKGgRrXOHnr8zMH8NnmtxmHMQx5aTUgixaZ1FCHwkMBH2h/ehITyXABi8YJuEtFh1eBt
+         2RUA==
+X-Gm-Message-State: AO0yUKUn9w/6NU6wc4klA0gpQX6esMwCZbuBbr8tZ1gVnHKSdbz8dKmw
+        ZkjE7xAKSyAZuGTtpVLZRf8qKw==
+X-Google-Smtp-Source: AK7set/1wOi6EX3ewTUrlh0Q+V7z3U5I3m2dJos4Lkw3/kNs4+4AWTV8MxqaKkoV6Egus8jGerD2rQ==
+X-Received: by 2002:a05:6808:298a:b0:384:dfc7:7d84 with SMTP id ex10-20020a056808298a00b00384dfc77d84mr1844506oib.58.1678916854725;
+        Wed, 15 Mar 2023 14:47:34 -0700 (PDT)
+Received: from fedora64.linuxtx.org (99-47-93-78.lightspeed.rcsntx.sbcglobal.net. [99.47.93.78])
+        by smtp.gmail.com with ESMTPSA id r140-20020acaa892000000b00383ecd10ea6sm2654963oie.20.2023.03.15.14.47.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Mar 2023 14:47:34 -0700 (PDT)
+Sender: Justin Forbes <jmforbes@linuxtx.org>
+Date:   Wed, 15 Mar 2023 16:47:32 -0500
+From:   Justin Forbes <jforbes@fedoraproject.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 6.2 000/141] 6.2.7-rc1 review
+Message-ID: <ZBI89ARxCFkPvm7/@fedora64.linuxtx.org>
+References: <20230315115739.932786806@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230315192130.970021-3-desnesn@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230315115739.932786806@linuxfoundation.org>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Desnes,
+On Wed, Mar 15, 2023 at 01:11:43PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.2.7 release.
+> There are 141 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Fri, 17 Mar 2023 11:57:10 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.2.7-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.2.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-Thank you for the patch! Perhaps something to improve:
+Tested rc1 against the Fedora build system (aarch64, armv7, ppc64le,
+s390x, x86_64), and boot tested x86_64. No regressions noted.
 
-[auto build test WARNING on jejb-scsi/for-next]
-[also build test WARNING on mkp-scsi/for-next linus/master hch-configfs/for-next v6.3-rc2 next-20230315]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Desnes-Nunes/dma-debug-small-dma_debug_entry-s-comment-and-variable-name-updates/20230316-032542
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git for-next
-patch link:    https://lore.kernel.org/r/20230315192130.970021-3-desnesn%40redhat.com
-patch subject: [PATCH 2/3] dma-debug: add cacheline to user/kernel space dump messages
-config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20230316/202303160548.ReyuTsGD-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/ae3f8fdd17c54b837d476952733456723c472ed8
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Desnes-Nunes/dma-debug-small-dma_debug_entry-s-comment-and-variable-name-updates/20230316-032542
-        git checkout ae3f8fdd17c54b837d476952733456723c472ed8
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash kernel/dma/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303160548.ReyuTsGD-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from include/linux/device.h:15,
-                    from include/linux/dma-mapping.h:7,
-                    from include/linux/dma-map-ops.h:9,
-                    from kernel/dma/debug.c:12:
-   kernel/dma/debug.c: In function 'debug_dma_dump_mappings':
->> kernel/dma/debug.c:537:42: warning: format '%llx' expects argument of type 'long long unsigned int', but argument 9 has type 'phys_addr_t' {aka 'unsigned int'} [-Wformat=]
-     537 |                                          "%s idx %d P=%llx N=%lx D=%llx L=%llx cln=%llx %s %s\n",
-         |                                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:110:30: note: in definition of macro 'dev_printk_index_wrap'
-     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-         |                              ^~~
-   include/linux/dev_printk.h:150:58: note: in expansion of macro 'dev_fmt'
-     150 |         dev_printk_index_wrap(_dev_info, KERN_INFO, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                                          ^~~~~~~
-   kernel/dma/debug.c:536:33: note: in expansion of macro 'dev_info'
-     536 |                                 dev_info(entry->dev,
-         |                                 ^~~~~~~~
-   kernel/dma/debug.c:537:87: note: format string is defined here
-     537 |                                          "%s idx %d P=%llx N=%lx D=%llx L=%llx cln=%llx %s %s\n",
-         |                                                                                    ~~~^
-         |                                                                                       |
-         |                                                                                       long long unsigned int
-         |                                                                                    %x
-   kernel/dma/debug.c: In function 'dump_show':
-   kernel/dma/debug.c:568:87: warning: format '%llx' expects argument of type 'long long unsigned int', but argument 11 has type 'phys_addr_t' {aka 'unsigned int'} [-Wformat=]
-     568 |                                    "%s %s %s idx %d P=%llx N=%lx D=%llx L=%llx cln=%llx %s %s\n",
-         |                                                                                    ~~~^
-         |                                                                                       |
-         |                                                                                       long long unsigned int
-         |                                                                                    %x
-   ......
-     574 |                                    cln, dir2name[entry->direction],
-         |                                    ~~~                                                 
-         |                                    |
-         |                                    phys_addr_t {aka unsigned int}
-
-
-vim +537 kernel/dma/debug.c
-
-   518	
-   519	/*
-   520	 * Dump mappings entries on kernel space for debugging purposes
-   521	 */
-   522	void debug_dma_dump_mappings(struct device *dev)
-   523	{
-   524		int idx;
-   525		phys_addr_t cln;
-   526	
-   527		for (idx = 0; idx < HASH_SIZE; idx++) {
-   528			struct hash_bucket *bucket = &dma_entry_hash[idx];
-   529			struct dma_debug_entry *entry;
-   530			unsigned long flags;
-   531	
-   532			spin_lock_irqsave(&bucket->lock, flags);
-   533			list_for_each_entry(entry, &bucket->list, list) {
-   534				if (!dev || dev == entry->dev) {
-   535					cln = to_cacheline_number(entry);
-   536					dev_info(entry->dev,
- > 537						 "%s idx %d P=%llx N=%lx D=%llx L=%llx cln=%llx %s %s\n",
-   538						 type2name[entry->type], idx,
-   539						 phys_addr(entry), entry->pfn,
-   540						 entry->dev_addr, entry->size,
-   541						 cln, dir2name[entry->direction],
-   542						 maperr2str[entry->map_err_type]);
-   543				}
-   544			}
-   545			spin_unlock_irqrestore(&bucket->lock, flags);
-   546	
-   547			cond_resched();
-   548		}
-   549	}
-   550	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Tested-by: Justin M. Forbes <jforbes@fedoraproject.org>
