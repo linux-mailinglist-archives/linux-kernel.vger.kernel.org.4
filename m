@@ -2,59 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DEEE6BAAD0
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 09:33:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C76176BAAD2
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 09:33:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231419AbjCOIdF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 04:33:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58894 "EHLO
+        id S231552AbjCOIdc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 04:33:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229971AbjCOIdD (ORCPT
+        with ESMTP id S231451AbjCOIda (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 04:33:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCC7E83E9;
-        Wed, 15 Mar 2023 01:33:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 57B8761B77;
-        Wed, 15 Mar 2023 08:33:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E1A6C433D2;
-        Wed, 15 Mar 2023 08:32:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678869180;
-        bh=O6E2IOFT7Qo6yMnQvB/m7JajulqmQNBlEUHnHZxFKPY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=pYRWPmTG2IWkcRZSgKf4n/QcI/FH5910wX+3Z0vmTqe0YSQP46H8P3BZNw6HEQRj8
-         qUq4vtUeba2wxdWZLNB9uQ7OK1E09IqnQ+PbNKmoWGgllT9jNRcYabguZbcfFTz863
-         1SldAVuMHjDKdqNDc9lTa7S+VK8juIz5cHW21LArrarzAvxszwFrewXqn7kQ499NIZ
-         kHzgFwvi9OAZZk4s2R7QxjlJv+Cm1JcCT4/0xhWGv54WqEF9AC+OMUTA4d1qasNHxq
-         mQZvsKousLR1sDrkRSGSELtscd9Pu+QCef0dWv3RX3cdopjUlIJwuHPaaxX2wh/IGy
-         q6PTTR5onCzFw==
-Date:   Wed, 15 Mar 2023 17:32:57 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     open list <linux-kernel@vger.kernel.org>,
-        linux-trace-kernel@vger.kernel.org,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        lkft-triage@lists.linaro.org,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Anders Roxell <anders.roxell@linaro.org>
-Subject: Re: selftests: ftrace: event filter function - test event filtering
- on functions [FAIL]
-Message-Id: <20230315173257.1311e50729c73e0cb6e0aa0d@kernel.org>
-In-Reply-To: <CA+G9fYtF-XEKi9YNGgR=Kf==7iRb2FrmEC7qtwAeQbfyah-UhA@mail.gmail.com>
-References: <CA+G9fYtF-XEKi9YNGgR=Kf==7iRb2FrmEC7qtwAeQbfyah-UhA@mail.gmail.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+        Wed, 15 Mar 2023 04:33:30 -0400
+Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1671166E5;
+        Wed, 15 Mar 2023 01:33:25 -0700 (PDT)
+Received: by mail-pl1-x643.google.com with SMTP id u5so19229417plq.7;
+        Wed, 15 Mar 2023 01:33:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678869205;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=2vTQAZoeBjlEcGhk3RrVAUomw8DLBSpSN68W8fBtiGg=;
+        b=lNSVB4VtYjZer+I7ek45AOkfcs1c+zhiQKToBht/hO0FBWaTeO9oymX6qglT/2gjnb
+         a1zQus8fK5DDOf53ANoZIoTjAJn71mF3pXxabpIyZi8DQc7DgwS8SRw99dWtklTZ3PjV
+         fF4l2RL33GVjDw3ouctr95Ch9tYXBb58ChftPUOe7OJ6wkAjtWOzWw0VouFfxzhDGSVv
+         Obgz324F/8gFTzzg/ClhA5YjVjRupnl6OH9RrOMfHvpgMvZAZvZZc5XmybF2cyic1bKa
+         DTQ80KWzd+I8IV6RGIfwNPVY+m7s8+Bjj/mgWZkUfd0uwhpa6IrwyWaa1xzloIP+IWy/
+         dz6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678869205;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2vTQAZoeBjlEcGhk3RrVAUomw8DLBSpSN68W8fBtiGg=;
+        b=BBObMtBU6lIurlxLQXVw6p4b7zd4c+8WdVF0WFsqqVksAkB06Mn0kfbaTeXK9nFMBK
+         sWRRAKlj0u8a5mFGwfh0/OUKqvFiXejS69G9mkh8H1jYhwSqDed3GNIqTzgCCIuusHCD
+         PsWxoPBH9EEpuPl4HoLem73dtrUfTSR8WfmDoqagCkpGMpOhjGS8QhpTj+AKs50zG5qz
+         UetTPuhAvthYHqM1VMO1/vIo0PgKnj3e0SEmVkjnbkxSky2yFwcwCh+hO03tRREaXsU0
+         Tmqeq+SlwWDanyMDdkwO7f6sTrFgDqFyWREuDnQTrXVfJiR/FEo8hhX1YJF7G1qJtNuJ
+         +/hg==
+X-Gm-Message-State: AO0yUKUl6XNgsX+kiv5M5UK7lwbRYpBpD/ei8NT+w2e37NN8oQ2+5Lr2
+        /HtvNG9Lvpw/RcsxzxJ0qhuCj3gosYB5CGwss1A=
+X-Google-Smtp-Source: AK7set/Iw5C4XuG6SwJxpPZY1I4cHrD9Ck/VW9bNRxjHJ79m06v7p7oyXiQ/KwbVGknWrJXkjBWPSA==
+X-Received: by 2002:a17:90a:19:b0:23a:ad68:25a7 with SMTP id 25-20020a17090a001900b0023aad6825a7mr33242681pja.2.1678869205233;
+        Wed, 15 Mar 2023 01:33:25 -0700 (PDT)
+Received: from localhost.localdomain ([43.132.141.9])
+        by smtp.gmail.com with ESMTPSA id kx14-20020a170902f94e00b001a064cff3c5sm2990745plb.43.2023.03.15.01.33.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Mar 2023 01:33:24 -0700 (PDT)
+From:   korantwork@gmail.com
+To:     seanjc@google.com, pbonzini@redhat.com, tglx@linutronix.de,
+        mingo@redhat.com, mlevitsk@redhat.com, wanpengli@tencent.com
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org, x86@kernel.org,
+        Xinghui Li <korantli@tencent.com>
+Subject: [PATCH] KVM: x86: SVM: Fix one redefine issue about VMCB_AVIC_APIC_BAR_MASK
+Date:   Wed, 15 Mar 2023 16:33:20 +0800
+Message-Id: <20230315083320.230000-1-korantwork@gmail.com>
+X-Mailer: git-send-email 2.31.1
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,95 +70,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Naresh,
+From: Xinghui Li <korantli@tencent.com>
 
-On Tue, 14 Mar 2023 15:52:44 +0530
-Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
+VMCB_AVIC_APIC_BAR_MASK is defined twice with the same value in svm.h,
+which is meaningless. Delete the duplicate one.
 
-> Results from Linaro’s test farm.
-> 
-> selftests ftrace failed on qemu-x86_64 and qemu-arm64.
-> Please find the test log below.
+Fixes: 391503528257 ("KVM: x86: SVM: move avic definitions from AMD's spec to svm.h")
+Signed-off-by: Xinghui Li <korantli@tencent.com>
+---
+ arch/x86/include/asm/svm.h | 1 -
+ 1 file changed, 1 deletion(-)
 
-Thanks for reporting!
-Can you share the kernel config which you used for this build?
-And the kernel is "next-20230314", is that correct?
-
-> 
-> Is this expected to fail ? Am I missing anything ?
-
-No, it should be a bug. I would like to reproduce it.
-
-Thank you,
-
-> 
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> 
-> kselftest: Running tests in ftrace
-> TAP version 13
-> 1..1
-> # selftests: ftrace: ftracetest
-> # === Ftrace unit tests ===
-> # [1] Basic trace file check [PASS]
-> 
-> ...
-> 
-> # [23] event filter function - test event filtering on functions [FAIL]
-> 
-> ...
-> # [58] Kretprobe %return suffix test [PASS]
-> # [59] Register/unregister many kprobe events
-> [  431.662904] trace_kprobe: Could not probe notrace function startup_64
-> [  431.669846] trace_kprobe: Could not probe notrace function _stext
-> [  431.674104] trace_kprobe: Could not probe notrace function _text
-> [  431.675908] trace_kprobe: Could not probe notrace function
-> secondary_startup_64
-> [  431.677876] trace_kprobe: Could not probe notrace function
-> secondary_startup_64_no_verify
-> [  431.679899] trace_kprobe: Could not probe notrace function __pfx_verify_cpu
-> [  431.681738] trace_kprobe: Could not probe notrace function verify_cpu
-> [  431.683667] trace_kprobe: Could not probe notrace function
-> __pfx_sev_verify_cbit
-> [  431.685594] trace_kprobe: Could not probe notrace function sev_verify_cbit
-> [  431.687381] trace_kprobe: Could not probe notrace function start_cpu0
-> [  431.689225] trace_kprobe: Could not probe notrace function __pfx___startup_64
-> [  431.691223] trace_kprobe: Could not probe notrace function __startup_64
-> [  431.693088] trace_kprobe: Could not probe notrace function
-> __pfx_startup_64_setup_env
-> [  431.695021] trace_kprobe: Could not probe notrace function
-> startup_64_setup_env
-> [  431.697012] trace_kprobe: Could not probe notrace function
-> __pfx___traceiter_initcall_level
-> [  431.700780] trace_kprobe: Could not probe notrace function
-> __pfx___traceiter_initcall_start
-> ...
-> [  439.183587] trace_kprobe: Could not probe notrace function
-> __pfx_hv_check_msr_access
-> [  439.186192] trace_kprobe: Could not probe notrace function
-> __pfx_kvm_hv_flush_tlb
-> ...
-> 
-> # [106] (instance)  event filter function - test event filtering on
-> functions [FAIL]
-> 
-> ...
-> #
-> # # of passed:  109
-> # # of failed:  2
-> # # of unresolved:  3
-> # # of untested:  0
-> # # of unsupported:  3
-> # # of xfailed:  1
-> # # of undefined(test bug):  0
-> not ok 1 selftests: ftrace: ftracetest # exit=1
-> 
-> log link,
-> https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230314/testrun/15564370/suite/kselftest-ftrace/test/ftrace_ftracetest/log
-> 
-> --
-> Linaro LKFT
-> https://lkft.linaro.org
-
-
+diff --git a/arch/x86/include/asm/svm.h b/arch/x86/include/asm/svm.h
+index cb1ee53ad3b1..633f724d461a 100644
+--- a/arch/x86/include/asm/svm.h
++++ b/arch/x86/include/asm/svm.h
+@@ -276,7 +276,6 @@ enum avic_ipi_failure_cause {
+ #define X2AVIC_MAX_PHYSICAL_ID		0x1FFUL
+ 
+ #define AVIC_HPA_MASK	~((0xFFFULL << 52) | 0xFFF)
+-#define VMCB_AVIC_APIC_BAR_MASK		0xFFFFFFFFFF000ULL
+ 
+ 
+ struct vmcb_seg {
 -- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+2.31.1
+
