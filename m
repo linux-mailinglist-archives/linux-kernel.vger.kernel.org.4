@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 225656BA93C
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 08:31:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5D4F6BA93D
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 08:31:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231758AbjCOHbX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 03:31:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39450 "EHLO
+        id S231638AbjCOHbZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 03:31:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231428AbjCOHaU (ORCPT
+        with ESMTP id S231517AbjCOHaV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 03:30:20 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E91C6BDF0;
-        Wed, 15 Mar 2023 00:29:23 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id l9-20020a17090a3f0900b0023d32684e7fso2850175pjc.1;
-        Wed, 15 Mar 2023 00:29:23 -0700 (PDT)
+        Wed, 15 Mar 2023 03:30:21 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 890486B300;
+        Wed, 15 Mar 2023 00:29:25 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id rj10so7295108pjb.4;
+        Wed, 15 Mar 2023 00:29:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678865361;
+        d=gmail.com; s=20210112; t=1678865364;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=/uvJs4X+K4UceXd2k+66/c3dGn+ev++3qcWkPqYJYAw=;
-        b=gFr8KSmeoyAXQVW91BqTPyiRcKvFeSgkJMQvcGjpyHXPzfdPdmLJlL1rcre0rw6D1g
-         uqsvxNyaZBmiAZFWZTXld/nJi9zvyS6NHMFZlfpvxnTAqucEi0/Fsx4drdw5NiY9V3+n
-         jltvMfj32asvhVXklq94kgXCdcunAEvDMGMiU/j/Um9s9xBlp91VuGrhSrkWWWVZuh1L
-         O3USOkDjKjwbGiWE6WqAuKDV1/4NpIQZVGklGVmAv1gFVqD0VT5vKQL6Xv7JodaZz5V6
-         BWWm78s6PYqc8PU1NJ4cx5TdLEyFVao1LoKH5W0WIwk8i0wqJvgxTHdkOecI6hQJh1ow
-         0cCg==
+        bh=tCnGvIs2Tq8LeZXK/BHdAYKObwoy4RHPHee0yLoq8bM=;
+        b=bewoF86q8bBsFN0qhkp/a1PFzYVMCX2Y+hxzO+Yfe9EXWzRTv+a/GhvT+VTkX6EAM/
+         U8itS/mWKbnjMh9VfurS2gWJTItsCoIQ6O3D7iQtOpwC9XwgcJ+I9U0ApyKYE68RGasW
+         Xpt8MLEX4JPDDmRlVaD2s5EMyFJJk24TK2pCa+yqRg6sLMKy1s9PqZz42dOhytWHZ1ZS
+         rXWgzrUFgQysGsgTKu4q0bDfmPaWIN1gJ1IfVo5DNBYjWxAktqCUf9oFidbTVYe5Auxf
+         hV9nS+joqF1Y1CK9wo9aJKfQMdNUlRr4sMOqIoSsnQmYs0qTie+vBbkZdmZiKWRpw9SD
+         zKaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678865361;
+        d=1e100.net; s=20210112; t=1678865364;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=/uvJs4X+K4UceXd2k+66/c3dGn+ev++3qcWkPqYJYAw=;
-        b=aP8FIgKFMls6nMG5N1I+7qVCQrdrxFirTrLCpWnmxpWiqCP/ypJfwfvgO8M38UoRNn
-         RwDcz/G8Xo6VErxFtGTWTNuQ+yKyA/HargTb2qdXbNhpzV0toBSfjjHfNPiUHJ0TG7Ur
-         wY6em9TBmH1XkH/iWst7hzV9fgpiSC6yd+9noUPn1xMM5eS5m8aVChtqdCwzxxlN52vZ
-         rjTQjMyBViKc5g33lbE+o22lZl2TNqsikjP7T7ufzmhhrmE6rIQj8fG4VnXMEeiNEPsb
-         jyv6O2DFHSXjrUSUXA9NSG4z38SIMPEj1VEew+2q1WS6aTqZngdKDQJiJGihFe8W2VH+
-         lkHw==
-X-Gm-Message-State: AO0yUKUvN4KWyG8klBO0kkTWmSDpVnF+Hsr39JaDpQFrqLTZGf9b9s9V
-        ZoKDIgxQD6lT5Exb7c/FD3I=
-X-Google-Smtp-Source: AK7set/C1XOvKQHPg2+bUHWOgVhYILaB0LmAjbIsQNd0NE4qUrZGCifoXNzKbIeSuYPVAkm/OgJtnQ==
-X-Received: by 2002:a17:902:dac8:b0:1a0:763f:2445 with SMTP id q8-20020a170902dac800b001a0763f2445mr2031537plx.11.1678865361305;
-        Wed, 15 Mar 2023 00:29:21 -0700 (PDT)
+        bh=tCnGvIs2Tq8LeZXK/BHdAYKObwoy4RHPHee0yLoq8bM=;
+        b=YW8DrQ6LMuXvmRWybtsCNXs0VmLN8xaplrml9XkDei8dZDh8bvvDnli9JC2JWf6h6l
+         QBo6vO0wUa1ulUFiJkr0r3qKsxKycMDl7Y8M0zDJthBjG+DKeUAccpD9RpyU23h58bXm
+         Fr8GP8SPGK0BAAPqVRIvVyEUsrFll+miwuTvSSI1Dbw+HShPHfDHAgU08mkCiBlhZoTE
+         AGXz4kBH2KImkegya3/M33S+rwXGrlserwv1mooYPIZk9n4+uzK6lozg95Tjb1fbzBkJ
+         OcQhxLu+uhVkJY+w6R9lqYYgRKbu896fPjJOLy84IBeyPfliNPisL8DNBxfrdt9Fk+VC
+         rMYA==
+X-Gm-Message-State: AO0yUKW6lIBJIrBkjFYzzad/DOwt/LA5ICxQtDlPeUQIE7KR3Iht1mYG
+        a8zt06Z/f2E397DB80sPMVY=
+X-Google-Smtp-Source: AK7set+hG6Ka99Vt9tXoVmO88yvAPxytcP+1S9CzwSZMpWQQNepeq6XwQ5K6t1ATS0awuhn6rvOU5A==
+X-Received: by 2002:a17:902:e484:b0:19f:2339:b2ec with SMTP id i4-20020a170902e48400b0019f2339b2ecmr1363973ple.33.1678865363787;
+        Wed, 15 Mar 2023 00:29:23 -0700 (PDT)
 Received: from a28aa0606c51.. (60-250-192-107.hinet-ip.hinet.net. [60.250.192.107])
-        by smtp.gmail.com with ESMTPSA id kz11-20020a170902f9cb00b001a0667822c8sm2740003plb.94.2023.03.15.00.29.19
+        by smtp.gmail.com with ESMTPSA id kz11-20020a170902f9cb00b001a0667822c8sm2740003plb.94.2023.03.15.00.29.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Mar 2023 00:29:21 -0700 (PDT)
+        Wed, 15 Mar 2023 00:29:23 -0700 (PDT)
 From:   Jacky Huang <ychuang570808@gmail.com>
 To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         lee@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
@@ -58,9 +58,9 @@ To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
 Cc:     devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
         schung@nuvoton.com, Jacky Huang <ychuang3@nuvoton.com>
-Subject: [PATCH 05/15] dt-bindings: reset: nuvoton: add binding for ma35d1 IP reset control
-Date:   Wed, 15 Mar 2023 07:28:52 +0000
-Message-Id: <20230315072902.9298-6-ychuang570808@gmail.com>
+Subject: [PATCH 06/15] dt-bindings: mfd: syscon: Add nuvoton,ma35d1-sys compatible
+Date:   Wed, 15 Mar 2023 07:28:53 +0000
+Message-Id: <20230315072902.9298-7-ychuang570808@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230315072902.9298-1-ychuang570808@gmail.com>
 References: <20230315072902.9298-1-ychuang570808@gmail.com>
@@ -78,129 +78,25 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Jacky Huang <ychuang3@nuvoton.com>
 
-Add the dt-bindings header for Nuvoton ma35d1, that gets shared
-between the reset controller and reset references in the dts.
+Add Nuvoton ma35d1 system registers compatible
 
 Signed-off-by: Jacky Huang <ychuang3@nuvoton.com>
 ---
- .../dt-bindings/reset/nuvoton,ma35d1-reset.h  | 108 ++++++++++++++++++
- 1 file changed, 108 insertions(+)
- create mode 100644 include/dt-bindings/reset/nuvoton,ma35d1-reset.h
+ Documentation/devicetree/bindings/mfd/syscon.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/include/dt-bindings/reset/nuvoton,ma35d1-reset.h b/include/dt-bindings/reset/nuvoton,ma35d1-reset.h
-new file mode 100644
-index 000000000000..6d0791b04d52
---- /dev/null
-+++ b/include/dt-bindings/reset/nuvoton,ma35d1-reset.h
-@@ -0,0 +1,108 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (C) 2023 Nuvoton Technologies.
-+ * Author: Chi-Fen Li <cfli0@nuvoton.com>
-+ *
-+ * Device Tree binding constants for MA35D1 reset controller.
-+ */
-+
-+#ifndef __DT_BINDINGS_RESET_MA35D1_H
-+#define __DT_BINDINGS_RESET_MA35D1_H
-+
-+#define MA35D1_RESET_CHIP	0
-+#define MA35D1_RESET_CA35CR0	1
-+#define MA35D1_RESET_CA35CR1	2
-+#define MA35D1_RESET_CM4	3
-+#define MA35D1_RESET_PDMA0	4
-+#define MA35D1_RESET_PDMA1	5
-+#define MA35D1_RESET_PDMA2	6
-+#define MA35D1_RESET_PDMA3	7
-+#define MA35D1_RESET_DISP	9
-+#define MA35D1_RESET_VCAP0	10
-+#define MA35D1_RESET_VCAP1	11
-+#define MA35D1_RESET_GFX	12
-+#define MA35D1_RESET_VDEC	13
-+#define MA35D1_RESET_WHC0	14
-+#define MA35D1_RESET_WHC1	15
-+#define MA35D1_RESET_GMAC0	16
-+#define MA35D1_RESET_GMAC1	17
-+#define MA35D1_RESET_HWSEM	18
-+#define MA35D1_RESET_EBI	19
-+#define MA35D1_RESET_HSUSBH0	20
-+#define MA35D1_RESET_HSUSBH1	21
-+#define MA35D1_RESET_HSUSBD	22
-+#define MA35D1_RESET_USBHL	23
-+#define MA35D1_RESET_SDH0	24
-+#define MA35D1_RESET_SDH1	25
-+#define MA35D1_RESET_NAND	26
-+#define MA35D1_RESET_GPIO	27
-+#define MA35D1_RESET_MCTLP	28
-+#define MA35D1_RESET_MCTLC	29
-+#define MA35D1_RESET_DDRPUB	30
-+#define MA35D1_RESET_TMR0	34
-+#define MA35D1_RESET_TMR1	35
-+#define MA35D1_RESET_TMR2	36
-+#define MA35D1_RESET_TMR3	37
-+#define MA35D1_RESET_I2C0	40
-+#define MA35D1_RESET_I2C1	41
-+#define MA35D1_RESET_I2C2	42
-+#define MA35D1_RESET_I2C3	43
-+#define MA35D1_RESET_QSPI0	44
-+#define MA35D1_RESET_SPI0	45
-+#define MA35D1_RESET_SPI1	46
-+#define MA35D1_RESET_SPI2	47
-+#define MA35D1_RESET_UART0	48
-+#define MA35D1_RESET_UART1	49
-+#define MA35D1_RESET_UART2	50
-+#define MA35D1_RESET_UAER3	51
-+#define MA35D1_RESET_UART4	52
-+#define MA35D1_RESET_UART5	53
-+#define MA35D1_RESET_UART6	54
-+#define MA35D1_RESET_UART7	55
-+#define MA35D1_RESET_CANFD0	56
-+#define MA35D1_RESET_CANFD1	57
-+#define MA35D1_RESET_EADC0	60
-+#define MA35D1_RESET_I2S0	61
-+#define MA35D1_RESET_SC0	64
-+#define MA35D1_RESET_SC1	65
-+#define MA35D1_RESET_QSPI1	68
-+#define MA35D1_RESET_SPI3	70
-+#define MA35D1_RESET_EPWM0	80
-+#define MA35D1_RESET_EPWM1	81
-+#define MA35D1_RESET_QEI0	86
-+#define MA35D1_RESET_QEI1	87
-+#define MA35D1_RESET_ECAP0	90
-+#define MA35D1_RESET_ECAP1	91
-+#define MA35D1_RESET_CANFD2	92
-+#define MA35D1_RESET_ADC0	95
-+#define MA35D1_RESET_TMR4	96
-+#define MA35D1_RESET_TMR5	97
-+#define MA35D1_RESET_TMR6	98
-+#define MA35D1_RESET_TMR7	99
-+#define MA35D1_RESET_TMR8	100
-+#define MA35D1_RESET_TMR9	101
-+#define MA35D1_RESET_TMR10	102
-+#define MA35D1_RESET_TMR11	103
-+#define MA35D1_RESET_UART8	104
-+#define MA35D1_RESET_UART9	105
-+#define MA35D1_RESET_UART10	106
-+#define MA35D1_RESET_UART11	107
-+#define MA35D1_RESET_UART12	108
-+#define MA35D1_RESET_UART13	109
-+#define MA35D1_RESET_UART14	110
-+#define MA35D1_RESET_UART15	111
-+#define MA35D1_RESET_UART16	112
-+#define MA35D1_RESET_I2S1	113
-+#define MA35D1_RESET_I2C4	114
-+#define MA35D1_RESET_I2C5	115
-+#define MA35D1_RESET_EPWM2	116
-+#define MA35D1_RESET_ECAP2	117
-+#define MA35D1_RESET_QEI2	118
-+#define MA35D1_RESET_CANFD3	119
-+#define MA35D1_RESET_KPI	120
-+#define MA35D1_RESET_GIC	124
-+#define MA35D1_RESET_SSMCC	126
-+#define MA35D1_RESET_SSPCC	127
-+#define MA35D1_RESET_COUNT	128
-+
-+#endif
+diff --git a/Documentation/devicetree/bindings/mfd/syscon.yaml b/Documentation/devicetree/bindings/mfd/syscon.yaml
+index c828c4f5e4a7..e7a3c6e1e77f 100644
+--- a/Documentation/devicetree/bindings/mfd/syscon.yaml
++++ b/Documentation/devicetree/bindings/mfd/syscon.yaml
+@@ -57,6 +57,7 @@ properties:
+               - microchip,sparx5-cpu-syscon
+               - mstar,msc313-pmsleep
+               - nuvoton,wpcm450-shm
++              - nuvoton,ma35d1-sys
+               - rockchip,px30-qos
+               - rockchip,rk3036-qos
+               - rockchip,rk3066-qos
 -- 
 2.34.1
 
