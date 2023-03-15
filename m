@@ -2,52 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E1536BA58D
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 04:16:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43F396BA59C
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 04:29:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230143AbjCODQx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 23:16:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56140 "EHLO
+        id S230390AbjCOD3J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 23:29:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229633AbjCODQu (ORCPT
+        with ESMTP id S230336AbjCOD24 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 23:16:50 -0400
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26BFB457D9
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 20:16:48 -0700 (PDT)
-Received: by mail-io1-f69.google.com with SMTP id f15-20020a05660215cf00b00752dd002fd1so1142838iow.3
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 20:16:48 -0700 (PDT)
+        Tue, 14 Mar 2023 23:28:56 -0400
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F0E65A6ED
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 20:28:55 -0700 (PDT)
+Received: by mail-io1-xd31.google.com with SMTP id b5so7298872iow.0
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 20:28:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1678850933;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KHJv8+oprMyTG8LLowWuTDSnzgqZct/FrXmCJG1m1N8=;
+        b=E9y0viNou8XTccqIF7nChT4t+S/RO+S43g8Yi6qhmRl67Mc8Jp2q0qh02d3Zj6ltm7
+         3++Hj2kFeVOM8T0bceft9TDEYRcPUwEJw3FIyloAw0Lk35wqe2+hnNQm0zGCcn229Fk0
+         eOanbixHkHR++JqIkACWcNjYBlI/BxKBQxWms=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678850207;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vGBVKQOu//U9MZYEieyhjs1JmosA1wF9zZa3sb+J/0w=;
-        b=JfsbnPktOWIoW7KuvJhtHjlsJVrP68/PbpnCC0MciONCYtbgowRX5OZRRUE8AHE92p
-         Qp0S13GXrhMhI8JXxYJ8/LWJrElUKFGPl1Cd5xOxbC9/wP5mWDnf7EGuTJlDpdDbVe3G
-         HdWXTx2CMDpsdnugn75Jo8NaUP/ZIgIQNYOowkNXTJEFlVhmssyiwoxHQfFwTjCGVwNJ
-         HzPRpT77eTj8GcED//7kBqfAmv6g7wzL9pi9nvvB4L6uhl9xQyAp8iF597Onl0kYuenQ
-         vx6bPpxM1RCODAAgoKDzys9kXXg6omsBNh2beeFC2wYgCsB9l65ti4y+TWfqnVZBjpVN
-         gN7w==
-X-Gm-Message-State: AO0yUKVPo9B2Yg6cF9FOBzTrwBctisP9gsehoXoYwEQSZSBFkEhnh82f
-        gc6bS4iFwk2XmHHizufN9HSvqsQB9o0T/uwXxdk5muycfWKy
-X-Google-Smtp-Source: AK7set/GAqdOFmxcV2MmuG0PXBuF4cINuIPZG+o9uUcOG/MPMfL6gi+8XaWlhl77JLjbUkmLCXIZouRhhiQFP3qYrJBgz9fMtBCf
+        d=1e100.net; s=20210112; t=1678850933;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KHJv8+oprMyTG8LLowWuTDSnzgqZct/FrXmCJG1m1N8=;
+        b=4N9JX9lEkpbSxFH2Aqf2CIkOHxy0j7BPd4cDh/RtqMXF0RZXMcAae7RQ/asQCqK7XR
+         2m5AXG6EZqwIcZ/PwIuh2MldsN57iY5G2q3414WJnSi+AUogHJny8hKdpppVyvaen66d
+         2nz8pp52e9GtZSvGSI6RH0A4DJV4O7n1RiSZ2khkz+lrR3FGyQYRNjStud2H5ABLt1jz
+         InGsA571BBS5swmBEjgY31IopxS6ScShoZw0QxQ/uge8PWE6vDqCGB9LTNQJWFZSj73n
+         HkxYymLCNFOXLJlEZd6Uo/e2uvwwaAlrrXXGvs7Sr1J+k3TVGgeM3J+5Spe8Ks0NEQ7+
+         q+nA==
+X-Gm-Message-State: AO0yUKVCjjTheZYIG7tgb4YkQiHJX4a6xmvQutc0rzNlnQImwQCVMzMa
+        c1grPGtmhkjx57ZHwWr8LEew3CF5+f0J7U7uChYYXw==
+X-Google-Smtp-Source: AK7set+K7jxkr7x8BZk6qGVZSfKCUnhLEKrVm/pbz3cErtANxa+XHpoQoJ+pTsmTBi35XTKMaOL6QXGQ+aywcAvRAUo=
+X-Received: by 2002:a6b:6a0a:0:b0:745:b287:c281 with SMTP id
+ x10-20020a6b6a0a000000b00745b287c281mr17750961iog.2.1678850933695; Tue, 14
+ Mar 2023 20:28:53 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:d0c:b0:313:c399:73c8 with SMTP id
- g12-20020a056e020d0c00b00313c39973c8mr2516315ilj.4.1678850207484; Tue, 14 Mar
- 2023 20:16:47 -0700 (PDT)
-Date:   Tue, 14 Mar 2023 20:16:47 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000003faaa105f6e7c658@google.com>
-Subject: [syzbot] [block?] WARNING in copy_page_from_iter
-From:   syzbot <syzbot+63dec323ac56c28e644f@syzkaller.appspotmail.com>
-To:     axboe@kernel.dk, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        viro@zeniv.linux.org.uk
+References: <20230314110043.2139111-1-treapking@chromium.org> <CAD=FV=W=jVsvD620wWKfniRYQNJnb7goDUKb_HhL_qVxLYGZOA@mail.gmail.com>
+In-Reply-To: <CAD=FV=W=jVsvD620wWKfniRYQNJnb7goDUKb_HhL_qVxLYGZOA@mail.gmail.com>
+From:   Pin-yen Lin <treapking@chromium.org>
+Date:   Wed, 15 Mar 2023 11:28:42 +0800
+Message-ID: <CAEXTbpe6EyukjKfgaVtHdMK2Ppw715kUUnOqvFa+tEX913p9aQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] drm/bridge: ps8640: Skip redundant bridge enable
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,96 +74,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi Doug,
 
-syzbot found the following issue on:
+On Wed, Mar 15, 2023 at 5:31=E2=80=AFAM Doug Anderson <dianders@chromium.or=
+g> wrote:
+>
+> Hi,
+>
+> On Tue, Mar 14, 2023 at 4:00=E2=80=AFAM Pin-yen Lin <treapking@chromium.o=
+rg> wrote:
+> >
+> > Skip the drm_bridge_chain_pre_enable call when the bridge is already
+> > pre_enabled. This make pre_enable and post_disable (thus
+> > pm_runtime_get/put) symmetric.
+> >
+> > Fixes: 46f206304db0 ("drm/bridge: ps8640: Rework power state handling")
+> > Signed-off-by: Pin-yen Lin <treapking@chromium.org>
+> > ---
+> >
+> >  drivers/gpu/drm/bridge/parade-ps8640.c | 3 ++-
+> >  1 file changed, 2 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/gpu/drm/bridge/parade-ps8640.c b/drivers/gpu/drm/b=
+ridge/parade-ps8640.c
+> > index 4b361d7d5e44..08de501c436e 100644
+> > --- a/drivers/gpu/drm/bridge/parade-ps8640.c
+> > +++ b/drivers/gpu/drm/bridge/parade-ps8640.c
+> > @@ -557,7 +557,8 @@ static struct edid *ps8640_bridge_get_edid(struct d=
+rm_bridge *bridge,
+> >          * EDID, for this chip, we need to do a full poweron, otherwise=
+ it will
+> >          * fail.
+> >          */
+> > -       drm_atomic_bridge_chain_pre_enable(bridge, connector->state->st=
+ate);
+> > +       if (poweroff)
+> > +               drm_atomic_bridge_chain_pre_enable(bridge, connector->s=
+tate->state);
+>
+> It always seemed weird to me that this function was asymmetric, so I
+> like this change, thanks!
+>
+> I also remember wondering before how this function was safe, though.
+> The callpath for getting here from the ioctl is documented in the
+> function and when I look at it I wonder if anything is preventing the
+> bridge from being enabled / disabled through normal means at the same
+> time your function is running. That could cause all sorts of badness
+> if it is indeed possible. Does anyone reading this know if that's
+> indeed a problem?
 
-HEAD commit:    fc89d7fb499b Merge tag 'for_linus' of git://git.kernel.org..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=13ec6e84c80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=253e7e1012aef938
-dashboard link: https://syzkaller.appspot.com/bug?extid=63dec323ac56c28e644f
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=103eae42c80000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12a81156c80000
+If the "normal mean" is disabling the bridge, then we are probably
+disabling the whole display pipeline. If so, is the EDID still
+relevant in this case?
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/a6a7b232754b/disk-fc89d7fb.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/bdf765cb166a/vmlinux-fc89d7fb.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/ba2677f81efa/bzImage-fc89d7fb.xz
+drm_get_edid returns NULL whenever error happens, and the helpers seem
+to handle this case properly.
+>
+> I suppose that, if this is unsafe, it's no more unsafe now than it was
+> before your patch, so I guess:
+>
+> Reviewed-by: Douglas Anderson <dianders@chromium.org>
+>
+> If there are no issues, I'll plan to land this patch and the next one
+> to drm-misc-next sometime late-ish next week.
 
-The issue was bisected to:
+Thanks for the review. I'll submit a v2 to collect the review tags and
+fix up the nit in patch 2/2.
 
-commit a41dad905e5a388f88435a517de102e9b2c8e43d
-Author: Al Viro <viro@zeniv.linux.org.uk>
-Date:   Fri Sep 16 00:11:15 2022 +0000
-
-    iov_iter: saner checks for attempt to copy to/from iterator
-
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=14bda788c80000
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=16bda788c80000
-console output: https://syzkaller.appspot.com/x/log.txt?x=12bda788c80000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+63dec323ac56c28e644f@syzkaller.appspotmail.com
-Fixes: a41dad905e5a ("iov_iter: saner checks for attempt to copy to/from iterator")
-
-WARNING: CPU: 1 PID: 5070 at lib/iov_iter.c:623 _copy_from_iter+0x2ad/0x1060 lib/iov_iter.c:623
-Modules linked in:
-CPU: 1 PID: 5070 Comm: syz-executor363 Not tainted 6.3.0-rc2-syzkaller-00006-gfc89d7fb499b #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/02/2023
-RIP: 0010:_copy_from_iter+0x2ad/0x1060 lib/iov_iter.c:623
-Code: 5d 41 5c 41 5d 41 5e 41 5f c3 e8 4e 1a 6e fd be 73 02 00 00 48 c7 c7 40 ab a6 8a e8 1d ec a9 fd e9 56 fe ff ff e8 33 1a 6e fd <0f> 0b 45 31 ff eb 8b e8 27 1a 6e fd 31 ff 89 ee e8 2e 16 6e fd 40
-RSP: 0018:ffffc9000348f688 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: ffff88802ab34100 RSI: ffffffff8414dc0d RDI: 0000000000000001
-RBP: 0000000000000021 R08: 0000000000000001 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
-R13: ffffea0001c9fc00 R14: ffffc9000348f8c0 R15: 0000000000000021
-FS:  000055555576d300(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00000000004561a0 CR3: 000000007980a000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- copy_page_from_iter lib/iov_iter.c:748 [inline]
- copy_page_from_iter+0x233/0x3f0 lib/iov_iter.c:737
- bio_copy_from_iter block/blk-map.c:55 [inline]
- bio_copy_user_iov block/blk-map.c:210 [inline]
- blk_rq_map_user_iov+0xb5d/0x16e0 block/blk-map.c:661
- blk_rq_map_user block/blk-map.c:690 [inline]
- blk_rq_map_user_io+0x1cd/0x200 block/blk-map.c:723
- sg_start_req drivers/scsi/sg.c:1807 [inline]
- sg_common_write.constprop.0+0xdcd/0x1e00 drivers/scsi/sg.c:803
- sg_new_write.isra.0+0x522/0xa90 drivers/scsi/sg.c:770
- sg_ioctl_common drivers/scsi/sg.c:935 [inline]
- sg_ioctl+0x9a8/0x2700 drivers/scsi/sg.c:1159
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:870 [inline]
- __se_sys_ioctl fs/ioctl.c:856 [inline]
- __x64_sys_ioctl+0x197/0x210 fs/ioctl.c:856
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f47aad046c9
-Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffcbf523d68 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f47aad046c9
-RDX: 0000000020000180 RSI: 0000000000002285 RDI: 0000000000000003
-RBP: 00007f47aacc41d0 R08: 0000000000000000 R09: 0000000000000000
-R10: 000000000000ffff R11: 0000000000000246 R12: 00007f47aacc4260
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+Best regards,
+Pin-yen
