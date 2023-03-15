@@ -2,174 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87BEE6BA57D
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 04:06:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DE516BA580
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 04:07:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230260AbjCODGr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 23:06:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45522 "EHLO
+        id S230212AbjCODHq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 23:07:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbjCODGo (ORCPT
+        with ESMTP id S229542AbjCODHm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 23:06:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 830205D46E;
-        Tue, 14 Mar 2023 20:06:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0B3C76198E;
-        Wed, 15 Mar 2023 03:06:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62786C433EF;
-        Wed, 15 Mar 2023 03:06:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678849601;
-        bh=HJEvpw/ETUl/MIv+XGdx2eTFUfpYueNHiCDUAT1UDBg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cdtf2Ux0Q3joM/oeXLqBnAJR7b5RJZxL8VxRoiFaD8qgikpZ26Q1TGICIUX4+c2o8
-         I5KbhdIxJ2PGiaHzTaaFdBAO7Us8Mww5AN2qN6qkRCOTA2iS8YUbML7iJDLwq481mx
-         VsKp69z6tQuHzI1LsLQRwTNrRNq4QikAcOufuW9DiiH8EYwlHdf5C4pG+dSQl55grt
-         Qao96PVYxUHxWGdIeVX8v3qy+7yaxQ54NG9jQ+DvrB/dq2udFjwl3LlMzWkyETmPxm
-         XBwvA45Z1PFmpsVdBZRUjEdUZPZVEUEzi6SjEJe6so/iYQNPMVufKTG/Ze9UTKy5VP
-         IaVWyefWiWIVA==
-Date:   Tue, 14 Mar 2023 20:06:40 -0700
-From:   "Darrick J. Wong" <djwong@kernel.org>
-To:     Dave Chinner <david@fromorbit.com>
-Cc:     Ye Bin <yebin@huaweicloud.com>, linux-xfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Ye Bin <yebin10@huawei.com>
-Subject: Re: [PATCH] xfs: fix possible assert failed in xfs_fs_put_super()
- when do cpu offline
-Message-ID: <20230315030640.GF11376@frogsfrogsfrogs>
-References: <20230314090649.326642-1-yebin@huaweicloud.com>
- <20230314163100.GC11376@frogsfrogsfrogs>
- <20230314221305.GR360264@dread.disaster.area>
+        Tue, 14 Mar 2023 23:07:42 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 281575D779;
+        Tue, 14 Mar 2023 20:07:41 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id x13so22816948edd.1;
+        Tue, 14 Mar 2023 20:07:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678849659;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Tg96jB00Z0xJAjaX35dGOvi0S0BxZfiR5lY6gXxTruM=;
+        b=pcytAVu3ygryJm2ME+7AeEiL4mOWRr++QzyMQjmGY2UnI/Uff+01CJgO/L9Ircaesg
+         Xa4sqC9PVIhYgoPnMu4PMBQ/YPK3pZyUGLtPc1AQBVChzkslgRSTkzn1Q8ZCDafo22sD
+         nn6gW0pmSieLpa6E6LORgPHIfFsDnqo89hsJT4Gaf4GsTQXluJC5W2orm2wXsP79i/k0
+         BtQeNCtXcUPsrS5fuKtM+IaDEEiBkKikLD9KC9uDBQ+ZRzp7h02+GsCif0EIxNfz8O2p
+         rwtQN6RC4yIz1nBT5Unx9SNvZIjCVbzrfjlakRiapTq9a4i1OsxvbF9Qu0MWFcTWnN4w
+         pmaA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678849659;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Tg96jB00Z0xJAjaX35dGOvi0S0BxZfiR5lY6gXxTruM=;
+        b=wV9PXOua7PRlQdKTMWzvrty/ezQcLBzmioSZCK4eFCovSdMnaGJK9SIs3MZ5zjs6Pi
+         7h3W0VL+blg6OkfGWCoMJCmjtwYTMy/GIw/B/CCWUdS0ZkztQHbTZL+7wTcdiC15/ddW
+         gzcXZSc+WNoYxGsDzMdRLQRPxKIHj+E4/S5pvP54PwLAcR+aRb40+X+XY33Wj+9AoNPk
+         o5YBW6VQZ1UyBLJc+wJjYG0J63n/BxBt2j5n44jiFgqqJRm7V3pu9rNkj6E1MNu4lN6L
+         pQr/PASe+l+zKkpXC0SmAtWnYgQqxpQfucI1qfTNdCtiImsc+V1t2g0AsjWYZt3LvS7r
+         Wl2w==
+X-Gm-Message-State: AO0yUKUsGvNDoVmfhoVNE3Fi8ZRPuEcNbg7WO96Gnvl2pRYssGtEG+mQ
+        FIUN9KATwQb+J1GeGEqsH/LMAI2IYa8kJjs0vE2k14QvWYU=
+X-Google-Smtp-Source: AK7set8ZxP3H95X9OWSv2ZecRuaPva4uZTO8mzifEhRkJ6S5Mr5ycZSYvVuHcoKIBbPHVw4J8SaScTwBqs1gH/a91hw=
+X-Received: by 2002:a17:906:5619:b0:92b:e576:ea31 with SMTP id
+ f25-20020a170906561900b0092be576ea31mr2163021ejq.5.1678849659601; Tue, 14 Mar
+ 2023 20:07:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230314221305.GR360264@dread.disaster.area>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230210111141.1379645-1-keguang.zhang@gmail.com> <a3e6f6038511ad48258627dbf4c335e2.sboyd@kernel.org>
+In-Reply-To: <a3e6f6038511ad48258627dbf4c335e2.sboyd@kernel.org>
+From:   Keguang Zhang <keguang.zhang@gmail.com>
+Date:   Wed, 15 Mar 2023 11:07:23 +0800
+Message-ID: <CAJhJPsUQN5Lo_rVUbbmGY68gorwkcQT=9AXfcEh371cP97Wj_A@mail.gmail.com>
+Subject: Re: [PATCH] MIPS: loongson32: Update the clock initialization
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Stephen Boyd <sboyd@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[add lfsdevel to cc to spread the, um, love]
+On Sat, Feb 11, 2023 at 7:31=E2=80=AFAM Stephen Boyd <sboyd@kernel.org> wro=
+te:
+>
+> Quoting Keguang Zhang (2023-02-10 03:11:41)
+> > The Loongson-1 clock driver is under re-implementation
+> > to add DT support. As a result, ls1x_clk_init() will be dropped soon.
+> > Therefore, call of_clk_init() for clock initialization instead.
+> >
+> > Link: https://lore.kernel.org/all/20230209132614.1079198-3-keguang.zhan=
+g@gmail.com
+> > Link: https://lore.kernel.org/all/20230209132614.1079198-4-keguang.zhan=
+g@gmail.com
 
-TLDR: percpu_counter_sum doesn't add in the values from CPUs in the
-dying mask.  As a result, the summation can race with cpu hotunplug
-and return the wrong values.
+Hi Thomas,
+Sorry to bother you.
+For fear of raising build error, is it possible to merge this patch
+before the above two patches getting applied?
+Or is there anything to improve?
+Thanks very much!
 
-On Wed, Mar 15, 2023 at 09:13:05AM +1100, Dave Chinner wrote:
-> On Tue, Mar 14, 2023 at 09:31:00AM -0700, Darrick J. Wong wrote:
-> > On Tue, Mar 14, 2023 at 05:06:49PM +0800, Ye Bin wrote:
-> > > From: Ye Bin <yebin10@huawei.com>
-> > > 
-> > > There's a issue when do cpu offline test:
-> > > CPU: 48 PID: 1168152 Comm: umount Kdump: loaded Tainted: G L
-> > > pstate: 60000005 (nZCv daif -PAN -UAO -TCO BTYPE=--)
-> > > pc : assfail+0x8c/0xb4
-> > > lr : assfail+0x38/0xb4
-> > > sp : ffffa00033ce7c40
-> > > x29: ffffa00033ce7c40 x28: ffffa00014794f30
-> > > x27: ffffa00014f6ca20 x26: 1fffe0120b2e2030
-> > > x25: ffff009059710188 x24: ffff00886c0a4650
-> > > x23: 1fffe0110d8148ca x22: ffff009059710180
-> > > x21: ffffa00015155680 x20: ffff00886c0a4000
-> > > x19: 0000000000000001 x18: 0000000000000000
-> > > x17: 0000000000000000 x16: 0000000000000000
-> > > x15: 0000000000000007 x14: 1fffe00304cef265
-> > > x13: ffff00182642b200 x12: ffff8012d37757bf
-> > > x11: 1fffe012d37757be x10: ffff8012d37757be
-> > > x9 : ffffa00010603a0c x8 : 0000000041b58ab3
-> > > x7 : ffff94000679cf44 x6 : 00000000ffffffc0
-> > > x5 : 0000000000000021 x4 : 00000000ffffffca
-> > > x3 : 1ffff40002a27ee1 x2 : 0000000000000004
-> > > x1 : 0000000000000000 x0 : ffffa0001513f000
-> > > Call trace:
-> > >  assfail+0x8c/0xb4
-> > >  xfs_destroy_percpu_counters+0x98/0xa4
-> > >  xfs_fs_put_super+0x1a0/0x2a4
-> > >  generic_shutdown_super+0x104/0x2c0
-> > >  kill_block_super+0x8c/0xf4
-> > >  deactivate_locked_super+0xa4/0x164
-> > >  deactivate_super+0xb0/0xdc
-> > >  cleanup_mnt+0x29c/0x3ec
-> > >  __cleanup_mnt+0x1c/0x30
-> > >  task_work_run+0xe0/0x200
-> > >  do_notify_resume+0x244/0x320
-> > >  work_pending+0xc/0xa0
-> > > 
-> > > We analyzed the data in vmcore is correct. But triggered above issue.
-> > > As f689054aace2 ("percpu_counter: add percpu_counter_sum_all interface")
-> > > commit describes there is a small race window between the online CPUs traversal
-> > > of percpu_counter_sum and the CPU offline callback. This means percpu_counter_sum()
-> > > may return incorrect result during cpu offline.
-> > > To solve above issue use percpu_counter_sum_all() interface to make sure
-> > > result is correct to prevent false triggering of assertions.
-> > 
-> > How about the other percpu_counter_sum callsites inside XFS?  Some of
-> > them are involved in writing ondisk metadata (xfs_log_sb) or doing
-> > correctness checks (fs/xfs/scrub/*); shouldn't those also be using the
-> > _all variant?
-> 
-> Ugh. I kinda wish that the percpu_counter_sum_all() patch had been
-> cc'd to lists for subsystems that use percpu_counter_sum()
-> extensively, or just to people who have modified that code in the
-> past.
-> 
-> The problem is that it uses cpu_possible_mask, which means it
-> walks all possible CPUs that can be added to the system even if the
-> CPUs aren't physically present. That can be a lot in the case of
-> systems that can have cpu-capable nodes hotplugged into them, and
-> that makes percpu_counter_sum_all() excitingly expensive for no good
-> reason.
-> 
-> AFAICT, if we are trying to close a race condition between iterating
-> online CPUs not summing dying CPUs and the cpu dead notification
-> updating the sum, then shouldn't we be using
-> cpu_mask_or(cpu_online_mask, cpu_dying_mask) for summing iteration
-> rather than just cpu_online_mask?
-> 
-> i.e. when a CPU is being taken down, it gets added to the
-> cpu_dying_mask, then removed from the cpu_online_mask, then the
-> offline notifications are run (i.e. the percpu counter dead
-> callback), and when the CPU reaches the CPUHP_TEARDOWN_CPU state,
-> it is removed from the cpu_dying_mask because it is now dead and all
-> the "cpu dying" callbacks have been run.
-> 
-> Except when a hotplug event is being processed, cpu_dying_mask will
-> be empty, hence there is little change in summing overhead. But it
-> will close the summing race condition when a CPU is being
-> offlined...
-> 
-> That, I think, is the solution we want for XFS. Having the percpu
-> counters just do the right thing is far better than always having to
-> wonder if summation interface we are using is correct in the face of
-> CPU hotplug. I'll put a patchset together to do:
-> 
-> 1. fix percpu_counter_sum() to include the dying mask in it's
-> iteration. This should fix the XFS issue.
 
-I took a quick look at ext4 and btrfs usage of percpu_counter_sum.  I
-/think/ they're less impacted because most of the usage seems to be for
-things like statfs which are inherently racy.  That said, mixing in the
-dying mask sounds like a cheap fix.
+> > Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
+> > ---
+>
+> Acked-by: Stephen Boyd <sboyd@kernel.org>
 
-> 2. change the only user of percpu_counter_sum_all() to only use
-> percpu_counter_sum() because percpu_counter_sum_all() is now
-> redundant.
-> 3. remove percpu_counter_sum_all() because it is unused.
 
-Sounds reasonable to /me. :)
 
---D
+--
+Best regards,
 
-> Cheers,
-> 
-> Dave.
-> -- 
-> Dave Chinner
-> david@fromorbit.com
+Kelvin Cheung
