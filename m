@@ -2,48 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEBFB6BC187
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 00:36:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75FD06BC172
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 00:35:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233350AbjCOXgD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 19:36:03 -0400
+        id S233344AbjCOXf3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 19:35:29 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233322AbjCOXf0 (ORCPT
+        with ESMTP id S233340AbjCOXeu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 19:35:26 -0400
+        Wed, 15 Mar 2023 19:34:50 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 234E42E0F9;
-        Wed, 15 Mar 2023 16:34:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51B38A8C40;
+        Wed, 15 Mar 2023 16:33:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 59354B81FA4;
-        Wed, 15 Mar 2023 23:32:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54DFDC433A0;
-        Wed, 15 Mar 2023 23:32:54 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 629F4B81F9A;
+        Wed, 15 Mar 2023 23:32:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40613C433D2;
+        Wed, 15 Mar 2023 23:32:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678923175;
-        bh=BPOCHHteXLKnZC3y+JEMP4ElqNTGojXEqse61Z/dRZc=;
+        s=k20201202; t=1678923176;
+        bh=aoz2bnbiFrBxlSw6q0XxgH+8ryhNBVBOEYUuwtxFdQM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TUTiATHluVjrTjplcT0rOePEivnoTrCL/+yS4GrqQuAZjwHhTXVov6FWWZQEUq+6k
-         1JDYFXS8oMbcI9MB0aiqBPCojcdNoldsRU4eTJD77ZssFIOt4u9Yy//5ZlbvofKIvD
-         bJZh4KskVGzG8hE5+zEIHvaxIFh/oeT8/dUTCgLow7OvA1ISVSDlLE2ruclB31MGuz
-         G3uYQnjUKiu13e2TObshH+NqY+C37vGmWXIqp/a2ggvkF5HMxXbMBG0hBkZo6rofNX
-         68rX+c0grC1PRRoMoaSwzeVeBO+XH4GDbt9U+t5lip5TzjHGDbupBLBL+KT5XWhDk1
-         uzAkgEIG98LkQ==
+        b=YvPpbXMkjrmQVwvQaBYqfnhvkekanx11vUo31RXxBu5OGLj6kWpapyqgnNcwrme7t
+         otesIGB1z+mSBUfq76W5e30FZOMzFxS4N2nBj/a5HQDs4PIydryzbK7S8fmhMx56ks
+         f/1vXeFFNp22KOMx5jHekYndfKGv/irSuB17lmQkMy/TlhTXNEJruYq2TMeN1N5lYL
+         MIEXbii9n2sx/cSxMZHc4GSWY48i/C+YbeawcSnOarei9pZfZIiUYnv8eVB6G/GTh9
+         uI2MKZCAfETqafs8b40dcddc2Rhvf4EErFEoQfAmpMGlCX+VqPCGwGfrSN1s4D0RAM
+         k9ezEB9LcrtOw==
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     linux-arm-msm@vger.kernel.org, konrad.dybcio@linaro.org,
-        Robert Marko <robert.marko@sartura.hr>, robh+dt@kernel.org,
-        agross@kernel.org, devicetree@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-kernel@vger.kernel.org
+To:     linux-arm-msm@vger.kernel.org, sboyd@kernel.org,
+        konrad.dybcio@linaro.org, Robert Marko <robert.marko@sartura.hr>,
+        robh+dt@kernel.org, agross@kernel.org, devicetree@vger.kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, mturquette@baylibre.com
 Cc:     luka.perkov@sartura.hr
-Subject: Re: (subset) [PATCH 1/4] ARM: dts: qcom: ipq4018-ap120c-ac: setup serial console
-Date:   Wed, 15 Mar 2023 16:35:25 -0700
-Message-Id: <167892332566.4030021.2253910306567333644.b4-ty@kernel.org>
+Subject: Re: (subset) [PATCH 1/7] dt-bindings: clock: split qcom,gcc-ipq4019 to separate file
+Date:   Wed, 15 Mar 2023 16:35:26 -0700
+Message-Id: <167892332566.4030021.2066671633508562447.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230214161211.306462-1-robert.marko@sartura.hr>
-References: <20230214161211.306462-1-robert.marko@sartura.hr>
+In-Reply-To: <20230214162325.312057-1-robert.marko@sartura.hr>
+References: <20230214162325.312057-1-robert.marko@sartura.hr>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -56,22 +57,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 14 Feb 2023 17:12:08 +0100, Robert Marko wrote:
-> Add the required alias and stdout property so that kernel can setup
-> the console based off DTS and not have to set it in the cmdline.
+On Tue, 14 Feb 2023 17:23:19 +0100, Robert Marko wrote:
+> Move schema for the GCC on IPQ4019 platform to a separate file to be able
+> to allow passing XO and sleep clks directly to GCC.
 > 
 > 
 
 Applied, thanks!
 
-[1/4] ARM: dts: qcom: ipq4018-ap120c-ac: setup serial console
-      commit: 131731c44f2cea44135e93bfb0a2920829910625
-[2/4] ARM: dts: qcom: ipq4018-ap120c-ac: align GPIO hog with DT schema
-      commit: a7d2715df2845560302aea9d9922b4bfdf4fe09a
-[3/4] ARM: dts: qcom: ipq4018-ap120c-ac: align SPI-NAND with DT schema
-      commit: fabc476a6cff40119365014e84aa2d2bbdf7756a
-[4/4] ARM: dts: qcom: ipq4018-ap120c-ac: use NVMEM for ath10k caldata
-      commit: d64f94249c689962b895aa650a30c29ac3b41cd3
+[3/7] ARM: dts: qcom: ipq4019: pass XO and sleep clocks to GCC
+      commit: 66e4811ab3967332c52a72f04d615f0faabb145e
+[4/7] ARM: dts: qcom: ipq4019: remove clk-output-names for sleep clock
+      commit: 2a41c611f21751150cf4c0132a02828700e58e2d
 
 Best regards,
 -- 
