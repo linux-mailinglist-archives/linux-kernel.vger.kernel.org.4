@@ -2,134 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 300CF6BB7B6
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 16:27:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F09C6BB7AF
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 16:26:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232329AbjCOP1L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 11:27:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34260 "EHLO
+        id S232173AbjCOP0W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 11:26:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232262AbjCOP1J (ORCPT
+        with ESMTP id S231466AbjCOP0U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 11:27:09 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D674F22C9F
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 08:27:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=K5ZrtxAQhAg4taBIjn5Ggqft0vr/AgFW0+J9EI0A4Iw=; b=pr2EXFWcfmlInLFnmMlP9TMUSh
-        mFPaikx4ZU2hoTYIBSvcDksRp+NzoLTJNzmhIdUkRyzSGZEcc4+C4JrAxVfn86ARELhqWdbQ2Z6TP
-        ATM7eiYiuvm0YUuXxWGaHGL7CyDHMb7X0yMBVYmNKewESvfX7PZapme8+GulcCwgO+kQyVpyTJ3lF
-        T7dWy9Bv4yRCIE+5nRy6TN8xPnaDC284scJeNmWQbVfly+l1OFB3WCNopAQc+AF2/GW/fOimrQ8Wa
-        sih2vP/PTJPDtahcUTz+zDLs5uHASs3f1MvJXKSBUmgfiqr8eWjlgNlC+Bl3tn6OoTCdGxq/pEpJM
-        RHYfSnQg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pcT0n-00DwgJ-U1; Wed, 15 Mar 2023 15:25:58 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 25023300237;
-        Wed, 15 Mar 2023 16:25:53 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 0D42B20FF20AC; Wed, 15 Mar 2023 16:25:53 +0100 (CET)
-Date:   Wed, 15 Mar 2023 16:25:52 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Chen Yu <yu.c.chen@intel.com>
-Cc:     Vincent Guittot <vincent.guittot@linaro.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Tim Chen <tim.c.chen@intel.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>,
-        K Prateek Nayak <kprateek.nayak@amd.com>,
-        Abel Wu <wuyun.abel@bytedance.com>,
-        Yicong Yang <yangyicong@hisilicon.com>,
-        "Gautham R . Shenoy" <gautham.shenoy@amd.com>,
-        Honglei Wang <wanghonglei@didichuxing.com>,
-        Len Brown <len.brown@intel.com>,
-        Chen Yu <yu.chen.surf@gmail.com>,
-        Tianchen Ding <dtcccc@linux.alibaba.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Josh Don <joshdon@google.com>, Hillf Danton <hdanton@sina.com>,
-        kernel test robot <yujie.liu@intel.com>,
-        Arjan Van De Ven <arjan.van.de.ven@intel.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 2/2] sched/fair: Introduce SIS_SHORT to wake up short
- task on current CPU
-Message-ID: <20230315152552.GF2006103@hirez.programming.kicks-ass.net>
-References: <cover.1677069490.git.yu.c.chen@intel.com>
- <373e6886e274f198608fa1b5f1c254e32b43845d.1677069490.git.yu.c.chen@intel.com>
+        Wed, 15 Mar 2023 11:26:20 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9E09EA27D;
+        Wed, 15 Mar 2023 08:26:17 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0B2044B3;
+        Wed, 15 Mar 2023 08:27:01 -0700 (PDT)
+Received: from [10.57.64.236] (unknown [10.57.64.236])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 777913F67D;
+        Wed, 15 Mar 2023 08:26:16 -0700 (PDT)
+Message-ID: <6dd5cdf8-400e-8378-22be-994f0ada5cc2@arm.com>
+Date:   Wed, 15 Mar 2023 15:26:14 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <373e6886e274f198608fa1b5f1c254e32b43845d.1677069490.git.yu.c.chen@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.8.0
+Subject: Re: [PATCH v4 35/36] mm: Convert do_set_pte() to set_pte_range()
+Content-Language: en-US
+To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        linux-arch@vger.kernel.org
+Cc:     Yin Fengwei <fengwei.yin@intel.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+References: <20230315051444.3229621-1-willy@infradead.org>
+ <20230315051444.3229621-36-willy@infradead.org>
+From:   Ryan Roberts <ryan.roberts@arm.com>
+In-Reply-To: <20230315051444.3229621-36-willy@infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 22, 2023 at 10:09:55PM +0800, Chen Yu wrote:
+On 15/03/2023 05:14, Matthew Wilcox (Oracle) wrote:
+> From: Yin Fengwei <fengwei.yin@intel.com>
+> 
+> set_pte_range() allows to setup page table entries for a specific
+> range.  It takes advantage of batched rmap update for large folio.
+> It now takes care of calling update_mmu_cache_range().
+> 
+> Signed-off-by: Yin Fengwei <fengwei.yin@intel.com>
+> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+> ---
+>  Documentation/filesystems/locking.rst |  2 +-
+>  include/linux/mm.h                    |  3 ++-
+>  mm/filemap.c                          |  3 +--
+>  mm/memory.c                           | 27 +++++++++++++++------------
+>  4 files changed, 19 insertions(+), 16 deletions(-)
+> 
+> diff --git a/Documentation/filesystems/locking.rst b/Documentation/filesystems/locking.rst
+> index 7de7a7272a5e..922886fefb7f 100644
+> --- a/Documentation/filesystems/locking.rst
+> +++ b/Documentation/filesystems/locking.rst
+> @@ -663,7 +663,7 @@ locked. The VM will unlock the page.
+>  Filesystem should find and map pages associated with offsets from "start_pgoff"
+>  till "end_pgoff". ->map_pages() is called with page table locked and must
+>  not block.  If it's not possible to reach a page without blocking,
+> -filesystem should skip it. Filesystem should use do_set_pte() to setup
+> +filesystem should skip it. Filesystem should use set_pte_range() to setup
+>  page table entry. Pointer to entry associated with the page is passed in
+>  "pte" field in vm_fault structure. Pointers to entries for other offsets
+>  should be calculated relative to "pte".
+> diff --git a/include/linux/mm.h b/include/linux/mm.h
+> index ee755bb4e1c1..81788c985a8c 100644
+> --- a/include/linux/mm.h
+> +++ b/include/linux/mm.h
+> @@ -1299,7 +1299,8 @@ static inline pte_t maybe_mkwrite(pte_t pte, struct vm_area_struct *vma)
+>  }
+>  
+>  vm_fault_t do_set_pmd(struct vm_fault *vmf, struct page *page);
+> -void do_set_pte(struct vm_fault *vmf, struct page *page, unsigned long addr);
+> +void set_pte_range(struct vm_fault *vmf, struct folio *folio,
+> +		struct page *page, unsigned int nr, unsigned long addr);
+>  
+>  vm_fault_t finish_fault(struct vm_fault *vmf);
+>  vm_fault_t finish_mkwrite_fault(struct vm_fault *vmf);
+> diff --git a/mm/filemap.c b/mm/filemap.c
+> index 6e2b0778db45..e2317623dcbf 100644
+> --- a/mm/filemap.c
+> +++ b/mm/filemap.c
+> @@ -3504,8 +3504,7 @@ static vm_fault_t filemap_map_folio_range(struct vm_fault *vmf,
+>  			ret = VM_FAULT_NOPAGE;
+>  
+>  		ref_count++;
+> -		do_set_pte(vmf, page, addr);
+> -		update_mmu_cache(vma, addr, vmf->pte);
+> +		set_pte_range(vmf, folio, page, 1, addr);
+>  	} while (vmf->pte++, page++, addr += PAGE_SIZE, ++count < nr_pages);
+>  
+>  	/* Restore the vmf->pte */
+> diff --git a/mm/memory.c b/mm/memory.c
+> index 6aa21e8f3753..9a654802f104 100644
+> --- a/mm/memory.c
+> +++ b/mm/memory.c
+> @@ -4274,7 +4274,8 @@ vm_fault_t do_set_pmd(struct vm_fault *vmf, struct page *page)
+>  }
+>  #endif
+>  
+> -void do_set_pte(struct vm_fault *vmf, struct page *page, unsigned long addr)
+> +void set_pte_range(struct vm_fault *vmf, struct folio *folio,
+> +		struct page *page, unsigned int nr, unsigned long addr)
+>  {
+>  	struct vm_area_struct *vma = vmf->vma;
+>  	bool uffd_wp = vmf_orig_pte_uffd_wp(vmf);
+> @@ -4282,7 +4283,7 @@ void do_set_pte(struct vm_fault *vmf, struct page *page, unsigned long addr)
+>  	bool prefault = vmf->address != addr;
 
-> will-it-scale
-> =============
-> case			load		baseline	compare%
-> context_switch1		224 groups	1.00		+946.68%
-> 
-> There is a huge improvement in fast context switch test case, especially
-> when the number of groups equals the CPUs.
-> 
-> netperf
-> =======
-> case            	load    	baseline(std%)	compare%( std%)
-> TCP_RR          	56-threads	 1.00 (  1.12)	 -0.05 (  0.97)
-> TCP_RR          	112-threads	 1.00 (  0.50)	 +0.31 (  0.35)
-> TCP_RR          	168-threads	 1.00 (  3.46)	 +5.50 (  2.08)
-> TCP_RR          	224-threads	 1.00 (  2.52)	+665.38 (  3.38)
-> TCP_RR          	280-threads	 1.00 ( 38.59)	+22.12 ( 11.36)
-> TCP_RR          	336-threads	 1.00 ( 15.88)	 -0.00 ( 19.96)
-> TCP_RR          	392-threads	 1.00 ( 27.22)	 +0.26 ( 24.26)
-> TCP_RR          	448-threads	 1.00 ( 37.88)	 +0.04 ( 27.87)
-> UDP_RR          	56-threads	 1.00 (  2.39)	 -0.36 (  8.33)
-> UDP_RR          	112-threads	 1.00 ( 22.62)	 -0.65 ( 24.66)
-> UDP_RR          	168-threads	 1.00 ( 15.72)	 +3.97 (  5.02)
-> UDP_RR          	224-threads	 1.00 ( 15.90)	+134.98 ( 28.59)
-> UDP_RR          	280-threads	 1.00 ( 32.43)	 +0.26 ( 29.68)
-> UDP_RR          	336-threads	 1.00 ( 39.21)	 -0.05 ( 39.71)
-> UDP_RR          	392-threads	 1.00 ( 31.76)	 -0.22 ( 32.00)
-> UDP_RR          	448-threads	 1.00 ( 44.90)	 +0.06 ( 31.83)
-> 
-> There is significant 600+% improvement for TCP_RR and 100+% for UDP_RR
-> when the number of threads equals the CPUs.
-> 
-> tbench
-> ======
-> case            	load    	baseline(std%)	compare%( std%)
-> loopback        	56-threads	 1.00 (  0.15)	 +0.88 (  0.08)
-> loopback        	112-threads	 1.00 (  0.06)	 -0.41 (  0.52)
-> loopback        	168-threads	 1.00 (  0.17)	+45.42 ( 39.54)
-> loopback        	224-threads	 1.00 ( 36.93)	+24.10 (  0.06)
-> loopback        	280-threads	 1.00 (  0.04)	 -0.04 (  0.04)
-> loopback        	336-threads	 1.00 (  0.06)	 -0.16 (  0.14)
-> loopback        	392-threads	 1.00 (  0.05)	 +0.06 (  0.02)
-> loopback        	448-threads	 1.00 (  0.07)	 -0.02 (  0.07)
-> 
-> There is no noticeable impact on tbench. Although there is run-to-run variance
-> in 168/224 threads case, with or without this patch applied.
+I think you are changing behavior here - is this intentional? Previously this
+would be evaluated per page, now its evaluated once for the whole range. The
+intention below is that directly faulted pages are mapped young and prefaulted
+pages are mapped old. But now a whole range will be mapped the same.
 
-So there is a very narrow, but significant, win at 4x overload.
-What about 3x/5x overload, they only have very marginal gains.
+Thanks,
+Ryan
 
-So these patches are briliant if you run at exactly 4x overload, and
-very meh otherwise.
+>  	pte_t entry;
+>  
+> -	flush_icache_page(vma, page);
+> +	flush_icache_pages(vma, page, nr);
+>  	entry = mk_pte(page, vma->vm_page_prot);
+>  
+>  	if (prefault && arch_wants_old_prefaulted_pte())
+> @@ -4296,14 +4297,18 @@ void do_set_pte(struct vm_fault *vmf, struct page *page, unsigned long addr)
+>  		entry = pte_mkuffd_wp(entry);
+>  	/* copy-on-write page */
+>  	if (write && !(vma->vm_flags & VM_SHARED)) {
+> -		inc_mm_counter(vma->vm_mm, MM_ANONPAGES);
+> -		page_add_new_anon_rmap(page, vma, addr);
+> -		lru_cache_add_inactive_or_unevictable(page, vma);
+> +		add_mm_counter(vma->vm_mm, MM_ANONPAGES, nr);
+> +		VM_BUG_ON_FOLIO(nr != 1, folio);
+> +		folio_add_new_anon_rmap(folio, vma, addr);
+> +		folio_add_lru_vma(folio, vma);
+>  	} else {
+> -		inc_mm_counter(vma->vm_mm, mm_counter_file(page));
+> -		page_add_file_rmap(page, vma, false);
+> +		add_mm_counter(vma->vm_mm, mm_counter_file(page), nr);
+> +		folio_add_file_rmap_range(folio, page, nr, vma, false);
+>  	}
+> -	set_pte_at(vma->vm_mm, addr, vmf->pte, entry);
+> +	set_ptes(vma->vm_mm, addr, vmf->pte, entry, nr);
+> +
+> +	/* no need to invalidate: a not-present page won't be cached */
+> +	update_mmu_cache_range(vma, addr, vmf->pte, nr);
+>  }
+>  
+>  static bool vmf_pte_changed(struct vm_fault *vmf)
+> @@ -4376,11 +4381,9 @@ vm_fault_t finish_fault(struct vm_fault *vmf)
+>  
+>  	/* Re-check under ptl */
+>  	if (likely(!vmf_pte_changed(vmf))) {
+> -		do_set_pte(vmf, page, vmf->address);
+> -
+> -		/* no need to invalidate: a not-present page won't be cached */
+> -		update_mmu_cache(vma, vmf->address, vmf->pte);
+> +		struct folio *folio = page_folio(page);
+>  
+> +		set_pte_range(vmf, folio, page, 1, vmf->address);
+>  		ret = 0;
+>  	} else {
+>  		update_mmu_tlb(vma, vmf->address, vmf->pte);
 
-Why do we care about 4x overload?
