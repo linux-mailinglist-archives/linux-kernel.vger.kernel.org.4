@@ -2,139 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E83136BAF36
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 12:29:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F0026BAF46
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 12:32:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231470AbjCOL3X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 07:29:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56648 "EHLO
+        id S231767AbjCOLb6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 07:31:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231509AbjCOL3S (ORCPT
+        with ESMTP id S231529AbjCOLbp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 07:29:18 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E52E367C2
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 04:29:16 -0700 (PDT)
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1pcPJc-0007nK-Ro; Wed, 15 Mar 2023 12:29:08 +0100
-Received: from pengutronix.de (unknown [IPv6:2a00:20:3059:9eeb:8134:2053:cf60:de3a])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 06E301939E5;
-        Wed, 15 Mar 2023 11:29:06 +0000 (UTC)
-Date:   Wed, 15 Mar 2023 12:29:05 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Markus Schneider-Pargmann <msp@baylibre.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
-        Simon Horman <simon.horman@corigine.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/5] dt-bindings: can: tcan4x5x: Add tcan4552 and
- tcan4553 variants
-Message-ID: <20230315112905.qutggrdnpsttbase@pengutronix.de>
-References: <20230314151201.2317134-1-msp@baylibre.com>
- <20230314151201.2317134-2-msp@baylibre.com>
- <680053bc-66fb-729f-ecdc-2f5fe511cecd@linaro.org>
- <20230315104914.qpwhnv6drjwau5jr@blmsp>
+        Wed, 15 Mar 2023 07:31:45 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53EAF64849;
+        Wed, 15 Mar 2023 04:31:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678879904; x=1710415904;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=emKW1DsDd6J7BoaliTpiqaTlAsPQ1Xr/3FNEg+io6NQ=;
+  b=YBQo49A55PKeoUSU5BCFs2agz8PmUVtJt+YZOEMAV1NMkBxtToYRazVt
+   AjDCbSdgAmSN7D5bJ5pD2S6CIOUJiHmluUnsrXOzm5BA4RdYyuF0Bq1YX
+   nFJR3h6ZfsZQyXG6LFqv/Qo8C8SBqjHCfPIadtNiIUdQWHLtrXsRZqmoo
+   vl8+VtnTak+6fzh0WqvKVMahp1Obxqdcsvy5BrWjrbT88csIPqfYpTB5Q
+   1yOJ2CCVvjqMYd4ATlxJTyQhLOpqbU77U4u/om5trkG3oB0lK52VH7PLK
+   4zmsCy11YVDQ7iRTtFEL9o7ud4iDKpU8uedSSGuiPcnfyaBlM1ApDC3I2
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="340040093"
+X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
+   d="scan'208";a="340040093"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2023 04:31:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="768455999"
+X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
+   d="scan'208";a="768455999"
+Received: from nopopovi-mobl1.ger.corp.intel.com (HELO box.shutemov.name) ([10.252.33.48])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2023 04:31:38 -0700
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id A507B10CC9C; Wed, 15 Mar 2023 14:31:35 +0300 (+03)
+From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Mel Gorman <mgorman@suse.de>, Vlastimil Babka <vbabka@suse.cz>,
+        David Hildenbrand <david@redhat.com>
+Cc:     linux-mm@kvack.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Subject: [PATCH 00/10] Fix confusion around MAX_ORDER
+Date:   Wed, 15 Mar 2023 14:31:23 +0300
+Message-Id: <20230315113133.11326-1-kirill.shutemov@linux.intel.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="nomegujo7vfexmwg"
-Content-Disposition: inline
-In-Reply-To: <20230315104914.qpwhnv6drjwau5jr@blmsp>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+MAX_ORDER currently defined as number of orders page allocator supports:
+user can ask buddy allocator for page order between 0 and MAX_ORDER-1.
 
---nomegujo7vfexmwg
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This definition is counter-intuitive and lead to number of bugs all over
+the kernel.
 
-On 15.03.2023 11:49:14, Markus Schneider-Pargmann wrote:
-> Hi Krzysztof,
->=20
-> On Tue, Mar 14, 2023 at 09:01:10PM +0100, Krzysztof Kozlowski wrote:
-> > On 14/03/2023 16:11, Markus Schneider-Pargmann wrote:
-> > > These two new chips do not have state or wake pins.
-> > >=20
-> > > Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> > > ---
-> > >  .../devicetree/bindings/net/can/tcan4x5x.txt          | 11 ++++++++-=
---
-> > >  1 file changed, 8 insertions(+), 3 deletions(-)
-> > >=20
-> > > diff --git a/Documentation/devicetree/bindings/net/can/tcan4x5x.txt b=
-/Documentation/devicetree/bindings/net/can/tcan4x5x.txt
-> > > index e3501bfa22e9..38a2b5369b44 100644
-> > > --- a/Documentation/devicetree/bindings/net/can/tcan4x5x.txt
-> > > +++ b/Documentation/devicetree/bindings/net/can/tcan4x5x.txt
-> > > @@ -4,7 +4,10 @@ Texas Instruments TCAN4x5x CAN Controller
-> > >  This file provides device node information for the TCAN4x5x interfac=
-e contains.
-> > > =20
-> > >  Required properties:
-> > > -	- compatible: "ti,tcan4x5x"
-> > > +	- compatible:
-> > > +		"ti,tcan4x5x" or
-> > > +		"ti,tcan4552" or
-> > > +		"ti,tcan4553"
-> >=20
-> > Awesome, they nicely fit into wildcard... Would be useful to deprecate
-> > the wildcard at some point and switch to proper compatibles in such
-> > case, because now they became confusing.
-> >=20
-> > Anyway:
-> >=20
-> > Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->=20
-> Thank you. Indeed the old generic name could be replaced, unfortunately
-> I don't have a list of devices that this generic wildcard matches.
+Fix the bugs and then change the definition of MAX_ORDER to be
+inclusive: the range of orders user can ask from buddy allocator is
+0..MAX_ORDER now.
 
-The mcp251xfd driver supports "microchip,mcp2517fd",
-"microchip,mcp2518fd", "microchip,mcp251863", and "microchip,mcp251xfd".
-It always does auto detection and throws a warning if the found chip is
-not consistent with the firmware (DT, ACPI).
+Kirill A. Shutemov (10):
+  sparc/mm: Fix MAX_ORDER usage in tsb_grow()
+  um: Fix MAX_ORDER usage in linux_main()
+  floppy: Fix MAX_ORDER usage
+  drm/i915: Fix MAX_ORDER usage in i915_gem_object_get_pages_internal()
+  genwqe: Fix MAX_ORDER usage
+  perf/core: Fix MAX_ORDER usage in rb_alloc_aux_page()
+  mm/page_reporting: Fix MAX_ORDER usage in page_reporting_register()
+  mm/slub: Fix MAX_ORDER usage in calculate_order()
+  iommu: Fix MAX_ORDER usage in __iommu_dma_alloc_pages()
+  mm, treewide: Redefine MAX_ORDER sanely
 
-Marc
+ .../admin-guide/kdump/vmcoreinfo.rst          |  2 +-
+ .../admin-guide/kernel-parameters.txt         |  2 +-
+ arch/arc/Kconfig                              |  4 +-
+ arch/arm/Kconfig                              |  9 ++---
+ arch/arm/configs/imx_v6_v7_defconfig          |  2 +-
+ arch/arm/configs/milbeaut_m10v_defconfig      |  2 +-
+ arch/arm/configs/oxnas_v6_defconfig           |  2 +-
+ arch/arm/configs/pxa_defconfig                |  2 +-
+ arch/arm/configs/sama7_defconfig              |  2 +-
+ arch/arm/configs/sp7021_defconfig             |  2 +-
+ arch/arm64/Kconfig                            | 27 ++++++-------
+ arch/arm64/include/asm/sparsemem.h            |  2 +-
+ arch/arm64/kvm/hyp/include/nvhe/gfp.h         |  2 +-
+ arch/arm64/kvm/hyp/nvhe/page_alloc.c          | 10 ++---
+ arch/csky/Kconfig                             |  2 +-
+ arch/ia64/Kconfig                             |  8 ++--
+ arch/ia64/include/asm/sparsemem.h             |  4 +-
+ arch/ia64/mm/hugetlbpage.c                    |  2 +-
+ arch/loongarch/Kconfig                        | 15 +++-----
+ arch/m68k/Kconfig.cpu                         |  5 +--
+ arch/mips/Kconfig                             | 19 ++++------
+ arch/nios2/Kconfig                            |  7 +---
+ arch/powerpc/Kconfig                          | 27 ++++++-------
+ arch/powerpc/configs/85xx/ge_imp3a_defconfig  |  2 +-
+ arch/powerpc/configs/fsl-emb-nonhw.config     |  2 +-
+ arch/powerpc/mm/book3s64/iommu_api.c          |  2 +-
+ arch/powerpc/mm/hugetlbpage.c                 |  2 +-
+ arch/powerpc/platforms/powernv/pci-ioda.c     |  2 +-
+ arch/sh/configs/ecovec24_defconfig            |  2 +-
+ arch/sh/mm/Kconfig                            | 17 ++++-----
+ arch/sparc/Kconfig                            |  5 +--
+ arch/sparc/kernel/pci_sun4v.c                 |  2 +-
+ arch/sparc/kernel/traps_64.c                  |  2 +-
+ arch/sparc/mm/tsb.c                           |  4 +-
+ arch/xtensa/Kconfig                           |  5 +--
+ drivers/base/regmap/regmap-debugfs.c          |  8 ++--
+ drivers/block/floppy.c                        |  2 +-
+ drivers/crypto/ccp/sev-dev.c                  |  2 +-
+ drivers/crypto/hisilicon/sgl.c                |  6 +--
+ .../gpu/drm/i915/gem/selftests/huge_pages.c   |  2 +-
+ drivers/gpu/drm/ttm/ttm_pool.c                | 22 +++++------
+ drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h   |  2 +-
+ drivers/iommu/dma-iommu.c                     |  4 +-
+ drivers/irqchip/irq-gic-v3-its.c              |  4 +-
+ drivers/md/dm-bufio.c                         |  2 +-
+ drivers/misc/genwqe/card_utils.c              |  2 +-
+ .../net/ethernet/hisilicon/hns3/hns3_enet.c   |  2 +-
+ drivers/net/ethernet/ibm/ibmvnic.h            |  2 +-
+ drivers/video/fbdev/hyperv_fb.c               |  4 +-
+ drivers/video/fbdev/vermilion/vermilion.c     |  2 +-
+ drivers/virtio/virtio_balloon.c               |  2 +-
+ drivers/virtio/virtio_mem.c                   | 12 +++---
+ fs/ramfs/file-nommu.c                         |  2 +-
+ include/drm/ttm/ttm_pool.h                    |  2 +-
+ include/linux/hugetlb.h                       |  2 +-
+ include/linux/mmzone.h                        | 10 ++---
+ include/linux/pageblock-flags.h               |  4 +-
+ include/linux/slab.h                          |  6 +--
+ kernel/crash_core.c                           |  2 +-
+ kernel/dma/pool.c                             |  6 +--
+ mm/Kconfig                                    |  6 +--
+ mm/compaction.c                               |  8 ++--
+ mm/debug_vm_pgtable.c                         |  4 +-
+ mm/huge_memory.c                              |  2 +-
+ mm/hugetlb.c                                  |  4 +-
+ mm/kmsan/init.c                               |  6 +--
+ mm/memblock.c                                 |  2 +-
+ mm/memory_hotplug.c                           |  4 +-
+ mm/page_alloc.c                               | 38 +++++++++----------
+ mm/page_isolation.c                           | 12 +++---
+ mm/page_owner.c                               |  6 +--
+ mm/page_reporting.c                           |  4 +-
+ mm/shuffle.h                                  |  2 +-
+ mm/slab.c                                     |  2 +-
+ mm/slub.c                                     |  4 +-
+ mm/vmscan.c                                   |  2 +-
+ mm/vmstat.c                                   | 14 +++----
+ net/smc/smc_ib.c                              |  2 +-
+ security/integrity/ima/ima_crypto.c           |  2 +-
+ tools/testing/memblock/linux/mmzone.h         |  6 +--
+ 80 files changed, 210 insertions(+), 240 deletions(-)
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+-- 
+2.39.2
 
---nomegujo7vfexmwg
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmQRq/8ACgkQvlAcSiqK
-BOhz7Af+Ijf/SfgPsTnfv7fBmVGkSnNMyFFNZrx4qRYBaKVOQLO/yM1cbTi9nvpB
-+8Jb+Dar80wua5kHmFcb/Uipad3/MF/JtA8TPKB1CAagvEWgw2MIAKyzTVGJzPxR
-sSIlDOINkWgmmhEvN0C+jNT51CgvO/6+0j4ZidDf3lwBgyofKAK6lSD+y5UupLYJ
-/eKt/oQFhlgDMVeatstmBGh0eMO2XV+T2Q5t/MVdqa/teoUrIfp3i98MPLpfB1uh
-nPXml9k3s5LDhFGnq31TrCBfcQ8n/S0QnphX+dyIKIuHBoa9YhbYgLXZrCQEm+fu
-HwpLvTBfsA9deh1Xx9r4avsdU5zz0Q==
-=AotW
------END PGP SIGNATURE-----
-
---nomegujo7vfexmwg--
