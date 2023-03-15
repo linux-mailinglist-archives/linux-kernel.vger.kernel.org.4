@@ -2,313 +2,705 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B78AA6BAFF9
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 13:12:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED19F6BB14A
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 13:26:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231701AbjCOMML (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 08:12:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32948 "EHLO
+        id S232432AbjCOM0M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 08:26:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229734AbjCOMMJ (ORCPT
+        with ESMTP id S232412AbjCOMZu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 08:12:09 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AD5C8091A;
-        Wed, 15 Mar 2023 05:12:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678882327; x=1710418327;
-  h=message-id:date:subject:to:references:cc:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=t6HGP2db1Y3g/OHN9Aca63G73noWDeR2SGfJfJ7tgzg=;
-  b=gjU0Oq9kuMF2V08Wd4bcUcszN/AQ3jsqZgNkCZB16q02tGmgvJOvt0/1
-   +NiVMYhpn2DLYjf2T5OCXhR3AQNTCy1gpTurRluZj0TIRJ4aSwqz/YP51
-   mY+DC0Lg9tRTxNo7nuTU9rrPeo0mA9g0OvRAdk+FrutGCjsm8TlHVP79r
-   ldwBOFbSy15fwMzK8irR/NZ/gcarBgnxZwbroTjAmN+GkgFUyZiO3YJgW
-   l+Vc11u69UHk7ESiGoBnRBlUNWKNlWLW/h3YmarOOa8CGk9gbX6RmVpz9
-   Iis1ho6PuEc3eF5Va2vNEH5pcDgHLjNVlHEXjedwZl2j4W29mfx3NHHfI
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="335170127"
-X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
-   d="scan'208";a="335170127"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2023 05:12:06 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="803264592"
-X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
-   d="scan'208";a="803264592"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by orsmga004.jf.intel.com with ESMTP; 15 Mar 2023 05:12:06 -0700
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Wed, 15 Mar 2023 05:12:06 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Wed, 15 Mar 2023 05:12:05 -0700
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21 via Frontend Transport; Wed, 15 Mar 2023 05:12:05 -0700
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.108)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.21; Wed, 15 Mar 2023 05:12:05 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kJVJli5cgkhZRma8a6JPamtDKEYPWAkVEKdI6Gy5rQfc3zWETAEKH315CVr08wnB1PTcpIiJ0z+qPGlfrvme9bgNkfa277S0kym/1OqCD7MawjNbS29ujBsl8Emd+hytK5H0ZimkyWoxwl3N0fqK0oLdp2re7M789SYwG/Ig2B8L4b9FiMNXwr1tGW0mbFYHSywjgg3XXKKS0SwjAyib6BoiLKeub3V5Ng9uiZ7qmwybMAmF4BbCSBAnVdcVWZlaEGJui5pRASzbVar+YmzKl9zKJ0uJEkgvmKJfg6ATn+DmOFDC6482AcIvpoWPGDQvd61xkvHdtNKlu6D2+LW47g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Ip6O84se6SVS20oFxQMzjqVoQMrR7EcuU70j9WCFjOk=;
- b=lusmPsV9hIvPHJHRdqZuurYrnzjxTXnkTB4ix7xDD4Oz9ioIUD/WkP/iK9AfCOrkv1yr87aHNjN+jWkLMKnBKc2QulOpyjpDnBAlWVc1T0i4/2/w93zJ06eNk6BHOXmXTYZL8EsMelvVqZaR0wRrGs2Zh9kJsnRJVwKI33M4oeZwIK0trs4jRZhINxPyeYekR1XDmRiDOrJWe/MQlmB/eCUYr3UYpKAdYNG0OeXM+uL9CNZIrQ3scooJRirKzNn+CKB+umLXcIBbYNNogspQbxmCQrzpTybOo3NBPlLBq5WjM7zOmka9bYGnLXPyJBiTbhzds5BjXyicw0DZa4AYcQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DM6PR11MB3625.namprd11.prod.outlook.com (2603:10b6:5:13a::21)
- by BN9PR11MB5481.namprd11.prod.outlook.com (2603:10b6:408:102::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.29; Wed, 15 Mar
- 2023 12:11:59 +0000
-Received: from DM6PR11MB3625.namprd11.prod.outlook.com
- ([fe80::7911:de29:ded:224]) by DM6PR11MB3625.namprd11.prod.outlook.com
- ([fe80::7911:de29:ded:224%5]) with mapi id 15.20.6178.029; Wed, 15 Mar 2023
- 12:11:58 +0000
-Message-ID: <6b48673b-33a2-877d-dadd-b43a1364b330@intel.com>
-Date:   Wed, 15 Mar 2023 13:10:44 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [syzbot] [bpf?] [net?] BUG: unable to handle kernel NULL pointer
- dereference in __build_skb_around
-Content-Language: en-US
-To:     <ast@kernel.org>,
-        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>
-References: <000000000000f1985705f6ef2243@google.com>
-CC:     syzbot <syzbot+e1d1b65f7c32f2a86a9f@syzkaller.appspotmail.com>,
-        <bpf@vger.kernel.org>, <daniel@iogearbox.net>,
-        <davem@davemloft.net>, <edumazet@google.com>, <hawk@kernel.org>,
-        <john.fastabend@gmail.com>, <kuba@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <pabeni@redhat.com>, <syzkaller-bugs@googlegroups.com>
-From:   Alexander Lobakin <aleksander.lobakin@intel.com>
-In-Reply-To: <000000000000f1985705f6ef2243@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: YT3PR01CA0074.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:84::32) To DM6PR11MB3625.namprd11.prod.outlook.com
- (2603:10b6:5:13a::21)
+        Wed, 15 Mar 2023 08:25:50 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EDC39AA24;
+        Wed, 15 Mar 2023 05:25:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id C1A62CE19C0;
+        Wed, 15 Mar 2023 12:24:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56D50C433D2;
+        Wed, 15 Mar 2023 12:24:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1678883093;
+        bh=HxobUR7YsoVwribI8QOOk0cgyEyxSdfD1k5aCnEhznY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=RZ6F6NM5S+B90/4jRXN9tYq/Ca35W+dWv8R9NqPhea7mw4rEl824orRVtpwqXKWtB
+         eFUsZEti5g7t1a9uDr5QyI0rWrz653yiAXB9BZfRZrOGHT/mmlW5b+Qm50lDwjqzkH
+         jd1H8e9lBtO2mQO75iqRfVIGC5smWhGiafsmkoUM=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     stable@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: [PATCH 5.15 000/145] 5.15.103-rc1 review
+Date:   Wed, 15 Mar 2023 13:11:06 +0100
+Message-Id: <20230315115738.951067403@linuxfoundation.org>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR11MB3625:EE_|BN9PR11MB5481:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3f1d537f-5021-4ab8-702a-08db254e79e9
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 6Mx5z8fdZdj5L2/F6SsOAjqNUHYCYj/WVC72WleT1kzDX0GTlt+Xy20oKT1yuYd6hruk/x1/xLNsROvzlPDmWeKTcXZ22rM8qSMi2VKHNgtJ56yKlw/TlpLLDXM5myoAmwKeRex2Vdu+5MnAGjPLhiHfTGxt+Dz4gIB2sVigZlpXvGtL7g0s/+/w0lzv0rEso6EvFXfQ/E0EgJl9fAN797qS0Ja8+oL1TG4XzbdTGlLbD1h+knOKL41sSZpa9Ea9zImt5AsoT9gvxK1oshSR5RLo4bme7ElwRC1rA5n/nRZ7y0Ex9B6S87SR3EEcz3FMmDbo/fphQmF7fLLDx3eHOA4opLJo6aJYIcG6/6IR4UHoYdlmeS0AeTNW7n2zkx++h17GlLFI8SjK0l4Cy0yqgxfL6TYn1VNAkbulC1HmjQPgPZprBTfVL916o7ivec+96OdfUcszVU1EyyAg8an999AH8nFPF4RPBphTMspCHogt5ZxFO6KnjrMgqkfplNoqHbdGDVT9Ll3Sj2KxWxswiXtfrDYfiXKlC26+t1OkCFigVpBz2fWMPw9RowVK1juVtKsmv/M0vXmWDgIWDu+LPLapBzgPDkHh3gum3Y3aadBT8oFjVVJKa5/wY/c65RFahQ5B1AsBAZGCZhZfrytlnIpKlrGwUAh4scGtDL/bYeGwCeKWzudwVzpY8ki4xUO+lXvfD/xwetwSTsBYypuuaMCnv51HXvHcaqW6H1ludzzJCUra8nLvTLPoP2Eh02j+vmCvbjmh38FqRGL1LyO5pxLD5MD84UNyRZOc6SD3UVE=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB3625.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(376002)(396003)(346002)(136003)(39860400002)(366004)(451199018)(36756003)(7416002)(5660300002)(83380400001)(45080400002)(186003)(478600001)(6512007)(2616005)(6666004)(966005)(26005)(6506007)(6486002)(66946007)(66556008)(6916009)(8676002)(41300700001)(66476007)(8936002)(31696002)(4326008)(86362001)(316002)(38100700002)(82960400001)(2906002)(31686004)(99710200001)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VEJFeUpUOXBIWEc0dUJjVE1QeTd0UmNLTmQ2UDFDa1hBWGM5QWV4bXdmRlgw?=
- =?utf-8?B?eVMwWnNxaXBDNDUzSFJ4cE5oZXpyaHVTTTVockhycEpaRyt0MEx5azBqMUt3?=
- =?utf-8?B?L2JKb0l2b2drSUVEQzlBd1RVTzB0M1dUZzREVCtrUFZFM0VpV0tranRWc1Zp?=
- =?utf-8?B?R2ZLZ3dqMnlEaGtKUG1DQUZFd293bnhXTnhBQTk5NjMzcFlTQ3pzM2UycGlj?=
- =?utf-8?B?MTYxU2JSS0FDNFFjTWNJY2Rpc25WRWtIZGd0TWpDOG55R1c0cUpWRE15UkpC?=
- =?utf-8?B?cjZsV0NHN3oxS1NRNGRyMDdaamVrcm1CVklub25lbTJQZnJxa2R2ZkVVZGFN?=
- =?utf-8?B?elEyMEZsOHB3a2xjazVnWGlrc0tMdTNDeUNZK2w2Q0ZmSk9yQ2x1ZkJLNjNi?=
- =?utf-8?B?Unp2SHVxV1lqVklIMUlaSXhqRjZhZ1hEdUZ6S2NjTEFjaFFVSkxKK1RNNnU1?=
- =?utf-8?B?b2g5b3pudDJhc3JTaWJJbHJtR2VQekNxbFd1bXA4VEtHTHA0ZytNajhkL0NX?=
- =?utf-8?B?U3BKRzhuTUdUejhuNXBrZHh0M2hnbHpRWDM4SnZIWFVHaUw4bFRBYVByUitU?=
- =?utf-8?B?MXQwWmIxNlJESm01VXRiRkRuak9pTFZwZU1RQ0ZHZVlOZXdoUFJKT2lrZ05n?=
- =?utf-8?B?V3plUWdpdkZnZXd5d2pCTkhNQ1N1Y3p0MHl4ZEF3Zys2WmtIUi91S1l0MWpw?=
- =?utf-8?B?SlRPSzUvOFNIb3dGK3o1ai9DMkJCTVFtVGlRaG5SM24rU29FVlBxMUMyRXhi?=
- =?utf-8?B?YVRVeG1wcjdjM1RMcURvTnZpSEFmZTNOd1A1RTBkVzM4NDlvMko2R0w2MkxJ?=
- =?utf-8?B?NWY1cHc1bmg0UHFZY2NqYVoxcTl4T3Q3aHcwSk9RV3czeVFiWVcyc1BYZEh6?=
- =?utf-8?B?OVgrZHlnV0NkVXJWalp3a3NVeE5wU0MwOXZwWDlOM3Y1QjlzQUVZTDNJcVFV?=
- =?utf-8?B?VE4reXgrd0txRmJOR284ajZ4KzF4MVZtMEQyNHZBa1g3dWJyNFJ4dXpqZjdS?=
- =?utf-8?B?ckx1Sy9uTHpKRStYZC9USUx3TDl1U0hsWi9XamFmc2dJZkNjbTRrOWh0VHlx?=
- =?utf-8?B?aGRHaWxwcGQ5OGczSUlueFFJZk5zT3kzWmI2ci90MU1yVkdvOTFYU3NLSm96?=
- =?utf-8?B?RVp5U29IRnRROWswbitQaEpMc1VkOFZIbnJYOTVWSmE1UTNxTGl3NXdSSVRk?=
- =?utf-8?B?Zyt5YURWNGdOLzBNOFNmRllXVFJ5ZGRsSTAzamNxOUtrbWg3ck01N1VsZmJW?=
- =?utf-8?B?aUNKNHJhbWNuMVNkc1BmOWlsZEVwK041dExMVk5Tc2N0KzN1cVBlTGlKUDBG?=
- =?utf-8?B?WVpSOFFzdW9sWEZIV2FnTDJFNzhOUnRabVpOeVU0OE5TMUp4dVFKMjI4aWl3?=
- =?utf-8?B?Yi8yMlUxZU5nZ1FnTVdZTEdYN2hwb0hLVGxkd05tYU1adjlRUHNqUUFJckVE?=
- =?utf-8?B?ZXBVYlRHWXhUS2Z6Y24zNXVqdTZXOTlLKys1YkhDdXdNRVlCbmFIQTBhVG9D?=
- =?utf-8?B?V2VLZjZhY3ZZM1kvaFE2ZStPRVB0eGkwSU10bmsyWlRqTlhFSW96d1ZFeW4y?=
- =?utf-8?B?ZGJFRlRsaHVlbk8zb0JPazZEd01za2hIQ2ZERmNmc0c2R1ZtRkkwS1A5a3p4?=
- =?utf-8?B?alFCdkZ1ckFEbGI3amFIaC93eUFBR3VWNTJtMlRGOTRReWlrcS9LT3lKcXdp?=
- =?utf-8?B?T01NZ0ppWHJJS2E5aHd5Vys0aXp4WUxxUnQxRXR4STVPdWtYZkt1RVlRSnEy?=
- =?utf-8?B?Y3FkQkdsWld1dHBmclB5RkFRNTBpVE9hL3ZvamdxcjE1ZXVoT0xOdjBuTm5H?=
- =?utf-8?B?MlZtQW9MR3FvWHdEWFNENTJPN3lHQnlVdXd6UUlPOTYySnNHRzREVlVTZGt4?=
- =?utf-8?B?bnV5Wjh2dHpESy9pYjhWdXJtL0ZhanhCRk9VNW56WjFuZm04LzgzOVcyL08w?=
- =?utf-8?B?MFRkVzFHdGtHOVJYOS9iRlVjRUFaZkxwRDVJMGRHNUJLMCsvQjJSeHU3ZGFC?=
- =?utf-8?B?dkxtczk1TDRDbWZQd041cEtWNE1hK3ZHa1lqVjVsVHZMbHJpaGpqTGQrR2xl?=
- =?utf-8?B?eFBtRXBTMjhZcGkvZkhGTjdTSGZOUXE5RjRVd1U3a1UreGsrZnJxQlBmRlht?=
- =?utf-8?B?bzlZZEtaMDVCdHM1M3Nlc3daU01NZkpjR25BWnkyeTIxRDRxN3dybkxxRWNX?=
- =?utf-8?Q?a8nD5MTLXLt8atdGRj3tB1M=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3f1d537f-5021-4ab8-702a-08db254e79e9
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB3625.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Mar 2023 12:11:58.7481
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 3O52fRsMh3/dAs/+cDY6FtsWUuy9iNnF7Hwt7MIqYRx9bT8Nqh8/uklR0Sx0Q7FvRNWjbwoIiGvem5nbYquMljr11fIqK1r1zOOobKI3li0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR11MB5481
-X-OriginatorOrg: intel.com
+User-Agent: quilt/0.67
+X-stable: review
+X-Patchwork-Hint: ignore
+X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.103-rc1.gz
+X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+X-KernelTest-Branch: linux-5.15.y
+X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
+X-KernelTest-Version: 5.15.103-rc1
+X-KernelTest-Deadline: 2023-03-17T11:57+00:00
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Syzbot <syzbot+e1d1b65f7c32f2a86a9f@syzkaller.appspotmail.com>
-Date: Wed, 15 Mar 2023 05:03:47 -0700
+This is the start of the stable review cycle for the 5.15.103 release.
+There are 145 patches in this series, all will be posted as a response
+to this one.  If anyone has any issues with these being applied, please
+let me know.
 
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    3c2611bac08a selftests/bpf: Fix trace_virtqueue_add_sgs te..
-> git tree:       bpf-next
-> console+strace: https://syzkaller.appspot.com/x/log.txt?x=1026d472c80000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=cab35c936731a347
-> dashboard link: https://syzkaller.appspot.com/bug?extid=e1d1b65f7c32f2a86a9f
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15826bc6c80000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15cd12e2c80000
-> 
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/36a32f4d222a/disk-3c2611ba.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/f5c0da04f143/vmlinux-3c2611ba.xz
-> kernel image: https://storage.googleapis.com/syzbot-assets/ae2ca9bce51a/bzImage-3c2611ba.xz
-> 
-> The issue was bisected to:
-> 
-> commit 9c94bbf9a87b264294f42e6cc0f76d87854733ec
-> Author: Alexander Lobakin <aleksander.lobakin@intel.com>
-> Date:   Mon Mar 13 21:55:52 2023 +0000
-> 
->     xdp: recycle Page Pool backed skbs built from XDP frames
-> 
-> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=11deec2ac80000
-> final oops:     https://syzkaller.appspot.com/x/report.txt?x=13deec2ac80000
-> console output: https://syzkaller.appspot.com/x/log.txt?x=15deec2ac80000
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+e1d1b65f7c32f2a86a9f@syzkaller.appspotmail.com
-> Fixes: 9c94bbf9a87b ("xdp: recycle Page Pool backed skbs built from XDP frames")
-> 
-> BUG: kernel NULL pointer dereference, address: 0000000000000d28
-> #PF: supervisor write access in kernel mode
-> #PF: error_code(0x0002) - not-present page
-> PGD 7b741067 P4D 7b741067 PUD 7c1ca067 PMD 0 
-> Oops: 0002 [#1] PREEMPT SMP KASAN
-> CPU: 1 PID: 5080 Comm: syz-executor371 Not tainted 6.2.0-syzkaller-13030-g3c2611bac08a #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/02/2023
-> RIP: 0010:memset_erms+0xd/0x20 arch/x86/lib/memset_64.S:66
-> Code: 01 48 0f af c6 f3 48 ab 89 d1 f3 aa 4c 89 c8 c3 66 66 2e 0f 1f 84 00 00 00 00 00 66 90 66 0f 1f 00 49 89 f9 40 88 f0 48 89 d1 <f3> aa 4c 89 c8 c3 66 66 2e 0f 1f 84 00 00 00 00 00 66 90 66 0f 1f
-> RSP: 0018:ffffc90003baf730 EFLAGS: 00010246
-> RAX: 0000000000000000 RBX: ffff888028b94000 RCX: 0000000000000020
-> RDX: 0000000000000020 RSI: 0000000000000000 RDI: 0000000000000d28
-> RBP: 0000000000000001 R08: 0000000000000001 R09: 0000000000000d28
-> R10: ffffed100517281c R11: 0000000000094001 R12: 0000000000000d48
-> R13: 0000000000000d28 R14: 0000000000000f68 R15: 0000000000000100
-> FS:  0000555555979300(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 0000000000000d28 CR3: 0000000028e2d000 CR4: 00000000003506e0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->  <TASK>
->  __finalize_skb_around net/core/skbuff.c:321 [inline]
->  __build_skb_around+0x232/0x3a0 net/core/skbuff.c:379
->  build_skb_around+0x32/0x290 net/core/skbuff.c:444
->  __xdp_build_skb_from_frame+0x121/0x760 net/core/xdp.c:622
->  xdp_recv_frames net/bpf/test_run.c:248 [inline]
->  xdp_test_run_batch net/bpf/test_run.c:334 [inline]
->  bpf_test_run_xdp_live+0x1289/0x1930 net/bpf/test_run.c:362
->  bpf_prog_test_run_xdp+0xa05/0x14e0 net/bpf/test_run.c:1418
->  bpf_prog_test_run kernel/bpf/syscall.c:3675 [inline]
->  __sys_bpf+0x1598/0x5100 kernel/bpf/syscall.c:5028
->  __do_sys_bpf kernel/bpf/syscall.c:5114 [inline]
->  __se_sys_bpf kernel/bpf/syscall.c:5112 [inline]
->  __x64_sys_bpf+0x79/0xc0 kernel/bpf/syscall.c:5112
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> RIP: 0033:0x7f320b4efca9
-> Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-> RSP: 002b:00007ffd2c9924d8 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
-> RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f320b4efca9
-> RDX: 0000000000000048 RSI: 0000000020000080 RDI: 000000000000000a
-> RBP: 00007f320b4b3e50 R08: 0000000000000000 R09: 0000000000000000
-> R10: 0000000000000000 R11: 0000000000000246 R12: 00007f320b4b3ee0
-> R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
->  </TASK>
-> Modules linked in:
-> CR2: 0000000000000d28
-> ---[ end trace 0000000000000000 ]---
-> RIP: 0010:memset_erms+0xd/0x20 arch/x86/lib/memset_64.S:66
-> Code: 01 48 0f af c6 f3 48 ab 89 d1 f3 aa 4c 89 c8 c3 66 66 2e 0f 1f 84 00 00 00 00 00 66 90 66 0f 1f 00 49 89 f9 40 88 f0 48 89 d1 <f3> aa 4c 89 c8 c3 66 66 2e 0f 1f 84 00 00 00 00 00 66 90 66 0f 1f
-> RSP: 0018:ffffc90003baf730 EFLAGS: 00010246
-> RAX: 0000000000000000 RBX: ffff888028b94000 RCX: 0000000000000020
-> RDX: 0000000000000020 RSI: 0000000000000000 RDI: 0000000000000d28
-> RBP: 0000000000000001 R08: 0000000000000001 R09: 0000000000000d28
-> R10: ffffed100517281c R11: 0000000000094001 R12: 0000000000000d48
-> R13: 0000000000000d28 R14: 0000000000000f68 R15: 0000000000000100
-> FS:  0000555555979300(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 0000000000000d28 CR3: 0000000028e2d000 CR4: 00000000003506e0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> ----------------
-> Code disassembly (best guess), 1 bytes skipped:
->    0:	48 0f af c6          	imul   %rsi,%rax
->    4:	f3 48 ab             	rep stos %rax,%es:(%rdi)
->    7:	89 d1                	mov    %edx,%ecx
->    9:	f3 aa                	rep stos %al,%es:(%rdi)
->    b:	4c 89 c8             	mov    %r9,%rax
->    e:	c3                   	retq
->    f:	66 66 2e 0f 1f 84 00 	data16 nopw %cs:0x0(%rax,%rax,1)
->   16:	00 00 00 00
->   1a:	66 90                	xchg   %ax,%ax
->   1c:	66 0f 1f 00          	nopw   (%rax)
->   20:	49 89 f9             	mov    %rdi,%r9
->   23:	40 88 f0             	mov    %sil,%al
->   26:	48 89 d1             	mov    %rdx,%rcx
-> * 29:	f3 aa                	rep stos %al,%es:(%rdi) <-- trapping instruction
+Responses should be made by Fri, 17 Mar 2023 11:57:10 +0000.
+Anything received after that time might be too late.
 
-Looks like skb_shinfo() returns %NULL inside __finalize_skb_around(). My
-code didn't touch this at all, but I'm digging this already anyway :s
+The whole patch series can be found in one patch at:
+	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.103-rc1.gz
+or in the git tree and branch at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+and the diffstat can be found below.
 
-+ Toke, test_run author :p
+thanks,
 
->   2b:	4c 89 c8             	mov    %r9,%rax
->   2e:	c3                   	retq
->   2f:	66 66 2e 0f 1f 84 00 	data16 nopw %cs:0x0(%rax,%rax,1)
->   36:	00 00 00 00
->   3a:	66 90                	xchg   %ax,%ax
->   3c:	66                   	data16
->   3d:	0f                   	.byte 0xf
->   3e:	1f                   	(bad)
-> 
-> 
-> ---
-> This report is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
-> 
-> syzbot will keep track of this issue. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-> syzbot can test patches for this issue, for details see:
-> https://goo.gl/tpsmEJ#testing-patches
+greg k-h
 
-Thanks,
-Olek
+-------------
+Pseudo-Shortlog of commits:
+
+Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+    Linux 5.15.103-rc1
+
+Alexandru Matei <alexandru.matei@uipath.com>
+    KVM: VMX: Fix crash due to uninitialized current_vmcs
+
+Vitaly Kuznetsov <vkuznets@redhat.com>
+    KVM: VMX: Introduce vmx_msr_bitmap_l01_changed() helper
+
+Vitaly Kuznetsov <vkuznets@redhat.com>
+    KVM: nVMX: Don't use Enlightened MSR Bitmap for L3
+
+Christian Brauner <christian.brauner@ubuntu.com>
+    fs: hold writers when changing mount's idmapping
+
+Masahiro Yamada <masahiroy@kernel.org>
+    UML: define RUNTIME_DISCARD_EXIT
+
+Gaosheng Cui <cuigaosheng1@huawei.com>
+    xfs: remove xfs_setattr_time() declaration
+
+Miaohe Lin <linmiaohe@huawei.com>
+    KVM: fix memoryleak in kvm_init()
+
+Andres Freund <andres@anarazel.de>
+    tools bpftool: Fix compilation error with new binutils
+
+Andres Freund <andres@anarazel.de>
+    tools bpf_jit_disasm: Fix compilation error with new binutils
+
+Andres Freund <andres@anarazel.de>
+    tools perf: Fix compilation error with new binutils
+
+Andres Freund <andres@anarazel.de>
+    tools include: add dis-asm-compat.h to handle version differences
+
+Andres Freund <andres@anarazel.de>
+    tools build: Add feature test for init_disassemble_info API changes
+
+Tom Saeger <tom.saeger@oracle.com>
+    sh: define RUNTIME_DISCARD_EXIT
+
+Masahiro Yamada <masahiroy@kernel.org>
+    s390: define RUNTIME_DISCARD_EXIT to fix link error with GNU ld < 2.36
+
+Michael Ellerman <mpe@ellerman.id.au>
+    powerpc/vmlinux.lds: Don't discard .rela* for relocatable builds
+
+Michael Ellerman <mpe@ellerman.id.au>
+    powerpc/vmlinux.lds: Define RUNTIME_DISCARD_EXIT
+
+Masahiro Yamada <masahiroy@kernel.org>
+    arch: fix broken BuildID for arm64 and riscv
+
+Lukas Czerner <lczerner@redhat.com>
+    ext4: block range must be validated before use in ext4_mb_clear_bb()
+
+Ritesh Harjani <riteshh@linux.ibm.com>
+    ext4: add strict range checks while freeing blocks
+
+Ritesh Harjani <riteshh@linux.ibm.com>
+    ext4: add ext4_sb_block_valid() refactored out of ext4_inode_block_valid()
+
+Ritesh Harjani <riteshh@linux.ibm.com>
+    ext4: refactor ext4_free_blocks() to pull out ext4_mb_clear_bb()
+
+Qais Yousef <qyousef@layalina.io>
+    sched/fair: Fixes for capacity inversion detection
+
+Qais Yousef <qyousef@layalina.io>
+    sched/uclamp: Fix a uninitialized variable warnings
+
+Qais Yousef <qais.yousef@arm.com>
+    sched/fair: Consider capacity inversion in util_fits_cpu()
+
+Qais Yousef <qais.yousef@arm.com>
+    sched/fair: Detect capacity inversion
+
+Qais Yousef <qais.yousef@arm.com>
+    sched/uclamp: Cater for uclamp in find_energy_efficient_cpu()'s early exit condition
+
+Qais Yousef <qais.yousef@arm.com>
+    sched/uclamp: Make cpu_overutilized() use util_fits_cpu()
+
+Qais Yousef <qais.yousef@arm.com>
+    sched/uclamp: Fix fits_capacity() check in feec()
+
+Seth Forshee <sforshee@kernel.org>
+    filelocks: use mount idmapping for setlease permission check
+
+Li Jun <jun.li@nxp.com>
+    media: rc: gpio-ir-recv: add remove function
+
+Paul Elder <paul.elder@ideasonboard.com>
+    media: ov5640: Fix analogue gain control
+
+Masahiro Yamada <masahiroy@kernel.org>
+    scripts: handle BrokenPipeError for python scripts
+
+Alvaro Karsz <alvaro.karsz@solid-run.com>
+    PCI: Avoid FLR for SolidRun SNET DPU rev 1
+
+Alvaro Karsz <alvaro.karsz@solid-run.com>
+    PCI: Add SolidRun vendor ID
+
+Nathan Chancellor <nathan@kernel.org>
+    macintosh: windfarm: Use unsigned type for 1-bit bitfields
+
+Edward Humes <aurxenon@lunos.org>
+    alpha: fix R_ALPHA_LITERAL reloc for large modules
+
+Rohan McLure <rmclure@linux.ibm.com>
+    powerpc/kcsan: Exclude udelay to prevent recursive instrumentation
+
+Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+    powerpc/iommu: fix memory leak with using debugfs_lookup()
+
+Christophe Leroy <christophe.leroy@csgroup.eu>
+    powerpc: Check !irq instead of irq == NO_IRQ and remove NO_IRQ
+
+xurui <xurui@kylinos.cn>
+    MIPS: Fix a compilation issue
+
+Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+    clk: qcom: mmcc-apq8084: remove spdm clocks
+
+Christian Brauner <brauner@kernel.org>
+    fs: use consistent setgid checks in is_sxid()
+
+Christian Brauner <brauner@kernel.org>
+    attr: use consistent sgid stripping checks
+
+Christian Brauner <brauner@kernel.org>
+    attr: add setattr_should_drop_sgid()
+
+Christian Brauner <brauner@kernel.org>
+    fs: move should_remove_suid()
+
+Christian Brauner <brauner@kernel.org>
+    attr: add in_group_or_capable()
+
+Yang Xu <xuyang2018.jy@fujitsu.com>
+    fs: move S_ISGID stripping into the vfs_*() helpers
+
+Yang Xu <xuyang2018.jy@fujitsu.com>
+    fs: add mode_strip_sgid() helper
+
+Dave Chinner <dchinner@redhat.com>
+    xfs: set prealloc flag in xfs_alloc_file_space()
+
+Dave Chinner <dchinner@redhat.com>
+    xfs: fallocate() should call file_modified()
+
+Dave Chinner <dchinner@redhat.com>
+    xfs: remove XFS_PREALLOC_SYNC
+
+Darrick J. Wong <djwong@kernel.org>
+    xfs: use setattr_copy to set vfs inode attributes
+
+Morten Linderud <morten@linderud.pw>
+    tpm/eventlog: Don't abort tpm_read_log on faulty ACPI address
+
+David Disseldorp <ddiss@suse.de>
+    watch_queue: fix IOC_WATCH_QUEUE_SET_SIZE alloc error paths
+
+Hans de Goede <hdegoede@redhat.com>
+    staging: rtl8723bs: Fix key-store index handling
+
+Hannes Braun <hannesbraun@mail.de>
+    staging: rtl8723bs: fix placement of braces
+
+Jagath Jog J <jagathjog1996@gmail.com>
+    Staging: rtl8723bs: Placing opening { braces in previous line
+
+Michael Straube <straube.linux@gmail.com>
+    staging: rtl8723bs: clean up comparsions to NULL
+
+Gavrilov Ilia <Ilia.Gavrilov@infotecs.ru>
+    iommu/amd: Add a length limitation for the ivrs_acpihid command-line parameter
+
+Kim Phillips <kim.phillips@amd.com>
+    iommu/amd: Fix ill-formed ivrs_ioapic, ivrs_hpet and ivrs_acpihid options
+
+Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
+    iommu/amd: Add PCI segment support for ivrs_[ioapic/hpet/acpihid] commands
+
+Christoph Hellwig <hch@lst.de>
+    nbd: use the correct block_device in nbd_bdev_reset
+
+Johan Hovold <johan+linaro@kernel.org>
+    irqdomain: Fix mapping-creation race
+
+Jan Kara <jack@suse.cz>
+    ext4: Fix deadlock during directory rename
+
+Conor Dooley <conor.dooley@microchip.com>
+    RISC-V: Don't check text_mutex during stop_machine
+
+Heiko Carstens <hca@linux.ibm.com>
+    s390/ftrace: remove dead code
+
+Alexandre Ghiti <alexghiti@rivosinc.com>
+    riscv: Use READ_ONCE_NOCHECK in imprecise unwinding stack mode
+
+Eric Dumazet <edumazet@google.com>
+    af_unix: fix struct pid leaks in OOB support
+
+Kuniyuki Iwashima <kuniyu@amazon.co.jp>
+    af_unix: Remove unnecessary brackets around CONFIG_AF_UNIX_OOB.
+
+Vladimir Oltean <vladimir.oltean@nxp.com>
+    net: dsa: mt7530: permit port 5 to work without port 6 on MT7621 SoC
+
+Benjamin Coddington <bcodding@redhat.com>
+    SUNRPC: Fix a server shutdown leak
+
+Suman Ghosh <sumang@marvell.com>
+    octeontx2-af: Unlock contexts in the queue context cache in case of fault detection
+
+D. Wythe <alibuda@linux.alibaba.com>
+    net/smc: fix fallback failed while sendmsg with fastopen
+
+Randy Dunlap <rdunlap@infradead.org>
+    platform: x86: MLX_PLATFORM: select REGMAP instead of depending on it
+
+Eric Dumazet <edumazet@google.com>
+    netfilter: conntrack: adopt safer max chain length
+
+Chandrakanth Patil <chandrakanth.patil@broadcom.com>
+    scsi: megaraid_sas: Update max supported LD IDs to 240
+
+Daniel Golle <daniel@makrotopia.org>
+    net: ethernet: mtk_eth_soc: fix RX data corruption issue
+
+Heiner Kallweit <hkallweit1@gmail.com>
+    net: phy: smsc: fix link up detection in forced irq mode
+
+Lukas Wunner <lukas@wunner.de>
+    net: phy: smsc: Cache interrupt mask
+
+Lorenz Bauer <lorenz.bauer@isovalent.com>
+    btf: fix resolving BTF_KIND_VAR after ARRAY, STRUCT, UNION, PTR
+
+Florian Westphal <fw@strlen.de>
+    netfilter: tproxy: fix deadlock due to missing BH disable
+
+Ivan Delalande <colona@arista.com>
+    netfilter: ctnetlink: revert to dumping mark regardless of event type
+
+Michael Chan <michael.chan@broadcom.com>
+    bnxt_en: Avoid order-5 memory allocation for TPA data
+
+Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+    net: phylib: get rid of unnecessary locking
+
+Rongguang Wei <weirongguang@kylinos.cn>
+    net: stmmac: add to set device wake up flag when stmmac init phy
+
+Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+    drm/msm/dpu: fix len of sc7180 ctl blocks
+
+Liu Jian <liujian56@huawei.com>
+    bpf, sockmap: Fix an infinite loop error when len is 0 in tcp_bpf_recvmsg_parser()
+
+Petr Oros <poros@redhat.com>
+    ice: copy last block omitted in ice_get_module_eeprom()
+
+Shigeru Yoshida <syoshida@redhat.com>
+    net: caif: Fix use-after-free in cfusbl_device_notify()
+
+Yuiko Oshino <yuiko.oshino@microchip.com>
+    net: lan78xx: fix accessing the LAN7800's internal phy specific registers from the MAC driver
+
+Changbin Du <changbin.du@huawei.com>
+    perf stat: Fix counting when initial delay configured
+
+Hangbin Liu <liuhangbin@gmail.com>
+    selftests: nft_nat: ensuring the listening side is up before starting the client
+
+Eric Dumazet <edumazet@google.com>
+    ila: do not generate empty messages in ila_xlat_nl_cmd_get_mapping()
+
+Vladimir Oltean <vladimir.oltean@nxp.com>
+    powerpc: dts: t1040rdb: fix compatible string for Rev A boards
+
+Kang Chen <void0red@gmail.com>
+    nfc: fdp: add null check of devm_kmalloc_array in fdp_nci_i2c_read_device_properties
+
+Rafał Miłecki <rafal@milecki.pl>
+    bgmac: fix *initial* chip reset to support BCM5358
+
+Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+    drm/msm/a5xx: fix context faults during ring switch
+
+Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+    drm/msm/a5xx: fix the emptyness check in the preempt code
+
+Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+    drm/msm/a5xx: fix highest bank bit for a530
+
+Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+    drm/msm/a5xx: fix setting of the CP_PREEMPT_ENABLE_LOCAL register
+
+Rob Clark <robdclark@chromium.org>
+    drm/msm: Fix potential invalid ptr free
+
+Jiri Slaby (SUSE) <jirislaby@kernel.org>
+    drm/nouveau/kms/nv50: fix nv50_wndw_new_ prototype
+
+Ben Skeggs <bskeggs@redhat.com>
+    drm/nouveau/kms/nv50-: remove unused functions
+
+Jan Kara <jack@suse.cz>
+    ext4: Fix possible corruption when moving a directory
+
+Matthias Kaehlcke <mka@chromium.org>
+    regulator: core: Use ktime_get_boottime() to determine how long a regulator was off
+
+Christian Kohlschütter <christian@kohlschutter.com>
+    regulator: core: Fix off-on-delay-us for always-on/boot-on regulators
+
+Mark Brown <broonie@kernel.org>
+    regulator: Flag uncontrollable regulators as always_on
+
+Bart Van Assche <bvanassche@acm.org>
+    scsi: core: Remove the /proc/scsi/${proc_name} directory earlier
+
+Liao Chang <liaochang1@huawei.com>
+    riscv: Add header include guards to insn.h
+
+Mattias Nissler <mnissler@rivosinc.com>
+    riscv: Avoid enabling interrupts in die()
+
+Palmer Dabbelt <palmer@rivosinc.com>
+    RISC-V: Avoid dereferening NULL regs in die()
+
+Pierre Gondois <pierre.gondois@arm.com>
+    arm64: efi: Make efi_rt_lock a raw_spinlock
+
+Jens Axboe <axboe@kernel.dk>
+    brd: mark as nowait compatible
+
+Luis Chamberlain <mcgrof@kernel.org>
+    block/brd: add error handling support for add_disk()
+
+Jacob Pan <jacob.jun.pan@linux.intel.com>
+    iommu/vt-d: Fix PASID directory pointer coherency
+
+Johan Hovold <johan+linaro@kernel.org>
+    irqdomain: Refactor __irq_domain_alloc_irqs()
+
+Corey Minyard <cminyard@mvista.com>
+    ipmi:ssif: Add a timer between request retries
+
+Corey Minyard <cminyard@mvista.com>
+    ipmi:ssif: Increase the message retry time
+
+Jaegeuk Kim <jaegeuk@kernel.org>
+    f2fs: retry to update the inode page given data corruption
+
+Jaegeuk Kim <jaegeuk@kernel.org>
+    f2fs: do not bother checkpoint by f2fs_get_node_info
+
+Jaegeuk Kim <jaegeuk@kernel.org>
+    f2fs: avoid down_write on nat_tree_lock during checkpoint
+
+Jan Kara <jack@suse.cz>
+    udf: Fix off-by-one error when discarding preallocation
+
+Alexander Aring <aahringo@redhat.com>
+    fs: dlm: start midcomms before scand
+
+Alexander Aring <aahringo@redhat.com>
+    fs: dlm: add midcomms init/start functions
+
+Alexander Aring <aahringo@redhat.com>
+    fs: dlm: fix log of lowcomms vs midcomms
+
+Sean Christopherson <seanjc@google.com>
+    KVM: SVM: Process ICR on AVIC IPI delivery failure due to invalid target
+
+Sean Christopherson <seanjc@google.com>
+    KVM: SVM: Don't rewrite guest ICR on AVIC IPI virtualization failure
+
+Sean Christopherson <seanjc@google.com>
+    KVM: Register /dev/kvm as the _very_ last thing during initialization
+
+Vitaly Kuznetsov <vkuznets@redhat.com>
+    KVM: Pre-allocate cpumasks for kvm_make_all_cpus_request_except()
+
+Vitaly Kuznetsov <vkuznets@redhat.com>
+    KVM: Optimize kvm_make_vcpus_request_mask() a bit
+
+Fedor Pchelkin <pchelkin@ispras.ru>
+    nfc: change order inside nfc_se_io error path
+
+Zhihao Cheng <chengzhihao1@huawei.com>
+    ext4: zero i_disksize when initializing the bootloader inode
+
+Ye Bin <yebin10@huawei.com>
+    ext4: fix WARNING in ext4_update_inline_data
+
+Ye Bin <yebin10@huawei.com>
+    ext4: move where set the MAY_INLINE_DATA flag is set
+
+Darrick J. Wong <djwong@kernel.org>
+    ext4: fix another off-by-one fsmap error on 1k block filesystems
+
+Eric Whitney <enwlinux@gmail.com>
+    ext4: fix RENAME_WHITEOUT handling for inline directories
+
+Eric Biggers <ebiggers@google.com>
+    ext4: fix cgroup writeback accounting with fs-layer encryption
+
+Hans de Goede <hdegoede@redhat.com>
+    staging: rtl8723bs: Pass correct parameters to cfg80211_get_bss()
+
+Harry Wentland <harry.wentland@amd.com>
+    drm/connector: print max_requested_bpc in state debugfs
+
+Alex Deucher <alexander.deucher@amd.com>
+    drm/amdgpu: fix error checking in amdgpu_read_mm_registers for soc15
+
+Andrew Cooper <andrew.cooper3@citrix.com>
+    x86/CPU/AMD: Disable XSAVES on AMD family 0x17
+
+Tobias Klauser <tklauser@distanz.ch>
+    fork: allow CLONE_NEWTIME in clone3 flags
+
+Namhyung Kim <namhyung@kernel.org>
+    perf inject: Fix --buildid-all not to eat up MMAP2
+
+Johannes Thumshirn <johannes.thumshirn@wdc.com>
+    btrfs: fix percent calculation for bg reclaim message
+
+Theodore Ts'o <tytso@mit.edu>
+    fs: prevent out-of-bounds array speculation when closing a file descriptor
+
+
+-------------
+
+Diffstat:
+
+ Documentation/admin-guide/kernel-parameters.txt    |  51 ++-
+ Documentation/trace/ftrace.rst                     |   2 +-
+ Makefile                                           |   4 +-
+ arch/alpha/kernel/module.c                         |   4 +-
+ arch/arm64/include/asm/efi.h                       |   6 +-
+ arch/arm64/kernel/efi.c                            |   2 +-
+ arch/mips/include/asm/mach-rc32434/pci.h           |   2 +-
+ arch/powerpc/boot/dts/fsl/t1040rdb-rev-a.dts       |   1 -
+ arch/powerpc/include/asm/irq.h                     |   3 -
+ arch/powerpc/kernel/iommu.c                        |   4 +-
+ arch/powerpc/kernel/time.c                         |   4 +-
+ arch/powerpc/kernel/vmlinux.lds.S                  |   6 +-
+ arch/powerpc/platforms/44x/fsp2.c                  |   2 +-
+ arch/riscv/include/asm/ftrace.h                    |   2 +-
+ arch/riscv/include/asm/parse_asm.h                 |   5 +
+ arch/riscv/include/asm/patch.h                     |   2 +
+ arch/riscv/kernel/ftrace.c                         |  14 +-
+ arch/riscv/kernel/patch.c                          |  28 +-
+ arch/riscv/kernel/stacktrace.c                     |   2 +-
+ arch/riscv/kernel/traps.c                          |  14 +-
+ arch/s390/kernel/ftrace.c                          |  86 +----
+ arch/s390/kernel/vmlinux.lds.S                     |   2 +
+ arch/sh/kernel/vmlinux.lds.S                       |   1 +
+ arch/um/kernel/vmlinux.lds.S                       |   2 +-
+ arch/x86/kernel/cpu/amd.c                          |   9 +
+ arch/x86/kvm/lapic.c                               |   1 +
+ arch/x86/kvm/svm/avic.c                            |  28 +-
+ arch/x86/kvm/vmx/evmcs.h                           |  11 -
+ arch/x86/kvm/vmx/vmx.c                             |  44 ++-
+ drivers/block/brd.c                                |  10 +-
+ drivers/block/nbd.c                                |  14 +-
+ drivers/char/ipmi/ipmi_ssif.c                      |  34 +-
+ drivers/char/tpm/eventlog/acpi.c                   |   6 +-
+ drivers/clk/qcom/mmcc-apq8084.c                    | 271 ----------------
+ drivers/gpu/drm/amd/amdgpu/soc15.c                 |   5 +-
+ drivers/gpu/drm/drm_atomic.c                       |   1 +
+ drivers/gpu/drm/msm/adreno/a5xx_gpu.c              |   6 +-
+ drivers/gpu/drm/msm/adreno/a5xx_preempt.c          |   4 +-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c     |   6 +-
+ drivers/gpu/drm/msm/msm_gem_submit.c               |   5 +-
+ drivers/gpu/drm/nouveau/dispnv50/disp.c            |  16 -
+ drivers/gpu/drm/nouveau/dispnv50/wndw.c            |  12 -
+ drivers/gpu/drm/nouveau/dispnv50/wndw.h            |   7 +-
+ drivers/iommu/amd/init.c                           | 105 ++++--
+ drivers/iommu/intel/pasid.c                        |   7 +
+ drivers/macintosh/windfarm_lm75_sensor.c           |   4 +-
+ drivers/macintosh/windfarm_smu_sensors.c           |   4 +-
+ drivers/media/i2c/ov5640.c                         |   2 +-
+ drivers/media/rc/gpio-ir-recv.c                    |  18 ++
+ drivers/net/dsa/mt7530.c                           |  35 +-
+ drivers/net/ethernet/broadcom/bgmac.c              |   8 +-
+ drivers/net/ethernet/broadcom/bgmac.h              |   2 +
+ drivers/net/ethernet/broadcom/bnxt/bnxt.c          |  23 +-
+ drivers/net/ethernet/intel/ice/ice_ethtool.c       |   6 +-
+ drivers/net/ethernet/marvell/octeontx2/af/rvu.h    |   5 +
+ .../ethernet/marvell/octeontx2/af/rvu_debugfs.c    |   7 +-
+ .../net/ethernet/marvell/octeontx2/af/rvu_nix.c    |  16 +-
+ .../net/ethernet/marvell/octeontx2/af/rvu_npa.c    |  58 +++-
+ .../net/ethernet/marvell/octeontx2/af/rvu_reg.h    |   3 +
+ drivers/net/ethernet/mediatek/mtk_eth_soc.c        |   3 +-
+ drivers/net/ethernet/mediatek/mtk_eth_soc.h        |   1 +
+ drivers/net/ethernet/stmicro/stmmac/stmmac_main.c  |   1 +
+ drivers/net/phy/microchip.c                        |  32 ++
+ drivers/net/phy/phy_device.c                       |   8 +-
+ drivers/net/phy/smsc.c                             |  20 +-
+ drivers/net/usb/lan78xx.c                          |  27 +-
+ drivers/nfc/fdp/i2c.c                              |   4 +
+ drivers/pci/quirks.c                               |   8 +
+ drivers/platform/x86/Kconfig                       |   3 +-
+ drivers/regulator/core.c                           |  27 +-
+ drivers/scsi/hosts.c                               |   2 +
+ drivers/scsi/megaraid/megaraid_sas.h               |   2 +
+ drivers/scsi/megaraid/megaraid_sas_fp.c            |   2 +-
+ drivers/staging/rtl8723bs/core/rtw_ap.c            |  20 +-
+ drivers/staging/rtl8723bs/core/rtw_cmd.c           |  96 +++---
+ drivers/staging/rtl8723bs/core/rtw_ioctl_set.c     |   4 +-
+ drivers/staging/rtl8723bs/core/rtw_mlme.c          |   6 +-
+ drivers/staging/rtl8723bs/core/rtw_mlme_ext.c      |  56 ++--
+ drivers/staging/rtl8723bs/core/rtw_security.c      |   6 +-
+ drivers/staging/rtl8723bs/include/rtw_security.h   |   8 +-
+ drivers/staging/rtl8723bs/os_dep/ioctl_cfg80211.c  | 355 +++++++--------------
+ drivers/staging/rtl8723bs/os_dep/ioctl_linux.c     |  51 +--
+ drivers/staging/rtl8723bs/os_dep/os_intfs.c        |   4 +-
+ fs/attr.c                                          |  72 ++++-
+ fs/btrfs/block-group.c                             |   3 +-
+ fs/dlm/lockspace.c                                 |  21 +-
+ fs/dlm/lowcomms.c                                  |  16 +-
+ fs/dlm/lowcomms.h                                  |   1 +
+ fs/dlm/main.c                                      |   7 +-
+ fs/dlm/midcomms.c                                  |  17 +-
+ fs/dlm/midcomms.h                                  |   3 +
+ fs/ext4/block_validity.c                           |  26 +-
+ fs/ext4/ext4.h                                     |   3 +
+ fs/ext4/fsmap.c                                    |   2 +
+ fs/ext4/inline.c                                   |   1 -
+ fs/ext4/inode.c                                    |   7 +-
+ fs/ext4/ioctl.c                                    |   1 +
+ fs/ext4/mballoc.c                                  | 205 +++++++-----
+ fs/ext4/namei.c                                    |  36 ++-
+ fs/ext4/page-io.c                                  |  11 +-
+ fs/ext4/xattr.c                                    |   3 +
+ fs/f2fs/checkpoint.c                               |   2 +-
+ fs/f2fs/compress.c                                 |   2 +-
+ fs/f2fs/data.c                                     |   8 +-
+ fs/f2fs/f2fs.h                                     |   2 +-
+ fs/f2fs/file.c                                     |   2 +-
+ fs/f2fs/gc.c                                       |   6 +-
+ fs/f2fs/inline.c                                   |   4 +-
+ fs/f2fs/inode.c                                    |  14 +-
+ fs/f2fs/node.c                                     |  23 +-
+ fs/f2fs/recovery.c                                 |   2 +-
+ fs/f2fs/segment.c                                  |   2 +-
+ fs/file.c                                          |   1 +
+ fs/fuse/file.c                                     |   2 +-
+ fs/inode.c                                         |  90 +++---
+ fs/internal.h                                      |  10 +-
+ fs/locks.c                                         |   3 +-
+ fs/namei.c                                         |  82 ++++-
+ fs/namespace.c                                     |  29 +-
+ fs/ocfs2/file.c                                    |   4 +-
+ fs/ocfs2/namei.c                                   |   1 +
+ fs/open.c                                          |   8 +-
+ fs/udf/inode.c                                     |   2 +-
+ fs/xfs/xfs_bmap_util.c                             |   9 +-
+ fs/xfs/xfs_file.c                                  |  24 +-
+ fs/xfs/xfs_iops.c                                  |  56 +---
+ fs/xfs/xfs_iops.h                                  |   1 -
+ fs/xfs/xfs_pnfs.c                                  |   9 +-
+ include/asm-generic/vmlinux.lds.h                  |   5 +
+ include/linux/fs.h                                 |   6 +-
+ include/linux/pci_ids.h                            |   2 +
+ include/net/netfilter/nf_tproxy.h                  |   7 +
+ kernel/bpf/btf.c                                   |   1 +
+ kernel/fork.c                                      |   2 +-
+ kernel/irq/irqdomain.c                             | 152 +++++----
+ kernel/sched/core.c                                |  10 +-
+ kernel/sched/fair.c                                | 128 +++++++-
+ kernel/sched/sched.h                               |  61 +++-
+ kernel/watch_queue.c                               |   1 +
+ net/caif/caif_usb.c                                |   3 +
+ net/ipv4/netfilter/nf_tproxy_ipv4.c                |   2 +-
+ net/ipv4/tcp_bpf.c                                 |   6 +
+ net/ipv4/udp_bpf.c                                 |   3 +
+ net/ipv6/ila/ila_xlat.c                            |   1 +
+ net/ipv6/netfilter/nf_tproxy_ipv6.c                |   2 +-
+ net/netfilter/nf_conntrack_core.c                  |   4 +-
+ net/netfilter/nf_conntrack_netlink.c               |  14 +-
+ net/nfc/netlink.c                                  |   2 +-
+ net/smc/af_smc.c                                   |  13 +-
+ net/sunrpc/svc.c                                   |   6 +-
+ net/unix/af_unix.c                                 |  16 +-
+ net/unix/unix_bpf.c                                |   3 +
+ scripts/checkkconfigsymbols.py                     |  13 +-
+ scripts/clang-tools/run-clang-tools.py             |  21 +-
+ scripts/diffconfig                                 |  16 +-
+ tools/bpf/Makefile                                 |   5 +-
+ tools/bpf/bpf_jit_disasm.c                         |   5 +-
+ tools/bpf/bpftool/Makefile                         |   5 +-
+ tools/bpf/bpftool/jit_disasm.c                     |  42 ++-
+ tools/build/Makefile.feature                       |   1 +
+ tools/build/feature/Makefile                       |   4 +
+ tools/build/feature/test-all.c                     |   4 +
+ .../build/feature/test-disassembler-init-styled.c  |  13 +
+ tools/include/tools/dis-asm-compat.h               |  55 ++++
+ tools/perf/Makefile.config                         |   8 +
+ tools/perf/builtin-inject.c                        |   1 +
+ tools/perf/builtin-stat.c                          |  15 +-
+ tools/perf/util/annotate.c                         |   7 +-
+ tools/perf/util/stat.c                             |   6 +-
+ tools/perf/util/stat.h                             |   1 -
+ tools/perf/util/target.h                           |  12 +
+ tools/testing/selftests/netfilter/nft_nat.sh       |   2 +
+ virt/kvm/kvm_main.c                                | 145 ++++++---
+ 173 files changed, 1962 insertions(+), 1490 deletions(-)
+
+
