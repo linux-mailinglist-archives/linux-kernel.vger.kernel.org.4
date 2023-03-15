@@ -2,235 +2,254 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9E516BBFFA
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 23:44:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 182856BC005
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 23:47:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232346AbjCOWoo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 18:44:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36846 "EHLO
+        id S232615AbjCOWrc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 18:47:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229751AbjCOWom (ORCPT
+        with ESMTP id S232464AbjCOWrS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 18:44:42 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7361714EA3;
-        Wed, 15 Mar 2023 15:44:40 -0700 (PDT)
-Date:   Wed, 15 Mar 2023 22:44:37 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1678920278;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=GjmlrFQTqGturbIE+fgewqog6NLlHfnD7mWRE0jhQv8=;
-        b=nMhDrjSJUw9bqF/tIXTVi8+ftXNoYlgUXzLg72prueoXkTzqyzT0ERLkgWMYQ7r4oq7HIx
-        1P5vFoy8rUjxIRRsj/xrP4ULAoGaTqrDsw3gO9HYg3e1yu55btoptvYSPMJzeqA8Or/ohC
-        9bsWRn4zVqqjOWdCbJMfB7yGrte8lqVGadGi6UPcSZVtLJNBIC2K0JOeaRFhLgCiPmeaWp
-        RlzpZn2gkBZzg8vNGO8xKFBPY7cc+LAWHv+jDGXgvT+b8WInzTYlwF0BCdK+8xl7FY5V2+
-        Mkcjvhh8Qfv+tWhTnDNe/vHkfY/fbrGmOrSOpWeT3WzH7XhotL4xA84H6hSV+A==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1678920278;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=GjmlrFQTqGturbIE+fgewqog6NLlHfnD7mWRE0jhQv8=;
-        b=zIgROjbG15WKCvx1h/VK2V7yaE7w7oTHNpC3HVSHpo9lWHh55jYYk57rKZhc1hfRot8PTY
-        ingboI/CmGYG28CQ==
-From:   "tip-bot2 for Shawn Wang" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/urgent] x86/resctrl: Clear staged_config[] before and after
- it is used
-Cc:     Xin Hao <xhao@linux.alibaba.com>,
-        Shawn Wang <shawnwang@linux.alibaba.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        stable@vger.kernel.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org
+        Wed, 15 Mar 2023 18:47:18 -0400
+Received: from sonic313-15.consmr.mail.ne1.yahoo.com (sonic313-15.consmr.mail.ne1.yahoo.com [66.163.185.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE1291CBDB
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 15:47:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1678920432; bh=hqLxQ4FWwbjlveCRO+9/+fSo9XdwYZ4nASM8wmlD7tw=; h=From:To:Cc:Subject:Date:References:From:Subject:Reply-To; b=dXG2MVvoMRnNH2GJrQmLvuahE6GOaz87uSuFIEjqrNcQEx45uKQ6Cf5IpL4+HyOWUlRn9QoJwZQFQhZhySXctmtNXW57e9uJkZlyoMZ5XF1XiRvB+H8MGQY7VsQ1mUY2egb+kdhYjVqX8Vap84kxLvOS9AgttqGcc+joCXAS2f6Jo/ORZzP8luPSS8JizeSRR0TaVanPJ8vXgZ8gMuPr8omgtrXwC7iPUIX1faU64iSY47N2W7gPDmGe9BQ/UaaVeC1HunSAofsWrbamNWqZxluGgaqs7flT6bJdQ91wslL2fqRmmmvVEUVlJVlfH9vxkK6/1plh2NEwLwjRfF+SzA==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1678920432; bh=QnuWlcKPzNVdljOl5S1yDqLuIN/hi23aiLncCZzP3g9=; h=X-Sonic-MF:From:To:Subject:Date:From:Subject; b=EnFxBCEtYHPcTJzrUT63WiJe43zWeaK5sEiSbJRvXzyvoHfTlimUuuHSg3q+36d1UvlMXBgAvAi0OsUgU6YVYaanrJLNJPUw5ItW96kthkFQHKnVELrDda84BfR9wH3fphf5ox5g5rbGFO9H4w+r4gcBT0NNUZHQf2VuEhPtCB/3OPrcO3kzCbh7CxknDUZxP56CayFRrEt1ViAOTmhbtcjN/Kw4lno8FaS7CWklrp2LwrM55QHDxGIjjA+UhO+BR1OR17wgH5EwnF0DMHUBWYQKNeA0XK2pt4NhBTZtLqPaE4LGjSlnI/Bjd5pQJwZwWBdwoWCM+qx04q7JvdQhjA==
+X-YMail-OSG: l7n.hGUVM1k0j2smTkPtrQ0ImAE2OBxa2FghX9kRoS6unbXTFdIM0vL.DFItabE
+ dB1mtoz.W1IwJEy2EDiGWCMbpLeKEfuVyIBl4DbLimJVDKohgmQiZrv2.FtR.AW4LRJrYWMeIUNa
+ LikMULSfqtwKX0DAT9jvejtk7KHezx7cHemVFxcj86LvX4FVhUQxVBCd2z9sjzazuX0JssEElABU
+ VUHxzpko8U32o4gh_zcRa3uknHv5Vd9MvKm8aLNyFt0LnqLXL11IfIESgu5eGTZ37yyF1_l8dZ2i
+ rRM7AitYoz4ogwI0NzNnk6bQO8KhINIVeUNw3WEKs6Cs_mgynoiWZv2gLPQV4egPIraNZ8NvnI_F
+ NtYOAfvwp4PB9j29kD_LVT77EW974dcVvmVqDgDFfTtYlY_Nc_8IkWxCoWfrxVjb_cIqbRMn0jkX
+ TONDjJVVtLLQhCkEyCksHlQJlQb7E8JUNz3QRqcqFqwYd7urVVII5DNfwEgV6fpGx8TYPqW2mcbr
+ GB1lTtTI3qGC98nPXa2J0iTiNrCHOMllxOLn_XwL8vJDZjWY8Z8R4DxzYdNwIHLlmXVpXRoIqLWk
+ G6pvDFaorZ2P6B2QMaALoJ.qrf8k3o214F65.0qKUVvvE1rIqxbHaxAWJD2FTetUouUXafRVdFTn
+ RVZx7C_guPEoAzJ_9Ay825zDyrrXcPLWrwXaYToQRUDh8g8vvtl_ZSyXcV0ibRV2SjBAZ7fP_b0z
+ 5TxGvUKup49zYb2QqCobTkMhLxP4eQcroco1L7ZrbcQQUkCgD7WMJp_O0NfFyNTwx2pPpCLlu0I9
+ HlgDgEyRgxmQsujdP1LoYAHzrGnxj1v77WW8OjTDR6nsykJZKaOn.9qdTqDNCCCE9q9Dq5SxyYPV
+ Z7BrIkJTZHhV31S.RCMSOlL_9XOzCbblJb1OWVouMCa6_n9i6hlfkEkoWz530AAiI58.COHeO7RB
+ aGUe3Jb_FneIRBR2uj4hcVMzimGdbzZN3YNwjHP.KRTVGXAyxSri5MIbAfCP5yxXoiWJhl1plQ1l
+ 8z_4LTTjXPCDisWOsg.Emr.KbtmN_qq.EtpQdu1ah5wFxRmMA8J5WickGxgf64yAKtUOJ7Mla6NA
+ Xho3LVHeCXd2fNwy8Kc50PL4WOHMRGQqrDMWtXvNJJotQKt1an_7G2ZrmQIA3WEFkQ9CdN4x76xQ
+ 7ZipJ0wedDc3_b5Kz2WxznZQKMcINcorOrojGa7oa4XwKfN_sAcYzwE5AymcBmazLKQJ4NuvTCO2
+ laBNN._lRcwCWvq_eBNLWuApYV_.1LIuFtS.vmOvJ36uHaid8sKJSrdKwqshmkUyNJErgGyKM0z4
+ GdOegguIMCa_430XtEL9Qx6LIxNkbUyIaY23Yase3ud16jUEnx1TlpY2Pn3fEHthk.fjQ0_1aGWX
+ cSgEVRUVxZuvmIV811IfjnwOMlj9BDpwlYMXkp6TBTmcd.GQdmXnQEtGM_Z9VeuqkS0VIkVqWu8N
+ X1qbJrD34DbBO3YzUBU6eFZjlNWe5wezsPP5DgOPuZlIylCVoBaLeCb30ZRW9vDW3AXbkqgNe.FI
+ zduDK880okL2MyQeQ7FBSHGJeTiDwdnA6MSC_iWqVkdmyJYSfqp842e7JFFOiGchH9nSD9rCFh1B
+ v0c47dvv.gghKBW_GZM1tdt1KhERK8bcjEvoSM.iMGpe3AFed_7bIa_JWZE7oesT9CQVSHrN312r
+ 7FQZf2GhRswZotPkHQtiXOzyzHNLH_zYAB_cRky4VXsrdoDWSKfjWSEETDjJvn1nbRlKrlUhIc3G
+ 5WmYX6P2mENEnYPucJsAcRWrZLvtAsiZQCUsYCx3BJcyv8pI4MXhBb_zSf64q0tFqXKIiYF6CLy8
+ EBkBleTcJdGcGZY_eOFXYZe__uEWVlymiFQDrH9SrYUVwjKyRK_WKatHH7g10HQvO6OdyydAkGN6
+ Fcs9V1jXO7DnixLAfxIhAbGJAz6HUTHr9nAKj4FnAbFCCk_..faFjFkADbuabqjyLYRbSCCHyVQS
+ 9WOHDOamatnIcwXPIB5oYCyXJA1JBuKh5yY5ynDYDHjxOAVUordrudG_75OsuGWEJ.DI0wbEjXLm
+ SYwNTtuuO0RfU2tgx7u0ompzpWwMbgVDPcMC_7NJvrRDIqzum7L7x7SLcTJZer3Cj.cO9O15b2kV
+ lugmf2Nca8AAVZ0AoazbHpVHdPsY_b.Zy8kiPK2dEh8l2u8GSjDC42Hq8COR9rh6Q6K0MRR6Irqt
+ XX5qL7U.Iam_lHXF4_JZ8sGo39RHjPmGhA5.4e01LJ8YmyUKoqleER1ZJb8zdbDXo_B8PiV8cd3k
+ 7y2TucyemqQvC
+X-Sonic-MF: <casey@schaufler-ca.com>
+X-Sonic-ID: ae3fde3a-1c6f-469f-8de5-13c60be5ac0a
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic313.consmr.mail.ne1.yahoo.com with HTTP; Wed, 15 Mar 2023 22:47:12 +0000
+Received: by hermes--production-ne1-759c9b8c64-7lgm5 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID a598a9259311ec92faa24ca803c3eea5;
+          Wed, 15 Mar 2023 22:47:07 +0000 (UTC)
+From:   Casey Schaufler <casey@schaufler-ca.com>
+To:     casey@schaufler-ca.com, paul@paul-moore.com,
+        linux-security-module@vger.kernel.org
+Cc:     jmorris@namei.org, keescook@chromium.org,
+        john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
+        stephen.smalley.work@gmail.com, linux-kernel@vger.kernel.org,
+        linux-api@vger.kernel.org, mic@digikod.net
+Subject: [PATCH v7 00/11] LSM: Three basic syscalls
+Date:   Wed, 15 Mar 2023 15:46:53 -0700
+Message-Id: <20230315224704.2672-1-casey@schaufler-ca.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Message-ID: <167892027751.5837.1271275229889484859.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+References: <20230315224704.2672-1-casey.ref@schaufler-ca.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/urgent branch of tip:
+Add three system calls for the Linux Security Module ABI.
 
-Commit-ID:     0424a7dfe9129b93f29b277511a60e87f052ac6b
-Gitweb:        https://git.kernel.org/tip/0424a7dfe9129b93f29b277511a60e87f052ac6b
-Author:        Shawn Wang <shawnwang@linux.alibaba.com>
-AuthorDate:    Tue, 17 Jan 2023 13:14:50 -08:00
-Committer:     Dave Hansen <dave.hansen@linux.intel.com>
-CommitterDate: Wed, 15 Mar 2023 15:19:43 -07:00
+lsm_get_self_attr() provides the security module specific attributes
+that have previously been visible in the /proc/self/attr directory.
+For each security module that uses the specified attribute on the
+current process the system call will return an LSM identifier and
+the value of the attribute. The LSM and attribute identifier values
+are defined in include/uapi/linux/lsm.h
 
-x86/resctrl: Clear staged_config[] before and after it is used
+LSM identifiers are simple integers and reflect the order in which
+the LSM was added to the mainline kernel. This is a convention, not
+a promise of the API. LSM identifiers below the value of 100 are
+reserved for unspecified future uses. That could include information
+about the security infrastructure itself, or about how multiple LSMs
+might interact with each other.
 
-As a temporary storage, staged_config[] in rdt_domain should be cleared
-before and after it is used. The stale value in staged_config[] could
-cause an MSR access error.
+A new LSM hook security_getselfattr() is introduced to get the
+required information from the security modules. This is similar
+to the existing security_getprocattr() hook, but specifies the
+format in which string data is returned and requires the module
+to put the information into a userspace destination.
 
-Here is a reproducer on a system with 16 usable CLOSIDs for a 15-way L3
-Cache (MBA should be disabled if the number of CLOSIDs for MB is less than
-16.) :
-	mount -t resctrl resctrl -o cdp /sys/fs/resctrl
-	mkdir /sys/fs/resctrl/p{1..7}
-	umount /sys/fs/resctrl/
-	mount -t resctrl resctrl /sys/fs/resctrl
-	mkdir /sys/fs/resctrl/p{1..8}
+lsm_set_self_attr() changes the specified LSM attribute. Only one
+attribute can be changed at a time, and then only if the specified
+security module allows the change.
 
-An error occurs when creating resource group named p8:
-    unchecked MSR access error: WRMSR to 0xca0 (tried to write 0x00000000000007ff) at rIP: 0xffffffff82249142 (cat_wrmsr+0x32/0x60)
-    Call Trace:
-     <IRQ>
-     __flush_smp_call_function_queue+0x11d/0x170
-     __sysvec_call_function+0x24/0xd0
-     sysvec_call_function+0x89/0xc0
-     </IRQ>
-     <TASK>
-     asm_sysvec_call_function+0x16/0x20
+A new LSM hook security_setselfattr() is introduced to set the
+required information in the security modules. This is similar
+to the existing security_setprocattr() hook, but specifies the
+format in which string data is presented and requires the module
+to get the information from a userspace destination.
 
-When creating a new resource control group, hardware will be configured
-by the following process:
-    rdtgroup_mkdir()
-      rdtgroup_mkdir_ctrl_mon()
-        rdtgroup_init_alloc()
-          resctrl_arch_update_domains()
+lsm_list_modules() provides the LSM identifiers, in order, of the
+security modules that are active on the system. This has been
+available in the securityfs file /sys/kernel/security/lsm.
 
-resctrl_arch_update_domains() iterates and updates all resctrl_conf_type
-whose have_new_ctrl is true. Since staged_config[] holds the same values as
-when CDP was enabled, it will continue to update the CDP_CODE and CDP_DATA
-configurations. When group p8 is created, get_config_index() called in
-resctrl_arch_update_domains() will return 16 and 17 as the CLOSIDs for
-CDP_CODE and CDP_DATA, which will be translated to an invalid register -
-0xca0 in this scenario.
+Patch 0001 changes the LSM registration from passing the name
+of the module to passing a lsm_id structure that contains the
+name of the module, an LSM identifier number and an attribute
+identifier.
+Patch 0002 adds the registered lsm_ids to a table.
+Patch 0003 changes security_[gs]etprocattr() to use LSM IDs instead
+of LSM names.
+Patch 0004 implements lsm_get_self_attr() and lsm_set_self_attr().
+New LSM hooks security_getselfattr() and security_setselfattr() are
+defined.
+Patch 0005 implements lsm_list_modules().
+Patch 0006 wires up the syscalls.
+Patch 0007 implements helper functions to make it easier for
+security modules to use lsm_ctx structures.
+Patch 0008 provides the Smack implementation for [gs]etselfattr().
+Patch 0009 provides the AppArmor implementation for [gs]etselfattr().
+Patch 0010 provides the SELinux implementation for [gs]etselfattr().
+Patch 0011 implements selftests for the three new syscalls.
 
-Fix it by clearing staged_config[] before and after it is used.
+https://github.com/cschaufler/lsm-stacking.git#lsm-syscalls-6.3-rc2-a
 
-[reinette: re-order commit tags]
+v7: Pass the attribute desired to lsm_[gs]et_self_attr in its own
+    parameter rather than encoding it in the flags.
+    Change the flags parameters to u32.
+    Don't shortcut out of calling LSM specific code in the
+    infrastructure, let the LSM report that doesn't support an
+    attribute instead. With that it is not necessary to maintain
+    a set of supported attributes in the lsm_id structure.
+    Fix a typing error.
+v6: Switch from reusing security_[gs]procattr() to using new
+    security_[gs]selfattr() hooks. Use explicit sized data types
+    in the lsm_ctx structure.
 
-Fixes: 75408e43509e ("x86/resctrl: Allow different CODE/DATA configurations to be staged")
-Suggested-by: Xin Hao <xhao@linux.alibaba.com>
-Signed-off-by: Shawn Wang <shawnwang@linux.alibaba.com>
-Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
-Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
-Tested-by: Reinette Chatre <reinette.chatre@intel.com>
-Cc:stable@vger.kernel.org
-Link: https://lore.kernel.org/all/2fad13f49fbe89687fc40e9a5a61f23a28d1507a.1673988935.git.reinette.chatre%40intel.com
----
- arch/x86/kernel/cpu/resctrl/ctrlmondata.c |  7 +-----
- arch/x86/kernel/cpu/resctrl/internal.h    |  1 +-
- arch/x86/kernel/cpu/resctrl/rdtgroup.c    | 25 ++++++++++++++++++----
- 3 files changed, 24 insertions(+), 9 deletions(-)
+v5: Correct syscall parameter data types.
 
-diff --git a/arch/x86/kernel/cpu/resctrl/ctrlmondata.c b/arch/x86/kernel/cpu/resctrl/ctrlmondata.c
-index eb07d44..b44c487 100644
---- a/arch/x86/kernel/cpu/resctrl/ctrlmondata.c
-+++ b/arch/x86/kernel/cpu/resctrl/ctrlmondata.c
-@@ -368,7 +368,6 @@ ssize_t rdtgroup_schemata_write(struct kernfs_open_file *of,
- {
- 	struct resctrl_schema *s;
- 	struct rdtgroup *rdtgrp;
--	struct rdt_domain *dom;
- 	struct rdt_resource *r;
- 	char *tok, *resname;
- 	int ret = 0;
-@@ -397,10 +396,7 @@ ssize_t rdtgroup_schemata_write(struct kernfs_open_file *of,
- 		goto out;
- 	}
- 
--	list_for_each_entry(s, &resctrl_schema_all, list) {
--		list_for_each_entry(dom, &s->res->domains, list)
--			memset(dom->staged_config, 0, sizeof(dom->staged_config));
--	}
-+	rdt_staged_configs_clear();
- 
- 	while ((tok = strsep(&buf, "\n")) != NULL) {
- 		resname = strim(strsep(&tok, ":"));
-@@ -445,6 +441,7 @@ ssize_t rdtgroup_schemata_write(struct kernfs_open_file *of,
- 	}
- 
- out:
-+	rdt_staged_configs_clear();
- 	rdtgroup_kn_unlock(of->kn);
- 	cpus_read_unlock();
- 	return ret ?: nbytes;
-diff --git a/arch/x86/kernel/cpu/resctrl/internal.h b/arch/x86/kernel/cpu/resctrl/internal.h
-index 8edecc5..85ceaf9 100644
---- a/arch/x86/kernel/cpu/resctrl/internal.h
-+++ b/arch/x86/kernel/cpu/resctrl/internal.h
-@@ -555,5 +555,6 @@ void __check_limbo(struct rdt_domain *d, bool force_free);
- void rdt_domain_reconfigure_cdp(struct rdt_resource *r);
- void __init thread_throttle_mode_init(void);
- void __init mbm_config_rftype_init(const char *config);
-+void rdt_staged_configs_clear(void);
- 
- #endif /* _ASM_X86_RESCTRL_INTERNAL_H */
-diff --git a/arch/x86/kernel/cpu/resctrl/rdtgroup.c b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-index 884b6e9..6ad33f3 100644
---- a/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-+++ b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
-@@ -78,6 +78,19 @@ void rdt_last_cmd_printf(const char *fmt, ...)
- 	va_end(ap);
- }
- 
-+void rdt_staged_configs_clear(void)
-+{
-+	struct rdt_resource *r;
-+	struct rdt_domain *dom;
-+
-+	lockdep_assert_held(&rdtgroup_mutex);
-+
-+	for_each_alloc_capable_rdt_resource(r) {
-+		list_for_each_entry(dom, &r->domains, list)
-+			memset(dom->staged_config, 0, sizeof(dom->staged_config));
-+	}
-+}
-+
- /*
-  * Trivial allocator for CLOSIDs. Since h/w only supports a small number,
-  * we can keep a bitmap of free CLOSIDs in a single integer.
-@@ -3107,7 +3120,9 @@ static int rdtgroup_init_alloc(struct rdtgroup *rdtgrp)
- {
- 	struct resctrl_schema *s;
- 	struct rdt_resource *r;
--	int ret;
-+	int ret = 0;
-+
-+	rdt_staged_configs_clear();
- 
- 	list_for_each_entry(s, &resctrl_schema_all, list) {
- 		r = s->res;
-@@ -3119,20 +3134,22 @@ static int rdtgroup_init_alloc(struct rdtgroup *rdtgrp)
- 		} else {
- 			ret = rdtgroup_init_cat(s, rdtgrp->closid);
- 			if (ret < 0)
--				return ret;
-+				goto out;
- 		}
- 
- 		ret = resctrl_arch_update_domains(r, rdtgrp->closid);
- 		if (ret < 0) {
- 			rdt_last_cmd_puts("Failed to initialize allocations\n");
--			return ret;
-+			goto out;
- 		}
- 
- 	}
- 
- 	rdtgrp->mode = RDT_MODE_SHAREABLE;
- 
--	return 0;
-+out:
-+	rdt_staged_configs_clear();
-+	return ret;
- }
- 
- static int mkdir_rdt_prepare(struct kernfs_node *parent_kn,
+v4: Restore "reserved" LSM ID values. Add explaination.
+    Squash patches that introduce fields in lsm_id.
+    Correct a wireup error.
+
+v3: Add lsm_set_self_attr().
+    Rename lsm_self_attr() to lsm_get_self_attr().
+    Provide the values only for a specifed attribute in
+    lsm_get_self_attr().
+    Add selftests for the three new syscalls.
+    Correct some parameter checking.
+
+v2: Use user-interface safe data types.
+    Remove "reserved" LSM ID values.
+    Improve kerneldoc comments
+    Include copyright dates
+    Use more descriptive name for LSM counter
+    Add documentation
+    Correct wireup errors
+
+Casey Schaufler (11):
+  LSM: Identify modules by more than name
+  LSM: Maintain a table of LSM attribute data
+  proc: Use lsmids instead of lsm names for attrs
+  LSM: syscalls for current process attributes
+  LSM: Create lsm_list_modules system call
+  LSM: wireup Linux Security Module syscalls
+  LSM: Helpers for attribute names and filling an lsm_ctx
+  Smack: implement setselfattr and getselfattr hooks
+  AppArmor: Add selfattr hooks
+  SELinux: Add selfattr hooks
+  LSM: selftests for Linux Security Module syscalls
+
+ Documentation/userspace-api/index.rst         |   1 +
+ Documentation/userspace-api/lsm.rst           |  73 +++++
+ MAINTAINERS                                   |   1 +
+ arch/alpha/kernel/syscalls/syscall.tbl        |   3 +
+ arch/arm/tools/syscall.tbl                    |   3 +
+ arch/arm64/include/asm/unistd.h               |   2 +-
+ arch/arm64/include/asm/unistd32.h             |   6 +
+ arch/ia64/kernel/syscalls/syscall.tbl         |   3 +
+ arch/m68k/kernel/syscalls/syscall.tbl         |   3 +
+ arch/microblaze/kernel/syscalls/syscall.tbl   |   3 +
+ arch/mips/kernel/syscalls/syscall_n32.tbl     |   3 +
+ arch/mips/kernel/syscalls/syscall_n64.tbl     |   3 +
+ arch/mips/kernel/syscalls/syscall_o32.tbl     |   3 +
+ arch/parisc/kernel/syscalls/syscall.tbl       |   3 +
+ arch/powerpc/kernel/syscalls/syscall.tbl      |   3 +
+ arch/s390/kernel/syscalls/syscall.tbl         |   3 +
+ arch/sh/kernel/syscalls/syscall.tbl           |   3 +
+ arch/sparc/kernel/syscalls/syscall.tbl        |   3 +
+ arch/x86/entry/syscalls/syscall_32.tbl        |   3 +
+ arch/x86/entry/syscalls/syscall_64.tbl        |   3 +
+ arch/xtensa/kernel/syscalls/syscall.tbl       |   3 +
+ fs/proc/base.c                                |  29 +-
+ fs/proc/internal.h                            |   2 +-
+ include/linux/lsm_hook_defs.h                 |   4 +
+ include/linux/lsm_hooks.h                     |  27 +-
+ include/linux/security.h                      |  45 ++-
+ include/linux/syscalls.h                      |   6 +
+ include/uapi/asm-generic/unistd.h             |  11 +-
+ include/uapi/linux/lsm.h                      |  86 ++++++
+ kernel/sys_ni.c                               |   5 +
+ security/Makefile                             |   1 +
+ security/apparmor/include/procattr.h          |   2 +-
+ security/apparmor/lsm.c                       | 104 ++++++-
+ security/apparmor/procattr.c                  |  11 +-
+ security/bpf/hooks.c                          |   9 +-
+ security/commoncap.c                          |   8 +-
+ security/landlock/cred.c                      |   2 +-
+ security/landlock/fs.c                        |   2 +-
+ security/landlock/ptrace.c                    |   2 +-
+ security/landlock/setup.c                     |   6 +
+ security/landlock/setup.h                     |   1 +
+ security/loadpin/loadpin.c                    |   9 +-
+ security/lockdown/lockdown.c                  |   8 +-
+ security/lsm_syscalls.c                       | 145 ++++++++++
+ security/safesetid/lsm.c                      |   9 +-
+ security/security.c                           | 191 +++++++++++--
+ security/selinux/hooks.c                      | 156 ++++++++--
+ security/smack/smack_lsm.c                    | 113 +++++++-
+ security/tomoyo/tomoyo.c                      |   9 +-
+ security/yama/yama_lsm.c                      |   8 +-
+ .../arch/mips/entry/syscalls/syscall_n64.tbl  |   3 +
+ .../arch/powerpc/entry/syscalls/syscall.tbl   |   3 +
+ .../perf/arch/s390/entry/syscalls/syscall.tbl |   3 +
+ .../arch/x86/entry/syscalls/syscall_64.tbl    |   3 +
+ tools/testing/selftests/Makefile              |   1 +
+ tools/testing/selftests/lsm/Makefile          |  12 +
+ tools/testing/selftests/lsm/config            |   2 +
+ .../selftests/lsm/lsm_get_self_attr_test.c    | 268 ++++++++++++++++++
+ .../selftests/lsm/lsm_list_modules_test.c     | 149 ++++++++++
+ .../selftests/lsm/lsm_set_self_attr_test.c    |  70 +++++
+ 60 files changed, 1555 insertions(+), 101 deletions(-)
+ create mode 100644 Documentation/userspace-api/lsm.rst
+ create mode 100644 include/uapi/linux/lsm.h
+ create mode 100644 security/lsm_syscalls.c
+ create mode 100644 tools/testing/selftests/lsm/Makefile
+ create mode 100644 tools/testing/selftests/lsm/config
+ create mode 100644 tools/testing/selftests/lsm/lsm_get_self_attr_test.c
+ create mode 100644 tools/testing/selftests/lsm/lsm_list_modules_test.c
+ create mode 100644 tools/testing/selftests/lsm/lsm_set_self_attr_test.c
+
+-- 
+2.39.2
+
