@@ -2,49 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 628576BA62D
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 05:27:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D8BC6BA631
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 05:28:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230513AbjCOE1K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 00:27:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50536 "EHLO
+        id S231127AbjCOE2M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 00:28:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230421AbjCOE1H (ORCPT
+        with ESMTP id S229488AbjCOE2I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 00:27:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C99F843467;
-        Tue, 14 Mar 2023 21:27:03 -0700 (PDT)
+        Wed, 15 Mar 2023 00:28:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BA8B1DBA0;
+        Tue, 14 Mar 2023 21:28:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 577D3B81BC1;
-        Wed, 15 Mar 2023 04:27:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5E34C433EF;
-        Wed, 15 Mar 2023 04:27:00 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E446461AE3;
+        Wed, 15 Mar 2023 04:28:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC318C433D2;
+        Wed, 15 Mar 2023 04:28:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1678854421;
-        bh=LBkQx4LAP2aLDYow6vxHgX9FLwS40i6k53JaMQG77D8=;
+        s=korg; t=1678854486;
+        bh=LAK7Ux218jJKDKVTmRf0R9iRAT4prcpZ1FxGOQoWDwg=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=P3I4iSsqDhgBPhxN9Z08ZriKoCH2c645hs4VL9HXOwWN8AAPF5CDOdfnVfZBPMYlk
-         8aTz9O8ngPRlNS98kApjCuRf9AJPmNQSoXfIZLzg5r0AO3C4q+7uqI0ZA11yTLjXgs
-         LsyNHaueL0JQw11etaP0rZTGoA8rQPp+7Q4Ddw5o=
-Date:   Wed, 15 Mar 2023 05:26:58 +0100
+        b=Meg8cAsSQxJ7QxAuSZLPP3N2IuvTug41TVw+4NUkBgdNygxnFtsRmCtn/OOC6i1AA
+         tENroIg/6Yu2qFS7vMD2C7KdJMIUajdU65LKHg1rZNYqJVyf12remllOOELwcqkWwM
+         edNvhYYOcqd9SpbyhnoxGx2zG8UUj7Jiy0mqO640=
+Date:   Wed, 15 Mar 2023 05:28:03 +0100
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     listdansp <listdansp@mail.ru>
-Cc:     stable@vger.kernel.org, Bin Liu <b-liu@ti.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lvc-project@linuxtesting.org, Sergey Shtylyov <s.shtylyov@omp.ru>
-Subject: Re: [PATCH 5.10 1/1] usb: musb: core: drop redundant checks
-Message-ID: <ZBFJEoDcdUI2PyVK@kroah.com>
-References: <20230314170113.11968-1-listdansp@mail.ru>
- <20230314170113.11968-2-listdansp@mail.ru>
- <ZBCqHJz8zYeXQ3Q7@kroah.com>
- <10af6434-a466-7884-5650-fd8de01d540b@mail.ru>
+To:     Bjorn Andersson <andersson@kernel.org>
+Cc:     Elliot Berman <quic_eberman@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Amol Maheshwari <amahesh@qti.qualcomm.com>,
+        Arnd Bergmann <arnd@arndb.de>, Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Gokul krishna Krishnakumar <quic_gokukris@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ath10k@lists.infradead.org, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, linux-remoteproc@vger.kernel.org
+Subject: Re: [PATCH] firmware: qcom_scm: Use fixed width src vm bitmap
+Message-ID: <ZBFJU3Lp4+/EgSr5@kroah.com>
+References: <20230213181832.3489174-1-quic_eberman@quicinc.com>
+ <20230213214417.mtcpeultvynyls6s@ripper>
+ <Y+tNRPf0PGdShf5l@kroah.com>
+ <20230214172325.lplxgbprhj3bzvr3@ripper>
+ <bdda82f7-933d-443b-614a-6befad2899b5@quicinc.com>
+ <2ae96b75-82f1-165a-e56d-7446c90bb7af@quicinc.com>
+ <20230315041119.fp7npwa5bia5hck3@ripper>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <10af6434-a466-7884-5650-fd8de01d540b@mail.ru>
+In-Reply-To: <20230315041119.fp7npwa5bia5hck3@ripper>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
@@ -55,21 +70,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 15, 2023 at 07:16:44AM +0300, listdansp wrote:
-> This patch was prepare in according to secure programming conception.
+On Tue, Mar 14, 2023 at 09:11:19PM -0700, Bjorn Andersson wrote:
+> On Fri, Mar 03, 2023 at 01:09:08PM -0800, Elliot Berman wrote:
+> > 
+> > 
+> > On 2/14/2023 10:52 AM, Elliot Berman wrote:
+> > > 
+> > > 
+> > > On 2/14/2023 9:23 AM, Bjorn Andersson wrote:
+> > > > On Tue, Feb 14, 2023 at 09:58:44AM +0100, Greg Kroah-Hartman wrote:
+> > > > > On Mon, Feb 13, 2023 at 01:44:17PM -0800, Bjorn Andersson wrote:
+> > > > > > On Mon, Feb 13, 2023 at 10:18:29AM -0800, Elliot Berman wrote:
+> > > > > > > The maximum VMID for assign_mem is 63. Use a u64 to represent this
+> > > > > > > bitmap instead of architecture-dependent "unsigned int"
+> > > > > > > which varies in
+> > > > > > > size on 32-bit and 64-bit platforms.
+> > > > > > > 
+> > > > > > > Acked-by: Kalle Valo <kvalo@kernel.org> (ath10k)
+> > > > > > > Tested-by: Gokul krishna Krishnakumar <quic_gokukris@quicinc.com>
+> > > > > > > Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
+> > > > > > 
+> > > > > > Reviewed-by: Bjorn Andersson <andersson@kernel.org>
+> > > > > > 
+> > > > > > @Greg, would you mind taking this through your tree for v6.3, you
+> > > > > > already have a related change in fastrpc.c in your tree...
+> > > > > 
+> > > > > I tried, but it doesn't apply to my char-misc tree at all:
+> > > > > 
+> > > > > checking file drivers/firmware/qcom_scm.c
+> > > > > Hunk #1 succeeded at 898 (offset -7 lines).
+> > > > > Hunk #2 succeeded at 915 (offset -7 lines).
+> > > > > Hunk #3 succeeded at 930 (offset -7 lines).
+> > > > > checking file drivers/misc/fastrpc.c
+> > > > > checking file drivers/net/wireless/ath/ath10k/qmi.c
+> > > > > checking file drivers/remoteproc/qcom_q6v5_mss.c
+> > > > > Hunk #1 succeeded at 227 (offset -8 lines).
+> > > > > Hunk #2 succeeded at 404 (offset -10 lines).
+> > > > > Hunk #3 succeeded at 939 with fuzz 1 (offset -28 lines).
+> > > > > checking file drivers/remoteproc/qcom_q6v5_pas.c
+> > > > > Hunk #1 FAILED at 94.
+> > > > > 1 out of 1 hunk FAILED
+> > > > > checking file drivers/soc/qcom/rmtfs_mem.c
+> > > > > Hunk #1 succeeded at 30 (offset -1 lines).
+> > > > > can't find file to patch at input line 167
+> > > > > Perhaps you used the wrong -p or --strip option?
+> > > > > The text leading up to this was:
+> > > > > --------------------------
+> > > > > |diff --git a/include/linux/firmware/qcom/qcom_scm.h
+> > > > > b/include/linux/firmware/qcom/qcom_scm.h
+> > > > > |index 1e449a5d7f5c..250ea4efb7cb 100644
+> > > > > |--- a/include/linux/firmware/qcom/qcom_scm.h
+> > > > > |+++ b/include/linux/firmware/qcom/qcom_scm.h
+> > > > > --------------------------
+> > > > > 
+> > > > > What tree is this patch made against?
+> > > > > 
+> > > > 
+> > > > Sorry about that, I missed the previous changes in qcom_q6v5_pas in the
+> > > > remoteproc tree. Elliot said he based it on linux-next, so I expect that
+> > > > it will merge fine on top of -rc1, once that arrives.
+> > > > 
+> > > 
+> > > Yes, this patch applies on next-20230213. I guess there are enough
+> > > changes were coming from QCOM side (via Bjorn's qcom tree) as well as
+> > > the fastrpc change (via Greg's char-misc tree).
+> > > 
+> > > Let me know if I should do anything once -rc1 arrives. Happy to post
+> > > version on the -rc1 if it helps.
+> > > 
+> > 
+> > The patch now applies on tip of Linus's tree and on char-misc.
+> 
+> Greg, I have a couple more patches in the scm driver in my inbox. Would
+> you be okay with me pulling this through the Qualcomm tree for v6.4?
 
-I do not understand what that means.
-
-> In practice it indeed simply remove unused code.
-
-Yes, it did, but why should that be added to a stable kernel tree?
-
-> If you're thinking, that this patch is useless, we don't insist on applying
-> it.
-
-I'm confused as to why you thought it should have been applied at all.
-Why did your testing deem it needed?
-
-thanks,
-
-greg k-h
+Please do!
