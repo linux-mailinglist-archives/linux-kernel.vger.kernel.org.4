@@ -2,115 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CB7A6BACE2
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 11:01:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D68A6BACE8
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 11:01:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231978AbjCOKA6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 06:00:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54996 "EHLO
+        id S231586AbjCOKBt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 06:01:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231673AbjCOKAa (ORCPT
+        with ESMTP id S231452AbjCOKBT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 06:00:30 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F077673AFE
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 02:59:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 92025B81DB8
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 09:59:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC7DEC4339B;
-        Wed, 15 Mar 2023 09:59:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678874361;
-        bh=Zt8Fn9RBg9zUIlT1Qoxfcb78d/GvRsgfwThplyX0Sl4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=E3rP+schZnaTP0z6SlDq1AMfSjQOPFtrXWyCDEPa8n1gsgedEbDcoPwyeLby9jKOL
-         vVZvl0NeHtLFL6yudfeR07WuK+f78qodhBF1wJK9IwEg7PLfLvl49mZCeD8j2KuNg+
-         1c4wrvvGJC0BfImQZAqZ2ItB/tG7Oj4goZMD60L7llGlFIF24wQFDFnsOJ8Mw4SI21
-         rQX03h0b3Lcrn8rezHT2kxImgyngXmAmBR0Xgsh9iNNk7m3dGnmbw1Vn+FBB3IxCtc
-         ulvypGvOQOtXqdYQUFmH0ox48zNNjfa5rLp5c6A3pQTgd9N1nRIMQIS61OXeIphfwq
-         ZeEPa+zLUWX9A==
-Date:   Wed, 15 Mar 2023 15:29:17 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Vijendar Mukunda <Vijendar.Mukunda@amd.com>
-Cc:     alsa-devel@alsa-project.org, pierre-louis.bossart@linux.intel.com,
-        Basavaraj.Hiregoudar@amd.com, Sunil-kumar.Dommati@amd.com,
-        Mario.Limonciello@amd.com, amadeuszx.slawinski@linux.intel.com,
-        Mastan.Katragadda@amd.com, Arungopal.kondaveeti@amd.com,
-        claudiu.beznea@microchip.com,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Sanyog Kale <sanyog.r.kale@intel.com>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH V6 4/8] soundwire: amd: enable build for AMD SoundWire
- manager driver
-Message-ID: <ZBGW9ThXgcT0tIui@matsya>
-References: <20230307133135.545952-1-Vijendar.Mukunda@amd.com>
- <20230307133135.545952-5-Vijendar.Mukunda@amd.com>
+        Wed, 15 Mar 2023 06:01:19 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEE8F5CC3A
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 03:00:07 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id x11so19404635pln.12
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 03:00:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678874407;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=nfMWt4ixugNsc9AOhW4zh3Qlkp0wA/BUmvjbUtzpDgw=;
+        b=KwquW/B+JdxTYUB3gevchOoNy7S5NSEVjtk2Vw9uyUiuw2KbOX884786SNjAYg2Xwh
+         NthtUeL3MfbALd33VrWYKb2gazlKkCdtOXIJS40/7Ye0emaUHLAMInd1DRjgJRI7mpNn
+         uSQJIdv+VwdpGiTpTdlqrAP145F5m2y/U4sUbB7s67ONPURmLEojAJTkk8BkaMTqSuf/
+         GIIQI+laaERgNWpPSMchyvaqEf0JkludmLgDpfjP40eC14QCgrUQEBkifhtRMk22a7uh
+         2Tt37u0nez39KO9ExcBZoM61U9fQL4KnvSvis8nFHz7QCtLBisrF/8Dha3naiusoqOit
+         0+iQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678874407;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nfMWt4ixugNsc9AOhW4zh3Qlkp0wA/BUmvjbUtzpDgw=;
+        b=i0/peCVgEUM31CE0Ed96tmtMnQjF9pbwqLtXqrpvpmR3CSwyplzhyDhdW6VK5F9WZh
+         f4655Jiw6rEzHW9G1XodApINNfwIKL7rb3RgeYQqml6n1YBSPLaOIsDjpeJ+8QG1aT6m
+         Gnd0omTv++dSTnAa96K2FGKplAdwQfZ98rwAVK1OLE4Fr2ivXHPs35gRTyK0hL2iVKzx
+         BmJlHMhwJM1RtEMFBzjhgHjl1paSHPDgKLPvruWmrKYvGL7mMsX5dyi7WhxtsF/xEL/V
+         XKyLDB0aBKXJIM/9DQUkGPHACDsexv+tzYTrT4ZYNNyxQQz0Iklihft/q73ZoZtVHPku
+         Znog==
+X-Gm-Message-State: AO0yUKUSrx/qh1/m0TJt2PRuoSv+jA+R7kMqoyMMOHhv/Kz4g878N1V6
+        Vbeef0DT5krhmmaZT+4MnFXqVg==
+X-Google-Smtp-Source: AK7set/A2w5RNkUesxs8MRcKHqtR8roh32s/RLeEjhIrH3APMn4IA1gF0sdSaEuCZQhNN7WbTExdtA==
+X-Received: by 2002:a17:902:e844:b0:1a1:7b89:3860 with SMTP id t4-20020a170902e84400b001a17b893860mr1194410plg.6.1678874407080;
+        Wed, 15 Mar 2023 03:00:07 -0700 (PDT)
+Received: from ?IPV6:2401:4900:1c61:1acb:9af6:bd7f:78e7:7ae6? ([2401:4900:1c61:1acb:9af6:bd7f:78e7:7ae6])
+        by smtp.gmail.com with ESMTPSA id x1-20020a1709028ec100b0019aa4c00ff4sm3227744plo.206.2023.03.15.03.00.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Mar 2023 03:00:06 -0700 (PDT)
+Message-ID: <3cdf5826-ef8d-2c4f-e7e3-c9ddef68043c@linaro.org>
+Date:   Wed, 15 Mar 2023 15:29:55 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230307133135.545952-5-Vijendar.Mukunda@amd.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH 2/2] arm64: dts: qcom: Add base qrb4210-rb2 board dts
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     agross@kernel.org, andersson@kernel.org,
+        linux-kernel@vger.kernel.org, bhupesh.linux@gmail.com,
+        robh+dt@kernel.org, krzysztof.kozlowski@linaro.org
+References: <20230314210828.2049720-1-bhupesh.sharma@linaro.org>
+ <20230314210828.2049720-3-bhupesh.sharma@linaro.org>
+ <09b49716-fa77-710c-92ec-3c0d7c154bc3@linaro.org>
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+In-Reply-To: <09b49716-fa77-710c-92ec-3c0d7c154bc3@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07-03-23, 19:01, Vijendar Mukunda wrote:
-> Enable build for SoundWire manager driver for AMD platforms.
+On 3/15/23 2:55 AM, Konrad Dybcio wrote:
 > 
-> Signed-off-by: Vijendar Mukunda <Vijendar.Mukunda@amd.com>
-> Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-> Link: https://lore.kernel.org/lkml/20230220100418.76754-5-Vijendar.Mukunda@amd.com
-> ---
->  drivers/soundwire/Kconfig  | 10 ++++++++++
->  drivers/soundwire/Makefile |  4 ++++
->  2 files changed, 14 insertions(+)
 > 
-> diff --git a/drivers/soundwire/Kconfig b/drivers/soundwire/Kconfig
-> index 2b7795233282..983afe3570b2 100644
-> --- a/drivers/soundwire/Kconfig
-> +++ b/drivers/soundwire/Kconfig
-> @@ -46,4 +46,14 @@ config SOUNDWIRE_QCOM
->  config SOUNDWIRE_GENERIC_ALLOCATION
->  	tristate
->  
-> +config SOUNDWIRE_AMD
-> +	tristate "AMD SoundWire Manager driver"
+> On 14.03.2023 22:08, Bhupesh Sharma wrote:
+>> Add DTS for Qualcomm qrb4210-rb2 board which uses SM4250 SoC.
+>>
+>> This adds debug uart, emmc, uSD and tlmm support along with
+>> regulators found on this board.
+>>
+>> Also defines the 'xo_board' and 'sleep_clk' frequencies for
+>> this board.
+>>
+>> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+>> ---
+> [...]
+> 
+>> +#include <dt-bindings/regulator/qcom,rpmh-regulator.h>
+> This SoC does not feature RPMh, drop.
 
-Alphabetically sorted please
+Ok.
 
-> +	select SOUNDWIRE_GENERIC_ALLOCATION
-> +	depends on ACPI && SND_SOC
-> +	help
-> +	  SoundWire AMD Manager driver.
-> +	  If you have an AMD platform which has a SoundWire Manager then
-> +	  enable this config option to get the SoundWire support for that
-> +	  device.
-> +
->  endif
-> diff --git a/drivers/soundwire/Makefile b/drivers/soundwire/Makefile
-> index ca97414ada70..5956229d3eb3 100644
-> --- a/drivers/soundwire/Makefile
-> +++ b/drivers/soundwire/Makefile
-> @@ -26,3 +26,7 @@ obj-$(CONFIG_SOUNDWIRE_INTEL) += soundwire-intel.o
->  #Qualcomm driver
->  soundwire-qcom-y :=	qcom.o
->  obj-$(CONFIG_SOUNDWIRE_QCOM) += soundwire-qcom.o
-> +
-> +#AMD driver
-> +soundwire-amd-y :=	amd_manager.o
-> +obj-$(CONFIG_SOUNDWIRE_AMD) += soundwire-amd.o
+>> +#include "sm4250.dtsi"
+>> +
+>> +/ {
+>> +	model = "Qualcomm Technologies, Inc. QRB4210 RB2";
+>> +	compatible = "qcom,qrb4210-rb2", "qcom,sm4250";
+> Please add a qcom,qrb4210 between the board-specific and the common SoC
+> compatibles so that we can address QRB-specific quirks if such ever arise.
 
-here as well
+As per the available documentation there are no qrb specific quirks as 
+of now, but let me add a qcom,qrb4210 for future compatibility.
 
-> -- 
-> 2.34.1
+>> +
+>> +	aliases {
+>> +		serial0 = &uart4;
+>> +	};
+>> +
+> [...]
+> 
+>> +&xo_board {
+>> +	clock-frequency = <19200000>;
+>> +};
+>> +
+>> +&sleep_clk {
+>> +	clock-frequency = <32000>;
+>> +};
+> Out of alphanumerical order
 
--- 
-~Vinod
+Ok.
+
+>> +
+>> +&qupv3_id_0 {
+>> +	status = "okay";
+>> +};
+>> +
+>> +&uart4 {
+>> +	status = "okay";
+>> +};
+>> +
+>> +&rpm_requests {
+> Out of alphanumerical order
+
+Ok.
+
+>> +	regulators-0 {
+> Will there be more PMICs under this node? If not, drop the -0.
+
+Ok.
+
+> [...]
+> 
+>> +&tlmm {
+>> +	gpio-reserved-ranges = <37 5>, <43 2>, <47 1>,
+>> +			       <49 1>, <52 1>, <54 1>,
+>> +			       <56 3>, <61 2>, <64 1>,
+>> +			       <68 1>, <72 8>, <96 1>;
+>> +};
+> Are there *really* so many? Does the board refuse to boot if
+> you knock off any of these entries? If so, they probably
+> don't belong here.
+
+Yes, these are reserved / not-connected gpios as per latest version of 
+the board schematics.
+
+>> +
+>> +&sdhc_1 {
+>> +	status = "okay";
+> Status should go last
+>> +
+>> +	vmmc-supply = <&vreg_l24a_2p96>; /* emmc power line */
+>> +	vqmmc-supply = <&vreg_l11a_1p8>; /* emmc vddq */
+> The comments are not very useful, drop please.
+> 
+>> +	bus-width = <8>;
+> This is defined in the SoC dtsi already
+
+Ok.
+
+>> +	no-sdio;
+>> +	non-removable;
+>> +};
+>> +
+>> +&sdhc_2 {
+>> +	status = "okay";
+>> +
+>> +	cd-gpios = <&tlmm 88 GPIO_ACTIVE_HIGH>; /* card detect gpio */
+>> +	vmmc-supply = <&vreg_l22a_2p96>; /* Card power line */
+>> +	vqmmc-supply = <&vreg_l5a_2p96>; /* IO line power */
+>> +	bus-width = <4>;
+>> +	no-sdio;
+>> +	no-emmc;
+> Ditto
+
+Ok. Will send updated v2 soon.
+
+Thanks.
