@@ -2,30 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 570A16BA53C
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 03:30:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A7C16BA53F
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 03:31:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229720AbjCOCaX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 22:30:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34168 "EHLO
+        id S229863AbjCOCbS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 22:31:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjCOCaW (ORCPT
+        with ESMTP id S229778AbjCOCbQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 22:30:22 -0400
-Received: from out30-113.freemail.mail.aliyun.com (out30-113.freemail.mail.aliyun.com [115.124.30.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 980DD5D275
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 19:30:20 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R901e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VduGZD6_1678847417;
-Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0VduGZD6_1678847417)
+        Tue, 14 Mar 2023 22:31:16 -0400
+Received: from out30-119.freemail.mail.aliyun.com (out30-119.freemail.mail.aliyun.com [115.124.30.119])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 045FF5D45F;
+        Tue, 14 Mar 2023 19:31:12 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R871e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0VduGZVi_1678847469;
+Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0VduGZVi_1678847469)
           by smtp.aliyun-inc.com;
-          Wed, 15 Mar 2023 10:30:18 +0800
+          Wed, 15 Mar 2023 10:31:10 +0800
 From:   Yang Li <yang.lee@linux.alibaba.com>
 To:     will@kernel.org
-Cc:     mark.rutland@arm.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Yang Li <yang.lee@linux.alibaba.com>
-Subject: [PATCH -next] perf: arm: Use devm_platform_get_and_ioremap_resource()
-Date:   Wed, 15 Mar 2023 10:30:17 +0800
-Message-Id: <20230315023017.35789-1-yang.lee@linux.alibaba.com>
+Cc:     mark.rutland@arm.com, agross@kernel.org, andersson@kernel.org,
+        konrad.dybcio@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Yang Li <yang.lee@linux.alibaba.com>
+Subject: [PATCH -next] perf: qcom: Use devm_platform_get_and_ioremap_resource()
+Date:   Wed, 15 Mar 2023 10:31:08 +0800
+Message-Id: <20230315023108.36953-1-yang.lee@linux.alibaba.com>
 X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -47,22 +49,22 @@ what this function does.
 
 Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
 ---
- drivers/perf/arm_dmc620_pmu.c | 3 +--
+ drivers/perf/qcom_l3_pmu.c | 3 +--
  1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/perf/arm_dmc620_pmu.c b/drivers/perf/arm_dmc620_pmu.c
-index 54aa4658fb36..5de06f9a4dd3 100644
---- a/drivers/perf/arm_dmc620_pmu.c
-+++ b/drivers/perf/arm_dmc620_pmu.c
-@@ -655,8 +655,7 @@ static int dmc620_pmu_device_probe(struct platform_device *pdev)
- 		.attr_groups	= dmc620_pmu_attr_groups,
+diff --git a/drivers/perf/qcom_l3_pmu.c b/drivers/perf/qcom_l3_pmu.c
+index 346311a05460..2887edb4eb0b 100644
+--- a/drivers/perf/qcom_l3_pmu.c
++++ b/drivers/perf/qcom_l3_pmu.c
+@@ -763,8 +763,7 @@ static int qcom_l3_cache_pmu_probe(struct platform_device *pdev)
+ 		.capabilities	= PERF_PMU_CAP_NO_EXCLUDE,
  	};
  
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	dmc620_pmu->base = devm_ioremap_resource(&pdev->dev, res);
-+	dmc620_pmu->base = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
- 	if (IS_ERR(dmc620_pmu->base))
- 		return PTR_ERR(dmc620_pmu->base);
+-	memrc = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	l3pmu->regs = devm_ioremap_resource(&pdev->dev, memrc);
++	l3pmu->regs = devm_platform_get_and_ioremap_resource(pdev, 0, &memrc);
+ 	if (IS_ERR(l3pmu->regs))
+ 		return PTR_ERR(l3pmu->regs);
  
 -- 
 2.20.1.7.g153144c
