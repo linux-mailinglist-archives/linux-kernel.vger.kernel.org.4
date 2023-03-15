@@ -2,117 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 364B56BBA48
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 17:54:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88FE36BBA4B
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 17:55:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231455AbjCOQyi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 12:54:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43502 "EHLO
+        id S231892AbjCOQzN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 12:55:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232308AbjCOQyf (ORCPT
+        with ESMTP id S229751AbjCOQzL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 12:54:35 -0400
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 094A82472D
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 09:54:32 -0700 (PDT)
-Received: by mail-pl1-x649.google.com with SMTP id z9-20020a170902708900b0019f271f33aeso7175847plk.9
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 09:54:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678899271;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=/VfOj1PxwZtE3fiW4+Wbi4dS2kE6Vdmar5BqVI1M2z0=;
-        b=BEqSBnWJskRuRBspuN6FxAXPBhQk21kw/QwpQhD+OPlE7HMQ4t4minhZOXyoQwEo3F
-         tt1stwO6FYs5bIqkpXIeC3XJ7m3dYjzvRiWySWCR3r6wfBOkC/PEY+WXuc80rxFKt27c
-         KOzAcFEhGzqEsuuAhRKgnxCk70qP0LpFveG9jRbnMqvf2vKnfdjPpL0HesVOOclo4OxM
-         BOLJ9w1PyWUHlGa3ORpqrIvOBdmK89BmWv3pPnitmBb3dg57lPujpJr63O9FjhdqQL5K
-         HCjCfb3bzmtH+GiUm5c46uiyfcwSwwsV223MDV86CcsaaHgcmDJ0bQMYtI4p/yIpPisc
-         6r5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678899271;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/VfOj1PxwZtE3fiW4+Wbi4dS2kE6Vdmar5BqVI1M2z0=;
-        b=4trZLtuRlJW74U6HPkDh2nl/d+3y9POJnnC2fR7MltiyAYRMcbGVDM79dWAj30ZEbj
-         4E4BEmyjUE/A2xyZ/EOamRbJ/gDc9Bkq9UQnsszxSLZAI9NujAFbNr4NCtf9xe04f+di
-         agiLidJJNWcqQqiifqREcaEwl0tE3OD5f5hIh7YdlBWS/4fkCMO7y5aKPKzEMEfheXZS
-         xXZh+FqtICCUqk+pdEuIomNvyDb24KUxC2TfB285hox6toN4HhZGur3NvNv2dw/plPd5
-         CEv4eSXg6xQ2heSMVf1u/NDw7XTWsWkkZrpuLtKXAx+rKBw4n8K6BVUsJtiovZlMbXZz
-         +5Ng==
-X-Gm-Message-State: AO0yUKVv5j/Zyyh2Zn+frRaAwwIV39PSA1TUxzoUa+g9LGwmzFoHuBdM
-        JQjQuFvsxImptRfz4yXvSU+EliXpIGQ=
-X-Google-Smtp-Source: AK7set8uXr2sovLYtbxUeraNaTKwMoaMEQm3jr5Cs9656uq3YKkYAaDETqng8wyzyCVhZ2HsOOop/4RwRyc=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a65:5c43:0:b0:4f1:cd3a:3e83 with SMTP id
- v3-20020a655c43000000b004f1cd3a3e83mr122328pgr.3.1678899271499; Wed, 15 Mar
- 2023 09:54:31 -0700 (PDT)
-Date:   Wed, 15 Mar 2023 09:54:30 -0700
-In-Reply-To: <ZBGfmLuORj+ZBziv@yzhao56-desk.sh.intel.com>
-Mime-Version: 1.0
-References: <20230311002258.852397-1-seanjc@google.com> <20230311002258.852397-21-seanjc@google.com>
- <ZBGfmLuORj+ZBziv@yzhao56-desk.sh.intel.com>
-Message-ID: <ZBH4RizqdigXeYte@google.com>
-Subject: Re: [PATCH v2 20/27] KVM: x86/mmu: Use page-track notifiers iff there
- are external users
-From:   Sean Christopherson <seanjc@google.com>
-To:     Yan Zhao <yan.y.zhao@intel.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>,
-        Zhi Wang <zhi.a.wang@intel.com>, kvm@vger.kernel.org,
-        intel-gvt-dev@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Ben Gardon <bgardon@google.com>
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 15 Mar 2023 12:55:11 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8B595A193;
+        Wed, 15 Mar 2023 09:54:54 -0700 (PDT)
+Received: from [192.168.10.39] (unknown [39.37.168.222])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 3BBA56602065;
+        Wed, 15 Mar 2023 16:54:46 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1678899292;
+        bh=EyXR2YxwFVjBAcx1rUVLdzVeq5GifyBb6Z8dID0brCk=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=SHQ3SHGgunZCD9CQKxkcMrkNu82y/hn/LXDp+BkqMXc7hJnD5qh+gIhMIMTiEOxR7
+         EkaldNLGjTXTymZH3QmhQwWDCVW4Jeb9n47yKYEdRiLYkghf+cXEAC/nsxUXsFOU2Y
+         m/EqUEI/mHPFRT+cSK436ppqmBN5zq99BRVK8+99lGAz0dYSBatwE8U9psqRXg6OLB
+         XOXxGInAuGnjbKNFohYXlKgAy4J29WtLirHCECYN9Iz1eno/uOz+mTJgqF8rDdp3F6
+         UevrNe3irtE7kpeBmhfQ8nWRofKmCdG/rCgthAST7DOfk8vKWFLJRi7wtbLiQFdarr
+         GzoyGjH6cfBCw==
+Message-ID: <3d2d1ba4-bfab-6b3d-f0d6-ae0920ebdcb0@collabora.com>
+Date:   Wed, 15 Mar 2023 21:54:40 +0500
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WC?= =?UTF-8?Q?aw?= 
+        <emmir@google.com>, Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
+Subject: Re: [PATCH v11 4/7] fs/proc/task_mmu: Implement IOCTL to get and
+ optionally clear info about PTEs
+Content-Language: en-US
+To:     Peter Xu <peterx@redhat.com>
+References: <20230309135718.1490461-1-usama.anjum@collabora.com>
+ <20230309135718.1490461-5-usama.anjum@collabora.com> <ZBHqjBjj6nn1xeTM@x1n>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <ZBHqjBjj6nn1xeTM@x1n>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 15, 2023, Yan Zhao wrote:
-> On Fri, Mar 10, 2023 at 04:22:51PM -0800, Sean Christopherson wrote:
-> > Disable the page-track notifier code at compile time if there are no
-> > external users, i.e. if CONFIG_KVM_EXTERNAL_WRITE_TRACKING=n.  KVM itself
-> > now hooks emulated writes directly instead of relying on the page-track
-> > mechanism.
-> > 
-> > Signed-off-by: Sean Christopherson <seanjc@google.com>
-> > ---
-> >  arch/x86/include/asm/kvm_host.h       |  2 ++
-> >  arch/x86/include/asm/kvm_page_track.h |  2 ++
-> >  arch/x86/kvm/mmu/page_track.c         |  9 ++++-----
-> >  arch/x86/kvm/mmu/page_track.h         | 29 +++++++++++++++++++++++----
-> >  4 files changed, 33 insertions(+), 9 deletions(-)
-> > 
-> > diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> > index 1a4225237564..a3423711e403 100644
-> > --- a/arch/x86/include/asm/kvm_host.h
-> > +++ b/arch/x86/include/asm/kvm_host.h
-> > @@ -1265,7 +1265,9 @@ struct kvm_arch {
-> >  	 * create an NX huge page (without hanging the guest).
-> >  	 */
-> >  	struct list_head possible_nx_huge_pages;
-> > +#ifdef CONFIG_KVM_EXTERNAL_WRITE_TRACKING
-> >  	struct kvm_page_track_notifier_head track_notifier_head;
-> > +#endif
-> >  	/*
-> >  	 * Protects marking pages unsync during page faults, as TDP MMU page
-> >  	 * faults only take mmu_lock for read.  For simplicity, the unsync
-> > diff --git a/arch/x86/include/asm/kvm_page_track.h b/arch/x86/include/asm/kvm_page_track.h
-> > index deece45936a5..53c2adb25a07 100644
-> > --- a/arch/x86/include/asm/kvm_page_track.h
-> > +++ b/arch/x86/include/asm/kvm_page_track.h
-> The "#ifdef CONFIG_KVM_EXTERNAL_WRITE_TRACKING" can be moved to the
-> front of this file?
-> All the structures are only exposed for external users now.
+On 3/15/23 8:55 PM, Peter Xu wrote:
+> On Thu, Mar 09, 2023 at 06:57:15PM +0500, Muhammad Usama Anjum wrote:
+>> +	for (addr = start; !ret && addr < end; pte++, addr += PAGE_SIZE) {
+>> +		pte = pte_offset_map_lock(vma->vm_mm, pmd, addr, &ptl);
+>> +
+>> +		is_writ = !is_pte_uffd_wp(*pte);
+>> +		is_file = vma->vm_file;
+>> +		is_pres = pte_present(*pte);
+>> +		is_swap = is_swap_pte(*pte);
+>> +
+>> +		pte_unmap_unlock(pte, ptl);
+>> +
+>> +		ret = pagemap_scan_output(is_writ, is_file, is_pres, is_swap,
+>> +					  p, addr, 1);
+>> +		if (ret)
+>> +			break;
+>> +
+>> +		if (PM_SCAN_OP_IS_WP(p) && is_writ &&
+>> +		    uffd_wp_range(walk->mm, vma, addr, PAGE_SIZE, true) < 0)
+>> +			ret = -EINVAL;
+>> +	}
+> 
+> This is not real atomic..
+> 
+> Taking the spinlock for eacy pte is not only overkill but wrong in
+> atomicity because the pte can change right after spinlock unlocked.
+Let me explain. It seems like wrong, but it isn't. In my rigorous testing,
+it didn't show any side-effect.  Here we are finding out if a page is
+written. If page is written, only then we clear it. Lets look at the
+different possibilities here:
+- If a page isn't written, we'll not clear it.
+- If a page is written and there isn't any race, we'll clear written-to
+flag by write protecting it.
+- If a page is written but before clearing it, data is written again to the
+page. The page would remain written and we'll clear it.
+- If a page is written but before clearing it, it gets write protected,
+we'll still write protected it. There is double right protection here, but
+no side-effect.
 
-Huh.  I've no idea why I didn't do that.  IIRC, the entire reason past me wrapped
-track_notifier_head in an #ifdef was to allow this change in kvm_page_track.h.
+Lets turn this into a truth table for easier understanding. Here first
+coulmn and thrid column represents this above code. 2nd column represents
+any other thread interacting with the page.
 
-I'll do this in the next version unless I discover an edge case I'm overlooking.
+If page is written/dirty	some other task interacts	wp_page
+no				does nothing			no
+no				writes to page			no
+no				wp the page			no
+yes				does nothing			yes
+yes				write to page			yes
+yes				wp the page			yes
 
-Thanks yet again!
+As you can see there isn't any side-effect happening. We aren't over doing
+the wp or under-doing the write-protect.
+
+Even if we were doing something wrong here and I bring the lock over all of
+this, the pages get become written or wp just after unlocking. It is
+expected. This current implementation doesn't seem to be breaking this.
+
+Is my understanding wrong somewhere here? Can you point out?
+
+Previous to this current locking design were either buggy or slower when
+multiple threads were working on same pages. Current implementation removes
+the limitations:
+- The memcpy inside pagemap_scan_output is happening with pte unlocked.
+- We are only wp a page if we have noted this page to be dirty
+- No mm write lock is required. Only read lock works fine just like
+userfaultfd_writeprotect() takes only read lock.
+
+There is only one con here that we are locking and unlocking the pte lock
+again and again.
+
+Please have a look at my explanation and let me know what do you think.
+
+> 
+> Unfortunately you also cannot reuse uffd_wp_range() because that's not
+> atomic either, my fault here.  Probably I was thinking mostly from
+> soft-dirty pov on batching the collect+reset.
+> 
+> You need to take the spin lock, collect whatever bits, set/clear whatever
+> bits, only until then release the spin lock.
+> 
+> "Not atomic" means you can have some page got dirtied but you could miss
+> it.  Depending on how strict you want, I think it'll break apps like CRIU
+> if strict atomicity needed for migrating a process.  If we want to have a
+> new interface anyway, IMHO we'd better do that in the strict way.
+In my rigorous multi-threaded testing where a lots of threads are working
+on same set of pages, we aren't losing even a single update. I can share
+the test if you want.
+
+> 
+> Same comment applies to the THP handling (where I cut from the context).
+> 
+
+-- 
+BR,
+Muhammad Usama Anjum
