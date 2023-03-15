@@ -2,75 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BEDD6BB991
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 17:22:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DBBE6BB990
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 17:21:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231820AbjCOQWO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 12:22:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44558 "EHLO
+        id S229751AbjCOQVl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 12:21:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231667AbjCOQWM (ORCPT
+        with ESMTP id S229725AbjCOQVh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 12:22:12 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B970184
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 09:21:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678897286;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=gLpXDCqdXOXJIgT6RZL1oqrUDc+znTju+CcMww0NbwY=;
-        b=TJJ3jhXnVq23C9JF1JwXAXmvSi3uvDH7lvfrL7rNOLSotJB0jBWGQSefiYp1LKAKzOzsj8
-        HcKHovPARpbMfbmlrhboCoxYpI7nXaDPICiw06OK3VSXOLNAFETSQES0mZkZ94/vCrRNzi
-        ZY1d4/G/pMWJMcBrZCEt+tTk4qyF9s0=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-645-yCHe-VHZNaiWm0wbhL5ojw-1; Wed, 15 Mar 2023 12:21:24 -0400
-X-MC-Unique: yCHe-VHZNaiWm0wbhL5ojw-1
-Received: by mail-wm1-f71.google.com with SMTP id o2-20020a05600c510200b003ed2c898324so2288397wms.1
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 09:21:23 -0700 (PDT)
+        Wed, 15 Mar 2023 12:21:37 -0400
+Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8696A49C4
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 09:21:36 -0700 (PDT)
+Received: by mail-pg1-x549.google.com with SMTP id bc19-20020a656d93000000b005072b17a298so4646974pgb.14
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 09:21:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1678897296;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=JKTk6fHXe0DcBHYZ7abQpFccg4odhIWL73B59FNN1Xk=;
+        b=JIJTtqfS3TMGnsbFa8g96atWXLD9Hi639HJF8P22QUC+Vb51Lk9yNCn5QWlUY59BCc
+         eptR4lQ3acknGb4WF8ZXNG89vGlBbvoMQqwd4R1MrcO5psAhmtkSb7k4gnVzvgudFdTw
+         avYKauJrNh6tEZckc8zEeWTVtIy4somJPyM0y/bW71369Y2Dua/19SsouijpZn+b4kCl
+         a6qBe1NKaQljePkV/vaMJuAMUt72wGV0sPX9AavXH6ip5x9HhVeK72lING95SHW3UOvC
+         2C4gFKhFmy95spZV+N9HSrT1LGnLu6EO5NNtqJ9hYJYUO3Wu5+0pRtSlgJOXOldW5Jb6
+         dK6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678897282;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gLpXDCqdXOXJIgT6RZL1oqrUDc+znTju+CcMww0NbwY=;
-        b=lwAn5U8/JOT4w75zQPCd+RG/VFp8g/54XKxocA13jnzDRteO7MMB0JmCH//ZGej/37
-         hN7y05uV9eAw0pUJWV5gKSYSGMoHbvkQCl6OezICAtDkR4TXznNEvvRYEaHG6wtC20GL
-         OtMS1/DgBCJFaMZwXuSNJOsBjzBfcICribyQ1tJYBx5qabe5bNQ6d49BstZ0KDcadHKp
-         c6330tBBmG8wm10/B7zIjhc48yoDmBCDJiygcyRI5yuXZWRVP8+5dAfNYLtI9jTAZ3Qg
-         DdHUfJTC1u5vHpDr3CTWNjxaalueNuhnpi7CtxEtxu9LDFzqNNyfciBU6XgfPIIWWk2Y
-         RlRw==
-X-Gm-Message-State: AO0yUKWSgqVXJuHoSNoNIcoBPovdmfy+FuCDD4episAJ9IYO0nSAJKnN
-        DE6+rQviQZ0e3lV60RPayZpI3Ar823M9Dn7TYZ18mTmgBu8oWYtNcE0UkQdJDu04rx3z1cOXAdE
-        +/kkeaLRor5biZPabL1EXhToI
-X-Received: by 2002:a05:600c:5493:b0:3ea:edc7:aa59 with SMTP id iv19-20020a05600c549300b003eaedc7aa59mr19083949wmb.32.1678897282738;
-        Wed, 15 Mar 2023 09:21:22 -0700 (PDT)
-X-Google-Smtp-Source: AK7set8l0FlMYlfB7z4wPq4zZjlG3lnnvvfGaqSVZmH/xQvlmt/IC3bGNvN60DywcA+W7MvhHiIeKA==
-X-Received: by 2002:a05:600c:5493:b0:3ea:edc7:aa59 with SMTP id iv19-20020a05600c549300b003eaedc7aa59mr19083940wmb.32.1678897282523;
-        Wed, 15 Mar 2023 09:21:22 -0700 (PDT)
-Received: from vschneid.remote.csb ([154.57.232.159])
-        by smtp.gmail.com with ESMTPSA id o19-20020a05600c059300b003eb68bb61c8sm2466199wmd.3.2023.03.15.09.21.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Mar 2023 09:21:21 -0700 (PDT)
-From:   Valentin Schneider <vschneid@redhat.com>
-To:     Tom Rix <trix@redhat.com>, mingo@redhat.com, peterz@infradead.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com
-Cc:     linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>
-Subject: Re: [PATCH] sched/topology: set varaiables
- sched_energy_mutex,update storage-class-specifier to static
-In-Reply-To: <20230314144818.1453523-1-trix@redhat.com>
-References: <20230314144818.1453523-1-trix@redhat.com>
-Date:   Wed, 15 Mar 2023 16:21:19 +0000
-Message-ID: <xhsmhfsa6m1ds.mognet@vschneid.remote.csb>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        d=1e100.net; s=20210112; t=1678897296;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JKTk6fHXe0DcBHYZ7abQpFccg4odhIWL73B59FNN1Xk=;
+        b=MsHLaPS2qlwFN6+7f6hREJajYnxzw9ggJ9PQRu9X7eyDZOQ/s8wk4uBdIgH90Aik3k
+         Pih1qp83V8Pq7Q2b08JhpTsYDkIkUMABSCOFFvZXyY9YAGL8j32leqZbhgn70odVX+Om
+         QjITiFiVxKaxAxLiTCO7FfY3kVWwiMPZwrJJ3W81N3Z6UZYcOibJwdC7/RU8c4AoWwgw
+         b3UHWu2XxzD7DfC7coCm/1o3XqENaIahqMMSVxnq5df2vk60KhPkRDHYKA3NEmvbTyxL
+         yL8W4lpCT+C0gAq5mb/j6M0ay5GD3wMGwFqJ4nd0/ezeW+yxKOYJ2PVy55l5hZ6ux4XH
+         D8Og==
+X-Gm-Message-State: AO0yUKU+VKZlt2ER4o0d9j23PSSyCKx0rJfH39m3Sl63oV8gH08PsnZm
+        +beAUYE0MMO2EouEUAgem+ULpCffEdc=
+X-Google-Smtp-Source: AK7set8gPm4g/NvRUZwmci48nYogYWiDAtlDOVIipuNXOmnGWoPg5uKaBoV4za1AXTOtQ2HQrJ0TchlLCME=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a17:903:2344:b0:1a0:561c:7276 with SMTP id
+ c4-20020a170903234400b001a0561c7276mr84640plh.1.1678897295968; Wed, 15 Mar
+ 2023 09:21:35 -0700 (PDT)
+Date:   Wed, 15 Mar 2023 09:21:34 -0700
+In-Reply-To: <ZBGRJaV3tDTVyE/q@yzhao56-desk.sh.intel.com>
+Mime-Version: 1.0
+References: <20230311002258.852397-1-seanjc@google.com> <20230311002258.852397-21-seanjc@google.com>
+ <ZBGRJaV3tDTVyE/q@yzhao56-desk.sh.intel.com>
+Message-ID: <ZBHwjm2heYeE40xl@google.com>
+Subject: Re: [PATCH v2 20/27] KVM: x86/mmu: Use page-track notifiers iff there
+ are external users
+From:   Sean Christopherson <seanjc@google.com>
+To:     Yan Zhao <yan.y.zhao@intel.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Zhi Wang <zhi.a.wang@intel.com>, kvm@vger.kernel.org,
+        intel-gvt-dev@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Ben Gardon <bgardon@google.com>
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,16 +73,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/03/23 10:48, Tom Rix wrote:
-> smatch reports
-> kernel/sched/topology.c:212:1: warning:
->   symbol 'sched_energy_mutex' was not declared. Should it be static?
-> kernel/sched/topology.c:213:6: warning:
->   symbol 'sched_energy_update' was not declared. Should it be static?
->
-> These variables are only used in topology.c, so should be static
->
-> Signed-off-by: Tom Rix <trix@redhat.com>
+On Wed, Mar 15, 2023, Yan Zhao wrote:
+> Nit: there is a typo in the commit header: "iff" -> "if"
+> 
+> > -void kvm_page_track_write(struct kvm_vcpu *vcpu, gpa_t gpa, const u8 *new,
+> > -			  int bytes)
+> > +void __kvm_page_track_write(struct kvm *kvm, gpa_t gpa, const u8 *new, int bytes)
+> Line length is 81 characters. A little longer than 80 :)
+> 
+> > +static inline bool kvm_page_track_has_external_user(struct kvm *kvm) { return false; }
+> This line is also too long.
 
-Reviewed-by: Valentin Schneider <vschneid@redhat.com>
+The 80 character limit is a "soft" limit these days, e.g. checkpatch only complains
+if a line is 100+.  In KVM x86, the preferred style is to treat the 80 char limit
+as "firm", for lack of a better word.  E.g. let a line run over if it's just a
+char or two and there's no other wrapping in the declaration, but don't create long
+lines just because checkpatch no longer yells.
 
+There's obviously a fair bit of subjectivity, but the guideline has worked well
+so far (hopefully I didn't just jinx us).
