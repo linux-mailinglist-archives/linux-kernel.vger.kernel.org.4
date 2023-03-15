@@ -2,458 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C216C6BAB23
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 09:51:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C97F6BAB26
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 09:51:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231905AbjCOIvE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 04:51:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57040 "EHLO
+        id S231878AbjCOIv3 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 15 Mar 2023 04:51:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231871AbjCOIuj (ORCPT
+        with ESMTP id S231871AbjCOIvI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 04:50:39 -0400
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A5B877E20
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 01:50:14 -0700 (PDT)
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 199AA3F216
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 08:50:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1678870213;
-        bh=Q1m6NQLqRBTP8z3hsMYxofduF6uobMIX9a0HuHQkYmw=;
-        h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-         MIME-Version:Content-Type;
-        b=uXj/5fs2MeVXK9J1vF37YchdPyi3PWgEf0n33YgblXtFAKKi3EiGD60uGoE88jluu
-         Qc2h14ob/dB65NhB6rJokex/xJBz27TLA22nQYmbcsnD4MGQdylIjsDZAW84Wz0KN0
-         h/eF/UQ3jdQpjo/opf/f4aHNzQ+O6Ca8pupo8rif8FZjbf1+KioIbLAtzduMGnri8q
-         nmClbz1zkPcUBIv84Kd4cedXyJJmbiXclQD8lYGtJSWonbPQb7Onp2jKYfDnf5NNC7
-         l7T7vZ+QiJe7mChBlH89igJPpzFnJlfgRcr7rRhJRjeP9sKUIZYZkwIj0tVzohczZ4
-         6PALYsjtBFSag==
-Received: by mail-ed1-f70.google.com with SMTP id e18-20020a056402191200b004fa702d64b3so16598667edz.23
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 01:50:13 -0700 (PDT)
+        Wed, 15 Mar 2023 04:51:08 -0400
+Received: from mail-qv1-f48.google.com (mail-qv1-f48.google.com [209.85.219.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6662C5D47B;
+        Wed, 15 Mar 2023 01:50:34 -0700 (PDT)
+Received: by mail-qv1-f48.google.com with SMTP id m6so6512083qvq.0;
+        Wed, 15 Mar 2023 01:50:34 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678870211;
-        h=mime-version:organization:references:in-reply-to:message-id:subject
-         :cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Q1m6NQLqRBTP8z3hsMYxofduF6uobMIX9a0HuHQkYmw=;
-        b=tfc+6Mhbdxn/m1WtY+OVLY/mtvd7HgGLJYjATeYYMC9sxNKRReSoLQgYq2O1M8Fvcf
-         nMQUvvVI4vLVHzVQ2PwJ2F6+xH5OAn4Mb7VdiOAeXz0L1kFShExhuzDSyS8jBo7/Qtvp
-         pZT3whj0yxUH8Axlbm90KlDL2sGTbmEw9Hbzjq9OGBqxdLdsUpX7A4Po+uVsT3eoqNRe
-         /17iUAKyUL8r+UcwYIeUsO4aDbRikz7R4xU40ti38xYjx6s3Dqw9qg7B58kMVNXAtQYR
-         EaYPHjSnXpr6S1zZhob0DUlCfOAiFqRAFFzUQR8+uV3Mlp81M7pY4I287+6TCnFiF2p4
-         u2yg==
-X-Gm-Message-State: AO0yUKXi0BR/StdbP6C8qGPCTTc8Q6k+PfNrVH1ryZ8fF6Tg64BgoL8y
-        6rI/I/8qz0NOnPL72gsM1T+uf9Fnv8Mzsb4ALL4MkHyKkIpZ6m+0Ic4/PLHZ9+gjOaUEGbh/RMQ
-        tPUyBiNkjeeS7CRQQWHaqjQqDqVyW37uU8MwZhWSJmw==
-X-Received: by 2002:a17:906:b88d:b0:8b1:806b:7dbb with SMTP id hb13-20020a170906b88d00b008b1806b7dbbmr5311150ejb.51.1678870211622;
-        Wed, 15 Mar 2023 01:50:11 -0700 (PDT)
-X-Google-Smtp-Source: AK7set8BrxBJxTiQJMn1ONR9mZPN9eAhxlL6kgUVa50qk1+ymSvM1BVw8YuKCkSkwT3Q4kYxusbG4A==
-X-Received: by 2002:a17:906:b88d:b0:8b1:806b:7dbb with SMTP id hb13-20020a170906b88d00b008b1806b7dbbmr5311133ejb.51.1678870211242;
-        Wed, 15 Mar 2023 01:50:11 -0700 (PDT)
-Received: from gollum ([194.191.244.86])
-        by smtp.gmail.com with ESMTPSA id y21-20020a1709064b1500b00905a1abecbfsm2198997eju.47.2023.03.15.01.50.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Mar 2023 01:50:10 -0700 (PDT)
-Date:   Wed, 15 Mar 2023 09:50:08 +0100
-From:   Juerg Haefliger <juerg.haefliger@canonical.com>
-To:     Bjorn Andersson <quic_bjorande@quicinc.com>
-Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>,
-        Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <freedreno@lists.freedesktop.org>, <johan@kernel.org>,
-        <mani@kernel.org>
-Subject: Re: [PATCH 1/3] drm/msm/adreno: Add Adreno A690 support
-Message-ID: <20230315095008.7d650ebe@gollum>
-In-Reply-To: <20230208034052.2047681-2-quic_bjorande@quicinc.com>
-References: <20230208034052.2047681-1-quic_bjorande@quicinc.com>
-        <20230208034052.2047681-2-quic_bjorande@quicinc.com>
-Organization: Canonical Ltd
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        d=1e100.net; s=20210112; t=1678870233;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6eK3lv3XmGf5e0hSe7nNdyGKzby4aQeSuaY3l4ZaQq4=;
+        b=DP9W51eH4Ke/Y/xuVxwrfykbFn2AittAzuE8c3j89Rwt36Zf8Eck9IXWrEbSRrd1JY
+         4lZ1Vs+qU4n80ZOlPKep2cmzv5KYQjbW/NbP5TCL5xQb2xEgemMZldGQNS5hQ48GEK6H
+         RNBJF/dc17/CEwHxcx1kEuC1/lUeqw7Wf8wrc5Ft3sPcxWAsqRw0eNCVZa/qFADk5yW9
+         kv0ekX8kTKlbZnrqTbSFHQuQlKP0VFNaYMU3KWRXndSoXb50qVVr++4G0KRVOY+2SwXr
+         rrYwg1HNJi5MTkafkzix+429LvQ/flv/e0+Ii9U3plQWWOd1gSvoRCwl+M3m4pE1veDc
+         KqSQ==
+X-Gm-Message-State: AO0yUKW7Qti8E3I3pSRce+v6haTMTzWq1RwOdoW89LHEVHi5FMgVz6DQ
+        /n2KVHJHG6bWC4uHmozml5lQ6NVPpODcErov
+X-Google-Smtp-Source: AK7set8dRPrrl3en/Mf9crpWwlmhMvVpriUeSdP2zeNmeXFHlYiO7j914GVUot1R+YEjfBppKkwDZg==
+X-Received: by 2002:a05:6214:b63:b0:5aa:9502:4ec1 with SMTP id ey3-20020a0562140b6300b005aa95024ec1mr15063502qvb.49.1678870233417;
+        Wed, 15 Mar 2023 01:50:33 -0700 (PDT)
+Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com. [209.85.219.181])
+        by smtp.gmail.com with ESMTPSA id z201-20020a3765d2000000b00745c2b29091sm3150302qkb.93.2023.03.15.01.50.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Mar 2023 01:50:32 -0700 (PDT)
+Received: by mail-yb1-f181.google.com with SMTP id e65so9687766ybh.10;
+        Wed, 15 Mar 2023 01:50:32 -0700 (PDT)
+X-Received: by 2002:a05:6902:724:b0:b46:c5aa:86ef with SMTP id
+ l4-20020a056902072400b00b46c5aa86efmr2687476ybt.12.1678870231794; Wed, 15 Mar
+ 2023 01:50:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/ku5ZPn.n_cuALSq6c8Lqvju";
- protocol="application/pgp-signature"; micalg=pgp-sha512
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230314131443.46342-1-wsa+renesas@sang-engineering.com> <20230314131443.46342-5-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20230314131443.46342-5-wsa+renesas@sang-engineering.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 15 Mar 2023 09:50:20 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdWhKfw93Fyukr=kguMAmZCnynk=-96+BKBPB8PDZkE9gg@mail.gmail.com>
+Message-ID: <CAMuHMdWhKfw93Fyukr=kguMAmZCnynk=-96+BKBPB8PDZkE9gg@mail.gmail.com>
+Subject: Re: [PATCH net-next 4/4] smsc911x: add FIXME to move 'mac_managed_pm'
+ to probe
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     netdev@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        kernel@pengutronix.de,
+        Steve Glendinning <steve.glendinning@shawell.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/ku5ZPn.n_cuALSq6c8Lqvju
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Wolfram,
 
-On Tue, 7 Feb 2023 19:40:50 -0800
-Bjorn Andersson <quic_bjorande@quicinc.com> wrote:
+On Tue, Mar 14, 2023 at 2:30 PM Wolfram Sang
+<wsa+renesas@sang-engineering.com> wrote:
+> On Renesas hardware, we had issues because the above flag was set during
+> 'open'. It was concluded that it needs to be set during 'probe'. It
+> looks like SMS911x needs the same fix but I can't test it because I
+> don't have the hardware. At least, leave a note about the issue.
 
-> From: Bjorn Andersson <bjorn.andersson@linaro.org>
->=20
-> Introduce support for the Adreno A690, found in Qualcomm SC8280XP.
->=20
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
-> ---
->  drivers/gpu/drm/msm/adreno/a6xx_gpu.c      | 120 ++++++++++++++++++++-
->  drivers/gpu/drm/msm/adreno/a6xx_hfi.c      |  34 ++++++
->  drivers/gpu/drm/msm/adreno/adreno_device.c |  14 +++
->  drivers/gpu/drm/msm/adreno/adreno_gpu.h    |  10 +-
->  4 files changed, 173 insertions(+), 5 deletions(-)
->=20
-> diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c b/drivers/gpu/drm/msm/=
-adreno/a6xx_gpu.c
-> index aae60cbd9164..81dfcc5073ad 100644
-> --- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-> +++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-> @@ -588,6 +588,63 @@ const struct adreno_reglist a660_hwcg[] =3D {
->  	{},
->  };
-> =20
-> +const struct adreno_reglist a690_hwcg[] =3D {
-> +	{REG_A6XX_RBBM_CLOCK_CNTL_SP0, 0x02222222},
-> +	{REG_A6XX_RBBM_CLOCK_CNTL2_SP0, 0x02222220},
-> +	{REG_A6XX_RBBM_CLOCK_DELAY_SP0, 0x00000080},
-> +	{REG_A6XX_RBBM_CLOCK_HYST_SP0, 0x0000F3CF},
-> +	{REG_A6XX_RBBM_CLOCK_CNTL_TP0, 0x22222222},
-> +	{REG_A6XX_RBBM_CLOCK_CNTL2_TP0, 0x22222222},
-> +	{REG_A6XX_RBBM_CLOCK_CNTL3_TP0, 0x22222222},
-> +	{REG_A6XX_RBBM_CLOCK_CNTL4_TP0, 0x00022222},
-> +	{REG_A6XX_RBBM_CLOCK_DELAY_TP0, 0x11111111},
-> +	{REG_A6XX_RBBM_CLOCK_DELAY2_TP0, 0x11111111},
-> +	{REG_A6XX_RBBM_CLOCK_DELAY3_TP0, 0x11111111},
-> +	{REG_A6XX_RBBM_CLOCK_DELAY4_TP0, 0x00011111},
-> +	{REG_A6XX_RBBM_CLOCK_HYST_TP0, 0x77777777},
-> +	{REG_A6XX_RBBM_CLOCK_HYST2_TP0, 0x77777777},
-> +	{REG_A6XX_RBBM_CLOCK_HYST3_TP0, 0x77777777},
-> +	{REG_A6XX_RBBM_CLOCK_HYST4_TP0, 0x00077777},
-> +	{REG_A6XX_RBBM_CLOCK_CNTL_RB0, 0x22222222},
-> +	{REG_A6XX_RBBM_CLOCK_CNTL2_RB0, 0x01002222},
-> +	{REG_A6XX_RBBM_CLOCK_CNTL_CCU0, 0x00002220},
-> +	{REG_A6XX_RBBM_CLOCK_HYST_RB_CCU0, 0x00040F00},
-> +	{REG_A6XX_RBBM_CLOCK_CNTL_RAC, 0x25222022},
-> +	{REG_A6XX_RBBM_CLOCK_CNTL2_RAC, 0x00005555},
-> +	{REG_A6XX_RBBM_CLOCK_DELAY_RAC, 0x00000011},
-> +	{REG_A6XX_RBBM_CLOCK_HYST_RAC, 0x00445044},
-> +	{REG_A6XX_RBBM_CLOCK_CNTL_TSE_RAS_RBBM, 0x04222222},
-> +	{REG_A6XX_RBBM_CLOCK_MODE_VFD, 0x00002222},
-> +	{REG_A6XX_RBBM_CLOCK_MODE_GPC, 0x00222222},
-> +	{REG_A6XX_RBBM_CLOCK_DELAY_HLSQ_2, 0x00000002},
-> +	{REG_A6XX_RBBM_CLOCK_MODE_HLSQ, 0x00002222},
-> +	{REG_A6XX_RBBM_CLOCK_DELAY_TSE_RAS_RBBM, 0x00004000},
-> +	{REG_A6XX_RBBM_CLOCK_DELAY_VFD, 0x00002222},
-> +	{REG_A6XX_RBBM_CLOCK_DELAY_GPC, 0x00000200},
-> +	{REG_A6XX_RBBM_CLOCK_DELAY_HLSQ, 0x00000000},
-> +	{REG_A6XX_RBBM_CLOCK_HYST_TSE_RAS_RBBM, 0x00000000},
-> +	{REG_A6XX_RBBM_CLOCK_HYST_VFD, 0x00000000},
-> +	{REG_A6XX_RBBM_CLOCK_HYST_GPC, 0x04104004},
-> +	{REG_A6XX_RBBM_CLOCK_HYST_HLSQ, 0x00000000},
-> +	{REG_A6XX_RBBM_CLOCK_CNTL_TEX_FCHE, 0x00000222},
-> +	{REG_A6XX_RBBM_CLOCK_DELAY_TEX_FCHE, 0x00000111},
-> +	{REG_A6XX_RBBM_CLOCK_HYST_TEX_FCHE, 0x00000000},
-> +	{REG_A6XX_RBBM_CLOCK_CNTL_UCHE, 0x22222222},
-> +	{REG_A6XX_RBBM_CLOCK_HYST_UCHE, 0x00000004},
-> +	{REG_A6XX_RBBM_CLOCK_DELAY_UCHE, 0x00000002},
-> +	{REG_A6XX_RBBM_CLOCK_CNTL, 0x8AA8AA82},
-> +	{REG_A6XX_RBBM_ISDB_CNT, 0x00000182},
-> +	{REG_A6XX_RBBM_RAC_THRESHOLD_CNT, 0x00000000},
-> +	{REG_A6XX_RBBM_SP_HYST_CNT, 0x00000000},
-> +	{REG_A6XX_RBBM_CLOCK_CNTL_GMU_GX, 0x00000222},
-> +	{REG_A6XX_RBBM_CLOCK_DELAY_GMU_GX, 0x00000111},
-> +	{REG_A6XX_RBBM_CLOCK_HYST_GMU_GX, 0x00000555},
-> +	{REG_A6XX_GPU_GMU_AO_GMU_CGC_MODE_CNTL, 0x20200},
-> +	{REG_A6XX_GPU_GMU_AO_GMU_CGC_DELAY_CNTL, 0x10111},
-> +	{REG_A6XX_GPU_GMU_AO_GMU_CGC_HYST_CNTL, 0x5555},
-> +	{}
-> +};
-> +
->  static void a6xx_set_hwcg(struct msm_gpu *gpu, bool state)
->  {
->  	struct adreno_gpu *adreno_gpu =3D to_adreno_gpu(gpu);
-> @@ -747,6 +804,45 @@ static const u32 a660_protect[] =3D {
->  	A6XX_PROTECT_NORDWR(0x1f8c0, 0x0000), /* note: infinite range */
->  };
-> =20
-> +/* These are for a690 */
-> +static const u32 a690_protect[] =3D {
-> +	A6XX_PROTECT_RDONLY(0x00000, 0x004ff),
-> +	A6XX_PROTECT_RDONLY(0x00501, 0x00001),
-> +	A6XX_PROTECT_RDONLY(0x0050b, 0x002f4),
-> +	A6XX_PROTECT_NORDWR(0x0050e, 0x00000),
-> +	A6XX_PROTECT_NORDWR(0x00510, 0x00000),
-> +	A6XX_PROTECT_NORDWR(0x00534, 0x00000),
-> +	A6XX_PROTECT_NORDWR(0x00800, 0x00082),
-> +	A6XX_PROTECT_NORDWR(0x008a0, 0x00008),
-> +	A6XX_PROTECT_NORDWR(0x008ab, 0x00024),
-> +	A6XX_PROTECT_RDONLY(0x008d0, 0x000bc),
-> +	A6XX_PROTECT_NORDWR(0x00900, 0x0004d),
-> +	A6XX_PROTECT_NORDWR(0x0098d, 0x00272),
-> +	A6XX_PROTECT_NORDWR(0x00e00, 0x00001),
-> +	A6XX_PROTECT_NORDWR(0x00e03, 0x0000c),
-> +	A6XX_PROTECT_NORDWR(0x03c00, 0x000c3),
-> +	A6XX_PROTECT_RDONLY(0x03cc4, 0x01fff),
-> +	A6XX_PROTECT_NORDWR(0x08630, 0x001cf),
-> +	A6XX_PROTECT_NORDWR(0x08e00, 0x00000),
-> +	A6XX_PROTECT_NORDWR(0x08e08, 0x00008),
-> +	A6XX_PROTECT_NORDWR(0x08e50, 0x0001f),
-> +	A6XX_PROTECT_NORDWR(0x08e80, 0x0027f),
-> +	A6XX_PROTECT_NORDWR(0x09624, 0x001db),
-> +	A6XX_PROTECT_NORDWR(0x09e60, 0x00011),
-> +	A6XX_PROTECT_NORDWR(0x09e78, 0x00187),
-> +	A6XX_PROTECT_NORDWR(0x0a630, 0x001cf),
-> +	A6XX_PROTECT_NORDWR(0x0ae02, 0x00000),
-> +	A6XX_PROTECT_NORDWR(0x0ae50, 0x0012f),
-> +	A6XX_PROTECT_NORDWR(0x0b604, 0x00000),
-> +	A6XX_PROTECT_NORDWR(0x0b608, 0x00006),
-> +	A6XX_PROTECT_NORDWR(0x0be02, 0x00001),
-> +	A6XX_PROTECT_NORDWR(0x0be20, 0x0015f),
-> +	A6XX_PROTECT_NORDWR(0x0d000, 0x005ff),
-> +	A6XX_PROTECT_NORDWR(0x0f000, 0x00bff),
-> +	A6XX_PROTECT_RDONLY(0x0fc00, 0x01fff),
-> +	A6XX_PROTECT_NORDWR(0x11c00, 0x00000), /*note: infiite range */
-> +};
-> +
->  static void a6xx_set_cp_protect(struct msm_gpu *gpu)
->  {
->  	struct adreno_gpu *adreno_gpu =3D to_adreno_gpu(gpu);
-> @@ -758,6 +854,11 @@ static void a6xx_set_cp_protect(struct msm_gpu *gpu)
->  		count =3D ARRAY_SIZE(a650_protect);
->  		count_max =3D 48;
->  		BUILD_BUG_ON(ARRAY_SIZE(a650_protect) > 48);
-> +	} else if (adreno_is_a690(adreno_gpu)) {
-> +		regs =3D a690_protect;
-> +		count =3D ARRAY_SIZE(a690_protect);
-> +		count_max =3D 48;
-> +		BUILD_BUG_ON(ARRAY_SIZE(a690_protect) > 48);
->  	} else if (adreno_is_a660_family(adreno_gpu)) {
->  		regs =3D a660_protect;
->  		count =3D ARRAY_SIZE(a660_protect);
-> @@ -806,6 +907,13 @@ static void a6xx_set_ubwc_config(struct msm_gpu *gpu)
->  		uavflagprd_inv =3D 2;
->  	}
-> =20
-> +	if (adreno_is_a690(adreno_gpu)) {
-> +		lower_bit =3D 2;
-> +		amsbc =3D 1;
-> +		rgb565_predicator =3D 1;
-> +		uavflagprd_inv =3D 2;
-> +	}
-> +
->  	if (adreno_is_7c3(adreno_gpu)) {
->  		lower_bit =3D 1;
->  		amsbc =3D 1;
-> @@ -1065,13 +1173,18 @@ static int hw_init(struct msm_gpu *gpu)
->  	if (adreno_is_a660_family(adreno_gpu))
->  		gpu_write(gpu, REG_A6XX_CP_LPAC_PROG_FIFO_SIZE, 0x00000020);
-> =20
-> +	if (adreno_is_a690(adreno_gpu)) {
-> +		gpu_write(gpu, REG_A6XX_RBBM_GBIF_CLIENT_QOS_CNTL, 0x0);
-> +		gpu_write(gpu, REG_A6XX_CP_LPAC_PROG_FIFO_SIZE, 0x00000020);
-> +	}
-> +
->  	/* Setting the mem pool size */
->  	gpu_write(gpu, REG_A6XX_CP_MEM_POOL_SIZE, 128);
-> =20
->  	/* Setting the primFifo thresholds default values,
->  	 * and vccCacheSkipDis=3D1 bit (0x200) for A640 and newer
->  	*/
-> -	if (adreno_is_a650(adreno_gpu) || adreno_is_a660(adreno_gpu))
-> +	if (adreno_is_a650(adreno_gpu) || adreno_is_a660(adreno_gpu) || adreno_=
-is_a690(adreno_gpu))
->  		gpu_write(gpu, REG_A6XX_PC_DBG_ECO_CNTL, 0x00300200);
->  	else if (adreno_is_a640_family(adreno_gpu) || adreno_is_7c3(adreno_gpu))
->  		gpu_write(gpu, REG_A6XX_PC_DBG_ECO_CNTL, 0x00200200);
-> @@ -1579,7 +1692,7 @@ static void a6xx_llc_activate(struct a6xx_gpu *a6xx=
-_gpu)
->  		/* On A660, the SCID programming for UCHE traffic is done in
->  		 * A6XX_GBIF_SCACHE_CNTL0[14:10]
->  		 */
-> -		if (adreno_is_a660_family(adreno_gpu))
-> +		if (adreno_is_a660_family(adreno_gpu) || adreno_is_a690(adreno_gpu))
->  			gpu_rmw(gpu, REG_A6XX_GBIF_SCACHE_CNTL0, (0x1f << 10) |
->  				(1 << 8), (gpu_scid << 10) | (1 << 8));
->  	}
-> @@ -2006,7 +2119,8 @@ struct msm_gpu *a6xx_gpu_init(struct drm_device *de=
-v)
->  	info =3D adreno_info(config->rev);
-> =20
->  	if (info && (info->revn =3D=3D 650 || info->revn =3D=3D 660 ||
-> -			adreno_cmp_rev(ADRENO_REV(6, 3, 5, ANY_ID), info->rev)))
-> +		     info->revn =3D=3D 690 ||
-> +		     adreno_cmp_rev(ADRENO_REV(6, 3, 5, ANY_ID), info->rev)))
->  		adreno_gpu->base.hw_apriv =3D true;
-> =20
->  	a6xx_llc_slices_init(pdev, a6xx_gpu);
-> diff --git a/drivers/gpu/drm/msm/adreno/a6xx_hfi.c b/drivers/gpu/drm/msm/=
-adreno/a6xx_hfi.c
-> index 2cc83e049613..4d6d68a25931 100644
-> --- a/drivers/gpu/drm/msm/adreno/a6xx_hfi.c
-> +++ b/drivers/gpu/drm/msm/adreno/a6xx_hfi.c
-> @@ -4,6 +4,7 @@
->  #include <linux/completion.h>
->  #include <linux/circ_buf.h>
->  #include <linux/list.h>
-> +#include <soc/qcom/cmd-db.h>
-> =20
->  #include "a6xx_gmu.h"
->  #include "a6xx_gmu.xml.h"
-> @@ -414,6 +415,37 @@ static void a650_build_bw_table(struct a6xx_hfi_msg_=
-bw_table *msg)
->  	msg->cnoc_cmds_data[1][0] =3D  0x60000001;
->  }
-> =20
-> +static void a690_build_bw_table(struct a6xx_hfi_msg_bw_table *msg)
-> +{
-> +	/*
-> +	 * Send a single "off" entry just to get things running
-> +	 * TODO: bus scaling
-> +	 */
-> +	msg->bw_level_num =3D 1;
-> +
-> +	msg->ddr_cmds_num =3D 3;
-> +	msg->ddr_wait_bitmask =3D 0x01;
-> +
-> +	msg->ddr_cmds_addrs[0] =3D cmd_db_read_addr("SH0");
-> +	msg->ddr_cmds_addrs[1] =3D cmd_db_read_addr("MC0");
-> +	msg->ddr_cmds_addrs[2] =3D cmd_db_read_addr("ACV");
-> +
-> +	msg->ddr_cmds_data[0][0] =3D  0x40000000;
-> +	msg->ddr_cmds_data[0][1] =3D  0x40000000;
-> +	msg->ddr_cmds_data[0][2] =3D  0x40000000;
-> +
-> +	/*
-> +	 * These are the CX (CNOC) votes - these are used by the GMU but the
-> +	 * votes are known and fixed for the target
-> +	 */
-> +	msg->cnoc_cmds_num =3D 1;
-> +	msg->cnoc_wait_bitmask =3D 0x01;
-> +
-> +	msg->cnoc_cmds_addrs[0] =3D cmd_db_read_addr("CN0");
-> +	msg->cnoc_cmds_data[0][0] =3D  0x40000000;
-> +	msg->cnoc_cmds_data[1][0] =3D  0x60000001;
-> +}
-> +
->  static void a660_build_bw_table(struct a6xx_hfi_msg_bw_table *msg)
->  {
->  	/*
-> @@ -531,6 +563,8 @@ static int a6xx_hfi_send_bw_table(struct a6xx_gmu *gm=
-u)
->  		adreno_7c3_build_bw_table(&msg);
->  	else if (adreno_is_a660(adreno_gpu))
->  		a660_build_bw_table(&msg);
-> +	else if (adreno_is_a690(adreno_gpu))
-> +		a690_build_bw_table(&msg);
->  	else
->  		a6xx_build_bw_table(&msg);
-> =20
-> diff --git a/drivers/gpu/drm/msm/adreno/adreno_device.c b/drivers/gpu/drm=
-/msm/adreno/adreno_device.c
-> index ca38b837dedb..437515e46e5a 100644
-> --- a/drivers/gpu/drm/msm/adreno/adreno_device.c
-> +++ b/drivers/gpu/drm/msm/adreno/adreno_device.c
-> @@ -355,6 +355,20 @@ static const struct adreno_info gpulist[] =3D {
->  		.init =3D a6xx_gpu_init,
->  		.zapfw =3D "a640_zap.mdt",
->  		.hwcg =3D a640_hwcg,
-> +	}, {
-> +		.rev =3D ADRENO_REV(6, 9, 0, ANY_ID),
-> +		.revn =3D 690,
-> +		.name =3D "A690",
-> +		.fw =3D {
-> +			[ADRENO_FW_SQE] =3D "a660_sqe.fw",
-> +			[ADRENO_FW_GMU] =3D "a690_gmu.bin",
-> +		},
-> +		.gmem =3D SZ_4M,
-> +		.inactive_period =3D DRM_MSM_INACTIVE_PERIOD,
-> +		.init =3D a6xx_gpu_init,
-> +		.zapfw =3D "a690_zap.mdt",
-> +		.hwcg =3D a690_hwcg,
-> +		.address_space_size =3D SZ_16G,
->  	},
->  };
+You no longer have the APE6-EVM?
 
-This needs
+Gr{oetje,eeting}s,
 
-MODULE_FIRMWARE("qcom/a660_sqe.fw");
-MODULE_FIRMWARE("qcom/a690_gmu.bin");
-MODULE_FIRMWARE("qcom/a690_zap.mbn");
+                        Geert
 
-...Juerg
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
- =20
-> diff --git a/drivers/gpu/drm/msm/adreno/adreno_gpu.h b/drivers/gpu/drm/ms=
-m/adreno/adreno_gpu.h
-> index b4f9b1343d63..da29bd392388 100644
-> --- a/drivers/gpu/drm/msm/adreno/adreno_gpu.h
-> +++ b/drivers/gpu/drm/msm/adreno/adreno_gpu.h
-> @@ -55,7 +55,7 @@ struct adreno_reglist {
->  	u32 value;
->  };
-> =20
-> -extern const struct adreno_reglist a615_hwcg[], a630_hwcg[], a640_hwcg[]=
-, a650_hwcg[], a660_hwcg[];
-> +extern const struct adreno_reglist a615_hwcg[], a630_hwcg[], a640_hwcg[]=
-, a650_hwcg[], a660_hwcg[], a690_hwcg[];
-> =20
->  struct adreno_info {
->  	struct adreno_rev rev;
-> @@ -272,6 +272,11 @@ static inline int adreno_is_a660(struct adreno_gpu *=
-gpu)
->  	return gpu->revn =3D=3D 660;
->  }
-> =20
-> +static inline int adreno_is_a690(struct adreno_gpu *gpu)
-> +{
-> +	return gpu->revn =3D=3D 690;
-> +};
-> +
->  /* check for a615, a616, a618, a619 or any derivatives */
->  static inline int adreno_is_a615_family(struct adreno_gpu *gpu)
->  {
-> @@ -286,7 +291,8 @@ static inline int adreno_is_a660_family(struct adreno=
-_gpu *gpu)
->  /* check for a650, a660, or any derivatives */
->  static inline int adreno_is_a650_family(struct adreno_gpu *gpu)
->  {
-> -	return gpu->revn =3D=3D 650 || gpu->revn =3D=3D 620 || adreno_is_a660_f=
-amily(gpu);
-> +	return gpu->revn =3D=3D 650 || gpu->revn =3D=3D 620  || gpu->revn =3D=
-=3D 690 ||
-> +	       adreno_is_a660_family(gpu);
->  }
-> =20
->  u64 adreno_private_address_space_size(struct msm_gpu *gpu);
-
-
---Sig_/ku5ZPn.n_cuALSq6c8Lqvju
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCgAdFiEEhZfU96IuprviLdeLD9OLCQumQrcFAmQRhsAACgkQD9OLCQum
-QrcaEg/+KR5Z168oZC28DaAtwaoOf6caom+zx2RWTcFnxbGC+y1txYE9vacG7CMT
-Py3wvkWaVmwYNxa1LuJR5VpBG1LWk5tFlKAV/oVK9/ggvErq6qkN0uKiFONkYaxW
-rc2Mc9m6nvOS/uV2ZBU2a+9TjdkxekTGAXlyAk1uYZ53uzx9eW4zFy3OpmmDlPzp
-4J9Xdn7uT/NejOmklbVZZN2Uerk4+PXAHKu6mpzJQQMmHLPlykSaJqwgq36vzgFC
-Jckf2/CAWLllJ+5ETa9yc0kTk3zI5580Aor7e4ovVVrImpW+vzWCMqcJfC9vJpOZ
-RHdkcp1q3owGTvwtlrZS9Etbi/qxv4FuEgP+piSBpT5tqY5UFci7fvZ+DheB7waE
-ydG85WLtsPjRT0g3S53v+UCqnhU/vl7WIp70pR6i8vW4a8kFgrXuzXgk/EQ3mLwP
-4Oe3Penz/6nM48+lt3EwwryhcqkhjYq6Nj0tCDU47ocW9fwUWcNpTUOJbNMOY4Jw
-HrIB6hQuDyQuDohhTNRssbQGFygLCuMB7UYoWFP6naFwxcAajoE8RkICIcnKqVSQ
-e7ApBKhwn6b17e3ugoW8q2vtB0huy6L5+3hrMHNKhiKWJ9ss893Q7DrmgkLGVBTc
-iSCbu7XfoFUqJK65NEH/9ZXvB+CHHzy2yXe5rw59twQSNFeT+34=
-=rJ4c
------END PGP SIGNATURE-----
-
---Sig_/ku5ZPn.n_cuALSq6c8Lqvju--
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
