@@ -2,123 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0F5A6BA6F8
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 06:20:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92F5B6BA70B
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 06:26:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231717AbjCOFUa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 01:20:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49220 "EHLO
+        id S231506AbjCOF0r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 01:26:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231382AbjCOFTz (ORCPT
+        with ESMTP id S231459AbjCOF01 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 01:19:55 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5759C64851;
-        Tue, 14 Mar 2023 22:16:21 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id n16so4881060pfa.12;
-        Tue, 14 Mar 2023 22:16:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678857345;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=85u2mP267MsDWaYI2anR0VTKt7dL+xKQUjJLVotEHs4=;
-        b=gBap95uEBpqian2RBARTrUhbt/kKcSUXiSo5c7Duq2LsgHsJd7sdPPRFiFg1axqEcx
-         LCEFgPx4s/l6A65imFaWZtjeJ9PYLAon3RKjoOlwq50YBEm/FikgnG8vlR6/pgNyWaVm
-         iUN0iCRDvqZzEzTi215AXkU5Fxb833GIShXRKYfuOxbeaLqRanNK5+oUDbdpif7kdJ+j
-         +/cPDEjjw3PAjywDo0XsFGrDw+DOyzfVWoJfaBf9LtEA13/OQSUQF9Usn6szyjPME+L/
-         UcdSXy/53dTBtT/b6TWWxp/bKilr/mflre5QrDHlMp8h885ORIa5iS0l1bJMOCQkRi9K
-         aFGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678857345;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=85u2mP267MsDWaYI2anR0VTKt7dL+xKQUjJLVotEHs4=;
-        b=6IPjcmvTFPsRKi471HyzO/d+EcYG1M3qHJOxlazq90agO0cnVHPdjfeS8yEGDlsVFE
-         MNzrT/3sAkTnKU+7Z9FGMSfU9IWMTPsNJZSMCu0QwBH88C1XNeoeTETh5n7ufRPnlT/j
-         SCmPOzNlXVJ+u384Yz/1p5ISeY/8sJ1Bcg9GN36kWk0p2jaXnIcgm+HTXOyNntU2vrh9
-         rkxRHvgQNGXkN6Fv1mDQHxxi2EEEZczFEeJ6NdOnKQ8ewibZTFJN3XJdaoYV6EeJmIQS
-         +0qi5N8TTkOsAClCaP7p/fA3hO9DSzrGu9etktcUzAp8JXSbIJ26QJnPvloQJY+nrI7+
-         Oy/w==
-X-Gm-Message-State: AO0yUKV1iR3HEsYazyzG2ODx10FsaoJrE0UIFe9jLO1sKGupLu0obEds
-        jeSYFCbybWQ0S1X4J2+01I0=
-X-Google-Smtp-Source: AK7set/qpV14jNC8aoJAxGYlBsaChSOHlujZd1EeVD7OBA4G2dFhCb+/fwJ/AIoqn083Mq9weK9KRQ==
-X-Received: by 2002:a62:3814:0:b0:623:c7ff:46c8 with SMTP id f20-20020a623814000000b00623c7ff46c8mr10052331pfa.1.1678857345006;
-        Tue, 14 Mar 2023 22:15:45 -0700 (PDT)
-Received: from kim-GL702ZC.. ([118.32.98.101])
-        by smtp.gmail.com with ESMTPSA id z64-20020a636543000000b004e28be19d1csm2442903pgb.32.2023.03.14.22.15.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Mar 2023 22:15:44 -0700 (PDT)
-From:   Paran Lee <p4ranlee@gmail.com>
-To:     Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>
-Cc:     Anton Blanchard <anton@ozlabs.org>, Daniel Axtens <dja@axtens.net>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, Paran Lee <p4ranlee@gmail.com>
-Subject: [PATCH v2] perf tools riscv: Add support for riscv lookup_binutils_path
-Date:   Wed, 15 Mar 2023 14:15:01 +0900
-Message-Id: <20230315051500.13064-1-p4ranlee@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Wed, 15 Mar 2023 01:26:27 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4377B1B2FD;
+        Tue, 14 Mar 2023 22:25:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B7FB1B81BFA;
+        Wed, 15 Mar 2023 05:16:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19369C4339C;
+        Wed, 15 Mar 2023 05:16:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678857394;
+        bh=Bhf7zj25Ro7zhgY0ji25HnJhOcSay0ch2FcQZvqYmmI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=KtEnVijbBHGKL9D6jjLyq/rn2fDGj//tM1kuf97hh6yAIgvsjb2Ey6O0q+CA8pwrA
+         /feO4+WkpJkdQCdYb94b6lxQaEJcSgBIop0dxFguAVePkpaes7fcD9WEKltEkMS86y
+         BHDp9BVdb3UJZbrw860qMJwc99zC2yICry68b7SlGRdp6dgSfQrqHgHijJJAa/hJ+6
+         FH/uQgEoHPrz6HFPI6EphsIm+IWD8h+FMVe9ZCBm+mI10ltYpuutPIsucDJ17lNY3p
+         cv5p+BEGmdHkvMyIxpxjsT7J99HqFkmqeGOGEmVYBXZppWCwAgRXWSvhxcCHyzhUi2
+         h1VjA+a3rtTlw==
+Date:   Tue, 14 Mar 2023 22:16:33 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Anjali Kulkarni <anjali.k.kulkarni@oracle.com>
+Cc:     davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+        zbr@ioremap.net, brauner@kernel.org, johannes@sipsolutions.net,
+        ecree.xilinx@gmail.com, leon@kernel.org, keescook@chromium.org,
+        socketcan@hartkopp.net, petrm@nvidia.com,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH v2 2/5] connector/cn_proc: Add filtering to fix some
+ bugs
+Message-ID: <20230314221633.1e6c9bef@kernel.org>
+In-Reply-To: <20230315021850.2788946-3-anjali.k.kulkarni@oracle.com>
+References: <20230315021850.2788946-1-anjali.k.kulkarni@oracle.com>
+        <20230315021850.2788946-3-anjali.k.kulkarni@oracle.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add RISC-V binutils path on lookup triplets.
+On Tue, 14 Mar 2023 19:18:47 -0700 Anjali Kulkarni wrote:
+> diff --git a/net/netlink/af_netlink.c b/net/netlink/af_netlink.c
+> index 003c7e6ec9be..ad8ec18152cd 100644
+> --- a/net/netlink/af_netlink.c
+> +++ b/net/netlink/af_netlink.c
+> @@ -63,6 +63,7 @@
+>  #include <linux/net_namespace.h>
+>  #include <linux/nospec.h>
+>  #include <linux/btf_ids.h>
+> +#include <linux/connector.h>
 
-Signed-off-by: Paran Lee <p4ranlee@gmail.com>
----
- tools/perf/arch/common.c | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+Not needed any more.
 
-diff --git a/tools/perf/arch/common.c b/tools/perf/arch/common.c
-index 59dd875fd5e4..e80d4d22cabf 100644
---- a/tools/perf/arch/common.c
-+++ b/tools/perf/arch/common.c
-@@ -43,6 +43,20 @@ const char *const powerpc_triplets[] = {
- 	NULL
- };
- 
-+const char *const riscv32_triplets[] = {
-+	"riscv32-unknown-linux-gnu-",
-+	"riscv32-linux-android-",
-+	"riscv32-linux-gnu-",
-+	NULL
-+};
-+
-+const char *const riscv64_triplets[] = {
-+	"riscv64-unknown-linux-gnu-",
-+	"riscv64-linux-android-",
-+	"riscv64-linux-gnu-",
-+	NULL
-+};
-+
- const char *const s390_triplets[] = {
- 	"s390-ibm-linux-",
- 	"s390x-linux-gnu-",
-@@ -166,6 +180,10 @@ static int perf_env__lookup_binutils_path(struct perf_env *env,
- 		path_list = arm64_triplets;
- 	else if (!strcmp(arch, "powerpc"))
- 		path_list = powerpc_triplets;
-+	else if (!strcmp(arch, "riscv32"))
-+		path_list = riscv32_triplets;
-+	else if (!strcmp(arch, "riscv64"))
-+		path_list = riscv64_triplets;
- 	else if (!strcmp(arch, "sh"))
- 		path_list = sh_triplets;
- 	else if (!strcmp(arch, "s390"))
--- 
-2.34.1
+>  	/* must not acquire netlink_table_lock in any way again before unbind
+>  	 * and notifying genetlink is done as otherwise it might deadlock
+>  	 */
+> -	if (nlk->netlink_unbind) {
+> +	if (nlk->netlink_unbind && nlk->groups) {
 
+Why?
+
+>  		int i;
+> -
+>  		for (i = 0; i < nlk->ngroups; i++)
+>  			if (test_bit(i, nlk->groups))
+>  				nlk->netlink_unbind(sock_net(sk), i + 1);
+
+Please separate the netlink core changes from the connector
+changes.
+
+Please slow down with new versions, we have 300 patches in the queue,
+replying to one version just to notice you posted a new one is
+frustrating. Give reviewers 24h to reply.
