@@ -2,59 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 546826BA7B8
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 07:22:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 069C26BA7BA
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 07:23:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230359AbjCOGWy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 02:22:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57594 "EHLO
+        id S230475AbjCOGX1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 02:23:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231191AbjCOGWr (ORCPT
+        with ESMTP id S230421AbjCOGXZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 02:22:47 -0400
-Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48CA52FCF9;
-        Tue, 14 Mar 2023 23:22:41 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.169])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Pc0gJ6W5qz4f4fBy;
-        Wed, 15 Mar 2023 14:22:36 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.127.227])
-        by APP3 (Coremail) with SMTP id _Ch0CgDX0R8tZBFkjiTNEw--.32962S4;
-        Wed, 15 Mar 2023 14:22:38 +0800 (CST)
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-To:     jejb@linux.ibm.com, martin.petersen@oracle.com, bvanassche@acm.org,
-        hare@suse.de, axboe@kernel.dk, sconnor@purestorage.com,
-        michael.christie@oracle.com, brian@purestorage.com,
-        yukuai3@huawei.com
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yukuai1@huaweicloud.com, yi.zhang@huawei.com, yangerkun@huawei.com
-Subject: [PATCH -next] scsi: scsi_dh_alua: fix memleak for 'qdata' in alua_activate()
-Date:   Wed, 15 Mar 2023 14:21:54 +0800
-Message-Id: <20230315062154.668812-1-yukuai1@huaweicloud.com>
-X-Mailer: git-send-email 2.31.1
+        Wed, 15 Mar 2023 02:23:25 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D16F30EA8;
+        Tue, 14 Mar 2023 23:23:22 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32F6NCrl033939;
+        Wed, 15 Mar 2023 01:23:12 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1678861392;
+        bh=aEgd9XPuLQCR59sQocm1j89Ty0kcJwLrMZIDQCf67fQ=;
+        h=From:To:CC:Subject:Date;
+        b=gykANu25PYJv0FTC/bkyN5pldAFBEJjn4+n9mO3DTk/loMbdJN5L0B0iOoN9sHp/9
+         bTManLCL5sCdOg/17uwe4Oiin8l6q1HrH9M7L/4vpVTHZm/J5VNhXZkJxf+YmhMLKN
+         0/jdFPBCpV64nTmdyrN8Gkuo1u+OGkuTTxBtyj28=
+Received: from DLEE102.ent.ti.com (dlee102.ent.ti.com [157.170.170.32])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32F6NCnY104448
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 15 Mar 2023 01:23:12 -0500
+Received: from DLEE112.ent.ti.com (157.170.170.23) by DLEE102.ent.ti.com
+ (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Wed, 15
+ Mar 2023 01:23:11 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Wed, 15 Mar 2023 01:23:11 -0500
+Received: from uda0492258.dhcp.ti.com (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32F6N7br024744;
+        Wed, 15 Mar 2023 01:23:08 -0500
+From:   Siddharth Vadapalli <s-vadapalli@ti.com>
+To:     <nm@ti.com>, <vigneshr@ti.com>, <kristo@kernel.org>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski@linaro.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <afd@ti.com>
+CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <srk@ti.com>,
+        <s-vadapalli@ti.com>
+Subject: [PATCH v3 0/4] Add DT support for J721E CPSW9G and J7200 CPSW5G
+Date:   Wed, 15 Mar 2023 11:53:03 +0530
+Message-ID: <20230315062307.1612220-1-s-vadapalli@ti.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _Ch0CgDX0R8tZBFkjiTNEw--.32962S4
-X-Coremail-Antispam: 1UD129KBjvJXoW7Kw4UZr13ZrW3Gr4UArWxtFb_yoW8Aw18pr
-        Z8Kas8CrW8XF4UuFWjyF13JFyY9FW8uFy8JFWft34rGFy8GFyUt347Cr1jgrWDJF97Jry7
-        Ar1UCFyjqryDJw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvY14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
-        Y2ka0xkIwI1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
-        xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43
-        MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I
-        0E14v26F4j6r4UJwCI42IY6xAIw20EY4v20xvaj40_Zr0_Wr1UMIIF0xvEx4A2jsIE14v2
-        6r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0J
-        UZa9-UUUUU=
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        MAY_BE_FORGED,SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,52 +65,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yu Kuai <yukuai3@huawei.com>
+Hello,
 
-If alua_rtpg_queue() failed from alua_activate(), then 'qdata' is not
-freed, which will cause following memleak:
+This series adds the device-tree nodes for the CPSW9G instance of CPSW
+Ethernet Switch on TI's J721E SoC and the CPSW5G instance of CPSW
+Ethernet Switch on TI's J7200 SoC. Additionally, overlays are also added
+to individually enable CPSW9G on J721E SoC and CPSW5G on J7200 SoC in
+QSGMII mode with the Add-On J7 QUAD Port Ethernet expansion QSGMII
+daughtercard.
 
-unreferenced object 0xffff88810b2c6980 (size 32):
-  comm "kworker/u16:2", pid 635322, jiffies 4355801099 (age 1216426.076s)
-  hex dump (first 32 bytes):
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    40 39 24 c1 ff ff ff ff 00 f8 ea 0a 81 88 ff ff  @9$.............
-  backtrace:
-    [<0000000098f3a26d>] alua_activate+0xb0/0x320
-    [<000000003b529641>] scsi_dh_activate+0xb2/0x140
-    [<000000007b296db3>] activate_path_work+0xc6/0xe0 [dm_multipath]
-    [<000000007adc9ace>] process_one_work+0x3c5/0x730
-    [<00000000c457a985>] worker_thread+0x93/0x650
-    [<00000000cb80e628>] kthread+0x1ba/0x210
-    [<00000000a1e61077>] ret_from_fork+0x22/0x30
+This series combines the v2 series for J721E CPSW9G at:
+https://lore.kernel.org/r/20230310103504.731845-1-s-vadapalli@ti.com/
+and the v1 series for J7200 CPSW5G at:
+https://lore.kernel.org/r/20230310101407.722334-1-s-vadapalli@ti.com/
 
-Fix the problem by freeing 'qdata' in error path.
+The suggestions for the v2 series for J721E are implemented for the J7200
+series as well in this patch series.
 
-Fixes: 625fe857e4fa ("scsi: scsi_dh_alua: Check scsi_device_get() return value")
-Signed-off-by: Yu Kuai <yukuai3@huawei.com>
 ---
- drivers/scsi/device_handler/scsi_dh_alua.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+Changes from v2 for J721E CPSW9G series:
+1. Rename the overlay k3-j721e-quad-port-eth-exp.dtso as
+   k3-j721e-evm-quad-port-eth-exp.dtso.
+2. Update arch/arm64/boot/dts/ti/Makefile to build k3-j721e-evm.dtb as the
+   result of applying k3-j721e-evm-quad-port-eth-exp.dtbo to
+   k3-j721e-common-proc-board.dtb.
+3. Use the newer "&{/} {" style instead of the "fragments" style in
+   k3-j721e-evm-quad-port-eth-exp.dtso.
+4. Move the "mdio0_pins_default" pinctrl from cpsw0 node into the
+   "cpsw9g_mdio" node.
+5. Disable individual "cpsw0_port" nodes in the main.dtsi file, enabling
+   only the required nodes in the overlay.
+6. Disable the "cpsw9g_mdio" node in the main.dtsi file.
 
-diff --git a/drivers/scsi/device_handler/scsi_dh_alua.c b/drivers/scsi/device_handler/scsi_dh_alua.c
-index 362fa631f39b..a226dc1b65d7 100644
---- a/drivers/scsi/device_handler/scsi_dh_alua.c
-+++ b/drivers/scsi/device_handler/scsi_dh_alua.c
-@@ -1145,10 +1145,12 @@ static int alua_activate(struct scsi_device *sdev,
- 	rcu_read_unlock();
- 	mutex_unlock(&h->init_mutex);
- 
--	if (alua_rtpg_queue(pg, sdev, qdata, true))
-+	if (alua_rtpg_queue(pg, sdev, qdata, true)) {
- 		fn = NULL;
--	else
-+	} else {
-+		kfree(qdata);
- 		err = SCSI_DH_DEV_OFFLINED;
-+	}
- 	kref_put(&pg->kref, release_port_group);
- out:
- 	if (fn)
+Changes from v1 for J721E CPSW9G series:
+1. Rename node name "mdio_pins_default" to "mdio0-pins-default", since
+   node names shouldn't contain underscores.
+2. Change node label "mdio_pins_default" to "mdio0_pins_default".
+
+Changes from v1 for J7200 CPSW5G series:
+1. Rename the overlay k3-j7200-quad-port-eth-exp.dtso as
+   k3-j7200-evm-quad-port-eth-exp.dtso.
+2. Update arch/arm64/boot/dts/ti/Makefile to build k3-j7200-evm.dtb as the
+   result of applying k3-j7200-evm-quad-port-eth-exp.dtbo to
+   k3-j7200-common-proc-board.dtb.
+3. Use the newer "&{/} {" style instead of the "fragments" style in
+   k3-j7200-evm-quad-port-eth-exp.dtso.
+4. Move the "mdio0_pins_default" pinctrl from cpsw0 node into the
+   "cpsw5g_mdio" node.
+5. Disable individual "cpsw0_port" nodes in the main.dtsi file, enabling
+   only the required nodes in the overlay.
+6. Disable the "cpsw5g_mdio" node in the main.dtsi file.
+
+J721E CPSW9G v2 series:
+https://lore.kernel.org/r/20230310103504.731845-1-s-vadapalli@ti.com/
+J721E CPSW9G v1 series:
+https://lore.kernel.org/r/20230310092804.692303-1-s-vadapalli@ti.com/
+J7200 CPSW5G v1 series:
+https://lore.kernel.org/r/20230310101407.722334-1-s-vadapalli@ti.com/
+
+Siddharth Vadapalli (4):
+  arm64: dts: ti: k3-j721e: Add CPSW9G nodes
+  arm64: dts: ti: k3-j721e: Add overlay to enable CPSW9G ports in QSGMII
+    mode
+  arm64: dts: ti: j7200-main: Add CPSW5G nodes
+  arm64: dts: ti: k3-j7200: Add overlay to enable CPSW5G ports in QSGMII
+    mode
+
+ arch/arm64/boot/dts/ti/Makefile               |   6 +-
+ .../ti/k3-j7200-evm-quad-port-eth-exp.dtso    | 100 +++++++++++++
+ arch/arm64/boot/dts/ti/k3-j7200-main.dtsi     |  88 ++++++++++++
+ .../ti/k3-j721e-evm-quad-port-eth-exp.dtso    | 132 ++++++++++++++++++
+ arch/arm64/boot/dts/ti/k3-j721e-main.dtsi     | 116 +++++++++++++++
+ arch/arm64/boot/dts/ti/k3-j721e.dtsi          |   1 +
+ 6 files changed, 441 insertions(+), 2 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/ti/k3-j7200-evm-quad-port-eth-exp.dtso
+ create mode 100644 arch/arm64/boot/dts/ti/k3-j721e-evm-quad-port-eth-exp.dtso
+
 -- 
-2.31.1
+2.25.1
 
