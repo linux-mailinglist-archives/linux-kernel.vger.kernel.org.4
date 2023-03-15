@@ -2,84 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08F5E6BA5EB
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 05:10:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5D436BA60D
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 05:12:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230359AbjCOEKg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 00:10:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58802 "EHLO
+        id S231307AbjCOEMQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 00:12:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229631AbjCOEKd (ORCPT
+        with ESMTP id S231256AbjCOELx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 00:10:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BCD13E631;
-        Tue, 14 Mar 2023 21:10:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 32480B81BC1;
-        Wed, 15 Mar 2023 04:10:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0195C433D2;
-        Wed, 15 Mar 2023 04:10:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678853429;
-        bh=ntjkd5ecWuLKH9Sa/6T6Lz65wiAmBbJRc4QFXD440lA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=nzJS2fTD3ItSldIrXvK1bybRMUC8QxOQMHHiviZkAM0QoS3MkXwMfRY6m7F6H37lj
-         N7UVRJK+ZYOibo9+MsVYRk9CWyrwnnevTlwZhdf/omL4y+6Zynz6xpfWf7ACnZi/SE
-         KWCCpsoh48g/AlJO7Mshs0OM0SNtZdEvoBGTVxkrlTPOMPq8w0tZ593Wi1Xe/U9yjF
-         CWKOWoIYq9H6kW3yRxaQryMf5bMj/MxldO+PZp9AESvh78iLd7woWv3mrOztle/GE8
-         kRwqCap6r0Hyb983hnUQIm8wYDEvE+lOwHM0vllCX+2J2j+BNaQmSym8EAbv9rsNuH
-         lTQWRJ0AtRr7w==
-Date:   Tue, 14 Mar 2023 21:10:28 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Zheng Hacker <hackerzheng666@gmail.com>
-Cc:     Zheng Wang <zyytlz.wz@163.com>, davem@davemloft.net,
-        edumazet@google.com, pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, 1395428693sheep@gmail.com,
-        alex000young@gmail.com
-Subject: Re: [PATCH net] net: ethernet: fix use after free bug in
- ns83820_remove_one due to race condition
-Message-ID: <20230314211028.6e9cbbcf@kernel.org>
-In-Reply-To: <CAJedcCxBn=GE_pQ4xzpnvUmMA6rDuwn_AiE7S7d1EqGF9cHkNw@mail.gmail.com>
-References: <20230309094231.3808770-1-zyytlz.wz@163.com>
-        <20230313162630.225f6a86@kernel.org>
-        <CAJedcCxBn=GE_pQ4xzpnvUmMA6rDuwn_AiE7S7d1EqGF9cHkNw@mail.gmail.com>
+        Wed, 15 Mar 2023 00:11:53 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FDB25D8AA
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 21:11:15 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id z10so10075809pgr.8
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 21:11:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1678853474;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=HKoujjtc9hCGDl1d2RjrGi/c9c1GCO8QdPXGn1k1ZhE=;
+        b=PqGSN9BYMdbfE0eWEVmbysbCyChbr6sF9pWxkj85Kz5mkziotP9bSFSXW4C9708ksD
+         PdMQdDG3U9RhQxCC+RljHg5ufQoAaOkiDJ7qb1zQhp+AnWEBYLxLDrsn+104v9cVnufh
+         r8yR10WUyRReQ9MTec2gjjnuTMDIY3sM0fsUc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678853474;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HKoujjtc9hCGDl1d2RjrGi/c9c1GCO8QdPXGn1k1ZhE=;
+        b=cR4ttpDLeiH/AjEJdwQcVAPgjGf0xhUPx2wzskOkJTNYXO2TuPFbHpOA0cIC19CVSX
+         eLVIA4NefPy52xL5WcDXLyClT20y4ArOGRAG3s50TXYRb8/90hFNwBmuErdebIrrtl18
+         OYw35HGL2A5o1c2grfvmhDjKggBrOodRvW2hrYuQtK4gJlMrUyBOhomwNQud1VqOFlkn
+         WwkAPvO2kGKhhUNb03yZOd+fvVFw0dkOzY8dHoTeu/qON4w7zaz1IsuUtqw2DSPMBP3y
+         pNzD0AI0RPdXMxskEiYRd1il7MYXAHMHyS5ZkSp3lelx8cJpYDE1Qz4f3YVG3l1mtTfT
+         e6Xw==
+X-Gm-Message-State: AO0yUKW7Yt9PMraQKj4UAnFYHNfLc/NDYZyKvPM0AgqpUGtTC6pscRtx
+        bn2X1QjNPN1iPjRxyEyrmlLDgA==
+X-Google-Smtp-Source: AK7set9NjRWMOlC2eXp/43o2DAvOdU92TkqxbQHze5KccUrQJ7/Ck6guDEaybokQOD5ue/W6vTf3/Q==
+X-Received: by 2002:a62:53c3:0:b0:5d7:637a:abcf with SMTP id h186-20020a6253c3000000b005d7637aabcfmr33159484pfb.32.1678853474423;
+        Tue, 14 Mar 2023 21:11:14 -0700 (PDT)
+Received: from treapking.tpe.corp.google.com ([2401:fa00:1:10:3a77:bf68:24f0:1c75])
+        by smtp.gmail.com with ESMTPSA id d13-20020aa7814d000000b0059261bd5bacsm2338685pfn.202.2023.03.14.21.11.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Mar 2023 21:11:14 -0700 (PDT)
+From:   Pin-yen Lin <treapking@chromium.org>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        Pin-yen Lin <treapking@chromium.org>
+Subject: [PATCH] Revert "arm64: dts: mediatek: mt8173-elm: Move display to ps8640 auxiliary bus"
+Date:   Wed, 15 Mar 2023 12:11:07 +0800
+Message-Id: <20230315041107.2886940-1-treapking@chromium.org>
+X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 14 Mar 2023 09:59:09 +0800 Zheng Hacker wrote:
-> Jakub Kicinski <kuba@kernel.org> =E4=BA=8E2023=E5=B9=B43=E6=9C=8814=E6=97=
-=A5=E5=91=A8=E4=BA=8C 07:26=E5=86=99=E9=81=93=EF=BC=9A
-> > On Thu,  9 Mar 2023 17:42:31 +0800 Zheng Wang wrote: =20
-> > > +     cancel_work_sync(&dev->tq_refill);
-> > >       ns83820_disable_interrupts(dev); /* paranoia */
-> > >
-> > >       unregister_netdev(ndev); =20
-> >
-> > Canceling the work before unregister can't work.
-> > Please take a closer look, the work to refill a ring should be
-> > canceled when the ring itself is dismantled. =20
->=20
-> Hi Jakub,
->=20
-> Thanks for your review! After seeing code again, I found when handling
-> IRQ request, it will finally call ns83820_irq->ns83820_do_isr->
-> ns83820_rx_kick->schedule_work to start work. So I think we should
-> move the code after free_irq. What do you think?
+This reverts commit c2d94f72140a28d0f516b7c5e8274a9c185a04ff.
 
-Sorry, we have over 300 patches which need reviews. I don't have=20
-the time to help you. Perhaps someone else will.
+The `lg_lp120up1_mode` defined in panel-edp.c is not working for some
+panels used on elm/hana devices. Move the panel node out of the aux-bus
+subnode so the driver only uses the modes retrieved from the EDID.
 
-Please make sure you work on a single networking fix at a time.
-All the patches you posted had the same issues.
+Signed-off-by: Pin-yen Lin <treapking@chromium.org>
+
+---
+
+ arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi | 26 +++++++++-----------
+ 1 file changed, 12 insertions(+), 14 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi b/arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi
+index d452cab28c67..d45a2aeb0eb1 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi
+@@ -90,6 +90,18 @@ switch-volume-up {
+ 		};
+ 	};
+ 
++	panel: panel {
++		compatible = "lg,lp120up1";
++		power-supply = <&panel_fixed_3v3>;
++		backlight = <&backlight>;
++
++		port {
++			panel_in: endpoint {
++				remote-endpoint = <&ps8640_out>;
++			};
++		};
++	};
++
+ 	panel_fixed_3v3: regulator1 {
+ 		compatible = "regulator-fixed";
+ 		regulator-name = "PANEL_3V3";
+@@ -282,20 +294,6 @@ ps8640_out: endpoint {
+ 				};
+ 			};
+ 		};
+-
+-		aux-bus {
+-			panel: panel {
+-				compatible = "lg,lp120up1";
+-				power-supply = <&panel_fixed_3v3>;
+-				backlight = <&backlight>;
+-
+-				port {
+-					panel_in: endpoint {
+-						remote-endpoint = <&ps8640_out>;
+-					};
+-				};
+-			};
+-		};
+ 	};
+ };
+ 
+-- 
+2.40.0.rc1.284.g88254d51c5-goog
+
