@@ -2,125 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E904C6BAFEB
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 13:08:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85D0C6BAFAD
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 12:52:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231143AbjCOMIW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 08:08:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56530 "EHLO
+        id S230366AbjCOLwR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 07:52:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230205AbjCOMIR (ORCPT
+        with ESMTP id S231768AbjCOLv5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 08:08:17 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73A83222C3;
-        Wed, 15 Mar 2023 05:07:35 -0700 (PDT)
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32FBSuMY029989;
-        Wed, 15 Mar 2023 12:07:13 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : reply-to : to : cc : date : in-reply-to : references : content-type
- : mime-version : content-transfer-encoding; s=pp1;
- bh=5gFL/nxSnjkVO4MBThs2A5kD6yMxkINEPE6ry3QkYlg=;
- b=szDok60mVjzc0H5jH7aKLBf9kciQHVb4JYVU4OR8YLTUXoYQh3zb2NijRNeMAYF+Z+c6
- nv+veyUMghHcNES5d7QfFB/Hpj/wOjqKYSbJJUCtf2j/LxY4EhjSyAbBYVzs3v/B6HtL
- OrHBI1DFZjazYoXDdZOoGWY5yVJacPKZnEXV1TQkyL7BxmBorqs53iAEn3jbxSGPyLvN
- uLlyeb6ChJjJWZJ9AP+O5IZV01jj14wzc+MUD36XPwSislNPCdXHZd08swOxtiCA9fBH
- 1+4oLIeoNMl29OGx04IGp96dcOUiCG1G/zLKyLTNmntnz1s01/FfKMorNopDBF+CPb2Y TA== 
-Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3pbbmyuby5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 15 Mar 2023 12:07:12 +0000
-Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
-        by ppma02wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32FAN7VQ026430;
-        Wed, 15 Mar 2023 12:07:12 GMT
-Received: from smtprelay02.dal12v.mail.ibm.com ([9.208.130.97])
-        by ppma02wdc.us.ibm.com (PPS) with ESMTPS id 3pb29ru1w1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 15 Mar 2023 12:07:12 +0000
-Received: from smtpav01.dal12v.mail.ibm.com (smtpav01.dal12v.mail.ibm.com [10.241.53.100])
-        by smtprelay02.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32FC7BTe34800234
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 15 Mar 2023 12:07:11 GMT
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B1B6358552;
-        Wed, 15 Mar 2023 11:49:00 +0000 (GMT)
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D3D9B5854C;
-        Wed, 15 Mar 2023 11:48:59 +0000 (GMT)
-Received: from lingrow.int.hansenpartnership.com (unknown [9.211.76.184])
-        by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Wed, 15 Mar 2023 11:48:59 +0000 (GMT)
-Message-ID: <0be9002bbc7feea0bfd0dc8ad2dccc52bbf34834.camel@linux.ibm.com>
-Subject: Re: [PATCH for-next] scsi: Implement host state statistics
-From:   James Bottomley <jejb@linux.ibm.com>
-Reply-To: jejb@linux.ibm.com
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        "Seymour, Shane M" <shane.seymour@hpe.com>
-Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>
-Date:   Wed, 15 Mar 2023 07:48:58 -0400
-In-Reply-To: <ZBFnYwtr+2bfjvcY@kroah.com>
-References: <DM4PR84MB1373DCD07EABD28D88129C50FDBF9@DM4PR84MB1373.NAMPRD84.PROD.OUTLOOK.COM>
-         <ZBFnYwtr+2bfjvcY@kroah.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 
+        Wed, 15 Mar 2023 07:51:57 -0400
+Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 072B772B3E
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 04:50:55 -0700 (PDT)
+Received: by mail-qv1-xf31.google.com with SMTP id cu4so12354399qvb.3
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 04:50:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google; t=1678881054;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=mIhw5TKqO9mTYKFemZbRpq7iDCkZNqVFLva/m8xHOzg=;
+        b=waNm/Unrsfng4WDuQSr20zp5Ams7+pYpWM90E+gaO4TrMWxivrOTrq/aAcN6iY8xch
+         aQVWfoLUgoLqh+/khtH8Dps79O1dLU7XnMwVac1GtbeIlB6olJSNI6Hen1PTn9TVcW0L
+         5Ul2V4oA32dF3XebYgdkXK32ZX1gBrZewBE9E=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678881054;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mIhw5TKqO9mTYKFemZbRpq7iDCkZNqVFLva/m8xHOzg=;
+        b=2ZVMjRThz5FnicPdjwKx7WKcruLWblE5fnrra0Qpv2VUKCkhZbBC/h5j437x5OtVni
+         ng0YYrWTWQ2uTFKHgJRRfAfCeJd1MJePsiXAez9FPhEn0tuoXoOFfMqB2pw6jNU6S2sv
+         s3jwQbxckaLaOR38WYyb7n2G85/5sRkolPdU4wCCM2NfP2Qjk88k2O6zKon9H385m5wA
+         OIU0qk5zNsUaLWR7+6xpeypJLzm80vEIjIPs+PjvshIRtleJn2Xj7qiJXj9n7Sct/91U
+         vKDgS1wDnZwl6Ff7pAGmGIF4RsT7l8HhVVs9qzItBD5wEdiDScF+8UbHLqRpW4OLMxmJ
+         Ag3Q==
+X-Gm-Message-State: AO0yUKV9Eu6pZLhHBEC5Od914zpJHqEQh6V7ajDd8cDbLIvetq272juQ
+        XeJQegesvR63hBc+a6gJSdu0SQ==
+X-Google-Smtp-Source: AK7set/HGERichkdCGc8V5hGUWnrdJVEw1/aY6DvqL/rGnqLrjxBvexv0saeYel2bNqXVs0YW3jM5w==
+X-Received: by 2002:a05:622a:1208:b0:3d2:90b1:d161 with SMTP id y8-20020a05622a120800b003d290b1d161mr9397483qtx.48.1678881054440;
+        Wed, 15 Mar 2023 04:50:54 -0700 (PDT)
+Received: from localhost (129.239.188.35.bc.googleusercontent.com. [35.188.239.129])
+        by smtp.gmail.com with ESMTPSA id x7-20020ac87307000000b003b63b8df24asm3585728qto.36.2023.03.15.04.50.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Mar 2023 04:50:54 -0700 (PDT)
+Date:   Wed, 15 Mar 2023 11:50:53 +0000
+From:   Joel Fernandes <joel@joelfernandes.org>
+To:     Bob Pearson <rpearsonhpe@gmail.com>
+Cc:     Uladzislau Rezki <urezki@gmail.com>,
+        Zhu Yanjun <zyjzyj2000@gmail.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Leon Romanovsky <leon@kernel.org>, linux-rdma@vger.kernel.org,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Philipp Reisner <philipp.reisner@linbit.com>,
+        Bryan Tan <bryantan@vmware.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Ariel Levkovich <lariel@nvidia.com>,
+        Theodore Ts'o <tytso@mit.edu>, Julian Anastasov <ja@ssi.bg>
+Subject: Re: [PATCH 07/13] RDMA/rxe: Rename kfree_rcu() to
+ kfree_rcu_mightsleep()
+Message-ID: <20230315115053.GA3784687@google.com>
+References: <20230201150815.409582-1-urezki@gmail.com>
+ <20230201150815.409582-8-urezki@gmail.com>
+ <ZAnjnRC1wY3RIFhM@pc636>
+ <ZAnpdKV/VvvX0TZz@pc636>
+ <20230310005529.GA339498@google.com>
+ <67fbe385-3682-be4e-15fe-f26cc56fd56b@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: m5IiWuspWVXFrK3jAlNjAPRD88u9mn-W
-X-Proofpoint-ORIG-GUID: m5IiWuspWVXFrK3jAlNjAPRD88u9mn-W
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-15_06,2023-03-15_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
- priorityscore=1501 spamscore=0 suspectscore=0 adultscore=0 impostorscore=0
- malwarescore=0 mlxscore=0 mlxlogscore=895 clxscore=1011 phishscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2302240000 definitions=main-2303150104
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <67fbe385-3682-be4e-15fe-f26cc56fd56b@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2023-03-15 at 07:36 +0100, Greg KH wrote:
-> On Wed, Mar 15, 2023 at 06:08:19AM +0000, Seymour, Shane M wrote:
-> > The following patch implements host state statistics via sysfs. The
-> > intent is to allow user space to see the state changes and be able
-> > to report when a host changes state. The files do not separate out
-> > the time spent into each state but only into three:
-> 
-> Why does userspace care about these things at all?
-
-This is the most important question: Why are times spent in various
-states and transition counts important?  Is this some kind of
-predictive failure system, or is it simply logging? If it's logging,
-wouldn't you get better information if we output state changes as they
-occur then they'd appear as timestamped entries in the syslog from
-which all these statistics could be deduced?
-
->   What tool needs them and what can userspace do with the
-> information?
+On Mon, Mar 13, 2023 at 02:43:43PM -0500, Bob Pearson wrote:
+> On 3/9/23 18:55, Joel Fernandes wrote:
+> > On Thu, Mar 09, 2023 at 03:13:08PM +0100, Uladzislau Rezki wrote:
+> >>> On Wed, Feb 01, 2023 at 04:08:13PM +0100, Uladzislau Rezki (Sony) wrote:
+> >>>> The kfree_rcu()'s single argument name is deprecated therefore
+> >>>> rename it to kfree_rcu_mightsleep() variant. The goal is explicitly
+> >>>> underline that it is for sleepable contexts.
+> >>>>
+> >>>> Please check the RXE driver in a way that a single argument can
+> >>>> be used. Briefly looking at it and rcu_head should be embed to
+> >>>> free an obj over RCU-core. The context might be atomic.
+> >>>>
+> >>>> Cc: Bob Pearson <rpearsonhpe@gmail.com>
+> >>>> Cc: Jason Gunthorpe <jgg@nvidia.com>
+> >>>> Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
+> >>>> ---
+> >>>>  drivers/infiniband/sw/rxe/rxe_pool.c | 2 +-
+> >>>>  1 file changed, 1 insertion(+), 1 deletion(-)
+> >>>>
+> >>> Could you please add you reviwed-by or Acked-by tags so we can bring
+> >>> our series with renaming for the next merge window?
+> >>>
+> >>> Thanks!
+> >>>
+> >> __rxe_cleanup() can be called in two contexts, sleepable and not.
+> >> Therefore usage of a single argument of the kvfree_rcu() is not correct
+> >> here.
+> >>
+> >> Could you please fix and check your driver? If my above statement
+> >> is not correct, please provide Acked-by or Reviwed-by tags to the
+> >> path that is in question.
+> >>
+> >> Otherwise please add an rcu_head in your data to free objects over
+> >> kvfree_rcu() using double argument API.
+> >>
+> >> Could you please support?
 > > 
-[...]
-> > A (GPLv2) program called hostmond will be released in a few months
-> > that will monitor these interfaces and report (local host only via
-> > syslog(3C)) when hosts change state.
+> > Also this one needs renaming? It came in because of the commit in 6.3-rc1:
+> > 72a03627443d ("RDMA/rxe: Remove rxe_alloc()")
+> > 
+> > It could be squashed into this patch itself since it is infiniband related.
+> > 
+> > Paul noticed that this breaks dropping the old API on -next, so it is
+> > blocking the renaming.
+> > 
+> > ---8<-----------------------
+> > 
+> > diff --git a/drivers/infiniband/sw/rxe/rxe_mr.c b/drivers/infiniband/sw/rxe/rxe_mr.c
+> > index b10aa1580a64..ae3a100e18fb 100644
+> > --- a/drivers/infiniband/sw/rxe/rxe_mr.c
+> > +++ b/drivers/infiniband/sw/rxe/rxe_mr.c
+> > @@ -731,7 +731,7 @@ int rxe_dereg_mr(struct ib_mr *ibmr, struct ib_udata *udata)
+> >  		return -EINVAL;
+> >  
+> >  	rxe_cleanup(mr);
+> > -	kfree_rcu(mr);
+> > +	kfree_rcu_mightsleep(mr);
+> >  	return 0;
+> >  }
+> >  
+> I just got back from a 1 week vacation and missed all this.
 > 
-> We kind of need to see this before the kernel changes can be accepted
-> for obvious reasons, what is preventing that from happening now?
+> The "RDMA/rxe: Remove rxe_alloc()" patch just moved the memory allocation
+> for MR (verbs) objects outside of the rxe_pool code since it only applied
+> to MRs and not the other verbs objects (AH, QP, CQ, ...).  That code has to
+> handle a unique situation for AH objects which can be created or destroyed
+> by connection manager code in atomic context while all the other ones
+> including MRs are always created/destroyed in process context. All objects
+> other than MR's are created/destroyed in the rdma-core code
+> (drivers/infiniband/core).
+> 
+> The rxe driver keeps xarray's of pointers to the various objects which are
+> protected by rcu locking and so it made sense to use kfree_rcu to delete
+> the object with a delay. In the MR case ..._mightsleep seems harmless and
+> should not be an issue.
+> 
+> However on reflection, all the references to the MR objects are ref counted
+> and they have been dropped before reaching the kfree and so there really
+> never was a good reason to use kfree_rcu in the first place. So a better
+> solution would be to replace kfree_rcu with kfree. There is a timeout in
+> completion_done() that triggers a WARN_ON() and this is only seen if the
+> driver is broken for some reason but that is equivalent to getting a seg
+> fault so no reason to further delay the kfree.
+> 
+> Reviewed-by: Bob Pearson <rpearsonhpe@gmail.com>
 
-I don't think that's a requirement.  The whole point of sysfs is it's
-user readable, so we don't need a tool to make use of its entries.  On
-the other hand if this tool can help elucidate the use case for these
-statistics, then publishing it now would be useful to help everyone
-else understand why this is useful.
+Thanks, I am planning to send the following patch for 6.4 consideration,
+please let me know if you disagree. Still testing it.
 
-James
+----8<---
+
+From: Joel Fernandes (Google) <joel@joelfernandes.org>
+Subject: [PATCH] RDMA/rxe: Rename kfree_rcu() to kvfree_rcu_mightsleep()
+
+The k[v]free_rcu() macro's single-argument form is deprecated.
+Therefore switch to the new k[v]free_rcu_mightsleep() variant. The goal
+is to avoid accidental use of the single-argument forms, which can
+introduce functionality bugs in atomic contexts and latency bugs in
+non-atomic contexts.
+
+There is no functionality change with this patch.
+
+Link: https://lore.kernel.org/rcu/20230201150815.409582-1-urezki@gmail.com
+Acked-by: Zhu Yanjun <zyjzyj2000@gmail.com>
+Reviewed-by: Bob Pearson <rpearsonhpe@gmail.com>
+Reviewed-by: Paul E. McKenney <paulmck@kernel.org>
+Fixes: 72a03627443d ("RDMA/rxe: Remove rxe_alloc()")
+Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+---
+ drivers/infiniband/sw/rxe/rxe_mr.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/infiniband/sw/rxe/rxe_mr.c b/drivers/infiniband/sw/rxe/rxe_mr.c
+index b10aa1580a64..ae3a100e18fb 100644
+--- a/drivers/infiniband/sw/rxe/rxe_mr.c
++++ b/drivers/infiniband/sw/rxe/rxe_mr.c
+@@ -731,7 +731,7 @@ int rxe_dereg_mr(struct ib_mr *ibmr, struct ib_udata *udata)
+ 		return -EINVAL;
+ 
+ 	rxe_cleanup(mr);
+-	kfree_rcu(mr);
++	kfree_rcu_mightsleep(mr);
+ 	return 0;
+ }
+ 
+-- 
+2.40.0.rc1.284.g88254d51c5-goog
 
