@@ -2,127 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 716806BB575
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 15:03:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B92666BB57A
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 15:03:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232505AbjCOODR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 10:03:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38394 "EHLO
+        id S232587AbjCOODp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 10:03:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231731AbjCOODO (ORCPT
+        with ESMTP id S232878AbjCOODi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 10:03:14 -0400
-Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 027C623C62
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 07:03:12 -0700 (PDT)
+        Wed, 15 Mar 2023 10:03:38 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFA1E23C62;
+        Wed, 15 Mar 2023 07:03:30 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id r19-20020a05600c459300b003eb3e2a5e7bso1317993wmo.0;
+        Wed, 15 Mar 2023 07:03:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=inria.fr; s=dc;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=lqJvBi858bb2oCsrQI9F4clr12DZvtkfiaPExOH0Vyg=;
-  b=WiB95KWSAXw+EhwqHlXKEmCTvbkFFCxsAfeEnRL3vTuAhBcBM+oveVif
-   CBAnocox3Uzk3lI/nT/69bKHYHsHP39GmWyKjE+Uxh2xfYCs3JBVFr9lc
-   Nv6rGbsjiAGzTuw4Qx1HAIux1muUfA3J3vyc5MyyWspOYvfgIzYg+krzF
-   Q=;
-Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
-X-IronPort-AV: E=Sophos;i="5.98,262,1673910000"; 
-   d="scan'208";a="97372769"
-Received: from dt-lawall.paris.inria.fr ([128.93.67.65])
-  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2023 15:03:10 +0100
-Date:   Wed, 15 Mar 2023 15:03:11 +0100 (CET)
-From:   Julia Lawall <julia.lawall@inria.fr>
+        d=gmail.com; s=20210112; t=1678889009;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=XIk3ogv3pUdC7KwTvWg8R7IPOwtwSacY2eCQ4DVoSyw=;
+        b=DhcNMjg36eUyCZu6ESsusG9qEqjaDiku8RyxJ9JQ5O4rOyvTH8Jii5N6Hw75QSECp3
+         YPKlKhvmRV9mQ8RmIxvEPO9PXLb5c9gH/lXlQkOeFd00PXXPoKra/wqebmzCt/MniQr0
+         RRr3XZjIN6ulRMO98Po1CAdXZKJq51jQJLeJcLCQ/OPWe+mH/j7aCAyLeoNnK2qZfAYr
+         moZzn/fIP9zx1i51U/LAjhNu+L9ho6c34uRIT9mfUILwxCBZW060XcpNxgmJr8SrJHND
+         iqzunKvoqnkQ04Eu0/VApr3FNVHxVyIMVpD1aC1K2zd6k8BF0P5d0sY3fHMH+nsiG39l
+         6SyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678889009;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XIk3ogv3pUdC7KwTvWg8R7IPOwtwSacY2eCQ4DVoSyw=;
+        b=eJPT/RclC1d6B15/4SBVtheEQTpDfkm0dcqkC+1yNiFCztuHJBhp+KSNRid5lI4wH8
+         b08paWUMo23MGwtjIZSR5Kb83fxselSMz44vCJOA44M8yMtuDMv7FtnaNj6yjMjMjQBr
+         zz7FRKA3pir0XN3MCyem+RcERkgqLKlC4At6k4xB8luw2sUydncIv78RARc2PlBXifU9
+         PLJw4fuFVUj4O8k/tCGtQj6sccoM0Ik6KKGe0oA/BKI39tLD9p03gCdmviKSq2U/DMBt
+         HeuhnWnJdThvI0/3GrjtX8ABZROfYFaRSR0lqxQ+Z+uwQPNknuJohN7jORslGYPBdFk2
+         hRSQ==
+X-Gm-Message-State: AO0yUKVPdi5KhNq6cT6Yd9d4GwbC09/zDtUNGQZ0PQNAUSbKNkgg3vnL
+        MeP/ynaxIs0DCn/oH1O0xrtXt6U1rct2VQ==
+X-Google-Smtp-Source: AK7set+96i3xc8VHHtOjLteM5z+uwSmEOg6a1WnipirrplHwA+cni/zDDYAcWHcmCNkqwSOh+2nBpA==
+X-Received: by 2002:a05:600c:540c:b0:3eb:25ff:3446 with SMTP id he12-20020a05600c540c00b003eb25ff3446mr18054106wmb.4.1678889009322;
+        Wed, 15 Mar 2023 07:03:29 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id bg5-20020a05600c3c8500b003e7f1086660sm2211614wmb.15.2023.03.15.07.03.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Mar 2023 07:03:25 -0700 (PDT)
+Date:   Wed, 15 Mar 2023 17:03:20 +0300
+From:   Dan Carpenter <error27@gmail.com>
 To:     Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>
-cc:     gregkh@linuxfoundation.org, outreachy@lists.linux.dev,
-        martyn@welchs.me.uk, manohar.vanga@gmail.com, zoo868e@gmail.com,
-        jerrykang026@gmail.com, cuigaosheng1@huawei.com, arnd@arndb.de,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
-Subject: Re: [PATCH v3 1/2] staging: vme_user: add space around operators
-In-Reply-To: <078be1ba242950f31d0aa13fe9815d92fe96468b.1678888612.git.eng.mennamahmoud.mm@gmail.com>
-Message-ID: <3cb654df-c08-881-f1c-52364ce2ad2b@inria.fr>
-References: <078be1ba242950f31d0aa13fe9815d92fe96468b.1678888612.git.eng.mennamahmoud.mm@gmail.com>
+Cc:     Michael.Hennerich@analog.com, lars@metafoo.de, jic23@kernel.org,
+        gregkh@linuxfoundation.org, linux-iio@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Outreachy Linux Kernel <outreachy@lists.linux.dev>
+Subject: Re: Outreachy
+Message-ID: <8a30c3d1-a1a4-468c-a9f4-d15e0f418ef6@kili.mountain>
+References: <ec13bbba-88ec-64b0-58ae-eee8617990b8@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ec13bbba-88ec-64b0-58ae-eee8617990b8@gmail.com>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Mar 15, 2023 at 03:17:28PM +0200, Menna Mahmoud wrote:
+> Hi Mentors,
+> 
+> 
+> I am Menna, Outreachy applicant and I work on my clean-up patches.
+> 
+> Is it Okay to work on this error reported by checkpatch script?
+> 
+> 
+> drivers/staging/iio/frequency/ad9832.c
+> --------------------------------------
+> ERROR: Use 4 digit octal (0777) not decimal permissions
+> #256: FILE: drivers/staging/iio/frequency/ad9832.c:256:
+> +static IIO_DEV_ATTR_FREQ(0, 1, 0200, NULL, ad9832_write, AD9832_FREQ1HM);
 
+What???  Is it complaining about the 0200?  That is octal.  Why is
+checkpatch complaining about this?  Am I wrong?  Maybe I am misreading.
 
-On Wed, 15 Mar 2023, Menna Mahmoud wrote:
+I could investigate, but I am leaving that task to you.  It may be that
+checkpatch has a problem and you can fix that instead.
 
-> add a space before and after the operator, for readability.
+regards,
+dan carpenter
 
-add -> Add
-That is, start the sentence with a capital letter.
-
->
-> Reported By checkpatch script:
-
-By -> by
-No need for capital letters in the middle of a sentence, unless you are
-referring to a proper noun (name of someone or something).
-
-julia
-
-> " CHECK: spaces preferred around that '+', '<<' and '>>' ".
->
-> Signed-off-by: Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>
-> ---
-> change in v2:
->         edit commit message
-> ---
-> change in v3:
->         edit commit message
-> ---
->  drivers/staging/vme_user/vme_tsi148.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/staging/vme_user/vme_tsi148.c b/drivers/staging/vme_user/vme_tsi148.c
-> index 482049cfc664..bfa604043355 100644
-> --- a/drivers/staging/vme_user/vme_tsi148.c
-> +++ b/drivers/staging/vme_user/vme_tsi148.c
-> @@ -737,7 +737,7 @@ static int tsi148_alloc_resource(struct vme_master_resource *image,
->  		return 0;
->
->  	if (!image->bus_resource.name) {
-> -		image->bus_resource.name = kmalloc(VMENAMSIZ+3, GFP_ATOMIC);
-> +		image->bus_resource.name = kmalloc(VMENAMSIZ + 3, GFP_ATOMIC);
->  		if (!image->bus_resource.name) {
->  			retval = -ENOMEM;
->  			goto err_name;
-> @@ -983,7 +983,7 @@ static int tsi148_master_set(struct vme_master_resource *image, int enabled,
->  		goto err_aspace;
->  	}
->
-> -	temp_ctl &= ~(3<<4);
-> +	temp_ctl &= ~(3 << 4);
->  	if (cycle & VME_SUPER)
->  		temp_ctl |= TSI148_LCSR_OTAT_SUP;
->  	if (cycle & VME_PROG)
-> @@ -2187,14 +2187,14 @@ static int tsi148_crcsr_init(struct vme_bridge *tsi148_bridge,
->
->  	/* Ensure that the CR/CSR is configured at the correct offset */
->  	cbar = ioread32be(bridge->base + TSI148_CBAR);
-> -	cbar = (cbar & TSI148_CRCSR_CBAR_M)>>3;
-> +	cbar = (cbar & TSI148_CRCSR_CBAR_M) >> 3;
->
->  	vstat = tsi148_slot_get(tsi148_bridge);
->
->  	if (cbar != vstat) {
->  		cbar = vstat;
->  		dev_info(tsi148_bridge->parent, "Setting CR/CSR offset\n");
-> -		iowrite32be(cbar<<3, bridge->base + TSI148_CBAR);
-> +		iowrite32be(cbar << 3, bridge->base + TSI148_CBAR);
->  	}
->  	dev_info(tsi148_bridge->parent, "CR/CSR Offset: %d\n", cbar);
->
-> --
-> 2.34.1
->
->
->
