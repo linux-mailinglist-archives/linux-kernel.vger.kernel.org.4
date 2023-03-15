@@ -2,111 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4DF46BABC6
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 10:12:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0124B6BABD4
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 10:13:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231721AbjCOJMd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 05:12:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60974 "EHLO
+        id S232056AbjCOJNc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 05:13:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232014AbjCOJMG (ORCPT
+        with ESMTP id S231493AbjCOJNK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 05:12:06 -0400
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3780C1EBE7
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 02:11:59 -0700 (PDT)
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com [209.85.208.72])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 139163F22A
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 09:11:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1678871518;
-        bh=MpqJ7yUI5cExdfWQOS/tjCzS7DTEtC5WTJpFk2vxYHI=;
-        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-         MIME-Version;
-        b=js36bwQskzpoYlOzoMm7kCN/sfJiY+VctCn1fEFfBIpHsF+VHJsboxBuY4xhbbTz9
-         e9C5+jaWhQNIcN6nNC7vXCcI5Vu4fB5G/OrP6DnwA1mW3OUyBTSM2fzNaFOfauKW+H
-         DLcwbtbw5Q4c1JtRoc4cLzv0jQz1PIdyTFwPKeBgronDcGoZ6wgtUXLgUOp3QzvFLm
-         B1+/tzTlU0x8IVq1OsTSfYwe5CQhtYUMAVVkHuBTpxc3a9sVrhhMu+6t/jEIjLZVbL
-         4oZz8y2UhGh1EWO+2tOkg/aRLGiaj6n1kEb9+YR4XzW6yDUXJM0NdfnAd36N3PDaeq
-         4CnaXn4FVTL7g==
-Received: by mail-ed1-f72.google.com with SMTP id i42-20020a0564020f2a00b004fd23c238beso9880637eda.0
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 02:11:58 -0700 (PDT)
+        Wed, 15 Mar 2023 05:13:10 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AE5E67014
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 02:12:51 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id j2so16593823wrh.9
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 02:12:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678871569;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :to:content-language:subject:reply-to:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=8eWJAVwfdAMUCwI3o2WJJsF7HeRR9gB8W1OrllJjb5o=;
+        b=XzSmAIL6WPDc9unS6StGpnGGh/CGMJ8Wy8hZjsWSd8gRTPzMl4yLkyH89Z+NjNNOEE
+         /Zl4VkWXiNeVyyMGC7M7hiIBT32VcDKSLy3AiNF1yo1y17rrs6Q98cNSLWgczakKjRen
+         nr+onVKwv62YRyFi0/Ar2V62oOKd932RzGtYRliH1EwMglxP5NqYCJwxiWMCjhIRnRog
+         2R4k6Q7byMQpvMmJkzinKqrxYlBIs2v9GCUanWcefXQXQ8MJEjRntl+eLd6HQc/jPsgZ
+         n2XpIhHApTZItuwQB5/c5PwtrzQI3mSIHqoIDWaieiCE+5NREvvA69rUWPdAieBmH6G8
+         8Huw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678871517;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MpqJ7yUI5cExdfWQOS/tjCzS7DTEtC5WTJpFk2vxYHI=;
-        b=NrvobPsGKFZDPIG1eLpIVHEDQyIbEziW9H9xrMojxWNzws0MVAUI4ATQHXCmwZey7K
-         7j2FQX9dPgVtJjgNEzgl/cfDMvugXr2FGu7fJYpsEsJadB1Rc3GXOu3SKAL++TKeBh60
-         4InMGBXOi1rCe7QIIPkKzkXIkWvRUAc+c5i2sbmxD7mk4MF4JrcgCs63gerbPUtPtfWs
-         7JdrdrA06XJNENJinIEAXVF7Fr7gm68vZkFpoIjxcf4VZuXbqdcMsX9bhoUGCE7POcgD
-         QN5mA6kipu3TrN9cBCU+7QNm/okKyvD1QziO1Yuim38oZKPz7zZrIkIZ12LPHFwgZDap
-         VvXA==
-X-Gm-Message-State: AO0yUKWj9uVVqv1MoOxhYAZMezBW6kGE23cXzbVbOOUOC203kIuRKu2r
-        9uw3HsGP+nWX05/Gr5K4B47MKXu6shFRv5H7hRpwX/cQufVAfZMsoe0MfqLPi5fRabT0Ki6JbvQ
-        QUBtoayj5NUgDT5bGy/qJduaiEPbpM8iYYIcecvmfbQ==
-X-Received: by 2002:a50:fa8e:0:b0:4fb:98e2:3df8 with SMTP id w14-20020a50fa8e000000b004fb98e23df8mr2001081edr.27.1678871517728;
-        Wed, 15 Mar 2023 02:11:57 -0700 (PDT)
-X-Google-Smtp-Source: AK7set/nzaWIB774alFcqWYrbiez5la/w6tU6YOVja/BGwglwNB9o+vB78bdA/MbM7nnBlLjDcjq0g==
-X-Received: by 2002:a50:fa8e:0:b0:4fb:98e2:3df8 with SMTP id w14-20020a50fa8e000000b004fb98e23df8mr2001059edr.27.1678871517511;
-        Wed, 15 Mar 2023 02:11:57 -0700 (PDT)
-Received: from gollum.fritz.box ([194.191.244.86])
-        by smtp.gmail.com with ESMTPSA id t26-20020a50d71a000000b004bc15a440f1sm2075719edi.78.2023.03.15.02.11.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Mar 2023 02:11:57 -0700 (PDT)
-From:   Juerg Haefliger <juerg.haefliger@canonical.com>
-To:     tony@atomide.com
-Cc:     arnd@arndb.de, juerg.haefliger@canonical.com, juergh@canonical.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-next@vger.kernel.org, olof@lixom.net, sfr@canb.auug.org.au
-Subject: [PATCH v2] ARM: omap1: Kconfig: Fix indentation
-Date:   Wed, 15 Mar 2023 10:11:52 +0100
-Message-Id: <20230315091152.132443-1-juerg.haefliger@canonical.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <Y8kXVekfGHEcPvWg@atomide.com>
-References: <Y8kXVekfGHEcPvWg@atomide.com>
+        d=1e100.net; s=20210112; t=1678871569;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :to:content-language:subject:reply-to:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8eWJAVwfdAMUCwI3o2WJJsF7HeRR9gB8W1OrllJjb5o=;
+        b=jKh9TOy6ozBxdqdlHTk/I46d8FPAPkHEdeOg+wsdRN3HmAJ04ImeE3sYKRC2epMgfR
+         Vye1TiJsnk/iQbh4RzPzCnnOzMwIwLUdRjq6vB5zuOfu1FtnlgTQB/0yMNTuoIiXVbyB
+         yVqs3jGi9uz6XRyBrTDAeUnQ62eNjDBph34ql2k1He2jPHg7Pf8J1WIXhqJ47GtKjEz/
+         VrY+NAiwKqsxh0i3YVQKJFXrFPJx0v8zrcu1/nkfsOwlU8hPvBQnYi5orVhTEDIpfNXc
+         U14Tk1lmRxvQiplh+UqmmAlU1sHWji9Q+uav1rXRaGSpyI+JJ7cGjxAntOpIRC5+Rm9C
+         i2xA==
+X-Gm-Message-State: AO0yUKUwgZpadZ/zte9/EuX+E7JS8hr8DIVMyH842x7cG50ZZB52yjgj
+        iL625BvRYvw2DyG9D5zcjFcv1A==
+X-Google-Smtp-Source: AK7set+eEbACpzLETf5+yoKzRbTbJU8SVnRF6TSezwW6SQk2wIN2YnBbU8HXUTnpArYwaQ5lSXadsw==
+X-Received: by 2002:a5d:4c8e:0:b0:2cf:e710:a4b9 with SMTP id z14-20020a5d4c8e000000b002cfe710a4b9mr1357985wrs.32.1678871569378;
+        Wed, 15 Mar 2023 02:12:49 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:982:cbb0:5d2d:8427:397b:8fe7? ([2a01:e0a:982:cbb0:5d2d:8427:397b:8fe7])
+        by smtp.gmail.com with ESMTPSA id n4-20020a5d6b84000000b002cfe685bfd6sm4027654wrx.108.2023.03.15.02.12.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Mar 2023 02:12:48 -0700 (PDT)
+Message-ID: <f4801f1d-cd6a-2a3f-155c-e72d3d28da30@linaro.org>
+Date:   Wed, 15 Mar 2023 10:12:47 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH 7/9] regulator: rpi-panel-attiny: Drop of_match_ptr for ID
+ table
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Tony Lindgren <tony@atomide.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-omap@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+References: <20230310214553.275450-1-krzysztof.kozlowski@linaro.org>
+ <20230310214553.275450-7-krzysztof.kozlowski@linaro.org>
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Organization: Linaro Developer Services
+In-Reply-To: <20230310214553.275450-7-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The convention for indentation seems to be a single tab. Help text is
-further indented by an additional two whitespaces. Fix the lines that
-violate these rules.
+On 10/03/2023 22:45, Krzysztof Kozlowski wrote:
+> The driver can match only via the DT table so the table should be always
+> used and the of_match_ptr does not have any sense (this also allows ACPI
+> matching via PRP0001, even though it is not relevant here).
+> 
+>    drivers/regulator/rpi-panel-attiny-regulator.c:390:34: error: ‘attiny_dt_ids’ defined but not used [-Werror=unused-const-variable=]
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>   drivers/regulator/rpi-panel-attiny-regulator.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/regulator/rpi-panel-attiny-regulator.c b/drivers/regulator/rpi-panel-attiny-regulator.c
+> index 34514976475e..3953fc1f389f 100644
+> --- a/drivers/regulator/rpi-panel-attiny-regulator.c
+> +++ b/drivers/regulator/rpi-panel-attiny-regulator.c
+> @@ -396,7 +396,7 @@ MODULE_DEVICE_TABLE(of, attiny_dt_ids);
+>   static struct i2c_driver attiny_regulator_driver = {
+>   	.driver = {
+>   		.name = "rpi_touchscreen_attiny",
+> -		.of_match_table = of_match_ptr(attiny_dt_ids),
+> +		.of_match_table = attiny_dt_ids,
+>   	},
+>   	.probe_new = attiny_i2c_probe,
+>   	.remove	= attiny_i2c_remove,
 
-Signed-off-by: Juerg Haefliger <juerg.haefliger@canonical.com>
 
----
-v2: Updated for latest upstream.
-
----
- arch/arm/mach-omap1/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/arm/mach-omap1/Kconfig b/arch/arm/mach-omap1/Kconfig
-index 8df9a4de0e79..cbf703f0d850 100644
---- a/arch/arm/mach-omap1/Kconfig
-+++ b/arch/arm/mach-omap1/Kconfig
-@@ -118,7 +118,7 @@ config MACH_OMAP_OSK
- 	depends on ARCH_OMAP16XX
- 	help
- 	  TI OMAP 5912 OSK (OMAP Starter Kit) board support. Say Y here
--          if you have such a board.
-+	  if you have such a board.
- 
- config MACH_OMAP_PALMTE
- 	bool "Palm Tungsten E"
--- 
-2.34.1
-
+Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
