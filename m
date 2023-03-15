@@ -2,140 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFA756BAB5A
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 10:00:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BF6A6BAB5B
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 10:00:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230280AbjCOJAN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 05:00:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43216 "EHLO
+        id S231877AbjCOJAR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 05:00:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231969AbjCOJAE (ORCPT
+        with ESMTP id S231963AbjCOJAC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 05:00:04 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 225106486F;
-        Wed, 15 Mar 2023 01:59:41 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id iw3so2454111plb.6;
-        Wed, 15 Mar 2023 01:59:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678870780;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pIKnOPkj8qC3z1y/KVPXPT/wWMpHW0zTQSBUf9tEOlc=;
-        b=fO+uORb/w5iZoll6ztqXnKYfVc7IgS0+xIs2RUdwXD3SPJc2bdbfZLsKd5T4GqRMCa
-         sGKaJ48q2QfbMShI7xwKQLAmzXMorlrXh2Bpv3I4jkO0F8Z/ozQIHfqOOsoxaLCAzxzN
-         LwLRphaCiSLke2N5xyoK0/P3pAh0paoIZp5Tv3dXROWs/gp12kFhJJj9rAQvBXgZtt9M
-         e7P0m+K7fGnEoO1pRlumBOC0sJrHNAC+zYbjL8OMztW8/41qjIqYbH+PVMipFrvLGQKe
-         ds7jAf4zjRgszkSDSk9d8/WPhq1N9HloGEG3rukT7nkV1cWhosycZvDVOhrvwuCA9yFH
-         F7JA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678870780;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pIKnOPkj8qC3z1y/KVPXPT/wWMpHW0zTQSBUf9tEOlc=;
-        b=4cqODBpOHx2+pl0zSk/fZdvRMbcn0bksDGVsJH/ZbNy1IOJ+4CTnLFkhHszVSDDeXh
-         Sh9Z7AOg0f6AK3CC3wUQ+A7D3B5+FA5+nUzvMGz/AQed6IKAtpEpgfojIpakQk6tGLMi
-         oSXDJZXC0Uafsx9ZdhytVOWsxE8CbGedIw9k417GZWlw8aaNBzUb226bvqQF4/WOJL+R
-         Jkmxx01FrmMy0h4hAwxBJ2k7Pxh/KqSlOo0FBrUnjmvRskgoNcekqaSaDw+nhoz2RfUU
-         vnuH14mIjrFH8TetYLhWQasL9KPYK9FpyrIafol6pafkhtUgEP1L5ML4MlQ2iGZqp0hT
-         XCaA==
-X-Gm-Message-State: AO0yUKViefSXSCanxVM9PsCgGTQJ614h8gusVH8zAWk/35xi9qQ8GIy4
-        cVUjWAJoeZUpVl8Ea7c956vYFcbAEPr6edOVVvI=
-X-Google-Smtp-Source: AK7set8hOZJn6EE53swyCwcO/i6/tetWkkPQbwjyqZXoxq6SywsStUtUgLnMSnNnW70XMMRVDC+QZ+7/wmRODW1UeB4=
-X-Received: by 2002:a17:902:dac3:b0:1a0:503a:2a42 with SMTP id
- q3-20020a170902dac300b001a0503a2a42mr875498plx.12.1678870780567; Wed, 15 Mar
- 2023 01:59:40 -0700 (PDT)
+        Wed, 15 Mar 2023 05:00:02 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C169264220
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 01:59:39 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-321-8KLqB0VTNH6q28Tcl8blTg-1; Wed, 15 Mar 2023 08:59:36 +0000
+X-MC-Unique: 8KLqB0VTNH6q28Tcl8blTg-1
+Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
+ (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.47; Wed, 15 Mar
+ 2023 08:59:34 +0000
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.047; Wed, 15 Mar 2023 08:59:34 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'richard clark' <richard.xnu.clark@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>
+Subject: RE: Question about select and poll system call
+Thread-Topic: Question about select and poll system call
+Thread-Index: AQHZVhzW15NaHXL3bku7XbgbJ/Iq0a77izHg
+Date:   Wed, 15 Mar 2023 08:59:34 +0000
+Message-ID: <c708bced26624078842ff7d83e8597d7@AcuMS.aculab.com>
+References: <CAJNi4rNSHf3N6KrBNcVXKo-wjSPmZa2xan9WPmrER8Ttir-MDA@mail.gmail.com>
+In-Reply-To: <CAJNi4rNSHf3N6KrBNcVXKo-wjSPmZa2xan9WPmrER8Ttir-MDA@mail.gmail.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-References: <20230313163120.3741811-1-zyytlz.wz@163.com> <2274018.ElGaqSPkdT@jernej-laptop>
-In-Reply-To: <2274018.ElGaqSPkdT@jernej-laptop>
-From:   Zheng Hacker <hackerzheng666@gmail.com>
-Date:   Wed, 15 Mar 2023 16:59:29 +0800
-Message-ID: <CAJedcCwxbiEv4cOEyWpgrNNLZybP4O8Ubu6hpiMpmg1wL8xP1g@mail.gmail.com>
-Subject: Re: [PATCH v2] media: cedrus: fix use after free bug in cedrus_remove
- due to race condition
-To:     =?UTF-8?Q?Jernej_=C5=A0krabec?= <jernej.skrabec@gmail.com>
-Cc:     mchehab@kernel.org, Zheng Wang <zyytlz.wz@163.com>,
-        hverkuil@xs4all.nl, wens@csie.org, samuel@sholland.org,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, 1395428693sheep@gmail.com,
-        alex000young@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jernej =C5=A0krabec <jernej.skrabec@gmail.com> =E4=BA=8E2023=E5=B9=B43=E6=
-=9C=8815=E6=97=A5=E5=91=A8=E4=B8=89 03:53=E5=86=99=E9=81=93=EF=BC=9A
->
-> Dne ponedeljek, 13. marec 2023 ob 17:31:20 CET je Zheng Wang napisal(a):
-> > In cedrus_probe, dev->watchdog_work is bound with cedrus_watchdog funct=
-ion.
-> > In cedrus_device_run, it will started by schedule_delayed_work. If ther=
-e is
-> > an unfinished work in cedrus_remove, there may be a race condition and
-> > trigger UAF bug.
-> >
-> > CPU0                  CPU1
-> >
-> >                     |cedrus_watchdog
-> >
-> > cedrus_remove       |
-> >   v4l2_m2m_release  |
-> >   kfree(m2m_dev)    |
-> >
-> >                     | v4l2_m2m_get_curr_priv
-> >                     |
-> >                     |   m2m_dev //use
-> >
-> > Fix it by canceling the worker in cedrus_remove.
-> >
-> > Fixes: 7c38a551bda1 ("media: cedrus: Add watchdog for job completion")
-> > Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
-> > ---
-> > v2:
-> > - use cancel_delayed_work_sync instead and add Fixes
-> > label suggested by Hans Verkuil
-> > ---
-> >  drivers/staging/media/sunxi/cedrus/cedrus.c | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
->
-> Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
->
+PiAyLiBDYW4gd2UgdW5pZnkgdGhlIHR3byBkaWZmZXJlbnQgc3lzdGVtIGNhbGxzPyBGb3IgZXhh
+bXBsZSwgdXNpbmcNCj4gcG9sbCguLi4pIHRvIGltcGxlbWVudCB0aGUgZnJvbnRlbmQgc2VsZWN0
+IGNhbGwoLi4uKSwgaXMgdGhlcmUNCj4gc29tZXRoaW5nIEknbSBtaXNzaW5nIGZvciBjdXJyZW50
+IGltcGxlbWVudGF0aW9uPyBUaGUgQ29ucyBhbmQgUHJvcywNCj4gZXRjDQoNClRoZSB1bmRlcmx5
+aW5nIGNvZGUgdGhhdCBpbXBsZW1lbnRzIHRoZW0gaXMgY29tbW9uLg0KDQpCZXdhcmUgdGhhdCB0
+aGUgZ2xpYmMgc2VsZWN0KCkgd3JhcHBlcnMgaGF2ZSB0aGVpciBvd24gbGltaXQNCm9uIHRoZSBo
+aWdoZXN0IGZkLg0KRXhjZWVkaW5nIHRoYXQgbGltaXQgKHByb2JhYmx5IDEwMjQpIHdpbGwgY2F1
+c2UgYnVmZmVyIG92ZXJydW5zDQppbiB0aGUgYXBwbGljYXRpb24gKE9uZSBvZiB0aGUgQW5kcm9p
+ZCBhcHBzIEkgdXNlcyBjcmFzaGVzIHRoYXQgd2F5KS4NCg0Kc2VsZWN0KCkgYWxzbyBkb2Vzbid0
+IHNjYWxlIHdlbGwgZm9yIHNwYXJzZSBsaXN0cyBvZiBmZHMuDQpTbyBpdCByZWFsbHkgaXMgYmVz
+dCB0byB1c2UgcG9sbCgpIGFuZCBuZXZlciBzZWxlY3QoKS4NCihBbHRob3VnaCBmb3IgdmVyeSBs
+YXJnZSBmZCBsaXN0cyBlcG9sbCgpIG1heSBiZSBhIGJldHRlciBjaG9pY2UuKQ0KDQoJRGF2aWQN
+Cg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNzIExha2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50IEZh
+cm0sIE1pbHRvbiBLZXluZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3RyYXRpb24gTm86IDEzOTczODYg
+KFdhbGVzKQ0K
 
-Thanks for your review.
-
-Best regards,
-Zheng
-
-> Best regards,
-> Jernej
->
-> > diff --git a/drivers/staging/media/sunxi/cedrus/cedrus.c
-> > b/drivers/staging/media/sunxi/cedrus/cedrus.c index
-> > a43d5ff66716..a50a4d0a8f71 100644
-> > --- a/drivers/staging/media/sunxi/cedrus/cedrus.c
-> > +++ b/drivers/staging/media/sunxi/cedrus/cedrus.c
-> > @@ -547,6 +547,7 @@ static int cedrus_remove(struct platform_device *pd=
-ev)
-> >  {
-> >       struct cedrus_dev *dev =3D platform_get_drvdata(pdev);
-> >
-> > +     cancel_delayed_work_sync(&dev->watchdog_work);
-> >       if (media_devnode_is_registered(dev->mdev.devnode)) {
-> >               media_device_unregister(&dev->mdev);
-> >               v4l2_m2m_unregister_media_controller(dev->m2m_dev);
->
->
->
->
