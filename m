@@ -2,79 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3E376BA904
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 08:27:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 671DD6BA909
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 08:27:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231578AbjCOH1Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 03:27:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36370 "EHLO
+        id S231604AbjCOH11 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 03:27:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231372AbjCOH1T (ORCPT
+        with ESMTP id S231470AbjCOH1U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 03:27:19 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CBDF5B404;
-        Wed, 15 Mar 2023 00:27:14 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id y15-20020a17090aa40f00b00237ad8ee3a0so957683pjp.2;
-        Wed, 15 Mar 2023 00:27:14 -0700 (PDT)
+        Wed, 15 Mar 2023 03:27:20 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 500995B5FA
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 00:27:17 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id ek18so40590957edb.6
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 00:27:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678865234;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ILLBIlXm9Rz3Tg1L2PxIbv3bGEf+crUkn4jQUAdjYNM=;
-        b=YbdzLSouNrZFwPLkP5FuJ6zDO5iDkMI/UoYlJjr0pzIdLse0F+JFWyqZIgXVA5NgtO
-         6bLbnArKVvMG4k/zpNWcgVRSYpSZ3crXglPfFSXMcX9ba1QOMFFDrbBCoM92I13td9nU
-         OWe3Yxh0r9we/buosUhYOp673EbTx6Mzm2biUGgQfWNzITvSK5GQm7x/OD14cHPIUM4m
-         YrlZGTbzCX0t1jIjmlI83xnhlpNGcaGyi+qPv01MXFPSDbgzRIN4N3LyDY44jYAC/bdt
-         QVSvKFu8Tl0xdMeherYZAOp2uj2VrOcVMxM4lsFyOF8YqaRHzuFLMsgzhgOSJGF6yhmm
-         EZfQ==
+        d=linaro.org; s=google; t=1678865236;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/XkSNZ9/L81tnlMfTdYfQiXfbKH1OUIHyrnqyB+a0xc=;
+        b=JdHZpLLKjWRfIge0npNEMS71ROiYJ2tT3QY/CkVTY3lZAu8tX9zGZGBZZT81lDc9yE
+         /zjnZKaSFKttdjOgHz7rqW7e61YZlEnhJDoeLSPew7bK8dO6InCF67jIiHLLh56GUig2
+         eKXRaxma4dDz0rJxg/L3IeIWowlo1QO5MCv+6k9K9dDuLBQcwtvrJXwLgVS1f5NSAUcO
+         r587aRc+jrZiI6u9k6fPkjl7MX1MtGBF4tk8mPhDTR8Sv1aLcOeoEHg8MDPrjZtXVksf
+         JZn3fMMLNDCao6mVVaqoV2iVK6vtO19AL19AFMBrevxHbXwim5Ouuy3k4j57q/Rvcd4v
+         RT+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678865234;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ILLBIlXm9Rz3Tg1L2PxIbv3bGEf+crUkn4jQUAdjYNM=;
-        b=QBqL1pA7jU2b4PNYkYuY8oRNfJjhNCYiQT+3zKL3yDBplJ7HM2Cd0Xdxtt/xuzZtE2
-         i3IHD9++aBtnAi3BdiAq/ad7rYRgaHdSn664sBALSGXcd/v/E0+fs0UsYNHuVjgTE+n3
-         a08D2cMIGPvlIjH+r+HKIisEeuUcrtulcASOmgPyWrhHxNjEWwmaBjNNI2kXzI+KL5NH
-         XNf0iDxMq4tY84TPXOQD7AND8X9h36aFJ20PLHCjg893qZ0LsFl3x8C1/bF6XNoxyylu
-         9Okc9zOyhw/zNM4/HTCDTZiSCLTXT3usijQCSrHLbPV1gSFB+qrYMxOFPYD367A+eIuP
-         qLfQ==
-X-Gm-Message-State: AO0yUKUYurD81iXOzskDxrP70etSQS0qo/KIyDxi9KXhi2TJwj9SXegt
-        /W6611o2EdjBSAjyuyKckHg=
-X-Google-Smtp-Source: AK7set+peO+ucdIIiVtE9U04DHqz4I6q3J5F5EAWPy87pPdizSkXTsww6nTtutMzoI7UQKR3dcRcwg==
-X-Received: by 2002:a17:90a:2c47:b0:23d:2532:ae34 with SMTP id p7-20020a17090a2c4700b0023d2532ae34mr6105227pjm.2.1678865233752;
-        Wed, 15 Mar 2023 00:27:13 -0700 (PDT)
-Received: from localhost ([192.55.54.55])
-        by smtp.gmail.com with ESMTPSA id z22-20020a17090a015600b00234899c65e7sm655943pje.28.2023.03.15.00.27.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Mar 2023 00:27:13 -0700 (PDT)
-Date:   Wed, 15 Mar 2023 00:27:11 -0700
-From:   Isaku Yamahata <isaku.yamahata@gmail.com>
-To:     "Huang, Kai" <kai.huang@intel.com>
-Cc:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
-        "zhi.wang.linux@gmail.com" <zhi.wang.linux@gmail.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "Shahar, Sagi" <sagis@google.com>,
-        "Aktas, Erdem" <erdemaktas@google.com>,
-        "isaku.yamahata@gmail.com" <isaku.yamahata@gmail.com>,
-        "dmatlack@google.com" <dmatlack@google.com>,
-        "Christopherson,, Sean" <seanjc@google.com>
-Subject: Re: [PATCH v13 003/113] KVM: TDX: Initialize the TDX module when
- loading the KVM intel kernel module
-Message-ID: <20230315072711.GF3922605@ls.amr.corp.intel.com>
-References: <cover.1678643051.git.isaku.yamahata@intel.com>
- <44f7fe9f235e29f2193eaac5890a4dede22c324c.1678643052.git.isaku.yamahata@intel.com>
- <20ebae70fd625f8a0fe87f98c25613a2d4dc5792.camel@intel.com>
+        d=1e100.net; s=20210112; t=1678865236;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/XkSNZ9/L81tnlMfTdYfQiXfbKH1OUIHyrnqyB+a0xc=;
+        b=abny+ZbgFQPzCX5bPBdwRaDmqydJvyLhd6i8ePQkUhZH4V+x4lXstfA45Z/xco1ygt
+         Ns1wdADvvoRBQbXYDywYTzRsFDomQMgPDKiSBgIUfgrnPgtEtbe2MoXVrrNbrGKWUGgK
+         jaiVH6hoPl5kOeuDqXc3i8yoHgzUclAxJqUY+jydwr91elV1erCqbF1a35Unr5BmztRl
+         rmLAPZK9SEszPLrGeaq8VYLmtXAnVGkAz+QeK5y9TR2kfX3Lgi77hHewUbG5rdWDIfCV
+         TQT4uKeQivabe3r4lBYDTBloSkAaYRgM5SPOnQa/LerBnYrvj2bYNLakgYNgpC4dcPE/
+         SPQA==
+X-Gm-Message-State: AO0yUKUbYeeFpgUGxxk9jndrmdiFwixM5WFKe/jqII5Ih5SPCqQxp0lt
+        DKyT7MWWvnJ8CAi//iHIPorpDw==
+X-Google-Smtp-Source: AK7set9FfLcgAfH7FO1y50HhfTvmPGy17F1O2zEYVAGr5Dk0RA0TaL2JL2ECeR0qZQpZ5AMqOLy4LQ==
+X-Received: by 2002:a17:906:aec9:b0:878:605b:ffef with SMTP id me9-20020a170906aec900b00878605bffefmr5317178ejb.55.1678865235775;
+        Wed, 15 Mar 2023 00:27:15 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:940e:8615:37dc:c2bd? ([2a02:810d:15c0:828:940e:8615:37dc:c2bd])
+        by smtp.gmail.com with ESMTPSA id hx3-20020a170906846300b0092a3b199db8sm2078405ejc.186.2023.03.15.00.27.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Mar 2023 00:27:15 -0700 (PDT)
+Message-ID: <7a143671-372a-3af8-7804-fe12f858f853@linaro.org>
+Date:   Wed, 15 Mar 2023 08:27:14 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20ebae70fd625f8a0fe87f98c25613a2d4dc5792.camel@intel.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v2 2/7] soc: qcom: icc-bwmon: Handle global registers
+ correctly
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230304-topic-ddr_bwmon-v2-0-04db989db059@linaro.org>
+ <20230304-topic-ddr_bwmon-v2-2-04db989db059@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230304-topic-ddr_bwmon-v2-2-04db989db059@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,267 +83,170 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 14, 2023 at 02:38:06AM +0000,
-"Huang, Kai" <kai.huang@intel.com> wrote:
-
-> On Sun, 2023-03-12 at 10:55 -0700, isaku.yamahata@intel.com wrote:
-> > +int __init tdx_hardware_setup(struct kvm_x86_ops *x86_ops)
-> > +{
-> > +	int r;
-> > +
-> > +	if (!enable_ept) {
-> > +		pr_warn("Cannot enable TDX with EPT disabled\n");
-> > +		return -EINVAL;
-> > +	}
-> > +
-> > +	/* tdx_enable() in tdx_module_setup() requires cpus lock. */
-> > +	cpus_read_lock();
-> > +	/* TDX requires VMX. */
-> > +	r = vmxon_all();
+On 13/03/2023 12:41, Konrad Dybcio wrote:
+> The BWMON hardware has two sets of registers: one for the monitor itself
+> and one called "global". It has what seems to be some kind of a head
+> switch and an interrupt control register. It's usually 0x200 in size.
 > 
-> Why not using hardware_enable_all()?
+> On fairly recent SoCs (with the starting point seemingly being moving
+> the OSM programming to the firmware) these two register sets are
+> contiguous and overlapping, like this (on sm8450):
 > 
-> > +	if (!r) {
-> > +		int cpu;
-> > +
-> > +		/*
-> > +		 * Because tdx_cpu_enabel() acquire spin locks, on_each_cpu()
-> > +		 * can't be used.
-> > +		 */
-> > +		for_each_online_cpu(cpu) {
-> > +			if (smp_call_on_cpu(cpu, tdx_cpu_enable_cpu, NULL, false))
-> > +				r = -EIO;
-> > +		}
-> > +		if (!r)
-> > +			r = tdx_module_setup();
-> > +	}
-> > +	vmxoff_all();
-> > +	cpus_read_unlock();
-> > +
-> > +	return r;
-> > +}
+> /* notice how base.start == global_base.start+0x100 */
+> reg = <0x90b6400 0x300>, <0x90b6300 0x200>;
+> reg-names = "base", "global_base";
 > 
-> I think you should use hardware_enable_all(), and just do something similar to
-> below in vmx_hardware_enable():
+> Which led to some confusion and the assumption that since the
+> "interesting" global registers begin right after global_base+0x100,
+> there's no need to map two separate regions and one can simply subtract
+> 0x100 from the offsets.
+> 
+> This is however not the case for anything older than SDM845, as the
+> global region can appear in seemingly random spots on the register map.
+> 
+> Handle the case where the global registers are mapped separately to allow
+> proper functioning of BWMONv4 on MSM8998 and older. Add specific
+> compatibles for 845, 8280xp, 7280 and 8550 (all of which use the single
+> reg space scheme) to keep backwards compatibility with old DTs.
+> 
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+>  drivers/soc/qcom/icc-bwmon.c | 228 +++++++++++++++++++++++++++++++++++++++----
+>  1 file changed, 208 insertions(+), 20 deletions(-)
+> 
+> diff --git a/drivers/soc/qcom/icc-bwmon.c b/drivers/soc/qcom/icc-bwmon.c
+> index d07be3700db6..2fe67a3cd2d7 100644
+> --- a/drivers/soc/qcom/icc-bwmon.c
+> +++ b/drivers/soc/qcom/icc-bwmon.c
+> @@ -34,14 +34,27 @@
+>  /* Internal sampling clock frequency */
+>  #define HW_TIMER_HZ				19200000
+>  
+> -#define BWMON_V4_GLOBAL_IRQ_CLEAR		0x008
+> -#define BWMON_V4_GLOBAL_IRQ_ENABLE		0x00c
+> +#define BWMON_V4_GLOBAL_IRQ_CLEAR		0x108
+> +#define BWMON_V4_GLOBAL_IRQ_ENABLE		0x10c
+>  /*
+>   * All values here and further are matching regmap fields, so without absolute
+>   * register offsets.
+>   */
+>  #define BWMON_V4_GLOBAL_IRQ_ENABLE_ENABLE	BIT(0)
+>  
+> +/*
+> + * Starting with SDM845, the BWMON4 register space has changed a bit:
+> + * the global registers were jammed into the beginning of the monitor region.
+> + * To keep the proper offsets, one would have to map <GLOBAL_BASE 0x200> and
+> + * <GLOBAL_BASE+0x100 0x300>, which is straight up wrong.
+> + * To facilitate for that, while allowing the older, arguably more proper
+> + * implementations to work, offset the global registers by -0x100 to avoid
+> + * having to map half of the global registers twice.
+> + */
+> +#define BWMON_V4_845_OFFSET			0x100
+> +#define BWMON_V4_GLOBAL_IRQ_CLEAR_845		(BWMON_V4_GLOBAL_IRQ_CLEAR - BWMON_V4_845_OFFSET)
+> +#define BWMON_V4_GLOBAL_IRQ_ENABLE_845		(BWMON_V4_GLOBAL_IRQ_ENABLE - BWMON_V4_845_OFFSET)
+> +
+>  #define BWMON_V4_IRQ_STATUS			0x100
+>  #define BWMON_V4_IRQ_CLEAR			0x108
+>  
+> @@ -118,8 +131,12 @@
+>  #define BWMON_NEEDS_FORCE_CLEAR			BIT(1)
+>  
+>  enum bwmon_fields {
+> +	/* Global region fields, keep them at the top */
+>  	F_GLOBAL_IRQ_CLEAR,
+>  	F_GLOBAL_IRQ_ENABLE,
+> +	F_NUM_GLOBAL_FIELDS,
+> +
+> +	/* Monitor region fields */
+>  	F_IRQ_STATUS,
 
-The use of hardware_enable_all() make us circle back to refactoring KVM
-hardware initialization topic.  I'd like to stay away from it for now for TDX.
-I find that vmxon_all() is unnecessary and we can move VMXON to
-tdx_cpu_enable_cpu().
-Here is the version of dropping vmxon_all().
+F_IRQ_STATUS = F_NUM_GLOBAL_FIELDS
+or = 2, so you won't waste one space in the array.
 
-From f8fa8fe9786f1c4d4a3b0af0d0228d2842984cba Mon Sep 17 00:00:00 2001
-Message-Id: <f8fa8fe9786f1c4d4a3b0af0d0228d2842984cba.1678864879.git.isaku.yamahata@intel.com>
-In-Reply-To: <d2aa2142665b8204b628232ab615c98090371c99.1678864879.git.isaku.yamahata@intel.com>
-References: <d2aa2142665b8204b628232ab615c98090371c99.1678864879.git.isaku.yamahata@intel.com>
-From: Isaku Yamahata <isaku.yamahata@intel.com>
-Date: Tue, 22 Feb 2022 14:44:15 -0800
-Subject: [PATCH] KVM: TDX: Initialize the TDX module when loading the
- KVM intel kernel module
+>  	F_IRQ_CLEAR,
+>  	F_IRQ_ENABLE,
+> @@ -157,6 +174,9 @@ struct icc_bwmon_data {
+>  
+>  	const struct regmap_config *regmap_cfg;
+>  	const struct reg_field *regmap_fields;
+> +
+> +	const struct regmap_config *global_regmap_cfg;
+> +	const struct reg_field *global_regmap_fields;
+>  };
+>  
+>  struct icc_bwmon {
+> @@ -166,6 +186,7 @@ struct icc_bwmon {
+>  
+>  	struct regmap *regmap;
+>  	struct regmap_field *regs[F_NUM_FIELDS];
+> +	struct regmap_field *global_regs[F_NUM_FIELDS];
 
-TDX requires several initialization steps for KVM to create guest TDs.
-Detect CPU feature, enable VMX (TDX is based on VMX), detect the TDX module
-availability, and initialize it.
+F_NUM_GLOBAL_FIELDS?
 
-There are several options on when to initialize the TDX module.  A.) kernel
-module loading time, B.) the first guest TD creation time.  A.) was chosen.
-With B.), a user may hit an error of the TDX initialization when trying to
-create the first guest TD.  The machine that fails to initialize the TDX
-module can't boot any guest TD further.  Such failure is undesirable and a
-surprise because the user expects that the machine can accommodate guest
-TD, but actually not.  So A.) is better than B.).
+>  
 
-Introduce a module parameter, kvm_intel.tdx, to explicitly enable TDX KVM
-support.  It's off by default to keep same behavior for those who don't use
-TDX.  Implement hardware_setup method to detect TDX feature of CPU and
-initialize TDX module.
+(...)
 
-Suggested-by: Sean Christopherson <seanjc@google.com>
-Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
----
- arch/x86/kvm/Makefile      |  1 +
- arch/x86/kvm/vmx/main.c    | 18 +++++++++-
- arch/x86/kvm/vmx/tdx.c     | 74 ++++++++++++++++++++++++++++++++++++++
- arch/x86/kvm/vmx/vmx.c     |  7 ++++
- arch/x86/kvm/vmx/x86_ops.h |  9 +++++
- 5 files changed, 108 insertions(+), 1 deletion(-)
- create mode 100644 arch/x86/kvm/vmx/tdx.c
+>  }
+>  
+>  static int bwmon_probe(struct platform_device *pdev)
+> @@ -645,6 +816,21 @@ static const struct icc_bwmon_data msm8998_bwmon_data = {
+>  	.quirks = BWMON_HAS_GLOBAL_IRQ,
+>  	.regmap_fields = msm8998_bwmon_reg_fields,
+>  	.regmap_cfg = &msm8998_bwmon_regmap_cfg,
+> +	.global_regmap_fields = msm8998_bwmon_global_reg_fields,
+> +	.global_regmap_cfg = &msm8998_bwmon_global_regmap_cfg,
+> +};
+> +
+> +static const struct icc_bwmon_data sdm845_ddr_bwmon_data = {
 
-diff --git a/arch/x86/kvm/Makefile b/arch/x86/kvm/Makefile
-index 0e894ae23cbc..4b01ab842ab7 100644
---- a/arch/x86/kvm/Makefile
-+++ b/arch/x86/kvm/Makefile
-@@ -25,6 +25,7 @@ kvm-$(CONFIG_KVM_SMM)	+= smm.o
- kvm-intel-y		+= vmx/vmx.o vmx/vmenter.o vmx/pmu_intel.o vmx/vmcs12.o \
- 			   vmx/hyperv.o vmx/nested.o vmx/posted_intr.o vmx/main.o
- kvm-intel-$(CONFIG_X86_SGX_KVM)	+= vmx/sgx.o
-+kvm-intel-$(CONFIG_INTEL_TDX_HOST)	+= vmx/tdx.o
- 
- kvm-amd-y		+= svm/svm.o svm/vmenter.o svm/pmu.o svm/nested.o svm/avic.o \
- 			   svm/sev.o svm/hyperv.o
-diff --git a/arch/x86/kvm/vmx/main.c b/arch/x86/kvm/vmx/main.c
-index 3f49e8e38b6b..5c9f5e00b3c4 100644
---- a/arch/x86/kvm/vmx/main.c
-+++ b/arch/x86/kvm/vmx/main.c
-@@ -6,6 +6,22 @@
- #include "nested.h"
- #include "pmu.h"
- 
-+static bool enable_tdx __ro_after_init;
-+module_param_named(tdx, enable_tdx, bool, 0444);
-+
-+static __init int vt_hardware_setup(void)
-+{
-+	int ret;
-+
-+	ret = vmx_hardware_setup();
-+	if (ret)
-+		return ret;
-+
-+	enable_tdx = enable_tdx && !tdx_hardware_setup(&vt_x86_ops);
-+
-+	return 0;
-+}
-+
- #define VMX_REQUIRED_APICV_INHIBITS		       \
- (						       \
-        BIT(APICV_INHIBIT_REASON_DISABLE)|	       \
-@@ -159,7 +175,7 @@ struct kvm_x86_ops vt_x86_ops __initdata = {
- };
- 
- struct kvm_x86_init_ops vt_init_ops __initdata = {
--	.hardware_setup = vmx_hardware_setup,
-+	.hardware_setup = vt_hardware_setup,
- 	.handle_intel_pt_intr = NULL,
- 
- 	.runtime_ops = &vt_x86_ops,
-diff --git a/arch/x86/kvm/vmx/tdx.c b/arch/x86/kvm/vmx/tdx.c
-new file mode 100644
-index 000000000000..8d265d7ae6fb
---- /dev/null
-+++ b/arch/x86/kvm/vmx/tdx.c
-@@ -0,0 +1,74 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <linux/cpu.h>
-+
-+#include <asm/tdx.h>
-+
-+#include "capabilities.h"
-+#include "x86_ops.h"
-+#include "x86.h"
-+
-+#undef pr_fmt
-+#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-+
-+static int __init tdx_module_setup(void)
-+{
-+	int ret;
-+
-+	ret = tdx_enable();
-+	if (ret) {
-+		pr_info("Failed to initialize TDX module.\n");
-+		return ret;
-+	}
-+
-+	pr_info("TDX is supported.\n");
-+	return 0;
-+}
-+
-+static int __init tdx_cpu_enable_cpu(void *unused)
-+{
-+	int r;
-+
-+	/*
-+	 * TDX requires VMX. Because thread can be migrated, keep VMXON on
-+	 * all online cpus until all TDX module initialization is done.
-+	 */
-+	r = vmxon();
-+	if (r)
-+		return r;
-+	return tdx_cpu_enable();
-+}
-+
-+static void __init tdx_vmxoff_cpu(void *unused)
-+{
-+	WARN_ON_ONCE(cpu_vmxoff());
-+}
-+
-+int __init tdx_hardware_setup(struct kvm_x86_ops *x86_ops)
-+{
-+	int cpu;
-+	int r = 0;
-+
-+	if (!enable_ept) {
-+		pr_warn("Cannot enable TDX with EPT disabled\n");
-+		return -EINVAL;
-+	}
-+
-+	/* tdx_enable() in tdx_module_setup() requires cpus lock. */
-+	cpus_read_lock();
-+	/*
-+	 * Because tdx_cpu_enable() acquires spin locks, on_each_cpu()
-+	 * can't be used.
-+	 */
-+	for_each_online_cpu(cpu) {
-+		if (smp_call_on_cpu(cpu, tdx_cpu_enable_cpu, NULL, false)) {
-+			r = -EIO;
-+			break;
-+		}
-+	}
-+	if (!r)
-+		r = tdx_module_setup();
-+	on_each_cpu(tdx_vmxoff_cpu, NULL, 1);
-+	cpus_read_unlock();
-+
-+	return r;
-+}
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index 3bbd07412f00..ce48e0bc9e00 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -8123,6 +8123,13 @@ static unsigned int vmx_handle_intel_pt_intr(void)
- 	return 1;
- }
- 
-+__init int vmxon(void)
-+{
-+	if (cr4_read_shadow() & X86_CR4_VMXE)
-+		return -EBUSY;
-+	return kvm_cpu_vmxon(__pa(this_cpu_read(vmxarea)));
-+}
-+
- static __init void vmx_setup_user_return_msrs(void)
- {
- 
-diff --git a/arch/x86/kvm/vmx/x86_ops.h b/arch/x86/kvm/vmx/x86_ops.h
-index 051b5c4b5c2f..892c39f7d771 100644
---- a/arch/x86/kvm/vmx/x86_ops.h
-+++ b/arch/x86/kvm/vmx/x86_ops.h
-@@ -20,6 +20,9 @@ bool kvm_is_vmx_supported(void);
- int __init vmx_init(void);
- void vmx_exit(void);
- 
-+__init int vmxon(void);
-+__init int vmx_hardware_setup(void);
-+
- extern struct kvm_x86_ops vt_x86_ops __initdata;
- extern struct kvm_x86_init_ops vt_init_ops __initdata;
- 
-@@ -133,4 +136,10 @@ void vmx_cancel_hv_timer(struct kvm_vcpu *vcpu);
- #endif
- void vmx_setup_mce(struct kvm_vcpu *vcpu);
- 
-+#ifdef CONFIG_INTEL_TDX_HOST
-+int __init tdx_hardware_setup(struct kvm_x86_ops *x86_ops);
-+#else
-+static inline int tdx_hardware_setup(struct kvm_x86_ops *x86_ops) { return -ENOSYS; }
-+#endif
-+
- #endif /* __KVM_X86_VMX_X86_OPS_H */
--- 
-2.25.1
+The name "ddr" is here (and other places) confusing. This is not the DDR
+bwmon.
 
+> +	.sample_ms = 4,
+> +	.count_unit_kb = 64,
+> +	.default_highbw_kbps = 4800 * 1024, /* 4.8 GBps */
+> +	.default_medbw_kbps = 512 * 1024, /* 512 MBps */
+> +	.default_lowbw_kbps = 0,
+> +	.zone1_thres_count = 16,
+> +	.zone3_thres_count = 1,
+> +	.quirks = BWMON_HAS_GLOBAL_IRQ,
+> +	.regmap_fields = sdm845_ddr_bwmon_reg_fields,
+> +	.regmap_cfg = &sdm845_ddr_bwmon_regmap_cfg,
+>  };
+>  
+>  static const struct icc_bwmon_data sdm845_llcc_bwmon_data = {
+> @@ -673,16 +859,18 @@ static const struct icc_bwmon_data sc7280_llcc_bwmon_data = {
+>  };
+>  
+>  static const struct of_device_id bwmon_of_match[] = {
+> -	{
+> -		.compatible = "qcom,msm8998-bwmon",
+> -		.data = &msm8998_bwmon_data
+> -	}, {
+> -		.compatible = "qcom,sdm845-llcc-bwmon",
+> -		.data = &sdm845_llcc_bwmon_data
+> -	}, {
+> -		.compatible = "qcom,sc7280-llcc-bwmon",
+> -		.data = &sc7280_llcc_bwmon_data
+> -	},
+> +	/* BWMONv4, separate monitor and global register spaces */
+> +	{ .compatible = "qcom,msm8998-bwmon", .data = &msm8998_bwmon_data },
+> +	/* BWMONv4, unified register space */
+> +	{ .compatible = "qcom,sdm845-bwmon", .data = &sdm845_ddr_bwmon_data },
+> +	/* BWMONv5 */
+> +	{ .compatible = "qcom,sdm845-llcc-bwmon", .data = &sdm845_llcc_bwmon_data },
+> +	{ .compatible = "qcom,sc7280-llcc-bwmon", .data = &sc7280_llcc_bwmon_data },
+> +
+> +	/* Compatibles kept for legacy reasons */
+> +	{ .compatible = "qcom,sc7280-cpu-bwmon", .data = &sdm845_ddr_bwmon_data },
+> +	{ .compatible = "qcom,sc8280xp-cpu-bwmon", .data = &sdm845_ddr_bwmon_data },
+> +	{ .compatible = "qcom,sm8550-cpu-bwmon", .data = &sdm845_ddr_bwmon_data },
+>  	{}
+>  };
+>  MODULE_DEVICE_TABLE(of, bwmon_of_match);
+> 
 
+Best regards,
+Krzysztof
 
--- 
-Isaku Yamahata <isaku.yamahata@gmail.com>
