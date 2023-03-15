@@ -2,136 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B43F66BAF77
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 12:45:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A754D6BAF7D
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 12:48:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231527AbjCOLpd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 07:45:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52026 "EHLO
+        id S231566AbjCOLsR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 07:48:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230155AbjCOLpa (ORCPT
+        with ESMTP id S230377AbjCOLsP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 07:45:30 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F2B0244AB
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 04:45:24 -0700 (PDT)
-X-UUID: db3fda9ac32611edbd2e61cc88cc8f98-20230315
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=8pVoHzcnVsdUKSRmD7CFv1XjbBsBrHZrxHjiGf+h8UI=;
-        b=nykKKgERG2vVHmJ7KtUybaAPcrwikTvsfWMgwFnsyvZHbFQbz4G49gSqMbiOAmkzpgm0xhReZhXzh5As8S6s8XoLHvTkQJwrTkf6LVxfE7lANIIjKoHW2eWhA33+ipyL7Gan3zhnsGSG+A7wSzpfrBsKIDQhvkZQ6V8YO+Hui5c=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.21,REQID:7aed2d4c-1ef6-4e82-b876-ee196c971db5,IP:0,U
-        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-        N:release,TS:-25
-X-CID-META: VersionHash:83295aa,CLOUDID:e1e7e3f5-ddba-41c3-91d9-10eeade8eac7,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
-X-CID-BVR: 0,NGT
-X-CID-BAS: 0,NGT,0,_
-X-UUID: db3fda9ac32611edbd2e61cc88cc8f98-20230315
-Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw02.mediatek.com
-        (envelope-from <johnson.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 748479108; Wed, 15 Mar 2023 19:45:17 +0800
-Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.25; Wed, 15 Mar 2023 19:45:15 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.25 via Frontend Transport; Wed, 15 Mar 2023 19:45:15 +0800
-From:   Johnson Wang <johnson.wang@mediatek.com>
-To:     <matthias.bgg@gmail.com>, <angelogioacchino.delregno@collabora.com>
-CC:     <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Johnson Wang <johnson.wang@mediatek.com>
-Subject: [PATCH] soc: mediatek: pm-domains: Add buck isolation setting for MT8188
-Date:   Wed, 15 Mar 2023 19:45:05 +0800
-Message-ID: <20230315114505.25144-1-johnson.wang@mediatek.com>
-X-Mailer: git-send-email 2.18.0
+        Wed, 15 Mar 2023 07:48:15 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C17B81C5AC;
+        Wed, 15 Mar 2023 04:48:13 -0700 (PDT)
+Received: from localhost (unknown [188.24.156.231])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: cristicc)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 9185666003AC;
+        Wed, 15 Mar 2023 11:48:11 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1678880891;
+        bh=QMdRoHZDA4Dzb4ZItQ6gCETIH96B+vuVwaf66nkbnMQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=bj2xu6gGH92QEICLrGXFl386kUFglMAxEePZm/i3SmcJEKbpiM06LNDvC992CaPby
+         NM5t+sCRjcezTbr2NabWD08SWWwBmtibVsTapQxEK5mmB3qBMqm6A3ZR3zGvTqK2X/
+         kq1tpf4ei/myrqWjdSjmx33y1vbA3Buej4dDpK5R58c44aTHtliZQbl8QPa5lGIgMm
+         1Wde+f/mne8pQmnJ8dV2Z1/44cIZWLAcw0wV8eDw5pqm2mchbH57paOvrdGTazIPO3
+         Haypn6anq0fRgT56oE4lMtcT9wJBSs1PwqkREBZoFgiIm6TTJ8E18JZQyaJqgJ6+sB
+         vwoxdhZxRe/tA==
+From:   Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+To:     Sudeep Holla <sudeep.holla@arm.com>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Daniel Drake <drake@endlessm.com>,
+        Katsuhiro Suzuki <katsuhiro@katsuster.net>
+Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-rockchip@lists.infradead.org,
+        linux-riscv@lists.infradead.org, kernel@collabora.com
+Subject: [PATCH 00/11] Enable I2S support for RK3588/RK3588S SoCs
+Date:   Wed, 15 Mar 2023 13:47:55 +0200
+Message-Id: <20230315114806.3819515-1-cristian.ciocaltea@collabora.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,RDNS_NONE,
-        SPF_HELO_PASS,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For ADSP_AO, CAM_VCORE and IMG_VCORE power domains in MT8188,
-we have to add the buck isolation setting to make them work properly.
+There are five I2S/PCM/TDM controllers and two I2S/PCM controllers embedded 
+in the RK3588 and RK3588S SoCs. Furthermore, RK3588 provides four additional
+I2S/PCM/TDM controllers.
 
-Signed-off-by: Johnson Wang <johnson.wang@mediatek.com>
----
- drivers/soc/mediatek/mt8188-pm-domains.h | 14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
+This patch series adds the required device tree nodes to support all the above.
 
-diff --git a/drivers/soc/mediatek/mt8188-pm-domains.h b/drivers/soc/mediatek/mt8188-pm-domains.h
-index 0692cb444ed0..e6dbdc0aa684 100644
---- a/drivers/soc/mediatek/mt8188-pm-domains.h
-+++ b/drivers/soc/mediatek/mt8188-pm-domains.h
-@@ -165,6 +165,8 @@ static const struct scpsys_domain_data scpsys_domain_data_mt8188[] = {
- 		.ctl_offs = 0x35C,
- 		.pwr_sta_offs = 0x16C,
- 		.pwr_sta2nd_offs = 0x170,
-+		.ext_buck_iso_offs = 0x3EC,
-+		.ext_buck_iso_mask = BIT(10),
- 		.bp_infracfg = {
- 			BUS_PROT_WR(MT8188_TOP_AXI_PROT_EN_2_ADSP_AO_STEP1,
- 				    MT8188_TOP_AXI_PROT_EN_2_SET,
-@@ -175,7 +177,7 @@ static const struct scpsys_domain_data scpsys_domain_data_mt8188[] = {
- 				    MT8188_TOP_AXI_PROT_EN_2_CLR,
- 				    MT8188_TOP_AXI_PROT_EN_2_STA),
- 		},
--		.caps = MTK_SCPD_ALWAYS_ON,
-+		.caps = MTK_SCPD_ALWAYS_ON | MTK_SCPD_EXT_BUCK_ISO,
- 	},
- 	[MT8188_POWER_DOMAIN_ADSP_INFRA] = {
- 		.name = "adsp_infra",
-@@ -479,6 +481,8 @@ static const struct scpsys_domain_data scpsys_domain_data_mt8188[] = {
- 		.ctl_offs = 0x3A4,
- 		.pwr_sta_offs = 0x16C,
- 		.pwr_sta2nd_offs = 0x170,
-+		.ext_buck_iso_offs = 0x3EC,
-+		.ext_buck_iso_mask = BIT(12),
- 		.bp_infracfg = {
- 			BUS_PROT_WR(MT8188_TOP_AXI_PROT_EN_MM_IMG_VCORE_STEP1,
- 				    MT8188_TOP_AXI_PROT_EN_MM_SET,
-@@ -493,7 +497,8 @@ static const struct scpsys_domain_data scpsys_domain_data_mt8188[] = {
- 				    MT8188_TOP_AXI_PROT_EN_MM_2_CLR,
- 				    MT8188_TOP_AXI_PROT_EN_MM_2_STA),
- 		},
--		.caps = MTK_SCPD_KEEP_DEFAULT_OFF | MTK_SCPD_DOMAIN_SUPPLY,
-+		.caps = MTK_SCPD_KEEP_DEFAULT_OFF | MTK_SCPD_DOMAIN_SUPPLY |
-+			MTK_SCPD_EXT_BUCK_ISO,
- 	},
- 	[MT8188_POWER_DOMAIN_IMG_MAIN] = {
- 		.name = "img_main",
-@@ -541,6 +546,8 @@ static const struct scpsys_domain_data scpsys_domain_data_mt8188[] = {
- 		.ctl_offs = 0x3A0,
- 		.pwr_sta_offs = 0x16C,
- 		.pwr_sta2nd_offs = 0x170,
-+		.ext_buck_iso_offs = 0x3EC,
-+		.ext_buck_iso_mask = BIT(11),
- 		.bp_infracfg = {
- 			BUS_PROT_WR(MT8188_TOP_AXI_PROT_EN_MM_CAM_VCORE_STEP1,
- 				    MT8188_TOP_AXI_PROT_EN_MM_SET,
-@@ -563,7 +570,8 @@ static const struct scpsys_domain_data scpsys_domain_data_mt8188[] = {
- 				    MT8188_TOP_AXI_PROT_EN_MM_2_CLR,
- 				    MT8188_TOP_AXI_PROT_EN_MM_2_STA),
- 		},
--		.caps = MTK_SCPD_KEEP_DEFAULT_OFF | MTK_SCPD_DOMAIN_SUPPLY,
-+		.caps = MTK_SCPD_KEEP_DEFAULT_OFF | MTK_SCPD_DOMAIN_SUPPLY |
-+			MTK_SCPD_EXT_BUCK_ISO,
- 	},
- 	[MT8188_POWER_DOMAIN_CAM_MAIN] = {
- 		.name = "cam_main",
+Additionally, it enables analog audio support for the Rock 5B SBC, which has
+been used to test both audio playback and recording.
+
+Note that some of the DT bindings fixes in this series are not particularly
+related to I2S, but are required for a proper dtbs_check validation.
+
+Cristian Ciocaltea (11):
+  dt-bindings: firmware: arm,scmi: Document assigned-clocks and
+    assigned-clock-rates
+  dt-bindings: serial: snps-dw-apb-uart: Relax dma-names order
+    constraint
+  ASoC: dt-bindings: everest,es8316: Document audio graph port
+  ASoC: dt-bindings: rockchip: Document audio graph port
+  ASoC: dt-bindings: rockchip: i2s-tdm: Document audio graph port
+  ASoC: dt-bindings: rockchip: i2s-tdm: Document power-domains
+  ASoC: dt-bindings: rockchip: Add compatible for RK3588
+  ASoC: rockchip: i2s: Add compatible for RK3588
+  arm64: dts: rockchip: rk3588s: Add I2S nodes
+  arm64: dts: rockchip: rk3588: Add I2S nodes
+  arm64: dts: rockchip: rk3588-rock-5b: Add analog audio
+
+ .../bindings/firmware/arm,scmi.yaml           |   3 +
+ .../bindings/serial/snps-dw-apb-uart.yaml     |  10 +-
+ .../bindings/sound/everest,es8316.yaml        |   4 +
+ .../bindings/sound/rockchip,i2s-tdm.yaml      |   7 +
+ .../bindings/sound/rockchip-i2s.yaml          |   5 +
+ .../boot/dts/rockchip/rk3588-rock-5b.dts      |  62 ++++++++
+ arch/arm64/boot/dts/rockchip/rk3588.dtsi      |  68 ++++++++
+ arch/arm64/boot/dts/rockchip/rk3588s.dtsi     | 148 ++++++++++++++++++
+ sound/soc/rockchip/rockchip_i2s.c             |   1 +
+ 9 files changed, 305 insertions(+), 3 deletions(-)
+
 -- 
-2.18.0
+2.39.1
 
