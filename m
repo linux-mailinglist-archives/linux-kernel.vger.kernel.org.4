@@ -2,139 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AC3B6BBE85
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 22:07:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4DF26BBE83
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 22:07:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232716AbjCOVHL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 17:07:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45434 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229916AbjCOVHJ (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S232285AbjCOVHJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Wed, 15 Mar 2023 17:07:09 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8039D46AE;
-        Wed, 15 Mar 2023 14:06:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678914403; x=1710450403;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=zgcxU04kk7R74eIwM5VvQS7PnF5BOcPygMlUIObyV7o=;
-  b=YaG1QmxeKE8oDytogeRtw9Jq0aHWgk+gbhmLjlZkokQUlj/f1QakR0q0
-   MGkFDiotBrqX7aV2BcWMTYeGH8+msT6s0oxt9CsK7FxR0opeXPW2jjbmW
-   iREOgt3Rd5/vqLK/BobAkyV4r0NI9hQZLuT4jI/JHPo33DjcDmiA+Oj/7
-   5vnr+SsHZdyAYeLwikZQ5oTvqJ/G/eEdARsSUGm5t8CbLONxNt9MVQlOR
-   W5n5AFVRptTHMk4v56j9FBesqQS24EstHiTwLFqCL8Gpy2r2JDqtErSbM
-   i/xIC0QvIYEIwNT6PRpZcUM91WlutnLAqAPeSCOhFrlRAEGa+N6lI+z0B
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="337835815"
-X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
-   d="scan'208";a="337835815"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2023 14:05:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="822941919"
-X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
-   d="scan'208";a="822941919"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 15 Mar 2023 14:05:08 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pcYJ1-00082F-15;
-        Wed, 15 Mar 2023 21:05:07 +0000
-Date:   Thu, 16 Mar 2023 05:04:54 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Herve Codina via Alsa-devel <alsa-devel@alsa-project.org>,
-        Herve Codina <herve.codina@bootlin.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Derek Kiernan <derek.kiernan@xilinx.com>,
-        Dragan Cvetic <dragan.cvetic@xilinx.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, alsa-devel@alsa-project.org,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH 2/7] drivers: misc: Add support for the Lantiq PEF2256
- framer
-Message-ID: <202303160430.HUK3FkVq-lkp@intel.com>
-References: <167888778959.26.12757990479414568225@mailman-core.alsa-project.org>
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45358 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232492AbjCOVHG (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 15 Mar 2023 17:07:06 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2EA880E0C
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 14:06:40 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id z11so12561925pfh.4
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 14:06:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678914399;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iKYYaPT5Is0MJH9ud4+ebRYb/vJAs/FQRvpTFpyZc7Y=;
+        b=Sq9sDYEUQPSqrreoT3iByu/xaaOclmqRZ4BZ8oTI6ZByIhmIYt4vvpr3yoyLDGEc+r
+         Bh7IOxubKomnUk8OzozZQ84IitmdmnZsQeNtAJ2lXdUfFP5DQx6IFVUgsMIU0OOS1GEn
+         FPbbthhFVHIMmx00Vm13rQJVZc3/Tal/GJLmF/rZjejSfB8bOAV2lIodf7JJX20QYHOw
+         oHJtOJ+pfoeWsKBvIT/NfdUjCQ3mzBBmv9Ws33pREk6tO+zc12OhPo1kd21gxUjbIAol
+         x925KwtHGn+x9bOAvOVy1icbNxQtwwmZ7JOZ9cim3RJ/aCQaSCjIUzPhfsYvQs0gad5O
+         8z8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678914399;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=iKYYaPT5Is0MJH9ud4+ebRYb/vJAs/FQRvpTFpyZc7Y=;
+        b=w1cVhKa+m9y1BsMK2Te2RRCMBi8HrcYy34Nzdzpl4f8HIfP8/NtC85SgIYbYi1UACA
+         PT1ATgBm0cTu3SGBWGqkJ2MShKCQsIPBj+wy+s25XCEVYhFBthKM9HP+OhnaO+hBjqSa
+         fz0zaU8w8VErEx8KifJJ7yn1HHASxlK8XdrVhYRhBLn0fODIeJCD3MGOPqAE5DBE65W4
+         b42cCHTVBTO+MzATJQfqcyrxx/DD7jVG0EQQ+ihmmoaD5Nowr81yV72Pi7V6bT75GVcs
+         hpjym7IuzA9G3jL0QFFrUVrOC7CsaxCai5U3OBVbwIYcf2BUfox/LCo9ql/0jDmXBkA6
+         yqeQ==
+X-Gm-Message-State: AO0yUKVAa+xtcTr80HMgVF4xycRbinCxpCBsugXoEEwyvj22qY+bUgS9
+        HIyjNVXid0IQGVterWwfzGq5HZBc3oTMwAaZCmj7tdd2
+X-Google-Smtp-Source: AK7set/vin/gH7uqM0zKWCc7qnMyrIM4uNDSSRFlUr2NYSPDlXh+VQAl1j6lpXoUOiTtYyPA3BhG/uIwYAg/RIHJzP4=
+X-Received: by 2002:a05:6a00:2d0e:b0:625:dc5b:9d1d with SMTP id
+ fa14-20020a056a002d0e00b00625dc5b9d1dmr550388pfb.0.1678914399119; Wed, 15 Mar
+ 2023 14:06:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <167888778959.26.12757990479414568225@mailman-core.alsa-project.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230315171642.1244625-1-peterx@redhat.com>
+In-Reply-To: <20230315171642.1244625-1-peterx@redhat.com>
+From:   Yang Shi <shy828301@gmail.com>
+Date:   Wed, 15 Mar 2023 14:06:27 -0700
+Message-ID: <CAHbLzkrUMztboKPKsbDjiiJDRuY6bTmix64Te_cXezE-ugxvog@mail.gmail.com>
+Subject: Re: [PATCH] mm/thp: Rename TRANSPARENT_HUGEPAGE_NEVER_DAX to _UNSUPPORTED
+To:     Peter Xu <peterx@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Herve,
+On Wed, Mar 15, 2023 at 10:16=E2=80=AFAM Peter Xu <peterx@redhat.com> wrote=
+:
+>
+> TRANSPARENT_HUGEPAGE_NEVER_DAX has nothing to do with DAX.  It's set when
+> has_transparent_hugepage() returns false, checked in hugepage_vma_check()
+> and will disable THP completely if false.  Rename it to reflect its real
+> purpose.
 
-Thank you for the patch! Perhaps something to improve:
+Makes sense to me. Reviewed-by: Yang Shi <shy828301@gmail.com>
 
-[auto build test WARNING on broonie-sound/for-next]
-[also build test WARNING on robh/for-next char-misc/char-misc-testing char-misc/char-misc-next char-misc/char-misc-linus linus/master v6.3-rc2 next-20230315]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Herve-Codina-via-Alsa-devel/drivers-misc-Add-support-for-the-Lantiq-PEF2256-framer/20230315-214833
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
-patch link:    https://lore.kernel.org/r/167888778959.26.12757990479414568225%40mailman-core.alsa-project.org
-patch subject: [PATCH 2/7] drivers: misc: Add support for the Lantiq PEF2256 framer
-config: sparc-allyesconfig (https://download.01.org/0day-ci/archive/20230316/202303160430.HUK3FkVq-lkp@intel.com/config)
-compiler: sparc64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/93791052da597151cddbe64bc3013d9fec19550f
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Herve-Codina-via-Alsa-devel/drivers-misc-Add-support-for-the-Lantiq-PEF2256-framer/20230315-214833
-        git checkout 93791052da597151cddbe64bc3013d9fec19550f
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc SHELL=/bin/bash drivers/misc/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303160430.HUK3FkVq-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/misc/pef2256.c:1054:38: warning: duplicate 'const' declaration specifier [-Wduplicate-decl-specifier]
-    1054 | static const struct pinctrl_pin_desc const pef2256_v12_pins[] = {
-         |                                      ^~~~~
-   drivers/misc/pef2256.c:1065:38: warning: duplicate 'const' declaration specifier [-Wduplicate-decl-specifier]
-    1065 | static const struct pinctrl_pin_desc const pef2256_v2x_pins[] = {
-         |                                      ^~~~~
-
-
-vim +/const +1054 drivers/misc/pef2256.c
-
-  1053	
-> 1054	static const struct pinctrl_pin_desc const pef2256_v12_pins[] = {
-  1055		PEF2256_PINCTRL_PIN(0, "RPA", PEF2256_PC1, PEF2256_12_PC_RPC_MASK),
-  1056		PEF2256_PINCTRL_PIN(1, "RPB", PEF2256_PC2, PEF2256_12_PC_RPC_MASK),
-  1057		PEF2256_PINCTRL_PIN(2, "RPC", PEF2256_PC3, PEF2256_12_PC_RPC_MASK),
-  1058		PEF2256_PINCTRL_PIN(3, "RPD", PEF2256_PC4, PEF2256_12_PC_RPC_MASK),
-  1059		PEF2256_PINCTRL_PIN(4, "XPA", PEF2256_PC1, PEF2256_12_PC_XPC_MASK),
-  1060		PEF2256_PINCTRL_PIN(5, "XPB", PEF2256_PC2, PEF2256_12_PC_XPC_MASK),
-  1061		PEF2256_PINCTRL_PIN(6, "XPC", PEF2256_PC3, PEF2256_12_PC_XPC_MASK),
-  1062		PEF2256_PINCTRL_PIN(7, "XPD", PEF2256_PC4, PEF2256_12_PC_XPC_MASK),
-  1063	};
-  1064	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+>
+> Cc: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
+> Cc: Yang Shi <shy828301@gmail.com>
+> Signed-off-by: Peter Xu <peterx@redhat.com>
+> ---
+>  include/linux/huge_mm.h | 2 +-
+>  mm/huge_memory.c        | 4 ++--
+>  2 files changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/include/linux/huge_mm.h b/include/linux/huge_mm.h
+> index 70bd867eba94..9a3a3af2dd80 100644
+> --- a/include/linux/huge_mm.h
+> +++ b/include/linux/huge_mm.h
+> @@ -79,7 +79,7 @@ static inline vm_fault_t vmf_insert_pfn_pud(struct vm_f=
+ault *vmf, pfn_t pfn,
+>  }
+>
+>  enum transparent_hugepage_flag {
+> -       TRANSPARENT_HUGEPAGE_NEVER_DAX,
+> +       TRANSPARENT_HUGEPAGE_UNSUPPORTED,
+>         TRANSPARENT_HUGEPAGE_FLAG,
+>         TRANSPARENT_HUGEPAGE_REQ_MADV_FLAG,
+>         TRANSPARENT_HUGEPAGE_DEFRAG_DIRECT_FLAG,
+> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+> index b0ab247939e0..913e7dc32869 100644
+> --- a/mm/huge_memory.c
+> +++ b/mm/huge_memory.c
+> @@ -88,7 +88,7 @@ bool hugepage_vma_check(struct vm_area_struct *vma, uns=
+igned long vm_flags,
+>         /*
+>          * If the hardware/firmware marked hugepage support disabled.
+>          */
+> -       if (transparent_hugepage_flags & (1 << TRANSPARENT_HUGEPAGE_NEVER=
+_DAX))
+> +       if (transparent_hugepage_flags & (1 << TRANSPARENT_HUGEPAGE_UNSUP=
+PORTED))
+>                 return false;
+>
+>         /* khugepaged doesn't collapse DAX vma, but page fault is fine. *=
+/
+> @@ -464,7 +464,7 @@ static int __init hugepage_init(void)
+>                  * Hardware doesn't support hugepages, hence disable
+>                  * DAX PMD support.
+>                  */
+> -               transparent_hugepage_flags =3D 1 << TRANSPARENT_HUGEPAGE_=
+NEVER_DAX;
+> +               transparent_hugepage_flags =3D 1 << TRANSPARENT_HUGEPAGE_=
+UNSUPPORTED;
+>                 return -EINVAL;
+>         }
+>
+> --
+> 2.39.1
+>
