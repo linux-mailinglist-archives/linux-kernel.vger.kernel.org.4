@@ -2,126 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAA2E6BBCDC
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 20:00:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A2666BBCE0
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 20:00:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231791AbjCOTAB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 15:00:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36222 "EHLO
+        id S232229AbjCOTAx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 15:00:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232698AbjCOS7y (ORCPT
+        with ESMTP id S231513AbjCOTAi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 14:59:54 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95179763DB
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 11:59:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678906749;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3pRuFXv24zO9iZj6MhHQgS7pRqlQAfg3F2hO5yqQOu0=;
-        b=OkA6u5+WAin8q0Gt3IK3KSVLwSI9TF/+CuGIi507S9m8bg4RtY4T9Oe6fnXtEnmyd8XFOQ
-        ds5ym7r0rlIubsGoPnz+Jmfqhg/46k3S08J5a0QTXhV1bMb0t2Dv+bN2+CyOUVlUh7d6Ml
-        aCx7MG3nk17jh1S2NyU4Y+b1aL8LpWI=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-647-nW9k4c1dPAG5ZFz-n0Ph8A-1; Wed, 15 Mar 2023 14:59:08 -0400
-X-MC-Unique: nW9k4c1dPAG5ZFz-n0Ph8A-1
-Received: by mail-wm1-f70.google.com with SMTP id l18-20020a05600c4f1200b003ed35ab903aso980912wmq.6
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 11:59:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678906747;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3pRuFXv24zO9iZj6MhHQgS7pRqlQAfg3F2hO5yqQOu0=;
-        b=RUZE1QFHqxpGQpy9M5j/zDzfLMmkiopbMyzmSKyg6ILRVt6ZoCXyuNYYGl2HG2hSgp
-         y8CQGwqM7Xz+PsEaqGuqjmngXA/3H+GmOn5EM/6VuQO3PS9f+Asd9I9YQOcgFiO8um42
-         1kYf4Thq79UmsM1G8TR54FH52Wtmg+o7jopR2WhWmpGJbIHz6j8ppJerrOwsRmSvDNNM
-         Hc/dAf5t5x1oYmJFa8r2GpXjUlXsDMrgjs0oqJ6h/yavObimjksQT0DmHuNxFGSydAVy
-         /PkZlZsEic7JogAbOVkTrEJ2T2qJaI+PyfF4E/SOFveScuT11S1//PIgJQ+pHGv6ER1B
-         wYMQ==
-X-Gm-Message-State: AO0yUKWc/T5Vn0bndhJDH7d5OKIg0Q8ZexVWgXt/NsHlfWiIcZnUTEqe
-        0rYaNajXuDh16K+SYtBydmqdPMuI2fotbaot9ksujnS/pslm8Thd9lubyCktS6gST6oOxSHW0hR
-        A29+42X50Gx99mYcRrFMR0jNO
-X-Received: by 2002:a5d:452b:0:b0:2cf:ec84:b63a with SMTP id j11-20020a5d452b000000b002cfec84b63amr2499462wra.43.1678906746989;
-        Wed, 15 Mar 2023 11:59:06 -0700 (PDT)
-X-Google-Smtp-Source: AK7set/id0A51e2uD6Xav4KlpzhQfvsr1WBJ6M12HWKP+dMN7x79MowOlKwVntfM4m25nbOzwjbzYQ==
-X-Received: by 2002:a5d:452b:0:b0:2cf:ec84:b63a with SMTP id j11-20020a5d452b000000b002cfec84b63amr2499453wra.43.1678906746804;
-        Wed, 15 Mar 2023 11:59:06 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c702:2f00:2038:213d:e59f:7d44? (p200300cbc7022f002038213de59f7d44.dip0.t-ipconnect.de. [2003:cb:c702:2f00:2038:213d:e59f:7d44])
-        by smtp.gmail.com with ESMTPSA id b10-20020a5d45ca000000b002ca864b807csm5451460wrs.0.2023.03.15.11.59.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Mar 2023 11:59:06 -0700 (PDT)
-Message-ID: <0064f021-ac21-8bbc-5156-90328da61b8f@redhat.com>
-Date:   Wed, 15 Mar 2023 19:59:04 +0100
+        Wed, 15 Mar 2023 15:00:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79B8CC178;
+        Wed, 15 Mar 2023 12:00:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0F0A761E25;
+        Wed, 15 Mar 2023 19:00:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E85A7C433D2;
+        Wed, 15 Mar 2023 19:00:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678906836;
+        bh=m/Dz2eAH8r1EV3V2rwIMfNhkNPorhKim7P/EDMsa3YQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=O+P1b+XcKWZKOJGHvyC9nle6hIYaAvxJ4CMKvXS9yhO19Kt6ZvfoUxsRfAbrWiHFB
+         fy9U5Ndnm/2kit/ILOFcKkafM6HXGsf3Z53Osxsp1z2773fCGWydPdfmUUbZTbF+1I
+         kY9Nqs20jHCQzXABamSFNrqdNJgyZa6N3c1tKYeZ2zwpeD9eSNnxi/xzmtR3xD5Zc6
+         KoFKAJbhXO/BeJAdTvsAsv5l7M1+Lsnc1EFX8ngLDVhktqkggSMj2TR0BZAbGoj/S3
+         YyjGkVF+ijjxXOLIhJ/yhU2qYSYCNHmMx3G2//lieY6gR0UGhtR/wuGk0NMM4432zj
+         fslsVc4SJN3sg==
+Date:   Wed, 15 Mar 2023 19:00:32 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     William Qiu <william.qiu@starfivetech.com>
+Cc:     devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>
+Subject: Re: [RESEND v6 1/2] dt-bindings: soc: starfive: Add StarFive syscon
+ doc
+Message-ID: <043a859e-76fb-436b-9ce1-bc03aeb62ad0@spud>
+References: <20230315055813.94740-1-william.qiu@starfivetech.com>
+ <20230315055813.94740-2-william.qiu@starfivetech.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v19 02/15] splice: Make do_splice_to() generic and export
- it
-Content-Language: en-US
-To:     David Howells <dhowells@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>
-Cc:     Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Hillf Danton <hdanton@sina.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Christoph Hellwig <hch@lst.de>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        John Hubbard <jhubbard@nvidia.com>,
-        linux-unionfs@vger.kernel.org
-References: <20230315163549.295454-1-dhowells@redhat.com>
- <20230315163549.295454-3-dhowells@redhat.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20230315163549.295454-3-dhowells@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="MvUt9aa5WIR6VgtF"
+Content-Disposition: inline
+In-Reply-To: <20230315055813.94740-2-william.qiu@starfivetech.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15.03.23 17:35, David Howells wrote:
-> Rename do_splice_to() to vfs_splice_read() and export it so that it can be
-> used as a helper when calling down to a lower layer filesystem as it
-> performs all the necessary checks[1].
-> 
-> Signed-off-by: David Howells <dhowells@redhat.com>
-> Reviewed-by: Christoph Hellwig <hch@lst.de>
-> cc: Miklos Szeredi <miklos@szeredi.hu>
-> cc: Jens Axboe <axboe@kernel.dk>
-> cc: Al Viro <viro@zeniv.linux.org.uk>
-> cc: John Hubbard <jhubbard@nvidia.com>
-> cc: David Hildenbrand <david@redhat.com>
-> cc: Matthew Wilcox <willy@infradead.org>
-> cc: linux-unionfs@vger.kernel.org
-> cc: linux-block@vger.kernel.org
-> cc: linux-fsdevel@vger.kernel.org
-> cc: linux-mm@kvack.org
-> Link: https://lore.kernel.org/r/CAJfpeguGksS3sCigmRi9hJdUec8qtM9f+_9jC1rJhsXT+dV01w@mail.gmail.com/ [1]
+
+--MvUt9aa5WIR6VgtF
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Wed, Mar 15, 2023 at 01:58:12PM +0800, William Qiu wrote:
+> Add documentation to describe StarFive System Controller Registers.
+>=20
+> Signed-off-by: William Qiu <william.qiu@starfivetech.com>
+
+I thought I'd already left an R-b tag against this, but w/e, here it is
+again:
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+
+I'll pick this one up once either Krzysztof or Rob have reviewed it.
+
+Cheers,
+Conor.
+
 > ---
+>  .../soc/starfive/starfive,jh7110-syscon.yaml  | 41 +++++++++++++++++++
+>  MAINTAINERS                                   |  5 +++
+>  2 files changed, 46 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/soc/starfive/starfi=
+ve,jh7110-syscon.yaml
+>=20
+> diff --git a/Documentation/devicetree/bindings/soc/starfive/starfive,jh71=
+10-syscon.yaml b/Documentation/devicetree/bindings/soc/starfive/starfive,jh=
+7110-syscon.yaml
+> new file mode 100644
+> index 000000000000..ae7f1d6916af
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/soc/starfive/starfive,jh7110-sysc=
+on.yaml
+> @@ -0,0 +1,41 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/soc/starfive/starfive,jh7110-syscon.y=
+aml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: StarFive JH7110 SoC system controller
+> +
+> +maintainers:
+> +  - William Qiu <william.qiu@starfivetech.com>
+> +
+> +description: |
+> +  The StarFive JH7110 SoC system controller provides register informatio=
+n such
+> +  as offset, mask and shift to configure related modules such as MMC and=
+ PCIe.
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - enum:
+> +          - starfive,jh7110-aon-syscon
+> +          - starfive,jh7110-stg-syscon
+> +          - starfive,jh7110-sys-syscon
+> +      - const: syscon
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    syscon@10240000 {
+> +        compatible =3D "starfive,jh7110-stg-syscon", "syscon";
+> +        reg =3D <0x10240000 0x1000>;
+> +    };
+> +
+> +...
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 958b7ec118b4..fdad60cc9f2e 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -19964,6 +19964,11 @@ S:	Supported
+>  F:	Documentation/devicetree/bindings/rng/starfive*
+>  F:	drivers/char/hw_random/jh7110-trng.c
+>=20
+> +STARFIVE JH7110 SYSCON
+> +M:	William Qiu <william.qiu@starfivetech.com>
+> +S:	Supported
+> +F:	Documentation/devicetree/bindings/soc/starfive/starfive,jh7110-syscon=
+=2Eyaml
+> +
+>  STATIC BRANCH/CALL
+>  M:	Peter Zijlstra <peterz@infradead.org>
+>  M:	Josh Poimboeuf <jpoimboe@kernel.org>
+> --
+> 2.34.1
+>=20
 
-Reviewed-by: David Hildenbrand <david@redhat.com>
+--MvUt9aa5WIR6VgtF
+Content-Type: application/pgp-signature; name="signature.asc"
 
--- 
-Thanks,
+-----BEGIN PGP SIGNATURE-----
 
-David / dhildenb
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZBIV0AAKCRB4tDGHoIJi
+0ncRAP9N8OlC2y/fRbeW1DcwuUBENLFl90G1z5d28plldK4JLQD9GCVw2YMd1xU0
+xL5j+vQM1pgeWmLjKkA8I9ZcBKzyrgg=
+=f5ML
+-----END PGP SIGNATURE-----
 
+--MvUt9aa5WIR6VgtF--
