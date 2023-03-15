@@ -2,119 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C36BE6BBA52
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 17:56:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1985D6BBA45
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 17:54:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232341AbjCOQ4n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 12:56:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46548 "EHLO
+        id S232086AbjCOQyf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 12:54:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232238AbjCOQ4i (ORCPT
+        with ESMTP id S231892AbjCOQyd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 12:56:38 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 537BB1E9C4;
-        Wed, 15 Mar 2023 09:56:36 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id h8so34326753ede.8;
-        Wed, 15 Mar 2023 09:56:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678899395;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9TQxcK9OaPYsertMuppkBMhe3ksHgbNWBHBNJuD/3SM=;
-        b=bf++em/WSxTAwx8Jt2VK4uGWuaZuyXvqcOVhTxis3lSgx7N5+fkXw9aYA85T5G/g6X
-         IaRhtYqMS5V29bctv8MUwIyDFms+yIOwvicMa6Xu3cUBmsLFDGOgT445O1I9KAg7tQ6w
-         LW7aPN2n0Ig4nt6ecB0pyx7QhcxJMMyjPeRIaNxTwzldk/Gu0RsuBK3jFMrVW+jXp7rH
-         H0x4yEkFvfZYOso0rpDbu2qqVUdS21oyMgYdAVa4hLmkyCDlu2Plzj+g+uPPThHSxQJt
-         Vk5jzt/UdIbS7tAa4OOaGKx42DEath5a9JUmzLWavHBVyCG8o45tsbgl9FT4XML7wuep
-         8GKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678899395;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9TQxcK9OaPYsertMuppkBMhe3ksHgbNWBHBNJuD/3SM=;
-        b=VtutT1pJUiiN4lukpSQa/tzNrhgvQP/Crd/uRzzkuEA8urSxeWdf6chLfplkhjzmDw
-         KE+IKX9QtTiCDtdquPfPpG/q//L5ckV5PY31zooZNM+BOWXgykCx3hW4EO6AOvKOfuLy
-         gxPrmyKxxUwuCLe8w2TfWFi6v3RPx5uneq/bXQaxCij5lZgIYWUVCExzc17DgCht6fI5
-         H3dZXpmS0SQZFfTTzr7mfkJ8zYE8Gbj306hbhG8l9otKlAd/83hPgtydHQCnRrUXjeyO
-         3Xdb9N6yCM9bGoD3quR0+CSN/LZhKVymh3yX/QKl9IO3E29kzrtiip1VkXxAK5YBeUCY
-         aooQ==
-X-Gm-Message-State: AO0yUKXHqDj3i2EIHKh9Rd7uzB22yaZd263hVXo4D6a2Uyvsd7af6zXj
-        k9Hp7bHSP2mfINpp9gKDhVd6ZcP7Tmw=
-X-Google-Smtp-Source: AK7set/pn6NtBkwziMZ2k+MPhC4lRt2y2JTW+VqQug37QPJA/AWaL0QGO1soOyI/zun5Tooo0/dchg==
-X-Received: by 2002:a17:907:20f1:b0:924:943d:7181 with SMTP id rh17-20020a17090720f100b00924943d7181mr6198534ejb.51.1678899394771;
-        Wed, 15 Mar 2023 09:56:34 -0700 (PDT)
-Received: from [192.168.8.100] (94.196.116.3.threembb.co.uk. [94.196.116.3])
-        by smtp.gmail.com with ESMTPSA id u21-20020a170906409500b00928de86245fsm2729586ejj.135.2023.03.15.09.56.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Mar 2023 09:56:34 -0700 (PDT)
-Message-ID: <f3d1faef-dc0e-48e2-ab08-3ac1c7e7bcbb@gmail.com>
-Date:   Wed, 15 Mar 2023 16:53:09 +0000
+        Wed, 15 Mar 2023 12:54:33 -0400
+Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CF8E3756F;
+        Wed, 15 Mar 2023 09:54:29 -0700 (PDT)
+Received: from localhost.localdomain (1.general.phlin.uk.vpn [10.172.194.38])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id CACE13F266;
+        Wed, 15 Mar 2023 16:54:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1678899267;
+        bh=7Gpkd6P+6YNkelCqQOhn5hB0lRXFLPaQ6/DNa54+FU8=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=svXy0sEbbMZjulAkZzWtfH7WicxBtyfQqoCKE09ye6b3iDbNQAbHjzTDQr8ESjXJA
+         H4YS2i3cLDkqEcFehIrehhSZUg8AaIU2lYYcPJ3fe5AzEaFui3+gDx8yNCUqdZq/rn
+         uyUvtcCj+It1AXMLV9oJ8DrThCmFRtjYsJ4gMVq8pok2RTvAoY+XcsN1ZmGAVd06yS
+         H2ttQTESTYbr93E/KbCZvzK3F8FD7SEwORepAEeRoAXnTpBZtpZbrh2WETpzj3axsM
+         bg/mU7hyjZTPlYuqPRCqZzwPzFdb5Su5UrkC+DRWXak+TTBLVMh4t9OEyJ55rlyYHo
+         eXi/8jQs846GQ==
+From:   Po-Hsu Lin <po-hsu.lin@canonical.com>
+To:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        netdev@vger.kernel.org
+Cc:     danieller@mellanox.com, petrm@mellanox.com, idosch@mellanox.com,
+        shuah@kernel.org, pabeni@redhat.com, kuba@kernel.org,
+        edumazet@google.com, davem@davemloft.net, jiri@resnulli.us,
+        po-hsu.lin@canonical.com
+Subject: [PATCHv3] selftests: net: devlink_port_split.py: skip test if no suitable device available
+Date:   Thu, 16 Mar 2023 00:53:53 +0800
+Message-Id: <20230315165353.229590-1-po-hsu.lin@canonical.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [RFC 0/2] optimise local-tw task resheduling
-Content-Language: en-US
-To:     Ming Lei <ming.lei@redhat.com>
-Cc:     io-uring@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        linux-kernel@vger.kernel.org
-References: <cover.1678474375.git.asml.silence@gmail.com>
- <ZBEvD04sH/JzN7MJ@ovpn-8-22.pek2.redhat.com>
-From:   Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <ZBEvD04sH/JzN7MJ@ovpn-8-22.pek2.redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/15/23 02:35, Ming Lei wrote:
-> Hi Pavel
-> 
-> On Fri, Mar 10, 2023 at 07:04:14PM +0000, Pavel Begunkov wrote:
->> io_uring extensively uses task_work, but when a task is waiting
->> for multiple CQEs it causes lots of rescheduling. This series
->> is an attempt to optimise it and be a base for future improvements.
->>
->> For some zc network tests eventually waiting for a portion of
->> buffers I've got 10x descrease in the number of context switches,
->> which reduced the CPU consumption more than twice (17% -> 8%).
->> It also helps storage cases, while running fio/t/io_uring against
->> a low performant drive it got 2x descrease of the number of context
->> switches for QD8 and ~4 times for QD32.
-> 
-> ublk uses io_uring_cmd_complete_in_task()(io_req_task_work_add())
-> heavily. So I tried this patchset, looks not see obvious change
-> on both IOPS and context switches when running 't/io_uring /dev/ublkb0',
-> and it is one null ublk target(ublk add -t null -z -u 1 -q 2), IOPS
-> is ~2.8M.
+The `devlink -j port show` command output may not contain the "flavour"
+key, an example from Ubuntu 22.10 s390x LPAR(5.19.0-37-generic), with
+mlx4 driver and iproute2-5.15.0:
+  {"port":{"pci/0001:00:00.0/1":{"type":"eth","netdev":"ens301"},
+           "pci/0001:00:00.0/2":{"type":"eth","netdev":"ens301d1"},
+           "pci/0002:00:00.0/1":{"type":"eth","netdev":"ens317"},
+           "pci/0002:00:00.0/2":{"type":"eth","netdev":"ens317d1"}}}
 
-Hi Ming,
+This will cause a KeyError exception.
 
-It's enabled for rw requests and send-zc notifications, but
-io_uring_cmd_complete_in_task() is not covered. I'll be enabling
-it for more cases, including pass through.
+Create a validate_devlink_output() to check for this "flavour" from
+devlink command output to avoid this KeyError exception. Also let
+it handle the check for `devlink -j dev show` output in main().
 
-> But ublk applies batch schedule similar with io_uring before calling
-> io_uring_cmd_complete_in_task().
+Apart from this, if the test was not started because the max lanes of
+the designated device is 0. The script will still return 0 and thus
+causing a false-negative test result.
 
-The feature doesn't tolerate tw that produce multiple CQEs, so
-it can't be applied to this batching and the task would stuck
-waiting.
+Use a found_max_lanes flag to determine if these tests were skipped
+due to this reason and return KSFT_SKIP to make it more clear.
 
-btw, from a quick look it appeared that ublk batching is there
-to keep requests together but not to improve batching. And if so,
-I think we can get rid of it, rely on io_uring batching and
-let ublk to gather its requests from tw list, which sounds
-cleaner. I'll elaborate on that later
+V2: factor out the skip logic from main(), update commit message and
+    skip reasons accordingly.
+V3: rename flag as Jakub suggested, update commit message
+Link: https://bugs.launchpad.net/bugs/1937133
+Fixes: f3348a82e727 ("selftests: net: Add port split test")
+Signed-off-by: Po-Hsu Lin <po-hsu.lin@canonical.com>
+---
+ tools/testing/selftests/net/devlink_port_split.py | 36 +++++++++++++++++++----
+ 1 file changed, 31 insertions(+), 5 deletions(-)
 
+diff --git a/tools/testing/selftests/net/devlink_port_split.py b/tools/testing/selftests/net/devlink_port_split.py
+index 2b5d6ff..2d84c7a 100755
+--- a/tools/testing/selftests/net/devlink_port_split.py
++++ b/tools/testing/selftests/net/devlink_port_split.py
+@@ -59,6 +59,8 @@ class devlink_ports(object):
+         assert stderr == ""
+         ports = json.loads(stdout)['port']
+ 
++        validate_devlink_output(ports, 'flavour')
++
+         for port in ports:
+             if dev in port:
+                 if ports[port]['flavour'] == 'physical':
+@@ -220,6 +222,27 @@ def split_splittable_port(port, k, lanes, dev):
+     unsplit(port.bus_info)
+ 
+ 
++def validate_devlink_output(devlink_data, target_property=None):
++    """
++    Determine if test should be skipped by checking:
++      1. devlink_data contains values
++      2. The target_property exist in devlink_data
++    """
++    skip_reason = None
++    if any(devlink_data.values()):
++        if target_property:
++            skip_reason = "{} not found in devlink output, test skipped".format(target_property)
++            for key in devlink_data:
++                if target_property in devlink_data[key]:
++                    skip_reason = None
++    else:
++        skip_reason = 'devlink output is empty, test skipped'
++
++    if skip_reason:
++        print(skip_reason)
++        sys.exit(KSFT_SKIP)
++
++
+ def make_parser():
+     parser = argparse.ArgumentParser(description='A test for port splitting.')
+     parser.add_argument('--dev',
+@@ -240,12 +263,9 @@ def main(cmdline=None):
+         stdout, stderr = run_command(cmd)
+         assert stderr == ""
+ 
++        validate_devlink_output(json.loads(stdout))
+         devs = json.loads(stdout)['dev']
+-        if devs:
+-            dev = list(devs.keys())[0]
+-        else:
+-            print("no devlink device was found, test skipped")
+-            sys.exit(KSFT_SKIP)
++        dev = list(devs.keys())[0]
+ 
+     cmd = "devlink dev show %s" % dev
+     stdout, stderr = run_command(cmd)
+@@ -255,6 +275,7 @@ def main(cmdline=None):
+ 
+     ports = devlink_ports(dev)
+ 
++    found_max_lanes = False
+     for port in ports.if_names:
+         max_lanes = get_max_lanes(port.name)
+ 
+@@ -277,6 +298,11 @@ def main(cmdline=None):
+                 split_splittable_port(port, lane, max_lanes, dev)
+ 
+                 lane //= 2
++        found_max_lanes = True
++
++    if not found_max_lanes:
++        print(f"Test not started, no port of device {dev} reports max_lanes")
++        sys.exit(KSFT_SKIP)
+ 
+ 
+ if __name__ == "__main__":
 -- 
-Pavel Begunkov
+2.7.4
+
