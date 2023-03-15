@@ -2,68 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62C156BBA1B
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 17:44:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40EAD6BBA1E
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 17:46:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232165AbjCOQoc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 12:44:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48664 "EHLO
+        id S232005AbjCOQqQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 12:46:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231769AbjCOQoJ (ORCPT
+        with ESMTP id S232709AbjCOQp6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 12:44:09 -0400
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9A15244AB;
-        Wed, 15 Mar 2023 09:43:06 -0700 (PDT)
-Received: by mail-io1-xd31.google.com with SMTP id bf15so8081125iob.7;
-        Wed, 15 Mar 2023 09:43:06 -0700 (PDT)
+        Wed, 15 Mar 2023 12:45:58 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 333452A6F0
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 09:45:15 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id bh21-20020a05600c3d1500b003ed1ff06fb0so1698400wmb.3
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 09:45:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678898578;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20210112; t=1678898689;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=eSBft//WrRtBDPJzOXFEZFPYTgfp7+pd/pM3cYW2zzg=;
-        b=C7UhDTCkyOeNsbk8wuwOqxRXVkEVftD3qV1lyzZhsnAgBZ6aeLtDzPKrcrOfNeNaZg
-         WIVrPwKNJcXhpYIik6F29DWrIUOscxwuZh4vk3fC6bNnAlJUNXZWUPCWCfhkcs+KjWAm
-         JONsHbscuk5XhFWWehnAtr8lirPY/FpWPnRaA55F5Z1ag58WnJLquVh4zNpNnX2UI+4g
-         hdY3X0uGK6gzQgx7tCl4XEoiiu8oC4WCs1fGjI4CCprRaQAo2/46/TTFtXr3f6KuLF6R
-         BhV7fg3plA4aewJg5ZR499Lp5pa2axR/e7KIpO42am914C/yoO31gnN2DcFsJ6Vkekfe
-         gpvQ==
+        bh=04oAu1Epo9SQhPM4NVXULqyDXSz3JDl9X8av4pk+WzQ=;
+        b=DglSPjvA+jcxtiMiYO/y0FHAIg4I10LeDXGECLg9vElT1kVFTHvBhtNQJxs0mGzlLB
+         /TcrjGiPxOUXeynnARVo7HhDckn/ynBIFzRFVYI/prYtreWruSSxnTEGKkITqPgc7k4q
+         gDhZXtXWSuGhadsHat5S8AIxdOkOLYf18APceo5kJMZZ184OYDd6rANjka6onTPzzDlb
+         UGAxXNlRSQirMijzGUBC90crz/dpRpIdrG2f26iKKW4Q5ck/TZ+VK4HkyjV0bd4paeTZ
+         fTDOB4h9K9e92m9FYq6q4JGXfoEGXVso3h9tUxrhVqxz5T2/aXbBDpPPFH7BAO5tYbUj
+         ybgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678898578;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20210112; t=1678898689;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=eSBft//WrRtBDPJzOXFEZFPYTgfp7+pd/pM3cYW2zzg=;
-        b=2rz/PnEFlCTnSqLxT4CudU6m6jlfDo/TRgrtUZlID8bUamfqRuKs+nvzOzZ8qVJS11
-         kMRuvz+BBh4A9EYJf0kiv4NB1C1046xgLdoDCStZjUJcoCBczeO5KwzSyzfQwQbu4ovJ
-         lw4iYM6Vo+4ZrZf8mt96KbNKrSgxNd/diFgb6WgMLTJD9qA8exhWhGUqiZTwTMTf0koG
-         1aPmfzzzyrcgDscgaQaH/b/EfA4Qw1wshiqn5CWez+5MzRERq+9I0F3xYa7F875mN84c
-         VGP/mEMJKYD/vBSOQPeCRVReg4EACCw/bL3oRkA1GMwDk19gGNQRxTjXSRDxrSzIN5li
-         Q7lg==
-X-Gm-Message-State: AO0yUKXO0R4vWBYm9Lgek5pTuP3GyGQWxgYDQv9OnmbR0/x83aKM8lEY
-        yL/IFUkeuFhfD57NTuGqskyhV1QODSI2C+4iaEg=
-X-Google-Smtp-Source: AK7set9f6ZSV9BGDELF2DOHaZFHc8n3HszWFD7jzL581KtDLytWxbsbANNsvVi8VUiKpUjvFskq+Ey/kw9qlMGZ7eZc=
-X-Received: by 2002:a02:84c6:0:b0:405:8be:eaaa with SMTP id
- f64-20020a0284c6000000b0040508beeaaamr4224696jai.5.1678898578430; Wed, 15 Mar
- 2023 09:42:58 -0700 (PDT)
+        bh=04oAu1Epo9SQhPM4NVXULqyDXSz3JDl9X8av4pk+WzQ=;
+        b=kAl9Cf0estLJP5+jCRlPvbuH/OQpUhG4ggM3BF6B7azPODGElOhfaYfbLEF/IxhX58
+         gYdTN0Pm/z0arC210QK203oNnoVgMzsk+Ntbk9xM8AIWgCfqE7zMwjPBCCOTa60/MafZ
+         w1ak7tbdYnZvoqBD3X1Xg6vSlfWAT2FL3uFSYBrwaJBA6P0jU1NtD4nFsdlpxNVNJOnz
+         mBXVQZFxzeSjFBcZ5WNIXAhjf++/sPQMk1Vt9p45YA+PA2fQYmX8mj3gIQdyIWzo8lK5
+         9+uKjlZBGK0YUkUdv3AQnPU8qISum6boRZjUjECrWBjuJubXw+idQL01Jf2J4zaWF5eP
+         jvBQ==
+X-Gm-Message-State: AO0yUKV0nQ8I4ebY2HNmHuehwWWa4SeOOtTXKGQlmIrYPerkmIGAQlyi
+        1di3lgvnj2EB+MR3nbOY8Dc=
+X-Google-Smtp-Source: AK7set/aYkfdm0wcbNd6sEi+oBNKfDmIEBe6EQO935Og7raishZkqyy76N9BebVWQuKE9sqimk+LQg==
+X-Received: by 2002:a05:600c:468e:b0:3ea:f73e:9d8c with SMTP id p14-20020a05600c468e00b003eaf73e9d8cmr18568999wmo.16.1678898689062;
+        Wed, 15 Mar 2023 09:44:49 -0700 (PDT)
+Received: from suse.localnet (host-79-35-102-94.retail.telecomitalia.it. [79.35.102.94])
+        by smtp.gmail.com with ESMTPSA id az40-20020a05600c602800b003e2096da239sm2570663wmb.7.2023.03.15.09.44.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Mar 2023 09:44:48 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Khadija Kamran <kamrankhadijadj@gmail.com>
+Cc:     Alison Schofield <alison.schofield@intel.com>,
+        outreachy@lists.linux.dev,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>
+Subject: Re: [PATCH] staging: axis-fifo: initialize timeouts in probe only
+Date:   Wed, 15 Mar 2023 17:44:47 +0100
+Message-ID: <3096768.uvML7RA1vL@suse>
+In-Reply-To: <ZBHOi8vA/LpCyLTJ@khadija-virtual-machine>
+References: <ZA9mThZ7NyRrQAMX@khadija-virtual-machine> <2168386.Az4OtozEo7@suse>
+ <ZBHOi8vA/LpCyLTJ@khadija-virtual-machine>
 MIME-Version: 1.0
-References: <20230315121303.3358416-1-tmricht@linux.ibm.com>
-In-Reply-To: <20230315121303.3358416-1-tmricht@linux.ibm.com>
-From:   Namhyung Kim <namhyung@gmail.com>
-Date:   Wed, 15 Mar 2023 09:42:47 -0700
-Message-ID: <CAM9d7cg8FJP+P57-reTFjp7t_YX-zS_8_txjx2EuZjmxO7EULg@mail.gmail.com>
-Subject: Re: [PATCH] perf/test: Fix wrong size for perf test Setup struct perf_event_attr
-To:     Thomas Richter <tmricht@linux.ibm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        acme@kernel.org, robh@kernel.org, jolsa@kernel.org,
-        svens@linux.ibm.com, gor@linux.ibm.com, sumanthk@linux.ibm.com,
-        hca@linux.ibm.com
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,140 +76,155 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On mercoled=EC 15 marzo 2023 14:56:27 CET Khadija Kamran wrote:
+> On Wed, Mar 15, 2023 at 02:13:51PM +0100, Fabio M. De Francesco wrote:
+> > On mercoled=EC 15 marzo 2023 13:32:55 CET Khadija Kamran wrote:
+> > > On Tue, Mar 14, 2023 at 04:57:47PM -0700, Alison Schofield wrote:
+> > > > My guess is that this patch gets ignored because it has a lower=20
+version
+> > > > number than a previous patch.
+> > > >=20
+> > > > Take the feedback given here, and rev to
+> > > > [PATCH v5] staging: axis-fifo: initialize timeouts in probe only
+> > > >=20
+> > > > Be sure the Changelog, below the --- explains the journey.
+> > > >=20
+> > > > Changes in v5:
+> > > >=20
+> > > > Changes in v4:
+> > > >=20
+> > > > Changes in v3:
+> > >=20
+> > > > Changes in v2:
+> > > Hey Alison!
+> >=20
+> > Hi Khadija,
+> >=20
+> > Please put one or two blank lines between the last message you are=20
+replying
+> > and the new you are writing (exactly as I'm doing here between "Hey=20
+Alison!"
+> > and "Hi Khadija").
+>=20
+> Hey Fabio!
+>=20
+> Sorry about that. This was pointed by Alison before and I have been
+> adding spaces since then. Hopefully I am doing it right this time.
+>=20
+You are doing right this time :-)
+>
+> > > Based on Nathan's feedback I am trying to recompile and send a patch
+> > > without any warnings.
+> >=20
+> > Great!
+> >=20
+> > > As suggested by Fabio, I am running "make w=3D1 -jX" command to see i=
+f I
+> > > get any warnings.
+> >=20
+> > I suppose that "w=3D1" is a typo. The option is enabled with "W=3D1" (c=
+apital
+> > case, Linux and all UNIX-like are case-sensitive).
+>=20
+> Okay. I should re-run it with "W=3D1".
+>=20
+> > > But it is taking a lot of time, is there any way of
+> > > speeding it up?
+> >=20
+> > What is you choice for 'X' in "-jX"?
+>=20
+> I used "-j4".
+>=20
+> > Did you try with the exact number of logical cores?
+> > Are you building into a VM with enough logical cores?
+> > If you are building into a VM, did you reserve enough RAM?
+>=20
+> I am using Ubuntu 22.04.01 with the help of VM on VMware.
+> My machine has 13GB RAM and 2 processors(4 cores each).
 
-On Wed, Mar 15, 2023 at 5:15=E2=80=AFAM Thomas Richter <tmricht@linux.ibm.c=
-om> wrote:
->
-> The test case ./perf test 'Setup struct perf_event_attr' fails.
-> On s390 this output is observed:
->
->  # ./perf test -Fvvvv 17
->  17: Setup struct perf_event_attr                                    :
->  --- start ---
->  running './tests/attr/test-stat-C0'
->  Using CPUID IBM,8561,703,T01,3.6,002f
->  .....
->  Event event:base-stat
->       fd =3D 1
->       group_fd =3D -1
->       flags =3D 0|8
->       cpu =3D *
->       type =3D 0
->       size =3D 128     <<<--- wrong, specified in file base-stat
->       config =3D 0
->       sample_period =3D 0
->       sample_type =3D 65536
->       ...
->  'PERF_TEST_ATTR=3D/tmp/tmpgw574wvg ./perf stat -o \
->         /tmp/tmpgw574wvg/perf.data -e cycles -C 0 kill >/dev/null \
->         2>&1 ret '1', expected '1'
->   loading result events
->     Event event-0-0-4
->       fd =3D 4
->       group_fd =3D -1
->       cpu =3D 0
->       pid =3D -1
->       flags =3D 8
->       type =3D 0
->       size =3D 136     <<<--- actual size used in system call
->       .....
->   compare
->     matching [event-0-0-4]
->       to [event:base-stat]
->       [cpu] 0 *
->       [flags] 8 0|8
->       [type] 0 0
->       [size] 136 128
->     ->FAIL
->     match: [event-0-0-4] matches []
->   expected size=3D136, got 128
->   FAILED './tests/attr/test-stat-C0' - match failure
->
-> This mismatch is caused by
-> commit 09519ec3b19e ("perf: Add perf_event_attr::config3")
-> which enlarges the structure perf_event_attr by 8 bytes.
->
-> Fix this by adjusting the expected value of size.
->
-> Output after:
->  # ./perf test -Fvvvv 17
->  17: Setup struct perf_event_attr                                    :
->  --- start ---
->  running './tests/attr/test-stat-C0'
->  Using CPUID IBM,8561,703,T01,3.6,002f
->  ...
->   matched
->   compare
->     matching [event-0-0-4]
->       to [event:base-stat]
->       [cpu] 0 *
->       [flags] 8 0|8
->       [type] 0 0
->       [size] 136 136
->       ....
->    ->OK
->    match: [event-0-0-4] matches ['event:base-stat']
->  matched
->
-> Fixes: 09519ec3b19e ("perf: Add perf_event_attr::config3")
->
-> Signed-off-by: Thomas Richter <tmricht@linux.ibm.com>
+Therefore, you are using a Linux guest on a Linux host. This is a wise choi=
+ce.=20
+However, you didn't say where you are running your builds...
 
-Acked-by: Namhyung Kim <namhyung@kernel.org>
+I mean, the better things to do are the following steps:
 
-Thanks,
-Namhyung
+1) Your workspace with the staging tree should stay in the host.
+2) Shut down your guest in order to have all RAM and all logical processors=
+=20
+available for the build.
+3) Run "make -j8" in the host. Since you shutdown your guest VM you can use=
+=20
+all 8 logical cores and the maximum available RAM (without the VM draining=
+=20
+resources while building)
+4) When the build is done, switch on your VM on VMware with at least 4 logi=
+cal=20
+cores and 6GB of reserved RAM.
+5) Mount your cloned base directory as a shared folder between host and gue=
+st.
+6) In the guest, 'cd' to the shared folder and then run "make modules_insta=
+ll=20
+install" (in the guest, attention). This will install and configure the=20
+kernel, the modules, GRUB2 and everything else in your guest VM.
+7) Reboot the VM and test your patches.
+
+This procedure will speed up your next builds.
+The fundamental point is that you don't need to partition precious resource=
+s=20
+while building, Do everything without running the VM and switch it on only =
+for=20
+install and tests. Since you only build in the host but never install and b=
+oot=20
+in it, you don't risk any system's damage.
+
+This is what I do for Kernel development purposes.
+
+I hope it helps to answer your question about how to run fast recompilation.
+
+=46abio =20
 
 
-> ---
->  tools/perf/tests/attr/base-record       | 2 +-
->  tools/perf/tests/attr/base-stat         | 2 +-
->  tools/perf/tests/attr/system-wide-dummy | 2 +-
->  3 files changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/tools/perf/tests/attr/base-record b/tools/perf/tests/attr/ba=
-se-record
-> index 3ef07a12aa14..27c21271a16c 100644
-> --- a/tools/perf/tests/attr/base-record
-> +++ b/tools/perf/tests/attr/base-record
-> @@ -5,7 +5,7 @@ group_fd=3D-1
->  flags=3D0|8
->  cpu=3D*
->  type=3D0|1
-> -size=3D128
-> +size=3D136
->  config=3D0
->  sample_period=3D*
->  sample_type=3D263
-> diff --git a/tools/perf/tests/attr/base-stat b/tools/perf/tests/attr/base=
--stat
-> index 408164456530..a21fb65bc012 100644
-> --- a/tools/perf/tests/attr/base-stat
-> +++ b/tools/perf/tests/attr/base-stat
-> @@ -5,7 +5,7 @@ group_fd=3D-1
->  flags=3D0|8
->  cpu=3D*
->  type=3D0
-> -size=3D128
-> +size=3D136
->  config=3D0
->  sample_period=3D0
->  sample_type=3D65536
-> diff --git a/tools/perf/tests/attr/system-wide-dummy b/tools/perf/tests/a=
-ttr/system-wide-dummy
-> index 8fec06eda5f9..2f3e3eb728eb 100644
-> --- a/tools/perf/tests/attr/system-wide-dummy
-> +++ b/tools/perf/tests/attr/system-wide-dummy
-> @@ -7,7 +7,7 @@ cpu=3D*
->  pid=3D-1
->  flags=3D8
->  type=3D1
-> -size=3D128
-> +size=3D136
->  config=3D9
->  sample_period=3D4000
->  sample_type=3D455
-> --
-> 2.39.1
->
+>=20
+> > Please read carefully my questions above and try to understand your
+> > environment and reply, so that I can help you more effectively.
+> >=20
+> > > If this doesn't work then I have to follow the steps to reproduce in =
+lkp
+> > > mail as you said before.
+> >=20
+> > The steps to reproduce will take your precious time and use more=20
+resources.
+> > Again, try to respond my questions.
+> >=20
+> > > After dealing with these warnings I will send a [PATCH v5], following
+> > > your instructions above.
+> >=20
+> > Sorry for inadvertently overlooking to warn you about to send a message=
+ to
+> > Greg and ask him to drop your first 3 + 1 patches. Now you are doing go=
+od=20
+by
+> > following what Alison suggested: send v5 and write the log of revisions
+> > under
+> > the three dashes (exactly how Alison explained).
+> >=20
+> > > Kindly, let me know if I am on the wrong track.
+> > > Thank you!
+> >=20
+> > I think you are in the right track.
+> > Let's try to speed up your builds because you'll need to build again yo=
+ur
+> > kernel many, many times for future works.
+>=20
+> Okay great! Thank you.
+>=20
+> Regards,
+> Khadija
+>=20
+> > Thanks,
+> >=20
+> > Fabio
+
+
+
+
