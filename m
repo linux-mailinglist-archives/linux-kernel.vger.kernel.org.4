@@ -2,110 +2,381 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E92B6BB5E9
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 15:26:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B49C6BB5EB
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 15:26:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231774AbjCOO0O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 10:26:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49750 "EHLO
+        id S232672AbjCOO0b convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 15 Mar 2023 10:26:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231983AbjCOO0M (ORCPT
+        with ESMTP id S231983AbjCOO03 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 10:26:12 -0400
-Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E52892366E;
-        Wed, 15 Mar 2023 07:26:08 -0700 (PDT)
-Received: by mail-il1-x133.google.com with SMTP id l9so7330865iln.1;
-        Wed, 15 Mar 2023 07:26:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678890368;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=Bb6BqyZSkkDx4xoda/AlCz3K7+pWLz5fsJlOVsRCSK4=;
-        b=iaxVKbT2pXx7PjPzTxBTkY8MW92024Hz4QkYyrHPY2Bxiw8SsxjdF/B9I6fXBEtJ+V
-         NfrhW16kDczpBhZneos4/kyiGVNHEcvUrM9wIabSG/eW9onX7o0bKzJZw8j+HodqRHzm
-         yXjCzpiG5GqaBgjrzdu1QTDfS5e3UXrRXfeVfwSSUpyREeeL9QYQv6uREdzCqCIGopov
-         WqftZ4LUBpRRiju8MmLBOFZuMcM+IlMeiWn45lDZJOKfrWs8pZSxVvtpCtmVy0rDRXp6
-         Tv0pa/wZM7xGXU+vJNU6SMf+cKJy7xbovVVrrglcvoX3ICF76BdgBO3T6vJ/OBFnegMo
-         c5ig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678890368;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Bb6BqyZSkkDx4xoda/AlCz3K7+pWLz5fsJlOVsRCSK4=;
-        b=2R5WQCpznCTbFIMux/FOzX7dEurDq8FAOBfkNMU9g4e31Gn7cRtoFvobrsmDi46F+p
-         YCDIf6PBkuqZq6ua8VBsKIQEG5OWtN7kBqjhUwmPf/yLSVorL38EwVIhe3AVW3CLZ9VG
-         vKjzkYUiGd50BdxEt8Td2bcFcBGUTn4w0JJfZmBTJeTUNE9E9i0I8uOVuZfT83T/t2L8
-         PE/XCwyTdYdHNSrSdZR6/56KEum9peycMbC6LsmCOHZBXbnI3VbbqfFXITJPbm/KnizE
-         My9CHlk+1LTuL9cSFhV4VwGgjkY2T4KanLVf+NkbPxnbrP/cAOZpak1VffXwp6SeFB/D
-         rbLg==
-X-Gm-Message-State: AO0yUKU/KZ8JzuZYu0xUldsOMh0GGUmyspsfdEZXkYmmGB2IBuKdyJxz
-        59SMBnaU/1OkjbNXbMp9z6g=
-X-Google-Smtp-Source: AK7set8C1jd4zWOBmgHem4sZfx6LWTQakUR6pnDF2vFmpvHZu+QCkV+nayXhi1TTSmLykuKYfxTbgg==
-X-Received: by 2002:a05:6e02:c63:b0:315:69ef:345d with SMTP id f3-20020a056e020c6300b0031569ef345dmr3310631ilj.16.1678890368132;
-        Wed, 15 Mar 2023 07:26:08 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id m17-20020a056638225100b00404d129c1ecsm747391jas.138.2023.03.15.07.26.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Mar 2023 07:26:07 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <4584471d-d216-3edd-058c-e362e048462f@roeck-us.net>
-Date:   Wed, 15 Mar 2023 07:26:05 -0700
+        Wed, 15 Mar 2023 10:26:29 -0400
+Received: from mail.astralinux.ru (mail.astralinux.ru [217.74.38.119])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FFA51025B;
+        Wed, 15 Mar 2023 07:26:24 -0700 (PDT)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by mail.astralinux.ru (Postfix) with ESMTP id 40971186407D;
+        Wed, 15 Mar 2023 17:26:20 +0300 (MSK)
+Received: from mail.astralinux.ru ([127.0.0.1])
+        by localhost (rbta-msk-vsrv-mail01.astralinux.ru [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id ctxPzByjDvU6; Wed, 15 Mar 2023 17:26:19 +0300 (MSK)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by mail.astralinux.ru (Postfix) with ESMTP id 5BDA3186407C;
+        Wed, 15 Mar 2023 17:26:19 +0300 (MSK)
+X-Virus-Scanned: amavisd-new at astralinux.ru
+Received: from mail.astralinux.ru ([127.0.0.1])
+        by localhost (rbta-msk-vsrv-mail01.astralinux.ru [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 3HNTZHqifFk7; Wed, 15 Mar 2023 17:26:19 +0300 (MSK)
+Received: from [10.177.20.58] (unknown [10.177.20.58])
+        by mail.astralinux.ru (Postfix) with ESMTPSA id D4B4A186407D;
+        Wed, 15 Mar 2023 17:26:18 +0300 (MSK)
+Message-ID: <a390e831-49af-5c8e-7df3-87612269a83f@astralinux.ru>
+Date:   Wed, 15 Mar 2023 17:26:13 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 5.10 000/104] 5.10.175-rc1 review
+ Thunderbird/102.1.0
+Subject: Re: [PATCH] goku_udc: Add check for NULL in goku_irq
+To:     Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+Cc:     Jakob Koschel <jakobkoschel@gmail.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+References: <20230203101828.14799-1-abelova@astralinux.ru>
+ <Y9zly1vrj9z4c1qT@kroah.com>
+ <39993564-7310-a2e0-8139-14ccb9a03ba9@astralinux.ru>
+ <Y+zivah57216KcuB@kroah.com>
+ <a5f90434-f3e5-f25e-76e2-b03e79cc16fe@alu.unizg.hr>
+ <ddfab307-d471-ee08-6804-5f903adb1770@astralinux.ru>
+ <2681bc20-28a4-341f-5d01-0db4b356ac8e@alu.unizg.hr>
 Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-References: <20230315115731.942692602@linuxfoundation.org>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20230315115731.942692602@linuxfoundation.org>
+From:   Anastasia Belova <abelova@astralinux.ru>
+In-Reply-To: <2681bc20-28a4-341f-5d01-0db4b356ac8e@alu.unizg.hr>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/15/23 05:11, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.175 release.
-> There are 104 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Fri, 17 Mar 2023 11:57:10 +0000.
-> Anything received after that time might be too late.
-> 
 
-Another build failure, almost drowning in the noise.
+13.03.2023 16:49, Mirsad Goran Todorovac пишет:
+> On 13.3.2023. 13:19, Anastasia Belova wrote:
+>>
+>> 11.03.2023 06:29, Mirsad Goran Todorovac пишет:
+>>> On 15. 02. 2023. 14:48, Greg Kroah-Hartman wrote:
+>>>> On Wed, Feb 15, 2023 at 04:39:56PM +0300, Анастасия Белова wrote:
+>>>>> 03.02.2023 13:45, Greg Kroah-Hartman пишет:
+>>>>>> On Fri, Feb 03, 2023 at 01:18:28PM +0300, Anastasia Belova wrote:
+>>>>>>> Before dereferencing dev->driver check it for NULL.
+>>>>>>>
+>>>>>>> If an interrupt handler is called after assigning
+>>>>>>> NULL to dev->driver, but before resetting dev->int_enable,
+>>>>>>> NULL-pointer will be dereferenced.
+>>>>>>>
+>>>>>>> Found by Linux Verification Center (linuxtesting.org) with SVACE.
+>>>>>>>
+>>>>>>> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+>>>>>>> Signed-off-by: Anastasia Belova <abelova@astralinux.ru>
+>>>>>>> ---
+>>>>>>>    drivers/usb/gadget/udc/goku_udc.c | 5 +++--
+>>>>>>>    1 file changed, 3 insertions(+), 2 deletions(-)
+>>>>>>>
+>>>>>>> diff --git a/drivers/usb/gadget/udc/goku_udc.c 
+>>>>>>> b/drivers/usb/gadget/udc/goku_udc.c
+>>>>>>> index bdc56b24b5c9..896bba8b47f1 100644
+>>>>>>> --- a/drivers/usb/gadget/udc/goku_udc.c
+>>>>>>> +++ b/drivers/usb/gadget/udc/goku_udc.c
+>>>>>>> @@ -1616,8 +1616,9 @@ static irqreturn_t goku_irq(int irq, void 
+>>>>>>> *_dev)
+>>>>>>>    pm_next:
+>>>>>>>            if (stat & INT_USBRESET) {        /* hub reset done */
+>>>>>>>                ACK(INT_USBRESET);
+>>>>>>> -            INFO(dev, "USB reset done, gadget %s\n",
+>>>>>>> -                dev->driver->driver.name);
+>>>>>>> +            if (dev->driver)
+>>>>>>> +                INFO(dev, "USB reset done, gadget %s\n",
+>>>>>>> +                    dev->driver->driver.name);
+>>>>>> How can this ever happen?  Can you trigger this somehow?  If not, I
+>>>>>> don't think this is going to be possible (also what's up with printk
+>>>>>> from an irq handler???)
+>>>>> Unfortunately, I can't find the way to trigger this at the moment.
+>>>> Then the change should not be made.
+>>>>
+>>>>> What about printk, should trace_printk be used instead?
+>>>> Why?
+>>>>
+>>>>>> Odds are, no one actually has this hardware anymore, right?
+>>>>> Despite of this, such vulnerability should be fixed because
+>>>>> there is a possibility to exploit it.
+>>>> How can this be "exploited" if it can not ever be triggered?
+>>>>
+>>>> Also, this would cause a NULL dereference in an irq handler, how 
+>>>> can you
+>>>> "exploit" that?
+>>>>
+>>>> Please only submit patches that actually do something.  It is getting
+>>>> very hard to want to even review patches from this "project" based on
+>>>> the recent submissions.
+>>>>
+>>>> thanks,
+>>>>
+>>>> greg k-h
+>>> Hi Greg, Anastasia,
+>>
+>> Hi Misrad,
+>>
+>>> Without any pros or cons, or taking sides, there appears to be a 
+>>> similar check
+>>> when using dev->driver->driver.name in
+>>>
+>>> https://elixir.bootlin.com/linux/latest/source/drivers/usb/gadget/udc/goku_udc.c#L1158 
+>>>
+>>>
+>>>     seq_printf(m,
+>>>            "%s - %s\n"
+>>>            "%s version: %s %s\n"
+>>>            "Gadget driver: %s\n"
+>>>            "Host %s, %s\n"
+>>>            "\n",
+>>>            pci_name(dev->pdev), driver_desc,
+>>>            driver_name, DRIVER_VERSION, dmastr(),
+>>>            dev->driver ? dev->driver->driver.name : "(none)",
+>>>            is_usb_connected
+>>>                ? ((tmp & PW_PULLUP) ? "full speed" : "powered")
+>>>                : "disconnected",
+>>>            udc_ep_state(dev->ep0state));
+>>>
+>>> On the other hand, where could dev->drivre be reset without 
+>>> resetting dev->int_enable?
+>>>
+>>> dev->driver = NULL appears here:
+>>>
+>>> static int goku_udc_stop(struct usb_gadget *g)
+>>> {
+>>>     struct goku_udc    *dev = to_goku_udc(g);
+>>>     unsigned long    flags;
+>>>
+>>>     spin_lock_irqsave(&dev->lock, flags);
+>>>     dev->driver = NULL;
+>>>     stop_activity(dev);
+>>>     spin_unlock_irqrestore(&dev->lock, flags);
+>>>
+>>>     return 0;
+>>> }
+>>>
+>>> it is followed by stop_activity() calling udc_reset():
+>>>
+>>> static void udc_reset(struct goku_udc *dev)
+>>> {
+>>>     struct goku_udc_regs __iomem    *regs = dev->regs;
+>>>
+>>>     writel(0, &regs->power_detect);
+>>>     writel(0, &regs->int_enable);
+>>>     readl(&regs->int_enable);
+>>>     dev->int_enable = 0;
+>>> .
+>>> .
+>>> .
+>>>
+>>> ... but this happens in between spin_lock_irqsave() and 
+>>> spin_unlock_irqsave(),
+>>> which appears like a correct way to do it.
+>>
+>> Are you sure that spin_lock_irqsave makes the code safe? This 
+>> function disables interrupts on
+>> local processor only (Linux Device Drivers, Third Edition). So it 
+>> doesn't seem to be
+>> absolutely safe on multiprocessor systems.
+>
+> Hi, Anastasia,
+>
+> Looking from the Second Edition or the book and the source, I see that
+> spin_lock_irqsave() expands to:
+>
+> static inline unsigned long __raw_spin_lock_irqsave(raw_spinlock_t *lock)
+> {
+>     unsigned long flags;
+>
+>     local_irq_save(flags);
+>     preempt_disable();
+>     spin_acquire(&lock->dep_map, 0, 0, _RET_IP_);
+>     LOCK_CONTENDED(lock, do_raw_spin_trylock, do_raw_spin_lock);
+>     return flags;
+> }
+>
+> if the multiple threads on multiple cores/SMTs contend for the same lock,
+> that with preempt_disable() should assure mutual exclusion.
+>
+> Can you please quote from the Third Edition of Linux Device Drivers where
+> it says otherwise?
+>
 
-Building riscv32:allmodconfig ... failed
---------------
-Error log:
-drivers/pci/pci-driver.c: In function 'pci_pm_runtime_resume':
-drivers/pci/pci-driver.c:1297:9: error: implicit declaration of function 'pci_restore_standard_config' [-Werror=implicit-function-declaration]
-  1297 |         pci_restore_standard_config(pci_dev);
-       |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-At top level:
-drivers/pci/pci-driver.c:536:13: warning: 'pci_pm_default_resume_early' defined but not used [-Wunused-function]
-   536 | static void pci_pm_default_resume_early(struct pci_dev *pci_dev)
-       |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+Hi, Mirsad,
 
-Guenter
 
+If I get it right, preempt_disable blocks interrupts on all processors,
+
+correct? This statement seems to make the code safe, but there is a quote
+
+from Linux Device Drivers, Third Edition, CHAPTER 5, Concurrency and Race
+
+Conditions: "...spin_lock_irqsave disables interrupts (on the local 
+processor
+
+only) before taking the spinlock...". These thoughts contradict, don't they?
+
+
+> BTW, please also consider reading this article:
+>
+> https://docs.kernel.org/driver-api/io_ordering.html
+>
+> I saw they were using this readl() after writel() for synchronisation, so
+> please see if this clears your doubts. It says "readl() should flush 
+> any pending
+> writes".
+>
+> But I certainly see no harm in your proposal of guarding against NULL 
+> pointer
+> dereference of dev->driver, both in
+>
+> > -            INFO(dev, "USB reset done, gadget %s\n",
+> > -                dev->driver->driver.name);
+> > +            if (dev->driver)
+> > +                INFO(dev, "USB reset done, gadget %s\n",
+> > +                    dev->driver->driver.name);
+>
+> or use the construct as the one in another line of the driver:
+>
+> > -            INFO(dev, "USB reset done, gadget %s\n",
+> > -                dev->driver->driver.name);
+> > +            INFO(dev, "USB reset done, gadget %s\n",
+> > +                dev->driver ? dev->driver->driver.name : "(none)");
+>
+> (This would IMHO enable detecting and logging when dev->driver 
+> unexpectedly becomes NULL
+> in a race condition, rather that just silently skipping and ignoring 
+> the situation.)
+>
+Agree, the second construct looks better.
+> but additionally also in:
+>
+> > -     spin_unlock (&dev->lock);
+> > -     tmp = dev->driver->setup(&dev->gadget, &ctrl);
+> > -     spin_lock (&dev->lock);
+> > +     if (dev->driver && dev->driver->setup) {
+> > +         spin_unlock (&dev->lock);
+> > +         tmp = dev->driver->setup(&dev->gadget, &ctrl);
+> > +         spin_lock (&dev->lock);
+> > +     }
+>
+> for completeness and robustness sake.
+>
+> The author agrees that the race conditions in the device drivers are 
+> very hard
+> to reproduce:
+>
+> https://www.oreilly.com/library/view/linux-device-drivers/0596000081/ch09s08.html 
+>
+>
+> But I am really not able to analyse all possible scenarios ATM.
+> Maybe some ideas come after getting some oxygen.
+>
+> (This is not an authoritative answer on the matter, just an attempt on 
+> analysis.)
+>
+> Regards,
+> Mirsad
+>
+Regards,
+
+Anastasia
+
+>>> But second appearance is here:
+>>>
+>>> https://elixir.bootlin.com/linux/latest/source/drivers/usb/gadget/udc/goku_udc.c#L1559 
+>>>
+>>>
+>>>     spin_lock(&dev->lock);
+>>>
+>>> rescan:
+>>>     stat = readl(&regs->int_status) & dev->int_enable;
+>>>          if (!stat)
+>>>         goto done;
+>>>     dev->irqs++;
+>>>
+>>>     /* device-wide irqs */
+>>>     if (unlikely(stat & INT_DEVWIDE)) {
+>>>         if (stat & INT_SYSERROR) {
+>>>             ERROR(dev, "system error\n");
+>>>             stop_activity(dev);
+>>>             stat = 0;
+>>>             handled = 1;
+>>>             // FIXME have a neater way to prevent re-enumeration
+>>>             dev->driver = NULL;
+>>>             goto done;
+>>>         }
+>>>
+>>> goto done leads to:
+>>>
+>>> done:
+>>>     (void)readl(&regs->int_enable);
+>>>     spin_unlock(&dev->lock);
+>>>
+>>> This unlocks dev->lock before setting dev->int_enable to zero, or 
+>>> calling writel(0, &regs->int_enable);
+>>> which could be problematic. Unless it called stop_activity(dev) four 
+>>> lines earlier. Which does
+>>> bot of:
+>>>
+>>>     writel(0, &regs->int_enable);
+>>>     dev->int_enable = 0;
+>>>
+>>> So, FWIW, we seem to be safe. Yet, there might be no harm in 
+>>> printing "(null)" rather
+>>> than having an NULL pointer dereference, it seems.
+>>>
+>>> Yet, there is another unprotected dereference of dev->driver:
+>>>
+>>> https://elixir.bootlin.com/linux/latest/source/drivers/usb/gadget/udc/goku_udc.c#L1513 
+>>>
+>>>
+>>>     spin_unlock (&dev->lock);
+>>>     tmp = dev->driver->setup(&dev->gadget, &ctrl);
+>>>     spin_lock (&dev->lock);
+>>>
+>>> All others (in goku_udc.c, at least) have triple safeguards like:
+>>>
+>>>                 if (dev->gadget.speed != USB_SPEED_UNKNOWN
+>>>                         && dev->driver
+>>>                         && dev->driver->suspend) {
+>>>                     spin_unlock(&dev->lock);
+>>> dev->driver->suspend(&dev->gadget);
+>>>                     spin_lock(&dev->lock);
+>>>                 }
+>>>
+>>> So the above should maybe put to:
+>>>
+>>>     if (dev->driver && dev->driver->setup) {
+>>>         spin_unlock (&dev->lock);
+>>>         tmp = dev->driver->setup(&dev->gadget, &ctrl);
+>>>         spin_lock (&dev->lock);
+>>>     }
+>>>
+>>> instead to be completely certain.
+>>>
+>>> Forgive me for this uninspired rant. Thank you if you've read this far.
+>>> I hope this helps.
+>>>
+>>> My $0.02.
+>>>
+>>> Regards,
+>>> Mirsad
+>>>
+>> Thanks,
+>>
+>> Anastasia
+>
