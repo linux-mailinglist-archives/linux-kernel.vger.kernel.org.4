@@ -2,236 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7CA76BBBAC
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 19:06:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C0E06BBBAF
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 19:08:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232154AbjCOSGw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 14:06:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34762 "EHLO
+        id S232238AbjCOSIA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 14:08:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232106AbjCOSGu (ORCPT
+        with ESMTP id S230248AbjCOSH6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 14:06:50 -0400
-Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4840A5D451
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 11:06:48 -0700 (PDT)
-Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-54195ef155aso204925617b3.9
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 11:06:48 -0700 (PDT)
+        Wed, 15 Mar 2023 14:07:58 -0400
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 964F114201;
+        Wed, 15 Mar 2023 11:07:57 -0700 (PDT)
+Received: by mail-oi1-x22b.google.com with SMTP id bd36so3947277oib.12;
+        Wed, 15 Mar 2023 11:07:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678903607;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yEN+4igpQnsaZDWFE65KuKe5vYz6+U5Kq6oQlxkGgp4=;
-        b=fT/0rkq91CZJKKkYi1eYGD0jl6CfHlvLWz+hbKRlg4EjJn1y0xjZUIINhgF/e9HWuB
-         3QstKXsB6XxbFYPpDRPUV7TCv4ydC62EQLm7PqRVTAjpkkelqLVZDWNc2LdQsRMa2qKx
-         KJKR4MvXg8l692WnMFP/zJrLzs5yRUJoKIO4je/G7zzn5q4owHC7mc/IDZZd5Jer0Rsc
-         cBCj09BpvJQrO5jbNRmo8g5j5TY5PfabOVKQemktuzVjWP5B6Kv4gPbYgm6bh99Am0Gn
-         c1fJsaH5rkAKmHckDWuN/UXznNcdSBChdlrqX4OTZHcMblxm7Sd/+Vi5HChmd776OQpg
-         6EZg==
+        d=gmail.com; s=20210112; t=1678903677;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=bswk4wkeUv+Xxd0NDqkMooJeA4YdJa/+8yZXmuwomxg=;
+        b=JybN+y1Hx2ekfETb9GZtFLZVRJwjs8YyEYEyo2vnyLZNjX6kxF+Fdc/jxQmibdaZRq
+         mevgnjWdpUMGpXX9jzaPMz2iyX3RpVh0+ef2WQf4TPWUe/azYdCh/h20E3J5oPFD7LBb
+         WFBMOvywJCylytgjg4IA832CjBej+EraoiuONBAv4gAk2hdF449Xur6t8IJz1EIhoqoA
+         6aSaghwrfTycG54OWtIF6dcrdEYGEox8Jiq8H7wCPAVzfuP1rBoI5nSrhPm5u4fvIuqO
+         DvLgl6Lj6LAOQaU4co6aRiWmbhWCocDHL8lkUXpE9wVKzG/7uPj0uX7KQT9pov6xivJO
+         KpXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678903607;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yEN+4igpQnsaZDWFE65KuKe5vYz6+U5Kq6oQlxkGgp4=;
-        b=gSXnUOPkGIbxaftn3dZ/LbVZO1b9+JO3p9yXby5lRKdsHr0N84+SaUvq01ngnsJm1e
-         9AdPoEddnsasSCiAlAvQny++7IKJF2+gKugSWedWLJB2BybVw45zm+ny7fWCrI8uC+x8
-         mf02aStlLx+wfGXjyfRwHoIACVpnvK8LHGw/wYlGE8AJCHny+wSL+0Kiadj8g//S5DDL
-         TySh90bFlp3IivvViJdjiMZ3g+0JT09L57yaRgA8TWgMeN/fxFSNtGlTuCJsVTlIbB+l
-         puUr8Ytl/Qns73f03PCdd/lsgMtu7IRaZLbhsQAGOcx7XTlSJch/WnxhY7xuOY42ZCk+
-         5oGA==
-X-Gm-Message-State: AO0yUKXWIIbvX7vxG8VdXKkrrzEsqb5NqbTRG/QIyKr/S4muxtZSjyLw
-        ofvktrqoOnrhfuVmN26zUUhFPwJ16tmwEdCHaow4OQ==
-X-Google-Smtp-Source: AK7set/tGno4/NUFj4FeC/s/GZj7L8oEWZAxPlKwtJt+H+A7Ebdk41cyh63hbkvM2AxaMcKQ0IYhxJJEopYuV5Wmh/M=
-X-Received: by 2002:a81:d302:0:b0:541:359c:103a with SMTP id
- y2-20020a81d302000000b00541359c103amr481255ywi.8.1678903607298; Wed, 15 Mar
- 2023 11:06:47 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1678903677;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=bswk4wkeUv+Xxd0NDqkMooJeA4YdJa/+8yZXmuwomxg=;
+        b=UFeJv97H7ILH75TOS1dvthx5V6jtrG0/9CpwK8Sozw0YrT39aEA/B+CE3TZqBNJo7U
+         9A5VR4AD+rYeAmSNJC0F0msmHYoQEJe20P354//2yJwlDefug1bKFJij4a1iM97ISFb2
+         40QbEYWLJwFMF0ooAzS7x5yokU+TR7CIaSDSBo9P39HakdwZyROEwur5njBEj6IkF9Ua
+         FWdSse666V4tUC6tn9xWwRT+ZZ029AS8W8i+1WOcAWufR/ms5I5iJdNabaDL5dkMKbsI
+         sDTreqet4fWEZmRXMj6c9e9GD/SF5VxUJPO6NGhY7SZXQOJpmkXexAu94o6MrPLi6rl8
+         TFNw==
+X-Gm-Message-State: AO0yUKWqIBaHh15tyCPJmh1eNl0WqQ5dy7mASK0Jk9FS1lR292Wr8QJ1
+        PpWpkMcoy5nmqyVK9BBR+2o=
+X-Google-Smtp-Source: AK7set9vKCFoc3Wv5kWXBT9PoDc+xloD8ch3irDduMkdfZlsgouZZIXNaKHiCFuige8aJlPteUtctw==
+X-Received: by 2002:a05:6808:280d:b0:383:c6f1:306c with SMTP id et13-20020a056808280d00b00383c6f1306cmr1326182oib.42.1678903675393;
+        Wed, 15 Mar 2023 11:07:55 -0700 (PDT)
+Received: from ?IPV6:2603:8081:140c:1a00:ebd0:e160:a3dd:fe9a? (2603-8081-140c-1a00-ebd0-e160-a3dd-fe9a.res6.spectrum.com. [2603:8081:140c:1a00:ebd0:e160:a3dd:fe9a])
+        by smtp.gmail.com with ESMTPSA id p130-20020acaf188000000b00383ebc74edasm2488540oih.7.2023.03.15.11.07.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Mar 2023 11:07:54 -0700 (PDT)
+Message-ID: <d5453f77-1e23-003b-6706-ce1f9c71a668@gmail.com>
+Date:   Wed, 15 Mar 2023 13:07:53 -0500
 MIME-Version: 1.0
-References: <20230310153151.293608-1-zenghuchen@google.com> <20230311022334.he6ev6tswfc2xcwo@mobilestation>
-In-Reply-To: <20230311022334.he6ev6tswfc2xcwo@mobilestation>
-From:   Jack Chen <zenghuchen@google.com>
-Date:   Wed, 15 Mar 2023 14:06:36 -0400
-Message-ID: <CALvyBcWewTs5pRwXktKcAuCOogXgQ8jkiwp5ToG7T+Dr2qaJjA@mail.gmail.com>
-Subject: Re: [PATCH] spi: dw: remove delay between write and read
-To:     Serge Semin <fancer.lancer@gmail.com>
-Cc:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jesus Sanchez-Palencia <jesussanp@google.com>,
-        Mark Slevinsky <markslevinsky@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 07/13] RDMA/rxe: Rename kfree_rcu() to
+ kfree_rcu_mightsleep()
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     Uladzislau Rezki <urezki@gmail.com>,
+        Zhu Yanjun <zyjzyj2000@gmail.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Leon Romanovsky <leon@kernel.org>, linux-rdma@vger.kernel.org,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Philipp Reisner <philipp.reisner@linbit.com>,
+        Bryan Tan <bryantan@vmware.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Ariel Levkovich <lariel@nvidia.com>,
+        Theodore Ts'o <tytso@mit.edu>, Julian Anastasov <ja@ssi.bg>
+References: <20230201150815.409582-1-urezki@gmail.com>
+ <20230201150815.409582-8-urezki@gmail.com> <ZAnjnRC1wY3RIFhM@pc636>
+ <ZAnpdKV/VvvX0TZz@pc636> <20230310005529.GA339498@google.com>
+ <67fbe385-3682-be4e-15fe-f26cc56fd56b@gmail.com>
+ <20230315115053.GA3784687@google.com>
+Content-Language: en-US
+From:   Bob Pearson <rpearsonhpe@gmail.com>
+In-Reply-To: <20230315115053.GA3784687@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Serge,
+On 3/15/23 06:50, Joel Fernandes wrote:
+> On Mon, Mar 13, 2023 at 02:43:43PM -0500, Bob Pearson wrote:
+>> On 3/9/23 18:55, Joel Fernandes wrote:
+>>> On Thu, Mar 09, 2023 at 03:13:08PM +0100, Uladzislau Rezki wrote:
+>>>>> On Wed, Feb 01, 2023 at 04:08:13PM +0100, Uladzislau Rezki (Sony) wrote:
+>>>>>> The kfree_rcu()'s single argument name is deprecated therefore
+>>>>>> rename it to kfree_rcu_mightsleep() variant. The goal is explicitly
+>>>>>> underline that it is for sleepable contexts.
+>>>>>>
+>>>>>> Please check the RXE driver in a way that a single argument can
+>>>>>> be used. Briefly looking at it and rcu_head should be embed to
+>>>>>> free an obj over RCU-core. The context might be atomic.
+>>>>>>
+>>>>>> Cc: Bob Pearson <rpearsonhpe@gmail.com>
+>>>>>> Cc: Jason Gunthorpe <jgg@nvidia.com>
+>>>>>> Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
+>>>>>> ---
+>>>>>>  drivers/infiniband/sw/rxe/rxe_pool.c | 2 +-
+>>>>>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>>>
+>>>>> Could you please add you reviwed-by or Acked-by tags so we can bring
+>>>>> our series with renaming for the next merge window?
+>>>>>
+>>>>> Thanks!
+>>>>>
+>>>> __rxe_cleanup() can be called in two contexts, sleepable and not.
+>>>> Therefore usage of a single argument of the kvfree_rcu() is not correct
+>>>> here.
+>>>>
+>>>> Could you please fix and check your driver? If my above statement
+>>>> is not correct, please provide Acked-by or Reviwed-by tags to the
+>>>> path that is in question.
+>>>>
+>>>> Otherwise please add an rcu_head in your data to free objects over
+>>>> kvfree_rcu() using double argument API.
+>>>>
+>>>> Could you please support?
+>>>
+>>> Also this one needs renaming? It came in because of the commit in 6.3-rc1:
+>>> 72a03627443d ("RDMA/rxe: Remove rxe_alloc()")
+>>>
+>>> It could be squashed into this patch itself since it is infiniband related.
+>>>
+>>> Paul noticed that this breaks dropping the old API on -next, so it is
+>>> blocking the renaming.
+>>>
+>>> ---8<-----------------------
+>>>
+>>> diff --git a/drivers/infiniband/sw/rxe/rxe_mr.c b/drivers/infiniband/sw/rxe/rxe_mr.c
+>>> index b10aa1580a64..ae3a100e18fb 100644
+>>> --- a/drivers/infiniband/sw/rxe/rxe_mr.c
+>>> +++ b/drivers/infiniband/sw/rxe/rxe_mr.c
+>>> @@ -731,7 +731,7 @@ int rxe_dereg_mr(struct ib_mr *ibmr, struct ib_udata *udata)
+>>>  		return -EINVAL;
+>>>  
+>>>  	rxe_cleanup(mr);
+>>> -	kfree_rcu(mr);
+>>> +	kfree_rcu_mightsleep(mr);
+>>>  	return 0;
+>>>  }
+>>>  
+>> I just got back from a 1 week vacation and missed all this.
+>>
+>> The "RDMA/rxe: Remove rxe_alloc()" patch just moved the memory allocation
+>> for MR (verbs) objects outside of the rxe_pool code since it only applied
+>> to MRs and not the other verbs objects (AH, QP, CQ, ...).  That code has to
+>> handle a unique situation for AH objects which can be created or destroyed
+>> by connection manager code in atomic context while all the other ones
+>> including MRs are always created/destroyed in process context. All objects
+>> other than MR's are created/destroyed in the rdma-core code
+>> (drivers/infiniband/core).
+>>
+>> The rxe driver keeps xarray's of pointers to the various objects which are
+>> protected by rcu locking and so it made sense to use kfree_rcu to delete
+>> the object with a delay. In the MR case ..._mightsleep seems harmless and
+>> should not be an issue.
+>>
+>> However on reflection, all the references to the MR objects are ref counted
+>> and they have been dropped before reaching the kfree and so there really
+>> never was a good reason to use kfree_rcu in the first place. So a better
+>> solution would be to replace kfree_rcu with kfree. There is a timeout in
+>> completion_done() that triggers a WARN_ON() and this is only seen if the
+>> driver is broken for some reason but that is equivalent to getting a seg
+>> fault so no reason to further delay the kfree.
+>>
+>> Reviewed-by: Bob Pearson <rpearsonhpe@gmail.com>
+> 
+> Thanks, I am planning to send the following patch for 6.4 consideration,
+> please let me know if you disagree. Still testing it.
+> 
+> ----8<---
+> 
+> From: Joel Fernandes (Google) <joel@joelfernandes.org>
+> Subject: [PATCH] RDMA/rxe: Rename kfree_rcu() to kvfree_rcu_mightsleep()
+> 
+> The k[v]free_rcu() macro's single-argument form is deprecated.
+> Therefore switch to the new k[v]free_rcu_mightsleep() variant. The goal
+> is to avoid accidental use of the single-argument forms, which can
+> introduce functionality bugs in atomic contexts and latency bugs in
+> non-atomic contexts.
+> 
+> There is no functionality change with this patch.
+> 
+> Link: https://lore.kernel.org/rcu/20230201150815.409582-1-urezki@gmail.com
+> Acked-by: Zhu Yanjun <zyjzyj2000@gmail.com>
+> Reviewed-by: Bob Pearson <rpearsonhpe@gmail.com>
+> Reviewed-by: Paul E. McKenney <paulmck@kernel.org>
+> Fixes: 72a03627443d ("RDMA/rxe: Remove rxe_alloc()")
+> Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+> ---
+>  drivers/infiniband/sw/rxe/rxe_mr.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/infiniband/sw/rxe/rxe_mr.c b/drivers/infiniband/sw/rxe/rxe_mr.c
+> index b10aa1580a64..ae3a100e18fb 100644
+> --- a/drivers/infiniband/sw/rxe/rxe_mr.c
+> +++ b/drivers/infiniband/sw/rxe/rxe_mr.c
+> @@ -731,7 +731,7 @@ int rxe_dereg_mr(struct ib_mr *ibmr, struct ib_udata *udata)
+>  		return -EINVAL;
+>  
+>  	rxe_cleanup(mr);
+> -	kfree_rcu(mr);
+> +	kfree_rcu_mightsleep(mr);
+>  	return 0;
+>  }
+>  
 
-> On Fri, Mar 10, 2023 at 10:31:51AM -0500, Jack Chen wrote:
-> > Delay between write and read in polling mode is not necessary in dw spi
-> > driver. It was added assuming that dw spi controller need the delay to
-> > send data from tx fifo to spi devices. But it is not needed because
-> > following reasons:
-> > 1) dw spi datasheet claims transfer begins when first data word is
-> >    present in the transmit FIFO and a slave is enabled. So at least we
-> >    do not need the full fifo-size-transfer time delay.
-> > 2) in practice, due to spi devices implementation, spi full-duplex
-> >    (write and read real data) is always split into two transfers.
+I would prefer just
 
-> In practice the delay is specifically added to minimize the dummy
-> loops in the poll-based transfer. It's calculated based on the number
-> of bytes pushed to the Tx FIFO and the SPI-bus clock rate (that's why
-> the spi_transfer.effective_speed_hz field is initialized in the
-> driver). So after all of them are transferred we get to start reading
-> data from the Rx FIFO. Until then the kernel thread is supposed to
-> sleep giving up the CPU for another tasks.
+-	kfree_rcu(mr);
++	kfree(mr);
 
-Thanks so much for your feedback. I understand the purpose of the specifica=
-lly
-calculated delay now. However, whether freeing cpu to other threads actuall=
-y
-depends on the size of delay. If the delay is smaller than 10 us, normally =
-it
-will cause busy-looping in cpu instead of freeing it.
-And the delay does not work in all cases. For example:
-if I am running the spi at 20M with a fifo size to be 8, and transfering a =
-huge
-chunk of data (4096 bytes) in one transfer, based on the delay calculation,=
- it
-would add a 3200 ns delay between each sub-transfer, which is transformed t=
-o
-4us delay and in most cases on most platforms, udelay is not precise enough=
- and
-I measured >=3D 5 us delay in most cases on my platform. So at least 1.8 us=
- extra
-delay is added. Considering the time to fill tx_fifo, let's round it to 2us=
-.
-The actual time needed to transfer 8 bytes at 20M speed is just 3.2 us but =
-we
-added an extra delay of 2 us on average. When we consider the whole chunk o=
-f
-data (4096 bytes) in the whole transfer, we added more than 1 ms delay. Thi=
-s
-extra delay is long enough to fail a big chunk of data transfer application=
-s (
-e.g. image, audio.).
+but either one will work.
 
-To overcome the extra delay, maybe we can consider the following two
-proposals:
-1) add a node in dts and allow users to enable the delay in polling mode.
-2) Let's compare the needed delay time (bytes to transfer in tx fifo) to 10=
- us,
-        and only call spi_delay_exec when the delay is bigger than 10 us. S=
-ince
-        When the delay is smaller than 10 us, short delay calls
-(ndelay/udelay)
-        are just busy-loops, even calling delay won't freeing cpu to
-other tasks.
-What is your opinion?
-Thanks
-Jack Chen
-
-On Fri, Mar 10, 2023 at 9:23=E2=80=AFPM Serge Semin <fancer.lancer@gmail.co=
-m> wrote:
->
-> Hi Jack
->
-> On Fri, Mar 10, 2023 at 10:31:51AM -0500, Jack Chen wrote:
-> > Delay between write and read in polling mode is not necessary in dw spi
-> > driver. It was added assuming that dw spi controller need the delay to
-> > send data from tx fifo to spi devices. But it is not needed because
-> > following reasons:
-> > 1) dw spi datasheet claims transfer begins when first data word is
-> >    present in the transmit FIFO and a slave is enabled. So at least we
-> >    do not need the full fifo-size-transfer time delay.
-> > 2) in practice, due to spi devices implementation, spi full-duplex
-> >    (write and read real data) is always split into two transfers.
->
-> In practice the delay is specifically added to minimize the dummy
-> loops in the poll-based transfer. It's calculated based on the number
-> of bytes pushed to the Tx FIFO and the SPI-bus clock rate (that's why
-> the spi_transfer.effective_speed_hz field is initialized in the
-> driver). So after all of them are transferred we get to start reading
-> data from the Rx FIFO. Until then the kernel thread is supposed to
-> sleep giving up the CPU for another tasks.
->
-> > Delay between spi transfers may be needed. But this can be introduced b=
-y
-> > using a more formal helper function "spi_transfer_delay_exec", in which
-> > the delay time is passed by users through spi_ioc_transfer.
->
-> This is wrong. spi_transfer.delay is supposed to be executed after the
-> whole transfer is completed. You suggest to to do that in between some
-> random data chunks pushed and pulled from the controller FIFO.
-> Moreover that delay is already performed by the SPI-core:
-> https://elixir.bootlin.com/linux/latest/source/drivers/spi/spi.c#L1570
->
-> -Serge(y)
->
-> >
-> > Signed-off-by: Jack Chen <zenghuchen@google.com>
-> > ---
-> >  drivers/spi/spi-dw-core.c | 20 +++++++-------------
-> >  1 file changed, 7 insertions(+), 13 deletions(-)
-> >
-> > diff --git a/drivers/spi/spi-dw-core.c b/drivers/spi/spi-dw-core.c
-> > index c3bfb6c84cab..7c10fb353567 100644
-> > --- a/drivers/spi/spi-dw-core.c
-> > +++ b/drivers/spi/spi-dw-core.c
-> > @@ -379,9 +379,12 @@ static void dw_spi_irq_setup(struct dw_spi *dws)
-> >
-> >  /*
-> >   * The iterative procedure of the poll-based transfer is simple: write=
- as much
-> > - * as possible to the Tx FIFO, wait until the pending to receive data =
-is ready
-> > - * to be read, read it from the Rx FIFO and check whether the performe=
-d
-> > - * procedure has been successful.
-> > + * as possible to the Tx FIFO, then read from the Rx FIFO and check wh=
-ether the
-> > + * performed procedure has been successful.
-> > + *
-> > + * Delay is introduced in the end of each transfer before (optionally)=
- changing
-> > + * the chipselect status, then starting the next transfer or completin=
-g the
-> > + * list of @spi_message.
-> >   *
-> >   * Note this method the same way as the IRQ-based transfer won't work =
-well for
-> >   * the SPI devices connected to the controller with native CS due to t=
-he
-> > @@ -390,21 +393,12 @@ static void dw_spi_irq_setup(struct dw_spi *dws)
-> >  static int dw_spi_poll_transfer(struct dw_spi *dws,
-> >                               struct spi_transfer *transfer)
-> >  {
-> > -     struct spi_delay delay;
-> > -     u16 nbits;
-> >       int ret;
-> >
-> > -     delay.unit =3D SPI_DELAY_UNIT_SCK;
-> > -     nbits =3D dws->n_bytes * BITS_PER_BYTE;
-> > -
-> >       do {
-> >               dw_writer(dws);
-> > -
-> > -             delay.value =3D nbits * (dws->rx_len - dws->tx_len);
-> > -             spi_delay_exec(&delay, transfer);
-> > -
-> >               dw_reader(dws);
-> > -
-> > +             spi_transfer_delay_exec(transfer);
-> >               ret =3D dw_spi_check_status(dws, true);
-> >               if (ret)
-> >                       return ret;
-> > --
-> > 2.40.0.rc1.284.g88254d51c5-goog
-> >
+Bob
