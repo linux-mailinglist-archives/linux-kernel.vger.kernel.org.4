@@ -2,270 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 165BB6BACAA
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 10:52:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F16A6BACB6
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 10:54:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231700AbjCOJwv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 05:52:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38146 "EHLO
+        id S232153AbjCOJyY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 05:54:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231484AbjCOJwP (ORCPT
+        with ESMTP id S232190AbjCOJxy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 05:52:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C33EB7E89C;
-        Wed, 15 Mar 2023 02:51:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 30D0361CB0;
-        Wed, 15 Mar 2023 09:51:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D375C4339B;
-        Wed, 15 Mar 2023 09:51:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678873867;
-        bh=SS3nEk8RuVUf6cgvqO5Fgo/W8bTsermC5WUVbt8Pkik=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=t/otul67vrR+5yINptH8xhcO6gsoHDd5eDAMhboCY/asJCWHV5mA4Rd0PUkaP24ks
-         v8UHOu9i7owsvSAL2CAA16Anp7vpQkva5ZywLoHFQADbrqGsWVwvYgQgFjTzZNUHtv
-         TZUWC2PgyH4gPQhGapNkixwkUbd/iJOTLIUThTcmJCzE/7BzoF369dM6oqu0OXRA+q
-         nVD0tbFFjFLKJ2YbbpFh1P5rJqMPsxGjayItEzzdPYxWZVDPfwXcklb52ckVR6bc+d
-         xdy9gnQu4H/oVbLZOwzs4Obeh5Kmoq72XlgQVxJPbiI9P5Tm9bbqYKwtxAqX0uPnW1
-         Zu/IWISv5Jpbg==
-Date:   Wed, 15 Mar 2023 11:50:55 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Cc:     linux-arch@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Guo Ren <guoren@kernel.org>,
-        linux-csky@vger.kernel.org
-Subject: Re: [PATCH v4 10/36] csky: Implement the new page table range API
-Message-ID: <ZBGU/wdcQLh5IlBH@kernel.org>
-References: <20230315051444.3229621-1-willy@infradead.org>
- <20230315051444.3229621-11-willy@infradead.org>
+        Wed, 15 Mar 2023 05:53:54 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D7DC77CA8;
+        Wed, 15 Mar 2023 02:52:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678873947; x=1710409947;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=gBg6Vr33FAryjFmPnYb0dmG82k9ImBYRN0MW7OCbJHU=;
+  b=MFuh0nQPeDUWwjbq5zjWg/IEUboL4vL/pzfFypAOYJSMuNa+fz7deuA/
+   nk1RbD8Z7epAnQ1sSLmOq1Kxuk7cJCYAaE2Oe37KkQ3+mv9Yx5qVfz6FO
+   ylpeEGfcY6kyP0q2JhrlfSTmnLyfAOKRCE5/IRz5C8+8vASWuSLr50SOU
+   ay+HjWdZx33v2u+lEHMndXCHNthwvSgOLhrqfbgPsMrOdUayvOwO9IWSg
+   e6Hn3WmvyvTwJNw5fBT7wTJzjO+XDefpIARIvymliCI0IWfyigRrlSXrX
+   BWaaf4Dk/syjoec6ps1tBgGlpzeW24wbl1J9brkkm3F/mncw34bZeM4WL
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="326019499"
+X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
+   d="scan'208";a="326019499"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2023 02:52:27 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="748355968"
+X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
+   d="scan'208";a="748355968"
+Received: from mchanan-mobl.ger.corp.intel.com (HELO [10.213.222.39]) ([10.213.222.39])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2023 02:52:22 -0700
+Message-ID: <b3b63d6e-438e-1b5a-6d01-6164c2160f75@linux.intel.com>
+Date:   Wed, 15 Mar 2023 09:52:20 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230315051444.3229621-11-willy@infradead.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [RFC 01/10] drm: Track clients by tgid and not tid
+Content-Language: en-US
+To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
+Cc:     cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tejun Heo <tj@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Dave Airlie <airlied@redhat.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Rob Clark <robdclark@chromium.org>,
+        =?UTF-8?Q?St=c3=a9phane_Marchesin?= <marcheu@chromium.org>,
+        "T . J . Mercier" <tjmercier@google.com>, Kenny.Ho@amd.com,
+        Brian Welty <brian.welty@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
+        Zack Rusin <zackr@vmware.com>,
+        linux-graphics-maintainer@vmware.com,
+        Alex Deucher <alexander.deucher@amd.com>
+References: <20230314141904.1210824-1-tvrtko.ursulin@linux.intel.com>
+ <20230314141904.1210824-2-tvrtko.ursulin@linux.intel.com>
+ <2d4c10c7-6406-7458-4f52-4260b415874e@amd.com>
+From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+Organization: Intel Corporation UK Plc
+In-Reply-To: <2d4c10c7-6406-7458-4f52-4260b415874e@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
+        NICE_REPLY_A,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 15, 2023 at 05:14:18AM +0000, Matthew Wilcox (Oracle) wrote:
-> Add PFN_PTE_SHIFT, update_mmu_cache_range() and flush_dcache_folio().
-> Change the PG_dcache_clean flag from being per-page to per-folio.
-> 
-> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-> Acked-by: Guo Ren <guoren@kernel.org>
-> Cc: linux-csky@vger.kernel.org
 
-Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
+Hi,
 
-> ---
->  arch/csky/abiv1/cacheflush.c         | 32 +++++++++++++++++-----------
->  arch/csky/abiv1/inc/abi/cacheflush.h |  2 ++
->  arch/csky/abiv2/cacheflush.c         | 32 ++++++++++++++--------------
->  arch/csky/abiv2/inc/abi/cacheflush.h | 10 +++++++--
->  arch/csky/include/asm/pgtable.h      |  8 ++++---
->  5 files changed, 50 insertions(+), 34 deletions(-)
+On 14/03/2023 15:33, Christian König wrote:
+> Am 14.03.23 um 15:18 schrieb Tvrtko Ursulin:
+>> From: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
+>>
+>> Thread group id (aka pid from userspace point of view) is a more
+>> interesting thing to show as an owner of a DRM fd, so track and show that
+>> instead of the thread id.
+>>
+>> In the next patch we will make the owner updated post file descriptor
+>> handover, which will also be tgid based to avoid ping-pong when multiple
+>> threads access the fd.
+>>
+>> Signed-off-by: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
+>> Cc: Zack Rusin <zackr@vmware.com>
+>> Cc: linux-graphics-maintainer@vmware.com
+>> Cc: Alex Deucher <alexander.deucher@amd.com>
+>> Cc: "Christian König" <christian.koenig@amd.com>
+>> Reviewed-by: Zack Rusin <zackr@vmware.com>
 > 
-> diff --git a/arch/csky/abiv1/cacheflush.c b/arch/csky/abiv1/cacheflush.c
-> index fb91b069dc69..ba43f6c26b4f 100644
-> --- a/arch/csky/abiv1/cacheflush.c
-> +++ b/arch/csky/abiv1/cacheflush.c
-> @@ -14,43 +14,49 @@
->  
->  #define PG_dcache_clean		PG_arch_1
->  
-> -void flush_dcache_page(struct page *page)
-> +void flush_dcache_folio(struct folio *folio)
->  {
->  	struct address_space *mapping;
->  
-> -	if (page == ZERO_PAGE(0))
-> +	if (is_zero_pfn(folio_pfn(folio)))
->  		return;
->  
-> -	mapping = page_mapping_file(page);
-> +	mapping = folio_flush_mapping(folio);
->  
-> -	if (mapping && !page_mapcount(page))
-> -		clear_bit(PG_dcache_clean, &page->flags);
-> +	if (mapping && !folio_mapped(folio))
-> +		clear_bit(PG_dcache_clean, &folio->flags);
->  	else {
->  		dcache_wbinv_all();
->  		if (mapping)
->  			icache_inv_all();
-> -		set_bit(PG_dcache_clean, &page->flags);
-> +		set_bit(PG_dcache_clean, &folio->flags);
->  	}
->  }
-> +EXPORT_SYMBOL(flush_dcache_folio);
-> +
-> +void flush_dcache_page(struct page *page)
-> +{
-> +	flush_dcache_folio(page_folio(page));
-> +}
->  EXPORT_SYMBOL(flush_dcache_page);
->  
-> -void update_mmu_cache(struct vm_area_struct *vma, unsigned long addr,
-> -	pte_t *ptep)
-> +void update_mmu_cache_range(struct vm_area_struct *vma, unsigned long addr,
-> +		pte_t *ptep, unsigned int nr)
->  {
->  	unsigned long pfn = pte_pfn(*ptep);
-> -	struct page *page;
-> +	struct folio *folio;
->  
->  	if (!pfn_valid(pfn))
->  		return;
->  
-> -	page = pfn_to_page(pfn);
-> -	if (page == ZERO_PAGE(0))
-> +	if (is_zero_pfn(pfn))
->  		return;
->  
-> -	if (!test_and_set_bit(PG_dcache_clean, &page->flags))
-> +	folio = page_folio(pfn_to_page(pfn));
-> +	if (!test_and_set_bit(PG_dcache_clean, &folio->flags))
->  		dcache_wbinv_all();
->  
-> -	if (page_mapping_file(page)) {
-> +	if (folio_flush_mapping(folio)) {
->  		if (vma->vm_flags & VM_EXEC)
->  			icache_inv_all();
->  	}
-> diff --git a/arch/csky/abiv1/inc/abi/cacheflush.h b/arch/csky/abiv1/inc/abi/cacheflush.h
-> index ed62e2066ba7..0d6cb65624c4 100644
-> --- a/arch/csky/abiv1/inc/abi/cacheflush.h
-> +++ b/arch/csky/abiv1/inc/abi/cacheflush.h
-> @@ -9,6 +9,8 @@
->  
->  #define ARCH_IMPLEMENTS_FLUSH_DCACHE_PAGE 1
->  extern void flush_dcache_page(struct page *);
-> +void flush_dcache_folio(struct folio *);
-> +#define flush_dcache_folio flush_dcache_folio
->  
->  #define flush_cache_mm(mm)			dcache_wbinv_all()
->  #define flush_cache_page(vma, page, pfn)	cache_wbinv_all()
-> diff --git a/arch/csky/abiv2/cacheflush.c b/arch/csky/abiv2/cacheflush.c
-> index 39c51399dd81..622e5b1b3f8a 100644
-> --- a/arch/csky/abiv2/cacheflush.c
-> +++ b/arch/csky/abiv2/cacheflush.c
-> @@ -6,30 +6,30 @@
->  #include <linux/mm.h>
->  #include <asm/cache.h>
->  
-> -void update_mmu_cache(struct vm_area_struct *vma, unsigned long address,
-> -		      pte_t *pte)
-> +void update_mmu_cache_range(struct vm_area_struct *vma, unsigned long address,
-> +		pte_t *pte, unsigned int nr)
->  {
-> -	unsigned long addr;
-> -	struct page *page;
-> +	unsigned long pfn = pte_pfn(*pte);
-> +	struct folio *folio;
-> +	unsigned int i;
->  
-> -	if (!pfn_valid(pte_pfn(*pte)))
-> +	if (!pfn_valid(pfn) || is_zero_pfn(pfn))
->  		return;
->  
-> -	page = pfn_to_page(pte_pfn(*pte));
-> -	if (page == ZERO_PAGE(0))
-> -		return;
-> +	folio = page_folio(pfn_to_page(pfn));
->  
-> -	if (test_and_set_bit(PG_dcache_clean, &page->flags))
-> +	if (test_and_set_bit(PG_dcache_clean, &folio->flags))
->  		return;
->  
-> -	addr = (unsigned long) kmap_atomic(page);
-> -
-> -	dcache_wb_range(addr, addr + PAGE_SIZE);
-> +	for (i = 0; i < folio_nr_pages(folio); i++) {
-> +		unsigned long addr = (unsigned long) kmap_local_folio(folio,
-> +								i * PAGE_SIZE);
->  
-> -	if (vma->vm_flags & VM_EXEC)
-> -		icache_inv_range(addr, addr + PAGE_SIZE);
-> -
-> -	kunmap_atomic((void *) addr);
-> +		dcache_wb_range(addr, addr + PAGE_SIZE);
-> +		if (vma->vm_flags & VM_EXEC)
-> +			icache_inv_range(addr, addr + PAGE_SIZE);
-> +		kunmap_local((void *) addr);
-> +	}
->  }
->  
->  void flush_icache_deferred(struct mm_struct *mm)
-> diff --git a/arch/csky/abiv2/inc/abi/cacheflush.h b/arch/csky/abiv2/inc/abi/cacheflush.h
-> index a565e00c3f70..9c728933a776 100644
-> --- a/arch/csky/abiv2/inc/abi/cacheflush.h
-> +++ b/arch/csky/abiv2/inc/abi/cacheflush.h
-> @@ -18,11 +18,17 @@
->  
->  #define PG_dcache_clean		PG_arch_1
->  
-> +static inline void flush_dcache_folio(struct folio *folio)
-> +{
-> +	if (test_bit(PG_dcache_clean, &folio->flags))
-> +		clear_bit(PG_dcache_clean, &folio->flags);
-> +}
-> +#define flush_dcache_folio flush_dcache_folio
-> +
->  #define ARCH_IMPLEMENTS_FLUSH_DCACHE_PAGE 1
->  static inline void flush_dcache_page(struct page *page)
->  {
-> -	if (test_bit(PG_dcache_clean, &page->flags))
-> -		clear_bit(PG_dcache_clean, &page->flags);
-> +	flush_dcache_folio(page_folio(page));
->  }
->  
->  #define flush_dcache_mmap_lock(mapping)		do { } while (0)
-> diff --git a/arch/csky/include/asm/pgtable.h b/arch/csky/include/asm/pgtable.h
-> index d4042495febc..8cd27104f408 100644
-> --- a/arch/csky/include/asm/pgtable.h
-> +++ b/arch/csky/include/asm/pgtable.h
-> @@ -28,6 +28,7 @@
->  #define pgd_ERROR(e) \
->  	pr_err("%s:%d: bad pgd %08lx.\n", __FILE__, __LINE__, pgd_val(e))
->  
-> +#define PFN_PTE_SHIFT	PAGE_SHIFT
->  #define pmd_pfn(pmd)	(pmd_phys(pmd) >> PAGE_SHIFT)
->  #define pmd_page(pmd)	(pfn_to_page(pmd_phys(pmd) >> PAGE_SHIFT))
->  #define pte_clear(mm, addr, ptep)	set_pte((ptep), \
-> @@ -90,7 +91,6 @@ static inline void set_pte(pte_t *p, pte_t pte)
->  	/* prevent out of order excution */
->  	smp_mb();
->  }
-> -#define set_pte_at(mm, addr, ptep, pteval) set_pte(ptep, pteval)
->  
->  static inline pte_t *pmd_page_vaddr(pmd_t pmd)
->  {
-> @@ -263,8 +263,10 @@ static inline pte_t pte_modify(pte_t pte, pgprot_t newprot)
->  extern pgd_t swapper_pg_dir[PTRS_PER_PGD];
->  extern void paging_init(void);
->  
-> -void update_mmu_cache(struct vm_area_struct *vma, unsigned long address,
-> -		      pte_t *pte);
-> +void update_mmu_cache_range(struct vm_area_struct *vma, unsigned long address,
-> +		pte_t *pte, unsigned int nr);
-> +#define update_mmu_cache(vma, addr, ptep) \
-> +	update_mmu_cache_range(vma, addr, ptep, 1)
->  
->  #define io_remap_pfn_range(vma, vaddr, pfn, size, prot) \
->  	remap_pfn_range(vma, vaddr, pfn, size, prot)
-> -- 
-> 2.39.2
+> Reviewed-by: Christian König <christian.koenig@amd.com>
 > 
-> 
+> Should we push the already reviewed cleanups like this one to 
+> drm-misc-next? That makes sense even without the rest of the 
+> functionality and reduce the amount of patches re-send.
 
--- 
-Sincerely yours,
-Mike.
+I don't have the commit rights so if you could do that I certainly would 
+not mind, thanks!
+
+Regards,
+
+Tvrtko
+
+>> ---
+>>   drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c | 2 +-
+>>   drivers/gpu/drm/drm_debugfs.c           | 4 ++--
+>>   drivers/gpu/drm/drm_file.c              | 2 +-
+>>   drivers/gpu/drm/vmwgfx/vmwgfx_gem.c     | 2 +-
+>>   4 files changed, 5 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c 
+>> b/drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c
+>> index d8e683688daa..863cb668e000 100644
+>> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c
+>> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c
+>> @@ -969,7 +969,7 @@ static int amdgpu_debugfs_gem_info_show(struct 
+>> seq_file *m, void *unused)
+>>            * Therefore, we need to protect this ->comm access using RCU.
+>>            */
+>>           rcu_read_lock();
+>> -        task = pid_task(file->pid, PIDTYPE_PID);
+>> +        task = pid_task(file->pid, PIDTYPE_TGID);
+>>           seq_printf(m, "pid %8d command %s:\n", pid_nr(file->pid),
+>>                  task ? task->comm : "<unknown>");
+>>           rcu_read_unlock();
+>> diff --git a/drivers/gpu/drm/drm_debugfs.c 
+>> b/drivers/gpu/drm/drm_debugfs.c
+>> index 4f643a490dc3..4855230ba2c6 100644
+>> --- a/drivers/gpu/drm/drm_debugfs.c
+>> +++ b/drivers/gpu/drm/drm_debugfs.c
+>> @@ -80,7 +80,7 @@ static int drm_clients_info(struct seq_file *m, void 
+>> *data)
+>>       seq_printf(m,
+>>              "%20s %5s %3s master a %5s %10s\n",
+>>              "command",
+>> -           "pid",
+>> +           "tgid",
+>>              "dev",
+>>              "uid",
+>>              "magic");
+>> @@ -94,7 +94,7 @@ static int drm_clients_info(struct seq_file *m, void 
+>> *data)
+>>           bool is_current_master = drm_is_current_master(priv);
+>>           rcu_read_lock(); /* locks pid_task()->comm */
+>> -        task = pid_task(priv->pid, PIDTYPE_PID);
+>> +        task = pid_task(priv->pid, PIDTYPE_TGID);
+>>           uid = task ? __task_cred(task)->euid : GLOBAL_ROOT_UID;
+>>           seq_printf(m, "%20s %5d %3d   %c    %c %5d %10u\n",
+>>                  task ? task->comm : "<unknown>",
+>> diff --git a/drivers/gpu/drm/drm_file.c b/drivers/gpu/drm/drm_file.c
+>> index a51ff8cee049..c1018c470047 100644
+>> --- a/drivers/gpu/drm/drm_file.c
+>> +++ b/drivers/gpu/drm/drm_file.c
+>> @@ -156,7 +156,7 @@ struct drm_file *drm_file_alloc(struct drm_minor 
+>> *minor)
+>>       if (!file)
+>>           return ERR_PTR(-ENOMEM);
+>> -    file->pid = get_pid(task_pid(current));
+>> +    file->pid = get_pid(task_tgid(current));
+>>       file->minor = minor;
+>>       /* for compatibility root is always authenticated */
+>> diff --git a/drivers/gpu/drm/vmwgfx/vmwgfx_gem.c 
+>> b/drivers/gpu/drm/vmwgfx/vmwgfx_gem.c
+>> index d6baf73a6458..c0da89e16e6f 100644
+>> --- a/drivers/gpu/drm/vmwgfx/vmwgfx_gem.c
+>> +++ b/drivers/gpu/drm/vmwgfx/vmwgfx_gem.c
+>> @@ -241,7 +241,7 @@ static int vmw_debugfs_gem_info_show(struct 
+>> seq_file *m, void *unused)
+>>            * Therefore, we need to protect this ->comm access using RCU.
+>>            */
+>>           rcu_read_lock();
+>> -        task = pid_task(file->pid, PIDTYPE_PID);
+>> +        task = pid_task(file->pid, PIDTYPE_TGID);
+>>           seq_printf(m, "pid %8d command %s:\n", pid_nr(file->pid),
+>>                  task ? task->comm : "<unknown>");
+>>           rcu_read_unlock();
+> 
