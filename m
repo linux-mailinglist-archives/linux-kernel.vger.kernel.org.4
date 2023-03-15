@@ -2,133 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5D436BA60D
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 05:12:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B23826BA5E7
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 05:08:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231307AbjCOEMQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 00:12:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59122 "EHLO
+        id S230376AbjCOEID (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 00:08:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231256AbjCOELx (ORCPT
+        with ESMTP id S230006AbjCOEIA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 00:11:53 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FDB25D8AA
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 21:11:15 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id z10so10075809pgr.8
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 21:11:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1678853474;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=HKoujjtc9hCGDl1d2RjrGi/c9c1GCO8QdPXGn1k1ZhE=;
-        b=PqGSN9BYMdbfE0eWEVmbysbCyChbr6sF9pWxkj85Kz5mkziotP9bSFSXW4C9708ksD
-         PdMQdDG3U9RhQxCC+RljHg5ufQoAaOkiDJ7qb1zQhp+AnWEBYLxLDrsn+104v9cVnufh
-         r8yR10WUyRReQ9MTec2gjjnuTMDIY3sM0fsUc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678853474;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HKoujjtc9hCGDl1d2RjrGi/c9c1GCO8QdPXGn1k1ZhE=;
-        b=cR4ttpDLeiH/AjEJdwQcVAPgjGf0xhUPx2wzskOkJTNYXO2TuPFbHpOA0cIC19CVSX
-         eLVIA4NefPy52xL5WcDXLyClT20y4ArOGRAG3s50TXYRb8/90hFNwBmuErdebIrrtl18
-         OYw35HGL2A5o1c2grfvmhDjKggBrOodRvW2hrYuQtK4gJlMrUyBOhomwNQud1VqOFlkn
-         WwkAPvO2kGKhhUNb03yZOd+fvVFw0dkOzY8dHoTeu/qON4w7zaz1IsuUtqw2DSPMBP3y
-         pNzD0AI0RPdXMxskEiYRd1il7MYXAHMHyS5ZkSp3lelx8cJpYDE1Qz4f3YVG3l1mtTfT
-         e6Xw==
-X-Gm-Message-State: AO0yUKW7Yt9PMraQKj4UAnFYHNfLc/NDYZyKvPM0AgqpUGtTC6pscRtx
-        bn2X1QjNPN1iPjRxyEyrmlLDgA==
-X-Google-Smtp-Source: AK7set9NjRWMOlC2eXp/43o2DAvOdU92TkqxbQHze5KccUrQJ7/Ck6guDEaybokQOD5ue/W6vTf3/Q==
-X-Received: by 2002:a62:53c3:0:b0:5d7:637a:abcf with SMTP id h186-20020a6253c3000000b005d7637aabcfmr33159484pfb.32.1678853474423;
-        Tue, 14 Mar 2023 21:11:14 -0700 (PDT)
-Received: from treapking.tpe.corp.google.com ([2401:fa00:1:10:3a77:bf68:24f0:1c75])
-        by smtp.gmail.com with ESMTPSA id d13-20020aa7814d000000b0059261bd5bacsm2338685pfn.202.2023.03.14.21.11.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Mar 2023 21:11:14 -0700 (PDT)
-From:   Pin-yen Lin <treapking@chromium.org>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        Pin-yen Lin <treapking@chromium.org>
-Subject: [PATCH] Revert "arm64: dts: mediatek: mt8173-elm: Move display to ps8640 auxiliary bus"
-Date:   Wed, 15 Mar 2023 12:11:07 +0800
-Message-Id: <20230315041107.2886940-1-treapking@chromium.org>
-X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
+        Wed, 15 Mar 2023 00:08:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B86B171E;
+        Tue, 14 Mar 2023 21:07:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2258E61AAD;
+        Wed, 15 Mar 2023 04:07:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27010C433D2;
+        Wed, 15 Mar 2023 04:07:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678853277;
+        bh=KJqyxTArsBbv6ReyKMgsMSt6IK3Nx4mxhE44Z4zwGi8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KubU8rW5zY1FS0YPdL5x43KMZenlN84ZIrfHq4nxfw3uGXTt6hcvuywqbabSvzZVL
+         t9ugsSaMCjKQL4sEISaKMfzJzqvLLQFQI+bhDCI4+4r+z8KvcDy0y/1XhgCCymNPEX
+         TH1TvXD+2i6NmINmWYqfvfZNk4aYqgj3BG7TM2tSNUy0er6kniiNPIPPOzjaLyjyYV
+         aiY0qexUbqz/90PvCWBRho/NJKGzPW0fyYzJl6trUAPjy829CBGznfbh8DP60K9+8V
+         PZwaC7FNxujAHBVBYef/nty+R6hUmBsdQmsvsULPKq5BVPtwHyZTfYuhfp9S5LlJEk
+         piSSadL8T2tow==
+Date:   Tue, 14 Mar 2023 21:11:19 -0700
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Elliot Berman <quic_eberman@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Amol Maheshwari <amahesh@qti.qualcomm.com>,
+        Arnd Bergmann <arnd@arndb.de>, Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Gokul krishna Krishnakumar <quic_gokukris@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ath10k@lists.infradead.org, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, linux-remoteproc@vger.kernel.org
+Subject: Re: [PATCH] firmware: qcom_scm: Use fixed width src vm bitmap
+Message-ID: <20230315041119.fp7npwa5bia5hck3@ripper>
+References: <20230213181832.3489174-1-quic_eberman@quicinc.com>
+ <20230213214417.mtcpeultvynyls6s@ripper>
+ <Y+tNRPf0PGdShf5l@kroah.com>
+ <20230214172325.lplxgbprhj3bzvr3@ripper>
+ <bdda82f7-933d-443b-614a-6befad2899b5@quicinc.com>
+ <2ae96b75-82f1-165a-e56d-7446c90bb7af@quicinc.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2ae96b75-82f1-165a-e56d-7446c90bb7af@quicinc.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This reverts commit c2d94f72140a28d0f516b7c5e8274a9c185a04ff.
+On Fri, Mar 03, 2023 at 01:09:08PM -0800, Elliot Berman wrote:
+> 
+> 
+> On 2/14/2023 10:52 AM, Elliot Berman wrote:
+> > 
+> > 
+> > On 2/14/2023 9:23 AM, Bjorn Andersson wrote:
+> > > On Tue, Feb 14, 2023 at 09:58:44AM +0100, Greg Kroah-Hartman wrote:
+> > > > On Mon, Feb 13, 2023 at 01:44:17PM -0800, Bjorn Andersson wrote:
+> > > > > On Mon, Feb 13, 2023 at 10:18:29AM -0800, Elliot Berman wrote:
+> > > > > > The maximum VMID for assign_mem is 63. Use a u64 to represent this
+> > > > > > bitmap instead of architecture-dependent "unsigned int"
+> > > > > > which varies in
+> > > > > > size on 32-bit and 64-bit platforms.
+> > > > > > 
+> > > > > > Acked-by: Kalle Valo <kvalo@kernel.org> (ath10k)
+> > > > > > Tested-by: Gokul krishna Krishnakumar <quic_gokukris@quicinc.com>
+> > > > > > Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
+> > > > > 
+> > > > > Reviewed-by: Bjorn Andersson <andersson@kernel.org>
+> > > > > 
+> > > > > @Greg, would you mind taking this through your tree for v6.3, you
+> > > > > already have a related change in fastrpc.c in your tree...
+> > > > 
+> > > > I tried, but it doesn't apply to my char-misc tree at all:
+> > > > 
+> > > > checking file drivers/firmware/qcom_scm.c
+> > > > Hunk #1 succeeded at 898 (offset -7 lines).
+> > > > Hunk #2 succeeded at 915 (offset -7 lines).
+> > > > Hunk #3 succeeded at 930 (offset -7 lines).
+> > > > checking file drivers/misc/fastrpc.c
+> > > > checking file drivers/net/wireless/ath/ath10k/qmi.c
+> > > > checking file drivers/remoteproc/qcom_q6v5_mss.c
+> > > > Hunk #1 succeeded at 227 (offset -8 lines).
+> > > > Hunk #2 succeeded at 404 (offset -10 lines).
+> > > > Hunk #3 succeeded at 939 with fuzz 1 (offset -28 lines).
+> > > > checking file drivers/remoteproc/qcom_q6v5_pas.c
+> > > > Hunk #1 FAILED at 94.
+> > > > 1 out of 1 hunk FAILED
+> > > > checking file drivers/soc/qcom/rmtfs_mem.c
+> > > > Hunk #1 succeeded at 30 (offset -1 lines).
+> > > > can't find file to patch at input line 167
+> > > > Perhaps you used the wrong -p or --strip option?
+> > > > The text leading up to this was:
+> > > > --------------------------
+> > > > |diff --git a/include/linux/firmware/qcom/qcom_scm.h
+> > > > b/include/linux/firmware/qcom/qcom_scm.h
+> > > > |index 1e449a5d7f5c..250ea4efb7cb 100644
+> > > > |--- a/include/linux/firmware/qcom/qcom_scm.h
+> > > > |+++ b/include/linux/firmware/qcom/qcom_scm.h
+> > > > --------------------------
+> > > > 
+> > > > What tree is this patch made against?
+> > > > 
+> > > 
+> > > Sorry about that, I missed the previous changes in qcom_q6v5_pas in the
+> > > remoteproc tree. Elliot said he based it on linux-next, so I expect that
+> > > it will merge fine on top of -rc1, once that arrives.
+> > > 
+> > 
+> > Yes, this patch applies on next-20230213. I guess there are enough
+> > changes were coming from QCOM side (via Bjorn's qcom tree) as well as
+> > the fastrpc change (via Greg's char-misc tree).
+> > 
+> > Let me know if I should do anything once -rc1 arrives. Happy to post
+> > version on the -rc1 if it helps.
+> > 
+> 
+> The patch now applies on tip of Linus's tree and on char-misc.
 
-The `lg_lp120up1_mode` defined in panel-edp.c is not working for some
-panels used on elm/hana devices. Move the panel node out of the aux-bus
-subnode so the driver only uses the modes retrieved from the EDID.
+Greg, I have a couple more patches in the scm driver in my inbox. Would
+you be okay with me pulling this through the Qualcomm tree for v6.4?
 
-Signed-off-by: Pin-yen Lin <treapking@chromium.org>
-
----
-
- arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi | 26 +++++++++-----------
- 1 file changed, 12 insertions(+), 14 deletions(-)
-
-diff --git a/arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi b/arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi
-index d452cab28c67..d45a2aeb0eb1 100644
---- a/arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8173-elm.dtsi
-@@ -90,6 +90,18 @@ switch-volume-up {
- 		};
- 	};
- 
-+	panel: panel {
-+		compatible = "lg,lp120up1";
-+		power-supply = <&panel_fixed_3v3>;
-+		backlight = <&backlight>;
-+
-+		port {
-+			panel_in: endpoint {
-+				remote-endpoint = <&ps8640_out>;
-+			};
-+		};
-+	};
-+
- 	panel_fixed_3v3: regulator1 {
- 		compatible = "regulator-fixed";
- 		regulator-name = "PANEL_3V3";
-@@ -282,20 +294,6 @@ ps8640_out: endpoint {
- 				};
- 			};
- 		};
--
--		aux-bus {
--			panel: panel {
--				compatible = "lg,lp120up1";
--				power-supply = <&panel_fixed_3v3>;
--				backlight = <&backlight>;
--
--				port {
--					panel_in: endpoint {
--						remote-endpoint = <&ps8640_out>;
--					};
--				};
--			};
--		};
- 	};
- };
- 
--- 
-2.40.0.rc1.284.g88254d51c5-goog
-
+Regards,
+Bjorn
