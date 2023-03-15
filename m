@@ -2,181 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B0F86BBC11
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 19:30:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4777F6BBC12
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 19:30:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231646AbjCOSaA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 14:30:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41482 "EHLO
+        id S231725AbjCOSaC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 14:30:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232464AbjCOS3x (ORCPT
+        with ESMTP id S232400AbjCOS3w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 14:29:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0D3F8ABE5
+        Wed, 15 Mar 2023 14:29:52 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E6A519C57
         for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 11:29:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4067061E07
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 18:29:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C271C433EF;
-        Wed, 15 Mar 2023 18:29:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678904981;
-        bh=IElDfGkli0DP+TpNpslvFjebzjXzSrZFS4o5fGnwePY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pqnVZoe/U83ZX+F6sVpj9f8R60GXGqBmEmu576WDauUYLp88UbKmjoj+dJNtJclRd
-         JMD6gWopws9xtsqmp8pEU9IBmEXW0ULXSx0VN7kQ/w4vB5OilIn0HWY5GF2Jld61yN
-         e97Uijet2pH/Ei82RjjuE2eAgKBUNgpVHCvg5jqMFHUfPDvTkpjQ8HT6NefHEEd6va
-         5VyrJJuwvT5F0R2lUna3CwEtQ2M1YWcpHnrrMgpSsdPC1w15M2pjYNy+NCPoF4oHPs
-         2gSuZHrRJMX+BIMoVHbbDv1EMC2/hQnI7mrDvN/rQOpWpOxmlK+77OKTQlLf68yGgH
-         SUl+htP7bSxiA==
-Date:   Wed, 15 Mar 2023 18:29:37 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Song Shuai <suagrfillet@gmail.com>
-Cc:     sudeep.holla@arm.com, gregkh@linuxfoundation.org,
-        rafael@kernel.org, conor.dooley@microchip.com,
-        ionela.voinescu@arm.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V2] arch_topology: Clear LLC sibling when cacheinfo
- teardown
-Message-ID: <70faf5fa-65c2-45a6-9815-8bab38bdae75@spud>
-References: <20230314075345.1325187-1-suagrfillet@gmail.com>
+Received: by mail-ed1-x532.google.com with SMTP id w9so8331054edc.3
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 11:29:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tessares.net; s=google; t=1678904980;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=wFueg1Re7r7oz+bq5GiyyDwW00ISWX7DiVqgOMzRA58=;
+        b=z77gvtWr37A/s5VNJqbHRj5RMHdZyDNaJEFQwqIIut4z+DlUSrDiaHl4Kv474TkyTo
+         PMtJeodhY9Sdc1cFqKmX02tf7fQ+YA1d30C+EOaFuIJrlIkavn22w+xZcGUZ+Fqtbo+r
+         Egc9ZnO2h2BIuPSvNlvQPAEfy/3rhPfKKviynBm2JUBuf3BQCbvXz+Eg0fSuw5gvi7Pe
+         6sA0vYN8/haAHMsNb/rZ/6C38LQP/w7PtgyMWswG/t67xwh0lVe2BX/zfDmadUHEdCUF
+         rj0os6zkpLGszqEptTMycf7ZSZwPQUdWwhLpusTyJVsYFkLFOHPiUq+pUjjaBcKo3SsX
+         X2Fg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678904980;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wFueg1Re7r7oz+bq5GiyyDwW00ISWX7DiVqgOMzRA58=;
+        b=R1bydWntMBI83GJ2iac2v9rGtFF8nE4F4MoG0Vnirw4j+mTZh+F7nsIKSnHkz8F5l7
+         Er33A+oZj8vP3ud7JsaEdHKAzG/5lAmpOrU0ndRGiU6fw2EZvUTEOQBZTMw/0cynROyr
+         nq0TFGgRh2P4zYKG1+FH1nUJs99VNh3W52G42L0lFZzWNxV6DWK074YKIF9arS5zM72E
+         p0FthCSqwRLVG2dyeiuF1+V5Ihpw22xRwFjJHRIJrfE5Xw2w6DLHBJ+OXPQqR9ZQ+F7i
+         D+bMWG3/4qD1rspr/QzgTidHUXRqNBsr6xipVWurO5L0F8Xhny52hGbFu0kcJLCq3VvY
+         ggcQ==
+X-Gm-Message-State: AO0yUKWXyzMlFHXFqUHThoawEcmVh8WTKq32PqCB4Ist6C+2GqibkKHT
+        DN74EE0Lps4AhDIqHrD3GKnqXw==
+X-Google-Smtp-Source: AK7set9V2+oXGXLvqaa5erAztcj3u7fMWk+JUhyXOLyZzl8OTMMm30BM9l3QFu8UbAHFwKCWN/EDrg==
+X-Received: by 2002:a17:906:7e4e:b0:929:bd3:eab4 with SMTP id z14-20020a1709067e4e00b009290bd3eab4mr7111332ejr.68.1678904980521;
+        Wed, 15 Mar 2023 11:29:40 -0700 (PDT)
+Received: from [10.124.6.19] ([195.181.172.151])
+        by smtp.gmail.com with ESMTPSA id k1-20020a508ac1000000b004c0239e41d8sm2860526edk.81.2023.03.15.11.29.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Mar 2023 11:29:40 -0700 (PDT)
+Message-ID: <1126b5c9-0742-0d3e-f483-8f08ea22aec4@tessares.net>
+Date:   Wed, 15 Mar 2023 19:29:39 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="WXSODWlx7Ag6BoSl"
-Content-Disposition: inline
-In-Reply-To: <20230314075345.1325187-1-suagrfillet@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 1/2] docs: process: allow Closes tags with links
+Content-Language: en-GB
+To:     Konstantin Ryabitsev <konstantin@linuxfoundation.org>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Andy Whitcroft <apw@canonical.com>,
+        Joe Perches <joe@perches.com>,
+        Dwaipayan Ray <dwaipayanray1@gmail.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        =?UTF-8?Q?Kai_Wasserb=c3=a4ch?= <kai@dev.carbon-project.org>,
+        Thorsten Leemhuis <linux@leemhuis.info>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        mptcp@lists.linux.dev
+References: <20230314-doc-checkpatch-closes-tag-v1-0-1b83072e9a9a@tessares.net>
+ <20230314-doc-checkpatch-closes-tag-v1-1-1b83072e9a9a@tessares.net>
+ <20230315181205.f3av7h6owqzzw64p@meerkat.local>
+From:   Matthieu Baerts <matthieu.baerts@tessares.net>
+In-Reply-To: <20230315181205.f3av7h6owqzzw64p@meerkat.local>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Konstantin,
 
---WXSODWlx7Ag6BoSl
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 15/03/2023 19:12, Konstantin Ryabitsev wrote:
+> On Wed, Mar 15, 2023 at 06:44:56PM +0100, Matthieu Baerts wrote:
+>> Note that thanks to this "Closes" tag, the mentioned bug trackers can
+>> also locate where a patch has been applied in different branches and
+>> repositories. If only the "Link" tag is used, the tracking can also be
+>> done but the ticket will not be closed and a manual operation will be
+>> needed.
+> 
+> We will soon gain this ability on bugzilla.kernel.org as one of the features
+> of the bugbot integration tool (which is still WIP).
 
-On Tue, Mar 14, 2023 at 03:53:45PM +0800, Song Shuai wrote:
-> The teardown of CPUHP_AP_BASE_CACHEINFO_ONLINE now only invokes
-> free_cache_attributes() to clear share_cpu_map of cacheinfo list.
-> At the same time, clearing cpu_topology[].llc_sibling is
-> called quite late at the teardown code in hotplug STARTING section.
->=20
-> To avoid the incorrect LLC sibling masks generated, move its clearing
-> right after free_cache_attributes().
->=20
+Good news! This feature will be helpful for bugzilla users!
 
-> Link: https://lore.kernel.org/linux-kernel/20230313102752.1134472-1-suagr=
-fillet@gmail.com/
-
-btw, I think you've added the wrong link here - this seems to be a link
-to your previous submission. Was it meant to link to something else?
+> So, if it helps, I
+> support making this a recognized trailer.
+Thank you for your support!
 
 Cheers,
-Conor.
-
-> Fixes: 3fcbf1c77d08 ("arch_topology: Fix cache attributes detection in th=
-e CPU hotplug path")
-> Signed-off-by: Song Shuai <suagrfillet@gmail.com>
-> ---
-> changes from V1:
->  - fix implicit declaration of clear_llc_topology
-> ---
->  drivers/base/arch_topology.c  | 16 ++++++++++++++--
->  drivers/base/cacheinfo.c      |  2 ++
->  include/linux/arch_topology.h |  3 +++
->  3 files changed, 19 insertions(+), 2 deletions(-)
->=20
-> diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
-> index b1c1dd38ab01..8681654d6c07 100644
-> --- a/drivers/base/arch_topology.c
-> +++ b/drivers/base/arch_topology.c
-> @@ -769,6 +769,20 @@ void update_siblings_masks(unsigned int cpuid)
->  	}
->  }
-> =20
-> +void clear_llc_topology(unsigned int cpu)
-> +{
-> +	int sib;
-> +
-> +	for_each_cpu(sib, topology_llc_cpumask(cpu)) {
-> +		if (sib =3D=3D cpu)
-> +			continue;
-> +		if (last_level_cache_is_shared(cpu, sib)) {
-> +			cpumask_clear_cpu(cpu, topology_llc_cpumask(sib));
-> +			cpumask_clear_cpu(sib, topology_llc_cpumask(cpu));
-> +		}
-> +	}
-> +}
-> +
->  static void clear_cpu_topology(int cpu)
->  {
->  	struct cpu_topology *cpu_topo =3D &cpu_topology[cpu];
-> @@ -811,8 +825,6 @@ void remove_cpu_topology(unsigned int cpu)
->  		cpumask_clear_cpu(cpu, topology_sibling_cpumask(sibling));
->  	for_each_cpu(sibling, topology_cluster_cpumask(cpu))
->  		cpumask_clear_cpu(cpu, topology_cluster_cpumask(sibling));
-> -	for_each_cpu(sibling, topology_llc_cpumask(cpu))
-> -		cpumask_clear_cpu(cpu, topology_llc_cpumask(sibling));
-> =20
->  	clear_cpu_topology(cpu);
->  }
-> diff --git a/drivers/base/cacheinfo.c b/drivers/base/cacheinfo.c
-> index f6573c335f4c..1c276b30fd5a 100644
-> --- a/drivers/base/cacheinfo.c
-> +++ b/drivers/base/cacheinfo.c
-> @@ -19,6 +19,7 @@
->  #include <linux/slab.h>
->  #include <linux/smp.h>
->  #include <linux/sysfs.h>
-> +#include <linux/arch_topology.h>
-> =20
->  /* pointer to per cpu cacheinfo */
->  static DEFINE_PER_CPU(struct cpu_cacheinfo, ci_cpu_cacheinfo);
-> @@ -814,6 +815,7 @@ static int cacheinfo_cpu_pre_down(unsigned int cpu)
->  		cpu_cache_sysfs_exit(cpu);
-> =20
->  	free_cache_attributes(cpu);
-> +	clear_llc_topology(cpu);
->  	return 0;
->  }
-> =20
-> diff --git a/include/linux/arch_topology.h b/include/linux/arch_topology.h
-> index a07b510e7dc5..569e05607934 100644
-> --- a/include/linux/arch_topology.h
-> +++ b/include/linux/arch_topology.h
-> @@ -89,9 +89,12 @@ void store_cpu_topology(unsigned int cpuid);
->  const struct cpumask *cpu_coregroup_mask(int cpu);
->  const struct cpumask *cpu_clustergroup_mask(int cpu);
->  void update_siblings_masks(unsigned int cpu);
-> +void clear_llc_topology(unsigned int cpu);
->  void remove_cpu_topology(unsigned int cpuid);
->  void reset_cpu_topology(void);
->  int parse_acpi_topology(void);
-> +#else
-> +static inline void clear_llc_topology(unsigned int cpu) { }
->  #endif
-> =20
->  #endif /* _LINUX_ARCH_TOPOLOGY_H_ */
-> --=20
-> 2.20.1
->=20
-
---WXSODWlx7Ag6BoSl
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZBIOkQAKCRB4tDGHoIJi
-0iPyAP0dyvyYAXc7fXVhiF7RViNcSjXUh5HCIST0t557EwELfAEAwSk39ME6BWq6
-w3JUWTbThvkmqEsvuAdkY1s3bkJHmAg=
-=z29j
------END PGP SIGNATURE-----
-
---WXSODWlx7Ag6BoSl--
+Matt
+-- 
+Tessares | Belgium | Hybrid Access Solutions
+www.tessares.net
