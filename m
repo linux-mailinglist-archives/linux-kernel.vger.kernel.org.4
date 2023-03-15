@@ -2,209 +2,245 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C1B26BA6EE
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 06:17:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 910366BA6FB
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 06:21:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231696AbjCOFRQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 01:17:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49778 "EHLO
+        id S231737AbjCOFVI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 01:21:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231492AbjCOFPj (ORCPT
+        with ESMTP id S231557AbjCOFUg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 01:15:39 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC2A63E612;
-        Tue, 14 Mar 2023 22:15:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
-        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
-        Content-Type:Content-ID:Content-Description;
-        bh=PaqUJoSuStWz+a+eZ6H5Czv2RDkRGCSPMhY7d1rRpLQ=; b=vvhYyf+z+JwQ/j/pQJl+0gs8Cg
-        Z7U9+n33E4ya8Rs6VKmmnqEH28jdQ4DqxJoZzM5mdflmtSMd+yi4QD5DY7G6MwTu/aY/fxbFfqpzA
-        GNRHXJsPYag8wyB2MsDXq0FNR167SZ8hfIU8jfQYsAEEWY7xVUG2EUAiHGSR8zgrURZk0SBcC/tw3
-        /zcFkUw5x8LSpC4C5WwfSqdey12gZW0dngWQsr7691RQiTnLYh7PJh4w2M+kkStz9lDF4v7fY+LUA
-        HFBny6CHlaD22KncUJZ6rWt/MD07tTSoYRCHZOIQywVMEC83Jj2z/yp/0ev2MTAuRFR9j6kKg88OI
-        cmYZqZ9g==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pcJTO-00DYDm-Gh; Wed, 15 Mar 2023 05:14:50 +0000
-From:   "Matthew Wilcox (Oracle)" <willy@infradead.org>
-To:     linux-arch@vger.kernel.org
-Cc:     Yin Fengwei <fengwei.yin@intel.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Matthew Wilcox <willy@infradead.org>
-Subject: [PATCH v4 33/36] filemap: Add filemap_map_folio_range()
-Date:   Wed, 15 Mar 2023 05:14:41 +0000
-Message-Id: <20230315051444.3229621-34-willy@infradead.org>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20230315051444.3229621-1-willy@infradead.org>
-References: <20230315051444.3229621-1-willy@infradead.org>
+        Wed, 15 Mar 2023 01:20:36 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B94B06547C;
+        Tue, 14 Mar 2023 22:17:04 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 74A4116F2;
+        Tue, 14 Mar 2023 22:16:21 -0700 (PDT)
+Received: from a077893.blr.arm.com (unknown [10.162.41.10])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 201983F67D;
+        Tue, 14 Mar 2023 22:15:32 -0700 (PDT)
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        will@kernel.org, catalin.marinas@arm.com, mark.rutland@arm.com
+Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        Mark Brown <broonie@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Suzuki Poulose <suzuki.poulose@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        linux-perf-users@vger.kernel.org
+Subject: [PATCH V9 08/10] arm64/perf: Add struct brbe_regset helper functions
+Date:   Wed, 15 Mar 2023 10:44:42 +0530
+Message-Id: <20230315051444.1683170-9-anshuman.khandual@arm.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230315051444.1683170-1-anshuman.khandual@arm.com>
+References: <20230315051444.1683170-1-anshuman.khandual@arm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yin Fengwei <fengwei.yin@intel.com>
+The primary abstraction level for fetching branch records from BRBE HW has
+been changed as 'struct brbe_regset', which contains storage for all three
+BRBE registers i.e BRBSRC, BRBTGT, BRBINF. Whether branch record processing
+happens in the task sched out path, or in the PMU IRQ handling path, these
+registers need to be extracted from the HW. Afterwards both live and stored
+sets need to be stitched together to create final branch records set. This
+adds required helper functions for such operations.
 
-filemap_map_folio_range() maps partial/full folio. Comparing to original
-filemap_map_pages(), it updates refcount once per folio instead of per
-page and gets minor performance improvement for large folio.
-
-With a will-it-scale.page_fault3 like app (change file write
-fault testing to read fault testing. Trying to upstream it to
-will-it-scale at [1]), got 2% performance gain on a 48C/96T
-Cascade Lake test box with 96 processes running against xfs.
-
-[1]: https://github.com/antonblanchard/will-it-scale/pull/37
-
-Signed-off-by: Yin Fengwei <fengwei.yin@intel.com>
-Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
 ---
- mm/filemap.c | 98 +++++++++++++++++++++++++++++-----------------------
- 1 file changed, 54 insertions(+), 44 deletions(-)
+ arch/arm64/kernel/brbe.c | 163 +++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 163 insertions(+)
 
-diff --git a/mm/filemap.c b/mm/filemap.c
-index a34abfe8c654..6e2b0778db45 100644
---- a/mm/filemap.c
-+++ b/mm/filemap.c
-@@ -2199,16 +2199,6 @@ unsigned filemap_get_folios(struct address_space *mapping, pgoff_t *start,
- }
- EXPORT_SYMBOL(filemap_get_folios);
- 
--static inline
--bool folio_more_pages(struct folio *folio, pgoff_t index, pgoff_t max)
--{
--	if (!folio_test_large(folio) || folio_test_hugetlb(folio))
--		return false;
--	if (index >= max)
--		return false;
--	return index < folio->index + folio_nr_pages(folio) - 1;
--}
--
- /**
-  * filemap_get_folios_contig - Get a batch of contiguous folios
-  * @mapping:	The address_space to search
-@@ -3480,6 +3470,53 @@ static inline struct folio *next_map_page(struct address_space *mapping,
- 				  mapping, xas, end_pgoff);
+diff --git a/arch/arm64/kernel/brbe.c b/arch/arm64/kernel/brbe.c
+index a8b4f89b5d00..34bc58ef8062 100644
+--- a/arch/arm64/kernel/brbe.c
++++ b/arch/arm64/kernel/brbe.c
+@@ -44,6 +44,169 @@ static void select_brbe_bank(int bank)
+ 	isb();
  }
  
 +/*
-+ * Map page range [start_page, start_page + nr_pages) of folio.
-+ * start_page is gotten from start by folio_page(folio, start)
++ * This scans over BRBE register banks and captures individual branch reocrds
++ * [BRBSRC, BRBTGT, BRBINF] into a pre-allocated 'struct brbe_regset' buffer,
++ * until an invalid one gets encountered. The caller for this function needs
++ * to ensure BRBE is an appropriate state before the records can be captured.
 + */
-+static vm_fault_t filemap_map_folio_range(struct vm_fault *vmf,
-+			struct folio *folio, unsigned long start,
-+			unsigned long addr, unsigned int nr_pages)
++static int capture_brbe_regset(struct brbe_hw_attr *brbe_attr, struct brbe_regset *buf)
 +{
-+	vm_fault_t ret = 0;
-+	struct vm_area_struct *vma = vmf->vma;
-+	struct file *file = vma->vm_file;
-+	struct page *page = folio_page(folio, start);
-+	unsigned int mmap_miss = READ_ONCE(file->f_ra.mmap_miss);
-+	unsigned int ref_count = 0, count = 0;
++	int loop1_idx1, loop1_idx2, loop2_idx1, loop2_idx2;
++	int idx, count;
 +
-+	do {
-+		if (PageHWPoison(page))
-+			continue;
++	loop1_idx1 = BRBE_BANK0_IDX_MIN;
++	if (brbe_attr->brbe_nr <= BRBE_BANK_MAX_ENTRIES) {
++		loop1_idx2 = brbe_attr->brbe_nr - 1;
++		loop2_idx1 = BRBE_BANK1_IDX_MIN;
++		loop2_idx2 = BRBE_BANK0_IDX_MAX;
++	} else {
++		loop1_idx2 = BRBE_BANK0_IDX_MAX;
++		loop2_idx1 = BRBE_BANK1_IDX_MIN;
++		loop2_idx2 = brbe_attr->brbe_nr - 1;
++	}
 +
-+		if (mmap_miss > 0)
-+			mmap_miss--;
-+
++	select_brbe_bank(BRBE_BANK_IDX_0);
++	for (idx = 0, count = loop1_idx1; count <= loop1_idx2; idx++, count++) {
++		buf[idx].brbinf = get_brbinf_reg(idx);
 +		/*
-+		 * NOTE: If there're PTE markers, we'll leave them to be
-+		 * handled in the specific fault path, and it'll prohibit the
-+		 * fault-around logic.
++		 * There are no valid entries anymore on the buffer.
++		 * Abort the branch record processing to save some
++		 * cycles and also reduce the capture/process load
++		 * for the user space as well.
 +		 */
-+		if (!pte_none(*vmf->pte))
-+			continue;
++		if (brbe_invalid(buf[idx].brbinf))
++			return idx;
 +
-+		if (vmf->address == addr)
-+			ret = VM_FAULT_NOPAGE;
++		buf[idx].brbsrc = get_brbsrc_reg(idx);
++		buf[idx].brbtgt = get_brbtgt_reg(idx);
++	}
 +
-+		ref_count++;
-+		do_set_pte(vmf, page, addr);
-+		update_mmu_cache(vma, addr, vmf->pte);
-+	} while (vmf->pte++, page++, addr += PAGE_SIZE, ++count < nr_pages);
++	select_brbe_bank(BRBE_BANK_IDX_1);
++	for (count = loop2_idx1; count <= loop2_idx2; idx++, count++) {
++		buf[idx].brbinf = get_brbinf_reg(idx);
++		/*
++		 * There are no valid entries anymore on the buffer.
++		 * Abort the branch record processing to save some
++		 * cycles and also reduce the capture/process load
++		 * for the user space as well.
++		 */
++		if (brbe_invalid(buf[idx].brbinf))
++			return idx;
 +
-+	/* Restore the vmf->pte */
-+	vmf->pte -= nr_pages;
-+
-+	folio_ref_add(folio, ref_count);
-+	WRITE_ONCE(file->f_ra.mmap_miss, mmap_miss);
-+
-+	return ret;
++		buf[idx].brbsrc = get_brbsrc_reg(idx);
++		buf[idx].brbtgt = get_brbtgt_reg(idx);
++	}
++	return idx;
 +}
 +
- vm_fault_t filemap_map_pages(struct vm_fault *vmf,
- 			     pgoff_t start_pgoff, pgoff_t end_pgoff)
- {
-@@ -3490,9 +3527,9 @@ vm_fault_t filemap_map_pages(struct vm_fault *vmf,
- 	unsigned long addr;
- 	XA_STATE(xas, &mapping->i_pages, start_pgoff);
- 	struct folio *folio;
--	struct page *page;
- 	unsigned int mmap_miss = READ_ONCE(file->f_ra.mmap_miss);
- 	vm_fault_t ret = 0;
-+	int nr_pages = 0;
- 
- 	rcu_read_lock();
- 	folio = first_map_page(mapping, &xas, end_pgoff);
-@@ -3507,45 +3544,18 @@ vm_fault_t filemap_map_pages(struct vm_fault *vmf,
- 	addr = vma->vm_start + ((start_pgoff - vma->vm_pgoff) << PAGE_SHIFT);
- 	vmf->pte = pte_offset_map_lock(vma->vm_mm, vmf->pmd, addr, &vmf->ptl);
- 	do {
--again:
--		page = folio_file_page(folio, xas.xa_index);
--		if (PageHWPoison(page))
--			goto unlock;
--
--		if (mmap_miss > 0)
--			mmap_miss--;
-+		unsigned long end;
- 
- 		addr += (xas.xa_index - last_pgoff) << PAGE_SHIFT;
- 		vmf->pte += xas.xa_index - last_pgoff;
- 		last_pgoff = xas.xa_index;
-+		end = folio->index + folio_nr_pages(folio) - 1;
-+		nr_pages = min(end, end_pgoff) - xas.xa_index + 1;
- 
--		/*
--		 * NOTE: If there're PTE markers, we'll leave them to be
--		 * handled in the specific fault path, and it'll prohibit the
--		 * fault-around logic.
--		 */
--		if (!pte_none(*vmf->pte))
--			goto unlock;
-+		ret |= filemap_map_folio_range(vmf, folio,
-+				xas.xa_index - folio->index, addr, nr_pages);
-+		xas.xa_index += nr_pages;
- 
--		/* We're about to handle the fault */
--		if (vmf->address == addr)
--			ret = VM_FAULT_NOPAGE;
--
--		do_set_pte(vmf, page, addr);
--		/* no need to invalidate: a not-present page won't be cached */
--		update_mmu_cache(vma, addr, vmf->pte);
--		if (folio_more_pages(folio, xas.xa_index, end_pgoff)) {
--			xas.xa_index++;
--			folio_ref_inc(folio);
--			goto again;
--		}
--		folio_unlock(folio);
--		continue;
--unlock:
--		if (folio_more_pages(folio, xas.xa_index, end_pgoff)) {
--			xas.xa_index++;
--			goto again;
--		}
- 		folio_unlock(folio);
- 		folio_put(folio);
- 	} while ((folio = next_map_page(mapping, &xas, end_pgoff)) != NULL);
++static inline void copy_brbe_regset(struct brbe_regset *src, int src_idx,
++				    struct brbe_regset *dst, int dst_idx)
++{
++	dst[dst_idx].brbinf = src[src_idx].brbinf;
++	dst[dst_idx].brbsrc = src[src_idx].brbsrc;
++	dst[dst_idx].brbtgt = src[src_idx].brbtgt;
++}
++
++/*
++ * This function concatenates branch records from stored and live buffer
++ * up to maximum nr_max records and the stored buffer holds the resultant
++ * buffer. The concatenated buffer contains all the branch records from
++ * the live buffer but might contain some from stored buffer considering
++ * the maximum combined length does not exceed 'nr_max'.
++ *
++ *	Stored records	Live records
++ *	------------------------------------------------^
++ *	|	S0	|	L0	|	Newest	|
++ *	---------------------------------		|
++ *	|	S1	|	L1	|		|
++ *	---------------------------------		|
++ *	|	S2	|	L2	|		|
++ *	---------------------------------		|
++ *	|	S3	|	L3	|		|
++ *	---------------------------------		|
++ *	|	S4	|	L4	|		nr_max
++ *	---------------------------------		|
++ *	|		|	L5	|		|
++ *	---------------------------------		|
++ *	|		|	L6	|		|
++ *	---------------------------------		|
++ *	|		|	L7	|		|
++ *	---------------------------------		|
++ *	|		|		|		|
++ *	---------------------------------		|
++ *	|		|		|	Oldest	|
++ *	------------------------------------------------V
++ *
++ *
++ * S0 is the newest in the stored records, where as L7 is the oldest in
++ * the live reocords. Unless the live buffer is detetcted as being full
++ * thus potentially dropping off some older records, L7 and S0 records
++ * are contiguous in time for a user task context. The stitched buffer
++ * here represents maximum possible branch records, contiguous in time.
++ *
++ *	Stored records  Live records
++ *	------------------------------------------------^
++ *	|	L0	|	L0	|	Newest	|
++ *	---------------------------------		|
++ *	|	L0	|	L1	|		|
++ *	---------------------------------		|
++ *	|	L2	|	L2	|		|
++ *	---------------------------------		|
++ *	|	L3	|	L3	|		|
++ *	---------------------------------		|
++ *	|	L4	|	L4	|	      nr_max
++ *	---------------------------------		|
++ *	|	L5	|	L5	|		|
++ *	---------------------------------		|
++ *	|	L6	|	L6	|		|
++ *	---------------------------------		|
++ *	|	L7	|	L7	|		|
++ *	---------------------------------		|
++ *	|	S0	|		|		|
++ *	---------------------------------		|
++ *	|	S1	|		|    Oldest	|
++ *	------------------------------------------------V
++ *	|	S2	| <----|
++ *	-----------------      |
++ *	|	S3	| <----| Dropped off after nr_max
++ *	-----------------      |
++ *	|	S4	| <----|
++ *	-----------------
++ */
++static int stitch_stored_live_entries(struct brbe_regset *stored,
++				      struct brbe_regset *live,
++				      int nr_stored, int nr_live,
++				      int nr_max)
++{
++	int nr_total, nr_excess, nr_last, i;
++
++	nr_total = nr_stored + nr_live;
++	nr_excess = nr_total - nr_max;
++
++	/* Stored branch records in stitched buffer */
++	if (nr_live == nr_max)
++		nr_stored = 0;
++	else if (nr_excess > 0)
++		nr_stored -= nr_excess;
++
++	/* Stitched buffer branch records length */
++	if (nr_total > nr_max)
++		nr_last = nr_max;
++	else
++		nr_last = nr_total;
++
++	/* Move stored branch records */
++	for (i = 0; i < nr_stored; i++)
++		copy_brbe_regset(stored, i, stored, nr_last - nr_stored - 1 + i);
++
++	/* Copy live branch records */
++	for (i = 0; i < nr_live; i++)
++		copy_brbe_regset(live, i, stored, i);
++
++	return nr_last;
++}
++
+ /*
+  * Generic perf branch filters supported on BRBE
+  *
 -- 
-2.39.2
+2.25.1
 
