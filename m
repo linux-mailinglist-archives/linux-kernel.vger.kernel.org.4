@@ -2,166 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 328F76BAFA3
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 12:50:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C0A66BAF97
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 12:49:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231979AbjCOLuT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 07:50:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56496 "EHLO
+        id S231831AbjCOLth (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 07:49:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232115AbjCOLtV (ORCPT
+        with ESMTP id S231896AbjCOLtF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 07:49:21 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 612178B056;
-        Wed, 15 Mar 2023 04:48:52 -0700 (PDT)
-Received: from localhost (unknown [188.24.156.231])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: cristicc)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8E64B66030A4;
-        Wed, 15 Mar 2023 11:48:45 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1678880925;
-        bh=wrYnFVXqR4x5khiXgk8aZhgK1Ok1W3waRicWpzY70j8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZrvzslQ6t0mFJsIwODjyUCMWcpCpX1Vh23/fY9DiS244etRA6/j8uUGzt9boQqdHR
-         un7yCiajQCFimFeAnyWCWEQt/VlvijltG0Re4JcHTuRpEPCmNpAh52TzCyRVEkBP4X
-         /k8E38z9SYh6otb6ywMwVqL7D45K+5BNNHDFnhYcLDJmjgCz5Oc+AHlHjXc/Cu44Cz
-         ZWAXtj3HPzBXpAm9DKg7AzFRghmCUYfQ9eqOG5tzAqbhh+qM/s/8W23Fm+/lxJN/XQ
-         KXjOpVNlnG2HqsYyconlqfCeFpDXa3ccz0l68nOqb0b1ftJsmWW6vbrbLHoxLb2I2u
-         mJq1Zp4hoW99g==
-From:   Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
-To:     Sudeep Holla <sudeep.holla@arm.com>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Daniel Drake <drake@endlessm.com>,
-        Katsuhiro Suzuki <katsuhiro@katsuster.net>
-Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-rockchip@lists.infradead.org,
-        linux-riscv@lists.infradead.org, kernel@collabora.com
-Subject: [PATCH 11/11] arm64: dts: rockchip: rk3588-rock-5b: Add analog audio
-Date:   Wed, 15 Mar 2023 13:48:06 +0200
-Message-Id: <20230315114806.3819515-12-cristian.ciocaltea@collabora.com>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230315114806.3819515-1-cristian.ciocaltea@collabora.com>
-References: <20230315114806.3819515-1-cristian.ciocaltea@collabora.com>
+        Wed, 15 Mar 2023 07:49:05 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BF63838B0
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 04:48:33 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id m35so2815189wms.4
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 04:48:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1678880912;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=NO4JHw+ZVAfkOsRA/oTSKnVgRkH4XwkA1j+W0BL/pdw=;
+        b=NpEBwtpN5e9qvCAKYLSSfGOCoxZ5Gx8bYsIsUoLwksUrXDVusK6rewjy+4zlzFKnKl
+         zwOJL3D7vBoQEIVfS25/c+6atqDZM7CngruUJ17Lj7f64CJ5PXBq43fF4vL41lCY3UPD
+         zrbrnpShRX6VFGbQ4tg7xu0DDz8Ii6pSjG+386b3M6OE3REuGZnsW/HNLUdSnO8RcCaV
+         zX28x13VqPR+Pki8i34qXiEyPw8+jdtIFONO8aZXvy1UhkZDKzn56K/LfsoQz7nBc2Px
+         eKhSpYBmT0sDJYyxM4zUzYPUiJOZp2DZVhblpjNfOf512dENf3VgHOEjf/Hdc9jVypQt
+         uWnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678880912;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=NO4JHw+ZVAfkOsRA/oTSKnVgRkH4XwkA1j+W0BL/pdw=;
+        b=ugNK0DJD5uN2BGAmuNdGrt2GNRZsYzew3y+SC/x8gDcggwtmbIHQcLxy5rWdbEZ/qx
+         Md86mQghQlTjK7UAyABtIRd3hvJhNDppQh4MIlXe74Qbvsf1caI8H3SPgjpgwru0x5jU
+         gGzarZ30COr/pZQ4CpvRNs/uub0NYEnQ69tJZvE4QHfZU4T1uHpVM5S47Omo+eSa2i9q
+         IzGGzh5cubwQXLu7WX279zz+VfGHh77XEuYfenu5Lv9YmvXWsiogfbToBwWRDcADQJqN
+         XqVmPVR/Jo9iqkIJpgSFzQTfx/L83KUVhD2qmbqLlOcq///gVSmGenZnYSA9Dbq0sy+9
+         oEpw==
+X-Gm-Message-State: AO0yUKUVthddx16x3BpB2jq8k4/A2K2HeYpYJUw/tFzVUPmRliTp0fxO
+        wQeLgnfA/H9MUiss5NzEOBk2uw==
+X-Google-Smtp-Source: AK7set+GokxbwRmBEQRMy2g7A1M53ZwF41ApR9RS3SgvL6woujcHid/lb0fuLuYXyG+4/rgnwcRbiw==
+X-Received: by 2002:a05:600c:45d0:b0:3ed:2382:d2fc with SMTP id s16-20020a05600c45d000b003ed2382d2fcmr4448665wmo.4.1678880912390;
+        Wed, 15 Mar 2023 04:48:32 -0700 (PDT)
+Received: from [192.168.1.70] (151.31.102.84.rev.sfr.net. [84.102.31.151])
+        by smtp.gmail.com with ESMTPSA id 1-20020a05600c234100b003ed2c0a0f37sm1601734wmq.35.2023.03.15.04.48.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Mar 2023 04:48:32 -0700 (PDT)
+Message-ID: <8fbd38d7-841e-2b9d-714b-753c66931707@baylibre.com>
+Date:   Wed, 15 Mar 2023 12:48:29 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v2 4/4] misc: tps6594-pfsm: Add driver for TI TPS6594 PFSM
+Content-Language: en-US
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     lee@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, corbet@lwn.net, arnd@arndb.de,
+        derek.kiernan@xilinx.com, dragan.cvetic@xilinx.com,
+        eric.auger@redhat.com, jgg@ziepe.ca, razor@blackwall.org,
+        stephen@networkplumber.org, davem@davemloft.net,
+        christian.koenig@amd.com, contact@emersion.fr,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, sterzik@ti.com, u-kumar1@ti.com,
+        eblanc@baylibre.com, jneanne@baylibre.com
+References: <20230315110736.35506-1-jpanis@baylibre.com>
+ <20230315110736.35506-5-jpanis@baylibre.com> <ZBGtVuI6YTfENUNr@kroah.com>
+From:   Julien Panis <jpanis@baylibre.com>
+In-Reply-To: <ZBGtVuI6YTfENUNr@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the necessary DT nodes for the Rock 5B board to enable the analog
-audio support provided by the Everest Semi ES8316 codec.
 
-Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
----
- .../boot/dts/rockchip/rk3588-rock-5b.dts      | 62 +++++++++++++++++++
- 1 file changed, 62 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts b/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts
-index 95805cb0adfa..945eac304766 100644
---- a/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts
-+++ b/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts
-@@ -2,6 +2,7 @@
- 
- /dts-v1/;
- 
-+#include <dt-bindings/gpio/gpio.h>
- #include "rk3588.dtsi"
- 
- / {
-@@ -25,6 +26,59 @@ vcc5v0_sys: vcc5v0-sys-regulator {
- 		regulator-min-microvolt = <5000000>;
- 		regulator-max-microvolt = <5000000>;
- 	};
-+
-+	sound {
-+		compatible = "audio-graph-card";
-+		label = "Analog";
-+
-+		widgets = "Microphone", "Mic Jack",
-+			  "Headphone", "Headphones";
-+
-+		routing = "MIC2", "Mic Jack",
-+			  "Headphones", "HPOL",
-+			  "Headphones", "HPOR";
-+
-+		dais = <&i2s0_8ch_p0>;
-+		hp-det-gpio = <&gpio1 RK_PD5 GPIO_ACTIVE_HIGH>;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&hp_detect>;
-+	};
-+};
-+
-+&i2c7 {
-+	status = "okay";
-+
-+	es8316: es8316@11 {
-+		compatible = "everest,es8316";
-+		reg = <0x11>;
-+		clocks = <&cru I2S0_8CH_MCLKOUT>;
-+		clock-names = "mclk";
-+		#sound-dai-cells = <0>;
-+
-+		port {
-+			es8316_p0_0: endpoint {
-+				remote-endpoint = <&i2s0_8ch_p0_0>;
-+			};
-+		};
-+	};
-+};
-+
-+&i2s0_8ch {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&i2s0_lrck
-+		     &i2s0_mclk
-+		     &i2s0_sclk
-+		     &i2s0_sdi0
-+		     &i2s0_sdo0>;
-+	status = "okay";
-+
-+	i2s0_8ch_p0: port {
-+		i2s0_8ch_p0_0: endpoint {
-+			dai-format = "i2s";
-+			mclk-fs = <256>;
-+			remote-endpoint = <&es8316_p0_0>;
-+		};
-+	};
- };
- 
- &sdhci {
-@@ -42,3 +96,11 @@ &uart2 {
- 	pinctrl-0 = <&uart2m0_xfer>;
- 	status = "okay";
- };
-+
-+&pinctrl {
-+	sound {
-+		hp_detect: hp-detect {
-+			rockchip,pins = <1 RK_PD5 RK_FUNC_GPIO &pcfg_pull_none>;
-+		};
-+	};
-+};
--- 
-2.39.1
+On 3/15/23 12:34, Greg KH wrote:
+> On Wed, Mar 15, 2023 at 12:07:36PM +0100, Julien Panis wrote:
+>> +// SPDX-License-Identifier: GPL-2.0-or-later
+> Are you sure about "or-later"?  (I have to ask.)
 
+Some others drivers are used with it ("or-later"),
+even in misc directory.
+But to be honest I'm not sure about the restrictions, if any.
+I will ask that as well.
+
+>> +/*
+>> + * PFSM (Pre-configurable Finite State Machine) driver for TI TPS6594/TPS6593/LP8764X PMICs
+>> + *
+>> + * Copyright (C) 2022 BayLibre Incorporated - https://www.baylibre.com/
+> It's 2023 now :)
+>
+
+OK, hehe. :) I'll fix that for next version.
