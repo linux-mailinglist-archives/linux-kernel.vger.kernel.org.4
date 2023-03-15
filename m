@@ -2,106 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EE7D6BAD57
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 11:16:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11EC36BAD5B
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 11:16:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232271AbjCOKQN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 06:16:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57002 "EHLO
+        id S231253AbjCOKQu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 06:16:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232103AbjCOKQL (ORCPT
+        with ESMTP id S232288AbjCOKQq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 06:16:11 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 802232A6E5
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 03:15:19 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BC0342F4;
-        Wed, 15 Mar 2023 03:15:55 -0700 (PDT)
-Received: from [192.168.178.6] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3F8BC3F67D;
-        Wed, 15 Mar 2023 03:15:10 -0700 (PDT)
-Message-ID: <5527ad0e-0f6d-fb4c-7505-a1c80192ed3b@arm.com>
-Date:   Wed, 15 Mar 2023 11:15:01 +0100
+        Wed, 15 Mar 2023 06:16:46 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 276AF1ABE2
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 03:16:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678875379; x=1710411379;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=rmJrMBCDLfJET/OCfZDk2lk9cUIq2z0NoHpCnWGNLN4=;
+  b=Rs6zL2DVpRY5W8NYSddePoP1kUDtVqLssiUQMMT1JrACipPMpru/N6af
+   6CAVcuZ+GB1f1aRuYxviyKdILkUSnbSRwCsr9nctMRKV4w1eKz31QH6gP
+   6Ooh07qGYx5Nm6NjAzMBSa5F9LFfGzYA5cUsWEz2PyMH38IXxeGAkdHGg
+   4M0/M/1urSfoCwOZcmYfak08a5ddqDNIOI78Ug+gxvCLGSFw029VRgMDc
+   3+pg96eDovShwTYfzSuaoLFePXeiA5ys7/Fd3HvzraztsQBypJP7vNoez
+   mhe/ILSOabgMI+t0ScQ7iSmQ4lzRhznboHDFHg4XbNeOBmr5dl3devVII
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="337684895"
+X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
+   d="scan'208";a="337684895"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2023 03:15:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="709630303"
+X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
+   d="scan'208";a="709630303"
+Received: from mchanan-mobl.ger.corp.intel.com (HELO [10.213.222.39]) ([10.213.222.39])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2023 03:15:04 -0700
+Message-ID: <caf1095e-8237-c79e-e0fa-27022363ffb2@linux.intel.com>
+Date:   Wed, 15 Mar 2023 10:15:01 +0000
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v2] sched/fair: sanitize vruntime of entity being migrated
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 30/36] drm/i915/huc: use const struct bus_type pointers
 Content-Language: en-US
-To:     Vincent Guittot <vincent.guittot@linaro.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Zhang Qiao <zhangqiao22@huawei.com>, linux-kernel@vger.kernel.org,
-        mingo@redhat.com, juri.lelli@redhat.com, rostedt@goodmis.org,
-        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
-        vschneid@redhat.com, rkagan@amazon.de
-References: <CAKfTPtAf5RrzZRSHtfK+r3QvnFQ-oM3+rJ-z5SB8T4+nUv1aQw@mail.gmail.com>
- <20230309142825.GB273121@hirez.programming.kicks-ass.net>
- <ZAnvCGdlOrWbIC/o@hirez.programming.kicks-ass.net>
- <CAKfTPtADUas2QHZCQyu0ad-JTKRQ=PcsB=o7+PuJNVxHwAzkCQ@mail.gmail.com>
- <ZAs+zV0o9ShO7nLT@vingu-book> <02a08042-e7c4-464d-bc20-9ec4ccdab1ff@arm.com>
- <8c093661-7431-00d8-d703-b8f7a7c8e747@arm.com>
- <CAKfTPtBw9SJxVBcN1qff7jRzE81kXSjbc-rXD6goEBFiXEwbyg@mail.gmail.com>
- <20230314120726.GG1845660@hirez.programming.kicks-ass.net>
- <CAKfTPtBHocw4N-YMHeqfMj78Ro=aF8sJPanxVCN=tM70hr6r8g@mail.gmail.com>
- <20230314171607.GN2017917@hirez.programming.kicks-ass.net>
- <CAKfTPtBurhAxcykDWQHoSZ0aiokgK4jhamdh-F29643cL1jVsw@mail.gmail.com>
- <CAKfTPtCra1QV32w1MZQY2SHVDv58m2MT2QwpHu0huJJ3B1wcCA@mail.gmail.com>
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-In-Reply-To: <CAKfTPtCra1QV32w1MZQY2SHVDv58m2MT2QwpHu0huJJ3B1wcCA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     rafael@kernel.org, Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>,
+        Alan Previn <alan.previn.teres.alexis@intel.com>,
+        John Harrison <John.C.Harrison@Intel.com>,
+        Tony Ye <tony.ye@intel.com>,
+        Vitaly Lubart <vitaly.lubart@intel.com>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
+References: <20230313182918.1312597-1-gregkh@linuxfoundation.org>
+ <20230313182918.1312597-30-gregkh@linuxfoundation.org>
+From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+Organization: Intel Corporation UK Plc
+In-Reply-To: <20230313182918.1312597-30-gregkh@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
+        NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/03/2023 09:42, Vincent Guittot wrote:
-> On Wed, 15 Mar 2023 at 08:18, Vincent Guittot
-> <vincent.guittot@linaro.org> wrote:
->>
->> On Tue, 14 Mar 2023 at 18:16, Peter Zijlstra <peterz@infradead.org> wrote:
->>>
->>> On Tue, Mar 14, 2023 at 02:24:37PM +0100, Vincent Guittot wrote:
->>>
->>>>> @@ -7632,11 +7646,8 @@ static void migrate_task_rq_fair(struct task_struct *p, int new_cpu)
->>>>>          * min_vruntime -- the latter is done by enqueue_entity() when placing
->>>>>          * the task on the new runqueue.
->>>>>          */
->>>>> -       if (READ_ONCE(p->__state) == TASK_WAKING) {
->>>>> -               struct cfs_rq *cfs_rq = cfs_rq_of(se);
->>>>> -
->>>>> +       if (READ_ONCE(p->__state) == TASK_WAKING || reset_vruntime(cfs_rq, se))
->>>>
->>>> That's somehow what was proposed in one of the previous proposals but
->>>> we can't call rq_clock_task(rq_of(cfs_rq)) because rq lock might not
->>>> be hold and rq task clock has not been updated before being used
->>>
->>> Argh indeed. I spend a lot of time ensuring we didn't take the old rq
->>> lock on wakeup -- and then a lot of time cursing about how we don't :-)
->>>
->>> Now, if we could rely on the rq-clock being no more than 1 tick behind
->>> current, this would still be entirely sufficient to catch the long sleep
->>> case.
->>
->> We should also take care when loading rq_clock_task that we are not
->> racing with an update especially for a 32bits system like pelt
->> last_update_time
+
+On 13/03/2023 18:29, Greg Kroah-Hartman wrote:
+> The struct bus_type pointers in the functions
+> intel_huc_register_gsc_notifier() and
+> intel_huc_unregister_gsc_notifier() should be a const pointer, as the
+> structure is not modified anywhere in the functions, and the pointer
+> they are passed will be a const * in the near future.
 > 
-> We still have this possibility:
-> https://lore.kernel.org/lkml/ZAiFxWLSb9HDazSI@vingu-book/
+> Cc: Jani Nikula <jani.nikula@linux.intel.com>
+> Cc: Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
+> Cc: Rodrigo Vivi <rodrigo.vivi@intel.com>
+> Cc: Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+> Cc: David Airlie <airlied@gmail.com>
+> Cc: Daniel Vetter <daniel@ffwll.ch>
+> Cc: Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>
+> Cc: Alan Previn <alan.previn.teres.alexis@intel.com>
+> Cc: John Harrison <John.C.Harrison@Intel.com>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Tony Ye <tony.ye@intel.com>
+> Cc: Vitaly Lubart <vitaly.lubart@intel.com>
+> Cc: intel-gfx@lists.freedesktop.org
+> Cc: dri-devel@lists.freedesktop.org
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> ---
+> Note, this is a patch that is a prepatory cleanup as part of a larger
+> series of patches that is working on resolving some old driver core
+> design mistakes.  It will build and apply cleanly on top of 6.3-rc2 on
+> its own, but I'd prefer if I could take it through my driver-core tree
+> so that the driver core changes can be taken through there for 6.4-rc1.
+
+Sounds fine to me.
+
+Acked-by: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
+
+Regards,
+
+Tvrtko
+
 > 
-> which uses pelt last_update_time when migrating and keep using
-> rq_clock_task in place_entity
-
-Isn't there an issue with this approach on asymmetric CPU capacity systems?
-
-We do a sync_entity_load_avg() in select_task_rq_fair()
-(find_energy_efficient_cpu() for EAS and select_idle_sibling() for CAS)
-to sync cfs_rq and se.
-
-[...]
-
+>   drivers/gpu/drm/i915/gt/uc/intel_huc.c | 4 ++--
+>   drivers/gpu/drm/i915/gt/uc/intel_huc.h | 4 ++--
+>   2 files changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/i915/gt/uc/intel_huc.c b/drivers/gpu/drm/i915/gt/uc/intel_huc.c
+> index 410905da8e97..8b453bd7c953 100644
+> --- a/drivers/gpu/drm/i915/gt/uc/intel_huc.c
+> +++ b/drivers/gpu/drm/i915/gt/uc/intel_huc.c
+> @@ -183,7 +183,7 @@ static int gsc_notifier(struct notifier_block *nb, unsigned long action, void *d
+>   	return 0;
+>   }
+>   
+> -void intel_huc_register_gsc_notifier(struct intel_huc *huc, struct bus_type *bus)
+> +void intel_huc_register_gsc_notifier(struct intel_huc *huc, const struct bus_type *bus)
+>   {
+>   	int ret;
+>   
+> @@ -200,7 +200,7 @@ void intel_huc_register_gsc_notifier(struct intel_huc *huc, struct bus_type *bus
+>   	}
+>   }
+>   
+> -void intel_huc_unregister_gsc_notifier(struct intel_huc *huc, struct bus_type *bus)
+> +void intel_huc_unregister_gsc_notifier(struct intel_huc *huc, const struct bus_type *bus)
+>   {
+>   	if (!huc->delayed_load.nb.notifier_call)
+>   		return;
+> diff --git a/drivers/gpu/drm/i915/gt/uc/intel_huc.h b/drivers/gpu/drm/i915/gt/uc/intel_huc.h
+> index 52db03620c60..05d4832f8461 100644
+> --- a/drivers/gpu/drm/i915/gt/uc/intel_huc.h
+> +++ b/drivers/gpu/drm/i915/gt/uc/intel_huc.h
+> @@ -51,8 +51,8 @@ int intel_huc_check_status(struct intel_huc *huc);
+>   void intel_huc_update_auth_status(struct intel_huc *huc);
+>   bool intel_huc_is_authenticated(struct intel_huc *huc);
+>   
+> -void intel_huc_register_gsc_notifier(struct intel_huc *huc, struct bus_type *bus);
+> -void intel_huc_unregister_gsc_notifier(struct intel_huc *huc, struct bus_type *bus);
+> +void intel_huc_register_gsc_notifier(struct intel_huc *huc, const struct bus_type *bus);
+> +void intel_huc_unregister_gsc_notifier(struct intel_huc *huc, const struct bus_type *bus);
+>   
+>   static inline int intel_huc_sanitize(struct intel_huc *huc)
+>   {
