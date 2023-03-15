@@ -2,161 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13CD76BA403
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 01:25:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EAF656BA405
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 01:25:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229803AbjCOAZO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 20:25:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51478 "EHLO
+        id S229958AbjCOAZQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 20:25:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229545AbjCOAZK (ORCPT
+        with ESMTP id S229667AbjCOAZL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 20:25:10 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21C076E8B
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 17:25:03 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id m18-20020a05600c3b1200b003ed2a3d635eso100159wms.4
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 17:25:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1678839901;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PBNqRKvFHgPqqskaybm027VBSueaOqeOTv7uwJBWtdQ=;
-        b=ZiLxIon1u+rmZiqod8EddJ1NTtYuick9y4S5J3gIzNVwzhoPs8cNYgm0UcpTqZd4GC
-         WXyLUpKm39+drChF4demvnBD117++Ok1xOZEphRRiTuqZJAZGaXrEFYLbNHbNkMZefuo
-         ULsB9cCkVr8xwkt81Ow4eHlVoH0pkdxniF+lc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678839901;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PBNqRKvFHgPqqskaybm027VBSueaOqeOTv7uwJBWtdQ=;
-        b=7TrQaNb7msbnrbhDg2FSNqbymG/jsEfVcgYRt+lKeO0Z8Bf2hI0AXMZuUgHgtsh+LX
-         KLxpD/9ZP6LU2smAKSjkNrJIp8oVP2QwGcenGY6GuoUsCbV5fWbLbkOjzbYHKf6hICeO
-         HsK0TpHMSDVWEBqK7zveztbw25+CA12lz4T0LkJCAFqqwyRzv3nWXPgeJh57LinOzIqm
-         7bkYaXzRQt3IuPxc6fosrJVi3pO+CSAf1cRswl9yBtgpwUd6YdxPobErPLveceOQYCA5
-         EuJ+1r6NbV0MfYugShg7U1AygRh9EEdsug4awzqX0qF4r5135bz4vccbjPCv7kECaDYc
-         CxIg==
-X-Gm-Message-State: AO0yUKVVU709rmqCGCij75z7PEA+77zHToskOZdboROY84yYOuk5rcF6
-        Ievu+w7LdxrPIl7JcUh44r1JbD8mxNZ1isMImIZg2g==
-X-Google-Smtp-Source: AK7set/m4nESElQsgLmaw1biuRQY8j6mcZEJlWhUB+r9v2P1fMoQCuNEmhEy6d2bWp46oRQ6Y14VPSx4Kv3vqwW2Crw=
-X-Received: by 2002:a05:600c:512a:b0:3ed:26fa:6ee5 with SMTP id
- o42-20020a05600c512a00b003ed26fa6ee5mr2238902wms.4.1678839901419; Tue, 14 Mar
- 2023 17:25:01 -0700 (PDT)
+        Tue, 14 Mar 2023 20:25:11 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02E3A11654;
+        Tue, 14 Mar 2023 17:25:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678839909; x=1710375909;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=U1zdj8Dquc6MZUtI6kfFO20iWgohrm20xN5v1gR/6P0=;
+  b=lDoRGj1edS0WWURCwW6t29BmcTdAiRFX/yns0h52AAWb7+hkIqF81hrY
+   dvDtsDLDsgAM6GptpX+MIfrDuRNw4XXrwm4T1GOqGEqEeIy5X07sDKu76
+   yGXMrjw1HOfy+HzipZyx0ZuvirtViluRuM/rjLEucCiF+c8F1Vk4GEgcj
+   Sa5612+8wRCM6JUNC4EJSxGkJ1OBHux1PzpOBD3C8jLTFepVwiEeNQ/BZ
+   jkUJvReqOWZnl9LdRTUEtjgaAUbPa4CcwmBBBC4vSB06JOFu00GIXCMDi
+   M/73waLAesG46c91k/O/RdwZb4Ikc0FQQQBpqDoTEaK/qGmD25dzOPaOc
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="400157895"
+X-IronPort-AV: E=Sophos;i="5.98,261,1673942400"; 
+   d="scan'208";a="400157895"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2023 17:25:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="709480399"
+X-IronPort-AV: E=Sophos;i="5.98,261,1673942400"; 
+   d="scan'208";a="709480399"
+Received: from aschofie-mobl2.amr.corp.intel.com (HELO aschofie-mobl2) ([10.212.140.184])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2023 17:25:07 -0700
+Date:   Tue, 14 Mar 2023 17:25:06 -0700
+From:   Alison Schofield <alison.schofield@intel.com>
+To:     Julia Lawall <julia.lawall@inria.fr>,
+        Dan Carpenter <error27@gmail.com>
+Cc:     Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>,
+        outreachy@lists.linux.dev, lars@metafoo.de,
+        Michael.Hennerich@analog.com, jic23@kernel.org,
+        gregkh@linuxfoundation.org, linux-iio@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] staging: iio: meter: enclose Macros with complex values
+ in parentheses
+Message-ID: <ZBEQYp/z+C/JeR98@aschofie-mobl2>
+References: <20230312133347.120944-1-eng.mennamahmoud.mm@gmail.com>
+ <alpine.DEB.2.22.394.2303121507450.2865@hadrien>
+ <174e4d14-8b3e-67f7-d901-bd77b054f7c3@gmail.com>
+ <alpine.DEB.2.22.394.2303121525270.2865@hadrien>
 MIME-Version: 1.0
-References: <20230301060453.4031503-1-grundler@chromium.org> <20230314193836.GA1667748@bhelgaas>
-In-Reply-To: <20230314193836.GA1667748@bhelgaas>
-From:   Grant Grundler <grundler@chromium.org>
-Date:   Tue, 14 Mar 2023 17:24:49 -0700
-Message-ID: <CANEJEGtxn79+weGWVuF+Ytw789Smxv-2vGaM_qes1hfzg7qeYw@mail.gmail.com>
-Subject: Re: [PATCH] PCI/AER: correctable error message as KERN_INFO
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Grant Grundler <grundler@chromium.org>,
-        Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
-        "Oliver O 'Halloran" <oohall@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rajat Khandelwal <rajat.khandelwal@linux.intel.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Rajat Jain <rajatja@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
-        USER_IN_DEF_SPF_WL autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <alpine.DEB.2.22.394.2303121525270.2865@hadrien>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 14, 2023 at 12:38=E2=80=AFPM Bjorn Helgaas <helgaas@kernel.org>=
- wrote:
->
-> On Tue, Feb 28, 2023 at 10:04:53PM -0800, Grant Grundler wrote:
-> > Since correctable errors have been corrected (and counted), the dmesg o=
-utput
-> > should not be reported as a warning, but rather as "informational".
+On Sun, Mar 12, 2023 at 03:25:37PM +0100, Julia Lawall wrote:
+> 
+> 
+> On Sun, 12 Mar 2023, Menna Mahmoud wrote:
+> 
 > >
-> > Otherwise, using a certain well known vendor's PCIe parts in a USB4 doc=
-king
-> > station, the dmesg buffer can be spammed with correctable errors, 717 b=
-ytes
-> > per instance, potentially many MB per day.
+> > On ١٢/٣/٢٠٢٣ ١٦:١٢, Julia Lawall wrote:
+> > >
+> > > On Sun, 12 Mar 2023, Menna Mahmoud wrote:
+> > >
+> > > > enclose Macros with complex values in parentheses is especially useful
+> > > > in making macro definitions “safe” (so that they
+> > > > evaluate each operand exactly once).
+> > > enclose -> Enclose, and Macros -> macros
+> > >
+> > > I don't understand the above comment though.  How does adding parentheses
+> > > around the body of a macro cause the operands to be evaluated only once?
+> > > And the macros that you have changed don't have any operands.
+> > >
+> > > The value of adding parentheses is normally to ensure that the body of the
+> > > macro doesn't interact with the context in a weird way.  For example, you
+> > > could have
+> > >
+> > > #define ADD 3 + 4
+> > >
+> > > Then if you use your macro as 6 * ADD, you will end up evaluating
+> > > 6 * 3 + 4, ie 18 + 4, when you might have expected 6 * 7.  The issue is
+> > > that * has higher precedence than +.
 > >
-> > Given the "WARN" priority, these messages have already confused the typ=
-ical
-> > user that stumbles across them, support staff (triaging feedback report=
-s),
-> > and more than a few linux kernel devs. Changing to INFO will hide these
-> > messages from most audiences.
 > >
-> > Signed-off-by: Grant Grundler <grundler@chromium.org>
-> > ---
-> > This patch will likely conflict with:
-> >   https://lore.kernel.org/all/20230103165548.570377-1-rajat.khandelwal@=
-linux.intel.com/
+> > yes, I mean that but i couldn't explain it well, thanks for your feedback.
 > >
-> > which I'd also like to see upstream. Please let me know to resubmit
-> > mine if Rajat's patch lands first. Or feel free to fix up this one.
->
-> Yes.  I think it makes sense to separate this into two patches:
->
->   1) Log correctable errors as KERN_INFO instead of KERN_WARNING, and
->   2) Rate-limit correctable error logging.
+> >
+> > >
+> > > But I don't think that such a problem can arise with a cast expression, so
+> > > parentheses around it should not be necessary.
+> >
+> >
+> > So, no need for this patch?
+> 
+> No, I don't think so.
+> 
+> julia
 
-I'm going to look into your comment below. I'll port Rajat's patch on
-top of mine to follow the order you've listed above.
+Looping in Dan C explicitly.
 
-> >  drivers/pci/pcie/aer.c | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
+Can we revisit this one?  It actually leads to a checkpatch ERROR.
+So, anyone hoping to get an error free checkpatch run on this file,
+is out of luck.
+
+Is this something that checkpatch can learn about and allow, or
+should we add the parens here, to dare I say, appease the checkpatch
+god ;)
+
+Alison
+
+
+> 
 > >
-> > diff --git a/drivers/pci/pcie/aer.c b/drivers/pci/pcie/aer.c
-> > index f6c24ded134c..e4cf3ec40d66 100644
-> > --- a/drivers/pci/pcie/aer.c
-> > +++ b/drivers/pci/pcie/aer.c
-> > @@ -692,7 +692,7 @@ static void __aer_print_error(struct pci_dev *dev,
 > >
-> >       if (info->severity =3D=3D AER_CORRECTABLE) {
-> >               strings =3D aer_correctable_error_string;
-> > -             level =3D KERN_WARNING;
-> > +             level =3D KERN_INFO;
-> >       } else {
-> >               strings =3D aer_uncorrectable_error_string;
-> >               level =3D KERN_ERR;
-> > @@ -724,7 +724,7 @@ void aer_print_error(struct pci_dev *dev, struct ae=
-r_err_info *info)
-> >       layer =3D AER_GET_LAYER_ERROR(info->severity, info->status);
-> >       agent =3D AER_GET_AGENT(info->severity, info->status);
+> > > > this error reported by chechpatch.pl
+> > > this error is reported by checkpatch.
+> > >
+> > > > "ERROR: Macros with complex values should be enclosed in parentheses"
+> > > >
+> > > > for ADE7854_SPI_SLOW, ADE7854_SPI_BURST and ADE7854_SPI_FAST
+> > > > macros and this error fixed by enclose these macros in parentheses.
+> > > The last two lines aren't needed.  One can easily see that from looking at
+> > > the patch.
 > >
-> > -     level =3D (info->severity =3D=3D AER_CORRECTABLE) ? KERN_WARNING =
-: KERN_ERR;
-> > +     level =3D (info->severity =3D=3D AER_CORRECTABLE) ? KERN_INFO : K=
-ERN_ERR;
 > >
-> >       pci_printk(level, dev, "PCIe Bus Error: severity=3D%s, type=3D%s,=
- (%s)\n",
-> >                  aer_error_severity_string[info->severity],
->
-> Shouldn't we do the same in the cper_print_aer() path?  That path
-> currently uses pci_err() and then calls __aer_print_error(), so the
-> initial message will always be KERN_ERR, and the decoding done by
-> __aer_print_error() will be KERN_INFO (for correctable) or KERN_ERR.
+> > Got it, Thank you.
+> >
+> > Menna
+> >
+> > > julia
+> > >
+> > > > Signed-off-by: Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>
+> > > > ---
+> > > >   drivers/staging/iio/meter/ade7854.h | 6 +++---
+> > > >   1 file changed, 3 insertions(+), 3 deletions(-)
+> > > >
+> > > > diff --git a/drivers/staging/iio/meter/ade7854.h
+> > > > b/drivers/staging/iio/meter/ade7854.h
+> > > > index 7a49f8f1016f..41eeedef569b 100644
+> > > > --- a/drivers/staging/iio/meter/ade7854.h
+> > > > +++ b/drivers/staging/iio/meter/ade7854.h
+> > > > @@ -139,9 +139,9 @@
+> > > >   #define ADE7854_MAX_RX    7
+> > > >   #define ADE7854_STARTUP_DELAY 1000
+> > > >
+> > > > -#define ADE7854_SPI_SLOW	(u32)(300 * 1000)
+> > > > -#define ADE7854_SPI_BURST	(u32)(1000 * 1000)
+> > > > -#define ADE7854_SPI_FAST	(u32)(2000 * 1000)
+> > > > +#define ADE7854_SPI_SLOW	((u32)(300 * 1000))
+> > > > +#define ADE7854_SPI_BURST	((u32)(1000 * 1000))
+> > > > +#define ADE7854_SPI_FAST	((u32)(2000 * 1000))
+> > > >
+> > > >   /**
+> > > >    * struct ade7854_state - device instance specific data
+> > > > --
+> > > > 2.34.1
+> > > >
+> > > >
+> > > >
+> >
 
-I was completely unaware of this since it's not causing me any
-immediate problems. But I agree the message priority should be
-consistent for correctable errors.
-
-> Seems like a shame to do the same test in three places, but would
-> require a little more refactoring to avoid that.
-
-I don't mind doing the same test in multiple places. If refactoring
-this isn't straight forward, I'll leave the refactoring for someone
-more ambitious. :D
-
-cheers,
-grant
-
->
-> Bjorn
