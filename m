@@ -2,194 +2,288 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EB756BA3E6
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 01:09:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81A1F6BA3F3
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 01:15:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230110AbjCOAJo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 20:09:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34928 "EHLO
+        id S229705AbjCOAPK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 20:15:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229571AbjCOAJl (ORCPT
+        with ESMTP id S229545AbjCOAPI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 20:09:41 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61459360AF;
-        Tue, 14 Mar 2023 17:09:35 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id p13-20020a17090a284d00b0023d2e945aebso2253456pjf.0;
-        Tue, 14 Mar 2023 17:09:35 -0700 (PDT)
+        Tue, 14 Mar 2023 20:15:08 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FF51279A7;
+        Tue, 14 Mar 2023 17:15:07 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id fm20-20020a05600c0c1400b003ead37e6588so76469wmb.5;
+        Tue, 14 Mar 2023 17:15:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678838975;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=kzy0B/VYnSJRvZ8pGtdA2kQJazW5NtKMyoTehvrQmDw=;
-        b=nKOf8FBfQ9KPvrSmoworRlZ9jZ+EREKalj7RmCUGg+12gvO+Kz8OmKTqPxKDCEhRK4
-         GlHqyJOzZXf3XHHWBNFvDKuQPO2ZL6ltay52IIctGgpB8PbiQcryGNPjij+UJ6Q0LZlc
-         V6TKnxmfIGPQd4zs5TSEs99VjZhOgep/lyARwv3k5vuiYOtcC415KSCwnEzjWEteuGav
-         4Z+ohFCXB+0NR5NttQbQrcYFRTu7nmIDeE4jVNkB7PxQVGGCKHmH5mIE7dPHiRzWFoZ8
-         Dvb7DPR7sucMV8QhGjTJ4JTln6J838YrJPaWtgicGKGLbxfyJjUbHXoj0bO07hYmmxuB
-         rhYA==
+        d=gmail.com; s=20210112; t=1678839305;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3awC0gMPAiPXnlm6wKZJyVsjNQ276k/08Eimwgsa2PY=;
+        b=qvmwb0/PxDkWj/0STg/wCTEyGg8MPkbhQVsg70PSBLJukww9j8oQCmHhUNMk6OXtjj
+         mksE1fmju6ez2ur6MvSDX+1u4Qg8DLq9xRsNEf8pe4UjfOsVumNrY3kAGzz4ZTqAhRm+
+         IQLAuvp4R2VgBIagDb6WaTjFiHpQTl+9R5aO46IxdzzomgiOooAoKIShp5o54e5cjqpv
+         szMrLSZgQ4EdAagUmNvqNn2bD7ODX6+TEyEbxRRojuxWSzYLSvg+GxXgIdfYm2kxwgVT
+         m6K+j6JxckWHZlonHB95o3vpCgFMoBaxVQTSmeEHMSSjljqLjejB+Fnc7sDDVxBMxQcR
+         P/gw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678838975;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=kzy0B/VYnSJRvZ8pGtdA2kQJazW5NtKMyoTehvrQmDw=;
-        b=CseWKZpJgp61ZmDArIAyOFHHUaz8q7SOf9gRXktEETcITOYw7XSrn88fjp+uLWagN+
-         ADba2DCNVcUKScFmyj9k3FCGjVDNldwVaaEsvKqwkdasnyW0WJBs8kQVXIQl3JsLIGBI
-         qbPiDPejTvLzbSkNKWS7rd2DAWUxY4VCLoxw04/vYJEgWRYgD4S1va6akUjH0GKsKT21
-         qOK4Im5RIIMpVuo67gTIvYZoLuesTv1vJcOyL2wflpePWYPLcR1jeTIxXdtV7/p7whhP
-         clVnKdHOEcDJR84hsCCtKGGyMv4LIqkQiznunV7vdOA4V8EbZDBC2Wf6YkTZtF3RaVMb
-         m4wg==
-X-Gm-Message-State: AO0yUKVxlNGE0RGv5+4g7qXdk+lWZqONVHbfX5K/7pVpGp4OiWw0hoeB
-        tx/Tvzv38cQPgOVDvhhXf0w=
-X-Google-Smtp-Source: AK7set8TUYkpg5z/wkWn9Qm4PGh31BVMHTj0nRUVT2NCG7126FC8rPOANB99aIRkUDre4XDFPNTU8Q==
-X-Received: by 2002:a05:6a20:9146:b0:9d:efbe:52ae with SMTP id x6-20020a056a20914600b0009defbe52aemr38231916pzc.30.1678838974492;
-        Tue, 14 Mar 2023 17:09:34 -0700 (PDT)
-Received: from localhost.localdomain ([14.139.38.154])
-        by smtp.googlemail.com with ESMTPSA id z19-20020a634c13000000b00502f017657dsm2080157pga.83.2023.03.14.17.09.30
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Tue, 14 Mar 2023 17:09:33 -0700 (PDT)
-From:   Vijaya Anand <sunrockers8@gmail.com>
-To:     lgirdwood@gmail.com, broonie@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Vijaya Anand <sunrockers8@gmail.com>,
-        Daniel Baluta <daniel.baluta@nxp.com>
-Subject: [RFC PATCH v2] ASoC: dt-bindings: adi,adau17x1: Convert to DT schema
-Date:   Wed, 15 Mar 2023 05:39:14 +0530
-Message-Id: <20230315000914.99083-1-sunrockers8@gmail.com>
-X-Mailer: git-send-email 2.37.1 (Apple Git-137.1)
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        d=1e100.net; s=20210112; t=1678839305;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=3awC0gMPAiPXnlm6wKZJyVsjNQ276k/08Eimwgsa2PY=;
+        b=WVSIY0YVNEeDJ/G3ebZ1TAKnDaR6bU0AtrB5T7bMi3a5v3YaQUobrUUJGHooy2p6/6
+         MQgBW8NAJMeMSHI35hDP4V6pMfHtuobXEgf1DcGTXKOZdJzoj+ybrzIg9qO07jzRoc1i
+         uq9/7aaBb1ltlc/CG4cQrWg6l6w77k730SOXm84Kpoty0vX8DluU4qaVLeCvUun0uE1n
+         qNHq6F3zP0lapMDPWRB37kHtp3VV82OnCN57GWXrFFfImXG8jnQedkBSqCFzQsjH1Lyj
+         GRvXV7xg+WQJkaPR8N4FibBUJp2HF5jSJ21uKj/LUZxWtTHmlpbc5Z2NpNGPcfdYuGXH
+         Hk7g==
+X-Gm-Message-State: AO0yUKV5BiyZ8z7rDRGFotsRw7IqsEt1n6LiRKat7E51QkAaYjNGYLjv
+        kWdv+yrZcbTLXS0zO4mO0w4=
+X-Google-Smtp-Source: AK7set9z+WtrIevyfgj0uiVN2/U69pNjGkpvV5AmeeklAczYUZcRXbCkH10sq6c4Hml5XTZPzgMDVg==
+X-Received: by 2002:a05:600c:3b9d:b0:3ed:29db:cb80 with SMTP id n29-20020a05600c3b9d00b003ed29dbcb80mr6153512wms.18.1678839305389;
+        Tue, 14 Mar 2023 17:15:05 -0700 (PDT)
+Received: from localhost (93-55-83-125.ip262.fastwebnet.it. [93.55.83.125])
+        by smtp.gmail.com with ESMTPSA id y6-20020a7bcd86000000b003e20cf0408esm72131wmj.40.2023.03.14.17.15.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Mar 2023 17:15:04 -0700 (PDT)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Wed, 15 Mar 2023 01:15:03 +0100
+Message-Id: <CR6IV4NTEN8Z.1V1RNR667SWJ7@vincent-arch>
+Subject: Re: [PATCH] modpost: support arbitrary symbol length in modversion
+From:   "Vincenzo Palazzo" <vincenzopalazzodev@gmail.com>
+To:     "Andrea Righi" <andrea.righi@canonical.com>,
+        =?utf-8?q?Michal_Such=C3=A1nek?= <msuchanek@suse.de>
+Cc:     "Gary Guo" <gary@garyguo.net>, "Kees Cook" <keescook@chromium.org>,
+        "Masahiro Yamada" <masahiroy@kernel.org>,
+        <linux-kbuild@vger.kernel.org>,
+        "Wedson Almeida Filho" <wedsonaf@google.com>,
+        "Joel Stanley" <joel@jms.id.au>,
+        "Alex Gaynor" <alex.gaynor@gmail.com>,
+        "Miguel Ojeda" <ojeda@kernel.org>,
+        "Wedson Almeida Filho" <wedsonaf@gmail.com>,
+        "Nicolas Schier" <nicolas@fjasle.eu>,
+        <rust-for-linux@vger.kernel.org>,
+        "Guo Zhengkui" <guozhengkui@vivo.com>,
+        "Boqun Feng" <boqun.feng@gmail.com>,
+        "Nicholas Piggin" <npiggin@gmail.com>,
+        =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        "Nathan Chancellor" <nathan@kernel.org>,
+        "Nick Desaulniers" <ndesaulniers@google.com>,
+        <linux-kernel@vger.kernel.org>,
+        "Julia Lawall" <Julia.Lawall@inria.fr>,
+        "Luis Chamberlain" <mcgrof@kernel.org>,
+        <linuxppc-dev@lists.ozlabs.org>, <linux-modules@vger.kernel.org>
+X-Mailer: aerc 0.14.0
+References: <20230111161155.1349375-1-gary@garyguo.net>
+ <ZA+IUIOAgrWH2oZ0@righiandr-XPS-13-7390>
+ <20230313214853.GY19419@kitsune.suse.cz>
+ <ZA+bXi0o27XPx3nz@righiandr-XPS-13-7390>
+ <20230313220234.GZ19419@kitsune.suse.cz>
+ <ZA+fGpAdnvB5VwKW@righiandr-XPS-13-7390>
+ <ZBCG3ykG1q4GEcIf@righiandr-XPS-13-7390>
+ <ZBCL1G+8z8c6zLI0@righiandr-XPS-13-7390>
+In-Reply-To: <ZBCL1G+8z8c6zLI0@righiandr-XPS-13-7390>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the binding document for adi,adau17x1 from txt to yaml
-so one could validate dt-entries correctly and any future additions
-can go into yaml format. Add address and size cells to example to
-prevent errors regarding reg format.
+> In practice, this is what I'm testing at the moment:
+>
+> ---
+> diff --git a/arch/powerpc/kernel/module_64.c b/arch/powerpc/kernel/module=
+_64.c
+> index ff045644f13f..ea6c830ed1e7 100644
+> --- a/arch/powerpc/kernel/module_64.c
+> +++ b/arch/powerpc/kernel/module_64.c
+> @@ -234,12 +234,13 @@ static unsigned long get_stubs_size(const Elf64_Ehd=
+r *hdr,
+>  static void dedotify_versions(struct modversion_info *vers,
+>  			      unsigned long size)
+>  {
+> -	struct modversion_info *end;
+> +	struct modversion_info *end =3D (void *)vers + size;
+> =20
+> -	for (end =3D (void *)vers + size; vers < end; vers++)
+> +	for (; vers < end && vers->next; vers =3D (void *)vers + vers->next) {
+>  		if (vers->name[0] =3D=3D '.') {
+>  			memmove(vers->name, vers->name+1, strlen(vers->name));
+>  		}
+> +	}
+>  }
+> =20
+>  /*
+> diff --git a/include/linux/module.h b/include/linux/module.h
+> index 8c5909c0076c..4744901bdf63 100644
+> --- a/include/linux/module.h
+> +++ b/include/linux/module.h
+> @@ -34,9 +34,11 @@
+>  #define MODULE_NAME_LEN MAX_PARAM_PREFIX_LEN
+> =20
+>  struct modversion_info {
+> -	unsigned long crc;
+> -	char name[MODULE_NAME_LEN];
+> -};
+> +	/* Offset of the next modversion entry in relation to this one. */
+> +	u32 next;
+> +	u32 crc;
+> +	char name[0];
+> +} __packed;
+> =20
+>  struct module;
+>  struct exception_table_entry;
+> diff --git a/kernel/module/version.c b/kernel/module/version.c
+> index 53f43ac5a73e..5528f98c42dc 100644
+> --- a/kernel/module/version.c
+> +++ b/kernel/module/version.c
+> @@ -17,32 +17,30 @@ int check_version(const struct load_info *info,
+>  {
+>  	Elf_Shdr *sechdrs =3D info->sechdrs;
+>  	unsigned int versindex =3D info->index.vers;
+> -	unsigned int i, num_versions;
+> -	struct modversion_info *versions;
+> +	struct modversion_info *versions, *end;
+> +	u32 crcval;
+> =20
+>  	/* Exporting module didn't supply crcs?  OK, we're already tainted. */
+>  	if (!crc)
+>  		return 1;
+> +	crcval =3D *crc;
+> =20
+>  	/* No versions at all?  modprobe --force does this. */
+>  	if (versindex =3D=3D 0)
+>  		return try_to_force_load(mod, symname) =3D=3D 0;
+> =20
+>  	versions =3D (void *)sechdrs[versindex].sh_addr;
+> -	num_versions =3D sechdrs[versindex].sh_size
+> -		/ sizeof(struct modversion_info);
+> +	end =3D (void *)versions + sechdrs[versindex].sh_size;
+> =20
+> -	for (i =3D 0; i < num_versions; i++) {
+> -		u32 crcval;
+> -
+> -		if (strcmp(versions[i].name, symname) !=3D 0)
+> +	for (; versions < end && versions->next;
+> +	       versions =3D (void *)versions + versions->next) {
+> +		if (strcmp(versions->name, symname) !=3D 0)
+>  			continue;
+> =20
+> -		crcval =3D *crc;
+> -		if (versions[i].crc =3D=3D crcval)
+> +		if (versions->crc =3D=3D crcval)
+>  			return 1;
+> -		pr_debug("Found checksum %X vs module %lX\n",
+> -			 crcval, versions[i].crc);
+> +		pr_debug("Found checksum %X vs module %X\n",
+> +			 crcval, versions->crc);
+>  		goto bad_version;
+>  	}
+> =20
+> diff --git a/scripts/export_report.pl b/scripts/export_report.pl
+> index feb3d5542a62..1117646f3141 100755
+> --- a/scripts/export_report.pl
+> +++ b/scripts/export_report.pl
+> @@ -116,18 +116,19 @@ foreach my $thismod (@allcfiles) {
+>  	while ( <$module> ) {
+>  		chomp;
+>  		if ($state =3D=3D 0) {
+> -			$state =3D 1 if ($_ =3D~ /static const struct modversion_info/);
+> +			$state =3D 1 if ($_ =3D~ /static const char ____versions/);
+>  			next;
+>  		}
+>  		if ($state =3D=3D 1) {
+> -			$state =3D 2 if ($_ =3D~ /__attribute__\(\(section\("__versions"\)\)\=
+)/);
+> +			$state =3D 2 if ($_ =3D~ /__used __section\("__versions"\)/);
+>  			next;
+>  		}
+>  		if ($state =3D=3D 2) {
+> -			if ( $_ !~ /0x[0-9a-f]+,/ ) {
+> +			if ( $_ !~ /\\0"/ ) {
+> +				last if ($_ =3D~ /;/);
+>  				next;
+>  			}
+> -			my $sym =3D (split /([,"])/,)[4];
+> +			my $sym =3D (split /(["\\])/,)[2];
+>  			my ($module, $value, $symbol, $gpl) =3D @{$SYMBOL{$sym}};
+>  			$SYMBOL{ $sym } =3D  [ $module, $value+1, $symbol, $gpl];
+>  			push(@{$MODULE{$thismod}} , $sym);
+> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+> index efff8078e395..55335ae98f4f 100644
+> --- a/scripts/mod/modpost.c
+> +++ b/scripts/mod/modpost.c
+> @@ -2046,13 +2046,17 @@ static void add_exported_symbols(struct buffer *b=
+uf, struct module *mod)
+>  static void add_versions(struct buffer *b, struct module *mod)
+>  {
+>  	struct symbol *s;
+> +	unsigned int name_len;
+> +	unsigned int name_len_padded;
+> +	unsigned int tmp;
+> +	unsigned char *tmp_view =3D (unsigned char *)&tmp;
+> =20
+>  	if (!modversions)
+>  		return;
+> =20
+>  	buf_printf(b, "\n");
+> -	buf_printf(b, "static const struct modversion_info ____versions[]\n");
+> -	buf_printf(b, "__used __section(\"__versions\") =3D {\n");
+> +	buf_printf(b, "static const char ____versions[]\n");
+> +	buf_printf(b, "__used __section(\"__versions\") =3D\n");
+> =20
+>  	list_for_each_entry(s, &mod->unresolved_symbols, list) {
+>  		if (!s->module)
+> @@ -2062,16 +2066,27 @@ static void add_versions(struct buffer *b, struct=
+ module *mod)
+>  				s->name, mod->name);
+>  			continue;
+>  		}
+> -		if (strlen(s->name) >=3D MODULE_NAME_LEN) {
+> -			error("too long symbol \"%s\" [%s.ko]\n",
+> -			      s->name, mod->name);
+> -			break;
+> -		}
+> -		buf_printf(b, "\t{ %#8x, \"%s\" },\n",
+> -			   s->crc, s->name);
+> +		name_len =3D strlen(s->name);
+> +		name_len_padded =3D (name_len + 1 + 3) & ~3;
+> +
+> +		/* Offset to next entry */
+> +		tmp =3D 8 + name_len_padded;
+> +		tmp =3D TO_NATIVE(tmp);
+> +		buf_printf(b, "\t\"\\x%02x\\x%02x\\x%02x\\x%02x",
+> +			   tmp_view[0], tmp_view[1], tmp_view[2], tmp_view[3]);
+> +
+> +		tmp =3D TO_NATIVE(s->crc);
+> +		buf_printf(b, "\\x%02x\\x%02x\\x%02x\\x%02x\"\n",
+> +			   tmp_view[0], tmp_view[1], tmp_view[2], tmp_view[3]);
+> +
+> +		buf_printf(b, "\t\"%s", s->name);
+> +		for (; name_len < name_len_padded; name_len++)
+> +			buf_printf(b, "\\0");
+> +		buf_printf(b, "\"\n");
+>  	}
+> =20
+> -	buf_printf(b, "};\n");
+> +	/* Always end with a dummy NULL entry */
+> +	buf_printf(b, "\t\"\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\";\n");
+>  }
+> =20
+>  static void add_depends(struct buffer *b, struct module *mod)
+This looks promissing, do you had a small reproducer to this just to
+make the code a little bit clearn to the reader?
 
-Signed-off-by: Vijaya Anand <sunrockers8@gmail.com>
-Cc: Daniel Baluta <daniel.baluta@nxp.com>
----
-Changes since v1:
-- added 'Codec' in title to clarify type of devices
-- put compatible devices in lexographic order
-- changed description of clocks
-- changed 'unevaluatedProperties' to 'additionalProperties'
-- changed node names to be generic
+Ciao,=20
 
----
- .../bindings/sound/adi,adau17x1.txt           | 32 ------------
- .../bindings/sound/adi,adau17x1.yaml          | 52 +++++++++++++++++++
- 2 files changed, 52 insertions(+), 32 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/sound/adi,adau17x1.txt
- create mode 100644 Documentation/devicetree/bindings/sound/adi,adau17x1.yaml
-
-diff --git a/Documentation/devicetree/bindings/sound/adi,adau17x1.txt b/Documentation/devicetree/bindings/sound/adi,adau17x1.txt
-deleted file mode 100644
-index 1447dec28125..000000000000
---- a/Documentation/devicetree/bindings/sound/adi,adau17x1.txt
-+++ /dev/null
-@@ -1,32 +0,0 @@
--Analog Devices ADAU1361/ADAU1461/ADAU1761/ADAU1961/ADAU1381/ADAU1781
--
--Required properties:
--
-- - compatible:		Should contain one of the following:
--			"adi,adau1361"
--			"adi,adau1461"
--			"adi,adau1761"
--			"adi,adau1961"
--			"adi,adau1381"
--			"adi,adau1781"
--
-- - reg:			The i2c address. Value depends on the state of ADDR0
--			and ADDR1, as wired in hardware.
--
--Optional properties:
-- - clock-names:		If provided must be "mclk".
-- - clocks:		phandle + clock-specifiers for the clock that provides
--			the audio master clock for the device.
--
--Examples:
--#include <dt-bindings/sound/adau17x1.h>
--
--	i2c_bus {
--		adau1361@38 {
--			compatible = "adi,adau1761";
--			reg = <0x38>;
--
--			clock-names = "mclk";
--			clocks = <&audio_clock>;
--		};
--	};
-diff --git a/Documentation/devicetree/bindings/sound/adi,adau17x1.yaml b/Documentation/devicetree/bindings/sound/adi,adau17x1.yaml
-new file mode 100644
-index 000000000000..8ef1e7f6ec91
---- /dev/null
-+++ b/Documentation/devicetree/bindings/sound/adi,adau17x1.yaml
-@@ -0,0 +1,52 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/sound/adi,adau17x1.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title:
-+ Analog Devices ADAU1361/ADAU1461/ADAU1761/ADAU1961/ADAU1381/ADAU1781 Codec
-+
-+maintainers:
-+  - Lars-Peter Clausen <lars@metafoo.de>
-+
-+properties:
-+  compatible:
-+    enum:
-+      - adi,adau1361
-+      - adi,adau1381
-+      - adi,adau1461
-+      - adi,adau1761
-+      - adi,adau1781
-+      - adi,adau1961
-+
-+  reg:
-+    maxItems: 1
-+    description:
-+      The i2c address. Value depends on the state of ADDR0 and ADDR1,
-+      as wired in hardware.
-+
-+  clock-names:
-+    const: mclk
-+
-+  clocks:
-+    items:
-+      - description: provides the audio master clock for the device.
-+
-+required:
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    i2c {
-+      #address-cells = <1>;
-+      #size-cells = <0>;
-+      audio-codec@38 {
-+        compatible = "adi,adau1761";
-+        reg = <0x38>;
-+        clock-names = "mclk";
-+        clocks = <&audio_clock>;
-+      };
-+    };
--- 
-2.37.1 (Apple Git-137.1)
-
+Vincent.
