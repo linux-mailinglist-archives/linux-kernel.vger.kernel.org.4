@@ -2,121 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4B276BAC26
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 10:28:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3F546BAC28
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 10:29:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231980AbjCOJ2z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 05:28:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60860 "EHLO
+        id S231994AbjCOJ27 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 05:28:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231818AbjCOJ2r (ORCPT
+        with ESMTP id S231821AbjCOJ2z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 05:28:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7BCB6A77;
-        Wed, 15 Mar 2023 02:28:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8040CB81D76;
-        Wed, 15 Mar 2023 09:28:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E884C433D2;
-        Wed, 15 Mar 2023 09:28:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678872520;
-        bh=iqRg2qO3GWrEc0EoQMp3T6JPcclnenU1RS60M1C2JkQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PBitN9VYog13FLH/phZ3daXoGBntZuEE/cNH9QXFLtf0rPjEO6Tq3wkFCY2XP24dw
-         B8TqSJNqAujFJPOfGFXBKIK4hlAXOqr9sn09jJZvN3W3ktUTmsaDmPez3pwqJZS6Lz
-         cIyLRwY9OXu/RwxkCWyEC0LqsXAe/G5SUqEN6H7Zgo6RYu6vBJw1sSA3NS9WoVdng2
-         neVDiztIHIvk4Iz8ymdVjTR0QSS6jfQVD0RZCfnkMBn1krGWQCHovqjB5cd9kdv9ln
-         F1owxBJbcMhx5fxhhxj1Tn3n/CeN0Iv9wBdXkNGgNcFih1efSQetPNEs+24XpnCnrX
-         Djv9ZcxggACcA==
-Date:   Wed, 15 Mar 2023 11:28:27 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Cc:     linux-arch@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 03/36] mm: Add folio_flush_mapping()
-Message-ID: <ZBGPu2j1FiknlwPP@kernel.org>
-References: <20230315051444.3229621-1-willy@infradead.org>
- <20230315051444.3229621-4-willy@infradead.org>
+        Wed, 15 Mar 2023 05:28:55 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0183574DB;
+        Wed, 15 Mar 2023 02:28:52 -0700 (PDT)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1pcNRA-0006fF-0x; Wed, 15 Mar 2023 10:28:48 +0100
+Message-ID: <d233a796-1cb8-a9b3-5a50-043dd2f98b3e@leemhuis.info>
+Date:   Wed, 15 Mar 2023 10:28:47 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230315051444.3229621-4-willy@infradead.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Content-Language: en-US, de-DE
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        regressions@lists.linux.dev
+References: <1a788a8e7ba8a2063df08668f565efa832016032.1678021408.git.linux@leemhuis.info>
+ <87a60frxk0.fsf@meer.lwn.net>
+From:   Thorsten Leemhuis <linux@leemhuis.info>
+Subject: Re: [PATCH v3] docs: describe how to quickly build a trimmed kernel
+In-Reply-To: <87a60frxk0.fsf@meer.lwn.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1678872532;7b404aaf;
+X-HE-SMSGID: 1pcNRA-0006fF-0x
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 15, 2023 at 05:14:11AM +0000, Matthew Wilcox (Oracle) wrote:
-> This is the folio equivalent of page_mapping_file(), but rename it
-> to make it clear that it's very different from page_file_mapping().
-> Theoretically, there's nothing flush-only about it, but there are no
-> other users today, and I doubt there will be; it's almost always more
-> useful to know the swapfile's mapping or the swapcache's mapping.
+On 14.03.23 19:35, Jonathan Corbet wrote:
+> Thorsten Leemhuis <linux@leemhuis.info> writes:
 > 
-> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-
-Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
-
-> ---
->  include/linux/pagemap.h | 26 +++++++++++++++++++++-----
->  1 file changed, 21 insertions(+), 5 deletions(-)
+>> Add a text explaining how to quickly build a kernel, as that's something
+>> users will often have to do when they want to report an issue or test
+>> proposed fixes.
 > 
-> diff --git a/include/linux/pagemap.h b/include/linux/pagemap.h
-> index a56308a9d1a4..e56c2023aa0e 100644
-> --- a/include/linux/pagemap.h
-> +++ b/include/linux/pagemap.h
-> @@ -369,6 +369,26 @@ static inline struct address_space *folio_file_mapping(struct folio *folio)
->  	return folio->mapping;
->  }
->  
-> +/**
-> + * folio_flush_mapping - Find the file mapping this folio belongs to.
-> + * @folio: The folio.
-> + *
-> + * For folios which are in the page cache, return the mapping that this
-> + * page belongs to.  Anonymous folios return NULL, even if they're in
-> + * the swap cache.  Other kinds of folio also return NULL.
-> + *
-> + * This is ONLY used by architecture cache flushing code.  If you aren't
-> + * writing cache flushing code, you want either folio_mapping() or
-> + * folio_file_mapping().
-> + */
-> +static inline struct address_space *folio_flush_mapping(struct folio *folio)
-> +{
-> +	if (unlikely(folio_test_swapcache(folio)))
-> +		return NULL;
-> +
-> +	return folio_mapping(folio);
-> +}
-> +
->  static inline struct address_space *page_file_mapping(struct page *page)
->  {
->  	return folio_file_mapping(page_folio(page));
-> @@ -379,11 +399,7 @@ static inline struct address_space *page_file_mapping(struct page *page)
->   */
->  static inline struct address_space *page_mapping_file(struct page *page)
->  {
-> -	struct folio *folio = page_folio(page);
-> -
-> -	if (unlikely(folio_test_swapcache(folio)))
-> -		return NULL;
-> -	return folio_mapping(folio);
-> +	return folio_flush_mapping(page_folio(page));
->  }
->  
->  /**
-> -- 
-> 2.39.2
-> 
+> So I think the time has come to apply this.
 
--- 
-Sincerely yours,
-Mike.
+Sounds good.
+
+>  I did have one final
+> thought, though...  In the v2 discussion, you said:
+> 
+>> Be warned, if it works I might do the same for "reporting issues". ;)
+>> But let's first see how this goes (and if we get any feedback to be able
+>> to tell if this experiment worked).
+> 
+> This caused me to wonder if we shouldn't create a new book called
+> "tutorials" for this kind of stuff, with an explicit proviso that a more
+> web-oriented approach is OK in that section?  Tutorial documentation
+> *is* quite different from reference material, but we've really made no
+> effort to treat the two differently so far.
+> 
+> Thoughts?
+
+Hmmm. Thinking about this makes sense, as yes, reference material and
+tutorials are different kind of texts.
+
+I'm not against separating, but it currently kinda feels wrong.
+
+Documentation/doc-guide/contributing.rst says that "books" are meant to
+"group documentation for specific readers"; creating a new book for
+tutorials would work against that, as readers (users and administrators
+in this case) then would have to consult two books.
+
+And isn't for example Documentation/process/submitting-patches.rst also
+more of a tutorial than reference material (which we also have in the
+form of Documentation/process/development-process.rst)? Does that mean
+it should be moved? Into the same book or a separate book, as it has a
+different target audience? I fear that might quickly get confusing for
+readers without any real benefits
+
+Or did I understand the idea of a new book wrong and you meant something
+else? Like creating Documentation/admin-guide/tutorials/ and putting the
+text there? That might work and would help future authors to get the
+right mental model when writing new texts. But I'm not sure that's worth it.
+
+Ciao, Thorsten
