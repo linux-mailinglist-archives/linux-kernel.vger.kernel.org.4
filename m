@@ -2,103 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80A806BA505
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 03:13:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24DC36BA509
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 03:17:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230170AbjCOCNG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 22:13:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37526 "EHLO
+        id S230274AbjCOCRB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 22:17:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229789AbjCOCNF (ORCPT
+        with ESMTP id S229528AbjCOCQ7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 22:13:05 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97221CC29;
-        Tue, 14 Mar 2023 19:13:03 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Pbv7K339kz4xDq;
-        Wed, 15 Mar 2023 13:13:01 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1678846381;
-        bh=WQQg7X4YBFQFZIPkw+RXCtY8FwqACXRBodhmDceWuS4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=KMMKvvkC32k+PRqu5LnQaifW5tGa3lhqNO9+GbqY1wPjauAuqu+Rb5szlX2DSAcUw
-         AvMO/jzpfxFL61Cn6zCXRdtI08AlvQbUM2Qrs7zVsuUeC5hAYq0RhIwy3HU1gxTmRO
-         34OPaFjqWgCkpPA+hSvAr0ycZ9PD6n4MdzjwRaWSU69tBYMoj76xrSCmlEamEBJo4c
-         BUzTx7uh5vr++h8rpHb9dJdTgJvDQ3d76ob98QJ92HqndLfpmfwDBOGIVpAODuqnyG
-         5EaFfQq4NccZiVieHmAqf37I1g9RV+EESLVTjW0fLb6C9TYPrsXa56ngpvRaLLBa1I
-         NoJ8GvlKdCElg==
-Date:   Wed, 15 Mar 2023 13:13:00 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Joey Gouly <joey.gouly@arm.com>, Peter Xu <peterx@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: duplicate patch in the mm-hotfixes tree
-Message-ID: <20230315131300.7776ce0e@canb.auug.org.au>
-In-Reply-To: <20230314082447.46640d77@canb.auug.org.au>
-References: <20230314082447.46640d77@canb.auug.org.au>
+        Tue, 14 Mar 2023 22:16:59 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E3B22C64D
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 19:16:58 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id fy10-20020a17090b020a00b0023b4bcf0727so410034pjb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 19:16:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112; t=1678846618;
+        h=to:from:cc:content-transfer-encoding:mime-version:date:message-id
+         :subject:references:in-reply-to:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=iwBAR+UkxMnSfUf34bmVcyrSKlfEQzQsi3AcgUhJuek=;
+        b=hNro0VYbQSfFtDVDaIf8e99lkLrpi4+NJoIs5WZJa4CntRov7RB69q2mwcM42qUx5l
+         g9GgiQC6B2UamSEaNjQnBU1A3FFBZDdFpmx8mz4erk7PkRwNQRmcgmOssvTL1qnsqmyo
+         5jCzMA2OWQPpr/51QyzQFX9rDCchGqvjtDSM28LN+hZubaVFxHc67WnyRVAf56Ae6C3q
+         YjNQsJ2XUWMSVWYbN8Zd/9UEuKDvMvcnqEBWIQ6yDIjhOm8Wdreq9gLp8B5MrKzdg4dK
+         zNKyqGvMupSc/12QkDBLaMC3d9mKrJbQ/7Q/ObZD/cJ3MPo/GvqGujaSEhMfOgxpj2Jc
+         pbNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678846618;
+        h=to:from:cc:content-transfer-encoding:mime-version:date:message-id
+         :subject:references:in-reply-to:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=iwBAR+UkxMnSfUf34bmVcyrSKlfEQzQsi3AcgUhJuek=;
+        b=muvlZMcTScoxMasBsxLliH3t/f8NQ0L1vGa5GrCoef9BtZ0nRNmM3RYAFW0/wJEnM2
+         L0+sEyWps2GKihnIdrZeDrkkgJkwH1mQBJdAgG1BccfPhFFMlokAfV+GBqL/eX97+2ba
+         qloNj7SwVaHTRos1z/06b7K89yWndCYRmigG7tsugudvaitpu54D4Ipz3mc5oi6HjcUA
+         q4vYzm5iGgXd0Al2I/svu/0h4ZwUuDXN7Yo1K09Cxcly/65SGAgqkuY57LiJuysjTCbx
+         ALD7WQbjczJj/WPxA750GcC6MDRSgNBRy8vl3IKwv5/imJZgdOf6/eYT5Xj35Q5Ecc8c
+         SBdw==
+X-Gm-Message-State: AO0yUKVAyyj2qCjN+7N2ls75VvHY4djs21bvpZsx4pEAerWe+vDIpm/Z
+        cTMA3Iu2lF5pRFrpCUR0Sug3jQ==
+X-Google-Smtp-Source: AK7set8jkF7aJ83Dj6iCO3ZNZNSDYLalFWoPUkQVlz72eQVIA4v6Kt12UFvxcYv2mdDdffdYMu4PiA==
+X-Received: by 2002:a17:903:2844:b0:19d:74c:78e5 with SMTP id kq4-20020a170903284400b0019d074c78e5mr964618plb.50.1678846618049;
+        Tue, 14 Mar 2023 19:16:58 -0700 (PDT)
+Received: from localhost ([50.221.140.188])
+        by smtp.gmail.com with ESMTPSA id kf14-20020a17090305ce00b001a064282ce5sm2331959plb.294.2023.03.14.19.16.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Mar 2023 19:16:57 -0700 (PDT)
+In-Reply-To: <20230310075021.3919290-1-dylan@andestech.com>
+References: <20230310075021.3919290-1-dylan@andestech.com>
+Subject: Re: [RESEND PATCH v2] RISC-V: mm: Support huge page in
+ vmalloc_fault()
+Message-Id: <167884655832.30922.14980065995349775052.b4-ty@rivosinc.com>
+Date:   Tue, 14 Mar 2023 19:15:58 -0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/DLKFTa4/r=SVi=3YNShFacl";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-901c5
+Cc:     liushixin2@huawei.com, x5710999x@gmail.com,
+        Bjorn Topel <bjorn@rivosinc.com>, abrestic@rivosinc.com,
+        peterx@redhat.com, hanchuanhua@oppo.com, apopple@nvidia.com,
+        hca@linux.ibm.com, aou@eecs.berkeley.edu,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>, tim609@andestech.com,
+        peterlin@andestech.com, ycliang@andestech.com,
+        Alexandre Ghiti <alexghiti@rivosinc.com>
+From:   Palmer Dabbelt <palmer@rivosinc.com>
+To:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Dylan Jhong <dylan@andestech.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/DLKFTa4/r=SVi=3YNShFacl
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+On Fri, 10 Mar 2023 15:50:21 +0800, Dylan Jhong wrote:
+> Since RISC-V supports ioremap() with huge page (pud/pmd) mapping,
+> However, vmalloc_fault() assumes that the vmalloc range is limited
+> to pte mappings. To complete the vmalloc_fault() function by adding
+> huge page support.
+> 
+> 
 
-On Tue, 14 Mar 2023 08:24:47 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> The following commit is also in Linus Torvalds' tree as a different commit
-> (but the same patch):
->=20
->   a1713ab0740f ("tools headers UAPI: Sync linux/prctl.h with the kernel s=
-ources")
+Applied, thanks!
 
-The above is now commit
+[1/1] RISC-V: mm: Support huge page in vmalloc_fault()
+      https://git.kernel.org/palmer/c/47dd902aaee9
 
-  36714de4fa54 ("tools headers UAPI: sync linux/prctl.h with the kernel sou=
-rces")
+Best regards,
+-- 
+Palmer Dabbelt <palmer@rivosinc.com>
 
-> This is commit
->=20
->   df4b933e0e51 ("tools headers UAPI: Sync linux/prctl.h with the kernel s=
-ources")
->=20
-> in Linus' tree.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/DLKFTa4/r=SVi=3YNShFacl
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQRKawACgkQAVBC80lX
-0GwEvggAjY2ihCUqj8eq7SlXCg4ZFeuRBfOmHK/cYbTPboyn5tlpdYeZ4b6Mbzlt
-mFRLvslOlJS/mgFPjJ8+zRwiF87H+6pVBDFdDoOboYN9bEZ2f0wGnvrmNMKtkGZV
-pn1IWXsmPM8PlPtZz4sLFMe5l3Ki8PGKbigHbo2bloLDTky6DGBDJ54IgR3yV70C
-47f7c9iQhtsU14LwOPXwDfb/6W/6jhL30IzOtH0VFcmP3JJg6gfPIt+tpyRjYXZj
-uKb6pmCG0BO9tlN7CdMi8UhYpQyZGxgzoygSgi3IceCAsM2pjjpKJEmBkspvIA7E
-muisR6QkWwxOBt58gTNB7bFcjek4Zw==
-=l2Ox
------END PGP SIGNATURE-----
-
---Sig_/DLKFTa4/r=SVi=3YNShFacl--
