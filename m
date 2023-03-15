@@ -2,183 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 941B36BA8F1
+	by mail.lfdr.de (Postfix) with ESMTP id 46D536BA8F0
 	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 08:22:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231592AbjCOHVq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 03:21:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57328 "EHLO
+        id S231578AbjCOHVn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 03:21:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231530AbjCOHV3 (ORCPT
+        with ESMTP id S231488AbjCOHVS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 03:21:29 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFF4A6923A;
-        Wed, 15 Mar 2023 00:21:13 -0700 (PDT)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32F634iW013971;
-        Wed, 15 Mar 2023 07:21:11 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=fCdCFK+wRShOfc45RRYz+BzRBwmmZNXzRilOrAjpY3A=;
- b=NmquYZSFToMHM758eKR1u37yBVQrq+T79yJ2i+UGazt+MypZB/yx1929Czj3wAD6zY5Y
- zZ85OIAMHo9DiGeh76Pa/Gl9WzCtS7mLEZSmcj1L3mNLEzxryWFjgGSHBVHo9EwpGXIH
- oVuvduZVEvTe0ids1Vji5jjleJaRxKXYa0jR9aq6cQrA0iZmnauV5YHoCQKvFpEmxlAN
- 91QgeJzbpx7lacCDBlzcnIOON6A90aFq0EV52j/iKODiG1IyTUpJr9lmvoNcD4RLy1b6
- ihBDTbfZtYJYh4oitK6lNIPBQXkYzfryrTfElT2R7wUhebbiNKQRJ6zOdOq+JR2OZghJ ZA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pb6wmuk3y-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 15 Mar 2023 07:21:10 +0000
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32F7B9GN018688;
-        Wed, 15 Mar 2023 07:21:10 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pb6wmuk2s-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 15 Mar 2023 07:21:10 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32EN62eg008691;
-        Wed, 15 Mar 2023 07:21:08 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3pb29sgefk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 15 Mar 2023 07:21:07 +0000
-Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32F7L4jV56361458
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 15 Mar 2023 07:21:04 GMT
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 51FC12004D;
-        Wed, 15 Mar 2023 07:21:04 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E19B020043;
-        Wed, 15 Mar 2023 07:21:03 +0000 (GMT)
-Received: from [9.171.86.252] (unknown [9.171.86.252])
-        by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Wed, 15 Mar 2023 07:21:03 +0000 (GMT)
-Message-ID: <432b0083-3e22-adf8-2699-903c71e7dd57@linux.ibm.com>
-Date:   Wed, 15 Mar 2023 08:21:03 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 2/6] tools/perf/json: Add cache metrics for s390 z16
-To:     Ian Rogers <irogers@google.com>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        sumanthk@linux.ibm.com, svens@linux.ibm.com, gor@linux.ibm.com,
-        hca@linux.ibm.com
-References: <20230313080201.2440201-1-tmricht@linux.ibm.com>
- <20230313080201.2440201-2-tmricht@linux.ibm.com>
- <CAP-5=fW=xVYzkgQ4vUyzkiK-oQjUQ=hLwcLT6D8VjtVCXH5oSQ@mail.gmail.com>
- <ZA9sYL/re/aNVpo+@kernel.org>
- <1ee6884a-2d92-68d9-0917-3ae4f5390714@linux.ibm.com>
- <CAP-5=fUtJsvAtrhe4xESoQc8U15WJ8BWREbH51OKoA218uJLzw@mail.gmail.com>
-Content-Language: en-US
-From:   Thomas Richter <tmricht@linux.ibm.com>
-Organization: IBM
-In-Reply-To: <CAP-5=fUtJsvAtrhe4xESoQc8U15WJ8BWREbH51OKoA218uJLzw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: HkMobC8TzWcneDtdiyklhr0TU82J5QMr
-X-Proofpoint-GUID: yO9Vxiv1qwFZQ7W3ufo85IIrnaDFedKB
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Wed, 15 Mar 2023 03:21:18 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F4685AB78
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 00:21:12 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id x3so71629045edb.10
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 00:21:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678864870;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ozR0dnqnJVp0BhWFNtiQ9uNm8JZDF8pkJ8MCkHvyY9o=;
+        b=bPtJfDFvUiUczE1oDcphFrtGfzybJ+GtT3roYXYiD7BKtGzqLhKO1dYTGLgQggtBZC
+         sf9/zhUnw+InkJoSLs8kicjxpWYRyR1uYuSVRKugyy1rzfVU65DW/b3u5XJZcSyXE05v
+         lD6Wh3aBQRPokpSiTxpWx3ajoxSUfKZHkYMRE1tTjCQg4u7goqz8sxJ0FtSA9fS4aTjp
+         mVY8YoEOsI9p7kVZLRVgnrUP6CmEnoFYDTyI25CWi3r9NCoq9ewQlT6wO9VNVtNTQUUO
+         ha+4tZ4Gl1Alkc84fnMjsBu/7nw9HhnJ0yblQkkIVjnLdaSxsX3bDG79CWHiO2B2mHHU
+         dkew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678864870;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ozR0dnqnJVp0BhWFNtiQ9uNm8JZDF8pkJ8MCkHvyY9o=;
+        b=u0rnbnBgc0RZI5v2wv5xDGX3RVtGoCRxMH6NzwbKlkSeOXn/Ny+we70MZaHq0IePqa
+         brAuRaUNR63mKsC8RNmv2uGfbUJ3jFBQma70YDPZWec72KWhU79bMfalcFNMpucvZG0y
+         hVzpJzSFlO5Nl5SRI+bzgd84fw3DsYlxDF0GVMbmQPoXvVnS7pVOazWyWRwSd6FL2dww
+         XWCzyjIjNz4FIDThyezWnZphedB4YcE1AXQ7djGe6Ig+rShMRqkvCOMUv2XjB9w+Ryxl
+         t/OfsZ5nruCDVzhgcC3Ay3D8iOcrxt3sqOuXJ6Z077IYdqrDpOtnUGfAf5c4Z/gCjjot
+         bIVw==
+X-Gm-Message-State: AO0yUKVvRN2puEVEutZb/xgd8XgiKPP5VNRa4cQ0/lEAGSzfDdteBf8/
+        u1fI2ZDP5f6ZgXBts9reeTGFJQ==
+X-Google-Smtp-Source: AK7set+tTTuF2Ln4iUAaub4ZI6VDeCChGk/zyzpT6o0EnVUWmuOlHgrEHzbo4nPYtVK6Xv5L8jB/TA==
+X-Received: by 2002:a17:906:8494:b0:87f:89f2:c012 with SMTP id m20-20020a170906849400b0087f89f2c012mr5638543ejx.24.1678864870206;
+        Wed, 15 Mar 2023 00:21:10 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:940e:8615:37dc:c2bd? ([2a02:810d:15c0:828:940e:8615:37dc:c2bd])
+        by smtp.gmail.com with ESMTPSA id op13-20020a170906bced00b008c607dd7cefsm2093286ejb.79.2023.03.15.00.21.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Mar 2023 00:21:09 -0700 (PDT)
+Message-ID: <aa7f656c-d022-7b7c-3f30-ce92f219c94e@linaro.org>
+Date:   Wed, 15 Mar 2023 08:21:08 +0100
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-15_02,2023-03-14_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- spamscore=0 mlxscore=0 bulkscore=0 clxscore=1015 adultscore=0
- impostorscore=0 suspectscore=0 malwarescore=0 priorityscore=1501
- mlxlogscore=999 phishscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2302240000 definitions=main-2303150061
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v2 1/7] dt-bindings: interconnect: qcom,msm8998-bwmon:
+ Resolve MSM8998 support
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230304-topic-ddr_bwmon-v2-0-04db989db059@linaro.org>
+ <20230304-topic-ddr_bwmon-v2-1-04db989db059@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230304-topic-ddr_bwmon-v2-1-04db989db059@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/14/23 17:34, Ian Rogers wrote:
-> On Tue, Mar 14, 2023 at 1:20 AM Thomas Richter <tmricht@linux.ibm.com> wrote:
->>
->> On 3/13/23 19:33, Arnaldo Carvalho de Melo wrote:
->>> Em Mon, Mar 13, 2023 at 08:22:44AM -0700, Ian Rogers escreveu:
->>>> On Mon, Mar 13, 2023 at 1:30 AM Thomas Richter <tmricht@linux.ibm.com> wrote:
->>>>>
->>>>> Add metrics for s390 z16
->>>>> - Percentage sourced from Level 2 cache
->>>>> - Percentage sourced from Level 3 on same chip cache
->>>>> - Percentage sourced from Level 4 Local cache on same book
->>>>> - Percentage sourced from Level 4 Remote cache on different book
->>>>> - Percentage sourced from memory
->>>>>
->>>>> For details about the formulas see this documentation:
->>>>> https://www.ibm.com/support/pages/system/files/inline-files/CPU%20MF%20Formulas%20including%20z16%20-%20May%202022_1.pdf
->>>>>
->>>>> Outpuf after:
->>>>>  # ./perf stat -M l4rp -- dd if=/dev/zero of=/dev/null bs=10M count=10K
->>>>>  .... dd output deleted
->>>>>
->>>>>  Performance counter stats for 'dd if=/dev/zero of=/dev/null bs=10M count=10K':
->>>>>
->>>>>                  0      IDCW_OFF_DRAWER_CHIP_HIT         #     0.00 l4rp
->>>>>            431,866      L1I_DIR_WRITES
->>>>>              2,395      IDCW_OFF_DRAWER_IV
->>>>>                  0      ICW_OFF_DRAWER
->>>>>                  0      IDCW_OFF_DRAWER_DRAWER_HIT
->>>>>              1,437      DCW_OFF_DRAWER
->>>>>        425,960,793      L1D_DIR_WRITES
->>>>>
->>>>>       12.165030699 seconds time elapsed
->>>>>
->>>>>        0.001037000 seconds user
->>>>>       12.162140000 seconds sys
->>>>>
->>>>>  #
->>>>>
->>>>> Signed-off-by: Thomas Richter <tmricht@linux.ibm.com>
->>>>> Acked-By: Sumanth Korikkar <sumanthk@linux.ibm.com>
->>>>
->>>> Acked-by: Ian Rogers <irogers@google.com>
->>>
->>> Thanks, applied the first two patches, please address the review
->>> suggestions for patches 3-6 and resubmit only those.
->>>
->>> The patches will be in the public perf-tools-next branch later today.
->>>
->>> - Arnaldo
->>>
->>
->> I would really prefer the current implementation without using "ScaleUnit": "100%"
->> The reason is that these formulars are given to me from the s390 Performance team.
->> They want to use the exact same formulars on all platforms running on s390
->> which includes z/OS and z/VM. This way they are sure to get the same numbers.
->>
->> Hope this background info helps.
+On 13/03/2023 12:41, Konrad Dybcio wrote:
+> BWMONv4 has two sets of registers: one for handling the monitor itself
+> and one called "global" which hosts some sort of a headswitch and an
+> interrupt control register. We did not handle that one before, as on
+> SoCs starting with SDM845 they have been merged into a single contiguous
+> range.
 > 
-> For the series:
-> Acked-by: Ian Rogers <irogers@google.com>
+> To make the qcom,msm8998-bwmon less confusing and in preparation for
+> actual MSM8998 support, describe the global register space and introduce
+> new "qcom,sdm845-cpu-bwmon" compatible while keeping the
+> "qcom,sdm845-bwmon" as a fallback for SoCs with this merged register space
+> scheme.
 > 
-> Using ScaleUnit won't change the result. A ScaleUnit of "100%" means
-> scale the result up by multiplying by 100 and then apply the % after
-> the value. Another nit is having metrics that place their units in the
-> name, like _percent, is usually a sign the name can be better. Perhaps
-> we can follow up with some clean up.
-> 
-> Thanks,
-> Ian
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-Thanks Ian,
-I put the ScaleUnit thing on my todo list and will provide a clean up...
 
--- 
-Thomas Richter, Dept 3303, IBM s390 Linux Development, Boeblingen, Germany
---
-Vorsitzender des Aufsichtsrats: Gregor Pillen
-Geschäftsführung: David Faller
-Sitz der Gesellschaft: Böblingen / Registergericht: Amtsgericht Stuttgart, HRB 243294
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
 
