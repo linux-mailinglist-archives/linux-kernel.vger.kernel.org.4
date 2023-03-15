@@ -2,47 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C22376BC17E
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 00:35:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B94CC6BC16A
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 00:35:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233315AbjCOXfr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 19:35:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45978 "EHLO
+        id S233220AbjCOXfJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 19:35:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233204AbjCOXfD (ORCPT
+        with ESMTP id S231971AbjCOXeg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 19:35:03 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 298F5A6BE3;
-        Wed, 15 Mar 2023 16:34:04 -0700 (PDT)
+        Wed, 15 Mar 2023 19:34:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF9B4A225D;
+        Wed, 15 Mar 2023 16:33:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E3AE6B81FA8;
-        Wed, 15 Mar 2023 23:32:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04C41C4339E;
-        Wed, 15 Mar 2023 23:32:57 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1EDAA61EB1;
+        Wed, 15 Mar 2023 23:33:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD3EEC433D2;
+        Wed, 15 Mar 2023 23:32:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678923178;
-        bh=J+VdprXsDkR+blMkvRslh77/YhAHDDN+vCvCjz/vvLI=;
+        s=k20201202; t=1678923181;
+        bh=ZW0cW6j0eZ3LRxXMTCWZrrkIV3axsHJnqHcZZpwnlco=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Xyt0J9r4e5xX3KFqn3uiSSsvWIX00GokRQFtX8ZL1Jyzwh8ojXn6rinx8zrEcIpOZ
-         3toEjXS8o71xa7lmgrF9/RQLSiDWOkkPSKI/iR8Gr1eZipnMAdkKDBiWzaLJss5dBA
-         myq9r6icveeFgynCSEQi/s/UykZ7lW5cMsq9cwuXKN8zoM0ynHF2blrwbS0ZqLJb7l
-         YDNT77TTP/UkAqcxp3BwBYx/6iLbY1jW5AP5vTPcqoqcGnK1IPApn6e+qLIiTIent4
-         sFoN9SGeZJdhpOGW68f6CpNV4F/3hYtzB9HZ4BFhmIHN7ghjxzS0qhjZMWpm/w3l8b
-         RpX98qog/1AkQ==
+        b=DQEoGlYRaWYHi/3uI8nc0LhUk+/xLW7zzvBumLCc+upwsanoVQoyggJaMNzHIBAah
+         dUqX7NTdlqtNqmVH/DkhNlmdhG2TDo8lVKgqn9b4iqOz8VxYmzIKSA6ocnC0RE5iVF
+         gCDXLOCIQ9m3MCqH92jKnf66VpJfg28tUC4YFJRgv4WmV+H6ZpiS4GYhkT0Ulh7v6k
+         0P0eiOIcdIton2WyhrGiY3/0QMrCKisubp+rlcPe4QhNIGfYkwOLPEua2qEBOr2RK8
+         0lW00iPAGST7rIrGR+59BXC9kt6+CZ3pQcxZeLVFPF7TYXG9jP8MadTZ9rbSwtx0/w
+         ga0o2PgaBXBEA==
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     sboyd@kernel.org, konrad.dybcio@linaro.org, agross@kernel.org,
-        Tom Rix <trix@redhat.com>, mturquette@baylibre.com
-Cc:     linux-clk@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] clk: qcom: remove unused variables gpucc_parent_data,map_2
-Date:   Wed, 15 Mar 2023 16:35:29 -0700
-Message-Id: <167892332568.4030021.2522610216685451226.b4-ty@kernel.org>
+To:     Tero Kristo <kristo@kernel.org>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Nishanth Menon <nm@ti.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Andy Gross <agross@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Prashant Gaikwad <pgaikwad@nvidia.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     linux-arm-msm@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-tegra@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-omap@vger.kernel.org,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org
+Subject: Re: (subset) [PATCH 00/30] clk: Convert to platform remove callback returning void
+Date:   Wed, 15 Mar 2023 16:35:30 -0700
+Message-Id: <167892332563.4030021.12717582908504193989.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230315155630.1740065-1-trix@redhat.com>
-References: <20230315155630.1740065-1-trix@redhat.com>
+In-Reply-To: <20230312161512.2715500-1-u.kleine-koenig@pengutronix.de>
+References: <20230312161512.2715500-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -55,23 +93,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 15 Mar 2023 11:56:30 -0400, Tom Rix wrote:
-> gcc with W=1 reports these errors
-> drivers/clk/qcom/gpucc-sm6375.c:145:37: error:
->   ‘gpucc_parent_data_2’ defined but not used [-Werror=unused-const-variable=]
->   145 | static const struct clk_parent_data gpucc_parent_data_2[] = {
->       |                                     ^~~~~~~~~~~~~~~~~~~
-> drivers/clk/qcom/gpucc-sm6375.c:139:32: error:
->   ‘gpucc_parent_map_2’ defined but not used [-Werror=unused-const-variable=]
->   139 | static const struct parent_map gpucc_parent_map_2[] = {
->       |                                ^~~~~~~~~~~~~~~~~~
+On Sun, 12 Mar 2023 17:14:42 +0100, Uwe Kleine-König wrote:
+> this patch series adapts the platform drivers below drivers/clk
+> to use the .remove_new() callback. Compared to the traditional .remove()
+> callback .remove_new() returns no value. This is a good thing because
+> the driver core doesn't (and cannot) cope for errors during remove. The
+> only effect of a non-zero return value in .remove() is that the driver
+> core emits a warning. The device is removed anyhow and an early return
+> from .remove() usually yields a resource leak.
 > 
 > [...]
 
 Applied, thanks!
 
-[1/1] clk: qcom: remove unused variables gpucc_parent_data,map_2
-      commit: 54ed70b57623e18f6c18f510cbe1e741bca89f34
+[22/30] clk: qcom: Convert to platform remove callback returning void
+        commit: c4dc24da5286742f8cc728379f6115c9e886a8a4
 
 Best regards,
 -- 
