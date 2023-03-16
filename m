@@ -2,104 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 164036BD71F
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 18:30:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 120266BD721
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 18:31:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229688AbjCPRa5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 13:30:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48626 "EHLO
+        id S229654AbjCPRbV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 13:31:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229651AbjCPRax (ORCPT
+        with ESMTP id S229581AbjCPRbQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 13:30:53 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9331ACA1F0;
-        Thu, 16 Mar 2023 10:30:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 92EDCCE1E1C;
-        Thu, 16 Mar 2023 17:30:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id BD5F8C433D2;
-        Thu, 16 Mar 2023 17:30:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678987820;
-        bh=rFOBIEh1pPzhvRn5Gb5UlmOzo4rc1g3fvU1dUCn/28k=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=exgkn63BgIJ4+Cgh5LxbgQ95J2yMVgUhyMeAlDPcwj8d3e1QKwECqOm/0szJg3FNF
-         MPUQ2M2T1CQNWJpSsUZpInNJKUondL5leR1XZtBucCGgUBNcIShy22LxToWtNUuPUf
-         LcmCHkpPaSVfCOa2L30CXtcOnZS9TyL621Afnc0lDfaq7HTek0u2OA6J6sxzN6gCAk
-         HvsrLcp44qgBzZntBez6TqMlrNhY492CrkL5dZ1A//8TOi22nbh9ZB3QRx/7QO1wFp
-         i1SMUXeC5yiCX59Q44x/o5t8WZz+KBlcB1hW0ZDJPBay7fNOcHSYJB06mq/UXS8JMS
-         1sPwlf1xxzYvQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A896AE29F32;
-        Thu, 16 Mar 2023 17:30:20 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 16 Mar 2023 13:31:16 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BC9CB9504
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 10:30:54 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id z21so10654874edb.4
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 10:30:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1678987853;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YryrzFP9xzjyk98MIHgDswzk42M925/BWmA7MtQw0v4=;
+        b=h67olO+uevKaXKTSNOLSoT4LanVp8uprOJ0ALprCpqh//3X78gBQQy00RoLDAqDx6d
+         YbYnaJRoO+9vpCxBbUqNZyfDssR+OABHsRGahvLIHqpECT4cKajrMb8PpbWBbu43tA1N
+         Fpnu7muihuAekZeLvXccYyjPgsQkQSXYYr6Cg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678987853;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YryrzFP9xzjyk98MIHgDswzk42M925/BWmA7MtQw0v4=;
+        b=5bHpzCEmOykpabQVmNx0/27bh4THFsk224AR1H64G5S6K4u8XGLGPYkuqTuwP0izUl
+         YcTHlCt7iSANCap1OaUjLxUEmCFir6Z6VdbvJxSeBY4w5n8Ul+jjPKKtj9YebxCkjI8x
+         ScLCRNJcETQxr0EaVznaicn/3hZKk7TGdXHswKjgOMK2R6V79XlOJPkhIPF6qKl/cRbd
+         1L1cYHKNyW22tDSYqOMxPqxKAaa8UA/J9zHPHiSBzK24zvK0V2CK2G6y65PwfGqIIBcK
+         nNmuX7+NLZOLZRhxSGnDAtDQlgFKpPr+hGZinGzIdVzMcR2bXB77Ow9gRCnLIh7owx9z
+         LuKA==
+X-Gm-Message-State: AO0yUKUhrvWAJZ8esWsjJc30QHmEqigxz2eOxTM7KZW7RFsiiPLpmmzW
+        k4xOMjcBmqHHdJCVs5b3DTHCpqOAW66lvK3RcM5U+Q==
+X-Google-Smtp-Source: AK7set8VTGDMrz1ALNJ8oxVZV14FQXVPklK/vaYxIM1XoW+uy2WqF+ZCI8kBc0eLjr10miik89ERWw==
+X-Received: by 2002:a17:907:2da7:b0:8e6:bcb6:469e with SMTP id gt39-20020a1709072da700b008e6bcb6469emr12590994ejc.0.1678987852725;
+        Thu, 16 Mar 2023 10:30:52 -0700 (PDT)
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com. [209.85.208.47])
+        by smtp.gmail.com with ESMTPSA id b12-20020a170906038c00b00924d38bbdc0sm4094931eja.105.2023.03.16.10.30.51
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Mar 2023 10:30:51 -0700 (PDT)
+Received: by mail-ed1-f47.google.com with SMTP id y4so10676948edo.2
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 10:30:51 -0700 (PDT)
+X-Received: by 2002:a17:907:2069:b0:8af:4963:fb08 with SMTP id
+ qp9-20020a170907206900b008af4963fb08mr5816749ejb.15.1678987850768; Thu, 16
+ Mar 2023 10:30:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH RESEND net v4 0/4] several updates to virtio/vsock
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167898782068.22462.15920934490206565808.git-patchwork-notify@kernel.org>
-Date:   Thu, 16 Mar 2023 17:30:20 +0000
-References: <1bfcb7fd-bce3-30cf-8a58-8baa57b7345c@sberdevices.ru>
-In-Reply-To: <1bfcb7fd-bce3-30cf-8a58-8baa57b7345c@sberdevices.ru>
-To:     Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-Cc:     stefanha@redhat.com, sgarzare@redhat.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        bobby.eshleman@bytedance.com, kvm@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@sberdevices.ru,
-        oxffffaa@gmail.com, avkrasnov@sberdevices.ru
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230314-doc-checkpatch-closes-tag-v1-0-1b83072e9a9a@tessares.net>
+ <c27709bd-90af-ec4f-de0b-3a4536bc17ca@leemhuis.info> <81f8be3e-4860-baf9-8e13-fec3a103245b@tessares.net>
+In-Reply-To: <81f8be3e-4860-baf9-8e13-fec3a103245b@tessares.net>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 16 Mar 2023 10:30:34 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wh0v1EeDV3v8TzK81nDC40=XuTdY2MCr0xy3m3FiBV3+Q@mail.gmail.com>
+Message-ID: <CAHk-=wh0v1EeDV3v8TzK81nDC40=XuTdY2MCr0xy3m3FiBV3+Q@mail.gmail.com>
+Subject: Re: [PATCH 0/2] docs & checkpatch: allow Closes tags with links
+To:     Matthieu Baerts <matthieu.baerts@tessares.net>
+Cc:     Thorsten Leemhuis <linux@leemhuis.info>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Andy Whitcroft <apw@canonical.com>,
+        Joe Perches <joe@perches.com>,
+        Dwaipayan Ray <dwaipayanray1@gmail.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        =?UTF-8?Q?Kai_Wasserb=C3=A4ch?= <kai@dev.carbon-project.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, mptcp@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On Thu, Mar 16, 2023 at 4:43=E2=80=AFAM Matthieu Baerts
+<matthieu.baerts@tessares.net> wrote:
+>
+> @Linus: in short, we would like to continue using the "Closes:" tag (or
+> similar, see below) with a URL in commit messages. They are useful to
+> have public bug trackers doing automated actions like closing a specific
+> ticket. Any objection from your side?
 
-This series was applied to netdev/net.git (main)
-by David S. Miller <davem@davemloft.net>:
+As long as it's a public link, I guess that just documents what the
+drm people have been doing.
 
-On Tue, 14 Mar 2023 14:03:23 +0300 you wrote:
-> Hello,
-> 
-> this patchset evolved from previous v2 version (see link below). It does
-> several updates to virtio/vsock:
-> 1) Changes 'virtio_transport_inc/dec_rx_pkt()' interface. Now instead of
->    using skbuff state ('head' and 'data' pointers) to update 'fwd_cnt'
->    and 'rx_bytes', integer value is passed as an input argument. This
->    makes code more simple, because in this case we don't need to update
->    skbuff state before calling 'virtio_transport_inc/dec_rx_pkt()'. In
->    more common words - we don't need to change skbuff state to update
->    'rx_bytes' and 'fwd_cnt' correctly.
-> 2) For SOCK_STREAM, when copying data to user fails, current skbuff is
->    not dropped. Next read attempt will use same skbuff and last offset.
->    Instead of 'skb_dequeue()', 'skb_peek()' + '__skb_unlink()' are used.
->    This behaviour was implemented before skbuff support.
-> 3) For SOCK_SEQPACKET it removes unneeded 'skb_pull()' call, because for
->    this type of socket each skbuff is used only once: after removing it
->    from socket's queue, it will be freed anyway.
-> 
-> [...]
+I'm not convinced "Closes" is actually any better than just "Link:",
+though. I would very much hope and expect that the actual closing of
+any bug report is actually done separately and verified, rather than
+some kind of automated "well, the commit says it closes it, so.."
 
-Here is the summary with links:
-  - [RESEND,net,v4,1/4] virtio/vsock: don't use skbuff state to account credit
-    https://git.kernel.org/netdev/net/c/077706165717
-  - [RESEND,net,v4,2/4] virtio/vsock: remove redundant 'skb_pull()' call
-    https://git.kernel.org/netdev/net/c/6825e6b4f8e5
-  - [RESEND,net,v4,3/4] virtio/vsock: don't drop skbuff on copy failure
-    https://git.kernel.org/netdev/net/c/8daaf39f7f6e
-  - [RESEND,net,v4,4/4] test/vsock: copy to user failure test
-    https://git.kernel.org/netdev/net/c/7e699d2a4e81
+So honestly, I feel like "Link:" is just a better thing, and I worry
+that "Closes:" is then going to be used for random internal crap.
+We've very much seen people wanting to do that - having their own
+private bug trackers, and then using the commit message to refer to
+them, which I am *violently* against. If it's only useful to some
+closed community, it shouldn't be in the public commits.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+And while the current GPU people seem to use "Closes:" the right way
+(and maybe some other groups do too - but it does seem to be mostly a
+freedesktop thing), I really think it is amenable to mis-use in ways
+"Link:" is not.
 
+The point of "Link:" is explicitly two-fold:
 
+ - it makes it quite obvious that you expect an actual valid web-link,
+not some internal garbage
+
+ - random people always want random extensions, and "Link:" is
+_designed_ to counter-act that creeping "let's add a random new tag"
+disease. It's very explicitly "any relevant link".
+
+and I really question the value of adding new types of tags,
+particularly ones that seem almost designed to be mis-used.
+
+So I'm not violently against it, and 99% of the existing uses seem
+fine. But I do note that some of the early "Closes:" tags in the
+kernel were very much complete garbage, and exactly the kind of thing
+that I absolutely detest.
+
+What does
+
+    Closes: 10437
+
+mean? That's crazy talk. (And yes, in that case it was a
+kernel.bugzilla.org number, which is perfectly fine, but I'm using it
+as a very real example of how "Closes:" ends up being very naturally
+to mis-use).
+
+End result: I don't hate our current "Closes:" uses. But I'm very wary of i=
+t.
+
+I'm not at all convinced that it really adds a lot of value over
+"Link:", and I am, _very_ aware of how easily it can be then taken to
+be a "let's use our own bug tracker cookies here".
+
+So I will neither endorse nor condemn it, but if I see people using it
+wrong, I will absolutely put my foot down.
+
+                    Linus
