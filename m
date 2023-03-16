@@ -2,75 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 280CA6BD12C
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 14:45:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 508496BD132
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 14:46:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230412AbjCPNpg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 09:45:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45508 "EHLO
+        id S230471AbjCPNqD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 09:46:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230375AbjCPNpa (ORCPT
+        with ESMTP id S230398AbjCPNpr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 09:45:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C56107DD32;
-        Thu, 16 Mar 2023 06:45:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4215D62033;
-        Thu, 16 Mar 2023 13:45:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A975C433EF;
-        Thu, 16 Mar 2023 13:45:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678974326;
-        bh=IFBpd7OfWuYdVfbveasMQcIhr3pIZmts7EDU6oOkGLU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Al9xKvyk9j5o8Qqw8bfsgQzYRU/IhFoTqS5sfJT4LWSinQL6WOonC/ctuNnlAHCDr
-         b4T3qLhvyjQx4Or1uEE3MDMHnaMby0TCSkROe+8EotWFJFJjxuFF7N/iHITxQ1w2G4
-         5yxhMOlA+qRCNzGJSuPKz0luSGVTkwyCDWdXJ7fmD2F2vV29nXodvcw1dXCbmWKN7K
-         +o6Ys0wcwT6IgO/6koVdNrJgLyqudMU+B7PJUwkqx0MK866zGR2QsO1V2ZDft/zOC7
-         b1B6K8f/KKinw+6AaRtC69aAD6au0jlaGg5Jy5mdZSjYKTI46EedGPtPHcZ5TzFtD6
-         LOXPLKlcxLcew==
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Leon Romanovsky <leonro@nvidia.com>, linux-kernel@vger.kernel.org,
-        linux-rdma@vger.kernel.org,
-        Michael Guralnik <michaelgur@nvidia.com>,
-        netdev@vger.kernel.org, Patrisious Haddad <phaddad@nvidia.com>,
-        Saeed Mahameed <saeedm@nvidia.com>
-Subject: [PATCH rdma-next 0/2] Add Q-counters for representors
-Date:   Thu, 16 Mar 2023 15:45:19 +0200
-Message-Id: <cover.1678974109.git.leon@kernel.org>
-X-Mailer: git-send-email 2.39.2
+        Thu, 16 Mar 2023 09:45:47 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82E7CA17C9;
+        Thu, 16 Mar 2023 06:45:36 -0700 (PDT)
+Date:   Thu, 16 Mar 2023 13:45:33 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1678974334;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=OFyaFDPEPaIsBCnzx7br38Ux0Nge11G84LMEMFd9lFg=;
+        b=APG7eYFsvkLa17FbQXLBkWCWsXBE6CmKSm71TeKkIC2z2EQneH3HnS0bYCShZGaq/XQSbo
+        qKGrgAp+S7yO9NN2k+7/2tAzebNykYk05ctJoetA732ePXvy6n0m0aEWWBlmhdSQG6K/qj
+        pLElFEQnzfS5OS9Hes+WHgtYTJLNHMxDsPBTXeegE9MDfGrH+71t2u7bAuYFr7s+71kYIz
+        e/IKQbSgSLM7bLchNG6F4uJQfGXlLlCrHvhotb5Byfm44iHutTRUtePUVZztA1buZ8gn3P
+        7R2oAnG1rK0nZ9B7QsDybUhgqid7y+COqvgdSWCBntV6NCIdESsOsizucmiKfQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1678974334;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=OFyaFDPEPaIsBCnzx7br38Ux0Nge11G84LMEMFd9lFg=;
+        b=EizeFONJGqpwHaWH5R1Z8GM48q/B9DeBRex6t6u4JYaj3jkN0//iCuKjOQ4Cq4cFSErUlM
+        xVOV1Njr6EmlioBA==
+From:   "tip-bot2 for Nikita Zhandarovich" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/urgent] x86/mm: Fix use of uninitialized buffer in sme_enable()
+Cc:     Nikita Zhandarovich <n.zhandarovich@fintech.ru>,
+        "Borislav Petkov (AMD)" <bp@alien8.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>, <stable@kernel.org>,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20230306160656.14844-1-n.zhandarovich@fintech.ru>
+References: <20230306160656.14844-1-n.zhandarovich@fintech.ru>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-        version=3.4.6
+Message-ID: <167897433346.5837.2554151062062268699.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Leon Romanovsky <leonro@nvidia.com>
+The following commit has been merged into the x86/urgent branch of tip:
 
-The following series from Patrisious exports iVF representors counters
-to be visible by the host.
+Commit-ID:     cbebd68f59f03633469f3ecf9bea99cd6cce3854
+Gitweb:        https://git.kernel.org/tip/cbebd68f59f03633469f3ecf9bea99cd6cce3854
+Author:        Nikita Zhandarovich <n.zhandarovich@fintech.ru>
+AuthorDate:    Mon, 06 Mar 2023 08:06:56 -08:00
+Committer:     Borislav Petkov (AMD) <bp@alien8.de>
+CommitterDate: Thu, 16 Mar 2023 12:22:25 +01:00
 
-Thanks
+x86/mm: Fix use of uninitialized buffer in sme_enable()
 
-Patrisious Haddad (2):
-  net/mlx5: Introduce other vport query for Q-counters
-  RDMA/mlx5: Expand switchdev Q-counters to expose representor
-    statistics
+cmdline_find_option() may fail before doing any initialization of
+the buffer array. This may lead to unpredictable results when the same
+buffer is used later in calls to strncmp() function.  Fix the issue by
+returning early if cmdline_find_option() returns an error.
 
- drivers/infiniband/hw/mlx5/counters.c | 161 ++++++++++++++++++++++----
- include/linux/mlx5/mlx5_ifc.h         |  13 ++-
- 2 files changed, 146 insertions(+), 28 deletions(-)
+Found by Linux Verification Center (linuxtesting.org) with static
+analysis tool SVACE.
 
--- 
-2.39.2
+Fixes: aca20d546214 ("x86/mm: Add support to make use of Secure Memory Encryption")
+Signed-off-by: Nikita Zhandarovich <n.zhandarovich@fintech.ru>
+Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
+Acked-by: Tom Lendacky <thomas.lendacky@amd.com>
+Cc: <stable@kernel.org>
+Link: https://lore.kernel.org/r/20230306160656.14844-1-n.zhandarovich@fintech.ru
+---
+ arch/x86/mm/mem_encrypt_identity.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
+diff --git a/arch/x86/mm/mem_encrypt_identity.c b/arch/x86/mm/mem_encrypt_identity.c
+index 88cccd6..c6efcf5 100644
+--- a/arch/x86/mm/mem_encrypt_identity.c
++++ b/arch/x86/mm/mem_encrypt_identity.c
+@@ -600,7 +600,8 @@ void __init sme_enable(struct boot_params *bp)
+ 	cmdline_ptr = (const char *)((u64)bp->hdr.cmd_line_ptr |
+ 				     ((u64)bp->ext_cmd_line_ptr << 32));
+ 
+-	cmdline_find_option(cmdline_ptr, cmdline_arg, buffer, sizeof(buffer));
++	if (cmdline_find_option(cmdline_ptr, cmdline_arg, buffer, sizeof(buffer)) < 0)
++		return;
+ 
+ 	if (!strncmp(buffer, cmdline_on, sizeof(buffer)))
+ 		sme_me_mask = me_mask;
