@@ -2,245 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A82E26BC2D4
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 01:33:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9FD06BC2DC
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 01:36:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233367AbjCPAdY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 20:33:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36040 "EHLO
+        id S231201AbjCPAf6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 20:35:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233360AbjCPAcO (ORCPT
+        with ESMTP id S231673AbjCPAfo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 20:32:14 -0400
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD2ADA674D
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 17:31:38 -0700 (PDT)
-Received: by mail-pg1-x54a.google.com with SMTP id m12-20020a6562cc000000b0050bdfabc8e2so15879pgv.9
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 17:31:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678926692;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=YxU1hhaZ4SyfL9lxoIcMNBPPAq0yfPS0xuipesTDclo=;
-        b=W0G3AmVBhmaEPW1mzeOzfktEstHk/ayT4Fca4WpYB+uqnQXqFONecZpHfNEM3EVkI8
-         dMoU+aBolGRnKrvqkSWbCeJFkilUlbcTqWcVH0y2O7kmHEk9EOK0BEV0KFKuPFrnCkbs
-         QOotzJYDWHJggJes5/KIvM96osSnaCvae3qKB3LUHRBB+uNwEOmmHmd8zvTbRGoEVjUL
-         rVFdyBsTEprlo4ciiWa3+M8yKhD16Tn+oY0bqfI0h7Rz5RgpgT08FQynab2lujb51lp7
-         x7X7TlFctPEGFqxyshGyufJ1XL1Zen+FPj5jvwOG/5BAnYWpY1i72h9z5SjlNs7jYsNa
-         hwdw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678926692;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YxU1hhaZ4SyfL9lxoIcMNBPPAq0yfPS0xuipesTDclo=;
-        b=3DJWWf5lMBnEMgy89i61Z9hmuIbd521QAZ8aD2CqMCYwwMCzgrAUjn8UxC+e9NGrKT
-         uM8srS6Pn7ujXhHDGZXV/qRqVV2O6wvgPmpTMSeyUGwnQXze4Vo0wF9v4coGjvE1l993
-         XYxXMxqVgsXjDoFaXcEtZcllOgZtkWb/VJ0zJrZadyGw/BQjds8Pfk4sokvSbsPgD6wR
-         r6Bu2Ut3EcmRSsa66PolmyVmtof+zN8Y/O/ytumcgNyh22Qqft9xRgx+7VXpB/93Omxq
-         PFmvEhbgylq9Dx2i6wtMmUV2603Oq4jAOuy2L3rsKbcCfVQVpqZil6MB+1oiYwdZbI7j
-         nodQ==
-X-Gm-Message-State: AO0yUKVCDMq0Xe4OL/C56k4aufbhhKIHNJe59cxbk9AYVc5n22duFmp5
-        +hUnpQPiYNu/oSGTsTd54wjJdlinY5It8r5U4Q==
-X-Google-Smtp-Source: AK7set/r1L80ZGqvN1Jqjj7ZwUbt+f+1AOqGwiuE9AJvattpTxM2ZIa1Wyqx7LP6pavKwLlYqhK3jR4rdgiNHjRokg==
-X-Received: from ackerleytng-cloudtop.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1f5f])
- (user=ackerleytng job=sendgmr) by 2002:a65:530d:0:b0:502:fd12:83ce with SMTP
- id m13-20020a65530d000000b00502fd1283cemr347381pgq.5.1678926691968; Wed, 15
- Mar 2023 17:31:31 -0700 (PDT)
-Date:   Thu, 16 Mar 2023 00:31:03 +0000
-In-Reply-To: <cover.1678926164.git.ackerleytng@google.com>
-Mime-Version: 1.0
-References: <cover.1678926164.git.ackerleytng@google.com>
-X-Mailer: git-send-email 2.40.0.rc2.332.ga46443480c-goog
-Message-ID: <90aaa4ab85fa5e3d5641793e2a4873282eb16556.1678926164.git.ackerleytng@google.com>
-Subject: [RFC PATCH 10/10] KVM: selftests: Test KVM exit behavior for private memory/access
-From:   Ackerley Tng <ackerleytng@google.com>
-To:     kvm@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, qemu-devel@nongnu.org
-Cc:     aarcange@redhat.com, ak@linux.intel.com, akpm@linux-foundation.org,
-        arnd@arndb.de, bfields@fieldses.org, bp@alien8.de,
-        chao.p.peng@linux.intel.com, corbet@lwn.net, dave.hansen@intel.com,
-        david@redhat.com, ddutile@redhat.com, dhildenb@redhat.com,
-        hpa@zytor.com, hughd@google.com, jlayton@kernel.org,
-        jmattson@google.com, joro@8bytes.org, jun.nakajima@intel.com,
-        kirill.shutemov@linux.intel.com, linmiaohe@huawei.com,
-        luto@kernel.org, mail@maciej.szmigiero.name, mhocko@suse.com,
-        michael.roth@amd.com, mingo@redhat.com, naoya.horiguchi@nec.com,
-        pbonzini@redhat.com, qperret@google.com, rppt@kernel.org,
-        seanjc@google.com, shuah@kernel.org, steven.price@arm.com,
-        tabba@google.com, tglx@linutronix.de, vannapurve@google.com,
-        vbabka@suse.cz, vkuznets@redhat.com, wanpengli@tencent.com,
-        wei.w.wang@intel.com, x86@kernel.org, yu.c.zhang@linux.intel.com,
-        Ackerley Tng <ackerleytng@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Wed, 15 Mar 2023 20:35:44 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2308B16AE7
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 17:35:11 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PcStb64Qxz4x1d;
+        Thu, 16 Mar 2023 11:33:59 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1678926839;
+        bh=tVxoK8hf/XN33P1gUvO+d1PauwkQu5SvlY6VlvvJG+I=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=naebMpWVzZnTsDDVDCZvu+loLUFkGB0WVnpnOVf1RrkkzLRr65F2p2HX7qV5gH71O
+         bCmEMKta2CEf6yQjYBKBLJ+wsFfECWBBIrieoCou4jcjMP0HgC9/CJlP3lHn6EIv/E
+         34i3WR6kWLcP/AGaJrVMo482XbwaZtaUb9Gfh0kKBiti6xZFgEjZ+Op4CqB/6oDLUw
+         lWI//uuSQlxAcqcd2n2imIyIpJv22PnSxqnEynqVXhD4X2Ly4ocHgIzGmH8lR+tAti
+         L1iOQJnIlam9qUTNGbeP7fJyZ5PPX6sP5s0NjQO5qjtQD9XTbcGiKp8lIC9Wdersg2
+         o+F5WIBKg2JWw==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Andrea Righi <andrea.righi@canonical.com>
+Cc:     Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Oleg Nesterov <oleg@redhat.com>, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: boot regression on ppc64 with linux 6.2
+In-Reply-To: <ZBFhUAlL+1ZVKcwQ@righiandr-XPS-13-7390>
+References: <ZA7oJr1/Z4vzWy4N@righiandr-XPS-13-7390>
+ <878rfyofma.fsf@mpe.ellerman.id.au>
+ <ZBFhUAlL+1ZVKcwQ@righiandr-XPS-13-7390>
+Date:   Thu, 16 Mar 2023 11:33:59 +1100
+Message-ID: <87zg8dmt54.fsf@mpe.ellerman.id.au>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"Testing private access when memslot gets deleted" tests the behavior
-of KVM when a private memslot gets deleted while the VM is using the
-private memslot. When KVM looks up the deleted (slot = NULL) memslot,
-KVM should exit to userspace with KVM_EXIT_MEMORY_FAULT.
+Andrea Righi <andrea.righi@canonical.com> writes:
+> On Wed, Mar 15, 2023 at 02:30:53PM +1100, Michael Ellerman wrote:
+>> Andrea Righi <andrea.righi@canonical.com> writes:
+>> > I'm triggering the following bug when booting my qemu powerpc VM:
+>> 
+>> I'm not seeing that here :/
+>> 
+>> Can you give a bit more detail?
+>>  - qemu version
+>>  - qemu command line
+>>  - what userspace are you using?
+>>  - full dmesg of the failing case
+>
+> Yeah, ignore this for now, it could be related to another custom patch
+> that I had applied (and forgot about it sorry), this one:
+> https://lore.kernel.org/lkml/20230119155709.20d87e35.gary@garyguo.net/T/
 
-In the second test, upon a private access to non-private memslot, KVM
-should also exit to userspace with KVM_EXIT_MEMORY_FAULT.
+OK. Did you do the bisect with that patch applied though?
 
-Signed-off-by: Ackerley Tng <ackerleytng@google.com>
----
- tools/testing/selftests/kvm/Makefile          |   1 +
- .../kvm/x86_64/private_mem_kvm_exits_test.c   | 124 ++++++++++++++++++
- 2 files changed, 125 insertions(+)
- create mode 100644 tools/testing/selftests/kvm/x86_64/private_mem_kvm_exits_test.c
+> That is causing other issues on ppc64, so I think it might be related to
+> that, I'll do more tests making sure I use a vanilla kernel.
 
-diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-index bafee3c43b2e..0ad588852a1d 100644
---- a/tools/testing/selftests/kvm/Makefile
-+++ b/tools/testing/selftests/kvm/Makefile
-@@ -80,6 +80,7 @@ TEST_GEN_PROGS_x86_64 += x86_64/nested_exceptions_test
- TEST_GEN_PROGS_x86_64 += x86_64/platform_info_test
- TEST_GEN_PROGS_x86_64 += x86_64/pmu_event_filter_test
- TEST_GEN_PROGS_x86_64 += x86_64/private_mem_conversions_test
-+TEST_GEN_PROGS_x86_64 += x86_64/private_mem_kvm_exits_test
- TEST_GEN_PROGS_x86_64 += x86_64/set_boot_cpu_id
- TEST_GEN_PROGS_x86_64 += x86_64/set_sregs_test
- TEST_GEN_PROGS_x86_64 += x86_64/smaller_maxphyaddr_emulation_test
-diff --git a/tools/testing/selftests/kvm/x86_64/private_mem_kvm_exits_test.c b/tools/testing/selftests/kvm/x86_64/private_mem_kvm_exits_test.c
-new file mode 100644
-index 000000000000..c8667dfbbf0a
---- /dev/null
-+++ b/tools/testing/selftests/kvm/x86_64/private_mem_kvm_exits_test.c
-@@ -0,0 +1,124 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (C) 2022, Google LLC.
-+ */
-+#include "kvm_util_base.h"
-+#include <linux/kvm.h>
-+#include <pthread.h>
-+#include <stdint.h>
-+#include "kvm_util.h"
-+#include "processor.h"
-+#include "test_util.h"
-+
-+/* Arbitrarily selected to avoid overlaps with anything else */
-+#define EXITS_TEST_GVA 0xc0000000
-+#define EXITS_TEST_GPA EXITS_TEST_GVA
-+#define EXITS_TEST_NPAGES 1
-+#define EXITS_TEST_SIZE (EXITS_TEST_NPAGES * PAGE_SIZE)
-+#define EXITS_TEST_SLOT 10
-+
-+static uint64_t guest_repeatedly_read(void)
-+{
-+	volatile uint64_t value;
-+
-+	while (true)
-+		value = *((uint64_t *) EXITS_TEST_GVA);
-+
-+	return value;
-+}
-+
-+static uint32_t run_vcpu_get_exit_reason(struct kvm_vcpu *vcpu)
-+{
-+	vcpu_run(vcpu);
-+
-+	return vcpu->run->exit_reason;
-+}
-+
-+const struct vm_shape protected_vm_shape = {
-+	.mode = VM_MODE_DEFAULT,
-+	.type = KVM_X86_PROTECTED_VM,
-+};
-+
-+static void test_private_access_memslot_deleted(void)
-+{
-+	struct kvm_vm *vm;
-+	struct kvm_vcpu *vcpu;
-+	pthread_t vm_thread;
-+	void *thread_return;
-+	uint32_t exit_reason;
-+
-+	vm = vm_create_shape_with_one_vcpu(protected_vm_shape, &vcpu,
-+					   guest_repeatedly_read);
-+
-+	vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS,
-+				    EXITS_TEST_GPA, EXITS_TEST_SLOT,
-+				    EXITS_TEST_NPAGES,
-+				    KVM_MEM_PRIVATE);
-+
-+	virt_map(vm, EXITS_TEST_GVA, EXITS_TEST_GPA, EXITS_TEST_NPAGES);
-+
-+	/* Request to access page privately */
-+	vm_mem_map_shared_or_private(vm, EXITS_TEST_GPA, EXITS_TEST_SIZE, false);
-+
-+	pr_info("Testing private access when memslot gets deleted\n");
-+
-+	pthread_create(&vm_thread, NULL,
-+		       (void *(*)(void *))run_vcpu_get_exit_reason,
-+		       (void *)vcpu);
-+
-+	vm_mem_region_delete(vm, EXITS_TEST_SLOT);
-+
-+	pthread_join(vm_thread, &thread_return);
-+	exit_reason = (uint32_t)(uint64_t)thread_return;
-+
-+	ASSERT_EQ(exit_reason, KVM_EXIT_MEMORY_FAULT);
-+	ASSERT_EQ(vcpu->run->memory.flags, KVM_MEMORY_EXIT_FLAG_PRIVATE);
-+	ASSERT_EQ(vcpu->run->memory.gpa, EXITS_TEST_GPA);
-+	ASSERT_EQ(vcpu->run->memory.size, EXITS_TEST_SIZE);
-+
-+	pr_info("\t ... PASSED\n");
-+
-+	kvm_vm_free(vm);
-+}
-+
-+static void test_private_access_memslot_not_private(void)
-+{
-+	struct kvm_vm *vm;
-+	struct kvm_vcpu *vcpu;
-+	uint32_t exit_reason;
-+
-+	vm = vm_create_shape_with_one_vcpu(protected_vm_shape, &vcpu,
-+					   guest_repeatedly_read);
-+
-+	/* Add a non-private memslot (flags = 0) */
-+	vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS,
-+				    EXITS_TEST_GPA, EXITS_TEST_SLOT,
-+				    EXITS_TEST_NPAGES, 0);
-+
-+	virt_map(vm, EXITS_TEST_GVA, EXITS_TEST_GPA, EXITS_TEST_NPAGES);
-+
-+	/* Request to access page privately */
-+	vm_set_memory_attributes(vm, EXITS_TEST_GPA, EXITS_TEST_SIZE,
-+				 KVM_MEMORY_ATTRIBUTE_PRIVATE);
-+
-+	pr_info("Testing private access to non-private memslot\n");
-+
-+	exit_reason = run_vcpu_get_exit_reason(vcpu);
-+
-+	ASSERT_EQ(exit_reason, KVM_EXIT_MEMORY_FAULT);
-+	ASSERT_EQ(vcpu->run->memory.flags, KVM_MEMORY_EXIT_FLAG_PRIVATE);
-+	ASSERT_EQ(vcpu->run->memory.gpa, EXITS_TEST_GPA);
-+	ASSERT_EQ(vcpu->run->memory.size, EXITS_TEST_SIZE);
-+
-+	pr_info("\t ... PASSED\n");
-+
-+	kvm_vm_free(vm);
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	TEST_REQUIRE(kvm_check_cap(KVM_CAP_VM_TYPES) & BIT(KVM_X86_PROTECTED_VM));
-+
-+	test_private_access_memslot_deleted();
-+	test_private_access_memslot_not_private();
-+}
--- 
-2.40.0.rc2.332.ga46443480c-goog
+I don't see an obvious connection between the modversions stuff and this
+crash, but I guess it's possible.
 
+cheers
