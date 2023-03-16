@@ -2,129 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2621A6BD8AE
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 20:13:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5E046BD8B4
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 20:16:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230125AbjCPTNI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 15:13:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58278 "EHLO
+        id S230009AbjCPTQi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 15:16:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229620AbjCPTNG (ORCPT
+        with ESMTP id S229669AbjCPTQe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 15:13:06 -0400
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4443B34339
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 12:12:58 -0700 (PDT)
-Received: by mail-il1-f199.google.com with SMTP id q8-20020a92ca48000000b00320ed437f04so1287919ilo.19
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 12:12:58 -0700 (PDT)
+        Thu, 16 Mar 2023 15:16:34 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 312C872020
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 12:16:33 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id cy23so11651227edb.12
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 12:16:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678994191;
+        h=in-reply-to:content-disposition:mime-version:references:reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=x/wDWtFCM7WcRQcdZ/hsAREK7bWOLl6e/ZYZcmTu9kY=;
+        b=IbhDwe/+Pk8t2zx5e2xUger4Co7HNiCBwQ9eWAA5Oi/QXGYGiXKsNYIKwGmP+Jkpa/
+         7YQhL7J2euxNH84t9Xlcf3r8eTQaLsftCDfBA5RRjSaznLEqUPE+lJJ+OKh0FEhgTlMc
+         vcP9Loh7OeWURRHkvP4nSqhbAIMFnUa0zCVeSHUr/uxvm7n95MbYpVEjiOWp0QSPj2g0
+         621zIesyuaeEEbqiJ+NAuGzO4cxUOi/vfTMgUTZhA5/lplZrQfOHTjry3mMETd3lUFyi
+         jO20RHub+IYMCoL+bM/htpur1qK22YCP3GTJ/OID7TMsomM8XiD+Lm/KP1ouSIqdQ46N
+         m7/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678993977;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=U7xPE9eHjZFiRatnko2u5b3DgPyVKb9Z04I4THxWcHA=;
-        b=2CdDG5QVrMLQNYmgXiCxc+io6bt6Wkc0fsykmbhBL/JcpfJWngW9i7PrZrOC3E5ixt
-         0XqMjfcOZWonswpMLAek9rqYjIXsUQ27Y+Ioo3UqbSHwiK+SUBMwQ+A9YP6HrVX5TNUZ
-         fTUNKg7W3dlGmlW5mbJ1Kb2iEp8zwqbfYaN4pgB358Tu24ia/YaaSIAjMKkwE/oYDmjS
-         6WW1djwI+WVB8+nYBIxVd8Q2BVGeydIG1Dq7nsfGti692ztPaz2gJUZakIzfjsI/h8km
-         JpRaVviA8Bb+RgGscKM5nPdoNnr8hEkBF4C+YiZzCG3gnQ+v1tiqGB8sDq5bpLLtkVNt
-         4gwg==
-X-Gm-Message-State: AO0yUKW+BZNEZORrkfS87t+xQFZEPGGVHO1ugyOplk4PxQpIZ9u9dPMU
-        qg8gMpTmhP4gd/ZJKUdXbl9Wcemu5Szu++Fffe9h7wLeVeCb
-X-Google-Smtp-Source: AK7set8iENLiJJcuU7KGbv5SPcslX1Xx8ih7ZxAYfEeQTB2zuyrWs36a2NISGBtPQ+8fuCG/DGR7CBdQCLGobTFBZ47UUIQ60c/S
+        d=1e100.net; s=20210112; t=1678994191;
+        h=in-reply-to:content-disposition:mime-version:references:reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=x/wDWtFCM7WcRQcdZ/hsAREK7bWOLl6e/ZYZcmTu9kY=;
+        b=yn/M7W9Gz+AV5uzFen1kETRoNvqzQUVSAOWWyoq8S6fDobJx6a2EGyusM6P2b73xTk
+         hT2JG5PGE+5KcAQQymyKhMEcyYSTRdXu0FHl3pUJW5udwmV7CTpKuX1asvrtTPXqBjQ5
+         fLfotZ9b0/ItOQItfLCRbiS8hoC0Qv2+uPDyPr8ds20Sg2gg2SD3fp2CHmO5VFx0R6jK
+         Co4ZjYpW9so3v3KocMd6bXSQq2UuO4JvSdtJ/nezAUvKMs2LCTVZv494m0T0I1UsUwJk
+         m2j0VBTZhlnc22vKrVqg2L/H2VHQIOzkf6sBVWfkUjMyDxLicHrPpzKryectDW3abq4i
+         MDow==
+X-Gm-Message-State: AO0yUKWY3FHsYgxcreDDes2qWDU4y+vqz5+wTYoPuQ0wY8mtENFH7pPM
+        DoKKKVLKaJ+KIZZjUrXD98c=
+X-Google-Smtp-Source: AK7set9sU3F6kgpGUDoNVIyPCTEtbDfMWvBBxDekfNVTsfy16mWBxpaCLu2I8xtzVPpWB9Z5kqMewA==
+X-Received: by 2002:a17:907:a60b:b0:92f:cf87:578d with SMTP id vt11-20020a170907a60b00b0092fcf87578dmr5417045ejc.75.1678994191537;
+        Thu, 16 Mar 2023 12:16:31 -0700 (PDT)
+Received: from archlinux (p200300e73722c9367ab74af7b32c2ca8.dip0.t-ipconnect.de. [2003:e7:3722:c936:7ab7:4af7:b32c:2ca8])
+        by smtp.gmail.com with ESMTPSA id g10-20020a1709061c8a00b0092bd1a7f5fdsm10169ejh.57.2023.03.16.12.16.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Mar 2023 12:16:31 -0700 (PDT)
+Date:   Thu, 16 Mar 2023 20:16:29 +0100
+From:   Nils Hartmann <nils1hartmann@gmail.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] Using MAP_SHARE_VALIDATE in mmap without fd
+Message-ID: <20230316191629.2pet2mq5bpxl3z4p@archlinux>
+Reply-To: 20230310171617.wqnqs42l2viwjsz5@archlinux
+References: <20230310171617.wqnqs42l2viwjsz5@archlinux>
+ <e6b72d88-3011-c284-f53a-71431065b991@redhat.com>
 MIME-Version: 1.0
-X-Received: by 2002:a5d:9a96:0:b0:745:c41a:8f0f with SMTP id
- c22-20020a5d9a96000000b00745c41a8f0fmr69348iom.2.1678993977437; Thu, 16 Mar
- 2023 12:12:57 -0700 (PDT)
-Date:   Thu, 16 Mar 2023 12:12:57 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000009af47405f7093fc6@google.com>
-Subject: [syzbot] [kvm?] WARNING in kvm_arch_vcpu_ioctl_run (4)
-From:   syzbot <syzbot+8accb43ddc6bd1f5713a@syzkaller.appspotmail.com>
-To:     bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
-        jarkko@kernel.org, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-sgx@vger.kernel.org,
-        mingo@redhat.com, pbonzini@redhat.com, seanjc@google.com,
-        syzkaller-bugs@googlegroups.com, tglx@linutronix.de, x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e6b72d88-3011-c284-f53a-71431065b991@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Thu, Mar 16, 2023 at 04:28:21PM +0100, David Hildenbrand wrote:
+> On 10.03.23 18:16, Nils Hartmann wrote:
+> > Hey,
+> > When used without a file pointer, EINVAL is returned. Is there a reason for this?
+>
+> You mean, using it with shared anonymous memory? (MAP_SHARED|MAP_ANON)
+> I assume you mean "file descriptor" not "file pointer".
 
-syzbot found the following issue on:
+Yup thats what I meant.
 
-HEAD commit:    ee3f96b16468 Merge tag 'nfsd-6.3-1' of git://git.kernel.or..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=11622f64c80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=cab35c936731a347
-dashboard link: https://syzkaller.appspot.com/bug?extid=8accb43ddc6bd1f5713a
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15bd61acc80000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17402eb0c80000
+> The only reason MAP_SHARED_VALIDATE was introduced was due to MAP_SYNC, only
+> required for DAX. DAX does not apply to shared anonymous memory.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/a7ac3e540d6d/disk-ee3f96b1.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/604b5042d73d/vmlinux-ee3f96b1.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/5a6d400b42b5/bzImage-ee3f96b1.xz
+Yeah I heard about it being introduced with MAP_SYNC.
+But since the manpage from mmap specifically says:
+'MAP_SHARED_VALIDATE provides the same behaviour as MAP_SHARED',
+I didn't think it would make a difference
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+8accb43ddc6bd1f5713a@syzkaller.appspotmail.com
+> I guess nobody cared/cares.
+> Question is if we want to update the implementation (there has to be a good
+> reason IMHO) or simply update the man page, stating that MAP_SHARED_VALIDATE
+> is not supported for MAP_ANON.
 
-kvm_intel: KVM_SET_TSS_ADDR needs to be called before running vCPU
-kvm_intel: set kvm_intel.dump_invalid_vmcs=1 to dump internal KVM state.
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 5082 at arch/x86/kvm/x86.c:11060 kvm_arch_vcpu_ioctl_run+0x2464/0x2af0 arch/x86/kvm/x86.c:11060
-Modules linked in:
-CPU: 0 PID: 5082 Comm: syz-executor178 Not tainted 6.2.0-syzkaller-13115-gee3f96b16468 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 02/16/2023
-RIP: 0010:kvm_arch_vcpu_ioctl_run+0x2464/0x2af0 arch/x86/kvm/x86.c:11060
-Code: 74 c3 00 e9 2f de ff ff 48 c7 c7 80 45 78 8e e8 02 74 c3 00 e9 a9 dc ff ff e8 38 f8 71 00 0f 0b e9 6c e0 ff ff e8 2c f8 71 00 <0f> 0b e9 a4 e0 ff ff e8 20 f8 71 00 be 08 00 00 00 65 48 8b 1c 25
-RSP: 0018:ffffc90003b4fcb0 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: 0000000000000001 RCX: 0000000000000000
-RDX: ffff8880236e0000 RSI: ffffffff81130274 RDI: 0000000000000005
-RBP: ffff888021798000 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000000000001 R11: 0000000000000000 R12: 0000000000000000
-R13: ffffc90003bfac90 R14: ffff88802319a8c0 R15: ffff8880217982ec
-FS:  000055555600f300(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000000000000 CR3: 0000000073d95000 CR4: 00000000003526f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- kvm_vcpu_ioctl+0x574/0xfe0 arch/x86/kvm/../../../virt/kvm/kvm_main.c:4099
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:870 [inline]
- __se_sys_ioctl fs/ioctl.c:856 [inline]
- __x64_sys_ioctl+0x197/0x210 fs/ioctl.c:856
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7ff9dc1b2289
-Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffcad58a378 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007ff9dc1b2289
-RDX: 0000000000000000 RSI: 000000000000ae80 RDI: 0000000000000005
-RBP: 00007ff9dc175ce0 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007ff9dc175d70
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
- </TASK>
+The only reason I can come up with, is naming consistency.
+But it's really a non-issue und updating the man page is definitly
+the saner option.
 
+> --
+> Thanks,
+>
+> David / dhildenb
+>
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+Best Regards,
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+Nils
