@@ -2,148 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B1AB6BD428
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 16:42:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20E116BD429
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 16:42:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231794AbjCPPm0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 11:42:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53972 "EHLO
+        id S230398AbjCPPm3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 11:42:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231744AbjCPPl7 (ORCPT
+        with ESMTP id S231789AbjCPPmB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 11:41:59 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC1FF4C23
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 08:41:23 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id ix20so2184725plb.3
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 08:41:23 -0700 (PDT)
+        Thu, 16 Mar 2023 11:42:01 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 957F5C48B8;
+        Thu, 16 Mar 2023 08:41:25 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id h8so2156763plf.10;
+        Thu, 16 Mar 2023 08:41:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1678981279;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=M1jWVsLcHnLgluES/TZZIa08/2lUaIDoh9NhTqSDt50=;
-        b=DANpDHYSOlUDZQAJ/zJmFLsz80ZTHOjNZaezhmrWu2X7VwgGLvTSlAPG9KTz93gGHS
-         Ziqg5ULEYOP0BGSsxKAA/7CnVA0LzRxGLo1xdWCwbjbSB/V3PRmkqdvxOruPQZFQwLXJ
-         H7FZN2lwlIrvTu28nfhwNsMgOJGrhzBvo08Ns=
+        d=gmail.com; s=20210112; t=1678981280;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=hDj6HHe6QIQSy0m43rHzmd3XSI0d0wloxyDtIEPd/RU=;
+        b=ZC0XaRI5LDdOPLc7kmu3d4yJ6J2z7pfXZgPGH3dEAxN0YOuhVFAXh+V4lMMW2YKeir
+         vkACoMYwS1Y6SF84UjjKGtwRZkmRHChIoAn7q1aYlq8/A3d7gHKgkw7q3uHC1xFsKllt
+         U6tXEQ1lgcYmE92aqKp5MV1XMMiQz7D9oKb64aRkRWXbFkcpRsmgwUcXdFdJJFeeKqHV
+         DQevggVSuL6vxclpFT2r/g+TIqRy4LsJsDrggmPPvOWeWYsbwOlZTYua1eI4OrzAVE0R
+         A0P6+rE56jWUwUchiYqlO4JUqQ8bXyByN+W1rpEHUCMtkxzepuu3i8An5duDlyZPABBV
+         bVPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678981279;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=M1jWVsLcHnLgluES/TZZIa08/2lUaIDoh9NhTqSDt50=;
-        b=wiTHS3i61oBI6ZUdfeCWRR9Aso37vrPxTF76mAnvk0wJyOmnfAzwelUUsEDv+0FVdF
-         QrTW6ULvple+agZiumhFGTpwy8aG/uU1qit9otnaZKScwqh1MiwSzdm6kGBhkP8zBprA
-         cf9kryBDdyk4bCmw5pvQ4t6LZ7PJcpiMVknphtHE+0DbRjDlwGDm5v8x2OQHpF/p294Y
-         J0KoenuZ8J9h7f9mHZ37+ywUiTq6SfCNpnnci0ZxtyKi3DrqogPkIX90YvPPDLoAu7CG
-         1qrcdaC5/JNajy9X3pbzQwQtUuV0XKZKPjjs133lkqAesXdrzm0BnSPAD7D0SdENFwrX
-         Ge9A==
-X-Gm-Message-State: AO0yUKVbZkfX/Iqs8IwvichC8qc+jD8j8ixCUmjzYoxwwpbtTZZ9WELo
-        iRcmedVHqcwgwzkbTfapAG9UQz6TcNd4iHKs8UCGvQ==
-X-Google-Smtp-Source: AK7set/ZjYExtZvnQuADH2/TCv0j8SwedLL2ms+4BZIr/3P+qNJHpodSZrEJEMbc9FcE/1mlAQzh2N6IEeQ4fFaIJ3M=
-X-Received: by 2002:a17:903:32ce:b0:19f:3cc1:e3c3 with SMTP id
- i14-20020a17090332ce00b0019f3cc1e3c3mr1634726plr.12.1678981279615; Thu, 16
- Mar 2023 08:41:19 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1678981280;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hDj6HHe6QIQSy0m43rHzmd3XSI0d0wloxyDtIEPd/RU=;
+        b=2Z2aMYfQd4e6s/9vQ0StWsHJkcsc32njKl/Ge04mLd2vwZA6WSrRXz/2U8N4pRJ8t7
+         BS9r0x+7q27QveehX6N2fRznCcQCBbu/JvAwUl94BlT/vzVWUW9npvQhLe36olf3WcWR
+         NkJksJxDduXnpnX+BBYyKWVUFqhZSBN9pQ1B8g8MViLRZyzydVAoGWNRxEzgZyItNjYf
+         kByeDBOdZZ2VqjeVZl+UvPDwc974HPR0NLLTQC8SmY1W28IwuAxWEsnqqLp8YL/aeCjg
+         5FHbZiHJKKnDpG8PrfPMBIi7VxFd8RNUb+NSff2PaV3+cKq5dQRoRnHFcAzj9wliwpct
+         0mHA==
+X-Gm-Message-State: AO0yUKXT/HhdyirTyogH4dW+yL8g7j6CNheq5I8JGv9xMl47jXFjwR4B
+        wtfYhBlfZO/OLTvNVQnkzIw=
+X-Google-Smtp-Source: AK7set89o+4AUu9kcgHbviNf8mXzUkYE1K7O/FRk5sxh4x8ea2gqOO8qvmnLzAfJkXVMgx/O7vNEhQ==
+X-Received: by 2002:a05:6a20:4c08:b0:d4:6d80:f93a with SMTP id fm8-20020a056a204c0800b000d46d80f93amr3570490pzb.24.1678981279827;
+        Thu, 16 Mar 2023 08:41:19 -0700 (PDT)
+Received: from localhost ([192.55.54.55])
+        by smtp.gmail.com with ESMTPSA id j13-20020aa783cd000000b005d3730383a7sm5527127pfn.220.2023.03.16.08.41.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Mar 2023 08:41:19 -0700 (PDT)
+Date:   Thu, 16 Mar 2023 08:41:18 -0700
+From:   Isaku Yamahata <isaku.yamahata@gmail.com>
+To:     "Huang, Kai" <kai.huang@intel.com>
+Cc:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
+        "zhi.wang.linux@gmail.com" <zhi.wang.linux@gmail.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "Shahar, Sagi" <sagis@google.com>,
+        "Aktas, Erdem" <erdemaktas@google.com>,
+        "isaku.yamahata@gmail.com" <isaku.yamahata@gmail.com>,
+        "dmatlack@google.com" <dmatlack@google.com>,
+        "Christopherson,, Sean" <seanjc@google.com>
+Subject: Re: [PATCH v13 005/113] KVM: TDX: Add placeholders for TDX VM/vcpu
+ structure
+Message-ID: <20230316154118.GC259042@ls.amr.corp.intel.com>
+References: <cover.1678643051.git.isaku.yamahata@intel.com>
+ <0545bd8a7b851d5b53cea16e7e4624b58dd9b71e.1678643052.git.isaku.yamahata@intel.com>
+ <70caa84177d8d4c3ace65663992ba4d72f939f4e.camel@intel.com>
 MIME-Version: 1.0
-References: <20230207182135.2671106-1-revest@chromium.org> <20230207182135.2671106-7-revest@chromium.org>
- <20230315195136.2996b1dd@gandalf.local.home>
-In-Reply-To: <20230315195136.2996b1dd@gandalf.local.home>
-From:   Florent Revest <revest@chromium.org>
-Date:   Thu, 16 Mar 2023 16:41:08 +0100
-Message-ID: <CABRcYmJYUVsZyRY2Bo1DDnJogkcasi=g7TCY07vb0DELH6Hy+A@mail.gmail.com>
-Subject: Re: [PATCH v2 06/10] ftrace: selftest: remove broken trace_direct_tramp
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        catalin.marinas@arm.com, will@kernel.org, mhiramat@kernel.org,
-        mark.rutland@arm.com, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, kpsingh@kernel.org, jolsa@kernel.org,
-        xukuohai@huaweicloud.com, lihuafei1@huawei.com,
-        Xu Kuohai <xukuohai@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <70caa84177d8d4c3ace65663992ba4d72f939f4e.camel@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 16, 2023 at 12:51=E2=80=AFAM Steven Rostedt <rostedt@goodmis.or=
-g> wrote:
->
-> On Tue,  7 Feb 2023 19:21:31 +0100
-> Florent Revest <revest@chromium.org> wrote:
->
-> > From: Mark Rutland <mark.rutland@arm.com>
-> >
-> > The ftrace selftest code has a trace_direct_tramp() function which it
-> > uses as a direct call trampoline. This happens to work on x86, since th=
-e
-> > direct call's return address is in the usual place, and can be returned
-> > to via a RET, but in general the calling convention for direct calls is
-> > different from regular function calls, and requires a trampoline writte=
-n
-> > in assembly.
-> >
-> > On s390, regular function calls place the return address in %r14, and a=
-n
-> > ftrace patch-site in an instrumented function places the trampoline's
-> > return address (which is within the instrumented function) in %r0,
-> > preserving the original %r14 value in-place. As a regular C function
-> > will return to the address in %r14, using a C function as the trampolin=
-e
-> > results in the trampoline returning to the caller of the instrumented
-> > function, skipping the body of the instrumented function.
-> >
-> > Note that the s390 issue is not detcted by the ftrace selftest code, as
-> > the instrumented function is trivial, and returning back into the calle=
-r
-> > happens to be equivalent.
-> >
-> > On arm64, regular function calls place the return address in x30, and
-> > an ftrace patch-site in an instrumented function saves this into r9
-> > and places the trampoline's return address (within the instrumented
-> > function) in x30. A regular C function will return to the address in
-> > x30, but will not restore x9 into x30. Consequently, using a C function
-> > as the trampoline results in returning to the trampoline's return
-> > address having corrupted x30, such that when the instrumented function
-> > returns, it will return back into itself.
-> >
-> > To avoid future issues in this area, remove the trace_direct_tramp()
-> > function, and require that each architecture with direct calls provides
-> > a stub trampoline, named ftrace_stub_direct_tramp. This can be written
-> > to handle the architecture's trampoline calling convention, and in
-> > future could be used elsewhere (e.g. in the ftrace ops sample, to
-> > measure the overhead of direct calls), so we may as well always build i=
-t
-> > in.
-> >
-> > Signed-off-by: Mark Rutland <mark.rutland@arm.com>
-> > Cc: Li Huafei <lihuafei1@huawei.com>
-> > Cc: Xu Kuohai <xukuohai@huawei.com>
-> > Cc: Steven Rostedt (Google) <rostedt@goodmis.org>
-> > Cc: Florent Revest <revest@chromium.org>
-> > Signed-off-by: Florent Revest <revest@chromium.org>
->
->
-> Care to respin with my update requests? I can take up to this patch and
-> base it directly on v6.3-rc3 when it comes out. I'm expecting that to hav=
-e
-> the fixes in other code that is breaking my tests.
+On Wed, Mar 15, 2023 at 10:42:09AM +0000,
+"Huang, Kai" <kai.huang@intel.com> wrote:
 
-Okay! :) I'll send you a subset of this series (first 6 patches with
-your review addressed and rebased on v6.3-rc2 for now).
+> On Sun, 2023-03-12 at 10:55 -0700, isaku.yamahata@intel.com wrote:
+> > +
+> > +static inline bool is_td(struct kvm *kvm)
+> > +{
+> > +	return kvm->arch.vm_type == KVM_X86_PROTECTED_VM;
+> > +}
+> > +
+> 
+> KVM_X86_PROTECTED_VM is defined in the next patch, which means this patch cannot
+> compile.
+> 
+> Also, why KVM_X86_PROTECTED_VM == TDX VM?
 
-> Then I'll push it out after it passes all my tests, and you can take it
-> and add the arm64 specific bits on top. I'm currently running these patch=
-es
-> as is on my tests to see if they fail (with a patched kernel for the othe=
-r
-> code that's breaking my tests).
->
-> Does that sound OK?
-
-Sounds good to me, yes!
+This part needs to be resolved.
+Use KVM_X86_PROTECTED_VM as TDX VM or new type KVM_X86_TDX_VM or other way
+to specify VM type.
+Given pKVM is coming, dedicated VM type seems better.  I'll switch it to
+KVM_X86_TDX_VM next respin.
+-- 
+Isaku Yamahata <isaku.yamahata@gmail.com>
