@@ -2,95 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA5DA6BD361
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 16:23:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E26596BD364
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 16:24:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231220AbjCPPXx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 11:23:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54326 "EHLO
+        id S229955AbjCPPYY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 11:24:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230461AbjCPPXt (ORCPT
+        with ESMTP id S231400AbjCPPYW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 11:23:49 -0400
-Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CEF9D5A78
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 08:23:33 -0700 (PDT)
-Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-5419d4c340aso38144747b3.11
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 08:23:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google; t=1678980212;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=COAEuX4852H70FVvwYK4VYA78apPYBZc0pQhcVye60o=;
-        b=RKdk7b/R4htRKAS7tQNcupg7rUrN2OFmNW9swqUP5uKdx8rovhGuKXfbebkP9MGxLl
-         o67PTS0QghHZVHiTQumeay47Fk0eDO09xxb5HM5gwWnykgxD1D4iDp+M/XgBC/jQ3d2w
-         4af8u2d9CrGfmtnmmCsEpv1SFi2idlll06xrg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678980212;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=COAEuX4852H70FVvwYK4VYA78apPYBZc0pQhcVye60o=;
-        b=B6hnZ3mf/yoObu0Di53oB/364Ir9Oh5/bYMBvlCegNsRW/cOqJcOsGOEUzD64rPkrF
-         gEnleZB1xNMmrCvQIcg039kfDSR14yFJrBhgokw38mAX8fcL4EkX6EWigOrHb1xc7Wik
-         iXEUurtQkrdBV8cRAYwqcWHAIwfm+cRCh2LqSyGIuMmmziS6F3wF0r7MaWSYD09ejxFH
-         Vebpfz7lPJmbIfx9S7NoCI3mGVeDsfuElZU1auGARmgEcfI/13p9naGbP+vHMXshbLtp
-         dUMjW0tqZHpmhenQx0x9HBWFfXCuypdh39i4/BHHYOBNt9GO3tUKaDxai7LXkDQcXTpm
-         wHAg==
-X-Gm-Message-State: AO0yUKUS8W25qjh7ZVFsVXr1BbBXDWvO5xEf3L18LvueakzqBuxuLdNO
-        Qt0Hh14XEGhwmWJw4P0gGrHyrh/Gf6GQ7KuxS34aLA==
-X-Google-Smtp-Source: AK7set+8TRlChz2VgPHoBRSwjSgIUk6X24QYYlwoQpAksp9+1tC3fVEZUsVX6PMHE7AEetqVlov69RG8jyPAWjCxmFQ=
-X-Received: by 2002:a81:c749:0:b0:541:753d:32f9 with SMTP id
- i9-20020a81c749000000b00541753d32f9mr2651951ywl.9.1678980212500; Thu, 16 Mar
- 2023 08:23:32 -0700 (PDT)
+        Thu, 16 Mar 2023 11:24:22 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E4359E309;
+        Thu, 16 Mar 2023 08:24:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Jbs95Gjo7Q//j6ilu4KDrnygFvpFxedZLKTPScHD73o=; b=0REXzHjdr3ri4fT8gvfHhc1YE+
+        CzFmb3IfjPqEVtLc1hEeKsHoeslo1BrVqyrSvvD6iQ1WKABF792Y2KK6Nh7Qn5I2vZl9kDc7LLt3T
+        9aUYhgNnDW8A4+Qo9nAt4e4s9sCq6nUnN2Em41FVx5tUawAAN+Zh3sgRpI9AcqR8y1BJ613rpSfqZ
+        kiVkZUmktBBZMU7XEIB9zErbzECUCup5LesKj8eenY3JrKQDHarPokKUw9z9UG5oip1vyw1co0470
+        v85Mz316j22qeqbbxrlwcOuhs6kE1J61YoNNW5W4NPLOE4uAbtSElJR7WOqXoqHGtOpQ5zFWoOGte
+        b9F5fWzQ==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1pcpSW-00Goph-19;
+        Thu, 16 Mar 2023 15:24:04 +0000
+Date:   Thu, 16 Mar 2023 08:24:04 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Pankaj Raghav <p.raghav@samsung.com>
+Cc:     Christoph Hellwig <hch@infradead.org>, hubcap@omnibond.com,
+        senozhatsky@chromium.org, martin@omnibond.com, willy@infradead.org,
+        minchan@kernel.org, viro@zeniv.linux.org.uk, brauner@kernel.org,
+        axboe@kernel.dk, akpm@linux-foundation.org,
+        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        gost.dev@samsung.com, mcgrof@kernel.org, devel@lists.orangefs.org
+Subject: Re: [RFC PATCH 1/3] filemap: convert page_endio to folio_endio
+Message-ID: <ZBM0lPycYm2X0Tfp@infradead.org>
+References: <20230315123233.121593-1-p.raghav@samsung.com>
+ <CGME20230315123234eucas1p2503d83ad0180cecde02e924d7b143535@eucas1p2.samsung.com>
+ <20230315123233.121593-2-p.raghav@samsung.com>
+ <ZBHcl8Pz2ULb4RGD@infradead.org>
+ <d6cde35e-359a-e837-d2e0-f2bd362f2c3e@samsung.com>
 MIME-Version: 1.0
-References: <20230315181902.4177819-1-joel@joelfernandes.org>
- <20230315181902.4177819-7-joel@joelfernandes.org> <20230315190753.GC3024297@mit.edu>
-In-Reply-To: <20230315190753.GC3024297@mit.edu>
-From:   Joel Fernandes <joel@joelfernandes.org>
-Date:   Thu, 16 Mar 2023 11:23:21 -0400
-Message-ID: <CAEXW_YQBV26RUVBBwBB3DaJtrc0PyARuAbfqyEiDMoSXDguniA@mail.gmail.com>
-Subject: Re: [PATCH v2 07/14] ext4/super: Rename kfree_rcu() to kfree_rcu_mightsleep()
-To:     "Theodore Ts'o" <tytso@mit.edu>
-Cc:     Andreas Dilger <adilger.kernel@dilger.ca>,
-        "Uladzislau Rezki (Sony)" <urezki@gmail.com>,
-        Lukas Czerner <lczerner@redhat.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLACK autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d6cde35e-359a-e837-d2e0-f2bd362f2c3e@samsung.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 15, 2023 at 3:07=E2=80=AFPM Theodore Ts'o <tytso@mit.edu> wrote=
-:
->
-> On Wed, Mar 15, 2023 at 06:18:54PM +0000, Joel Fernandes (Google) wrote:
-> > From: "Uladzislau Rezki (Sony)" <urezki@gmail.com>
-> >
-> > The kfree_rcu() and kvfree_rcu() macros' single-argument forms are
-> > deprecated.  Therefore switch to the new kfree_rcu_mightsleep() and
-> > kvfree_rcu_mightsleep() variants. The goal is to avoid accidental use
-> > of the single-argument forms, which can introduce functionality bugs in
-> > atomic contexts and latency bugs in non-atomic contexts.
-> >
-> > Cc: Theodore Ts'o <tytso@mit.edu>
-> > Cc: Lukas Czerner <lczerner@redhat.com>
-> > Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
-> > Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> > Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
->
-> Acked-by: Theodore Ts'o <tytso@mit.edu>
->
+On Thu, Mar 16, 2023 at 11:04:54AM +0100, Pankaj Raghav wrote:
+> It looks like this endio function is called when alloc_page is used (for
+> partial IO) to trigger writeback from the user space `echo "idle" >
+> /sys/block/zram0/writeback`.
 
-Thanks!
 
- - Joel
+Yes.
+
+> I don't understand when you say the harm might not be horrible if we don't
+> call folio_endio here. Do you think it is just safe to remove the call to
+> folio_endio function?
+
+I suspect so.  It doesn't seem like the involved pages are ever locked
+or have the writeback set, so it should be fine.
+
+> +               while ((folio = readahead_folio(rac))) {
+> +                       folio_clear_uptodate(folio);
+> +                       folio_set_error(folio);
+> +                       folio_unlock(folio);
+> +               }
+> +               return;
+> +       }
+> +
+> +       while ((folio = readahead_folio(rac))) {
+> +               folio_mark_uptodate(folio);
+> +               folio_unlock(folio);
+>         }
+>  }
+
+Looks good.
+
+> @@ -59,7 +59,8 @@ static void mpage_end_io(struct bio *bio)
+> static struct bio *mpage_bio_submit(struct bio *bio)
+>  {
+> -       bio->bi_end_io = mpage_end_io;
+> +       bio->bi_end_io = (op_is_write(bio_op(bio))) ? mpage_write_end_io :
+> +                                                     mpage_read_end_io;
+>         guard_bio_eod(bio);
+>         submit_bio(bio);
+>         return NULL;
+> And mpage_{write,read}_end_io will iterate over the folio and call the
+> respective functions.
+
+Yes, although I'd do it with a good old if/else and with less braces.
+It might make sense to split mpage_bio_submit as well, though.
