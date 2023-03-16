@@ -2,108 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE35E6BCAE4
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 10:32:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A0E06BCAE9
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 10:32:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229950AbjCPJcN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 05:32:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52728 "EHLO
+        id S230427AbjCPJcm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 05:32:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230180AbjCPJcK (ORCPT
+        with ESMTP id S229621AbjCPJck (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 05:32:10 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEA6E49897
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 02:31:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678959081;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=CS1wqtcOK2buYZ6heyq67kcFUemEQNu97cyhCyrzUp4=;
-        b=WatcLJSLPp5iRIQ5LCzAS+zyC0q2dltXlsT5isRxb6Se16oq9edshyR8YzITqj24O9zOZb
-        ryd0EyvGGyj1CVUFzpMDaOLDZSF7QBfWTx1Wcw1eFzAa8EqjWcR8oB7djHI018rcFSAk0x
-        7TgsR/EmNWFTu8efMiroBbknNW5DWhQ=
-Received: from mail-ot1-f70.google.com (mail-ot1-f70.google.com
- [209.85.210.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-517-w5mlkGBrMwCuzx_mWw2nyA-1; Thu, 16 Mar 2023 05:31:20 -0400
-X-MC-Unique: w5mlkGBrMwCuzx_mWw2nyA-1
-Received: by mail-ot1-f70.google.com with SMTP id e12-20020a9d63cc000000b006944a810ab3so523638otl.20
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 02:31:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678959079;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=CS1wqtcOK2buYZ6heyq67kcFUemEQNu97cyhCyrzUp4=;
-        b=oYsnC8EV0t3LkBo0iU6MP7HdGLtEyALYmC7r17tU5zDLYk4Jh+tQbdVelZsM/aQoJ8
-         /xUqvFwUwJAmrzNhVLvDjHbakc/FRUrbuA0YPOYO9JXS8I4kIjJ8OWdjJNZUPiNYTKyw
-         29mb5/Da9cVft1H8FLrVFkLNSmTgmief+Tf44JQMdjxZr9x7DveVjLc7GSY2xZ0iNi3j
-         wWdsXqbrh1dQKCPCDi1uv53bYPeGsyNYjvyePnMyiYWbjttrY+aFcESWz+ZtT4yT8hp8
-         MpxL/Xv/y6+huf5yQxcMYuOxEZJjhgDpvaGgXiNrLVw/NnqYC+StyKdOanIkloeisTTh
-         uzVQ==
-X-Gm-Message-State: AO0yUKUY7XiU8V29OXyo687cGuvx040q3bIXtDoWMpDQGzCPVlK4jGB1
-        AwakYExD1PYaWHTZYKZQbh8qsy/hsqeVLnJQQOKWeLdtF/VSaHbr5iekD1ZxZ3aXDCY0NVgcZ07
-        j131+/Vm40fU9CWrFxvLr9Yd2lcmYcb5wyJLEIbqUCbIIRteWIVU=
-X-Received: by 2002:a05:6808:4285:b0:383:fad3:d19 with SMTP id dq5-20020a056808428500b00383fad30d19mr1815813oib.9.1678959079004;
-        Thu, 16 Mar 2023 02:31:19 -0700 (PDT)
-X-Google-Smtp-Source: AK7set9pBzOokvEbcx6aOLA28L4vBQN4JkIIhkDIzzehrOEGVuar/34lDJFkgZD2rtlQCkDjH1qP1S+BEyo4gJ/aWZA=
-X-Received: by 2002:a05:6808:4285:b0:383:fad3:d19 with SMTP id
- dq5-20020a056808428500b00383fad30d19mr1815808oib.9.1678959078836; Thu, 16 Mar
- 2023 02:31:18 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230228094110.37-1-xieyongji@bytedance.com> <20230228094110.37-2-xieyongji@bytedance.com>
-In-Reply-To: <20230228094110.37-2-xieyongji@bytedance.com>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Thu, 16 Mar 2023 17:31:07 +0800
-Message-ID: <CACGkMEsak_C1TTdq4PRXx46HHw42hjvcbZM+B_mGS-kJ6AA4eA@mail.gmail.com>
-Subject: Re: [PATCH v3 01/11] lib/group_cpus: Export group_cpus_evenly()
-To:     Xie Yongji <xieyongji@bytedance.com>
-Cc:     mst@redhat.com, tglx@linutronix.de, hch@lst.de,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 16 Mar 2023 05:32:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B40EB53EF;
+        Thu, 16 Mar 2023 02:32:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3756F61F8B;
+        Thu, 16 Mar 2023 09:32:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FBC3C4339C;
+        Thu, 16 Mar 2023 09:32:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678959158;
+        bh=X5j5wZaVfDApMQfPIqmbRrHxc4bWj4lj/kFlDhbE2KU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=JLM0SV1B8dlFj5dGNuPHJb2+axY7u/9jUVjXlIrFlcOHUpuujxhq82F5PtJ2nrn5j
+         v3W+bPv4EzNsMql3fwLrdh0eIxxEPXMn1Yp5dyBvldOJMzD/inMI2Pllf/a7Ln0hoP
+         PnTUrVnVwk3GoUTH6NPCgqcq/uGO0FuTSWrV6OeOoXsYCl9aYqMvnw9fuVB2uv57O8
+         1E35ewskN7Au9l3/lnx0GVocgWG7V3zkkqLC/5oIdzsj+pQKdYWCwKRbfbU/UW4lWR
+         F/a8JQUXRnlNdm8LRScBwS6ztBL+1EWArOpKCfRswrwOj59vV5tJeAFk9n2LWguecK
+         yXL+FkffnTj7g==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pcjyO-000X1g-5g;
+        Thu, 16 Mar 2023 09:32:36 +0000
+Date:   Thu, 16 Mar 2023 09:32:35 +0000
+Message-ID: <86a60dxcr0.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Janne Grunau <j@jannau.net>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof =?UTF-8?B?V2lsY3p5?= =?UTF-8?B?xYRza2k=?= 
+        <kw@linux.com>, Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Sven Peter <sven@svenpeter.dev>, linux-pci@vger.kernel.org,
+        asahi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Daire McNamara <daire.mcnamara@microchip.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v2] PCI: apple: Set only available ports up
+In-Reply-To: <20230309163935.GA1140101@bhelgaas>
+References: <20230307-apple_pcie_disabled_ports-v2-1-c3bd1fd278a4@jannau.net>
+        <20230309163935.GA1140101@bhelgaas>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: helgaas@kernel.org, j@jannau.net, alyssa@rosenzweig.io, lpieralisi@kernel.org, kw@linux.com, robh@kernel.org, bhelgaas@google.com, sven@svenpeter.dev, linux-pci@vger.kernel.org, asahi@lists.linux.dev, linux-kernel@vger.kernel.org, daire.mcnamara@microchip.com, conor.dooley@microchip.com, stable@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 28, 2023 at 5:42=E2=80=AFPM Xie Yongji <xieyongji@bytedance.com=
-> wrote:
->
-> Export group_cpus_evenly() so that some modules
-> can make use of it to group CPUs evenly according
-> to NUMA and CPU locality.
->
-> Signed-off-by: Xie Yongji <xieyongji@bytedance.com>
+On Thu, 09 Mar 2023 16:39:35 +0000,
+Bjorn Helgaas <helgaas@kernel.org> wrote:
+> 
+> [+cc Daire, Conor for apple/microchip use of ECAM .init() method]
+> 
+> On Thu, Mar 09, 2023 at 02:36:24PM +0100, Janne Grunau wrote:
+> > Fixes following warning inside of_irq_parse_raw() called from the common
+> > PCI device probe path.
+> > 
+> >   /soc/pcie@690000000/pci@1,0 interrupt-map failed, using interrupt-controller
+> >   WARNING: CPU: 4 PID: 252 at drivers/of/irq.c:279 of_irq_parse_raw+0x5fc/0x724
+> 
+> Based on this commit log, I assume this patch only fixes the warning,
+> and the system *works* just fine either way.  If that's the case, it's
+> debatable whether it meets the stable kernel criteria, although the
+> documented criteria are much stricter than what happens in practice.
+> 
+> >   ...
+> >   Call trace:
+> >    of_irq_parse_raw+0x5fc/0x724
+> >    of_irq_parse_and_map_pci+0x128/0x1d8
+> >    pci_assign_irq+0xc8/0x140
+> >    pci_device_probe+0x70/0x188
+> >    really_probe+0x178/0x418
+> >    __driver_probe_device+0x120/0x188
+> >    driver_probe_device+0x48/0x22c
+> >    __device_attach_driver+0x134/0x1d8
+> >    bus_for_each_drv+0x8c/0xd8
+> >    __device_attach+0xdc/0x1d0
+> >    device_attach+0x20/0x2c
+> >    pci_bus_add_device+0x5c/0xc0
+> >    pci_bus_add_devices+0x58/0x88
+> >    pci_host_probe+0x124/0x178
+> >    pci_host_common_probe+0x124/0x198 [pci_host_common]
+> >    apple_pcie_probe+0x108/0x16c [pcie_apple]
+> >    platform_probe+0xb4/0xdc
+> > 
+> > This became apparent after disabling unused PCIe ports in the Apple
+> > silicon device trees instead of deleting them.
+> > 
+> > Use for_each_available_child_of_node instead of for_each_child_of_node
+> > which takes the "status" property into account.
+> > 
+> > Link: https://lore.kernel.org/asahi/20230214-apple_dts_pcie_disable_unused-v1-0-5ea0d3ddcde3@jannau.net/
+> > Link: https://lore.kernel.org/asahi/1ea2107a-bb86-8c22-0bbc-82c453ab08ce@linaro.org/
+> > Fixes: 1e33888fbe44 ("PCI: apple: Add initial hardware bring-up")
+> > Cc: stable@vger.kernel.org
+> > Reviewed-by: Marc Zyngier <maz@kernel.org>
+> > Signed-off-by: Janne Grunau <j@jannau.net>
+> > ---
+> > Changes in v2:
+> > - rewritten commit message with more details and corrections
+> > - collected Marc's "Reviewed-by:"
+> > - Link to v1: https://lore.kernel.org/r/20230307-apple_pcie_disabled_ports-v1-1-b32ef91faf19@jannau.net
+> > ---
+> >  drivers/pci/controller/pcie-apple.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/pci/controller/pcie-apple.c b/drivers/pci/controller/pcie-apple.c
+> > index 66f37e403a09..f8670a032f7a 100644
+> > --- a/drivers/pci/controller/pcie-apple.c
+> > +++ b/drivers/pci/controller/pcie-apple.c
+> > @@ -783,7 +783,7 @@ static int apple_pcie_init(struct pci_config_window *cfg)
+> >  	cfg->priv = pcie;
+> >  	INIT_LIST_HEAD(&pcie->ports);
+> >  
+> > -	for_each_child_of_node(dev->of_node, of_port) {
+> > +	for_each_available_child_of_node(dev->of_node, of_port) {
+> >  		ret = apple_pcie_setup_port(pcie, of_port);
+> >  		if (ret) {
+> >  			dev_err(pcie->dev, "Port %pOF setup fail: %d\n", of_port, ret);
+> 
+> Is this change still needed after 6fffbc7ae137 ("PCI: Honor firmware's
+> device disabled status")?  This is a generic problem, and it would be
+> a lot nicer if we had a generic solution.  But I assume it *is* still
+> needed because Rob gave his Reviewed-by.
 
-Acked-by: Jason Wang <jasowang@redhat.com>
+I'm not sure this is addressing the same issue. The way I read it, the
+patch you mention here allows a PCI device to be disabled in firmware,
+even if it could otherwise be probed.
 
-Thanks
+What this patch does is to prevent root ports that exist in the HW but
+that have been disabled from being probed. Same concept, only at a
+different level.
 
-> ---
->  lib/group_cpus.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/lib/group_cpus.c b/lib/group_cpus.c
-> index 9c837a35fef7..aa3f6815bb12 100644
-> --- a/lib/group_cpus.c
-> +++ b/lib/group_cpus.c
-> @@ -426,3 +426,4 @@ struct cpumask *group_cpus_evenly(unsigned int numgrp=
-s)
->         return masks;
->  }
->  #endif /* CONFIG_SMP */
-> +EXPORT_SYMBOL_GPL(group_cpus_evenly);
-> --
-> 2.20.1
->
+> Not related to this patch, but this function looks funny to me.  Most
+> pci_ecam_ops.init functions just set up ECAM-related things.
+> 
+> In addition to ECAM stuff, apple_pcie_init() and mc_platform_init()
+> also initialize IRQs, clocks, and resets.
 
+And more. We also initialise the RID-to-SID mapping that control the
+view the downstream IOMMU has of the devices controlled by the root
+port.
+
+> Maybe we shoehorn the IRQ, clock, reset setup into pci_ecam_ops.init
+> because we lack a generic hook for doing those things, but it seems a
+> little muddy conceptually.
+
+Indeed. I used this callback as it was convenient ordering wise, but
+this is conceptually a platform init thing.  The current state of the
+ECAM setup doesn't allow any other callback that would suit the
+context.
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
