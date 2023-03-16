@@ -2,129 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5512B6BCC39
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 11:14:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55FDD6BCC3E
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 11:15:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230322AbjCPKOC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 06:14:02 -0400
+        id S230135AbjCPKP3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 06:15:29 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230321AbjCPKNf (ORCPT
+        with ESMTP id S229454AbjCPKPH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 06:13:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62EB9BBB0D;
-        Thu, 16 Mar 2023 03:13:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8A27561EFB;
-        Thu, 16 Mar 2023 10:13:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C39F2C433D2;
-        Thu, 16 Mar 2023 10:13:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678961585;
-        bh=4hBFXp7kq5jpTGTR3V2fVBamGY+6l1AyRs1M+Mn24L8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=k7poubKxLaDvDEpQTohrR5kCeYHrEk8MrplJL43zaqPKRg+mAKueLfLvSpfxXGKD7
-         CpMtf6rSK1nOTmL4DXxh3P8lOBbCAM0HrGCetye4OhA+VIfSj8BHXpDTc236h24Eg8
-         NzNgMa8E3goacCWVdPfyxIRsbHiwWwKaD3te4kAyzowQf7/6+tH70YB5tjafpdK6HE
-         vf+7EF+wWCrvDtZAmpc58IY7xjYXn7G+K+fPUu67nOvkDRpfYp/YpVhmcPau8n71xl
-         K/Wm5KcJTHWsbYa5NAgSkA78eV+8Tuamt2Aw+NlqfvP5sG7hmuAu/mNN1IcK7B21Js
-         LFb/lAaSfp6Fw==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 3CDB34049F; Thu, 16 Mar 2023 07:13:02 -0300 (-03)
-Date:   Thu, 16 Mar 2023 07:13:02 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Leo Yan <leo.yan@linaro.org>
-Cc:     Namhyung Kim <namhyung@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        John Garry <john.g.garry@oracle.com>,
-        James Clark <james.clark@arm.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v5 11/16] perf kvm: Use histograms list to replace cached
- list
-Message-ID: <ZBLrruagawAbxqoz@kernel.org>
-References: <20230315145112.186603-1-leo.yan@linaro.org>
- <20230315145112.186603-12-leo.yan@linaro.org>
- <CAM9d7chSKPxMHzpKZ92xGZ+XmLpd2q2EJwMuszosXu_FO4_dgA@mail.gmail.com>
- <20230316090418.GA2665235@leoy-yangtze.lan>
+        Thu, 16 Mar 2023 06:15:07 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE0B0BDF2
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 03:15:04 -0700 (PDT)
+X-UUID: 61f2fbbec3e311edbd2e61cc88cc8f98-20230316
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=SIJTB2iw2ZKbVZypN9eh4Lmwq+P7EW/KvxfnNL94MRc=;
+        b=eeHeASbfC77etrde7DA+MUitBUz4AhQT+i6P4ftH6QWPOLqQ98KaNFto29qQKpP0Y8n9lxjbtDy9G/4jFPil8L4c9557MwsIJBJuwOgSBGXaqlfKAMQxWng1xN7eWy1ezguQu9bid0mLikDBdXj9Q2n7U0BKf2lVnErL50mH2nA=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.21,REQID:98d48548-f0a5-4308-b904-9efd6eeb21ca,IP:0,U
+        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+        :release,TS:-5
+X-CID-META: VersionHash:83295aa,CLOUDID:12a600f6-ddba-41c3-91d9-10eeade8eac7,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-UUID: 61f2fbbec3e311edbd2e61cc88cc8f98-20230316
+Received: from mtkmbs13n2.mediatek.inc [(172.21.101.108)] by mailgw02.mediatek.com
+        (envelope-from <yong.wu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 183096444; Thu, 16 Mar 2023 18:14:48 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs13n1.mediatek.inc (172.21.101.193) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.25; Thu, 16 Mar 2023 18:14:48 +0800
+Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
+ mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.25 via Frontend Transport; Thu, 16 Mar 2023 18:14:47 +0800
+From:   Yong Wu <yong.wu@mediatek.com>
+To:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     Robin Murphy <robin.murphy@arm.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Yong Wu <yong.wu@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, <iommu@lists.linux.dev>,
+        <linux-mediatek@lists.infradead.org>,
+        Yunfei Wang <yf.wang@mediatek.com>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <jianjiao.zeng@mediatek.com>, <chengci.xu@mediatek.com>
+Subject: [PATCH v3] iommu/mediatek: Set dma_mask for PGTABLE_PA_35_EN
+Date:   Thu, 16 Mar 2023 18:14:45 +0800
+Message-ID: <20230316101445.12443-1-yong.wu@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230316090418.GA2665235@leoy-yangtze.lan>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,RDNS_NONE,
+        SPF_HELO_PASS,SPF_PASS,UNPARSEABLE_RELAY autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Thu, Mar 16, 2023 at 05:04:18PM +0800, Leo Yan escreveu:
-> On Thu, Mar 16, 2023 at 12:42:53AM -0700, Namhyung Kim wrote:
-> 
-> [...]
-> 
-> > >  static struct kvm_event *find_create_kvm_event(struct perf_kvm_stat *kvm,
-> > >                                                struct event_key *key,
-> > >                                                struct perf_sample *sample)
-> > >  {
-> > >         struct kvm_event *event;
-> > > -       struct list_head *head;
-> > > +       struct hist_entry *he;
-> > > +       struct kvm_info *ki;
-> > >
-> > >         BUG_ON(key->key == INVALID_KEY);
-> > >
-> > > -       head = &kvm->kvm_events_cache[kvm_events_hash_fn(key->key)];
-> > > -       list_for_each_entry(event, head, hash_entry) {
-> > > -               if (event->key.key == key->key && event->key.info == key->info)
-> > > -                       return event;
-> > > +       ki = zalloc(sizeof(*ki));
-> > > +       if (!ki) {
-> > > +               pr_err("Failed to allocate kvm info\n");
-> > > +               return NULL;
-> > >         }
-> > >
-> > > -       event = kvm_alloc_init_event(kvm, key, sample);
-> > > -       if (!event)
-> > > +       kvm->events_ops->decode_key(kvm, key, ki->name);
-> > > +       he = hists__add_entry_ops(&kvm_hists.hists, &kvm_ev_entry_ops,
-> > > +                                 &kvm->al, NULL, NULL, NULL, ki, sample, true);
-> > 
-> > The hists__add_entry{,_ops} can return either a new entry
-> > or an existing one.  I think it'd leak the 'ki' when it returns
-> > the existing one.  You may deep-copy it in hist_entry__init()
-> > and always free the 'ki' here.
-> 
-> Thanks for pointing out this, Namhyung.  I will fix it.
-> 
-> @Arnaldo, do you want me to send an appending patch, or will you drop
-> this patch series from your branch so I send a new patch set?
-> 
-> > Another thought on this.  Lots of fields in the hist_entry are
-> > not used for kvm.  We might split the hist_entry somehow
-> > so that we can use unnecessary parts only.  But that could
-> > be a future project. :)
-> 
-> Yeah, I found now hist_entry contains many fields
-> (branch_info/mem_info/kvm_info/block_info); we can consider to
-> refactor the struct hist_entry to use an abstract pointer to refer
-> tool's specific data, this could be easily extend hist_entry to
-> support more tools.
+When we enable PGTABLE_PA_35_EN, the PA for pgtable may be 35bits.
+Thus add dma_mask for it.
 
-Since I build tested this already and had the other fixes, I'm pushing
-this out to perf-tools-next (and perf/core for a while, for people not
-knowing about the new nbranch names) and you can continue from there,
-ok?
+Fixes: 301c3ca12576 ("iommu/mediatek: Allow page table PA up to 35bit")
+Signed-off-by: Chengci.Xu <chengci.xu@mediatek.com>
+Signed-off-by: Yong Wu <yong.wu@mediatek.com>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+---
+v3: Sorry for a typo. Change from "if (!ret)" to "if (ret)".
 
-- Arnaldo
+v2: Just move this out from mt8188 series. Nothing change.
+
+v1: https://lore.kernel.org/linux-mediatek/20230307080555.14399-3-yong.wu@mediatek.com/
+---
+ drivers/iommu/mtk_iommu.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
+index d5a4955910ff..6a00ce208dc2 100644
+--- a/drivers/iommu/mtk_iommu.c
++++ b/drivers/iommu/mtk_iommu.c
+@@ -1258,6 +1258,14 @@ static int mtk_iommu_probe(struct platform_device *pdev)
+ 			return PTR_ERR(data->bclk);
+ 	}
+ 
++	if (MTK_IOMMU_HAS_FLAG(data->plat_data, PGTABLE_PA_35_EN)) {
++		ret = dma_set_mask(dev, DMA_BIT_MASK(35));
++		if (ret) {
++			dev_err(dev, "Failed to set dma_mask 35.\n");
++			return ret;
++		}
++	}
++
+ 	pm_runtime_enable(dev);
+ 
+ 	if (MTK_IOMMU_IS_TYPE(data->plat_data, MTK_IOMMU_TYPE_MM)) {
+-- 
+2.25.1
+
