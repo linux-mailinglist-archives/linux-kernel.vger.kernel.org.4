@@ -2,67 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A25156BD5CE
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 17:34:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D86D6BD5E6
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 17:35:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231168AbjCPQeY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 12:34:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42728 "EHLO
+        id S231196AbjCPQfg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 12:35:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231136AbjCPQeA (ORCPT
+        with ESMTP id S230372AbjCPQeY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 12:34:00 -0400
-Received: from proxima.lasnet.de (proxima.lasnet.de [IPv6:2a01:4f8:121:31eb:3::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 183A8E63C9;
-        Thu, 16 Mar 2023 09:33:18 -0700 (PDT)
-Received: from [192.168.2.51] (p5dd0da05.dip0.t-ipconnect.de [93.208.218.5])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        Thu, 16 Mar 2023 12:34:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A4F9E6FF4;
+        Thu, 16 Mar 2023 09:33:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: stefan@datenfreihafen.org)
-        by proxima.lasnet.de (Postfix) with ESMTPSA id DE3E6C027C;
-        Thu, 16 Mar 2023 17:33:15 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=datenfreihafen.org;
-        s=2021; t=1678984396;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=UrWrpPv+/3slKvIAuehiHkc06CKCMU5Vv1SKl92JOdI=;
-        b=asCQEiNQyYuBa69dpfM8dBU9fdWuoUqoECwB0zPjNUGlO2ZxHUKZgPlvt8hwPiKRrWIbQL
-        nUsH9QYNeWgNlYye7uDnhZRY3xKLI1Zzdtas23f0DLf/NSiTHgOmYnBmmyitCQ2tSX+st/
-        Hp4yl61tabPffzYMtTPc885E1Zp+aD7kgzvGZ3cfYb1dGIMlrju4hbvwBvg64IEn78JuXX
-        2knUuGTc0JV3nitxs93VfJ/7RjKah2a38Z8o3QN0+49LK7EZgu0m9zg+s4Xzc+ZFQYcK/W
-        WVLgD43pndNZ+dtuPYah1HLgPdZX+EPOEbMZNQ41kGPDytTLu8KB0QUZmPuOzg==
-Message-ID: <93bc1f0a-d1ed-e0cf-30ec-a3b59a1ec678@datenfreihafen.org>
-Date:   Thu, 16 Mar 2023 17:33:15 +0100
+        by ams.source.kernel.org (Postfix) with ESMTPS id 57A16B8226B;
+        Thu, 16 Mar 2023 16:33:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB753C433D2;
+        Thu, 16 Mar 2023 16:33:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678984428;
+        bh=Y38himw7kgZijWJW9L1MkW0vWORfRC3VqLMfCnLO/Kc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=PoSXbGgndyvGedw8xyUwtB/w+iW8FSPo9pLSB8gXTbUYDY/t0VmURLMkF2+U0K521
+         65G5Eiu0jtq6PZivUyzeVL4XQ93Kei7EZ0uC+5j81Bxhk5pChxejEm+IQ6LRDc2Tc8
+         fQT5WTCkvwNXRJxdK4r/jOZP/Dg05upflTcquflUzBNgKHdffz0pmWPW80c1xhrzor
+         PUYBQo0B5VqlpWsCdAEcBKKYCJ8LKwZPkPYdQzAUcRYzbCdXTBKkJ3Y3ZGAP/bW04V
+         Be6qNArmxPlnrHa05nQSuwno4FS8SGmW0Bo1qGvTTWb6w6ihZ+G0OicPiMKlaKssPr
+         m2qcahp46QSVQ==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Adrien Thierry <athierry@redhat.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Sasha Levin <sashal@kernel.org>, jejb@linux.ibm.com,
+        beanhuo@micron.com, avri.altman@wdc.com, keosung.park@samsung.com,
+        kwmad.kim@samsung.com, andersson@kernel.org,
+        linux-scsi@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.15 1/3] scsi: ufs: core: Initialize devfreq synchronously
+Date:   Thu, 16 Mar 2023 12:33:38 -0400
+Message-Id: <20230316163344.708931-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH next] ca8210: Fix unsigned mac_len comparison with zero in
- ca8210_skb_tx()
-Content-Language: en-US
-To:     Simon Horman <simon.horman@corigine.com>,
-        Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
-Cc:     Dan Carpenter <error27@gmail.com>,
-        Alexander Aring <alex.aring@gmail.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Harry Morris <harrymorris12@gmail.com>,
-        linux-wpan@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230306191824.4115839-1-harshit.m.mogalapalli@oracle.com>
- <ZAb5BlS+OgFfJM6t@corigine.com>
-From:   Stefan Schmidt <stefan@datenfreihafen.org>
-In-Reply-To: <ZAb5BlS+OgFfJM6t@corigine.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,39 +58,173 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Simon.
+From: Adrien Thierry <athierry@redhat.com>
 
-On 07.03.23 09:42, Simon Horman wrote:
-> On Mon, Mar 06, 2023 at 11:18:24AM -0800, Harshit Mogalapalli wrote:
->> mac_len is of type unsigned, which can never be less than zero.
->>
->> 	mac_len = ieee802154_hdr_peek_addrs(skb, &header);
->> 	if (mac_len < 0)
->> 		return mac_len;
->>
->> Change this to type int as ieee802154_hdr_peek_addrs() can return negative
->> integers, this is found by static analysis with smatch.
->>
->> Fixes: ded845a781a5 ("ieee802154: Add CA8210 IEEE 802.15.4 device driver")
->> Signed-off-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
-> 
-> I discussed this briefly with Harshit offline.
-> 
-> The commit referenced above tag does add the call to
-> ieee802154_hdr_peek_addrs(), an there is a sign miss match between
-> the return value and the variable.
-> 
-> The code to check the mac_len was added more recently, by the following
-> commit. However the fixes tag is probably fine as-is, because it's fixing
-> error handling of a call made in that commit.
-> 
-> 6c993779ea1d ("ca8210: fix mac_len negative array access")
-> 
-> Reviewed-by: Simon Horman <simon.horman@corigine.com>
+[ Upstream commit 7dafc3e007918384c8693ff8d70381b5c1e9c247 ]
 
-I agree that the commit above is the better Fixes tag as it makes clear 
-it only comes after this change. I amended the commit message 
-accordingly when applying this to wpan.
+During UFS initialization, devfreq initialization is asynchronous:
+ufshcd_async_scan() calls ufshcd_add_lus(), which in turn initializes
+devfreq for UFS. The simple ondemand governor is then loaded. If it is
+built as a module, request_module() is called and throws a warning:
 
-regards
-Stefan Schmidt
+  WARNING: CPU: 7 PID: 167 at kernel/kmod.c:136 __request_module+0x1e0/0x460
+  Modules linked in: crct10dif_ce llcc_qcom phy_qcom_qmp_usb ufs_qcom phy_qcom_snps_femto_v2 ufshcd_pltfrm phy_qcom_qmp_combo ufshcd_core phy_qcom_qmp_ufs qcom_wdt socinfo fuse ipv6
+  CPU: 7 PID: 167 Comm: kworker/u16:3 Not tainted 6.2.0-rc6-00009-g58706f7fb045 #1
+  Hardware name: Qualcomm SA8540P Ride (DT)
+  Workqueue: events_unbound async_run_entry_fn
+  pstate: 00400005 (nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+  pc : __request_module+0x1e0/0x460
+  lr : __request_module+0x1d8/0x460
+  sp : ffff800009323b90
+  x29: ffff800009323b90 x28: 0000000000000000 x27: 0000000000000000
+  x26: ffff800009323d50 x25: ffff7b9045f57810 x24: ffff7b9045f57830
+  x23: ffffdc5a83e426e8 x22: ffffdc5ae80a9818 x21: 0000000000000001
+  x20: ffffdc5ae7502f98 x19: ffff7b9045f57800 x18: ffffffffffffffff
+  x17: 312f716572667665 x16: 642f7366752e3030 x15: 0000000000000000
+  x14: 000000000000021c x13: 0000000000005400 x12: ffff7b9042ed7614
+  x11: ffff7b9042ed7600 x10: 00000000636c0890 x9 : 0000000000000038
+  x8 : ffff7b9045f2c880 x7 : ffff7b9045f57c68 x6 : 0000000000000080
+  x5 : 0000000000000000 x4 : 8000000000000000 x3 : 0000000000000000
+  x2 : 0000000000000000 x1 : ffffdc5ae5d382f0 x0 : 0000000000000001
+  Call trace:
+   __request_module+0x1e0/0x460
+   try_then_request_governor+0x7c/0x100
+   devfreq_add_device+0x4b0/0x5fc
+   ufshcd_async_scan+0x1d4/0x310 [ufshcd_core]
+   async_run_entry_fn+0x34/0xe0
+   process_one_work+0x1d0/0x320
+   worker_thread+0x14c/0x444
+   kthread+0x10c/0x110
+   ret_from_fork+0x10/0x20
+
+This occurs because synchronous module loading from async is not
+allowed. According to __request_module():
+
+  /*
+   * We don't allow synchronous module loading from async.  Module
+   * init may invoke async_synchronize_full() which will end up
+   * waiting for this task which already is waiting for the module
+   * loading to complete, leading to a deadlock.
+   */
+
+Such a deadlock was experienced on the Qualcomm QDrive3/sa8540p-ride. With
+DEVFREQ_GOV_SIMPLE_ONDEMAND=m, the boot hangs after the warning.
+
+Fix both the warning and the deadlock by moving devfreq initialization out
+of the async routine.
+
+Tested on the sa8540p-ride by using fio to put the UFS under load, and
+printing the trace generated by
+/sys/kernel/tracing/events/ufs/ufshcd_clk_scaling events. The trace looks
+similar with and without the change.
+
+Link: https://lore.kernel.org/r/20230217194423.42553-1-athierry@redhat.com
+Signed-off-by: Adrien Thierry <athierry@redhat.com>
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/scsi/ufs/ufshcd.c | 47 ++++++++++++++++++++++++++-------------
+ drivers/scsi/ufs/ufshcd.h |  1 +
+ 2 files changed, 32 insertions(+), 16 deletions(-)
+
+diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
+index 120831428ec6f..eaa91aec036b1 100644
+--- a/drivers/scsi/ufs/ufshcd.c
++++ b/drivers/scsi/ufs/ufshcd.c
+@@ -1307,6 +1307,13 @@ static int ufshcd_devfreq_target(struct device *dev,
+ 	struct ufs_clk_info *clki;
+ 	unsigned long irq_flags;
+ 
++	/*
++	 * Skip devfreq if UFS initialization is not finished.
++	 * Otherwise ufs could be in a inconsistent state.
++	 */
++	if (!smp_load_acquire(&hba->logical_unit_scan_finished))
++		return 0;
++
+ 	if (!ufshcd_is_clkscaling_supported(hba))
+ 		return -EINVAL;
+ 
+@@ -7881,22 +7888,6 @@ static int ufshcd_add_lus(struct ufs_hba *hba)
+ 	if (ret)
+ 		goto out;
+ 
+-	/* Initialize devfreq after UFS device is detected */
+-	if (ufshcd_is_clkscaling_supported(hba)) {
+-		memcpy(&hba->clk_scaling.saved_pwr_info.info,
+-			&hba->pwr_info,
+-			sizeof(struct ufs_pa_layer_attr));
+-		hba->clk_scaling.saved_pwr_info.is_valid = true;
+-		hba->clk_scaling.is_allowed = true;
+-
+-		ret = ufshcd_devfreq_init(hba);
+-		if (ret)
+-			goto out;
+-
+-		hba->clk_scaling.is_enabled = true;
+-		ufshcd_init_clk_scaling_sysfs(hba);
+-	}
+-
+ 	ufs_bsg_probe(hba);
+ 	ufshpb_init(hba);
+ 	scsi_scan_host(hba->host);
+@@ -8030,6 +8021,12 @@ static void ufshcd_async_scan(void *data, async_cookie_t cookie)
+ 	if (ret) {
+ 		pm_runtime_put_sync(hba->dev);
+ 		ufshcd_hba_exit(hba);
++	} else {
++		/*
++		 * Make sure that when reader code sees UFS initialization has finished,
++		 * all initialization steps have really been executed.
++		 */
++		smp_store_release(&hba->logical_unit_scan_finished, true);
+ 	}
+ }
+ 
+@@ -9590,12 +9587,30 @@ int ufshcd_init(struct ufs_hba *hba, void __iomem *mmio_base, unsigned int irq)
+ 	 */
+ 	ufshcd_set_ufs_dev_active(hba);
+ 
++	/* Initialize devfreq */
++	if (ufshcd_is_clkscaling_supported(hba)) {
++		memcpy(&hba->clk_scaling.saved_pwr_info.info,
++			&hba->pwr_info,
++			sizeof(struct ufs_pa_layer_attr));
++		hba->clk_scaling.saved_pwr_info.is_valid = true;
++		hba->clk_scaling.is_allowed = true;
++
++		err = ufshcd_devfreq_init(hba);
++		if (err)
++			goto rpm_put_sync;
++
++		hba->clk_scaling.is_enabled = true;
++		ufshcd_init_clk_scaling_sysfs(hba);
++	}
++
+ 	async_schedule(ufshcd_async_scan, hba);
+ 	ufs_sysfs_add_nodes(hba->dev);
+ 
+ 	device_enable_async_suspend(dev);
+ 	return 0;
+ 
++rpm_put_sync:
++	pm_runtime_put_sync(dev);
+ free_tmf_queue:
+ 	blk_cleanup_queue(hba->tmf_queue);
+ free_tmf_tag_set:
+diff --git a/drivers/scsi/ufs/ufshcd.h b/drivers/scsi/ufs/ufshcd.h
+index c8513cc6c2bdd..33d9c096ec7fd 100644
+--- a/drivers/scsi/ufs/ufshcd.h
++++ b/drivers/scsi/ufs/ufshcd.h
+@@ -838,6 +838,7 @@ struct ufs_hba {
+ 	struct completion *uic_async_done;
+ 
+ 	enum ufshcd_state ufshcd_state;
++	bool logical_unit_scan_finished;
+ 	u32 eh_flags;
+ 	u32 intr_mask;
+ 	u16 ee_ctrl_mask; /* Exception event mask */
+-- 
+2.39.2
+
