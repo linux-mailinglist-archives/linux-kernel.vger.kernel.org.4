@@ -2,117 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B65AC6BC6B2
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 08:14:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DBA46BC6D4
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 08:15:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229765AbjCPHOF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 03:14:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41542 "EHLO
+        id S230135AbjCPHPL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 03:15:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230061AbjCPHOB (ORCPT
+        with ESMTP id S230209AbjCPHOn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 03:14:01 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB45FADC11;
-        Thu, 16 Mar 2023 00:13:39 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id a32so618262ljr.9;
-        Thu, 16 Mar 2023 00:13:39 -0700 (PDT)
+        Thu, 16 Mar 2023 03:14:43 -0400
+Received: from mail-ua1-x933.google.com (mail-ua1-x933.google.com [IPv6:2607:f8b0:4864:20::933])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9799E4FF14
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 00:14:14 -0700 (PDT)
+Received: by mail-ua1-x933.google.com with SMTP id q42so544743uac.3
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 00:14:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678950818;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=F2wFT7CrRqcdyw8L0sjGieOy+9WgGuAwjTPbuLH379I=;
-        b=AFZJv8f0LnZQ0fM7TsswxbUC8egy/hgi+pKDIFZnbGJyZicjuFs+lKy4jytlsC1VbR
-         KkA2qJJTH1nNsThH8SdG4AyIb++pNptf/eT4c81KKQxuJwAIqZQBotg0fRx1sNmEwILo
-         8Vpf2q8SkRmfx/gZMIwO3oZjPtz7znR8+OHM25x4suC5PQgC/W0zo7gC04rnEhLuIoUR
-         Sn781dn8NyRnKUwFIzSyOcVRXmAiiHtp5Q92oUq1AZLfsx1Bj4a/OP2CwAXbHiOTfpja
-         Z66ZYWwy9gDvI4r37kODI/cJpcvhkdt8Lwk/PIGi2EKaY0mCj+f1tQ9iuQvcmNXqcYUc
-         nMMA==
+        d=linaro.org; s=google; t=1678950851;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=DIcQiQ+PixIuhqgdCx8gDBGlIxjSr4mA5y32j1Q4pG4=;
+        b=F5t/9b92W8kdvvTdhOSrm+AL7r2052O8R1daRmqonXkg27V3xMTVUtwBK4/b7aFzpB
+         WpaTRyfApUQXY3QRH4xKd7QHs5Nh9TLaQZ45obTYRnQtWCO+sPjK28tpLclYis3M5wk3
+         Se+AYliFMtuOqwJH7JC47wxdYTOVEh9ms0NLJCGSMpLg8i2jFxY+qzFRbCqGsYOChfR9
+         533CMQ94A5hSU3U6Vt8qcv8VazSSWJS+E+p3UAIjW11h5OX49XtgjjDq4ZEoLupggRI9
+         KhLhoHdC9OJEb33SGAPVrgfPLoEK72IPfT5P87UqHHc6K/r2GcK4xFkoHWb4UekX7Fws
+         3++Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678950818;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=F2wFT7CrRqcdyw8L0sjGieOy+9WgGuAwjTPbuLH379I=;
-        b=XmwElcI0/2nr2BsgRNuk46OUlXcUdnjt2UrngOXZJf19XtZedtpMYX1bOxOiWM7YM/
-         cDeRzFjHcvKHtKDnD1xbxfSsAclQfvgLWRNeq+D4ogAgwvW4vHr2zgEWeFMSzlxAD8NE
-         9ZPzIMrvbGyWqwchFWGTBoRVCtqmU5VjbUn/Cd+2TK3Zi5aTJSVBmobeB6Cv2vT1HspI
-         +jyusPuTbez7ad91ihBqJqXqSacAcK6Dw6ZRd7e/Rqe5cihQJC6GQAcCHY3HPm6gEpCF
-         bNE/hP6KEBCYxAHDCFPKAPjUNx8+UiJlXQcAsNIjjW5CDvAqJUSWYEuPUJV22GVS9q32
-         s69Q==
-X-Gm-Message-State: AO0yUKVH4Ztn2jy5fDurNv2sJub35lWkhSDMM8OqGu+NQc8NIK4zbLV0
-        8j0cL0M3InSKVzjS1CgU4EQ=
-X-Google-Smtp-Source: AK7set+QXuT4Phd7o0BtowhfYtOterzcc0ah/2EqaDQmwvsYz8jF5sUdZeNB2iugK3zTYb4BrkcsRQ==
-X-Received: by 2002:a05:651c:10cf:b0:28f:8fa4:7c25 with SMTP id l15-20020a05651c10cf00b0028f8fa47c25mr1421917ljn.25.1678950818031;
-        Thu, 16 Mar 2023 00:13:38 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:16f3:4a00::6? (dc75zzyyyyyyyyyyyyydy-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::6])
-        by smtp.gmail.com with ESMTPSA id t17-20020a2e9d11000000b0029353caa593sm1124713lji.5.2023.03.16.00.13.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Mar 2023 00:13:37 -0700 (PDT)
-Message-ID: <f581a290-4f10-5f32-7640-8c5dea0ccfce@gmail.com>
-Date:   Thu, 16 Mar 2023 09:13:36 +0200
+        d=1e100.net; s=20210112; t=1678950851;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DIcQiQ+PixIuhqgdCx8gDBGlIxjSr4mA5y32j1Q4pG4=;
+        b=jAGPksc7cg9ajSHMwcJusK154ia/KiHc1oTIxyZEBu6MjI+WsCiKywXIgvR2eDdBZl
+         x6ruBoAaGuhrsNGr8lpT4v8uqaHevpFWhmUtDhLmpDjZP2A2PRR1pM5XL9M94TGxqpKX
+         u8+H2f+AH+QKlul+AqnhMBhpkhjvbo9+gknS2vbMvYUCvgjtAoUTxuut9BRzhtVy9SUc
+         RKwi+Zb90q5hqjLcQCXkN/DADBPTYQ1oZaJNA+pjpUfj62BP1ZYBPdru9P3okdHaBSWF
+         GQX0hvDgjogzqJS2t35Coi63gwfEmL35SMHvzs56VPOBXkobybFoYAS12kzAdxMASNpO
+         UWzA==
+X-Gm-Message-State: AO0yUKVrWa++ZWt4WL/SNZxzVzlixb9zMMfIQPzB/ZR5gLUfC4dLHL4z
+        dLk9AFWXhxG9JB+G1Vu0a6U2VYKq9oW15wr9fu2gzQ==
+X-Google-Smtp-Source: AK7set/wk7hUQtvHn1YRvBN6v4aKwj3cuIxPyxHD5UJMl/24sS4nsnvSb5aa2bWhWIS3UFZqDPvXKrPS0cOj6alRCDc=
+X-Received: by 2002:a1f:5283:0:b0:40c:4d1:b550 with SMTP id
+ g125-20020a1f5283000000b0040c04d1b550mr24714137vkb.0.1678950851171; Thu, 16
+ Mar 2023 00:14:11 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCHv2 02/12] power: supply: core: auto-exposure of
- simple-battery data
-Content-Language: en-US, en-GB
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20230314225535.1321736-1-sre@kernel.org>
- <20230314225535.1321736-3-sre@kernel.org>
- <baffa307-173c-6ba1-0289-e7287049c0f5@gmail.com>
- <20230316004121.rwieru4aj7d6mwgb@mercury.elektranox.org>
- <de0848f7-7f33-b170-54b7-f0fbf4e5d7d6@gmail.com>
-In-Reply-To: <de0848f7-7f33-b170-54b7-f0fbf4e5d7d6@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 16 Mar 2023 12:44:00 +0530
+Message-ID: <CA+G9fYsqpaicB4TKpMHKbma+YKs0Lm_mpsGBnxvh4tHcubAUeg@mail.gmail.com>
+Subject: next: arm-32bit: build errors: kernel/module/internal.h:252:56:
+ error: expected ';', ',' or ')' before 'const'
+To:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org, bpf <bpf@vger.kernel.org>,
+        linux-mips@vger.kernel.org,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Viktor Malik <vmalik@redhat.com>, Jiri Olsa <jolsa@kernel.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/16/23 09:10, Matti Vaittinen wrote:
-> On 3/16/23 02:41, Sebastian Reichel wrote:
->> Hi,
->> [08/12] power: supply: generic-adc-battery: use simple-battery API
-> 
-> This one did look good to me but as it was pretty trivial one I didn't 
-> think my review made much of a difference :) I can reply with my tag on 
-> that one though as I did review what there was to review.
+Results from Linaro=E2=80=99s test farm.
+Following mips and arm builds failed.
 
-Sorry! I mixed this patch with another one. This indeed did have some 
-changes - I must've accidentally skipped this one. Will check this after 
-eating my breakfast :)
+Regressions found on mips:
+ - build/gcc-12-ath79_defconfig
+ - build/gcc-8-ath79_defconfig
 
-> 
->>
->>> [...]
->>
->> Thanks for your reviews,
-> 
-> Thanks to you! You are the one making things better here, I am just 
-> treating this as an opportunity to learn ;)
-> 
-> Yours,
->      -- Matti
-> 
+Regressions found on arm:
+ - build/gcc-8-omap1_defconfig
+ - build/gcc-12-omap1_defconfig
+ - build/clang-nightly-omap1_defconfig
+ - build/clang-16-omap1_defconfig
 
--- 
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
 
-~~ When things go utterly wrong vim users can always type :help! ~~
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
+Build log:
+------------
+
+In file included from kernel/module/main.c:59:
+kernel/module/internal.h:252:56: error: expected ';', ',' or ')' before 'co=
+nst'
+  252 |                                                        const char *=
+name)
+      |                                                        ^~~~~
+make[4]: *** [scripts/Makefile.build:252: kernel/module/main.o] Error 1
+In file included from kernel/module/strict_rwx.c:12:
+kernel/module/internal.h:252:56: error: expected ';', ',' or ')' before 'co=
+nst'
+  252 |                                                        const char *=
+name)
+      |                                                        ^~~~~
+make[4]: *** [scripts/Makefile.build:252: kernel/module/strict_rwx.o] Error=
+ 1
+In file included from kernel/module/tree_lookup.c:11:
+kernel/module/internal.h:252:56: error: expected ';', ',' or ')' before 'co=
+nst'
+  252 |                                                        const char *=
+name)
+      |                                                        ^~~~~
+make[4]: *** [scripts/Makefile.build:252: kernel/module/tree_lookup.o] Erro=
+r 1
+In file included from kernel/module/procfs.c:13:
+kernel/module/internal.h:252:56: error: expected ';', ',' or ')' before 'co=
+nst'
+  252 |                                                        const char *=
+name)
+      |                                                        ^~~~~
+make[4]: *** [scripts/Makefile.build:252: kernel/module/procfs.o] Error 1
+In file included from kernel/module/sysfs.c:15:
+kernel/module/internal.h:252:56: error: expected ';', ',' or ')' before 'co=
+nst'
+  252 |                                                        const char *=
+name)
+      |                                                        ^~~~~
+make[4]: *** [scripts/Makefile.build:252: kernel/module/sysfs.o] Error 1
+
+
+build log:
+ - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230316=
+/testrun/15632981/suite/build/test/gcc-12-omap1_defconfig/log
+ - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230316=
+/testrun/15632981/suite/build/test/gcc-12-omap1_defconfig/details/
+
+
+--
+Linaro LKFT
+https://lkft.linaro.org
