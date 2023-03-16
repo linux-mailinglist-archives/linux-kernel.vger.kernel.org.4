@@ -2,117 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A804A6BCA7D
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 10:13:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92CD96BCA81
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 10:13:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229562AbjCPJNC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 05:13:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52986 "EHLO
+        id S230100AbjCPJNy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 05:13:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230177AbjCPJM4 (ORCPT
+        with ESMTP id S229691AbjCPJNu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 05:12:56 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DB3E3E0B0
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 02:12:52 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id q16so836738wrw.2
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 02:12:51 -0700 (PDT)
+        Thu, 16 Mar 2023 05:13:50 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C29915C97;
+        Thu, 16 Mar 2023 02:13:46 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id ip21-20020a05600ca69500b003ed56690948so594027wmb.1;
+        Thu, 16 Mar 2023 02:13:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678957970;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:reply-to:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=4i/+IbvCXFdjz4/Efw9W5WipElhYaJU8p9Z3d1lAFC4=;
-        b=E0+h3yXwq5fvWGNhV8VYhU38LOM9BchpTo9sZX+1Iuk+GRUdIBSDcswSrjXKgIoSYu
-         zCE/Y0S1RE6d55RUxTPve2n/dbd1BtK3gMidj6WB4FqobDGXRUpCFik3BU0wf1BhdBoF
-         TcZYncP1u2G2xmQA8PViKF9VngzzIreFVQ7BmkuIHAgRGniPtChAIEmjnaQzrGUSL+ZS
-         YAaXCkT0dM3oLR9SiwBYlcAl0gl1Io5cA2fszdkKKUkjlLw2eMrkXG4n8/okb09QcL3V
-         s7p3INwrwAB8SK7CkXCD0FeyHBwS8JalWojsX+g/SYvQBxtH4nJitSxSF9bTMEoTSMIe
-         BaFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678957970;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:reply-to:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20210112; t=1678958025;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=4i/+IbvCXFdjz4/Efw9W5WipElhYaJU8p9Z3d1lAFC4=;
-        b=En8bE3OB6u8N0yBdHS2CUreVhOyDkHK3ri633ZSuH0i1OqrbI5M+CDj+hrzBpzoSEC
-         Coyo26ZFHdbfw64R23NCLL25X+5+fiLhavmsh+IalbVjkKBZGV1NwNOPyqF7Xc4kTS4M
-         RbOJqq7lNj8mO1wCLQP/zdjX1yXtIDedyRuv2ArSnuDwGmlrE625nSWGfM1Wjz91LCM4
-         /KK7/fbOeQeNImmQF6cW/NNYHisljnorqEDAmubpWmCmYBvswtDlDpT7QkYn5xwIpEAw
-         JmLQw+WLIebh4l1pTb8gpxPQnhVraRUJ3jZyLUduZrYjrud58F25VnRgtppndvZ2IRm1
-         87tQ==
-X-Gm-Message-State: AO0yUKVvzNcl2SntsveyamXeN3VTgnJMzOTY6hc6IDBm38iFJFz20RcF
-        GJFiRZkQ1rr40Tx9dKl83nBfUA==
-X-Google-Smtp-Source: AK7set8jZaolZMq/mj8iZgCzDU5vopOEcP9e972h+2SL64Qr19+KS2HhPt/PZAi+SVgjykT7KAaHyA==
-X-Received: by 2002:adf:e48c:0:b0:2c3:dd60:d749 with SMTP id i12-20020adfe48c000000b002c3dd60d749mr4559291wrm.47.1678957970566;
-        Thu, 16 Mar 2023 02:12:50 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:d33b:7c79:2a99:1fd4? ([2a01:e0a:982:cbb0:d33b:7c79:2a99:1fd4])
-        by smtp.gmail.com with ESMTPSA id t4-20020a0560001a4400b002be5bdbe40csm6717165wry.27.2023.03.16.02.12.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Mar 2023 02:12:50 -0700 (PDT)
-Message-ID: <3e2932d4-89ea-39e1-da46-e9fd2d889fdf@linaro.org>
-Date:   Thu, 16 Mar 2023 10:12:49 +0100
+        bh=y1wI6KS7nZ+BAxbXQwcHv8OCqNHv/ZA1CoTUOG0kaOw=;
+        b=pH4DZPsV8fHwNHtlkoRtDhH+rGhAebSra2S6AS12iNP1CQphcOBdgRjZi5aQVnf2AN
+         l9BRE52FccC7urQrvE81fDDpg6RHDnr5eSdedgxc9digmPGOO/m9ZSHTaUMwZ4E9qsZf
+         9UJWtypK3/M0Xb/TJTq6JO777BZ0wV+dFMZbWcilV6IjWgqkDtQ5NEbVdCvDU0itsxTB
+         l8PO6evxixNThrGVRpAKrZ2FTdH04fUZ2VZoK3m7m+GUDRd11NG4zDeQuhuPdFVY0Up/
+         q/t/5Okm7Uj0+Wg2XOawXe3LXY6sdoNSQa632zAKMSqNANd/eW7aDO8P5fZJ8Nh8rph3
+         bMlw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678958025;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=y1wI6KS7nZ+BAxbXQwcHv8OCqNHv/ZA1CoTUOG0kaOw=;
+        b=sCayG2c/RFnLcH3+JqHcAUuguzGliCnLOpjcgj0tcEGZL5Uloniwr+d+67gAh/HYke
+         JS1X6Pg8rLa4edpkjDvq2jDwBtdbln3HDIA0pwiQmhBdjHpulb6UbJPtXOxAoyxr0C10
+         xLJIIvMyHdSI+Qm2PjS6z/Inf5hHw/sjjcmoWOyJ7vypMwal/06vejKq/2oKOwMPcJH1
+         M4faZX/5DId7/MmLOFYSIHp8OEpjKvkE0WcZxsGkWcGvGeuLbaFOi3xuuGXxFcGfyOEI
+         XP799cDQ5uFWSLttXJMa1m/Xl7C+AlKWH2OngPD1ikm11OpcZjcvlBItPivTwkiJVJ+N
+         bmVg==
+X-Gm-Message-State: AO0yUKVLtlVUt4a6cZqxjhNfhyt+XUxwRaOK1m6cATAFoa5RwAx+ND+7
+        mWuLoTa/j21Wda5BIlJtA4SP2hn+LJ2ntA==
+X-Google-Smtp-Source: AK7set/omKQgo/seetBthv72Tur5fOCcDJfwpwJcU+3LcqDf1smJKiGVEp1Nh48clT48qmi0/MIViQ==
+X-Received: by 2002:a05:600c:19cf:b0:3eb:2da4:f304 with SMTP id u15-20020a05600c19cf00b003eb2da4f304mr19305219wmq.17.1678958024569;
+        Thu, 16 Mar 2023 02:13:44 -0700 (PDT)
+Received: from suse.localnet (host-79-35-102-94.retail.telecomitalia.it. [79.35.102.94])
+        by smtp.gmail.com with ESMTPSA id i26-20020a1c541a000000b003ed246f76a2sm4609903wmb.1.2023.03.16.02.13.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Mar 2023 02:13:44 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Stefano Garzarella <sgarzare@redhat.com>
+Cc:     virtualization@lists.linux-foundation.org,
+        Andrey Zhadchenko <andrey.zhadchenko@virtuozzo.com>,
+        eperezma@redhat.com, netdev@vger.kernel.org, stefanha@redhat.com,
+        linux-kernel@vger.kernel.org, Jason Wang <jasowang@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>, kvm@vger.kernel.org,
+        Stefano Garzarella <sgarzare@redhat.com>
+Subject: Re: [PATCH v2 3/8] vringh: replace kmap_atomic() with kmap_local_page()
+Date:   Thu, 16 Mar 2023 10:13:39 +0100
+Message-ID: <5675662.DvuYhMxLoT@suse>
+In-Reply-To: <20230302113421.174582-4-sgarzare@redhat.com>
+References: <20230302113421.174582-1-sgarzare@redhat.com>
+ <20230302113421.174582-4-sgarzare@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH v3 7/7] arm64: dts: qcom: sm8550: Use the correct BWMON
- fallback compatible
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Marijn Suijten <marijn.suijten@somainline.org>
-References: <20230304-topic-ddr_bwmon-v3-0-77a050c2fbda@linaro.org>
- <20230304-topic-ddr_bwmon-v3-7-77a050c2fbda@linaro.org>
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Organization: Linaro Developer Services
-In-Reply-To: <20230304-topic-ddr_bwmon-v3-7-77a050c2fbda@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/03/2023 15:11, Konrad Dybcio wrote:
-> Use the correct fallback compatible for the BWMONv4 with merged global and
-> monitor register spaces.
-> 
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+On gioved=EC 2 marzo 2023 12:34:16 CET Stefano Garzarella wrote:
+> kmap_atomic() is deprecated in favor of kmap_local_page().
+>=20
+> With kmap_local_page() the mappings are per thread, CPU local, can take
+> page-faults, and can be called from any context (including interrupts).
+> Furthermore, the tasks can be preempted and, when they are scheduled to
+> run again, the kernel virtual addresses are restored and still valid.
+>=20
+> kmap_atomic() is implemented like a kmap_local_page() which also disables
+> page-faults and preemption (the latter only for !PREEMPT_RT kernels,
+> otherwise it only disables migration).
+>=20
+> The code within the mappings/un-mappings in getu16_iotlb() and
+> putu16_iotlb() don't depend on the above-mentioned side effects of
+> kmap_atomic(), so that mere replacements of the old API with the new one
+> is all that is required (i.e., there is no need to explicitly add calls
+> to pagefault_disable() and/or preempt_disable()).
+
+It seems that my commit message is quite clear and complete and therefore h=
+as=20
+already been reused by others who have somehow given me credit.=20
+
+I would really appreciate it being mentioned here that you are reusing a=20
+"boiler plate" commit message of my own making and Cc me :-)
+
+Thanks,
+
+=46abio
+
+> Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
 > ---
->   arch/arm64/boot/dts/qcom/sm8550.dtsi | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sm8550.dtsi b/arch/arm64/boot/dts/qcom/sm8550.dtsi
-> index 25f51245fe9b..b5488c6822bd 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8550.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm8550.dtsi
-> @@ -3391,7 +3391,7 @@ opp-8 {
->   		};
->   
->   		pmu@240b6400 {
-> -			compatible = "qcom,sm8550-cpu-bwmon", "qcom,msm8998-bwmon";
-> +			compatible = "qcom,sm8550-cpu-bwmon", "qcom,sdm845-bwmon";
->   			reg = <0 0x240b6400 0 0x600>;
->   			interrupts = <GIC_SPI 581 IRQ_TYPE_LEVEL_HIGH>;
->   			interconnects = <&gem_noc MASTER_APPSS_PROC 3 &gem_noc SLAVE_LLCC 3>;
-> 
+>=20
+> Notes:
+>     v2:
+>     - added this patch since checkpatch.pl complained about deprecation
+>       of kmap_atomic() touched by next patch
+>=20
+>  drivers/vhost/vringh.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+>=20
+> diff --git a/drivers/vhost/vringh.c b/drivers/vhost/vringh.c
+> index a1e27da54481..0ba3ef809e48 100644
+> --- a/drivers/vhost/vringh.c
+> +++ b/drivers/vhost/vringh.c
+> @@ -1220,10 +1220,10 @@ static inline int getu16_iotlb(const struct vringh
+> *vrh, if (ret < 0)
+>  		return ret;
+>=20
+> -	kaddr =3D kmap_atomic(iov.bv_page);
+> +	kaddr =3D kmap_local_page(iov.bv_page);
+>  	from =3D kaddr + iov.bv_offset;
+>  	*val =3D vringh16_to_cpu(vrh, READ_ONCE(*(__virtio16 *)from));
+> -	kunmap_atomic(kaddr);
+> +	kunmap_local(kaddr);
+>=20
+>  	return 0;
+>  }
+> @@ -1241,10 +1241,10 @@ static inline int putu16_iotlb(const struct vringh
+> *vrh, if (ret < 0)
+>  		return ret;
+>=20
+> -	kaddr =3D kmap_atomic(iov.bv_page);
+> +	kaddr =3D kmap_local_page(iov.bv_page);
+>  	to =3D kaddr + iov.bv_offset;
+>  	WRITE_ONCE(*(__virtio16 *)to, cpu_to_vringh16(vrh, val));
+> -	kunmap_atomic(kaddr);
+> +	kunmap_local(kaddr);
+>=20
+>  	return 0;
+>  }
+> --
+> 2.39.2
 
-I can't test right now, but:
 
-Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
+
+
