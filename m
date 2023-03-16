@@ -2,185 +2,288 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72A066BD2EC
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 16:05:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E645E6BD2ED
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 16:05:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231176AbjCPPFU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 11:05:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54254 "EHLO
+        id S231296AbjCPPFX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 11:05:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230293AbjCPPFS (ORCPT
+        with ESMTP id S231217AbjCPPFT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 11:05:18 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB65FBAD2C;
-        Thu, 16 Mar 2023 08:05:14 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id r27so2746455lfe.10;
-        Thu, 16 Mar 2023 08:05:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678979113;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=uffFfXiabczaI0jKGUZNsFXzehKi34g9pKeACP002zM=;
-        b=a5S8iZVQkoa3W6bl+kiq/uojcYGMWtTIRhNZHBB24sG1nQ8gkqRXwP3eIh+xbzHeeT
-         d4pg6C4576VXWqdxyF2fvr8CSDsjpLhoXbl6UcUiAQW4Q7jB1yl45PxUtD4ulffopXOA
-         bavulUa/dnmsziLIRXe+ap0qnOanGyPDiet4sfqzTjJtBClLmLHsuW8D7KeGneArpluG
-         IWlaaloUWa9NMmFIgvStVu+HqKM5FRUIMtk7frRGqKatTa0U9DzSlnULJ+0FvSMtx2NA
-         Ohpfjcn+MycuI4Ffno7n0VQt8pysTiwMz7jobv89dEIoxR0oe23Mq/40rt6QxcJTkwc8
-         I9gg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678979113;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uffFfXiabczaI0jKGUZNsFXzehKi34g9pKeACP002zM=;
-        b=eH/GZydoS5Jl5FbsQ8Dsi0t2WHAWxbMIHkOQdsN/+CMthaF7fZH50pM8ax0Yw0hb+G
-         0Aok0B2YM7x91EXCqLqHSdbSYJstgEtjJyOOZ4EyOdDZVjOxWjLk8/4mmI7DHe6vKjsS
-         nMkyCQgIwXJ9mX65AY5A3i5Z3FvZ4PNv8oFRiBIK1tr/Ol8T9FKt0989Z51s/f9NPi38
-         2D0swYMSKO76OZYBu1aZL6EArs5psGMZPX2A0UY+BBuJeSBS7XHSZ2QNEYVhNqKAQa5O
-         d5sx5dLKCDau/VRqpmmCfMWC8lpuILrfl/DPwWSRQELofwmsDMcgZEPVQL6DcefOrAcK
-         JrAg==
-X-Gm-Message-State: AO0yUKWO2wZj8hjeow/8hWs54ZkKP1aa7q/Y1EVvToLmDpQUlGGrAi0F
-        HG1Q0u6BZeT7Xaib5TGEbAQ=
-X-Google-Smtp-Source: AK7set/z7tIo2PKRO9aFULOVZQphkue7B7gQSrm5ui/PFTloTIbNodzQVZjVROGGEcd+j5joE6Akhw==
-X-Received: by 2002:ac2:5981:0:b0:4dc:807a:d144 with SMTP id w1-20020ac25981000000b004dc807ad144mr3138165lfn.39.1678979112737;
-        Thu, 16 Mar 2023 08:05:12 -0700 (PDT)
-Received: from pc636 (host-90-233-209-246.mobileonline.telia.com. [90.233.209.246])
-        by smtp.gmail.com with ESMTPSA id d27-20020ac2545b000000b004dbebb3a6fasm1254314lfn.175.2023.03.16.08.05.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Mar 2023 08:05:12 -0700 (PDT)
-From:   Uladzislau Rezki <urezki@gmail.com>
-X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
-Date:   Thu, 16 Mar 2023 16:05:09 +0100
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Uladzislau Rezki <urezki@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Philipp Reisner <philipp.reisner@linbit.com>,
-        Bryan Tan <bryantan@vmware.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Bob Pearson <rpearsonhpe@gmail.com>,
-        Ariel Levkovich <lariel@nvidia.com>,
-        Theodore Ts'o <tytso@mit.edu>, Julian Anastasov <ja@ssi.bg>
-Subject: Re: [PATCH 04/13] tracing: Rename kvfree_rcu() to
- kvfree_rcu_mightsleep()
-Message-ID: <ZBMwJYFYpfLsuW5F@pc636>
-References: <20230201150815.409582-1-urezki@gmail.com>
- <20230201150815.409582-5-urezki@gmail.com>
- <ZAni8Q1NW9cWrvHJ@pc636>
- <20230315183648.5164af0f@gandalf.local.home>
- <ZBLQZSm+SuazEODN@pc636>
- <20230316095653.4beccbe0@gandalf.local.home>
+        Thu, 16 Mar 2023 11:05:19 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D7C3B9531;
+        Thu, 16 Mar 2023 08:05:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678979117; x=1710515117;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=/lKBXE6NMg4dM03Mb8QnXmlt4juzkr2o8eLsDDIEdAw=;
+  b=CWNVCgxcsYHEYWzrf7bR144mIl7JDQnshGm86/AeAY+b0Icb36vOu8m7
+   2QkjkMABYSRtutvWWUS3ElTAyUotU2aoMjQK8G/QATqGb8IZQmzHAIe9q
+   dSXYEHKN632Pksf9iLnjWsD7EE7NyHsOK2xUqW9uXnTx8dSGsEMVjxOIU
+   wpZ9EAYoN5Ubwd42WcIeiJKVEV1nE1U6Pcqb7+kzU38CqQXMahl0ASG8o
+   qGqu/nHGIPYr0poFX85fXCn3xjtrpcHSO3S3mDC2lUr4wUKgGK6FJk0Ns
+   3uAZlwR8qTRNbTnZkeLp6CB+Tjso5xQVsjknh7OjVDZL5dLGhbB3Mm6K9
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="336707384"
+X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
+   d="scan'208";a="336707384"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 08:05:16 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="768988962"
+X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
+   d="scan'208";a="768988962"
+Received: from trybicki-mobl1.ger.corp.intel.com ([10.252.63.119])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 08:05:12 -0700
+Date:   Thu, 16 Mar 2023 17:05:10 +0200 (EET)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Jacky Huang <ychuang570808@gmail.com>
+cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        lee@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
+        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-serial@vger.kernel.org, schung@nuvoton.com,
+        Jacky Huang <ychuang3@nuvoton.com>
+Subject: Re: [PATCH 13/15] reset: Add Nuvoton ma35d1 reset driver support
+In-Reply-To: <20230315072902.9298-14-ychuang570808@gmail.com>
+Message-ID: <1c943355-e9c0-3b23-4437-4040fa18b9fa@linux.intel.com>
+References: <20230315072902.9298-1-ychuang570808@gmail.com> <20230315072902.9298-14-ychuang570808@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230316095653.4beccbe0@gandalf.local.home>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 16, 2023 at 09:56:53AM -0400, Steven Rostedt wrote:
-> On Thu, 16 Mar 2023 09:16:37 +0100
-> Uladzislau Rezki <urezki@gmail.com> wrote:
-> 
-> > > diff --git a/kernel/trace/trace_probe.h b/kernel/trace/trace_probe.h
-> > > index ef8ed3b65d05..e6037752dcf0 100644
-> > > --- a/kernel/trace/trace_probe.h
-> > > +++ b/kernel/trace/trace_probe.h
-> > > @@ -256,6 +256,7 @@ struct trace_probe {
-> > >  struct event_file_link {
-> > >  	struct trace_event_file		*file;
-> > >  	struct list_head		list;
-> > > +	struct rcu_head			rcu;
-> > >  };
-> > >  
-> > >  static inline bool trace_probe_test_flag(struct trace_probe *tp,
-> > >  
-> > struct foo_a {
-> >   int a;
-> >   int b;
-> > };
-> 
-> Most machines today are 64 bits, even low end machines.
-> 
->  struct foo_a {
-> 	long long a;
-> 	long long b;
->  };
-> 
-> is more accurate. That's 16 bytes.
-> 
-> Although it is more likely off because list_head is a double pointer. But
-> let's just go with this, as the amount really doesn't matter here.
-> 
-> > 
-> > your obj size is 8 byte
-> > 
-> > struct foo_b {
-> >   struct rcu_head rcu;
-> 
-> Isn't rcu_head defined as;
-> 
-> struct callback_head {
->         struct callback_head *next;
->         void (*func)(struct callback_head *head);
-> } __attribute__((aligned(sizeof(void *))));
-> #define rcu_head callback_head
-> 
-> Which makes it 8 not 16 on 32 bit as well?
-> 
-> >   int a;
-> >   int b;
-> > };
-> 
-> So it should be 8 + 8 = 16, on 32 bit and 16 + 16 = 32 on 64bit.
-> 
-> > 
-> > now it becomes 16 + 8 = 24 bytes. In reallity a foo_b object
-> > will be 32 bytes since there is no slab for 24 bytes:
-> > 
-> > <snip>
-> >   kmalloc-32         19840  19840     32  128    1 : tunables    0    0    0 : slabdata    155    155      0
-> >   kmalloc-16         28857  28928     16  256    1 : tunables    0    0    0 : slabdata    113    113      0
-> >   kmalloc-8          37376  37376      8  512    1 : tunables    0    0    0 : slabdata     73     73      0
-> > <snip>
-> > 
-> > if we allocate 512 objects of foo_a it would be 4096 bytes
-> > in case of foo_b it is 24 * 512 = 12228 bytes.
-> 
-> This is for probe events. We usually allocate 1, maybe 2. Oh, some may even
-> allocate 100 to be crazy. But each probe event is in reality much larger
-> (1K perhaps) as each one allocates dentry's, inodes, etc. So 8 or 16 bytes
-> extra is still lost in the noise.
-> 
-> > 
-> > single argument will give you 4096 + 512 * 8 = 8192 bytes
-> > int terms of memory consumtion.
-> 
-> If someone allocate 512 instances, that would be closer to a meg in size
-> without this change. 8k is probably less than 1%
-> 
-In percentage. My case. (12228 - 8192) * 100 / 12228 = ~33% difference.
+On Wed, 15 Mar 2023, Jacky Huang wrote:
 
-> > 
-> > And double argument will not give you better performance comparing
-> > with a single argument.
+> From: Jacky Huang <ychuang3@nuvoton.com>
 > 
-> It will, because it will no longer have to allocate anything if need be.
-> Note, when it doesn't allocate the system is probably mostly idle and we
-> don't care about performance, but when it needs allocation, that's likely a
-> time when performance is a bit more important.
+> This driver supports individual IP reset for ma35d1. The reset
+> control registers is a subset of system control registers.
 > 
-The problem further is about pointer chasing, like comparing arrays and
-lists. It will take longer time to offload all pointers.
+> Signed-off-by: Jacky Huang <ychuang3@nuvoton.com>
+> ---
+>  drivers/reset/Kconfig        |   6 ++
+>  drivers/reset/Makefile       |   1 +
+>  drivers/reset/reset-ma35d1.c | 152 +++++++++++++++++++++++++++++++++++
+>  3 files changed, 159 insertions(+)
+>  create mode 100644 drivers/reset/reset-ma35d1.c
+> 
+> diff --git a/drivers/reset/Kconfig b/drivers/reset/Kconfig
+> index 2a52c990d4fe..47671060d259 100644
+> --- a/drivers/reset/Kconfig
+> +++ b/drivers/reset/Kconfig
+> @@ -143,6 +143,12 @@ config RESET_NPCM
+>  	  This enables the reset controller driver for Nuvoton NPCM
+>  	  BMC SoCs.
+>  
+> +config RESET_NUVOTON_MA35D1
+> +	bool "Nuvton MA35D1 Reset Driver"
+> +	default ARCH_NUVOTON
+> +	help
+> +	  This enables the reset controller driver for Nuvoton MA35D1 SoC.
+> +
+>  config RESET_OXNAS
+>  	bool
+>  
+> diff --git a/drivers/reset/Makefile b/drivers/reset/Makefile
+> index 3e7e5fd633a8..fd52dcf66a99 100644
+> --- a/drivers/reset/Makefile
+> +++ b/drivers/reset/Makefile
+> @@ -20,6 +20,7 @@ obj-$(CONFIG_RESET_MCHP_SPARX5) += reset-microchip-sparx5.o
+>  obj-$(CONFIG_RESET_MESON) += reset-meson.o
+>  obj-$(CONFIG_RESET_MESON_AUDIO_ARB) += reset-meson-audio-arb.o
+>  obj-$(CONFIG_RESET_NPCM) += reset-npcm.o
+> +obj-$(CONFIG_RESET_NUVOTON_MA35D1) += reset-ma35d1.o
+>  obj-$(CONFIG_RESET_OXNAS) += reset-oxnas.o
+>  obj-$(CONFIG_RESET_PISTACHIO) += reset-pistachio.o
+>  obj-$(CONFIG_RESET_POLARFIRE_SOC) += reset-mpfs.o
+> diff --git a/drivers/reset/reset-ma35d1.c b/drivers/reset/reset-ma35d1.c
+> new file mode 100644
+> index 000000000000..bdd39483ca4e
+> --- /dev/null
+> +++ b/drivers/reset/reset-ma35d1.c
+> @@ -0,0 +1,152 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (C) 2023 Nuvoton Technology Corp.
+> + * Author: Chi-Fang Li <cfli0@nuvoton.com>
+> + */
+> +
+> +#include <linux/device.h>
+> +#include <linux/err.h>
+> +#include <linux/mfd/syscon.h>
+> +#include <linux/io.h>
+> +#include <linux/of.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/reset-controller.h>
+> +#include <linux/mfd/ma35d1-sys.h>
+> +#include <dt-bindings/reset/nuvoton,ma35d1-reset.h>
+> +#include <linux/regmap.h>
+> +#include <linux/reboot.h>
+> +
+> +#define RST_PRE_REG	32
+> +
+> +struct ma35d1_reset_data {
+> +	struct reset_controller_dev rcdev;
+> +	struct regmap *regmap;
+> +};
+> +
+> +struct ma35d1_reboot_data {
+> +	struct notifier_block restart_handler;
+> +	struct regmap *regmap;
+> +};
+> +
+> +static int ma35d1_restart_handler(struct notifier_block *this,
+> +				  unsigned long mode, void *cmd)
+> +{
+> +	struct ma35d1_reboot_data *data =
+> +			container_of(this, struct ma35d1_reboot_data,
+> +				     restart_handler);
+> +	regmap_write(data->regmap, REG_SYS_IPRST0, 1 << MA35D1_RESET_CHIP);
+> +	return -EAGAIN;
 
---
-Uladzislau Rezki
+This results -EAGAIN always???
+
+> +}
+> +
+> +static int ma35d1_reset_update(struct reset_controller_dev *rcdev,
+> +			      unsigned long id, bool assert)
+> +{
+> +	int reg;
+> +	int offset = (id / RST_PRE_REG) * 4;
+> +	struct ma35d1_reset_data *data =
+> +			container_of(rcdev, struct ma35d1_reset_data, rcdev);
+> +
+> +	regmap_read(data->regmap, REG_SYS_IPRST0 + offset, &reg);
+> +	if (assert)
+> +		reg |= 1 << (id % RST_PRE_REG);
+> +	else
+> +		reg &= ~(1 << (id % RST_PRE_REG));
+> +
+> +	regmap_write(data->regmap, REG_SYS_IPRST0 + offset, reg);
+> +	return 0;
+
+This returns always 0. What about regmap_read/write() errors, should the 
+be returned?
+
+> +}
+> +
+> +static int ma35d1_reset_assert(struct reset_controller_dev *rcdev,
+> +			       unsigned long id)
+> +{
+> +	return ma35d1_reset_update(rcdev, id, true);
+> +}
+> +
+> +static int ma35d1_reset_deassert(struct reset_controller_dev *rcdev,
+> +				 unsigned long id)
+> +{
+> +	return ma35d1_reset_update(rcdev, id, false);
+> +}
+> +
+> +static int ma35d1_reset_status(struct reset_controller_dev *rcdev,
+> +			      unsigned long id)
+> +{
+> +	int reg;
+> +	int offset = id / RST_PRE_REG;
+> +	struct ma35d1_reset_data *data =
+> +			container_of(rcdev, struct ma35d1_reset_data, rcdev);
+> +
+> +	regmap_read(data->regmap, REG_SYS_IPRST0 + offset, &reg);
+
+Error handling?
+
+> +	return !!(reg & BIT(id % RST_PRE_REG));
+> +}
+> +
+> +static const struct reset_control_ops ma35d1_reset_ops = {
+> +	.assert = ma35d1_reset_assert,
+> +	.deassert = ma35d1_reset_deassert,
+> +	.status = ma35d1_reset_status,
+> +};
+> +
+> +static const struct of_device_id ma35d1_reset_dt_ids[] = {
+> +	{ .compatible = "nuvoton,ma35d1-reset" },
+> +	{ },
+> +};
+> +
+> +static int ma35d1_reset_probe(struct platform_device *pdev)
+> +{
+> +	struct device *dev = &pdev->dev;
+> +	struct ma35d1_reset_data *reset_data;
+> +	struct ma35d1_reboot_data *reboot_data;
+> +	int err;
+> +
+> +	if (!pdev->dev.of_node) {
+> +		dev_err(&pdev->dev, "Device tree node not found\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	reset_data = devm_kzalloc(dev, sizeof(*reset_data), GFP_KERNEL);
+> +	if (!reset_data)
+> +		return -ENOMEM;
+> +
+> +	reboot_data = devm_kzalloc(dev, sizeof(*reboot_data), GFP_KERNEL);
+> +	if (!reboot_data) {
+> +		devm_kfree(dev, reset_data);
+
+Unnecessary.
+
+> +		return -ENOMEM;
+> +	}
+> +
+> +	reset_data->regmap  = syscon_regmap_lookup_by_phandle(
+> +			      pdev->dev.of_node, "regmap");
+> +	if (IS_ERR(reset_data->regmap)) {
+> +		dev_err(&pdev->dev, "Failed to get SYS register base\n");
+> +		err = PTR_ERR(reset_data->regmap);
+> +		goto err_out;
+> +	}
+> +	reset_data->rcdev.owner = THIS_MODULE;
+> +	reset_data->rcdev.nr_resets = MA35D1_RESET_COUNT;
+> +	reset_data->rcdev.ops = &ma35d1_reset_ops;
+> +	reset_data->rcdev.of_node = dev->of_node;
+> +
+> +	reboot_data->regmap = reset_data->regmap;
+> +	reboot_data->restart_handler.notifier_call = ma35d1_restart_handler;
+> +	reboot_data->restart_handler.priority = 192;
+> +
+> +	err = register_restart_handler(&reboot_data->restart_handler);
+> +	if (err)
+> +		dev_warn(&pdev->dev, "failed to register restart handler\n");
+> +
+> +	return devm_reset_controller_register(dev, &reset_data->rcdev);
+> +
+> +err_out:
+> +	devm_kfree(dev, reset_data);
+> +	devm_kfree(dev, reboot_data);
+
+These are unnecessary since the probe is failing.
+
+> +	return err;
+> +}
+> +
+> +static struct platform_driver ma35d1_reset_driver = {
+> +	.probe = ma35d1_reset_probe,
+> +	.driver = {
+> +		.name = "ma35d1-reset",
+> +		.of_match_table	= ma35d1_reset_dt_ids,
+> +	},
+> +};
+> +
+> +builtin_platform_driver(ma35d1_reset_driver);
+> 
+
+-- 
+ i.
+
