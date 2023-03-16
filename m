@@ -2,84 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84B3C6BCAFE
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 10:34:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB2C26BCB00
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 10:35:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231199AbjCPJem (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 05:34:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57740 "EHLO
+        id S229899AbjCPJfa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 05:35:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231200AbjCPJef (ORCPT
+        with ESMTP id S229589AbjCPJf1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 05:34:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52D7FAFBA0;
-        Thu, 16 Mar 2023 02:34:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E1B3361FAC;
-        Thu, 16 Mar 2023 09:34:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0257C433EF;
-        Thu, 16 Mar 2023 09:34:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1678959268;
-        bh=N6qBnppIi8AfwTjyHCvwjRK9nwxr0aaHUgabjTQA6gc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DeQWqElFbJqJyKYkHDHjFDA9gqhcmUurTa0rr6DnHTOccBMxG8C3dxD6NP3YP+Lys
-         tu/L4bFq+AhbWdyf5m6kk7jg8KUmWMBHnECMN80mgl+w62fqIX1qkf51mYBQy9DN39
-         cTkz+e1E+BgHE5HlC3ctWFBlZ5mVsm+LChY8NZrA=
-Date:   Thu, 16 Mar 2023 10:34:25 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Pavel Machek <pavel@denx.de>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: Missing patches in 4.19? was Re: [PATCH 4.19 00/39] 4.19.278-rc1
- review
-Message-ID: <ZBLioUeQIdzjb+W5@kroah.com>
-References: <20230315115721.234756306@linuxfoundation.org>
- <ZBLYf4KZYj62HuHX@duo.ucw.cz>
+        Thu, 16 Mar 2023 05:35:27 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BDC81D91D;
+        Thu, 16 Mar 2023 02:35:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1678959316; x=1710495316;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=XSdA/tzh1oA+YHWvUYbB+BNJN185VFEmxlVBOOTiIQ8=;
+  b=bb5E/vlBV4BqlEg6Uv+/ZcpZbxu83O+Sm2E3j9dpcGVzWdyFiq1ZOq2G
+   pZXeXXIqCiHXWWVZPwtk0QUUNl96eB9MC9EdM3H3+tWaYJ9mAHqbc5Fne
+   sA305qESv1eQKTnxFGPofC6gRzLKFJ+l5fvitXO7NKnBQBeh0FBgv9Qdv
+   rIa3ywXgZtkDeRefHC1Pn6elIvx5jXh4xi07K1c0dbQMqN3JQkSDTEddd
+   +2Qn3TSUae+oRzs8Snc1ANA0wVmTKbIcQQpfk3qbUawx62g36v/kBFrYt
+   X1dgkwK8B/M8huJOl966XuuCqUUIsMu6QRPRa9eIeSBEKhb3BFLzBvb4G
+   g==;
+X-IronPort-AV: E=Sophos;i="5.98,265,1673938800"; 
+   d="scan'208";a="142345028"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 16 Mar 2023 02:35:14 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Thu, 16 Mar 2023 02:35:14 -0700
+Received: from den-her-m31857h.microchip.com (10.10.115.15) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
+ 15.1.2507.21 via Frontend Transport; Thu, 16 Mar 2023 02:35:12 -0700
+Message-ID: <261a7bca8f0f1f78e85d79a7be27cd809c956464.camel@microchip.com>
+Subject: Re: [PATCH net] hsr: ratelimit only when errors are printed
+From:   Steen Hegelund <steen.hegelund@microchip.com>
+To:     Matthieu Baerts <matthieu.baerts@tessares.net>,
+        <mptcp@lists.linux.dev>, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kristian Overskeid <koverskeid@gmail.com>
+CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Date:   Thu, 16 Mar 2023 10:35:11 +0100
+In-Reply-To: <20230315-net-20230315-hsr_framereg-ratelimit-v1-1-61d2ef176d11@tessares.net>
+References: <20230315-net-20230315-hsr_framereg-ratelimit-v1-1-61d2ef176d11@tessares.net>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZBLYf4KZYj62HuHX@duo.ucw.cz>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 16, 2023 at 09:51:11AM +0100, Pavel Machek wrote:
-> Hi!
-> 
-> > Pseudo-Shortlog of commits:
-> 
-> There is something missing here.
-> 
-> In 5.10-rc we have:
-> 
-> de365066382ce0dbbf3b7189128ccc16e4eae198 net: caif: Fix use-after-free in cfusbl_device_notify()
-> 
-> 4.14-rc has:
-> 
-> 921b052b636c72fbb97c50bd0be33bd7358ab374 net: caif: Fix use-after-free in cfusbl_device_notify()
-> 
-> But I don't see corresponding patch in 4.19.
-> 
-> More than one patch may be affected:
-> 
->  |70cec8eec 9781e9 .: 5.10| net: caif: Fix use-after-free in cfusbl_device_notify()
->  |f690886b9 9781e9 .: 4.14| net: caif: Fix use-after-free in cfusbl_device_notify()
->  |98e6078de 11f180 .: 5.10| nfc: fdp: add null check of devm_kmalloc_array in fdp_nci_i2c_read_device_properties
->  |012961752 11f180 .: 4.14| nfc: fdp: add null check of devm_kmalloc_array in fdp_nci_i2c_read_device_properties
->  |b4e4d4931 693aa2 o: 5.10| ila: do not generate empty messages in ila_xlat_nl_cmd_get_mapping()
->  |f2b350c04 693aa2 o: 4.14| ila: do not generate empty messages in ila_xlat_nl_cmd_get_mapping()
+Hi Mattieu,
 
-Good catch, now queued up and I'll push out a -rc3.
+Looks good to me.
+
+Reviewed-by: Steen Hegelund <Steen.Hegelund@microchip.com>
+
+On Wed, 2023-03-15 at 21:25 +0100, Matthieu Baerts wrote:
+> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+> 
+> Recently, when automatically merging -net and net-next in MPTCP devel
+> tree, our CI reported [1] a conflict in hsr, the same as the one
+> reported by Stephen in netdev [2].
+> 
+> When looking at the conflict, I noticed it is in fact the v1 [3] that
+> has been applied in -net and the v2 [4] in net-next. Maybe the v1 was
+> applied by accident.
+> 
+> As mentioned by Jakub Kicinski [5], the new condition makes more sense
+> before the net_ratelimit(), not to update net_ratelimit's state which is
+> unnecessary if we're not going to print either way.
+> 
+> Here, this modification applies the v2 but in -net.
+> 
+> Link: https://github.com/multipath-tcp/mptcp_net-next/actions/runs/4423171069 [1]
+> Link: https://lore.kernel.org/netdev/20230315100914.53fc1760@canb.auug.org.au/ [2]
+> Link: https://lore.kernel.org/netdev/20230307133229.127442-1-koverskeid@gmail.com/ [3]
+> Link: https://lore.kernel.org/netdev/20230309092302.179586-1-koverskeid@gmail.com/ [4]
+> Link: https://lore.kernel.org/netdev/20230308232001.2fb62013@kernel.org/ [5]
+> Fixes: 28e8cabe80f3 ("net: hsr: Don't log netdev_err message on unknown prp dst node")
+> Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
+> ---
+>  net/hsr/hsr_framereg.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/net/hsr/hsr_framereg.c b/net/hsr/hsr_framereg.c
+> index 865eda39d601..b77f1189d19d 100644
+> --- a/net/hsr/hsr_framereg.c
+> +++ b/net/hsr/hsr_framereg.c
+> @@ -415,7 +415,7 @@ void hsr_addr_subst_dest(struct hsr_node *node_src, struct sk_buff *skb,
+>         node_dst = find_node_by_addr_A(&port->hsr->node_db,
+>                                        eth_hdr(skb)->h_dest);
+>         if (!node_dst) {
+> -               if (net_ratelimit() && port->hsr->prot_version != PRP_V1)
+> +               if (port->hsr->prot_version != PRP_V1 && net_ratelimit())
+>                         netdev_err(skb->dev, "%s: Unknown node\n", __func__);
+>                 return;
+>         }
+> 
+> ---
+> base-commit: 75014826d0826d175aa9e36cd8e118793263e3f4
+> change-id: 20230315-net-20230315-hsr_framereg-ratelimit-3c8ff6e43511
+> 
+> Best regards,
+> --
+> Matthieu Baerts <matthieu.baerts@tessares.net>
+> 
+
+BR
+Steen
+
