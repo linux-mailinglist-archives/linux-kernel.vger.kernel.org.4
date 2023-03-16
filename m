@@ -2,257 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6C856BCE70
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 12:37:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33A856BCE6F
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 12:37:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230266AbjCPLhb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 07:37:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57464 "EHLO
+        id S230189AbjCPLhZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 07:37:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229729AbjCPLhT (ORCPT
+        with ESMTP id S230033AbjCPLhU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 07:37:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB988C6426;
-        Thu, 16 Mar 2023 04:36:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0ABE7B82129;
-        Thu, 16 Mar 2023 11:36:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01E91C433EF;
-        Thu, 16 Mar 2023 11:36:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678966613;
-        bh=O9HMPyWgeiI0jJRwpx01XQshSoPMJEGZDfmKLwzW+UI=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=ZGcLDh0kp6YPPYl7JeOcz+d7GmBqXMYfTc8DIRfh4TnMDR0KR2VbAIXuPPhh0PsQC
-         7+9unTxXk+9S1TZ6uCkIV3kmtvaxajNlU7mhDLYPFarETP068RjpmUfWmZ0sR6YCib
-         fKJ8bG3/kvegAZAr3jEWawIuQlHgx8NI7wJ2omNRsno4pNblUXoTr+MaXejUqt8WO4
-         P/vMUl+YA+W3kvi4C1oxC1tOLvGe580mE3Q5FxU6pRqCywsxSeIAMzaC122BVWram4
-         cjwQ6se4WJ1r5CzsdXrfMCGK/PU3Xk9JrbFbSHhZjQV7N+6ZNHGUOaCOa/Zd3JJnul
-         LvL3cXAQLN8fA==
-Message-ID: <60e73395-f670-6eaa-0eb7-389553320a71@kernel.org>
-Date:   Thu, 16 Mar 2023 13:36:47 +0200
+        Thu, 16 Mar 2023 07:37:20 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33E3BC5AE1
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 04:37:01 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id x13so6403497edd.1
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 04:37:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678966619;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=AfGhbI5w3WuDswJbCQtfkPCMptbW1heMaZynDig3b6o=;
+        b=WdZEAyLcSkyP3jHiliNzzURVyP5bg0AhOJ/n1KD+xejldEkacpeekFFOUFx+zld37q
+         U9EEZKk6uTvjNmm3UZZSpWL2MlXnABLnKMcCOdnPawFhuhCC3VMOuegNF1qvL6zd9WgM
+         V507GkNiQG30Fj5zDyS0pi8sdPl1/sBVbh14SQGRObgzt6vNOd+8zSrqqi4sGKTuuPXC
+         TTVujg0DzKVp4ZIAjD/8lFnLO+i8MHz/q/sl3QRwK002rNkmNRflt1cK5NEOLpUMlgkR
+         POjrdhmPwHciq4cFWboHsEjP6oZ1SqATu6+yc9l5zY2xKj6TZ3Q7o+RkI0RAfcNjN4I8
+         l8Ng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678966619;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=AfGhbI5w3WuDswJbCQtfkPCMptbW1heMaZynDig3b6o=;
+        b=ACXP/gWJhx3IzW+0Ip7i5kMsdJOer+HWhRq7kiBTHnnBbDeDEHJzZMSJhQEVyUcu6n
+         iOgnMOpUw5VKL97wnzOyQ83p5NAfJImAY6dTbODMtS/HWGqOyq8mohohapMIBzFuUY4S
+         vZ8K6ourrjQ/twTz2Qf1j9FWhGaAPNtq8aKDZz8VlRKEr94a0ZaUKVG6WC7agpDzKYa3
+         +cOSu3lTdgcZwU+yxgaDX8UIVr295be7P+WQcpbVgdEvVaqL4qI+ECET9xvLSXuNQsoi
+         8m6jV/lULevJFCHjxiwt3wM0/fsKjiVwG+0WRG5Pz1rQWV3GQqYzCGvYsv2cnilpcyhd
+         Y6+Q==
+X-Gm-Message-State: AO0yUKX7yNFY1RPRXYp+lKcQ7xNDW1R2bj6uMSGCvWKVISvtM+u/TQut
+        M7uJ1RA0EzThVmBERHlGZy8sQw==
+X-Google-Smtp-Source: AK7set80wKzIShLBKFRFwgznGN61cTEyjNtx9HtLBiDrk9zBalX963QlSRikXu3lp1lrDTbm0tt4Fg==
+X-Received: by 2002:a05:6402:418:b0:4fc:52c0:df10 with SMTP id q24-20020a056402041800b004fc52c0df10mr6125485edv.26.1678966619655;
+        Thu, 16 Mar 2023 04:36:59 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:9827:5f65:8269:a95f? ([2a02:810d:15c0:828:9827:5f65:8269:a95f])
+        by smtp.gmail.com with ESMTPSA id si2-20020a170906cec200b008e68d2c11d8sm3728845ejb.218.2023.03.16.04.36.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Mar 2023 04:36:59 -0700 (PDT)
+Message-ID: <0ebf187d-972e-4228-d8a0-8c0ce02f642d@linaro.org>
+Date:   Thu, 16 Mar 2023 12:36:57 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [EXTERNAL] Re: [PATCH v4 4/5] soc: ti: pruss: Add helper
- functions to set GPI mode, MII_RT_event and XFR
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v29 1/7] dt-bindings: mediatek: add ethdr definition for
+ mt8195
 Content-Language: en-US
-To:     Md Danish Anwar <a0501179@ti.com>,
-        MD Danish Anwar <danishanwar@ti.com>,
-        "Andrew F. Davis" <afd@ti.com>, Suman Anna <s-anna@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Nishanth Menon <nm@ti.com>
-Cc:     linux-remoteproc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-omap@vger.kernel.org, srk@ti.com, devicetree@vger.kernel.org,
-        netdev@vger.kernel.org
-References: <20230313111127.1229187-1-danishanwar@ti.com>
- <20230313111127.1229187-5-danishanwar@ti.com>
- <d168e7dd-42a0-b728-5c4c-e97209c13871@kernel.org>
- <b1409f34-86b5-14e8-f352-5032aa57ca46@ti.com>
-From:   Roger Quadros <rogerq@kernel.org>
-In-Reply-To: <b1409f34-86b5-14e8-f352-5032aa57ca46@ti.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        =?UTF-8?B?TmFuY3kgTGluICjmnpfmrKPonqIp?= <Nancy.Lin@mediatek.com>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "chunkuang.hu@kernel.org" <chunkuang.hu@kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        =?UTF-8?B?U2luZ28gQ2hhbmcgKOW8teiIiOWciyk=?= 
+        <Singo.Chang@mediatek.com>,
+        "nathan@kernel.org" <nathan@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "daniel@ffwll.ch" <daniel@ffwll.ch>,
+        =?UTF-8?B?Q0sgSHUgKOiDoeS/iuWFiSk=?= <ck.hu@mediatek.com>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        Project_Global_Chrome_Upstream_Group 
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "clang-built-linux@googlegroups.com" 
+        <clang-built-linux@googlegroups.com>,
+        "ndesaulniers@google.com" <ndesaulniers@google.com>
+References: <20221227081011.6426-1-nancy.lin@mediatek.com>
+ <20221227081011.6426-2-nancy.lin@mediatek.com>
+ <4aff6a7a3b606f26ec793192d9c75774276935e0.camel@mediatek.com>
+ <2700bd6c-f00d-fa99-b730-2fcdf89089fa@linaro.org>
+ <1d65e8b2de708db18b5f7a0faaa53834e1002d9f.camel@mediatek.com>
+ <b04eb48e-c9aa-0404-33ec-bef623b8282f@linaro.org>
+ <e5ceec9e-d51b-2aeb-1db7-b79b151bd44c@collabora.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <e5ceec9e-d51b-2aeb-1db7-b79b151bd44c@collabora.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 16/03/2023 10:53, AngeloGioacchino Del Regno wrote:
 
-On 16/03/2023 13:05, Md Danish Anwar wrote:
-> Hi Roger,
+> Hello Krzysztof, Nancy,
 > 
-> On 15/03/23 17:52, Roger Quadros wrote:
->>
->>
->> On 13/03/2023 13:11, MD Danish Anwar wrote:
->>> From: Suman Anna <s-anna@ti.com>
->>>
->>> The PRUSS CFG module is represented as a syscon node and is currently
->>> managed by the PRUSS platform driver. Add easy accessor functions to set
->>> GPI mode, MII_RT event enable/disable and XFR (XIN XOUT) enable/disable
->>> to enable the PRUSS Ethernet usecase. These functions reuse the generic
->>> pruss_cfg_update() API function.
->>>
->>> Signed-off-by: Suman Anna <s-anna@ti.com>
->>> Co-developed-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
->>> Signed-off-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
->>> Signed-off-by: Puranjay Mohan <p-mohan@ti.com>
->>> Signed-off-by: MD Danish Anwar <danishanwar@ti.com>
->>> ---
->>>  drivers/soc/ti/pruss.c           | 60 ++++++++++++++++++++++++++++++++
->>>  include/linux/remoteproc/pruss.h | 22 ++++++++++++
->>>  2 files changed, 82 insertions(+)
->>>
->>> diff --git a/drivers/soc/ti/pruss.c b/drivers/soc/ti/pruss.c
->>> index 26d8129b515c..2f04b7922ddb 100644
->>> --- a/drivers/soc/ti/pruss.c
->>> +++ b/drivers/soc/ti/pruss.c
->>> @@ -203,6 +203,66 @@ static int pruss_cfg_update(struct pruss *pruss, unsigned int reg,
->>>  	return regmap_update_bits(pruss->cfg_regmap, reg, mask, val);
->>>  }
->>>  
->>> +/**
->>> + * pruss_cfg_gpimode() - set the GPI mode of the PRU
->>> + * @pruss: the pruss instance handle
->>> + * @pru_id: id of the PRU core within the PRUSS
->>> + * @mode: GPI mode to set
->>> + *
->>> + * Sets the GPI mode for a given PRU by programming the
->>> + * corresponding PRUSS_CFG_GPCFGx register
->>> + *
->>> + * Return: 0 on success, or an error code otherwise
->>> + */
->>> +int pruss_cfg_gpimode(struct pruss *pruss, enum pruss_pru_id pru_id,
->>> +		      enum pruss_gpi_mode mode)
->>> +{
->>> +	if (pru_id < 0 || pru_id >= PRUSS_NUM_PRUS)
->>> +		return -EINVAL;
->>> +
->>> +	if (mode < 0 || mode > PRUSS_GPI_MODE_MAX)
->>> +		return -EINVAL;
->>> +
->>> +	return pruss_cfg_update(pruss, PRUSS_CFG_GPCFG(pru_id),
->>> +				PRUSS_GPCFG_PRU_GPI_MODE_MASK,
->>> +				mode << PRUSS_GPCFG_PRU_GPI_MODE_SHIFT);
->>> +}
->>> +EXPORT_SYMBOL_GPL(pruss_cfg_gpimode);
->>> +
->>> +/**
->>> + * pruss_cfg_miirt_enable() - Enable/disable MII RT Events
->>> + * @pruss: the pruss instance
->>> + * @enable: enable/disable
->>> + *
->>> + * Enable/disable the MII RT Events for the PRUSS.
->>> + *
->>> + * Return: 0 on success, or an error code otherwise
->>> + */
->>> +int pruss_cfg_miirt_enable(struct pruss *pruss, bool enable)
->>> +{
->>> +	u32 set = enable ? PRUSS_MII_RT_EVENT_EN : 0;
->>> +
->>> +	return pruss_cfg_update(pruss, PRUSS_CFG_MII_RT,
->>> +				PRUSS_MII_RT_EVENT_EN, set);
->>> +}
->>> +EXPORT_SYMBOL_GPL(pruss_cfg_miirt_enable);
->>> +
->>> +/**
->>> + * pruss_cfg_xfr_enable() - Enable/disable XIN XOUT shift functionality
->>> + * @pruss: the pruss instance
->>> + * @enable: enable/disable
->>> + * @mask: Mask for PRU / RTU
->>
->> You should not expect the user to provide the mask but only
->> the core type e.g. 
->>
->> enum pru_type {
->>         PRU_TYPE_PRU = 0,
->>         PRU_TYPE_RTU,
->>         PRU_TYPE_TX_PRU,
->>         PRU_TYPE_MAX,
->> };
->>
->> Then you figure out the mask in the function.
->> Also check for invalid pru_type and return error if so.
->>
+> Since this series has reached v29, can we please reach an agreement on the bindings
+> to use here, so that we can get this finally upstreamed?
 > 
-> Sure Roger, I will create a enum and take it as parameter in API. Based on
-> these enum I will calculate mask and do XFR shifting inside the API
-> pruss_cfg_xfr_enable().
+> I will put some examples to try to get this issue resolved.
 > 
-> There are two registers for XFR shift.
+> ### Example 1: Constrain the number of GCE entries to *seven* array elements (7x4!)
 > 
-> #define PRUSS_SPP_XFER_SHIFT_EN                 BIT(1)
-> #define PRUSS_SPP_RTU_XFR_SHIFT_EN              BIT(3)
-> 
-> For PRU XFR shifting, the mask should be PRUSS_SPP_XFER_SHIFT_EN,
-> for RTU shifting mask should be PRUSS_SPP_RTU_XFR_SHIFT_EN and for PRU and RTU
-> shifting mask should be (PRUSS_SPP_XFER_SHIFT_EN | PRUSS_SPP_RTU_XFR_SHIFT_EN)
-> 
-> So the enum would be something like this.
-> 
-> /**
->  * enum xfr_shift_type - XFR shift type
->  * @XFR_SHIFT_PRU: Enables XFR shift for PRU
->  * @XFR_SHIFT_RTU: Enables XFR shift for RTU
->  * @XFR_SHIFT_PRU_RTU: Enables XFR shift for both PRU and RTU
+>    mediatek,gce-client-reg:
+>      $ref: /schemas/types.yaml#/definitions/phandle-array
+>      maxItems: 1
+>      description: The register of display function block to be set by gce.
+>        There are 4 arguments in this property, gce node, subsys id, offset and
+>        register size. The subsys id is defined in the gce header of each chips
+>        include/dt-bindings/gce/<chip>-gce.h, mapping to the register of display
+>        function block.
+>      items:
+>        minItems: 28
+>        maxItems: 28
+>        items:                     <----- this block doesn't seem to get checked :\
+>          - description: phandle of GCE
+>          - description: GCE subsys id
+>          - description: register offset
+>          - description: register size
 
-This is not required. User can call the API twice. once for PRU and once for RTU.
-
->  * @XFR_SHIFT_MAX: Total number of XFR shift types available.
->  *
->  */
-> 
-> enum xfr_shift_type {
->         XFR_SHIFT_PRU = 0,
->         XFR_SHIFT_RTU,
->         XFR_SHIFT_PRU_RTU,
->         XFR_SHIFT_MAX,
-> };
-
-Why do you need this new enum definition?
-We already have pru_type defined somewhere. You can move it to a public header
-if not there yet.
-
-enum pru_type {
-         PRU_TYPE_PRU = 0,
-         PRU_TYPE_RTU,
-         PRU_TYPE_TX_PRU,
-         PRU_TYPE_MAX,
-};
-
+This is what we would like to have but it requires exception in
+dtschema. Thus:
 
 > 
-> In pruss_cfg_xfr_enable() API, I will use switch case, and for first three
-> enums, I will calculate the mask.
 > 
-> If input is anything other than first three, I will retun -EINVAL. This will
-> serve as check for valid xfr_shift_type.
+> ### Example 2: Don't care about constraining the number of arguments
 > 
-> The API will look like this.
-> 
-> int pruss_cfg_xfr_enable(struct pruss *pruss, enum xfr_shift_type xfr_type,
-> 			 bool enable);
-> {
-> 	u32 mask;
-> 
-> 	switch (xfr_type) {
-> 	case XFR_SHIFT_PRU:
-> 		mask = PRUSS_SPP_XFER_SHIFT_EN;
-> 		break;
-> 	case XFR_SHIFT_RTU:
-> 		mask = PRUSS_SPP_RTU_XFR_SHIFT_EN;
-> 		break;
-> 	case XFR_SHIFT_PRU_RTU:
-> 		mask = PRUSS_SPP_XFER_SHIFT_EN | PRUSS_SPP_RTU_XFR_SHIFT_EN;
-> 		break;
-> 	default:
-> 		return -EINVAL;
-> 	}
-> 
-> 	u32 set = enable ? mask : 0;
-> 
-> 	return pruss_cfg_update(pruss, PRUSS_CFG_SPP, mask, set);
-> }
-> 
-> This entire change I will keep as part of this patch only.
-> 
-> Please let me know if this looks OK to you.
-> 
-> 
+>    mediatek,gce-client-reg:
+>      $ref: /schemas/types.yaml#/definitions/phandle-array
+>      maxItems: 1
+>      description: The register of display function block to be set by gce.
+>        There are 4 arguments in this property, gce node, subsys id, offset and
+>        register size. The subsys id is defined in the gce header of each chips
+>        include/dt-bindings/gce/<chip>-gce.h, mapping to the register of display
+>        function block.
 
-cheers,
--roger
+use this.
+
+Best regards,
+Krzysztof
+
