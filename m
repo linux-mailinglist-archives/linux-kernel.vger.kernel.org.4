@@ -2,210 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 956CF6BC90D
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 09:26:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E89546BC93B
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 09:33:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229966AbjCPI0l convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 16 Mar 2023 04:26:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60562 "EHLO
+        id S230201AbjCPIdd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 04:33:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbjCPI0i (ORCPT
+        with ESMTP id S230122AbjCPIda (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 04:26:38 -0400
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBC5EB4F49;
-        Thu, 16 Mar 2023 01:26:13 -0700 (PDT)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 8944824E231;
-        Thu, 16 Mar 2023 16:15:09 +0800 (CST)
-Received: from EXMBX162.cuchost.com (172.16.6.72) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 16 Mar
- 2023 16:15:09 +0800
-Received: from [192.168.120.42] (171.223.208.138) by EXMBX162.cuchost.com
- (172.16.6.72) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 16 Mar
- 2023 16:15:08 +0800
-Message-ID: <d2bb7fa5-206f-2059-bde0-b65e1acc44de@starfivetech.com>
-Date:   Thu, 16 Mar 2023 16:15:06 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v7 4/6] dt-bindings: net: Add support StarFive dwmac
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <linux-riscv@lists.infradead.org>, <netdev@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Yanhong Wang <yanhong.wang@starfivetech.com>,
-        Tommaso Merciai <tomm.merciai@gmail.com>
-References: <20230316043714.24279-1-samin.guo@starfivetech.com>
- <20230316043714.24279-5-samin.guo@starfivetech.com>
- <cfeec762-de75-f90f-7ba1-6c0bd8b70dff@linaro.org>
- <93a3b4bb-35a4-da7c-6816-21225b42f79b@starfivetech.com>
- <9038dba0-6f72-44a1-9f57-1c08b03b9c31@linaro.org>
-From:   Guo Samin <samin.guo@starfivetech.com>
-In-Reply-To: <9038dba0-6f72-44a1-9f57-1c08b03b9c31@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Originating-IP: [171.223.208.138]
-X-ClientProxiedBy: EXCAS061.cuchost.com (172.16.6.21) To EXMBX162.cuchost.com
- (172.16.6.72)
-X-YovoleRuleAgent: yovoleflag
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 16 Mar 2023 04:33:30 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3A4360432;
+        Thu, 16 Mar 2023 01:33:06 -0700 (PDT)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32G7D1Vj031993;
+        Thu, 16 Mar 2023 08:15:18 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : subject
+ : date : message-id : in-reply-to : references; s=qcppdkim1;
+ bh=okuHmuDRoxgH78pBz+bK8iU6YeuBgRv0iFYAkXwrh4E=;
+ b=IyGv2aYhF8aXuQ4H5EIj4JvR7Qzre4pWnfeQMLPc/jFLX70BYe7d28YVVVm4iU4MRHu5
+ hj5TznEpxEl6eXKt9mg6YEUoMZXD+6xoVqCSHiWqE6j5+nj8LSfQ1ei9F2q3VVMbxPMc
+ G69NBt5MtJwFOrVRoPIwYk6Z/Lrl/cNDdpiIgeW3b20PwQKV0DZG/Xd7EAARJQEopX+r
+ GUlvT7sJuiKxFk6ezY75J+caliI5Q+9aJNZzgZ33jvUzrRuES4n3j4HAB4qbRTBVjW7v
+ HPQ25+mkf3iV/jT74kXXUIZ8SPT9qV9yAzPre/l6C242D2E8HO1161lh21UaiWMUQQI1 8A== 
+Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pbpya1509-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 16 Mar 2023 08:15:17 +0000
+Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 32G8FDKQ008640;
+        Thu, 16 Mar 2023 08:15:13 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 3p8jqks0hr-1;
+        Thu, 16 Mar 2023 08:15:13 +0000
+Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32G8FDoL008635;
+        Thu, 16 Mar 2023 08:15:13 GMT
+Received: from vboma-linux.qualcomm.com (vboma-linux.qualcomm.com [10.204.65.94])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 32G8FDJB008634;
+        Thu, 16 Mar 2023 08:15:13 +0000
+Received: by vboma-linux.qualcomm.com (Postfix, from userid 72083)
+        id 8A57D900889; Thu, 16 Mar 2023 13:45:12 +0530 (IST)
+From:   quic_vboma@quicinc.com
+To:     Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        Vikash Garodia <quic_vgarodia@quicinc.com>,
+        Viswanath Boma <quic_vboma@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH V3 0/1] Fix for VP9 DRC and Decoder STOP issue.
+Date:   Thu, 16 Mar 2023 13:45:08 +0530
+Message-Id: <20230316081509.12201-1-quic_vboma@quicinc.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20230202064712.5804-2-quic_vboma@quicinc.com>
+References: <20230202064712.5804-2-quic_vboma@quicinc.com>
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: Zg9nLEaivc4kwYk6dEF3Zw-8NGLjTgZm
+X-Proofpoint-GUID: Zg9nLEaivc4kwYk6dEF3Zw-8NGLjTgZm
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-16_05,2023-03-15_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ mlxlogscore=836 spamscore=0 phishscore=0 bulkscore=0 impostorscore=0
+ adultscore=0 priorityscore=1501 malwarescore=0 suspectscore=0
+ clxscore=1015 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303150002 definitions=main-2303160069
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,
+        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Viswanath Boma <quic_vboma@quicinc.com>
 
+Fixed indent comments, ensured rebase and checkpatch with --strict.
+Tested the changes on v5.15 and v5.4 kernels .
+For testing Chrome Utilities were used .
 
-Re: [PATCH v7 4/6] dt-bindings: net: Add support StarFive dwmac
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-to: Guo Samin <samin.guo@starfivetech.com>, linux-riscv@lists.infradead.org, netdev@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-data: 2023/3/16
+Viswanath Boma (1):
+  venus: Enable sufficient sequence change support for sc7180 and fix
+    for Decoder STOP command issue.
 
-> On 16/03/2023 09:02, Guo Samin wrote:
->>
->>
->> -------- 原始信息 --------
->> 主题: Re: [PATCH v7 4/6] dt-bindings: net: Add support StarFive dwmac
->> From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> 收件人: Samin Guo <samin.guo@starfivetech.com>, linux-riscv@lists.infradead.org, netdev@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
->> 日期: 2023/3/16
->>
->>> On 16/03/2023 05:37, Samin Guo wrote:
->>>> From: Yanhong Wang <yanhong.wang@starfivetech.com>
->>>>
->>>> Add documentation to describe StarFive dwmac driver(GMAC).
->>>>
->>> Thank you for your patch. There is something to discuss/improve.
->>>
->>>> Signed-off-by: Yanhong Wang <yanhong.wang@starfivetech.com>
->>>> Signed-off-by: Samin Guo <samin.guo@starfivetech.com>
->>>> Tested-by: Tommaso Merciai <tomm.merciai@gmail.com>
->>>> ---
->>>>  .../devicetree/bindings/net/snps,dwmac.yaml   |   1 +
->>>>  .../bindings/net/starfive,jh7110-dwmac.yaml   | 130 ++++++++++++++++++
->>>>  MAINTAINERS                                   |   6 +
->>>>  3 files changed, 137 insertions(+)
->>>>  create mode 100644 Documentation/devicetree/bindings/net/starfive,jh7110-dwmac.yaml
->>>>
->>>> diff --git a/Documentation/devicetree/bindings/net/snps,dwmac.yaml b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
->>>> index e4519cf722ab..245f7d713261 100644
->>>> --- a/Documentation/devicetree/bindings/net/snps,dwmac.yaml
->>>> +++ b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
->>>> @@ -91,6 +91,7 @@ properties:
->>>>          - snps,dwmac-5.20
->>>>          - snps,dwxgmac
->>>>          - snps,dwxgmac-2.10
->>>> +        - starfive,jh7110-dwmac
->>>>  
->>>>    reg:
->>>>      minItems: 1
->>>> diff --git a/Documentation/devicetree/bindings/net/starfive,jh7110-dwmac.yaml b/Documentation/devicetree/bindings/net/starfive,jh7110-dwmac.yaml
->>>> new file mode 100644
->>>> index 000000000000..b59e6bd8201f
->>>> --- /dev/null
->>>> +++ b/Documentation/devicetree/bindings/net/starfive,jh7110-dwmac.yaml
->>>> @@ -0,0 +1,130 @@
->>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->>>> +# Copyright (C) 2022 StarFive Technology Co., Ltd.
->>>> +%YAML 1.2
->>>> +---
->>>> +$id: http://devicetree.org/schemas/net/starfive,jh7110-dwmac.yaml#
->>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>>> +
->>>> +title: StarFive JH7110 DWMAC glue layer
->>>> +
->>>> +maintainers:
->>>> +  - Emil Renner Berthing <kernel@esmil.dk>
->>>> +  - Samin Guo <samin.guo@starfivetech.com>
->>>> +
->>>> +select:
->>>> +  properties:
->>>> +    compatible:
->>>> +      contains:
->>>> +        enum:
->>>> +          - starfive,jh7110-dwmac
->>>> +  required:
->>>> +    - compatible
->>>> +
->>>> +properties:
->>>> +  compatible:
->>>> +    items:
->>>> +      - enum:
->>>> +          - starfive,jh7110-dwmac
->>>> +      - const: snps,dwmac-5.20
->>>> +
->>>
->>> reg:
->>>   maxItems: 1
->>
->>>
->>>> +  clocks:
->>>> +    items:
->>>> +      - description: GMAC main clock
->>>> +      - description: GMAC AHB clock
->>>> +      - description: PTP clock
->>>> +      - description: TX clock
->>>> +      - description: GTX clock
->>>> +
->>>> +  clock-names:
->>>> +    items:
->>>> +      - const: stmmaceth
->>>> +      - const: pclk
->>>> +      - const: ptp_ref
->>>> +      - const: tx
->>>> +      - const: gtx
->>>> +
->>>
->>> interrupts: ???
->>>
->>
->> Hi Krzysztof, 
->>
->> snps,dwmac.yaml has defined the reg/interrupt/interrupt-names nodes,
->> and the JH7110 SoC is also applicable.
->> Maybe just add reg/interrupt/interrupt-names to the required ?
-> 
-> You need to constrain them.
+ drivers/media/platform/qcom/venus/core.h       | 18 ++++++++++++++++++
+ drivers/media/platform/qcom/venus/hfi_cmds.c   |  1 +
+ drivers/media/platform/qcom/venus/hfi_helper.h |  2 ++
+ drivers/media/platform/qcom/venus/hfi_msgs.c   | 11 +++++++++--
+ drivers/media/platform/qcom/venus/vdec.c       | 12 +++++++++++-
+ 5 files changed, 41 insertions(+), 3 deletions(-)
 
-
-I see. I will add reg constraints in the next version, thanks.
-
-I have one more question, the interrupts/interrup-names of JH7110 SoC's gmac are exactly the same as snps,dwmac.yaml,
-do these also need to be constrained?
-
-
-Best regards,
-Samin
-> 
->>
->>
->>   required:
->>     - compatible
->> +   - reg
->>     - clocks
->>     - clock-names
->> +   - interrupts
->> +   - interrupt-names
->>     - resets
->>     - reset-names
-> Best regards,
-> Krzysztof
-> 
-
+-- 
+2.17.1
 
