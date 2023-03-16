@@ -2,112 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36D1D6BC97E
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 09:42:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 001966BC986
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 09:43:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230399AbjCPImU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 04:42:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58912 "EHLO
+        id S230434AbjCPInl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 04:43:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230503AbjCPImI (ORCPT
+        with ESMTP id S230388AbjCPIni (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 04:42:08 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4928F769DF
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 01:41:59 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id a32so839975ljq.1
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 01:41:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678956118;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=CvqxWDG/7oYUqZnc4BrFMUBnsmZoft98lZutj4XXS0Q=;
-        b=trEEnoYJqaMDyRD7Zwhhis3vi4Jry9EI9Ow7TjvDlvWPXiQkEpsNkAPMdi93rz376K
-         dSkCQ+8uW01Bo0Iex+7YcpdmB6N3pOjVSZrhYUjr2w4rS09pAmTD/lAl7uiRR8aDcwAf
-         Pz/7W7eSOI+EE6TD//Qn8GjEhTkQrSLh92xMeJfurwL61el5YGXL0cRu+gdyiQqqIHpa
-         DOvaK5MVPEv7hB9A+0Az+OHYSFwswck1TGxO0DNJRHshdz+N3csqo17YGFXKKZk2pXdE
-         JbJcGqCCxRYPNeVL5wl4XmnuAeFTzI02hu937ehp90XYQkCqAYCQGVzofSGy7ItYKT7D
-         08uA==
+        Thu, 16 Mar 2023 04:43:38 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41CF12A145
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 01:42:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678956175;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZNIt6/EC2fPTtrcmtD4NvPKR+xt/u6QnYqo+DbsIIYU=;
+        b=eSAELSJOcz1Kt89EymhhhmK0us+MyT8vh2Dr2tQiWdrQEyFkKSGS8adxwZuoSLKxvtfTo8
+        KXXjqeOvy9UUaGoyfPtUaeqMRjBg1HFypib3KtdgmBeEiLb9NL8BaMIF0je2YmHO9qMQly
+        JFgAlXvLRwhSZFzdYYV2HiZAcklxezo=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-34-t7BBDUwCOlK1CjU8L0AM-A-1; Thu, 16 Mar 2023 04:42:53 -0400
+X-MC-Unique: t7BBDUwCOlK1CjU8L0AM-A-1
+Received: by mail-wm1-f70.google.com with SMTP id bd27-20020a05600c1f1b00b003ed5cf99f0cso308180wmb.1
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 01:42:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678956118;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20210112; t=1678956173;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CvqxWDG/7oYUqZnc4BrFMUBnsmZoft98lZutj4XXS0Q=;
-        b=NDkQT4uh3c8sWRrSdNm41AcV2Q0adL92yezUOW4LyIFm9uGfLhJKvnH2F0d+WnoGKO
-         iDg3ep81GuLWWKHGNXiCEsuuAewnANTwe3nOgFGWjtr947dtFUW4WD6+YXVsFM2PbVSn
-         dTO8AtSSISzOtyq638u1tvX1GHJZHGsvYFXSwvIX4S8v0qjpEzFMJAihoOjI8kkXHEmE
-         VdMtPyok8uiIAwzRgndLzO3byfck5aM4TBS2vF9ek9BiQiXtVMpnXU0WgKbihlh6BmI5
-         xHo/S12oWBreMy/iMZWG+O4tQ3Go8J22pRcfpec9+s5gJfkjfBkNFm3YJqt08mLB/pwI
-         hWCg==
-X-Gm-Message-State: AO0yUKWvZV2I2qM8zzYP/ePAajT0eOixKg5pv5gIjH6tjZ70+CoiYlDF
-        mkq+j+2ciF/PTXop5HX5Z51H/abL7aZo+yoPJeI=
-X-Google-Smtp-Source: AK7set8ibbso0egaUkLYL3mvPXxFmOVW8mALfy3A5I9IbOCGGR61CZdH2DONtdhfk/YFVJV7Vnp9VA==
-X-Received: by 2002:a05:651c:211b:b0:28b:6d76:e9ce with SMTP id a27-20020a05651c211b00b0028b6d76e9cemr2271598ljq.23.1678956117715;
-        Thu, 16 Mar 2023 01:41:57 -0700 (PDT)
-Received: from [192.168.1.101] (abyj16.neoplus.adsl.tpnet.pl. [83.9.29.16])
-        by smtp.gmail.com with ESMTPSA id x1-20020a2e9c81000000b002958937e9cbsm1154544lji.99.2023.03.16.01.41.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Mar 2023 01:41:57 -0700 (PDT)
-Message-ID: <5325fab5-7414-61dd-3fb8-a20fde9a1564@linaro.org>
-Date:   Thu, 16 Mar 2023 09:41:55 +0100
+        bh=ZNIt6/EC2fPTtrcmtD4NvPKR+xt/u6QnYqo+DbsIIYU=;
+        b=eA3uNOlP1z2TXjZVnIIKCBpGr3snYpjMFBUOpWJdU//bk+l6/GlZ8b5dpGbsDCxB1q
+         YS8rro2rpHEnlZJRfUmy3q185knBZlwsAKKGFOQS9zmpxw+zw+NCsH1fX15LayURkIaQ
+         M1++sc96q5nFBP204drqCzO+UG7f8HSHYutDGtzcvuEdrUtasvaBDYy3mWyj9Fb6A5Vr
+         5g/Jl2gJQQfhl6rHq4Aa7I6ybeJkn4zkFyQgenMNBfOKjWOqf4ttZc9Njs8vg6SZFCqY
+         BAFPM0GultkJmk0Eh90qe3o4maSCuVIehenE5NsqchHNBTLkrV0fRVZYiEoqU97Hp/6+
+         wVpg==
+X-Gm-Message-State: AO0yUKUtX//nmJl0AanV2+h9AOJkg9hXrkP1PsX8rCHG/L4lpWQhRX1R
+        9gWC7mErhcIlSvuj7pj1on+/gzFGCfKYBpZWjgzH46PtN2tIyC+TgLN75L/uL7QZMeZWcbnoI5r
+        eh1bwvgHGVm0LEh4j/msHKVaR
+X-Received: by 2002:a05:600c:450b:b0:3eb:2de9:8aed with SMTP id t11-20020a05600c450b00b003eb2de98aedmr19691722wmo.41.1678956172846;
+        Thu, 16 Mar 2023 01:42:52 -0700 (PDT)
+X-Google-Smtp-Source: AK7set+StsW8ItLxY7viETFKNcN8XIJEpkb0A6sN2+0X6h0DH3Cm81PlzHGjafdM1NdabSKvBVlFOQ==
+X-Received: by 2002:a05:600c:450b:b0:3eb:2de9:8aed with SMTP id t11-20020a05600c450b00b003eb2de98aedmr19691708wmo.41.1678956172618;
+        Thu, 16 Mar 2023 01:42:52 -0700 (PDT)
+Received: from sgarzare-redhat (host-82-57-51-170.retail.telecomitalia.it. [82.57.51.170])
+        by smtp.gmail.com with ESMTPSA id o13-20020a5d4a8d000000b002c5534db60bsm6673269wrq.71.2023.03.16.01.42.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Mar 2023 01:42:51 -0700 (PDT)
+Date:   Thu, 16 Mar 2023 09:42:48 +0100
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     virtualization@lists.linux-foundation.org,
+        Andrey Zhadchenko <andrey.zhadchenko@virtuozzo.com>,
+        eperezma@redhat.com, netdev@vger.kernel.org, stefanha@redhat.com,
+        linux-kernel@vger.kernel.org,
+        "Michael S. Tsirkin" <mst@redhat.com>, kvm@vger.kernel.org
+Subject: Re: [PATCH v2 7/8] vdpa_sim: replace the spinlock with a mutex to
+ protect the state
+Message-ID: <20230316084248.woh6dksgpu2ycn64@sgarzare-redhat>
+References: <20230302113421.174582-1-sgarzare@redhat.com>
+ <20230302113421.174582-8-sgarzare@redhat.com>
+ <CACGkMEuCUBQeg0gLUjBXff=zMf-=qJqhMpdeUvTDk55Gz6tAVA@mail.gmail.com>
+ <CACGkMEv=MkGUUP_xv9V5q+gneLm41yKqJXoWp4cYLK8Cf95oUw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH V3 0/1] Fix for VP9 DRC and Decoder STOP issue.
-To:     quic_vboma@quicinc.com,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        Vikash Garodia <quic_vgarodia@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230202064712.5804-2-quic_vboma@quicinc.com>
- <20230316081509.12201-1-quic_vboma@quicinc.com>
-Content-Language: en-US
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230316081509.12201-1-quic_vboma@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CACGkMEv=MkGUUP_xv9V5q+gneLm41yKqJXoWp4cYLK8Cf95oUw@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Mar 14, 2023 at 01:31:25PM +0800, Jason Wang wrote:
+>On Tue, Mar 14, 2023 at 1:29 PM Jason Wang <jasowang@redhat.com> wrote:
+>>
+>> On Thu, Mar 2, 2023 at 7:35 PM Stefano Garzarella <sgarzare@redhat.com> wrote:
+>> >
+>> > The spinlock we use to protect the state of the simulator is sometimes
+>> > held for a long time (for example, when devices handle requests).
+>> >
+>> > This also prevents us from calling functions that might sleep (such as
+>> > kthread_flush_work() in the next patch), and thus having to release
+>> > and retake the lock.
+>> >
+>> > For these reasons, let's replace the spinlock with a mutex that gives
+>> > us more flexibility.
+>> >
+>> > Suggested-by: Jason Wang <jasowang@redhat.com>
+>> > Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
+>>
+>> Acked-by: Jason Wang <jasowang@redhat.com>
+>>
+>> Thanks
+>
+>Btw, though it looks fine but we'd better double confirm virtio_vdpa works well.
 
+I tested it, but I will do it more carefully to make sure everything
+is okay.
 
-On 16.03.2023 09:15, quic_vboma@quicinc.com wrote:
-> From: Viswanath Boma <quic_vboma@quicinc.com>
-Please fix your git send-email config to include your first and last
-name in the emails you send.
+>
+>(I think so since there's transport that might sleep).
 
-Please send next versions as a standalone thread, not in reply to the
-previous ones.
+I see.
 
-> 
-> Fixed indent comments, ensured rebase and checkpatch with --strict.
-> Tested the changes on v5.15 and v5.4 kernels .
-You're submitting changes to the mainline kernel, not to v5.15 or v5.4.
-Please validate it against linux-next/master.
+Thanks,
+Stefano
 
-Konrad
-> For testing Chrome Utilities were used .
-> 
-> Viswanath Boma (1):
->   venus: Enable sufficient sequence change support for sc7180 and fix
->     for Decoder STOP command issue.
-> 
->  drivers/media/platform/qcom/venus/core.h       | 18 ++++++++++++++++++
->  drivers/media/platform/qcom/venus/hfi_cmds.c   |  1 +
->  drivers/media/platform/qcom/venus/hfi_helper.h |  2 ++
->  drivers/media/platform/qcom/venus/hfi_msgs.c   | 11 +++++++++--
->  drivers/media/platform/qcom/venus/vdec.c       | 12 +++++++++++-
->  5 files changed, 41 insertions(+), 3 deletions(-)
-> 
