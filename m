@@ -2,121 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0B7B6BD615
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 17:43:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F5686BD66C
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 17:56:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230429AbjCPQm7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 12:42:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33352 "EHLO
+        id S229863AbjCPQ4A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 12:56:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbjCPQm5 (ORCPT
+        with ESMTP id S230329AbjCPQz6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 12:42:57 -0400
-Received: from proxima.lasnet.de (proxima.lasnet.de [78.47.171.185])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F445AE110;
-        Thu, 16 Mar 2023 09:42:24 -0700 (PDT)
-Received: from [192.168.2.51] (p5dd0da05.dip0.t-ipconnect.de [93.208.218.5])
+        Thu, 16 Mar 2023 12:55:58 -0400
+X-Greylist: delayed 564 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 16 Mar 2023 09:55:56 PDT
+Received: from bmailout2.hostsharing.net (bmailout2.hostsharing.net [IPv6:2a01:37:3000::53df:4ef0:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6259E67011;
+        Thu, 16 Mar 2023 09:55:56 -0700 (PDT)
+Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: stefan@datenfreihafen.org)
-        by proxima.lasnet.de (Postfix) with ESMTPSA id F18ECC03A4;
-        Thu, 16 Mar 2023 17:41:26 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=datenfreihafen.org;
-        s=2021; t=1678984887;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=dIoqtcJzu1esglgGJt69EUsY55OJna6FV1+aLxNNeak=;
-        b=Xbu11MtOA2RdwHy+5MUfW9qGDt+SjZDSB33nJ6y+zrFImNjUePKW2bWShVABm1CCT0Z39U
-        9fJVPfyMO0Fl9XlyC9iqyhlOeQNdPbY/pQlfriiwNJii/hMTEKmn0SF/75dCHSCf+gXuSq
-        LARKRPNMjQ18KUDfsUrvHY9EFpjbvq1ixMTxQE50ouvQg5BIFuGeY8iwxPsMhtve67ZqGo
-        Lt/ErkpkLWFJet3kfdvhbO6m34Qw0ASkH1hltKR7lPSraydiu+c/+8KU0zZzOxzAXW0O0G
-        cXrAMzT0uYWCKZcwhkHL0r3wmeNzs1T6uF8G8J1W77JQM57F1nUZN1KE6QQATQ==
-Message-ID: <996f0981-98f4-5077-12b6-bb093bbd28be@datenfreihafen.org>
-Date:   Thu, 16 Mar 2023 17:41:26 +0100
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "*.hostsharing.net", Issuer "RapidSSL Global TLS RSA4096 SHA256 2022 CA1" (verified OK))
+        by bmailout2.hostsharing.net (Postfix) with ESMTPS id 9B19D2800C911;
+        Thu, 16 Mar 2023 17:41:27 +0100 (CET)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+        id 907DD2D3D9; Thu, 16 Mar 2023 17:41:27 +0100 (CET)
+Date:   Thu, 16 Mar 2023 17:41:27 +0100
+From:   Lukas Wunner <lukas@wunner.de>
+To:     Karol Herbst <kherbst@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+        linux-pci@vger.kernel.org, nouveau@lists.freedesktop.org
+Subject: Re: [PATCH] PCI: stop spamming info in quirk_nvidia_hda
+Message-ID: <20230316164127.GA5476@wunner.de>
+References: <20230316143122.2377354-1-kherbst@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2 12/14] mac802154: Rename kfree_rcu() to
- kvfree_rcu_mightsleep()
-Content-Language: en-US
-To:     "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        Alexander Aring <alex.aring@gmail.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        David Girault <david.girault@qorvo.com>
-Cc:     "Paul E . McKenney" <paulmck@kernel.org>,
-        Alexander Aring <aahringo@redhat.com>,
-        linux-wpan@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230315181902.4177819-1-joel@joelfernandes.org>
- <20230315181902.4177819-12-joel@joelfernandes.org>
-From:   Stefan Schmidt <stefan@datenfreihafen.org>
-In-Reply-To: <20230315181902.4177819-12-joel@joelfernandes.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230316143122.2377354-1-kherbst@redhat.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_NONE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello.
+On Thu, Mar 16, 2023 at 03:31:22PM +0100, Karol Herbst wrote:
+> Users kept complaining about those messages and it's a little spammy on
+> prime systems so turn it into a debug print.
+> 
+> Cc: Bjorn Helgaas <bhelgaas@google.com>
+> Cc: Lukas Wunner <lukas@wunner.de>
+> Cc: linux-pci@vger.kernel.org
+> Cc: nouveau@lists.freedesktop.org
+> Fixes: b516ea586d71 ("PCI: Enable NVIDIA HDA controllers")
+> Signed-off-by: Karol Herbst <kherbst@redhat.com>
 
-On 15.03.23 19:18, Joel Fernandes (Google) wrote:
-> The k[v]free_rcu() macro's single-argument form is deprecated.
-> Therefore switch to the new k[v]free_rcu_mightsleep() variant. The goal
-> is to avoid accidental use of the single-argument forms, which can
-> introduce functionality bugs in atomic contexts and latency bugs in
-> non-atomic contexts.
-> 
-> The callers are holding a mutex so the context allows blocking. Hence
-> using the API with a single argument will be fine, but use its new name.
-> 
-> There is no functionality change with this patch.
-> 
-> Fixes: 57588c71177f ("mac802154: Handle passive scanning")
-> Reviewed-by: Paul E. McKenney <paulmck@kernel.org>
-> Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+Could you provide Link: tags to bugzillas or mailing list messages
+of those complaints so that the sentence sounds a little less like
+hand-waving?
+
+The point of the message is that if users see adverse effects as a
+result of exposing the hidden HDA controller, they get a hint in
+dmesg as to the cause.  Hopefully the existence of such adverse
+effects can be ruled out by now.
+
+Thanks,
+
+Lukas
+
 > ---
->   net/mac802154/scan.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
+>  drivers/pci/quirks.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/net/mac802154/scan.c b/net/mac802154/scan.c
-> index 9b0933a185eb..5c191bedd72c 100644
-> --- a/net/mac802154/scan.c
-> +++ b/net/mac802154/scan.c
-> @@ -52,7 +52,7 @@ static int mac802154_scan_cleanup_locked(struct ieee802154_local *local,
->   	request = rcu_replace_pointer(local->scan_req, NULL, 1);
->   	if (!request)
->   		return 0;
-> -	kfree_rcu(request);
-> +	kvfree_rcu_mightsleep(request);
->   
->   	/* Advertize first, while we know the devices cannot be removed */
->   	if (aborted)
-> @@ -403,7 +403,7 @@ int mac802154_stop_beacons_locked(struct ieee802154_local *local,
->   	request = rcu_replace_pointer(local->beacon_req, NULL, 1);
->   	if (!request)
->   		return 0;
-> -	kfree_rcu(request);
-> +	kvfree_rcu_mightsleep(request);
->   
->   	nl802154_beaconing_done(wpan_dev);
->   
-
-I just saw that there is a v2 of this patch. My ACK still stands as for v1.
-
-
-Acked-by: Stefan Schmidt <stefan@datenfreihafen.org>
-
-regards
-Stefan Schmidt
+> diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
+> index 44cab813bf951..b10c77bbe4716 100644
+> --- a/drivers/pci/quirks.c
+> +++ b/drivers/pci/quirks.c
+> @@ -5549,7 +5549,7 @@ static void quirk_nvidia_hda(struct pci_dev *gpu)
+>  	if (val & BIT(25))
+>  		return;
+>  
+> -	pci_info(gpu, "Enabling HDA controller\n");
+> +	pci_dbg(gpu, "Enabling HDA controller\n");
+>  	pci_write_config_dword(gpu, 0x488, val | BIT(25));
+>  
+>  	/* The GPU becomes a multi-function device when the HDA is enabled */
+> -- 
+> 2.39.2
