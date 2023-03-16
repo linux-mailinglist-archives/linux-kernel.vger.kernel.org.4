@@ -2,134 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09C806BDBB3
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 23:30:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 884056BDBB5
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 23:31:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229588AbjCPWam (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 18:30:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50570 "EHLO
+        id S229704AbjCPWbV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 18:31:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229673AbjCPWai (ORCPT
+        with ESMTP id S229494AbjCPWbS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 18:30:38 -0400
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2070.outbound.protection.outlook.com [40.107.22.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AFE61ADE4;
-        Thu, 16 Mar 2023 15:30:08 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=F6yTIkxfyzAh+WMUnUlsV5Th5B+ApuIb8XQYOUOuLjjlwrNYcbHqL/4RHQFMqNJlkJmIu6P4owz1MQFG4UpannhznqRwVyGazQFfQcMsH9qTHcQ5VGjc7JQ9aIhAonztk5Pxar+rL8y2jUuVBFfkvWUUwMaEj7+ns2E4w0b+ACB1c5PFuN0mOw/k30Y4K2bKKpzg7a3/ZNkil6niOBkqUbVZ7LKxi0lNFpmSiRB0TbiUHHAjtP8YsX5KaNnnA3pdrtkiyP21dcyPMfpvw/hAZ9hASy11iuzL0BzNKCcovS9U2f8ZJUMsoKUYKEMtemUxzFnHMsa6ZxrBZWpNy4b+og==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=zMRQRmgClOAcAoQqPKdoS+t5jSS7Idul7pXfJA1BgT4=;
- b=WjsdAZ37DHnV1FDbhKErAMkeUJ22V9pS8nZJdtDwXxNxIvTbJWpNVewCNOUcbkS6dSsjQPJ/mvKHk0zppCxLtWaKP6owuSXbmdMXOqkMInnfRnQt1/CqvHAsG23gR+pplQ29j2cEd3Tx3js/b7AMVgpfROng5ufUCAagUQGYJmo1zJfkWWNv65XpUzIa11XMITDUzcHdIBYt5LkXaAEAYKeRntKbo34/82yWeMsrZHXX0pWzSuyKrD3f1q5QzPOmY8qKQQqU2uQi1ewmuYXEtz/WsRESCrVnEF1oePhdKp+GpEQNVf6craE2oupZbGELDmQ1yBNk6mS381JJU57u3Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=wolfvision.net; dmarc=pass action=none
- header.from=wolfvision.net; dkim=pass header.d=wolfvision.net; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wolfvision.net;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zMRQRmgClOAcAoQqPKdoS+t5jSS7Idul7pXfJA1BgT4=;
- b=nw1Nzfqhiwb0Rg2R4X16PuID+cTcnkJMX5clwVFG8vEww77km4mxrtrUlNFvy0tdzH4lkVsNhs0VzQXCbfObL0UiUl8/z4ixNDhq9ZUtqdFTadlN2J2y4dKs7Ew6ijxBpMbFT/xVIlJmsDHRDfxeSCFW8vHlbRxUA0XlXzfWbpk=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=wolfvision.net;
-Received: from DU0PR08MB9155.eurprd08.prod.outlook.com (2603:10a6:10:416::5)
- by PAVPR08MB9460.eurprd08.prod.outlook.com (2603:10a6:102:316::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.33; Thu, 16 Mar
- 2023 22:29:56 +0000
-Received: from DU0PR08MB9155.eurprd08.prod.outlook.com
- ([fe80::6f4d:f868:c89:4db1]) by DU0PR08MB9155.eurprd08.prod.outlook.com
- ([fe80::6f4d:f868:c89:4db1%5]) with mapi id 15.20.6178.031; Thu, 16 Mar 2023
- 22:29:56 +0000
-Message-ID: <dd26836f-d54c-65d1-0acc-8a09745bb066@wolfvision.net>
-Date:   Thu, 16 Mar 2023 23:29:53 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 7/7] dt-bindings: display: add panel-timing property to
- sitronix,st7789v
-To:     Rob Herring <robh@kernel.org>,
-        Gerald Loacker <gerald.loacker@wolfvision.net>
-Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@gmail.com>,
+        Thu, 16 Mar 2023 18:31:18 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F802B328A
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 15:30:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679005803;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=PnePPKTKmaEIYsfyxDXD5WYxDmgciUFDMNuKm+FuJjM=;
+        b=aGJauynrOYKfLp0hRDgNx5TlK72+8HD/Ntb6nmYAPRHfOJjp5+vm6Vz/e3S/xUN2aL+ENQ
+        23IGsluy03rxthZYdHsstv5xX53AFQfpcXYGrNM7ohY1pHRYy1cxyyXAItLy9h2BZN0JNh
+        lRHc5fZE8SRP69dGSmp6Qa3lrDyntus=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-528-ritx13v_P327odB1VDEOKA-1; Thu, 16 Mar 2023 18:30:02 -0400
+X-MC-Unique: ritx13v_P327odB1VDEOKA-1
+Received: by mail-wr1-f69.google.com with SMTP id o13-20020adfa10d000000b002d34203df59so50385wro.9
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 15:30:01 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679005801;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=PnePPKTKmaEIYsfyxDXD5WYxDmgciUFDMNuKm+FuJjM=;
+        b=sayv92627qbDB+mp8MmPWa9cqJDXVpUc0rsexImvjPRTQ37BnSf5aGnc/wXjMM5GMh
+         CabH8Gu+WABqTX0soDoplHg31OaE8ckcwKtKZaxV9qYseqPaE3beLekZHoFlOG56FF3m
+         yRmiNntib0PzHpJ3MguruFrQaKsHoezLu3YLkPZj1/y3y4c1chGCGMXX3Cxc5lRBKPTr
+         Hy0oJaR2xPrgJtYr4em+Qv1W3LtQoBg/EnpwVWUMMspAwQmai8yR6ULv6AMnP1Jxi4TM
+         DCbXGYNZAHXg8n58BD3MUCP6O0sDLEYdNAs+Amuyw0Mz76d+RFCfp3Z7mAFzHfaqW8OL
+         YHwQ==
+X-Gm-Message-State: AO0yUKXowYBcRLgOLkfzrq3KGwGOygKPnliGLC4Ai25qxDiz98/1a61v
+        EJUAg6uCrFoVJpp5G00Gla3zFn+YwqOuji/vJs/CYjJIZTkGZ7p39p1KyeyVQ85DxJUMivTO+Gp
+        TzqPP3zQSwcS+gq6tCPGIj0wK
+X-Received: by 2002:a5d:56d2:0:b0:2d1:6104:76aa with SMTP id m18-20020a5d56d2000000b002d1610476aamr4059060wrw.2.1679005800793;
+        Thu, 16 Mar 2023 15:30:00 -0700 (PDT)
+X-Google-Smtp-Source: AK7set+pavBAwLwWKQ9EFH0kovHVMuq3+iTPxofStWBmSEUYWs+tWYytxbJKDvuLhUGIjUzpcr5HmA==
+X-Received: by 2002:a5d:56d2:0:b0:2d1:6104:76aa with SMTP id m18-20020a5d56d2000000b002d1610476aamr4059045wrw.2.1679005800473;
+        Thu, 16 Mar 2023 15:30:00 -0700 (PDT)
+Received: from localhost (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id d12-20020adffbcc000000b002c54e26bca5sm462701wrs.49.2023.03.16.15.30.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Mar 2023 15:30:00 -0700 (PDT)
+From:   Javier Martinez Canillas <javierm@redhat.com>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Arthur Grillo <arthurgrillo@riseup.net>,
+        =?utf-8?Q?Ma=C3=ADra?= Canal <mairacanal@riseup.net>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Maxime Ripard <maxime@cerno.tech>,
         Daniel Vetter <daniel@ffwll.ch>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maxime Ripard <mripard@kernel.org>
-References: <20230314115644.3775169-1-gerald.loacker@wolfvision.net>
- <20230314115644.3775169-8-gerald.loacker@wolfvision.net>
- <20230316215735.GA3940832-robh@kernel.org>
-Content-Language: en-US
-From:   Michael Riesch <michael.riesch@wolfvision.net>
-In-Reply-To: <20230316215735.GA3940832-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: ZR0P278CA0184.CHEP278.PROD.OUTLOOK.COM
- (2603:10a6:910:44::19) To DU0PR08MB9155.eurprd08.prod.outlook.com
- (2603:10a6:10:416::5)
+        David Airlie <airlied@gmail.com>,
+        David Gow <davidgow@google.com>,
+        =?utf-8?Q?Jos=C3=A9_Exp=C3=B3sito?= <jose.exposito89@gmail.com>,
+        dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH v2] drm/format-helper: Make conversion_buf_size()
+ support sub-byte pixel fmts
+In-Reply-To: <CAMuHMdUs0bXz1T41=bW0D1NwVYZyKUsrjCkF2hGsRPSt5+qvMA@mail.gmail.com>
+References: <20230307215039.346863-1-javierm@redhat.com>
+ <CAMuHMdUs0bXz1T41=bW0D1NwVYZyKUsrjCkF2hGsRPSt5+qvMA@mail.gmail.com>
+Date:   Thu, 16 Mar 2023 23:29:59 +0100
+Message-ID: <877cvgqqhk.fsf@minerva.mail-host-address-is-not-set>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU0PR08MB9155:EE_|PAVPR08MB9460:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3f601704-4a95-43dd-9667-08db266df834
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: gCZKK/zeYiRBZgEaNfu+LqrXqU+AOM5/zBsy0IV14+xfiGfIofKNWxu3Z4OEWZf1wdEhZoucoYraCKURhCIG28/Q2OTcBdHpo7rcrfGaeV3rDCyuKlF9UatfXX5+OV3rINLxMiigVwFHv5+p9f7J55NFUVpVzuYijmCuNyPbVjYQHncQzvVmC5GYk1y6qxgxngn/cMzHFH5oPbVju6+7qLBOHZpO5tOGQtAnKFCjC+sBDywGHBjdQfXTsMqNAw1WrPlHrARZAr6nigktiooOadPRCxV+qlAiMpi8AmrgegjV+CNpdoqezMpWwNETOLqEMZSCbl3vyBbU159M/4gK2Na959s4v3d2+NcmQqCtbzZG9PySUZPS9e2xXEWfXk4YoM6knfQgSOAU1Ahnkb2UERNpqNKtYDjt4DLmZNyZdAvFt5Pc/zXZwVPRh/Z1PMNWz2gUJT/YmM4oBFQAWCyHYjjlFXT+R4gv4Q5WKNA2pymU8pUrwezmV7ZCLIc/IVgBTX+6Nf0NMSQPwtqQjTXPAbbYNVMZlEcRKYQVxA9GudA5iNaopwey038oeepLqlp5cDshx/A3AzVVgeG+likbMTAci1oDOBdoatbZUnV+dhHvGDJVl5iFBoLBKvwt/lKKTaEwJxM1+lC1gXTz5+ujJcEKMWfJFuElQ0fCwmJ4tmI2QYQghpUYYNOhso8twgUa5mgO3ZLAFfhutoNDnAaTfhWTovwWFhSH5764Y0U1Csw=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR08MB9155.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(39850400004)(366004)(136003)(396003)(346002)(451199018)(6666004)(38100700002)(54906003)(6636002)(110136005)(31696002)(316002)(478600001)(83380400001)(86362001)(66556008)(66476007)(4326008)(8676002)(66946007)(41300700001)(7416002)(8936002)(36756003)(6486002)(5660300002)(2616005)(31686004)(2906002)(186003)(44832011)(6512007)(53546011)(6506007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Ky8xbkh1c3dQMElDdVdwaEdSUlpKTnRORUNTRERZK3V0OXhoNUdHalk1bXF1?=
- =?utf-8?B?SjQ4TVh4L1FUVThQT2QvdUpXelJQWDJYclFydUt3MVgwOXFyTnRqVDU3bWNM?=
- =?utf-8?B?QWRTSmRvTzNaalFzZnd6VnBDWmNyMklveGJiWEMrV2paYjNQRVVRcy9MUzBK?=
- =?utf-8?B?MGw1UEtDWG1VZ1FlMVJhZ2cwMURWZ1FHbDJ0UHY5LzZjNUVRMFp5UkxhbnF5?=
- =?utf-8?B?SzhGT1Q3Qy80QWNXOW1JNkVpd1h2SStReit4dW92Y2YzUzhiRHNwMncwSDdT?=
- =?utf-8?B?clZUTmllcDlZdnJCakF2QjZZWVR2QkxGdisyTk1tVEs4dnNQbnA1d3hZblBE?=
- =?utf-8?B?NjJaRjVraTQwb0lTb25IaGI4YkZ4WTNvR1FjMkxGbWtSWEppUmR2aElrVXBJ?=
- =?utf-8?B?azZJQ3BXWFRpb1dLMlFDWlJrSGVKTC9tOVZjdFJDRXlFYUsxL0JZYUtSSUl3?=
- =?utf-8?B?dHRFN1BzS3cwZlZGanlPRXEyK2hRdVk4T1l0eEFjak5kY3U0MGNEdk5yRUhn?=
- =?utf-8?B?QmtlZ01wS2svcDBnN3FDWEtiTEtJd2xGWFZhUGlMTHJ4ZTlPWDcvMExGL2lD?=
- =?utf-8?B?VlE2TUJWdktqalA4emtuUzFKVUZLaGpYbEx6OVFwdnZvMEhZR1lVYktPWUJG?=
- =?utf-8?B?bHUvU1lWV3BtbWU3dmdJdXVoZUs1QnhwcG1tai8wT3dGN1BibTczVzNpV3NC?=
- =?utf-8?B?Zmd6dmpNemJtVkdYMHhJRHdiNGJiN1lDaU9mQnFuWlk5OVorTXd6aUFHNW9y?=
- =?utf-8?B?SWY5NDE4cUM2UUxObUI1dFc0djZ1emtxRHoyeWZoSGh4VS9oQlU3YnZGQkhq?=
- =?utf-8?B?R1dPYWxyUEJtd25TWWxWNkQxQnkwRW1FckxlVUc1OE5nOEpBVXNZdVdmMDNK?=
- =?utf-8?B?cG1pQTkrNjVyTGNkZlF2TkEweXY0RVlydHpaQlJIY2ErK29NOHE5WFdmekE1?=
- =?utf-8?B?eFVMOEZZaUV4WDRyMEszTHRZSThXTE43QzRPdzFvRWxjZTdKNnRDRjFadkhH?=
- =?utf-8?B?VTlOVExNNG93SkZZTVlCQzl2eUlvSlJXbVBscTd1aDMvZjhzSnhuV2k5ZFNx?=
- =?utf-8?B?Tnh5SmNrRVZJcWt4YlRLdXd6U3UycVRVeWM4NHpTb0tCYkcyRENJWk0xMUNE?=
- =?utf-8?B?RHM3VVNnTWRrTlZLZ2d5MlRGamZVcitjUVhJVlV4SmVYTmsrOXlMbTcyaTNn?=
- =?utf-8?B?NVpScW1SZ3lEZWlNL3E1bHFIY0dTUTdxZm5yK2xyYWlYTk5pZSt0ZHgvUzV0?=
- =?utf-8?B?Q2JDYm51SDl5b29pTjVoQnFadDdVQnJVZmtIUFZFTjFxc3BHVWIzN0R6QUE0?=
- =?utf-8?B?NXNEcVYvYVhrOW5yeDhhTVhpNUZlQUlQZFRiMWJzQ3VxN0ZVTHJHWGplZm5B?=
- =?utf-8?B?NUVNL1JnWG1sbnk3Q3FVb1dnSE5xUm9sVzBIbXhreVUrQUIvNnIxSW5DUit1?=
- =?utf-8?B?TytEaTdHOXNMQ3ZWbjhFdWtva3NmdlRDMHNtZXNDQkZCaFlEcmxiWXU1dkRR?=
- =?utf-8?B?UC9IOFo0WE8rYVhTeU5CT2F4c3dJbTBQVnREc0J4WUJnNHV2eHNxWDR4bEpF?=
- =?utf-8?B?VC9jRjQrM2xoQ1VxQ3kvdi9TQ2tvWUxuNHZjSmRTVDNEWGN5Zi9kc0crRkda?=
- =?utf-8?B?T1g0dSs1SXJqYmV0LzRHVEpMd2VlRUVacjM3K3dPSjYwYnBrK1U0MExZeSt6?=
- =?utf-8?B?YVZPTm45OWt6TnZ1YUJQYktvRmM5MFJ1L3JINHcrcWg1bjFOVnBNcWY1TTVM?=
- =?utf-8?B?SnVoam5MM0FVWTFuNGVnVnFFYUJzYlNYQVgyZmJSZ3dIelZTTE8xeFZMU1JE?=
- =?utf-8?B?dUozQTR1aVBpMDJVUk9iZWhoaGRWT0hzRHRWVnVmTE13VVljd1FwbTB6Zk9K?=
- =?utf-8?B?RnZTKzRZK2g0cGJ1NW5MWktDV0hlYS8ySHRXR1cwNXVCVzMrdW1hT2k3UTN6?=
- =?utf-8?B?WWNOaVNWRUhOSytTV0RoWGR3dlVscHY1M0ZINzJmbEEzT2FkaVViMmdPWHk2?=
- =?utf-8?B?ZGlFaFhTaG5lM0prTFpQZWI0cTlOTnRVd0pYUFNQYXhPamtjbXp5OTVadTZG?=
- =?utf-8?B?aFJSTlc5cDdjMDdWOG1WdG54K2lNVU9YcVNHTXB6Y3VNZHozSG1oVXN1VVpZ?=
- =?utf-8?B?K3JxanltVFlGNjRMMTdMcEdSQ1VTMURTZDF6N0o2NDB1NFlEWjVzUHkrSE1s?=
- =?utf-8?B?M2xicGdIaXovdEJKdWZad0w2SmZWQnNESTdrNGNFQVFoSXNtSmtCZU9nc0Yw?=
- =?utf-8?Q?gjXLIEd2lW+AM9ClUTfGg2e0Fo7rkIrzolwhDX/CVE=3D?=
-X-OriginatorOrg: wolfvision.net
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3f601704-4a95-43dd-9667-08db266df834
-X-MS-Exchange-CrossTenant-AuthSource: DU0PR08MB9155.eurprd08.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Mar 2023 22:29:56.1950
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: e94ec9da-9183-471e-83b3-51baa8eb804f
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: zSW/DLxbgybNSXK0S/J1LoierR7fyJVu6bH48hxp9wefQeWQbGtqLqiQbuPUntK8BDzUXKFH31I7tJ6hp86+icrrUq0bLzkXVCz6smwQExM=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAVPR08MB9460
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -137,79 +85,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob,
+Geert Uytterhoeven <geert@linux-m68k.org> writes:
 
-On 3/16/23 22:57, Rob Herring wrote:
-> On Tue, Mar 14, 2023 at 12:56:44PM +0100, Gerald Loacker wrote:
->> The sitronix-st7789v driver now considers the panel-timing property.
-> 
-> I read the patch for that and still don't know 'why'. Commit messages 
-> should answer why.
-> 
->> Add the property to the documentation.
-> 
-> We generally don't put timings in DT for panels. Why is this one 
-> special?
+Hello Geert,
 
-For now, having the timings in the device tree allows for setting the
-hsync/vsync/de polarity.
+[...]
 
-As a next step, we aim to implement the partial mode feature of this
-panel. It is possible to use only a certain region of the panel, which
-is helpful e.g., when a part of the panel is occluded and should not be
-considered by DRM. We thought that this could be specified as timing in DT.
+>> +       if (!dst_pitch) {
+>> +               bpp = drm_format_info_bpp(dst_fi, 0);
+>> +               dst_pitch = DIV_ROUND_UP(drm_rect_width(clip) * bpp, 8);
+>
+> I know I'm a bit late to the party,  but here's actually a helper for that:
+>
+>     dst_pitch = drm_format_info_min_pitch(info, 0, drm_rect_width(clip));
+>
 
-(The hactive and vactive properties serve as dimensions of this certain
-region, of course. We still need to specify somehow the position of the
-region. Maybe with additional properties hactive-start and vactive-start?)
+Nice, I didn't notice this. I'll send a follow-up patch. Thanks!
 
-What do you think about that?
+-- 
+Best regards,
 
-Thanks and best regards,
-Michael
+Javier Martinez Canillas
+Core Platforms
+Red Hat
 
-> 
->>
->> Signed-off-by: Gerald Loacker <gerald.loacker@wolfvision.net>
->> ---
->>  .../display/panel/sitronix,st7789v.yaml         | 17 +++++++++++++++++
->>  1 file changed, 17 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/display/panel/sitronix,st7789v.yaml b/Documentation/devicetree/bindings/display/panel/sitronix,st7789v.yaml
->> index ed942cd3620f..8810f123dedf 100644
->> --- a/Documentation/devicetree/bindings/display/panel/sitronix,st7789v.yaml
->> +++ b/Documentation/devicetree/bindings/display/panel/sitronix,st7789v.yaml
->> @@ -21,6 +21,7 @@ properties:
->>    reset-gpios: true
->>    power-supply: true
->>    backlight: true
->> +  panel-timing: true
->>    port: true
->>    rotation: true
->>  
->> @@ -54,6 +55,22 @@ examples:
->>              spi-cpol;
->>              spi-cpha;
->>  
->> +            panel-timing {
->> +                clock-frequency = <7000000>;
->> +                hactive = <240>;
->> +                vactive = <320>;
->> +                hfront-porch = <38>;
->> +                hback-porch = <10>;
->> +                hsync-len = <10>;
->> +                vfront-porch = <8>;
->> +                vback-porch = <4>;
->> +                vsync-len = <4>;
->> +                hsync-active = <1>;
->> +                vsync-active = <1>;
->> +                de-active = <1>;
->> +                pixelclk-active = <1>;
->> +            };
->> +
->>              port {
->>                  panel_input: endpoint {
->>                      remote-endpoint = <&tcon0_out_panel>;
->> -- 
->> 2.37.2
->>
