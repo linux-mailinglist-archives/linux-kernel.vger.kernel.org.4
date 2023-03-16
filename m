@@ -2,90 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E07F6BDCA0
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 00:03:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 161346BDCA6
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 00:05:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229644AbjCPXDr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 19:03:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46282 "EHLO
+        id S230283AbjCPXFU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 19:05:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbjCPXDp (ORCPT
+        with ESMTP id S229804AbjCPXFP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 19:03:45 -0400
-Received: from mail-il1-f180.google.com (mail-il1-f180.google.com [209.85.166.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19CE2BD4E2;
-        Thu, 16 Mar 2023 16:03:44 -0700 (PDT)
-Received: by mail-il1-f180.google.com with SMTP id i19so1859322ila.10;
-        Thu, 16 Mar 2023 16:03:44 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679007823;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        Thu, 16 Mar 2023 19:05:15 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A514CE5016
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 16:05:14 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id d8so1895665pgm.3
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 16:05:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1679007914;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=b3vqXXLwqv2XRky9iyecIB+2xC8KFM8iq/pRksSGaDY=;
-        b=Rc68iAREGBNfwPETlbzxqRdLhJ0tVux0lNq79AdmnAYMx5Gw7GPuB6dtIuuYwQcwds
-         mL8nHZDVsc/hN1F42MHz0DX+jz+trRU4EMDB5Xn6kPiCo2X5reUkqO4XsyBklAz4HBmO
-         hqPJyx1SbL/61nkQa7QugOcexpB9jJjKSUs31Pu26oYFd75o0lniyTUv/t+nrbge/toZ
-         /2JEa1G6KheJYdUVdD6j+P9bU/8yWq16+pji6c3Q4Ri6zjF7JxM0DrJk7fRj/834GFC/
-         mtFtRXthflp0JtH0iDYBE9lr4ZS0luaK31ORwjaE34AcQ9XYuyK1gvLTcSx3cPE4KKoq
-         m89Q==
-X-Gm-Message-State: AO0yUKUoYGdsJBqRpsrKj4jIA8/Gkc6c7nhs/BgH0WjcM0mP1aazKj3V
-        O0RrpyDIth3YuHUASNC2xw==
-X-Google-Smtp-Source: AK7set+KtYnW8zMo/o5tGP6SAbrOZZwVFCpK7S1AMRI04tsXzGoeXfTQvecCDoQGfCwFP5RJ9D+uBw==
-X-Received: by 2002:a92:6a0c:0:b0:317:9c8b:c0a7 with SMTP id f12-20020a926a0c000000b003179c8bc0a7mr7745417ilc.11.1679007823331;
-        Thu, 16 Mar 2023 16:03:43 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.249])
-        by smtp.gmail.com with ESMTPSA id c5-20020a056e020bc500b0031112bb19e9sm158706ilu.54.2023.03.16.16.03.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Mar 2023 16:03:42 -0700 (PDT)
-Received: (nullmailer pid 4050407 invoked by uid 1000);
-        Thu, 16 Mar 2023 23:03:40 -0000
-Date:   Thu, 16 Mar 2023 18:03:40 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Neil Armstrong <neil.armstrong@linaro.org>
-Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, Will Deacon <will@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        linux-arm-msm@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Andersson <andersson@kernel.org>
-Subject: Re: [PATCH v3 05/12] dt-bindings: usb: snps,dwc3: document HS & SS
- OF graph ports
-Message-ID: <167900782010.4050347.7367290857102133764.robh@kernel.org>
-References: <20230130-topic-sm8450-upstream-pmic-glink-v3-0-4c860d265d28@linaro.org>
- <20230130-topic-sm8450-upstream-pmic-glink-v3-5-4c860d265d28@linaro.org>
+        bh=UX/KTPHcDdcu6dbgU5HB9yD5ykeUvMNlEFlUDYk+cCA=;
+        b=SF5xfB6kSG39cncDovV1pyUCNotzNarkCKr42WsrRqrv+9fidcfNcsYPs/E/nLYTPi
+         sgP/iHBm74AvHzfnMrAzzmUWvrn9SNnbrKYc5WBLnRJ8pwuz/PqVPl9lzDBLAVPAPU5A
+         Id8hV68bUKBptVKA3NUQfarZihMw+hUjU9uxVsun49Ne/HblwfQ+O1QNHpaX+KBVjxU/
+         r22m9lmL4OaosAsU5R6KT2QaddJbY9rG+XSNWbWml8bryeqMeZnwijl9K4jd0Ucws+qk
+         8Q1XJ3Gb+bsrtNOownn3Vxf3W0lbgbCggKodhNKtDgw7Y8Zu7e1tDbGpgJSIFTiUkDzC
+         Vunw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679007914;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=UX/KTPHcDdcu6dbgU5HB9yD5ykeUvMNlEFlUDYk+cCA=;
+        b=LXv7ZD7bg3pYUSHFAqksb5Aaz7D+271As+bwG9Zgd054JrCjQmwMO1NYcMIGMN3zCv
+         S6YzH7usTtFbKK9Iahh+gvgw4oPWn2PJuZnA6OyW57YpP4iv7CJ0IaWlejbD1yuNcazF
+         iRm9j96UankpZnz3As/XKDIFo7DLEmq+SUfXz1o72S+KH2CRw3/cTPzOueJveL9+6rFH
+         YXKcR690NEHMKlSF4mzneVwREd8mj1ol6wC+nDBRvsNgz3aC4qpTCBzAqh4fUAEGds7r
+         70eVLtp+OXyhHBvXa1Z5HksB8ukE6Qa1zzE9IdgGZFvsOP40oOnG75a48vn905tDEFsH
+         IdbQ==
+X-Gm-Message-State: AO0yUKUQXpdJp7K7/aliQKBryFoa/Get8+RmWhGM+Xijor8wJ32uXMsc
+        SMIwpxwqPQI6z1D9ZrXAGBLrtLzDwZCoT28KExzUZQ==
+X-Google-Smtp-Source: AK7set9xMU7SWH6Z2EQZMeJm478KkEPP57LvIRya986B0PASt62FSyyKX2NMFas/FBsNA5R+wN1CExGxMYRivLbhMTs=
+X-Received: by 2002:aa7:88c4:0:b0:624:6e5:1a2a with SMTP id
+ k4-20020aa788c4000000b0062406e51a2amr2437655pff.0.1679007913947; Thu, 16 Mar
+ 2023 16:05:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230130-topic-sm8450-upstream-pmic-glink-v3-5-4c860d265d28@linaro.org>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <20230227201340.2087605-1-sdalvi@google.com> <CAPOBaE4U4rCJ+4CcSoj597LsP-0ESBhiKKHz00bk+SvNHrOzKQ@mail.gmail.com>
+ <CAEbtx1mhMqZjJeU0L99xpwY9W5caJmpv69aRZG+b-hLfstK-Ww@mail.gmail.com>
+In-Reply-To: <CAEbtx1mhMqZjJeU0L99xpwY9W5caJmpv69aRZG+b-hLfstK-Ww@mail.gmail.com>
+From:   Sajid Dalvi <sdalvi@google.com>
+Date:   Thu, 16 Mar 2023 18:05:02 -0500
+Message-ID: <CAEbtx1kNMY5xH435=Rw0QoDebyRL=RYi+dfkqs4WRG7DS5f3dA@mail.gmail.com>
+Subject: Re: [PATCH v2] PCI: dwc: Wait for link up only if link is started
+To:     Han Jingoo <jingoohan1@gmail.com>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Cc:     Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>, kernel-team@android.com,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Feb 28, 2023 at 10:36=E2=80=AFPM Sajid Dalvi <sdalvi@google.com> wr=
+ote:
+>
+> Thanks for your review Jingoo.
+> Sajid
+>
+> On Tue, Feb 28, 2023 at 4:04=E2=80=AFPM Han Jingoo <jingoohan1@gmail.com>=
+ wrote:
+> >
+> > On Mon, Feb 27, 2023, Sajid Dalvi <sdalvi@google.com> wrote:
+> > >
+> > > In dw_pcie_host_init() regardless of whether the link has been starte=
+d
+> > > or not, the code waits for the link to come up. Even in cases where
+> > > start_link() is not defined the code ends up spinning in a loop for 1
+> > > second. Since in some systems dw_pcie_host_init() gets called during
+> > > probe, this one second loop for each pcie interface instance ends up
+> > > extending the boot time.
+> > >
+> > > Call trace when start_link() is not defined:
+> > > dw_pcie_wait_for_link << spins in a loop for 1 second
+> > > dw_pcie_host_init
+> > >
+> > > Signed-off-by: Sajid Dalvi <sdalvi@google.com>
+> >
+> > (CC'ed Krzysztof Kozlowski)
+> >
+> > Acked-by: Jingoo Han <jingoohan1@gmail.com>
+> >
+> > It looks good to me. I also checked the previous thread.
+> > I agree with Krzysztof's opinion that we should include
+> > only hardware-related features into DT.
+> > Thank you.
+> >
+> > Best regards,
+> > Jingoo Han
+> >
+> > > ---
+> > >  drivers/pci/controller/dwc/pcie-designware-host.c | 6 +++---
+> > >  1 file changed, 3 insertions(+), 3 deletions(-)
+> > >
+> > > diff --git a/drivers/pci/controller/dwc/pcie-designware-host.c b/driv=
+ers/pci/controller/dwc/pcie-designware-host.c
+> > > index 9952057c8819..9709f69f173e 100644
+> > > --- a/drivers/pci/controller/dwc/pcie-designware-host.c
+> > > +++ b/drivers/pci/controller/dwc/pcie-designware-host.c
+> > > @@ -489,10 +489,10 @@ int dw_pcie_host_init(struct dw_pcie_rp *pp)
+> > >                 ret =3D dw_pcie_start_link(pci);
+> > >                 if (ret)
+> > >                         goto err_remove_edma;
+> > > -       }
+> > >
+> > > -       /* Ignore errors, the link may come up later */
+> > > -       dw_pcie_wait_for_link(pci);
+> > > +               /* Ignore errors, the link may come up later */
+> > > +               dw_pcie_wait_for_link(pci);
+> > > +       }
+> > >
+> > >         bridge->sysdata =3D pp;
+> > >
+> > > --
+> > > 2.39.2.722.g9855ee24e9-goog
+> > >
 
-On Thu, 09 Mar 2023 14:27:56 +0100, Neil Armstrong wrote:
-> Document the optional ports subnode to describe the High-Speed
-> and Super-Speed connections as separate OF graph links.
-> 
-> The ports property is an alternative to the already documented
-> single port subnode property.
-> 
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-> ---
->  Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 16 ++++++++++++++++
->  1 file changed, 16 insertions(+)
-> 
+@bhelgaas Can this be picked up in your tree:
+ https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git/
 
-Reviewed-by: Rob Herring <robh@kernel.org>
-
+Thanks
+Sajid
