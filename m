@@ -2,228 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E28286BCC07
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 11:07:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27A726BCC10
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 11:08:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229991AbjCPKH0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 06:07:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54766 "EHLO
+        id S230187AbjCPKIW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 06:08:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229765AbjCPKHX (ORCPT
+        with ESMTP id S229938AbjCPKIU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 06:07:23 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2106.outbound.protection.outlook.com [40.107.92.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C631811EA0;
-        Thu, 16 Mar 2023 03:07:07 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=H6IeZzH1jv3h0iCcdl37+vXAOU6pXlpWxYYmPQ0O++sSls5cUVnIEaOUAmmAO62XawnkU42cyuV2lsd8RuXHsf7T8+8kvNzNAi8KmXO/hsyxDwYC7THoDnRFyMD6gMuSnpLCbwY0GG60WF0sXrTZEc32xGtq+XO9b5r+dppLjdak7shVPbjvvezZeUiR0H7oS9OTr1fLWUsamsR2MI8bHTQAhoc573KyapxVaVNyiSGC8WwVr2KVqUVLMUK40q1NP/u2IGYCoR3XchEgwGinihA4lg1/pNBwPOr8HTh0whUAyHZXDVMJWbhcFqRDpijnbiktlPNHKG5b16KR0Rfrcg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=nzbDDyhUpcr8fPWOgbo3D67B9+01dAm2maXyQ5F8RyQ=;
- b=hYB5bnnxv5J5XG5LZZvrSAgZmNOqCuv76OVkeYFJmfota/28IODOtlBpaNOPP1T45wVZfS4/VR8FVxDVcyryyeDl6yFVq8IU44zaPFOFqHmrJkaNby/CgS3WJbvPYpavxvheiWvu9eH4yCAz9+e96Kz24oVfMv8ceW5bz9+aBuOuTMhZJ0g4T5W74W0p8ow7EuXrdzlhj7jibrZm+1UZLWJs34gL1LSwuXLxy2RHkmppU+W5+EkJbm2dQujQMcSY283X5czaunruQP3aYeCt6oaWIpZLVzkYY18cJ88V7LFrgHuZrxN8ucY50ldXYBaychtqRvLrr4ojV95S7clvZA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=nzbDDyhUpcr8fPWOgbo3D67B9+01dAm2maXyQ5F8RyQ=;
- b=o6u4cOoThUf0b0c9iZFf6ncePAa0aBXyrlWvnjxSThTJvetqoBXwSPZcXma2KKZEY7XJfgkXln4ed/EZmDMK5Xd6eCD42iz3WJ+MKmGE/TZbihKT48wr/PVHIxF7oydeHIFAU5NjyiGG7iBKYH6rKVQX2ZzzeoWNkBFYc/Q6eX8=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by SN7PR13MB6279.namprd13.prod.outlook.com (2603:10b6:806:2e8::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.24; Thu, 16 Mar
- 2023 10:07:04 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::85f5:bdb:fb9e:294c]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::85f5:bdb:fb9e:294c%2]) with mapi id 15.20.6178.033; Thu, 16 Mar 2023
- 10:07:04 +0000
-Date:   Thu, 16 Mar 2023 11:06:58 +0100
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Markus Schneider-Pargmann <msp@baylibre.com>
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 10/16] can: m_can: Add tx coalescing ethtool support
-Message-ID: <ZBLqQmj4FoMAsNsh@corigine.com>
-References: <20230315110546.2518305-1-msp@baylibre.com>
- <20230315110546.2518305-11-msp@baylibre.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230315110546.2518305-11-msp@baylibre.com>
-X-ClientProxiedBy: AS4P189CA0015.EURP189.PROD.OUTLOOK.COM
- (2603:10a6:20b:5d7::19) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        Thu, 16 Mar 2023 06:08:20 -0400
+Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C8ADA2C1F
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 03:07:45 -0700 (PDT)
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20230316100744euoutp02a2a556edc1ab353574dd1ca961280898~M3l-c15wF1463714637euoutp02V
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 10:07:44 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20230316100744euoutp02a2a556edc1ab353574dd1ca961280898~M3l-c15wF1463714637euoutp02V
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1678961264;
+        bh=/5KVLbY5EbFI+IEYeOG53hyhtyXgaXrgX9fqrbvA2kY=;
+        h=Date:Subject:To:CC:From:In-Reply-To:References:From;
+        b=JUQuVLfWUqLd6aIm6j9/zDDnvQ0O1SoTxe/hf0KO8t6DZqznCIT/LBHc/D/ceuCBN
+         4/e1kTHpq/vMsn+XFC0rGgcix9fGawMKYWPJZYt0FjqPspKhXzgqYvGf1BfGBAF8sM
+         uKgM0WAUwybd5MN8RB0zUOLgeURGWLd49sLgE824=
+Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20230316100744eucas1p2091c328f81b5c7d3530f9b9a8e2cabec~M3l-M20OT0459504595eucas1p2X;
+        Thu, 16 Mar 2023 10:07:44 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges1new.samsung.com (EUCPMTA) with SMTP id 68.36.09503.07AE2146; Thu, 16
+        Mar 2023 10:07:44 +0000 (GMT)
+Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20230316100743eucas1p2c47958a35d977b3cdc8f2624a25e7bfe~M3l_02bb_0456104561eucas1p26;
+        Thu, 16 Mar 2023 10:07:43 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20230316100743eusmtrp179409928ca5693e6acda839d27d15524~M3l_zqiuW1198011980eusmtrp1P;
+        Thu, 16 Mar 2023 10:07:43 +0000 (GMT)
+X-AuditID: cbfec7f2-e8fff7000000251f-92-6412ea70950b
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id 5C.36.09583.F6AE2146; Thu, 16
+        Mar 2023 10:07:43 +0000 (GMT)
+Received: from CAMSVWEXC02.scsc.local (unknown [106.1.227.72]) by
+        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20230316100743eusmtip2c14a68e7c74e1e30e25a0f1511fa316f~M3l_oOcme0556805568eusmtip2x;
+        Thu, 16 Mar 2023 10:07:43 +0000 (GMT)
+Received: from [192.168.8.107] (106.210.248.172) by CAMSVWEXC02.scsc.local
+        (2002:6a01:e348::6a01:e348) with Microsoft SMTP Server (TLS) id 15.0.1497.2;
+        Thu, 16 Mar 2023 10:07:23 +0000
+Message-ID: <7121c937-adea-a495-eb15-8e0d7fe0838c@samsung.com>
+Date:   Thu, 16 Mar 2023 11:07:22 +0100
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|SN7PR13MB6279:EE_
-X-MS-Office365-Filtering-Correlation-Id: e4d14a95-f102-44a8-737f-08db26063110
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: R/Z76vmD1opMeI1OAsCtLJUJVdDsOB1rD5npMsACCwaKEbJalLTzl4rvzThic6HLx/8Q4pRN8iNFL7XAMPY0RcQg/cNYMutO4qeIjNLgaFopxJKGKqTVZSiqdYaHADkgpyFgOUqopZP0uvkaEunXvWELPWGWAha8u0DsOB833oa76+1v5ayqYnQ73fE7Zt/JxA7P1WJfwrlOqZx6A9q1144qII35VItqV9exvEfAC6xV4fvyDeqFIRBiPVwvfF+m58Qm6a2Xdv2dJT2PV/NC2sRJXdhHX5MGQSnWjZcJjMgDyE9h7YYwp45xNpmdIJRsdNav8nfPUwpSoKl98RmVTO0o/vLFS9Le96H/refwQymsIBMr9J5LxPoYp1IQ3PjPpphrEAZSrLlw7V5qz1YbCkjSMWc46IbM2FsDGYg1nOGCAp/9+e5sH2KYw6Z4P307SfpZ1BGtv6h2QhaLgZAbFT6mCrdZnPavHwXSih+ba8nMkH7O2eTUc5UhI5fMn7YYkG/vEMunraOd1imkoPNz9D72JwVPy1cDtvM++yN+jV03UTDeuMokIlZXdg7FrEL9Uh62Pxbyg8xxp2aoxDgqf3xEzGonfWjsmHzPSuK3A+zEXThAcqfNX6XanRSgqOF4XQoryT4ERUd668bB+OifNg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(396003)(346002)(366004)(39840400004)(136003)(451199018)(54906003)(316002)(83380400001)(478600001)(38100700002)(86362001)(2616005)(6666004)(186003)(6506007)(6512007)(6486002)(36756003)(5660300002)(6916009)(66946007)(8676002)(66476007)(66556008)(44832011)(41300700001)(8936002)(2906002)(4326008);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?iQV2/QKJVrAbuXi8pEL/pVUvN6l8UbTIhCc1UcvhvEH2s/E3aLPAzqJNUD2f?=
- =?us-ascii?Q?SqcM3EzrIHG/rNk0xCV0VcVbtaWJpY4lZ3M4wqzaEaEVBvo1j+1m3NUMqbdX?=
- =?us-ascii?Q?HQlzbRasjMwDqBwnq4WUoMkn6YCi2aIT/bVX8xcjvm/0Y/eea3GGmHagFxYM?=
- =?us-ascii?Q?ZdXLI3prUxfiolYg0+CY0BWXODAKVSYupiLHVLAI49eie9PcFt+XMVZJTixI?=
- =?us-ascii?Q?lgdiU4IYJ+LUGkgxCLys1D1zr0au/KPpUNcW+XeQ343jfHapt9R2P2Y/ucvB?=
- =?us-ascii?Q?w3ypdiIYyrn5/owluOEWHSy2L1gyR/I/CbJTVA821mwsGVn0rplfw41VpiFx?=
- =?us-ascii?Q?4LS8hT1/DnQsrLU+yeU0cHxIySM3k3zs4VQJm3LA5t+gZdMDA6hrU+OycEct?=
- =?us-ascii?Q?3+KFBqLigG4ncEl8hWkQ597C8zL9M2GP2/OXB+Qy6CJma1KKh7SFl4g+O8dX?=
- =?us-ascii?Q?moXkIa5XnlTT8YLguGdgXJbneu3UfXzRqEVtstWvi65LZPYrZUktaK2/N9vV?=
- =?us-ascii?Q?qxs5DzcgUkUeuCV1C7CLhO1SjD0Na1HglBv3C3rY+AB2RTSUpjnjbNxUBJ1S?=
- =?us-ascii?Q?ZWZqmOwL7zSXYCjFy+kfjnxegHfU9VjQ3l5wsZxOolOfnKPslAU+sMGLKSui?=
- =?us-ascii?Q?JJKKmlm61fW4wOCe1E/+sHLXCcf0UasELQtIlLf/G5BCfNbQDzqscwfmntmp?=
- =?us-ascii?Q?qRP5AeY9jktdR0t05GQ3CAOIpdg+YjtH1CQii4/BIwnR5uYDJAbnx4e0tVWx?=
- =?us-ascii?Q?ZWChvX4VHvwfkhhbWYyYOSAqa9IJlecZUVE2dwo+sdMMH0MphsuhmLYUisEw?=
- =?us-ascii?Q?zOKOvOaLFBrl6G+w+3loccev0dRAMradIfQnksRZANLzNJLhjAccNnN81WFW?=
- =?us-ascii?Q?MG/UJXkY4B0yInNES2pjXMdwGzSjplm2NBitxj5Q+0TkhoQGhx8djQSYbOAJ?=
- =?us-ascii?Q?mkGuZ8EqmLAu0c2fM+d9TlOtfjtUmvuC8trHfb0wjErScWOcpZBndu+lS32U?=
- =?us-ascii?Q?qxMWmYaXFPZI9SU1jQdqEJZ1Dg1w2ctheHSbWdMJoAKeJ5tlM3L3ZTmjXs7R?=
- =?us-ascii?Q?qj5y9LCDsvO0c0EW07HOm/mADUxXJyY8EBBPPnv6UWeR5gGP9ZSZB9mnqzHt?=
- =?us-ascii?Q?DT8m2Wx7Q3+PqZqD8PDtDxlAFkk3praICto0+EZ96sZSKG/SS8N4NUhNp6wD?=
- =?us-ascii?Q?o5I7xq5pG+Um5aMrUyPE4SwNJB/0tFtkWjO3J19fCuykiy51jS1gg+TUxOvZ?=
- =?us-ascii?Q?B3l1xEjLaOUrx3NV25FNipzS7AW43L4lmWBiFca7hBzALj4JaR5cTEk7YRgQ?=
- =?us-ascii?Q?0SXRK5KvXLIXYJLO0gz+wEBFvHskzH+e9mJWtRy4BkCKK5aLyo3Kx792LtIa?=
- =?us-ascii?Q?ycfkvU5+IiyjGEosOOOLxW9dDmSXRecH+ogw6BygKTBqzc+IarvLyMFALHPd?=
- =?us-ascii?Q?CZoiCqRqDpz28/8NylEsuONdqS2WtO1kRF0fUeK+vOnpn1A7NPNfyYQoN71J?=
- =?us-ascii?Q?JkKXUYMWVnShk0gLp1Bz0YOt2QkX5GYOtIampyhntdES4NH+eTRJvM3iZH1L?=
- =?us-ascii?Q?rWVbGHzyowlnFCZbM8oGbqf6qhjif6BhTBvSMgRkaHg26iu7CV5h2HXP3RVf?=
- =?us-ascii?Q?mShbN7AyRZek60rJ09jku8saM7W3E8tQMc+WCk2uyXKH3PHHsqZ/zKYb7oS8?=
- =?us-ascii?Q?jlOChg=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e4d14a95-f102-44a8-737f-08db26063110
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Mar 2023 10:07:03.9127
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ZcwdKOicOkYQ73fvaJQ9pRAGqhxJCKlONwBZvDWKxOi5BWF9anPTaEcEpCVVF1DxxD/nwKXOBIDWKt5KUQSEfKErOZsxld/k5Mw2/HneOKM=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR13MB6279
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+        Thunderbird/102.8.0
+Subject: Re: [RFC PATCH 2/3] mpage: use bio_for_each_folio_all in
+ mpage_end_io()
+Content-Language: en-US
+To:     Matthew Wilcox <willy@infradead.org>,
+        Hannes Reinecke <hare@suse.de>
+CC:     <hubcap@omnibond.com>, <senozhatsky@chromium.org>,
+        <martin@omnibond.com>, <minchan@kernel.org>,
+        <viro@zeniv.linux.org.uk>, <brauner@kernel.org>, <axboe@kernel.dk>,
+        <akpm@linux-foundation.org>, <linux-kernel@vger.kernel.org>,
+        <linux-block@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
+        <linux-mm@kvack.org>, <gost.dev@samsung.com>, <mcgrof@kernel.org>,
+        <devel@lists.orangefs.org>
+From:   Pankaj Raghav <p.raghav@samsung.com>
+In-Reply-To: <ZBHtjrk52/TTPU/F@casper.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [106.210.248.172]
+X-ClientProxiedBy: CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347) To
+        CAMSVWEXC02.scsc.local (2002:6a01:e348::6a01:e348)
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrMKsWRmVeSWpSXmKPExsWy7djPc7oFr4RSDH5eY7GYs34Nm8Xqu/1s
+        Fq8Pf2K02L95CpPFnkWTmCza7/YxWey9pW2xZ+9JFovLu+awWdxb85/V4uT6/8wWNyY8ZbRY
+        9vU9u8XujYvYLM7/Pc5q8fvHHDYHAY/ZDRdZPDav0PK4fLbUY9OqTjaPTZ8msXucmPGbxaNh
+        6i02j1+377B6bD5d7fF5k5zHpidvmQK4o7hsUlJzMstSi/TtErgytvS2sxW0cVasWivQwDiF
+        vYuRk0NCwETi0LxGVhBbSGAFo8TytzJdjFxA9hdGic/rZrBBOJ8ZJX7/es4I09G37TALRMdy
+        Rom7t4Xgip6+nMQO4exmlFjSeQpsLq+AnUTDrFlg3SwCqhLLzr5ghogLSpyc+QRoEgeHqECU
+        xIvXZSBhYYEgiXsbHrOB2MwC4hK3nsxnArFFBDwk/l9azgIyn1mgh1li7t3TjCC9bAJaEo2d
+        YO9wAh3Xun8nK0SvpkTr9t/sELa8xPa3c5ghHlCWmPN6B5RdK3Fqyy0mCPsZp0TXFBsI20Xi
+        xZ//UDXCEq+Ob4EGl4zE6ck9LBB2tcTTG7+ZQe6REGhhlOjfuZ4N5B4JAWuJvjM5EDWOEpsW
+        TWGFCPNJ3HgrCHEOn8SkbdOZJzCqzkIKiFlIPp6F5INZSD5YwMiyilE8tbQ4Nz212DAvtVyv
+        ODG3uDQvXS85P3cTIzAdnv53/NMOxrmvPuodYmTiYDzEKMHBrCTCG84ikCLEm5JYWZValB9f
+        VJqTWnyIUZqDRUmcV9v2ZLKQQHpiSWp2ampBahFMlomDU6qBKUrZakG/X6yxrdB8TxbT2+n3
+        JQtuct0NvGO3o61u8ekD57vtGK39l2/bcmPtn3UWnI6RNp1rn2059S2g7Jvp1JZdcf1eOpc2
+        SXfOC7316PiPcz9u8345tvhMr/4y/nUiyxfuXH/j0nyh3/nCZ87/nHjQM3WC3ncOW+PJW8P/
+        9Pyoq5E2Mvj49VVHQ6CqgNfF+11td1+/XVh1PGPij0+XloZcve5ZsWhHVZbxzPo/3yPS/u/W
+        s3J9v6gpwstT/PJc9acenFbb55629ZnG0LFxb09O4rclBTtW1d+cz3h1Udei6SUL5Zjn8l5w
+        vzLnXUCAdrlm5Ozn/4uNZXw9M42OsocfFKiwYxJQSUj36RfbulGJpTgj0VCLuag4EQAdOwYz
+        9gMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprFKsWRmVeSWpSXmKPExsVy+t/xe7r5r4RSDC7MU7eYs34Nm8Xqu/1s
+        Fq8Pf2K02L95CpPFnkWTmCza7/YxWey9pW2xZ+9JFovLu+awWdxb85/V4uT6/8wWNyY8ZbRY
+        9vU9u8XujYvYLM7/Pc5q8fvHHDYHAY/ZDRdZPDav0PK4fLbUY9OqTjaPTZ8msXucmPGbxaNh
+        6i02j1+377B6bD5d7fF5k5zHpidvmQK4o/RsivJLS1IVMvKLS2yVog0tjPQMLS30jEws9QyN
+        zWOtjEyV9O1sUlJzMstSi/TtEvQytvS2sxW0cVasWivQwDiFvYuRk0NCwESib9thFhBbSGAp
+        o8S1PX4QcRmJT1c+QtUIS/y51sXWxcgFVPORUeJH51omCGc3o8SJ+1dZQap4BewkGmbNYgSx
+        WQRUJZadfcEMEReUODnzCdgGUYEoiad3DoHFhQWCJO5teMwGYjMLiEvcejKfCcQWEfCQ+H9p
+        OQtEvIdZ4lNbDcSyWUwSq6a/AEpwcLAJaEk0doJdxwn0Qev+nawQ9ZoSrdt/s0PY8hLb385h
+        hvhAWWLO6x1Qdq3E57/PGCcwis5Cct4sJGfMQjJqFpJRCxhZVjGKpJYW56bnFhvpFSfmFpfm
+        pesl5+duYgQmkm3Hfm7Zwbjy1Ue9Q4xMHIyHGCU4mJVEeMNZBFKEeFMSK6tSi/Lji0pzUosP
+        MZoCw2gis5Rocj4wleWVxBuaGZgamphZGphamhkrifN6FnQkCgmkJ5akZqemFqQWwfQxcXBK
+        NTBprS2/MfPhyn23GttEVmpOt7Pd9f3wh5wvOX93P/h26wyzm5Gh+omF4i458lP+tGhEPBVJ
+        zdfYNEExYd6am3Hv89exTalwu33xy5GeijdytUmJDWqaUa+vx7BLv/GX3DYx+t1/seMfm6IL
+        JgjInmv0qc06KbWN79Ur44xZXDrbje23JW0JeSI4/ckft/OPv048Fhm5f0ZCRO4q9oNvn8Yn
+        lPSnd9yKcb+ozlT5rbTpaImd6/yMY1HvuPoELmQk/b8V3/Z3laavTNX1c/P59nfO4/67jWXp
+        I59jW3YtdGe1nvRhrUPAkhePrl44LLWrwVNx5Tzvi7ycmwvL/Sb+MF3RvKjhvax91x2lf5zT
+        +pOtlFiKMxINtZiLihMBweWkw60DAAA=
+X-CMS-MailID: 20230316100743eucas1p2c47958a35d977b3cdc8f2624a25e7bfe
+X-Msg-Generator: CA
+X-RootMTR: 20230315123235eucas1p1bd62cb2aab435727880769f2e57624fd
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20230315123235eucas1p1bd62cb2aab435727880769f2e57624fd
+References: <20230315123233.121593-1-p.raghav@samsung.com>
+        <CGME20230315123235eucas1p1bd62cb2aab435727880769f2e57624fd@eucas1p1.samsung.com>
+        <20230315123233.121593-3-p.raghav@samsung.com>
+        <64a5e85e-4018-ed7d-29d4-db12af290899@suse.de>
+        <ZBHtjrk52/TTPU/F@casper.infradead.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 15, 2023 at 12:05:40PM +0100, Markus Schneider-Pargmann wrote:
-> Add get/set functions for ethtool coalescing. tx-frames-irq and
-> tx-usecs-irq can only be set/unset together. tx-frames-irq needs to be
-> less than TXE and TXB.
-
-Perhaps I'm reading this wrong (maybe I need a coffee). But I think it
-might be a bit clearer to call out the TX aspect of this patch up front (I
-know it is in the subject.
-
-Maybe something like this:
-
-  Add TX support to get/set functions for ethtool coalescing...
-
+On 2023-03-15 17:08, Matthew Wilcox wrote:
+> On Wed, Mar 15, 2023 at 03:52:15PM +0100, Hannes Reinecke wrote:
+>> On 3/15/23 13:32, Pankaj Raghav wrote:
+>>> Use bio_for_each_folio_all to iterate through folios in a bio so that
+>>> the folios can be directly passed to the folio_endio() function.
+>>> +	bio_for_each_folio_all(fi, bio)
+>>> +		folio_endio(fi.folio, bio_op(bio),
+>>> +			    blk_status_to_errno(bio->bi_status));
+>>>   	bio_put(bio);
+>>>   }
+>>
+>> Ah. Here it is.
+>>
+>> I would suggest merge these two patches.
 > 
-> As rx and tx share the same timer, rx-usecs-irq and tx-usecs-irq can be
-> enabled/disabled individually but they need to have the same value if
-> enabled.
+> The right way to have handled this patch series was:
 > 
-> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-
-Nits above and below not withstanding,
-
-Reviewed-by: Simon Horman <simon.horman@corigine.com>
-
-> ---
->  drivers/net/can/m_can/m_can.c | 38 ++++++++++++++++++++++++++++++++++-
->  1 file changed, 37 insertions(+), 1 deletion(-)
+> 1. Introduce a new folio_endio() [but see Christoph's mail on why we
+> shouldn't do that]
+> 2-n convert callers to use folios directly
+> n+1 remove page_endio() entirely.
 > 
-> diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
-> index 7f8decfae81e..4e794166664a 100644
-> --- a/drivers/net/can/m_can/m_can.c
-> +++ b/drivers/net/can/m_can/m_can.c
-> @@ -1945,6 +1945,8 @@ static int m_can_get_coalesce(struct net_device *dev,
->  
->  	ec->rx_max_coalesced_frames_irq = cdev->rx_max_coalesced_frames_irq;
->  	ec->rx_coalesce_usecs_irq = cdev->rx_coalesce_usecs_irq;
-> +	ec->tx_max_coalesced_frames_irq = cdev->tx_max_coalesced_frames_irq;
-> +	ec->tx_coalesce_usecs_irq = cdev->tx_coalesce_usecs_irq;
->  
->  	return 0;
->  }
-> @@ -1971,16 +1973,50 @@ static int m_can_set_coalesce(struct net_device *dev,
->  		netdev_err(dev, "rx-frames-irq and rx-usecs-irq can only be set together\n");
->  		return -EINVAL;
->  	}
-> +	if (ec->tx_max_coalesced_frames_irq > cdev->mcfg[MRAM_TXE].num) {
-> +		netdev_err(dev, "tx-frames-irq %u greater than the TX event FIFO %u\n",
-> +			   ec->tx_max_coalesced_frames_irq,
-> +			   cdev->mcfg[MRAM_TXE].num);
-> +		return -EINVAL;
-> +	}
-> +	if (ec->tx_max_coalesced_frames_irq > cdev->mcfg[MRAM_TXB].num) {
-> +		netdev_err(dev, "tx-frames-irq %u greater than the TX FIFO %u\n",
-> +			   ec->tx_max_coalesced_frames_irq,
-> +			   cdev->mcfg[MRAM_TXB].num);
-> +		return -EINVAL;
-> +	}
-> +	if ((ec->tx_max_coalesced_frames_irq == 0) != (ec->tx_coalesce_usecs_irq == 0)) {
-> +		netdev_err(dev, "tx-frames-irq and tx-usecs-irq can only be set together\n");
-> +		return -EINVAL;
-> +	}
-
-nit: checkpatch complains about unnecessary parentheses
-
-drivers/net/can/m_can/m_can.c:1988: CHECK: Unnecessary parentheses around 'ec->tx_max_coalesced_frames_irq == 0'
-+	if ((ec->tx_max_coalesced_frames_irq == 0) != (ec->tx_coalesce_usecs_irq == 0)) {
-
-drivers/net/can/m_can/m_can.c:1988: CHECK: Unnecessary parentheses around 'ec->tx_coalesce_usecs_irq == 0'
-+	if ((ec->tx_max_coalesced_frames_irq == 0) != (ec->tx_coalesce_usecs_irq == 0)) {
-
-
-> +	if (ec->rx_coalesce_usecs_irq != 0 && ec->tx_coalesce_usecs_irq != 0 &&
-> +	    ec->rx_coalesce_usecs_irq != ec->tx_coalesce_usecs_irq) {
-> +		netdev_err(dev, "rx-usecs-irq %u needs to be equal to tx-usecs-irq %u if both are enabled\n",
-> +			   ec->rx_coalesce_usecs_irq,
-> +			   ec->tx_coalesce_usecs_irq);
-> +		return -EINVAL;
-> +	}
->  
->  	cdev->rx_max_coalesced_frames_irq = ec->rx_max_coalesced_frames_irq;
->  	cdev->rx_coalesce_usecs_irq = ec->rx_coalesce_usecs_irq;
-> +	cdev->tx_max_coalesced_frames_irq = ec->tx_max_coalesced_frames_irq;
-> +	cdev->tx_coalesce_usecs_irq = ec->tx_coalesce_usecs_irq;
-> +
-> +	if (cdev->rx_coalesce_usecs_irq)
-> +		cdev->irq_timer_wait =
-> +			ns_to_ktime(cdev->rx_coalesce_usecs_irq * NSEC_PER_USEC);
-> +	else
-> +		cdev->irq_timer_wait =
-> +			ns_to_ktime(cdev->tx_coalesce_usecs_irq * NSEC_PER_USEC);
-
-nit: perhaps adding us_to_ktime() and using it treewide would be interesting
-
->  	return 0;
->  }
->  
->  static const struct ethtool_ops m_can_ethtool_ops = {
->  	.supported_coalesce_params = ETHTOOL_COALESCE_RX_USECS_IRQ |
-> -		ETHTOOL_COALESCE_RX_MAX_FRAMES_IRQ,
-> +		ETHTOOL_COALESCE_RX_MAX_FRAMES_IRQ |
-> +		ETHTOOL_COALESCE_TX_USECS_IRQ |
-> +		ETHTOOL_COALESCE_TX_MAX_FRAMES_IRQ,
->  	.get_ts_info = ethtool_op_get_ts_info,
->  	.get_coalesce = m_can_get_coalesce,
->  	.set_coalesce = m_can_set_coalesce,
-> -- 
-> 2.39.2
+> Note that patch n+1 might not be part of this patch series; sometimes
+> it takes a while to convert all callers to use folios.
 > 
+
+This is definitely a much better way to handle these changes. Thanks willy.
+
+> I very much dislike the way this was done by pushing the page_folio()
+> call into each of the callers because it makes the entire series hard to
+> review.
