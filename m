@@ -2,66 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1F7A6BD716
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 18:30:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F02A6BD71A
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 18:30:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229866AbjCPRaK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 13:30:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45172 "EHLO
+        id S229961AbjCPRag (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 13:30:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230030AbjCPR3d (ORCPT
+        with ESMTP id S229949AbjCPRa2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 13:29:33 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 347E8B9504
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 10:29:17 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-54352648c1eso22119757b3.9
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 10:29:17 -0700 (PDT)
+        Thu, 16 Mar 2023 13:30:28 -0400
+Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67AE23D0A6;
+        Thu, 16 Mar 2023 10:30:07 -0700 (PDT)
+Received: by mail-qv1-xf35.google.com with SMTP id f1so1706889qvx.13;
+        Thu, 16 Mar 2023 10:30:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678987756;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=87tojeD1hl3r+GUx070hYtMF9ILSs5cMERcPTVCxRuM=;
-        b=aHMVxJZD2DW3iFMk6TmL8oBPJAFeqAikJ4nTGDGRFnxxnqtQ2GJIdXs09G+X/4WzVH
-         EolIwi5v7QX2Y2F9FeJ972W7TwgchD6Xj4y3HGumhDSsCXdiTvLSAHiorOvEJjtiAa/U
-         7jPrnf1uCOQCsBELMESaTVnDcmQMKrql2XeIm2aj6w2vX/Ntg+SZu+STY9W67b9pdnP/
-         AqtBEKNtp+ind7FoI0zwmkeGyrme8GZVsWqjDfHM2ZNog29h01pP44BNCJuKjao5Ex5l
-         JLiBy7IJw694s7thTru85RTcdkWn1Ms2+WaTBffoQXZPOfKM6HGfsdxVm9u3t8EfRrrh
-         QH5Q==
+        d=gmail.com; s=20210112; t=1678987806;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Tn1ckKKfCdS6iR6CHpn4A1885U18s9IIj5WK45VdNbc=;
+        b=Y2S88pw6EmpWjpdYCTxzNJq0Qwog9knPdu4mCJl3Pnx3XzAj3G8jH7V8GsXiZUH/H9
+         H3M4bvSK0Bve9H+BGUw4GpaDTQMoJryhh23uBqa+XIOHc9wvUVvL2Abgp3IE35sEkr7X
+         Yw9X7Yk8mKxsQAO0cMDzWMNfXMSNfAZd+Q3cEOmG7vkJvp/R+94p+wedwTksw2oJW9Bm
+         iTmDoW8eAvx8JCH2rvPD8IjrRCW/Wqs87ZMTXHu6Nm/QrN+Q84LpEnWQsVjAX3BERle3
+         jmhWb1KZP5W6tvX3ljV0KR1n2iIRks4PDBkzimx2ylthgwGzZECjbMz0plhTfmPrLkhz
+         eBew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678987756;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=87tojeD1hl3r+GUx070hYtMF9ILSs5cMERcPTVCxRuM=;
-        b=g2pDJy5UQxHUnFvvsgAdUN9FcFLokOMEF93KjQMMjjzZ8LmEAnuyyca8VOPy5QUaDw
-         cxhliiW4nU5TrLpKqXI/eGvjlyizmKWbmXtc78jgIDnRfpdC69ONItqekUrDrrSnVhgi
-         KxmmlI6HJyGivRocu2IH92dSxaQnbhVmF/mm2C6uBk6de1BowtfPNhFYKcwxqdbm4vUY
-         HVO7896UfduhIRU8QeTkUzBo9wiPA46GR/bGIehIlJLyptd8ixJ9WARbaQ4AUYwqtUB0
-         I73O7gGrH9XyjU/uNV5hY2DUI7XlM2xfcDyucRBBWJO9nKjIbJBQoTvQxh5Q3JL74lQe
-         HVBw==
-X-Gm-Message-State: AO0yUKVlEyULhZfyiJ/Muo2Zd+wo2enGjzfkdo8xmW5+m/qvSiZW6KPE
-        qbHOmxIJAUFopK2mcMVOPouamGfm4lMY6Q==
-X-Google-Smtp-Source: AK7set8Fj9mkWCG4obWtev4yFMPVNmVcf1IXzAsy6fBiJYqOBrZpcX2U+wCqguEL4DDVoeejTe+9+XQy2zKQAQ==
-X-Received: from dlatypov-spec.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:3f35])
- (user=dlatypov job=sendgmr) by 2002:a81:ae22:0:b0:541:69f4:f927 with SMTP id
- m34-20020a81ae22000000b0054169f4f927mr2725264ywh.8.1678987756364; Thu, 16 Mar
- 2023 10:29:16 -0700 (PDT)
-Date:   Thu, 16 Mar 2023 10:29:00 -0700
-In-Reply-To: <20230316172900.755430-1-dlatypov@google.com>
-Mime-Version: 1.0
-References: <20230316172900.755430-1-dlatypov@google.com>
-X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
-Message-ID: <20230316172900.755430-2-dlatypov@google.com>
-Subject: [PATCH 2/2] kunit: tool: remove unused imports and variables
-From:   Daniel Latypov <dlatypov@google.com>
-To:     brendanhiggins@google.com, davidgow@google.com
-Cc:     rmoar@google.com, linux-kernel@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        skhan@linuxfoundation.org, Daniel Latypov <dlatypov@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        d=1e100.net; s=20210112; t=1678987806;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Tn1ckKKfCdS6iR6CHpn4A1885U18s9IIj5WK45VdNbc=;
+        b=ISKJvqv8OzPMPqQAw3MT9hbzLXWrllSH5Z5Uh5M55Lk/tqywoVlMzQoG5xoHwTtTOQ
+         VX3NvUSDqG20598py4qOqIguNBpRPZJLQSoicec9PEVj4jKqqt/nbpFxSEt9mJvKwzL9
+         5i6czABL5RAks9LPtCYtA0QPeVnh6Zllkmq2qsibKojcWXQK6BQSfUsRLN7cwO29UnZg
+         lO/xOR/09Ik6w5IWj2XwLHwOPJ1ZsfZK+Hc2TlAOlZwbRPYiZ9OvIyXV/zZTXrxVzKWP
+         TSkmPBisOH/cwGAPHQLHhJ37pgvJm6RZCD/48SemliJNiMrCokpy847PtGPsL7riQKqN
+         +0OQ==
+X-Gm-Message-State: AO0yUKV4y/ZtZVrkTuTtSaZqEE1M/HOUf9i+1BgDq3LQ8NpUEd83j6K4
+        YDv+QpeESkbEl7PX9MfZba8=
+X-Google-Smtp-Source: AK7set8VCghTK9sdZPFmL02S15AWQqH6WSVurO9amXjiXfU3aiOoqR1JXJswhVYF2+ggPEHsylzxtQ==
+X-Received: by 2002:a05:6214:2622:b0:5b8:1f61:a20 with SMTP id gv2-20020a056214262200b005b81f610a20mr3173479qvb.35.1678987806299;
+        Thu, 16 Mar 2023 10:30:06 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id d78-20020a376851000000b0074571b64f0fsm6235131qkc.53.2023.03.16.10.30.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Mar 2023 10:30:05 -0700 (PDT)
+Message-ID: <89808c78-2f78-6f17-883d-1bcaa52806fb@gmail.com>
+Date:   Thu, 16 Mar 2023 10:30:00 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v2] net: dsa: b53: mmap: fix device tree support
+Content-Language: en-US
+To:     =?UTF-8?Q?=c3=81lvaro_Fern=c3=a1ndez_Rojas?= <noltari@gmail.com>,
+        jonas.gorski@gmail.com, andrew@lunn.ch, olteanv@gmail.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230310121059.4498-1-noltari@gmail.com>
+ <20230316172807.460146-1-noltari@gmail.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20230316172807.460146-1-noltari@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,82 +78,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We don't run a linter regularly over kunit.py code (the default settings
-on most don't like kernel style, e.g. tabs) so some of these imports
-didn't get removed when they stopped being used.
+On 3/16/23 10:28, Álvaro Fernández Rojas wrote:
+> CPU port should also be enabled in order to get a working switch.
+> 
+> Fixes: a5538a777b73 ("net: dsa: b53: mmap: Add device tree support")
+> Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
 
-Signed-off-by: Daniel Latypov <dlatypov@google.com>
----
- tools/testing/kunit/kunit.py           | 2 +-
- tools/testing/kunit/kunit_config.py    | 2 +-
- tools/testing/kunit/kunit_kernel.py    | 1 -
- tools/testing/kunit/kunit_parser.py    | 1 -
- tools/testing/kunit/kunit_tool_test.py | 2 +-
- 5 files changed, 3 insertions(+), 5 deletions(-)
-
-diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
-index 741f15420467..52853634ba23 100755
---- a/tools/testing/kunit/kunit.py
-+++ b/tools/testing/kunit/kunit.py
-@@ -123,7 +123,7 @@ def _suites_from_test_list(tests: List[str]) -> List[str]:
- 		parts = t.split('.', maxsplit=2)
- 		if len(parts) != 2:
- 			raise ValueError(f'internal KUnit error, test name should be of the form "<suite>.<test>", got "{t}"')
--		suite, case = parts
-+		suite, _ = parts
- 		if not suites or suites[-1] != suite:
- 			suites.append(suite)
- 	return suites
-diff --git a/tools/testing/kunit/kunit_config.py b/tools/testing/kunit/kunit_config.py
-index 48b5f34b2e5d..9f76d7b89617 100644
---- a/tools/testing/kunit/kunit_config.py
-+++ b/tools/testing/kunit/kunit_config.py
-@@ -8,7 +8,7 @@
- 
- from dataclasses import dataclass
- import re
--from typing import Dict, Iterable, List, Set, Tuple
-+from typing import Dict, Iterable, List, Tuple
- 
- CONFIG_IS_NOT_SET_PATTERN = r'^# CONFIG_(\w+) is not set$'
- CONFIG_PATTERN = r'^CONFIG_(\w+)=(\S+|".*")$'
-diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
-index e6fc8fcb071a..775842b912d8 100644
---- a/tools/testing/kunit/kunit_kernel.py
-+++ b/tools/testing/kunit/kunit_kernel.py
-@@ -18,7 +18,6 @@ import threading
- from typing import Iterator, List, Optional, Tuple
- 
- import kunit_config
--from kunit_printer import stdout
- import qemu_config
- 
- KCONFIG_PATH = '.config'
-diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
-index a225799f6b1b..fbc094f0567e 100644
---- a/tools/testing/kunit/kunit_parser.py
-+++ b/tools/testing/kunit/kunit_parser.py
-@@ -12,7 +12,6 @@
- from __future__ import annotations
- from dataclasses import dataclass
- import re
--import sys
- import textwrap
- 
- from enum import Enum, auto
-diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
-index 0c2190514103..be35999bb84f 100755
---- a/tools/testing/kunit/kunit_tool_test.py
-+++ b/tools/testing/kunit/kunit_tool_test.py
-@@ -328,7 +328,7 @@ class KUnitParserTest(unittest.TestCase):
- 	def test_parse_subtest_header(self):
- 		ktap_log = test_data_path('test_parse_subtest_header.log')
- 		with open(ktap_log) as file:
--			result = kunit_parser.parse_run_tests(file.readlines())
-+			kunit_parser.parse_run_tests(file.readlines())
- 		self.print_mock.assert_any_call(StrContains('suite (1 subtest)'))
- 
- 	def test_show_test_output_on_failure(self):
+Acked-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 
-2.40.0.rc1.284.g88254d51c5-goog
+Florian
 
