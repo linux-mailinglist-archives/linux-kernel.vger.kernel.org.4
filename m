@@ -2,123 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEF5B6BDC88
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 00:01:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98EB36BDC8E
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 00:02:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230263AbjCPXBg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 19:01:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41804 "EHLO
+        id S229799AbjCPXCC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 19:02:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbjCPXBe (ORCPT
+        with ESMTP id S229541AbjCPXB6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 19:01:34 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 395512CFE3;
-        Thu, 16 Mar 2023 16:01:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=biRMyrU+XuL95zR8LqJLaB3BbRBCfLHWBcOSEHaHpBw=; b=pIgAMqYbbabotPI+N4zy8hC0i1
-        3oVn0WhjzKXndze3t8usxuVfsyHha5Xt53ZFvYyY1K67zU/D4T849rurl3vJ0gi2NDr5tZNPkzZ8a
-        QYPNEBvRE8WHjciK9NmtyeRABG0o5tlvdUDnrcItxBuFVtTiCYz+xyp+LI5Ndfv+acE30cpOuGWwD
-        caHfTPq0Fdv+Yojsf+5o3ZzTLzAITOAs/J4wUjiPdqPijRGpFrlRsskRkxT6fxfkvM7nhBdL3F1cw
-        91GKiv2REcLX6YkKjOjyDZ5yPKAXsKMIxLdgeNw0vF/ry8R++1k7uTWmwAdp3FPUIIN61W4AjpYYx
-        J7tapbJw==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:58674)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1pcwb4-0001Qe-65; Thu, 16 Mar 2023 23:01:22 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1pcwav-0002pC-9n; Thu, 16 Mar 2023 23:01:13 +0000
-Date:   Thu, 16 Mar 2023 23:01:13 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Andrew Halaney <ahalaney@redhat.com>, linux-kernel@vger.kernel.org,
-        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        vkoul@kernel.org, bhupesh.sharma@linaro.org,
-        mturquette@baylibre.com, sboyd@kernel.org, peppe.cavallaro@st.com,
-        alexandre.torgue@foss.st.com, joabreu@synopsys.com,
-        mcoquelin.stm32@gmail.com, richardcochran@gmail.com,
-        veekhee@apple.com, tee.min.tan@linux.intel.com,
-        mohammad.athari.ismail@intel.com, jonathanh@nvidia.com,
-        ruppala@nvidia.com, bmasney@redhat.com,
-        andrey.konovalov@linaro.org, linux-arm-msm@vger.kernel.org,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, ncai@quicinc.com,
-        jsuraj@qti.qualcomm.com, hisunil@quicinc.com
-Subject: Re: [PATCH net-next 08/11] net: stmmac: Add EMAC3 variant of dwmac4
-Message-ID: <ZBOfuSBifFO7O/xQ@shell.armlinux.org.uk>
-References: <20230313165620.128463-1-ahalaney@redhat.com>
- <20230313165620.128463-9-ahalaney@redhat.com>
- <20230313173904.3d611e83@kernel.org>
- <20230316183609.a3ymuku2cmhpyrpc@halaney-x13s>
- <20230316115234.393bca5d@kernel.org>
+        Thu, 16 Mar 2023 19:01:58 -0400
+Received: from mail-il1-f178.google.com (mail-il1-f178.google.com [209.85.166.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AE60B2544;
+        Thu, 16 Mar 2023 16:01:52 -0700 (PDT)
+Received: by mail-il1-f178.google.com with SMTP id h7so1869860ila.5;
+        Thu, 16 Mar 2023 16:01:52 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679007711;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=06lCH5X+/2ktLi7UZAedLY+z6qnYJzrh1ZZ0qiMJwLY=;
+        b=dfwgHmOxq7SPYesx2MCtSsAHuJAGOfEHYdhlAcDm+TQqfFsuukIZxShKkQZRCX93Gf
+         Fr5BKl5OXls1IuXxoZHqEg0uaqKU8S4ZjQ+tQ5Lv3UWA2gu3PNdLk9TbxH30OVuTjxJf
+         HQlONBV/B3nxea6TVQ/KohaZCAResEUg0zYU809zBdADO0a33pXOolsE4+2ZotXIX6M3
+         ZkZk3OTo+t+F81SMZPdZn/ADDSFFhPyEGyLXhWHoSbfilEzhM3zKJnaiFm5Wt2RnoEx0
+         8UwZqszDJN569n7w+vLO6xRFIlMb4tWM6InIw7tc7VmE521OxDU+pmF0SiCVr2jcYlOg
+         /hgA==
+X-Gm-Message-State: AO0yUKXIrSsPrA8+Ny5GvrGRSXq3yZJCzFgvFTWAvsuy55jg/Jf4soy7
+        qJpZtFvDmyHv6pU6jhB2HoXmjyTWKQ==
+X-Google-Smtp-Source: AK7set9bS1Np+BTwgHkJFdCjppLx8hnSdQLc2Mqz1H+LZQojmGyhVqcJh+2jyJBeB6iR5Tsyhp5Z1Q==
+X-Received: by 2002:a92:c210:0:b0:323:338:cc3c with SMTP id j16-20020a92c210000000b003230338cc3cmr7403233ilo.6.1679007711397;
+        Thu, 16 Mar 2023 16:01:51 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.249])
+        by smtp.gmail.com with ESMTPSA id 71-20020a020a4a000000b0040474ab909fsm178402jaw.36.2023.03.16.16.01.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Mar 2023 16:01:50 -0700 (PDT)
+Received: (nullmailer pid 4047863 invoked by uid 1000);
+        Thu, 16 Mar 2023 23:01:48 -0000
+Date:   Thu, 16 Mar 2023 18:01:48 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Neil Armstrong <neil.armstrong@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        linux-remoteproc@vger.kernel.org,
+        Bjorn Andersson <andersson@kernel.org>,
+        devicetree@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH 1/3] dt-bindings: remoteproc: qcom,pas: correct
+ memory-region constraints
+Message-ID: <167900769556.4046079.3396885204765671138.robh@kernel.org>
+References: <20230309082446.37362-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230316115234.393bca5d@kernel.org>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230309082446.37362-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 16, 2023 at 11:52:34AM -0700, Jakub Kicinski wrote:
-> On Thu, 16 Mar 2023 13:36:09 -0500 Andrew Halaney wrote:
-> > static void emac3_config_cbs(struct mac_device_info *hw, u32 send_slope,
-> > 				    u32 idle_slope, u32 high_credit,
-> > 				    u32 low_credit, u32 queue)
-> > 
-> > I agree, that's quite gnarly to read. the emac3_config_cbs is the
-> > callback, so it's already at 6 arguments, so there's nothing I can
-> > trim there. I could create some struct for readability, populate that,
-> > then call the do_config_cbs() func with it from emac3_config_cbs.
-> > Is that the sort of thing you want to see?
+
+On Thu, 09 Mar 2023 09:24:44 +0100, Krzysztof Kozlowski wrote:
+> Qualcomm PAS devices expect exactly one memory region, not many.  Also,
+> the memory-region is now defined in device specific binding, not in
+> qcom,pas-common.yaml, thus also require it in the same place.
 > 
-> Yes, a structure is much better, because it can be initialized member
-> by member,
+> Fixes: cee616c68846 ("dt-bindings: remoteproc: qcom: adsp: move memory-region and firmware-name out of pas-common")
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > 
-> struct bla my_bla = { .this = 1, .that = 2, .and = 3, another = 4, };
+> ---
 > 
-> That's much easier to read. A poor man's version of Python's keyword
-> arguments, if you will.
+> Following dtbs_check errors are expected (not related):
+>  - qcom,halt-regs:0: [142] is too short
+>  - clocks: [[24, 222], [24, 223], [24, 157], [16], [24, 229], [24, 224], [24, 225], [27, 2], [27, 8]] is too short
+>  - 'px-supply' is a required property
+> ---
+>  Documentation/devicetree/bindings/remoteproc/qcom,adsp.yaml    | 1 +
+>  .../devicetree/bindings/remoteproc/qcom,pas-common.yaml        | 1 -
+>  .../devicetree/bindings/remoteproc/qcom,qcs404-pas.yaml        | 3 ++-
+>  .../devicetree/bindings/remoteproc/qcom,sc7180-pas.yaml        | 3 ++-
+>  .../devicetree/bindings/remoteproc/qcom,sc8180x-pas.yaml       | 3 ++-
+>  .../devicetree/bindings/remoteproc/qcom,sc8280xp-pas.yaml      | 3 ++-
+>  .../devicetree/bindings/remoteproc/qcom,sdx55-pas.yaml         | 3 ++-
+>  .../devicetree/bindings/remoteproc/qcom,sm6350-pas.yaml        | 3 ++-
+>  .../devicetree/bindings/remoteproc/qcom,sm8150-pas.yaml        | 3 ++-
+>  .../devicetree/bindings/remoteproc/qcom,sm8350-pas.yaml        | 3 ++-
+>  10 files changed, 17 insertions(+), 9 deletions(-)
+> 
 
-What I would say is be careful with that - make sure "struct bla" is
-specific to the interface being called and not generic.
+Reviewed-by: Rob Herring <robh@kernel.org>
 
-I had that mistake with struct phylink_state... and there is an
-endless stream of people who don't seem to bother reading the
-documentation, who blindly access whatever members of that they
-damn well please because it suits them, even when either they
-shouldn't be writing to them, or when phylink doesn't guarantee
-their contents, they read them.
-
-As a result, I'm now of the opinion that using a struct to pass
-arguments is in principle a bad idea.
-
-There's other reasons why it's a bad idea. Many ABIs are capable of
-passing arguments to functions via processor registers. As soon as
-one uses a struct, they typically end up being written to memory.
-Not only does that potentially cause cache line churn, it also
-means that there could be more slow memory accesses that have to be
-made at some point, potentially making other accesses slow.
-
-So, all in all, I'm really not a fan of the struct approach for
-all the reasons above.
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
