@@ -2,126 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 205A96BC7C2
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 08:53:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8CA16BC7D2
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 08:55:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229667AbjCPHxV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 03:53:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51070 "EHLO
+        id S229872AbjCPHyo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 03:54:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230096AbjCPHxQ (ORCPT
+        with ESMTP id S229549AbjCPHyi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 03:53:16 -0400
-Received: from esa2.hgst.iphmx.com (esa2.hgst.iphmx.com [68.232.143.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D68A389F38
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 00:53:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1678953194; x=1710489194;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=RXkfFrZ4cJbq5mA2q725lauWqEHcqyRQeVT3Aao/9Qw=;
-  b=GrCCwow9VFG416vzING7UcyQi6WcgDKzYhD2jl/4LaP2rISKd8EwtcCc
-   yQAkIFyv7j3ORDeJnqT8K1GHsXIrZGHMByCg3svdlPJhLjbiWt7dTHoR+
-   uRPRaJY3HjEB8+gjwo9jBkWesDkelWPbtJgzbGrZXMTSGnomdXjnJAlTe
-   mf6IbvZKHz9HRT4AwexoEBhjxkHfM5QG9TKjUSKRwUQgQaL6vZ92Q/fbb
-   OCxK4KFPvOhMd2Nyt4gRbGRbPms5NYmaEzCaOGh6gQapDmC9+DRq15tYV
-   Vgv3rMj+7/KY+o+tRY6xKqWuNMF2JPPQ66eVFmGiTkTExNt3fPpMR99lC
-   A==;
-X-IronPort-AV: E=Sophos;i="5.98,265,1673884800"; 
-   d="scan'208";a="330149600"
-Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 16 Mar 2023 15:53:12 +0800
-IronPort-SDR: tc9uy5odJLhbkqZGByfi2aHiKkh6z5cLfKYQ6ynCAOOgwe0yFt1vSHlFhcSf80l0mIdLoYZKM2
- jG4IHIR0h3gdMYv8i527Nxej0fZ6v73+g7kKiiRWrSXD40ECAmciedxI+7Xbu1/XyPWwU6H8PL
- FpoBtQOgn+r/EIHyyzpz7uDGuqtgLU1cFXcZd8KgZAE/xN/UCaPBDJ8As5MQgStqBAiyqzd7EZ
- ESunnAkM+lXWPcwuUUKR/Jol1ZEjPoBXVmLhvFRY7adXNJ68CDiLElnmU1EMHsqpCR+G87/51z
- GBA=
-Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 16 Mar 2023 00:09:38 -0700
-IronPort-SDR: q/Xyl1+KfvYHtGk/SYV/IVTV1CJqBq3GCwBwYrqGEJrMnTnwIGhi2Apa24PYY5NA8eZ4Cy879b
- ZAOP26xzkplK9eLbbC8Rvw7KUildHZ3J39cugYzXyr0dRIg8G7HA9bqzv9WfXVoJritm6JrG95
- aGZCdddXjuPXYzkSbhmm9ZPPkwS6sBFv123HB4G3gQ9OrnaObSItFCkOlRp1TU3yw+IUOxdehh
- oE1kDwE2aXeaWzmWOjEJGsJMh8m+S9AnF4yqlYdnHWPVIwyxTGQuMngO2HWEOkW1QwfMhjef0V
- 6Zw=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 16 Mar 2023 00:53:13 -0700
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4PcfdN1Grtz1RtVq
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 00:53:12 -0700 (PDT)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:content-language:references:to
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1678953191; x=1681545192; bh=RXkfFrZ4cJbq5mA2q725lauWqEHcqyRQeVT
-        3Aao/9Qw=; b=DIG7KAu3wMdekvKQcingmQSqSs4fueFQoXvHqyjox234L/dSEnJ
-        4ApWYRt8E95IJUM6s0FrJ3iaS3St6PDKFc23HG6ahIqPYxx+WxstlEP5ggyGV/yG
-        1rp1+qakICc9f6hSIjtmUzsmdhTgOW4Z9h8JxwdX68o30/lBodQMLk9ihQxIXwUT
-        qGXw96CHc9jZKm45oGYMNNLPZRkuEYo+un5hoVOsPrzOlQqy8xMP01cuPTSM6Unr
-        REmnZ1r8YbKxu7bryo72OF18xSxKuJKYJr9rGAtIxCigoUoDkq3mQnSgBCpFN6AR
-        582oCAHYbUImHrPQjuPJnqp1zGJPWCXS/cQ==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id wcoFR9AlQVbL for <linux-kernel@vger.kernel.org>;
-        Thu, 16 Mar 2023 00:53:11 -0700 (PDT)
-Received: from [10.225.163.87] (unknown [10.225.163.87])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4PcfdL2lflz1RtVm;
-        Thu, 16 Mar 2023 00:53:10 -0700 (PDT)
-Message-ID: <2fa6c8ec-c25f-5338-ac78-eee422935ab8@opensource.wdc.com>
-Date:   Thu, 16 Mar 2023 16:53:08 +0900
+        Thu, 16 Mar 2023 03:54:38 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D7DA12588
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 00:53:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678953225;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=aZYLoXgK/JW3b9cmlgSFtaDq15S+diTkjhEeDbb70oY=;
+        b=IdUuh5JNrZJPjGTIUyzudtERX5y2RcB81vTI94yaPvGqcyZiGgYd2A1ikoNTwPuMIcAiOU
+        9e8iPx7ZyOOlaZvml3Y4LU06F0l9ZdL/3L1CbJSHxHlbowNg/4BqvZxtXXN1sBNCp1Stpr
+        S3glGTlIZaKKRunF2MDX3gfFgwQipyk=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-397-Eeh8ZUJjOZKGWAW-DiI-rw-1; Thu, 16 Mar 2023 03:53:44 -0400
+X-MC-Unique: Eeh8ZUJjOZKGWAW-DiI-rw-1
+Received: by mail-ed1-f70.google.com with SMTP id h11-20020a0564020e8b00b004e59d4722a3so1793845eda.6
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 00:53:43 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678953223;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=aZYLoXgK/JW3b9cmlgSFtaDq15S+diTkjhEeDbb70oY=;
+        b=t9L72pew491BEBrYMENfbRi50Y+/GlbswQFSQveFirrsEjUeqG32El6H3YX2j/l8pt
+         O/InXhXRsQ1i4UOF2391zAHrO+/Q7Tt9cGdulji2EtP5Az4qEWxr7lmGzLq4qxbwLIex
+         MLMbwYmxSigmKnvmq6zrC7lulWipWF7naMoLsKoRgU+LmC3dtNYeWYTfNNSFvisECguE
+         bwahJb0X3lg8xfeUBUj+tO9Y+I1qNMcGVMFYkFSSR13lRKeHWGWV6TsLXkga3YQK47Ip
+         SiStc75eE8+wJxlJeCOr/rTCPN5G4DCW07zhlshjOL8TUHmyXk/j6r/V91EdXDaj5qVv
+         eoew==
+X-Gm-Message-State: AO0yUKXI4T/RBK+DFi5SxeuTBguRSTzCJI0dduZvUGtMPeaJFqGBORWc
+        3IOKLTcEfKClyMLyO/uHpRyLbVcNZHetn6UlBxMKaj80A0inUbj7/QDi9KBQ/ku/Y1+fk4lt0cg
+        gIRHZP/xOBxPvTG3O6Te83g4=
+X-Received: by 2002:a17:907:60c9:b0:8e1:12b6:a8fc with SMTP id hv9-20020a17090760c900b008e112b6a8fcmr11086084ejc.4.1678953222999;
+        Thu, 16 Mar 2023 00:53:42 -0700 (PDT)
+X-Google-Smtp-Source: AK7set84iHWAWy9wrsukpTv+yvJRTM3Gf1ub8/HI94lAt1/UoUW/Pjk54pFWWJhGC8DFoWm9E8vr+w==
+X-Received: by 2002:a17:907:60c9:b0:8e1:12b6:a8fc with SMTP id hv9-20020a17090760c900b008e112b6a8fcmr11086065ejc.4.1678953222665;
+        Thu, 16 Mar 2023 00:53:42 -0700 (PDT)
+Received: from [10.43.17.73] (nat-pool-brq-t.redhat.com. [213.175.37.10])
+        by smtp.gmail.com with ESMTPSA id mh1-20020a170906eb8100b008eddbd46d7esm3482399ejb.31.2023.03.16.00.53.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Mar 2023 00:53:42 -0700 (PDT)
+Message-ID: <c8e4cc40-f764-0a99-be50-015d4000adfd@redhat.com>
+Date:   Thu, 16 Mar 2023 08:53:41 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-Subject: Re: [PATCH v3] pata_parport: fix memory leaks
-To:     Ondrej Zary <linux@zary.sk>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>, linux-ide@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <cf8c7b34-3c5d-2b9e-b410-d83f4af7274a@opensource.wdc.com>
- <20230314225805.9124-1-linux@zary.sk>
+Subject: Re: next: arm-32bit: build errors: kernel/module/internal.h:252:56:
+ error: expected ';', ',' or ')' before 'const'
 Content-Language: en-US
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <20230314225805.9124-1-linux@zary.sk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org, bpf <bpf@vger.kernel.org>,
+        linux-mips@vger.kernel.org,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Arnd Bergmann <arnd@arndb.de>, Jiri Olsa <jolsa@kernel.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>
+References: <CA+G9fYsqpaicB4TKpMHKbma+YKs0Lm_mpsGBnxvh4tHcubAUeg@mail.gmail.com>
+From:   Viktor Malik <vmalik@redhat.com>
+In-Reply-To: <CA+G9fYsqpaicB4TKpMHKbma+YKs0Lm_mpsGBnxvh4tHcubAUeg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/15/23 07:58, Ondrej Zary wrote:
-> When ida_alloc() fails, "pi" is not freed although the misleading
-> comment says otherwise.
-> Move the ida_alloc() call up so we really don't have to free "pi" in
-> case of ida_alloc() failure.
+On 3/16/23 08:14, Naresh Kamboju wrote:
+> Results from Linaro’s test farm.
+> Following mips and arm builds failed.
 > 
-> Also move ida_free() call from pi_remove_one() to
-> pata_parport_dev_release(). It was dereferencing already freed dev
-> pointer.
+> Regressions found on mips:
+>   - build/gcc-12-ath79_defconfig
+>   - build/gcc-8-ath79_defconfig
 > 
-> Testing revealed leak even in non-failure case which was tracked down
-> to missing put_device() call after bus_find_device_by_name(). As a
-> result, pata_parport_dev_release() was never called.
+> Regressions found on arm:
+>   - build/gcc-8-omap1_defconfig
+>   - build/gcc-12-omap1_defconfig
+>   - build/clang-nightly-omap1_defconfig
+>   - build/clang-16-omap1_defconfig
 > 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Reported-by: Dan Carpenter <error27@gmail.com>
-> Link: https://lore.kernel.org/r/202303111822.IHNchbkp-lkp@intel.com/
-> Signed-off-by: Ondrej Zary <linux@zary.sk>
+> 
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> 
+> Build log:
+> ------------
+> 
+> In file included from kernel/module/main.c:59:
+> kernel/module/internal.h:252:56: error: expected ';', ',' or ')' before 'const'
+>    252 |                                                        const char *name)
+>        |                                                        ^~~~~
+> make[4]: *** [scripts/Makefile.build:252: kernel/module/main.o] Error 1
+> In file included from kernel/module/strict_rwx.c:12:
+> kernel/module/internal.h:252:56: error: expected ';', ',' or ')' before 'const'
+>    252 |                                                        const char *name)
+>        |                                                        ^~~~~
+> make[4]: *** [scripts/Makefile.build:252: kernel/module/strict_rwx.o] Error 1
+> In file included from kernel/module/tree_lookup.c:11:
+> kernel/module/internal.h:252:56: error: expected ';', ',' or ')' before 'const'
+>    252 |                                                        const char *name)
+>        |                                                        ^~~~~
+> make[4]: *** [scripts/Makefile.build:252: kernel/module/tree_lookup.o] Error 1
+> In file included from kernel/module/procfs.c:13:
+> kernel/module/internal.h:252:56: error: expected ';', ',' or ')' before 'const'
+>    252 |                                                        const char *name)
+>        |                                                        ^~~~~
+> make[4]: *** [scripts/Makefile.build:252: kernel/module/procfs.o] Error 1
+> In file included from kernel/module/sysfs.c:15:
+> kernel/module/internal.h:252:56: error: expected ';', ',' or ')' before 'const'
+>    252 |                                                        const char *name)
+>        |                                                        ^~~~~
+> make[4]: *** [scripts/Makefile.build:252: kernel/module/sysfs.o] Error 1
+> 
+> 
+> build log:
+>   - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230316/testrun/15632981/suite/build/test/gcc-12-omap1_defconfig/log
+>   - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230316/testrun/15632981/suite/build/test/gcc-12-omap1_defconfig/details/
+> 
 
-Applied to for-6.3-fixes. Thanks !
+Hi,
 
--- 
-Damien Le Moal
-Western Digital Research
+this was fixed by Alexei by force-pushing bpf-next [1] but it seems that 
+linux-next has managed to pull bpf-next in the meantime. I'm not sure 
+what is the best way to fix this in linux-next, let me know if I should 
+send a patch.
+
+I apologize for the trouble.
+Viktor
+
+[1] 
+https://lore.kernel.org/bpf/6c8f828c-3995-a9b0-3bdd-37724e96a4ce@redhat.com/T/#m44dc53d16524fa818d6a9397487107805e5f0713
+
+> 
+> --
+> Linaro LKFT
+> https://lkft.linaro.org
+> 
 
