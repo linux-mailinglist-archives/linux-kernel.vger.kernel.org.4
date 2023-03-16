@@ -2,198 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E03D46BD6CB
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 18:13:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB59A6BD6D0
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 18:16:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229590AbjCPRNV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 13:13:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50422 "EHLO
+        id S229617AbjCPRP6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 13:15:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbjCPRNT (ORCPT
+        with ESMTP id S229479AbjCPRPz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 13:13:19 -0400
+        Thu, 16 Mar 2023 13:15:55 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3A8112F2B
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 10:13:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7822818176;
+        Thu, 16 Mar 2023 10:15:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5DEBE620B5
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 17:13:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95829C433D2;
-        Thu, 16 Mar 2023 17:13:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1DFDE620B3;
+        Thu, 16 Mar 2023 17:15:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99003C433D2;
+        Thu, 16 Mar 2023 17:15:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678986796;
-        bh=ycI170u42IGu7QqLc2ahGz0aUq50c3KdvJb5OQc+Q0k=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=q4t5CCaa4BuZj1m9HFZmGbfN08085T2gc3nW50QIyG/BM6LiUNy+vfrfQVXiTE0NR
-         9Gq4Tt/t+eKK5YKK1VRWysO7cHJWeZbtzbl7IGSCie9c26q4s5xtj3I19zEwpRp5/w
-         pUT+IA5XYdSZsowkbI9zb1IiA15XJK4p4ad2F1oxuyKnzovKgjgn7QdSIjERuRCQFB
-         ZwvuAGg94fPrwQYwOKMsgLfIbIB6yhCBEOqDyKRdPY3vEvXv2OM+Qe8m0zqtSqURr5
-         dYPZHD+0Gbhh/OJdg4UdqCTndwTmcoaYLhSIpiIOme/D1xCP2/l07JAaN9eQjinJMY
-         T46jqdVzL8r4g==
-Date:   Thu, 16 Mar 2023 10:13:14 -0700
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     Yonggil Song <yonggil.song@samsung.com>
-Cc:     "chao@kernel.org" <chao@kernel.org>,
-        "linux-f2fs-devel@lists.sourceforge.net" 
-        <linux-f2fs-devel@lists.sourceforge.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v1] f2fs: Fix system crash due to lack of free space in
- LFS
-Message-ID: <ZBNOKq/EYNMnMSFi@google.com>
-References: <CGME20230314074733epcms2p511d7a7fa11d5b54ac2fbaa840db3f1cb@epcms2p5>
- <20230314074733epcms2p511d7a7fa11d5b54ac2fbaa840db3f1cb@epcms2p5>
+        s=k20201202; t=1678986953;
+        bh=paYpboia4VxrbfCtT7DOi0TFcUA2l2m0b6vVWEPCcpQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=DCFTD87d1LgeIPlMHHQndU91cdYEz+J0z4jZkrWPsQmcHTFgQaev0mcysL6rNzWof
+         OUszJ5pWE+IS1uaIvrSOWOZ0nZtI7jvCD3ERiXi+MJoOvK9DrjQkwhCmmX2hCelU9Q
+         1ObRa8JzKpZRgqwi2lbe1FgvkUmI239SRdEzGSuE8GCq0OKTE3qrBiqYXwEKE+/qZt
+         tO3y6eLZi5+mavlnL+F0SR+jcoHZva1fuDYMMV08eA3zdZhuTkyTub5ZbNnR7/SJTa
+         ewNrzZACCZIDtH3w8J2u3m9vTzH1RFE9Y/vhuBbjfjI16nGyGDx6brv7GEeF7h6pmm
+         vgt8pOH6L9lpA==
+Message-ID: <51e64093-5e2f-18fa-db04-8d6789362921@kernel.org>
+Date:   Thu, 16 Mar 2023 18:15:48 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230314074733epcms2p511d7a7fa11d5b54ac2fbaa840db3f1cb@epcms2p5>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] tracing/hwlat: Replace sched_setaffinity with
+ set_cpus_allowed_ptr
+To:     Costa Shulyupin <costa.shul@redhat.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        "open list:TRACING" <linux-kernel@vger.kernel.org>,
+        "open list:TRACING" <linux-trace-kernel@vger.kernel.org>
+Cc:     bwensley@redhat.com, constantine.shulyupin@gmail.com
+References: <20230316144535.1004952-1-costa.shul@redhat.com>
+Content-Language: en-US
+From:   Daniel Bristot de Oliveira <bristot@kernel.org>
+In-Reply-To: <20230316144535.1004952-1-costa.shul@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/14, Yonggil Song wrote:
-> When f2fs tries to checkpoint during foreground gc in LFS mode, system
-> crash occurs due to lack of free space if the amount of dirty node and
-> dentry pages generated by data migration exceeds free space.
-> The reproduction sequence is as follows.
+On 3/16/23 15:45, Costa Shulyupin wrote:
+> There is a problem with the behavior of hwlat in a container,
+> resulting in incorrect output. A warning message is generated:
+> "cpumask changed while in round-robin mode, switching to mode none",
+> and the tracing_cpumask is ignored. This issue arises because
+> the kernel thread, hwlatd, is not a part of the container, and
+> the function sched_setaffinity is unable to locate it using its PID.
+> Additionally, the task_struct of hwlatd is already known.
+> Ultimately, the function set_cpus_allowed_ptr achieves
+> the same outcome as sched_setaffinity, but employs task_struct
+> instead of PID.
 > 
->  - 20GiB capacity block device (null_blk)
->  - format and mount with LFS mode
->  - create a file and write 20,000MiB
->  - 4k random write on full range of the file
+> Test case:
 > 
->  RIP: 0010:new_curseg+0x48a/0x510 [f2fs]
->  Code: 55 e7 f5 89 c0 48 0f af c3 48 8b 5d c0 48 c1 e8 20 83 c0 01 89 43 6c 48 83 c4 28 5b 41 5c 41 5d 41 5e 41 5f 5d c3 cc cc cc cc <0f> 0b f0 41 80 4f 48 04 45 85 f6 0f 84 ba fd ff ff e9 ef fe ff ff
->  RSP: 0018:ffff977bc397b218 EFLAGS: 00010246
->  RAX: 00000000000027b9 RBX: 0000000000000000 RCX: 00000000000027c0
->  RDX: 0000000000000000 RSI: 00000000000027b9 RDI: ffff8c25ab4e74f8
->  RBP: ffff977bc397b268 R08: 00000000000027b9 R09: ffff8c29e4a34b40
->  R10: 0000000000000001 R11: ffff977bc397b0d8 R12: 0000000000000000
->  R13: ffff8c25b4dd81a0 R14: 0000000000000000 R15: ffff8c2f667f9000
->  FS: 0000000000000000(0000) GS:ffff8c344ec80000(0000) knlGS:0000000000000000
->  CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->  CR2: 000000c00055d000 CR3: 0000000e30810003 CR4: 00000000003706e0
->  DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
->  DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
->  Call Trace:
->  <TASK>
->  allocate_segment_by_default+0x9c/0x110 [f2fs]
->  f2fs_allocate_data_block+0x243/0xa30 [f2fs]
->  ? __mod_lruvec_page_state+0xa0/0x150
->  do_write_page+0x80/0x160 [f2fs]
->  f2fs_do_write_node_page+0x32/0x50 [f2fs]
->  __write_node_page+0x339/0x730 [f2fs]
->  f2fs_sync_node_pages+0x5a6/0x780 [f2fs]
->  block_operations+0x257/0x340 [f2fs]
->  f2fs_write_checkpoint+0x102/0x1050 [f2fs]
->  f2fs_gc+0x27c/0x630 [f2fs]
->  ? folio_mark_dirty+0x36/0x70
->  f2fs_balance_fs+0x16f/0x180 [f2fs]
+>   # cd /sys/kernel/tracing
+>   # echo 0 > tracing_on
+>   # echo round-robin > hwlat_detector/mode
+>   # echo hwlat > current_tracer
+>   # unshare --fork --pid bash -c 'echo 1 > tracing_on'
+>   # dmesg -c
 > 
-> This patch adds checking whether free sections are enough before checkpoint
-> during gc.
+> Actual behavior:
 > 
-> Signed-off-by: Yonggil Song <yonggil.song@samsung.com>
+> [573502.809060] hwlat_detector: cpumask changed while in round-robin mode, switching to mode none
+> 
+> Signed-off-by: Costa Shulyupin <costa.shul@redhat.com>
+
+I tested it and... it works.
+
+Acked-by: Daniel Bristot de Oliveira <bristot@kernel.org>
+
+Thanks
+-- Daniel
+
 > ---
->  fs/f2fs/gc.c      |  7 ++++++-
->  fs/f2fs/segment.h | 26 +++++++++++++++++++++-----
->  2 files changed, 27 insertions(+), 6 deletions(-)
+>  kernel/trace/trace_hwlat.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/fs/f2fs/gc.c b/fs/f2fs/gc.c
-> index 4546e01b2ee0..b22f49a6f128 100644
-> --- a/fs/f2fs/gc.c
-> +++ b/fs/f2fs/gc.c
-> @@ -1773,6 +1773,7 @@ int f2fs_gc(struct f2fs_sb_info *sbi, struct f2fs_gc_control *gc_control)
->  		.iroot = RADIX_TREE_INIT(gc_list.iroot, GFP_NOFS),
->  	};
->  	unsigned int skipped_round = 0, round = 0;
-> +	unsigned int nr_needed_secs = 0, node_blocks = 0, dent_blocks = 0;
+> diff --git a/kernel/trace/trace_hwlat.c b/kernel/trace/trace_hwlat.c
+> index d440ddd5fd8b..444dfc31f258 100644
+> --- a/kernel/trace/trace_hwlat.c
+> +++ b/kernel/trace/trace_hwlat.c
+> @@ -339,7 +339,7 @@ static void move_to_next_cpu(void)
+>  	cpumask_clear(current_mask);
+>  	cpumask_set_cpu(next_cpu, current_mask);
 >  
->  	trace_f2fs_gc_begin(sbi->sb, gc_type, gc_control->no_bg_gc,
->  				gc_control->nr_free_secs,
-> @@ -1858,8 +1859,12 @@ int f2fs_gc(struct f2fs_sb_info *sbi, struct f2fs_gc_control *gc_control)
->  		}
+> -	sched_setaffinity(0, current_mask);
+> +	set_cpus_allowed_ptr(current, current_mask);
+>  	return;
+>  
+>   change_mode:
+> @@ -446,7 +446,7 @@ static int start_single_kthread(struct trace_array *tr)
+>  
 >  	}
 >  
-> +	/* need more three extra sections for writer's data/node/dentry */
-> +	nr_needed_secs = get_min_need_secs(sbi, &node_blocks, &dent_blocks) + 3;
-
-	get_min_need_secs(&lower, &upper)
-	{
-		...
-
-		*lower = node_secs + dent_secs;
-		*upper = *lower + (node_blocks ? 1 : 0) + (dent_blocks ? 1 : 0);
-	}
-
-> +	nr_needed_secs += ((node_blocks ? 1 : 0) + (dent_blocks ? 1 : 0));
-> +
->  	/* Write checkpoint to reclaim prefree segments */
-> -	if (free_sections(sbi) < NR_CURSEG_PERSIST_TYPE &&
-> +	if (free_sections(sbi) <= nr_needed_secs &&
-
-#define NR_GC_CHECKPOINT_SECS	(3)	/* data/node/dentry sections */
-
-	if (free_sections(sbi) <= upper + NR_GC_CHECKPOINT_SECS &&
-
->  				prefree_segments(sbi)) {
->  		ret = f2fs_write_checkpoint(sbi, &cpc);
->  		if (ret)
-> diff --git a/fs/f2fs/segment.h b/fs/f2fs/segment.h
-> index be8f2d7d007b..ac11c47bfe37 100644
-> --- a/fs/f2fs/segment.h
-> +++ b/fs/f2fs/segment.h
-> @@ -605,8 +605,11 @@ static inline bool has_curseg_enough_space(struct f2fs_sb_info *sbi,
->  	return true;
->  }
+> -	sched_setaffinity(kthread->pid, current_mask);
+> +	set_cpus_allowed_ptr(kthread, current_mask);
 >  
-> -static inline bool has_not_enough_free_secs(struct f2fs_sb_info *sbi,
-> -					int freed, int needed)
-> +/*
-> + * calculate the minimum number of sections (needed) for dirty node/dentry
-> + */
-> +static inline unsigned int get_min_need_secs(struct f2fs_sb_info *sbi,
-> +		unsigned int *node_blocks, unsigned int *dent_blocks)
->  {
->  	unsigned int total_node_blocks = get_pages(sbi, F2FS_DIRTY_NODES) +
->  					get_pages(sbi, F2FS_DIRTY_DENTS) +
-> @@ -614,15 +617,28 @@ static inline bool has_not_enough_free_secs(struct f2fs_sb_info *sbi,
->  	unsigned int total_dent_blocks = get_pages(sbi, F2FS_DIRTY_DENTS);
->  	unsigned int node_secs = total_node_blocks / CAP_BLKS_PER_SEC(sbi);
->  	unsigned int dent_secs = total_dent_blocks / CAP_BLKS_PER_SEC(sbi);
-> -	unsigned int node_blocks = total_node_blocks % CAP_BLKS_PER_SEC(sbi);
-> -	unsigned int dent_blocks = total_dent_blocks % CAP_BLKS_PER_SEC(sbi);
-> +
-> +	f2fs_bug_on(sbi, (!node_blocks || !dent_blocks));
-> +
-> +	*node_blocks = total_node_blocks % CAP_BLKS_PER_SEC(sbi);
-> +	*dent_blocks = total_dent_blocks % CAP_BLKS_PER_SEC(sbi);
-> +
-> +	return (node_secs + dent_secs);
-> +}
-> +
-> +static inline bool has_not_enough_free_secs(struct f2fs_sb_info *sbi,
-> +					int freed, int needed)
-> +{
-> +	unsigned int node_blocks = 0;
-> +	unsigned int dent_blocks = 0;
->  	unsigned int free, need_lower, need_upper;
->  
->  	if (unlikely(is_sbi_flag_set(sbi, SBI_POR_DOING)))
->  		return false;
->  
->  	free = free_sections(sbi) + freed;
-> -	need_lower = node_secs + dent_secs + reserved_sections(sbi) + needed;
-> +	need_lower = get_min_need_secs(sbi, &node_blocks, &dent_blocks) + needed +
-> +				reserved_sections(sbi);
->  	need_upper = need_lower + (node_blocks ? 1 : 0) + (dent_blocks ? 1 : 0);
->  
->  	if (free > need_upper)
-> -- 
-> 2.34.1
+>  	kdata->kthread = kthread;
+>  	wake_up_process(kthread);
+
