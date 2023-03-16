@@ -2,109 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 325B36BD4E8
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 17:16:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 272C56BD510
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 17:17:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229958AbjCPQQm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 12:16:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36594 "EHLO
+        id S230185AbjCPQR2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 12:17:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229770AbjCPQQk (ORCPT
+        with ESMTP id S230109AbjCPQRZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 12:16:40 -0400
-Received: from msg-1.mailo.com (msg-1.mailo.com [213.182.54.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0C4ACB046
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 09:15:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1678983329; bh=dO+ZMH6qjgplEx6nSU5n6rmwyk4FtUwjUTO3YAmYrSA=;
-        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
-         MIME-Version:Content-Type:In-Reply-To;
-        b=czetI19z036f9xoHox+85+Sns5BVqVEzyRoOQTDHsTw/LJ9qWoyXJBd86kyFqVKAn
-         6D5RIFHg+KuQMfbPEWMoo5IXG9Nva0ZLSc46lf9KVKABEKysEbnNcnzVU+2IagKgZN
-         gnoG3BT+5HqHer8nIcIYOJgtyPdXo27vQEtpksQM=
-Received: by b221-4.in.mailobj.net [192.168.90.24] with ESMTP
-        via ip-20.mailobj.net [213.182.54.20]
-        Thu, 16 Mar 2023 17:15:24 +0100 (CET)
-X-EA-Auth: eRMUx2J/pwtZS8PYOuWWYXRGDO+tJA8apJU774lQkFdOLH758ShCUPWz7omWuQwUyvXilBYISUqp5dyavZ64mtV+N6K/AeKh
-Date:   Thu, 16 Mar 2023 21:45:13 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     Sumitra Sharma <sumitraartsy@gmail.com>
-Cc:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-staging@lists.linux.dev, outreachy@lists.linux.dev
-Subject: Re: [PATCH v2] Staging: octeon: Fix line ending with '('
-Message-ID: <ZBNAkYSO3ARPbjKU@ubun2204.myguest.virtualbox.org>
-References: <20230316155202.GA82100@sumitra.com>
+        Thu, 16 Mar 2023 12:17:25 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36A0DB71A0
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 09:15:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678983331;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=mlukPFgMuUiNDYUja4zCoHJNdHul/iInVFC/mNyQV8Q=;
+        b=WeIDxR7eS8wn2u9RAe3uYDIPjTN3fa4/3TeEbrgNYTSA4OJ8lRDo/CcY0j4qAa3S/r8Fqy
+        gBe/su+wJTNYG82KbEpOSbu1QSG6q6LdQAXuO10fQiRi8H76X/6IMfuPWcTWQZ0gwTSPb/
+        c2KGZl4aWeseV6gwMI8XUeq9odNrW3E=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-197-O_DJq66rNq60ooIdTxoHYw-1; Thu, 16 Mar 2023 12:15:30 -0400
+X-MC-Unique: O_DJq66rNq60ooIdTxoHYw-1
+Received: by mail-qk1-f197.google.com with SMTP id a14-20020a05620a16ce00b0074616159bd9so1212535qkn.2
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 09:15:29 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678983329;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mlukPFgMuUiNDYUja4zCoHJNdHul/iInVFC/mNyQV8Q=;
+        b=srI8Am6p5QduIpjup5nkh/4PQI4oWKJE6bXzF26QEzShOd5cTrFZzbVYqOzgoUzo19
+         aXDlMJ8Y05CfNJXd4Dk8H7R60UTjJuq7xTavaFkcUlmkm/gxBjEGr7xrCpWOqPqNzXKM
+         zWENQVStuJSUkjP3VPebExX2x29vHmlJdNxlMEK8b9ltsNEQ77i/qHghdMV/uirsL18w
+         IZjRRuWxKjPbcYIumsMzx3MaKmfUenwQKyVacDmzy+J7DEzEA1RoYIaZ6nv+r1lZFnyU
+         6xeh5LsECcTtX2CzlhaAMDHd5oifzvmPFfzNv0sF+vwsjumAtBS6+169lLOwpmkv1/TK
+         bpmw==
+X-Gm-Message-State: AO0yUKXG9ICDO8+MtIi4H7ZUeRy4ohM+G84ONpIfy8xLmS9Cv5vSHfYA
+        IR8mK9MhlZUeOuGSFXCODlMLpp5MAh8BXEBCwlR4nbIR25pm4DRqFF7Axv7Vrh7XWmf+V3h09Y9
+        c/kixP3TPqM5no3CmTe+sCdDS
+X-Received: by 2002:a05:6214:2428:b0:574:8ef8:89d2 with SMTP id gy8-20020a056214242800b005748ef889d2mr39824759qvb.38.1678983329412;
+        Thu, 16 Mar 2023 09:15:29 -0700 (PDT)
+X-Google-Smtp-Source: AK7set+of7na8F1dFKLndAwQGwakPmWiDEiDVwrlTO9yupX5AyjFyMqZe903mbwQxlEn+ZQoYaB20w==
+X-Received: by 2002:a05:6214:2428:b0:574:8ef8:89d2 with SMTP id gy8-20020a056214242800b005748ef889d2mr39824676qvb.38.1678983329027;
+        Thu, 16 Mar 2023 09:15:29 -0700 (PDT)
+Received: from halaney-x13s (104-53-165-62.lightspeed.stlsmo.sbcglobal.net. [104.53.165.62])
+        by smtp.gmail.com with ESMTPSA id q16-20020a05620a025000b00745df9edd7csm4841721qkn.91.2023.03.16.09.15.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Mar 2023 09:15:28 -0700 (PDT)
+Date:   Thu, 16 Mar 2023 11:15:25 -0500
+From:   Andrew Halaney <ahalaney@redhat.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, vkoul@kernel.org,
+        bhupesh.sharma@linaro.org, mturquette@baylibre.com,
+        sboyd@kernel.org, peppe.cavallaro@st.com,
+        alexandre.torgue@foss.st.com, joabreu@synopsys.com,
+        mcoquelin.stm32@gmail.com, richardcochran@gmail.com,
+        linux@armlinux.org.uk, veekhee@apple.com,
+        tee.min.tan@linux.intel.com, mohammad.athari.ismail@intel.com,
+        jonathanh@nvidia.com, ruppala@nvidia.com, bmasney@redhat.com,
+        andrey.konovalov@linaro.org, linux-arm-msm@vger.kernel.org,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, ncai@quicinc.com,
+        jsuraj@qti.qualcomm.com, hisunil@quicinc.com
+Subject: Re: [PATCH net-next 01/11] dt-bindings: net: snps,dwmac: Update
+ interrupt-names
+Message-ID: <20230316161525.fwzfyj3fhekfwafd@halaney-x13s>
+References: <20230313165620.128463-1-ahalaney@redhat.com>
+ <20230313165620.128463-2-ahalaney@redhat.com>
+ <d4831176-c6f1-5a9b-3086-23d82f1f05a6@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230316155202.GA82100@sumitra.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <d4831176-c6f1-5a9b-3086-23d82f1f05a6@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 16, 2023 at 08:52:02AM -0700, Sumitra Sharma wrote:
-> Adhere to coding-style.
+On Thu, Mar 16, 2023 at 08:13:24AM +0100, Krzysztof Kozlowski wrote:
+> On 13/03/2023 17:56, Andrew Halaney wrote:
+> > From: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+> >
+> > As commit fc191af1bb0d ("net: stmmac: platform: Fix misleading
+> > interrupt error msg") noted, not every stmmac based platform
+> > makes use of the 'eth_wake_irq' or 'eth_lpi' interrupts.
+> >
+> > So, update the 'interrupt-names' inside 'snps,dwmac' YAML
+> > bindings to reflect the same.
+> >
+> > Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+> > Signed-off-by: Andrew Halaney <ahalaney@redhat.com>
+> > ---
+> >
+> > I picked this up from:
+> >		https://lore.kernel.org/netdev/20220929060405.2445745-2-bhupesh.sharma@linaro.org/
+> > No changes other than collecting the Acked-by.
+> >
+> >  Documentation/devicetree/bindings/net/snps,dwmac.yaml | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/Documentation/devicetree/bindings/net/snps,dwmac.yaml b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+> > index 16b7d2904696..52ce14a4bea7 100644
+> > --- a/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+> > +++ b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+> > @@ -105,8 +105,8 @@ properties:
+> >      minItems: 1
+> >      items:
+> >        - const: macirq
+> > -      - const: eth_wake_irq
+> > -      - const: eth_lpi
+> > +      - enum: [eth_wake_irq, eth_lpi]
+> > +      - enum: [eth_wake_irq, eth_lpi]
+>
+> I acked it before but this is not correct. This should be:
+> +      - enum: [eth_wake_irq, eth_lpi]
+> +      - enum: eth_lpi
 
-Hi Sumitra,
-Quick background: Linux Kernel coding style required developers to limit the
-code within 80 columns per line. This resulted in splitting the long lines into
-more than one lines. Some splits were unwillingly poor causing checkpatch error
-[e.g. this one that you are attempting to address].
-Recently, the 80 column limit was relaxed to 100 columns. This now will allow to
-merge some poorly split lines resulting in improved readability and avoid
-checkpath complaints.
+Would
++      - enum: [eth_wake_irq, eth_lpi]
++      - const: eth_lpi
+be more appropriate? With the suggested change above I get the following
+error, but with the above things seem to work as I expect:
 
-Now, can you use this information to convert your live above a little more
-descriptive. Remember a well written "why" explanation is almost always
-necessary.
+    (dtschema) ahalaney@halaney-x13s ~/git/redhat/stmmac (git)-[stmmac|rebase-i] % git diff HEAD~
+    diff --git a/Documentation/devicetree/bindings/net/snps,dwmac.yaml b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+    index 16b7d2904696..ca199a17f83d 100644
+    --- a/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+    +++ b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+    @@ -105,8 +105,8 @@ properties:
+         minItems: 1
+         items:
+           - const: macirq
+    -      - const: eth_wake_irq
+    -      - const: eth_lpi
+    +      - enum: [eth_wake_irq, eth_lpi]
+    +      - enum: eth_lpi
 
-> 
-> Checkpatch has reported code style warning:
-> CHECK: Lines should not end with a '('.
-> 
-> Enhance the design of a function header:
-> Align the function parameters immediately after '(' in a single line.
+       clocks:
+         minItems: 1
+    (dtschema) ahalaney@halaney-x13s ~/git/redhat/stmmac (git)-[stmmac|rebase-i] % make dt_binding_check DT_SCHEMA_FILES=Documentation/devicetree/bindings/net/snps,dwmac.yaml
+      DTEX    Documentation/devicetree/bindings/net/snps,dwmac.example.dts
+      LINT    Documentation/devicetree/bindings
+      CHKDT   Documentation/devicetree/bindings/processed-schema.json
+    /home/ahalaney/git/redhat/stmmac/Documentation/devicetree/bindings/net/snps,dwmac.yaml: properties:interrupt-names:items: 'anyOf' conditional failed, one must be fixed:
+        [{'const': 'macirq'}, {'enum': ['eth_wake_irq', 'eth_lpi']}, {'enum': 'eth_lpi'}] is not of type 'object', 'boolean'
+        'eth_lpi' is not of type 'array'
+        from schema $id: http://json-schema.org/draft-07/schema#
+    /home/ahalaney/git/redhat/stmmac/Documentation/devicetree/bindings/net/snps,dwmac.yaml: properties:interrupt-names:items: 'oneOf' conditional failed, one must be fixed:
+        [{'const': 'macirq'}, {'enum': ['eth_wake_irq', 'eth_lpi']}, {'enum': 'eth_lpi'}] is not of type 'object'
+        'eth_lpi' is not of type 'array'
+        from schema $id: http://devicetree.org/meta-schemas/keywords.yaml#
+    /home/ahalaney/git/redhat/stmmac/Documentation/devicetree/bindings/net/snps,dwmac.yaml: properties:interrupt-names:items: 'oneOf' conditional failed, one must be fixed:
+        [{'const': 'macirq'}, {'enum': ['eth_wake_irq', 'eth_lpi']}, {'enum': 'eth_lpi'}] is not of type 'object'
+        'eth_lpi' is not of type 'array'
+        from schema $id: http://devicetree.org/meta-schemas/string-array.yaml#
+      SCHEMA  Documentation/devicetree/bindings/processed-schema.json
+    /home/ahalaney/git/redhat/stmmac/Documentation/devicetree/bindings/net/snps,dwmac.yaml: ignoring, error in schema: properties: interrupt-names: items
+      DTC_CHK Documentation/devicetree/bindings/net/snps,dwmac.example.dtb
 
-This is the "what" part and not so useful for such a simple change. You need not
-write this. However for complex changes or tricky code optimization, the "what"
-part will be very useful as well.
-
-Hope this helps.
-
-Deepak.
-
-> 
-> Signed-off-by: Sumitra Sharma <sumitraartsy@gmail.com>
-> ---
-> 
-> v2: Change patch subject and description.
-> 
->  drivers/staging/octeon/octeon-stubs.h | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
-> 
-> diff --git a/drivers/staging/octeon/octeon-stubs.h b/drivers/staging/octeon/octeon-stubs.h
-> index 7a02e59e283f..3e7b92cd2e35 100644
-> --- a/drivers/staging/octeon/octeon-stubs.h
-> +++ b/drivers/staging/octeon/octeon-stubs.h
-> @@ -1372,9 +1372,7 @@ static inline void cvmx_fau_async_fetch_and_add32(uint64_t scraddr,
->  						  int32_t value)
->  { }
->  
-> -static inline union cvmx_gmxx_rxx_rx_inbnd cvmx_spi4000_check_speed(
-> -	int interface,
-> -	int port)
-> +static inline union cvmx_gmxx_rxx_rx_inbnd cvmx_spi4000_check_speed(int interface, int port)
->  {
->  	union cvmx_gmxx_rxx_rx_inbnd r;
->  
-> -- 
-> 2.25.1
-> 
-> 
-
+Thanks,
+Andrew
 
