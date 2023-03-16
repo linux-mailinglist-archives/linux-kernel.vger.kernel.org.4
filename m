@@ -2,163 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C0046BC936
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 09:32:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89FB56BC93F
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 09:35:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229664AbjCPIcj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 04:32:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43926 "EHLO
+        id S230082AbjCPIfo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 04:35:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229760AbjCPIcf (ORCPT
+        with ESMTP id S229574AbjCPIfm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 04:32:35 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 038C05D458
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 01:31:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678955488;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        Thu, 16 Mar 2023 04:35:42 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3A471D931
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 01:35:40 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 8A80621A38;
+        Thu, 16 Mar 2023 08:35:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1678955739; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=X/1UEGyWZZrbvStEgLaSVShuWDRxe0yPRa+3kY6NxaI=;
-        b=IYJprkW1OtGCrEF2tI/Z48yXTIZTz1RV8Ys1KgziE+F6Spy8wYk5KyvU/G00TEf+LSxOi6
-        EoDiEYpSUsvIZji2VjKObgxeUmt9QR+Q1/ZPsz8OW5VoMTSCT0uTuP0Yg9mLypM4BGZWSR
-        urjd+943k1XIGiGc1s8dDiFSomMDxc4=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-13-sAUsOuckM32CU82usJZ82g-1; Thu, 16 Mar 2023 04:31:27 -0400
-X-MC-Unique: sAUsOuckM32CU82usJZ82g-1
-Received: by mail-wm1-f69.google.com with SMTP id bg13-20020a05600c3c8d00b003ed40f09355so432869wmb.5
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 01:31:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678955486;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=X/1UEGyWZZrbvStEgLaSVShuWDRxe0yPRa+3kY6NxaI=;
-        b=YvwTJMZtgXpYjWiE5Ij0GxXs6CncFwDbdiED5QgWlRD0ewlOnBPWnDhshecUBoQcfm
-         sXREB84GQw4058dQ8aO8f/cNbHIA6OJqCTV/XDyxtn6HyolXVLJPrPESjwyi/YqitSpU
-         VdOwv3ioB2gY6kRc2LP+dsUgRlu0npVcOqTK/nggsFqnwu/BOgj6sj8yblCavCktC3j/
-         wOH17qoDIQP/c/cBAzWFLq5hquVz2s2ETaIU/XuygxDUqigRtqDYc9NCBWleu10pAD1l
-         hQp7DDp/mhE3ItM2PX0FI6RLaArtQHbaqeUTSdgPqFoaK3DzBxCQ7x5Ny/q0uqq6VnMq
-         BP9g==
-X-Gm-Message-State: AO0yUKUXCxUMwES6Mq65MwinwXjE+B/+uc/PRuK2YcJtAC91XQCCAzOc
-        oJ91BdJnBQhZe4jk/t22qkFHyFpl0cnMFuBHRaHDvaEe9D1e3Pw9GGGhsXRV0StWFSoa1Hl4IFI
-        tWJ9RZUMkijHdKIgof5H8piy4ESsGRtO9
-X-Received: by 2002:a5d:5955:0:b0:2cf:e29f:d7f5 with SMTP id e21-20020a5d5955000000b002cfe29fd7f5mr3576310wri.25.1678955486054;
-        Thu, 16 Mar 2023 01:31:26 -0700 (PDT)
-X-Google-Smtp-Source: AK7set8XgT/fkEa6oyHpuwgit2NX40Fpv+7C8AxfojZlS6SqwfkBRFQgzp3vx+Buq6H4mrLWafU74w==
-X-Received: by 2002:a5d:5955:0:b0:2cf:e29f:d7f5 with SMTP id e21-20020a5d5955000000b002cfe29fd7f5mr3576292wri.25.1678955485799;
-        Thu, 16 Mar 2023 01:31:25 -0700 (PDT)
-Received: from sgarzare-redhat (host-82-57-51-170.retail.telecomitalia.it. [82.57.51.170])
-        by smtp.gmail.com with ESMTPSA id c10-20020adffb0a000000b002d1bfe3269esm1518738wrr.59.2023.03.16.01.31.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Mar 2023 01:31:25 -0700 (PDT)
-Date:   Thu, 16 Mar 2023 09:31:22 +0100
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     virtualization@lists.linux-foundation.org,
-        Andrey Zhadchenko <andrey.zhadchenko@virtuozzo.com>,
-        eperezma@redhat.com, netdev@vger.kernel.org, stefanha@redhat.com,
-        linux-kernel@vger.kernel.org,
-        "Michael S. Tsirkin" <mst@redhat.com>, kvm@vger.kernel.org
-Subject: Re: [PATCH v2 2/8] vhost-vdpa: use bind_mm/unbind_mm device callbacks
-Message-ID: <20230316083122.hliiktgsymrfpozy@sgarzare-redhat>
-References: <20230302113421.174582-1-sgarzare@redhat.com>
- <20230302113421.174582-3-sgarzare@redhat.com>
- <CACGkMEttgd82xOxV8WLdSFdfhRLZn68tSaV4APSDh8qXxf4OEw@mail.gmail.com>
+        bh=xyh5uGvhV5m2gmbFTSe9oGg9qP1qtpxgm6fUuA7nZJM=;
+        b=hBj89sJnEclTOejEPc5hsl5Ym2lIJ1IM2dz8BxbVlRP5cg/ur8GFQni2lmL3Q0Xm7h6/t/
+        ywIgbPNpBIF8opX0GobOLS/OAkWntf7IYPKoGvHz3Q/Ca8wrAw8R55dSNPe7hf8Rht0VV2
+        /HAGap/Gr3b/7F7vLeAoLK8TtZOfis8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1678955739;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=xyh5uGvhV5m2gmbFTSe9oGg9qP1qtpxgm6fUuA7nZJM=;
+        b=i4zbF/imSwtvq8PhPTuHiiOp4K3JXCeEJA7n0z0TCcgcbdG00qZ8aXM97J/ykM5+tkiUTh
+        Pgij0CG3Q3IfB9BA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7BE5313A2F;
+        Thu, 16 Mar 2023 08:35:39 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Q+eOHdvUEmSnJQAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Thu, 16 Mar 2023 08:35:39 +0000
+Message-ID: <997d99e4-6ebd-c23e-ca1e-b62155701cb0@suse.cz>
+Date:   Thu, 16 Mar 2023 09:35:39 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CACGkMEttgd82xOxV8WLdSFdfhRLZn68tSaV4APSDh8qXxf4OEw@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 10/10] mm/mremap: simplify vma expansion again
+Content-Language: en-US
+To:     Lorenzo Stoakes <lstoakes@gmail.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        maple-tree@lists.infradead.org
+References: <20230309111258.24079-1-vbabka@suse.cz>
+ <20230309111258.24079-11-vbabka@suse.cz>
+ <7a9ca4a6-9713-4e31-9c0f-11ec31817c7a@lucifer.local>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <7a9ca4a6-9713-4e31-9c0f-11ec31817c7a@lucifer.local>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 14, 2023 at 11:48:33AM +0800, Jason Wang wrote:
->On Thu, Mar 2, 2023 at 7:34 PM Stefano Garzarella <sgarzare@redhat.com> wrote:
+On 3/15/23 23:20, Lorenzo Stoakes wrote:
+> On Thu, Mar 09, 2023 at 12:12:58PM +0100, Vlastimil Babka wrote:
+>> This effectively reverts d014cd7c1c35 ("mm, mremap: fix mremap()
+>> expanding for vma's with vm_ops->close()"). After the recent changes,
+>> vma_merge() is able to handle the expansion properly even when the vma
+>> being expanded has a vm_ops->close operation, so we don't need to
+>> special case it anymore.
 >>
->> When the user call VHOST_SET_OWNER ioctl and the vDPA device
->> has `use_va` set to true, let's call the bind_mm callback.
->> In this way we can bind the device to the user address space
->> and directly use the user VA.
->>
->> The unbind_mm callback is called during the release after
->> stopping the device.
->>
->> Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
+>> Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
 >> ---
+>>  mm/mremap.c | 20 ++++----------------
+>>  1 file changed, 4 insertions(+), 16 deletions(-)
 >>
->> Notes:
->>     v2:
->>     - call the new unbind_mm callback during the release [Jason]
->>     - avoid to call bind_mm callback after the reset, since the device
->>       is not detaching it now during the reset
+>> diff --git a/mm/mremap.c b/mm/mremap.c
+>> index 411a85682b58..65f5b545601e 100644
+>> --- a/mm/mremap.c
+>> +++ b/mm/mremap.c
+>> @@ -1040,23 +1040,11 @@ SYSCALL_DEFINE5(mremap, unsigned long, addr, unsigned long, old_len,
+>>  			 * vma (expand operation itself) and possibly also with
+>>  			 * the next vma if it becomes adjacent to the expanded
+>>  			 * vma and  otherwise compatible.
+>> -			 *
+>> -			 * However, vma_merge() can currently fail due to
+>> -			 * is_mergeable_vma() check for vm_ops->close (see the
+>> -			 * comment there). Yet this should not prevent vma
+>> -			 * expanding, so perform a simple expand for such vma.
+>> -			 * Ideally the check for close op should be only done
+>> -			 * when a vma would be actually removed due to a merge.
+>>  			 */
+>> -			if (!vma->vm_ops || !vma->vm_ops->close) {
+>> -				vma = vma_merge(&vmi, mm, vma, extension_start,
+>> -					extension_end, vma->vm_flags, vma->anon_vma,
+>> -					vma->vm_file, extension_pgoff, vma_policy(vma),
+>> -					vma->vm_userfaultfd_ctx, anon_vma_name(vma));
+>> -			} else if (vma_expand(&vmi, vma, vma->vm_start,
+>> -					addr + new_len, vma->vm_pgoff, NULL)) {
+>> -				vma = NULL;
+>> -			}
+>> +			vma = vma_merge(&vmi, mm, vma, extension_start,
+>> +				extension_end, vma->vm_flags, vma->anon_vma,
+>> +				vma->vm_file, extension_pgoff, vma_policy(vma),
+>> +				vma->vm_userfaultfd_ctx, anon_vma_name(vma));
+>>  			if (!vma) {
+>>  				vm_unacct_memory(pages);
+>>  				ret = -ENOMEM;
+>> --
+>> 2.39.2
 >>
->>  drivers/vhost/vdpa.c | 30 ++++++++++++++++++++++++++++++
->>  1 file changed, 30 insertions(+)
->>
->> diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
->> index dc12dbd5b43b..1ab89fccd825 100644
->> --- a/drivers/vhost/vdpa.c
->> +++ b/drivers/vhost/vdpa.c
->> @@ -219,6 +219,28 @@ static int vhost_vdpa_reset(struct vhost_vdpa *v)
->>         return vdpa_reset(vdpa);
->>  }
->>
->> +static long vhost_vdpa_bind_mm(struct vhost_vdpa *v)
->> +{
->> +       struct vdpa_device *vdpa = v->vdpa;
->> +       const struct vdpa_config_ops *ops = vdpa->config;
->> +
->> +       if (!vdpa->use_va || !ops->bind_mm)
->> +               return 0;
->> +
->> +       return ops->bind_mm(vdpa, v->vdev.mm);
->> +}
->> +
->> +static void vhost_vdpa_unbind_mm(struct vhost_vdpa *v)
->> +{
->> +       struct vdpa_device *vdpa = v->vdpa;
->> +       const struct vdpa_config_ops *ops = vdpa->config;
->> +
->> +       if (!vdpa->use_va || !ops->unbind_mm)
->> +               return;
->> +
->> +       ops->unbind_mm(vdpa);
->> +}
->> +
->>  static long vhost_vdpa_get_device_id(struct vhost_vdpa *v, u8 __user *argp)
->>  {
->>         struct vdpa_device *vdpa = v->vdpa;
->> @@ -711,6 +733,13 @@ static long vhost_vdpa_unlocked_ioctl(struct file *filep,
->>                 break;
->>         default:
->>                 r = vhost_dev_ioctl(&v->vdev, cmd, argp);
->> +               if (!r && cmd == VHOST_SET_OWNER) {
->> +                       r = vhost_vdpa_bind_mm(v);
->> +                       if (r) {
->> +                               vhost_dev_reset_owner(&v->vdev, NULL);
->> +                               break;
->> +                       }
->> +               }
->
->Nit: is it better to have a new condition/switch branch instead of
->putting them under default? (as what vring_ioctl did).
+> 
+> Good to eliminate this edge case! Do we have a self-test for this case to assert
+> that the issue is fixed by this? I guess a little tricky due to the need for the
+> the owning VMA to have ->close() specified.
 
-Yep, I agree!
+Yeah that's the problem, it needs some specific setup, unlike the existing
+tests.
 
-I'll change it.
+> In any case, the changes you have made in the previous patch should ensure the
+> edge case is no longer required, hence:-
+> 
+> Reviewed-by: Lorenzo Stoakes <lstoakes@gmail.com>
 
-Thanks,
-Stefano
-
+Thanks!
