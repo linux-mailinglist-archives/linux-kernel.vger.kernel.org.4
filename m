@@ -2,82 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C1A06BD2A9
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 15:48:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8C7A6BD2AC
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 15:48:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230208AbjCPOsK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 10:48:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57414 "EHLO
+        id S230477AbjCPOsl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 10:48:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230129AbjCPOsI (ORCPT
+        with ESMTP id S230156AbjCPOsi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 10:48:08 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E52A132E1;
-        Thu, 16 Mar 2023 07:48:06 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id fd5so8651162edb.7;
-        Thu, 16 Mar 2023 07:48:06 -0700 (PDT)
+        Thu, 16 Mar 2023 10:48:38 -0400
+Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 097481285B
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 07:48:37 -0700 (PDT)
+Received: by mail-vs1-xe35.google.com with SMTP id g4so1732428vsb.2
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 07:48:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678978085;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112; t=1678978116;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=iKWEEXtwpzWyoke4EDt/SjsZs9hzq1bNd8Ga2FZNSkY=;
-        b=R2baROw3Ek92CnTov526LJmaVacryhnvdk1pmAOCFMq0bxAt8jLYnm/3vwU0Xtyebd
-         tciViUG94zTQf6BBD1yMAqUykGu40R45DlkwuCeZ7kdOY2DWawvscv1JZqcw1jRa4tw9
-         alitaa+86NgYQX4u48ENXgyRqPqLVnjiQbGW3ZUrZpGmeD/DGNkq5BGYjueTM1QNNgzw
-         ULe/wHcltfT9nsmGMbWRHbKf2VUlGEsHzjFk070gyhYlMmpmy5ny7xzc+ZpkNwnnss68
-         qx5fs2QW7uT+KSv0+Z/Lek2F+aLUU3qv1Hhfd/DQ0flZHcg2ptaBoUnGA11rbLPm5Pb/
-         /7kA==
+        bh=5D7kiOj4gnK/59hK4rYeGFr7qsbvI5Wb0oej3O0Nx10=;
+        b=1EyCeultkcuFWM8iBsx/m6fvHeqNzOaXvqKmBL725CYN7u0Sc28/bfjV38II7p5wlY
+         V7p/aPVd6MVgWry2SsbS1LKZebBDBhz24OJhIR6N4XH89mHV+13RKj2E7h83CTspv96t
+         mV/3jOnFiq3rB3CfboYKDAyl8z3sFZ7xmwtoYwR+YFsPCtIOixdmRyxmPaNNE1uWwCQK
+         e+0/2ai3IaOrv/9xvM/PYkleaIsDq01k6R9u9wEkjOC4NFSymKS3qJmgpN40cG3qvRw0
+         bAGEW0NWj8qj3wKgmuoUfGmUlQ/rThuq+q2OpgKi0ZjMz+MMAJB+JybtFOjVi8PiGntF
+         USeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678978085;
+        d=1e100.net; s=20210112; t=1678978116;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=iKWEEXtwpzWyoke4EDt/SjsZs9hzq1bNd8Ga2FZNSkY=;
-        b=fTbHJ/PJvFfnmhkGvM/n2myllXfz3v3qhQFjz7F08KAj5Q2oPqCbmIULJ2atB+G3zN
-         OAdlVrSiOlg8iJHQOZwEs8tkAeg0bgfjlUBamGQgnf89y8+5F5e9sDyjv105clSWy121
-         RRpoTNxRBbRHceiIBXtg6PFfp8hG/VxhWh22V4sAUzpJNL3zZLK9zZZ6gGNUstgb6qWp
-         yw+FFiNS4mhK0RVzNqJtTajvA3rst+nurLSC+2pZI9Hx2CMBLPFzBo6RcdJbPPj/G12c
-         pg50swcUB8p9b/wEC1LU4ClrtRY+Cnpzw7dL8bMT5hdSzvN3f4LFan12LdmfOXNKpbew
-         J2ig==
-X-Gm-Message-State: AO0yUKWhGoa5SeZEK1Arqv/fij5cucKEz2xKrashSn5yoMCOKn+xnP1m
-        NFj5NxsoVFoLAvBvtdkSgKWiQN+YEYnqbiyq71A=
-X-Google-Smtp-Source: AK7set/xWVcJOMfkQHMVyXDiy81VQPzKWcMSSS6wnn/vPpsZk8RESi9bQhzNLJ68PkVD0u1TpUCENB3mosHwO6afNtk=
-X-Received: by 2002:a50:99d6:0:b0:4fb:f19:883 with SMTP id n22-20020a5099d6000000b004fb0f190883mr3700885edb.1.1678978084578;
- Thu, 16 Mar 2023 07:48:04 -0700 (PDT)
+        bh=5D7kiOj4gnK/59hK4rYeGFr7qsbvI5Wb0oej3O0Nx10=;
+        b=DDcp6d0jEXRckKn9mXrU0z5m3yT8Yx6mE+MUHTY68xHwQjjvisQlf9GOdx1yT7sRPZ
+         YG27hsKBZazFZRjHrLnV+7WualMPsoamoUKOnZ7CDOjpM4RuJA1poZpR/0stWU4Bvmea
+         lO+hHUrPFaPovn51dtqUAYzeGCYq3kjVd28dJ15vlwmyVp+1o7d5ZEZ24IJenDuKesVc
+         MdBO8k6JMMMqllmFpcb1Yqu95rHPLIItwS1teGeVNfq0SFUZvmwWp82oArqRLmNgjqsu
+         quOwnKRctYQEX7MuXRvQv36fvnxxJsw3oOlFC1PxYRxioU5zM4TinFxwAOK+gMnLG9CA
+         m+uQ==
+X-Gm-Message-State: AO0yUKVJlz++X2aS+1NphH3J5FGs6tOy0HlfIHN+PniUtbQwOok5/UfH
+        ISSskLPysnIuDdSS6gkAq9R7qaFmyWzz2gkIax2N5Q==
+X-Google-Smtp-Source: AK7set9hresCFKa/wvC5SlJJTtVVVZfKzdiouMqI/exLoXPbb3ubYlDT3qxmZdYhYTaa0AUo709sV856uhsqLMC3WEo=
+X-Received: by 2002:a67:e003:0:b0:425:d57c:bbd6 with SMTP id
+ c3-20020a67e003000000b00425d57cbbd6mr1566591vsl.0.1678978115876; Thu, 16 Mar
+ 2023 07:48:35 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230315160228.2362-1-cnsztl@gmail.com> <20230315160228.2362-5-cnsztl@gmail.com>
- <CA+E=qVei7T4T0FWhdUFnr5JbCWSgFbGLcmU2OHxx54yvnNR6mw@mail.gmail.com>
- <CAOP2_TiU815F528jVGvDbcg3kSG+ykepU-ZYz7VWMO84GgcwMg@mail.gmail.com>
- <71b16513-49b1-d9b3-b0b9-4c47e68563ba@kwiboo.se> <CAOP2_TgieY2PNBJz9tE_+hxX14wBQ7RtFNfFhYd2_MCSnoZLxg@mail.gmail.com>
-In-Reply-To: <CAOP2_TgieY2PNBJz9tE_+hxX14wBQ7RtFNfFhYd2_MCSnoZLxg@mail.gmail.com>
-From:   Tianling Shen <cnsztl@gmail.com>
-Date:   Thu, 16 Mar 2023 22:47:53 +0800
-Message-ID: <CAOP2_Tii7auK7rHrFF1FT76LnC5coBfhZtGaEpk6Nd=az0UQVg@mail.gmail.com>
-Subject: Re: [PATCH 4/5] arm64: dts: rockchip: fix gmac support for NanoPi R5S
-To:     Jonas Karlman <jonas@kwiboo.se>
-Cc:     Vasily Khoruzhick <anarsoul@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
+References: <20230309103752.173541-1-brgl@bgdev.pl>
+In-Reply-To: <20230309103752.173541-1-brgl@bgdev.pl>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Thu, 16 Mar 2023 15:48:25 +0100
+Message-ID: <CAMRc=Mes7ETY7isa-Kh4VHa1eyJHO3OjvWq6VeJRSnZCkX9_6Q@mail.gmail.com>
+Subject: Re: [PATCH v5 0/9] arm64: dts: qcom: sa8775p-ride: enable relevant
+ QUPv3 IPs
+To:     Bjorn Andersson <andersson@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Peter Geis <pgwipeout@gmail.com>, Andy Yan <andyshrk@163.com>,
-        Brian Norris <briannorris@chromium.org>,
-        Chris Morgan <macromorgan@hotmail.com>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        Maya Matuszczyk <maccraft123mc@gmail.com>,
-        Andrew Powers-Holmes <aholmes@omnom.net>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,45 +74,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Thu, Mar 16, 2023 at 4:46=E2=80=AFPM Tianling Shen <cnsztl@gmail.com> wr=
-ote:
+On Thu, Mar 9, 2023 at 11:37=E2=80=AFAM Bartosz Golaszewski <brgl@bgdev.pl>=
+ wrote:
 >
-> Hi Jonas,
+> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 >
-> On Thu, Mar 16, 2023 at 3:37=E2=80=AFPM Jonas Karlman <jonas@kwiboo.se> w=
-rote:
-> >
-
-[...]
-
-> >
-> > Generic ethernet phy driver is not resetting the phy in the same way
-> > that snsp,reset-gpio does, please see top two commits at [1].
-> >
-> > I have been meaning to send that out as an RFC but I got stuck in a
-> > u-boot rabbit hole, and I also do not know what the correct way to fix
-> > this would be, so I played with both device tree and code changes.
-> > Will prioritize this and send out a RFC later today.
-> >
-> > [1] https://github.com/Kwiboo/linux-rockchip/commits/rk3568-eth-phy-res=
-et
+> This enables the QUPv3 interfaces that are exposed on the sa8775p-ride
+> board: I2C, SPI and the Bluetooth and GNSS UART ports.
 >
-> Thanks for the hint! I will test your patches tonight.
+> v4 -> v5:
+> - remove board-specific interrupt from UART17 in SoC dtsi
+> - rearrange node properties to have various *-cells properties come right
+>   before status
+> - collect more tags
+>
+> v3 -> v4:
+> - use interconnect constants instead of magic numbers where applicable
+> - pad addresses in reg to 8 digits
+> - group pins under state nodes for UART
+>
+> v2 -> v3:
+> - fix the interrupt number for uart12
+> - replace underscores with hyphens in DT node names (although make dtbs_c=
+heck
+>   does not raise warnings about this)
+> - rearrange the commits so that they're more fine-grained with separate
+>   patches for adding nodes to dtsi and enabling them for the board
+>
+> v1 -> v2:
+> - uart17 is the Bluetooth port, not GNSS
+> - add uart12 for GNSS too in that case
+>
+> Bartosz Golaszewski (9):
+>   arm64: dts: qcom: sa8775p: add the QUPv3 #2 node
+>   arm64: dts: qcom: sa8775p-ride: enable QUPv3 #2
+>   arm64: dts: qcom: sa8775p: add the i2c18 node
+>   arm64: dts: qcom: sa8775p-ride: enable i2c18
+>   arm64: dts: qcom: sa8775p: add the spi16 node
+>   arm64: dts: qcom: sa8775p-ride: enable the SPI node
+>   arm64: dts: qcom: sa8775p: add high-speed UART nodes
+>   arm64: dts: qcom: sa8775p-ride: enable the GNSS UART port
+>   arm64: dts: qcom: sa8775p-ride: enable the BT UART port
+>
+>  arch/arm64/boot/dts/qcom/sa8775p-ride.dts | 99 +++++++++++++++++++++++
+>  arch/arm64/boot/dts/qcom/sa8775p.dtsi     | 86 ++++++++++++++++++++
+>  2 files changed, 185 insertions(+)
+>
+> --
+> 2.37.2
+>
 
-I'm currently playing your patches at
-https://github.com/1715173329/imoutowrt/commits/master-rockchip-mdio
+Bjorn,
 
-I applied commit 8597fcfa0c5c792dabb44a2db7b283c56c99ec6a to NanoPi
-R5S, it worked perfectly.
+I noticed you're picking up the reviewed patches. :) This series seems
+ready to go into your tree as well.
 
-However, with commit c338ed260bfd87277c41aa0290f1f2aad8d629b1 + moving
-reset properties into the phy node,
-the driver still failed to lookup phy. I'm not sure if I missed /
-misunderstood anything.
-
-Thanks,
-Tianling.
-
-[...]
+Thanks in advance,
+Bartosz
