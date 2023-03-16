@@ -2,117 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E76186BC73B
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 08:32:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCDE06BC74E
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 08:35:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230223AbjCPHcT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 03:32:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42422 "EHLO
+        id S230231AbjCPHfL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 03:35:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229545AbjCPHcL (ORCPT
+        with ESMTP id S230290AbjCPHer (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 03:32:11 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4955FACBAE;
-        Thu, 16 Mar 2023 00:31:33 -0700 (PDT)
+        Thu, 16 Mar 2023 03:34:47 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6050595BCC;
+        Thu, 16 Mar 2023 00:34:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678951893; x=1710487893;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=bRuPOGfZnu4JByDAsSat1lIPi/d4YuYFnKKqk6RPkbs=;
-  b=Ui/p35oUu+km//R0LdE1K6YyvnNuQX+Z4MfWuYQEOsGyRgmXLiDrjEI7
-   UXyB63a02rjXfcqmpdwX7Vq+nylF96/DK5luaefXaao+qP6AZbugHDsae
-   KflEcbclu7ix14PcPhCi0kiJTl6rf1iogSp90U24qBrDDgK+tp8SxOzva
-   t300Xh3hsCsdHulFgpdPuilKIPg+ugjyPh1o+v4TP7TyQkUvi7ptjMFtt
-   HU+3kv0JNoVLFYEIOIopnLFadYkypqcMTBPodap5AOwCux/Wun7CQ5nZy
-   9fa5DqOSy1TN/C3b02BwDNmg7HXtDUQ/8g/7PBMJYE3Z6KWszYiIIUyHk
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="336606548"
+  t=1678952052; x=1710488052;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=/RZV+NKoVH+A+UzBt07KdobJa/g/QegZ+SlgrfhPIfk=;
+  b=Xmylb12X6N9lZIkfbDlTIQrhYP/b85O8NGOh8Wq/b1GevykvmYr4e/tV
+   YpU6LVbyyzbVL0Ub5Sp7oMorK2u40Cjw7W43Ya8TWtv8zPcj9JsqwgsaM
+   YMftK5totAdNLpmYgHXuRfgBUcQtRAAMkIVt4BH8AjC0Npt1DQX933H39
+   owAo3+fzf/N5YZvjcrE9loGSe3olVJ1bPopDPAh7Ga8uom7X9RD7MXnLz
+   X8TTg9Vx+oCP0MaE5nn1uKvx9L6WA4jxobWSYFFWT61U7zG4i9CelIjRJ
+   Hc16eBZeka49tnYxco6KtaDhlLDEIIbT8pqb9Vf5bRTnYoT+j2WYzVb18
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="321755345"
 X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
-   d="scan'208";a="336606548"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 00:31:30 -0700
+   d="scan'208";a="321755345"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 00:31:24 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="679794068"
+X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="657087475"
 X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
-   d="scan'208";a="679794068"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 16 Mar 2023 00:31:25 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pci56-0008PO-2a;
-        Thu, 16 Mar 2023 07:31:24 +0000
-Date:   Thu, 16 Mar 2023 15:30:31 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Herve Codina via Alsa-devel <alsa-devel@alsa-project.org>,
-        Herve Codina <herve.codina@bootlin.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Derek Kiernan <derek.kiernan@xilinx.com>,
-        Dragan Cvetic <dragan.cvetic@xilinx.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, alsa-devel@alsa-project.org,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH 3/7] Documentation: sysfs: Document the Lantiq PEF2256
- sysfs entry
-Message-ID: <202303161547.ZzSQWnIQ-lkp@intel.com>
-References: <167888779364.26.9200222608363841485@mailman-core.alsa-project.org>
+   d="scan'208";a="657087475"
+Received: from blu2-mobl.ccr.corp.intel.com (HELO [10.249.173.173]) ([10.249.173.173])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 00:31:21 -0700
+Message-ID: <9cd8f9b8-2362-2145-6f5d-edf47087aca3@linux.intel.com>
+Date:   Thu, 16 Mar 2023 15:31:19 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <167888779364.26.9200222608363841485@mailman-core.alsa-project.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Cc:     baolu.lu@linux.intel.com, Joerg Roedel <joro@8bytes.org>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        "Yu, Fenghua" <fenghua.yu@intel.com>,
+        "Jiang, Dave" <dave.jiang@intel.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 2/5] iommu/vt-d: Allow SVA with device-specific IOPF
+To:     "Tian, Kevin" <kevin.tian@intel.com>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>
+References: <20230309025639.26109-1-baolu.lu@linux.intel.com>
+ <20230309025639.26109-3-baolu.lu@linux.intel.com>
+ <BN9PR11MB5276F50D86F8DA507CC18AF18CBC9@BN9PR11MB5276.namprd11.prod.outlook.com>
+Content-Language: en-US
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <BN9PR11MB5276F50D86F8DA507CC18AF18CBC9@BN9PR11MB5276.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Herve,
+On 2023/3/16 15:09, Tian, Kevin wrote:
+>> From: Lu Baolu <baolu.lu@linux.intel.com>
+>> Sent: Thursday, March 9, 2023 10:57 AM
+>>
+>> @@ -4650,7 +4650,18 @@ static int intel_iommu_enable_sva(struct device
+>> *dev)
+>>   	if (!(iommu->flags & VTD_FLAG_SVM_CAPABLE))
+>>   		return -ENODEV;
+>>
+>> -	if (!info->pasid_enabled || !info->pri_enabled || !info->ats_enabled)
+>> +	if (!info->pasid_enabled)
+>> +		return -EINVAL;
+>> +
+> 
+> I think you still want to check ats_enabled even for device specific IOPF.
 
-Thank you for the patch! Perhaps something to improve:
+Yeah! Updated.
 
-[auto build test WARNING on broonie-sound/for-next]
-[also build test WARNING on robh/for-next char-misc/char-misc-testing char-misc/char-misc-next char-misc/char-misc-linus linus/master v6.3-rc2 next-20230316]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Herve-Codina-via-Alsa-devel/drivers-misc-Add-support-for-the-Lantiq-PEF2256-framer/20230315-214833
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
-patch link:    https://lore.kernel.org/r/167888779364.26.9200222608363841485%40mailman-core.alsa-project.org
-patch subject: [PATCH 3/7] Documentation: sysfs: Document the Lantiq PEF2256 sysfs entry
-reproduce:
-        # https://github.com/intel-lab-lkp/linux/commit/0140596e508d18933cd319314838bc802214b345
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Herve-Codina-via-Alsa-devel/drivers-misc-Add-support-for-the-Lantiq-PEF2256-framer/20230315-214833
-        git checkout 0140596e508d18933cd319314838bc802214b345
-        make menuconfig
-        # enable CONFIG_COMPILE_TEST, CONFIG_WARN_MISSING_DOCUMENTS, CONFIG_WARN_ABI_ERRORS
-        make htmldocs
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303161547.ZzSQWnIQ-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> Documentation/ABI/testing/sysfs-bus-platform-devices-pef2256:2: WARNING: Unexpected indentation.
->> Documentation/ABI/testing/sysfs-bus-platform-devices-pef2256:2: WARNING: Block quote ends without a blank line; unexpected unindent.
-
-vim +2 Documentation/ABI/testing/sysfs-bus-platform-devices-pef2256
-
-   > 2	KernelVersion:	6.4
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Best regards,
+baolu
