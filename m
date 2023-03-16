@@ -2,132 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8C7A6BD2AC
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 15:48:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2737B6BD2AF
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 15:51:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230477AbjCPOsl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 10:48:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58354 "EHLO
+        id S230210AbjCPOvY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 10:51:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230156AbjCPOsi (ORCPT
+        with ESMTP id S229732AbjCPOvW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 10:48:38 -0400
-Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 097481285B
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 07:48:37 -0700 (PDT)
-Received: by mail-vs1-xe35.google.com with SMTP id g4so1732428vsb.2
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 07:48:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112; t=1678978116;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5D7kiOj4gnK/59hK4rYeGFr7qsbvI5Wb0oej3O0Nx10=;
-        b=1EyCeultkcuFWM8iBsx/m6fvHeqNzOaXvqKmBL725CYN7u0Sc28/bfjV38II7p5wlY
-         V7p/aPVd6MVgWry2SsbS1LKZebBDBhz24OJhIR6N4XH89mHV+13RKj2E7h83CTspv96t
-         mV/3jOnFiq3rB3CfboYKDAyl8z3sFZ7xmwtoYwR+YFsPCtIOixdmRyxmPaNNE1uWwCQK
-         e+0/2ai3IaOrv/9xvM/PYkleaIsDq01k6R9u9wEkjOC4NFSymKS3qJmgpN40cG3qvRw0
-         bAGEW0NWj8qj3wKgmuoUfGmUlQ/rThuq+q2OpgKi0ZjMz+MMAJB+JybtFOjVi8PiGntF
-         USeA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678978116;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5D7kiOj4gnK/59hK4rYeGFr7qsbvI5Wb0oej3O0Nx10=;
-        b=DDcp6d0jEXRckKn9mXrU0z5m3yT8Yx6mE+MUHTY68xHwQjjvisQlf9GOdx1yT7sRPZ
-         YG27hsKBZazFZRjHrLnV+7WualMPsoamoUKOnZ7CDOjpM4RuJA1poZpR/0stWU4Bvmea
-         lO+hHUrPFaPovn51dtqUAYzeGCYq3kjVd28dJ15vlwmyVp+1o7d5ZEZ24IJenDuKesVc
-         MdBO8k6JMMMqllmFpcb1Yqu95rHPLIItwS1teGeVNfq0SFUZvmwWp82oArqRLmNgjqsu
-         quOwnKRctYQEX7MuXRvQv36fvnxxJsw3oOlFC1PxYRxioU5zM4TinFxwAOK+gMnLG9CA
-         m+uQ==
-X-Gm-Message-State: AO0yUKVJlz++X2aS+1NphH3J5FGs6tOy0HlfIHN+PniUtbQwOok5/UfH
-        ISSskLPysnIuDdSS6gkAq9R7qaFmyWzz2gkIax2N5Q==
-X-Google-Smtp-Source: AK7set9hresCFKa/wvC5SlJJTtVVVZfKzdiouMqI/exLoXPbb3ubYlDT3qxmZdYhYTaa0AUo709sV856uhsqLMC3WEo=
-X-Received: by 2002:a67:e003:0:b0:425:d57c:bbd6 with SMTP id
- c3-20020a67e003000000b00425d57cbbd6mr1566591vsl.0.1678978115876; Thu, 16 Mar
- 2023 07:48:35 -0700 (PDT)
+        Thu, 16 Mar 2023 10:51:22 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4E71B26B7
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 07:51:21 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 469282F4;
+        Thu, 16 Mar 2023 07:52:04 -0700 (PDT)
+Received: from bogus (unknown [10.57.52.173])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D90BB3F67D;
+        Thu, 16 Mar 2023 07:51:18 -0700 (PDT)
+Date:   Thu, 16 Mar 2023 14:50:45 +0000
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Song Shuai <suagrfillet@gmail.com>
+Cc:     gregkh@linuxfoundation.org, rafael@kernel.org,
+        conor.dooley@microchip.com, ionela.voinescu@arm.com,
+        Sudeep Holla <sudeep.holla@arm.com>, Pierre.Gondois@arm.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V2] arch_topology: Clear LLC sibling when cacheinfo
+ teardown
+Message-ID: <20230316145045.if3iw5qdtfjyroea@bogus>
+References: <20230314075345.1325187-1-suagrfillet@gmail.com>
+ <20230316092910.doolw3xiuwwakile@bogus>
+ <CAAYs2=gaTkA2f65SXkexxAUkSPxgaPNQGdkSKS4pYmJ3hO7z-Q@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230309103752.173541-1-brgl@bgdev.pl>
-In-Reply-To: <20230309103752.173541-1-brgl@bgdev.pl>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Thu, 16 Mar 2023 15:48:25 +0100
-Message-ID: <CAMRc=Mes7ETY7isa-Kh4VHa1eyJHO3OjvWq6VeJRSnZCkX9_6Q@mail.gmail.com>
-Subject: Re: [PATCH v5 0/9] arm64: dts: qcom: sa8775p-ride: enable relevant
- QUPv3 IPs
-To:     Bjorn Andersson <andersson@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAAYs2=gaTkA2f65SXkexxAUkSPxgaPNQGdkSKS4pYmJ3hO7z-Q@mail.gmail.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 9, 2023 at 11:37=E2=80=AFAM Bartosz Golaszewski <brgl@bgdev.pl>=
- wrote:
+On Thu, Mar 16, 2023 at 10:30:52AM +0000, Song Shuai wrote:
+> Sudeep Holla <sudeep.holla@arm.com> 于2023年3月16日周四 09:29写道：
+> >
+> > On Tue, Mar 14, 2023 at 03:53:45PM +0800, Song Shuai wrote:
+> > > The teardown of CPUHP_AP_BASE_CACHEINFO_ONLINE now only invokes
+> > > free_cache_attributes() to clear share_cpu_map of cacheinfo list.
+> > > At the same time, clearing cpu_topology[].llc_sibling is
+> > > called quite late at the teardown code in hotplug STARTING section.
+> > >
+> > > To avoid the incorrect LLC sibling masks generated, move its clearing
+> > > right after free_cache_attributes().
+> > >
+> >
+> > Technically in terms of flow/timing this is correct. However I would like
+> > to know if you are seeing any issues without this change ?
+> >
+> > Technically, if a cpu is hotplugged out, the cacheinfo is reset first
+> > and then the topology. Until the cpu is removes, the LLC info in the
+> > topology is still valid. Also I am not sure if anything gets scheduled
+> > and this LLC info is utilised once the teardown of CPUHP_AP_BASE_CACHEINFO_ONLINE
+> > has started.
 >
-> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> There is no visible issue in the entire offline process(eg: echo 0 > online).
 >
-> This enables the QUPv3 interfaces that are exposed on the sa8775p-ride
-> board: I2C, SPI and the Bluetooth and GNSS UART ports.
+> However, when I hotplugged out the CPU into the state before CACHEINFO_ONLINE on
+> my kernel with the CONFIG_CPU_HOTPLUG_STATE_CONTROL configured,
+> the share_cpu_map had been updated but llc_sibling had not, which
+> would result in a trivial issue:
 >
-> v4 -> v5:
-> - remove board-specific interrupt from UART17 in SoC dtsi
-> - rearrange node properties to have various *-cells properties come right
->   before status
-> - collect more tags
->
-> v3 -> v4:
-> - use interconnect constants instead of magic numbers where applicable
-> - pad addresses in reg to 8 digits
-> - group pins under state nodes for UART
->
-> v2 -> v3:
-> - fix the interrupt number for uart12
-> - replace underscores with hyphens in DT node names (although make dtbs_c=
-heck
->   does not raise warnings about this)
-> - rearrange the commits so that they're more fine-grained with separate
->   patches for adding nodes to dtsi and enabling them for the board
->
-> v1 -> v2:
-> - uart17 is the Bluetooth port, not GNSS
-> - add uart12 for GNSS too in that case
->
-> Bartosz Golaszewski (9):
->   arm64: dts: qcom: sa8775p: add the QUPv3 #2 node
->   arm64: dts: qcom: sa8775p-ride: enable QUPv3 #2
->   arm64: dts: qcom: sa8775p: add the i2c18 node
->   arm64: dts: qcom: sa8775p-ride: enable i2c18
->   arm64: dts: qcom: sa8775p: add the spi16 node
->   arm64: dts: qcom: sa8775p-ride: enable the SPI node
->   arm64: dts: qcom: sa8775p: add high-speed UART nodes
->   arm64: dts: qcom: sa8775p-ride: enable the GNSS UART port
->   arm64: dts: qcom: sa8775p-ride: enable the BT UART port
->
->  arch/arm64/boot/dts/qcom/sa8775p-ride.dts | 99 +++++++++++++++++++++++
->  arch/arm64/boot/dts/qcom/sa8775p.dtsi     | 86 ++++++++++++++++++++
->  2 files changed, 185 insertions(+)
->
-> --
-> 2.37.2
+> At the end of stepped hotplugging out, the cpuset_hotplug_work would
+> be flushed and then sched domain would be rebuilt
+> where the **cpu_coregroup_mask** in sched_domain_topology got
+> incorrect llc_sibling, but the result of rebuilding was correct due
+> to the protection of cpu_active_mask.
 >
 
-Bjorn,
+Wait, I would like to disagree there. While I agree there is inconsistency
+between cacheinfo cpu_shared_map and the llc_sibling in the tear down path,
+it is still correct and terming it as "incorrect" llc_sibling is wrong.
+The cpu is not yet completely offline yet and hence the llc_sibling
+represents all the cpus it shares LLC. When the cpu is offlined, the
+cpu_topology is anyway removed. So I don't see it as an issue at all.
+If you follow __cpu_disable()->remove_cpu_topology(), it gets updated there.
+If the sched_domain_topology is not rebuilt after that, then we may have
+other issues. What am I missing ?
 
-I noticed you're picking up the reviewed patches. :) This series seems
-ready to go into your tree as well.
+I am not bothered by cacheinfo cpu_shared_map and cpu_topology llc_sibling
+mismatch for short window during the teardown as technically until the cpu
+is torndown, it is sharing llc with llc_sibling and it is definitely not
+wrong to have it in there.
 
-Thanks in advance,
-Bartosz
+> The stepped hotplugging may not be used in the production environment,
+> but the issue existed.
+
+What issue ? If it is just inconsistency, then I am fine to ignore. That
+is just artificial and momentary and it impacts nothing.
+
+> Even in the entire offline process, it's possible that a future user
+> gets wrong the llc_sibling when accessing it concurrently or right
+> after the teardown of CACHEINFO_ONLINE.
+
+As I said, even if someone access it, it is not wrong information.
+
+--
+Regards,
+Sudeep
