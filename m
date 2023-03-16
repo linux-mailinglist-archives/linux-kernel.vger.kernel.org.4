@@ -2,162 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 058B16BD33C
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 16:20:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 630C76BD346
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 16:21:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231368AbjCPPTw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 11:19:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48192 "EHLO
+        id S231340AbjCPPVW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 11:21:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230147AbjCPPTu (ORCPT
+        with ESMTP id S230215AbjCPPVU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 11:19:50 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A5639DF737
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 08:19:33 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 25F4A2F4;
-        Thu, 16 Mar 2023 08:20:17 -0700 (PDT)
-Received: from [10.1.196.40] (e121345-lin.cambridge.arm.com [10.1.196.40])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EE8493F67D;
-        Thu, 16 Mar 2023 08:19:31 -0700 (PDT)
-Message-ID: <1d4ff93d-a97e-85bb-4259-9da259bc2ab7@arm.com>
-Date:   Thu, 16 Mar 2023 15:19:27 +0000
+        Thu, 16 Mar 2023 11:21:20 -0400
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A21810273
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 08:21:19 -0700 (PDT)
+Received: by mail-yb1-xb2b.google.com with SMTP id e65so2317575ybh.10
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 08:21:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google; t=1678980078;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3EyPva+NA58QOv4uevl1RDj2mZqkbablGEN+XHX1jCs=;
+        b=gKLRzsZlI3+oOD2jZ8em011yiVLt5iQXxPBDzIvp8J5VctyS6LaRL+Ga5Qq9WlLSVp
+         jf29DhB2ousYJcf9Q670B8d7wyLuyCXm+bBUFAL/X7MZEhWmR7R4xD67bd8fe2vg9DkT
+         YOrkdKSNIAfLQm7Pvee+xFIjtEtuIuXq3Z3fE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678980078;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3EyPva+NA58QOv4uevl1RDj2mZqkbablGEN+XHX1jCs=;
+        b=acHsU2+gWpRDk6KXFV1Qqpd5K19ZbYon/BCLoYcEHX4aHz12npcX5sTGXWvxFOmNyi
+         Ot0jJtNy7RWhrz0V0aI3iBy+ebq+2YZiTxUh0bhivAUCM2ZWkplvhL7V8ZGaKeicpENG
+         UQVSgmfHq/nEKkny9Lz5ajPow3Gn0tQprAbHcm4tvs8myUMa9zaBDCN0jU4kEZQNleX8
+         X37Qohuv5LFhEDToBy7es0amHlQZ8PC1UU+CKJeGVgsC62w03/yTv85XtwTXzaZUVepY
+         w2zQc2ZJ7+GeSCaxARLzpiFh9+RAHg5w7+qN/ndeWfF335hdlurHyhVtffYu9d3qS7OR
+         xrKA==
+X-Gm-Message-State: AO0yUKXRge17jC6U+WxFyBEnhaLJ/nmIxFb5BFK1qMGqFocehsAlNxHG
+        mdIGwe39g56ZbBriMI7297dkpI1D6V+NKaY9QEkX2FYy/UYNHG3L3R4=
+X-Google-Smtp-Source: AK7set8w62orB5NBC7nsC9ESkTg0CuRiwAd1lddbe0/+hmWu8PeEzQUwtfya4+r7r/efUDQ8cZMQ1XIEcPMKjsFLjgQ=
+X-Received: by 2002:a05:6902:18ce:b0:b4d:ee98:4ff7 with SMTP id
+ ck14-20020a05690218ce00b00b4dee984ff7mr4464595ybb.2.1678980078546; Thu, 16
+ Mar 2023 08:21:18 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v1 04/14] iommu/arm-smmu-v3: Add arm_smmu_hw_info
-Content-Language: en-GB
-To:     Nicolin Chen <nicolinc@nvidia.com>
-Cc:     jgg@nvidia.com, will@kernel.org, eric.auger@redhat.com,
-        kevin.tian@intel.com, baolu.lu@linux.intel.com, joro@8bytes.org,
-        shameerali.kolothum.thodi@huawei.com, jean-philippe@linaro.org,
-        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
+References: <20230315181902.4177819-1-joel@joelfernandes.org>
+ <20230315181902.4177819-2-joel@joelfernandes.org> <ZBK8O5tKj0PPM1co@kroah.com>
+In-Reply-To: <ZBK8O5tKj0PPM1co@kroah.com>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Thu, 16 Mar 2023 11:21:07 -0400
+Message-ID: <CAEXW_YS=ApOpXwdgnP-Aq=xD_pvYhZWPOF=U19LqbVjjn=eROg@mail.gmail.com>
+Subject: Re: [PATCH v2 02/14] misc: vmw_vmci: Rename kvfree_rcu() to kvfree_rcu_mightsleep()
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Bryan Tan <bryantan@vmware.com>, Vishnu Dasa <vdasa@vmware.com>,
+        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Uladzislau Rezki (Sony)" <urezki@gmail.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
         linux-kernel@vger.kernel.org
-References: <cover.1678348754.git.nicolinc@nvidia.com>
- <494e36cbb77d49e11427b308868dbc1b0e19fe18.1678348754.git.nicolinc@nvidia.com>
- <bfa43614-c052-4bed-b87e-691141f41909@arm.com>
- <ZAqFFolbw5xoJDfb@Asurada-Nvidia>
- <5cc56149-965a-bb47-f23f-6aa9d0ecce4e@arm.com>
- <ZBJfJUjbAUId68s1@Asurada-Nvidia>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <ZBJfJUjbAUId68s1@Asurada-Nvidia>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLACK autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/03/2023 12:13 am, Nicolin Chen wrote:
-> On Fri, Mar 10, 2023 at 03:28:56PM +0000, Robin Murphy wrote:
->> External email: Use caution opening links or attachments
->>
->>
->> On 2023-03-10 01:17, Nicolin Chen wrote:
->>> Hi Robin,
->>>
->>> Thanks for the inputs.
->>>
->>> On Thu, Mar 09, 2023 at 01:03:41PM +0000, Robin Murphy wrote:
->>>> External email: Use caution opening links or attachments
->>>>
->>>>
->>>> On 2023-03-09 10:53, Nicolin Chen wrote:
->>>>> This is used to forward the host IDR values to the user space, so the
->>>>> hypervisor and the guest VM can learn about the underlying hardware's
->>>>> capabilities.
->>>>>
->>>>> Also, set the driver_type to IOMMU_HW_INFO_TYPE_ARM_SMMUV3 to pass the
->>>>> corresponding type sanity in the core.
->>>>>
->>>>> Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
->>>>> ---
->>>>>     drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c | 25 +++++++++++++++++++++
->>>>>     drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h |  2 ++
->>>>>     include/uapi/linux/iommufd.h                | 14 ++++++++++++
->>>>>     3 files changed, 41 insertions(+)
->>>>>
->>>>> diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
->>>>> index f2425b0f0cd6..c1aac695ae0d 100644
->>>>> --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
->>>>> +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
->>>>> @@ -2005,6 +2005,29 @@ static bool arm_smmu_capable(struct device *dev, enum iommu_cap cap)
->>>>>         }
->>>>>     }
->>>>>
->>>>> +static void *arm_smmu_hw_info(struct device *dev, u32 *length)
->>>>> +{
->>>>> +     struct arm_smmu_master *master = dev_iommu_priv_get(dev);
->>>>> +     struct iommu_hw_info_smmuv3 *info;
->>>>> +     void *base_idr;
->>>>> +     int i;
->>>>> +
->>>>> +     if (!master || !master->smmu)
->>>>> +             return ERR_PTR(-ENODEV);
->>>>> +
->>>>> +     info = kzalloc(sizeof(*info), GFP_KERNEL);
->>>>> +     if (!info)
->>>>> +             return ERR_PTR(-ENOMEM);
->>>>> +
->>>>> +     base_idr = master->smmu->base + ARM_SMMU_IDR0;
->>>>> +     for (i = 0; i <= 5; i++)
->>>>> +             info->idr[i] = readl_relaxed(base_idr + 0x4 * i);
->>>>
->>>> You need to take firmware overrides etc. into account here. In
->>>> particular, features like BTM may need to be hidden to work around
->>>> errata either in the system integration or the SMMU itself. It isn't
->>>> reasonable to expect every VMM to be aware of every erratum and
->>>> workaround, and there may even be workarounds where we need to go out of
->>>> our way to prevent guests from trying to use certain features in order
->>>> to maintain correctness at S2.
->>>
->>> We can add a bit of overrides after this for errata, perhaps?
->>>
->>> I have some trouble with finding the errata docs. Would it be
->>> possible for you to direct me to it with a link maybe?
->>
->> The key Arm term is "Software Developer Errata Notice", or just SDEN.
->> Here's the ones for MMU-600 and MMU-700:
->>
->> https://developer.arm.com/documentation/SDEN-946810/latest/
-> 
-> This page shows "Arm CoreLink MMU-600 System Memory Management
-> Unit Software Developer Errata Notice" but the downloaded file
-> is "Arm CoreLink CI-700 Coherent Interconnect" errata notice.
-> And I don't quite understand what it's about.
+On Thu, Mar 16, 2023 at 2:50=E2=80=AFAM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Wed, Mar 15, 2023 at 06:18:49PM +0000, Joel Fernandes (Google) wrote:
+> > From: "Uladzislau Rezki (Sony)" <urezki@gmail.com>
+> >
+> > The kvfree_rcu() macro's single-argument form is deprecated.  Therefore
+> > switch to the new kvfree_rcu_mightsleep() variant. The goal is to
+> > avoid accidental use of the single-argument forms, which can introduce
+> > functionality bugs in atomic contexts and latency bugs in non-atomic
+> > contexts.
+> >
+> > Cc: Bryan Tan <bryantan@vmware.com>
+> > Cc: Vishnu Dasa <vdasa@vmware.com>
+> > Reviewed-by: Vishnu Dasa <vdasa@vmware.com>
+> > Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
+> > Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> > Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+> > ---
+> >  drivers/misc/vmw_vmci/vmci_context.c | 2 +-
+> >  drivers/misc/vmw_vmci/vmci_event.c   | 2 +-
+> >  2 files changed, 2 insertions(+), 2 deletions(-)
+>
+> Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-Oh, wonderful... I've reported that now, hopefully it gets fixed soon...
+Thanks!
 
->> https://developer.arm.com/documentation/SDEN-1786925/latest/
-> 
-> Yea, this one I got an "MMU-700 System Memory Management Unit"
-> SMMU errata file that I can read and understand.
-> 
->> Note that until now it has been extremely fortunate that in pretty much
->> every case Linux either hasn't supported the affected feature at all, or
->> has happened to avoid meeting the conditions. Once we do introduce
->> nesting support that all goes out the window (and I'll have to think
->> more when reviewing new errata in future...)
->>
->> I've been putting off revisiting all the existing errata to figure out
->> what we'd need to do until new nesting patches appeared, so I'll try to
->> get to that soon now. I think in many cases it's likely to be best to
->> just disallowing nesting entirely on affected implementations.
-> 
-> Do we have already a list of "affected implementations"? Or,
-> we would need to make such a list now? In a latter case, can
-> these affected implementations be detected from their IRD0-5
-> registers, so that we can simply do something in hw_info()?
-
-Somewhere I have a patch that adds all the IIDR stuff needed for this, 
-but I never sent it upstream since the erratum itself was an early 
-MMU-600 one which in practice doesn't matter. I'll dig that out and 
-update it with what I have in mind.
-
-Thanks,
-Robin.
+- Joel
