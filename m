@@ -2,160 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A57A76BCD23
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 11:47:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71ED26BCD33
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 11:48:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229639AbjCPKrh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 06:47:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34580 "EHLO
+        id S230130AbjCPKsJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 06:48:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230125AbjCPKrX (ORCPT
+        with ESMTP id S229842AbjCPKrn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 06:47:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D99B7B53EB;
-        Thu, 16 Mar 2023 03:47:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EC764B820F1;
-        Thu, 16 Mar 2023 10:47:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BA71C433D2;
-        Thu, 16 Mar 2023 10:47:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678963638;
-        bh=oVJKXXmyFemiia076cROVBxSR0hcwYomgygILOaiuhs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=STJX+/4MELf1XFf3XtEMCdDHYG4U1N5l+NIK58bK8/DoopMvH1mDx2l44s0smoKTt
-         1inb1y/H0vpPXsRJU/oept6d7jc/yot9fg/sbKfjjq1CPN5OnLc/6xiKnsj/er64aB
-         tif80s7q2HhNyW3jfDTfNbdTy6BlvRPYJGoWjJ7q5ieU1ZQUgsblnRuItuLa9+CE2f
-         Ah3/nh1j1HAQSlCHD1MdhTM4uiWKZHZp99ioSjMDmdhiIEkA3v3X0puzAxD3huLd1j
-         qNddr70dq8SErG5Kk+q9bp140tX4r0/eUPdX76rjZ3UORdPlOvoLIU50ljJOoKIicH
-         OwGkX+oUJQk1w==
-Date:   Thu, 16 Mar 2023 11:47:11 +0100
-From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>, Janne Grunau <j@jannau.net>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Sven Peter <sven@svenpeter.dev>, linux-pci@vger.kernel.org,
-        asahi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Daire McNamara <daire.mcnamara@microchip.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v2] PCI: apple: Set only available ports up
-Message-ID: <ZBLzr1MZ2whtvusL@lpieralisi>
-References: <20230307-apple_pcie_disabled_ports-v2-1-c3bd1fd278a4@jannau.net>
- <20230309163935.GA1140101@bhelgaas>
- <86a60dxcr0.wl-maz@kernel.org>
+        Thu, 16 Mar 2023 06:47:43 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 244F8BE5C2;
+        Thu, 16 Mar 2023 03:47:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678963652; x=1710499652;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=BYz5y8qjpu7VLTEbVu95st7NnX4R2KAVJgLfMmMipiA=;
+  b=ktO/uFatEgrgBb/1LubSl0GM8wN8xDOHysOZ+KPDrcFkhWOwxGfJUHQ8
+   m8y1jkM0HG5tr9fqCxCxr42coi8lsrWcRITpLzusZZIziibUV4D00BQfb
+   vF/xMxSgsxLxtLC7BnMpH/yLY1ohtD1xngNoDtbowJuNTbs+uufEdnQlz
+   0wDhMDS8kjDLhyn4ugYnfOVHvtwtCw1f+ATiLb6PH15esqQZQTyEs2jUJ
+   NLUOMCKJmRUJbE1lfsZprY/X/JMEb9Li3z7TSb8HH/+nzJ95ba9KoGuaV
+   bGuQqehsOcIRAu03aO7rWGM+gjtBmljDIh4VC+2lZ1yNT2UWOWvJXLCuL
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="424225339"
+X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
+   d="scan'208";a="424225339"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 03:47:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="679852794"
+X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
+   d="scan'208";a="679852794"
+Received: from unknown (HELO localhost.localdomain) ([10.237.112.144])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 03:47:27 -0700
+Date:   Thu, 16 Mar 2023 11:47:19 +0100
+From:   Michal Swiatkowski <michal.swiatkowski@linux.intel.com>
+To:     Daniil Tatianin <d-tatianin@yandex-team.ru>
+Cc:     Ariel Elior <aelior@marvell.com>,
+        Manish Chopra <manishc@marvell.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Yuval Mintz <Yuval.Mintz@qlogic.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] qed/qed_sriov: guard against NULL derefs from
+ qed_iov_get_vf_info
+Message-ID: <ZBLzt+tS/SKO9IGC@localhost.localdomain>
+References: <20230316102921.609266-1-d-tatianin@yandex-team.ru>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <86a60dxcr0.wl-maz@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230316102921.609266-1-d-tatianin@yandex-team.ru>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 16, 2023 at 09:32:35AM +0000, Marc Zyngier wrote:
-> On Thu, 09 Mar 2023 16:39:35 +0000,
-> Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > 
-> > [+cc Daire, Conor for apple/microchip use of ECAM .init() method]
-> > 
-> > On Thu, Mar 09, 2023 at 02:36:24PM +0100, Janne Grunau wrote:
-> > > Fixes following warning inside of_irq_parse_raw() called from the common
-> > > PCI device probe path.
-> > > 
-> > >   /soc/pcie@690000000/pci@1,0 interrupt-map failed, using interrupt-controller
-> > >   WARNING: CPU: 4 PID: 252 at drivers/of/irq.c:279 of_irq_parse_raw+0x5fc/0x724
-> > 
-> > Based on this commit log, I assume this patch only fixes the warning,
-> > and the system *works* just fine either way.  If that's the case, it's
-> > debatable whether it meets the stable kernel criteria, although the
-> > documented criteria are much stricter than what happens in practice.
-> > 
-> > >   ...
-> > >   Call trace:
-> > >    of_irq_parse_raw+0x5fc/0x724
-> > >    of_irq_parse_and_map_pci+0x128/0x1d8
-> > >    pci_assign_irq+0xc8/0x140
-> > >    pci_device_probe+0x70/0x188
-> > >    really_probe+0x178/0x418
-> > >    __driver_probe_device+0x120/0x188
-> > >    driver_probe_device+0x48/0x22c
-> > >    __device_attach_driver+0x134/0x1d8
-> > >    bus_for_each_drv+0x8c/0xd8
-> > >    __device_attach+0xdc/0x1d0
-> > >    device_attach+0x20/0x2c
-> > >    pci_bus_add_device+0x5c/0xc0
-> > >    pci_bus_add_devices+0x58/0x88
-> > >    pci_host_probe+0x124/0x178
-> > >    pci_host_common_probe+0x124/0x198 [pci_host_common]
-> > >    apple_pcie_probe+0x108/0x16c [pcie_apple]
-> > >    platform_probe+0xb4/0xdc
-> > > 
-> > > This became apparent after disabling unused PCIe ports in the Apple
-> > > silicon device trees instead of deleting them.
-> > > 
-> > > Use for_each_available_child_of_node instead of for_each_child_of_node
-> > > which takes the "status" property into account.
-> > > 
-> > > Link: https://lore.kernel.org/asahi/20230214-apple_dts_pcie_disable_unused-v1-0-5ea0d3ddcde3@jannau.net/
-> > > Link: https://lore.kernel.org/asahi/1ea2107a-bb86-8c22-0bbc-82c453ab08ce@linaro.org/
-> > > Fixes: 1e33888fbe44 ("PCI: apple: Add initial hardware bring-up")
-> > > Cc: stable@vger.kernel.org
-> > > Reviewed-by: Marc Zyngier <maz@kernel.org>
-> > > Signed-off-by: Janne Grunau <j@jannau.net>
-> > > ---
-> > > Changes in v2:
-> > > - rewritten commit message with more details and corrections
-> > > - collected Marc's "Reviewed-by:"
-> > > - Link to v1: https://lore.kernel.org/r/20230307-apple_pcie_disabled_ports-v1-1-b32ef91faf19@jannau.net
-> > > ---
-> > >  drivers/pci/controller/pcie-apple.c | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > > 
-> > > diff --git a/drivers/pci/controller/pcie-apple.c b/drivers/pci/controller/pcie-apple.c
-> > > index 66f37e403a09..f8670a032f7a 100644
-> > > --- a/drivers/pci/controller/pcie-apple.c
-> > > +++ b/drivers/pci/controller/pcie-apple.c
-> > > @@ -783,7 +783,7 @@ static int apple_pcie_init(struct pci_config_window *cfg)
-> > >  	cfg->priv = pcie;
-> > >  	INIT_LIST_HEAD(&pcie->ports);
-> > >  
-> > > -	for_each_child_of_node(dev->of_node, of_port) {
-> > > +	for_each_available_child_of_node(dev->of_node, of_port) {
-> > >  		ret = apple_pcie_setup_port(pcie, of_port);
-> > >  		if (ret) {
-> > >  			dev_err(pcie->dev, "Port %pOF setup fail: %d\n", of_port, ret);
-> > 
-> > Is this change still needed after 6fffbc7ae137 ("PCI: Honor firmware's
-> > device disabled status")?  This is a generic problem, and it would be
-> > a lot nicer if we had a generic solution.  But I assume it *is* still
-> > needed because Rob gave his Reviewed-by.
+On Thu, Mar 16, 2023 at 01:29:21PM +0300, Daniil Tatianin wrote:
+> We have to make sure that the info returned by the helper is valid
+> before using it.
 > 
-> I'm not sure this is addressing the same issue. The way I read it, the
-> patch you mention here allows a PCI device to be disabled in firmware,
-> even if it could otherwise be probed.
+> Found by Linux Verification Center (linuxtesting.org) with the SVACE
+> static analysis tool.
 > 
-> What this patch does is to prevent root ports that exist in the HW but
-> that have been disabled from being probed. Same concept, only at a
-> different level.
+> Fixes: f990c82c385b ("qed*: Add support for ndo_set_vf_trust")
+> Fixes: 733def6a04bf ("qed*: IOV link control")
+> Signed-off-by: Daniil Tatianin <d-tatianin@yandex-team.ru>
+> ---
+> Changes since v1:
+> - Add a vf check to qed_iov_handle_trust_change as well
+> ---
+>  drivers/net/ethernet/qlogic/qed/qed_sriov.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/ethernet/qlogic/qed/qed_sriov.c b/drivers/net/ethernet/qlogic/qed/qed_sriov.c
+> index 2bf18748581d..fa167b1aa019 100644
+> --- a/drivers/net/ethernet/qlogic/qed/qed_sriov.c
+> +++ b/drivers/net/ethernet/qlogic/qed/qed_sriov.c
+> @@ -4404,6 +4404,9 @@ qed_iov_configure_min_tx_rate(struct qed_dev *cdev, int vfid, u32 rate)
+>  	}
+>  
+>  	vf = qed_iov_get_vf_info(QED_LEADING_HWFN(cdev), (u16)vfid, true);
+> +	if (!vf)
+> +		return -EINVAL;
+> +
+>  	vport_id = vf->vport_id;
+>  
+>  	return qed_configure_vport_wfq(cdev, vport_id, rate);
+> @@ -5152,7 +5155,7 @@ static void qed_iov_handle_trust_change(struct qed_hwfn *hwfn)
+>  
+>  		/* Validate that the VF has a configured vport */
+>  		vf = qed_iov_get_vf_info(hwfn, i, true);
+> -		if (!vf->vport_instance)
+> +		if (!vf || !vf->vport_instance)
+>  			continue;
+>  
+>  		memset(&params, 0, sizeof(params));
+> -- 
+> 2.25.1
+> 
 
-A root port is a PCI device though and that's what's causing the warning
-AFAIK (? it is triggered on the root port PCI device pci_assign_irq()
-call), I am not sure the root port DT node is associated with the root
-port PCI device correctly, which might explain why, even after
-6fffbc7ae137, the PCI enumeration code is adding the root port PCI
-device to the PCI tree.
+Thanks,
+Reviewed-by: Michal Swiatkowski <michal.swiatkowski@linux.intel.com>
 
-Is the dts available anywhere ? How are root ports described in it ?
-
-Lorenzo
