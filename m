@@ -2,261 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B63956BCBF6
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 11:05:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 730B86BCBFD
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 11:06:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230033AbjCPKFj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 06:05:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51196 "EHLO
+        id S229726AbjCPKGp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 06:06:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229701AbjCPKFg (ORCPT
+        with ESMTP id S229896AbjCPKGj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 06:05:36 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFA16A0B3B
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 03:05:28 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id o11-20020a05600c4fcb00b003eb33ea29a8so679083wmq.1
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 03:05:28 -0700 (PDT)
+        Thu, 16 Mar 2023 06:06:39 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2121.outbound.protection.outlook.com [40.107.237.121])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A59E9B78A3;
+        Thu, 16 Mar 2023 03:06:08 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ZQGv7Vg5miRBCVeShwGh/FiikIfi69VZpDPvae0SED0E3aQCNScdjPU9jTq/vi/qIwuYmyihwFoFpInb14KcXV8iokvhBcU0A6q0mIeeUbfU0YpCiAYqy8AgpdoKHeNiN6wz1Xq4BvwFXoI5eVfTy+MRKrZJiEcltDtO6K54/55pmXwjm5XVcMxTg9328FOJzJA7UM57JuK1lek06YKHTG+iJFBzgUHfco4UwqQKXbpvbpyNK3W9cuJnnMI0D/hxhQsU/NRN6OSwK3f5cAUMUg/iZsCHFcFAfQLyM/zI7reYYneEnBPjFOXArSbvqu1TvsQDedXgjKCyyXhcQcKCiQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=SWDS2xX6gpx6orfiDLXNAh/DJCxxEgGoeWwlxaY4KUU=;
+ b=XQXG102GKU7272brZp3mGuTJlzVd9Mtuug+pGHCkwya3r9FOGkRC7Se/SEXYw5edeuaT2jwbAprJw1/otogGuwlBW3aliyDL7U0Z4B3aGYdTn+QZC3aH9EDIq08Vhp4lz42aNXdgMuNE6UeX3/GgFjGD886Tm/rg5Wc0PDWF/MKBPKf1b4eQlEv+awIVZCAEh1V8qZKRHJUtTt8fuuduGxwi8UuR3OjMj6PxiLzwiCkZ88tmKRA1W+smRWwch8iaRcIQNbMg2Ceq3emUJwo9v8h/Kw9MHBz7G0xuU7oX76jWpLwAU+bPZtmC8Ym0FKzsoDET77hrSulaEnoSyddJvQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678961127;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=LgYCZHGkMxWxLNxSIypAzujsXqtz2VniUuNUBnk+gis=;
-        b=VSiX4ak9m2Fbpeodc2znc0DO1Ptd/zIBs8O7Y8ughyQyMMYMUIXgqe1dCOAFuRvVwc
-         tWcGRawnoOh+glRb8/e5G2dCJYbzJQIhTEHtu1DqCrAknzoNLoIdH2rm8rIajeqxnlo6
-         w1HaoqmMwKg8RkgvbcJjaKu4ocB8AIYT4FQ7MPciNJd3fr1a6oqXK1j/6Z4B74gj97iY
-         jxMMlzv+zvU2XLgi2ZO2ok+GmZjqHraissXWmUjI7hRXKw+E5XqJu2Kq+NfD26pb32Ml
-         BPVzN5lRw5/lvK3he1qB4E2E6ut7p+wNH9MRoyVXbe3hYObOauKxNU80Kzs19zE8GT8z
-         G6OA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678961127;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LgYCZHGkMxWxLNxSIypAzujsXqtz2VniUuNUBnk+gis=;
-        b=U2eKeh2JKwWoNdInF1iIrYH4KHorKVITe66TsfZvYcrVz41bv3GdJS3wjG4pJXpS6F
-         t0NEb5VABVovWxY0sU2MoS5LC+RKZLWUkbh5+fsM9pffxDk2wqfhy0I/i3wni+shk4w0
-         g2X0I5+ir5UyzY0MMV8ynLWmeRSfrAvv/OzyHN5QnUIML6hunTM1lla/jFh7ZdVFXs6r
-         V0VT3hmvHfXjpSdm21rjttBlAtv+7j/n55+nNPSuLzFD3gGcrAEHY0tIVpPl/Yxi6zZl
-         hPia5ZFMban4b8aXnIEhxdKLrwqCsFNHYAKBvV/+Xwv9kNccV6DvZaAfUZoiLkQsJyXJ
-         c9Sg==
-X-Gm-Message-State: AO0yUKWcVF2Py8e05c4lEER2EMec1A5wcH/ILDbJqYePzWU8KBwhTUCA
-        UR8M3u7l8ulx4WF1Ll8OQoXt4A==
-X-Google-Smtp-Source: AK7set+ZBAEGyPlBeMSevhv7QLiyPYaj5v7LU+lQDc2C6qWm+uykJB1zOxqDuqALnVB1LKmFbDZYXA==
-X-Received: by 2002:a05:600c:4691:b0:3ed:33a1:ba8e with SMTP id p17-20020a05600c469100b003ed33a1ba8emr4766778wmo.1.1678961126625;
-        Thu, 16 Mar 2023 03:05:26 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:cd3c:7f23:e93c:fbb4? ([2a05:6e02:1041:c10:cd3c:7f23:e93c:fbb4])
-        by smtp.googlemail.com with ESMTPSA id e4-20020a05600c4e4400b003e8f0334db8sm4601879wmq.5.2023.03.16.03.05.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Mar 2023 03:05:26 -0700 (PDT)
-Message-ID: <bae80282-cb80-462d-e554-1934d090e216@linaro.org>
-Date:   Thu, 16 Mar 2023 11:05:25 +0100
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=SWDS2xX6gpx6orfiDLXNAh/DJCxxEgGoeWwlxaY4KUU=;
+ b=IXUDvsHNyeGWWLs7+HcpCznyAEzGaeHHjrrpBXLgkwU3bqnsp33W2a5o2+k3lrwYF5hvqB/ov1QBJsbe0B4beVYu8ZBmDWBTY1wDjZrjhh8Qj0DWQudkFlSrX0tFX602Gc2N+v1eJTDuuQ8ep2L7lyFng4fbnBdn216CE10cOTQ=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by DM6PR13MB4066.namprd13.prod.outlook.com (2603:10b6:5:2ab::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.31; Thu, 16 Mar
+ 2023 10:06:05 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::85f5:bdb:fb9e:294c]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::85f5:bdb:fb9e:294c%2]) with mapi id 15.20.6178.033; Thu, 16 Mar 2023
+ 10:06:05 +0000
+Date:   Thu, 16 Mar 2023 11:05:59 +0100
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Markus Schneider-Pargmann <msp@baylibre.com>
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 08/16] can: m_can: Implement transmit coalescing
+Message-ID: <ZBLqB1FOrQqZluoA@corigine.com>
+References: <20230315110546.2518305-1-msp@baylibre.com>
+ <20230315110546.2518305-9-msp@baylibre.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230315110546.2518305-9-msp@baylibre.com>
+X-ClientProxiedBy: AM4PR05CA0036.eurprd05.prod.outlook.com (2603:10a6:205::49)
+ To PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [RESEND] [PATCHv3 4/7] thermal: rockchip: Simplify channel id
- logic
-Content-Language: en-US
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Heiko Stuebner <heiko@sntech.de>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pm@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com
-References: <20230308112253.15659-1-sebastian.reichel@collabora.com>
- <20230308112253.15659-5-sebastian.reichel@collabora.com>
- <6c13708d-d51a-73b8-bf01-d6893eae2af4@linaro.org>
- <ec66d4e7-cb82-46c6-84ae-bd51df7cab7c@mercury.local>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <ec66d4e7-cb82-46c6-84ae-bd51df7cab7c@mercury.local>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|DM6PR13MB4066:EE_
+X-MS-Office365-Filtering-Correlation-Id: ef9f92f6-94a6-43b2-9002-08db26060e04
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: b9og7I2+jaCvT0MvCy3TSVKlfw3cuh6pZCkXom0i1azbczBQBmYke/PMSyXwYuj2nmxPfVpWF0lX+FcqeyjdcyfeB4/SR6oThAFxy3cf2AmSPFGlMFjf0rfizW56yLD7NlIDqCQv/5EQY0D1HBRCJYX/qUujPUyoz5sYoxNLAltiqgcm4QuuyMOKX1dHt+L5wZQ05+RgdOyavYGnf9Hh47Y/UqH8CVtUQK/s7N+otqR/2QaHgiK7+gcN10zFLdpXdrRS8XQsRrNxNP5cG+faBX5X7OO4DDoEyAON5g2bmQ7ErB65ZNSDNjVNNiWLZknBIgL+4lV89GTQmKUmHq0ok1efXFPgQXdXj8r5rKOaGz+IbZEDKFksNGARxe9YqTGjWo9LtOiqc/FYbItbOGxmdwp+9OL5EiZKv7U2sy8iBEGfMmJgOi9/j2OTHPhHbkHiXh+LKgbDfRzwkB7scX5zIsrDxGAON7PeHqeMA1XTbuMDWGO7uJhvPJPXCJ9yc6A08B1kAfdYYkYsKcA7xnIa7KfqYlg9w2SvNSmehatSO5yHY+ysu9M9qnwEgKjSzD2OKdbP6khgVsltVR0UNlNm7aFNYJmboSZSz3ZRcIZugdX2V74qCBmd/rHPlaXs6IHN5p/SyqdSBckxbxZhn+9ipQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(136003)(346002)(396003)(376002)(39840400004)(451199018)(36756003)(44832011)(478600001)(2906002)(186003)(316002)(83380400001)(41300700001)(2616005)(54906003)(4744005)(6512007)(6506007)(6486002)(5660300002)(8936002)(66946007)(6666004)(66556008)(66476007)(6916009)(4326008)(8676002)(86362001)(38100700002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?uzHTGaUtKpSQnnFdKtNAxM3XGQdY5VXzXZg06oP+vmmJWrmcUSm2YNBPam/Z?=
+ =?us-ascii?Q?LY6bbrwfke/AGsXeIoHo+YZ/+o8PnsYzrMveRw3Seuir52B/IXxyyKemwPRc?=
+ =?us-ascii?Q?Uqxi5OXdx+SML/0bHLfcjiPUYdk0Ptx23B7DZysn+HaVVUO8ebL7kcG6nkyx?=
+ =?us-ascii?Q?a8kf1F14H8Xv5Zqimaw+sluPvixmaEFaOnc/4jCNMJTwrQiJGtFVUo/uX6fe?=
+ =?us-ascii?Q?j0pyXt3C/jAM/LmVOe0ecJ9cR4VI9SS7qN10KqNOdRta/idxoESduagu98eC?=
+ =?us-ascii?Q?ToRDiZ4zyM52ykVZs2j2xfcLKxdzYhp3XBM+haCeoGChLpT0tp9rLYG325uT?=
+ =?us-ascii?Q?rWZLvENUvqGvp18D97Jiqz5da14QUzjgsBlQI7417s3bd/er7TeNnk65O7/T?=
+ =?us-ascii?Q?A7Tg5NQaZKgMttAZ6bQzwhLOR4UOyEbjuwyecpIER+U9/q99hkhFxuwG4V/S?=
+ =?us-ascii?Q?AHWECdJF+HrQ/uTCHqyDYNP1Rn+rOh9PbteBMFYSp1mBK5Y5KvPQe5fR14oX?=
+ =?us-ascii?Q?do0IOU7bAxErqqe3mWDzgTESvil8hQHMCjFXKkagDelz6l/LdYmmfVyvvu2z?=
+ =?us-ascii?Q?p0IWtq4q3bfG6upKL1VhnTetYBLPtwY2l1AC7+J8WlqBhD8uKWwuWaFmnZqE?=
+ =?us-ascii?Q?HxZmLUDYj/NXjdWdL6xsKKZPFJoLfz32lSC5CmupmhSPZyBMdD1i5CEIytvf?=
+ =?us-ascii?Q?LnhUe1YGh/BnQzjykjuCIBWASs0L19ZZuqaRVj6eYDfAMKmBGBXpSF9Juhrp?=
+ =?us-ascii?Q?hWq1WazL4Cj6BYB4dExe5s63y5KIWLx1l57bE37zX7xUPLa4zUoafYZrbKE1?=
+ =?us-ascii?Q?RCnGcvTb3Q5Hr8aLm1LYZQxUt4lH4vt0yEzWKJQn3A9BPNtpHA9yN82jbiyE?=
+ =?us-ascii?Q?JZ69OASO4hmAwPBLqb+6ZHgyAwAlix59ja+OVwnv4cOnSjR+W4UBkf8cPunc?=
+ =?us-ascii?Q?g2dRB1N74kUxdMlpac39U+5e9huYCUdIGbiHPXQy2BBS/o0yorYsYLuOhBrh?=
+ =?us-ascii?Q?neVPjdvqogl/4VChBnKpw2iQnypAh3TFR86CXqoDY4qVOFHp3MYutjuhvomy?=
+ =?us-ascii?Q?+WfuW13zuABA3jIQKYzGn8YTW8QurxcdVZcHnBYlipeLYr4OLV31VMnZunY4?=
+ =?us-ascii?Q?Eyfyzjl5ZJhDnVtHXnizMLqVR0WsM2h+nAPyMKOKSdDtZL8ZxwtOwFF71kPC?=
+ =?us-ascii?Q?UQ5dnOQnuYYJpEhDbimIrMyC+nq7zGeHPJwMYAQYDJdz1Mg6ae9IWMZ8J63/?=
+ =?us-ascii?Q?85EfCySG/mkgJ/ERl+IQvJ79LhWLPIkKgZgXNpxaNQa2fA9cwRgf3eb077FV?=
+ =?us-ascii?Q?2ut7TTO0b6gDzoTDNTWcBs8l4XDDTf5jhO1xck3lwlgIkpaR9EgqxVo9q7Pk?=
+ =?us-ascii?Q?PElZvNfc15JEIiNgiFFzwJ1yQuf57jAO/JnyfHYKkvD6lKedySjT5bGrdSzj?=
+ =?us-ascii?Q?GD3KayDbWpK0K4xzla96BL23OpIct94uzx/keY1ozxPebKRgTs15HL24q11p?=
+ =?us-ascii?Q?9YY9SE8cJmF/26AoCsAzU+vn+dacUIHfKmuGGhfuz2n2UKnHnIYsCLXBqeeF?=
+ =?us-ascii?Q?nMo+ZaFKcppz2mImwKoz/MnbN9II9Rx6elXB7oipQd9Lh/JVvVAUE2DB3FQd?=
+ =?us-ascii?Q?8GMmPJxX3ega/xEVUFOwPPHyf1l8syXO7A7McdEJ7V97R+d9lBZfy/4eDGDp?=
+ =?us-ascii?Q?vB7yPw=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ef9f92f6-94a6-43b2-9002-08db26060e04
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Mar 2023 10:06:05.1302
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: h6n9z+K/SBAMCtJ6umPQ6mEjoESQsI4SH8zmafp3bj0sF1i8mYGUcwJo6qzEAmudN1pHNmIR0+5Q6wzj0eLG2fdaDnkf0O7BYL0OYLYLyiA=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR13MB4066
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-Hi Heiko,
-
-On 08/03/2023 19:42, Sebastian Reichel wrote:
-> Hi Daniel,
+On Wed, Mar 15, 2023 at 12:05:38PM +0100, Markus Schneider-Pargmann wrote:
+> Extend the coalescing implementation for transmits.
 > 
-> On Wed, Mar 08, 2023 at 07:13:22PM +0100, Daniel Lezcano wrote:
->> On 08/03/2023 12:22, Sebastian Reichel wrote:
->>> Replace the channel ID lookup table by a simple offset, since
->>> the channel IDs are consecutive.
->>>
->>> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
->>
->> As all the other patches are reviewed by Heiko, is the tag missing here?
+> In normal mode the chip raises an interrupt for every finished transmit.
+> This implementation switches to coalescing mode as soon as an interrupt
+> handled a transmit. For coalescing the watermark level interrupt is used
+> to interrupt exactly after x frames were sent. It switches back into
+> normal mode once there was an interrupt with no finished transmit and
+> the timer being inactive.
 > 
-> Heiko was not happy with this in PATCHv2, when he reviewed most
-> of the patches:
+> The timer is shared with receive coalescing. The time for receive and
+> transmit coalescing timers have to be the same for that to work. The
+> benefit is to have only a single running timer.
 > 
-> https://lore.kernel.org/all/3601039.e9J7NaK4W3@phil/
-> 
-> I replied, but never got a response, so I kept it as is:
-> 
-> https://lore.kernel.org/all/20221206170232.xsm4kcbfwrmlrriw@mercury.elektranox.org/
-> 
-> FWIW it is essential for the series and cannot be dropped, because
-> RK3588 has more than 2 channels.
+> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
 
-Do you have a suggestion to improve the proposed change ?
-
-Thanks
-    -- Daniel
-
-
->>> ---
->>>    drivers/thermal/rockchip_thermal.c | 48 +++++++++++++-----------------
->>>    1 file changed, 21 insertions(+), 27 deletions(-)
->>>
->>> diff --git a/drivers/thermal/rockchip_thermal.c b/drivers/thermal/rockchip_thermal.c
->>> index 9ed45b318344..bcbdd618daae 100644
->>> --- a/drivers/thermal/rockchip_thermal.c
->>> +++ b/drivers/thermal/rockchip_thermal.c
->>> @@ -39,15 +39,6 @@ enum tshut_polarity {
->>>    	TSHUT_HIGH_ACTIVE,
->>>    };
->>> -/*
->>> - * The system has two Temperature Sensors.
->>> - * sensor0 is for CPU, and sensor1 is for GPU.
->>> - */
->>> -enum sensor_id {
->>> -	SENSOR_CPU = 0,
->>> -	SENSOR_GPU,
->>> -};
->>> -
->>>    /*
->>>     * The conversion table has the adc value and temperature.
->>>     * ADC_DECREMENT: the adc value is of diminishing.(e.g. rk3288_code_table)
->>> @@ -82,7 +73,7 @@ struct chip_tsadc_table {
->>>    /**
->>>     * struct rockchip_tsadc_chip - hold the private data of tsadc chip
->>> - * @chn_id: array of sensor ids of chip corresponding to the channel
->>> + * @chn_offset: the channel offset of the first channel
->>>     * @chn_num: the channel number of tsadc chip
->>>     * @tshut_temp: the hardware-controlled shutdown temperature value
->>>     * @tshut_mode: the hardware-controlled shutdown mode (0:CRU 1:GPIO)
->>> @@ -98,7 +89,7 @@ struct chip_tsadc_table {
->>>     */
->>>    struct rockchip_tsadc_chip {
->>>    	/* The sensor id of chip correspond to the ADC channel */
->>> -	int chn_id[SOC_MAX_SENSORS];
->>> +	int chn_offset;
->>>    	int chn_num;
->>>    	/* The hardware-controlled tshut property */
->>> @@ -925,8 +916,8 @@ static void rk_tsadcv2_tshut_mode(int chn, void __iomem *regs,
->>>    }
->>>    static const struct rockchip_tsadc_chip px30_tsadc_data = {
->>> -	.chn_id[SENSOR_CPU] = 0, /* cpu sensor is channel 0 */
->>> -	.chn_id[SENSOR_GPU] = 1, /* gpu sensor is channel 1 */
->>> +	/* cpu, gpu */
->>> +	.chn_offset = 0,
->>>    	.chn_num = 2, /* 2 channels for tsadc */
->>>    	.tshut_mode = TSHUT_MODE_CRU, /* default TSHUT via CRU */
->>> @@ -949,7 +940,8 @@ static const struct rockchip_tsadc_chip px30_tsadc_data = {
->>>    };
->>>    static const struct rockchip_tsadc_chip rv1108_tsadc_data = {
->>> -	.chn_id[SENSOR_CPU] = 0, /* cpu sensor is channel 0 */
->>> +	/* cpu */
->>> +	.chn_offset = 0,
->>>    	.chn_num = 1, /* one channel for tsadc */
->>>    	.tshut_mode = TSHUT_MODE_GPIO, /* default TSHUT via GPIO give PMIC */
->>> @@ -973,7 +965,8 @@ static const struct rockchip_tsadc_chip rv1108_tsadc_data = {
->>>    };
->>>    static const struct rockchip_tsadc_chip rk3228_tsadc_data = {
->>> -	.chn_id[SENSOR_CPU] = 0, /* cpu sensor is channel 0 */
->>> +	/* cpu */
->>> +	.chn_offset = 0,
->>>    	.chn_num = 1, /* one channel for tsadc */
->>>    	.tshut_mode = TSHUT_MODE_GPIO, /* default TSHUT via GPIO give PMIC */
->>> @@ -997,8 +990,8 @@ static const struct rockchip_tsadc_chip rk3228_tsadc_data = {
->>>    };
->>>    static const struct rockchip_tsadc_chip rk3288_tsadc_data = {
->>> -	.chn_id[SENSOR_CPU] = 1, /* cpu sensor is channel 1 */
->>> -	.chn_id[SENSOR_GPU] = 2, /* gpu sensor is channel 2 */
->>> +	/* cpu, gpu */
->>> +	.chn_offset = 1,
->>>    	.chn_num = 2, /* two channels for tsadc */
->>>    	.tshut_mode = TSHUT_MODE_GPIO, /* default TSHUT via GPIO give PMIC */
->>> @@ -1022,7 +1015,8 @@ static const struct rockchip_tsadc_chip rk3288_tsadc_data = {
->>>    };
->>>    static const struct rockchip_tsadc_chip rk3328_tsadc_data = {
->>> -	.chn_id[SENSOR_CPU] = 0, /* cpu sensor is channel 0 */
->>> +	/* cpu */
->>> +	.chn_offset = 0,
->>>    	.chn_num = 1, /* one channels for tsadc */
->>>    	.tshut_mode = TSHUT_MODE_CRU, /* default TSHUT via CRU */
->>> @@ -1045,8 +1039,8 @@ static const struct rockchip_tsadc_chip rk3328_tsadc_data = {
->>>    };
->>>    static const struct rockchip_tsadc_chip rk3366_tsadc_data = {
->>> -	.chn_id[SENSOR_CPU] = 0, /* cpu sensor is channel 0 */
->>> -	.chn_id[SENSOR_GPU] = 1, /* gpu sensor is channel 1 */
->>> +	/* cpu, gpu */
->>> +	.chn_offset = 0,
->>>    	.chn_num = 2, /* two channels for tsadc */
->>>    	.tshut_mode = TSHUT_MODE_GPIO, /* default TSHUT via GPIO give PMIC */
->>> @@ -1070,8 +1064,8 @@ static const struct rockchip_tsadc_chip rk3366_tsadc_data = {
->>>    };
->>>    static const struct rockchip_tsadc_chip rk3368_tsadc_data = {
->>> -	.chn_id[SENSOR_CPU] = 0, /* cpu sensor is channel 0 */
->>> -	.chn_id[SENSOR_GPU] = 1, /* gpu sensor is channel 1 */
->>> +	/* cpu, gpu */
->>> +	.chn_offset = 0,
->>>    	.chn_num = 2, /* two channels for tsadc */
->>>    	.tshut_mode = TSHUT_MODE_GPIO, /* default TSHUT via GPIO give PMIC */
->>> @@ -1095,8 +1089,8 @@ static const struct rockchip_tsadc_chip rk3368_tsadc_data = {
->>>    };
->>>    static const struct rockchip_tsadc_chip rk3399_tsadc_data = {
->>> -	.chn_id[SENSOR_CPU] = 0, /* cpu sensor is channel 0 */
->>> -	.chn_id[SENSOR_GPU] = 1, /* gpu sensor is channel 1 */
->>> +	/* cpu, gpu */
->>> +	.chn_offset = 0,
->>>    	.chn_num = 2, /* two channels for tsadc */
->>>    	.tshut_mode = TSHUT_MODE_GPIO, /* default TSHUT via GPIO give PMIC */
->>> @@ -1120,8 +1114,8 @@ static const struct rockchip_tsadc_chip rk3399_tsadc_data = {
->>>    };
->>>    static const struct rockchip_tsadc_chip rk3568_tsadc_data = {
->>> -	.chn_id[SENSOR_CPU] = 0, /* cpu sensor is channel 0 */
->>> -	.chn_id[SENSOR_GPU] = 1, /* gpu sensor is channel 1 */
->>> +	/* cpu, gpu */
->>> +	.chn_offset = 0,
->>>    	.chn_num = 2, /* two channels for tsadc */
->>>    	.tshut_mode = TSHUT_MODE_GPIO, /* default TSHUT via GPIO give PMIC */
->>> @@ -1404,7 +1398,7 @@ static int rockchip_thermal_probe(struct platform_device *pdev)
->>>    	for (i = 0; i < thermal->chip->chn_num; i++) {
->>>    		error = rockchip_thermal_register_sensor(pdev, thermal,
->>>    						&thermal->sensors[i],
->>> -						thermal->chip->chn_id[i]);
->>> +						thermal->chip->chn_offset + i);
->>>    		if (error)
->>>    			return dev_err_probe(&pdev->dev, error,
->>>    				"failed to register sensor[%d].\n", i);
->>
->> -- 
->> <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
->>
->> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
->> <http://twitter.com/#!/linaroorg> Twitter |
->> <http://www.linaro.org/linaro-blog/> Blog
->>
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Reviewed-by: Simon Horman <simon.horman@corigine.com>
 
