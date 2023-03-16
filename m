@@ -2,209 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 193C36BDAA7
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 22:13:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56B0B6BDAAD
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 22:14:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229631AbjCPVNh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 17:13:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60322 "EHLO
+        id S230035AbjCPVO2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 17:14:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229595AbjCPVNf (ORCPT
+        with ESMTP id S229554AbjCPVO0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 17:13:35 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DFFBA76A1
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 14:13:32 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id g17so4079949lfv.4
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 14:13:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf.com; s=google; t=1679001210;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=EZht2X58FgZjJc2UYyPMsew0vdOtQyEdYhQD5ePFyeY=;
-        b=IuhuF8emKVnSAPRznRMDaFZODFCKL53aYJpjmZ7NFHz5J5zA29z4a8s8rUPjcZGcQh
-         C9NF9EPE44m0W/Ft3tAvtusJykH+abcbpxMNvVFItLWa4kDgGU5GdQdceuyzXM5e3GJQ
-         0zZbG/9gWQk0uB955rHAZRJdEf7Q8xRpbqCAqPu/KQWZBCd7FvY5cMPRHVv111QIHc9D
-         EnSNA1RkO0Lf/mmUwqvHQhdw9jlvDhHls84CIt1oJ7A8I4o8d5hX5+QRfRUiE1ccFA0Y
-         4JXNaXJ8rrrpnfO2O64nMdaKMdn/jOGs9B4IXLx4SMprRx6nYVJipFkX3m93mZn9DUhZ
-         yT9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679001210;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=EZht2X58FgZjJc2UYyPMsew0vdOtQyEdYhQD5ePFyeY=;
-        b=qALN+Mk+6M3+lmNSrNyVlnpjNNvNpJTXWn1i8nc2umXbQYm7rRCS4T6I4nQDynQmjW
-         AqIMIVQ3ZUSHJsvSzSa6cy7n9Sc6NqxtYb4Paidle8WxlGOQuDXG1EnBwuwJZm9zIH/G
-         z49+1SB2y3F2/sIoxOxvnY7hiR6cXTYJTTkwo3msVvyhhOfeHpKEMUi1KTETVEGE2+K0
-         +KopCNPt4sZQTvdKr+h869gNW/ACcTsXK0q49sxDn2BxGrxMz1rK1E0EUUL8wj+Ykn4V
-         TE6SIEyLYdCkrBAF0JGghcXAOj5zFq6JF8JXORPIyF2vH217xpZKvmjm82DCMP+D3LKY
-         Driw==
-X-Gm-Message-State: AO0yUKUmijIQMbzFOxc6R51X/aPZ2vkX66pzQ/gZODdx9ArWxlBnMyxk
-        ZP70nllDXGym4sz1Oj4CaBNbLQ==
-X-Google-Smtp-Source: AK7set9fMZrUVLJxQXI2GiQnpXFYqdAVAbHHMzkXfn2vcuZHQEhw9Nf409kV6vWz3A0lPxM1zNr7BA==
-X-Received: by 2002:ac2:5988:0:b0:4e0:54a3:4b3b with SMTP id w8-20020ac25988000000b004e054a34b3bmr3725955lfn.69.1679001210600;
-        Thu, 16 Mar 2023 14:13:30 -0700 (PDT)
-Received: from [10.43.1.252] ([83.142.187.84])
-        by smtp.gmail.com with ESMTPSA id g5-20020a19ee05000000b004d783b0d310sm41042lfb.307.2023.03.16.14.13.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Mar 2023 14:13:30 -0700 (PDT)
-Message-ID: <9ee7d5e3-2273-4aa7-6859-a5f82c82c34c@semihalf.com>
-Date:   Thu, 16 Mar 2023 22:13:28 +0100
+        Thu, 16 Mar 2023 17:14:26 -0400
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B47496F37;
+        Thu, 16 Mar 2023 14:14:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+        bh=Kw3gyhHeP4st5bWIhkd2RwQ5/1rzrwMt+TeeXEDeMPw=; b=Npp2iFEQVeeP4AYeZvxiPCuurN
+        zC+UkLsNqv+rJy6h1e/dgvqpNl206FYUIzxLUo/icVYaDwA3aLAWYq9d8uXheeH2fwW5HbZm5ko3z
+        E+37KWTWOIU3eIVjSyJW/qeVZQSA+o5VCQptoxdEYJZqNCBcNFTXE0F/Zk9/ZPmlDBw8ppW+Yvjne
+        +Vwgr2vXD++jzuwDvXtZ3yqbXRtKrjasrCcvCOPi3lO0W+mTP4zclpgpXq5xT0LnI9xqjmd53DTLU
+        pYi3WBYYTrVoHz4kaj4mUCHdq2C8qJvPR+UKaw9FQVgSe2jQ0QZ2uhfFfbB2Wfu818Z7STLhlCNLA
+        xHn+zoLg==;
+Received: from sslproxy03.your-server.de ([88.198.220.132])
+        by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1pcuvA-000O8K-VP; Thu, 16 Mar 2023 22:14:00 +0100
+Received: from [85.1.206.226] (helo=linux.home)
+        by sslproxy03.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1pcuvA-000UM8-D5; Thu, 16 Mar 2023 22:14:00 +0100
+Subject: Re: [PATCH bpf v3] xsk: Add missing overflow check in xdp_umem_reg
+To:     Magnus Karlsson <magnus.karlsson@gmail.com>,
+        Kal Conley <kal.conley@dectris.com>
+Cc:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230308174013.1114745-1-kal.conley@dectris.com>
+ <CAJ8uoz1f1RSWtFspPQsEBoH_j3=jUYkDmye3nHRQ_xvgHiusHg@mail.gmail.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <8a076362-c98e-9268-47bd-91f5f8e57449@iogearbox.net>
+Date:   Thu, 16 Mar 2023 22:13:59 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v3 2/2] KVM: x86/ioapic: Resample the pending state of an
- IRQ when unmasking
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        Marc Zyngier <maz@kernel.org>,
-        Eric Auger <eric.auger@redhat.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Rong L Liu <rong.l.liu@intel.com>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>,
-        Tomasz Nowicki <tn@semihalf.com>,
-        Grzegorz Jaszczyk <jaz@semihalf.com>, upstream@semihalf.com,
-        Dmitry Torokhov <dtor@google.com>,
-        Eddie Dong <eddie.dong@intel.com>
-References: <20220818202701.3314045-1-dmy@semihalf.com>
- <20220818202701.3314045-3-dmy@semihalf.com> <ZBJfuOOioFb0pVB6@google.com>
+In-Reply-To: <CAJ8uoz1f1RSWtFspPQsEBoH_j3=jUYkDmye3nHRQ_xvgHiusHg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-From:   Dmytro Maluka <dmy@semihalf.com>
-In-Reply-To: <ZBJfuOOioFb0pVB6@google.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.8/26845/Thu Mar 16 19:16:15 2023)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sean,
-
-On 3/16/23 01:16, Sean Christopherson wrote:
-> Looks sane to me, just a bunch of cosmetic comments.  But this really needs input/review
-> from others.  I/O APIC and level triggered interrupts are not exactly in my wheelhouse.
-
-Ok, sure. All of your cosmetic suggestions below sound good to me.
-
-> 
-> On Thu, Aug 18, 2022, Dmytro Maluka wrote:
->> ---
->>  arch/x86/kvm/ioapic.c    | 36 ++++++++++++++++++++++++++++++++++--
->>  include/linux/kvm_host.h |  8 ++++++++
->>  virt/kvm/eventfd.c       | 39 +++++++++++++++++++++++++++++++++------
->>  3 files changed, 75 insertions(+), 8 deletions(-)
+On 3/16/23 1:52 PM, Magnus Karlsson wrote:
+> On Wed, 8 Mar 2023 at 18:51, Kal Conley <kal.conley@dectris.com> wrote:
 >>
->> diff --git a/arch/x86/kvm/ioapic.c b/arch/x86/kvm/ioapic.c
->> index 765943d7cfa5..da7074d9b04e 100644
->> --- a/arch/x86/kvm/ioapic.c
->> +++ b/arch/x86/kvm/ioapic.c
->> @@ -368,8 +368,40 @@ static void ioapic_write_indirect(struct kvm_ioapic *ioapic, u32 val)
->>  		if (mask_before != mask_after)
->>  			kvm_fire_mask_notifiers(ioapic->kvm, KVM_IRQCHIP_IOAPIC, index, mask_after);
->>  		if (e->fields.trig_mode == IOAPIC_LEVEL_TRIG
->> -		    && ioapic->irr & (1 << index))
->> -			ioapic_service(ioapic, index, false);
->> +		    && ioapic->irr & (1 << index)
->> +		    && !e->fields.mask
->> +		    && !e->fields.remote_irr) {
-> 
-> Can you opportunistically change these to fit the preferred style of putting the &&
-> on the previous line?  Ignore the file's existing "style", this crud is ancient and
-> ugly (this goes for all of my comments).
-> 
->> @@ -1987,6 +1988,13 @@ static inline int kvm_irqfd(struct kvm *kvm, struct kvm_irqfd *args)
->>  }
->>  
->>  static inline void kvm_irqfd_release(struct kvm *kvm) {}
->> +
->> +static inline bool kvm_notify_irqfd_resampler(struct kvm *kvm,
->> +					      unsigned irqchip,
->> +					      unsigned pin)
-> 
-> "unsigned int" instead of bare "unsigned"
-> 
->> +{
->> +	return false;
->> +}
->>  #endif
->>  
->>  #else
->> diff --git a/virt/kvm/eventfd.c b/virt/kvm/eventfd.c
->> index 61aea70dd888..71f327019f1e 100644
->> --- a/virt/kvm/eventfd.c
->> +++ b/virt/kvm/eventfd.c
->> @@ -55,6 +55,16 @@ irqfd_inject(struct work_struct *work)
->>  			    irqfd->gsi, 1, false);
->>  }
->>  
->> +/* Called within kvm->irq_srcu read side. */
-> 
-> Ne need for the comment, let lockdep do the heavy lifting.
-> 
->> +static void __irqfd_resampler_notify(struct kvm_kernel_irqfd_resampler *resampler)
-> 
-> I don't see a need for the double underscores.  I assume the idea is to convey
-> that this is called under kvm->irq_srcu, but I just ended up looking for a version
-> without the underscores.
-> 
->> +{
->> +	struct kvm_kernel_irqfd *irqfd;
->> +
->> +	list_for_each_entry_srcu(irqfd, &resampler->list, resampler_link,
->> +	    srcu_read_lock_held(&resampler->kvm->irq_srcu))
-> 
-> Align the indentation, i.e.
-> 
-> 	struct kvm_kernel_irqfd *irqfd;
-> 
-> 	list_for_each_entry_srcu(irqfd, &resampler->list, resampler_link,
-> 				 srcu_read_lock_held(&resampler->kvm->irq_srcu))
-> 		eventfd_signal(irqfd->resamplefd, 1);
-> 
->> @@ -648,6 +653,28 @@ void kvm_irq_routing_update(struct kvm *kvm)
->>  	spin_unlock_irq(&kvm->irqfds.lock);
->>  }
->>  
->> +bool kvm_notify_irqfd_resampler(struct kvm *kvm, unsigned irqchip, unsigned pin)
->> +{
->> +	struct kvm_kernel_irqfd_resampler *resampler;
->> +	int gsi, idx;
->> +
->> +	idx = srcu_read_lock(&kvm->irq_srcu);
->> +	gsi = kvm_irq_map_chip_pin(kvm, irqchip, pin);
->> +	if (gsi != -1)
-> 
-> This if-statement needs curly braces, the exemption doesn't apply if there are
-> multiple blocks? (can't think of the right name at the moment) in the guts of
-> the if-statement.
-> 
->> +		list_for_each_entry_srcu(resampler,
->> +					 &kvm->irqfds.resampler_list, link,
->> +					 srcu_read_lock_held(&kvm->irq_srcu)) {
->> +			if (resampler->notifier.gsi == gsi) {
->> +				__irqfd_resampler_notify(resampler);
->> +				srcu_read_unlock(&kvm->irq_srcu, idx);
->> +				return true;
->> +			}
->> +		}
->> +	srcu_read_unlock(&kvm->irq_srcu, idx);
->> +
->> +	return false;
->> +}
->> +
->>  /*
->>   * create a host-wide workqueue for issuing deferred shutdown requests
->>   * aggregated from all vm* instances. We need our own isolated
->> -- 
->> 2.37.1.595.g718a3a8f04-goog
+>> The number of chunks can overflow u32. Make sure to return -EINVAL on
+>> overflow.
 >>
+>> Also remove a redundant u32 cast assigning umem->npgs.
+> 
+> Thanks!
+> 
+> Acked-by: Magnus Karlsson <magnus.karlsson@intel.com>
+> 
+>> Fixes: bbff2f321a86 ("xsk: new descriptor addressing scheme")
+>> Signed-off-by: Kal Conley <kal.conley@dectris.com>
+
+Looks like patchbot was on partial strike, this was applied to bpf, thanks!
