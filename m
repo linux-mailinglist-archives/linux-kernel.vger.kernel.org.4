@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 396776BDB90
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 23:22:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B7BB6BDB8A
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 23:22:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230313AbjCPWWl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 18:22:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60642 "EHLO
+        id S229798AbjCPWWi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 18:22:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230287AbjCPWWL (ORCPT
+        with ESMTP id S230299AbjCPWWL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 16 Mar 2023 18:22:11 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6857B6D0A
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12122B719C
         for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 15:21:23 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id r29so2851448wra.13
+Received: by mail-wm1-x32e.google.com with SMTP id j42-20020a05600c1c2a00b003ed363619ddso2576125wms.1
         for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 15:21:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1679005281;
+        d=bytedance.com; s=google; t=1679005282;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=RcZv3zbGH7k+CBej9wIKrUlEuzG8XkHUgLqLEwBzkYQ=;
-        b=a80sFCpTfQlIpXTjBsvv7ruVIpaS8bqFb+SlrcuHl5I392mri/jymyx8NdqbaTK26C
-         YdzkusJuVGbbG+cerQZAoFtmPsAeG83fpCop2fSPB4j7+NfDKhqyk+UUL/xyRPXD59UL
-         m/JTjGaANhJbkCdXrbqxuO3fcULccPrNcnEkGek1+2CXQxorClocGjcOGE8ByYYHCa97
-         HhZ2n2NqlKTG8F0FYunRXsj664X3UxvK7D/9mG68dxr1byoc1gYLOUFmoGFsb5FN/GWi
-         +7lWXAqIY8D2vGoHqH8nVgsDFU32g88zJiNgPfmFXQFV2W5wivqgZrlZpo6nQhbIfU+e
-         HfvQ==
+        bh=abU/HviepGZu6336k1MSiJADTLApJ+GQsge41I7AWUg=;
+        b=QXlA+DodXTz82wK9foe4XP1PtTD5CMXj0hFHQEpnOFZGQfFt1o6qSOGXFp3n0uzm3v
+         ZCrQDPlwEzX9wfhQOGpVrZ7U51gESJBoJbP5J3BxkyKPpMezeJosSfsOD88vc5PML5F9
+         FwQHOlIJQRt9Lu54qnbCkHIkdiBqw+zF3WMTFXchJ/K7yoSUiyWeBr98gh3j4dgoufoT
+         uZz7KUJH3zqPlfKgwxwE2H59iGJIw77vUi7kRJpXY+Qe0cdjpd4W6zm/ejWPlNmRejhd
+         3sEsYx4YxawLzDiA2bv/2ZR0A+KaUY7FShCZOPNRgHcTASpwO5pCTqZQC7jkyB+p/2J4
+         F0ug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679005281;
+        d=1e100.net; s=20210112; t=1679005282;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=RcZv3zbGH7k+CBej9wIKrUlEuzG8XkHUgLqLEwBzkYQ=;
-        b=mEofbTxgjMIT5yWQCMoZjCto33lH4Bzg9LJ0xHWEmh25KE+YodDhxfEqlGWXzf4PEQ
-         BqR7KGGeR/OFaVGEjnKkefltrafiKZ/+iOUdwsKt1uRWq85q820pIcAi90Fv4aeW4Mfr
-         uetONcGluYvzz0oP6C02CU5tXg4un4oUEfcH6XxMRq8Mu4iZyMycxK/VSYRWR0qO5ak+
-         TMzYLjh+pQaY/6MVPlpEunWOEy5vOj4exRq3Q7oNEaBMb0wRkdV7lX+pdrA1jQzM5x5A
-         lrt92oEoX65iPbawIfufWxWjap9ksrtYxyN5Ci1TpZHpH+S9w5BjleDCh7lFuDyUQg+Z
-         Yu/Q==
-X-Gm-Message-State: AO0yUKX0ylv8JLai6ct6P7YeAyPEd3G7q7zyg4Tkp1mSEf70tC6tYFSw
-        HUD0La1Sylv1ZcDvmZMICuURwg==
-X-Google-Smtp-Source: AK7set+JpXWF25NwAX+ht8V3iJLxlUUHq0mfKzDa7qpQYKi8WWk8BzvgTlvojvDIhVIQLvbFznBLFw==
-X-Received: by 2002:a5d:63c3:0:b0:2cf:e868:f789 with SMTP id c3-20020a5d63c3000000b002cfe868f789mr5360294wrw.48.1679005281208;
-        Thu, 16 Mar 2023 15:21:21 -0700 (PDT)
+        bh=abU/HviepGZu6336k1MSiJADTLApJ+GQsge41I7AWUg=;
+        b=gLqxfSLWM8ROQiLD+TEPhcy4QSjblX8YmNi+6VrBI6Q27HBJfZ5X/x3xdBXQjSochR
+         HWKlLTMlaMf4KyouuKHKKUN486sp7XWBKUUrrKX63gC9GeUcW9RMv/Ie9aQht9LEzEQI
+         Y0wa1LwTQB/h/FMg4HPy9JrNGN3mTOO4Sc+y5iiauGgcNWotN+1H6eeBAhc2WjtyFFWj
+         k+2GIQgsXkEuOFIxaMkdWPAY+tyaYHCIvdCmgLHlp4MEkQIrSTNb9nPE8x2KasXEKXh5
+         pOs9L8IW2pWn/VNWTISO+EoRPBdWyRzEf00xRm7vcVwxrNlVRr6V+REdbhhN/fOe2P2d
+         2KTg==
+X-Gm-Message-State: AO0yUKX4l2mhEYPtup7s8lTje90GQipA3uVI6dSR+OWV/L8HZwJeRQ0N
+        jd529yAmSW2jCRLX3XiXfjGJ4A==
+X-Google-Smtp-Source: AK7set8IL3X/ZWDjfxHPwvfTCZZhvcm5A7h9zWRFiisl8hdLNTGuEk4JX6VpHdCat8N9aMbpia+B8g==
+X-Received: by 2002:a05:600c:4e87:b0:3eb:38a2:2bcd with SMTP id f7-20020a05600c4e8700b003eb38a22bcdmr22744902wmq.28.1679005282469;
+        Thu, 16 Mar 2023 15:21:22 -0700 (PDT)
 Received: from usaari01.cust.communityfibre.co.uk ([2a02:6b6a:b566:0:4b87:78c3:3abe:7b0d])
-        by smtp.gmail.com with ESMTPSA id f9-20020adff989000000b002cea392f000sm439256wrr.69.2023.03.16.15.21.20
+        by smtp.gmail.com with ESMTPSA id f9-20020adff989000000b002cea392f000sm439256wrr.69.2023.03.16.15.21.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Mar 2023 15:21:20 -0700 (PDT)
+        Thu, 16 Mar 2023 15:21:21 -0700 (PDT)
 From:   Usama Arif <usama.arif@bytedance.com>
 To:     dwmw2@infradead.org, tglx@linutronix.de, kim.phillips@amd.com,
         brgerst@gmail.com
@@ -64,14 +64,13 @@ Cc:     piotrgorski@cachyos.org, oleksandr@natalenko.name,
         simon.evans@bytedance.com, liangma@liangbit.com,
         gpiccoli@igalia.com, David Woodhouse <dwmw@amazon.co.uk>,
         Usama Arif <usama.arif@bytedance.com>
-Subject: [PATCH v15 10/12] x86/smpboot: Send INIT/SIPI/SIPI to secondary CPUs in parallel
-Date:   Thu, 16 Mar 2023 22:21:07 +0000
-Message-Id: <20230316222109.1940300-11-usama.arif@bytedance.com>
+Subject: [PATCH v15 11/12] x86/smpboot: Serialize topology updates for secondary bringup
+Date:   Thu, 16 Mar 2023 22:21:08 +0000
+Message-Id: <20230316222109.1940300-12-usama.arif@bytedance.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230316222109.1940300-1-usama.arif@bytedance.com>
 References: <20230316222109.1940300-1-usama.arif@bytedance.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -84,39 +83,33 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: David Woodhouse <dwmw@amazon.co.uk>
 
-When the APs can find their own APIC ID without assistance, perform the
-AP bringup in parallel.
+The toplogy update is performed by the AP via smp_callin() after the BSP
+has called do_wait_cpu_initialized(), setting the AP's bit in
+cpu_callout_mask to allow it to proceed.
 
-Register a CPUHP_BP_PARALLEL_DYN stage "x86/cpu:kick" which just calls
-do_boot_cpu() to deliver INIT/SIPI/SIPI to each AP in turn before the
-normal native_cpu_up() does the rest of the hand-holding.
+In preparation to enable further parallelism of AP bringup, add locking to
+serialize the update even if multiple APs are (in future) permitted to
+proceed through the next stages of bringup in parallel.
 
-The APs will then take turns through the real mode code (which has its
-own bitlock for exclusion) until they make it to their own stack, then
-proceed through the first few lines of start_secondary() and execute
-these parts in parallel:
+Without such ordering (and with that future extra parallelism), confusion
+ensues:
 
- start_secondary()
-    -> cr4_init()
-    -> (some 32-bit only stuff so not in the parallel cases)
-    -> cpu_init_secondary()
-       -> cpu_init_exception_handling()
-       -> cpu_init()
-          -> wait_for_master_cpu()
-
-At this point they wait for the BSP to set their bit in cpu_callout_mask
-(from do_wait_cpu_initialized()), and release them to continue through
-the rest of cpu_init() and beyond.
-
-This reduces the time taken for bringup on my 28-thread Haswell system
-from about 120ms to 80ms. On a socket 96-thread Skylake it takes the
-bringup time from 500ms to 100ms.
-
-There is more speedup to be had by doing the remaining parts in parallel
-too — especially notify_cpu_starting() in which the AP takes itself
-through all the stages from CPUHP_BRINGUP_CPU to CPUHP_ONLINE. But those
-require careful auditing to ensure they are reentrant, before we can go
-that far.
+[    1.360149] x86: Booting SMP configuration:
+[    1.360221] .... node  #0, CPUs:        #1  #2  #3  #4  #5  #6  #7  #8  #9 #10 #11 #12 #13 #14 #15 #16 #17 #18 #19 #20 #21 #22 #23
+[    1.366225] .... node  #1, CPUs:   #24 #25 #26 #27 #28 #29 #30 #31 #32 #33 #34 #35 #36 #37 #38 #39 #40 #41 #42 #43 #44 #45 #46 #47
+[    1.370219] .... node  #0, CPUs:   #48 #49 #50 #51 #52 #53 #54 #55 #56 #57 #58 #59 #60 #61 #62 #63 #64 #65 #66 #67 #68 #69 #70 #71
+[    1.378226] .... node  #1, CPUs:   #72 #73 #74 #75 #76 #77 #78 #79 #80 #81 #82 #83 #84 #85 #86 #87 #88 #89 #90 #91 #92 #93 #94 #95
+[    1.382037] Brought 96 CPUs to x86/cpu:kick in 72232606 cycles
+[    0.104104] smpboot: CPU 26 Converting physical 0 to logical die 1
+[    0.104104] smpboot: CPU 27 Converting physical 1 to logical package 2
+[    0.104104] smpboot: CPU 24 Converting physical 1 to logical package 3
+[    0.104104] smpboot: CPU 27 Converting physical 0 to logical die 2
+[    0.104104] smpboot: CPU 25 Converting physical 1 to logical package 4
+[    1.385609] Brought 96 CPUs to x86/cpu:wait-init in 9269218 cycles
+[    1.395285] Brought CPUs online in 28930764 cycles
+[    1.395469] smp: Brought up 2 nodes, 96 CPUs
+[    1.395689] smpboot: Max logical packages: 2
+[    1.396222] smpboot: Total of 96 processors activated (576000.00 BogoMIPS)
 
 Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
 Signed-off-by: Usama Arif <usama.arif@bytedance.com>
@@ -125,68 +118,222 @@ Tested-by: Kim Phillips <kim.phillips@amd.com>
 Tested-by: Oleksandr Natalenko <oleksandr@natalenko.name>
 Tested-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
 ---
- arch/x86/kernel/smpboot.c | 21 +++++++++++++++++----
- 1 file changed, 17 insertions(+), 4 deletions(-)
+ arch/x86/include/asm/smp.h      |  4 +-
+ arch/x86/include/asm/topology.h |  2 -
+ arch/x86/kernel/cpu/common.c    |  6 +--
+ arch/x86/kernel/smpboot.c       | 73 ++++++++++++++++++++-------------
+ arch/x86/xen/smp_pv.c           |  4 +-
+ 5 files changed, 48 insertions(+), 41 deletions(-)
 
+diff --git a/arch/x86/include/asm/smp.h b/arch/x86/include/asm/smp.h
+index 1cf4f1e57570..defe76ee9e64 100644
+--- a/arch/x86/include/asm/smp.h
++++ b/arch/x86/include/asm/smp.h
+@@ -48,8 +48,6 @@ struct smp_ops {
+ };
+ 
+ /* Globals due to paravirt */
+-extern void set_cpu_sibling_map(int cpu);
+-
+ #ifdef CONFIG_SMP
+ extern struct smp_ops smp_ops;
+ 
+@@ -137,7 +135,7 @@ void native_send_call_func_single_ipi(int cpu);
+ void x86_idle_thread_init(unsigned int cpu, struct task_struct *idle);
+ 
+ void smp_store_boot_cpu_info(void);
+-void smp_store_cpu_info(int id);
++void smp_store_cpu_info(int id, bool force_single_core);
+ 
+ asmlinkage __visible void smp_reboot_interrupt(void);
+ __visible void smp_reschedule_interrupt(struct pt_regs *regs);
+diff --git a/arch/x86/include/asm/topology.h b/arch/x86/include/asm/topology.h
+index 458c891a8273..4bccbd949a99 100644
+--- a/arch/x86/include/asm/topology.h
++++ b/arch/x86/include/asm/topology.h
+@@ -136,8 +136,6 @@ static inline int topology_max_smt_threads(void)
+ 	return __max_smt_threads;
+ }
+ 
+-int topology_update_package_map(unsigned int apicid, unsigned int cpu);
+-int topology_update_die_map(unsigned int dieid, unsigned int cpu);
+ int topology_phys_to_logical_pkg(unsigned int pkg);
+ int topology_phys_to_logical_die(unsigned int die, unsigned int cpu);
+ bool topology_is_primary_thread(unsigned int cpu);
+diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
+index f3cc7699e1e1..06d7f9e55d45 100644
+--- a/arch/x86/kernel/cpu/common.c
++++ b/arch/x86/kernel/cpu/common.c
+@@ -1771,7 +1771,7 @@ static void generic_identify(struct cpuinfo_x86 *c)
+  * Validate that ACPI/mptables have the same information about the
+  * effective APIC id and update the package map.
+  */
+-static void validate_apic_and_package_id(struct cpuinfo_x86 *c)
++static void validate_apic_id(struct cpuinfo_x86 *c)
+ {
+ #ifdef CONFIG_SMP
+ 	unsigned int apicid, cpu = smp_processor_id();
+@@ -1782,8 +1782,6 @@ static void validate_apic_and_package_id(struct cpuinfo_x86 *c)
+ 		pr_err(FW_BUG "CPU%u: APIC id mismatch. Firmware: %x APIC: %x\n",
+ 		       cpu, apicid, c->initial_apicid);
+ 	}
+-	BUG_ON(topology_update_package_map(c->phys_proc_id, cpu));
+-	BUG_ON(topology_update_die_map(c->cpu_die_id, cpu));
+ #else
+ 	c->logical_proc_id = 0;
+ #endif
+@@ -1974,7 +1972,7 @@ void identify_secondary_cpu(struct cpuinfo_x86 *c)
+ #ifdef CONFIG_X86_32
+ 	enable_sep_cpu();
+ #endif
+-	validate_apic_and_package_id(c);
++	validate_apic_id(c);
+ 	x86_spec_ctrl_setup_ap();
+ 	update_srbds_msr();
+ 
 diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
-index a9e48946fc89..69b56c597949 100644
+index 69b56c597949..0960fdec43c2 100644
 --- a/arch/x86/kernel/smpboot.c
 +++ b/arch/x86/kernel/smpboot.c
-@@ -57,6 +57,7 @@
- #include <linux/pgtable.h>
- #include <linux/overflow.h>
- #include <linux/stackprotector.h>
-+#include <linux/smpboot.h>
+@@ -180,16 +180,12 @@ static void smp_callin(void)
+ 	apic_ap_setup();
  
- #include <asm/acpi.h>
- #include <asm/cacheinfo.h>
-@@ -992,7 +993,8 @@ static void announce_cpu(int cpu, int apicid)
- 		node_width = num_digits(num_possible_nodes()) + 1; /* + '#' */
+ 	/*
+-	 * Save our processor parameters. Note: this information
+-	 * is needed for clock calibration.
+-	 */
+-	smp_store_cpu_info(cpuid);
+-
+-	/*
++	 * Save our processor parameters and update topology.
++	 * Note: this information is needed for clock calibration.
+ 	 * The topology information must be up to date before
+ 	 * calibrate_delay() and notify_cpu_starting().
+ 	 */
+-	set_cpu_sibling_map(raw_smp_processor_id());
++	smp_store_cpu_info(cpuid, false);
  
- 	if (cpu == 1)
--		printk(KERN_INFO "x86: Booting SMP configuration:\n");
-+		printk(KERN_INFO "x86: Booting SMP configuration in %s:\n",
-+		       do_parallel_bringup ? "parallel" : "series");
+ 	ap_init_aperfmperf();
  
- 	if (system_state < SYSTEM_RUNNING) {
- 		if (node != current_node) {
-@@ -1325,9 +1327,12 @@ int native_cpu_up(unsigned int cpu, struct task_struct *tidle)
+@@ -243,6 +239,12 @@ static void notrace start_secondary(void *unused)
+ 	 * its bit in cpu_callout_mask to release it.
+ 	 */
+ 	cpu_init_secondary();
++
++	/*
++	 * Even though notify_cpu_starting() will do this, it does so too late
++	 * as the AP may already have triggered lockdep splats by then. See
++	 * commit 29368e093 ("x86/smpboot:  Move rcu_cpu_starting() earlier").
++	 */
+ 	rcu_cpu_starting(raw_smp_processor_id());
+ 	x86_cpuinit.early_percpu_clock_init();
+ 
+@@ -351,7 +353,7 @@ EXPORT_SYMBOL(topology_phys_to_logical_die);
+  * @pkg:	The physical package id as retrieved via CPUID
+  * @cpu:	The cpu for which this is updated
+  */
+-int topology_update_package_map(unsigned int pkg, unsigned int cpu)
++static int topology_update_package_map(unsigned int pkg, unsigned int cpu)
  {
- 	int ret;
+ 	int new;
  
--	ret = do_cpu_up(cpu, tidle);
--	if (ret)
--		goto out;
-+	/* If parallel AP bringup isn't enabled, perform the first steps now. */
-+	if (!do_parallel_bringup) {
-+		ret = do_cpu_up(cpu, tidle);
-+		if (ret)
-+			goto out;
-+	}
+@@ -374,7 +376,7 @@ int topology_update_package_map(unsigned int pkg, unsigned int cpu)
+  * @die:	The die id as retrieved via CPUID
+  * @cpu:	The cpu for which this is updated
+  */
+-int topology_update_die_map(unsigned int die, unsigned int cpu)
++static int topology_update_die_map(unsigned int die, unsigned int cpu)
+ {
+ 	int new;
  
- 	ret = do_wait_cpu_initialized(cpu);
- 	if (ret)
-@@ -1347,6 +1352,12 @@ int native_cpu_up(unsigned int cpu, struct task_struct *tidle)
- 	return ret;
+@@ -405,25 +407,7 @@ void __init smp_store_boot_cpu_info(void)
+ 	c->initialized = true;
  }
  
-+/* Bringup step one: Send INIT/SIPI to the target AP */
-+static int native_cpu_kick(unsigned int cpu)
+-/*
+- * The bootstrap kernel entry code has set these up. Save them for
+- * a given CPU
+- */
+-void smp_store_cpu_info(int id)
+-{
+-	struct cpuinfo_x86 *c = &cpu_data(id);
+-
+-	/* Copy boot_cpu_data only on the first bringup */
+-	if (!c->initialized)
+-		*c = boot_cpu_data;
+-	c->cpu_index = id;
+-	/*
+-	 * During boot time, CPU0 has this setup already. Save the info when
+-	 * bringing up AP or offlined CPU0.
+-	 */
+-	identify_secondary_cpu(c);
+-	c->initialized = true;
+-}
++static arch_spinlock_t topology_lock = __ARCH_SPIN_LOCK_UNLOCKED;
+ 
+ static bool
+ topology_same_node(struct cpuinfo_x86 *c, struct cpuinfo_x86 *o)
+@@ -629,7 +613,7 @@ static struct sched_domain_topology_level x86_topology[] = {
+  */
+ static bool x86_has_numa_in_package;
+ 
+-void set_cpu_sibling_map(int cpu)
++static void set_cpu_sibling_map(int cpu)
+ {
+ 	bool has_smt = smp_num_siblings > 1;
+ 	bool has_mp = has_smt || boot_cpu_data.x86_max_cores > 1;
+@@ -708,6 +692,37 @@ void set_cpu_sibling_map(int cpu)
+ 	}
+ }
+ 
++/*
++ * The bootstrap kernel entry code has set these up. Save them for
++ * a given CPU
++ */
++void smp_store_cpu_info(int id, bool force_single_core)
 +{
-+	return do_cpu_up(cpu, idle_thread_get(cpu, true));
++	struct cpuinfo_x86 *c = &cpu_data(id);
++
++	/* Copy boot_cpu_data only on the first bringup */
++	if (!c->initialized)
++		*c = boot_cpu_data;
++	c->cpu_index = id;
++	/*
++	 * During boot time, CPU0 has this setup already. Save the info when
++	 * bringing up AP or offlined CPU0.
++	 */
++	identify_secondary_cpu(c);
++
++	arch_spin_lock(&topology_lock);
++	BUG_ON(topology_update_package_map(c->phys_proc_id, id));
++	BUG_ON(topology_update_die_map(c->cpu_die_id, id));
++	c->initialized = true;
++
++	/* For Xen PV */
++	if (force_single_core)
++		c->x86_max_cores = 1;
++
++	set_cpu_sibling_map(id);
++	arch_spin_unlock(&topology_lock);
 +}
 +
- /**
-  * arch_disable_smp_support() - disables SMP support for x86 at runtime
-  */
-@@ -1515,6 +1526,8 @@ static bool prepare_parallel_bringup(void)
- 		smpboot_control = STARTUP_APICID_CPUID_01;
+ /* maps the cpu to the sched domain representing multi-core */
+ const struct cpumask *cpu_coregroup_mask(int cpu)
+ {
+diff --git a/arch/x86/xen/smp_pv.c b/arch/x86/xen/smp_pv.c
+index 6175f2c5c822..09f94f940689 100644
+--- a/arch/x86/xen/smp_pv.c
++++ b/arch/x86/xen/smp_pv.c
+@@ -71,9 +71,7 @@ static void cpu_bringup(void)
+ 		xen_enable_syscall();
  	}
+ 	cpu = smp_processor_id();
+-	smp_store_cpu_info(cpu);
+-	cpu_data(cpu).x86_max_cores = 1;
+-	set_cpu_sibling_map(cpu);
++	smp_store_cpu_info(cpu, true);
  
-+	cpuhp_setup_state_nocalls(CPUHP_BP_PARALLEL_DYN, "x86/cpu:kick",
-+				  native_cpu_kick, NULL);
- 	return true;
- }
+ 	speculative_store_bypass_ht_init();
  
 -- 
 2.25.1
