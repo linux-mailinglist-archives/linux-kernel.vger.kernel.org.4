@@ -2,84 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E79B66BDB24
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 22:52:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C123C6BDB2C
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 22:57:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230083AbjCPVwK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 17:52:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51824 "EHLO
+        id S229716AbjCPV5k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 17:57:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229758AbjCPVwI (ORCPT
+        with ESMTP id S229534AbjCPV5i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 17:52:08 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9466CC30F;
-        Thu, 16 Mar 2023 14:52:06 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id h8so13223714ede.8;
-        Thu, 16 Mar 2023 14:52:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679003525;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RtfiY/9Ts/lxuhuIdPnRLbTi5IvroJVQJHVG9Rqr+Bg=;
-        b=PoXtj1HJ3nrMs24bTw7Qvq7nChyhyYPmubiruUJPAEJ70lvXIjOlzac5InPDksRn7i
-         g0aTSuSv2ZdeQDmUNfAP0ynTLMuNjgD5TA7t7p/zrq6jiiqjkLyrJed7r4QtZGCz773h
-         mHmvNU3eDFVPpiqtKMb224poxmWOdQyoVTEFGcLtmv12HsHobRnt81GCeC1yOpu7LZ0O
-         l9kQuz2RB5jFR3IrBjJIV1yYe86PeTOMu1ffEgQ7MQ+pjCE/3p1AqwQH8kWZDBMU6oQt
-         3kNadT6eMf3Q6rQWqZ5qnjyRNU77QxSgP1cdp/w0otNSQ4KFBfD3EQc45LstN16nNTka
-         IaVA==
+        Thu, 16 Mar 2023 17:57:38 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B40436040F
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 14:56:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679003810;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=yBfyzuvRoe+QOXGN5SbtszQ6PVd6w0zcMfyA5scQ3Zo=;
+        b=BhbG+7xU8eRNHOjTRgeEdxG3RBaawYqQzWTnXWNWrtNDRdsuWQXBCw8ISvJcnJLa9ryrmx
+        N4HmRsWOqV4mIXJCiBTlv3SP0zRTKOR0JKuz8ZoDSyU0erClSVtJDOtwx63XS/W/CSVSqv
+        pEIYUgaHSAEgF7Y7iABuWlJpKf/fYww=
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com
+ [209.85.166.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-393-dVw7NiGJPd2IoLPCHVDX7A-1; Thu, 16 Mar 2023 17:56:49 -0400
+X-MC-Unique: dVw7NiGJPd2IoLPCHVDX7A-1
+Received: by mail-il1-f198.google.com with SMTP id b9-20020a926709000000b00322ffd64968so1492153ilc.13
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 14:56:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679003525;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20210112; t=1679003808;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=RtfiY/9Ts/lxuhuIdPnRLbTi5IvroJVQJHVG9Rqr+Bg=;
-        b=5SvdwXiL0OmZjCsa9SLkIdUFcgHVLAN3YKlJXfRzNjiOFrLFZmbCOs05Z1ckPSBCy4
-         Hw6b8QMD3wMh5XnUltCYvJP0O7AhCVOwRc6talSFrbG8LjbTLv2J2IbP45E2ieDZEZSP
-         Qgj1uGJEUMmgL96gEGNpLRKQBc+d03/eEau6w/Uya6/NXxAUlb821osBBAnzTrZeLAxI
-         +ggO6hmNX5tDUrJ6X6CL1Gz40r4FMuymop4FIjOUIhf0LY58usl1wKZAkKzlt/pj2Rin
-         mZil/kqnxlq2nlyIhJ0dBBaW6euEwW5NXrewEicDwttiKVNGjzHtbsxZclVSfCJzkToD
-         fa1Q==
-X-Gm-Message-State: AO0yUKWoMw1c8cajf77oIjVMZSmCQS7gCZdAjG31MrvfPeB+mOOuU53o
-        b7B5jRsnpxXIKhyOKZR2KWkQ+69LHW8TRSfxVo0=
-X-Google-Smtp-Source: AK7set+JHSJCpQhlouI1fR8tmdBnrXTHcd+1Y5inVf/QAlkKqOBIrzQH16xoTjuF0I2vgt3/7fxuTJfLifCY5KSGxyY=
-X-Received: by 2002:a17:906:bc51:b0:923:6595:a81b with SMTP id
- s17-20020a170906bc5100b009236595a81bmr6185367ejv.5.1679003525011; Thu, 16 Mar
- 2023 14:52:05 -0700 (PDT)
+        bh=yBfyzuvRoe+QOXGN5SbtszQ6PVd6w0zcMfyA5scQ3Zo=;
+        b=Nnh+abNPtIC1dJuJ7U+1CyiUMvbpUTR2CTT2t93nIqaqO72KqogFr8QarAhDVFmCGb
+         Srs+n+OcrjFi0PCLZFjtaE9JNcwvv3PCbZlhy1UmcJHaGO1H3aUsaEAcHtsifjsmFU0k
+         9Ult+kUSrjOx1mJBu/i6xc9nnc3LJGvmJE7QyWUc9bDngZEhE3MmxfjvyYHIU7C1moZF
+         /z/U2QV4fU12NAsrcicj4WUQtL8aK4SvdWGHgUS5sYBHEA58HPZvi6O92heQKML3/Buf
+         PMcU/qgVX71Og+N9eDejFgvwBquiKdD7OuXl1jBbP5gdBFcAqX0FlIGKLd9ZIW1yYXjB
+         GyzQ==
+X-Gm-Message-State: AO0yUKUGUX2C9PsU8Unciztr28rx0C/YzjMbHgtj7U28Pz+7kBKPnj8D
+        e9A2dwEHyOG9UMf4XhgzvtsjJzZwy68lT5c4ql2VQXCTqTBpvtjNodK8y+caz28ILub7NicPTlp
+        A4qUTG7WQjwfmwWPdfk97m7ZU
+X-Received: by 2002:a92:da8e:0:b0:315:53b6:d293 with SMTP id u14-20020a92da8e000000b0031553b6d293mr8470341iln.21.1679003808585;
+        Thu, 16 Mar 2023 14:56:48 -0700 (PDT)
+X-Google-Smtp-Source: AK7set8hE9qRjiVkADLNj9Ym+CS3y91gsTlZRJSIxUV9UT3cXYpWiTMNkB+43yCbBxsrCLOPFbEbcA==
+X-Received: by 2002:a92:da8e:0:b0:315:53b6:d293 with SMTP id u14-20020a92da8e000000b0031553b6d293mr8470326iln.21.1679003808286;
+        Thu, 16 Mar 2023 14:56:48 -0700 (PDT)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id c13-20020a928e0d000000b003157b2c504bsm137825ild.24.2023.03.16.14.56.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Mar 2023 14:56:47 -0700 (PDT)
+Date:   Thu, 16 Mar 2023 15:56:46 -0600
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     Reinette Chatre <reinette.chatre@intel.com>
+Cc:     jgg@nvidia.com, yishaih@nvidia.com,
+        shameerali.kolothum.thodi@huawei.com, kevin.tian@intel.com,
+        tglx@linutronix.de, darwi@linutronix.de, kvm@vger.kernel.org,
+        dave.jiang@intel.com, jing2.liu@intel.com, ashok.raj@intel.com,
+        fenghua.yu@intel.com, tom.zanussi@linux.intel.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 0/8] vfio/pci: Support dynamic allocation of MSI-X
+ interrupts
+Message-ID: <20230316155646.07ae266f.alex.williamson@redhat.com>
+In-Reply-To: <cover.1678911529.git.reinette.chatre@intel.com>
+References: <cover.1678911529.git.reinette.chatre@intel.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-References: <20230316170149.4106586-1-jolsa@kernel.org> <ZBNTMZjEoETU9d8N@casper.infradead.org>
- <CAP-5=fVYriALLwF2FU1ZUtLuHndnvPw=3SctVqY6Uwex8JfscA@mail.gmail.com>
-In-Reply-To: <CAP-5=fVYriALLwF2FU1ZUtLuHndnvPw=3SctVqY6Uwex8JfscA@mail.gmail.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Thu, 16 Mar 2023 14:51:52 -0700
-Message-ID: <CAEf4BzYgyGTVv=cDwaW+DBke1uk_aLCg3CB_9W6+9tkS8Nyn_Q@mail.gmail.com>
-Subject: Re: [PATCHv3 bpf-next 0/9] mm/bpf/perf: Store build id in file object
-To:     Ian Rogers <irogers@google.com>
-Cc:     Matthew Wilcox <willy@infradead.org>, Jiri Olsa <jolsa@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Hao Luo <haoluo@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        bpf@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Namhyung Kim <namhyung@gmail.com>,
-        Dave Chinner <david@fromorbit.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,66 +84,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 16, 2023 at 10:50=E2=80=AFAM Ian Rogers <irogers@google.com> wr=
-ote:
->
-> On Thu, Mar 16, 2023 at 10:35=E2=80=AFAM Matthew Wilcox <willy@infradead.=
-org> wrote:
-> >
-> > On Thu, Mar 16, 2023 at 06:01:40PM +0100, Jiri Olsa wrote:
-> > > hi,
-> > > this patchset adds build id object pointer to struct file object.
-> > >
-> > > We have several use cases for build id to be used in BPF programs
-> > > [2][3].
-> >
-> > Yes, you have use cases, but you never answered the question I asked:
-> >
-> > Is this going to be enabled by every distro kernel, or is it for specia=
-l
-> > use-cases where only people doing a very specialised thing who are
-> > willing to build their own kernels will use it?
-> >
-> > Saying "hubble/tetragon" doesn't answer that question.  Maybe it does
-> > to you, but I have no idea what that software is.
-> >
-> > Put it another way: how does this make *MY* life better?  Literally me.
-> > How will it affect my life?
->
-> So at Google we use build IDs for all profiling, I believe Meta is the
-> same but obviously I can't speak for them. For BPF program stack
+On Wed, 15 Mar 2023 13:59:20 -0700
+Reinette Chatre <reinette.chatre@intel.com> wrote:
 
-Yep, Meta is also capturing stack traces with build ID as well, if
-possible. Build IDs help with profiling short-lived processes which
-exit before the profiling session is done and user-space tooling is
-able to collect /proc/<pid>/maps contents (which is what Ian is
-referring to here). But also build ID allows to offload more of the
-expensive stack symbolization process (converting raw memory addresses
-into human readable function+offset+file path+line numbers
-information) to dedicated remote servers, by allowing to cache and
-reuse preprocessed DWARF/ELF information based on build ID.
+> == Cover letter ==
+> 
+> Qemu allocates interrupts incrementally at the time the guest unmasks an
+> interrupt, for example each time a Linux guest runs request_irq().
+> 
+> Dynamic allocation of MSI-X interrupts was not possible until v6.2 [1].
+> This prompted Qemu to, when allocating a new interrupt, first release all
+> previously allocated interrupts (including disable of MSI-X) followed
+> by re-allocation of all interrupts that includes the new interrupt.
+> Please see [2] for a detailed discussion about this issue.
+> 
+> Releasing and re-allocating interrupts may be acceptable if all
+> interrupts are unmasked during device initialization. If unmasking of
+> interrupts occur during runtime this may result in lost interrupts.
+> For example, consider an accelerator device with multiple work queues,
+> each work queue having a dedicated interrupt. A work queue can be
+> enabled at any time with its associated interrupt unmasked while other
+> work queues are already active. Having all interrupts released and MSI-X
+> disabled to enable the new work queue will impact active work queues.
+> 
+> This series builds on the recent interrupt sub-system core changes
+> that added support for dynamic MSI-X allocation after initial MSI-X
+> enabling.
+> 
+> Add support for dynamic MSI-X allocation to vfio-pci. A flag
+> indicating lack of support for dynamic allocation already exist:
+> VFIO_IRQ_INFO_NORESIZE and has always been set for MSI and MSI-X. With
+> support for dynamic MSI-X the flag is cleared for MSI-X, enabling
+> Qemu to modify its behavior.
+> 
+> == Why is this an RFC ? ==
+> 
+> vfio support for dynamic MSI-X needs to work with existing user space
+> as well as upcoming user space that takes advantage of this feature.
+> I would appreciate guidance on the expectations and requirements
+> surrounding error handling when considering existing user space.
+> 
+> For example, consider the following scenario:
+> Start: Consider a passthrough device that supports 10 MSI-X interrupts
+> 	(0 to 9) and existing Qemu allocated interrupts 0 to 4.
+> 
+> Scenario: Qemu (hypothetically) attempts to associate a new action to
+> 	interrupts 0 to 7. Early checking of this range in
+> 	vfio_set_irqs_validate_and_prepare() will pass since it
+> 	is a valid range for the device. What happens after the
+> 	early checking is considered next:
+> 
+> Current behavior (before this series): Since the provided range, 0 - 7,
+> 	exceeds the allocated range, no action will be taken on existing
+> 	allocated interrupts 0 - 4 and the Qemu request will fail without
+> 	making any state changes.
 
-I believe perf tool is also using build ID, so any tool relying on
-perf capturing full and complete profiling data for system-wide
-performance analysis would benefit as well.
+I must be missing something, it was described correctly earlier that
+QEMU will disable MSI-X and re-enable with a new vector count.  Not
+only does QEMU not really have a way to fail this change, pretty much
+nothing would work if we did.
 
-Generally speaking, there is a whole ecosystem built on top of
-assumption that binaries have build ID and profiling tooling is able
-to provide more value if those build IDs are more reliably collected.
-Which ultimately benefits the entire open-source ecosystem by allowing
-people to spot issues (not necessarily just performance, it could be
-correctness issues as well) more reliably, fix them, and benefit every
-user.
+What happens in this case is that the QEMU vfio-pci driver gets a
+vector_use callback for one of these new vectors {5,6,7},
+vfio_msix_vector_do_use() checks that's greater than we have enabled,
+disables MSI-X, and re-enables it for the new vector count.  Worst case
+we'll do that 3 times if the vectors are presented in ascending order.
 
-> traces, using build ID + offset stack traces is preferable to perf's
-> whole system synthesis of mmap events based on data held in
-> /proc/pid/maps. Individual stack traces are larger, but you avoid the
-> ever growing problem of coming up with some initial virtual memory
-> state that will allow you to identify samples.
->
-> This doesn't answer the question about how this will help you, but I
-> expect over time you will see scalability issues and also want to use
-> tools assuming build IDs are present and cheap to access.
->
-> Thanks,
-> Ian
+> New behavior (with this series): Since vfio supports dynamic MSI-X new
+> 	interrupts will be allocated for vectors 5, 6, and 7. Please note
+> 	that this changes the behavior encountered by unmodified Qemu: new
+> 	interrupts are allocated instead of returning an error. Even more,
+> 	since the range provided by Qemu spans 0 - 7, a failure during
+> 	allocation of 5, 6, or 7 will result in release of entire range.
+
+As above, QEMU doesn't currently return an error here, nor is there
+actually any means to return an error.  MSI-X is not paravirtualized
+and the PCI spec definition of MSI-X does not define that a driver
+needs to check whether the device accepted unmasking a vector.  All we
+can do in QEMU if the host fails to configure the device as directed is
+print an error message as a breadcrumb to help debug why the device
+stopped working.  In practice, I don't think I've ever seen this.
+
+So really the difference should be transparent to the guest.  The risk
+of an error allocating vectors on the host is the same, the only
+significant difference should be the amount of disruption at the device
+that we can better approximate the request of the guest.
+ 
+> This series aims to maintain existing error behavior for MSI (please see
+> "vfio/pci: Remove interrupt context counter") but I would appreciate your
+> guidance on whether existing error behavior should be maintained for MSI-X
+> and how to do so if it is a requirement.
+
+Based on above, there really can never be an error if we expect the
+device to work, so I think there's a misread of the current status.
+Dynamic MSI-X support should simply reduce the disruption and chance of
+lost interrupts at the device, but the points where we risk that the
+host cannot provide the configuration we need are the same.  Thanks,
+
+Alex
+
