@@ -2,66 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AFD56BDA6D
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 21:52:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D35BF6BDA8B
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 22:04:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230398AbjCPUwr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 16:52:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34360 "EHLO
+        id S229907AbjCPVEV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 17:04:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229639AbjCPUwp (ORCPT
+        with ESMTP id S229436AbjCPVET (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 16:52:45 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A61E16E68B;
-        Thu, 16 Mar 2023 13:52:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id E495CCE1EB3;
-        Thu, 16 Mar 2023 20:52:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAD46C433EF;
-        Thu, 16 Mar 2023 20:52:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678999959;
-        bh=RqbnUWeY+HYBi3rHUEQbPvSQ2IN0wd86FyHyKmwfTM0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=jHQHY0t842wTFvilHYo/g5r2sWYVsM1iTPo5+znFm1Mxharke9JAcHQ2zLGaCg4c5
-         7LeHdVjNTTOhiAzo4/Lqdlttt6KUBgl34owX4vKVCa4c9Rq47usaHN6/jcAd+df+hs
-         2HEwFnaS5zF0rMdG20On0cUDvPoALqlBF94cBgajJDfh+rBQ8Qqml7hCIi6+q3SIAf
-         4kznm6Ig7SjzG9vDJsafF5DQqUNZr23/KlruFAeRh4W8zPKysEQ9PF/GK3rIq8mlfM
-         N+5e/xPE7Q2B3mIr/wUj6BUEFqyevoPNSuhMt0ly/0ENQ0hMMnYugQKWNrM6LuGk9e
-         JnRNO8Tz63Q5w==
-Date:   Thu, 16 Mar 2023 13:52:37 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Szymon Heidrich <szymon.heidrich@gmail.com>
-Cc:     steve.glendinning@shawell.net, UNGLinuxDriver@microchip.com,
-        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] net: usb: smsc95xx: Limit packet length to skb->len
-Message-ID: <20230316135237.3052d98c@kernel.org>
-In-Reply-To: <20230316101954.75836-1-szymon.heidrich@gmail.com>
-References: <20230315212425.12cb48ca@kernel.org>
-        <20230316101954.75836-1-szymon.heidrich@gmail.com>
+        Thu, 16 Mar 2023 17:04:19 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 571B8A02A9;
+        Thu, 16 Mar 2023 14:04:18 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id q14so1932337pff.10;
+        Thu, 16 Mar 2023 14:04:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679000657;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=bsa1hqqUtwuhnktlTRykUeCWJokYlRu4j488CD+HwrU=;
+        b=U2NawJySa4mBlU8Bf4sy04Gqu+TBlY8uqebMIGI6yDMmKwgeEpghUWPMgpqmm8G3eT
+         TdCEJruP3k82qaORkRdJfdsSxvMD5p0rGAxN4lHbsBoQSHFq0c1Eot5e0e/ktOw+6G5H
+         ART3gxU0tDa/+P1BsTbIsmYougSA/DGW5gO9k5wrOoFgIlFAXnJMgNc95WOgWCfh+dpa
+         IuhTBguAKu1MJeJBMXkHrVmYIayJ4keiXK3rrVxD+xIICJ6y8VLITp3LQZTmXUfJpsCY
+         3TSRRAUaxpUFA0Uwh2qnPfkg9bGoCk6tCMRBcX2k5kGfK1WNC5Wc/SlFRGok3jbyZM03
+         jv0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679000657;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bsa1hqqUtwuhnktlTRykUeCWJokYlRu4j488CD+HwrU=;
+        b=Kh+SC5M8c29eD/1YY939VBsJ1pJHkJmebfY/ILMK+P20s9BvPhnS4S4gEeK9ww1KcI
+         zvq29KT2rm1Y20EPbjekfQreiiJ60ThrxoNs2Xkmd+2UeiFD/3xaiJwpy/diMWN2pCF/
+         8ETY892csasUDDp33K+YNtECpbjBfjnGuPnIsic1AvbWRFeOAfLNoXUjtG/jw1w/RPDm
+         r3qkhFzFXUK6irhhyclyeHy7tfjMpwMr+oQs3n9Yo+m70bI/cClSV4qp/ryQDNJHnFuS
+         9rMIYXb/maI3T650ZkoKzgL69qWBTPioZKW/XUsH/8UOXUvbmw4IYUTBhmDZDk7gnR4Q
+         Z3xg==
+X-Gm-Message-State: AO0yUKXryqGrzPskOqD4Wa++apB2j8qDyv9hgThgip1cUwYcSwJwO77C
+        2QSxYS98dI7ddCy1+mk10O/oZJ8Zt7g=
+X-Google-Smtp-Source: AK7set+7eGgbWhFgBPdTlQQDQQyt8I34MXMhrxsrD2sbHIiflpuMkkXeDKWbtmibAVKn/DebRqGlLA==
+X-Received: by 2002:aa7:96b9:0:b0:625:ebc3:b26c with SMTP id g25-20020aa796b9000000b00625ebc3b26cmr3059366pfk.22.1679000656639;
+        Thu, 16 Mar 2023 14:04:16 -0700 (PDT)
+Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id 14-20020aa7914e000000b005e099d7c30bsm106599pfi.205.2023.03.16.14.04.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Mar 2023 14:04:15 -0700 (PDT)
+From:   Florian Fainelli <f.fainelli@gmail.com>
+To:     netdev@vger.kernel.org
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Calvin Johnson <calvin.johnson@oss.nxp.com>,
+        Grant Likely <grant.likely@arm.com>,
+        Ioana Ciornei <ioana.ciornei@nxp.com>,
+        linux-kernel@vger.kernel.org (open list),
+        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
+        DEVICE TREE), mbizon@freebox.fr
+Subject: [PATCH 0/2] ACPI/DT mdiobus module owner fixes
+Date:   Thu, 16 Mar 2023 13:52:59 -0700
+Message-Id: <20230316205301.2087667-1-f.fainelli@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 16 Mar 2023 11:19:54 +0100 Szymon Heidrich wrote:
-> Packet length retrieved from descriptor may be larger than
-> the actual socket buffer length. In such case the cloned
-> skb passed up the network stack will leak kernel memory contents.
-> 
-> Fixes: 2f7ca802bdae ("net: Add SMSC LAN9500 USB2.0 10/100 ethernet adapter driver")
-> Signed-off-by: Szymon Heidrich <szymon.heidrich@gmail.com>
+This patch series fixes wrong mdiobus module ownership for MDIO buses
+registered from DT or ACPI.
 
-Reviewed-by: Jakub Kicinski <kuba@kernel.org>
+Thanks Maxime for providing the first patch and making me see that ACPI
+also had the same issue.
+
+Florian Fainelli (1):
+  net: mdio: fix owner field for mdio buses registered using ACPI
+
+Maxime Bizon (1):
+  net: mdio: fix owner field for mdio buses registered using device-tree
+
+ drivers/net/mdio/acpi_mdio.c  | 10 ++++++----
+ drivers/net/mdio/of_mdio.c    |  9 +++++----
+ drivers/net/phy/mdio_devres.c |  8 ++++----
+ include/linux/acpi_mdio.h     |  9 ++++++++-
+ include/linux/of_mdio.h       | 22 +++++++++++++++++++---
+ 5 files changed, 42 insertions(+), 16 deletions(-)
+
+-- 
+2.34.1
+
