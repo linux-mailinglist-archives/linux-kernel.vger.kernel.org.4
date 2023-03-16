@@ -2,275 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B6E76BCC2E
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 11:12:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19B046BCC31
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 11:12:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230351AbjCPKMp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 06:12:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34628 "EHLO
+        id S230415AbjCPKMx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 06:12:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230313AbjCPKM2 (ORCPT
+        with ESMTP id S230326AbjCPKMc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 06:12:28 -0400
-Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46075BBB3E
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 03:12:09 -0700 (PDT)
-Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-5447d217bc6so21209377b3.7
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 03:12:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678961528;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=HUXMtYCJCytkJaYrRDzWMzdMH+FzcGdy44GMw4xZIbw=;
-        b=qrgea51T34DMF4J459mkcIfZM1O5H1D7Blf2NqQVaiHCYu/S0yJheRooxcaRzkLKA8
-         o/qVX9Z5kPl+ZfI2iQMguYLIjfKBVzZ/51FeU9TxUjsn21UWVJRd8bkLeLExN+2r/t9C
-         45dK+4coBBS0nCQo/mOSU3oqeFUNMQfD0NX0r49iCClhHAW/fcHlu/dqbB/fgBjBk390
-         bWnb+0+NO+OPFq5zMlxdFnzT+Ug9A8QfqOeZrVpa+1ikFXFkqKb9IEE3Cl9JP69IlFoN
-         gMlRtPTcKjpVX08WqHkJdp4oZzjNf+lUIWzemFJQ3SKZD40b09+Qkie46tTorxxT0epL
-         5G1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678961528;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HUXMtYCJCytkJaYrRDzWMzdMH+FzcGdy44GMw4xZIbw=;
-        b=hb2attFSmZbE6saezqlKfT5/Gc4IE7DeH71w2wg9U87kGqeN4j5jjtPj5e3YbRFstW
-         fC0nd3A19svt+sLjoRsSrHQbbRCljDoMme9Ei+nGub11jCArgd8rz6Ub+UJ7vy3Wa1CI
-         ntiX1z3PT9DQbMgcpY2jtPHgRrBHPWTsjAUlVWFiHyAUVhidMsw1pNvjLxgZI+uLZveb
-         UzQ4QGOKvVXsKEmqAkMp/kpopUFsN6M6wG5VZOaZiyDyS31NfXrRQcY9nVQ9EyjncHBL
-         1eyn2/1WDSf1oSRx9K+Q/YQxvdf9p2g4NW/16JpKj8fUTc3Y0SB3r//AsAMOhg1VxMDw
-         pzJw==
-X-Gm-Message-State: AO0yUKVcNAFfz0zuq25TN4YREsL3VdBBXgbKq3C9WGJL9huM5SRc7se+
-        HWBRhuUuN5eJhLDxI0tdmcUeye4Zxvho/Zj+Aic6SA==
-X-Google-Smtp-Source: AK7set/KxCCnM2xscrt5p3IwN8pijGV3hZwQNY4jhHYrQ6X7R+dhtMmXWquofPXgEnNNKJko0qibO1BNsjyewjnx8Xk=
-X-Received: by 2002:a81:d84d:0:b0:543:9065:b225 with SMTP id
- n13-20020a81d84d000000b005439065b225mr1963135ywl.5.1678961528178; Thu, 16 Mar
- 2023 03:12:08 -0700 (PDT)
+        Thu, 16 Mar 2023 06:12:32 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79572BCBBB;
+        Thu, 16 Mar 2023 03:12:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678961534; x=1710497534;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=1ch8yAEoqDaUdQ3sRi+e/B4vAYC/6RjGdOIhFQNejgo=;
+  b=BpNEsMIJzAI7WzLL3bKzFpaMLvPDYwFK4WIzvfqLEnWyrF1zqg1fw0W1
+   9IDv0u7I55oO4eEEnvFoq5RepEbf+OhyOxZnfQuGGXiYWWGyDEj+4V+ln
+   /vrUUk4EArT9YYOMkOK8c9Lfw80LCBb1Q0S+YHNCm9xIFnbsK9LFpLe6D
+   PhMGbKVywO5RqAcJUWRQLEHZrSjEIYWwetBOgAz552O7xXLq8ybI7S84O
+   gZ1774jzLDFFXz2u1TC76McY2IJ5SBtnwuoOBrdoRmfR8rxsXpDXxzGnt
+   VJusVPOLwyjnTTHqVASzpAdaCLITdCGOS0pzlw9PYhKyXEyIMmcyxpuYC
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="337965227"
+X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
+   d="scan'208";a="337965227"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 03:12:13 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="748797466"
+X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
+   d="scan'208";a="748797466"
+Received: from unknown (HELO localhost.localdomain) ([10.237.112.144])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 03:12:11 -0700
+Date:   Thu, 16 Mar 2023 11:12:04 +0100
+From:   Michal Swiatkowski <michal.swiatkowski@linux.intel.com>
+To:     Daniil Tatianin <d-tatianin@yandex-team.ru>
+Cc:     Ariel Elior <aelior@marvell.com>,
+        Manish Chopra <manishc@marvell.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Yuval Mintz <Yuval.Mintz@qlogic.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] qed/qed_sriov: avoid a possible NULL deref in
+ configure_min_tx_rate
+Message-ID: <ZBLrb6C1mEjgAGHr@localhost.localdomain>
+References: <20230315194809.579756-1-d-tatianin@yandex-team.ru>
 MIME-Version: 1.0
-References: <20230316083049.29979-1-quic_tdas@quicinc.com> <20230316083049.29979-3-quic_tdas@quicinc.com>
-In-Reply-To: <20230316083049.29979-3-quic_tdas@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Thu, 16 Mar 2023 12:11:57 +0200
-Message-ID: <CAA8EJpqxtRyVKoqNsY01FmHaa10WK9LT49ydenztoJ1q0ah0+A@mail.gmail.com>
-Subject: Re: [PATCH 2/3] clk: qcom: videocc-sm8450: Add video clock controller
- driver for SM8450
-To:     Taniya Das <quic_tdas@quicinc.com>
-Cc:     Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_skakitap@quicinc.com, quic_jkona@quicinc.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230315194809.579756-1-d-tatianin@yandex-team.ru>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 16 Mar 2023 at 10:31, Taniya Das <quic_tdas@quicinc.com> wrote:
->
-> Add support for the video clock controller driver for peripheral clock
-> clients to be able to request for video cc clocks.
->
-> Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
+On Wed, Mar 15, 2023 at 10:48:09PM +0300, Daniil Tatianin wrote:
+> We have to make sure that the info returned by qed_iov_get_vf_info is
+> valid before using it.
+> 
+> Found by Linux Verification Center (linuxtesting.org) with the SVACE
+> static analysis tool.
+> 
+> Fixes: 733def6a04bf ("qed*: IOV link control")
+> Signed-off-by: Daniil Tatianin <d-tatianin@yandex-team.ru>
 > ---
->  drivers/clk/qcom/Kconfig          |   9 +
->  drivers/clk/qcom/Makefile         |   1 +
->  drivers/clk/qcom/videocc-sm8450.c | 464 ++++++++++++++++++++++++++++++
->  3 files changed, 474 insertions(+)
->  create mode 100644 drivers/clk/qcom/videocc-sm8450.c
->
-> diff --git a/drivers/clk/qcom/Kconfig b/drivers/clk/qcom/Kconfig
-> index 5ab4b7dfe3c2..81909e179bc7 100644
-> --- a/drivers/clk/qcom/Kconfig
-> +++ b/drivers/clk/qcom/Kconfig
-> @@ -892,4 +892,13 @@ config CLK_GFM_LPASS_SM8250
->           Support for the Glitch Free Mux (GFM) Low power audio
->            subsystem (LPASS) clocks found on SM8250 SoCs.
->
-> +config SM_VIDEOCC_8450
-> +       tristate "SM8450 Video Clock Controller"
-> +       select SM_GCC_8450
-> +       select QCOM_GDSC
-> +       help
-> +         Support for the video clock controller on Qualcomm Technologies, Inc.
-> +         SM8450 devices.
-> +         Say Y if you want to support video devices and functionality such as
-> +         video encode/decode.
->  endif
-> diff --git a/drivers/clk/qcom/Makefile b/drivers/clk/qcom/Makefile
-> index c743805a9cbb..5cbd0eedd6d9 100644
-> --- a/drivers/clk/qcom/Makefile
-> +++ b/drivers/clk/qcom/Makefile
-> @@ -119,6 +119,7 @@ obj-$(CONFIG_SM_GPUCC_8350) += gpucc-sm8350.o
->  obj-$(CONFIG_SM_TCSRCC_8550) += tcsrcc-sm8550.o
->  obj-$(CONFIG_SM_VIDEOCC_8150) += videocc-sm8150.o
->  obj-$(CONFIG_SM_VIDEOCC_8250) += videocc-sm8250.o
-> +obj-$(CONFIG_SM_VIDEOCC_8450) += videocc-sm8450.o
->  obj-$(CONFIG_SPMI_PMIC_CLKDIV) += clk-spmi-pmic-div.o
->  obj-$(CONFIG_KPSS_XCC) += kpss-xcc.o
->  obj-$(CONFIG_QCOM_HFPLL) += hfpll.o
-> diff --git a/drivers/clk/qcom/videocc-sm8450.c b/drivers/clk/qcom/videocc-sm8450.c
-> new file mode 100644
-> index 000000000000..ca60f3be587d
-> --- /dev/null
-> +++ b/drivers/clk/qcom/videocc-sm8450.c
-> @@ -0,0 +1,464 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (c) 2023, Qualcomm Innovation Center, Inc. All rights reserved.
-> + */
+>  drivers/net/ethernet/qlogic/qed/qed_sriov.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/net/ethernet/qlogic/qed/qed_sriov.c b/drivers/net/ethernet/qlogic/qed/qed_sriov.c
+> index 2bf18748581d..cd43f1b23eb1 100644
+> --- a/drivers/net/ethernet/qlogic/qed/qed_sriov.c
+> +++ b/drivers/net/ethernet/qlogic/qed/qed_sriov.c
+> @@ -4404,6 +4404,9 @@ qed_iov_configure_min_tx_rate(struct qed_dev *cdev, int vfid, u32 rate)
+>  	}
+>  
+>  	vf = qed_iov_get_vf_info(QED_LEADING_HWFN(cdev), (u16)vfid, true);
+> +	if (!vf)
+> +		return -EINVAL;
 > +
-> +#include <linux/clk-provider.h>
-> +#include <linux/module.h>
-> +#include <linux/of_device.h>
-> +#include <linux/pm_runtime.h>
-> +#include <linux/regmap.h>
-> +
-> +#include <dt-bindings/clock/qcom,videocc-sm8450.h>
-> +
-> +#include "clk-alpha-pll.h"
-> +#include "clk-branch.h"
-> +#include "clk-rcg.h"
-> +#include "clk-regmap.h"
-> +#include "clk-regmap-divider.h"
-> +#include "common.h"
-> +#include "gdsc.h"
-> +#include "reset.h"
-> +
-> +enum {
-> +       P_BI_TCXO,
-> +       P_VIDEO_CC_PLL0_OUT_MAIN,
-> +       P_VIDEO_CC_PLL1_OUT_MAIN,
-> +};
-> +
-> +static const struct pll_vco lucid_evo_vco[] = {
-> +       { 249600000, 2020000000, 0 },
-> +};
-> +
-> +static const struct alpha_pll_config video_cc_pll0_config = {
-> +       .l = 0x1E,
-> +       .alpha = 0x0,
-> +       .config_ctl_val = 0x20485699,
-> +       .config_ctl_hi_val = 0x00182261,
-> +       .config_ctl_hi1_val = 0x32AA299C,
-> +       .user_ctl_val = 0x00000000,
-> +       .user_ctl_hi_val = 0x00000805,
-> +};
-> +
-> +static struct clk_alpha_pll video_cc_pll0 = {
-> +       .offset = 0x0,
-> +       .vco_table = lucid_evo_vco,
-> +       .num_vco = ARRAY_SIZE(lucid_evo_vco),
-> +       .regs = clk_alpha_pll_regs[CLK_ALPHA_PLL_TYPE_LUCID_EVO],
-> +       .clkr = {
-> +               .hw.init = &(const struct clk_init_data){
-> +                       .name = "video_cc_pll0",
-> +                       .parent_data = &(const struct clk_parent_data){
-> +                               .fw_name = "bi_tcxo",
+>  	vport_id = vf->vport_id;
+>  
+>  	return qed_configure_vport_wfq(cdev, vport_id, rate);
+> -- 
+> 2.25.1
+> 
 
-Could you please follow the last of recent drivers and use DT indices
-instead of clock-names?
+There is also potential NULL pointer dereference in:
+qed_iov_handle_trust_change()
+Should be:
+if (!vf || !vf->vf->vport_instance)
 
-Also, as a syntax nit, could you please add whitespaces between ) and { ?
+I think it can be a part of this fix.
 
-> +                       },
-> +                       .num_parents = 1,
-> +                       .ops = &clk_alpha_pll_lucid_evo_ops,
-> +               },
-> +       },
-> +};
-> +
-
-[skipped]
-
-
-> +
-> +static void video_cc_sm8450_pm_runtime_disable(void *data)
-> +{
-> +       pm_runtime_disable(data);
-> +}
-> +
-> +static int video_cc_sm8450_probe(struct platform_device *pdev)
-> +{
-> +       struct regmap *regmap;
-> +       int ret;
-> +
-> +       pm_runtime_enable(&pdev->dev);
-> +
-> +       ret = devm_add_action_or_reset(&pdev->dev, video_cc_sm8450_pm_runtime_disable, &pdev->dev);
-> +       if (ret)
-> +               return ret;
-
-Could you please shift to using devm_pm_runtime_enable()?
-
-> +
-> +       ret = pm_runtime_resume_and_get(&pdev->dev);
-> +       if (ret)
-> +               return ret;
-> +
-> +       regmap = qcom_cc_map(pdev, &video_cc_sm8450_desc);
-> +       if (IS_ERR(regmap)) {
-> +               pm_runtime_put(&pdev->dev);
-> +               return PTR_ERR(regmap);
-> +       }
-> +
-> +       clk_lucid_evo_pll_configure(&video_cc_pll0, regmap, &video_cc_pll0_config);
-> +       clk_lucid_evo_pll_configure(&video_cc_pll1, regmap, &video_cc_pll1_config);
-> +
-> +       /*
-> +        * Keep clocks always enabled:
-> +        *      video_cc_ahb_clk
-> +        *      video_cc_sleep_clk
-> +        *      video_cc_xo_clk
-> +        */
-> +       regmap_update_bits(regmap, 0x80e4, BIT(0), BIT(0));
-> +       regmap_update_bits(regmap, 0x8130, BIT(0), BIT(0));
-> +       regmap_update_bits(regmap, 0x8114, BIT(0), BIT(0));
-> +
-> +       ret = qcom_cc_really_probe(pdev, &video_cc_sm8450_desc, regmap);
-> +
-> +       pm_runtime_put(&pdev->dev);
-> +
-> +       return ret;
-> +}
-> +
-> +static struct platform_driver video_cc_sm8450_driver = {
-> +       .probe = video_cc_sm8450_probe,
-> +       .driver = {
-> +               .name = "video_cc-sm8450",
-> +               .of_match_table = video_cc_sm8450_match_table,
-> +       },
-> +};
-> +
-> +static int __init video_cc_sm8450_init(void)
-> +{
-> +       return platform_driver_register(&video_cc_sm8450_driver);
-> +}
-> +subsys_initcall(video_cc_sm8450_init);
-> +
-> +static void __exit video_cc_sm8450_exit(void)
-> +{
-> +       platform_driver_unregister(&video_cc_sm8450_driver);
-> +}
-> +module_exit(video_cc_sm8450_exit);
-> +
-> +MODULE_DESCRIPTION("QTI VIDEO_CC SM8450 Driver");
-> +MODULE_LICENSE("GPL v2");
-
-I think this should be just "GPL" nowaways.
-
-> --
-> 2.17.1
->
-
-
--- 
-With best wishes
-Dmitry
+Thanks,
+Michal
