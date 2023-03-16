@@ -2,255 +2,361 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 211A06BD153
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 14:50:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 916556BD127
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 14:45:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230372AbjCPNt4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 09:49:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53018 "EHLO
+        id S230325AbjCPNpb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 09:45:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230041AbjCPNtx (ORCPT
+        with ESMTP id S229930AbjCPNpY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 09:49:53 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2073.outbound.protection.outlook.com [40.107.94.73])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 043514EE4;
-        Thu, 16 Mar 2023 06:49:51 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=koNUZXxT8ehdq15NLKAIgqK0YPTxzwBs6iYPRyjaGABUu+GgClNUMMU113KFLL6rZIRCU5ddZhd8R0JAm3mWQs6CrHSiP+BC/avkqmDJYOKY8BjkPGVgJCooEJBxFBLj/OhY0sU/IeZ+ydIUROA+i1fZKld8ktafO++Lng16+0ra/vwtnSDaK5DQsuDM8OXHtRBul0pOFR6Mpo+wkvV3yt7L6+jbDWT4nDggKtqNbUtIaKxTDQpztUxG1LOEpE+17fC3c0P9hMCBK1qCjxkKCiXsoXvtkln3A/oLlFKQHr1tmiiqPwhXLO3oKPNzB1Sq8oqivTxq6BY3QaJDp3+QbQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Vphis5bi2r8pZINdzGZ3zDJdj5BMtBCTwC4FkVFtDKE=;
- b=KSef4EdvIXTVnR3bard8s2ycWXpcS4UBxXl6wweE8oI61Gj3fcFlktdiVrr59QvntZjqdRfk6yjgYfOKGUmsVKXEgz2CUUFveYaI73lP4or2xs5JQfaRZqD+br+2/Jc9MvfvUp9YZGOcLXv0oq7r8yYBLQuMCzgLfe2B1bY3OsZXc8nEvBWogsbaR2fQge5I78oMAHVrnGWyuQvuhOYNsG5Y6eyt+hi7rIaigFVfij0ehVppmPzEjL3dtQc3Lu7VdQdfMv7TMpXZl96VPWHZmYkTCPeZgVhTh0UgoTYTziGPLFdt7cepOCY7wp6KEgrdyQTmGLdfybHh7AZHfPRsUg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=redhat.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Vphis5bi2r8pZINdzGZ3zDJdj5BMtBCTwC4FkVFtDKE=;
- b=jI5iT5b8cL4gYgk8+z/AJ6oFUsL8gPriz/r5fCctzKNa3KYogDWvkkgmlW9CyjbZKo2llfPrgyMerUQ1Xoc2BMji88X9vp6fb+JG37Ima9nZafq6vET24J7CBtHHWk9274zxNLVfzHWd6wF5vgBo75NRaSHOd5fmI9PiHV3KlOqS4/GwvSIHX1gQZ1TjzcpyXtQErro/KjFNbGiV/rbjd9HzmnPr+X9W+iCZxPB42UFZX/7it9WGiO2c/DmyZGkms3HhJWEVLnKB/T7DqA5n45RaeIsWGZIn+NMLf+tbsTN7a+frgZpiNoJT5TPGuatSV9dnZLLk+JgwPmWsNZiuYw==
-Received: from DM6PR02CA0076.namprd02.prod.outlook.com (2603:10b6:5:1f4::17)
- by BL0PR12MB4946.namprd12.prod.outlook.com (2603:10b6:208:1c5::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.29; Thu, 16 Mar
- 2023 13:49:46 +0000
-Received: from DS1PEPF0000E653.namprd02.prod.outlook.com
- (2603:10b6:5:1f4:cafe::10) by DM6PR02CA0076.outlook.office365.com
- (2603:10b6:5:1f4::17) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.33 via Frontend
- Transport; Thu, 16 Mar 2023 13:49:45 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- DS1PEPF0000E653.mail.protection.outlook.com (10.167.18.9) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6178.30 via Frontend Transport; Thu, 16 Mar 2023 13:49:45 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Thu, 16 Mar 2023
- 06:49:40 -0700
-Received: from yaviefel (10.126.231.37) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Thu, 16 Mar
- 2023 06:49:36 -0700
-References: <20230210221243.228932-1-vladimir.oltean@nxp.com>
- <873579ddv0.fsf@nvidia.com> <20230213113907.j5t5zldlwea3mh7d@skbuf>
- <87sff8bgkm.fsf@nvidia.com> <87y1nxq7dk.fsf@nvidia.com>
-User-agent: mu4e 1.6.6; emacs 28.1
-From:   Petr Machata <petrm@nvidia.com>
-To:     Petr Machata <petrm@nvidia.com>
-CC:     Vladimir Oltean <vladimir.oltean@nxp.com>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Michal Kubecek <mkubecek@suse.cz>,
-        "Vinicius Costa Gomes" <vinicius.gomes@intel.com>,
-        Xiaoliang Yang <xiaoliang.yang_1@nxp.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Rui Sousa <rui.sousa@nxp.com>,
-        Ferenc Fejes <ferenc.fejes@ericsson.com>,
-        "Pranavi Somisetty" <pranavi.somisetty@amd.com>,
-        Harini Katakam <harini.katakam@amd.com>,
-        <UNGLinuxDriver@microchip.com>, Ido Schimmel <idosch@nvidia.com>,
-        Aaron Conole <aconole@redhat.com>
-Subject: Re: [RFC PATCH net-next] selftests: forwarding: add a test for MAC
- Merge layer
-Date:   Thu, 16 Mar 2023 14:43:25 +0100
-In-Reply-To: <87y1nxq7dk.fsf@nvidia.com>
-Message-ID: <87ttykreky.fsf@nvidia.com>
+        Thu, 16 Mar 2023 09:45:24 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBC0F75A40
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 06:45:22 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id l12so1579778wrm.10
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 06:45:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678974321;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XySx3jV3xEipa/HELoqrBjB9yryOO5F7eocg+dFMhy4=;
+        b=adSxJTPRet2CALew/avVIjVyBLDMJLE36kXJIL+SxudjDBZ3QBbVnlmC94IzU8sKF1
+         NNPtO9jQVEIOXh9YeHinCKXpjEvfzjIdEOw9yj4TWs1pcq5Ud0jvMyK2zhKpvxEosyzf
+         Y0o4IoyTd4P6pl2oJmrfmOqjnutnhh1kgWNNCQScgdRQZdLJZB+Pn3LGQL4RP1RlOj8x
+         NTFSgQxieoVFYggX8b0DLnZDIrTHBBLsNWWNJS8liYueTvUcLShV2DFDqywuvAjTfizW
+         nIsbStHy+v91bZjfYH0U7KGehsg6kZJB1LhvnO9QuC0iJKTtWxakaCDhfr6l9hIVU96k
+         BMMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678974321;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=XySx3jV3xEipa/HELoqrBjB9yryOO5F7eocg+dFMhy4=;
+        b=sjpUEzmPlZIlNA1QaDCAdpeYR/jrugrlo+6U54Po2Vm2f0VPNtzt/eL1Sl1sCb/GNl
+         rQPqBcBn1xA7dHtzvf6ayeSJPT5IWyoAgBrqQUg0WPRFuse76Z67QnXX0QIUGyujrOYw
+         POV6Ul2QFFpBJC7PWU0CngBx+6nikFMqagGmTcQwCn2sadTDmkuZbivqnj0IeF9HWqIc
+         jpcFcE3cUN4E/zhhLgPbZ0uxQHedxzpVkR0h0oBNh9tNqI8lrYf6cpd+O97qycQ7oaHt
+         G8PEQIlpCnMCpbvsloeDMDFGJPbuNwC4khD+TBDUBr+l4wVLnJBpMt+5A3o5EJ1wUhF3
+         xVRg==
+X-Gm-Message-State: AO0yUKVzAW8T2sG5bgJqm3R/bUyhaYoigJ0BsV0WEQDTDuLBjwzURFId
+        cjxtHjBm9MktmsnNNEQ93KGx2+waua5Bv8Rla4zbXw==
+X-Google-Smtp-Source: AK7set/a1eEDMJYhEaELVK3rBQ9cD7X+8cWYSf0F4De52iUTCLBhZ9KZTlVO/+3zI9nOa3oa7ltQ8P5MS469t5XPNxc=
+X-Received: by 2002:a05:6000:104:b0:2cf:e388:7803 with SMTP id
+ o4-20020a056000010400b002cfe3887803mr1134547wrx.3.1678974321102; Thu, 16 Mar
+ 2023 06:45:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.126.231.37]
-X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS1PEPF0000E653:EE_|BL0PR12MB4946:EE_
-X-MS-Office365-Filtering-Correlation-Id: 017c6b17-e1d2-4cb1-0466-08db26254d8c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: hJtXB9Lt5/9vHtew/+gIJsuHdyYA1FEJ7/+bfMrJHmwaEkeE11ZAzu0Za+bJH2nb7W+YgEEqsp8tBhp8t03CM6Rcl27E5nfJVrVPZHLI6Db1YF1NdGn34XAmpViPJzfiG+dlu5zRuIeZmj3VcIC/uqrD2e0hhGA/N4OFIMZNycMR9/LLfpWSBYZvvudXhEg4gyNVkt9UgtOB3m15DBzBvQpraw8ebL9XbvmoMP3Pj4Pl6VG1yTqW8bfjIlRCfgwKq8YYJmXIjdxOyXhsHjVI4lMZ0tK6pg15GFH77ZSUbOAJDkbPIfhhQv6KuDpI4NiiNi4urjuIB+sxLGFfHwjF5ZLQlfpuqbIKfhh7Ii+vhKgAOhwc4Wr3KLJQ2qDLn1li7HrsOQv608Ed3XFXbcL8WadoDCNpfuwouKriU4vErnpyaUEZVRHVJC72vBusIur+2qguvKvAQLug6xFkTw+zExWjKZkJT2zP9mJXsqXzQD0irxao9s/X/73YXcKmiyRxPNj4x+x3piV+69a6BNDiPMiwXJp6X25euAaMzrbF1gvEHTuhgBbDpwVyEWNs07B+4A1ab7QG19qu9loPvHkFvX04FqpgujAPVgzaCE0Vkm6bG8uUZ2RdM8rWAreP5O/+a/utQqIu1vKKgHBLPqf9dbuwit6fGlXvJaQ0iVHhgalesU2ptmtllY+3VXp05NdXs9HxzqDvyaIp2IPHzWh7KOt2NlFCO+4tGE9569LyQeE=
-X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(396003)(136003)(39860400002)(376002)(346002)(451199018)(46966006)(36840700001)(36756003)(36860700001)(82740400003)(7636003)(7416002)(2906002)(6200100001)(8936002)(41300700001)(6862004)(86362001)(5660300002)(82310400005)(4326008)(40480700001)(2616005)(47076005)(336012)(83380400001)(356005)(26005)(426003)(54906003)(316002)(16526019)(186003)(37006003)(6666004)(70206006)(478600001)(70586007)(8676002)(66899018);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Mar 2023 13:49:45.8161
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 017c6b17-e1d2-4cb1-0466-08db26254d8c
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DS1PEPF0000E653.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR12MB4946
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230315113201.1343781-1-etienne.carriere@linaro.org> <20230315113201.1343781-3-etienne.carriere@linaro.org>
+In-Reply-To: <20230315113201.1343781-3-etienne.carriere@linaro.org>
+From:   Jens Wiklander <jens.wiklander@linaro.org>
+Date:   Thu, 16 Mar 2023 14:45:10 +0100
+Message-ID: <CAHUa44FOKft9xQzc6g-CywY=jgcvp-ApG=ufR3CMzwAot4df5w@mail.gmail.com>
+Subject: Re: [PATCH v3 3/3] optee: add enable/disable/set_wake handlers to
+ optee irqs
+To:     Etienne Carriere <etienne.carriere@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Marc Zyngier <maz@kernel.org>,
+        Sumit Garg <sumit.garg@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-Petr Machata <petrm@nvidia.com> writes:
-
-> Petr Machata <petrm@nvidia.com> writes:
+On Wed, Mar 15, 2023 at 12:32=E2=80=AFPM Etienne Carriere
+<etienne.carriere@linaro.org> wrote:
 >
->> Vladimir Oltean <vladimir.oltean@nxp.com> writes:
->>
->>> diff --git a/tools/testing/selftests/drivers/net/mlxsw/sch_tbf_ets.sh b/tools/testing/selftests/drivers/net/mlxsw/sch_tbf_ets.sh
->>> index c6ce0b448bf3..bf57400e14ee 100755
->>> --- a/tools/testing/selftests/drivers/net/mlxsw/sch_tbf_ets.sh
->>> +++ b/tools/testing/selftests/drivers/net/mlxsw/sch_tbf_ets.sh
->>> @@ -2,7 +2,7 @@
->>>  # SPDX-License-Identifier: GPL-2.0
->>>  
->>>  source qos_lib.sh
->>> -bail_on_lldpad
->>> +bail_on_lldpad "configure DCB" "configure Qdiscs"
->>
->> ... lib.sh isn't sourced at this point yet. `source
->> $lib_dir/sch_tbf_ets.sh' brings that in later in the file, so the bail
->> would need to be below that. But if it is, it won't run until after the
->> test, which is useless.
+> Implements OP-TEE's It Notif PTA API to deactivate and activate an
+> interrupt notifier and to configure the wakeup capability
+> of that interrupt. These controls are useful for efficient power
+> management of the device when an interrupt controller resources is
+> hosted in OP-TEE world.
+>
+> When OP-TEE does not implement the It Notif PTA, the related handlers
+> simply return with success. If OP-TEE exposes the PTA services, they
+> are invoked on enable, disable and set_wake irqchip operations.
+>
+> Cc: Jens Wiklander <jens.wiklander@linaro.org>
+> Cc: Marc Zyngier <maz@kernel.org>
+> Cc: Sumit Garg <sumit.garg@linaro.org>
+>
+> Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
+> ---
+> Changes since v3:
+> - Renamed it_notif/IT_NOTIF to itr_notif/ITR_NOTIF.
+>
+> Changes since v2:
+> - Patch added in v2 series for power-up/down and wakeup configuration
+>   of the irq chip.
+>
+> Patch not present in v1
+> - Patch added for power-up/down and wakeup configuration of the irq chip.
+> ---
+>  drivers/tee/optee/optee_private.h |   2 +
+>  drivers/tee/optee/smc_abi.c       | 157 ++++++++++++++++++++++++++++++
+>  2 files changed, 159 insertions(+)
+>
+> diff --git a/drivers/tee/optee/optee_private.h b/drivers/tee/optee/optee_=
+private.h
+> index f467409e02e9..4b4002d81315 100644
+> --- a/drivers/tee/optee/optee_private.h
+> +++ b/drivers/tee/optee/optee_private.h
+> @@ -166,6 +166,7 @@ struct optee_ops {
+>   * @scan_bus_done      flag if device registation was already done.
+>   * @scan_bus_wq                workqueue to scan optee bus and register =
+optee drivers
+>   * @scan_bus_work      workq to scan optee bus and register optee driver=
+s
+> + * @notif_itr_pta_ctx   TEE context for invoking interrupt configuration=
+ services
+>   */
+>  struct optee {
+>         struct tee_device *supp_teedev;
+> @@ -185,6 +186,7 @@ struct optee {
+>         bool   scan_bus_done;
+>         struct workqueue_struct *scan_bus_wq;
+>         struct work_struct scan_bus_work;
+> +       struct tee_context *notif_itr_pta_ctx;
 
-I added a shim as shown below. Comments welcome. Your patch then needs a
-bit of adaptation, plus I've dropped all the now-useless imports of
-qos_lib.sh. I'll pass this through our regression, and if nothing
-explodes, I'll point you at a branch tomorrow, and you can make the two
-patches a part of your larger patchset?
+Please use the other *ctx above instead.
 
-Subject: [PATCH net-next mlxsw] selftests: forwarding: sch_tbs_*: Add a
- pre-run hook
+Thanks,
+Jens
 
-The driver-specific wrappers of these selftests invoke bail_on_lldpad to
-make sure that LLDPAD doesn't trample the configuration. The function
-bail_on_lldpad is going to move to lib.sh in the next patch. With that, it
-won't be visible for the wrappers before sourcing the framework script. And
-after sourcing it, it is too late: the selftest will have run by then.
-
-One option might be to source NUM_NETIFS=0 lib.sh from the wrapper, but
-even if that worked (it might, it might not), that seems cumbersome. lib.sh
-is doing fair amount of stuff, and even if it works today, it does not look
-particularly solid as a solution.
-
-Instead, introduce a hook, sch_tbf_pre_hook(), that when available, gets
-invoked. Move the bail to the hook.
-
-Signed-off-by: Petr Machata <petrm@nvidia.com>
----
- tools/testing/selftests/drivers/net/mlxsw/sch_tbf_ets.sh  | 6 +++++-
- tools/testing/selftests/drivers/net/mlxsw/sch_tbf_prio.sh | 6 +++++-
- tools/testing/selftests/drivers/net/mlxsw/sch_tbf_root.sh | 6 +++++-
- tools/testing/selftests/net/forwarding/sch_tbf_etsprio.sh | 4 ++++
- tools/testing/selftests/net/forwarding/sch_tbf_root.sh    | 4 ++++
- 5 files changed, 23 insertions(+), 3 deletions(-)
-
-diff --git a/tools/testing/selftests/drivers/net/mlxsw/sch_tbf_ets.sh b/tools/testing/selftests/drivers/net/mlxsw/sch_tbf_ets.sh
-index c6ce0b448bf3..b9b4cdf14ceb 100755
---- a/tools/testing/selftests/drivers/net/mlxsw/sch_tbf_ets.sh
-+++ b/tools/testing/selftests/drivers/net/mlxsw/sch_tbf_ets.sh
-@@ -2,7 +2,11 @@
- # SPDX-License-Identifier: GPL-2.0
- 
- source qos_lib.sh
--bail_on_lldpad
-+
-+sch_tbf_pre_hook()
-+{
-+	bail_on_lldpad
-+}
- 
- lib_dir=$(dirname $0)/../../../net/forwarding
- TCFLAGS=skip_sw
-diff --git a/tools/testing/selftests/drivers/net/mlxsw/sch_tbf_prio.sh b/tools/testing/selftests/drivers/net/mlxsw/sch_tbf_prio.sh
-index 8d245f331619..dff9810ee04f 100755
---- a/tools/testing/selftests/drivers/net/mlxsw/sch_tbf_prio.sh
-+++ b/tools/testing/selftests/drivers/net/mlxsw/sch_tbf_prio.sh
-@@ -2,7 +2,11 @@
- # SPDX-License-Identifier: GPL-2.0
- 
- source qos_lib.sh
--bail_on_lldpad
-+
-+sch_tbf_pre_hook()
-+{
-+	bail_on_lldpad
-+}
- 
- lib_dir=$(dirname $0)/../../../net/forwarding
- TCFLAGS=skip_sw
-diff --git a/tools/testing/selftests/drivers/net/mlxsw/sch_tbf_root.sh b/tools/testing/selftests/drivers/net/mlxsw/sch_tbf_root.sh
-index 013886061f15..75406bd7036e 100755
---- a/tools/testing/selftests/drivers/net/mlxsw/sch_tbf_root.sh
-+++ b/tools/testing/selftests/drivers/net/mlxsw/sch_tbf_root.sh
-@@ -2,7 +2,11 @@
- # SPDX-License-Identifier: GPL-2.0
- 
- source qos_lib.sh
--bail_on_lldpad
-+
-+sch_tbf_pre_hook()
-+{
-+	bail_on_lldpad
-+}
- 
- lib_dir=$(dirname $0)/../../../net/forwarding
- TCFLAGS=skip_sw
-diff --git a/tools/testing/selftests/net/forwarding/sch_tbf_etsprio.sh b/tools/testing/selftests/net/forwarding/sch_tbf_etsprio.sh
-index 75a37c189ef3..df9bcd6a811a 100644
---- a/tools/testing/selftests/net/forwarding/sch_tbf_etsprio.sh
-+++ b/tools/testing/selftests/net/forwarding/sch_tbf_etsprio.sh
-@@ -57,6 +57,10 @@ tbf_root_test()
- 	tc qdisc del dev $swp2 root
- }
- 
-+if type -t sch_tbf_pre_hook >/dev/null; then
-+	sch_tbf_pre_hook
-+fi
-+
- trap cleanup EXIT
- 
- setup_prepare
-diff --git a/tools/testing/selftests/net/forwarding/sch_tbf_root.sh b/tools/testing/selftests/net/forwarding/sch_tbf_root.sh
-index 72aa21ba88c7..96c997be0d03 100755
---- a/tools/testing/selftests/net/forwarding/sch_tbf_root.sh
-+++ b/tools/testing/selftests/net/forwarding/sch_tbf_root.sh
-@@ -23,6 +23,10 @@ tbf_test()
- 	tc qdisc del dev $swp2 root
- }
- 
-+if type -t sch_tbf_pre_hook >/dev/null; then
-+	sch_tbf_pre_hook
-+fi
-+
- trap cleanup EXIT
- 
- setup_prepare
--- 
-2.39.0
+>  };
+>
+>  struct optee_session {
+> diff --git a/drivers/tee/optee/smc_abi.c b/drivers/tee/optee/smc_abi.c
+> index 6e6c6979abfd..046aa242b2ef 100644
+> --- a/drivers/tee/optee/smc_abi.c
+> +++ b/drivers/tee/optee/smc_abi.c
+> @@ -52,6 +52,43 @@
+>   */
+>  #define OPTEE_MIN_STATIC_POOL_ALIGN    9 /* 512 bytes aligned */
+>
+> +/*
+> + * Interrupt notification can be configured using Notif-IT PTA services.
+> + * Below are the PTA UUID and its API commands.
+> + */
+> +#define PTA_ITR_NOTIF_UUID \
+> +       UUID_INIT(0x4461e5c7, 0xb523, 0x4b73, 0xac, 0xed, 0x75, 0xad, \
+> +                 0x2b, 0x9b, 0x59, 0xa1)
+> +
+> +/*
+> + * PTA_ITR_NOTIF_ACTIVATE_DETECTION - Enable a interrupt notification
+> + *
+> + * [in]  params[0].value.a     Interrupt ID
+> + */
+> +#define PTA_ITR_NOTIF_ACTIVATE_DETECTION       0
+> +
+> +/*
+> + * PTA_ITR_NOTIF_DEACTIVATE_DETECTION - Disable a interrupt notification
+> + *
+> + * [in]  params[0].value.a     Interrupt ID
+> + */
+> +#define PTA_ITR_NOTIF_DEACTIVATE_DETECTION     1
+> +
+> +/*
+> + * PTA_ITR_NOTIF_ENABLE_WAKEUP_SOURCE - Enable an interrupt wakeup sourc=
+e
+> + *
+> + * [in]  params[0].value.a     Interrupt ID
+> + */
+> +#define PTA_ITR_NOTIF_ENABLE_WAKEUP_SOURCE     2
+> +
+> +/*
+> + * PTA_ITR_NOTIF_ENABLE_WAKEUP_SOURCE - Disable an interrupt wakeup sour=
+ce
+> + *
+> + * [in]  params[0].value.a     Interrupt ID
+> + */
+> +#define PTA_ITR_NOTIF_DISABLE_WAKEUP_SOURCE    3
+> +
+> +
+>  /*
+>   * 1. Convert between struct tee_param and struct optee_msg_param
+>   *
+> @@ -977,6 +1014,92 @@ static int optee_smc_stop_async_notif(struct tee_co=
+ntext *ctx)
+>   * 5. Asynchronous notification
+>   */
+>
+> +static int optee_ctx_match(struct tee_ioctl_version_data *ver, const voi=
+d *data)
+> +{
+> +       return ver->impl_id =3D=3D TEE_IMPL_ID_OPTEE;
+> +}
+> +
+> +static void init_optee_pta_context(struct optee *optee)
+> +{
+> +       struct tee_context *ctx =3D NULL;
+> +       const uuid_t pta_uuid =3D PTA_ITR_NOTIF_UUID;
+> +       struct tee_ioctl_open_session_arg sess_arg;
+> +       int ret;
+> +
+> +       ctx =3D tee_client_open_context(NULL, optee_ctx_match, NULL, NULL=
+);
+> +       if (IS_ERR(ctx))
+> +               return;
+> +
+> +       memset(&sess_arg, 0, sizeof(sess_arg));
+> +       export_uuid(sess_arg.uuid, &pta_uuid);
+> +       sess_arg.clnt_login =3D TEE_IOCTL_LOGIN_REE_KERNEL;
+> +
+> +       ret =3D tee_client_open_session(ctx, &sess_arg, NULL);
+> +       if ((ret < 0) || (sess_arg.ret !=3D 0)) {
+> +               pr_err("Can't open ITR_NOTIF PTA session: %#x\n", sess_ar=
+g.ret);
+> +               tee_client_close_context(ctx);
+> +               return;
+> +       }
+> +
+> +       tee_client_close_session(ctx, sess_arg.session);
+> +
+> +       optee->notif_itr_pta_ctx =3D ctx;
+> +}
+> +
+> +static void release_optee_pta_context(struct optee *optee)
+> +{
+> +       if (optee->notif_itr_pta_ctx) {
+> +               tee_client_close_context(optee->notif_itr_pta_ctx);
+> +               optee->notif_itr_pta_ctx =3D NULL;
+> +       }
+> +}
+> +
+> +static int invoke_optee_pta(struct optee *optee, unsigned int command,
+> +                           unsigned int irq_id)
+> +{
+> +       const uuid_t pta_uuid =3D PTA_ITR_NOTIF_UUID;
+> +       struct tee_ioctl_open_session_arg sess_arg;
+> +       struct tee_ioctl_invoke_arg inv_arg;
+> +       struct tee_param param[1];
+> +       int ret;
+> +
+> +       if (!optee->notif_itr_pta_ctx)
+> +               return -ENOENT;
+> +
+> +       memset(&sess_arg, 0, sizeof(sess_arg));
+> +       export_uuid(sess_arg.uuid, &pta_uuid);
+> +       sess_arg.clnt_login =3D TEE_IOCTL_LOGIN_REE_KERNEL;
+> +
+> +       ret =3D tee_client_open_session(optee->notif_itr_pta_ctx, &sess_a=
+rg, NULL);
+> +       if ((ret < 0) || (sess_arg.ret !=3D 0)) {
+> +               pr_err("tee_client_open_session failed, err: %#x\n", sess=
+_arg.ret);
+> +               if (!ret)
+> +                       ret =3D -EINVAL;
+> +               return ret;
+> +       }
+> +
+> +       memset(&inv_arg, 0, sizeof(inv_arg));
+> +       inv_arg.session =3D sess_arg.session;
+> +       inv_arg.func =3D command;
+> +       inv_arg.num_params =3D 1;
+> +
+> +       memset(&param, 0, sizeof(param));
+> +       param[0].attr =3D TEE_IOCTL_PARAM_ATTR_TYPE_VALUE_INPUT;
+> +       param[0].u.value.a =3D irq_id;
+> +
+> +       ret =3D tee_client_invoke_func(optee->notif_itr_pta_ctx, &inv_arg=
+, param);
+> +       if ((ret < 0) || (inv_arg.ret !=3D 0)) {
+> +               pr_err("tee_client_invoke_func failed, ret: %d, err: %#x\=
+n",
+> +                      ret, inv_arg.ret);
+> +               if (!ret)
+> +                       ret =3D -EINVAL;
+> +       }
+> +
+> +       tee_client_close_session(optee->notif_itr_pta_ctx, sess_arg.sessi=
+on);
+> +
+> +       return ret;
+> +}
+> +
+>  static void optee_itr_notif_mask(struct irq_data *d)
+>  {
+>         struct optee *optee =3D d->domain->host_data;
+> @@ -995,10 +1118,40 @@ static void optee_itr_notif_unmask(struct irq_data=
+ *d)
+>                              0, 0, 0, 0, 0, &res);
+>  }
+>
+> +static void optee_itr_notif_disable(struct irq_data *d)
+> +{
+> +       struct optee *optee =3D d->domain->host_data;
+> +
+> +       (void)invoke_optee_pta(optee, PTA_ITR_NOTIF_DEACTIVATE_DETECTION,=
+ d->hwirq);
+> +}
+> +
+> +static void optee_itr_notif_enable(struct irq_data *d)
+> +{
+> +       struct optee *optee =3D d->domain->host_data;
+> +
+> +       (void)invoke_optee_pta(optee, PTA_ITR_NOTIF_ACTIVATE_DETECTION, d=
+->hwirq);
+> +}
+> +
+> +static int optee_itr_notif_set_wake(struct irq_data *d, unsigned int on)
+> +{
+> +       struct optee *optee =3D d->domain->host_data;
+> +       u32 command;
+> +
+> +       if (on)
+> +               command =3D PTA_ITR_NOTIF_ENABLE_WAKEUP_SOURCE;
+> +       else
+> +               command =3D PTA_ITR_NOTIF_DISABLE_WAKEUP_SOURCE;
+> +
+> +       return invoke_optee_pta(optee, command, d->hwirq);
+> +}
+> +
+>  static struct irq_chip optee_irq_chip =3D {
+>         .name =3D "optee-it",
+>         .irq_mask =3D optee_itr_notif_mask,
+>         .irq_unmask =3D optee_itr_notif_unmask,
+> +       .irq_disable =3D optee_itr_notif_disable,
+> +       .irq_enable =3D optee_itr_notif_enable,
+> +       .irq_set_wake =3D optee_itr_notif_set_wake,
+>  };
+>
+>  static int optee_itr_alloc(struct irq_domain *d, unsigned int virq,
+> @@ -1459,6 +1612,7 @@ static int optee_smc_remove(struct platform_device =
+*pdev)
+>                 optee_disable_shm_cache(optee);
+>
+>         optee_smc_notif_uninit_irq(optee);
+> +       release_optee_pta_context(optee);
+>
+>         optee_remove_common(optee);
+>
+> @@ -1646,6 +1800,8 @@ static int optee_probe(struct platform_device *pdev=
+)
+>                                 irq_dispose_mapping(irq);
+>                                 goto err_notif_uninit;
+>                         }
+> +
+> +                       init_optee_pta_context(optee);
+>                 }
+>
+>                 enable_async_notif(optee->smc.invoke_fn);
+> @@ -1683,6 +1839,7 @@ static int optee_probe(struct platform_device *pdev=
+)
+>                 optee_disable_shm_cache(optee);
+>         optee_smc_notif_uninit_irq(optee);
+>         optee_unregister_devices();
+> +       release_optee_pta_context(optee);
+>  err_notif_uninit:
+>         optee_notif_uninit(optee);
+>  err_close_ctx:
+> --
+> 2.25.1
+>
