@@ -2,62 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBCEB6BC58E
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 06:20:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F35366BC58F
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 06:20:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229686AbjCPFUA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 01:20:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54622 "EHLO
+        id S229716AbjCPFUH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 01:20:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbjCPFT6 (ORCPT
+        with ESMTP id S229712AbjCPFUF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 01:19:58 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B925DA8810
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 22:19:57 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id k2so546847pll.8
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 22:19:57 -0700 (PDT)
+        Thu, 16 Mar 2023 01:20:05 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3F4DA9DFA
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 22:20:02 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id p13-20020a17090a284d00b0023d2e945aebso4969957pjf.0
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 22:20:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678943997;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=xAnoNAg/wEFIyazuIz3SvYiQvbZa3Cm+e5t9iiTafMM=;
-        b=ogfWJ1M10cinsLgiOAHKG+R/e+AeY7RLAjxzO5+PTzaZzHnE+duwairY1Zbn2F5c2f
-         1iRx3C90ofLuUhJy6e7SLhwesqZn9u29O1m8vus+X8ud4mW605FucHslMCSNT0jh1ByS
-         jHrlR/lFjWTBvs9NkjE53WyuNN1sSl2rqamLpNNB1Kv/nkpAcMzOmK3bRcoRgQ7ZyoK5
-         15SDbruJxM2MnUTAin4deSVBs9mJpHq9trBSCcDN0SAFUl5QlE2BKIayRzJyimuAkyD0
-         s9LCY3bSd5jqRWkk+IkEx/gfDZv58P1UGYlTceiXThtTe8ZV4ERXr5YEFlh4HghHM3SQ
-         cIXw==
+        d=gmail.com; s=20210112; t=1678944002;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cnS/2L5eapvwqGTZQsUuWuWrYgLcDrvgqwnYFYygers=;
+        b=QE826bxyY1maP+6E6wVynxn9Mv6IuqRQViB2FhQD0h/chSW/Kw+weOZ4aZ4wVs81Pf
+         Ing4sukZ64gzdoNgoFnEKc1PUpuvKZmKztMqw5eFxiRCO8X1OIjuVsEGuhYJOkjl/Jqf
+         taUF8/Q8HWqTvOx3TQmc1s2avXtx3xP0JavcyM3wlC2IBVTz17uGXho9CLqP0sRoe65f
+         vdOyOoCURiYufz8tH653p2RPal+y1gioShzqK6otX5Z01blem1kiFqghfcjNxYaJergQ
+         BF9XVxFbTiGT9aWCVT+nHcza7vCFaZ89i89ufYjjHTfRjOfmpXqO04UtM7B/bUPc5DS6
+         1ROg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678943997;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xAnoNAg/wEFIyazuIz3SvYiQvbZa3Cm+e5t9iiTafMM=;
-        b=gr22/yoEsbF/lg23h4XIvsG0F12YFDMPtdJbzoKDsNVQkyVm9o3X2i1YNV96L40uDb
-         eoM2H3ySU6c4TaOD0OrIFRdH+1tJNeaQU8F/jTpCw748QbFc1GOCHeiQQMWQwNLvIL0O
-         ASVYFKQYjC1Zlrgc9J3BcBcHN17VAlpWrYVYwPGVgDzyslRdwv/C+Gw2NZSSwpVF6APo
-         QkEZLT53LoLpU3DMCeFD76LNhfEwzVNFiRY0z/puP0WKrZd3miObp8OhbHUiYK1bFoM5
-         ErVuEQIAVWd0f4B2TMXmgLMJ4hUPLVL7CHjEILP9ZlXE4DGlfWMnbH0Rc0ReL/554GeQ
-         vC/Q==
-X-Gm-Message-State: AO0yUKXBJsjLEZbE3J++iVBI6ojMFpW1sEuEy7LcdG2wuMLL/3dqgWs2
-        +ysYCPfDUEk9lFNoHnbUuII=
-X-Google-Smtp-Source: AK7set8c84uHAkq4MtaFVRHC3YXK22SqDEUPVWFCrcEGkReUCFOEGDytzQLUpjDl0h1WyuxwlB4GEw==
-X-Received: by 2002:a17:903:234a:b0:1a0:51d4:f055 with SMTP id c10-20020a170903234a00b001a051d4f055mr2499980plh.49.1678943997153;
-        Wed, 15 Mar 2023 22:19:57 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1678944002;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=cnS/2L5eapvwqGTZQsUuWuWrYgLcDrvgqwnYFYygers=;
+        b=ETdVZNVcPRt32zKHYi7IgqD/3ui8R/b2t9bacTQwURSfL3vm0vPl4AkGPprOVJq2+T
+         C6qSL7B0NRp9/Vx6u9FBB+V0JvK0XLkQ79zHqnvE/M5KEC68n0tHRCZ2CyK58cofJCzO
+         pMkHT+SKnuL1gG6Hzg2ySG73SH4J24QrJnqrPTLVXTLoNvbcD/WSNHY9bzLBk4gEcF1L
+         mFxJe70y+IJUL8nkEin1y93R0IodKU5txq2Fm6oujOExX0k02VCRm+zKoPV8R+YOZ5Ex
+         JY+oHJJQPccpxCb0VKMC8/+xN4Z7M/pGejgMZ9hphDGXI8ejEGsQUqmBHGYhEiPXB3t7
+         4B7g==
+X-Gm-Message-State: AO0yUKVDUN+i1ctotz/1Qv/adkJs7MBVmHyev5ZVXCIKctwj9N7LH4sW
+        myB1MQZDpcWtXHxg4jMy4gzMEvld2LE418mG+D0=
+X-Google-Smtp-Source: AK7set9cI/OHaF/cbDFfzC0cU9Z94ikfd7AyHCR0H2ZEwPcKdsECly1zQatRRbZthu1DOkP6YL7UfA==
+X-Received: by 2002:a17:902:ce92:b0:19c:fd73:5586 with SMTP id f18-20020a170902ce9200b0019cfd735586mr2269077plg.38.1678944002224;
+        Wed, 15 Mar 2023 22:20:02 -0700 (PDT)
 Received: from d.home.yangfl.dn42 ([104.28.213.199])
-        by smtp.gmail.com with ESMTPSA id jh1-20020a170903328100b0019a593e45f1sm4475708plb.261.2023.03.15.22.19.53
+        by smtp.gmail.com with ESMTPSA id jh1-20020a170903328100b0019a593e45f1sm4475708plb.261.2023.03.15.22.19.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Mar 2023 22:19:56 -0700 (PDT)
+        Wed, 15 Mar 2023 22:20:02 -0700 (PDT)
 From:   David Yang <mmyangfl@gmail.com>
 To:     mmyangfl@gmail.com
 Cc:     Wei Xu <xuwei5@hisilicon.com>,
         Russell King <linux@armlinux.org.uk>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 0/3] ARM: hisi: Support Hi3798 SoC
-Date:   Thu, 16 Mar 2023 13:19:32 +0800
-Message-Id: <20230316051936.1775033-1-mmyangfl@gmail.com>
+Subject: [PATCH 1/3] ARM: hisi: Add S40 IO map
+Date:   Thu, 16 Mar 2023 13:19:33 +0800
+Message-Id: <20230316051936.1775033-2-mmyangfl@gmail.com>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230316051936.1775033-1-mmyangfl@gmail.com>
+References: <20230316051936.1775033-1-mmyangfl@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -70,22 +73,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series enables booting Hi3798 SoCs.
+Hisilion S40 platform supports ARM Cortex-A9 processors.
 
-David Yang (3):
-  ARM: hisi: Add S40 IO map
-  ARM: hisi: Add S5 IO map
-  ARM: hisi: Support Hi3798 SoC
+Signed-off-by: David Yang <mmyangfl@gmail.com>
+---
+ arch/arm/mach-hisi/hisilicon.c | 33 +++++++++++++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
 
- arch/arm/mach-hisi/Makefile    |   2 +-
- arch/arm/mach-hisi/core.h      |   6 ++
- arch/arm/mach-hisi/headsmp.S   |  36 ++++++++++
- arch/arm/mach-hisi/hisilicon.c |  70 ++++++++++++++++++
- arch/arm/mach-hisi/hotplug.c   | 120 +++++++++++++++++++++++++++++--
- arch/arm/mach-hisi/platsmp.c   | 128 +++++++++++++++++++++++++++++++++
- 6 files changed, 357 insertions(+), 5 deletions(-)
- create mode 100644 arch/arm/mach-hisi/headsmp.S
-
+diff --git a/arch/arm/mach-hisi/hisilicon.c b/arch/arm/mach-hisi/hisilicon.c
+index b8d14b369..9f56b0f56 100644
+--- a/arch/arm/mach-hisi/hisilicon.c
++++ b/arch/arm/mach-hisi/hisilicon.c
+@@ -50,3 +50,36 @@ DT_MACHINE_START(HI3620, "Hisilicon Hi3620 (Flattened Device Tree)")
+ 	.map_io		= hi3620_map_io,
+ 	.dt_compat	= hi3xxx_compat,
+ MACHINE_END
++
++#define S40_IOCH1_PHYS_BASE		0xf8000000
++#define S40_IOCH1_VIRT_BASE		0xf9000000
++#define S40_IOCH1_SIZE			0x02000000
++
++static struct map_desc s40_io_desc[] __initdata = {
++	{
++		.pfn		= __phys_to_pfn(S40_IOCH1_PHYS_BASE),
++		.virtual	= S40_IOCH1_VIRT_BASE,
++		.length		= S40_IOCH1_SIZE,
++		.type		= MT_DEVICE,
++	},
++};
++
++static void __init s40_map_io(void)
++{
++	debug_ll_io_init();
++	iotable_init(s40_io_desc, ARRAY_SIZE(s40_io_desc));
++}
++
++static const char *const s40_compat[] __initconst = {
++	"hisilicon,hi3798cv200",
++	"hisilicon,hi3796mv200",
++	"hisilicon,hi3798cv200",
++	"hisilicon,hi3798mv200",
++	"hisilicon,hi3798mv300",
++	NULL,
++};
++
++DT_MACHINE_START(S40, "Hisilicon S40 (Flattened Device Tree)")
++	.map_io		= s40_map_io,
++	.dt_compat	= s40_compat,
++MACHINE_END
 -- 
 2.39.2
 
