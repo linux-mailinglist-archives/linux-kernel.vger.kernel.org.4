@@ -2,187 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBC936BD9B3
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 21:00:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B9206BD9B9
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 21:00:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230212AbjCPUAB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 16:00:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47022 "EHLO
+        id S229616AbjCPUAv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 16:00:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230152AbjCPT7w (ORCPT
+        with ESMTP id S229534AbjCPUAe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 15:59:52 -0400
-Received: from mail-oo1-xc31.google.com (mail-oo1-xc31.google.com [IPv6:2607:f8b0:4864:20::c31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48A77B53FF;
-        Thu, 16 Mar 2023 12:59:22 -0700 (PDT)
-Received: by mail-oo1-xc31.google.com with SMTP id n3-20020a4ad403000000b0053351dadc20so418209oos.13;
-        Thu, 16 Mar 2023 12:59:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678996748;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=iJcydj5yu12eDXGAVXNpWYkjn09kXGYM+OpHShhhGtQ=;
-        b=M5Exo1aemhXIC+NICj+3t+mFNugig8zOaYV1viHiIlM8w1p5Wgm4MVqvTuRz3CDl/7
-         Tn2toe6g4WjeP/F5BdcHxm+0egf+oXDHbaAbAz1aBqAtJ24oaEAF6BpUqJvfdo3FfX2N
-         etDByyXvad0ZKSrlbh/6K91BaoQlWZ6M4IR1QSv2MZ50iUFP3aM2LgKUJe0ErSE+pTKP
-         0m/Ebc/US0hhKnstBMta1soZKC2I8BJvowj+VjydpB+Vm2NeUn8X52j9q0MV3hWL3vi5
-         LzPb+PteZ/g2kQR6TJ4VjjYZE1M40YFZcsOv7qAUoacDJwRvZVeh4bKNhNq30dyz0mds
-         20Pg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678996748;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iJcydj5yu12eDXGAVXNpWYkjn09kXGYM+OpHShhhGtQ=;
-        b=PEJwUjtP7xvL9mWHWWsyR5qv5Tt4MH3V6akLeDBEhTv9LtuiVc+WSi05oRQOefuuzh
-         ZgDmfdb8OcVweynzGiI0BnbUSTYfoUVbHnuShvONuzp6lO3KhLWH32FHxQSp/nSmdPqt
-         IpF2FTogqLq0gxuzNSCS+41e4qYGGvDMx0TN4RRB3wfDBCPqs8ETkdxiHAmT7F/6kOSV
-         upvUPE4aYNT5PLM+F6yd05P4ZSEksF7Bj32ujGMl6AZoiZn0JDPFW++PmPSY244W2r4g
-         ACT9T7MWfk0S0bv2t8wE/LU14U2IraimDE1kSQ5eMVRhfiRpaHXtO3dQC9hmW9buQS+3
-         xuSQ==
-X-Gm-Message-State: AO0yUKU7bJn3Zz4z3PphWqiyyKzrWA5GJdLL0bWB8xN2LBZtloxj0c2P
-        pRighBgiY0cUpc1YWFReims=
-X-Google-Smtp-Source: AK7set873rjkScAW0PvvWNiDaSas6qVsx1V6E8+/VvR9+EWZwsiZipOMHLmvwH/oCotxf2TSkVj+8g==
-X-Received: by 2002:a4a:6552:0:b0:534:c38a:dafd with SMTP id z18-20020a4a6552000000b00534c38adafdmr3319661oog.6.1678996747844;
-        Thu, 16 Mar 2023 12:59:07 -0700 (PDT)
-Received: from neuromancer. (76-244-6-13.lightspeed.rcsntx.sbcglobal.net. [76.244.6.13])
-        by smtp.gmail.com with ESMTPSA id c11-20020a4ae24b000000b005255e556399sm3620572oot.43.2023.03.16.12.59.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Mar 2023 12:59:07 -0700 (PDT)
-Message-ID: <6413750b.4a0a0220.cfd67.2a0b@mx.google.com>
-X-Google-Original-Message-ID: <ZBN1CGjW8ltuGavP@neuromancer.>
-Date:   Thu, 16 Mar 2023 14:59:04 -0500
-From:   Chris Morgan <macroalpha82@gmail.com>
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc:     linux-wireless@vger.kernel.org,
-        Yan-Hsuan Chuang <tony0620emma@gmail.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-mmc@vger.kernel.org, Nitin Gupta <nitin.gupta981@gmail.com>,
-        Neo Jou <neojou@gmail.com>, Pkshih <pkshih@realtek.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>
-Subject: Re: [PATCH v2 RFC 9/9] wifi: rtw88: Add support for the SDIO based
- RTL8821CS chipset
-References: <20230310202922.2459680-1-martin.blumenstingl@googlemail.com>
- <20230310202922.2459680-10-martin.blumenstingl@googlemail.com>
+        Thu, 16 Mar 2023 16:00:34 -0400
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6BA5CC309;
+        Thu, 16 Mar 2023 13:00:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+        bh=1+em3CxVhuR3t6hBfQ8ylZ5mFdk8mfxa3UhWs5bbebE=; b=jnfTLbEYvHHYc0U0zB3DuCNep9
+        VQUjClUzHpq6rCcIiW8MhZBjnyv1nSpWEGrOzwVtrLyDwxtMWEqU/2rj48STQjv+k14/9EaXBcmgi
+        sV61H+eMBJHKSn4mo5GbdWuV5UlK/ozBf/KO/CKgeEKGEzM8CCMuOiwOJMI6ObdjTTB3JsCMYkHgi
+        yZ1rIrtCpgy2ZEABBuS7URmVOsapvfSIYwhczA2gEESMwKyd9tggTRZHlDpFjEgf/NRXVax5yz8Z5
+        y5TWju9TY+Qj5SHP9hADSMEIyNjWprGlOKKfMMzptm+Bd5vjbM/vWKz5sqTKQ4j4GDPNUfl/oxobQ
+        jYRmVdFw==;
+Received: from sslproxy04.your-server.de ([78.46.152.42])
+        by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1pctkx-000GR8-FZ; Thu, 16 Mar 2023 20:59:23 +0100
+Received: from [85.1.206.226] (helo=linux.home)
+        by sslproxy04.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1pctkw-0003g0-Nf; Thu, 16 Mar 2023 20:59:22 +0100
+Subject: Re: [PATCHv3 bpf-next 9/9] selftests/bpf: Add file_build_id test
+To:     Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Hao Luo <haoluo@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>
+Cc:     bpf@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Namhyung Kim <namhyung@gmail.com>,
+        Dave Chinner <david@fromorbit.com>
+References: <20230316170149.4106586-1-jolsa@kernel.org>
+ <20230316170149.4106586-10-jolsa@kernel.org>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <478a8e03-dea3-ebca-8376-6b7e3b616b5e@iogearbox.net>
+Date:   Thu, 16 Mar 2023 20:59:21 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230310202922.2459680-10-martin.blumenstingl@googlemail.com>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230316170149.4106586-10-jolsa@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.8/26845/Thu Mar 16 19:16:15 2023)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 10, 2023 at 09:29:22PM +0100, Martin Blumenstingl wrote:
-> Wire up RTL8821CS chipset support using the new rtw88 SDIO HCI code as
-> well as the existing RTL8821C chipset code.
+On 3/16/23 6:01 PM, Jiri Olsa wrote:
+> The test attaches bpf program to sched_process_exec tracepoint
+> and gets build of executed file from bprm->file object.
 > 
-> Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-> ---
-> Changes since v1:
-> - use /* ... */ style for copyright comments
+> We use urandom_read as the test program and in addition we also
+> attach uprobe to liburandom_read.so:urandlib_read_without_sema
+> and retrieve and check build id of that shared library.
 > 
+> Also executing the no_build_id binary to verify the bpf program
+> gets the error properly.
 > 
->  drivers/net/wireless/realtek/rtw88/Kconfig    | 11 ++++++
->  drivers/net/wireless/realtek/rtw88/Makefile   |  3 ++
->  .../net/wireless/realtek/rtw88/rtw8821cs.c    | 35 +++++++++++++++++++
->  3 files changed, 49 insertions(+)
->  create mode 100644 drivers/net/wireless/realtek/rtw88/rtw8821cs.c
-> 
-> diff --git a/drivers/net/wireless/realtek/rtw88/Kconfig b/drivers/net/wireless/realtek/rtw88/Kconfig
-> index 6b65da81127f..29eb2f8e0eb7 100644
-> --- a/drivers/net/wireless/realtek/rtw88/Kconfig
-> +++ b/drivers/net/wireless/realtek/rtw88/Kconfig
-> @@ -133,6 +133,17 @@ config RTW88_8821CE
->  
->  	  802.11ac PCIe wireless network adapter
->  
-> +config RTW88_8821CS
-> +	tristate "Realtek 8821CS SDIO wireless network adapter"
-> +	depends on MMC
-> +	select RTW88_CORE
-> +	select RTW88_SDIO
-> +	select RTW88_8821C
-> +	help
-> +	  Select this option will enable support for 8821CS chipset
-> +
-> +	  802.11ac SDIO wireless network adapter
-> +
->  config RTW88_8821CU
->  	tristate "Realtek 8821CU USB wireless network adapter"
->  	depends on USB
-> diff --git a/drivers/net/wireless/realtek/rtw88/Makefile b/drivers/net/wireless/realtek/rtw88/Makefile
-> index 6105c2745bda..82979b30ae8d 100644
-> --- a/drivers/net/wireless/realtek/rtw88/Makefile
-> +++ b/drivers/net/wireless/realtek/rtw88/Makefile
-> @@ -59,6 +59,9 @@ rtw88_8821c-objs		:= rtw8821c.o rtw8821c_table.o
->  obj-$(CONFIG_RTW88_8821CE)	+= rtw88_8821ce.o
->  rtw88_8821ce-objs		:= rtw8821ce.o
->  
-> +obj-$(CONFIG_RTW88_8821CS)	+= rtw88_8821cs.o
-> +rtw88_8821cs-objs		:= rtw8821cs.o
-> +
->  obj-$(CONFIG_RTW88_8821CU)	+= rtw88_8821cu.o
->  rtw88_8821cu-objs		:= rtw8821cu.o
->  
-> diff --git a/drivers/net/wireless/realtek/rtw88/rtw8821cs.c b/drivers/net/wireless/realtek/rtw88/rtw8821cs.c
+> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+[...]
+> diff --git a/tools/testing/selftests/bpf/progs/file_build_id.c b/tools/testing/selftests/bpf/progs/file_build_id.c
 > new file mode 100644
-> index 000000000000..7ad7c13ac9e6
+> index 000000000000..6dc10c8e17ac
 > --- /dev/null
-> +++ b/drivers/net/wireless/realtek/rtw88/rtw8821cs.c
-> @@ -0,0 +1,35 @@
-> +// SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause
-> +/* Copyright(c) Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-> + */
+> +++ b/tools/testing/selftests/bpf/progs/file_build_id.c
+> @@ -0,0 +1,70 @@
+> +// SPDX-License-Identifier: GPL-2.0
 > +
-> +#include <linux/mmc/sdio_func.h>
-> +#include <linux/mmc/sdio_ids.h>
-> +#include <linux/module.h>
-> +#include "sdio.h"
-> +#include "rtw8821c.h"
+> +#include "vmlinux.h"
+> +#include "err.h"
+> +#include <bpf/bpf_helpers.h>
+> +#include <bpf/bpf_tracing.h>
+> +#include <linux/string.h>
 > +
-> +static const struct sdio_device_id rtw_8821cs_id_table[] =  {
-> +	{
-> +		SDIO_DEVICE(SDIO_VENDOR_ID_REALTEK,
-> +			    SDIO_DEVICE_ID_REALTEK_RTW8821CS),
-> +		.driver_data = (kernel_ulong_t)&rtw8821c_hw_spec,
-> +	},
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(sdio, rtw_8821cs_id_table);
+> +char _license[] SEC("license") = "GPL";
 > +
-> +static struct sdio_driver rtw_8821cs_driver = {
-> +	.name = "rtw_8821cs",
-> +	.probe = rtw_sdio_probe,
-> +	.remove = rtw_sdio_remove,
-> +	.id_table = rtw_8821cs_id_table,
-> +	.drv = {
-> +		.pm = &rtw_sdio_pm_ops,
-> +		.shutdown = rtw_sdio_shutdown,
-> +	}
-> +};
-> +module_sdio_driver(rtw_8821cs_driver);
+> +int pid;
 > +
-> +MODULE_AUTHOR("Martin Blumenstingl <martin.blumenstingl@googlemail.com>");
-> +MODULE_DESCRIPTION("Realtek 802.11ac wireless 8821cs driver");
-> +MODULE_LICENSE("Dual BSD/GPL");
-> -- 
-> 2.39.2
-> 
+> +u32 build_id_bin_size;
+> +u32 build_id_lib_size;
+> +
+> +char build_id_bin[BUILD_ID_SIZE_MAX];
+> +char build_id_lib[BUILD_ID_SIZE_MAX];
+> +
+> +long build_id_bin_err;
+> +long build_id_lib_err;
+> +
+> +static int store_build_id(struct file *file, char *build_id, u32 *sz, long *err)
+> +{
+> +	struct build_id *bid;
+> +
+> +	bid = file->f_build_id;
+> +	if (IS_ERR_OR_NULL(bid)) {
 
-Overall it works well for me, but when I resume from suspend I get the
-following filling up my dmesg:
+I think you might need to enable this also in the CI config:
 
-rtw_8821cs mmc3:0001:1: sdio read8 failed (0x86): -110
+   [...]
+     CLNG-BPF [test_maps] btf_dump_test_case_multidim.bpf.o
+     CLNG-BPF [test_maps] ima.bpf.o
+     CLNG-BPF [test_maps] bpf_cubic.bpf.o
+   progs/bpf_iter_task_vma_buildid.c:46:27: error: no member named 'f_build_id' in 'struct file'
+           if (IS_ERR_OR_NULL(file->f_build_id)) {
+                              ~~~~  ^
+   progs/bpf_iter_task_vma_buildid.c:51:37: error: no member named 'f_build_id' in 'struct file'
+                   __builtin_memcpy(&build_id, file->f_build_id, sizeof(*file->f_build_id));
+                                               ~~~~  ^
+   progs/bpf_iter_task_vma_buildid.c:51:63: error: no member named 'f_build_id' in 'struct file'
+                   __builtin_memcpy(&build_id, file->f_build_id, sizeof(*file->f_build_id));
+                                                                         ~~~~  ^
+   3 errors generated.
+   make: *** [Makefile:578: /tmp/work/bpf/bpf/tools/testing/selftests/bpf/bpf_iter_task_vma_buildid.bpf.o] Error 1
+   make: *** Waiting for unfinished jobs....
+   make: Leaving directory '/tmp/work/bpf/bpf/tools/testing/selftests/bpf'
+   Error: Process completed with exit code 2.
 
-So suspend/resume seems to be an issue, but otherwise it works well
-for me.
-
-Chris Morgan
+Thanks,
+Daniel
