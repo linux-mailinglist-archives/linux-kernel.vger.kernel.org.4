@@ -2,82 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9FD06BC2DC
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 01:36:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 720C36BC2E4
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 01:37:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231201AbjCPAf6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 20:35:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35666 "EHLO
+        id S229525AbjCPAhw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 20:37:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231673AbjCPAfo (ORCPT
+        with ESMTP id S229626AbjCPAho (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 20:35:44 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2308B16AE7
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 17:35:11 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Wed, 15 Mar 2023 20:37:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 449FEB3E30;
+        Wed, 15 Mar 2023 17:37:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PcStb64Qxz4x1d;
-        Thu, 16 Mar 2023 11:33:59 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1678926839;
-        bh=tVxoK8hf/XN33P1gUvO+d1PauwkQu5SvlY6VlvvJG+I=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=naebMpWVzZnTsDDVDCZvu+loLUFkGB0WVnpnOVf1RrkkzLRr65F2p2HX7qV5gH71O
-         bCmEMKta2CEf6yQjYBKBLJ+wsFfECWBBIrieoCou4jcjMP0HgC9/CJlP3lHn6EIv/E
-         34i3WR6kWLcP/AGaJrVMo482XbwaZtaUb9Gfh0kKBiti6xZFgEjZ+Op4CqB/6oDLUw
-         lWI//uuSQlxAcqcd2n2imIyIpJv22PnSxqnEynqVXhD4X2Ly4ocHgIzGmH8lR+tAti
-         L1iOQJnIlam9qUTNGbeP7fJyZ5PPX6sP5s0NjQO5qjtQD9XTbcGiKp8lIC9Wdersg2
-         o+F5WIBKg2JWw==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Andrea Righi <andrea.righi@canonical.com>
-Cc:     Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Oleg Nesterov <oleg@redhat.com>, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: boot regression on ppc64 with linux 6.2
-In-Reply-To: <ZBFhUAlL+1ZVKcwQ@righiandr-XPS-13-7390>
-References: <ZA7oJr1/Z4vzWy4N@righiandr-XPS-13-7390>
- <878rfyofma.fsf@mpe.ellerman.id.au>
- <ZBFhUAlL+1ZVKcwQ@righiandr-XPS-13-7390>
-Date:   Thu, 16 Mar 2023 11:33:59 +1100
-Message-ID: <87zg8dmt54.fsf@mpe.ellerman.id.au>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ABA1661ECD;
+        Thu, 16 Mar 2023 00:37:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 142F9C433D2;
+        Thu, 16 Mar 2023 00:37:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678927051;
+        bh=u/ft7HTwZ+Z6VuhAoZZItau7bQuBduCh0LEE7+zRQUo=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=Cp05I6EpWB8tsUhJYtUzoxh1XY60cptZy5ImwIXljSlbkA7cdWNPvuBMKmA7w7k2w
+         1cs1ugze9/9bHS3ukrZaeV+soeg3FfEVUH9KKiC+VzJ5IqBghikduhxzi5xe5tIgiV
+         k2UQJYMv7uBo8W10L52pvo3tx2HQ7Bh/r0P64dsJBI67mhAHU/wOMzcdF+YuYLadSb
+         /lNayIgYjuYhbkZbEtKsYB3hHmK4ERYT6mxJmDPsaSAlkWpfWHfEUiytH8AerkYS6j
+         hSyyO+R+zI88WaEUB4l0WaLAEvD2EV7UmLI5wnXLFLnSTNh3+VKRiOxr7L3Dds0FVv
+         d+x96WqhyylIQ==
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id 96C0E1540395; Wed, 15 Mar 2023 17:37:30 -0700 (PDT)
+Date:   Wed, 15 Mar 2023 17:37:30 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
+        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>,
+        Philipp Reisner <philipp.reisner@linbit.com>,
+        Bryan Tan <bryantan@vmware.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Bob Pearson <rpearsonhpe@gmail.com>,
+        Ariel Levkovich <lariel@nvidia.com>,
+        Theodore Ts'o <tytso@mit.edu>, Julian Anastasov <ja@ssi.bg>
+Subject: Re: [PATCH 04/13] tracing: Rename kvfree_rcu() to
+ kvfree_rcu_mightsleep()
+Message-ID: <60f55a5d-213f-46b7-9294-c37f10f98252@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <20230201150815.409582-1-urezki@gmail.com>
+ <20230201150815.409582-5-urezki@gmail.com>
+ <ZAni8Q1NW9cWrvHJ@pc636>
+ <20230315183648.5164af0f@gandalf.local.home>
+ <d404a6b6-4ff9-930a-1cdc-fd730270fbe7@kernel.dk>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <d404a6b6-4ff9-930a-1cdc-fd730270fbe7@kernel.dk>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Andrea Righi <andrea.righi@canonical.com> writes:
-> On Wed, Mar 15, 2023 at 02:30:53PM +1100, Michael Ellerman wrote:
->> Andrea Righi <andrea.righi@canonical.com> writes:
->> > I'm triggering the following bug when booting my qemu powerpc VM:
->> 
->> I'm not seeing that here :/
->> 
->> Can you give a bit more detail?
->>  - qemu version
->>  - qemu command line
->>  - what userspace are you using?
->>  - full dmesg of the failing case
->
-> Yeah, ignore this for now, it could be related to another custom patch
-> that I had applied (and forgot about it sorry), this one:
-> https://lore.kernel.org/lkml/20230119155709.20d87e35.gary@garyguo.net/T/
+On Wed, Mar 15, 2023 at 05:19:18PM -0600, Jens Axboe wrote:
+> On 3/15/23 4:36 PM, Steven Rostedt wrote:
+> > On Thu, 9 Mar 2023 14:45:21 +0100
+> > Uladzislau Rezki <urezki@gmail.com> wrote:
+> > 
+> >>> The kvfree_rcu()'s single argument name is deprecated therefore
+> >>> rename it to kvfree_rcu_mightsleep() variant. The goal is explicitly
+> >>> underline that it is for sleepable contexts.
+> >>>
+> >>> Cc: Steven Rostedt (VMware) <rostedt@goodmis.org>
+> >>> Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
+> >>>  
+> >> Could you please add you reviwed-by or Acked-by tags so we can bring
+> >> our series with renaming for the next merge window?
+> > 
+> > I don't know. Perhaps we should just apply this patch and not worry about
+> > sleeping and whatnot.
 
-OK. Did you do the bisect with that patch applied though?
+That does work, and I am guessing that the size increase is not a big
+problem for you there.
 
-> That is causing other issues on ppc64, so I think it might be related to
-> that, I'll do more tests making sure I use a vanilla kernel.
+> That's a cop out, just removing the one case you care about. Fact is
+> the naming is awful, and the 1/2 argument thing is making it worse.
+> If a big change is warranted, why not do it right and ACTUALLY
+> get it right?
 
-I don't see an obvious connection between the modversions stuff and this
-crash, but I guess it's possible.
+You both do realize that the kvfree_rcu_mightsleep() definition is
+already in mainline, right?
 
-cheers
+Anyway, to sum up, kvfree_rcu_mightsleep()--or whatever the entire
+community eventually decides to name it--can do any of the following:
+
+1.	Put the pointer into an already allocated array of pointers.
+
+2.	Allocate a new array of pointers, have the allocation succeed
+	without sleeping, then put the pointer into an already allocated
+	array of pointers.
+
+3.	Allocate a new array of pointers, have the allocation succeed
+	after sleeping, then put the pointer into an already allocated
+	array of pointers.
+
+4.	Attempt to allocate a new array of pointers, have the allocation
+	fail (presumably after sleeping), then invoke synchronize_rcu()
+	directly.
+
+Too much fun!  ;-)
+
+							Thanx, Paul
