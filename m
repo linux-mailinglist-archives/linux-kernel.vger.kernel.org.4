@@ -2,129 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09D9B6BCCD0
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 11:31:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C56F66BCCD6
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 11:32:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230290AbjCPKbP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 06:31:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38826 "EHLO
+        id S229596AbjCPKcO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 06:32:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230138AbjCPKbH (ORCPT
+        with ESMTP id S229972AbjCPKcM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 06:31:07 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD294E1A6
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 03:31:04 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id v21so1198060ple.9
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 03:31:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678962664;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LaSPvmPSt93nNheKLzW291h2A9WkN7ApV5HQtl26YWo=;
-        b=Dum/Rq0NIjZXk/W4AndokOhgSRTJbn43U/VgkdjLexY03UtbAen3XazOP9bL6qrPrU
-         lKRDvWnpjbYPmGZ0Kv5laOAf0rQ4Ji34AZnXwwfHrvR5/k8Z7nA7QM108qg2NodWRL8K
-         qBxtxmlxF51/pMs433XPxn5ay4iJYxvaSsOwTTfEDW4HzXcJz3e7AntTwcMGXT1n3hQv
-         mSCl5Shr7oP8Kh5xvsVThMs+54hke52TVKpjjRFZaIwIuztPk9ITMiLt4g+I1nHapAKO
-         wq88L4gUhhR+YmGCQKyIEHvo4CO7+1JjO/LQRiOilV8ZwVaesXJLBKh3P7DGTtvLgiHg
-         GwTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678962664;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=LaSPvmPSt93nNheKLzW291h2A9WkN7ApV5HQtl26YWo=;
-        b=Ash75Fvat4IOs0ntqHzM9QawgV2N9rR/Hz4d4VJB5S/WgWnk+Hdjd31YrNhSCsod0l
-         d54tsBiZfCUXCNljyWtfxFUTTOJDJf2SWHxqUr8Iy7BiCxPd36gQWMjK4jdu0k9W3LzI
-         smrC7JkdaxuALmO9zqmzNVVVDVQfn80a9rG7rZ6qHY+jcsEtMVsEKSpRAZA5+vBkzZQx
-         N9B81oAObAXnBh+5NidKXHKycl8tYt8uWQkeGuJ+lXsl0WzkQ40alW/Vc9vy6TiZ26Q9
-         +WWjXxYUaICA0eKiEV68fCfkgx1BltMk6lophCcfSbOD5MMLOTc42iB41tGLahY4uA1r
-         pQAw==
-X-Gm-Message-State: AO0yUKVtYD/9nrCwy0dE6PZwdwRfSuamnfzpo8ztjhLaX7K35zTrw4tL
-        B5gCnh1hXTQnpcMumzkvkWfPAGOJQdbkVBVMZ6SJ9rJ+1KQ=
-X-Google-Smtp-Source: AK7set//MPCx+TU+7KS757Fw88kx3Hyhv3abLM5v34Lh3B3OJ3L2f8xu3/tieBZp8nOltOxRRQhy4NPGCawZvQS90Qw=
-X-Received: by 2002:a17:90a:5b01:b0:23c:fa47:e763 with SMTP id
- o1-20020a17090a5b0100b0023cfa47e763mr990712pji.0.1678962664074; Thu, 16 Mar
- 2023 03:31:04 -0700 (PDT)
+        Thu, 16 Mar 2023 06:32:12 -0400
+Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C7FE132DC
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 03:32:07 -0700 (PDT)
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20230316103204euoutp02e66e5e30aa4449bfaf31786be3a26db2~M37PGreHE1085910859euoutp027
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 10:32:04 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20230316103204euoutp02e66e5e30aa4449bfaf31786be3a26db2~M37PGreHE1085910859euoutp027
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1678962724;
+        bh=RMjrJyTwtzr03vsG7RrGU7iTtezv0HO8dRVEwqfEyzc=;
+        h=Date:Subject:To:From:In-Reply-To:References:From;
+        b=k00Oswv0DOrHXdWvUUzqt6H+EMzVeZVdgAc8QUJTHfuSpwC10cPnFT62VSRHwNZTZ
+         PRLzgIFVrTNJjS6OUkGafLPnG91Z/ZFxInXePnJHNdQxobinHIVCzy0qI9xbnAMjWj
+         rheE4y7JwIC6pQl6tCNr0tivALlGbyrjZgNBxYqk=
+Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20230316103204eucas1p2d41d0c4cdcfc010e79523152b09ff783~M37O0TBFd3193731937eucas1p2C;
+        Thu, 16 Mar 2023 10:32:04 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges3new.samsung.com (EUCPMTA) with SMTP id 98.D2.10014.320F2146; Thu, 16
+        Mar 2023 10:32:03 +0000 (GMT)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20230316103203eucas1p2adc02a5104f496cf1cbb69040bb9bb9e~M37Oay6243234432344eucas1p2S;
+        Thu, 16 Mar 2023 10:32:03 +0000 (GMT)
+Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20230316103203eusmtrp29622781fdbd5274f4b9be33a3bb3ff1f~M37OZ9lfa3232132321eusmtrp2a;
+        Thu, 16 Mar 2023 10:32:03 +0000 (GMT)
+X-AuditID: cbfec7f5-ba1ff7000000271e-f4-6412f0230c31
+Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
+        eusmgms1.samsung.com (EUCPMTA) with SMTP id 86.BD.08862.320F2146; Thu, 16
+        Mar 2023 10:32:03 +0000 (GMT)
+Received: from [106.210.134.192] (unknown [106.210.134.192]) by
+        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20230316103202eusmtip11c0f6e6b0d611898e76192da6302a9a7~M37Nk1kkE1710117101eusmtip14;
+        Thu, 16 Mar 2023 10:32:02 +0000 (GMT)
+Message-ID: <b9d3a220-e7a1-73d0-56bf-af1291cd58ee@samsung.com>
+Date:   Thu, 16 Mar 2023 11:32:01 +0100
 MIME-Version: 1.0
-References: <20230314075345.1325187-1-suagrfillet@gmail.com> <20230316092910.doolw3xiuwwakile@bogus>
-In-Reply-To: <20230316092910.doolw3xiuwwakile@bogus>
-From:   Song Shuai <suagrfillet@gmail.com>
-Date:   Thu, 16 Mar 2023 10:30:52 +0000
-Message-ID: <CAAYs2=gaTkA2f65SXkexxAUkSPxgaPNQGdkSKS4pYmJ3hO7z-Q@mail.gmail.com>
-Subject: Re: [PATCH V2] arch_topology: Clear LLC sibling when cacheinfo teardown
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     gregkh@linuxfoundation.org, rafael@kernel.org,
-        conor.dooley@microchip.com, ionela.voinescu@arm.com,
-        Pierre.Gondois@arm.com, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0)
+        Gecko/20100101 Thunderbird/102.8.0
+Subject: Re: [PATCH v4 1/2] ARM: dts: exynos: replace mshc0 alias with
+ mmc-ddr-1_8v property
+Content-Language: en-US
+To:     Henrik Grimler <henrik@grimler.se>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, alim.akhtar@samsung.com,
+        jenneron@protonmail.com, markuss.broks@gmail.com,
+        martin.juecker@gmail.com, virag.david003@gmail.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+In-Reply-To: <20230315212644.15764-2-henrik@grimler.se>
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrCKsWRmVeSWpSXmKPExsWy7djPc7rKH4RSDM63WFo8mLeNzWL+kXOs
+        Fm+X7GK02HHpAqtF34uHzBabHl9jtbi8aw6bxYzz+5gszh1Yx2xx5t9UFosFf+wsWvceYbc4
+        /v4xo8Xm738ZHfg8ds66y+5x9Mo9Vo9NqzrZPO5c28PmsXlJvcf/O2vZPXraNjF59G1Zxejx
+        eZNcAGcUl01Kak5mWWqRvl0CV0bv8p0sBV9UKxat/s3awHhCtouRk0NCwETibsMj5i5GLg4h
+        gRWMEi+2f2eDcL4wSnx8v5YJwvnMKLF5x0RWmJajM3uhEssZJXZ9XMQC4XxklPjVtJARpIpX
+        wE7i/5sNbCA2i4CqRNOjNhaIuKDEyZlPwGxRgRSJHed3s4PYwgJxEs2X28HqmQXEJW49mQ+2
+        QURgPbPE09NPwIrYBAwlut52gRVxCphL/Nh6iAmiQV5i+9s5YF9ICMznlGi4vpcZ4lYXiXdr
+        njBB2MISr45vYYewZST+74TYICHQziix4Pd9KGcCo0TD81uMEFXWEnfO/QJaxwG0QlNi/S59
+        iLCjxNF5p8HCEgJ8EjfeCkIcwScxadt0Zogwr0RHmxBEtZrErOPr4NYevHAJqsRDYsbhlAmM
+        irOQgmUWkvdnIflsFsIJCxhZVjGKp5YW56anFhvnpZbrFSfmFpfmpesl5+duYgQmvNP/jn/d
+        wbji1Ue9Q4xMHIyHGCU4mJVEeMNZBFKEeFMSK6tSi/Lji0pzUosPMUpzsCiJ82rbnkwWEkhP
+        LEnNTk0tSC2CyTJxcEo1MDV87v/81fK+c6Nxg0PntO69h1dPXSIyd1VW6BmruZIWzFuDEiq8
+        5f8ERM8Nbm2+tvbppLwE35jNqxkPXFpyf+fmkhdfPv8Im7H4zyS2PbsvJ51+tr5zguKfXsu0
+        q/nnBCbdNbiXt7/f8ETl7aONmx2Sf7RUb97fbTot4PKEZdn3uScnLdG6YMxy5NfidVc1FUTD
+        f254xW5/eaJb4kXJtSUvo4WUPfnazNl8FG9HrQnQ1n7ssPur6+bF7y8cll2WZhDOe69q3y5d
+        ObFUnt92VdPFix/y3xb6py4iH94UF/JcgPlN9US+g7MMxe+uXe3B7mJvJaWk9rwx7e6DS1P0
+        DE/nplRvz1/baMTabCabuFSJpTgj0VCLuag4EQAU9GQh5wMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrJIsWRmVeSWpSXmKPExsVy+t/xu7rKH4RSDB41SVk8mLeNzWL+kXOs
+        Fm+X7GK02HHpAqtF34uHzBabHl9jtbi8aw6bxYzz+5gszh1Yx2xx5t9UFosFf+wsWvceYbc4
+        /v4xo8Xm738ZHfg8ds66y+5x9Mo9Vo9NqzrZPO5c28PmsXlJvcf/O2vZPXraNjF59G1Zxejx
+        eZNcAGeUnk1RfmlJqkJGfnGJrVK0oYWRnqGlhZ6RiaWeobF5rJWRqZK+nU1Kak5mWWqRvl2C
+        Xkbv8p0sBV9UKxat/s3awHhCtouRk0NCwETi6MxeJhBbSGApo8SFxYYQcRmJk9MaWCFsYYk/
+        17rYuhi5gGreM0rsOX6EESTBK2An8f/NBjYQm0VAVaLpURsLRFxQ4uTMJ0A2B4eoQIrE7C4d
+        kLCwQJxE8+V2sHJmAXGJW0/mM4HMFBFYzyyxanI3O8SC7YwS57qXgl3EJmAo0fW2C6yDU8Bc
+        4sfWQ0wQ3WYSXVu7GCFseYntb+cwT2AUnIVk9ywkS2YhaZmFpGUBI8sqRpHU0uLc9NxiQ73i
+        xNzi0rx0veT83E2MwDjeduzn5h2M81591DvEyMTBeIhRgoNZSYQ3nEUgRYg3JbGyKrUoP76o
+        NCe1+BCjKTAAJjJLiSbnAxNJXkm8oZmBqaGJmaWBqaWZsZI4r2dBR6KQQHpiSWp2ampBahFM
+        HxMHp1QDU6Mbj0PB4ugVkdOOcexhvV2UezJAa0n70iMrTTUmPw64mf6xxCeQaf6EGyk/jr1/
+        UTK1uKz55wert7OMSlO2Rlm15eQ/uZPx7ceufY9yP7176rJFbkrNKf7N/GxBSTMblHXSrkic
+        U+Z53dHzser/9TZL0x9nBMPvvi9f3blil3nhQROvGSGTc+/9qr9psDNP1iFw22aOS5JBnY6y
+        7ZxKc1l5dtm+T2njk2W3uxgxr83ULMXlnK+U/5812yfK3ePzmrD37qGHB6Tsg2/V8D2aHD7b
+        JfweT97a+vO2clacQsHJW0O9YzU5rrAc0RQROHCglJ09/K9qSyTjdgmbsx0yL8rNP7qIOF69
+        t16tju2+EktxRqKhFnNRcSIAbL5+cWwDAAA=
+X-CMS-MailID: 20230316103203eucas1p2adc02a5104f496cf1cbb69040bb9bb9e
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20230315212730eucas1p1bf80678add8f33024c3655e129157adb
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20230315212730eucas1p1bf80678add8f33024c3655e129157adb
+References: <20230315212644.15764-1-henrik@grimler.se>
+        <CGME20230315212730eucas1p1bf80678add8f33024c3655e129157adb@eucas1p1.samsung.com>
+        <20230315212644.15764-2-henrik@grimler.se>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sudeep Holla <sudeep.holla@arm.com> =E4=BA=8E2023=E5=B9=B43=E6=9C=8816=E6=
-=97=A5=E5=91=A8=E5=9B=9B 09:29=E5=86=99=E9=81=93=EF=BC=9A
+Hi Henrik
+
+On 15.03.2023 22:26, Henrik Grimler wrote:
+> Previously, the mshc0 alias has been necessary so that
+> MMC_CAP_1_8V_DDR | MMC_CAP_8_BIT_DATA are set for mshc_0/mmc_0.
+> However, these capabilities should be described in the device tree so
+> that we do not have to rely on the alias.
 >
-> On Tue, Mar 14, 2023 at 03:53:45PM +0800, Song Shuai wrote:
-> > The teardown of CPUHP_AP_BASE_CACHEINFO_ONLINE now only invokes
-> > free_cache_attributes() to clear share_cpu_map of cacheinfo list.
-> > At the same time, clearing cpu_topology[].llc_sibling is
-> > called quite late at the teardown code in hotplug STARTING section.
-> >
-> > To avoid the incorrect LLC sibling masks generated, move its clearing
-> > right after free_cache_attributes().
-> >
+> The property mmc-ddr-1_8v replaces MMC_CAP_1_8V_DDR, while bus_width =
+> <8>, which is already set for all the mshc0/mmc0 nodes, replaces
+> MMC_CAP_8_BIT_DATA.
 >
-> Technically in terms of flow/timing this is correct. However I would like
-> to know if you are seeing any issues without this change ?
+> Also drop other mshc aliases as they are not needed.
 >
-> Technically, if a cpu is hotplugged out, the cacheinfo is reset first
-> and then the topology. Until the cpu is removes, the LLC info in the
-> topology is still valid. Also I am not sure if anything gets scheduled
-> and this LLC info is utilised once the teardown of CPUHP_AP_BASE_CACHEINF=
-O_ONLINE
-> has started.
-
-There is no visible issue in the entire offline process(eg: echo 0 > online=
-).
-
-However, when I hotplugged out the CPU into the state before CACHEINFO_ONLI=
-NE on
-my kernel with the CONFIG_CPU_HOTPLUG_STATE_CONTROL configured,
-the share_cpu_map had been updated but llc_sibling had not, which
-would result in a trivial issue:
-
-At the end of stepped hotplugging out, the cpuset_hotplug_work would
-be flushed and then sched domain would be rebuilt
-where the **cpu_coregroup_mask** in sched_domain_topology got
-incorrect llc_sibling,
-but the result of rebuilding was correct due to the protection of
-cpu_active_mask.
-
-The stepped hotplugging may not be used in the production environment,
-but the issue existed.
-Even in the entire offline process, it's possible that a future user
-gets wrong the llc_sibling when accessing it concurrently or right
-after the teardown of CACHEINFO_ONLINE.
-
+> Signed-off-by: Henrik Grimler <henrik@grimler.se>
+> ---
 >
-> So I am trying to understand if we really need this change. Please let me
-> know if I am missing anything here.
+> Changes since v3:
+> * Drop attempt at node sorting/cleaning
+> * Move two mmc alias additions to the other patch
+> * Update commit message
 >
-> --
-> Regards,
-> Sudeep
+> Changes since v2:
+> * Set mmc-ddr-1_8v in device trees for mshc_0/mmc_0
+>
+>   arch/arm/boot/dts/exynos3250-artik5.dtsi            | 1 +
+>   arch/arm/boot/dts/exynos3250-monk.dts               | 1 +
+>   arch/arm/boot/dts/exynos3250-rinato.dts             | 1 +
+>   arch/arm/boot/dts/exynos4210-i9100.dts              | 1 +
+>   arch/arm/boot/dts/exynos4210-origen.dts             | 1 +
+>   arch/arm/boot/dts/exynos4210-trats.dts              | 1 +
+>   arch/arm/boot/dts/exynos4210-universal_c210.dts     | 1 +
+>   arch/arm/boot/dts/exynos4412-itop-scp-core.dtsi     | 1 +
+>   arch/arm/boot/dts/exynos4412-midas.dtsi             | 1 +
+>   arch/arm/boot/dts/exynos4412-odroid-common.dtsi     | 1 +
+>   arch/arm/boot/dts/exynos4412-origen.dts             | 1 +
+>   arch/arm/boot/dts/exynos4412-p4note.dtsi            | 1 +
+>   arch/arm/boot/dts/exynos4412.dtsi                   | 1 -
+>   arch/arm/boot/dts/exynos5250-arndale.dts            | 1 +
+>   arch/arm/boot/dts/exynos5250-smdk5250.dts           | 1 +
+>   arch/arm/boot/dts/exynos5250-snow-common.dtsi       | 1 +
+>   arch/arm/boot/dts/exynos5250-spring.dts             | 1 +
+>   arch/arm/boot/dts/exynos5250.dtsi                   | 4 ----
+>   arch/arm/boot/dts/exynos5260-xyref5260.dts          | 1 +
+>   arch/arm/boot/dts/exynos5410-odroidxu.dts           | 1 +
+>   arch/arm/boot/dts/exynos5410-smdk5410.dts           | 1 +
+>   arch/arm/boot/dts/exynos5420-arndale-octa.dts       | 1 +
+>   arch/arm/boot/dts/exynos5420-galaxy-tab-common.dtsi | 1 +
+>   arch/arm/boot/dts/exynos5420-peach-pit.dts          | 1 +
+>   arch/arm/boot/dts/exynos5420-smdk5420.dts           | 1 +
+>   arch/arm/boot/dts/exynos5420.dtsi                   | 3 ---
+>   arch/arm/boot/dts/exynos5422-odroidxu3-common.dtsi  | 1 +
+>   arch/arm/boot/dts/exynos5422-samsung-k3g.dts        | 1 +
+>   arch/arm/boot/dts/exynos5800-peach-pi.dts           | 1 +
+>   29 files changed, 26 insertions(+), 8 deletions(-)
+>
+
+> ...
+
+> diff --git a/arch/arm/boot/dts/exynos4210-i9100.dts b/arch/arm/boot/dts/exynos4210-i9100.dts
+> index bba85011ecc9..a370a5fa20d8 100644
+> --- a/arch/arm/boot/dts/exynos4210-i9100.dts
+> +++ b/arch/arm/boot/dts/exynos4210-i9100.dts
+> @@ -776,6 +776,7 @@ &sdhci_0 {
+>   	status = "okay";
+>   
+>   	bus-width = <8>;
+> +	mmc-ddr-1_8v;
+>   	non-removable;
+>   	vmmc-supply = <&vemmc_reg>;
+>   
+> diff --git a/arch/arm/boot/dts/exynos4210-origen.dts b/arch/arm/boot/dts/exynos4210-origen.dts
+> index 1103e7f92b57..d8dd13ce29e1 100644
+> --- a/arch/arm/boot/dts/exynos4210-origen.dts
+> +++ b/arch/arm/boot/dts/exynos4210-origen.dts
+> @@ -326,6 +326,7 @@ max8997_irq: max8997-irq-pins {
+>   
+>   &sdhci_0 {
+>   	bus-width = <4>;
+> +	mmc-ddr-1_8v;
+>   	pinctrl-0 = <&sd0_clk &sd0_cmd &sd0_bus4 &sd0_cd>;
+>   	pinctrl-names = "default";
+>   	vmmc-supply = <&mmc_reg>;
+> diff --git a/arch/arm/boot/dts/exynos4210-trats.dts b/arch/arm/boot/dts/exynos4210-trats.dts
+> index b8e9dd23fc51..d757228a5676 100644
+> --- a/arch/arm/boot/dts/exynos4210-trats.dts
+> +++ b/arch/arm/boot/dts/exynos4210-trats.dts
+> @@ -491,6 +491,7 @@ &rtc {
+>   
+>   &sdhci_0 {
+>   	bus-width = <8>;
+> +	mmc-ddr-1_8v;
+>   	non-removable;
+>   	pinctrl-0 = <&sd0_clk &sd0_cmd &sd0_bus8>;
+>   	pinctrl-names = "default";
+> diff --git a/arch/arm/boot/dts/exynos4210-universal_c210.dts b/arch/arm/boot/dts/exynos4210-universal_c210.dts
+> index 140abfb38e1d..57dbed908131 100644
+> --- a/arch/arm/boot/dts/exynos4210-universal_c210.dts
+> +++ b/arch/arm/boot/dts/exynos4210-universal_c210.dts
+> @@ -584,6 +584,7 @@ &rtc {
+>   
+>   &sdhci_0 {
+>   	bus-width = <8>;
+> +	mmc-ddr-1_8v;
+>   	non-removable;
+>   	pinctrl-0 = <&sd0_clk &sd0_cmd &sd0_bus8>;
+>   	pinctrl-names = "default";
+
+SDHCI is a different MMC controller than MSHC (DW-MMC), so please drop 
+the above changes as they break SDHCI based MMC device operation (tested 
+on Exynos4210 based Trats). With that fixed, feel free to add:
+
+Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
 
 
+Best regards
+-- 
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
 
---=20
-Thanks,
-Song
