@@ -2,155 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76F466BD9E8
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 21:11:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 601B56BD9EF
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 21:12:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230163AbjCPUK7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 16:10:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39150 "EHLO
+        id S230134AbjCPUMg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 16:12:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229589AbjCPUK5 (ORCPT
+        with ESMTP id S229682AbjCPUMe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 16:10:57 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 023BBDDF1B
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 13:10:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678997410;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=S/vpb1xIhX2vQ4kvOXzbDy79AECXzJiS3LlCu83SQPk=;
-        b=XwrgE2d60pQh6EIczn9Bnjhe0gACfrJ1HrVgRpZpf+Wv3oQbAi2jvN2CV6lPW6L9hzeT3U
-        1SxjezQkpZCJG5HgSYQg9ymVxDclLOP+T5P/y9Iay9JTvGC/C0YyekS631MqCUC+Z5OkSz
-        OKy7yPfAko3OJ31ZTTVH9oHSUIYZuOQ=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-57-HftELBHGMLGdRfiQOeu9dw-1; Thu, 16 Mar 2023 16:10:09 -0400
-X-MC-Unique: HftELBHGMLGdRfiQOeu9dw-1
-Received: by mail-ed1-f71.google.com with SMTP id t26-20020a50d71a000000b005003c5087caso3276336edi.1
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 13:10:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678997405;
-        h=content-transfer-encoding:mime-version:message-id:date:references
-         :in-reply-to:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=S/vpb1xIhX2vQ4kvOXzbDy79AECXzJiS3LlCu83SQPk=;
-        b=PP4NUh+uUZbRXm5oPhOB2Ws0nPoXJyq5l4psXo90fN+mzGimzWyrjZPLYOoyJkgBtg
-         NS8qQStSrQFvZ3HLnxbFVmcAZ7FHHN+UcL9/wfWMhiAN2csQ52K1iQ61+pXKYbss8kUl
-         GqTxUvk7h60kdIvv1u3KEu9D3dAgoJW1jKtvZR410eo8xJQiY4F+uO4lDzz06fEtCXTV
-         Yb2IavnpUYr7tprRI/pXMV7gqigKPX00j3Yy2vbUl0pbLLfCP5+0+zHTqJYhcN71Az7B
-         EyD6xgYnyH3dUaiomB8KsUC/vLEwcH3bSP9K7WfaW6qHqcxUlzf/0aq+wRCG9yLIt+6h
-         ft0w==
-X-Gm-Message-State: AO0yUKWGLywnsY6coCNBOeJFUoLU5QTFcqG+BgTJSW99OCyiypk2RoOy
-        +44QOw902jmeKfGmHuFXVBNSJ94LP/Qji/rn/P+hFqwHk77nJgmT5aLaNIef7kFkLbzyV/vA4Su
-        skYfV1IWXe6/1a/vxN0cK/lyq
-X-Received: by 2002:aa7:d38e:0:b0:4a3:43c1:8430 with SMTP id x14-20020aa7d38e000000b004a343c18430mr639551edq.4.1678997404829;
-        Thu, 16 Mar 2023 13:10:04 -0700 (PDT)
-X-Google-Smtp-Source: AK7set/KstoAnY5wxPAVV6js2FmqK22PG2bWRxtvBjMEP5kEuMnnvnnbw/ckF/EqlkBmUW/RWKO0lQ==
-X-Received: by 2002:aa7:d38e:0:b0:4a3:43c1:8430 with SMTP id x14-20020aa7d38e000000b004a343c18430mr639493edq.4.1678997403848;
-        Thu, 16 Mar 2023 13:10:03 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
-        by smtp.gmail.com with ESMTPSA id q28-20020a50aa9c000000b004fb556e905fsm203845edc.49.2023.03.16.13.10.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Mar 2023 13:10:03 -0700 (PDT)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 7E9919E30A4; Thu, 16 Mar 2023 21:10:02 +0100 (CET)
-From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To:     Alexander Lobakin <aleksander.lobakin@intel.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>
-Cc:     Alexander Lobakin <aleksander.lobakin@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Larysa Zaremba <larysa.zaremba@intel.com>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Song Liu <song@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: fix "metadata marker"
- getting overwritten by the netstack
-In-Reply-To: <20230316175051.922550-3-aleksander.lobakin@intel.com>
-References: <20230316175051.922550-1-aleksander.lobakin@intel.com>
- <20230316175051.922550-3-aleksander.lobakin@intel.com>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date:   Thu, 16 Mar 2023 21:10:02 +0100
-Message-ID: <875yb0a25h.fsf@toke.dk>
+        Thu, 16 Mar 2023 16:12:34 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4330EE193A;
+        Thu, 16 Mar 2023 13:12:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D882EB8234A;
+        Thu, 16 Mar 2023 20:12:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D10B9C433EF;
+        Thu, 16 Mar 2023 20:12:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678997550;
+        bh=aVKFhVYxDwxQfxrSuIzE8aVSFP2JSCdE26VT7FUCnes=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nRHXAN89HeDXuyyPlAdXiD6tB51zPZGWpAh8J9Ni4lm/ylqi3s8VZXQY6yrMVZ7sW
+         94YTfqrzPhIh6XTIJYZxn+K3cthdlvLqm1C+VXSdSpWt07zo0jBN+rl+KSGc13RTqT
+         0U072E3JMiG4u/5i5Tg2+Og9HnhtafWi5gBH31kY8XvBMZ2hRmqIuddUh1Q1nOPnia
+         PczKkteoP/fj0/qc3yIz3gzNCOg18RcB7SwZxFlgXYNWiumeu4/AiAqUGfpwbs/+Rc
+         +GGnxorVv7bd5gxBNLBycpc3aWr8L8s8tNv+KQxRUs8gFqY/YpwaTekGlVFEvXO3d9
+         Orclfio6PwZxQ==
+Date:   Thu, 16 Mar 2023 22:12:14 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Alexandre Ghiti <alexghiti@rivosinc.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Anup Patel <anup@brainfault.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCH v8 2/4] mm: Introduce memblock_isolate_memory
+Message-ID: <ZBN4Hoo99DNd5wKx@kernel.org>
+References: <20230316131711.1284451-1-alexghiti@rivosinc.com>
+ <20230316131711.1284451-3-alexghiti@rivosinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230316131711.1284451-3-alexghiti@rivosinc.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Alexander Lobakin <aleksander.lobakin@intel.com> writes:
+Hi Alexandre,
 
-> Alexei noticed xdp_do_redirect test on BPF CI started failing on
-> BE systems after skb PP recycling was enabled:
->
-> test_xdp_do_redirect:PASS:prog_run 0 nsec
-> test_xdp_do_redirect:PASS:pkt_count_xdp 0 nsec
-> test_xdp_do_redirect:PASS:pkt_count_zero 0 nsec
-> test_xdp_do_redirect:FAIL:pkt_count_tc unexpected pkt_count_tc: actual
-> 220 !=3D expected 9998
-> test_max_pkt_size:PASS:prog_run_max_size 0 nsec
-> test_max_pkt_size:PASS:prog_run_too_big 0 nsec
-> close_netns:PASS:setns 0 nsec
->  #289 xdp_do_redirect:FAIL
-> Summary: 270/1674 PASSED, 30 SKIPPED, 1 FAILED
->
-> and it doesn't happen on LE systems.
-> Ilya then hunted it down to:
->
->  #0  0x0000000000aaeee6 in neigh_hh_output (hh=3D0x83258df0,
-> skb=3D0x88142200) at linux/include/net/neighbour.h:503
->  #1  0x0000000000ab2cda in neigh_output (skip_cache=3Dfalse,
-> skb=3D0x88142200, n=3D<optimized out>) at linux/include/net/neighbour.h:5=
-44
->  #2  ip6_finish_output2 (net=3Dnet@entry=3D0x88edba00, sk=3Dsk@entry=3D0x=
-0,
-> skb=3Dskb@entry=3D0x88142200) at linux/net/ipv6/ip6_output.c:134
->  #3  0x0000000000ab4cbc in __ip6_finish_output (skb=3D0x88142200, sk=3D0x=
-0,
-> net=3D0x88edba00) at linux/net/ipv6/ip6_output.c:195
->  #4  ip6_finish_output (net=3D0x88edba00, sk=3D0x0, skb=3D0x88142200) at
-> linux/net/ipv6/ip6_output.c:206
->
-> xdp_do_redirect test places a u32 marker (0x42) right before the Ethernet
-> header to check it then in the XDP program and return %XDP_ABORTED if it's
-> not there. Neigh xmit code likes to round up hard header length to speed
-> up copying the header, so it overwrites two bytes in front of the Eth
-> header. On LE systems, 0x42 is one byte at `data - 4`, while on BE it's
-> `data - 1`, what explains why it happens only there.
-> It didn't happen previously due to that %XDP_PASS meant the page will be
-> discarded and replaced by a new one, but now it can be recycled as well,
-> while bpf_test_run code doesn't reinitialize the content of recycled
-> pages. This mark is limited to this particular test and its setup though,
-> so there's no need to predict 1000 different possible cases. Just move
-> it 4 bytes to the left, still keeping it 32 bit to match on more
-> bytes.
+On Thu, Mar 16, 2023 at 02:17:09PM +0100, Alexandre Ghiti wrote:
+> This function allows to split a region in memblock.memory and will be
+> useful when setting up the linear mapping with STRICT_KERNEL_RWX: it
+> allows to isolate the kernel text/rodata and then avoid to map those
+> regions with a PUD/P4D/PGD.
+ 
+Sorry I've missed it last time. The changelog is fine in the context of
+this series, but if you look at it as a part of memblock changelog it
+doesn't provide enough background on why memblock_isolate_memory() is
+useful.
 
-Wow, this must have been annoying to track down - nice work :)
+Can you please add more context so it would be self explanatory?
 
-> Fixes: 9c94bbf9a87b ("xdp: recycle Page Pool backed skbs built from XDP f=
-rames")
-> Reported-by: Alexei Starovoitov <ast@kernel.org>
-> Link: https://lore.kernel.org/bpf/CAADnVQ+B_JOU+EpP=3DDKhbY9yXdN6GiRPnpTT=
-XfEZ9sNkUeb-yQ@mail.gmail.com
-> Reported-by: Ilya Leoshkevich <iii@linux.ibm.com> # + debugging
-> Link: https://lore.kernel.org/bpf/8341c1d9f935f410438e79d3bd8a9cc50aefe10=
-5.camel@linux.ibm.com
-> Signed-off-by: Alexander Lobakin <aleksander.lobakin@intel.com>
+> Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+> Reviewed-by: Anup Patel <anup@brainfault.org>
+> Tested-by: Anup Patel <anup@brainfault.org>
+> ---
+>  include/linux/memblock.h |  1 +
+>  mm/memblock.c            | 20 ++++++++++++++++++++
+>  2 files changed, 21 insertions(+)
+> 
+> diff --git a/include/linux/memblock.h b/include/linux/memblock.h
+> index 50ad19662a32..2f7ef97c0da7 100644
+> --- a/include/linux/memblock.h
+> +++ b/include/linux/memblock.h
+> @@ -125,6 +125,7 @@ int memblock_clear_hotplug(phys_addr_t base, phys_addr_t size);
+>  int memblock_mark_mirror(phys_addr_t base, phys_addr_t size);
+>  int memblock_mark_nomap(phys_addr_t base, phys_addr_t size);
+>  int memblock_clear_nomap(phys_addr_t base, phys_addr_t size);
+> +int memblock_isolate_memory(phys_addr_t base, phys_addr_t size);
+>  
+>  void memblock_free_all(void);
+>  void memblock_free(void *ptr, size_t size);
+> diff --git a/mm/memblock.c b/mm/memblock.c
+> index 25fd0626a9e7..e8c651a37012 100644
+> --- a/mm/memblock.c
+> +++ b/mm/memblock.c
+> @@ -805,6 +805,26 @@ static int __init_memblock memblock_isolate_range(struct memblock_type *type,
+>  	return 0;
+>  }
+>  
+> +/**
+> + * memblock_isolate_memory - isolate given range in memblock.memory
+> + * @base: base of range to isolate
+> + * @size: size of range to isolate
+> + *
+> + * Isolates the given range in memblock.memory so that it does not share any
+> + * region with other ranges.
+> + *
+> + * Return:
+> + * 0 on success, -errno on failure.
+> + */
+> +
+> +int __init_memblock memblock_isolate_memory(phys_addr_t base, phys_addr_t size)
+> +{
+> +	int start_rgn, end_rgn;
+> +
+> +	return memblock_isolate_range(&memblock.memory, base, size,
+> +				      &start_rgn, &end_rgn);
+> +}
+> +
+>  static int __init_memblock memblock_remove_range(struct memblock_type *type,
+>  					  phys_addr_t base, phys_addr_t size)
+>  {
+> -- 
+> 2.37.2
+> 
 
-Acked-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
-
+-- 
+Sincerely yours,
+Mike.
