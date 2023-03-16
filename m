@@ -2,197 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D6A46BDCB4
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 00:10:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 651216BDCB6
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 00:10:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230233AbjCPXJ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 19:09:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54096 "EHLO
+        id S229845AbjCPXKa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 19:10:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230305AbjCPXJu (ORCPT
+        with ESMTP id S229590AbjCPXK2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 19:09:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20BAF658E
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 16:09:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A4C7E6215A
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 23:09:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7ABDC433EF;
-        Thu, 16 Mar 2023 23:09:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679008188;
-        bh=w6jBwS1Um7mLlpoN+a+eGG2DalmQykD8t+mghS5Gsj8=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=Xn/mhMMsBa9jUDc41ni0DMUUt4rDxfMz2bHiXfw1XOBLWhlw+tv8t3tkSrUwFpzah
-         F6yRYXxBoF/7NL4kJm7B7P6a+/rJg9wCMKkeddzgV3I3qHJ9pT3iSq+tgz8wl8Xao9
-         EzFKSOr2Sg64KMAgUQ3mWgN0+rNM6KVcgflFqSJ/Ucm2c6D0hIxCfeJ9qxxM2o36FQ
-         RbwxQjqrlHHlQYAoMD3qrxYbz5WjR8d+EK4phi4hERBwPm5Ed7Esg6/28AqzgONA8P
-         oCmRbfB8rtZTOgM2VP0L/d4Ou9G/tVshG1zAD4c39viBP2ANCss0BD2ZrmJeQfKD9n
-         j4Q+hcETWJIPQ==
-Date:   Thu, 16 Mar 2023 16:09:44 -0700 (PDT)
-From:   Stefano Stabellini <sstabellini@kernel.org>
-X-X-Sender: sstabellini@ubuntu-linux-20-04-desktop
-To:     Juergen Gross <jgross@suse.com>
-cc:     Alex Deucher <alexdeucher@gmail.com>,
-        Jan Beulich <jbeulich@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Honglei Huang <honglei1.huang@amd.com>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org,
-        Stewart Hildebrand <Stewart.Hildebrand@amd.com>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Huang Rui <ray.huang@amd.com>,
-        Chen Jiqian <Jiqian.Chen@amd.com>,
-        Xenia Ragiadakou <burzalodowa@gmail.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        xen-devel@lists.xenproject.org,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Julia Zhang <julia.zhang@amd.com>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        =?UTF-8?Q?Roger_Pau_Monn=C3=A9?= <roger.pau@citrix.com>
-Subject: Re: [RFC PATCH 1/5] x86/xen: disable swiotlb for xen pvh
-In-Reply-To: <d256a967-f50e-2e19-1985-aa9cfc0e8b18@suse.com>
-Message-ID: <alpine.DEB.2.22.394.2303161603200.3359@ubuntu-linux-20-04-desktop>
-References: <20230312120157.452859-1-ray.huang@amd.com> <20230312120157.452859-2-ray.huang@amd.com> <ea0e3852-87ba-984b-4010-5eeac3d6c507@suse.com> <alpine.DEB.2.22.394.2303141747350.863724@ubuntu-linux-20-04-desktop> <f5e03f2a-8176-528f-e885-9a97940367c0@suse.com>
- <alpine.DEB.2.22.394.2303151616200.3462@ubuntu-linux-20-04-desktop> <5e22a45d-6f12-da9b-94f6-3112a30e8574@suse.com> <CADnq5_PH9ZqDqpPES74V3fB3NVpaexDoGTyu_+-zoux5vgagyg@mail.gmail.com> <dcb54275-b21f-a837-76bb-e19e331a0666@suse.com>
- <CADnq5_PpCWrZzQdE_X6ZnuNU3ktVeC6TbmE5vq3K6rCAdB8GTg@mail.gmail.com> <d256a967-f50e-2e19-1985-aa9cfc0e8b18@suse.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        Thu, 16 Mar 2023 19:10:28 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4A402411B;
+        Thu, 16 Mar 2023 16:10:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=2BeCZSdN3o0+g9nGC8N+LpsPqap3J67+DNmxUtN89CI=; b=l7uBeCoiqmfiGlgs5kb3jYWIo+
+        nL+f0+87aA+uQV8HUvu5Jr56NZER4f87EapO+uZrOepUl4sgLjh6OQuZHgwkyZe45wHlr5VWjRsJ1
+        o0PmRt6gp19W7+i/ESzSg6Iy/lNQswMNacsYc+9USJEq1ldFVrea2rLLkma2N1ukgikGli4+KZrjO
+        9XYys6FEpjyYZPCFEX9PMbVKovRAUWJ0sej6TYNvcQ1/sxuyOqw9a/3wbtreeYB/a8raS6wEngWqd
+        ejTjMcc0SHXAm47+nYvoVjwmMHpqhDe3xpczgzAsVk9C2vuQEvKEQGaDHccirO90cBuLBUqFqCGwm
+        MhW+egqQ==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:46154)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1pcwjX-0001SC-CT; Thu, 16 Mar 2023 23:10:07 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1pcwjT-0002qB-LM; Thu, 16 Mar 2023 23:10:03 +0000
+Date:   Thu, 16 Mar 2023 23:10:03 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Jochen Henneberg <jh@henneberg-systemdesign.com>
+Cc:     netdev@vger.kernel.org,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Wong Vee Khee <veekhee@apple.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Revanth Kumar Uppala <ruppala@nvidia.com>,
+        Andrey Konovalov <andrey.konovalov@linaro.org>,
+        Tan Tee Min <tee.min.tan@linux.intel.com>,
+        Voon Weifeng <weifeng.voon@intel.com>,
+        Mohammad Athari Bin Ismail <mohammad.athari.ismail@intel.com>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH net V2] net: stmmac: Fix for mismatched host/device DMA
+ address width
+Message-ID: <ZBOhy02DFBlnIQR1@shell.armlinux.org.uk>
+References: <20230316095306.721255-1-jh@henneberg-systemdesign.com>
+ <20230316131503.738933-1-jh@henneberg-systemdesign.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; BOUNDARY="8323329-549136083-1679007957=:3359"
-Content-ID: <alpine.DEB.2.22.394.2303161606140.3359@ubuntu-linux-20-04-desktop>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230316131503.738933-1-jh@henneberg-systemdesign.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-
---8323329-549136083-1679007957=:3359
-Content-Type: text/plain; CHARSET=UTF-8
-Content-Transfer-Encoding: 8BIT
-Content-ID: <alpine.DEB.2.22.394.2303161606141.3359@ubuntu-linux-20-04-desktop>
-
-On Thu, 16 Mar 2023, Juergen Gross wrote:
-> On 16.03.23 14:53, Alex Deucher wrote:
-> > On Thu, Mar 16, 2023 at 9:48 AM Juergen Gross <jgross@suse.com> wrote:
-> > > 
-> > > On 16.03.23 14:45, Alex Deucher wrote:
-> > > > On Thu, Mar 16, 2023 at 3:50 AM Jan Beulich <jbeulich@suse.com> wrote:
-> > > > > 
-> > > > > On 16.03.2023 00:25, Stefano Stabellini wrote:
-> > > > > > On Wed, 15 Mar 2023, Jan Beulich wrote:
-> > > > > > > On 15.03.2023 01:52, Stefano Stabellini wrote:
-> > > > > > > > On Mon, 13 Mar 2023, Jan Beulich wrote:
-> > > > > > > > > On 12.03.2023 13:01, Huang Rui wrote:
-> > > > > > > > > > Xen PVH is the paravirtualized mode and takes advantage of
-> > > > > > > > > > hardware
-> > > > > > > > > > virtualization support when possible. It will using the
-> > > > > > > > > > hardware IOMMU
-> > > > > > > > > > support instead of xen-swiotlb, so disable swiotlb if
-> > > > > > > > > > current domain is
-> > > > > > > > > > Xen PVH.
-> > > > > > > > > 
-> > > > > > > > > But the kernel has no way (yet) to drive the IOMMU, so how can
-> > > > > > > > > it get
-> > > > > > > > > away without resorting to swiotlb in certain cases (like I/O
-> > > > > > > > > to an
-> > > > > > > > > address-restricted device)?
-> > > > > > > > 
-> > > > > > > > I think Ray meant that, thanks to the IOMMU setup by Xen, there
-> > > > > > > > is no
-> > > > > > > > need for swiotlb-xen in Dom0. Address translations are done by
-> > > > > > > > the IOMMU
-> > > > > > > > so we can use guest physical addresses instead of machine
-> > > > > > > > addresses for
-> > > > > > > > DMA. This is a similar case to Dom0 on ARM when the IOMMU is
-> > > > > > > > available
-> > > > > > > > (see include/xen/arm/swiotlb-xen.h:xen_swiotlb_detect, the
-> > > > > > > > corresponding
-> > > > > > > > case is XENFEAT_not_direct_mapped).
-> > > > > > > 
-> > > > > > > But how does Xen using an IOMMU help with, as said,
-> > > > > > > address-restricted
-> > > > > > > devices? They may still need e.g. a 32-bit address to be
-> > > > > > > programmed in,
-> > > > > > > and if the kernel has memory beyond the 4G boundary not all I/O
-> > > > > > > buffers
-> > > > > > > may fulfill this requirement.
-> > > > > > 
-> > > > > > In short, it is going to work as long as Linux has guest physical
-> > > > > > addresses (not machine addresses, those could be anything) lower
-> > > > > > than
-> > > > > > 4GB.
-> > > > > > 
-> > > > > > If the address-restricted device does DMA via an IOMMU, then the
-> > > > > > device
-> > > > > > gets programmed by Linux using its guest physical addresses (not
-> > > > > > machine
-> > > > > > addresses).
-> > > > > > 
-> > > > > > The 32-bit restriction would be applied by Linux to its choice of
-> > > > > > guest
-> > > > > > physical address to use to program the device, the same way it does
-> > > > > > on
-> > > > > > native. The device would be fine as it always uses Linux-provided
-> > > > > > <4GB
-> > > > > > addresses. After the IOMMU translation (pagetable setup by Xen), we
-> > > > > > could get any address, including >4GB addresses, and that is
-> > > > > > expected to
-> > > > > > work.
-> > > > > 
-> > > > > I understand that's the "normal" way of working. But whatever the
-> > > > > swiotlb
-> > > > > is used for in baremetal Linux, that would similarly require its use
-> > > > > in
-> > > > > PVH (or HVM) aiui. So unconditionally disabling it in PVH would look
-> > > > > to
-> > > > > me like an incomplete attempt to disable its use altogether on x86.
-> > > > > What
-> > > > > difference of PVH vs baremetal am I missing here?
-> > > > 
-> > > > swiotlb is not usable for GPUs even on bare metal.  They often have
-> > > > hundreds or megs or even gigs of memory mapped on the device at any
-> > > > given time.  Also, AMD GPUs support 44-48 bit DMA masks (depending on
-> > > > the chip family).
-> > > 
-> > > But the swiotlb isn't per device, but system global.
-> > 
-> > Sure, but if the swiotlb is in use, then you can't really use the GPU.
-> > So you get to pick one.
+On Thu, Mar 16, 2023 at 02:15:03PM +0100, Jochen Henneberg wrote:
+> Currently DMA address width is either read from a RO device register
+> or force set from the platform data. This breaks DMA when the host DMA
+> address width is <=32it but the device is >32bit.
 > 
-> The swiotlb is used only for buffers which are not within the DMA mask of a
-> device (see dma_direct_map_page()). So an AMD GPU supporting a 44 bit DMA mask
-> won't use the swiotlb unless you have a buffer above guest physical address of
-> 16TB (so basically never).
+> Right now the driver may decide to use a 2nd DMA descriptor for
+> another buffer (happens in case of TSO xmit) assuming that 32bit
+> addressing is used due to platform configuration but the device will
+> still use both descriptor addresses as one address.
 > 
-> Disabling swiotlb in such a guest would OTOH mean, that a device with only
-> 32 bit DMA mask passed through to this guest couldn't work with buffers
-> above 4GB.
+> This can be observed with the Intel EHL platform driver that sets
+> 32bit for addr64 but the MAC reports 40bit. The TX queue gets stuck in
+> case of TCP with iptables NAT configuration on TSO packets.
 > 
-> I don't think this is acceptable.
+> The logic should be like this: Whatever we do on the host side (memory
+> allocation GFP flags) should happen with the host DMA width, whenever
+> we decide how to set addresses on the device registers we must use the
+> device DMA address width.
+> 
+> This patch renames the platform address width field from addr64 (term
+> used in device datasheet) to host_addr and uses this value exclusively
+> for host side operations while all chip operations consider the device
+> DMA width as read from the device register.
+> 
+> Fixes: 7cfc4486e7ea ("stmmac: intel: Configure EHL PSE0 GbE and PSE1 GbE to 32 bits DMA addressing")
+> Signed-off-by: Jochen Henneberg <jh@henneberg-systemdesign.com>
+> ---
+> V2: Fixes from checkpatch.pl for commit message
+> 
+>  drivers/net/ethernet/stmicro/stmmac/common.h  |  1 +
+>  .../net/ethernet/stmicro/stmmac/dwmac-imx.c   |  2 +-
+>  .../net/ethernet/stmicro/stmmac/dwmac-intel.c |  4 +--
+>  .../ethernet/stmicro/stmmac/dwmac-mediatek.c  |  2 +-
+>  .../net/ethernet/stmicro/stmmac/stmmac_main.c | 30 ++++++++++---------
+>  include/linux/stmmac.h                        |  2 +-
+>  6 files changed, 22 insertions(+), 19 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/common.h b/drivers/net/ethernet/stmicro/stmmac/common.h
+> index 6b5d96bced47..55a728b1b708 100644
+> --- a/drivers/net/ethernet/stmicro/stmmac/common.h
+> +++ b/drivers/net/ethernet/stmicro/stmmac/common.h
+> @@ -418,6 +418,7 @@ struct dma_features {
+>  	unsigned int frpbs;
+>  	unsigned int frpes;
+>  	unsigned int addr64;
+> +	unsigned int host_addr;
 
-From the Xen subsystem in Linux point of view, the only thing we need to
-do is to make sure *not* to enable swiotlb_xen (yes "swiotlb_xen", not
-the global swiotlb) on PVH because it is not needed anyway.
+Obvious question: is host_addr an address? From the above description it
+sounds like this is more of a host address width indicator.
 
-I think we should leave the global "swiotlb" setting alone. The global
-swiotlb is not relevant to Xen anyway, and surely baremetal Linux has to
-have a way to deal with swiotlb/GPU incompatibilities.
+Maybe call these "dev_addr_width" and "host_addr_width" so it's clear
+what each of these are?
 
-We just have to avoid making things worse on Xen, and for that we just
-need to avoid unconditionally enabling swiotlb-xen. If the Xen subsystem
-doesn't enable swiotlb_xen/swiotlb, and no other subsystem enables
-swiotlb, then we have a good Linux configuration capable of handling the
-GPU properly.
-
-Alex, please correct me if I am wrong. How is x86_swiotlb_enable set to
-false on native (non-Xen) x86?
---8323329-549136083-1679007957=:3359--
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
