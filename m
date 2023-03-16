@@ -2,131 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECF246BCECD
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 12:58:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4768F6BCECF
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 12:59:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230255AbjCPL6C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 07:58:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60446 "EHLO
+        id S230071AbjCPL7C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 07:59:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229796AbjCPL6A (ORCPT
+        with ESMTP id S230293AbjCPL66 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 07:58:00 -0400
-Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01on2126.outbound.protection.outlook.com [40.107.113.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7E8649FE;
-        Thu, 16 Mar 2023 04:57:58 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SwapyZ6qLMjU0kTxhZJFNb3wXurQyQJchjLU5KjeDLzEdm7akLm7WA0OfpmGiUFMWKUk+lta+HqDGjwM33eB3Ab/UAQn0RLAllc4NWa1r5ntUMmLgU6Rudy/TMKBc7arVCrri4eLgyMbr/j7NQAPir4cbLVeu/TbcMPWCnE4gKDC7KVNSX/cB5qzRHVLrDKmcgTzdohUaSaw9PEVr2X/LJz2biO1lqLbqpI8gd0XZ4b4v5rFs5WJ7sQC+jXcmrvPu1YiuyQ61t3AlV20fAYBZfZJHcBh2X+FGFTiVlxoKMocXI4T5vpVTTCCxk9xzi2Lzms5JLPeBdalWzk0ygSDvQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Qih8xd2oS+vybo2LdHCJXggrBLLrRo7A7u0SuEUXgw0=;
- b=XVrhYSfDjRgi/mPaDHTneOHmWjcq617/qYVNmjdC+Yg8Cc+9YeJxwIDuKWohpEnotMV3i5V3tr03FXfPCs2uU8Moi1oLTJuyOUJGf7yCwDAItGwn8XK6Jm1vpI4Cf2brQIj+yuk+QaRfxPT3lGQz/xosN6wpFhgJoT6KzfbU8v/xuQG8HRw+G0X74g8gxmZrmp3g++RkdRUWtbYP9mGwI1DiHkbZ9BuhgVSSOExnCRsWDGffVAXmC+ZSjZXm6IyvS8wsEgmGij1kTVxlJhsHc2PkoTIXOHva5RFXLfQE9NdjGzA0sQ7O9tt5rmx4oaIJ46pRhgCE+h2kaHlF8DYVyA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
- dkim=pass header.d=renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=renesas.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Qih8xd2oS+vybo2LdHCJXggrBLLrRo7A7u0SuEUXgw0=;
- b=DFatHnk0PJUyfSUea8qyu7Tq30EcNY6k7wEsYM2unf89pOCwEfcHwm8mBeMKAxeL6SU/FV8YNI76mCqWsNfi26D7ysl3KHqyQ5a6xfnMfyDdHcnwxoAN6lQ6dNVSjqk7FM8W+qgulPB4n3Krfngm+syF5PKaiFTDWFphaCtc10I=
-Received: from TYCPR01MB10588.jpnprd01.prod.outlook.com (2603:1096:400:309::8)
- by TYWPR01MB10459.jpnprd01.prod.outlook.com (2603:1096:400:2fb::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.33; Thu, 16 Mar
- 2023 11:57:55 +0000
-Received: from TYCPR01MB10588.jpnprd01.prod.outlook.com
- ([fe80::dc49:e307:b424:4a53]) by TYCPR01MB10588.jpnprd01.prod.outlook.com
- ([fe80::dc49:e307:b424:4a53%4]) with mapi id 15.20.6178.030; Thu, 16 Mar 2023
- 11:57:55 +0000
-From:   Chris Paterson <Chris.Paterson2@renesas.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        "patches@lists.linux.dev" <patches@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "patches@kernelci.org" <patches@kernelci.org>,
-        "lkft-triage@lists.linaro.org" <lkft-triage@lists.linaro.org>,
-        "pavel@denx.de" <pavel@denx.de>,
-        "jonathanh@nvidia.com" <jonathanh@nvidia.com>,
-        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
-        "sudipm.mukherjee@gmail.com" <sudipm.mukherjee@gmail.com>,
-        "srw@sladewatkins.net" <srw@sladewatkins.net>,
-        "rwarsow@gmx.de" <rwarsow@gmx.de>
-Subject: RE: [PATCH 4.14 00/20] 4.14.310-rc2 review
-Thread-Topic: [PATCH 4.14 00/20] 4.14.310-rc2 review
-Thread-Index: AQHZV+RUy87Uo7cV7EWFQvyxi/S8sa79QRpwgAAFmYCAAAU4kA==
-Date:   Thu, 16 Mar 2023 11:57:55 +0000
-Message-ID: <TYCPR01MB1058859F0D4457BD3BCEEB868B7BC9@TYCPR01MB10588.jpnprd01.prod.outlook.com>
-References: <20230316083335.429724157@linuxfoundation.org>
- <TYCPR01MB10588DFCA0CABA9028F2FD723B7BC9@TYCPR01MB10588.jpnprd01.prod.outlook.com>
- <ZBL+ueZuSk51GhFE@kroah.com>
-In-Reply-To: <ZBL+ueZuSk51GhFE@kroah.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=renesas.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: TYCPR01MB10588:EE_|TYWPR01MB10459:EE_
-x-ms-office365-filtering-correlation-id: 24793e1d-15d6-4d3a-dfc7-08db2615ad8e
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: B2sC0va+RGhTpPnNEMaWD5ZXaOI0Jt5+qdZiEfIeQOsImAXp+kDVv/gQMx230xjrNN2ycwpLGmZZKv5373jBuJPbPT4/d/bWi3FgLPt6O+r402EC/nveRhTZA6AJprZP1DQe2R0+tbW720XRq+yFFBh2p2Wafi8se1RtY7tmUDKFeWT7q245B7WUo6RcWG4qH7GR6QldEkPKghgqduCz9YcslQ06jMV7Mqx/2aArZyCYFtjkvtblth/iQ1B5i1HlVAH7rqBYmuNUqOQKaKy6JXji/esy1sBFdpGRDHLroWcs7lzOGaH7gtoOT9+GWaTDam4bZ8BQZvi6cXaSPnsFKPEvGcPFDRLFqzDaVq54vxHXiBp8VZ/eaYsVTsIbOcrS+lHZBNRTWApzNUGLcdwk/2D+DsCPGrqeFZEFS8zcPREwjgpJWRJiiHPxg9Er72PQt9S7WWdP/Tw3R9h+ARamv3znDLr6ldDxf/H0tfJbOU/qRJPvfY6hOeRrOrJ7FN7kf+EkShs3PZ28g5zpe32DAcUdbfQz8bylH+k7VwQiNT01OaqadMhXIw7E242xOXhUGemrMfIzwrbUUrMClTzlobJLCVYSCk7VifcEXSeSCNDnOKAqr/fY8/6gUKtcjEGBT/v1CKxAWgGqm/QkBYG/XQXIAN8HqIN/hl1VdLZ1xGk0EimiNRaJTwJ59BM1IjH5evLCZSqxv/3mjFtrNzdKmA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYCPR01MB10588.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(346002)(376002)(136003)(396003)(39860400002)(451199018)(52536014)(41300700001)(5660300002)(4744005)(7416002)(8936002)(2906002)(122000001)(86362001)(38070700005)(33656002)(38100700002)(7696005)(478600001)(71200400001)(76116006)(66946007)(66556008)(66476007)(66446008)(64756008)(8676002)(6916009)(55016003)(83380400001)(54906003)(4326008)(316002)(9686003)(186003)(26005)(6506007);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?Windows-1252?Q?2dQ0bmqyc+DMHmKNEW63WWlBK0KHPf/D2u+q+365s2ah/WRC9zVpHRWl?=
- =?Windows-1252?Q?P3aCweYSG+yf8Np6bX2PkQKjSdsNGtM3qgLs/AQTz9gGZ9hGOV24lvy0?=
- =?Windows-1252?Q?L5mK/5oV7lr0vdn0DTj6oUWheqaEZ+mSLlckV7I8rbFsdQfnEH+iHVOK?=
- =?Windows-1252?Q?2RTP9rgxN3y924YoKfksKi6AV3fp4TUkX+DIfxIaBKmzW8cdJgJ+eFk1?=
- =?Windows-1252?Q?57AqZUGguV+PioNtwXm3EeqweM0qCyn8QoCpkcGtMNbhCtk9Bel3+k/P?=
- =?Windows-1252?Q?A6nRyoKlGDmPhHp9j+DF/gV86S65TPw50h4eSHUcBurH0AFJc2dIVFgj?=
- =?Windows-1252?Q?hz56WHhTAzZrFUq7DfDdnWfVAcb7x6wEkz3+TBebc5f3Tg7GrOglyn+x?=
- =?Windows-1252?Q?/b1LMmxcfgV8tFuTXNEeEaNknybIMTNginRg28aYG1kIdnZunQJ/Rcbu?=
- =?Windows-1252?Q?9OCZlu0Ksx7dWiTO7jEjxUFks7mrn7aRsQ97S6aJh7Lz7o2myPuO7vYl?=
- =?Windows-1252?Q?ixfv7WvnemjmYeSMC/h8KLjf+uWt8K2U8gKpHn9JHvmdyztUTwPY7Fsv?=
- =?Windows-1252?Q?fvkUhevBnPGiXQ3Hvfc0nJLUyuZA3mHhNeHrUJTq5M7dJSKT17zJqSZ9?=
- =?Windows-1252?Q?xiiPoO1udh8Jhx4B8ZNNj2vNwxtK1zXFTGTsqoH3cibtFm0PqCcC1MFo?=
- =?Windows-1252?Q?YQYWkpQR5BNZj9140DxoHkPzZwcSPw0AEn7hLZsHmXRaGmrzFkrqTdso?=
- =?Windows-1252?Q?juWu0zsjU7fO4Eon3PdIb3XoG9pmzs6tNtZ0mydSmezzmdigBgAamHs6?=
- =?Windows-1252?Q?7MakVs8d6RvCpG5w65o7XqIMy8g4iV3DZfkFOiusA5hC1h2IGNS6Gjbe?=
- =?Windows-1252?Q?D2sWGGPWT498ofeCcanctl2Ns0m2XjnBWtqXdrwoji4Zeqbu6VEByssN?=
- =?Windows-1252?Q?8AucVyQ7fRTbei+GiL9/aVBGTq+jO+6Dor93W57TaA/fWgo1A4OSX3LF?=
- =?Windows-1252?Q?E0GLz3aj1uf4FkyocTK/MaGZEZ7eQZTiFHHyyBu8aRiGQCc9EH7XHsE9?=
- =?Windows-1252?Q?A6HHNgNelwbi7O54GKk9spk/j6wE3ioFpaHcF5VgeSvRNya7aR4TGoV/?=
- =?Windows-1252?Q?38JFJXrB2tiWC1KaNTFenCCNf9l/5L7mjGHIYlYzk5K0E/EE6MAb9HSg?=
- =?Windows-1252?Q?Mm74aiBrkVJohuvXnK0limo9SYPNJ75cmej1KYrWFPFUsRiQatIgOsTx?=
- =?Windows-1252?Q?AeqvJp6HxgawQkceWMn6qpjcYjhDVdAr3ortD0Czkeu1Ofe2hV2rtgp0?=
- =?Windows-1252?Q?r3dqd/nBgxH1R8nleJR5bTLLmxIR54Mx3hmORvaDRQWvPNhO59Of3ftv?=
- =?Windows-1252?Q?EPeCrX7VpH10FZUZGBUuZxJEY9nnIvW0ctSn6eH4U/KFwklEPOiw1/H/?=
- =?Windows-1252?Q?5NIFDzJV7mUezjzM9tKSrkhaEx2BBkb6abigg+lLoNN0d1ucUbXt7QPw?=
- =?Windows-1252?Q?ByQaYwM0Q0+D2nzyxuUIQ+PkP4PTumar8UKiW8s/Q/WTlgXZacUvqDDS?=
- =?Windows-1252?Q?nadcrh0mEdKd0OBShC08I1TTFNG57lfmy+U/OFik+b/vi+jmaBC8W9KO?=
- =?Windows-1252?Q?TfA/aECT/CDQzHIJeWSA3KXOJ/vGRK7smO4l6xJH14r0A2CIlPTRxpUg?=
- =?Windows-1252?Q?k6WLBKZJ0UxI7a+CiJHsKgNy/REPs+ndNahJDpwknVo/g2O7/XfGEQ?=
- =?Windows-1252?Q?=3D=3D?=
-Content-Type: text/plain; charset="Windows-1252"
-Content-Transfer-Encoding: quoted-printable
+        Thu, 16 Mar 2023 07:58:58 -0400
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A08E2311B;
+        Thu, 16 Mar 2023 04:58:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1678967936; x=1710503936;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=ju6734ynvDV9eHQw4tpvQwukcfS8TgkcQr6MmSj8sVs=;
+  b=kMhj9t2jk4kU82vZeUI/ab15LPMVBP5UxQEhTk27t3U768hvOHQ3kaKd
+   j/m8K57lUksV3ttVZF86iP1GYeVMTV9QRFGWUJp2WWYxuWSUnhHOlnZJR
+   TvS7qdnyZvE+rv3/nEldRU27NYZSWNdGTFCyPt2GZ+lOvKJ+5vhJ9rhvC
+   yujkOU+5qSEM68LRnqWPZB39Llzjz4QzV8OGRfw8a0BdBqY4+bdN6hiWy
+   1gU/m0RqNdbY55GoluBks+yFBPyWgRXhtNY6DMi7QRUmjWvSistVbzapv
+   ZVcaK3vPooO6pfVl3hwIzDH8fKf6uZgsBhsTRaabxqHGS6vlH981mtkOB
+   w==;
+X-IronPort-AV: E=Sophos;i="5.98,265,1673910000"; 
+   d="scan'208";a="29736785"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 16 Mar 2023 12:58:54 +0100
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Thu, 16 Mar 2023 12:58:54 +0100
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Thu, 16 Mar 2023 12:58:54 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1678967934; x=1710503934;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=ju6734ynvDV9eHQw4tpvQwukcfS8TgkcQr6MmSj8sVs=;
+  b=lGAApJUXpxnKGWvluSsLnNWrtQ0OEh7VlXlaoA+m71UySbbofsKmAbwx
+   vgjVtvon5kw94GVVZfvi7gSltuG4eEE5UcJoA913ObXBOhI/lzLaHrvd/
+   C6YJRIlrATrx7mn80lDH4Pr6Ikse8kH0b4SAqA1AHrrtr3Vp8h4nvRqBa
+   UgVpbK24v7f9SOxp4LtDk/wGioHCObLWUxUX/IKnJ+lCUyx4sgjoD+YVz
+   xN5QjOp9TUXhGifdvJ6ijdh2TfLXu8txuIffka2SLJgtU87XXZ1X1AIUV
+   a/H1gC/SYIJ7bEXQmmW2pGmnteSecqRDTX+30IHquGtrkZJJ0qpbUDawq
+   w==;
+X-IronPort-AV: E=Sophos;i="5.98,265,1673910000"; 
+   d="scan'208";a="29736784"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 16 Mar 2023 12:58:54 +0100
+Received: from steina-w.localnet (unknown [10.123.53.21])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id B9BBC280056;
+        Thu, 16 Mar 2023 12:58:53 +0100 (CET)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     Bjorn Helgaas <bhelgaas@google.com>,
+        Oliver Neukum <oneukum@suse.com>,
+        Oliver Neukum <oneukum@suse.com>
+Cc:     Korneliusz Osmenda <korneliuszo@gmail.com>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/1] Guard pci_create_sysfs_dev_files with atomic value
+Date:   Thu, 16 Mar 2023 12:58:53 +0100
+Message-ID: <4888964.44csPzL39Z@steina-w>
+Organization: TQ-Systems GmbH
+In-Reply-To: <612dfdd2-7de1-12a7-c47c-7569c3466224@suse.com>
+References: <20230316091540.494366-1-alexander.stein@ew.tq-group.com> <6131694.LvFx2qVVIh@steina-w> <612dfdd2-7de1-12a7-c47c-7569c3466224@suse.com>
 MIME-Version: 1.0
-X-OriginatorOrg: renesas.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TYCPR01MB10588.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 24793e1d-15d6-4d3a-dfc7-08db2615ad8e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Mar 2023 11:57:55.0578
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: CtNFOTGVkUeUotUiREde+s/8y1f4e5CrFCZQz4W8nsYHPnk4kQRJ/T2Ynec6hFX9aoVjFwTFdZ3DGxIbqgEZgbCTPox5AWmnc2N9DV05FEE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYWPR01MB10459
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -134,35 +83,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Greg,
+Hi Oliver,
 
-> From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Sent: 16 March 2023 11:34
+Am Donnerstag, 16. M=E4rz 2023, 12:17:32 CET schrieb Oliver Neukum:
+> On 16.03.23 10:33, Alexander Stein wrote:
+> > Hi Oliver,
 >=20
-> On Thu, Mar 16, 2023 at 11:25:29AM +0000, Chris Paterson wrote:
-> > Hello Greg,
-> >
-> > > From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > > Sent: 16 March 2023 08:50
-> > >
-> > > This is the start of the stable review cycle for the 4.14.310 release=
-.
-> > > There are 20 patches in this series, all will be posted as a response
-> > > to this one.  If anyone has any issues with these being applied, plea=
-se
-> > > let me know.
-> > >
-> > > Responses should be made by Sat, 18 Mar 2023 08:33:04 +0000.
-> > > Anything received after that time might be too late.
-> >
-> > It sounds like there may be an -rc3 on the way, but for what it's worth=
-...
+> Hi,
 >=20
-> There is?  Only for 4.19.y.
+> > Admittedly
+> > I would like to get rid of these two pathes for creating sysfs files in
+> > the
+> > first place, but I do not know the pci subsystem very well.
+> > IMHO for_each_pci_dev(pdev) in pci_sysfs_init is part of the problem as=
+ it
+> > unconditionally iterates over the bus, without any locks, thus creating
+> > sysfs files for each device added to the bus.
+> > Any ideas?
+>=20
+> First of all, this existing code is a mess.
+>=20
+> If I understand you have the issue that your driver adds a bridge
+> in dw_pcie_host_init() and the generic code in pci_create_sysfs_dev_files=
+()
+> populates the directory before or while your driver does so and
+> the devices are effectively discovered twice.
 
-Ah, I was referring to you saying you'd drop "clk: qcom: mmcc-apq8084: remo=
-ve spdm clocks".
-I was assuming that meant another RC.
-/me must stop assuming things...
+Yep, that's my observation as well.
 
-Chris
+> It seems to me that you must not add a bridge before
+> pci_create_sysfs_dev_files() has finished. Now you could add a wait_queue
+> and a flag and wait for it to finish. But that is not very elegant.
+
+Do we need the pci_sysfs_init initcall at all? Or to put it in other words,=
+=20
+what does this initcall solve?
+See my different approach eliminating this race at all.
+
+> From which initcall is your driver probed?
+
+The callstack looks like this:
+> imx6_pcie_probe from platform_probe+0x5c/0xb8
+> platform_probe from call_driver_probe+0x24/0x118
+> call_driver_probe from really_probe+0xc4/0x31c
+> really_probe from __driver_probe_device+0x8c/0x120
+> __driver_probe_device from driver_probe_device+0x30/0xc0
+> driver_probe_device from __driver_attach_async_helper+0x50/0xd8
+> __driver_attach_async_helper from async_run_entry_fn+0x30/0x144
+> async_run_entry_fn from process_one_work+0x1c4/0x3d0
+> process_one_work from worker_thread+0x50/0x41c
+> worker_thread from kthread+0xec/0x104
+> kthread from ret_from_fork+0x14/0x2c
+
+So technically the device is not probed from within a initcall but a kthrea=
+d.=20
+It is set to be probed asynchronous in imx6_pcie_driver.
+
+This async call is scheduled in __driver_attach, from this callstack:
+> __driver_attach from bus_for_each_dev+0x74/0xc8
+> bus_for_each_dev from bus_add_driver+0xf0/0x1f4
+> bus_add_driver from driver_register+0x7c/0x118
+> driver_register from do_one_initcall+0x4c/0x180
+> do_one_initcall from do_initcalls+0xe0/0x114
+> do_initcalls from kernel_init_freeable+0xd8/0x100
+> kernel_init_freeable from kernel_init+0x18/0x12c
+> kernel_init from ret_from_fork+0x14/0x2c
+
+Best regards,
+Alexander
+=2D-=20
+TQ-Systems GmbH | M=FChlstra=DFe 2, Gut Delling | 82229 Seefeld, Germany
+Amtsgericht M=FCnchen, HRB 105018
+Gesch=E4ftsf=FChrer: Detlef Schneider, R=FCdiger Stahl, Stefan Schneider
+http://www.tq-group.com/
+
+
