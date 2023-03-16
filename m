@@ -2,218 +2,261 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F13636BD1A2
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 14:59:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F41C96BD1A6
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 15:00:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230236AbjCPN7C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 09:59:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39020 "EHLO
+        id S230326AbjCPN76 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 09:59:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229693AbjCPN7A (ORCPT
+        with ESMTP id S229932AbjCPN7p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 09:59:00 -0400
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2067.outbound.protection.outlook.com [40.107.22.67])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6001EC661
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 06:58:58 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=X9KIM/qUPtArMXcXb3SGZBWWqHgr5CDfZrhOksdEHvSYfZUP6A4tx751ST5E7m3nrWPkX7N99hSLoi7dzVMo12hC0RpuitWP9l6vWEPFaOmCTz6I2ar1PEtUFFKaKe/58cOydow552Hgb+F4yaE10Uzvq+w9R4ZWdGxYAA4l4DCevZdrDiIJ6QVLhdztXFsVgQZiiJ00lgXfkpx6PGGnAtmYd991cWz42U5Ye9wKeXHl18SUWjYVZSJy44kTlpPHKqvdkpOzL2khHjfyYFJPzdJ0A5MJSdXr8o62sdu8pY1mlglfD65DWD83LcP0qm06k30FeH6zJUr5Hyw2elXyvw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hLcooodllh1xsZDvwPGQ69LKffMVQqs6Qi1qy8Cv+6o=;
- b=SG4dR0/zg1eXkGF+HTu3sBA2w7dQfqylfKiOGMZf9DhCr5qKPXv6iVLEhzoVaNulkV3mKQ/dwCjAvT3a3KBpSiE1LkRL8/51bOjqrdeyswt2o/DqylPaYzvvsX8k3S510qPHysqLYNoB719Wi+hYh9+eOEwZJQQ+smtZK0f6gAPdOL64P0VdpOCJURfO2tG84T7z9gEH/V4+62VtN3ssxsZKqsg2pq3cpGRG8o5c71tMQ5Eatp4A6ko9Cz//ADoa5OwE+0hQbIv6An+blN4iMPE44XNqXq/saw13HR7psT2F1E1qnoetCWBZ4MtwE8wnIloFXYJECI4xN22HyGZE9g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hLcooodllh1xsZDvwPGQ69LKffMVQqs6Qi1qy8Cv+6o=;
- b=Fyt3tNaaQhBH+Lj+xoBD7xu1fGIrgjS4PnTrdOLz3VZb2XOrshHW/v+28GulYj9Rdclg3NcIu6r6loE16RWCCahjbPH3ym0vmyG7ZdcaKHURD6cDLBk+z88pFQ7pT5zQrQDJ+g68/TLbFB+tm5ZaPiEgFe838dMvrL5on6d1g6yZ7YThkcMez65TbrOWsIuJCoM/Zmz1gzBjGWzz4swbj8OpMJtoVfuVh1NV5AeVcFvX/WFyESmg4fLubXvWtuSt0zknq+qnhZDNv75vOgYa6WXB8NJO1LvVvkX90PCoEwqf7MB2Ug8TFWmDxItM8SRUklI+Hf5YjOHaaSXUofjpbw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=suse.com;
-Received: from VE1PR04MB6560.eurprd04.prod.outlook.com (2603:10a6:803:122::25)
- by PAXPR04MB8622.eurprd04.prod.outlook.com (2603:10a6:102:219::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.31; Thu, 16 Mar
- 2023 13:58:52 +0000
-Received: from VE1PR04MB6560.eurprd04.prod.outlook.com
- ([fe80::154e:166d:ec25:531b]) by VE1PR04MB6560.eurprd04.prod.outlook.com
- ([fe80::154e:166d:ec25:531b%5]) with mapi id 15.20.6178.026; Thu, 16 Mar 2023
- 13:58:52 +0000
-Message-ID: <1097b40a-704f-62a8-129c-758ea50a073b@suse.com>
-Date:   Thu, 16 Mar 2023 14:58:49 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [RFC PATCH 1/5] x86/xen: disable swiotlb for xen pvh
-Content-Language: en-US
-To:     Alex Deucher <alexdeucher@gmail.com>
-Cc:     Stefano Stabellini <sstabellini@kernel.org>,
-        Honglei Huang <honglei1.huang@amd.com>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org,
-        Stewart Hildebrand <Stewart.Hildebrand@amd.com>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Huang Rui <ray.huang@amd.com>,
-        Chen Jiqian <Jiqian.Chen@amd.com>,
-        Xenia Ragiadakou <burzalodowa@gmail.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        xen-devel@lists.xenproject.org,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Julia Zhang <julia.zhang@amd.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        =?UTF-8?Q?Roger_Pau_Monn=c3=a9?= <roger.pau@citrix.com>,
-        Juergen Gross <jgross@suse.com>
-References: <20230312120157.452859-1-ray.huang@amd.com>
- <20230312120157.452859-2-ray.huang@amd.com>
- <ea0e3852-87ba-984b-4010-5eeac3d6c507@suse.com>
- <alpine.DEB.2.22.394.2303141747350.863724@ubuntu-linux-20-04-desktop>
- <f5e03f2a-8176-528f-e885-9a97940367c0@suse.com>
- <alpine.DEB.2.22.394.2303151616200.3462@ubuntu-linux-20-04-desktop>
- <5e22a45d-6f12-da9b-94f6-3112a30e8574@suse.com>
- <CADnq5_PH9ZqDqpPES74V3fB3NVpaexDoGTyu_+-zoux5vgagyg@mail.gmail.com>
- <dcb54275-b21f-a837-76bb-e19e331a0666@suse.com>
- <CADnq5_PpCWrZzQdE_X6ZnuNU3ktVeC6TbmE5vq3K6rCAdB8GTg@mail.gmail.com>
-From:   Jan Beulich <jbeulich@suse.com>
-In-Reply-To: <CADnq5_PpCWrZzQdE_X6ZnuNU3ktVeC6TbmE5vq3K6rCAdB8GTg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: FR3P281CA0138.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:95::17) To VE1PR04MB6560.eurprd04.prod.outlook.com
- (2603:10a6:803:122::25)
+        Thu, 16 Mar 2023 09:59:45 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D60215B5D7
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 06:59:42 -0700 (PDT)
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id A9BF73F48A
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 13:59:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1678975181;
+        bh=s5o9DPzI1qYtz/YXjKH1gRwsqjy0KxEjU5/kQqTTsVg=;
+        h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+         Content-Type:In-Reply-To;
+        b=Wd7dvzCHQzcQNct8z3C2idEIVsLpQUn2OfTEyQX3PD1R15Jf3sLjd+mxYi5v5hTk8
+         467YMLkwPYMjLQd2Fg5h+ZCp9Vr5HICuoik0sntzk9J/nUpeT9cLR+YMTZKkxlfRgG
+         q/fRtGqxW2SnZjpcygvIs9NpB5hNowfaXxbmoDy+BPijnYbWdTzsSu1uIhedvAazKJ
+         fzjPG8OLKhnuVI04Bvad8nx1FSj5UWPzY4SQu5PGiQohutsSOmYf9jzOw3tqGd2G1/
+         aYlcj9gVuXA0i54HSBIPAGmYNNK3m/yxeofhoEHHpFuMMbUJuP44WFSYFkU/7N1DLP
+         f8Op8G+kzoDLQ==
+Received: by mail-ed1-f69.google.com with SMTP id dn8-20020a05640222e800b004bd35dd76a9so3207579edb.13
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 06:59:41 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678975181;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=s5o9DPzI1qYtz/YXjKH1gRwsqjy0KxEjU5/kQqTTsVg=;
+        b=p8N73+ccIcQuG1IL5fYoAFvEcVucIz+EE3WGoJL/dlAs+fwobIxs9thvpOUyd3JmTZ
+         rFeAH9/VI5ewo7ZgJ0McHtJu2IhNGpFA1BMbt7kkkaV0n3seXl7mOniXftc6bXNgmzlP
+         scCxXcf85QnVeVjjkHOY2nvReUbGRkprZqMYN8Hi5XxdXF8O2DowjBWPRc6gekw2nWSh
+         6mIQAb8vdI2rTyaOWP5ZHQPST9boHG2248NemPF3t4KXfpqVl5PYlhIgRaUPYbXl4DjS
+         ruIl2W0pBxYALgwKyT2NK9rctWpxF0xfu/OHc3suji1d7zW5nGJrxdZhJBcSPxk20MAG
+         Cd+w==
+X-Gm-Message-State: AO0yUKXsVhbJsefecFBswLhzVtI1JJ/UJZeMtpSZV8XGSxe0Mjyya2SI
+        lr3xFD0hMUjZCO0onwHwuJ2vD7s7bCa/8lCxO3CZwrJGziZPmMDswKVHiM5hTrWNA20Ti/0Wuoj
+        S7XCIEYoGNPGyfpRL852ImLFM1AbDW40ONBjlj5bBgA==
+X-Received: by 2002:a17:907:3fa6:b0:878:7189:a457 with SMTP id hr38-20020a1709073fa600b008787189a457mr12814467ejc.51.1678975181400;
+        Thu, 16 Mar 2023 06:59:41 -0700 (PDT)
+X-Google-Smtp-Source: AK7set/WIv8P7aulh3CUCZ6bEKmlM7k4ERADum6gVWOgJy42nlzGzz7z4ZpPdO9IQIuQ3781APapJA==
+X-Received: by 2002:a17:907:3fa6:b0:878:7189:a457 with SMTP id hr38-20020a1709073fa600b008787189a457mr12814432ejc.51.1678975181045;
+        Thu, 16 Mar 2023 06:59:41 -0700 (PDT)
+Received: from localhost (host-79-53-23-214.retail.telecomitalia.it. [79.53.23.214])
+        by smtp.gmail.com with ESMTPSA id i18-20020a1709064fd200b0092be390b51asm3834582ejw.113.2023.03.16.06.59.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Mar 2023 06:59:40 -0700 (PDT)
+Date:   Thu, 16 Mar 2023 14:59:39 +0100
+From:   Andrea Righi <andrea.righi@canonical.com>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Paolo Pisati <paolo.pisati@canonical.com>,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Darren Hart <darren@os.amperecomputing.com>
+Subject: Re: kernel 6.2 stuck at boot (efi_call_rts) on arm64
+Message-ID: <ZBMgy+Yh9fDxt44C@righiandr-XPS-13-7390>
+References: <CAMj1kXF_f4QFtaDYBaSJwO0B97TJHWr6uRQdeYeD=Gv7DrVicg@mail.gmail.com>
+ <ZBL+o7ydLk2iBCCr@righiandr-XPS-13-7390>
+ <CAMj1kXEtj_jEZeT6YNh9xB=8o=0LVKiPYucHU08s34xBgy1yDA@mail.gmail.com>
+ <CAMj1kXF3pkxvDX6ZMpnRd3wQX2_T6CYmz7ML-h+PXeo+hM_ZdA@mail.gmail.com>
+ <ZBMOitWwCDj3XiRw@righiandr-XPS-13-7390>
+ <CAMj1kXF=8KoCnRmUyLCZmbfPTeOFQZBeudZuTeA0uHOv-1drFg@mail.gmail.com>
+ <ZBMQdgPepwa+VyAH@righiandr-XPS-13-7390>
+ <CAMj1kXES+FxxbqUPH5TRjHak2MMC2Yksm0_P6wo__LQMH6Emhw@mail.gmail.com>
+ <ZBMes6r2FiAyo81F@righiandr-XPS-13-7390>
+ <CAMj1kXG0+NO6HayK2YqSJU0pwj8bn9Un_G-4VJr=hc1ELi-TpQ@mail.gmail.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VE1PR04MB6560:EE_|PAXPR04MB8622:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1c9f9bde-d4ac-44c7-4f32-08db26269304
-X-LD-Processed: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba,ExtFwd
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: pz1c9WBrqFXE5r21p+eBbae+oKOxv+aNxnKKWZOxo35ORazVcCR33B3n0BmLjVZ/O9SbqgB5TrVslug16AUKENhX0AsfvuMBjHAgoyxN1HBtqc+s5VeLOCGPMjhknY7Vpx9eTZb/MulFcUdlHCJc8sheS97qwcpSCYSjEEnlOgzZSQ6/pu/7GgO0u3nAXB5ai1Ki9+8JtiCd5XmlrKlTAOAcPgsFR7VM+SDnEKzUnPaoFoB+lUXQ9v403eqBjKRAK+HJEr+6VaGG9lebxyPpqML7adYU+SOwoXkTCJVN8vlwAE3Iu6mbjErkzyCWKCsGg9ZcVvqfgmKPPA3N45jmZyla7YzFNacZrHRXPjY2KAvhuTUwwZ3JRH0e3WHsZnTWyDOUoqlRct1ypU170+pvdDX02mpTU5aM21yusFVvWeXOoxLbEEeQUxW37cn2kZYfCoLLbLqZMokCPLXab18QIh7pFDxCdpkVNyYHPZTC/Ep21e5tBPudp/nfxbXPJqpMxtaTlRBcKhenkHZexZko1ykQTkL4uWvwuAivfh/PBa/HPWVrwDYJZRRtu59+zUHO39rL3LiPTuQDJmeD4avHVvyAInN8Bo3Q314e48HNcoXQ6bLpjkOS2aNimz+B/GgrbEKMFPtlnPvLehiqO0gqTaG1JWCZ+6woRSU6QxQ/QHihHaE0Yb90ps5KKcG4d/Uu/OXBxpi4ILxRDKF91kZ6tsHHdPVuAG8wrGtqJJc30pY=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR04MB6560.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(39860400002)(396003)(366004)(136003)(346002)(376002)(451199018)(31686004)(36756003)(4326008)(7416002)(41300700001)(8936002)(5660300002)(2906002)(31696002)(38100700002)(86362001)(478600001)(66946007)(66476007)(8676002)(66556008)(6486002)(107886003)(6666004)(6916009)(54906003)(316002)(186003)(53546011)(6506007)(6512007)(26005)(83380400001)(2616005)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TXppUHhwMDZ3dC93MkNPMlB5MEp2TXR5S1FGK2ZhT0JRQlJrSXlxakkrSHNz?=
- =?utf-8?B?TW9JZTBkQXcvRDU1N2tUTXU5SG9rc1J0T3lyZVhxdG55endwcUN2VjRQdWly?=
- =?utf-8?B?UWdjTStJS01kaWg1OGhTZ0xURk9QNk11ZE9Da2ZQZlpCTUptUTUwYlVMZFpH?=
- =?utf-8?B?SGk2dVUrZzJtYkRtdkludTVhbjJSOUN0RG1WTXV1b3UyWlI1MXhQdkdLNWoz?=
- =?utf-8?B?T0ppRzlqZm5YZEdUUCswcmsvZThjNVhwQWhRZ1Z6RDYrbmt6K0I0MnZFNTZh?=
- =?utf-8?B?N0dkZ1BFYVJld2FvVUdLUm1ZSWhrK3c2VW05ZzlQYVdoN3VmdWZaUGxBa3Qw?=
- =?utf-8?B?MjVUVUl6THFURVVYT1YzZTNSSXVCL0RiMW93dGlwNTlzSkNRT1IzTXpWbUNq?=
- =?utf-8?B?N1VNYXQ1WkVvQ0Rpc2pzWG5SL0lVMzRBWjVwOC94UG50RkVZSUdua3hpMm5L?=
- =?utf-8?B?T0paclRrdldzZEIxSGxvY2lUQUd3MVpReWppL2diSm83ZDFGekU5dEVDdEEx?=
- =?utf-8?B?eWhoUVArVHB1SFo4SG9yOGh6NVpPWDNvQlB1eWRxdXZjdFFvak03eTlWcXZr?=
- =?utf-8?B?VUExQzY0S0o4T1BzOWNHSG1hbVVMd1NkWXEzOHFzQndpSklUWGhtajcwQkdH?=
- =?utf-8?B?ZzZma2MxNEsvRUhFVEJNTVdjVlB4dlpzMU8xRjlpMXJGMkJaMHJoTUtOaTlW?=
- =?utf-8?B?TVc3Vkh3MXZTL0xSV0xBZEFUWnlwK0xzYWpCYTYrZkxRZzVsUXZ3THl5dGFz?=
- =?utf-8?B?b2t5VkJNQUduMitOSU03aU50MkJuUVpUUUhPZGo3N3JBUy8rank0ekJpRzRR?=
- =?utf-8?B?YUVJOTNiWGkxeVZmQndHVWU1V3BqS2M2S3BvaytSbkYxV3pqUzdQTUpmazNj?=
- =?utf-8?B?aWMwaFhlalRjV21YNjE0QXlQVXBDT05BbFhIc2U5dVRaaUlaS2sxbGphRWU2?=
- =?utf-8?B?Z3JvSHhtQkVIZy9YbnQxUGRsdGlkRnFxRGo0Q1ZRcWd1RHo2SzJ2MXdCc2xS?=
- =?utf-8?B?LzJ3aEFmekM2K3R4cE5ZenJyZzVYKzlxeldJaVVkdzA0QU1yNXFoODl4b2lN?=
- =?utf-8?B?YmtGM0RMd3dCdmNwdVR6c3NaOXo4SXNISy9YRTQwVWJIN05MUkt3cUJlTW5N?=
- =?utf-8?B?VUJxMjAvbkJuU0ltMEJiY2oza29SSlZ1K2ZFYVhFcURmOGZCRnlXaVVUNkFn?=
- =?utf-8?B?OHFrdjJlVXkzYUlWZDhQR3QwRjkveUxxeDhuZ2JZNFV3dDJvdnZuUlFzMGJj?=
- =?utf-8?B?S3c5MVMyZS9YMkZGc3dUYjVyTitGTnlPYVZucUljN1pqaUF1V2srZk5HRWdE?=
- =?utf-8?B?TnRQMVRWQ2hUWVBRb3BSQW9uaDNWQU1WcHZHV29OeG00cWMrNjhyakFEU3Uz?=
- =?utf-8?B?dWVlSDd2SUxKT1VmSXVMZXpFZWllT0JBMGpjKzhLWFROWHg3bHVpZDdXbG1O?=
- =?utf-8?B?NFBtWE9HRk8wWGorSXRFZUFLYnVob05ac1pRZ3RtMm9HR2praG5yaVZpQ0w2?=
- =?utf-8?B?eVloRVRRd090cWw2TVN0RFBuakVDUWhWNHB5bXBaSURMT1B1WUN1YVNaMnU0?=
- =?utf-8?B?SUJ2T0JFTEFORVk5SnIvSlpWc3YxalE1dlNkOThZMmJrcTRhLy91MDMyWWhw?=
- =?utf-8?B?UTYyZ0VucW5HYkdqTW02akZDNWdPWUQzVHNLZ0NESVgrVGQwTFFRQS9pTjhZ?=
- =?utf-8?B?MDNab0FGZXV4L1RGV24yNFZ4cVFZNEt0cmc0TjIvQUs4TVBvT1VZWk9jNnZO?=
- =?utf-8?B?RFlkQTQ1cWdYdHZhdTNXRFl4ZFV0ZXpBNUhOc2FSeW9pWTUvYjdRRld5bE5j?=
- =?utf-8?B?RWliKzEwRXJ5MlduMG1OZHlaQ2ZRc3UxN0E1WklkSGZ0Q3NLTmNsQXIrTnFj?=
- =?utf-8?B?aVFySjVNdnR4Wlh1aGh3dURJL0RHbFVtNDV5VWF5aU9rbG15ZTRNdmNNT052?=
- =?utf-8?B?RkgzVzNmay91RUhLZ0RqZjlqTzZ2VVk3bWxTT0NFQTZHeVdYRjdEckhobTc0?=
- =?utf-8?B?SnVsUlcwZ0F4dXdybmN3M3oyYnpCZ0ppejBDalRWUDdmNGV0Q1c3TDJmcW9E?=
- =?utf-8?B?bjVDYTE2RzZ6YkVKUUkzZ2k1ek43RGUra0Q1T3hxSitzV1h0d3AzMjBBMmhK?=
- =?utf-8?Q?IoloZmCIt4Is4aMDFiE0VIZ6K?=
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1c9f9bde-d4ac-44c7-4f32-08db26269304
-X-MS-Exchange-CrossTenant-AuthSource: VE1PR04MB6560.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Mar 2023 13:58:52.1921
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: x6L+yeBSgKN5l7iVlVOtTPT9fKR7592IQUaO4ykg9M6IOzs6tXipPy5kJ5XNb+tlA1tdiMQadjxAO4jAy0IRfA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB8622
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMj1kXG0+NO6HayK2YqSJU0pwj8bn9Un_G-4VJr=hc1ELi-TpQ@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16.03.2023 14:53, Alex Deucher wrote:
-> On Thu, Mar 16, 2023 at 9:48 AM Juergen Gross <jgross@suse.com> wrote:
->>
->> On 16.03.23 14:45, Alex Deucher wrote:
->>> On Thu, Mar 16, 2023 at 3:50 AM Jan Beulich <jbeulich@suse.com> wrote:
->>>>
->>>> On 16.03.2023 00:25, Stefano Stabellini wrote:
->>>>> On Wed, 15 Mar 2023, Jan Beulich wrote:
->>>>>> On 15.03.2023 01:52, Stefano Stabellini wrote:
->>>>>>> On Mon, 13 Mar 2023, Jan Beulich wrote:
->>>>>>>> On 12.03.2023 13:01, Huang Rui wrote:
->>>>>>>>> Xen PVH is the paravirtualized mode and takes advantage of hardware
->>>>>>>>> virtualization support when possible. It will using the hardware IOMMU
->>>>>>>>> support instead of xen-swiotlb, so disable swiotlb if current domain is
->>>>>>>>> Xen PVH.
->>>>>>>>
->>>>>>>> But the kernel has no way (yet) to drive the IOMMU, so how can it get
->>>>>>>> away without resorting to swiotlb in certain cases (like I/O to an
->>>>>>>> address-restricted device)?
->>>>>>>
->>>>>>> I think Ray meant that, thanks to the IOMMU setup by Xen, there is no
->>>>>>> need for swiotlb-xen in Dom0. Address translations are done by the IOMMU
->>>>>>> so we can use guest physical addresses instead of machine addresses for
->>>>>>> DMA. This is a similar case to Dom0 on ARM when the IOMMU is available
->>>>>>> (see include/xen/arm/swiotlb-xen.h:xen_swiotlb_detect, the corresponding
->>>>>>> case is XENFEAT_not_direct_mapped).
->>>>>>
->>>>>> But how does Xen using an IOMMU help with, as said, address-restricted
->>>>>> devices? They may still need e.g. a 32-bit address to be programmed in,
->>>>>> and if the kernel has memory beyond the 4G boundary not all I/O buffers
->>>>>> may fulfill this requirement.
->>>>>
->>>>> In short, it is going to work as long as Linux has guest physical
->>>>> addresses (not machine addresses, those could be anything) lower than
->>>>> 4GB.
->>>>>
->>>>> If the address-restricted device does DMA via an IOMMU, then the device
->>>>> gets programmed by Linux using its guest physical addresses (not machine
->>>>> addresses).
->>>>>
->>>>> The 32-bit restriction would be applied by Linux to its choice of guest
->>>>> physical address to use to program the device, the same way it does on
->>>>> native. The device would be fine as it always uses Linux-provided <4GB
->>>>> addresses. After the IOMMU translation (pagetable setup by Xen), we
->>>>> could get any address, including >4GB addresses, and that is expected to
->>>>> work.
->>>>
->>>> I understand that's the "normal" way of working. But whatever the swiotlb
->>>> is used for in baremetal Linux, that would similarly require its use in
->>>> PVH (or HVM) aiui. So unconditionally disabling it in PVH would look to
->>>> me like an incomplete attempt to disable its use altogether on x86. What
->>>> difference of PVH vs baremetal am I missing here?
->>>
->>> swiotlb is not usable for GPUs even on bare metal.  They often have
->>> hundreds or megs or even gigs of memory mapped on the device at any
->>> given time.  Also, AMD GPUs support 44-48 bit DMA masks (depending on
->>> the chip family).
->>
->> But the swiotlb isn't per device, but system global.
+On Thu, Mar 16, 2023 at 02:53:24PM +0100, Ard Biesheuvel wrote:
+> On Thu, 16 Mar 2023 at 14:50, Andrea Righi <andrea.righi@canonical.com> wrote:
+> >
+> > On Thu, Mar 16, 2023 at 02:45:49PM +0100, Ard Biesheuvel wrote:
+> > > On Thu, 16 Mar 2023 at 13:50, Andrea Righi <andrea.righi@canonical.com> wrote:
+> > > >
+> > > > On Thu, Mar 16, 2023 at 01:43:32PM +0100, Ard Biesheuvel wrote:
+> > > > > On Thu, 16 Mar 2023 at 13:41, Andrea Righi <andrea.righi@canonical.com> wrote:
+> > > > > >
+> > > > > > On Thu, Mar 16, 2023 at 01:38:30PM +0100, Ard Biesheuvel wrote:
+> > > > > > > On Thu, 16 Mar 2023 at 13:21, Ard Biesheuvel <ardb@kernel.org> wrote:
+> > > > > > > >
+> > > > > > > > On Thu, 16 Mar 2023 at 12:34, Andrea Righi <andrea.righi@canonical.com> wrote:
+> > > > > > > > >
+> > > > > > > > > On Thu, Mar 16, 2023 at 11:18:21AM +0100, Ard Biesheuvel wrote:
+> > > > > > > > > > On Thu, 16 Mar 2023 at 11:03, Andrea Righi <andrea.righi@canonical.com> wrote:
+> > > > > > > > > > >
+> > > > > > > > > > > On Thu, Mar 16, 2023 at 10:55:58AM +0100, Ard Biesheuvel wrote:
+> > > > > > > > > > > > (cc Darren)
+> > > > > > > > > > > >
+> > > > > > > > > > > > On Thu, 16 Mar 2023 at 10:45, Andrea Righi <andrea.righi@canonical.com> wrote:
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > On Thu, Mar 16, 2023 at 08:58:20AM +0100, Ard Biesheuvel wrote:
+> > > > > > > > > > > > > > Hello Andrea,
+> > > > > > > > > > > > > >
+> > > > > > > > > > > > > > On Thu, 16 Mar 2023 at 08:54, Andrea Righi <andrea.righi@canonical.com> wrote:
+> > > > > > > > > > > > > > >
+> > > > > > > > > > > > > > > Hello,
+> > > > > > > > > > > > > > >
+> > > > > > > > > > > > > > > the latest v6.2.6 kernel fails to boot on some arm64 systems, the kernel
+> > > > > > > > > > > > > > > gets stuck and never completes the boot. On the console I see this:
+> > > > > > > > > > > > > > >
+> > > > > > > > > > > > > > > [   72.043484] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+> > > > > > > > > > > > > > > [   72.049571] rcu:     22-...0: (30 GPs behind) idle=b10c/1/0x4000000000000000 softirq=164/164 fqs=6443
+> > > > > > > > > > > > > > > [   72.058520]     (detected by 28, t=15005 jiffies, g=449, q=174 ncpus=32)
+> > > > > > > > > > > > > > > [   72.064949] Task dump for CPU 22:
+> > > > > > > > > > > > > > > [   72.068251] task:kworker/u64:5   state:R  running task     stack:0     pid:447   ppid:2      flags:0x0000000a
+> > > > > > > > > > > > > > > [   72.078156] Workqueue: efi_rts_wq efi_call_rts
+> > > > > > > > > > > > > > > [   72.082595] Call trace:
+> > > > > > > > > > > > > > > [   72.085029]  __switch_to+0xbc/0x100
+> > > > > > > > > > > > > > > [   72.088508]  0xffff80000fe83d4c
+> > > > > > > > > > > > > > >
+> > > > > > > > > > > > > > > After that, as a consequence, I start to get a lot of hung task timeout traces.
+> > > > > > > > > > > > > > >
+> > > > > > > > > > > > > > > I tried to bisect the problem and I found that the offending commit is
+> > > > > > > > > > > > > > > this one:
+> > > > > > > > > > > > > > >
+> > > > > > > > > > > > > > >  e7b813b32a42 ("efi: random: refresh non-volatile random seed when RNG is initialized")
+> > > > > > > > > > > > > > >
+> > > > > > > > > > > > > > > I've reverted this commit for now and everything works just fine, but I
+> > > > > > > > > > > > > > > was wondering if the problem could be caused by a lack of entropy on
+> > > > > > > > > > > > > > > these arm64 boxes or something else.
+> > > > > > > > > > > > > > >
+> > > > > > > > > > > > > > > Any suggestion? Let me know if you want me to do any specific test.
+> > > > > > > > > > > > > > >
+> > > > > > > > > > > > > >
+> > > > > > > > > > > > > > Thanks for the report.
+> > > > > > > > > > > > > >
+> > > > > > > > > > > > > > This is most likely the EFI SetVariable() call going off into the
+> > > > > > > > > > > > > > weeds and never returning.
+> > > > > > > > > > > > > >
+> > > > > > > > > > > > > > Is this an Ampere Altra system by any chance? Do you see it on
+> > > > > > > > > > > > > > different types of hardware?
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > This is: Ampere eMAG / Lenovo ThinkSystem HR330a.
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > >
+> > > > > > > > > > > > > > Could you check whether SetVariable works on this system? E.g. by
+> > > > > > > > > > > > > > updating the EFI boot timeout (sudo efibootmgr -t <n>)?
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > ubuntu@kuzzle:~$ sudo efibootmgr -t 10
+> > > > > > > > > > > > > ^C^C^C^C
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > ^ Stuck there, so it really looks like SetVariable is the problem.
+> > > > > > > > > > > > >
+> > > > > > > > > > > >
+> > > > > > > > > > > > Could you please share the output of
+> > > > > > > > > > > >
+> > > > > > > > > > > > dmidecode -s bios
+> > > > > > > > > > > > dmidecode -s system-family
+> > > > > > > > > > >
+> > > > > > > > > > > $ sudo dmidecode -s bios-vendor
+> > > > > > > > > > > LENOVO
+> > > > > > > > > > > $ sudo dmidecode -s bios-version
+> > > > > > > > > > > hve104r-1.15
+> > > > > > > > > > > $ sudo dmidecode -s bios-release-date
+> > > > > > > > > > > 02/26/2021
+> > > > > > > > > > > $ sudo dmidecode -s bios-revision
+> > > > > > > > > > > 1.15
+> > > > > > > > > > > $ sudo dmidecode -s system-family
+> > > > > > > > > > > Lenovo ThinkSystem HR330A/HR350A
+> > > > > > > > > > >
+> > > > > > > > > >
+> > > > > > > > > > Thanks
+> > > > > > > > > >
+> > > > > > > > > > Mind checking if this patch fixes your issue as well?
+> > > > > > > > > >
+> > > > > > > > > > https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/commit/?h=altra-fix&id=77fa99dd4741456da85049c13ec31a148f5f5ac0
+> > > > > > > > >
+> > > > > > > > > Unfortunately this doesn't seem to be enough, I'm still getting the same
+> > > > > > > > > problem also with this patch applied.
+> > > > > > > > >
+> > > > > > > >
+> > > > > > > > Thanks for trying.
+> > > > > > > >
+> > > > > > > > How about the last 3 patches on this branch?
+> > > > > > > >
+> > > > > > > > https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/log/?h=efi-smbios-altra-fix
+> > > > > > >
+> > > > > > > Actually, that may not match your hardware.
+> > > > > > >
+> > > > > > > Does your kernel log have a line like
+> > > > > > >
+> > > > > > > SMCCC: SOC_ID: ID = jep106:036b:0019 Revision = 0x00000102
+> > > > > > >
+> > > > > > > ?
+> > > > > >
+> > > > > > $ sudo dmesg | grep "SMCCC: SOC_ID"
+> > > > > > [    5.320782] SMCCC: SOC_ID: ARCH_SOC_ID not implemented, skipping ....
+> > > > > >
+> > > > >
+> > > > > Thanks. Could you share the entire dmidecode output somewhere? Or at
+> > > > > least the type 4 record(s)?
+> > > >
+> > > > Sure, here's the full output of dmidecode:
+> > > > https://pastebin.ubuntu.com/p/4ZmKmP2xTm/
+> > > >
+> > >
+> > > Thanks. I have updated my SMBIOS patches to take the processor version
+> > > 'eMAG' into account, which appears to be what these boxes are using.
+> > >
+> > > I have updated the efi/urgent branch here with the latest versions.
+> > > Mind giving them a spin?
+> > >
+> > >
+> > > In the mean time, just for the record - could you please run this as well?
+> > >
+> > > hexdump -C /sys/firmware/dmi/entries/4-0/raw
+> > >
+> > > (as root)
+> >
+> > hm.. I don't have that in /sys/firmware/, this is what I have:
+> >
+> > # ls -l /sys/firmware/dmi/
+> > total 0
+> > drwxr-xr-x 2 root root 0 Mar 16 13:26 tables
+> > # ls -l /sys/firmware/dmi/tables/
+> > total 0
+> > -r-------- 1 root root 5004 Mar 16 13:26 DMI
+> > -r-------- 1 root root   24 Mar 16 13:26 smbios_entry_point
+> >
 > 
-> Sure, but if the swiotlb is in use, then you can't really use the GPU.
-> So you get to pick one.
+> You'll need to load the dmi_sysfs module for that. But no big deal
+> otherwise, I'm pretty sure the word order is the correct on on your
+> system in any case (it decodes the value correctly in the next line)
 
-Yet that "pick one" then can't be an unconditional disable in the source code.
-If there's no way to avoid swiotlb on a per-device basis, then users will need
-to be told to arrange for this via command line option when they want to use
-the GPU is certain ways.
+ok, much better after modprobe dmi_sysfs. :)
 
-Jan
+$ sudo hexdump -C /sys/firmware/dmi/entries/4-0/raw 
+00000000  04 30 04 00 01 03 fe 02  02 00 3f 50 00 00 00 00  |.0........?P....|
+00000010  03 89 b8 0b e4 0c b8 0b  41 06 05 00 06 00 07 00  |........A.......|
+00000020  04 00 00 20 20 20 7c 00  01 01 00 00 00 00 00 00  |...   |.........|
+00000030  43 50 55 20 31 00 41 6d  70 65 72 65 28 54 4d 29  |CPU 1.Ampere(TM)|
+00000040  00 65 4d 41 47 20 00 30  30 30 30 30 30 30 30 30  |.eMAG .000000000|
+00000050  30 30 30 30 30 30 30 35  30 30 35 30 31 30 35 30  |0000000500501050|
+00000060  32 46 42 30 39 38 38 00  55 6e 6b 6e 6f 77 6e 00  |2FB0988.Unknown.|
+00000070  55 6e 6b 6e 6f 77 6e 00  00                       |Unknown..|
+00000079
+
+-Andrea
