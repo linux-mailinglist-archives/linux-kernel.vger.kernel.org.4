@@ -2,106 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D55786BD80C
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 19:18:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 507ED6BD80F
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 19:19:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230462AbjCPSSx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 14:18:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45048 "EHLO
+        id S230063AbjCPSS4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 14:18:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230514AbjCPSSs (ORCPT
+        with ESMTP id S231149AbjCPSSv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 14:18:48 -0400
-Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EAB1E1CB7;
-        Thu, 16 Mar 2023 11:18:07 -0700 (PDT)
-Received: by mail-qv1-xf30.google.com with SMTP id qh28so1829553qvb.7;
-        Thu, 16 Mar 2023 11:18:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678990686;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=oZLGHJ6+3en7wcpDA1c5BiqkKAkKpDqfiHyz3caHyFE=;
-        b=W8M9hEzvOYxxUxLe9cGr1pEw2qRyYlm3E97AOCY42wX1PNAxqD7g9VadohnIeVSLb9
-         K+jUtAJmccpQDkK37ooPm4aEdsWvJ8kTLGTj2hYxSHW4/U/+DRQOdc87rfS8TnpsKe13
-         z+ZfEdA+UNJ3tjQ44w2RV9S6KBFOsx5wSpFRkcQoBhJcouqPQl0vWQ++iTNewbaHMjCA
-         kY8t9QyrSl+IIU1EPUyVtCFVMmrIe2W0SJjULxLqgYnzDrWNW1qyhddrOr6ATbwcJjXx
-         tfYXd9Fa1gwG7yYmtH4G5s5m3SneLXZvguqz2JyEC/EG1+SQRwOb+HgleOkZm0iUMu+9
-         MupA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678990686;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oZLGHJ6+3en7wcpDA1c5BiqkKAkKpDqfiHyz3caHyFE=;
-        b=sp6tVyhs5HmTVzamGIdAEvzP6WLdpinQLhjv11ULsIvVrj6yrpdTd7DAZjNV1TEWPI
-         ujlODVKm19YHWU7PCnojczN/tS+f7rzs1J8h0/SyydZklizYN6TAaqYIAdThN/w9wlm0
-         iimTJXv8LwSAuzxXaRbKnylA/NY8r+czrHAs5e7l5Km31S40jOUe6k+aYEH0qM75bOO3
-         PjQvqGa/VyghMDlFBS2ZB4p2qsEg8DQNjyylwYbkYoXlJVwq2dn7JNgqRdjZMYEzh2kx
-         7/nhy+JgLw3qtgR9OgcBf1SAqf/zUWYEWBa9KSJlDZBbDuDEQofGOPvSIRI6bIfTMRJ7
-         Uu+Q==
-X-Gm-Message-State: AO0yUKW5w8YT6/ipeTr654Ktg5QGGANxjoMzOvfU94fRXsprPbkcAiW/
-        u5Kc1lPHpEiAI5cUtRUaCNo=
-X-Google-Smtp-Source: AK7set+fEui6EyOvMdH0qNoEjcEL6H16nBqpNbg6DV9CrSS0yq6BEabvKSlFnSAwAyPs3j0qBXvSkQ==
-X-Received: by 2002:a05:6214:20c1:b0:535:5492:b427 with SMTP id 1-20020a05621420c100b005355492b427mr33869325qve.28.1678990686077;
-        Thu, 16 Mar 2023 11:18:06 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id j9-20020a05620a288900b0070648cf78bdsm42704qkp.54.2023.03.16.11.18.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Mar 2023 11:18:05 -0700 (PDT)
-Message-ID: <3bc1da60-92d2-eba9-5f0b-b6b7020e19d0@gmail.com>
-Date:   Thu, 16 Mar 2023 11:17:57 -0700
+        Thu, 16 Mar 2023 14:18:51 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BF01E193F;
+        Thu, 16 Mar 2023 11:18:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678990704; x=1710526704;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=/GnY+D05AYcUSyIie4JZA4hwK2HevYRArrSO76XL0I4=;
+  b=Z+4iaKifcrZ+MOIn73nd8YKnj/Gi1wMdGy2t0bxglkVbFH2VlVTXEVWn
+   iaKT9rNm6nO+/l8pB3YGZsxG5mZkG9JNaI9ga/sIDS/pPRXNXI9mPtnYM
+   5gdIXAG/UlrEfbU+3Do6b7gakbZnK5ribvDdaM9qpHAV1FAmv+n0reuNH
+   vs0sjdxFrRi1YMEKL0ql6dEyjiKiNQ0OTMxfN3tiTWbaqdmGjQVnpqvTK
+   tdoVzzzdfJfpTUgRsOr2Qhc4CssDGWxzOxs20/0wqkZhf9RruAP4gDwSy
+   o+yV0hCPd2O7jOP4KO+yAkUlJv6yCiUgRPc3tridm2MDlVaVp3q+HVVnF
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="336769056"
+X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
+   d="scan'208";a="336769056"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 11:18:17 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="803842404"
+X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
+   d="scan'208";a="803842404"
+Received: from mgisomme-mobl1.amr.corp.intel.com ([10.212.42.167])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 11:18:11 -0700
+Message-ID: <559654bbef8483fcd53458824f23814236b0c9e0.camel@linux.intel.com>
+Subject: Re: [PATCH linux-next v2 1/3] platform/x86/intel/tpmi: Fix double
+ free in tpmi_create_device()
+From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     Hans de Goede <hdegoede@redhat.com>,
+        Dongliang Mu <dzm91@hust.edu.cn>,
+        Mark Gross <markgross@kernel.org>
+Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Thu, 16 Mar 2023 11:18:09 -0700
+In-Reply-To: <dd36a2ab-d465-f857-30c6-3c0094babd31@redhat.com>
+References: <20230309040107.534716-1-dzm91@hust.edu.cn>
+         <20230309040107.534716-2-dzm91@hust.edu.cn>
+         <dd36a2ab-d465-f857-30c6-3c0094babd31@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu1 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 5.10 00/91] 5.10.175-rc2 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-References: <20230316083430.973448646@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20230316083430.973448646@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/16/23 01:50, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.175 release.
-> There are 91 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Sat, 18 Mar 2023 08:33:04 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.175-rc2.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+Hi Hans,
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
-BMIPS_GENERIC:
+On Thu, 2023-03-16 at 15:25 +0100, Hans de Goede wrote:
+> Hi,
+>=20
+> On 3/9/23 05:01, Dongliang Mu wrote:
+> > The previous commit 6a192c0cbf38 ("platform/x86/intel/tpmi: Fix
+> > double free reported by Smatch") incorrectly handle the
+> > deallocation of
+> > res variable. As shown in the comment, intel_vsec_add_aux handles
+> > all
+> > the deallocation of res and feature_vsec_dev. Therefore, kfree(res)
+> > can
+> > still cause double free if intel_vsec_add_aux returns error.
+> >=20
+> > Fix this by adjusting the error handling part in
+> > tpmi_create_device,
+> > following the function intel_vsec_add_dev.
+> >=20
+> > Fixes: 6a192c0cbf38 ("platform/x86/intel/tpmi: Fix double free
+> > reported by Smatch")
+> > Signed-off-by: Dongliang Mu <dzm91@hust.edu.cn>
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+Acked-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+
+>=20
+> IIRC then after this v2 was posted I still saw some comments on the
+> original v1 which was not posted on the list. Without the v1 comments
+> being on the list and this archived, I have lost track of what the
+> status of these patches is.
+>=20
+> Srinivas, can you let me know if I should merge these, or if more
+> changes are necessary ?
+>=20
+> From the off-list discussion of v1 I got the impression more changes
+> are necessary, but I'm not sure.
+
+I was looking for changes submitted=C2=A0by the following patch
+"
+[PATCH linux-next v2 3/3] drivers/platform/x86/intel: fix a memory leak
+in intel_vsec_add_aux
+"
+
+Since I was not copied on this, I was unaware. So I was requesting this
+change.
+
+Thanks,
+Srinivas
+
+>=20
+> Regards,
+>=20
+> Hans
+>=20
+>=20
+>=20
+>=20
+> > ---
+> > =C2=A0drivers/platform/x86/intel/tpmi.c | 17 ++++-------------
+> > =C2=A01 file changed, 4 insertions(+), 13 deletions(-)
+> >=20
+> > diff --git a/drivers/platform/x86/intel/tpmi.c
+> > b/drivers/platform/x86/intel/tpmi.c
+> > index c999732b0f1e..882fe5e4763f 100644
+> > --- a/drivers/platform/x86/intel/tpmi.c
+> > +++ b/drivers/platform/x86/intel/tpmi.c
+> > @@ -215,8 +215,8 @@ static int tpmi_create_device(struct
+> > intel_tpmi_info *tpmi_info,
+> > =C2=A0
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0feature_vsec_dev =3D kz=
+alloc(sizeof(*feature_vsec_dev),
+> > GFP_KERNEL);
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (!feature_vsec_dev) =
+{
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0ret =3D -ENOMEM;
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0goto free_res;
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0kfree(res);
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0return -ENOMEM;
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0}
+> > =C2=A0
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0snprintf(feature_id_nam=
+e, sizeof(feature_id_name), "tpmi-
+> > %s", name);
+> > @@ -242,17 +242,8 @@ static int tpmi_create_device(struct
+> > intel_tpmi_info *tpmi_info,
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * feature_vsec_dev mem=
+ory is also freed as part of device
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * delete.
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 */
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0ret =3D intel_vsec_add_aux(v=
+sec_dev->pcidev, &vsec_dev-
+> > >auxdev.dev,
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 feature_vsec_dev,
+> > feature_id_name);
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (ret)
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0goto free_res;
+> > -
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return 0;
+> > -
+> > -free_res:
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0kfree(res);
+> > -
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return ret;
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return intel_vsec_add_aux(vs=
+ec_dev->pcidev, &vsec_dev-
+> > >auxdev.dev,
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 feature_vsec_dev,
+> > feature_id_name);
+> > =C2=A0}
+> > =C2=A0
+> > =C2=A0static int tpmi_create_devices(struct intel_tpmi_info *tpmi_info)
+>=20
 
