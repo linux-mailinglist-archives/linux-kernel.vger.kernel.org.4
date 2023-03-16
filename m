@@ -2,153 +2,285 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB0D86BD24D
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 15:26:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AE536BD24A
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 15:25:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231162AbjCPO0G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 10:26:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56550 "EHLO
+        id S230422AbjCPOZ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 10:25:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231145AbjCPO0C (ORCPT
+        with ESMTP id S230241AbjCPOZZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 10:26:02 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52301B6D31
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 07:25:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678976719;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=283XLpLkY/GtlkVIgN/bgnAXAkOeliF5pq/xdk1cojI=;
-        b=QNxNIXxShleZxppmK7cMSvr2M24iZ1beiU6WYISOxkVdLC6ByXtLHxYroXMgX188bz9PEU
-        D+w9vNaldPueDELzsI1V9mRWDS2gaycRWZ9sLHN9m6qAZMtEzMbQ/2RHxDDAgw2BskDw7t
-        RQCe7EQvJS/22+MqCrmAYLyURRmM7UE=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-501-ImFnvjAmMD6C_8Mlb3miFg-1; Thu, 16 Mar 2023 10:25:18 -0400
-X-MC-Unique: ImFnvjAmMD6C_8Mlb3miFg-1
-Received: by mail-ed1-f70.google.com with SMTP id r9-20020a05640251c900b004d4257341c2so3275396edd.19
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 07:25:18 -0700 (PDT)
+        Thu, 16 Mar 2023 10:25:25 -0400
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F2A0B79E0
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 07:25:23 -0700 (PDT)
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com [209.85.208.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 3D3A241B67
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 14:25:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1678976722;
+        bh=92i4qrEhaaWULAWrFn5b6EQzymw7+aSf9ULAswrYqXc=;
+        h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+         Content-Type:In-Reply-To;
+        b=r7r+ganDTv7p0J4zec8GydLYJ1M+QVBdOp2jQykaHXByTG/tP3I2pCuVedAy9xEa9
+         WZPzF+wkv/Qy6I8nuv4P8XSP723gEHDuBtA7hAlS6qvsVMiP2UkgTwqHMRNhMR/QWk
+         aye9D9bKlUqACzPIam74eQiap31LoiWG5B8Tfkgq/xLWzr1LIPVpTJ6vHEKaAZttru
+         UUUXVLu5St02Jmnq8gw7kXEKwD6W2m1O1DzM/NRQ3XSeaMqomOMnpvC+8SlgUaLAME
+         dLoxdk5yNURBieGXewcBTNsx9i8jckMx/j1DF0bPOuRXjXYtDZI+nlxhoGcjM3iiRO
+         3dCDJkhULThKQ==
+Received: by mail-ed1-f72.google.com with SMTP id i22-20020a05640242d600b004f5962985f4so3338043edc.12
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 07:25:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678976717;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=283XLpLkY/GtlkVIgN/bgnAXAkOeliF5pq/xdk1cojI=;
-        b=Mz8eZic0jaX8eNUKww7/m4AX+hRVMiAlgfLIDol+Sv5si1BrAzqFRwI0MgKRPqbRVo
-         orccq4Nw+Mp4Uorv8dHhVnkY2pMytms8J4sOXIkkDpU64cn9bjpNa83tpDGd2AufQsBu
-         DXiRWtL150r4HXZbmhIh2x5P3COPP6UQr5yEtQjtLNkrU2S/Q/RcOuCCh5/KKlDqi52Z
-         yl8Q/A6C8p2kklDIJrEewfuaoBsJMRaA+h6mja38cVIBNjiEVGwgMb0Fkd2rSuQUs54h
-         kr2p6TxVmfYclLMHzsYUUy6raVl/5XxQ8A0eoZdry3UCWSkFOpVh6R9mw7lWGbVf13jR
-         o1iQ==
-X-Gm-Message-State: AO0yUKX8QYLkJOfb0O7N6zRBSi2Jb07ITFmYfUmAz3Md9Jl8aKuqC795
-        L/ULe0nlgpWoK4vpg2SfZlfh8CxSU8mVYJ+6KQ7wOFZcd3ymKMVkc1H9aS95rpG5k6VfEliFOh2
-        1cAdhiMBifeCvirqtn2j/B7btuOcU6rZZ
-X-Received: by 2002:a05:6402:658:b0:4fd:2155:74ef with SMTP id u24-20020a056402065800b004fd215574efmr6895466edx.19.1678976717062;
-        Thu, 16 Mar 2023 07:25:17 -0700 (PDT)
-X-Google-Smtp-Source: AK7set+8ohUPdNc1ewEcrGnImeeVbX9S/OYzn7ZNnFHIlHpjijoBmWkVr/rFmti45Bb/aaCqQQfYNQ==
-X-Received: by 2002:a05:6402:658:b0:4fd:2155:74ef with SMTP id u24-20020a056402065800b004fd215574efmr6895438edx.19.1678976716779;
-        Thu, 16 Mar 2023 07:25:16 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id z25-20020a50cd19000000b004af73333d6esm3942089edi.53.2023.03.16.07.25.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Mar 2023 07:25:16 -0700 (PDT)
-Message-ID: <dd36a2ab-d465-f857-30c6-3c0094babd31@redhat.com>
-Date:   Thu, 16 Mar 2023 15:25:15 +0100
+        d=1e100.net; s=20210112; t=1678976722;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=92i4qrEhaaWULAWrFn5b6EQzymw7+aSf9ULAswrYqXc=;
+        b=i0ngcfiwAMauEysvZ5xMEkE5lwtnSC7B3rzRuzC8A1pekiYB5ykzpAA5/wYFMiVC07
+         dGzuQIzonPuI7V80YCjBbVGNkZSTc0EqTY1vF3HlzXP3ohQqSZOX6vKmjUcI0WziQxmc
+         wpxkkoSLFEeKPtM9s4bnUlNdzuXhWgGymCmLzBFDkVhlvQLRXAes4kGXwxteIT8sVl02
+         0og3FHB4XuzwNWtKYE0UHPn+nRdsafupY2bmL9O1qfV4y5D648lkGo7nFe9hP5N2cOKr
+         FjhNclndRCbbvHo3DECqCgL0NC6XyP/n8CYjJANuryTSkHq0FDGNhyrGeyX8Y/QEPJpF
+         c7Vw==
+X-Gm-Message-State: AO0yUKWWZX3EqaCL076bpRzINEIObQsq+KCz38zki7EcFNzrS/Dri5zf
+        vXMhQyT11v9ex59rKMJ5oh5AORu3+3RAfpTQ3PHWb0Ob7Nj1VSXELmVOUSiqkH1v+BuxoUg7SIS
+        6L45hjKtAUFYfgN2rEfexK2FPJxfHRWx4xVEE9FnjBQ==
+X-Received: by 2002:a17:906:a450:b0:88d:9cf8:2dbb with SMTP id cb16-20020a170906a45000b0088d9cf82dbbmr11090868ejb.12.1678976721832;
+        Thu, 16 Mar 2023 07:25:21 -0700 (PDT)
+X-Google-Smtp-Source: AK7set+agi1nKXx1jIWlNITv4H5MH/5KPqUouCuESwMucLcXHcirnZDPgg6dGpBI+OhNPpDle5P0tw==
+X-Received: by 2002:a17:906:a450:b0:88d:9cf8:2dbb with SMTP id cb16-20020a170906a45000b0088d9cf82dbbmr11090849ejb.12.1678976721479;
+        Thu, 16 Mar 2023 07:25:21 -0700 (PDT)
+Received: from localhost (host-79-53-23-214.retail.telecomitalia.it. [79.53.23.214])
+        by smtp.gmail.com with ESMTPSA id oy12-20020a170907104c00b00931024e96c5sm351777ejb.99.2023.03.16.07.25.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Mar 2023 07:25:21 -0700 (PDT)
+Date:   Thu, 16 Mar 2023 15:25:20 +0100
+From:   Andrea Righi <andrea.righi@canonical.com>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Paolo Pisati <paolo.pisati@canonical.com>,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Darren Hart <darren@os.amperecomputing.com>
+Subject: Re: kernel 6.2 stuck at boot (efi_call_rts) on arm64
+Message-ID: <ZBMm0D97gWcxzY3B@righiandr-XPS-13-7390>
+References: <CAMj1kXF3pkxvDX6ZMpnRd3wQX2_T6CYmz7ML-h+PXeo+hM_ZdA@mail.gmail.com>
+ <ZBMOitWwCDj3XiRw@righiandr-XPS-13-7390>
+ <CAMj1kXF=8KoCnRmUyLCZmbfPTeOFQZBeudZuTeA0uHOv-1drFg@mail.gmail.com>
+ <ZBMQdgPepwa+VyAH@righiandr-XPS-13-7390>
+ <CAMj1kXES+FxxbqUPH5TRjHak2MMC2Yksm0_P6wo__LQMH6Emhw@mail.gmail.com>
+ <ZBMes6r2FiAyo81F@righiandr-XPS-13-7390>
+ <CAMj1kXG0+NO6HayK2YqSJU0pwj8bn9Un_G-4VJr=hc1ELi-TpQ@mail.gmail.com>
+ <ZBMgy+Yh9fDxt44C@righiandr-XPS-13-7390>
+ <CAMj1kXEWs43NaTegzmGPFD7UGNVw_13hUCuvmwvKNVYPsfh5Vg@mail.gmail.com>
+ <CAMj1kXHKkK+6TDLebZw=H-ZZLVnwPGSRpNNKSbJoPwwA2vhG+w@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH linux-next v2 1/3] platform/x86/intel/tpmi: Fix double
- free in tpmi_create_device()
-Content-Language: en-US, nl
-To:     Dongliang Mu <dzm91@hust.edu.cn>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Mark Gross <markgross@kernel.org>
-Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230309040107.534716-1-dzm91@hust.edu.cn>
- <20230309040107.534716-2-dzm91@hust.edu.cn>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20230309040107.534716-2-dzm91@hust.edu.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMj1kXHKkK+6TDLebZw=H-ZZLVnwPGSRpNNKSbJoPwwA2vhG+w@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 3/9/23 05:01, Dongliang Mu wrote:
-> The previous commit 6a192c0cbf38 ("platform/x86/intel/tpmi: Fix
-> double free reported by Smatch") incorrectly handle the deallocation of
-> res variable. As shown in the comment, intel_vsec_add_aux handles all
-> the deallocation of res and feature_vsec_dev. Therefore, kfree(res) can
-> still cause double free if intel_vsec_add_aux returns error.
+On Thu, Mar 16, 2023 at 03:08:53PM +0100, Ard Biesheuvel wrote:
+> On Thu, 16 Mar 2023 at 15:06, Ard Biesheuvel <ardb@kernel.org> wrote:
+> >
+> > On Thu, 16 Mar 2023 at 14:59, Andrea Righi <andrea.righi@canonical.com> wrote:
+> > >
+> > > On Thu, Mar 16, 2023 at 02:53:24PM +0100, Ard Biesheuvel wrote:
+> > > > On Thu, 16 Mar 2023 at 14:50, Andrea Righi <andrea.righi@canonical.com> wrote:
+> > > > >
+> > > > > On Thu, Mar 16, 2023 at 02:45:49PM +0100, Ard Biesheuvel wrote:
+> > > > > > On Thu, 16 Mar 2023 at 13:50, Andrea Righi <andrea.righi@canonical.com> wrote:
+> > > > > > >
+> > > > > > > On Thu, Mar 16, 2023 at 01:43:32PM +0100, Ard Biesheuvel wrote:
+> > > > > > > > On Thu, 16 Mar 2023 at 13:41, Andrea Righi <andrea.righi@canonical.com> wrote:
+> > > > > > > > >
+> > > > > > > > > On Thu, Mar 16, 2023 at 01:38:30PM +0100, Ard Biesheuvel wrote:
+> > > > > > > > > > On Thu, 16 Mar 2023 at 13:21, Ard Biesheuvel <ardb@kernel.org> wrote:
+> > > > > > > > > > >
+> > > > > > > > > > > On Thu, 16 Mar 2023 at 12:34, Andrea Righi <andrea.righi@canonical.com> wrote:
+> > > > > > > > > > > >
+> > > > > > > > > > > > On Thu, Mar 16, 2023 at 11:18:21AM +0100, Ard Biesheuvel wrote:
+> > > > > > > > > > > > > On Thu, 16 Mar 2023 at 11:03, Andrea Righi <andrea.righi@canonical.com> wrote:
+> > > > > > > > > > > > > >
+> > > > > > > > > > > > > > On Thu, Mar 16, 2023 at 10:55:58AM +0100, Ard Biesheuvel wrote:
+> > > > > > > > > > > > > > > (cc Darren)
+> > > > > > > > > > > > > > >
+> > > > > > > > > > > > > > > On Thu, 16 Mar 2023 at 10:45, Andrea Righi <andrea.righi@canonical.com> wrote:
+> > > > > > > > > > > > > > > >
+> > > > > > > > > > > > > > > > On Thu, Mar 16, 2023 at 08:58:20AM +0100, Ard Biesheuvel wrote:
+> > > > > > > > > > > > > > > > > Hello Andrea,
+> > > > > > > > > > > > > > > > >
+> > > > > > > > > > > > > > > > > On Thu, 16 Mar 2023 at 08:54, Andrea Righi <andrea.righi@canonical.com> wrote:
+> > > > > > > > > > > > > > > > > >
+> > > > > > > > > > > > > > > > > > Hello,
+> > > > > > > > > > > > > > > > > >
+> > > > > > > > > > > > > > > > > > the latest v6.2.6 kernel fails to boot on some arm64 systems, the kernel
+> > > > > > > > > > > > > > > > > > gets stuck and never completes the boot. On the console I see this:
+> > > > > > > > > > > > > > > > > >
+> > > > > > > > > > > > > > > > > > [   72.043484] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+> > > > > > > > > > > > > > > > > > [   72.049571] rcu:     22-...0: (30 GPs behind) idle=b10c/1/0x4000000000000000 softirq=164/164 fqs=6443
+> > > > > > > > > > > > > > > > > > [   72.058520]     (detected by 28, t=15005 jiffies, g=449, q=174 ncpus=32)
+> > > > > > > > > > > > > > > > > > [   72.064949] Task dump for CPU 22:
+> > > > > > > > > > > > > > > > > > [   72.068251] task:kworker/u64:5   state:R  running task     stack:0     pid:447   ppid:2      flags:0x0000000a
+> > > > > > > > > > > > > > > > > > [   72.078156] Workqueue: efi_rts_wq efi_call_rts
+> > > > > > > > > > > > > > > > > > [   72.082595] Call trace:
+> > > > > > > > > > > > > > > > > > [   72.085029]  __switch_to+0xbc/0x100
+> > > > > > > > > > > > > > > > > > [   72.088508]  0xffff80000fe83d4c
+> > > > > > > > > > > > > > > > > >
+> > > > > > > > > > > > > > > > > > After that, as a consequence, I start to get a lot of hung task timeout traces.
+> > > > > > > > > > > > > > > > > >
+> > > > > > > > > > > > > > > > > > I tried to bisect the problem and I found that the offending commit is
+> > > > > > > > > > > > > > > > > > this one:
+> > > > > > > > > > > > > > > > > >
+> > > > > > > > > > > > > > > > > >  e7b813b32a42 ("efi: random: refresh non-volatile random seed when RNG is initialized")
+> > > > > > > > > > > > > > > > > >
+> > > > > > > > > > > > > > > > > > I've reverted this commit for now and everything works just fine, but I
+> > > > > > > > > > > > > > > > > > was wondering if the problem could be caused by a lack of entropy on
+> > > > > > > > > > > > > > > > > > these arm64 boxes or something else.
+> > > > > > > > > > > > > > > > > >
+> > > > > > > > > > > > > > > > > > Any suggestion? Let me know if you want me to do any specific test.
+> > > > > > > > > > > > > > > > > >
+> > > > > > > > > > > > > > > > >
+> > > > > > > > > > > > > > > > > Thanks for the report.
+> > > > > > > > > > > > > > > > >
+> > > > > > > > > > > > > > > > > This is most likely the EFI SetVariable() call going off into the
+> > > > > > > > > > > > > > > > > weeds and never returning.
+> > > > > > > > > > > > > > > > >
+> > > > > > > > > > > > > > > > > Is this an Ampere Altra system by any chance? Do you see it on
+> > > > > > > > > > > > > > > > > different types of hardware?
+> > > > > > > > > > > > > > > >
+> > > > > > > > > > > > > > > > This is: Ampere eMAG / Lenovo ThinkSystem HR330a.
+> > > > > > > > > > > > > > > >
+> > > > > > > > > > > > > > > > >
+> > > > > > > > > > > > > > > > > Could you check whether SetVariable works on this system? E.g. by
+> > > > > > > > > > > > > > > > > updating the EFI boot timeout (sudo efibootmgr -t <n>)?
+> > > > > > > > > > > > > > > >
+> > > > > > > > > > > > > > > > ubuntu@kuzzle:~$ sudo efibootmgr -t 10
+> > > > > > > > > > > > > > > > ^C^C^C^C
+> > > > > > > > > > > > > > > >
+> > > > > > > > > > > > > > > > ^ Stuck there, so it really looks like SetVariable is the problem.
+> > > > > > > > > > > > > > > >
+> > > > > > > > > > > > > > >
+> > > > > > > > > > > > > > > Could you please share the output of
+> > > > > > > > > > > > > > >
+> > > > > > > > > > > > > > > dmidecode -s bios
+> > > > > > > > > > > > > > > dmidecode -s system-family
+> > > > > > > > > > > > > >
+> > > > > > > > > > > > > > $ sudo dmidecode -s bios-vendor
+> > > > > > > > > > > > > > LENOVO
+> > > > > > > > > > > > > > $ sudo dmidecode -s bios-version
+> > > > > > > > > > > > > > hve104r-1.15
+> > > > > > > > > > > > > > $ sudo dmidecode -s bios-release-date
+> > > > > > > > > > > > > > 02/26/2021
+> > > > > > > > > > > > > > $ sudo dmidecode -s bios-revision
+> > > > > > > > > > > > > > 1.15
+> > > > > > > > > > > > > > $ sudo dmidecode -s system-family
+> > > > > > > > > > > > > > Lenovo ThinkSystem HR330A/HR350A
+> > > > > > > > > > > > > >
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > Thanks
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > Mind checking if this patch fixes your issue as well?
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/commit/?h=altra-fix&id=77fa99dd4741456da85049c13ec31a148f5f5ac0
+> > > > > > > > > > > >
+> > > > > > > > > > > > Unfortunately this doesn't seem to be enough, I'm still getting the same
+> > > > > > > > > > > > problem also with this patch applied.
+> > > > > > > > > > > >
+> > > > > > > > > > >
+> > > > > > > > > > > Thanks for trying.
+> > > > > > > > > > >
+> > > > > > > > > > > How about the last 3 patches on this branch?
+> > > > > > > > > > >
+> > > > > > > > > > > https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/log/?h=efi-smbios-altra-fix
+> > > > > > > > > >
+> > > > > > > > > > Actually, that may not match your hardware.
+> > > > > > > > > >
+> > > > > > > > > > Does your kernel log have a line like
+> > > > > > > > > >
+> > > > > > > > > > SMCCC: SOC_ID: ID = jep106:036b:0019 Revision = 0x00000102
+> > > > > > > > > >
+> > > > > > > > > > ?
+> > > > > > > > >
+> > > > > > > > > $ sudo dmesg | grep "SMCCC: SOC_ID"
+> > > > > > > > > [    5.320782] SMCCC: SOC_ID: ARCH_SOC_ID not implemented, skipping ....
+> > > > > > > > >
+> > > > > > > >
+> > > > > > > > Thanks. Could you share the entire dmidecode output somewhere? Or at
+> > > > > > > > least the type 4 record(s)?
+> > > > > > >
+> > > > > > > Sure, here's the full output of dmidecode:
+> > > > > > > https://pastebin.ubuntu.com/p/4ZmKmP2xTm/
+> > > > > > >
+> > > > > >
+> > > > > > Thanks. I have updated my SMBIOS patches to take the processor version
+> > > > > > 'eMAG' into account, which appears to be what these boxes are using.
+> > > > > >
+> > > > > > I have updated the efi/urgent branch here with the latest versions.
+> > > > > > Mind giving them a spin?
+> > > > > >
+> > > > > >
+> > > > > > In the mean time, just for the record - could you please run this as well?
+> > > > > >
+> > > > > > hexdump -C /sys/firmware/dmi/entries/4-0/raw
+> > > > > >
+> > > > > > (as root)
+> > > > >
+> > > > > hm.. I don't have that in /sys/firmware/, this is what I have:
+> > > > >
+> > > > > # ls -l /sys/firmware/dmi/
+> > > > > total 0
+> > > > > drwxr-xr-x 2 root root 0 Mar 16 13:26 tables
+> > > > > # ls -l /sys/firmware/dmi/tables/
+> > > > > total 0
+> > > > > -r-------- 1 root root 5004 Mar 16 13:26 DMI
+> > > > > -r-------- 1 root root   24 Mar 16 13:26 smbios_entry_point
+> > > > >
+> > > >
+> > > > You'll need to load the dmi_sysfs module for that. But no big deal
+> > > > otherwise, I'm pretty sure the word order is the correct on on your
+> > > > system in any case (it decodes the value correctly in the next line)
+> > >
+> > > ok, much better after modprobe dmi_sysfs. :)
+> > >
+> >
+> > Yeah better, thanks.
+> >
+> > > $ sudo hexdump -C /sys/firmware/dmi/entries/4-0/raw
+> > > 00000000  04 30 04 00 01 03 fe 02  02 00 3f 50 00 00 00 00  |.0........?P....|
+> > > 00000010  03 89 b8 0b e4 0c b8 0b  41 06 05 00 06 00 07 00  |........A.......|
+> > > 00000020  04 00 00 20 20 20 7c 00  01 01 00 00 00 00 00 00  |...   |.........|
+> > > 00000030  43 50 55 20 31 00 41 6d  70 65 72 65 28 54 4d 29  |CPU 1.Ampere(TM)|
+> > > 00000040  00 65 4d 41 47 20 00 30  30 30 30 30 30 30 30 30  |.eMAG .000000000|
+> >
+> > Darn, this means we have to match for "eMAG " (with the trailing
+> > space) so the branch i just pushed needs to be updated for this.
+> >
 > 
-> Fix this by adjusting the error handling part in tpmi_create_device,
-> following the function intel_vsec_add_dev.
+> I.e.,
 > 
-> Fixes: 6a192c0cbf38 ("platform/x86/intel/tpmi: Fix double free reported by Smatch")
-> Signed-off-by: Dongliang Mu <dzm91@hust.edu.cn>
-
-IIRC then after this v2 was posted I still saw some comments on the original v1 which was not posted on the list. Without the v1 comments being on the list and this archived, I have lost track of what the status of these patches is.
-
-Srinivas, can you let me know if I should merge these, or if more changes are necessary ?
-
-From the off-list discussion of v1 I got the impression more changes are necessary, but I'm not sure.
-
-Regards,
-
-Hans
-
-
-
-
-> ---
->  drivers/platform/x86/intel/tpmi.c | 17 ++++-------------
->  1 file changed, 4 insertions(+), 13 deletions(-)
+> --- a/drivers/firmware/efi/libstub/arm64.c
+> +++ b/drivers/firmware/efi/libstub/arm64.c
+> @@ -36,7 +36,7 @@ static bool system_needs_vamap(void)
+>         default:
+>                 version = efi_get_smbios_string(&record->header, 4,
+>                                                 processor_version);
+> -               if (!version || strcmp(version, "eMAG"))
+> +               if (!version || strncmp(version, "eMAG", 4))
+>                         break;
 > 
-> diff --git a/drivers/platform/x86/intel/tpmi.c b/drivers/platform/x86/intel/tpmi.c
-> index c999732b0f1e..882fe5e4763f 100644
-> --- a/drivers/platform/x86/intel/tpmi.c
-> +++ b/drivers/platform/x86/intel/tpmi.c
-> @@ -215,8 +215,8 @@ static int tpmi_create_device(struct intel_tpmi_info *tpmi_info,
->  
->  	feature_vsec_dev = kzalloc(sizeof(*feature_vsec_dev), GFP_KERNEL);
->  	if (!feature_vsec_dev) {
-> -		ret = -ENOMEM;
-> -		goto free_res;
-> +		kfree(res);
-> +		return -ENOMEM;
->  	}
->  
->  	snprintf(feature_id_name, sizeof(feature_id_name), "tpmi-%s", name);
-> @@ -242,17 +242,8 @@ static int tpmi_create_device(struct intel_tpmi_info *tpmi_info,
->  	 * feature_vsec_dev memory is also freed as part of device
->  	 * delete.
->  	 */
-> -	ret = intel_vsec_add_aux(vsec_dev->pcidev, &vsec_dev->auxdev.dev,
-> -				 feature_vsec_dev, feature_id_name);
-> -	if (ret)
-> -		goto free_res;
-> -
-> -	return 0;
-> -
-> -free_res:
-> -	kfree(res);
-> -
-> -	return ret;
-> +	return intel_vsec_add_aux(vsec_dev->pcidev, &vsec_dev->auxdev.dev,
-> +				  feature_vsec_dev, feature_id_name);
->  }
->  
->  static int tpmi_create_devices(struct intel_tpmi_info *tpmi_info)
+>                 fallthrough;
 
+OK, I can add that and test it.
+
+-Andrea
