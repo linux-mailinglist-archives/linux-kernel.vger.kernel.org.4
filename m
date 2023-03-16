@@ -2,138 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 727726BD799
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 18:55:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68A0B6BD79D
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 18:55:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230298AbjCPRzZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 13:55:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60628 "EHLO
+        id S230082AbjCPRzo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 13:55:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230208AbjCPRzP (ORCPT
+        with ESMTP id S230286AbjCPRzc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 13:55:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37D8A7EC8;
-        Thu, 16 Mar 2023 10:54:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C768C620B3;
-        Thu, 16 Mar 2023 17:54:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32EC1C433EF;
-        Thu, 16 Mar 2023 17:54:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678989294;
-        bh=fAyb965+K/lVukS5xMMsFo8dHBwVzWtpB66j36wUhfQ=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=UWWcY/xsxSDztGJ1ZGPxAmoxhqYpFmkLeA3Fh/08eS5A41/B1j30+sB4aLlxsDTHo
-         CXBZo6/IINhxXCKdwFdtMLXs2ZCFqCmkiyokkvRa0CPkkG1wTHUzftEZ1g9CN83oaV
-         gVDvf1+PA2yqTQyITRfSVLzdLbHKLvZBx8znxOgPAYTUWVcee66fQ/1MeTEUcmQGLc
-         DWwtS9liV/Cv6KyMdPnkMXqjQ1rf84tRWHQPGHsHSX7J75P+n6PljEd9dvuZI+EL4k
-         MhVImE8gXWKxus3MQtM7XzOUE+d7eGiRe+YmWus1KkXJZsna76uKz4j7ErB5lYeo17
-         JBOEd0GDk5Naw==
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id D82431540395; Thu, 16 Mar 2023 10:54:53 -0700 (PDT)
-Date:   Thu, 16 Mar 2023 10:54:53 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Uladzislau Rezki <urezki@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
-        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Philipp Reisner <philipp.reisner@linbit.com>,
-        Bryan Tan <bryantan@vmware.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Bob Pearson <rpearsonhpe@gmail.com>,
-        Ariel Levkovich <lariel@nvidia.com>,
-        Theodore Ts'o <tytso@mit.edu>, Julian Anastasov <ja@ssi.bg>
-Subject: Re: [PATCH 04/13] tracing: Rename kvfree_rcu() to
- kvfree_rcu_mightsleep()
-Message-ID: <9c5a24c2-8b8c-4037-9607-76f4438693f5@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <20230201150815.409582-1-urezki@gmail.com>
- <20230201150815.409582-5-urezki@gmail.com>
- <ZAni8Q1NW9cWrvHJ@pc636>
- <20230315183648.5164af0f@gandalf.local.home>
+        Thu, 16 Mar 2023 13:55:32 -0400
+Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.196])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3635A132D3;
+        Thu, 16 Mar 2023 10:55:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=F7z8r
+        uqVwWGO2iKV3hhmptNBwExUSsE13fwewhDsOi0=; b=Y8rMFwHvwAoKI2U6Wmm2s
+        Sofn1IdhK1o+vH7JYbyAwfPaqJJf0bpG7/UFWjjMtaMuoc4NiOEexv0zyEGrTkLi
+        dP+4Nh/MqJIXU+NhhGAZ6eiCZZ88FXGT4z6gxSY9egbGsjiT2v/17xwiWSEkS2JQ
+        JH+KI0esBMpy3/5Ay56cTg=
+Received: from leanderwang-LC2.localdomain (unknown [111.206.145.21])
+        by zwqz-smtp-mta-g5-2 (Coremail) with SMTP id _____wCnT_zyVxNkdZsdAQ--.63001S2;
+        Fri, 17 Mar 2023 01:54:58 +0800 (CST)
+From:   Zheng Wang <zyytlz.wz@163.com>
+To:     gregkh@linuxfoundation.org
+Cc:     p.zabel@pengutronix.de, biju.das.jz@bp.renesas.com,
+        phil.edworthy@renesas.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, hackerzheng666@gmail.com,
+        1395428693sheep@gmail.com, alex000young@gmail.com,
+        yoshihiro.shimoda.uh@renesas.com, Zheng Wang <zyytlz.wz@163.com>
+Subject: [PATCH v6] usb: gadget: udc: renesas_usb3: Fix use after free bug in  renesas_usb3_remove due to race condition
+Date:   Fri, 17 Mar 2023 01:54:57 +0800
+Message-Id: <20230316175457.1595921-1-zyytlz.wz@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230315183648.5164af0f@gandalf.local.home>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: _____wCnT_zyVxNkdZsdAQ--.63001S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7Zr45Xr15Jr4rCF4UXr4DXFb_yoW8Cr4kpF
+        WDKFW5Ar4rJFWqq3y7GFykZF1rCasrKry7ZFW7Kw4xuF1rW3y8JryIqF4jkFnrJFZ3AF4F
+        qa1Du34jqa47u37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zic4S7UUUUU=
+X-Originating-IP: [111.206.145.21]
+X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/1tbiQho0U1aEEsHXzAAAsl
+X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,
+        RCVD_IN_VALIDITY_RPBL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 15, 2023 at 06:36:48PM -0400, Steven Rostedt wrote:
-> On Thu, 9 Mar 2023 14:45:21 +0100
-> Uladzislau Rezki <urezki@gmail.com> wrote:
-> 
-> > > The kvfree_rcu()'s single argument name is deprecated therefore
-> > > rename it to kvfree_rcu_mightsleep() variant. The goal is explicitly
-> > > underline that it is for sleepable contexts.
-> > > 
-> > > Cc: Steven Rostedt (VMware) <rostedt@goodmis.org>
-> > > Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
-> > >  
-> > Could you please add you reviwed-by or Acked-by tags so we can bring
-> > our series with renaming for the next merge window?
-> 
-> I don't know. Perhaps we should just apply this patch and not worry about
-> sleeping and whatnot.
+In renesas_usb3_probe, role_work is bound with renesas_usb3_role_work.
+renesas_usb3_start will be called to start the work.
 
-Just in case it is not clear:
+If we remove the driver which will call usbhs_remove, there may be
+an unfinished work. The possible sequence is as follows:
 
-Acked-by: Paul E. McKenney <paulmck@kernel.org>
+Fix it by canceling the work before cleanup in the renesas_usb3_remove.
 
-> -- Steve
-> 
-> diff --git a/kernel/trace/trace_osnoise.c b/kernel/trace/trace_osnoise.c
-> index 04f0fdae19a1..5de945a8f61d 100644
-> --- a/kernel/trace/trace_osnoise.c
-> +++ b/kernel/trace/trace_osnoise.c
-> @@ -76,6 +76,7 @@ static unsigned long osnoise_options	= OSN_DEFAULT_OPTIONS;
->  struct osnoise_instance {
->  	struct list_head	list;
->  	struct trace_array	*tr;
-> +	struct rcu_head		rcu;
->  };
->  
->  static struct list_head osnoise_instances;
-> @@ -159,7 +160,7 @@ static void osnoise_unregister_instance(struct trace_array *tr)
->  	if (!found)
->  		return;
->  
-> -	kvfree_rcu(inst);
-> +	kvfree_rcu(inst, rcu);
->  }
->  
->  /*
-> diff --git a/kernel/trace/trace_probe.c b/kernel/trace/trace_probe.c
-> index 20d0c4a97633..ef5fafb40c76 100644
-> --- a/kernel/trace/trace_probe.c
-> +++ b/kernel/trace/trace_probe.c
-> @@ -1172,7 +1172,7 @@ int trace_probe_remove_file(struct trace_probe *tp,
->  		return -ENOENT;
->  
->  	list_del_rcu(&link->list);
-> -	kvfree_rcu(link);
-> +	kvfree_rcu(link, rcu);
->  
->  	if (list_empty(&tp->event->files))
->  		trace_probe_clear_flag(tp, TP_FLAG_TRACE);
-> diff --git a/kernel/trace/trace_probe.h b/kernel/trace/trace_probe.h
-> index ef8ed3b65d05..e6037752dcf0 100644
-> --- a/kernel/trace/trace_probe.h
-> +++ b/kernel/trace/trace_probe.h
-> @@ -256,6 +256,7 @@ struct trace_probe {
->  struct event_file_link {
->  	struct trace_event_file		*file;
->  	struct list_head		list;
-> +	struct rcu_head			rcu;
->  };
->  
->  static inline bool trace_probe_test_flag(struct trace_probe *tp,
+Note that removing a driver is a root-only operation, and should never
+happen.
+
+CPU0                  			CPU1
+
+                    			| renesas_usb3_role_work
+renesas_usb3_remove 			|
+usb_role_switch_unregister|
+device_unregister   			|
+kfree(sw)  	     					|
+free usb3->role_sw  			|
+                    			| usb_role_switch_set_role
+                    			| //use usb3->role_sw
+
+Fixes: 39facfa01c9f ("usb: gadget: udc: renesas_usb3: Add register of usb role switch")
+Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+Reviewed-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+---
+v6:
+- beautify the format and add note suggested by Greg KH
+v5:
+- fix typo
+v4:
+- add Reviewed-by label and resubmit v4 suggested by Greg KH
+v3:
+- modify the commit message to make it clearer suggested by Yoshihiro Shimoda
+v2:
+- fix typo, use clearer commit message and only cancel the UAF-related work suggested by Yoshihiro Shimoda
+---
+ drivers/usb/gadget/udc/renesas_usb3.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/usb/gadget/udc/renesas_usb3.c b/drivers/usb/gadget/udc/renesas_usb3.c
+index bee6bceafc4f..a301af66bd91 100644
+--- a/drivers/usb/gadget/udc/renesas_usb3.c
++++ b/drivers/usb/gadget/udc/renesas_usb3.c
+@@ -2661,6 +2661,7 @@ static int renesas_usb3_remove(struct platform_device *pdev)
+ 	debugfs_remove_recursive(usb3->dentry);
+ 	device_remove_file(&pdev->dev, &dev_attr_role);
+ 
++	cancel_work_sync(&usb3->role_work);
+ 	usb_role_switch_unregister(usb3->role_sw);
+ 
+ 	usb_del_gadget_udc(&usb3->gadget);
+-- 
+2.25.1
+
