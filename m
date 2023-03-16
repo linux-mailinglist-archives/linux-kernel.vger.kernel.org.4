@@ -2,210 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B1FD6BCB3B
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 10:42:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6632C6BCB3F
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 10:44:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230290AbjCPJmZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 05:42:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41760 "EHLO
+        id S229512AbjCPJoN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 05:44:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230131AbjCPJmX (ORCPT
+        with ESMTP id S229473AbjCPJoK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 05:42:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16BEDB53D0;
-        Thu, 16 Mar 2023 02:42:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9A17AB820C2;
-        Thu, 16 Mar 2023 09:42:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA42DC433EF;
-        Thu, 16 Mar 2023 09:42:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1678959737;
-        bh=vpSSBSzQt8XaSR/S3XysOU+czKUFDnj6+ZE+jNzO3NU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=w3dQPkjeDFrCo6mfG9itGdY6u8xIY27o90c5GwdwwqxY6YBosIgbIdOvA68gYrTbB
-         B1g+hkH+1CBIt2SHwCfusT3YMh2S0VeZKXHJWiJBR2D9n8b3yGbjA6aMLSeXHHNxEk
-         qJoeKFe8uAxNljCkNPM7CPnCqHH6iBOZO3P0z94Q=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     stable@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Subject: [PATCH 4.19 00/27] 4.19.278-rc3 review
-Date:   Thu, 16 Mar 2023 10:42:14 +0100
-Message-Id: <20230316094129.846802350@linuxfoundation.org>
-X-Mailer: git-send-email 2.40.0
+        Thu, 16 Mar 2023 05:44:10 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A98EACC2C
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 02:43:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678959801;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=P76DINGwLN3jYPnTLgFDgnOUdVkQEqE2bdfQVbKORjo=;
+        b=OJRhNPRfVy7fNuiZmLLnVZju5T2KNrr5SsRJcFJpuV3TPpjCNrHzgJTpXRkbH8RnSWGT1j
+        GGoVOIxGxp7QD/KVJMDtANRQl6rBPc+F0YBu8DmwFJoTIO3jVxNdDh66XLpkx+2I/C2f1/
+        p3fbeuviO5Mwgc2QEJBArNDoYEkhbZw=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-403-xw9eZ-PZPfSFfCY-_eiyMA-1; Thu, 16 Mar 2023 05:43:20 -0400
+X-MC-Unique: xw9eZ-PZPfSFfCY-_eiyMA-1
+Received: by mail-ed1-f69.google.com with SMTP id w6-20020a05640234c600b004fc0e5b4433so2165101edc.18
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 02:43:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678959799;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=P76DINGwLN3jYPnTLgFDgnOUdVkQEqE2bdfQVbKORjo=;
+        b=wbzgnEEkR0ZVd3CcKkH5xsrZx+LOvbedG7DqXDJz4+nPs8HYAIPqJ+yJPDtZ4L7M8+
+         +HmM1Xkla8yDr+CyPk94qTrBHuDfKXYkEakkspydJJsMPDL90JOVRqfWQoGopEYf3qNM
+         Y+Bj1QO/4kWynZyjjZjSNOH+HXVkiSVM4zNZ/62RbB57uanAcu+H1se6dyUuNX/eQRfq
+         2pEH+BfDo14lydRrCakJ/Qo1oNJpI6G6CvNW2kexUGWLOeLiC3Xddmc4vSADZRKGANv7
+         btHoQWqBIsdFlOFykpzO2arBKLc+BLHI1qQlfARyumzszBTzM9D+XAMAMqI2mM0D9If5
+         bx2g==
+X-Gm-Message-State: AO0yUKXjdWRk4VxQmlE+Zw9MkPZ8Anyqj4NGLylD72LANEJMMHqSVhKS
+        ahdfMRBVMlkk7/knWWej4RQ4nFyV4lcDrfjzZ45VGzTOAY1eupTNYtldh3ziH6EZ8jP50nFT4Xp
+        SXzCG5u3pZ3igZ0bpYPe3SRF3
+X-Received: by 2002:a17:907:c508:b0:92c:6fbf:28 with SMTP id tq8-20020a170907c50800b0092c6fbf0028mr11131713ejc.64.1678959799130;
+        Thu, 16 Mar 2023 02:43:19 -0700 (PDT)
+X-Google-Smtp-Source: AK7set9ABacgIfpMNu8b5pxHf2TkCJA8LMCLwd2GIJtR06o8lF73WzUup/jJcRknqUbwOk8DJbXvqw==
+X-Received: by 2002:a17:907:c508:b0:92c:6fbf:28 with SMTP id tq8-20020a170907c50800b0092c6fbf0028mr11131697ejc.64.1678959798893;
+        Thu, 16 Mar 2023 02:43:18 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id e23-20020a170906375700b008cff300cf47sm3603646ejc.72.2023.03.16.02.43.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Mar 2023 02:43:18 -0700 (PDT)
+Message-ID: <fc45ace6-546c-59cd-016d-906b6bcb1831@redhat.com>
+Date:   Thu, 16 Mar 2023 10:43:17 +0100
 MIME-Version: 1.0
-User-Agent: quilt/0.67
-X-stable: review
-X-Patchwork-Hint: ignore
-X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.19.278-rc3.gz
-X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-X-KernelTest-Branch: linux-4.19.y
-X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
-X-KernelTest-Version: 4.19.278-rc3
-X-KernelTest-Deadline: 2023-03-18T09:41+00:00
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v3 1/8] platform/x86/intel/ifs: Reorganize driver data
+Content-Language: en-US, nl
+To:     "Joseph, Jithu" <jithu.joseph@intel.com>, markgross@kernel.org
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        gregkh@linuxfoundation.org, rostedt@goodmis.org,
+        ashok.raj@intel.com, tony.luck@intel.com,
+        linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        patches@lists.linux.dev, ravi.v.shankar@intel.com,
+        thiago.macieira@intel.com, athenas.jimenez.gonzalez@intel.com,
+        sohil.mehta@intel.com
+References: <20230214234426.344960-1-jithu.joseph@intel.com>
+ <20230301015942.462799-1-jithu.joseph@intel.com>
+ <20230301015942.462799-2-jithu.joseph@intel.com>
+ <a6ae936e-effd-3794-e6fb-11b33a4d6eb1@redhat.com>
+ <2ae25756-7403-ad5f-548a-50e633040bf9@intel.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <2ae25756-7403-ad5f-548a-50e633040bf9@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is the start of the stable review cycle for the 4.19.278 release.
-There are 27 patches in this series, all will be posted as a response
-to this one.  If anyone has any issues with these being applied, please
-let me know.
+Hi,
 
-Responses should be made by Sat, 18 Mar 2023 09:41:20 +0000.
-Anything received after that time might be too late.
+On 3/13/23 22:34, Joseph, Jithu wrote:
+> 
+> 
+> On 3/13/2023 7:46 AM, Hans de Goede wrote:
+>> Hi Jithu,
+>>
+>> On 3/1/23 02:59, Jithu Joseph wrote:
+> 
+>>>  
+>>> +struct ifs_const_data {
+>>> +	int	integrity_cap_bit;
+>>> +	int	test_num;
+>>> +};
+>>> +
+>>
+>> This is a description of the specific capabilties / bits of
+>> the IFS on e.g. Saphire Rapids, so please name this appropriately
+>> for example:
+>>
+>> struct ifs_hw_caps  {
+>> 	int	integrity_cap_bit;
+>> 	int	test_num;
+>> };
+> 
+> This can be renamed to ifs_test_caps as it holds test specific fields.
 
-The whole patch series can be found in one patch at:
-	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.19.278-rc3.gz
-or in the git tree and branch at:
-	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.19.y
-and the diffstat can be found below.
+Ack.
 
-thanks,
+>>
+>> You got this exactly the wrong way around, there should be a single
+>>
+>> static const struct ifs_hw_caps saphire_rapids_caps = {
+>> 	.integrity_cap_bit = MSR_INTEGRITY_CAPS_PERIODIC_BIST_BIT,
+>> 	.test_num = 0,
+>> };
+>>
+>> And then struct ifs_device { } should have a "const struct ifs_hw_caps *hw_caps"
+>> which gets initialized to point to &saphire_rapids_caps. So that your const
+>> data is actually const.
+>>
+>> Where as since the r/w data's lifetime is couple to the misc-device lifetime
+>> there is no need to dynamically allocate it just keep that embedded, so that
+>> together you get:
+> 
+> Noted 
+> 
+>>
+>> struct ifs_device {
+>> 	const struct ifs_hw_caps *hw_caps;
+>> 	struct ifs_data data;
+>> 	struct miscdevice misc;
+>> };
+>>
+> 
+> The initialization portion, taking into account your suggestion above, translates to:
 
-greg k-h
+Yes, assuming we go with 1 ifs_device per test type.
 
--------------
-Pseudo-Shortlog of commits:
+Regards,
 
-Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-    Linux 4.19.278-rc3
-
-Eric Dumazet <edumazet@google.com>
-    ila: do not generate empty messages in ila_xlat_nl_cmd_get_mapping()
-
-Kang Chen <void0red@gmail.com>
-    nfc: fdp: add null check of devm_kmalloc_array in fdp_nci_i2c_read_device_properties
-
-Shigeru Yoshida <syoshida@redhat.com>
-    net: caif: Fix use-after-free in cfusbl_device_notify()
-
-John Harrison <John.C.Harrison@Intel.com>
-    drm/i915: Don't use BAR mappings for ring buffers with LLC
-
-Tung Nguyen <tung.q.nguyen@dektech.com.au>
-    tipc: improve function tipc_wait_for_cond()
-
-Paul Elder <paul.elder@ideasonboard.com>
-    media: ov5640: Fix analogue gain control
-
-Alvaro Karsz <alvaro.karsz@solid-run.com>
-    PCI: Add SolidRun vendor ID
-
-Nathan Chancellor <nathan@kernel.org>
-    macintosh: windfarm: Use unsigned type for 1-bit bitfields
-
-Edward Humes <aurxenon@lunos.org>
-    alpha: fix R_ALPHA_LITERAL reloc for large modules
-
-xurui <xurui@kylinos.cn>
-    MIPS: Fix a compilation issue
-
-Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
-    Revert "spi: mt7621: Fix an error message in mt7621_spi_probe()"
-
-Bart Van Assche <bvanassche@acm.org>
-    scsi: core: Remove the /proc/scsi/${proc_name} directory earlier
-
-Masahiro Yamada <yamada.masahiro@socionext.com>
-    kbuild: generate modules.order only in directories visited by obj-y/m
-
-Masahiro Yamada <yamada.masahiro@socionext.com>
-    kbuild: fix false-positive need-builtin calculation
-
-Jan Kara <jack@suse.cz>
-    udf: Detect system inodes linked into directory hierarchy
-
-Jan Kara <jack@suse.cz>
-    udf: Preserve link count of system files
-
-Jan Kara <jack@suse.cz>
-    udf: Remove pointless union in udf_inode_info
-
-Steven J. Magnani <steve.magnani@digidescorp.com>
-    udf: reduce leakage of blocks related to named streams
-
-Jan Kara <jack@suse.cz>
-    udf: Explain handling of load_nls() failure
-
-Fedor Pchelkin <pchelkin@ispras.ru>
-    nfc: change order inside nfc_se_io error path
-
-Zhihao Cheng <chengzhihao1@huawei.com>
-    ext4: zero i_disksize when initializing the bootloader inode
-
-Ye Bin <yebin10@huawei.com>
-    ext4: fix WARNING in ext4_update_inline_data
-
-Ye Bin <yebin10@huawei.com>
-    ext4: move where set the MAY_INLINE_DATA flag is set
-
-Darrick J. Wong <djwong@kernel.org>
-    ext4: fix another off-by-one fsmap error on 1k block filesystems
-
-Eric Whitney <enwlinux@gmail.com>
-    ext4: fix RENAME_WHITEOUT handling for inline directories
-
-Andrew Cooper <andrew.cooper3@citrix.com>
-    x86/CPU/AMD: Disable XSAVES on AMD family 0x17
-
-Theodore Ts'o <tytso@mit.edu>
-    fs: prevent out-of-bounds array speculation when closing a file descriptor
+Hans
 
 
--------------
-
-Diffstat:
-
- Makefile                                 |  4 +-
- arch/alpha/kernel/module.c               |  4 +-
- arch/mips/include/asm/mach-rc32434/pci.h |  2 +-
- arch/x86/kernel/cpu/amd.c                |  9 ++++
- drivers/gpu/drm/i915/intel_ringbuffer.c  |  4 +-
- drivers/macintosh/windfarm_lm75_sensor.c |  4 +-
- drivers/macintosh/windfarm_smu_sensors.c |  4 +-
- drivers/media/i2c/ov5640.c               |  2 +-
- drivers/nfc/fdp/i2c.c                    |  4 ++
- drivers/scsi/hosts.c                     |  2 +
- drivers/staging/mt7621-spi/spi-mt7621.c  |  8 ++--
- fs/ext4/fsmap.c                          |  2 +
- fs/ext4/inline.c                         |  1 -
- fs/ext4/inode.c                          |  7 ++-
- fs/ext4/ioctl.c                          |  1 +
- fs/ext4/namei.c                          | 13 +++---
- fs/ext4/xattr.c                          |  3 ++
- fs/file.c                                |  1 +
- fs/udf/directory.c                       |  2 +-
- fs/udf/file.c                            |  7 ++-
- fs/udf/ialloc.c                          | 14 +++---
- fs/udf/inode.c                           | 76 ++++++++++++++++++++++----------
- fs/udf/misc.c                            |  6 +--
- fs/udf/namei.c                           |  7 ++-
- fs/udf/partition.c                       |  2 +-
- fs/udf/super.c                           | 12 ++++-
- fs/udf/symlink.c                         |  2 +-
- fs/udf/udf_i.h                           | 12 ++---
- include/linux/pci_ids.h                  |  2 +
- net/caif/caif_usb.c                      |  3 ++
- net/ipv6/ila/ila_xlat.c                  |  1 +
- net/nfc/netlink.c                        |  2 +-
- net/tipc/socket.c                        |  2 +-
- scripts/Makefile.build                   |  4 +-
- 34 files changed, 150 insertions(+), 79 deletions(-)
-
+> static const struct ifs_test_caps scan_test = {
+> 	.integrity_cap_bit = MSR_INTEGRITY_CAPS_PERIODIC_BIST_BIT,
+> 	.test_num = IFS_TYPE_SAF,
+> };
+> 
+> static const struct ifs_test_caps array_test = {
+> 	.integrity_cap_bit = MSR_INTEGRITY_CAPS_ARRAY_BIST_BIT,
+> 	.test_num = IFS_TYPE_ARRAY_BIST,
+> };
+> 
+> static struct ifs_device ifs_devices[] = {
+> 	[IFS_TYPE_SAF] = {
+> 		.test_caps = &scan_test,
+> 		.misc = {
+> 			.name = "intel_ifs_0",
+> 			.minor = MISC_DYNAMIC_MINOR,
+> 			.groups = plat_ifs_groups,
+> 		},
+> 	},
+> 	[IFS_TYPE_ARRAY_BIST] = {
+> 		.test_caps = &array_test,
+> 		.misc = {
+> 			.name = "intel_ifs_1",
+> 			.minor = MISC_DYNAMIC_MINOR,
+> 			.groups = plat_ifs_array_groups,
+> 		},
+> 	},
+> };
+> 
+> Jithu
+> 
 
