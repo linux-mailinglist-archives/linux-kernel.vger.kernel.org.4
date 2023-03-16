@@ -2,235 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A72B6BC702
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 08:25:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4356B6BC708
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 08:27:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229597AbjCPHZ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 03:25:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33692 "EHLO
+        id S229972AbjCPH14 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 03:27:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229599AbjCPHZX (ORCPT
+        with ESMTP id S229850AbjCPH1y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 03:25:23 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F9CA5BD8A;
-        Thu, 16 Mar 2023 00:25:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678951521; x=1710487521;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=7eXeQDx1R70Uy9CUZfP2EOMqGS3eVg9qeNF/IRaFXZE=;
-  b=l6bXIFchzbg6htnSkhxXsvVSfVC86EE1xpbmVCtdKjfJ5N/HlwVFQ6//
-   sZS4PjCjGa8BF3zL543bD5sGleb0JLPh62TPCtuPkfKCBv7dz8IhFc6xx
-   FpQI5EZDI6ik1lUEIWLhm//KpTEZAa3dD23O/yTf2XoAIjVbvYrLdzJ72
-   0ydSDUXgEHYuGRGdzO5+rmmw4QeoRDdcuDoXrMKoAfw8pAYcVdc6jJ8Zt
-   LfdDf6XB10o1cDpH8G3EeVfZ78Dk17Yn2dmSmB3WoszeS2etdpn2XwIg/
-   YAF146Yn3NhVap0Kde0RYc+Fb8v46AOMrH9XWvrTuxvtmbe75WpKx+Zya
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="317562193"
-X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
-   d="scan'208";a="317562193"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 00:25:20 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="673032564"
-X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
-   d="scan'208";a="673032564"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by orsmga007.jf.intel.com with ESMTP; 16 Mar 2023 00:25:20 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Thu, 16 Mar 2023 00:25:20 -0700
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21 via Frontend Transport; Thu, 16 Mar 2023 00:25:20 -0700
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.169)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.21; Thu, 16 Mar 2023 00:25:19 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=IleEyWy8LtaAspkid/v3BDSijtKUKbrQaCsaGWr66C2Gcu7AFDFQvKwpQNoVftVan0NdTMx9jptaOlBMREWJ0cMIA8GzWqfjSHw6UFQPfemx4y62lRSi62d2kfj2tVd/l8SK+gS6GaIBnPZrXu8t5QDKEfY87L7H2NHOM/5z5rlHL2nKs0kYjGDwoU0z+8q8/mYn4RO/IdcoRYxEBxQEWChTpA3SGvmYQEAx/rIucB8iJbwVaPV1pxrIfzNrjaV6oCKLwluZZU3CfNCzozPQ3Z5psbAzutZCMTK3jpZis2KK73OOU2nCOxgx7Kby2gqqaoGmXas29htOTWsylWyCQQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=IxEnoCDSd6HYoSt7Vns3s5vm5T/kxaJUc4E5MAFGV9U=;
- b=ZZQsLGwGGAJ+ZbliwogItoxNt58/U5DX4mEUkHPtANzSz6SSSN4pJxhpX746iT3TLz8L4BqFFh01qD2UxwPEPw47fUPsuLgYDFVdj5vdlgDpFI6whDNx4YrCszFZqqeNM6tt5PON70jB+zaglIneAm0ahE9nY03sS8KibbqkdOjUu+caFbPx0BE4UnWIJN2CnHHEn9m+LjyKtAwHgLN8Gd8xGgYagyHekqREjhMTO6Z23ajdQZYe58iWDtvNfOSDPtOAzS4QUaBAU5cDPxI4itusz2BwtoGGTRZg+kLN0bMbl7qGOLGHbU1kNIDa0JeK27cYLCHY1/ijcGa0kcdzWg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
- by DS0PR11MB6349.namprd11.prod.outlook.com (2603:10b6:8:ce::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.31; Thu, 16 Mar
- 2023 07:25:17 +0000
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::1aac:b695:f7c5:bcac]) by BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::1aac:b695:f7c5:bcac%9]) with mapi id 15.20.6178.031; Thu, 16 Mar 2023
- 07:25:17 +0000
-From:   "Tian, Kevin" <kevin.tian@intel.com>
-To:     Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Jason Gunthorpe <jgg@nvidia.com>
-CC:     "Luck, Tony" <tony.luck@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Will Deacon <will@kernel.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        "Raj, Ashok" <ashok.raj@intel.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "Yu, Fenghua" <fenghua.yu@intel.com>,
-        "Jiang, Dave" <dave.jiang@intel.com>,
-        "Zanussi, Tom" <tom.zanussi@intel.com>
-Subject: RE: [PATCH 3/4] iommu/sva: Support reservation of global PASIDs
-Thread-Topic: [PATCH 3/4] iommu/sva: Support reservation of global PASIDs
-Thread-Index: AQHZTKHLpFv8Ca2hQ0+TT/QlO+gFRa7nPClwgAJeMICABCPvAIAATvUA////3YCAAAQCgIAABegAgAAIRICAAAStgIAElbqAgApc9+A=
-Date:   Thu, 16 Mar 2023 07:25:17 +0000
-Message-ID: <BN9PR11MB5276DE801B64423E7BF3B68E8CBC9@BN9PR11MB5276.namprd11.prod.outlook.com>
-References: <20230302005959.2695267-1-jacob.jun.pan@linux.intel.com>
-        <20230302005959.2695267-4-jacob.jun.pan@linux.intel.com>
-        <BN9PR11MB52765C5E0DC0759880C08E258CB29@BN9PR11MB5276.namprd11.prod.outlook.com>
-        <20230303134753.660d0755@jacob-builder> <ZAXkLN39VUSl+t65@nvidia.com>
-        <20230306094408.2d675d5b@jacob-builder> <ZAYmS4Sx6bm+ziDY@nvidia.com>
-        <20230306095759.1dd65cca@jacob-builder> <ZAYunPcgSOGFK8Qi@nvidia.com>
-        <SJ1PR11MB6083DFA2C1D00B00C3918982FCB69@SJ1PR11MB6083.namprd11.prod.outlook.com>
-        <ZAY5d2MSXjWRGF0n@nvidia.com> <20230309090623.7ea2c3fe@jacob-builder>
-In-Reply-To: <20230309090623.7ea2c3fe@jacob-builder>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|DS0PR11MB6349:EE_
-x-ms-office365-filtering-correlation-id: 9b4d4402-37f1-4cdf-0477-08db25ef97c3
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: w0kRjBYTLiWNLbK0xD7AGerj+C8eipt+cqjUiYgniBlDmdBY/o8ytRHX+XzW0KPaWBvDbtCspy68vdlp7ue0FAJSPKoGlEZqFeqoYOvz7KvTZSYK8C6AQjcTZj8Ez6U6BiDc6PWg/pmGytjx1fAyGFjT7dlBhp6Jpc0KYW0O6t91YRFap1mdgU49sJ+tJURb4RtCOnP9UwwZl2JDa5P2WPbl1XP50uTQAofZc5xIuithZ5X6kiF40iS84BcsyCBRGla6NNXznvDjBi/kVndFTL+8eyLTY57/hM6XzfHOmiSWgChFsDHtZeRexn2okY4xoq0QimZnLTXsw/VKmKa9A1MmwM0GghyUw5kVlKwYxXkgtZ67zkcE4VofuTB9s5lB8M0Vv8yi6fkemmQMdcUzmZvPeNl3MnbgmYboDm5FSPvmSgXXuQw720/jsk/C3RdVrmacyNJ+8lgqcwVJV7TvLWvVA1Y3iuzmsHUHB9JHYUM9NYY/kqPmYMQTZplThC8aCDHKLj+q+zCR5H4lN7s+O3h2Obwwn88/1BTX8vaAnWKxrMBceCpQkVLfB+83Gg22b3Yz+QyvkTQi6yolcpdN8Z8JRtmn+aNxBjLUQwPfJM4SIPg8JZr54AMxGbDQ2mBUeAAS9JtWDQs2cKf6tU/39AzOvZ33e+L7v8dWmmUImMVHhvd+5SEVybBT8x1S1Y6W19JFZw81m7aVLpeNLL4UYw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(346002)(376002)(366004)(39860400002)(396003)(136003)(451199018)(38070700005)(86362001)(33656002)(38100700002)(122000001)(82960400001)(2906002)(52536014)(41300700001)(7416002)(8936002)(5660300002)(55016003)(4326008)(6506007)(9686003)(186003)(26005)(54906003)(316002)(110136005)(76116006)(66946007)(66556008)(66476007)(66446008)(8676002)(64756008)(478600001)(71200400001)(7696005);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?/WhKrfW9ll/oFRsn8Mi1gvPgKpoEmdCjw7JBwL6KOmtCdU1rm7AdAhc6xcjC?=
- =?us-ascii?Q?r6bXMBPyyZzz1KD/SXLjm6KODo6nHegDKYK2NfW8qprNTEUVrSL/R30+CiCh?=
- =?us-ascii?Q?cqK2BUZoFri16TtDL6hRmx43J68lOEAiRpNxkAVAnokPFqeAZDBhN+D/f8Vg?=
- =?us-ascii?Q?lob27t9rr3lSb/oPf6xKTo17irJQ++J60VO7nKCQQlBGtFCAXRKQhyGZaoCc?=
- =?us-ascii?Q?ltNoGK80pOLHt5tfLlluVWaigUJFzLdmb4+ZyIuJtlhLx9u8SJZNdei2gLy3?=
- =?us-ascii?Q?I6+BQqs3E1Ea6NhqojoFkCaZaa3GA9PIJTiOwtWalIbhD/Wl1WpHZZ4WR/tY?=
- =?us-ascii?Q?2BNsYZBXlvLSu34o5e2YPBy5vPw6jLbwNXQJ16KUZMhv9An8Wjk8VWN9gspM?=
- =?us-ascii?Q?abX2jjTuFQ62Igdsgc4iG3rDbJI+ZWtTyGgY+RKkWh2/1ecwDSFyu4P5wMCU?=
- =?us-ascii?Q?u3DKjaZuwDO4sHO69wBuvD2fyATcEfQ3KepAaiPEB7iIZ//oKvYYzNDaCsAb?=
- =?us-ascii?Q?ZwuVoZt70ATBrxZyd85XsJKUXu+2QbBWvKDJTRKd6R3TlS6FEZsm2GIOViLa?=
- =?us-ascii?Q?sV0e3gAMcNwIGztbMrXGtkZrwT/7rE9s3L6K1PYnemI+I1MgRYyg1sjwuwem?=
- =?us-ascii?Q?uFvYgPxtr9Jl+wCHfNK3oL6GKJO6+U2//N4udVUiOtKiUWjC7EPbsUGkznue?=
- =?us-ascii?Q?wB8pG/IfyHLNiczJUy0i9jix/w7YXZy55mGVZtU3BSdGRp7fbBNEfXHDEioe?=
- =?us-ascii?Q?YhUfUyzPNLSApGVfdCkd/azHRIKyfnmK+wWsizkf5TY/R/5Urxa50DDRIk0X?=
- =?us-ascii?Q?uYR0G8rNalUSgihPzt6KwEOqYI8uxgm4OnYpB9r8r2MmOnBD078ipihtSEUf?=
- =?us-ascii?Q?rEf7SbIpPG1FuLWGYrduNSL6LL4xwFdT118NmKhkSYPTOaJB+TFyln1uBXYu?=
- =?us-ascii?Q?KC5f+cniXxQHQ3ZmuY60O24B771b2ElkReqZhreb/QT8IWY6rbR4s2Yi0rfH?=
- =?us-ascii?Q?bl3nzwOOWsb5QjnPEynVxL4r2pttFTd3GNaaQJ4vUXOpZdRqFp1ftqtvZt7X?=
- =?us-ascii?Q?CVLWRLaavXfRq7sy4IzsIsPUm409DJMAvtkMTmlzRHK/jTlYCxzLfZ3Ox1zO?=
- =?us-ascii?Q?TQZydJZiPsRpcz9cFzfp1lqhlDfoOhnJkrCszLzG43chdsExL0zL36/gI7uJ?=
- =?us-ascii?Q?7bfxAzTGbqV+w8zrd0JoTyw1E+HD0puynebrfu07rUU804IxJXFnCxzfiG+K?=
- =?us-ascii?Q?K+ijBmdlzCsVRCEsn+oYtdexx6vS5RvHazFtsXqaO656tFSM22rxmwDzkau/?=
- =?us-ascii?Q?Rh8SvLc3TxnyPeqvRogMlfMCMjd5GI81dgCHBrL0E0HDVIy36BYfw+LlKC7G?=
- =?us-ascii?Q?pjOcwv+3XPEzNVPmcuT1UEm3fapKMmvUWNo+bkT57oX59DCbp4LeAHbTnh53?=
- =?us-ascii?Q?xCx2U0Mbp8RPHVholq76qGPrFJQNk+zJkqXSCR4DBuFSt1rqSIrTY0LCL8iB?=
- =?us-ascii?Q?ACFYkPUhgCwaTDA/KFFbZHJQwrjXQFdqLN1MXBXcheIv7z576qyHiIXdRxvL?=
- =?us-ascii?Q?9LY35jtGi6ZDKkoIckJeC3YNpwVl6iiPT7RJwjLz?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Thu, 16 Mar 2023 03:27:54 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B55673029
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 00:27:51 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id y4so3905083edo.2
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 00:27:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678951670;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=XK209g2VbExh/TqurSdOwtwH2IufznodX/JmW/3KLmc=;
+        b=HChaTJc3kHVEAb6hVQADOZpU05dX3YjTZxKyDvkpBFOo1Oe4dPjb+DMmdM14GNyeIS
+         6JRluNCuzmDmCmE7bSlEA4J4RTmi6HSugb5kpT65Jb6FjFTJbSApl6cd9zx1arvIHTEg
+         ShmjqyCKMqbOtfPgiVNOwlu2VFKGo4XaHnzNET0qVG3WeZLajFMbDEu8N7NGGUYwqNcD
+         7HD0yqK4Hsuo9OLS2JxWg10s4JB7f/263Amjs5sIJTlaeHT4bv94CS9612bSWAE/rT2/
+         kIXdmlmM8eC5JUa4B9+S7APiUC45tc3cTaBPdglv1N+IfqoaZFW7fqo8fzADdN52nLE3
+         8yCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678951670;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XK209g2VbExh/TqurSdOwtwH2IufznodX/JmW/3KLmc=;
+        b=ln96DfhLn2ZdGNS4jK6DMSOcozv54OzPNULsqZHUrjf/v+Y4wzLnxnirdBgZ7qBetV
+         pzmCiUGKvdob4Uk31yA40l0MkxEPUf6ClQUQtqC9Pha0Yd3inTO1VhUSgtxd2hEsI1+c
+         NgwcaV3ULtaqLmZA45TkU4axXv5ld3VbpLfQFhKXsCzWnpnRa9fjzlO/u/ckrD0/i/zV
+         /fFuVcIrTOjNLNnq8wbEG0aCFrPB5y52vmTafJFMA2r4aSAKslATrQhplWsF545555UD
+         34DDyCAlfeLlbQ+3WUKAmMALGP6/3VofufzN4IL5JfWIxwnzGxN0R121E8upfUifVwfQ
+         bmfQ==
+X-Gm-Message-State: AO0yUKUvw9GaPGCZfpJxPmUqx18qQVk1gO80i02SANDKFvmidUULTU/o
+        +K0gBq3ZB2BZdjy31Byotr2o6w==
+X-Google-Smtp-Source: AK7set/Dr0fYdr41RCJNO5h+athWj3NTIYT68gO1NkqweUmCPxsQgXs+rJYrxMRigcX9FdXMNWx5XA==
+X-Received: by 2002:a17:907:e93:b0:92f:22b1:57f9 with SMTP id ho19-20020a1709070e9300b0092f22b157f9mr5914949ejc.2.1678951669987;
+        Thu, 16 Mar 2023 00:27:49 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:9827:5f65:8269:a95f? ([2a02:810d:15c0:828:9827:5f65:8269:a95f])
+        by smtp.gmail.com with ESMTPSA id si2-20020a170906cec200b008e68d2c11d8sm3458672ejb.218.2023.03.16.00.27.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Mar 2023 00:27:49 -0700 (PDT)
+Message-ID: <cfeec762-de75-f90f-7ba1-6c0bd8b70dff@linaro.org>
+Date:   Thu, 16 Mar 2023 08:27:48 +0100
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9b4d4402-37f1-4cdf-0477-08db25ef97c3
-X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Mar 2023 07:25:17.6140
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: t9scVoDf0tVM5xMbhiHN/+ys+zuL41EqYZ2Wij68mHAtyYlycYLtkoOtMpIXvM192Cw6Y88BdZbNtq4JhhjOuQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR11MB6349
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v7 4/6] dt-bindings: net: Add support StarFive dwmac
+Content-Language: en-US
+To:     Samin Guo <samin.guo@starfivetech.com>,
+        linux-riscv@lists.infradead.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Yanhong Wang <yanhong.wang@starfivetech.com>,
+        Tommaso Merciai <tomm.merciai@gmail.com>
+References: <20230316043714.24279-1-samin.guo@starfivetech.com>
+ <20230316043714.24279-5-samin.guo@starfivetech.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230316043714.24279-5-samin.guo@starfivetech.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> From: Jacob Pan <jacob.jun.pan@linux.intel.com>
-> Sent: Friday, March 10, 2023 1:06 AM
->=20
-> Hi Jason,
->=20
-> On Mon, 6 Mar 2023 15:05:27 -0400, Jason Gunthorpe <jgg@nvidia.com>
-> wrote:
->=20
-> > On Mon, Mar 06, 2023 at 06:48:43PM +0000, Luck, Tony wrote:
-> > > >> ENQCMDS does not have the restriction of using a single CPU MSR to
-> > > >> store PASIDs, PASID is supplied to the instruction operand.
-> > > >
-> > > > Huh? That isn't what it says in the programming manual. It says the
-> > > > PASID only comes from the IA32_PASID msr and the only two operands
-> are
-> > > > the destination MMIO and the memory source for the rest of the
-> > > > payload.
-> > >
-> > > Jason,
-> > >
-> > > Two different instructions with only one letter different in the name=
-.
-> > >
-> > > ENQCMD - ring 3 instruction. The PASID is inserted into the descripto=
-r
-> > > pushed to the device from the IA32_PASID MSR.
-> > >
-> > > ENQCMDS - ring 0 instruction (see that trailing "S" for Supervisor
-> > > mode). In this case the submitter can include any PASID value they wa=
-nt
-> > > in the in-memory copy of the descriptor and ENQCMDS will pass that to
-> > > the device.
-> >
-> > Ah, well, my comment wasn't talking about ENQCMDS :)
-> >
-> > If ENQCMDS can take in an arbitary PASID then there is no
-> > justification here to use the global allocator.
-> >
-> > The rational is more like:
-> >
-> >  IDXD uses PASIDs that come from the SVA allocator. It needs to create
-> >  an internal kernel-only PASID that is non-overlapping so allow the SVA
-> >  allocator to reserve PASIDs for driver use.
-> >
-> >  IDXD has to use the global SVA PASID allocator beacuse its userspace
-> >  will use ENQCMD which requires global PASIDs.
-> >
-> yes, great summary. I think that is the same as what I was trying to say
-> earlier :)
-> "due the unforgiving nature of ENQCMD that requires global PASIDs,
-> ENQCMDS
-> has no choice but to allocate from the same numberspace to avoid conflict=
-."
->=20
-> In that sense, I feel the global allocator should be staying with SVA
-> instead of moving to iommu core (as Kevin suggested). Because we are tryi=
-ng
-> to have non-overlapping pasid with SVA.
->=20
+On 16/03/2023 05:37, Samin Guo wrote:
+> From: Yanhong Wang <yanhong.wang@starfivetech.com>
+> 
+> Add documentation to describe StarFive dwmac driver(GMAC).
+> 
+Thank you for your patch. There is something to discuss/improve.
 
-I still doubt 'reserve' is the right interface to define.
+> Signed-off-by: Yanhong Wang <yanhong.wang@starfivetech.com>
+> Signed-off-by: Samin Guo <samin.guo@starfivetech.com>
+> Tested-by: Tommaso Merciai <tomm.merciai@gmail.com>
+> ---
+>  .../devicetree/bindings/net/snps,dwmac.yaml   |   1 +
+>  .../bindings/net/starfive,jh7110-dwmac.yaml   | 130 ++++++++++++++++++
+>  MAINTAINERS                                   |   6 +
+>  3 files changed, 137 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/net/starfive,jh7110-dwmac.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/net/snps,dwmac.yaml b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+> index e4519cf722ab..245f7d713261 100644
+> --- a/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+> +++ b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
+> @@ -91,6 +91,7 @@ properties:
+>          - snps,dwmac-5.20
+>          - snps,dwxgmac
+>          - snps,dwxgmac-2.10
+> +        - starfive,jh7110-dwmac
+>  
+>    reg:
+>      minItems: 1
+> diff --git a/Documentation/devicetree/bindings/net/starfive,jh7110-dwmac.yaml b/Documentation/devicetree/bindings/net/starfive,jh7110-dwmac.yaml
+> new file mode 100644
+> index 000000000000..b59e6bd8201f
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/net/starfive,jh7110-dwmac.yaml
+> @@ -0,0 +1,130 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +# Copyright (C) 2022 StarFive Technology Co., Ltd.
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/net/starfive,jh7110-dwmac.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: StarFive JH7110 DWMAC glue layer
+> +
+> +maintainers:
+> +  - Emil Renner Berthing <kernel@esmil.dk>
+> +  - Samin Guo <samin.guo@starfivetech.com>
+> +
+> +select:
+> +  properties:
+> +    compatible:
+> +      contains:
+> +        enum:
+> +          - starfive,jh7110-dwmac
+> +  required:
+> +    - compatible
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - enum:
+> +          - starfive,jh7110-dwmac
+> +      - const: snps,dwmac-5.20
+> +
 
-for DMA domain probably yes as it's static and one-off.
+reg:
+  maxItems: 1
 
-but thinking louder when the same driver starts to support SIOV we
-need allocating additional PASIDs on demand which is hardly to be
-fit in a reservation interface.
+
+> +  clocks:
+> +    items:
+> +      - description: GMAC main clock
+> +      - description: GMAC AHB clock
+> +      - description: PTP clock
+> +      - description: TX clock
+> +      - description: GTX clock
+> +
+> +  clock-names:
+> +    items:
+> +      - const: stmmaceth
+> +      - const: pclk
+> +      - const: ptp_ref
+> +      - const: tx
+> +      - const: gtx
+> +
+
+interrupts: ???
+
+> +  resets:
+> +    items:
+> +      - description: MAC Reset signal.
+> +      - description: AHB Reset signal.
+> +
+> +  reset-names:
+> +    items:
+> +      - const: stmmaceth
+> +      - const: ahb
+> +
+> +  starfive,tx-use-rgmii-clk:
+> +    description:
+> +      Tx clock is provided by external rgmii clock.
+> +    type: boolean
+> +
+> +  starfive,syscon:
+> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+> +    items:
+> +      - items:
+> +          - description: phandle to syscon that configures phy mode
+> +          - description: Offset of phy mode selection
+> +          - description: Shift of phy mode selection
+> +    description:
+> +      A phandle to syscon with two arguments that configure phy mode.
+> +      The argument one is the offset of phy mode selection, the
+> +      argument two is the shift of phy mode selection.
+> +
+> +allOf:
+> +  - $ref: snps,dwmac.yaml#
+> +
+> +unevaluatedProperties: false
+> +
+Best regards,
+Krzysztof
+
