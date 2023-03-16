@@ -2,158 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B91E6BCE2A
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 12:30:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EBF36BCE33
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 12:31:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230009AbjCPLaB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 07:30:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44098 "EHLO
+        id S230140AbjCPLaf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 07:30:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230038AbjCPL3b (ORCPT
+        with ESMTP id S230293AbjCPLaQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 07:29:31 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E940B1A4B
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 04:29:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678966171; x=1710502171;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=xnFS4TzT2ZJOZBuEttpQYgkFbTy0yryV481F1Qp/dtU=;
-  b=aEvOWyh9DMRMEqQbjmhqqITA49xkaCHW4sCnPnnHr5plPmu0JKs3Vxo7
-   jiWeWwCX3LdHKgZ6v4SSsKzLHqF/hnUuazfb4iBJ1tYsF5C4KetAuZtxm
-   w6yTZ1+XP9/jYr0NDVRurM6qlIGUOJmn7wwov7N5O1shtHyHOQ85azxuH
-   UrvdNF2aXTn9Lu2C+tj0GjSB646RMsR6AJPPyq4yNeCvpIhniXr55LVRS
-   XGmVoQu2A/pof0jIePxOse4JL6l1zLLVU0jlNHmAS9IWPxXn0B4Mai6fD
-   YjpevZR5QDIuTHqImeU7SEPuwjd3pmIUYnwksM/gEHy9NULfogM2wAbva
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="317610785"
-X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
-   d="scan'208";a="317610785"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 04:29:30 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="629840964"
-X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
-   d="scan'208";a="629840964"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 16 Mar 2023 04:29:29 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pclnU-0008Uk-2G;
-        Thu, 16 Mar 2023 11:29:28 +0000
-Date:   Thu, 16 Mar 2023 19:28:47 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:x86/cache] BUILD SUCCESS
- 322b72e0fd10101f2da8985b31b4af70f184bf79
-Message-ID: <6412fd6f.DccJ0qsdV/2Rh/HV%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 16 Mar 2023 07:30:16 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49316B78B6;
+        Thu, 16 Mar 2023 04:30:10 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 22A555C0121;
+        Thu, 16 Mar 2023 07:30:06 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Thu, 16 Mar 2023 07:30:06 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1678966206; x=1679052606; bh=OY
+        lavnWqoA5P30TlUOqzAKcU6nmTHtWjKSta9ojFhs4=; b=GxWZ7pBs0uzumAjxw4
+        JE0ujAL0NjBjwdM2nrCpc4PHTgj4I4jsqscG6cf63wZPCvjw1DuNlSSxjoROm6N/
+        C4RjmHAES8C0T2jsX5RmBobAWZkpJgl/V1d5SrqfLXmYvZ3qjkDRdgosbYj2ieo3
+        NorlGyW8Ih8zzqfOoXmLjqMQ70hZKtRByTOj4ZfF3tZ+X6UyxSzNobiS2isnQK7U
+        rJYkhoClItL5mcqbA8E5Awpbz9AcSQZH+LTWMFQdWpM2cRDr3nf4aLXirS+9RUF6
+        FOWj93w2K3eTBSeNJVKu8vV6g34tyR/OnTb+C93lW50KAl+3okOivJ6kelewZraO
+        l62Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1678966206; x=1679052606; bh=OYlavnWqoA5P3
+        0TlUOqzAKcU6nmTHtWjKSta9ojFhs4=; b=EBLn+svO2LjqZvaiqME5IPe7TVl3u
+        i0z1bwyH/RBn8FORXafPof9fqSbFKvVyjl3q0OWhWzmrU9cW1tV6wO6Go/R8OBMe
+        TG11SRPItVY/MycF1YSn+CS7UrB1V6Za4abda0qpIzu/kAGPVMvsmXEZgoKU4Xu2
+        kqO3w0QtufP7C/2sT/vVmt2yzows6F8pKVA7lWBoZftCzlpnKpt3GHphX7WZAY6/
+        XJGNHEFVKiCkyUzSwL8x8HnV7K/umhYrBaP5qDks9s6Vl9mdM6F/MsZKUeSAfCjK
+        yP8U3tl8vnfoQptZjdtjRjoR6kC0SZjiRzhuGzB011P2h3C0zVYTjvxkA==
+X-ME-Sender: <xms:vf0SZCtoQzcX8ev-l5qiDca1DS2q9ce3ZI-RJNAgvC8Xt6x0nuj7hQ>
+    <xme:vf0SZHcY5LBbEJxGNk0I8Gb1NDnliPEKGD9Dpf2hmStc3hxZYFHtAwT2fBtoIt4YO
+    _rB-TKCF8NHblv40qo>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeftddgvdelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:vf0SZNysLfZx7rt65LGFMJh3HzICAqlJA1j7yRpSmRKgugET8z1P_g>
+    <xmx:vf0SZNOtc0K5Rly1w6ZjhJAFPVZD0N4xQbINTjCVYSiFCkMeabpauw>
+    <xmx:vf0SZC9ZNK5okppGsCAB7UIe9JfMOVVeIX0yEgmhJcHqMgnm3bNGSg>
+    <xmx:vv0SZEK9ucnnG6vSWLW9zt3f4iolI-1mc043tDNYdm9IF0cHvJsS9Q>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id C2913B60086; Thu, 16 Mar 2023 07:30:05 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-221-gec32977366-fm-20230306.001-gec329773
+Mime-Version: 1.0
+Message-Id: <ad11a961-d355-4780-ad08-f73e9b40a1cc@app.fastmail.com>
+In-Reply-To: <20230316111630.4897-1-lukas.bulwahn@gmail.com>
+References: <20230316111630.4897-1-lukas.bulwahn@gmail.com>
+Date:   Thu, 16 Mar 2023 12:29:45 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Lukas Bulwahn" <lukas.bulwahn@gmail.com>,
+        "Jens Axboe" <axboe@kernel.dk>, linux-block@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] block: remove obsolete config BLOCK_COMPAT
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/cache
-branch HEAD: 322b72e0fd10101f2da8985b31b4af70f184bf79  x86/resctrl: Avoid redundant counter read in __mon_event_count()
+On Thu, Mar 16, 2023, at 12:16, Lukas Bulwahn wrote:
+> Before commit bdc1ddad3e5f ("compat_ioctl: block: move
+> blkdev_compat_ioctl() into ioctl.c"), the config BLOCK_COMPAT was used to
+> include compat_ioctl.c into the kernel build. With this commit, the code
+> is moved into ioctl.c and included with the config COMPAT. So, since then,
+> the config BLOCK_COMPAT has no effect and any further purpose.
+>
+> Remove this obsolete config BLOCK_COMPAT.
+>
+> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 
-elapsed time: 720m
+Thanks for spotting this,
 
-configs tested: 78
-configs skipped: 169
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                  randconfig-r014-20230312   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                  randconfig-r013-20230313   gcc  
-arm                  randconfig-r016-20230313   gcc  
-arm                  randconfig-r046-20230312   clang
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                randconfig-r011-20230312   gcc  
-csky                                defconfig   gcc  
-csky                 randconfig-r011-20230313   gcc  
-csky                 randconfig-r012-20230313   gcc  
-hexagon              randconfig-r041-20230312   clang
-hexagon              randconfig-r041-20230313   clang
-hexagon              randconfig-r045-20230312   clang
-hexagon              randconfig-r045-20230313   clang
-i386                             allyesconfig   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                 randconfig-a001-20230313   gcc  
-i386                 randconfig-a002-20230313   gcc  
-i386                 randconfig-a003-20230313   gcc  
-i386                 randconfig-a004-20230313   gcc  
-i386                 randconfig-a005-20230313   gcc  
-i386                 randconfig-a006-20230313   gcc  
-i386                 randconfig-a011-20230313   clang
-i386                 randconfig-a012-20230313   clang
-i386                 randconfig-a013-20230313   clang
-i386                 randconfig-a014-20230313   clang
-i386                 randconfig-a015-20230313   clang
-i386                 randconfig-a016-20230313   clang
-i386                          randconfig-c001   gcc  
-ia64                             allmodconfig   gcc  
-ia64                                defconfig   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-m68k                             allmodconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                 randconfig-r014-20230313   gcc  
-m68k                 randconfig-r015-20230313   gcc  
-m68k                 randconfig-r016-20230312   gcc  
-mips                             allmodconfig   gcc  
-nios2                               defconfig   gcc  
-nios2                randconfig-r012-20230312   gcc  
-nios2                randconfig-r013-20230312   gcc  
-parisc                              defconfig   gcc  
-parisc64                            defconfig   gcc  
-powerpc              randconfig-r015-20230312   gcc  
-riscv                randconfig-r042-20230313   clang
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r044-20230313   clang
-sh                               allmodconfig   gcc  
-sparc                               defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64               randconfig-a001-20230313   gcc  
-x86_64               randconfig-a002-20230313   gcc  
-x86_64               randconfig-a003-20230313   gcc  
-x86_64               randconfig-a004-20230313   gcc  
-x86_64               randconfig-a005-20230313   gcc  
-x86_64               randconfig-a006-20230313   gcc  
-x86_64               randconfig-a011-20230313   clang
-x86_64               randconfig-a012-20230313   clang
-x86_64               randconfig-a013-20230313   clang
-x86_64               randconfig-a014-20230313   clang
-x86_64               randconfig-a015-20230313   clang
-x86_64               randconfig-a016-20230313   clang
-x86_64                               rhel-8.3   gcc  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Acked-by: Arnd Bergmann <arnd@arndb.de>
