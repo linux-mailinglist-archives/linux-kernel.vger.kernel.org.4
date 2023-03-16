@@ -2,170 +2,249 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB3936BD1C2
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 15:07:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ED166BD1C0
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 15:07:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231134AbjCPOH2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 10:07:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49446 "EHLO
+        id S230509AbjCPOHQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 10:07:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230520AbjCPOHV (ORCPT
+        with ESMTP id S230493AbjCPOHL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 10:07:21 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 356ADD5A53
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 07:06:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678975593;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=UgMDTiStEF85Ioza/girhQTz9UClQi/pg6W3A0BYpDE=;
-        b=D+MN9IxFuE95VqmJ5J1rVJMvuRhynfRUg+pOxocmJ+fzD2Wy+RcF+B2TEZCrUQ/mX2b+RP
-        h2yNqy+HSCFTMJ2UDyqDlKO2QESkf10gwkJM23CA5y5lMAdJcIUO0UPfDnMmu4sXH0OHD6
-        HQaobRyQZqBAAwFBfqmeh3lEoNy0vnM=
-Received: from mail-yb1-f200.google.com (mail-yb1-f200.google.com
- [209.85.219.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-607-inaDC2REP52hMlmhfW0hDg-1; Thu, 16 Mar 2023 10:06:27 -0400
-X-MC-Unique: inaDC2REP52hMlmhfW0hDg-1
-Received: by mail-yb1-f200.google.com with SMTP id e129-20020a251e87000000b00b56598237f5so1942084ybe.16
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 07:06:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678975586;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=UgMDTiStEF85Ioza/girhQTz9UClQi/pg6W3A0BYpDE=;
-        b=HVFMXYahEhfpM26dulufmuZeOaVVrHzSvdFemewk25oAhpWVZEbP6QvqTeTY8H8J0j
-         vxP1CglV20tDcDGnMAMR5gMLroAJRj4BKFEioxfIaCnZPk8Y9FkWPkBwWLCHXrYvKvC6
-         2d3eP095p9fftia9Hm2ayDObEOFI3cnCbupepM0T7NnXT8nCjeUF+7sNSqGvvadwJWTQ
-         VLwXiiE0CMVQanz8OoNzXGAo9Oor0Udg2Icg//OkfyuWSBKOByzxOs0iKOKWLkzk6D3B
-         wdFo5cx5cqp7B3U2SLtCEjBBEuZqINCofjwrkaeo1cvCuvDNgZ7GZDsdznBDYErPy7Nw
-         ZBCw==
-X-Gm-Message-State: AO0yUKW4NxoA7oddLIVqn8gQ8tJbHqgMcQc+DJRGOub7e4zgr3sK4zCf
-        i0/8zXQXfWVGHx1KooAFpydkLor/wSdGANNJmKc153EdJV/OU3HKSgNOWWCHwQkqADfqycTxnS6
-        PtZleFe/tFLIr64RfFiqsN/RT3GRXdT/HYy0sxUdX
-X-Received: by 2002:a81:4317:0:b0:52e:f77c:315d with SMTP id q23-20020a814317000000b0052ef77c315dmr2404699ywa.3.1678975586632;
-        Thu, 16 Mar 2023 07:06:26 -0700 (PDT)
-X-Google-Smtp-Source: AK7set+W06+Z1Quvd50yqRAEEP3PdK81dRQNkqvZUU49Z41ptq0NMe3jeG2hBo4qkYa3hyse6foi7+3YaeAREaFfyZk=
-X-Received: by 2002:a81:4317:0:b0:52e:f77c:315d with SMTP id
- q23-20020a814317000000b0052ef77c315dmr2404677ywa.3.1678975586373; Thu, 16 Mar
- 2023 07:06:26 -0700 (PDT)
+        Thu, 16 Mar 2023 10:07:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3695D5A43;
+        Thu, 16 Mar 2023 07:06:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 28DD962033;
+        Thu, 16 Mar 2023 14:06:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B094C4339E;
+        Thu, 16 Mar 2023 14:06:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678975616;
+        bh=+2tZSV0gwfDZOk+gHp4f8WTceEYSccr/Qc8noMpfN5M=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=LQ8H4Prn5BcEnhEibdJ4NhmR08k5AUc/IBpHPlJJl+WDYK+gCDkrUjhGl7N2T+10y
+         QVXV221C5ULIwSVMedV1zsL+qu4ce6ccrtSDOp7+xIfeoPOZ7YeldSGaoA4V0JpIdJ
+         B1kqeWVZx5wCjMyMKMkRe1aYj55+O89bk86/g41Hqj0RDkegAER3YX4TqEY/z7o7bx
+         Q7bcKRf/Nk7anXNzCKOHBK1zVrlkQerW1Mu3kFOrFcVRc+kgwDiRbRD7cqyH2mzFi0
+         JhsPfWX//Uiw9hkwh4ulZPSn7weeQGynIqyzRb+QFBZhsCEOaxJONGzggqGVCIe2Fm
+         LWe932CzyibNw==
+Received: by mail-lf1-f53.google.com with SMTP id r27so2510665lfe.10;
+        Thu, 16 Mar 2023 07:06:56 -0700 (PDT)
+X-Gm-Message-State: AO0yUKXiVXdTPKHHh3U9+yzGt9urFmAUADQDCjUOaN9BYaPsmo5lQYrD
+        NaEjVUXwClOYlcsMGPm0tV+sAwDrpKWI6k6vWU4=
+X-Google-Smtp-Source: AK7set9faeSYRglDDYFhOOnMUnI6A2BGg3YBU9zKQQdjAPI93+qjKaWDMO1oBN5CQpihf+gWOCsgESSGXAFJbGUdmQg=
+X-Received: by 2002:ac2:5591:0:b0:4dd:98c6:ee3 with SMTP id
+ v17-20020ac25591000000b004dd98c60ee3mr3225158lfg.4.1678975614517; Thu, 16 Mar
+ 2023 07:06:54 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230315192130.970021-1-desnesn@redhat.com> <20230315192130.970021-2-desnesn@redhat.com>
- <44d364bc-62ac-7d31-b886-0f7ee94e3a08@arm.com>
-In-Reply-To: <44d364bc-62ac-7d31-b886-0f7ee94e3a08@arm.com>
-From:   Desnes Nunes <desnesn@redhat.com>
-Date:   Thu, 16 Mar 2023 11:06:15 -0300
-Message-ID: <CACaw+exWmGQwBz5oCsz_YTiQfNt4=hSm1UDb6aV75gABwRb4Zw@mail.gmail.com>
-Subject: Re: [PATCH 1/3] dma-debug: small dma_debug_entry's comment and
- variable name updates
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     iommu@lists.linux.dev, linux-scsi@vger.kernel.org,
-        storagedev@microchip.com, linux-kernel@vger.kernel.org, hch@lst.de,
-        martin.petersen@oracle.com, don.brace@microchip.com,
-        m.szyprowski@samsung.com, jejb@linux.ibm.com, jsnitsel@redhat.com
+References: <CAMj1kXF_f4QFtaDYBaSJwO0B97TJHWr6uRQdeYeD=Gv7DrVicg@mail.gmail.com>
+ <ZBL+o7ydLk2iBCCr@righiandr-XPS-13-7390> <CAMj1kXEtj_jEZeT6YNh9xB=8o=0LVKiPYucHU08s34xBgy1yDA@mail.gmail.com>
+ <CAMj1kXF3pkxvDX6ZMpnRd3wQX2_T6CYmz7ML-h+PXeo+hM_ZdA@mail.gmail.com>
+ <ZBMOitWwCDj3XiRw@righiandr-XPS-13-7390> <CAMj1kXF=8KoCnRmUyLCZmbfPTeOFQZBeudZuTeA0uHOv-1drFg@mail.gmail.com>
+ <ZBMQdgPepwa+VyAH@righiandr-XPS-13-7390> <CAMj1kXES+FxxbqUPH5TRjHak2MMC2Yksm0_P6wo__LQMH6Emhw@mail.gmail.com>
+ <ZBMes6r2FiAyo81F@righiandr-XPS-13-7390> <CAMj1kXG0+NO6HayK2YqSJU0pwj8bn9Un_G-4VJr=hc1ELi-TpQ@mail.gmail.com>
+ <ZBMgy+Yh9fDxt44C@righiandr-XPS-13-7390>
+In-Reply-To: <ZBMgy+Yh9fDxt44C@righiandr-XPS-13-7390>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Thu, 16 Mar 2023 15:06:43 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXEWs43NaTegzmGPFD7UGNVw_13hUCuvmwvKNVYPsfh5Vg@mail.gmail.com>
+Message-ID: <CAMj1kXEWs43NaTegzmGPFD7UGNVw_13hUCuvmwvKNVYPsfh5Vg@mail.gmail.com>
+Subject: Re: kernel 6.2 stuck at boot (efi_call_rts) on arm64
+To:     Andrea Righi <andrea.righi@canonical.com>
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Paolo Pisati <paolo.pisati@canonical.com>,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Darren Hart <darren@os.amperecomputing.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Good day Robin,
-
-Thank you very much for the review and clarification - will send a v2
-with the proper comment update.
-
-Best Regards,
-
-On Thu, Mar 16, 2023 at 7:24=E2=80=AFAM Robin Murphy <robin.murphy@arm.com>=
- wrote:
+On Thu, 16 Mar 2023 at 14:59, Andrea Righi <andrea.righi@canonical.com> wrote:
 >
-> On 2023-03-15 19:21, Desnes Nunes wrote:
-> > Small update on dma_debug_entry's struct commentary and also standardiz=
-e
-> > the usage of 'dma_addr' variable name from debug_dma_map_page() on
-> > debug_dma_unmap_page(), and similarly on debug_dma_free_coherent()
+> On Thu, Mar 16, 2023 at 02:53:24PM +0100, Ard Biesheuvel wrote:
+> > On Thu, 16 Mar 2023 at 14:50, Andrea Righi <andrea.righi@canonical.com> wrote:
+> > >
+> > > On Thu, Mar 16, 2023 at 02:45:49PM +0100, Ard Biesheuvel wrote:
+> > > > On Thu, 16 Mar 2023 at 13:50, Andrea Righi <andrea.righi@canonical.com> wrote:
+> > > > >
+> > > > > On Thu, Mar 16, 2023 at 01:43:32PM +0100, Ard Biesheuvel wrote:
+> > > > > > On Thu, 16 Mar 2023 at 13:41, Andrea Righi <andrea.righi@canonical.com> wrote:
+> > > > > > >
+> > > > > > > On Thu, Mar 16, 2023 at 01:38:30PM +0100, Ard Biesheuvel wrote:
+> > > > > > > > On Thu, 16 Mar 2023 at 13:21, Ard Biesheuvel <ardb@kernel.org> wrote:
+> > > > > > > > >
+> > > > > > > > > On Thu, 16 Mar 2023 at 12:34, Andrea Righi <andrea.righi@canonical.com> wrote:
+> > > > > > > > > >
+> > > > > > > > > > On Thu, Mar 16, 2023 at 11:18:21AM +0100, Ard Biesheuvel wrote:
+> > > > > > > > > > > On Thu, 16 Mar 2023 at 11:03, Andrea Righi <andrea.righi@canonical.com> wrote:
+> > > > > > > > > > > >
+> > > > > > > > > > > > On Thu, Mar 16, 2023 at 10:55:58AM +0100, Ard Biesheuvel wrote:
+> > > > > > > > > > > > > (cc Darren)
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > On Thu, 16 Mar 2023 at 10:45, Andrea Righi <andrea.righi@canonical.com> wrote:
+> > > > > > > > > > > > > >
+> > > > > > > > > > > > > > On Thu, Mar 16, 2023 at 08:58:20AM +0100, Ard Biesheuvel wrote:
+> > > > > > > > > > > > > > > Hello Andrea,
+> > > > > > > > > > > > > > >
+> > > > > > > > > > > > > > > On Thu, 16 Mar 2023 at 08:54, Andrea Righi <andrea.righi@canonical.com> wrote:
+> > > > > > > > > > > > > > > >
+> > > > > > > > > > > > > > > > Hello,
+> > > > > > > > > > > > > > > >
+> > > > > > > > > > > > > > > > the latest v6.2.6 kernel fails to boot on some arm64 systems, the kernel
+> > > > > > > > > > > > > > > > gets stuck and never completes the boot. On the console I see this:
+> > > > > > > > > > > > > > > >
+> > > > > > > > > > > > > > > > [   72.043484] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+> > > > > > > > > > > > > > > > [   72.049571] rcu:     22-...0: (30 GPs behind) idle=b10c/1/0x4000000000000000 softirq=164/164 fqs=6443
+> > > > > > > > > > > > > > > > [   72.058520]     (detected by 28, t=15005 jiffies, g=449, q=174 ncpus=32)
+> > > > > > > > > > > > > > > > [   72.064949] Task dump for CPU 22:
+> > > > > > > > > > > > > > > > [   72.068251] task:kworker/u64:5   state:R  running task     stack:0     pid:447   ppid:2      flags:0x0000000a
+> > > > > > > > > > > > > > > > [   72.078156] Workqueue: efi_rts_wq efi_call_rts
+> > > > > > > > > > > > > > > > [   72.082595] Call trace:
+> > > > > > > > > > > > > > > > [   72.085029]  __switch_to+0xbc/0x100
+> > > > > > > > > > > > > > > > [   72.088508]  0xffff80000fe83d4c
+> > > > > > > > > > > > > > > >
+> > > > > > > > > > > > > > > > After that, as a consequence, I start to get a lot of hung task timeout traces.
+> > > > > > > > > > > > > > > >
+> > > > > > > > > > > > > > > > I tried to bisect the problem and I found that the offending commit is
+> > > > > > > > > > > > > > > > this one:
+> > > > > > > > > > > > > > > >
+> > > > > > > > > > > > > > > >  e7b813b32a42 ("efi: random: refresh non-volatile random seed when RNG is initialized")
+> > > > > > > > > > > > > > > >
+> > > > > > > > > > > > > > > > I've reverted this commit for now and everything works just fine, but I
+> > > > > > > > > > > > > > > > was wondering if the problem could be caused by a lack of entropy on
+> > > > > > > > > > > > > > > > these arm64 boxes or something else.
+> > > > > > > > > > > > > > > >
+> > > > > > > > > > > > > > > > Any suggestion? Let me know if you want me to do any specific test.
+> > > > > > > > > > > > > > > >
+> > > > > > > > > > > > > > >
+> > > > > > > > > > > > > > > Thanks for the report.
+> > > > > > > > > > > > > > >
+> > > > > > > > > > > > > > > This is most likely the EFI SetVariable() call going off into the
+> > > > > > > > > > > > > > > weeds and never returning.
+> > > > > > > > > > > > > > >
+> > > > > > > > > > > > > > > Is this an Ampere Altra system by any chance? Do you see it on
+> > > > > > > > > > > > > > > different types of hardware?
+> > > > > > > > > > > > > >
+> > > > > > > > > > > > > > This is: Ampere eMAG / Lenovo ThinkSystem HR330a.
+> > > > > > > > > > > > > >
+> > > > > > > > > > > > > > >
+> > > > > > > > > > > > > > > Could you check whether SetVariable works on this system? E.g. by
+> > > > > > > > > > > > > > > updating the EFI boot timeout (sudo efibootmgr -t <n>)?
+> > > > > > > > > > > > > >
+> > > > > > > > > > > > > > ubuntu@kuzzle:~$ sudo efibootmgr -t 10
+> > > > > > > > > > > > > > ^C^C^C^C
+> > > > > > > > > > > > > >
+> > > > > > > > > > > > > > ^ Stuck there, so it really looks like SetVariable is the problem.
+> > > > > > > > > > > > > >
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > Could you please share the output of
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > dmidecode -s bios
+> > > > > > > > > > > > > dmidecode -s system-family
+> > > > > > > > > > > >
+> > > > > > > > > > > > $ sudo dmidecode -s bios-vendor
+> > > > > > > > > > > > LENOVO
+> > > > > > > > > > > > $ sudo dmidecode -s bios-version
+> > > > > > > > > > > > hve104r-1.15
+> > > > > > > > > > > > $ sudo dmidecode -s bios-release-date
+> > > > > > > > > > > > 02/26/2021
+> > > > > > > > > > > > $ sudo dmidecode -s bios-revision
+> > > > > > > > > > > > 1.15
+> > > > > > > > > > > > $ sudo dmidecode -s system-family
+> > > > > > > > > > > > Lenovo ThinkSystem HR330A/HR350A
+> > > > > > > > > > > >
+> > > > > > > > > > >
+> > > > > > > > > > > Thanks
+> > > > > > > > > > >
+> > > > > > > > > > > Mind checking if this patch fixes your issue as well?
+> > > > > > > > > > >
+> > > > > > > > > > > https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/commit/?h=altra-fix&id=77fa99dd4741456da85049c13ec31a148f5f5ac0
+> > > > > > > > > >
+> > > > > > > > > > Unfortunately this doesn't seem to be enough, I'm still getting the same
+> > > > > > > > > > problem also with this patch applied.
+> > > > > > > > > >
+> > > > > > > > >
+> > > > > > > > > Thanks for trying.
+> > > > > > > > >
+> > > > > > > > > How about the last 3 patches on this branch?
+> > > > > > > > >
+> > > > > > > > > https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/log/?h=efi-smbios-altra-fix
+> > > > > > > >
+> > > > > > > > Actually, that may not match your hardware.
+> > > > > > > >
+> > > > > > > > Does your kernel log have a line like
+> > > > > > > >
+> > > > > > > > SMCCC: SOC_ID: ID = jep106:036b:0019 Revision = 0x00000102
+> > > > > > > >
+> > > > > > > > ?
+> > > > > > >
+> > > > > > > $ sudo dmesg | grep "SMCCC: SOC_ID"
+> > > > > > > [    5.320782] SMCCC: SOC_ID: ARCH_SOC_ID not implemented, skipping ....
+> > > > > > >
+> > > > > >
+> > > > > > Thanks. Could you share the entire dmidecode output somewhere? Or at
+> > > > > > least the type 4 record(s)?
+> > > > >
+> > > > > Sure, here's the full output of dmidecode:
+> > > > > https://pastebin.ubuntu.com/p/4ZmKmP2xTm/
+> > > > >
+> > > >
+> > > > Thanks. I have updated my SMBIOS patches to take the processor version
+> > > > 'eMAG' into account, which appears to be what these boxes are using.
+> > > >
+> > > > I have updated the efi/urgent branch here with the latest versions.
+> > > > Mind giving them a spin?
+> > > >
+> > > >
+> > > > In the mean time, just for the record - could you please run this as well?
+> > > >
+> > > > hexdump -C /sys/firmware/dmi/entries/4-0/raw
+> > > >
+> > > > (as root)
+> > >
+> > > hm.. I don't have that in /sys/firmware/, this is what I have:
+> > >
+> > > # ls -l /sys/firmware/dmi/
+> > > total 0
+> > > drwxr-xr-x 2 root root 0 Mar 16 13:26 tables
+> > > # ls -l /sys/firmware/dmi/tables/
+> > > total 0
+> > > -r-------- 1 root root 5004 Mar 16 13:26 DMI
+> > > -r-------- 1 root root   24 Mar 16 13:26 smbios_entry_point
+> > >
 > >
-> > Signed-off-by: Desnes Nunes <desnesn@redhat.com>
-> > ---
-> >   kernel/dma/debug.c | 11 ++++++-----
-> >   1 file changed, 6 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/kernel/dma/debug.c b/kernel/dma/debug.c
-> > index 18c93c2276ca..e0ad8db1ec25 100644
-> > --- a/kernel/dma/debug.c
-> > +++ b/kernel/dma/debug.c
-> > @@ -52,7 +52,8 @@ enum map_err_types {
-> >   /**
-> >    * struct dma_debug_entry - track a dma_map* or dma_alloc_coherent ma=
-pping
-> >    * @list: node on pre-allocated free_entries list
-> > - * @dev: 'dev' argument to dma_map_{page|single|sg} or dma_alloc_coher=
-ent
-> > + * @dev: pointer to the device driver
+> > You'll need to load the dmi_sysfs module for that. But no big deal
+> > otherwise, I'm pretty sure the word order is the correct on on your
+> > system in any case (it decodes the value correctly in the next line)
 >
-> The original comment was correct...
->
-> > + * @dev_addr: 'dev' argument to dma_map_{page|single|sg} or dma_alloc_=
-coherent
->
-> ...and the address is clearly not the argument representing the device,
-> since it is an address :/
->
-> Thanks,
-> Robin.
->
-> >    * @size: length of the mapping
-> >    * @type: single, page, sg, coherent
-> >    * @direction: enum dma_data_direction
-> > @@ -1262,13 +1263,13 @@ void debug_dma_mapping_error(struct device *dev=
-, dma_addr_t dma_addr)
-> >   }
-> >   EXPORT_SYMBOL(debug_dma_mapping_error);
-> >
-> > -void debug_dma_unmap_page(struct device *dev, dma_addr_t addr,
-> > +void debug_dma_unmap_page(struct device *dev, dma_addr_t dma_addr,
-> >                         size_t size, int direction)
-> >   {
-> >       struct dma_debug_entry ref =3D {
-> >               .type           =3D dma_debug_single,
-> >               .dev            =3D dev,
-> > -             .dev_addr       =3D addr,
-> > +             .dev_addr       =3D dma_addr,
-> >               .size           =3D size,
-> >               .direction      =3D direction,
-> >       };
-> > @@ -1403,13 +1404,13 @@ void debug_dma_alloc_coherent(struct device *de=
-v, size_t size,
-> >   }
-> >
-> >   void debug_dma_free_coherent(struct device *dev, size_t size,
-> > -                      void *virt, dma_addr_t addr)
-> > +                      void *virt, dma_addr_t dma_addr)
-> >   {
-> >       struct dma_debug_entry ref =3D {
-> >               .type           =3D dma_debug_coherent,
-> >               .dev            =3D dev,
-> >               .offset         =3D offset_in_page(virt),
-> > -             .dev_addr       =3D addr,
-> > +             .dev_addr       =3D dma_addr,
-> >               .size           =3D size,
-> >               .direction      =3D DMA_BIDIRECTIONAL,
-> >       };
+> ok, much better after modprobe dmi_sysfs. :)
 >
 
+Yeah better, thanks.
 
---=20
-Desnes Nunes
-Principal Software Engineer
-Red Hat Brasil
+> $ sudo hexdump -C /sys/firmware/dmi/entries/4-0/raw
+> 00000000  04 30 04 00 01 03 fe 02  02 00 3f 50 00 00 00 00  |.0........?P....|
+> 00000010  03 89 b8 0b e4 0c b8 0b  41 06 05 00 06 00 07 00  |........A.......|
+> 00000020  04 00 00 20 20 20 7c 00  01 01 00 00 00 00 00 00  |...   |.........|
+> 00000030  43 50 55 20 31 00 41 6d  70 65 72 65 28 54 4d 29  |CPU 1.Ampere(TM)|
+> 00000040  00 65 4d 41 47 20 00 30  30 30 30 30 30 30 30 30  |.eMAG .000000000|
 
+Darn, this means we have to match for "eMAG " (with the trailing
+space) so the branch i just pushed needs to be updated for this.
+
+> 00000050  30 30 30 30 30 30 30 35  30 30 35 30 31 30 35 30  |0000000500501050|
+> 00000060  32 46 42 30 39 38 38 00  55 6e 6b 6e 6f 77 6e 00  |2FB0988.Unknown.|
+> 00000070  55 6e 6b 6e 6f 77 6e 00  00                       |Unknown..|
+> 00000079
+>
+> -Andrea
