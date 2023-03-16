@@ -2,109 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86FDF6BD7F3
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 19:14:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BC2B6BD7F6
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 19:15:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230091AbjCPSOc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 14:14:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36408 "EHLO
+        id S229960AbjCPSPV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 14:15:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229673AbjCPSOX (ORCPT
+        with ESMTP id S229744AbjCPSPT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 14:14:23 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 318C03C29;
-        Thu, 16 Mar 2023 11:14:21 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 5FEB121A3E;
-        Thu, 16 Mar 2023 18:14:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1678990460; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Ys7W/BlXDmm4G821Jj5LyZgWOPhf76cJGQQhxQ4c34I=;
-        b=kAQMTgf1sddeWIlVDf3bOv/6ZY7B8wPHVNdWEWzblQm0Pu4DTeRJnr0ksZV6QLqQV/SYFR
-        +YIl0wRkXPHmD/v64a7A3iCQCLQZwMtIdRNANyco4cy85j/JcdVSx1paUlp2sLSPBGrQ2v
-        eSvRW5xCItvoHcry8/EpvksC8imVPQU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1678990460;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Ys7W/BlXDmm4G821Jj5LyZgWOPhf76cJGQQhxQ4c34I=;
-        b=oay+gei83CZIKC6CB+aSWoub6wLIe7wrGA3olEGCmukQGJgp0VLBA+NTRWILb0+PT7Wx5Q
-        I8pm3uruKntyKrDw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id AD58913A71;
-        Thu, 16 Mar 2023 18:14:19 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id /lyoJntcE2SDXAAAMHmgww
-        (envelope-from <lhenriques@suse.de>); Thu, 16 Mar 2023 18:14:19 +0000
-Received: from localhost (brahms.olymp [local])
-        by brahms.olymp (OpenSMTPD) with ESMTPA id 04237c26;
-        Thu, 16 Mar 2023 18:14:14 +0000 (UTC)
-From:   =?UTF-8?q?Lu=C3=ADs=20Henriques?= <lhenriques@suse.de>
-To:     Eric Biggers <ebiggers@kernel.org>, Xiubo Li <xiubli@redhat.com>,
-        Jeff Layton <jlayton@kernel.org>
-Cc:     "Theodore Y. Ts'o" <tytso@mit.edu>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        Ilya Dryomov <idryomov@gmail.com>,
-        linux-fscrypt@vger.kernel.org, ceph-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Lu=C3=ADs=20Henriques?= <lhenriques@suse.de>
-Subject: [PATCH v3 3/3] ceph: switch ceph_open_atomic() to use the new fscrypt helper
-Date:   Thu, 16 Mar 2023 18:14:13 +0000
-Message-Id: <20230316181413.26916-4-lhenriques@suse.de>
-In-Reply-To: <20230316181413.26916-1-lhenriques@suse.de>
-References: <20230316181413.26916-1-lhenriques@suse.de>
+        Thu, 16 Mar 2023 14:15:19 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32E26DC09A
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 11:14:57 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id p20so2660891plw.13
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 11:14:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678990493;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=pqp+Ruz/AdnKmnGI6Zv/MF4JDiJ9A6hS03v38ROXSso=;
+        b=SoOra7MYJ9yivi4lQa+vmZdoc/naYbQn9Og1Qszg3CNCnmunbPcxN6IQPbIdWCxvjX
+         A2CGlAaXFkP3JeXKtzf1JiVPR9liWuArRur29p8mmckt6mm4C3MeEgpD2na9oUeLn4JG
+         cjzIf2GrTGasQgwLHVk9vzwdwfWyvLsybrVQuf14AnoHT+hWYDtRbhd/4DO0O/bAFjZ4
+         hHR01N0LyzuCTjuvpm1C+u2llD2UfK/+mmfns+5H4nH0ZCHpS0w3L50138PZXXyslGT/
+         RWes9KJ2go8TmDh2f3qiTVEIckz1KrlgU4QOWerkkpSKlWqRSn4VFGgsv2ljPQAZm7x6
+         3LWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678990493;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pqp+Ruz/AdnKmnGI6Zv/MF4JDiJ9A6hS03v38ROXSso=;
+        b=xwfcH/erbqAW/1n350q8R3eLXTUrFu1Wvs5PGnAVGzk6OHDWw+cw6AMWdz7IkEnv7c
+         pKj+4wxtvMG+edNNMFcVCEdhA9FAvzJ+mH0yqHWtmPRTjswtPTAYWIrodTZUnXyXfyuH
+         qA0L3ConX1ZmLx2lSN/ki2cVnuPRgZcxDAseoHu5wdLXTpxgQw1Dwssp95JT6lqSHoQR
+         pF/sjIRpkDFl60PmjK6o9tZl7pHApZG1QD+uMgD/YBHcN+lZQOSu+yrYu92J+wcUroBh
+         2vPhHmhhMeHc1XfdQOM7nL2S26n2KZXxYyK5PHXRpUQ0GmqKoqizWGWjn+FnvmRqVXfw
+         1W3g==
+X-Gm-Message-State: AO0yUKUbGJQG5hHxhDAgJ/Eb5xKbD/okCyMNwgNiwYtLYNQhAZL5WQS3
+        jpud3oiZJR1xBO8lQyEmboN9xA==
+X-Google-Smtp-Source: AK7set+RPXOketPy5+X+PCkBvQftwRTp+x6bJhpmW+1XHc3+dvZDWj/l3PB2TxM/AHSGIWzWn0XNJg==
+X-Received: by 2002:a05:6a20:8b90:b0:d3:5b84:6fcd with SMTP id m16-20020a056a208b9000b000d35b846fcdmr4638504pzh.12.1678990493121;
+        Thu, 16 Mar 2023 11:14:53 -0700 (PDT)
+Received: from p14s ([2604:3d09:148c:c800:5997:2b9a:5757:d5f4])
+        by smtp.gmail.com with ESMTPSA id r20-20020a63ec54000000b004ff6b744248sm5436710pgj.48.2023.03.16.11.14.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Mar 2023 11:14:52 -0700 (PDT)
+Date:   Thu, 16 Mar 2023 12:14:50 -0600
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Yang Li <yang.lee@linux.alibaba.com>
+Cc:     andersson@kernel.org, matthias.bgg@gmail.com,
+        angelogioacchino.delregno@collabora.com,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: Re: [PATCH -next] remoteproc/mtk_scp: Fix one kernel-doc comment
+Message-ID: <20230316181450.GA2421452@p14s>
+References: <20230316084011.99613-1-yang.lee@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230316084011.99613-1-yang.lee@linux.alibaba.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Switch ceph_atomic_open() to use new fscrypt helper function
-fscrypt_prepare_lookup_partial().  This fixes a bug in the atomic open
-operation where a dentry is incorrectly set with DCACHE_NOKEY_NAME when
-'dir' has been evicted but the key is still available (for example, where
-there's a drop_caches).
+On Thu, Mar 16, 2023 at 04:40:11PM +0800, Yang Li wrote:
+> Fixs the function name in kernel-doc comments to clear the below
+> warning:
+> 
+> drivers/remoteproc/mtk_scp_ipi.c:136: warning: expecting prototype for scp_ipi_lock(). Prototype was for scp_ipi_unlock() instead
+> 
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=4544
+> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+> ---
+>  drivers/remoteproc/mtk_scp_ipi.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/remoteproc/mtk_scp_ipi.c b/drivers/remoteproc/mtk_scp_ipi.c
+> index fc55df649b40..9c7c17b9d181 100644
+> --- a/drivers/remoteproc/mtk_scp_ipi.c
+> +++ b/drivers/remoteproc/mtk_scp_ipi.c
+> @@ -125,7 +125,7 @@ void scp_ipi_lock(struct mtk_scp *scp, u32 id)
+>  EXPORT_SYMBOL_GPL(scp_ipi_lock);
+>  
+>  /**
+> - * scp_ipi_lock() - Unlock after operations of an IPI ID
+> + * scp_ipi_unlock() - Unlock after operations of an IPI ID
 
-Signed-off-by: Luís Henriques <lhenriques@suse.de>
----
- fs/ceph/file.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+I have applied this patch.
 
-diff --git a/fs/ceph/file.c b/fs/ceph/file.c
-index dee3b445f415..2448d0f1a9ea 100644
---- a/fs/ceph/file.c
-+++ b/fs/ceph/file.c
-@@ -795,11 +795,9 @@ int ceph_atomic_open(struct inode *dir, struct dentry *dentry,
- 	ihold(dir);
- 	if (IS_ENCRYPTED(dir)) {
- 		set_bit(CEPH_MDS_R_FSCRYPT_FILE, &req->r_req_flags);
--		if (!fscrypt_has_encryption_key(dir)) {
--			spin_lock(&dentry->d_lock);
--			dentry->d_flags |= DCACHE_NOKEY_NAME;
--			spin_unlock(&dentry->d_lock);
--		}
-+		err = fscrypt_prepare_lookup_partial(dir, dentry);
-+		if (err < 0)
-+			goto out_req;
- 	}
- 
- 	if (flags & O_CREAT) {
+Thanks,
+Mathieu
+
+>   *
+>   * @scp:	mtk_scp structure
+>   * @id:		IPI ID
+> -- 
+> 2.20.1.7.g153144c
+> 
