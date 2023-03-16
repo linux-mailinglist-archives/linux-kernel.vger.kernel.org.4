@@ -2,184 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B81B6BD1BC
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 15:06:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E99B16BD1B6
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 15:06:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229940AbjCPOGm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 10:06:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48792 "EHLO
+        id S230450AbjCPOGJ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 16 Mar 2023 10:06:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230478AbjCPOGe (ORCPT
+        with ESMTP id S229790AbjCPOGH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 10:06:34 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED517C97D3
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 07:05:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678975548;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=/8g7fUH4/RipZKQITUlU71WoFZ3ij/ncUi8oVz8ATl0=;
-        b=V4MoRlZ0MAfD+Bm+9ys7ABPX5bsVuODnqbM8wg5HcRl/JcYkpLpXyOwy1FJkOnvRTqHR2I
-        WOb97Pn7kVeTVV1UGZjH8C56WVZwk2IQPdC1eRKy+rLs5nscAxY0K/j3ZNLrqRfgAOAlxE
-        tTuMT6WXWlAQgPJYQ2/bdb8TIe5kdbY=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-173-kxZo_iKQPka5mMEey_-6_Q-1; Thu, 16 Mar 2023 10:05:44 -0400
-X-MC-Unique: kxZo_iKQPka5mMEey_-6_Q-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 882991C087A0;
-        Thu, 16 Mar 2023 14:05:44 +0000 (UTC)
-Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 6B00A40D1C5;
-        Thu, 16 Mar 2023 14:05:44 +0000 (UTC)
-From:   Paolo Bonzini <pbonzini@redhat.com>
-To:     torvalds@linux-foundation.org
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Subject: [GIT PULL] KVM fixes for Linux 6.3-rc3
-Date:   Thu, 16 Mar 2023 10:05:43 -0400
-Message-Id: <20230316140543.3253564-1-pbonzini@redhat.com>
+        Thu, 16 Mar 2023 10:06:07 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C46B21EFEB
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 07:06:02 -0700 (PDT)
+Received: from [62.91.42.93] (helo=phil.localnet)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1pcoEl-0001uw-A0; Thu, 16 Mar 2023 15:05:47 +0100
+From:   Heiko Stuebner <heiko@sntech.de>
+To:     hjc@rock-chips.com, airlied@gmail.com, daniel@ffwll.ch,
+        nathan@kernel.org, ndesaulniers@google.com,
+        michael.riesch@wolfvision.net, s.hauer@pengutronix.de,
+        Tom Rix <trix@redhat.com>
+Cc:     dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, Tom Rix <trix@redhat.com>
+Subject: Re: [PATCH] drm/rockchip: vop2: fix uninitialized variable possible_crtcs
+Date:   Thu, 16 Mar 2023 15:05:46 +0100
+Message-ID: <8664878.T7Z3S40VBb@phil>
+In-Reply-To: <20230316132302.531724-1-trix@redhat.com>
+References: <20230316132302.531724-1-trix@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus,
+Am Donnerstag, 16. März 2023, 14:23:02 CET schrieb Tom Rix:
+> clang reportes this error
+> drivers/gpu/drm/rockchip/rockchip_drm_vop2.c:2322:8: error:
+>   variable 'possible_crtcs' is used uninitialized whenever 'if'
+>   condition is false [-Werror,-Wsometimes-uninitialized]
+>                         if (vp) {
+>                             ^~
+> drivers/gpu/drm/rockchip/rockchip_drm_vop2.c:2336:36: note:
+>   uninitialized use occurs here
+>                 ret = vop2_plane_init(vop2, win, possible_crtcs);
+>                                                  ^~~~~~~~~~~~~~
+> drivers/gpu/drm/rockchip/rockchip_drm_vop2.c:2322:4:
+>   note: remove the 'if' if its condition is always true
+>                         if (vp) {
+>                         ^~~~~~~~
+> 
+> The else-statement changes the win->type to OVERLAY without setting the
+> possible_crtcs variable.  Rework the block, initialize possible_crtcs to
+> 0 to remove the else-statement.  Split the else-if-statement out to its
+> own if-statement so the OVERLAY check will catch when the win-type has
+> been changed.
+> 
+> Fixes: 368419a2d429 ("drm/rockchip: vop2: initialize possible_crtcs properly")
+> Signed-off-by: Tom Rix <trix@redhat.com>
+> ---
+>  drivers/gpu/drm/rockchip/rockchip_drm_vop2.c | 9 ++++-----
+>  1 file changed, 4 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/rockchip/rockchip_drm_vop2.c b/drivers/gpu/drm/rockchip/rockchip_drm_vop2.c
+> index 03ca32cd2050..fce992c3506f 100644
+> --- a/drivers/gpu/drm/rockchip/rockchip_drm_vop2.c
+> +++ b/drivers/gpu/drm/rockchip/rockchip_drm_vop2.c
+> @@ -2301,7 +2301,7 @@ static int vop2_create_crtcs(struct vop2 *vop2)
+>  	nvp = 0;
+>  	for (i = 0; i < vop2->registered_num_wins; i++) {
+>  		struct vop2_win *win = &vop2->win[i];
+> -		u32 possible_crtcs;
+> +		u32 possible_crtcs = 0;
+>  
+>  		if (vop2->data->soc_id == 3566) {
+>  			/*
+> @@ -2327,12 +2327,11 @@ static int vop2_create_crtcs(struct vop2 *vop2)
+>  				/* change the unused primary window to overlay window */
+>  				win->type = DRM_PLANE_TYPE_OVERLAY;
+>  			}
+> -		} else if (win->type == DRM_PLANE_TYPE_OVERLAY) {
+> -			possible_crtcs = (1 << nvps) - 1;
+> -		} else {
+> -			possible_crtcs = 0;
+>  		}
+>  
+> +		if (win->type == DRM_PLANE_TYPE_OVERLAY)
+> +			possible_crtcs = (1 << nvps) - 1;
+> +
 
-The following changes since commit eeac8ede17557680855031c6f305ece2378af326:
+After a long hard stare at the code in question, I think doing it this
+way looks like the correct one, as as you mention in the commit message
+the first "if" will change the win->type to OVERLAY in one case, but this
+then will never be added.
 
-  Linux 6.3-rc2 (2023-03-12 16:36:44 -0700)
+Michael, do you agree/disagree?
 
-are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/virt/kvm/kvm.git tags/for-linus
+Thanks
+Heiko
 
-for you to fetch changes up to f3e707413dbe3920a972d0c2b51175180e7de36b:
+https://lore.kernel.org/r/20230315090158.2442771-1-michael.riesch@wolfvision.net
 
-  KVM: selftests: Sync KVM exit reasons in selftests (2023-03-14 10:20:10 -0400)
+>  		ret = vop2_plane_init(vop2, win, possible_crtcs);
+>  		if (ret) {
+>  			drm_err(vop2->drm, "failed to init plane %s: %d\n",
+> 
 
-----------------------------------------------------------------
-ARM64:
 
-* Address a rather annoying bug w.r.t. guest timer offsetting.  The
-  synchronization of timer offsets between vCPUs was broken, leading to
-  inconsistent timer reads within the VM.
 
-x86:
-
-* New tests for the slow path of the EVTCHNOP_send Xen hypercall
-
-* Add missing nVMX consistency checks for CR0 and CR4
-
-* Fix bug that broke AMD GATag on 512 vCPU machines
-
-Selftests:
-
-* Skip hugetlb tests if huge pages are not available
-
-* Sync KVM exit reasons
-
-----------------------------------------------------------------
-David Woodhouse (2):
-      KVM: selftests: Use enum for test numbers in xen_shinfo_test
-      KVM: selftests: Add EVTCHNOP_send slow path test to xen_shinfo_test
-
-Marc Zyngier (1):
-      KVM: arm64: timers: Convert per-vcpu virtual offset to a global value
-
-Paolo Bonzini (4):
-      Merge tag 'kvmarm-fixes-6.3-1' of git://git.kernel.org/pub/scm/linux/kernel/git/kvmarm/kvmarm into HEAD
-      KVM: nVMX: add missing consistency checks for CR0 and CR4
-      KVM: nVMX: remove unnecessary #ifdef
-      selftests: KVM: skip hugetlb tests if huge pages are not available
-
-Rong Tao (2):
-      KVM: VMX: Fix indentation coding style issue
-      KVM: VMX: Use tabs instead of spaces for indentation
-
-Sean Christopherson (5):
-      KVM: SVM: Fix a benign off-by-one bug in AVIC physical table mask
-      KVM: SVM: WARN if GATag generation drops VM or vCPU ID information
-      KVM: selftests: Move the guts of kvm_hypercall() to a separate macro
-      KVM: selftests: Add helpers to make Xen-style VMCALL/VMMCALL hypercalls
-      KVM: selftests: Add macro to generate KVM exit reason strings
-
-Suravee Suthikulpanit (1):
-      KVM: SVM: Modify AVIC GATag to support max number of 512 vCPUs
-
-Vipin Sharma (3):
-      KVM: selftests: Make vCPU exit reason test assertion common
-      KVM: selftests: Print expected and actual exit reason in KVM exit reason assert
-      KVM: selftests: Sync KVM exit reasons in selftests
-
- arch/arm64/include/asm/kvm_host.h                  |   3 +
- arch/arm64/kvm/arch_timer.c                        |  45 +---
- arch/arm64/kvm/hypercalls.c                        |   2 +-
- arch/x86/include/asm/svm.h                         |  12 +-
- arch/x86/kvm/svm/avic.c                            |  37 +++-
- arch/x86/kvm/vmx/nested.c                          |  18 +-
- arch/x86/kvm/vmx/vmenter.S                         |   4 +-
- arch/x86/kvm/vmx/vmx.c                             |  12 +-
- include/kvm/arm_arch_timer.h                       |  15 ++
- tools/testing/selftests/kvm/aarch64/psci_test.c    |   4 +-
- tools/testing/selftests/kvm/include/test_util.h    |   9 +
- .../selftests/kvm/include/x86_64/processor.h       |   2 +
- tools/testing/selftests/kvm/lib/kvm_util.c         |  67 +++---
- .../selftests/kvm/lib/s390x/diag318_test_handler.c |   3 +-
- tools/testing/selftests/kvm/lib/test_util.c        |  25 ++-
- tools/testing/selftests/kvm/lib/x86_64/processor.c |  39 ++--
- tools/testing/selftests/kvm/s390x/sync_regs_test.c |  15 +-
- .../testing/selftests/kvm/set_memory_region_test.c |   6 +-
- tools/testing/selftests/kvm/x86_64/amx_test.c      |   8 +-
- .../selftests/kvm/x86_64/cr4_cpuid_sync_test.c     |   8 +-
- tools/testing/selftests/kvm/x86_64/debug_regs.c    |   2 +-
- .../testing/selftests/kvm/x86_64/flds_emulation.h  |   5 +-
- tools/testing/selftests/kvm/x86_64/hyperv_clock.c  |   7 +-
- tools/testing/selftests/kvm/x86_64/hyperv_evmcs.c  |   8 +-
- .../testing/selftests/kvm/x86_64/hyperv_features.c |  14 +-
- tools/testing/selftests/kvm/x86_64/hyperv_ipi.c    |   6 +-
- .../testing/selftests/kvm/x86_64/hyperv_svm_test.c |   7 +-
- .../selftests/kvm/x86_64/hyperv_tlb_flush.c        |  14 +-
- .../testing/selftests/kvm/x86_64/kvm_clock_test.c  |   5 +-
- tools/testing/selftests/kvm/x86_64/kvm_pv_test.c   |   5 +-
- .../selftests/kvm/x86_64/monitor_mwait_test.c      |   9 +-
- .../selftests/kvm/x86_64/nested_exceptions_test.c  |   5 +-
- .../selftests/kvm/x86_64/platform_info_test.c      |  14 +-
- .../selftests/kvm/x86_64/pmu_event_filter_test.c   |   6 +-
- tools/testing/selftests/kvm/x86_64/smm_test.c      |   9 +-
- tools/testing/selftests/kvm/x86_64/state_test.c    |   8 +-
- .../selftests/kvm/x86_64/svm_int_ctl_test.c        |   8 +-
- .../kvm/x86_64/svm_nested_shutdown_test.c          |   7 +-
- .../kvm/x86_64/svm_nested_soft_inject_test.c       |   6 +-
- .../testing/selftests/kvm/x86_64/svm_vmcall_test.c |   6 +-
- .../testing/selftests/kvm/x86_64/sync_regs_test.c  |  25 +--
- .../selftests/kvm/x86_64/triple_fault_event_test.c |   9 +-
- .../selftests/kvm/x86_64/tsc_scaling_sync.c        |   6 +-
- .../selftests/kvm/x86_64/ucna_injection_test.c     |  22 +-
- .../selftests/kvm/x86_64/userspace_io_test.c       |   6 +-
- .../selftests/kvm/x86_64/userspace_msr_exit_test.c |  22 +-
- .../selftests/kvm/x86_64/vmx_apic_access_test.c    |  11 +-
- .../kvm/x86_64/vmx_close_while_nested_test.c       |   5 +-
- .../selftests/kvm/x86_64/vmx_dirty_log_test.c      |   7 +-
- .../vmx_exception_with_invalid_guest_state.c       |   4 +-
- .../kvm/x86_64/vmx_invalid_nested_guest_state.c    |   4 +-
- .../kvm/x86_64/vmx_nested_tsc_scaling_test.c       |   6 +-
- .../kvm/x86_64/vmx_preemption_timer_test.c         |   8 +-
- .../selftests/kvm/x86_64/vmx_tsc_adjust_test.c     |   6 +-
- .../testing/selftests/kvm/x86_64/xapic_ipi_test.c  |   6 +-
- .../testing/selftests/kvm/x86_64/xen_shinfo_test.c | 228 +++++++++++----------
- .../testing/selftests/kvm/x86_64/xen_vmcall_test.c |   5 +-
- 57 files changed, 354 insertions(+), 511 deletions(-)
 
