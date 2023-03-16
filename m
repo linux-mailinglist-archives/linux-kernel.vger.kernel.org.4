@@ -2,154 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C5DE6BC9C8
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 09:50:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A8616BC9BC
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 09:49:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230335AbjCPIub (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 04:50:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42126 "EHLO
+        id S230116AbjCPIta (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 04:49:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231266AbjCPIuC (ORCPT
+        with ESMTP id S229542AbjCPItX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 04:50:02 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1EB1E1BE
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 01:49:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678956557;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Thu, 16 Mar 2023 04:49:23 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 461401C302;
+        Thu, 16 Mar 2023 01:49:21 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 2A31A21A22;
+        Thu, 16 Mar 2023 08:49:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1678956560; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=ZQF+VfJcpEoBY5ux7q01aOkEisslQ62cgsWrGcOCzeA=;
-        b=EfwC0yUj3kY2pJm58hnrj8yDxkzYw2KBplDJH1PfNhwLOWgNVSP3RAM4U1Qm8pxHkrTF30
-        QsCmP1YsBluIVHQy/UVZuq0m8ki+gs62FSSTBmVP7hlIQ8O77dV6vtGRD40k+CTF2gyrrR
-        pJF5ocJCDgVAooKG40uT62mIBgPJGE8=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-427-xIucgTPpNKOc0HN_gSX_yw-1; Thu, 16 Mar 2023 04:49:15 -0400
-X-MC-Unique: xIucgTPpNKOc0HN_gSX_yw-1
-Received: by mail-ed1-f71.google.com with SMTP id q13-20020a5085cd000000b004af50de0bcfso2028121edh.15
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 01:49:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678956554;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZQF+VfJcpEoBY5ux7q01aOkEisslQ62cgsWrGcOCzeA=;
-        b=Nv4luHrDyiK839HcY0KP+/FjmDcyY7x4iZFVfUt4BTC+oQ9tSDdwLZFSUz/GKkl+q5
-         /9oCoPYl5LA7wcRLnaDMGDM6lqH5jlBihhZ2ZKZ3ZG+cNz6m2OUqgr5y2rtOnOApXrM+
-         uvqH5qrBZKb9Lo5pTBGNTRs80sYIfISwXWLQBoVcEgxT6ciaOzII2Q90ycZByZpKOD2V
-         271/UQ52jR8bfNz+r9YxfuKN0kHP0Q7Wvx2yPveoizdxJ1NDD7PYpCwa4uZCpGToAIBi
-         DvMd7pT9uUS1ykYWayVrIYudPmhSNOHN5dqUxeVcKjGsKAUkuo2OmOPLlizm3Mmz87us
-         BIkA==
-X-Gm-Message-State: AO0yUKVgjl2ruS0bERL6PdXrOTuYny5CmA0VRMe5bh3M9gFVLX+8eBXx
-        Dz5uj6pHF0brq+i7INonHKmK0BCzbmX4zNfd1r34eloOV/1KEL57Ae+OmI2EV/KdDx7mt1C945S
-        qF2KMH63dNFKCY3ULfGH4uxc0
-X-Received: by 2002:a17:907:31ca:b0:92f:e643:e822 with SMTP id xf10-20020a17090731ca00b0092fe643e822mr3072609ejb.37.1678956554158;
-        Thu, 16 Mar 2023 01:49:14 -0700 (PDT)
-X-Google-Smtp-Source: AK7set986UHmIZ1pfjcoD9S5jCEussbdGvwlVTM/9q1utc4TpF0kSx1gaCcutBDOKagtBqq8vpo49g==
-X-Received: by 2002:a17:907:31ca:b0:92f:e643:e822 with SMTP id xf10-20020a17090731ca00b0092fe643e822mr3072589ejb.37.1678956553903;
-        Thu, 16 Mar 2023 01:49:13 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id t21-20020a1709066bd500b0092bd1a7f5fdsm3539340ejs.57.2023.03.16.01.49.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Mar 2023 01:49:13 -0700 (PDT)
-Message-ID: <31b1d4a5-3a98-ae3a-b089-f2464fc890f4@redhat.com>
-Date:   Thu, 16 Mar 2023 09:49:12 +0100
+        bh=LsnTAWqJOWRNOseuHzzO1gVL47/3J60Y+FhPk1kbiFI=;
+        b=e40MrNFDHKhznFiHl82x2dI56LnH6n7moyN9mcdE12eJgMdojOMSl9k4xvGWV/COSojZUe
+        Ps199FbwgMwBEpA/RO1x7IJcAZlwaWv2rMmXpXw6jvgVklxk/qCUHyhHWYEFNpImeD14MH
+        1kfKOgNfRnTpa1Mppl7dgt33OO2v8SQ=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E50AF13A2F;
+        Thu, 16 Mar 2023 08:49:19 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id wAuMNg/YEmRMLQAAMHmgww
+        (envelope-from <jgross@suse.com>); Thu, 16 Mar 2023 08:49:19 +0000
+Message-ID: <5e638be3-6195-1ff5-d767-e0f224befd8d@suse.com>
+Date:   Thu, 16 Mar 2023 09:49:19 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] Input: i8042 - Add quirk for Fujitsu Lifebook A574/H
-Content-Language: en-US, nl
-To:     Jonathan Denose <jdenose@chromium.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Jonathan Denose <jdenose@google.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Mattijs Korpershoek <mkorpershoek@baylibre.com>,
-        Takashi Iwai <tiwai@suse.de>,
-        Werner Sembach <wse@tuxedocomputers.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-input@vger.kernel.org
-References: <20230303152623.45859-1-jdenose@google.com>
- <e8f5e2aa-d7fa-88ff-6306-4c1ee8feeade@redhat.com>
- <CALNJtpWsvZEdGJFA30cv0cSq43Djm7q+trDQVxx5aRDzg7u3Gw@mail.gmail.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <CALNJtpWsvZEdGJFA30cv0cSq43Djm7q+trDQVxx5aRDzg7u3Gw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] xen: remove unnecessary (void*) conversions
+Content-Language: en-US
+To:     Yu Zhe <yuzhe@nfschina.com>, sstabellini@kernel.org,
+        oleksandr_tyshchenko@epam.com
+Cc:     xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, liqiong@nfschina.com
+References: <20230316083954.4223-1-yuzhe@nfschina.com>
+From:   Juergen Gross <jgross@suse.com>
+In-Reply-To: <20230316083954.4223-1-yuzhe@nfschina.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------lW2n9lsE8l5RcBGzlXoysCpB"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------lW2n9lsE8l5RcBGzlXoysCpB
+Content-Type: multipart/mixed; boundary="------------TuxkOGmzhcB7i5SD1HM9zLls";
+ protected-headers="v1"
+From: Juergen Gross <jgross@suse.com>
+To: Yu Zhe <yuzhe@nfschina.com>, sstabellini@kernel.org,
+ oleksandr_tyshchenko@epam.com
+Cc: xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
+ kernel-janitors@vger.kernel.org, liqiong@nfschina.com
+Message-ID: <5e638be3-6195-1ff5-d767-e0f224befd8d@suse.com>
+Subject: Re: [PATCH] xen: remove unnecessary (void*) conversions
+References: <20230316083954.4223-1-yuzhe@nfschina.com>
+In-Reply-To: <20230316083954.4223-1-yuzhe@nfschina.com>
 
-On 3/15/23 22:39, Jonathan Denose wrote:
-> Hello Hans,
-> 
-> Thank you very much for your review.
-> 
-> For my knowledge, what is the timeline for patches in the input
-> mailing list getting applied to a maintainer branch after review?
+--------------TuxkOGmzhcB7i5SD1HM9zLls
+Content-Type: multipart/mixed; boundary="------------2BhFTSZXNpNt6futtoPVSXhg"
 
-It depends on when Dmitry has time to go through the patch queue. Not a really helpful answer I know, sorry.
+--------------2BhFTSZXNpNt6futtoPVSXhg
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-Regards,
+T24gMTYuMDMuMjMgMDk6MzksIFl1IFpoZSB3cm90ZToNCj4gUG9pbnRlciB2YXJpYWJsZXMg
+b2Ygdm9pZCAqIHR5cGUgZG8gbm90IHJlcXVpcmUgdHlwZSBjYXN0Lg0KPiANCj4gU2lnbmVk
+LW9mZi1ieTogWXUgWmhlIDx5dXpoZUBuZnNjaGluYS5jb20+DQoNClJldmlld2VkLWJ5OiBK
+dWVyZ2VuIEdyb3NzIDxqZ3Jvc3NAc3VzZS5jb20+DQoNCg0KSnVlcmdlbg0KDQo=
+--------------2BhFTSZXNpNt6futtoPVSXhg
+Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Description: OpenPGP public key
+Content-Transfer-Encoding: quoted-printable
 
-Hans
+-----BEGIN PGP PUBLIC KEY BLOCK-----
 
+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
+jR/i1DG86lem3iBDXzXsZDn8R38=3D
+=3D2wuH
+-----END PGP PUBLIC KEY BLOCK-----
 
-> On Mon, Mar 6, 2023 at 5:00 AM Hans de Goede <hdegoede@redhat.com> wrote:
->>
->> Hi,
->>
->> On 3/3/23 16:26, Jonathan Denose wrote:
->>> Fujitsu Lifebook A574/H requires the nomux option to properly
->>> probe the touchpad, especially when waking from sleep.
->>>
->>> Signed-off-by: Jonathan Denose <jdenose@google.com>
->>
->> Thanks, patch looks good to me:
->>
->> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
->>
->> Regards,
->>
->> Hans
->>
->>
->>> ---
->>>
->>>  drivers/input/serio/i8042-acpipnpio.h | 8 ++++++++
->>>  1 file changed, 8 insertions(+)
->>>
->>> diff --git a/drivers/input/serio/i8042-acpipnpio.h b/drivers/input/serio/i8042-acpipnpio.h
->>> index efc61736099b..fe7ffe30997c 100644
->>> --- a/drivers/input/serio/i8042-acpipnpio.h
->>> +++ b/drivers/input/serio/i8042-acpipnpio.h
->>> @@ -610,6 +610,14 @@ static const struct dmi_system_id i8042_dmi_quirk_table[] __initconst = {
->>>               },
->>>               .driver_data = (void *)(SERIO_QUIRK_NOMUX)
->>>       },
->>> +     {
->>> +             /* Fujitsu Lifebook A574/H */
->>> +             .matches = {
->>> +                     DMI_MATCH(DMI_SYS_VENDOR, "FUJITSU"),
->>> +                     DMI_MATCH(DMI_PRODUCT_NAME, "FMVA0501PZ"),
->>> +             },
->>> +             .driver_data = (void *)(SERIO_QUIRK_NOMUX)
->>> +     },
->>>       {
->>>               /* Gigabyte M912 */
->>>               .matches = {
->>
-> 
+--------------2BhFTSZXNpNt6futtoPVSXhg--
 
+--------------TuxkOGmzhcB7i5SD1HM9zLls--
+
+--------------lW2n9lsE8l5RcBGzlXoysCpB
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmQS2A8FAwAAAAAACgkQsN6d1ii/Ey+e
+fgf+Mzh7p8kg1gm1OzIls1Rc62M5MlAfz599Gr4egjVsub8gv3uWrFN4Pe4Jp/j5RmF660/+ElSx
+mWpmX+alDmm6+cvuYOyv7IjXpJrnsqZ1iNRtoXcIKjeRw5JH81HWbtS3dUHA/31Agn6dhPd/Zu/f
+VrVm9yU2C5ZdUFCwq1JIdh0+ii9M+yeimto5FEBNg2oleGzDsyfrY+ed5IldorXbLm/mIi+K9aXA
+M+KsjkL99TGWUubjef7oO4mJyX8wXTU4WdUY2F2TDTKNwxwGOgwxEepm+HHyQcya8zqSlhMo3nSB
+FP82SLnIL9e7IUteHi2uXh7ehNMV1wKrICxnqdGjPw==
+=mhOI
+-----END PGP SIGNATURE-----
+
+--------------lW2n9lsE8l5RcBGzlXoysCpB--
