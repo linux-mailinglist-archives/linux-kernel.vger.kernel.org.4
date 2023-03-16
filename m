@@ -2,111 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B11036BCCB0
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 11:25:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CCC76BCCB7
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 11:26:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231233AbjCPKZb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 06:25:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49850 "EHLO
+        id S231244AbjCPK0M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 06:26:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231236AbjCPKZP (ORCPT
+        with ESMTP id S231219AbjCPKZu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 06:25:15 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C21E5BCFDC
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 03:24:43 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id DA64E660309D;
-        Thu, 16 Mar 2023 10:24:20 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1678962261;
-        bh=JdVoGCJf3Q6s6CvpqfATsO0IIiTbtHaPsLAGORiICLQ=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=ShTG0J1nBkA8ToOcGv0l67RQRBXFzu6DU+cCCVS2R+PFfiYGglc452pngu7LtW+VL
-         gBnyae7I0t5brIbuJLL01km4PdI3lkTX11Bn8Eb4eg8/SfEdHwtxLwFar1klM3CWPj
-         bGDClkcQiJIFpQJEH3ZV5CaVFZDjhYZziCL0kYncNOnxWpNMH3nPu4yYGPQ3mOGLID
-         yosnUYg6CG6RyY1YfGOm/v/IwzQxBA5zGgWkKxn5jYi1ul9RIlwzKkbGg/2Xo2rrUI
-         DZaUZ8HoFb/EYP1p1QxPAdw0Q0ZA5/seX+eXnCqKUzJwpU1jvf1Rwt/xA9yKKtcpf7
-         wX3DR3MZIDI3g==
-Message-ID: <4a398efe-af02-b1b6-1617-5537fc490bd7@collabora.com>
-Date:   Thu, 16 Mar 2023 11:24:18 +0100
+        Thu, 16 Mar 2023 06:25:50 -0400
+Received: from out-7.mta0.migadu.com (out-7.mta0.migadu.com [IPv6:2001:41d0:1004:224b::7])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C02726C13
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 03:25:32 -0700 (PDT)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1678962330;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=T0LlouiaaJCTY/nLAMjlbcAIUIL3clukrpmqFl+EWEM=;
+        b=K7vZrmd9NSQH98rEGOA5fodzxyTtiD+/8p+ZujHULt4pTlKP9NRKQHFchH+vWDtMaZ6dMx
+        orxdovPWJwwKjjECKyeSRxHzTQ24/5ZeM9tCm+Al0juPNRMVLcu9vM1+QyvxdNCYRujbdM
+        DwzdH1WrWwvPAfOqkx3pr5MV0hHVwzw=
+From:   Richard Leitner <richard.leitner@linux.dev>
+Date:   Thu, 16 Mar 2023 11:25:25 +0100
+Subject: [PATCH] mailmap: add entries for Richard Leitner
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v3] iommu/mediatek: Set dma_mask for PGTABLE_PA_35_EN
-Content-Language: en-US
-To:     Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
-        Will Deacon <will@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     Robin Murphy <robin.murphy@arm.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        iommu@lists.linux.dev, linux-mediatek@lists.infradead.org,
-        Yunfei Wang <yf.wang@mediatek.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        jianjiao.zeng@mediatek.com, chengci.xu@mediatek.com
-References: <20230316101445.12443-1-yong.wu@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230316101445.12443-1-yong.wu@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20230316-my-mailmap-v1-1-76bc3a36ba41@linux.dev>
+X-B4-Tracking: v=1; b=H4sIAJTuEmQC/x2N0QrCMAwAf2Xk2UDTQkV/RXzItugCto5ExDH27
+ +t8PI7jVnAxFYdrt4LJV13ftQGdOhgmrk9BHRtDDDGFRBnLgoX1VXjGwPmSKJ4p0wgt6NkFe+M
+ 6TEdS2D9ih5hNHvr7X273bdsBUHcsH3UAAAA=
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     Richard Leitner <richard.leitner@linux.dev>
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1118;
+ i=richard.leitner@linux.dev; h=from:subject:message-id;
+ bh=kV9ErzOSMtvPVbrDIxkswd7IgZVUY3RBXY/NbWS8XSA=;
+ b=owGbwMvMwCX2R2KahkXN7wuMp9WSGFKE3s1KDn48i32DR/Cc4Cv7tf9FpW+cFscUGJX3hOHujKdR
+ S87md5SyMIhxMciKKbLYG3O1u+eWva9U1MmFmcPKBDKEgYtTACZi9JORYf7CL7f32Iu4BFszfpFP2s
+ tz19WMY83zJs/u9um2eb7LGBn+Rzw4LKO4ac+lkPsGP5MYRHbwvwydY/+9LIpt2p6nDA3feQA=
+X-Developer-Key: i=richard.leitner@linux.dev; a=openpgp;
+ fpr=3F330A87476D76EF79212C6DFC189628387CFBD0
+X-Migadu-Flow: FLOW_OUT
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 16/03/23 11:14, Yong Wu ha scritto:
-> When we enable PGTABLE_PA_35_EN, the PA for pgtable may be 35bits.
-> Thus add dma_mask for it.
-> 
-> Fixes: 301c3ca12576 ("iommu/mediatek: Allow page table PA up to 35bit")
-> Signed-off-by: Chengci.Xu <chengci.xu@mediatek.com>
-> Signed-off-by: Yong Wu <yong.wu@mediatek.com>
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> ---
-> v3: Sorry for a typo. Change from "if (!ret)" to "if (ret)".
+Map all my old email addresses to my current address.
 
-I was just about to make you notice. Glad you've fixed that promptly and before
-giving me a chance to complain! :-P
+Signed-off-by: Richard Leitner <richard.leitner@linux.dev>
+---
+ .mailmap | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Good job!
+diff --git a/.mailmap b/.mailmap
+index 86a6307dd824..a442825fa9d9 100644
+--- a/.mailmap
++++ b/.mailmap
+@@ -384,6 +384,9 @@ Rémi Denis-Courmont <rdenis@simphalempin.com>
+ Ricardo Ribalda <ribalda@kernel.org> <ricardo@ribalda.com>
+ Ricardo Ribalda <ribalda@kernel.org> Ricardo Ribalda Delgado <ribalda@kernel.org>
+ Ricardo Ribalda <ribalda@kernel.org> <ricardo.ribalda@gmail.com>
++Richard Leitner <richard.leitner@linux.dev> <dev@g0hl1n.net>
++Richard Leitner <richard.leitner@linux.dev> <me@g0hl1n.net>
++Richard Leitner <richard.leitner@linux.dev> <richard.leitner@skidata.com>
+ Robert Foss <rfoss@kernel.org> <robert.foss@linaro.org>
+ Roman Gushchin <roman.gushchin@linux.dev> <guro@fb.com>
+ Roman Gushchin <roman.gushchin@linux.dev> <guroan@gmail.com>
 
-Cheers,
-Angelo
+---
+base-commit: 9c1bec9c0b08abeac72ed6214b723adc224013bf
+change-id: 20230316-my-mailmap-0a693127161d
 
-> 
-> v2: Just move this out from mt8188 series. Nothing change.
-> 
-> v1: https://lore.kernel.org/linux-mediatek/20230307080555.14399-3-yong.wu@mediatek.com/
-> ---
->   drivers/iommu/mtk_iommu.c | 8 ++++++++
->   1 file changed, 8 insertions(+)
-> 
-> diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
-> index d5a4955910ff..6a00ce208dc2 100644
-> --- a/drivers/iommu/mtk_iommu.c
-> +++ b/drivers/iommu/mtk_iommu.c
-> @@ -1258,6 +1258,14 @@ static int mtk_iommu_probe(struct platform_device *pdev)
->   			return PTR_ERR(data->bclk);
->   	}
->   
-> +	if (MTK_IOMMU_HAS_FLAG(data->plat_data, PGTABLE_PA_35_EN)) {
-> +		ret = dma_set_mask(dev, DMA_BIT_MASK(35));
-> +		if (ret) {
-> +			dev_err(dev, "Failed to set dma_mask 35.\n");
-> +			return ret;
-> +		}
-> +	}
-> +
->   	pm_runtime_enable(dev);
->   
->   	if (MTK_IOMMU_IS_TYPE(data->plat_data, MTK_IOMMU_TYPE_MM)) {
+Best regards,
+-- 
+Richard Leitner <richard.leitner@linux.dev>
 
