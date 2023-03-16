@@ -2,65 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 436DD6BCE49
+	by mail.lfdr.de (Postfix) with ESMTP id 8EE0F6BCE4A
 	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 12:34:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230033AbjCPLeS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 07:34:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52280 "EHLO
+        id S230146AbjCPLeV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 07:34:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230058AbjCPLd4 (ORCPT
+        with ESMTP id S230096AbjCPLeB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 07:33:56 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98E55184;
-        Thu, 16 Mar 2023 04:33:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 16 Mar 2023 07:34:01 -0400
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB42D184
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 04:33:59 -0700 (PDT)
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4261BB820FA;
-        Thu, 16 Mar 2023 11:33:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC0F0C433D2;
-        Thu, 16 Mar 2023 11:33:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678966431;
-        bh=vDocdycxCF3x/Zn1u1sFhrHTw1xj9HPiv64qQnogRfI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Va//pdWzxmhiRpESjcfRBT4poZCpE+2tUIpYFsg9B2uN5d45SqlrhmBmKo0GZswmr
-         t/9z2Oq0/dDgKHf2a+s9KlVJ3Zox8u8SO6IYCqkgla3EAmqFq1HrlktdbtcGZNf2ko
-         lOLIIPUVQwc5RNuSiHaDcWZKChhAPW1MVZ9eSvIj8ioKHngMSj7spdSkVpPVhfaruR
-         EyBbGvSqu9xW8iOEjwm8xcn+9QWFoR2I5IA1YBmrwmE7oGclZQR7xvIeLOCi+liIJp
-         HRCVatfvJhlURLSV/68Pqebpl+fI9LTE2EVeWi1Z/zbXMW9Z2ArMYTtZuOji6GS+N5
-         eoG9QuIIwlLSg==
-Date:   Thu, 16 Mar 2023 11:33:45 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Frank Rowand <frowand.list@gmail.com>
-Cc:     kernelci@groups.io, rmoar@google.com,
-        "Bird, Tim" <Tim.Bird@sony.com>,
-        "davidgow@google.com" <davidgow@google.com>,
-        "skhan@linuxfoundation.org" <skhan@linuxfoundation.org>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "brendanhiggins@google.com" <brendanhiggins@google.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "guillaume.tucker@collabora.com" <guillaume.tucker@collabora.com>,
-        "dlatypov@google.com" <dlatypov@google.com>,
-        "kunit-dev@googlegroups.com" <kunit-dev@googlegroups.com>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [KTAP V2 PATCH] ktap_v2: add skip test result
-Message-ID: <ad7e6e40-6542-4439-8199-d46a6fc91364@sirena.org.uk>
-References: <20230310222002.3633162-1-rmoar@google.com>
- <BYAPR13MB2503C590A2AE6FEF6BCAC529FDBB9@BYAPR13MB2503.namprd13.prod.outlook.com>
- <CA+GJov5O6hGdjYMXjRd34MEZuyBuukyJCOsS=HeO30h43eLQbQ@mail.gmail.com>
- <4568b302-2a5a-4499-b2f7-12f89c031495@sirena.org.uk>
- <155efcdb-2be6-16c4-42bc-37930639060a@gmail.com>
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 69A3341BA7
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 11:33:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1678966437;
+        bh=Mpm31NliFgs0ydzc6S3DaZ/Zls4Qi0OVxpRYVFsfdKk=;
+        h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+         Content-Type:In-Reply-To;
+        b=kNDknlVwlPTVzd9EnRsjfdQCZXmU7d0TX5ky2GUpVCBqh3DOdQdLNn1czW0XYElHH
+         mx/G6q/HjCXqLLyW2YVT2K2GZswRH9RPHCZQwBjgYtVbM5K2yqyeygbaDn0thTgOGE
+         HST5Eq86nDynu3K9TiPdEPmroAjv06mlrwubltEOnX/XpOhJdU6ZWPXZRNvFq4zJ9f
+         DyknjycBi+U6lAIW7W17j4wXqEYo/f7E274aWgtFn9pccFoC+EWys/6XRjRNqbNZza
+         2i1oJ5jbEQMgaxzuZNLJ3i1r9Hk7FeMAW6QaMFBk2VBbKJJmogoqUnDpGZW8/MNinO
+         bodqQdbjMPM8g==
+Received: by mail-ed1-f71.google.com with SMTP id i42-20020a0564020f2a00b004fd23c238beso2678038eda.0
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 04:33:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678966437;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Mpm31NliFgs0ydzc6S3DaZ/Zls4Qi0OVxpRYVFsfdKk=;
+        b=kArOnAZv7QUuDFkURRp2owiSmF4oOz4GqC9ui398J9r6jjTLl+8bilPvu5xFPoc33G
+         jHSIvqGmPq9hCwcTpOzgcyJk0RgC5puyELrJVI34bbW6uweEjN0F2X1g3pWk71ZalLBY
+         5GfxF5kKCgurBDhbnKP+w3G8yPtetXqi0A151rCN9b60ND/fZUpQ9YTrNMlY1ClO/y1n
+         V2OrhLNt1tY9ddicAv5Ne991JVRYH/K0oBL7rAhLDw6vQ4EreTAdWmPTTu9D0FEfLUkO
+         g+cxt9h1Yl8BZhNd+z26q+lX9+2HO/feMoVI+OlQDVx3KpfD+f8QzB+Ra/tsgAItqFMl
+         ANLw==
+X-Gm-Message-State: AO0yUKX8X8Z2RyhzgrPMIojMhh4V6OSnoq/LAmulJz8/fvn6JCfkzmQL
+        Flh5aryR9nFnhIfq2QOfiSP0hYpgQAuYXNEIa6LHptTGqKnUxNAXS1+ShFMg9MDsSA+HwoLuuLr
+        g7oncwlDmFrjh/B0LxYMP/BGC73Ib592+HaIMFiWllA==
+X-Received: by 2002:a17:906:4d53:b0:926:e917:133c with SMTP id b19-20020a1709064d5300b00926e917133cmr10258744ejv.47.1678966436961;
+        Thu, 16 Mar 2023 04:33:56 -0700 (PDT)
+X-Google-Smtp-Source: AK7set+PgHth3qWZf6VcyjKGp4GUyLDJ6SCZCRIWk0t0BEGs5o7U+BS0eITXVTXOby5ZEIb4RFWivA==
+X-Received: by 2002:a17:906:4d53:b0:926:e917:133c with SMTP id b19-20020a1709064d5300b00926e917133cmr10258725ejv.47.1678966436678;
+        Thu, 16 Mar 2023 04:33:56 -0700 (PDT)
+Received: from localhost (host-79-53-23-214.retail.telecomitalia.it. [79.53.23.214])
+        by smtp.gmail.com with ESMTPSA id oz31-20020a170906cd1f00b00930c7b642d0sm413338ejb.166.2023.03.16.04.33.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Mar 2023 04:33:56 -0700 (PDT)
+Date:   Thu, 16 Mar 2023 12:33:55 +0100
+From:   Andrea Righi <andrea.righi@canonical.com>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Paolo Pisati <paolo.pisati@canonical.com>,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Darren Hart <darren@os.amperecomputing.com>
+Subject: Re: kernel 6.2 stuck at boot (efi_call_rts) on arm64
+Message-ID: <ZBL+o7ydLk2iBCCr@righiandr-XPS-13-7390>
+References: <ZBLLSmLbt2P4ZN6O@righiandr-XPS-13-7390>
+ <CAMj1kXHYqMdis99D3OaKf51eoCDW2+5NfcUEbF4Zrau4BcKgsQ@mail.gmail.com>
+ <ZBLlLRVVxCbZfEJd@righiandr-XPS-13-7390>
+ <CAMj1kXET+A2rk+WQyebKPNtSvzzS0nJdMbx3uT1JgMxOvqfx4w@mail.gmail.com>
+ <ZBLpVDmy8BXQZve9@righiandr-XPS-13-7390>
+ <CAMj1kXF_f4QFtaDYBaSJwO0B97TJHWr6uRQdeYeD=Gv7DrVicg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="UVwe1GSxcWtU1Vyf"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <155efcdb-2be6-16c4-42bc-37930639060a@gmail.com>
-X-Cookie: ... I have read the INSTRUCTIONS ...
+In-Reply-To: <CAMj1kXF_f4QFtaDYBaSJwO0B97TJHWr6uRQdeYeD=Gv7DrVicg@mail.gmail.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -70,32 +86,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Mar 16, 2023 at 11:18:21AM +0100, Ard Biesheuvel wrote:
+> On Thu, 16 Mar 2023 at 11:03, Andrea Righi <andrea.righi@canonical.com> wrote:
+> >
+> > On Thu, Mar 16, 2023 at 10:55:58AM +0100, Ard Biesheuvel wrote:
+> > > (cc Darren)
+> > >
+> > > On Thu, 16 Mar 2023 at 10:45, Andrea Righi <andrea.righi@canonical.com> wrote:
+> > > >
+> > > > On Thu, Mar 16, 2023 at 08:58:20AM +0100, Ard Biesheuvel wrote:
+> > > > > Hello Andrea,
+> > > > >
+> > > > > On Thu, 16 Mar 2023 at 08:54, Andrea Righi <andrea.righi@canonical.com> wrote:
+> > > > > >
+> > > > > > Hello,
+> > > > > >
+> > > > > > the latest v6.2.6 kernel fails to boot on some arm64 systems, the kernel
+> > > > > > gets stuck and never completes the boot. On the console I see this:
+> > > > > >
+> > > > > > [   72.043484] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+> > > > > > [   72.049571] rcu:     22-...0: (30 GPs behind) idle=b10c/1/0x4000000000000000 softirq=164/164 fqs=6443
+> > > > > > [   72.058520]     (detected by 28, t=15005 jiffies, g=449, q=174 ncpus=32)
+> > > > > > [   72.064949] Task dump for CPU 22:
+> > > > > > [   72.068251] task:kworker/u64:5   state:R  running task     stack:0     pid:447   ppid:2      flags:0x0000000a
+> > > > > > [   72.078156] Workqueue: efi_rts_wq efi_call_rts
+> > > > > > [   72.082595] Call trace:
+> > > > > > [   72.085029]  __switch_to+0xbc/0x100
+> > > > > > [   72.088508]  0xffff80000fe83d4c
+> > > > > >
+> > > > > > After that, as a consequence, I start to get a lot of hung task timeout traces.
+> > > > > >
+> > > > > > I tried to bisect the problem and I found that the offending commit is
+> > > > > > this one:
+> > > > > >
+> > > > > >  e7b813b32a42 ("efi: random: refresh non-volatile random seed when RNG is initialized")
+> > > > > >
+> > > > > > I've reverted this commit for now and everything works just fine, but I
+> > > > > > was wondering if the problem could be caused by a lack of entropy on
+> > > > > > these arm64 boxes or something else.
+> > > > > >
+> > > > > > Any suggestion? Let me know if you want me to do any specific test.
+> > > > > >
+> > > > >
+> > > > > Thanks for the report.
+> > > > >
+> > > > > This is most likely the EFI SetVariable() call going off into the
+> > > > > weeds and never returning.
+> > > > >
+> > > > > Is this an Ampere Altra system by any chance? Do you see it on
+> > > > > different types of hardware?
+> > > >
+> > > > This is: Ampere eMAG / Lenovo ThinkSystem HR330a.
+> > > >
+> > > > >
+> > > > > Could you check whether SetVariable works on this system? E.g. by
+> > > > > updating the EFI boot timeout (sudo efibootmgr -t <n>)?
+> > > >
+> > > > ubuntu@kuzzle:~$ sudo efibootmgr -t 10
+> > > > ^C^C^C^C
+> > > >
+> > > > ^ Stuck there, so it really looks like SetVariable is the problem.
+> > > >
+> > >
+> > > Could you please share the output of
+> > >
+> > > dmidecode -s bios
+> > > dmidecode -s system-family
+> >
+> > $ sudo dmidecode -s bios-vendor
+> > LENOVO
+> > $ sudo dmidecode -s bios-version
+> > hve104r-1.15
+> > $ sudo dmidecode -s bios-release-date
+> > 02/26/2021
+> > $ sudo dmidecode -s bios-revision
+> > 1.15
+> > $ sudo dmidecode -s system-family
+> > Lenovo ThinkSystem HR330A/HR350A
+> >
+> 
+> Thanks
+> 
+> Mind checking if this patch fixes your issue as well?
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/commit/?h=altra-fix&id=77fa99dd4741456da85049c13ec31a148f5f5ac0
 
---UVwe1GSxcWtU1Vyf
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Unfortunately this doesn't seem to be enough, I'm still getting the same
+problem also with this patch applied.
 
-On Wed, Mar 15, 2023 at 04:45:29PM -0500, Frank Rowand wrote:
-
-> Yes, there is no need to do a single specification change that results
-> in incompatibility.  But given the previous discussions there seem to
-> be plenty of other desired changes that will result in incompatibility.
-
-Do you have a pointer to that previous discussion?
-
---UVwe1GSxcWtU1Vyf
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQS/pgACgkQJNaLcl1U
-h9DAGQf9H5cCQVE7wWovMynfMODIpOC7+Z6SXi1+MsZtWfm+bRqBeAyvOqp80/tj
-9K+0b5XET1aaQhEtvOZN4RdDT044i/4n/AaDc+nNK/M7R8pukbbPInu65zfKv1rc
-TLbFvO7RyoyiBVLl/DckezLT5MfNA5rEfgDZLSh7VYAjrk797YQi2jsG2wavrt6H
-hik9XI91StSnc0kzntjL3b22bkhwTYT5X87pHIgP9XzMj4jzyPXN6b8kQ+nWLd9g
-jC+kx2/zOVMTX9rDY+YtRjepLGoSeXhoUxwXUdVW0WEwOAloD99V5ohd13fuL5lu
-FEwgs+MvZ+ijQME9jtxY+4oo5kiFqA==
-=Pym2
------END PGP SIGNATURE-----
-
---UVwe1GSxcWtU1Vyf--
+-Andrea
