@@ -2,124 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FDA86BCB7C
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 10:52:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63BDE6BCB72
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 10:52:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230260AbjCPJwh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 05:52:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55394 "EHLO
+        id S230182AbjCPJwM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 05:52:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230200AbjCPJwd (ORCPT
+        with ESMTP id S230030AbjCPJwE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 05:52:33 -0400
-Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A92E475A60
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 02:52:21 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R401e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0Ve-ANIv_1678960336;
-Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0Ve-ANIv_1678960336)
-          by smtp.aliyun-inc.com;
-          Thu, 16 Mar 2023 17:52:18 +0800
-From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-To:     alexander.deucher@amd.com
-Cc:     christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@gmail.com,
-        daniel@ffwll.ch, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH 2/2] drm/amd/display: Remove the unused function link_timing_bandwidth_kbps()
-Date:   Thu, 16 Mar 2023 17:51:43 +0800
-Message-Id: <20230316095143.73368-2-jiapeng.chong@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
-In-Reply-To: <20230316095143.73368-1-jiapeng.chong@linux.alibaba.com>
-References: <20230316095143.73368-1-jiapeng.chong@linux.alibaba.com>
+        Thu, 16 Mar 2023 05:52:04 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B79A6C6A4;
+        Thu, 16 Mar 2023 02:52:02 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32G9pmUj060493;
+        Thu, 16 Mar 2023 04:51:48 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1678960308;
+        bh=ZelipF9icADDXzaTHp6Kp3qFHINB7rfZwnly8m4FC9A=;
+        h=From:To:CC:Subject:Date;
+        b=N/TzqT6AQJXUR+W8BEEevQsl9QZCzTfwMEHRZmNvW/b3frbBn8Ar16YNtX4EV/bAm
+         bYRP12Qf0HCAwjNb1HeMYHS3CuHEeOHW3iQQzAp7jOvQ52pQgqMwMdSStR3aZIO0te
+         qp2WmH7NwvTttH7UDfBbpUVCXVaCbzObtY2FqgGQ=
+Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32G9pmVL016394
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 16 Mar 2023 04:51:48 -0500
+Received: from DLEE115.ent.ti.com (157.170.170.26) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Thu, 16
+ Mar 2023 04:51:48 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Thu, 16 Mar 2023 04:51:48 -0500
+Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32G9plDn012930;
+        Thu, 16 Mar 2023 04:51:47 -0500
+From:   Bhavya Kapoor <b-kapoor@ti.com>
+To:     <devicetree@vger.kernel.org>, <robh+dt@kernel.org>
+CC:     <nm@ti.com>, <vigneshr@ti.com>, <kristo@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <b-kapoor@ti.com>
+Subject: [PATCH v7 0/2] arm64: dts: ti: k3-j721s2: Add support for ADC nodes
+Date:   Thu, 16 Mar 2023 15:21:44 +0530
+Message-ID: <20230316095146.498999-1-b-kapoor@ti.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The function link_timing_bandwidth_kbps is defined in the
-link_validation.c file, but not called elsewhere, so remove this unused
-function.
+J721s2 has two instances of 8 channel ADCs in MCU domain. Add support
+for both ADC nodes in dtsi file. Add pinmux information for both
+instances of ADC in board dts file.
 
-drivers/gpu/drm/amd/amdgpu/../display/dc/link/link_validation.c:258:10: warning: no previous prototype for ‘link_timing_bandwidth_kbps’.
+Changelog v6->v7:
+ - Created 2 commits for k3-j721s2-mcu-wakeup.dtsi and
+ k3-j721s2-common-proc-board.dts instead of a single commit
 
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=4547
-Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
----
- .../drm/amd/display/dc/link/link_validation.c | 51 -------------------
- 1 file changed, 51 deletions(-)
+Bhavya Kapoor (2):
+  arm64: dts: ti: k3-j721s2-mcu-wakeup: Add support for ADC nodes
+  arm64: dts: ti: k3-j721s2-common-proc-board: Add pinmux information
+    for ADC
 
-diff --git a/drivers/gpu/drm/amd/display/dc/link/link_validation.c b/drivers/gpu/drm/amd/display/dc/link/link_validation.c
-index 9a5010f86003..afbd22631721 100644
---- a/drivers/gpu/drm/amd/display/dc/link/link_validation.c
-+++ b/drivers/gpu/drm/amd/display/dc/link/link_validation.c
-@@ -255,57 +255,6 @@ uint32_t dp_link_bandwidth_kbps(
- 	return link_rate_per_lane_kbps * link_settings->lane_count / 10000 * total_data_bw_efficiency_x10000;
- }
- 
--uint32_t link_timing_bandwidth_kbps(const struct dc_crtc_timing *timing)
--{
--	uint32_t bits_per_channel = 0;
--	uint32_t kbps;
--
--	if (timing->flags.DSC)
--		return dc_dsc_stream_bandwidth_in_kbps(timing,
--				timing->dsc_cfg.bits_per_pixel,
--				timing->dsc_cfg.num_slices_h,
--				timing->dsc_cfg.is_dp);
--
--	switch (timing->display_color_depth) {
--	case COLOR_DEPTH_666:
--		bits_per_channel = 6;
--		break;
--	case COLOR_DEPTH_888:
--		bits_per_channel = 8;
--		break;
--	case COLOR_DEPTH_101010:
--		bits_per_channel = 10;
--		break;
--	case COLOR_DEPTH_121212:
--		bits_per_channel = 12;
--		break;
--	case COLOR_DEPTH_141414:
--		bits_per_channel = 14;
--		break;
--	case COLOR_DEPTH_161616:
--		bits_per_channel = 16;
--		break;
--	default:
--		ASSERT(bits_per_channel != 0);
--		bits_per_channel = 8;
--		break;
--	}
--
--	kbps = timing->pix_clk_100hz / 10;
--	kbps *= bits_per_channel;
--
--	if (timing->flags.Y_ONLY != 1) {
--		/*Only YOnly make reduce bandwidth by 1/3 compares to RGB*/
--		kbps *= 3;
--		if (timing->pixel_encoding == PIXEL_ENCODING_YCBCR420)
--			kbps /= 2;
--		else if (timing->pixel_encoding == PIXEL_ENCODING_YCBCR422)
--			kbps = kbps * 2 / 3;
--	}
--
--	return kbps;
--}
--
- static bool dp_validate_mode_timing(
- 	struct dc_link *link,
- 	const struct dc_crtc_timing *timing)
+ .../dts/ti/k3-j721s2-common-proc-board.dts    | 44 +++++++++++++++++++
+ .../boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi     | 40 +++++++++++++++++
+ 2 files changed, 84 insertions(+)
+
 -- 
-2.20.1.7.g153144c
+2.34.1
 
