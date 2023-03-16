@@ -2,107 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 788306BDBF2
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 23:49:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 455FE6BDBF3
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 23:49:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230107AbjCPWtI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 18:49:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50754 "EHLO
+        id S230051AbjCPWtf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 18:49:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229798AbjCPWtE (ORCPT
+        with ESMTP id S229798AbjCPWte (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 18:49:04 -0400
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE5DBB75B
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 15:48:59 -0700 (PDT)
-Received: by mail-io1-xd35.google.com with SMTP id t129so1505887iof.12
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 15:48:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679006939;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Gxr240v7gPTttE+NPLSA84Q9E6emq53Syi5SVB2+hgU=;
-        b=ADu4GbHaErlrOn0VmVYPpIMKX5Zqy2fcRK+6i6Bqjfj4gjh1PNDY94sbkf8tssn95g
-         BYrOfR5ONrGboCnUY8prbwyzRYVLUGR1wHq3Wb46NnQOa46KT/VECOqelGgbK8Fe+NMJ
-         Iz7KE+EnBfBNp0PIaPN752kzqZhe2MbQrFIaoKFs064grmcITMVJkP5QDij30fLT5oBs
-         DwBZFMwRaHskwcxkzteuDcExPAHp66elMbVDLz8o6NPxXR4SlF8QBxNP35BPBZnzz+i5
-         1Ti0uKXIo0DAoMLq7I6mkbMYeKZkLWGTFq2ojDkdNuZEi5ZZGmagvwTFEGV3YeBIBLCf
-         ODiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679006939;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Gxr240v7gPTttE+NPLSA84Q9E6emq53Syi5SVB2+hgU=;
-        b=ZitbUwarfLHYPxQIX1UKrnbqpMbCUXzxCOV4x0AcZpTAsbePwHulPgQvsqMEt+pVp+
-         HY0tVzpnjYyv1hxcv0KZdmLzogAt6YkAJj/LfPyBNiAsfXKzQF1GAe/cTaLqeBScT7xU
-         Mwob20iJ1MI5Uc4FLEKVoQ1TLF91xPepbjImH5dCRuFGufaO9pD/mbWW5564sV6tfHCM
-         BMnKIxwZzgEAGfTWqfV8FhbNUCEUlLPzWDxpBoqiQQGStig9PBmsIvVYgSGq0kTIvkJP
-         xveN2CMP+B+AYhpFhvhJkEZWTEI81Y4N4OtsJ1wOapFSjnbTHcE/yALDG3THeHfq0e8w
-         Ko6g==
-X-Gm-Message-State: AO0yUKUumiun7arYpr6FNMb5EGIX/DkbimhRgeEocPBaSFuDpIO7FV/s
-        pnPCKJJgN4IRVxvMqV7o7v3b1VtMtSiwnRI5b/e0MKA6ExqPaZejPpk=
-X-Google-Smtp-Source: AK7set/+QGT+zp/m9OIPmBdmW5Wf2XkrsV6D8oXdPUwkZGggZmYAUbh6m4uhfMEPWmVTSHCdOvuqn7BR9TPWZ6YANdY=
-X-Received: by 2002:a05:6602:228d:b0:74c:8c3c:b71 with SMTP id
- d13-20020a056602228d00b0074c8c3c0b71mr533639iod.12.1679006939131; Thu, 16 Mar
- 2023 15:48:59 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230316155104.594662-1-elver@google.com> <20230316153354.bc31b9583eae6a79a1789de0@linux-foundation.org>
-In-Reply-To: <20230316153354.bc31b9583eae6a79a1789de0@linux-foundation.org>
-From:   Marco Elver <elver@google.com>
-Date:   Thu, 16 Mar 2023 23:48:15 +0100
-Message-ID: <CANpmjNNqmRa3qYPoWcfe=FQXtJvLU5xN05hnZTjo4-cG9B984A@mail.gmail.com>
-Subject: Re: [PATCH] kfence, kcsan: avoid passing -g for tests
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>, kasan-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Nathan Chancellor <nathan@kernel.org>
+        Thu, 16 Mar 2023 18:49:34 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 435DF93F3
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 15:49:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679006973; x=1710542973;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=XKwkQJ0bdfOgGhhbgRIu/ZDdq4XL/bigHbAEq4aoOnc=;
+  b=dyLcjnaxeToEFU0Bdu3NpnWFipKjBdu+vziDmUMR73D3tDQYvoJjBfuz
+   ICOxc0pQuej60V0QX8bKohi0tVnzKAHgLYX5ci2z2sXowZ48Iwv3cWQs5
+   UOq9BdTIqJ/djBg76hqiN1kMLe7jjSreuihfiwAc4VBU+J5W36y3Y0Bcn
+   bhsrJgpJwf/yIVogxYun3LSycYyldWGcdOxopyi6lb2v55e0zYbl0LEay
+   r+2ovUI0wFeRKbSXF4x7geByNaDSEZlzQN0QiFuJrFCxgR3bYA5pUbYHQ
+   wHeCOo7JKx1Btuckd6JfX5zVcUaB+geH8lxY7Y7NfapeHFWzj6V+j0WuJ
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="424400306"
+X-IronPort-AV: E=Sophos;i="5.98,267,1673942400"; 
+   d="scan'208";a="424400306"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 15:49:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="854230161"
+X-IronPort-AV: E=Sophos;i="5.98,267,1673942400"; 
+   d="scan'208";a="854230161"
+Received: from johanir-mobl.amr.corp.intel.com (HELO [10.212.200.250]) ([10.212.200.250])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 15:49:32 -0700
+Message-ID: <75730c46f226722b71dd1ec9634a1eb90017f116.camel@linux.intel.com>
+Subject: Re: [PATCH 08/10] sched/fair: Add lag based placement
+From:   Tim Chen <tim.c.chen@linux.intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>, mingo@kernel.org,
+        vincent.guittot@linaro.org
+Cc:     linux-kernel@vger.kernel.org, juri.lelli@redhat.com,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, corbet@lwn.net,
+        qyousef@layalina.io, chris.hyser@oracle.com,
+        patrick.bellasi@matbug.net, pjt@google.com, pavel@ucw.cz,
+        qperret@google.com, joshdon@google.com, timj@gnu.org,
+        kprateek.nayak@amd.com, yu.c.chen@intel.com,
+        youssefesmat@chromium.org, joel@joelfernandes.org
+Date:   Thu, 16 Mar 2023 15:49:31 -0700
+In-Reply-To: <20230306141502.691294694@infradead.org>
+References: <20230306132521.968182689@infradead.org>
+         <20230306141502.691294694@infradead.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 16 Mar 2023 at 23:33, Andrew Morton <akpm@linux-foundation.org> wrote:
->
-> On Thu, 16 Mar 2023 16:51:04 +0100 Marco Elver <elver@google.com> wrote:
->
-> > Nathan reported that when building with GNU as and a version of clang
-> > that defaults to DWARF5:
-> >
-> >   $ make -skj"$(nproc)" ARCH=riscv CROSS_COMPILE=riscv64-linux-gnu- \
-> >                       LLVM=1 LLVM_IAS=0 O=build \
-> >                       mrproper allmodconfig mm/kfence/kfence_test.o
-> >   /tmp/kfence_test-08a0a0.s: Assembler messages:
-> >   /tmp/kfence_test-08a0a0.s:14627: Error: non-constant .uleb128 is not supported
-> >   /tmp/kfence_test-08a0a0.s:14628: Error: non-constant .uleb128 is not supported
-> >   /tmp/kfence_test-08a0a0.s:14632: Error: non-constant .uleb128 is not supported
-> >   /tmp/kfence_test-08a0a0.s:14633: Error: non-constant .uleb128 is not supported
-> >   /tmp/kfence_test-08a0a0.s:14639: Error: non-constant .uleb128 is not supported
-> >   ...
-> >
-> > This is because `-g` defaults to the compiler debug info default. If the
-> > assembler does not support some of the directives used, the above errors
-> > occur. To fix, remove the explicit passing of `-g`.
-> >
-> > All these tests want is that stack traces print valid function names,
-> > and debug info is not required for that. I currently cannot recall why I
-> > added the explicit `-g`.
->
-> Does this need to be backported into earlier kernels?
->
-> If so, we'd need to do it as two patches, each with the relevant
-> Fixes:, which appear to be a146fed56f8 and bc8fbc5f30.
+On Mon, 2023-03-06 at 14:25 +0100, Peter Zijlstra wrote:
+> With the introduction of avg_vruntime, it is possible to approximate
+> lag (the entire purpose of introducing it in fact). Use this to do lag
+> based placement over sleep+wake.
+>=20
+> Specifically, the FAIR_SLEEPERS thing places things too far to the
+> left and messes up the deadline aspect of EEVDF.
+>=20
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> ---
+>  include/linux/sched.h   |    1=20
+>  kernel/sched/core.c     |    1=20
+>  kernel/sched/fair.c     |   63 +++++++++++++++++++++++++++--------------=
+-------
+>  kernel/sched/features.h |    8 ++++++
+>  4 files changed, 46 insertions(+), 27 deletions(-)
+>=20
+> --- a/include/linux/sched.h
+> +++ b/include/linux/sched.h
+> @@ -555,6 +555,7 @@ struct sched_entity {
+>  	u64				sum_exec_runtime;
+>  	u64				vruntime;
+>  	u64				prev_sum_exec_runtime;
+> +	s64				lag;
+> =20
+>  	u64				nr_migrations;
+> =20
+> --- a/kernel/sched/core.c
+> +++ b/kernel/sched/core.c
+> @@ -4436,6 +4436,7 @@ static void __sched_fork(unsigned long c
+>  	p->se.prev_sum_exec_runtime	=3D 0;
+>  	p->se.nr_migrations		=3D 0;
+>  	p->se.vruntime			=3D 0;
+> +	p->se.lag			=3D 0;
+>  	INIT_LIST_HEAD(&p->se.group_node);
+> =20
+>  	set_latency_offset(p);
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -4749,39 +4749,45 @@ static void
+>  place_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int initial=
+)
+>  {
+>  	u64 vruntime =3D avg_vruntime(cfs_rq);
+> -	u64 sleep_time;
+> =20
+> -	/* sleeps up to a single latency don't count. */
+> -	if (!initial) {
+> -		unsigned long thresh;
+> -
+> -		if (se_is_idle(se))
+> -			thresh =3D sysctl_sched_min_granularity;
+> -		else
+> -			thresh =3D sysctl_sched_latency;
+> +	if (sched_feat(FAIR_SLEEPERS)) {
+> +		u64 sleep_time;
+> +
+> +		/* sleeps up to a single latency don't count. */
+> +		if (!initial) {
+> +			unsigned long thresh;
+> +
+> +			if (se_is_idle(se))
+> +				thresh =3D sysctl_sched_min_granularity;
+> +			else
+> +				thresh =3D sysctl_sched_latency;
+> +
+> +			/*
+> +			 * Halve their sleep time's effect, to allow
+> +			 * for a gentler effect of sleepers:
+> +			 */
+> +			if (sched_feat(GENTLE_FAIR_SLEEPERS))
+> +				thresh >>=3D 1;
+> +
+> +			vruntime -=3D thresh;
+> +		}
+> =20
+>  		/*
+> -		 * Halve their sleep time's effect, to allow
+> -		 * for a gentler effect of sleepers:
+> +		 * Pull vruntime of the entity being placed to the base level of
+> +		 * cfs_rq, to prevent boosting it if placed backwards.  If the entity
+> +		 * slept for a long time, don't even try to compare its vruntime with
+> +		 * the base as it may be too far off and the comparison may get
+> +		 * inversed due to s64 overflow.
+>  		 */
+> -		if (sched_feat(GENTLE_FAIR_SLEEPERS))
+> -			thresh >>=3D 1;
+> -
+> -		vruntime -=3D thresh;
+> +		sleep_time =3D rq_clock_task(rq_of(cfs_rq)) - se->exec_start;
+> +		if ((s64)sleep_time < 60LL * NSEC_PER_SEC)
+> +			vruntime =3D max_vruntime(se->vruntime, vruntime);
+>  	}
+> =20
+> -	/*
+> -	 * Pull vruntime of the entity being placed to the base level of
+> -	 * cfs_rq, to prevent boosting it if placed backwards.  If the entity
+> -	 * slept for a long time, don't even try to compare its vruntime with
+> -	 * the base as it may be too far off and the comparison may get
+> -	 * inversed due to s64 overflow.
+> -	 */
+> -	sleep_time =3D rq_clock_task(rq_of(cfs_rq)) - se->exec_start;
+> -	if ((s64)sleep_time > 60LL * NSEC_PER_SEC)
+> -		se->vruntime =3D vruntime;
+> -	else
+> -		se->vruntime =3D max_vruntime(se->vruntime, vruntime);
+> +	if (sched_feat(PRESERVE_LAG))
+> +		vruntime -=3D se->lag;
+> +
+> +	se->vruntime =3D vruntime;
 
-Good point - sent
-https://lkml.kernel.org/r/20230316224705.709984-1-elver@google.com
+I was going to say that
+when we migrate a task to a new runqueue, we subtract vruntime
+by old queue's min_vruntime and that math needs update.
 
-Thanks,
--- Marco
+But then I saw you did that in=20
+https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git/commit/ker=
+nel/sched?h=3Dsched/eevdf
+
+With this new lag based placement, I think it should properly fix
+the starvation issues we have seen caused by quickly cpu hopping tasks.=20
+
+Tim
+
+>  }
+> =20
+>  static void check_enqueue_throttle(struct cfs_rq *cfs_rq);
+> @@ -4949,6 +4955,9 @@ dequeue_entity(struct cfs_rq *cfs_rq, st
+> =20
+>  	clear_buddies(cfs_rq, se);
+> =20
+> +	if (sched_feat(PRESERVE_LAG) && (flags & DEQUEUE_SLEEP))
+> +		se->lag =3D avg_vruntime(cfs_rq) - se->vruntime;
+> +
+>  	if (se !=3D cfs_rq->curr)
+>  		__dequeue_entity(cfs_rq, se);
+>  	se->on_rq =3D 0;
+> --- a/kernel/sched/features.h
+> +++ b/kernel/sched/features.h
+> @@ -1,12 +1,20 @@
+>  /* SPDX-License-Identifier: GPL-2.0 */
+> +
+>  /*
+>   * Only give sleepers 50% of their service deficit. This allows
+>   * them to run sooner, but does not allow tons of sleepers to
+>   * rip the spread apart.
+>   */
+> +SCHED_FEAT(FAIR_SLEEPERS, false)
+>  SCHED_FEAT(GENTLE_FAIR_SLEEPERS, true)
+> =20
+>  /*
+> + * Using the avg_vruntime, do the right thing and preserve lag
+> + * across sleep+wake cycles.
+> + */
+> +SCHED_FEAT(PRESERVE_LAG, true)
+> +
+> +/*
+>   * Prefer to schedule the task we woke last (assuming it failed
+>   * wakeup-preemption), since its likely going to consume data we
+>   * touched, increases cache locality.
+>=20
+>=20
+
