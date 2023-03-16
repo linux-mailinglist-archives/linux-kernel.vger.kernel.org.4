@@ -2,224 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01C4D6BD17F
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 14:53:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28FE56BD177
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 14:53:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230371AbjCPNxy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 09:53:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58094 "EHLO
+        id S230430AbjCPNxl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 09:53:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230446AbjCPNxn (ORCPT
+        with ESMTP id S230346AbjCPNxg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 09:53:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94236B5FDC;
-        Thu, 16 Mar 2023 06:53:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 48C06B8219C;
-        Thu, 16 Mar 2023 13:53:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F325AC4339B;
-        Thu, 16 Mar 2023 13:53:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678974818;
-        bh=ZFCg1R9x3TYU2MIKEu2nraQz7Cm1ZbqwW3c+AwfOoRs=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=sP0YqmZZDv7gq2cfQr+7tzUpA/rkkSJR9Xpu3AfU2joplN6rprXlpO9j64C1MiOSp
-         a2gHHXkDJfNhMZrjPIYDkbVslyXsQ6p18ObepWz2JYUn7UP5B+efuLQxhGlLwgYVBO
-         yPY0vBZ6tI/r6ZQ/MYZhdRksWXwBb/LQzxWISSD1BY2MPb/R+gmUeFRS0kUkZEDshQ
-         uFDTzB17bWZbjkpxHIguHzv46ki7fGkU7HhqV4xkmKZDtmvARxV8VWDrDrcAJHbQZN
-         zEeDFteffNMXqjlgpWOls8BKxorwVUHYTQ+bVY2VReLgquV30igkqPe89W2tfXUeRG
-         ovkAzfEvmHZ6Q==
-Received: by mail-lf1-f41.google.com with SMTP id bi9so2443794lfb.12;
-        Thu, 16 Mar 2023 06:53:37 -0700 (PDT)
-X-Gm-Message-State: AO0yUKWVNhnAMXdxLpEWgK3R6xNyCnCyFR1bbfX/gjNhd+lr3oSld+rn
-        FE7Fs9rDMPj+jyhVfnOC7jX7iwnG8l1p5z4RH8c=
-X-Google-Smtp-Source: AK7set8aEVEP9Pqpoe8z0WN3pnvwA4tRVznAzzFiJbL5STPsavVMZe7yVpfRpYnltjdW55wDMKEycSwTyVwtTRI5UVk=
-X-Received: by 2002:a05:6512:304c:b0:4dc:7e56:9839 with SMTP id
- b12-20020a056512304c00b004dc7e569839mr4911045lfb.5.1678974816034; Thu, 16 Mar
- 2023 06:53:36 -0700 (PDT)
+        Thu, 16 Mar 2023 09:53:36 -0400
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45DA6B6D3C
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 06:53:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=/Z6rpmwkteOiygLm8KF3rdmk2hab
+        C2Tl5Edd5c1AYUQ=; b=WTHkIUgrQv/pjJdGqUHJFUl69GDucON4YS2TCjE6zK41
+        h/VmRN3JubQ7yi36myAu+HQTSO+BDH72fiXTfN7UKo65SpkOCtYaAWGl9IDpG6oK
+        1pZPf6UVezzCrU+6eb0PeOpWoeDsdMCx4u1tquQe2RQPi4nzCOMFBdR45ckkwQU=
+Received: (qmail 3800160 invoked from network); 16 Mar 2023 14:53:27 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 16 Mar 2023 14:53:27 +0100
+X-UD-Smtp-Session: l3s3148p1@zvT8yAT3Rt8ujnvb
+Date:   Thu, 16 Mar 2023 14:53:27 +0100
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     Wei Fang <wei.fang@nxp.com>
+Cc:     "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        Shenwei Wang <shenwei.wang@nxp.com>,
+        Clark Wang <xiaoning.wang@nxp.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+Subject: Re: [PATCH net-next 3/4] fec: add FIXME to move 'mac_managed_pm' to
+ probe
+Message-ID: <ZBMfV2BwiMLyKC7w@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Wei Fang <wei.fang@nxp.com>,
+        "linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        Shenwei Wang <shenwei.wang@nxp.com>,
+        Clark Wang <xiaoning.wang@nxp.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+References: <20230314131443.46342-1-wsa+renesas@sang-engineering.com>
+ <20230314131443.46342-4-wsa+renesas@sang-engineering.com>
+ <DB9PR04MB8106C492FAAE4D7BE9CB731688BF9@DB9PR04MB8106.eurprd04.prod.outlook.com>
+ <ZBFzVjaRjcITP0bA@ninjato>
+ <ZBLNCYgeTtNBSaMi@ninjato>
+ <AM5PR04MB313943C24A61C48D761B452688BC9@AM5PR04MB3139.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
-References: <CAMj1kXET+A2rk+WQyebKPNtSvzzS0nJdMbx3uT1JgMxOvqfx4w@mail.gmail.com>
- <ZBLpVDmy8BXQZve9@righiandr-XPS-13-7390> <CAMj1kXF_f4QFtaDYBaSJwO0B97TJHWr6uRQdeYeD=Gv7DrVicg@mail.gmail.com>
- <ZBL+o7ydLk2iBCCr@righiandr-XPS-13-7390> <CAMj1kXEtj_jEZeT6YNh9xB=8o=0LVKiPYucHU08s34xBgy1yDA@mail.gmail.com>
- <CAMj1kXF3pkxvDX6ZMpnRd3wQX2_T6CYmz7ML-h+PXeo+hM_ZdA@mail.gmail.com>
- <ZBMOitWwCDj3XiRw@righiandr-XPS-13-7390> <CAMj1kXF=8KoCnRmUyLCZmbfPTeOFQZBeudZuTeA0uHOv-1drFg@mail.gmail.com>
- <ZBMQdgPepwa+VyAH@righiandr-XPS-13-7390> <CAMj1kXES+FxxbqUPH5TRjHak2MMC2Yksm0_P6wo__LQMH6Emhw@mail.gmail.com>
- <ZBMes6r2FiAyo81F@righiandr-XPS-13-7390>
-In-Reply-To: <ZBMes6r2FiAyo81F@righiandr-XPS-13-7390>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Thu, 16 Mar 2023 14:53:24 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXG0+NO6HayK2YqSJU0pwj8bn9Un_G-4VJr=hc1ELi-TpQ@mail.gmail.com>
-Message-ID: <CAMj1kXG0+NO6HayK2YqSJU0pwj8bn9Un_G-4VJr=hc1ELi-TpQ@mail.gmail.com>
-Subject: Re: kernel 6.2 stuck at boot (efi_call_rts) on arm64
-To:     Andrea Righi <andrea.righi@canonical.com>
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Paolo Pisati <paolo.pisati@canonical.com>,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Darren Hart <darren@os.amperecomputing.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="CnzlotyyzHK1hC34"
+Content-Disposition: inline
+In-Reply-To: <AM5PR04MB313943C24A61C48D761B452688BC9@AM5PR04MB3139.eurprd04.prod.outlook.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 16 Mar 2023 at 14:50, Andrea Righi <andrea.righi@canonical.com> wrote:
->
-> On Thu, Mar 16, 2023 at 02:45:49PM +0100, Ard Biesheuvel wrote:
-> > On Thu, 16 Mar 2023 at 13:50, Andrea Righi <andrea.righi@canonical.com> wrote:
-> > >
-> > > On Thu, Mar 16, 2023 at 01:43:32PM +0100, Ard Biesheuvel wrote:
-> > > > On Thu, 16 Mar 2023 at 13:41, Andrea Righi <andrea.righi@canonical.com> wrote:
-> > > > >
-> > > > > On Thu, Mar 16, 2023 at 01:38:30PM +0100, Ard Biesheuvel wrote:
-> > > > > > On Thu, 16 Mar 2023 at 13:21, Ard Biesheuvel <ardb@kernel.org> wrote:
-> > > > > > >
-> > > > > > > On Thu, 16 Mar 2023 at 12:34, Andrea Righi <andrea.righi@canonical.com> wrote:
-> > > > > > > >
-> > > > > > > > On Thu, Mar 16, 2023 at 11:18:21AM +0100, Ard Biesheuvel wrote:
-> > > > > > > > > On Thu, 16 Mar 2023 at 11:03, Andrea Righi <andrea.righi@canonical.com> wrote:
-> > > > > > > > > >
-> > > > > > > > > > On Thu, Mar 16, 2023 at 10:55:58AM +0100, Ard Biesheuvel wrote:
-> > > > > > > > > > > (cc Darren)
-> > > > > > > > > > >
-> > > > > > > > > > > On Thu, 16 Mar 2023 at 10:45, Andrea Righi <andrea.righi@canonical.com> wrote:
-> > > > > > > > > > > >
-> > > > > > > > > > > > On Thu, Mar 16, 2023 at 08:58:20AM +0100, Ard Biesheuvel wrote:
-> > > > > > > > > > > > > Hello Andrea,
-> > > > > > > > > > > > >
-> > > > > > > > > > > > > On Thu, 16 Mar 2023 at 08:54, Andrea Righi <andrea.righi@canonical.com> wrote:
-> > > > > > > > > > > > > >
-> > > > > > > > > > > > > > Hello,
-> > > > > > > > > > > > > >
-> > > > > > > > > > > > > > the latest v6.2.6 kernel fails to boot on some arm64 systems, the kernel
-> > > > > > > > > > > > > > gets stuck and never completes the boot. On the console I see this:
-> > > > > > > > > > > > > >
-> > > > > > > > > > > > > > [   72.043484] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
-> > > > > > > > > > > > > > [   72.049571] rcu:     22-...0: (30 GPs behind) idle=b10c/1/0x4000000000000000 softirq=164/164 fqs=6443
-> > > > > > > > > > > > > > [   72.058520]     (detected by 28, t=15005 jiffies, g=449, q=174 ncpus=32)
-> > > > > > > > > > > > > > [   72.064949] Task dump for CPU 22:
-> > > > > > > > > > > > > > [   72.068251] task:kworker/u64:5   state:R  running task     stack:0     pid:447   ppid:2      flags:0x0000000a
-> > > > > > > > > > > > > > [   72.078156] Workqueue: efi_rts_wq efi_call_rts
-> > > > > > > > > > > > > > [   72.082595] Call trace:
-> > > > > > > > > > > > > > [   72.085029]  __switch_to+0xbc/0x100
-> > > > > > > > > > > > > > [   72.088508]  0xffff80000fe83d4c
-> > > > > > > > > > > > > >
-> > > > > > > > > > > > > > After that, as a consequence, I start to get a lot of hung task timeout traces.
-> > > > > > > > > > > > > >
-> > > > > > > > > > > > > > I tried to bisect the problem and I found that the offending commit is
-> > > > > > > > > > > > > > this one:
-> > > > > > > > > > > > > >
-> > > > > > > > > > > > > >  e7b813b32a42 ("efi: random: refresh non-volatile random seed when RNG is initialized")
-> > > > > > > > > > > > > >
-> > > > > > > > > > > > > > I've reverted this commit for now and everything works just fine, but I
-> > > > > > > > > > > > > > was wondering if the problem could be caused by a lack of entropy on
-> > > > > > > > > > > > > > these arm64 boxes or something else.
-> > > > > > > > > > > > > >
-> > > > > > > > > > > > > > Any suggestion? Let me know if you want me to do any specific test.
-> > > > > > > > > > > > > >
-> > > > > > > > > > > > >
-> > > > > > > > > > > > > Thanks for the report.
-> > > > > > > > > > > > >
-> > > > > > > > > > > > > This is most likely the EFI SetVariable() call going off into the
-> > > > > > > > > > > > > weeds and never returning.
-> > > > > > > > > > > > >
-> > > > > > > > > > > > > Is this an Ampere Altra system by any chance? Do you see it on
-> > > > > > > > > > > > > different types of hardware?
-> > > > > > > > > > > >
-> > > > > > > > > > > > This is: Ampere eMAG / Lenovo ThinkSystem HR330a.
-> > > > > > > > > > > >
-> > > > > > > > > > > > >
-> > > > > > > > > > > > > Could you check whether SetVariable works on this system? E.g. by
-> > > > > > > > > > > > > updating the EFI boot timeout (sudo efibootmgr -t <n>)?
-> > > > > > > > > > > >
-> > > > > > > > > > > > ubuntu@kuzzle:~$ sudo efibootmgr -t 10
-> > > > > > > > > > > > ^C^C^C^C
-> > > > > > > > > > > >
-> > > > > > > > > > > > ^ Stuck there, so it really looks like SetVariable is the problem.
-> > > > > > > > > > > >
-> > > > > > > > > > >
-> > > > > > > > > > > Could you please share the output of
-> > > > > > > > > > >
-> > > > > > > > > > > dmidecode -s bios
-> > > > > > > > > > > dmidecode -s system-family
-> > > > > > > > > >
-> > > > > > > > > > $ sudo dmidecode -s bios-vendor
-> > > > > > > > > > LENOVO
-> > > > > > > > > > $ sudo dmidecode -s bios-version
-> > > > > > > > > > hve104r-1.15
-> > > > > > > > > > $ sudo dmidecode -s bios-release-date
-> > > > > > > > > > 02/26/2021
-> > > > > > > > > > $ sudo dmidecode -s bios-revision
-> > > > > > > > > > 1.15
-> > > > > > > > > > $ sudo dmidecode -s system-family
-> > > > > > > > > > Lenovo ThinkSystem HR330A/HR350A
-> > > > > > > > > >
-> > > > > > > > >
-> > > > > > > > > Thanks
-> > > > > > > > >
-> > > > > > > > > Mind checking if this patch fixes your issue as well?
-> > > > > > > > >
-> > > > > > > > > https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/commit/?h=altra-fix&id=77fa99dd4741456da85049c13ec31a148f5f5ac0
-> > > > > > > >
-> > > > > > > > Unfortunately this doesn't seem to be enough, I'm still getting the same
-> > > > > > > > problem also with this patch applied.
-> > > > > > > >
-> > > > > > >
-> > > > > > > Thanks for trying.
-> > > > > > >
-> > > > > > > How about the last 3 patches on this branch?
-> > > > > > >
-> > > > > > > https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/log/?h=efi-smbios-altra-fix
-> > > > > >
-> > > > > > Actually, that may not match your hardware.
-> > > > > >
-> > > > > > Does your kernel log have a line like
-> > > > > >
-> > > > > > SMCCC: SOC_ID: ID = jep106:036b:0019 Revision = 0x00000102
-> > > > > >
-> > > > > > ?
-> > > > >
-> > > > > $ sudo dmesg | grep "SMCCC: SOC_ID"
-> > > > > [    5.320782] SMCCC: SOC_ID: ARCH_SOC_ID not implemented, skipping ....
-> > > > >
-> > > >
-> > > > Thanks. Could you share the entire dmidecode output somewhere? Or at
-> > > > least the type 4 record(s)?
-> > >
-> > > Sure, here's the full output of dmidecode:
-> > > https://pastebin.ubuntu.com/p/4ZmKmP2xTm/
-> > >
-> >
-> > Thanks. I have updated my SMBIOS patches to take the processor version
-> > 'eMAG' into account, which appears to be what these boxes are using.
-> >
-> > I have updated the efi/urgent branch here with the latest versions.
-> > Mind giving them a spin?
-> >
-> >
-> > In the mean time, just for the record - could you please run this as well?
-> >
-> > hexdump -C /sys/firmware/dmi/entries/4-0/raw
-> >
-> > (as root)
->
-> hm.. I don't have that in /sys/firmware/, this is what I have:
->
-> # ls -l /sys/firmware/dmi/
-> total 0
-> drwxr-xr-x 2 root root 0 Mar 16 13:26 tables
-> # ls -l /sys/firmware/dmi/tables/
-> total 0
-> -r-------- 1 root root 5004 Mar 16 13:26 DMI
-> -r-------- 1 root root   24 Mar 16 13:26 smbios_entry_point
->
 
-You'll need to load the dmi_sysfs module for that. But no big deal
-otherwise, I'm pretty sure the word order is the correct on on your
-system in any case (it decodes the value correctly in the next line)
+--CnzlotyyzHK1hC34
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+
+> Thank you Wolfram. But I'm not sure whether it's really an issue. The flag
+> " mac_managed_pm" indicates that the MAC driver will take care of
+> suspending/resuming the PHY, that is to say the MAC driver calls
+> phy_stop()/phy_start() in its PM callbacks. If a ethernet interface never
+> brings up, the MAC PM callbacks do nothing and just return 0 directly. So I
+> think it's fine for the MDIO PM to do suspend/resume the PHY unless the MDIO
+> bus can't be accessed.
+
+I have one board here where accessing the MDIO bus times out, although I
+don't really understand why. And another one where the call to
+phy_init_hw() during resume causes issues. There might be more problems
+with these boards, but I think it is cleaner to avoid any MDIO bus
+suspend/resume if we have 'mac_managed_pm' anyway.
+
+
+--CnzlotyyzHK1hC34
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmQTH1MACgkQFA3kzBSg
+KbYL7Q//dywmjoDxGliQjbHP6vLj7AlkKf/mueKBQyaDBW0qnKpaLnuv+7kLWyxt
+mPykS6JxAAQFVmqTjEry5H87e12bVId9ejgTIWbyFLPP6j+qwrmjFT+Y0TBiQlNi
+p1QXEFsLAQ2seKaDfTj3S97jONGhmjQ9V37Kl743JkbCWijkTqXnaDcrXVoZ7LKl
+xV2LamIwxfxOPb7DXVnCFfThOgRnFDnWaLM863zH34VPTawQ67kzO0nVWgP+JM0Q
+OwdxPuly7r+nQ284Dy6UM9pIxcmcVHNsZeMPLgqOhIOrcXGA0oG9S1SbelglGzK4
+S3O6rbwFx18Ge4ED1oARBfqc4BZAH7bcX0gZvUq43jfB3aNMNK35J3GgRqRzavfE
+H0/uPUNuLZ6V7NS4eraxCk4C1377jzNN0mQZDDPWs0vjb3BC9cXc1/UrNQxLL91t
+8xFZkz4Q692WXBv1JW1/TZU+6cUEYpj6O19ESaVqU4HhcLgtxzrw0zE/B35EQXUz
+jwVoM/dMqjcExxQ1ClOanClOS5HIswrEZEZNj04UYASmK7DxaWcDBamcNHli+/IF
+wfKIjyPJSoReJin/U8iZcWHSBy114lUMZ442FX3X3fY7zJCDlLmU64AyFDIafIM6
+ds4o8/MSnD/yXEBS/RqYmkvbwmFoYa99RbAzy946S9a1uRhBTmU=
+=NkQ5
+-----END PGP SIGNATURE-----
+
+--CnzlotyyzHK1hC34--
