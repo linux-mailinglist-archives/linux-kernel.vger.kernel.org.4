@@ -2,111 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D33656BC7AF
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 08:50:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 878346BC7B2
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 08:50:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230039AbjCPHuY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 03:50:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44696 "EHLO
+        id S230078AbjCPHul (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 03:50:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbjCPHuS (ORCPT
+        with ESMTP id S229960AbjCPHu1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 03:50:18 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD04CA9DDB;
-        Thu, 16 Mar 2023 00:49:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3A520B82026;
-        Thu, 16 Mar 2023 07:49:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5869FC4339B;
-        Thu, 16 Mar 2023 07:49:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1678952988;
-        bh=0yOANMPqtyND/qZrPRckKTU0+G5MvOSEyU4jtRcWVzU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hHkKMHYfMo/u5ASQuDW4Wfod9VB2DV0aXNGPOw4aDxYfg6mZgD2SfvXhpEfVmR556
-         rxRvCv+oywXXdot9qs7zimjPkhPLBCXRjAvZ9LpC3Pjdj4m8o6j2iAiKANIa+djggj
-         89Gy6kL7zFObax0ovJpt1gMVS2gpVmdgcD8zhz4E=
-Date:   Thu, 16 Mar 2023 08:49:46 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Chris Paterson <Chris.Paterson2@renesas.com>
-Cc:     "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        "patches@lists.linux.dev" <patches@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "patches@kernelci.org" <patches@kernelci.org>,
-        "lkft-triage@lists.linaro.org" <lkft-triage@lists.linaro.org>,
-        "pavel@denx.de" <pavel@denx.de>,
-        "jonathanh@nvidia.com" <jonathanh@nvidia.com>,
-        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
-        "sudipm.mukherjee@gmail.com" <sudipm.mukherjee@gmail.com>,
-        "srw@sladewatkins.net" <srw@sladewatkins.net>,
-        "rwarsow@gmx.de" <rwarsow@gmx.de>
-Subject: Re: [PATCH 5.4 00/68] 5.4.237-rc1 review
-Message-ID: <ZBLKGpyaGnpOb3Km@kroah.com>
-References: <20230315115726.103942885@linuxfoundation.org>
- <TYCPR01MB10588F845D48C023460EDB70BB7BF9@TYCPR01MB10588.jpnprd01.prod.outlook.com>
+        Thu, 16 Mar 2023 03:50:27 -0400
+Received: from EUR02-AM0-obe.outbound.protection.outlook.com (mail-am0eur02on2052.outbound.protection.outlook.com [40.107.247.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A2821043D
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 00:50:17 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=P7lLmvfD+dkWTLrOG1FSTHpOvx/R7v2ObuqOCx+Ckdhx8vIcYs1EKbo1ZQY+1ORFB0X+kzI0JaeMGjoXlUkBOs6TGAi/9W6Nf6Q0wDlWIMr87dHLW7VXe4PpeOCbCXOkEIf0cRJhxeZSGKpLZ+qfDlfyln3ob4CmbdzgfvsamnIWuEF5wDAzzdHj1CsMllW7kFTSboKah5xQNLzAMU6mMvubb8jJJni9lMGpnLRDEBMy7R9Ae9BCxU1mmZqZ8S5wxH8UrJ4vi1wSEiSfiF4C1ii3PHP+0JyJ0pWmoZMn/YvfGv/PnOWdQMosKQTPwhqEKvcuQRFNzjRjATZfNtaQ9Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Og14EUITHXvbPrh4W/a1B77ZpP0NHk0P5pkLDv47/BY=;
+ b=WemiUV/ASNXTQgM2DMyifiJ53+ZwsXKErqTGFWlc3gV1r5amZSjq9yjesZIW5DNiP90JfO0n3Fkqnr0nPnskMkp+J5ok6wYIkuIBohErfGPWbfcoBhaQfyvRH8Kl1VZM8YMQwdF5stVnA4yzoZnS2PSWxJa5apfT2R9/tljvUh7ebdqOFWDFkY6c37aQABDfJblqg5U6WHHNIv7VY8aau8WucS13KOy9PwRxaQ+3yE2ZxJF4WdXypqZwU5xOHbBGabxU7m/9ILVpsNE0fWd46rzCJ3MQb6UOn6cMw2y+g8rcjIraXm8iVhVYH70yowt7Epn04V/0PjVRuBkG+8q7yg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
+ dkim=pass header.d=suse.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Og14EUITHXvbPrh4W/a1B77ZpP0NHk0P5pkLDv47/BY=;
+ b=3sQF2tqUficQITP/yFXRgPsPiJJXg965Nf28nfav4KFPEkPi4w2Qb5SE0sAQlNlBRNg83LgFZWsVOsRkSCf4hDQJB0viK8gLAKjmNJFu82WVmm9Cu3+UYlMlxhl0UOCUZJztlFjGfyaB8i7BM8ottkZHPXrxFtj0+EiNPfMAEgTJFfiRZbtvcfesPAAv+gz6X7+evMYl0Q4hbZw8K5oYTczaygrnIuaOKG8LTzjnle9XYQXzj8KSvLy68gKcoK4Kr1beW43c7KhG7cwEDcPmBCKyLd5mBdVhNAZoST+IycYEA0QQYjF4EjQja6zLj2VkaO/2y3gfoYe+SgRnpenuoQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=suse.com;
+Received: from VE1PR04MB6560.eurprd04.prod.outlook.com (2603:10a6:803:122::25)
+ by AS8PR04MB8341.eurprd04.prod.outlook.com (2603:10a6:20b:3b0::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.29; Thu, 16 Mar
+ 2023 07:50:13 +0000
+Received: from VE1PR04MB6560.eurprd04.prod.outlook.com
+ ([fe80::154e:166d:ec25:531b]) by VE1PR04MB6560.eurprd04.prod.outlook.com
+ ([fe80::154e:166d:ec25:531b%5]) with mapi id 15.20.6178.026; Thu, 16 Mar 2023
+ 07:50:13 +0000
+Message-ID: <5e22a45d-6f12-da9b-94f6-3112a30e8574@suse.com>
+Date:   Thu, 16 Mar 2023 08:50:11 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [RFC PATCH 1/5] x86/xen: disable swiotlb for xen pvh
+Content-Language: en-US
+To:     Stefano Stabellini <sstabellini@kernel.org>
+Cc:     Huang Rui <ray.huang@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Stewart Hildebrand <Stewart.Hildebrand@amd.com>,
+        Xenia Ragiadakou <burzalodowa@gmail.com>,
+        Honglei Huang <honglei1.huang@amd.com>,
+        Julia Zhang <julia.zhang@amd.com>,
+        Chen Jiqian <Jiqian.Chen@amd.com>,
+        Juergen Gross <jgross@suse.com>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        =?UTF-8?Q?Roger_Pau_Monn=c3=a9?= <roger.pau@citrix.com>,
+        xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org
+References: <20230312120157.452859-1-ray.huang@amd.com>
+ <20230312120157.452859-2-ray.huang@amd.com>
+ <ea0e3852-87ba-984b-4010-5eeac3d6c507@suse.com>
+ <alpine.DEB.2.22.394.2303141747350.863724@ubuntu-linux-20-04-desktop>
+ <f5e03f2a-8176-528f-e885-9a97940367c0@suse.com>
+ <alpine.DEB.2.22.394.2303151616200.3462@ubuntu-linux-20-04-desktop>
+From:   Jan Beulich <jbeulich@suse.com>
+In-Reply-To: <alpine.DEB.2.22.394.2303151616200.3462@ubuntu-linux-20-04-desktop>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR0P281CA0075.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:1e::10) To VE1PR04MB6560.eurprd04.prod.outlook.com
+ (2603:10a6:803:122::25)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <TYCPR01MB10588F845D48C023460EDB70BB7BF9@TYCPR01MB10588.jpnprd01.prod.outlook.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: VE1PR04MB6560:EE_|AS8PR04MB8341:EE_
+X-MS-Office365-Filtering-Correlation-Id: c70dcd48-1648-4c1e-196f-08db25f3135c
+X-LD-Processed: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba,ExtFwd
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: j//oK4L/bXGLAW5r5/FunPeuYcAT234CNuzAxmTk5w4e50Klsj2o/FABu/yhjw7kNIy1xRtSQ6tfmqCVwGmdicdjt6c8OkuUdC5kkgsporvDuMrsG9NRENH6q/qSx0XrGLx87kHMFzM/IC58aNBjVLg1c5Kh1hjnJk13bo1gFZWRhh/syATra6QC+KtafGZ46Xsxez5I+huwVdK/noiycVRlCcCSn3cE0T9hKg/k4ye1TPFG4n7Wqj6hKYJzwbFoO1KQRiCILh6GNAm6SpxawZRtHYJPC3Xpu8AZ8+pPjsuPw2Y8IhBhFc4H1vhc38lTBeBAwhkepSmt3cs/93IMhRcydH3JIvmcsDGZrvbkVGS0FwMAbsWqgZfDdYTDj2nI49OGAUgyYGraS+a1K2EpqqVToIr04LQWc1h/pnsm6FvDEZQoJ/+JlNNa1RtP3MilAqMpdDsKclFLw6POA4HWeK+25/9/HuNMBgbN8Gv1KF4Bam+I8aPSrSxO0Dml3YUs69xGci+qXcR5Aqyg/E5HMokh7e9hMpQTcCTgcm/b5gnVY+4HR3MqEhYZkZfun4J9qxHa7yT8Q55nNSKwNwMxQmh9j+9WHNePdj9D2XVfqdUoUr+d+FMRhF26B1Mo1smXvlfIlB6v0rHpq6ZuiNWhQkyXisbES8g4VQZHtWrgEgJdtF+nw5o1bXnKW8hxgOjLE5zYNDMSjBscuKTa/Qufw9hSPYtbi1hzz9acT/mlQlc=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR04MB6560.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(376002)(396003)(39860400002)(366004)(346002)(136003)(451199018)(6486002)(83380400001)(478600001)(2616005)(186003)(53546011)(6512007)(6506007)(31686004)(66556008)(66946007)(54906003)(66476007)(316002)(26005)(4326008)(8676002)(41300700001)(6916009)(8936002)(5660300002)(7416002)(38100700002)(2906002)(31696002)(36756003)(86362001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?a2VQMEF6WFppZDJKL3Y4MEtMdzFFNys3MjlzRVVQU1lzSTBISWFtR290RmtC?=
+ =?utf-8?B?RkZZMUxFa2hOcWhza0NpQ2NKREhKTzlLOU1nTFFuTCtaWHVyYTZTbldEOTk4?=
+ =?utf-8?B?YzZYWDNncWl4UXR2alVMZ0J4b3pSUWttbUU3UmRqMVJoemJkRVovcWJuVCtz?=
+ =?utf-8?B?eVVVejM2MVdKYmUvK2xRcHNpUmw2clhhTWtsQVdHTlIwNURNV1Rqd3cvL2Z0?=
+ =?utf-8?B?V2hNdVJzWGdTdEZUa3VPZnYvaVlJaFdJaThVaGkwbnM4SXgvQVdUdE0zeVVr?=
+ =?utf-8?B?YXRrcFRuQTFrMDcrTDhiUzY5a0FORFZFWlVWNDhYOWdpNGVsWWdVUDFDRXVa?=
+ =?utf-8?B?K2ZXSDVxMGRZUjVCZXBtTC9LSXJDeVFsZmxUV0lVSE1ZTVdlYXBHR1ZhSUYx?=
+ =?utf-8?B?bXlWTGU2UWJXSFprYVMvSTNWQXBQbFgzL0o4Q2F4K0x1V0lFdis5bG16VTly?=
+ =?utf-8?B?L1QwOHBYRFFQMG1VSTh6NE1Zby9va0VJME5ONEJZcjZLQVQwQytjY0NrejRi?=
+ =?utf-8?B?emFSZVNmbHN5d1p4QldOWkxLOU1mdXJnVVo3bDhlaGJ3TnpUWFQySDRPOUtS?=
+ =?utf-8?B?S0Rtb2xrK2tCYis0TDR5cDBXSVNua2Zwd0V0OUUwaytOdVlpMlpqMEFYSlNR?=
+ =?utf-8?B?RVNidXl6aUVpeFF0SWkxM1VreEE4QkQ1dnBoZVJLVjBrV3FQd3grRFZNaUUv?=
+ =?utf-8?B?VzBxZ0JGM05heFZhanBLU2l4VHF0YUovS1BONTVNbVJNOVdpbU5WN3F1bklI?=
+ =?utf-8?B?c0FSRWd4NWRiZGRBNnY4KzBtVzIvZVBPUUd6NnRsaEd4emQ0VVI0bS9pQ3JL?=
+ =?utf-8?B?Q0dUVXd1dnBMaUxjRWtyR0ovci94MTNoMVpWYTNxdWpHRCt0amRxV2IwSXZ5?=
+ =?utf-8?B?MFl2VjduVzA1NUtIbS9hWUFxdVk1OWNuK0xkdDd2TWQ0MEZEeVRMdmFSNk1D?=
+ =?utf-8?B?ck04Mk5ubHVET05BRjNwU25TRVJES1dyazFVZTFoR1F4cVBIZjF4cEFPbW5P?=
+ =?utf-8?B?c3NVT3FUYndMUGIwZWFiWXVERzVCQWJLeU9pSm5zSXJ4VHN1NFo0Qmp5OWNP?=
+ =?utf-8?B?V3lNRzg3NmUxRU9sc0xBc3lLa0ZITXdzY0FmY3NIc2J2emZzSi8reHc3Uzcx?=
+ =?utf-8?B?aXA1VFNLM2R5UTJ5eVlJMTc3NWVPZmMraUx3dG1xWHd1Snp1Q2VOTTYxaHhX?=
+ =?utf-8?B?UnJiV29XVlhNTUprWklPbWo4Wm5FZmdKR092S094aS9QRVh3QWY1ODRCTWc1?=
+ =?utf-8?B?N0pFM3hTMzRlVHhVRlZYRC9IYVVlV0lYdkpoUDhEeTkwRE9ZellMNERGOWhY?=
+ =?utf-8?B?SzNCb1R0emxWeDlLQjVQajc2bW5lTExmOEhyS29aS2htOFZGYjN5b1EwV2Jw?=
+ =?utf-8?B?cmZ0OVR0cFRzR3JwY3JsQ1h0QWdDQTl3RXdaZlNxa1gvM3ZRb0VlWVByWjNZ?=
+ =?utf-8?B?aWxGWWV3UnVhSnhhVXc1ZDBBekpXaXlORDBWRjQxcVEzQk5KRmtoWmYwMkc2?=
+ =?utf-8?B?ZytXVXh3N01hNmhXdnYxV0JPQ01mZ25kbDlwRFNzOWpkVkt5Tnp3Q2doZGZ3?=
+ =?utf-8?B?MjIxK1R2b2hKdnNZL3BRVHQ2eXpYWnRWSGtMamp3SElHM29TdXFEWFpLbE9J?=
+ =?utf-8?B?aVRsV2gwTXZKWklYam9NUnhPZTVTcU9rMHovQlA3Sks0SVZnVG85MDgrdWtX?=
+ =?utf-8?B?cUxJNFNNa3hHY0pVV2lac3IvYy9na2ZWMUN6RC9UWm41YUxJNzhtenhSSEY4?=
+ =?utf-8?B?bHV2a2JzN1EzTDhoRUxuQ216ckJqd1V5RE40bC90K3ErY241NG1nY2t5Q01H?=
+ =?utf-8?B?RFBmdkltN0ZXaWYyYjIyZlhuZkpJakU0WmNlSVlQVGNwU0xvenhXbXFzdWlU?=
+ =?utf-8?B?Rm9pM0oxeHkxRjdIRWhGamdTQTl2VEF3TlJZU1RGcUozYTh3aEpXQ3p4ZUp4?=
+ =?utf-8?B?Y0huN25qRlVnSWdSa04wLzhYOE1VOXEwK2JOUG9XOU1WR2dmdkJwc3lYMU9s?=
+ =?utf-8?B?QmdnZ1lBN0hUakJFYUhXODkzY0FHR0FOZTF4dXFLai9BamROWmV0aVpCbE1U?=
+ =?utf-8?B?MW9SbFVPMnRKeXU0SEdTOS9LZGdCUkhyWjcxNE5Pck1OWHFINyt2ZjVMOVRy?=
+ =?utf-8?Q?mf/cSfr6cC6h35ttcyEv6+UNO?=
+X-OriginatorOrg: suse.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c70dcd48-1648-4c1e-196f-08db25f3135c
+X-MS-Exchange-CrossTenant-AuthSource: VE1PR04MB6560.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Mar 2023 07:50:13.7015
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: kVzglH9PIFd0ZVz/JCljg7wZ45aIbpShfJ4hjz534e3JtfFrgVmEs9l0sorxHf9GQ0NuMbkMUejzZ56aQ/RBlw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB8341
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 15, 2023 at 02:27:28PM +0000, Chris Paterson wrote:
-> Hello Greg,
+On 16.03.2023 00:25, Stefano Stabellini wrote:
+> On Wed, 15 Mar 2023, Jan Beulich wrote:
+>> On 15.03.2023 01:52, Stefano Stabellini wrote:
+>>> On Mon, 13 Mar 2023, Jan Beulich wrote:
+>>>> On 12.03.2023 13:01, Huang Rui wrote:
+>>>>> Xen PVH is the paravirtualized mode and takes advantage of hardware
+>>>>> virtualization support when possible. It will using the hardware IOMMU
+>>>>> support instead of xen-swiotlb, so disable swiotlb if current domain is
+>>>>> Xen PVH.
+>>>>
+>>>> But the kernel has no way (yet) to drive the IOMMU, so how can it get
+>>>> away without resorting to swiotlb in certain cases (like I/O to an
+>>>> address-restricted device)?
+>>>
+>>> I think Ray meant that, thanks to the IOMMU setup by Xen, there is no
+>>> need for swiotlb-xen in Dom0. Address translations are done by the IOMMU
+>>> so we can use guest physical addresses instead of machine addresses for
+>>> DMA. This is a similar case to Dom0 on ARM when the IOMMU is available
+>>> (see include/xen/arm/swiotlb-xen.h:xen_swiotlb_detect, the corresponding
+>>> case is XENFEAT_not_direct_mapped).
+>>
+>> But how does Xen using an IOMMU help with, as said, address-restricted
+>> devices? They may still need e.g. a 32-bit address to be programmed in,
+>> and if the kernel has memory beyond the 4G boundary not all I/O buffers
+>> may fulfill this requirement.
 > 
-> > From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > Sent: 15 March 2023 12:12
-> > 
-> > This is the start of the stable review cycle for the 5.4.237 release.
-> > There are 68 patches in this series, all will be posted as a response
-> > to this one.  If anyone has any issues with these being applied, please
-> > let me know.
-> > 
-> > Responses should be made by Fri, 17 Mar 2023 11:57:10 +0000.
-> > Anything received after that time might be too late.
+> In short, it is going to work as long as Linux has guest physical
+> addresses (not machine addresses, those could be anything) lower than
+> 4GB.
 > 
-> Tested-by: Chris Paterson (CIP) <chris.paterson2@renesas.com>
-> CI Pipeline:  https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/pipelines/807195748
+> If the address-restricted device does DMA via an IOMMU, then the device
+> gets programmed by Linux using its guest physical addresses (not machine
+> addresses).
 > 
-> We (CIP) are seeing some build issues with Linux 5.4.237-rc1 (543ff97e810c).
-> 
-> 1)
-> For arm multi_v7_defconfig builds we're seeing a some errors when building the exynos5422 device trees:
-> arch/arm/boot/dts/exynos5422-odroidxu3-common.dtsi:409.10-412.7: ERROR (phandle_references): /thermal-zones/gpu-thermal/cooling-maps/map3: Reference to non-existent node or label "gpu"
-> arch/arm/boot/dts/exynos5422-odroidxu3-common.dtsi:413.10-416.7: ERROR (phandle_references): /thermal-zones/gpu-thermal/cooling-maps/map4: Reference to non-existent node or label "gpu"
-> ERROR: Input tree has errors, aborting (use -f to force output)
-> make[1]: *** [scripts/Makefile.lib:285: arch/arm/boot/dts/exynos5422-odroidxu3-lite.dtb] Error 2
-> make[1]: *** Waiting for unfinished jobs....
-> arch/arm/boot/dts/exynos5422-odroidhc1.dts:238.10-241.7: ERROR (phandle_references): /thermal-zones/gpu-thermal/cooling-maps/map0: Reference to non-existent node or label "gpu"
-> arch/arm/boot/dts/exynos5422-odroidhc1.dts:242.10-245.7: ERROR (phandle_references): /thermal-zones/gpu-thermal/cooling-maps/map1: Reference to non-existent node or label "gpu"
-> ERROR: Input tree has errors, aborting (use -f to force output)
-> make[1]: *** [scripts/Makefile.lib:285: arch/arm/boot/dts/exynos5422-odroidhc1.dtb] Error 2
-> arch/arm/boot/dts/exynos5422-odroidxu3-common.dtsi:409.10-412.7: ERROR (phandle_references): /thermal-zones/gpu-thermal/cooling-maps/map3: Reference to non-existent node or label "gpu"
-> arch/arm/boot/dts/exynos5422-odroidxu3-common.dtsi:413.10-416.7: ERROR (phandle_references): /thermal-zones/gpu-thermal/cooling-maps/map4: Reference to non-existent node or label "gpu"
-> ERROR: Input tree has errors, aborting (use -f to force output)
-> make[1]: *** [scripts/Makefile.lib:285: arch/arm/boot/dts/exynos5422-odroidxu3.dtb] Error 2
-> arch/arm/boot/dts/exynos5422-odroidxu3-common.dtsi:409.10-412.7: ERROR (phandle_references): /thermal-zones/gpu-thermal/cooling-maps/map3: Reference to non-existent node or label "gpu"
-> arch/arm/boot/dts/exynos5422-odroidxu3-common.dtsi:413.10-416.7: ERROR (phandle_references): /thermal-zones/gpu-thermal/cooling-maps/map4: Reference to non-existent node or label "gpu"
-> ERROR: Input tree has errors, aborting (use -f to force output)
-> make[1]: *** [scripts/Makefile.lib:285: arch/arm/boot/dts/exynos5422-odroidxu4.dtb] Error 2
-> 
-> Log: https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/jobs/3939400038#L8368
-> 
-> Presumably caused by "ARM: dts: exynos: Add GPU thermal zone cooling maps for Odroid XU3/XU4/HC1", but I haven't had a chance to revert and re-test.
+> The 32-bit restriction would be applied by Linux to its choice of guest
+> physical address to use to program the device, the same way it does on
+> native. The device would be fine as it always uses Linux-provided <4GB
+> addresses. After the IOMMU translation (pagetable setup by Xen), we
+> could get any address, including >4GB addresses, and that is expected to
+> work.
 
-Should now be fixed up for -rc2, thanks.
+I understand that's the "normal" way of working. But whatever the swiotlb
+is used for in baremetal Linux, that would similarly require its use in
+PVH (or HVM) aiui. So unconditionally disabling it in PVH would look to
+me like an incomplete attempt to disable its use altogether on x86. What
+difference of PVH vs baremetal am I missing here?
 
-greg k-h
+Jan
