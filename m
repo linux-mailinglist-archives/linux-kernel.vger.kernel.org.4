@@ -2,175 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D40A6BD40F
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 16:40:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C3F66BD413
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 16:40:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230258AbjCPPkO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 11:40:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53926 "EHLO
+        id S231800AbjCPPkw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 11:40:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231760AbjCPPjd (ORCPT
+        with ESMTP id S231642AbjCPPkf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 11:39:33 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10722C889C;
-        Thu, 16 Mar 2023 08:38:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678981092; x=1710517092;
-  h=message-id:subject:from:reply-to:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=lpeckZ811LPUH7GBNtBOnJgvZwwJw+EL6zHIrvG2K18=;
-  b=amo8kypwZ9CNUU8HTDde+W2+tyheQ4j5OviZn1FukvcYVigmfrZCudzq
-   Apben07ckUCCpDnfowcC8t9Rp/CPo4CHoGYcYJzyLXm7zc9o7E3biNDbD
-   y09kLyUBVX+y0SUVkC3U24Z+fhQtdFihwSgMsSgLDFegB1zMr8z165PKC
-   dmGgc6beD4a9U7HQfy4yBD+EGDFsYyKtFhS+BLftV1xPyXDiLgdqSc8gS
-   x7iM89WHuflDoxJkoCtAdCjERK8jwVdYuyPE3EIHwEVIGG3zylng52klj
-   serNPDQr04IvFPwrkZmTKn2NMNhkhsy/GR9DqAxA3Jwjn+d2z1aGNXlnI
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="340399797"
-X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
-   d="scan'208";a="340399797"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 08:36:23 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="769002159"
-X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
-   d="scan'208";a="769002159"
-Received: from linux.intel.com ([10.54.29.200])
-  by FMSMGA003.fm.intel.com with ESMTP; 16 Mar 2023 08:36:23 -0700
-Received: from vahoang-mobl.amr.corp.intel.com (unknown [10.212.175.15])
-        by linux.intel.com (Postfix) with ESMTP id B9325580C4C;
-        Thu, 16 Mar 2023 08:36:22 -0700 (PDT)
-Message-ID: <f8c8375921cbe1d16329b450ad264e8bb711a7dc.camel@linux.intel.com>
-Subject: Re: [PATCH 00/11] Intel pmc_core: Enable telemetry
-From:   "David E. Box" <david.e.box@linux.intel.com>
-Reply-To: david.e.box@linux.intel.com
-To:     Hans de Goede <hdegoede@redhat.com>, irenic.rajneesh@gmail.com,
-        markgross@kernel.org, andy.shevchenko@gmail.com,
-        rajvi.jingar@linux.intel.com, xi.pardee@intel.com
-Cc:     linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org
-Date:   Thu, 16 Mar 2023 08:36:22 -0700
-In-Reply-To: <2d8d484d-55d6-446e-10af-49be3f2f0f7c@redhat.com>
-References: <20230315183405.2465630-1-david.e.box@linux.intel.com>
-         <2d8d484d-55d6-446e-10af-49be3f2f0f7c@redhat.com>
-Organization: David E. Box
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu1 
+        Thu, 16 Mar 2023 11:40:35 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 781D4763C3
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 08:38:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678981060;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=10cvjAWj/i7Tr+Lb50o4wfxv3/cWk1L2EfPxqlS0kiI=;
+        b=Y/sgKRq7lMHjHBZ7kYHtfTE/WP8lrLo75E9rCdM/RxZdfTqFbFWOLmUrPUtTTk6iRNCgLM
+        DvqYlKFZfqn8MgDppEveDDPgorHwnl8mplAtO6ICATB1eiLabPOd/9/qh0RztWNopHnHTk
+        BTP6AXGqWHFX+Sm68CQ+lHbcyvLhKpg=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-84-5P9qB5f9MS-tNRE5TU38sA-1; Thu, 16 Mar 2023 11:37:39 -0400
+X-MC-Unique: 5P9qB5f9MS-tNRE5TU38sA-1
+Received: by mail-wr1-f71.google.com with SMTP id i25-20020adfaad9000000b002cff37de14fso381102wrc.16
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 08:37:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678981058;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=10cvjAWj/i7Tr+Lb50o4wfxv3/cWk1L2EfPxqlS0kiI=;
+        b=EXuHs4OschwUsjTZyen2krzKc5M6LQM0z8pj38bpZHs15mQf2ho22+x9Zx6mSGIiVQ
+         z1ikN8632uvWE6X29KFZpoWRkqc78W87WteSvW+cmkoE4AnlNaQZ65zbHSoqDf0+kwZ6
+         Sw2ZCL24gKNiVmYf80ODV/0rSjgtHhGOo4RJgDU6XRK4jDC9iagziGENDsRddXVZYahH
+         TXGDKq/xjBeHe3eueDPdt8g4/RmbCsarq2in6g1yXWuetiERZ3DCFEsB+1l6Eq3owGvG
+         aChe5JECRCpR6l4f61Z/aN6dJuv4PbweNYXYAVzgXECbcr7YuVXQDnEIlyc+zmFeRV+2
+         qZNQ==
+X-Gm-Message-State: AO0yUKWluNNS3MI3iynPFwhULZdItKvWT+DcE+ha/QIusPb52YF19ocA
+        f011Iv1dIEnaqYSNHDKhJet54vGYJQsewnKUJvmBS1kRkxqVhmsxMeUWhPVkV07IVnTzDmBKBrP
+        LU8JsfQU0mmKi3KeLPCbotMyb
+X-Received: by 2002:a5d:5955:0:b0:2cf:e29f:d7f5 with SMTP id e21-20020a5d5955000000b002cfe29fd7f5mr4525448wri.25.1678981058130;
+        Thu, 16 Mar 2023 08:37:38 -0700 (PDT)
+X-Google-Smtp-Source: AK7set8fqjO7xgut70o0sevMb1v49SL3ULnSmxx8KeSVsgNMEeq2wco+1sVFyTBO2HcQ0pt6HItXAg==
+X-Received: by 2002:a5d:5955:0:b0:2cf:e29f:d7f5 with SMTP id e21-20020a5d5955000000b002cfe29fd7f5mr4525437wri.25.1678981057806;
+        Thu, 16 Mar 2023 08:37:37 -0700 (PDT)
+Received: from ?IPV6:2a09:80c0:192:0:5dac:bf3d:c41:c3e7? ([2a09:80c0:192:0:5dac:bf3d:c41:c3e7])
+        by smtp.gmail.com with ESMTPSA id w12-20020a5d608c000000b002cfefa50a8esm6184757wrt.98.2023.03.16.08.37.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Mar 2023 08:37:37 -0700 (PDT)
+Message-ID: <e25eca2e-67c8-bcd5-69f8-f6590fc0b011@redhat.com>
+Date:   Thu, 16 Mar 2023 16:37:36 +0100
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] mm/thp: Rename TRANSPARENT_HUGEPAGE_NEVER_DAX to
+ _UNSUPPORTED
+Content-Language: en-US
+To:     Peter Xu <peterx@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
+        Yang Shi <shy828301@gmail.com>
+References: <20230315171642.1244625-1-peterx@redhat.com>
+ <83625129-26c9-8885-7367-bb56bc5367f3@redhat.com> <ZBMzQW674oHQJV7F@x1n>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <ZBMzQW674oHQJV7F@x1n>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Hans,
+On 16.03.23 16:18, Peter Xu wrote:
+> On Thu, Mar 16, 2023 at 03:57:12PM +0100, David Hildenbrand wrote:
+>> On 15.03.23 18:16, Peter Xu wrote:
+>>> TRANSPARENT_HUGEPAGE_NEVER_DAX has nothing to do with DAX.  It's set when
+>>> has_transparent_hugepage() returns false, checked in hugepage_vma_check()
+>>> and will disable THP completely if false.  Rename it to reflect its real
+>>> purpose.
+>>>
+>>> Cc: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
+>>> Cc: Yang Shi <shy828301@gmail.com>
+>>> Signed-off-by: Peter Xu <peterx@redhat.com>
+>>> ---
+>>>    include/linux/huge_mm.h | 2 +-
+>>>    mm/huge_memory.c        | 4 ++--
+>>>    2 files changed, 3 insertions(+), 3 deletions(-)
+>>>
+>>> diff --git a/include/linux/huge_mm.h b/include/linux/huge_mm.h
+>>> index 70bd867eba94..9a3a3af2dd80 100644
+>>> --- a/include/linux/huge_mm.h
+>>> +++ b/include/linux/huge_mm.h
+>>> @@ -79,7 +79,7 @@ static inline vm_fault_t vmf_insert_pfn_pud(struct vm_fault *vmf, pfn_t pfn,
+>>>    }
+>>>    enum transparent_hugepage_flag {
+>>> -	TRANSPARENT_HUGEPAGE_NEVER_DAX,
+>>> +	TRANSPARENT_HUGEPAGE_UNSUPPORTED,
+>>>    	TRANSPARENT_HUGEPAGE_FLAG,
+>>>    	TRANSPARENT_HUGEPAGE_REQ_MADV_FLAG,
+>>>    	TRANSPARENT_HUGEPAGE_DEFRAG_DIRECT_FLAG,
+>>> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+>>> index b0ab247939e0..913e7dc32869 100644
+>>> --- a/mm/huge_memory.c
+>>> +++ b/mm/huge_memory.c
+>>> @@ -88,7 +88,7 @@ bool hugepage_vma_check(struct vm_area_struct *vma, unsigned long vm_flags,
+>>>    	/*
+>>>    	 * If the hardware/firmware marked hugepage support disabled.
+>>>    	 */
+>>> -	if (transparent_hugepage_flags & (1 << TRANSPARENT_HUGEPAGE_NEVER_DAX))
+>>> +	if (transparent_hugepage_flags & (1 << TRANSPARENT_HUGEPAGE_UNSUPPORTED))
+>>>    		return false;
+>>>    	/* khugepaged doesn't collapse DAX vma, but page fault is fine. */
+>>> @@ -464,7 +464,7 @@ static int __init hugepage_init(void)
+>>>    		 * Hardware doesn't support hugepages, hence disable
+>>>    		 * DAX PMD support.
+>>
+>>
+>> We should also fixup that comment then, no?
+> 
+> Yes, I'd drop the comment since the code explains itself.  One fixup
+> attached.  Thanks.
 
-On Thu, 2023-03-16 at 15:51 +0100, Hans de Goede wrote:
-> Hi David,
->=20
-> On 3/15/23 19:33, David E. Box wrote:
-> > On Intel SoCs, registers for the Power Management Controller are availa=
-ble
-> > in the PCI BAR of the SSRAM device, 0000:14.2. On Meteor Lake, these
-> > registers are structured in Intel PMT Telemetry regions which could be
-> > handled by the pmt_telemetry driver. This series adds APIs to the
-> > intel_vsec and pmt_telemetry drivers so that pmc_core driver can both
-> > create the telemetry instance from the SSRAM device and register for a
-> > handle to read the telemetry which contains the low power mode requirem=
-ents
-> > for the S0ix states supported by Meteor Lake. The series also adds some
-> > fixes.
->=20
-> Thank you for the series. I notice that none of these patches have a Revi=
-ewed-
-> by nor a Tested-by from some other Intel developers.
->=20
-> It really helps if you can get someone other Intel kernel people to revie=
-w and
-> test your patches and then add their tags before posting a large(ish) ser=
-ies
-> like this upstream.
+LGTM
 
-Sure. About 5 of these, though related, are small and can be sent separatel=
-y.
-I'll send those first and get Intel review for the others. Since this small=
-er
-batch won't be enabling telemetry, as in the cover letter title, I'll send =
-as a
-new series.
+-- 
+Thanks,
 
-David
-
->=20
-> Regards,
->=20
-> Hans
->=20
->=20
->=20
->=20
->=20
-> >=20
-> > David E. Box (6):
-> > =C2=A0 platform/x86/intel/vsec: Explicitly enable capabilities
-> > =C2=A0 platform/x86/intel/vsec: Add base address field
-> > =C2=A0 platform/x86/intel/pmt: Add INTEL_PMT module namespace
-> > =C2=A0 platform/x86/intel/pmt: telemetry: Add telemetry read functions
-> > =C2=A0 platform/x86/intel/pmt/telemetry: Add driver version
-> > =C2=A0 platform/x86/intel/pmc: Add Intel PMT support for MTL PMC
-> >=20
-> > Gayatri Kammela (1):
-> > =C2=A0 platform/x86/intel/vsec: Add intel_vsec_register
-> >=20
-> > Rajvi Jingar (1):
-> > =C2=A0 platform/x86/intel/pmc: Alder Lake slp_s0_residency fix
-> >=20
-> > Xi Pardee (3):
-> > =C2=A0 platform/x86:intel/pmc: Combine core_init and core_configure fun=
-ction
-> > =C2=A0 platform/x86:intel/pmc: Move get_low_power_modes function
-> > =C2=A0 platform/x86/intel/pmc/mtl: get LPM information using Intel PMT
-> >=20
-> > =C2=A0drivers/platform/x86/intel/pmc/Kconfig=C2=A0=C2=A0=C2=A0=C2=A0 |=
-=C2=A0=C2=A0 1 +
-> > =C2=A0drivers/platform/x86/intel/pmc/adl.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 |=C2=A0 17 +-
-> > =C2=A0drivers/platform/x86/intel/pmc/cnp.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 |=C2=A0 17 +-
-> > =C2=A0drivers/platform/x86/intel/pmc/core.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 |=C2=A0 71 +++++---
-> > =C2=A0drivers/platform/x86/intel/pmc/core.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 |=C2=A0 24 +--
-> > =C2=A0drivers/platform/x86/intel/pmc/icl.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 |=C2=A0 11 +-
-> > =C2=A0drivers/platform/x86/intel/pmc/mtl.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 | 187 ++++++++++++++++++-
-> > =C2=A0drivers/platform/x86/intel/pmc/spt.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 |=C2=A0 11 +-
-> > =C2=A0drivers/platform/x86/intel/pmc/tgl.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 |=C2=A0 17 +-
-> > =C2=A0drivers/platform/x86/intel/pmt/class.c=C2=A0=C2=A0=C2=A0=C2=A0 |=
-=C2=A0 48 +++--
-> > =C2=A0drivers/platform/x86/intel/pmt/class.h=C2=A0=C2=A0=C2=A0=C2=A0 |=
-=C2=A0 35 ++--
-> > =C2=A0drivers/platform/x86/intel/pmt/crashlog.c=C2=A0 |=C2=A0=C2=A0 3 +=
--
-> > =C2=A0drivers/platform/x86/intel/pmt/telemetry.c | 199 ++++++++++++++++=
-++++-
-> > =C2=A0drivers/platform/x86/intel/pmt/telemetry.h | 120 +++++++++++++
-> > =C2=A0drivers/platform/x86/intel/vsec.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0 | 131 ++++++--------
-> > =C2=A0drivers/platform/x86/intel/vsec.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 64 ++++++-
-> > =C2=A016 files changed, 790 insertions(+), 166 deletions(-)
-> > =C2=A0create mode 100644 drivers/platform/x86/intel/pmt/telemetry.h
-> >=20
-> >=20
-> > base-commit: 02c464b73645404654359ad21f368a13735e2850
->=20
+David / dhildenb
 
