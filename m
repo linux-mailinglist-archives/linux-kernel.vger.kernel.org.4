@@ -2,169 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 571D66BCED8
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 12:59:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECF246BCECD
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 12:58:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230305AbjCPL7z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 07:59:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36682 "EHLO
+        id S230255AbjCPL6C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 07:58:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230358AbjCPL7j (ORCPT
+        with ESMTP id S229796AbjCPL6A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 07:59:39 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F20291CAC5;
-        Thu, 16 Mar 2023 04:59:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678967976; x=1710503976;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=aQJgc40bxhA0m6Gtt/TdHlxrdPmhvIPNPMXc1ig44Qc=;
-  b=OQqwTeGEzEc62swA+7/5/jlnKi+yL6JouzGsyAuR1j/pY0DtDYanxhAn
-   Itg3a67/tStfY7Cy7a0Is63z3bIyYNFKleTnZ0lCask+p0ZHmlsNq4fw5
-   lRdSoO8LJxTBHqgcYwXV3WjsYFv/hDALtjJbp5MoCMMFUROefNYqmg1bh
-   /CggDO29wJpRxhXhthL0sdw0/HrS2/MkF767CDU9wgQw7oW1WNL+p5PPr
-   V3giG74SNKGMiVM1nb2Ls76KS4NcmNdHq8BnY7x6dHMQ9o7cwEHHbLEIp
-   2LEbuC6s+pIR9pCUaqeMESaGwfU5IkdWVj+gHNyhECvcoqVSD35fQAvwC
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="337984020"
-X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
-   d="scan'208";a="337984020"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 04:59:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="925749555"
-X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
-   d="scan'208";a="925749555"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by fmsmga006.fm.intel.com with ESMTP; 16 Mar 2023 04:59:35 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Thu, 16 Mar 2023 04:59:34 -0700
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21 via Frontend Transport; Thu, 16 Mar 2023 04:59:34 -0700
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (104.47.73.173)
- by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.21; Thu, 16 Mar 2023 04:59:06 -0700
+        Thu, 16 Mar 2023 07:58:00 -0400
+Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01on2126.outbound.protection.outlook.com [40.107.113.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7E8649FE;
+        Thu, 16 Mar 2023 04:57:58 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BoD2tSCjeyEDqDYL19cxYRZwf/QTcnpyYJEYv7c2cf6H8bJy691rR708HCRIaHgkBssuJRDP+s2raem/hRjSEsBOwkbpgB1U4XDL+V5v88QpccGWTiVH5NOfIe0ThzufoYclubrG8Hl+YO6hLazr7mjPOtcXKnOstFAspSpbotaSmxMNPChMnlSlncZ2EissRvPpplEhvvR5L+q6WMYx5aFboz7Ml17Ev3SHmfq2q0ixmStGN+Q4rg2q078MdU7SBLytaGr5BQjW1IbqUHC4qb6b95DYbDeViyQET000b5vsHXBAHQchjRM1WksHJXA0nLOQqwBDbTLgJ+IBO4QxEA==
+ b=SwapyZ6qLMjU0kTxhZJFNb3wXurQyQJchjLU5KjeDLzEdm7akLm7WA0OfpmGiUFMWKUk+lta+HqDGjwM33eB3Ab/UAQn0RLAllc4NWa1r5ntUMmLgU6Rudy/TMKBc7arVCrri4eLgyMbr/j7NQAPir4cbLVeu/TbcMPWCnE4gKDC7KVNSX/cB5qzRHVLrDKmcgTzdohUaSaw9PEVr2X/LJz2biO1lqLbqpI8gd0XZ4b4v5rFs5WJ7sQC+jXcmrvPu1YiuyQ61t3AlV20fAYBZfZJHcBh2X+FGFTiVlxoKMocXI4T5vpVTTCCxk9xzi2Lzms5JLPeBdalWzk0ygSDvQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wjCBAste7XJn9XeC7QpG+sZpvxukLw8XvjAF+b/7qWs=;
- b=DZ7uq4pqmdBh02sP5gnDbtwTpE30ZaBjLvqHId3k3vm5NqaTbFSKWY8PqLDF0/H9qX3EkAvkQs9U6x9mFwfj1vR/uqHaqAAvM2n6lisXJBIatgl1tNpcVpbozDJm5tlyOI4H3OGszagKy/0ExzTV4ctE4/QNnhHPdvFRBYck/2h8X3qKia9TrpO0wENf5sygxZ3dScwpIya2NqvDiaECF6t299n472+ZXrqZ6HYp6B4+AOn3c/c0MunoNgsDG0hyIhNZ6C62+GJWoI1Ck2XeuwOybHxmkpHAOeLumlbrFT8tKnywtTAPnjLX754NsOrzdm0NlJevlateBFCpOSbS5Q==
+ bh=Qih8xd2oS+vybo2LdHCJXggrBLLrRo7A7u0SuEUXgw0=;
+ b=XVrhYSfDjRgi/mPaDHTneOHmWjcq617/qYVNmjdC+Yg8Cc+9YeJxwIDuKWohpEnotMV3i5V3tr03FXfPCs2uU8Moi1oLTJuyOUJGf7yCwDAItGwn8XK6Jm1vpI4Cf2brQIj+yuk+QaRfxPT3lGQz/xosN6wpFhgJoT6KzfbU8v/xuQG8HRw+G0X74g8gxmZrmp3g++RkdRUWtbYP9mGwI1DiHkbZ9BuhgVSSOExnCRsWDGffVAXmC+ZSjZXm6IyvS8wsEgmGij1kTVxlJhsHc2PkoTIXOHva5RFXLfQE9NdjGzA0sQ7O9tt5rmx4oaIJ46pRhgCE+h2kaHlF8DYVyA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DM6PR11MB3625.namprd11.prod.outlook.com (2603:10b6:5:13a::21)
- by SA3PR11MB7533.namprd11.prod.outlook.com (2603:10b6:806:306::15) with
+ smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
+ dkim=pass header.d=renesas.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=renesas.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Qih8xd2oS+vybo2LdHCJXggrBLLrRo7A7u0SuEUXgw0=;
+ b=DFatHnk0PJUyfSUea8qyu7Tq30EcNY6k7wEsYM2unf89pOCwEfcHwm8mBeMKAxeL6SU/FV8YNI76mCqWsNfi26D7ysl3KHqyQ5a6xfnMfyDdHcnwxoAN6lQ6dNVSjqk7FM8W+qgulPB4n3Krfngm+syF5PKaiFTDWFphaCtc10I=
+Received: from TYCPR01MB10588.jpnprd01.prod.outlook.com (2603:1096:400:309::8)
+ by TYWPR01MB10459.jpnprd01.prod.outlook.com (2603:1096:400:2fb::7) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.31; Thu, 16 Mar
- 2023 11:59:05 +0000
-Received: from DM6PR11MB3625.namprd11.prod.outlook.com
- ([fe80::7911:de29:ded:224]) by DM6PR11MB3625.namprd11.prod.outlook.com
- ([fe80::7911:de29:ded:224%5]) with mapi id 15.20.6178.029; Thu, 16 Mar 2023
- 11:59:05 +0000
-Message-ID: <55a752e9-faf4-2b37-5492-c58dee3c170c@intel.com>
-Date:   Thu, 16 Mar 2023 12:57:55 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH bpf-next v3 0/4] xdp: recycle Page Pool backed skbs built
- from XDP frames
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>
-CC:     Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Larysa Zaremba <larysa.zaremba@intel.com>,
-        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>,
-        Song Liu <song@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Menglong Dong <imagedong@tencent.com>,
-        Mykola Lysenko <mykolal@fb.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, <bpf@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20230313214300.1043280-1-aleksander.lobakin@intel.com>
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.33; Thu, 16 Mar
+ 2023 11:57:55 +0000
+Received: from TYCPR01MB10588.jpnprd01.prod.outlook.com
+ ([fe80::dc49:e307:b424:4a53]) by TYCPR01MB10588.jpnprd01.prod.outlook.com
+ ([fe80::dc49:e307:b424:4a53%4]) with mapi id 15.20.6178.030; Thu, 16 Mar 2023
+ 11:57:55 +0000
+From:   Chris Paterson <Chris.Paterson2@renesas.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        "patches@lists.linux.dev" <patches@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "linux@roeck-us.net" <linux@roeck-us.net>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "patches@kernelci.org" <patches@kernelci.org>,
+        "lkft-triage@lists.linaro.org" <lkft-triage@lists.linaro.org>,
+        "pavel@denx.de" <pavel@denx.de>,
+        "jonathanh@nvidia.com" <jonathanh@nvidia.com>,
+        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
+        "sudipm.mukherjee@gmail.com" <sudipm.mukherjee@gmail.com>,
+        "srw@sladewatkins.net" <srw@sladewatkins.net>,
+        "rwarsow@gmx.de" <rwarsow@gmx.de>
+Subject: RE: [PATCH 4.14 00/20] 4.14.310-rc2 review
+Thread-Topic: [PATCH 4.14 00/20] 4.14.310-rc2 review
+Thread-Index: AQHZV+RUy87Uo7cV7EWFQvyxi/S8sa79QRpwgAAFmYCAAAU4kA==
+Date:   Thu, 16 Mar 2023 11:57:55 +0000
+Message-ID: <TYCPR01MB1058859F0D4457BD3BCEEB868B7BC9@TYCPR01MB10588.jpnprd01.prod.outlook.com>
+References: <20230316083335.429724157@linuxfoundation.org>
+ <TYCPR01MB10588DFCA0CABA9028F2FD723B7BC9@TYCPR01MB10588.jpnprd01.prod.outlook.com>
+ <ZBL+ueZuSk51GhFE@kroah.com>
+In-Reply-To: <ZBL+ueZuSk51GhFE@kroah.com>
+Accept-Language: en-GB, en-US
 Content-Language: en-US
-From:   Alexander Lobakin <aleksander.lobakin@intel.com>
-In-Reply-To: <20230313214300.1043280-1-aleksander.lobakin@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR3P281CA0107.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:a3::17) To DM6PR11MB3625.namprd11.prod.outlook.com
- (2603:10b6:5:13a::21)
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=renesas.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: TYCPR01MB10588:EE_|TYWPR01MB10459:EE_
+x-ms-office365-filtering-correlation-id: 24793e1d-15d6-4d3a-dfc7-08db2615ad8e
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: B2sC0va+RGhTpPnNEMaWD5ZXaOI0Jt5+qdZiEfIeQOsImAXp+kDVv/gQMx230xjrNN2ycwpLGmZZKv5373jBuJPbPT4/d/bWi3FgLPt6O+r402EC/nveRhTZA6AJprZP1DQe2R0+tbW720XRq+yFFBh2p2Wafi8se1RtY7tmUDKFeWT7q245B7WUo6RcWG4qH7GR6QldEkPKghgqduCz9YcslQ06jMV7Mqx/2aArZyCYFtjkvtblth/iQ1B5i1HlVAH7rqBYmuNUqOQKaKy6JXji/esy1sBFdpGRDHLroWcs7lzOGaH7gtoOT9+GWaTDam4bZ8BQZvi6cXaSPnsFKPEvGcPFDRLFqzDaVq54vxHXiBp8VZ/eaYsVTsIbOcrS+lHZBNRTWApzNUGLcdwk/2D+DsCPGrqeFZEFS8zcPREwjgpJWRJiiHPxg9Er72PQt9S7WWdP/Tw3R9h+ARamv3znDLr6ldDxf/H0tfJbOU/qRJPvfY6hOeRrOrJ7FN7kf+EkShs3PZ28g5zpe32DAcUdbfQz8bylH+k7VwQiNT01OaqadMhXIw7E242xOXhUGemrMfIzwrbUUrMClTzlobJLCVYSCk7VifcEXSeSCNDnOKAqr/fY8/6gUKtcjEGBT/v1CKxAWgGqm/QkBYG/XQXIAN8HqIN/hl1VdLZ1xGk0EimiNRaJTwJ59BM1IjH5evLCZSqxv/3mjFtrNzdKmA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYCPR01MB10588.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(346002)(376002)(136003)(396003)(39860400002)(451199018)(52536014)(41300700001)(5660300002)(4744005)(7416002)(8936002)(2906002)(122000001)(86362001)(38070700005)(33656002)(38100700002)(7696005)(478600001)(71200400001)(76116006)(66946007)(66556008)(66476007)(66446008)(64756008)(8676002)(6916009)(55016003)(83380400001)(54906003)(4326008)(316002)(9686003)(186003)(26005)(6506007);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?Windows-1252?Q?2dQ0bmqyc+DMHmKNEW63WWlBK0KHPf/D2u+q+365s2ah/WRC9zVpHRWl?=
+ =?Windows-1252?Q?P3aCweYSG+yf8Np6bX2PkQKjSdsNGtM3qgLs/AQTz9gGZ9hGOV24lvy0?=
+ =?Windows-1252?Q?L5mK/5oV7lr0vdn0DTj6oUWheqaEZ+mSLlckV7I8rbFsdQfnEH+iHVOK?=
+ =?Windows-1252?Q?2RTP9rgxN3y924YoKfksKi6AV3fp4TUkX+DIfxIaBKmzW8cdJgJ+eFk1?=
+ =?Windows-1252?Q?57AqZUGguV+PioNtwXm3EeqweM0qCyn8QoCpkcGtMNbhCtk9Bel3+k/P?=
+ =?Windows-1252?Q?A6nRyoKlGDmPhHp9j+DF/gV86S65TPw50h4eSHUcBurH0AFJc2dIVFgj?=
+ =?Windows-1252?Q?hz56WHhTAzZrFUq7DfDdnWfVAcb7x6wEkz3+TBebc5f3Tg7GrOglyn+x?=
+ =?Windows-1252?Q?/b1LMmxcfgV8tFuTXNEeEaNknybIMTNginRg28aYG1kIdnZunQJ/Rcbu?=
+ =?Windows-1252?Q?9OCZlu0Ksx7dWiTO7jEjxUFks7mrn7aRsQ97S6aJh7Lz7o2myPuO7vYl?=
+ =?Windows-1252?Q?ixfv7WvnemjmYeSMC/h8KLjf+uWt8K2U8gKpHn9JHvmdyztUTwPY7Fsv?=
+ =?Windows-1252?Q?fvkUhevBnPGiXQ3Hvfc0nJLUyuZA3mHhNeHrUJTq5M7dJSKT17zJqSZ9?=
+ =?Windows-1252?Q?xiiPoO1udh8Jhx4B8ZNNj2vNwxtK1zXFTGTsqoH3cibtFm0PqCcC1MFo?=
+ =?Windows-1252?Q?YQYWkpQR5BNZj9140DxoHkPzZwcSPw0AEn7hLZsHmXRaGmrzFkrqTdso?=
+ =?Windows-1252?Q?juWu0zsjU7fO4Eon3PdIb3XoG9pmzs6tNtZ0mydSmezzmdigBgAamHs6?=
+ =?Windows-1252?Q?7MakVs8d6RvCpG5w65o7XqIMy8g4iV3DZfkFOiusA5hC1h2IGNS6Gjbe?=
+ =?Windows-1252?Q?D2sWGGPWT498ofeCcanctl2Ns0m2XjnBWtqXdrwoji4Zeqbu6VEByssN?=
+ =?Windows-1252?Q?8AucVyQ7fRTbei+GiL9/aVBGTq+jO+6Dor93W57TaA/fWgo1A4OSX3LF?=
+ =?Windows-1252?Q?E0GLz3aj1uf4FkyocTK/MaGZEZ7eQZTiFHHyyBu8aRiGQCc9EH7XHsE9?=
+ =?Windows-1252?Q?A6HHNgNelwbi7O54GKk9spk/j6wE3ioFpaHcF5VgeSvRNya7aR4TGoV/?=
+ =?Windows-1252?Q?38JFJXrB2tiWC1KaNTFenCCNf9l/5L7mjGHIYlYzk5K0E/EE6MAb9HSg?=
+ =?Windows-1252?Q?Mm74aiBrkVJohuvXnK0limo9SYPNJ75cmej1KYrWFPFUsRiQatIgOsTx?=
+ =?Windows-1252?Q?AeqvJp6HxgawQkceWMn6qpjcYjhDVdAr3ortD0Czkeu1Ofe2hV2rtgp0?=
+ =?Windows-1252?Q?r3dqd/nBgxH1R8nleJR5bTLLmxIR54Mx3hmORvaDRQWvPNhO59Of3ftv?=
+ =?Windows-1252?Q?EPeCrX7VpH10FZUZGBUuZxJEY9nnIvW0ctSn6eH4U/KFwklEPOiw1/H/?=
+ =?Windows-1252?Q?5NIFDzJV7mUezjzM9tKSrkhaEx2BBkb6abigg+lLoNN0d1ucUbXt7QPw?=
+ =?Windows-1252?Q?ByQaYwM0Q0+D2nzyxuUIQ+PkP4PTumar8UKiW8s/Q/WTlgXZacUvqDDS?=
+ =?Windows-1252?Q?nadcrh0mEdKd0OBShC08I1TTFNG57lfmy+U/OFik+b/vi+jmaBC8W9KO?=
+ =?Windows-1252?Q?TfA/aECT/CDQzHIJeWSA3KXOJ/vGRK7smO4l6xJH14r0A2CIlPTRxpUg?=
+ =?Windows-1252?Q?k6WLBKZJ0UxI7a+CiJHsKgNy/REPs+ndNahJDpwknVo/g2O7/XfGEQ?=
+ =?Windows-1252?Q?=3D=3D?=
+Content-Type: text/plain; charset="Windows-1252"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR11MB3625:EE_|SA3PR11MB7533:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7a57f906-9000-4139-0434-08db2615d703
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: d4Q8aVl2nB+BQDNtpbF168QCDnrPzjp/0oMVqFmTjhHLaf9xpk9O0pJ1qn/LPH8APQosqW7o7XUoPGV6EvjiWCQSuRvi+6R3bqAxe8rlgLGpNrTkOKllibpMV1NLVhkxEPExFyiZ7+L6qwTbvytR38IIXiDNKyd/FCXBwUiy1MK1wlgdgQ1ls61tNvbw7YHqZpyyt/1acvtU6lg8bPF4N+qvVMWys5CEgkdepnjdXzhSdKnfVseZOY55V4Ntl6lEoEMOLEMQmBzNYggLQqXgjMnFEcE8vLUMRvb8HxtGp0Zpd79FzdBqSXBRo89Q1aQuJSKFyACA4xA3Mcwxa/0EL9pwTpVBmI1/o22ab479GYcxujVPrpfl7hoHPvJdGhmP7vpaA8znPPKNIHc3qcIgUo9yXJVNiT612S+RETIGgz9AfNwFEFgZaw4cj/na00vBGQLshCpBCMywcEYRTGHd8FI26ie13gquQPfEY1E/ijFeo8RRXG1RlaTAEDeIbtcIqdz6qNTL+SomWxInx1rjd+YcJHjfJrOU71ynHgGiXfV7s/I/9bJlf3hg6f45O3zfPD/AxCoCufrNMOiChN63YufZo6QFuEaHp2e/ZubPZ2UaQv0H4rhHD4944NBotVWoYvQpBrjX8hoG+3JP33Is9AJPE3zCHJ9/puUcp7t2rmncZEpPhZjBWtgxAKaF4WCxWPpI7ZPZXErm8C7y8EHpyY0ZAwgOORbehTDbkWlvAiVT3iTyTwiqwd84Fw1in6kw2AUruC9mFytbZLa6YczXXw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB3625.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(346002)(396003)(376002)(39860400002)(366004)(136003)(451199018)(38100700002)(86362001)(31696002)(82960400001)(36756003)(2906002)(41300700001)(5660300002)(8936002)(7416002)(4326008)(6506007)(6512007)(26005)(186003)(2616005)(6666004)(110136005)(83380400001)(54906003)(316002)(66476007)(66556008)(6486002)(966005)(478600001)(66946007)(8676002)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aUdvdXBRRkVVM1RUSHEwOThaaWszK3FnVkMwcUliM04zNlB6MnRKTXdHeXBG?=
- =?utf-8?B?c29nUnY4bkdGaXdFQjdIcUF5Wk9tT3UxWC93b2xoSnpVQTRIVCtJLytDRHho?=
- =?utf-8?B?L3VWNHFaTnZLNTdJMk50b3g2MVFweVg0Z1lCeFZ1WkRBMnRBYWxEZ2pzbmJv?=
- =?utf-8?B?S215ZDV1YnBCdkZ2T3htNE5KNEZwMDhKT2tEYVRDbFdwekFGdVBwU2NSMWY1?=
- =?utf-8?B?ZGNzNjV5QnM1YnJaSVhBMHRkSnA2SjAxdGZSNDZBQjJWZWF1UUorWkRkQ1lR?=
- =?utf-8?B?akNPUHIzNmlPNGI3REY3NllXdllhZE1Oc08zKzdPTHFXdkhpY0tMUHdGYS9I?=
- =?utf-8?B?SSthNUo2SkQ5ZFU5ZnlVaGtmUm8vOVo1bjRiektqTWJla2Rpb21oamRWYVNp?=
- =?utf-8?B?cDFLMVNyd05pNjFGZGw2cEQwRXloNHlodGkweXpwRjByTGJYOW1UTW90R1FT?=
- =?utf-8?B?eEFaVDAvNE9nVzh6cTZEMUl0Qk9GMXFNQ2JBL21WK081QXNDdzFWcXdGK2d0?=
- =?utf-8?B?SVhYSi9xSERBRTlWVEJGYitvbDI4eGlaaGZGTklxaWxjY1hFamdtVmtKdTVr?=
- =?utf-8?B?bXFwOXV3aEpWZURmR1pjUFdTRER2V2pMK3h6cUljOWVROGtTeWRRVnNBV3hs?=
- =?utf-8?B?ckFFQkR4bmJrMWpIN1Zmanc3bXNTVmRaWmU3anM0RURGbXROeURsak5nSjgw?=
- =?utf-8?B?YXBZMkJwN3RyUGZicEVHSTE2K1BBKzJZQXVHeUZpTTA2eVI0dFVoNXV5S2xM?=
- =?utf-8?B?OUZCdDhadDg0TFhrS05TN1RvZCtyMDJWbVE1MG9Rdml2SnpvNkQ2T3NRcmhO?=
- =?utf-8?B?THJ1N2FvWGF1azFMUmlXeHZrLzlFUlVZTC8wY3I5QWVxVm9XMDFtamcyK3hP?=
- =?utf-8?B?TVRWWGx3NmFwZ2Y2NmI0WklBVGFqampGTm1UaGJjQ3VRK2Z0VXJtQkJCaFVQ?=
- =?utf-8?B?Sis3RHp6dVR1VndXeE1ZR3EwRWh6OXJoNU1sUndZakVKWHhkc20xT1Z2S093?=
- =?utf-8?B?ZmNlVGNZVnh1NGFqaXFoZDVOY2VSbDZnWXU3TDhzSis4cGN3QTZJV2V6Wk5B?=
- =?utf-8?B?Wk9zQWtId04yL0RuZUFUWXUzMzVLNTMwWWx2bERLbTZyait2aWJQcit4SWho?=
- =?utf-8?B?LzZVTkRNbi9MbzZjQmpUbnNZcTd2c0syTysyZUNvNlVpVHlxaWwyb2t3d3hx?=
- =?utf-8?B?QndzOFk2UEhLNWFSNk5qK2pQWVlOUm1HajR1dEZHbEduN1k0VGRsNCtQK0VY?=
- =?utf-8?B?Q0NURFRRaUNDQzZDWXBsd3AyRk9pNjBSZXd1d2prWUNBOFIvYmhWc05IQWIy?=
- =?utf-8?B?YWhCbE1WdTg1NzZabVBDcTg5TUdUL29XY0loVEMyZHczdEpuVEtBaWtVSDAx?=
- =?utf-8?B?VW1TQzl0T1crNll1Wm05bjJ5NDQzdC8vMmtKUlU4VGFsVUtNbU5kTzdPR1Q1?=
- =?utf-8?B?czlJcXhUeWMzRmQvUW1xUjNNcWwrVTRCMHVxaTFmekZjeEJsUlljaXRFclIw?=
- =?utf-8?B?V1I2RXkyYWl0b1p5ZnRleTZ0NXhsb2g4VzE3K0xuZmFwRFdxV3h4c2dVVlZa?=
- =?utf-8?B?a1lQOTZNdFZSRWVXWkpTT2tQK1JZLzI4aGM5blprMW1EZnlIejc3MnBXVU1G?=
- =?utf-8?B?TTEzYWVFYTd2OTBuOE9GNllwM0lCZ212eXpaRXJQSG9BYVl0R1diTUNKQTU5?=
- =?utf-8?B?TXpiK2FYd0xTV1J5TU9WNldIL2p2bEc5c0RsYUl2QTRFam12UEFoOE5OTUhS?=
- =?utf-8?B?elJQczR2YTh6dXhHbHhzMVk2aDNQMVBYS080V1E2UGxpQ3hzeERDYjZYdUZJ?=
- =?utf-8?B?c2RtVzl3QjZIbTM3ZWZvZmI2L3cxTHAxOEhmay9za3B6SFVxdGxBK0VONEM3?=
- =?utf-8?B?ZTVNQ3UwTWxtTlI1SFkwaU5kRTJ2Zys0OUhISjFPaUMwOGZBLzFlSnkyNlZG?=
- =?utf-8?B?aDlSa2VRZ2NOeFhnRjZOejIrZndoeXh3WVpGMjArRDIvczEycHRoYno3N091?=
- =?utf-8?B?RlM0RFdHWDdWczZYaFB1RUtzRHd3NTRIWDdTYi9kbTVFcWlOejdXMkMrL2ZJ?=
- =?utf-8?B?blMyeU51blA3UkNNSGU0eVJ6MGtZYkc2YVpkazdIRFppbjJVU2thblY2S1Vy?=
- =?utf-8?B?TTgxRGlzOTAva3crdXg3b3FLSXhYTk1XeG5INnl3RTdnUDNmelpDSk9KUWIw?=
- =?utf-8?Q?Jo6+b+QDafbl5s2flStFDA8=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7a57f906-9000-4139-0434-08db2615d703
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB3625.namprd11.prod.outlook.com
+X-OriginatorOrg: renesas.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Mar 2023 11:59:04.9493
+X-MS-Exchange-CrossTenant-AuthSource: TYCPR01MB10588.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 24793e1d-15d6-4d3a-dfc7-08db2615ad8e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Mar 2023 11:57:55.0578
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: KZyDsCl1NaOy+FTmZDnpX+xf2UIfubQD8fpvIvophvaVaZe9mh8V89/UP5flzciE/Cv4g+SA2A98dixIW6I9Ionm9Scic3PF3KxKFX+mPlc=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA3PR11MB7533
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: CtNFOTGVkUeUotUiREde+s/8y1f4e5CrFCZQz4W8nsYHPnk4kQRJ/T2Ynec6hFX9aoVjFwTFdZ3DGxIbqgEZgbCTPox5AWmnc2N9DV05FEE=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYWPR01MB10459
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -172,75 +134,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexander Lobakin <aleksander.lobakin@intel.com>
-Date: Mon, 13 Mar 2023 22:42:56 +0100
+Hello Greg,
 
-> Yeah, I still remember that "Who needs cpumap nowadays" (c), but anyway.
-> 
-> __xdp_build_skb_from_frame() missed the moment when the networking stack
-> became able to recycle skb pages backed by a page_pool. This was making
-> e.g. cpumap redirect even less effective than simple %XDP_PASS. veth was
-> also affected in some scenarios.
-> A lot of drivers use skb_mark_for_recycle() already, it's been almost
-> two years and seems like there are no issues in using it in the generic
-> code too. {__,}xdp_release_frame() can be then removed as it losts its
-> last user.
-> Page Pool becomes then zero-alloc (or almost) in the abovementioned
-> cases, too. Other memory type models (who needs them at this point)
-> have no changes.
+> From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Sent: 16 March 2023 11:34
+>=20
+> On Thu, Mar 16, 2023 at 11:25:29AM +0000, Chris Paterson wrote:
+> > Hello Greg,
+> >
+> > > From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > > Sent: 16 March 2023 08:50
+> > >
+> > > This is the start of the stable review cycle for the 4.14.310 release=
+.
+> > > There are 20 patches in this series, all will be posted as a response
+> > > to this one.  If anyone has any issues with these being applied, plea=
+se
+> > > let me know.
+> > >
+> > > Responses should be made by Sat, 18 Mar 2023 08:33:04 +0000.
+> > > Anything received after that time might be too late.
+> >
+> > It sounds like there may be an -rc3 on the way, but for what it's worth=
+...
+>=20
+> There is?  Only for 4.19.y.
 
-Sorry, our SMTP proxy went crazy and resent several times all my
-messages sent via git-send-email during the last couple days. Please
-ignore this.
+Ah, I was referring to you saying you'd drop "clk: qcom: mmcc-apq8084: remo=
+ve spdm clocks".
+I was assuming that meant another RC.
+/me must stop assuming things...
 
-> 
-> Some numbers on 1 Xeon Platinum core bombed with 27 Mpps of 64-byte
-> IPv6 UDP, iavf w/XDP[0] (CONFIG_PAGE_POOL_STATS is enabled):
-> 
-> Plain %XDP_PASS on baseline, Page Pool driver:
-> 
-> src cpu Rx     drops  dst cpu Rx
->   2.1 Mpps       N/A    2.1 Mpps
-> 
-> cpumap redirect (cross-core, w/o leaving its NUMA node) on baseline:
-> 
->   6.8 Mpps  5.0 Mpps    1.8 Mpps
-> 
-> cpumap redirect with skb PP recycling:
-> 
->   7.9 Mpps  5.7 Mpps    2.2 Mpps
->                        +22% (from cpumap redir on baseline)
-> 
-> [0] https://github.com/alobakin/linux/commits/iavf-xdp
-> 
-> Alexander Lobakin (4):
->   selftests/bpf: robustify test_xdp_do_redirect with more payload magics
->   net: page_pool, skbuff: make skb_mark_for_recycle() always available
->   xdp: recycle Page Pool backed skbs built from XDP frames
->   xdp: remove unused {__,}xdp_release_frame()
-> 
->  include/linux/skbuff.h                        |  4 +--
->  include/net/xdp.h                             | 29 ---------------
->  net/core/xdp.c                                | 19 ++--------
->  .../bpf/progs/test_xdp_do_redirect.c          | 36 +++++++++++++------
->  4 files changed, 30 insertions(+), 58 deletions(-)
-> 
-> ---
-> From v2[1]:
-> * fix the test_xdp_do_redirect selftest failing after the series: it was
->   relying on that %XDP_PASS frames can't be recycled on veth
->   (BPF CI, Alexei);
-> * explain "w/o leaving its node" in the cover letter (Jesper).
-> 
-> From v1[2]:
-> * make skb_mark_for_recycle() always available, otherwise there are build
->   failures on non-PP systems (kbuild bot);
-> * 'Page Pool' -> 'page_pool' when it's about a page_pool instance, not
->   API (Jesper);
-> * expanded test system info a bit in the cover letter (Jesper).
-> 
-> [1] https://lore.kernel.org/bpf/20230303133232.2546004-1-aleksander.lobakin@intel.com
-> [2] https://lore.kernel.org/bpf/20230301160315.1022488-1-aleksander.lobakin@intel.com
-
-Thanks,
-Olek
+Chris
