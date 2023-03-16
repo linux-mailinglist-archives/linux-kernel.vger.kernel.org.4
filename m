@@ -2,56 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D5F36BCF88
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 13:32:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 695DE6BCF8B
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 13:32:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229993AbjCPMcA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 08:32:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53602 "EHLO
+        id S230093AbjCPMcH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 08:32:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229813AbjCPMb6 (ORCPT
+        with ESMTP id S229760AbjCPMcC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 08:31:58 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70654C88BC
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 05:31:57 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id z31-20020a25a122000000b00b38d2b9a2e9so1674446ybh.3
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 05:31:57 -0700 (PDT)
+        Thu, 16 Mar 2023 08:32:02 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 667F6CA1D1
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 05:32:01 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-5419fb7d6c7so13713457b3.11
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 05:32:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678969916;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=87DZZv3zvWxq1JNrpUvBlJXCIWW+Rra/IVtOi+lv2AY=;
-        b=qCtLERy62hEhlxSG/0eouCyDubA5IlOQzhKT2mnHloimO+vyrKei3sI8aJq1Tfj3qo
-         14b4Ounm+uimNdlEK6Gl1oKiwLH2oXLtNv7TDzmIibqjvnhVsYKbFeHnWom15qxZpv7E
-         5tOLPt/Rhk6QEnPn8W1CABp2zBMKp0CBPEXm1BE2uMklheDAqZWfiip3/rl6zFZvRNo1
-         r2Z8izryfAq4Y83tOgyd4a84rYY84JZ4Xsr8I1WQTjjxx5eNPvCps/nAEOnaV8B1vU7D
-         3V/f1c1bck0wJUie1OxMnbvg8BDG+pUfLdOJT4U31Beb6tiecEyvJAK/k9YvtACNmOeC
-         /+tA==
+        d=google.com; s=20210112; t=1678969920;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Wgf7EduwhN6551MQujeSUTn74g+txYbPhrHuCm2tsLY=;
+        b=AyWoKrQzAyrLTzIXGUwTfXlrMUQUEzcdqf58netne9uKl/Mp/DJZVbiMFCi75BVjg+
+         37c6H916KKaLMAgkXrmdOY8pnJVXd4UEw39b1nnvb+SPDcNuL1VNWE8CcpNXuYM7sQuJ
+         zyD77kK2ta0teFzQHy6va89aFHW5sPOGNWgZV3p1aK/SSz2v/ay4t5IsUhsPe/LYFgzg
+         n/f5CzIIYi4gIevSJE6Q0bWZMZi42L4mD5RRoh5vBVKr8UHiha9Zev2fizVH/+a7lykf
+         qQQIICCLpehxLMZbHdpUvlgFU0WCE9A2i6/fLSSJVd8/iXqmMiSLyDZdu7DN3D6qQv0k
+         xt0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678969916;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=87DZZv3zvWxq1JNrpUvBlJXCIWW+Rra/IVtOi+lv2AY=;
-        b=kSVt5PC6z2IvDeiE9jCpsLzsYs6naqSqrEDNHjSjo39BC77pY1iCambGFVsHeoKqRe
-         S0h8dlTtczKRCaqhzxhpUmG90PIu2dyxUv5bFUuoYsmMcdiJo79xqzFRPaKQl2EvpQAr
-         rhBwqS3u5sK+4gqm8TyQvyU5mIdRhYOgLHS4TWM3xA4268rmbdiQj6NjBfBsC9REogLq
-         wa1h03WDtHMrO7cKpBSM7etK+n8vN4Fwsds28Kb71YjpoM3kXy+15dz2isZc2ZdwT2AP
-         CI6/s3iR9l2wT1Ywz3I4AgwIhHPmLI/0lsZ3T633UqjQhIUj7JnHTn8SDDMZbsati+Ql
-         lI6w==
-X-Gm-Message-State: AO0yUKX7eoQZ/L74Tmna4zMGhsZN7NQG8GdHvwY61ZSAzTbOdUjx109T
-        Ran9c6dSiubZ1te951W3J3oQsoyp+g==
-X-Google-Smtp-Source: AK7set8JP+8/fO1CBDiuj35SBYwSWx/12DvLYxR4mHEgN+gX3ZM7tBbPLfdlKovQQ+AeL7C/2ao8pYromw==
+        d=1e100.net; s=20210112; t=1678969920;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Wgf7EduwhN6551MQujeSUTn74g+txYbPhrHuCm2tsLY=;
+        b=18yguJ9aAppfyZVOrbcp0NUIlmK6BzOq+6Phnyo0mRDthSkr3db5CjUgxV+pSwv6ZT
+         iOZ25kxbKjWWIJwpb7ThIZSoR4TqII1Fk4kcyqH7wajvpa1KbHgnPigVQO7US22KDDqb
+         owea6+xYZYN/mDSUs9MDtjZ90wR+bSS++s4igHWjW1KAvZ9IhNWiRz7/vFrFr61eUdKL
+         lJZk4txPLtZ2GNB5pvFjJXm2tlDu1853HEzc+Jp5AFBj2briApo3ReiYUPB3fr0sdbDD
+         bCim1YP1iGJ2swM344qeXLofYI7vOEPvlWHO8DIvtHxIwhjzYUUd/mYLfISz/lazJyzl
+         /EjQ==
+X-Gm-Message-State: AO0yUKWJOcg1E7PgA1JnNNWmgVomjQr6MJG+liyhYN/Bwpjj669Dk8v6
+        Nv5ei/wV5NQvwd8pkUliKn/35ITP9g==
+X-Google-Smtp-Source: AK7set/u/hog7qriGRuTm81gsBOhizqGgDKI210by82U6cLVLThJ5+FWaQSPpbb1TmvQ5L53tUN4kqsCHQ==
 X-Received: from elver.muc.corp.google.com ([2a00:79e0:9c:201:f359:6b95:96e:1317])
- (user=elver job=sendgmr) by 2002:a81:b306:0:b0:541:61aa:9e60 with SMTP id
- r6-20020a81b306000000b0054161aa9e60mr2038578ywh.6.1678969916701; Thu, 16 Mar
- 2023 05:31:56 -0700 (PDT)
-Date:   Thu, 16 Mar 2023 13:30:27 +0100
+ (user=elver job=sendgmr) by 2002:a81:e508:0:b0:544:5fc7:f01f with SMTP id
+ s8-20020a81e508000000b005445fc7f01fmr2036499ywl.4.1678969920431; Thu, 16 Mar
+ 2023 05:32:00 -0700 (PDT)
+Date:   Thu, 16 Mar 2023 13:30:28 +0100
+In-Reply-To: <20230316123028.2890338-1-elver@google.com>
 Mime-Version: 1.0
+References: <20230316123028.2890338-1-elver@google.com>
 X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
-Message-ID: <20230316123028.2890338-1-elver@google.com>
-Subject: [PATCH v6 1/2] posix-timers: Prefer delivery of signals to the
- current thread
+Message-ID: <20230316123028.2890338-2-elver@google.com>
+Subject: [PATCH v6 2/2] selftests/timers/posix_timers: Test delivery of
+ signals across threads
 From:   Marco Elver <elver@google.com>
 To:     elver@google.com, Peter Zijlstra <peterz@infradead.org>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -63,7 +65,7 @@ Cc:     Oleg Nesterov <oleg@redhat.com>,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,97 +75,114 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Dmitry Vyukov <dvyukov@google.com>
 
-POSIX timers using the CLOCK_PROCESS_CPUTIME_ID clock prefer the main
-thread of a thread group for signal delivery.     However, this has a
-significant downside: it requires waking up a potentially idle thread.
-
-Instead, prefer to deliver signals to the current thread (in the same
-thread group) if SIGEV_THREAD_ID is not set by the user. This does not
-change guaranteed semantics, since POSIX process CPU time timers have
-never guaranteed that signal delivery is to a specific thread (without
-SIGEV_THREAD_ID set).
-
-The effect is that we no longer wake up potentially idle threads, and
-the kernel is no longer biased towards delivering the timer signal to
-any particular thread (which better distributes the timer signals esp.
-when multiple timers fire concurrently).
+Test that POSIX timers using CLOCK_PROCESS_CPUTIME_ID eventually deliver
+a signal to all running threads.  This effectively tests that the kernel
+doesn't prefer any one thread (or subset of threads) for signal delivery.
 
 Signed-off-by: Dmitry Vyukov <dvyukov@google.com>
-Suggested-by: Oleg Nesterov <oleg@redhat.com>
-Reviewed-by: Oleg Nesterov <oleg@redhat.com>
 Signed-off-by: Marco Elver <elver@google.com>
 ---
 v6:
-- Split test from this patch.
-- Update wording on what this patch aims to improve.
-
-v5:
-- Rebased onto v6.2.
-
-v4:
-- Restructured checks in send_sigqueue() as suggested.
-
-v3:
-- Switched to the completely different implementation (much simpler)
-  based on the Oleg's idea.
-
-RFC v2:
-- Added additional Cc as Thomas asked.
+- Update wording on what the test aims to test.
+- Fix formatting per checkpatch.pl.
 ---
- kernel/signal.c | 25 ++++++++++++++++++++++---
- 1 file changed, 22 insertions(+), 3 deletions(-)
+ tools/testing/selftests/timers/posix_timers.c | 77 +++++++++++++++++++
+ 1 file changed, 77 insertions(+)
 
-diff --git a/kernel/signal.c b/kernel/signal.c
-index 8cb28f1df294..605445fa27d4 100644
---- a/kernel/signal.c
-+++ b/kernel/signal.c
-@@ -1003,8 +1003,7 @@ static void complete_signal(int sig, struct task_struct *p, enum pid_type type)
- 	/*
- 	 * Now find a thread we can wake up to take the signal off the queue.
- 	 *
--	 * If the main thread wants the signal, it gets first crack.
--	 * Probably the least surprising to the average bear.
-+	 * Try the suggested task first (may or may not be the main thread).
- 	 */
- 	if (wants_signal(sig, p))
- 		t = p;
-@@ -1970,8 +1969,23 @@ int send_sigqueue(struct sigqueue *q, struct pid *pid, enum pid_type type)
+diff --git a/tools/testing/selftests/timers/posix_timers.c b/tools/testing/selftests/timers/posix_timers.c
+index 0ba500056e63..8a17c0e8d82b 100644
+--- a/tools/testing/selftests/timers/posix_timers.c
++++ b/tools/testing/selftests/timers/posix_timers.c
+@@ -188,6 +188,80 @@ static int check_timer_create(int which)
+ 	return 0;
+ }
  
- 	ret = -1;
- 	rcu_read_lock();
-+	/*
-+	 * This function is used by POSIX timers to deliver a timer signal.
-+	 * Where type is PIDTYPE_PID (such as for timers with SIGEV_THREAD_ID
-+	 * set), the signal must be delivered to the specific thread (queues
-+	 * into t->pending).
-+	 *
-+	 * Where type is not PIDTYPE_PID, signals must just be delivered to the
-+	 * current process. In this case, prefer to deliver to current if it is
-+	 * in the same thread group as the target, as it avoids unnecessarily
-+	 * waking up a potentially idle task.
-+	 */
- 	t = pid_task(pid, type);
--	if (!t || !likely(lock_task_sighand(t, &flags)))
-+	if (!t)
-+		goto ret;
-+	if (type != PIDTYPE_PID && same_thread_group(t, current))
-+		t = current;
-+	if (!likely(lock_task_sighand(t, &flags)))
- 		goto ret;
++int remain;
++__thread int got_signal;
++
++static void *distribution_thread(void *arg)
++{
++	while (__atomic_load_n(&remain, __ATOMIC_RELAXED));
++	return NULL;
++}
++
++static void distribution_handler(int nr)
++{
++	if (!__atomic_exchange_n(&got_signal, 1, __ATOMIC_RELAXED))
++		__atomic_fetch_sub(&remain, 1, __ATOMIC_RELAXED);
++}
++
++/*
++ * Test that all running threads _eventually_ receive CLOCK_PROCESS_CPUTIME_ID
++ * timer signals. This primarily tests that the kernel does not favour any one.
++ */
++static int check_timer_distribution(void)
++{
++	int err, i;
++	timer_t id;
++	const int nthreads = 10;
++	pthread_t threads[nthreads];
++	struct itimerspec val = {
++		.it_value.tv_sec = 0,
++		.it_value.tv_nsec = 1000 * 1000,
++		.it_interval.tv_sec = 0,
++		.it_interval.tv_nsec = 1000 * 1000,
++	};
++
++	printf("Check timer_create() per process signal distribution... ");
++	fflush(stdout);
++
++	remain = nthreads + 1;  /* worker threads + this thread */
++	signal(SIGALRM, distribution_handler);
++	err = timer_create(CLOCK_PROCESS_CPUTIME_ID, NULL, &id);
++	if (err < 0) {
++		perror("Can't create timer\n");
++		return -1;
++	}
++	err = timer_settime(id, 0, &val, NULL);
++	if (err < 0) {
++		perror("Can't set timer\n");
++		return -1;
++	}
++
++	for (i = 0; i < nthreads; i++) {
++		if (pthread_create(&threads[i], NULL, distribution_thread, NULL)) {
++			perror("Can't create thread\n");
++			return -1;
++		}
++	}
++
++	/* Wait for all threads to receive the signal. */
++	while (__atomic_load_n(&remain, __ATOMIC_RELAXED));
++
++	for (i = 0; i < nthreads; i++) {
++		if (pthread_join(threads[i], NULL)) {
++			perror("Can't join thread\n");
++			return -1;
++		}
++	}
++
++	if (timer_delete(id)) {
++		perror("Can't delete timer\n");
++		return -1;
++	}
++
++	printf("[OK]\n");
++	return 0;
++}
++
+ int main(int argc, char **argv)
+ {
+ 	printf("Testing posix timers. False negative may happen on CPU execution \n");
+@@ -217,5 +291,8 @@ int main(int argc, char **argv)
+ 	if (check_timer_create(CLOCK_PROCESS_CPUTIME_ID) < 0)
+ 		return ksft_exit_fail();
  
- 	ret = 1; /* the signal is ignored */
-@@ -1993,6 +2007,11 @@ int send_sigqueue(struct sigqueue *q, struct pid *pid, enum pid_type type)
- 	q->info.si_overrun = 0;
- 
- 	signalfd_notify(t, sig);
-+	/*
-+	 * If the type is not PIDTYPE_PID, we just use shared_pending, which
-+	 * won't guarantee that the specified task will receive the signal, but
-+	 * is sufficient if t==current in the common case.
-+	 */
- 	pending = (type != PIDTYPE_PID) ? &t->signal->shared_pending : &t->pending;
- 	list_add_tail(&q->list, &pending->list);
- 	sigaddset(&pending->signal, sig);
++	if (check_timer_distribution() < 0)
++		return ksft_exit_fail();
++
+ 	return ksft_exit_pass();
+ }
 -- 
 2.40.0.rc1.284.g88254d51c5-goog
 
