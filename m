@@ -2,69 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D144F6BD266
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 15:30:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2328F6BD269
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 15:32:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231253AbjCPOaP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 10:30:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35530 "EHLO
+        id S230329AbjCPOcR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 10:32:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231247AbjCPOaM (ORCPT
+        with ESMTP id S229985AbjCPOcP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 10:30:12 -0400
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26356C889A
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 07:30:10 -0700 (PDT)
-Received: by mail-qt1-x830.google.com with SMTP id x1so1862696qtr.7
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 07:30:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112; t=1678977009;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=8tJ4I9ZiOnVv27V/2pSQJ0BPsYXHXaREO6k8Y5ACwnI=;
-        b=C+GP8LpvlQRSMcbmjE1Y6jbjYNh1r7qtieyvqkJoRE2fZrv4fxBngweL8yB8gOs1Ci
-         zRvDHr/tRnfo2MmcZ9KsA4EWcAuIA6KNIJ46jeumdomZhqO+JPBYDuGsJImNbLmHQ+YO
-         R1J82Py99kVbPp7Q3s544BRgJzU+pcTLtEbbSBeY3LHM76IwbWGd/o4Bj5/tYfhjs9XJ
-         xR/jnaagQFIlM+2tN7TbpuWfhCVv8YSiTG2WdWNtqFpYxyEYK25387s0OgpG3b1ygloP
-         wcBWHm1rKSTh1Blq0AzNp7H4oW5r19VmC3AQARxVycJOuFkNnXXc1ITEaUIexiqy2Ymc
-         VVaA==
+        Thu, 16 Mar 2023 10:32:15 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87CF849D0
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 07:31:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678977088;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=IUpF5YpfmKBEdpMgbmDi2tfoMcmDwV8UPq2EahjD2lk=;
+        b=DHnGJfsl4GxAvqlRYZgEONvSFsQjYR4WKNDD2YodjEMzzFNi0SeVbD/Q1ZyD9CDFfq5RTz
+        fUuu8I5hthMVHopFSQuhFjvyWMejyvdhrUYG72av5F/NFffapM0cRWoj8PqGH1MCMdtYGU
+        UWMpvfYxzO39kqc9E774Ci7qANCuh8E=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-370-WZBON61mNC-qkwCqvhIfBg-1; Thu, 16 Mar 2023 10:31:27 -0400
+X-MC-Unique: WZBON61mNC-qkwCqvhIfBg-1
+Received: by mail-wm1-f71.google.com with SMTP id l17-20020a05600c1d1100b003ed29ba093cso737071wms.6
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 07:31:27 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678977009;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8tJ4I9ZiOnVv27V/2pSQJ0BPsYXHXaREO6k8Y5ACwnI=;
-        b=ESBaTVmwjlBM5q+vU2jLckgUlAU8vlWjTddQo70DuOf299ooH5vfrniVsh6i4dC4rU
-         JE++Psh4tLIzok0mU0mdz15Y3f5TaSk6p5+KpTkWYFlBKuO1SV8IyeFclywY9Mn+VDEm
-         FMYxH+GmDYNxldOlvMpoPmSEmVgB+T9NA4V40rCcn5R85f2HYilZDpInpPfrVzy3cniC
-         lZMYR2HLDeOKFBX34yYFHSUv9bwKMP/wfiMdf2sqIYWPtYO/M/Rku2vsIIvQ9/Q32Qoe
-         Yi70z9AtOrNtHedyJIfuoOJBVGnBf9OcFf7kiLptexD+ofMHqD72AdvGqrZma0bo/gGX
-         pjDw==
-X-Gm-Message-State: AO0yUKU7HeSWINeFBcDe7OJyd/gpKnKC8F0TPhpjcAPWCZ0HSSSV94dp
-        iSoDpbwRl63mwYdeNRp156hmDA==
-X-Google-Smtp-Source: AK7set8SZHeDkSTpgT1aKVMpmUum/pCP5ZIxkPGNliu26fh7kkQe3PBQ/sCZGqX8TPWJpRG9Bd+6IA==
-X-Received: by 2002:ac8:4e92:0:b0:3bf:c423:c384 with SMTP id 18-20020ac84e92000000b003bfc423c384mr6287097qtp.15.1678977008742;
-        Thu, 16 Mar 2023 07:30:08 -0700 (PDT)
-Received: from localhost ([2620:10d:c091:400::5:62db])
-        by smtp.gmail.com with ESMTPSA id l19-20020a37f913000000b0073b3316bbd0sm6023764qkj.29.2023.03.16.07.30.08
+        d=1e100.net; s=20210112; t=1678977086;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=IUpF5YpfmKBEdpMgbmDi2tfoMcmDwV8UPq2EahjD2lk=;
+        b=S96mSXlycoy4WnCPzekcdqm1mhbJrYzwctdQLhHI+romx8fBAcSVPNxVFCLtpfIuXR
+         A27EQ71jyaNeFVvmoF7nu9ZmHEkBFKrleKtlBVGuO9nx+EA1VYi0yVnGiXWw+s/J9kDY
+         HoQ91z38/+7SXeIU6WIx2spkIFeR4sglyJeTx/aSie82NKXEHc5fexfdMiih4Pybh9TQ
+         6Y3CN5D6b0D5G9L1tTnPhQevsT84ibqWzBQg8jjaLfYTaFkV01XGBLRrziUY5MDzdXPl
+         F4vZU/6HPvnBeDf3Gg7A03jnNmoRiEVaepxiDCtyaxPdYGmU5FSK34c0xZPGD32DqROZ
+         vKTA==
+X-Gm-Message-State: AO0yUKUOwwaDp21QyfdFfnTwiECClyAONRuRLqpYNt0Ob2Bjp9hlwLQP
+        T19dIeJW4qj7Gk3O5hN6gzVy2Zbn0kor0otMrHbLzRTIM2QoN+R0mtayfPFmaO2/lyutUzBEfvf
+        QGdfTwV+fri7X+fCC82p/0Ba9BZ3faHag54OAV68ZKQdhF9sMwXm7zkyynND91rseVhaWcXtaEn
+        XdsiekBnI=
+X-Received: by 2002:a05:600c:1d27:b0:3ed:2a41:8529 with SMTP id l39-20020a05600c1d2700b003ed2a418529mr2598334wms.2.1678977086013;
+        Thu, 16 Mar 2023 07:31:26 -0700 (PDT)
+X-Google-Smtp-Source: AK7set9ONATU/6Jrjx4MVUvm8TBfCFj8L6oolG4cHH5OfWe7GoRvRBF/xk+E8xlHDHoVUXeZJyfTVw==
+X-Received: by 2002:a05:600c:1d27:b0:3ed:2a41:8529 with SMTP id l39-20020a05600c1d2700b003ed2a418529mr2598313wms.2.1678977085687;
+        Thu, 16 Mar 2023 07:31:25 -0700 (PDT)
+Received: from kherbst.pingu.com (ip1f1032bf.dynamic.kabel-deutschland.de. [31.16.50.191])
+        by smtp.gmail.com with ESMTPSA id fk4-20020a05600c0cc400b003e0015c8618sm5145432wmb.6.2023.03.16.07.31.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Mar 2023 07:30:08 -0700 (PDT)
-Date:   Thu, 16 Mar 2023 10:30:07 -0400
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     yang.yang29@zte.com.cn
-Cc:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, iamjoonsoo.kim@lge.com, willy@infradead.org
-Subject: Re: =?iso-8859-1?Q?=A0=5BPATCH_linux-next?=
- =?iso-8859-1?Q?=5D_mm=3A_workingset=3A_simplify_the=A0calculatio?=
- =?iso-8859-1?Q?n?= of workingset size
-Message-ID: <20230316143007.GC116016@cmpxchg.org>
-References: <202303161723055514455@zte.com.cn>
+        Thu, 16 Mar 2023 07:31:24 -0700 (PDT)
+From:   Karol Herbst <kherbst@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Karol Herbst <kherbst@redhat.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lukas Wunner <lukas@wunner.de>, linux-pci@vger.kernel.org,
+        nouveau@lists.freedesktop.org
+Subject: [PATCH] PCI: stop spamming info in quirk_nvidia_hda
+Date:   Thu, 16 Mar 2023 15:31:22 +0100
+Message-Id: <20230316143122.2377354-1-kherbst@redhat.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202303161723055514455@zte.com.cn>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,36 +78,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 16, 2023 at 05:23:05PM +0800, yang.yang29@zte.com.cn wrote:
-> From: Yang Yang <yang.yang29@zte.com.cn>
-> 
-> After we implemented workingset detection for anonymous LRU[1],
-> the calculation of workingset size is a little complex. Actually there is
-> no need to call mem_cgroup_get_nr_swap_pages() if refault page is
-> anonymous page, since we are doing swapping then should always
-> give pressure to NR_ACTIVE_ANON.
+Users kept complaining about those messages and it's a little spammy on
+prime systems so turn it into a debug print.
 
-This is false.
+Cc: Bjorn Helgaas <bhelgaas@google.com>
+Cc: Lukas Wunner <lukas@wunner.de>
+Cc: linux-pci@vger.kernel.org
+Cc: nouveau@lists.freedesktop.org
+Fixes: b516ea586d71 ("PCI: Enable NVIDIA HDA controllers")
+Signed-off-by: Karol Herbst <kherbst@redhat.com>
+---
+ drivers/pci/quirks.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-(mem_cgroup_)get_nr_swap_pages() returns the *free swap slots*. There
-might be swap, but if it's full, reclaim stops scanning anonymous
-pages altogether. That means that refaults of either type can no
-longer displace existing anonymous pages, only cache.
+diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
+index 44cab813bf951..b10c77bbe4716 100644
+--- a/drivers/pci/quirks.c
++++ b/drivers/pci/quirks.c
+@@ -5549,7 +5549,7 @@ static void quirk_nvidia_hda(struct pci_dev *gpu)
+ 	if (val & BIT(25))
+ 		return;
+ 
+-	pci_info(gpu, "Enabling HDA controller\n");
++	pci_dbg(gpu, "Enabling HDA controller\n");
+ 	pci_write_config_dword(gpu, 0x488, val | BIT(25));
+ 
+ 	/* The GPU becomes a multi-function device when the HDA is enabled */
+-- 
+2.39.2
 
-So yes, all refaults need to check free swap to determine how to act
-on the reuse frequency.
-
-> @@ -466,22 +466,23 @@ void workingset_refault(struct folio *folio, void *shadow)
->  	/*
->  	 * Compare the distance to the existing workingset size. We
->  	 * don't activate pages that couldn't stay resident even if
-> -	 * all the memory was available to the workingset. Whether
-> -	 * workingset competition needs to consider anon or not depends
-> -	 * on having swap.
-> +	 * all the memory was available to the workingset. For page
-> +	 * cache whether workingset competition needs to consider
-> +	 * anon or not depends on having swap.
-
-No, it applies to all refaults, not just cache.
-
-What could help is changing the comment to "having free swap space".
