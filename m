@@ -2,101 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02B7A6BCCC6
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 11:29:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58B096BCCC7
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 11:29:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230051AbjCPK3e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 06:29:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35996 "EHLO
+        id S229972AbjCPK3n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 06:29:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229959AbjCPK3b (ORCPT
+        with ESMTP id S229959AbjCPK3k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 06:29:31 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B664D637EE
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 03:29:26 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id r27so1643060lfe.10
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 03:29:26 -0700 (PDT)
+        Thu, 16 Mar 2023 06:29:40 -0400
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1EAEDBDD
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 03:29:38 -0700 (PDT)
+Received: by mail-yb1-xb2c.google.com with SMTP id e194so1245596ybf.1
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 03:29:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678962565;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZoXEVHbh4zESyEnp5EA5Zcb4rCYHcLM5oXeCPSUEYhA=;
-        b=hPGRGxF+ke8z3JzOJVv+C09Jmuv4N0i5SYgY2ZnNIKaXxFPKIJ7v7rnm2ULALJDkS3
-         BN+pVAOZSFrQcXJ72EtdmQLp8W7xIabGTpOC1j1pFwBeGr3S2feU1PHVkEeTqdTutiPw
-         aU9vqjmKMMz40gaZ8L2TzgsC/ycD6WoA6uapZvUDjCeahwljPbAPNVSsRefd0Mq9y20n
-         fdX4PKenMaxkUbhjaaU7NYQUZYUJL59wmPbtVVOg7gfHNbtejQlMvxNRmrqa60LdbRxE
-         2y2ayOBGkrD8bvHM/UhTZZ8TxMdjgvxZpe44qY/YBMkbC6Sfiyj2cTlfsM4hD2W2wrYN
-         /TEQ==
+        d=gmail.com; s=20210112; t=1678962578;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Utrqm6TMaaiRVdrnBHDzX43Ie3rDTCdv2ZFEbN+1erI=;
+        b=Mm8g/4lA/RM9mTGWfDnkv91n6UAyLxonCLwXc5bZROiIN2gtK3dvrNLF4PV9n7GSHF
+         0Emqub9OhhD5mLv8KOKqe8k8rM2twKxcLsPqNNx0jWssymO7jDm6YGjq5yryrsRceK1O
+         gk8TmukItGCsoP+LrY7HEIpqi3nI/ut3DrikxQXoezJICLuqEBVi5AQ8xy7lMRWQo6+I
+         clnF3djPz+lWXhKGdZFqqRWkW8IC5bBcGfutplVRKvv9jVw0+qqYlXNYIIds/fxQTvQl
+         ZDFm1G7FIaqWpi3aewC+lCtSbF5gAvOoJ1bBFEtnRBXvEtAcjvnWaCDwD8Kr6z0Auwi0
+         Qnew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678962565;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZoXEVHbh4zESyEnp5EA5Zcb4rCYHcLM5oXeCPSUEYhA=;
-        b=im7uH32KLjj3PSpBrJrKntst5oIx0Oiml/FQPbYH4aGM+KzOmhOOFfogTC6AXOaL8Q
-         MP/LGSsnDCngtJ3AAj78Bpoe0GnURdAnyPaglRoSv3hFrJqU4nXYNR/00mEgfiAtARaE
-         piTgLL77dAy7MQCwYEzVYmlyur1aNywHbNoNWs/67eFqDnX363P+6G+hG+jeP7qnHLPn
-         EQc18W5ZeiJBSoegkN+psiZ4UgP/XONN4shvsVbYuJqUtcb9N97O1cCA8ClWOaWNVmEU
-         R38L3YYidPH6UtKKLyYUURQYQEO49P4ohMimLo4SX+goq/Nr6Hu1H8VxvQVYYiUvggZm
-         QRGA==
-X-Gm-Message-State: AO0yUKUGPUuoAA1OJLLf/I916hPIGJt06mngBAZBbY3QTh1fjZhR2cpH
-        Rcv0wsMggY2SS638MN35t+xlYw==
-X-Google-Smtp-Source: AK7set8RqMAmh9lKg1cILMKHSx8C7wupxbgS49UmQD0f1euyKuqdXR0j+LcLnHCcQgn5HAX+nmRHtQ==
-X-Received: by 2002:ac2:5dd1:0:b0:4e8:4699:d01 with SMTP id x17-20020ac25dd1000000b004e846990d01mr2775148lfq.27.1678962565001;
-        Thu, 16 Mar 2023 03:29:25 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id n7-20020a195507000000b004e84896253asm1169523lfe.251.2023.03.16.03.29.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Mar 2023 03:29:23 -0700 (PDT)
-Message-ID: <5cfc6a2b-5b70-c44c-17d4-9c5dfaa33f54@linaro.org>
-Date:   Thu, 16 Mar 2023 12:29:23 +0200
+        d=1e100.net; s=20210112; t=1678962578;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Utrqm6TMaaiRVdrnBHDzX43Ie3rDTCdv2ZFEbN+1erI=;
+        b=eOaqVcJ7tJa5ErePRuXZm/+LMTpoAGRAj1gIk5s/08ygHOLkGLc/pMcuZku/sgPPkG
+         DQu0Hk/1GTbAoBeqqmlz7L0AyVrxOq53UbWJHaLsdDVJdnVbLI7XYPj0m8KKyKSEts+2
+         BHt+6J6vTm3DgArQh7OnDm7SoNlBJplJU7VlW/9UhMYUKtq8sVbX8i83ZKjj0olvmclc
+         JK5BWbq0zy8iJlsCLMITM59IWmVZgeIIaOxc4XDjjarCreIGCyNA2qAr4VgqIoponBo0
+         pT9rhSx9cMcbj+Hy/i8eIQfy1SCqLkWVkdHow+GV9/Arh5L75SEIa7h2XoaX3qsz8Ekn
+         0SzA==
+X-Gm-Message-State: AO0yUKXzuM8Vv5rJx/dAlwJOwgBtOUQWf28gGTrhsTvANp8cBMLSbPbA
+        s/UPg7p6ehb6OQmP/u20GT5+tyjOnmEHe97wwpLd17yyyOSeFg==
+X-Google-Smtp-Source: AK7set+hUxuWIQO1bnYJu+rdDJPXLcaZR+T0tHn8HIfaIscR71O8XrIYeia9WemAU22cirm2oiFCeiB/aVn6VDJ3axI=
+X-Received: by 2002:a25:f50e:0:b0:b26:81e1:f928 with SMTP id
+ a14-20020a25f50e000000b00b2681e1f928mr16194078ybe.1.1678962577835; Thu, 16
+ Mar 2023 03:29:37 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] drm: msm: adreno: Disable preemption on Adreno 510
-Content-Language: en-GB
-To:     Adam Skladowski <a39.skl@gmail.com>
-Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Elliot Berman <quic_eberman@quicinc.com>,
-        Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        Chia-I Wu <olvaffe@gmail.com>,
-        Douglas Anderson <dianders@chromium.org>,
-        AngeloGioacchino Del Regno <kholk11@gmail.com>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20230314221757.13096-1-a39.skl@gmail.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230314221757.13096-1-a39.skl@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+From:   Guillermo Rodriguez Garcia <guille.rodriguez@gmail.com>
+Date:   Thu, 16 Mar 2023 11:29:26 +0100
+Message-ID: <CABDcavZWz=YOvZnW8pkQmuTVjTDxPPoa0zOiC7A_0HAEg_Vi3w@mail.gmail.com>
+Subject: Change of behaviour when console=null and ttynull driver is used
+To:     linux-kernel@vger.kernel.org
+Cc:     Petr Mladek <pmladek@suse.com>,
+        Alejandro Vazquez <avazquez.dev@gmail.com>,
+        Shreyas Joshi <shreyas.joshi@biamp.com>,
+        sergey.senozhatsky@gmail.com, rostedt@goodmis.org,
+        shreyasjoshi15@gmail.com, Guenter Roeck <linux@roeck-us.net>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/03/2023 00:17, Adam Skladowski wrote:
-> Downstream driver appears to not support preemption on A510 target,
-> trying to use one make device slow and fill log with rings related errors.
-> Set num_rings to 1 to disable preemption.
-> 
-> Suggested-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> Fixes: e20c9284c8f2 ("drm/msm/adreno: Add support for Adreno 510 GPU")
-> Signed-off-by: Adam Skladowski <a39.skl@gmail.com>
+Hi all,
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+We have several embedded systems where pass console= or console=null
+in production to disable the console.
+
+Later we check for this in user space: in our inittab we check if fd0
+is "associated with a terminal" (test -t 0); if so, we are in
+development mode and we open a debug shell; otherwise (console
+disabled) we just start the application.
+
+Recently [1] this behaviour has changed and now if we pass console= or
+console=null, the new ttynull driver is used. This breaks the check we
+were doing (test -t 0 always true now).
+
+Is there a way to get the previous behaviour? If not, is there an easy
+way for userspace to detect whether the console device is a "real" tty
+or ttynull (other than trying to parse the kernel boot args, which
+would be a bit fragile).
+
+Thank you,
+
+(If possible, please CC me in any replies)
+
+ [1]: https://lore.kernel.org/lkml/X%2FcDG%2FxCCzSWW2cd@alley/t/
 
 -- 
-With best wishes
-Dmitry
-
+Guillermo Rodriguez Garcia
+guille.rodriguez@gmail.com
