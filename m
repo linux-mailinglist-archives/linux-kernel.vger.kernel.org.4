@@ -2,114 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 604AE6BCFA4
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 13:38:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E15A6BCFA1
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 13:38:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229887AbjCPMig (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 08:38:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33010 "EHLO
+        id S230035AbjCPMiD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 08:38:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229770AbjCPMie (ORCPT
+        with ESMTP id S229799AbjCPMiA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 08:38:34 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BAC82698
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 05:37:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678970269;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=9+hfNPh55s3QIpUAvR0km9DQY261PaQ6CD81XmL2nws=;
-        b=EMVPbKc9jC8GJ/Q04l5N3HfdBu1DjWdFQgSZg5RMX+TplW5Xng8BXbZbTfAE8880n5dct6
-        Fa2PDPA/9zR7iPjkEpnmT34d6/xZ2rywWuxHDXeZ9+lBx96EqU5St0gcqToKX4ae7fDO6E
-        B1H1zdXU9fF4zzhr3e+jJGnVtIHE0lc=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-447-6Ed-Ng3pO6ifvgbj0ehqlg-1; Thu, 16 Mar 2023 08:37:48 -0400
-X-MC-Unique: 6Ed-Ng3pO6ifvgbj0ehqlg-1
-Received: by mail-wm1-f69.google.com with SMTP id t1-20020a7bc3c1000000b003dfe223de49so2563595wmj.5
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 05:37:48 -0700 (PDT)
+        Thu, 16 Mar 2023 08:38:00 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF7FD59DE
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 05:37:58 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id j11so2132853lfg.13
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 05:37:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678970277;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=et1TOxaAuO23Dnon/VyidpOKHbPw5JTTXg0EC2DDFBE=;
+        b=XcnGQqD7HsW6KZttIoq+G5EPC61Q6wL/r9yN2cpO4Fi3JO1Sny3UNOeAutADEGpNuV
+         BIlNyi1kh8qEou5WqHSXpSxHMVdpRx2vXmvmaqvuRoXCLrqVk8iyQjC1Gg6XdqSl//nP
+         910A2s4fpV5WI29Pcfpc8L72lPAB9eNpP4K+sSQ4xiKNxb6P74Hus3mYrnWZfnZS9W8v
+         ykpJCQHqF+TXKirt0ljw0gsOqrSjic6YsiXLkF0c38suKiKAoVNFriunfE0BAYcVj9uW
+         x9B2rNYFfYgBun9iZxLUm0v0pDxe0/KZptGG9kfKQPLUeg8eOBZBiCT6v4QGOCmkMUrw
+         LXNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678970267;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9+hfNPh55s3QIpUAvR0km9DQY261PaQ6CD81XmL2nws=;
-        b=aMhuEJlTCt0XOPyvDMCcBSHuCeDnZxervo2GlF5gm5jaq6ogVYXsk/wpweMvqSVKRz
-         HPIDZx0F+lAxUEbptGDHy4XfhxdKIOte5D7ckq2wkWBXi7qR2VQwjNDeXqZmd4IQppzD
-         J3rX2pX6IFLDtTL+Ou/F9VWAlYmH7kF3O6kGQi5crYwaiKbJm7JcGgCFffdYNpL/fToU
-         nFyAyu2ayWwdDbayuCqg+GbECIHJdnSp6VHRLraVuFyTF66p0WAReWLyaepGo047Vam2
-         3QmTgUkGqhnq1ODvfS6Y8+TRsayn20ihCwrNUX9m6p6w9lh8U5g/KfadBjXUaeJHEumZ
-         F6Xw==
-X-Gm-Message-State: AO0yUKW7voJw69R8kNOhmBQlUtKGiCXOOh/NcrTzM+5YoSqEy1Mlt7b6
-        vOGzdSK7Ja+a4SZrPTGkI6A/6w+zkFUuSFKOwuZdJk5bi+K1AlTwbYpvHCzilmeFQI7/IlOid1s
-        cSf/3ntyxLk7OVDzlEw5KC0ZT
-X-Received: by 2002:a05:600c:19c9:b0:3ed:31fa:f563 with SMTP id u9-20020a05600c19c900b003ed31faf563mr5633484wmq.20.1678970267664;
-        Thu, 16 Mar 2023 05:37:47 -0700 (PDT)
-X-Google-Smtp-Source: AK7set909uXZKSW83RKxR+7Cr6bSKy6Ix/SZI1X9kWjaMkvkdqwheynIZDPY0NqDBlcgG3YwAwc/EA==
-X-Received: by 2002:a05:600c:19c9:b0:3ed:31fa:f563 with SMTP id u9-20020a05600c19c900b003ed31faf563mr5633453wmq.20.1678970267347;
-        Thu, 16 Mar 2023 05:37:47 -0700 (PDT)
-Received: from ?IPV6:2a09:80c0:192:0:5dac:bf3d:c41:c3e7? ([2a09:80c0:192:0:5dac:bf3d:c41:c3e7])
-        by smtp.gmail.com with ESMTPSA id y16-20020a05600c365000b003ed23845666sm4764550wmq.45.2023.03.16.05.37.46
+        d=1e100.net; s=20210112; t=1678970277;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=et1TOxaAuO23Dnon/VyidpOKHbPw5JTTXg0EC2DDFBE=;
+        b=zPLSx3y+TgOAOB+odlnN5D0EqUVM2Fvxmnolq/5gLs027toHR9rNCp65E8bNgoh1yI
+         oovaKnpPYEcqIBVUNro+LfUzsMDiy5MfRCxV8lbmGffckg0hM3z3b3PwpWHNr0uVHPbB
+         /7wOdODR9gL3VhhH5S79yI9QgvQ7Ez5Me5E4jhL0J9IXJLnnDwKmksnirV4QPS5yTfbX
+         VhAepi5RTL+x5Pkp1Z64lHXAKG3KF7oN0SG5iZYF7xlGu8cQ1mGFuwoC2Xd1Vb61wHYj
+         XGL/p3Pr6CHfv1lNL0ZZ5fUMV4lbbAsgPIlfO//oM1fqoZE0dkKSgJV3NneaL+AzWNky
+         yggw==
+X-Gm-Message-State: AO0yUKV+Jiv3vlA0/GjAk6XhW2YJvAUC2XGle8oQ25q8Mc6trFDJ4IaN
+        7Vvk6rn6r+r4eDLyG3T1wvmi/g==
+X-Google-Smtp-Source: AK7set8kpJ1Q6vODGrPLPHfwgsqkvFRVBRQO6bHlN9i9oIf/N2IEuBqykwF89ubVVq/wFJJxheFGNQ==
+X-Received: by 2002:a05:6512:988:b0:4db:19fb:6a7 with SMTP id w8-20020a056512098800b004db19fb06a7mr2517982lft.60.1678970277050;
+        Thu, 16 Mar 2023 05:37:57 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id c25-20020ac244b9000000b00498f67cbfa9sm1205423lfm.22.2023.03.16.05.37.56
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Mar 2023 05:37:46 -0700 (PDT)
-Message-ID: <d7a530a9-fa96-22fd-5dee-6951b923181b@redhat.com>
-Date:   Thu, 16 Mar 2023 13:37:45 +0100
+        Thu, 16 Mar 2023 05:37:56 -0700 (PDT)
+Message-ID: <0a9e9729-aa5b-4ce6-fc68-394949c1b162@linaro.org>
+Date:   Thu, 16 Mar 2023 14:37:56 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-Subject: Re: [PATCH v10 01/16] x86/tdx: Define TDX supported page sizes as
- macros
-Content-Language: en-US
-To:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Cc:     linux-mm@kvack.org, dave.hansen@intel.com, peterz@infradead.org,
-        tglx@linutronix.de, seanjc@google.com, pbonzini@redhat.com,
-        dan.j.williams@intel.com, rafael.j.wysocki@intel.com,
-        kirill.shutemov@linux.intel.com, ying.huang@intel.com,
-        reinette.chatre@intel.com, len.brown@intel.com,
-        tony.luck@intel.com, ak@linux.intel.com, isaku.yamahata@intel.com,
-        chao.gao@intel.com, sathyanarayanan.kuppuswamy@linux.intel.com,
-        bagasdotme@gmail.com, sagis@google.com, imammedo@redhat.com
-References: <cover.1678111292.git.kai.huang@intel.com>
- <ca5d11744de083812ba121f1b8cc0576a8691342.1678111292.git.kai.huang@intel.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <ca5d11744de083812ba121f1b8cc0576a8691342.1678111292.git.kai.huang@intel.com>
+Subject: Re: [PATCH V3 0/1] Fix for VP9 DRC and Decoder STOP issue.
+Content-Language: en-GB
+To:     quic_vboma@quicinc.com,
+        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        Vikash Garodia <quic_vgarodia@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230202064712.5804-2-quic_vboma@quicinc.com>
+ <20230316081509.12201-1-quic_vboma@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230316081509.12201-1-quic_vboma@quicinc.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06.03.23 15:13, Kai Huang wrote:
-> TDX supports 4K, 2M and 1G page sizes.  The corresponding values are
-> defined by the TDX module spec and used as TDX module ABI.  Currently,
-> they are used in try_accept_one() when the TDX guest tries to accept a
-> page.  However currently try_accept_one() uses hard-coded magic values.
+On 16/03/2023 10:15, quic_vboma@quicinc.com wrote:
+> From: Viswanath Boma <quic_vboma@quicinc.com>
 > 
-> Define TDX supported page sizes as macros and get rid of the hard-coded
-> values in try_accept_one().  TDX host support will need to use them too.
-> 
-> Signed-off-by: Kai Huang <kai.huang@intel.com>
-> Reviewed-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> Reviewed-by: Dave Hansen <dave.hansen@linux.intel.com>
-> ---
+> Fixed indent comments, ensured rebase and checkpatch with --strict.
+> Tested the changes on v5.15 and v5.4 kernels .
 
-Reviewed-by: David Hildenbrand <david@redhat.com>
+Was it tested on top of the recent kernels?
+
+> For testing Chrome Utilities were used .
+> 
+> Viswanath Boma (1):
+>    venus: Enable sufficient sequence change support for sc7180 and fix
+>      for Decoder STOP command issue.
+> 
+>   drivers/media/platform/qcom/venus/core.h       | 18 ++++++++++++++++++
+>   drivers/media/platform/qcom/venus/hfi_cmds.c   |  1 +
+>   drivers/media/platform/qcom/venus/hfi_helper.h |  2 ++
+>   drivers/media/platform/qcom/venus/hfi_msgs.c   | 11 +++++++++--
+>   drivers/media/platform/qcom/venus/vdec.c       | 12 +++++++++++-
+>   5 files changed, 41 insertions(+), 3 deletions(-)
+> 
 
 -- 
-Thanks,
-
-David / dhildenb
+With best wishes
+Dmitry
 
