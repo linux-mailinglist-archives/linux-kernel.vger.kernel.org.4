@@ -2,179 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DEE36BCE98
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 12:42:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DAC196BCE9D
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 12:43:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230130AbjCPLmL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 07:42:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39878 "EHLO
+        id S230058AbjCPLn5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 07:43:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229727AbjCPLmK (ORCPT
+        with ESMTP id S229459AbjCPLnz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 07:42:10 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3FCF16AE1
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 04:42:02 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id r11so6405068edd.5
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 04:42:02 -0700 (PDT)
+        Thu, 16 Mar 2023 07:43:55 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 648392004B
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 04:43:52 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id x13so6477278edd.1
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 04:43:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678966921;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=yMr7/L6ld7SqDWFk0PhUo8yDjIH51evoeIgT4UWaiFI=;
-        b=DPX9wCK5DX9dDuFSFQxaOuW9KzEqwSBAneILt8bA3qCS4zodt+NsbmYpUUi5ITnflZ
-         Ryu2r3kUpFrV4vYquR5v1u5yieoxJElcAbENLrg2zelpLyfhVvpZvXTNAjepClMrVPyJ
-         BqI0MOAAzSh1/lMMUm/Aild4RNM6YsrEiMfKzJYvCqurXzBn3puOAaSS0lky7SI15trU
-         eBSzi8lM2ewtvR1xMZeHgh1eEmvMS7+lRSAyGFR0z5ihHhgxIh+0LGQxy3kBMrPJxjUY
-         JGIdfEmBt6kYhKSfAZ9xlC1AobiIeq0+UWkt7wIup78ln4SrqWIJf55ktEEouhtuMytd
-         lIjQ==
+        d=tessares.net; s=google; t=1678967031;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=thUFjFBGjR3fhOfIi9hVXRjQGGNCMGLil0BHgmTo/ic=;
+        b=KyeM9k0ZKw4NJASVXPNZ0vzzWep932EWoZHPycDlavk6txL1/DqQqg0mTQHmVoBHB8
+         V9ld6c8BWWd4ejSmes2n1NVAVRiMfE9S7xTmzhYXHIdu/VCiPbCBxVc7kQqy2r3f1Ofj
+         iL5ddMWOlA3dzOSwuoO9rJO+oAZ4dOzntwgYZRpbKJrHi82UH8VpTBxtxrq5YAfexj2s
+         4XtUvrhiXsokBnZxxZG+aSub9HBETU1W5BzCwFszLte9Ot1aFRCT/6MwFMcW1rtBHfiv
+         bsrIUxjk65K7fryaETQblboHu1M+n0igZBu8/imWB/nTu12GUKLLsoU+ZewJ9v4dTkXK
+         ptDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678966921;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yMr7/L6ld7SqDWFk0PhUo8yDjIH51evoeIgT4UWaiFI=;
-        b=Zbv+O80HkDRNmGtMscEBaigvd/+gyKEskHS0ghmgVTcOO0ZQQ5/wpGwZiBRu6kXVnZ
-         KHYOJXnfKlkYK5qOkX8pBWyrVZWhMVWIaIDUT5q+lKcPA00nymaW/ahXAVP7ndC3mb7b
-         u0m8gW77++CjWnqvBm4/Byd2fVqJSbIrIscAAlN9mRnFRFrslLQq5nLwpsfv+EcbHfYk
-         1pk3UTg5RXUEYV0NI8AX/t3R2lGT0/fl3lNvkKS0zR7USD82ASojVRm31oR1tgG4xgyU
-         0E+MK7p8jZ6IQ5Pd8/JqX/J9ZzEGmDo8z09eDNvvcly9hfUdDQ6iOAwLg9aZSn2WESGl
-         gSLQ==
-X-Gm-Message-State: AO0yUKWgWdmFYk1+fyBsyijKCzm4DrqxDcHiQ10TwuXIQiS2pZ8Se7en
-        eFC/Ofdtu6KaSbMQNiWOQfpuG4tWWhDu36zz
-X-Google-Smtp-Source: AK7set/nlcqfPSTpurU3LMoT4iZh16mGQ/VZfrEQNXgvk7cUgBg7lctz8Gz+E/J8o5VJghzlKgRVVQ==
-X-Received: by 2002:a05:6402:495:b0:4fd:2363:16fa with SMTP id k21-20020a056402049500b004fd236316famr5657912edv.41.1678966920943;
-        Thu, 16 Mar 2023 04:42:00 -0700 (PDT)
-Received: from khadija-virtual-machine ([39.41.209.88])
-        by smtp.gmail.com with ESMTPSA id t10-20020a50c24a000000b004c0057b478bsm3732454edf.34.2023.03.16.04.42.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Mar 2023 04:42:00 -0700 (PDT)
-Date:   Thu, 16 Mar 2023 16:41:58 +0500
-From:   Khadija Kamran <kamrankhadijadj@gmail.com>
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        outreachy@lists.linux.dev,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] staging: axis-fifo: initialize timeouts in probe only
-Message-ID: <ZBMAhld/NOG93pcs@khadija-virtual-machine>
-References: <ZA9mThZ7NyRrQAMX@khadija-virtual-machine>
- <ZBEJ+8DbhADSBTLr@aschofie-mobl2>
- <ZBG699SriXWy1I2K@khadija-virtual-machine>
- <16148020.1MiD057Pog@suse>
- <ZBHUr7bANuhnOnIV@khadija-virtual-machine>
- <20230315150656.GA2938956@dev-arch.thelio-3990X>
+        d=1e100.net; s=20210112; t=1678967031;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=thUFjFBGjR3fhOfIi9hVXRjQGGNCMGLil0BHgmTo/ic=;
+        b=fpZiELwIsJW7FD3W9WIIV/9fTgZwX/WRlNsFjQw21YiBCtXM3/OEx4R68uzc3olec1
+         3wLLWOjfULbqHaepXdx6hqP7jGKTs5vqNN4ObOD1czz45PtGPvvt6Z4zkf1WbakpuWr4
+         YQH8RcNQ3ldF+9fzKQ/6ExCNHwI5f8Lq/QE7i4J7RvyR6/8nCWh57JCfnFx6hN7zDqgQ
+         80lMxuwC84qQd5HAcpr4qKLf8WEmVMW7X5q8GVX/OYyW6SmHeuAfYahMwoyjTn8oUbpN
+         5sqkbswwWa4OYlXF343BbVQgF681pWlALFl0J2qXqmASDQcjn1utu/05VlmJmhZ4nROk
+         VXiQ==
+X-Gm-Message-State: AO0yUKVnfoq0UfUTbvonlAMV0JayYyoxsGe+vaR2fxNqpEs+c/K5dFyq
+        Qf7Ox9pmiYSpSZN9rQsTwkUCZQ==
+X-Google-Smtp-Source: AK7set9DzddMMCMd0B+4V/kLF1eWBlJyzgxJJXNzHSTU0T9xuZkAhz9WVCq1iaeT3rYerBx/YztakQ==
+X-Received: by 2002:aa7:d99a:0:b0:4fb:78a0:eabf with SMTP id u26-20020aa7d99a000000b004fb78a0eabfmr5903708eds.29.1678967030711;
+        Thu, 16 Mar 2023 04:43:50 -0700 (PDT)
+Received: from ?IPV6:2a02:578:8593:1200:118:fc7d:1ce3:f580? ([2a02:578:8593:1200:118:fc7d:1ce3:f580])
+        by smtp.gmail.com with ESMTPSA id s26-20020a508d1a000000b004bef1187754sm3685504eds.95.2023.03.16.04.43.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Mar 2023 04:43:50 -0700 (PDT)
+Message-ID: <81f8be3e-4860-baf9-8e13-fec3a103245b@tessares.net>
+Date:   Thu, 16 Mar 2023 12:43:49 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230315150656.GA2938956@dev-arch.thelio-3990X>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 0/2] docs & checkpatch: allow Closes tags with links
+To:     Thorsten Leemhuis <linux@leemhuis.info>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Andy Whitcroft <apw@canonical.com>,
+        Joe Perches <joe@perches.com>,
+        Dwaipayan Ray <dwaipayanray1@gmail.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        =?UTF-8?Q?Kai_Wasserb=c3=a4ch?= <kai@dev.carbon-project.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, mptcp@lists.linux.dev
+References: <20230314-doc-checkpatch-closes-tag-v1-0-1b83072e9a9a@tessares.net>
+ <c27709bd-90af-ec4f-de0b-3a4536bc17ca@leemhuis.info>
+Content-Language: en-GB
+From:   Matthieu Baerts <matthieu.baerts@tessares.net>
+In-Reply-To: <c27709bd-90af-ec4f-de0b-3a4536bc17ca@leemhuis.info>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 15, 2023 at 08:06:56AM -0700, Nathan Chancellor wrote:
-> Hi Khadija,
-> 
-> On Wed, Mar 15, 2023 at 07:22:39PM +0500, Khadija Kamran wrote:
-> > On Wed, Mar 15, 2023 at 02:34:31PM +0100, Fabio M. De Francesco wrote:
-> > > Aside from what I said and asked for with the other message of this same 
-> > > thread, please take note that you can build a specific module if you prefer 
-> > > not to re-build the whole kernel and other modules at the same time. 
-> > > 
-> > > I'm pretty sure that the instructions to do so are in the OutreachyFirstPatch 
-> > > tutorial.
-> > > 
-> > > If they are not there, please let us know.
-> > > 
-> > > Fabio
-> > 
-> > Hey Fabio!
-> > 
-> > In the Outreachy FirstPatchTutorial under the 'Compiling only part of
-> > the kernel' section there are ways to compile only some part of the
-> > kernel.
-> > 
-> > I have tried using "make W=1 drivers/staging/axis-fifo/" and it says
-> > 'nothing to be done for'. 
-> 
-> Is CONFIG_XIL_AXIS_FIFO enabled in your configuration?
-> 
-> > Should I start with the steps to reproduce? :'(
-> 
-> I did see a report of this same warning occurring with GCC but the
-> report I commented on cane from clang/LLVM; using that toolchain may
-> make it easier for you to reproduce this issue. The robot's reproduction
-> instructions are fine but I think doing it manually is actually simpler.
-> 
-> Ubuntu 22.04 should have a pretty modern version of clang/LLVM, which
-> you can install via 'sudo apt install clang lld llvm'.
-> https://apt.llvm.org is another resource.
-> 
-> First, we will grab the configuration that was provided in the report:
-> 
-> $ wget -O .config https://download.01.org/0day-ci/archive/20230314/202303141159.6wN9HNP9-lkp@intel.com/config
-> 
-> Next, we want to make sure the configuration is synced, since we are
-> technically changing compilers:
-> 
-> $ make -j"$(nproc)" ARCH=arm64 LLVM=1 olddefconfig
-> 
-> Finally, you should be able to build that object file and see the
-> warning:
-> 
-> $ make -j"$(nproc)" ARCH=arm64 LLVM=1 drivers/staging/axis-fifo/
-> ...
-> drivers/staging/axis-fifo/axis-fifo.c:817:18: warning: implicit conversion from 'long' to 'int' changes value from 9223372036854775807 to -1 [-Wconstant-conversion]
->                 read_timeout = MAX_SCHEDULE_TIMEOUT;
->                              ~ ^~~~~~~~~~~~~~~~~~~~
-> ./include/linux/sched.h:296:31: note: expanded from macro 'MAX_SCHEDULE_TIMEOUT'
-> #define MAX_SCHEDULE_TIMEOUT            LONG_MAX
->                                         ^~~~~~~~
-> ./include/vdso/limits.h:11:19: note: expanded from macro 'LONG_MAX'
-> #define LONG_MAX        ((long)(~0UL >> 1))
->                          ^~~~~~~~~~~~~~~~~
-> drivers/staging/axis-fifo/axis-fifo.c:822:19: warning: implicit conversion from 'long' to 'int' changes value from 9223372036854775807 to -1 [-Wconstant-conversion]
->                 write_timeout = MAX_SCHEDULE_TIMEOUT;
->                               ~ ^~~~~~~~~~~~~~~~~~~~
-> ./include/linux/sched.h:296:31: note: expanded from macro 'MAX_SCHEDULE_TIMEOUT'
-> #define MAX_SCHEDULE_TIMEOUT            LONG_MAX
->                                         ^~~~~~~~
-> ./include/vdso/limits.h:11:19: note: expanded from macro 'LONG_MAX'
-> #define LONG_MAX        ((long)(~0UL >> 1))
->                          ^~~~~~~~~~~~~~~~~
-> 2 warnings generated.
-> 
-> Just repeat the last step as you investigate. If you have any further
-> issues or questions, please let me know. For the record, I am not
-> associated with Outreachy (I am one of the maintainers of clang/LLVM
-> support in the kernel), so if I have messed something up or overstepped
-> some boundary, I do apologize.
-> 
-> Cheers,
-> Nathan
+Hi Thorsten, Linus,
 
-Hi Nathan! 
+@Linus: in short, we would like to continue using the "Closes:" tag (or
+similar, see below) with a URL in commit messages. They are useful to
+have public bug trackers doing automated actions like closing a specific
+ticket. Any objection from your side?
 
-Sorry about the last email where I said that this is not working. I was
-working in the wrong branch, my bad. 
+The full thread is visible there:
 
-This works! And it has helped me remove the warnings too. I have
-replaced int datatype with long and the two warnings that were showing
-are no longer there. 
-
-I am working on [PATCH v5] and I will submit it in no time.
-
-This was great help. :)
-
-Thank you!
-Regards,
-Khadija
+https://lore.kernel.org/linux-doc/20230314-doc-checkpatch-closes-tag-v1-0-1b83072e9a9a@tessares.net/T/
 
 
+@Thorsten: thank you for your reply!
+
+On 16/03/2023 10:22, Thorsten Leemhuis wrote:
+> On 15.03.23 18:44, Matthieu Baerts wrote:
+>> Since v6.3, checkpatch.pl now complains about the use of "Closes:" tags
+>> followed by a link [1]. It also complains if a "Reported-by:" tag is
+>> followed by a "Closes:" one [2].
+>>
+>> As detailed in the first patch, this "Closes:" tag is used for a bit of
+>> time, mainly by DRM and MPTCP subsystems. It is used by some bug
+>> trackers to automate the closure of issues when a patch is accepted.
+>>
+>> Because this tag is used for a bit of time by different subsystems and
+>> it looks like it makes sense and it is useful for them, I didn't bother
+>> Linus to get his permission to continue using it. If you think this is
+>> necessary to do that up front, please tell me and I will be happy to ask
+>> for his agreement.
+> 
+> Due to how he reacted to some "invented" tags recently, I'd think it
+> would be appropriate to CC him on this patchset, as he then can speak up
+> if he wants to (and I assume a few more mails don't bother him).
+
+Sure, just did with a short summary.
+
+>> The first patch updates the documentation to explain what is this
+>> "Closes:" tag and how/when to use it. The second patch modifies
+>> checkpatch.pl to stop complaining about it.
+> 
+> I liked Andrew's `have been using "Addresses:" on occasion. [...] more
+> humble [...]` comment.  Sadly that tag is not supported by GitLab and
+> GitHub. But well, "Resolves" is and also a bit more humble if you ask
+> me. How about using that instead? Assuming that Konstantin can work with
+> that tag, too, but I guess he can.
+
+I don't mind changing the tag name but I still have a preference to use
+'Closes:' simply because it was used ~500 times in the past.
+
+If we want to change, it is probably the best time to do so but for me,
+the fact we -- MPTCP subsystem -- use the same tag as the DRM subsystem
+(and ClangBuiltLinux and Debian) without consulting each other -- if I'm
+not mistaken -- is a sign it is a good tag :)
+
+> I also wonder if the texts for the documentation could be shorter.
+> Wouldn't something like this do?
+> 
+> `Instead of "Link:" feel free to use "Resolves:" with an URL instead, if
+> the issue was filed in a public bug tracker that will consider the issue
+> resolved when it noticed that tag.`
+> 
+> [s/Resolves/Closes/ if we stick to that]
+
+Sure, I'm not used to write doc and I appreciate your suggestion to
+improve that. I might change one or two words but I have no objection to
+write this in the v2 once we agreed on the name of this tag.
+
+Also, should I use the same text in both process/5.Posting.rst and
+process/submitting-patches.rst?
+
+> Side note: makes we wonder if we should go "all in" here to avoid
+> confusion and allow "Resolves" everywhere, even for links to lore.
+
+Personally, I would recommend that, it might even be useful for other
+bots like regzbot: a patch can be linked to one discussion but not
+fixing the issue and even fixing another one instead. It might be useful
+for a bot to be able to distinguish the two without depending on a not
+100% reliable AI ;-)
+
+A concrete example: patch 1/2 of this series is linked to a bug report
+[1]. The ticket can be closed only when patch 2/2 will be applied.
+
+Cheers,
+Matt
+
+[1] https://github.com/multipath-tcp/mptcp_net-next/issues/373
+-- 
+Tessares | Belgium | Hybrid Access Solutions
+www.tessares.net
