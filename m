@@ -2,110 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F5DE6BD56F
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 17:22:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DEF46BD573
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 17:22:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229707AbjCPQWU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 12:22:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48206 "EHLO
+        id S229940AbjCPQWm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 12:22:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229734AbjCPQWM (ORCPT
+        with ESMTP id S229872AbjCPQWj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 12:22:12 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69F6D619B;
-        Thu, 16 Mar 2023 09:22:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1678983731; x=1710519731;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=iImao4I7FTxTgDMyeHkCyoDdECSP8/GLuTLheEeH1Rc=;
-  b=HCZIGs56BH/xIELvhCYXrzO/aATxC3qEmKgOvNwyXsc73IED84zO3DOj
-   Su9h5kwpj/Cimc/fVi0ZecfkX3B5eiBvD9yIx29jK703uIi6o0+XzUZ2v
-   abBJnP8DCXVROoJH1d15eKi4Kps/1+SmaBUz850hFcQberpBBUceL2wla
-   Kxzo/CTA/eW3YPZVCSiSIbunnTd0H8ScgeWGkTQpGGzCD/7yNq9NqDWrS
-   o6qlnbogRNbkQqZaUUdj0aokBRMtDsSWNCh3khgu5XsrA/tvqu5L707bw
-   gImcvKRcaNgn5rPJnSRp1c6dRuNRo5bNEvUP+0ncf/nCa8oN1D70ueiES
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.98,265,1673938800"; 
-   d="scan'208";a="202008008"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 16 Mar 2023 09:22:11 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Thu, 16 Mar 2023 09:22:10 -0700
-Received: from [10.171.246.59] (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server id 15.1.2507.21 via Frontend
- Transport; Thu, 16 Mar 2023 09:22:08 -0700
-Message-ID: <ae8e8b61-b00a-1ec1-8212-7194c5ae4b30@microchip.com>
-Date:   Thu, 16 Mar 2023 17:22:07 +0100
+        Thu, 16 Mar 2023 12:22:39 -0400
+Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAD032A994
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 09:22:31 -0700 (PDT)
+Received: by mail-qv1-xf36.google.com with SMTP id x8so1563710qvr.9
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 09:22:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1678983750;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=9GBmyw0WJBg7ZCrOCyO2Mj9DN8D/RYHEWxuq24q58BM=;
+        b=IBbPWCSwUaEft4y5eeSYVHPLcYKZe6q20jMe8CFCou9o8KL0uPCCP39bC6WjHexpL3
+         h4ChTrGg9orCknI95a3z0l3Gw3j6Ry3Y/Io3bKEjrTWpiLrgc3A6GcUTlQQC1nzfcHGj
+         wjf0n7z2sSyDo7hSofVu9srGEi8xnZ0o26udc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678983750;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9GBmyw0WJBg7ZCrOCyO2Mj9DN8D/RYHEWxuq24q58BM=;
+        b=KflF/XMI4pPmooDK0xRzqqIbbA4B/LkSgEoCKNMgz28Su4AQAw2Q5KEpE3TmxuKwZx
+         79Ml4DK/QrbR58J5xhfQMOX0r2oTQqkwUJsHq9RVvix6EDF67jmKo/jC75oL1txG5vfP
+         BmMhIQrhzPYpqXNGgrD308ZpCTWf1tktH9+feNaeonniK/7pXFCfWBJklZFzPc5GTXRi
+         PkaN2xslS6EjWT5JZqoKF5onFkJ4abfdDWSUO5wWfjcckAhaKWyAxfuzNFMleKgebw3y
+         2ZteH2z6ANfHtKx6/CGmED7vkF4diO7sgturJ5pI0fUGHCTmmvpdSXvITWt2eHTvbU7z
+         EyGQ==
+X-Gm-Message-State: AO0yUKW8fKD/svHnsEk7dBTRv5tID40CE6CimwKE3vQZJGhBUcqHxOOK
+        vVUhoWa0v1ntvkbEgHWfljGeNg==
+X-Google-Smtp-Source: AK7set8xEGt6h86HL22O97EmhJZzwZ6k+fOwDGCLLvjvxO6ADEVZBNhra0L2aLE9daBvgDOrEjePYQ==
+X-Received: by 2002:a05:6214:19ea:b0:5ae:419a:8c22 with SMTP id q10-20020a05621419ea00b005ae419a8c22mr11533826qvc.5.1678983750655;
+        Thu, 16 Mar 2023 09:22:30 -0700 (PDT)
+Received: from meerkat.local (bras-base-mtrlpq5031w-grc-30-209-226-106-7.dsl.bell.ca. [209.226.106.7])
+        by smtp.gmail.com with ESMTPSA id r6-20020a374406000000b007423dad060bsm6139056qka.87.2023.03.16.09.22.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Mar 2023 09:22:29 -0700 (PDT)
+Date:   Thu, 16 Mar 2023 12:22:27 -0400
+From:   Konstantin Ryabitsev <konstantin@linuxfoundation.org>
+To:     Thorsten Leemhuis <linux@leemhuis.info>
+Cc:     Matthieu Baerts <matthieu.baerts@tessares.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Andy Whitcroft <apw@canonical.com>,
+        Joe Perches <joe@perches.com>,
+        Dwaipayan Ray <dwaipayanray1@gmail.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Kai =?utf-8?Q?Wasserb=C3=A4ch?= <kai@dev.carbon-project.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        mptcp@lists.linux.dev
+Subject: Re: [PATCH 0/2] docs & checkpatch: allow Closes tags with links
+Message-ID: <20230316162227.727rhima2tejdl5j@meerkat.local>
+References: <20230314-doc-checkpatch-closes-tag-v1-0-1b83072e9a9a@tessares.net>
+ <c27709bd-90af-ec4f-de0b-3a4536bc17ca@leemhuis.info>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH net-next] net: macb: Increase halt timeout to accommodate
- 10Mbps link
-Content-Language: en-US
-To:     Harini Katakam <harini.katakam@amd.com>, <davem@davemloft.net>,
-        <claudiu.beznea@microchip.com>, <kuba@kernel.org>,
-        <edumazet@google.com>, <pabeni@redhat.com>
-CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <michal.simek@amd.com>, <harinikatakamlinux@gmail.com>
-References: <20230316083050.2108-1-harini.katakam@amd.com>
-From:   Nicolas Ferre <nicolas.ferre@microchip.com>
-Organization: microchip
-In-Reply-To: <20230316083050.2108-1-harini.katakam@amd.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <c27709bd-90af-ec4f-de0b-3a4536bc17ca@leemhuis.info>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/03/2023 at 09:30, Harini Katakam wrote:
-> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
-> 
-> From: Harini Katakam <harini.katakam@xilinx.com>
-> 
-> Increase halt timeout to accommodate for 16K SRAM at 10Mbps rounded.
-> 
-> Signed-off-by: Harini Katakam <harini.katakam@xilinx.com>
-> Signed-off-by: Michal Simek <michal.simek@xilinx.com>
-> Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
+On Thu, Mar 16, 2023 at 10:22:18AM +0100, Thorsten Leemhuis wrote:
+> I liked Andrew's `have been using "Addresses:" on occasion. [...] more
+> humble [...]` comment.  Sadly that tag is not supported by GitLab and
+> GitHub. But well, "Resolves" is and also a bit more humble if you ask
+> me. How about using that instead? Assuming that Konstantin can work with
+> that tag, too, but I guess he can.
 
-Fine with me:
-Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
-Best regards,
-   Nicolas
+There's a subtle difference between "Closes" and "Resolves" that may be
+important to consider ("closes" doesn't really imply the bug is "fixed").
 
-> ---
->   drivers/net/ethernet/cadence/macb_main.c | 3 +--
->   1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/drivers/net/ethernet/cadence/macb_main.c b/drivers/net/ethernet/cadence/macb_main.c
-> index 51c9fd6f68a4..96fd2aa9ee90 100644
-> --- a/drivers/net/ethernet/cadence/macb_main.c
-> +++ b/drivers/net/ethernet/cadence/macb_main.c
-> @@ -94,8 +94,7 @@ struct sifive_fu540_macb_mgmt {
->   /* Graceful stop timeouts in us. We should allow up to
->    * 1 frame time (10 Mbits/s, full-duplex, ignoring collisions)
->    */
-> -#define MACB_HALT_TIMEOUT      1230
-> -
-> +#define MACB_HALT_TIMEOUT      14000
->   #define MACB_PM_TIMEOUT  100 /* ms */
-> 
->   #define MACB_MDIO_TIMEOUT      1000000 /* in usecs */
-> --
-> 2.17.1
-> 
+The Bugbot should eventually support a number of "if this, then that"
+conditions once it's done, so which tag we look for will be a matter of
+configuration. It's not yet at that stage, though I should have some initial
+trials in the near future.
 
--- 
-Nicolas Ferre
-
+-K
