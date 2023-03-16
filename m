@@ -2,79 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3CE46BD70B
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 18:29:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 980346BD714
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 18:30:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229886AbjCPR3C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 13:29:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43946 "EHLO
+        id S230036AbjCPR3o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 13:29:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbjCPR3A (ORCPT
+        with ESMTP id S229896AbjCPR3c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 13:29:00 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DA913A9D;
-        Thu, 16 Mar 2023 10:28:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=SEN+HKxo7EQ3q5D6tuhe44Eox24eDP+iTTu9PwnX/OM=; b=r+edEyVdE8CHzECGKqBOw2z/6K
-        pmwPgko9E9SA73wK+2z4oOZWpCopkXUaE5ym0bys0jdwzPDo6kraGswMtU87rc/adnU9rk/zyFN/h
-        5ICv8yRV71KH4jem5zFLwoESEv41E4dclTYq5L4qs/1EegQkOxHIyoRxw8HKBGcgeTN2ARXr8oz23
-        0eYYj2EHDmhrqCz2dDGjCTGHKBsgzqCO0FDLUtedrD3mnegEZybLCRJuWXhKOqJJYh8u7uwUY+xxc
-        xbrG0pH/tRc2U9v4mUJrLqa22NZ6uIr5MTBVRFYhWDGL2gA/WyyAEVT1H6yFIrBPnlo06u+othVO6
-        OaUm+ZdA==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pcrP8-00F226-M0; Thu, 16 Mar 2023 17:28:42 +0000
-Date:   Thu, 16 Mar 2023 17:28:42 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     David Howells <dhowells@redhat.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, Jeff Layton <jlayton@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        netdev@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Bernard Metzler <bmt@zurich.ibm.com>,
-        Tom Talpey <tom@talpey.com>, linux-rdma@vger.kernel.org
-Subject: Re: [RFC PATCH 02/28] Add a special allocator for staging netfs
- protocol to MSG_SPLICE_PAGES
-Message-ID: <ZBNRysLdgZsfVaSj@casper.infradead.org>
-References: <20230316152618.711970-1-dhowells@redhat.com>
- <20230316152618.711970-3-dhowells@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230316152618.711970-3-dhowells@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 16 Mar 2023 13:29:32 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADEA7231EE
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 10:29:15 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id j125-20020a25d283000000b008f257b16d71so2529773ybg.15
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 10:29:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1678987754;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Uq7nE/DzfEkIETd0TF3h83fIBuNZuqidPfixIYK7CAQ=;
+        b=czBNpX06izp1eLfvOstpmYwsBSgbtD3M+wd9P3LoNRWtG9xn8E0dAswbfRLY36v+x4
+         7W0h4LdvAhJtzF4vVnjUWoQupVUqjP+Atu7xuHS3hLIczVKyfbrjzaGFmVkTw6pe/iIK
+         Z0YsUig0v3lTXCDyw8J0CrMsVVW0P0SBWMVaNzAV30VI3HcDcyJ4wRMX9qdDkvMVvL5l
+         IG8vfZJTuuORFgge4J1HK1ry3F4ttiG97z9asETUt93Fg5+hWJlxGoJFrEccR6nt25On
+         n7JEpL7mkeHCUONlAl4nFeVqq3nRZtTb3LJhBBZ5vGP042gLpztn1LowpNTXKvjf+5VJ
+         AAWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678987754;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Uq7nE/DzfEkIETd0TF3h83fIBuNZuqidPfixIYK7CAQ=;
+        b=Aug3ueDvAmAAWOQc+1h2s2lsehFrJTCXrlrd8CAOuqE4+JMjskGIuVRhY3NGfLYqGn
+         1k9yKFQKYaVVs44zzIqI7yMQtOeBlJxhaHN6ntmCtq3voRzQTjZGVxPyyOUtTA0LbZFr
+         pwxbwf11+mJ/brB/xPFzfrkgvABX3yrvRd2DHdE8bBiaNn9RY2p//BDjJpEV42xairTm
+         6D2b5J15PKzyhWtO5JvqlmEwQaonJL0AwQvOL9T8PfMR5+ppDeVxvPdlik71/iIfIHwB
+         KHDjGzrKte1P84/86uLMHHSkwMh/rrJ7bGOk1pkyCoGACiqe+QTZFaqKAI8b1JV7OJiL
+         xGzg==
+X-Gm-Message-State: AO0yUKWe1345CqeAKRwoBwdi1IURnFSPufPrp7QHy7LLIHW8uzmh45TH
+        /jejeNjihWPUrN+ECEWyK34Bl/VfJrm1aA==
+X-Google-Smtp-Source: AK7set84MdG0TuJ2MrWwGLi0I46LN6Rd4Pu4yM++fxEoMwv+wzeTCkuqCWuG7lNq3aUZpdgi3jPWdInkSHT0WA==
+X-Received: from dlatypov-spec.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:3f35])
+ (user=dlatypov job=sendgmr) by 2002:a05:6902:2c5:b0:b45:5cbe:48b3 with SMTP
+ id w5-20020a05690202c500b00b455cbe48b3mr6311269ybh.0.1678987754589; Thu, 16
+ Mar 2023 10:29:14 -0700 (PDT)
+Date:   Thu, 16 Mar 2023 10:28:59 -0700
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
+Message-ID: <20230316172900.755430-1-dlatypov@google.com>
+Subject: [PATCH 1/2] kunit: tool: add subscripts for type annotations where appropriate
+From:   Daniel Latypov <dlatypov@google.com>
+To:     brendanhiggins@google.com, davidgow@google.com
+Cc:     rmoar@google.com, linux-kernel@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        skhan@linuxfoundation.org, Daniel Latypov <dlatypov@google.com>,
+        Johannes Berg <johannes.berg@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 16, 2023 at 03:25:52PM +0000, David Howells wrote:
-> If a network protocol sendmsg() sees MSG_SPLICE_DATA, it expects that the
-> iterator is of ITER_BVEC type and that all the pages can have refs taken on
-> them with get_page() and discarded with put_page().  Bits of network
-> filesystem protocol data, however, are typically contained in slab memory
-> for which the cleanup method is kfree(), not put_page(), so this doesn't
-> work.
-> 
-> Provide a simple allocator, zcopy_alloc(), that allocates a page at a time
-> per-cpu and sequentially breaks off pieces and hands them out with a ref as
-> it's asked for them.  The caller disposes of the memory it was given by
-> calling put_page().  When a page is all parcelled out, it is abandoned by
-> the allocator and another page is obtained.  The page will get cleaned up
-> when the last skbuff fragment is destroyed.
+E.g. for subprocess.Popen, it can be opened in `text=True` mode where it
+returns strings, or `text=False` where it returns bytes.
+To differentiate, you can annotate types as `Popen[str]` or
+`Popen[bytes]`.
 
-This feels a _lot_ like the page_frag allocator.  Can the two be
-unified?
+This patch should add subscripts in all the places we were missing them.
+
+Reported-by: Johannes Berg <johannes.berg@intel.com>
+Link: https://lore.kernel.org/linux-kselftest/20230315105055.9b2be0153625.I7a2cb99b95dff216c0feed4604255275e0b156a7@changeid/
+Signed-off-by: Daniel Latypov <dlatypov@google.com>
+---
+ tools/testing/kunit/kunit_kernel.py  | 6 +++---
+ tools/testing/kunit/kunit_printer.py | 2 +-
+ tools/testing/kunit/run_checks.py    | 2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
+index 53e90c335834..e6fc8fcb071a 100644
+--- a/tools/testing/kunit/kunit_kernel.py
++++ b/tools/testing/kunit/kunit_kernel.py
+@@ -92,7 +92,7 @@ class LinuxSourceTreeOperations:
+ 		if stderr:  # likely only due to build warnings
+ 			print(stderr.decode())
+ 
+-	def start(self, params: List[str], build_dir: str) -> subprocess.Popen:
++	def start(self, params: List[str], build_dir: str) -> subprocess.Popen[str]:
+ 		raise RuntimeError('not implemented!')
+ 
+ 
+@@ -112,7 +112,7 @@ class LinuxSourceTreeOperationsQemu(LinuxSourceTreeOperations):
+ 		kconfig.merge_in_entries(base_kunitconfig)
+ 		return kconfig
+ 
+-	def start(self, params: List[str], build_dir: str) -> subprocess.Popen:
++	def start(self, params: List[str], build_dir: str) -> subprocess.Popen[str]:
+ 		kernel_path = os.path.join(build_dir, self._kernel_path)
+ 		qemu_command = ['qemu-system-' + self._qemu_arch,
+ 				'-nodefaults',
+@@ -141,7 +141,7 @@ class LinuxSourceTreeOperationsUml(LinuxSourceTreeOperations):
+ 		kconfig.merge_in_entries(base_kunitconfig)
+ 		return kconfig
+ 
+-	def start(self, params: List[str], build_dir: str) -> subprocess.Popen:
++	def start(self, params: List[str], build_dir: str) -> subprocess.Popen[str]:
+ 		"""Runs the Linux UML binary. Must be named 'linux'."""
+ 		linux_bin = os.path.join(build_dir, 'linux')
+ 		params.extend(['mem=1G', 'console=tty', 'kunit_shutdown=halt'])
+diff --git a/tools/testing/kunit/kunit_printer.py b/tools/testing/kunit/kunit_printer.py
+index 5f1cc55ecdf5..015adf87dc2c 100644
+--- a/tools/testing/kunit/kunit_printer.py
++++ b/tools/testing/kunit/kunit_printer.py
+@@ -15,7 +15,7 @@ _RESET = '\033[0;0m'
+ class Printer:
+ 	"""Wraps a file object, providing utilities for coloring output, etc."""
+ 
+-	def __init__(self, output: typing.IO):
++	def __init__(self, output: typing.IO[str]):
+ 		self._output = output
+ 		self._use_color = output.isatty()
+ 
+diff --git a/tools/testing/kunit/run_checks.py b/tools/testing/kunit/run_checks.py
+index 066e6f938f6d..61cece1684df 100755
+--- a/tools/testing/kunit/run_checks.py
++++ b/tools/testing/kunit/run_checks.py
+@@ -37,7 +37,7 @@ def main(argv: Sequence[str]) -> None:
+ 	if argv:
+ 		raise RuntimeError('This script takes no arguments')
+ 
+-	future_to_name: Dict[futures.Future, str] = {}
++	future_to_name: Dict[futures.Future[None], str] = {}
+ 	executor = futures.ThreadPoolExecutor(max_workers=len(commands))
+ 	for name, argv in commands.items():
+ 		if name in necessary_deps and shutil.which(necessary_deps[name]) is None:
+
+base-commit: 2c6a96dad5797e57b4cf04101d6c8d5c7a571603
+-- 
+2.40.0.rc1.284.g88254d51c5-goog
+
