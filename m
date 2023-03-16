@@ -2,94 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 129156BDBA1
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 23:27:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49D686BDB9C
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 23:25:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229647AbjCPW1D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 18:27:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40874 "EHLO
+        id S229648AbjCPWZa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 18:25:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230030AbjCPW0j (ORCPT
+        with ESMTP id S229544AbjCPWZ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 18:26:39 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEA5BB0B8E
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 15:25:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679005359;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=FiNRrqqvSuubpSuuWdFDbGPDB+qkVipo+igQfKYRoHk=;
-        b=epIaSK2gOQw3c3Dc7KrZQ2JyvTaxbyMpuJSXjm9CqV68zAOOFSi2bRYVe4yhPc9Vs/alEp
-        ohxJQwmy3LIqPBPCYRN2KpdAMOzTRs5o4GfCs59VzdlMXUOeUhjuX58pB/0qnby1CyxlQ6
-        0n89EoRTsI9FhmxBByp8Z85JT+pu17A=
-Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com
- [209.85.167.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-576-04MknQoCPRumSljhCRv69A-1; Thu, 16 Mar 2023 18:22:38 -0400
-X-MC-Unique: 04MknQoCPRumSljhCRv69A-1
-Received: by mail-lf1-f69.google.com with SMTP id c22-20020a196556000000b004e95c80075aso1172766lfj.3
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 15:22:38 -0700 (PDT)
+        Thu, 16 Mar 2023 18:25:27 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 146D827496;
+        Thu, 16 Mar 2023 15:24:47 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id ek18so13494239edb.6;
+        Thu, 16 Mar 2023 15:24:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679005395;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AGSZyqKLu9g/b6ltq5HPmqtNV6Ck97PehH5tW5q6yKw=;
+        b=B0dxVLRnRXXZLCRxo8NJ6aibdCmCMWnolan9GswsTXDfMVrnVbHzijuwJA5Oi3tqIW
+         6nT/pGnodEEpPaISyehOV3sVMBLax489zKxPrI3dM6woBo1X+YdOH/PQQQvjDwK1qdG7
+         F52pX+eaq3Nhxs3nGoaNYF5ev9lf/ePdg+QqTY+6K4OKpCQt/72D0ARsRbGStDkTPRMU
+         pE0thi+jNmFnmqHi5VjTMyGywxWf/yIiPpJMevfY2U/RmAkNHkKe7UDU/pLdnaDUCtDY
+         9t38RGsLVvbDKoDB7Qdot+dSAVv0wQDHS1RWr64j0i3KPc4XVhN6nQ4Ag413WI1n+4Yu
+         BAOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679005357;
+        d=1e100.net; s=20210112; t=1679005395;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=FiNRrqqvSuubpSuuWdFDbGPDB+qkVipo+igQfKYRoHk=;
-        b=iSQjhIIi6hihqrLZklZaALp6d/2cT71VrOGq69L0iJYeoxBI7/AJQ67qGBjxwAvDpP
-         BFTZBvMg6mUAa51UQJy90qoLdoVMQTpWTJ8tSFdJwPGSQ9HMMYUPAmZY/AcB7UXYWvAF
-         K8BbY7hx1UGL4CfXWs4NOjtJf9xRFRmUpWYnhn49IUHeEhL1WgTAwmOoWT7Ew4UTshX2
-         2EmAKJPUw4GjDfoF9ES+HD94PnzFdD2hru9vDrSZV19uiaPdQR+6BeeemdS95VErxmPd
-         1156t7h7ls5MPj4ZUGsvzjsOTyf+VhA5kmJHJNO/0PTysUQsYUjq1OUs+ucnct8A7pV3
-         9Itg==
-X-Gm-Message-State: AO0yUKVSgIQsnf8UyfGHHHGQ69gcRWHtkVmUhgTvNrV0fNvQ4UbnsFM8
-        OfF124OEAV1NJH8VQ6wID29+LvQnTdKbkt4q/O5B2BaAAG8a0Z+Y/afLIqdqr6VffDjMpNrTrc8
-        rp1Tu4XUgy5NiEYNHc1r9wRf/PMflsP6z2nO+qRvn
-X-Received: by 2002:ac2:4857:0:b0:4e8:4117:67c8 with SMTP id 23-20020ac24857000000b004e8411767c8mr3732211lfy.7.1679005356714;
-        Thu, 16 Mar 2023 15:22:36 -0700 (PDT)
-X-Google-Smtp-Source: AK7set8G08laVUog1RwsYZrLKcASLbIgQyaWUhPxFNOKZSNNfixtvrswrY1dJy7CT6DWclONJBFpHH/j6fESF/DrUps=
-X-Received: by 2002:ac2:4857:0:b0:4e8:4117:67c8 with SMTP id
- 23-20020ac24857000000b004e8411767c8mr3732197lfy.7.1679005356306; Thu, 16 Mar
- 2023 15:22:36 -0700 (PDT)
+        bh=AGSZyqKLu9g/b6ltq5HPmqtNV6Ck97PehH5tW5q6yKw=;
+        b=G4Qqr+iJas9PbBlGkF1Q+IfU5cxxiwBb+FNuGrBHEgLbaDJeJt7/tWJLvjWnTMuld8
+         zs6ADYlBLCaL2BpwGKor1+ENB2Hx41ysyP2mbvVGXtnyWtjbN+oNcgBe76DTLEn5mRwP
+         XBh+JV6dIGFS7b5IwydxD8GviCIJd9P5MhwG7NEjkReDd02WKdJnYq/O85lJE1b5uMfL
+         7VN/uVCb4qlrQHoW4oFH6ncKNVLE6ruNwDB/uqg7Tf/h8D5XhGpzg8rP/s+PcbhpQ4Kr
+         AXbdFPiA2H9pOB+wBTIU1WuAevhc2BUWCrrdQW9+L64Q6xYJh7HNGcl16523fIKIXWJ3
+         vf7w==
+X-Gm-Message-State: AO0yUKWuOxFaUTq4Nrc4MKtOz7xsHLegDYMnBaYUyGGW2C++4xYFx5/G
+        6YqO0+2BtECxz2yBfm1LyN0ONZw5whitdAL9J18=
+X-Google-Smtp-Source: AK7set9fHlBx26S7LOhx6lweHap9xCD5lSyQMnsugPB/PzOCM0OOWwhWygZ6QWBEabhw6FIPFUESOayFrEwergf47Io=
+X-Received: by 2002:a17:906:2b09:b0:931:ce20:db96 with SMTP id
+ a9-20020a1709062b0900b00931ce20db96mr35719ejg.5.1679005394787; Thu, 16 Mar
+ 2023 15:23:14 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230308155322.344664-1-robdclark@gmail.com> <20230308155322.344664-2-robdclark@gmail.com>
- <ZAtQspuFjPtGy7ze@gmail.com> <CAF6AEGsGOr5+Q10wX=5ttrWCSUJfn7gzHW8QhxFC0GDLgagMHg@mail.gmail.com>
- <ZBHNvT3BLgS3qvV5@gmail.com> <CAF6AEGu1S2CXzRxV_c5tE_H+XUGiO=n0tXjLZ_u_tW-eMqMsQw@mail.gmail.com>
- <ZBLg0t0tTVvuPuiJ@gmail.com> <CAF6AEGvV5arZThTyju_=xFFDWRbMaexgO_kkdKZuK-zeCxrN7Q@mail.gmail.com>
-In-Reply-To: <CAF6AEGvV5arZThTyju_=xFFDWRbMaexgO_kkdKZuK-zeCxrN7Q@mail.gmail.com>
-From:   Sebastian Wick <sebastian.wick@redhat.com>
-Date:   Thu, 16 Mar 2023 23:22:24 +0100
-Message-ID: <CA+hFU4xbssR+=Sf4ia5kPdsSb4y9SQUd4nx_2p1Szcbtna28CA@mail.gmail.com>
-Subject: Re: [PATCH v10 01/15] dma-buf/dma-fence: Add deadline awareness
-To:     Rob Clark <robdclark@gmail.com>
-Cc:     =?UTF-8?B?Sm9uYXMgw4VkYWhs?= <jadahl@gmail.com>,
-        Rob Clark <robdclark@chromium.org>,
-        Pekka Paalanen <pekka.paalanen@collabora.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <ckoenig.leichtzumerken@gmail.com>,
-        intel-gfx@lists.freedesktop.org,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        dri-devel@lists.freedesktop.org,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
-        <linaro-mm-sig@lists.linaro.org>,
-        Luben Tuikov <luben.tuikov@amd.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Gustavo Padovan <gustavo@padovan.org>,
-        Matt Turner <mattst88@gmail.com>,
-        freedreno@lists.freedesktop.org,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        "open list:DMA BUFFER SHARING FRAMEWORK" 
-        <linux-media@vger.kernel.org>
+References: <20230316170149.4106586-1-jolsa@kernel.org> <20230316170149.4106586-6-jolsa@kernel.org>
+In-Reply-To: <20230316170149.4106586-6-jolsa@kernel.org>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Thu, 16 Mar 2023 15:23:03 -0700
+Message-ID: <CAEf4BzZpXK0_k0Z8BmAB1-Edpc_BZYsu5wt9XVEJ4ryAxDYewA@mail.gmail.com>
+Subject: Re: [PATCHv3 bpf-next 5/9] selftests/bpf: Add read_buildid function
+To:     Jiri Olsa <jolsa@kernel.org>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Hao Luo <haoluo@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>, bpf@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Namhyung Kim <namhyung@gmail.com>,
+        Dave Chinner <david@fromorbit.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -97,337 +86,188 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 16, 2023 at 5:29=E2=80=AFPM Rob Clark <robdclark@gmail.com> wro=
-te:
+On Thu, Mar 16, 2023 at 10:03=E2=80=AFAM Jiri Olsa <jolsa@kernel.org> wrote=
+:
 >
-> On Thu, Mar 16, 2023 at 2:26=E2=80=AFAM Jonas =C3=85dahl <jadahl@gmail.co=
-m> wrote:
-> >
-> > On Wed, Mar 15, 2023 at 09:19:49AM -0700, Rob Clark wrote:
-> > > On Wed, Mar 15, 2023 at 6:53=E2=80=AFAM Jonas =C3=85dahl <jadahl@gmai=
-l.com> wrote:
-> > > >
-> > > > On Fri, Mar 10, 2023 at 09:38:18AM -0800, Rob Clark wrote:
-> > > > > On Fri, Mar 10, 2023 at 7:45=E2=80=AFAM Jonas =C3=85dahl <jadahl@=
-gmail.com> wrote:
-> > > > > >
-> > > > > > On Wed, Mar 08, 2023 at 07:52:52AM -0800, Rob Clark wrote:
-> > > > > > > From: Rob Clark <robdclark@chromium.org>
-> > > > > > >
-> > > > > > > Add a way to hint to the fence signaler of an upcoming deadli=
-ne, such as
-> > > > > > > vblank, which the fence waiter would prefer not to miss.  Thi=
-s is to aid
-> > > > > > > the fence signaler in making power management decisions, like=
- boosting
-> > > > > > > frequency as the deadline approaches and awareness of missing=
- deadlines
-> > > > > > > so that can be factored in to the frequency scaling.
-> > > > > > >
-> > > > > > > v2: Drop dma_fence::deadline and related logic to filter dupl=
-icate
-> > > > > > >     deadlines, to avoid increasing dma_fence size.  The fence=
--context
-> > > > > > >     implementation will need similar logic to track deadlines=
- of all
-> > > > > > >     the fences on the same timeline.  [ckoenig]
-> > > > > > > v3: Clarify locking wrt. set_deadline callback
-> > > > > > > v4: Clarify in docs comment that this is a hint
-> > > > > > > v5: Drop DMA_FENCE_FLAG_HAS_DEADLINE_BIT.
-> > > > > > > v6: More docs
-> > > > > > > v7: Fix typo, clarify past deadlines
-> > > > > > >
-> > > > > > > Signed-off-by: Rob Clark <robdclark@chromium.org>
-> > > > > > > Reviewed-by: Christian K=C3=B6nig <christian.koenig@amd.com>
-> > > > > > > Acked-by: Pekka Paalanen <pekka.paalanen@collabora.com>
-> > > > > > > Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
-> > > > > > > ---
-> > > > > >
-> > > > > > Hi Rob!
-> > > > > >
-> > > > > > >  Documentation/driver-api/dma-buf.rst |  6 +++
-> > > > > > >  drivers/dma-buf/dma-fence.c          | 59 ++++++++++++++++++=
-++++++++++
-> > > > > > >  include/linux/dma-fence.h            | 22 +++++++++++
-> > > > > > >  3 files changed, 87 insertions(+)
-> > > > > > >
-> > > > > > > diff --git a/Documentation/driver-api/dma-buf.rst b/Documenta=
-tion/driver-api/dma-buf.rst
-> > > > > > > index 622b8156d212..183e480d8cea 100644
-> > > > > > > --- a/Documentation/driver-api/dma-buf.rst
-> > > > > > > +++ b/Documentation/driver-api/dma-buf.rst
-> > > > > > > @@ -164,6 +164,12 @@ DMA Fence Signalling Annotations
-> > > > > > >  .. kernel-doc:: drivers/dma-buf/dma-fence.c
-> > > > > > >     :doc: fence signalling annotation
-> > > > > > >
-> > > > > > > +DMA Fence Deadline Hints
-> > > > > > > +~~~~~~~~~~~~~~~~~~~~~~~~
-> > > > > > > +
-> > > > > > > +.. kernel-doc:: drivers/dma-buf/dma-fence.c
-> > > > > > > +   :doc: deadline hints
-> > > > > > > +
-> > > > > > >  DMA Fences Functions Reference
-> > > > > > >  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > > > > > >
-> > > > > > > diff --git a/drivers/dma-buf/dma-fence.c b/drivers/dma-buf/dm=
-a-fence.c
-> > > > > > > index 0de0482cd36e..f177c56269bb 100644
-> > > > > > > --- a/drivers/dma-buf/dma-fence.c
-> > > > > > > +++ b/drivers/dma-buf/dma-fence.c
-> > > > > > > @@ -912,6 +912,65 @@ dma_fence_wait_any_timeout(struct dma_fe=
-nce **fences, uint32_t count,
-> > > > > > >  }
-> > > > > > >  EXPORT_SYMBOL(dma_fence_wait_any_timeout);
-> > > > > > >
-> > > > > > > +/**
-> > > > > > > + * DOC: deadline hints
-> > > > > > > + *
-> > > > > > > + * In an ideal world, it would be possible to pipeline a wor=
-kload sufficiently
-> > > > > > > + * that a utilization based device frequency governor could =
-arrive at a minimum
-> > > > > > > + * frequency that meets the requirements of the use-case, in=
- order to minimize
-> > > > > > > + * power consumption.  But in the real world there are many =
-workloads which
-> > > > > > > + * defy this ideal.  For example, but not limited to:
-> > > > > > > + *
-> > > > > > > + * * Workloads that ping-pong between device and CPU, with a=
-lternating periods
-> > > > > > > + *   of CPU waiting for device, and device waiting on CPU.  =
-This can result in
-> > > > > > > + *   devfreq and cpufreq seeing idle time in their respectiv=
-e domains and in
-> > > > > > > + *   result reduce frequency.
-> > > > > > > + *
-> > > > > > > + * * Workloads that interact with a periodic time based dead=
-line, such as double
-> > > > > > > + *   buffered GPU rendering vs vblank sync'd page flipping. =
- In this scenario,
-> > > > > > > + *   missing a vblank deadline results in an *increase* in i=
-dle time on the GPU
-> > > > > > > + *   (since it has to wait an additional vblank period), sen=
-ding a signal to
-> > > > > > > + *   the GPU's devfreq to reduce frequency, when in fact the=
- opposite is what is
-> > > > > > > + *   needed.
-> > > > > >
-> > > > > > This is the use case I'd like to get some better understanding =
-about how
-> > > > > > this series intends to work, as the problematic scheduling beha=
-vior
-> > > > > > triggered by missed deadlines has plagued compositing display s=
-ervers
-> > > > > > for a long time.
-> > > > > >
-> > > > > > I apologize, I'm not a GPU driver developer, nor an OpenGL driv=
-er
-> > > > > > developer, so I will need some hand holding when it comes to
-> > > > > > understanding exactly what piece of software is responsible for
-> > > > > > communicating what piece of information.
-> > > > > >
-> > > > > > > + *
-> > > > > > > + * To this end, deadline hint(s) can be set on a &dma_fence =
-via &dma_fence_set_deadline.
-> > > > > > > + * The deadline hint provides a way for the waiting driver, =
-or userspace, to
-> > > > > > > + * convey an appropriate sense of urgency to the signaling d=
-river.
-> > > > > > > + *
-> > > > > > > + * A deadline hint is given in absolute ktime (CLOCK_MONOTON=
-IC for userspace
-> > > > > > > + * facing APIs).  The time could either be some point in the=
- future (such as
-> > > > > > > + * the vblank based deadline for page-flipping, or the start=
- of a compositor's
-> > > > > > > + * composition cycle), or the current time to indicate an im=
-mediate deadline
-> > > > > > > + * hint (Ie. forward progress cannot be made until this fenc=
-e is signaled).
-> > > > > >
-> > > > > > Is it guaranteed that a GPU driver will use the actual start of=
- the
-> > > > > > vblank as the effective deadline? I have some memories of seing
-> > > > > > something about vblank evasion browsing driver code, which I mi=
-ght have
-> > > > > > misunderstood, but I have yet to find whether this is something
-> > > > > > userspace can actually expect to be something it can rely on.
-> > > > >
-> > > > > I guess you mean s/GPU driver/display driver/ ?  It makes things =
-more
-> > > > > clear if we talk about them separately even if they happen to be =
-the
-> > > > > same device.
-> > > >
-> > > > Sure, sorry about being unclear about that.
-> > > >
-> > > > >
-> > > > > Assuming that is what you mean, nothing strongly defines what the
-> > > > > deadline is.  In practice there is probably some buffering in the
-> > > > > display controller.  For ex, block based (including bandwidth
-> > > > > compressed) formats, you need to buffer up a row of blocks to
-> > > > > efficiently linearize for scanout.  So you probably need to latch=
- some
-> > > > > time before you start sending pixel data to the display.  But det=
-ails
-> > > > > like this are heavily implementation dependent.  I think the most
-> > > > > reasonable thing to target is start of vblank.
-> > > >
-> > > > The driver exposing those details would be quite useful for userspa=
-ce
-> > > > though, so that it can delay committing updates to late, but not to=
-o
-> > > > late. Setting a deadline to be the vblank seems easy enough, but it
-> > > > isn't enough for scheduling the actual commit.
-> > >
-> > > I'm not entirely sure how that would even work.. but OTOH I think you
-> > > are talking about something on the order of 100us?  But that is a bit
-> > > of another topic.
-> >
-> > Yes, something like that. But yea, it's not really related. Scheduling
-> > commits closer to the deadline has more complex behavior than that too,
-> > e.g. the need for real time scheduling, and knowing how long it usually
-> > takes to create and commit and for the kernel to process.
+> Adding read_build_id function that parses out build id from
+> specified binary.
+>
+> It will replace extract_build_id and also be used in following
+> changes.
+>
+> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> ---
+>  tools/testing/selftests/bpf/trace_helpers.c | 86 +++++++++++++++++++++
+>  tools/testing/selftests/bpf/trace_helpers.h |  5 ++
+>  2 files changed, 91 insertions(+)
+>
+> diff --git a/tools/testing/selftests/bpf/trace_helpers.c b/tools/testing/=
+selftests/bpf/trace_helpers.c
+> index 934bf28fc888..72b38a41f574 100644
+> --- a/tools/testing/selftests/bpf/trace_helpers.c
+> +++ b/tools/testing/selftests/bpf/trace_helpers.c
+> @@ -11,6 +11,9 @@
+>  #include <linux/perf_event.h>
+>  #include <sys/mman.h>
+>  #include "trace_helpers.h"
+> +#include <linux/limits.h>
+> +#include <libelf.h>
+> +#include <gelf.h>
+>
+>  #define TRACEFS_PIPE   "/sys/kernel/tracing/trace_pipe"
+>  #define DEBUGFS_PIPE   "/sys/kernel/debug/tracing/trace_pipe"
+> @@ -234,3 +237,86 @@ ssize_t get_rel_offset(uintptr_t addr)
+>         fclose(f);
+>         return -EINVAL;
+>  }
+> +
+> +static int
+> +parse_build_id_buf(const void *note_start, Elf32_Word note_size,
+> +                  char *build_id)
 
-Vblank can be really long, especially with VRR where the additional
-time you get to finish the frame comes from making vblank longer.
-Using the start of vblank as a deadline makes VRR useless. It really
-would be nice to have some feedback about the actual deadline from the
-kernel, maybe in `struct drm_event_vblank`.
+nit: single line
 
-But yes, sorry, off topic...
+should we pass buffer size instead of assuming at least BPF_BUILD_ID_SIZE b=
+elow?
 
-> > >
-> >
-> > 8-< *snip* 8-<
-> >
-> > > > >
-> > > > > You need a fence to set the deadline, and for that work needs to =
-be
-> > > > > flushed.  But you can't associate a deadline with work that the k=
-ernel
-> > > > > is unaware of anyways.
-> > > >
-> > > > That makes sense, but it might also a bit inadequate to have it as =
-the
-> > > > only way to tell the kernel it should speed things up. Even with th=
-e
-> > > > trick i915 does, with GNOME Shell, we still end up with the feedbac=
-k
-> > > > loop this series aims to mitigate. Doing triple buffering, i.e. del=
-aying
-> > > > or dropping the first frame is so far the best work around that wor=
-ks,
-> > > > except doing other tricks that makes the kernel to ramp up its cloc=
-k.
-> > > > Having to rely on choosing between latency and frame drops should
-> > > > ideally not have to be made.
-> > >
-> > > Before you have a fence, the thing you want to be speeding up is the
-> > > CPU, not the GPU.  There are existing mechanisms for that.
-> >
-> > Is there no benefit to let the GPU know earlier that it should speed up=
-,
-> > so that when the job queue arrives, it's already up to speed?
->
-> Downstream we have input notifier that resumes the GPU so we can
-> pipeline the 1-2ms it takes to boot up the GPU with userspace.  But we
-> wait to boost freq until we have cmdstream to submit, since that
-> doesn't take as long.  What needs help initially after input is all
-> the stuff that happens on the CPU before the GPU can start to do
-> anything ;-)
->
-> Btw, I guess I haven't made this clear, dma-fence deadline is trying
-> to help the steady-state situation, rather than the input-latency
-> situation.  It might take a frame or two of missed deadlines for
-> gpufreq to arrive at a good steady-state freq.
+> +{
+> +       Elf32_Word note_offs =3D 0, new_offs;
+> +
+> +       while (note_offs + sizeof(Elf32_Nhdr) < note_size) {
+> +               Elf32_Nhdr *nhdr =3D (Elf32_Nhdr *)(note_start + note_off=
+s);
+> +
+> +               if (nhdr->n_type =3D=3D 3 && nhdr->n_namesz =3D=3D sizeof=
+("GNU") &&
+> +                   !strcmp((char *)(nhdr + 1), "GNU") && nhdr->n_descsz =
+> 0 &&
+> +                   nhdr->n_descsz <=3D BPF_BUILD_ID_SIZE) {
+> +                       memcpy(build_id, note_start + note_offs +
+> +                              ALIGN(sizeof("GNU"), 4) + sizeof(Elf32_Nhd=
+r), nhdr->n_descsz);
+> +                       memset(build_id + nhdr->n_descsz, 0, BPF_BUILD_ID=
+_SIZE - nhdr->n_descsz);
+> +                       return (int) nhdr->n_descsz;
+> +               }
+> +
+> +               new_offs =3D note_offs + sizeof(Elf32_Nhdr) +
+> +                          ALIGN(nhdr->n_namesz, 4) + ALIGN(nhdr->n_descs=
+z, 4);
+> +               if (new_offs >=3D note_size)
+> +                       break;
 
-The mutter issue also is about a suboptimal steady-state.
+while condition() above would handle this, so this check appears not necess=
+ary?
 
-Truth be told, I'm not sure if this fence deadline idea fixes the
-issue we're seeing or at least helps sometimes. It might, it might
-not. What annoys me is that the compositor *knows* before any work is
-submitted that some work will be submitted and when it has to finish.
-We could maximize the chances to get everything right but having to
-wait for a fence to materialize in the compositor to do anything about
-it is suboptimal.
+so just assign note_offs directly?
 
-> > >
-> > > TBF I'm of the belief that there is still a need for input based cpu
-> > > boost (and early wake-up trigger for GPU).. we have something like
-> > > this in CrOS kernel.  That is a bit of a different topic, but my poin=
-t
-> > > is that fence deadlines are just one of several things we need to
-> > > optimize power/perf and responsiveness, rather than the single thing
-> > > that solves every problem under the sun ;-)
-> >
-> > Perhaps; but I believe it's a bit of a back channel of intent; the piec=
-e
-> > of the puzzle that has the information to know whether there is need
-> > actually speed up is the compositor, not the kernel.
-> >
-> > For example, pressing 'p' while a terminal is focused does not need hig=
-h
-> > frequency clocks, it just needs the terminal emulator to draw a 'p' and
-> > the compositor to composite that update. Pressing <Super> may however
-> > trigger a non-trivial animation moving a lot of stuff around on screen,
-> > maybe triggering Wayland clients to draw and what not, and should most
-> > arguably have the ability to "warn" the kernel about the upcoming flood
-> > of work before it is already knocking on its door step.
->
-> The super key is problematic, but not for the reason you think.  It is
-> because it is a case where we should boost on key-up instead of
-> key-down.. and the second key-up event comes after the cpu-boost is
-> already in it's cool-down period.  But even if suboptimal in cases
-> like this, it is still useful for touch/stylus cases where the
-> slightest of lag is much more perceptible.
->
-> This is getting off topic but I kinda favor coming up with some sort
-> of static definition that userspace could give the kernel to let the
-> kernel know what input to boost on.  Or maybe something could be done
-> with BPF?
 
-Why? Do you think user space is so slow that it can't process the
-input events and then do a syscall? We need to have all input devices
-open anyway that can affect the system and know more about how they
-affect behavior than the kernel can ever know.
+> +               note_offs =3D new_offs;
+> +       }
+> +
+> +       return -EINVAL;
 
->
-> > >
-> >
-> > 8-< *snip* 8-<
-> >
-> > > >
-> > > > Is it expected that WSI's will set their own deadlines, or should t=
-hat
-> > > > be the job of the compositor? For example by using compositors usin=
-g
-> > > > DMA_BUF_IOCTL_EXPORT_SYNC_FILE that you mentioned, using it to set =
-a
-> > > > deadline matching the vsync it most ideally will be committed to?
-> > > >
-> > >
-> > > I'm kind of assuming compositors, but if the WSI somehow has more
-> > > information about ideal presentation time, then I suppose it could be
-> > > in the WSI?  I'll defer to folks who spend more time on WSI and
-> > > compositors to hash out the details ;-)
-> >
-> > With my compositor developer hat on, it might be best to let it be up t=
-o
-> > the compositor, it's the one that knows if a client's content will
-> > actually end up anywhere visible.
-> >
->
-> wfm
->
-> BR,
-> -R
->
-> >
-> > Jonas
-> >
-> > >
-> > > BR,
-> > > -R
->
+nit: -ENOENT or -ESRCH?
 
+> +}
+> +
+> +/* Reads binary from *path* file and returns it in the *build_id*
+> + * which is expected to be at least BPF_BUILD_ID_SIZE bytes.
+> + * Returns size of build id on success. On error the error value
+> + * is returned.
+> + */
+> +int read_build_id(const char *path, char *build_id)
+> +{
+> +       int fd, err =3D -EINVAL;
+> +       Elf *elf =3D NULL;
+> +       GElf_Ehdr ehdr;
+> +       size_t max, i;
+> +
+> +       fd =3D open(path, O_RDONLY | O_CLOEXEC);
+> +       if (fd < 0)
+> +               return -errno;
+> +
+> +       (void)elf_version(EV_CURRENT);
+> +
+> +       elf =3D elf_begin(fd, ELF_C_READ, NULL);
+
+ELF_C_READ_MMAP ?
+
+> +       if (!elf)
+> +               goto out;
+> +       if (elf_kind(elf) !=3D ELF_K_ELF)
+> +               goto out;
+> +       if (gelf_getehdr(elf, &ehdr) =3D=3D NULL)
+
+nit: !gelf_getehdr()
+
+> +               goto out;
+> +       if (ehdr.e_ident[EI_CLASS] !=3D ELFCLASS64)
+> +               goto out;
+
+does this have to be 64-bit specific?... you are using gelf stuff, you
+can be bitness-agnostic here
+
+> +
+> +       for (i =3D 0; i < ehdr.e_phnum; i++) {
+> +               GElf_Phdr mem, *phdr;
+> +               char *data;
+> +
+> +               phdr =3D gelf_getphdr(elf, i, &mem);
+> +               if (!phdr)
+> +                       goto out;
+> +               if (phdr->p_type !=3D PT_NOTE)
+> +                       continue;
+
+I don't know where ELF + build ID spec is (if at all), but it seems to
+always be in the ".note.gnu.build-id" section, so should we check the
+name here?
+
+
+> +               data =3D elf_rawfile(elf, &max);
+> +               if (!data)
+> +                       goto out;
+> +               if (phdr->p_offset >=3D max || (phdr->p_offset + phdr->p_=
+memsz >=3D max))
+
+`phdr->p_offset + phdr->p_memsz =3D=3D max` would be fine, no?
+
+> +                       goto out;
+> +               err =3D parse_build_id_buf(data + phdr->p_offset, phdr->p=
+_memsz, build_id);
+> +               if (err > 0)
+> +                       goto out;
+> +               err =3D -EINVAL;
+> +       }
+> +
+> +out:
+> +       if (elf)
+> +               elf_end(elf);
+> +       close(fd);
+> +       return err;
+> +}
+> diff --git a/tools/testing/selftests/bpf/trace_helpers.h b/tools/testing/=
+selftests/bpf/trace_helpers.h
+> index 53efde0e2998..bc3b92057033 100644
+> --- a/tools/testing/selftests/bpf/trace_helpers.h
+> +++ b/tools/testing/selftests/bpf/trace_helpers.h
+> @@ -4,6 +4,9 @@
+>
+>  #include <bpf/libbpf.h>
+>
+> +#define __ALIGN_MASK(x, mask)  (((x)+(mask))&~(mask))
+> +#define ALIGN(x, a)            __ALIGN_MASK(x, (typeof(x))(a)-1)
+> +
+>  struct ksym {
+>         long addr;
+>         char *name;
+> @@ -23,4 +26,6 @@ void read_trace_pipe(void);
+>  ssize_t get_uprobe_offset(const void *addr);
+>  ssize_t get_rel_offset(uintptr_t addr);
+>
+> +int read_build_id(const char *path, char *build_id);
+> +
+>  #endif
+> --
+> 2.39.2
+>
