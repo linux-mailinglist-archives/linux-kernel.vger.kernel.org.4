@@ -2,129 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 898496BD813
+	by mail.lfdr.de (Postfix) with ESMTP id E060D6BD814
 	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 19:20:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230234AbjCPSUN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 14:20:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47966 "EHLO
+        id S229938AbjCPSUQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 14:20:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231134AbjCPSTy (ORCPT
+        with ESMTP id S230133AbjCPSUM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 14:19:54 -0400
-Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7BF8E20EF
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 11:19:23 -0700 (PDT)
-Received: by mail-il1-x136.google.com with SMTP id s7so1467296ilv.12
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 11:19:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1678990759; x=1681582759;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=WbL1jXcAAzjaooJaT7ULn7Y2lyg1tFqQl4SmSGqfzD0=;
-        b=hRLNEClznBSDehOZH75x/kVOAqJbqIuB2OlBoEloOOCkj9/RKVDtYkOH+enCgy40lL
-         +X307Fyyy9S9fRt02mZ0ZBSd09VxUICFtV/kXiU9jl67FNRtC+Ox0Xr8MAhy6KDX87u6
-         OI9sndoXLbRbaRASVVoWJRtH8+N+4HTKh8c5w=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678990759; x=1681582759;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WbL1jXcAAzjaooJaT7ULn7Y2lyg1tFqQl4SmSGqfzD0=;
-        b=fs0UABMOW1RZr7vaJ0oR/M9v1OMBG/aEBCV0hUYsJZk+o+lCJv4323Oaz2V9OsH2Ug
-         rRJNa/mHIR7n//w36plrvdYyHE8cCO0OJNfm1fKbuuY+AX5a516FZqerkvuNh01yh7Jf
-         Cp/Asy9BpWQht8W7P5f05J+6DHcN0bsSU74qf3cVt/EQ7q53BZjplFbKsgNpMnh/6SJI
-         I9HGRZHDRRyRr4+linVq+U7CgQOI66UzHgpZ/nzcrd0pO4fj9fzgPwWkUReeU+QU9Xl2
-         89+6aSbb8ZMZ2FmGRMzflEa9PoLAoUMdPQDZ7DOayl4+tNE0jb5sEA/ClER5I7LK+M9R
-         QXEA==
-X-Gm-Message-State: AO0yUKVVE+93HyIbxa5apbe1BMtEWL8OKS9hNOTarmqYP4R6dFheOzyC
-        2SVE903yo7WfaPnOU7EZsaRukw==
-X-Google-Smtp-Source: AK7set8nXB0G5d00N+QxR3UMxgSIuG9FPDgpWgQFF0bSsczlgwroMRvOo/iSlzh3KT1V37QPyrPqWw==
-X-Received: by 2002:a92:d64f:0:b0:323:10c5:899e with SMTP id x15-20020a92d64f000000b0032310c5899emr4508137ilp.1.1678990759303;
-        Thu, 16 Mar 2023 11:19:19 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id v5-20020a056e020f8500b00317b8e2c2b4sm15128ilo.39.2023.03.16.11.18.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Mar 2023 11:18:52 -0700 (PDT)
-Message-ID: <a83b2f5f-732c-6d71-3e0c-1dce76076817@linuxfoundation.org>
-Date:   Thu, 16 Mar 2023 12:18:40 -0600
+        Thu, 16 Mar 2023 14:20:12 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D77D591FE
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 11:20:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678990800; x=1710526800;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=pAvg3SuZqEJ6Cl69ahM7MR7Th6gdWUEQc5iMKwqIrBY=;
+  b=cIZ2nRkIbEskEoPuFNTUHYDt/UG2HGZp3ImAWWK5MwoxsX8tJu37cI3g
+   AAgEJxlDLhNRPywf7a9wFKdC9TsU+gk/X28Wma04+9LgqpLChodEaapKl
+   Vxh4veIXDCr3O5+dDal2lVKtJUpEV+vmH+sO5GNqEv++fxH2tjU904TF9
+   BgVrK/W3sv3kzmgm4JAb9ia+zfi9yzcG3BlH29BIr+XMobw3nANJdOQL1
+   vFhQLQQL/OqvvqSOtV76pC9wRI1xSBmdYmgV7kpH/IQFPT9U3DilmCFOa
+   WX3W0M0LWRKv/ywpbSESBppWZ+hhzubE2ZguYqFkaTQRoHoPrRz7Htth1
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="326443552"
+X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
+   d="scan'208";a="326443552"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 11:18:56 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="1009343282"
+X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
+   d="scan'208";a="1009343282"
+Received: from ahajda-mobl.ger.corp.intel.com (HELO [10.213.22.209]) ([10.213.22.209])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 11:18:53 -0700
+Message-ID: <8a52b10f-0c6c-e776-df94-d5c85868f440@intel.com>
+Date:   Thu, 16 Mar 2023 19:18:51 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2] usbip: vudc: Fix use after free bug in vudc_remove due
- to race condition
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.9.0
+Subject: Re: [Intel-gfx] [PATCH v6 0/2] drm/i915: add guard page to
+ ggtt->error_capture
+To:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+Cc:     intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Chris Wilson <chris.p.wilson@linux.intel.com>,
+        Nirmoy Das <nirmoy.das@intel.com>
+References: <20230308-guard_error_capture-v6-0-1b5f31422563@intel.com>
 Content-Language: en-US
-To:     Zheng Wang <zyytlz.wz@163.com>, valentina.manea.m@gmail.com
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, hackerzheng666@gmail.com,
-        1395428693sheep@gmail.com, alex000young@gmail.com,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20230316180940.1601515-1-zyytlz.wz@163.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20230316180940.1601515-1-zyytlz.wz@163.com>
+From:   Andrzej Hajda <andrzej.hajda@intel.com>
+Organization: Intel Technology Poland sp. z o.o. - ul. Slowackiego 173, 80-298
+ Gdansk - KRS 101882 - NIP 957-07-52-316
+In-Reply-To: <20230308-guard_error_capture-v6-0-1b5f31422563@intel.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/16/23 12:09, Zheng Wang wrote:
-> In vudc_probe, it calls init_vudc_hw, which bound &udc->timer with v_timer.
+On 10.03.2023 10:23, Andrzej Hajda wrote:
+> This patch tries to diminish plague of DMAR read errors present
+> in CI for ADL*, RPL*, DG2 platforms, see for example [1] (grep DMAR).
+> CI is usually tolerant for these errors, so the scale of the problem
+> is not really visible.
+> To show it I have counted lines containing DMAR read errors in dmesgs
+> produced by CI for all three versions of the patch, but in contrast to v2
+> I have grepped only for lines containing "PTE Read access".
+> Below stats for kernel w/o patchset vs patched one.
+> v1: 210 vs 0
+> v2: 201 vs 0
+> v3: 214 vs 0
+> Apparently the patchset fixes all common PTE read errors.
 > 
-> When it calls usbip_sockfd_store, it will call v_start_timer to start the
-> timer work.
-> 
-> When we call vudc_remove to remove the driver, theremay be a sequence as
-> follows:
-> 
-> Fix it by shutdown the timer work before cleanup in vudc_remove.
-> 
-> Note that removing a driver is a root-only operation, and should never
-> happen.
-> 
-> CPU0                  CPU1
-> 
->                       |v_timer
-> vudc_remove          |
-> kfree(udc);          |
-> //free shost         |
->                       |udc->gadget
->                       |//use
-> 
-> This bug was found by static analysis.
-
-Tell me which static analysis tool did you use to find this and
-the output from the tool.
-
-> 
-> Fixes: b6a0ca111867 ("usbip: vudc: Add UDC specific ops")
-> Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
-> ---
+> Changelog:
 > v2:
-> - add more details about how the bug was found suggested by Shuah
-> ---
->   drivers/usb/usbip/vudc_dev.c | 1 +
->   1 file changed, 1 insertion(+)
+>      - modified commit message (I hope the diagnosis is correct),
+>      - added bug checks to ensure scratch is initialized on gen3 platforms.
+>        CI produces strange stacktrace for it suggesting scratch[0] is NULL,
+>        to be removed after resolving the issue with gen3 platforms.
+> v3:
+>      - removed bug checks, replaced with gen check.
+> v4:
+>      - change code for scratch page insertion to support all platforms,
+>      - add info in commit message there could be more similar issues
+> v5:
+>      - changed to patchset adding nop_clear_range related code,
+>      - re-insert scratch PTEs on resume
+> v6:
+>      - use scratch_range
 > 
-> diff --git a/drivers/usb/usbip/vudc_dev.c b/drivers/usb/usbip/vudc_dev.c
-> index 2bc428f2e261..33d0991755bb 100644
-> --- a/drivers/usb/usbip/vudc_dev.c
-> +++ b/drivers/usb/usbip/vudc_dev.c
-> @@ -633,6 +633,7 @@ int vudc_remove(struct platform_device *pdev)
->   {
->   	struct vudc *udc = platform_get_drvdata(pdev);
->   
-> +	timer_shutdown_sync(&udc->timer);
->   	usb_del_gadget_udc(&udc->gadget);
->   	cleanup_vudc_hw(udc);
->   	kfree(udc);
+> To: Jani Nikula <jani.nikula@linux.intel.com>
+> To: Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
+> To: Rodrigo Vivi <rodrigo.vivi@intel.com>
+> To: Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+> Cc: intel-gfx@lists.freedesktop.org
+> Cc: dri-devel@lists.freedesktop.org
+> Cc: linux-kernel@vger.kernel.org
+> Cc: Andi Shyti <andi.shyti@linux.intel.com>
+> Cc: Chris Wilson <chris.p.wilson@linux.intel.com>
+> Cc: Nirmoy Das <nirmoy.das@intel.com>
+> 
+> Signed-off-by: Andrzej Hajda <andrzej.hajda@intel.com>
+> 
 
-thanks,
--- Shuah
+Queued to drm-intel-gt-next
+
+Regards
+Andrzej
+
+> ---
+> - Link to v5: https://lore.kernel.org/r/20230308-guard_error_capture-v5-0-6d1410d13540@intel.com
+> 
+> ---
+> Andrzej Hajda (2):
+>        drm/i915/gt: introduce vm->scratch_range callback
+>        drm/i915: add guard page to ggtt->error_capture
+> 
+>   drivers/gpu/drm/i915/gt/intel_ggtt.c      | 43 ++++++++++++++++++++++++++++---
+>   drivers/gpu/drm/i915/gt/intel_ggtt_gmch.c |  1 +
+>   drivers/gpu/drm/i915/gt/intel_gtt.h       |  2 ++
+>   3 files changed, 42 insertions(+), 4 deletions(-)
+> ---
+> base-commit: 3cd6c251f39c14df9ab711e3eb56e703b359ff54
+> change-id: 20230308-guard_error_capture-f3f334eec85f
+> 
+> Best regards,
+
