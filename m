@@ -2,65 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2D4D6BC81D
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 09:02:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67B6E6BC81E
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 09:03:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229626AbjCPICy convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 16 Mar 2023 04:02:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39816 "EHLO
+        id S230358AbjCPIDA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 04:03:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230109AbjCPICq (ORCPT
+        with ESMTP id S229464AbjCPICt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 04:02:46 -0400
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CCFB559DA;
-        Thu, 16 Mar 2023 01:02:32 -0700 (PDT)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 960CA24E201;
-        Thu, 16 Mar 2023 16:02:30 +0800 (CST)
-Received: from EXMBX162.cuchost.com (172.16.6.72) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 16 Mar
- 2023 16:02:30 +0800
-Received: from [192.168.120.42] (171.223.208.138) by EXMBX162.cuchost.com
- (172.16.6.72) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 16 Mar
- 2023 16:02:29 +0800
-Message-ID: <93a3b4bb-35a4-da7c-6816-21225b42f79b@starfivetech.com>
-Date:   Thu, 16 Mar 2023 16:02:27 +0800
+        Thu, 16 Mar 2023 04:02:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2C0A509B6;
+        Thu, 16 Mar 2023 01:02:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 446116199C;
+        Thu, 16 Mar 2023 08:02:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AD2FC433D2;
+        Thu, 16 Mar 2023 08:02:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1678953752;
+        bh=sCg7LY++8tSg2hrlbPjQpl0Er0nwVxgieBMOEu+U/As=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=aLxmWmCa/LngmD3xlP3zeb0KUYTZ7rMzgDDADHHf1Q4JvNtgmI0sN/C4645s4xt7U
+         NFB1jLWtT56V6qRduvwM7zbi4EclGy8H5PAhKxavcQKY4kRNuqYSG2N1XBEd0Oey3k
+         h7hYu15oXiqIm3rIxNcpK9mGYXjZrAICNkJ6QcQU=
+Date:   Thu, 16 Mar 2023 09:02:30 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Daniel =?iso-8859-1?Q?D=EDaz?= <daniel.diaz@linaro.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 6.1 000/143] 6.1.20-rc1 review
+Message-ID: <ZBLNFrZmpOLvGJCb@kroah.com>
+References: <20230315115740.429574234@linuxfoundation.org>
+ <b97c4328-54fd-0461-5fa9-323a0d2ba1f4@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v7 4/6] dt-bindings: net: Add support StarFive dwmac
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <linux-riscv@lists.infradead.org>, <netdev@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Yanhong Wang <yanhong.wang@starfivetech.com>,
-        Tommaso Merciai <tomm.merciai@gmail.com>
-References: <20230316043714.24279-1-samin.guo@starfivetech.com>
- <20230316043714.24279-5-samin.guo@starfivetech.com>
- <cfeec762-de75-f90f-7ba1-6c0bd8b70dff@linaro.org>
-From:   Guo Samin <samin.guo@starfivetech.com>
-In-Reply-To: <cfeec762-de75-f90f-7ba1-6c0bd8b70dff@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Originating-IP: [171.223.208.138]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX162.cuchost.com
- (172.16.6.72)
-X-YovoleRuleAgent: yovoleflag
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <b97c4328-54fd-0461-5fa9-323a0d2ba1f4@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,158 +56,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
--------- 原始信息 --------
-主题: Re: [PATCH v7 4/6] dt-bindings: net: Add support StarFive dwmac
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-收件人: Samin Guo <samin.guo@starfivetech.com>, linux-riscv@lists.infradead.org, netdev@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-日期: 2023/3/16
-
-> On 16/03/2023 05:37, Samin Guo wrote:
->> From: Yanhong Wang <yanhong.wang@starfivetech.com>
->>
->> Add documentation to describe StarFive dwmac driver(GMAC).
->>
-> Thank you for your patch. There is something to discuss/improve.
+On Wed, Mar 15, 2023 at 09:21:53AM -0600, Daniel D�az wrote:
+> Hello!
 > 
->> Signed-off-by: Yanhong Wang <yanhong.wang@starfivetech.com>
->> Signed-off-by: Samin Guo <samin.guo@starfivetech.com>
->> Tested-by: Tommaso Merciai <tomm.merciai@gmail.com>
->> ---
->>  .../devicetree/bindings/net/snps,dwmac.yaml   |   1 +
->>  .../bindings/net/starfive,jh7110-dwmac.yaml   | 130 ++++++++++++++++++
->>  MAINTAINERS                                   |   6 +
->>  3 files changed, 137 insertions(+)
->>  create mode 100644 Documentation/devicetree/bindings/net/starfive,jh7110-dwmac.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/net/snps,dwmac.yaml b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
->> index e4519cf722ab..245f7d713261 100644
->> --- a/Documentation/devicetree/bindings/net/snps,dwmac.yaml
->> +++ b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
->> @@ -91,6 +91,7 @@ properties:
->>          - snps,dwmac-5.20
->>          - snps,dwxgmac
->>          - snps,dwxgmac-2.10
->> +        - starfive,jh7110-dwmac
->>  
->>    reg:
->>      minItems: 1
->> diff --git a/Documentation/devicetree/bindings/net/starfive,jh7110-dwmac.yaml b/Documentation/devicetree/bindings/net/starfive,jh7110-dwmac.yaml
->> new file mode 100644
->> index 000000000000..b59e6bd8201f
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/net/starfive,jh7110-dwmac.yaml
->> @@ -0,0 +1,130 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +# Copyright (C) 2022 StarFive Technology Co., Ltd.
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/net/starfive,jh7110-dwmac.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: StarFive JH7110 DWMAC glue layer
->> +
->> +maintainers:
->> +  - Emil Renner Berthing <kernel@esmil.dk>
->> +  - Samin Guo <samin.guo@starfivetech.com>
->> +
->> +select:
->> +  properties:
->> +    compatible:
->> +      contains:
->> +        enum:
->> +          - starfive,jh7110-dwmac
->> +  required:
->> +    - compatible
->> +
->> +properties:
->> +  compatible:
->> +    items:
->> +      - enum:
->> +          - starfive,jh7110-dwmac
->> +      - const: snps,dwmac-5.20
->> +
+> On 15/03/23 06:11, Greg Kroah-Hartman wrote:
+> > This is the start of the stable review cycle for the 6.1.20 release.
+> > There are 143 patches in this series, all will be posted as a response
+> > to this one.  If anyone has any issues with these being applied, please
+> > let me know.
+> > 
+> > Responses should be made by Fri, 17 Mar 2023 11:57:10 +0000.
+> > Anything received after that time might be too late.
+> > 
+> > The whole patch series can be found in one patch at:
+> > 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.20-rc1.gz
+> > or in the git tree and branch at:
+> > 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
+> > and the diffstat can be found below.
+> > 
+> > thanks,
+> > 
+> > greg k-h
+> > 
+> > -------------
 > 
-> reg:
->   maxItems: 1
+> Build failures on PowerPC (GCC-8, GCC-12, Clang-16, Clang-nightly) on:
+> * cell_defconfig
+> * mpc83xx_defconfig
+> 
+> -----8<-----
+> In file included from /builds/linux/drivers/usb/host/ohci-hcd.c:1253:
+> /builds/linux/drivers/usb/host/ohci-ppc-of.c: In function 'ohci_hcd_ppc_of_probe':
+> /builds/linux/drivers/usb/host/ohci-ppc-of.c:123:13: error: 'NO_IRQ' undeclared (first use in this function); did you mean 'NR_IRQS'?
+>   if (irq == NO_IRQ) {
+>              ^~~~~~
+>              NR_IRQS
+> ----->8-----
+> 
+> 
+> PowerPC with GCC-8 and GCC-12, for ppc6xx_defconfig:
+> 
+> -----8<-----
+> /builds/linux/drivers/ata/pata_mpc52xx.c: In function 'mpc52xx_ata_probe':
+> /builds/linux/drivers/ata/pata_mpc52xx.c:734:17: error: 'NO_IRQ' undeclared (first use in this function); did you mean 'NR_IRQS'?
+>   if (ata_irq == NO_IRQ) {
+>                  ^~~~~~
+>                  NR_IRQS
+> /builds/linux/drivers/ata/pata_mpc52xx.c:734:17: note: each undeclared identifier is reported only once for each function it appears in
+> make[4]: *** [/builds/linux/scripts/Makefile.build:250: drivers/ata/pata_mpc52xx.o] Error 1
+> make[4]: Target 'drivers/ata/' not remade because of errors.
+> make[3]: *** [/builds/linux/scripts/Makefile.build:500: drivers/ata] Error 2
+> In file included from /builds/linux/drivers/usb/host/ehci-hcd.c:1321:
+> /builds/linux/drivers/usb/host/ehci-ppc-of.c: In function 'ehci_hcd_ppc_of_probe':
+> /builds/linux/drivers/usb/host/ehci-ppc-of.c:122:13: error: 'NO_IRQ' undeclared (first use in this function); did you mean 'NR_IRQS'?
+>   if (irq == NO_IRQ) {
+>              ^~~~~~
+>              NR_IRQS
+> /builds/linux/drivers/usb/host/ehci-ppc-of.c:122:13: note: each undeclared identifier is reported only once for each function it appears in
+> make[5]: *** [/builds/linux/scripts/Makefile.build:250: drivers/usb/host/ehci-hcd.o] Error 1
+> In file included from /builds/linux/drivers/usb/host/ohci-hcd.c:1253:
+> /builds/linux/drivers/usb/host/ohci-ppc-of.c: In function 'ohci_hcd_ppc_of_probe':
+> /builds/linux/drivers/usb/host/ohci-ppc-of.c:123:13: error: 'NO_IRQ' undeclared (first use in this function); did you mean 'NR_IRQS'?
+>   if (irq == NO_IRQ) {
+>              ^~~~~~
+>              NR_IRQS
+> /builds/linux/drivers/usb/host/ohci-ppc-of.c:123:13: note: each undeclared identifier is reported only once for each function it appears in
+> ----->8-----
+
+Those all should be fixed in -rc2.
 
 > 
->> +  clocks:
->> +    items:
->> +      - description: GMAC main clock
->> +      - description: GMAC AHB clock
->> +      - description: PTP clock
->> +      - description: TX clock
->> +      - description: GTX clock
->> +
->> +  clock-names:
->> +    items:
->> +      - const: stmmaceth
->> +      - const: pclk
->> +      - const: ptp_ref
->> +      - const: tx
->> +      - const: gtx
->> +
 > 
-> interrupts: ???
+> PowerPC with GCC-8 and GCC-12, for ppc64e_defconfig:
 > 
+> -----8<-----
+> powerpc64le-linux-gnu-gcc: error: missing argument to '-mcpu='
+> powerpc64le-linux-gnu-gcc: error: missing argument to '-mcpu='
+> make[2]: *** [/builds/linux/arch/powerpc/boot/Makefile:237: arch/powerpc/boot/crt0.o] Error 1
+> make[2]: *** [/builds/linux/arch/powerpc/boot/Makefile:237: arch/powerpc/boot/crtsavres.o] Error 1
+> powerpc64le-linux-gnu-gcc: error: missing argument to '-mcpu='
+> make[2]: *** [/builds/linux/arch/powerpc/boot/Makefile:235: arch/powerpc/boot/cuboot.o] Error 1
+> powerpc64le-linux-gnu-gcc: error: missing argument to '-mcpu='
+> powerpc64le-linux-gnu-gcc: error: missing argument to '-mcpu='
+> make[2]: *** [/builds/linux/arch/powerpc/boot/Makefile:238: arch/powerpc/boot/div64.o] Error 1
+> make[2]: *** [/builds/linux/arch/powerpc/boot/Makefile:234: arch/powerpc/boot/devtree.o] Error 1
+> [...]
+> make[2]: *** [/builds/linux/arch/powerpc/boot/Makefile:235: arch/powerpc/boot/fdt_sw.o] Error 1
+> powerpc64le-linux-gnu-gcc: error: missing argument to '-mcpu='
+> make[2]: *** [/builds/linux/arch/powerpc/boot/Makefile:235: arch/powerpc/boot/fdt_wip.o] Error 1
+> make[2]: Target 'arch/powerpc/boot/zImage' not remade because of errors.
+> make[1]: *** [/builds/linux/arch/powerpc/Makefile:247: zImage] Error 2
+> make[1]: Target '__all' not remade because of errors.
+> make: *** [Makefile:238: __sub-make] Error 2
+> make: Target '__all' not remade because of errors.
+> ----->8-----
 
-Hi Krzysztof, 
+Odd, ok, I think I've fixed this one up as well now.
 
-snps,dwmac.yaml has defined the reg/interrupt/interrupt-names nodes,
-and the JH7110 SoC is also applicable.
-Maybe just add reg/interrupt/interrupt-names to the required ?
+thanks
 
-
-  required:
-    - compatible
-+   - reg
-    - clocks
-    - clock-names
-+   - interrupts
-+   - interrupt-names
-    - resets
-    - reset-names
-
-Best regards,
-Samin
-
->> +  resets:
->> +    items:
->> +      - description: MAC Reset signal.
->> +      - description: AHB Reset signal.
->> +
->> +  reset-names:
->> +    items:
->> +      - const: stmmaceth
->> +      - const: ahb
->> +
->> +  starfive,tx-use-rgmii-clk:
->> +    description:
->> +      Tx clock is provided by external rgmii clock.
->> +    type: boolean
->> +
->> +  starfive,syscon:
->> +    $ref: /schemas/types.yaml#/definitions/phandle-array
->> +    items:
->> +      - items:
->> +          - description: phandle to syscon that configures phy mode
->> +          - description: Offset of phy mode selection
->> +          - description: Shift of phy mode selection
->> +    description:
->> +      A phandle to syscon with two arguments that configure phy mode.
->> +      The argument one is the offset of phy mode selection, the
->> +      argument two is the shift of phy mode selection.
->> +
->> +allOf:
->> +  - $ref: snps,dwmac.yaml#
->> +
->> +unevaluatedProperties: false
->> +
-> Best regards,
-> Krzysztof
-> 
-
-
-
+greg k-h
