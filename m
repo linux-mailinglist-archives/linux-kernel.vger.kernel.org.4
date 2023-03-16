@@ -2,123 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B08696BC739
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 08:32:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E76186BC73B
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 08:32:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230258AbjCPHcK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 03:32:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42176 "EHLO
+        id S230223AbjCPHcT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 03:32:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229634AbjCPHcC (ORCPT
+        with ESMTP id S229545AbjCPHcL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 03:32:02 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F3A7ACB97;
-        Thu, 16 Mar 2023 00:31:25 -0700 (PDT)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32G4foHG031285;
-        Thu, 16 Mar 2023 07:31:09 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=SKWLoh6QME64wtG6gGZX5ImVFsnVCjXt2ObaKeigQKI=;
- b=WGDv8NdEFAPXD9jBRurHCU4x5qlflR1/yrhg8sVWhtDlWbORG0vClEkZZWDJCbbEhczu
- H5r+YlsZCmS81/IOeVcdXZPV4B7zSuywO0hXNpfzz94ZhGDmw/p4Xg24/+SptNR2RD91
- 3DSo4Vh/RkV9gA+kXiIHuUnOAy4VN0imdKbOT+4l5mm0TPhe+dpTTg6Wlq3neJfR2Ah0
- P+wZG+CTIKjYVmymkpakCNNeC+qP40jv4Z6vFbyEiajA/TBccVk84Ra5tcoCAf/Lpiqt
- zVh6mDfrX2stxcipjZrcQagswfz00TILbUTTxPaHRsDvMkNZcKsRiOZBLNp2az2MK34+ LQ== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pbpy9h1f8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 16 Mar 2023 07:31:09 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32G7V4D1006338
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 16 Mar 2023 07:31:04 GMT
-Received: from devipriy-linux.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.41; Thu, 16 Mar 2023 00:30:56 -0700
-From:   Devi Priya <quic_devipriy@quicinc.com>
-To:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <linus.walleij@linaro.org>,
-        <catalin.marinas@arm.com>, <will@kernel.org>,
-        <p.zabel@pengutronix.de>, <shawnguo@kernel.org>, <arnd@arndb.de>,
-        <marcel.ziswiler@toradex.com>, <dmitry.baryshkov@linaro.org>,
-        <nfraprado@collabora.com>, <broonie@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <linux-gpio@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-CC:     <quic_srichara@quicinc.com>, <quic_gokulsri@quicinc.com>,
-        <quic_sjaganat@quicinc.com>, <quic_kathirav@quicinc.com>,
-        <quic_arajkuma@quicinc.com>, <quic_anusha@quicinc.com>,
-        <quic_poovendh@quicinc.com>
-Subject: [PATCH V9 6/6] arm64: defconfig: Enable IPQ9574 SoC base configs
-Date:   Thu, 16 Mar 2023 12:59:40 +0530
-Message-ID: <20230316072940.29137-7-quic_devipriy@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230316072940.29137-1-quic_devipriy@quicinc.com>
-References: <20230316072940.29137-1-quic_devipriy@quicinc.com>
+        Thu, 16 Mar 2023 03:32:11 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4955FACBAE;
+        Thu, 16 Mar 2023 00:31:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678951893; x=1710487893;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=bRuPOGfZnu4JByDAsSat1lIPi/d4YuYFnKKqk6RPkbs=;
+  b=Ui/p35oUu+km//R0LdE1K6YyvnNuQX+Z4MfWuYQEOsGyRgmXLiDrjEI7
+   UXyB63a02rjXfcqmpdwX7Vq+nylF96/DK5luaefXaao+qP6AZbugHDsae
+   KflEcbclu7ix14PcPhCi0kiJTl6rf1iogSp90U24qBrDDgK+tp8SxOzva
+   t300Xh3hsCsdHulFgpdPuilKIPg+ugjyPh1o+v4TP7TyQkUvi7ptjMFtt
+   HU+3kv0JNoVLFYEIOIopnLFadYkypqcMTBPodap5AOwCux/Wun7CQ5nZy
+   9fa5DqOSy1TN/C3b02BwDNmg7HXtDUQ/8g/7PBMJYE3Z6KWszYiIIUyHk
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="336606548"
+X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
+   d="scan'208";a="336606548"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 00:31:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="679794068"
+X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
+   d="scan'208";a="679794068"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 16 Mar 2023 00:31:25 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pci56-0008PO-2a;
+        Thu, 16 Mar 2023 07:31:24 +0000
+Date:   Thu, 16 Mar 2023 15:30:31 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Herve Codina via Alsa-devel <alsa-devel@alsa-project.org>,
+        Herve Codina <herve.codina@bootlin.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Derek Kiernan <derek.kiernan@xilinx.com>,
+        Dragan Cvetic <dragan.cvetic@xilinx.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, alsa-devel@alsa-project.org,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH 3/7] Documentation: sysfs: Document the Lantiq PEF2256
+ sysfs entry
+Message-ID: <202303161547.ZzSQWnIQ-lkp@intel.com>
+References: <167888779364.26.9200222608363841485@mailman-core.alsa-project.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: Cp0SXgJwyEToCX12iw8gXpiBmRiiinQR
-X-Proofpoint-GUID: Cp0SXgJwyEToCX12iw8gXpiBmRiiinQR
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-16_05,2023-03-15_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- clxscore=1015 mlxlogscore=801 suspectscore=0 spamscore=0 malwarescore=0
- mlxscore=0 priorityscore=1501 bulkscore=0 adultscore=0 phishscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303150002 definitions=main-2303160062
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <167888779364.26.9200222608363841485@mailman-core.alsa-project.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enables clk & pinctrl related configs for Qualcomm IPQ9574 SoC
+Hi Herve,
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
----
- Changes in V9:
-	- No change
+Thank you for the patch! Perhaps something to improve:
 
- arch/arm64/configs/defconfig | 2 ++
- 1 file changed, 2 insertions(+)
+[auto build test WARNING on broonie-sound/for-next]
+[also build test WARNING on robh/for-next char-misc/char-misc-testing char-misc/char-misc-next char-misc/char-misc-linus linus/master v6.3-rc2 next-20230316]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 3a6d995384d9..275e50ef9330 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -546,6 +546,7 @@ CONFIG_PINCTRL_IMX93=y
- CONFIG_PINCTRL_MSM=y
- CONFIG_PINCTRL_IPQ8074=y
- CONFIG_PINCTRL_IPQ6018=y
-+CONFIG_PINCTRL_IPQ9574=y
- CONFIG_PINCTRL_MSM8916=y
- CONFIG_PINCTRL_MSM8953=y
- CONFIG_PINCTRL_MSM8976=y
-@@ -1127,6 +1128,7 @@ CONFIG_QCOM_CLK_SMD_RPM=y
- CONFIG_QCOM_CLK_RPMH=y
- CONFIG_IPQ_GCC_6018=y
- CONFIG_IPQ_GCC_8074=y
-+CONFIG_IPQ_GCC_9574=y
- CONFIG_MSM_GCC_8916=y
- CONFIG_MSM_GCC_8994=y
- CONFIG_MSM_MMCC_8996=y
+url:    https://github.com/intel-lab-lkp/linux/commits/Herve-Codina-via-Alsa-devel/drivers-misc-Add-support-for-the-Lantiq-PEF2256-framer/20230315-214833
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+patch link:    https://lore.kernel.org/r/167888779364.26.9200222608363841485%40mailman-core.alsa-project.org
+patch subject: [PATCH 3/7] Documentation: sysfs: Document the Lantiq PEF2256 sysfs entry
+reproduce:
+        # https://github.com/intel-lab-lkp/linux/commit/0140596e508d18933cd319314838bc802214b345
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Herve-Codina-via-Alsa-devel/drivers-misc-Add-support-for-the-Lantiq-PEF2256-framer/20230315-214833
+        git checkout 0140596e508d18933cd319314838bc802214b345
+        make menuconfig
+        # enable CONFIG_COMPILE_TEST, CONFIG_WARN_MISSING_DOCUMENTS, CONFIG_WARN_ABI_ERRORS
+        make htmldocs
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303161547.ZzSQWnIQ-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> Documentation/ABI/testing/sysfs-bus-platform-devices-pef2256:2: WARNING: Unexpected indentation.
+>> Documentation/ABI/testing/sysfs-bus-platform-devices-pef2256:2: WARNING: Block quote ends without a blank line; unexpected unindent.
+
+vim +2 Documentation/ABI/testing/sysfs-bus-platform-devices-pef2256
+
+   > 2	KernelVersion:	6.4
+
 -- 
-2.17.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
