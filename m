@@ -2,68 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E54806BDC2B
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 23:59:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F7F86BDC34
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 23:59:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230148AbjCPW7X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 18:59:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38792 "EHLO
+        id S230266AbjCPW7u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 18:59:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229887AbjCPW7V (ORCPT
+        with ESMTP id S230106AbjCPW7s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 18:59:21 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCD1F1A496
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 15:59:18 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-5411f21f849so29691357b3.16
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 15:59:18 -0700 (PDT)
+        Thu, 16 Mar 2023 18:59:48 -0400
+Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D95E7AD00A;
+        Thu, 16 Mar 2023 15:59:38 -0700 (PDT)
+Received: by mail-oi1-x230.google.com with SMTP id bg11so2548076oib.5;
+        Thu, 16 Mar 2023 15:59:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679007558;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=qWalks976lIx9gM0rZXHprcJNgdQ23aAcuCS3sG+Yi4=;
-        b=tDU9PX7ro8icNVMA9iC29WCiEBLRgkY0S5CrNun6+PTEQjClU+V/wUZBzQmNmt9QGN
-         ZQ9+GGEvDNsPKndiypt2UPENk8mNhhdNmP2+9GEa0ZUW17xvaKykg31zO4XL4x1oaI0Q
-         ixPa21LWXdKiTjny36mrwUEooyVC4aHmFHcaf4x0NjEFWR9Dh0vmLebfU8TUvXqeoFro
-         eW/bznvVTNANsTwoFJGt48pZHVRk4wkC6kgvBIZFQv0qX98yqiSoyOxeQ5JgLJ6+NOAK
-         cSLNSeerYOozMDwjYy1GXPqPmXr7vqUcsveEynMzK6lpUDyAeBm6UkoIFzfeGkyGXJ++
-         hwSA==
+        d=gmail.com; s=20210112; t=1679007578;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=O+Q3zykGKWzwlxB7YogT8IrEAcZkZC2hIiwrlEj+NA8=;
+        b=FguCteUmTFci0RgETq6WkwmDHT8UYfvA28+2vHPtlqupZdkc63sRWlKt14cz/toDJC
+         9OrBL5OTqtPdvx0Yom1AZ/ZERRzGsnCoGQ12R9iA79BUgAIA9aCLusQ0BWeIZzhSTreW
+         W5sPl+vDj12dM8e0QYcxCCRA8JPwxf5xpUNmlTt2pbeDYB0/YVTtILynIMdsi30h+/EQ
+         L9NcPHzGJM+WJr8k0Uo7f7Pcq4dRc6nkqv6WNSFPP704XrlFMMSYb8FVYo/+lv4QygWb
+         3yhjJryoyOU7Qb/ZNjVoi3NlP5l5xd0J9PIohhAAkRBsXYVnCvYSDI+1oM2KkmuIxKG0
+         DMAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679007558;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=qWalks976lIx9gM0rZXHprcJNgdQ23aAcuCS3sG+Yi4=;
-        b=YY0wd3Lr1dhWkuzxupiEzKe8pjtIAUEvhaubXR+SvYdG46g1gw7tmnhmc4O3JeZ1py
-         dzypDCGjofU1MrSZGmw7f/LnS303d0jQSYUQtlMCQoRU3dDlW9Liku4eQIj01YKE76gp
-         ip82gZRDgPjclpoZkuxf3Tu/aTCgisYufkQ9lpHTvMLCOKNekTgsSAKRC7kBw9gnvuBS
-         jZFMdYd+iQ57m5QOALJ6YVSX4EfwlRZC7x9SlaLdf+GHOvW8+SU34MfWe675HilYz4qQ
-         Ho1/bmaBXR3XFucGOSOsXJOLf6EQDq/ecYiiRs3nboFI8Xp3VtYnZ+N547Qq/NgB6utT
-         lorg==
-X-Gm-Message-State: AO0yUKUFNK/FkhAhppdUspin7vQozaqcF8+sTTbLwpm+KVxhE1ZjkSPb
-        trr3szl1Hpbo/aSNb0sA6GxW0EV9/A==
-X-Google-Smtp-Source: AK7set+PsgVedABxdiCxAyh7j6bk5z0QFl1X1enf7V6rXMj1w7qnkz2nRGM1IaA5IByx14VygSQhFDWWGQ==
-X-Received: from rmoar-specialist.c.googlers.com ([fda3:e722:ac3:cc00:2b:7d90:c0a8:45d3])
- (user=rmoar job=sendgmr) by 2002:a81:b284:0:b0:533:99bb:c296 with SMTP id
- q126-20020a81b284000000b0053399bbc296mr3151151ywh.5.1679007558179; Thu, 16
- Mar 2023 15:59:18 -0700 (PDT)
-Date:   Thu, 16 Mar 2023 22:59:15 +0000
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
-Message-ID: <20230316225915.494688-1-rmoar@google.com>
-Subject: [KTAP V2 PATCH] ktap_v2: add recognized test name line
-From:   Rae Moar <rmoar@google.com>
-To:     frowand.list@gmail.com, davidgow@google.com,
-        skhan@linuxfoundation.org, keescook@chromium.org,
-        Tim.Bird@sony.com, brendanhiggins@google.com
-Cc:     corbet@lwn.net, guillaume.tucker@collabora.com,
-        dlatypov@google.com, kernelci@lists.linux.dev,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Rae Moar <rmoar@google.com>
+        d=1e100.net; s=20210112; t=1679007578;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=O+Q3zykGKWzwlxB7YogT8IrEAcZkZC2hIiwrlEj+NA8=;
+        b=Ji0/DLuDsnCFjcvU+yl3YREtFJ2hGhv4+90vVGANTCougrkc6+sqUlaApbpjt7zTPB
+         r7Gx4+sIaS1D+CBpHWqtnf2s3V/JbHCRWS3gqkoxc4z/VmobI75cPxj29SgUb1IFfL/V
+         xQaJl4gANpu4s2i+rFK3dUj0xvPPVFXZXlM/e7gBnBykSbvSlz+YNHLPqeDw2vKBic5z
+         PCnC/lUzTfa2bifb9ahnj1bAsH8k7bdgtGX39IS+J0KLjeXLSRgCPUPaGAVbJ5nUP5ke
+         YGaHJxd45Y5AzLao6Iky02zUBT13pJIWhBliSG3Jup2dIWMyweqPVM0yU2N/F5OFNrgs
+         aN8Q==
+X-Gm-Message-State: AO0yUKXrtrt+U0VS2M/jtKzXA2tZIgWqFkVljWujgzc/KitNBucTivtq
+        IQMC/iGPoxMJeqyCXjo/B6mOTECZ5SLTVWOyzFw=
+X-Google-Smtp-Source: AK7set8uDMT2O8oKnFiQPXA3/WP81jqHWAuiW4OEseQS11OgJqpHWpRBtD8xF3tvEjMqiVBjYC6q1TWBDyUQIMnPzCs=
+X-Received: by 2002:a05:6808:902:b0:378:30dc:ae5b with SMTP id
+ w2-20020a056808090200b0037830dcae5bmr2657557oih.5.1679007577776; Thu, 16 Mar
+ 2023 15:59:37 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230308155322.344664-1-robdclark@gmail.com> <20230308155322.344664-2-robdclark@gmail.com>
+ <ZAtQspuFjPtGy7ze@gmail.com> <CAF6AEGsGOr5+Q10wX=5ttrWCSUJfn7gzHW8QhxFC0GDLgagMHg@mail.gmail.com>
+ <ZBHNvT3BLgS3qvV5@gmail.com> <CAF6AEGu1S2CXzRxV_c5tE_H+XUGiO=n0tXjLZ_u_tW-eMqMsQw@mail.gmail.com>
+ <ZBLg0t0tTVvuPuiJ@gmail.com> <CAF6AEGvV5arZThTyju_=xFFDWRbMaexgO_kkdKZuK-zeCxrN7Q@mail.gmail.com>
+ <CA+hFU4xbssR+=Sf4ia5kPdsSb4y9SQUd4nx_2p1Szcbtna28CA@mail.gmail.com>
+In-Reply-To: <CA+hFU4xbssR+=Sf4ia5kPdsSb4y9SQUd4nx_2p1Szcbtna28CA@mail.gmail.com>
+From:   Rob Clark <robdclark@gmail.com>
+Date:   Thu, 16 Mar 2023 15:59:26 -0700
+Message-ID: <CAF6AEGuSaNAQUfbkJf2bt+VMTxYWTf0j0jiJOS6Q-6HfCLnw6Q@mail.gmail.com>
+Subject: Re: [PATCH v10 01/15] dma-buf/dma-fence: Add deadline awareness
+To:     Sebastian Wick <sebastian.wick@redhat.com>
+Cc:     =?UTF-8?B?Sm9uYXMgw4VkYWhs?= <jadahl@gmail.com>,
+        Rob Clark <robdclark@chromium.org>,
+        Pekka Paalanen <pekka.paalanen@collabora.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <ckoenig.leichtzumerken@gmail.com>,
+        intel-gfx@lists.freedesktop.org,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        dri-devel@lists.freedesktop.org,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
+        <linaro-mm-sig@lists.linaro.org>,
+        Luben Tuikov <luben.tuikov@amd.com>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Gustavo Padovan <gustavo@padovan.org>,
+        Matt Turner <mattst88@gmail.com>,
+        freedreno@lists.freedesktop.org,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        "open list:DMA BUFFER SHARING FRAMEWORK" 
+        <linux-media@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,136 +92,382 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add recognition of the test name line ("# Subtest: <name>") to the KTAP v2
-spec.
+On Thu, Mar 16, 2023 at 3:22=E2=80=AFPM Sebastian Wick
+<sebastian.wick@redhat.com> wrote:
+>
+> On Thu, Mar 16, 2023 at 5:29=E2=80=AFPM Rob Clark <robdclark@gmail.com> w=
+rote:
+> >
+> > On Thu, Mar 16, 2023 at 2:26=E2=80=AFAM Jonas =C3=85dahl <jadahl@gmail.=
+com> wrote:
+> > >
+> > > On Wed, Mar 15, 2023 at 09:19:49AM -0700, Rob Clark wrote:
+> > > > On Wed, Mar 15, 2023 at 6:53=E2=80=AFAM Jonas =C3=85dahl <jadahl@gm=
+ail.com> wrote:
+> > > > >
+> > > > > On Fri, Mar 10, 2023 at 09:38:18AM -0800, Rob Clark wrote:
+> > > > > > On Fri, Mar 10, 2023 at 7:45=E2=80=AFAM Jonas =C3=85dahl <jadah=
+l@gmail.com> wrote:
+> > > > > > >
+> > > > > > > On Wed, Mar 08, 2023 at 07:52:52AM -0800, Rob Clark wrote:
+> > > > > > > > From: Rob Clark <robdclark@chromium.org>
+> > > > > > > >
+> > > > > > > > Add a way to hint to the fence signaler of an upcoming dead=
+line, such as
+> > > > > > > > vblank, which the fence waiter would prefer not to miss.  T=
+his is to aid
+> > > > > > > > the fence signaler in making power management decisions, li=
+ke boosting
+> > > > > > > > frequency as the deadline approaches and awareness of missi=
+ng deadlines
+> > > > > > > > so that can be factored in to the frequency scaling.
+> > > > > > > >
+> > > > > > > > v2: Drop dma_fence::deadline and related logic to filter du=
+plicate
+> > > > > > > >     deadlines, to avoid increasing dma_fence size.  The fen=
+ce-context
+> > > > > > > >     implementation will need similar logic to track deadlin=
+es of all
+> > > > > > > >     the fences on the same timeline.  [ckoenig]
+> > > > > > > > v3: Clarify locking wrt. set_deadline callback
+> > > > > > > > v4: Clarify in docs comment that this is a hint
+> > > > > > > > v5: Drop DMA_FENCE_FLAG_HAS_DEADLINE_BIT.
+> > > > > > > > v6: More docs
+> > > > > > > > v7: Fix typo, clarify past deadlines
+> > > > > > > >
+> > > > > > > > Signed-off-by: Rob Clark <robdclark@chromium.org>
+> > > > > > > > Reviewed-by: Christian K=C3=B6nig <christian.koenig@amd.com=
+>
+> > > > > > > > Acked-by: Pekka Paalanen <pekka.paalanen@collabora.com>
+> > > > > > > > Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
+> > > > > > > > ---
+> > > > > > >
+> > > > > > > Hi Rob!
+> > > > > > >
+> > > > > > > >  Documentation/driver-api/dma-buf.rst |  6 +++
+> > > > > > > >  drivers/dma-buf/dma-fence.c          | 59 ++++++++++++++++=
+++++++++++++
+> > > > > > > >  include/linux/dma-fence.h            | 22 +++++++++++
+> > > > > > > >  3 files changed, 87 insertions(+)
+> > > > > > > >
+> > > > > > > > diff --git a/Documentation/driver-api/dma-buf.rst b/Documen=
+tation/driver-api/dma-buf.rst
+> > > > > > > > index 622b8156d212..183e480d8cea 100644
+> > > > > > > > --- a/Documentation/driver-api/dma-buf.rst
+> > > > > > > > +++ b/Documentation/driver-api/dma-buf.rst
+> > > > > > > > @@ -164,6 +164,12 @@ DMA Fence Signalling Annotations
+> > > > > > > >  .. kernel-doc:: drivers/dma-buf/dma-fence.c
+> > > > > > > >     :doc: fence signalling annotation
+> > > > > > > >
+> > > > > > > > +DMA Fence Deadline Hints
+> > > > > > > > +~~~~~~~~~~~~~~~~~~~~~~~~
+> > > > > > > > +
+> > > > > > > > +.. kernel-doc:: drivers/dma-buf/dma-fence.c
+> > > > > > > > +   :doc: deadline hints
+> > > > > > > > +
+> > > > > > > >  DMA Fences Functions Reference
+> > > > > > > >  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > > > > > > >
+> > > > > > > > diff --git a/drivers/dma-buf/dma-fence.c b/drivers/dma-buf/=
+dma-fence.c
+> > > > > > > > index 0de0482cd36e..f177c56269bb 100644
+> > > > > > > > --- a/drivers/dma-buf/dma-fence.c
+> > > > > > > > +++ b/drivers/dma-buf/dma-fence.c
+> > > > > > > > @@ -912,6 +912,65 @@ dma_fence_wait_any_timeout(struct dma_=
+fence **fences, uint32_t count,
+> > > > > > > >  }
+> > > > > > > >  EXPORT_SYMBOL(dma_fence_wait_any_timeout);
+> > > > > > > >
+> > > > > > > > +/**
+> > > > > > > > + * DOC: deadline hints
+> > > > > > > > + *
+> > > > > > > > + * In an ideal world, it would be possible to pipeline a w=
+orkload sufficiently
+> > > > > > > > + * that a utilization based device frequency governor coul=
+d arrive at a minimum
+> > > > > > > > + * frequency that meets the requirements of the use-case, =
+in order to minimize
+> > > > > > > > + * power consumption.  But in the real world there are man=
+y workloads which
+> > > > > > > > + * defy this ideal.  For example, but not limited to:
+> > > > > > > > + *
+> > > > > > > > + * * Workloads that ping-pong between device and CPU, with=
+ alternating periods
+> > > > > > > > + *   of CPU waiting for device, and device waiting on CPU.=
+  This can result in
+> > > > > > > > + *   devfreq and cpufreq seeing idle time in their respect=
+ive domains and in
+> > > > > > > > + *   result reduce frequency.
+> > > > > > > > + *
+> > > > > > > > + * * Workloads that interact with a periodic time based de=
+adline, such as double
+> > > > > > > > + *   buffered GPU rendering vs vblank sync'd page flipping=
+.  In this scenario,
+> > > > > > > > + *   missing a vblank deadline results in an *increase* in=
+ idle time on the GPU
+> > > > > > > > + *   (since it has to wait an additional vblank period), s=
+ending a signal to
+> > > > > > > > + *   the GPU's devfreq to reduce frequency, when in fact t=
+he opposite is what is
+> > > > > > > > + *   needed.
+> > > > > > >
+> > > > > > > This is the use case I'd like to get some better understandin=
+g about how
+> > > > > > > this series intends to work, as the problematic scheduling be=
+havior
+> > > > > > > triggered by missed deadlines has plagued compositing display=
+ servers
+> > > > > > > for a long time.
+> > > > > > >
+> > > > > > > I apologize, I'm not a GPU driver developer, nor an OpenGL dr=
+iver
+> > > > > > > developer, so I will need some hand holding when it comes to
+> > > > > > > understanding exactly what piece of software is responsible f=
+or
+> > > > > > > communicating what piece of information.
+> > > > > > >
+> > > > > > > > + *
+> > > > > > > > + * To this end, deadline hint(s) can be set on a &dma_fenc=
+e via &dma_fence_set_deadline.
+> > > > > > > > + * The deadline hint provides a way for the waiting driver=
+, or userspace, to
+> > > > > > > > + * convey an appropriate sense of urgency to the signaling=
+ driver.
+> > > > > > > > + *
+> > > > > > > > + * A deadline hint is given in absolute ktime (CLOCK_MONOT=
+ONIC for userspace
+> > > > > > > > + * facing APIs).  The time could either be some point in t=
+he future (such as
+> > > > > > > > + * the vblank based deadline for page-flipping, or the sta=
+rt of a compositor's
+> > > > > > > > + * composition cycle), or the current time to indicate an =
+immediate deadline
+> > > > > > > > + * hint (Ie. forward progress cannot be made until this fe=
+nce is signaled).
+> > > > > > >
+> > > > > > > Is it guaranteed that a GPU driver will use the actual start =
+of the
+> > > > > > > vblank as the effective deadline? I have some memories of sei=
+ng
+> > > > > > > something about vblank evasion browsing driver code, which I =
+might have
+> > > > > > > misunderstood, but I have yet to find whether this is somethi=
+ng
+> > > > > > > userspace can actually expect to be something it can rely on.
+> > > > > >
+> > > > > > I guess you mean s/GPU driver/display driver/ ?  It makes thing=
+s more
+> > > > > > clear if we talk about them separately even if they happen to b=
+e the
+> > > > > > same device.
+> > > > >
+> > > > > Sure, sorry about being unclear about that.
+> > > > >
+> > > > > >
+> > > > > > Assuming that is what you mean, nothing strongly defines what t=
+he
+> > > > > > deadline is.  In practice there is probably some buffering in t=
+he
+> > > > > > display controller.  For ex, block based (including bandwidth
+> > > > > > compressed) formats, you need to buffer up a row of blocks to
+> > > > > > efficiently linearize for scanout.  So you probably need to lat=
+ch some
+> > > > > > time before you start sending pixel data to the display.  But d=
+etails
+> > > > > > like this are heavily implementation dependent.  I think the mo=
+st
+> > > > > > reasonable thing to target is start of vblank.
+> > > > >
+> > > > > The driver exposing those details would be quite useful for users=
+pace
+> > > > > though, so that it can delay committing updates to late, but not =
+too
+> > > > > late. Setting a deadline to be the vblank seems easy enough, but =
+it
+> > > > > isn't enough for scheduling the actual commit.
+> > > >
+> > > > I'm not entirely sure how that would even work.. but OTOH I think y=
+ou
+> > > > are talking about something on the order of 100us?  But that is a b=
+it
+> > > > of another topic.
+> > >
+> > > Yes, something like that. But yea, it's not really related. Schedulin=
+g
+> > > commits closer to the deadline has more complex behavior than that to=
+o,
+> > > e.g. the need for real time scheduling, and knowing how long it usual=
+ly
+> > > takes to create and commit and for the kernel to process.
+>
+> Vblank can be really long, especially with VRR where the additional
+> time you get to finish the frame comes from making vblank longer.
+> Using the start of vblank as a deadline makes VRR useless. It really
+> would be nice to have some feedback about the actual deadline from the
+> kernel, maybe in `struct drm_event_vblank`.
 
-The purpose of this line is to declare the name of a test before its
-results. This functionality is especially useful when trying to parse test
-results incrementally and when interpretting results after a crash.
+note that here we are only talking about the difference between
+start/end of vblank and the deadline for the hw to latch a change for
+the next frame.  (Which I _expect_ generally amounts to however long
+it takes to slurp in a row of tiles)
 
-This line is already compliant with KTAP v1 as it is interpretted as a
-diagnostic line by parsers. Additionally, the line is currently used by
-KUnit tests and was derived from the TAP 14 spec:
-https://testanything.org/tap-version-14-specification.html.
+> But yes, sorry, off topic...
+>
+> > > >
+> > >
+> > > 8-< *snip* 8-<
+> > >
+> > > > > >
+> > > > > > You need a fence to set the deadline, and for that work needs t=
+o be
+> > > > > > flushed.  But you can't associate a deadline with work that the=
+ kernel
+> > > > > > is unaware of anyways.
+> > > > >
+> > > > > That makes sense, but it might also a bit inadequate to have it a=
+s the
+> > > > > only way to tell the kernel it should speed things up. Even with =
+the
+> > > > > trick i915 does, with GNOME Shell, we still end up with the feedb=
+ack
+> > > > > loop this series aims to mitigate. Doing triple buffering, i.e. d=
+elaying
+> > > > > or dropping the first frame is so far the best work around that w=
+orks,
+> > > > > except doing other tricks that makes the kernel to ramp up its cl=
+ock.
+> > > > > Having to rely on choosing between latency and frame drops should
+> > > > > ideally not have to be made.
+> > > >
+> > > > Before you have a fence, the thing you want to be speeding up is th=
+e
+> > > > CPU, not the GPU.  There are existing mechanisms for that.
+> > >
+> > > Is there no benefit to let the GPU know earlier that it should speed =
+up,
+> > > so that when the job queue arrives, it's already up to speed?
+> >
+> > Downstream we have input notifier that resumes the GPU so we can
+> > pipeline the 1-2ms it takes to boot up the GPU with userspace.  But we
+> > wait to boost freq until we have cmdstream to submit, since that
+> > doesn't take as long.  What needs help initially after input is all
+> > the stuff that happens on the CPU before the GPU can start to do
+> > anything ;-)
+> >
+> > Btw, I guess I haven't made this clear, dma-fence deadline is trying
+> > to help the steady-state situation, rather than the input-latency
+> > situation.  It might take a frame or two of missed deadlines for
+> > gpufreq to arrive at a good steady-state freq.
+>
+> The mutter issue also is about a suboptimal steady-state.
+>
+> Truth be told, I'm not sure if this fence deadline idea fixes the
+> issue we're seeing or at least helps sometimes. It might, it might
+> not. What annoys me is that the compositor *knows* before any work is
+> submitted that some work will be submitted and when it has to finish.
+> We could maximize the chances to get everything right but having to
+> wait for a fence to materialize in the compositor to do anything about
+> it is suboptimal.
 
-Recognition of this line would create an accepted way for different test
-frameworks to declare the name of a test before its results.
+Why would the app not immediately send the fence+buf to the compositor
+as soon as it is submitted to the kernel on client process side?
 
-The proposed location for this line is between the version line and the
-test plan line. This location ensures that the line would not be
-accidentally parsed as a subtest's diagnostic lines. Note this proposed
-location would be a slight differentiation from KTAP v1.
+At any rate, it really doesn't matter how early the kernel finds out
+about the deadline, since the point is to let the kernel driver know
+if it is missing the deadline so that it doesn't mis-interpret stall
+time waiting for the _next_ vblank after the one we wanted.
 
-Example of test name line:
+> > > >
+> > > > TBF I'm of the belief that there is still a need for input based cp=
+u
+> > > > boost (and early wake-up trigger for GPU).. we have something like
+> > > > this in CrOS kernel.  That is a bit of a different topic, but my po=
+int
+> > > > is that fence deadlines are just one of several things we need to
+> > > > optimize power/perf and responsiveness, rather than the single thin=
+g
+> > > > that solves every problem under the sun ;-)
+> > >
+> > > Perhaps; but I believe it's a bit of a back channel of intent; the pi=
+ece
+> > > of the puzzle that has the information to know whether there is need
+> > > actually speed up is the compositor, not the kernel.
+> > >
+> > > For example, pressing 'p' while a terminal is focused does not need h=
+igh
+> > > frequency clocks, it just needs the terminal emulator to draw a 'p' a=
+nd
+> > > the compositor to composite that update. Pressing <Super> may however
+> > > trigger a non-trivial animation moving a lot of stuff around on scree=
+n,
+> > > maybe triggering Wayland clients to draw and what not, and should mos=
+t
+> > > arguably have the ability to "warn" the kernel about the upcoming flo=
+od
+> > > of work before it is already knocking on its door step.
+> >
+> > The super key is problematic, but not for the reason you think.  It is
+> > because it is a case where we should boost on key-up instead of
+> > key-down.. and the second key-up event comes after the cpu-boost is
+> > already in it's cool-down period.  But even if suboptimal in cases
+> > like this, it is still useful for touch/stylus cases where the
+> > slightest of lag is much more perceptible.
+> >
+> > This is getting off topic but I kinda favor coming up with some sort
+> > of static definition that userspace could give the kernel to let the
+> > kernel know what input to boost on.  Or maybe something could be done
+> > with BPF?
+>
+> Why? Do you think user space is so slow that it can't process the
+> input events and then do a syscall? We need to have all input devices
+> open anyway that can affect the system and know more about how they
+> affect behavior than the kernel can ever know.
 
- KTAP version 2
- # Subtest: main_test
- 1..1
-   KTAP version 2
-   # Subtest: sub_test
-   1..2
-   ok 1 test_1
-   ok 2 test_2
- ok 1 sub_test
+Again this is getting off into a different topic.  But my gut feel is
+that the shorter the path to input cpu freq boost, the better.. since
+however many extra cycles you add, they will be cycles with cpu (and
+probably ddr) at lowest freq
 
-Here is a link to a version of the KUnit parser that is able to parse the
-test name line for KTAP version 2. Note this includes a test name line for
-the main level of KTAP.
+BR,
+-R
 
-Link: https://kunit-review.googlesource.com/c/linux/+/5709
-
-Signed-off-by: Rae Moar <rmoar@google.com>
----
-
-This is a RFC. I would like to know what people think and use this as a
-platform for discussion on KTAP v2.
-
-Note: this patch is based on Frank's ktap_spec_version_2 branch.
-
- Documentation/dev-tools/ktap.rst | 19 ++++++++++++++-----
- 1 file changed, 14 insertions(+), 5 deletions(-)
-
-diff --git a/Documentation/dev-tools/ktap.rst b/Documentation/dev-tools/ktap.rst
-index ff77f4aaa6ef..9c7ed66d9f77 100644
---- a/Documentation/dev-tools/ktap.rst
-+++ b/Documentation/dev-tools/ktap.rst
-@@ -28,8 +28,7 @@ KTAP output is built from four different types of lines:
- In general, valid KTAP output should also form valid TAP output, but some
- information, in particular nested test results, may be lost. Also note that
- there is a stagnant draft specification for TAP14, KTAP diverges from this in
--a couple of places (notably the "Subtest" header), which are described where
--relevant later in this document.
-+a couple of places, which are described where relevant later in this document.
- 
- Version lines
- -------------
-@@ -44,8 +43,8 @@ For example:
- - "TAP version 14"
- 
- Note that, in KTAP, subtests also begin with a version line, which denotes the
--start of the nested test results. This differs from TAP14, which uses a
--separate "Subtest" line.
-+start of the nested test results. This differs from TAP14, which uses only a
-+"Subtest" line.
- 
- While, going forward, "KTAP version 2" should be used by compliant tests, it
- is expected that most parsers and other tooling will accept the other versions
-@@ -166,6 +165,12 @@ even if they do not start with a "#": this is to capture any other useful
- kernel output which may help debug the test. It is nevertheless recommended
- that tests always prefix any diagnostic output they have with a "#" character.
- 
-+One recognized diagnostic line is the "# Subtest: <name>" line. This line
-+is used to declare the name of a test before subtest results are printed. This
-+is helpful for parsing and for providing context during crashes. As a rule,
-+this line is placed after the version line and before the plan line. Note
-+this line can be used for the main test, as well as subtests.
-+
- Unknown lines
- -------------
- 
-@@ -206,6 +211,7 @@ An example of a test with two nested subtests:
- 	KTAP version 2
- 	1..1
- 	  KTAP version 2
-+	  # Subtest: example
- 	  1..2
- 	  ok 1 test_1
- 	  not ok 2 test_2
-@@ -219,6 +225,7 @@ An example format with multiple levels of nested testing:
- 	KTAP version 2
- 	1..2
- 	  KTAP version 2
-+	  # Subtest: example_test_1
- 	  1..2
- 	    KTAP version 2
- 	    1..2
-@@ -245,7 +252,7 @@ allows an arbitrary number of tests to be nested     no         yes
- 
- The TAP14 specification does permit nested tests, but instead of using another
- nested version line, uses a line of the form
--"Subtest: <name>" where <name> is the name of the parent test.
-+"Subtest: <name>" where <name> is the name of the parent test as discussed above.
- 
- Example KTAP output
- --------------------
-@@ -254,6 +261,7 @@ Example KTAP output
- 	KTAP version 2
- 	1..1
- 	  KTAP version 2
-+	  # Subtest: main_test
- 	  1..3
- 	    KTAP version 2
- 	    1..1
-@@ -266,6 +274,7 @@ Example KTAP output
- 	    ok 2 test_2
- 	  ok 2 example_test_2
- 	    KTAP version 2
-+		# Subtest: example_test_3
- 	    1..3
- 	    ok 1 test_1
- 	    # test_2: FAIL
-
-base-commit: 906f02e42adfbd5ae70d328ee71656ecb602aaf5
--- 
-2.40.0.rc1.284.g88254d51c5-goog
-
+> >
+> > > >
+> > >
+> > > 8-< *snip* 8-<
+> > >
+> > > > >
+> > > > > Is it expected that WSI's will set their own deadlines, or should=
+ that
+> > > > > be the job of the compositor? For example by using compositors us=
+ing
+> > > > > DMA_BUF_IOCTL_EXPORT_SYNC_FILE that you mentioned, using it to se=
+t a
+> > > > > deadline matching the vsync it most ideally will be committed to?
+> > > > >
+> > > >
+> > > > I'm kind of assuming compositors, but if the WSI somehow has more
+> > > > information about ideal presentation time, then I suppose it could =
+be
+> > > > in the WSI?  I'll defer to folks who spend more time on WSI and
+> > > > compositors to hash out the details ;-)
+> > >
+> > > With my compositor developer hat on, it might be best to let it be up=
+ to
+> > > the compositor, it's the one that knows if a client's content will
+> > > actually end up anywhere visible.
+> > >
+> >
+> > wfm
+> >
+> > BR,
+> > -R
+> >
+> > >
+> > > Jonas
+> > >
+> > > >
+> > > > BR,
+> > > > -R
+> >
+>
