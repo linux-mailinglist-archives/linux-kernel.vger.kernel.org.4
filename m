@@ -2,122 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 383EB6BDBBF
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 23:35:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A59ED6BDBC2
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 23:35:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229760AbjCPWfO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 18:35:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57554 "EHLO
+        id S229842AbjCPWft (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 18:35:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229608AbjCPWfM (ORCPT
+        with ESMTP id S229608AbjCPWfr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 18:35:12 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3735020577
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 15:34:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679006061;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=cQjcHnFhhGHZA5Yk3fgjjkY+JL6ce3oLWezSsu1quCk=;
-        b=Yu+WT9/a91D6QMKiw7x4fK+sme7bPdu5cebtsPP4yDG60oPoTCkaoPRpRfAP6R+GIFB1DJ
-        MkO5mayEems8djg1zUgKAfoh6wVPgLNb7C1xljtCx+115I19ytBGDevnx/GXHAxVuAu1gd
-        R1TQuNAmp2tWSGeg0lOuUOBiKgdtCjk=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-609-wgb68QYQO9e9-J025Ud5hg-1; Thu, 16 Mar 2023 18:34:20 -0400
-X-MC-Unique: wgb68QYQO9e9-J025Ud5hg-1
-Received: by mail-wr1-f69.google.com with SMTP id p1-20020a5d6381000000b002cea6b2d5a9so517972wru.14
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 15:34:19 -0700 (PDT)
+        Thu, 16 Mar 2023 18:35:47 -0400
+Received: from mail-io1-f44.google.com (mail-io1-f44.google.com [209.85.166.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8329D58C10;
+        Thu, 16 Mar 2023 15:35:46 -0700 (PDT)
+Received: by mail-io1-f44.google.com with SMTP id o12so1503505iow.6;
+        Thu, 16 Mar 2023 15:35:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679006059;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cQjcHnFhhGHZA5Yk3fgjjkY+JL6ce3oLWezSsu1quCk=;
-        b=XnkhYICZT2nMWQrOHknHC3pQEPv4n188jTTwz+geN/Jjj095EYnOUjb/X+YjYZpE0H
-         /uuEFY/44447bWbRM4OXsz6dmp6ykp2M8iT9IHrCOCcR9iXdQKNCUwkZMwRQ53+sFcOf
-         2wbCH6Mw4hPj4c5FXvKaBqwUoUY8RaicpxUXgbjryXQsDuPijYgtINWV6X8GaAlkpp3n
-         bwYhJFGNpUkpxumxYNZqJwTeBHR3xFJVkaZpkVJDZglXdxv9m4BfnIqjx6ohFOaY+e8v
-         qXyc7ulEEa6O5jqcnv3v4VNlEtZ1BmQFUNhWVWwbs/UaJ6u6SEst3Qfq2nuuAZufAHrg
-         hFrw==
-X-Gm-Message-State: AO0yUKXyMeIwirKZQu8iN086JXbKuT6SZ1BWE/lx54QUXiL3xwQFZCyR
-        r8WGK4tJk1GMSUb2vSHNMMMdYV2gMHuk7+pT+NO9y7sdHBegihya+skSfieUWEfR6Aw8IMe+hZ1
-        Mr0yk+oVI0RSqUsvydrAhwFUkKt5+OQWWv7pMWGDWM4wyRbzt6KjYA5rzqMWMErCsBuNEKXxNdJ
-        drzw2YeXc=
-X-Received: by 2002:a5d:4d10:0:b0:2d1:7ade:aad with SMTP id z16-20020a5d4d10000000b002d17ade0aadmr4193285wrt.31.1679006058737;
-        Thu, 16 Mar 2023 15:34:18 -0700 (PDT)
-X-Google-Smtp-Source: AK7set9v6p8hdWcWbe8F7o80naCh5TQbXl2/qaDD1HpV78Lc0LMQy8kTM9oet4mKKOKDXFt7Ra0tdw==
-X-Received: by 2002:a5d:4d10:0:b0:2d1:7ade:aad with SMTP id z16-20020a5d4d10000000b002d17ade0aadmr4193267wrt.31.1679006058328;
-        Thu, 16 Mar 2023 15:34:18 -0700 (PDT)
-Received: from minerva.home (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id t11-20020a05600001cb00b002c54241b4fesm452499wrx.80.2023.03.16.15.34.17
+        d=1e100.net; s=20210112; t=1679006145;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=RsDQM6oA7Sc4GrwdW4rvd7swFz7mkc413XGqYjlViXE=;
+        b=VJegj11omvMfG1HOy22SdWAjVHXM32uEILBjYWdgS5+KpR40o2K6INph25wiE70uFA
+         /nnOt54OypgaL+NuDS5xDDKRdQLeIGgz40hG3ux0rAAFQKjwg1gCkfHRDVzVyegAQN3c
+         yY5T+SbLg3opbED/mqrLwaN5fu3SnUmybld4sqNIwR/7+pQ6gW7fmKhABMTjKi1VE/Ay
+         VasOFQhS0DrX6hfpYL7rdvb5719MyUpmNwOLGMdSaqSe7hpXYo8PtjXwpJ1s0Q0c6AZL
+         1bH4nH0b8YSrRHsGkYsu46erVzPayjc+hH25snLVn0rle/4FjEds9rVnhkSjbobAdrIb
+         lzxQ==
+X-Gm-Message-State: AO0yUKXOj0/DarVDv4ioI6n8Ncmx3GH5TZKoLHD1jjduF+O2U3MKqXUc
+        SVJxFmHBWMMojgjRRfh9MQ==
+X-Google-Smtp-Source: AK7set8scroUEs+g+P+YuNnzijoW4C2z9w+t4go2VOkci7XB0pxR0PPx9n8TncXiQ6U5y2eS8rnQbw==
+X-Received: by 2002:a6b:a13:0:b0:753:2862:a2c0 with SMTP id z19-20020a6b0a13000000b007532862a2c0mr263784ioi.21.1679006145636;
+        Thu, 16 Mar 2023 15:35:45 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.249])
+        by smtp.gmail.com with ESMTPSA id d4-20020a6b6804000000b0073f8a470bacsm117385ioc.16.2023.03.16.15.35.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Mar 2023 15:34:18 -0700 (PDT)
-From:   Javier Martinez Canillas <javierm@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Javier Martinez Canillas <javierm@redhat.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Arthur Grillo <arthurgrillo@riseup.net>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@gmail.com>,
-        David Gow <davidgow@google.com>,
-        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>,
-        =?UTF-8?q?Ma=C3=ADra=20Canal?= <mairacanal@riseup.net>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        dri-devel@lists.freedesktop.org
-Subject: [PATCH] drm/format-helper: Use drm_format_info_min_pitch() in tests helper
-Date:   Thu, 16 Mar 2023 23:34:04 +0100
-Message-Id: <20230316223404.102806-1-javierm@redhat.com>
-X-Mailer: git-send-email 2.39.2
+        Thu, 16 Mar 2023 15:35:45 -0700 (PDT)
+Received: (nullmailer pid 4013127 invoked by uid 1000);
+        Thu, 16 Mar 2023 22:35:43 -0000
+Date:   Thu, 16 Mar 2023 17:35:43 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     Chen-Yu Tsai <wenst@chromium.org>, bchihi@baylibre.com,
+        angelogioacchino.delregno@collabora.com, rafael@kernel.org,
+        amitk@kernel.org, rui.zhang@intel.com, matthias.bgg@gmail.com,
+        krzysztof.kozlowski+dt@linaro.org, rdunlap@infradead.org,
+        ye.xingchen@zte.com.cn, p.zabel@pengutronix.de,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        khilman@baylibre.com, james.lo@mediatek.com,
+        rex-bc.chen@mediatek.com
+Subject: Re: [PATCH 1/4] dt-bindings: thermal: mediatek: Add AP domain to
+ LVTS thermal controllers for mt8195
+Message-ID: <20230316223543.GA4008428-robh@kernel.org>
+References: <20230307154524.118541-1-bchihi@baylibre.com>
+ <20230307154524.118541-2-bchihi@baylibre.com>
+ <CAGXv+5FUrWEF4SZ6DKjoF8Oai--JGFffzQ3_DyzQrUrThVEQ7Q@mail.gmail.com>
+ <e5959cb5-af8c-9410-9530-b3e19e9b647a@linaro.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <e5959cb5-af8c-9410-9530-b3e19e9b647a@linaro.org>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There's a nice macro to calculate the destination pitch that already takes
-into account sub-byte pixel formats. Use that instead of open coding it.
+On Thu, Mar 09, 2023 at 11:39:13AM +0100, Daniel Lezcano wrote:
+> On 09/03/2023 05:40, Chen-Yu Tsai wrote:
+> > On Wed, Mar 8, 2023 at 12:46 AM <bchihi@baylibre.com> wrote:
+> > > 
+> > > From: Balsam CHIHI <bchihi@baylibre.com>
+> > > 
+> > > Add AP Domain to LVTS thermal controllers dt-binding definition for mt8195.
+> > > 
+> > > Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
+> > > ---
+> > >   include/dt-bindings/thermal/mediatek,lvts-thermal.h | 10 ++++++++++
+> > >   1 file changed, 10 insertions(+)
+> > > 
+> > > diff --git a/include/dt-bindings/thermal/mediatek,lvts-thermal.h b/include/dt-bindings/thermal/mediatek,lvts-thermal.h
+> > > index c09398920468..8fa5a46675c4 100644
+> > > --- a/include/dt-bindings/thermal/mediatek,lvts-thermal.h
+> > > +++ b/include/dt-bindings/thermal/mediatek,lvts-thermal.h
+> > > @@ -16,4 +16,14 @@
+> > >   #define MT8195_MCU_LITTLE_CPU2  6
+> > >   #define MT8195_MCU_LITTLE_CPU3  7
+> > > 
+> > > +#define MT8195_AP_VPU0  8
+> > 
+> > Can't this start from 0? This is a different hardware block. The index
+> > namespace is separate. Same question for MT8192.
+> 
+> The ID is used to differentiate the thermal zone identifier in the device
+> tree from the driver.
+> 
+> +		vpu0-thermal {
+> +			polling-delay = <0>;
+> +			polling-delay-passive = <0>;
+> +			thermal-sensors = <&lvts_ap MT8195_AP_VPU0>;
+> +
+> +			trips {
+> +				vpu0_crit: trip-crit {
+> +					temperature = <100000>;
+> +					hysteresis = <2000>;
+> +					type = "critical";
+> +				};
+> +			};
+> +		};
+> 
+> If MT8195_AP_VPU0 is 0, then the code won't be able to differentiate
+> MT8195_AP_VPU0 and MT8195_MCU_BIG_CPU0
+> 
+> The LVTS driver will call devm_thermal_of_zone_register() with the sensor
+> id. If MT8195_MCU_BIG_CPU0 and MT8195_AP_VPU0 have the same id, then at the
+> moment of registering the MT8195_AP_VPU0, the underlying OF thermal
+> framework code will use MT8195_MCU_BIG_CPU0 description instead because it
+> will be the first to be find in the DT.
+> 
+> If MT8195_AP_VPU0 is described in DT before, then the same will happen when
+> registering MT8195_MCU_BIG_CPU0, MT8195_AP_VPU0 will be registered instead.
+> 
+> IOW all ids must be different.
 
-Suggested-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
----
+That's broken for how producer/consumer phandle+args bindings work.
 
- drivers/gpu/drm/tests/drm_format_helper_test.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/gpu/drm/tests/drm_format_helper_test.c b/drivers/gpu/drm/tests/drm_format_helper_test.c
-index bfa47f8ffd09..474bb7a1c4ee 100644
---- a/drivers/gpu/drm/tests/drm_format_helper_test.c
-+++ b/drivers/gpu/drm/tests/drm_format_helper_test.c
-@@ -440,15 +440,12 @@ static size_t conversion_buf_size(u32 dst_format, unsigned int dst_pitch,
- 				  const struct drm_rect *clip)
- {
- 	const struct drm_format_info *dst_fi = drm_format_info(dst_format);
--	unsigned int bpp;
- 
- 	if (!dst_fi)
- 		return -EINVAL;
- 
--	if (!dst_pitch) {
--		bpp = drm_format_info_bpp(dst_fi, 0);
--		dst_pitch = DIV_ROUND_UP(drm_rect_width(clip) * bpp, 8);
--	}
-+	if (!dst_pitch)
-+		dst_pitch = drm_format_info_min_pitch(dst_fi, 0, drm_rect_width(clip));
- 
- 	return dst_pitch * drm_rect_height(clip);
- }
-
-base-commit: 165d5133731a2e045abdd6d9d3c9221fdc2a556e
--- 
-2.39.2
-
+Rob
