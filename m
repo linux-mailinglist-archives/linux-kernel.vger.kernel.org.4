@@ -2,70 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 002546BD700
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 18:26:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 841DC6BD70F
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 18:29:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229701AbjCPR0m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 13:26:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40354 "EHLO
+        id S229911AbjCPR3Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 13:29:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbjCPR0k (ORCPT
+        with ESMTP id S229890AbjCPR3E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 13:26:40 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C131457EB;
-        Thu, 16 Mar 2023 10:26:03 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id ja10so2531640plb.5;
-        Thu, 16 Mar 2023 10:26:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678987563;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pIpspfcq433YYpVyc2+2HNwIim7kmYWAvZxpFDodPGA=;
-        b=qrbh179zGwz/tzTHa95r9xJ9wtKxnWpyRvaGAZPyYndo0+/bM6huYFuCX3qov63CZV
-         Gi5j3eshxpud7rimNPKrxe01lXeNzoLkF3mSUJt3pnrTVoNektEsnRIp0wImQHc/0Szl
-         L1z7gkRqJeIByTMk7NjEEuOqfEKJCDGn++anO+jmqB2xIiWJn8uVsFwlNqkJ0+mb9Vjz
-         jB+Oa/FzR7Q1VzYI6XYObocI2NvsaXdRmJA816eFEqhEbA6tFEwYTjIgq6qgVkVNfpkA
-         iVPBLYCyVjxV/1gXwcG0y0/6qgZiPO6U0J0L18VxvcpvKtLlLZPXIdQT/dopXLUsDSPL
-         1rbQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678987563;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pIpspfcq433YYpVyc2+2HNwIim7kmYWAvZxpFDodPGA=;
-        b=de1MxWRmkZMPbi5p8p5U+fTTs28w+t3uMbDt9cGKBDUpaVv/ao68yc2SWmdBZII4yJ
-         Nl2xPe2O1BZdcAx4KxddrX7EeXDfE7vwfEuh3st6lGurr9ajY5vEKyZts6B5/hYU+45v
-         nwvWhxIOJg+zT/1bxHPrEOhDhEnOJa110lm/JBAJzQyRVcsAueL81XpLJmYHyIhXJBEM
-         h2wVyPZsH3IHyM9w6fxPNAw8a6dVnqaegt3DQ5mrgqx5thr7JOBfONgBy8qNBYxtjKHC
-         qromBhwTD8U5LvwsEEpx5K1pRW38xy9L/qZH8LmM4Em4K7r+FDqFWR+CBuFsV/tDHY29
-         MQrQ==
-X-Gm-Message-State: AO0yUKVbVQk3WfZSF7RqbhPjZCR1qoIdb+JyQnGYj5vMERWCgcK9N9xT
-        ZXvBhLTUbnbTNFHpw2SHK5XiXKHeIpEBWWuAdt0=
-X-Google-Smtp-Source: AK7set+rzE43RchTLXIMDlJhy9z6qiZh7Nue+oPLlEN4GtLa4y+mD94wPRTtgXR1K0JhmUefOkaxW4VLIaKwvKgyzWA=
-X-Received: by 2002:a17:903:32d1:b0:19f:3cc1:e3be with SMTP id
- i17-20020a17090332d100b0019f3cc1e3bemr1823624plr.12.1678987562995; Thu, 16
- Mar 2023 10:26:02 -0700 (PDT)
+        Thu, 16 Mar 2023 13:29:04 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C0BAACBB2
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 10:28:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678987694;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=7hzxcSRtKQlA0e6rFrTWceT+M7ty2llKw335P2T8iHI=;
+        b=HGpuGBGS2nae9I3ZjqN8i077lRmLPdA/ahemwokdwQOctpEmvObFc9fkfcOChK3PFj2UHA
+        AvUqpeJuchXxE26uAYmn1l15ArYi6NSM3fid5K/EfJshjo/JR6Sx8+VdLivDgGtLiD5ks0
+        vuPLE4DuxXNOWmR6DWbpV9trSo5IHcc=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-128-X_O2pjKoObCWcsos-J3Lyg-1; Thu, 16 Mar 2023 13:28:11 -0400
+X-MC-Unique: X_O2pjKoObCWcsos-J3Lyg-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9BAE7857FBF;
+        Thu, 16 Mar 2023 17:28:05 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.18])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 5EDC135454;
+        Thu, 16 Mar 2023 17:28:03 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <4EDC79DC-0C32-40FD-9C35-164C7A077922@oracle.com>
+References: <4EDC79DC-0C32-40FD-9C35-164C7A077922@oracle.com> <20230316152618.711970-1-dhowells@redhat.com> <20230316152618.711970-28-dhowells@redhat.com> <3DFBF27C-A62B-4AFE-87FD-3DF53FC39E8E@hammerspace.com>
+To:     Chuck Lever III <chuck.lever@oracle.com>
+Cc:     dhowells@redhat.com, Trond Myklebust <trondmy@hammerspace.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Jeffrey Layton <jlayton@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        Anna Schumaker <anna@kernel.org>,
+        Linux NFS Mailing List <linux-nfs@vger.kernel.org>
+Subject: Re: [RFC PATCH 27/28] sunrpc: Use sendmsg(MSG_SPLICE_PAGES) rather then sendpage
 MIME-Version: 1.0
-References: <20230316155645.1565045-1-zyytlz.wz@163.com> <ZBNCam0XjWehrF3c@kroah.com>
-In-Reply-To: <ZBNCam0XjWehrF3c@kroah.com>
-From:   Zheng Hacker <hackerzheng666@gmail.com>
-Date:   Fri, 17 Mar 2023 01:25:50 +0800
-Message-ID: <CAJedcCw4DbpdiL8w+xQfGU87eV_yU-SSojX++-=GGrdKqHYxLA@mail.gmail.com>
-Subject: Re: [PATCH v5] usb: gadget: udc: renesas_usb3: Fix use after free bug
- in renesas_usb3_remove due to race condition
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Zheng Wang <zyytlz.wz@163.com>, p.zabel@pengutronix.de,
-        biju.das.jz@bp.renesas.com, phil.edworthy@renesas.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        1395428693sheep@gmail.com, alex000young@gmail.com,
-        yoshihiro.shimoda.uh@renesas.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <782775.1678987682.1@warthog.procyon.org.uk>
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Date:   Thu, 16 Mar 2023 17:28:02 +0000
+Message-ID: <782776.1678987682@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,60 +82,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Greg KH <gregkh@linuxfoundation.org> =E4=BA=8E2023=E5=B9=B43=E6=9C=8817=E6=
-=97=A5=E5=91=A8=E4=BA=94 00:23=E5=86=99=E9=81=93=EF=BC=9A
->
-> On Thu, Mar 16, 2023 at 11:56:45PM +0800, Zheng Wang wrote:
-> > In renesas_usb3_probe, &usb3->role_work is bound with
-> > renesas_usb3_role_work. renesas_usb3_start will be called
-> > to start the work.
->
-> You have a full 72 columns to write in, please use them :)
->
+Chuck Lever III <chuck.lever@oracle.com> wrote:
 
-Thanks for your kind reminder. I'll fix the format in the next version.
+> That means I haven't seen the cover letter and do not have any
+> context for this proposed change.
 
-> >
-> > If we remove the driver which will call usbhs_remove, there may be
-> > an unfinished work. The possible sequence is as follows:
-> >
-> > Fix it by canceling the work before cleanup in the renesas_usb3_remove.
-> >
-> > CPU0                  CPU1
-> >
-> >                     |renesas_usb3_role_work
-> > renesas_usb3_remove |
-> > usb_role_switch_unregister  |
-> > device_unregister   |
-> > kfree(sw)          |
-> > free usb3->role_sw  |
-> >                     |   usb_role_switch_set_role
-> >                     |   //use usb3->role_sw
->
-> Why can't this be written so it looks better:
+https://lore.kernel.org/linux-fsdevel/20230316152618.711970-1-dhowells@red=
+hat.com/
 
-Sorry, I'll beautify the format next time.
+> We've tried combining the sendpages calls in here before. It
+> results in a significant and measurable performance regression.
+> See:
+> =
 
->
->  CPU0                         CPU1
->
->                             | renesas_usb3_role_work
->  renesas_usb3_remove        |
->  usb_role_switch_unregister |
->  device_unregister          |
->  kfree(sw)                  |
->  free usb3->role_sw         |
->                             |  usb_role_switch_set_role
->                             |  // use usb3->role_sw
->
-> Note that removing a driver is a root-only operation, and should never
-> happen so please also say that.
->
-Get it.
+> da1661b93bf4 ("SUNRPC: Teach server to use xprt_sock_sendmsg for socket =
+sends")
 
-Best regards,
-Zheng
+The commit replaced the use of sendpage with sendmsg, but that took away t=
+he
+zerocopy aspect of sendpage.  The idea behind MSG_SPLICE_PAGES is that it
+allows you to do keep that.  I'll have to try reapplying this commit and
+adding the MSG_SPLICE_PAGES flag.
 
-> thanks,
->
-> greg k-h
+> Therefore, this kind of change needs to be accompanied by both
+> benchmark results and some field testing to convince me it won't
+> cause harm.
+
+Yep.
+
+> And, we have to make certain that this doesn't break operation
+> with kTLS sockets... do they support MSG_SPLICE_PAGES ?
+
+I haven't yet tackled AF_TLS, AF_KCM or AF_SMC as they seem significantly =
+more
+complex than TCP and UDP.  I thought I'd get some feedback on what I have
+before I tried my hand at those.
+
+David
+
