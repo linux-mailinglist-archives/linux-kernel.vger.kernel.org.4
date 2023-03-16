@@ -2,108 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19B046BCC31
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 11:12:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19C916BCC38
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 11:13:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230415AbjCPKMx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 06:12:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33496 "EHLO
+        id S230304AbjCPKNw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 06:13:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230326AbjCPKMc (ORCPT
+        with ESMTP id S230419AbjCPKNa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 06:12:32 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79572BCBBB;
-        Thu, 16 Mar 2023 03:12:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678961534; x=1710497534;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=1ch8yAEoqDaUdQ3sRi+e/B4vAYC/6RjGdOIhFQNejgo=;
-  b=BpNEsMIJzAI7WzLL3bKzFpaMLvPDYwFK4WIzvfqLEnWyrF1zqg1fw0W1
-   9IDv0u7I55oO4eEEnvFoq5RepEbf+OhyOxZnfQuGGXiYWWGyDEj+4V+ln
-   /vrUUk4EArT9YYOMkOK8c9Lfw80LCBb1Q0S+YHNCm9xIFnbsK9LFpLe6D
-   PhMGbKVywO5RqAcJUWRQLEHZrSjEIYWwetBOgAz552O7xXLq8ybI7S84O
-   gZ1774jzLDFFXz2u1TC76McY2IJ5SBtnwuoOBrdoRmfR8rxsXpDXxzGnt
-   VJusVPOLwyjnTTHqVASzpAdaCLITdCGOS0pzlw9PYhKyXEyIMmcyxpuYC
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="337965227"
-X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
-   d="scan'208";a="337965227"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 03:12:13 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="748797466"
-X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
-   d="scan'208";a="748797466"
-Received: from unknown (HELO localhost.localdomain) ([10.237.112.144])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 03:12:11 -0700
-Date:   Thu, 16 Mar 2023 11:12:04 +0100
-From:   Michal Swiatkowski <michal.swiatkowski@linux.intel.com>
-To:     Daniil Tatianin <d-tatianin@yandex-team.ru>
-Cc:     Ariel Elior <aelior@marvell.com>,
-        Manish Chopra <manishc@marvell.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Yuval Mintz <Yuval.Mintz@qlogic.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] qed/qed_sriov: avoid a possible NULL deref in
- configure_min_tx_rate
-Message-ID: <ZBLrb6C1mEjgAGHr@localhost.localdomain>
-References: <20230315194809.579756-1-d-tatianin@yandex-team.ru>
+        Thu, 16 Mar 2023 06:13:30 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 62794BD4E3;
+        Thu, 16 Mar 2023 03:12:57 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.133])
+        by gateway (Coremail) with SMTP id _____8DxXNqf6xJkJ+AMAA--.7002S3;
+        Thu, 16 Mar 2023 18:12:47 +0800 (CST)
+Received: from [10.20.42.133] (unknown [10.20.42.133])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxT+Se6xJkgfEBAA--.10052S3;
+        Thu, 16 Mar 2023 18:12:46 +0800 (CST)
+Message-ID: <f795709e-e06a-daee-968b-b1cd0c1b5587@loongson.cn>
+Date:   Thu, 16 Mar 2023 18:12:46 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230315194809.579756-1-d-tatianin@yandex-team.ru>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+From:   Sui jingfeng <suijingfeng@loongson.cn>
+Subject: Re: [PATCH v7 2/2] drm: add kms driver for loongson display
+ controller
+To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Sui Jingfeng <15330273260@189.cn>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sumit Semwal <sumit.semwal@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+        Li Yi <liyi@loongson.cn>
+References: <20230315211550.2620818-1-15330273260@189.cn>
+ <20230315211550.2620818-3-15330273260@189.cn>
+ <efcc3a66-78ca-4e0a-c0fb-527da376fc06@amd.com>
+ <62f955de-6352-a0b1-ecab-52b854ba6839@loongson.cn>
+Content-Language: en-US
+In-Reply-To: <62f955de-6352-a0b1-ecab-52b854ba6839@loongson.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8AxT+Se6xJkgfEBAA--.10052S3
+X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
+X-Coremail-Antispam: 1Uk129KBjvJXoW3JryxXFyxZr45Gw15XF1rtFb_yoW7Zr47pF
+        Z3Kay5trZ8Gr4kAr1qyw1UJryYq34rA3WDJr90yryI939xKFn0grWjqr4q9a47Zr4rGF1j
+        vFWUXrW29F17Gw7anT9S1TB71UUUUb7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bqkYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
+        n4kS14v26r1q6r43M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
+        ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1q6rW5McIj6I8E
+        87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0V
+        AS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUtVW8ZwCF04k20xvY0x0EwIxGrwCFx2IqxVCF
+        s4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUtVW8ZwC20s026c02F40E14v26r1j6r18MI
+        8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41l
+        IxAIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIx
+        AIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2
+        jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jTq2NUUUUU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 15, 2023 at 10:48:09PM +0300, Daniil Tatianin wrote:
-> We have to make sure that the info returned by qed_iov_get_vf_info is
-> valid before using it.
-> 
-> Found by Linux Verification Center (linuxtesting.org) with the SVACE
-> static analysis tool.
-> 
-> Fixes: 733def6a04bf ("qed*: IOV link control")
-> Signed-off-by: Daniil Tatianin <d-tatianin@yandex-team.ru>
-> ---
->  drivers/net/ethernet/qlogic/qed/qed_sriov.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/net/ethernet/qlogic/qed/qed_sriov.c b/drivers/net/ethernet/qlogic/qed/qed_sriov.c
-> index 2bf18748581d..cd43f1b23eb1 100644
-> --- a/drivers/net/ethernet/qlogic/qed/qed_sriov.c
-> +++ b/drivers/net/ethernet/qlogic/qed/qed_sriov.c
-> @@ -4404,6 +4404,9 @@ qed_iov_configure_min_tx_rate(struct qed_dev *cdev, int vfid, u32 rate)
->  	}
->  
->  	vf = qed_iov_get_vf_info(QED_LEADING_HWFN(cdev), (u16)vfid, true);
-> +	if (!vf)
-> +		return -EINVAL;
-> +
->  	vport_id = vf->vport_id;
->  
->  	return qed_configure_vport_wfq(cdev, vport_id, rate);
-> -- 
-> 2.25.1
-> 
 
-There is also potential NULL pointer dereference in:
-qed_iov_handle_trust_change()
-Should be:
-if (!vf || !vf->vf->vport_instance)
+On 2023/3/16 16:46, Sui jingfeng wrote:
+>
+> On 2023/3/16 15:18, Christian König wrote:
+>>
+>>
+>> Am 15.03.23 um 22:15 schrieb Sui Jingfeng:
+>>> From: suijingfeng <suijingfeng@loongson.cn>
+>>>
+>>> Loongson display controller IP has been integrated in both Loongson
+>>> North Bridge chipset(ls7a1000 and ls7a2000) and Loongson SoCs(ls2k1000
+>>> and ls2k2000 etc), it even has been included in Loongson BMC products.
+>>>
+>>> This display controller is a PCI device, it has two display pipe. For
+>>> the DC in LS7A1000 and LS2K1000 each way has a DVO output interface
+>>> which provide RGB888 signals, vertical & horizontal synchronisations,
+>>> and the pixel clock. Each CRTC is able to support 1920x1080@60Hz,
+>>> the maximum resolution is 2048x2048 according to the hardware spec.
+>>>
+>>> For the DC in LS7A2000, each display pipe is equipped with a built-in
+>>> HDMI encoder which is compliant with HDMI 1.4 specification, thus it
+>>> support 3840x2160@30Hz. The first display pipe is also equipped with
+>>> a transparent vga encoder which is parallel with the HDMI encoder.
+>>> The DC in LS7A2000 is more complete, besides above feature, it has
+>>> two hardware cursors, two hardware vblank counter and two scanout
+>>> position recorders.
+>>>
+>>>   v1 -> v2:
+>>>    1) Use hpd status reg when polling for ls7a2000
+>>>    2) Fix all warnings emerged when compile with W=1
+>>>
+>>>   v2 -> v3:
+>>>    1) Add COMPILE_TEST in Kconfig and make the driver off by default
+>>>    2) Alphabetical sorting headers (Thomas)
+>>>    3) Untangle register access functions as much as possible (Thomas)
+>>>    4) Switch to TTM based memory manager and prefer cached mapping
+>>>       for Loongson SoC (Thomas)
+>>>    5) Add chip id detection method, now all models are distinguishable.
+>>>    6) Revise builtin HDMI phy driver, nearly all main stream mode
+>>>       below 4K@30Hz is tested, this driver supported these mode very
+>>>       well including clone display mode and extend display mode.
+>>>
+>>>   v3 -> v4:
+>>>    1) Quickly fix a small mistake.
+>>>
+>>>   v4 -> v5:
+>>>    1) Drop potential support for Loongson 2K series SoC temporary,
+>>>       this part should be resend with the DT binding patch in the 
+>>> future.
+>>>    2) Add per display pipe debugfs support to the builtin HDMI encoder.
+>>>    3) Rewrite atomic_update() for hardware cursors plane(Thomas)
+>>>    4) Rewrite encoder and connector initialization part, untangle it
+>>>       according to the chip(Thomas).
+>>>
+>>>   v5 -> v6:
+>>>    1) Remove stray code which didn't get used, say 
+>>> lsdc_of_get_reserved_ram
+>>>    2) Fix all typos I could found, make sentences and code more 
+>>> readable
+>>>    3) Untange lsdc_hdmi*_connector_detect() function according to 
+>>> the pipe
+>>>    4) After a serious consideration, we rename this driver as loongson.
+>>>       Because we also have drivers toward the LoongGPU IP in 
+>>> LS7A2000 and
+>>>       LS2K2000. Besides, there are also drivers about the external 
+>>> encoder,
+>>>       HDMI audio driver and vbios support etc. This patch only 
+>>> provide DC
+>>>       driver part, my teammate Li Yi believe that loongson will be more
+>>>       suitable for loongson graphics than lsdc in the long run.
+>>>
+>>>       loongson.ko = LSDC + LoongGPU + encoders driver + vbios/DT ...
+>>>
+>>>    v6 -> v7:
+>>>    1) Add prime support, self-sharing is works. sharing buffer with 
+>>> etnaviv
+>>>       is also tested, and its works with limitation.
+>>>    2) Implement buffer objects tracking with list_head.
+>>>    3) S3(sleep to RAM) is tested on ls3a5000+ls7a2000 evb and it works.
+>>>    4) Rewrite lsdc_bo_move, since ttm core stop allocating resources
+>>>       during BO creation. Patch V1 ~ V6 of this series no longer works
+>>>       on latest kernel. Thus, we send V7.
+>>>
+>>> Signed-off-by: Li Yi <liyi@loongson.cn>
+>>> Signed-off-by: suijingfeng <suijingfeng@loongson.cn>
+>>> Signed-off-by: Sui Jingfeng <15330273260@189.cn>
+>>
+>> [SNIP]
+>>
+> Hi,
+>
+> I send my patch series with  my personal email (15330273260@189.cn), 
+> because it is more reliable.
+>
+> I don't mind remove it when this driver is applied.
+>
 
-I think it can be a part of this fix.
+We know that we should do this job cleanly.
 
-Thanks,
-Michal
+But i am worry about the troubles it may cause when  send patch with my 
+company email(suijingfeng <suijingfeng@loongson.cn>)
+
+So I just follow the my conventional way of sending patch about this 
+series,
+
+I will use my company email(suijingfeng <suijingfeng@loongson.cn>) in 
+the future.
+
+>>> +u64 lsdc_bo_gpu_offset(struct ttm_buffer_object *tbo)
+>>> +{
+>>> +    struct drm_device *ddev = tbo->base.dev;
+>>> +    struct ttm_resource *resource = tbo->resource;
+>>> +
+>>> +    if (drm_WARN_ON(ddev, !tbo->pin_count))
+>>> +        return -ENODEV;
+>>
+>> Returning -ENODEV when the function return value is unsigned doesn't 
+>> make much sense. I would also use 0 here.
+>>
+> OK,
+>
+> To make sense, the caller can cast the return to s64. Use 0 is also ok.
+>
+> In our daily usage,  tbo->pin_count ==0  never happens.  A warning 
+> message is enough.
+>
+> I will revise this at next version.
+>
+>
+>> Apart from that I briefly skimmed over the prime and TTM handling and 
+>> couldn't find anything obviously wrong.
+>>
+>> I obviously can't review the hw specific stuff, but over all looks 
+>> pretty good to me.
+> Maybe you could do me a favor, give me a reviewed-by for the TTM and 
+> PRIME part :)
+>
+Here missing a '?' at the end.
+
+>
+>> Regards,
+>> Christian.
+
