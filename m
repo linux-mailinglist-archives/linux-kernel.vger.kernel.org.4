@@ -2,181 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFCF96BCE0B
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 12:20:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A623D6BCE09
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 12:20:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230149AbjCPLUR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 07:20:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59618 "EHLO
+        id S229961AbjCPLUA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 07:20:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229829AbjCPLUK (ORCPT
+        with ESMTP id S229629AbjCPLT6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 07:20:10 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDC398ABC6;
-        Thu, 16 Mar 2023 04:19:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1678965580; x=1710501580;
-  h=from:to:subject:date:message-id:references:in-reply-to:
-   content-id:content-transfer-encoding:mime-version;
-  bh=HFV1jeg/L+Z8YNpqFU8VhNl8Dt6Cptg2f3YLKwdyE8I=;
-  b=DIJv26gixXNrVnslx76oPOx0jXxIzYfG+Ee9spepJJNIC27XyegrBZy0
-   Cl1khsf1o+8nf64QpeojltunlV4EKpPEJhKxCpG7mjLm9VQCpUIcRclfh
-   6qHqT+GoLKFbRwg4xh2ir8KhyipkrbrFJTf6tsGYNkhVxZyQt06959Nn+
-   LrOMGiXHPDXBKBSJEf+avks5XsaiKI9Jh/lmcLOORp872KdxHTTdjRnbj
-   mwRsoSghtzsEBFgdD8NL3F5bVU/6Xec48/xzufYex/FDaTjw6jGBbjNad
-   ArGuh8pGOBVfeV7wADdKKMedK4ZG5Zv+4czjmbkBsMLtQaC6iOEbSkagh
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.98,265,1673938800"; 
-   d="scan'208";a="205723392"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 16 Mar 2023 04:18:56 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Thu, 16 Mar 2023 04:18:54 -0700
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21 via Frontend Transport; Thu, 16 Mar 2023 04:18:54 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Qkr8GbFZh6N1/muxEI2UShDzD6qdh+GGTTLFePkPpxX1y6rfFeCLFGKbOEh1GkyY5IG6xThWdB7ybYRlU/1sw/ekadpsmyCaDhSNLgFk2SAmuAGuK8zes4vZdPqIm3hRoRu3WHYuKKd/eRN4j+PmZMsBQ7p8CX0Ugx4EWQv2IFaFhGl83HT3+OjuABO29imse5mYgesq0TzHb9L/MzKZcC74hpeDnon1u5dPOGQfes9C2CtZyHntrsWckg8ZdUG2JajqGEeZvavanpdhcr3n7U0Tkwy9Ixhd3Xp8j+gxi+OlUT31anpOALLSugZQGbbalVUPVh7k7Y38khGhxEwXBA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=HFV1jeg/L+Z8YNpqFU8VhNl8Dt6Cptg2f3YLKwdyE8I=;
- b=FYkUaEFITEXMfDPQ+I8Aa11FXtB3Yd3GeDk54HDFoOiikJE5SFxbF6JJV7FkvvvOvHz7YXeRlPmy9ohI9ixxFfYRJxaUM0YKXJkZnZJRimkbVld7pGfCUbdiiZLab+X83MGsapJvHIsIB1Q9Xz87Oi3PSLm50PFKofPhwjPT6dDTD8AS1vSOPQP1oDas2ZKp74azFD7cVoOAezR196TaLD4ie1mjOOpsoAvYvfJ/124vk7uwE4L2sp8tvzrZXcUF0H6uqWEL0MnX9UNv0ldwVkt4RlBv3AbFfUnORNHIB/W6IIV0EYnWtyNBMGBIVYblCTPFEGPeqgglsLcC2sAT8Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=HFV1jeg/L+Z8YNpqFU8VhNl8Dt6Cptg2f3YLKwdyE8I=;
- b=SvWy2VIUrwZMASJNDD5k+BC+0qT5snhoFpyXWlbeNS0mw6MDhWd+tqpo9iIpCVlURWFojT2Mn351uVDI0rrXZcO2NgYNLFKPBRCuUerU0GTfBAdQuUH+VM2KHVS46o63RNDHOlu8T+tUJqB7LOgW/SXPjTqMn+BwihPmFv//s7A=
-Received: from BN6PR11MB1953.namprd11.prod.outlook.com (2603:10b6:404:105::14)
- by SA2PR11MB4937.namprd11.prod.outlook.com (2603:10b6:806:118::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.33; Thu, 16 Mar
- 2023 11:18:52 +0000
-Received: from BN6PR11MB1953.namprd11.prod.outlook.com
- ([fe80::6eb8:36cd:3f97:ab32]) by BN6PR11MB1953.namprd11.prod.outlook.com
- ([fe80::6eb8:36cd:3f97:ab32%5]) with mapi id 15.20.6178.031; Thu, 16 Mar 2023
- 11:18:52 +0000
-From:   <Claudiu.Beznea@microchip.com>
-To:     <Durai.ManickamKR@microchip.com>, <Hari.PrasathGE@microchip.com>,
-        <Balamanikandan.Gunasundar@microchip.com>,
-        <Manikandan.M@microchip.com>, <Varshini.Rajendran@microchip.com>,
-        <Dharma.B@microchip.com>, <Nayabbasha.Sayed@microchip.com>,
-        <Balakrishnan.S@microchip.com>, <Cristian.Birsan@microchip.com>,
-        <Nicolas.Ferre@microchip.com>, <davem@davemloft.net>,
-        <linux-kernel@vger.kernel.org>, <edumazet@google.com>,
-        <kuba@kernel.org>, <richardcochran@gmail.com>,
-        <linux@armlinux.org.uk>, <palmer@dabbelt.com>,
-        <paul.walmsley@sifive.com>, <netdev@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>, <pabeni@redhat.com>
-Subject: Re: [PATCH 1/2] net: macb: Add PTP support to GEM for sama7g5
-Thread-Topic: [PATCH 1/2] net: macb: Add PTP support to GEM for sama7g5
-Thread-Index: AQHZV/kWO8w3ULUZBkKMSIDf5/SrTg==
+        Thu, 16 Mar 2023 07:19:58 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69B89D503;
+        Thu, 16 Mar 2023 04:19:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0E8ABB81FA7;
+        Thu, 16 Mar 2023 11:18:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3460C433D2;
+        Thu, 16 Mar 2023 11:18:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678965534;
+        bh=JarC/Lr5xGEmHxjDuOh254kaR60wlKpI3/R82UkKIkY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=sHza2oKk2ydXN4NMEL+WH03zZSjsr9n00J8DdZDfrCeL0lLaJ94uBKUsZ4ZWLvFml
+         sqUClx0WCDATpxFq9k0YnANvGtw+8pahG7nc5QaLaO+GhuMowPFBoC7wryEnL2eSDJ
+         x6V76rTuo6lg0yPNZlux5Rb7xlMKcVvRRWIxzZ+olWmpXNYDmT2Xw0zE9XScwkHT8z
+         gZsaNax3v09jckC/KY3BbP2Nt3d2uzsGlVCnk/IQLrvnliIqzoBpgJIXhJwQBihIS4
+         IXWcmyM4W8lLDLOjG0s2UqvzAXkAA47jphmR/41QptSnUaQAG1Zx40KmbJf2FFSwHA
+         +cHUzeqDqvu5g==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pcldE-000YvR-Ci;
+        Thu, 16 Mar 2023 11:18:52 +0000
 Date:   Thu, 16 Mar 2023 11:18:52 +0000
-Message-ID: <96a4e3a8-3d1f-052c-3338-ad0073fb7fa6@microchip.com>
-References: <20230315095053.53969-1-durai.manickamkr@microchip.com>
- <20230315095053.53969-2-durai.manickamkr@microchip.com>
-In-Reply-To: <20230315095053.53969-2-durai.manickamkr@microchip.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microchip.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BN6PR11MB1953:EE_|SA2PR11MB4937:EE_
-x-ms-office365-filtering-correlation-id: c2b25695-4be6-49a2-1c15-08db26103925
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Np0TLrKtS1wZ07NTRD7r0r8aYWZtDoFd5ipGEVBvNFwzCkgx/aDcsyfiA7ubE0yHsZHd9B4qSFDtrcZH9roQYo4Vqr9JGsx2rCvaE2GNEL2qDaOCrhPeqLLs55gaCg/spUM2HVquqz9PlOuF3JOuu7GfM8Gz/WT7HsmOti9vHP165JX8ai05HLJBvVjxTqFmQPud55T6boIDDZrpynqinjsr/V5wB9ho7dXxgWA7LnX6G8sxvCss/FhSbmxTqLG3PLA+6q2heyd7LBNoI8zy3gcq/lNiyxC58V1yLKJSy2qWbv0cbNPbRVdr5odQMVcOtn3yPOF/UmDHSlavcwH/Hw8ZBDqhsBaIbkWSTFjtX+L7mbuqAamDpMUxSuhNb7g5ouY/prjOGREHSGkc1mfr6ltTj4udgP6wwyKTj6/+wvmgkUu8ksg6RolV+XJTZjl9sZMqhHFw9tZtCK4XAg+L/PU5BqyHVu+jGrsDSnLNJ0+84C4L0MgTsWvOxviwJSKlDcpiN+qdsEL+sG5tWCM7WrCr1y6pqbm/Un+90hRUOxxILJqNEkq/ATNpQ9ivxAGJc5dlJslcKPZcmMhJCMal/zyaPYrgcSEE74ABvclCUeTSh00YF2IRAez/VEYlfzSMY+I8a0h3ou5QifKiBAyppd4dYXB/eYHa82OHTRHcDQz7EzfeZsj5r6rb45gTiZmrUXtQolFvKmSe1Z2Sa7/QzNiUW+wF8b6MoCBhnsQVpDWx58+Gk+xKUPTHFrdwZhK5O1t0mHdbcC0f0IK+2jIRs4CMl9irZJjJoYsL0FxC+m6K2vx7VqWO9lSWSiQMs9sj
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN6PR11MB1953.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(376002)(366004)(396003)(136003)(39860400002)(346002)(451199018)(921005)(31686004)(86362001)(31696002)(38100700002)(83380400001)(122000001)(38070700005)(2616005)(53546011)(6512007)(6506007)(186003)(71200400001)(6486002)(110136005)(478600001)(26005)(66556008)(66946007)(66476007)(5660300002)(76116006)(41300700001)(91956017)(316002)(66446008)(64756008)(8676002)(2906002)(36756003)(7416002)(4744005)(8936002)(138113003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?ekM4bEpGTENpSmxyVW0valBUQUltNXdjOWVkNzJ3NXBPcG9WZ3RzOWhrZEVy?=
- =?utf-8?B?bWxQd1J0ZnAxYmhQRG9UR2FMVERVeGtIUlNHMzc0eGZYTnNwcGpneDRHNW5q?=
- =?utf-8?B?VmloLzRLSmtub01HSFFjVjB4WVltbVJOTHUzYVNIYlcwOGRxSmliN01rSzgv?=
- =?utf-8?B?cVlzb0lLUEo4cEYweGRzUjdtTW1KVkpQK0I3T2NBdkw1OVovWnVHS0IyTUMx?=
- =?utf-8?B?dkJsWCsrNkhsVHgxdDNNb2ZSQ0ExTmd5aXhnQXhTODM3ZHNwVSs1d3dydVM1?=
- =?utf-8?B?UTFpY0RRb0pEMGFHRFFtQ0toYklsZWRIRE1peEFPUlVUVEpaQktwVEhvK1lk?=
- =?utf-8?B?UlIxTk9oNXBIayt4eWVtdDIxUkFzQVpTT0I5bDR1S3NMdmV3YXlhWE5GWHNB?=
- =?utf-8?B?eDNwckt0Tk5DdHVwNVp3M2JzV0pKc0UzZUwvbU43emozclFCY25LVGdNOGd2?=
- =?utf-8?B?VTJBSHZHajYwdDZIcDV3RUU4Q2c4WnQ1VUZSUUs4UXJ5d243QW5VQnBOVWJO?=
- =?utf-8?B?aTFSZTYrdHlvOHJFdUhSbWNOZk8rMWZGbVFWaURVbG1ONTZDbHJ5RSs1Ky9L?=
- =?utf-8?B?cURTTWIvaUNrWWFZTjBZcG5NTU44QjlUMkEzVjU4M1RxMjhWSE4yVUVkL0NX?=
- =?utf-8?B?QXBzY05PTWdvVzN2UDlKa0NNMVY4ajBEckloWmZ4NEl0K1d6TGxMN2dRdEVs?=
- =?utf-8?B?QktHbmkxazZtS3VEWi8zRm9OakVzTVQwNTlseVFPcUh0dEswS1RFVEd0V25B?=
- =?utf-8?B?Uld3Tkk5RXV3SzlSU3BCM3NMZVdGcHNUc2IybStvZU1RMkZaSG54RlJzejdV?=
- =?utf-8?B?RWNxMnlSMGFkYVlUNjFkSWdYWXBLd1ByZUdHMnBzNzRNWlRmSk0xaDA1N0tV?=
- =?utf-8?B?eUt2VFpIVFZ5NmpaN1ViNys4aG8wdzRzVktRYXJuK0RJOXU2QkNLQUYwalBm?=
- =?utf-8?B?bTlnazZwL281YjRWYVIvMkxuRnRhMmpJQkhwSUFZMXppY0NnRnd0S0U0UW91?=
- =?utf-8?B?OVZMNTlURHFXayt4MndMUTY4S3AwMVc4NkRXc3ZiUnBEL2x0TFp6SEZ3MWdw?=
- =?utf-8?B?SlAvMTdMNFo4MEg1OHFnSEc4Z1R0M2ovZHpXOGZ1cUg2dTVlRmd5OFRFWnoz?=
- =?utf-8?B?N0xacDF4R251NTIwVmRtdXFHdEo3YTFSb1MrL2t1Z2RPblcrQ1c1TUdFTEZS?=
- =?utf-8?B?Ukl0UXNJRklDekdmWElkVzVoSzQ0VWpscC84aVdTL3BJWHdVNmYvNHhDdlVS?=
- =?utf-8?B?U0RsVEpUQnE2SFA3V3RSR3g4aHlmYk1udUo5dDVnT3Fsb3IzcUR1eituWGR6?=
- =?utf-8?B?NXYwREd0a2tmTHpKZUZKcjFRU1NxQWpROHFCR1FoUzVnUnV0dy9lUnAwT3d3?=
- =?utf-8?B?b1BKTDhuM1ZueWthQkhjU0huRWsrc1A1bGZBWW5OekpBNStkMWRnbUZKVUY3?=
- =?utf-8?B?c21uRm9IanVacWQzNWpLTG1QSkhtRG9LV0s3RG9RVXVreG5BelJxRFZlNzhH?=
- =?utf-8?B?cHY0WUNGOTdTd1NvMmtBL1NlVW1rRHhJd1ZkbmpQUlZIM01pcTNoM1RYaHJI?=
- =?utf-8?B?V3ZyRER6bW9uM2hlZktpcHYxbUliZWtSZmlCd1NXVWlST0ZLWlhlMFJKQUhN?=
- =?utf-8?B?MFhiaTJwMHk2TVpvcmN6RVI1ajVlcVNiRzRxZktnNnlnOW5hcDJXTzlzeUxu?=
- =?utf-8?B?eS84YTBHdk1VRFpWTkpNSG1nczNSckJKSGxNMVY1NktNY2pYcG9DQTdKeUVm?=
- =?utf-8?B?MDJLcFVwaU4zNnpmaHBpc0lCWS9XcWlGT1JybGFPM3BGTTAvVGZUTy80aVBu?=
- =?utf-8?B?YlJOYnJERkFzSEJIajNvbXhkQ3pETU5RT3J3OUY0MjVpSG5aTGdYVThOeTlE?=
- =?utf-8?B?VXNrOHdZR29kV1NBNmFLYkVHOVh6ZEx3Ri9hQzgwVWJ2RnBUZGkrM1ZVUU5i?=
- =?utf-8?B?Lzc2ak01SDRwc082S0lTNGhtK1FuZzRqUlVsYnc4MUNBOUMyZHdyTlJuWkQy?=
- =?utf-8?B?RGFCNG5pK1BnVzlDeUJCbEUvV3NqYkFqMnU1Z0lWSERRTHhiTXhkU2hnZ1kz?=
- =?utf-8?B?MXVIMmJvLzczVjRXUU9saFB1MzczRWlDVSsvRTR0ZFNscFAxYS9VU3huMHB2?=
- =?utf-8?B?c2Fkb2l4MHBKNEpybUZQcnhJTFNQUHk2Y2xIQllqT3RsQVRONDJveXJCeUZ3?=
- =?utf-8?B?emc9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <F4766F319F333342BC0455766201C507@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN6PR11MB1953.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c2b25695-4be6-49a2-1c15-08db26103925
-X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Mar 2023 11:18:52.2653
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: VPUTikggBwBKARaS+sQ1ID7855I0LP/RUfxKbBcRLkyHU5cY8iBkhD6Wn/U1IjraFpuqHUsB7zh+KobwAwqs+jZ/8t+dFWuExbu9SoCj/Sk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR11MB4937
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Message-ID: <868rfxx7tv.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Lorenzo Pieralisi <lpieralisi@kernel.org>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>, Janne Grunau <j@jannau.net>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Krzysztof =?UTF-8?B?V2lsY3p5xYRza2k=?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Sven Peter <sven@svenpeter.dev>, linux-pci@vger.kernel.org,
+        asahi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Daire McNamara <daire.mcnamara@microchip.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v2] PCI: apple: Set only available ports up
+In-Reply-To: <ZBLzr1MZ2whtvusL@lpieralisi>
+References: <20230307-apple_pcie_disabled_ports-v2-1-c3bd1fd278a4@jannau.net>
+        <20230309163935.GA1140101@bhelgaas>
+        <86a60dxcr0.wl-maz@kernel.org>
+        <ZBLzr1MZ2whtvusL@lpieralisi>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: lpieralisi@kernel.org, helgaas@kernel.org, j@jannau.net, alyssa@rosenzweig.io, kw@linux.com, robh@kernel.org, bhelgaas@google.com, sven@svenpeter.dev, linux-pci@vger.kernel.org, asahi@lists.linux.dev, linux-kernel@vger.kernel.org, daire.mcnamara@microchip.com, conor.dooley@microchip.com, stable@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gMTUuMDMuMjAyMyAxMTo1MCwgRHVyYWkgTWFuaWNrYW0gS1Igd3JvdGU6DQo+IEFkZCBQVFAg
-Y2FwYWJpbGl0eSB0byB0aGUgR2lnYWJpdCBFdGhlcm5ldCBNQUMuDQo+IA0KPiBTaWduZWQtb2Zm
-LWJ5OiBEdXJhaSBNYW5pY2thbSBLUiA8ZHVyYWkubWFuaWNrYW1rckBtaWNyb2NoaXAuY29tPg0K
-DQpSZXZpZXdlZC1ieTogQ2xhdWRpdSBCZXpuZWEgPGNsYXVkaXUuYmV6bmVhQG1pY3JvY2hpcC5j
-b20+DQoNCg0KPiAtLS0NCj4gIGRyaXZlcnMvbmV0L2V0aGVybmV0L2NhZGVuY2UvbWFjYl9tYWlu
-LmMgfCAyICstDQo+ICAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDEgZGVsZXRpb24o
-LSkNCj4gDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL25ldC9ldGhlcm5ldC9jYWRlbmNlL21hY2Jf
-bWFpbi5jIGIvZHJpdmVycy9uZXQvZXRoZXJuZXQvY2FkZW5jZS9tYWNiX21haW4uYw0KPiBpbmRl
-eCA2ZTE0MWE4YmJmNDMuLjI3ZmM2YzkwM2QyNSAxMDA2NDQNCj4gLS0tIGEvZHJpdmVycy9uZXQv
-ZXRoZXJuZXQvY2FkZW5jZS9tYWNiX21haW4uYw0KPiArKysgYi9kcml2ZXJzL25ldC9ldGhlcm5l
-dC9jYWRlbmNlL21hY2JfbWFpbi5jDQo+IEBAIC00ODQ0LDcgKzQ4NDQsNyBAQCBzdGF0aWMgY29u
-c3Qgc3RydWN0IG1hY2JfY29uZmlnIG1wZnNfY29uZmlnID0gew0KPiAgDQo+ICBzdGF0aWMgY29u
-c3Qgc3RydWN0IG1hY2JfY29uZmlnIHNhbWE3ZzVfZ2VtX2NvbmZpZyA9IHsNCj4gIAkuY2FwcyA9
-IE1BQ0JfQ0FQU19HSUdBQklUX01PREVfQVZBSUxBQkxFIHwgTUFDQl9DQVBTX0NMS19IV19DSEcg
-fA0KPiAtCQlNQUNCX0NBUFNfTUlJT05SR01JSSwNCj4gKwkJTUFDQl9DQVBTX01JSU9OUkdNSUkg
-fCBNQUNCX0NBUFNfR0VNX0hBU19QVFAsDQo+ICAJLmRtYV9idXJzdF9sZW5ndGggPSAxNiwNCj4g
-IAkuY2xrX2luaXQgPSBtYWNiX2Nsa19pbml0LA0KPiAgCS5pbml0ID0gbWFjYl9pbml0LA0KDQo=
+On Thu, 16 Mar 2023 10:47:11 +0000,
+Lorenzo Pieralisi <lpieralisi@kernel.org> wrote:
+> 
+> On Thu, Mar 16, 2023 at 09:32:35AM +0000, Marc Zyngier wrote:
+> > On Thu, 09 Mar 2023 16:39:35 +0000,
+> > Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > > 
+> > > [+cc Daire, Conor for apple/microchip use of ECAM .init() method]
+> > > 
+> > > On Thu, Mar 09, 2023 at 02:36:24PM +0100, Janne Grunau wrote:
+> > > > Fixes following warning inside of_irq_parse_raw() called from the common
+> > > > PCI device probe path.
+> > > > 
+> > > >   /soc/pcie@690000000/pci@1,0 interrupt-map failed, using interrupt-controller
+> > > >   WARNING: CPU: 4 PID: 252 at drivers/of/irq.c:279 of_irq_parse_raw+0x5fc/0x724
+> > > 
+> > > Based on this commit log, I assume this patch only fixes the warning,
+> > > and the system *works* just fine either way.  If that's the case, it's
+> > > debatable whether it meets the stable kernel criteria, although the
+> > > documented criteria are much stricter than what happens in practice.
+> > > 
+> > > >   ...
+> > > >   Call trace:
+> > > >    of_irq_parse_raw+0x5fc/0x724
+> > > >    of_irq_parse_and_map_pci+0x128/0x1d8
+> > > >    pci_assign_irq+0xc8/0x140
+> > > >    pci_device_probe+0x70/0x188
+> > > >    really_probe+0x178/0x418
+> > > >    __driver_probe_device+0x120/0x188
+> > > >    driver_probe_device+0x48/0x22c
+> > > >    __device_attach_driver+0x134/0x1d8
+> > > >    bus_for_each_drv+0x8c/0xd8
+> > > >    __device_attach+0xdc/0x1d0
+> > > >    device_attach+0x20/0x2c
+> > > >    pci_bus_add_device+0x5c/0xc0
+> > > >    pci_bus_add_devices+0x58/0x88
+> > > >    pci_host_probe+0x124/0x178
+> > > >    pci_host_common_probe+0x124/0x198 [pci_host_common]
+> > > >    apple_pcie_probe+0x108/0x16c [pcie_apple]
+> > > >    platform_probe+0xb4/0xdc
+> > > > 
+> > > > This became apparent after disabling unused PCIe ports in the Apple
+> > > > silicon device trees instead of deleting them.
+> > > > 
+> > > > Use for_each_available_child_of_node instead of for_each_child_of_node
+> > > > which takes the "status" property into account.
+> > > > 
+> > > > Link: https://lore.kernel.org/asahi/20230214-apple_dts_pcie_disable_unused-v1-0-5ea0d3ddcde3@jannau.net/
+> > > > Link: https://lore.kernel.org/asahi/1ea2107a-bb86-8c22-0bbc-82c453ab08ce@linaro.org/
+> > > > Fixes: 1e33888fbe44 ("PCI: apple: Add initial hardware bring-up")
+> > > > Cc: stable@vger.kernel.org
+> > > > Reviewed-by: Marc Zyngier <maz@kernel.org>
+> > > > Signed-off-by: Janne Grunau <j@jannau.net>
+> > > > ---
+> > > > Changes in v2:
+> > > > - rewritten commit message with more details and corrections
+> > > > - collected Marc's "Reviewed-by:"
+> > > > - Link to v1: https://lore.kernel.org/r/20230307-apple_pcie_disabled_ports-v1-1-b32ef91faf19@jannau.net
+> > > > ---
+> > > >  drivers/pci/controller/pcie-apple.c | 2 +-
+> > > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > > > 
+> > > > diff --git a/drivers/pci/controller/pcie-apple.c b/drivers/pci/controller/pcie-apple.c
+> > > > index 66f37e403a09..f8670a032f7a 100644
+> > > > --- a/drivers/pci/controller/pcie-apple.c
+> > > > +++ b/drivers/pci/controller/pcie-apple.c
+> > > > @@ -783,7 +783,7 @@ static int apple_pcie_init(struct pci_config_window *cfg)
+> > > >  	cfg->priv = pcie;
+> > > >  	INIT_LIST_HEAD(&pcie->ports);
+> > > >  
+> > > > -	for_each_child_of_node(dev->of_node, of_port) {
+> > > > +	for_each_available_child_of_node(dev->of_node, of_port) {
+> > > >  		ret = apple_pcie_setup_port(pcie, of_port);
+> > > >  		if (ret) {
+> > > >  			dev_err(pcie->dev, "Port %pOF setup fail: %d\n", of_port, ret);
+> > > 
+> > > Is this change still needed after 6fffbc7ae137 ("PCI: Honor firmware's
+> > > device disabled status")?  This is a generic problem, and it would be
+> > > a lot nicer if we had a generic solution.  But I assume it *is* still
+> > > needed because Rob gave his Reviewed-by.
+> > 
+> > I'm not sure this is addressing the same issue. The way I read it, the
+> > patch you mention here allows a PCI device to be disabled in firmware,
+> > even if it could otherwise be probed.
+> > 
+> > What this patch does is to prevent root ports that exist in the HW but
+> > that have been disabled from being probed. Same concept, only at a
+> > different level.
+> 
+> A root port is a PCI device though and that's what's causing the warning
+> AFAIK (? it is triggered on the root port PCI device pci_assign_irq()
+> call),
+
+As usual, there are two sides to things. The root ports are also part
+of a platform device, and this what this patch uses.
+
+> I am not sure the root port DT node is associated with the root
+> port PCI device correctly, which might explain why, even after
+> 6fffbc7ae137, the PCI enumeration code is adding the root port PCI
+> device to the PCI tree.
+
+I didn't say that commit did not suppress the warning. I haven't
+tested it the first place because I really need all the PCIe ports I
+can get on the machines I have.
+
+It just feels to me that they are tracking different things.
+
+> Is the dts available anywhere ? How are root ports described in it ?
+
+arch/arm64/boot/dts/apple/t8103.dtsi
+Documentation/devicetree/bindings/pci/apple,pcie.yaml
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
