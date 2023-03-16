@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69BE06BC83A
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 09:07:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42D7E6BC83E
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 09:07:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230402AbjCPIG5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 04:06:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48108 "EHLO
+        id S230206AbjCPIHq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 04:07:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230398AbjCPIGw (ORCPT
+        with ESMTP id S229686AbjCPIHo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 04:06:52 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1749B06E9
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 01:06:35 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id z21so4203472edb.4
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 01:06:35 -0700 (PDT)
+        Thu, 16 Mar 2023 04:07:44 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B6F61913D
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 01:07:41 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id eg48so4048467edb.13
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 01:07:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678953994;
+        d=linaro.org; s=google; t=1678954059;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=KZkYtSR+YFrQLhjFXxMBdPgks/5EamNF6JACsG0aG5I=;
-        b=MZyWQTzvPjgcuXcNYT/yQuy4ao0cb9lt1XOBPuBy/LGocjOIgUnBTqrQrapFtA6C5E
-         AGe9t2b3JcQHb3Q0v31fRCNeKoqIgB7uxmG4eUHu6PVn7YXwLKvofq1IsrNhzIQ5Ig5L
-         G47IzFDjVpaYokKqTGsVn5LsAe2j9nVg+gL3gFJb2RBUQ/fJqO+x/XbJ3fW4DQcZliwU
-         2eUuZbzvtg+tchztjsUboLm+FqCFo08EcEwtrqlxVmR2ZcECbx4rwrcx1fBjxjsLkdUt
-         yKxW9Om5vG01d/pnvBq5Fk53TFajpGZVA36Mz47lJtM3a1KHEpphS9VYczFs/+gzUbIi
-         cl2w==
+        bh=7bLCnphtCoYaOUO/XmDnUvbleV00dxya2UA7xOdtlvI=;
+        b=u+eyp6tx+NTpuXn9TcIwnNCAck2h5Llecsjso31eMXyMw55rTgUAJjbxIfx+4TSBFT
+         UerMzwj+URTf+h3ZeZlH9UodIHFViAIDtRxcpag1TFBBD/XirFhXki9EAHP6ualP6h5V
+         eKZ83H+h/c8l+dooQTR62EfkpIVVCq5fvL1YqVWEiYu1axk+x09kIyH6Xy1Il3EDjI1F
+         wqk7QYCu2BDUIz5sjqHPS6Ii0Wyt1ZbYc3Rvh9PseXP3Odau93L66r8pAoN2rm5F61vv
+         WwpLAsOfcXazaPQ2TRVl+eqc1W/caEl8RE2VqEKDULsDDup+ZHLtVRQ2YvhS+2nXs7tJ
+         l+Ww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678953994;
+        d=1e100.net; s=20210112; t=1678954059;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KZkYtSR+YFrQLhjFXxMBdPgks/5EamNF6JACsG0aG5I=;
-        b=MkOBj4cVhkvsmycOHg7hNtIMBPRPEdPuUArHty2/kyIXaug4bH/szZoBqvA4kdw6+5
-         FGxIdfyh+hK5jL62aj1ccU6+IDTqHBRpKYzGIgbxfRcwsePEsPglK2OhmetqqJ4csJov
-         EQNf2VXB19NGSeNkbTw/Tizw9BikHeLaLVomizcHN8lBeTlaSuHTbBUtG4wW1tRtc6dy
-         NEdSkOWTyvI5KQDruoqoEfV87UA4v9JVco249NMeK4d6jcxYD545+e8NdEjpQyCFcRLx
-         EbVVUnmwxqaF+d5Sm2wmeZsl77XUqKwR4Uwb/v7e8OInXk1j60zBul6T0umrfeXg2PS/
-         7BrA==
-X-Gm-Message-State: AO0yUKVhUBH9FCS+0DyhtTUpVraYCP0MgA+IIgHlCI6kwBeru5E3UU33
-        zfyZqRg4a0AOpZdbC9Wi+3JIKQ==
-X-Google-Smtp-Source: AK7set816JtppXD+OBP7Q2nHJWHyKFcPf9wNBzn6R33ibzuPGNNFWGvEWVf1ckoXJyxR+9WOJERVLA==
-X-Received: by 2002:a17:906:b17:b0:8b1:7857:2331 with SMTP id u23-20020a1709060b1700b008b178572331mr8990750ejg.65.1678953994419;
-        Thu, 16 Mar 2023 01:06:34 -0700 (PDT)
+        bh=7bLCnphtCoYaOUO/XmDnUvbleV00dxya2UA7xOdtlvI=;
+        b=JKLd5tufABY8KEvNRI9tDzP1r9sUy/ozY/4IQSwuP5CkLxjf2DbJ53NA9tle0uzeiw
+         Sh9duxDq7WHzM7iU+PtUBghmtT8NqMfrCCAIfp7u31T9PPWM8foQCdy5l/eKiaWQvZWX
+         RbsyiZ2fOqal/uqUxkEYwgWShY1qtdI35odFiWGZbouI2xCBoDs/OPRM3BeNHn9L6snX
+         lILYI1UaG2MlEfNX96Gn3oUR9QaKn5sVQEU/TrcInrztN09z252cI6bw5tz8uORwGnM4
+         TqkCUvVKU5VfCSl9HZ3Fqhv9aovzXM1NigFB5Uw3mAOMGPSWpLCCG7fLFNfqQc0fVtw+
+         baXw==
+X-Gm-Message-State: AO0yUKWH6LPJwmaAr2XG+sO9SGLb1jC8llENdfdEe3o8vFu3F03jIdnZ
+        3tVrcZib+Ww8jBMfTCDY/V3xTw==
+X-Google-Smtp-Source: AK7set9E8pty3V37QE7on6sEyxDO7T6KMKBPBTC0gYLiXURZICca8Wpt50shKAdyoNuvMjlI8HEp2A==
+X-Received: by 2002:a17:906:bc8f:b0:8e8:602f:847a with SMTP id lv15-20020a170906bc8f00b008e8602f847amr9762171ejb.24.1678954059599;
+        Thu, 16 Mar 2023 01:07:39 -0700 (PDT)
 Received: from ?IPV6:2a02:810d:15c0:828:9827:5f65:8269:a95f? ([2a02:810d:15c0:828:9827:5f65:8269:a95f])
-        by smtp.gmail.com with ESMTPSA id oq12-20020a170906cc8c00b0092fdb0b2e5dsm938055ejb.93.2023.03.16.01.06.33
+        by smtp.gmail.com with ESMTPSA id z17-20020a1709064e1100b008b69aa62efcsm3527336eju.62.2023.03.16.01.07.38
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Mar 2023 01:06:34 -0700 (PDT)
-Message-ID: <c9577e01-b6a0-48d9-173e-2eddffd8019c@linaro.org>
-Date:   Thu, 16 Mar 2023 09:06:32 +0100
+        Thu, 16 Mar 2023 01:07:39 -0700 (PDT)
+Message-ID: <543fe511-5d04-f3d9-503e-968d3b1a6f6a@linaro.org>
+Date:   Thu, 16 Mar 2023 09:07:37 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-Subject: Re: [PATCH net-next 10/16] dt-bindings: net: dwmac: Add AXI-bus
+Subject: Re: [PATCH net-next 11/16] dt-bindings: net: dwmac: Add MTL Rx Queue
  properties constraints
 Content-Language: en-US
 To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
@@ -80,14 +80,15 @@ Cc:     Serge Semin <fancer.lancer@gmail.com>,
         linux-stm32@st-md-mailman.stormreply.com,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
 References: <20230313225103.30512-1-Sergey.Semin@baikalelectronics.ru>
- <20230313225103.30512-11-Sergey.Semin@baikalelectronics.ru>
+ <20230313225103.30512-12-Sergey.Semin@baikalelectronics.ru>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230313225103.30512-11-Sergey.Semin@baikalelectronics.ru>
+In-Reply-To: <20230313225103.30512-12-Sergey.Semin@baikalelectronics.ru>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -95,34 +96,29 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 13/03/2023 23:50, Serge Semin wrote:
-> Currently none of the AXI-bus non-boolean DT-properties have constraints
-> defined meanwhile they can be specified at least based on the
-> corresponding device configs. Let's do that:
-> + snps,wr_osr_lm/snps,rd_osr_lmt - maximum number of outstanding AXI-bus
-> read/write requests is limited with the IP-core synthesize parameter
-> AXI_MAX_{RD,WR}_REQ. DW MAC/GMAC: <= 16, DW Eth QoS: <= 32, DW xGMAC: <=
-> 64. The least restrictive constraint is defined since the DT-schema is
-> common for all IP-cores.
-> + snps,blen - array of the burst lengths supported by the AXI-bus. Values
-> are limited by the AXI3/4 bus standard, available AXI/System bus CSR flags
-> and the AXI-bus IP-core synthesize config . All DW *MACs support setting
-> the burst length within the set: 4, 8, 16, 32, 64, 128, 256. If some burst
-> length is unsupported a zero value can be specified instead in the array.
-> 
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> Currently none of the MTL Rx Queues QoS-related DT-properties have been
+> equipped with the proper constraints. Meanwhile they can be specified at
+> least based on the corresponding CSR field sizes or the DW (x|xG)MAC
+> IP-core synthesize parameter constraints. Let's do that:
+> + snps,rx-queues-to-use - number of Rx queues to utilise is limited w
 
+(...)
 
->  
->        snps,kbbe:
->          $ref: /schemas/types.yaml#/definitions/uint32
-> @@ -501,6 +507,8 @@ properties:
->            this is a vector of supported burst length.
->          minItems: 7
->          maxItems: 7
-> +        items:
-> +          enum: [256, 128, 64, 32, 16, 8, 4, 0]
+> +
+>            snps,route-avcp:
+>              type: boolean
+>              description: AV Untagged Control packets
+> @@ -166,6 +173,9 @@ properties:
+>            snps,priority:
+>              $ref: /schemas/types.yaml#/definitions/uint32
+>              description: Bitmask of the tagged frames priorities assigned to the queue
+> +            minimum: 0
+> +            maximum: 0xFF
+> +
 
-Increasing order.
+lowercase hex
+
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
 Krzysztof
