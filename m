@@ -2,90 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDB866BD85C
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 19:52:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E6316BD85F
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 19:53:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229832AbjCPSwn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 14:52:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55926 "EHLO
+        id S229702AbjCPSxO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 14:53:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbjCPSwl (ORCPT
+        with ESMTP id S229539AbjCPSxM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 14:52:41 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F059728E59;
-        Thu, 16 Mar 2023 11:52:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9ECE6B822BC;
-        Thu, 16 Mar 2023 18:52:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECD8AC433EF;
-        Thu, 16 Mar 2023 18:52:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678992757;
-        bh=59kceHKTQ9pP2wUCJX8jKFzLo8hYVTu7itr7dC78eII=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=PGUIcaZp6+rvtdA+AXlsWzUw+mepWVcL6mXTXRgW0sgMF6pYGsV9aGt95mIYsEPPn
-         mzR0GYlsSB8sEZ3LLO5iUqDWrNzh5Nt6HAgUhzT7o6VTkakqrGjq7kTr2cH10BBHCr
-         OCo5l8B4olKfIqW8YTjTcNro8TfwpLnUErrl6QLzMDzn1LuMaECLpL/frKH3ydjtov
-         98a0yAp+TFpFg+L3Qe+M5G46OTDt6AqowmZer9SfOghnhOB35do/BwnWONyOswUr/6
-         /H2Im6x3rgFHDG+u7QfFUyhJiTRD9aUvzjRAv5JfnwbNRHk1pIg+XRHf/yJRir8/BP
-         iv0OYqCiOSLXg==
-Date:   Thu, 16 Mar 2023 11:52:34 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Andrew Halaney <ahalaney@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org,
-        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        vkoul@kernel.org, bhupesh.sharma@linaro.org,
-        mturquette@baylibre.com, sboyd@kernel.org, peppe.cavallaro@st.com,
-        alexandre.torgue@foss.st.com, joabreu@synopsys.com,
-        mcoquelin.stm32@gmail.com, richardcochran@gmail.com,
-        linux@armlinux.org.uk, veekhee@apple.com,
-        tee.min.tan@linux.intel.com, mohammad.athari.ismail@intel.com,
-        jonathanh@nvidia.com, ruppala@nvidia.com, bmasney@redhat.com,
-        andrey.konovalov@linaro.org, linux-arm-msm@vger.kernel.org,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, ncai@quicinc.com,
-        jsuraj@qti.qualcomm.com, hisunil@quicinc.com
-Subject: Re: [PATCH net-next 08/11] net: stmmac: Add EMAC3 variant of dwmac4
-Message-ID: <20230316115234.393bca5d@kernel.org>
-In-Reply-To: <20230316183609.a3ymuku2cmhpyrpc@halaney-x13s>
-References: <20230313165620.128463-1-ahalaney@redhat.com>
-        <20230313165620.128463-9-ahalaney@redhat.com>
-        <20230313173904.3d611e83@kernel.org>
-        <20230316183609.a3ymuku2cmhpyrpc@halaney-x13s>
+        Thu, 16 Mar 2023 14:53:12 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CCFED3098
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 11:53:11 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id u20so1286345pfk.12
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 11:53:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1678992790;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=h1W/YlEcuttY3U+vH0Zvi8N5CN0MRI21GzH8QWAyVcI=;
+        b=Lat+lKQfUS8qaHdbgQZoN+LZJ35jZBofHf93jeA469v8V8xyILhxZ+ts9CUZjkmXG4
+         BbOsppMk1ngvHvYqHcCR8mIv1Ai6oqZ0J82FEJaLC7Jw5+YnuB86WMQq76w5MdLh/hsV
+         xnUwyu2dXI2LCGJXqS424ufkp3xGGJAbtKYKOQmSQhDwW1JAqJt3Rpg+EzFHFkPZXFdH
+         cqVf30QcR/9JUr0XM1+OT4Z0QBBo7OV8m+HCyQGbdr/t+5TGOKhEooqc26/y6FP1R0pw
+         k7g9H+qG/GeBUhVNf9fAqrS8yCyfH/ZH7aVRbTPn2QIPARVF3t6WP7325CEJl5rRB9Ek
+         nGUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678992790;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=h1W/YlEcuttY3U+vH0Zvi8N5CN0MRI21GzH8QWAyVcI=;
+        b=sfgJ10P5A2FylHiIVkfwXh2UgEgaLLyKcj3be9m9aUlwckigsH87JfAYSC67udBror
+         h3lkdLr5VRAHEg5g+EEYvgyPQRuMQWRQoFS1cHJUvZthCdGczGXU8t03ljmIDKiJpAtd
+         GoTUi3h8O02VsrCNzVzP/zHvBAv7RxUv2ftyd/YOwVN1FQJ1EbsTGjN/Kc7JxNSC8cwz
+         55+c6SYm9+lUeVRSWmXulfgyJd9HXf893D5LeJHrnVoq/7NafUrTW4Y697o7EUJ6s1y0
+         Ma9POSDT1+rF5/dQ17jjRFfi8cb0BaqYQjYGzAoJV/eFbQMuDFp/heNgArS7E6DbUdoU
+         JbJw==
+X-Gm-Message-State: AO0yUKV5xQ2ynSUZ19FQvGkF68GgGkipBrp2J7HcwctNCylmCMhK4r7v
+        Emolooqnd6zYJTj4m+ImunE8UB5N8Bb1tdvRAymKLQ==
+X-Google-Smtp-Source: AK7set8calzpmt4TbvcPrwDLOE09bCWglEjTwqJL2dcv5Oh96AwzuzFYFuH3zOn+uAZGWnv7FxksYI8VP/RxjpVrANE=
+X-Received: by 2002:a65:6d96:0:b0:503:2583:effb with SMTP id
+ bc22-20020a656d96000000b005032583effbmr1174594pgb.9.1678992790072; Thu, 16
+ Mar 2023 11:53:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230315214029.899573-1-joshdon@google.com> <bfbdef64-1b8c-4168-2576-f6d4a112686b@redhat.com>
+In-Reply-To: <bfbdef64-1b8c-4168-2576-f6d4a112686b@redhat.com>
+From:   Josh Don <joshdon@google.com>
+Date:   Thu, 16 Mar 2023 11:52:58 -0700
+Message-ID: <CABk29NuKPJAVFCJ=i2Qh4=UqPoj5aia01-mCiF3p8vebV3uPWg@mail.gmail.com>
+Subject: Re: [PATCH] cgroup: fix display of forceidle time at root
+To:     Waiman Long <longman@redhat.com>
+Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 16 Mar 2023 13:36:09 -0500 Andrew Halaney wrote:
-> static void emac3_config_cbs(struct mac_device_info *hw, u32 send_slope,
-> 				    u32 idle_slope, u32 high_credit,
-> 				    u32 low_credit, u32 queue)
-> 
-> I agree, that's quite gnarly to read. the emac3_config_cbs is the
-> callback, so it's already at 6 arguments, so there's nothing I can
-> trim there. I could create some struct for readability, populate that,
-> then call the do_config_cbs() func with it from emac3_config_cbs.
-> Is that the sort of thing you want to see?
+On Wed, Mar 15, 2023 at 7:19=E2=80=AFPM Waiman Long <longman@redhat.com> wr=
+ote:
+>
+> How about adding the following fixes tag?
+>
+> Fixes: 1fcf54deb767 ("sched/core: add forced idle accounting for cgroups"=
+)
 
-Yes, a structure is much better, because it can be initialized member
-by member,
-
-struct bla my_bla = { .this = 1, .that = 2, .and = 3, another = 4, };
-
-That's much easier to read. A poor man's version of Python's keyword
-arguments, if you will.
+SGTM, thanks Waiman!
