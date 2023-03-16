@@ -2,119 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4FC46BD744
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 18:39:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 849AF6BD748
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 18:41:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229999AbjCPRj2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 13:39:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33078 "EHLO
+        id S229631AbjCPRlD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 13:41:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230123AbjCPRjO (ORCPT
+        with ESMTP id S229599AbjCPRlA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 13:39:14 -0400
-Received: from GBR01-CWL-obe.outbound.protection.outlook.com (mail-cwlgbr01on2136.outbound.protection.outlook.com [40.107.11.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A293E2536;
-        Thu, 16 Mar 2023 10:38:53 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=IE/IOYVC6S8ME266H7hYzi6F/2r7KpJz5yvyiADR8fYb+cusUvMPiLPHzgEi0RuMMGrEmP2n6aWv4hZ8fT8aUN44GtqmLtGzaX+KlglOa5IWZFxg8Jt/wzOQvs56g6sDh+nD+X1u8uEWM7fx1AJzCfpybUtkD+uJXR6qQDoW2VweKDSFGUSx+81LhPT0QOswjO4HVOJdFkcOCm1Pev6l3CTODQOrcNcrdZ/ponWTbr2y4p+5CGamPvlCIdEqpSvmwTdyQCkYMVdiGQ5UmpP0BHHMMPE9SFWMq6y7BJBeCBaZypIoiZdeVyKpgIkCUd/ENSU1lzxyOlmHWCgdwHIt6A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=IS97sT05ZBg2aMy8byrSb6hopK9iFccuHMFDBlgJBi8=;
- b=LD4/HlWFFMndbR62ZIW5Ks09vluv7jU7ON+Tu/XQm5+MEQu6tZxT2A/Y8Msbejm4qYRVotFIHvg+Kb8uloaQyThLUbHFWTD1fuWd4fzbYMC3Z9deJWDMeLVu+UAXCs3VnPRBXSmc+MRU4kkd+IAkCc/Yf1yMWpEtXTW+sL8+5hzvtFbkKxG+oOhCZYayZ3ZQDN9QCjMgBZrXcQJmJhJ4V1z5qHI95kHBVOYb9msR/BjxDEXgmG8NMuLwogIl0jzeq21LpKmXL5F28SWzbUUXxf0dx6ZI1+dzcsZ58W2fxnreaHj79ry+c45qSUdvsz4LRdpcvebKf5vYcR7/jbuW1w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
- dkim=pass header.d=garyguo.net; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IS97sT05ZBg2aMy8byrSb6hopK9iFccuHMFDBlgJBi8=;
- b=emPhyQx79BLJ066bWEGShxzExUOH/ETZ50AwJXNV+Aoy26qa2qOaokTL4sZH1z/AuE6BCmZH8nH3N5SqoYi2zoCp17BFkW02HpJuTNtIONTyUXht4iERYFlEY+ryd7b9J/UXa4AnunULwjZ986cFPsGy+/pb2UeW6py5Z4k5HCs=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=garyguo.net;
-Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:253::10)
- by LO0P265MB5731.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:264::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.31; Thu, 16 Mar
- 2023 17:38:50 +0000
-Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
- ([fe80::2f2a:55d4:ea1d:dece]) by LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
- ([fe80::2f2a:55d4:ea1d:dece%3]) with mapi id 15.20.6178.031; Thu, 16 Mar 2023
- 17:38:49 +0000
-Date:   Thu, 16 Mar 2023 17:38:48 +0000
-From:   Gary Guo <gary@garyguo.net>
-To:     y86-dev <y86-dev@protonmail.com>
-Cc:     "ojeda@kernel.org" <ojeda@kernel.org>,
-        "alex.gaynor@gmail.com" <alex.gaynor@gmail.com>,
-        "wedsonaf@gmail.com" <wedsonaf@gmail.com>,
-        "boqun.feng@gmail.com" <boqun.feng@gmail.com>,
-        "bjorn3_gh@protonmail.com" <bjorn3_gh@protonmail.com>,
-        "rust-for-linux@vger.kernel.org" <rust-for-linux@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "patches@lists.linux.dev" <patches@lists.linux.dev>
-Subject: Re: [PATCH v1 2/3] rust: add pin-init API
-Message-ID: <20230316173848.18b45232.gary@garyguo.net>
-In-Reply-To: <ct76zcR4JhAXHG90VDfewAmzPJmEHhMvvOf-MejsM_uZsdcsBs9qVLJNYvNvTHOBLlOedgQ4Dm16M2DSDRBIF-olZfq2zp4XboRsCxsm3CA=@protonmail.com>
-References: <D0mWM1KEcWLeFa7IIqPygHlXRTD6gRFHvJKaegYzQXo9zTx7YbSpVLeYLFfq53s2S30Wx7v0khkPMOy6Ng5HiNZ5x7TXtOyLB58vUHtq6ro=@protonmail.com>
-        <20230315200722.57487341.gary@garyguo.net>
-        <ct76zcR4JhAXHG90VDfewAmzPJmEHhMvvOf-MejsM_uZsdcsBs9qVLJNYvNvTHOBLlOedgQ4Dm16M2DSDRBIF-olZfq2zp4XboRsCxsm3CA=@protonmail.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO4P265CA0024.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:2ae::19) To LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:253::10)
+        Thu, 16 Mar 2023 13:41:00 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2045ABCFCA;
+        Thu, 16 Mar 2023 10:40:19 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id p13-20020a17090a284d00b0023d2e945aebso6232594pjf.0;
+        Thu, 16 Mar 2023 10:40:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678988417;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=JnLT3w3MddT1FeU+yFD8gqkc17TpH98T7IaFk8jMiuk=;
+        b=A522MBa9ryjX761nW+71GjDjKYGiIKHWptxTWoLKOtkAQhKCK/vraNVWKsi2q2Cv9z
+         IflKUMiGMS67v7WUk9czaRDi1K6fyWxt54iYTf3f+A6t4uCK8myIjPuQFZpJkf/5OBXn
+         LIlxsQqHQf+mNjvXy2jFZn52EKQ+ZjfqVVl0gkc2BGZzZFkmCzlzAqajTSofgWp6vol2
+         bD+CUUOO0NWD84SS/YQMVpZ9VJ0a219ZDWG9D8/QfkKkm+wsxZV/7di9onO0SAwiuNuI
+         haJJbvZLDnpwVn7JnIXHPbQRtQoN9XCGA9V5ycuMRoUNp2ppN7gGO6Mxcx4wxwd3uq3t
+         zGOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678988417;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JnLT3w3MddT1FeU+yFD8gqkc17TpH98T7IaFk8jMiuk=;
+        b=vWZFrYwzkuQC+HyDKOlYvGM2H9zu8BiwpBQRQ80BbVMKN7hUru5RplZvp16TW2ax2C
+         Qwa7GNVjopYWKHyNu7ciZNW5mSYTQQF5pOx8H+bUVKuCuDgF0oZjqI+PLz0ydw1gg0m8
+         TX1SZGEUi89aVuVzfQmz8pjspVsczhcBPvmTgFVD+ws+x3dnJAJUs5UXPgmeYkQZhDYP
+         rOHDWzGfH2C824+ntm0/KzvnL3mkz+2uTAgoiL5jNnz6qgxFBpNRd8hPMRprw5SO0+7X
+         T5LGVrT/UUCakq5vGNLDBDI1kkYmr/wF+SnPux4cOSMjqyqDvwSLUnWm2MB2iSlSF5HX
+         YFzg==
+X-Gm-Message-State: AO0yUKVHPFRMCyY3Dqi4RqrsxYLVkC34SHhIkzr24NbtWqkd/pbVJFdQ
+        M4OtQf7D8rKfDrehXAIE6I+i1pclq1A=
+X-Google-Smtp-Source: AK7set9kh6aca4zZSdEU93VoALZWhpFld2TQbqwAcIVZHGekqVMhgMPTiYNMpbMACQS2cFEFXA1aGw==
+X-Received: by 2002:a05:6a20:bf02:b0:d0:4297:c698 with SMTP id gc2-20020a056a20bf0200b000d04297c698mr4380556pzb.9.1678988416446;
+        Thu, 16 Mar 2023 10:40:16 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id f24-20020aa78b18000000b005898fcb7c1bsm5885178pfd.177.2023.03.16.10.40.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Mar 2023 10:40:15 -0700 (PDT)
+Message-ID: <fd4cb74c-3a8e-c9c0-f9ac-312fb916275c@gmail.com>
+Date:   Thu, 16 Mar 2023 10:40:10 -0700
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LO2P265MB5183:EE_|LO0P265MB5731:EE_
-X-MS-Office365-Filtering-Correlation-Id: d1c1d3fc-b35d-4e4b-fb35-08db26454d82
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: t+1svFOJJ1g/89z32YHUxd+GAePSNpXr+kPQgvCzvs404vwdsSgh1a+DVhy3E2R/8Fu4AKLPSmgae9785RUUklm8DqT25DJ7DTYibw9NLFBKXVodciv/O0PsQ2VcT0d9FrA4G53nMcX5vjKDkBfpj1H6EeQeuemtIbQrnERbL935iEsM6sNZaJ2bvl9JJepbpfg6HfHHloJQleXxDAM80B+bncYrxjcnIukGfocSeER/KqZKMZ/8mJCXra76NK9jZdszwkMnVPZQKybWDWyTm7EgtmaTXlbRmKBqiZkBo5GugGw96WMIMyFPhtNWztfv/t3ikWGhymtFqB9nKDMqVZHZPqVYDXK5zvQIs8mPCXp0EPLiXPyUfnzM2LkY3+prQZyf2Xqprb4a1ZPSrHoDSrz9pGUbQD+mqvGDVtwdRsjdLajUObjDpldAsXwKZKYD8TsdqXl9X0Pcdeuqaq80PBWmBwhUdBkpiw+IV2jwZzHXIQEpgNhAe/29dR0anyJfB1a4vWt2Jg7JBc7P5jse8smeenkiAu1rpCr+x7IXVL2VzpBCG29CYJ/wP1prOCq/KquVtjQsYvJ1aZn6vr7cir12KsMOwl3GffwIPsrE+Qimto2JfFOxPa+FelSUA1mUxL0uUKyDITNpHY6Vcb/Iag==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230025)(39830400003)(136003)(376002)(396003)(366004)(346002)(451199018)(36756003)(86362001)(2906002)(38100700002)(5660300002)(41300700001)(8936002)(26005)(1076003)(2616005)(6512007)(186003)(6506007)(4326008)(316002)(54906003)(83380400001)(66476007)(6486002)(6916009)(66556008)(66946007)(8676002)(478600001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?6jyGMqTTZ9+XPMkaIrRO6Bf+24fr7IjeE5lvxjqhhNmn9ujxzVuvgmvxOF86?=
- =?us-ascii?Q?JL+VoQkivhZ4COW2p7AOAtOZVZQx/UoMZJiR1sWENF4YZjNq4Ram625CDnEW?=
- =?us-ascii?Q?P2sdIDtiFh19gGIzyvUAdESfWZKx8D7a/zbpQYLPXqSr1ZIlcF9CswNkypLx?=
- =?us-ascii?Q?ZfNmb5Dg/dKIvFLnPkxmyhNiActxgwTDXhvNTcZsg8em+O1pUKOz1CQt1Gqi?=
- =?us-ascii?Q?TnUPdEbrkP16llSz1iSaV71x5rBDOfEc+a8261+SLjrjzPFgLBQ7euucIA8e?=
- =?us-ascii?Q?Wx0R+Yp2+V00i1Cq65soaYnSxn1QoFP3yDg+fJfyfqKdMAuzDnDH71P/ebs1?=
- =?us-ascii?Q?ABtXiBHBGvMJmtd3CKkAUPfPsFJeo1rMCibR1CASXS87snQ7RY7zb18H+Tbk?=
- =?us-ascii?Q?x83Wtxy9ov172yeW6vVVlxEYoshQPDzXzT3dwXP7qnyhd8RNCBoF2gBYgIlQ?=
- =?us-ascii?Q?y3st0HE4HcBBdIIDLHGJv4sseG7L06MDP6o5eKYvJwvLeIHuYRT/CUrFicK7?=
- =?us-ascii?Q?AhklNBNnVStOH0Br3YDMeNrGPySFbmbor2cWut6PI2Z3+lrmpY00yq/2OXSO?=
- =?us-ascii?Q?wU4yj85Wn32SDRzuF+jgHBWXTa2ksYDCe/jKL0rfeyA9lBofbaUZvvnJ0hEv?=
- =?us-ascii?Q?jBqjpmIb7DaPSGeb/Mu7dD3NqTZJIOzyKILN5RLSDn4mZu5RJlDypnuQlYTs?=
- =?us-ascii?Q?ZnnyEmWlCDEk4HJoM8e4o+u/4XikiV5WhO5E+EEL4q8wq8OKlwICbF5vfE4a?=
- =?us-ascii?Q?6DJPD8Z7SbPgv85vftNyz/VPANzQKS14TBQ/DcvjrsD5fqwzuFkFwq36PSgX?=
- =?us-ascii?Q?CRJ9Y1jmmjhkzGfn/oCd4GsetcR1hlPsRMJpgIigyEUrE0/cBKEraJCiVrnA?=
- =?us-ascii?Q?55HEoQJGEaSoNvrF9JRKYBK8ZxMC2hFDRqP9rDDLVP9IfE1VrEF3zlseGrE+?=
- =?us-ascii?Q?Nh1r2GF9GIxEMda/g534lyplMIpgdOmzc6KOWKhGfgSGcjDb4O6OYrm3tSKW?=
- =?us-ascii?Q?2KNlt2DR/JgUNTrhRFTpTjzjc2AaJetTrx0URS2xrW4wJyPoLE+ZhOHS/leG?=
- =?us-ascii?Q?Pac8ITO0XFd1c+MfM7mVoCOpKA6l3NwCyQwpZ6Z/J48BkxUT5m4GJK3Kptyx?=
- =?us-ascii?Q?07jOM1jw+CtaTxQi8DUmVmtIQRGZ4igcHzdYC6AhKij+67uN2DqR5xZITSHe?=
- =?us-ascii?Q?jt50EVcauLZNfhzTNhOD4kjyUeA5r6UDp2PkaOFD7NvDUxYkljDs30jea2em?=
- =?us-ascii?Q?gDVP/vM3J1qsrwqoBi9xkn0GSvE7iwDm6SHcg2h74r7FEQPgkJlq+3jQqcWC?=
- =?us-ascii?Q?NZkzPWLfn9KY1Sbw2rqRDa+CU3WBEkL/4dIBcAQD/LcCsKhlJun3N3nrb+xb?=
- =?us-ascii?Q?Yym72n0aVMpCIcptOLehUJmPt2PLZet8slRisAWh18fbK1hT2HqbueF6lbhP?=
- =?us-ascii?Q?d/+uCly4G1rUkydStOD2C5OnSmG0l7J4tj5cw57Y3uu9kICZDwHV/hVzDgX6?=
- =?us-ascii?Q?opqePcaIBqdgP51xRJkDXyMTWV/bXkIWgNam+qUAohU5tS/IKyACdubjvc6H?=
- =?us-ascii?Q?Xy5/2GC7eQb/FZRa7JF87pRP5CysSu+i1tcDIssz?=
-X-OriginatorOrg: garyguo.net
-X-MS-Exchange-CrossTenant-Network-Message-Id: d1c1d3fc-b35d-4e4b-fb35-08db26454d82
-X-MS-Exchange-CrossTenant-AuthSource: LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Mar 2023 17:38:49.9491
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 2FCanFeJW39p95H0vEsceP/R5/PEFuzM9o3kUZB/I0v0YfPrIwI6HfAe3zXmZKrVWhGJiMmKl3B8Uf26gShYcw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO0P265MB5731
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH] mips: bmips: BCM6358: disable arch_sync_dma_for_cpu_all()
+Content-Language: en-US
+To:     =?UTF-8?Q?=c3=81lvaro_Fern=c3=a1ndez_Rojas?= <noltari@gmail.com>
+Cc:     William Zhang <william.zhang@broadcom.com>,
+        Jonas Gorski <jonas.gorski@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com, tsbogend@alpha.franken.de,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230310121306.4632-1-noltari@gmail.com>
+ <da5d150e-a2db-573d-e231-b4fd9fdaf63b@gmail.com>
+ <CAOiHx=njCvfVju9BAe7gTzMq0vybQF-gy4SRZrhEJFULGLhC7w@mail.gmail.com>
+ <5b4d3eef-ff80-29e8-9be0-d487aee5e4e2@broadcom.com>
+ <a88fc41b-69d3-b042-fa91-e403d1263742@gmail.com>
+ <CAKR-sGfL5_VU9uxJHGyZ-bj2P_7R6+OOfWs6Yf-ihcCF8bD2MA@mail.gmail.com>
+ <e3cff853-8d5d-acdf-8e6a-3322c4de2023@gmail.com>
+ <CAKR-sGcyMF26NGoeEApKuKDe6=14nCGKwRYx-o68LHAcmUNXhA@mail.gmail.com>
+ <7517f1b0-2afb-7edf-a847-e839a410f46f@gmail.com>
+ <CAKR-sGdOeg185sPFi0nwDxd6Fjx_SxyBgvtmFEiO9Y_50Wf2Bw@mail.gmail.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <CAKR-sGdOeg185sPFi0nwDxd6Fjx_SxyBgvtmFEiO9Y_50Wf2Bw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -122,139 +86,185 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 16 Mar 2023 09:38:16 +0000
-y86-dev <y86-dev@protonmail.com> wrote:
-
-> > > +
-> > > +/// Trait facilitating pinned destruction.
-> > > +///
-> > > +/// Use [`pinned_drop`] to implement this trait safely:
-> > > +///
-> > > +/// ```rust
-> > > +/// # use kernel::sync::Mutex;
-> > > +/// use kernel::macros::pinned_drop;
-> > > +/// use core::pin::Pin;
-> > > +/// #[pin_data(PinnedDrop)]
-> > > +/// struct Foo {
-> > > +///     #[pin]
-> > > +///     mtx: Mutex<usize>,
-> > > +/// }
-> > > +///
-> > > +/// #[pinned_drop]
-> > > +/// impl PinnedDrop for Foo {
-> > > +///     fn drop(self: Pin<&mut Self>) {
-> > > +///         pr_info!("Foo is being dropped!");
-> > > +///     }
-> > > +/// }
-> > > +/// ```
-> > > +///
-> > > +/// # Safety
-> > > +///
-> > > +/// This trait must be implemented with [`pinned_drop`].
-> > > +///
-> > > +/// [`pinned_drop`]: kernel::macros::pinned_drop
-> > > +pub unsafe trait PinnedDrop: __PinData {
-> > > +    /// Executes the pinned destructor of this type.
-> > > +    ///
-> > > +    /// # Safety
-> > > +    ///
-> > > +    /// Only call this from `<Self as Drop>::drop`.
-> > > +    unsafe fn drop(self: Pin<&mut Self>);
-> > > +
-> > > +    // Used by the `pinned_drop` proc-macro to ensure that only safe operations are used in `drop`.
-> > > +    // the function should not be called.
-> > > +    #[doc(hidden)]
-> > > +    fn __ensure_no_unsafe_op_in_drop(self: Pin<&mut Self>);  
-> >
-> > One idea to avoid this extra function is to have an unsafe token to the
-> > drop function.
-> >
-> > fn drop(self: Pin<&mut Self>, token: TokenThatCanOnlyBeCreatedUnsafely);  
+On 3/14/23 11:14, Álvaro Fernández Rojas wrote:
+> Hi Florian,
 > 
-> What is wrong with having this extra function? If the problem is that this
-> function might be called, then we could add a parameter with an
-> unconstructable type.
+> El lun, 13 mar 2023 a las 22:46, Florian Fainelli
+> (<f.fainelli@gmail.com>) escribió:
+>>
+>> (please don't top post)
+>>
+>> On 3/13/23 14:39, Álvaro Fernández Rojas wrote:
+>>> Hi Florian,
+>>>
+>>> I did another test changing from TP1 to TP0 and this is the result:
+>>> [ 0.000000] Linux version 5.15.98 (noltari@atlantis)
+>>> (mips-openwrt-linux-musl-gcc (OpenWrt GCC 12.2.0 r22187+1-19817fa3f5)
+>>> 12.2.0, GNU ld (GNU Binutils) 2.40.0) #0 SMP Sun Mar 12 18:23:28 2023
+>>> [ 0.000000] bmips_cpu_setup: read_c0_brcm_config_0() = 0xe30e1006
+>>> [ 0.000000] bmips_cpu_setup: BMIPS_RAC_CONFIG = 0x2a00015
+>>> [ 0.000000] CPU0 revision is: 0002a010 (Broadcom BMIPS4350)
+>>>
+>>> And there were no exceptions with EHCI/OHCI as opposed to TP1.
+>>> So the issue is only happening when booting from TP1.
+>>
+>> Ah, that explains it then, I was just about to ask you which TP was the
+>> kernel booted on.
+>>
+>>> Maybe it's due to the fact that BCM6358 has a shared TLB?
+>>
+>> I think it has to do with the fact that the BMIPS_RAC_CONFIG_1 is likely
+>> not enabling the RAC since that register pertains to TP1, could you dump
+>> its contents, and if they do not set bit 0 and/or 1, please set them and
+>> try again and see whether it works any better? The RAC provides
+>> substantial performance improvements, it would be a change to keep it
+>> disabled.
 > 
-> I think that `drop` should be `unsafe`, since it really does have
-> the requirement of only being called in the normal drop impl.
+> This is the code that I added to bmips_cpu_setup():
+>      case CPU_BMIPS4350:
+>          cfg = read_c0_brcm_cmt_local();
+>          pr_info("bmips_cpu_setup: read_c0_brcm_cmt_local() = 0x%x\n", cfg);
+> 
+>          cfg = read_c0_brcm_config_0();
+>          pr_info("bmips_cpu_setup: read_c0_brcm_config_0() = 0x%x\n", cfg);
+> 
+>          cfg = __raw_readl(cbr + BMIPS_RAC_ADDRESS_RANGE);
+>          pr_info("bmips_cpu_setup: BMIPS_RAC_ADDRESS_RANGE = 0x%x\n", cfg);
+> 
+>          cfg = __raw_readl(cbr + BMIPS_L2_CONFIG);
+>          pr_info("bmips_cpu_setup: BMIPS_L2_CONFIG = 0x%x\n", cfg);
+> 
+>          cfg = __raw_readl(cbr + BMIPS_LMB_CONTROL);
+>          pr_info("bmips_cpu_setup: BMIPS_LMB_CONTROL = 0x%x\n", cfg);
+> 
+>          cfg = __raw_readl(cbr + BMIPS_RAC_CONFIG);
+>          pr_info("bmips_cpu_setup: BMIPS_RAC_CONFIG = 0x%x\n", cfg);
+>          __raw_writel(cfg | BIT(0) | BIT(1), cbr + BMIPS_RAC_CONFIG);
+>          pr_info("bmips_cpu_setup: BMIPS_RAC_CONFIG = 0x%x\n", cfg);
+>          __raw_readl(cbr + BMIPS_RAC_CONFIG);
+> 
+>          cfg = __raw_readl(cbr + BMIPS_RAC_CONFIG_1);
+>          pr_info("bmips_cpu_setup: BMIPS_RAC_CONFIG_1 = 0x%x\n", cfg);
+>          __raw_writel(cfg | BIT(0) | BIT(1), cbr + BMIPS_RAC_CONFIG_1);
+>          pr_info("bmips_cpu_setup: BMIPS_RAC_CONFIG_1 = 0x%x\n", cfg);
+>          __raw_readl(cbr + BMIPS_RAC_CONFIG_1);
+>          break;
+> 
+> And this is the result:
+> [    0.000000] bmips_cpu_setup: read_c0_brcm_cmt_local() = 0x80000000
 
-The point to avoid having two functions with the same body. This would
-require double the amount of checks needed by the compiler (and make
-error message worth if anything's wrong in the body of `drop`).
+OK, so we are executing from TP1, but we knew that already.
 
-This current approach is really just a hack to avoid code from doing
-unsafe stuff without using `unsafe` block -- and the best solution is
-just to avoid make `drop` function unsafe. However we don't want drop
-function to be actually called from safe code, and that's the point of
-a token that can only be created unsafely is force `drop` to *not* be
-called by safe code. The token is a proof that `unsafe` is being used.
+> [    0.000000] bmips_cpu_setup: read_c0_brcm_config_0() = 0xe30e1006
 
-This way the `__ensure_no_unsafe_op_in_drop` function would not be
-needed.
+bit 31: instruction cache enabled
+bit 30: data cache enabled
+bit 29: RAC present
+bit 25: DSU power enabled
+bit 24: data cache power enabled
+bit 19: low-latency memory bus (LMB) present
+bit 18: concurrent multi threading (CMT) present
+bit 17: reserved
+bit 12: split instruction cache
+bit 2: number of Hi/Lo special registers - 1
+bit 1: eDSP present
+
+This seems to match the recommended and default values
+
+> [    0.000000] bmips_cpu_setup: BMIPS_RAC_ADDRESS_RANGE = 0x277bdab0
+
+That does not look intended, the reset value is supposed to be 0. Can 
+you apply the same values as the ones programmed in the CPU_BMIPS_3300 case?
+
+> [    0.000000] bmips_cpu_setup: BMIPS_L2_CONFIG = 0x241a0008
+
+
+> [    0.000000] bmips_cpu_setup: BMIPS_LMB_CONTROL = 0x0
+
+LMB not enabled, that's OK.
+
+> [    0.000000] bmips_cpu_setup: BMIPS_RAC_CONFIG = 0x3c1b8041
+> [    0.000000] bmips_cpu_setup: BMIPS_RAC_CONFIG = 0x3c1b8041
+> [    0.000000] bmips_cpu_setup: BMIPS_RAC_CONFIG_1 = 0x3600008
+> [    0.000000] bmips_cpu_setup: BMIPS_RAC_CONFIG_1 = 0x3600008
+> 
+> As you can see the bit's aren't set and all the registers appear to
+> have strange values and not the usual ones when initialized by the
+> bootloader...
+
+Yes, so maybe the best way to go about is indeed to go with your change 
+such that if we are running on TP1, it is safe to assume that CFE has 
+not done any sensible initialization, and we have a non functional RAC.
 
 > 
-> > > +}
-> > > +
-> > > +/// Smart pointer that can initialize memory in-place.
-> > > +pub trait InPlaceInit<T>: Sized {
-> > > +    /// Use the given initializer to in-place initialize a `T`.
-> > > +    ///
-> > > +    /// If `T: !Unpin` it will not be able to move afterwards.
-> > > +    fn pin_init<E>(init: impl PinInit<T, E>) -> error::Result<Pin<Self>>
-> > > +    where
-> > > +        Error: From<E>;
-> > > +
-> > > +    /// Use the given initializer to in-place initialize a `T`.
-> > > +    fn init<E>(init: impl Init<T, E>) -> error::Result<Self>
-> > > +    where
-> > > +        Error: From<E>;
-> > > +}  
-> >
-> > Is this trait used? Or the methods could be inherent methods?  
+>>
+>>>
+>>> Maybe the correct way of solving the issue would be by adding the
+>>> following code at bcm6358_quirks():
+>>> if (read_c0_brcm_cmt_local() & (1 << 31))
+>>>       bmips_dma_sync_disabled = 1;
+>>>
+>>> BTW, if I understood it correctly, you want me to reverse the logic,
+>>> so bmips_dma_sync_disabled instead of bmips_dma_sync_enabled.
+>>> Is this correct?
+>>
+>> Yes, I want the logic such that we need to set a variable to 1/true
+>> rather setting one to 0, less change to get it wrong IMHO.
+>>
+>>>
+>>> Best regards,
+>>> Álvaro.
+>>>
+>>>
+>>> El lun, 13 mar 2023 a las 18:37, Florian Fainelli
+>>> (<f.fainelli@gmail.com>) escribió:
+>>>>
+>>>> On 3/12/23 11:50, Álvaro Fernández Rojas wrote:
+>>>>> Hi Florian,
+>>>>>
+>>>>> I tried what you suggested but it stil panics on EHCI:
+>>>>>
+>>>>> [    0.000000] Linux version 5.15.98 (noltari@atlantis)
+>>>>> (mips-openwrt-linux-musl-gcc (OpenWrt GCC 12.2.0 r22187+1-19817fa3f5)
+>>>>> 12.2.0, GNU ld (GNU Binutils) 2.40.0) #0 SMP Sun Mar 12 18:23:28 2023
+>>>>> [    0.000000] bmips_cpu_setup: read_c0_brcm_config_0() = 0xe30e1006
+>>>>> [    0.000000] bmips_cpu_setup: cbr + BMIPS_RAC_CONFIG = 0x3c1b8041
+>>>>> [    0.000000] CPU0 revision is: 0002a010 (Broadcom BMIPS4350)
+>>>>>
+>>>>> It looks like bit 29 is set so RAC should be present.
+>>>>> And RAC_I seems to be set, but not RAC_D...
+>>>>>
+>>>>> BTW, this is what I added to bmips_cpu_setup:
+>>>>>
+>>>>> case CPU_BMIPS4350:
+>>>>> cfg = read_c0_brcm_config_0();
+>>>>> pr_info("bmips_cpu_setup: read_c0_brcm_config_0() = 0x%x\n", cfg);
+>>>>>
+>>>>> cfg = __raw_readl(cbr + BMIPS_RAC_CONFIG);
+>>>>> pr_info("bmips_cpu_setup: cbr + BMIPS_RAC_CONFIG = 0x%x\n", cfg);
+>>>>> __raw_writel(cfg | BIT(0) | BIT(1), cbr + BMIPS_RAC_CONFIG);
+>>>>> __raw_readl(cbr + BMIPS_RAC_CONFIG);
+>>>>> break;
+>>>>
+>>>> Thanks for running those experiments, I cannot explain what you are
+>>>> seeing, so there must be some sort of erratum applicable to the
+>>>> BMIPS4380 revision used on the 6358 somehow...
+>>>>
+>>>> If you can make the suggested change to use negative logic in order to
+>>>> disable the RAC flushing, that would work for me, also maybe add a
+>>>> Fixes: tag so it gets backported to stable trees?
+>>>>
+>>>> Thanks!
+>>>> --
+>>>> Florian
+>>>>
+>>
+>> --
+>> Florian
+>>
 > 
-> I need an extension trait for `Box`, since it is inside of the `alloc`
-> crate and so I figured that I might as well use it for other types. I do
-> not think we can avoid the extension trait for `Box`, but I could make the
-> functions for `UniqueArc` inherent. What do you think?
+> Álvaro
 
-Good point, I forget about `Box`.
+-- 
+Florian
 
-> 
-> > > +/// An initializer that leaves the memory uninitialized.
-> > > +///
-> > > +/// The initializer is a no-op. The `slot` memory is not changed.
-> > > +#[inline]
-> > > +pub fn uninit<T>() -> impl Init<MaybeUninit<T>> {
-> > > +    // SAFETY: The memory is allowed to be uninitialized.
-> > > +    unsafe { init_from_closure(|_| Ok(())) }
-> > > +}  
-> >
-> > Do you think there's a value to have a `Uninitable` which is
-> > implemented for both `MaybeUninit` and `Opaque`?  
-> 
-> If we really need it for `Opaque`, then it probably should be an inherent
-> function. I do not really see additional use for an `Uninitable` trait.
-
-Fair.
-
-> > > +// This trait is only implemented via the `#[pin_data]` proc-macro. It is used to facilitate
-> > > +// the pin projections within the initializers.
-> > > +#[doc(hidden)]
-> > > +pub unsafe trait __PinData {
-> > > +    type __PinData;
-> > > +}
-> > > +
-> > > +/// Stack initializer helper type. Use [`stack_pin_init`] instead of this primitive.  
-> >
-> > `#[doc(hidden)]`?  
-> 
-> This trait is implementation detail of the `#[pin_data]` macro. Why should
-> it be visible in the rust-docs?
-
-I am commenting about `stack_pin_init` (note the doc comment above my
-comment). `StackInit` is an implementation detail of `stack_pin_init`
-and shouldn't be exposed, IMO. Or do you think manual use of
-`StackInit` is needed?
-
-Best,
-Gary
