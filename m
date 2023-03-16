@@ -2,98 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CA536BD590
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 17:29:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C469D6BD59D
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 17:31:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230135AbjCPQ3K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 12:29:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60306 "EHLO
+        id S230242AbjCPQa7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 12:30:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229540AbjCPQ3I (ORCPT
+        with ESMTP id S230156AbjCPQaz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 12:29:08 -0400
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1277276B0;
-        Thu, 16 Mar 2023 09:29:04 -0700 (PDT)
-Received: (Authenticated sender: herve.codina@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id CF611FF811;
-        Thu, 16 Mar 2023 16:29:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1678984143;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jeRzDs4ihJbeI7tp32i3vf2hG703FkbCNPgA50D/FNA=;
-        b=mXFzboS07wKLrh31pNwHjrVSBN14J/n9oejyp51jQ/bRh1ex0pQ7a21J4KKzxljg005gqX
-        pp45HUxC6IHCfX+F8PGrmOOe/FB8XqVLKHmpyjW1yXy3R2vmaaqTe+RfLiqjIa572fiwh1
-        RiXLGu+b5LQW2DT+RLrmq9+oiqzS89YrL38unneeJIJ+7SpG81P2m+vSnxwz88EdkoB1sF
-        VyzyCQSwkEHO3RqJ+C/o/N3qLhutNpOSA87VuQciRtJpa83iHr0vAJYZb7YRZTLMvqUb8f
-        K4JbNS/lXslxJ//oyVuBGcG7p/c1fqW0TZPO/CAIRgW7v1iHsyAMjBZ955oItA==
-Date:   Thu, 16 Mar 2023 17:29:00 +0100
-From:   Herve Codina <herve.codina@bootlin.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Derek Kiernan <derek.kiernan@xilinx.com>,
-        Dragan Cvetic <dragan.cvetic@xilinx.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, alsa-devel@alsa-project.org,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v2 2/7] drivers: misc: Add support for the Lantiq
- PEF2256 framer
-Message-ID: <20230316172900.2bb49a13@bootlin.com>
-In-Reply-To: <ZBMQTxFsrKQesd4v@kroah.com>
-References: <20230316122741.577663-1-herve.codina@bootlin.com>
-        <20230316122741.577663-3-herve.codina@bootlin.com>
-        <ZBMQTxFsrKQesd4v@kroah.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-redhat-linux-gnu)
+        Thu, 16 Mar 2023 12:30:55 -0400
+Received: from mail.antaris-organics.com (mail.antaris-organics.com [91.227.220.155])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E4B122037;
+        Thu, 16 Mar 2023 09:30:51 -0700 (PDT)
+Date:   Thu, 16 Mar 2023 17:30:48 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mareichelt.com;
+        s=202107; t=1678984249;
+        bh=jeR/NRXRjJLxySP9oIxOLTiz9pwgULcWBCaoBTdDcug=;
+        h=Date:From:To:Subject:References:In-Reply-To:From;
+        b=z8PmfTYZJFPOEANBqFAV1KRXQVrGB1vFOn8inhqLB1rQUQf03WtfHyjmzWjogcL0t
+         887+bLCPVljfGdjUQhICXtwvsScCipyXqrRUUQi1fkBfF2SVhVs10hEOo4V46/FzPw
+         nwUtMaaTslsV6vC3ds7zKvpx/jK0EaM7ev3kIUIE/u4CR6HYwj155eO+LPA1pNx8dZ
+         hCnZN2gNMD2/rWUZ9FFiPwH/dAMQ4nLuM2D7yHr4k1RUrPn/mhyyYK3QtyNB2VgqX6
+         sVgGXUqSTZuV3l3Hvvuix6+Ycedtqr3BreYA95juqzxiBtWpMnFKKn5bLE9q9h5OEs
+         pr+OinUSIhT6g==
+From:   Markus Reichelt <lkt+2023@mareichelt.com>
+To:     stable@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 6.1 000/140] 6.1.20-rc2 review
+Message-ID: <20230316163048.GA3702@pc21.mareichelt.com>
+Mail-Followup-To: stable@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230316083444.336870717@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230316083444.336870717@linuxfoundation.org>
+Organization: still stuck in reorganization mode
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+* Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
 
-On Thu, 16 Mar 2023 13:49:19 +0100
-Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
+> This is the start of the stable review cycle for the 6.1.20 release.
+> There are 140 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Sat, 18 Mar 2023 08:33:04 +0000.
+> Anything received after that time might be too late.
 
-> On Thu, Mar 16, 2023 at 01:27:36PM +0100, Herve Codina wrote:
-> > +EXPORT_SYMBOL(pef2256_get_byphandle); =20
->=20
-> You have a mixture of EXPORT_SYMBOL() and EXPORT_SYMBOL_GPL() in the
-> same file here.  As this one:
->=20
-> > +
-> > +void pef2256_put(struct pef2256 *pef2256)
-> > +{
-> > +	put_device(pef2256->dev);
-> > +}
-> > +EXPORT_SYMBOL(pef2256_put); =20
->=20
-> Is just a wrapper around a EXPORT_SYMBOL_GPL() function, please revisit
-> and perhaps make them all EXPORT_SYMBOL_GPL() calls?
->=20
+Hi Greg
 
-Indeed.
-I will make them consistent in the v3 series.
+6.1.20-rc2
 
-Thanks for pointing that out.
-Herv=C3=A9
---=20
-Herv=C3=A9 Codina, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+compiles, boots and runs here on x86_64
+(AMD Ryzen 5 PRO 4650G, Slackware64-15.0)
+
+Tested-by: Markus Reichelt <lkt+2023@mareichelt.com>
