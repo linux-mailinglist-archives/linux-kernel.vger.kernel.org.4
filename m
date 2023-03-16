@@ -2,188 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 507ED6BD80F
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 19:19:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 898496BD813
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 19:20:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230063AbjCPSS4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 14:18:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45694 "EHLO
+        id S230234AbjCPSUN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 14:20:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231149AbjCPSSv (ORCPT
+        with ESMTP id S231134AbjCPSTy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 14:18:51 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BF01E193F;
-        Thu, 16 Mar 2023 11:18:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678990704; x=1710526704;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=/GnY+D05AYcUSyIie4JZA4hwK2HevYRArrSO76XL0I4=;
-  b=Z+4iaKifcrZ+MOIn73nd8YKnj/Gi1wMdGy2t0bxglkVbFH2VlVTXEVWn
-   iaKT9rNm6nO+/l8pB3YGZsxG5mZkG9JNaI9ga/sIDS/pPRXNXI9mPtnYM
-   5gdIXAG/UlrEfbU+3Do6b7gakbZnK5ribvDdaM9qpHAV1FAmv+n0reuNH
-   vs0sjdxFrRi1YMEKL0ql6dEyjiKiNQ0OTMxfN3tiTWbaqdmGjQVnpqvTK
-   tdoVzzzdfJfpTUgRsOr2Qhc4CssDGWxzOxs20/0wqkZhf9RruAP4gDwSy
-   o+yV0hCPd2O7jOP4KO+yAkUlJv6yCiUgRPc3tridm2MDlVaVp3q+HVVnF
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="336769056"
-X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
-   d="scan'208";a="336769056"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 11:18:17 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="803842404"
-X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
-   d="scan'208";a="803842404"
-Received: from mgisomme-mobl1.amr.corp.intel.com ([10.212.42.167])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 11:18:11 -0700
-Message-ID: <559654bbef8483fcd53458824f23814236b0c9e0.camel@linux.intel.com>
-Subject: Re: [PATCH linux-next v2 1/3] platform/x86/intel/tpmi: Fix double
- free in tpmi_create_device()
-From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     Hans de Goede <hdegoede@redhat.com>,
-        Dongliang Mu <dzm91@hust.edu.cn>,
-        Mark Gross <markgross@kernel.org>
-Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Thu, 16 Mar 2023 11:18:09 -0700
-In-Reply-To: <dd36a2ab-d465-f857-30c6-3c0094babd31@redhat.com>
-References: <20230309040107.534716-1-dzm91@hust.edu.cn>
-         <20230309040107.534716-2-dzm91@hust.edu.cn>
-         <dd36a2ab-d465-f857-30c6-3c0094babd31@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu1 
+        Thu, 16 Mar 2023 14:19:54 -0400
+Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7BF8E20EF
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 11:19:23 -0700 (PDT)
+Received: by mail-il1-x136.google.com with SMTP id s7so1467296ilv.12
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 11:19:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1678990759; x=1681582759;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=WbL1jXcAAzjaooJaT7ULn7Y2lyg1tFqQl4SmSGqfzD0=;
+        b=hRLNEClznBSDehOZH75x/kVOAqJbqIuB2OlBoEloOOCkj9/RKVDtYkOH+enCgy40lL
+         +X307Fyyy9S9fRt02mZ0ZBSd09VxUICFtV/kXiU9jl67FNRtC+Ox0Xr8MAhy6KDX87u6
+         OI9sndoXLbRbaRASVVoWJRtH8+N+4HTKh8c5w=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678990759; x=1681582759;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=WbL1jXcAAzjaooJaT7ULn7Y2lyg1tFqQl4SmSGqfzD0=;
+        b=fs0UABMOW1RZr7vaJ0oR/M9v1OMBG/aEBCV0hUYsJZk+o+lCJv4323Oaz2V9OsH2Ug
+         rRJNa/mHIR7n//w36plrvdYyHE8cCO0OJNfm1fKbuuY+AX5a516FZqerkvuNh01yh7Jf
+         Cp/Asy9BpWQht8W7P5f05J+6DHcN0bsSU74qf3cVt/EQ7q53BZjplFbKsgNpMnh/6SJI
+         I9HGRZHDRRyRr4+linVq+U7CgQOI66UzHgpZ/nzcrd0pO4fj9fzgPwWkUReeU+QU9Xl2
+         89+6aSbb8ZMZ2FmGRMzflEa9PoLAoUMdPQDZ7DOayl4+tNE0jb5sEA/ClER5I7LK+M9R
+         QXEA==
+X-Gm-Message-State: AO0yUKVVE+93HyIbxa5apbe1BMtEWL8OKS9hNOTarmqYP4R6dFheOzyC
+        2SVE903yo7WfaPnOU7EZsaRukw==
+X-Google-Smtp-Source: AK7set8nXB0G5d00N+QxR3UMxgSIuG9FPDgpWgQFF0bSsczlgwroMRvOo/iSlzh3KT1V37QPyrPqWw==
+X-Received: by 2002:a92:d64f:0:b0:323:10c5:899e with SMTP id x15-20020a92d64f000000b0032310c5899emr4508137ilp.1.1678990759303;
+        Thu, 16 Mar 2023 11:19:19 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id v5-20020a056e020f8500b00317b8e2c2b4sm15128ilo.39.2023.03.16.11.18.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Mar 2023 11:18:52 -0700 (PDT)
+Message-ID: <a83b2f5f-732c-6d71-3e0c-1dce76076817@linuxfoundation.org>
+Date:   Thu, 16 Mar 2023 12:18:40 -0600
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v2] usbip: vudc: Fix use after free bug in vudc_remove due
+ to race condition
+Content-Language: en-US
+To:     Zheng Wang <zyytlz.wz@163.com>, valentina.manea.m@gmail.com
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, hackerzheng666@gmail.com,
+        1395428693sheep@gmail.com, alex000young@gmail.com,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20230316180940.1601515-1-zyytlz.wz@163.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20230316180940.1601515-1-zyytlz.wz@163.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Hans,
+On 3/16/23 12:09, Zheng Wang wrote:
+> In vudc_probe, it calls init_vudc_hw, which bound &udc->timer with v_timer.
+> 
+> When it calls usbip_sockfd_store, it will call v_start_timer to start the
+> timer work.
+> 
+> When we call vudc_remove to remove the driver, theremay be a sequence as
+> follows:
+> 
+> Fix it by shutdown the timer work before cleanup in vudc_remove.
+> 
+> Note that removing a driver is a root-only operation, and should never
+> happen.
+> 
+> CPU0                  CPU1
+> 
+>                       |v_timer
+> vudc_remove          |
+> kfree(udc);          |
+> //free shost         |
+>                       |udc->gadget
+>                       |//use
+> 
+> This bug was found by static analysis.
 
-On Thu, 2023-03-16 at 15:25 +0100, Hans de Goede wrote:
-> Hi,
->=20
-> On 3/9/23 05:01, Dongliang Mu wrote:
-> > The previous commit 6a192c0cbf38 ("platform/x86/intel/tpmi: Fix
-> > double free reported by Smatch") incorrectly handle the
-> > deallocation of
-> > res variable. As shown in the comment, intel_vsec_add_aux handles
-> > all
-> > the deallocation of res and feature_vsec_dev. Therefore, kfree(res)
-> > can
-> > still cause double free if intel_vsec_add_aux returns error.
-> >=20
-> > Fix this by adjusting the error handling part in
-> > tpmi_create_device,
-> > following the function intel_vsec_add_dev.
-> >=20
-> > Fixes: 6a192c0cbf38 ("platform/x86/intel/tpmi: Fix double free
-> > reported by Smatch")
-> > Signed-off-by: Dongliang Mu <dzm91@hust.edu.cn>
+Tell me which static analysis tool did you use to find this and
+the output from the tool.
 
-Acked-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> 
+> Fixes: b6a0ca111867 ("usbip: vudc: Add UDC specific ops")
+> Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+> ---
+> v2:
+> - add more details about how the bug was found suggested by Shuah
+> ---
+>   drivers/usb/usbip/vudc_dev.c | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/usb/usbip/vudc_dev.c b/drivers/usb/usbip/vudc_dev.c
+> index 2bc428f2e261..33d0991755bb 100644
+> --- a/drivers/usb/usbip/vudc_dev.c
+> +++ b/drivers/usb/usbip/vudc_dev.c
+> @@ -633,6 +633,7 @@ int vudc_remove(struct platform_device *pdev)
+>   {
+>   	struct vudc *udc = platform_get_drvdata(pdev);
+>   
+> +	timer_shutdown_sync(&udc->timer);
+>   	usb_del_gadget_udc(&udc->gadget);
+>   	cleanup_vudc_hw(udc);
+>   	kfree(udc);
 
->=20
-> IIRC then after this v2 was posted I still saw some comments on the
-> original v1 which was not posted on the list. Without the v1 comments
-> being on the list and this archived, I have lost track of what the
-> status of these patches is.
->=20
-> Srinivas, can you let me know if I should merge these, or if more
-> changes are necessary ?
->=20
-> From the off-list discussion of v1 I got the impression more changes
-> are necessary, but I'm not sure.
-
-I was looking for changes submitted=C2=A0by the following patch
-"
-[PATCH linux-next v2 3/3] drivers/platform/x86/intel: fix a memory leak
-in intel_vsec_add_aux
-"
-
-Since I was not copied on this, I was unaware. So I was requesting this
-change.
-
-Thanks,
-Srinivas
-
->=20
-> Regards,
->=20
-> Hans
->=20
->=20
->=20
->=20
-> > ---
-> > =C2=A0drivers/platform/x86/intel/tpmi.c | 17 ++++-------------
-> > =C2=A01 file changed, 4 insertions(+), 13 deletions(-)
-> >=20
-> > diff --git a/drivers/platform/x86/intel/tpmi.c
-> > b/drivers/platform/x86/intel/tpmi.c
-> > index c999732b0f1e..882fe5e4763f 100644
-> > --- a/drivers/platform/x86/intel/tpmi.c
-> > +++ b/drivers/platform/x86/intel/tpmi.c
-> > @@ -215,8 +215,8 @@ static int tpmi_create_device(struct
-> > intel_tpmi_info *tpmi_info,
-> > =C2=A0
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0feature_vsec_dev =3D kz=
-alloc(sizeof(*feature_vsec_dev),
-> > GFP_KERNEL);
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (!feature_vsec_dev) =
-{
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0ret =3D -ENOMEM;
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0goto free_res;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0kfree(res);
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0return -ENOMEM;
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0}
-> > =C2=A0
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0snprintf(feature_id_nam=
-e, sizeof(feature_id_name), "tpmi-
-> > %s", name);
-> > @@ -242,17 +242,8 @@ static int tpmi_create_device(struct
-> > intel_tpmi_info *tpmi_info,
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * feature_vsec_dev mem=
-ory is also freed as part of device
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * delete.
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 */
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0ret =3D intel_vsec_add_aux(v=
-sec_dev->pcidev, &vsec_dev-
-> > >auxdev.dev,
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 feature_vsec_dev,
-> > feature_id_name);
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (ret)
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0goto free_res;
-> > -
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return 0;
-> > -
-> > -free_res:
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0kfree(res);
-> > -
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return ret;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return intel_vsec_add_aux(vs=
-ec_dev->pcidev, &vsec_dev-
-> > >auxdev.dev,
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 feature_vsec_dev,
-> > feature_id_name);
-> > =C2=A0}
-> > =C2=A0
-> > =C2=A0static int tpmi_create_devices(struct intel_tpmi_info *tpmi_info)
->=20
-
+thanks,
+-- Shuah
