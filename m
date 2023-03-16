@@ -2,112 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F21E6BD264
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 15:30:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D144F6BD266
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 15:30:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231239AbjCPOaL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 10:30:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35402 "EHLO
+        id S231253AbjCPOaP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 10:30:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230477AbjCPOaI (ORCPT
+        with ESMTP id S231247AbjCPOaM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 10:30:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C67BDCC329
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 07:30:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7C6E0B82200
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 14:30:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6D2FC433EF;
-        Thu, 16 Mar 2023 14:30:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1678977003;
-        bh=JhkESV526pzCMfXYIVB0sC2lcuQvYPbJky11zSTcTHY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Py6CjtegcA/pB97b3EXPuY/bgdUkddGxTiSk4sU+J/5pyfuS0DIMd60o36+49M8VG
-         jn0jd8zUYofxz4t30hPbYE33PjTxzRyX1m9dwu9X+VlxNV4c889J9sbz5Ot/qNxRZp
-         VcVKz2r8kXy+IAQvCySaLCyi2iQ8UjYgYP4QkRKY=
-Date:   Thu, 16 Mar 2023 15:30:00 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Sumitra Sharma <sumitraartsy@gmail.com>
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        outreachy@lists.linux.dev
-Subject: Re: [PATCH] Staging: octeon: Fix Lines should not end with a '('
-Message-ID: <ZBMn6H3RPW+TgMeQ@kroah.com>
-References: <20230316130647.GA81281@sumitra.com>
+        Thu, 16 Mar 2023 10:30:12 -0400
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26356C889A
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 07:30:10 -0700 (PDT)
+Received: by mail-qt1-x830.google.com with SMTP id x1so1862696qtr.7
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 07:30:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112; t=1678977009;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=8tJ4I9ZiOnVv27V/2pSQJ0BPsYXHXaREO6k8Y5ACwnI=;
+        b=C+GP8LpvlQRSMcbmjE1Y6jbjYNh1r7qtieyvqkJoRE2fZrv4fxBngweL8yB8gOs1Ci
+         zRvDHr/tRnfo2MmcZ9KsA4EWcAuIA6KNIJ46jeumdomZhqO+JPBYDuGsJImNbLmHQ+YO
+         R1J82Py99kVbPp7Q3s544BRgJzU+pcTLtEbbSBeY3LHM76IwbWGd/o4Bj5/tYfhjs9XJ
+         xR/jnaagQFIlM+2tN7TbpuWfhCVv8YSiTG2WdWNtqFpYxyEYK25387s0OgpG3b1ygloP
+         wcBWHm1rKSTh1Blq0AzNp7H4oW5r19VmC3AQARxVycJOuFkNnXXc1ITEaUIexiqy2Ymc
+         VVaA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678977009;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8tJ4I9ZiOnVv27V/2pSQJ0BPsYXHXaREO6k8Y5ACwnI=;
+        b=ESBaTVmwjlBM5q+vU2jLckgUlAU8vlWjTddQo70DuOf299ooH5vfrniVsh6i4dC4rU
+         JE++Psh4tLIzok0mU0mdz15Y3f5TaSk6p5+KpTkWYFlBKuO1SV8IyeFclywY9Mn+VDEm
+         FMYxH+GmDYNxldOlvMpoPmSEmVgB+T9NA4V40rCcn5R85f2HYilZDpInpPfrVzy3cniC
+         lZMYR2HLDeOKFBX34yYFHSUv9bwKMP/wfiMdf2sqIYWPtYO/M/Rku2vsIIvQ9/Q32Qoe
+         Yi70z9AtOrNtHedyJIfuoOJBVGnBf9OcFf7kiLptexD+ofMHqD72AdvGqrZma0bo/gGX
+         pjDw==
+X-Gm-Message-State: AO0yUKU7HeSWINeFBcDe7OJyd/gpKnKC8F0TPhpjcAPWCZ0HSSSV94dp
+        iSoDpbwRl63mwYdeNRp156hmDA==
+X-Google-Smtp-Source: AK7set8SZHeDkSTpgT1aKVMpmUum/pCP5ZIxkPGNliu26fh7kkQe3PBQ/sCZGqX8TPWJpRG9Bd+6IA==
+X-Received: by 2002:ac8:4e92:0:b0:3bf:c423:c384 with SMTP id 18-20020ac84e92000000b003bfc423c384mr6287097qtp.15.1678977008742;
+        Thu, 16 Mar 2023 07:30:08 -0700 (PDT)
+Received: from localhost ([2620:10d:c091:400::5:62db])
+        by smtp.gmail.com with ESMTPSA id l19-20020a37f913000000b0073b3316bbd0sm6023764qkj.29.2023.03.16.07.30.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Mar 2023 07:30:08 -0700 (PDT)
+Date:   Thu, 16 Mar 2023 10:30:07 -0400
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     yang.yang29@zte.com.cn
+Cc:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, iamjoonsoo.kim@lge.com, willy@infradead.org
+Subject: Re: =?iso-8859-1?Q?=A0=5BPATCH_linux-next?=
+ =?iso-8859-1?Q?=5D_mm=3A_workingset=3A_simplify_the=A0calculatio?=
+ =?iso-8859-1?Q?n?= of workingset size
+Message-ID: <20230316143007.GC116016@cmpxchg.org>
+References: <202303161723055514455@zte.com.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230316130647.GA81281@sumitra.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <202303161723055514455@zte.com.cn>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 16, 2023 at 06:06:47AM -0700, Sumitra Sharma wrote:
-> checkpatch.pl CHECK: Lines should not end with a '('
+On Thu, Mar 16, 2023 at 05:23:05PM +0800, yang.yang29@zte.com.cn wrote:
+> From: Yang Yang <yang.yang29@zte.com.cn>
 > 
-> Signed-off-by: Sumitra Sharma <sumitraartsy@gmail.com>
-> ---
->  drivers/staging/octeon/octeon-stubs.h | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
-> 
-> diff --git a/drivers/staging/octeon/octeon-stubs.h b/drivers/staging/octeon/octeon-stubs.h
-> index 7a02e59e283f..3e7b92cd2e35 100644
-> --- a/drivers/staging/octeon/octeon-stubs.h
-> +++ b/drivers/staging/octeon/octeon-stubs.h
-> @@ -1372,9 +1372,7 @@ static inline void cvmx_fau_async_fetch_and_add32(uint64_t scraddr,
->  						  int32_t value)
->  { }
->  
-> -static inline union cvmx_gmxx_rxx_rx_inbnd cvmx_spi4000_check_speed(
-> -	int interface,
-> -	int port)
-> +static inline union cvmx_gmxx_rxx_rx_inbnd cvmx_spi4000_check_speed(int interface, int port)
->  {
->  	union cvmx_gmxx_rxx_rx_inbnd r;
->  
-> -- 
-> 2.25.1
-> 
-> 
+> After we implemented workingset detection for anonymous LRU[1],
+> the calculation of workingset size is a little complex. Actually there is
+> no need to call mem_cgroup_get_nr_swap_pages() if refault page is
+> anonymous page, since we are doing swapping then should always
+> give pressure to NR_ACTIVE_ANON.
 
-Hi,
+This is false.
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+(mem_cgroup_)get_nr_swap_pages() returns the *free swap slots*. There
+might be swap, but if it's full, reclaim stops scanning anonymous
+pages altogether. That means that refaults of either type can no
+longer displace existing anonymous pages, only cache.
 
-You are receiving this message because of the following common error(s)
-as indicated below:
+So yes, all refaults need to check free swap to determine how to act
+on the reuse frequency.
 
-- You did not specify a description of why the patch is needed, or
-  possibly, any description at all, in the email body.  Please read the
-  section entitled "The canonical patch format" in the kernel file,
-  Documentation/process/submitting-patches.rst for what is needed in
-  order to properly describe the change.
+> @@ -466,22 +466,23 @@ void workingset_refault(struct folio *folio, void *shadow)
+>  	/*
+>  	 * Compare the distance to the existing workingset size. We
+>  	 * don't activate pages that couldn't stay resident even if
+> -	 * all the memory was available to the workingset. Whether
+> -	 * workingset competition needs to consider anon or not depends
+> -	 * on having swap.
+> +	 * all the memory was available to the workingset. For page
+> +	 * cache whether workingset competition needs to consider
+> +	 * anon or not depends on having swap.
 
-- You did not write a descriptive Subject: for the patch, allowing Greg,
-  and everyone else, to know what this patch is all about.  Please read
-  the section entitled "The canonical patch format" in the kernel file,
-  Documentation/process/submitting-patches.rst for what a proper
-  Subject: line should look like.
+No, it applies to all refaults, not just cache.
 
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
-
-thanks,
-
-greg k-h's patch email bot
+What could help is changing the comment to "having free swap space".
