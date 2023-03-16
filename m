@@ -2,108 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6A6E6BCC71
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 11:20:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B41216BCC76
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 11:20:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230326AbjCPKUl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 06:20:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48038 "EHLO
+        id S230375AbjCPKUq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 06:20:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230227AbjCPKUf (ORCPT
+        with ESMTP id S230296AbjCPKUi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 06:20:35 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DC0ABCFE3;
-        Thu, 16 Mar 2023 03:20:26 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id o12so5382508edb.9;
-        Thu, 16 Mar 2023 03:20:26 -0700 (PDT)
+        Thu, 16 Mar 2023 06:20:38 -0400
+Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 638DFBBB2B
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 03:20:29 -0700 (PDT)
+Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-5416698e889so21902427b3.2
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 03:20:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678962024;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jGioppgO0MzFmAHm40uh73Adm2rQQtc87u2aiQkh8H4=;
-        b=drd9Ugkav0IjqQXXwvmyIm2esAE32wSSlIYWjYhNCjnOZ0ItBJY/DRlbWWu1/R32eC
-         2BNgYkWAkkHMmQnQ6B8JXwWMpdENk2RZEkHohKsbOuA01kwDUuoREQZasK0Pv+URvqEa
-         iMWEVXXvSxFk/a24tIk7lN9vGZ+1zywUwf9SzRM+nJe1f0PGbliX0FxR5P1Oc/2VouVH
-         P/0dXNpIjz6gpoAsrv/b5e50J8P5Jd30/avK5u057TAIshZKJr+JOItDfL6W8mMKD1Hd
-         gZqO7Sg6x1plAuIcgg+MrSS6HB1tBd+7JtbMyhrS4/JgoqCNbjk5ofNeEIOa727P/2/B
-         2G1Q==
+        d=linaro.org; s=google; t=1678962028;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=SAog4H/SRFvoaEO1OZaRPW+vcyrqLcy+mvMuM/gRdEU=;
+        b=c+ZumM3X9admVFx8dYxUtMxlNIuB1aK9CvI3x1Bhk8FAE8iZwfnpyrfVzAVWQKPIfg
+         Jy3AgQ2Wdq6r+PGFBOOR6Ap7ANNwzjk6ANKoPK0arbRr+2b9tlhpm/PLkn4SztdbA/Ag
+         zqTcQcSvnJvPfyJFBkJzA+GqMxcV/Tx9JKmDWASuCW6fQ7Io7PnlTZGUpqttYj2Y1B+S
+         WfNH9NAblKoCa5asYybuJDSgs0y3gu1pThe2rdgI7cUsKxBKJCSNidxQkLdqRDC4IBGW
+         TffJHOKI1ZA13UMP/2eS3wRa7Hr7Ml3VXi7SHlD91iHBRIqkf4XG1sy6fsNtdEi+p7s/
+         cB2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678962024;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jGioppgO0MzFmAHm40uh73Adm2rQQtc87u2aiQkh8H4=;
-        b=BHA6vcFeCyU1IXUSSs85pZAPfUYW1asZThsuFxPILIxhC3fpCSQvB1R6+b3Nlyfef6
-         fpwNxuTjI1jdM6hfhZzoWLM12FVpgj9++zHCxb3jeIiv0nfC6H//f/QtnvqZTXLYz7lx
-         gLWIFH4kmZm/j0G4cxVcVmjWfxeJ6KtrxvpeVXUWfzKsRRxzGvyq0gOHRNz1TkcYGt2q
-         x+zfE8PzeRGcaWTHjhyefcVlylyi92X/TiHCWlncnGFRnIEHwklKhs9bNk6kJH+X5GNL
-         Yok4oBc3gamLx5HaJGwj+7qTy7Rtyt2dFMhuYZ7k6CzZ/T6uRDIqpiJXSUIIKHPi0/Yi
-         ewvQ==
-X-Gm-Message-State: AO0yUKV3oTISqROPDSVsS6Qrs4gWxgKmihXzmHpu2Rh9XrrGVmOrbLBe
-        zD/2P/kfD3N2WOnTQYEfMRU=
-X-Google-Smtp-Source: AK7set83zGBfwIIdGj2u78Yejl5npnGcUU/3kxOM7rghdNvDRp2QU42QsMvnhCzxg1hMxtxs3MXC1w==
-X-Received: by 2002:a17:906:9be4:b0:930:eb8e:b1c9 with SMTP id de36-20020a1709069be400b00930eb8eb1c9mr560320ejc.24.1678962023979;
-        Thu, 16 Mar 2023 03:20:23 -0700 (PDT)
-Received: from localhost.localdomain (077222238142.warszawa.vectranet.pl. [77.222.238.142])
-        by smtp.googlemail.com with ESMTPSA id qh2-20020a170906eca200b008e2dfc6382asm3648118ejb.125.2023.03.16.03.20.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Mar 2023 03:20:23 -0700 (PDT)
-From:   Szymon Heidrich <szymon.heidrich@gmail.com>
-To:     kuba@kernel.org, steve.glendinning@shawell.net,
-        UNGLinuxDriver@microchip.com, davem@davemloft.net,
-        edumazet@google.com
-Cc:     pabeni@redhat.com, szymon.heidrich@gmail.com,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] net: usb: smsc95xx: Limit packet length to skb->len
-Date:   Thu, 16 Mar 2023 11:19:54 +0100
-Message-Id: <20230316101954.75836-1-szymon.heidrich@gmail.com>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230315212425.12cb48ca@kernel.org>
-References: <20230315212425.12cb48ca@kernel.org>
+        d=1e100.net; s=20210112; t=1678962028;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SAog4H/SRFvoaEO1OZaRPW+vcyrqLcy+mvMuM/gRdEU=;
+        b=0zfpNawRt9cIIOwhUW2rvNHesXNIrlsGhsg9Uk6Ckh534tB3t2QWUxP4Cio2VChW9M
+         +vc+VqAGTFSBRhRc/1wCb9RG+YYlKQsGT3Gkhm665QA8XUaWp6HddV7SEvX7qtzXw6wU
+         2TkGXbd4qNEmH7Mq7eL9iHPeTbGzIdBTtvlQe4YoHTcVdBAb658MnaFrpbAgJAyns5X5
+         b6+9onOxN4YnLvfUhqJOf7zSWixfpFzkd1b9N/L02RP+slzoJ1XJiQ527u2mnChCyIDl
+         Iu0viq+bnTM7768sjbJ2tp1jUtGYGGv66XgqIgfEOU8jVU9o1ESqYUAe1NxhPdcJYNyp
+         4iLw==
+X-Gm-Message-State: AO0yUKWTQkG1WgxJIUWebZGPZg9ggMxxv8XrbLIqbwNx7j0YvsMXYii3
+        F9pOS4OrFX7p0koQEkWlHx9DScR1plqwsMloLDJyHw==
+X-Google-Smtp-Source: AK7set9sa4/oy4Jqwr7KB88J+xmPYRgd44Viltr+Y+ihpUmjD1EzCd/GuXR6lmOjOsG+2r84dXTULPtF66OZHVXeTtw=
+X-Received: by 2002:a81:b3ca:0:b0:541:8a9a:5445 with SMTP id
+ r193-20020a81b3ca000000b005418a9a5445mr1860892ywh.5.1678962028513; Thu, 16
+ Mar 2023 03:20:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20230202064712.5804-2-quic_vboma@quicinc.com> <20230316081509.12201-1-quic_vboma@quicinc.com>
+ <20230316081509.12201-2-quic_vboma@quicinc.com>
+In-Reply-To: <20230316081509.12201-2-quic_vboma@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Thu, 16 Mar 2023 12:20:17 +0200
+Message-ID: <CAA8EJpozq1nCgG5npK5JUXc-Y-7LiPe3Y_VP8++Rq70AreCenA@mail.gmail.com>
+Subject: Re: [PATCH] venus: Enable sufficient sequence change support for
+ sc7180 and fix for Decoder STOP command issue.
+To:     quic_vboma@quicinc.com
+Cc:     Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        Vikash Garodia <quic_vgarodia@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Vikash Garodia <vgarodia@qti.qualcomm.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Packet length retrieved from descriptor may be larger than
-the actual socket buffer length. In such case the cloned
-skb passed up the network stack will leak kernel memory contents.
+On Thu, 16 Mar 2023 at 10:17, <quic_vboma@quicinc.com> wrote:
+>
+> From: Viswanath Boma <quic_vboma@quicinc.com>
+>
+> For VP9 bitstreams, there could be a change in resolution at interframe,
+> for driver to get notified of such resolution change,
+> enable the property in video firmware.
+> Also, EOS handling is now made same in video firmware across all V6 SOCs,
+> hence above a certain firmware version, the driver handling is
+> made generic for all V6s
+>
+> Signed-off-by: Vikash Garodia <vgarodia@qti.qualcomm.com>
+> Signed-off-by: Viswanath Boma <quic_vboma@quicinc.com>
+> Tested-by: Nathan Hebert <nhebert@chromium.org>
+> ---
 
-Fixes: 2f7ca802bdae ("net: Add SMSC LAN9500 USB2.0 10/100 ethernet adapter driver")
-Signed-off-by: Szymon Heidrich <szymon.heidrich@gmail.com>
----
-V1 -> V2: Move packet length check to prevent kernel panic in skb_pull
+Which version of the patch is this? Were there any changes compared to
+the previous version? Please include a changelog below the dashed line
+to let other people know what has changed
 
- drivers/net/usb/smsc95xx.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+>  drivers/media/platform/qcom/venus/core.h       | 18 ++++++++++++++++++
+>  drivers/media/platform/qcom/venus/hfi_cmds.c   |  1 +
+>  drivers/media/platform/qcom/venus/hfi_helper.h |  2 ++
+>  drivers/media/platform/qcom/venus/hfi_msgs.c   | 11 +++++++++--
+>  drivers/media/platform/qcom/venus/vdec.c       | 12 +++++++++++-
+>  5 files changed, 41 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/media/platform/qcom/venus/core.h b/drivers/media/platform/qcom/venus/core.h
+> index 32551c2602a9..ee8b70a34656 100644
+> --- a/drivers/media/platform/qcom/venus/core.h
+> +++ b/drivers/media/platform/qcom/venus/core.h
+> @@ -202,6 +202,11 @@ struct venus_core {
+>         unsigned int core0_usage_count;
+>         unsigned int core1_usage_count;
+>         struct dentry *root;
+> +       struct venus_img_version {
+> +               u32 major;
+> +               u32 minor;
+> +               u32 rev;
+> +       } venus_ver;
+>  };
+>
+>  struct vdec_controls {
+> @@ -500,4 +505,17 @@ venus_caps_by_codec(struct venus_core *core, u32 codec, u32 domain)
+>         return NULL;
+>  }
+>
+> +static inline int
+> +is_fw_rev_or_newer(struct venus_core *core, u32 vmajor, u32 vminor, u32 vrev)
+> +{
+> +       return ((core)->venus_ver.major == vmajor && (core)->venus_ver.minor ==
+> +                       vminor && (core)->venus_ver.rev >= vrev);
+> +}
+> +
+> +static inline int
+> +is_fw_rev_or_older(struct venus_core *core, u32 vmajor, u32 vminor, u32 vrev)
+> +{
+> +       return ((core)->venus_ver.major == vmajor && (core)->venus_ver.minor ==
+> +                       vminor && (core)->venus_ver.rev <= vrev);
+> +}
+>  #endif
+> diff --git a/drivers/media/platform/qcom/venus/hfi_cmds.c b/drivers/media/platform/qcom/venus/hfi_cmds.c
+> index 930b743f225e..e2539b58340f 100644
+> --- a/drivers/media/platform/qcom/venus/hfi_cmds.c
+> +++ b/drivers/media/platform/qcom/venus/hfi_cmds.c
+> @@ -521,6 +521,7 @@ static int pkt_session_set_property_1x(struct hfi_session_set_property_pkt *pkt,
+>                 pkt->shdr.hdr.size += sizeof(u32) + sizeof(*en);
+>                 break;
+>         }
+> +       case HFI_PROPERTY_PARAM_VDEC_ENABLE_SUFFICIENT_SEQCHANGE_EVENT:
+>         case HFI_PROPERTY_CONFIG_VDEC_POST_LOOP_DEBLOCKER: {
+>                 struct hfi_enable *in = pdata;
+>                 struct hfi_enable *en = prop_data;
+> diff --git a/drivers/media/platform/qcom/venus/hfi_helper.h b/drivers/media/platform/qcom/venus/hfi_helper.h
+> index d2d6719a2ba4..20516b4361d3 100644
+> --- a/drivers/media/platform/qcom/venus/hfi_helper.h
+> +++ b/drivers/media/platform/qcom/venus/hfi_helper.h
+> @@ -469,6 +469,8 @@
+>  #define HFI_PROPERTY_PARAM_VDEC_PIXEL_BITDEPTH                 0x1003007
+>  #define HFI_PROPERTY_PARAM_VDEC_PIC_STRUCT                     0x1003009
+>  #define HFI_PROPERTY_PARAM_VDEC_COLOUR_SPACE                   0x100300a
+> +#define HFI_PROPERTY_PARAM_VDEC_ENABLE_SUFFICIENT_SEQCHANGE_EVENT \
+> +                                                               0x0100300b
+>
+>  /*
+>   * HFI_PROPERTY_CONFIG_VDEC_COMMON_START
+> diff --git a/drivers/media/platform/qcom/venus/hfi_msgs.c b/drivers/media/platform/qcom/venus/hfi_msgs.c
+> index df96db3761a7..07ac0fcd2852 100644
+> --- a/drivers/media/platform/qcom/venus/hfi_msgs.c
+> +++ b/drivers/media/platform/qcom/venus/hfi_msgs.c
+> @@ -248,9 +248,10 @@ static void hfi_sys_init_done(struct venus_core *core, struct venus_inst *inst,
+>  }
+>
+>  static void
+> -sys_get_prop_image_version(struct device *dev,
+> +sys_get_prop_image_version(struct venus_core *core,
+>                            struct hfi_msg_sys_property_info_pkt *pkt)
+>  {
+> +       struct device *dev = core->dev;
+>         u8 *smem_tbl_ptr;
+>         u8 *img_ver;
+>         int req_bytes;
+> @@ -263,6 +264,12 @@ sys_get_prop_image_version(struct device *dev,
+>                 return;
+>
+>         img_ver = pkt->data;
+> +       if (IS_V4(core))
+> +               sscanf(img_ver, "14:VIDEO.VE.%u.%u-%u-PROD",
+> +                      &core->venus_ver.major, &core->venus_ver.minor, &core->venus_ver.rev);
+> +       else if (IS_V6(core))
+> +               sscanf(img_ver, "14:VIDEO.VPU.%u.%u-%u-PROD",
+> +                      &core->venus_ver.major, &core->venus_ver.minor, &core->venus_ver.rev);
+>
+>         dev_dbg(dev, VDBGL "F/W version: %s\n", img_ver);
+>
+> @@ -286,7 +293,7 @@ static void hfi_sys_property_info(struct venus_core *core,
+>
+>         switch (pkt->property) {
+>         case HFI_PROPERTY_SYS_IMAGE_VERSION:
+> -               sys_get_prop_image_version(dev, pkt);
+> +               sys_get_prop_image_version(core, pkt);
+>                 break;
+>         default:
+>                 dev_dbg(dev, VDBGL "unknown property data\n");
+> diff --git a/drivers/media/platform/qcom/venus/vdec.c b/drivers/media/platform/qcom/venus/vdec.c
+> index 4ceaba37e2e5..36c88858ea9d 100644
+> --- a/drivers/media/platform/qcom/venus/vdec.c
+> +++ b/drivers/media/platform/qcom/venus/vdec.c
+> @@ -545,7 +545,7 @@ vdec_decoder_cmd(struct file *file, void *fh, struct v4l2_decoder_cmd *cmd)
+>
+>                 fdata.buffer_type = HFI_BUFFER_INPUT;
+>                 fdata.flags |= HFI_BUFFERFLAG_EOS;
+> -               if (IS_V6(inst->core))
+> +               if (IS_V6(inst->core) && is_fw_rev_or_older(inst->core, 1, 0, 87))
+>                         fdata.device_addr = 0;
+>                 else
+>                         fdata.device_addr = 0xdeadb000;
+> @@ -671,6 +671,16 @@ static int vdec_set_properties(struct venus_inst *inst)
+>                         return ret;
+>         }
+>
+> +       /* Enabling sufficient sequence change support for VP9 */
+> +       if (of_device_is_compatible(inst->core->dev->of_node, "qcom,sc7180-venus")) {
 
-diff --git a/drivers/net/usb/smsc95xx.c b/drivers/net/usb/smsc95xx.c
-index 32d2c60d3..563ecd27b 100644
---- a/drivers/net/usb/smsc95xx.c
-+++ b/drivers/net/usb/smsc95xx.c
-@@ -1833,6 +1833,12 @@ static int smsc95xx_rx_fixup(struct usbnet *dev, struct sk_buff *skb)
- 		size = (u16)((header & RX_STS_FL_) >> 16);
- 		align_count = (4 - ((size + NET_IP_ALIGN) % 4)) % 4;
- 
-+		if (unlikely(size > skb->len)) {
-+			netif_dbg(dev, rx_err, dev->net,
-+				  "size err header=0x%08x\n", header);
-+			return 0;
-+		}
-+
- 		if (unlikely(header & RX_STS_ES_)) {
- 			netif_dbg(dev, rx_err, dev->net,
- 				  "Error header=0x%08x\n", header);
+Is it really specific just to sc7180 or will it be applicable to any
+other platform using venus-5.4 firmware?
+
+> +               if (is_fw_rev_or_newer(inst->core, 5, 4, 51)) {
+> +                       ptype = HFI_PROPERTY_PARAM_VDEC_ENABLE_SUFFICIENT_SEQCHANGE_EVENT;
+> +                       ret = hfi_session_set_property(inst, ptype, &en);
+> +                       if (ret)
+> +                               return ret;
+> +               }
+> +       }
+> +
+>         ptype = HFI_PROPERTY_PARAM_VDEC_CONCEAL_COLOR;
+>         conceal = ctr->conceal_color & 0xffff;
+>         conceal |= ((ctr->conceal_color >> 16) & 0xffff) << 10;
+> --
+> 2.17.1
+>
+
+
 -- 
-2.40.0
-
+With best wishes
+Dmitry
