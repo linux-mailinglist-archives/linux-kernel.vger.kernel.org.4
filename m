@@ -2,188 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCE806BD8BC
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 20:17:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CAEC26BD8C4
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 20:18:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229938AbjCPTRu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 15:17:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36540 "EHLO
+        id S230141AbjCPTSE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 15:18:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229744AbjCPTRs (ORCPT
+        with ESMTP id S229744AbjCPTR5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 15:17:48 -0400
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 194F2B1B0E
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 12:17:47 -0700 (PDT)
-Received: by mail-pj1-x104a.google.com with SMTP id j7-20020a17090aeb0700b0023d19dfe884so1202881pjz.4
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 12:17:47 -0700 (PDT)
+        Thu, 16 Mar 2023 15:17:57 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78C78DC0B4
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 12:17:54 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id er8so26566edb.0
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 12:17:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678994266;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TJcbWDGDY7mW2UZ8+dFYqV06yFsfykcIM5oQQgMomTE=;
-        b=NXIQoi3YBWb27fNIE5+YxwwobwjsnMUlQCThLejvGIka8X9iKT1GPt141RafmdDhvJ
-         Q1yQwnKxMawq65in8Dcskl0DbfPNT11jbIOrGadjZV/UCMTs/yuH812+5+U30Z66QnyT
-         HkUxGY5+kGA3AtIxFr5v9jTPb9iXv6f98VnwwB+Bzm8SRrIGyFvbkfbc8/xRNJxr+bwM
-         tOuADhijReGR7kTsHXr1YtDuCn8+YgJfv8fMSHPoAQtQ9TtOTWqiHUqi8w0znTR851GE
-         bsNlnjrMYY9xN3gIFdMpAxSJuHJl50OBqvj5Re8bwjTuB2gF/zf+OdPk5JGRqOKVGY3u
-         32og==
+        d=linaro.org; s=google; t=1678994274;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=LUqUOWWiZli99bg9SVozznX57dV1t/fJ4AoOzF+lHVk=;
+        b=g7oRUQ3QlrKPdHr2cbg+8oDIky9CyeZzElETO/Dp6QH8wQeXufdGy32mxiliaTtF8p
+         +KRS0CFESrv7jyNf19H5VsZ+UOnq4qN9wGKuJ11KbE/k+43ilv2vQoWs4XqOsb4yewda
+         MtcejyLGAsLvljt40Cg0hAjodbZ7PxDoG73e6hai6MnIKiWksouTqzkMHPgbu5k5CLKZ
+         aJAx9fN6elcNFleWOwbSOddHJstrUvFH2WG1WO9iwVMenHMrz8n796jI3ejYttZ9qDzB
+         I/5NbvKCWHtiMq79TZeXk22lafidXAhsnWrmRqvpW9FD4HARJqwl/ZurUMAVgtQ3Bz5M
+         ZSNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678994266;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=TJcbWDGDY7mW2UZ8+dFYqV06yFsfykcIM5oQQgMomTE=;
-        b=QX4DUiqB+XTYBCJtCmZNEh/4oWxFSufslhjvoAXAoCtP72Z5NTnEcqzTRxmxW6APh7
-         ieuizIQk0tD7t9JEGXhM6ecndehnIn7YxeOIFeT4QPlLTaSF6jNVSVgNyE6YQkVidf1F
-         VCNe8BlHGhFj5lB+lhfoyVm0RykLsWg6UYn//bfguIvEsbswMOD1P0tr3xA43XfJLKYc
-         F+iLn69nyjk3AOC/I2jnyNiVIJSSyFel0e9uyVWQr7nQ54PYaFojFPMnFOk5Bsh2+Vt5
-         qSx33kcofOFbcJs3wHwkjNOWZJw2t/df9kHglZWxYWENl2nIBlwc51DV8kTdLvzllCxb
-         DjKA==
-X-Gm-Message-State: AO0yUKW7yR76XE1DtPyzupv9O+t161ZaLKv7QHxudlLVgW8yUQ9nU2Qu
-        KZbvk0hjhOWmcrfu+apNvF3sfivadAM=
-X-Google-Smtp-Source: AK7set9O/4knFRyTM8/eHnkpwXDC/N3CPpiLPCHA3JrSy8khWhbEwCudTVlbz9cm5U2vbO9zvEYs7/JAUnw=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a05:6a00:218b:b0:625:c7de:48c1 with SMTP id
- h11-20020a056a00218b00b00625c7de48c1mr2123151pfi.4.1678994266635; Thu, 16 Mar
- 2023 12:17:46 -0700 (PDT)
-Date:   Thu, 16 Mar 2023 19:17:45 +0000
-In-Reply-To: <0a42f824d24946ab86bcc6efa31b2863@huawei.com>
-Mime-Version: 1.0
-References: <0a42f824d24946ab86bcc6efa31b2863@huawei.com>
-Message-ID: <ZBNrWZQhMX8AHzWM@google.com>
-Subject: Re: WARNING in kvm_arch_vcpu_ioctl_run
-From:   Sean Christopherson <seanjc@google.com>
-To:     "zhangjianguo (A)" <zhangjianguo18@huawei.com>
-Cc:     "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        Renxuming <renxuming@huawei.com>,
-        "Wangyuan (Ethan)" <wangyuan38@huawei.com>,
-        "Ligang (J)" <stuart.li@huawei.com>,
-        yuzenghui <yuzenghui@huawei.com>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        d=1e100.net; s=20210112; t=1678994274;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=LUqUOWWiZli99bg9SVozznX57dV1t/fJ4AoOzF+lHVk=;
+        b=U0B4GatR1ev0YEVDkllyF2csE/7USOykczoicUi4mNreZdCxyC6FP8ocjOFjCoV+V3
+         0wpb+83HMvTUnqXhxD0Nhuqst0+H223cgVDz+SBCUAHnKc2B26SsgjK+3uBvWkWA1Xhu
+         B90ciwSAdzfgBU6iLQ1pC/5RzUTlPbzmyGBApN6/TySWstQtVRC92sHba1OdZFwWWYAY
+         C1MWpSO2ErLVILCV9nMB2OAnb6szYLUxKxfni0VmRLzSw6S4JMfxnIYfhwUcdhoxzyB7
+         ScafKLQgcfaxEPkiAJtws8gV/HJ7ZaHI5qYQwGwfC7mC2McweNKw2ye9fWOVi1g1ew7X
+         8Thw==
+X-Gm-Message-State: AO0yUKWdWiHvi7DDlxFOKbkfeYNGIteNLMuS8Gj+MfEBbu7tz+AMc2MO
+        209DrY/BwVP2s0sTWYZBdrV5Ng==
+X-Google-Smtp-Source: AK7set8YWZHXgEmHetI4JO8TbJOhcLvww2JEX6BbpNaPODsy3dOWflTX9OXBRY3f2eSxHuwvHRnOag==
+X-Received: by 2002:a17:906:b88d:b0:8b1:806b:7dbb with SMTP id hb13-20020a170906b88d00b008b1806b7dbbmr10962635ejb.51.1678994274028;
+        Thu, 16 Mar 2023 12:17:54 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:9827:5f65:8269:a95f? ([2a02:810d:15c0:828:9827:5f65:8269:a95f])
+        by smtp.gmail.com with ESMTPSA id q27-20020a50aa9b000000b004af73333d6esm150320edc.53.2023.03.16.12.17.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Mar 2023 12:17:53 -0700 (PDT)
+Message-ID: <49790631-807e-4903-bd26-86a6cde41e46@linaro.org>
+Date:   Thu, 16 Mar 2023 20:17:52 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v2] ASoC: dt-bindings: adi,adau17x1: Convert to DT schema
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>, Vijaya Anand <sunrockers8@gmail.com>
+Cc:     broonie@kernel.org, Daniel Baluta <daniel.baluta@nxp.com>,
+        robh+dt@kernel.org, lgirdwood@gmail.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, alsa-devel@alsa-project.org
+References: <20230315231055.3067-1-sunrockers8@gmail.com>
+ <167897435177.2729678.7747291818682080828.robh@kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <167897435177.2729678.7747291818682080828.robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+LKML (lore isn't picking this up for some reason) and a real subject
+On 16/03/2023 14:53, Rob Herring wrote:
+> 
+> On Thu, 16 Mar 2023 04:40:55 +0530, Vijaya Anand wrote:
+>> Convert the binding document for adi,adau17x1 from txt to yaml
+>> so one could validate dt-entries correctly and any future additions
+>> can go into yaml format. Add address and size cells to example to
+>> prevent errors regarding reg format.
+>>
+>> Signed-off-by: Vijaya Anand <sunrockers8@gmail.com>
+>> Cc: Daniel Baluta <daniel.baluta@nxp.com>
+>> ---
+>> Changes since v1:
+>> - added 'Codec' in title to clarify type of devices
+>> - put compatible devices in lexographic order
+>> - changed description of clocks
+>> - changed 'unevaluatedProperties' to 'additionalProperties'
+>> - changed node names to be generic
+>>
+>> ---
+>>  .../bindings/sound/adi,adau17x1.txt           | 32 ------------
+>>  .../bindings/sound/adi,adau17x1.yaml          | 52 +++++++++++++++++++
+>>  2 files changed, 52 insertions(+), 32 deletions(-)
+>>  delete mode 100644 Documentation/devicetree/bindings/sound/adi,adau17x1.txt
+>>  create mode 100644 Documentation/devicetree/bindings/sound/adi,adau17x1.yaml
+>>
+> 
+> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+> on your patch (DT_CHECKER_FLAGS is new in v5.13):
+> 
+> yamllint warnings/errors:
+> ./Documentation/devicetree/bindings/sound/adi,adau17x1.yaml:8:2: [warning] wrong indentation: expected 2 but found 1 (indentation)
+> 
+> dtschema/dtc warnings/errors:
+> Error: Documentation/devicetree/bindings/sound/adi,adau17x1.example.dts:29.3-30.1 syntax error
+> FATAL ERROR: Unable to parse input tree
+> make[1]: *** [scripts/Makefile.lib:419: Documentation/devicetree/bindings/sound/adi,adau17x1.example.dtb] Error 1
 
-On Thu, Mar 16, 2023, zhangjianguo (A) wrote:
-> Hi all,
->=20
-> Install the 6.3.0-rc1 kernel on the x86 server, and execute the https://s=
-yzkaller.appspot.com/text?tag=3DReproC&x=3D14b34300880000 test case, the ca=
-ll trace appears.
->=20
-> [  +0.000028] ------------[ cut here ]------------
-> [  +0.000002] WARNING: CPU: 36 PID: 73250 at arch/x86/kvm/x86.c:11060 kvm=
-_arch_vcpu_ioctl_run+0x482/0x4b0 [kvm]
-> [  +0.000086] Modules linked in: openvswitch nf_conncount nf_nat nf_connt=
-rack nf_defrag_ipv6 nf_defrag_ipv4 libcrc32c ebtable_filter ebtables ip6tab=
-le_filter ip6_tables iptable_filter ip_tables intel_rapl_msr intel_rapl_com=
-mon sb_edac x86_pkg_temp_thermal coretemp kvm_intel kvm irqbypass rapl inte=
-l_cstate ixgbe ses intel_uncore mei_me enclosure pcspkr i2c_i801 mdio sunrp=
-c mei intel_pch_thermal i2c_smbus joydev lpc_ich dca sg acpi_power_meter dr=
-m vhost_net tun vhost fuse vhost_iotlb tap ext4 mbcache jbd2 sd_mod crct10d=
-if_pclmul ipmi_si ahci crc32_pclmul crc32c_intel libahci ipmi_devintf ghash=
-_clmulni_intel mpt3sas libata sha512_ssse3 ipmi_msghandler wdat_wdt raid_cl=
-ass scsi_transport_sas dm_mod br_netfilter bridge stp llc nvme nvme_core t1=
-0_pi crc64_rocksoft_generic crc64_rocksoft crc64 nbd
-> [  +0.000077] CPU: 36 PID: 73250 Comm: run_vcpu_ioctrl Not tainted 6.3.0-=
-rc1+ #2
-> [  +0.000004] Hardware name: Huawei RH2288 V3/BC11HGSB0, BIOS 3.87 02/02/=
-2018
-> [  +0.000002] RIP: 0010:kvm_arch_vcpu_ioctl_run+0x482/0x4b0 [kvm]
-> [  +0.000002] Call Trace:
-> [  +0.000003]  <TASK>
-> [  +0.000003]  kvm_vcpu_ioctl+0x279/0x680 [kvm]
-> [  +0.000047]  ? vfs_write+0x2c8/0x3d0
-> [  +0.000006]  __x64_sys_ioctl+0x8f/0xc0
-> [  +0.000006]  do_syscall_64+0x3f/0x90
-> [  +0.000007]  entry_SYSCALL_64_after_hwframe+0x72/0xdc
-> [  +0.000002]  </TASK>
-> [  +0.000002] ---[ end trace 0000000000000000 ]---
->=20
-> |        } else {
-> |                WARN_ON_ONCE(vcpu->arch.pio.count);
-> |                WARN_ON_ONCE(vcpu->mmio_needed);      // where the splat=
- triggered
-> |        }
+Test your patches before sending... this never worked.
 
-The splat occurs due to a longstanding (literally since KVM's inception) sh=
-ortcoming
-in KVM's uAPI.  On an emulated MMIO write, KVM finishes the instruction bef=
-ore
-exiting to userspace.  This is necessary given how KVM's uAPI works, as out=
-side
-of REP string instructions, KVM doesn't provide a way to restart an instruc=
-tion
-that partially completed before the MMIO was encountered.
-
-For the vast majority of _emulated_ instructions, this doesn't cause proble=
-ms as
-there is a single memory accesses, i.e. any exceptions on the instruction w=
-ill
-occur _before_ the MMIO write.
-
-What's happening here is that a PUSHA triggers an MMIO write and then runs =
-past
-the segment limit, resulting in a #SS after the MMIO is queued.  KVM inject=
-s the
-#SS (well, tries to) and thus loses track of the MMIO, but never clears mmi=
-o_needed.
-
-There's a second bug here that results in failed VM-Enter when KVM tries to=
- inject
-the #SS: KVM doesn't ignore drop error code when the vCPU is in Real Mode. =
- This
-too is a longstanding bug that has likely escaped notice because no real wo=
-rk code
-runs in Real Mode _and_ gracefully handles exceptions.
-
-My plan, pending testing, is to suppress the MMIO write + exception scenari=
-o since
-the bug has been around for 15+ years without anyone noticing, let alone ca=
-ring.
-Fixing it properly would be a heck of a lot of complexity and code churn fo=
-r no
-real benefit.
-
-And for the Real Mode exception bug, unless I'm missing something, the erro=
-r code
-can simply be suppressed when queueing the exception.
-
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 237c483b1230..b3bf3a0d74ab 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -646,6 +646,9 @@ static void kvm_multiple_exception(struct kvm_vcpu *vcp=
-u,
-=20
-        kvm_make_request(KVM_REQ_EVENT, vcpu);
-=20
-+       /* Real Mode exceptions do not report error codes. */
-+       has_error &=3D is_protmode(vcpu);
-+
-        /*
-         * If the exception is destined for L2 and isn't being reinjected,
-         * morph it to a VM-Exit if L1 wants to intercept the exception.  A
-@@ -8883,6 +8886,8 @@ int x86_emulate_instruction(struct kvm_vcpu *vcpu, gp=
-a_t cr2_or_gpa,
-        }
-=20
-        if (ctxt->have_exception) {
-+               WARN_ON_ONCE(vcpu->mmio_needed && !vcpu->mmio_is_write);
-+               vcpu->mmio_needed =3D false;
-                r =3D 1;
-                inject_emulated_exception(vcpu);
-        } else if (vcpu->arch.pio.count) {
+Best regards,
+Krzysztof
 
