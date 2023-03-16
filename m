@@ -2,98 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26CD36BCCCA
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 11:30:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02B7A6BCCC6
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 11:29:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230351AbjCPKaJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 06:30:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36944 "EHLO
+        id S230051AbjCPK3e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 06:29:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231310AbjCPK37 (ORCPT
+        with ESMTP id S229959AbjCPK3b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 06:29:59 -0400
-X-Greylist: delayed 52879 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 16 Mar 2023 03:29:49 PDT
-Received: from forwardcorp1b.mail.yandex.net (forwardcorp1b.mail.yandex.net [IPv6:2a02:6b8:c02:900:1:45:d181:df01])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CE911CBF9;
-        Thu, 16 Mar 2023 03:29:48 -0700 (PDT)
-Received: from mail-nwsmtp-smtp-corp-main-44.iva.yp-c.yandex.net (mail-nwsmtp-smtp-corp-main-44.iva.yp-c.yandex.net [IPv6:2a02:6b8:c0c:5398:0:640:443b:0])
-        by forwardcorp1b.mail.yandex.net (Yandex) with ESMTP id 70F355FC9C;
-        Thu, 16 Mar 2023 13:29:46 +0300 (MSK)
-Received: from d-tatianin-nix.yandex-team.ru (unknown [2a02:6b8:b081:b53b::1:d])
-        by mail-nwsmtp-smtp-corp-main-44.iva.yp-c.yandex.net (smtpcorp/Yandex) with ESMTPSA id OTh0TA0hxGk0-rpgz28XH;
-        Thu, 16 Mar 2023 13:29:45 +0300
-X-Yandex-Fwd: 1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex-team.ru; s=default;
-        t=1678962585; bh=YSsSTmCAl0Avq9yZ876wK9u88LT7FmPh5ldlvefTzBc=;
-        h=Message-Id:Date:Cc:Subject:To:From;
-        b=SitDX3BapP0GEm3WMcsc5ae2KZijq5YVjSHC3jr7IiJvDD8AIs97Gq65BFB/UYgLf
-         fQpciIUezgZAd0f6fmUF9m/CHYkN3arRUDmGRXlWOOivMXCK7w0Ty0tLi+kR3yBTC8
-         RxiFlYchyYAVsF/NeqhVt/A0oOhOpX3alWd1Dngw=
-Authentication-Results: mail-nwsmtp-smtp-corp-main-44.iva.yp-c.yandex.net; dkim=pass header.i=@yandex-team.ru
-From:   Daniil Tatianin <d-tatianin@yandex-team.ru>
-To:     Ariel Elior <aelior@marvell.com>
-Cc:     Daniil Tatianin <d-tatianin@yandex-team.ru>,
-        Manish Chopra <manishc@marvell.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Yuval Mintz <Yuval.Mintz@qlogic.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] qed/qed_sriov: guard against NULL derefs from qed_iov_get_vf_info
-Date:   Thu, 16 Mar 2023 13:29:21 +0300
-Message-Id: <20230316102921.609266-1-d-tatianin@yandex-team.ru>
-X-Mailer: git-send-email 2.25.1
+        Thu, 16 Mar 2023 06:29:31 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B664D637EE
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 03:29:26 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id r27so1643060lfe.10
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 03:29:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678962565;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ZoXEVHbh4zESyEnp5EA5Zcb4rCYHcLM5oXeCPSUEYhA=;
+        b=hPGRGxF+ke8z3JzOJVv+C09Jmuv4N0i5SYgY2ZnNIKaXxFPKIJ7v7rnm2ULALJDkS3
+         BN+pVAOZSFrQcXJ72EtdmQLp8W7xIabGTpOC1j1pFwBeGr3S2feU1PHVkEeTqdTutiPw
+         aU9vqjmKMMz40gaZ8L2TzgsC/ycD6WoA6uapZvUDjCeahwljPbAPNVSsRefd0Mq9y20n
+         fdX4PKenMaxkUbhjaaU7NYQUZYUJL59wmPbtVVOg7gfHNbtejQlMvxNRmrqa60LdbRxE
+         2y2ayOBGkrD8bvHM/UhTZZ8TxMdjgvxZpe44qY/YBMkbC6Sfiyj2cTlfsM4hD2W2wrYN
+         /TEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678962565;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZoXEVHbh4zESyEnp5EA5Zcb4rCYHcLM5oXeCPSUEYhA=;
+        b=im7uH32KLjj3PSpBrJrKntst5oIx0Oiml/FQPbYH4aGM+KzOmhOOFfogTC6AXOaL8Q
+         MP/LGSsnDCngtJ3AAj78Bpoe0GnURdAnyPaglRoSv3hFrJqU4nXYNR/00mEgfiAtARaE
+         piTgLL77dAy7MQCwYEzVYmlyur1aNywHbNoNWs/67eFqDnX363P+6G+hG+jeP7qnHLPn
+         EQc18W5ZeiJBSoegkN+psiZ4UgP/XONN4shvsVbYuJqUtcb9N97O1cCA8ClWOaWNVmEU
+         R38L3YYidPH6UtKKLyYUURQYQEO49P4ohMimLo4SX+goq/Nr6Hu1H8VxvQVYYiUvggZm
+         QRGA==
+X-Gm-Message-State: AO0yUKUGPUuoAA1OJLLf/I916hPIGJt06mngBAZBbY3QTh1fjZhR2cpH
+        Rcv0wsMggY2SS638MN35t+xlYw==
+X-Google-Smtp-Source: AK7set8RqMAmh9lKg1cILMKHSx8C7wupxbgS49UmQD0f1euyKuqdXR0j+LcLnHCcQgn5HAX+nmRHtQ==
+X-Received: by 2002:ac2:5dd1:0:b0:4e8:4699:d01 with SMTP id x17-20020ac25dd1000000b004e846990d01mr2775148lfq.27.1678962565001;
+        Thu, 16 Mar 2023 03:29:25 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id n7-20020a195507000000b004e84896253asm1169523lfe.251.2023.03.16.03.29.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Mar 2023 03:29:23 -0700 (PDT)
+Message-ID: <5cfc6a2b-5b70-c44c-17d4-9c5dfaa33f54@linaro.org>
+Date:   Thu, 16 Mar 2023 12:29:23 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] drm: msm: adreno: Disable preemption on Adreno 510
+Content-Language: en-GB
+To:     Adam Skladowski <a39.skl@gmail.com>
+Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Elliot Berman <quic_eberman@quicinc.com>,
+        Akhil P Oommen <quic_akhilpo@quicinc.com>,
+        Chia-I Wu <olvaffe@gmail.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        AngeloGioacchino Del Regno <kholk11@gmail.com>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20230314221757.13096-1-a39.skl@gmail.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230314221757.13096-1-a39.skl@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We have to make sure that the info returned by the helper is valid
-before using it.
+On 15/03/2023 00:17, Adam Skladowski wrote:
+> Downstream driver appears to not support preemption on A510 target,
+> trying to use one make device slow and fill log with rings related errors.
+> Set num_rings to 1 to disable preemption.
+> 
+> Suggested-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> Fixes: e20c9284c8f2 ("drm/msm/adreno: Add support for Adreno 510 GPU")
+> Signed-off-by: Adam Skladowski <a39.skl@gmail.com>
 
-Found by Linux Verification Center (linuxtesting.org) with the SVACE
-static analysis tool.
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-Fixes: f990c82c385b ("qed*: Add support for ndo_set_vf_trust")
-Fixes: 733def6a04bf ("qed*: IOV link control")
-Signed-off-by: Daniil Tatianin <d-tatianin@yandex-team.ru>
----
-Changes since v1:
-- Add a vf check to qed_iov_handle_trust_change as well
----
- drivers/net/ethernet/qlogic/qed/qed_sriov.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/net/ethernet/qlogic/qed/qed_sriov.c b/drivers/net/ethernet/qlogic/qed/qed_sriov.c
-index 2bf18748581d..fa167b1aa019 100644
---- a/drivers/net/ethernet/qlogic/qed/qed_sriov.c
-+++ b/drivers/net/ethernet/qlogic/qed/qed_sriov.c
-@@ -4404,6 +4404,9 @@ qed_iov_configure_min_tx_rate(struct qed_dev *cdev, int vfid, u32 rate)
- 	}
- 
- 	vf = qed_iov_get_vf_info(QED_LEADING_HWFN(cdev), (u16)vfid, true);
-+	if (!vf)
-+		return -EINVAL;
-+
- 	vport_id = vf->vport_id;
- 
- 	return qed_configure_vport_wfq(cdev, vport_id, rate);
-@@ -5152,7 +5155,7 @@ static void qed_iov_handle_trust_change(struct qed_hwfn *hwfn)
- 
- 		/* Validate that the VF has a configured vport */
- 		vf = qed_iov_get_vf_info(hwfn, i, true);
--		if (!vf->vport_instance)
-+		if (!vf || !vf->vport_instance)
- 			continue;
- 
- 		memset(&params, 0, sizeof(params));
 -- 
-2.25.1
+With best wishes
+Dmitry
 
