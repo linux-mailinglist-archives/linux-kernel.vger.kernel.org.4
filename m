@@ -2,68 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CBEC6BC5CD
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 06:43:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5747B6BC5DA
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 06:51:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229540AbjCPFnc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 01:43:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51360 "EHLO
+        id S229617AbjCPFv1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 01:51:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbjCPFna (ORCPT
+        with ESMTP id S229516AbjCPFvZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 01:43:30 -0400
-Received: from out30-124.freemail.mail.aliyun.com (out30-124.freemail.mail.aliyun.com [115.124.30.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 586697DFB9;
-        Wed, 15 Mar 2023 22:43:29 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R591e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VdymIEA_1678945406;
-Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0VdymIEA_1678945406)
-          by smtp.aliyun-inc.com;
-          Thu, 16 Mar 2023 13:43:27 +0800
-From:   Yang Li <yang.lee@linux.alibaba.com>
-To:     michal.simek@xilinx.com
-Cc:     linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yang Li <yang.lee@linux.alibaba.com>
-Subject: [PATCH -next] i2c: xiic: Use devm_platform_get_and_ioremap_resource()
-Date:   Thu, 16 Mar 2023 13:43:25 +0800
-Message-Id: <20230316054325.108457-1-yang.lee@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        Thu, 16 Mar 2023 01:51:25 -0400
+Received: from forwardcorp1b.mail.yandex.net (forwardcorp1b.mail.yandex.net [178.154.239.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE27C4ED3;
+        Wed, 15 Mar 2023 22:51:21 -0700 (PDT)
+Received: from mail-nwsmtp-smtp-corp-main-26.myt.yp-c.yandex.net (mail-nwsmtp-smtp-corp-main-26.myt.yp-c.yandex.net [IPv6:2a02:6b8:c12:5da4:0:640:ef2d:0])
+        by forwardcorp1b.mail.yandex.net (Yandex) with ESMTP id CEB9260456;
+        Thu, 16 Mar 2023 08:51:17 +0300 (MSK)
+Received: from [IPV6:2a02:6b8:b081:b420::1:2e] (unknown [2a02:6b8:b081:b420::1:2e])
+        by mail-nwsmtp-smtp-corp-main-26.myt.yp-c.yandex.net (smtpcorp/Yandex) with ESMTPSA id GpcvBB0hwqM0-FtYW6EG3;
+        Thu, 16 Mar 2023 08:51:17 +0300
+X-Yandex-Fwd: 1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex-team.ru; s=default;
+        t=1678945877; bh=MmV3iqC5bsbyAV/2LJuRI5otJk5YUkKFYzvzv1ynAM0=;
+        h=From:In-Reply-To:Cc:Date:References:To:Subject:Message-ID;
+        b=T3uFjnj96q6dTaVNa/E+ZA5MrgX7V2rKACaOMfdIHMbgmtY7Dbm2/MKN3j8DpBOTt
+         L5cX/A2RObrfQstBZrJdvZJkZlyroZ1LdcL3q/7+ddq4WzewlMp9X7XmUd4UV0grgz
+         Z8C1u9LyauMBWMgokPf8jLhtXNi13HXzuuWmexjM=
+Authentication-Results: mail-nwsmtp-smtp-corp-main-26.myt.yp-c.yandex.net; dkim=pass header.i=@yandex-team.ru
+Message-ID: <69f0d161-e473-37dc-13a9-c81ec9145de2@yandex-team.ru>
+Date:   Thu, 16 Mar 2023 08:51:15 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] kvm/x86: actually verify that reading MSR_IA32_UCODE_REV
+ succeeds
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230315195109.580333-1-d-tatianin@yandex-team.ru>
+ <ZBInlO18ZlClLbHp@google.com>
+Content-Language: en-US
+From:   Daniil Tatianin <d-tatianin@yandex-team.ru>
+In-Reply-To: <ZBInlO18ZlClLbHp@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-According to commit 890cc39a8799 ("drivers: provide
-devm_platform_get_and_ioremap_resource()"), convert
-platform_get_resource(), devm_ioremap_resource() to a single
-call to devm_platform_get_and_ioremap_resource(), as this is exactly
-what this function does.
+On 3/15/23 11:16 PM, Sean Christopherson wrote:
+> On Wed, Mar 15, 2023, Daniil Tatianin wrote:
+>> ...and return KVM_MSR_RET_INVALID otherwise.
+>>
+>> Found by Linux Verification Center (linuxtesting.org) with the SVACE
+>> static analysis tool.
+>>
+>> Fixes: cd28325249a1 ("KVM: VMX: support MSR_IA32_ARCH_CAPABILITIES as a feature MSR")
+>> Signed-off-by: Daniil Tatianin <d-tatianin@yandex-team.ru>
+>> ---
+>>   arch/x86/kvm/x86.c | 3 ++-
+>>   1 file changed, 2 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+>> index 7713420abab0..7de6939fc371 100644
+>> --- a/arch/x86/kvm/x86.c
+>> +++ b/arch/x86/kvm/x86.c
+>> @@ -1661,7 +1661,8 @@ static int kvm_get_msr_feature(struct kvm_msr_entry *msr)
+>>   		msr->data = kvm_caps.supported_perf_cap;
+>>   		break;
+>>   	case MSR_IA32_UCODE_REV:
+>> -		rdmsrl_safe(msr->index, &msr->data);
+>> +		if (rdmsrl_safe(msr->index, &msr->data))
+>> +			return KVM_MSR_RET_INVALID;
+> 
+> This is unnecessary and would arguably break KVM's ABI.  KVM unconditionally emulates
+> MSR_IA32_UCODE_REV in software and rdmsrl_safe() zeros the result on a fault (see
+> ex_handler_msr()).  '0' is a legitimate ucode revid and a reasonable fallback for
+> a theoretical (virtual) CPU that doesn't support the MSR.
 
-Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
----
- drivers/i2c/busses/i2c-xiic.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/drivers/i2c/busses/i2c-xiic.c b/drivers/i2c/busses/i2c-xiic.c
-index dbb792fc197e..0eea00d10545 100644
---- a/drivers/i2c/busses/i2c-xiic.c
-+++ b/drivers/i2c/busses/i2c-xiic.c
-@@ -1233,8 +1233,7 @@ static int xiic_i2c_probe(struct platform_device *pdev)
- 		i2c->quirks = data->quirks;
- 	}
- 
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	i2c->base = devm_ioremap_resource(&pdev->dev, res);
-+	i2c->base = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
- 	if (IS_ERR(i2c->base))
- 		return PTR_ERR(i2c->base);
- 
--- 
-2.20.1.7.g153144c
-
+I see, thanks for the explanation!
