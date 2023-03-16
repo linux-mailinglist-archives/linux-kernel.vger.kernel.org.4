@@ -2,123 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 241B46BC7F4
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 08:57:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EE2E6BC7EF
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 08:57:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229870AbjCPH54 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 03:57:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59574 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230211AbjCPH5t (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S230234AbjCPH5t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Thu, 16 Mar 2023 03:57:49 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 100D425E17;
-        Thu, 16 Mar 2023 00:57:47 -0700 (PDT)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32G3n29U023112;
-        Thu, 16 Mar 2023 07:57:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references; s=qcppdkim1;
- bh=vYf7MJVBmEbDDRGmEYOio2EVZ5KVHxsGoNLgaqNTQgc=;
- b=EtvG7dYUJPe5bF9HC5rPhYJ+GvQ0x6o138sS37DGHr86Qs9Ya9K6kodkdiz25gMA9w9s
- 4JZumogcVj4CWKFOGdErJjS+xpbHY1UvzpzWmiuNfCeRIcyhUIZInJm9mxbMTwQF+5vs
- zz4S5NFcGNlgqhtGKPJBZoFqsgK+/WXEx6TAR5J9cmsfKtLo4DtNs925w+zQ1eqpF72O
- FiHzU2dzrS/+CJ25rLYxr8Y5TKpE/UdUlsr4P8zkZsZm9Pc9qTu1tXRixOaDzMd4vOMm
- ZE92qCh051U/HuOJInW+cirvhNfhOGb6bdM3yT/qKtpKAwI1o3t/PMkgwtlXqBoH8e8A lw== 
-Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pbpy8h4te-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 16 Mar 2023 07:57:44 +0000
-Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 32G7vfrc025640;
-        Thu, 16 Mar 2023 07:57:41 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 3p8jqkry4v-1;
-        Thu, 16 Mar 2023 07:57:41 +0000
-Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32G7vfDn025629;
-        Thu, 16 Mar 2023 07:57:41 GMT
-Received: from vboma-linux.qualcomm.com (vboma-linux.qualcomm.com [10.204.65.94])
-        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 32G7vfqE025627;
-        Thu, 16 Mar 2023 07:57:41 +0000
-Received: by vboma-linux.qualcomm.com (Postfix, from userid 72083)
-        id 3F739900889; Thu, 16 Mar 2023 13:27:40 +0530 (IST)
-From:   quic_vboma@quicinc.com
-To:     Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        Vikash Garodia <quic_vgarodia@quicinc.com>,
-        Viswanath Boma <quic_vboma@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Vikash Garodia <vgarodia@qti.qualcomm.com>
-Subject: [PATCH] venus : Fix for H265 decoding failure.
-Date:   Thu, 16 Mar 2023 13:27:29 +0530
-Message-Id: <20230316075729.4052-2-quic_vboma@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230316075729.4052-1-quic_vboma@quicinc.com>
-References: <20221115121004.28197-2-quic_vboma@quicinc.com>
- <20230316075729.4052-1-quic_vboma@quicinc.com>
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 32iuyrYL35o00lNz8QHay3mMN3RUo6b9
-X-Proofpoint-ORIG-GUID: 32iuyrYL35o00lNz8QHay3mMN3RUo6b9
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-16_05,2023-03-15_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- spamscore=0 clxscore=1015 malwarescore=0 mlxlogscore=999 suspectscore=0
- adultscore=0 impostorscore=0 bulkscore=0 phishscore=0 mlxscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303150002 definitions=main-2303160066
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,
-        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59532 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229720AbjCPH5q (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Mar 2023 03:57:46 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F89626851
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 00:57:43 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id ek18so4085163edb.6
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 00:57:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678953462;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=QUKmVZD4P10t9tCmWsV/xiC2I1YN3U8W6JtlRyatjRg=;
+        b=Xw3+Kvfeto5589ehWRE9jW0zXPLkt2pJPGHn5kE4sK3UiSZwo1y2drS68wpgBezbB+
+         1dinfQ+75yEZ0KBV8/Kt3mbU+0xEGHZgjac1ZvICtx22VfgEzgz27zxIzutLSXFjR41+
+         wkscuqTlOgdtfcxI9p+qjR/T7XIZHsSUdNF91ofT7xiLS3wS2uA6rYCwkE/Ogg16Vn1i
+         mRekwGuCl0X2oWJ80vZaDaxjnl/ypF3AS889xftnE8gYdS3WUxEGhpIR7skjfTZYMW6V
+         o0ZkPt2R4xJWJ49HLME6fAQWazlVB1USC2qu+X5OnE+IVZKrYoJmqIxRP5p7Cf9+bGsF
+         jZ9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678953462;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QUKmVZD4P10t9tCmWsV/xiC2I1YN3U8W6JtlRyatjRg=;
+        b=osr7kxRT8O7+ye2vB5w7uhYhqUZT2PIJhd2LSe9YpNVUjtYze00fMlUxw6K3m45RQD
+         +L8u326Qu9sUXu5sZXh9TyXby7Di9ZeT137wZV9HnzIf3RZr1i3jtQE+sfF6sVwKfV9M
+         2xd6+glCfpBw9Rr9+u+J02MEXuLf9mfeYFfnb6gXtWHHEU6ogUvnGTE16lBsCwMTzR0K
+         KzLwL1AqTovZSXppjqQgoKUJ4A6zhrzy6k99JpzdpZHGOELMpn/mRK8+UZLafGspjSQB
+         nPdkJ7qXeleAAhNGYTjUr53mdL2xG/NHxpA1gj2d9ZzHSU+dPi5jwvjk3LL76uSH2dSg
+         8IgQ==
+X-Gm-Message-State: AO0yUKWAFFUcsON+xN7etBNq9XigjIKxLfa8FNsnCEHYqFdst93NEARh
+        EU6LtG4S1rfKGN8F/izAbSAAPvBRVyZQ+6Tr41s=
+X-Google-Smtp-Source: AK7set/44q+f7ezrCJo9lEFuuMwzHC04K9dAbeiAfdMqxRNZv/8E6WRomtaxUYP5ax2gWHBVMu1gJw==
+X-Received: by 2002:a17:906:2290:b0:8f0:9566:c1ff with SMTP id p16-20020a170906229000b008f09566c1ffmr9886317eja.69.1678953462052;
+        Thu, 16 Mar 2023 00:57:42 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:9827:5f65:8269:a95f? ([2a02:810d:15c0:828:9827:5f65:8269:a95f])
+        by smtp.gmail.com with ESMTPSA id v10-20020a170906858a00b008d173604d72sm3531809ejx.174.2023.03.16.00.57.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Mar 2023 00:57:41 -0700 (PDT)
+Message-ID: <c441cab6-09a1-864b-d857-0c22e15b029e@linaro.org>
+Date:   Thu, 16 Mar 2023 08:57:40 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v4 2/2] dt-bindings: rtc: add max313xx RTCs
+Content-Language: en-US
+To:     Ibrahim Tilki <Ibrahim.Tilki@analog.com>, a.zummo@towertech.it,
+        alexandre.belloni@bootlin.com, jdelvare@suse.com,
+        linux@roeck-us.net, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
+References: <20230315161626.247-1-Ibrahim.Tilki@analog.com>
+ <20230315161626.247-3-Ibrahim.Tilki@analog.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230315161626.247-3-Ibrahim.Tilki@analog.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Viswanath Boma <quic_vboma@quicinc.com>
+On 15/03/2023 17:16, Ibrahim Tilki wrote:
+> Devicetree binding documentation for Analog Devices MAX313XX RTCs
+> 
+> Signed-off-by: Ibrahim Tilki <Ibrahim.Tilki@analog.com>
+> Signed-off-by: Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
+> ---
+>  .../devicetree/bindings/rtc/adi,max313xx.yaml | 142 ++++++++++++++++++
+>  1 file changed, 142 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/rtc/adi,max313xx.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/rtc/adi,max313xx.yaml b/Documentation/devicetree/bindings/rtc/adi,max313xx.yaml
+> new file mode 100644
+> index 000000000..bed6d0bc4
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/rtc/adi,max313xx.yaml
+> @@ -0,0 +1,142 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +# Copyright 2022 Analog Devices Inc.
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/rtc/adi,max313xx.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Analog Devices MAX313XX series I2C RTCs
+> +
+> +maintainers:
+> +  - Ibrahim Tilki <Ibrahim.Tilki@analog.com>
+> +  - Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
+> +
+> +description: Analog Devices MAX313XX series I2C RTCs.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - adi,max31328
+> +      - adi,max31329
+> +      - adi,max31331
+> +      - adi,max31334
+> +      - adi,max31341
+> +      - adi,max31342
+> +      - adi,max31343
+> +
+> +  reg:
+> +    description: I2C address of the RTC
+> +    items:
+> +      - enum: [0x68, 0x69]
+> +
+> +  interrupts:
+> +    description: |
+> +      Alarm1 interrupt line of the RTC. Some of the RTCs have two interrupt
+> +      lines and alarm1 interrupt muxing depends on the clockin/clockout
+> +      configuration.
+> +    maxItems: 1
+> +
+> +  "#clock-cells":
+> +    description: |
+> +      RTC can be used as a clock source through its clock output pin when
+> +      supplied.
+> +    const: 0
+> +
+> +  clocks:
+> +    description: |
+> +      RTC uses this clock for clock input when supplied. Clock has to provide
+> +      one of these four frequencies: 1Hz, 50Hz, 60Hz or 32.768kHz.
+> +    maxItems: 1
+> +
+> +  aux-voltage-chargeable: true
 
-Aligned the mismatch of persist1 and scratch1 buffer calculation,
-as per the firmware requirements .
+Drop, coming from rtc.yaml.
 
-Signed-off-by: Vikash Garodia <vgarodia@qti.qualcomm.com>
-Signed-off-by: Viswanath Boma <quic_vboma@quicinc.com>
-Tested-by: Nathan Hebert <nhebert@chromium.org>
----
- drivers/media/platform/qcom/venus/hfi_plat_bufs_v6.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+> +
+> +  trickle-resistor-ohms:
+> +    description: Enables trickle charger with specified resistor value.
+> +    enum: [3000, 6000, 11000]
+> +
+> +  adi,trickle-diode-enable:
+> +    description: Charge the auxiliary voltage with a diode.
+> +    type: boolean
+> +
+> +additionalProperties: false
 
-diff --git a/drivers/media/platform/qcom/venus/hfi_plat_bufs_v6.c b/drivers/media/platform/qcom/venus/hfi_plat_bufs_v6.c
-index ea25c451222b..a9be31ec6927 100644
---- a/drivers/media/platform/qcom/venus/hfi_plat_bufs_v6.c
-+++ b/drivers/media/platform/qcom/venus/hfi_plat_bufs_v6.c
-@@ -93,7 +93,7 @@
- #define LCU_MIN_SIZE_PELS		16
- #define SIZE_SEI_USERDATA		4096
- 
--#define H265D_MAX_SLICE			600
-+#define H265D_MAX_SLICE			3600
- #define SIZE_H265D_HW_PIC_T		SIZE_H264D_HW_PIC_T
- #define SIZE_H265D_BSE_CMD_PER_BUF	(16 * sizeof(u32))
- #define SIZE_H265D_VPP_CMD_PER_BUF	256
-@@ -1021,7 +1021,7 @@ static u32 h264d_persist1_size(void)
- static u32 h265d_persist1_size(void)
- {
- 	return ALIGN((SIZE_SLIST_BUF_H265 * NUM_SLIST_BUF_H265 + H265_NUM_TILE
--			* sizeof(u32)), HFI_DMA_ALIGNMENT);
-+			* sizeof(u32) + NUM_HW_PIC_BUF * SIZE_SEI_USERDATA), HFI_DMA_ALIGNMENT);
- }
- 
- static u32 vp8d_persist1_size(void)
--- 
-2.17.1
+Use order like in example-schema, so required, allOf then
+unevaluatedProperties: false.
+
+
+Best regards,
+Krzysztof
 
