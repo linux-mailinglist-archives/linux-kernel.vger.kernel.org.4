@@ -2,123 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29F8C6BDCBB
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 00:11:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5270F6BDCBD
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 00:11:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230077AbjCPXLX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 19:11:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55956 "EHLO
+        id S230306AbjCPXLZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 19:11:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229590AbjCPXLU (ORCPT
+        with ESMTP id S230290AbjCPXLW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 19:11:20 -0400
-Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A1CC234C7;
-        Thu, 16 Mar 2023 16:11:19 -0700 (PDT)
-Received: by mail-ot1-x335.google.com with SMTP id r23-20020a05683001d700b00690eb18529fso1934594ota.1;
-        Thu, 16 Mar 2023 16:11:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679008278;
-        h=content-transfer-encoding:mime-version:message-id:references
-         :in-reply-to:user-agent:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=YcdmFaDt/Cf3OEZTuhE6C+fH1voZvs0au3xzuaV9u5Y=;
-        b=NHqiaZ38ESCpwnaQAzL6DB3Rgds+gFstT1N5yF3hqRVRYpBe4Bx7fJmh4IdWqsQ22r
-         NauoV7t7y6EYPEZ8WUGH8h6sZ8ntReyUwwn6e4bmgjwg2SeitRzh4X0b3+wW/W4qU37b
-         m01COCxCYPXJRgiJJQXXeEwr9g4mcAd/U/tpBcAJSOArr6k9f9P5FlyN3SxLv15/6chh
-         XLWibuN1k+ZgOqsaabzu5gv6nr+a4mGOf7GP2a14UKIoTaA9TjeqGKwvrn8Md3GAf3KS
-         cjKjK+u8BtnBL010MxphmKoc95XpCGtvvTzk5r6G1jZHTo8vQ7Bcj4AowExp36fb3Pp+
-         Q+mQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679008278;
-        h=content-transfer-encoding:mime-version:message-id:references
-         :in-reply-to:user-agent:subject:cc:to:from:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=YcdmFaDt/Cf3OEZTuhE6C+fH1voZvs0au3xzuaV9u5Y=;
-        b=kIcE6jA99qn1fGDI9Pf9kNh24sb7wSUDbHynSLPGaE3ARznP7R5fy1bNGP6SvFeeaD
-         fdU9AP0w4J4r7p8e7Ic4ppr/no43rs5NQYce8SYbzuYlPi+8lNbqZ4AACp3Z1oz/GkqM
-         eoH2VwK7s1S2N93GYfkwXbC9OAuHTwPd9desAnAalj7x+G+V4bAQHKJ6BbXi9JaQMHp+
-         IbgppFf7XUGesCfBnhltLMpB5V1aN/99/GXmL+hBYYy6zrDd15eUT2Igzy2P9rw9sXFJ
-         dxydqHSMnLnFoKRsviUSF1nS8r0QZlsvF3yRrjy4IxpITbbS/U81v1XKmllL4vsEob6f
-         rtnA==
-X-Gm-Message-State: AO0yUKXm1LjC5VznQRHlHMu9agYv0McoVSEbPWUfOvP2AqvzNFZMvxdp
-        kg9k1I4f8GhxaDREXOsatNE=
-X-Google-Smtp-Source: AK7set/ql1xaD1GZvmGqHKAwEjxQRA7/0GbY8h5F17WCkLSNgM3Fc5gunpWG2i+FvDx5HEKVMPiCgg==
-X-Received: by 2002:a9d:2f0:0:b0:68b:caa8:6ef1 with SMTP id 103-20020a9d02f0000000b0068bcaa86ef1mr22677270otl.12.1679008278713;
-        Thu, 16 Mar 2023 16:11:18 -0700 (PDT)
-Received: from [127.0.0.1] (187-26-169-5.3g.claro.net.br. [187.26.169.5])
-        by smtp.gmail.com with ESMTPSA id v13-20020a9d5a0d000000b00693c9f984b4sm354610oth.70.2023.03.16.16.11.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Mar 2023 16:11:18 -0700 (PDT)
-Date:   Thu, 16 Mar 2023 20:11:11 -0300
-From:   Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-CC:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        irogers@google.com, namhyung@kernel.org
-Subject: Re: linux-next: build failure after merge of the perf tree
-User-Agent: K-9 Mail for Android
-In-Reply-To: <20230317095025.49aa34f9@canb.auug.org.au>
-References: <20230317095025.49aa34f9@canb.auug.org.au>
-Message-ID: <7D15C431-1AB6-482E-B4B9-289A15C0E2E4@gmail.com>
+        Thu, 16 Mar 2023 19:11:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 383B4234C7;
+        Thu, 16 Mar 2023 16:11:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C28DE6215A;
+        Thu, 16 Mar 2023 23:11:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB8CEC433D2;
+        Thu, 16 Mar 2023 23:11:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679008280;
+        bh=C9SeBZKe1J8xGwKJwJ0+m/gRU/FcXNA39c4C2EpsCw8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=OIrdVdMwEVXSwXTPd21TxEKgha2ZmkPifPbVOKWq0vHWhgoKeTOOKrJXdZuoDqQ4O
+         oXIsFDAXi2htZFn1dF9N7kzpSE4HO3lPPWV6mtpoY4qvz2jm8DJ5PgrCz+LfJqFaC5
+         kbkKHIlSsSBMkn+gquyrt9DG6slo8FbvL/3ty5ImUHzRzX/9Zg0F5lJIF2KVNMVJzy
+         8bWxRg9fp2O8SALmvzlz/g2+MUF/x4Hd1Wp772uueEHMJUlvdcE9f3nx/1ST38l6Ky
+         R12nTpgd3BAKGVlZuKSveJPmA2kBUmmoSQCNrwwLL2xJRzRQYyy4VrKdmTfMzCXe59
+         SOAYTvKtxSGSQ==
+From:   Stephen Boyd <sboyd@kernel.org>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        patches@lists.linux.dev,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Chen-Yu Tsai <wenst@chromium.org>
+Subject: [PATCH] clk: mediatek: Ensure fhctl code is available for COMMON_CLK_MT6795
+Date:   Thu, 16 Mar 2023 16:11:18 -0700
+Message-Id: <20230316231118.2579242-1-sboyd@kernel.org>
+X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Without this select we get linker errors when linking
+clk-mt6795-apmixedsys
 
+arm-linux-gnueabi-ld: drivers/clk/mediatek/clk-mt6795-apmixedsys.o: in function `clk_mt6795_apmixed_remove':
+clk-mt6795-apmixedsys.c:(.text+0x34): undefined reference to `mtk_clk_unregister_pllfhs'
+arm-linux-gnueabi-ld: drivers/clk/mediatek/clk-mt6795-apmixedsys.o: in function `clk_mt6795_apmixed_probe':
+clk-mt6795-apmixedsys.c:(.text+0x98): undefined reference to `fhctl_parse_dt'
+arm-linux-gnueabi-ld: clk-mt6795-apmixedsys.c:(.text+0xb8): undefined reference to `mtk_clk_register_pllfhs'
+arm-linux-gnueabi-ld: clk-mt6795-apmixedsys.c:(.text+0x1c4): undefined reference to `mtk_clk_unregister_pllfhs'
 
-On March 16, 2023 7:50:25 PM GMT-03:00, Stephen Rothwell <sfr@canb=2Eauug=
-=2Eorg=2Eau> wrote:
->Hi all,
->
->After merging the perf tree, today's linux-next build (native perf)
->failed like this:
->
->Auto-detecting system features:
->=2E=2E=2E                         clang-bpf-co-re: [ =1B[32mon=1B[m  ]
->=2E=2E=2E                                    llvm: [ =1B[31mOFF=1B[m ]
->=2E=2E=2E                                  libcap: [ =1B[32mon=1B[m  ]
->=2E=2E=2E                                  libbfd: [ =1B[32mon=1B[m  ]
->
->make[1]: *** Deleting file '/home/sfr/next/perf/util/bpf_skel/vmlinux=2Eh=
-'
->libbpf: failed to find '=2EBTF' ELF section in /boot/vmlinux-6=2E0=2E0-5-=
-powerpc64le
->Error: failed to load BTF from /boot/vmlinux-6=2E0=2E0-5-powerpc64le: No =
-data available
->make[1]: *** [Makefile=2Eperf:1075: /home/sfr/next/perf/util/bpf_skel/vml=
-inux=2Eh] Error 195
->make[1]: *** Waiting for unfinished jobs=2E=2E=2E=2E
->make: *** [Makefile=2Eperf:236: sub-make] Error 2
->Command exited with non-zero status 2
->
->To be clear this is a native build of perf on a PPC64le host using this
->command line:
->
->make -C tools/perf -f Makefile=2Eperf -s -O -j60 O=3D=2E=2E/perf EXTRA_CF=
-LAGS=3D-Wno-psabi
->
->(I could probably remove the EXTRA_CLFAGS now that I am building with
->gcc 12=2E2)
->
->I don't know which commit caused this=2E
+Fixes: f222a1baec5f ("clk: mediatek: mt6795: Add support for frequency hopping through FHCTL")
+Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Cc: Chen-Yu Tsai <wenst@chromium.org>
+Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+---
+ drivers/clk/mediatek/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-Can you try adding NO_BPF_SKEL=3D1 to the make -C tools/perf command line?
+diff --git a/drivers/clk/mediatek/Kconfig b/drivers/clk/mediatek/Kconfig
+index 7a12aefb1d0b..c707c6fe45a3 100644
+--- a/drivers/clk/mediatek/Kconfig
++++ b/drivers/clk/mediatek/Kconfig
+@@ -270,6 +270,7 @@ config COMMON_CLK_MT6795
+ 	tristate "Clock driver for MediaTek MT6795"
+ 	depends on ARCH_MEDIATEK || COMPILE_TEST
+ 	select COMMON_CLK_MEDIATEK
++	select COMMON_CLK_MEDIATEK_FHCTL
+ 	default ARCH_MEDIATEK
+ 	help
+ 	  This driver supports MediaTek MT6795 basic clocks and clocks
+-- 
+https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git/
+https://git.kernel.org/pub/scm/linux/kernel/git/sboyd/spmi.git
 
-- Arnaldo
-
->
->I have used the perf tree from next-20230316 for today=2E
->
->
->
