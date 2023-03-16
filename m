@@ -2,158 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2ADFA6BC7AC
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 08:49:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E3526BC7A3
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 08:48:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230258AbjCPHt0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 03:49:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44038 "EHLO
+        id S230036AbjCPHsf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 03:48:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230123AbjCPHtM (ORCPT
+        with ESMTP id S229608AbjCPHsc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 03:49:12 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14ED2ACBB5;
-        Thu, 16 Mar 2023 00:49:08 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id a2so845522plm.4;
-        Thu, 16 Mar 2023 00:49:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678952947;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FqZfoUoxy8iXzcBbOibqnO/QMawNVpGzC8pVpMz5OXw=;
-        b=XrakP6GBQtekN+sgg3bQqv9Ep1KiZK636rxYBHrDNRfSxKYnbN8Cthh35xM5RrFUDm
-         xFJ2UFVsm1Q+b7nP/YVqdLhmNNwKhZb8DET900/eJBexkpozHqTrzo7htIM3wpBKjV/x
-         mAZSMhFsdUtpsZBgVnKDUIe2MQqMSVyc1hUMVyYqJiwyov7trHFI5iA+FatMcMaUmeJJ
-         eA3e4QcrU4yHQvsIopO3PINEORbtK+a5sXwH2TvW1dHF/Dszy69RoR/aiA7B9EMwG9E0
-         /3FFpmnPHFhJnsFASME3zH+Jiw+7L/ggKZoY5hZ5NrXBWKMX9YKqdxbt9fhtcmfqsRkT
-         iAog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678952947;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FqZfoUoxy8iXzcBbOibqnO/QMawNVpGzC8pVpMz5OXw=;
-        b=nrtXH0cg+dg3UB8SJJa7BqQpkRR6WkewwZEcGol1cRpPyBUbTxblGgDCdzgZn+dRK7
-         OBkQ+r7c7L5hfGb0h+W1g62Rl2i3//iFgdjsLBaY98fcE/dx8xOYuncdT1lKGue5Cb/1
-         Zw+JoN1HpPks9vl93rQyjKJh0sjnBPk27b2/n6nwAaZNE0q1EX4NZtxfZX25+rwqOuE8
-         FMVpfpLVtaHT2rWO2xPvS04shpExNL1+VBBKo+PrVWI3uTO1THIMAlWnO+fBYDymljT2
-         I3zPLLCCcW+24Cw4dfGkpD5PFbv5UOgzgi/HQqpfdqAcpmSpOIlbtpLTRdQq8iIWHNdJ
-         w6/A==
-X-Gm-Message-State: AO0yUKULLEN+rCRzNgrqUOFXtPMOdnwZ9b81C+Z+1cE1MtiCbBPF6lcu
-        BkxqG9cH4E4rzXG6ZAGhKLz4K6gfntsKRg==
-X-Google-Smtp-Source: AK7set9uC6TxuZ+KP7W/oD56NUSmdRduZBGSJ23Hziptg0lvxtgTfF3oENH6ux6TKd+3TkqqBd/ZzQ==
-X-Received: by 2002:a05:6a20:8413:b0:d5:c14c:1263 with SMTP id c19-20020a056a20841300b000d5c14c1263mr3123026pzd.53.1678952947327;
-        Thu, 16 Mar 2023 00:49:07 -0700 (PDT)
-Received: from kazuki-mac.lan ([2400:4051:ea3:5910::789])
-        by smtp.gmail.com with ESMTPSA id 23-20020aa79217000000b005e099d7c30bsm4683618pfo.205.2023.03.16.00.49.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Mar 2023 00:49:07 -0700 (PDT)
-From:   Kazuki H <kazukih0205@gmail.com>
-To:     linux-pm@vger.kernel.org
-Cc:     Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
-        Kazuki H <kazukih0205@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] PM: s2idle: Fully block the system from entering s2idle when cpuidle isn't supported
-Date:   Thu, 16 Mar 2023 16:47:50 +0900
-Message-Id: <20230316074750.289025-3-kazukih0205@gmail.com>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230316074750.289025-1-kazukih0205@gmail.com>
-References: <20230316074750.289025-1-kazukih0205@gmail.com>
+        Thu, 16 Mar 2023 03:48:32 -0400
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49722149AA;
+        Thu, 16 Mar 2023 00:48:30 -0700 (PDT)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 32G7lu6rB029583, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 32G7lu6rB029583
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
+        Thu, 16 Mar 2023 15:47:56 +0800
+Received: from RTEXMBS03.realtek.com.tw (172.21.6.96) by
+ RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.17; Thu, 16 Mar 2023 15:48:09 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXMBS03.realtek.com.tw (172.21.6.96) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Thu, 16 Mar 2023 15:48:08 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::b4a2:2bcc:48d1:8b02]) by
+ RTEXMBS04.realtek.com.tw ([fe80::b4a2:2bcc:48d1:8b02%5]) with mapi id
+ 15.01.2375.007; Thu, 16 Mar 2023 15:48:08 +0800
+From:   Phinex Hung <phinex@realtek.com>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        "jdelvare@suse.com" <jdelvare@suse.com>
+CC:     "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v1] hwmon: drivetemp: support to be a platform driver for thermal_of
+Thread-Topic: [PATCH v1] hwmon: drivetemp: support to be a platform driver for
+ thermal_of
+Thread-Index: AQHZVzfsuBPt1OfUHEer519nIXIgnK77czOAgAE6SgD//4V8AIAAjaUA//+VWgCAAK9BgIAAA6MA
+Date:   Thu, 16 Mar 2023 07:48:08 +0000
+Message-ID: <A6DF8FB3-6318-40CD-A364-603A3E581511@realtek.com>
+References: <20230315121606.GA71707@threadripper>
+ <8dbed631-62b6-1802-8f4e-7141b1a91a56@roeck-us.net>
+ <D23B9D06-0DEA-4E3B-A64C-C928CAF2FEF8@realtek.com>
+ <aaf0553c-48de-580f-70d5-aafeecb19e16@roeck-us.net>
+ <1E8784A0-713E-41A8-A26D-72869E3E5779@realtek.com>
+ <5c805125-4cb5-cdf8-6b50-5a6ce7e97149@roeck-us.net>
+ <2686E7B8-BD3F-4C86-97B6-447343BFCF22@realtek.com>
+In-Reply-To: <2686E7B8-BD3F-4C86-97B6-447343BFCF22@realtek.com>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.22.242.6]
+x-kse-serverinfo: RTEXMBS03.realtek.com.tw, 9
+x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
+ rules found
+x-kse-antivirus-interceptor-info: scan successful
+x-kse-antivirus-info: =?utf-8?B?Q2xlYW4sIGJhc2VzOiAyMDIzLzMvMTYg5LiK5Y2IIDA2OjAwOjAw?=
+x-kse-bulkmessagesfiltering-scan-result: protection disabled
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <63FA54BA6D49BC4DA612F59A54F86DC7@realtek.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-s2idle isn't supported on platforms that don't support cpuidle as of
-31a3409065d1 ("cpuidle / sleep: Do sanity checks in cpuidle_enter_freeze()
-too").
-
-There is a check in the cpuidle subsystem which would prevent the
-system from entering s2idle. However, there is nothing in the suspend
-framework which prevents this, which can cause the suspend subsystem to
-think that the machine is entering s2idle while the cpuidle subsystem is
-not, which can completely break the system.
-
-Block the machine from entering s2idle when cpuidle isn't supported in
-the suspend subsystem as well.
-
-Link: https://lore.kernel.org/all/20230204152747.drte4uitljzngdt6@kazuki-mac
-Fixes: 31a3409065d1 ("cpuidle / sleep: Do sanity checks in cpuidle_enter_freeze() too")
-Signed-off-by: Kazuki H <kazukih0205@gmail.com>
----
- kernel/power/main.c    | 12 +++++++++---
- kernel/power/suspend.c |  5 +++++
- 2 files changed, 14 insertions(+), 3 deletions(-)
-
-diff --git a/kernel/power/main.c b/kernel/power/main.c
-index 31ec4a9b9d70..b14765447989 100644
---- a/kernel/power/main.c
-+++ b/kernel/power/main.c
-@@ -133,6 +133,8 @@ static ssize_t mem_sleep_show(struct kobject *kobj, struct kobj_attribute *attr,
- 	for (i = PM_SUSPEND_MIN; i < PM_SUSPEND_MAX; i++) {
- 		if (i >= PM_SUSPEND_MEM && cxl_mem_active())
- 			continue;
-+		if (i == PM_SUSPEND_TO_IDLE && cpuidle_not_available())
-+			continue;
- 		if (mem_sleep_states[i]) {
- 			const char *label = mem_sleep_states[i];
- 
-@@ -185,11 +187,15 @@ static ssize_t mem_sleep_store(struct kobject *kobj, struct kobj_attribute *attr
- 	}
- 
- 	state = decode_suspend_state(buf, n);
--	if (state < PM_SUSPEND_MAX && state > PM_SUSPEND_ON)
-+	if (state == PM_SUSPEND_TO_IDLE && cpuidle_not_available())
-+		goto einval;
-+	if (state < PM_SUSPEND_MAX && state > PM_SUSPEND_ON) {
- 		mem_sleep_current = state;
--	else
--		error = -EINVAL;
-+		goto out;
-+	}
- 
-+ einval:
-+	error = -EINVAL;
-  out:
- 	pm_autosleep_unlock();
- 	return error ? error : n;
-diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
-index 3f436282547c..55ddf525aaaf 100644
---- a/kernel/power/suspend.c
-+++ b/kernel/power/suspend.c
-@@ -556,6 +556,11 @@ static int enter_state(suspend_state_t state)
- 
- 	trace_suspend_resume(TPS("suspend_enter"), state, true);
- 	if (state == PM_SUSPEND_TO_IDLE) {
-+		if (cpuidle_not_available()) {
-+			pr_warn("s2idle is unsupported when cpuidle is unavailable");
-+			return -EINVAL;
-+		}
-+
- #ifdef CONFIG_PM_DEBUG
- 		if (pm_test_level != TEST_NONE && pm_test_level <= TEST_CPUS) {
- 			pr_warn("Unsupported test mode for suspend to idle, please choose none/freezer/devices/platform.\n");
--- 
-2.40.0
-
+DQoNCu+7v09uIDMvMTYvMjMgMTU6MzUgIlBoaW5leCBIdW5nIiA8cGhpbmV4QHJlYWx0ZWsuY29t
+IDxtYWlsdG86cGhpbmV4QHJlYWx0ZWsuY29tPiB3cm90ZToNCg0KPk5vdCBzdXJlIHdoZXRoZXIg
+dGhpcyBpcyB0aGUgZGlmZmVyZW5jZSwgYnV0IHVzZSB0aGUgZm9sbG93aW5nIHBhdGNoIGNhbiBz
+b2x2ZSB0aGlzIGlzc3VlLg0KDQo+QEAgLTU0MCw5ICs1MzEsOSBAQCBzdGF0aWMgaW50IGRyaXZl
+dGVtcF9hZGQoc3RydWN0IGRldmljZSAqZGV2LCBzdHJ1Y3QgY2xhc3NfaW50ZXJmYWNlICppbnRm
+KQ0KPmdvdG8gYWJvcnQ7DQo+fQ0KPg0KPg0KPi0gc3QtPmh3ZGV2ID0gaHdtb25fZGV2aWNlX3Jl
+Z2lzdGVyX3dpdGhfaW5mbyhkZXYtPnBhcmVudCwgImRyaXZldGVtcCIsDQo+LSBzdCwgJmRyaXZl
+dGVtcF9jaGlwX2luZm8sDQo+LSBOVUxMKTsNCj4rIHN0LT5od2RldiA9IGh3bW9uX2RldmljZV9y
+ZWdpc3Rlcl93aXRoX2luZm8oDQo+KyBkZXYtPnBhcmVudC0+cGFyZW50LT5wYXJlbnQtPnBhcmVu
+dC0+cGFyZW50LCAiZHJpdmV0ZW1wIiwgc3QsDQo+KyAmZHJpdmV0ZW1wX2NoaXBfaW5mbywgTlVM
+TCk7DQoNCg0KQSBtb3JlIGdlbmVyaWMgcGF0Y2ggd29ya3MgaW4gbXkgY2FzZSwgbGlzdGVkIGJl
+bG93Og0KDQpkaWZmIC0tZ2l0IGEvZHJpdmVycy9od21vbi9kcml2ZXRlbXAuYyBiL2RyaXZlcnMv
+aHdtb24vZHJpdmV0ZW1wLmMNCmluZGV4IDFjZjRmOTAxNTMxNi4uYTRjZGRmZWE4ZDIyIDEwMDY0
+NA0KLS0tIGEvZHJpdmVycy9od21vbi9kcml2ZXRlbXAuYw0KKysrIGIvZHJpdmVycy9od21vbi9k
+cml2ZXRlbXAuYw0KQEAgLTUyNSw2ICs1MjUsNyBAQCBzdGF0aWMgaW50IGRyaXZldGVtcF9hZGQo
+c3RydWN0IGRldmljZSAqZGV2LCBzdHJ1Y3QgY2xhc3NfaW50ZXJmYWNlICppbnRmKQ0KIHsNCiAg
+ICAgICAgc3RydWN0IHNjc2lfZGV2aWNlICpzZGV2ID0gdG9fc2NzaV9kZXZpY2UoZGV2LT5wYXJl
+bnQpOw0KICAgICAgICBzdHJ1Y3QgZHJpdmV0ZW1wX2RhdGEgKnN0Ow0KKyAgICAgICBzdHJ1Y3Qg
+ZGV2aWNlICp0ZGV2ID0gZGV2LT5wYXJlbnQ7DQogICAgICAgIGludCBlcnI7DQoNCiAgICAgICAg
+c3QgPSBremFsbG9jKHNpemVvZigqc3QpLCBHRlBfS0VSTkVMKTsNCkBAIC01NDAsOCArNTQxLDEx
+IEBAIHN0YXRpYyBpbnQgZHJpdmV0ZW1wX2FkZChzdHJ1Y3QgZGV2aWNlICpkZXYsIHN0cnVjdCBj
+bGFzc19pbnRlcmZhY2UgKmludGYpDQogICAgICAgICAgICAgICAgZ290byBhYm9ydDsNCiAgICAg
+ICAgfQ0KDQotICAgICAgIHN0LT5od2RldiA9IGh3bW9uX2RldmljZV9yZWdpc3Rlcl93aXRoX2lu
+Zm8oZGV2LT5wYXJlbnQsICJkcml2ZXRlbXAiLA0KLSAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgIHN0LCAmZHJpdmV0ZW1wX2NoaXBfaW5mbywNCisgICAg
+ICAgd2hpbGUoIXRkZXYtPm9mX25vZGUpDQorICAgICAgICAgICAgICAgdGRldiA9IHRkZXYtPnBh
+cmVudDsNCisNCisgICAgICAgc3QtPmh3ZGV2ID0gaHdtb25fZGV2aWNlX3JlZ2lzdGVyX3dpdGhf
+aW5mbyh0ZGV2LCAiZHJpdmV0ZW1wIiwgc3QsDQorICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgJmRyaXZldGVtcF9jaGlwX2luZm8sDQogICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgTlVMTCk7DQogICAgICAg
+IGlmIChJU19FUlIoc3QtPmh3ZGV2KSkgew0KICAgICAgICAgICAgICAgIGVyciA9IFBUUl9FUlIo
+c3QtPmh3ZGV2KTsNCg0KVGhhbmtzDQoNClJlZ2FyZHMsDQpQaGluZXgNCg0KDQoNCg0K
