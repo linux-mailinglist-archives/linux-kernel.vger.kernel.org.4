@@ -2,105 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 627CB6BC800
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 08:59:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 918116BC816
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 09:02:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229978AbjCPH7Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 03:59:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34354 "EHLO
+        id S229811AbjCPICP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 04:02:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230315AbjCPH7L (ORCPT
+        with ESMTP id S230322AbjCPICJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 03:59:11 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C4D626C1D
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 00:58:59 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id r11so4115403edd.5
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 00:58:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678953538;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=GgWjAOSsGpnFZeb1S60AfKC+cGhYfGms4dZlf0IKKGw=;
-        b=H43a7pWnRKfhhghjWHGago3HNcH/TRFRNsac1WdvfZSqww/x05Y1YrKWm9dhYZn4gl
-         ZrBLZf1HU5rqZJr6ym8sM4P3xUXfyk56XHkDWW3iefFDe7ELUfAVMYEvxIgTQ1IV/03q
-         8wWqBe7JHYu8GSKhd8597T5VTiTrOlyWHUtr+1l4nr4hFEFmoY6zLtRkaruqS8tIOQNx
-         13/kKFA0LPk8+qaGjt4K92NcdlxtQFeQSWbTJY7EknKDHDI1Zipfwe/nf6MCXIickfrM
-         AZjA2Z9HD00SFpSoboA7FUQYOt20/j6ofoEp/iExP/jX/Kr3Goc+QdJU45vu5qdmqAYl
-         m5EQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678953538;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GgWjAOSsGpnFZeb1S60AfKC+cGhYfGms4dZlf0IKKGw=;
-        b=p+IFM9QPHdIg21qi+j8et+KkFRf/2gIX91L6caGMb1QFF72E1Bs3wmYKKYY/CZceSk
-         pU5Uu0BlQgUeevefXqWyExGIPSmJka2uyqay4IDfVZKQrDYk8hgm1eWpdmWvtjtzvGci
-         JcAgDbroJ9nwIeiA969fvLItFvKUgjZvgAVFS2SmDQVZ6JgeKTIKlM6FYkMConm5LXvC
-         No9OA2mOIfre4hMUW3Z49YHyHq1fgjjGylaaa7ElLL0nZ/NbJR933Hwo/HYLaBcdT1ws
-         ibB4t4Wf97hArsqOLJcBBuC9otFB+2K914/qFwwC+6NGi0y12PRu+KFrBPhL5cRkiwuH
-         9O5w==
-X-Gm-Message-State: AO0yUKWYFCEhe01Q0pXFb+vPN4ZqwJp/YsUFBUrLoEk+wa4K2xGKod/Z
-        /T3f91tuPukRSyvmfgU8POK3Ow==
-X-Google-Smtp-Source: AK7set/d7tBTRU9WkYZeBn2oKVks+I8G8LF9+LOa6Y1dE4mGGH41JMn3Nw7oHi5E9mdgWKAsd3QjqA==
-X-Received: by 2002:a17:907:a649:b0:8f7:6ea6:b451 with SMTP id vu9-20020a170907a64900b008f76ea6b451mr10035458ejc.2.1678953537888;
-        Thu, 16 Mar 2023 00:58:57 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:9827:5f65:8269:a95f? ([2a02:810d:15c0:828:9827:5f65:8269:a95f])
-        by smtp.gmail.com with ESMTPSA id f6-20020a170906738600b008ea8effe947sm3494225ejl.225.2023.03.16.00.58.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Mar 2023 00:58:57 -0700 (PDT)
-Message-ID: <1b0c4e5b-55e6-e519-bff1-a641e0141a8b@linaro.org>
-Date:   Thu, 16 Mar 2023 08:58:56 +0100
+        Thu, 16 Mar 2023 04:02:09 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6E1354C8F;
+        Thu, 16 Mar 2023 01:02:00 -0700 (PDT)
+Received: from maxwell.fritz.box ([109.42.114.157]) by
+ mrelayeu.kundenserver.de (mreue011 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1N5VXu-1qZOzS1ix8-016vCE; Thu, 16 Mar 2023 09:00:48 +0100
+From:   Jochen Henneberg <jh@henneberg-systemdesign.com>
+To:     netdev@vger.kernel.org
+Cc:     Jochen Henneberg <jh@henneberg-systemdesign.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Ong Boon Leong <boon.leong.ong@intel.com>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH net V2 0/2] net: stmmac: Premature loop termination check was ignored
+Date:   Thu, 16 Mar 2023 08:59:38 +0100
+Message-Id: <20230316075940.695583-1-jh@henneberg-systemdesign.com>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230314123759.132521-1-jh@henneberg-systemdesign.com>
+References: 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v4 14/18] dt-bindings: PCI: qcom: Add "mhi" register
- region to supported SoCs
-Content-Language: en-US
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        andersson@kernel.org, lpieralisi@kernel.org, kw@linux.com,
-        krzysztof.kozlowski+dt@linaro.org, robh@kernel.org
-Cc:     konrad.dybcio@linaro.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_srichara@quicinc.com
-References: <20230315064255.15591-1-manivannan.sadhasivam@linaro.org>
- <20230315064255.15591-15-manivannan.sadhasivam@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230315064255.15591-15-manivannan.sadhasivam@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:MF+CTOsuaUq00JRKYZHVnsChLb87wgi4uQ1NbzyyNpJIXRd8oR5
+ W4ykBIg0Us5rgmf3C88AvJGFzY9e+D57+Muxbny4/4lOA9pbdfO5pBjBUS0iZsgTHfr1xxa
+ vmPbcloq4rtlnFdDspnr2Fi4ReAvnQz+VoN8wpBVhmTesVvd8xPjyBga/xKDXzGiYtxymLg
+ Hz52hJjfworWMxsM6lXCg==
+UI-OutboundReport: notjunk:1;M01:P0:LIoPf2/TAMs=;QhWFGVa7tyxykKcxVcjlZU+BKF5
+ vMT3NkA0jzP5P3RSpMMkPS8EMvKA6XdEyS7Tkktzuy7QZKP4p1vMYCgSgI0w9wVrCF0UonIoh
+ 5NY+ssi7US/JeldnU15MfQxTsqeZ9daTF3qpmCiCNoKeogTlupK0lFuXzPaCTQ/9EH8CrpGlf
+ bXb+oyzUSUHtN6HKn+jaq6857IalkzXBLl5izpyxCYP6YBtR9KQDfpfkZzKp26pPaBFv6PAfj
+ 8ho4vqYOIyQsL7+5uskISN5ASCrHm0mCGsFT2uw/FwEPzfx/djOupNC7+c1I9BcL21KBkk3g3
+ fQZBFKHnfp36vCPUrV9voYEDFcRgOcWyZi72szFR8n+gF5ejb22z60w+n0k7RSLjv3FicU7Ah
+ V5nXW9OK51OW8p60ODhXkTQkZgqQxWKoyG8Hxf9z4402qEL13QROPZQzUtUrNe134Hepggwad
+ B7izy25PSjIBDhp9iCaBTokYuHwLKPimF2x9nmWwXJB3RvHnV+TQtcQDtf3rPJiu1TluSIHvG
+ DoY2WREu2848EqBILmSIbKoIapyfnchC8okgVLSO6UDi2e7H4WV97M8cXBYBl9USVw9VV5ZJe
+ 5dudodI/nlN87VoLwou1SVpypHp5Me+HTcd94RFufT2RgodBFNRqgHTTmp6MMaInGfYwK9w9O
+ fxDQe4JTllrua943bYeBHl+r4l0ZSJTSvF4bBPqc4g==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/03/2023 07:42, Manivannan Sadhasivam wrote:
-> "mhi" register region contains the MHI registers that could be used by
-> the PCIe controller drivers to get debug information like PCIe link
-> transition counts on newer SoCs.
-> 
-> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+As proposed in [1] here is are the fixes as a patch series that do the
+premature end-of-loop check within the goto loop.
 
-This is a friendly reminder during the review process.
+The commit messages now tell us which rx path has been fixed.
 
-It looks like you received a tag and forgot to add it.
+Jochen Henneberg (2):
+  net: stmmac: Premature loop termination check was ignored on rx
+  net: stmmac: Premature loop termination check was ignored on ZC rx
 
-If you do not know the process, here is a short explanation:
-Please add Acked-by/Reviewed-by/Tested-by tags when posting new
-versions. However, there's no need to repost patches *only* to add the
-tags. The upstream maintainer will do that for acks received on the
-version they apply.
+ drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-https://elixir.bootlin.com/linux/v5.17/source/Documentation/process/submitting-patches.rst#L540
-
-If a tag was not added on purpose, please state why and what changed.
-
-
-Best regards,
-Krzysztof
+[1] https://lore.kernel.org/all/Y%2FdiTAg2iUopr%2FOy@corigine.com
+-- 
+2.39.2
 
