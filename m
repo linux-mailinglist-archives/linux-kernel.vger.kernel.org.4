@@ -2,100 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AC3B6BCF0C
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 13:12:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 258F46BCF1B
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 13:14:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229993AbjCPMMj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 08:12:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53780 "EHLO
+        id S230231AbjCPMOj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 08:14:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229693AbjCPMMh (ORCPT
+        with ESMTP id S229732AbjCPMOh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 08:12:37 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C27D8C97F6
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 05:12:35 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Thu, 16 Mar 2023 08:14:37 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5053A2684B;
+        Thu, 16 Mar 2023 05:14:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 7CEE821A3D;
-        Thu, 16 Mar 2023 12:12:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1678968754; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=mHaedlz+6PJdRiBIO280UYU0+qJudLUsHrt8K4W6gl0=;
-        b=J5ntyVYB/EyIfey+Y1gv60/GLFc0S3vRYrT65jDAsfsakX0a2cVz0tzh0plgjCxJP7RoQu
-        Ep/5X1WkaD+ZIxLsxANNAGDRG+/K5Lo/HxPQbUtek3trMXoYOTqGGt8lRehq6aExoXsL5Y
-        qm7A/nt4hiL38kmHST49OY7OwFhTIWQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1678968754;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=mHaedlz+6PJdRiBIO280UYU0+qJudLUsHrt8K4W6gl0=;
-        b=qECEkxutGnHzG3qHNM6078FQtmGNqd9LL2L18Sl7dTOQV+G8sGF3eQIDSo5bvv8NztbxxR
-        71ReDV00K7S4TwAg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 564CA133E0;
-        Thu, 16 Mar 2023 12:12:34 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id hzs+FLIHE2RNHQAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Thu, 16 Mar 2023 12:12:34 +0000
-Message-ID: <3c77182b-5c41-65ec-afca-42625eadfae4@suse.cz>
-Date:   Thu, 16 Mar 2023 13:12:34 +0100
+        by ams.source.kernel.org (Postfix) with ESMTPS id 00B5BB820E7;
+        Thu, 16 Mar 2023 12:14:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49B51C433EF;
+        Thu, 16 Mar 2023 12:14:26 +0000 (UTC)
+Date:   Thu, 16 Mar 2023 08:14:24 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     paulmck@kernel.org, Jens Axboe <axboe@kernel.dk>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
+        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>,
+        Philipp Reisner <philipp.reisner@linbit.com>,
+        Bryan Tan <bryantan@vmware.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Bob Pearson <rpearsonhpe@gmail.com>,
+        Ariel Levkovich <lariel@nvidia.com>,
+        "Theodore Ts'o" <tytso@mit.edu>, Julian Anastasov <ja@ssi.bg>
+Subject: Re: [PATCH 04/13] tracing: Rename kvfree_rcu() to
+ kvfree_rcu_mightsleep()
+Message-ID: <20230316081424.28dd8b7f@gandalf.local.home>
+In-Reply-To: <CAEXW_YRr_fpkNAF8dFHLt0vGjYeksS+ObUPGgEUJimGpsASKcQ@mail.gmail.com>
+References: <20230201150815.409582-1-urezki@gmail.com>
+        <20230201150815.409582-5-urezki@gmail.com>
+        <ZAni8Q1NW9cWrvHJ@pc636>
+        <20230315183648.5164af0f@gandalf.local.home>
+        <d404a6b6-4ff9-930a-1cdc-fd730270fbe7@kernel.dk>
+        <60f55a5d-213f-46b7-9294-c37f10f98252@paulmck-laptop>
+        <20230315222323.7afe82e7@gandalf.local.home>
+        <29b54f07-b4ce-4eab-bbc2-281672bca5a5@paulmck-laptop>
+        <CAEXW_YRr_fpkNAF8dFHLt0vGjYeksS+ObUPGgEUJimGpsASKcQ@mail.gmail.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2 1/2] mm: compaction: consider the number of scanning
- compound pages in isolate fail path
-Content-Language: en-US
-To:     Baolin Wang <baolin.wang@linux.alibaba.com>,
-        akpm@linux-foundation.org
-Cc:     mgorman@techsingularity.net, osalvador@suse.de,
-        william.lam@bytedance.com, mike.kravetz@oracle.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <73d6250a90707649cc010731aedc27f946d722ed.1678962352.git.baolin.wang@linux.alibaba.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <73d6250a90707649cc010731aedc27f946d722ed.1678962352.git.baolin.wang@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/16/23 12:06, Baolin Wang wrote:
-> The commit b717d6b93b54 ("mm: compaction: include compound page count
-> for scanning in pageblock isolation") had added compound page statistics
-> for scanning in pageblock isolation, to make sure the number of scanned
-> pages are always larger than the number of isolated pages when isolating
-> mirgratable or free pageblock.
-> 
-> However, when failed to isolate the pages when scanning the mirgratable or
-> free pageblock, the isolation failure path did not consider the scanning
-> statistics of the compound pages, which can show the incorrect number of
-> scanned pages in tracepoints or the vmstats to make people confusing about
-> the page scanning pressure in memory compaction.
-> 
-> Thus we should take into account the number of scanning pages when failed
-> to isolate the compound pages to make the statistics accurate.
-> 
-> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+On Thu, 16 Mar 2023 00:16:39 -0400
+Joel Fernandes <joel@joelfernandes.org> wrote:
 
-Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
+> Indeed, and one could argue that "headless" sounds like something out
+> of a horror movie ;-). Which of course does match the situation when
+> the API is applied incorrectly.
 
-Thanks!
+Well, "headless" is a common term in IT.
 
+   https://en.wikipedia.org/wiki/Headless_software
+
+
+We could be specific to what horror movie/story, and call it:
+
+  kvfree_rcu_sleepy_hollow()
+
+Which will imply both headless *and* might_sleep!
+
+-- Steve
