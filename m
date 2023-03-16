@@ -2,48 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 727D16BD98B
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 20:50:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D271C6BD98F
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 20:51:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230181AbjCPTun (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 15:50:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59636 "EHLO
+        id S229966AbjCPTvI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 15:51:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbjCPTul (ORCPT
+        with ESMTP id S229541AbjCPTvH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 15:50:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38C6C6C188;
-        Thu, 16 Mar 2023 12:50:40 -0700 (PDT)
+        Thu, 16 Mar 2023 15:51:07 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77F5B6C894;
+        Thu, 16 Mar 2023 12:51:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CB0FB62104;
-        Thu, 16 Mar 2023 19:50:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0590BC433EF;
-        Thu, 16 Mar 2023 19:50:38 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1CF6BB82344;
+        Thu, 16 Mar 2023 19:51:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DE5FC433EF;
+        Thu, 16 Mar 2023 19:51:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678996239;
-        bh=moLvtDcS2t0hYUwb9GPaqpFg5LnXXKhW5777Gh63RF4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=bACMCg7rlfffyva7/AnZ9DFx6GD8gcLpUyR5uwB7d53qst8LAUPe+H0f2WhpORKI3
-         frZOtCpHNTUSLCd6mUJ8FWi5Y3ZM3kJJUYXhprnWPcN7mvBb7qQrkJqQUBEuMnjZ1r
-         mSox0SsJgEmUs9Bn5rEeA0GPLtRNlp6e3i0w3PdhrFDBp2h4Fy8TYVLtfb7rjX52ov
-         c3135VSwyhAxT5n6fecCbGxYJy7tjB3oEGHPBpWOb+eVbPpSYGDhw3ZE3gzuHB8eEq
-         bzC0VgB458HEEX2Sr6Bwahm1vBzQOaszWp87nedPgAvUbm8AVozDhAGCeAtf4hABwF
-         yE5EjSn6jN8lw==
-Date:   Thu, 16 Mar 2023 14:50:37 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Karol Herbst <kherbst@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
-        Lukas Wunner <lukas@wunner.de>, linux-pci@vger.kernel.org,
-        nouveau@lists.freedesktop.org
-Subject: Re: [PATCH] PCI: stop spamming info in quirk_nvidia_hda
-Message-ID: <20230316195037.GA1849341@bhelgaas>
+        s=k20201202; t=1678996262;
+        bh=YyAB4zTINlVaoeomkIjTN3h6RJa2BLsMtOZxv9V+64E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pZBXxaeaATqBP72oarAsrWl5k/z1dNW5PlkcQsyHJYSjTd4MF7IkwIcLUFY+OnjX9
+         MRnrKaI2uKxj6c5RVEFkOSOwALTDwbu4KG6wYfoO94ryxOdRNhrV66/CvIkVTWqmfh
+         Bkwh9szM0fMsUH1SgOlnHc6CuVw6g/x4wyz237b0PFTujz2EHfYRYgaaCpbLM1+1Uu
+         7o6MQb3YBM7V0S6+Rj9b8PAU2IVh8gZXrunYhsY83jsXgZYjNgmcaDbu1DQ2OM7x3n
+         8opqyWwyx0w22NwoHqS3glKZEPr3cSleIf01Cl43sc7PZJvTMjyW6rGBdy4InjjHMz
+         MzzIxNxbfVcJQ==
+Date:   Thu, 16 Mar 2023 20:50:59 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Dongliang Mu <dzm91@hust.edu.cn>
+Cc:     Sekhar Nori <nsekhar@ti.com>, Bartosz Golaszewski <brgl@bgdev.pl>,
+        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] drivers: i2c: remove dead code in davinci_i2c_probe
+Message-ID: <ZBNzIw6ti3kNbi7s@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Dongliang Mu <dzm91@hust.edu.cn>, Sekhar Nori <nsekhar@ti.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230306024523.248216-1-dzm91@hust.edu.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="SX8TjVAtNyHHmONC"
 Content-Disposition: inline
-In-Reply-To: <20230316143122.2377354-1-kherbst@redhat.com>
+In-Reply-To: <20230306024523.248216-1-dzm91@hust.edu.cn>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -53,47 +60,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 16, 2023 at 03:31:22PM +0100, Karol Herbst wrote:
-> Users kept complaining about those messages and it's a little spammy on
-> prime systems so turn it into a debug print.
 
-What is a "prime system"?
+--SX8TjVAtNyHHmONC
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I'm a little surprised that users would really care about the message.
-But I do see comments like these:
-https://bugs.launchpad.net/ubuntu/+source/linux/+bug/1836308/comments/15
-https://bugs.launchpad.net/ubuntu/+source/linux/+bug/2002206
-that suggest the message happens frequently, maybe if we're resuming
-the controller after runtime suspend?
+On Mon, Mar 06, 2023 at 10:45:23AM +0800, Dongliang Mu wrote:
+> From the comment of platform_get_irq, it only returns non-zero IRQ
+> number and negative error number, other than zero.
+>=20
+> Fix this by removing the if condition.
+>=20
+> Signed-off-by: Dongliang Mu <dzm91@hust.edu.cn>
 
-Maybe this should be a pci_info_once() sort of thing?  I think there's
-some value in knowing that we're changing the BIOS configuration
-outside the purview of a driver, since I assume BIOS had some reason
-for hiding the HDA controller.
+Applied to for-next, thanks!
 
-> Cc: Bjorn Helgaas <bhelgaas@google.com>
-> Cc: Lukas Wunner <lukas@wunner.de>
-> Cc: linux-pci@vger.kernel.org
-> Cc: nouveau@lists.freedesktop.org
-> Fixes: b516ea586d71 ("PCI: Enable NVIDIA HDA controllers")
-> Signed-off-by: Karol Herbst <kherbst@redhat.com>
-> ---
->  drivers/pci/quirks.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
-> index 44cab813bf951..b10c77bbe4716 100644
-> --- a/drivers/pci/quirks.c
-> +++ b/drivers/pci/quirks.c
-> @@ -5549,7 +5549,7 @@ static void quirk_nvidia_hda(struct pci_dev *gpu)
->  	if (val & BIT(25))
->  		return;
->  
-> -	pci_info(gpu, "Enabling HDA controller\n");
-> +	pci_dbg(gpu, "Enabling HDA controller\n");
->  	pci_write_config_dword(gpu, 0x488, val | BIT(25));
->  
->  	/* The GPU becomes a multi-function device when the HDA is enabled */
-> -- 
-> 2.39.2
-> 
+
+--SX8TjVAtNyHHmONC
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmQTcyMACgkQFA3kzBSg
+KbZrwg//X/WvAJt/VYdCVJLoFELNRUQVuAWMiVjXZGqD7odn+8E0qu9bKctQdtD5
+UUzx2diTJDLnavOA470wpvTL9MFPLarB4P83wGqIgiA8esz1QJi9+HLVY6ePZqZc
+vU5MV0gzgvoP1wX8IHtjej3kirM3l53OlwC2Nb2Bh88+yuBH1Hr8FB6J+gBU0ZfV
+LiKR1DSSoj9AR7nSrwzF05KICvbA8xmH4l+S3QPso+0/KXHTCHybW4p+liJ7MpEo
+L4Ma3tUT1oZwiY8Ru5R2AkcYBh0uTH8eM+0VTH7jYjZOrR7mNOlv9VeKaX2MtPgo
+qpZYO711yvi1mMeWlV8OZ2qxVPb0vr1DKuuBHuzIEHwT5KITBUsyxBUEzt1VhjMF
+EbPIuy25/vHXpkRDrA5S8UpBtIhHeXB/ibp9BBE5v4dTix84iKKWIAYOKHzn51Yn
+4eUfSaDA9dFqNKPSYI/cYCUEhvLSQsCUAVfEK2XCV3PhOjWW7rLwRLF7WgUSHz1Y
+jTWZ8kHQ6gRQuGZQ9FF3aN7f1IerdX6TCicKDkIMmxot8K4J7QiReh/njVSO+PZg
+OMkpHbPHAHregaA9UYW7MV+Srm6e32wWwWNZyRLhELHOcDEl2/O23vpYIStdyHSj
+OfZd65gL2iMesZPehna20PF+GFOC8bTC86MkgDVIrPKUfEdec4o=
+=/BZ1
+-----END PGP SIGNATURE-----
+
+--SX8TjVAtNyHHmONC--
