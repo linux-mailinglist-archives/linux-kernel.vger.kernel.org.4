@@ -2,62 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F8A66BD464
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 16:53:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2582B6BD4B7
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 17:09:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230472AbjCPPxq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 11:53:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54346 "EHLO
+        id S229841AbjCPQJ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 12:09:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230015AbjCPPxo (ORCPT
+        with ESMTP id S229476AbjCPQJ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 11:53:44 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB90DCA1D;
-        Thu, 16 Mar 2023 08:53:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 28576B82272;
-        Thu, 16 Mar 2023 15:53:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DAA5C433D2;
-        Thu, 16 Mar 2023 15:53:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678982019;
-        bh=Rj/V4HvM4lftSD7pR5Qhs+36gJgM/NfzJd5glSkQr/s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YIGG2QuV9M6wru4NUwa7EWkLGPBulz674i9mA5XOCE2CmTJ9uGsMePf+3NiFEKUof
-         GKxNtKYUhHmtHzmLkjHnv2cFxHtSOyaHSM/HpxF3HfVYU6l1ZgceT4hRjDKcc1cMZX
-         VCt70267hChSrXRbxqOvPKi75pPEcf2y1rgwCHZ81OIucGW56DqAL5zqMMF9OfQ3KP
-         Be8pEZHxzFjGeq/heU9OwWJJhqPFEuMh3dyn9CcIs6tYLXnDe3bvp8hz4TX+t3R8JI
-         nPmnIoub6qTFr45Q49rvmk/mypxAack4lCR7Fw4oAeJP2eDAoqN/MqPfX2plt/R0K8
-         Upu0a5Emv/UMA==
-Date:   Thu, 16 Mar 2023 15:53:33 +0000
-From:   Lee Jones <lee@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        devicetree@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-amlogic@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com
-Subject: Re: [PATCH] mfd: Use of_property_present() for testing DT property
- presence
-Message-ID: <20230316155333.GL9667@google.com>
-References: <20230310144712.1543379-1-robh@kernel.org>
+        Thu, 16 Mar 2023 12:09:27 -0400
+X-Greylist: delayed 449 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 16 Mar 2023 09:09:26 PDT
+Received: from forward103o.mail.yandex.net (forward103o.mail.yandex.net [37.140.190.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90CB08A64;
+        Thu, 16 Mar 2023 09:09:26 -0700 (PDT)
+Received: from forward100q.mail.yandex.net (forward100q.mail.yandex.net [IPv6:2a02:6b8:c0e:4b:0:640:4012:bb97])
+        by forward103o.mail.yandex.net (Yandex) with ESMTP id 3BF0310AA90A;
+        Thu, 16 Mar 2023 18:55:46 +0300 (MSK)
+Received: from vla1-2f6a8787997a.qloud-c.yandex.net (vla1-2f6a8787997a.qloud-c.yandex.net [IPv6:2a02:6b8:c0d:35a1:0:640:2f6a:8787])
+        by forward100q.mail.yandex.net (Yandex) with ESMTP id 3762F6F40007;
+        Thu, 16 Mar 2023 18:55:46 +0300 (MSK)
+Received: by vla1-2f6a8787997a.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id 8tmDo6Yck8c1-N43cg4iV;
+        Thu, 16 Mar 2023 18:55:45 +0300
+X-Yandex-Fwd: 1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex.ru; s=mail; t=1678982145;
+        bh=BQReFTG2lcPA75b18D8vey98+5FpL4ag8kMta6cDrLc=;
+        h=Message-Id:Date:Cc:Subject:To:From;
+        b=EtPFiL6PpQMV+ji65NctGCy9xESd+yPzBu6Tdgj0JcTt5nT2pLC38luwMnLIpu3kp
+         2N9hKaF2o+tkeK2jFkADZtZIoq4eqoP/QwDSeu4E6lOPwIalzbB0EHSZjsPRiIaU2u
+         RzAuBJfL4zXWqlquxs41W3qMqcCO3sX/pxIynifE=
+Authentication-Results: vla1-2f6a8787997a.qloud-c.yandex.net; dkim=pass header.i=@yandex.ru
+From:   Valery Zabrovsky <valthebrewer@yandex.ru>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Valery Zabrovsky <valthebrewer@yandex.ru>,
+        Guo Zhengkui <guozhengkui@vivo.com>,
+        Aaro Koskinen <aaro.koskinen@iki.fi>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Mian Yousaf Kaukab <yousaf.kaukab@intel.com>,
+        Felipe Balbi <balbi@ti.com>,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        lvc-project@linuxtesting.org
+Subject: [PATCH] usb: gadget: net2280: fix NULL pointer dereference
+Date:   Thu, 16 Mar 2023 18:53:55 +0300
+Message-Id: <20230316155356.13391-1-valthebrewer@yandex.ru>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230310144712.1543379-1-robh@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,23 +58,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 10 Mar 2023, Rob Herring wrote:
+In net2280_free_request():
+If _ep is NULL, then ep is NULL and is dereferenced
+while trying to produce an error message.
+The patch replaces dev_err() with pr_err() which works fine.
 
-> It is preferred to use typed property access functions (i.e.
-> of_property_read_<type> functions) rather than low-level
-> of_get_property/of_find_property functions for reading properties. As
-> part of this, convert of_get_property/of_find_property calls to the
-> recently added of_property_present() helper when we just want to test
-> for presence of a property and nothing more.
->
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  drivers/mfd/bcm2835-pm.c | 2 +-
->  drivers/mfd/khadas-mcu.c | 2 +-
->  drivers/mfd/stmpe.c      | 2 +-
->  3 files changed, 3 insertions(+), 3 deletions(-)
+Found by Linux Verification Center (linuxtesting.org) with SVACE.
 
-Applied, thanks
+Fixes: 9ceafcc2b3ad ("usb: gadget: net2280: print error in ep_ops error paths")
+Signed-off-by: Valery Zabrovsky <valthebrewer@yandex.ru>
+---
+ drivers/usb/gadget/udc/net2280.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
---
-Lee Jones [李琼斯]
+diff --git a/drivers/usb/gadget/udc/net2280.c b/drivers/usb/gadget/udc/net2280.c
+index 1b929c519cd7..a027d1323993 100644
+--- a/drivers/usb/gadget/udc/net2280.c
++++ b/drivers/usb/gadget/udc/net2280.c
+@@ -584,8 +584,7 @@ static void net2280_free_request(struct usb_ep *_ep, struct usb_request *_req)
+ 
+ 	ep = container_of(_ep, struct net2280_ep, ep);
+ 	if (!_ep || !_req) {
+-		dev_err(&ep->dev->pdev->dev, "%s: Invalid ep=%p or req=%p\n",
+-							__func__, _ep, _req);
++		pr_err("%s: Invalid ep=%p or req=%p\n", __func__, _ep, _req);
+ 		return;
+ 	}
+ 
+-- 
+2.34.1
+
