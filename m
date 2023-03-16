@@ -2,161 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E0CB6BCE7F
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 12:38:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 043626BCE97
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 12:42:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230390AbjCPLiL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 07:38:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58316 "EHLO
+        id S229900AbjCPLmJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 07:42:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230315AbjCPLhm (ORCPT
+        with ESMTP id S229512AbjCPLmH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 07:37:42 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4F32C97ED;
-        Thu, 16 Mar 2023 04:37:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678966651; x=1710502651;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=ZFpBMYKp7Vej9uaBP1GUTHm12MmkAD4Atk8fjSWwcN0=;
-  b=Svrlzv0c6HE7J3IuIp14zYb8BxUEmxv1CtXdT8I6/YH1wwfRbUL/raWt
-   EKxzsU7iV4G5AlEx+3KmvsvNKjggDCrW41fi0fInUc4f3iw5wsmcPoBvd
-   V0ioh6kNztvBVMBXidhdPFILWhz34wjXDYzisMCUTNHkhWRDG210MWr/V
-   k8rapjLEZy15rEupa9dr8ODNSGDKxmw0t9gnm5fAZIPUya7TF6uGRZf5v
-   cU5pcT8sDbGL3dX2LBEpzvVioD81N9WEW2O7OmzGOGdghJ7TKQDmaSQjv
-   ofPGRA1p3NfUAqMCVLHFwAy73V9JMN+gpwgY0p17q21QBqWz0C2D2qJgP
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="340320644"
-X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
-   d="scan'208";a="340320644"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 04:37:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="1009190224"
-X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
-   d="scan'208";a="1009190224"
-Received: from irvmail002.ir.intel.com ([10.43.11.120])
-  by fmsmga005.fm.intel.com with ESMTP; 16 Mar 2023 04:37:26 -0700
-Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail002.ir.intel.com (Postfix) with ESMTP id C2F774FEA4;
-        Mon, 13 Mar 2023 21:44:03 +0000 (GMT)
-From:   Alexander Lobakin <aleksander.lobakin@intel.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>
-Cc:     Alexander Lobakin <aleksander.lobakin@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Larysa Zaremba <larysa.zaremba@intel.com>,
-        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-        Song Liu <song@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Menglong Dong <imagedong@tencent.com>,
-        Mykola Lysenko <mykolal@fb.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v3 4/4] xdp: remove unused {__,}xdp_release_frame()
-Date:   Mon, 13 Mar 2023 22:43:00 +0100
-Message-Id: <20230313214300.1043280-5-aleksander.lobakin@intel.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230313214300.1043280-1-aleksander.lobakin@intel.com>
-References: <20230313214300.1043280-1-aleksander.lobakin@intel.com>
+        Thu, 16 Mar 2023 07:42:07 -0400
+X-Greylist: delayed 1749 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 16 Mar 2023 04:41:51 PDT
+Received: from egress-ip4a.ess.de.barracuda.com (egress-ip4a.ess.de.barracuda.com [18.184.203.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2C6A168AA
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 04:41:51 -0700 (PDT)
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com [209.85.160.200]) by mx-outbound40-126.eu-central-1c.ess.aws.cudaops.com (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO); Thu, 16 Mar 2023 11:41:49 +0000
+Received: by mail-qt1-f200.google.com with SMTP id i2-20020ac84882000000b003d6fee1d438so721186qtq.1
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 04:41:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=mistralsolutions.com; s=google; t=1678966908;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=DAO3s9WIPu6FGtr1O/SymD5IC2bA74jcQnX8JFNXRUo=;
+        b=C8+BneIotC1t/8SGsAwDtZfbOSQUpCldbfArpFUgOLYaoAXAJlYImxKZcS8jKjzRVl
+         6zhy9GCGrL+4BYygI7AV2or+E+1zGMTfiklsKTBpnVlghyVnbS/G44mpRSN51MVttwMp
+         t3LDD2aWhfYvfD3pqkpP4Tv1I+zP7bO9k7StM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678966908;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DAO3s9WIPu6FGtr1O/SymD5IC2bA74jcQnX8JFNXRUo=;
+        b=sBUmXdH4+Li7pyR4ZCd1GpDpBC37DhP5o/KVwMwCXNPxFzf0qte2CPeaTKIIrLC3to
+         WP26oiqk2mvfsRyyR+C8bAMirpFYwyqzYD6loRS59W9IEtOU/tCSQPAUv9LVna4XJNTN
+         nRCqKHvSWCgR7cTkvczrXLbtCoOf17/qK90hUT1RVn4hDlFvMsY8Ejdz1upu1i3kfmHv
+         Gn+37t1kakxHPw9JO4iszlckDhVadAZ452mp1vg47taCa1SRq5KL5GFEdaDx1WkKBpOy
+         JyuSAOVFGqgkV/2LySKfMRIlm7t7nZhlAbg0aOiquRi5DuyXR51lf6gHq7ww0bkU90gx
+         Ptsg==
+X-Gm-Message-State: AO0yUKVM6dwU4ciQkCmmwur+mzfLgVgvz0OCJimSYeEfWLtfunFqEiEh
+        j2zIbxMUZSNuM/Xy5mhTVKRuaiQZb+ON4UHTvASepygoKb+BQDV0Vd6J9rd2ADYj/VLV2RhhPv+
+        EAdYIV7F2mIugzDguPu2sqn5CBZh1fqFbJK9i5m8b6uMsNxYAxzyzuBzZh5gq
+X-Received: by 2002:aa7:9d12:0:b0:625:a102:9a34 with SMTP id k18-20020aa79d12000000b00625a1029a34mr2467805pfp.24.1678963675646;
+        Thu, 16 Mar 2023 03:47:55 -0700 (PDT)
+X-Google-Smtp-Source: AK7set8ZIHqpxTj5SShM5wZfbAekKBVo4SSDbXQqCraFeWsiUcsOMKa5qAMss1F1qq9ZExPt1dhZLA==
+X-Received: by 2002:aa7:9d12:0:b0:625:a102:9a34 with SMTP id k18-20020aa79d12000000b00625a1029a34mr2467791pfp.24.1678963675351;
+        Thu, 16 Mar 2023 03:47:55 -0700 (PDT)
+Received: from localhost.localdomain ([106.51.227.150])
+        by smtp.gmail.com with ESMTPSA id f26-20020aa78b1a000000b005a8c92f7c27sm5108744pfd.212.2023.03.16.03.47.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Mar 2023 03:47:55 -0700 (PDT)
+From:   sabiya.d@mistralsolutions.com
+X-Google-Original-From: sabiya.d@ti.com
+To:     nm@ti.com, vigneshr@ti.com, kristo@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linus.walleij@linaro.org
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, sabiya.d@mistralsolutions.com,
+        Dasnavis Sabiya <sabiya.d@ti.com>
+Subject: [PATCH 0/2] Fix WKUP domain IO PADCONFIG size issue and RPi header support
+Date:   Thu, 16 Mar 2023 16:17:41 +0530
+Message-Id: <20230316104743.482972-1-sabiya.d@ti.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-BESS-ID: 1678966909-310366-5551-16212-1
+X-BESS-VER: 2019.1_20230310.1716
+X-BESS-Apparent-Source-IP: 209.85.160.200
+X-BESS-Parts: H4sIAAAAAAACA4uuVkqtKFGyUirNy1bSUcovVrIyNbcEMjKAYikGKYZpyYYWlo
+        bGieYmiWYWlgZmFmZGaYnmxqlmKSYGSrWxAPGtUx9AAAAA
+X-BESS-Outbound-Spam-Score: 0.00
+X-BESS-Outbound-Spam-Report: Code version 3.2, rules version 3.2.2.246833 [from 
+        cloudscan17-171.eu-central-1b.ess.aws.cudaops.com]
+        Rule breakdown below
+         pts rule name              description
+        ---- ---------------------- --------------------------------
+        0.00 BSF_BESS_OUTBOUND      META: BESS Outbound 
+        0.00 NO_REAL_NAME           HEADER: From: does not include a real name 
+        0.00 BSF_SC0_MISMATCH_TO    META: Envelope rcpt doesn't match header 
+X-BESS-Outbound-Spam-Status: SCORE=0.00 using account:ESS91090 scores of KILL_LEVEL=7.0 tests=BSF_BESS_OUTBOUND, NO_REAL_NAME, BSF_SC0_MISMATCH_TO
+X-BESS-BRTS-Status: 1
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-__xdp_build_skb_from_frame() was the last user of
-{__,}xdp_release_frame(), which detaches pages from the page_pool.
-All the consumers now recycle Page Pool skbs and page, except mlx5,
-stmmac and tsnep drivers, which use page_pool_release_page() directly
-(might change one day). It's safe to assume this functionality is not
-needed anymore and can be removed (in favor of recycling).
+From: Dasnavis Sabiya <sabiya.d@ti.com>
 
-Signed-off-by: Alexander Lobakin <aleksander.lobakin@intel.com>
----
- include/net/xdp.h | 29 -----------------------------
- net/core/xdp.c    | 15 ---------------
- 2 files changed, 44 deletions(-)
+Hi All,
 
-diff --git a/include/net/xdp.h b/include/net/xdp.h
-index d517bfac937b..5393b3ebe56e 100644
---- a/include/net/xdp.h
-+++ b/include/net/xdp.h
-@@ -317,35 +317,6 @@ void xdp_flush_frame_bulk(struct xdp_frame_bulk *bq);
- void xdp_return_frame_bulk(struct xdp_frame *xdpf,
- 			   struct xdp_frame_bulk *bq);
- 
--/* When sending xdp_frame into the network stack, then there is no
-- * return point callback, which is needed to release e.g. DMA-mapping
-- * resources with page_pool.  Thus, have explicit function to release
-- * frame resources.
-- */
--void __xdp_release_frame(void *data, struct xdp_mem_info *mem);
--static inline void xdp_release_frame(struct xdp_frame *xdpf)
--{
--	struct xdp_mem_info *mem = &xdpf->mem;
--	struct skb_shared_info *sinfo;
--	int i;
--
--	/* Curr only page_pool needs this */
--	if (mem->type != MEM_TYPE_PAGE_POOL)
--		return;
--
--	if (likely(!xdp_frame_has_frags(xdpf)))
--		goto out;
--
--	sinfo = xdp_get_shared_info_from_frame(xdpf);
--	for (i = 0; i < sinfo->nr_frags; i++) {
--		struct page *page = skb_frag_page(&sinfo->frags[i]);
--
--		__xdp_release_frame(page_address(page), mem);
--	}
--out:
--	__xdp_release_frame(xdpf->data, mem);
--}
--
- static __always_inline unsigned int xdp_get_frame_len(struct xdp_frame *xdpf)
- {
- 	struct skb_shared_info *sinfo;
-diff --git a/net/core/xdp.c b/net/core/xdp.c
-index a2237cfca8e9..8d3ad315f18d 100644
---- a/net/core/xdp.c
-+++ b/net/core/xdp.c
-@@ -531,21 +531,6 @@ void xdp_return_buff(struct xdp_buff *xdp)
- }
- EXPORT_SYMBOL_GPL(xdp_return_buff);
- 
--/* Only called for MEM_TYPE_PAGE_POOL see xdp.h */
--void __xdp_release_frame(void *data, struct xdp_mem_info *mem)
--{
--	struct xdp_mem_allocator *xa;
--	struct page *page;
--
--	rcu_read_lock();
--	xa = rhashtable_lookup(mem_id_ht, &mem->id, mem_id_rht_params);
--	page = virt_to_head_page(data);
--	if (xa)
--		page_pool_release_page(xa->page_pool, page);
--	rcu_read_unlock();
--}
--EXPORT_SYMBOL_GPL(__xdp_release_frame);
--
- void xdp_attachment_setup(struct xdp_attachment_info *info,
- 			  struct netdev_bpf *bpf)
- {
+This patch series include the below changes:
+1. Fix the incorrect IO PADCONFIG offset size of the wakeup domain for J784S4 SoC
+2. Add RPi expansion header support for AM69 SK.
+
+Dasnavis Sabiya (2):
+  arm64: dts: ti: k3-j784s4-mcu-wakeup: Fix IO PADCONFIG size for wakeup
+    domain
+  arm64: dts: ti: k3-am69-sk: Add pinmux for RPi Header
+
+ arch/arm64/boot/dts/ti/k3-am69-sk.dts         | 72 +++++++++++++++++++
+ .../boot/dts/ti/k3-j784s4-mcu-wakeup.dtsi     |  2 +-
+ 2 files changed, 73 insertions(+), 1 deletion(-)
+
 -- 
-2.39.2
+2.25.1
 
