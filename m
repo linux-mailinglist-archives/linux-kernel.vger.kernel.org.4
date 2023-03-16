@@ -2,129 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1586A6BCE8D
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 12:40:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E5E06BCE86
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 12:40:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230322AbjCPLke (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 07:40:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36606 "EHLO
+        id S229934AbjCPLk3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 07:40:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229645AbjCPLk2 (ORCPT
+        with ESMTP id S230446AbjCPLkK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 07:40:28 -0400
-Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2106.outbound.protection.outlook.com [40.107.215.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55ABF570AC;
-        Thu, 16 Mar 2023 04:40:02 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=T/yR1JB3UxQB/AaPRGf7wgAex4LsRiZrXfAoMXdbnU7kOCZezabHRSU54cLwq10QYo8fz3R/TUC46Hw7cy3gD2E+JM1kM7DgBbQsTX5gZOBGFSwZEdXY+CkD5fbmMddaxJwQN9/zeLMqwCDQbVqq9o8rBbd5rRQJAxeFgWrn9vNQ0dyIaT6k0ljW6bBhwkG78U1/fBLT3mGKUZE/CuCp4ajnFESqeAXuLwWOIr5b7dzsqxYk+OIB65aQjcfFKsCEdR1u6E/uVJyaTJzQ/WZ1bp+7y91Qzcd/hESRjCLdglIwhLmaYjhdtK7mGRktcDxZgJhGiDYFTrX5LMMNDVAxrg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=RNjHdA8ArI7Cuj1psguUjBTy7LIFvtfRFFVg9mWk3ZU=;
- b=aoSGtznzDAI1Cxwh3iW32z3AN66hwSd2ceBh5coooJo1u8MY/TAcNtbT95VoejncV9nX+ELcjstEpiRx+t0kUKZpJfAOXFuvxYcF21MPJff8T4KJIoFV+GXuMw6DYQQM2u1akjGMHCV6ZLvp9Zgj/MZPyVTcCKxgaDuLWT5BlwfxptCSd8vpPGCBJEU53hU4WFfjjkJ2R/IpqMV079mmrpq1HOWblj4av+4OdA4xy76lkB4iqSWDwGRv0FRAuXDk72Ro2VxW8sv5FKRSYSgxL3tLsb6Pd0KfcI0BMqdcz1mxMKaAkXrKRoA3BRcQBewRL59FAGwyaBG+QeMFryHLgA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=coep.ac.in; dmarc=pass action=none header.from=coep.ac.in;
- dkim=pass header.d=coep.ac.in; arc=none
+        Thu, 16 Mar 2023 07:40:10 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFBB27A88
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 04:39:36 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id o11-20020a05600c4fcb00b003eb33ea29a8so888621wmq.1
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 04:39:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=coepac.onmicrosoft.com; s=selector2-coepac-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=RNjHdA8ArI7Cuj1psguUjBTy7LIFvtfRFFVg9mWk3ZU=;
- b=ESmFWxpCUcUKrJIozWDr3VVq8qYHs2uufBo8tmKvdPLdLBztTDFVLFSaW2HI9XVXFgf1DtRL4QH+cl98b5h65J9K3nhB7qlxAsZme2gVXM2rNw47qvT72o1WBFupMDYZjnTaWwJGCnOax8DIq4yoD+VlwI1fZ8r3QSlytUD5R2M=
-Received: from TY2PR0101MB2591.apcprd01.prod.exchangelabs.com
- (2603:1096:404:ab::19) by SI2PR01MB3819.apcprd01.prod.exchangelabs.com
- (2603:1096:4:ed::5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6222.8; Thu, 16 Mar
- 2023 11:39:28 +0000
-Received: from TY2PR0101MB2591.apcprd01.prod.exchangelabs.com
- ([fe80::9f6c:1351:78bc:13bd]) by
- TY2PR0101MB2591.apcprd01.prod.exchangelabs.com
- ([fe80::9f6c:1351:78bc:13bd%5]) with mapi id 15.20.6178.026; Thu, 16 Mar 2023
- 11:39:27 +0000
-From:   BHANDKKAR YOGITA TULSHIRAM <bhandkkaryt21.civil@coep.ac.in>
-Subject: Request.
-Thread-Topic: Request.
-Thread-Index: AQHZV/v1IG9Dcr2BnEupbfnFD57NsA==
-Date:   Thu, 16 Mar 2023 11:39:25 +0000
-Message-ID: <TY2PR0101MB2591D7935D536561479CC33ECDBC9@TY2PR0101MB2591.apcprd01.prod.exchangelabs.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=coep.ac.in;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: TY2PR0101MB2591:EE_|SI2PR01MB3819:EE_
-x-ms-office365-filtering-correlation-id: 51f855ec-f491-409e-034d-08db26131839
-x-ms-exchange-atpmessageproperties: SA
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: kHEU3ppcvq1bImwZB/uDVOKoitGPvKSQMbmQeBOdIL4vLETgV3nuzKhdDi8h8E3NKyk82BPFPP77mt6wbmRT2pPlJs46tQt5LqAV9UzDzGTRVWEXXI53jSzTx4jcstDHPXCgLq4j4U0R5Q5JUft3eXYQpQkBclpJNVLPhjh02oXIK6TKlTGZba0zVXW5eOxv4IG+XSIfnvRyN775XT9V3RauaebssYk4y6l+E1BqtKKv0e6lo/otQ/WZLCuv1iHULols6PrlJpSXIkROK2kmBf0jRJkXcFvfUmzEXwP2vYmDBnLi7OyMrxBCUDrtIMD6UBG4q5cRmjnF8Ire+nmb1OtHkiARzCKBR6j/DumS79WTV3VVBYp98/Ku0SmXysKfbT2IdAdrBEcXYop7a4Faa7E2dVzd6g9g8Xjx8s0iGSaIwkdBWgFNuBXn1KWFSzZCD1RfLYf+E8YLNeenEWTBRZBAUWqUJV0oB6ySSBFXfTAGioSuCRjOoLj+gm8r7xpxVD9JnV7b88T9UwzG0X/0N67MJY1TVZKLGYSXNnCrDHaTta+/zklgOGrVzqE+tE0XKDf/Ly1hOpx/r8uCekH1ti2IFCZNdq36PSnTw+J+ziEyX1B8Nda9Y+NPFe+5qHEslkhyCr2IJDYa8euX2ciLlLcliLVHS481eILclaD6AykkX8sU4UcpUsW0cCffLMan5VigAUwMGI5dcEo4a4JnPw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TY2PR0101MB2591.apcprd01.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(136003)(346002)(366004)(39860400002)(396003)(109986016)(451199018)(7406005)(7366002)(7336002)(7276002)(52536014)(5660300002)(41300700001)(7416002)(8936002)(7116003)(2906002)(7696005)(4744005)(33656002)(122000001)(38070700005)(3480700007)(86362001)(38100700002)(71200400001)(478600001)(66556008)(66476007)(64756008)(66446008)(91956017)(8676002)(89122003)(76116006)(66946007)(9686003)(55016003)(41320700001)(88732003)(786003)(76576003)(316002)(6506007)(26005)(186003)(55236004)(487294008);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?Windows-1252?Q?YfCQnPT8bx9I/aSPpjhrXwDBZbTP5SjmSBrlcd3Gkk8G9P2hlpzEyXZa?=
- =?Windows-1252?Q?onE/rdsKvjI+kVVUPcHeyYEB7V55/xBOpinhie6lE5cVDJCQbChYaoyM?=
- =?Windows-1252?Q?oi4i0TKLha0netpJzG7GG7/Y/VlXW0zARlLKjEcSjS6WxHMm7R/QDGmL?=
- =?Windows-1252?Q?fgCBSVL4P6saBk4qXSS/ty3telh7oNkeM4e3i7UBu4kIq7eyHHpPBXAt?=
- =?Windows-1252?Q?kNIAzf3albH5tP8biP0d8t9G8BcA4ucA2ofEIYZW8675PfBuI5dqkxFb?=
- =?Windows-1252?Q?/J8anDjeJ82w+rDhtfnc6fsw65/I2a3zdJXwagouWLYhJHz4qLso9nr0?=
- =?Windows-1252?Q?QnpuGBXKN87SBinPwLvshNoi+FqEJDC04yor1nAIAC0UNRxoQRihOt9b?=
- =?Windows-1252?Q?q4mcsqX51jGrRrEjOHvjO8UCnuXoTONow/kCpyWAMrg22CfcnjSv1VDt?=
- =?Windows-1252?Q?DAJecK34PYHhPVh2IwfNzq9aEMWc8vhdUP4FRegVSbWQc+xazbcoYp+s?=
- =?Windows-1252?Q?S137Ozth8rbMozenYMZExq/au/o1zpAs8jW9EPaXC9ijYelCqNbHIANy?=
- =?Windows-1252?Q?b7rh9jcettzbGGstKai5Nm4q3oKuhbSB0CpHNS0ZRh/vse3IC885N5/n?=
- =?Windows-1252?Q?2+5m5mIfOp5vRqtaI8f3+ORnECCzIFTWWkTCKLfqThwmTbzqujkPvZJe?=
- =?Windows-1252?Q?Jszp/K5xmpe7Dkqnfxhyh1AbC3pFhjfE8CWRvfQPmpwpLOPAwE5FUxjX?=
- =?Windows-1252?Q?lFA1dgRqeA/psEkVlqOOiwigiNeZcEM0qp+Jkn59BJzD4ID7VoP5Ek5P?=
- =?Windows-1252?Q?P1jdOPFmnKBf8RKEUVTEQM3EOfdf87IsMK5qG8X/wXI23a1QieYKOWY/?=
- =?Windows-1252?Q?ofQrIzzZ621zyS3ur157875g0MjSaxYdB4UH3OoiVH+nXSHpuwtYzqcd?=
- =?Windows-1252?Q?6e8C9olThXV42g8NUzfJwyTN2nbNHO9NzcuL0TIoDA+2Msx5oJNyKVDn?=
- =?Windows-1252?Q?cS/+spb52a7UBBxzBWWqk/FtlVjeNcohVa7EZMeB/p99Y4vUCw/qJ3QI?=
- =?Windows-1252?Q?M1uPuClxCbY3AH91JD/0Z8HCb2BJVUVcWsJJIiTHm+RbYWIe3N7FOaON?=
- =?Windows-1252?Q?2BspyCeY/qN8W9KCVkfA+wh5hRT6BBpUgEKnJf9wYz5j4kO8pEnOyDMh?=
- =?Windows-1252?Q?rEBhTits7YLpZtotzRVfzbvpvjC9p+QDgCwIeKDDafpOJ9/g+7//xeUF?=
- =?Windows-1252?Q?5JAtyURoHDRfToYPowFrDZnaYq3QjTlkoAh34vdH9/wLyoLWy74UrIkE?=
- =?Windows-1252?Q?zcwm/9CVe5a/ULHuIDl7IqjiS5aWkELwrAMIQ8vU/TUHtGRZw+ojPUuL?=
- =?Windows-1252?Q?+1nZRyxm3Hri77YyE+fCvwM92VTms63yZq+3dPAC5mih7ezdspJf7i2H?=
- =?Windows-1252?Q?CJNg5Cwk5XQ6XxX6kq7HEvpZYCgc2grwGrW3f8Edlgt2ktx+ZclIQhc4?=
- =?Windows-1252?Q?emDJ+LnwKLSa3lkxBWXD4huz/sQd7ZC+b+5GRKaSAQoIgyTKufM6rclu?=
- =?Windows-1252?Q?HEVqDucdFUE2QdJzFTt2NhRTwIApsEO9t5Ztf/kl+zb+hy/hCt/qd8dF?=
- =?Windows-1252?Q?fxOkBJLo/2NeE4vwU0ZNArFvzuOLTSG85bCdor18ppI+bsouuwGhLN06?=
- =?Windows-1252?Q?rd4uPaEkF/EngiGwcswziVLUEX4rZTje?=
-Content-Type: text/plain; charset="Windows-1252"
-Content-Transfer-Encoding: quoted-printable
+        d=gmail.com; s=20210112; t=1678966773;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Kc+TKhkWgBxkIa6rZa0UbU5xS8M4xJrUEtCCPts6psA=;
+        b=B+5HKVjQ8mqaMShUiMvGvciIUQfBmk2sKuXFiO0jRY7B4pN81pcvxjrp3CGPMA+DWW
+         ABYjfzkZkx+Rkzl6tcq+vU8cykbsE+C+SXugvPo+yaMkomHf0k05lr/PG9g0JTmnAf5q
+         NtvVb7ZQ4ImBbaCUwogqfDWYshoR/mvjQxWIpV95EFXQlVy+tF4mm47XtGLAT5CH8UKS
+         AwY3rD10Jtuj4w+knkTcShcDwzBDypoPy9nz7EDHJ2eK9twKH1pe6vVztC3vjZvchXEp
+         aJ0Ymx0RrtjhzuZieo8OVp540TaHoProQLVSDvlVV4xU+oETu5J0ku92y7IE0uUq6Azb
+         uLZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678966773;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Kc+TKhkWgBxkIa6rZa0UbU5xS8M4xJrUEtCCPts6psA=;
+        b=g0vDeAb7RAuSckcqNYiEWg+9YZuLT9Tsl28EqxopvOWV8AC4hzZSfQLuB3hsH4fVlD
+         zMKFOwlZ2aH1p3/6lsr+XNKSN2/G0W0GCtHBzafmygqZo7yS6sGgdhLew7Yzsjrgoenp
+         QAA5ppHlLq6EJDnhAk+LtIDD5jEm5C9i7yOrApJ8NpejmSS4rnhyS20eLJIlW7qifqwO
+         cP2tJW9KRcrJSYw4Z+KbbmGuFjFlssce+8ZLHqySbmKSiEXP4auKL/QwpORoa3uZZwV8
+         cJdRhD9YzzdpFD2LW62MnUjxSD4yK4aC2a2LqUxKzmT3PZ5kJqlo4F4Oaqzcdr6zdMyp
+         kBCA==
+X-Gm-Message-State: AO0yUKXoIrzQf6NTRITEuWIsXmeir4uZh6zlfuIrS+1nKfvv//OUKaLv
+        0KjQ6krBevYaoMMrpJjOZTU=
+X-Google-Smtp-Source: AK7set9t7Ni42RcKhVlDgKuW0vQm8VjNXJNze9Kjqr2Zp/LPYHq/TjiqOUEQAFJlJr4eTogJHxcynQ==
+X-Received: by 2002:a05:600c:354d:b0:3ed:340e:afbe with SMTP id i13-20020a05600c354d00b003ed340eafbemr4696790wmq.20.1678966773095;
+        Thu, 16 Mar 2023 04:39:33 -0700 (PDT)
+Received: from suse.localnet (host-79-35-102-94.retail.telecomitalia.it. [79.35.102.94])
+        by smtp.gmail.com with ESMTPSA id c3-20020a7bc843000000b003db0bb81b6asm4803346wml.1.2023.03.16.04.39.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Mar 2023 04:39:32 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Khadija Kamran <kamrankhadijadj@gmail.com>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Alison Schofield <alison.schofield@intel.com>,
+        outreachy@lists.linux.dev,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] staging: axis-fifo: initialize timeouts in probe only
+Date:   Thu, 16 Mar 2023 12:39:31 +0100
+Message-ID: <1902746.IobQ9Gjlxr@suse>
+In-Reply-To: <ZBLsoTBeKbuYbhCi@khadija-virtual-machine>
+References: <ZA9mThZ7NyRrQAMX@khadija-virtual-machine> <279821116.9N5E1g01tA@suse>
+ <ZBLsoTBeKbuYbhCi@khadija-virtual-machine>
 MIME-Version: 1.0
-X-OriginatorOrg: coep.ac.in
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TY2PR0101MB2591.apcprd01.prod.exchangelabs.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 51f855ec-f491-409e-034d-08db26131839
-X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Mar 2023 11:39:25.5368
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b4c6b754-54e3-41e4-a8da-304355c62816
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: sOMx61OJfvKlccOGwnig88xYmwvNjol7CF077xe5cchfcVuXLnzxS2txvpHuNmxQmCOOL/8FxolMSuQ3lv5YRLMUnNLIlqwzBcB7JqaRpug=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SI2PR01MB3819
-X-Spam-Status: No, score=2.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,LOTS_OF_MONEY,MISSING_HEADERS,MONEY_FORM_SHORT,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_FILL_THIS_FORM_SHORT autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: **
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I am a private investment consultant in the Netherlands representing the in=
-terest of a multinational Russian conglomerate who is desirous to upload fu=
-nds into a trust management portfolio. Can you avail my client of an invest=
-ment portfolio to nestle the fund of =80150 MILLION EURO? Please contact me=
- back through my private email address for more information: rsevriens3@gma=
-il.com =0A=
-=0A=
-Ryusei Sevriens=0A=
-SEVRIENS LAWYERS=0A=
-(Email: rsevriens3@gmail.com)=
+On gioved=EC 16 marzo 2023 11:17:05 CET Khadija Kamran wrote:
+> On Wed, Mar 15, 2023 at 05:24:23PM +0100, Fabio M. De Francesco wrote:
+> > On mercoled=EC 15 marzo 2023 16:06:56 CET Nathan Chancellor wrote:
+> > > Hi Khadija,
+> > >=20
+> > > On Wed, Mar 15, 2023 at 07:22:39PM +0500, Khadija Kamran wrote:
+> > > > On Wed, Mar 15, 2023 at 02:34:31PM +0100, Fabio M. De Francesco wro=
+te:
+> > > > > Aside from what I said and asked for with the other message of th=
+is
+> > > > > same
+> > > > > thread, please take note that you can build a specific module if =
+you
+> > > > > prefer
+> > > > > not to re-build the whole kernel and other modules at the same ti=
+me.
+> > > > >=20
+> > > > > I'm pretty sure that the instructions to do so are in the
+> > > > > OutreachyFirstPatch
+> > > > > tutorial.
+> > > > >=20
+> > > > > If they are not there, please let us know.
+> > > > >=20
+> > > > > Fabio
+> > > >=20
+> > > > Hey Fabio!
+> > > >=20
+> > > > In the Outreachy FirstPatchTutorial under the 'Compiling only part =
+of
+> > > > the kernel' section there are ways to compile only some part of the
+> > > > kernel.
+> > > >=20
+> > > > I have tried using "make W=3D1 drivers/staging/axis-fifo/" and it s=
+ays
+> > > > 'nothing to be done for'.
+> > >=20
+> > > Is CONFIG_XIL_AXIS_FIFO enabled in your configuration?
+> >=20
+> > @Khadija:
+> >=20
+> > Maybe that you won't find CONFIG_XIL_AXIS_FIFO among the staging drivers
+> > entries while using "make menuconfig" (or the other similar commands for
+> > working with the configuration).
+> >=20
+> > In that case, first enable the CONFIG_OF option if disabled.
+> > CONFIG_XIL_AXIS_FIFO depends on the former.
+> >=20
+> > For "CONFIG_XIL_AXIS_FIFO depends on CONFIG_OF" we mean that you can the
+> > former if and only if the latter is already enabled.
+> >=20
+> > Actually, CONFIG_XIL_AXIS_FIFO depends also on two other options. Howev=
+er
+> > you
+> > shouldn't worry about those others because they are commonly enabled in=
+=20
+more
+> > than 99% of PC distributions.
+>=20
+> Hey Fabio!
+>=20
+> I have checked in my .config file and both options are enabled. The file
+> says,
+> CONFIG_OF=3Dy
+> CONFIG_HAS_IOMEM=3Dy
+>=20
+> The "make menuconfig" shows 'Xilinx AXI-Stream FIFO IP core driver' with
+> built-in selection [*].
+> The problem I am having here is that in the OutreachyFirstPatch
+> tutorial, it asks you to change [*] -> [m], but I cannot change it.
+>=20
+> Kindly help me with this!
+
+Hi Khadija,
+
+Sorry for being here so late.
+
+I just saw also your other messages with further help requests.
+Please do other work while waiting for help on a specific issue.=20
+
+If I understand you correctly, you are saying that you can only build axis-
+fifo in-kernel because you cannot change the '*' to 'm'. Correct?
+
+If so, you have probably touched other configuration options in a way that=
+=20
+forces that driver to work only if compiled in-kernel). Therefore, I'd rest=
+art=20
+from scratch.
+
+Please delete your current .config and make a copy of the one from your=20
+running kernel. Then check the three options Alison and I were talking abou=
+t.=20
+
+Remember that you cannot see the axis-fifo module entry (CONFIG_XIL_AXIS_FI=
+=46O)=20
+in "Device Drivers" -> "Staging Drivers" section if you have not yet enable=
+d =20
+(either with 'm' or 'y') CONFIG_OF and CONFIG_HAS_IOMEM.=20
+
+Now you should end up with a visible CONFIG_XIL_AXIS_FIFO that can be enabl=
+ed=20
+as a module with 'm'.=20
+
+Let me know if this procedure works.
+
+=46abio
+
+> Thank you!
+> Regards,
+> Khadija
+>=20
+> > > > Should I start with the steps to reproduce? :'(
+> > >=20
+> > > I did see a report of this same warning occurring with GCC but the
+> > > report I commented on cane from clang/LLVM; using that toolchain may
+> > > make it easier for you to reproduce this issue. The robot's reproduct=
+ion
+> > > instructions are fine but I think doing it manually is actually simpl=
+er.
+> > >=20
+> > > Ubuntu 22.04 should have a pretty modern version of clang/LLVM, which
+> > > you can install via 'sudo apt install clang lld llvm'.
+> > > https://apt.llvm.org is another resource.
+> >=20
+> > @Nathan: Congratulations, you now have another clang/LLVM adept!
+> > (Obviously, I'm just kidding :-))
+> >=20
+> > Fabio
+
+
+
+
