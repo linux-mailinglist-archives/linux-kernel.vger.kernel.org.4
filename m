@@ -2,108 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69D936BC342
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 02:22:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3C276BC344
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 02:25:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229706AbjCPBWh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 21:22:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35592 "EHLO
+        id S229705AbjCPBZn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 21:25:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbjCPBWg (ORCPT
+        with ESMTP id S229512AbjCPBZl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 21:22:36 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BD2E7303D
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 18:22:31 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id o12so1587426edb.9
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 18:22:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent.com; s=google; t=1678929749;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nk5MnEj+9VdMq2koFjsXyLeZ+RHukG9plsb5KVbpDTg=;
-        b=e+7tQkAQ2uUODrnzOrY6Ips2/7+bIYTNXPx6aMCM1eR1GeiKx/tKzSh8Bj6I/MP34k
-         Wz+8TJHIWu6R7JemAB2R7ittFu5xBMal/raUmVrxB8V40iec+dAftGd4BiapoOM3cNqY
-         sj7Vtek0LI/yMFB25r27MSF95TKaooXqBfATR8GA6piJKchdGM4iUPDzNmO/gtfVHkYs
-         TLb5/5fyNFuEyBkJ8NsUOoBvAly/fmbPFDy1rx1jwNcmKj/JJ9nA/ZRdB5YJe//ifn8b
-         50W3XrmHTzRIzDBswedqRHtP+tTb0NnE+sDpGD/hIf43HLKvZrEwLJDn8enB/mgzNArw
-         aueg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678929749;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nk5MnEj+9VdMq2koFjsXyLeZ+RHukG9plsb5KVbpDTg=;
-        b=IuNbCz+bD9i1GRIToTUhoeHVabM+L0W+coZ2jP1xybr2LLzHdKkug9QB5x8GS1a1uP
-         8weIfTAQvh8UGAMy8ttrJh3dMdDwLVVrrCkF4EOnGklmPukU/fTLdRZxLYQc+AQLOpne
-         TJVe3NsVBIvpavmoSGvYnWUGMNjQEf85nBPR7vUS5NomulwQaOznXmW5gSLrVgQnNOMk
-         whAik79kaJs9Jo5a6qnHb7uFyIEeJeZJXzxyUmIQCTe/g3u7tp9aXVVIdl/nwhDG/rMi
-         Qw7GRHbVwzBtpVvGEjc7hclRtM/f+MHTrUPyGvLfPDvCnCpOBvg/ayfHEL+7QyNbjirj
-         FGjw==
-X-Gm-Message-State: AO0yUKXZ96qR06vUBuaFIJ1UGfRhTr2p296rYXj29dpAeKLECtrru5GQ
-        OAu9sXbqQR0pfa1j5d/8t5yXNqNP0tBZAYZkedInTA==
-X-Google-Smtp-Source: AK7set9vUQWlnYib29M7GxGUMKP+4/l9rWjXcSKXwSBOGUAVjRwK82k8x0u1IBJKP1XHqNoKznFC4u6JpgMJWUT0U4U=
-X-Received: by 2002:a50:8a9a:0:b0:4fa:3c0b:741 with SMTP id
- j26-20020a508a9a000000b004fa3c0b0741mr2496372edj.4.1678929749501; Wed, 15 Mar
- 2023 18:22:29 -0700 (PDT)
+        Wed, 15 Mar 2023 21:25:41 -0400
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A8829E337
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 18:25:40 -0700 (PDT)
+Received: from cwcc.thunk.org (pool-173-48-120-46.bstnma.fios.verizon.net [173.48.120.46])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 32G1PGa1016681
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 15 Mar 2023 21:25:17 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+        t=1678929920; bh=lRx3gB9ap1EU+d75/csSNwe0A4dHCtawrnOTXZn7ddo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=Yu5uk0NjxrYfB58RIIejQd3EMkiasqodMOITziDE1FeTVU8jRs7h23i7+Qvo91Jtr
+         fVcKVwYr1tPrl19o4jASSmXIRYyIobjzCwti0KOXfOIquDAXHBHcn8s3MKb2eBVYzx
+         3gQK6PeBn0fCUHRp2lY4lX6WVyMHlp/xLirlls5yEYhx0e8/mYGpiBPdYypYT/pdd6
+         5XFUEfmKJGZeScfWOcBTiCUcCXLLw0u0cxpDSZ1+sg01vuKR148/uGeX+VdGVGC0SX
+         QopNVdfBOIJfVYyP5HPjuQSb6/nyWC5L3LgqltGnDemb4uUrPMBMMky7JOxGGzpd7b
+         wB0gOul3336RA==
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id D2E4515C5830; Wed, 15 Mar 2023 21:25:16 -0400 (EDT)
+Date:   Wed, 15 Mar 2023 21:25:16 -0400
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>,
+        Philipp Reisner <philipp.reisner@linbit.com>,
+        Bryan Tan <bryantan@vmware.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Bob Pearson <rpearsonhpe@gmail.com>,
+        Ariel Levkovich <lariel@nvidia.com>,
+        Julian Anastasov <ja@ssi.bg>
+Subject: Re: [PATCH 00/13] Rename k[v]free_rcu() single argument to
+ k[v]free_rcu_mightsleep()
+Message-ID: <20230316012516.GK860405@mit.edu>
+References: <20230201150815.409582-1-urezki@gmail.com>
+ <20230315151415.2534e11c@gandalf.local.home>
+ <e5a1815b-65b5-55ca-9773-ec04378d53c0@kernel.dk>
+ <ZBIbloFMm5xRsjfn@pc636>
+ <20230315153448.6914f85b@gandalf.local.home>
+ <CAEXW_YTLFQ3-LApyCPNNx7Tn2ovFr8YUXL=1WVCm+rE2hRKE8g@mail.gmail.com>
+ <20230315162840.106a5b4f@gandalf.local.home>
+ <CAEXW_YTNNJJftsg1QRvhUCRoZpKa3SM6=-0M-cukCGt5=G+row@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230312190600.324573-1-joe@isovalent.com> <ZBB8vZ8EJRv2d7mD@mail.gmail.com>
-In-Reply-To: <ZBB8vZ8EJRv2d7mD@mail.gmail.com>
-From:   Joe Stringer <joe@isovalent.com>
-Date:   Wed, 15 Mar 2023 18:22:18 -0700
-Message-ID: <CADa=RywQPwBib1MKs3+TFK4K6yh8sd2UkERkU5bzHZ9VS77hyw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3] docs/bpf: Add LRU internals description and graph
-To:     Maxim Mikityanskiy <maxtram95@gmail.com>
-Cc:     bpf@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ast@kernel.org, corbet@lwn.net,
-        martin.lau@linux.dev, bagasdotme@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEXW_YTNNJJftsg1QRvhUCRoZpKa3SM6=-0M-cukCGt5=G+row@mail.gmail.com>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 14, 2023 at 6:55=E2=80=AFAM Maxim Mikityanskiy <maxtram95@gmail=
-.com> wrote:
->
-> On Sun, Mar 12, 2023 at 12:05:59PM -0700, Joe Stringer wrote:
+On Wed, Mar 15, 2023 at 06:08:19PM -0400, Joel Fernandes wrote:
+> 
+> I am doubtful there may be a future where it does not sleep. Why?
+> Because you need an rcu_head *somewhere*.
 
-<snip>
+I think the real problem was that this won't sleep:
 
-> I believe there are some inaccuracies, though. As far as I see it,
-> local_freelist_check corresponds to __local_list_pop_free in the common
-> LRU case, specifically, to checking its return value; use_local_node
-> corresponds to returning that value; and common_lru_check corresponds
-> to bpf_lru_pop_free (for both common and percpu LRU, that's where the
-> distinction is made).
+   kfree_rcu(ptr, rhf);
 
-Ah yes, thanks for the pointers, will fix up. I started with reviewing
-the shared case since I was primarily interested in the behaviour
-there, then I added the other cases later. Adding the function names
-was one of the later ideas but it's difficult to get accurate.
+While this *could* sleep:
 
-> > +  local_freelist_check [shape=3Ddiamond,fillcolor=3D1,
-> > +    label=3D"Local freelist\nnode available?"];
-> > +  // The following corresponds to __local_list_pop_free() for common L=
-RU case.
-> > +  use_local_node [shape=3Drectangle,
-> > +    label=3D"Use node owned\nby this CPU"]
-> > +
-> > +  common_lru_check [shape=3Ddiamond,
-> > +    label=3D"Map created with\ncommon LRU?\n(!BPF_NO_COMMON_LRU)"];
->
-> Nit: the exact flag name is BPF_F_NO_COMMON_LRU.
+   kfree_rcu(ptr);
 
-Will fix.
+So the the original sin was to try to make the same mistake that C++
+did --- which is to think that it's good to have functions that have
+the same name but different function signatures, and in some cases,
+different semantic meanings because they have different implementations.
 
-> Thanks again for this patch, this piece of documentation really helped
-> me understand internals of the LRU hashmap.
+Personally, this is why I refuse to use C++ for any of my personal
+projects --- this kind of "magic" looks good, but it's a great way to
+potentially shoot yourself (or worse, your users) in the foot.
 
-Glad to hear, thanks for the feedback on the patch!
+So separating out the two-argument kfree_rcu() from the one-argument
+kfree_rcu(), by renaming the latter to something else is IMHO, a
+Really F***** Good Idea.  So while, sure, kfree_rcu_mightsleep() might
+be a little awkward, the name documents the potential landmind
+involved with using that function, that's a good thing.  Because do
+you really think users will always conscientiously check the
+documentation and/or the implementation before using the interface?  :-)
+
+If you hate that name, one other possibility is to try to use the
+two-argument form kfree_rcu() and arrange to *have* a rcu_head in the
+structure.  That's going to be better from a performance perspective,
+and thus kinder to the end user than using rcu_synchronize().
+
+Cheers,
+
+					- Ted
