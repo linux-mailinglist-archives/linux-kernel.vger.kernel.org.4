@@ -2,104 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 692086BDA19
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 21:26:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A03236BDA25
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 21:28:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230027AbjCPU0X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 16:26:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58924 "EHLO
+        id S230132AbjCPU24 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 16:28:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229721AbjCPU0W (ORCPT
+        with ESMTP id S229659AbjCPU2y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 16:26:22 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF0904B822;
-        Thu, 16 Mar 2023 13:26:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678998381; x=1710534381;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=N/UV/JGFwalfx0oPNUccNM6ZJrQ5XofHq51SxDHotNo=;
-  b=l7/NVFHKiFju+nCZgHvb8cKrfW4OXOAodpuI6aIaglKd8WfeHZwtTr9V
-   g1xT6z2ch8sXcoYFAbV3JvwCBMnq0LzO1ZrnOmTVNya7izZSlcy7CGLFJ
-   Ar3q2NaBlZBmLdcH++PpEfiHB1TOnc00y+MbIWpRaxBAa+bDmoXYh56mb
-   YCkwi0yzKl+OZiWpw9tjX432XefEApWLiYHIIlSwgOfEl5KRrUrSCv/2a
-   E0DYkFsf7iAx7dX0K6Nte2499PEYbBmVjGNydkN8m+rfb6aINgT797AXh
-   8ia57Fg12/puUpB6CM5iGWDDotbWJ/cMlhtst0L5BnzZ7qkIgp1bUbD3Q
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="424376014"
-X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
-   d="scan'208";a="424376014"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 13:26:21 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="803874716"
-X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
-   d="scan'208";a="803874716"
-Received: from djiang5-mobl3.amr.corp.intel.com (HELO [10.213.182.83]) ([10.213.182.83])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 13:26:20 -0700
-Message-ID: <b7a0b5c0-61a0-9843-09a6-3c4c606221be@intel.com>
-Date:   Thu, 16 Mar 2023 13:26:20 -0700
+        Thu, 16 Mar 2023 16:28:54 -0400
+Received: from domac.alu.hr (domac.alu.unizg.hr [IPv6:2001:b68:2:2800::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B13F20555;
+        Thu, 16 Mar 2023 13:28:53 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id DE37B60501;
+        Thu, 16 Mar 2023 21:28:49 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1678998529; bh=ahEFVVhdg+LtRwVQf0dgtf/npUuwtlKdwtIwDCR5Vk4=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=piIgxmLo2kvU5rj8gYAND6x2kY5XGbtyqGmDHTM5GtgNw+x8raHemruZDKJzDIOnW
+         UEBThEyq7YGgz2KDYVD54xzkga6jCsOW1+bfJkFIMzAyjQ0kxuJSeKppU3YP49/QfZ
+         S32juUZbrGfPcbsoz/94G9l4eayG+Nt5ckqPr0AqPDheytq/P/GlfT5AFQF1oiLCDN
+         PlsvIXML8gcLEK6bPxHJjs/tmumvD5yTKCAojzpNUYC4imZNCykbLLzJRyZxNse3hN
+         oC3cQeZLt+98jWxdyiKgn0TnOafGbaBrGvCRiru8z64jvXdNPTqa4b8Zwkkwgo7lsz
+         u/Pex60FJShWA==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id vZz56q_HW_Mx; Thu, 16 Mar 2023 21:28:47 +0100 (CET)
+Received: from [192.168.1.4] (unknown [77.237.109.125])
+        by domac.alu.hr (Postfix) with ESMTPSA id 1FAC1604FE;
+        Thu, 16 Mar 2023 21:28:47 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1678998527; bh=ahEFVVhdg+LtRwVQf0dgtf/npUuwtlKdwtIwDCR5Vk4=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Vh2RaTiy/ONE5mWyhcOgcEwqN0X0ftYO4JO192uRSIufRzw+Fv0BQlezVh/Iv0r+7
+         noEbpJCdfiwPELB8dCoOY5Z/v6mdiZO42/pzKLYeEL8KgoqWoqXU/jgvyREkEp6gel
+         AYwfz2nVT2N8pncqG6LFpkNfU1N3l+09gj3VnsOYVVKcy44r5Ym04hsoqV18wFZIBf
+         Jq7Xi19lQiQBcixslRY5NevCyryC1jjJeW/w5WuR9o1u1GCpQ6QwLsk1t4I5+GT2e1
+         mRm2am6qT6e2VZH7cM7UvwgADUVUnPVsWKkQq83JZ9tx3vtGiTfPajBbzkQaV0XF4s
+         N1LA/ijV2SJuA==
+Message-ID: <5260feaa-1b0d-b398-b648-b10263145751@alu.unizg.hr>
+Date:   Thu, 16 Mar 2023 21:28:46 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.6.0
-Subject: Re: [PATCH] ACPI: APEI: EINJ: Add CXL error types
-Content-Language: en-US
-To:     Tony Luck <tony.luck@intel.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Cc:     Borislav Petkov <bp@alien8.de>, x86@kernel.org,
-        linux-acpi@vger.kernel.org, linux-cxl@vger.kernel.org,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev
-References: <20230314004611.48583-1-tony.luck@intel.com>
-From:   Dave Jiang <dave.jiang@intel.com>
-In-Reply-To: <20230314004611.48583-1-tony.luck@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+ Thunderbird/102.8.0
+Subject: Re: BUG: selftest/net/tun: Hang in unregister_netdevice
+To:     Eric Dumazet <edumazet@google.com>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, shuah@kernel.org
+References: <910f9616-fdcc-51bd-786d-8ecc9f4b5179@alu.unizg.hr>
+ <20230315205639.38461-1-kuniyu@amazon.com>
+ <CANn89iJDRG_CFWUz1GOSEi4YagCynZ-zhjq4POjbpyjkv9aawg@mail.gmail.com>
+Content-Language: en-US, hr
+From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+In-Reply-To: <CANn89iJDRG_CFWUz1GOSEi4YagCynZ-zhjq4POjbpyjkv9aawg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 15. 03. 2023. 21:59, Eric Dumazet wrote:
+> On Wed, Mar 15, 2023 at 1:57 PM Kuniyuki Iwashima <kuniyu@amazon.com> wrote:
+>>
+>> However, we don't assume the delay and also the failure in
+>> tun_set_real_num_queues().
+>>
+>> In this case, we have to re-initialise the queues without
+>> touching kobjects.
+>>
+>> Eric,
+>> Are you working on this?
+>> If not, let me try fixing this :)
+> 
+> I am not working on this, please go ahead, thanks !
+
+Hi,
+
+It's me again. I just have new findings.
+
+[root@pc-mtodorov linux_torvalds]# grep -E '(KOBJECT|TRACKER)' /boot/config-6.3.0-rc2-00006-gfc89d7fb499b 
+CONFIG_REF_TRACKER=y
+CONFIG_NET_DEV_REFCNT_TRACKER=y
+CONFIG_NET_NS_REFCNT_TRACKER=y
+CONFIG_DEBUG_KOBJECT=y
+# CONFIG_DEBUG_KOBJECT_RELEASE is not set
+# CONFIG_SAMPLE_KOBJECT is not set
+# CONFIG_TEST_REF_TRACKER is not set
+[root@pc-mtodorov linux_torvalds]# uname -rms
+Linux 6.3.0-rc2-00006-gfc89d7fb499b x86_64
+[root@pc-mtodorov linux_torvalds]# grep -E '(KOBJECT|TRACKER)' /boot/config-6.3.0-rc2-00006-gfc89d7fb499b 
+CONFIG_REF_TRACKER=y
+CONFIG_NET_DEV_REFCNT_TRACKER=y
+CONFIG_NET_NS_REFCNT_TRACKER=y
+CONFIG_DEBUG_KOBJECT=y
+# CONFIG_DEBUG_KOBJECT_RELEASE is not set
+# CONFIG_SAMPLE_KOBJECT is not set
+# CONFIG_TEST_REF_TRACKER is not set
+[root@pc-mtodorov linux_torvalds]# tools/testing/selftests/net/tun
+TAP version 13
+1..5
+# Starting 5 tests from 1 test cases.
+#  RUN           tun.delete_detach_close ...
+#            OK  tun.delete_detach_close
+ok 1 tun.delete_detach_close
+#  RUN           tun.detach_delete_close ...
+#            OK  tun.detach_delete_close
+ok 2 tun.detach_delete_close
+#  RUN           tun.detach_close_delete ...
+#            OK  tun.detach_close_delete
+ok 3 tun.detach_close_delete
+#  RUN           tun.reattach_delete_close ...
+#            OK  tun.reattach_delete_close
+ok 4 tun.reattach_delete_close
+#  RUN           tun.reattach_close_delete ...
+#            OK  tun.reattach_close_delete
+ok 5 tun.reattach_close_delete
+# PASSED: 5 / 5 tests passed.
+# Totals: pass:5 fail:0 xfail:0 xpass:0 skip:0 error:0
+[root@pc-mtodorov linux_torvalds]# 
+
+My interpretation if you allow it is that the bug search can be narrowed to the code
+that depends on CONFIG_DEBUG_KOBJECT_RELEASE=y.
+
+Best regards,
+Mirsad
 
 
-On 3/13/23 5:46 PM, Tony Luck wrote:
-> ACPI 6.5 added six new error types for CXL. See chapter 18
-> table 18.30.
-> 
-> Add strings for the new types so that Linux will list them in the
-> /sys/kernel/debug/apei/einj/available_error_types file.
-> 
-> It seems no other changes are needed. Linux already accepts
-> the CXL codes (on a BIOS that advertises them).
-> 
-> Signed-off-by: Tony Luck <tony.luck@intel.com>
+CONFIG_DEBUG_KOBJECT=y alone doesn't seem to be sufficient to trigger the reference leak.
 
-Reviewed-by: Dave Jiang <dave.jiang@intel.com>
+Hope this helps narrow down the search.
 
-> ---
->   drivers/acpi/apei/einj.c | 6 ++++++
->   1 file changed, 6 insertions(+)
-> 
-> diff --git a/drivers/acpi/apei/einj.c b/drivers/acpi/apei/einj.c
-> index b4373e575660..39bee5a067cc 100644
-> --- a/drivers/acpi/apei/einj.c
-> +++ b/drivers/acpi/apei/einj.c
-> @@ -584,6 +584,12 @@ static const char * const einj_error_type_string[] = {
->   	"0x00000200\tPlatform Correctable\n",
->   	"0x00000400\tPlatform Uncorrectable non-fatal\n",
->   	"0x00000800\tPlatform Uncorrectable fatal\n",
-> +	"0x00001000\tCXL.cache Protocol Correctable\n",
-> +	"0x00002000\tCXL.cache Protocol Uncorrectable non-fatal\n",
-> +	"0x00004000\tCXL.cache Protocol Uncorrectable fatal\n",
-> +	"0x00008000\tCXL.mem Protocol Correctable\n",
-> +	"0x00010000\tCXL.mem Protocol Uncorrectable non-fatal\n",
-> +	"0x00020000\tCXL.mem Protocol Uncorrectable fatal\n",
->   };
->   
->   static int available_error_type_show(struct seq_file *m, void *v)
+-- 
+Mirsad Goran Todorovac
+Sistem inženjer
+Grafički fakultet | Akademija likovnih umjetnosti
+Sveučilište u Zagrebu
+ 
+System engineer
+Faculty of Graphic Arts | Academy of Fine Arts
+University of Zagreb, Republic of Croatia
+The European Union
+
