@@ -2,141 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 651216BDCB6
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 00:10:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29F8C6BDCBB
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 00:11:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229845AbjCPXKa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 19:10:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54882 "EHLO
+        id S230077AbjCPXLX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 19:11:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229590AbjCPXK2 (ORCPT
+        with ESMTP id S229590AbjCPXLU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 19:10:28 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4A402411B;
-        Thu, 16 Mar 2023 16:10:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=2BeCZSdN3o0+g9nGC8N+LpsPqap3J67+DNmxUtN89CI=; b=l7uBeCoiqmfiGlgs5kb3jYWIo+
-        nL+f0+87aA+uQV8HUvu5Jr56NZER4f87EapO+uZrOepUl4sgLjh6OQuZHgwkyZe45wHlr5VWjRsJ1
-        o0PmRt6gp19W7+i/ESzSg6Iy/lNQswMNacsYc+9USJEq1ldFVrea2rLLkma2N1ukgikGli4+KZrjO
-        9XYys6FEpjyYZPCFEX9PMbVKovRAUWJ0sej6TYNvcQ1/sxuyOqw9a/3wbtreeYB/a8raS6wEngWqd
-        ejTjMcc0SHXAm47+nYvoVjwmMHpqhDe3xpczgzAsVk9C2vuQEvKEQGaDHccirO90cBuLBUqFqCGwm
-        MhW+egqQ==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:46154)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1pcwjX-0001SC-CT; Thu, 16 Mar 2023 23:10:07 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1pcwjT-0002qB-LM; Thu, 16 Mar 2023 23:10:03 +0000
-Date:   Thu, 16 Mar 2023 23:10:03 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Jochen Henneberg <jh@henneberg-systemdesign.com>
-Cc:     netdev@vger.kernel.org,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Wong Vee Khee <veekhee@apple.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Revanth Kumar Uppala <ruppala@nvidia.com>,
-        Andrey Konovalov <andrey.konovalov@linaro.org>,
-        Tan Tee Min <tee.min.tan@linux.intel.com>,
-        Voon Weifeng <weifeng.voon@intel.com>,
-        Mohammad Athari Bin Ismail <mohammad.athari.ismail@intel.com>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH net V2] net: stmmac: Fix for mismatched host/device DMA
- address width
-Message-ID: <ZBOhy02DFBlnIQR1@shell.armlinux.org.uk>
-References: <20230316095306.721255-1-jh@henneberg-systemdesign.com>
- <20230316131503.738933-1-jh@henneberg-systemdesign.com>
+        Thu, 16 Mar 2023 19:11:20 -0400
+Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A1CC234C7;
+        Thu, 16 Mar 2023 16:11:19 -0700 (PDT)
+Received: by mail-ot1-x335.google.com with SMTP id r23-20020a05683001d700b00690eb18529fso1934594ota.1;
+        Thu, 16 Mar 2023 16:11:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679008278;
+        h=content-transfer-encoding:mime-version:message-id:references
+         :in-reply-to:user-agent:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=YcdmFaDt/Cf3OEZTuhE6C+fH1voZvs0au3xzuaV9u5Y=;
+        b=NHqiaZ38ESCpwnaQAzL6DB3Rgds+gFstT1N5yF3hqRVRYpBe4Bx7fJmh4IdWqsQ22r
+         NauoV7t7y6EYPEZ8WUGH8h6sZ8ntReyUwwn6e4bmgjwg2SeitRzh4X0b3+wW/W4qU37b
+         m01COCxCYPXJRgiJJQXXeEwr9g4mcAd/U/tpBcAJSOArr6k9f9P5FlyN3SxLv15/6chh
+         XLWibuN1k+ZgOqsaabzu5gv6nr+a4mGOf7GP2a14UKIoTaA9TjeqGKwvrn8Md3GAf3KS
+         cjKjK+u8BtnBL010MxphmKoc95XpCGtvvTzk5r6G1jZHTo8vQ7Bcj4AowExp36fb3Pp+
+         Q+mQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679008278;
+        h=content-transfer-encoding:mime-version:message-id:references
+         :in-reply-to:user-agent:subject:cc:to:from:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=YcdmFaDt/Cf3OEZTuhE6C+fH1voZvs0au3xzuaV9u5Y=;
+        b=kIcE6jA99qn1fGDI9Pf9kNh24sb7wSUDbHynSLPGaE3ARznP7R5fy1bNGP6SvFeeaD
+         fdU9AP0w4J4r7p8e7Ic4ppr/no43rs5NQYce8SYbzuYlPi+8lNbqZ4AACp3Z1oz/GkqM
+         eoH2VwK7s1S2N93GYfkwXbC9OAuHTwPd9desAnAalj7x+G+V4bAQHKJ6BbXi9JaQMHp+
+         IbgppFf7XUGesCfBnhltLMpB5V1aN/99/GXmL+hBYYy6zrDd15eUT2Igzy2P9rw9sXFJ
+         dxydqHSMnLnFoKRsviUSF1nS8r0QZlsvF3yRrjy4IxpITbbS/U81v1XKmllL4vsEob6f
+         rtnA==
+X-Gm-Message-State: AO0yUKXm1LjC5VznQRHlHMu9agYv0McoVSEbPWUfOvP2AqvzNFZMvxdp
+        kg9k1I4f8GhxaDREXOsatNE=
+X-Google-Smtp-Source: AK7set/ql1xaD1GZvmGqHKAwEjxQRA7/0GbY8h5F17WCkLSNgM3Fc5gunpWG2i+FvDx5HEKVMPiCgg==
+X-Received: by 2002:a9d:2f0:0:b0:68b:caa8:6ef1 with SMTP id 103-20020a9d02f0000000b0068bcaa86ef1mr22677270otl.12.1679008278713;
+        Thu, 16 Mar 2023 16:11:18 -0700 (PDT)
+Received: from [127.0.0.1] (187-26-169-5.3g.claro.net.br. [187.26.169.5])
+        by smtp.gmail.com with ESMTPSA id v13-20020a9d5a0d000000b00693c9f984b4sm354610oth.70.2023.03.16.16.11.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Mar 2023 16:11:18 -0700 (PDT)
+Date:   Thu, 16 Mar 2023 20:11:11 -0300
+From:   Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+CC:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        irogers@google.com, namhyung@kernel.org
+Subject: Re: linux-next: build failure after merge of the perf tree
+User-Agent: K-9 Mail for Android
+In-Reply-To: <20230317095025.49aa34f9@canb.auug.org.au>
+References: <20230317095025.49aa34f9@canb.auug.org.au>
+Message-ID: <7D15C431-1AB6-482E-B4B9-289A15C0E2E4@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230316131503.738933-1-jh@henneberg-systemdesign.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 16, 2023 at 02:15:03PM +0100, Jochen Henneberg wrote:
-> Currently DMA address width is either read from a RO device register
-> or force set from the platform data. This breaks DMA when the host DMA
-> address width is <=32it but the device is >32bit.
-> 
-> Right now the driver may decide to use a 2nd DMA descriptor for
-> another buffer (happens in case of TSO xmit) assuming that 32bit
-> addressing is used due to platform configuration but the device will
-> still use both descriptor addresses as one address.
-> 
-> This can be observed with the Intel EHL platform driver that sets
-> 32bit for addr64 but the MAC reports 40bit. The TX queue gets stuck in
-> case of TCP with iptables NAT configuration on TSO packets.
-> 
-> The logic should be like this: Whatever we do on the host side (memory
-> allocation GFP flags) should happen with the host DMA width, whenever
-> we decide how to set addresses on the device registers we must use the
-> device DMA address width.
-> 
-> This patch renames the platform address width field from addr64 (term
-> used in device datasheet) to host_addr and uses this value exclusively
-> for host side operations while all chip operations consider the device
-> DMA width as read from the device register.
-> 
-> Fixes: 7cfc4486e7ea ("stmmac: intel: Configure EHL PSE0 GbE and PSE1 GbE to 32 bits DMA addressing")
-> Signed-off-by: Jochen Henneberg <jh@henneberg-systemdesign.com>
-> ---
-> V2: Fixes from checkpatch.pl for commit message
-> 
->  drivers/net/ethernet/stmicro/stmmac/common.h  |  1 +
->  .../net/ethernet/stmicro/stmmac/dwmac-imx.c   |  2 +-
->  .../net/ethernet/stmicro/stmmac/dwmac-intel.c |  4 +--
->  .../ethernet/stmicro/stmmac/dwmac-mediatek.c  |  2 +-
->  .../net/ethernet/stmicro/stmmac/stmmac_main.c | 30 ++++++++++---------
->  include/linux/stmmac.h                        |  2 +-
->  6 files changed, 22 insertions(+), 19 deletions(-)
-> 
-> diff --git a/drivers/net/ethernet/stmicro/stmmac/common.h b/drivers/net/ethernet/stmicro/stmmac/common.h
-> index 6b5d96bced47..55a728b1b708 100644
-> --- a/drivers/net/ethernet/stmicro/stmmac/common.h
-> +++ b/drivers/net/ethernet/stmicro/stmmac/common.h
-> @@ -418,6 +418,7 @@ struct dma_features {
->  	unsigned int frpbs;
->  	unsigned int frpes;
->  	unsigned int addr64;
-> +	unsigned int host_addr;
 
-Obvious question: is host_addr an address? From the above description it
-sounds like this is more of a host address width indicator.
 
-Maybe call these "dev_addr_width" and "host_addr_width" so it's clear
-what each of these are?
+On March 16, 2023 7:50:25 PM GMT-03:00, Stephen Rothwell <sfr@canb=2Eauug=
+=2Eorg=2Eau> wrote:
+>Hi all,
+>
+>After merging the perf tree, today's linux-next build (native perf)
+>failed like this:
+>
+>Auto-detecting system features:
+>=2E=2E=2E                         clang-bpf-co-re: [ =1B[32mon=1B[m  ]
+>=2E=2E=2E                                    llvm: [ =1B[31mOFF=1B[m ]
+>=2E=2E=2E                                  libcap: [ =1B[32mon=1B[m  ]
+>=2E=2E=2E                                  libbfd: [ =1B[32mon=1B[m  ]
+>
+>make[1]: *** Deleting file '/home/sfr/next/perf/util/bpf_skel/vmlinux=2Eh=
+'
+>libbpf: failed to find '=2EBTF' ELF section in /boot/vmlinux-6=2E0=2E0-5-=
+powerpc64le
+>Error: failed to load BTF from /boot/vmlinux-6=2E0=2E0-5-powerpc64le: No =
+data available
+>make[1]: *** [Makefile=2Eperf:1075: /home/sfr/next/perf/util/bpf_skel/vml=
+inux=2Eh] Error 195
+>make[1]: *** Waiting for unfinished jobs=2E=2E=2E=2E
+>make: *** [Makefile=2Eperf:236: sub-make] Error 2
+>Command exited with non-zero status 2
+>
+>To be clear this is a native build of perf on a PPC64le host using this
+>command line:
+>
+>make -C tools/perf -f Makefile=2Eperf -s -O -j60 O=3D=2E=2E/perf EXTRA_CF=
+LAGS=3D-Wno-psabi
+>
+>(I could probably remove the EXTRA_CLFAGS now that I am building with
+>gcc 12=2E2)
+>
+>I don't know which commit caused this=2E
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+Can you try adding NO_BPF_SKEL=3D1 to the make -C tools/perf command line?
+
+- Arnaldo
+
+>
+>I have used the perf tree from next-20230316 for today=2E
+>
+>
+>
