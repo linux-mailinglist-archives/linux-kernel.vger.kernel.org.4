@@ -2,86 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD88B6BD9A8
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 20:58:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4305E6BD9A5
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 20:57:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229929AbjCPT6C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 15:58:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41492 "EHLO
+        id S229783AbjCPT5w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 15:57:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229890AbjCPT57 (ORCPT
+        with ESMTP id S229678AbjCPT5u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 15:57:59 -0400
-Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B55FDBDD24;
-        Thu, 16 Mar 2023 12:57:14 -0700 (PDT)
-Received: from [192.168.1.103] (178.176.73.23) by msexch01.omp.ru
- (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Thu, 16 Mar
- 2023 22:56:12 +0300
-Subject: Re: [PATCH net v2 1/2] ravb: avoid PHY being resumed when interface
- is not up
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        <netdev@vger.kernel.org>
-CC:     <linux-renesas-soc@vger.kernel.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Michal Kubiak <michal.kubiak@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        <linux-kernel@vger.kernel.org>
-References: <20230315074115.3008-1-wsa+renesas@sang-engineering.com>
- <20230315074115.3008-2-wsa+renesas@sang-engineering.com>
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-Organization: Open Mobile Platform
-Message-ID: <f4f46db5-459a-5479-7fda-7d59517e34a5@omp.ru>
-Date:   Thu, 16 Mar 2023 22:56:11 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Thu, 16 Mar 2023 15:57:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 722B6BD4D9;
+        Thu, 16 Mar 2023 12:57:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DAEE462040;
+        Thu, 16 Mar 2023 19:56:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9986EC433EF;
+        Thu, 16 Mar 2023 19:56:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678996576;
+        bh=PfUYV+9ZbNdnWPZGJkz3rVty4AE/q0+P1FyVLuVDiTE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UknZIvIYCaejql9hITewhMGmVoY3p/uDlBHS25lpySIMpMa69hr1OzfiivzcyaRnR
+         32cfYTtKa+07kLPidicqI+9As3sC1Iw5vs4QKSvAw4mLzxjqiWCCCcY8KaDe6AXiyc
+         7s8G6eIQ3BF31cyqhiGVD3qz/6PSi9eJfSNMDPA4hs76d3DN6dInc45lC/ithmu46N
+         9DW8Zecux1xihK/JeEy8D0TVDrXQXA+0f/Ymmr6p+GgjX5dcFK7KDKY7Qt22KI35mS
+         aNsB8fbblnOd7OTn47B7ZUUZ7BwQAgVlQ3nw9kOafdXUPJ7jPPXuEiCRgCHesH+3Jm
+         v9Lalxrg5vtHw==
+Date:   Thu, 16 Mar 2023 20:56:12 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Qii Wang <qii.wang@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Andreas =?utf-8?Q?F=C3=A4rber?= <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        linux-i2c@vger.kernel.org, chrome-platform@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        linux-actions@lists.infradead.org
+Subject: Re: [PATCH 1/5] i2c: mt65xx: drop of_match_ptr for ID table
+Message-ID: <ZBN0XAp8jm095my/@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Qii Wang <qii.wang@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+        Andreas =?utf-8?Q?F=C3=A4rber?= <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>, linux-i2c@vger.kernel.org,
+        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        linux-actions@lists.infradead.org
+References: <20230311111658.251951-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-In-Reply-To: <20230315074115.3008-2-wsa+renesas@sang-engineering.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [178.176.73.23]
-X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
- (10.188.4.12)
-X-KSE-ServerInfo: msexch01.omp.ru, 9
-X-KSE-AntiSpam-Interceptor-Info: scan successful
-X-KSE-AntiSpam-Version: 5.9.59, Database issued on: 03/16/2023 19:42:29
-X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
-X-KSE-AntiSpam-Method: none
-X-KSE-AntiSpam-Rate: 59
-X-KSE-AntiSpam-Info: Lua profiles 176151 [Mar 16 2023]
-X-KSE-AntiSpam-Info: Version: 5.9.59.0
-X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
-X-KSE-AntiSpam-Info: LuaCore: 507 507 08d345461d9bcca7095738422a5279ab257bb65a
-X-KSE-AntiSpam-Info: {rep_avail}
-X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
-X-KSE-AntiSpam-Info: {relay has no DNS name}
-X-KSE-AntiSpam-Info: {SMTP from is not routable}
-X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.73.23 in (user)
- dbl.spamhaus.org}
-X-KSE-AntiSpam-Info: 178.176.73.23:7.1.2;omp.ru:7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;127.0.0.199:7.1.2
-X-KSE-AntiSpam-Info: ApMailHostAddress: 178.176.73.23
-X-KSE-AntiSpam-Info: {DNS response errors}
-X-KSE-AntiSpam-Info: Rate: 59
-X-KSE-AntiSpam-Info: Status: not_detected
-X-KSE-AntiSpam-Info: Method: none
-X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
- smtp.mailfrom=omp.ru;dkim=none
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Heuristic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 03/16/2023 19:46:00
-X-KSE-AttachmentFiltering-Interceptor-Info: protection disabled
-X-KSE-Antivirus-Interceptor-Info: scan successful
-X-KSE-Antivirus-Info: Clean, bases: 3/16/2023 2:00:00 PM
-X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="bKW2mF7l2ILB4D6Q"
+Content-Disposition: inline
+In-Reply-To: <20230311111658.251951-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,19 +81,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/15/23 10:41 AM, Wolfram Sang wrote:
 
-> RAVB doesn't need mdiobus suspend/resume, that's why it sets
-> 'mac_managed_pm'. However, setting it needs to be moved from init to
-> probe, so mdiobus PM functions will really never be called (e.g. when
-> the interface is not up yet during suspend/resume).
-> 
-> Fixes: 4924c0cdce75 ("net: ravb: Fix PHY state warning splat during system resume")
-> Suggested-by: Heiner Kallweit <hkallweit1@gmail.com>
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+--bKW2mF7l2ILB4D6Q
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-[...]
+On Sat, Mar 11, 2023 at 12:16:54PM +0100, Krzysztof Kozlowski wrote:
+> The driver can match only via the DT table so the table should be always
+> used and the of_match_ptr does not have any sense (this also allows ACPI
+> matching via PRP0001, even though it might not be relevant here).
+>=20
+>   drivers/i2c/busses/i2c-mt65xx.c:514:34: error: =E2=80=98mtk_i2c_of_matc=
+h=E2=80=99 defined but not used [-Werror=3Dunused-const-variable=3D]
+>=20
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Reviewed-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+Applied to for-next, thanks!
 
-MBR, Sergey
+
+--bKW2mF7l2ILB4D6Q
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmQTdFwACgkQFA3kzBSg
+KbblQhAAhR2X5U38APPQWOy4gWDy7Xl2FMahiZoLJSZeabT1t8HHafaSSbQCKKbe
+FvGEcDNCkPxAYqpeUW7gUgWsjRL1JB03UMn3B6TygU/rMD5Ty5RpHQnc16i5KX5r
+Ebp+fhOo+BQhjJDld6bot7raM9ifyvq7tkzaiLjXeg1JIgEDklDRtTH6Yp7P3Rqr
+irJ20AAKQbUWCwJQ0iL3hraxY+y44Ce3ofqi1e/eUha+4EFaC7KyWdyxXZfY8Rzt
++9G/ZZeBa71grd0nn6U4XjkkgLnA1cYg4o+UDPI//Q0LFl0puR6KM9wo7M4SOJ+1
+5m2HSyO0kxbxaWmcB82jZWOCv3yvU7gx5HtOZGLTikSpnlGQ3QiMENwjDVT0X842
+wis1bWmVcFq2hsx1XlJyX3jFY50icYw3M+A0pOYa0lWkk+l8Qkdn6LUI0ipq23IL
+PTcvRzcu0Wcqatt9TOG9+f9LoV49j+18st5S3/3sOswCN5gqYzDhYxI/p/aDzCXF
+cQh29BVe3nKmlANsGQxHDyn2gupsmNN1bCqk5Ny+lE22bMoR4vIcEFFmYVRAb1Ih
+jWOH7lw/SzdNkhFjSqD28IHbrWLN1pA0v27UxqTi5lZT52M9qQncJDipBdK5kcpt
+vNZa1plwLpOtPodH0cPEdj1xZIwSC/wWCCmbq5GGpoTCeSBb9rU=
+=P7Qe
+-----END PGP SIGNATURE-----
+
+--bKW2mF7l2ILB4D6Q--
