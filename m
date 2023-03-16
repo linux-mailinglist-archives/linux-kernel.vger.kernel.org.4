@@ -2,108 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2328F6BD269
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 15:32:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F25506BD26D
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 15:32:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230329AbjCPOcR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 10:32:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37052 "EHLO
+        id S230380AbjCPOcx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 10:32:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229985AbjCPOcP (ORCPT
+        with ESMTP id S229985AbjCPOcv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 10:32:15 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87CF849D0
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 07:31:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678977088;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=IUpF5YpfmKBEdpMgbmDi2tfoMcmDwV8UPq2EahjD2lk=;
-        b=DHnGJfsl4GxAvqlRYZgEONvSFsQjYR4WKNDD2YodjEMzzFNi0SeVbD/Q1ZyD9CDFfq5RTz
-        fUuu8I5hthMVHopFSQuhFjvyWMejyvdhrUYG72av5F/NFffapM0cRWoj8PqGH1MCMdtYGU
-        UWMpvfYxzO39kqc9E774Ci7qANCuh8E=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-370-WZBON61mNC-qkwCqvhIfBg-1; Thu, 16 Mar 2023 10:31:27 -0400
-X-MC-Unique: WZBON61mNC-qkwCqvhIfBg-1
-Received: by mail-wm1-f71.google.com with SMTP id l17-20020a05600c1d1100b003ed29ba093cso737071wms.6
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 07:31:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678977086;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=IUpF5YpfmKBEdpMgbmDi2tfoMcmDwV8UPq2EahjD2lk=;
-        b=S96mSXlycoy4WnCPzekcdqm1mhbJrYzwctdQLhHI+romx8fBAcSVPNxVFCLtpfIuXR
-         A27EQ71jyaNeFVvmoF7nu9ZmHEkBFKrleKtlBVGuO9nx+EA1VYi0yVnGiXWw+s/J9kDY
-         HoQ91z38/+7SXeIU6WIx2spkIFeR4sglyJeTx/aSie82NKXEHc5fexfdMiih4Pybh9TQ
-         6Y3CN5D6b0D5G9L1tTnPhQevsT84ibqWzBQg8jjaLfYTaFkV01XGBLRrziUY5MDzdXPl
-         F4vZU/6HPvnBeDf3Gg7A03jnNmoRiEVaepxiDCtyaxPdYGmU5FSK34c0xZPGD32DqROZ
-         vKTA==
-X-Gm-Message-State: AO0yUKUOwwaDp21QyfdFfnTwiECClyAONRuRLqpYNt0Ob2Bjp9hlwLQP
-        T19dIeJW4qj7Gk3O5hN6gzVy2Zbn0kor0otMrHbLzRTIM2QoN+R0mtayfPFmaO2/lyutUzBEfvf
-        QGdfTwV+fri7X+fCC82p/0Ba9BZ3faHag54OAV68ZKQdhF9sMwXm7zkyynND91rseVhaWcXtaEn
-        XdsiekBnI=
-X-Received: by 2002:a05:600c:1d27:b0:3ed:2a41:8529 with SMTP id l39-20020a05600c1d2700b003ed2a418529mr2598334wms.2.1678977086013;
-        Thu, 16 Mar 2023 07:31:26 -0700 (PDT)
-X-Google-Smtp-Source: AK7set9ONATU/6Jrjx4MVUvm8TBfCFj8L6oolG4cHH5OfWe7GoRvRBF/xk+E8xlHDHoVUXeZJyfTVw==
-X-Received: by 2002:a05:600c:1d27:b0:3ed:2a41:8529 with SMTP id l39-20020a05600c1d2700b003ed2a418529mr2598313wms.2.1678977085687;
-        Thu, 16 Mar 2023 07:31:25 -0700 (PDT)
-Received: from kherbst.pingu.com (ip1f1032bf.dynamic.kabel-deutschland.de. [31.16.50.191])
-        by smtp.gmail.com with ESMTPSA id fk4-20020a05600c0cc400b003e0015c8618sm5145432wmb.6.2023.03.16.07.31.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Mar 2023 07:31:24 -0700 (PDT)
-From:   Karol Herbst <kherbst@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Karol Herbst <kherbst@redhat.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lukas Wunner <lukas@wunner.de>, linux-pci@vger.kernel.org,
-        nouveau@lists.freedesktop.org
-Subject: [PATCH] PCI: stop spamming info in quirk_nvidia_hda
-Date:   Thu, 16 Mar 2023 15:31:22 +0100
-Message-Id: <20230316143122.2377354-1-kherbst@redhat.com>
-X-Mailer: git-send-email 2.39.2
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Thu, 16 Mar 2023 10:32:51 -0400
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9EDC525D;
+        Thu, 16 Mar 2023 07:32:50 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 3234A5C0102;
+        Thu, 16 Mar 2023 10:32:50 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Thu, 16 Mar 2023 10:32:50 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1678977170; x=1679063570; bh=7i
+        jgDLmeD93wpp+M55EYZJS5ULGYTFy+YLaAjY5QCeg=; b=ipcazilBXEO0ZY6s1W
+        9WuRMl/4v/E6eQQC71UmnrLZtozKVeban5Rh678kB1G4H8vw8F+xPKIURPWzB03k
+        njVVIoTJwK1ZCp4bv+xj5S7Hov3vQaJI26ybjsQRjFtbqNsyBfcgdyoLnb8lAWZD
+        ghMsZi6OhqU3VbW3NeOil/HLNpXLSUluKkKSa9ye4/6FJaq4V3rZe57liIqOecX/
+        nAxjp3b1T8/XjoMpfjN6OLBGRme+MoefdBfmjYnec52LFGs5DOp12D8klrDxhHFo
+        WdgWjssHtFDhKFgsTu91+PYt6+yx6KCk5FwkHPGeryXVQ0itjYV/NwfgMR/k/8Jy
+        uU0Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1678977170; x=1679063570; bh=7ijgDLmeD93wp
+        p+M55EYZJS5ULGYTFy+YLaAjY5QCeg=; b=StR/rei+APjw5flVCNJNOHwtDB/2J
+        JZSyTHAXTiTVonUxXgRHQAbz/leve8o/WT3UX5S//khmPU6hHk/Ee/rwENThT1Ce
+        FclrG9F2GteA9N2dO13RewnRv4Vv7Us1DPKeYlIvJ94ecanyfvVUMlYEffdBd0XR
+        Wv1RWGXbKL3LSjOHSlOgrC8Ugknt6NHJ5nZ1bLYEFfUVVZdy8oRl7qA5aPxcqphS
+        7nLbnYchav8x/ma05Qza7PpHcx7rTeyB/aBEVmavyyOP8W6T3YwUu2H+rA6NiTjT
+        HgoDxnk2S7V0oCPplLIgqH2bbTHyEyXhalJQrNmSdbtGIY7Mwv3ueoh3w==
+X-ME-Sender: <xms:kSgTZPU0vxEOGguKyhWR-y6yTqbicRbDFJ6ZEPhRAedFETwveavCmw>
+    <xme:kSgTZHnGz-fBMfXDnTgWPVCe9XgjY-EJDTuLw6mPOK5fKV-ng3GdKSh2njm5F3f4j
+    YDX1VFU8gD5aC866xc>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeftddgieeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:kigTZLaPtDxlQBy5FunB_zqckRha-lfISqU_tZm0EJjNrdWD_7leow>
+    <xmx:kigTZKUgqqaCJax5KdYEF3izN02GjJnLMkrkXlt5jlRETJdttw5dCw>
+    <xmx:kigTZJnoIzrgTkXn2BQ5SWiwEqgWPnA3Mf6LCDjdVSraNRd3J9E23w>
+    <xmx:kigTZLkM2Lwr7pPMVD4Tmtz60u1_hTXzKnpK0prhnhgFrlyWLb4A2g>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id EAD3DB60086; Thu, 16 Mar 2023 10:32:49 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-221-gec32977366-fm-20230306.001-gec329773
+Mime-Version: 1.0
+Message-Id: <235fcb71-9e96-4f28-bb8c-6843d4d85cea@app.fastmail.com>
+In-Reply-To: <f8b323b4-fd07-f5fd-70cf-31450e9ef204@linaro.org>
+References: <20230315072902.9298-1-ychuang570808@gmail.com>
+ <20230315072902.9298-8-ychuang570808@gmail.com>
+ <f8b323b4-fd07-f5fd-70cf-31450e9ef204@linaro.org>
+Date:   Thu, 16 Mar 2023 15:32:07 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
+        "Jacky Huang" <ychuang570808@gmail.com>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        krzysztof.kozlowski+dt@linaro.org, "Lee Jones" <lee@kernel.org>,
+        "Michael Turquette" <mturquette@baylibre.com>,
+        "Stephen Boyd" <sboyd@kernel.org>,
+        "Philipp Zabel" <p.zabel@pengutronix.de>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        "Jiri Slaby" <jirislaby@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+        schung@nuvoton.com, "Jacky Huang" <ychuang3@nuvoton.com>
+Subject: Re: [PATCH 07/15] dt-bindings: arm: Add initial bindings for Nuvoton platform
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Users kept complaining about those messages and it's a little spammy on
-prime systems so turn it into a debug print.
+On Thu, Mar 16, 2023, at 08:33, Krzysztof Kozlowski wrote:
+> On 15/03/2023 08:28, Jacky Huang wrote:
+>> From: Jacky Huang <ychuang3@nuvoton.com>
+>> 
+>> Add binding for ARMv8 based Nuvotn SoCs and platform boards.
+>> Add initial bindings for ma35d1 series development boards.
+>> 
+>> Signed-off-by: Jacky Huang <ychuang3@nuvoton.com>
+>> ---
+>>  .../devicetree/bindings/arm/nuvoton.yaml      | 30 +++++++++++++++++++
+>
+> And what is npcm for? Why it was made an directory?
+>
+> All these should be just one Nuvoton.
 
-Cc: Bjorn Helgaas <bhelgaas@google.com>
-Cc: Lukas Wunner <lukas@wunner.de>
-Cc: linux-pci@vger.kernel.org
-Cc: nouveau@lists.freedesktop.org
-Fixes: b516ea586d71 ("PCI: Enable NVIDIA HDA controllers")
-Signed-off-by: Karol Herbst <kherbst@redhat.com>
----
- drivers/pci/quirks.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+npcm is an unrelated product line, so I think it would be best
+to rename the npcm directory to nuvoton and move the new
+file in there, though I'm not sure about the name or what the
+other chips are called.
 
-diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
-index 44cab813bf951..b10c77bbe4716 100644
---- a/drivers/pci/quirks.c
-+++ b/drivers/pci/quirks.c
-@@ -5549,7 +5549,7 @@ static void quirk_nvidia_hda(struct pci_dev *gpu)
- 	if (val & BIT(25))
- 		return;
- 
--	pci_info(gpu, "Enabling HDA controller\n");
-+	pci_dbg(gpu, "Enabling HDA controller\n");
- 	pci_write_config_dword(gpu, 0x488, val | BIT(25));
- 
- 	/* The GPU becomes a multi-function device when the HDA is enabled */
--- 
-2.39.2
+My impression is that this one is more closely related to
+the older Arm9 nuc900/w90x900/n9 chips that we dropped from
+the kernel a while ago, while the npcm family has a different
+origin.
 
+    Arnd
