@@ -2,142 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24B286BC42A
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 04:05:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3ECA86BC421
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 04:05:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229868AbjCPDFd convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 15 Mar 2023 23:05:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39108 "EHLO
+        id S229545AbjCPDFX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 23:05:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229780AbjCPDFU (ORCPT
+        with ESMTP id S229597AbjCPDFS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 23:05:20 -0400
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5D294ED2;
-        Wed, 15 Mar 2023 20:05:17 -0700 (PDT)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 5DC2524E201;
-        Thu, 16 Mar 2023 11:05:16 +0800 (CST)
-Received: from EXMBX061.cuchost.com (172.16.6.61) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 16 Mar
- 2023 11:05:16 +0800
-Received: from localhost.localdomain (113.72.145.194) by EXMBX061.cuchost.com
- (172.16.6.61) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 16 Mar
- 2023 11:05:15 +0800
-From:   Xingyu Wu <xingyu.wu@starfivetech.com>
-To:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        "Michael Turquette" <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Conor Dooley <conor@kernel.org>,
-        "Emil Renner Berthing" <kernel@esmil.dk>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Hal Feng <hal.feng@starfivetech.com>,
-        Xingyu Wu <xingyu.wu@starfivetech.com>,
-        William Qiu <william.qiu@starfivetech.com>,
-        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>
-Subject: [PATCH v2 0/6] Add PLL clocks driver for StarFive JH7110 SoC
-Date:   Thu, 16 Mar 2023 11:05:08 +0800
-Message-ID: <20230316030514.137427-1-xingyu.wu@starfivetech.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 15 Mar 2023 23:05:18 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FAAA1FD4
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 20:05:14 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id u5so320443plq.7
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 20:05:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1678935914;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZAJ32JUJ/u8tD4KHo0y/9csx0a9LdOuzb1AC53J8pBo=;
+        b=Hzu3b0ypyUtxefOCDdRStwfJPseOMdTDAOe1bNFk+mdav8xOUgCe8HcAY7b/XO7hAV
+         rcmOIxBA8lO0WvKMtn3Ydfp/CJ+lREaarW9T/J3AG0KK7O2IQhW3JYe/8WVwYf6+2nwz
+         H8gadlIv3MUoprqeXaLCEgiWQCNSzqGJ/sSUA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678935914;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZAJ32JUJ/u8tD4KHo0y/9csx0a9LdOuzb1AC53J8pBo=;
+        b=x9p/XsDdtCNABDX0nY8lpxe0w4N/MiabTNafi+8d+o/7jV/mcOFKXrEe8MhGNCTQiX
+         QiHWK3paZFYDO4AqvF51SY9IFu8QNZaZFsvhLeENf4J+6EvZuEP2E/rmz/NPvR5nWL2V
+         2vadbGN37my/ikIlHBdYFZuH7fcNkEmwc3ps/a5pcmc3FuaVw6UcP61f9eV/GKisLe2p
+         sghiTFncDkkDqT5WbcCRvtcGp1Th3hamGQbt75nOBszUimILxWgj6HIQS/rmp/pC00e8
+         rvMjjp1AH2b2R21f9hslkeXViRAkpyWYylDtwitR6MGHdSmbsYes6i7iUO+r5nNtTSMg
+         kHVA==
+X-Gm-Message-State: AO0yUKXm6J3FIq9PL/70s8wwMy6Z6gYe9J7oefOGBRP05z3oqptf7R6g
+        btAfNZL1XAu/bD8Mxs4J77Aayg==
+X-Google-Smtp-Source: AK7set9ZFTYHhd84dOmI9tzKAbY7LI7C7q2nN4XMZlm9R+t4OVOt2ZixXu1gQDxf1Ymcqa+7JGS2gw==
+X-Received: by 2002:a17:90b:4b90:b0:23d:3386:95e0 with SMTP id lr16-20020a17090b4b9000b0023d338695e0mr2226245pjb.1.1678935913875;
+        Wed, 15 Mar 2023 20:05:13 -0700 (PDT)
+Received: from google.com (KD124209188001.ppp-bb.dion.ne.jp. [124.209.188.1])
+        by smtp.gmail.com with ESMTPSA id x35-20020a631723000000b00502fd12bc9bsm3958818pgl.8.2023.03.15.20.05.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Mar 2023 20:05:13 -0700 (PDT)
+Date:   Thu, 16 Mar 2023 12:05:08 +0900
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Ricardo Ribalda <ribalda@chromium.org>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        linux-kernel@vger.kernel.org, "hn.chen" <hn.chen@sunplusit.com>,
+        linux-media@vger.kernel.org
+Subject: Re: [PATCH v9 1/6] media: uvcvideo: Fix negative modulus calculation
+Message-ID: <20230316030508.GB1927922@google.com>
+References: <20220920-resend-hwtimestamp-v9-0-55a89f46f6be@chromium.org>
+ <20220920-resend-hwtimestamp-v9-1-55a89f46f6be@chromium.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [113.72.145.194]
-X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX061.cuchost.com
- (172.16.6.61)
-X-YovoleRuleAgent: yovoleflag
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220920-resend-hwtimestamp-v9-1-55a89f46f6be@chromium.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch serises are to add PLL clocks driver and providers by writing
-and reading syscon registers for the StarFive JH7110 RISC-V SoC.
+On (23/03/15 14:30), Ricardo Ribalda wrote:
+> 
+> If head is 0, last will be addressing the index 0 instead of clock->size
+> -1. Luckily clock->head is unsiged, otherwise it would be addressing
+> 0xffffffff.
+> 
+> Nontheless, this is not the intented behaviour and should be fixed.
+> 
+> Fixes: 66847ef013cc ("[media] uvcvideo: Add UVC timestamps support")
+> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 
-PLL are high speed, low jitter frequency synthesizers in JH7110.
-Each PLL clocks work in integer mode or fraction mode by some dividers,
-and the dividers are set in several syscon registers.
-The formula for calculating frequency is:
-Fvco = Fref * (NI + NF) / M / Q1
-
-The first patch adds docunmentation to describe PLL clock bindings,
-and the second patch adds driver to support PLL clocks for JH7110.
-The patch 3 modifies the syscon dt-bindings and adds optional
-pateerProperties about PLL clock controller. The patch 4 modifies the
-SYSCRG dibindings and adds PLL clock inputs. The patch 5 modifies the
-system clock driver and changes PLL clock source from PLL clock
-controller instead of the fixed factor clocks. The last patch adds PLL
-clock node and modifies the syscrg node in dts file.
-
-This patchset should be applied after these patchset about JH7110 clock
-driver[1] and syscon dt-bindings[2].
-[1] https://lore.kernel.org/all/20230221024645.127922-1-hal.feng@starfivetech.com/
-[2] https://lore.kernel.org/all/20230315055813.94740-1-william.qiu@starfivetech.com/
-
-Changes since v1:
-- Changed PLL clock node to be child of syscon node in dts.
-- Modifed the definitions and names of function in PLL clock driver.
-- Added commit to update syscon and syscrg dt-bindings.
-
-Xingyu Wu (6):
-  dt-bindings: clock: Add StarFive JH7110 PLL clock generator
-  clk: starfive: Add StarFive JH7110 PLL clock driver
-  dt-bindings: soc: starfive: syscon: Add optional patternProperties
-  dt-bindings: clock: jh7110-syscrg: Add PLL clock inputs
-  clk: starfive: jh7110-sys: Modify PLL clocks source
-  riscv: dts: starfive: jh7110: Add PLL clock node and modify syscrg
-    node
-
- .../bindings/clock/starfive,jh7110-pll.yaml   |  46 ++
- .../clock/starfive,jh7110-syscrg.yaml         |  20 +-
- .../soc/starfive/starfive,jh7110-syscon.yaml  |  39 +-
- arch/riscv/boot/dts/starfive/jh7110.dtsi      |  16 +-
- drivers/clk/starfive/Kconfig                  |   9 +
- drivers/clk/starfive/Makefile                 |   1 +
- .../clk/starfive/clk-starfive-jh7110-pll.c    | 420 ++++++++++++++++++
- .../clk/starfive/clk-starfive-jh7110-pll.h    | 293 ++++++++++++
- .../clk/starfive/clk-starfive-jh7110-sys.c    |  35 +-
- .../dt-bindings/clock/starfive,jh7110-crg.h   |   6 +
- 10 files changed, 845 insertions(+), 40 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/clock/starfive,jh7110-pll.yaml
- create mode 100644 drivers/clk/starfive/clk-starfive-jh7110-pll.c
- create mode 100644 drivers/clk/starfive/clk-starfive-jh7110-pll.h
-
-
-base-commit: 8ca09d5fa3549d142c2080a72a4c70ce389163cd
-prerequisite-patch-id: ebaead89601acf604e83224f4df8d57a7f4331b8
-prerequisite-patch-id: 609d5d7c55b0b8e2967966673dab8f62a6fceab9
-prerequisite-patch-id: ac150a8c622e858e088df8121093d448df49c245
-prerequisite-patch-id: a4255724d4698f1238663443024de56de38d717b
-prerequisite-patch-id: 89f049f951e5acf75aab92541992f816fd0acc0d
-prerequisite-patch-id: dfb8d5a1fb262127d7a8e1ef3e97f455aaa19509
-prerequisite-patch-id: 11b0f5746bbfbf8aa5c5746dcd7b0dce62e7f922
-prerequisite-patch-id: 315303931e4b6499de7127a88113763f86e97e16
-prerequisite-patch-id: 40cb8212ddb024c20593f73d8b87d9894877e172
-prerequisite-patch-id: a1673a9e9f19d6fab5a51abb721e54e36636f067
-prerequisite-patch-id: 189a0f41ba4eecd4f3f35c503baac8aed8ccd7de
-prerequisite-patch-id: 1117ecaa40a353c667b71802ab34ecf9568d8bb2
-prerequisite-patch-id: 25923a0c77e92631ed3cd8a163d789daad35f0f8
-prerequisite-patch-id: 6a6f6215f09932e68fdfd294df2e813ec9d2481f
-prerequisite-patch-id: 2cc95b47cad25fd9b875d27f4e8e3d84eb70274b
-prerequisite-patch-id: 258ea5f9b8bf41b6981345dcc81795f25865d38f
-prerequisite-patch-id: 8b6f2c9660c0ac0ee4e73e4c21aca8e6b75e81b9
-prerequisite-patch-id: dbb0c0151b8bdf093e6ce79fd2fe3f60791a6e0b
-prerequisite-patch-id: e7773c977a7b37692e9792b21cc4f17fa58f9215
-prerequisite-patch-id: d57e95d31686772abc4c4d5aa1cadc344dc293cd
-prerequisite-patch-id: 0a0ac5a8a90655b415f6b62e324f3db083cdaaee
-prerequisite-patch-id: 2ffbced093555055b5796c0c0572b3b0216f8938
-prerequisite-patch-id: 1be0fb49e0fbe293ca8fa94601e191b13c8c67d9
--- 
-2.25.1
-
+Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>
