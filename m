@@ -2,92 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EABE26BD07F
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 14:14:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BBDD6BD082
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 14:15:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229902AbjCPNO0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 09:14:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54924 "EHLO
+        id S229986AbjCPNPA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 09:15:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229638AbjCPNOW (ORCPT
+        with ESMTP id S229977AbjCPNO4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 09:14:22 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 853E5CDD9
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 06:14:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=/aWedzsw7s5dh5oPwPfRoS0tq8TyVis1dtJ7OKpO1Dc=; b=F7JDAF+3N4UWoW/9MmOE/cinBW
-        YRLtE3ctmv5dizaO+XGmKATzdOkAdXS8brbF9tZIRRadpypqsnqkTl4y7PsEr2jFiVVUPmH63PwNV
-        6ymi5FwwLOxXfimYVjg9wtyy+iklrSDsLuGiZTtGIwouFj2u/u17zpDH9H7JDciyZ8uBA0k900WKX
-        32/fo4ZT/QoaFaypjz4NN0Y0MVGoFvbRWqA+RCOSbtcEjtLKpGWdgEQ01dPmDxDwGN9s0fugk3m0z
-        BIbujheg0Se9qKFA/UXIVm00QgT/2nG1mhv6h77PA2PqyD3z2LggYkV2XKeq/on+P7XmV3vBEnbWC
-        QQ+cB8XA==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pcnQj-00EqgY-Jt; Thu, 16 Mar 2023 13:14:05 +0000
-Date:   Thu, 16 Mar 2023 13:14:05 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     yang.yang29@zte.com.cn
-Cc:     akpm@linux-foundation.org, hannes@cmpxchg.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        iamjoonsoo.kim@lge.com
-Subject: Re: =?iso-8859-1?Q?=A0=5BPATCH_linux-next?=
- =?iso-8859-1?Q?=5D_mm=3A_workingset=3A_simplify_the=A0calculatio?=
- =?iso-8859-1?Q?n?= of workingset size
-Message-ID: <ZBMWHUJfFnIX7F9y@casper.infradead.org>
-References: <202303161723055514455@zte.com.cn>
+        Thu, 16 Mar 2023 09:14:56 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 452782737
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 06:14:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678972456;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=cij1DgoI5i6Ff0Me0upgsjOT5aDaEMgTlpSwTjH71C4=;
+        b=dBjZAXIqiLkW9HrMIdIHRq6ZEwadd4YqX5tBlIdDS/t6/Gv9ahqKH1TdTiwkNDrRiwyx/G
+        4HbBXIWQ7pP8gOaem2fL0E8ut/ukfB6f3tEbP9KTk8DM20f5KQ6JrjBzvAPe5d97btUfUM
+        T9o1RDn4UcvmJmkgYVMDrj7J4C9qfLQ=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-297-stumiDUsNhC6MaVYHDbBNw-1; Thu, 16 Mar 2023 09:14:15 -0400
+X-MC-Unique: stumiDUsNhC6MaVYHDbBNw-1
+Received: by mail-wm1-f71.google.com with SMTP id k41-20020a05600c1ca900b003ed383b1b62so641157wms.8
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 06:14:14 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678972454;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cij1DgoI5i6Ff0Me0upgsjOT5aDaEMgTlpSwTjH71C4=;
+        b=JN9MHyokJYLxUjNQi2olBrYXPbRq7MEZUzU0UgVxiBAnBV67gy809KYa19Mo/TeClp
+         EL2T2Seg6WYEBY+FHBY3y9P5hVb5enNRkty0aqscZ3qrv3WMIB47eeru53KgGSP0iaZT
+         0bPW1DZHak7u6rOSp4XPvQsLGht/GPpjiV6T6W32uchvR3KbBEHicFCBVtjROyOTdV+k
+         ZsSYPblA47EfP32MSDlovjFeL+QDql9RJbNiF1sIgxcJEuoFF1ARB2noPAg4DVOHesCn
+         qu79h5AZ1SEpFljytt9HPd9X9GM2DKOHtonvn3FHR1TU7ij8BnnqpwPiYt/bSbZFEM1D
+         iRGA==
+X-Gm-Message-State: AO0yUKUKfcp0Yx+2VE0Pt4NSUygBJLRi7+0gZDCfpmd2U4gk/8mddkh2
+        /p1nz9yWVHDx9sYqC9F0xB7VjwrkikAXNGh5F44jxq6AJNhjPDClbzzWoFo45W4AGTKA8yOLllX
+        XkWxFMN7uHXA7FXOrDNjF4Ndd
+X-Received: by 2002:a7b:c394:0:b0:3ed:6693:1388 with SMTP id s20-20020a7bc394000000b003ed66931388mr1025909wmj.18.1678972453932;
+        Thu, 16 Mar 2023 06:14:13 -0700 (PDT)
+X-Google-Smtp-Source: AK7set8ZjMO0Y6+7kxovZnLoqzSDbEfVY0ZYumsiTW725vRLK5qi93k9OiMeyFdN6OokIatcXWlIng==
+X-Received: by 2002:a7b:c394:0:b0:3ed:6693:1388 with SMTP id s20-20020a7bc394000000b003ed66931388mr1025892wmj.18.1678972453636;
+        Thu, 16 Mar 2023 06:14:13 -0700 (PDT)
+Received: from ?IPV6:2a09:80c0:192:0:5dac:bf3d:c41:c3e7? ([2a09:80c0:192:0:5dac:bf3d:c41:c3e7])
+        by smtp.gmail.com with ESMTPSA id k18-20020a056000005200b002c71dd1109fsm7318197wrx.47.2023.03.16.06.14.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Mar 2023 06:14:13 -0700 (PDT)
+Message-ID: <f312327e-c11e-60f4-1367-af4e480b2609@redhat.com>
+Date:   Thu, 16 Mar 2023 14:14:12 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202303161723055514455@zte.com.cn>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v19 04/15] overlayfs: Implement splice-read
+Content-Language: en-US
+To:     David Howells <dhowells@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>
+Cc:     Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Hillf Danton <hdanton@sina.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Christoph Hellwig <hch@lst.de>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        linux-unionfs@vger.kernel.org
+References: <20230315163549.295454-1-dhowells@redhat.com>
+ <20230315163549.295454-5-dhowells@redhat.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230315163549.295454-5-dhowells@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 16, 2023 at 05:23:05PM +0800, yang.yang29@zte.com.cn wrote:
->  	 * Compare the distance to the existing workingset size. We
->  	 * don't activate pages that couldn't stay resident even if
-> -	 * all the memory was available to the workingset. Whether
-> -	 * workingset competition needs to consider anon or not depends
-> -	 * on having swap.
-> +	 * all the memory was available to the workingset. For page
-> +	 * cache whether workingset competition needs to consider
-> +	 * anon or not depends on having swap.
+On 15.03.23 17:35, David Howells wrote:
+> Implement splice-read for overlayfs by passing the request down a layer
+> rather than going through generic_file_splice_read() which is going to be
+> changed to assume that ->read_folio() is present on buffered files.
+> 
+> Signed-off-by: David Howells <dhowells@redhat.com>
+> cc: Christoph Hellwig <hch@lst.de>
+> cc: Jens Axboe <axboe@kernel.dk>
+> cc: Al Viro <viro@zeniv.linux.org.uk>
+> cc: John Hubbard <jhubbard@nvidia.com>
+> cc: David Hildenbrand <david@redhat.com>
+> cc: Matthew Wilcox <willy@infradead.org>
+> cc: Miklos Szeredi <miklos@szeredi.hu>
+> cc: linux-unionfs@vger.kernel.org
+> cc: linux-block@vger.kernel.org
+> cc: linux-fsdevel@vger.kernel.org
+> cc: linux-mm@kvack.org
+> ---
 
-I don't mind this change
+Reviewed-by: David Hildenbrand <david@redhat.com>
 
->  	 */
->  	workingset_size = lruvec_page_state(eviction_lruvec, NR_ACTIVE_FILE);
-> +	/* For anonymous page */
+-- 
+Thanks,
 
-This comment adds no value
+David / dhildenb
 
->  	if (!file) {
-> +		workingset_size += lruvec_page_state(eviction_lruvec,
-> +						     NR_ACTIVE_ANON);
->  		workingset_size += lruvec_page_state(eviction_lruvec,
->  						     NR_INACTIVE_FILE);
-> -	}
-> -	if (mem_cgroup_get_nr_swap_pages(eviction_memcg) > 0) {
-> +	/* For page cache */
-
-Nor this one
-
-> +	} else if (mem_cgroup_get_nr_swap_pages(eviction_memcg) > 0) {
->  		workingset_size += lruvec_page_state(eviction_lruvec,
->  						     NR_ACTIVE_ANON);
-> -		if (file) {
-> -			workingset_size += lruvec_page_state(eviction_lruvec,
-> +		workingset_size += lruvec_page_state(eviction_lruvec,
->  						     NR_INACTIVE_ANON);
-> -		}
->  	}
-
-I don't have an opinion on the actual code changes.
