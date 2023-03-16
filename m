@@ -2,459 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8E176BCDCD
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 12:17:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 344C16BCDD2
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 12:17:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230209AbjCPLRC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 07:17:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53198 "EHLO
+        id S229701AbjCPLRS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 07:17:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229701AbjCPLRB (ORCPT
+        with ESMTP id S230224AbjCPLRO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 07:17:01 -0400
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 651BFBE5FD;
-        Thu, 16 Mar 2023 04:16:54 -0700 (PDT)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 85F7624DBC0;
-        Thu, 16 Mar 2023 19:16:52 +0800 (CST)
-Received: from EXMBX071.cuchost.com (172.16.6.81) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 16 Mar
- 2023 19:16:52 +0800
-Received: from [192.168.125.108] (113.72.145.194) by EXMBX071.cuchost.com
- (172.16.6.81) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 16 Mar
- 2023 19:16:51 +0800
-Message-ID: <e99d8ea0-6fd8-2c97-7467-8d481fee8edc@starfivetech.com>
-Date:   Thu, 16 Mar 2023 19:16:50 +0800
+        Thu, 16 Mar 2023 07:17:14 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1DD4C48AD
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 04:17:09 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id x36so1253076ljq.7
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 04:17:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678965428;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=0mnANG0WP3DmVcvz1/YwEmwBOAubSIpodiPhLQQRHPQ=;
+        b=RzD6kGo45mF1NC8IwGwp1zoMdZiY/uwKOFdG0Gku81ZiR6TajnHjupDXa3KXXnqkLm
+         b1jdXXJxMatCz3vl8euA8Yl9D3n/VHxiWF5+yy3Wsf2ieKvPnVKeOP1mDb025CTOlsSU
+         XjmTMe76vdRHfP6pi55UkFl2z5bdGeD+etYICMpmkV3500gfrCNlY/cJNy6ttgihzm3G
+         +AQ+GIUnRkXaPIIvM1T2FFB0PWJLsQzyMT68M6kviJ3vwY+Rvcnw3BkNNINAPzZicaZY
+         c5Ov+RWsl8Bm0BexF7vKBCKhl1jMARnBYdnV/A1DxwEWB18ByHB7Wk5I629KkpGYn7Ek
+         b8Qw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678965428;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0mnANG0WP3DmVcvz1/YwEmwBOAubSIpodiPhLQQRHPQ=;
+        b=HhsRYAzMRuQZZUZDEJpHjjG3pYnqYLH9Chw0+qXSbNgZlQ1CEnNKdCEz6f80E49fZZ
+         T+45xezZ8svEQn2c+OmVi2v/D9EazD39egXzS3WtuVvkJ8v+73P3NgvhCeqy8cyk+/wK
+         lcmlVjSlEo08xy2DzbjD8V1WroY5LZVodYpONlIfNmjnqwqREcybAfHp9Ft4ta5v/G28
+         PKpYqy66QXH1csAoNBssSYNE0J5LBMnEeSWvOdl89IQBwZ8UsYuqIRPa7j7MgN/mgPJd
+         9b2VHkqZujFClIPj7cR8efxjkQbp2DCZ9ZfJ18tBPCB+3L+NZYKdLwLLDAEf49QYzHmR
+         LVYA==
+X-Gm-Message-State: AO0yUKWG1FRNACt6hoVbBu+BJwKm9ccDHtriQiYYPket7hdcJtQiX7dY
+        ozX/xYH9OtBMPyhx3V0Enl4IYw==
+X-Google-Smtp-Source: AK7set9M9vMVB99HuWwfZmcxzJSQHkiSodthWkCxQ2Mc+9AVjxWrSiXpIzRKWDHZnNqcXE8DfZsohA==
+X-Received: by 2002:a05:651c:30e:b0:290:bca:b4d1 with SMTP id a14-20020a05651c030e00b002900bcab4d1mr1782028ljp.33.1678965427986;
+        Thu, 16 Mar 2023 04:17:07 -0700 (PDT)
+Received: from [192.168.1.101] (abyj16.neoplus.adsl.tpnet.pl. [83.9.29.16])
+        by smtp.gmail.com with ESMTPSA id u28-20020ac243dc000000b004db2978e330sm1194222lfl.258.2023.03.16.04.17.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Mar 2023 04:17:07 -0700 (PDT)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: [PATCH 0/5] SM6350 GPU
+Date:   Thu, 16 Mar 2023 12:16:55 +0100
+Message-Id: <20230315-topic-lagoon_gpu-v1-0-a74cbec4ecfc@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v3 4/5] usb: cdns3: add StarFive JH7110 USB driver.
-Content-Language: en-US
-To:     Peter Chen <peter.chen@kernel.org>
-CC:     Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        Conor Dooley <conor@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAKf6EmQC/x2N0QrCMAwAf2Xk2cDWoYi/IiJpjF2gpKV1Qxj7d
+ 4OPd3DcDl2aSofbsEOTTbsWc5hOA/BClgT15QxhDPM4T2f8lKqMmVIp9kx1xSsHisyRLxLBs0h
+ dMDYyXjy0NWeXtclbv//P/XEcP8JmKdJ3AAAA
+To:     Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Pawel Laszczak <pawell@cadence.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Roger Quadros <rogerq@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-phy@lists.infradead.org>, <linux-usb@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>
-References: <20230315104411.73614-1-minda.chen@starfivetech.com>
- <20230315104411.73614-5-minda.chen@starfivetech.com>
- <20230316024652.GC2322573@nchen-desktop>
-From:   Minda Chen <minda.chen@starfivetech.com>
-In-Reply-To: <20230316024652.GC2322573@nchen-desktop>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [113.72.145.194]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX071.cuchost.com
- (172.16.6.81)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        Rob Herring <robh@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Luca Weiss <luca.weiss@fairphone.com>
+X-Mailer: b4 0.12.1
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1678965426; l=1107;
+ i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
+ bh=RF7HIBV67A6DiVij2JcKkT2mEA9SaWaW5WsM/kqTxv4=;
+ b=QW5XBYK11eROypzH3UX8psBBD5OI0JKN6JJUBvRp0LYvt/43LzbGr4lU9EV9m+X1R0X2NpjoNxm1
+ Qiu7SFcsAq2t3FlIt8JYILtpTxlkOUrpkgJQhSNXujfaqlDtTmvi
+X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
+X-Spam-Status: No, score=0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS,
+        SUBJ_ALL_CAPS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Add all the required nodes for SM6350's A619 and fix up its GPUCC
+bindings.
 
+This has been ready for like 1.5y now, time to finally merge it as
+the display part will take some more time (due to the HW catalog rework).
 
-On 2023/3/16 10:46, Peter Chen wrote:
-> On 23-03-15 18:44:10, Minda Chen wrote:
->> There is a Cadence USB3 core for JH7110 SoCs, the cdns
->> core is the child of this USB wrapper module device.
->> 
->> Signed-off-by: Minda Chen <minda.chen@starfivetech.com>
->> ---
->>  MAINTAINERS                        |   7 +
->>  drivers/usb/cdns3/Kconfig          |  11 ++
->>  drivers/usb/cdns3/Makefile         |   1 +
->>  drivers/usb/cdns3/cdns3-starfive.c | 305 +++++++++++++++++++++++++++++
->>  4 files changed, 324 insertions(+)
->>  create mode 100644 drivers/usb/cdns3/cdns3-starfive.c
->> 
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index 4263c005e45c..c530c966ab26 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -19985,6 +19985,13 @@ F:	Documentation/devicetree/bindings/phy/starfive,jh7110-usb-pcie-phy.yaml
->>  F:	drivers/phy/starfive/phy-jh7110-pcie.c
->>  F:	drivers/phy/starfive/phy-jh7110-usb.c
->>  
->> +STARFIVE JH71X0 USB DRIVERS
->> +M:	Emil Renner Berthing <kernel@esmil.dk>
->> +M:	Minda Chen <minda.chen@starfivetech.com>
->> +S:	Maintained
->> +F:	Documentation/devicetree/bindings/usb/starfive,jh7110-usb.yaml
->> +F:	drivers/usb/cdns3/cdns3-starfive.c
->> +
->>  STATIC BRANCH/CALL
->>  M:	Peter Zijlstra <peterz@infradead.org>
->>  M:	Josh Poimboeuf <jpoimboe@kernel.org>
->> diff --git a/drivers/usb/cdns3/Kconfig b/drivers/usb/cdns3/Kconfig
->> index b98ca0a1352a..0a514b591527 100644
->> --- a/drivers/usb/cdns3/Kconfig
->> +++ b/drivers/usb/cdns3/Kconfig
->> @@ -78,6 +78,17 @@ config USB_CDNS3_IMX
->>  
->>  	  For example, imx8qm and imx8qxp.
->>  
->> +config USB_CDNS3_STARFIVE
->> +	tristate "Cadence USB3 support on StarFive SoC platforms"
->> +	depends on ARCH_STARFIVE || COMPILE_TEST
->> +	help
->> +	  Say 'Y' or 'M' here if you are building for StarFive SoCs
->> +	  platforms that contain Cadence USB3 controller core.
->> +
->> +	  e.g. JH7110.
->> +
->> +	  If you choose to build this driver as module it will
->> +	  be dynamically linked and module will be called cdns3-starfive.ko
->>  endif
->>  
->>  if USB_CDNS_SUPPORT
->> diff --git a/drivers/usb/cdns3/Makefile b/drivers/usb/cdns3/Makefile
->> index 61edb2f89276..48dfae75b5aa 100644
->> --- a/drivers/usb/cdns3/Makefile
->> +++ b/drivers/usb/cdns3/Makefile
->> @@ -24,6 +24,7 @@ endif
->>  obj-$(CONFIG_USB_CDNS3_PCI_WRAP)		+= cdns3-pci-wrap.o
->>  obj-$(CONFIG_USB_CDNS3_TI)			+= cdns3-ti.o
->>  obj-$(CONFIG_USB_CDNS3_IMX)			+= cdns3-imx.o
->> +obj-$(CONFIG_USB_CDNS3_STARFIVE)		+= cdns3-starfive.o
->>  
->>  cdnsp-udc-pci-y					:= cdnsp-pci.o
->>  
->> diff --git a/drivers/usb/cdns3/cdns3-starfive.c b/drivers/usb/cdns3/cdns3-starfive.c
->> new file mode 100644
->> index 000000000000..a99f98f85235
->> --- /dev/null
->> +++ b/drivers/usb/cdns3/cdns3-starfive.c
->> @@ -0,0 +1,305 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +/**
->> + * cdns3-starfive.c - StarFive specific Glue layer for Cadence USB Controller
->> + *
->> + * Copyright (C) 2022 Starfive, Inc.
->> + * Author:	Yanhong Wang <yanhong.wang@starfivetech.com>
->> + * Author:	Mason Huo <mason.huo@starfivetech.com>
->> + * Author:	Minda Chen <minda.chen@starfivetech.com>
->> + */
->> +
->> +#include <linux/bits.h>
->> +#include <linux/clk.h>
->> +#include <linux/module.h>
->> +#include <linux/mfd/syscon.h>
->> +#include <linux/kernel.h>
->> +#include <linux/platform_device.h>
->> +#include <linux/io.h>
->> +#include <linux/of_platform.h>
->> +#include <linux/regmap.h>
->> +#include <linux/reset.h>
->> +#include <linux/usb/otg.h>
->> +#include "core.h"
->> +
->> +#define USB_STRAP_HOST			BIT(17)
->> +#define USB_STRAP_DEVICE		BIT(18)
->> +#define USB_STRAP_MASK			GENMASK(18, 16)
->> +
->> +#define USB_SUSPENDM_HOST		BIT(19)
->> +#define USB_SUSPENDM_MASK		BIT(19)
->> +
->> +#define USB_SUSPENDM_BYPS		BIT(20)
->> +#define USB_REFCLK_MODE			BIT(23)
->> +#define USB_PLL_EN			BIT(22)
->> +#define USB_PDRSTN_SPLIT		BIT(17)
->> +
->> +#define PCIE_CKREF_SRC_MASK		GENMASK(19, 18)
->> +#define PCIE_CLK_SEL_MASK		GENMASK(21, 20)
->> +#define PCIE_PHY_MODE			BIT(20)
->> +#define PCIE_PHY_MODE_MASK		GENMASK(21, 20)
->> +#define PCIE_USB3_BUS_WIDTH_MASK	GENMASK(3, 2)
->> +#define PCIE_USB3_RATE_MASK		GENMASK(6, 5)
->> +#define PCIE_USB3_RX_STANDBY_MASK	BIT(7)
->> +#define PCIE_USB3_PHY_ENABLE		BIT(4)
->> +
->> +struct cdns_starfive {
->> +	struct device *dev;
->> +	struct regmap *stg_syscon;
->> +	struct regmap *sys_syscon;
->> +	struct reset_control *resets;
->> +	struct clk_bulk_data *clks;
->> +	int num_clks;
->> +	u32 sys_offset;
->> +	u32 stg_offset_4;
->> +	u32 stg_offset_196;
->> +	u32 stg_offset_328;
->> +	u32 stg_offset_500;
->> +	bool usb2_only;
->> +};
->> +
->> +static int cdns_mode_init(struct platform_device *pdev,
->> +				struct cdns_starfive *data, const char **out_mode)
->> +{
->> +	struct device_node *child;
->> +	const char *dr_mode = NULL;
->> +
->> +	child = of_get_compatible_child(pdev->dev.of_node, "cdns,usb3");
->> +	if (!child) {
->> +		return dev_err_probe(&pdev->dev, -ENODEV,
->> +			"Failed to find child node\n");
->> +	}
->> +
->> +	/* Init usb 2.0 utmi phy */
->> +	regmap_update_bits(data->stg_syscon, data->stg_offset_4,
->> +		USB_SUSPENDM_BYPS, USB_SUSPENDM_BYPS);
->> +	regmap_update_bits(data->stg_syscon, data->stg_offset_4,
->> +		USB_PLL_EN, USB_PLL_EN);
->> +	regmap_update_bits(data->stg_syscon, data->stg_offset_4,
->> +		USB_REFCLK_MODE, USB_REFCLK_MODE);
->> +
->> +	if (!of_find_property(child, "cdns3,usb3-phy", NULL)) {
->> +		/* Disconnect usb 3.0 phy mode */
->> +		regmap_update_bits(data->sys_syscon, data->sys_offset,
->> +			USB_PDRSTN_SPLIT, USB_PDRSTN_SPLIT);
->> +		data->usb2_only = 1;
->> +	} else {
->> +		/* Config usb 3.0 pipe phy */
->> +		regmap_update_bits(data->stg_syscon, data->stg_offset_196,
->> +			PCIE_CKREF_SRC_MASK, 0);
->> +		regmap_update_bits(data->stg_syscon, data->stg_offset_196,
->> +			PCIE_CLK_SEL_MASK, 0);
->> +		regmap_update_bits(data->stg_syscon, data->stg_offset_328,
->> +			PCIE_PHY_MODE_MASK, PCIE_PHY_MODE);
->> +		regmap_update_bits(data->stg_syscon, data->stg_offset_500,
->> +			PCIE_USB3_BUS_WIDTH_MASK, 0);
->> +		regmap_update_bits(data->stg_syscon, data->stg_offset_500,
->> +			PCIE_USB3_RATE_MASK, 0);
->> +		regmap_update_bits(data->stg_syscon, data->stg_offset_500,
->> +			PCIE_USB3_RX_STANDBY_MASK, 0);
->> +		regmap_update_bits(data->stg_syscon, data->stg_offset_500,
->> +			PCIE_USB3_PHY_ENABLE, PCIE_USB3_PHY_ENABLE);
->> +
->> +		/* Connect usb 3.0 phy mode */
->> +		regmap_update_bits(data->sys_syscon, data->sys_offset,
->> +			USB_PDRSTN_SPLIT, 0);
->> +	}
->> +
->> +	if (!of_property_read_string(child, "dr_mode", &dr_mode)) {
->> +		if (!strcmp(dr_mode, "host")) {
->> +			regmap_update_bits(data->stg_syscon,
->> +				data->stg_offset_4,
->> +				USB_STRAP_MASK,
->> +				USB_STRAP_HOST);
->> +			regmap_update_bits(data->stg_syscon,
->> +				data->stg_offset_4,
->> +				USB_SUSPENDM_MASK,
->> +				USB_SUSPENDM_HOST);
->> +		} else if (!strcmp(dr_mode, "peripheral")) {
->> +			regmap_update_bits(data->stg_syscon, data->stg_offset_4,
->> +				USB_STRAP_MASK, USB_STRAP_DEVICE);
->> +			regmap_update_bits(data->stg_syscon, data->stg_offset_4,
->> +				USB_SUSPENDM_MASK, 0);
->> +		}
->> +	}
->> +
->> +	if (out_mode)
->> +		*out_mode = dr_mode;
->> +
->> +	return 0;
->> +}
->> +
->> +static int cdns_clk_rst_init(struct cdns_starfive *data)
->> +{
->> +	int ret;
->> +
->> +	data->num_clks = devm_clk_bulk_get_all(data->dev, &data->clks);
->> +	if (data->num_clks < 0)
->> +		return dev_err_probe(data->dev, -ENODEV,
->> +			"Failed to get clocks\n");
->> +
->> +	ret = clk_bulk_prepare_enable(data->num_clks, data->clks);
->> +	if (ret)
->> +		return dev_err_probe(data->dev, ret,
->> +			"failed to enable clocks\n");
->> +
->> +	data->resets = devm_reset_control_array_get_exclusive(data->dev);
->> +	if (IS_ERR(data->resets)) {
->> +		ret = dev_err_probe(data->dev, PTR_ERR(data->resets),
->> +			"Failed to get resets");
->> +		goto err_clk_init;
->> +	}
->> +
->> +	ret = reset_control_deassert(data->resets);
->> +	if (ret) {
->> +		ret = dev_err_probe(data->dev, ret,
->> +			"failed to reset clocks\n");
->> +		goto err_clk_init;
->> +	}
->> +
->> +	return ret;
->> +
->> +err_clk_init:
->> +	clk_bulk_disable_unprepare(data->num_clks, data->clks);
->> +	return ret;
->> +}
->> +
->> +static int cdns_starfive_probe(struct platform_device *pdev)
->> +{
->> +	struct device *dev = &pdev->dev;
->> +	struct device_node *node = pdev->dev.of_node;
->> +	struct cdns_starfive *data;
->> +	unsigned int args[4];
->> +	const char *dr_mode;
->> +	int ret;
->> +
->> +	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
->> +	if (!data)
->> +		return -ENOMEM;
->> +
->> +	platform_set_drvdata(pdev, data);
->> +
->> +	data->dev = dev;
->> +
->> +	data->stg_syscon = syscon_regmap_lookup_by_phandle_args(pdev->dev.of_node,
->> +		"starfive,stg-syscon", 4, args);
->> +
->> +	if (IS_ERR(data->stg_syscon))
->> +		return dev_err_probe(dev, PTR_ERR(data->stg_syscon),
->> +			"Failed to parse starfive,stg-syscon\n");
->> +
->> +	data->stg_offset_4 = args[0];
->> +	data->stg_offset_196 = args[1];
->> +	data->stg_offset_328 = args[2];
->> +	data->stg_offset_500 = args[3];
->> +
->> +	data->sys_syscon = syscon_regmap_lookup_by_phandle_args(pdev->dev.of_node,
->> +		"starfive,sys-syscon", 1, args);
->> +	if (IS_ERR(data->sys_syscon))
->> +		return dev_err_probe(dev, PTR_ERR(data->sys_syscon),
->> +			"Failed to parse starfive,sys-syscon\n");
->> +
->> +	data->sys_offset = args[0];
->> +
->> +	ret = cdns_mode_init(pdev, data, &dr_mode);
->> +	if (ret)
->> +		return ret;
->> +
->> +	ret = cdns_clk_rst_init(data);
->> +	if (ret)
->> +		return ret;
->> +
->> +	ret = of_platform_populate(node, NULL, NULL, dev);
->> +	if (ret)
->> +		return dev_err_probe(dev, ret, "Failed to create children\n");
->> +
->> +	device_set_wakeup_capable(dev, true);
->> +	pm_runtime_set_active(dev);
->> +	pm_runtime_enable(dev);
->> +
->> +	dev_info(dev, "usb mode %s %s probe success\n",
->> +		dr_mode ? dr_mode : "unknown", data->usb2_only ? "2.0" : "3.0");
->> +
->> +	return 0;
->> +}
->> +
->> +static int cdns_starfive_remove_core(struct device *dev, void *c)
->> +{
->> +	struct platform_device *pdev = to_platform_device(dev);
->> +
->> +	platform_device_unregister(pdev);
->> +
->> +	return 0;
->> +}
->> +
->> +static int cdns_starfive_remove(struct platform_device *pdev)
->> +{
->> +	struct device *dev = &pdev->dev;
->> +	struct cdns_starfive *data = dev_get_drvdata(dev);
->> +
->> +	pm_runtime_get_sync(dev);
->> +	device_for_each_child(dev, NULL, cdns_starfive_remove_core);
->> +
->> +	reset_control_assert(data->resets);
->> +	clk_bulk_disable_unprepare(data->num_clks, data->clks);
->> +	pm_runtime_disable(dev);
->> +	pm_runtime_put_noidle(dev);
->> +	platform_set_drvdata(pdev, NULL);
->> +
->> +	return 0;
->> +}
->> +
->> +#ifdef CONFIG_PM
->> +static int cdns_starfive_resume(struct device *dev)
->> +{
->> +	struct cdns_starfive *data = dev_get_drvdata(dev);
->> +	int ret;
->> +
->> +	ret = clk_bulk_prepare_enable(data->num_clks, data->clks);
->> +	if (ret)
->> +		return ret;
->> +
->> +	ret = reset_control_deassert(data->resets);
->> +	if (ret)
->> +		return ret;
->> +
-> 
-> So, you clk enable and reset has no sequence requirements? I see the
-> sequence is not the same between resume and suspend routine.
-> 
-> Peter
-Thanks, suspend seq should be inverted. I will change the suspend reset and enable sequence.
->> +	return 0;
->> +}
->> +
->> +static int cdns_starfive_suspend(struct device *dev)
->> +{
->> +	struct cdns_starfive *data = dev_get_drvdata(dev);
->> +
->> +	clk_bulk_disable_unprepare(data->num_clks, data->clks);
->> +	reset_control_assert(data->resets);
-I will invert this sequence. But these still can work.
->> +
->> +	return 0;
->> +}
->> +#endif
->> +
->> +static const struct dev_pm_ops cdns_starfive_pm_ops = {
->> +	SET_RUNTIME_PM_OPS(cdns_starfive_suspend, cdns_starfive_resume, NULL)
->> +	SET_SYSTEM_SLEEP_PM_OPS(cdns_starfive_suspend, cdns_starfive_resume)
->> +};
->> +
->> +static const struct of_device_id cdns_starfive_of_match[] = {
->> +	{ .compatible = "starfive,jh7110-usb", },
->> +	{ /* sentinel */ }
->> +};
->> +MODULE_DEVICE_TABLE(of, cdns_starfive_of_match);
->> +
->> +static struct platform_driver cdns_starfive_driver = {
->> +	.probe		= cdns_starfive_probe,
->> +	.remove		= cdns_starfive_remove,
->> +	.driver		= {
->> +		.name	= "cdns3-starfive",
->> +		.of_match_table	= cdns_starfive_of_match,
->> +		.pm	= &cdns_starfive_pm_ops,
->> +	},
->> +};
->> +module_platform_driver(cdns_starfive_driver);
->> +
->> +MODULE_ALIAS("platform:cdns3-starfive");
->> +MODULE_AUTHOR("YanHong Wang <yanhong.wang@starfivetech.com>");
->> +MODULE_AUTHOR("Mason Huo <mason.huo@starfivetech.com>");
->> +MODULE_LICENSE("GPL v2");
->> +MODULE_DESCRIPTION("Cadence USB3 StarFive Glue Layer");
->> -- 
->> 2.17.1
->> 
-> 
+Depends on (bindings, admittedly I could have organized it better):
+https://lore.kernel.org/linux-arm-msm/20230314-topic-nvmem_compats-v1-0-508100c17603@linaro.org/#t
+
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+Konrad Dybcio (5):
+      dt-bindings: clock: qcom,gpucc: Fix SM6350 clock names
+      arm64: dts: qcom: sm6350: Add GPUCC node
+      arm64: dts: qcom: sm6350: Add QFPROM node
+      arm64: dts: qcom: sm6350: Add GPU nodes
+      arm64: dts: qcom: sm6350: Fix ZAP region
+
+ .../devicetree/bindings/clock/qcom,gpucc.yaml      |  29 +++-
+ arch/arm64/boot/dts/qcom/sm6350.dtsi               | 177 ++++++++++++++++++++-
+ 2 files changed, 197 insertions(+), 9 deletions(-)
+---
+base-commit: 225b6b81afe63b3850b7cee0a3590f51144f2a75
+change-id: 20230315-topic-lagoon_gpu-8c2abccbc6eb
+
+Best regards,
+-- 
+Konrad Dybcio <konrad.dybcio@linaro.org>
+
