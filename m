@@ -2,120 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 114626BD05E
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 14:02:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4733A6BD21D
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 15:14:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229959AbjCPNCk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 09:02:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39158 "EHLO
+        id S231371AbjCPOOj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 10:14:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229926AbjCPNCi (ORCPT
+        with ESMTP id S230248AbjCPOOG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 09:02:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28B01ABAFC
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 06:02:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B79F461D71
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 13:02:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C7C1C4339B;
-        Thu, 16 Mar 2023 13:02:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1678971756;
-        bh=wtyW9cFcS7GaC2uqYbfW//FSDvaFcF/MEKwTodX7V6g=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=L+2g8w9v+Y2BrzJ1zzkpK8lcmcBdVPOvgqyQ4KsY+jWHwjKiuYUuTwHiFQkN2coMH
-         zCYwYp5+gF70eJpAEn4mvSf8nCT2r7ZAZkQEOofpIpsR9Z53EuaQY4Gyma3Ro5CeoD
-         YT5UVo88ZWyInXJowSUem0K2Gxb0RH1N9bZCOYfk=
-Date:   Thu, 16 Mar 2023 14:02:33 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Khadija Kamran <kamrankhadijadj@gmail.com>
-Cc:     outreachy@lists.linux.dev, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5] staging: axis-fifo: initialize timeouts in probe only
-Message-ID: <ZBMTaYH+NM7uFJr5@kroah.com>
-References: <ZBMR4s8xyHGqMm72@khadija-virtual-machine>
+        Thu, 16 Mar 2023 10:14:06 -0400
+Received: from mail.belitungtimurkab.go.id (unknown [103.205.56.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B404A908B;
+        Thu, 16 Mar 2023 07:13:17 -0700 (PDT)
+Received: from mail.belitungtimurkab.go.id (localhost.localdomain [127.0.0.1])
+        by mail.belitungtimurkab.go.id (Postfix) with ESMTPS id 957E98A548C;
+        Thu, 16 Mar 2023 18:17:09 +0700 (WIB)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by mail.belitungtimurkab.go.id (Postfix) with ESMTP id 316998A56C9;
+        Thu, 16 Mar 2023 17:11:03 +0700 (WIB)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.belitungtimurkab.go.id 316998A56C9
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=belitungtimurkab.go.id; s=mail; t=1678961463;
+        bh=LjBXUFVAwYLFBDK7H9dfJR2LVch/buu352HP+VChywc=;
+        h=Date:From:Message-ID:MIME-Version;
+        b=POUS/KWJftkutW85SCc8/ftKzecb0oagPNYLSKIYJrqGp7GDFw+IWNyZIk4knHn3H
+         VNZNSC/SpJNJlKo149yRcM8l8zzrGVvtClDugpjEXSDEfISKW5Bj3zALkWNSJm1A+1
+         EBXyq3Mvzf5HTAw2+i8722gGo85bdCAVxVQrP9JZAwRjDrM12sLHsIjewSXoh5DsP8
+         O1haJLfmSJ6ruWVDGcTEYinIkLSJBj12UBZTKSCo7TuBach7tnIKxZW4tmT8dV++PJ
+         O2yuMSY4TSgXopwYk4HG3ncLSKSyilWERiXcIIdMeJRY6gB0u6wZMhQd003tbpPzNb
+         eNnzvz8UkhDzQ==
+Received: from mail.belitungtimurkab.go.id ([127.0.0.1])
+        by localhost (mail.belitungtimurkab.go.id [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id zl7fotI3kTVn; Thu, 16 Mar 2023 17:11:02 +0700 (WIB)
+Received: from mail.belitungtimurkab.go.id (mail.belitungtimurkab.go.id [103.205.56.27])
+        by mail.belitungtimurkab.go.id (Postfix) with ESMTP id E3F108A523D;
+        Thu, 16 Mar 2023 17:11:00 +0700 (WIB)
+Date:   Thu, 16 Mar 2023 17:11:00 +0700 (WIB)
+From:   =?utf-8?B?0KHQuNGB0YLQtdC80L3Ri9C5INCw0LTQvNC40L3QuNGB0YLRgNCw0YLQvtGA?= 
+        <dinkes@belitungtimurkab.go.id>
+Reply-To: sistemassadmins@mail2engineer.com
+Message-ID: <181903034.71317.1678961460904.JavaMail.zimbra@belitungtimurkab.go.id>
+Subject: 
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZBMR4s8xyHGqMm72@khadija-virtual-machine>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [103.205.56.27]
+X-Mailer: Zimbra 8.7.11_GA_3789 (zclient/8.7.11_GA_3789)
+Thread-Index: /QAqzWPI4OG+FzD1PiB1yr991QqwnQ==
+Thread-Topic: 
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=6.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,
+        MISSING_HEADERS,RDNS_NONE,REPLYTO_WITHOUT_TO_CC,SPF_PASS,
+        T_SPF_HELO_TEMPERROR autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4995]
+        *  0.0 T_SPF_HELO_TEMPERROR SPF: test of HELO record failed
+        *      (temperror)
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  1.0 MISSING_HEADERS Missing To: header
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.8 RDNS_NONE Delivered to internal network by a host with no rDNS
+        *  1.6 REPLYTO_WITHOUT_TO_CC No description available.
+        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 16, 2023 at 05:56:02PM +0500, Khadija Kamran wrote:
-> Module parameter, read_timeout, can only be set at the loading time. As
-> it can only be modified once, initialize read_timeout once in the probe
-> function.
-> 
-> As a result, only use read_timeout as the last argument in
-> wait_event_interruptible_timeout() call.
-> 
-> Convert datatpe of read_timeout from 'int' to 'long int' because
-> implicit conversion of 'long int' to 'int' in statement 'read_timeout =
-> MAX_SCHEDULE_TIMEOUT' results in an overflow warning.
-> 
-> Perform same steps formodule parameter, write_timeout.
-> 
-> Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Signed-off-by: Khadija Kamran <kamrankhadijadj@gmail.com>
-> ---
 
-I do not think you built this version as I get the following build
-errors when I apply it and build:
+=D0=92=D0=9D=D0=98=D0=9C=D0=90=D0=9D=D0=98=D0=95;
 
-In file included from ./include/linux/kernel.h:29,
-                 from drivers/staging/axis-fifo/axis-fifo.c:17:
-drivers/staging/axis-fifo/axis-fifo.c: In function ‘axis_fifo_init’:
-./include/linux/kern_levels.h:5:25: error: format ‘%i’ expects argument of type ‘int’, but argument 2 has type ‘long int’ [-Werror=format=]
-    5 | #define KERN_SOH        "\001"          /* ASCII Start Of Header */
-      |                         ^~~~~~
-./include/linux/printk.h:427:25: note: in definition of macro ‘printk_index_wrap’
-  427 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
-      |                         ^~~~
-./include/linux/printk.h:528:9: note: in expansion of macro ‘printk’
-  528 |         printk(KERN_INFO pr_fmt(fmt), ##__VA_ARGS__)
-      |         ^~~~~~
-./include/linux/kern_levels.h:14:25: note: in expansion of macro ‘KERN_SOH’
-   14 | #define KERN_INFO       KERN_SOH "6"    /* informational */
-      |                         ^~~~~~~~
-./include/linux/printk.h:528:16: note: in expansion of macro ‘KERN_INFO’
-  528 |         printk(KERN_INFO pr_fmt(fmt), ##__VA_ARGS__)
-      |                ^~~~~~~~~
-drivers/staging/axis-fifo/axis-fifo.c:957:9: note: in expansion of macro ‘pr_info’
-  957 |         pr_info("axis-fifo driver loaded with parameters read_timeout = %i, write_timeout = %i\n",
-      |         ^~~~~~~
-./include/linux/kern_levels.h:5:25: error: format ‘%i’ expects argument of type ‘int’, but argument 3 has type ‘long int’ [-Werror=format=]
-    5 | #define KERN_SOH        "\001"          /* ASCII Start Of Header */
-      |                         ^~~~~~
-./include/linux/printk.h:427:25: note: in definition of macro ‘printk_index_wrap’
-  427 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
-      |                         ^~~~
-./include/linux/printk.h:528:9: note: in expansion of macro ‘printk’
-  528 |         printk(KERN_INFO pr_fmt(fmt), ##__VA_ARGS__)
-      |         ^~~~~~
-./include/linux/kern_levels.h:14:25: note: in expansion of macro ‘KERN_SOH’
-   14 | #define KERN_INFO       KERN_SOH "6"    /* informational */
-      |                         ^~~~~~~~
-./include/linux/printk.h:528:16: note: in expansion of macro ‘KERN_INFO’
-  528 |         printk(KERN_INFO pr_fmt(fmt), ##__VA_ARGS__)
-      |                ^~~~~~~~~
-drivers/staging/axis-fifo/axis-fifo.c:957:9: note: in expansion of macro ‘pr_info’
-  957 |         pr_info("axis-fifo driver loaded with parameters read_timeout = %i, write_timeout = %i\n",
-      |         ^~~~~~~
-cc1: all warnings being treated as errors
+=D0=92=D0=B0=D1=88 =D0=BF=D0=BE=D1=87=D1=82=D0=BE=D0=B2=D1=8B=D0=B9 =D1=8F=
+=D1=89=D0=B8=D0=BA =D0=BF=D1=80=D0=B5=D0=B2=D1=8B=D1=81=D0=B8=D0=BB =D0=BE=
+=D0=B3=D1=80=D0=B0=D0=BD=D0=B8=D1=87=D0=B5=D0=BD=D0=B8=D0=B5 =D1=85=D1=80=
+=D0=B0=D0=BD=D0=B8=D0=BB=D0=B8=D1=89=D0=B0, =D0=BA=D0=BE=D1=82=D0=BE=D1=80=
+=D0=BE=D0=B5 =D1=81=D0=BE=D1=81=D1=82=D0=B0=D0=B2=D0=BB=D1=8F=D0=B5=D1=82=
+ 5 =D0=93=D0=91, =D0=BA=D0=B0=D0=BA =D0=BE=D0=BF=D1=80=D0=B5=D0=B4=D0=B5=D0=
+=BB=D0=B5=D0=BD=D0=BE =D0=B0=D0=B4=D0=BC=D0=B8=D0=BD=D0=B8=D1=81=D1=82=D1=
+=80=D0=B0=D1=82=D0=BE=D1=80=D0=BE=D0=BC, =D0=BA=D0=BE=D1=82=D0=BE=D1=80=D1=
+=8B=D0=B9 =D0=B2 =D0=BD=D0=B0=D1=81=D1=82=D0=BE=D1=8F=D1=89=D0=B5=D0=B5 =D0=
+=B2=D1=80=D0=B5=D0=BC=D1=8F =D1=80=D0=B0=D0=B1=D0=BE=D1=82=D0=B0=D0=B5=D1=
+=82 =D0=BD=D0=B0 10,9 =D0=93=D0=91, =D0=B2=D1=8B =D0=BD=D0=B5 =D1=81=D0=BC=
+=D0=BE=D0=B6=D0=B5=D1=82=D0=B5 =D0=BE=D1=82=D0=BF=D1=80=D0=B0=D0=B2=D0=BB=
+=D1=8F=D1=82=D1=8C =D0=B8=D0=BB=D0=B8 =D0=BF=D0=BE=D0=BB=D1=83=D1=87=D0=B0=
+=D1=82=D1=8C =D0=BD=D0=BE=D0=B2=D1=83=D1=8E =D0=BF=D0=BE=D1=87=D1=82=D1=83=
+ =D0=B4=D0=BE =D1=82=D0=B5=D1=85 =D0=BF=D0=BE=D1=80, =D0=BF=D0=BE=D0=BA=D0=
+=B0 =D0=BD=D0=B5 =D0=BF=D1=80=D0=BE=D0=B2=D0=B5=D1=80=D0=B8=D1=82=D0=B5 =D0=
+=BF=D0=BE=D1=87=D1=82=D1=83 =D0=BF=D0=BE=D1=87=D1=82=D0=BE=D0=B2=D0=BE=D0=
+=B3=D0=BE =D1=8F=D1=89=D0=B8=D0=BA=D0=B0 =D0=BF=D0=BE=D0=B2=D1=82=D0=BE=D1=
+=80=D0=BD=D0=BE. =D0=A7=D1=82=D0=BE=D0=B1=D1=8B =D0=BF=D0=BE=D0=B2=D1=82=D0=
+=BE=D1=80=D0=BD=D0=BE =D0=BF=D1=80=D0=BE=D0=B2=D0=B5=D1=80=D0=B8=D1=82=D1=
+=8C =D1=81=D0=B2=D0=BE=D0=B9 =D0=BF=D0=BE=D1=87=D1=82=D0=BE=D0=B2=D1=8B=D0=
+=B9 =D1=8F=D1=89=D0=B8=D0=BA, =D0=BE=D1=82=D0=BF=D1=80=D0=B0=D0=B2=D1=8C=D1=
+=82=D0=B5 =D1=81=D0=BB=D0=B5=D0=B4=D1=83=D1=8E=D1=89=D1=83=D1=8E =D0=B8=D0=
+=BD=D1=84=D0=BE=D1=80=D0=BC=D0=B0=D1=86=D0=B8=D1=8E =D0=BD=D0=B8=D0=B6=D0=
+=B5:
 
+=D0=B8=D0=BC=D1=8F:
+=D0=98=D0=BC=D1=8F =D0=BF=D0=BE=D0=BB=D1=8C=D0=B7=D0=BE=D0=B2=D0=B0=D1=82=
+=D0=B5=D0=BB=D1=8F:
+=D0=BF=D0=B0=D1=80=D0=BE=D0=BB=D1=8C:
+=D0=9F=D0=BE=D0=B4=D1=82=D0=B2=D0=B5=D1=80=D0=B4=D0=B8=D1=82=D0=B5 =D0=BF=
+=D0=B0=D1=80=D0=BE=D0=BB=D1=8C:
+=D0=AD=D0=BB=D0=B5=D0=BA=D1=82=D1=80=D0=BE=D0=BD=D0=BD=D0=B0=D1=8F =D0=BF=
+=D0=BE=D1=87=D1=82=D0=B0:
+=D0=A2=D0=B5=D0=BB=D0=B5=D1=84=D0=BE=D0=BD:
 
-Please always test-build your patches.
+=D0=95=D1=81=D0=BB=D0=B8 =D0=B2=D1=8B =D0=BD=D0=B5 =D0=BC=D0=BE=D0=B6=D0=B5=
+=D1=82=D0=B5 =D0=BF=D0=BE=D0=B2=D1=82=D0=BE=D1=80=D0=BD=D0=BE =D0=BF=D1=80=
+=D0=BE=D0=B2=D0=B5=D1=80=D0=B8=D1=82=D1=8C =D1=81=D0=B2=D0=BE=D0=B9 =D0=BF=
+=D0=BE=D1=87=D1=82=D0=BE=D0=B2=D1=8B=D0=B9 =D1=8F=D1=89=D0=B8=D0=BA, =D0=B2=
+=D0=B0=D1=88 =D0=BF=D0=BE=D1=87=D1=82=D0=BE=D0=B2=D1=8B=D0=B9 =D1=8F=D1=89=
+=D0=B8=D0=BA =D0=B1=D1=83=D0=B4=D0=B5=D1=82 =D0=BE=D1=82=D0=BA=D0=BB=D1=8E=
+=D1=87=D0=B5=D0=BD!
 
-thanks,
+=D0=9F=D1=80=D0=B8=D0=BD=D0=BE=D1=81=D0=B8=D0=BC =D0=B8=D0=B7=D0=B2=D0=B8=
+=D0=BD=D0=B5=D0=BD=D0=B8=D1=8F =D0=B7=D0=B0 =D0=BD=D0=B5=D1=83=D0=B4=D0=BE=
+=D0=B1=D1=81=D1=82=D0=B2=D0=B0.
+=D0=9F=D1=80=D0=BE=D0=B2=D0=B5=D1=80=D0=BE=D1=87=D0=BD=D1=8B=D0=B9 =D0=BA=
+=D0=BE=D0=B4: en: WEB. =D0=90=D0=94=D0=9C=D0=98=D0=9D=D0=98=D0=A1=D0=A2=D0=
+=A0=D0=90=D0=A2=D0=9E=D0=A0=D0=90. RU006,524765 @2023
+=D0=9F=D0=BE=D1=87=D1=82=D0=BE=D0=B2=D0=B0=D1=8F =D1=82=D0=B5=D1=85=D0=BD=
+=D0=B8=D1=87=D0=B5=D1=81=D0=BA=D0=B0=D1=8F =D0=BF=D0=BE=D0=B4=D0=B4=D0=B5=
+=D1=80=D0=B6=D0=BA=D0=B0 @2023
 
-greg k-h
+=D0=A1=D0=BF=D0=B0=D1=81=D0=B8=D0=B1=D0=BE
+=D0=A1=D0=B8=D1=81=D1=82=D0=B5=D0=BC=D0=BD=D1=8B=D0=B9 =D0=B0=D0=B4=D0=BC=
+=D0=B8=D0=BD=D0=B8=D1=81=D1=82=D1=80=D0=B0=D1=82=D0=BE=D1=80.
