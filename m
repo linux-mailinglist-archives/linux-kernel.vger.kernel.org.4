@@ -2,150 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 510F06BC798
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 08:46:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E7726BC79C
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 08:46:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229769AbjCPHqW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 03:46:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38922 "EHLO
+        id S230035AbjCPHq3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 03:46:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229866AbjCPHqQ (ORCPT
+        with ESMTP id S230039AbjCPHqR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 03:46:16 -0400
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA6A0A4B01
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 00:46:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-transfer-encoding; s=k1; bh=+IR8pE4hi1ZLE+
-        2LyqKA5kfPq/hBxxEmeX0MnGUKI4c=; b=DnI16kGJNgx0M25sW+BCIGFKwh401d
-        5QyHNd7ALoXBfFpWQEsmiJWv7f2BwI7oQqgTVwYA5GmSS3wVbZYbGtcIa9QtXdh/
-        TmDQJL8MhOjnh2gCF6s/k+htUsVVeVzDW6TwrrzVQkmAwxrJuFXH52voGidWYp4S
-        3TxDslnkw9Qf0=
-Received: (qmail 3694226 invoked from network); 16 Mar 2023 08:46:09 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 16 Mar 2023 08:46:09 +0100
-X-UD-Smtp-Session: l3s3148p1@ybFtp//2WJwujnvb
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     netdev@vger.kernel.org
-Cc:     linux-renesas-soc@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Steve Glendinning <steve.glendinning@shawell.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/2] Revert "net: smsc911x: Make Runtime PM handling more fine-grained"
-Date:   Thu, 16 Mar 2023 08:45:57 +0100
-Message-Id: <20230316074558.15268-2-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230316074558.15268-1-wsa+renesas@sang-engineering.com>
-References: <20230316074558.15268-1-wsa+renesas@sang-engineering.com>
+        Thu, 16 Mar 2023 03:46:17 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F18FA4033;
+        Thu, 16 Mar 2023 00:46:15 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id j13so841815pjd.1;
+        Thu, 16 Mar 2023 00:46:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678952774;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Sp8n21BUQb5dHlsU/Jl3vAwa9E+kF9N6pkWBGTGEZ/c=;
+        b=m0xT41KK42bpQg1SdxIkvBesNYR67uqep4fC7Gyt9rg/ikc4w1rrJGMUwThWNw8C0q
+         COvG8Ynqr0eH9nU5VuxjbKeRAX8dZWztf30gYL2Q+gn57HUOMk2Yt8M9MXKKAG5uh0z2
+         dlGyX2rbAd28ALqBvXcKayQl00R0u5MhP5lkZVRdjuhyPz5a0YShAh51D2on3kTsnqN+
+         LB3Gkd7xol02CSwTpzHfhNKzInylacO7kiJWosuRUqy4P1Vku/IY7IwIEhWf0OPtHxxz
+         xZ63Ixv4p0Ql4tloNsrNGq2gOF9OtEdOEWfKzodBWo7tr/8CdK+yLrFrZNOlgxBqMOBg
+         JjWA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678952774;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Sp8n21BUQb5dHlsU/Jl3vAwa9E+kF9N6pkWBGTGEZ/c=;
+        b=4B3axtaYpTaEhy2ybPA8hdwAk9NDjm+IAGNTaLmKzw6zJfLsDogiaEpgNkKfbcXVKW
+         m3/jA3Tntc62ML2dPz/i/9+dVazsJk+BVin1Rga5YXKXRbHUzwHE6Bjs3tB0P9kCfofc
+         QszcDyXNgxlmcWC6k5c8tNg3Sle6UmYlCw93HLBwlAZqZt+5i8WRohTU7kZ0qKHWlX1a
+         naPzUzpKowtM6PX0o7XzvuiO/EXbqgfDI5zGRpwtU6/AZoF1C+qt+niCb8tzu7sgcCT+
+         wzhwFK/iJoZzYuZLnyTAx6XqmTUj0zcc477NDCFMcN3frAF7tetahbiB5RH4hrae3fjl
+         h4AA==
+X-Gm-Message-State: AO0yUKXoGDF6aKnweFjM1Di05m0Dgi5lRJ10YeMb7KOqj9rLBz1VOmXA
+        zzouQSCqlmYEWu+2iztTIPSo4Dl1v9ww2A==
+X-Google-Smtp-Source: AK7set8XFIK72Rtk0X1EhThGMVUB3zTC+gG6Mvs3ElWDeAAJgFTs5JfLsQrVjIjBH8tAINbxh3yB/A==
+X-Received: by 2002:a17:903:41d0:b0:1a0:41eb:fdb3 with SMTP id u16-20020a17090341d000b001a041ebfdb3mr2499067ple.10.1678952773962;
+        Thu, 16 Mar 2023 00:46:13 -0700 (PDT)
+Received: from kazuki-mac.lan ([2400:4051:ea3:5910::789])
+        by smtp.gmail.com with ESMTPSA id kh5-20020a170903064500b0019b9a075f1fsm4889717plb.80.2023.03.16.00.46.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Mar 2023 00:46:13 -0700 (PDT)
+From:   Kazuki H <kazukih0205@gmail.com>
+To:     linux-pm@vger.kernel.org
+Cc:     Kazuki H <kazukih0205@gmail.com>,
+        Kazuki Hashimoto <kazuki0205@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/3] sched/idle: Remove stale comments
+Date:   Thu, 16 Mar 2023 16:45:58 +0900
+Message-Id: <20230316074600.288864-1-kazukih0205@gmail.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This reverts commit 1e30b8d755b81b0d1585cb22bc753e9f2124fe87. Running
-'ifconfig' with the interface down BUGs. This is the culprit:
+rcu_idle_enter/exit() got removed in commit 1098582a0f6c
+("sched,idle,rcu: Push rcu_idle deeper into the idle path"), so this
+comment is outdated. Remove it.
 
-	smsc911x_get_stats from dev_get_stats+0xe4/0xf4
-
-The above function is called with the clocks off, so register read
-fails. Enabling clocks in the above functions does not work, because it
-is called in atomic context. So, let's return to the simple and working
-PM we had before.
-
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Signed-off-by: Kazuki Hashimoto <kazuki0205@gmail.com>
 ---
- drivers/net/ethernet/smsc/smsc911x.c | 10 +---------
- 1 file changed, 1 insertion(+), 9 deletions(-)
+ kernel/sched/idle.c | 6 ------
+ 1 file changed, 6 deletions(-)
 
-diff --git a/drivers/net/ethernet/smsc/smsc911x.c b/drivers/net/ethernet/smsc/smsc911x.c
-index a2e511912e6a..9d12fd54281a 100644
---- a/drivers/net/ethernet/smsc/smsc911x.c
-+++ b/drivers/net/ethernet/smsc/smsc911x.c
-@@ -557,7 +557,6 @@ static int smsc911x_mii_read(struct mii_bus *bus, int phyaddr, int regidx)
- 	unsigned int addr;
- 	int i, reg;
+diff --git a/kernel/sched/idle.c b/kernel/sched/idle.c
+index f26ab2675f7d..dbfc2eb5ccbd 100644
+--- a/kernel/sched/idle.c
++++ b/kernel/sched/idle.c
+@@ -179,12 +179,6 @@ static void cpuidle_idle_call(void)
+ 		return;
+ 	}
  
--	pm_runtime_get_sync(bus->parent);
- 	spin_lock_irqsave(&pdata->mac_lock, flags);
- 
- 	/* Confirm MII not busy */
-@@ -583,7 +582,6 @@ static int smsc911x_mii_read(struct mii_bus *bus, int phyaddr, int regidx)
- 
- out:
- 	spin_unlock_irqrestore(&pdata->mac_lock, flags);
--	pm_runtime_put(bus->parent);
- 	return reg;
- }
- 
-@@ -596,7 +594,6 @@ static int smsc911x_mii_write(struct mii_bus *bus, int phyaddr, int regidx,
- 	unsigned int addr;
- 	int i, reg;
- 
--	pm_runtime_get_sync(bus->parent);
- 	spin_lock_irqsave(&pdata->mac_lock, flags);
- 
- 	/* Confirm MII not busy */
-@@ -626,7 +623,6 @@ static int smsc911x_mii_write(struct mii_bus *bus, int phyaddr, int regidx,
- 
- out:
- 	spin_unlock_irqrestore(&pdata->mac_lock, flags);
--	pm_runtime_put(bus->parent);
- 	return reg;
- }
- 
-@@ -1595,8 +1591,6 @@ static int smsc911x_open(struct net_device *dev)
- 	int retval;
- 	int irq_flags;
- 
--	pm_runtime_get_sync(dev->dev.parent);
+-	/*
+-	 * The RCU framework needs to be told that we are entering an idle
+-	 * section, so no more rcu read side critical sections and one more
+-	 * step to the grace period
+-	 */
 -
- 	/* find and start the given phy */
- 	if (!dev->phydev) {
- 		retval = smsc911x_mii_probe(dev);
-@@ -1743,7 +1737,6 @@ static int smsc911x_open(struct net_device *dev)
- 	phy_disconnect(dev->phydev);
- 	dev->phydev = NULL;
- out:
--	pm_runtime_put(dev->dev.parent);
- 	return retval;
- }
- 
-@@ -1775,7 +1768,6 @@ static int smsc911x_stop(struct net_device *dev)
- 		dev->phydev = NULL;
- 	}
- 	netif_carrier_off(dev);
--	pm_runtime_put(dev->dev.parent);
- 
- 	SMSC_TRACE(pdata, ifdown, "Interface stopped");
- 	return 0;
-@@ -2347,6 +2339,7 @@ static int smsc911x_drv_remove(struct platform_device *pdev)
- 
- 	free_netdev(dev);
- 
-+	pm_runtime_put(&pdev->dev);
- 	pm_runtime_disable(&pdev->dev);
- 
- 	return 0;
-@@ -2552,7 +2545,6 @@ static int smsc911x_drv_probe(struct platform_device *pdev)
- 	}
- 
- 	spin_unlock_irq(&pdata->mac_lock);
--	pm_runtime_put(&pdev->dev);
- 
- 	netdev_info(dev, "MAC Address: %pM\n", dev->dev_addr);
+ 	if (cpuidle_not_available(drv, dev)) {
+ 		tick_nohz_idle_stop_tick();
  
 -- 
-2.30.2
+2.40.0
 
