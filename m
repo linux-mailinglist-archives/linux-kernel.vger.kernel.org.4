@@ -2,55 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25E6E6BCE1F
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 12:28:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E54996BCE22
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 12:29:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229804AbjCPL2U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 07:28:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42654 "EHLO
+        id S229900AbjCPL3Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 07:29:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229729AbjCPL2S (ORCPT
+        with ESMTP id S229532AbjCPL3W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 07:28:18 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CCDE22791;
-        Thu, 16 Mar 2023 04:28:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E47FAB8210B;
-        Thu, 16 Mar 2023 11:28:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 783B6C433D2;
-        Thu, 16 Mar 2023 11:28:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678966093;
-        bh=+DlbZ+J6+uqEoB6dZjD8hILUolgR4JsTAyoNWYDDgZM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nHS+iJ5B36o6Z8a2zhI1NQsx0diRRkE+S0LNlepnJ+k26xyoi0W/5QQj7a/sF+bmP
-         nfwWDWoaPaHYrQC7jQoCPbvou+OronRu9jpYnF2kWtgpJhrN3liXN8eO1TgLxEFsFB
-         jAkdaL4Z+7S+Ju/5fhzzugqPrY/Rys4JoLqXJR/TjHW0flV+ENFAKHp5JizybxDWmu
-         6l2NicZEi6JqTdR3aQPrupa6h8Ld/GCqVVP2iKR/zMasdSc+SWkA2p8wh1HQGFBxvk
-         MzcaYZ1JiFDmDnXO59Ef9hk44DRVAP+hcPvyyQnTVfC6YY1VhxHLNcLfEmZT/lN6Sl
-         oKRCYDC9M9njA==
-From:   "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
-To:     gor@linux.ibm.com
-Cc:     linux-kernel@vger.kernel.org,
-        "Jiri Slaby (SUSE)" <jirislaby@kernel.org>,
-        Joe Lawrence <joe.lawrence@redhat.com>, stable@vger.kernel.org,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>, linux-s390@vger.kernel.org
-Subject: [PATCH] s390: reintroduce expoline dependence to scripts
-Date:   Thu, 16 Mar 2023 12:28:09 +0100
-Message-Id: <20230316112809.7903-1-jirislaby@kernel.org>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <705ce64c-5f73-2ec8-e4bc-dd48c85f0498@kernel.org>
-References: <705ce64c-5f73-2ec8-e4bc-dd48c85f0498@kernel.org>
+        Thu, 16 Mar 2023 07:29:22 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72BE7A7291;
+        Thu, 16 Mar 2023 04:29:21 -0700 (PDT)
+Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4PclLz0yQSzSl1B;
+        Thu, 16 Mar 2023 19:26:03 +0800 (CST)
+Received: from huawei.com (10.175.127.227) by dggpeml500021.china.huawei.com
+ (7.185.36.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Thu, 16 Mar
+ 2023 19:29:19 +0800
+From:   Baokun Li <libaokun1@huawei.com>
+To:     <linux-ext4@vger.kernel.org>
+CC:     <tytso@mit.edu>, <adilger.kernel@dilger.ca>, <jack@suse.cz>,
+        <ritesh.list@gmail.com>, <linux-kernel@vger.kernel.org>,
+        <yi.zhang@huawei.com>, <yangerkun@huawei.com>,
+        <yukuai3@huawei.com>, <libaokun1@huawei.com>
+Subject: [PATCH 0/3] ext4: fix WARNING in ext4_add_complete_io
+Date:   Thu, 16 Mar 2023 19:28:29 +0800
+Message-ID: <20230316112832.2711783-1-libaokun1@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpeml500021.china.huawei.com (7.185.36.21)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,44 +47,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Expolines depend on scripts/basic/fixdep. And build of expolines can now
-race with the fixdep build:
+Baokun Li (3):
+  ext4: correct error ctx->mask_s_##name in ctx_set_##name
+  ext4: add helper to check if flag is changed by ctx
+  ext4: fix race between writepages and remount
 
- make[1]: *** Deleting file 'arch/s390/lib/expoline/expoline.o'
- /bin/sh: line 1: scripts/basic/fixdep: Permission denied
- make[1]: *** [../scripts/Makefile.build:385: arch/s390/lib/expoline/expoline.o] Error 126
- make: *** [../arch/s390/Makefile:166: expoline_prepare] Error 2
+ fs/ext4/ext4.h      |  3 ++-
+ fs/ext4/ext4_jbd2.h |  9 +++++----
+ fs/ext4/super.c     | 33 +++++++++++++++++++++++++++++----
+ 3 files changed, 36 insertions(+), 9 deletions(-)
 
-The dependence was removed in the below Fixes: commit. So reintroduce
-the dependence on scripts.
-
-Fixes: a0b0987a7811 ("s390/nospec: remove unneeded header includes")
-Cc: Joe Lawrence <joe.lawrence@redhat.com>
-Cc: stable@vger.kernel.org
-Cc: Heiko Carstens <hca@linux.ibm.com>
-Cc: Vasily Gorbik <gor@linux.ibm.com>
-Cc: Alexander Gordeev <agordeev@linux.ibm.com>
-Cc: Christian Borntraeger <borntraeger@linux.ibm.com>
-Cc: Sven Schnelle <svens@linux.ibm.com>
-Cc: linux-s390@vger.kernel.org
-Signed-off-by: Jiri Slaby (SUSE) <jirislaby@kernel.org>
----
- arch/s390/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/s390/Makefile b/arch/s390/Makefile
-index b3235ab0ace8..ed646c583e4f 100644
---- a/arch/s390/Makefile
-+++ b/arch/s390/Makefile
-@@ -162,7 +162,7 @@ vdso_prepare: prepare0
- 
- ifdef CONFIG_EXPOLINE_EXTERN
- modules_prepare: expoline_prepare
--expoline_prepare:
-+expoline_prepare: scripts
- 	$(Q)$(MAKE) $(build)=arch/s390/lib/expoline arch/s390/lib/expoline/expoline.o
- endif
- endif
 -- 
-2.40.0
+2.31.1
 
