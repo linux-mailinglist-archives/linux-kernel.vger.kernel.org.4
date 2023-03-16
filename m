@@ -2,149 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E49646BC497
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 04:23:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05B306BC4A3
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 04:25:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229999AbjCPDXb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 23:23:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58284 "EHLO
+        id S229631AbjCPDZe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 23:25:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbjCPDXC (ORCPT
+        with ESMTP id S229962AbjCPDYU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 23:23:02 -0400
-Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C6CBA64B5
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 20:20:58 -0700 (PDT)
-Received: from epcas1p4.samsung.com (unknown [182.195.41.48])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20230316031940epoutp02ce393f504354795b3d2b1eda50b513d3~MyBs8ddUf0263402634epoutp02P
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 03:19:40 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20230316031940epoutp02ce393f504354795b3d2b1eda50b513d3~MyBs8ddUf0263402634epoutp02P
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1678936780;
-        bh=LkGb9gudNokFJQy+N1Um3lBkQSilGBO0QXo/O4ejpOE=;
-        h=From:To:Cc:Subject:Date:References:From;
-        b=oAK9wInLQaY4XeCBa0ZxvjGG07lSdd8ltStj4GswHm5sFaZxU2Vd6MrfTRurxUZxf
-         TjGq1SCIPzsbsKuPWxoldXThEKuqgvDFE5NaZNEmWMHXqxqHxjkL0NIL1Xnv3iLJH+
-         E4jpDiT3uq1tl4+t9G2bFYYSW6tM7SOsUOhCuupk=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas1p4.samsung.com (KnoxPortal) with ESMTP id
-        20230316031940epcas1p4caa8b32f085acd38d3d98e6baa0de599~MyBsl-9vU2301623016epcas1p47;
-        Thu, 16 Mar 2023 03:19:40 +0000 (GMT)
-Received: from epsmges1p5.samsung.com (unknown [182.195.38.241]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 4PcXYl4G4Qz4x9Q5; Thu, 16 Mar
-        2023 03:19:39 +0000 (GMT)
-Received: from epcas1p4.samsung.com ( [182.195.41.48]) by
-        epsmges1p5.samsung.com (Symantec Messaging Gateway) with SMTP id
-        97.98.54823.8CA82146; Thu, 16 Mar 2023 12:19:36 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20230316031936epcas1p1ebd93477dcf3bf9ab1640306dd1da8ff~MyBpa58kf2332323323epcas1p1c;
-        Thu, 16 Mar 2023 03:19:36 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20230316031936epsmtrp1a883352cb7166f657325f6a3b10bbcaf~MyBpaMa_20887908879epsmtrp1z;
-        Thu, 16 Mar 2023 03:19:36 +0000 (GMT)
-X-AuditID: b6c32a39-a97ff7000000d627-52-64128ac87ef3
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        AC.71.18071.8CA82146; Thu, 16 Mar 2023 12:19:36 +0900 (KST)
-Received: from localhost.localdomain (unknown [10.253.99.41]) by
-        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20230316031936epsmtip29bbf332b78a1d49bb5febf990943fc99~MyBpQ25921011610116epsmtip2L;
-        Thu, 16 Mar 2023 03:19:36 +0000 (GMT)
-From:   Yeongjin Gil <youngjin.gil@samsung.com>
-To:     agk@redhat.com, snitzer@kernel.org, dm-devel@redhat.com
-Cc:     totte@google.com, linux-kernel@vger.kernel.org,
-        Yeongjin Gil <youngjin.gil@samsung.com>,
-        Sungjong Seo <sj1557.seo@samsung.com>
-Subject: [PATCH] dm verity: fix error handling for check_at_most_once
-Date:   Thu, 16 Mar 2023 12:18:42 +0900
-Message-Id: <20230316031842.17295-1-youngjin.gil@samsung.com>
-X-Mailer: git-send-email 2.39.2
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrHJsWRmVeSWpSXmKPExsWy7bCmge6JLqEUg31HjS3WnzrGbLH33WxW
-        i8u75rBZbPl3hNXixC1pi43PGC1m7H/K7sDusWBTqcemVZ1sHu/3XWXz6NuyitHj8ya5ANao
-        BkabxKLkjMyyVIXUvOT8lMy8dFul0BA3XQslhYz84hJbpWhDQyM9QwNzPSMjIz1To1grI1Ml
-        hbzE3FRbpQpdqF4lhaLkAqDa3MpioAE5qXpQcb3i1LwUh6z8UpDD9YoTc4tL89L1kvNzlRTK
-        EnNKgUYo6Sd8Y8w4uv4iY8FS7op12z6zNDDu4Oxi5OSQEDCR+LnyA3MXIxeHkMAORonDy06z
-        QzifGCWmPHvJCOF8Y5TYuvAsC0zLx+fvWCASexklVu+ZzQiSAGuZuc4TxGYT0JWY+vIpK4gt
-        ImAt8aJpJlgDs0ALo8TaR2+YQRLCAq4Sn2edYAexWQRUJW7d7wEaxMHBK2Ar8eWwMogpISAv
-        sfiBBEgFr4CgxMmZT8BuYAYKN2+dDXa2hMAldonH05uhjnOR2HJ4LTOELSzx6vgWdghbSuJl
-        fxs7REM7o8SKh3MYIZwZjBJ/399nhaiyl2hubWYD2cwsoCmxfpc+RFhRYufvuYwQtqDE6Wvd
-        zBBX8Em8+9rDCnEor0RHmxBEiZrElUm/oCbKSPQ9mAV1g4fExE8dTJCwipW4NH870wRGhVlI
-        fpuF5LdZCEcsYGRexSiWWlCcm55abFhgihzJmxjBSVXLcgfj9Lcf9A4xMnEwHmKU4GBWEuEN
-        ZxFIEeJNSaysSi3Kjy8qzUktPsSYDAzricxSosn5wLSeVxJvaGZmaWFpZGJobGZoSFjYxNLA
-        xMzIxMLY0thMSZxX3PZkspBAemJJanZqakFqEcwWJg5OqQamRlunZ/4SV28yRnoyJBhfX7dS
-        YJEc4/5CptCGRxyh799tEXsaE2d+wNrqtl/mzxLPR0F21qULlj+dnmtY/83N6cTKnOmG79+t
-        vc3spu7J9q5o35wjF9b5aj0oZl5Yy9+uJje9/eTky7dmJ31Ub1IwMbxmqHnc6F14k+6SQyuL
-        n+/+9lbjgkMi79Lfx6tvsYqUZMl7rfrkFOjz8VoDM+N87o1fbfznvTkX/PeujyIjz8tvC0/x
-        O034+UH79faVr2Jdv//l+CJcp6AVVd30v/orp/Ak7SKrLd/WNMzYp2SSHOqXXM/uzu/zrXPd
-        5u+9nbbLpn/r6vleLbuU+dj7QpY9SZtfuK7cZL95eu/MAtcyJZbijERDLeai4kQApGvIz2EE
-        AAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrFLMWRmVeSWpSXmKPExsWy7bCSvO6JLqEUg3PtShbrTx1jttj7bjar
-        xeVdc9gstvw7wmpx4pa0xcZnjBYz9j9ld2D3WLCp1GPTqk42j/f7rrJ59G1ZxejxeZNcAGsU
-        l01Kak5mWWqRvl0CV8bR9RcZC5ZyV6zb9pmlgXEHZxcjJ4eEgInEx+fvWLoYuTiEBHYzSuzq
-        WsIOkZCR+DPxPVsXIweQLSxx+HAxRM0HRokNh28ygdSwCehKTH35lBXEFhGwl3h6bSsbSBGz
-        QAejRPeSlWwgCWEBV4nPs06ADWURUJW4db+HEWQor4CtxJfDyhDz5SUWP5AAqeAVEJQ4OfMJ
-        C4jNDBRu3jqbeQIj3ywkqVlIUgsYmVYxSqYWFOem5xYbFhjmpZbrFSfmFpfmpesl5+duYgQH
-        p5bmDsbtqz7oHWJk4mA8xCjBwawkwhvOIpAixJuSWFmVWpQfX1Sak1p8iFGag0VJnPdC18l4
-        IYH0xJLU7NTUgtQimCwTB6dUA1Ne5PplWhLRh9iF/Rb+6bXuje6e+sH236sPVa98yi9fiVlQ
-        uzfn/omutCkRvYFtztqXH3xeVnp3jWz4ris8CyIOarr4ia9V+W6+VEfpzoW4onaro+4CClOl
-        u9kuFvx4FSYUIhD462WRsL1EZfeBtDkno1y+bP/lzHTVz0T/4oIDD0TTuY/FtM8o7TU+s/v7
-        6hfPWBxchCrW+eutYo2YLcqy43zvO+4Ul1uuH99k8SmyTQ9iUa1h4zh1NXvJ5wneH+Qatv1j
-        mjC79ftO3edOoe59Lff2z81QuaCQMH/1YrkXN689Znuu+iy+3++Rv+uHmx9X7+s7Vh6jXrnk
-        YYzF/JYHrZxFn7ZuC29KU3o556sSS3FGoqEWc1FxIgCC9DHavQIAAA==
-X-CMS-MailID: 20230316031936epcas1p1ebd93477dcf3bf9ab1640306dd1da8ff
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: SVC_REQ_APPROVE
-X-ArchiveUser: EV
-CMS-TYPE: 101P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20230316031936epcas1p1ebd93477dcf3bf9ab1640306dd1da8ff
-References: <CGME20230316031936epcas1p1ebd93477dcf3bf9ab1640306dd1da8ff@epcas1p1.samsung.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 15 Mar 2023 23:24:20 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EADD8ABAC2;
+        Wed, 15 Mar 2023 20:22:18 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32G2UYXr001845;
+        Thu, 16 Mar 2023 03:20:20 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id; s=qcppdkim1;
+ bh=G2ndkKjTC7YndGTL160uD3YPfgNsKL4syB7064e2854=;
+ b=o48t1EpQ2epfzZUHYmYU3YPjga6Slt739/5CEobatv/H0LvsgjDG7pcjZpTlFSzYMaUQ
+ sMyT+07JZB4JtK0B/HeZSb1vqpvS4uX4LQPH83DXC2Hws/mRd0LUKIOGVZ+yr8GMRTXk
+ w1B7uz4+6BOEdGoh+esjMHfY6JIg4Z6BNX6oTPguT/6vmSI1vKRLTx2akhTd+ziDPlQ8
+ orzVmckfvY0oFQ9efdxQz2oQy39rCIRfuzJi9YnaDD3X5JDWJCXF4fia6B4uIaf0ATQb
+ sscrWcWrk+f+jWX0DDgwQubYDnmEIBfOa2MUOR+dCBXSnwibaMfxDptELQcBdGhYcTXw HA== 
+Received: from aptaippmta02.qualcomm.com (tpe-colo-wan-fw-bordernet.qualcomm.com [103.229.16.4])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pbpxjrhhf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 16 Mar 2023 03:20:20 +0000
+Received: from pps.filterd (APTAIPPMTA02.qualcomm.com [127.0.0.1])
+        by APTAIPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 32G3KIXP003048;
+        Thu, 16 Mar 2023 03:20:18 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by APTAIPPMTA02.qualcomm.com (PPS) with ESMTP id 3p8jqmp08r-1;
+        Thu, 16 Mar 2023 03:20:18 +0000
+Received: from APTAIPPMTA02.qualcomm.com (APTAIPPMTA02.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32G3KItO003042;
+        Thu, 16 Mar 2023 03:20:18 GMT
+Received: from hazha-gv.ap.qualcomm.com (hazha-gv.qualcomm.com [10.239.105.144])
+        by APTAIPPMTA02.qualcomm.com (PPS) with ESMTP id 32G3KHM2003039;
+        Thu, 16 Mar 2023 03:20:18 +0000
+Received: by hazha-gv.ap.qualcomm.com (Postfix, from userid 4083943)
+        id 8A70F1200071; Thu, 16 Mar 2023 11:20:16 +0800 (CST)
+From:   Hao Zhang <quic_hazha@quicinc.com>
+To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Konrad Dybcio <konradybcio@gmail.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Jonathan Corbet <corbet@lwn.net>
+Cc:     Hao Zhang <quic_hazha@quicinc.com>, Leo Yan <leo.yan@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Tingwei Zhang <quic_tingweiz@quicinc.com>,
+        Jinlong Mao <quic_jinlmao@quicinc.com>,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        Tao Zhang <quic_taozha@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <andersson@kernel.org>,
+        linux-doc@vger.kernel.org
+Subject: [PATCH v1 0/3] Add support to configure Coresight Dummy subunit
+Date:   Thu, 16 Mar 2023 11:20:02 +0800
+Message-Id: <20230316032005.6509-1-quic_hazha@quicinc.com>
+X-Mailer: git-send-email 2.17.1
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: x6XpTLoB3IL6ofB8f4TW3KSqv9rXil8T
+X-Proofpoint-ORIG-GUID: x6XpTLoB3IL6ofB8f4TW3KSqv9rXil8T
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-16_02,2023-03-15_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 mlxscore=0
+ adultscore=0 suspectscore=0 mlxlogscore=861 clxscore=1011 malwarescore=0
+ priorityscore=1501 bulkscore=0 phishscore=0 lowpriorityscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303150002 definitions=main-2303160028
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In verity_work(), the return value of verity_verify_io() is converted to
-blk_status and passed to verity_finish_io(). BTW, when a bit is set in
-v->validated_blocks, verity_verify_io() skips verification regardless of
-I/O error for the corresponding bio. In this case, the I/O error could
-not be returned properly, and as a result, there is a problem that
-abnormal data could be read for the corresponding block.
+Introduction of Coresight Dummy subunit
+The Coresight Dummy subunit is for Coresight Dummy component, there are some
+specific Coresight devices that HLOS don't have permission to access. Such as
+some TPDMs, they would be configured in NON-HLOS side, but it's necessary to
+build Coresight path for it to debug. So there need driver to register dummy
+devices as Coresight devices.
 
-To fix this problem, when an I/O error occurs, do not skip verification
-even if the bit related is set in v->validated_blocks.
+Commit link:
+https://git.codelinaro.org/clo/linux-kernel/coresight/-/tree/coresight-dummy
 
-Fixes: 843f38d382b1 ("dm verity: add 'check_at_most_once' option to only validate hashes once")
+Hao Zhang (3):
+  Coresight: Add coresight dummy driver
+  dt-bindings: arm: Add Coresight Dummy Trace YAML schema
+  Documentation: trace: Add documentation for Coresight Dummy Trace
 
-Signed-off-by: Sungjong Seo <sj1557.seo@samsung.com>
-Signed-off-by: Yeongjin Gil <youngjin.gil@samsung.com>
----
- drivers/md/dm-verity-target.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../bindings/arm/qcom,coresight-dummy.yaml    | 129 +++++++++++++
+ .../trace/coresight/coresight-dummy.rst       |  58 ++++++
+ drivers/hwtracing/coresight/Kconfig           |  11 ++
+ drivers/hwtracing/coresight/Makefile          |   1 +
+ drivers/hwtracing/coresight/coresight-dummy.c | 176 ++++++++++++++++++
+ 5 files changed, 375 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/arm/qcom,coresight-dummy.yaml
+ create mode 100644 Documentation/trace/coresight/coresight-dummy.rst
+ create mode 100644 drivers/hwtracing/coresight/coresight-dummy.c
 
-diff --git a/drivers/md/dm-verity-target.c b/drivers/md/dm-verity-target.c
-index ade83ef3b439..9316399b920e 100644
---- a/drivers/md/dm-verity-target.c
-+++ b/drivers/md/dm-verity-target.c
-@@ -523,7 +523,7 @@ static int verity_verify_io(struct dm_verity_io *io)
- 		sector_t cur_block = io->block + b;
- 		struct ahash_request *req = verity_io_hash_req(v, io);
- 
--		if (v->validated_blocks &&
-+		if (v->validated_blocks && bio->bi_status == BLK_STS_OK &&
- 		    likely(test_bit(cur_block, v->validated_blocks))) {
- 			verity_bv_skip_block(v, io, iter);
- 			continue;
 -- 
-2.39.2
+2.17.1
 
