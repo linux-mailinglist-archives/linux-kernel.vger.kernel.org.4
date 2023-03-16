@@ -2,131 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26E636BD849
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 19:42:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A29016BD84E
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 19:44:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229608AbjCPSmR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 14:42:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45202 "EHLO
+        id S229588AbjCPSoG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 14:44:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbjCPSmP (ORCPT
+        with ESMTP id S229476AbjCPSoE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 14:42:15 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 19673DBFA
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 11:42:14 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3B8142F4;
-        Thu, 16 Mar 2023 11:42:57 -0700 (PDT)
-Received: from [10.1.196.40] (e121345-lin.cambridge.arm.com [10.1.196.40])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 09A373F67D;
-        Thu, 16 Mar 2023 11:42:11 -0700 (PDT)
-Message-ID: <cacb6338-6dc9-e8b6-426c-aeed3104c8af@arm.com>
-Date:   Thu, 16 Mar 2023 18:42:07 +0000
+        Thu, 16 Mar 2023 14:44:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57A8411E93
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 11:44:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B3C93620E3
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 18:44:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4858C433D2;
+        Thu, 16 Mar 2023 18:44:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678992242;
+        bh=n0pBD+LVa6I/weZ5XEhYq/DeLZruwMfnM+k5setIJ0E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rQ+7DdBJaO0K0G074cV0gSMSA3DmwykGjyrl4OLR+q9GoDVUN345AwJVdalGjPCgi
+         hR37GgtFP0FTInADhqo3ugj+5SO3iusKEXnu15Xcir9wkuO24txaC8ROi4OTO88cG1
+         o0bJfp4GYxetu7WbS8nafcCtME+T2IceVZ/A/ApbIdqUx28ywKnLFsWkToXzZr/Ho+
+         zr7ZMu0H4vX1nH3zoKIxgzvF9fFhD+Z04zTcOiNYF4AdloJ19ETM2/PLZNBFAi2I0h
+         /UiXR6nrQxPKEolqKs5GZBYkGkrKBz/YXJmtZLOOJUDudyEH6X+/KjYIBvNhfDHFRR
+         /1E1z60EVX0tw==
+Date:   Thu, 16 Mar 2023 18:44:00 +0000
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Yeongjin Gil <youngjin.gil@samsung.com>
+Cc:     agk@redhat.com, snitzer@kernel.org, dm-devel@redhat.com,
+        totte@google.com, linux-kernel@vger.kernel.org,
+        Sungjong Seo <sj1557.seo@samsung.com>,
+        Nathan Huckleberry <nhuck@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>
+Subject: Re: [PATCH] dm verity: fix error handling for check_at_most_once
+Message-ID: <ZBNjcA1feNWUxvaW@gmail.com>
+References: <CGME20230316031936epcas1p1ebd93477dcf3bf9ab1640306dd1da8ff@epcas1p1.samsung.com>
+ <20230316031842.17295-1-youngjin.gil@samsung.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v1 01/14] iommu: Add iommu_get_unmanaged_domain helper
-Content-Language: en-GB
-To:     Nicolin Chen <nicolinc@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Eric Auger <eric.auger@redhat.com>, will@kernel.org,
-        kevin.tian@intel.com, baolu.lu@linux.intel.com, joro@8bytes.org,
-        shameerali.kolothum.thodi@huawei.com, jean-philippe@linaro.org,
-        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-References: <cover.1678348754.git.nicolinc@nvidia.com>
- <9b1077601cace998533129327f5e7ad946752d29.1678348754.git.nicolinc@nvidia.com>
- <2118a147-ac95-d846-ad6f-85d7cebca46a@arm.com>
- <4938b20b-14d8-86f8-e80b-9d8ed9d8f28d@redhat.com>
- <ZAtS21vqhp7LqA+B@nvidia.com> <ZBJvLsfeIRhV6cME@Asurada-Nvidia>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <ZBJvLsfeIRhV6cME@Asurada-Nvidia>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230316031842.17295-1-youngjin.gil@samsung.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/03/2023 1:21 am, Nicolin Chen wrote:
-> Hi Robin,
+Hi Yeongjin,
+
+On Thu, Mar 16, 2023 at 12:18:42PM +0900, Yeongjin Gil wrote:
+> In verity_work(), the return value of verity_verify_io() is converted to
+> blk_status and passed to verity_finish_io(). BTW, when a bit is set in
+> v->validated_blocks, verity_verify_io() skips verification regardless of
+> I/O error for the corresponding bio. In this case, the I/O error could
+> not be returned properly, and as a result, there is a problem that
+> abnormal data could be read for the corresponding block.
 > 
-> How do you think about Jason's proposal below? I'd like to see
-> us come to an agreement on an acceptable solution...
+> To fix this problem, when an I/O error occurs, do not skip verification
+> even if the bit related is set in v->validated_blocks.
+> 
+> Fixes: 843f38d382b1 ("dm verity: add 'check_at_most_once' option to only validate hashes once")
+> 
+> Signed-off-by: Sungjong Seo <sj1557.seo@samsung.com>
+> Signed-off-by: Yeongjin Gil <youngjin.gil@samsung.com>
+> ---
+>  drivers/md/dm-verity-target.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/md/dm-verity-target.c b/drivers/md/dm-verity-target.c
+> index ade83ef3b439..9316399b920e 100644
+> --- a/drivers/md/dm-verity-target.c
+> +++ b/drivers/md/dm-verity-target.c
+> @@ -523,7 +523,7 @@ static int verity_verify_io(struct dm_verity_io *io)
+>  		sector_t cur_block = io->block + b;
+>  		struct ahash_request *req = verity_io_hash_req(v, io);
+>  
+> -		if (v->validated_blocks &&
+> +		if (v->validated_blocks && bio->bi_status == BLK_STS_OK &&
+>  		    likely(test_bit(cur_block, v->validated_blocks))) {
+>  			verity_bv_skip_block(v, io, iter);
+>  			continue;
 
-I think it's so thoroughly broken that I suspect Cunningham's law might
-be at play, but fine, you win :) Hopefully it's sufficiently obvious how
-the other pieces would fit around the patch below. FWIW I'd still prefer
-a generic domain->s2_domain pointer rather than any op at all, but I'm
-happy enough with this compromise.
+Thanks for sending this patch!  This looks like a correct fix, but I have some
+comments:
 
-Thanks,
-Robin.
+* Using "check_at_most_once" is strongly discouraged, as it reduces security.
+  If you are using check_at_most_once to improve performance at the cost of
+  reduced security, please consider that very recently, dm-verity performance
+  has significantly improved due to the removal of the WQ_UNBOUND workqueue flag
+  which was causing significant I/O latency.  See commit c25da5b7baf1
+  ("dm verity: stop using WQ_UNBOUND for verify_wq").
 
------>8-----
-Subject: [PATCH] iommu/dma: Support MSIs through nested domains
+* I think your commit message does not explain a key aspect of the problem which
+  is why is verity even attempted when the underlying I/O has failed?  This
+  appears to be because of the Forward Error Correction (FEC) feature.  So, this
+  issue is specific to the case where both FEC and check_at_most_once is used.
+  Can you make your commit message explain this?
 
-Currently, iommu-dma is the only place outside of IOMMUFD and drivers
-which might need to be aware of the stage 2 domain encapsulated within
-a nested domain. This would be in the legacy-VFIO-style case where we're
-using host-managed MSIs with an identity mapping at stage 1, where it is
-the underlying stage 2 domain which owns an MSI cookie and holds the
-corresponding dynamic mappings. Hook up the new op to resolve what we
-need from a nested domain.
+* This patch does not appear to have been received by the dm-devel mailing list,
+  which is the list where dm-verity patches should be reviewed on.  It doesn't
+  show up in the archive at https://lore.kernel.org/dm-devel.  Also, I'm
+  subscribed to dm-devel and I didn't receive this patch in my inbox.  (I had to
+  download it from https://lore.kernel.org/lkml instead.)  Did you receive a
+  bounce message when you sent this patch?
 
-Signed-off-by: Robin Murphy <robin.murphy@arm.com>
----
-  drivers/iommu/dma-iommu.c | 18 ++++++++++++++++--
-  1 file changed, 16 insertions(+), 2 deletions(-)
+* Please add 'Cc: stable@vger.kernel.org' to the commit message, just below the
+  Fixes line, as per Documentation/process/stable-kernel-rules.rst.  This will
+  ensure that the fix will be backported to the stable kernels.
 
-diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
-index 99b2646cb5c7..66b0d5fa49f8 100644
---- a/drivers/iommu/dma-iommu.c
-+++ b/drivers/iommu/dma-iommu.c
-@@ -1642,6 +1642,20 @@ static struct iommu_dma_msi_page *iommu_dma_get_msi_page(struct device *dev,
-  	return NULL;
-  }
-  
-+/*
-+ * Nested domains may not have an MSI cookie or accept mappings, but they may
-+ * be related to a domain which does, so we let them tell us what they need.
-+ */
-+static struct iommu_domain *iommu_dma_get_msi_mapping_domain(struct device *dev)
-+{
-+	struct iommu_domain *domain = iommu_get_domain_for_dev(dev);
-+
-+	if (domain && domain->type == IOMMU_DOMAIN_NESTED &&
-+	    domain->ops->get_msi_mapping_domain)
-+		domain = domain->ops->get_msi_mapping_domain(domain);
-+	return domain;
-+}
-+
-  /**
-   * iommu_dma_prepare_msi() - Map the MSI page in the IOMMU domain
-   * @desc: MSI descriptor, will store the MSI page
-@@ -1652,7 +1666,7 @@ static struct iommu_dma_msi_page *iommu_dma_get_msi_page(struct device *dev,
-  int iommu_dma_prepare_msi(struct msi_desc *desc, phys_addr_t msi_addr)
-  {
-  	struct device *dev = msi_desc_to_dev(desc);
--	struct iommu_domain *domain = iommu_get_domain_for_dev(dev);
-+	struct iommu_domain *domain = iommu_dma_get_msi_mapping_domain(dev);
-  	struct iommu_dma_msi_page *msi_page;
-  	static DEFINE_MUTEX(msi_prepare_lock); /* see below */
-  
-@@ -1685,7 +1699,7 @@ int iommu_dma_prepare_msi(struct msi_desc *desc, phys_addr_t msi_addr)
-  void iommu_dma_compose_msi_msg(struct msi_desc *desc, struct msi_msg *msg)
-  {
-  	struct device *dev = msi_desc_to_dev(desc);
--	const struct iommu_domain *domain = iommu_get_domain_for_dev(dev);
-+	const struct iommu_domain *domain = iommu_dma_get_msi_mapping_domain(dev);
-  	const struct iommu_dma_msi_page *msi_page;
-  
-  	msi_page = msi_desc_get_iommu_cookie(desc);
--- 
-2.39.2.101.g768bb238c484.dirty
+* "Signed-off-by: Sungjong Seo <sj1557.seo@samsung.com>" does not have a
+  corresponding Author or Co-developed-line, which is not allowed.  Did you mean
+  to list Sungjong as the Author or as a co-author?
 
+* No blank line between Fixes and the Signed-off-by line(s), please.
+
+Thanks!
+
+- Eric
