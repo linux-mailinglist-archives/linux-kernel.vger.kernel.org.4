@@ -2,137 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 739366BCA89
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 10:16:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31C6B6BCA8F
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 10:17:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230306AbjCPJP6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 05:15:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58104 "EHLO
+        id S229698AbjCPJRo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 05:17:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230177AbjCPJPy (ORCPT
+        with ESMTP id S230313AbjCPJRl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 05:15:54 -0400
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A0805AB4D;
-        Thu, 16 Mar 2023 02:15:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1678958152; x=1710494152;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=vNBKUCn+oSOubieZrKRWxbCHp3w8zx3bOHe3umDYycw=;
-  b=aDstGSYayo0Uez0xz1sw0mJ3Zqsb7qmgeec3GwAjf4CrwsAexESBYOmY
-   g3bHZzzp7UF5oaEt2shEP1QWlVYmJ7Lbf3NVg3FwhBMAsKCC0rxSnqAeA
-   rr2xllU+6Wl5NsEKyGPfeLQnF3zoaHHnPqpzKyjdgYpa2qsEfaVNkNuCN
-   zyDp/4GfrGpAnAdwvUl02v9So1ymvO7CuT0NAm2sQo8kYiIxiGDFRncl2
-   BgcwgHn3KgLjoxvazMUPTtwT2tBztIvjR/ELUB1I0TEcS2Qb8LEvNk1CU
-   YP3uC9Cicaq8zpKkHr4OnbTJe5NjjQcs4G8Q66Cdletojg6hUq0X59Nlj
-   A==;
-X-IronPort-AV: E=Sophos;i="5.98,265,1673910000"; 
-   d="scan'208";a="29730469"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 16 Mar 2023 10:15:49 +0100
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Thu, 16 Mar 2023 10:15:49 +0100
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Thu, 16 Mar 2023 10:15:49 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1678958149; x=1710494149;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=vNBKUCn+oSOubieZrKRWxbCHp3w8zx3bOHe3umDYycw=;
-  b=Q4h+tnXTJvDIjbGBHT/Ri4SboGxaSMFFTAKh3SM6/NJITqg1XKuptYgu
-   uylJwGqVYU72CEntyARNxePw7usmJe/tVkeZxi2LRwME08vlUR2pd9plL
-   dWSOO6uXdpTNzE5zZdlFULRiW6ZSPbhflJHlYpxIc2gBfz7N2sYtiFrXM
-   DOxKI455z4K+HsfXemK1CAjflfZq9TJEPF/giHWpIakZ9Eg+AboZsaynQ
-   NlZZykyNugPQ1zyhMFaSxKKvux59jnSYcy8GhvBPheLFTLQtbRKPd41iG
-   0EiV7t581d3yLbTXSF5cb0ATY2RCv78yI86/JjvRegx6WouKHezC2RZkB
-   w==;
-X-IronPort-AV: E=Sophos;i="5.98,265,1673910000"; 
-   d="scan'208";a="29730468"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 16 Mar 2023 10:15:49 +0100
-Received: from steina-w.tq-net.de (unknown [10.123.53.21])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        Thu, 16 Mar 2023 05:17:41 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C8D9A0F3F;
+        Thu, 16 Mar 2023 02:17:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 3ABF8280056;
-        Thu, 16 Mar 2023 10:15:49 +0100 (CET)
-From:   Alexander Stein <alexander.stein@ew.tq-group.com>
-To:     Bjorn Helgaas <bhelgaas@google.com>
-Cc:     Korneliusz Osmenda <korneliuszo@gmail.com>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alexander Stein <alexander.stein@ew.tq-group.com>
-Subject: [PATCH v2 1/1] Guard pci_create_sysfs_dev_files with atomic value
-Date:   Thu, 16 Mar 2023 10:15:40 +0100
-Message-Id: <20230316091540.494366-1-alexander.stein@ew.tq-group.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 45CD0B81EBA;
+        Thu, 16 Mar 2023 09:17:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD2EBC433A7;
+        Thu, 16 Mar 2023 09:17:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678958257;
+        bh=zyT8xkfWDFX+ZVDBAje6rf/gFx+GN8afenbi9RxVCJg=;
+        h=From:To:Cc:Subject:Date:From;
+        b=hN0jOpum8PpGRyHdTUdc+1+87Vx5xvVICCz7Uio/1zS3c6/q/RdCKfFV5l7N1aB7y
+         c3FqHIjEGwclFeqqOK9wpLznfhVZ4DHBzYdKdrcHWr8AMRb9avXYJdJXhPjyoYa2hR
+         Bizqyjojb56/LKF6fJNOS+fgQIqoDJDd1Kaj3Ah7k+v6NMDzLH5itVERB8gvXBqaoN
+         hTt7CQDXfXmbTsOEKRc5aP3ueE3vgbuK1/TnEeVsCByc1kcOwuL4arj6kMigx/ihhU
+         r5hltqiiT7LaX/cSKsrNWqxmXsMhQbRRWsbwWo7DZW/cM/ajqdDPg9H5K0KwQLTFTf
+         86+De5IY5yvRw==
+From:   Georgi Djakov <djakov@kernel.org>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        djakov@kernel.org
+Subject: [GIT PULL] interconnect fixes for 6.3-rc
+Date:   Thu, 16 Mar 2023 11:16:55 +0200
+Message-Id: <20230316091655.865358-1-djakov@kernel.org>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Korneliusz Osmenda <korneliuszo@gmail.com>
+Hello Greg,
 
-On Gateworks Ventana there is a number of PCI devices and:
-  - imx6_pcie_probe takes longer than start of late init
-  - pci_sysfs_init sets up flag sysfs_initialized
-  - pci_sysfs_init initializes already found devices
-  - imx6_pcie_probe tries to reinitialize device
+This pull request contains fixes for the current cycle. These are fixing
+a race condition and other reported issues. The details are in the signed
+tag. All patches has been in linux-next during the last few days (but in
+practice even for more than a week - i dropped one patch and some hashes
+changed). Please pull into char-misc-linus when possible.
 
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=215515
+Thanks,
+Georgi
 
-Signed-off-by: Korneliusz Osmenda <korneliuszo@gmail.com>
-Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
----
- drivers/pci/pci-sysfs.c | 6 ++++++
- include/linux/pci.h     | 2 ++
- 2 files changed, 8 insertions(+)
 
-diff --git a/drivers/pci/pci-sysfs.c b/drivers/pci/pci-sysfs.c
-index dd0d9d9bc509..998e44716b6f 100644
---- a/drivers/pci/pci-sysfs.c
-+++ b/drivers/pci/pci-sysfs.c
-@@ -1497,6 +1497,9 @@ int __must_check pci_create_sysfs_dev_files(struct pci_dev *pdev)
- 	if (!sysfs_initialized)
- 		return -EACCES;
- 
-+	if (atomic_cmpxchg(&pdev->sysfs_init_cnt, 0, 1) == 1)
-+		return 0;		/* already added */
-+
- 	return pci_create_resource_files(pdev);
- }
- 
-@@ -1511,6 +1514,9 @@ void pci_remove_sysfs_dev_files(struct pci_dev *pdev)
- 	if (!sysfs_initialized)
- 		return;
- 
-+	if (atomic_cmpxchg(&pdev->sysfs_init_cnt, 1, 0) == 0)
-+		return;		/* already removed */
-+
- 	pci_remove_resource_files(pdev);
- }
- 
-diff --git a/include/linux/pci.h b/include/linux/pci.h
-index b50e5c79f7e3..024313a7a90a 100644
---- a/include/linux/pci.h
-+++ b/include/linux/pci.h
-@@ -467,6 +467,8 @@ struct pci_dev {
- 	pci_dev_flags_t dev_flags;
- 	atomic_t	enable_cnt;	/* pci_enable_device has been called */
- 
-+	atomic_t	sysfs_init_cnt;	/* pci_create_sysfs_dev_files has been called */
-+
- 	u32		saved_config_space[16]; /* Config space saved at suspend time */
- 	struct hlist_head saved_cap_space;
- 	int		rom_attr_enabled;	/* Display of ROM attribute enabled? */
--- 
-2.34.1
+The following changes since commit fe15c26ee26efa11741a7b632e9f23b01aca4cc6:
 
+  Linux 6.3-rc1 (2023-03-05 14:52:03 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/djakov/icc.git tags/icc-6.3-rc3
+
+for you to fetch changes up to 9db481c909dd6312ccfbdc7e343b50e41c727483:
+
+  memory: tegra30-emc: fix interconnect registration race (2023-03-13 21:13:49 +0200)
+
+----------------------------------------------------------------
+interconnect fixes for v6.3-rc
+
+This contains a bunch of fixes with the highlight being fixes for a race
+condition that could sometimes occur during the interconnect provider
+driver registration. There are also fixes for memory overallocation and
+a memory leak.
+
+- interconnect: qcom: osm-l3: fix icc_onecell_data allocation
+- interconnect: qcom: sm8450: switch to qcom_icc_rpmh_* function
+- interconnect: qcom: sm8550: switch to qcom_icc_rpmh_* function
+- interconnect: qcom: qcm2290: Fix MASTER_SNOC_BIMC_NRT
+- interconnect: fix mem leak when freeing nodes
+- interconnect: fix icc_provider_del() error handling
+- interconnect: fix provider registration API
+- interconnect: imx: fix registration race
+- interconnect: qcom: osm-l3: fix registration race
+- interconnect: qcom: rpm: fix probe child-node error handling
+- interconnect: qcom: rpm: fix registration race
+- interconnect: qcom: rpmh: fix probe child-node error handling
+- interconnect: qcom: rpmh: fix registration race
+- interconnect: qcom: msm8974: fix registration race
+- interconnect: exynos: fix node leak in probe PM QoS error path
+- interconnect: exynos: fix registration race
+- interconnect: exynos: drop redundant link destroy
+- memory: tegra: fix interconnect registration race
+- memory: tegra124-emc: fix interconnect registration race
+- memory: tegra20-emc: fix interconnect registration race
+- memory: tegra30-emc: fix interconnect registration race
+
+Signed-off-by: Georgi Djakov <djakov@kernel.org>
+
+----------------------------------------------------------------
+Dmitry Baryshkov (3):
+      interconnect: qcom: osm-l3: fix icc_onecell_data allocation
+      interconnect: qcom: sm8450: switch to qcom_icc_rpmh_* function
+      interconnect: qcom: sm8550: switch to qcom_icc_rpmh_* function
+
+Johan Hovold (17):
+      interconnect: fix mem leak when freeing nodes
+      interconnect: fix icc_provider_del() error handling
+      interconnect: fix provider registration API
+      interconnect: imx: fix registration race
+      interconnect: qcom: osm-l3: fix registration race
+      interconnect: qcom: rpm: fix probe child-node error handling
+      interconnect: qcom: rpm: fix registration race
+      interconnect: qcom: rpmh: fix probe child-node error handling
+      interconnect: qcom: rpmh: fix registration race
+      interconnect: qcom: msm8974: fix registration race
+      interconnect: exynos: fix node leak in probe PM QoS error path
+      interconnect: exynos: fix registration race
+      interconnect: exynos: drop redundant link destroy
+      memory: tegra: fix interconnect registration race
+      memory: tegra124-emc: fix interconnect registration race
+      memory: tegra20-emc: fix interconnect registration race
+      memory: tegra30-emc: fix interconnect registration race
+
+Konrad Dybcio (1):
+      interconnect: qcom: qcm2290: Fix MASTER_SNOC_BIMC_NRT
+
+ drivers/interconnect/core.c           | 68 +++--
+ drivers/interconnect/imx/imx.c        | 20 +-
+ drivers/interconnect/qcom/icc-rpm.c   | 29 ++-
+ drivers/interconnect/qcom/icc-rpmh.c  | 30 ++-
+ drivers/interconnect/qcom/msm8974.c   | 20 +-
+ drivers/interconnect/qcom/osm-l3.c    | 16 +-
+ drivers/interconnect/qcom/qcm2290.c   |  4 +-
+ drivers/interconnect/qcom/sm8450.c    | 98 +------
+ drivers/interconnect/qcom/sm8550.c    | 99 +-------
+ drivers/interconnect/samsung/exynos.c | 30 +--
+ drivers/memory/tegra/mc.c             | 16 +-
+ drivers/memory/tegra/tegra124-emc.c   | 12 +-
+ drivers/memory/tegra/tegra20-emc.c    | 12 +-
+ drivers/memory/tegra/tegra30-emc.c    | 12 +-
+ include/linux/interconnect-provider.h | 12 +
+ 15 files changed, 158 insertions(+), 320 deletions(-)
