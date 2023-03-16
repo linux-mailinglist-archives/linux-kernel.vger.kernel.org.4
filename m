@@ -2,22 +2,22 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E54996BCE22
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 12:29:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38F476BCE25
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 12:29:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229900AbjCPL3Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 07:29:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43932 "EHLO
+        id S229961AbjCPL31 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 07:29:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbjCPL3W (ORCPT
+        with ESMTP id S229852AbjCPL3X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 07:29:22 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72BE7A7291;
-        Thu, 16 Mar 2023 04:29:21 -0700 (PDT)
+        Thu, 16 Mar 2023 07:29:23 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE5B3B5B57;
+        Thu, 16 Mar 2023 04:29:22 -0700 (PDT)
 Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4PclLz0yQSzSl1B;
-        Thu, 16 Mar 2023 19:26:03 +0800 (CST)
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4PclMJ5pl0znWs8;
+        Thu, 16 Mar 2023 19:26:20 +0800 (CST)
 Received: from huawei.com (10.175.127.227) by dggpeml500021.china.huawei.com
  (7.185.36.21) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Thu, 16 Mar
@@ -28,10 +28,12 @@ CC:     <tytso@mit.edu>, <adilger.kernel@dilger.ca>, <jack@suse.cz>,
         <ritesh.list@gmail.com>, <linux-kernel@vger.kernel.org>,
         <yi.zhang@huawei.com>, <yangerkun@huawei.com>,
         <yukuai3@huawei.com>, <libaokun1@huawei.com>
-Subject: [PATCH 0/3] ext4: fix WARNING in ext4_add_complete_io
-Date:   Thu, 16 Mar 2023 19:28:29 +0800
-Message-ID: <20230316112832.2711783-1-libaokun1@huawei.com>
+Subject: [PATCH 1/3] ext4: correct error ctx->mask_s_##name in ctx_set_##name
+Date:   Thu, 16 Mar 2023 19:28:30 +0800
+Message-ID: <20230316112832.2711783-2-libaokun1@huawei.com>
 X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20230316112832.2711783-1-libaokun1@huawei.com>
+References: <20230316112832.2711783-1-libaokun1@huawei.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
@@ -47,16 +49,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Baokun Li (3):
-  ext4: correct error ctx->mask_s_##name in ctx_set_##name
-  ext4: add helper to check if flag is changed by ctx
-  ext4: fix race between writepages and remount
+We should only save the flag to be cleared in ctx->mask_s_##name.
 
- fs/ext4/ext4.h      |  3 ++-
- fs/ext4/ext4_jbd2.h |  9 +++++----
- fs/ext4/super.c     | 33 +++++++++++++++++++++++++++++----
- 3 files changed, 36 insertions(+), 9 deletions(-)
+Fixes: 6e47a3cc68fc ("ext4: get rid of super block and sbi from handle_mount_ops()")
+Signed-off-by: Baokun Li <libaokun1@huawei.com>
+---
+ fs/ext4/super.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/fs/ext4/super.c b/fs/ext4/super.c
+index f43e526112ae..5b4a323c218b 100644
+--- a/fs/ext4/super.c
++++ b/fs/ext4/super.c
+@@ -2023,7 +2023,7 @@ static int ext4_parse_test_dummy_encryption(const struct fs_parameter *param,
+ static inline void ctx_set_##name(struct ext4_fs_context *ctx,		\
+ 				  unsigned long flag)			\
+ {									\
+-	ctx->mask_s_##name |= flag;					\
++	ctx->mask_s_##name &= ~flag;					\
+ 	ctx->vals_s_##name |= flag;					\
+ }
+ 
 -- 
 2.31.1
 
