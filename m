@@ -2,101 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C44366BCEC4
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 12:54:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6FDD6BCEC8
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 12:55:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230238AbjCPLyK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 07:54:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57344 "EHLO
+        id S230233AbjCPLz3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 07:55:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230006AbjCPLyJ (ORCPT
+        with ESMTP id S229997AbjCPLz1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 07:54:09 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 904ECB79E6
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 04:54:03 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id j42-20020a05600c1c2a00b003ed363619ddso1841457wms.1
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 04:54:03 -0700 (PDT)
+        Thu, 16 Mar 2023 07:55:27 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAAA3B79E2
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 04:55:26 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id o12so6464228edb.9
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 04:55:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678967642;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=0uFoBC91q5VOOAd9taKsYCtd+FrLnQsGWtXFX+JEaiE=;
-        b=jjMDXSIXZzfRTYSnbX9Mr/KdIc0QFnzYdAQ9S8ArgGTUCs1WFd5qLtP9xIQIJcnfRl
-         +kCWYNMbCSGF2Q3Yn04z3qB3Kh1acy0QsQVzpRjxA7uSyWhHrzd2GjknX2UoKf7Jp+Xv
-         vtncFNEY1Kd7l69F25oh5mmfjRdjDEVuvofIOt1izRtW/mMfhbGR80tyegJQWyyv/zmY
-         MmZ/odykKrmClKh9um570beMx6Qp9AgXYik4ASWBadNI17upijzCNLfYokdZbMhO7/Un
-         VSzTHbzGBVRZmOVISJqhGeC1vvaFdJmJxqpGH5p2DcjGOO3ArEe1rQqapmkw1bISeyEO
-         Kiyg==
+        d=gmail.com; s=20210112; t=1678967725;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=obgcXj/DJg2WhaGcvR0ghP06Pui2+uVQTrLvBZH+b4E=;
+        b=pYOIG1unIu4vGsj5VkPtPl+Y4Z5YQQurw7iWw8BdsNaD9qG99c59NJUQLfh1jUxWI4
+         4dYltVg8kWn/rfhheNJiE2+23czC7LyFCdU1jsL5YBbFS7LaDOj/VIUIal1rZbP0HTyj
+         4BMFgVL7gz2ED+OXoax0DnKaIR6xOkWlCOwPTnyEov+wMVTkfBn9p4iEm3A//i+yVLPn
+         dcaftlvKZGFwoX+lQNOwdJRibh9ZuaAfRIgnWvq03XZXYwoqJ/zVyGe/49sKV98cF0xp
+         8DteN1dKmJDAWTMzE8nfPdi566+VDq4+2v3WPOfqKMxke9PEEZnEmS2HfNa3KVsI3MS5
+         xQ7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678967642;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0uFoBC91q5VOOAd9taKsYCtd+FrLnQsGWtXFX+JEaiE=;
-        b=ul5zLRF9kh2t+QI7l6GpDGDt7tYyu4hE2verSTN21+vpflUP+dew0alFJwJYwY4jMC
-         LR51YMt9HAEpGBsORM5G9S90ANdYbbqmE34FRelU8zjoYLLY5nl7rSAoW8jTwTO3uwXW
-         ScLszzChRp4jiM2lZJW1bdgZxKnV//DEL9qaCb6TPnHROmreMeEAVMhmW+Bri4rjFhg2
-         JrfDaehLQLg7AlCmDc1r27eqtSLOzf6/EEZKwEaqNtcjanqHm997M8GUpLKS/70RREK0
-         woKP21WpNsDlMmg7Onxhccnp5eoOEzwwA894/qBCsaq5GSnd+b46UY+ABnW/1Tfh9mbu
-         VxHQ==
-X-Gm-Message-State: AO0yUKXyt8JdMy+jremwAoY+bV+JONmPZRc58VxSBqjuKR3vH/Hnl9No
-        LDktYwNJCkZyIUEacBjjHUJNSQ==
-X-Google-Smtp-Source: AK7set9Hrt5RyoRlxpHSmE6khdeump8dTgY0/+kD7fmRmozJMoSKNdoEVqtZwQHDJhcw0jetX5Hx8A==
-X-Received: by 2002:a1c:c907:0:b0:3ed:4f7d:f6ee with SMTP id f7-20020a1cc907000000b003ed4f7df6eemr1979671wmb.14.1678967642038;
-        Thu, 16 Mar 2023 04:54:02 -0700 (PDT)
-Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id q22-20020a056000137600b002c71d206329sm7006900wrz.55.2023.03.16.04.54.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Mar 2023 04:54:00 -0700 (PDT)
-Message-ID: <e3805411-170a-759b-3608-7f53464641e8@linaro.org>
-Date:   Thu, 16 Mar 2023 11:53:59 +0000
+        d=1e100.net; s=20210112; t=1678967725;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=obgcXj/DJg2WhaGcvR0ghP06Pui2+uVQTrLvBZH+b4E=;
+        b=5fbaTvJDJNb8upOrO/srd40Q8RuIar1NR35uiMWFLa/DWuGDOgQ9xhTiGqzr2IoOVc
+         2p/1yS9eVuoaJcGw6RDHI3NAeVdOe0EjaIFeEPv5CRiPeOwZvmxcQP/mkTdrmwz6BSt5
+         3sNv972sb2dpGNpoIp8psDTgCSFttId8czfdHmf7bbqdS/AOyj4UyUvk8P9aGymSOFcx
+         WoIJT9uTLg8fO34A+LAnolVN2dBYIVoCXpJwMoBlswJNHxKOr2QNtiQBeetUxIXCLKuL
+         7vwdQl0ha48sIhBgwV4G6j2o0UTY12tAui9VR/t+tqAC/mwKh1/FEl8kzUzuwnnTemAI
+         Ahpw==
+X-Gm-Message-State: AO0yUKVQP2CmgXwMvxE+N+XYnknwM/7bHFe8McmqoIWZoUHOipF1wPFe
+        FmAHmMboNUJ0DtZ10OvHQUfLcqtxTnxfu1u8
+X-Google-Smtp-Source: AK7set+7OVYmujdt4eAkckYId+Q2zv4BouMjgpVb0wUw8HHthKoPZYGPWXfIfadj1ofMs0xM0JQsnw==
+X-Received: by 2002:a17:906:70d1:b0:8e0:4baf:59d7 with SMTP id g17-20020a17090670d100b008e04baf59d7mr9864376ejk.31.1678967724875;
+        Thu, 16 Mar 2023 04:55:24 -0700 (PDT)
+Received: from khadija-virtual-machine ([39.41.209.88])
+        by smtp.gmail.com with ESMTPSA id x20-20020a1709064a9400b0092b86d41dbasm3780850eju.114.2023.03.16.04.55.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Mar 2023 04:55:24 -0700 (PDT)
+Date:   Thu, 16 Mar 2023 16:55:21 +0500
+From:   Khadija Kamran <kamrankhadijadj@gmail.com>
+To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Alison Schofield <alison.schofield@intel.com>,
+        outreachy@lists.linux.dev,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] staging: axis-fifo: initialize timeouts in probe only
+Message-ID: <ZBMDqXMWpjNzsf4p@khadija-virtual-machine>
+References: <ZA9mThZ7NyRrQAMX@khadija-virtual-machine>
+ <279821116.9N5E1g01tA@suse>
+ <ZBLsoTBeKbuYbhCi@khadija-virtual-machine>
+ <1902746.IobQ9Gjlxr@suse>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] venus: Enable sufficient sequence change support for
- sc7180 and fix for Decoder STOP command issue.
-Content-Language: en-US
-To:     quic_vboma@quicinc.com,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        Vikash Garodia <quic_vgarodia@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Vikash Garodia <vgarodia@qti.qualcomm.com>,
-        Dikshita Agarwal <dikshita@qti.qualcomm.com>
-References: <20230202064712.5804-2-quic_vboma@quicinc.com>
- <20230316081509.12201-1-quic_vboma@quicinc.com>
- <20230316081509.12201-2-quic_vboma@quicinc.com>
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <20230316081509.12201-2-quic_vboma@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1902746.IobQ9Gjlxr@suse>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/03/2023 08:15, quic_vboma@quicinc.com wrote:
-> +	if (IS_V4(core))
+On Thu, Mar 16, 2023 at 12:39:31PM +0100, Fabio M. De Francesco wrote:
+> Hi Khadija,
+> 
+> Sorry for being here so late.
+> 
+> I just saw also your other messages with further help requests.
+> Please do other work while waiting for help on a specific issue. 
+> 
+> If I understand you correctly, you are saying that you can only build axis-
+> fifo in-kernel because you cannot change the '*' to 'm'. Correct?
+>
 
-Hi Viswanath,
+Yes, corect.
 
-Could you please take in the change to base on on IRIS version and 
-rebase your patch on _that_ much at least, not necessarily all of the 
-changes in the series below. Dikshita should be able help.
+> If so, you have probably touched other configuration options in a way that 
+> forces that driver to work only if compiled in-kernel). Therefore, I'd restart 
+> from scratch.
+> 
+> Please delete your current .config and make a copy of the one from your 
+> running kernel. Then check the three options Alison and I were talking about. 
+>
+> Remember that you cannot see the axis-fifo module entry (CONFIG_XIL_AXIS_FIFO) 
+> in "Device Drivers" -> "Staging Drivers" section if you have not yet enabled  
+> (either with 'm' or 'y') CONFIG_OF and CONFIG_HAS_IOMEM. 
+> 
+> Now you should end up with a visible CONFIG_XIL_AXIS_FIFO that can be enabled 
+> as a module with 'm'. 
+>
 
-https://lore.kernel.org/linux-arm-msm/c9c324aa-6192-f878-9189-635626e76b13@quicinc.com/
+Hey Fabio!
 
-IRIS version is more granular/accurate than V4/V6 etc.
+I am on it. I have undertood the steps. I will let you know if this
+works.
 
----
-bod
+Also, with the help of Nathan's feedback I was able to reproduce the
+warnings. I have changed the files to remove the warnings and it works. 
+
+I will submit another [PATCH v5].
+
+Thank you!
+Regards,
+Khadija Kamran
+
+> Let me know if this procedure works.
+> 
+> Fabio
+> 
+> 
