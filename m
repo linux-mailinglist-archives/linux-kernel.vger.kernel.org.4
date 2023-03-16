@@ -2,161 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A09886BC648
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 07:47:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF9CA6BC654
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 07:50:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229878AbjCPGr1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 02:47:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35484 "EHLO
+        id S229627AbjCPGul (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 02:50:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229834AbjCPGrY (ORCPT
+        with ESMTP id S229721AbjCPGui (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 02:47:24 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F7CF2DE67;
-        Wed, 15 Mar 2023 23:47:19 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1pchOK-0003ay-LW; Thu, 16 Mar 2023 07:47:12 +0100
-Message-ID: <abbcc89b-008b-64ae-ed77-20607f9356a8@leemhuis.info>
-Date:   Thu, 16 Mar 2023 07:47:11 +0100
+        Thu, 16 Mar 2023 02:50:38 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B3315A915
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 23:50:36 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id o12so3502816edb.9
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 23:50:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678949434;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=FSmqR42JI8zcqdZRW9LGFpXnT9CY9HrPjFJaVqu4ZgY=;
+        b=LtSG7S1Is6GOySgnfXlDFq9WmlpDcL15eYIvGJGE5wawcnUtwzMePaKmAhMuLgEhUs
+         xTJTs+bkX4okGEn38efRN2rttgtE4dB+4IsT4Ilvtd1XhKAc6NzWUyoWa3WqXvoL7u2T
+         ggWDnwAJN0nv2Blhx7wMVb7yHDJnjqMnbjcCCh46Ezk8oV0RRn56Sk1eQOIxncoCALCT
+         T/AHI0c1h3r4Kgd1Eqtqbds7fp/dpooQMq2CMoxqPxH6aUv8XVPKbT47IrkpLhjEySj2
+         9VIqK63JW8wx7Fc61X7ttVzGNgKM6hkgeC53bC3iIqBQY63I047h4js0OPc8tQoaa5yE
+         A56w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678949434;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FSmqR42JI8zcqdZRW9LGFpXnT9CY9HrPjFJaVqu4ZgY=;
+        b=aqoxyLu99AXzomqQmlmA3lCdOjXXTGOZmESIEy7ojf8ocPERWFue0cvuJXsIL0E2FA
+         boCuVq8BBDmMWS0ZTTj1cgDoK8wN3uNbeuXWwoncwq4wNDE2k8hDUHYWGWtR9KcfYeoE
+         naiCFeF3wLRLQulnRK+PoVkW65i/NiPVzzuG/kg9/VQcNuAXljzR02gibjt2EovCl1Nq
+         dVrplkKo+JyH6/2EjOpcxuesAovclz+PlnVuFHYTx+SL5lq+UmrMEifSDTVXDCjaTxF8
+         3Likh/mqzGam6RHrIP9j4G7MYDAivyLQIOF0bltNSq+wrmrWi52ZKR3WS/961+kf2bbr
+         Ak6A==
+X-Gm-Message-State: AO0yUKV5iniGKDgEH3tGcrVoKh+gvEfJgf39HyHDHD+NU4nIAfEtK/5H
+        +QsikYU/2R+6JRP7o0kghlUJwA==
+X-Google-Smtp-Source: AK7set+PiE/udqoIZYh3NUnUhUQW7Ogs6QpL8HNi52GXZ5TS0E9frxcNkNS0kfUthl780jLDuZxS7g==
+X-Received: by 2002:a17:906:c9ce:b0:889:58bd:86f1 with SMTP id hk14-20020a170906c9ce00b0088958bd86f1mr8988609ejb.14.1678949434663;
+        Wed, 15 Mar 2023 23:50:34 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:9827:5f65:8269:a95f? ([2a02:810d:15c0:828:9827:5f65:8269:a95f])
+        by smtp.gmail.com with ESMTPSA id w13-20020a1709060a0d00b0092707833d08sm3388745ejf.70.2023.03.15.23.50.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Mar 2023 23:50:34 -0700 (PDT)
+Message-ID: <1f77b57b-e3dc-b44e-0afb-ac1b7c4cac83@linaro.org>
+Date:   Thu, 16 Mar 2023 07:50:33 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-Content-Language: en-US, de-DE
-From:   "Linux regression tracking (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-To:     Hector Martin <marcan@marcan.st>
-Cc:     Paolo Abeni <pabeni@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        petr.bahula@artisys.aero,
-        Linux kernel regressions list <regressions@lists.linux.dev>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-Subject: [regression] Bug 217204 - ASIX AX88179 does not work in 6.X kernel
+Subject: Re: [PATCH v4 08/10] dt-bindings: display/msm: dsi-controller-main:
+ Fix deprecated compatible
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Krishna Manikandan <quic_mkrishn@quicinc.com>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>
+Cc:     Rob Herring <robh@kernel.org>, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Marijn Suijten <marijn.suijten@somainline.org>
+References: <20230307-topic-dsi_qcm-v4-0-54b4898189cb@linaro.org>
+ <20230307-topic-dsi_qcm-v4-8-54b4898189cb@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230307-topic-dsi_qcm-v4-8-54b4898189cb@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1678949240;dbba4793;
-X-HE-SMSGID: 1pchOK-0003ay-LW
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Thorsten here, the Linux kernel's regression tracker.
-
-I noticed a regression report in bugzilla.kernel.org; Hector, apparently
-it's caused by a commit of yours.
-
-As many (most?) kernel developer don't keep an eye on bugzilla, I
-decided to forward it by mail. Quoting from
-https://bugzilla.kernel.org/show_bug.cgi?id=217204 :
-
->  petr.bahula@artisys.aero 2023-03-15 16:04:49 UTC
+On 14/03/2023 13:13, Konrad Dybcio wrote:
+> The point of the previous cleanup was to disallow "qcom,mdss-dsi-ctrl"
+> alone. This however didn't quite work out and the property became
+> undocumented instead of deprecated. Fix that.
 > 
-> After update from kernel 5.15.80 to 6.1.12 the USB ETH card ASIX AX88179 which is in USB-C dock is not accessible as eth1.
+> Fixes: 0c0f65c6dd44 ("dt-bindings: msm: dsi-controller-main: Add compatible strings for every current SoC")
+> Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+>  Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> **!!! IMPORTANT !!!
-> If the HW is booted with good kernel and then rebooted (without losing power) to bad kernel, it will still work. Only if it is booted with bad kernel from cold state (total no power) then it will not work.**
-> 
-> ```
-> Bisecting: 2 revisions left to test after this (roughly 2 steps)
-> [a41b17ff9dacd22f5f118ee53d82da0f3e52d5e3] dccp: put dccp_qpolicy_full() and dccp_qpolicy_push() in the same lock
-> Bisecting: 0 revisions left to test after this (roughly 1 step)
-> [f56530dcdb0684406661ac9f1accf48319d07600] net: usb: make USB_RTL8153_ECM non user configurable
-> c67cc4315a8e605ec875bd3a1210a549e3562ddc is the first bad commit
-> commit c67cc4315a8e605ec875bd3a1210a549e3562ddc
-> Author: Hector Martin <marcan@marcan.st>
-> Date:   Sun Jul 31 16:22:09 2022 +0900
-> 
->     net: usb: ax88179_178a: Bind only to vendor-specific interface
->     
->     The Anker PowerExpand USB-C to Gigabit Ethernet adapter uses this
->     chipset, but exposes CDC Ethernet configurations as well as the
->     vendor specific one. This driver tries to bind by PID:VID
->     unconditionally and ends up picking up the CDC configuration, which
->     is supposed to be handled by the class driver. To make things even
->     more confusing, it sees both of the CDC class interfaces and tries
->     to bind twice, resulting in two broken Ethernet devices.
->     
->     Change all the ID matches to specifically match the vendor-specific
->     interface. By default the device comes up in CDC mode and is bound by
->     that driver (which works fine); users may switch it to the vendor
->     interface using sysfs to set bConfigurationValue, at which point the
->     device actually goes through a reconnect cycle and comes back as a
->     vendor specific only device, and then this driver binds and works too.
->     
->     The affected device uses VID/PID 0b95:1790, but we might as well change
->     all of them for good measure, since there is no good reason for this
->     driver to bind to standard CDC Ethernet interfaces.
->     
->     v3: Added VID/PID info to commit message
->     
->     Signed-off-by: Hector Martin <marcan@marcan.st>
->     Link: https://lore.kernel.org/r/20220731072209.45504-1-marcan@marcan.st
->     Signed-off-by: Paolo Abeni <pabeni@redhat.com>
-> 
->  drivers/net/usb/ax88179_178a.c | 26 +++++++++++++-------------
->  1 file changed, 13 insertions(+), 13 deletions(-)
-> ```
-> 
-> I've reverted changes made in the c67cc4315a8e605ec875bd3a1210a549e3562ddc commit and gentoo-sources-6.1.12 works correctly now.
-> 
-> Patch which I use for new kernels now:
-> ```
-> pet@petkub ~ $  cat /etc/portage/patches/sys-kernel/gentoo-sources/ASIX_AX88179.patch 
-> --- a/drivers/net/usb/ax88179_178a.c    2022-12-11 23:15:18.000000000 +0100
-> +++ b/drivers/net/usb/ax88179_178a.c    2023-02-23 10:04:47.534060336 +0100
-> @@ -1844,7 +1844,8 @@
->  static const struct usb_device_id products[] = {
->  {
->         /* ASIX AX88179 10/100/1000 */
-> -       USB_DEVICE_AND_INTERFACE_INFO(0x0b95, 0x1790, 0xff, 0xff, 0),
-> +       /*USB_DEVICE_AND_INTERFACE_INFO(0x0b95, 0x1790, 0xff, 0xff, 0),*/
-> +       USB_DEVICE(0x0b95, 0x1790),
->         .driver_info = (unsigned long)&ax88179_info,
->  }, {
->         /* ASIX AX88178A 10/100/1000 */
-> ```
-> 
-> See also: https://bugs.gentoo.org/895720
+> diff --git a/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml b/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml
+> index 2494817c1bd6..94f4cdf88c95 100644
+> --- a/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml
+> +++ b/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml
+> @@ -34,7 +34,7 @@ properties:
+>        - items:
 
-See the ticket for more details.
+This patch should drop the items - you have only one item, so no need
+for list.
+
+>            - enum:
+>                - qcom,dsi-ctrl-6g-qcm2290
+> -          - const: qcom,mdss-dsi-ctrl
+> +              - qcom,mdss-dsi-ctrl # This should always come with an SoC-specific compatible
+>          deprecated: true
 
 
-[TLDR for the rest of this mail: I'm adding this report to the list of
-tracked Linux kernel regressions; the text you find below is based on a
-few templates paragraphs you might have encountered already in similar
-form.]
+Best regards,
+Krzysztof
 
-BTW, let me use this mail to also add the report to the list of tracked
-regressions to ensure it's doesn't fall through the cracks:
-
-#regzbot introduced: c67cc4315a8e6
-https://bugzilla.kernel.org/show_bug.cgi?id=217204
-#regzbot title: net: drivers(usb): ASIX AX88179 stopped working
-#regzbot ignore-activity
-
-This isn't a regression? This issue or a fix for it are already
-discussed somewhere else? It was fixed already? You want to clarify when
-the regression started to happen? Or point out I got the title or
-something else totally wrong? Then just reply and tell me -- ideally
-while also telling regzbot about it, as explained by the page listed in
-the footer of this mail.
-
-Developers: When fixing the issue, remember to add 'Link:' tags pointing
-to the report (e.g. the buzgzilla ticket and maybe this mail as well, if
-this thread sees some discussion). See page linked in footer for details.
-
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-If I did something stupid, please tell me, as explained on that page.
