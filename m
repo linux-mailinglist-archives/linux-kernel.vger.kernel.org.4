@@ -2,174 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D5246BCEBD
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 12:50:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C44366BCEC4
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 12:54:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230255AbjCPLuw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 07:50:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52622 "EHLO
+        id S230238AbjCPLyK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 07:54:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229733AbjCPLuu (ORCPT
+        with ESMTP id S230006AbjCPLyJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 07:50:50 -0400
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACAAF49F3;
-        Thu, 16 Mar 2023 04:50:47 -0700 (PDT)
-Received: (Authenticated sender: clement.leger@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id F373E1C0005;
-        Thu, 16 Mar 2023 11:50:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1678967445;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=E1afFIzDsJ40IP7Ith3L/4SRKNCsYKLONEXOEtzaXbs=;
-        b=Nn5HyeapmUkGllvyxQEGYP/X+cMnXXK0lX4ufrC/EhLRdqJ/pWmEogmdcrKat+hZDlPgHF
-        Qh0udtx4m7bVmBSI5xVu5/1+ExG6C3dVUATriG8FHR3jpPogKGuTu36jRk4grXhkkBd1XW
-        eYZ9oAFJeBj+HUr5uSK4h56fru4jJiItlr7gv75qSCzCWbgR0Mvu8OnxCHjtQ+XyP+1t/Z
-        WqJIT9K6dFM2oFLQd6MG3o6n0KIiywhy/GD6eGjTux3/JL5D0IVp9FkPbJmkKAl0WAmh6q
-        h2ZGY0Hjw+ZQwQ9Q8KL4vy1io85bRpYykrxllDuV0VPHWbk32KxL0D59t2YyGA==
-Date:   Thu, 16 Mar 2023 12:53:29 +0100
-From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Herve Codina <herve.codina@bootlin.com>,
-        =?UTF-8?B?TWlxdcOobA==?= Raynal <miquel.raynal@bootlin.com>,
-        Milan Stevanovic <milan.stevanovic@se.com>,
-        Jimmy Lalande <jimmy.lalande@se.com>,
-        Pascal Eberhard <pascal.eberhard@se.com>,
-        Arun Ramadoss <Arun.Ramadoss@microchip.com>,
-        linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Alexis =?UTF-8?B?TG90aG9yw6k=?= <alexis.lothore@bootlin.com>
-Subject: Re: [PATCH RESEND net-next v4 2/3] net: dsa: rzn1-a5psw: add
- support for .port_bridge_flags
-Message-ID: <20230316125329.75b290d4@fixe.home>
-In-Reply-To: <20230314230821.kjiyseiqhat4apqb@skbuf>
-References: <20230314163651.242259-1-clement.leger@bootlin.com>
-        <20230314163651.242259-3-clement.leger@bootlin.com>
-        <20230314230821.kjiyseiqhat4apqb@skbuf>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.36; x86_64-pc-linux-gnu)
+        Thu, 16 Mar 2023 07:54:09 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 904ECB79E6
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 04:54:03 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id j42-20020a05600c1c2a00b003ed363619ddso1841457wms.1
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 04:54:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678967642;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0uFoBC91q5VOOAd9taKsYCtd+FrLnQsGWtXFX+JEaiE=;
+        b=jjMDXSIXZzfRTYSnbX9Mr/KdIc0QFnzYdAQ9S8ArgGTUCs1WFd5qLtP9xIQIJcnfRl
+         +kCWYNMbCSGF2Q3Yn04z3qB3Kh1acy0QsQVzpRjxA7uSyWhHrzd2GjknX2UoKf7Jp+Xv
+         vtncFNEY1Kd7l69F25oh5mmfjRdjDEVuvofIOt1izRtW/mMfhbGR80tyegJQWyyv/zmY
+         MmZ/odykKrmClKh9um570beMx6Qp9AgXYik4ASWBadNI17upijzCNLfYokdZbMhO7/Un
+         VSzTHbzGBVRZmOVISJqhGeC1vvaFdJmJxqpGH5p2DcjGOO3ArEe1rQqapmkw1bISeyEO
+         Kiyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678967642;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0uFoBC91q5VOOAd9taKsYCtd+FrLnQsGWtXFX+JEaiE=;
+        b=ul5zLRF9kh2t+QI7l6GpDGDt7tYyu4hE2verSTN21+vpflUP+dew0alFJwJYwY4jMC
+         LR51YMt9HAEpGBsORM5G9S90ANdYbbqmE34FRelU8zjoYLLY5nl7rSAoW8jTwTO3uwXW
+         ScLszzChRp4jiM2lZJW1bdgZxKnV//DEL9qaCb6TPnHROmreMeEAVMhmW+Bri4rjFhg2
+         JrfDaehLQLg7AlCmDc1r27eqtSLOzf6/EEZKwEaqNtcjanqHm997M8GUpLKS/70RREK0
+         woKP21WpNsDlMmg7Onxhccnp5eoOEzwwA894/qBCsaq5GSnd+b46UY+ABnW/1Tfh9mbu
+         VxHQ==
+X-Gm-Message-State: AO0yUKXyt8JdMy+jremwAoY+bV+JONmPZRc58VxSBqjuKR3vH/Hnl9No
+        LDktYwNJCkZyIUEacBjjHUJNSQ==
+X-Google-Smtp-Source: AK7set9Hrt5RyoRlxpHSmE6khdeump8dTgY0/+kD7fmRmozJMoSKNdoEVqtZwQHDJhcw0jetX5Hx8A==
+X-Received: by 2002:a1c:c907:0:b0:3ed:4f7d:f6ee with SMTP id f7-20020a1cc907000000b003ed4f7df6eemr1979671wmb.14.1678967642038;
+        Thu, 16 Mar 2023 04:54:02 -0700 (PDT)
+Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id q22-20020a056000137600b002c71d206329sm7006900wrz.55.2023.03.16.04.54.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Mar 2023 04:54:00 -0700 (PDT)
+Message-ID: <e3805411-170a-759b-3608-7f53464641e8@linaro.org>
+Date:   Thu, 16 Mar 2023 11:53:59 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] venus: Enable sufficient sequence change support for
+ sc7180 and fix for Decoder STOP command issue.
+Content-Language: en-US
+To:     quic_vboma@quicinc.com,
+        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+        Vikash Garodia <quic_vgarodia@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Vikash Garodia <vgarodia@qti.qualcomm.com>,
+        Dikshita Agarwal <dikshita@qti.qualcomm.com>
+References: <20230202064712.5804-2-quic_vboma@quicinc.com>
+ <20230316081509.12201-1-quic_vboma@quicinc.com>
+ <20230316081509.12201-2-quic_vboma@quicinc.com>
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+In-Reply-To: <20230316081509.12201-2-quic_vboma@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le Wed, 15 Mar 2023 01:08:21 +0200,
-Vladimir Oltean <olteanv@gmail.com> a =C3=A9crit :
+On 16/03/2023 08:15, quic_vboma@quicinc.com wrote:
+> +	if (IS_V4(core))
 
-> On Tue, Mar 14, 2023 at 05:36:50PM +0100, Cl=C3=A9ment L=C3=A9ger wrote:
-> > +static int a5psw_port_pre_bridge_flags(struct dsa_switch *ds, int port,
-> > +				       struct switchdev_brport_flags flags,
-> > +				       struct netlink_ext_ack *extack)
-> > +{
-> > +	if (flags.mask & ~(BR_LEARNING | BR_FLOOD | BR_MCAST_FLOOD |
-> > +			   BR_BCAST_FLOOD))
-> > +		return -EINVAL;
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static int
-> > +a5psw_port_bridge_flags(struct dsa_switch *ds, int port,
-> > +			struct switchdev_brport_flags flags,
-> > +			struct netlink_ext_ack *extack)
-> > +{
-> > +	struct a5psw *a5psw =3D ds->priv;
-> > +	u32 val;
-> > +
-> > +	if (flags.mask & BR_LEARNING) {
-> > +		val =3D flags.val & BR_LEARNING ? 0 : A5PSW_INPUT_LEARN_DIS(port);
-> > +		a5psw_reg_rmw(a5psw, A5PSW_INPUT_LEARN,
-> > +			      A5PSW_INPUT_LEARN_DIS(port), val);
-> > +	} =20
->=20
-> 2 issues.
->=20
-> 1: does this not get overwritten by a5psw_port_stp_state_set()?
+Hi Viswanath,
 
-Hum indeed. How is this kind of thing supposed to be handled ? Should I
-remove the handling of BR_LEARNING to forbid modifying it ? Ot should I
-allow it only if STP isn't enabled (which I'm not sure how to do it) ?
+Could you please take in the change to base on on IRIS version and 
+rebase your patch on _that_ much at least, not necessarily all of the 
+changes in the series below. Dikshita should be able help.
 
-> 2: What is the hardware default value for A5PSW_INPUT_LEARN? Please make
->    sure that standalone ports have learning disabled by default, when
->    the driver probes.
->=20
-> > +
-> > +	if (flags.mask & BR_FLOOD) {
-> > +		val =3D flags.val & BR_FLOOD ? BIT(port) : 0;
-> > +		a5psw_reg_rmw(a5psw, A5PSW_UCAST_DEF_MASK, BIT(port), val);
-> > +	}
-> > +
-> > +	if (flags.mask & BR_MCAST_FLOOD) {
-> > +		val =3D flags.val & BR_MCAST_FLOOD ? BIT(port) : 0;
-> > +		a5psw_reg_rmw(a5psw, A5PSW_MCAST_DEF_MASK, BIT(port), val);
-> > +	}
-> > +
-> > +	if (flags.mask & BR_BCAST_FLOOD) {
-> > +		val =3D flags.val & BR_BCAST_FLOOD ? BIT(port) : 0;
-> > +		a5psw_reg_rmw(a5psw, A5PSW_BCAST_DEF_MASK, BIT(port), val);
-> > +	} =20
->=20
-> Humm, there's a (huge) problem with this flooding mask.
->=20
-> a5psw_flooding_set_resolution() - called from a5psw_port_bridge_join()
-> and a5psw_port_bridge_leave() - touches the same registers as
-> a5psw_port_bridge_flags(). Which means that your bridge forwarding
-> domain controls are the same as your flooding controls.
->=20
-> Which is bad news, because
-> dsa_port_bridge_leave()
-> -> dsa_port_switchdev_unsync_attrs()
->    -> dsa_port_clear_brport_flags()
->       -> dsa_port_bridge_flags()
->          -> a5psw_port_bridge_flags() =20
->=20
-> enables flooding on the port after calling a5psw_port_bridge_leave().
-> So the port which has left a bridge is standalone, but it still forwards
-> packets to the other bridged ports!
+https://lore.kernel.org/linux-arm-msm/c9c324aa-6192-f878-9189-635626e76b13@quicinc.com/
 
-Actually not this way because the port is configured in a specific mode
-which only forward packet to the CPU ports. Indeed, we set a specific
-rule using the PATTERN_CTRL register with the MGMTFWD bit set:
-When set, the frame is forwarded to the management port only
-(suppressing destination address lookup).
+IRIS version is more granular/accurate than V4/V6 etc.
 
-However, the port will received packets *from* the other ports (which is
-wrong... I can handle that by not setting the flooding attributes if
-the port is not in bridge. Doing so would definitely fix the various
-problems that could happen.
-
-BTW, the same goes with the learning bit that would be reenabled after
-leaving the bridge and you mentionned it should be disabled for a
-standalone port.
-
->=20
-> You should be able to see that this is the case, if you put the ports
-> under a dummy bridge, then run tools/testing/selftests/drivers/net/dsa/no=
-_forwarding.sh.
-
-Yes, makes sense.
-
-Thanks,
-
---=20
-Cl=C3=A9ment L=C3=A9ger,
-Embedded Linux and Kernel engineer at Bootlin
-https://bootlin.com
+---
+bod
