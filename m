@@ -2,78 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 050336BD33B
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 16:19:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 058B16BD33C
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 16:20:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231387AbjCPPTW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 11:19:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45086 "EHLO
+        id S231368AbjCPPTw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 11:19:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230147AbjCPPTR (ORCPT
+        with ESMTP id S230147AbjCPPTu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 11:19:17 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B47DD517E
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 08:18:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678979909;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=zk9KdCyCrYHmFVK1vb1UQg9WuTwY/vbXMs8lYmla1FA=;
-        b=K50XjM6MWsqWDOnwG+AWrC9FeJyMpDFANRWYr6QnpS9Eo8VOmt4no5B79sx/aT3rESQkyq
-        zbY8AJlFE006qxUZVulzJo3eqtli7u7dq5P2TwtHl4iiD1kFeFWCRfL1OgX/KIL6AVKcPm
-        XixYW9VNdLIPQmiyqXyAyryjzfrA7hA=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-187-g0FFi-DeOp6TexqXVKLY2A-1; Thu, 16 Mar 2023 11:18:28 -0400
-X-MC-Unique: g0FFi-DeOp6TexqXVKLY2A-1
-Received: by mail-qk1-f197.google.com with SMTP id oo24-20020a05620a531800b00745d671f9afso1090393qkn.12
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 08:18:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678979907;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zk9KdCyCrYHmFVK1vb1UQg9WuTwY/vbXMs8lYmla1FA=;
-        b=UdfayYRgq/79LVSRDCaceiyi6cclYJs/7DSrJEJPZ3RWHcTOP5OlLuaCmEgGz4JNTm
-         jBLIlG3qntx/+qRDwT4oGjfJr10Rm/hyBtEQ8os7pvi2hCsn89NqNYdF1yJK9Ja1DzT4
-         wiD5GasNItq+L4e9Wgg5inojMHRYLheQRB2rPgl4s9OnD9bmZQfM/22GD/KOTev+wWuu
-         IqEPrkNKCCGHOXoy7YM46WoQI1O/KUSYkTBWAM9J//w4Y2uvA7w1O/2ctqY7klCRKmk7
-         282PNz9EaFkJRO7HoM7jc5ab61WGMdnhWB1ge17buzGOvpnd69OuBYqRGnqlH4571nWv
-         jKFA==
-X-Gm-Message-State: AO0yUKVYgtZ6gUyeTL+PQSfJaaDBzEeRI4CAoLUtyQsekgpT+LN4KjHa
-        /USPOUAkkfJ2MecMEX5o7fIidPiAaa3xkdt3NOb5ugryEiYxKk1yKwcApd7wMKlEqgw69ERVr1z
-        hut/tqWFZVdp7EHmL4XNm2F6v
-X-Received: by 2002:ac8:5f8b:0:b0:3b9:fc92:a6 with SMTP id j11-20020ac85f8b000000b003b9fc9200a6mr5627934qta.6.1678979907388;
-        Thu, 16 Mar 2023 08:18:27 -0700 (PDT)
-X-Google-Smtp-Source: AK7set+odfYRpP33cKjai6UkPs9JzY9bzO4d71Nnx6DHJNlPPBdosWt4TG+KSxTh4IguRUSCcm1nyQ==
-X-Received: by 2002:ac8:5f8b:0:b0:3b9:fc92:a6 with SMTP id j11-20020ac85f8b000000b003b9fc9200a6mr5627901qta.6.1678979906963;
-        Thu, 16 Mar 2023 08:18:26 -0700 (PDT)
-Received: from x1n (bras-base-aurron9127w-grc-56-70-30-145-63.dsl.bell.ca. [70.30.145.63])
-        by smtp.gmail.com with ESMTPSA id z201-20020a3765d2000000b00745c2b29091sm5853490qkb.93.2023.03.16.08.18.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Mar 2023 08:18:26 -0700 (PDT)
-Date:   Thu, 16 Mar 2023 11:18:25 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>
-Subject: Re: [PATCH] mm/thp: Rename TRANSPARENT_HUGEPAGE_NEVER_DAX to
- _UNSUPPORTED
-Message-ID: <ZBMzQW674oHQJV7F@x1n>
-References: <20230315171642.1244625-1-peterx@redhat.com>
- <83625129-26c9-8885-7367-bb56bc5367f3@redhat.com>
+        Thu, 16 Mar 2023 11:19:50 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A5639DF737
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 08:19:33 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 25F4A2F4;
+        Thu, 16 Mar 2023 08:20:17 -0700 (PDT)
+Received: from [10.1.196.40] (e121345-lin.cambridge.arm.com [10.1.196.40])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EE8493F67D;
+        Thu, 16 Mar 2023 08:19:31 -0700 (PDT)
+Message-ID: <1d4ff93d-a97e-85bb-4259-9da259bc2ab7@arm.com>
+Date:   Thu, 16 Mar 2023 15:19:27 +0000
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="Rhi7qt2LvjtkimrJ"
-Content-Disposition: inline
-In-Reply-To: <83625129-26c9-8885-7367-bb56bc5367f3@redhat.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v1 04/14] iommu/arm-smmu-v3: Add arm_smmu_hw_info
+Content-Language: en-GB
+To:     Nicolin Chen <nicolinc@nvidia.com>
+Cc:     jgg@nvidia.com, will@kernel.org, eric.auger@redhat.com,
+        kevin.tian@intel.com, baolu.lu@linux.intel.com, joro@8bytes.org,
+        shameerali.kolothum.thodi@huawei.com, jean-philippe@linaro.org,
+        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+References: <cover.1678348754.git.nicolinc@nvidia.com>
+ <494e36cbb77d49e11427b308868dbc1b0e19fe18.1678348754.git.nicolinc@nvidia.com>
+ <bfa43614-c052-4bed-b87e-691141f41909@arm.com>
+ <ZAqFFolbw5xoJDfb@Asurada-Nvidia>
+ <5cc56149-965a-bb47-f23f-6aa9d0ecce4e@arm.com>
+ <ZBJfJUjbAUId68s1@Asurada-Nvidia>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <ZBJfJUjbAUId68s1@Asurada-Nvidia>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,97 +53,111 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---Rhi7qt2LvjtkimrJ
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-
-On Thu, Mar 16, 2023 at 03:57:12PM +0100, David Hildenbrand wrote:
-> On 15.03.23 18:16, Peter Xu wrote:
-> > TRANSPARENT_HUGEPAGE_NEVER_DAX has nothing to do with DAX.  It's set when
-> > has_transparent_hugepage() returns false, checked in hugepage_vma_check()
-> > and will disable THP completely if false.  Rename it to reflect its real
-> > purpose.
-> > 
-> > Cc: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
-> > Cc: Yang Shi <shy828301@gmail.com>
-> > Signed-off-by: Peter Xu <peterx@redhat.com>
-> > ---
-> >   include/linux/huge_mm.h | 2 +-
-> >   mm/huge_memory.c        | 4 ++--
-> >   2 files changed, 3 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/include/linux/huge_mm.h b/include/linux/huge_mm.h
-> > index 70bd867eba94..9a3a3af2dd80 100644
-> > --- a/include/linux/huge_mm.h
-> > +++ b/include/linux/huge_mm.h
-> > @@ -79,7 +79,7 @@ static inline vm_fault_t vmf_insert_pfn_pud(struct vm_fault *vmf, pfn_t pfn,
-> >   }
-> >   enum transparent_hugepage_flag {
-> > -	TRANSPARENT_HUGEPAGE_NEVER_DAX,
-> > +	TRANSPARENT_HUGEPAGE_UNSUPPORTED,
-> >   	TRANSPARENT_HUGEPAGE_FLAG,
-> >   	TRANSPARENT_HUGEPAGE_REQ_MADV_FLAG,
-> >   	TRANSPARENT_HUGEPAGE_DEFRAG_DIRECT_FLAG,
-> > diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-> > index b0ab247939e0..913e7dc32869 100644
-> > --- a/mm/huge_memory.c
-> > +++ b/mm/huge_memory.c
-> > @@ -88,7 +88,7 @@ bool hugepage_vma_check(struct vm_area_struct *vma, unsigned long vm_flags,
-> >   	/*
-> >   	 * If the hardware/firmware marked hugepage support disabled.
-> >   	 */
-> > -	if (transparent_hugepage_flags & (1 << TRANSPARENT_HUGEPAGE_NEVER_DAX))
-> > +	if (transparent_hugepage_flags & (1 << TRANSPARENT_HUGEPAGE_UNSUPPORTED))
-> >   		return false;
-> >   	/* khugepaged doesn't collapse DAX vma, but page fault is fine. */
-> > @@ -464,7 +464,7 @@ static int __init hugepage_init(void)
-> >   		 * Hardware doesn't support hugepages, hence disable
-> >   		 * DAX PMD support.
+On 16/03/2023 12:13 am, Nicolin Chen wrote:
+> On Fri, Mar 10, 2023 at 03:28:56PM +0000, Robin Murphy wrote:
+>> External email: Use caution opening links or attachments
+>>
+>>
+>> On 2023-03-10 01:17, Nicolin Chen wrote:
+>>> Hi Robin,
+>>>
+>>> Thanks for the inputs.
+>>>
+>>> On Thu, Mar 09, 2023 at 01:03:41PM +0000, Robin Murphy wrote:
+>>>> External email: Use caution opening links or attachments
+>>>>
+>>>>
+>>>> On 2023-03-09 10:53, Nicolin Chen wrote:
+>>>>> This is used to forward the host IDR values to the user space, so the
+>>>>> hypervisor and the guest VM can learn about the underlying hardware's
+>>>>> capabilities.
+>>>>>
+>>>>> Also, set the driver_type to IOMMU_HW_INFO_TYPE_ARM_SMMUV3 to pass the
+>>>>> corresponding type sanity in the core.
+>>>>>
+>>>>> Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
+>>>>> ---
+>>>>>     drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c | 25 +++++++++++++++++++++
+>>>>>     drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h |  2 ++
+>>>>>     include/uapi/linux/iommufd.h                | 14 ++++++++++++
+>>>>>     3 files changed, 41 insertions(+)
+>>>>>
+>>>>> diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+>>>>> index f2425b0f0cd6..c1aac695ae0d 100644
+>>>>> --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+>>>>> +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+>>>>> @@ -2005,6 +2005,29 @@ static bool arm_smmu_capable(struct device *dev, enum iommu_cap cap)
+>>>>>         }
+>>>>>     }
+>>>>>
+>>>>> +static void *arm_smmu_hw_info(struct device *dev, u32 *length)
+>>>>> +{
+>>>>> +     struct arm_smmu_master *master = dev_iommu_priv_get(dev);
+>>>>> +     struct iommu_hw_info_smmuv3 *info;
+>>>>> +     void *base_idr;
+>>>>> +     int i;
+>>>>> +
+>>>>> +     if (!master || !master->smmu)
+>>>>> +             return ERR_PTR(-ENODEV);
+>>>>> +
+>>>>> +     info = kzalloc(sizeof(*info), GFP_KERNEL);
+>>>>> +     if (!info)
+>>>>> +             return ERR_PTR(-ENOMEM);
+>>>>> +
+>>>>> +     base_idr = master->smmu->base + ARM_SMMU_IDR0;
+>>>>> +     for (i = 0; i <= 5; i++)
+>>>>> +             info->idr[i] = readl_relaxed(base_idr + 0x4 * i);
+>>>>
+>>>> You need to take firmware overrides etc. into account here. In
+>>>> particular, features like BTM may need to be hidden to work around
+>>>> errata either in the system integration or the SMMU itself. It isn't
+>>>> reasonable to expect every VMM to be aware of every erratum and
+>>>> workaround, and there may even be workarounds where we need to go out of
+>>>> our way to prevent guests from trying to use certain features in order
+>>>> to maintain correctness at S2.
+>>>
+>>> We can add a bit of overrides after this for errata, perhaps?
+>>>
+>>> I have some trouble with finding the errata docs. Would it be
+>>> possible for you to direct me to it with a link maybe?
+>>
+>> The key Arm term is "Software Developer Errata Notice", or just SDEN.
+>> Here's the ones for MMU-600 and MMU-700:
+>>
+>> https://developer.arm.com/documentation/SDEN-946810/latest/
 > 
+> This page shows "Arm CoreLink MMU-600 System Memory Management
+> Unit Software Developer Errata Notice" but the downloaded file
+> is "Arm CoreLink CI-700 Coherent Interconnect" errata notice.
+> And I don't quite understand what it's about.
+
+Oh, wonderful... I've reported that now, hopefully it gets fixed soon...
+
+>> https://developer.arm.com/documentation/SDEN-1786925/latest/
 > 
-> We should also fixup that comment then, no?
+> Yea, this one I got an "MMU-700 System Memory Management Unit"
+> SMMU errata file that I can read and understand.
+> 
+>> Note that until now it has been extremely fortunate that in pretty much
+>> every case Linux either hasn't supported the affected feature at all, or
+>> has happened to avoid meeting the conditions. Once we do introduce
+>> nesting support that all goes out the window (and I'll have to think
+>> more when reviewing new errata in future...)
+>>
+>> I've been putting off revisiting all the existing errata to figure out
+>> what we'd need to do until new nesting patches appeared, so I'll try to
+>> get to that soon now. I think in many cases it's likely to be best to
+>> just disallowing nesting entirely on affected implementations.
+> 
+> Do we have already a list of "affected implementations"? Or,
+> we would need to make such a list now? In a latter case, can
+> these affected implementations be detected from their IRD0-5
+> registers, so that we can simply do something in hw_info()?
 
-Yes, I'd drop the comment since the code explains itself.  One fixup
-attached.  Thanks.
+Somewhere I have a patch that adds all the IIDR stuff needed for this, 
+but I never sent it upstream since the erratum itself was an early 
+MMU-600 one which in practice doesn't matter. I'll dig that out and 
+update it with what I have in mind.
 
--- 
-Peter Xu
-
---Rhi7qt2LvjtkimrJ
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: attachment;
-	filename="0001-fixup-mm-thp-rename-TRANSPARENT_HUGEPAGE_NEVER_DAX-t.patch"
-
-From 0d01260fedfd9d99c1eeac10f9bddd52477823bd Mon Sep 17 00:00:00 2001
-From: Peter Xu <peterx@redhat.com>
-Date: Thu, 16 Mar 2023 11:08:47 -0400
-Subject: [PATCH] fixup! mm/thp: rename TRANSPARENT_HUGEPAGE_NEVER_DAX to
- _UNSUPPORTED
-
-Signed-off-by: Peter Xu <peterx@redhat.com>
----
- mm/huge_memory.c | 4 ----
- 1 file changed, 4 deletions(-)
-
-diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-index 2bb16cf4cafa..81a5689806af 100644
---- a/mm/huge_memory.c
-+++ b/mm/huge_memory.c
-@@ -460,10 +460,6 @@ static int __init hugepage_init(void)
- 	struct kobject *hugepage_kobj;
- 
- 	if (!has_transparent_hugepage()) {
--		/*
--		 * Hardware doesn't support hugepages, hence disable
--		 * DAX PMD support.
--		 */
- 		transparent_hugepage_flags = 1 << TRANSPARENT_HUGEPAGE_UNSUPPORTED;
- 		return -EINVAL;
- 	}
--- 
-2.39.1
-
-
---Rhi7qt2LvjtkimrJ--
-
+Thanks,
+Robin.
