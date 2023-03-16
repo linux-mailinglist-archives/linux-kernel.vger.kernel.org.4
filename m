@@ -2,108 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5DBD6BCF05
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 13:08:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E2B96BCF03
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 13:07:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230058AbjCPMIa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 08:08:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48586 "EHLO
+        id S230091AbjCPMHw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 08:07:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230149AbjCPMIZ (ORCPT
+        with ESMTP id S229639AbjCPMHu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 08:08:25 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F5E1C97EE
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 05:07:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678968455;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZSMHsj3qGaFVd90X1pJchslesPn8WvjooBJnnMqEy6E=;
-        b=TEWIx1sVq/R0bnNMRdVW436dRcATa1L1X5+QenqQoRhcyn4Cg+WMr0MUU1mlcfBjBL3V29
-        54k0mjsRT0BqLyVFHIRtKH5GOiiH9FQ+XZ/GIysD+NzRNjxt4zbqfwKMzSo0lALwugFr47
-        j3817aEybhnnimVVmNZEqNK+GKPAu7E=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-107--ls4bNP_N-ak8HtLXz7yXA-1; Thu, 16 Mar 2023 08:07:34 -0400
-X-MC-Unique: -ls4bNP_N-ak8HtLXz7yXA-1
-Received: by mail-wm1-f69.google.com with SMTP id s18-20020a7bc392000000b003deaf780ab6so569201wmj.4
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 05:07:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678968452;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZSMHsj3qGaFVd90X1pJchslesPn8WvjooBJnnMqEy6E=;
-        b=uWK8ntWBr2V532LXlyrAUsH6SQsmRPrpE4+7/q4QJYnX/vbrlOugl6oC+VtIX7FP4k
-         7ZnqufGJ2r2MlffiOpuPPz6n/RqcRoGccaUwIlmbWXvkMyhH+DxNHXawZl2vztgJVSIQ
-         Utf0L3Bnc36t+bop+L0SY/MZlwE+U4zN/kbQlKhoJbV6uSmr6jznDx6+ozku+wQoRHXm
-         qUobESj99TYxFAmG4vpECF9NrAc/jEg5BJM2KcBW0LjDGE213iiMamyjZhrxh1Ww8j/7
-         KVrjzMzIMKupJ16v8ogn420mFkeerG+BOmZT6G+lJOhAqMqG3lBxkzlP2E9r04BUK8Q1
-         tNiQ==
-X-Gm-Message-State: AO0yUKVI4NLnibMOLzRztHF0k21z1PwCUyp1v/yXVoNjPY9h1+P7DYVd
-        +1sHrNWpguQE34+P9IAFLwgLzRn6pxP/rG3RTetBN/OvIT6prMH+1Tk/ldVa7/oi9xZPMFxtLsg
-        8ldGZ14dHDRuwzgmLmPbvv8FqIAHQWCkB
-X-Received: by 2002:a05:600c:3151:b0:3dd:af7a:53db with SMTP id h17-20020a05600c315100b003ddaf7a53dbmr21342586wmo.11.1678968452545;
-        Thu, 16 Mar 2023 05:07:32 -0700 (PDT)
-X-Google-Smtp-Source: AK7set/afxErwVL8z+xD9jApgCP1zJ/+aex1HwtpcOEyBvugRBe8uSsjcLzaxegihFPY/qncNXdI2g==
-X-Received: by 2002:a05:600c:3151:b0:3dd:af7a:53db with SMTP id h17-20020a05600c315100b003ddaf7a53dbmr21342574wmo.11.1678968452293;
-        Thu, 16 Mar 2023 05:07:32 -0700 (PDT)
-Received: from [192.168.149.90] (58.254.164.109.static.wline.lns.sme.cust.swisscom.ch. [109.164.254.58])
-        by smtp.gmail.com with ESMTPSA id n5-20020a05600c4f8500b003b47b80cec3sm4828584wmq.42.2023.03.16.05.07.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Mar 2023 05:07:31 -0700 (PDT)
-Message-ID: <b98945f0-09ef-158a-9348-e518469ec7e3@redhat.com>
-Date:   Thu, 16 Mar 2023 13:07:31 +0100
+        Thu, 16 Mar 2023 08:07:50 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A462DCA1C8;
+        Thu, 16 Mar 2023 05:07:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678968469; x=1710504469;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=MgWcw0ZELpPGPcSfV8O0eRAKpYyedQmRFInBTmwy934=;
+  b=gxwRpZDqvxVfiCCxwIj996gLjYVo2AbZ4vxWB/zEmwYcoHULF6EYbxP+
+   Zxv6Lv3YqgDs2wGjOL4FbAG5BQb65skMgssipJQnxUV25Li6s6ZOV+AKJ
+   MAB0eZefBE94Bd5dLwqxdjw6rPkVFc5oILrGkMz6kFLEKpctgwWAahmjD
+   BVoeWnJflHzJzefyCgkEmvhPrAKpJUfppBGFBDaoSa2JT1+uMj1WPaU0j
+   Seh5v0VqynlyhgQUK0zcBuGNxo054FHhBlWFCnBv0SXJkDSzceFqQ2zIb
+   kO6fhYBFBqanCenhatV9pQt/S0R/FjgtXuA65bOdy0lh6oNDXvip75BzL
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10650"; a="400536901"
+X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
+   d="scan'208";a="400536901"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 05:07:49 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10650"; a="710079631"
+X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
+   d="scan'208";a="710079631"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga008.jf.intel.com with ESMTP; 16 Mar 2023 05:07:46 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id D2C443DD; Thu, 16 Mar 2023 14:08:30 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH net-next v1 1/1] net: phy: at803x: Replace of_gpio.h with what indeed is used
+Date:   Thu, 16 Mar 2023 14:08:26 +0200
+Message-Id: <20230316120826.14242-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 0/2] KVM: x86: Fix kvm/queue breakage on clang
-Content-Language: de-CH
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230315191128.1407655-1-seanjc@google.com>
-From:   Emanuele Giuseppe Esposito <eesposit@redhat.com>
-In-Reply-To: <20230315191128.1407655-1-seanjc@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+of_gpio.h in this driver is solely used as a proxy to other headers.
+This is incorrect usage of the of_gpio.h. Replace it .h with what
+indeed is used in the code.
 
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/net/phy/at803x.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-Am 15/03/2023 um 20:11 schrieb Sean Christopherson:
-> Fix clang build errors for patches sitting kvm/queue.  Ideally, these
-> fixes will be squashed before the buggy commits make their way to kvm/next.
-> If you do fixup kvm/queue, the VMX commit also has a bad SOB chain; Jim
-> either needs to be listed as the author or his SOB needs to be deleted.
-> 
-> Sean Christopherson (2):
->   KVM: VMX: Drop unprotected-by-braces variable declaration in
->     case-statement
->   KVM: SVM: Drop unprotected-by-braces variable declaration in
->     case-statement
-> 
->  arch/x86/kvm/svm/svm.c | 5 ++---
->  arch/x86/kvm/vmx/vmx.c | 4 +---
->  2 files changed, 3 insertions(+), 6 deletions(-)
-> 
-> 
-> base-commit: 95b9779c1758f03cf494e8550d6249a40089ed1c
-
-Note to self: compile patches also with clang, since gcc didn't complain
-about missing brackets in a switch case.
-
-Reviewed-by: Emanuele Giuseppe Esposito <eesposit@redhat.com>
+diff --git a/drivers/net/phy/at803x.c b/drivers/net/phy/at803x.c
+index 22f4458274aa..656136628ffd 100644
+--- a/drivers/net/phy/at803x.c
++++ b/drivers/net/phy/at803x.c
+@@ -13,12 +13,11 @@
+ #include <linux/netdevice.h>
+ #include <linux/etherdevice.h>
+ #include <linux/ethtool_netlink.h>
+-#include <linux/of_gpio.h>
+ #include <linux/bitfield.h>
+-#include <linux/gpio/consumer.h>
+ #include <linux/regulator/of_regulator.h>
+ #include <linux/regulator/driver.h>
+ #include <linux/regulator/consumer.h>
++#include <linux/of.h>
+ #include <linux/phylink.h>
+ #include <linux/sfp.h>
+ #include <dt-bindings/net/qca-ar803x.h>
+-- 
+2.39.2
 
