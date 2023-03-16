@@ -2,103 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31A686BD86F
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 19:57:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 836206BD873
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 19:58:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229971AbjCPS5n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 14:57:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33854 "EHLO
+        id S229926AbjCPS65 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 14:58:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229894AbjCPS5c (ORCPT
+        with ESMTP id S229597AbjCPS6y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 14:57:32 -0400
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DB8CDCA75
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 11:57:29 -0700 (PDT)
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 5C7323F22A
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 18:57:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1678993047;
-        bh=QxqRs/KWG5HAcPHMQaRj+RAjvJydpfqD9+moSKVBklM=;
-        h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-         Content-Type:In-Reply-To;
-        b=oFCwnPlkEf6Bs+yLtye5OnooYqacOzsecoJ+2AJTUHVwTA24uY5cSuyJbiWWrSdcp
-         AlBZQAX0DGy/p+pTl+IDQ7G8JbBMQiYbTq32ypByG5K+QPoc3HMuvs+6dMIMneqw4v
-         2GmRURklMlr+yJ327HimhX1J4VslG0C0g8y+HXEAoq1YMPpHHUBkO0GYcPVsSm/MK2
-         Ks7Jc0EDnvlEChQZPR17V7fqtfde5AlrY4qA5Xd2NgzFRuPNxQioCPKy1ZdGJ0P1nJ
-         BhAKKM03IQNcdPma4dA5kOpTNaLvTee/dOWyKGL0wtkb6jJ0rRcUFTOo+h232d9v0o
-         4M1CjELehkz0A==
-Received: by mail-ed1-f69.google.com with SMTP id b7-20020a056402350700b004d2a3d5cd3fso4318255edd.8
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 11:57:27 -0700 (PDT)
+        Thu, 16 Mar 2023 14:58:54 -0400
+Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C9DADDF2B;
+        Thu, 16 Mar 2023 11:58:53 -0700 (PDT)
+Received: by mail-qt1-x82d.google.com with SMTP id h19so2936123qtn.1;
+        Thu, 16 Mar 2023 11:58:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678993132;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=wlCRV7G1Pgp5HRqOyDJ5n/8HXIVn3jLn2OEG+oEehvw=;
+        b=dicNdp8Lkt+cSW7Czak/MMcRQyKpZQc2ZR3VTYX44XbPyo9z5zxhl0XGCTvHEEIjbZ
+         Jva0SXJzb8+mXjilatGxaisM8E0x7ZVqfFnd2MmnJwLG6SCSOPmHkoiqp1v9Yvvyo/LO
+         e5cQTe1SrQPswkyc72UXz8yNwV16tD7HZJ2ukW6pj/J550NDidWmjabsfnPL5rhHuED7
+         x/zBwGHT3ikb96SBZWrCR2luLarhGVkImw60AKaI7lPbjiUGNe0Mv2vMoopWf7BUF5RQ
+         +B+WqpYSpAMP+VBZ5+zlT8ACQNZ11Ff87US1u8IHBwTR6vyWc2jnn9FtpSPtTPne/onP
+         MpcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678993047;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QxqRs/KWG5HAcPHMQaRj+RAjvJydpfqD9+moSKVBklM=;
-        b=ADBY4ammjcGY9KQF29tCppFklHFbEkuD0MM6nybIThIvO8dMspZGkUc1uPR73azeMl
-         4iQiJW7OxtEcxSN4T19yv4eIE7Mgtdruhnpw1fYkop5iK2cew8HDjp0gu5SFd9f1D+KF
-         0o9hu5J4Hmy1j9zQOnp0iNvl4xyZWi0O6Vy2A9h6dOoCOz7iAHdlvUk0arKML6bAjW8w
-         ZgVAh9oF02Cg6gL8exaNHPZ9RMibk1aEBfsJvR2CpnPrGJcqZdkBQc2rfjq3j/CEwrqe
-         7vwfb9dZHlGyFUhsp/cI+VJ9gYibaXMwIbyWJRD+uArmgffk444LnbDneX+0qmyxs+ze
-         JT/w==
-X-Gm-Message-State: AO0yUKVQ7o3pF9TZaFd/nm2IAjUztOCC+EFXSQ5qj+8P7DD3rDWIQvVh
-        648W5z9iVpnDyo9imzXPFLQvYnGy62Rf1WXB5a5CReOWza1hCUd6Je0AQiHUEMAOLE4Xu2REhas
-        JWHMym0LETXxaFjtZvcwJ6C8K8yttonHYFfAQTI3oVA==
-X-Received: by 2002:a17:906:6a09:b0:926:ae94:adb4 with SMTP id qw9-20020a1709066a0900b00926ae94adb4mr13603303ejc.60.1678993047049;
-        Thu, 16 Mar 2023 11:57:27 -0700 (PDT)
-X-Google-Smtp-Source: AK7set+S+c1YdU+vSGom8HcSFFE7KkoUgtGlA48PmMDgJ5JQIsdcyEjVJmMyaXnpX4FAZu28zSpTSQ==
-X-Received: by 2002:a17:906:6a09:b0:926:ae94:adb4 with SMTP id qw9-20020a1709066a0900b00926ae94adb4mr13603283ejc.60.1678993046772;
-        Thu, 16 Mar 2023 11:57:26 -0700 (PDT)
-Received: from localhost (host-79-53-23-214.retail.telecomitalia.it. [79.53.23.214])
-        by smtp.gmail.com with ESMTPSA id e22-20020a170906315600b0092421bf4927sm4159619eje.95.2023.03.16.11.57.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Mar 2023 11:57:26 -0700 (PDT)
-Date:   Thu, 16 Mar 2023 19:57:23 +0100
-From:   Andrea Righi <andrea.righi@canonical.com>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Paolo Pisati <paolo.pisati@canonical.com>,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Darren Hart <darren@os.amperecomputing.com>
-Subject: Re: kernel 6.2 stuck at boot (efi_call_rts) on arm64
-Message-ID: <ZBNmk2hpao3D4E8m@righiandr-XPS-13-7390>
-References: <CAMj1kXF=8KoCnRmUyLCZmbfPTeOFQZBeudZuTeA0uHOv-1drFg@mail.gmail.com>
- <ZBMQdgPepwa+VyAH@righiandr-XPS-13-7390>
- <CAMj1kXES+FxxbqUPH5TRjHak2MMC2Yksm0_P6wo__LQMH6Emhw@mail.gmail.com>
- <ZBMes6r2FiAyo81F@righiandr-XPS-13-7390>
- <CAMj1kXG0+NO6HayK2YqSJU0pwj8bn9Un_G-4VJr=hc1ELi-TpQ@mail.gmail.com>
- <ZBMgy+Yh9fDxt44C@righiandr-XPS-13-7390>
- <CAMj1kXEWs43NaTegzmGPFD7UGNVw_13hUCuvmwvKNVYPsfh5Vg@mail.gmail.com>
- <CAMj1kXHKkK+6TDLebZw=H-ZZLVnwPGSRpNNKSbJoPwwA2vhG+w@mail.gmail.com>
- <ZBNXaF32nIh3Ca49@righiandr-XPS-13-7390>
- <CAMj1kXFgmPp8TPDWePNN2wU_TQ87dL940SFEaMKAm4oVaB86+g@mail.gmail.com>
+        d=1e100.net; s=20210112; t=1678993132;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wlCRV7G1Pgp5HRqOyDJ5n/8HXIVn3jLn2OEG+oEehvw=;
+        b=jgqXmW3Xv/2V5vjsvOzUdB5LaC3uAStBDtmZrSxxsxzG/C1rmc1X1YON0XSxd+aRJh
+         M/MZAgDugzmcj3/RcG6UPsZ2cDzCWVjrt3JWw0JGKv4kqnX1nKbpP42wOGk3my7gN/da
+         O6lBair6C+YINgSAVqC4xv4Il3dmNliI13P9DukHNBSo7UkKt12JBuqRk/fNsPfycORM
+         ashzZopSMXSEeaTLgYiMZa+++Upz7KOsKdFvKMznS9Lrl0+cIk/k3HswjHRte1OosJHV
+         4qbK1/mqN46xUYGN2KzhCPFOo+SEFivRffFd92qz4NBryzwHvEGkbbgKpNI/qzab0di2
+         VBGA==
+X-Gm-Message-State: AO0yUKWzJI51pLqk5O+LugeMSsGYMPO9/1zCyHoXCXWZGH3kEK/PTE9X
+        JLXbq5mFe+ugOlMQz0L5ahc=
+X-Google-Smtp-Source: AK7set88kxIDx2a3+4F9yjKaHVtSZATvUTFAOszrSwqdWRp+PUy6Dz6mgwa+oCgfJdt+aSLoZJp6Ow==
+X-Received: by 2002:a05:622a:58a:b0:3bf:d13f:207f with SMTP id c10-20020a05622a058a00b003bfd13f207fmr8052190qtb.22.1678993132637;
+        Thu, 16 Mar 2023 11:58:52 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id g19-20020a05620a40d300b007290be5557bsm110251qko.38.2023.03.16.11.58.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Mar 2023 11:58:52 -0700 (PDT)
+Message-ID: <1df7ec63-5842-4589-3a48-89eb7ce76766@gmail.com>
+Date:   Thu, 16 Mar 2023 11:58:45 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMj1kXFgmPp8TPDWePNN2wU_TQ87dL940SFEaMKAm4oVaB86+g@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 5.15 000/137] 5.15.103-rc2 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+References: <20230316083443.411936182@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20230316083443.411936182@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 16, 2023 at 07:55:36PM +0100, Ard Biesheuvel wrote:
-...
-> >
-> > Yay! Success! I just tested your latest efi/urgent (with the fixup) and
-> > system completed the boot without any soft lockups.
-> >
+On 3/16/23 01:50, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.103 release.
+> There are 137 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> Thanks for confirming. I'll take that as a tested-by
+> Responses should be made by Sat, 18 Mar 2023 08:33:04 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.103-rc2.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-Sure, thanks!
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
+BMIPS_GENERIC:
 
-Tested-by: Andrea Righi <andrea.righi@canonical.com>
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian
+
