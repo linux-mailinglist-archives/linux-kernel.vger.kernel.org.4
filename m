@@ -2,65 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E040C6BD49B
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 17:03:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED9E06BD49F
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 17:03:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229648AbjCPQDr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 12:03:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43310 "EHLO
+        id S229706AbjCPQDv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 12:03:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229560AbjCPQDo (ORCPT
+        with ESMTP id S229664AbjCPQDs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 12:03:44 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53BAA1EBF0
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 09:03:28 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id eh3so9538464edb.11
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 09:03:28 -0700 (PDT)
+        Thu, 16 Mar 2023 12:03:48 -0400
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE84F272E
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 09:03:45 -0700 (PDT)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-5419d4c340aso40495647b3.11
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 09:03:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678982606;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=E+5yg6ZbQ0SExT381wy7aXWOHC1xlGr+X1Ld1SU9mtg=;
-        b=z4O3i0DZ3ieWCRjy4RmXqfnsyzxRFtTCrznus41qB8MuYY98Fwdr9s86/FXDA07oT4
-         zETWMQ2qCzzw0dwcqtUg0zgdQ+3Ao/ffxQuWhTOxWTHDjc4ZHZz9qP20IZ0oQoe8uwRL
-         H4Y1eHbesJ4RIMyPXszDXGlM1lN9wWExp7cMt2eu1EGxdFAa34+fFMoSWqBIJRsJpBa2
-         1rXh0xzg3a6dziif4FVghXllwaMNRONBwX94RgGZYcm0QzZpeTLorQ12CQ/NCorvbZN0
-         F2Hmk0HS5vcWzOrIRnUIY46Lp4gFl7B48DxkJ9ePr2q4FOX++wYjRXBCnuKe2MQz7wip
-         Fclw==
+        d=linaro.org; s=google; t=1678982625;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=y4IWQ3qm69V7nWR3kZTl127u4+HwMbKM+fr7ufWkSq4=;
+        b=FHYsepG+obu7nQ3hBQZraJsz/3pb5JM1zNSX5SnPB2+Aka3UWkijGG5NGPTtS5LC4n
+         1MGM1jCwejxLh6tTFoWUgnkkBYsouhHgOERdQgvOwRm56ARvSi42PgqnRgPvIRzFJc6x
+         z+6KQ1um4U0Zz38wCDJqLjtnpyhxbRT23ihiZ40691I759/y7YOBcGqST5vlb78rvbrf
+         ZtV5vkqEMwy7FWxvjsnA+o7Nnx7S9A3MMB6WMr0lr7WefuEyvIT734TQZX6eoi3JcTPU
+         qsgN4nFIjn7wxARSIUD9A0mU3QG+pVKEvIuccQjpM3d0nfrySjVa+SsU3ceBHKbNZ87J
+         s+JA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678982606;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20210112; t=1678982625;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=E+5yg6ZbQ0SExT381wy7aXWOHC1xlGr+X1Ld1SU9mtg=;
-        b=hJrt6HG2tLyKN8xk5dUPzcaE9Ay7+lDXaJ5svJKP4itRz+fEH8j7ImY2G/zwwqkgWv
-         xmMZaKTDRn/PZf6RLSL3UwjAS3OukVtamCX+qXmRc6TqhwWQyLMH31gOvriMD5odxgWs
-         MxzQgRZq3LOL0/xHQ4dKxSba6iifDZuIEDpnrBdxqb0ybD8I6+KPAy156YLsie/R6DDJ
-         ZBLj71cJVleqtO7foSNVJbsL5tBYc4mLUVHL87K9N8K4grPnaqm6DNBSBevD71H/AkWC
-         uZ9LCrxoxCg3ns+ybwTHp+9t/q/zTRhg5kstE7H3txotqn33ZzrNEQOlEK1wriB7p8dM
-         3XIQ==
-X-Gm-Message-State: AO0yUKUAigTay5/FUoI2/cO5H8YZcr3mZMrijnQZV0njFA9Lbl4PLU23
-        RpP6VsYFUxWSFIpf07ou4ENStrw66Z3Ziqp9YHI=
-X-Google-Smtp-Source: AK7set/jElk6KsvQPACSimpCKocXRgKWv4U85ydCqzxJHHxw0Ii/Kx0ZmWgwOC2hxqqYeG6gZFerGg==
-X-Received: by 2002:a17:906:1ed6:b0:92b:ff31:45bc with SMTP id m22-20020a1709061ed600b0092bff3145bcmr10522037ejj.44.1678982606653;
-        Thu, 16 Mar 2023 09:03:26 -0700 (PDT)
-Received: from krzk-bin.. ([2a02:810d:15c0:828:9827:5f65:8269:a95f])
-        by smtp.gmail.com with ESMTPSA id v22-20020a170906859600b009311c9d33d7sm335338ejx.184.2023.03.16.09.03.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Mar 2023 09:03:26 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v2] platform: olpc: use SPI device ID data to bind device
-Date:   Thu, 16 Mar 2023 17:03:24 +0100
-Message-Id: <20230316160324.78856-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        bh=y4IWQ3qm69V7nWR3kZTl127u4+HwMbKM+fr7ufWkSq4=;
+        b=lc6unobvWsZDagwPDE3+ceGHMklSPK5HnBMHofDLoCjb37T1dDuXwGTdBLwDZitulu
+         EUnraQBOLnOgKCUKa5qgdrVXujzUP3WU2yfuZXohvTTWMJySQOUjsVyGc8cQwhmLm8OO
+         FMdhXbfjAy3RoBRDdOfenr8VtXAYlvNBb2zgwwnXYlJ7YOBGuUPfaEnv5R5ApTxt8Y/m
+         XlBUvOefOZbs+ILKW9u9+haCUq5brydvhJgGhqHjtNLD/f0gSObw+XiYq931nRhFtGSI
+         cvlvWDRenrCJs6OM5OnXJ391N2J0en/wFdeKjp0mhZbrHnbIJeyUgwQPvi+XmMcNsBhu
+         4qvQ==
+X-Gm-Message-State: AO0yUKWruxO6f5syWy9eApJ7bc9//2MXCl5aoe0v7VW995Z2UNSAnujt
+        DhIgIrjqqc+XzISK4Ut+eD6ffFkY5FbgVobXKuQxjg==
+X-Google-Smtp-Source: AK7set9W4SZAF2xF+bd2nTCNFeQnySUL0JERjAQIpc9fH2qYvBQ6oTmQNhEm0Oac7eVav3YqSLPkJHsGWryzP8RQpDY=
+X-Received: by 2002:a81:a708:0:b0:541:7f69:aa8b with SMTP id
+ e8-20020a81a708000000b005417f69aa8bmr2423344ywh.5.1678982624792; Thu, 16 Mar
+ 2023 09:03:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <1677267647-28672-1-git-send-email-quic_khsieh@quicinc.com>
+ <1677267647-28672-2-git-send-email-quic_khsieh@quicinc.com>
+ <42b3c193-8897-cfe9-1cae-2f9a66f7983a@linaro.org> <741be2a3-0208-2f40-eedf-d439c4e6795b@quicinc.com>
+ <F8A4FC18-C64E-4011-BC08-18EB3B95A357@linaro.org> <d5ee8233-66c8-9b88-417c-6cf9cc5c84fe@quicinc.com>
+ <CAA8EJpro5Q-2ZpnDJt40UhFX7Zp9oBhrto=FDOERzCDR2BDPvQ@mail.gmail.com>
+ <f0dfba42-4674-3748-bf5d-39f6e1745f67@quicinc.com> <f1a6ee82-9502-7ea5-fe48-f296fc7df497@linaro.org>
+ <3e114c0f-a042-6801-69bf-67436cb2a448@quicinc.com> <113a10b6-6097-c80e-c29c-6f61b2b2896a@linaro.org>
+ <c4c0ebf8-275d-500f-4019-e3d7517a884f@quicinc.com> <CAA8EJppxX4haZSwdvVbN7bc6kXAyNO1rg6zWZv9wPFdqGrcXuw@mail.gmail.com>
+ <c650e746-64c5-ce6b-933d-057349356b78@quicinc.com> <58E03B71-20C4-4F81-96C1-6D8CE517F3FB@linaro.org>
+ <fd876ad2-3fd0-eaab-3407-dd32d494f662@quicinc.com> <a5d1a74f-1b7a-569d-e487-774720dfae22@quicinc.com>
+In-Reply-To: <a5d1a74f-1b7a-569d-e487-774720dfae22@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Thu, 16 Mar 2023 18:03:33 +0200
+Message-ID: <CAA8EJpq_mwUt0+1yGYo6hRx8Vz12DumVdpEjJbPk8gGHhGZ2bA@mail.gmail.com>
+Subject: Re: [Freedreno] [RFC PATCH 1/2] drm/msm/dpu: add dsc helper functions
+To:     Jessica Zhang <quic_jesszhan@quicinc.com>
+Cc:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        quic_sbillaka@quicinc.com, sean@poorly.run, andersson@kernel.org,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        dianders@chromium.org, vkoul@kernel.org, agross@kernel.org,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        marijn.suijten@somainline.org, swboyd@chromium.org,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        freedreno@lists.freedesktop.org,
+        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
+        linux-arm-msm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -70,36 +84,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The driver defines spi_device_id table for module autoloading, but does
-not use it in id_table which causes W=1 warning:
+Hi,
 
-  drivers/platform/olpc/olpc-xo175-ec.c:737:35: error: ‘olpc_xo175_ec_id_table’ defined but not used [-Werror=unused-const-variable=]
+[removed previous conversation]
 
-Reference the SPI device ID table, so it can be also used for device
-binding.
+>
+> Hi Dmitry and Abhinav,
+>
+> Just wanted to follow up on this thread. I've gone over the MSM-specific
+> DSC params for DP and DSI and have found a few shared calculations and
+> variables between both DSI and DP paths:
+>
+> - (as mentioned earlier in the thread) almost all the calculations in
+> dpu_dsc_populate_dsc_config() match dsi_populate_dsc_params() [1]. The
+> only difference in the math I'm seeing is initial_scale_value.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+The value in dsi code is valid for initial_offset = 6144. Please use
+the formula from the standard (= sde_dsc_populate_dsc_config) and add
+it to drm_dsc_helper.c
 
----
+If I remember correctly the last remaining item in
+dsi_populate_dsc_params() (except mentioned initial_offset) was
+line_buf_depth, see [3]. I'm not sure about setting it to bpc+1.
+According to the standard it should come from a DSC decoder spec,
+which means it should be set by the DSI panel driver or via
+drm_dp_dsc_sink_line_buf_depth() in the case of DP output.
 
-Changes since v1:
-1. Rework the patch - reference the ID table instead of __maybe_unused.
----
- drivers/platform/olpc/olpc-xo175-ec.c | 1 +
- 1 file changed, 1 insertion(+)
+> - dsc_extra_pclk_cycle_cnt and dce_bytes_per_line, which were introduced
+> in Kuogee's v1 DSC series [2], are used for DSI, DP, and the DPU timing
+> engine. dsc_extra_pclk_cycle_cnt is calculated based on pclk_per_line
+> (which is calculated differently between DP and DSI), but
+> dce_bytes_per_line is calculated the same way between DP and DSI.
+>
+> To avoid having to duplicate math in 2 different places, I think it
+> would help to have these calculations in some msm_dsc_helper.c file. Any
+> thoughts on this?
 
-diff --git a/drivers/platform/olpc/olpc-xo175-ec.c b/drivers/platform/olpc/olpc-xo175-ec.c
-index 4823bd2819f6..62ccbcb15c74 100644
---- a/drivers/platform/olpc/olpc-xo175-ec.c
-+++ b/drivers/platform/olpc/olpc-xo175-ec.c
-@@ -746,6 +746,7 @@ static struct spi_driver olpc_xo175_ec_spi_driver = {
- 		.of_match_table = olpc_xo175_ec_of_match,
- 		.pm = &olpc_xo175_ec_pm_ops,
- 	},
-+	.id_table	= olpc_xo175_ec_id_table,
- 	.probe		= olpc_xo175_ec_probe,
- 	.remove		= olpc_xo175_ec_remove,
- };
+dsc_extra_pclk_cycle_cnt and dce_bytes_per_line are used only in DPU
+code, so they can stay in DPU driver.
+
+>
+> Thanks,
+>
+> Jessica Zhang
+>
+> [1]
+> https://elixir.bootlin.com/linux/v6.3-rc2/source/drivers/gpu/drm/msm/dsi/dsi_host.c#L1756
+>
+> [2] https://patchwork.freedesktop.org/patch/519845/?series=113240&rev=1
+
+[3] https://patchwork.freedesktop.org/patch/525441/?series=114472&rev=2
+
+
+
 -- 
-2.34.1
-
+With best wishes
+Dmitry
