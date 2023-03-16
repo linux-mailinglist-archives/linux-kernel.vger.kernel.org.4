@@ -2,84 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C3F66BD413
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 16:40:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 791E96BD416
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 16:41:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231800AbjCPPkw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 11:40:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54626 "EHLO
+        id S231464AbjCPPlK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 11:41:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231642AbjCPPkf (ORCPT
+        with ESMTP id S229993AbjCPPkp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 11:40:35 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 781D4763C3
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 08:38:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678981060;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=10cvjAWj/i7Tr+Lb50o4wfxv3/cWk1L2EfPxqlS0kiI=;
-        b=Y/sgKRq7lMHjHBZ7kYHtfTE/WP8lrLo75E9rCdM/RxZdfTqFbFWOLmUrPUtTTk6iRNCgLM
-        DvqYlKFZfqn8MgDppEveDDPgorHwnl8mplAtO6ICATB1eiLabPOd/9/qh0RztWNopHnHTk
-        BTP6AXGqWHFX+Sm68CQ+lHbcyvLhKpg=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-84-5P9qB5f9MS-tNRE5TU38sA-1; Thu, 16 Mar 2023 11:37:39 -0400
-X-MC-Unique: 5P9qB5f9MS-tNRE5TU38sA-1
-Received: by mail-wr1-f71.google.com with SMTP id i25-20020adfaad9000000b002cff37de14fso381102wrc.16
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 08:37:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678981058;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=10cvjAWj/i7Tr+Lb50o4wfxv3/cWk1L2EfPxqlS0kiI=;
-        b=EXuHs4OschwUsjTZyen2krzKc5M6LQM0z8pj38bpZHs15mQf2ho22+x9Zx6mSGIiVQ
-         z1ikN8632uvWE6X29KFZpoWRkqc78W87WteSvW+cmkoE4AnlNaQZ65zbHSoqDf0+kwZ6
-         Sw2ZCL24gKNiVmYf80ODV/0rSjgtHhGOo4RJgDU6XRK4jDC9iagziGENDsRddXVZYahH
-         TXGDKq/xjBeHe3eueDPdt8g4/RmbCsarq2in6g1yXWuetiERZ3DCFEsB+1l6Eq3owGvG
-         aChe5JECRCpR6l4f61Z/aN6dJuv4PbweNYXYAVzgXECbcr7YuVXQDnEIlyc+zmFeRV+2
-         qZNQ==
-X-Gm-Message-State: AO0yUKWluNNS3MI3iynPFwhULZdItKvWT+DcE+ha/QIusPb52YF19ocA
-        f011Iv1dIEnaqYSNHDKhJet54vGYJQsewnKUJvmBS1kRkxqVhmsxMeUWhPVkV07IVnTzDmBKBrP
-        LU8JsfQU0mmKi3KeLPCbotMyb
-X-Received: by 2002:a5d:5955:0:b0:2cf:e29f:d7f5 with SMTP id e21-20020a5d5955000000b002cfe29fd7f5mr4525448wri.25.1678981058130;
-        Thu, 16 Mar 2023 08:37:38 -0700 (PDT)
-X-Google-Smtp-Source: AK7set8fqjO7xgut70o0sevMb1v49SL3ULnSmxx8KeSVsgNMEeq2wco+1sVFyTBO2HcQ0pt6HItXAg==
-X-Received: by 2002:a5d:5955:0:b0:2cf:e29f:d7f5 with SMTP id e21-20020a5d5955000000b002cfe29fd7f5mr4525437wri.25.1678981057806;
-        Thu, 16 Mar 2023 08:37:37 -0700 (PDT)
-Received: from ?IPV6:2a09:80c0:192:0:5dac:bf3d:c41:c3e7? ([2a09:80c0:192:0:5dac:bf3d:c41:c3e7])
-        by smtp.gmail.com with ESMTPSA id w12-20020a5d608c000000b002cfefa50a8esm6184757wrt.98.2023.03.16.08.37.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Mar 2023 08:37:37 -0700 (PDT)
-Message-ID: <e25eca2e-67c8-bcd5-69f8-f6590fc0b011@redhat.com>
-Date:   Thu, 16 Mar 2023 16:37:36 +0100
+        Thu, 16 Mar 2023 11:40:45 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9CE427D72;
+        Thu, 16 Mar 2023 08:40:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678981202; x=1710517202;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=TUgeqE4ATDv399pdRnSJTG3joPFb41oP5Y0X4tbedDE=;
+  b=JIZpZcaOCnEA0QqUWZmZA+BehONk7ZEuxkvSllH9raleqbyPo1pvVelK
+   Y+Dy+HEWsPHnAVIERH4bKz/lJQmxRGj8yGeHBMYvooEVHIqJWG0LxQe8h
+   idkBmM8snEiMWYQGyVDn9ngzCfD5SWLjFJjCoPSUpSI16iCSAbsLD0k4Z
+   jM8tdMnEz22392k8FsksSuHgdthqS3CCnmdhc4+O49Mtc3nQt2WnvD6Pz
+   f1sL8oKYh3h4c9+k3LpBPxfcY+ZcSwwWjpij3LzQp2z5Qd2wa8ZcpebUB
+   R/vohHm65lZaUtfbr8CGnEHsNBBwJynNeGmYqd3luG1i5gvdoRYsSdkGp
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="339570930"
+X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
+   d="scan'208";a="339570930"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 08:38:50 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="1009266961"
+X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
+   d="scan'208";a="1009266961"
+Received: from feiwang3-mobl2.ccr.corp.intel.com (HELO rzhang1-DESK.intel.com) ([10.249.170.93])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 08:38:48 -0700
+From:   Zhang Rui <rui.zhang@intel.com>
+To:     linux-pm@vger.kernel.org, rafael.j.wysocki@intel.com,
+        daniel.lezcano@linaro.org
+Cc:     linux-kernel@vger.kernel.org, srinivas.pandruvada@intel.com
+Subject: [PATCH 0/15] powercap/intel_rapl: Introduce RAPL TPMI support
+Date:   Thu, 16 Mar 2023 23:38:26 +0800
+Message-Id: <20230316153841.3666-1-rui.zhang@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] mm/thp: Rename TRANSPARENT_HUGEPAGE_NEVER_DAX to
- _UNSUPPORTED
-Content-Language: en-US
-To:     Peter Xu <peterx@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>
-References: <20230315171642.1244625-1-peterx@redhat.com>
- <83625129-26c9-8885-7367-bb56bc5367f3@redhat.com> <ZBMzQW674oHQJV7F@x1n>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <ZBMzQW674oHQJV7F@x1n>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,60 +59,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16.03.23 16:18, Peter Xu wrote:
-> On Thu, Mar 16, 2023 at 03:57:12PM +0100, David Hildenbrand wrote:
->> On 15.03.23 18:16, Peter Xu wrote:
->>> TRANSPARENT_HUGEPAGE_NEVER_DAX has nothing to do with DAX.  It's set when
->>> has_transparent_hugepage() returns false, checked in hugepage_vma_check()
->>> and will disable THP completely if false.  Rename it to reflect its real
->>> purpose.
->>>
->>> Cc: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
->>> Cc: Yang Shi <shy828301@gmail.com>
->>> Signed-off-by: Peter Xu <peterx@redhat.com>
->>> ---
->>>    include/linux/huge_mm.h | 2 +-
->>>    mm/huge_memory.c        | 4 ++--
->>>    2 files changed, 3 insertions(+), 3 deletions(-)
->>>
->>> diff --git a/include/linux/huge_mm.h b/include/linux/huge_mm.h
->>> index 70bd867eba94..9a3a3af2dd80 100644
->>> --- a/include/linux/huge_mm.h
->>> +++ b/include/linux/huge_mm.h
->>> @@ -79,7 +79,7 @@ static inline vm_fault_t vmf_insert_pfn_pud(struct vm_fault *vmf, pfn_t pfn,
->>>    }
->>>    enum transparent_hugepage_flag {
->>> -	TRANSPARENT_HUGEPAGE_NEVER_DAX,
->>> +	TRANSPARENT_HUGEPAGE_UNSUPPORTED,
->>>    	TRANSPARENT_HUGEPAGE_FLAG,
->>>    	TRANSPARENT_HUGEPAGE_REQ_MADV_FLAG,
->>>    	TRANSPARENT_HUGEPAGE_DEFRAG_DIRECT_FLAG,
->>> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
->>> index b0ab247939e0..913e7dc32869 100644
->>> --- a/mm/huge_memory.c
->>> +++ b/mm/huge_memory.c
->>> @@ -88,7 +88,7 @@ bool hugepage_vma_check(struct vm_area_struct *vma, unsigned long vm_flags,
->>>    	/*
->>>    	 * If the hardware/firmware marked hugepage support disabled.
->>>    	 */
->>> -	if (transparent_hugepage_flags & (1 << TRANSPARENT_HUGEPAGE_NEVER_DAX))
->>> +	if (transparent_hugepage_flags & (1 << TRANSPARENT_HUGEPAGE_UNSUPPORTED))
->>>    		return false;
->>>    	/* khugepaged doesn't collapse DAX vma, but page fault is fine. */
->>> @@ -464,7 +464,7 @@ static int __init hugepage_init(void)
->>>    		 * Hardware doesn't support hugepages, hence disable
->>>    		 * DAX PMD support.
->>
->>
->> We should also fixup that comment then, no?
-> 
-> Yes, I'd drop the comment since the code explains itself.  One fixup
-> attached.  Thanks.
+The TPMI (Topology Aware Register and PM Capsule Interface) provides a
+flexible, extendable and PCIe enumerable MMIO interface for PM features.
 
-LGTM
+The TPMI documentation can be downloaded from:
+https://github.com/intel/tpmi_power_management
 
--- 
-Thanks,
+Intel RAPL (Running Average Power Limit) is one of the features that
+benefit from this. Using TPMI Interface has advantage over traditional MSR
+(Model Specific Register) interface, where a thread needs to be scheduled
+on the target CPU to read or write. Also the RAPL features vary between
+CPU models, and hence lot of model specific code. Here TPMI provides an
+architectural interface by providing hierarchical tables and fields,
+which will not need any model specific implementation.
 
-David / dhildenb
+Given that there are some differences between RAPL TPMI Interface and the
+existing RAPL MSR/MMIO Interface, this patch series improves the RAPL
+common code to satisfy the new requirements from TPMI interface, and then
+introduces the RAPL TPMI Interface driver.
+
+Patch 1-4	cleanups and preparation work.
+Patch 5		adds support for per Domain Unit register.
+Patch 6-10	improves Power Limits handling, and provides support
+		for per Power Limit register, and per Power Limit Lock.
+Patch 11-12	support rapl_package without online CPUs. So that TPMI
+		rapl_package still works with whole package offlined.
+Patch 13-15	introduces RAPL Core support for TPMI Interface and the
+		RAPL TPMI Interface driver.
+
+This series depends on the TPMI base driver which has been merged in 6.3-rc1.
+
+thanks,
+rui
+
+----------------------------------------------------------------
+Zhang Rui (15):
+      powercap/intel_rapl: Remove unused field in struct rapl_if_priv
+      powercap/intel_rapl: Allow probing without CPUID match
+      powercap/intel_rapl: Support per Interface rapl_defaults
+      powercap/intel_rapl: Support per Interface primitive information
+      powercap/intel_rapl: Support per domain energy/power/time unit
+      powercap/intel_rapl: Use index to initialize primitive information
+      powercap/intel_rapl: Change primitive order
+      powercap/intel_rapl: Use bitmap for Power Limits
+      powercap/intel_rapl: Cleanup Power Limits support
+      powercap/intel_rapl: Introduce per Power Limit lock
+      powercap/intel_rapl: Remove redundant cpu parameter
+      powercap/intel_rapl: Make cpu optional for rapl_package
+      powercap/intel_rapl: Introduce RAPL I/F type
+      powercap/intel_rapl: Introduce core support for TPMI interface
+      powercap/intel_rapl_tpmi: Introduce RAPL TPMI interface driver
+
+ drivers/powercap/Kconfig                           |  14 +
+ drivers/powercap/Makefile                          |   1 +
+ drivers/powercap/intel_rapl_common.c               | 868 ++++++++++++---------
+ drivers/powercap/intel_rapl_msr.c                  |  14 +-
+ drivers/powercap/intel_rapl_tpmi.c                 | 325 ++++++++
+ .../intel/int340x_thermal/processor_thermal_rapl.c |  11 +-
+ include/linux/intel_rapl.h                         |  40 +-
+ 7 files changed, 875 insertions(+), 398 deletions(-)
+ create mode 100644 drivers/powercap/intel_rapl_tpmi.c
 
