@@ -2,133 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04F796BD053
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 13:59:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D8A76BD05A
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 14:01:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229786AbjCPM7P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 08:59:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34726 "EHLO
+        id S229911AbjCPNBo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 09:01:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229687AbjCPM7M (ORCPT
+        with ESMTP id S229804AbjCPNBm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 08:59:12 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C7E172024;
-        Thu, 16 Mar 2023 05:58:54 -0700 (PDT)
-Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32GCPAKF025396;
-        Thu, 16 Mar 2023 13:57:39 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- content-transfer-encoding : in-reply-to; s=selector1;
- bh=O4MdXESRMuHAJnY5G9urN+vgVaPGITnoAbij57Bawls=;
- b=2C/7vQ64dcEtkrQRaFGoGdlrdDs4aSmUvsbiiefM5bYo9zD3oGRGMiDqNFWbMCqxM8yD
- jR6YVg4RRWCxWD4Lj4hgJ4XVNYFIFIdqWlYgRZQgW5XvnOBPQN1AJC2SPDa7dplFsZZh
- zpYZ5MTq2sPUKBoP78Yo2SVL5jLEnqdxKXqRZHGOvlwyH4Z8lS48JL1eaavr42JyrgaE
- bxZuUXltVZaXQhxQuxwUlP2K9Q5SC83eFi08DkEnoA2kdfKA+rrLZsjkagS4pmPWgaLN
- R6d3QHU/HWVLJ1mUc2TVaM2/MlicQZOCX1aSgVJuPpbvLLm2Skibv2xYmbiG03T7MqcJ 1A== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3pbpwqvg2p-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 16 Mar 2023 13:57:39 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id B2A66100038;
-        Thu, 16 Mar 2023 13:57:36 +0100 (CET)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id AB22D2171F4;
-        Thu, 16 Mar 2023 13:57:36 +0100 (CET)
-Received: from gnbcxd0016.gnb.st.com (10.129.178.213) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.17; Thu, 16 Mar
- 2023 13:57:36 +0100
-Date:   Thu, 16 Mar 2023 13:57:29 +0100
-From:   Alain Volmat <alain.volmat@foss.st.com>
-To:     Leonard =?iso-8859-1?Q?G=F6hrs?= <l.goehrs@pengutronix.de>
-CC:     Mark Brown <broonie@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        <kernel@pengutronix.de>, <linux-spi@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v1 2/2] spi: stm32: split large transfers based on word
- size instead of bytes
-Message-ID: <20230316125729.GA3495627@gnbcxd0016.gnb.st.com>
-Mail-Followup-To: Leonard =?iso-8859-1?Q?G=F6hrs?= <l.goehrs@pengutronix.de>,
-        Mark Brown <broonie@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        kernel@pengutronix.de, linux-spi@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230310092053.1006459-1-l.goehrs@pengutronix.de>
- <20230310092053.1006459-2-l.goehrs@pengutronix.de>
+        Thu, 16 Mar 2023 09:01:42 -0400
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C7078B042;
+        Thu, 16 Mar 2023 06:01:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=fmU1+ghPDUpLHdu1qhAM4Pdh6VNfesNoUAyvXpreIY4=; b=KJdf11YRWGGA3AHBkCcBU8wMfe
+        rwamCNzbsIOFyp6DxuocuuTZaArvhKzV53IAI91iGXRwSKsFbqGEAN/rrI0MaOt3ySdy0gDkZ5u+u
+        KkwYkg6+gzzsb2E/FEEmd1abbq1WpjJ0lei3aEjjYE+XXJliYmTHF1QTFYuUPjWBgsnb0R1y2sFm9
+        S4zuDTZgIRSi4jU3MQxG2zI9GeL1ZY54LcFyYjZjpwiVoYRU5unZtPxwwDurjTuJRah3YqynTsXRR
+        NOCnpMGSBcuTq7JGyxakjdA76AIVgT46LG/dgMC7gtJzxv+nqsSQOk5iQkVTfgEi8XNh5QyvyYrfS
+        d2gcc51A==;
+Received: from [152.254.169.34] (helo=[192.168.1.60])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1pcnEH-00DEyP-6l; Thu, 16 Mar 2023 14:01:13 +0100
+Message-ID: <65ce7063-d966-efea-6a39-db81da6b05aa@igalia.com>
+Date:   Thu, 16 Mar 2023 10:01:08 -0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230310092053.1006459-2-l.goehrs@pengutronix.de>
-X-Disclaimer: ce message est personnel / this message is private
-X-Originating-IP: [10.129.178.213]
-X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-16_08,2023-03-16_01,2023-02-09_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] Documentation/x86: Update split lock documentation
+Content-Language: en-US
+To:     Fenghua Yu <fenghua.yu@intel.com>, Tony Luck <tony.luck@intel.com>,
+        Jonathan Corbet <corbet@lwn.net>
+Cc:     x86@kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev
+References: <20230315225722.104607-1-tony.luck@intel.com>
+ <c34372d8-8166-6be6-b3a3-5214a2bae37a@intel.com>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <c34372d8-8166-6be6-b3a3-5214a2bae37a@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Leonard,
+On 15/03/2023 20:13, Fenghua Yu wrote:
+> Hi, Tony,
+> 
+> On 3/15/23 15:57, Tony Luck wrote:
+>> commit b041b525dab9 ("x86/split_lock: Make life miserable for split
+>> lockers") added a delay and serialization of cplit locks. Commit
+>                                               s/cplit/split/
+> 
+>> 727209376f49 ("x86/split_lock: Add sysctl to control the misery mode")
+>> provided a sysctl to turn off the misery.
+>>
+>> Update the split lock documentation to describe the current state of
+>> the code.
+>>
+>> Signed-off-by: Tony Luck <tony.luck@intel.com>
+>> ---
+>>   Documentation/x86/buslock.rst | 10 ++++++++--
+>>   1 file changed, 8 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/Documentation/x86/buslock.rst b/Documentation/x86/buslock.rst
+>> index 7c051e714943..31ec0ef78086 100644
+>> --- a/Documentation/x86/buslock.rst
+>> +++ b/Documentation/x86/buslock.rst
+>> @@ -53,8 +53,14 @@ parameter "split_lock_detect". Here is a summary of different options:
+>>   |off	  	   |Do nothing			|Do nothing		|
+>>   +------------------+----------------------------+-----------------------+
+>>   |warn		   |Kernel OOPs			|Warn once per task and |
+>> -|(default)	   |Warn once per task and	|and continues to run.  |
+>> -|		   |disable future checking	|			|
+>> +|(default)	   |Warn once per task, add a	|and continues to run.  |
+>> +|		   |delay, add synchronization	|			|
+>> +|		   |to prevent more than one	|			|
+>> +|		   |core from executing a	|			|
+>> +|		   |split lock in parallel.	|			|
+>> +|		   |sysctl split_lock_mitigate	|			|
+>> +|		   |can be used to avoid the	|			|
+>> +|		   |delay and synchronization	|			|
+>>   |		   |When both features are	|			|
+>>   |		   |supported, warn in #AC	|			|
+>>   +------------------+----------------------------+-----------------------+
+> 
+> Other than the typo, looks good to me.
+> 
+> Thanks.
+> 
+> -Fenghua
 
-thanks for your patch.  I agree with this patch and tested it ok
-as well on my side.
+Thanks for fixing the documentation Tony! Also looks great for me.
+Cheers,
 
-On Fri, Mar 10, 2023 at 10:20:53AM +0100, Leonard Göhrs wrote:
-> The TSIZE register in CR2, to which the number of words to transfer
-> is written, is only 16 Bit. This limits transfers to 65535 SPI
-> _words_ at a time. The existing code uses spi_split_transfers_maxsize
-> to limit transfers to 65535 _bytes_ at a time.
-> 
-> This breaks large transfers with bits_per_word > 8, as they are
-> split inside of a word boundary by the odd size limit.
-> 
-> Split transfers based on the number of words instead.
-> This has the added benefit of not artificially limiting the maximum
-> length of bpw > 8 transfers to half or a quarter of the actual limit.
-> 
-> The combination of very large transfers and bits_per_word = 16 is triggered
-> e.g. by MIPI DBI displays when updating large parts of the screen.
-> 
-> Signed-off-by: Leonard Göhrs <l.goehrs@pengutronix.de>
-> ---
->  drivers/spi/spi-stm32.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/spi/spi-stm32.c b/drivers/spi/spi-stm32.c
-> index def09cf0dc14..d2e16f16fae6 100644
-> --- a/drivers/spi/spi-stm32.c
-> +++ b/drivers/spi/spi-stm32.c
-> @@ -984,9 +984,9 @@ static int stm32_spi_prepare_msg(struct spi_master *master,
->  	if (spi->cfg->set_number_of_data) {
->  		int ret;
->  
-> -		ret = spi_split_transfers_maxsize(master, msg,
-> -						  STM32H7_SPI_TSIZE_MAX,
-> -						  GFP_KERNEL | GFP_DMA);
-> +		ret = spi_split_transfers_maxwords(master, msg,
-> +						   STM32H7_SPI_TSIZE_MAX,
-> +						   GFP_KERNEL | GFP_DMA);
->  		if (ret)
->  			return ret;
->  	}
 
-Acked-by: Alain Volmat <alain.volmat@foss.st.com>
-> -- 
-> 2.30.2
-> 
+Guilherme
