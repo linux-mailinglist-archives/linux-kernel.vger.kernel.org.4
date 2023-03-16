@@ -2,98 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDD206BD7CA
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 19:07:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B185B6BD7DB
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 19:09:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230395AbjCPSHO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 14:07:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53526 "EHLO
+        id S230453AbjCPSJt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 14:09:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229702AbjCPSHM (ORCPT
+        with ESMTP id S230422AbjCPSJo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 14:07:12 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1D7FB4224;
-        Thu, 16 Mar 2023 11:07:06 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id t15so2336098wrz.7;
-        Thu, 16 Mar 2023 11:07:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678990025;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=BQxP9Hae0QJYPvRU+UgB4w9TRIz/j+3TUA20yrz0awY=;
-        b=CTxWUY4d+KMAUT0PuMwWABTb/jq7Nud+0WNous+vSn7Ehew5Kklz39rKhRSn1p16pf
-         3a+l5dFhH6Iszrv6s0e0lMVJjNzQi1clV54CKf8A+3cgayrobKvQoTmiST/MyI1NUsEP
-         lUtSZqEPm74Ll94nLuoS7gAZsgyyDOpqvoUfrK1Cz56HJEP7/caJ0tDwiEpJYKUdGpZG
-         VSrlo4LTsoEofAImhP39SdF7d1/i5s2QMvl6tOjpPzWa1RIvHYaLVU80OLGs2q6G26KZ
-         EtNg1+0hEjjKS97zIveYvWdftUv9b9vq5upiO/hfK/W7ZEHnZg0XLrifaCHP9/lRn+1W
-         hIxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678990025;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=BQxP9Hae0QJYPvRU+UgB4w9TRIz/j+3TUA20yrz0awY=;
-        b=hGv9dProEGHGVFEKamHoFrplDDZfveuTiXF/h6whUhR6VsvrW6DUq+aFPit6MWKGE0
-         P/XAPXXo8DM1f1dHBWrRGVPkIiAGixStB2F7xt8XOxx3pjUCQuMPGQthIIIOJODnJ4ZM
-         bdsHuMEKFVbsA0vTJKllk0pvZtRYN35cYZGahS3DHPpa6z+/57PnNWFChqDLnOECwdKx
-         HVjVfc5LsFz8+sz0i35oX4Xc4c7svN88Cs8ocWHsjXzdlyNdi4OKHcrffsR/yuXd4bfQ
-         AEuymj4TZAPVuVN95h/eEDK/8iw7vZjp9ooho3xoBEG9e9LYKuqmo9cRuOl6HxPCsVUo
-         xS9w==
-X-Gm-Message-State: AO0yUKVSqxTsK+X7QOLKe8pH4Ib0gq9fXMVl6dNlRPCyYVqHMKEkR9nO
-        TO9WucE8XEVqIv+swkdQwokEIip3HvXcGoAg
-X-Google-Smtp-Source: AK7set/1C3UcVUhiLCb1rg9+5CI9zdmZUK5x/FPjiBx+pxuekH4gNUMUjWZUMUNV6yyqy/p25XpDug==
-X-Received: by 2002:a5d:6990:0:b0:2c7:1dd5:7918 with SMTP id g16-20020a5d6990000000b002c71dd57918mr5546341wru.28.1678990025010;
-        Thu, 16 Mar 2023 11:07:05 -0700 (PDT)
-Received: from atlantis.lan (255.red-79-146-124.dynamicip.rima-tde.net. [79.146.124.255])
-        by smtp.gmail.com with ESMTPSA id s7-20020adfeb07000000b002ceaa0e6aa5sm27262wrn.73.2023.03.16.11.07.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Mar 2023 11:07:04 -0700 (PDT)
-From:   =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
-        <noltari@gmail.com>
-To:     f.fainelli@gmail.com, jonas.gorski@gmail.com,
-        bcm-kernel-feedback-list@broadcom.com, tglx@linutronix.de,
-        maz@kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
-        <noltari@gmail.com>
-Subject: [PATCH] irqchip/bcm-6345-l1: show MMIO address
-Date:   Thu, 16 Mar 2023 19:07:01 +0100
-Message-Id: <20230316180701.783785-1-noltari@gmail.com>
-X-Mailer: git-send-email 2.30.2
+        Thu, 16 Mar 2023 14:09:44 -0400
+Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.215])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A113FC2D9A;
+        Thu, 16 Mar 2023 11:09:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=tAY3k
+        QXbHHXMa0A4+ZTt0dWYBtBAU/Xp4REesuuaIoM=; b=LozOv5d02dvwn333iRz3i
+        K+l873KtPvCm1vLy7jXX3UPjJlnovid8bRgK2vBs1wvr8q+5/FCW4O/pskF0wpdE
+        Jh+bHKpWiMk/MT4IJnGGJDgCduHcY1aaOD8wr6NXIyY+lNu+5gfRIL4OPsaTnqC0
+        as3jEN9DllrAnUxVKZCB6o=
+Received: from leanderwang-LC2.localdomain (unknown [111.206.145.21])
+        by zwqz-smtp-mta-g2-1 (Coremail) with SMTP id _____wAXLgY3WxNkWY8cAQ--.15896S2;
+        Fri, 17 Mar 2023 02:08:55 +0800 (CST)
+From:   Zheng Wang <zyytlz.wz@163.com>
+To:     gregkh@linuxfoundation.org
+Cc:     skhan@linuxfoundation.org, p.zabel@pengutronix.de,
+        biju.das.jz@bp.renesas.com, phil.edworthy@renesas.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        hackerzheng666@gmail.com, 1395428693sheep@gmail.com,
+        alex000young@gmail.com, yoshihiro.shimoda.uh@renesas.com,
+        Zheng Wang <zyytlz.wz@163.com>
+Subject: [PATCH v7] usb: gadget: udc: renesas_usb3: Fix use after free bug in  renesas_usb3_remove due to race condition
+Date:   Fri, 17 Mar 2023 02:08:50 +0800
+Message-Id: <20230316180850.1600867-1-zyytlz.wz@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: _____wAXLgY3WxNkWY8cAQ--.15896S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7Zr45Xr15Jr4rCF4UXr4DXFb_yoW8Zr1fpF
+        ZrKFW5Ar4rJFWqq3y7GFykZF1rCF9rKryUZFWxKw48uF1rW3y8JryIqa1UCFnrJFZ3AF4F
+        q3WDu34jqa47u37anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0ziS1v3UUUUU=
+X-Originating-IP: [111.206.145.21]
+X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/1tbiXRk0U1WBo8PfvAAAs0
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It's safe to show MMIO address.
+In renesas_usb3_probe, role_work is bound with renesas_usb3_role_work.
+renesas_usb3_start will be called to start the work.
 
-Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
+If we remove the driver which will call usbhs_remove, there may be
+an unfinished work. The possible sequence is as follows:
+
+Fix it by canceling the work before cleanup in the renesas_usb3_remove.
+
+Note that removing a driver is a root-only operation, and should never
+happen.
+
+CPU0                  			CPU1
+
+                    			| renesas_usb3_role_work
+renesas_usb3_remove 			|
+usb_role_switch_unregister|
+device_unregister   			|
+kfree(sw)  	     					|
+free usb3->role_sw  			|
+                    			| usb_role_switch_set_role
+                    			| //use usb3->role_sw
+
+This bug was found by static analysis.
+
+Fixes: 39facfa01c9f ("usb: gadget: udc: renesas_usb3: Add register of usb role switch")
+Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+Reviewed-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
 ---
- drivers/irqchip/irq-bcm6345-l1.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+v7:
+- add more details about how the bug was found suggested by Shuah
+v6:
+- beautify the format and add note suggested by Greg KH
+v5:
+- fix typo
+v4:
+- add Reviewed-by label and resubmit v4 suggested by Greg KH
+v3:
+- modify the commit message to make it clearer suggested by Yoshihiro Shimoda
+v2:
+- fix typo, use clearer commit message and only cancel the UAF-related work suggested by Yoshihiro Shimoda
+---
+ drivers/usb/gadget/udc/renesas_usb3.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/irqchip/irq-bcm6345-l1.c b/drivers/irqchip/irq-bcm6345-l1.c
-index 6899e37810a8..55a2d9b31597 100644
---- a/drivers/irqchip/irq-bcm6345-l1.c
-+++ b/drivers/irqchip/irq-bcm6345-l1.c
-@@ -335,7 +335,7 @@ static int __init bcm6345_l1_of_init(struct device_node *dn,
- 	for_each_cpu(idx, &intc->cpumask) {
- 		struct bcm6345_l1_cpu *cpu = intc->cpus[idx];
+diff --git a/drivers/usb/gadget/udc/renesas_usb3.c b/drivers/usb/gadget/udc/renesas_usb3.c
+index bee6bceafc4f..a301af66bd91 100644
+--- a/drivers/usb/gadget/udc/renesas_usb3.c
++++ b/drivers/usb/gadget/udc/renesas_usb3.c
+@@ -2661,6 +2661,7 @@ static int renesas_usb3_remove(struct platform_device *pdev)
+ 	debugfs_remove_recursive(usb3->dentry);
+ 	device_remove_file(&pdev->dev, &dev_attr_role);
  
--		pr_info("  CPU%u at MMIO 0x%p (irq = %d)\n", idx,
-+		pr_info("  CPU%u at MMIO 0x%px (irq = %d)\n", idx,
- 				cpu->map_base, cpu->parent_irq);
- 	}
++	cancel_work_sync(&usb3->role_work);
+ 	usb_role_switch_unregister(usb3->role_sw);
  
+ 	usb_del_gadget_udc(&usb3->gadget);
 -- 
-2.30.2
+2.25.1
 
