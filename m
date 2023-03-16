@@ -2,100 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 434376BD871
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 19:58:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C7866BD877
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 20:00:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229813AbjCPS6x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 14:58:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36804 "EHLO
+        id S229845AbjCPTAy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 15:00:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229597AbjCPS6v (ORCPT
+        with ESMTP id S229523AbjCPTAw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 14:58:51 -0400
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39B2310251
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 11:58:49 -0700 (PDT)
-Received: by mail-io1-xd33.google.com with SMTP id bf15so1241657iob.7
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 11:58:49 -0700 (PDT)
+        Thu, 16 Mar 2023 15:00:52 -0400
+Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FE4834F5B;
+        Thu, 16 Mar 2023 12:00:51 -0700 (PDT)
+Received: by mail-qv1-xf31.google.com with SMTP id jl13so1904279qvb.10;
+        Thu, 16 Mar 2023 12:00:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112; t=1678993128; x=1681585128;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=beuZlOYlsGzrMlG2T+NH12KmnMkS0LRayDtZbfmxOCM=;
-        b=YHNcLeTN/TdKtnITj02u1Dj0NXIHsb7iM4JVFgpxlSmdKIrLsTn/lf1H4q17titWS5
-         0jLJhX+RJKAh+ybCHy7TR71/RwA6C5OUzPsWBkAUUQLD+akdJZy7IvRhHbd9l35Rps8Y
-         A2o0FtExI/rvjWzIliySutETJRfmXcntUfVWf4oQNMhpAMXjNYsiZcA0dWRdcKjaVsCN
-         5fhHiQTaz7g6HreC/6DboYmGcJHzjvBTKSmxbBzFe452qH4Rzan6fG7cdAsXXgem5ImN
-         FbcjdQd6cFGVwhhsgSjDqjo9PhjsiaU+OvnB8qV6QKWHQIR7Jz57Tp8F4zrcsp7XpwcM
-         DGYw==
+        d=gmail.com; s=20210112; t=1678993250;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=N8gdgFdzn2VZfw/BOlLO7/M7CDem1fHQVxoPtn1UlLE=;
+        b=jBdn34TgfBJzkLpA7N96EBsZA3inde37taBEDqzQap+c/HgIara6ivAxhZmdI9s07W
+         Z0rUyrKfVMfVi9gzZQpswhHl+uk8/VEc6lwHTpcRq1fVt2XB/r+AMXEg9MAx6xfWgxdW
+         5p1YsPr8MsQYP1lyLACo08vn8VbZAOCOCGp5YU6QYwiTNDylua4ZmPdS/3qf17tOylF6
+         sEyiiF5OTkHg5fkgNNZkeDAnjuNHJFwiQpDbNl5r7U9YKlMF4TkUJVsWSRIYg0dWRGJ1
+         kdL+7ufedElax5aZhj27uHt4gVHmq8wlff0i+R9yOgASnqCYQ2C3OoltbEIXxIDOzthV
+         oeBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678993128; x=1681585128;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=beuZlOYlsGzrMlG2T+NH12KmnMkS0LRayDtZbfmxOCM=;
-        b=ozlI9Ot2evomZaytbvlHRZszoAUYO9g8Scyxt2Dzd41VE3fSe68UxrwxIQC1b2yXNh
-         CQTDLGQZb48ECoLo2CGWgrz1g68Mjsjmpm8Vyp61C2NKmHSQsSu4UCTPAENFIsQC1HOP
-         udAXpxd+2/Y4FRSs9xg0JvERaQiGrEzw+rtGtQZyV5AxS90WohOPpXvXpN0Aa/cjTSEo
-         mZSW5q0AD7j8+lBQCUFxBrLEuRykeHiyWcZ7VXG4T5C5vDiVPcYdYLWUnp+Ivae8OLm3
-         r3l/xRTlz7x70Rbp527Pw9446BLjoQfnUqbEehaIuc/+u0SULH74zO+scRIa+TBIpFIk
-         JwjQ==
-X-Gm-Message-State: AO0yUKUsBmXQOnxovopacJeLQrEc5NFSFNeHGlBq3eYP0YFOidYQBofm
-        pEkeDdBSQ/6TRvuC0WeS8+JsdQ==
-X-Google-Smtp-Source: AK7set/HbVF/sI5C5fpqS0RJ/ZYcJLU41RZTQBCp5bQc0lst6zGd3Kd6qtUMUKfyxVuu57wrWVOsdg==
-X-Received: by 2002:a6b:c38f:0:b0:752:f9b6:386b with SMTP id t137-20020a6bc38f000000b00752f9b6386bmr2123784iof.0.1678993128361;
-        Thu, 16 Mar 2023 11:58:48 -0700 (PDT)
-Received: from [192.168.1.94] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id ck16-20020a0566383f1000b003cfd7393382sm12225jab.93.2023.03.16.11.58.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Mar 2023 11:58:47 -0700 (PDT)
-Message-ID: <23aa947b-43b6-d1d3-f8b4-4518cf4dcabb@kernel.dk>
-Date:   Thu, 16 Mar 2023 12:58:46 -0600
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 5.10/5.15] io_uring: avoid null-ptr-deref in
- io_arm_poll_handler
-Content-Language: en-US
-To:     Fedor Pchelkin <pchelkin@ispras.ru>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        lvc-project@linuxtesting.org
-References: <20230316185616.271024-1-pchelkin@ispras.ru>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20230316185616.271024-1-pchelkin@ispras.ru>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        d=1e100.net; s=20210112; t=1678993250;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=N8gdgFdzn2VZfw/BOlLO7/M7CDem1fHQVxoPtn1UlLE=;
+        b=MW+xWCAbNulm24vnrXZj34nKPsQuhyrLYOlWacX41n0c5pucVJr9CHD3gkJ4jxzEWK
+         djNVcwWKTucihtM5j+3pxbChBT6H9YoTvoIGgdmEV+RDDBBG4OzELWg4prXVe2RMTUFy
+         97/PWPoMT6AoyBzD9XqvgdLc+ocX6DMob9ZCP7ZSZ9OZn34tBJkqVvBH7lizmD6uAajd
+         HjyS7PU3HvSyTRsZKcma7/PV4Hv4oM0vANdidj/itGGiTwQ1z2wF9HFy2EYwBmUxE/jV
+         wZMivuL8clhKwN6priv5TVWjAIs39c7x1JON0tmWJ1sex7bhWL6WLtdomS2Qk0PILloi
+         jjcg==
+X-Gm-Message-State: AO0yUKXvEFdufuHJ/S2ZHAWvPFcJ35rutgzNyfB5/MTCgrPkbJ3m/S3X
+        1PPqOUOM2fcxUuihn4MCqFmZXwypBTo=
+X-Google-Smtp-Source: AK7set9HVg6/x3f+ic5yQ+uP2gWUBHqmvBXFAjkjzROHUiUGIBghCoAnWktz2gfaZsbhbTJuHb+/XQ==
+X-Received: by 2002:a05:6214:d88:b0:5a3:cbc6:8145 with SMTP id e8-20020a0562140d8800b005a3cbc68145mr27795909qve.19.1678993249518;
+        Thu, 16 Mar 2023 12:00:49 -0700 (PDT)
+Received: from localhost (240.157.150.34.bc.googleusercontent.com. [34.150.157.240])
+        by smtp.gmail.com with ESMTPSA id c18-20020a05620a269200b007343fceee5fsm136266qkp.8.2023.03.16.12.00.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Mar 2023 12:00:47 -0700 (PDT)
+Date:   Thu, 16 Mar 2023 15:00:46 -0400
+From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To:     David Howells <dhowells@redhat.com>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Cc:     dhowells@redhat.com, Matthew Wilcox <willy@infradead.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, Jeff Layton <jlayton@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        netdev@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Message-ID: <6413675eedcfa_33bc9d208e9@willemb.c.googlers.com.notmuch>
+In-Reply-To: <811534.1678992280@warthog.procyon.org.uk>
+References: <641361cd8d704_33b0cc20823@willemb.c.googlers.com.notmuch>
+ <20230316152618.711970-1-dhowells@redhat.com>
+ <20230316152618.711970-4-dhowells@redhat.com>
+ <811534.1678992280@warthog.procyon.org.uk>
+Subject: Re: [RFC PATCH 03/28] tcp: Support MSG_SPLICE_PAGES
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/16/23 12:56 PM, Fedor Pchelkin wrote:
-> No upstream commit exists for this commit.
+David Howells wrote:
+> Willem de Bruijn <willemdebruijn.kernel@gmail.com> wrote:
 > 
-> The issue was introduced with backporting upstream commit c16bda37594f
-> ("io_uring/poll: allow some retries for poll triggering spuriously").
+> > The commit message mentions MSG_SPLICE_PAGES as an internal flag.
+> > 
+> > It can be passed from userspace. The code anticipates that and checks
+> > preconditions.
 > 
-> Memory allocation can possibly fail causing invalid pointer be
-> dereferenced just before comparing it to NULL value.
-> 
-> Move the pointer check in proper place (upstream has the similar location
-> of the check). In case the request has REQ_F_POLLED flag up, apoll can't
-> be NULL so no need to check there.
-> 
-> Found by Linux Verification Center (linuxtesting.org) with Syzkaller.
+> Should I add a separate field in the in-kernel msghdr struct for such internal
+> flags?  That would also avoid putting an internal flag in the same space as
+> the uapi flags.
 
-Ah thanks, yes that's a mistake. Looks good to me!
+That would work, if no cost to common paths that don't need it.
 
--- 
-Jens Axboe
+A not very pretty alternative would be to add an an extra arg to each
+sendmsg handler that is used only when called from sendpage.
 
+There are a few other internal MSG_.. flags, such as
+MSG_SENDPAGE_NOPOLICY. Those are all limited to sendpage, and ignored
+in sendmsg, I think. Which would explain why it was clearly safe to
+add them.
 
