@@ -2,82 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A54F6BCC28
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 11:12:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D9976BCC2A
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 11:12:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230148AbjCPKMM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 06:12:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32836 "EHLO
+        id S230280AbjCPKMY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 06:12:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230122AbjCPKMA (ORCPT
+        with ESMTP id S230179AbjCPKMO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 06:12:00 -0400
+        Thu, 16 Mar 2023 06:12:14 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC370B78B3
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 03:11:21 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67AF3B78B2
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 03:11:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678961480;
+        s=mimecast20190719; t=1678961497;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=eBYYYx6ebaSPMy4LYead5i1f9hXn4823DINswCsrSc8=;
-        b=Pqh4h9jblfSfE5EYOlcoggGCvmODNMhQLkCh3rV48bO9eCCX9BNNZYoOgIQceK6kTZxV+s
-        NlC8nIAQsAJ2uxCtccq3wpTWo3n0tZ2KCGhETArvkvBUCnX9ydZnADZYbZG8nx2uSoHSwz
-        MZggBcObaMWby6C/9RlV/sxHKlecQEc=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-207-i9-YXJtkOyGFmkKGHBWIRQ-1; Thu, 16 Mar 2023 06:11:19 -0400
-X-MC-Unique: i9-YXJtkOyGFmkKGHBWIRQ-1
-Received: by mail-wr1-f72.google.com with SMTP id g14-20020a5d64ee000000b002cfe47b8ec4so176318wri.10
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 03:11:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678961478;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=eBYYYx6ebaSPMy4LYead5i1f9hXn4823DINswCsrSc8=;
-        b=5GltX9K2HOin6v/oGunNT81eMwnZ75ZWbCpqrc7EHb7EjMraIhb+FOSHdxND/3IjwQ
-         kmSVjtjSdzAI9RJtRet5iUaJDUUYVF6mREVfhZqH7b+U4vp+fzrDFpMywhyjTbqAEjsu
-         6nP4A5lj9FJZbLD199GDN5U9nnhtii8xRimQFcwtRPBjhzEQbKv2Ap5oM7jfgcy3xE/m
-         nqZpYL4+JkB5tlkGY05xCAnFs9XMKoZ9I2gov5SYQk6HA8qDBAax/ffgjctEH/LSusli
-         ZgBCH9O1dKPcDX0QzJYITlkK1fcqu0BO1X0rgPGbl8D7NRiReq1f3RP4QJXLuMiWL4l+
-         IfNA==
-X-Gm-Message-State: AO0yUKUnlS2NM1tqVGoT5rClKm0ugL5ETaOVBLImU2CpfYDKSB7zrKB3
-        1gVl/eRxuhMG6DlcQlVHR0dp6racgIjFZ0cVUMV+vnhDrGB54xRBEtZh1mC/TcyGCSzlrR9lV8Y
-        xw5HqE4BQSRRPUDrJWfXciqGU
-X-Received: by 2002:a05:600c:35cd:b0:3e9:f4c2:b604 with SMTP id r13-20020a05600c35cd00b003e9f4c2b604mr22373478wmq.24.1678961478532;
-        Thu, 16 Mar 2023 03:11:18 -0700 (PDT)
-X-Google-Smtp-Source: AK7set/Lu433zhP9PilHomJbmSQWYVXOQWWKmTm0C09FAmF8pzNNFzHUbJzlyQH+yr7BXNl3vtwXzw==
-X-Received: by 2002:a05:600c:35cd:b0:3e9:f4c2:b604 with SMTP id r13-20020a05600c35cd00b003e9f4c2b604mr22373453wmq.24.1678961478236;
-        Thu, 16 Mar 2023 03:11:18 -0700 (PDT)
-Received: from sgarzare-redhat (host-82-57-51-170.retail.telecomitalia.it. [82.57.51.170])
-        by smtp.gmail.com with ESMTPSA id o23-20020a05600c511700b003ed29b332b8sm5045142wms.35.2023.03.16.03.11.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Mar 2023 03:11:17 -0700 (PDT)
-Date:   Thu, 16 Mar 2023 11:11:15 +0100
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     virtualization@lists.linux-foundation.org,
-        Andrey Zhadchenko <andrey.zhadchenko@virtuozzo.com>,
-        eperezma@redhat.com, netdev@vger.kernel.org, stefanha@redhat.com,
-        linux-kernel@vger.kernel.org,
-        "Michael S. Tsirkin" <mst@redhat.com>, kvm@vger.kernel.org
-Subject: Re: [PATCH v2 2/8] vhost-vdpa: use bind_mm/unbind_mm device callbacks
-Message-ID: <CAGxU2F6Pa9Dar0MVvW=qUh0k30pdtbrSy_5u2NuREd8u-id=MA@mail.gmail.com>
-References: <20230302113421.174582-1-sgarzare@redhat.com>
- <20230302113421.174582-3-sgarzare@redhat.com>
- <CACGkMEttgd82xOxV8WLdSFdfhRLZn68tSaV4APSDh8qXxf4OEw@mail.gmail.com>
- <20230316083122.hliiktgsymrfpozy@sgarzare-redhat>
+        bh=85fsDNz+lL7FHNJ1iBNzrAf34oVvetUItgQ6w01KkXg=;
+        b=CFuZBAiqcmFiQPbH10yxQEHkhAt0jkDW0vRJP6sF1MPfJOTV49iB6XJ0kVFhXSEO2mm3XZ
+        2eOAec3ljGUY7fsCALOVqXhekXfNgsn/p0AQ6Ei7t7OwurE/4zTg1Yu8qJBzLnpsX5DrIg
+        qbh8kdteHMTSWOzcEeERIuaMmqdn5LI=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-225-6DMdYaQDM0Kz1urE3t7CmQ-1; Thu, 16 Mar 2023 06:11:33 -0400
+X-MC-Unique: 6DMdYaQDM0Kz1urE3t7CmQ-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8FE3B800B23;
+        Thu, 16 Mar 2023 10:11:31 +0000 (UTC)
+Received: from localhost (ovpn-12-81.pek2.redhat.com [10.72.12.81])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id E59B32A68;
+        Thu, 16 Mar 2023 10:11:29 +0000 (UTC)
+Date:   Thu, 16 Mar 2023 18:11:26 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Eric DeVolder <eric.devolder@oracle.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        kexec@lists.infradead.org, ebiederm@xmission.com,
+        dyoung@redhat.com, vgoyal@redhat.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com, nramas@linux.microsoft.com, thomas.lendacky@amd.com,
+        robh@kernel.org, efault@gmx.de, rppt@kernel.org, david@redhat.com,
+        sourabhjain@linux.ibm.com, konrad.wilk@oracle.com,
+        boris.ostrovsky@oracle.com
+Subject: Re: [PATCH v19 2/7] crash: add generic infrastructure for crash
+ hotplug support
+Message-ID: <ZBLrTl3UHYa1FV2S@MiWiFi-R3L-srv>
+References: <20230306162228.8277-1-eric.devolder@oracle.com>
+ <20230306162228.8277-3-eric.devolder@oracle.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230316083122.hliiktgsymrfpozy@sgarzare-redhat>
+In-Reply-To: <20230306162228.8277-3-eric.devolder@oracle.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,118 +68,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 16, 2023 at 9:31 AM Stefano Garzarella <sgarzare@redhat.com> wrote:
->
-> On Tue, Mar 14, 2023 at 11:48:33AM +0800, Jason Wang wrote:
-> >On Thu, Mar 2, 2023 at 7:34 PM Stefano Garzarella <sgarzare@redhat.com> wrote:
-> >>
-> >> When the user call VHOST_SET_OWNER ioctl and the vDPA device
-> >> has `use_va` set to true, let's call the bind_mm callback.
-> >> In this way we can bind the device to the user address space
-> >> and directly use the user VA.
-> >>
-> >> The unbind_mm callback is called during the release after
-> >> stopping the device.
-> >>
-> >> Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
-> >> ---
-> >>
-> >> Notes:
-> >>     v2:
-> >>     - call the new unbind_mm callback during the release [Jason]
-> >>     - avoid to call bind_mm callback after the reset, since the device
-> >>       is not detaching it now during the reset
-> >>
-> >>  drivers/vhost/vdpa.c | 30 ++++++++++++++++++++++++++++++
-> >>  1 file changed, 30 insertions(+)
-> >>
-> >> diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
-> >> index dc12dbd5b43b..1ab89fccd825 100644
-> >> --- a/drivers/vhost/vdpa.c
-> >> +++ b/drivers/vhost/vdpa.c
-> >> @@ -219,6 +219,28 @@ static int vhost_vdpa_reset(struct vhost_vdpa *v)
-> >>         return vdpa_reset(vdpa);
-> >>  }
-> >>
-> >> +static long vhost_vdpa_bind_mm(struct vhost_vdpa *v)
-> >> +{
-> >> +       struct vdpa_device *vdpa = v->vdpa;
-> >> +       const struct vdpa_config_ops *ops = vdpa->config;
-> >> +
-> >> +       if (!vdpa->use_va || !ops->bind_mm)
-> >> +               return 0;
-> >> +
-> >> +       return ops->bind_mm(vdpa, v->vdev.mm);
-> >> +}
-> >> +
-> >> +static void vhost_vdpa_unbind_mm(struct vhost_vdpa *v)
-> >> +{
-> >> +       struct vdpa_device *vdpa = v->vdpa;
-> >> +       const struct vdpa_config_ops *ops = vdpa->config;
-> >> +
-> >> +       if (!vdpa->use_va || !ops->unbind_mm)
-> >> +               return;
-> >> +
-> >> +       ops->unbind_mm(vdpa);
-> >> +}
-> >> +
-> >>  static long vhost_vdpa_get_device_id(struct vhost_vdpa *v, u8 __user *argp)
-> >>  {
-> >>         struct vdpa_device *vdpa = v->vdpa;
-> >> @@ -711,6 +733,13 @@ static long vhost_vdpa_unlocked_ioctl(struct file *filep,
-> >>                 break;
-> >>         default:
-> >>                 r = vhost_dev_ioctl(&v->vdev, cmd, argp);
-> >> +               if (!r && cmd == VHOST_SET_OWNER) {
-> >> +                       r = vhost_vdpa_bind_mm(v);
-> >> +                       if (r) {
-> >> +                               vhost_dev_reset_owner(&v->vdev, NULL);
-> >> +                               break;
-> >> +                       }
-> >> +               }
-> >
-> >Nit: is it better to have a new condition/switch branch instead of
-> >putting them under default? (as what vring_ioctl did).
->
-> Yep, I agree!
->
-> I'll change it.
+On 03/06/23 at 11:22am, Eric DeVolder wrote:
+......
+> +static void crash_handle_hotplug_event(unsigned int hp_action, unsigned int cpu)
+> +{
+> +	/* Obtain lock while changing crash information */
+> +	if (kexec_trylock()) {
+> +
+> +		/* Check kdump is loaded */
+> +		if (kexec_crash_image) {
+> +			struct kimage *image = kexec_crash_image;
+> +
+> +			if (hp_action == KEXEC_CRASH_HP_ADD_CPU ||
+> +				hp_action == KEXEC_CRASH_HP_REMOVE_CPU)
+> +				pr_debug("hp_action %u, cpu %u\n", hp_action, cpu);
+> +			else
+> +				pr_debug("hp_action %u\n", hp_action);
+> +
+> +			/*
+> +			 * When the struct kimage is allocated, the elfcorehdr_index
+> +			 * is set to -1. Find the segment containing the elfcorehdr,
+> +			 * if not already found. This works for both the kexec_load
+> +			 * and kexec_file_load paths.
+> +			 */
+> +			if (image->elfcorehdr_index < 0) {
+> +				unsigned long mem;
+> +				unsigned char *ptr;
+> +				unsigned int n;
+> +
+> +				for (n = 0; n < image->nr_segments; n++) {
+> +					mem = image->segment[n].mem;
+> +					ptr = kmap_local_page(pfn_to_page(mem >> PAGE_SHIFT));
+> +					if (ptr) {
+> +						/* The segment containing elfcorehdr */
+> +						if (memcmp(ptr, ELFMAG, SELFMAG) == 0) {
+> +							image->elfcorehdr_index = (int)n;
+> +						}
+> +						kunmap_local(ptr);
+> +					}
+> +				}
+> +			}
+> +
+> +			if (image->elfcorehdr_index < 0) {
+> +				pr_err("unable to locate elfcorehdr segment");
+> +				goto out;
+> +			}
+> +
+> +			/* Needed in order for the segments to be updated */
+> +			arch_kexec_unprotect_crashkres();
+> +
+> +			/* Differentiate between normal load and hotplug update */
+> +			image->hp_action = hp_action;
+> +
+> +			/* Now invoke arch-specific update handler */
+> +			arch_crash_handle_hotplug_event(image);
+> +
+> +			/* No longer handling a hotplug event */
+> +			image->hp_action = KEXEC_CRASH_HP_NONE;
+> +			image->elfcorehdr_updated = true;
 
-Or maybe I can simply add `case VHOST_SET_OWNER` on this switch and call
-vhost_dev_set_owner() and vhost_vdpa_bind_mm(), I mean something like
-this:
+It's good to initialize the image->hp_action here, however where do
+you check it? Do you plan to add some check somewhere?
 
-diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
-index 331d4a718bf6..20250c3418b2 100644
---- a/drivers/vhost/vdpa.c
-+++ b/drivers/vhost/vdpa.c
-@@ -731,15 +731,16 @@ static long vhost_vdpa_unlocked_ioctl(struct file *filep,
-        case VHOST_VDPA_RESUME:
-                r = vhost_vdpa_resume(v);
-                break;
-+       case VHOST_SET_OWNER:
-+               r = vhost_dev_set_owner(d);
-+               if (r)
-+                       break;
-+               r = vhost_vdpa_bind_mm(v);
-+               if (r)
-+                       vhost_dev_reset_owner(d, NULL);
-+               break;
-        default:
-                r = vhost_dev_ioctl(&v->vdev, cmd, argp);
--               if (!r && cmd == VHOST_SET_OWNER) {
--                       r = vhost_vdpa_bind_mm(v);
--                       if (r) {
--                               vhost_dev_reset_owner(&v->vdev, NULL);
--                               break;
--                       }
--               }
-                if (r == -ENOIOCTLCMD)
-                        r = vhost_vdpa_vring_ioctl(v, cmd, argp);
-                break;
-
-WDYT?
-
-Thanks,
-Stefano
+> +
+> +			/* Change back to read-only */
+> +			arch_kexec_protect_crashkres();
+> +		}
+> +
+> +out:
+> +		/* Release lock now that update complete */
+> +		kexec_unlock();
+> +	}
+> +}
+......
 
