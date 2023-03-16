@@ -2,172 +2,300 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 251D26BC693
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 08:10:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE52C6BC69D
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 08:11:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229560AbjCPHKz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 03:10:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36172 "EHLO
+        id S229784AbjCPHLO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 03:11:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbjCPHKx (ORCPT
+        with ESMTP id S229832AbjCPHLJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 03:10:53 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DF1E3B0CA
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 00:10:02 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id w9so3757176edc.3
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 00:10:02 -0700 (PDT)
+        Thu, 16 Mar 2023 03:11:09 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18BE8ACBB5;
+        Thu, 16 Mar 2023 00:10:17 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id z5so615556ljc.8;
+        Thu, 16 Mar 2023 00:10:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678950593;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=7DskVPGyg4XTBFcAu4u2wBMvd2V9vUe35DTxUMiqKo0=;
-        b=Oii4tgqhM1+uytgl/uCtxEcAltbCiuY08aN8SwZk4cCYRC1mtyU92yp6QGwJaMR+69
-         r2LeC8f3Pnt7+BBfqEX0Y2mR0KYes6/bpYwuaVes44qLaD3Yoidm5RLYgytOqFqnS54E
-         bbxVDZhcftxAPs9cr3DplBamx/puAjOIABbLZR2V4/pPwyR/ws8N73HBXb0YDIo9mne6
-         twQQ15hw8kjf+UkJZZK4x30B+ItMvq+3k2a31brrxDdHF6Nznf1V++OM0ARYBboE03Nb
-         7whTxyvSJnd9wCfPtHRV2Pp2tv+7/3l7SMhlI9SkFiSclryfcOuK3xxpB9l4zNyg17zw
-         Wvcw==
+        d=gmail.com; s=20210112; t=1678950605;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=OWA/mj/f3eHS8QGRBYX7bjkJXRntxd/NN8cEK0DJXRw=;
+        b=qJN7kP7/b8cDTotWyXdm2lp3jxcpv519yY/yuCuOCfA64T/zUjALxGDtDHHGH23ZLG
+         jiw632iKNcRKRGu0IYeg5PBYaLc/fynmyDLAHmzdbCcYavkrhS96fdJQ4hM5NS1LocMn
+         PKHqZFYO6ZZr56Gt22SOksTe/TqBmMpJY/dvLB5VXpkf9mNOBRJqae/Kx+Bp+Kooci7r
+         Ddecy8CjY0RXtwj8E5Ig2lkFrXVXpOi9XYEhiIF5Hf6kVYEUrLHdBG0A51ehpPJC8T4D
+         mIKbrETgy8ZbCYl9gzEf9gUPADeHf3gZ51zoGoqLJBDJQjLShyIoQ/BWMEJwU3pYXUZk
+         VCPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678950593;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20210112; t=1678950605;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7DskVPGyg4XTBFcAu4u2wBMvd2V9vUe35DTxUMiqKo0=;
-        b=z9IqXmoXSMHGB4wFD+xUdVKoErY3oWS5z2EiUOa0lVHSkFwWWJpmHqolapVxLJ7nOV
-         rZ88hiBbyO2J7GwuSh/5W+MLW28ju0uekXmibjpGSNhMpCqHkF5BwKAk57yIVG250ZiM
-         GkfHSsEuIpVDSPgK964KT3CPHCen/17ZbDB91fejPsoXMfLgKsWw6RrLJdGqAsVBlHgu
-         1R8lLeuw9QGGbqyJIA5XkYe+tu6ykHTRrTcOg2PQfp2zCFlTaUcHeMLqUVrghUcyo+0F
-         zGtL4QWhCg/xqo+qtUV4XW52y5oWBM4pyuXc9jnT39rjN8nhDv03SV0l6fUVIOLrKxJZ
-         /mww==
-X-Gm-Message-State: AO0yUKXLLhhw1s9AlqZIcDuXKx4aK16Y0BD576l89qzKbkGNMSv0GX1N
-        tzE3mON9Kmmio16C/FhFPc8pog==
-X-Google-Smtp-Source: AK7set8+NBsRtQMHynOv/FiocIqAaxXx01Y0YdEP/h944/7U8HpnrYGeH2MUJuKARg20j4XUNIwrZQ==
-X-Received: by 2002:aa7:de82:0:b0:4fd:2b04:6e8b with SMTP id j2-20020aa7de82000000b004fd2b046e8bmr5524719edv.29.1678950593268;
-        Thu, 16 Mar 2023 00:09:53 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:9827:5f65:8269:a95f? ([2a02:810d:15c0:828:9827:5f65:8269:a95f])
-        by smtp.gmail.com with ESMTPSA id e20-20020a50d4d4000000b004fbf6b35a56sm3363840edj.76.2023.03.16.00.09.52
+        bh=OWA/mj/f3eHS8QGRBYX7bjkJXRntxd/NN8cEK0DJXRw=;
+        b=N5glW0mlxe/J2CN2ga/OCeLrf3kvG+bDVE0WiBHeacB3uqEBYqHp7X1gIWQdkT7Nd2
+         rmdV+SUxlcr5JkQwr/PniKoE3bxpFiPWwFMIqQvETjRFB9aQm6kMXjFgRmjwb223xUxD
+         fUKI+Y6W+OLgxmpl2KzPeBYSgUaJ6SwLvRhISJZsv1jMuoYWGw9eHYLWJ2c07cxsdCAF
+         qpLVnPDxsow0VAfNGEEaU/3POKh1TKSwbXqxnE4PICRGh5a1eJWeSrZEKzcKt3Chy9uP
+         6qGlAc/BuFEhbVviQkNnOjHOZbJDAKpfNbrcmb5cUDFqZLcy5GOirzxjJoM4repBI28B
+         N76g==
+X-Gm-Message-State: AO0yUKXgiessSu/WwZDnKHAakpeifMH3lRs2agkHnBTIb4LagUVr+CKL
+        cJBdrfxQbaYDxGfHuylugHZnHb1VPGE=
+X-Google-Smtp-Source: AK7set+PdO3ZA619yvNodhIF0VgC0x2BSazCc2i1PDcfTXtXKccQP8l9EkN3MOmNWnbQEXOGPJKEeg==
+X-Received: by 2002:a2e:a989:0:b0:295:a391:7b48 with SMTP id x9-20020a2ea989000000b00295a3917b48mr2152641ljq.26.1678950605351;
+        Thu, 16 Mar 2023 00:10:05 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:16f3:4a00::6? (dc75zzyyyyyyyyyyyyydy-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::6])
+        by smtp.gmail.com with ESMTPSA id b25-20020a2e9899000000b00299aa6d1820sm63994ljj.84.2023.03.16.00.10.04
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Mar 2023 00:09:52 -0700 (PDT)
-Message-ID: <04f9336b-2a49-ca3f-fd28-1f04db78d2bd@linaro.org>
-Date:   Thu, 16 Mar 2023 08:09:51 +0100
+        Thu, 16 Mar 2023 00:10:05 -0700 (PDT)
+Message-ID: <de0848f7-7f33-b170-54b7-f0fbf4e5d7d6@gmail.com>
+Date:   Thu, 16 Mar 2023 09:10:03 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-Subject: Re: [PATCH v4 02/14] dt-bindings: display/msm/gmu: Add GMU wrapper
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
+Content-Language: en-US, en-GB
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Akhil P Oommen <quic_akhilpo@quicinc.com>
-Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Rob Clark <robdclark@chromium.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>
-References: <20230223-topic-gmuwrapper-v4-0-e987eb79d03f@linaro.org>
- <20230223-topic-gmuwrapper-v4-2-e987eb79d03f@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230223-topic-gmuwrapper-v4-2-e987eb79d03f@linaro.org>
-Content-Type: text/plain; charset=UTF-8
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20230314225535.1321736-1-sre@kernel.org>
+ <20230314225535.1321736-3-sre@kernel.org>
+ <baffa307-173c-6ba1-0289-e7287049c0f5@gmail.com>
+ <20230316004121.rwieru4aj7d6mwgb@mercury.elektranox.org>
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+Subject: Re: [PATCHv2 02/12] power: supply: core: auto-exposure of
+ simple-battery data
+In-Reply-To: <20230316004121.rwieru4aj7d6mwgb@mercury.elektranox.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/03/2023 16:28, Konrad Dybcio wrote:
-> The "GMU Wrapper" is Qualcomm's name for "let's treat the GPU blocks
-> we'd normally assign to the GMU as if they were a part of the GMU, even
-> though they are not". It's a (good) software representation of the GMU_CX
-> and GMU_GX register spaces within the GPUSS that helps us programatically
-> treat these de-facto GMU-less parts in a way that's very similar to their
-> GMU-equipped cousins, massively saving up on code duplication.
+On 3/16/23 02:41, Sebastian Reichel wrote:
+> Hi,
 > 
-> The "wrapper" register space was specifically designed to mimic the layout
-> of a real GMU, though it rather obviously does not have the M3 core et al.
+> On Wed, Mar 15, 2023 at 09:01:50AM +0200, Matti Vaittinen wrote:
+>> On 3/15/23 00:55, Sebastian Reichel wrote:
+>> [...]
+>>>    #ifdef CONFIG_THERMAL
+>>>    static int power_supply_read_temp(struct thermal_zone_device *tzd,
+>>>    		int *temp)
+>>> @@ -1255,6 +1387,11 @@ __power_supply_register(struct device *parent,
+>>>    		goto check_supplies_failed;
+>>>    	}
+>>> +	/* psy->battery_info is optional */
 > 
-> To sum it all up, the GMU wrapper is essentially a register space within
-> the GPU, which Linux sees as a dumbed-down regular GMU: there's no clocks,
-> interrupts, multiple reg spaces, iommus and OPP. Document it.
+> I forgot to add a POWER_SUPPLY_TYPE_BATTERY limitation when removing
+> the opt-in method. Will be added in the next revision.
 > 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
->  .../devicetree/bindings/display/msm/gmu.yaml       | 49 ++++++++++++++++------
->  1 file changed, 37 insertions(+), 12 deletions(-)
+>>> +	rc = power_supply_get_battery_info(psy, &psy->battery_info);
+>>> +	if (rc && rc != -ENODEV)
+>>> +		goto check_supplies_failed;
+>>> +
+>>
+>> This is what rubs me in a slightly wrong way - but again, you probably know
+>> better than I what's the direction things are heading so please ignore me if
+>> I am talking nonsense :)
+>>
+>> Anyways, I think the battery information may be relevant to the driver which
+>> is registering the power-supply. It may be there is a fuel-gauge which needs
+>> to know the capacity and OCV tables etc. Or some other thingy. And - I may
+>> be wrong - but I have a feeling it might be something that should be known
+>> prior registering the power-supply.
 > 
-> diff --git a/Documentation/devicetree/bindings/display/msm/gmu.yaml b/Documentation/devicetree/bindings/display/msm/gmu.yaml
-> index ab14e81cb050..021373e686e1 100644
-> --- a/Documentation/devicetree/bindings/display/msm/gmu.yaml
-> +++ b/Documentation/devicetree/bindings/display/msm/gmu.yaml
-> @@ -19,16 +19,18 @@ description: |
->  
->  properties:
->    compatible:
-> -    items:
-> -      - pattern: '^qcom,adreno-gmu-6[0-9][0-9]\.[0-9]$'
-> -      - const: qcom,adreno-gmu
-> +    oneOf:
-> +      - items:
-> +          - pattern: '^qcom,adreno-gmu-6[0-9][0-9]\.[0-9]$'
-> +          - const: qcom,adreno-gmu
-> +      - const: qcom,adreno-gmu-wrapper
->  
->    reg:
-> -    minItems: 3
-> +    minItems: 1
->      maxItems: 4
->  
->    reg-names:
-> -    minItems: 3
-> +    minItems: 1
->      maxItems: 4
->  
->    clocks:
-> @@ -44,7 +46,6 @@ properties:
->        - description: GMU HFI interrupt
->        - description: GMU interrupt
->  
-> -
->    interrupt-names:
->      items:
->        - const: hfi
-> @@ -72,14 +73,8 @@ required:
->    - compatible
->    - reg
->    - reg-names
-> -  - clocks
-> -  - clock-names
-> -  - interrupts
-> -  - interrupt-names
->    - power-domains
->    - power-domain-names
-> -  - iommus
-> -  - operating-points-v2
->  
->  additionalProperties: false
->  
-> @@ -216,6 +211,27 @@ allOf:
->              - const: cxo
->              - const: axi
->              - const: memnoc
+> You can still do that, just like before.
 
-Blank line (you added such between ifs in previous patch)
+This is out of scope of your series, but as far as I remember the 
+"battery info getter" power_supply_get_battery_info() provided by the 
+core required the struct power_supply - which, I believe, should not be 
+used prior supply registration.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+(I think I did drop this requirement and added a getter which allowed 
+just passing the device (or fwnode) in a simple-gauge RFC series I sent 
+couple of years ago - but as I said, this is out of the scope)
 
-Best regards,
-Krzysztof
+> It's a bit inefficient,
+> since the battery data is allocated twice, but the driver probe
+> routine is not a hot path.
+
+This is true. OTOH, people are constantly struggling to push down the 
+start-up times so maybe we should avoid feeling too comfortable with 
+probes being slow. Still, I am not opposed to this series!
+
+>> So, in my head it should be the driver which is getting the information
+>> about the battery (whether it is in the DT node or coded in some tables and
+>> fetched by battery type) - using helpers provided by core.
+>>
+>> I further think it should be the driver who can pass the battery information
+>> to core at registration - core may 'fall-back' finding information itself if
+>> driver did not provide it.
+> 
+> This implements the fallback route.
+> 
+>> So, I think the core should not unconditionally populate the battery-info
+>> here but it should first check if the driver had it already filled.
+> 
+> Not until there is a user (i.e. a driver using that feature). FWIW
+> it's quite easy to implement once it is needed. Just adding a field
+> in power_supply_config and taking it over here is enough, no other
+> code changes are required.
+
+Fair enough. You are probably right in that things should not be 
+complicated if there is no need.
+
+> The alternative is adding some kind of probe/remove callback for the
+> power_supply device itself to properly initialize the device. That
+> would also be useful to have a sensible place for e.g. shutting of
+> chargers when the device is removed. Anyways it's a bit out of scope
+> for this patchset :)
+> 
+>> Well, as I said, I recognize I may not (do not) know all the dirty details
+>> and I do trust you to evaluate if what I wrote here makes any sense :) All
+>> in all, I think this auto-exposure is great.
+>>
+>> Please, bear with me if what I wrote above does not make sense to you and
+>> just assume I don't see the big picture :)
+> 
+> Right now the following battery drivers use power_supply_get_battery_info():
+> 
+>   * cw2015_battery
+>   * bq27xxx_battery
+>   * axp20x_battery
+>   * ug3105_battery
+>   * ingenic-battery
+>   * sc27xx_fuel_gauge
+>   * (generic-adc-battery)
+> 
+> All of them call it after the power-supply device has been
+> registered. Thus the way to go for them is removing the second call
+> to power_supply_get_battery_info() and instead use the battery-info
+> acquired by the core. I think that work deserves its own series.
+
+I agree.
+
+> For chargers the situation is different (they usually want the data
+> before registration), but they should not expose the battery data
+> anyways.
+
+I probably should go back studying how the power-supply class works 
+before continuing this discussion :)
+
+So, is it so that when a single IC contains both the charger logic and 
+battery monitoring - then the driver is expected to create two 
+power_supply devices. One for the battery and the other for the charger? 
+I assume both of these pover_supply devices will then find the same 
+battery_info - which means that one of the devices (probably the 
+charger) should not auto-expose properties(?)
+
+Well, as I said I should go study things better before continuing - but 
+as I have limited time for studying this now I'll just ask if there is a 
+danger we auto-expose battery details from existing drivers via two 
+devices? And as I did no study I will just accept what ever answer you 
+give and trust you to know this better ^_^;
+
+> Also ideally chargers get the information from the battery
+> power-supply device, which might supply the data from fuel-gauge
+> registers (or fallback to battery-info after this series).
+> 
+>>>    	spin_lock_init(&psy->changed_lock);
+>>>    	rc = device_add(dev);
+>>>    	if (rc)
+>>> diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/supply/power_supply_sysfs.c
+>>> index c228205e0953..5842dfe5dfb7 100644
+>>> --- a/drivers/power/supply/power_supply_sysfs.c
+>>> +++ b/drivers/power/supply/power_supply_sysfs.c
+>>> @@ -380,6 +380,9 @@ static umode_t power_supply_attr_is_visible(struct kobject *kobj,
+>>>    		}
+>>>    	}
+>>> +	if (power_supply_battery_info_has_prop(psy->battery_info, attrno))
+>>> +		return mode;
+>>> +
+>>>    	return 0;
+>>>    }
+>>> @@ -461,6 +464,8 @@ static int add_prop_uevent(const struct device *dev, struct kobj_uevent_env *env
+>>>    int power_supply_uevent(const struct device *dev, struct kobj_uevent_env *env)
+>>>    {
+>>>    	const struct power_supply *psy = dev_get_drvdata(dev);
+>>> +	const enum power_supply_property *battery_props =
+>>> +		power_supply_battery_info_properties;
+>>>    	int ret = 0, j;
+>>>    	char *prop_buf;
+>>> @@ -488,6 +493,16 @@ int power_supply_uevent(const struct device *dev, struct kobj_uevent_env *env)
+>>>    			goto out;
+>>>    	}
+>>> +	for (j = 0; j < power_supply_battery_info_properties_size; j++) {
+>>> +		if (!power_supply_battery_info_has_prop(psy->battery_info,
+>>> +				battery_props[j]))
+>>> +			continue;
+>>
+>> Hmm. I just noticed that there can probably be same properties in the
+>> psy->desc->properties and in the battery-info.
+> 
+> That's intended, so that battery drivers can implement their own
+> behaviour for the properties.
+
+Yes, I thought so. But this is why I asked if doubling the uevents below 
+was a problem.
+
+>> I didn't cascade deep into the code so I can't say if it is a
+>> problem to add duplicates?
+> 
+> It does not break anything (we used to have this for the TYPE
+> property in a driver), but confuses userspace. I will fix the
+> duplication in uevents and send a new version.
+> 
+>> So, if this is safe, and if what I wrote above is not something
+>> you want to consider:
+>>
+>> Reviewed-by: Matti Vaittinen <mazziesaccount@gmail.com>
+> 
+> Due to the changes I will not take this over in v3. Just to make
+> sure - is it correct, that you do not want your R-b tag for the
+> following two patches?
+> 
+> [05/12] power: supply: generic-adc-battery: drop jitter delay support
+
+I didn't feel technically capable of reviewing the above delay patch as 
+I don't know what kind of delays are typically needed - or if they need 
+to be configurable - or what is the purpose of this delay (some 
+stabilization period after charging?)
+
+So, it's not that your patch had something I didn't agree with - I was 
+just not feeling I understand the consequences of the changes. Purely 
+from coding perspective it looked good to me :)
+
+> [08/12] power: supply: generic-adc-battery: use simple-battery API
+
+This one did look good to me but as it was pretty trivial one I didn't 
+think my review made much of a difference :) I can reply with my tag on 
+that one though as I did review what there was to review.
+
+> 
+>> [...]
+> 
+> Thanks for your reviews,
+
+Thanks to you! You are the one making things better here, I am just 
+treating this as an opportunity to learn ;)
+
+Yours,
+	-- Matti
+
+-- 
+Matti Vaittinen
+Linux kernel developer at ROHM Semiconductors
+Oulu Finland
+
+~~ When things go utterly wrong vim users can always type :help! ~~
 
