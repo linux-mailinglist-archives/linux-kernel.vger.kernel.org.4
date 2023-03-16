@@ -2,97 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8D396BDCD2
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 00:20:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EAA3F6BDCD6
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 00:21:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230319AbjCPXUe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 19:20:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39002 "EHLO
+        id S229814AbjCPXVq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 19:21:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229648AbjCPXU3 (ORCPT
+        with ESMTP id S229488AbjCPXVp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 19:20:29 -0400
-Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A0FE19F00;
-        Thu, 16 Mar 2023 16:20:28 -0700 (PDT)
-Received: by mail-il1-x132.google.com with SMTP id h5so1872660ile.13;
-        Thu, 16 Mar 2023 16:20:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679008827;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=kiT7fkFtVF0n3Eq41iQuXy9kvWS5g2M36ZfkL5aFQ4E=;
-        b=SjOfvPAcNU2JoOc5taB73FlbEMLaMF/wcBaDJ2xDjr2xAPPZfbn3ZPpDyWzNBOcZ7m
-         77b3/ULninLGOEMXibzJG+vykBdar3XKRT+M3KONQZON+DyVv5fHZibT9B8y5MYWWLXt
-         kVn6DRLW5XPcLuMZPPRxnKo7cOKYMadKUtYT1CaDY2ZxhzMJ9PEpfdyQgovQMsiUzBmv
-         pOXXs6KXXkAxkxj7Mm7jMl+78uvXmqXi6Av323147yM/6Hhe/6U5G+c3iiv2muQlxzif
-         84XT3VxK76dm6SE16FXo08reEcmzDbyaGIswWLXFlHz31NAMyhIIWrsvoyNuaG4dPdcX
-         7ewQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679008827;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kiT7fkFtVF0n3Eq41iQuXy9kvWS5g2M36ZfkL5aFQ4E=;
-        b=Ab17Spig3lWg//KogOa3b4esBkqBuhvg0KlWoJ3RXNSEYO9C88wYNdfkZNhgJENYh0
-         z5kqVVdzmygNwsbmGYmt5O60RQ3QRieCMbeDehuCVljS6m7ZB9sXqdLj+oJAJttcMzQb
-         VNUYPgodBhG6K2Ve8hWCacswhMW13Px/lb+JI4kXkCFUAaPhLEHPqaulbX1S22tzVshQ
-         SfXTVeFyXuP594bCs2DqnaJb0Ba8P7FzYSNFHLI3vVqyQibTzJfQUhztwIeU5q9VtpRt
-         2I0Es6DPoG/7IoRFnJy1viugXZvW9fVQqPWkw9w/PYiq9taql2olbcawNM1+Ez4ATeWO
-         SVhA==
-X-Gm-Message-State: AO0yUKXSqiUTcLrvlcacyjndHdEpF76V0G6kymsVMxuCxzuw5/ygtm7c
-        LTgNtjCrRFFEe0C+fBFZP3o=
-X-Google-Smtp-Source: AK7set+D8b2k+mSFHjgu55zS+J/u1/lj+YDkGFZsjTYSNGF+c5zs+jS1nHlSWOBjMQOPN1w9VJ70Tw==
-X-Received: by 2002:a92:dacb:0:b0:317:99b9:3d1c with SMTP id o11-20020a92dacb000000b0031799b93d1cmr8521841ilq.26.1679008827541;
-        Thu, 16 Mar 2023 16:20:27 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 3-20020a921803000000b00322f1b34d92sm171453ily.35.2023.03.16.16.20.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Mar 2023 16:20:27 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 16 Mar 2023 16:20:26 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 6.1 000/140] 6.1.20-rc2 review
-Message-ID: <3633184a-6d1f-40ff-99dd-80b5ef17f5a0@roeck-us.net>
-References: <20230316083444.336870717@linuxfoundation.org>
+        Thu, 16 Mar 2023 19:21:45 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 518D310DE40;
+        Thu, 16 Mar 2023 16:21:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=Sdi/29/StTsbeuvKgT+Z/F++TfRAz2A8U4n5uNyTQzU=; b=yc1jhoRBNKVkdjN9mmlVB044Vu
+        wohIHAMTrL9uqkgv4xeeoVKIdni4or2O28eapr23X3uKegkoPxskg52+U/dVBIsVL3sIXwjsHEMW5
+        80C//4z4+Gbb4RT9+qfZ8Kb9S9cuSvo0GmBevSrXz37rQJSJc9S4xzJTtduN8qZ6LSlVstXP73atx
+        t857BK93EF5gn8KtcYGaGmLJ+7YBGo4cO5CmN8X6Pl8bYu+/SFSa/UlQrS7vgRDCpnDqPEQY5v5o5
+        EyLb4d79U+oBi6RtiDdDjSz+RQLfa2KuHEAqmdPdLSfnFYGRTVeGWmfnOBnbGvPnb/GY9cGx5fkMW
+        TWAK5xiQ==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:43194)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1pcwuI-0001Tf-9J; Thu, 16 Mar 2023 23:21:14 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1pcwuB-0002qU-Rg; Thu, 16 Mar 2023 23:21:07 +0000
+Date:   Thu, 16 Mar 2023 23:21:07 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Donglin Peng <pengdonglin@sangfor.com.cn>
+Cc:     mhiramat@kernel.org, rostedt@goodmis.org, mark.rutland@arm.com,
+        will@kernel.org, catalin.marinas@arm.com, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, tglx@linutronix.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, mingo@redhat.com,
+        xiehuan09@gmail.com, dinghui@sangfor.com.cn,
+        huangcun@sangfor.com.cn, dolinux.peng@gmail.com,
+        linux-trace-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 1/2] function_graph: Support recording and printing
+ the return value of function
+Message-ID: <ZBOkY8FkqgoBfzQ2@shell.armlinux.org.uk>
+References: <20230315133911.958741-1-pengdonglin@sangfor.com.cn>
+ <20230315133911.958741-2-pengdonglin@sangfor.com.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230316083444.336870717@linuxfoundation.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230315133911.958741-2-pengdonglin@sangfor.com.cn>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 16, 2023 at 09:50:22AM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.1.20 release.
-> There are 140 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Sat, 18 Mar 2023 08:33:04 +0000.
-> Anything received after that time might be too late.
-> 
+On Wed, Mar 15, 2023 at 06:39:10AM -0700, Donglin Peng wrote:
+> diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
+> index e24a9820e12f..ad03fc868f34 100644
+> --- a/arch/arm/Kconfig
+> +++ b/arch/arm/Kconfig
+> @@ -99,6 +99,7 @@ config ARM
+>  	select HAVE_FTRACE_MCOUNT_RECORD if !XIP_KERNEL
+>  	select HAVE_FUNCTION_ERROR_INJECTION
+>  	select HAVE_FUNCTION_GRAPH_TRACER
+> +	select HAVE_FUNCTION_GRAPH_RETVAL if HAVE_FUNCTION_GRAPH_TRACER
+>  	select HAVE_FUNCTION_TRACER if !XIP_KERNEL
+>  	select HAVE_GCC_PLUGINS
+>  	select HAVE_HW_BREAKPOINT if PERF_EVENTS && (CPU_V6 || CPU_V6K || CPU_V7)
+> diff --git a/arch/arm/kernel/entry-ftrace.S b/arch/arm/kernel/entry-ftrace.S
+> index 3e7bcaca5e07..0151d2ce9958 100644
+> --- a/arch/arm/kernel/entry-ftrace.S
+> +++ b/arch/arm/kernel/entry-ftrace.S
+> @@ -258,6 +258,10 @@ ENDPROC(ftrace_graph_regs_caller)
+>  #ifdef CONFIG_FUNCTION_GRAPH_TRACER
+>  ENTRY(return_to_handler)
+>  	stmdb	sp!, {r0-r3}
+> +#ifdef CONFIG_FUNCTION_GRAPH_RETVAL
+> +	/* Pass the function return value to ftrace_return_to_handler */
+> +	mov	r1, r0
 
-Build results:
-	total: 155 pass: 155 fail: 0
-Qemu test results:
-	total: 516 pass: 516 fail: 0
+In a similar vein to Peter's comment, do we care about 64-bit return
+values here, because the above only covers 32-bit values.
 
-Tested-by: Guenter Roeck <linux@roeck-us.net>
+If we do care about 64-bit values, then we get into EABI/OABI
+stickyness, because on EABI the 64-bit value would have to be passed
+in r2,r3, and OABI would need r1,r2.
 
-Guenter
+it would be better to have the 64-bit argument as the first argument
+to ftrace_return_to_handler() which would eliminate that variability,
+but I don't know what effect that would have for other architectures.
+
+Things get more icky if we want 128-bit values. For EABI, we've
+conveniently just stacked that. For OABI, that would need to be in
+r1-r3 and the final high bits on the stack.
+
+With a 128-bit argument as the first, that would be r0-r3 with the
+existing stack pointer argument stored... on the stack.
+
+So, really it depends what size of return value we want to report.
+Also, please bear in mind that where a function returns a 32-bit
+value, that will be in r0, and r1 will be whatever happened to be
+in it at function exit - there's no defined value for r1.
+
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
