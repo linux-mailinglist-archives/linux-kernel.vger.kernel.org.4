@@ -2,169 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CA3E6BD793
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 18:53:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 427CE6BD786
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 18:51:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230258AbjCPRxI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 13:53:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58862 "EHLO
+        id S229477AbjCPRvr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 13:51:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230235AbjCPRw4 (ORCPT
+        with ESMTP id S230168AbjCPRvn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 13:52:56 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48DAC1EFC1;
-        Thu, 16 Mar 2023 10:52:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678989171; x=1710525171;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=QRih3njZUr377Ux29J6E8DuVOV2jEWZRLenNqTC3HQw=;
-  b=FNIx2AaUemVDBoHyq/v0YRfT15JHboRqBlN9pCf3Msmv7k2dsZeQ1MIC
-   icHyBHo/V7/sY3LqCg7H/DAkjSnCp3hwdxn3kNkE/PTh2n55gFJtQ3WzW
-   Rhp5Jyww7AJbCKc95r3Y6AgEcGzwNHR4F7Y7DVZBa5IWblO7XHfBnnMMh
-   rDBrEDGRsU0trqPgRQ4JeL8BTbKBuXhXTa4H54nIqyJu2SGMUM+ewcMvc
-   8mNZ0BdpmxfZiBvoUrOftPtIxrwipqz42z5vv3N0fs/zFeEboMxU5gzgN
-   YF4fT8UcDVlmi7T4wSNpTe7m5Y6gYFys3Pf+zVd+jkcLLKn8054zmvrsy
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="317721473"
-X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
-   d="scan'208";a="317721473"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 10:52:12 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="823351351"
-X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
-   d="scan'208";a="823351351"
-Received: from newjersey.igk.intel.com ([10.102.20.203])
-  by fmsmga001.fm.intel.com with ESMTP; 16 Mar 2023 10:52:09 -0700
-From:   Alexander Lobakin <aleksander.lobakin@intel.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>
-Cc:     Alexander Lobakin <aleksander.lobakin@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Larysa Zaremba <larysa.zaremba@intel.com>,
-        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Song Liu <song@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next 2/2] selftests/bpf: fix "metadata marker" getting overwritten by the netstack
-Date:   Thu, 16 Mar 2023 18:50:51 +0100
-Message-Id: <20230316175051.922550-3-aleksander.lobakin@intel.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230316175051.922550-1-aleksander.lobakin@intel.com>
-References: <20230316175051.922550-1-aleksander.lobakin@intel.com>
+        Thu, 16 Mar 2023 13:51:43 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEF613FBA7;
+        Thu, 16 Mar 2023 10:51:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 170C2B822F0;
+        Thu, 16 Mar 2023 17:50:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDE7BC433D2;
+        Thu, 16 Mar 2023 17:50:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678989053;
+        bh=mQI195bsoZhuwsniwL56dTXtb0cJd+PAZxJeRAV03u0=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=ePaceNB3H0SMAoWUzF3ZtGKzuBojUWdl7jvCZ8euC/dCzORO2IL8fmZ5+Sv3Z5IE6
+         Cad8y8c/+DVbEEos9US3KWUtBHu+StnWugPhMiw/zFOumj3/EjsQBqKLr7/nkdlFrb
+         jcvrXY2Vco1xmFoT+VdrBPv+2j7WCmdxY5Sxym1muxp+c+ZQE6whJ4kWJlvXcJ0UiA
+         4sl4FEAJLW7Zy50gqGOeC4t1utlZWNiErv8rP4F4MyX21sHDrYS3dJ1uqoCZY/YSM9
+         5Lotfn+k7jr43M0vFcDBm4KHbS+o+LTTdvlvHnYHL66aQ5gMsYUjVQT+LYE5CAL4+j
+         WtsLVKG2nWvsg==
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id 6BFCF1540395; Thu, 16 Mar 2023 10:50:53 -0700 (PDT)
+Date:   Thu, 16 Mar 2023 10:50:53 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/1] rcu/rcuscale: Stop kfree_scale_thread thread(s)
+ after unloading rcuscale
+Message-ID: <2bbaa13a-bfcc-45b7-acce-8da59a2a0c32@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <IA1PR11MB61714FEEAF2C46639891401A89BC9@IA1PR11MB6171.namprd11.prod.outlook.com>
+ <2B9F2C1A-B274-41EF-8ABE-1E660521BCE4@joelfernandes.org>
+ <IA1PR11MB6171C7FEE026F421A3CD6A9689BC9@IA1PR11MB6171.namprd11.prod.outlook.com>
+ <CAEXW_YTh18nWTWjLBCRiB2AAH76oD7XrMMMPWZ+9thFSmcPaVg@mail.gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAEXW_YTh18nWTWjLBCRiB2AAH76oD7XrMMMPWZ+9thFSmcPaVg@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Alexei noticed xdp_do_redirect test on BPF CI started failing on
-BE systems after skb PP recycling was enabled:
+On Thu, Mar 16, 2023 at 10:57:06AM -0400, Joel Fernandes wrote:
+> On Thu, Mar 16, 2023 at 9:53 AM Zhuo, Qiuxu <qiuxu.zhuo@intel.com> wrote:
+> >
+> [...]
+> > > >> From: Paul E. McKenney <paulmck@kernel.org> [...]
+> > > >>>>
+> > > >>>> How about to pull the rcu_scale_cleanup() function after
+> > > >> kfree_scale_cleanup().
+> > > >>>> This groups kfree_* functions and groups rcu_scale_* functions.
+> > > >>>> Then the code would look cleaner.
+> > > >>>> So, do you think the changes below are better?
+> > > >>>
+> > > >>> IMHO, I don't think doing such a code move is better. Just add a new
+> > > >>> header file and declare the function there. But see what Paul says
+> > > >>> first.
+> > > >>
+> > > >> This situation is likely to be an early hint that the kvfree_rcu()
+> > > >> testing should be split out from kernel/rcu/rcuscale.c.
+> > > >
+> > > > Another is that it's a bit expensive to create a new header file just
+> > > > for eliminating a function declaration. ;-)
+> > >
+> > > What is so expensive about new files? It is a natural organization structure.
+> > >
+> > > > So, if no objections, I'd like to send out the v2 patch with the updates below:
+> > > >
+> > > >   - Move rcu_scale_cleanup() after kfree_scale_cleanup() to eliminate the
+> > > >     declaration of kfree_scale_cleanup(). Though this makes the patch bigger,
+> > > >     get the file rcuscale.c much cleaner.
+> > > >
+> > > >   - Remove the unnecessary step "modprobe torture" from the commit
+> > > message.
+> > > >
+> > > >   - Add the description for why move rcu_scale_cleanup() after
+> > > >     kfree_scale_cleanup() to the commit message.
+> > >
+> > > Honestly if you are moving so many lines around, you may as well split it out
+> > > into a new module.
+> > > The kfree stuff being clubbed in the same file has also been a major
+> > > annoyance.
+> >
+> > I'm OK with creating a new kernel module for these kfree stuffs,
+> > but do we really need to do that?
 
-test_xdp_do_redirect:PASS:prog_run 0 nsec
-test_xdp_do_redirect:PASS:pkt_count_xdp 0 nsec
-test_xdp_do_redirect:PASS:pkt_count_zero 0 nsec
-test_xdp_do_redirect:FAIL:pkt_count_tc unexpected pkt_count_tc: actual
-220 != expected 9998
-test_max_pkt_size:PASS:prog_run_max_size 0 nsec
-test_max_pkt_size:PASS:prog_run_too_big 0 nsec
-close_netns:PASS:setns 0 nsec
- #289 xdp_do_redirect:FAIL
-Summary: 270/1674 PASSED, 30 SKIPPED, 1 FAILED
+It is not a particularly high priority.
 
-and it doesn't happen on LE systems.
-Ilya then hunted it down to:
+> If it were me doing this, I would try to split it just because in the
+> long term I may have to maintain or deal with it.
+> 
+> I was also thinking a new scale directory _may_ make sense for
+> performance tests.
+> 
+> kernel/rcu/scaletests/kfree.c
+> kernel/rcu/scaletests/core.c
+> kernel/rcu/scaletests/ref.c
+> 
+> Or something like that.
 
- #0  0x0000000000aaeee6 in neigh_hh_output (hh=0x83258df0,
-skb=0x88142200) at linux/include/net/neighbour.h:503
- #1  0x0000000000ab2cda in neigh_output (skip_cache=false,
-skb=0x88142200, n=<optimized out>) at linux/include/net/neighbour.h:544
- #2  ip6_finish_output2 (net=net@entry=0x88edba00, sk=sk@entry=0x0,
-skb=skb@entry=0x88142200) at linux/net/ipv6/ip6_output.c:134
- #3  0x0000000000ab4cbc in __ip6_finish_output (skb=0x88142200, sk=0x0,
-net=0x88edba00) at linux/net/ipv6/ip6_output.c:195
- #4  ip6_finish_output (net=0x88edba00, sk=0x0, skb=0x88142200) at
-linux/net/ipv6/ip6_output.c:206
+I don't believe we are there yet, but...
 
-xdp_do_redirect test places a u32 marker (0x42) right before the Ethernet
-header to check it then in the XDP program and return %XDP_ABORTED if it's
-not there. Neigh xmit code likes to round up hard header length to speed
-up copying the header, so it overwrites two bytes in front of the Eth
-header. On LE systems, 0x42 is one byte at `data - 4`, while on BE it's
-`data - 1`, what explains why it happens only there.
-It didn't happen previously due to that %XDP_PASS meant the page will be
-discarded and replaced by a new one, but now it can be recycled as well,
-while bpf_test_run code doesn't reinitialize the content of recycled
-pages. This mark is limited to this particular test and its setup though,
-so there's no need to predict 1000 different possible cases. Just move
-it 4 bytes to the left, still keeping it 32 bit to match on more bytes.
+> and then maybe putt common code into: kernel/rcu/scaletests/common.c
 
-Fixes: 9c94bbf9a87b ("xdp: recycle Page Pool backed skbs built from XDP frames")
-Reported-by: Alexei Starovoitov <ast@kernel.org>
-Link: https://lore.kernel.org/bpf/CAADnVQ+B_JOU+EpP=DKhbY9yXdN6GiRPnpTTXfEZ9sNkUeb-yQ@mail.gmail.com
-Reported-by: Ilya Leoshkevich <iii@linux.ibm.com> # + debugging
-Link: https://lore.kernel.org/bpf/8341c1d9f935f410438e79d3bd8a9cc50aefe105.camel@linux.ibm.com
-Signed-off-by: Alexander Lobakin <aleksander.lobakin@intel.com>
----
- tools/testing/selftests/bpf/prog_tests/xdp_do_redirect.c | 7 ++++---
- tools/testing/selftests/bpf/progs/test_xdp_do_redirect.c | 2 +-
- 2 files changed, 5 insertions(+), 4 deletions(-)
+...splitting out the common code within the current directory/file
+structure makes a lot of sense to me.  Not that I have checked up on
+exactly how much common code there really is.  ;-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_do_redirect.c b/tools/testing/selftests/bpf/prog_tests/xdp_do_redirect.c
-index 856cbc29e6a1..4eaa3dcaebc8 100644
---- a/tools/testing/selftests/bpf/prog_tests/xdp_do_redirect.c
-+++ b/tools/testing/selftests/bpf/prog_tests/xdp_do_redirect.c
-@@ -86,12 +86,12 @@ static void test_max_pkt_size(int fd)
- void test_xdp_do_redirect(void)
- {
- 	int err, xdp_prog_fd, tc_prog_fd, ifindex_src, ifindex_dst;
--	char data[sizeof(pkt_udp) + sizeof(__u32)];
-+	char data[sizeof(pkt_udp) + sizeof(__u64)];
- 	struct test_xdp_do_redirect *skel = NULL;
- 	struct nstoken *nstoken = NULL;
- 	struct bpf_link *link;
- 	LIBBPF_OPTS(bpf_xdp_query_opts, query_opts);
--	struct xdp_md ctx_in = { .data = sizeof(__u32),
-+	struct xdp_md ctx_in = { .data = sizeof(__u64),
- 				 .data_end = sizeof(data) };
- 	DECLARE_LIBBPF_OPTS(bpf_test_run_opts, opts,
- 			    .data_in = &data,
-@@ -105,8 +105,9 @@ void test_xdp_do_redirect(void)
- 	DECLARE_LIBBPF_OPTS(bpf_tc_hook, tc_hook,
- 			    .attach_point = BPF_TC_INGRESS);
- 
--	memcpy(&data[sizeof(__u32)], &pkt_udp, sizeof(pkt_udp));
-+	memcpy(&data[sizeof(__u64)], &pkt_udp, sizeof(pkt_udp));
- 	*((__u32 *)data) = 0x42; /* metadata test value */
-+	*((__u32 *)data + 4) = 0;
- 
- 	skel = test_xdp_do_redirect__open();
- 	if (!ASSERT_OK_PTR(skel, "skel"))
-diff --git a/tools/testing/selftests/bpf/progs/test_xdp_do_redirect.c b/tools/testing/selftests/bpf/progs/test_xdp_do_redirect.c
-index cd2d4e3258b8..5baaafed0d2d 100644
---- a/tools/testing/selftests/bpf/progs/test_xdp_do_redirect.c
-+++ b/tools/testing/selftests/bpf/progs/test_xdp_do_redirect.c
-@@ -52,7 +52,7 @@ int xdp_redirect(struct xdp_md *xdp)
- 
- 	*payload = MARK_IN;
- 
--	if (bpf_xdp_adjust_meta(xdp, 4))
-+	if (bpf_xdp_adjust_meta(xdp, sizeof(__u64)))
- 		return XDP_ABORTED;
- 
- 	if (retcode > XDP_PASS)
--- 
-2.39.2
+							Thanx, Paul
 
+>  - Joel
+> 
+> >
+> > @paulmck, what's your suggestion for the next step?
+> >
+> > >  - Joel
+> > >
+> > >
+> > > > Thanks!
+> > > > -Qiuxu
+> > > >
+> > > >> [...]
