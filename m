@@ -2,97 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2CD76BDC0E
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 23:53:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA19C6BDC14
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 23:53:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229832AbjCPWxh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 18:53:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56558 "EHLO
+        id S230148AbjCPWxo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 18:53:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229589AbjCPWxe (ORCPT
+        with ESMTP id S229589AbjCPWxm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 18:53:34 -0400
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3946113F6;
-        Thu, 16 Mar 2023 15:53:32 -0700 (PDT)
-Received: by mail-io1-xd35.google.com with SMTP id b5so1544678iow.0;
-        Thu, 16 Mar 2023 15:53:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679007212;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8oRFDkjTItmRARF9MPboyy5pcC53D8DFiO7r4AdLOx4=;
-        b=Bd7/3V61PyyseMyST3POk/iFFLs64mcNtbzneGvgXjwAHwoN787AWd0WkqLWJjPuea
-         5z/MBP8WbYF8fdGz+tNmL7FgRsUIX4a2JjqxvtEslsvAL8Z4njloFPDndQMkLTl1xVc2
-         NdvndADX1rsLdLPYVN9WvYFn8aHHIGI0LnoTveiNMXERXKEV47iGwFLQyMW46uuOeEzJ
-         YOzByngT3mNfjkFKtppIJ38MwPabqkBn1zbanif+wLmKRxyh/Wz8F+WJcXUcMoT8qU69
-         cEFSfaDGBgLL4kfeJuM74OLZ+ebCNT4SWshVr9XjEBC2x2Cy1PEm46MhKa7UvjmhLasw
-         Ia0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679007212;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8oRFDkjTItmRARF9MPboyy5pcC53D8DFiO7r4AdLOx4=;
-        b=0j0ps02GoGrn61eN26JbpQ6v0U+gHVAPkxRrWKOIJhjai1B2HQpmSxpp15PIeioyS2
-         6XvgEfugXejd6G84V/XppfInB/72HRBI6BShPFIWgjqneyxBBM8fUgFGYFkuEWzMdkvO
-         pxVAMmnM6Umj5VDj/6KjQ708/rrcsHROOwCW+6NJTLp/y9SfmzZSyNHGGQkhb9rRF4D9
-         mdxJhMPT0QTp5yDkBiWLKsZ2uXdyAPHgIjyhYkRW+oiyGFsAR58gUl66JWXIFaVSikYR
-         SaA5q61y6EFQ5JPF7sNktXX2Vyh8bDBRZcfX8fnCooG5xNXFqAq1CpHNEh30ZQtR7oQ0
-         PoFQ==
-X-Gm-Message-State: AO0yUKWwDc0sodztRZM8T76L6tTE/VGTIZlxFa0JpLKOroF+fgEjgK18
-        Qm0DxxDzvOCK7ZyjzX36QUc=
-X-Google-Smtp-Source: AK7set8TbvIiZSVTbzgAzem48+HVV7SREKPoXRfSJh69O43NHm9hgkjAEBeUv0X7fxe5D4kNPO+Phw==
-X-Received: by 2002:a6b:4a18:0:b0:743:7742:1bc2 with SMTP id w24-20020a6b4a18000000b0074377421bc2mr364810iob.16.1679007212010;
-        Thu, 16 Mar 2023 15:53:32 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id g13-20020a02270d000000b0040306bfd949sm181096jaa.21.2023.03.16.15.53.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Mar 2023 15:53:31 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 16 Mar 2023 15:53:29 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 4.14 00/20] 4.14.310-rc2 review
-Message-ID: <8cbf73b6-f9d4-42d4-9dea-545caa558958@roeck-us.net>
-References: <20230316083335.429724157@linuxfoundation.org>
+        Thu, 16 Mar 2023 18:53:42 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9BC3B2F7BB;
+        Thu, 16 Mar 2023 15:53:41 -0700 (PDT)
+Received: by linux.microsoft.com (Postfix, from userid 1052)
+        id EC6622057035; Thu, 16 Mar 2023 15:53:40 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com EC6622057035
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1679007220;
+        bh=ozAKii3/G+nF0B4iMSAidkpr8EKBtFwptQ71Sgukeww=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KkZPlvrZkwVJk9N6tCVcfEWVijYklxICoHBlfmIBUdyC9L+DFQd4o9FIlLtaz5zo9
+         LlqgvLme5WmK8AGXZvR43afaNUceUwk8wqOJUB8SBwuHtIGBuXChLJM+Ctaq1+q6w0
+         SjFFKl2n5uJm/6kczK6TR5zqAcTMDJ2OG5M9TlUA=
+Date:   Thu, 16 Mar 2023 15:53:40 -0700
+From:   Fan Wu <wufan@linux.microsoft.com>
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     Steve Grubb <sgrubb@redhat.com>, corbet@lwn.net,
+        zohar@linux.ibm.com, jmorris@namei.org, serge@hallyn.com,
+        tytso@mit.edu, ebiggers@kernel.org, axboe@kernel.dk,
+        agk@redhat.com, snitzer@kernel.org, eparis@redhat.com,
+        linux-audit@redhat.com, dm-devel@redhat.com,
+        linux-doc@vger.kernel.org,
+        Deven Bowers <deven.desai@linux.microsoft.com>,
+        roberto.sassu@huawei.com, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org, linux-integrity@vger.kernel.org
+Subject: Re: [RFC PATCH v9 07/16] uapi|audit|ipe: add ipe auditing support
+Message-ID: <20230316225340.GB22567@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+References: <1675119451-23180-1-git-send-email-wufan@linux.microsoft.com>
+ <1675119451-23180-8-git-send-email-wufan@linux.microsoft.com>
+ <3723852.kQq0lBPeGt@x2>
+ <CAHC9VhRqMrTuvVtwzJoK2U=6O1QuaQ8ceA6+qm=6ib0TOUEeSw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230316083335.429724157@linuxfoundation.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAHC9VhRqMrTuvVtwzJoK2U=6O1QuaQ8ceA6+qm=6ib0TOUEeSw@mail.gmail.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 16, 2023 at 09:49:41AM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 4.14.310 release.
-> There are 20 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Thu, Mar 02, 2023 at 02:05:33PM -0500, Paul Moore wrote:
+> On Tue, Jan 31, 2023 at 12:11???PM Steve Grubb <sgrubb@redhat.com> wrote:
+> >
+> > Hello,
+> >
+> > On Monday, January 30, 2023 5:57:22 PM EST Fan Wu wrote:
+> > > From: Deven Bowers <deven.desai@linux.microsoft.com>
+> > >
+> > > Users of IPE require a way to identify when and why an operation fails,
+> > > allowing them to both respond to violations of policy and be notified
+> > > of potentially malicious actions on their systens with respect to IPE
+> > > itself.
+> > >
+> > > The new 1420 audit, AUDIT_IPE_ACCESS indicates the result of a policy
+> > > evaulation of a resource. The other two events, AUDIT_MAC_POLICY_LOAD,
+> > > and AUDIT_MAC_CONFIG_CHANGE represent a new policy was loaded into the
+> > > kernel and the currently active policy changed, respectively.
+> >
+> > Typically when you reuse an existing record type, it is expected to maintain
+> > the same fields in the same order. Also, it is expect that fields that are
+> > common across diferent records have the same meaning. To aid in this, we have
+> > a field dictionary here:
+> >
+> > https://github.com/linux-audit/audit-documentation/blob/main/specs/fields/
+> > field-dictionary.csv
+> >
+> > For example, dev is expected to be 2 hex numbers separated by a colon which
+> > are the device major and minor numbers. But down a couple lines from here, we
+> > find dev="tmpfs". But isn't that a filesystem type?
 > 
-> Responses should be made by Sat, 18 Mar 2023 08:33:04 +0000.
-> Anything received after that time might be too late.
+> What Steve said.
 > 
+> I'll also add an administrative note, we just moved upstream Linux
+> audit development to a new mailing list, audit@vger.kernel.org, please
+> use that in future patch submissions.  As a positive, it's a fully
+> open list so you won't run into moderation delays/notifications/etc.
+> 
+Thanks for the info, I will update the address.
 
-Build results:
-	total: 168 pass: 168 fail: 0
-Qemu test results:
-	total: 430 pass: 430 fail: 0
+> > > This patch also adds support for success auditing, allowing users to
+> > > identify how a resource passed policy. It is recommended to use this
+> > > option with caution, as it is quite noisy.
+> > >
+> > > This patch adds the following audit records:
+> > >
+> > >   audit: AUDIT1420 path="/tmp/tmpwxmam366/deny/bin/hello" dev="tmpfs"
+> > >     ino=72 rule="DEFAULT op=EXECUTE action=DENY"
+> >
+> > Do we really need to log the whole rule?
+> 
+> Fan, would it be reasonable to list the properties which caused the
+> access denial?  That seems like it might be more helpful than the
+> specific rule, or am I missing something?
+> 
+Audit the whole rule can let the user find the reason of a policy decision.
+We need the whole rule because an allow/block is not caused by a specific
+property, but the combination of all property conditions in a rule.
 
-Tested-by: Guenter Roeck <linux@roeck-us.net>
+We could also add a verbose switch such that we only audit
+the whole rule when a user turned the verbose switch on. 
 
-Guenter
+-Fan
+
+> paul-moore.com
