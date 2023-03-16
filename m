@@ -2,357 +2,308 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A1506BCF0F
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 13:13:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05D536BCF0B
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 13:12:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230248AbjCPMNJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 08:13:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54640 "EHLO
+        id S229923AbjCPMMd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 08:12:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230092AbjCPMNF (ORCPT
+        with ESMTP id S229693AbjCPMMb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 08:13:05 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FB4727D68
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 05:12:57 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id h14so565428pgj.7
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 05:12:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678968777;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=od3DXQEgQMTx/o+FP1rR4efgPuUI3RgZhMjodxUOCMQ=;
-        b=Xfp5zCpRL5o9xpgGA9KNq3E2yeSwqewj4PZEd6554Y3C7TbeDPjIIrQJAFMhmVyalI
-         j67tqz5u+Dgp8sujYRnTtna1KXipEk4ArbBd7pZ+kdlmNxAolaMWy8p/wDMAH/t6ymWE
-         Ab/anAOuz0+24UzigAswydw/R0dFRV99PcB5D5GlhtJp8541bL9Aj61bPK77lsChAHLN
-         oOWfMFRs3w6Luc/KE1Q4oTuWUgr2uhOogpBzg4bcdHoMJ1EVdFpMgFsXvccoveNs8qnB
-         Pv6xj/ovtOEyR2x2Gn8PMQrCEilwZQUZ72JLJh5uKFHwnQTF5V5vowugH7ALqnL7iXQZ
-         kJrg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678968777;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=od3DXQEgQMTx/o+FP1rR4efgPuUI3RgZhMjodxUOCMQ=;
-        b=Yu5meiABpJGcfChHp4jL8zxIJmTMX7Fu06yXMaid2kn2iudth8OPK/Lle8lHRv7Ehh
-         e4QHvjs0sA4rfDrrgfeediim1YjeeWpQxuNss6cqnmMG+z7rjz7JUM980Q46mMy/4fcz
-         1UaKfoPLMWgjYLRRwjCW36H7J0UyaUdBkcLQHNRnwpAS2Nh/SW93aoeRqWU/hhPAg7+R
-         3Tqf6ahRl8OALfCqEF++ebodOQQS8Rsv7x+rixQBZmbPqEEuMrIxcCVTPP55d6oMEfNL
-         13HHPreY4ZWNLlmallculbsfpYN6UqtnJ3hjxBbS2f+n2p9wO5hfxl2BO/zwR4lQUpWF
-         Zatg==
-X-Gm-Message-State: AO0yUKWku2nPI9POrSHmlsm5UAAm7nuJkTUXP1EIB9EpQHdNoLBlBnXG
-        zmA6XzA8jupEdKYd3UY4wwu0XZ4Bl29sm84gmPp8lg==
-X-Google-Smtp-Source: AK7set9HapZmc3MGh8eI5A7bdNHbn1+PaR0ApOWI44KjvTC3p414zeAEwTFSJltAixl5NdETPdwdBPvyyWRwoa6kV3A=
-X-Received: by 2002:a05:6a00:1752:b0:5eb:e0e0:d650 with SMTP id
- j18-20020a056a00175200b005ebe0e0d650mr1153939pfc.6.1678968776834; Thu, 16 Mar
- 2023 05:12:56 -0700 (PDT)
+        Thu, 16 Mar 2023 08:12:31 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7E81E7DFB9;
+        Thu, 16 Mar 2023 05:12:29 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AFBCE2F4;
+        Thu, 16 Mar 2023 05:13:12 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [10.57.54.101])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 205CF3F885;
+        Thu, 16 Mar 2023 05:12:27 -0700 (PDT)
+Date:   Thu, 16 Mar 2023 12:12:22 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Pavel Begunkov <asml.silence@gmail.com>,
+        Jens Axboe <axboe@kernel.dk>
+Cc:     io-uring@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH for-next 4/4] io_uring/rsrc: optimise registered huge
+ pages
+Message-ID: <ZBMHphP4qaaKqJqL@FVFF77S0Q05N>
+References: <cover.1677041932.git.asml.silence@gmail.com>
+ <757a0c399774f23df5dbfe2e0cc79f7ea432b04c.1677041932.git.asml.silence@gmail.com>
 MIME-Version: 1.0
-References: <20230302144330.274947-1-ulf.hansson@linaro.org>
- <54cee7de4ab7479db74b21e64e5f53cf@hyperstone.com> <CAPDyKFq-qToEX+qiuHirNbcuedii_f0KKuHiPAv7+tydrUTpqQ@mail.gmail.com>
- <4a2c5b752968496ca72966f80e148d47@hyperstone.com> <3effa855-1668-db9f-7d38-2c3352ea6ef1@intel.com>
- <CAPDyKFpVZaHA0jPBa=uxLSCzcUTZujUzJvh1oqar6NbBHg9wtQ@mail.gmail.com> <ed864feb-fdac-1aae-3f8b-f6e66f3e7598@intel.com>
-In-Reply-To: <ed864feb-fdac-1aae-3f8b-f6e66f3e7598@intel.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 16 Mar 2023 13:12:20 +0100
-Message-ID: <CAPDyKFp_19Y1QFh4v5abrL6va=cLdz+Ooz3xKu_pqh9rKZwqxw@mail.gmail.com>
-Subject: Re: [RFC PATCH] mmc: core: Disable REQ_FUA if the eMMC supports an
- internal cache
-To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     =?UTF-8?Q?Christian_L=C3=B6hle?= <CLoehle@hyperstone.com>,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Wenchao Chen <wenchao.chen666@gmail.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Bean Huo <huobean@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <757a0c399774f23df5dbfe2e0cc79f7ea432b04c.1677041932.git.asml.silence@gmail.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 14 Mar 2023 at 09:58, Adrian Hunter <adrian.hunter@intel.com> wrote=
-:
->
-> On 14/03/23 09:56, Ulf Hansson wrote:
-> > On Mon, 13 Mar 2023 at 17:56, Adrian Hunter <adrian.hunter@intel.com> w=
-rote:
-> >>
-> >> On 10/03/23 19:06, Christian L=C3=B6hle wrote:
-> >>>
-> >>>>>
-> >>>>> I have benchmarked the FUA/Cache behavior a bit.
-> >>>>> I don't have an actual filesystem benchmark that does what I wanted=
- and is easy to port to the target so I used:
-> >>>>>
-> >>>>> # call with
-> >>>>> # for loop in {1..3}; do sudo dd if=3D/dev/urandom bs=3D1M
-> >>>>> of=3D/dev/mmcblk2; done; for loop in {1..5}; do time
-> >>>>> ./filesystembenchmark.sh; umount /mnt; done
-> >>>>> mkfs.ext4 -F /dev/mmcblk2
-> >>>>> mount /dev/mmcblk2 /mnt
-> >>>>> for i in {1..3}
-> >>>>> do
-> >>>>> cp -r linux-6.2.2 /mnt/$i
-> >>>>> done
-> >>>>> for i in {1..3}
-> >>>>> do
-> >>>>> rm -r /mnt/$i
-> >>>>> done
-> >>>>> for i in {1..3}
-> >>>>> do
-> >>>>> cp -r linux-6.2.2 /mnt/$i
-> >>>>> done
-> >>>>>
-> >>>>>
-> >>>>> I found a couple of DUTs that I can link, I also tested one industr=
-ial card.
-> >>>>>
-> >>>>> DUT1: blue PCB Foresee eMMC
-> >>>>> https://pine64.com/product/32gb-emmc-module/
-> >>>>> DUT2: green PCB SiliconGo eMMC
-> >>>>> Couldn't find that one online anymore unfortunately
-> >>>>> DUT3: orange hardkernel PCB 8GB
-> >>>>> https://www.hardkernel.com/shop/8gb-emmc-module-c2-android/
-> >>>>> DUT4: orange hardkernel PCB white dot
-> >>>>> https://rlx.sk/en/odroid/3198-16gb-emmc-50-module-xu3-android-for-o=
-dro
-> >>>>> id-xu3.html
-> >>>>> DUT5: Industrial card
-> >>>>
-> >>>> Thanks a lot for helping out with testing! Much appreciated!
-> >>>
-> >>> No problem, glad to be of help.
-> >>>
-> >>>>
-> >>>>>
-> >>>>>
-> >>>>> The test issued 461 DO_REL_WR during one of the iterations for DUT5
-> >>>>>
-> >>>>> DUT1:
-> >>>>> Cache, no FUA:
-> >>>>> 13:04.49
-> >>>>> 13:13.82
-> >>>>> 13:30.59
-> >>>>> 13:28:13
-> >>>>> 13:20:64
-> >>>>> FUA:
-> >>>>> 13:30.32
-> >>>>> 13:36.26
-> >>>>> 13:10.86
-> >>>>> 13:32.52
-> >>>>> 13:48.59
-> >>>>>
-> >>>>> DUT2:
-> >>>>> FUA:
-> >>>>> 8:11.24
-> >>>>> 7:47.73
-> >>>>> 7:48.00
-> >>>>> 7:48.18
-> >>>>> 7:47.38
-> >>>>> Cache, no FUA:
-> >>>>> 8:10.30
-> >>>>> 7:48.97
-> >>>>> 7:48.47
-> >>>>> 7:47.93
-> >>>>> 7:44.18
-> >>>>>
-> >>>>> DUT3:
-> >>>>> Cache, no FUA:
-> >>>>> 7:02.82
-> >>>>> 6:58.94
-> >>>>> 7:03.20
-> >>>>> 7:00.27
-> >>>>> 7:00.88
-> >>>>> FUA:
-> >>>>> 7:05.43
-> >>>>> 7:03.44
-> >>>>> 7:04.82
-> >>>>> 7:03.26
-> >>>>> 7:04.74
-> >>>>>
-> >>>>> DUT4:
-> >>>>> FUA:
-> >>>>> 7:23.92
-> >>>>> 7:20.15
-> >>>>> 7:20.52
-> >>>>> 7:19.10
-> >>>>> 7:20.71
-> >>>>> Cache, no FUA:
-> >>>>> 7:20.23
-> >>>>> 7:20.48
-> >>>>> 7:19.94
-> >>>>> 7:18.90
-> >>>>> 7:19.88
-> >>>>
-> >>>> Without going into the details of the above, it seems like for DUT1,=
- DUT2, DUT3 and DUT4 there a good reasons to why we should move forward wit=
-h $subject patch.
-> >>>>
-> >>>> Do you agree?
-> >>>
-> >>> That is a good question, that's why I just posted the data without fu=
-rther comment from my side.
-> >>> I was honestly expecting the difference to be much higher, given the =
-original patch.
-> >>> If this is representative for most cards, you would require quite an =
-unusual workload to actually notice the difference IMO.
-> >>> If there are cards where the difference is much more significant then=
- of course a quirk would be nicer.
-> >>> On the other side I don't see why not and any improvement is a good o=
-ne?
-> >>>
-> >>>>
-> >>>>>
-> >>>>> Cache, no FUA:
-> >>>>> 7:19.36
-> >>>>> 7:02.11
-> >>>>> 7:01.53
-> >>>>> 7:01.35
-> >>>>> 7:00.37
-> >>>>> Cache, no FUA CQE:
-> >>>>> 7:17.55
-> >>>>> 7:00.73
-> >>>>> 6:59.25
-> >>>>> 6:58.44
-> >>>>> 6:58.60
-> >>>>> FUA:
-> >>>>> 7:15.10
-> >>>>> 6:58.99
-> >>>>> 6:58.94
-> >>>>> 6:59.17
-> >>>>> 6:60.00
-> >>>>> FUA CQE:
-> >>>>> 7:11.03
-> >>>>> 6:58.04
-> >>>>> 6:56.89
-> >>>>> 6:56.43
-> >>>>> 6:56:28
-> >>>>>
-> >>>>> If anyone has any comments or disagrees with the benchmark, or has =
-a specific eMMC to test, let me know.
-> >>>>
-> >>>> If I understand correctly, for DUT5, it seems like using FUA may be =
-slightly better than just cache-flushing, right?
-> >>>
-> >>> That is correct, I specifically tested with this card as under the as=
-sumption that reliable write is without much additional cost, the DCMD woul=
-d be slightly worse for performance and SYNC a bit worse.
-> >>>
-> >>>>
-> >>>> For CQE, it seems like FUA could be slightly even better, at least f=
-or DUT5.  Do you know if REQ_OP_FLUSH translates into MMC_ISSUE_DCMD or MMC=
-_ISSUE_SYNC for your case? See mmc_cqe_issue_type().
-> >>> It is SYNC (this is sdhci-of-arasan on rk3399, no DCMD), but even SYN=
-C is not too bad here it seems, could of course be worse if the workload wa=
-s less sequential.
-> >>>
-> >>>>
-> >>>> When it comes to CQE, maybe Adrian have some additional thoughts aro=
-und this? Perhaps we should keep using REQ_FUA, if we have CQE?
-> >>> Sure, I'm also interested in Adrian's take on this.
-> >>
-> >> Testing an arbitrary system and looking only at individual I/Os,
-> >> which may not be representative of any use-case, resulted in
-> >> FUA always winning, see below.
-> >>
-> >> All values are approximate and in microseconds.
-> >>
-> >>                 With FUA                Without FUA
-> >>
-> >> With CQE        Reliable Write  350     Write   125
-> >>                                         Flush   300
-> >>                 Total           350             425
-> >>
-> >> Without CQE     Reliable Write  350     Write   125
-> >>                 CMD13           100     CMD13   100
-> >>                                         Flush   300
-> >>                                         CMD13   100
-> >>                 Total           450             625
-> >>
-> >> FYI the test I was doing was:
-> >>
-> >>   # cat test.sh
-> >>         #!/bin/sh
-> >>
-> >>         echo "hi" > /mnt/mmc/hi.txt
-> >>
-> >>         sync
-> >>
-> >>
-> >>   # perf record --no-bpf-event -e mmc:* -a -- ./test.sh
-> >>   # perf script --ns --deltatime
-> >>
-> >>
-> >> The conclusion in this case would seem to be that CQE
-> >> makes the case for removing FUA less bad.
-> >>
-> >> Perhaps CQE is more common in newer eMMCs which in turn
-> >> have better FUA implementations.
-> >
-> > Very interesting data - and thanks for helping out with tests!
-> >
-> > A few observations and thoughts from the above.
-> >
-> > 1)
-> > A "normal" use case would probably include additional writes (regular
-> > writes) and I guess that could impact the flushing behavior. Maybe the
-> > flushing becomes less heavy, if the device internally/occasionally
-> > needs to flush its cache anyway? Or - maybe it doesn't matter at all,
-> > because the reliable writes are triggering the cache to be flushed
-> > too.
->
-> The sync is presumably causing an EXT4 journal commit which
-> seems to use REQ_PREFLUSH and REQ_FUA. That is:
->         Flush (the journal to media)
->         Write (the commit record) (FUA)
-> So it does a flush anyway.  The no-FUA case is:
->         Flush (the journal to media)
->         Write (the commit record)
->         Flush (the commit record)
->
-> >
-> > 2)
-> > Assuming that a reliable write is triggering the internal cache to be
-> > flushed too, then we need less number of commands to be sent/acked to
-> > the eMMC - compared to not using FUA. This means less protocol
-> > overhead when using FUA - and perhaps that's what your tests is
-> > actually telling us?
->
-> There is definitely less protocol overhead because the no-FUA
-> case has to do an extra CMD6 (flush) and CMD13.
->
-> Note also, in this case auto-CMD23 is being used, which is why
-> is is not listed.
->
-> Using an older system (no CQE but also auto-CMD23), resulted
-> in a win for no-FUA:
->
->                 With FUA                Without FUA
->
->                 Reliable Write  1200    Write    850
->                 CMD13            100    CMD13    100
->                                         Flush    120
->                                         CMD13     65
->                 Total           1300            1135
->
->
+Hi,
 
-Alright, so it seems like just checking whether the cache control
-feature is available, isn't sufficient when deciding to avoid FUA.
+Since v6.3-rc1, when fuzzing arm64 with Syzkaller, I see a bunch of bad page
+state splats with either "nonzero pincount" or "nonzero compound_pincount", and
+bisecting led me to this patch / commit:
 
-That said, in the next version I am going to add a card quirk, which
-needs to be set too, to avoid FUA. Then we can see for what cards it
-should actually be set for.
+  57bebf807e2abcf8 ("io_uring/rsrc: optimise registered huge pages")
 
-What eMMC cards did you use in your tests above?
+The splats look like:
 
-Kind regards
-Uffe
+| BUG: Bad page state in process kworker/u8:0  pfn:5c001
+| page:00000000bfda61c8 refcount:0 mapcount:0 mapping:0000000000000000 index:0x20001 pfn:0x5c001
+| head:0000000011409842 order:9 entire_mapcount:0 nr_pages_mapped:0 pincount:1
+| anon flags: 0x3fffc00000b0004(uptodate|head|mappedtodisk|swapbacked|node=0|zone=0|lastcpupid=0xffff)
+| raw: 03fffc0000000000 fffffc0000700001 ffffffff00700903 0000000100000000
+| raw: 0000000000000200 0000000000000000 00000000ffffffff 0000000000000000
+| head: 03fffc00000b0004 dead000000000100 dead000000000122 ffff00000a809dc1
+| head: 0000000000020000 0000000000000000 00000000ffffffff 0000000000000000
+| page dumped because: nonzero pincount
+| CPU: 3 PID: 9 Comm: kworker/u8:0 Not tainted 6.3.0-rc2-00001-gc6811bf0cd87 #1
+| Hardware name: linux,dummy-virt (DT)
+| Workqueue: events_unbound io_ring_exit_work
+| Call trace:
+|  dump_backtrace+0x13c/0x208
+|  show_stack+0x34/0x58
+|  dump_stack_lvl+0x150/0x1a8
+|  dump_stack+0x20/0x30
+|  bad_page+0xec/0x238
+|  free_tail_pages_check+0x280/0x350
+|  free_pcp_prepare+0x60c/0x830
+|  free_unref_page+0x50/0x498
+|  free_compound_page+0xcc/0x100
+|  free_transhuge_page+0x1f0/0x2b8
+|  destroy_large_folio+0x80/0xc8
+|  __folio_put+0xc4/0xf8
+|  gup_put_folio+0xd0/0x250
+|  unpin_user_page+0xcc/0x128
+|  io_buffer_unmap+0xec/0x2c0
+|  __io_sqe_buffers_unregister+0xa4/0x1e0
+|  io_ring_exit_work+0x68c/0x1188
+|  process_one_work+0x91c/0x1a58
+|  worker_thread+0x48c/0xe30
+|  kthread+0x278/0x2f0
+|  ret_from_fork+0x10/0x20
+
+Syzkaller gave me a reliable C reproducer, which I used to bisect (note:
+DEBUG_VM needs to be selected):
+
+| // autogenerated by syzkaller (https://github.com/google/syzkaller)
+| 
+| #define _GNU_SOURCE 
+| 
+| #include <endian.h>
+| #include <stdint.h>
+| #include <stdio.h>
+| #include <stdlib.h>
+| #include <string.h>
+| #include <sys/mman.h>
+| #include <sys/syscall.h>
+| #include <sys/types.h>
+| #include <unistd.h>
+| 
+| #ifndef __NR_io_uring_register
+| #define __NR_io_uring_register 427
+| #endif
+| #ifndef __NR_io_uring_setup
+| #define __NR_io_uring_setup 425
+| #endif
+| #ifndef __NR_mmap
+| #define __NR_mmap 222
+| #endif
+| 
+| #define SIZEOF_IO_URING_SQE 64
+| #define SIZEOF_IO_URING_CQE 16
+| #define SQ_HEAD_OFFSET 0
+| #define SQ_TAIL_OFFSET 64
+| #define SQ_RING_MASK_OFFSET 256
+| #define SQ_RING_ENTRIES_OFFSET 264
+| #define SQ_FLAGS_OFFSET 276
+| #define SQ_DROPPED_OFFSET 272
+| #define CQ_HEAD_OFFSET 128
+| #define CQ_TAIL_OFFSET 192
+| #define CQ_RING_MASK_OFFSET 260
+| #define CQ_RING_ENTRIES_OFFSET 268
+| #define CQ_RING_OVERFLOW_OFFSET 284
+| #define CQ_FLAGS_OFFSET 280
+| #define CQ_CQES_OFFSET 320
+| 
+| struct io_sqring_offsets {
+| 	uint32_t head;
+| 	uint32_t tail;
+| 	uint32_t ring_mask;
+| 	uint32_t ring_entries;
+| 	uint32_t flags;
+| 	uint32_t dropped;
+| 	uint32_t array;
+| 	uint32_t resv1;
+| 	uint64_t resv2;
+| };
+| 
+| struct io_cqring_offsets {
+| 	uint32_t head;
+| 	uint32_t tail;
+| 	uint32_t ring_mask;
+| 	uint32_t ring_entries;
+| 	uint32_t overflow;
+| 	uint32_t cqes;
+| 	uint64_t resv[2];
+| };
+| 
+| struct io_uring_params {
+| 	uint32_t sq_entries;
+| 	uint32_t cq_entries;
+| 	uint32_t flags;
+| 	uint32_t sq_thread_cpu;
+| 	uint32_t sq_thread_idle;
+| 	uint32_t features;
+| 	uint32_t resv[4];
+| 	struct io_sqring_offsets sq_off;
+| 	struct io_cqring_offsets cq_off;
+| };
+| 
+| #define IORING_OFF_SQ_RING 0
+| #define IORING_OFF_SQES 0x10000000ULL
+| 
+| static long syz_io_uring_setup(volatile long a0, volatile long a1, volatile long a2, volatile long a3, volatile long a4, volatile long a5)
+| {
+| 	uint32_t entries = (uint32_t)a0;
+| 	struct io_uring_params* setup_params = (struct io_uring_params*)a1;
+| 	void* vma1 = (void*)a2;
+| 	void* vma2 = (void*)a3;
+| 	void** ring_ptr_out = (void**)a4;
+| 	void** sqes_ptr_out = (void**)a5;
+| 	uint32_t fd_io_uring = syscall(__NR_io_uring_setup, entries, setup_params);
+| 	uint32_t sq_ring_sz = setup_params->sq_off.array + setup_params->sq_entries * sizeof(uint32_t);
+| 	uint32_t cq_ring_sz = setup_params->cq_off.cqes + setup_params->cq_entries * SIZEOF_IO_URING_CQE;
+| 	uint32_t ring_sz = sq_ring_sz > cq_ring_sz ? sq_ring_sz : cq_ring_sz;
+| 	*ring_ptr_out = mmap(vma1, ring_sz, PROT_READ | PROT_WRITE, MAP_SHARED | MAP_POPULATE | MAP_FIXED, fd_io_uring, IORING_OFF_SQ_RING);
+| 	uint32_t sqes_sz = setup_params->sq_entries * SIZEOF_IO_URING_SQE;
+| 	*sqes_ptr_out = mmap(vma2, sqes_sz, PROT_READ | PROT_WRITE, MAP_SHARED | MAP_POPULATE | MAP_FIXED, fd_io_uring, IORING_OFF_SQES);
+| 	return fd_io_uring;
+| }
+| 
+| uint64_t r[1] = {0xffffffffffffffff};
+| 
+| int main(void)
+| {
+| 		syscall(__NR_mmap, 0x1ffff000ul, 0x1000ul, 0ul, 0x32ul, -1, 0ul);
+| 	syscall(__NR_mmap, 0x20000000ul, 0x1000000ul, 7ul, 0x32ul, -1, 0ul);
+| 	syscall(__NR_mmap, 0x21000000ul, 0x1000ul, 0ul, 0x32ul, -1, 0ul);
+| 				intptr_t res = 0;
+| *(uint32_t*)0x20000684 = 0;
+| *(uint32_t*)0x20000688 = 0;
+| *(uint32_t*)0x2000068c = 0;
+| *(uint32_t*)0x20000690 = 0;
+| *(uint32_t*)0x20000698 = -1;
+| memset((void*)0x2000069c, 0, 12);
+| 	res = -1;
+| res = syz_io_uring_setup(0x2fd6, 0x20000680, 0x20ffd000, 0x20ffc000, 0x20000700, 0x20000740);
+| 	if (res != -1)
+| 		r[0] = res;
+| *(uint64_t*)0x20002840 = 0;
+| *(uint64_t*)0x20002848 = 0;
+| *(uint64_t*)0x20002850 = 0x20000840;
+| *(uint64_t*)0x20002858 = 0x1000;
+| 	syscall(__NR_io_uring_register, r[0], 0ul, 0x20002840ul, 2ul);
+| 	return 0;
+| }
+
+Thanks,
+Mark.
+
+On Wed, Feb 22, 2023 at 02:36:51PM +0000, Pavel Begunkov wrote:
+> When registering huge pages, internally io_uring will split them into
+> many PAGE_SIZE bvec entries. That's bad for performance as drivers need
+> to eventually dma-map the data and will do it individually for each bvec
+> entry. Coalesce huge pages into one large bvec.
+> 
+> Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
+> ---
+>  io_uring/rsrc.c | 38 ++++++++++++++++++++++++++++++++------
+>  1 file changed, 32 insertions(+), 6 deletions(-)
+> 
+> diff --git a/io_uring/rsrc.c b/io_uring/rsrc.c
+> index ebbd2cea7582..aab1bc6883e9 100644
+> --- a/io_uring/rsrc.c
+> +++ b/io_uring/rsrc.c
+> @@ -1210,6 +1210,7 @@ static int io_sqe_buffer_register(struct io_ring_ctx *ctx, struct iovec *iov,
+>  	unsigned long off;
+>  	size_t size;
+>  	int ret, nr_pages, i;
+> +	struct folio *folio;
+>  
+>  	*pimu = ctx->dummy_ubuf;
+>  	if (!iov->iov_base)
+> @@ -1224,6 +1225,21 @@ static int io_sqe_buffer_register(struct io_ring_ctx *ctx, struct iovec *iov,
+>  		goto done;
+>  	}
+>  
+> +	/* If it's a huge page, try to coalesce them into a single bvec entry */
+> +	if (nr_pages > 1) {
+> +		folio = page_folio(pages[0]);
+> +		for (i = 1; i < nr_pages; i++) {
+> +			if (page_folio(pages[i]) != folio) {
+> +				folio = NULL;
+> +				break;
+> +			}
+> +		}
+> +		if (folio) {
+> +			folio_put_refs(folio, nr_pages - 1);
+> +			nr_pages = 1;
+> +		}
+> +	}
+> +
+>  	imu = kvmalloc(struct_size(imu, bvec, nr_pages), GFP_KERNEL);
+>  	if (!imu)
+>  		goto done;
+> @@ -1236,6 +1252,17 @@ static int io_sqe_buffer_register(struct io_ring_ctx *ctx, struct iovec *iov,
+>  
+>  	off = (unsigned long) iov->iov_base & ~PAGE_MASK;
+>  	size = iov->iov_len;
+> +	/* store original address for later verification */
+> +	imu->ubuf = (unsigned long) iov->iov_base;
+> +	imu->ubuf_end = imu->ubuf + iov->iov_len;
+> +	imu->nr_bvecs = nr_pages;
+> +	*pimu = imu;
+> +	ret = 0;
+> +
+> +	if (folio) {
+> +		bvec_set_page(&imu->bvec[0], pages[0], size, off);
+> +		goto done;
+> +	}
+>  	for (i = 0; i < nr_pages; i++) {
+>  		size_t vec_len;
+>  
+> @@ -1244,12 +1271,6 @@ static int io_sqe_buffer_register(struct io_ring_ctx *ctx, struct iovec *iov,
+>  		off = 0;
+>  		size -= vec_len;
+>  	}
+> -	/* store original address for later verification */
+> -	imu->ubuf = (unsigned long) iov->iov_base;
+> -	imu->ubuf_end = imu->ubuf + iov->iov_len;
+> -	imu->nr_bvecs = nr_pages;
+> -	*pimu = imu;
+> -	ret = 0;
+>  done:
+>  	if (ret)
+>  		kvfree(imu);
+> @@ -1364,6 +1385,11 @@ int io_import_fixed(int ddir, struct iov_iter *iter,
+>  		const struct bio_vec *bvec = imu->bvec;
+>  
+>  		if (offset <= bvec->bv_len) {
+> +			/*
+> +			 * Note, huge pages buffers consists of one large
+> +			 * bvec entry and should always go this way. The other
+> +			 * branch doesn't expect non PAGE_SIZE'd chunks.
+> +			 */
+>  			iter->bvec = bvec;
+>  			iter->nr_segs = bvec->bv_len;
+>  			iter->count -= offset;
+> -- 
+> 2.39.1
+> 
+> 
