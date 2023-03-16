@@ -2,77 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE1D26BCD96
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 12:08:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A9FC6BCD92
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 12:08:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230179AbjCPLIa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 07:08:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38990 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230137AbjCPLI1 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S230150AbjCPLI1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Thu, 16 Mar 2023 07:08:27 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 508CAB3E30;
-        Thu, 16 Mar 2023 04:08:25 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32GB8FsT018343;
-        Thu, 16 Mar 2023 06:08:15 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1678964895;
-        bh=pAS0WD3J56+/e/GKkL/ABzi0tVU97vFjJOjoLjUwoBw=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=zQAgwT6A/MP9a5M3IpMYWXp5vHIRY6uGdPspSr/ea+d4WSN46081rLo99tQV5bxb0
-         3Vx3GJDPF/WlbWOBO08VxFOmUBC7j/UMMf7j7egEnBrQsSKaEr/rWZgLVdH6GVlOZG
-         ZpJTlnTlYkavl1+86D01ts0AjAxJM7xTWlbbei54=
-Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32GB8FXj031809
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 16 Mar 2023 06:08:15 -0500
-Received: from DLEE112.ent.ti.com (157.170.170.23) by DLEE105.ent.ti.com
- (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Thu, 16
- Mar 2023 06:08:14 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE112.ent.ti.com
- (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Thu, 16 Mar 2023 06:08:14 -0500
-Received: from [10.24.69.114] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32GB89Ph018640;
-        Thu, 16 Mar 2023 06:08:10 -0500
-Message-ID: <c52ae883-b0c9-8f92-98ae-fb9e9ad30420@ti.com>
-Date:   Thu, 16 Mar 2023 16:38:09 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [EXTERNAL] Re: [PATCH v4 3/5] soc: ti: pruss: Add
- pruss_cfg_read()/update() API
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38892 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230040AbjCPLIZ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 16 Mar 2023 07:08:25 -0400
+Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01on2135.outbound.protection.outlook.com [40.107.113.135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F76E2385A;
+        Thu, 16 Mar 2023 04:08:24 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GcS12MlpRPW6J4yXo5M8N04DA+9fRZnzAs1BHOkO2gnEzAB1JOGB/GBl34CxKQBkPHoxMnV1mehKGx/elpfXASncUdi+Y2+Iar9WqXCWmPrO47NSgNYG1mRWaY8FrdzOBM1vwM/bYC333IHNu0S30LkxhjzY4/c9ZhD20xqMQKqkELNJ4TOqAzBl9qPjTzs0atyuPlH5xp0tIRqn4/M0074qOp6Q9CjTF0y3DTvufN8z60hjWtXiuoWx2QV4cIFcG8Q9ifHVx77LLbaGwt9DdcMok8utYWw3FmRRYqT7pg7L2VaXhVUzMqw7IdV7CcZmGUTBT1WDdQKspAacXALXtw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=x03/wRFlSij/caXxnIo/AGC90ib52kScc6s4i8uDu2A=;
+ b=NpPW4xJOP0iGvXRL8Io+xFJ95iZ82RxNeqI/oGqVnzto2gjxd0L5iV1wBhzp8FWCdV13MHsQUNChY7rT8ehhMQO8heHnPhRncWAQuTGBuPfepfjsUIVDOcLt3RBCs6PpR16mjdUGSBNZ7rFdyvVIQe+WOINQnll01zK0ON+z2B5DURSDoXxxg92sHmsRxx8CpHZvHQlqzH6k/3lyv4wWcFrNIcDIcUibQtOLBNfzJqOvPxL60TuC73iJVvQxRDot5d/dqSIrKfoYYpuAZua0Vc7wZpR7BYP6lbWkZDB0MQ/K0lta3p+Kw1P2HwbqhQHjcnbDrHeYbTMSO0Evill+6A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
+ dkim=pass header.d=renesas.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=renesas.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=x03/wRFlSij/caXxnIo/AGC90ib52kScc6s4i8uDu2A=;
+ b=ZqOFGaJsaHLPD5s19FHeT28DmQ2LE+J+2v9xrQyjk9nWkRePbn/UkZF6ROwoV6xlaL2vWkajYgLEUBlbxOsNaV/ep3H78Wnv8cDDgIy4vb39jgE72PikdCZWRC5FO5ANozWRYiQH9KA9ZOIAVlQAE/8sj1njbwM17JJA0O9Wdvo=
+Received: from TYCPR01MB10588.jpnprd01.prod.outlook.com (2603:1096:400:309::8)
+ by TY3PR01MB9859.jpnprd01.prod.outlook.com (2603:1096:400:22b::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.30; Thu, 16 Mar
+ 2023 11:08:21 +0000
+Received: from TYCPR01MB10588.jpnprd01.prod.outlook.com
+ ([fe80::dc49:e307:b424:4a53]) by TYCPR01MB10588.jpnprd01.prod.outlook.com
+ ([fe80::dc49:e307:b424:4a53%4]) with mapi id 15.20.6178.030; Thu, 16 Mar 2023
+ 11:08:21 +0000
+From:   Chris Paterson <Chris.Paterson2@renesas.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+CC:     "patches@lists.linux.dev" <patches@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "linux@roeck-us.net" <linux@roeck-us.net>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "patches@kernelci.org" <patches@kernelci.org>,
+        "lkft-triage@lists.linaro.org" <lkft-triage@lists.linaro.org>,
+        "pavel@denx.de" <pavel@denx.de>,
+        "jonathanh@nvidia.com" <jonathanh@nvidia.com>,
+        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
+        "sudipm.mukherjee@gmail.com" <sudipm.mukherjee@gmail.com>,
+        "srw@sladewatkins.net" <srw@sladewatkins.net>,
+        "rwarsow@gmx.de" <rwarsow@gmx.de>
+Subject: RE: [PATCH 6.1 000/140] 6.1.20-rc2 review
+Thread-Topic: [PATCH 6.1 000/140] 6.1.20-rc2 review
+Thread-Index: AQHZV+Sb3KYt1UpITkO3dN7eeQoGCq79Pz8Q
+Date:   Thu, 16 Mar 2023 11:08:21 +0000
+Message-ID: <TYCPR01MB10588BDD8E0B11AF649CF2CD3B7BC9@TYCPR01MB10588.jpnprd01.prod.outlook.com>
+References: <20230316083444.336870717@linuxfoundation.org>
+In-Reply-To: <20230316083444.336870717@linuxfoundation.org>
+Accept-Language: en-GB, en-US
 Content-Language: en-US
-To:     Roger Quadros <rogerq@kernel.org>,
-        MD Danish Anwar <danishanwar@ti.com>,
-        "Andrew F. Davis" <afd@ti.com>, Suman Anna <s-anna@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Nishanth Menon <nm@ti.com>
-CC:     <linux-remoteproc@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-omap@vger.kernel.org>,
-        <srk@ti.com>, <devicetree@vger.kernel.org>,
-        <netdev@vger.kernel.org>
-References: <20230313111127.1229187-1-danishanwar@ti.com>
- <20230313111127.1229187-4-danishanwar@ti.com>
- <91481d4f-2005-7b33-d3be-df09b7d27ef6@kernel.org>
-From:   Md Danish Anwar <a0501179@ti.com>
-Organization: Texas Instruments
-In-Reply-To: <91481d4f-2005-7b33-d3be-df09b7d27ef6@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS autolearn=ham
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=renesas.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: TYCPR01MB10588:EE_|TY3PR01MB9859:EE_
+x-ms-office365-filtering-correlation-id: 666c8497-0bda-4670-0f8a-08db260ec109
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: /lIVAFvWcu2CPLhDD5+kf4LOXxZkB3K1eTccMXCn4oZltvkpvEwN5GUexr2SipMR31FTBSuihbLWhJcSOWvXgEf1SWZbSr/52F8ZY4Mxi50YvyGFuZIquf/yrh+DE8dqYc4IUtP9tIE7JTXbk43SY6/VF58P94zHXXVQiVlPRfjctLapZwinwll+8fnDiMY1L66A2iQXONc/+S6Iac/Aq5JuZX5Z7OMQcJ3KPpeNmGb2Q/UAO2zEshq3OBlZUbMDSHvshYURAb/xjCfTIKKKFrlC3GtHwO9PIRPytr2j74HFeHx6mZW1EZeMUWgJfFLAWog/wzc9jEwGaSC4hHs5nCdDHuVc9V54+LCxkbbLnCI1mipAYyK9T3BJgV2iCafJX2AdmWvnDOuMqx6tK1y2r6fXTgGXiUdi2DnXlGD8gZSUWfYRugx+o1FkUxzP3ozLvARDRePCyvzFHwgOAUOxp32J8xWIcXJwRZbjaNFaERjtayC1JV3YJQI6BzCOgReloOUBfeOezzw9dazJJy5Jl+SVJjtGWGadSagS00f1aamznqGKUoX7L5q1dDQtMel72u4kJVPHvlHWHOT44HURmKKMxSTkWfA7sIAa5G/7AMV8W2uWZ0Gl4rxEtGWjmXTevb4ruomZnqvZO0YP8Wg4G/8fFOpcR/DRkACAqI0PIjOXuLRbnVgpUCsCjOZrChB62bY+WORmlCDzKQknlpCckhxaVJ5clJ51qj3kR5UKfE4=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYCPR01MB10588.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(366004)(376002)(396003)(346002)(136003)(451199018)(86362001)(38070700005)(122000001)(33656002)(2906002)(38100700002)(52536014)(41300700001)(4744005)(8936002)(7416002)(5660300002)(7696005)(55016003)(64756008)(66476007)(9686003)(26005)(6506007)(186003)(110136005)(316002)(54906003)(4326008)(66556008)(66946007)(8676002)(966005)(71200400001)(478600001)(76116006)(66446008);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-2?Q?IQzMaRA6vk62FisMv/t7ozREFpxasnksxf7N0/3IwRazFdm1BJDf8hgpgX?=
+ =?iso-8859-2?Q?+m9ezct21sNHJMS8rrDYFQvi4gBQCEJ6TC2cGE7RujPZ1vXdpy3krcQ6E9?=
+ =?iso-8859-2?Q?rAxyev/aIxehthQd9MzKiuz9sA2nIU8nxOohwNZhniSmuheUJP3nG3hley?=
+ =?iso-8859-2?Q?XHXkeKiVkva+a9e6am1nn78NxIeMylH3NlwHX+N1z/5sUTtXH1EDfLllvs?=
+ =?iso-8859-2?Q?zQxrNxl7MhBC00lXQLrzCVr7f691yv9M3/tEr6S+QVuZLexUgxmceG8MsW?=
+ =?iso-8859-2?Q?Ev60jIhBmU0RXreVJb45JP8iq7AM0xxGuYPIvkR+F3Fqa8ZFet/Cdd6GOi?=
+ =?iso-8859-2?Q?Xn/xlkYtfB3v550ddz8BnBlga+gDnejdMm+Pu44RkIRlqgLmZYvTjAZ02f?=
+ =?iso-8859-2?Q?c0uRNMo5fV3rDW3YdNLCUa47ctO/PALbryuXERpSrkrUXVKufUONn/qipj?=
+ =?iso-8859-2?Q?yWLcs6YuXX33Aehme8Mkp3ukVugtm08cr6akYVLPi0jEzEPYLy0Rj7nOQA?=
+ =?iso-8859-2?Q?Mb2LNFAsX3up8XT2QNviOm604z3cXQPoJr0xxMhlVj34Uozh9xKBj5is6S?=
+ =?iso-8859-2?Q?cQhGYUkaddDSduGaS4HgttqlqEf0eqmwl8Q5R0JEOY9aoMSTOZtYmAG6XG?=
+ =?iso-8859-2?Q?FXrIF4jlmoPLs0MFEzMArb3T1RafGm93AZrJR+OkD4Tpl+JFTkaLwLrWR4?=
+ =?iso-8859-2?Q?cw34MjYmh4EtTRV6i3k6h6P5h8XTU9/XKhCQj+8Pft1J3p+WRmFTAOgwAF?=
+ =?iso-8859-2?Q?wMdG4zBLbNDFm7VYYVvReqSMFwo1VcrwJEQVpF06fdUDgtWKpVdltBweH5?=
+ =?iso-8859-2?Q?oYG0VJ32mIWnJl1UsCAusMIB2qMBKSDXfR5JdsRcuymLozK1bsjxC0p83I?=
+ =?iso-8859-2?Q?azbPopJkgI3l4R4Ez8EQV2Ee3GTNSSF2mKkS7RlBXG76VeILkuYRT1NEdU?=
+ =?iso-8859-2?Q?MG2JOqWAD/j9BMzElYwc2CJVgVEnswsWYQ4RkPWWFnWB8ysk51JjjBNP3O?=
+ =?iso-8859-2?Q?FAQ4Di2kX0bdFNxvIbA2GOo29/aVPeMi8l0BZvcNGayUxVGBvU/C94TnSU?=
+ =?iso-8859-2?Q?ANGqwntLg5ipbfV0sUMbwZIeJZ1nzeTlVW5/IXK9Z26VafAYt1gnKas49Z?=
+ =?iso-8859-2?Q?5/hJDMeLvsDMFWLppdAoWPwvh7E+TCm1i8WfW8rWpLZyyqZyT2T0oorP4a?=
+ =?iso-8859-2?Q?85K1xeibYuaRePYJHyA98hC96uh1rckLwBIX4Pnz5TR3BXX4I5Ll/mWf08?=
+ =?iso-8859-2?Q?OfCkTRxqxJ22xEpRtedZqdWFZQNnXJc0Q13rS1uUOUt9IUnPbktW+I9VdJ?=
+ =?iso-8859-2?Q?YkXH3cbb/LxiHabMkulh/5CCMHwsfct9RVd21VZRrRDAs0Anljvey+a8N4?=
+ =?iso-8859-2?Q?tsAnHE2ZTM6AaqLaMAUZ2E6eFcsfM4Uh0/HMxxusAuR8rczRB12mJh+S+x?=
+ =?iso-8859-2?Q?/dugH0E0De3bRvO/2O0UPbGLBc711sVt6Oz93N+/LmajTBfElGJFqHsxpn?=
+ =?iso-8859-2?Q?+NxBpq4l5vc7DEuaWl33uK5qxHmxiSSoPziKY32KRqChYPA3P67IKEFbiD?=
+ =?iso-8859-2?Q?mRN7lR2R9vtGdmFGQiUBCLTunB+vDzNJjPdgLG45AP9slbg89U+7O6NyPD?=
+ =?iso-8859-2?Q?s6fGlyqvQlD5e+LRub1iGN9MUP2UxhQNz3B81KzThE/xB5AedSA8DIpA?=
+ =?iso-8859-2?Q?=3D=3D?=
+Content-Type: text/plain; charset="iso-8859-2"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: renesas.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TYCPR01MB10588.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 666c8497-0bda-4670-0f8a-08db260ec109
+X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Mar 2023 11:08:21.2738
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: YRgrsIYnllDNqQ6WNchj2X+Jh1vnZ6kICL2VZ4AT9Vps/pJrI4VtM+qjASNdnRJVll7Q0me90/pRza4YW9LxOEqEidOie8bUk9VLnqFe+fw=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY3PR01MB9859
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,196 +131,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello Greg,
 
-On 15/03/23 17:37, Roger Quadros wrote:
-> Danish,
-> 
-> On 13/03/2023 13:11, MD Danish Anwar wrote:
->> From: Suman Anna <s-anna@ti.com>
->>
->> Add two new generic API pruss_cfg_read() and pruss_cfg_update() to
->> the PRUSS platform driver to read and program respectively a register
->> within the PRUSS CFG sub-module represented by a syscon driver.
->>
->> These APIs are internal to PRUSS driver. Various useful registers
->> and macros for certain register bit-fields and their values have also
->> been added.
->>
->> Signed-off-by: Suman Anna <s-anna@ti.com>
->> Co-developed-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
->> Signed-off-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
->> Signed-off-by: Puranjay Mohan <p-mohan@ti.com>
->> Signed-off-by: MD Danish Anwar <danishanwar@ti.com>
->> ---
->>  drivers/soc/ti/pruss.c           | 39 ++++++++++++++
->>  include/linux/remoteproc/pruss.h | 87 ++++++++++++++++++++++++++++++++
->>  2 files changed, 126 insertions(+)
->>
->> diff --git a/drivers/soc/ti/pruss.c b/drivers/soc/ti/pruss.c
->> index c8053c0d735f..26d8129b515c 100644
->> --- a/drivers/soc/ti/pruss.c
->> +++ b/drivers/soc/ti/pruss.c
->> @@ -164,6 +164,45 @@ int pruss_release_mem_region(struct pruss *pruss,
->>  }
->>  EXPORT_SYMBOL_GPL(pruss_release_mem_region);
->>  
->> +/**
->> + * pruss_cfg_read() - read a PRUSS CFG sub-module register
->> + * @pruss: the pruss instance handle
->> + * @reg: register offset within the CFG sub-module
->> + * @val: pointer to return the value in
->> + *
->> + * Reads a given register within the PRUSS CFG sub-module and
->> + * returns it through the passed-in @val pointer
->> + *
->> + * Return: 0 on success, or an error code otherwise
->> + */
->> +static int pruss_cfg_read(struct pruss *pruss, unsigned int reg, unsigned int *val)
->> +{
->> +	if (IS_ERR_OR_NULL(pruss))
->> +		return -EINVAL;
->> +
->> +	return regmap_read(pruss->cfg_regmap, reg, val);
->> +}
->> +
->> +/**
->> + * pruss_cfg_update() - configure a PRUSS CFG sub-module register
->> + * @pruss: the pruss instance handle
->> + * @reg: register offset within the CFG sub-module
->> + * @mask: bit mask to use for programming the @val
->> + * @val: value to write
->> + *
->> + * Programs a given register within the PRUSS CFG sub-module
->> + *
->> + * Return: 0 on success, or an error code otherwise
->> + */
->> +static int pruss_cfg_update(struct pruss *pruss, unsigned int reg,
->> +			    unsigned int mask, unsigned int val)
->> +{
->> +	if (IS_ERR_OR_NULL(pruss))
->> +		return -EINVAL;
->> +
->> +	return regmap_update_bits(pruss->cfg_regmap, reg, mask, val);
->> +}
->> +
->>  static void pruss_of_free_clk_provider(void *data)
->>  {
->>  	struct device_node *clk_mux_np = data;
->> diff --git a/include/linux/remoteproc/pruss.h b/include/linux/remoteproc/pruss.h
->> index 33f930e0a0ce..12ef10b9fe9a 100644
->> --- a/include/linux/remoteproc/pruss.h
->> +++ b/include/linux/remoteproc/pruss.h
->> @@ -10,12 +10,99 @@
->>  #ifndef __LINUX_PRUSS_H
->>  #define __LINUX_PRUSS_H
->>  
->> +#include <linux/bits.h>
->>  #include <linux/device.h>
->>  #include <linux/err.h>
->>  #include <linux/types.h>
->>  
->>  #define PRU_RPROC_DRVNAME "pru-rproc"
->>  
->> +/*
->> + * PRU_ICSS_CFG registers
->> + * SYSCFG, ISRP, ISP, IESP, IECP, SCRP applicable on AMxxxx devices only
->> + */
->> +#define PRUSS_CFG_REVID		0x00
->> +#define PRUSS_CFG_SYSCFG	0x04
->> +#define PRUSS_CFG_GPCFG(x)	(0x08 + (x) * 4)
->> +#define PRUSS_CFG_CGR		0x10
->> +#define PRUSS_CFG_ISRP		0x14
->> +#define PRUSS_CFG_ISP		0x18
->> +#define PRUSS_CFG_IESP		0x1C
->> +#define PRUSS_CFG_IECP		0x20
->> +#define PRUSS_CFG_SCRP		0x24
->> +#define PRUSS_CFG_PMAO		0x28
->> +#define PRUSS_CFG_MII_RT	0x2C
->> +#define PRUSS_CFG_IEPCLK	0x30
->> +#define PRUSS_CFG_SPP		0x34
->> +#define PRUSS_CFG_PIN_MX	0x40
->> +
->> +/* PRUSS_GPCFG register bits */
->> +#define PRUSS_GPCFG_PRU_GPO_SH_SEL		BIT(25)
->> +
->> +#define PRUSS_GPCFG_PRU_DIV1_SHIFT		20
->> +#define PRUSS_GPCFG_PRU_DIV1_MASK		GENMASK(24, 20)
->> +
->> +#define PRUSS_GPCFG_PRU_DIV0_SHIFT		15
->> +#define PRUSS_GPCFG_PRU_DIV0_MASK		GENMASK(15, 19)
->> +
->> +#define PRUSS_GPCFG_PRU_GPO_MODE		BIT(14)
->> +#define PRUSS_GPCFG_PRU_GPO_MODE_DIRECT		0
->> +#define PRUSS_GPCFG_PRU_GPO_MODE_SERIAL		BIT(14)
->> +
->> +#define PRUSS_GPCFG_PRU_GPI_SB			BIT(13)
->> +
->> +#define PRUSS_GPCFG_PRU_GPI_DIV1_SHIFT		8
->> +#define PRUSS_GPCFG_PRU_GPI_DIV1_MASK		GENMASK(12, 8)
->> +
->> +#define PRUSS_GPCFG_PRU_GPI_DIV0_SHIFT		3
->> +#define PRUSS_GPCFG_PRU_GPI_DIV0_MASK		GENMASK(7, 3)
->> +
->> +#define PRUSS_GPCFG_PRU_GPI_CLK_MODE_POSITIVE	0
->> +#define PRUSS_GPCFG_PRU_GPI_CLK_MODE_NEGATIVE	BIT(2)
->> +#define PRUSS_GPCFG_PRU_GPI_CLK_MODE		BIT(2)
->> +
->> +#define PRUSS_GPCFG_PRU_GPI_MODE_MASK		GENMASK(1, 0)
->> +#define PRUSS_GPCFG_PRU_GPI_MODE_SHIFT		0
->> +
->> +#define PRUSS_GPCFG_PRU_MUX_SEL_SHIFT		26
->> +#define PRUSS_GPCFG_PRU_MUX_SEL_MASK		GENMASK(29, 26)
->> +
->> +/* PRUSS_MII_RT register bits */
->> +#define PRUSS_MII_RT_EVENT_EN			BIT(0)
->> +
->> +/* PRUSS_SPP register bits */
->> +#define PRUSS_SPP_XFER_SHIFT_EN			BIT(1)
->> +#define PRUSS_SPP_PRU1_PAD_HP_EN		BIT(0)
-> 
-> Can we please move all the above definitions to private driver/soc/ti/pruss.h?
-> You can also add pruss_cfg_read and pruss_cfg_update there.
-> 
+> From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Sent: 16 March 2023 08:50
+>=20
+> This is the start of the stable review cycle for the 6.1.20 release.
+> There are 140 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>=20
+> Responses should be made by Sat, 18 Mar 2023 08:33:04 +0000.
+> Anything received after that time might be too late.
 
-Sure Roger, I'll move all these definitions to pruss.h
+CIP configurations built and booted with Linux 6.1.20-rc2 (7887563347ee):
+https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/pipelines/8=
+08352718
+https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/commits/lin=
+ux-6.1.y
 
->> +
->> +/*
->> + * enum pruss_gp_mux_sel - PRUSS GPI/O Mux modes for the
->> + * PRUSS_GPCFG0/1 registers
->> + *
->> + * NOTE: The below defines are the most common values, but there
->> + * are some exceptions like on 66AK2G, where the RESERVED and MII2
->> + * values are interchanged. Also, this bit-field does not exist on
->> + * AM335x SoCs
->> + */
->> +enum pruss_gp_mux_sel {
->> +	PRUSS_GP_MUX_SEL_GP = 0,
->> +	PRUSS_GP_MUX_SEL_ENDAT,
->> +	PRUSS_GP_MUX_SEL_RESERVED,
->> +	PRUSS_GP_MUX_SEL_SD,
->> +	PRUSS_GP_MUX_SEL_MII2,
->> +	PRUSS_GP_MUX_SEL_MAX,
->> +};
->> +
->> +/*
->> + * enum pruss_gpi_mode - PRUSS GPI configuration modes, used
->> + *			 to program the PRUSS_GPCFG0/1 registers
->> + */
->> +enum pruss_gpi_mode {
->> +	PRUSS_GPI_MODE_DIRECT = 0,
->> +	PRUSS_GPI_MODE_PARALLEL,
->> +	PRUSS_GPI_MODE_28BIT_SHIFT,
->> +	PRUSS_GPI_MODE_MII,
->> +};
->> +
->>  /**
->>   * enum pruss_pru_id - PRU core identifiers
->>   * @PRUSS_PRU0: PRU Core 0.
-> 
-> cheers,
-> -roger
+Tested-by: Chris Paterson (CIP) <chris.paterson2@renesas.com>
 
--- 
-Thanks and Regards,
-Danish.
+Kind regards, Chris
