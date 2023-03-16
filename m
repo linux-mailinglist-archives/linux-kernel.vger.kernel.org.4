@@ -2,159 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 195F46BD47A
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 16:58:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 674836BD487
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 16:59:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231605AbjCPP6K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 11:58:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34786 "EHLO
+        id S231707AbjCPP7B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 11:59:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229629AbjCPP6H (ORCPT
+        with ESMTP id S231665AbjCPP65 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 11:58:07 -0400
-Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CC4E14E8B
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 08:57:59 -0700 (PDT)
-Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32GFpjVl015162;
-        Thu, 16 Mar 2023 10:57:36 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=PODMain02222019;
- bh=zwa+Kz3z5JsstvJyyjsKd/9rebLnLWbVJ5G8ya5H37k=;
- b=TNPgfDSs79sO1vKqlcoH5bW71KMuMKW0xiODu1gRUUiJCQOz/6O6hnk3tafiC9vMv6Wz
- VaqAAK/4pytrLZbrUDtPkTchkd3dcxPLPstc+D5Gsy1IJNQ8cEDvc8xoQkJ4QTAqmp3l
- 4juR8sOZUfiJLgS2Jwyz76Sr6KyFDDEgy6dyLiXuW0JFQmMuCwTyGtPaZ0BPgGzfz7Du
- bY8oCJ/KoS5+6ZCXtHFmHh/nO4Q/W1MW746VUnVxn4gmaTmTDcD50C0ynNXIdnNTZv3a
- GABlEvnoQHEHhgxJ9pEVz9//KFoQqdLz4DN5Bfge8o0A5BJBN0RAMS4kpWbXiLIsooXa yw== 
-Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3pbs2nrxxu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 16 Mar 2023 10:57:35 -0500
-Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.25; Thu, 16 Mar
- 2023 10:57:34 -0500
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
- anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
- 15.2.1118.25 via Frontend Transport; Thu, 16 Mar 2023 10:57:34 -0500
-Received: from algalon.ad.cirrus.com (algalon.ad.cirrus.com [198.90.251.122])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 1EAD311D4;
-        Thu, 16 Mar 2023 15:57:34 +0000 (UTC)
-From:   Charles Keepax <ckeepax@opensource.cirrus.com>
-To:     <vkoul@kernel.org>
-CC:     <yung-chuan.liao@linux.intel.com>,
-        <pierre-louis.bossart@linux.intel.com>, <sanyog.r.kale@intel.com>,
-        <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
-        <patches@opensource.cirrus.com>
-Subject: [PATCH 2/2] soundwire: bus: Update sdw_nread/nwrite_no_pm to handle page boundaries
-Date:   Thu, 16 Mar 2023 15:57:34 +0000
-Message-ID: <20230316155734.3191577-2-ckeepax@opensource.cirrus.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230316155734.3191577-1-ckeepax@opensource.cirrus.com>
-References: <20230316155734.3191577-1-ckeepax@opensource.cirrus.com>
+        Thu, 16 Mar 2023 11:58:57 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9580A96F32
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 08:58:56 -0700 (PDT)
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1pcpzT-0001Wg-0O; Thu, 16 Mar 2023 16:58:07 +0100
+Received: from pengutronix.de (unknown [IPv6:2a00:20:3043:e035:5ae3:9609:678c:e1fb])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id EEF27194E2F;
+        Thu, 16 Mar 2023 15:57:59 +0000 (UTC)
+Date:   Thu, 16 Mar 2023 16:57:58 +0100
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     David Howells <dhowells@redhat.com>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, Jeff Layton <jlayton@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        netdev@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        bpf@vger.kernel.org, dccp@vger.kernel.org,
+        linux-afs@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-can@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-hams@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-sctp@vger.kernel.org,
+        linux-wpan@vger.kernel.org, linux-x25@vger.kernel.org,
+        mptcp@lists.linux.dev, rds-devel@oss.oracle.com,
+        tipc-discussion@lists.sourceforge.net,
+        virtualization@lists.linux-foundation.org
+Subject: Re: [RFC PATCH 28/28] sock: Remove ->sendpage*() in favour of
+ sendmsg(MSG_SPLICE_PAGES)
+Message-ID: <20230316155758.5ylpybqjma7x4lbs@pengutronix.de>
+References: <20230316152618.711970-1-dhowells@redhat.com>
+ <20230316152618.711970-29-dhowells@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-GUID: p0Dgp2C0Dmwbcqi8GtGVhGNykvjqSFYc
-X-Proofpoint-ORIG-GUID: p0Dgp2C0Dmwbcqi8GtGVhGNykvjqSFYc
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="km5oeoth2y26yqyc"
+Content-Disposition: inline
+In-Reply-To: <20230316152618.711970-29-dhowells@redhat.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently issuing a sdw_nread/nwrite_no_pm across a page boundary
-will silently fail to write correctly as nothing updates the page
-registers, meaning the same page of the chip will get rewritten
-with each successive page of data.
 
-As the sdw_msg structure contains page information it seems
-reasonable that a single sdw_msg should always be within one
-page. It is also mostly simpler to handle the paging at the
-bus level rather than each master having to handle it in their
-xfer_msg callback.
+--km5oeoth2y26yqyc
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-As such add handling to the bus code to split up a transfer into
-multiple sdw_msg's when they go across page boundaries.
+On 16.03.2023 15:26:18, David Howells wrote:
+> [!] Note: This is a work in progress.  At the moment, some things won't
+>     build if this patch is applied.  nvme, kcm, smc, tls.
+>=20
+> Remove ->sendpage() and ->sendpage_locked().  sendmsg() with
+> MSG_SPLICE_PAGES should be used instead.  This allows multiple pages and
+> multipage folios to be passed through.
+>=20
+> Signed-off-by: David Howells <dhowells@redhat.com>
 
-Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
----
- drivers/soundwire/bus.c | 47 +++++++++++++++++++++++------------------
- 1 file changed, 26 insertions(+), 21 deletions(-)
+> cc: linux-can@vger.kernel.org
 
-diff --git a/drivers/soundwire/bus.c b/drivers/soundwire/bus.c
-index 3c67266f94834..bdd251e871694 100644
---- a/drivers/soundwire/bus.c
-+++ b/drivers/soundwire/bus.c
-@@ -386,37 +386,42 @@ int sdw_fill_msg(struct sdw_msg *msg, struct sdw_slave *slave,
-  * Read/Write IO functions.
-  */
- 
--int sdw_nread_no_pm(struct sdw_slave *slave, u32 addr, size_t count, u8 *val)
-+static int sdw_ntransfer_no_pm(struct sdw_slave *slave, u32 addr, u8 flags,
-+			       size_t count, u8 *val)
- {
- 	struct sdw_msg msg;
-+	size_t size;
- 	int ret;
- 
--	ret = sdw_fill_msg(&msg, slave, addr, count,
--			   slave->dev_num, SDW_MSG_FLAG_READ, val);
--	if (ret < 0)
--		return ret;
-+	while (count) {
-+		// Only handle bytes up to next page boundary
-+		size = min(count, (SDW_REGADDR + 1) - (addr & SDW_REGADDR));
- 
--	ret = sdw_transfer(slave->bus, &msg);
--	if (slave->is_mockup_device)
--		ret = 0;
--	return ret;
-+		ret = sdw_fill_msg(&msg, slave, addr, size, slave->dev_num, flags, val);
-+		if (ret < 0)
-+			return ret;
-+
-+		ret = sdw_transfer(slave->bus, &msg);
-+		if (ret < 0 && !slave->is_mockup_device)
-+			return ret;
-+
-+		addr += size;
-+		val += size;
-+		count -= size;
-+	}
-+
-+	return 0;
-+}
-+
-+int sdw_nread_no_pm(struct sdw_slave *slave, u32 addr, size_t count, u8 *val)
-+{
-+	return sdw_ntransfer_no_pm(slave, addr, SDW_MSG_FLAG_READ, count, val);
- }
- EXPORT_SYMBOL(sdw_nread_no_pm);
- 
- int sdw_nwrite_no_pm(struct sdw_slave *slave, u32 addr, size_t count, const u8 *val)
- {
--	struct sdw_msg msg;
--	int ret;
--
--	ret = sdw_fill_msg(&msg, slave, addr, count,
--			   slave->dev_num, SDW_MSG_FLAG_WRITE, (u8 *)val);
--	if (ret < 0)
--		return ret;
--
--	ret = sdw_transfer(slave->bus, &msg);
--	if (slave->is_mockup_device)
--		ret = 0;
--	return ret;
-+	return sdw_ntransfer_no_pm(slave, addr, SDW_MSG_FLAG_WRITE, count, (u8 *)val);
- }
- EXPORT_SYMBOL(sdw_nwrite_no_pm);
- 
--- 
-2.30.2
+Acked-by: Marc Kleine-Budde <mkl@pengutronix.de> # for net/can
 
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--km5oeoth2y26yqyc
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmQTPIMACgkQvlAcSiqK
+BOj6JAgAtfBV5yq+uNvtDfdNTDCgUnr0pkrsEqo0Ygt0A84TUlJF1K9QFkFTlvFo
+NEtegJFeDvbE8EmvRgOnpoTRcMQwDClaw5c7O7TquCr3SEAcXECesFYUVLWR7hsf
+Mk3DzSWUNIqMeSUOAEPBPfWNGGQWdjut5IQHdhuIs2/irjgsb5GZJ27rYyV9F/+l
+daE1Ac6RGnKq9zV/UszZ7AbfKA7bI9TVioWBVmIFCQZeWJprHq5rD0LTH6+QjdyQ
+5AdUTjTbZ/YRTjr4KQQkISfoq8oMC/zVENiagYZ89SGTbciIaCeqBpvdgUVKTob6
+2Uoo/o+yUY90Dy8JPw9/gLSsthDGaw==
+=IhKV
+-----END PGP SIGNATURE-----
+
+--km5oeoth2y26yqyc--
