@@ -2,79 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C81ED6BCAF5
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 10:33:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 418C16BCAFB
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 10:34:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231168AbjCPJdv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 05:33:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55976 "EHLO
+        id S231209AbjCPJej (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 05:34:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230211AbjCPJds (ORCPT
+        with ESMTP id S229950AbjCPJee (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 05:33:48 -0400
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97EBCB856A;
-        Thu, 16 Mar 2023 02:33:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1678959224; x=1710495224;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=W7UnOpCRtVxMC1YLy/djxks54MjsNALCx508mBTqGOw=;
-  b=DILPNRapvG2FKeg9ER0vwn5qBsEblUv1tivo8U/aW6kNnZFoU1zc7UCq
-   OXys9CRUz2Lp0xZ8HDBE9Gbz3MsO2z6hv6A77+fCRPVFdzHee++8c5BEL
-   UzBDP2X/Ay0kb5JCqef4dZVXnSIDzHZmTtB0QNmBG/xIA5+tMxNJPWijN
-   D1dnLo3a3dNuAROUOziPm+EO9Ze+rnPwyt5Mwva1O6wLATL2pImjAx83G
-   kJhiG5QH87YEi5ZW5mR81/Ifr8usHJk4dBKZ9ZtenzHqhW2tXwrNIZdSF
-   W5Xwc2eJh/6bkA/Oe9U+YX/tiJeGShYGkd8U65opmPZ8ozJlm06ay00O8
-   g==;
-X-IronPort-AV: E=Sophos;i="5.98,265,1673910000"; 
-   d="scan'208";a="29731249"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 16 Mar 2023 10:33:41 +0100
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Thu, 16 Mar 2023 10:33:41 +0100
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Thu, 16 Mar 2023 10:33:41 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1678959221; x=1710495221;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=W7UnOpCRtVxMC1YLy/djxks54MjsNALCx508mBTqGOw=;
-  b=ZtxM30JDyKRelPUgwLqfTmiQPhezwMsE1kBIDg7fS9XYOaO/tClfAztH
-   I5/tQBvJnLRk+CzZfq4pqoOr0EH4ZPpTe60ByegqvFubVbdK8zLNCK2k/
-   QiqsBT4KCocCIYyCBjcq3nSbYOK4pyAh/gyWH5+xdjSRiG4qLg7IRcc19
-   VLDVxc4xe0vjqe0kIse3ZxMY46m3ba3tqHj0D+RaPEoxPB16e1k8pyFuK
-   IXDlpqZBSjL3DJVXLpkWth77qy8TnEoD740/e4KyPMWqe/jf4TbMvX51o
-   37pBoELM6Ct/xRIr1IQ03F3FRzZUyleoMV8BjaQqReKRe7e1abCqWSUxb
-   g==;
-X-IronPort-AV: E=Sophos;i="5.98,265,1673910000"; 
-   d="scan'208";a="29731247"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 16 Mar 2023 10:33:40 +0100
-Received: from steina-w.localnet (unknown [10.123.53.21])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id C6F74280056;
-        Thu, 16 Mar 2023 10:33:40 +0100 (CET)
-From:   Alexander Stein <alexander.stein@ew.tq-group.com>
-To:     Bjorn Helgaas <bhelgaas@google.com>,
-        Oliver Neukum <oneukum@suse.com>
-Cc:     Korneliusz Osmenda <korneliuszo@gmail.com>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/1] Guard pci_create_sysfs_dev_files with atomic value
-Date:   Thu, 16 Mar 2023 10:33:38 +0100
-Message-ID: <6131694.LvFx2qVVIh@steina-w>
-Organization: TQ-Systems GmbH
-In-Reply-To: <106b5618-908f-becc-6eb3-75ef136a48e4@suse.com>
-References: <20230316091540.494366-1-alexander.stein@ew.tq-group.com> <106b5618-908f-becc-6eb3-75ef136a48e4@suse.com>
+        Thu, 16 Mar 2023 05:34:34 -0400
+Received: from mail-0201.mail-europe.com (mail-0201.mail-europe.com [51.77.79.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43C2C6EA9;
+        Thu, 16 Mar 2023 02:34:13 -0700 (PDT)
+Date:   Thu, 16 Mar 2023 09:33:59 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail3; t=1678959248; x=1679218448;
+        bh=ySIfXFt6Xi6R7YaroHVL2o7033EHtToARDDqQVRsMyQ=;
+        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+         Message-ID:BIMI-Selector;
+        b=f/Jy8j02JZSc3nrQHu0gMVGP50bKj7qWX4p9h0keACRF+b/nzKFFG5Xc02OaZK4sa
+         ZQ/5cX7hBWB48YyrEZJjIvIOIRkqGexRDzdRwRdtZ2UDRcCvQpso11yFX815A8Fs80
+         eJGc3bKGZm+XwIErvHOg+3ieANnU1hVnJCUYPwvbb6lIzGF+Nqwgf8meG49fydhSO/
+         CWGCYxYy9DVS3z+VT0wxhm4sP3YEqA81hbtKiFSp6b6J+agibtsGMcvPavtCWBSdo5
+         otNY4QQK9OayXfLaeQv2MJ7aOF0BwPh1pYqzJfIQjnixvyRzPQ1RhVTNrkAfmh+VKZ
+         ROUsjF4hLS8ZA==
+To:     Boqun Feng <boqun.feng@gmail.com>
+From:   y86-dev <y86-dev@protonmail.com>
+Cc:     "ojeda@kernel.org" <ojeda@kernel.org>,
+        "alex.gaynor@gmail.com" <alex.gaynor@gmail.com>,
+        "wedsonaf@gmail.com" <wedsonaf@gmail.com>,
+        Gary Guo <gary@garyguo.net>,
+        "bjorn3_gh@protonmail.com" <bjorn3_gh@protonmail.com>,
+        "rust-for-linux@vger.kernel.org" <rust-for-linux@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "patches@lists.linux.dev" <patches@lists.linux.dev>
+Subject: Re: [PATCH v1 1/3] rust: macros: add `quote!` macro
+Message-ID: <rwLWkKoa4chEtf0rqg_7vYX5cTjKz4etynZ-i5wG_JCvF_O-6vf2I2cc205cZHFId2DJswFm_5FjpN5-8SYuF-FEdkCxMTPh_R9UCEB5fJA=@protonmail.com>
+In-Reply-To: <ZA9BfSEjAQ9xnZD7@Boquns-Mac-mini.local>
+References: <u9FrnEbtGtyUPp-CmzAQIv--8hmKwHdIIPiq-3IHJPcHdaJi_VXuDdVR2Js2GzvtWgCNrBLp4PhQs3tTlWNVDBZfIStCHiS9SoMtsDgc4oM=@protonmail.com> <ZA9BfSEjAQ9xnZD7@Boquns-Mac-mini.local>
+Feedback-ID: 40624463:user:proton
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLY,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,69 +56,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Oliver,
+On Monday, March 13th, 2023 at 16:30, Boqun Feng <boqun.feng@gmail.com> wro=
+te:
+> On Mon, Mar 13, 2023 at 01:23:18AM +0000, y86-dev wrote:
+>
+> > From: Gary Guo gary@garyguo.net
+> >
+> > Add the `quote!` macro for creating `TokenStream`s directly via the
+> > given Rust tokens. It also supports repetitions using iterators.
+> >
+> > It will be used by the pin-init API proc-macros to generate code.
+> >
+> > Signed-off-by: Gary Guo gary@garyguo.net
+> > Signed-off-by: Benno Lossin y86-dev@protonmail.com
+>
+>
+> Not sure whether I missed any sutble details, but the macros look
+> straight-forward. One thing could be improved is having a doc describing
+> what `quote!` does, a link to the quote crate will do the trick.
+>
+> Anyway, the code looks good to me.
+>
+> Acked-by: Boqun Feng boqun.feng@gmail.com
+>
+>
+> Regards,
+> Boqun
 
-Am Donnerstag, 16. M=E4rz 2023, 10:23:54 CET schrieb Oliver Neukum:
-> On 16.03.23 10:15, Alexander Stein wrote:
-> > From: Korneliusz Osmenda <korneliuszo@gmail.com>
-> >=20
-> > On Gateworks Ventana there is a number of PCI devices and:
-> >    - imx6_pcie_probe takes longer than start of late init
-> >    - pci_sysfs_init sets up flag sysfs_initialized
-> >    - pci_sysfs_init initializes already found devices
-> >    - imx6_pcie_probe tries to reinitialize device
-> >=20
-> > Link: https://bugzilla.kernel.org/show_bug.cgi?id=3D215515
-> >=20
-> > Signed-off-by: Korneliusz Osmenda <korneliuszo@gmail.com>
-> > Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-> > ---
-> >=20
-> >   drivers/pci/pci-sysfs.c | 6 ++++++
-> >   include/linux/pci.h     | 2 ++
-> >   2 files changed, 8 insertions(+)
-> >=20
-> > diff --git a/drivers/pci/pci-sysfs.c b/drivers/pci/pci-sysfs.c
-> > index dd0d9d9bc509..998e44716b6f 100644
-> > --- a/drivers/pci/pci-sysfs.c
-> > +++ b/drivers/pci/pci-sysfs.c
-> > @@ -1497,6 +1497,9 @@ int __must_check pci_create_sysfs_dev_files(struct
-> > pci_dev *pdev)>=20
-> >   	if (!sysfs_initialized)
-> >   =09
-> >   		return -EACCES;
-> >=20
-> > +	if (atomic_cmpxchg(&pdev->sysfs_init_cnt, 0, 1) =3D=3D 1)
-> > +		return 0;		/* already added */
-> > +
-> >=20
-> >   	return pci_create_resource_files(pdev);
->=20
-> This is very likely a bug. You are returning an error in the error
-> case. Yet the flag stays.
+Sure, will put it in v2!
 
-Ah, you are right. This is something needed to address.
-
-> And simply resetting it in the error case
-> would be a race. There is something fishy in that design.
-
-Admittedly=20
-I would like to get rid of these two pathes for creating sysfs files in the=
-=20
-first place, but I do not know the pci subsystem very well.
-IMHO for_each_pci_dev(pdev) in pci_sysfs_init is part of the problem as it=
-=20
-unconditionally iterates over the bus, without any locks, thus creating sys=
-fs=20
-files for each device added to the bus.
-Any ideas?
-
-Best regards,
-Alexander
-=2D-=20
-TQ-Systems GmbH | M=FChlstra=DFe 2, Gut Delling | 82229 Seefeld, Germany
-Amtsgericht M=FCnchen, HRB 105018
-Gesch=E4ftsf=FChrer: Detlef Schneider, R=FCdiger Stahl, Stefan Schneider
-http://www.tq-group.com/
-
-
+Regards,
+Benno
