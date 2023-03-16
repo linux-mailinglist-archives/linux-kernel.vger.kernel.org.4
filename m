@@ -2,74 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92CD96BCA81
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 10:13:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD1CE6BCA82
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 10:14:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230100AbjCPJNy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 05:13:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54846 "EHLO
+        id S229991AbjCPJOk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 05:14:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229691AbjCPJNu (ORCPT
+        with ESMTP id S229897AbjCPJOc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 05:13:50 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C29915C97;
-        Thu, 16 Mar 2023 02:13:46 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id ip21-20020a05600ca69500b003ed56690948so594027wmb.1;
-        Thu, 16 Mar 2023 02:13:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678958025;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=y1wI6KS7nZ+BAxbXQwcHv8OCqNHv/ZA1CoTUOG0kaOw=;
-        b=pH4DZPsV8fHwNHtlkoRtDhH+rGhAebSra2S6AS12iNP1CQphcOBdgRjZi5aQVnf2AN
-         l9BRE52FccC7urQrvE81fDDpg6RHDnr5eSdedgxc9digmPGOO/m9ZSHTaUMwZ4E9qsZf
-         9UJWtypK3/M0Xb/TJTq6JO777BZ0wV+dFMZbWcilV6IjWgqkDtQ5NEbVdCvDU0itsxTB
-         l8PO6evxixNThrGVRpAKrZ2FTdH04fUZ2VZoK3m7m+GUDRd11NG4zDeQuhuPdFVY0Up/
-         q/t/5Okm7Uj0+Wg2XOawXe3LXY6sdoNSQa632zAKMSqNANd/eW7aDO8P5fZJ8Nh8rph3
-         bMlw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678958025;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=y1wI6KS7nZ+BAxbXQwcHv8OCqNHv/ZA1CoTUOG0kaOw=;
-        b=sCayG2c/RFnLcH3+JqHcAUuguzGliCnLOpjcgj0tcEGZL5Uloniwr+d+67gAh/HYke
-         JS1X6Pg8rLa4edpkjDvq2jDwBtdbln3HDIA0pwiQmhBdjHpulb6UbJPtXOxAoyxr0C10
-         xLJIIvMyHdSI+Qm2PjS6z/Inf5hHw/sjjcmoWOyJ7vypMwal/06vejKq/2oKOwMPcJH1
-         M4faZX/5DId7/MmLOFYSIHp8OEpjKvkE0WcZxsGkWcGvGeuLbaFOi3xuuGXxFcGfyOEI
-         XP799cDQ5uFWSLttXJMa1m/Xl7C+AlKWH2OngPD1ikm11OpcZjcvlBItPivTwkiJVJ+N
-         bmVg==
-X-Gm-Message-State: AO0yUKVLtlVUt4a6cZqxjhNfhyt+XUxwRaOK1m6cATAFoa5RwAx+ND+7
-        mWuLoTa/j21Wda5BIlJtA4SP2hn+LJ2ntA==
-X-Google-Smtp-Source: AK7set/omKQgo/seetBthv72Tur5fOCcDJfwpwJcU+3LcqDf1smJKiGVEp1Nh48clT48qmi0/MIViQ==
-X-Received: by 2002:a05:600c:19cf:b0:3eb:2da4:f304 with SMTP id u15-20020a05600c19cf00b003eb2da4f304mr19305219wmq.17.1678958024569;
-        Thu, 16 Mar 2023 02:13:44 -0700 (PDT)
-Received: from suse.localnet (host-79-35-102-94.retail.telecomitalia.it. [79.35.102.94])
-        by smtp.gmail.com with ESMTPSA id i26-20020a1c541a000000b003ed246f76a2sm4609903wmb.1.2023.03.16.02.13.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Mar 2023 02:13:44 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Stefano Garzarella <sgarzare@redhat.com>
-Cc:     virtualization@lists.linux-foundation.org,
-        Andrey Zhadchenko <andrey.zhadchenko@virtuozzo.com>,
-        eperezma@redhat.com, netdev@vger.kernel.org, stefanha@redhat.com,
-        linux-kernel@vger.kernel.org, Jason Wang <jasowang@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>, kvm@vger.kernel.org,
-        Stefano Garzarella <sgarzare@redhat.com>
-Subject: Re: [PATCH v2 3/8] vringh: replace kmap_atomic() with kmap_local_page()
-Date:   Thu, 16 Mar 2023 10:13:39 +0100
-Message-ID: <5675662.DvuYhMxLoT@suse>
-In-Reply-To: <20230302113421.174582-4-sgarzare@redhat.com>
-References: <20230302113421.174582-1-sgarzare@redhat.com>
- <20230302113421.174582-4-sgarzare@redhat.com>
+        Thu, 16 Mar 2023 05:14:32 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A17B3136FA
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 02:14:30 -0700 (PDT)
+Received: from canpemm500009.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4PchQ56JyKzrTDb;
+        Thu, 16 Mar 2023 17:13:33 +0800 (CST)
+Received: from [10.67.102.169] (10.67.102.169) by
+ canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Thu, 16 Mar 2023 17:13:54 +0800
+CC:     <yangyicong@hisilicon.com>, <dietmar.eggemann@arm.com>,
+        <rostedt@goodmis.org>, <bsegall@google.com>, <mgorman@suse.de>,
+        <bristot@redhat.com>, <linuxarm@huawei.com>,
+        <prime.zeng@huawei.com>, <wangjie125@huawei.com>
+Subject: Re: [PATCH] sched/fair: Don't balance migration disabled tasks
+To:     Valentin Schneider <vschneid@redhat.com>, <mingo@redhat.com>,
+        <peterz@infradead.org>, <juri.lelli@redhat.com>,
+        <vincent.guittot@linaro.org>, <linux-kernel@vger.kernel.org>
+References: <20230313065759.39698-1-yangyicong@huawei.com>
+ <xhsmhilf2m3k4.mognet@vschneid.remote.csb>
+From:   Yicong Yang <yangyicong@huawei.com>
+Message-ID: <4968738b-940a-1207-0cea-3aea52c6e33e@huawei.com>
+Date:   Thu, 16 Mar 2023 17:13:54 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <xhsmhilf2m3k4.mognet@vschneid.remote.csb>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.102.169]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ canpemm500009.china.huawei.com (7.192.105.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,79 +54,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On gioved=EC 2 marzo 2023 12:34:16 CET Stefano Garzarella wrote:
-> kmap_atomic() is deprecated in favor of kmap_local_page().
->=20
-> With kmap_local_page() the mappings are per thread, CPU local, can take
-> page-faults, and can be called from any context (including interrupts).
-> Furthermore, the tasks can be preempted and, when they are scheduled to
-> run again, the kernel virtual addresses are restored and still valid.
->=20
-> kmap_atomic() is implemented like a kmap_local_page() which also disables
-> page-faults and preemption (the latter only for !PREEMPT_RT kernels,
-> otherwise it only disables migration).
->=20
-> The code within the mappings/un-mappings in getu16_iotlb() and
-> putu16_iotlb() don't depend on the above-mentioned side effects of
-> kmap_atomic(), so that mere replacements of the old API with the new one
-> is all that is required (i.e., there is no need to explicitly add calls
-> to pagefault_disable() and/or preempt_disable()).
+Hi Valentin,
 
-It seems that my commit message is quite clear and complete and therefore h=
-as=20
-already been reused by others who have somehow given me credit.=20
+On 2023/3/15 23:34, Valentin Schneider wrote:
+> On 13/03/23 14:57, Yicong Yang wrote:
+>>  kernel/sched/fair.c | 4 ++++
+>>  1 file changed, 4 insertions(+)
+>>
+>> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+>> index 7a1b1f855b96..8fe767362d22 100644
+>> --- a/kernel/sched/fair.c
+>> +++ b/kernel/sched/fair.c
+>> @@ -8433,6 +8433,10 @@ int can_migrate_task(struct task_struct *p, struct lb_env *env)
+>>       if (kthread_is_per_cpu(p))
+>>               return 0;
+>>
+>> +	/* Migration disabled tasks need to be kept on their running CPU. */
+>> +	if (is_migration_disabled(p))
+>> +		return 0;
+>> +
+>>       if (!cpumask_test_cpu(env->dst_cpu, p->cpus_ptr)) {
+>>               int cpu;
+> 
+> That cpumask check should cover migration_disabled tasks, unless they
+> haven't gone through migrate_disable_switch() yet
+> (p->migration_disabled == 1, but the cpus_ptr hasn't been touched yet).
+> 
+> Now, if that's the case, the task has to be src_rq's current (since it
+> hasn't switched out), which means can_migrate_task() should exit via:
+> 
+>         if (task_on_cpu(env->src_rq, p)) {
+>                 schedstat_inc(p->stats.nr_failed_migrations_running);
+>                 return 0;
+>         }
+> 
+> and thus not try to detach_task(). With that in mind, I don't get how your
+> splat can happen, nor how the change change can help (a remote task p could
+> execute migrate_disable() concurrently with can_migrate_task(p)).
+> 
 
-I would really appreciate it being mentioned here that you are reusing a=20
-"boiler plate" commit message of my own making and Cc me :-)
+I see, for migrate disabled tasks, if !p->on_cpu the migration can be avoid by
+the cpus_ptr check and if p->on_cpu migration can be avoid by the task_on_cpu()
+check. So this patch won't help.
+
+> I'm a bit confused here, detach_tasks() happens entirely with src_rq
+> rq_lock held, so there shouldn't be any surprises.
+> 
+
+Since it's a arm64 machine, could the WARN_ON_ONCE() test be false positive?
+I mean the update of p->migration_disabled is not observed by the balance
+CPU and trigger this warning incorrectly.
+
+> Can you share any extra context? E.g. exact HEAD of your tree, maybe the
+> migrate_disable task in question if you have that info.
+> 
+
+We met this on our internal version based on 6.1-rc4, the scheduler is not
+patched. We also saw this in previous version like 6.0. This patch is applied
+since 6.2 so we haven't seen this recently, but as you point out this patch doesn't
+solve the problem. The questioned tasks are some systemd services(udevd, etc)
+and I assume the migration disable is caused by seccomp:
+
+seccomp()
+	...
+	bpf_prog_run_pin_on_cpu()
+		migrate_disable()
+		...
+		migrate_enable()
 
 Thanks,
-
-=46abio
-
-> Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
-> ---
->=20
-> Notes:
->     v2:
->     - added this patch since checkpatch.pl complained about deprecation
->       of kmap_atomic() touched by next patch
->=20
->  drivers/vhost/vringh.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
->=20
-> diff --git a/drivers/vhost/vringh.c b/drivers/vhost/vringh.c
-> index a1e27da54481..0ba3ef809e48 100644
-> --- a/drivers/vhost/vringh.c
-> +++ b/drivers/vhost/vringh.c
-> @@ -1220,10 +1220,10 @@ static inline int getu16_iotlb(const struct vringh
-> *vrh, if (ret < 0)
->  		return ret;
->=20
-> -	kaddr =3D kmap_atomic(iov.bv_page);
-> +	kaddr =3D kmap_local_page(iov.bv_page);
->  	from =3D kaddr + iov.bv_offset;
->  	*val =3D vringh16_to_cpu(vrh, READ_ONCE(*(__virtio16 *)from));
-> -	kunmap_atomic(kaddr);
-> +	kunmap_local(kaddr);
->=20
->  	return 0;
->  }
-> @@ -1241,10 +1241,10 @@ static inline int putu16_iotlb(const struct vringh
-> *vrh, if (ret < 0)
->  		return ret;
->=20
-> -	kaddr =3D kmap_atomic(iov.bv_page);
-> +	kaddr =3D kmap_local_page(iov.bv_page);
->  	to =3D kaddr + iov.bv_offset;
->  	WRITE_ONCE(*(__virtio16 *)to, cpu_to_vringh16(vrh, val));
-> -	kunmap_atomic(kaddr);
-> +	kunmap_local(kaddr);
->=20
->  	return 0;
->  }
-> --
-> 2.39.2
-
-
-
-
+Yicong
