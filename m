@@ -2,109 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CA866BCD81
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 12:05:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22A406BCD87
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 12:07:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230047AbjCPLFq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 07:05:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34090 "EHLO
+        id S230098AbjCPLHI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 07:07:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230023AbjCPLFn (ORCPT
+        with ESMTP id S230091AbjCPLHD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 07:05:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA1C76C884;
-        Thu, 16 Mar 2023 04:05:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1A11A61FDB;
-        Thu, 16 Mar 2023 11:05:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B8E6C433A0;
-        Thu, 16 Mar 2023 11:05:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678964733;
-        bh=jwdsqFj42Pawn1NF91CaXMc12zQ2/CQZq6KOHz+TFDk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AOvS2dgIC9QgqUFLjiIKRrVFOe987AJjXYAqBEzcaczX3b9qM1h505TNB8EK3PpEZ
-         aHI49DbigXKkh+7n+9NBHP4PffBoOZvLHKe6r994l6kwB5gASJpP/K4L6mn1zf8QAo
-         SFl+jX3sqpHD3IMOFrRSbFyTA2xuOsvhosCQ+udQwC1YwEh1815+j0pcEMuEjPhcen
-         th63Onh11g+ZA6l8b2cGUviZgUxJgSi9tapL7TXBRRS5CL0yIcGK9oCZ+bt2EgncEf
-         fO1EnwZgLYy0YQLFzmoriiW0KlGZxVudHk2wui9bf47bIPTE7b0nD2NLZa7Z1yiHxY
-         +hnKqaTAmNmRg==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1pclRS-0004wx-Gp; Thu, 16 Mar 2023 12:06:42 +0100
-Date:   Thu, 16 Mar 2023 12:06:42 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Steev Klimaszewski <steev@kali.org>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        Sven Peter <sven@svenpeter.dev>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-bluetooth@vger.kernel.org,
-        Mark Pearson <markpearson@lenovo.com>
-Subject: Re: [PATCH v6 4/4] arm64: dts: qcom: sc8280xp-x13s: Add bluetooth
-Message-ID: <ZBL4Qrp9Lr+aOyXr@hovoldconsulting.com>
-References: <20230316034759.73489-1-steev@kali.org>
- <20230316034759.73489-5-steev@kali.org>
- <ZBLuxFxFvCY+0XHG@hovoldconsulting.com>
+        Thu, 16 Mar 2023 07:07:03 -0400
+Received: from out30-98.freemail.mail.aliyun.com (out30-98.freemail.mail.aliyun.com [115.124.30.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1317F81CCE
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 04:06:57 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0Ve-NM83_1678964813;
+Received: from localhost(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0Ve-NM83_1678964813)
+          by smtp.aliyun-inc.com;
+          Thu, 16 Mar 2023 19:06:54 +0800
+From:   Baolin Wang <baolin.wang@linux.alibaba.com>
+To:     akpm@linux-foundation.org
+Cc:     mgorman@techsingularity.net, osalvador@suse.de, vbabka@suse.cz,
+        william.lam@bytedance.com, mike.kravetz@oracle.com,
+        baolin.wang@linux.alibaba.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/2] mm: compaction: consider the number of scanning compound pages in isolate fail path
+Date:   Thu, 16 Mar 2023 19:06:46 +0800
+Message-Id: <73d6250a90707649cc010731aedc27f946d722ed.1678962352.git.baolin.wang@linux.alibaba.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZBLuxFxFvCY+0XHG@hovoldconsulting.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 16, 2023 at 11:26:12AM +0100, Johan Hovold wrote:
-> On Wed, Mar 15, 2023 at 10:47:58PM -0500, Steev Klimaszewski wrote:
-> > The Lenovo Thinkpad X13s has a WCN6855 Bluetooth controller on uart2,
-> > add this.
-> > 
-> > Signed-off-by: Steev Klimaszewski <steev@kali.org>
-> > ---
+The commit b717d6b93b54 ("mm: compaction: include compound page count
+for scanning in pageblock isolation") had added compound page statistics
+for scanning in pageblock isolation, to make sure the number of scanned
+pages are always larger than the number of isolated pages when isolating
+mirgratable or free pageblock.
+
+However, when failed to isolate the pages when scanning the mirgratable or
+free pageblock, the isolation failure path did not consider the scanning
+statistics of the compound pages, which can show the incorrect number of
+scanned pages in tracepoints or the vmstats to make people confusing about
+the page scanning pressure in memory compaction.
+
+Thus we should take into account the number of scanning pages when failed
+to isolate the compound pages to make the statistics accurate.
+
+Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+---
+Changes from v1:
+ - Move the compound pages statistics after sanity order checking.
+---
+ mm/compaction.c | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
+
+diff --git a/mm/compaction.c b/mm/compaction.c
+index 5a9501e0ae01..7e645cdfc2e9 100644
+--- a/mm/compaction.c
++++ b/mm/compaction.c
+@@ -586,6 +586,7 @@ static unsigned long isolate_freepages_block(struct compact_control *cc,
+ 			if (likely(order < MAX_ORDER)) {
+ 				blockpfn += (1UL << order) - 1;
+ 				cursor += (1UL << order) - 1;
++				nr_scanned += (1UL << order) - 1;
+ 			}
+ 			goto isolate_fail;
+ 		}
+@@ -904,6 +905,7 @@ isolate_migratepages_block(struct compact_control *cc, unsigned long low_pfn,
+ 				if (ret == -EBUSY)
+ 					ret = 0;
+ 				low_pfn += compound_nr(page) - 1;
++				nr_scanned += compound_nr(page) - 1;
+ 				goto isolate_fail;
+ 			}
  
-> > +		vreg_s1c: smps1 {
-> > +			regulator-name = "vreg_s1c";
-> > +			regulator-min-microvolt = <1880000>;
-> > +			regulator-max-microvolt = <1900000>;
-> > +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-> > +			regulator-allowed-modes = <RPMH_REGULATOR_MODE_AUTO>,
-> > +						  <RPMH_REGULATOR_MODE_RET>;
-> > +			regulator-allow-set-load;
-> 
-> So this does not look quite right still as you're specifying an initial
-> mode which is not listed as allowed.
-> 
-> Also there are no other in-tree users of RPMH_REGULATOR_MODE_RET and
-> AUTO is used to switch mode automatically which seems odd to use with
-> allow-set-load.
-> 
-> This regulator is in fact also used by the wifi part of the chip and as
-> that driver does not set any loads so we may end up with a regulator in
-> retention mode while wifi is in use.
-> 
-> Perhaps Bjorn can enlighten us, but my guess is that this should just be
-> "intial-mode = AUTO" (or even HPM, but I have no idea where this came
-> from originally).
+@@ -938,8 +940,10 @@ isolate_migratepages_block(struct compact_control *cc, unsigned long low_pfn,
+ 			 * a valid page order. Consider only values in the
+ 			 * valid order range to prevent low_pfn overflow.
+ 			 */
+-			if (freepage_order > 0 && freepage_order < MAX_ORDER)
++			if (freepage_order > 0 && freepage_order < MAX_ORDER) {
+ 				low_pfn += (1UL << freepage_order) - 1;
++				nr_scanned += (1UL << freepage_order) - 1;
++			}
+ 			continue;
+ 		}
+ 
+@@ -954,8 +958,10 @@ isolate_migratepages_block(struct compact_control *cc, unsigned long low_pfn,
+ 		if (PageCompound(page) && !cc->alloc_contig) {
+ 			const unsigned int order = compound_order(page);
+ 
+-			if (likely(order < MAX_ORDER))
++			if (likely(order < MAX_ORDER)) {
+ 				low_pfn += (1UL << order) - 1;
++				nr_scanned += (1UL << order) - 1;
++			}
+ 			goto isolate_fail;
+ 		}
+ 
+@@ -1077,6 +1083,7 @@ isolate_migratepages_block(struct compact_control *cc, unsigned long low_pfn,
+ 			 */
+ 			if (unlikely(PageCompound(page) && !cc->alloc_contig)) {
+ 				low_pfn += compound_nr(page) - 1;
++				nr_scanned += compound_nr(page) - 1;
+ 				SetPageLRU(page);
+ 				goto isolate_fail_put;
+ 			}
+-- 
+2.27.0
 
-This one probably also needs to be marked as always-on as we don't
-currently describe the fact that the wifi part also uses s1c.
-
-Johan
