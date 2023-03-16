@@ -2,184 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C123C6BDB2C
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 22:57:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8E4A6BDB2E
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 22:57:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229716AbjCPV5k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 17:57:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57838 "EHLO
+        id S230106AbjCPV5p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 17:57:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbjCPV5i (ORCPT
+        with ESMTP id S229812AbjCPV5j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 17:57:38 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B40436040F
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 14:56:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679003810;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=yBfyzuvRoe+QOXGN5SbtszQ6PVd6w0zcMfyA5scQ3Zo=;
-        b=BhbG+7xU8eRNHOjTRgeEdxG3RBaawYqQzWTnXWNWrtNDRdsuWQXBCw8ISvJcnJLa9ryrmx
-        N4HmRsWOqV4mIXJCiBTlv3SP0zRTKOR0JKuz8ZoDSyU0erClSVtJDOtwx63XS/W/CSVSqv
-        pEIYUgaHSAEgF7Y7iABuWlJpKf/fYww=
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com
- [209.85.166.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-393-dVw7NiGJPd2IoLPCHVDX7A-1; Thu, 16 Mar 2023 17:56:49 -0400
-X-MC-Unique: dVw7NiGJPd2IoLPCHVDX7A-1
-Received: by mail-il1-f198.google.com with SMTP id b9-20020a926709000000b00322ffd64968so1492153ilc.13
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 14:56:49 -0700 (PDT)
+        Thu, 16 Mar 2023 17:57:39 -0400
+Received: from mail-io1-f52.google.com (mail-io1-f52.google.com [209.85.166.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59FB260A95;
+        Thu, 16 Mar 2023 14:57:38 -0700 (PDT)
+Received: by mail-io1-f52.google.com with SMTP id g6so1451087iov.13;
+        Thu, 16 Mar 2023 14:57:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679003808;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yBfyzuvRoe+QOXGN5SbtszQ6PVd6w0zcMfyA5scQ3Zo=;
-        b=Nnh+abNPtIC1dJuJ7U+1CyiUMvbpUTR2CTT2t93nIqaqO72KqogFr8QarAhDVFmCGb
-         Srs+n+OcrjFi0PCLZFjtaE9JNcwvv3PCbZlhy1UmcJHaGO1H3aUsaEAcHtsifjsmFU0k
-         9Ult+kUSrjOx1mJBu/i6xc9nnc3LJGvmJE7QyWUc9bDngZEhE3MmxfjvyYHIU7C1moZF
-         /z/U2QV4fU12NAsrcicj4WUQtL8aK4SvdWGHgUS5sYBHEA58HPZvi6O92heQKML3/Buf
-         PMcU/qgVX71Og+N9eDejFgvwBquiKdD7OuXl1jBbP5gdBFcAqX0FlIGKLd9ZIW1yYXjB
-         GyzQ==
-X-Gm-Message-State: AO0yUKUGUX2C9PsU8Unciztr28rx0C/YzjMbHgtj7U28Pz+7kBKPnj8D
-        e9A2dwEHyOG9UMf4XhgzvtsjJzZwy68lT5c4ql2VQXCTqTBpvtjNodK8y+caz28ILub7NicPTlp
-        A4qUTG7WQjwfmwWPdfk97m7ZU
-X-Received: by 2002:a92:da8e:0:b0:315:53b6:d293 with SMTP id u14-20020a92da8e000000b0031553b6d293mr8470341iln.21.1679003808585;
-        Thu, 16 Mar 2023 14:56:48 -0700 (PDT)
-X-Google-Smtp-Source: AK7set8hE9qRjiVkADLNj9Ym+CS3y91gsTlZRJSIxUV9UT3cXYpWiTMNkB+43yCbBxsrCLOPFbEbcA==
-X-Received: by 2002:a92:da8e:0:b0:315:53b6:d293 with SMTP id u14-20020a92da8e000000b0031553b6d293mr8470326iln.21.1679003808286;
-        Thu, 16 Mar 2023 14:56:48 -0700 (PDT)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id c13-20020a928e0d000000b003157b2c504bsm137825ild.24.2023.03.16.14.56.47
+        d=1e100.net; s=20210112; t=1679003857;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VCX8Q0KiFWBenYq33JmGKJRfWkS+jFykJMHbbG7dBoQ=;
+        b=cIJ48kvpSVdmLMZodfgcDjQW7a8TB9rAZBEw8EqL9yunVoSsF3qKdv4AyM0gYpeEid
+         +k7hr574e2ZEDhr6Sp3eNKetU8XXnyXxI6D2E6xCaMBpQErdkykwYNvMxHEueiNoUqR9
+         sGDt9iWIdH864NaYcErn5jhIbfLcX4Jel4tD8rxUj6FvjkdbTFJSmtr/zJxSIXXO2bGr
+         tByXrT1Dio/jMVudjhunB4GQSbwZ5slq6JebI+u2GUu5n7X7JG+aeNYyyx5yhCK9lwjP
+         zYxy5YIftk0juwuM3lx2GKCBmwVyBI2l0c2EpPHV5j3r09C+jND/5ttz+52rm1Rqj1c0
+         gMWw==
+X-Gm-Message-State: AO0yUKX43X7EkP+nEy21aHdlNcRPj2GhHOLFi3zL2UxLUX7yp9B5pc9U
+        yQ8mBZPSlhSa973JaD6KjQ==
+X-Google-Smtp-Source: AK7set/1ioEGwLLlKvF20+unEkGcnCNWjn2iYIU36TopHqxFzHe7QejHEg/KOrCEWBF56csPo4ShDQ==
+X-Received: by 2002:a6b:5b12:0:b0:745:4726:b228 with SMTP id v18-20020a6b5b12000000b007454726b228mr335948ioh.17.1679003857572;
+        Thu, 16 Mar 2023 14:57:37 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.249])
+        by smtp.gmail.com with ESMTPSA id x3-20020a056638248300b003ee9720740esm121887jat.153.2023.03.16.14.57.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Mar 2023 14:56:47 -0700 (PDT)
-Date:   Thu, 16 Mar 2023 15:56:46 -0600
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     Reinette Chatre <reinette.chatre@intel.com>
-Cc:     jgg@nvidia.com, yishaih@nvidia.com,
-        shameerali.kolothum.thodi@huawei.com, kevin.tian@intel.com,
-        tglx@linutronix.de, darwi@linutronix.de, kvm@vger.kernel.org,
-        dave.jiang@intel.com, jing2.liu@intel.com, ashok.raj@intel.com,
-        fenghua.yu@intel.com, tom.zanussi@linux.intel.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 0/8] vfio/pci: Support dynamic allocation of MSI-X
- interrupts
-Message-ID: <20230316155646.07ae266f.alex.williamson@redhat.com>
-In-Reply-To: <cover.1678911529.git.reinette.chatre@intel.com>
-References: <cover.1678911529.git.reinette.chatre@intel.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
+        Thu, 16 Mar 2023 14:57:37 -0700 (PDT)
+Received: (nullmailer pid 3948932 invoked by uid 1000);
+        Thu, 16 Mar 2023 21:57:35 -0000
+Date:   Thu, 16 Mar 2023 16:57:35 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Gerald Loacker <gerald.loacker@wolfvision.net>
+Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Michael Riesch <michael.riesch@wolfvision.net>
+Subject: Re: [PATCH 7/7] dt-bindings: display: add panel-timing property to
+ sitronix,st7789v
+Message-ID: <20230316215735.GA3940832-robh@kernel.org>
+References: <20230314115644.3775169-1-gerald.loacker@wolfvision.net>
+ <20230314115644.3775169-8-gerald.loacker@wolfvision.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230314115644.3775169-8-gerald.loacker@wolfvision.net>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 15 Mar 2023 13:59:20 -0700
-Reinette Chatre <reinette.chatre@intel.com> wrote:
+On Tue, Mar 14, 2023 at 12:56:44PM +0100, Gerald Loacker wrote:
+> The sitronix-st7789v driver now considers the panel-timing property.
 
-> == Cover letter ==
-> 
-> Qemu allocates interrupts incrementally at the time the guest unmasks an
-> interrupt, for example each time a Linux guest runs request_irq().
-> 
-> Dynamic allocation of MSI-X interrupts was not possible until v6.2 [1].
-> This prompted Qemu to, when allocating a new interrupt, first release all
-> previously allocated interrupts (including disable of MSI-X) followed
-> by re-allocation of all interrupts that includes the new interrupt.
-> Please see [2] for a detailed discussion about this issue.
-> 
-> Releasing and re-allocating interrupts may be acceptable if all
-> interrupts are unmasked during device initialization. If unmasking of
-> interrupts occur during runtime this may result in lost interrupts.
-> For example, consider an accelerator device with multiple work queues,
-> each work queue having a dedicated interrupt. A work queue can be
-> enabled at any time with its associated interrupt unmasked while other
-> work queues are already active. Having all interrupts released and MSI-X
-> disabled to enable the new work queue will impact active work queues.
-> 
-> This series builds on the recent interrupt sub-system core changes
-> that added support for dynamic MSI-X allocation after initial MSI-X
-> enabling.
-> 
-> Add support for dynamic MSI-X allocation to vfio-pci. A flag
-> indicating lack of support for dynamic allocation already exist:
-> VFIO_IRQ_INFO_NORESIZE and has always been set for MSI and MSI-X. With
-> support for dynamic MSI-X the flag is cleared for MSI-X, enabling
-> Qemu to modify its behavior.
-> 
-> == Why is this an RFC ? ==
-> 
-> vfio support for dynamic MSI-X needs to work with existing user space
-> as well as upcoming user space that takes advantage of this feature.
-> I would appreciate guidance on the expectations and requirements
-> surrounding error handling when considering existing user space.
-> 
-> For example, consider the following scenario:
-> Start: Consider a passthrough device that supports 10 MSI-X interrupts
-> 	(0 to 9) and existing Qemu allocated interrupts 0 to 4.
-> 
-> Scenario: Qemu (hypothetically) attempts to associate a new action to
-> 	interrupts 0 to 7. Early checking of this range in
-> 	vfio_set_irqs_validate_and_prepare() will pass since it
-> 	is a valid range for the device. What happens after the
-> 	early checking is considered next:
-> 
-> Current behavior (before this series): Since the provided range, 0 - 7,
-> 	exceeds the allocated range, no action will be taken on existing
-> 	allocated interrupts 0 - 4 and the Qemu request will fail without
-> 	making any state changes.
+I read the patch for that and still don't know 'why'. Commit messages 
+should answer why.
 
-I must be missing something, it was described correctly earlier that
-QEMU will disable MSI-X and re-enable with a new vector count.  Not
-only does QEMU not really have a way to fail this change, pretty much
-nothing would work if we did.
+> Add the property to the documentation.
 
-What happens in this case is that the QEMU vfio-pci driver gets a
-vector_use callback for one of these new vectors {5,6,7},
-vfio_msix_vector_do_use() checks that's greater than we have enabled,
-disables MSI-X, and re-enables it for the new vector count.  Worst case
-we'll do that 3 times if the vectors are presented in ascending order.
+We generally don't put timings in DT for panels. Why is this one 
+special?
 
-> New behavior (with this series): Since vfio supports dynamic MSI-X new
-> 	interrupts will be allocated for vectors 5, 6, and 7. Please note
-> 	that this changes the behavior encountered by unmodified Qemu: new
-> 	interrupts are allocated instead of returning an error. Even more,
-> 	since the range provided by Qemu spans 0 - 7, a failure during
-> 	allocation of 5, 6, or 7 will result in release of entire range.
-
-As above, QEMU doesn't currently return an error here, nor is there
-actually any means to return an error.  MSI-X is not paravirtualized
-and the PCI spec definition of MSI-X does not define that a driver
-needs to check whether the device accepted unmasking a vector.  All we
-can do in QEMU if the host fails to configure the device as directed is
-print an error message as a breadcrumb to help debug why the device
-stopped working.  In practice, I don't think I've ever seen this.
-
-So really the difference should be transparent to the guest.  The risk
-of an error allocating vectors on the host is the same, the only
-significant difference should be the amount of disruption at the device
-that we can better approximate the request of the guest.
- 
-> This series aims to maintain existing error behavior for MSI (please see
-> "vfio/pci: Remove interrupt context counter") but I would appreciate your
-> guidance on whether existing error behavior should be maintained for MSI-X
-> and how to do so if it is a requirement.
-
-Based on above, there really can never be an error if we expect the
-device to work, so I think there's a misread of the current status.
-Dynamic MSI-X support should simply reduce the disruption and chance of
-lost interrupts at the device, but the points where we risk that the
-host cannot provide the configuration we need are the same.  Thanks,
-
-Alex
-
+> 
+> Signed-off-by: Gerald Loacker <gerald.loacker@wolfvision.net>
+> ---
+>  .../display/panel/sitronix,st7789v.yaml         | 17 +++++++++++++++++
+>  1 file changed, 17 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/display/panel/sitronix,st7789v.yaml b/Documentation/devicetree/bindings/display/panel/sitronix,st7789v.yaml
+> index ed942cd3620f..8810f123dedf 100644
+> --- a/Documentation/devicetree/bindings/display/panel/sitronix,st7789v.yaml
+> +++ b/Documentation/devicetree/bindings/display/panel/sitronix,st7789v.yaml
+> @@ -21,6 +21,7 @@ properties:
+>    reset-gpios: true
+>    power-supply: true
+>    backlight: true
+> +  panel-timing: true
+>    port: true
+>    rotation: true
+>  
+> @@ -54,6 +55,22 @@ examples:
+>              spi-cpol;
+>              spi-cpha;
+>  
+> +            panel-timing {
+> +                clock-frequency = <7000000>;
+> +                hactive = <240>;
+> +                vactive = <320>;
+> +                hfront-porch = <38>;
+> +                hback-porch = <10>;
+> +                hsync-len = <10>;
+> +                vfront-porch = <8>;
+> +                vback-porch = <4>;
+> +                vsync-len = <4>;
+> +                hsync-active = <1>;
+> +                vsync-active = <1>;
+> +                de-active = <1>;
+> +                pixelclk-active = <1>;
+> +            };
+> +
+>              port {
+>                  panel_input: endpoint {
+>                      remote-endpoint = <&tcon0_out_panel>;
+> -- 
+> 2.37.2
+> 
