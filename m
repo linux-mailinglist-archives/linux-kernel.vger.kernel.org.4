@@ -2,75 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 990D66BDA02
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 21:18:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C19AC6BDA00
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 21:18:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230266AbjCPUSD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 16:18:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47894 "EHLO
+        id S230215AbjCPUR6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 16:17:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230250AbjCPUSB (ORCPT
+        with ESMTP id S229544AbjCPUR5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 16:18:01 -0400
-Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75B9623671;
-        Thu, 16 Mar 2023 13:18:00 -0700 (PDT)
-Received: by mail-qv1-xf32.google.com with SMTP id f1so2042464qvx.13;
-        Thu, 16 Mar 2023 13:18:00 -0700 (PDT)
+        Thu, 16 Mar 2023 16:17:57 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB89F28E9B
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 13:17:55 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id h17so2643443wrt.8
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 13:17:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678997879;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=3hSQqmOPjN3PoBEQpVeufKdChsynQgIj6cJH3e5uFEI=;
-        b=UTdvpLFs42Cwb3ydTv3z+AT96WfIYlpo7rWEOhYhRyOAYzJkExAHsunw40mo0AcoEZ
-         EBzOBGpgePHFlGELL2r6u5ruhr6QetM2/uzCzPoe+bf115dYK+QT1NGA2MP7G9zMU5P1
-         5Lp+Gzr89M//HmJC9xiiNjEEv0RefsAdcvML44kNrYaKKCcNlUxmxPi+7gvMMLe8iCw/
-         LdP6U3jcl6F5ASdy5LZ0dZegaI+Fh+wUZFclnLbFF58ld8pU/daIF2gvRi1Ibsgr9KYv
-         gbldenQTT26fkCqiDtc6mJ75dcvf3osQIr7krbFSFg2xYTjoSwZqntBTyN3xv3gFRfuj
-         C+rA==
+        d=gmail.com; s=20210112; t=1678997874;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qcUGlWscPfoOjQ2/RY+CqDxREFzJPUhNCx1vWMcBYac=;
+        b=ZFCJt4LIFO5SGWn9ik6rwm/ZX4j+oBw2GhsisckUFkKA3eckrfLY3lYSg6cyMii5dg
+         6lJUEGjHHjrCLqRX2gDtUU3w/M5eT/HVcg/2pBB4cwGRpfmoA6dBFLuiehCEtRukKFHU
+         sniWDefQLaAGhUXBF9nQym0G7ob/ik1uU1QXyFrNig3tyZQqVpdMWZzpV6CVFHqkZNZr
+         bvZla/MKSHwL5/cEluhqZhtr79zLfofrxyl+GC8FPyjRxDBJFj2xBZW3iBaeyWKpPmka
+         RIOhisz+cfvytyfGZg+DKWXXawOXySgLqV7gJt48fPv6Wyraj9nLkeN9j0OEXdViFGmz
+         0bSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678997879;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3hSQqmOPjN3PoBEQpVeufKdChsynQgIj6cJH3e5uFEI=;
-        b=SNSV/glYxSJOWKYG6oai7w+i4y9JsFoIrBhErNJUwbisNf4E5OvJI/vixXifSDyrZ5
-         Re9sXMxTrPHU49CsYBlxAgSjsV6vKs41C1gyfNUcCaZXvUgQ4ro6Q0lcljtCwjQkiqk4
-         HS50GKVCIETezqcbDBTcugfyGYputl7Rw/wk+nbBjtvUfckLX9qf86MTRIYtBbyYoVn1
-         X203Rmq7stgttMlWLW5gzhKbn3YmRC7UUE9KD2kGA90itftyJoLfCWNvlph/hXO2qL7H
-         f9/8VwD7ACr1QPz8IfhFw1+xBZfWyLiQjn1KOgHB0tDlw4GXAOpWNFKjKTMTWvkFV9fa
-         4D0g==
-X-Gm-Message-State: AO0yUKUqN7/sBwe1QayIcfBZFyA7aIfIDRdXgf5oBSpqIIUYMfZzUbDp
-        UPo0/WtrqmHhcVQxWbdg1Lc=
-X-Google-Smtp-Source: AK7set+hpP78ijCJqK4lIgvUx76VikcSG1ESncgtMNADZ9uOHoXBbCkjOUd4zy9xUJKN6QTZMlz6DA==
-X-Received: by 2002:a05:6214:1c4e:b0:5b9:2e5d:76ea with SMTP id if14-20020a0562141c4e00b005b92e5d76eamr4380121qvb.6.1678997879372;
-        Thu, 16 Mar 2023 13:17:59 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id o10-20020a05620a228a00b00745b3e62006sm242069qkh.23.2023.03.16.13.17.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Mar 2023 13:17:58 -0700 (PDT)
-Message-ID: <58bcb53a-1a6a-63c0-bf69-627c3abf483b@gmail.com>
-Date:   Thu, 16 Mar 2023 13:17:51 -0700
+        d=1e100.net; s=20210112; t=1678997874;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qcUGlWscPfoOjQ2/RY+CqDxREFzJPUhNCx1vWMcBYac=;
+        b=HQqrug6kaza9s6VPjwkhbj4g0NUq9j6hRCTvNKFH99FCzv6O/t84EG01IWFaDTakTm
+         W1aR2IUYBWYIqLIrRpoqetY4piD1kGS6eG1aRmiN2U2tNUgRoIMMwVi91M9MC6Ig6ck5
+         8thKNQSPqi4Lrrt30knEYG0pa3xHhskSSBTc8+Uwldg6mqkrSuRdMfKrt/Vtoaq4nPYu
+         uDjJG4dOJqdIE0xMM5C6INZOz7xsbzfXF0rUWQ2iYAtNhmyloZhFJCal3Kdfju/Poce+
+         oIXzyF6kMjXI3HeIOqBt4dKh7uiiNppr3tdybudojt+rjKDYWRsKZKni3ZtlFhshiLAj
+         zkFg==
+X-Gm-Message-State: AO0yUKWbspU6bukzW0EZoxTpxTTkN74gYgRKEfDhR9riTflGfjpIhAOY
+        aMEkEVKrXBCsuDVoRqnQgRI=
+X-Google-Smtp-Source: AK7set95gtQqKGisnnc9p+bce+T2xGH3fsL5Ivj13Q9P9Pwq3tFiJ+B9qtMDaikhN+ERi6hqOOyREw==
+X-Received: by 2002:a5d:4586:0:b0:2cf:e65a:a5fc with SMTP id p6-20020a5d4586000000b002cfe65aa5fcmr5430408wrq.8.1678997874048;
+        Thu, 16 Mar 2023 13:17:54 -0700 (PDT)
+Received: from suse.localnet (host-79-35-102-94.retail.telecomitalia.it. [79.35.102.94])
+        by smtp.gmail.com with ESMTPSA id u8-20020adfdb88000000b002cff06039d7sm271611wri.39.2023.03.16.13.17.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Mar 2023 13:17:53 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Khadija Kamran <kamrankhadijadj@gmail.com>
+Cc:     outreachy@lists.linux.dev,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5] staging: axis-fifo: initialize timeouts in probe only
+Date:   Thu, 16 Mar 2023 21:17:52 +0100
+Message-ID: <3531852.LM0AJKV5NW@suse>
+In-Reply-To: <ZBNhXc3sVVLdibUF@khadija-virtual-machine>
+References: <ZBMR4s8xyHGqMm72@khadija-virtual-machine> <2162728.C4sosBPzcN@suse>
+ <ZBNhXc3sVVLdibUF@khadija-virtual-machine>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 6.2 000/137] 6.2.7-rc2 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-References: <20230316083443.733397152@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20230316083443.733397152@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -79,29 +74,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/16/23 01:50, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.2.7 release.
-> There are 137 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Sat, 18 Mar 2023 08:33:04 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.2.7-rc2.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.2.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+On gioved=EC 16 marzo 2023 19:35:09 CET Khadija Kamran wrote:
+> On Thu, Mar 16, 2023 at 05:17:47PM +0100, Fabio M. De Francesco wrote:
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
-BMIPS_GENERIC:
+[snip]
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+> > When you are done with build, install, and final reboot to test if your
+> > module can "modprobe" or "insmod" (i.e. link with the running custom=20
+kernel
+> > you built, installed and boot), try to compare the output of the follow=
+ing
+> > commands:
+> >=20
+> > # uname -a
+> > Linux suse 6.2.2-1-default #1 SMP PREEMPT_DYNAMIC Thu Mar  9 06:06:13 U=
+TC
+> > 2023 (44ca817) x86_64 x86_64 x86_64 GNU/Linux
+>=20
+> The above command works
+>=20
+> > AND
+> >=20
+> > # modinfo <name of the module you are testing here>
+>=20
+> On running 'modinfo axis-fifo' I get error saying module axis-fifo not
+> found.
+
+I built axis-fifo with your changes and then I ran "make install=20
+modules_install" in a QEMU/KVM x86_32 VM that I use on a Linux host for=20
+testing my patches (Linux on Linux).
+
+tweed32:~ # uname -a
+Linux tweed32 6.3.0-rc2-x86-32-debug+ #32 SMP PREEMPT_DYNAMIC Thu Mar 16=20
+18:09:49 CET 2023 i686 athlon i386 GNU/Linux
+
+tweed32:~ # modinfo axis-fifo=20
+filename:       /lib/modules/6.3.0-rc2-x86-32-debug+/kernel/drivers/staging/
+axis-fifo/axis-fifo.ko
+description:    Xilinx AXI-Stream FIFO v4.1 IP core driver
+author:         Jacob Feder <jacobsfeder@gmail.com>
+license:        GPL
+srcversion:     EBF46AD6851EAAE67D1000B
+alias:          of:N*T*Cxlnx,axi-fifo-mm-s-4.1C*
+alias:          of:N*T*Cxlnx,axi-fifo-mm-s-4.1
+depends:       =20
+staging:        Y
+retpoline:      Y
+intree:         Y
+name:           axis_fifo
+vermagic:       6.3.0-rc2-x86-32-debug+ SMP preempt mod_unload modversions =
+K7=20
+parm:           read_timeout:ms to wait before blocking read() timing out; =
+set=20
+to -1 for no timeout (long)
+parm:           write_timeout:ms to wait before blocking write() timing out=
+;=20
+set to -1 for no timeout (long)
+
+Do you see the "parm" lines? What's the type of read and write_timeout?
+
+=46abio
+
 
