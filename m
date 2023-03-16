@@ -2,153 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 977736BD2CE
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 15:57:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 531F16BD2D1
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 15:58:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230456AbjCPO5Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 10:57:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43804 "EHLO
+        id S230498AbjCPO6H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 10:58:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229928AbjCPO5W (ORCPT
+        with ESMTP id S230106AbjCPO6F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 10:57:22 -0400
-Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65ABFCD663
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 07:57:18 -0700 (PDT)
-Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-5447d217bc6so36805537b3.7
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 07:57:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google; t=1678978637;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8w7zMMd7x6aGvImR8WNeqUFh64/lLSPtzRGITxok/+k=;
-        b=C5SyNxP8fdmDzuY6FQgR2wVoMpRfFTRlNwcfeqtPE0JSARou3Jg06GsOFoed/IPUP/
-         FGg73oIv2WXtlYLjrbc8T6c8LAZD96UVSCyxbqqGQV3L4UH2cf+OQs8QK/HIJXOvBoWO
-         mvqO5y/lo0uyx+hHnIfggMQvGdmuvFsC9jtl0=
+        Thu, 16 Mar 2023 10:58:05 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A988CB061
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 07:57:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678978636;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=dzgtYRuv2N6ox79mROVezmyy+dEWrd7NrYkm4MuwFdo=;
+        b=MF8VRFD+335ms5hze0Z54L3dmRJnz7CpBJ1gBxsNFT7TdCJoDmu87E6+9Lax3wq/seyGZc
+        oQD+n9/cAZsm062vxkM1YX/XDtireBrljxBCf1x3dG5gwSwvll4WCqtqOdoH9JEWBZ+J7/
+        y/zOHaqzeCUjuqSJQFNa+sXBgo0lejg=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-206-rZnVZdlhPVyMjeReKwI1EA-1; Thu, 16 Mar 2023 10:57:15 -0400
+X-MC-Unique: rZnVZdlhPVyMjeReKwI1EA-1
+Received: by mail-wm1-f69.google.com with SMTP id n18-20020a05600c501200b003ed24740ea4so2749124wmr.3
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 07:57:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678978637;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8w7zMMd7x6aGvImR8WNeqUFh64/lLSPtzRGITxok/+k=;
-        b=ORCgW+yJps+kDLfxOxYg7hgDpf7FJV03icACltRi7oQbPiz1zxkG/ke5IDaL9kpi+s
-         8w83L1j9LLSRZ0QsbrfxyWCA3qR7QVY/Zy1Q/mxD0NPtswx0kglwQzMmb33SUdM+kSaj
-         vfTyy42X/Ceucq/lBckppbFrpdMBQuMZbyeBJUWUUYu17wGt9HwsBeGNnxr69GTnDakb
-         Vc5QUcmoSL8nYzeHvZnZpr0oZ7FJDDkzzVyQeyS/PkoJf5jqPKl+WoI3dNFtWWSeqyip
-         WP4uspMorLNnn32R14VXLe3fwRy+aLUP4YTZEg1dMCnmkc6Ha10i8Z89wZ8O3Qy6pyZ0
-         vxEQ==
-X-Gm-Message-State: AO0yUKV2vU8AEFjMHb3B0dO/c3EMD6i2LogJMUL2KilpckeLlorqct0G
-        IJ1G4h9PcSCdqilzDNa8mUbIFM299ObTyTKG/DI8CyK9WQT0wROJ2ec=
-X-Google-Smtp-Source: AK7set9gpBrpMLVvGQC2SDucMEvxUx3cOcSddFhk/h8urAkE6LiD61jtKdlV6M25oA3yKcWDsAGh8dgHefbjAHSLht0=
-X-Received: by 2002:a81:a807:0:b0:536:4ad1:f71 with SMTP id
- f7-20020a81a807000000b005364ad10f71mr2303020ywh.9.1678978637508; Thu, 16 Mar
- 2023 07:57:17 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1678978634;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dzgtYRuv2N6ox79mROVezmyy+dEWrd7NrYkm4MuwFdo=;
+        b=cF5QGBcg3ZzCLZJ2gMjEaAlR3+tqCtvRvboRIsEluFGTO8wdWuw8ji564xL/nwYGzY
+         bozoPsPFUJXAz5uNDt0SyL5P+KGOqcGy2dfKUORnVsMqu7m1cO+7NbHlOmVcyBiojQ/F
+         JLh2RmxLNljz6Mxci1uOibV06z/osxnH/Qh6hckTK6IC363hl4XrcL4tr/npJWSC4i/d
+         Z96LUfODxcKzCsTpDH9bbsxIFUlguHk2Oo23JOIRwTUVWfNy7+rrek1Xr5yjIfr4v/m7
+         0ZL+kiP+5OfGQ9i3r7PbYGFm7y3cMgTP0UyLuZQEPc3tpKysLb986ltdJgEtOfqqqyPI
+         Oonw==
+X-Gm-Message-State: AO0yUKXHZEqq2FVOm/JiF177sB9wblAHJ2FO6p6Jm3toVwBij68R3gsf
+        fCKStH5sFPymu1MVoZ3G2zRCF17tpg1dWHGh390xP9tiD112BM0Dlpy3EKl0GbayS3FKaqbVqns
+        +N3ZJuksqzrkKzkNWpsK/1E2N
+X-Received: by 2002:a05:600c:27cd:b0:3ed:5a12:5641 with SMTP id l13-20020a05600c27cd00b003ed5a125641mr2118062wmb.36.1678978633923;
+        Thu, 16 Mar 2023 07:57:13 -0700 (PDT)
+X-Google-Smtp-Source: AK7set9Lgxs8uH0JXoZf16zE7x4qcYswa8cWdymlyPBoS/qG+4kXT/DlM+LrT8xXJG6ATIxR0lqOpQ==
+X-Received: by 2002:a05:600c:27cd:b0:3ed:5a12:5641 with SMTP id l13-20020a05600c27cd00b003ed5a125641mr2118044wmb.36.1678978633558;
+        Thu, 16 Mar 2023 07:57:13 -0700 (PDT)
+Received: from ?IPV6:2a09:80c0:192:0:5dac:bf3d:c41:c3e7? ([2a09:80c0:192:0:5dac:bf3d:c41:c3e7])
+        by smtp.gmail.com with ESMTPSA id bg5-20020a05600c3c8500b003e7f1086660sm5529697wmb.15.2023.03.16.07.57.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Mar 2023 07:57:13 -0700 (PDT)
+Message-ID: <83625129-26c9-8885-7367-bb56bc5367f3@redhat.com>
+Date:   Thu, 16 Mar 2023 15:57:12 +0100
 MIME-Version: 1.0
-References: <IA1PR11MB61714FEEAF2C46639891401A89BC9@IA1PR11MB6171.namprd11.prod.outlook.com>
- <2B9F2C1A-B274-41EF-8ABE-1E660521BCE4@joelfernandes.org> <IA1PR11MB6171C7FEE026F421A3CD6A9689BC9@IA1PR11MB6171.namprd11.prod.outlook.com>
-In-Reply-To: <IA1PR11MB6171C7FEE026F421A3CD6A9689BC9@IA1PR11MB6171.namprd11.prod.outlook.com>
-From:   Joel Fernandes <joel@joelfernandes.org>
-Date:   Thu, 16 Mar 2023 10:57:06 -0400
-Message-ID: <CAEXW_YTh18nWTWjLBCRiB2AAH76oD7XrMMMPWZ+9thFSmcPaVg@mail.gmail.com>
-Subject: Re: [PATCH 1/1] rcu/rcuscale: Stop kfree_scale_thread thread(s) after
- unloading rcuscale
-To:     "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>
-Cc:     "paulmck@kernel.org" <paulmck@kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLACK autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] mm/thp: Rename TRANSPARENT_HUGEPAGE_NEVER_DAX to
+ _UNSUPPORTED
+Content-Language: en-US
+To:     Peter Xu <peterx@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
+        Yang Shi <shy828301@gmail.com>
+References: <20230315171642.1244625-1-peterx@redhat.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230315171642.1244625-1-peterx@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 16, 2023 at 9:53=E2=80=AFAM Zhuo, Qiuxu <qiuxu.zhuo@intel.com> =
-wrote:
->
-[...]
-> > >> From: Paul E. McKenney <paulmck@kernel.org> [...]
-> > >>>>
-> > >>>> How about to pull the rcu_scale_cleanup() function after
-> > >> kfree_scale_cleanup().
-> > >>>> This groups kfree_* functions and groups rcu_scale_* functions.
-> > >>>> Then the code would look cleaner.
-> > >>>> So, do you think the changes below are better?
-> > >>>
-> > >>> IMHO, I don't think doing such a code move is better. Just add a ne=
-w
-> > >>> header file and declare the function there. But see what Paul says
-> > >>> first.
-> > >>
-> > >> This situation is likely to be an early hint that the kvfree_rcu()
-> > >> testing should be split out from kernel/rcu/rcuscale.c.
-> > >
-> > > Another is that it's a bit expensive to create a new header file just
-> > > for eliminating a function declaration. ;-)
-> >
-> > What is so expensive about new files? It is a natural organization stru=
-cture.
-> >
-> > > So, if no objections, I'd like to send out the v2 patch with the upda=
-tes below:
-> > >
-> > >   - Move rcu_scale_cleanup() after kfree_scale_cleanup() to eliminate=
- the
-> > >     declaration of kfree_scale_cleanup(). Though this makes the patch=
- bigger,
-> > >     get the file rcuscale.c much cleaner.
-> > >
-> > >   - Remove the unnecessary step "modprobe torture" from the commit
-> > message.
-> > >
-> > >   - Add the description for why move rcu_scale_cleanup() after
-> > >     kfree_scale_cleanup() to the commit message.
-> >
-> > Honestly if you are moving so many lines around, you may as well split =
-it out
-> > into a new module.
-> > The kfree stuff being clubbed in the same file has also been a major
-> > annoyance.
->
-> I'm OK with creating a new kernel module for these kfree stuffs,
-> but do we really need to do that?
+On 15.03.23 18:16, Peter Xu wrote:
+> TRANSPARENT_HUGEPAGE_NEVER_DAX has nothing to do with DAX.  It's set when
+> has_transparent_hugepage() returns false, checked in hugepage_vma_check()
+> and will disable THP completely if false.  Rename it to reflect its real
+> purpose.
+> 
+> Cc: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
+> Cc: Yang Shi <shy828301@gmail.com>
+> Signed-off-by: Peter Xu <peterx@redhat.com>
+> ---
+>   include/linux/huge_mm.h | 2 +-
+>   mm/huge_memory.c        | 4 ++--
+>   2 files changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/include/linux/huge_mm.h b/include/linux/huge_mm.h
+> index 70bd867eba94..9a3a3af2dd80 100644
+> --- a/include/linux/huge_mm.h
+> +++ b/include/linux/huge_mm.h
+> @@ -79,7 +79,7 @@ static inline vm_fault_t vmf_insert_pfn_pud(struct vm_fault *vmf, pfn_t pfn,
+>   }
+>   
+>   enum transparent_hugepage_flag {
+> -	TRANSPARENT_HUGEPAGE_NEVER_DAX,
+> +	TRANSPARENT_HUGEPAGE_UNSUPPORTED,
+>   	TRANSPARENT_HUGEPAGE_FLAG,
+>   	TRANSPARENT_HUGEPAGE_REQ_MADV_FLAG,
+>   	TRANSPARENT_HUGEPAGE_DEFRAG_DIRECT_FLAG,
+> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+> index b0ab247939e0..913e7dc32869 100644
+> --- a/mm/huge_memory.c
+> +++ b/mm/huge_memory.c
+> @@ -88,7 +88,7 @@ bool hugepage_vma_check(struct vm_area_struct *vma, unsigned long vm_flags,
+>   	/*
+>   	 * If the hardware/firmware marked hugepage support disabled.
+>   	 */
+> -	if (transparent_hugepage_flags & (1 << TRANSPARENT_HUGEPAGE_NEVER_DAX))
+> +	if (transparent_hugepage_flags & (1 << TRANSPARENT_HUGEPAGE_UNSUPPORTED))
+>   		return false;
+>   
+>   	/* khugepaged doesn't collapse DAX vma, but page fault is fine. */
+> @@ -464,7 +464,7 @@ static int __init hugepage_init(void)
+>   		 * Hardware doesn't support hugepages, hence disable
+>   		 * DAX PMD support.
 
-If it were me doing this, I would try to split it just because in the
-long term I may have to maintain or deal with it.
 
-I was also thinking a new scale directory _may_ make sense for
-performance tests.
+We should also fixup that comment then, no?
 
-kernel/rcu/scaletests/kfree.c
-kernel/rcu/scaletests/core.c
-kernel/rcu/scaletests/ref.c
+Acked-by: David Hildenbrand <david@redhat.com>
 
-Or something like that.
+-- 
+Thanks,
 
-and then maybe putt common code into: kernel/rcu/scaletests/common.c
+David / dhildenb
 
- - Joel
-
->
-> @paulmck, what's your suggestion for the next step?
->
-> >  - Joel
-> >
-> >
-> > > Thanks!
-> > > -Qiuxu
-> > >
-> > >> [...]
