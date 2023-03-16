@@ -2,133 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DAAC6BD0D5
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 14:28:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F81B6BD0D4
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 14:28:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230338AbjCPN2w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 09:28:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50360 "EHLO
+        id S230314AbjCPN2l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 09:28:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230332AbjCPN2r (ORCPT
+        with ESMTP id S230260AbjCPN2i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 09:28:47 -0400
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03D4B6F48F
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 06:28:43 -0700 (PDT)
-Received: by mail-qt1-x836.google.com with SMTP id r5so1636128qtp.4
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 06:28:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google; t=1678973323;
-        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
-         :from:content-transfer-encoding:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mq05T+mqYchdO6eVgaCmPyYAruAZx/QKv/nYoCC7GvE=;
-        b=gtIvtqKZjbnizmS8t3q0lgTHjhzQuSiektGAU7yoNCrCEGjyt74+35bI9cf/AouYOg
-         i9q2/s2WPzwpd10R0HLiYLs9GXw2M8MNKrIspd2LMnciGoj/JjZAgoWmSVO2GCZIwR4N
-         whaHxtw3NlKu4M3za5UQkxHLEkj1CzxdB+Yrc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678973323;
-        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
-         :from:content-transfer-encoding:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mq05T+mqYchdO6eVgaCmPyYAruAZx/QKv/nYoCC7GvE=;
-        b=jhh4ICQzB6G75Pap/YblzhPjIoN87bP8HssFoSfx93ezo7nTcoLh6IE+cUSwjwik+7
-         zuA2GKfHLZOJ7DTrmPlPoPGnOCqPqen+pteUrgbeu0Xk4P6bvFGfSmbp6hnGAVTgqWZO
-         WBghdO1qOyPyviWE0IAas9S+uqMZNmNWaPC90DzWzh6eFsmahCTAx84qthOJRZBogK5x
-         zWFn8BFegZ/AZ+/cJlyEZGyP+yDvPCNNLeXfDW2RGvTSj3MGmWDQL0J6qoDvZGC9cDC9
-         zgVMVpHtNkQNZnxJpTBYejn/36+HL4b05sVNo1QJuTTNqtQqtKkUV99bKhmn7NO+UsEI
-         4oeg==
-X-Gm-Message-State: AO0yUKWBuJ6fN34leYr8vkqKbWbRbyT5letpcB5UGyCLKFP8HLZt8YVm
-        +aGlETMZunM1mzRfr5XaCwmgtExkGhUjvpHHmZg=
-X-Google-Smtp-Source: AK7set8shGyWYizyY6RNgWTdQAw4vWEX0VNS0sxE9of5pEe8x9LdR1zyuafDT2JKIuNlsh1wANUj6g==
-X-Received: by 2002:a05:622a:14cb:b0:3d5:1fc6:587b with SMTP id u11-20020a05622a14cb00b003d51fc6587bmr6471346qtx.18.1678973322822;
-        Thu, 16 Mar 2023 06:28:42 -0700 (PDT)
-Received: from smtpclient.apple ([2600:1003:b840:cfc9:d51f:7877:7172:21f6])
-        by smtp.gmail.com with ESMTPSA id de21-20020a05620a371500b007422fd3009esm5994590qkb.20.2023.03.16.06.28.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Mar 2023 06:28:42 -0700 (PDT)
+        Thu, 16 Mar 2023 09:28:38 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6CF35FDE;
+        Thu, 16 Mar 2023 06:28:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678973317; x=1710509317;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=UztYh2WnICxCRygj0nifIN2s9JGrwBz2pdL6lKlal9Q=;
+  b=h5Q8As6cZZx0DNM7R9LmqCvbkv4K7mWKVCREuzPs0/ZIXV1e8uvCQPJt
+   47R5gnpO1pF300nVZinGKY3dG8o1ZoyXz7jIupRiaUQAGLhKqx1dyu1zp
+   o//gN8K9GeR5kplcTKMluVGlxytpZF1mrELPDHTQOgejFOR1EvSzIdZrV
+   KnFHGHLuAh8FcmO/4h3N0YSwlDZqfreI85ZXTcMmB+jw/E4oyezYf3V8q
+   b+wGLgCuZf+aodSLZPQGDZb1TGfWki0FNHtcgdKL7ZqsnInoqB6xlQTNV
+   65qOswNvKy1gue8o67DneCRw370Jr7+woNOnj3OYvjlvyigm7fOREeJ2q
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10650"; a="365676918"
+X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
+   d="scan'208";a="365676918"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 06:28:37 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="823247493"
+X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
+   d="scan'208";a="823247493"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga001.fm.intel.com with ESMTP; 16 Mar 2023 06:28:35 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pcnek-004TNd-0H;
+        Thu, 16 Mar 2023 15:28:34 +0200
+Date:   Thu, 16 Mar 2023 15:28:33 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>
+Subject: Re: [PATCH v1 1/1] regulator: s5m8767: Replace of_gpio.h with what
+ indeed is used
+Message-ID: <ZBMZgSb0FXt7OIJz@smile.fi.intel.com>
+References: <20230316120113.86421-1-andriy.shevchenko@linux.intel.com>
+ <306b94ce-1f45-43a2-ad27-567fa5c235ce@sirena.org.uk>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-From:   Joel Fernandes <joel@joelfernandes.org>
-Mime-Version: 1.0 (1.0)
-Subject: Re: [PATCH 1/1] rcu/rcuscale: Stop kfree_scale_thread thread(s) after unloading rcuscale
-Date:   Thu, 16 Mar 2023 09:28:31 -0400
-Message-Id: <2B9F2C1A-B274-41EF-8ABE-1E660521BCE4@joelfernandes.org>
-References: <IA1PR11MB61714FEEAF2C46639891401A89BC9@IA1PR11MB6171.namprd11.prod.outlook.com>
-Cc:     paulmck@kernel.org, Frederic Weisbecker <frederic@kernel.org>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <IA1PR11MB61714FEEAF2C46639891401A89BC9@IA1PR11MB6171.namprd11.prod.outlook.com>
-To:     "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>
-X-Mailer: iPhone Mail (20B101)
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MIME_QP_LONG_LINE,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLACK autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <306b94ce-1f45-43a2-ad27-567fa5c235ce@sirena.org.uk>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Mar 16, 2023 at 01:10:46PM +0000, Mark Brown wrote:
+> On Thu, Mar 16, 2023 at 02:01:13PM +0200, Andy Shevchenko wrote:
+> > of_gpio.h in this driver is solely used as a proxy to other headers.
+> > This is incorrect usage of the of_gpio.h. Replace it .h with what
+> > indeed is used in the code.
+> 
+> This breaks an x86 allmodconfig build:
+> 
+> /build/stage/linux/drivers/regulator/s5m8767.c: In function ‘s5m8767_pmic_dt_parse_dvs_gpio’:
+> /build/stage/linux/drivers/regulator/s5m8767.c:492:24: error: implicit declaration of function ‘of_get_named_gpio’ [-Werror=implicit-function-declaration]
+>   492 |                 gpio = of_get_named_gpio(pmic_np,
+>       |                        ^~~~~~~~~~~~~~~~~
+> cc1: all warnings being treated as errors
 
-> On Mar 16, 2023, at 9:17 AM, Zhuo, Qiuxu <qiuxu.zhuo@intel.com> wrote:
->=20
-> =EF=BB=BF
->>=20
->> From: Paul E. McKenney <paulmck@kernel.org>
->> [...]
->>>>=20
->>>> How about to pull the rcu_scale_cleanup() function after
->> kfree_scale_cleanup().
->>>> This groups kfree_* functions and groups rcu_scale_* functions.
->>>> Then the code would look cleaner.
->>>> So, do you think the changes below are better?
->>>=20
->>> IMHO, I don't think doing such a code move is better. Just add a new
->>> header file and declare the function there. But see what Paul says
->>> first.
->>=20
->> This situation is likely to be an early hint that the kvfree_rcu() testin=
-g should
->> be split out from kernel/rcu/rcuscale.c.
->=20
-> Another is that it's a bit expensive to create a new header file just for=20=
+Oh, sorry for that. I missed something.
+Please, ignore this one, it should be different one.
 
-> eliminating a function declaration. ;-)
-
-What is so expensive about new files? It is a natural organization structure=
-.
-
-> So, if no objections, I'd like to send out the v2 patch with the updates b=
-elow:
->=20
->   - Move rcu_scale_cleanup() after kfree_scale_cleanup() to eliminate the
->     declaration of kfree_scale_cleanup(). Though this makes the patch bigg=
-er,=20
->     get the file rcuscale.c much cleaner.
->=20
->   - Remove the unnecessary step "modprobe torture" from the commit message=
-.
->=20
->   - Add the description for why move rcu_scale_cleanup() after
->     kfree_scale_cleanup() to the commit message.
-
-Honestly if you are moving so many lines around, you may as well split it ou=
-t into a new module.
-
-The kfree stuff being clubbed in the same file has also been a major annoyan=
-ce.
-
- - Joel=20
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
-> Thanks!
-> -Qiuxu
->=20
->> [...]
