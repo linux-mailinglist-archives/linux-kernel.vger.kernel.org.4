@@ -2,57 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7096A6BC992
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 09:45:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 149056BC999
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 09:45:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230474AbjCPIpI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 04:45:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36312 "EHLO
+        id S230523AbjCPIpx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 04:45:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230460AbjCPIpE (ORCPT
+        with ESMTP id S230410AbjCPIpv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 04:45:04 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4DFF7D09A;
-        Thu, 16 Mar 2023 01:44:59 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 68693660309D;
-        Thu, 16 Mar 2023 08:44:57 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1678956297;
-        bh=mBF272Uv22RD+C2JSIo/V6wQ2xTMSJyHuJQJDxdUJzc=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=f7flbqQBE9G9uumXYQRgci8KZQqZU6MrjKG2KPRb+fg59r0zjrylsv823wlDdKNvI
-         iDJ58VV25/+9JpQ6KVmViHZ8ZLoyM8a31oantlSNzqHD7wQx8dxiA0xlj3jmqs5dfG
-         nU8TJAJ+S7n1RyySAfA6pqf2/9LgxwOBdCHHzWfIdMCmunD4/HSulF8Jwr+imVXRdJ
-         e/N474YFsBS6yilSUvXqHVt+m6flIaiDnkhea51PApoWeg2Ix5h0PsWsAIDLMH0BlG
-         +pIb+EzxGNRt3mUcUcMt+ucLGGbRtHIRBRdIt95+Eq4SbMZZjphsuPgHci1KncN819
-         DtI3ScwVipU5Q==
-Message-ID: <7d3f2789-2282-9d6e-87b0-d1effe2be7fa@collabora.com>
-Date:   Thu, 16 Mar 2023 09:44:54 +0100
+        Thu, 16 Mar 2023 04:45:51 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBB875C9D5;
+        Thu, 16 Mar 2023 01:45:49 -0700 (PDT)
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32G8ag0k007160;
+        Thu, 16 Mar 2023 09:45:37 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=+VvmrXu/ffvFh3TQJ7KSmvkzPKsp4yTuF1jOM7wniec=;
+ b=JSdlal0NCcbDLkw7dfUkNrpQxEAhVQ6p3/G4VXRssSgDWkLIr46kcX9eRn3J8HPZeOs2
+ 0F1fw3LlEEQH2t99PBVI7iEIV3rUPdO0dJsMpOU5iT9I3xZqgdDw1ZYDfYqdWgqvGi/W
+ /U/6YCaCKjytO5ypOX01/8+nXb4M141V9ljH25E1xLfd/icOK6fO05YnNEL/CVwomoH6
+ iEv/Dvh7Kgi8XyvT72jKmXYdAmYXo7Ky6XpMXuzahiDSVAvVE3HS7WXJroofek3iH6UJ
+ Sg0ceqpON7qS2e+HKVB5lQF6iJMUcxTIY2y8DhNZg8LB5hsCp0ru9BoGXPVziUSHeKqB bQ== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3pbpwq2rf2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 16 Mar 2023 09:45:37 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id B3F2610002A;
+        Thu, 16 Mar 2023 09:45:36 +0100 (CET)
+Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id A8C2E2105A5;
+        Thu, 16 Mar 2023 09:45:36 +0100 (CET)
+Received: from [10.48.1.102] (10.48.1.102) by SHFDAG1NODE2.st.com
+ (10.75.129.70) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.17; Thu, 16 Mar
+ 2023 09:45:35 +0100
+Message-ID: <0473d8b1-aa99-2458-7993-4320f1178e5b@foss.st.com>
+Date:   Thu, 16 Mar 2023 09:45:35 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-Subject: Re: [PATCH -next] remoteproc/mtk_scp: Fix one kernel-doc comment
+Subject: Re: [PATCH] usb: dwc2: fix a devres leak in hw_enable upon suspend
+ resume
 Content-Language: en-US
-To:     Yang Li <yang.lee@linux.alibaba.com>, andersson@kernel.org
-Cc:     mathieu.poirier@linaro.org, matthias.bgg@gmail.com,
-        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Abaci Robot <abaci@linux.alibaba.com>
-References: <20230316084011.99613-1-yang.lee@linux.alibaba.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230316084011.99613-1-yang.lee@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     <hminas@synopsys.com>, <gregkh@linuxfoundation.org>,
+        <maz@kernel.org>, <m.szyprowski@samsung.com>
+CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <amelie.delaunay@foss.st.com>, <alexandre.torgue@foss.st.com>
+References: <20230315163246.3848102-1-fabrice.gasnier@foss.st.com>
+From:   Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+In-Reply-To: <20230315163246.3848102-1-fabrice.gasnier@foss.st.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+X-Originating-IP: [10.48.1.102]
+X-ClientProxiedBy: EQNCAS1NODE4.st.com (10.75.129.82) To SHFDAG1NODE2.st.com
+ (10.75.129.70)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-16_06,2023-03-15_01,2023-02-09_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,16 +74,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 16/03/23 09:40, Yang Li ha scritto:
-> Fixs the function name in kernel-doc comments to clear the below
-> warning:
+On 3/15/23 17:32, Fabrice Gasnier wrote:
+> Each time the platform goes to low power, PM suspend / resume routines
+> call: __dwc2_lowlevel_hw_enable -> devm_add_action_or_reset().
+> This adds a new devres each time.
+> This may also happen at runtime, as dwc2_lowlevel_hw_enable() can be
+> called from udc_start().
 > 
-> drivers/remoteproc/mtk_scp_ipi.c:136: warning: expecting prototype for scp_ipi_lock(). Prototype was for scp_ipi_unlock() instead
+> This can be seen with tracing:
+> - echo 1 > /sys/kernel/debug/tracing/events/dev/devres_log/enable
+> - go to low power
+> - cat /sys/kernel/debug/tracing/trace
 > 
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=4544
-> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+> A new "ADD" entry is found upon each low power cycle:
+> ... devres_log: 49000000.usb-otg ADD 82a13bba devm_action_release (8 bytes)
+> ... devres_log: 49000000.usb-otg ADD 49889daf devm_action_release (8 bytes)
+> ...
+> 
+> A second issue is addressed here:
+> - regulator_bulk_enable() is called upon each PM cycle (suspend/resume).
+> - regulator_bulk_disable() never gets called.
+> 
+> So the reference count for these regulators constantly increase, by one
+> upon each low power cycle, due to missing regulator_bulk_disable() call
+> in __dwc2_lowlevel_hw_disable().
+> 
+> The original fix that introduced the devm_add_action_or_reset() call,
+> fixed an issue during probe, that happens due to other errors in
+> dwc2_driver_probe() -> dwc2_core_reset(). Then the probe fails without
+> disabling regulators, when dr_mode == USB_DR_MODE_PERIPHERAL.
+> 
+> Rather fix the error path: disable all the low level hardware in the
+> error path, by using the "hsotg->ll_hw_enabled" flag. Checking dr_mode
+> has been introduced to avoid a dual call to dwc2_lowlevel_hw_disable().
+> "ll_hw_enabled" should achieve the same (and is used currently in the
+> remove() routine).
+> 
+> Fixes: 54c196060510 ("usb: dwc2: Always disable regulators on driver teardown")
+> Fixes: 33a06f1300a7 ("usb: dwc2: Fix error path in gadget registration")
+> Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+---
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Hi all,
 
+Please ignore this patch, I just sent a V2 to replace it.
 
+Best Regards,
+Fabrice
