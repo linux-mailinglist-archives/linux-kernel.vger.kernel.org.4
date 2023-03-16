@@ -2,133 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C8FF6BD5AE
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 17:32:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E516C6BD5BA
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 17:33:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230317AbjCPQcv convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 16 Mar 2023 12:32:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39146 "EHLO
+        id S230168AbjCPQdU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 12:33:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230296AbjCPQcn (ORCPT
+        with ESMTP id S230380AbjCPQdG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 12:32:43 -0400
-Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25759E4851;
-        Thu, 16 Mar 2023 09:32:34 -0700 (PDT)
-Received: by mail-qt1-f169.google.com with SMTP id ek9so2332462qtb.10;
-        Thu, 16 Mar 2023 09:32:34 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678984353;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jgcdy0Q2UM92NkuqSo6yI/I4/kIvBnyOPq4TXfCrfno=;
-        b=Qa3hJdzBoR4QYJJtno3arPI+S2Wxh7Rd3C9o56ANs28yusuvEn9MEmEZ4OSvf7DzWa
-         neURxvse8Q39uYWulzDgoR516t4rUy8ftB6dv1+CyBhv4B5BAMAJcCASg1Pw6Btv6R3u
-         gdUxLTiYYEuo38I5hfJ+T9mt4JF/hysmbyLDPsx97snV5sshkMf8eV7UbWNGO5C7IBPD
-         +8EIEklTsIkjtaqZ+gAivxR1kswqjctunECJR8wuNTY7pJ0VgT6Moti7b/3C2+PTyQA2
-         MCmkw4pxehMI/kOr1U+Ez5ezjAFqh7L6Ap1dPQzss+gqfr1hf4IBHPWgGoqgHtolqsj7
-         earg==
-X-Gm-Message-State: AO0yUKW7aF2lckk8JDldII+cM5isEnhwkoE7hROcSYhtrl1WPPUCyP6G
-        Pf8eizgw2RWKEBKs99XLJ4Ue+fW3CfV1pQ==
-X-Google-Smtp-Source: AK7set9Wv4ugIhggJpuKBizqjeJ5SkN0g1xYAveDgtt8SHTljENN7L1ucVv5pH/VzAMbRrlvsI7XYA==
-X-Received: by 2002:a05:622a:188c:b0:3bf:e2ff:4c2f with SMTP id v12-20020a05622a188c00b003bfe2ff4c2fmr7452986qtc.51.1678984353008;
-        Thu, 16 Mar 2023 09:32:33 -0700 (PDT)
-Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com. [209.85.128.173])
-        by smtp.gmail.com with ESMTPSA id 15-20020a05620a040f00b00745eb9f6e47sm4336978qkp.56.2023.03.16.09.32.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Mar 2023 09:32:32 -0700 (PDT)
-Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-53d277c1834so42139007b3.10;
-        Thu, 16 Mar 2023 09:32:32 -0700 (PDT)
-X-Received: by 2002:a81:ae5e:0:b0:541:a17f:c779 with SMTP id
- g30-20020a81ae5e000000b00541a17fc779mr2625005ywk.4.1678984352328; Thu, 16 Mar
- 2023 09:32:32 -0700 (PDT)
+        Thu, 16 Mar 2023 12:33:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67D89E4854;
+        Thu, 16 Mar 2023 09:32:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 58858620AC;
+        Thu, 16 Mar 2023 16:32:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DA0BC433EF;
+        Thu, 16 Mar 2023 16:32:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678984375;
+        bh=KASXsKcwhzOFvQl9CRD+V3oEgR7AUj1FxHxAfxlkrZg=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=qWuYFCfGRMPu9KpDKCDNT5mCuM0ko1ZWOVw4T1Au/VSJnDq1K0meLakoJOkZCb5b0
+         agd3SlwXhDQJGB/VL19d+wiFOfm4CzwHN5DPeiDHeM/Oos67e1GoWpYUxVNejNxNw9
+         EzUQ0UiE/4ZOtbVur0rDetzH0gOQuOk2YA6+gbZ86lk5mUZvML7qlKohQhqivT2WIN
+         Ak6uiAV318FWVOSSZpRfI7v134fVpBA9s5aGHbrjkc0zcH0CwTV0qpSovZQ+VH0xwv
+         0Ztar2IugFDz8xJD/9dQVOV+M9rDrNlSSIGW2s2T/65RCUJgjNVA0++B7bAG+1JeYN
+         s7kbSZ7bC+Nrg==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Duc Anh Le <lub.the.studio@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, lgirdwood@gmail.com,
+        perex@perex.cz, tiwai@suse.com, mario.limonciello@amd.com,
+        Syed.SabaKareem@amd.com, aniol@aniolmarti.cat, fengwk94@gmail.com,
+        dukzcry@ya.ru, xazrael@hotmail.com, alsa-devel@alsa-project.org
+Subject: [PATCH AUTOSEL 6.2 4/7] ASoC: amd: yc: Add DMI entries to support HP OMEN 16-n0xxx (8A43)
+Date:   Thu, 16 Mar 2023 12:32:21 -0400
+Message-Id: <20230316163227.708614-4-sashal@kernel.org>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230316163227.708614-1-sashal@kernel.org>
+References: <20230316163227.708614-1-sashal@kernel.org>
 MIME-Version: 1.0
-References: <20230315051444.3229621-1-willy@infradead.org> <20230315051444.3229621-15-willy@infradead.org>
- <CAMuHMdULvhry_pGap0J0FLH8TMXG1smanQjUNzPoyKsWh1FZBQ@mail.gmail.com>
-In-Reply-To: <CAMuHMdULvhry_pGap0J0FLH8TMXG1smanQjUNzPoyKsWh1FZBQ@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 16 Mar 2023 17:32:21 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdX__7r=ZcJtTAOZeYkzc7Ls+M+n3vuSY1=_HVCf5Y_twA@mail.gmail.com>
-Message-ID: <CAMuHMdX__7r=ZcJtTAOZeYkzc7Ls+M+n3vuSY1=_HVCf5Y_twA@mail.gmail.com>
-Subject: Re: [PATCH v4 14/36] m68k: Implement the new page table range API
-To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Cc:     linux-arch@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 15, 2023 at 8:43 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> On Wed, Mar 15, 2023 at 6:14 AM Matthew Wilcox (Oracle)
-> <willy@infradead.org> wrote:
-> > Add PFN_PTE_SHIFT, update_mmu_cache_range(), flush_icache_pages() and
-> > flush_dcache_folio().
-> >
-> > Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
->
-> Thanks for your patch!
->
-> > --- a/arch/m68k/include/asm/cacheflush_mm.h
-> > +++ b/arch/m68k/include/asm/cacheflush_mm.h
-> > @@ -220,24 +220,29 @@ static inline void flush_cache_page(struct vm_area_struct *vma, unsigned long vm
-> >
-> >  /* Push the page at kernel virtual address and clear the icache */
-> >  /* RZ: use cpush %bc instead of cpush %dc, cinv %ic */
-> > -static inline void __flush_page_to_ram(void *vaddr)
-> > +static inline void __flush_pages_to_ram(void *vaddr, unsigned int nr)
-> >  {
-> >         if (CPU_IS_COLDFIRE) {
-> >                 unsigned long addr, start, end;
-> >                 addr = ((unsigned long) vaddr) & ~(PAGE_SIZE - 1);
-> >                 start = addr & ICACHE_SET_MASK;
-> > -               end = (addr + PAGE_SIZE - 1) & ICACHE_SET_MASK;
-> > +               end = (addr + nr * PAGE_SIZE - 1) & ICACHE_SET_MASK;
-> >                 if (start > end) {
-> >                         flush_cf_bcache(0, end);
-> >                         end = ICACHE_MAX_ADDR;
-> >                 }
-> >                 flush_cf_bcache(start, end);
-> >         } else if (CPU_IS_040_OR_060) {
-> > -               __asm__ __volatile__("nop\n\t"
-> > -                                    ".chip 68040\n\t"
-> > -                                    "cpushp %%bc,(%0)\n\t"
-> > -                                    ".chip 68k"
-> > -                                    : : "a" (__pa(vaddr)));
-> > +               unsigned long paddr = __pa(vaddr);
-> > +
-> > +               do {
-> > +                       __asm__ __volatile__("nop\n\t"
-> > +                                            ".chip 68040\n\t"
-> > +                                            "cpushp %%bc,(%0)\n\t"
-> > +                                            ".chip 68k"
-> > +                                            : : "a" (paddr));
-> > +                       paddr += PAGE_SIZE;
-> > +               } while (--nr);
->
-> Please use "while (nr--) { ... }", to protect against anyone ever
-> calling this with nr == 0.
->
-> The rest LGTM, I'll give it a try shortly...
+From: Duc Anh Le <lub.the.studio@gmail.com>
 
-Still working fine on ARAnyM, so
-Tested-by: Geert Uytterhoeven <geert@linux-m68k.org>
+[ Upstream commit d52279d5c9204a041e9ba02a66a353573b2f96e4 ]
 
-Gr{oetje,eeting}s,
+This model requires an additional detection quirk to enable the internal microphone.
 
-                        Geert
+Signed-off-by: Duc Anh Le <lub.the.studio@gmail.com>
+Link: https://lore.kernel.org/r/20230227234921.7784-1-lub.the.studio@gmail.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ sound/soc/amd/yc/acp6x-mach.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
+diff --git a/sound/soc/amd/yc/acp6x-mach.c b/sound/soc/amd/yc/acp6x-mach.c
+index 4e681e9c08fe5..4a69ce702360c 100644
+--- a/sound/soc/amd/yc/acp6x-mach.c
++++ b/sound/soc/amd/yc/acp6x-mach.c
+@@ -262,6 +262,13 @@ static const struct dmi_system_id yc_acp_quirk_table[] = {
+ 			DMI_MATCH(DMI_PRODUCT_NAME, "OMEN by HP Gaming Laptop 16z-n000"),
+ 		}
+ 	},
++	{
++		.driver_data = &acp6x_card,
++		.matches = {
++			DMI_MATCH(DMI_BOARD_VENDOR, "HP"),
++			DMI_MATCH(DMI_BOARD_NAME, "8A43"),
++		}
++	},
+ 	{}
+ };
+ 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+2.39.2
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
