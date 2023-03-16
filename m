@@ -2,78 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F3666BD36A
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 16:25:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 301966BD374
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 16:27:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231132AbjCPPZ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 11:25:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57382 "EHLO
+        id S231263AbjCPP1R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 11:27:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229790AbjCPPZy (ORCPT
+        with ESMTP id S230147AbjCPP1P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 11:25:54 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59BC310D7;
-        Thu, 16 Mar 2023 08:25:53 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id d10so1128629pgt.12;
-        Thu, 16 Mar 2023 08:25:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678980353;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=z0idJoJp2w2wIfFTVWZdFY6UxngZNa7XXOBWQnR6Nfc=;
-        b=ALcZNjLSW6SKO4Rn4OiKb3x1iJbhy0pBsSvLP4ueXcqR+kSAmdYu9Hbnn7mx65CcVD
-         dk2UwrPAe7z6TqzzltYxW6X0etOuzQwlXoGBMp+Oqrj8Fqx3b/jyJAm0WVdf+oQsAvrm
-         aSOwtK5SmQga07Q3rROsYzQJ3TqDXvVkypsJPGoXpDuGaDsUFzMmkjWR0CJL5Y+HwIif
-         /1ewCCYjBAXKhaf7HKUY/DfIj8LCAEyQ2xEQODNjVR2dX1PjGRLOquZHiQ3M6Dcp9AFg
-         jwvRcS0QFlkibo59ZEoZS/RDoki/hpclXQOX+y4nhAtixMJxBmsFyl961Lwoxk0QO4Kr
-         JfAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678980353;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=z0idJoJp2w2wIfFTVWZdFY6UxngZNa7XXOBWQnR6Nfc=;
-        b=HpXhBIXClQp4wG5RKcBOW2+dfwg1qINp5pzzu6Lca/Ll+hVvdMM167ikngxUhHrZqS
-         TGcWhy8I+pVL4ByuT9jl1rmnD5QkLgcZUpZK07tCxTDbFLck3jvkl5Wzk3bhGaOTcH/Q
-         upUgA5EO6f18A0iOnGzpaMsFmavKW7DTY2gvkIvCX4oB9BL+aHzUdYeI8WH71PB1VzSX
-         0o5eWu2OrzPPZWCWCBYUN0a5ifrLq+vnx9wklhNiS4RBrscp70Bvy3Jf9si3Nj+O71m/
-         E9f3u9nFaOonMdZMhpsi8VAqUdwQqWcLEb2eODhZRw0oTftQYIRUGRDbIfHhUdZKd16p
-         6Q4g==
-X-Gm-Message-State: AO0yUKV1DDhhDOzTJXUEJZX1YVFiWpQju6byr7RXuurgFGP1rd6sZdmy
-        valTUQy7FQXGYZ2rpiRWKuZMK48sKl3nuvJ9Sy4=
-X-Google-Smtp-Source: AK7set+waXn+onvuWowCzAPU6KKu/o8UV7RfT+/eZlRBRBZw9yyGPaCFGM3qrZCq7RKIs2MYTJzvA6+D2xRNf+ka730=
-X-Received: by 2002:a05:6a00:1506:b0:625:ce0d:e69b with SMTP id
- q6-20020a056a00150600b00625ce0de69bmr1743171pfu.5.1678980352661; Thu, 16 Mar
- 2023 08:25:52 -0700 (PDT)
+        Thu, 16 Mar 2023 11:27:15 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A79C038B6D
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 08:26:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678980388;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=d661vx9npfWLSp9px0j06PlyK1m4PN240sa+uKnXwQU=;
+        b=g0Vt3efysA4JHLTroNnlkNMKS8FT0AMNcxqK8czfiSRYJJyZ/5qCrKP8SKdxSprjDdxXwM
+        46gqWnmiZROi2+j96j1asp6g3QTEArbEozTXi5I/676RsI3gDZrTsZcH/yCS9AziXqgkA4
+        Dv9PUCFGQraH6QT8qPHnnrRVia4jDtc=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-411-np5JX8eSNR-Ww7mS7-96oA-1; Thu, 16 Mar 2023 11:26:24 -0400
+X-MC-Unique: np5JX8eSNR-Ww7mS7-96oA-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8705838149BF;
+        Thu, 16 Mar 2023 15:26:23 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.18])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 962C92166B26;
+        Thu, 16 Mar 2023 15:26:21 +0000 (UTC)
+From:   David Howells <dhowells@redhat.com>
+To:     Matthew Wilcox <willy@infradead.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     David Howells <dhowells@redhat.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, Jeff Layton <jlayton@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        netdev@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: [RFC PATCH 00/28] splice, net: Replace sendpage with sendmsg(MSG_SPLICE_PAGES)
+Date:   Thu, 16 Mar 2023 15:25:50 +0000
+Message-Id: <20230316152618.711970-1-dhowells@redhat.com>
 MIME-Version: 1.0
-References: <aa9567fd-38e1-7b9c-b3e1-dc2fdc055da5@molgen.mpg.de>
- <55e30408-ac63-965f-769f-18be5fd5885c@molgen.mpg.de> <d95aa962-9750-c27c-639a-2362bdb32f41@cloud.ionos.com>
- <30576384-682c-c021-ff16-bebed8251365@molgen.mpg.de> <cdc0b03c-db53-35bc-2f75-93bbca0363b5@molgen.mpg.de>
- <bc342de0-98d2-1733-39cd-cc1999777ff3@molgen.mpg.de> <c3390ab0-d038-f1c3-5544-67ae9c8408b1@cloud.ionos.com>
- <a27c5a64-62bf-592c-e547-1e8e904e3c97@molgen.mpg.de> <6c7008df-942e-13b1-2e70-a058e96ab0e9@cloud.ionos.com>
- <12f09162-c92f-8fbb-8382-cba6188bfb29@molgen.mpg.de> <6757d55d-ada8-9b7e-b7fd-2071fe905466@cloud.ionos.com>
- <93d8d623-8aec-ad91-490c-a414c4926fb2@molgen.mpg.de> <0bb7c8d8-6b96-ce70-c5ee-ba414de10561@cloud.ionos.com>
- <e271e183-20e9-8ca2-83eb-225d4d7ab5db@molgen.mpg.de> <1cdfceb6-f39b-70e1-3018-ea14dbe257d9@cloud.ionos.com>
- <7733de01-d1b0-e56f-db6a-137a752f7236@molgen.mpg.de> <d92922af-f411-fc53-219f-154de855cd13@cloud.ionos.com>
- <CAH6h+hf7Y-kurBJG+pnH6WCQiaEK+Jq3KG5JOGnHJ4Uw6AbUjg@mail.gmail.com>
- <2af18cf7-05eb-f1d1-616a-2c5894d1ac43@linux.dev> <CAH6h+hc8VdpaS2q4ya_ZfqVxWFRsKVCjN-sv73SfeyGomXvjRQ@mail.gmail.com>
-In-Reply-To: <CAH6h+hc8VdpaS2q4ya_ZfqVxWFRsKVCjN-sv73SfeyGomXvjRQ@mail.gmail.com>
-From:   Marc Smith <msmith626@gmail.com>
-Date:   Thu, 16 Mar 2023 11:25:41 -0400
-Message-ID: <CAH6h+hcWfXNpC1Mro3zfzQc8tK142vuaOMELLJL7mg_G+o0fXw@mail.gmail.com>
-Subject: Re: md_raid: mdX_raid6 looping after sync_action "check" to "idle" transition
-To:     Guoqing Jiang <guoqing.jiang@linux.dev>
-Cc:     Donald Buczek <buczek@molgen.mpg.de>, Song Liu <song@kernel.org>,
-        linux-raid@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        it+raid@molgen.mpg.de
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,83 +67,225 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 14, 2023 at 10:45=E2=80=AFAM Marc Smith <msmith626@gmail.com> w=
-rote:
->
-> On Tue, Mar 14, 2023 at 9:55=E2=80=AFAM Guoqing Jiang <guoqing.jiang@linu=
-x.dev> wrote:
-> >
-> >
-> >
-> > On 3/14/23 21:25, Marc Smith wrote:
-> > > On Mon, Feb 8, 2021 at 7:49=E2=80=AFPM Guoqing Jiang
-> > > <guoqing.jiang@cloud.ionos.com> wrote:
-> > >> Hi Donald,
-> > >>
-> > >> On 2/8/21 19:41, Donald Buczek wrote:
-> > >>> Dear Guoqing,
-> > >>>
-> > >>> On 08.02.21 15:53, Guoqing Jiang wrote:
-> > >>>>
-> > >>>> On 2/8/21 12:38, Donald Buczek wrote:
-> > >>>>>> 5. maybe don't hold reconfig_mutex when try to unregister
-> > >>>>>> sync_thread, like this.
-> > >>>>>>
-> > >>>>>>           /* resync has finished, collect result */
-> > >>>>>>           mddev_unlock(mddev);
-> > >>>>>>           md_unregister_thread(&mddev->sync_thread);
-> > >>>>>>           mddev_lock(mddev);
-> > >>>>> As above: While we wait for the sync thread to terminate, wouldn'=
-t it
-> > >>>>> be a problem, if another user space operation takes the mutex?
-> > >>>> I don't think other places can be blocked while hold mutex, otherw=
-ise
-> > >>>> these places can cause potential deadlock. Please try above two li=
-nes
-> > >>>> change. And perhaps others have better idea.
-> > >>> Yes, this works. No deadlock after >11000 seconds,
-> > >>>
-> > >>> (Time till deadlock from previous runs/seconds: 1723, 37, 434, 1265=
-,
-> > >>> 3500, 1136, 109, 1892, 1060, 664, 84, 315, 12, 820 )
-> > >> Great. I will send a formal patch with your reported-by and tested-b=
-y.
-> > >>
-> > >> Thanks,
-> > >> Guoqing
-> > > I'm still hitting this issue with Linux 5.4.229 -- it looks like 1/2
-> > > of the patches that supposedly resolve this were applied to the stabl=
-e
-> > > kernels, however, one was omitted due to a regression:
-> > > md: don't unregister sync_thread with reconfig_mutex held (upstream
-> > > commit 8b48ec23cc51a4e7c8dbaef5f34ebe67e1a80934)
-> > >
-> > > I don't see any follow-up on the thread from June 8th 2022 asking for
-> > > this patch to be dropped from all stable kernels since it caused a
-> > > regression.
-> > >
-> > > The patch doesn't appear to be present in the current mainline kernel
-> > > (6.3-rc2) either. So I assume this issue is still present there, or i=
-t
-> > > was resolved differently and I just can't find the commit/patch.
-> >
-> > It should be fixed by commit 9dfbdafda3b3"md: unlock mddev before reap
-> > sync_thread in action_store".
->
-> Okay, let me try applying that patch... it does not appear to be
-> present in my 5.4.229 kernel source. Thanks.
+Hi Willy, Dave, et al.,
 
-Yes, applying this '9dfbdafda3b3 "md: unlock mddev before reap
-sync_thread in action_store"' patch on top of vanilla 5.4.229 source
-appears to fix the problem for me -- I can't reproduce the issue with
-the script, and it's been running for >24 hours now. (Previously I was
-able to induce the issue within a matter of minutes.)
+[NOTE! This patchset is a work in progress and some modules will not
+ compile with it.]
+
+I've been looking at how to make pipes handle the splicing in of multipage
+folios and also looking to see if I could implement a suggestion from Willy
+that pipe_buffers could perhaps hold a list of pages (which could make
+splicing simpler - an entire splice segment would go in a single
+pipe_buffer).
+
+There are a couple of issues here:
+
+ (1) Gifting/stealing a multipage folio is really tricky.  I think that if
+     a multipage folio if gifted, the gift flag should be quietly dropped.
+     Userspace has no control over what splice() and vmsplice() will see in
+     the pagecache.
+
+ (2) The sendpage op expects to be given a single page and various network
+     protocols just attach that to a socket buffer.
+
+This patchset aims to deal with the second by removing the ->sendpage()
+operation and replacing it with sendmsg() and a new internal flag
+MSG_SPLICE_PAGES.  As sendmsg() takes an I/O iterator, this also affords
+the opportunity to pass a slew of pages in one go, rather than one at a
+time.
+
+If MSG_SPLICE_PAGES is set, the current implementation requires that the
+iterator be ITER_BVEC-type and that the pages can be retained by calling
+get_page() on them.  Note that I'm accessing the bvec[] directly, but
+should really use iov_iter_extract_pages() which would allow an
+ITER_XARRAY-type iterator to be used also.
+
+The patchset consists of the following parts:
+
+ (1) Define the MSG_SPLICE_PAGES flag.
+
+ (2) Provide a simple allocator that takes pages and splits pieces off them
+     on request and returns them with a ref on the page.  Unlike with slab
+     memory, the lifetime of the allocated memory is controlled by the page
+     refcount.  This allows protocol bits to be included in the same bvec[]
+     as the data.
+
+ (3) Implement MSG_SPLICE_PAGES support in TCP.
+
+ (4) Make do_tcp_sendpages() just wrap sendmsg() and then fold it in to its
+     various callers.
+
+ (5) Implement MSG_SPLICE_PAGES support in IP and make udp_sendpage() just
+     a wrapper around sendmsg().
+
+ (6) Implement MSG_SPLICE_PAGES support in AF_UNIX.
+
+ (7) Implement MSG_SPLICE_PAGES support in AF_ALG and make
+     af_alg_sendpage() just a wrapper around sendmsg().
+
+ (8) Rename pipe_to_sendpage() to pipe_to_sendmsg() and make it a wrapper
+     around sendmsg().
+
+ (9) Remove sendpage file operation.
+
+(10) Convert siw, ceph, iscsi and tcp_bpf to use sendmsg() instead of
+     tcp_sendpage().
+
+(11) Make skb_send_sock() use sendmsg().
+
+(12) Remove AF_ALG's hash_sendpage() as hash_sendmsg() seems to do paste
+     the page pointers in anyway.
+
+(13) Convert ceph, rds, dlm and sunrpc to use sendmsg().
+
+(14) Remove the sendpage socket operation.
+
+This leaves the implementation of MSG_SPLICE_PAGES in AF_TLS, AF_KCM,
+AF_SMC and Chelsio-TLS which I'm going to need help with, and cleaning up
+the use of kernel_sendpage in AF_KCM, AF_SMC and NVMe over TCP still to be
+done.
 
 
->
-> --Marc
->
->
-> >
-> > Thanks,
-> > Guoqing
+I'm wondering about how best to proceed further:
+
+ - Rather than providing a special allocator, should protocols implementing
+   MSG_SPLICE_PAGES recognise pages that belong to the slab allocator and
+   copy the content of those to the skbuff and only directly attach the
+   source page if it's not a slab page?
+
+ - Should MSG_SPLICE_PAGES work with ITER_XARRAY as well as ITER_BVEC?
+
+ - Should MSG_SPLICE_PAGES just be a hint and get ignored if the conditions
+   for using it are not met rather than giving an error?
+
+ - Should pages attached to a pipe be pinned (ie. FOLL_PIN) rather than
+   simply ref'd (ie. FOLL_GET) so that the DIO issue doesn't occur on
+   spliced pages?
+
+ - Similarly, should pages undergoing zerocopy be pinned when attached to
+   an skbuff rather than being simply ref'd?  I have a patch to note in the
+   bottom two bits of the frag page pointer if they are pinned, ref'd or
+   neither.
+
+
+I have tested AF_UNIX splicing - which, surprisingly, seems nearly twice as
+fast - TCP splicing, the siw driver (softIWarp RDMA with nfs and cifs),
+sunrpc (with nfsd) and UDP (using a patched rxrpc).
+
+I've pushed the patches here also:
+
+	https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/log/?h=iov-sendpage
+
+David
+
+David Howells (28):
+  net: Declare MSG_SPLICE_PAGES internal sendmsg() flag
+  Add a special allocator for staging netfs protocol to MSG_SPLICE_PAGES
+  tcp: Support MSG_SPLICE_PAGES
+  tcp: Convert do_tcp_sendpages() to use MSG_SPLICE_PAGES
+  tcp_bpf: Inline do_tcp_sendpages as it's now a wrapper around
+    tcp_sendmsg
+  espintcp: Inline do_tcp_sendpages()
+  tls: Inline do_tcp_sendpages()
+  siw: Inline do_tcp_sendpages()
+  tcp: Fold do_tcp_sendpages() into tcp_sendpage_locked()
+  ip, udp: Support MSG_SPLICE_PAGES
+  udp: Convert udp_sendpage() to use MSG_SPLICE_PAGES
+  af_unix: Support MSG_SPLICE_PAGES
+  crypto: af_alg: Indent the loop in af_alg_sendmsg()
+  crypto: af_alg: Support MSG_SPLICE_PAGES
+  crypto: af_alg: Convert af_alg_sendpage() to use MSG_SPLICE_PAGES
+  splice, net: Use sendmsg(MSG_SPLICE_PAGES) rather than ->sendpage()
+  Remove file->f_op->sendpage
+  siw: Use sendmsg(MSG_SPLICE_PAGES) rather than sendpage to transmit
+  ceph: Use sendmsg(MSG_SPLICE_PAGES) rather than sendpage
+  iscsi: Use sendmsg(MSG_SPLICE_PAGES) rather than sendpage
+  tcp_bpf: Make tcp_bpf_sendpage() go through
+    tcp_bpf_sendmsg(MSG_SPLICE_PAGES)
+  net: Use sendmsg(MSG_SPLICE_PAGES) not sendpage in skb_send_sock()
+  algif: Remove hash_sendpage*()
+  ceph: Use sendmsg(MSG_SPLICE_PAGES) rather than sendpage()
+  rds: Use sendmsg(MSG_SPLICE_PAGES) rather than sendpage
+  dlm: Use sendmsg(MSG_SPLICE_PAGES) rather than sendpage
+  sunrpc: Use sendmsg(MSG_SPLICE_PAGES) rather then sendpage
+  sock: Remove ->sendpage*() in favour of sendmsg(MSG_SPLICE_PAGES)
+
+ Documentation/networking/scaling.rst     |   4 +-
+ crypto/Kconfig                           |   1 +
+ crypto/af_alg.c                          | 137 +++++--------
+ crypto/algif_aead.c                      |  40 ++--
+ crypto/algif_hash.c                      |  66 ------
+ crypto/algif_rng.c                       |   2 -
+ crypto/algif_skcipher.c                  |  22 +-
+ drivers/infiniband/sw/siw/siw_qp_tx.c    | 224 +++++----------------
+ drivers/target/iscsi/iscsi_target_util.c |  14 +-
+ fs/dlm/lowcomms.c                        |  10 +-
+ fs/splice.c                              |  42 ++--
+ include/linux/fs.h                       |   3 -
+ include/linux/net.h                      |   8 -
+ include/linux/socket.h                   |   1 +
+ include/linux/splice.h                   |   2 +
+ include/linux/zcopy_alloc.h              |  16 ++
+ include/net/inet_common.h                |   2 -
+ include/net/sock.h                       |   6 -
+ include/net/tcp.h                        |   2 -
+ include/net/tls.h                        |   2 +-
+ mm/Makefile                              |   2 +-
+ mm/zcopy_alloc.c                         | 129 ++++++++++++
+ net/appletalk/ddp.c                      |   1 -
+ net/atm/pvc.c                            |   1 -
+ net/atm/svc.c                            |   1 -
+ net/ax25/af_ax25.c                       |   1 -
+ net/caif/caif_socket.c                   |   2 -
+ net/can/bcm.c                            |   1 -
+ net/can/isotp.c                          |   1 -
+ net/can/j1939/socket.c                   |   1 -
+ net/can/raw.c                            |   1 -
+ net/ceph/messenger_v1.c                  |  58 ++----
+ net/ceph/messenger_v2.c                  |  89 ++-------
+ net/core/skbuff.c                        |  49 +++--
+ net/core/sock.c                          |  35 +---
+ net/dccp/ipv4.c                          |   1 -
+ net/dccp/ipv6.c                          |   1 -
+ net/ieee802154/socket.c                  |   2 -
+ net/ipv4/af_inet.c                       |  21 --
+ net/ipv4/ip_output.c                     |  89 ++++++++-
+ net/ipv4/tcp.c                           | 244 +++++------------------
+ net/ipv4/tcp_bpf.c                       |  72 ++-----
+ net/ipv4/tcp_ipv4.c                      |   1 -
+ net/ipv4/udp.c                           |  54 -----
+ net/ipv4/udp_impl.h                      |   2 -
+ net/ipv4/udplite.c                       |   1 -
+ net/ipv6/af_inet6.c                      |   3 -
+ net/ipv6/raw.c                           |   1 -
+ net/ipv6/tcp_ipv6.c                      |   1 -
+ net/key/af_key.c                         |   1 -
+ net/l2tp/l2tp_ip.c                       |   1 -
+ net/l2tp/l2tp_ip6.c                      |   1 -
+ net/llc/af_llc.c                         |   1 -
+ net/mctp/af_mctp.c                       |   1 -
+ net/mptcp/protocol.c                     |   2 -
+ net/netlink/af_netlink.c                 |   1 -
+ net/netrom/af_netrom.c                   |   1 -
+ net/packet/af_packet.c                   |   2 -
+ net/phonet/socket.c                      |   2 -
+ net/qrtr/af_qrtr.c                       |   1 -
+ net/rds/af_rds.c                         |   1 -
+ net/rds/tcp_send.c                       |  80 ++++----
+ net/rose/af_rose.c                       |   1 -
+ net/rxrpc/af_rxrpc.c                     |   1 -
+ net/sctp/protocol.c                      |   1 -
+ net/socket.c                             |  74 +------
+ net/sunrpc/svcsock.c                     |  70 ++-----
+ net/sunrpc/xdr.c                         |  24 ++-
+ net/tipc/socket.c                        |   3 -
+ net/tls/tls_main.c                       |  24 ++-
+ net/unix/af_unix.c                       | 223 +++++++--------------
+ net/vmw_vsock/af_vsock.c                 |   3 -
+ net/x25/af_x25.c                         |   1 -
+ net/xdp/xsk.c                            |   1 -
+ net/xfrm/espintcp.c                      |  10 +-
+ 75 files changed, 687 insertions(+), 1313 deletions(-)
+ create mode 100644 include/linux/zcopy_alloc.h
+ create mode 100644 mm/zcopy_alloc.c
+
