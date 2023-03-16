@@ -2,170 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C05F06BCD44
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 11:52:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B25A6BCD48
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 11:52:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229547AbjCPKvw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 06:51:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36540 "EHLO
+        id S229645AbjCPKwX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 06:52:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbjCPKv2 (ORCPT
+        with ESMTP id S229556AbjCPKvx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 06:51:28 -0400
-Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53C423C30
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 03:51:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=inria.fr; s=dc;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=dKQSMmO1/9WgFYdBrQ+Eoie6qDQfbpn+EnDdMXEPoVo=;
-  b=CDbWxOtHWs1Z0pmqLE60JKKB8/d++gdRsHsE6SAz6h/R1jDcaxB38k3E
-   aWElT2GM0IhpbUUCcdNLjRr10M0UiQVJVMZ58rIxrdxUVkAUQATrGlPIw
-   mllg9kkvO9OLWK3XknMVws06edPCyF4QBZ633t8ZHYem6Kr9Upoh19tbv
-   I=;
-Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
-X-IronPort-AV: E=Sophos;i="5.98,265,1673910000"; 
-   d="scan'208";a="97537696"
-Received: from dt-lawall.paris.inria.fr ([128.93.67.65])
-  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 11:51:23 +0100
-Date:   Thu, 16 Mar 2023 11:51:23 +0100 (CET)
-From:   Julia Lawall <julia.lawall@inria.fr>
-To:     Khadija Kamran <kamrankhadijadj@gmail.com>
-cc:     Alison Schofield <alison.schofield@intel.com>,
-        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        outreachy@lists.linux.dev,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>
-Subject: Re: [PATCH] staging: axis-fifo: initialize timeouts in probe only
-In-Reply-To: <ZBLxHyiFnOwEdPYf@khadija-virtual-machine>
-Message-ID: <d4e16b4-c296-8130-eddd-4de05e426e2@inria.fr>
-References: <ZA9mThZ7NyRrQAMX@khadija-virtual-machine> <ZBEJ+8DbhADSBTLr@aschofie-mobl2> <ZBG699SriXWy1I2K@khadija-virtual-machine> <16148020.1MiD057Pog@suse> <ZBHUr7bANuhnOnIV@khadija-virtual-machine> <ZBHtrGjgKOiVwjSF@aschofie-mobl2>
- <ZBLxHyiFnOwEdPYf@khadija-virtual-machine>
+        Thu, 16 Mar 2023 06:51:53 -0400
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9153D4C26
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 03:51:51 -0700 (PDT)
+Received: by mail-io1-f71.google.com with SMTP id u23-20020a6be917000000b007532ab65c70so551555iof.12
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 03:51:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678963910;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=wlZsmgoHP0KFVkPcMplNL5BB8+emSwJ8ox1cxUzm6Ho=;
+        b=1BYhHpQwI7LBz48NP8wM/b5rxGj0s0fJt4PCq0oXRO683UbxU5A8XYP4l9SLdiJa50
+         Btc24pkKWM/rjfcvSoh6MUod0sZ2vnVsbQvuFXbZ1U2aSx5W2FpdT3S0mgNXsD2MiCRr
+         cRuRLCUl69+qMaj3bN/D2SfN6J8ZGkX3vN+XIh9+IdoLjVfT61ui4BaEOa7eX0EgCSX9
+         o2v8X0w2dqdtv8Y9pYse8Qxn33zi+/2LEBHJL6NjKc5Fc0WDZpZtllv27SLrUMs8ruIE
+         WVYYTvp6w/RqbQPsqxR1lpiStZESrImaDUw45/huVA5pWyXTlNfR2O9VQ7dQuDt9HLlC
+         gjQg==
+X-Gm-Message-State: AO0yUKVyMdYD7+zDA9Pc1QzY5t9abId4UcVHstetPl8FJkfR9Ynz+b8u
+        P44SqUTdnot6h2GsXIDE11QvtnvI73oRGGBvfrXRZS2LNnw3
+X-Google-Smtp-Source: AK7set8qR157/5/BdoPXi2VFvXhsr1z8JFosdJN4laZIpbD1DOFpXUsH3JegSIZkzTJWJnhJppa7+trIn0f1qlEK/m+iFbmGMnjF
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:da48:0:b0:314:24e2:5189 with SMTP id
+ p8-20020a92da48000000b0031424e25189mr4675569ilq.0.1678963910794; Thu, 16 Mar
+ 2023 03:51:50 -0700 (PDT)
+Date:   Thu, 16 Mar 2023 03:51:50 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000007e653f05f7023f88@google.com>
+Subject: [syzbot] [ext4?] WARNING: bad unlock balance in ext4_rename
+From:   syzbot <syzbot+636aeec054650b49a379@syzkaller.appspotmail.com>
+To:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, tytso@mit.edu
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
+
+syzbot found the following issue on:
+
+HEAD commit:    9c1bec9c0b08 Merge tag 'linux-kselftest-fixes-6.3-rc3' of ..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=12d6a556c80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=6c84f77790aba2eb
+dashboard link: https://syzkaller.appspot.com/bug?extid=636aeec054650b49a379
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/e27b04dd32d0/disk-9c1bec9c.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/7b5061fb1ef2/vmlinux-9c1bec9c.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/f36752323820/bzImage-9c1bec9c.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+636aeec054650b49a379@syzkaller.appspotmail.com
+
+ext4 filesystem being mounted at /root/syzkaller-testdir1527489572/syzkaller.Uw8Ert/4184/file0 supports timestamps until 2038 (0x7fffffff)
+EXT4-fs error (device loop4): ext4_get_first_dir_block:3520: inode #12: block 32: comm syz-executor.4: bad entry in directory: rec_len is smaller than minimal - offset=0, inode=67174412, rec_len=0, size=2048 fake=1
+EXT4-fs error (device loop4): ext4_get_first_dir_block:3524: inode #12: comm syz-executor.4: directory missing '.'
+=====================================
+WARNING: bad unlock balance detected!
+6.3.0-rc2-syzkaller-00050-g9c1bec9c0b08 #0 Not tainted
+-------------------------------------
+syz-executor.4/25678 is trying to release lock (&type->i_mutex_dir_key) at:
+[<ffffffff8230b319>] inode_unlock include/linux/fs.h:763 [inline]
+[<ffffffff8230b319>] ext4_rename+0x569/0x27c0 fs/ext4/namei.c:4029
+but there are no more locks to release!
+
+other info that might help us debug this:
+2 locks held by syz-executor.4/25678:
+ #0: ffff88807a162460 (sb_writers#4){.+.+}-{0:0}, at: do_renameat2+0x37f/0xc90 fs/namei.c:4859
+ #1: ffff888084013628 (&type->i_mutex_dir_key#3/1){+.+.}-{3:3}, at: inode_lock_nested include/linux/fs.h:793 [inline]
+ #1: ffff888084013628 (&type->i_mutex_dir_key#3/1){+.+.}-{3:3}, at: lock_rename+0x229/0x280 fs/namei.c:2991
+
+stack backtrace:
+CPU: 0 PID: 25678 Comm: syz-executor.4 Not tainted 6.3.0-rc2-syzkaller-00050-g9c1bec9c0b08 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/02/2023
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xd9/0x150 lib/dump_stack.c:106
+ __lock_release kernel/locking/lockdep.c:5346 [inline]
+ lock_release+0x4f1/0x670 kernel/locking/lockdep.c:5689
+ up_write+0x2a/0x520 kernel/locking/rwsem.c:1625
+ inode_unlock include/linux/fs.h:763 [inline]
+ ext4_rename+0x569/0x27c0 fs/ext4/namei.c:4029
+ ext4_rename2+0x1c7/0x270 fs/ext4/namei.c:4202
+ vfs_rename+0xef6/0x17a0 fs/namei.c:4772
+ do_renameat2+0xb62/0xc90 fs/namei.c:4923
+ __do_sys_renameat2 fs/namei.c:4956 [inline]
+ __se_sys_renameat2 fs/namei.c:4953 [inline]
+ __x64_sys_renameat2+0xe8/0x120 fs/namei.c:4953
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f762388c0f9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f7624588168 EFLAGS: 00000246 ORIG_RAX: 000000000000013c
+RAX: ffffffffffffffda RBX: 00007f76239abf80 RCX: 00007f762388c0f9
+RDX: 0000000000000004 RSI: 00000000200001c0 RDI: 0000000000000004
+RBP: 00007f76238e7b39 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000020000200 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffd99195a8f R14: 00007f7624588300 R15: 0000000000022000
+ </TASK>
+------------[ cut here ]------------
+DEBUG_RWSEMS_WARN_ON((rwsem_owner(sem) != current) && !rwsem_test_oflags(sem, RWSEM_NONSPINNABLE)): count = 0x0, magic = 0xffff8880870a0390, owner = 0x0, curr 0xffff88802506ba80, list empty
+WARNING: CPU: 1 PID: 25678 at kernel/locking/rwsem.c:1369 __up_write kernel/locking/rwsem.c:1369 [inline]
+WARNING: CPU: 1 PID: 25678 at kernel/locking/rwsem.c:1369 up_write+0x425/0x520 kernel/locking/rwsem.c:1626
+Modules linked in:
+CPU: 1 PID: 25678 Comm: syz-executor.4 Not tainted 6.3.0-rc2-syzkaller-00050-g9c1bec9c0b08 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/02/2023
+RIP: 0010:__up_write kernel/locking/rwsem.c:1369 [inline]
+RIP: 0010:up_write+0x425/0x520 kernel/locking/rwsem.c:1626
+Code: 3c 02 00 0f 85 da 00 00 00 48 8b 55 00 4d 89 f1 53 4d 89 f8 4c 89 e9 48 c7 c6 60 51 4c 8a 48 c7 c7 00 50 4c 8a e8 7b 1b e8 ff <0f> 0b 59 e9 dd fc ff ff 48 89 df e8 eb aa 70 00 e9 1a fc ff ff 48
+RSP: 0018:ffffc9000319f9a0 EFLAGS: 00010282
+RAX: 0000000000000000 RBX: ffffffff8a4c4f40 RCX: ffffc9000c5aa000
+RDX: 0000000000040000 RSI: ffffffff814b6037 RDI: 0000000000000001
+RBP: ffff8880870a0390 R08: 0000000000000001 R09: 0000000000000000
+R10: 0000000000000001 R11: 57525f4755424544 R12: ffff8880870a0398
+R13: ffff8880870a0390 R14: ffff88802506ba80 R15: 0000000000000000
+FS:  00007f7624588700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000020526000 CR3: 000000001cfeb000 CR4: 0000000000350ee0
+Call Trace:
+ <TASK>
+ inode_unlock include/linux/fs.h:763 [inline]
+ ext4_rename+0x569/0x27c0 fs/ext4/namei.c:4029
+ ext4_rename2+0x1c7/0x270 fs/ext4/namei.c:4202
+ vfs_rename+0xef6/0x17a0 fs/namei.c:4772
+ do_renameat2+0xb62/0xc90 fs/namei.c:4923
+ __do_sys_renameat2 fs/namei.c:4956 [inline]
+ __se_sys_renameat2 fs/namei.c:4953 [inline]
+ __x64_sys_renameat2+0xe8/0x120 fs/namei.c:4953
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f762388c0f9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f7624588168 EFLAGS: 00000246 ORIG_RAX: 000000000000013c
+RAX: ffffffffffffffda RBX: 00007f76239abf80 RCX: 00007f762388c0f9
+RDX: 0000000000000004 RSI: 00000000200001c0 RDI: 0000000000000004
+RBP: 00007f76238e7b39 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000020000200 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffd99195a8f R14: 00007f7624588300 R15: 0000000000022000
+ </TASK>
 
 
-On Thu, 16 Mar 2023, Khadija Kamran wrote:
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-> On Wed, Mar 15, 2023 at 09:09:16AM -0700, Alison Schofield wrote:
-> > On Wed, Mar 15, 2023 at 07:22:39PM +0500, Khadija Kamran wrote:
-> > > On Wed, Mar 15, 2023 at 02:34:31PM +0100, Fabio M. De Francesco wrote:
-> > > > Aside from what I said and asked for with the other message of this same
-> > > > thread, please take note that you can build a specific module if you prefer
-> > > > not to re-build the whole kernel and other modules at the same time.
-> > > >
-> > > > I'm pretty sure that the instructions to do so are in the OutreachyFirstPatch
-> > > > tutorial.
-> > > >
-> > > > If they are not there, please let us know.
-> > > >
-> > > > Fabio
-> > >
-> > > Hey Fabio!
-> > >
-> > > In the Outreachy FirstPatchTutorial under the 'Compiling only part of
-> > > the kernel' section there are ways to compile only some part of the
-> > > kernel.
-> > >
-> > > I have tried using "make W=1 drivers/staging/axis-fifo/" and it says
-> > > 'nothing to be done for'.
-> > >
-> > > Should I start with the steps to reproduce? :'(
-> >
-> > Khadija,
-> >
-> > I've applied your patch and it fails to compile with the warnings
-> > that LKP reports.
-> >
-> > If you are doing: $ make drivers/staging/axis-fifo/
-> >
-> > and it is saying 'nothing to be done...'
-> >
-> > You either have not changed anything since the last compile, or you
-> > do not have the module configured.
-> >
->
-> Hey Alison!
-> I might've written the statement wrong. Actually, here is the output of
-> make drivers/staging/axis-fifo
->
-> YACC    scripts/genksyms/parse.tab.[ch]
->   HOSTCC  scripts/genksyms/parse.tab.o
->   HOSTCC  scripts/genksyms/lex.lex.o
->   HOSTLD  scripts/genksyms/genksyms
->   CC      scripts/mod/empty.o
->   MKELF   scripts/mod/elfconfig.h
->   HOSTCC  scripts/mod/modpost.o
->   CC      scripts/mod/devicetable-offsets.s
->   HOSTCC  scripts/mod/file2alias.o
->   HOSTCC  scripts/mod/sumversion.o
->   HOSTLD  scripts/mod/modpost
->   CC      kernel/bounds.s
->   CC      arch/x86/kernel/asm-offsets.s
->   CALL    scripts/checksyscalls.sh
->   DESCEND objtool
->   INSTALL libsubcmd_headers
->   DESCEND bpf/resolve_btfids
->   INSTALL libsubcmd_headers
-> make[3]: Nothing to be done for 'drivers/staging/axis-fifo/'.
-
-Did you try make allyesconfig and make drivers/staging/axis-fifo/axis-fifo.o
-
-I get no warnings with W=1, but I do get a .o file.  I also tried
-
-make drivers/staging/axis-fifo/axis-fifo.i
-
-which just expands macros and simplifies ifdefs, and I see the various
-code from the file.  So I don't have the impression that it is getting
-ifdef'd away in some obscure way.  Perhaps I am missing something.  Or
-perhaps the warning in question only comres from LLVM?
-
-julia
-
->
->
-> > I suspect it has never compiled for you and you need to look at
-> > the direction in the tutorial for 'Recompiling the driver' section
-> > and learn how to use make menuconfig.
-> >
-> > This driver has a couple of dependencies described in the Kconfig
-> > file. You will not even see the 'XIL_AXIS_FIFO' option until you
-> > turn on 'OF' and HAS_'IOMEM'.
-> >
-> > See the drivers/staging/axis-fifo/Kconfig
-> >
-> > Please confirm that you have compiled the driver before chasing
-> > after the build env that lkp reports.
-> >
-> > Thanks,
-> > Alison
->
-> Sorry, I made a mistake here.
->
-> I did not change the driver 'Xilinx AXI-Stream FIFO IP core driver' to
-> being compiled as a module by typing 'm'.
-> Is that the problem here?
->
-> Also, now when I try to change it by pressing 'm', it is not working.
-> And I have tried many times but I cannot change the driver from '*' to
-> 'm'.
->
-> Kindly help me with this.
->
-> Regards,
-> Khadija
->
->
->
->
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
