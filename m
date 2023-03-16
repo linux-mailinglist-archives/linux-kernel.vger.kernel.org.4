@@ -2,122 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 140CE6BCF79
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 13:29:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D5F36BCF88
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 13:32:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230396AbjCPM3A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 08:29:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48540 "EHLO
+        id S229993AbjCPMcA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 08:32:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230320AbjCPM2w (ORCPT
+        with ESMTP id S229813AbjCPMb6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 08:28:52 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1E99BE5DD
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 05:28:23 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id y4so7003305edo.2
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 05:28:23 -0700 (PDT)
+        Thu, 16 Mar 2023 08:31:58 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70654C88BC
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 05:31:57 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id z31-20020a25a122000000b00b38d2b9a2e9so1674446ybh.3
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 05:31:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678969700;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=DuzDwg2lxu1rtYjhTSBJYtTkaTQvz0mwPxYBQwYy20g=;
-        b=vxJm/pF8sewwUszKYiDSfHTVUwBSWICc5MH1RuCN+eYfHnhXBErovQZaEhRLWS2t0S
-         oBnoKqECgFj7mYaG6pAolJe3JfDkDB8qgSMH5JXts1MtsUk9viXtPl9+co+SOTeSgADk
-         FCOT+Dh4PTlzam28dIfSNtv0/5uEeIUZgLqeBoHLlcX0cBZ73lwHvyXp/6dx53dwvg3S
-         hNaRx9B+h6dya1kb6FGh7wD4M3nwdX18E3bQlcBVHZyFqZyEzHuTVqp16BbQ+iAXxp20
-         wuPhDagD3QqBtUJXlc7DgijZkhcoazfyQxfNDytWOUe2Wlpdu1zjgW18qED2nc7651ia
-         WXqA==
+        d=google.com; s=20210112; t=1678969916;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=87DZZv3zvWxq1JNrpUvBlJXCIWW+Rra/IVtOi+lv2AY=;
+        b=qCtLERy62hEhlxSG/0eouCyDubA5IlOQzhKT2mnHloimO+vyrKei3sI8aJq1Tfj3qo
+         14b4Ounm+uimNdlEK6Gl1oKiwLH2oXLtNv7TDzmIibqjvnhVsYKbFeHnWom15qxZpv7E
+         5tOLPt/Rhk6QEnPn8W1CABp2zBMKp0CBPEXm1BE2uMklheDAqZWfiip3/rl6zFZvRNo1
+         r2Z8izryfAq4Y83tOgyd4a84rYY84JZ4Xsr8I1WQTjjxx5eNPvCps/nAEOnaV8B1vU7D
+         3V/f1c1bck0wJUie1OxMnbvg8BDG+pUfLdOJT4U31Beb6tiecEyvJAK/k9YvtACNmOeC
+         /+tA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678969700;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DuzDwg2lxu1rtYjhTSBJYtTkaTQvz0mwPxYBQwYy20g=;
-        b=4G5/JbHnGHU+jFFi6Hmq+L7CSnshqDfTRWF8biVLyEkHdTTumZJH3yDe0LzwrX/EI6
-         0p8JIpsxNRYcvGMAlIR5Mxc67m+giFJZhD8FpmIvzClqvPHIJTEpLf0PVlxnPJWjG3gv
-         k+nhsrWl6GqzlTFmDdrCDPv/xq+ih+vAhi0LOFQw6MhioeRvBT/YuVO3mNLF+Xm03VZc
-         4hDTFxtcxtsM5nFvSP1Pb9nluQC6sF+aeyAS5wS+HIaDOe6nwyft10rpnWnBo4Vu0Kat
-         7AlZUVuAuP3o7Zjsgrw99nm0/Qpjv0zfJ6rZExNqqFDR4b7p+2f0A2oRZLNOeAboUCou
-         Lweg==
-X-Gm-Message-State: AO0yUKWJLQOlvnzZcBbgpfwLuHDAn7kgZfVvFf/Hk5uNpWQwAZcHcKMe
-        GaIHklrpmCjukDly6cqZHrNCkA==
-X-Google-Smtp-Source: AK7set8sb9Pt47A8F5UHMhUTeEFJy8nZDAA2FIy5bTWmk2ssc26ydb1AH4xupqEGnvo0UKQ1P6AZIQ==
-X-Received: by 2002:a17:906:4a09:b0:8b1:7de6:e292 with SMTP id w9-20020a1709064a0900b008b17de6e292mr9717493eju.9.1678969700160;
-        Thu, 16 Mar 2023 05:28:20 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:9827:5f65:8269:a95f? ([2a02:810d:15c0:828:9827:5f65:8269:a95f])
-        by smtp.gmail.com with ESMTPSA id d20-20020a1709063ed400b008d1693c212csm3762281ejj.8.2023.03.16.05.28.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Mar 2023 05:28:19 -0700 (PDT)
-Message-ID: <01d18b05-238f-e938-9ad0-ff1956cb361d@linaro.org>
-Date:   Thu, 16 Mar 2023 13:28:18 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [RFC PATCH] cpufreq: qcom-cpufreq-hw: allow work to be done on
- other CPU for PREEMPT_RT
-Content-Language: en-US
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Adrien Thierry <athierry@redhat.com>,
-        Brian Masney <bmasney@redhat.com>,
-        linux-rt-users@vger.kernel.org
-References: <20230315164910.302265-1-krzysztof.kozlowski@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230315164910.302265-1-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        d=1e100.net; s=20210112; t=1678969916;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=87DZZv3zvWxq1JNrpUvBlJXCIWW+Rra/IVtOi+lv2AY=;
+        b=kSVt5PC6z2IvDeiE9jCpsLzsYs6naqSqrEDNHjSjo39BC77pY1iCambGFVsHeoKqRe
+         S0h8dlTtczKRCaqhzxhpUmG90PIu2dyxUv5bFUuoYsmMcdiJo79xqzFRPaKQl2EvpQAr
+         rhBwqS3u5sK+4gqm8TyQvyU5mIdRhYOgLHS4TWM3xA4268rmbdiQj6NjBfBsC9REogLq
+         wa1h03WDtHMrO7cKpBSM7etK+n8vN4Fwsds28Kb71YjpoM3kXy+15dz2isZc2ZdwT2AP
+         CI6/s3iR9l2wT1Ywz3I4AgwIhHPmLI/0lsZ3T633UqjQhIUj7JnHTn8SDDMZbsati+Ql
+         lI6w==
+X-Gm-Message-State: AO0yUKX7eoQZ/L74Tmna4zMGhsZN7NQG8GdHvwY61ZSAzTbOdUjx109T
+        Ran9c6dSiubZ1te951W3J3oQsoyp+g==
+X-Google-Smtp-Source: AK7set8JP+8/fO1CBDiuj35SBYwSWx/12DvLYxR4mHEgN+gX3ZM7tBbPLfdlKovQQ+AeL7C/2ao8pYromw==
+X-Received: from elver.muc.corp.google.com ([2a00:79e0:9c:201:f359:6b95:96e:1317])
+ (user=elver job=sendgmr) by 2002:a81:b306:0:b0:541:61aa:9e60 with SMTP id
+ r6-20020a81b306000000b0054161aa9e60mr2038578ywh.6.1678969916701; Thu, 16 Mar
+ 2023 05:31:56 -0700 (PDT)
+Date:   Thu, 16 Mar 2023 13:30:27 +0100
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
+Message-ID: <20230316123028.2890338-1-elver@google.com>
+Subject: [PATCH v6 1/2] posix-timers: Prefer delivery of signals to the
+ current thread
+From:   Marco Elver <elver@google.com>
+To:     elver@google.com, Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@kernel.org>
+Cc:     Oleg Nesterov <oleg@redhat.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Dmitry Vyukov <dvyukov@google.com>, kasan-dev@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Dmitry Vyukov <dvyukov@google.com>
 
-On 15/03/2023 17:49, Krzysztof Kozlowski wrote:
-> Qualcomm cpufreq driver configures interrupts with affinity to each
-> cluster, e.g.  dcvsh-irq-0, dcvsh-irq-4 and dcvsh-irq-7 on SM8250.
-> Triggered interrupt will schedule delayed work, but, since workqueue
-> prefers local CPUs, it might get executed on a CPU dedicated to realtime
-> tasks causing unexpected latencies in realtime workload.
-> 
-> Use unbound workqueue for such case.  This might come with performance
-> or energy penalty, e.g. because of cache miss or when other CPU is
-> sleeping.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  drivers/cpufreq/qcom-cpufreq-hw.c | 11 ++++++++++-
+POSIX timers using the CLOCK_PROCESS_CPUTIME_ID clock prefer the main
+thread of a thread group for signal delivery.     However, this has a
+significant downside: it requires waking up a potentially idle thread.
 
-Let me also paste impact of this patch - rtla osnoise on entirely idle
-system (cores 2-7 isolated for Realtime):
+Instead, prefer to deliver signals to the current thread (in the same
+thread group) if SIGEV_THREAD_ID is not set by the user. This does not
+change guaranteed semantics, since POSIX process CPU time timers have
+never guaranteed that signal delivery is to a specific thread (without
+SIGEV_THREAD_ID set).
 
-BEFORE:
-       osnoise/7-2967    [007] d..h2..  3937.898311: irq_noise: dcvsh-irq-7:179 start 3937.898310871 duration 104 ns
- irq/179-dcvsh-i-343     [007] d..h2..  3937.898318: irq_noise: IPI:6 start 3937.898317537 duration 104 ns
- irq/179-dcvsh-i-343     [007] d...3..  3937.898321: thread_noise: irq/179-dcvsh-i:343 start 3937.898316287 duration 4740 ns
-     kworker/7:0-85      [007] d..h2..  3937.898323: irq_noise: IPI:6 start 3937.898322381 duration 104 ns
-     kworker/7:0-85      [007] d...3..  3937.898343: thread_noise: kworker/7:0:85 start 3937.898321339 duration 20990 ns
-       osnoise/7-2967    [007] .......  3937.898343: sample_threshold: start 3937.898308475 duration 34531 ns interference 5
+The effect is that we no longer wake up potentially idle threads, and
+the kernel is no longer biased towards delivering the timer signal to
+any particular thread (which better distributes the timer signals esp.
+when multiple timers fire concurrently).
 
-Noise duration: 34 us
+Signed-off-by: Dmitry Vyukov <dvyukov@google.com>
+Suggested-by: Oleg Nesterov <oleg@redhat.com>
+Reviewed-by: Oleg Nesterov <oleg@redhat.com>
+Signed-off-by: Marco Elver <elver@google.com>
+---
+v6:
+- Split test from this patch.
+- Update wording on what this patch aims to improve.
 
-AFTER:
-       osnoise/7-2637    [007] d..h2..   530.563819: irq_noise: dcvsh-irq-7:178 start 530.563817139 duration 260 ns
-       osnoise/7-2637    [007] d..h2..   530.563827: irq_noise: IPI:6 start 530.563826670 duration 156 ns
-       osnoise/7-2637    [007] .......   530.563828: sample_threshold: start 530.563814587 duration 12864 ns interference 2
+v5:
+- Rebased onto v6.2.
 
-Noise duration: 13 us
+v4:
+- Restructured checks in send_sigqueue() as suggested.
 
-Best regards,
-Krzysztof
+v3:
+- Switched to the completely different implementation (much simpler)
+  based on the Oleg's idea.
+
+RFC v2:
+- Added additional Cc as Thomas asked.
+---
+ kernel/signal.c | 25 ++++++++++++++++++++++---
+ 1 file changed, 22 insertions(+), 3 deletions(-)
+
+diff --git a/kernel/signal.c b/kernel/signal.c
+index 8cb28f1df294..605445fa27d4 100644
+--- a/kernel/signal.c
++++ b/kernel/signal.c
+@@ -1003,8 +1003,7 @@ static void complete_signal(int sig, struct task_struct *p, enum pid_type type)
+ 	/*
+ 	 * Now find a thread we can wake up to take the signal off the queue.
+ 	 *
+-	 * If the main thread wants the signal, it gets first crack.
+-	 * Probably the least surprising to the average bear.
++	 * Try the suggested task first (may or may not be the main thread).
+ 	 */
+ 	if (wants_signal(sig, p))
+ 		t = p;
+@@ -1970,8 +1969,23 @@ int send_sigqueue(struct sigqueue *q, struct pid *pid, enum pid_type type)
+ 
+ 	ret = -1;
+ 	rcu_read_lock();
++	/*
++	 * This function is used by POSIX timers to deliver a timer signal.
++	 * Where type is PIDTYPE_PID (such as for timers with SIGEV_THREAD_ID
++	 * set), the signal must be delivered to the specific thread (queues
++	 * into t->pending).
++	 *
++	 * Where type is not PIDTYPE_PID, signals must just be delivered to the
++	 * current process. In this case, prefer to deliver to current if it is
++	 * in the same thread group as the target, as it avoids unnecessarily
++	 * waking up a potentially idle task.
++	 */
+ 	t = pid_task(pid, type);
+-	if (!t || !likely(lock_task_sighand(t, &flags)))
++	if (!t)
++		goto ret;
++	if (type != PIDTYPE_PID && same_thread_group(t, current))
++		t = current;
++	if (!likely(lock_task_sighand(t, &flags)))
+ 		goto ret;
+ 
+ 	ret = 1; /* the signal is ignored */
+@@ -1993,6 +2007,11 @@ int send_sigqueue(struct sigqueue *q, struct pid *pid, enum pid_type type)
+ 	q->info.si_overrun = 0;
+ 
+ 	signalfd_notify(t, sig);
++	/*
++	 * If the type is not PIDTYPE_PID, we just use shared_pending, which
++	 * won't guarantee that the specified task will receive the signal, but
++	 * is sufficient if t==current in the common case.
++	 */
+ 	pending = (type != PIDTYPE_PID) ? &t->signal->shared_pending : &t->pending;
+ 	list_add_tail(&q->list, &pending->list);
+ 	sigaddset(&pending->signal, sig);
+-- 
+2.40.0.rc1.284.g88254d51c5-goog
 
