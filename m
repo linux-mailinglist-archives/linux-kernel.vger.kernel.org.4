@@ -2,60 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAF806BCC6D
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 11:20:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8BE36BCCA5
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 11:23:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230253AbjCPKUN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 06:20:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47620 "EHLO
+        id S231292AbjCPKX1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 06:23:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230470AbjCPKUH (ORCPT
+        with ESMTP id S229783AbjCPKXC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 06:20:07 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E7DC17165;
-        Thu, 16 Mar 2023 03:20:05 -0700 (PDT)
+        Thu, 16 Mar 2023 06:23:02 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F755C4884;
+        Thu, 16 Mar 2023 03:22:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678962005; x=1710498005;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=cTWfBk3x3x+gBfiWBEncDsQaVQ9wjMxpSgAt7XwU7gA=;
-  b=SW7eO7H2lNK5t3vyxZC6TC268M28YXUOPpogx4E6lTt72o9dQpBSL/LK
-   ccnfee+mVkNwUWddpOTpVjhRxG8T3TIlNKXdR/kg2zNVmuNZepX4rkLSi
-   uqEv4YXCIUbw2a3RP+flRsvm44Uo05ldRlXDxh3cAm+QSLrk2DoFI0mDV
-   K41x70Mf+Vd1Lc/AXP3YrAmLanPF/j4CTGnLIz2V1GRyJvFgBzc1E/lyl
-   +8C/miHPIcm8iE1lNyI1nO14Wi+JWFsH8jc8566ac4VBYW2uJPmsOVEDP
-   o2NWqMcjPr/8PDctCDf/aeTTVPFXoQTw1PCpwVRYTFuAH9+7yYzOgbKbb
+  t=1678962134; x=1710498134;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version:content-id;
+  bh=AXs+v9unQsT/CL6RnBbNTPiJoA+wNOgUNKpFs1nzhco=;
+  b=APqbcU3wMJJ/acYChCPwffM542lOsZCORkpUvWphhzbp7ub1nj4t0gzi
+   pc/OPxtyxXBKDf87E4qSEb79mxJ7wcj6aadqZJZQCXZcJFIEImoWWxcs0
+   jSrPZl72MkCp7VeeVc2ckwzRgmsqwni77c2Z7k0N5Q23q4D9a6webyQcY
+   71/HZQbhveZQoFYP3c9pUvu4cYtVAbgypBE4RcIJS1+2qjHegYwA4cXmd
+   ZGX0AMumBNcWbyrYB2xtogJMnunQECdTW7hFNzJExX0lCm51VTht2weis
+   +pXLC4vR3IwTmZ6+Cr+TEqqN6MO8ZIkBLsga4TPzj3luQ+xLmlH7rZjOh
    A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="337966831"
+X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="424220849"
 X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
-   d="scan'208";a="337966831"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 03:20:05 -0700
+   d="scan'208";a="424220849"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 03:21:39 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="1009169621"
+X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="679848802"
 X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
-   d="scan'208";a="1009169621"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga005.fm.intel.com with ESMTP; 16 Mar 2023 03:20:03 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id 9A06C1CC; Thu, 16 Mar 2023 12:20:48 +0200 (EET)
-Date:   Thu, 16 Mar 2023 12:20:48 +0200
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Tom Rix <trix@redhat.com>
-Cc:     andreas.noever@gmail.com, michael.jamet@intel.com,
-        YehezkelShB@gmail.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Mario Limonciello <mario.limonciello@amd.com>
-Subject: Re: [PATCH] thunderbolt: rename shadowed variables bit to
- interrupt_bit and auto_clear_bit
-Message-ID: <20230316102048.GR62143@black.fi.intel.com>
-References: <20230315220450.1470815-1-trix@redhat.com>
+   d="scan'208";a="679848802"
+Received: from trybicki-mobl1.ger.corp.intel.com ([10.252.63.119])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 03:21:37 -0700
+Date:   Thu, 16 Mar 2023 12:21:35 +0200 (EET)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Reinette Chatre <reinette.chatre@intel.com>
+cc:     linux-kselftest@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Shuah Khan <shuah@kernel.org>
+Subject: Re: [PATCH v2 9/9] selftests/resctrl: Correct get_llc_perf() param
+ in function comment
+In-Reply-To: <50d0e974-478f-ea60-9b7b-50982697ef96@intel.com>
+Message-ID: <4830705e-212f-6dd1-e8e9-7a35cc886d5@linux.intel.com>
+References: <20230215130605.31583-1-ilpo.jarvinen@linux.intel.com> <20230215130605.31583-10-ilpo.jarvinen@linux.intel.com> <50d0e974-478f-ea60-9b7b-50982697ef96@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230315220450.1470815-1-trix@redhat.com>
+Content-Type: multipart/mixed; BOUNDARY="8323329-709021613-1678956358=:2328"
+Content-ID: <20644a1f-8a3a-3710-d252-7214cb778879@linux.intel.com>
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
@@ -65,83 +63,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+Cc Mario
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-On Wed, Mar 15, 2023 at 06:04:50PM -0400, Tom Rix wrote:
-> cppcheck reports
-> drivers/thunderbolt/nhi.c:74:7: style: Local variable 'bit' shadows outer variable [shadowVariable]
->   int bit;
->       ^
-> drivers/thunderbolt/nhi.c:66:6: note: Shadowed declaration
->  int bit = ring_interrupt_index(ring) & 31;
->      ^
-> drivers/thunderbolt/nhi.c:74:7: note: Shadow variable
->   int bit;
->       ^
-> For readablity rename the outer to interrupt_bit and the innner
-> to auto_clear_bit.
+--8323329-709021613-1678956358=:2328
+Content-Type: text/plain; CHARSET=ISO-8859-15
+Content-Transfer-Encoding: 8BIT
+Content-ID: <da49d149-2086-13e1-7fdb-89f8a95812c9@linux.intel.com>
 
-Thanks for the patch! Yeah, this did not show up in any of the kbuild
-tests perhaps they are missing cppcheck :(
+On Wed, 15 Mar 2023, Reinette Chatre wrote:
 
-I'm thinking that I'll just move the two commits from "fixes" to "next"
-and add this one on top (and drop the stable tags) as the code that we
-should be sending to stable should not need additional fixes IMHO. I
-know Mario is on vacation so probably cannot answer here so let's deal
-with this when he is back.
-
-> Signed-off-by: Tom Rix <trix@redhat.com>
-> ---
->  drivers/thunderbolt/nhi.c | 16 ++++++++--------
->  1 file changed, 8 insertions(+), 8 deletions(-)
+> Hi Ilpo,
 > 
-> diff --git a/drivers/thunderbolt/nhi.c b/drivers/thunderbolt/nhi.c
-> index 318d20bd5b69..d0d26d288be8 100644
-> --- a/drivers/thunderbolt/nhi.c
-> +++ b/drivers/thunderbolt/nhi.c
-> @@ -63,15 +63,15 @@ static void ring_interrupt_active(struct tb_ring *ring, bool active)
->  {
->  	int reg = REG_RING_INTERRUPT_BASE +
->  		  ring_interrupt_index(ring) / 32 * 4;
-> -	int bit = ring_interrupt_index(ring) & 31;
-> -	int mask = 1 << bit;
-> +	int interrupt_bit = ring_interrupt_index(ring) & 31;
-> +	int mask = 1 << interrupt_bit;
->  	u32 old, new;
->  
->  	if (ring->irq > 0) {
->  		u32 step, shift, ivr, misc;
->  		void __iomem *ivr_base;
-> +		int auto_clear_bit;
->  		int index;
-> -		int bit;
->  
->  		if (ring->is_tx)
->  			index = ring->hop;
-> @@ -91,11 +91,11 @@ static void ring_interrupt_active(struct tb_ring *ring, bool active)
->  		 */
->  		misc = ioread32(ring->nhi->iobase + REG_DMA_MISC);
->  		if (ring->nhi->quirks & QUIRK_AUTO_CLEAR_INT)
-> -			bit = REG_DMA_MISC_INT_AUTO_CLEAR;
-> +			auto_clear_bit = REG_DMA_MISC_INT_AUTO_CLEAR;
->  		else
-> -			bit = REG_DMA_MISC_DISABLE_AUTO_CLEAR;
-> -		if (!(misc & bit))
-> -			iowrite32(misc | bit, ring->nhi->iobase + REG_DMA_MISC);
-> +			auto_clear_bit = REG_DMA_MISC_DISABLE_AUTO_CLEAR;
-> +		if (!(misc & auto_clear_bit))
-> +			iowrite32(misc | auto_clear_bit, ring->nhi->iobase + REG_DMA_MISC);
->  
->  		ivr_base = ring->nhi->iobase + REG_INT_VEC_ALLOC_BASE;
->  		step = index / REG_INT_VEC_ALLOC_REGS * REG_INT_VEC_ALLOC_BITS;
-> @@ -115,7 +115,7 @@ static void ring_interrupt_active(struct tb_ring *ring, bool active)
->  
->  	dev_dbg(&ring->nhi->pdev->dev,
->  		"%s interrupt at register %#x bit %d (%#x -> %#x)\n",
-> -		active ? "enabling" : "disabling", reg, bit, old, new);
-> +		active ? "enabling" : "disabling", reg, interrupt_bit, old, new);
->  
->  	if (new == old)
->  		dev_WARN(&ring->nhi->pdev->dev,
-> -- 
-> 2.27.0
+> On 2/15/2023 5:06 AM, Ilpo Järvinen wrote:
+> > get_llc_perf() function comment refers to cpu_no parameter that does
+> > not exist.
+> > 
+> > Correct get_llc_perf() the comment to document llc_perf_miss instead.
+> 
+> "Correct the get_llc_perf() comment"?
+
+Yes. No matter how many times I read my own changelogs through, my mind 
+goes to auto-correction mode and I often fail to spot obvious errors such 
+as this.
+
+Thanks for reviewing.
+
+-- 
+ i.
+
+> This is so minor and I do not think a reason to resubmit whole series.
+
+> > Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> > ---
+> 
+> Thank you
+> 
+> Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
+> 
+> Reinette
+> 
+--8323329-709021613-1678956358=:2328--
