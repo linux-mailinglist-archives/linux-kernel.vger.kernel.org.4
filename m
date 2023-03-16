@@ -2,55 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C45B6BDBEE
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 23:47:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B01E96BDBEF
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 23:47:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230103AbjCPWrX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 18:47:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47296 "EHLO
+        id S230131AbjCPWr0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 18:47:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230093AbjCPWrS (ORCPT
+        with ESMTP id S230098AbjCPWrX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 18:47:18 -0400
-Received: from mail-ed1-x54a.google.com (mail-ed1-x54a.google.com [IPv6:2a00:1450:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBEE1E6D8C
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 15:47:16 -0700 (PDT)
-Received: by mail-ed1-x54a.google.com with SMTP id c1-20020a0564021f8100b004acbe232c03so4905951edc.9
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 15:47:16 -0700 (PDT)
+        Thu, 16 Mar 2023 18:47:23 -0400
+Received: from mail-ed1-x549.google.com (mail-ed1-x549.google.com [IPv6:2a00:1450:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B452E6FE0
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 15:47:19 -0700 (PDT)
+Received: by mail-ed1-x549.google.com with SMTP id k12-20020a50c8cc000000b004accf30f6d3so4986367edh.14
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 15:47:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679006835;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=mIMhApGgO8tdqBq7ln4mUoYAtVQfctnuG47znmR3Hdk=;
-        b=dG1Fj3EX4sgJuQwgp2UhU7BloxdGqfpKCXNsSUwcImn0Gtitsw4nucQeqec/zudYiq
-         79+GE640VKDtERe9UcudVnI3IJwjavox42UEIyWrax04lelN9sgHSInSVI7K9aXmCBdX
-         3bKG/P5pP+f95mS62WQEBleu1VD+z6Kc4FO3l8Au9P2St2CD7Y3WMAUG8ktwBnw1rHT9
-         s47xHUyBGN4xrFp7/wYWe3AHWZPTgCwyHNiYQrSSD6TBpgb67ltgdkb09LDw/PNSJBNO
-         EJx4qe+cc5vCmCJcoRSeeT5kns/WNboi6XPBBAxi2836S2HBaG/P9Uwa9R6xiUbh5qNl
-         Eyig==
+        d=google.com; s=20210112; t=1679006838;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=DKOoaD6Ra29v+G2EYQelA/9U1zSfLrdqKtsejRDWzBc=;
+        b=poi8gC8t1L69qGbvV3ks4+AtYYPqxKPowF0x6sr1KaWiMUjsX4yJbWzHEuFQwMGTCC
+         a7vDGOPF9ZmWUYAEKqcXuGg3TH0I0ByS3it3T8iCMelyOoIoUHvnsD37tuy/eN/f8fgZ
+         MOhWLEZtd3O1iIO5liKIZl+rOd00DGKRWzqCFt9cb4FP0WauXq3RGlanbszWSkS7PIsn
+         3nqOmi6gnlGBIz02VEBhfzUlvZI0++Z2V19sIEMasWeBhM3fLZntPYAgfU5woXjA+hM0
+         rBDgBHTT1bwY8Y8QQDo0Lj2HKJM539d9cPt6XQANsVd4KS01FOSCOJtESH1ZAHER6eb1
+         CyLQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679006835;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=mIMhApGgO8tdqBq7ln4mUoYAtVQfctnuG47znmR3Hdk=;
-        b=eWRaTzNkHs/9a6C9BHqrqQ/t+dYA0A7MBRBlXkh3INh9/pKiyFID8dbYnC0K/P+n8a
-         NM6bxDBNVQGc3SyQu9rAGegbfSHI7CealtbfFTVAhplVkU7oSrIJjADz1mO9aFhY3Sgp
-         9HBbrLMQ8rpOXHxHNxyG+TlKmdaW1TE1uFiBr3ed/GVtgQrMYudrMkfn8y7I1zSnRvvL
-         ORoMjWsQU/GUU9pU2fdV1XHfC2LHPBrE/27BONdUvS40rX+FNuwQEh/wCp1u48IriDv5
-         70FpOHjq5GI5ZFyUmqAfkgN8ggLYuEHxaZWapVq9lwc4Py6HZgv4fz4lSum2l2XWgHyi
-         qAEg==
-X-Gm-Message-State: AO0yUKU1pGHl0R5yxQKUbRoZfVBSqADiUiZta7hMGKv92/3ZXC9P26Nu
-        J3iPVILKJN8H+DF6g0IJ6UQAyuo+KQ==
-X-Google-Smtp-Source: AK7set//hzRaf3817JCLhSDQAGvQzyZ1e2uHq6BrFdQ9Xuirr5ufy7yRaiJimwcfj+RKh9yiWLlx9PIgpQ==
+        d=1e100.net; s=20210112; t=1679006838;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DKOoaD6Ra29v+G2EYQelA/9U1zSfLrdqKtsejRDWzBc=;
+        b=4hhEMepwyXTmGDl5BscUVEh3TZgKTlpAyo5DuVNRGrj5bL63T42C2Dk6sB2ldyH6yh
+         SzATUwmqugyA3R3M8dvJg8WG9OTcUbaAaduWyJwvx4yOg7NZdFbXCs1wBXvCJwFKdb3f
+         jO9ga46f3Eqsw5tlZubQEMSBTPLnUyWavee/HJEApIZd94U73CghvzK0ttQhViV1Q0Nk
+         QpGlqQOUNuWRMsjI6seVuyBf0u/NaAhaEzx4yHvxg0uMx6gDrB6bNXiBak+JYWnksg2p
+         sPmLp6clrkgbeUU52OnmLqZr7XC6YiW6AVI2/4FjYyVw5MhKZgkA4O8mx+IxqtapnVAG
+         zLUw==
+X-Gm-Message-State: AO0yUKU/izNPNttNH033GjxQsIfhvVt2SxMN8+nuoxPDGy/r+yNLw5jl
+        uyZv6CPf2hUB4o3yRYQ/sFtnFwEVqQ==
+X-Google-Smtp-Source: AK7set84vqzxuBmj5AgtGtjOmC56rRG8HcHnwMoT5tOHT4ppEJRc4UKAS6topCc1otARidzMsc5TwGO2Fg==
 X-Received: from elver.muc.corp.google.com ([2a00:79e0:9c:201:f359:6b95:96e:1317])
- (user=elver job=sendgmr) by 2002:a17:907:8a01:b0:92f:b8f1:7239 with SMTP id
- sc1-20020a1709078a0100b0092fb8f17239mr3202420ejc.4.1679006835449; Thu, 16 Mar
- 2023 15:47:15 -0700 (PDT)
-Date:   Thu, 16 Mar 2023 23:47:04 +0100
+ (user=elver job=sendgmr) by 2002:a17:907:7284:b0:931:6f5b:d27d with SMTP id
+ dt4-20020a170907728400b009316f5bd27dmr669131ejc.0.1679006838228; Thu, 16 Mar
+ 2023 15:47:18 -0700 (PDT)
+Date:   Thu, 16 Mar 2023 23:47:05 +0100
+In-Reply-To: <20230316224705.709984-1-elver@google.com>
 Mime-Version: 1.0
+References: <20230316224705.709984-1-elver@google.com>
 X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
-Message-ID: <20230316224705.709984-1-elver@google.com>
-Subject: [PATCH 1/2] kfence: avoid passing -g for test
+Message-ID: <20230316224705.709984-2-elver@google.com>
+Subject: [PATCH 2/2] kcsan: avoid passing -g for test
 From:   Marco Elver <elver@google.com>
 To:     elver@google.com, Andrew Morton <akpm@linux-foundation.org>
 Cc:     Alexander Potapenko <glider@google.com>,
@@ -69,18 +71,9 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 Nathan reported that when building with GNU as and a version of clang
-that defaults to DWARF5:
+that defaults to DWARF5, the assembler will complain with:
 
-  $ make -skj"$(nproc)" ARCH=riscv CROSS_COMPILE=riscv64-linux-gnu- \
-			LLVM=1 LLVM_IAS=0 O=build \
-			mrproper allmodconfig mm/kfence/kfence_test.o
-  /tmp/kfence_test-08a0a0.s: Assembler messages:
-  /tmp/kfence_test-08a0a0.s:14627: Error: non-constant .uleb128 is not supported
-  /tmp/kfence_test-08a0a0.s:14628: Error: non-constant .uleb128 is not supported
-  /tmp/kfence_test-08a0a0.s:14632: Error: non-constant .uleb128 is not supported
-  /tmp/kfence_test-08a0a0.s:14633: Error: non-constant .uleb128 is not supported
-  /tmp/kfence_test-08a0a0.s:14639: Error: non-constant .uleb128 is not supported
-  ...
+  Error: non-constant .uleb128 is not supported
 
 This is because `-g` defaults to the compiler debug info default. If the
 assembler does not support some of the directives used, the above errors
@@ -90,24 +83,25 @@ All the test wants is that stack traces print valid function names, and
 debug info is not required for that. (I currently cannot recall why I
 added the explicit `-g`.)
 
-Fixes: bc8fbc5f305a ("kfence: add test suite")
+Fixes: 1fe84fd4a402 ("kcsan: Add test suite")
 Reported-by: Nathan Chancellor <nathan@kernel.org>
 Signed-off-by: Marco Elver <elver@google.com>
 ---
- mm/kfence/Makefile | 2 +-
+ kernel/kcsan/Makefile | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/mm/kfence/Makefile b/mm/kfence/Makefile
-index 0bb95728a784..2de2a58d11a1 100644
---- a/mm/kfence/Makefile
-+++ b/mm/kfence/Makefile
-@@ -2,5 +2,5 @@
+diff --git a/kernel/kcsan/Makefile b/kernel/kcsan/Makefile
+index 8cf70f068d92..a45f3dfc8d14 100644
+--- a/kernel/kcsan/Makefile
++++ b/kernel/kcsan/Makefile
+@@ -16,6 +16,6 @@ obj-y := core.o debugfs.o report.o
+ KCSAN_INSTRUMENT_BARRIERS_selftest.o := y
+ obj-$(CONFIG_KCSAN_SELFTEST) += selftest.o
  
- obj-y := core.o report.o
- 
--CFLAGS_kfence_test.o := -g -fno-omit-frame-pointer -fno-optimize-sibling-calls
-+CFLAGS_kfence_test.o := -fno-omit-frame-pointer -fno-optimize-sibling-calls
- obj-$(CONFIG_KFENCE_KUNIT_TEST) += kfence_test.o
+-CFLAGS_kcsan_test.o := $(CFLAGS_KCSAN) -g -fno-omit-frame-pointer
++CFLAGS_kcsan_test.o := $(CFLAGS_KCSAN) -fno-omit-frame-pointer
+ CFLAGS_kcsan_test.o += $(DISABLE_STRUCTLEAK_PLUGIN)
+ obj-$(CONFIG_KCSAN_KUNIT_TEST) += kcsan_test.o
 -- 
 2.40.0.rc1.284.g88254d51c5-goog
 
