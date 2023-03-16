@@ -2,159 +2,348 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEB636BC5F8
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 07:08:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F3826BC610
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 07:21:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229634AbjCPGIG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 02:08:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46656 "EHLO
+        id S229556AbjCPGV4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 02:21:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbjCPGIE (ORCPT
+        with ESMTP id S229454AbjCPGVy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 02:08:04 -0400
-Received: from EUR02-VI1-obe.outbound.protection.outlook.com (mail-vi1eur02on2068.outbound.protection.outlook.com [40.107.241.68])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF979136F3;
-        Wed, 15 Mar 2023 23:08:02 -0700 (PDT)
+        Thu, 16 Mar 2023 02:21:54 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6747D7B13C;
+        Wed, 15 Mar 2023 23:21:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678947709; x=1710483709;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=8s4xKEdaq3Hey97tTkko2m7AAvjciNudQxr/GT4yS6U=;
+  b=iQF8kWnljpcfSNFooiEqCOUGmjtmxYEByTwxQbd3pK48LWlaeKRwvC+d
+   3zibLLB0hKIMEwBgDNNvnJedCCUXKsGB9Hm17JM4j3JUON2aF/Cn4IUiS
+   YPqssfq0pIEYISC0EpkzKCtd0p4W1ABaR+adu8as23W0kqxpjbS2dB4ad
+   tiLJ4c8WXm+R1kjbsm3Ov+cWUHYQpqPQlZ9JQRiQitkIq04oIkRQl32yJ
+   yPz6BNtgDx73q7vr30twQnXaH+bwvAc5dpkWQCfSavkBdmQjB6w7Mt6iV
+   SUqmWDustvtyCyYnzMh5LPHjRjuhtJxo42CZc67fmUKazESGw7Q0Jok/f
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="318299894"
+X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
+   d="scan'208";a="318299894"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2023 23:21:47 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="803588503"
+X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
+   d="scan'208";a="803588503"
+Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
+  by orsmga004.jf.intel.com with ESMTP; 15 Mar 2023 23:21:45 -0700
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Wed, 15 Mar 2023 23:21:45 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Wed, 15 Mar 2023 23:21:44 -0700
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21 via Frontend Transport; Wed, 15 Mar 2023 23:21:44 -0700
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.171)
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.21; Wed, 15 Mar 2023 23:21:44 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cKts8KHYEuPpWrvmjCnTEe2XBfTCzD6VwQBA1QYov8/RADNFSs92QdcT2AlGkdj8mdfsHiRvMtjJTtMPG74SzOOUsf2RSkWDgX05Afm3SM2wKO/fgK71kvNta05y69Dt5eJELktfRH1HmLWp432mGAIXWuKg6fJVal+0VLVWRu/SWDs6SfPXBQatCEBMFYq6ymtwztDKg5QVHEoP4N1pZSIS9eKZHp1mBGtWCZKGlaGkPGBDXXPYxtHbSbMBR0sxtoWAuidVJeeCgchKCmXDE3yREujbNL69tm8obmUKh0mqpUJiiDlzU2FEBEkotvSiLFkT2o42WFyvWTyxhcN9vg==
+ b=OWRIHrtqO+SgGTmMGBXYqpRuNZx07yaU+AUUzrVWG5F8P3HBMDsRI+y2ANwGHVMe5rBeNyUv4Ocg2J8sdnbB3d8oq+ZrTUwLet3rC9MStZwPoNY1Skplv5iQt2UgkhuqKOLwh5DWuUtLB5Ie/Se3FByV2/HeN1xQzhCWgqz++2kms8SMKTUIXnSsis0ErMOhRz0r57e3z2GSjoz9ojKmjrdZ4meBjLbs9gDDmCbIHC6T03zEesUeZpLpTgNvUVDkBVKLD/GTf6/f/4Sg43NUJt2nojZH80cDedqHjfdL2BxZ8xknD09ptjrT+Mqyu747p+bq3P/Zp8FN4hbn/6npeQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=9ZU7mdkg8q2vIHljpakZrveryrF6x5uJGidNfb5dqG8=;
- b=eeVvAgsLuVYKh81trqki1BOfktY4+sbrgUyMn/ZyUmM+caL5pWFaHzzW1AG+LrTsF0JtN3GxOaF3zmcwo0Cmf7Q2QFfbzi6cOeXWy0SB4gbq/CsetAlbV59ylUvKB+1uqwf5acbjRTDqAdQD8k6S/8tEX8TOfOoJ1PenfzaZYuoOON2S0ZuCPmvmxeXFgDd1j7+v7GANafwu3sOodVYLGI8X34hhJauUg0+XF/ulKdi/CsMGLWIYDumiTAi81XqJMXO1ZhzWTQQi+UQ1Ro2hd2PRnTQVzO6OT3A26Qf8lW/FvQ/x3gsHL/QtBOVa9aRVWKPql+gzBOeMJHbW+LkPbw==
+ bh=X3n4ag7Rcr5ia+e2QtakfT4pknND3ywNwRYjHgsXUSs=;
+ b=lwFRkvjVFUOCycXUEncws3Cfyi2WJbmT++F//hesFD1HtWOYvdSDUuPjNNfCN9xKM3J6DQIlTb26eOCy4fz9IXAn0pE/Pv+ZJTigi9R0mN40koj6+d0zkhvkHIrEYwu7OZocDKI5/yeqEQrNlNUqTkcDRExm2leeMNbyl573+gna6Ie4ExFHxeNlFEle8cVCumvzdyMQLOVzDSasMHSh1Lgz23+jJIxnCwXRu7Zp5wf3XjTZRhIFa0/m6qDWZYGDvWVFcEzmZUTtmOQMZ7Z44wDkC8mAaMtY4yRH8Ziro0TfV/8bO8si3xRWnCeS6wUpiUOPwZj+vjjF/zUs56i4Jw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9ZU7mdkg8q2vIHljpakZrveryrF6x5uJGidNfb5dqG8=;
- b=g/6cPPy7iKVLTsUJGqLjf5NrLGF0wlagmMYUP0I4wTvYHeBuAkEKVQy6/IGu3HKQ+9bwIPgXtqWxwkyD2uoHR+JfW/AYhp3h3ndEUR0x87jcM5XzlbvPGy49w78Pka9jWR75tb0W05uogWCzaWycrosPf1WZfEa3Ccpg6O5vN8w=
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from DU0PR04MB9563.eurprd04.prod.outlook.com (2603:10a6:10:314::7)
- by AS1PR04MB9334.eurprd04.prod.outlook.com (2603:10a6:20b:4de::21) with
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from CY5PR11MB6392.namprd11.prod.outlook.com (2603:10b6:930:37::15)
+ by DM4PR11MB7400.namprd11.prod.outlook.com (2603:10b6:8:100::11) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.31; Thu, 16 Mar
- 2023 06:08:00 +0000
-Received: from DU0PR04MB9563.eurprd04.prod.outlook.com
- ([fe80::a518:512c:4af1:276e]) by DU0PR04MB9563.eurprd04.prod.outlook.com
- ([fe80::a518:512c:4af1:276e%5]) with mapi id 15.20.6178.024; Thu, 16 Mar 2023
- 06:07:59 +0000
-From:   meenakshi.aggarwal@nxp.com
-To:     horia.geanta@nxp.com, V.sethi@nxp.com, pankaj.gupta@nxp.com,
-        gaurav.jain@nxp.com, herbert@gondor.apana.org.au,
-        davem@davemloft.net, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org, franck.lenormand@nxp.com
-Cc:     vijayb@linux.microsoft.com, code@tyhicks.com
-Subject: [PATCH v2] drivers: crypto: caam: jr: add .shutdown hook
-Date:   Thu, 16 Mar 2023 11:37:34 +0530
-Message-Id: <20230316060734.818549-1-meenakshi.aggarwal@nxp.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230221054047.2140558-1-meenakshi.aggarwal@nxp.com>
-References: <20230221054047.2140558-1-meenakshi.aggarwal@nxp.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SG2PR06CA0222.apcprd06.prod.outlook.com
- (2603:1096:4:68::30) To DU0PR04MB9563.eurprd04.prod.outlook.com
- (2603:10a6:10:314::7)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.26; Thu, 16 Mar
+ 2023 06:21:42 +0000
+Received: from CY5PR11MB6392.namprd11.prod.outlook.com
+ ([fe80::66b:243c:7f3d:db9e]) by CY5PR11MB6392.namprd11.prod.outlook.com
+ ([fe80::66b:243c:7f3d:db9e%3]) with mapi id 15.20.6178.029; Thu, 16 Mar 2023
+ 06:21:42 +0000
+Date:   Thu, 16 Mar 2023 14:18:57 +0800
+From:   Yujie Liu <yujie.liu@intel.com>
+To:     Adrian Hunter <adrian.hunter@intel.com>
+CC:     <oe-lkp@lists.linux.dev>, <lkp@intel.com>,
+        <linux-kernel@vger.kernel.org>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        <linux-perf-users@vger.kernel.org>
+Subject: Re: [linus:master] [perf symbols] ce4c8e7966:
+ perf-sanity-tests.Test_data_symbol.fail
+Message-ID: <ZBK00bqcyl2lnG8W@yujie-X299>
+References: <202303061424.6ad43294-yujie.liu@intel.com>
+ <d62c6cc7-9f43-2c23-d9e2-1ddbd0f5234c@intel.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <d62c6cc7-9f43-2c23-d9e2-1ddbd0f5234c@intel.com>
+X-ClientProxiedBy: SG2PR04CA0165.apcprd04.prod.outlook.com (2603:1096:4::27)
+ To CY5PR11MB6392.namprd11.prod.outlook.com (2603:10b6:930:37::15)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU0PR04MB9563:EE_|AS1PR04MB9334:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6c3fc986-b56e-40b4-95eb-08db25e4caee
+X-MS-TrafficTypeDiagnostic: CY5PR11MB6392:EE_|DM4PR11MB7400:EE_
+X-MS-Office365-Filtering-Correlation-Id: 646a035f-fe9e-475d-de65-08db25e6b55d
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: b30NmlixCJBmb1GsDT/6DL7SLPBx0gN/p49n3NZ6XbnRjhX/FEkTz8MkGNjG6xSLbgyeaIQzfSgABnW7/9PmmxNMDZx03qxzAOnSfmJvN4hDjMobII5frAHrsCt28uTMfq970PryHbsdinxcTLriIZkmG0rHDB4OrUN6GfL18HC9C41ssbI/IDVxH4QGqGI0lnBjwZXLQb0LuUHoxrgzkFhatVTxnoSJD/SUdbLC7kaaPviYkx5X2+0IOyo+7Ofyxy/TpDTBCJgkRyeBgo2J/zQzS3TE3XKFXik088eDemf1TKxxUJMkIL1m5qpQqaU5wWNyypv8Or59o5aRGz5WFzmd0WKrm9bUe7R+DoqPGFV014Qg4gK68uT+pXCy+lDXEbWiZFOeTKf/WDBkiEthtXJFG3nxtprdwdMmS8fEkZztxk8qCZL5gF/6IyP+wc6azqf/mSyLo7qlFaPIyAryKfPA601Ag/Wbi5sCGvT2XtTqueSIEuUjx0iZV/JpVjt+eNUCUwBeV/BCcW8mfdGn4xyk0tE3w3x+Aeiw+Uclfmypuw9Ci7i/fHj9RmuUXIsXyHYhDumkUadfxpW8nVooHXLJP0gle8vl1OiMGAme+qe3no49xb6hiPDxndXY/FNgPBO7+l3fNG5AtrdqH9F/7BTZKVP36Oz4vbJV775vwG82jUyUaBgdagMnS5EqVQ18u4htTLm9c83PArKDgDLX/NQDyDHhIw7TZxaXagKWTN8=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9563.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(136003)(366004)(396003)(39860400002)(376002)(451199018)(41300700001)(5660300002)(2906002)(38100700002)(38350700002)(36756003)(86362001)(8936002)(478600001)(52116002)(8676002)(66556008)(6486002)(6666004)(66946007)(66476007)(4326008)(316002)(186003)(6512007)(6506007)(1076003)(26005)(2616005)(9686003)(142923001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: MG85TZAiC39bEV87WB8CIFuVOWfeZHhRrHMMRFUlwOiswEtgP3qhgGBrSfd1Jmgwwx0PgNBd27H8B0dO5mwGGUtULFv9U1sq6NdUp7duQ/t79PQ5OK0ALsSvHO3/aXy1eed+Of6mfIk7TNcw9trYRotlpGs10KKajtuY2Hv5PkgO7lX68uv/FOaBe2Rzvk/GI+1bri3CAgu/IgGpjHev3Bv27TE4nLlHzSryFReV0A4dt7eK7QcbGtDyZ/tW9j0WTqAaic4ILp18yD7Ge0juhuBC3Ru660ALGVLnp63sM6whl98XBZH079qdBPhfYFIXVY2oBJUh87U91LMNxgCLsDo1iGbDmImSiOs/HbQLACycsA5FEIGTAWi4enLBFWrpObb4MmI65BrmjlXA/oX343x6STNMkijXoVGz1KzX6AhzkdBXw7vCf20cPlCabldyBSJsd1WYnWta+Sp5isNfrBsoF/+knf11dROl0rQCLDMzIjUGbRVclihqiAVDZPbu88LFozsoX3UDHvPTRNzUcPxOS7zAcRUPAtAaiFU4aBtK4xfh3tIdB8i5LoejWQ5T6QABSUPAcuOC/nFquERsEyv+j2f5Eyk+hfAtAc8dMRLKrgkCdKI4RI4c9Hfz5GtCL9OvJmdIFax6Sn1a1G/AN4ksYaxdFMnE6kcmWgC2Vf0=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR11MB6392.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(7916004)(346002)(366004)(136003)(396003)(376002)(39860400002)(451199018)(2906002)(5660300002)(41300700001)(44832011)(8936002)(6862004)(66946007)(66556008)(4326008)(66476007)(8676002)(83380400001)(478600001)(186003)(6506007)(966005)(26005)(33716001)(6486002)(316002)(9686003)(82960400001)(53546011)(6666004)(6636002)(6512007)(86362001)(38100700002)(54906003);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?k+ko+L0z8aKGCbR6jSkkdeDV9p0oJhze1XwqBGysPVbAR/hTBnhWIrGHxYVT?=
- =?us-ascii?Q?U8jcnVJE+QAu3zZjvFyGzZnwVWQ+h+ucRVIsOHVV6XIwjMFF3LdRscSSEl/t?=
- =?us-ascii?Q?SxmQfeZ/pA4uGKKRYIyYnMeFZxon6IRrarxdJvJzn4Uxm+sVG1Xq6/YrK/Qd?=
- =?us-ascii?Q?XRzvMt+drw5JdH+re57Jl2Mi3O/mAQtjG/2+YUcU1hq7Ns/N5VbanpMMBPEV?=
- =?us-ascii?Q?mqHT+RFpu+p0f/1R6dkAJiG5f5v/PR5P6IU8RafVdSXzn6WoyMuGwaNILwNH?=
- =?us-ascii?Q?5ifTcEoNMoGPo1t1zA+B3c2MTvhSVzNTwsIeWI6wXJ9EdNZg7I2IAi4mBhZQ?=
- =?us-ascii?Q?pxv6oyCFoXKSRbNxAIAllQTfOu3E2HC6Q4k/GcZLEJj9sPU3Rz/N+1GZJQRg?=
- =?us-ascii?Q?+9mrLBE0WM1St4PRbkULTzjP3CYe49tqU0G6OSisgEW6bRKEpNuINwwCuCvk?=
- =?us-ascii?Q?GEXBuX3MdGqnDxM28pN8mMLfQuiNTOkKardC1+lQEyzCqhXKoo4uf6PwEdIt?=
- =?us-ascii?Q?7FrFR9fLy/yt60caShLxee6W7tNKM/DozuGprI4Kg6djY8lLk/yfR5PcY/cO?=
- =?us-ascii?Q?SoXAz9PWU8UsJAbkW1cR5XyVAbZ/lXSLQiIc0sFHwn6t8mpF/Xsouzs0Dtke?=
- =?us-ascii?Q?ch06ddDqH1BHDyxplbIOWNr2LIPqwHPbjA9tmxl3tTAxbVv0SOKCSvMz2pOB?=
- =?us-ascii?Q?uHnk4eHhZTuRoFbZiUOWo8FlBfcddTriKPZZ8c6dW+Tu/HkoxF7nYfuzBuLf?=
- =?us-ascii?Q?SNzPnPh9UMpmxPE6QD9G3RrKuJagNg72qgyYhkA9Wq1a2pV2wzJ4eOX+DQsA?=
- =?us-ascii?Q?YF+fpalcHK163zSvw5lNDAJzNLWM2Oke9G9VNHvkiNe6lD3N2g4MXDyUVLZT?=
- =?us-ascii?Q?GpGtRUxtu63MQwZLEU6u4aLac1ocGpe2WElDV8S/AhSzjVqT8AAQ7QbqYdCG?=
- =?us-ascii?Q?1FHaQmnb5YSyaLsMY7ASjOB3YqZyvaJ5H5FZLH/rFwnOHldtHFZWtUi+H9pN?=
- =?us-ascii?Q?oRdEG56+frwr2TmOe9st3flSn6bnBR05zFxYDXYrY4M882+gHuQdiymuXs6z?=
- =?us-ascii?Q?SMVsHjoJYi+5Ut+IlkAit4fv1x8ZROjMx+5DDYnHcq55PqOyIADqKCxEfwbW?=
- =?us-ascii?Q?naBZHDfjSkYbki2CGJ82P9rsi2NPv+RkzfJU8zDW9w2CwinknDtHWP2TVPMr?=
- =?us-ascii?Q?tVSie2gF3Yg2sM+/oMYMgAq1Tcs+G3nJez1cHTbi+OlJin5BRosE9kz6Yk7S?=
- =?us-ascii?Q?c9V8H0h41oPof8Jk7xee0Z7VoUHJhCu/5ODwL1od409/KSuO2HoV0UYex+Dz?=
- =?us-ascii?Q?jN7Cg5lffIq48wpltlqpA9gzHkFdL4sU2pRzjCC18YSmccG+Evgo6hyObRre?=
- =?us-ascii?Q?TK7f3KWknYuY/a9JppgJcbh+BCUzdgVMYjdSxQoArlFJeC3w9LsIpSI208C+?=
- =?us-ascii?Q?xhu6fETmlLGnoSvsm6m4XqCLJ3onafb0xNx6vXe6QY0u0Nofnqf4YHtHPWN5?=
- =?us-ascii?Q?4j+foQzVLsPCyjZpToCToYzd5pI5v48q/v+fchUf34xgtLXPGPO4IIGPiiL6?=
- =?us-ascii?Q?AtmA/cMfrlZhmtRZ5ZxmVLY998tIfFOIclmBpnwbsCE1SV0WiLuOBqIKAE90?=
- =?us-ascii?Q?ow=3D=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6c3fc986-b56e-40b4-95eb-08db25e4caee
-X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9563.eurprd04.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?8W8oX8jj0raZe1c75O6JTAChNiSe2hDX4EGeCildlvI/cccB8ZKoDVfshyNA?=
+ =?us-ascii?Q?Q6s2pez8cUrRXD1MPTYoThEq41JJtTSqWsAPq/IvUFTvZLSqSBPVzsd9CmP0?=
+ =?us-ascii?Q?46H2dm17YLnHydjgs1lTIB7ust6jZ3Kr6wXYTZ5gLe4P3xl2LA2/rUFwxu/t?=
+ =?us-ascii?Q?ouaSs2jVeKfIvgwahVJhhwo2+ztIrMzNOp5xeLIHxPhr9wuSCBFQpObHKwpZ?=
+ =?us-ascii?Q?ZsoalkW9G4/Tynffw+AbeG6CUWPcgmljW+UPoS6M2447A0qknMt5FfZ5BJr5?=
+ =?us-ascii?Q?dshTcoIfvsnPX2d7H6IVlDKQ258rMBR9EKC3hKLOpK30slzCn9OweHkqIcPh?=
+ =?us-ascii?Q?8YSGtcJX6U2qDT00HDCrzCVt52srQmVNKyeJa9qIvoBFU4+nyHLBncqtYxt+?=
+ =?us-ascii?Q?RX1QjEUXaX4mTNcXvxFy8M5ZhU+AQsO1IDZxCyEHlc9MfCyK3r1oj+EqRYRp?=
+ =?us-ascii?Q?Ox4+2bZ7l/s7NoDe+bUNqdId0NhoOIBjCqUzFg9yb8TUfIZbXRo+hGeXzPa9?=
+ =?us-ascii?Q?etr6gw60zcJ92atMmMoM/ZMTIXSATvFxT79fsQZeZttMl6KVl6Vso49uKoD9?=
+ =?us-ascii?Q?EzqEDEXZ2cdYDPdR7fVmj6Ibp+mikvJSOu0plrXeXAUQQb/bzA4CUIn0+Npj?=
+ =?us-ascii?Q?MKC/o70zuT/wWiSVao/pWpcoWy+wMPlO3U7TdOiUT4Qu3qgA1ImqsdjNbAi/?=
+ =?us-ascii?Q?XkAQn+kJH6gxY3vW3kU6J2PGuoJ6AOSyQKtFupITQQdCchIyCg7bxrAoPHfS?=
+ =?us-ascii?Q?IBzM6QyUKI1tGk4VaU2YRws4n4msMoSVuhMRS/hymQ3NFnK2GHbygBkObJQy?=
+ =?us-ascii?Q?U6UCMdhE/kEn1RQcTApalnO2W2k+OH4HigQ5SimkraEx/e7lgKWRghQmpgIq?=
+ =?us-ascii?Q?6DRA3FkcSrz13yeVFJF2yymPrRAvRLbZXkTSfExfBfH5BgkeIuB/hwv3jCPg?=
+ =?us-ascii?Q?OdZBZBXchpeK5P8ut9eTb1yhOKrVKNfNgTbltg+YMX1WzaBKRBfWhWFItqPX?=
+ =?us-ascii?Q?0wOQeiSbzhNrIQ9eZNj7Zcgd2fgUpUxecioq/2eTv4jIL9wFxaSJBEvaZxJ/?=
+ =?us-ascii?Q?x2BvPacMyS8mXvcWaG957CYfQlbvGF4CzPf0IG1KVY0tbohisFiKBAOah8Fs?=
+ =?us-ascii?Q?+lltBmJGEmMaO5xmjbFeh8jDc/XUP4gFQkP62a+p7VSOMN4uP/HXwO+isFF5?=
+ =?us-ascii?Q?1X8R5uEbGTf9db4C3A8pa1Dq4gtF5daMQbmp/FiS+ZaBO692TtFWESb/eu4d?=
+ =?us-ascii?Q?Uh4pG6ZO3gLbFiJbvaX0nGlkM/D+9u8fMcre2E6zbgR+xi9VvKvZJaNQTlKf?=
+ =?us-ascii?Q?xk2q4DxUDSnCX2Xl++Ijv6Fj6p8oxGiAmq8VhldtZSwGADl/XhdsBKXvkjyK?=
+ =?us-ascii?Q?2voEiEIexkKWwoKh0wP5cfpNFd3UfFLO10n97dsirfvQX3U2e1Fg6U90NXrQ?=
+ =?us-ascii?Q?MsnohVMGfENSTPCiVOs6ae70zNzYf7xvhAPIT1vzfuBpSng1coK0j3ILgumP?=
+ =?us-ascii?Q?UTa9obqyDWTdctnQ81KkJzdxx5HLjK2Hpx0U7OOKXsgFjTNA1iZzJWNWLDKG?=
+ =?us-ascii?Q?G1/LpTJDpnTBjDUZ6F0fXFrGZRw2SssRy4Trf8/o?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 646a035f-fe9e-475d-de65-08db25e6b55d
+X-MS-Exchange-CrossTenant-AuthSource: CY5PR11MB6392.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Mar 2023 06:07:59.7348
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Mar 2023 06:21:42.2183
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: KcZJzMue737PE27Y+lnVcObrSHgWLy/NkEJvTXkFUO6i9zQA4yF/o1A5rRzsXgoovz6EBFyJAMkgaDXCJF0TDiDcbLQMHsDVvQjH8HM87ss=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS1PR04MB9334
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: hXTLxp5S4MwmI/sx4y27Tr0EhCng7w5Smq2hiqBFsKjho8jcA2kzafUE28QvgbhPgfZqNSvJ43lzLg1JG92Gcg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB7400
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Gaurav Jain <gaurav.jain@nxp.com>
+On Mon, Mar 06, 2023 at 03:20:09PM +0200, Adrian Hunter wrote:
+> On 6/03/23 08:30, kernel test robot wrote:
+> > Greeting,
+> > 
+> > FYI, we sent a report when this commit was in linux-next/master:
+> > 
+> > https://lore.kernel.org/all/202302092156.c0b14693-oliver.sang@intel.com/
+> > 
+> > This commit has been merged to mainline and we still observe similar
+> > failures, so we report again FYI.
+> > 
+> > We noticed perf-sanity-tests.Test_data_symbol.fail due to commit (built with gcc-11):
+> > 
+> > commit: ce4c8e7966f317ef2af896778b5fa9105a5cd351 ("perf symbols: Get symbols for .plt.got for x86-64")
+> > https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git master
+> > 
+> > [test failed on linux-next/master 1acf39ef8f1425cd105f630dc2c7c1d8fff27ed1]
+> > 
+> > in testcase: perf-sanity-tests
+> > version: 
+> > with following parameters:
+> > 
+> > 	perf_compiler: clang
+> > 
+> > on test machine: 8 threads 1 sockets Intel(R) Core(TM) i7-7700 CPU @ 3.60GHz (Kaby Lake) with 32G memory
+> > 
+> > caused below changes (please refer to attached dmesg/kmsg for entire log/backtrace):
+> > 
+> > 
+> > 2023-02-08 19:29:00 sudo /usr/src/perf_selftests-x86_64-rhel-8.3-func-ce4c8e7966f317ef2af896778b5fa91
+> > 05a5cd351/tools/perf/perf test 105
+> > 105: Test data symbol                                                : FAILED!
+> > 
+> > 
+> > =========================================================================================
+> > tbox_group/testcase/rootfs/kconfig/compiler/perf_compiler:
+> >   lkp-kbl-d01/perf-sanity-tests/debian-11.1-x86_64-20220510.cgz/x86_64-rhel-8.3-func/gcc-11/clang
+> > 
+> > commit: 
+> >   51a188ad8c2d8 ("perf symbols: Start adding support for .plt.got for x86")
+> >   ce4c8e7966f31 ("perf symbols: Get symbols for .plt.got for x86-64")
+> > 
+> > 51a188ad8c2d89c5 ce4c8e7966f317ef2af896778b5 
+> > ---------------- --------------------------- 
+> >        fail:runs  %reproduction    fail:runs
+> >            |             |             |    
+> >            :6           50%           3:6     perf-sanity-tests.Check_branch_stack_sampling.fail
+> >            :6          100%           6:6     perf-sanity-tests.Test_data_symbol.fail
+> >            :6           33%           2:6     perf-sanity-tests.perf_record_tests.fail
+> > 
+> > 
+> > If you fix the issue, kindly add following tag
+> > | Reported-by: kernel test robot <yujie.liu@intel.com>
+> > | Link: https://lore.kernel.org/oe-lkp/202303061424.6ad43294-yujie.liu@intel.com
+> > 
+> > 
+> > To reproduce:
+> > 
+> >         git clone https://github.com/intel/lkp-tests.git
+> >         cd lkp-tests
+> >         sudo bin/lkp install job.yaml           # job file is attached in this email
+> >         bin/lkp split-job --compatible job.yaml # generate the yaml file for lkp run
+> >         sudo bin/lkp run generated-yaml-file
+> > 
+> >         # if come across any failure that blocks the test,
+> >         # please remove ~/.lkp and /lkp dir to run from a clean state.
+> 
+> Works fine for me.  See below.
+> 
+> You will have to debug your environment:
+> Add option -v to perf test (e.g. perf test -c "data symbol") and
+> add 'set -x' to tools/perf/tests/shell/test_data_symbol.sh
 
-add .shutdown hook in caam_jr driver to support kexec boot
+Thanks for the suggestion on debugging our environment.
 
-Signed-off-by: Gaurav Jain <gaurav.jain@nxp.com>
-Tested-by: Vijay Balakrishna <vijayb@linux.microsoft.com>
-Reviewed-by: Pankaj Gupta <pankaj.gupta@nxp.com>
----
+We found that we were asked by developers to run perf test with
+sanitizer on, so we build perf with some additional flags like
+`make EXTRA_CFLAGS="-fsanitize=undefined -fsanitize=address"`, and the
+test_data_symbol failure only happens when these flags are set, but
+won't happen if do a make without those flags.
 
- changes in v2:
-	- corrected alignment
+Could you please help check if above flags could impact the behavior of
+perf test? Thanks.
 
- drivers/crypto/caam/jr.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+Here are the test results with and without the flags:
 
-diff --git a/drivers/crypto/caam/jr.c b/drivers/crypto/caam/jr.c
-index 8745fe3cb575..28aef9ba8eac 100644
---- a/drivers/crypto/caam/jr.c
-+++ b/drivers/crypto/caam/jr.c
-@@ -198,6 +198,11 @@ static int caam_jr_remove(struct platform_device *pdev)
- 	return ret;
- }
- 
-+static void caam_jr_platform_shutdown(struct platform_device *pdev)
-+{
-+	caam_jr_remove(pdev);
-+}
-+
- /* Main per-ring interrupt handler */
- static irqreturn_t caam_jr_interrupt(int irq, void *st_dev)
- {
-@@ -653,6 +658,7 @@ static struct platform_driver caam_jr_driver = {
- 	},
- 	.probe       = caam_jr_probe,
- 	.remove      = caam_jr_remove,
-+	.shutdown    = caam_jr_platform_shutdown,
- };
- 
- static int __init jr_driver_init(void)
--- 
-2.25.1
+$ make EXTRA_CFLAGS="-fsanitize=undefined -fsanitize=address"
+$ ./perf test "data symbol" -v
+105: Test data symbol                                                :
+--- start ---
+test child forked, pid 25107
++ skip_if_no_mem_event
++ perf mem record -e list
++ grep -E -q available
++ return 0
++ TEST_PROGRAM='perf test -w datasym'
+++ mktemp /tmp/__perf_test.perf.data.XXXXX
++ PERF_DATA=/tmp/__perf_test.perf.data.t834P
++ trap cleanup_files exit term int
++ echo 'Recording workload...'
+Recording workload...
+++ grep -E -c 'vendor_id.*AuthenticAMD' /proc/cpuinfo
++ is_amd=0
++ (( 0 >= 1 ))
++ PERFPID=25120
++ sleep 1
++ perf mem record --all-user -o /tmp/__perf_test.perf.data.t834P -- perf test -w datasym
+util/util.c:527:2: runtime error: null pointer passed as argument 2, which is declared to never be null
++ kill 25120
++ wait 25120
+[ perf record: Woken up 1 times to write data ]
+[ perf record: Captured and wrote 0.154 MB /tmp/__perf_test.perf.data.t834P (993 samples) ]
++ check_result
+++ perf mem report -i /tmp/__perf_test.perf.data.t834P -s symbol_daddr -q
+++ awk '/buf1/ { print $4 }'
++ result=
++ '[' -z '' ']'
++ return 1
++ exit 1
++ cleanup_files
++ echo 'Cleaning up files...'
+Cleaning up files...
++ rm -f /tmp/__perf_test.perf.data.t834P
+test child finished with -1
+---- end ----
+Test data symbol: FAILED!
 
+
+$ make
+$ ./perf test "data symbol" -v
+105: Test data symbol                                                :
+--- start ---
+test child forked, pid 17241
++ skip_if_no_mem_event
++ perf mem record -e list
++ grep -E -q available
++ return 0
++ TEST_PROGRAM='perf test -w datasym'
+++ mktemp /tmp/__perf_test.perf.data.XXXXX
++ PERF_DATA=/tmp/__perf_test.perf.data.qqdDQ
++ trap cleanup_files exit term int
++ echo 'Recording workload...'
+Recording workload...
+++ grep -E -c 'vendor_id.*AuthenticAMD' /proc/cpuinfo
++ is_amd=0
++ (( 0 >= 1 ))
++ PERFPID=17247
++ sleep 1
++ perf mem record --all-user -o /tmp/__perf_test.perf.data.qqdDQ -- perf test -w datasym
++ kill 17247
++ wait 17247
+[ perf record: Woken up 1 times to write data ]
+[ perf record: Captured and wrote 0.364 MB /tmp/__perf_test.perf.data.qqdDQ (5039 samples) ]
++ check_result
+++ perf mem report -i /tmp/__perf_test.perf.data.qqdDQ -s symbol_daddr -q
+++ awk '/buf1/ { print $4 }'
++ result='buf1+0x0
+buf1+0x38
+buf1+0x38
+buf1+0x0'
++ '[' -z 'buf1+0x0
+buf1+0x38
+buf1+0x38
+buf1+0x0' ']'
++ IFS=
++ read -r line
++ '[' buf1+0x0 '!=' buf1+0x0 ']'
++ IFS=
++ read -r line
++ '[' buf1+0x38 '!=' buf1+0x0 ']'
++ '[' buf1+0x38 '!=' buf1+0x38 ']'
++ IFS=
++ read -r line
++ '[' buf1+0x38 '!=' buf1+0x0 ']'
++ '[' buf1+0x38 '!=' buf1+0x38 ']'
++ IFS=
++ read -r line
++ '[' buf1+0x0 '!=' buf1+0x0 ']'
++ IFS=
++ read -r line
++ return 0
++ exit 0
++ cleanup_files
++ echo 'Cleaning up files...'
+Cleaning up files...
++ rm -f /tmp/__perf_test.perf.data.qqdDQ
+test child finished with 0
+---- end ----
+Test data symbol: Ok
+
+
+--
+Best Regards,
+Yujie
