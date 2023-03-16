@@ -2,116 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 298F06BCCAF
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 11:25:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B11036BCCB0
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 11:25:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231221AbjCPKZ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 06:25:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48962 "EHLO
+        id S231233AbjCPKZb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 06:25:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231220AbjCPKZN (ORCPT
+        with ESMTP id S231236AbjCPKZP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 06:25:13 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D99EBBCBA1;
-        Thu, 16 Mar 2023 03:24:41 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A025C2F4;
-        Thu, 16 Mar 2023 03:25:04 -0700 (PDT)
-Received: from [10.57.54.201] (unknown [10.57.54.201])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 43C7F3F67D;
-        Thu, 16 Mar 2023 03:24:19 -0700 (PDT)
-Message-ID: <44d364bc-62ac-7d31-b886-0f7ee94e3a08@arm.com>
-Date:   Thu, 16 Mar 2023 10:24:14 +0000
+        Thu, 16 Mar 2023 06:25:15 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C21E5BCFDC
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 03:24:43 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id DA64E660309D;
+        Thu, 16 Mar 2023 10:24:20 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1678962261;
+        bh=JdVoGCJf3Q6s6CvpqfATsO0IIiTbtHaPsLAGORiICLQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=ShTG0J1nBkA8ToOcGv0l67RQRBXFzu6DU+cCCVS2R+PFfiYGglc452pngu7LtW+VL
+         gBnyae7I0t5brIbuJLL01km4PdI3lkTX11Bn8Eb4eg8/SfEdHwtxLwFar1klM3CWPj
+         bGDClkcQiJIFpQJEH3ZV5CaVFZDjhYZziCL0kYncNOnxWpNMH3nPu4yYGPQ3mOGLID
+         yosnUYg6CG6RyY1YfGOm/v/IwzQxBA5zGgWkKxn5jYi1ul9RIlwzKkbGg/2Xo2rrUI
+         DZaUZ8HoFb/EYP1p1QxPAdw0Q0ZA5/seX+eXnCqKUzJwpU1jvf1Rwt/xA9yKKtcpf7
+         wX3DR3MZIDI3g==
+Message-ID: <4a398efe-af02-b1b6-1617-5537fc490bd7@collabora.com>
+Date:   Thu, 16 Mar 2023 11:24:18 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-Subject: Re: [PATCH 1/3] dma-debug: small dma_debug_entry's comment and
- variable name updates
-Content-Language: en-GB
-To:     Desnes Nunes <desnesn@redhat.com>, iommu@lists.linux.dev,
-        linux-scsi@vger.kernel.org, storagedev@microchip.com,
-        linux-kernel@vger.kernel.org
-Cc:     hch@lst.de, martin.petersen@oracle.com, don.brace@microchip.com,
-        m.szyprowski@samsung.com, jejb@linux.ibm.com, jsnitsel@redhat.com
-References: <20230315192130.970021-1-desnesn@redhat.com>
- <20230315192130.970021-2-desnesn@redhat.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <20230315192130.970021-2-desnesn@redhat.com>
+Subject: Re: [PATCH v3] iommu/mediatek: Set dma_mask for PGTABLE_PA_35_EN
+Content-Language: en-US
+To:     Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
+        Will Deacon <will@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Robin Murphy <robin.murphy@arm.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        iommu@lists.linux.dev, linux-mediatek@lists.infradead.org,
+        Yunfei Wang <yf.wang@mediatek.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        jianjiao.zeng@mediatek.com, chengci.xu@mediatek.com
+References: <20230316101445.12443-1-yong.wu@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230316101445.12443-1-yong.wu@mediatek.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-03-15 19:21, Desnes Nunes wrote:
-> Small update on dma_debug_entry's struct commentary and also standardize
-> the usage of 'dma_addr' variable name from debug_dma_map_page() on
-> debug_dma_unmap_page(), and similarly on debug_dma_free_coherent()
+Il 16/03/23 11:14, Yong Wu ha scritto:
+> When we enable PGTABLE_PA_35_EN, the PA for pgtable may be 35bits.
+> Thus add dma_mask for it.
 > 
-> Signed-off-by: Desnes Nunes <desnesn@redhat.com>
+> Fixes: 301c3ca12576 ("iommu/mediatek: Allow page table PA up to 35bit")
+> Signed-off-by: Chengci.Xu <chengci.xu@mediatek.com>
+> Signed-off-by: Yong Wu <yong.wu@mediatek.com>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 > ---
->   kernel/dma/debug.c | 11 ++++++-----
->   1 file changed, 6 insertions(+), 5 deletions(-)
+> v3: Sorry for a typo. Change from "if (!ret)" to "if (ret)".
+
+I was just about to make you notice. Glad you've fixed that promptly and before
+giving me a chance to complain! :-P
+
+Good job!
+
+Cheers,
+Angelo
+
 > 
-> diff --git a/kernel/dma/debug.c b/kernel/dma/debug.c
-> index 18c93c2276ca..e0ad8db1ec25 100644
-> --- a/kernel/dma/debug.c
-> +++ b/kernel/dma/debug.c
-> @@ -52,7 +52,8 @@ enum map_err_types {
->   /**
->    * struct dma_debug_entry - track a dma_map* or dma_alloc_coherent mapping
->    * @list: node on pre-allocated free_entries list
-> - * @dev: 'dev' argument to dma_map_{page|single|sg} or dma_alloc_coherent
-> + * @dev: pointer to the device driver
-
-The original comment was correct...
-
-> + * @dev_addr: 'dev' argument to dma_map_{page|single|sg} or dma_alloc_coherent
-
-...and the address is clearly not the argument representing the device, 
-since it is an address :/
-
-Thanks,
-Robin.
-
->    * @size: length of the mapping
->    * @type: single, page, sg, coherent
->    * @direction: enum dma_data_direction
-> @@ -1262,13 +1263,13 @@ void debug_dma_mapping_error(struct device *dev, dma_addr_t dma_addr)
->   }
->   EXPORT_SYMBOL(debug_dma_mapping_error);
+> v2: Just move this out from mt8188 series. Nothing change.
+> 
+> v1: https://lore.kernel.org/linux-mediatek/20230307080555.14399-3-yong.wu@mediatek.com/
+> ---
+>   drivers/iommu/mtk_iommu.c | 8 ++++++++
+>   1 file changed, 8 insertions(+)
+> 
+> diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
+> index d5a4955910ff..6a00ce208dc2 100644
+> --- a/drivers/iommu/mtk_iommu.c
+> +++ b/drivers/iommu/mtk_iommu.c
+> @@ -1258,6 +1258,14 @@ static int mtk_iommu_probe(struct platform_device *pdev)
+>   			return PTR_ERR(data->bclk);
+>   	}
 >   
-> -void debug_dma_unmap_page(struct device *dev, dma_addr_t addr,
-> +void debug_dma_unmap_page(struct device *dev, dma_addr_t dma_addr,
->   			  size_t size, int direction)
->   {
->   	struct dma_debug_entry ref = {
->   		.type           = dma_debug_single,
->   		.dev            = dev,
-> -		.dev_addr       = addr,
-> +		.dev_addr       = dma_addr,
->   		.size           = size,
->   		.direction      = direction,
->   	};
-> @@ -1403,13 +1404,13 @@ void debug_dma_alloc_coherent(struct device *dev, size_t size,
->   }
+> +	if (MTK_IOMMU_HAS_FLAG(data->plat_data, PGTABLE_PA_35_EN)) {
+> +		ret = dma_set_mask(dev, DMA_BIT_MASK(35));
+> +		if (ret) {
+> +			dev_err(dev, "Failed to set dma_mask 35.\n");
+> +			return ret;
+> +		}
+> +	}
+> +
+>   	pm_runtime_enable(dev);
 >   
->   void debug_dma_free_coherent(struct device *dev, size_t size,
-> -			 void *virt, dma_addr_t addr)
-> +			 void *virt, dma_addr_t dma_addr)
->   {
->   	struct dma_debug_entry ref = {
->   		.type           = dma_debug_coherent,
->   		.dev            = dev,
->   		.offset		= offset_in_page(virt),
-> -		.dev_addr       = addr,
-> +		.dev_addr       = dma_addr,
->   		.size           = size,
->   		.direction      = DMA_BIDIRECTIONAL,
->   	};
+>   	if (MTK_IOMMU_IS_TYPE(data->plat_data, MTK_IOMMU_TYPE_MM)) {
+
