@@ -2,136 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C56606BC6AF
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 08:14:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B65AC6BC6B2
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 08:14:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230089AbjCPHOA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 03:14:00 -0400
+        id S229765AbjCPHOF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 03:14:05 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230064AbjCPHN5 (ORCPT
+        with ESMTP id S230061AbjCPHOB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 03:13:57 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB1CDADC02
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 00:13:30 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id z21so3772911edb.4
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 00:13:30 -0700 (PDT)
+        Thu, 16 Mar 2023 03:14:01 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB45FADC11;
+        Thu, 16 Mar 2023 00:13:39 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id a32so618262ljr.9;
+        Thu, 16 Mar 2023 00:13:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678950807;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        d=gmail.com; s=20210112; t=1678950818;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=eQqBxhsFpqht9TV3ODi4eqp1h6oGT5RNGJVf78eU7ys=;
-        b=mXgg3KF+U8HsBWs12EmYyC6aiUPvUi7w/0p0EKveStEcm9drVh0Cf6U0LfVL7OqLob
-         kt2FJzKBcNkqUeqU0dHEOF+3i+XSk2uHNpV6wDStGtdCQErJXcR5szdPH6XXhCHH5yRP
-         po2rbgpMC2XZQfDs3eH5ZgBvgNHaeLc1LyRirGHNP0JnNyDRXPhhZMtveGK48JDDGsZi
-         HX6/nHEpiEDYk39mYh57xydK+y/k/rsK+aMCbECpuLTPzJ3NAWbHxnEA0NlkbPA0GRJI
-         Jc9PEGtJTxme5EFHzumoWle8qBBTaPc+kOSroopXECWK0bubelFQK1eDdLNAhM1Kj4GR
-         3F9w==
+        bh=F2wFT7CrRqcdyw8L0sjGieOy+9WgGuAwjTPbuLH379I=;
+        b=AFZJv8f0LnZQ0fM7TsswxbUC8egy/hgi+pKDIFZnbGJyZicjuFs+lKy4jytlsC1VbR
+         KkA2qJJTH1nNsThH8SdG4AyIb++pNptf/eT4c81KKQxuJwAIqZQBotg0fRx1sNmEwILo
+         8Vpf2q8SkRmfx/gZMIwO3oZjPtz7znR8+OHM25x4suC5PQgC/W0zo7gC04rnEhLuIoUR
+         Sn781dn8NyRnKUwFIzSyOcVRXmAiiHtp5Q92oUq1AZLfsx1Bj4a/OP2CwAXbHiOTfpja
+         Z66ZYWwy9gDvI4r37kODI/cJpcvhkdt8Lwk/PIGi2EKaY0mCj+f1tQ9iuQvcmNXqcYUc
+         nMMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678950807;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        d=1e100.net; s=20210112; t=1678950818;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=eQqBxhsFpqht9TV3ODi4eqp1h6oGT5RNGJVf78eU7ys=;
-        b=t7PahlWj1vMkVwqzygjek0cCkaOH6F8guspdeRHMUw6amRSvhcHdXcw1JLmOLze5SU
-         VyXvvOkOjSAp840h19/1JlYP5o+hrTJiJCIK2y8OkQ3/DTPxKgALpbtZejxXI+9OeFey
-         SkmYaXnjf4W7uFMaw0zMTrQtd+ML7TMLoCCHAKo3G7w3vL0+W6wVX8dh2meqW3Mv/h8Z
-         mwjyKt74uA8v5mOigHwPZM01eO3fLVMHttVzTKZ8QnbXJpakc9Gsbhw6eCgdA7kAIz5+
-         h1OKlwKnhtq88F4OUUDE60mksUKF83UY30ucbuFS7b+gll979nmME2x5IMMBMvxt+nZq
-         fY7A==
-X-Gm-Message-State: AO0yUKX87EwM3oQb64JpLzDpbHg4DwJQYhqMH5grNOt2JZa7VYwupURo
-        TrNa6q3VAtCOM3FBXLtwcqOaPg==
-X-Google-Smtp-Source: AK7set+9y57Tbht/OlWaMi3QKo2qNZTFOC475LQrmWPsM5KyA5oghAoT+UaS5gVbwxz/UHpbpizsLg==
-X-Received: by 2002:a17:907:20c1:b0:930:604d:5891 with SMTP id qq1-20020a17090720c100b00930604d5891mr1177542ejb.37.1678950807103;
-        Thu, 16 Mar 2023 00:13:27 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:9827:5f65:8269:a95f? ([2a02:810d:15c0:828:9827:5f65:8269:a95f])
-        by smtp.gmail.com with ESMTPSA id md21-20020a170906ae9500b0092b546b57casm3417008ejb.195.2023.03.16.00.13.25
+        bh=F2wFT7CrRqcdyw8L0sjGieOy+9WgGuAwjTPbuLH379I=;
+        b=XmwElcI0/2nr2BsgRNuk46OUlXcUdnjt2UrngOXZJf19XtZedtpMYX1bOxOiWM7YM/
+         cDeRzFjHcvKHtKDnD1xbxfSsAclQfvgLWRNeq+D4ogAgwvW4vHr2zgEWeFMSzlxAD8NE
+         9ZPzIMrvbGyWqwchFWGTBoRVCtqmU5VjbUn/Cd+2TK3Zi5aTJSVBmobeB6Cv2vT1HspI
+         +jyusPuTbez7ad91ihBqJqXqSacAcK6Dw6ZRd7e/Rqe5cihQJC6GQAcCHY3HPm6gEpCF
+         bNE/hP6KEBCYxAHDCFPKAPjUNx8+UiJlXQcAsNIjjW5CDvAqJUSWYEuPUJV22GVS9q32
+         s69Q==
+X-Gm-Message-State: AO0yUKVH4Ztn2jy5fDurNv2sJub35lWkhSDMM8OqGu+NQc8NIK4zbLV0
+        8j0cL0M3InSKVzjS1CgU4EQ=
+X-Google-Smtp-Source: AK7set+QXuT4Phd7o0BtowhfYtOterzcc0ah/2EqaDQmwvsYz8jF5sUdZeNB2iugK3zTYb4BrkcsRQ==
+X-Received: by 2002:a05:651c:10cf:b0:28f:8fa4:7c25 with SMTP id l15-20020a05651c10cf00b0028f8fa47c25mr1421917ljn.25.1678950818031;
+        Thu, 16 Mar 2023 00:13:38 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:16f3:4a00::6? (dc75zzyyyyyyyyyyyyydy-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::6])
+        by smtp.gmail.com with ESMTPSA id t17-20020a2e9d11000000b0029353caa593sm1124713lji.5.2023.03.16.00.13.37
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Mar 2023 00:13:26 -0700 (PDT)
-Message-ID: <d4831176-c6f1-5a9b-3086-23d82f1f05a6@linaro.org>
-Date:   Thu, 16 Mar 2023 08:13:24 +0100
+        Thu, 16 Mar 2023 00:13:37 -0700 (PDT)
+Message-ID: <f581a290-4f10-5f32-7640-8c5dea0ccfce@gmail.com>
+Date:   Thu, 16 Mar 2023 09:13:36 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-Subject: Re: [PATCH net-next 01/11] dt-bindings: net: snps,dwmac: Update
- interrupt-names
-Content-Language: en-US
-To:     Andrew Halaney <ahalaney@redhat.com>, linux-kernel@vger.kernel.org
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, vkoul@kernel.org,
-        bhupesh.sharma@linaro.org, mturquette@baylibre.com,
-        sboyd@kernel.org, peppe.cavallaro@st.com,
-        alexandre.torgue@foss.st.com, joabreu@synopsys.com,
-        mcoquelin.stm32@gmail.com, richardcochran@gmail.com,
-        linux@armlinux.org.uk, veekhee@apple.com,
-        tee.min.tan@linux.intel.com, mohammad.athari.ismail@intel.com,
-        jonathanh@nvidia.com, ruppala@nvidia.com, bmasney@redhat.com,
-        andrey.konovalov@linaro.org, linux-arm-msm@vger.kernel.org,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, ncai@quicinc.com,
-        jsuraj@qti.qualcomm.com, hisunil@quicinc.com
-References: <20230313165620.128463-1-ahalaney@redhat.com>
- <20230313165620.128463-2-ahalaney@redhat.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230313165620.128463-2-ahalaney@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCHv2 02/12] power: supply: core: auto-exposure of
+ simple-battery data
+Content-Language: en-US, en-GB
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20230314225535.1321736-1-sre@kernel.org>
+ <20230314225535.1321736-3-sre@kernel.org>
+ <baffa307-173c-6ba1-0289-e7287049c0f5@gmail.com>
+ <20230316004121.rwieru4aj7d6mwgb@mercury.elektranox.org>
+ <de0848f7-7f33-b170-54b7-f0fbf4e5d7d6@gmail.com>
+In-Reply-To: <de0848f7-7f33-b170-54b7-f0fbf4e5d7d6@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/03/2023 17:56, Andrew Halaney wrote:
-> From: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+On 3/16/23 09:10, Matti Vaittinen wrote:
+> On 3/16/23 02:41, Sebastian Reichel wrote:
+>> Hi,
+>> [08/12] power: supply: generic-adc-battery: use simple-battery API
 > 
-> As commit fc191af1bb0d ("net: stmmac: platform: Fix misleading
-> interrupt error msg") noted, not every stmmac based platform
-> makes use of the 'eth_wake_irq' or 'eth_lpi' interrupts.
-> 
-> So, update the 'interrupt-names' inside 'snps,dwmac' YAML
-> bindings to reflect the same.
-> 
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-> Signed-off-by: Andrew Halaney <ahalaney@redhat.com>
-> ---
-> 
-> I picked this up from:
-> 	https://lore.kernel.org/netdev/20220929060405.2445745-2-bhupesh.sharma@linaro.org/
-> No changes other than collecting the Acked-by.
-> 
->  Documentation/devicetree/bindings/net/snps,dwmac.yaml | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/net/snps,dwmac.yaml b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
-> index 16b7d2904696..52ce14a4bea7 100644
-> --- a/Documentation/devicetree/bindings/net/snps,dwmac.yaml
-> +++ b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
-> @@ -105,8 +105,8 @@ properties:
->      minItems: 1
->      items:
->        - const: macirq
-> -      - const: eth_wake_irq
-> -      - const: eth_lpi
-> +      - enum: [eth_wake_irq, eth_lpi]
-> +      - enum: [eth_wake_irq, eth_lpi]
+> This one did look good to me but as it was pretty trivial one I didn't 
+> think my review made much of a difference :) I can reply with my tag on 
+> that one though as I did review what there was to review.
 
-I acked it before but this is not correct. This should be:
-+      - enum: [eth_wake_irq, eth_lpi]
-+      - enum: eth_lpi
+Sorry! I mixed this patch with another one. This indeed did have some 
+changes - I must've accidentally skipped this one. Will check this after 
+eating my breakfast :)
 
+> 
+>>
+>>> [...]
+>>
+>> Thanks for your reviews,
+> 
+> Thanks to you! You are the one making things better here, I am just 
+> treating this as an opportunity to learn ;)
+> 
+> Yours,
+>      -- Matti
+> 
 
-Best regards,
-Krzysztof
+-- 
+Matti Vaittinen
+Linux kernel developer at ROHM Semiconductors
+Oulu Finland
+
+~~ When things go utterly wrong vim users can always type :help! ~~
 
