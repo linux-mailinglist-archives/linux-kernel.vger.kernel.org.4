@@ -2,98 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F80C6BD734
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 18:35:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E6096BD738
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 18:37:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229892AbjCPRfR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 13:35:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55580 "EHLO
+        id S229798AbjCPRha (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 13:37:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229849AbjCPRfK (ORCPT
+        with ESMTP id S229549AbjCPRh2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 13:35:10 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AEA2DCF63
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 10:35:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 21DE2B822BD
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 17:35:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62BFAC433D2;
-        Thu, 16 Mar 2023 17:35:03 +0000 (UTC)
-Date:   Thu, 16 Mar 2023 17:35:00 +0000
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Baoquan He <bhe@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, horms@kernel.org,
-        thunder.leizhen@huawei.com, John.p.donnelly@oracle.com,
-        will@kernel.org, kexec@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v4] arm64: kdump: simplify the reservation behaviour of
- crashkernel=,high
-Message-ID: <ZBNTRBqqb74T3RMx@arm.com>
-References: <20230306084124.300584-1-bhe@redhat.com>
- <ZBHbw3Vp4dxukGOD@arm.com>
- <ZBLlyGxGk33yrA+2@MiWiFi-R3L-srv>
+        Thu, 16 Mar 2023 13:37:28 -0400
+Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22BE9BD4D8
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 10:37:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=inria.fr; s=dc;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=jtW6VRfS/JVv0FwoqbkQyH8YBBfB1YyKmLm0wG3RBG8=;
+  b=Mrf/MCkanwxvOkIpyGTAJPCLpYaX5tsp+qvOASyL4c2HGCPycCs7wZ9c
+   2HHxnexQ1UtiptV09FL0AuTbnMzFVCpb6z82v2mTcP5I8PfzSg086cq4A
+   WdGiRlZfMxElMddmDOPaTOMmzKNDJLTyeRdb5RTjpXC8PYqaBsTmO/A7Q
+   w=;
+Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
+X-IronPort-AV: E=Sophos;i="5.98,265,1673910000"; 
+   d="scan'208";a="50418013"
+Received: from dt-lawall.paris.inria.fr ([128.93.67.65])
+  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 18:37:25 +0100
+Date:   Thu, 16 Mar 2023 18:37:25 +0100 (CET)
+From:   Julia Lawall <julia.lawall@inria.fr>
+To:     Sumitra Sharma <sumitraartsy@gmail.com>
+cc:     drv@mailo.com, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
+        outreachy@lists.linux.dev
+Subject: Re: [PATCH v3] Staging: octeon: Fix line ending with '('
+In-Reply-To: <20230316171614.GA82631@sumitra.com>
+Message-ID: <92ac2441-aa53-41ad-b5b-a12b465bb826@inria.fr>
+References: <20230316171614.GA82631@sumitra.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZBLlyGxGk33yrA+2@MiWiFi-R3L-srv>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 16, 2023 at 05:47:52PM +0800, Baoquan He wrote:
-> On 03/15/23 at 02:52pm, Catalin Marinas wrote:
-> > On Mon, Mar 06, 2023 at 04:41:24PM +0800, Baoquan He wrote:
-> > > +		/*
-> > > +		 * For crashkernel=size[KMG], if the first attempt was for
-> > > +		 * low memory, fall back to high memory, the minimum required
-> > > +		 * low memory will be reserved later.
-> > > +		 */
-> > > +		if (!high && crash_max == CRASH_ADDR_LOW_MAX) {
-> > >  			crash_max = CRASH_ADDR_HIGH_MAX;
-> > > +			search_base = CRASH_ADDR_LOW_MAX;
-> > >  			crash_low_size = DEFAULT_CRASH_KERNEL_LOW_SIZE;
-> > >  			goto retry;
-> > >  		}
-> > 
-> > So I'm more tempted to set the search_base to 4G here rather than
-> > CRASH_ADDR_LOW_MAX. The crashkernel=x,high option on a RPi4 with all
-> > memory below 4G will fall back to low allocation. But RPi4 is the odd
-> > one out, so I think we can live with this.
-> 
-> I totally agree with you that we should take 4G as the fixed boundary of
-> low and high memory because kdump is aimed at workstation and server
-> platform. We can leave RPi4 to use crashkernel=size[KMG][@offset[KMG]]
-> to specify a region if people have to use.
-> 
-> [PATCH 0/2] arm64, kdump: enforce to take 4G as the crashkernel low memory end
-> https://lore.kernel.org/all/20220828005545.94389-1-bhe@redhat.com/T/#u
-> 
-> Now I am wondering if we should change CRASH_ADDR_LOW_MAX to 4G directly
-> since we decide to take 4G as the low memory limit when doing 'high'
-> reserving or falling back. This is just like what we have been doing in
-> x86_64. Not sure if I follow you correctly.
 
-On RPi4, we do need the 'low' allocation to be below 1GB, otherwise
-ZONE_DMA will be empty. But we can leave the 'high' reservation above
-4GB (if available). The downside is that we won't get anything between
-1GB and 4GB unless explicitly specified with @offset.
 
-I'm not entirely sure what you want to achieve: avoiding the 'high'
-reservation going across an arbitrary boundary (1GB or 4GB) that the
-user may not be aware of or just avoiding the 'high' reservation going
-across a 4G boundary? On RPi4, if the 'high' reservation above 4GB
-fails, should it fall back to below 1GB reservation or to somewhere
-between 1GB and 4GB, making sure it doesn't cross any of these two
-boundaries? For someone unfamiliar with the ZONE_DMA on RPi4, the latter
-would look like two 'low' allocations below 4GB.
+On Thu, 16 Mar 2023, Sumitra Sharma wrote:
 
--- 
-Catalin
+> Since, the coding-style limit the code within 80 columns per line. This
+> causes splitting the function header into two lines and results the
+> first line ending with a '('. This causes the checkpatch error.
+
+This should all be in the past tense: limited, caused, resulted, etc.
+
+julia
+
+>
+> Place the function parameters immediately after '(' in a single
+> line to align the function header.
+>
+> Signed-off-by: Sumitra Sharma <sumitraartsy@gmail.com>
+> ---
+> v2: Change patch subject and description
+>
+> v3: Change patch description, noted by Deepak R Varma <drv@mailo.com>
+>
+>
+> drivers/staging/octeon/octeon-stubs.h | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+>
+> diff --git a/drivers/staging/octeon/octeon-stubs.h b/drivers/staging/octeon/octeon-stubs.h
+> index 7a02e59e283f..3e7b92cd2e35 100644
+> --- a/drivers/staging/octeon/octeon-stubs.h
+> +++ b/drivers/staging/octeon/octeon-stubs.h
+> @@ -1372,9 +1372,7 @@ static inline void cvmx_fau_async_fetch_and_add32(uint64_t scraddr,
+>  						  int32_t value)
+>  { }
+>
+> -static inline union cvmx_gmxx_rxx_rx_inbnd cvmx_spi4000_check_speed(
+> -	int interface,
+> -	int port)
+> +static inline union cvmx_gmxx_rxx_rx_inbnd cvmx_spi4000_check_speed(int interface, int port)
+>  {
+>  	union cvmx_gmxx_rxx_rx_inbnd r;
+>
+> --
+> 2.25.1
+>
+>
+>
