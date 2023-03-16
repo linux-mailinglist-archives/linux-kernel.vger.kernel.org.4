@@ -2,98 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B65F76BD355
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 16:22:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A68506BD35F
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 16:23:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229985AbjCPPWf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 11:22:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51512 "EHLO
+        id S230233AbjCPPXu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 11:23:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231417AbjCPPWa (ORCPT
+        with ESMTP id S229959AbjCPPXr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 11:22:30 -0400
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1299DFB68;
-        Thu, 16 Mar 2023 08:22:19 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id D7DEA5C0151;
-        Thu, 16 Mar 2023 11:22:18 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Thu, 16 Mar 2023 11:22:18 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1678980138; x=1679066538; bh=Gu
-        9CGWBhuU9kfdDCy2f8ZEW/D76K6Q/Tbp9CvfberEs=; b=XQJYvEzxTMhu2lrbR9
-        NSUIJaM46GKfLcq/jwORrPj8Wygwv3+T5rcTzfUT8Eu8Ks5i61xHDE7ZZJk4qkbA
-        odKA07TScOtGGqs1DhOVjmg628ClLE2WvOe5WkHB1sE78oLmfxE+hpkEb/ibC+wj
-        ji2jH0MlXHFoIz+7eZsMz8Tp+ihON8wGY6wu772BW1Wi2lSPzrpg2DU/gXVPrPxA
-        r20PqoKytbvK6rJczlHXnz9LeZwF6DgLCP2b0nQNI1wALyKvgd7oxV+8TPJ8YIQO
-        4wDrHih1/jbV4PAZLrI+WNUEJiTIJN13w++RXMT4B5uRG2SToUv8ypcSlsKHdCWe
-        7L2Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1678980138; x=1679066538; bh=Gu9CGWBhuU9kf
-        dDCy2f8ZEW/D76K6Q/Tbp9CvfberEs=; b=W7fBa07kX8DNIjvBS2eGvcFZfb9QT
-        AgQ0u3hS4z49wQVgOG2DYtx5bHjt6+ETxCXUx0jFcRFuXRHyKJRGIXOTYI3ZzPJI
-        LGvdnEjiSP5CsqbPEJZfQNnPxysJKoYUiFldBJebTr57RPrx9bijuPNIhqsjoP5M
-        a87ph59TJOB/Y0LSxDz1UtoOh34shb20a4eQIuo4uBIsfrPdCBQkj4oR2Dovp4Bv
-        tvxtl+uyRiel5aTaN57ZtyVR2C3vS4Jrm1N53IYqb3Ujf58MSZb0TnVosxv4yjPN
-        oKNgJ1diDTr2JkupgBhkSJTRitxE4r2i0YYSp77CjEJ+gswKxgSeiBC+Q==
-X-ME-Sender: <xms:KTQTZN5CcGBOrkSGSjmbV2W2L-D6ylziRckElPy35rIpTKRRL0oiRQ>
-    <xme:KTQTZK4Iflz6DrqRA68IzpXEPSUMsJgViqHa1XrqTEmYYvBzKWaddxncfYFUeYIq7
-    Vs7llqb0CLML0q804Y>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdeftddgjeeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:KjQTZEdePnnd-bLyYdlOrG6oo24ABDT9lHKGS7Kmxi1Z__ii7CyVKw>
-    <xmx:KjQTZGJamWj9rcFX3RG3WE_JIcJ-XQj6Rs6fZ6hUbWPD2ua6n3OGRg>
-    <xmx:KjQTZBJMG9vi-Xb1NXz7SpwrlDhK6hlwbZDgXrN9OlBD-NGya1NnTg>
-    <xmx:KjQTZDg4paiw_2ieGp7OleYbMFuqq18rgEiTNMXgWkF594uAcp65bA>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id E1276B60083; Thu, 16 Mar 2023 11:22:17 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-221-gec32977366-fm-20230306.001-gec329773
-Mime-Version: 1.0
-Message-Id: <2f07c421-7f9c-4e53-8bd5-46be07bb5c89@app.fastmail.com>
-In-Reply-To: <9a1c49b0-2271-53c7-7f48-039f83d39e82@opensource.wdc.com>
-References: <20230314121216.413434-1-schnelle@linux.ibm.com>
- <20230314121216.413434-3-schnelle@linux.ibm.com>
- <CAMuHMdVry2YViJ5oFgo9i+uStWbhy7mXKWdWvCX=qgAu1-_Y1w@mail.gmail.com>
- <c7315ca2-3ebf-7f3b-da64-9a74a995b0ae@opensource.wdc.com>
- <CAMuHMdVajEYsw8HrKw0GwV+09gbtkhjVMuKZ6RSBvq6got=jAg@mail.gmail.com>
- <9a1c49b0-2271-53c7-7f48-039f83d39e82@opensource.wdc.com>
-Date:   Thu, 16 Mar 2023 16:21:58 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Damien Le Moal" <damien.lemoal@opensource.wdc.com>,
-        "Geert Uytterhoeven" <geert@linux-m68k.org>
-Cc:     "Niklas Schnelle" <schnelle@linux.ibm.com>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        "Bjorn Helgaas" <bhelgaas@google.com>,
-        =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
-        "Alan Stern" <stern@rowland.harvard.edu>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        "Paul Walmsley" <paul.walmsley@sifive.com>,
-        "Palmer Dabbelt" <palmer@dabbelt.com>,
-        "Albert Ou" <aou@eecs.berkeley.edu>, linux-kernel@vger.kernel.org,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-pci@vger.kernel.org, "Arnd Bergmann" <arnd@kernel.org>,
-        linux-ide@vger.kernel.org
-Subject: Re: [PATCH v3 02/38] ata: add HAS_IOPORT dependencies
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        Thu, 16 Mar 2023 11:23:47 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86C63BD4EE;
+        Thu, 16 Mar 2023 08:23:22 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id cy23so9020922edb.12;
+        Thu, 16 Mar 2023 08:23:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678980201;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PrzoMD4CuQsD1GnaeduBqm/59VH2CvP6iZ8kpO4L4zo=;
+        b=XrCXgJktL34IIt3GcnrDHQHCthbcX8YMQKdGHU2WcL0y+Bu/PhLujdea7yl8QF/lqq
+         8POJ8BJNXHxkXbBmynbKTiksORbOSHKL246ItZuT4agOTc6Me2DGhFaX4/gIlJg/LTjf
+         uZDsJVRAERjYQUlkf8vv4H8V/eUKlPYl5FLkNYxg9Pe/tE3qOET+4M/BsArcMrOsFsNX
+         tOXjTwcEy3ZMFhGg5eW6OyA9RjcvVVpdFXKVcMvngPLg+DuDGK+pOLl+27DuQn/hzfVH
+         XpWcNwEfmGAgNHAjuQd/dhtyM8Sdafq421zsktFiHvgiNxgpQs2DJ40lUiC0pUjQunEz
+         aRiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678980201;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PrzoMD4CuQsD1GnaeduBqm/59VH2CvP6iZ8kpO4L4zo=;
+        b=cj+KtQw6gjS2SghllZKc/mm+zua3+rb1wjrZDj8iQYqQDkxerhnyFuy3M4206ZPCFw
+         HlC33POSRIJ0V7ffoiDPPR1yWS576Az65UzsAuy+uEfrcX93GFLh/cA2pZg7KQiCgMPt
+         J8ljpIVMjXKHxoCuhRkhx1aSLQdGcES7ssN70n65+2JIYdLHtxFLbSRCHOQkNhzhWv9U
+         7r5Wr/WJo/OZzBN23w5zRenlaccQMQwfcWqd2sIr6rlFK3pT1hkgVarzg549fdKQuXYx
+         giC4cT9frZ6mCai44pZgZprjky6Pe+9rNssjp45sC+NoE3UFBeDBplKI75CAWF37axZU
+         W5Rg==
+X-Gm-Message-State: AO0yUKVP+b/iKYqsDWe6zxMjJrThJrOfRUnMQBy+AjxDgYJ4ZzEPC2Kx
+        Kpkovtcqy1mtwRFr53XtqLc=
+X-Google-Smtp-Source: AK7set8lt7URSpbX+pGpgLmU3TWep7/xdKn7mfbpM5H0xYj/ihzze1dQOcospGw7olsuqcv7qa9ZbQ==
+X-Received: by 2002:a17:906:6816:b0:930:1914:88fe with SMTP id k22-20020a170906681600b00930191488femr3553311ejr.68.1678980200899;
+        Thu, 16 Mar 2023 08:23:20 -0700 (PDT)
+Received: from localhost.localdomain (84-84-8-249.fixed.kpn.net. [84.84.8.249])
+        by smtp.gmail.com with ESMTPSA id vg8-20020a170907d30800b008c76facbbf7sm3981006ejc.171.2023.03.16.08.22.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Mar 2023 08:23:00 -0700 (PDT)
+From:   Jan Jasper de Kroon <jajadekroon@gmail.com>
+To:     jajadekroon@gmail.com
+Cc:     dmitry.torokhov@gmail.com, hadess@hadess.net, hdegoede@redhat.com,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        megi@xff.cz
+Subject: [PATCH v4 2/2] input: touchscreen: goodix: Hold controller in reset during suspend
+Date:   Thu, 16 Mar 2023 16:22:00 +0100
+Message-Id: <20230316152159.66922-1-jajadekroon@gmail.com>
+X-Mailer: git-send-email 2.34.3
+In-Reply-To: <20230310170026.415739-1-jajadekroon@gmail.com>
+References: <20230310170026.415739-1-jajadekroon@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -101,38 +74,106 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 16, 2023, at 00:57, Damien Le Moal wrote:
-> On 2023/03/15 20:36, Geert Uytterhoeven wrote:
+From: Ondřej Jirman <megi@xff.cz>
 
-> Ah. OK. I see now. So indeed, applying the dependency on the entire ATA_SFF
-> group of drivers is very coarse.
+The Goodix touchscreen controller used in PinePhone is not properly
+suspended during system sleep, leading to high power consumption. This
+commit modifies the driver to hold the controller in reset during
+system sleep, reducing power consumption by around 40mW.
 
+The original patch also disabled the regulators during system sleep, but
+this could cause issues with other peripherals attached to the same power
+supplies. Hence, this commit only holds the controller in reset during
+system sleep and does not attempt to power it off.
 
-> Can you change this to apply the dependency per driver ?
+A separate commit adds a new device tree property "goodix-hold-in-reset"
+to control the hold-in-reset behavior of the controller during system sleep.
 
-I think that will fail to build because of this function
-on architectures that drop their non-functional
-inb/outb helpers:
+Signed-off-by: Ondrej Jirman <megi@xff.cz>
+Signed-off-by: Jan Jasper de Kroon <jajadekroon@gmail.com>
+---
+Changes from v3 to v4:
+- Renamed the hold-in-reset-in-suspend function to 
+  goodix-hold-in-reset to prevent potential naming conflicts with other 
+  functions in the codebase. No functional changes were made.
 
-int ata_pci_bmdma_clear_simplex(struct pci_dev *pdev)
-{
-        unsigned long bmdma = pci_resource_start(pdev, 4);
-        u8 simplex;
+Changes from v2 to v3:
+- Some patch style cleaning up, to confirm to submission standard.
+
+Changes from v1 to v2:
+- Rewrote the commit message and function name to better reflect it's 
+  behavior.
+ drivers/input/touchscreen/goodix.c | 23 +++++++++++++++++++++++
+ drivers/input/touchscreen/goodix.h |  1 +
+ 2 files changed, 24 insertions(+)
+
+diff --git a/drivers/input/touchscreen/goodix.c b/drivers/input/touchscreen/goodix.c
+index b348172f19c3..9f86bdfbfc73 100644
+--- a/drivers/input/touchscreen/goodix.c
++++ b/drivers/input/touchscreen/goodix.c
+@@ -1284,6 +1284,7 @@ static void goodix_disable_regulators(void *arg)
  
-        if (bmdma == 0)
-                return -ENOENT;
+ static int goodix_ts_probe(struct i2c_client *client)
+ {
++	struct device_node *np = client->dev.of_node;
+ 	struct goodix_ts_data *ts;
+ 	const char *cfg_name;
+ 	int error;
+@@ -1303,6 +1304,7 @@ static int goodix_ts_probe(struct i2c_client *client)
+ 	i2c_set_clientdata(client, ts);
+ 	init_completion(&ts->firmware_loading_complete);
+ 	ts->contact_size = GOODIX_CONTACT_SIZE;
++	ts->goodix_hold_in_reset = of_property_read_bool(np, "goodix-hold-in-reset");
  
-        simplex = inb(bmdma + 0x02); 
-        outb(simplex & 0x60, bmdma + 0x02);
-        simplex = inb(bmdma + 0x02);
-        if (simplex & 0x80)
-                return -EOPNOTSUPP;
-        return 0;
-}
+ 	error = goodix_get_gpio_config(ts);
+ 	if (error)
+@@ -1410,6 +1412,13 @@ static int goodix_suspend(struct device *dev)
+ 	if (ts->load_cfg_from_disk)
+ 		wait_for_completion(&ts->firmware_loading_complete);
+ 
++	if (ts->goodix_hold_in_reset) {
++		goodix_free_irq(ts);
++		goodix_irq_direction_output(ts, 0);
++		gpiod_direction_output(ts->gpiod_rst, 0);
++		return 0;
++	}
++
+ 	/* We need gpio pins to suspend/resume */
+ 	if (ts->irq_pin_access_method == IRQ_PIN_ACCESS_NONE) {
+ 		disable_irq(client->irq);
+@@ -1455,6 +1464,20 @@ static int goodix_resume(struct device *dev)
+ 	u8 config_ver;
+ 	int error;
+ 
++	if (ts->goodix_hold_in_reset) {
++		error = goodix_reset(ts);
++		if (error) {
++			dev_err(dev, "Controller reset failed.\n");
++			return error;
++		}
++
++		error = goodix_request_irq(ts);
++		if (error)
++			return error;
++
++		return 0;
++	}
++
+ 	if (ts->irq_pin_access_method == IRQ_PIN_ACCESS_NONE) {
+ 		enable_irq(client->irq);
+ 		return 0;
+diff --git a/drivers/input/touchscreen/goodix.h b/drivers/input/touchscreen/goodix.h
+index 87797cc88b32..7be7eb1a8f27 100644
+--- a/drivers/input/touchscreen/goodix.h
++++ b/drivers/input/touchscreen/goodix.h
+@@ -104,6 +104,7 @@ struct goodix_ts_data {
+ 	u8 main_clk[GOODIX_MAIN_CLK_LEN];
+ 	int bak_ref_len;
+ 	u8 *bak_ref;
++	bool goodix_hold_in_reset;
+ };
+ 
+ int goodix_i2c_read(struct i2c_client *client, u16 reg, u8 *buf, int len);
+-- 
+2.34.3
 
-This is only called from five pata drivers (ali, amd,
-cmd64x, netcell, serverworks), so an easy workaround
-would be to make sure those depend on HAS_IOPORT
-and enclose the function definition in an #ifdef.
-
-        Arnd
