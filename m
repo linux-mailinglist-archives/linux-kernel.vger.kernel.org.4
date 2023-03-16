@@ -2,135 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A53A36BCF5B
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 13:25:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE2A36BCF60
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 13:27:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229909AbjCPMZ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 08:25:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43394 "EHLO
+        id S230087AbjCPM1D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 08:27:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbjCPMZ1 (ORCPT
+        with ESMTP id S229494AbjCPM1C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 08:25:27 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80BCCB1A45
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 05:24:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678969476;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=UtEGr4Rvg0bEC4nbqE2r93Q3GexaD+ubvmKMlTN9TvQ=;
-        b=erYy1GbIiw7MrJVe3r/sbAMtI/7hRYphJdiuHbYV2Y94O6Or+P/JD/yzXcVw/dul/hSV1l
-        2QuVQXisP1+C6ypt4DTGmL4VFGIlnefdZuuuwLYM7eNKdHmexRvq/zdiW0FitGn06W/axf
-        wGd8FYmAKXX1jti/Xf415xoVX+9tOBc=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-325-DFURbssNOr2lfqr6wC_-aA-1; Thu, 16 Mar 2023 08:24:35 -0400
-X-MC-Unique: DFURbssNOr2lfqr6wC_-aA-1
-Received: by mail-ed1-f71.google.com with SMTP id h11-20020a0564020e8b00b004e59d4722a3so2801173eda.6
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 05:24:35 -0700 (PDT)
+        Thu, 16 Mar 2023 08:27:02 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 851C8B951C;
+        Thu, 16 Mar 2023 05:27:01 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id x13so7003434edd.1;
+        Thu, 16 Mar 2023 05:27:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678969620;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=FMPnvazr+M7z4sZEE7rgBOYU1SkrFZ97M1BFgoNS8gw=;
+        b=cnCIU0eqE26HcDU24iSiJg0ojw3gvWmnT5o+GNnM2pZLJ6StCW8oixYjGqCqtM8sLi
+         CuaIHKHYKkydG6MR3NaflN92wYNDdby4MlI/Ko7J2nFxay7LacD3X4Qs/W3mMGC3abMI
+         T0kImGkAKtkYZ2L+yoeE6s1enbieGnXpx8gnaYWrkwTXkYyGOq2cPxSyJA2qt7yJUgKc
+         0sgoKvIhtlb5cFm7gOcR//9O053Eu9sj9xutx3v0LdDxZ3j8Az7dACiphaBHqbGllU58
+         s8DIvki+CSpgqz3ALUvnaZqt9LNhsOGDau2/Cg9A2w2vSPns927OguoRE0kbQp0dmOaV
+         SQgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678969474;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20210112; t=1678969620;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UtEGr4Rvg0bEC4nbqE2r93Q3GexaD+ubvmKMlTN9TvQ=;
-        b=qJ3IZAY4lOlXZXoO0+T15czU3mZfQvnWfeNDAw+HaOmAO6jqb0CSSrDlViI9RU3Dnh
-         YpB3f4Oww2Y2rCi+BSpTV3iw9HqInI9Fb3dyCNApD5Bo/gLeRXymX9HdE8ctvO6oHCET
-         hPICip+L5eBKleDZHjqhjXgsUviwTANfQt3BffAXb7q08O4dta2s8NI+GGBLovKm8WoS
-         A1mSwR2AKdF3hDbX8R4ZgwDyEWap0OB7p8tPyJoYPY1VkzH8bezHGQzSBOsNsYGz3Bx6
-         A8ZzfFasSI8GvWgV7acPYted54b11hdIA1c6EI0NbVr1jlfv44A3Pmd/stHGRWAC23Aw
-         T3eg==
-X-Gm-Message-State: AO0yUKXVkd62LEwlwZ/1lEdT525LsUH40x2nZgCr9C53lL3pzSVrlCrG
-        b14xAug1ejYZRlZ23FOwiIZdXuku0zrBCpvmmhLJ+U3yk8bP+E1tlxiBxqnp2M9AWJbTkpheBHQ
-        aarZNvB2Pj/Qg1S33uyklNK68
-X-Received: by 2002:aa7:cc94:0:b0:4fd:21a6:a649 with SMTP id p20-20020aa7cc94000000b004fd21a6a649mr5834409edt.40.1678969474415;
-        Thu, 16 Mar 2023 05:24:34 -0700 (PDT)
-X-Google-Smtp-Source: AK7set+WSRrCcr4bhPevwESZvKp7mYRo9xb3YCiMBm28uvFHEvtfafm5xMQQkMOSDAEjaTIY5YVHog==
-X-Received: by 2002:aa7:cc94:0:b0:4fd:21a6:a649 with SMTP id p20-20020aa7cc94000000b004fd21a6a649mr5834393edt.40.1678969474168;
-        Thu, 16 Mar 2023 05:24:34 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id v1-20020a50c401000000b004acbda55f6bsm3776310edf.27.2023.03.16.05.24.33
+        bh=FMPnvazr+M7z4sZEE7rgBOYU1SkrFZ97M1BFgoNS8gw=;
+        b=1GVnJ2DRvVcdLJrMecqjd7zKCFckrYwyQYTI2MTs79ucz4N3iPjx+0Sj4D3mBIwxDp
+         cxQ5vlZJv382UdE7IOGbgK9dn0n0/KhCrs1PCa/0p3VkuxTMhj1nHh0VeH9vIKhxztCA
+         y5zUmHi39J+4G6rxOjrNgeLbaRXp9kklqWHdOxRf5bBShCKzUxAmDp302dNiDl//Wtiu
+         lhOIX1vGnj/3DD4s0t6P5qPn3I288Gaby4GdcgtqjxAI63b633eocbabmiJhza4xHkFA
+         4kEVQrXzCNIs06A9BueEGRxZzO6Bd75/cF8Y2Bysh2BFyq4QEoxuU9U0eBgdsVw9S76e
+         scRQ==
+X-Gm-Message-State: AO0yUKXmViUw6eIK3vR8oF38pR0lKaEIsI/WkNeOQdZ8w/9pM3qSDxqf
+        jehY+nkUlxjlBmNPZyIzOzPUIgt31EE=
+X-Google-Smtp-Source: AK7set89MPgG9LNvjpKvJpjB5Cq3XHoTPOr7lXk0mwqkqLDeZ/FMi09O/bDr8GSECX4NHNpd77EO7A==
+X-Received: by 2002:a17:907:9882:b0:91f:5845:4e31 with SMTP id ja2-20020a170907988200b0091f58454e31mr10966023ejc.26.1678969620026;
+        Thu, 16 Mar 2023 05:27:00 -0700 (PDT)
+Received: from ?IPV6:2620:10d:c096:310::2eef? ([2620:10d:c092:600::2:7abd])
+        by smtp.gmail.com with ESMTPSA id qa17-20020a170907869100b008cecb8f374asm3789152ejc.0.2023.03.16.05.26.59
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Mar 2023 05:24:33 -0700 (PDT)
-Message-ID: <33889d76-ec46-6154-106f-d3603960adc9@redhat.com>
-Date:   Thu, 16 Mar 2023 13:24:32 +0100
+        Thu, 16 Mar 2023 05:26:59 -0700 (PDT)
+Message-ID: <7d533b7f-17e3-96e4-4fcb-f9bc4ce5e0ed@gmail.com>
+Date:   Thu, 16 Mar 2023 12:25:52 +0000
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 1/1] apple-gmux: Update apple_gmux_detect documentation
-Content-Language: en-US, nl
-To:     Orlando Chamberlain <orlandoch.dev@gmail.com>
-Cc:     Mark Gross <markgross@kernel.org>,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-References: <20230309104353.10905-1-orlandoch.dev@gmail.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20230309104353.10905-1-orlandoch.dev@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+ Thunderbird/102.7.2
+Subject: Re: [RFC 0/2] optimise local-tw task resheduling
+To:     Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org
+References: <cover.1678474375.git.asml.silence@gmail.com>
+ <9250606d-4998-96f6-aeaf-a5904d7027e3@kernel.dk>
+Content-Language: en-US
+From:   Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <9250606d-4998-96f6-aeaf-a5904d7027e3@kernel.dk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 3/9/23 11:43, Orlando Chamberlain wrote:
-> Commit fc83fbc80e1a ("platform/x86: apple-gmux: refactor gmux types")
-> neglected to update the documentation of apple_gmux_detect's arguments.
-> Update the documentation to reflect that commit's changes.
+On 3/11/23 17:24, Jens Axboe wrote:
+> On 3/10/23 12:04?PM, Pavel Begunkov wrote:
+>> io_uring extensively uses task_work, but when a task is waiting
+>> for multiple CQEs it causes lots of rescheduling. This series
+>> is an attempt to optimise it and be a base for future improvements.
+>>
+>> For some zc network tests eventually waiting for a portion of
+>> buffers I've got 10x descrease in the number of context switches,
+>> which reduced the CPU consumption more than twice (17% -> 8%).
+>> It also helps storage cases, while running fio/t/io_uring against
+>> a low performant drive it got 2x descrease of the number of context
+>> switches for QD8 and ~4 times for QD32.
+>>
+>> Not for inclusion yet, I want to add an optimisation for when
+>> waiting for 1 CQE.
 > 
-> include/linux/apple-gmux.h:99: warning:
-> 	Function parameter or member 'type_ret' not described in 'apple_gmux_detect'
-> include/linux/apple-gmux.h:99: warning:
-> 	Excess function parameter 'indexed_ret' description in 'apple_gmux_detect'
-> 
-> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> Link: https://lore.kernel.org/lkml/20230309122822.77435e33@canb.auug.org.au/
-> Fixes: fc83fbc80e1a ("platform/x86: apple-gmux: refactor gmux types")
-> Signed-off-by: Orlando Chamberlain <orlandoch.dev@gmail.com>
+> Ran this on the usual peak benchmark, using IRQ. IOPS is around ~70M for
+> that, and I see context rates of around 8.1-8.3M/sec with the current
+> kernel.
 
-Thank you for your patch, I've applied this patch to my review-hans 
-branch:
-https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
+Tried it out. No difference with bs=512, qd=4 is completed before
+it gets to schedule() in io_cqring_wait(). With QD32, it's local tw run
+__io_run_local_work() spins 2 loops, and QD=8 somewhat in the middle
+with rare extra sched.
 
-Note it will show up in my review-hans branch once I've pushed my
-local branch there, which might take a while.
+For bs=4096 QD=8 I see a lot of:
 
-Once I've run some tests on this branch the patches there will be
-added to the platform-drivers-x86/for-next branch and eventually
-will be included in the pdx86 pull-request to Linus for the next
-merge-window.
-
-Regards,
-
-Hans
+io_cqring_wait() @min_events=8
+schedule()
+__io_run_local_work() nr=4
+schedule()
+__io_run_local_work() nr=4
 
 
-> ---
->  include/linux/apple-gmux.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/include/linux/apple-gmux.h b/include/linux/apple-gmux.h
-> index 272f63f8fd7c..a7a7d430024b 100644
-> --- a/include/linux/apple-gmux.h
-> +++ b/include/linux/apple-gmux.h
-> @@ -86,7 +86,7 @@ static inline bool apple_gmux_is_mmio(unsigned long iostart)
->   * apple_gmux_detect() - detect if gmux is built into the machine
->   *
->   * @pnp_dev:     Device to probe or NULL to use the first matching device
-> - * @indexed_ret: Returns (by reference) if the gmux is indexed or not
-> + * @type_ret: Returns (by reference) the apple_gmux_type of the device
->   *
->   * Detect if a supported gmux device is present by actually probing it.
->   * This avoids the false positives returned on some models by
+And if we benchmark without and with the patch there is a nice
+CPU util reduction.
 
+CPU    %usr   %nice    %sys %iowait    %irq   %soft  %steal  %guest  %gnice   %idle
+   0    1.18    0.00   19.24    0.00    0.00    0.00    0.00    0.00    0.00   79.57
+   0    1.63    0.00   29.38    0.00    0.00    0.00    0.00    0.00    0.00   68.98
+
+-- 
+Pavel Begunkov
