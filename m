@@ -2,128 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 630F96BC65F
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 07:55:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C9206BC661
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 07:55:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229902AbjCPGzY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 02:55:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44260 "EHLO
+        id S229899AbjCPGz0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 02:55:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229881AbjCPGzW (ORCPT
+        with ESMTP id S229888AbjCPGzX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 02:55:22 -0400
-Received: from cstnet.cn (smtp80.cstnet.cn [159.226.251.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 98DDA80E0E
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 23:55:19 -0700 (PDT)
-Received: from localhost.localdomain (unknown [124.16.138.125])
-        by APP-01 (Coremail) with SMTP id qwCowAAnLjZVvRJkJXG7EA--.57936S2;
-        Thu, 16 Mar 2023 14:55:17 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     agk@redhat.com, snitzer@kernel.org
-Cc:     dm-devel@redhat.com, linux-kernel@vger.kernel.org,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH] dm stats: Add missing check for alloc_percpu
-Date:   Thu, 16 Mar 2023 14:55:06 +0800
-Message-Id: <20230316065506.17821-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        Thu, 16 Mar 2023 02:55:23 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F274F9DE15
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 23:55:20 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id y4so3654725edo.2
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 23:55:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678949719;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=p25e97wDMfgDnPnE95tN98IR5MoSUZWy0CVnCFqXSdU=;
+        b=fzAYCB3aNtzULDLDyoHNuafqVzmBW+1ayVIApVTnF+LcfqY4rm2G+pfUC7M6gOtqWC
+         zxLWkOVWzwlDOVQWLhTd6R8s1wnHX11w26lj+dta6GBqBmgDoE1Ra9psST30g/34e36K
+         rL80ntiypgni7EffrUpzMd1kUniOHQYEUvwGNo57mDa01asaAs1z2IYawb7QNHfKPBws
+         0B3W70zetV6nTfw7Q/pRRVKKEhOT0UmOLQF7tQjCg7TwRwzn1o41k5ypbvt1bVvgjbQm
+         eSyACiPQvcvr4bKU5rgGeUnsZTiy5oWky3XaeTJHyKcrRWgP1YlJn1CLCvvQiLEg/TE0
+         W23w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678949719;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=p25e97wDMfgDnPnE95tN98IR5MoSUZWy0CVnCFqXSdU=;
+        b=Yx43bFpzRYtxfseKALMWXtQ4WaO/4nI13MDkPVpGmuW+idYlFS8AHi1e3q2ot9V9xu
+         bhkJTk0fIt0woIusc4pWXjPMzFN+gbCNXDQLtGD0S2LqA1adpTl6cVC3XOzgUhou4TIL
+         XhF+fepjrS80WESJ9HO+FHWSjzzRlv7kwc0Qv333tx5f7qyFefq9JZcNshnV8XmYoBdu
+         qiIyJ6Ye/XJWoqTJjKBIswkjRii48XzcKUXxO7J6pQkN+qFty7O+/uvE50YtcGPvbaiL
+         MUOHccKoFQwshAkymONiqb20B+3ExEBrPz7EQVJrxK1ok361DkZnEF/D14rmdHO0WMmz
+         rFyA==
+X-Gm-Message-State: AO0yUKXNsEZRqzDfoQKbhPDhjbyM9tYTKDV3lOs1ZEY0uqX6lfbQPu7i
+        FqT4IkCD1yN1sc25PTFvYnIn2ilw+t+wls90EWY=
+X-Google-Smtp-Source: AK7set+TbKI6aA2alVPnlfi3mb7ymQVRySWJSY8MPQIWj7KNaeGdBb3suc0hJ9FX95pglxiyooHx9w==
+X-Received: by 2002:a17:906:f1d9:b0:92b:e566:98fb with SMTP id gx25-20020a170906f1d900b0092be56698fbmr9854728ejb.12.1678949719355;
+        Wed, 15 Mar 2023 23:55:19 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:9827:5f65:8269:a95f? ([2a02:810d:15c0:828:9827:5f65:8269:a95f])
+        by smtp.gmail.com with ESMTPSA id u21-20020a170906409500b00928de86245fsm3404436ejj.135.2023.03.15.23.55.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Mar 2023 23:55:18 -0700 (PDT)
+Message-ID: <72904c0b-4b32-7acc-346d-04add0ab66fb@linaro.org>
+Date:   Thu, 16 Mar 2023 07:55:17 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: qwCowAAnLjZVvRJkJXG7EA--.57936S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7tr43Zw43Kr13Xw4DtFW7twb_yoW8tr1xpF
-        4UX34ayrWUXw48Xw1DZryxCa4Yka1fKFyDCry2k3sxu3W5Cr45uF1UXayUXrWUGFWUZF13
-        t3Wjyrn8CayYqr7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkq14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK6r47
-        MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr
-        0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0E
-        wIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJV
-        W8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAI
-        cVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUjdOz3UUUUU==
-X-Originating-IP: [124.16.138.125]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] arm64: dts: qcom: sa8775p: add symbols to dtb
+Content-Language: en-US
+To:     Prasad Sodagudi <quic_psodagud@quicinc.com>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Eric Chanudet <echanude@redhat.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230309233945.1199358-1-echanude@redhat.com>
+ <43c11038-91d5-cbfd-7349-06fcd61a0661@linaro.org>
+ <1bd61fa7-cd0e-e198-9cee-7485eacbe685@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1bd61fa7-cd0e-e198-9cee-7485eacbe685@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the check for the return value of alloc_precpu and return the error
-if it fails.
-Moreover, Add the check for the return value of dm_stats_init cascade.
+On 14/03/2023 05:48, Prasad Sodagudi wrote:
+> 
+> 
+> On 3/9/2023 3:47 PM, Konrad Dybcio wrote:
+>>
+>>
+>> On 10.03.2023 00:39, Eric Chanudet wrote:
+>>> ABL uses the __symbols__ section to process the DTB before passing it
+>>> forward. Without it, the bootstrap is interrupted.
+>>>
+>>> Signed-off-by: Eric Chanudet <echanude@redhat.com>
+>>> ---
+>> Fix your ABL.
+> Hi Konrad,
+> 
+> Apps boot-loader need __symbols__ for dynamic overlay operation. 
+> Qualcomm firmware passes an overlay file to apps boot-loader to overlay 
+> some of the nodes based on firmware configuration. Without __symbols__ 
+> apps boot-loader is not able to overlay.
+> 
+> Qualcomm hypervisor/gunyah would like to overlay arch timer node with 
+> always-on property, So adding __symbols__ helps boot-loader to overlay.
 
-Fixes: fd2ed4d25270 ("dm: add statistics support")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
- drivers/md/dm-stats.c | 7 ++++++-
- drivers/md/dm-stats.h | 2 +-
- drivers/md/dm.c       | 4 +++-
- 3 files changed, 10 insertions(+), 3 deletions(-)
+Since none of these overlays are upstream, we can argue that it is not a
+valid reason. If you decide to keep overlays downstream then also you
+can keep patch enabling the overlays there...
 
-diff --git a/drivers/md/dm-stats.c b/drivers/md/dm-stats.c
-index c21a19ab73f7..db2d997a6c18 100644
---- a/drivers/md/dm-stats.c
-+++ b/drivers/md/dm-stats.c
-@@ -188,7 +188,7 @@ static int dm_stat_in_flight(struct dm_stat_shared *shared)
- 	       atomic_read(&shared->in_flight[WRITE]);
- }
- 
--void dm_stats_init(struct dm_stats *stats)
-+int dm_stats_init(struct dm_stats *stats)
- {
- 	int cpu;
- 	struct dm_stats_last_position *last;
-@@ -197,11 +197,16 @@ void dm_stats_init(struct dm_stats *stats)
- 	INIT_LIST_HEAD(&stats->list);
- 	stats->precise_timestamps = false;
- 	stats->last = alloc_percpu(struct dm_stats_last_position);
-+	if (!stats->last)
-+		return -ENOMEM;
-+
- 	for_each_possible_cpu(cpu) {
- 		last = per_cpu_ptr(stats->last, cpu);
- 		last->last_sector = (sector_t)ULLONG_MAX;
- 		last->last_rw = UINT_MAX;
- 	}
-+
-+	return 0;
- }
- 
- void dm_stats_cleanup(struct dm_stats *stats)
-diff --git a/drivers/md/dm-stats.h b/drivers/md/dm-stats.h
-index 0bc152c8e4f3..c6728c8b4159 100644
---- a/drivers/md/dm-stats.h
-+++ b/drivers/md/dm-stats.h
-@@ -21,7 +21,7 @@ struct dm_stats_aux {
- 	unsigned long long duration_ns;
- };
- 
--void dm_stats_init(struct dm_stats *st);
-+int dm_stats_init(struct dm_stats *st);
- void dm_stats_cleanup(struct dm_stats *st);
- 
- struct mapped_device;
-diff --git a/drivers/md/dm.c b/drivers/md/dm.c
-index eace45a18d45..b6ace995b9ca 100644
---- a/drivers/md/dm.c
-+++ b/drivers/md/dm.c
-@@ -2097,7 +2097,9 @@ static struct mapped_device *alloc_dev(int minor)
- 	if (!md->pending_io)
- 		goto bad;
- 
--	dm_stats_init(&md->stats);
-+	r = dm_stats_init(&md->stats);
-+	if (r < 0)
-+		goto bad;
- 
- 	/* Populate the mapping, nobody knows we exist yet */
- 	spin_lock(&_minor_lock);
--- 
-2.25.1
+Best regards,
+Krzysztof
 
