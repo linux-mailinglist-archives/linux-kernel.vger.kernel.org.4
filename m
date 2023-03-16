@@ -2,69 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26E556BDAC5
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 22:21:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E4396BDAD0
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 22:22:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229690AbjCPVVa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 17:21:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43776 "EHLO
+        id S229887AbjCPVWw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 17:22:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbjCPVV2 (ORCPT
+        with ESMTP id S229760AbjCPVWq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 17:21:28 -0400
-Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77B8F6906A
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 14:21:27 -0700 (PDT)
-Received: by mail-il1-x133.google.com with SMTP id e9e14a558f8ab-3184514d31eso13185ab.1
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 14:21:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679001687;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sed8mBQa+lDJxDv12thn4n6WdTH+ovGBkrm+trscL6A=;
-        b=HTnshhdiEiXyeKl4aXg09OlYc6L0l5aXKBxe+SSC8s1UqdOiifd5GvbIZKnKLvIpgA
-         hmv7dcTXYgl1H4YfNtUB/hCKvG0Gk30ZPmFbvTnOHpDj/rNAwbSYgmpb27mFIlItu8gR
-         Q67ZxNxJsXc1x64otXi64FYctPeHvD9uVdlOwF4QSc4xQUYxAatEhAKJbxFKsf2YzalK
-         xlroQyV/d4OgufRs+/hfTzoy9gWEKHt7e0UMYMfIJDeVwX6qxIDozSSORu+6XoPsqG8S
-         UI58g7w7eOSfEoC3NZz/XiW75sujncvLf402RgG8b+TbJ2xJwEy33cNyYH1RErdF5f0F
-         cIyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679001687;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sed8mBQa+lDJxDv12thn4n6WdTH+ovGBkrm+trscL6A=;
-        b=WTjbLo7LDPMntpZA5RjPqEw57DwHR4KljqgakWKjzpJUxxDlSLadmYkdC1zuF9qWeH
-         Bwf+mQMiM2mW0F0O3s/67lLzgpwOxIY98bkxETKM5X2FMrs/y8VyXyG8vllSH4wK0Xbq
-         XHv+TTeuojy6CjDuyOO+1uYLWO24CwUZHKOkyRpoHQMckblwGB6s0YemTTPMqssUvZfp
-         zQC2z0pzR8KU9ttZPAiZEXXyayIuA8h+9fPTrubBmI2yXle5h/IuMrD+WsdmdEGCJmaO
-         GhoDOe1y+FH0Em79GnZ2UYdH8OTJxdHAof4Wsf0CW3PeBJUjuyO0DBZ98rtV5MCi30I9
-         +Mgg==
-X-Gm-Message-State: AO0yUKWbCmn8K9vbYqMdwPz1tg91dEA87ShOTbr8KbRL2Pe2LOQbQX3q
-        +RrToHxi7+V9kkJrFyOrNnl/72TYa30a2IdAH42RxStCAbT3veFAYTs=
-X-Google-Smtp-Source: AK7set98LyaF+G5c4cnoCd0UiaU3BqlTvVBEFgHA8CSTx/7bwOpAfyueD2HfNo/QxkqsC9+iUNNK8oXMFvgA+KpjHA0=
-X-Received: by 2002:a05:6e02:1c8f:b0:322:c06b:50c0 with SMTP id
- w15-20020a056e021c8f00b00322c06b50c0mr33534ill.11.1679001686705; Thu, 16 Mar
- 2023 14:21:26 -0700 (PDT)
+        Thu, 16 Mar 2023 17:22:46 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9798DCD660
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 14:22:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679001720;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=nOiJMs6jGjsIK5mURzzO91u2urF7NRidfMKLLbVDxmI=;
+        b=Kep5berdbyn9mfhIyF8BV6BbgGQMJqq27LFgHrvANvkK52xEedWDNLqgtHZGbXrmjyZepZ
+        CB4A5R6suaklCLO/M/xHPZHgnh0o6xF0AsUFTqBlxd3gIpWjZD7hna4EZ7URS+OMPnTdAX
+        vg+7Ohg1bjzyM//fOHNwTu675ZSdSgo=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-444-U1vkmoP_NjKzPR5dpAkY1w-1; Thu, 16 Mar 2023 17:21:56 -0400
+X-MC-Unique: U1vkmoP_NjKzPR5dpAkY1w-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D4ABE185A791;
+        Thu, 16 Mar 2023 21:21:55 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.18])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 95B8C140EBF4;
+        Thu, 16 Mar 2023 21:21:53 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <4EDC79DC-0C32-40FD-9C35-164C7A077922@oracle.com>
+References: <4EDC79DC-0C32-40FD-9C35-164C7A077922@oracle.com> <20230316152618.711970-1-dhowells@redhat.com> <20230316152618.711970-28-dhowells@redhat.com> <3DFBF27C-A62B-4AFE-87FD-3DF53FC39E8E@hammerspace.com>
+To:     Chuck Lever III <chuck.lever@oracle.com>
+Cc:     dhowells@redhat.com, Trond Myklebust <trondmy@hammerspace.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Jeffrey Layton <jlayton@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        Anna Schumaker <anna@kernel.org>,
+        Linux NFS Mailing List <linux-nfs@vger.kernel.org>
+Subject: Re: [RFC PATCH 27/28] sunrpc: Use sendmsg(MSG_SPLICE_PAGES) rather then sendpage
 MIME-Version: 1.0
-References: <20230316194156.8320-1-adrian.hunter@intel.com>
-In-Reply-To: <20230316194156.8320-1-adrian.hunter@intel.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Thu, 16 Mar 2023 14:21:12 -0700
-Message-ID: <CAP-5=fV8HsLWzXSV-mov+s1doKNFvAPqpep9dhnoAbS3bdir5A@mail.gmail.com>
-Subject: Re: [PATCH 0/3] perf tools: Address fixes
-To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <818649.1679001712.1@warthog.procyon.org.uk>
+Date:   Thu, 16 Mar 2023 21:21:52 +0000
+Message-ID: <818650.1679001712@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,37 +80,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 16, 2023 at 12:42=E2=80=AFPM Adrian Hunter <adrian.hunter@intel=
-.com> wrote:
->
-> Hi
->
-> Here are 3 small fixes resulting from a report from a
-> kernel test robot:
->
-> https://lore.kernel.org/oe-lkp/202303061424.6ad43294-yujie.liu@intel.com
->
-> Issues were revealed due to the use of build
-> option:
->
->         EXTRA_CFLAGS=3D"-fsanitize=3Dundefined -fsanitize=3Daddress"
->
->
-> Adrian Hunter (3):
->       perf symbols: Fix use-after-free in get_plt_got_name()
->       perf symbols: Fix unaligned access in get_x86_64_plt_disp()
->       perf tools: Avoid warning in do_realloc_array_as_needed()
+Chuck Lever III <chuck.lever@oracle.com> wrote:
 
-All 3:
-Acked-by: Ian Rogers <irogers@google.com>
+> Therefore, this kind of change needs to be accompanied by both
+> benchmark results and some field testing to convince me it won't
+> cause harm.
 
-Thanks,
-Ian
+Btw, what do you use to benchmark NFS performance?
 
->  tools/perf/util/symbol-elf.c | 10 ++++++++--
->  tools/perf/util/util.c       |  3 ++-
->  2 files changed, 10 insertions(+), 3 deletions(-)
->
->
-> Regards
-> Adrian
+David
+
