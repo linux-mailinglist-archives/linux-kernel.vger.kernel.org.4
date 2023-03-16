@@ -2,92 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 428166BCEDB
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 13:00:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B80476BCEDE
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 13:02:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230255AbjCPMA4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 08:00:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39710 "EHLO
+        id S230092AbjCPMCF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 08:02:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229543AbjCPMAy (ORCPT
+        with ESMTP id S229913AbjCPMCE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 08:00:54 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 436FF59C1;
-        Thu, 16 Mar 2023 05:00:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678968053; x=1710504053;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=Ocsjhp370mXJgmzlds9QF9+bkkBao99B4P43WAeuJeU=;
-  b=joS2Gp4DCS4gliVyu4TrpLyNV/KQKDmC9uMNDRW2OLLPfgeBFoaxolP7
-   dTc6tzb0FwhduFVjIAxko7/J5clqK61/8aHQEtgefr4d2gidP9sj++RdL
-   DjjoAzvb0mZHN9i8iUKk98sNl8jKVhcYx8AZ300sco3nFkz1+/ie/HiHx
-   QDhRyk9zRkZEnRilRybPGiwfgOzjKkEThlJG+tCBNLjNtsfwQHcz33xcm
-   tVLzh+aZ3VF4aL0YL9HgoRmsuQ3WaYOFfx8MRDSF48Jdz1Zo9QHIhqjLm
-   M8/YbiV0Ylev4KtmezA/2rF2v8Pdge9cWa1NKONNH7mQm2RN8sZyJFSne
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="317617755"
-X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
-   d="scan'208";a="317617755"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 05:00:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="823212876"
-X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
-   d="scan'208";a="823212876"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 16 Mar 2023 05:00:33 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id E64DB3DD; Thu, 16 Mar 2023 14:01:17 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 1/1] regulator: s5m8767: Replace of_gpio.h with what indeed is used
-Date:   Thu, 16 Mar 2023 14:01:13 +0200
-Message-Id: <20230316120113.86421-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.39.2
+        Thu, 16 Mar 2023 08:02:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0621CC48BD;
+        Thu, 16 Mar 2023 05:02:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 84F5761FA4;
+        Thu, 16 Mar 2023 12:02:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71BADC433EF;
+        Thu, 16 Mar 2023 12:02:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1678968121;
+        bh=Gd8IqJ9rNvlvSXjTXtwWWOlllzwIQdOslXN75zxBLJg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pN2+ByTIvP37YBCXWhop3g2j0ST2mWPgmYIQAMy82wyUj17ay/pKm+mD682dncVFj
+         ApAif9SAv2eWTJ1Kn5wwsIVqq4igmeLHudNINubwC8vggLIG/zMuPlSAQ9mdD3bz+R
+         Tswh+T/M58oLyvDzpMMAACQkv0j8ucTkClMGtU/E=
+Date:   Thu, 16 Mar 2023 13:01:59 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Chris Paterson <Chris.Paterson2@renesas.com>
+Cc:     "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        "patches@lists.linux.dev" <patches@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "linux@roeck-us.net" <linux@roeck-us.net>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "patches@kernelci.org" <patches@kernelci.org>,
+        "lkft-triage@lists.linaro.org" <lkft-triage@lists.linaro.org>,
+        "pavel@denx.de" <pavel@denx.de>,
+        "jonathanh@nvidia.com" <jonathanh@nvidia.com>,
+        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
+        "sudipm.mukherjee@gmail.com" <sudipm.mukherjee@gmail.com>,
+        "srw@sladewatkins.net" <srw@sladewatkins.net>,
+        "rwarsow@gmx.de" <rwarsow@gmx.de>
+Subject: Re: [PATCH 4.14 00/20] 4.14.310-rc2 review
+Message-ID: <ZBMFN+6+zWzmtL3Y@kroah.com>
+References: <20230316083335.429724157@linuxfoundation.org>
+ <TYCPR01MB10588DFCA0CABA9028F2FD723B7BC9@TYCPR01MB10588.jpnprd01.prod.outlook.com>
+ <ZBL+ueZuSk51GhFE@kroah.com>
+ <TYCPR01MB1058859F0D4457BD3BCEEB868B7BC9@TYCPR01MB10588.jpnprd01.prod.outlook.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <TYCPR01MB1058859F0D4457BD3BCEEB868B7BC9@TYCPR01MB10588.jpnprd01.prod.outlook.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-of_gpio.h in this driver is solely used as a proxy to other headers.
-This is incorrect usage of the of_gpio.h. Replace it .h with what
-indeed is used in the code.
+On Thu, Mar 16, 2023 at 11:57:55AM +0000, Chris Paterson wrote:
+> Hello Greg,
+> 
+> > From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > Sent: 16 March 2023 11:34
+> > 
+> > On Thu, Mar 16, 2023 at 11:25:29AM +0000, Chris Paterson wrote:
+> > > Hello Greg,
+> > >
+> > > > From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > > > Sent: 16 March 2023 08:50
+> > > >
+> > > > This is the start of the stable review cycle for the 4.14.310 release.
+> > > > There are 20 patches in this series, all will be posted as a response
+> > > > to this one.  If anyone has any issues with these being applied, please
+> > > > let me know.
+> > > >
+> > > > Responses should be made by Sat, 18 Mar 2023 08:33:04 +0000.
+> > > > Anything received after that time might be too late.
+> > >
+> > > It sounds like there may be an -rc3 on the way, but for what it's worth...
+> > 
+> > There is?  Only for 4.19.y.
+> 
+> Ah, I was referring to you saying you'd drop "clk: qcom: mmcc-apq8084: remove spdm clocks".
+> I was assuming that meant another RC.
+> /me must stop assuming things...
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/regulator/s5m8767.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Dropping a patch that is not causing build or test errors generally does
+not mean a new -rc is to be released .
 
-diff --git a/drivers/regulator/s5m8767.c b/drivers/regulator/s5m8767.c
-index 3122ca7de8f5..b4a699701a81 100644
---- a/drivers/regulator/s5m8767.c
-+++ b/drivers/regulator/s5m8767.c
-@@ -4,9 +4,10 @@
- //              http://www.samsung.com
- 
- #include <linux/err.h>
--#include <linux/of_gpio.h>
-+#include <linux/gpio.h>
- #include <linux/gpio/consumer.h>
- #include <linux/module.h>
-+#include <linux/of.h>
- #include <linux/platform_device.h>
- #include <linux/regulator/driver.h>
- #include <linux/regulator/machine.h>
--- 
-2.39.2
+thanks,
 
+greg k-h
