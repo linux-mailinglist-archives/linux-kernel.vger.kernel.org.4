@@ -2,138 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 601B56BD9EF
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 21:12:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A907A6BD9F8
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 21:15:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230134AbjCPUMg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 16:12:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41838 "EHLO
+        id S229913AbjCPUPD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 16:15:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229682AbjCPUMe (ORCPT
+        with ESMTP id S229682AbjCPUPA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 16:12:34 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4330EE193A;
-        Thu, 16 Mar 2023 13:12:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D882EB8234A;
-        Thu, 16 Mar 2023 20:12:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D10B9C433EF;
-        Thu, 16 Mar 2023 20:12:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678997550;
-        bh=aVKFhVYxDwxQfxrSuIzE8aVSFP2JSCdE26VT7FUCnes=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nRHXAN89HeDXuyyPlAdXiD6tB51zPZGWpAh8J9Ni4lm/ylqi3s8VZXQY6yrMVZ7sW
-         94YTfqrzPhIh6XTIJYZxn+K3cthdlvLqm1C+VXSdSpWt07zo0jBN+rl+KSGc13RTqT
-         0U072E3JMiG4u/5i5Tg2+Og9HnhtafWi5gBH31kY8XvBMZ2hRmqIuddUh1Q1nOPnia
-         PczKkteoP/fj0/qc3yIz3gzNCOg18RcB7SwZxFlgXYNWiumeu4/AiAqUGfpwbs/+Rc
-         +GGnxorVv7bd5gxBNLBycpc3aWr8L8s8tNv+KQxRUs8gFqY/YpwaTekGlVFEvXO3d9
-         Orclfio6PwZxQ==
-Date:   Thu, 16 Mar 2023 22:12:14 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Alexandre Ghiti <alexghiti@rivosinc.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Anup Patel <anup@brainfault.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCH v8 2/4] mm: Introduce memblock_isolate_memory
-Message-ID: <ZBN4Hoo99DNd5wKx@kernel.org>
-References: <20230316131711.1284451-1-alexghiti@rivosinc.com>
- <20230316131711.1284451-3-alexghiti@rivosinc.com>
+        Thu, 16 Mar 2023 16:15:00 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9390DE20C9
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 13:14:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=uumsoE6D078n3Znb9lWlQ23wdndeL/MyNVNgOHTci4k=; b=UCErDsgcv7bKm/5iSSe5MimD6y
+        b9BkntdBeNrc8Mc/5IZJXQmszCddZBvuYVzu4SKjicMbUA+NNk1RRLBP4Gdr2SnNrKNHAPkJkY01l
+        pH4n90Alv8BmD4xRvnUo6MS0wM/fMR2nYDQvH7YqkmZyt+l8cui10VDNGXcyIw1q2buP4ugFN1LVj
+        zx3mmof/zWL30x14FQRo7AESd4BYxJdCuo1ZluPDY1QCELsXbakI5jsniUIdHP8JsEIuG7YeEF7kz
+        SEP2Fm0eYexrICINiYJpG88qZFHsE7jeeavZh2M/htZrjZ76qvMq1xcvRizHsVGPLacF5cCZJrEnd
+        OJwQZaEQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pctzU-00F9Gl-4M; Thu, 16 Mar 2023 20:14:24 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id C6DC8300328;
+        Thu, 16 Mar 2023 21:14:21 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 9C754212FCF5C; Thu, 16 Mar 2023 21:14:21 +0100 (CET)
+Date:   Thu, 16 Mar 2023 21:14:21 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Juergen Gross <jgross@suse.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        virtualization@lists.linux-foundation.org,
+        "Srivatsa S. Bhat (VMware)" <srivatsa@csail.mit.edu>,
+        Alexey Makhalov <amakhalov@vmware.com>,
+        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>
+Subject: Re: [PATCH] x86/paravirt: convert simple paravirt functions to asm
+Message-ID: <20230316201421.GA2060174@hirez.programming.kicks-ass.net>
+References: <20230308154210.18454-1-jgross@suse.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230316131711.1284451-3-alexghiti@rivosinc.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230308154210.18454-1-jgross@suse.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Alexandre,
+On Wed, Mar 08, 2023 at 04:42:10PM +0100, Juergen Gross wrote:
 
-On Thu, Mar 16, 2023 at 02:17:09PM +0100, Alexandre Ghiti wrote:
-> This function allows to split a region in memblock.memory and will be
-> useful when setting up the linear mapping with STRICT_KERNEL_RWX: it
-> allows to isolate the kernel text/rodata and then avoid to map those
-> regions with a PUD/P4D/PGD.
- 
-Sorry I've missed it last time. The changelog is fine in the context of
-this series, but if you look at it as a part of memblock changelog it
-doesn't provide enough background on why memblock_isolate_memory() is
-useful.
+> +DEFINE_PARAVIRT_ASM(pv_native_irq_disable, "cli", .text);
+> +DEFINE_PARAVIRT_ASM(pv_native_irq_enable, "sti", .text);
+> +DEFINE_PARAVIRT_ASM(pv_native_read_cr2, "mov %cr2, %rax", .text);
 
-Can you please add more context so it would be self explanatory?
+per these v, the above ^ should be in .noinstr.text
 
-> Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
-> Reviewed-by: Anup Patel <anup@brainfault.org>
-> Tested-by: Anup Patel <anup@brainfault.org>
-> ---
->  include/linux/memblock.h |  1 +
->  mm/memblock.c            | 20 ++++++++++++++++++++
->  2 files changed, 21 insertions(+)
-> 
-> diff --git a/include/linux/memblock.h b/include/linux/memblock.h
-> index 50ad19662a32..2f7ef97c0da7 100644
-> --- a/include/linux/memblock.h
-> +++ b/include/linux/memblock.h
-> @@ -125,6 +125,7 @@ int memblock_clear_hotplug(phys_addr_t base, phys_addr_t size);
->  int memblock_mark_mirror(phys_addr_t base, phys_addr_t size);
->  int memblock_mark_nomap(phys_addr_t base, phys_addr_t size);
->  int memblock_clear_nomap(phys_addr_t base, phys_addr_t size);
-> +int memblock_isolate_memory(phys_addr_t base, phys_addr_t size);
->  
->  void memblock_free_all(void);
->  void memblock_free(void *ptr, size_t size);
-> diff --git a/mm/memblock.c b/mm/memblock.c
-> index 25fd0626a9e7..e8c651a37012 100644
-> --- a/mm/memblock.c
-> +++ b/mm/memblock.c
-> @@ -805,6 +805,26 @@ static int __init_memblock memblock_isolate_range(struct memblock_type *type,
->  	return 0;
->  }
->  
-> +/**
-> + * memblock_isolate_memory - isolate given range in memblock.memory
-> + * @base: base of range to isolate
-> + * @size: size of range to isolate
-> + *
-> + * Isolates the given range in memblock.memory so that it does not share any
-> + * region with other ranges.
-> + *
-> + * Return:
-> + * 0 on success, -errno on failure.
-> + */
-> +
-> +int __init_memblock memblock_isolate_memory(phys_addr_t base, phys_addr_t size)
-> +{
-> +	int start_rgn, end_rgn;
-> +
-> +	return memblock_isolate_range(&memblock.memory, base, size,
-> +				      &start_rgn, &end_rgn);
-> +}
-> +
->  static int __init_memblock memblock_remove_range(struct memblock_type *type,
->  					  phys_addr_t base, phys_addr_t size)
->  {
-> -- 
-> 2.37.2
-> 
+> -static noinstr unsigned long pv_native_read_cr2(void)
+> -static noinstr void pv_native_irq_enable(void)
+> -static noinstr void pv_native_irq_disable(void)
 
--- 
-Sincerely yours,
-Mike.
+
