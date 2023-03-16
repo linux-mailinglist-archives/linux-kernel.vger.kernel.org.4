@@ -2,192 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 827556BC2B7
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 01:32:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F24356BC28C
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 01:31:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233189AbjCPAcl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 20:32:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34876 "EHLO
+        id S233178AbjCPAba (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 20:31:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233273AbjCPAcB (ORCPT
+        with ESMTP id S233057AbjCPAbV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 20:32:01 -0400
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D85DA591D
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 17:31:27 -0700 (PDT)
-Received: by mail-pl1-x64a.google.com with SMTP id u4-20020a170902bf4400b0019e30a57694so5199pls.20
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 17:31:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678926685;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=36lklAKITNKcvpGi9bBaV0pg92rnpur43Kuea+YFpfM=;
-        b=swpVj1SmNmgvWlTTZKcMha4lkIplKfRmILDkyWfcGRLXWLuIlK2d6RzDWw2bYkkCHP
-         soiW4nXc7/hBbAleU8BqoI0AbG96N9laDULGWA+oYmBxb9+GZWi0B0T26gJnbwIFOCwo
-         5kpRG9JizdS1Y6EbQlta+wo8Fhd+ryKKJGTqSzbsLYaWB10pCI4jhMlJ9DGRJ4DSAtGk
-         3aahsJCHmb9Uk47t1vgWw/SYjxk2SvIyeXgaVgaNp1TPH4oC+vl3KgGYbWyD1TlOcBi1
-         gvD1hR4NtBHZOvW4SAlG3B1IpFX0JT8Zq0hcF2742mhE+c1PzdSmxBYs2Pwk5wn4zjuL
-         RaVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678926685;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=36lklAKITNKcvpGi9bBaV0pg92rnpur43Kuea+YFpfM=;
-        b=4M/o9ThNvJSHGBPMI8ZjmGoVJgv/8Zg6vL0kxUIUvYVVtOiRH7vTSw076fbdT5mHQd
-         2YglH9iqZ0dOtsVCm6B94BNDz9L+f54CuS5hmuanI9l5NLlmfc6yWYLiAErHOaGqHtkU
-         XJOE0RF8sQE7BNCfz54YXCXoVaiECXtXK/VhblU9+2nC8u8WryoPX+KioJuox9ZRnG5V
-         q0gs6swvV7Lm38HD5pWUm+7GiQPMiplh241rN+hIB1Czk2ASS64LUVC8B/wvqp2FHsKX
-         o0vxR58mnNXabLEjtfK9WQ02aufhhVWK0XbUfRJYCdL8FpxTLwCQqQm+jF4VQeEbVKBC
-         /n6A==
-X-Gm-Message-State: AO0yUKWQpFi/HzsEaEP20F8HCwcqaaHXjNW/fHdE2I47tdh3RDhJnOHN
-        DL8EcoHdqrhst7jTgFM3F+cfIes7jJhfha9COw==
-X-Google-Smtp-Source: AK7set9HhZ92PQ2OitTC4KZtYEJK0EXqsjjwLnoPjbnEyW7GD+pO7NNEnen5rh0nKaexCpnSy3z8RFk0Cysc1DaScg==
-X-Received: from ackerleytng-cloudtop.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1f5f])
- (user=ackerleytng job=sendgmr) by 2002:a17:902:d50d:b0:1a0:5402:b17f with
- SMTP id b13-20020a170902d50d00b001a05402b17fmr634600plg.6.1678926685342; Wed,
- 15 Mar 2023 17:31:25 -0700 (PDT)
-Date:   Thu, 16 Mar 2023 00:30:59 +0000
-In-Reply-To: <cover.1678926164.git.ackerleytng@google.com>
-Mime-Version: 1.0
-References: <cover.1678926164.git.ackerleytng@google.com>
-X-Mailer: git-send-email 2.40.0.rc2.332.ga46443480c-goog
-Message-ID: <c554a93f38f5a79627a341309ffa974531d35697.1678926164.git.ackerleytng@google.com>
-Subject: [RFC PATCH 06/10] KVM: selftests: Default private_mem_conversions_test
- to use 1 memslot for test data
-From:   Ackerley Tng <ackerleytng@google.com>
-To:     kvm@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, qemu-devel@nongnu.org
-Cc:     aarcange@redhat.com, ak@linux.intel.com, akpm@linux-foundation.org,
-        arnd@arndb.de, bfields@fieldses.org, bp@alien8.de,
-        chao.p.peng@linux.intel.com, corbet@lwn.net, dave.hansen@intel.com,
-        david@redhat.com, ddutile@redhat.com, dhildenb@redhat.com,
-        hpa@zytor.com, hughd@google.com, jlayton@kernel.org,
-        jmattson@google.com, joro@8bytes.org, jun.nakajima@intel.com,
-        kirill.shutemov@linux.intel.com, linmiaohe@huawei.com,
-        luto@kernel.org, mail@maciej.szmigiero.name, mhocko@suse.com,
-        michael.roth@amd.com, mingo@redhat.com, naoya.horiguchi@nec.com,
-        pbonzini@redhat.com, qperret@google.com, rppt@kernel.org,
-        seanjc@google.com, shuah@kernel.org, steven.price@arm.com,
-        tabba@google.com, tglx@linutronix.de, vannapurve@google.com,
-        vbabka@suse.cz, vkuznets@redhat.com, wanpengli@tencent.com,
-        wei.w.wang@intel.com, x86@kernel.org, yu.c.zhang@linux.intel.com,
-        Ackerley Tng <ackerleytng@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Wed, 15 Mar 2023 20:31:21 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D04F49F056;
+        Wed, 15 Mar 2023 17:31:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678926677; x=1710462677;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=tQjCpDdlBQOPYNMm3lvVMmFMiyKlXDKFGgNr7hy+Aoc=;
+  b=hmmVXinuxSHfQ7ak7PaQlHrcZN77OxWDKGXpeQ3Re6EBoO5hAv6Vg22Q
+   HIocIWoSHDD+h4TX3csbH/WXNzYXy7fioh8a8NBiUTI0QxCJN8Z1pl3MA
+   y0t+JA0MI5k3eZMwUQGqh8P12bh3Kc3NY8r43aQVz3TDazofVFfLlCrv/
+   I6ClO2Cjlui9pQUZVx/Emoz1kxyznpET2SCPaIqSXULIHCT0Rx9AtsNMp
+   5rIkjIvbVSpfaYuulVNal+nx/5UKxpPcm5N+ZertKhkcrMMBs/JrVkgGU
+   EDWIar1p3zHckoe90Mb7qWYddpTOhhfUmYL9zoLLrI1+wriUfk9XN32gy
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="336540969"
+X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
+   d="scan'208";a="336540969"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Mar 2023 17:31:16 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="712126055"
+X-IronPort-AV: E=Sophos;i="5.98,262,1673942400"; 
+   d="scan'208";a="712126055"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 15 Mar 2023 17:31:14 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pcbWT-00089a-1r;
+        Thu, 16 Mar 2023 00:31:13 +0000
+Date:   Thu, 16 Mar 2023 08:30:59 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Alvin =?utf-8?Q?=C5=A0ipraga?= <alvin@pqrs.dk>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-usb@vger.kernel.org,
+        Alvin =?utf-8?Q?=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] extcon: usbc-tusb320: add usb_role_switch support
+Message-ID: <202303160838.j3Q18WnL-lkp@intel.com>
+References: <20230315220246.951213-2-alvin@pqrs.dk>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230315220246.951213-2-alvin@pqrs.dk>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Default the private/shared memory conversion tests to use a single
-memslot, while executing on multiple vCPUs in parallel, to stress-test
-the restrictedmem subsystem.
+Hi Alvin,
 
-Also add a flag to allow multiple memslots to be used.
+I love your patch! Perhaps something to improve:
 
-Signed-off-by: Ackerley Tng <ackerleytng@google.com>
----
- .../kvm/x86_64/private_mem_conversions_test.c | 30 +++++++++++++++----
- 1 file changed, 25 insertions(+), 5 deletions(-)
+[auto build test WARNING on chanwoo-extcon/extcon-next]
+[cannot apply to linus/master v6.3-rc2 next-20230315]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-diff --git a/tools/testing/selftests/kvm/x86_64/private_mem_conversions_test.c b/tools/testing/selftests/kvm/x86_64/private_mem_conversions_test.c
-index 14aa90e9a89b..afaf8d0e52e6 100644
---- a/tools/testing/selftests/kvm/x86_64/private_mem_conversions_test.c
-+++ b/tools/testing/selftests/kvm/x86_64/private_mem_conversions_test.c
-@@ -335,7 +335,8 @@ static void add_memslot_for_vcpu(
- }
- 
- static void test_mem_conversions(enum vm_mem_backing_src_type src_type,
--				 uint8_t nr_vcpus, uint32_t iterations)
-+				 uint8_t nr_vcpus, uint32_t iterations,
-+				 bool use_multiple_memslots)
- {
- 	struct kvm_vcpu *vcpus[KVM_MAX_VCPUS];
- 	pthread_t threads[KVM_MAX_VCPUS];
-@@ -355,6 +356,16 @@ static void test_mem_conversions(enum vm_mem_backing_src_type src_type,
- 	vm_enable_cap(vm, KVM_CAP_EXIT_HYPERCALL, (1 << KVM_HC_MAP_GPA_RANGE));
- 
- 	npages_for_all_vcpus = DATA_SIZE / vm->page_size * nr_vcpus;
-+
-+	if (use_multiple_memslots) {
-+		for (i = 0; i < nr_vcpus; i++)
-+			add_memslot_for_vcpu(vm, src_type, i);
-+	} else {
-+		vm_userspace_mem_region_add(
-+			vm, src_type, DATA_GPA_BASE, DATA_SLOT_BASE,
-+			npages_for_all_vcpus, KVM_MEM_PRIVATE);
-+	}
-+
- 	virt_map(vm, DATA_GPA_BASE, DATA_GPA_BASE, npages_for_all_vcpus);
- 
- 	for (i = 0; i < nr_vcpus; i++)
-@@ -371,13 +382,16 @@ static void test_mem_conversions(enum vm_mem_backing_src_type src_type,
- 	for (i = 0; i < nr_vcpus; i++)
- 		pthread_join(threads[i], NULL);
- 
--	test_invalidation_code_unbound(vm, nr_vcpus, DATA_SIZE);
-+	if (!use_multiple_memslots)
-+		test_invalidation_code_unbound(vm, 1, DATA_SIZE * nr_vcpus);
-+	else
-+		test_invalidation_code_unbound(vm, nr_vcpus, DATA_SIZE);
- }
- 
- static void usage(const char *command)
- {
- 	puts("");
--	printf("usage: %s [-h] [-s mem-type] [-n number-of-vcpus] [-i number-of-iterations]\n",
-+	printf("usage: %s [-h] [-m] [-s mem-type] [-n number-of-vcpus] [-i number-of-iterations]\n",
- 	       command);
- 	puts("");
- 	backing_src_help("-s");
-@@ -388,6 +402,8 @@ static void usage(const char *command)
- 	puts(" -i: specify the number iterations of memory conversion");
- 	puts("     tests to run. (default: 10)");
- 	puts("");
-+	puts(" -m: use multiple memslots (default: use 1 memslot)");
-+	puts("");
- }
- 
- int main(int argc, char *argv[])
-@@ -395,12 +411,13 @@ int main(int argc, char *argv[])
- 	enum vm_mem_backing_src_type src_type = DEFAULT_VM_MEM_SRC;
- 	uint8_t nr_vcpus = 2;
- 	uint32_t iterations = 10;
-+	bool use_multiple_memslots = false;
- 	int opt;
- 
- 	TEST_REQUIRE(kvm_has_cap(KVM_CAP_EXIT_HYPERCALL));
- 	TEST_REQUIRE(kvm_check_cap(KVM_CAP_VM_TYPES) & BIT(KVM_X86_PROTECTED_VM));
- 
--	while ((opt = getopt(argc, argv, "hs:n:i:")) != -1) {
-+	while ((opt = getopt(argc, argv, "mhs:n:i:")) != -1) {
- 		switch (opt) {
- 		case 'n':
- 			nr_vcpus = atoi_positive("nr_vcpus", optarg);
-@@ -411,6 +428,9 @@ int main(int argc, char *argv[])
- 		case 's':
- 			src_type = parse_backing_src_type(optarg);
- 			break;
-+		case 'm':
-+			use_multiple_memslots = true;
-+			break;
- 		case 'h':
- 		default:
- 			usage(argv[0]);
-@@ -418,6 +438,6 @@ int main(int argc, char *argv[])
- 		}
- 	}
- 
--	test_mem_conversions(src_type, nr_vcpus, iterations);
-+	test_mem_conversions(src_type, nr_vcpus, iterations, use_multiple_memslots);
- 	return 0;
- }
+url:    https://github.com/intel-lab-lkp/linux/commits/Alvin-ipraga/extcon-usbc-tusb320-add-usb_role_switch-support/20230316-060433
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/extcon.git extcon-next
+patch link:    https://lore.kernel.org/r/20230315220246.951213-2-alvin%40pqrs.dk
+patch subject: [PATCH 2/2] extcon: usbc-tusb320: add usb_role_switch support
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20230316/202303160838.j3Q18WnL-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/8ed7905410ebc9e2de0bd58d4cdd0a8225529f42
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Alvin-ipraga/extcon-usbc-tusb320-add-usb_role_switch-support/20230316-060433
+        git checkout 8ed7905410ebc9e2de0bd58d4cdd0a8225529f42
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 olddefconfig
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303160838.j3Q18WnL-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   drivers/extcon/extcon-usbc-tusb320.c: In function 'tusb320_typec_irq_handler':
+>> drivers/extcon/extcon-usbc-tusb320.c:280:33: warning: unused variable 'role_sw' [-Wunused-variable]
+     280 |         struct usb_role_switch *role_sw = priv->role_sw;
+         |                                 ^~~~~~~
+
+
+vim +/role_sw +280 drivers/extcon/extcon-usbc-tusb320.c
+
+   277	
+   278	static void tusb320_typec_irq_handler(struct tusb320_priv *priv, u8 reg9)
+   279	{
+ > 280		struct usb_role_switch *role_sw = priv->role_sw;
+   281		struct typec_port *port = priv->port;
+   282		struct device *dev = priv->dev;
+   283		int typec_mode;
+   284		enum usb_role usb_role;
+   285		enum typec_role pwr_role;
+   286		enum typec_data_role data_role;
+   287		u8 state, mode, accessory;
+   288		int ret, reg8;
+   289		bool ori;
+   290	
+   291		ret = regmap_read(priv->regmap, TUSB320_REG8, &reg8);
+   292		if (ret) {
+   293			dev_err(dev, "error during reg8 i2c read, ret=%d!\n", ret);
+   294			return;
+   295		}
+   296	
+   297		ori = reg9 & TUSB320_REG9_CABLE_DIRECTION;
+   298		typec_set_orientation(port, ori ? TYPEC_ORIENTATION_REVERSE :
+   299						  TYPEC_ORIENTATION_NORMAL);
+   300	
+   301		state = FIELD_GET(TUSB320_REG9_ATTACHED_STATE, reg9);
+   302		accessory = FIELD_GET(TUSB320_REG8_ACCESSORY_CONNECTED, reg8);
+   303	
+   304		switch (state) {
+   305		case TUSB320_ATTACHED_STATE_DFP:
+   306			typec_mode = TYPEC_MODE_USB2;
+   307			usb_role = USB_ROLE_HOST;
+   308			pwr_role = TYPEC_SOURCE;
+   309			data_role = TYPEC_HOST;
+   310			break;
+   311		case TUSB320_ATTACHED_STATE_UFP:
+   312			typec_mode = TYPEC_MODE_USB2;
+   313			usb_role = USB_ROLE_DEVICE;
+   314			pwr_role = TYPEC_SINK;
+   315			data_role = TYPEC_DEVICE;
+   316			break;
+   317		case TUSB320_ATTACHED_STATE_ACC:
+   318			/*
+   319			 * Accessory detected. For debug accessories, just make some
+   320			 * qualified guesses as to the role for lack of a better option.
+   321			 */
+   322			if (accessory == TUSB320_REG8_ACCESSORY_CONNECTED_AUDIO ||
+   323			    accessory == TUSB320_REG8_ACCESSORY_CONNECTED_ACHRG) {
+   324				typec_mode = TYPEC_MODE_AUDIO;
+   325				usb_role = USB_ROLE_NONE;
+   326				pwr_role = TYPEC_SINK;
+   327				data_role = TYPEC_DEVICE;
+   328				break;
+   329			} else if (accessory ==
+   330				   TUSB320_REG8_ACCESSORY_CONNECTED_DBGDFP) {
+   331				typec_mode = TYPEC_MODE_DEBUG;
+   332				pwr_role = TYPEC_SOURCE;
+   333				usb_role = USB_ROLE_HOST;
+   334				data_role = TYPEC_HOST;
+   335				break;
+   336			} else if (accessory ==
+   337				   TUSB320_REG8_ACCESSORY_CONNECTED_DBGUFP) {
+   338				typec_mode = TYPEC_MODE_DEBUG;
+   339				pwr_role = TYPEC_SINK;
+   340				usb_role = USB_ROLE_DEVICE;
+   341				data_role = TYPEC_DEVICE;
+   342				break;
+   343			}
+   344	
+   345			dev_warn(priv->dev, "unexpected ACCESSORY_CONNECTED state %d\n",
+   346				 accessory);
+   347	
+   348			fallthrough;
+   349		default:
+   350			typec_mode = TYPEC_MODE_USB2;
+   351			usb_role = USB_ROLE_NONE;
+   352			pwr_role = TYPEC_SINK;
+   353			data_role = TYPEC_DEVICE;
+   354			break;
+   355		}
+   356	
+   357		typec_set_vconn_role(port, pwr_role);
+   358		typec_set_pwr_role(port, pwr_role);
+   359		typec_set_data_role(port, data_role);
+   360		typec_set_mode(port, typec_mode);
+   361		usb_role_switch_set_role(priv->role_sw, usb_role);
+   362	
+   363		mode = FIELD_GET(TUSB320_REG8_CURRENT_MODE_DETECT, reg8);
+   364		if (mode == TUSB320_REG8_CURRENT_MODE_DETECT_DEF)
+   365			typec_set_pwr_opmode(port, TYPEC_PWR_MODE_USB);
+   366		else if (mode == TUSB320_REG8_CURRENT_MODE_DETECT_MED)
+   367			typec_set_pwr_opmode(port, TYPEC_PWR_MODE_1_5A);
+   368		else if (mode == TUSB320_REG8_CURRENT_MODE_DETECT_HI)
+   369			typec_set_pwr_opmode(port, TYPEC_PWR_MODE_3_0A);
+   370		else	/* Charge through accessory */
+   371			typec_set_pwr_opmode(port, TYPEC_PWR_MODE_USB);
+   372	}
+   373	
+
 -- 
-2.40.0.rc2.332.ga46443480c-goog
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
