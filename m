@@ -2,64 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E0F86BCC6B
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 11:20:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6A6E6BCC71
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 11:20:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229834AbjCPKUK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 06:20:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46584 "EHLO
+        id S230326AbjCPKUl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 06:20:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230227AbjCPKTr (ORCPT
+        with ESMTP id S230227AbjCPKUf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 06:19:47 -0400
-Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFD8AD521;
-        Thu, 16 Mar 2023 03:19:45 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4PcjtN28Bkz4f47nr;
-        Thu, 16 Mar 2023 18:19:40 +0800 (CST)
-Received: from [10.174.178.129] (unknown [10.174.178.129])
-        by APP4 (Coremail) with SMTP id gCh0CgBnG6887RJkmOznFQ--.57637S2;
-        Thu, 16 Mar 2023 18:19:41 +0800 (CST)
-Subject: Re: [PATCH v3 20/20] ext4: simplify calculation of blkoff in
- ext4_mb_new_blocks_simple
-To:     Theodore Ts'o <tytso@mit.edu>
-Cc:     adilger.kernel@dilger.ca, ojaswin@linux.ibm.com,
-        ritesh.list@gmail.com,
-        Harshad Shirwadkar <harshadshirwadkar@gmail.com>,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230303172120.3800725-1-shikemeng@huaweicloud.com>
- <20230303172120.3800725-21-shikemeng@huaweicloud.com>
- <20230316050740.GL860405@mit.edu>
-From:   Kemeng Shi <shikemeng@huaweicloud.com>
-Message-ID: <d88a3d33-6832-2921-c8bb-b935b19e7db4@huaweicloud.com>
-Date:   Thu, 16 Mar 2023 18:19:40 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.5.0
+        Thu, 16 Mar 2023 06:20:35 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DC0ABCFE3;
+        Thu, 16 Mar 2023 03:20:26 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id o12so5382508edb.9;
+        Thu, 16 Mar 2023 03:20:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678962024;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jGioppgO0MzFmAHm40uh73Adm2rQQtc87u2aiQkh8H4=;
+        b=drd9Ugkav0IjqQXXwvmyIm2esAE32wSSlIYWjYhNCjnOZ0ItBJY/DRlbWWu1/R32eC
+         2BNgYkWAkkHMmQnQ6B8JXwWMpdENk2RZEkHohKsbOuA01kwDUuoREQZasK0Pv+URvqEa
+         iMWEVXXvSxFk/a24tIk7lN9vGZ+1zywUwf9SzRM+nJe1f0PGbliX0FxR5P1Oc/2VouVH
+         P/0dXNpIjz6gpoAsrv/b5e50J8P5Jd30/avK5u057TAIshZKJr+JOItDfL6W8mMKD1Hd
+         gZqO7Sg6x1plAuIcgg+MrSS6HB1tBd+7JtbMyhrS4/JgoqCNbjk5ofNeEIOa727P/2/B
+         2G1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678962024;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jGioppgO0MzFmAHm40uh73Adm2rQQtc87u2aiQkh8H4=;
+        b=BHA6vcFeCyU1IXUSSs85pZAPfUYW1asZThsuFxPILIxhC3fpCSQvB1R6+b3Nlyfef6
+         fpwNxuTjI1jdM6hfhZzoWLM12FVpgj9++zHCxb3jeIiv0nfC6H//f/QtnvqZTXLYz7lx
+         gLWIFH4kmZm/j0G4cxVcVmjWfxeJ6KtrxvpeVXUWfzKsRRxzGvyq0gOHRNz1TkcYGt2q
+         x+zfE8PzeRGcaWTHjhyefcVlylyi92X/TiHCWlncnGFRnIEHwklKhs9bNk6kJH+X5GNL
+         Yok4oBc3gamLx5HaJGwj+7qTy7Rtyt2dFMhuYZ7k6CzZ/T6uRDIqpiJXSUIIKHPi0/Yi
+         ewvQ==
+X-Gm-Message-State: AO0yUKV3oTISqROPDSVsS6Qrs4gWxgKmihXzmHpu2Rh9XrrGVmOrbLBe
+        zD/2P/kfD3N2WOnTQYEfMRU=
+X-Google-Smtp-Source: AK7set83zGBfwIIdGj2u78Yejl5npnGcUU/3kxOM7rghdNvDRp2QU42QsMvnhCzxg1hMxtxs3MXC1w==
+X-Received: by 2002:a17:906:9be4:b0:930:eb8e:b1c9 with SMTP id de36-20020a1709069be400b00930eb8eb1c9mr560320ejc.24.1678962023979;
+        Thu, 16 Mar 2023 03:20:23 -0700 (PDT)
+Received: from localhost.localdomain (077222238142.warszawa.vectranet.pl. [77.222.238.142])
+        by smtp.googlemail.com with ESMTPSA id qh2-20020a170906eca200b008e2dfc6382asm3648118ejb.125.2023.03.16.03.20.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Mar 2023 03:20:23 -0700 (PDT)
+From:   Szymon Heidrich <szymon.heidrich@gmail.com>
+To:     kuba@kernel.org, steve.glendinning@shawell.net,
+        UNGLinuxDriver@microchip.com, davem@davemloft.net,
+        edumazet@google.com
+Cc:     pabeni@redhat.com, szymon.heidrich@gmail.com,
+        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] net: usb: smsc95xx: Limit packet length to skb->len
+Date:   Thu, 16 Mar 2023 11:19:54 +0100
+Message-Id: <20230316101954.75836-1-szymon.heidrich@gmail.com>
+X-Mailer: git-send-email 2.40.0
+In-Reply-To: <20230315212425.12cb48ca@kernel.org>
+References: <20230315212425.12cb48ca@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20230316050740.GL860405@mit.edu>
-Content-Type: text/plain; charset=gbk
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: gCh0CgBnG6887RJkmOznFQ--.57637S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Ar1UtrWxJFW8Aw4fWF17Jrb_yoW8XFW5pF
-        Z3u3WrtFs7Gw4Utrn7Z3ySq3W0vw48Jr15GrWrK3y5uF9xXas3GF4kGw4Yva42grZ3KF42
-        qFW3ur9xC3W5ZaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUyEb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij
-        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
-        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE
-        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42
-        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
-        c7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU1zuWJUUUUU==
-X-CM-SenderInfo: 5vklyvpphqwq5kxd4v5lfo033gof0z/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        MAY_BE_FORGED,NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE autolearn=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,49 +75,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Packet length retrieved from descriptor may be larger than
+the actual socket buffer length. In such case the cloned
+skb passed up the network stack will leak kernel memory contents.
 
+Fixes: 2f7ca802bdae ("net: Add SMSC LAN9500 USB2.0 10/100 ethernet adapter driver")
+Signed-off-by: Szymon Heidrich <szymon.heidrich@gmail.com>
+---
+V1 -> V2: Move packet length check to prevent kernel panic in skb_pull
 
-on 3/16/2023 1:07 PM, Theodore Ts'o wrote:
-> On Sat, Mar 04, 2023 at 01:21:20AM +0800, Kemeng Shi wrote:
->> We try to allocate a block from goal in ext4_mb_new_blocks_simple. We
->> only need get blkoff in first group with goal and set blkoff to 0 for
->> the rest groups.
->>
->> Signed-off-by: Kemeng Shi <shikemeng@huaweicloud.com>
-> 
-> While this patch is OK as a simplification, there's a bigger problem
-> with ext4_mb_new_blocks_simple(), and that is that we start looking
-> for free blocks starting at the goal block, and then if we can't any
-> free blocks by the time we get to the last block group.... we stop,
-> and return ENOSPC.
-> 
-> This function is only used in the fast commit replay path, but for a
-> very full file system, this could cause a fast commit replay to fail
-> unnecesarily.  What we need to do is to try wrapping back to the
-> beginning of the file system, and stop when we hit the original group
-> (of the goal block) minus one.
-> 
-> We can fix this up in a separate patch, since this doesn't make things
-> any worse, but essentially we need to do something like this:
-Hi Theodore, thanks for feedback. I will submit another patchset for
-mballoc and I would like to include this fix if no one else does. As
-new patches may be conflicted with old ones I submited, I would submit
-the new patchset after the old ones are fully reviewed and applied
-if this fix is not in rush. Thanks!
-> 
->     	maxgroups = ext4_get_groups_count(sb);
-> 	for (g = 0; g < maxgroups ; g++) {
-> 	
-> 		...
-> 		group++;
-> 		if (group > maxgroups)
-> 			group = 0;
-> 	}
-> 
-> 					- Ted
-> 
+ drivers/net/usb/smsc95xx.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
+diff --git a/drivers/net/usb/smsc95xx.c b/drivers/net/usb/smsc95xx.c
+index 32d2c60d3..563ecd27b 100644
+--- a/drivers/net/usb/smsc95xx.c
++++ b/drivers/net/usb/smsc95xx.c
+@@ -1833,6 +1833,12 @@ static int smsc95xx_rx_fixup(struct usbnet *dev, struct sk_buff *skb)
+ 		size = (u16)((header & RX_STS_FL_) >> 16);
+ 		align_count = (4 - ((size + NET_IP_ALIGN) % 4)) % 4;
+ 
++		if (unlikely(size > skb->len)) {
++			netif_dbg(dev, rx_err, dev->net,
++				  "size err header=0x%08x\n", header);
++			return 0;
++		}
++
+ 		if (unlikely(header & RX_STS_ES_)) {
+ 			netif_dbg(dev, rx_err, dev->net,
+ 				  "Error header=0x%08x\n", header);
 -- 
-Best wishes
-Kemeng Shi
+2.40.0
 
