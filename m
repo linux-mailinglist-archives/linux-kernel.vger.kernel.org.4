@@ -2,165 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BBB36BCAB4
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 10:24:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CBFC6BCAB7
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 10:25:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230494AbjCPJYL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 05:24:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42660 "EHLO
+        id S230479AbjCPJZT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 05:25:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230471AbjCPJYF (ORCPT
+        with ESMTP id S229659AbjCPJZR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 05:24:05 -0400
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2067.outbound.protection.outlook.com [40.107.21.67])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DC7A37552;
-        Thu, 16 Mar 2023 02:24:00 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XSSYl6S7nWvlMFypMI874KlxtgE7skBdOB/X9snlGRL48vzZ3gA845qO9xhfchqwDa0Z++cDP8A/hAjrcgFeD49K+9xUQX6rsVPZ7XPUtcTHHGevCLlEvo4MIMFMIQCUU6Q5xHeg9MiDRLD6Yy5w81E2TXanoJlxwecu8oOT/WGcqJGK7IQnbhNrdQcw/HhA838UWiQfW4Nme0ULgWYLU3+6Myf/oQg2KmFMC0jckPetXEzWmjSVZk3gRZYb3zYU4xlenNq52wc7KOxtqSVGLcHF6Xm96sFGXm73UF9T1OTVOmzP5gdq7+crWtDvo9Ql43Hp2MSVQzVJ4gUXGDB5cA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wfXJbqFL3Ciwgl8W1Ldbrra+W4JkzaILGqvExmrqoCY=;
- b=j2yXyPZIAfONjg2Z2mK/9SAbCjXsZclm39q/SPhOkx/j6UeF+ajezkExzwqqAhXl9tAyS0oxQrRtUZ2YepCK5s5P9q1TxnLckTWqdimWhlwGKkmNhhAxcfqz73ntSM/pptE4DlTHQ6K8vII+DtfUNzSP+V0zEVZY136jK0pehORU8I3x0tGbSVJaPv0oag2BkvKLiWemMif7Fsv3AsRYTbn+VckmS/lApXdkzb2A6fG1ho1DSIuFu7nI6q7pUJb20IhM9NcUtG4cmwc/Wh3ujIG87Zg86x8tqJAhkFxgimlK0d0LjIMdSh2T+unIAU0KN1ZZ3xdQzmFh4yYLk/6MtQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wfXJbqFL3Ciwgl8W1Ldbrra+W4JkzaILGqvExmrqoCY=;
- b=WqjiBsm33Dujnmhe64An7yslgBKlBcsYCEkirKs2LJZGXtzGcTKJWg7Wq0FiQS0jSKIHQCtR8uj73s8WWo9XjJ9053nMCcB9mCV+S4+MfJG16awrx/IMDfFWm7RsMmEArevT6G7fp4+KUhtvYsx/wu0YGkZNBqCKociLfK1J3gXhVauw8kdBnmhxYyF+8i5p2rkQIh4XfEepLyuvA1TgUEZ5cxWyzjGVC3yvBEXuetZoRE4KaCd++VADI2dJ+hLcYuLMei3NVtzxG8ULxYovp5QXGyramIjcHk5ZxiVQGm/GjxZRmDEgUL3OAegZBkDbCHqadX8WsynNnGYRCXPHjw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=suse.com;
-Received: from VI1PR04MB7104.eurprd04.prod.outlook.com (2603:10a6:800:126::9)
- by VI1PR04MB9955.eurprd04.prod.outlook.com (2603:10a6:800:1e1::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.29; Thu, 16 Mar
- 2023 09:23:56 +0000
-Received: from VI1PR04MB7104.eurprd04.prod.outlook.com ([fe80::2ea:4a86:9ab7])
- by VI1PR04MB7104.eurprd04.prod.outlook.com ([fe80::2ea:4a86:9ab7%3]) with
- mapi id 15.20.6178.031; Thu, 16 Mar 2023 09:23:56 +0000
-Message-ID: <106b5618-908f-becc-6eb3-75ef136a48e4@suse.com>
-Date:   Thu, 16 Mar 2023 10:23:54 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2 1/1] Guard pci_create_sysfs_dev_files with atomic value
-Content-Language: en-US
-To:     Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Cc:     Korneliusz Osmenda <korneliuszo@gmail.com>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230316091540.494366-1-alexander.stein@ew.tq-group.com>
-From:   Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <20230316091540.494366-1-alexander.stein@ew.tq-group.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR0P281CA0115.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:a8::14) To VI1PR04MB7104.eurprd04.prod.outlook.com
- (2603:10a6:800:126::9)
+        Thu, 16 Mar 2023 05:25:17 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDF25B5FE9;
+        Thu, 16 Mar 2023 02:25:15 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id m18-20020a05600c3b1200b003ed2a3d635eso589886wms.4;
+        Thu, 16 Mar 2023 02:25:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678958714;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JHk3LkW04FxegI0HeDKKkz9Skqui6v3gP3Rg7i28Ek0=;
+        b=oV1BMXWx8tzbSTJaIVWUKxpRPo1C4IKBtsYDtMhmwTqJL1liiOwJKeHPKtLVjAiK2c
+         qslQkG9POSHjMs/3sW3hURDmcrCDiZk7btaoGwBS7OkVYrcJuTL0WF/EqlraA0HOJjOH
+         pdS0Ffz/f//EfOf4HuqYoqSqAqJQ+DOrfdZblaMvFDuzRcw2ZU+XYaNgLMTn3jDPgfXn
+         VfY9UKWpw2EH0hI2ilwXFsbW3N/uDOa65CcG8ayThWsyNkK9X3rOZ4Yr0WbzI+VOsKyd
+         2amB0m/miEKI7qlzTKiYIY455JMcg8FZ96BSA/tBWQIJtephCoC1cE7ytmPBZF/bdhqM
+         3gZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678958714;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JHk3LkW04FxegI0HeDKKkz9Skqui6v3gP3Rg7i28Ek0=;
+        b=Am6L3fWbc0+INDwpfQMBO+ToLpoQnmbKKm/I4aRiEw1nK+9+yAhYce5RcMqsuzP9WY
+         HrQ2rY5h215IP1RFxEGpURSfWTnXSa9YJ8JVElpm2e1pmw+4Q0LS86ZnNlvJq4/vidP0
+         TkSZJEwlOnXKijmjTYWqXgK9rhRHc+8x9qftioivt8KF/6fGYxPNvXVidJld6KR7Qa8F
+         3ZWMvfsQA44CulJ0EBnfoGZykvTzjpxCuf7RvnvsvX4aYPKQby4DdGXDfP9TOngdYsdI
+         h+/Y8mJvgFOzrJm6cO7OubV0T5qEMorwgmmLU4V/V4Awf0eFzue0ohiXtE1j/Z81ZJUJ
+         ezBQ==
+X-Gm-Message-State: AO0yUKVf7yygwJvXSJwAQMGhgYSRg7HfSut0UTdlUuMOiy4XVK1SNpwl
+        2sRBBVixhYbFgfm0jVqaU2+ra/YzBJnufg==
+X-Google-Smtp-Source: AK7set/5wRJv3GP2yYF4DVmYKAYBS3hOXmW5dm0XysfflqGjwgFweuDKwlS9lgZC3vHbJhBTrY+Zbw==
+X-Received: by 2002:a05:600c:4f87:b0:3df:de28:f819 with SMTP id n7-20020a05600c4f8700b003dfde28f819mr20969428wmq.15.1678958714201;
+        Thu, 16 Mar 2023 02:25:14 -0700 (PDT)
+Received: from suse.localnet (host-79-35-102-94.retail.telecomitalia.it. [79.35.102.94])
+        by smtp.gmail.com with ESMTPSA id e18-20020a056000121200b002cf1c435afcsm6708222wrx.11.2023.03.16.02.25.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Mar 2023 02:25:13 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Stefano Garzarella <sgarzare@redhat.com>
+Cc:     Jason Wang <jasowang@redhat.com>,
+        virtualization@lists.linux-foundation.org,
+        Andrey Zhadchenko <andrey.zhadchenko@virtuozzo.com>,
+        eperezma@redhat.com, netdev@vger.kernel.org, stefanha@redhat.com,
+        linux-kernel@vger.kernel.org,
+        "Michael S. Tsirkin" <mst@redhat.com>, kvm@vger.kernel.org
+Subject: Re: [PATCH v2 3/8] vringh: replace kmap_atomic() with kmap_local_page()
+Date:   Thu, 16 Mar 2023 10:25:12 +0100
+Message-ID: <2155970.irdbgypaU6@suse>
+In-Reply-To: <CAGxU2F4k-UHxHxpLcsvKvJdvcXfb3WpV+wU=8ZpnJwMNkx0rdA@mail.gmail.com>
+References: <20230302113421.174582-1-sgarzare@redhat.com> <1980067.5pFmK94fv0@suse>
+ <CAGxU2F4k-UHxHxpLcsvKvJdvcXfb3WpV+wU=8ZpnJwMNkx0rdA@mail.gmail.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VI1PR04MB7104:EE_|VI1PR04MB9955:EE_
-X-MS-Office365-Filtering-Correlation-Id: f0c9ee7c-cd1d-4a1f-1355-08db26002af9
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: +E9Azf6JRWFm+lMMAzHJ+SeKWinEbQG3OtiqPRCrD8gc4xX9mWQsCs9vT42Yx6z60rFU8BVeS2mOmwD8BqDKCOCwAcT7qJ9V1es7e+spFHXAlHs62dsP4cvBKlDZf0+4QlQlDGHDWIG7kIp/Up0vHfk3CUY1LrsbXqPdu4JD0PZOUPMMWHP9MVnPheYQ6fgnIpom+XqXaTkNOh3xidOdg1z+XU5I4f3fMIBNzT6US/eI+raG3xMBWuCii5PkFxQGqMOn72HQ6PdFIFcWK1Jq6XVdKa3iuoKi1Ueq55LL6harHxLwyCSKNTNdDC7IYllm7o383D48dAEA3a6+eR30QBGoL/Kxis+idt5NqK2GeZZQfSi0O+JUNLT7Mjmnl8PLUE4Zc9aX5KBIY6LsSajpxMsWStUB0FaVnfu1dd+XgIFsATjQuAN1zZgI/xFb/PPKe31uUaJF1ZAaorDGd/+lNQJ3cVzCWLpiwO4RXVPU6+9QxfwwYnS0kMLH/3LpF8ATPrZgAtakq8gPn53C8vho3S/54MU+FVjS4nCU5B+ICcktMcQRI8nQG5BQTT9jPIz/QkI24Z4oaHrnADXeRiH9h0Jaf2NM3hmbe9BdBJF5jqUnO8IPu78f4JTRoHUbZzq+6icJz4UtSrI/RCMS/zO1DBf7evSLN8wUpioiW0ygPaOkKLep7is0L6D8uNaSR6rc5Zj+XT4sqlBCFQRppYoRXw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB7104.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(136003)(396003)(366004)(39860400002)(376002)(346002)(451199018)(31686004)(2616005)(110136005)(966005)(186003)(478600001)(6486002)(6512007)(53546011)(6506007)(31696002)(86362001)(38100700002)(8936002)(2906002)(5660300002)(36756003)(41300700001)(4326008)(316002)(66946007)(66476007)(8676002)(66556008)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?OG9LMlVNQy9zcHhxQmtTckJjQlhFQUlXREdvTEFraGE3eTl4ZjJtSGVCd3pX?=
- =?utf-8?B?Y0p4WHIvSHNuN1p2d1hGeE1KTzdxRUwzZklCd2h3Tm1OOGtiZEE2WjgxR1E2?=
- =?utf-8?B?RnZyVmd3UGtKOUZIQzJ0T1Rva2kwSjM4Wk9YMkVnTWZLRkFxbUZKdXkrYmRh?=
- =?utf-8?B?MjlIdXlTZWNQamZXUEVXU0xYZ3U5Y2swU04wSXhKZDFNeTFIU1FwWEJINmpZ?=
- =?utf-8?B?blZSc2RnN3F5VUltTHYvOGtkaGVUcXIzcmRIc2dxMlFJTEpnbzRWb0MxcGtr?=
- =?utf-8?B?dUJJSHJXYy9xNWNFVlVUZkE1WlM1RmFjMlYvVmFoNmFPTWpJeDdUK3YzTHlM?=
- =?utf-8?B?UXRmN2hPUS9WbmlMazByVjREaWVnZ2pOTDh4Y3lhdVNwLzkzcHNucXZYZEI2?=
- =?utf-8?B?bkxDdk10aS9ISFFXV041ZUpkTVVnU0Rnays2NmVUdDNiM2h0SURGRHJQOFVY?=
- =?utf-8?B?R3oyVktNeC95QXRWcGF6WUx4M1F6bmF0REp4dG5xRDhZaWRTVWtuUGdRU28r?=
- =?utf-8?B?M3ZWNHN4NE9HaWZhZzBjU1lLeVd0WVJvczk5VmNCRXdjS3dFNTVMN2wxVUJs?=
- =?utf-8?B?a3NaYWtoVjVnRTFCRlFxcU9RMUx4N015N3V2Tll3L0NvbEtMbHp2VE5RYXV5?=
- =?utf-8?B?WEFkYkg5bE5uZkhYUXNBK3dDaUE4VE1MczJpamRDRnBLU0hwUXVsakE5L0pB?=
- =?utf-8?B?dEZWeXlrS09Bc0tCUGRJdW85bm5kU0wrSHJTUWtzWlhqc0VybjFDU2RlTUJP?=
- =?utf-8?B?a1NReTRCaERIb210ZmFBZVZCYWMwYitiM0w5dWhmNjRtY3JmM0tmZTBGeEYw?=
- =?utf-8?B?RVdRb1lQSEdSZk1DL3dSRWFsczhuQ3ZNV3Ywb3hzRHhtQTJTcjRlbFFQRFQ2?=
- =?utf-8?B?QUVHelRsdCtPelNYZzlETUs1dGdzSVFmd2p1K1dlYnZvbHRReEtlNjI3eFAx?=
- =?utf-8?B?bFBpR0VTQ0p0T1FMV0thVko4VzFiejVFeU9NUzlGS3lxT0FBMFBNaUg2VXEy?=
- =?utf-8?B?Rkp2MkpvTmpia0h3MVJtVmdaY05FVnJwK1VHNGxmbmNwMXpOUGVWRThtRkNs?=
- =?utf-8?B?TS9jWGdwYkFsSFJ5aXhiaXBrT1Y4WHBFTmZKZFlqMWJXZVZrSkUzUm1tYVdO?=
- =?utf-8?B?aW1IMS9OTWNxb05rSkM2c2xNOHhZMERaRlZjV1VwbEhkTU56NWtzZnl1UUhK?=
- =?utf-8?B?U3hjcGVRK3BtcHFFQmxuY0M0U09HTXcvSjRwbXJwZGtYYk1meW5pZVlNYTlU?=
- =?utf-8?B?ZzBXbnNmUU1JdW8rMTlXbzYydmdoSWNraGFRcnQ5b3Z5RFlVR3dEVFZISzZi?=
- =?utf-8?B?UW5MVmtBN3pPdzRHZXcveEg5b3VNZGxJL2VrZ3FEZHkreDRndTBKSkF5anBB?=
- =?utf-8?B?MmtHQ0Y2aXlYaUFubFBJYis4NTB5dWhjRjVXYTYwdnFkYzdKNStIZ2NqTjFU?=
- =?utf-8?B?aGFKdnlFKy9kcWE0ZUErN2VqVCtqeU9tTTY5a240Kzl1Tk9nWHpoS0ZuWGgw?=
- =?utf-8?B?eWxFcXNYL24vZ3JuM01pUWdhYVFFbDZLNnlzV25yU2pOeGZGc05BcnlLbHJ6?=
- =?utf-8?B?V2xuc2hCeXgrS1RXY2Nja250K1QxQmdiZlc3SHpEOGQ2UUZWSjVHbVY5eGxY?=
- =?utf-8?B?T3ptMCtORk5DdnhDeHp4dEEvTzdreExzWGlJVzRXMGFtRVlWNFhoS21CSi9k?=
- =?utf-8?B?RUkzVXZGNUtuL1JhZWVGd3B4bm9rakxEVS9lL0owSms4ZUx6VmpUN1doSVll?=
- =?utf-8?B?TitWc0tHKzdadU5RU1VndVp4SXNNVmQrVGxxQ1NwMmVrUW5QeE9OMWJZbTVS?=
- =?utf-8?B?YVFMamx0b0hHTnhvT2V0RFprSlBnMjArQ09BdFJVdHI4UlVsMnA4VFdtakIw?=
- =?utf-8?B?UHgrcTdZMi82LzJaSkpGdHRMRzBFQzlPZFgxVk9yUFI1OFBjbWlMWkQzVmVr?=
- =?utf-8?B?b21lczdBU0RTNmUyc3lMeVMvSnhUS3hKUm9vUFJlUmc3M3REVXRuMHFGSm9o?=
- =?utf-8?B?dm9LVUVqZU43RGN5dTNiL1RiRTRGRE1vR3dvcEF4Y3VZQ0pMTTBMVUs3UFlE?=
- =?utf-8?B?NDl4NytucW9UZ2pLTzFQRnZqajNUMCtyRU56YlI3RVpjTWdON0pQUysxZExi?=
- =?utf-8?B?ZjlvaHJaMG1vbndFUkhGVklwS0hLSHRqZDdkRVdDaEF4NnVLbUp4MERxRXFy?=
- =?utf-8?Q?eddTfmnpnExqxXs1eYZFWuqnxQYxnLhjfIJ1HOlnoH2f?=
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f0c9ee7c-cd1d-4a1f-1355-08db26002af9
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB7104.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Mar 2023 09:23:56.6972
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: A0VL7rOGYBGNMX880TImvyfA1Jt3X1J+m2b1ywY80xv6TY6KFAfKSt8eDSTv8a6JSJynsPiTCFUEt5YV+gHEGA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB9955
-X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,RCVD_IN_VALIDITY_RPBL,SPF_HELO_PASS,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On gioved=C3=AC 16 marzo 2023 09:09:29 CET Stefano Garzarella wrote:
+> On Wed, Mar 15, 2023 at 10:12=E2=80=AFPM Fabio M. De Francesco
+>=20
+> <fmdefrancesco@gmail.com> wrote:
+> > On marted=C3=AC 14 marzo 2023 04:56:08 CET Jason Wang wrote:
+> > > On Thu, Mar 2, 2023 at 7:34=E2=80=AFPM Stefano Garzarella <sgarzare@r=
+edhat.com>
+> >=20
+> > wrote:
+> > > > kmap_atomic() is deprecated in favor of kmap_local_page().
+> > >=20
+> > > It's better to mention the commit or code that introduces this.
+> > >=20
+> > > > With kmap_local_page() the mappings are per thread, CPU local, can=
+=20
+take
+> > > > page-faults, and can be called from any context (including=20
+interrupts).
+> > > > Furthermore, the tasks can be preempted and, when they are schedule=
+d=20
+to
+> > > > run again, the kernel virtual addresses are restored and still vali=
+d.
+> > > >=20
+> > > > kmap_atomic() is implemented like a kmap_local_page() which also
+> > > > disables
+> > > > page-faults and preemption (the latter only for !PREEMPT_RT kernels,
+> > > > otherwise it only disables migration).
+> > > >=20
+> > > > The code within the mappings/un-mappings in getu16_iotlb() and
+> > > > putu16_iotlb() don't depend on the above-mentioned side effects of
+> > > > kmap_atomic(),
+> > >=20
+> > > Note we used to use spinlock to protect simulators (at least until
+> > > patch 7, so we probably need to re-order the patches at least) so I
+> > > think this is only valid when:
+> > >=20
+> > > The vringh IOTLB helpers are not used in atomic context (e.g spinlock,
+> > > interrupts).
+> >=20
+> > I'm probably missing some context but it looks that you are saying that
+> > kmap_local_page() is not suited for any use in atomic context (you are
+> > mentioning spinlocks).
+> >=20
+> > The commit message (that I know pretty well since it's the exact copy,=
+=20
+word
+> > by word, of my boiler plate commits)
+>=20
+> I hope it's not a problem for you, should I mention it somehow?
+
+Sorry, I had missed your last message when I wrote a another message few=20
+minutes ago in this thread.
+
+Obviously, I'm happy that my commit message it's being reused. As I said in=
+=20
+the other message I would appreciate some kind of crediting me as the autho=
+r.
+
+I proposed a means you can use, but feel free to ignore my suggestion and d=
+o=20
+differently if you prefer to.
+
+Again thanks,
+
+=46abio
+
+> I searched for the last commits that made a similar change and found
+> yours that explained it perfectly ;-)
+>=20
+> Do I need to rephrase?
+>=20
+> > explains that kmap_local_page() is perfectly
+> > usable in atomic context (including interrupts).
+> >=20
+> > I don't know this code, however I am not able to see why these vringh=20
+IOTLB
+> > helpers cannot work if used under spinlocks. Can you please elaborate a
+> > little more?
+> >=20
+> > > If yes, should we document this? (Or should we introduce a boolean to
+> > > say whether an IOTLB variant can be used in an atomic context)?
+> >=20
+> > Again, you'll have no problems from the use of kmap_local_page() and so=
+=20
+you
+> > don't need any boolean to tell whether or not the code is running in=20
+atomic
+> > context.
+> >=20
+> > Please take a look at the Highmem documentation which has been recently
+> > reworked and extended by me: https://docs.kernel.org/mm/highmem.html
+> >=20
+> > Anyway, I have been ATK 12 or 13 hours in a row. So I'm probably missin=
+g=20
+the
+> > whole picture.
+>=20
+> Thanks for your useful info!
+> Stefano
 
 
-On 16.03.23 10:15, Alexander Stein wrote:
-> From: Korneliusz Osmenda <korneliuszo@gmail.com>
-> 
-> On Gateworks Ventana there is a number of PCI devices and:
->    - imx6_pcie_probe takes longer than start of late init
->    - pci_sysfs_init sets up flag sysfs_initialized
->    - pci_sysfs_init initializes already found devices
->    - imx6_pcie_probe tries to reinitialize device
-> 
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=215515
-> 
-> Signed-off-by: Korneliusz Osmenda <korneliuszo@gmail.com>
-> Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-> ---
->   drivers/pci/pci-sysfs.c | 6 ++++++
->   include/linux/pci.h     | 2 ++
->   2 files changed, 8 insertions(+)
-> 
-> diff --git a/drivers/pci/pci-sysfs.c b/drivers/pci/pci-sysfs.c
-> index dd0d9d9bc509..998e44716b6f 100644
-> --- a/drivers/pci/pci-sysfs.c
-> +++ b/drivers/pci/pci-sysfs.c
-> @@ -1497,6 +1497,9 @@ int __must_check pci_create_sysfs_dev_files(struct pci_dev *pdev)
->   	if (!sysfs_initialized)
->   		return -EACCES;
->   
-> +	if (atomic_cmpxchg(&pdev->sysfs_init_cnt, 0, 1) == 1)
-> +		return 0;		/* already added */
-> +
->   	return pci_create_resource_files(pdev);
 
-This is very likely a bug. You are returning an error in the error
-case. Yet the flag stays. And simply resetting it in the error case
-would be a race. There is something fishy in that design.
 
-	Regards
-		Oliver
