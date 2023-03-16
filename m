@@ -2,77 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 875006BC247
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 01:16:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D9DC6BC24B
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 01:17:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230248AbjCPAQe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 20:16:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42518 "EHLO
+        id S232812AbjCPARH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 20:17:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230209AbjCPAQc (ORCPT
+        with ESMTP id S230457AbjCPARE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 20:16:32 -0400
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BB285FA74
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 17:16:31 -0700 (PDT)
-Received: by mail-pg1-x54a.google.com with SMTP id q30-20020a631f5e000000b0050760997f4dso12199pgm.6
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 17:16:31 -0700 (PDT)
+        Wed, 15 Mar 2023 20:17:04 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 046F762B71;
+        Wed, 15 Mar 2023 17:16:59 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id m2so13599wrh.6;
+        Wed, 15 Mar 2023 17:16:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678925790;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=aEOtW/UvBLbs+rdNOst01WJ3Nmt0dr4+Kg7urr3t254=;
-        b=RlolKrOV2qpzwBK5xFbGpRrHQKhSRtQtHxriUvZp1S51GSP3QpS68JDYU+IKdBij0K
-         GqRDtqrxIQI2GtQh1j458rsQL26utXeMYJR9nW0X8HoI08S3v4u78kNiLPJvY25nr8s+
-         b18oQwTWQOtCpauTWNPKb0EHKUTcI7XykFWfwx671axGpbSEAanwd7vwNqJEk5QdRYPs
-         CNgIP1dp384kzbLm3UMqJfigMCshKlWY79UOD9/5Ft5L03DNu7+3KewG9lnMnFoF/35+
-         lxjGd+F39jFVx0/icIH0p0Csjr8q4Ei7Em7kRXr+XvLx8qENtjC5UcttNRyazXYdKarM
-         Xw1A==
+        d=gmail.com; s=20210112; t=1678925817;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lTV9EnLtEgkBc71Ccit1w3PTMeFKwTnDyhAhw89XVNI=;
+        b=hQ3dQ4U3LsqaKJ5WcJzbeOWMpFCEwWkMEhQyaeWkxDNosIIMYFJh5XPwDi0XutMGx3
+         iWeL6vUkJrFVx851HEDZcEFrKA96ldy1hzI0eyixb9G2BVNjusRi+sRGBX8f3RrVLFuy
+         ZWJaAxZ0NQRwPE0U5lneRBzHTh8Lob3yfWTEHY4f0QPNu0/UifRt51b+tRRjfWzBfQPb
+         L1DynkWDgb5gq67C6Hb95hg+zcK+hASUdlXQb0em6ecML5TfoQJAfP3J7uVB2g24bra4
+         Igdob8AJR/kAn9LTWjMk8r1HyUQn5NPhi5QGiRzpO1I1+XaM2CYCXZzuIj/aUldbv8DS
+         YLdA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678925790;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aEOtW/UvBLbs+rdNOst01WJ3Nmt0dr4+Kg7urr3t254=;
-        b=SGKjS/SoyJJRBhu9jY1EVXxRm2j9ck70l15zg1CdEcXvt77oBQqmEXXBMoUzkZa1cA
-         3brnTEnqivDkn0rm/nvAdl14W0AQBXeGlN7eQSfMVE05bijJ7A2dJ0BbY1jegCTQSJqL
-         x8vBJX5Wk6S9JWGJuJUBJ0ducFZqZhu4dMG4n5EsMLNWgTUzz40alee8HZY315GpUi7N
-         RtieI2UFu7VY4bfabiYQHv3hpQ6sZus1jKjDHzkAq63zGjGEBBd1Igjn5JLi1X9JISWW
-         Ig6AdLFXXiZLUO6PZIpkVvNlYB6mQlmVd/YgC4Lz0Lm3mWLCHMvXkpW40VwkUEex5wFR
-         9bpA==
-X-Gm-Message-State: AO0yUKUF7PgUfzGn9olVmSk5qvdHPBxTbhM3XDNKfeRc3Nhe1XHE0Dag
-        4NsnZB9lgLWMx93H1AEoMzQBWIdug3o=
-X-Google-Smtp-Source: AK7set9pRTpNFmcnx3jEqxce1TOHXrWf9E4JfoqIvt+Pki6qlZ8cK/LW8adBEnN6nY3vWJk/67tekDdto58=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:902:ecc7:b0:19d:1dfe:eac6 with SMTP id
- a7-20020a170902ecc700b0019d1dfeeac6mr615813plh.1.1678925790528; Wed, 15 Mar
- 2023 17:16:30 -0700 (PDT)
-Date:   Wed, 15 Mar 2023 17:16:29 -0700
-In-Reply-To: <20220818202701.3314045-3-dmy@semihalf.com>
-Mime-Version: 1.0
-References: <20220818202701.3314045-1-dmy@semihalf.com> <20220818202701.3314045-3-dmy@semihalf.com>
-Message-ID: <ZBJfuOOioFb0pVB6@google.com>
-Subject: Re: [PATCH v3 2/2] KVM: x86/ioapic: Resample the pending state of an
- IRQ when unmasking
-From:   Sean Christopherson <seanjc@google.com>
-To:     Dmytro Maluka <dmy@semihalf.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        Marc Zyngier <maz@kernel.org>,
-        Eric Auger <eric.auger@redhat.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Rong L Liu <rong.l.liu@intel.com>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>,
-        Tomasz Nowicki <tn@semihalf.com>,
-        Grzegorz Jaszczyk <jaz@semihalf.com>, upstream@semihalf.com,
-        Dmitry Torokhov <dtor@google.com>,
-        Eddie Dong <eddie.dong@intel.com>
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        d=1e100.net; s=20210112; t=1678925817;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lTV9EnLtEgkBc71Ccit1w3PTMeFKwTnDyhAhw89XVNI=;
+        b=M5G6AunkCtCEzc4tE34umIG+qUilc42mzOzCCRwyMoAfztFK6zWZHStObnLTK7oOM/
+         sf+Zv+p6E4UerN1HnsrE+t9ht3AjT8ZqBbCpso5JC0Wu0rrm5HQW7tgyPPnXDgLXyZ+q
+         GSUqYuDyN6AmAqT0DZTTo5MKawMl1POnh0+Gxi7oqdLY7SYYGsLKxc6Z+Se0K5LeH6Rh
+         x1biznpyVfl/kmyzFqAEYIYFpkwEgUk8dBe1tlR4XejkY2rCg2wIzXnGE2K/0PnoC10y
+         CaTPp+DTXLQSdaiY/bzAkPLHHmRPwFNHijsE5gLGb1CdmfgVg3tACPhuELr2CC2Gga/i
+         Uz3Q==
+X-Gm-Message-State: AO0yUKU5dzg/AKg1JneF9BTbyX8CzQkdQta12qMW9FBzN77iHx2wJl3Q
+        kapv85921J+o5l3DCc1mcev2YwKshO2NcxaUaOw=
+X-Google-Smtp-Source: AK7set/pluI8RhE5QmBIHGlQNxPKXPr3AZKOWkXiMh/E85uReVoHRs8JGxaSYzON7hxQ26BbpJUfIjxf2X9EZICRXzY=
+X-Received: by 2002:a5d:63d1:0:b0:2ce:ac97:6f51 with SMTP id
+ c17-20020a5d63d1000000b002ceac976f51mr763875wrw.13.1678925817370; Wed, 15 Mar
+ 2023 17:16:57 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230315160228.2362-1-cnsztl@gmail.com> <20230315160228.2362-5-cnsztl@gmail.com>
+In-Reply-To: <20230315160228.2362-5-cnsztl@gmail.com>
+From:   Vasily Khoruzhick <anarsoul@gmail.com>
+Date:   Wed, 15 Mar 2023 17:16:30 -0700
+Message-ID: <CA+E=qVei7T4T0FWhdUFnr5JbCWSgFbGLcmU2OHxx54yvnNR6mw@mail.gmail.com>
+Subject: Re: [PATCH 4/5] arm64: dts: rockchip: fix gmac support for NanoPi R5S
+To:     Tianling Shen <cnsztl@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Peter Geis <pgwipeout@gmail.com>, Andy Yan <andyshrk@163.com>,
+        Brian Norris <briannorris@chromium.org>,
+        Chris Morgan <macromorgan@hotmail.com>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        Maya Matuszczyk <maccraft123mc@gmail.com>,
+        Andrew Powers-Holmes <aholmes@omnom.net>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,117 +82,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Looks sane to me, just a bunch of cosmetic comments.  But this really needs input/review
-from others.  I/O APIC and level triggered interrupts are not exactly in my wheelhouse.
-
-On Thu, Aug 18, 2022, Dmytro Maluka wrote:
+On Wed, Mar 15, 2023 at 9:02=E2=80=AFAM Tianling Shen <cnsztl@gmail.com> wr=
+ote:
+>
+> - Changed phy-mode to rgmii.
+>
+> - Fixed pull type in pinctrl for gmac0.
+>
+> - Removed duplicate properties in mdio node.
+>   These properties are defined in the gmac0 node already.
+>
+> Signed-off-by: Tianling Shen <cnsztl@gmail.com>
 > ---
->  arch/x86/kvm/ioapic.c    | 36 ++++++++++++++++++++++++++++++++++--
->  include/linux/kvm_host.h |  8 ++++++++
->  virt/kvm/eventfd.c       | 39 +++++++++++++++++++++++++++++++++------
->  3 files changed, 75 insertions(+), 8 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/ioapic.c b/arch/x86/kvm/ioapic.c
-> index 765943d7cfa5..da7074d9b04e 100644
-> --- a/arch/x86/kvm/ioapic.c
-> +++ b/arch/x86/kvm/ioapic.c
-> @@ -368,8 +368,40 @@ static void ioapic_write_indirect(struct kvm_ioapic *ioapic, u32 val)
->  		if (mask_before != mask_after)
->  			kvm_fire_mask_notifiers(ioapic->kvm, KVM_IRQCHIP_IOAPIC, index, mask_after);
->  		if (e->fields.trig_mode == IOAPIC_LEVEL_TRIG
-> -		    && ioapic->irr & (1 << index))
-> -			ioapic_service(ioapic, index, false);
-> +		    && ioapic->irr & (1 << index)
-> +		    && !e->fields.mask
-> +		    && !e->fields.remote_irr) {
+>  arch/arm64/boot/dts/rockchip/rk3568-nanopi-r5s.dts | 7 ++-----
+>  1 file changed, 2 insertions(+), 5 deletions(-)
+>
+> diff --git a/arch/arm64/boot/dts/rockchip/rk3568-nanopi-r5s.dts b/arch/ar=
+m64/boot/dts/rockchip/rk3568-nanopi-r5s.dts
+> index e9adf5e66529..2a1118f15c29 100644
+> --- a/arch/arm64/boot/dts/rockchip/rk3568-nanopi-r5s.dts
+> +++ b/arch/arm64/boot/dts/rockchip/rk3568-nanopi-r5s.dts
+> @@ -57,7 +57,7 @@
+>         assigned-clock-rates =3D <0>, <125000000>;
+>         clock_in_out =3D "output";
+>         phy-handle =3D <&rgmii_phy0>;
+> -       phy-mode =3D "rgmii-id";
+> +       phy-mode =3D "rgmii";
+>         pinctrl-names =3D "default";
+>         pinctrl-0 =3D <&gmac0_miim
+>                      &gmac0_tx_bus2
+> @@ -79,9 +79,6 @@
+>                 reg =3D <1>;
+>                 pinctrl-0 =3D <&eth_phy0_reset_pin>;
+>                 pinctrl-names =3D "default";
+> -               reset-assert-us =3D <10000>;
+> -               reset-deassert-us =3D <50000>;
+> -               reset-gpios =3D <&gpio0 RK_PC4 GPIO_ACTIVE_LOW>;
 
-Can you opportunistically change these to fit the preferred style of putting the &&
-on the previous line?  Ignore the file's existing "style", this crud is ancient and
-ugly (this goes for all of my comments).
+Hmm, I don't see RK_PC4 being used anywhere else. gmac0 has RK_PC5 as
+snsp,reset-gpio. So it essentially drops reset for the PHY. Is it
+expected?
 
-> @@ -1987,6 +1988,13 @@ static inline int kvm_irqfd(struct kvm *kvm, struct kvm_irqfd *args)
->  }
->  
->  static inline void kvm_irqfd_release(struct kvm *kvm) {}
-> +
-> +static inline bool kvm_notify_irqfd_resampler(struct kvm *kvm,
-> +					      unsigned irqchip,
-> +					      unsigned pin)
-
-"unsigned int" instead of bare "unsigned"
-
-> +{
-> +	return false;
-> +}
->  #endif
->  
->  #else
-> diff --git a/virt/kvm/eventfd.c b/virt/kvm/eventfd.c
-> index 61aea70dd888..71f327019f1e 100644
-> --- a/virt/kvm/eventfd.c
-> +++ b/virt/kvm/eventfd.c
-> @@ -55,6 +55,16 @@ irqfd_inject(struct work_struct *work)
->  			    irqfd->gsi, 1, false);
->  }
->  
-> +/* Called within kvm->irq_srcu read side. */
-
-Ne need for the comment, let lockdep do the heavy lifting.
-
-> +static void __irqfd_resampler_notify(struct kvm_kernel_irqfd_resampler *resampler)
-
-I don't see a need for the double underscores.  I assume the idea is to convey
-that this is called under kvm->irq_srcu, but I just ended up looking for a version
-without the underscores.
-
-> +{
-> +	struct kvm_kernel_irqfd *irqfd;
-> +
-> +	list_for_each_entry_srcu(irqfd, &resampler->list, resampler_link,
-> +	    srcu_read_lock_held(&resampler->kvm->irq_srcu))
-
-Align the indentation, i.e.
-
-	struct kvm_kernel_irqfd *irqfd;
-
-	list_for_each_entry_srcu(irqfd, &resampler->list, resampler_link,
-				 srcu_read_lock_held(&resampler->kvm->irq_srcu))
-		eventfd_signal(irqfd->resamplefd, 1);
-
-> @@ -648,6 +653,28 @@ void kvm_irq_routing_update(struct kvm *kvm)
->  	spin_unlock_irq(&kvm->irqfds.lock);
->  }
->  
-> +bool kvm_notify_irqfd_resampler(struct kvm *kvm, unsigned irqchip, unsigned pin)
-> +{
-> +	struct kvm_kernel_irqfd_resampler *resampler;
-> +	int gsi, idx;
-> +
-> +	idx = srcu_read_lock(&kvm->irq_srcu);
-> +	gsi = kvm_irq_map_chip_pin(kvm, irqchip, pin);
-> +	if (gsi != -1)
-
-This if-statement needs curly braces, the exemption doesn't apply if there are
-multiple blocks? (can't think of the right name at the moment) in the guts of
-the if-statement.
-
-> +		list_for_each_entry_srcu(resampler,
-> +					 &kvm->irqfds.resampler_list, link,
-> +					 srcu_read_lock_held(&kvm->irq_srcu)) {
-> +			if (resampler->notifier.gsi == gsi) {
-> +				__irqfd_resampler_notify(resampler);
-> +				srcu_read_unlock(&kvm->irq_srcu, idx);
-> +				return true;
-> +			}
-> +		}
-> +	srcu_read_unlock(&kvm->irq_srcu, idx);
-> +
-> +	return false;
-> +}
-> +
->  /*
->   * create a host-wide workqueue for issuing deferred shutdown requests
->   * aggregated from all vm* instances. We need our own isolated
-> -- 
-> 2.37.1.595.g718a3a8f04-goog
-> 
+>         };
+>  };
+>
+> @@ -115,7 +112,7 @@
+>  &pinctrl {
+>         gmac0 {
+>                 eth_phy0_reset_pin: eth-phy0-reset-pin {
+> -                       rockchip,pins =3D <0 RK_PC4 RK_FUNC_GPIO &pcfg_pu=
+ll_down>;
+> +                       rockchip,pins =3D <0 RK_PC4 RK_FUNC_GPIO &pcfg_pu=
+ll_up>;
+>                 };
+>         };
+>
+> --
+> 2.17.1
+>
