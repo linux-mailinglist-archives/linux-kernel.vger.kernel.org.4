@@ -2,216 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54DDA6BD937
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 20:31:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 210156BD949
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 20:34:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229852AbjCPTbA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 15:31:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59186 "EHLO
+        id S230220AbjCPTeP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 15:34:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229812AbjCPTa6 (ORCPT
+        with ESMTP id S229638AbjCPTeM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 15:30:58 -0400
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70E12DFB5B
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 12:30:52 -0700 (PDT)
-Received: by mail-yb1-xb35.google.com with SMTP id u32so3222129ybi.6
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 12:30:52 -0700 (PDT)
+        Thu, 16 Mar 2023 15:34:12 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 525CD274B2
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 12:34:08 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id r11so11965822edd.5
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 12:34:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112; t=1678995051;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OQinqcAul9N1/k6Qm0xi6TTExDZScG0p56fu1+mj3E8=;
-        b=aZUr5Hc3SSnInpRHn4QQapVy8DLcSf4/Fsji81ynnnbmxFUbqyycyen3xS68rzw2cJ
-         csdHHzPzn1pP4Rqhq8/jlqA8dQLTAnyjBWcvBZHm6/pvneaCtKF11X0NKVPFJ6Lwuk5o
-         72RVceBABLTBI+tJn+l9lpq3yxow6PgeoozRTUpTU2xzCTSQilljxyWqtox7dKLQwmVh
-         Mt7eATOZlaYVhW8nPozAkwkhKitbs3qSfS0zDDfCSHkn4bHon39z2LN2WrpJHFl7bH+u
-         01CLGuTfkqCSiQaPZ34ZVbtLD9fLHpC87CEEjOYCcl/1TmRK/ccg1mJnufuIL2N997aO
-         uUJw==
+        d=linaro.org; s=google; t=1678995247;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=dyciw28w72xcQW9mQh3xwrk42HtEkqAkTnLwxCjUt1I=;
+        b=jDqdnQW7R9aFerJ6wrorsKPfOTU+aKBneRLhQVGtss9S/T+e8qLZ/WtyuHSPazKXlP
+         LCLGXb1WbkdfS45+Npn8Nl0lKy1f84TjB4kQ8fy8EG/c9bwDun7ozcmubXSESQemTOzR
+         h8ULyf3hwJtSIEP97mfo4O9wZyhKn/gZHDHoI73gViztzppizQXDBT5AYu0sxRRhDv2q
+         IdGW3c8psvYjfBnse59HncFk0Bvr7+ObRp+8rLhKCLJvqQ4DEiqoJKstGX1bawSQZWwv
+         1x7GY5SqbwcSUNZLLvaSUufn5E40ozOsYJj5tvPI70FDX6AEWkCBsACJUm/YtG/2Tirl
+         iSIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678995051;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OQinqcAul9N1/k6Qm0xi6TTExDZScG0p56fu1+mj3E8=;
-        b=ge9SokLDqsDziNzLk5R756CMyNRzaBhAFw9M91PvfKeu7g53k8EM6SFgpEG/HyUc53
-         WpojssqOWOdhVjymxYsBhuKAFpIRKDb1DC4mlCGE7ZFkY3qtx9fq+zttXhxJmjYRQy9d
-         aLm9sZOtAKUfCR++q0RtLAn4TtTFM/2RNzXwUrbBSa94GyhA6hk+y58juhJNKptUbcca
-         LbGCItf831ipid/APM83zz0obH8y94XXXOBjRGkgW0kJ56yX2aUQ0O1xu30eRGa3hSRb
-         6l/M7nmdu6c+aAFmdpJ1qpQnZ9DRSDYIO6q13FK2kOSNi1JG00Veoux+RYKI/91nYYhL
-         vwvA==
-X-Gm-Message-State: AO0yUKVK3PlosKz/TMuDeE7b1ysLPqUT1gWr0J7Cb4zj9N28lCkeDqB6
-        UsyoqoLnfwvPc5zsW0xQZM5nnDOA31Bx50/IDuKa8Q==
-X-Google-Smtp-Source: AK7set8XMy0ufUxFXEARzyZfU02oLy+VwPbPQAYSeIVhzA2hlPaXVJJxn8QbOjY2tiSVxh7zXiHiE5Y10vOoOFYvORc=
-X-Received: by 2002:a25:f507:0:b0:b3b:6576:b22b with SMTP id
- a7-20020a25f507000000b00b3b6576b22bmr10524766ybe.12.1678995051579; Thu, 16
- Mar 2023 12:30:51 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1678995247;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=dyciw28w72xcQW9mQh3xwrk42HtEkqAkTnLwxCjUt1I=;
+        b=e1r85bke5JNUBk7MYA8eu6rPGjiqb86CRWdjrPoBAwzGb7L1VkKBgvEwjynhD6fpy7
+         tJRWxlocfmazEZ4DjIPbNCiJ9ohI0GJtNCoSsgpA9/X5hu67Y1+Pu/svQJWBJVYrF5jU
+         iaPGbd9/mpOrgsApYdjUXgmpVTS1jmOJzeFAsvlQchdWz0NCniQ2r+krPlYLFmtkQ61h
+         XoGFLt5ej3bJOExdOxilU2TiOuTFKajqgqjo36nWwYE7QKVJzKDc0rz+c21DJrxU9o94
+         R87L/FuBMbRXvXLXZWPRZNndGDvt4Ww0c/c9hncE45DAUvuD8MumevaxrCwvSsTXdBDa
+         5WmQ==
+X-Gm-Message-State: AO0yUKWTnJyjCC8IhhO6tPwJEXue5SV/87X9rfLqZXPesO0JWCUlOqIK
+        2OW9xlPRthL/piHoskEF9eB7AA==
+X-Google-Smtp-Source: AK7set/v1W7Ns5+ZlsqTjhJvhjWCh0bXOH6bccxxSpksf19UNwSeZsMDyZ3fw5BSDUUO2F7XNaAskg==
+X-Received: by 2002:a17:906:cc54:b0:884:37fd:bf4c with SMTP id mm20-20020a170906cc5400b0088437fdbf4cmr11914784ejb.19.1678995246860;
+        Thu, 16 Mar 2023 12:34:06 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:9827:5f65:8269:a95f? ([2a02:810d:15c0:828:9827:5f65:8269:a95f])
+        by smtp.gmail.com with ESMTPSA id r5-20020a1709064d0500b00923f05b2931sm16291eju.118.2023.03.16.12.34.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Mar 2023 12:34:06 -0700 (PDT)
+Message-ID: <7424bab4-6a92-7d71-b110-454819101678@linaro.org>
+Date:   Thu, 16 Mar 2023 20:34:05 +0100
 MIME-Version: 1.0
-References: <20230227222957.24501-1-rick.p.edgecombe@intel.com>
- <20230227222957.24501-34-rick.p.edgecombe@intel.com> <ZADbP7HvyPHuwUY9@arm.com>
- <20230309185511.GA1964069@debug.ba.rivosinc.com> <ZBAf/QI42hcVQ4Uq@kernel.org>
-In-Reply-To: <ZBAf/QI42hcVQ4Uq@kernel.org>
-From:   Deepak Gupta <debug@rivosinc.com>
-Date:   Thu, 16 Mar 2023 12:30:40 -0700
-Message-ID: <CAKC1njTP2WAnkh3vaNGGaeOCa_uArNAatVOXxie+chR2mhA89w@mail.gmail.com>
-Subject: Re: [PATCH v7 33/41] x86/shstk: Introduce map_shadow_stack syscall
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        John Allen <john.allen@amd.com>, kcc@google.com,
-        eranian@google.com, jamorris@linux.microsoft.com,
-        dethoma@microsoft.com, akpm@linux-foundation.org,
-        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
-        david@redhat.com, nd@arm.com, al.grant@arm.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 1/3] dt-bindings: clock: qcom: Add bindings for videocc on
+ SM8450
+Content-Language: en-US
+To:     Taniya Das <quic_tdas@quicinc.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_skakitap@quicinc.com, quic_jkona@quicinc.com
+References: <20230316083049.29979-1-quic_tdas@quicinc.com>
+ <20230316083049.29979-2-quic_tdas@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230316083049.29979-2-quic_tdas@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 14, 2023 at 12:19=E2=80=AFAM Mike Rapoport <rppt@kernel.org> wr=
-ote:
->
-> Hi,
->
-> On Thu, Mar 09, 2023 at 10:55:11AM -0800, Deepak Gupta wrote:
-> > On Thu, Mar 02, 2023 at 05:22:07PM +0000, Szabolcs Nagy wrote:
-> > > The 02/27/2023 14:29, Rick Edgecombe wrote:
-> > > > Previously, a new PROT_SHADOW_STACK was attempted,
-> > > ...
-> > > > So rather than repurpose two existing syscalls (mmap, madvise) that=
- don't
-> > > > quite fit, just implement a new map_shadow_stack syscall to allow
-> > > > userspace to map and setup new shadow stacks in one step. While uco=
-ntext
-> > > > is the primary motivator, userspace may have other unforeseen reaso=
-ns to
-> > > > setup it's own shadow stacks using the WRSS instruction. Towards th=
-is
-> > > > provide a flag so that stacks can be optionally setup securely for =
-the
-> > > > common case of ucontext without enabling WRSS. Or potentially have =
-the
-> > > > kernel set up the shadow stack in some new way.
-> > > ...
-> > > > The following example demonstrates how to create a new shadow stack=
- with
-> > > > map_shadow_stack:
-> > > > void *shstk =3D map_shadow_stack(addr, stack_size, SHADOW_STACK_SET=
-_TOKEN);
-> > >
-> > > i think
-> > >
-> > > mmap(addr, size, PROT_READ, MAP_ANON|MAP_SHADOW_STACK, -1, 0);
-> > >
-> > > could do the same with less disruption to users (new syscalls
-> > > are harder to deal with than new flags). it would do the
-> > > guard page and initial token setup too (there is no flag for
-> > > it but could be squeezed in).
-> >
-> > Discussion on this topic in v6
-> > https://lore.kernel.org/all/20230223000340.GB945966@debug.ba.rivosinc.c=
-om/
-> >
-> > Again I know earlier CET patches had protection flag and somehow due to=
- pushback
-> > on mailing list, it was adopted to go for special syscall because no on=
-e else
-> > had shadow stack.
-> >
-> > Seeing a response from Szabolcs, I am assuming arm4 would also want to =
-follow
-> > using mmap to manufacture shadow stack. For reference RFC patches for r=
-isc-v shadow stack,
-> > use a new protection flag =3D PROT_SHADOWSTACK.
-> > https://lore.kernel.org/lkml/20230213045351.3945824-1-debug@rivosinc.co=
-m/
-> >
-> > I know earlier discussion had been that we let this go and do a re-fact=
-or later as other
-> > arch support trickle in. But as I thought more on this and I think it m=
-ay just be
-> > messy from user mode point of view as well to have cognition of two dif=
-ferent ways of
-> > creating shadow stack. One would be special syscall (in current libc) a=
-nd another `mmap`
-> > (whenever future re-factor happens)
-> >
-> > If it's not too late, it would be more wise to take `mmap`
-> > approach rather than special `syscall` approach.
->
-> I disagree.
->
-> Having shadow stack flags for mmap() adds unnecessary complexity to the
-> core-mm, while having a dedicated syscall hides all the details in the
-> architecture specific code.
+On 16/03/2023 09:30, Taniya Das wrote:
+> Add device tree bindings for the video clock controller on Qualcomm
+> SM8450 platform.
 
-Again reiterating it would've made sense if only x86 had a shadow stack.
-aarch64 announced support for guarded stack. risc-v spec is in
-development to support shadow stack.
+Subject: drop second/last, redundant "bindings for". The "dt-bindings"
+prefix is already stating that these are bindings.
 
-So there will be shadow stack related flow in these arches.
+> 
+> Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
+> ---
+>  .../bindings/clock/qcom,sm8450-videocc.yaml   | 84 +++++++++++++++++++
+>  .../dt-bindings/clock/qcom,videocc-sm8450.h   | 38 +++++++++
+>  2 files changed, 122 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/clock/qcom,sm8450-videocc.yaml
+>  create mode 100644 include/dt-bindings/clock/qcom,videocc-sm8450.h
+> 
+> diff --git a/Documentation/devicetree/bindings/clock/qcom,sm8450-videocc.yaml b/Documentation/devicetree/bindings/clock/qcom,sm8450-videocc.yaml
+> new file mode 100644
+> index 000000000000..909da704c123
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/clock/qcom,sm8450-videocc.yaml
+> @@ -0,0 +1,84 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/clock/qcom,sm8450-videocc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Qualcomm Video Clock & Reset Controller on SM8450
+> +
+> +maintainers:
+> +  - Taniya Das <quic_tdas@quicinc.com>
+> +
+> +description: |
+> +  Qualcomm video clock control module provides the clocks, resets and power
+> +  domains on SM8450.
+> +
+> +  See also:: include/dt-bindings/clock/qcom,videocc-sm8450.h
+> +
+> +properties:
+> +  compatible:
+> +    const: qcom,sm8450-videocc
+> +
+> +  clocks:
+> +    items:
+> +      - description: Video AHB clock from GCC
+> +      - description: Board XO source
+> +
+> +  clock-names:
+> +    items:
+> +      - const: iface
+> +      - const: bi_tcxo
+> +
+> +  power-domains:
+> +    maxItems: 1
+> +    description:
+> +      A phandle and PM domain specifier for the MMCX power domain.
 
->
-> Another reason to use a dedicated system call allows for better
-> extensibility if/when we'd need to update the way shadow stack VMA is
-> created.
+Drop "A phandle and PM domain specifier for the"
 
-I see two valid points here
-    - Shadow stack doesn't need conversion into different memory types
-(which is usually the case for address ranges created by mmap)
-      So there is a static page permissions on shadow stack which is
-not mutable.
+> +
+> +  required-opps:
+> +    maxItems: 1
+> +    description:
+> +      A phandle to an OPP node describing required MMCX performance point.
+> +
+> +  '#clock-cells':
+> +    const: 1
+> +
+> +  '#reset-cells':
+> +    const: 1
+> +
+> +  '#power-domain-cells':
+> +    const: 1
+> +
+> +  reg:
+> +    maxItems: 1
 
-    - Future feature addition (if there is one needed) at the time of
-shadow stack creation
-      It would avoid future tax on mmap
+That's a unusual ordering. Either order elements by name or use some
+custom order... but then reg is always second property.
 
-I'll think more about this.
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - clock-names
+> +  - power-domains
+> +  - required-opps
+> +  - '#clock-cells'
+> +  - '#reset-cells'
+> +  - '#power-domain-cells'
 
->
-> As for the userspace convenience, it is anyway required to add special
-> code for creating the shadow stack and it wouldn't matter if that code
-> would use mmap(NEW_FLAG) or map_shadow_stack().
+And keep same order in required.
 
-Yes *strictly* from userspace convenience, it doesn't matter which option.
+> +
+> +additionalProperties: false
 
->
-> > > most of the mmap features need not be available (EINVAL) when
-> > > MAP_SHADOW_STACK is specified.
-> > >
-> > > the main drawback is running out of mmap flags so extension
-> > > is limited. (but the new syscall has limitations too).
->
-> --
-> Sincerely yours,
-> Mike.
+
+Best regards,
+Krzysztof
+
