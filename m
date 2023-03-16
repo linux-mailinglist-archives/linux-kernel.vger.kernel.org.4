@@ -2,68 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8F3A6BCE42
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 12:33:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B399B6BCE47
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 12:34:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229602AbjCPLdM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 07:33:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48906 "EHLO
+        id S230001AbjCPLeO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 07:34:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230033AbjCPLcn (ORCPT
+        with ESMTP id S229878AbjCPLdp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 07:32:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B525EB7881;
-        Thu, 16 Mar 2023 04:32:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 30308B820F3;
-        Thu, 16 Mar 2023 11:32:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44DC8C433EF;
-        Thu, 16 Mar 2023 11:32:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678966358;
-        bh=nBz45GHzV7AGgbGS7y+G2iLoldSYDuCtcrNJso9S2w0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=BZWpGqVTAfxHRtW5QG1crrttHPbgAkjmSKRSDbxUQ8DdfsFC+1knFMvKaNJhA485k
-         4JTQCo/PMIx1PQUae6J61cmJjpExhS3331RJDOzAOWmDf4deUbOWnNsYEe9y9RdN90
-         Rq/AJaxeAG1u7ThaMI5aoej7aJpImHGbvRK2Acey42ezkt3NyZREMEF8SCc/wAdgIf
-         NvXQlBSJaAtZ7PQjdw/yEVU39J74EgfkxOmaM+Z83/HO+avce0A0nRiXnlWDBn6q6e
-         5CWufLyXbwfiSwkVBPnzWi7Wg6LDDga9Bbonw/bB6eeOIMoBdgo7UJ5fEUm8iLHjzB
-         nYreKY5Ovjekw==
-Message-ID: <f22b02bc-522e-7302-82db-a42526faf71c@kernel.org>
-Date:   Thu, 16 Mar 2023 13:32:32 +0200
+        Thu, 16 Mar 2023 07:33:45 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6182E1C7DA;
+        Thu, 16 Mar 2023 04:33:43 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id k2so1380696pll.8;
+        Thu, 16 Mar 2023 04:33:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678966422;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=OMcGys+aUXZl6oMblnaGMEvtWXDzLim778FcaXE7Inc=;
+        b=O8RdRpU3hGI+zAweNOcR8MwIgFdQmRprKaVs/zHc40mJ+uJ5RrCvgAUnx6vtFRySi/
+         zctMafM1qYuoV47yK9JEN7f/pFY9SmQ7lF5MMalJRGI609O9NAeKXWSTM4Aq+e+dsStZ
+         KtgF0PCCu3S8cj+dPM2Mlsyhtw4bKMwa9ZkTA3vj3wrwcNZPcnL+jaZl57FNT4Cp2lVV
+         Z5d8qXLZyiPjPmmhgSBpUpVHyA5LZYOsM07dwVmm9NMJEQ03LgYaiyVR0Tgk1RCsVyaN
+         0Ss/2AzFpH7ReQVzQ8BnK6J96hQiRtmEIG8vUo43G9vU5ns6XXYFQ/DAA/iTA4U0ofjL
+         E14w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678966422;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OMcGys+aUXZl6oMblnaGMEvtWXDzLim778FcaXE7Inc=;
+        b=YQZeRw867V0UppGF8INhKEyRwru5Akwig5rse8iyw7nnu4QCLRRK6Yzl5BURUzFo8Q
+         6GdifsUrfwkj3A3MiSyJK+OvYvogVduNDw9k8jCz3I5jPniUz3nfO0aVSI6d4Q+QyAqL
+         o+3mJYCigYaf6BjXOeO3cpUQPOc6IdLH0Uai7FRgmOYueODI8w4hQi8SK1Yq7KunZWv8
+         J6jKFJmQPstvuYxeMMt+fccvMSn5NaEYuYJe4puHPoXbJpw6Gsp/k3MD5vhnBT9nTRPr
+         Ie8NUXXG6ASo8pVyjtn8bzZjV3hkjI2K9fqOaSojDgeFQGb0fS769tGRSb7LlvF06iGZ
+         2IMA==
+X-Gm-Message-State: AO0yUKVhWOYelZzt05JQr08mI1vveqNfOCuZSIC3MHkkjpe6oYLbTuzL
+        qwXQZM+pTc5Hyo3XeNIHR54=
+X-Google-Smtp-Source: AK7set/8RKrY6mdVqQX5kkbs82yDrytygXzmxvnuKmX25zSH/ZIXewjxF5c5znPWXBMQWs4cmUtfZQ==
+X-Received: by 2002:a05:6a20:7347:b0:d6:17fc:9f66 with SMTP id v7-20020a056a20734700b000d617fc9f66mr3725155pzc.18.1678966422522;
+        Thu, 16 Mar 2023 04:33:42 -0700 (PDT)
+Received: from localhost.localdomain ([103.7.29.32])
+        by smtp.gmail.com with ESMTPSA id y18-20020aa78052000000b005a8bf239f5csm5222974pfm.193.2023.03.16.04.33.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Mar 2023 04:33:42 -0700 (PDT)
+From:   Like Xu <like.xu.linux@gmail.com>
+X-Google-Original-From: Like Xu <likexu@tencent.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] KVM: x86/pmu: Fix emulation on counters' bit width
+Date:   Thu, 16 Mar 2023 19:33:12 +0800
+Message-Id: <20230316113312.54714-1-likexu@tencent.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [EXTERNAL] Re: [PATCH v4 3/5] soc: ti: pruss: Add
- pruss_cfg_read()/update() API
-To:     Md Danish Anwar <a0501179@ti.com>,
-        MD Danish Anwar <danishanwar@ti.com>,
-        "Andrew F. Davis" <afd@ti.com>, Suman Anna <s-anna@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Nishanth Menon <nm@ti.com>
-Cc:     linux-remoteproc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-omap@vger.kernel.org, srk@ti.com, devicetree@vger.kernel.org,
-        netdev@vger.kernel.org
-References: <20230313111127.1229187-1-danishanwar@ti.com>
- <20230313111127.1229187-4-danishanwar@ti.com>
- <91481d4f-2005-7b33-d3be-df09b7d27ef6@kernel.org>
- <c52ae883-b0c9-8f92-98ae-fb9e9ad30420@ti.com>
- <a3e26ef1-b7e7-f6da-94ff-4a8bf80649f6@ti.com>
-Content-Language: en-US
-From:   Roger Quadros <rogerq@kernel.org>
-In-Reply-To: <a3e26ef1-b7e7-f6da-94ff-4a8bf80649f6@ti.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,174 +70,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Like Xu <likexu@tencent.com>
 
+According to the latest Intel SDM, the bit width of a PMU counter
+is specified via CPUID only if the vCPU has FW_WRITE[bit 13] on
+IA32_PERF_CAPABILITIES. Moreover, if this bit is deliberately removed
+from KVM's user space, the only valid value written to is EAX[31:0].
 
-On 16/03/2023 13:29, Md Danish Anwar wrote:
-> Roger,
-> 
-> On 16/03/23 16:38, Md Danish Anwar wrote:
->>
->> On 15/03/23 17:37, Roger Quadros wrote:
->>> Danish,
->>>
->>> On 13/03/2023 13:11, MD Danish Anwar wrote:
->>>> From: Suman Anna <s-anna@ti.com>
->>>>
->>>> Add two new generic API pruss_cfg_read() and pruss_cfg_update() to
->>>> the PRUSS platform driver to read and program respectively a register
->>>> within the PRUSS CFG sub-module represented by a syscon driver.
->>>>
->>>> These APIs are internal to PRUSS driver. Various useful registers
->>>> and macros for certain register bit-fields and their values have also
->>>> been added.
->>>>
->>>> Signed-off-by: Suman Anna <s-anna@ti.com>
->>>> Co-developed-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
->>>> Signed-off-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
->>>> Signed-off-by: Puranjay Mohan <p-mohan@ti.com>
->>>> Signed-off-by: MD Danish Anwar <danishanwar@ti.com>
->>>> ---
->>>>  drivers/soc/ti/pruss.c           | 39 ++++++++++++++
->>>>  include/linux/remoteproc/pruss.h | 87 ++++++++++++++++++++++++++++++++
->>>>  2 files changed, 126 insertions(+)
->>>>
->>>> diff --git a/drivers/soc/ti/pruss.c b/drivers/soc/ti/pruss.c
->>>> index c8053c0d735f..26d8129b515c 100644
->>>> --- a/drivers/soc/ti/pruss.c
->>>> +++ b/drivers/soc/ti/pruss.c
->>>> @@ -164,6 +164,45 @@ int pruss_release_mem_region(struct pruss *pruss,
->>>>  }
->>>>  EXPORT_SYMBOL_GPL(pruss_release_mem_region);
->>>>  
->>>> +/**
->>>> + * pruss_cfg_read() - read a PRUSS CFG sub-module register
->>>> + * @pruss: the pruss instance handle
->>>> + * @reg: register offset within the CFG sub-module
->>>> + * @val: pointer to return the value in
->>>> + *
->>>> + * Reads a given register within the PRUSS CFG sub-module and
->>>> + * returns it through the passed-in @val pointer
->>>> + *
->>>> + * Return: 0 on success, or an error code otherwise
->>>> + */
->>>> +static int pruss_cfg_read(struct pruss *pruss, unsigned int reg, unsigned int *val)
->>>> +{
->>>> +	if (IS_ERR_OR_NULL(pruss))
->>>> +		return -EINVAL;
->>>> +
->>>> +	return regmap_read(pruss->cfg_regmap, reg, val);
->>>> +}
->>>> +
->>>> +/**
->>>> + * pruss_cfg_update() - configure a PRUSS CFG sub-module register
->>>> + * @pruss: the pruss instance handle
->>>> + * @reg: register offset within the CFG sub-module
->>>> + * @mask: bit mask to use for programming the @val
->>>> + * @val: value to write
->>>> + *
->>>> + * Programs a given register within the PRUSS CFG sub-module
->>>> + *
->>>> + * Return: 0 on success, or an error code otherwise
->>>> + */
->>>> +static int pruss_cfg_update(struct pruss *pruss, unsigned int reg,
->>>> +			    unsigned int mask, unsigned int val)
->>>> +{
->>>> +	if (IS_ERR_OR_NULL(pruss))
->>>> +		return -EINVAL;
->>>> +
->>>> +	return regmap_update_bits(pruss->cfg_regmap, reg, mask, val);
->>>> +}
->>>> +
->>>>  static void pruss_of_free_clk_provider(void *data)
->>>>  {
->>>>  	struct device_node *clk_mux_np = data;
->>>> diff --git a/include/linux/remoteproc/pruss.h b/include/linux/remoteproc/pruss.h
->>>> index 33f930e0a0ce..12ef10b9fe9a 100644
->>>> --- a/include/linux/remoteproc/pruss.h
->>>> +++ b/include/linux/remoteproc/pruss.h
->>>> @@ -10,12 +10,99 @@
->>>>  #ifndef __LINUX_PRUSS_H
->>>>  #define __LINUX_PRUSS_H
->>>>  
->>>> +#include <linux/bits.h>
->>>>  #include <linux/device.h>
->>>>  #include <linux/err.h>
->>>>  #include <linux/types.h>
->>>>  
->>>>  #define PRU_RPROC_DRVNAME "pru-rproc"
->>>>  
->>>> +/*
->>>> + * PRU_ICSS_CFG registers
->>>> + * SYSCFG, ISRP, ISP, IESP, IECP, SCRP applicable on AMxxxx devices only
->>>> + */
->>>> +#define PRUSS_CFG_REVID		0x00
->>>> +#define PRUSS_CFG_SYSCFG	0x04
->>>> +#define PRUSS_CFG_GPCFG(x)	(0x08 + (x) * 4)
->>>> +#define PRUSS_CFG_CGR		0x10
->>>> +#define PRUSS_CFG_ISRP		0x14
->>>> +#define PRUSS_CFG_ISP		0x18
->>>> +#define PRUSS_CFG_IESP		0x1C
->>>> +#define PRUSS_CFG_IECP		0x20
->>>> +#define PRUSS_CFG_SCRP		0x24
->>>> +#define PRUSS_CFG_PMAO		0x28
->>>> +#define PRUSS_CFG_MII_RT	0x2C
->>>> +#define PRUSS_CFG_IEPCLK	0x30
->>>> +#define PRUSS_CFG_SPP		0x34
->>>> +#define PRUSS_CFG_PIN_MX	0x40
->>>> +
->>>> +/* PRUSS_GPCFG register bits */
->>>> +#define PRUSS_GPCFG_PRU_GPO_SH_SEL		BIT(25)
->>>> +
->>>> +#define PRUSS_GPCFG_PRU_DIV1_SHIFT		20
->>>> +#define PRUSS_GPCFG_PRU_DIV1_MASK		GENMASK(24, 20)
->>>> +
->>>> +#define PRUSS_GPCFG_PRU_DIV0_SHIFT		15
->>>> +#define PRUSS_GPCFG_PRU_DIV0_MASK		GENMASK(15, 19)
->>>> +
->>>> +#define PRUSS_GPCFG_PRU_GPO_MODE		BIT(14)
->>>> +#define PRUSS_GPCFG_PRU_GPO_MODE_DIRECT		0
->>>> +#define PRUSS_GPCFG_PRU_GPO_MODE_SERIAL		BIT(14)
->>>> +
->>>> +#define PRUSS_GPCFG_PRU_GPI_SB			BIT(13)
->>>> +
->>>> +#define PRUSS_GPCFG_PRU_GPI_DIV1_SHIFT		8
->>>> +#define PRUSS_GPCFG_PRU_GPI_DIV1_MASK		GENMASK(12, 8)
->>>> +
->>>> +#define PRUSS_GPCFG_PRU_GPI_DIV0_SHIFT		3
->>>> +#define PRUSS_GPCFG_PRU_GPI_DIV0_MASK		GENMASK(7, 3)
->>>> +
->>>> +#define PRUSS_GPCFG_PRU_GPI_CLK_MODE_POSITIVE	0
->>>> +#define PRUSS_GPCFG_PRU_GPI_CLK_MODE_NEGATIVE	BIT(2)
->>>> +#define PRUSS_GPCFG_PRU_GPI_CLK_MODE		BIT(2)
->>>> +
->>>> +#define PRUSS_GPCFG_PRU_GPI_MODE_MASK		GENMASK(1, 0)
->>>> +#define PRUSS_GPCFG_PRU_GPI_MODE_SHIFT		0
->>>> +
->>>> +#define PRUSS_GPCFG_PRU_MUX_SEL_SHIFT		26
->>>> +#define PRUSS_GPCFG_PRU_MUX_SEL_MASK		GENMASK(29, 26)
->>>> +
->>>> +/* PRUSS_MII_RT register bits */
->>>> +#define PRUSS_MII_RT_EVENT_EN			BIT(0)
->>>> +
->>>> +/* PRUSS_SPP register bits */
->>>> +#define PRUSS_SPP_XFER_SHIFT_EN			BIT(1)
->>>> +#define PRUSS_SPP_PRU1_PAD_HP_EN		BIT(0)
->>>
->>> Can we please move all the above definitions to private driver/soc/ti/pruss.h?
->>> You can also add pruss_cfg_read and pruss_cfg_update there.
->>>
-> 
-> There is no driver/soc/ti/pruss.h. The pruss.h file is located in
-> include/linux/remoteproc/pruss.h and there is one pruss_driver.h file which is
-> located in include/linux/pruss_driver.h
-> 
-> Do you want me to create another header file at driver/soc/ti/pruss.h and place
-> all these definitions inside that?
-> 
-> Please let me know.
+Opportunistically BIT_ULL() is applied.
 
-Yes. All private definitions should sit in driver/soc/ti/pruss.h
+Signed-off-by: Like Xu <likexu@tencent.com>
+---
+ arch/x86/kvm/svm/pmu.c       | 2 +-
+ arch/x86/kvm/vmx/pmu_intel.c | 6 ++++--
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
+diff --git a/arch/x86/kvm/svm/pmu.c b/arch/x86/kvm/svm/pmu.c
+index cc77a0681800..0d45dc55326b 100644
+--- a/arch/x86/kvm/svm/pmu.c
++++ b/arch/x86/kvm/svm/pmu.c
+@@ -178,7 +178,7 @@ static void amd_pmu_refresh(struct kvm_vcpu *vcpu)
+ 	else
+ 		pmu->nr_arch_gp_counters = AMD64_NUM_COUNTERS;
+ 
+-	pmu->counter_bitmask[KVM_PMC_GP] = ((u64)1 << 48) - 1;
++	pmu->counter_bitmask[KVM_PMC_GP] = BIT_ULL(48) - 1;
+ 	pmu->reserved_bits = 0xfffffff000280000ull;
+ 	pmu->raw_event_mask = AMD64_RAW_EVENT_MASK;
+ 	pmu->version = 1;
+diff --git a/arch/x86/kvm/vmx/pmu_intel.c b/arch/x86/kvm/vmx/pmu_intel.c
+index e8a3be0b9df9..1c9d87856c37 100644
+--- a/arch/x86/kvm/vmx/pmu_intel.c
++++ b/arch/x86/kvm/vmx/pmu_intel.c
+@@ -516,6 +516,7 @@ static void intel_pmu_refresh(struct kvm_vcpu *vcpu)
+ 	union cpuid10_edx edx;
+ 	u64 perf_capabilities;
+ 	u64 counter_mask;
++	bool fw_wr = fw_writes_is_enabled(vcpu);
+ 	int i;
+ 
+ 	pmu->nr_arch_gp_counters = 0;
+@@ -545,7 +546,8 @@ static void intel_pmu_refresh(struct kvm_vcpu *vcpu)
+ 					 kvm_pmu_cap.num_counters_gp);
+ 	eax.split.bit_width = min_t(int, eax.split.bit_width,
+ 				    kvm_pmu_cap.bit_width_gp);
+-	pmu->counter_bitmask[KVM_PMC_GP] = ((u64)1 << eax.split.bit_width) - 1;
++	pmu->counter_bitmask[KVM_PMC_GP] =
++		BIT_ULL(fw_wr ? eax.split.bit_width : 32) - 1;
+ 	eax.split.mask_length = min_t(int, eax.split.mask_length,
+ 				      kvm_pmu_cap.events_mask_len);
+ 	pmu->available_event_types = ~entry->ebx &
+@@ -561,7 +563,7 @@ static void intel_pmu_refresh(struct kvm_vcpu *vcpu)
+ 		edx.split.bit_width_fixed = min_t(int, edx.split.bit_width_fixed,
+ 						  kvm_pmu_cap.bit_width_fixed);
+ 		pmu->counter_bitmask[KVM_PMC_FIXED] =
+-			((u64)1 << edx.split.bit_width_fixed) - 1;
++			BIT_ULL(fw_wr ? edx.split.bit_width_fixed : 32) - 1;
+ 		setup_fixed_pmc_eventsel(pmu);
+ 	}
+ 
 
-cheers,
-roger
+base-commit: eeac8ede17557680855031c6f305ece2378af326
+-- 
+2.39.2
+
