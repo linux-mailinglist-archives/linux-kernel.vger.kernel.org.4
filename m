@@ -2,219 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19C916BCC38
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 11:13:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5512B6BCC39
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 11:14:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230304AbjCPKNw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 06:13:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35544 "EHLO
+        id S230322AbjCPKOC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 06:14:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230419AbjCPKNa (ORCPT
+        with ESMTP id S230321AbjCPKNf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 06:13:30 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 62794BD4E3;
-        Thu, 16 Mar 2023 03:12:57 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.133])
-        by gateway (Coremail) with SMTP id _____8DxXNqf6xJkJ+AMAA--.7002S3;
-        Thu, 16 Mar 2023 18:12:47 +0800 (CST)
-Received: from [10.20.42.133] (unknown [10.20.42.133])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxT+Se6xJkgfEBAA--.10052S3;
-        Thu, 16 Mar 2023 18:12:46 +0800 (CST)
-Message-ID: <f795709e-e06a-daee-968b-b1cd0c1b5587@loongson.cn>
-Date:   Thu, 16 Mar 2023 18:12:46 +0800
+        Thu, 16 Mar 2023 06:13:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62EB9BBB0D;
+        Thu, 16 Mar 2023 03:13:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8A27561EFB;
+        Thu, 16 Mar 2023 10:13:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C39F2C433D2;
+        Thu, 16 Mar 2023 10:13:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678961585;
+        bh=4hBFXp7kq5jpTGTR3V2fVBamGY+6l1AyRs1M+Mn24L8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=k7poubKxLaDvDEpQTohrR5kCeYHrEk8MrplJL43zaqPKRg+mAKueLfLvSpfxXGKD7
+         CpMtf6rSK1nOTmL4DXxh3P8lOBbCAM0HrGCetye4OhA+VIfSj8BHXpDTc236h24Eg8
+         NzNgMa8E3goacCWVdPfyxIRsbHiwWwKaD3te4kAyzowQf7/6+tH70YB5tjafpdK6HE
+         vf+7EF+wWCrvDtZAmpc58IY7xjYXn7G+K+fPUu67nOvkDRpfYp/YpVhmcPau8n71xl
+         K/Wm5KcJTHWsbYa5NAgSkA78eV+8Tuamt2Aw+NlqfvP5sG7hmuAu/mNN1IcK7B21Js
+         LFb/lAaSfp6Fw==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 3CDB34049F; Thu, 16 Mar 2023 07:13:02 -0300 (-03)
+Date:   Thu, 16 Mar 2023 07:13:02 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Leo Yan <leo.yan@linaro.org>
+Cc:     Namhyung Kim <namhyung@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        John Garry <john.g.garry@oracle.com>,
+        James Clark <james.clark@arm.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v5 11/16] perf kvm: Use histograms list to replace cached
+ list
+Message-ID: <ZBLrruagawAbxqoz@kernel.org>
+References: <20230315145112.186603-1-leo.yan@linaro.org>
+ <20230315145112.186603-12-leo.yan@linaro.org>
+ <CAM9d7chSKPxMHzpKZ92xGZ+XmLpd2q2EJwMuszosXu_FO4_dgA@mail.gmail.com>
+ <20230316090418.GA2665235@leoy-yangtze.lan>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-From:   Sui jingfeng <suijingfeng@loongson.cn>
-Subject: Re: [PATCH v7 2/2] drm: add kms driver for loongson display
- controller
-To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        Sui Jingfeng <15330273260@189.cn>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Sumit Semwal <sumit.semwal@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        Li Yi <liyi@loongson.cn>
-References: <20230315211550.2620818-1-15330273260@189.cn>
- <20230315211550.2620818-3-15330273260@189.cn>
- <efcc3a66-78ca-4e0a-c0fb-527da376fc06@amd.com>
- <62f955de-6352-a0b1-ecab-52b854ba6839@loongson.cn>
-Content-Language: en-US
-In-Reply-To: <62f955de-6352-a0b1-ecab-52b854ba6839@loongson.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8AxT+Se6xJkgfEBAA--.10052S3
-X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBjvJXoW3JryxXFyxZr45Gw15XF1rtFb_yoW7Zr47pF
-        Z3Kay5trZ8Gr4kAr1qyw1UJryYq34rA3WDJr90yryI939xKFn0grWjqr4q9a47Zr4rGF1j
-        vFWUXrW29F17Gw7anT9S1TB71UUUUb7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bqkYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
-        n4kS14v26r1q6r43M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
-        ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1q6rW5McIj6I8E
-        87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0V
-        AS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUtVW8ZwCF04k20xvY0x0EwIxGrwCFx2IqxVCF
-        s4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUtVW8ZwC20s026c02F40E14v26r1j6r18MI
-        8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41l
-        IxAIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIx
-        AIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2
-        jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jTq2NUUUUU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230316090418.GA2665235@leoy-yangtze.lan>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Em Thu, Mar 16, 2023 at 05:04:18PM +0800, Leo Yan escreveu:
+> On Thu, Mar 16, 2023 at 12:42:53AM -0700, Namhyung Kim wrote:
+> 
+> [...]
+> 
+> > >  static struct kvm_event *find_create_kvm_event(struct perf_kvm_stat *kvm,
+> > >                                                struct event_key *key,
+> > >                                                struct perf_sample *sample)
+> > >  {
+> > >         struct kvm_event *event;
+> > > -       struct list_head *head;
+> > > +       struct hist_entry *he;
+> > > +       struct kvm_info *ki;
+> > >
+> > >         BUG_ON(key->key == INVALID_KEY);
+> > >
+> > > -       head = &kvm->kvm_events_cache[kvm_events_hash_fn(key->key)];
+> > > -       list_for_each_entry(event, head, hash_entry) {
+> > > -               if (event->key.key == key->key && event->key.info == key->info)
+> > > -                       return event;
+> > > +       ki = zalloc(sizeof(*ki));
+> > > +       if (!ki) {
+> > > +               pr_err("Failed to allocate kvm info\n");
+> > > +               return NULL;
+> > >         }
+> > >
+> > > -       event = kvm_alloc_init_event(kvm, key, sample);
+> > > -       if (!event)
+> > > +       kvm->events_ops->decode_key(kvm, key, ki->name);
+> > > +       he = hists__add_entry_ops(&kvm_hists.hists, &kvm_ev_entry_ops,
+> > > +                                 &kvm->al, NULL, NULL, NULL, ki, sample, true);
+> > 
+> > The hists__add_entry{,_ops} can return either a new entry
+> > or an existing one.  I think it'd leak the 'ki' when it returns
+> > the existing one.  You may deep-copy it in hist_entry__init()
+> > and always free the 'ki' here.
+> 
+> Thanks for pointing out this, Namhyung.  I will fix it.
+> 
+> @Arnaldo, do you want me to send an appending patch, or will you drop
+> this patch series from your branch so I send a new patch set?
+> 
+> > Another thought on this.  Lots of fields in the hist_entry are
+> > not used for kvm.  We might split the hist_entry somehow
+> > so that we can use unnecessary parts only.  But that could
+> > be a future project. :)
+> 
+> Yeah, I found now hist_entry contains many fields
+> (branch_info/mem_info/kvm_info/block_info); we can consider to
+> refactor the struct hist_entry to use an abstract pointer to refer
+> tool's specific data, this could be easily extend hist_entry to
+> support more tools.
 
-On 2023/3/16 16:46, Sui jingfeng wrote:
->
-> On 2023/3/16 15:18, Christian König wrote:
->>
->>
->> Am 15.03.23 um 22:15 schrieb Sui Jingfeng:
->>> From: suijingfeng <suijingfeng@loongson.cn>
->>>
->>> Loongson display controller IP has been integrated in both Loongson
->>> North Bridge chipset(ls7a1000 and ls7a2000) and Loongson SoCs(ls2k1000
->>> and ls2k2000 etc), it even has been included in Loongson BMC products.
->>>
->>> This display controller is a PCI device, it has two display pipe. For
->>> the DC in LS7A1000 and LS2K1000 each way has a DVO output interface
->>> which provide RGB888 signals, vertical & horizontal synchronisations,
->>> and the pixel clock. Each CRTC is able to support 1920x1080@60Hz,
->>> the maximum resolution is 2048x2048 according to the hardware spec.
->>>
->>> For the DC in LS7A2000, each display pipe is equipped with a built-in
->>> HDMI encoder which is compliant with HDMI 1.4 specification, thus it
->>> support 3840x2160@30Hz. The first display pipe is also equipped with
->>> a transparent vga encoder which is parallel with the HDMI encoder.
->>> The DC in LS7A2000 is more complete, besides above feature, it has
->>> two hardware cursors, two hardware vblank counter and two scanout
->>> position recorders.
->>>
->>>   v1 -> v2:
->>>    1) Use hpd status reg when polling for ls7a2000
->>>    2) Fix all warnings emerged when compile with W=1
->>>
->>>   v2 -> v3:
->>>    1) Add COMPILE_TEST in Kconfig and make the driver off by default
->>>    2) Alphabetical sorting headers (Thomas)
->>>    3) Untangle register access functions as much as possible (Thomas)
->>>    4) Switch to TTM based memory manager and prefer cached mapping
->>>       for Loongson SoC (Thomas)
->>>    5) Add chip id detection method, now all models are distinguishable.
->>>    6) Revise builtin HDMI phy driver, nearly all main stream mode
->>>       below 4K@30Hz is tested, this driver supported these mode very
->>>       well including clone display mode and extend display mode.
->>>
->>>   v3 -> v4:
->>>    1) Quickly fix a small mistake.
->>>
->>>   v4 -> v5:
->>>    1) Drop potential support for Loongson 2K series SoC temporary,
->>>       this part should be resend with the DT binding patch in the 
->>> future.
->>>    2) Add per display pipe debugfs support to the builtin HDMI encoder.
->>>    3) Rewrite atomic_update() for hardware cursors plane(Thomas)
->>>    4) Rewrite encoder and connector initialization part, untangle it
->>>       according to the chip(Thomas).
->>>
->>>   v5 -> v6:
->>>    1) Remove stray code which didn't get used, say 
->>> lsdc_of_get_reserved_ram
->>>    2) Fix all typos I could found, make sentences and code more 
->>> readable
->>>    3) Untange lsdc_hdmi*_connector_detect() function according to 
->>> the pipe
->>>    4) After a serious consideration, we rename this driver as loongson.
->>>       Because we also have drivers toward the LoongGPU IP in 
->>> LS7A2000 and
->>>       LS2K2000. Besides, there are also drivers about the external 
->>> encoder,
->>>       HDMI audio driver and vbios support etc. This patch only 
->>> provide DC
->>>       driver part, my teammate Li Yi believe that loongson will be more
->>>       suitable for loongson graphics than lsdc in the long run.
->>>
->>>       loongson.ko = LSDC + LoongGPU + encoders driver + vbios/DT ...
->>>
->>>    v6 -> v7:
->>>    1) Add prime support, self-sharing is works. sharing buffer with 
->>> etnaviv
->>>       is also tested, and its works with limitation.
->>>    2) Implement buffer objects tracking with list_head.
->>>    3) S3(sleep to RAM) is tested on ls3a5000+ls7a2000 evb and it works.
->>>    4) Rewrite lsdc_bo_move, since ttm core stop allocating resources
->>>       during BO creation. Patch V1 ~ V6 of this series no longer works
->>>       on latest kernel. Thus, we send V7.
->>>
->>> Signed-off-by: Li Yi <liyi@loongson.cn>
->>> Signed-off-by: suijingfeng <suijingfeng@loongson.cn>
->>> Signed-off-by: Sui Jingfeng <15330273260@189.cn>
->>
->> [SNIP]
->>
-> Hi,
->
-> I send my patch series with  my personal email (15330273260@189.cn), 
-> because it is more reliable.
->
-> I don't mind remove it when this driver is applied.
->
+Since I build tested this already and had the other fixes, I'm pushing
+this out to perf-tools-next (and perf/core for a while, for people not
+knowing about the new nbranch names) and you can continue from there,
+ok?
 
-We know that we should do this job cleanly.
-
-But i am worry about the troubles it may cause when  send patch with my 
-company email(suijingfeng <suijingfeng@loongson.cn>)
-
-So I just follow the my conventional way of sending patch about this 
-series,
-
-I will use my company email(suijingfeng <suijingfeng@loongson.cn>) in 
-the future.
-
->>> +u64 lsdc_bo_gpu_offset(struct ttm_buffer_object *tbo)
->>> +{
->>> +    struct drm_device *ddev = tbo->base.dev;
->>> +    struct ttm_resource *resource = tbo->resource;
->>> +
->>> +    if (drm_WARN_ON(ddev, !tbo->pin_count))
->>> +        return -ENODEV;
->>
->> Returning -ENODEV when the function return value is unsigned doesn't 
->> make much sense. I would also use 0 here.
->>
-> OK,
->
-> To make sense, the caller can cast the return to s64. Use 0 is also ok.
->
-> In our daily usage,  tbo->pin_count ==0  never happens.  A warning 
-> message is enough.
->
-> I will revise this at next version.
->
->
->> Apart from that I briefly skimmed over the prime and TTM handling and 
->> couldn't find anything obviously wrong.
->>
->> I obviously can't review the hw specific stuff, but over all looks 
->> pretty good to me.
-> Maybe you could do me a favor, give me a reviewed-by for the TTM and 
-> PRIME part :)
->
-Here missing a '?' at the end.
-
->
->> Regards,
->> Christian.
-
+- Arnaldo
