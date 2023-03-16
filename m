@@ -2,127 +2,255 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEEF96BD277
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 15:37:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CA5E6BD279
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 15:38:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230039AbjCPOhN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 10:37:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43396 "EHLO
+        id S231229AbjCPOiJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 10:38:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230043AbjCPOhL (ORCPT
+        with ESMTP id S230043AbjCPOiI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 10:37:11 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A222BCB075
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 07:36:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678977386;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=gpcF/hcqSj5GjvLav9T+2zCuKxAs7PflO1KObok4Dec=;
-        b=AeCPeOilqU+JUFjBsKlMOWTflqClXDtW/CI/OR9KST0VKSEUqkCiLEh3RH+uuThUOBf4fp
-        ep0CCv3ROws+nV7reGGGIemHZQhAF4xI7C5K2PC4CQyA0OEOujFQgQhD+JmximuYzI/UY9
-        M0xXsNQ5Lv0OUmUVuGcs78dJWTXPNGY=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-323-VvFKBlrGNJGFM7-TPuDx4A-1; Thu, 16 Mar 2023 10:36:25 -0400
-X-MC-Unique: VvFKBlrGNJGFM7-TPuDx4A-1
-Received: by mail-ed1-f70.google.com with SMTP id i42-20020a0564020f2a00b004fd23c238beso3413588eda.0
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 07:36:24 -0700 (PDT)
+        Thu, 16 Mar 2023 10:38:08 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A352449C1
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 07:38:06 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id ip21-20020a05600ca69500b003ed56690948so1241820wmb.1
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 07:38:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678977485;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0XI2eVpcSqFKSHDGu+9LYbNws8P+6loDyR+TV4ZvW3A=;
+        b=HKsitrd+G0kWMpEMONYvYJmlCBcc6tJqNN3kBHfa6iI1lyQSHnNWu+Kdm6O64CXU51
+         743AVWmJlGKig4XLFSxsvGy7RD9AlqMK1OPf38nA0cyQhleEIKisKeNkd8WS4fR0gEqe
+         oGAl10oNulEehq55wgL8Vajh1hq21PBoUPHhBf9QoIiZVgUd/f7nPjYHcPEPwMgAPoNY
+         EChQNsc257ua550LS+fMqT+V2WLprGyAsSE6TXFDLHOEQWtmJ9WPD/Ngk/qtnXgy94j8
+         lxFVllLGHGuXpRAjTv3s7MejRnSLm3Sin4uQ1ZxGRUbfA/SF9lLj8UNM0u5mcRcfBa6d
+         y8Xg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678977381;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gpcF/hcqSj5GjvLav9T+2zCuKxAs7PflO1KObok4Dec=;
-        b=PnnaH5TNy3B2V47fxN7PHsdckYO2yi5SS5lYXLa0FQ6QKvJk3tTl+Ttg4q846V4jBC
-         ZfGHodfTHWruMk0f/FBut+XHHFSWulcK/zg8LQW14869UIyH2syuVz5NPLxmgTyGuSET
-         URHkf7V7bY4nF1xOwUq7lGt4jI4gQ52IPr1KM75hH5x1aEhYdNxZu02i91j3Rb+IY384
-         odX/TxA4vff0g1c4fAp3MKF1LkDYBLoeIIuMMwFsk3jrX+E13BzVzNG0VednxWdrRg2i
-         nX50mCMza/vA82GanUvyxblMy9kmUqzP862spjQAZvgAjeM1U0Hxevniw0q/YYcSQ+Br
-         htkA==
-X-Gm-Message-State: AO0yUKXCJLAfuT8KA5h7neoFVjIqt0PXHNfrzpAX9JqDXmR3svlqCZG3
-        caENwXzuQzLMlnQuC8CedKSrcJxXaWJR0WVXlYt5U8Lkx+XKb5nkmaVnco4u3e/AK/TZAfYu6dE
-        7pHShzmyL09HyryD3v5+8vVMvXrs3dvbH
-X-Received: by 2002:a17:906:a93:b0:931:102e:13a1 with SMTP id y19-20020a1709060a9300b00931102e13a1mr1014734ejf.40.1678977381827;
-        Thu, 16 Mar 2023 07:36:21 -0700 (PDT)
-X-Google-Smtp-Source: AK7set+3sDtdZoj5OqJUkdJWg7pUDUuqy7otslopEM9hlTRgSN7UXX5iGSty6lF+5RmzNraTlnQ3fg==
-X-Received: by 2002:a17:906:a93:b0:931:102e:13a1 with SMTP id y19-20020a1709060a9300b00931102e13a1mr1014710ejf.40.1678977381529;
-        Thu, 16 Mar 2023 07:36:21 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id gt16-20020a1709072d9000b008c327bef167sm3888641ejc.7.2023.03.16.07.36.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Mar 2023 07:36:21 -0700 (PDT)
-Message-ID: <7b3aa5c3-493e-d765-29c4-9b28edd82ab3@redhat.com>
-Date:   Thu, 16 Mar 2023 15:36:20 +0100
+        d=1e100.net; s=20210112; t=1678977485;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0XI2eVpcSqFKSHDGu+9LYbNws8P+6loDyR+TV4ZvW3A=;
+        b=yXJIvy4cz3toL4+GsrRdUMHX4lM48uweCkVwtaKz+usI5sCena2tPAldoL3iJtbH8+
+         NmC50fgWIg0fTbdXd+TD/miHwF5OZvnQK1u4Ke4BdgXpA1Y0dVaX/J3bMsPEbJy0E0vm
+         ZOHPgFtDWjDoR7hz3JIfcPOdZfTI0+37alZA+HPjCOe33Eo1w0/OlZQnqaE+nbFVaQLv
+         ChQRcLoMsyEmt5BhxHKpNsnSH3C97HzrKJ19loNExn1A9dCkZwfYCRoy7Idtfkj5V1Z4
+         9R92lEn/5MyZkdxrhlReOU44CNhf220hFK3cNTSxAsTPpmKqK6WQH/eWmTGzkT8+hB/Y
+         5+kg==
+X-Gm-Message-State: AO0yUKVeLBJtQdrsVVjBRL40Ggtpt7OzRxI/1ef7uhaGqv0AEvxmpuhE
+        eOx3ZVw25WAnvemRQbN2GFV0JuvUkbM=
+X-Google-Smtp-Source: AK7set8cHSx4IMY0EXpFhkBXQ/3jjZmYb/PSePIpVVMnxy7TVy2mMgO4Z7ENQy8sBZg8NwiGX9p0DQ==
+X-Received: by 2002:a05:600c:310e:b0:3e9:f15b:935b with SMTP id g14-20020a05600c310e00b003e9f15b935bmr22624237wmo.32.1678977484994;
+        Thu, 16 Mar 2023 07:38:04 -0700 (PDT)
+Received: from suse.localnet (host-79-35-102-94.retail.telecomitalia.it. [79.35.102.94])
+        by smtp.gmail.com with ESMTPSA id k26-20020a7bc31a000000b003eb596cbc54sm5302340wmj.0.2023.03.16.07.38.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Mar 2023 07:38:04 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     outreachy@lists.linux.dev,
+        Khadija Kamran <kamrankhadijadj@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5] staging: axis-fifo: initialize timeouts in probe only
+Date:   Thu, 16 Mar 2023 15:38:03 +0100
+Message-ID: <2626731.BddDVKsqQX@suse>
+In-Reply-To: <ZBMR4s8xyHGqMm72@khadija-virtual-machine>
+References: <ZBMR4s8xyHGqMm72@khadija-virtual-machine>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] acerhdf: remove unneeded semicolon
-Content-Language: en-US, nl
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>, peter@piie.net
-Cc:     markgross@kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
-References: <20230309061045.25256-1-jiapeng.chong@linux.alibaba.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20230309061045.25256-1-jiapeng.chong@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Khadija,
 
-On 3/9/23 07:10, Jiapeng Chong wrote:
-> ./drivers/platform/x86/acerhdf.c:343:2-3: Unneeded semicolon.
-> 
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=2271
-> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Just saw your v5 patch and Greg's two replies.
 
-Thank you for your patch, I've applied this patch to my review-hans 
-branch:
-https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
+=46or v6 you will need to change the subject to "[PATCH v6] staging: axis-f=
+ifo:=20
+initialize timeouts in init only" to indicate that you are doing assignment=
+s=20
+in axis_fifo_init().
 
-Note it will show up in my review-hans branch once I've pushed my
-local branch there, which might take a while.
+Don't forget to extend the version log with "Changes in v6:" and clarify th=
+at=20
+v5 had a different "Object" (you should probably also add a link to the v5=
+=20
+patch in lore: https://lore.kernel.org/lkml /ZBMR4s8xyHGqMm72@khadija-virtu=
+al-
+machine/). When the "Subject" changes, readers may not find the previous=20
+versions easily.   =20
 
-Once I've run some tests on this branch the patches there will be
-added to the platform-drivers-x86/for-next branch and eventually
-will be included in the pdx86 pull-request to Linus for the next
-merge-window.
+On gioved=EC 16 marzo 2023 13:56:02 CET Khadija Kamran wrote:
+> Module parameter, read_timeout, can only be set at the loading time. As
+> it can only be modified once, initialize read_timeout once in the probe
 
-Regards,
+Substitute "probe" with "init".
 
-Hans
+> function.
+>=20
+> As a result, only use read_timeout as the last argument in
+> wait_event_interruptible_timeout() call.
 
+This two sentences are not much clear. I'd merge and rework:
 
+"Initialize the module parameters read_timeout and write_timeout once in=20
+init().
 
+Module parameters can only be set once and cannot be modified later, so we=
+=20
+don't need to evaluate them again when passing the parameters to =20
+wait_event_interruptible_timeout()."  =20
+
+>=20
+> Convert datatpe
+
+s/datatpe/type/
+
+> of read_timeout
+
+of {read,write}_timeout
+
+> from 'int' to 'long int' because
+> implicit conversion of 'long int' to 'int' in statement 'read_timeout =3D
+> MAX_SCHEDULE_TIMEOUT' results in an overflow warning.
+
+We don't care too much about the warning themselves: I mean, it overflows a=
+nd=20
+you must avoid it to happen (as you are doing with the changes of types), n=
+ot=20
+merely be interested in avoiding the warning. "[] results in an overflow." =
+is=20
+all we care about.
+
+Add also the previous paragraph in the last part of the commit message.
+=20
+> Perform same steps formodule parameter, write_timeout.
+
+And instead delete the this last phrase.
+
+> Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Signed-off-by: Khadija Kamran <kamrankhadijadj@gmail.com>
 > ---
->  drivers/platform/x86/acerhdf.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/platform/x86/acerhdf.c b/drivers/platform/x86/acerhdf.c
-> index a48638ad2a8a..ec8cc780b822 100644
-> --- a/drivers/platform/x86/acerhdf.c
-> +++ b/drivers/platform/x86/acerhdf.c
-> @@ -341,7 +341,7 @@ static void acerhdf_check_param(struct thermal_zone_device *thermal)
->  		pr_err("fanoff temperature (%d) is above fanon temperature (%d), clamping to %d\n",
->  		       fanoff, fanon, fanon);
->  		fanoff = fanon;
-> -	};
-> +	}
->  
->  	trips[0].temperature = fanon;
->  	trips[0].hysteresis  = fanon - fanoff;
+>=20
+> Changes in v5:
+>  - Convert timeout's datatype from int to long.
+> Changes in v4:
+>  - Initialize timeouts once as suggested by Greg; this automatically
+>    fixes the indentation problems.
+>  - Change the subject and description.
+> Changes in v3:
+>  - Fix grammatical mistakes
+>  - Do not change the second argument's indentation in split lines
+> Changes in v2:
+>  - Instead of matching alignment to open parenthesis, align second and
+>    the last argument instead.
+>  - Change the subject to 'remove tabs to align arguments'.
+>  - Use imperative language in subject and description
+>=20
+>  drivers/staging/axis-fifo/axis-fifo.c | 26 ++++++++++++++++----------
+>  1 file changed, 16 insertions(+), 10 deletions(-)
+>=20
+> diff --git a/drivers/staging/axis-fifo/axis-fifo.c
+> b/drivers/staging/axis-fifo/axis-fifo.c index dfd2b357f484..d667dc80df47
+> 100644
+> --- a/drivers/staging/axis-fifo/axis-fifo.c
+> +++ b/drivers/staging/axis-fifo/axis-fifo.c
+> @@ -103,17 +103,17 @@
+>   *           globals
+>   * ----------------------------
+>   */
+> -static int read_timeout =3D 1000; /* ms to wait before read() times out =
+*/
+> -static int write_timeout =3D 1000; /* ms to wait before write() times ou=
+t */
+> +static long read_timeout =3D 1000; /* ms to wait before read() times out=
+ */
+> +static long write_timeout =3D 1000; /* ms to wait before write() times o=
+ut */
+>=20
+>  /* ----------------------------
+>   * module command-line arguments
+>   * ----------------------------
+>   */
+>=20
+> -module_param(read_timeout, int, 0444);
+> +module_param(read_timeout, long, 0444);
+>  MODULE_PARM_DESC(read_timeout, "ms to wait before blocking read() timing=
+=20
+out;
+> set to -1 for no timeout"); -module_param(write_timeout, int, 0444);
+> +module_param(write_timeout, long, 0444);
+>  MODULE_PARM_DESC(write_timeout, "ms to wait before blocking write() timi=
+ng
+> out; set to -1 for no timeout");
+>=20
+>  /* ----------------------------
+> @@ -384,9 +384,7 @@ static ssize_t axis_fifo_read(struct file *f, char=20
+__user
+> *buf, mutex_lock(&fifo->read_lock);
+>  		ret =3D wait_event_interruptible_timeout(fifo->read_queue,
+>  			ioread32(fifo->base_addr + XLLF_RDFO_OFFSET),
+> -				 (read_timeout >=3D 0) ?
+> -				  msecs_to_jiffies(read_timeout) :
+> -				  MAX_SCHEDULE_TIMEOUT);
+> +			read_timeout);
+>=20
+>  		if (ret <=3D 0) {
+>  			if (ret =3D=3D 0) {
+> @@ -528,9 +526,7 @@ static ssize_t axis_fifo_write(struct file *f, const=
+=20
+char
+> __user *buf, ret =3D wait_event_interruptible_timeout(fifo->write_queue,
+>  			ioread32(fifo->base_addr + XLLF_TDFV_OFFSET)
+>=20
+>  				 >=3D words_to_write,
+
+What is this? You haven't yet compiled your patch.
+Any further problems with enabling axis-fifo as a module?
+
+=46abio
+
+>=20
+> -				 (write_timeout >=3D 0) ?
+> -				  msecs_to_jiffies(write_timeout) :
+> -				  MAX_SCHEDULE_TIMEOUT);
+> +			write_timeout);
+>=20
+>  		if (ret <=3D 0) {
+>  			if (ret =3D=3D 0) {
+> @@ -815,6 +811,16 @@ static int axis_fifo_probe(struct platform_device=20
+*pdev)
+>  	char *device_name;
+>  	int rc =3D 0; /* error return value */
+>=20
+> +	if (read_timeout >=3D 0)
+> +		read_timeout =3D msecs_to_jiffies(read_timeout);
+> +	else
+> +		read_timeout =3D MAX_SCHEDULE_TIMEOUT;
+> +
+> +	if (write_timeout >=3D 0)
+> +		write_timeout =3D msecs_to_jiffies(write_timeout);
+> +	else
+> +		write_timeout =3D MAX_SCHEDULE_TIMEOUT;
+> +
+>  	/* ----------------------------
+>  	 *     init wrapper device
+>  	 * ----------------------------
+> --
+> 2.34.1
+
+
+
 
