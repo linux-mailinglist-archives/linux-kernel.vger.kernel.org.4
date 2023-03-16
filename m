@@ -2,106 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20E116BD429
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 16:42:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 428266BD444
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 16:44:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230398AbjCPPm3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 11:42:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54018 "EHLO
+        id S231293AbjCPPoh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 11:44:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231789AbjCPPmB (ORCPT
+        with ESMTP id S231292AbjCPPoL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 11:42:01 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 957F5C48B8;
-        Thu, 16 Mar 2023 08:41:25 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id h8so2156763plf.10;
-        Thu, 16 Mar 2023 08:41:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678981280;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=hDj6HHe6QIQSy0m43rHzmd3XSI0d0wloxyDtIEPd/RU=;
-        b=ZC0XaRI5LDdOPLc7kmu3d4yJ6J2z7pfXZgPGH3dEAxN0YOuhVFAXh+V4lMMW2YKeir
-         vkACoMYwS1Y6SF84UjjKGtwRZkmRHChIoAn7q1aYlq8/A3d7gHKgkw7q3uHC1xFsKllt
-         U6tXEQ1lgcYmE92aqKp5MV1XMMiQz7D9oKb64aRkRWXbFkcpRsmgwUcXdFdJJFeeKqHV
-         DQevggVSuL6vxclpFT2r/g+TIqRy4LsJsDrggmPPvOWeWYsbwOlZTYua1eI4OrzAVE0R
-         A0P6+rE56jWUwUchiYqlO4JUqQ8bXyByN+W1rpEHUCMtkxzepuu3i8An5duDlyZPABBV
-         bVPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678981280;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hDj6HHe6QIQSy0m43rHzmd3XSI0d0wloxyDtIEPd/RU=;
-        b=2Z2aMYfQd4e6s/9vQ0StWsHJkcsc32njKl/Ge04mLd2vwZA6WSrRXz/2U8N4pRJ8t7
-         BS9r0x+7q27QveehX6N2fRznCcQCBbu/JvAwUl94BlT/vzVWUW9npvQhLe36olf3WcWR
-         NkJksJxDduXnpnX+BBYyKWVUFqhZSBN9pQ1B8g8MViLRZyzydVAoGWNRxEzgZyItNjYf
-         kByeDBOdZZ2VqjeVZl+UvPDwc974HPR0NLLTQC8SmY1W28IwuAxWEsnqqLp8YL/aeCjg
-         5FHbZiHJKKnDpG8PrfPMBIi7VxFd8RNUb+NSff2PaV3+cKq5dQRoRnHFcAzj9wliwpct
-         0mHA==
-X-Gm-Message-State: AO0yUKXT/HhdyirTyogH4dW+yL8g7j6CNheq5I8JGv9xMl47jXFjwR4B
-        wtfYhBlfZO/OLTvNVQnkzIw=
-X-Google-Smtp-Source: AK7set89o+4AUu9kcgHbviNf8mXzUkYE1K7O/FRk5sxh4x8ea2gqOO8qvmnLzAfJkXVMgx/O7vNEhQ==
-X-Received: by 2002:a05:6a20:4c08:b0:d4:6d80:f93a with SMTP id fm8-20020a056a204c0800b000d46d80f93amr3570490pzb.24.1678981279827;
-        Thu, 16 Mar 2023 08:41:19 -0700 (PDT)
-Received: from localhost ([192.55.54.55])
-        by smtp.gmail.com with ESMTPSA id j13-20020aa783cd000000b005d3730383a7sm5527127pfn.220.2023.03.16.08.41.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Mar 2023 08:41:19 -0700 (PDT)
-Date:   Thu, 16 Mar 2023 08:41:18 -0700
-From:   Isaku Yamahata <isaku.yamahata@gmail.com>
-To:     "Huang, Kai" <kai.huang@intel.com>
-Cc:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
-        "zhi.wang.linux@gmail.com" <zhi.wang.linux@gmail.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "Shahar, Sagi" <sagis@google.com>,
-        "Aktas, Erdem" <erdemaktas@google.com>,
-        "isaku.yamahata@gmail.com" <isaku.yamahata@gmail.com>,
-        "dmatlack@google.com" <dmatlack@google.com>,
-        "Christopherson,, Sean" <seanjc@google.com>
-Subject: Re: [PATCH v13 005/113] KVM: TDX: Add placeholders for TDX VM/vcpu
- structure
-Message-ID: <20230316154118.GC259042@ls.amr.corp.intel.com>
-References: <cover.1678643051.git.isaku.yamahata@intel.com>
- <0545bd8a7b851d5b53cea16e7e4624b58dd9b71e.1678643052.git.isaku.yamahata@intel.com>
- <70caa84177d8d4c3ace65663992ba4d72f939f4e.camel@intel.com>
+        Thu, 16 Mar 2023 11:44:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4C4A4ECDB;
+        Thu, 16 Mar 2023 08:43:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3F66D62088;
+        Thu, 16 Mar 2023 15:42:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65092C433D2;
+        Thu, 16 Mar 2023 15:42:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678981362;
+        bh=ubuWRpXYumnYKpvSuHJeibQZdBLGJXwvOQq4t3bHDtE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CqBRuh+deIOVqKl5dgUY57bnvvc0oR8zoEbsx8Bc70t206OccBLm+Us+Gebole6/f
+         Bhdf3wYH3bOfj3KZaUn8WNqV5yFhvEqUl+AtYgfjt3PwTImn8prawiLL1/tfE9zDF2
+         uUnjCB9RQy6MKjdBt1LMK0KhaNWIrBlZxnQD75C728K4M8zNNQ+5IsM8LaiNwhRYrp
+         uzmTjLKDBerZ8SfpGe+m0rnnUg5IbEA0xrnUzriBCewCp5XnqS0lGFK84FaT8izYkD
+         FjfklqS5sRG+TZnauBx/5B2doduUdzO1KuGj/Y/3za2Lr5bFPup8CE6cimW17wXEE8
+         Yo345wXU3SByg==
+Date:   Thu, 16 Mar 2023 15:42:37 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     Nick Alcock <nick.alcock@oracle.com>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Support Opensource <support.opensource@diasemi.com>
+Subject: Re: [PATCH 01/18] mfd: da903x: remove MODULE_LICENSE in non-modules
+Message-ID: <20230316154237.GJ9667@google.com>
+References: <20230308194307.374789-1-nick.alcock@oracle.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <70caa84177d8d4c3ace65663992ba4d72f939f4e.camel@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230308194307.374789-1-nick.alcock@oracle.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 15, 2023 at 10:42:09AM +0000,
-"Huang, Kai" <kai.huang@intel.com> wrote:
+On Wed, 08 Mar 2023, Nick Alcock wrote:
 
-> On Sun, 2023-03-12 at 10:55 -0700, isaku.yamahata@intel.com wrote:
-> > +
-> > +static inline bool is_td(struct kvm *kvm)
-> > +{
-> > +	return kvm->arch.vm_type == KVM_X86_PROTECTED_VM;
-> > +}
-> > +
-> 
-> KVM_X86_PROTECTED_VM is defined in the next patch, which means this patch cannot
-> compile.
-> 
-> Also, why KVM_X86_PROTECTED_VM == TDX VM?
+> Since commit 8b41fc4454e ("kbuild: create modules.builtin without
+> Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
+> are used to identify modules. As a consequence, uses of the macro
+> in non-modules will cause modprobe to misidentify their containing
+> object file as a module when it is not (false positives), and modprobe
+> might succeed rather than failing with a suitable error message.
+>
+> So remove it in the files in this commit, none of which can be built as
+> modules.
+>
+> Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
+> Suggested-by: Luis Chamberlain <mcgrof@kernel.org>
+> Cc: Luis Chamberlain <mcgrof@kernel.org>
+> Cc: linux-modules@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Cc: Support Opensource <support.opensource@diasemi.com>
+> Cc: Lee Jones <lee@kernel.org>
+> ---
+>  drivers/mfd/da903x.c | 1 -
+>  1 file changed, 1 deletion(-)
 
-This part needs to be resolved.
-Use KVM_X86_PROTECTED_VM as TDX VM or new type KVM_X86_TDX_VM or other way
-to specify VM type.
-Given pKVM is coming, dedicated VM type seems better.  I'll switch it to
-KVM_X86_TDX_VM next respin.
--- 
-Isaku Yamahata <isaku.yamahata@gmail.com>
+All applied, thanks
+
+--
+Lee Jones [李琼斯]
