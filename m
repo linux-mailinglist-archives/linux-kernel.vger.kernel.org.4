@@ -2,217 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08F2D6BCE96
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 12:41:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DEE36BCE98
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 12:42:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230058AbjCPLlc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 07:41:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38570 "EHLO
+        id S230130AbjCPLmL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 07:42:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229634AbjCPLlY (ORCPT
+        with ESMTP id S229727AbjCPLmK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 07:41:24 -0400
-Received: from egress-ip4a.ess.de.barracuda.com (egress-ip4a.ess.de.barracuda.com [18.184.203.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73CA459D1
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 04:41:22 -0700 (PDT)
-Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com [209.85.216.69]) by mx-outbound40-126.eu-central-1c.ess.aws.cudaops.com (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO); Thu, 16 Mar 2023 11:41:19 +0000
-Received: by mail-pj1-f69.google.com with SMTP id m9-20020a17090a7f8900b0023769205928so2421278pjl.6
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 04:41:19 -0700 (PDT)
+        Thu, 16 Mar 2023 07:42:10 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3FCF16AE1
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 04:42:02 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id r11so6405068edd.5
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 04:42:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mistralsolutions.com; s=google; t=1678966879;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xdueyagCDU+rbLAuQs1asrXFjnhTGxhiEoDTXnftt8w=;
-        b=I1xa4CLaDEV9PQ/pYUqJXdKcaQ+usB3uFUPRs01lUtmKe3NGINGD6+RgKSfR7Tj7Hi
-         qSLGjb5gQXEiH7ILFYtwc6aV5Ik6OyqLcv8J1HAj3YRwYuqemtnJORUitAUQ1RJbbUYk
-         kQJ6Z6V+s3SxS38GzjimnRQSql9TmEAWZbydk=
+        d=gmail.com; s=20210112; t=1678966921;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=yMr7/L6ld7SqDWFk0PhUo8yDjIH51evoeIgT4UWaiFI=;
+        b=DPX9wCK5DX9dDuFSFQxaOuW9KzEqwSBAneILt8bA3qCS4zodt+NsbmYpUUi5ITnflZ
+         Ryu2r3kUpFrV4vYquR5v1u5yieoxJElcAbENLrg2zelpLyfhVvpZvXTNAjepClMrVPyJ
+         BqI0MOAAzSh1/lMMUm/Aild4RNM6YsrEiMfKzJYvCqurXzBn3puOAaSS0lky7SI15trU
+         eBSzi8lM2ewtvR1xMZeHgh1eEmvMS7+lRSAyGFR0z5ihHhgxIh+0LGQxy3kBMrPJxjUY
+         JGIdfEmBt6kYhKSfAZ9xlC1AobiIeq0+UWkt7wIup78ln4SrqWIJf55ktEEouhtuMytd
+         lIjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678966879;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xdueyagCDU+rbLAuQs1asrXFjnhTGxhiEoDTXnftt8w=;
-        b=S8gphVCauG4SuestbQ94/+AVoA/RI0L+on0O/rT1KNvpoII12dS2oJMkZcQ8uEzdJz
-         YH5zciP4tO2ygsoIW6jVe+hZIPl2I7zvcjyYA5bDKYbU5BQebUXQizoYNzaNNpDP/7ca
-         AALqlV0JNhRgnrcl85A5b5PHcEZvP10+QkybnBKRFjl5k8h0+5oq0tdCvMx8uaoVWcJj
-         /3XVOz71e2Czk7M4jeJCbaFhD6kaxWgkZiguV4ORXEI6MiFhQEAhDkr5z2Hko46THch7
-         o2Cz0JKOQTxfRJAWhgbR1j6lw6OoT8N9ML3ex7iTtF6doh5QQ14PvX3VVVHMSdkfnW+s
-         HjnA==
-X-Gm-Message-State: AO0yUKWZkTDUC1Nq30Bdre1bujzUQ8yar6oxFhy7uS+Lw3T3xtBCMx/T
-        Z4q6BWRAk842ljNraTWfMk32YbWRZAy1C+qqXWv2lS8jMkQUIGxrfAUXsk0U6qDCu1P7B2ziKAo
-        MuYtcL64oPQI3Y6/I5Pzqnpod6QbIsG5xRxbJQtKbyr0vlfnnlDk6yMd3QTBP
-X-Received: by 2002:a05:6a20:d49b:b0:cc:d514:62cf with SMTP id im27-20020a056a20d49b00b000ccd51462cfmr3233533pzb.43.1678966879019;
-        Thu, 16 Mar 2023 04:41:19 -0700 (PDT)
-X-Google-Smtp-Source: AK7set9OlADws5PVaeSR7peTMYf8XVMbtBhpPHyeeOxqw9yHPOxcgCbFzP5eKB3MiJdarB9Gty+MrA==
-X-Received: by 2002:a05:6a20:d49b:b0:cc:d514:62cf with SMTP id im27-20020a056a20d49b00b000ccd51462cfmr3233511pzb.43.1678966878650;
-        Thu, 16 Mar 2023 04:41:18 -0700 (PDT)
-Received: from localhost.localdomain ([49.207.217.20])
-        by smtp.gmail.com with ESMTPSA id j9-20020aa78dc9000000b00571f66721aesm5284534pfr.42.2023.03.16.04.41.15
+        d=1e100.net; s=20210112; t=1678966921;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yMr7/L6ld7SqDWFk0PhUo8yDjIH51evoeIgT4UWaiFI=;
+        b=Zbv+O80HkDRNmGtMscEBaigvd/+gyKEskHS0ghmgVTcOO0ZQQ5/wpGwZiBRu6kXVnZ
+         KHYOJXnfKlkYK5qOkX8pBWyrVZWhMVWIaIDUT5q+lKcPA00nymaW/ahXAVP7ndC3mb7b
+         u0m8gW77++CjWnqvBm4/Byd2fVqJSbIrIscAAlN9mRnFRFrslLQq5nLwpsfv+EcbHfYk
+         1pk3UTg5RXUEYV0NI8AX/t3R2lGT0/fl3lNvkKS0zR7USD82ASojVRm31oR1tgG4xgyU
+         0E+MK7p8jZ6IQ5Pd8/JqX/J9ZzEGmDo8z09eDNvvcly9hfUdDQ6iOAwLg9aZSn2WESGl
+         gSLQ==
+X-Gm-Message-State: AO0yUKWgWdmFYk1+fyBsyijKCzm4DrqxDcHiQ10TwuXIQiS2pZ8Se7en
+        eFC/Ofdtu6KaSbMQNiWOQfpuG4tWWhDu36zz
+X-Google-Smtp-Source: AK7set/nlcqfPSTpurU3LMoT4iZh16mGQ/VZfrEQNXgvk7cUgBg7lctz8Gz+E/J8o5VJghzlKgRVVQ==
+X-Received: by 2002:a05:6402:495:b0:4fd:2363:16fa with SMTP id k21-20020a056402049500b004fd236316famr5657912edv.41.1678966920943;
+        Thu, 16 Mar 2023 04:42:00 -0700 (PDT)
+Received: from khadija-virtual-machine ([39.41.209.88])
+        by smtp.gmail.com with ESMTPSA id t10-20020a50c24a000000b004c0057b478bsm3732454edf.34.2023.03.16.04.42.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Mar 2023 04:41:18 -0700 (PDT)
-From:   Sinthu Raja <sinthu.raja@mistralsolutions.com>
-X-Google-Original-From: Sinthu Raja <sinthu.raja@ti.com>
-To:     Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Vignesh Raghavendra <vigneshr@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Sinthu Raja <sinthu.raja@ti.com>
-Subject: [PATCH V3 2/2] arm64: dts: ti: k3-am68-sk-base-board: Add pinmux for RPi Header
-Date:   Thu, 16 Mar 2023 17:11:02 +0530
-Message-Id: <20230316114102.3602-3-sinthu.raja@ti.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20230316114102.3602-1-sinthu.raja@ti.com>
-References: <20230316114102.3602-1-sinthu.raja@ti.com>
+        Thu, 16 Mar 2023 04:42:00 -0700 (PDT)
+Date:   Thu, 16 Mar 2023 16:41:58 +0500
+From:   Khadija Kamran <kamrankhadijadj@gmail.com>
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Alison Schofield <alison.schofield@intel.com>,
+        outreachy@lists.linux.dev,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] staging: axis-fifo: initialize timeouts in probe only
+Message-ID: <ZBMAhld/NOG93pcs@khadija-virtual-machine>
+References: <ZA9mThZ7NyRrQAMX@khadija-virtual-machine>
+ <ZBEJ+8DbhADSBTLr@aschofie-mobl2>
+ <ZBG699SriXWy1I2K@khadija-virtual-machine>
+ <16148020.1MiD057Pog@suse>
+ <ZBHUr7bANuhnOnIV@khadija-virtual-machine>
+ <20230315150656.GA2938956@dev-arch.thelio-3990X>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-BESS-ID: 1678966872-310366-5552-16177-2
-X-BESS-VER: 2019.1_20230310.1716
-X-BESS-Apparent-Source-IP: 209.85.216.69
-X-BESS-Parts: H4sIAAAAAAACA4uuVkqtKFGyUirNy1bSUcovVrIyMbI0ArIygIKWBslp5hZGFq
-        aJZskmyWYmxikWaRZmBpaWpmYGZgapqUq1sQCyTTixQQAAAA==
-X-BESS-Outbound-Spam-Score: 0.50
-X-BESS-Outbound-Spam-Report: Code version 3.2, rules version 3.2.2.246833 [from 
-        cloudscan22-104.eu-central-1b.ess.aws.cudaops.com]
-        Rule breakdown below
-         pts rule name              description
-        ---- ---------------------- --------------------------------
-        0.50 BSF_RULE7568M          META: Custom Rule 7568M 
-        0.00 BSF_BESS_OUTBOUND      META: BESS Outbound 
-        0.00 BSF_SC0_MISMATCH_TO    META: Envelope rcpt doesn't match header 
-X-BESS-Outbound-Spam-Status: SCORE=0.50 using account:ESS91090 scores of KILL_LEVEL=7.0 tests=BSF_RULE7568M, BSF_BESS_OUTBOUND, BSF_SC0_MISMATCH_TO
-X-BESS-BRTS-Status: 1
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230315150656.GA2938956@dev-arch.thelio-3990X>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sinthu Raja <sinthu.raja@ti.com>
+On Wed, Mar 15, 2023 at 08:06:56AM -0700, Nathan Chancellor wrote:
+> Hi Khadija,
+> 
+> On Wed, Mar 15, 2023 at 07:22:39PM +0500, Khadija Kamran wrote:
+> > On Wed, Mar 15, 2023 at 02:34:31PM +0100, Fabio M. De Francesco wrote:
+> > > Aside from what I said and asked for with the other message of this same 
+> > > thread, please take note that you can build a specific module if you prefer 
+> > > not to re-build the whole kernel and other modules at the same time. 
+> > > 
+> > > I'm pretty sure that the instructions to do so are in the OutreachyFirstPatch 
+> > > tutorial.
+> > > 
+> > > If they are not there, please let us know.
+> > > 
+> > > Fabio
+> > 
+> > Hey Fabio!
+> > 
+> > In the Outreachy FirstPatchTutorial under the 'Compiling only part of
+> > the kernel' section there are ways to compile only some part of the
+> > kernel.
+> > 
+> > I have tried using "make W=1 drivers/staging/axis-fifo/" and it says
+> > 'nothing to be done for'. 
+> 
+> Is CONFIG_XIL_AXIS_FIFO enabled in your configuration?
+> 
+> > Should I start with the steps to reproduce? :'(
+> 
+> I did see a report of this same warning occurring with GCC but the
+> report I commented on cane from clang/LLVM; using that toolchain may
+> make it easier for you to reproduce this issue. The robot's reproduction
+> instructions are fine but I think doing it manually is actually simpler.
+> 
+> Ubuntu 22.04 should have a pretty modern version of clang/LLVM, which
+> you can install via 'sudo apt install clang lld llvm'.
+> https://apt.llvm.org is another resource.
+> 
+> First, we will grab the configuration that was provided in the report:
+> 
+> $ wget -O .config https://download.01.org/0day-ci/archive/20230314/202303141159.6wN9HNP9-lkp@intel.com/config
+> 
+> Next, we want to make sure the configuration is synced, since we are
+> technically changing compilers:
+> 
+> $ make -j"$(nproc)" ARCH=arm64 LLVM=1 olddefconfig
+> 
+> Finally, you should be able to build that object file and see the
+> warning:
+> 
+> $ make -j"$(nproc)" ARCH=arm64 LLVM=1 drivers/staging/axis-fifo/
+> ...
+> drivers/staging/axis-fifo/axis-fifo.c:817:18: warning: implicit conversion from 'long' to 'int' changes value from 9223372036854775807 to -1 [-Wconstant-conversion]
+>                 read_timeout = MAX_SCHEDULE_TIMEOUT;
+>                              ~ ^~~~~~~~~~~~~~~~~~~~
+> ./include/linux/sched.h:296:31: note: expanded from macro 'MAX_SCHEDULE_TIMEOUT'
+> #define MAX_SCHEDULE_TIMEOUT            LONG_MAX
+>                                         ^~~~~~~~
+> ./include/vdso/limits.h:11:19: note: expanded from macro 'LONG_MAX'
+> #define LONG_MAX        ((long)(~0UL >> 1))
+>                          ^~~~~~~~~~~~~~~~~
+> drivers/staging/axis-fifo/axis-fifo.c:822:19: warning: implicit conversion from 'long' to 'int' changes value from 9223372036854775807 to -1 [-Wconstant-conversion]
+>                 write_timeout = MAX_SCHEDULE_TIMEOUT;
+>                               ~ ^~~~~~~~~~~~~~~~~~~~
+> ./include/linux/sched.h:296:31: note: expanded from macro 'MAX_SCHEDULE_TIMEOUT'
+> #define MAX_SCHEDULE_TIMEOUT            LONG_MAX
+>                                         ^~~~~~~~
+> ./include/vdso/limits.h:11:19: note: expanded from macro 'LONG_MAX'
+> #define LONG_MAX        ((long)(~0UL >> 1))
+>                          ^~~~~~~~~~~~~~~~~
+> 2 warnings generated.
+> 
+> Just repeat the last step as you investigate. If you have any further
+> issues or questions, please let me know. For the record, I am not
+> associated with Outreachy (I am one of the maintainers of clang/LLVM
+> support in the kernel), so if I have messed something up or overstepped
+> some boundary, I do apologize.
+> 
+> Cheers,
+> Nathan
 
-Add pinmux required to bring out the i2c and gpios on 40-pin RPi
-expansion header on the AM68 SK board.
+Hi Nathan! 
 
-Signed-off-by: Sinthu Raja <sinthu.raja@ti.com>
----
+Sorry about the last email where I said that this is not working. I was
+working in the wrong branch, my bad. 
 
-No Changes in V3.
+This works! And it has helped me remove the warnings too. I have
+replaced int datatype with long and the two warnings that were showing
+are no longer there. 
 
- .../boot/dts/ti/k3-am68-sk-base-board.dts     | 70 ++++++++++++++++++-
- 1 file changed, 69 insertions(+), 1 deletion(-)
+I am working on [PATCH v5] and I will submit it in no time.
 
-diff --git a/arch/arm64/boot/dts/ti/k3-am68-sk-base-board.dts b/arch/arm64/boot/dts/ti/k3-am68-sk-base-board.dts
-index 27a43a8ecffd..118308cfdd75 100644
---- a/arch/arm64/boot/dts/ti/k3-am68-sk-base-board.dts
-+++ b/arch/arm64/boot/dts/ti/k3-am68-sk-base-board.dts
-@@ -173,6 +173,32 @@ J721S2_IOPAD(0x0a0, PIN_INPUT, 0) /* (AB25) MCASP0_AXR12.MCAN7_RX */
- 			J721S2_IOPAD(0x09c, PIN_INPUT, 0) /* (T24) MCASP0_AXR11.MCAN7_TX */
- 		>;
- 	};
-+
-+	main_i2c4_pins_default: main-i2c4-pins-default {
-+		pinctrl-single,pins = <
-+			J721S2_IOPAD(0x010, PIN_INPUT_PULLUP, 7) /* (AF28) MCAN13_RX.I2C4_SDA */
-+			J721S2_IOPAD(0x014, PIN_INPUT_PULLUP, 7) /* (AD25) MCAN14_TX.I2C4_SCL */
-+		>;
-+	};
-+
-+	rpi_header_gpio0_pins_default: rpi-header-gpio0-pins-default {
-+		pinctrl-single,pins = <
-+			J721S2_IOPAD(0x0a8, PIN_INPUT, 7) /* (U24)  MCASP0_AXR14.GPIO0_42 */
-+			J721S2_IOPAD(0x090, PIN_INPUT, 7) /* (W24) MCASP0_AXR8.GPIO0_36 */
-+			J721S2_IOPAD(0x0bc, PIN_INPUT, 7) /* (V28) MCASP1_AFSX.GPIO0_47 */
-+			J721S2_IOPAD(0x06c, PIN_INPUT, 7) /* (V26) MCAN1_TX.GPIO0_27 */
-+			J721S2_IOPAD(0x004, PIN_INPUT, 7) /* (W25) MCAN12_TX.GPIO0_1 */
-+			J721S2_IOPAD(0x008, PIN_INPUT, 7) /* (AC24) MCAN12_RX.GPIO0_2 */
-+			J721S2_IOPAD(0x0b8, PIN_INPUT, 7) /* (AA24) MCASP1_ACLKX.GPIO0_46 */
-+			J721S2_IOPAD(0x00c, PIN_INPUT, 7) /* (AE28) MCAN13_TX.GPIO0_3 */
-+			J721S2_IOPAD(0x034, PIN_INPUT, 7) /* (AD24) PMIC_WAKE0.GPIO0_13 */
-+			J721S2_IOPAD(0x0a4, PIN_INPUT, 7) /* (T23) MCASP0_AXR13.GPIO0_41 */
-+			J721S2_IOPAD(0x0c0, PIN_INPUT, 7) /* (T28) MCASP1_AXR0.GPIO0_48 */
-+			J721S2_IOPAD(0x0b4, PIN_INPUT, 7) /* (U25) MCASP1_AXR4.GPIO0_45 */
-+			J721S2_IOPAD(0x0cc, PIN_INPUT, 7) /* (AE27) SPI0_CS0.GPIO0_51 */
-+			J721S2_IOPAD(0x08c, PIN_INPUT, 7) /* (T25) MCASP0_AXR7.GPIO0_35 */
-+		>;
-+	};
- };
- 
- &wkup_pmx0 {
-@@ -214,12 +240,39 @@ J721S2_WKUP_IOPAD(0x0d0, PIN_OUTPUT, 0) /* (C23) WKUP_GPIO0_4.MCU_MCAN1_TX*/
- 		>;
- 	};
- 
-+	mcu_i2c0_pins_default: mcu-i2c0-pins-default {
-+		pinctrl-single,pins = <
-+			J721S2_WKUP_IOPAD(0x100, PIN_INPUT, 0) /*(H24) WKUP_GPIO0_63.MCU_I2C0_SCL*/
-+			J721S2_WKUP_IOPAD(0x104, PIN_INPUT, 0) /*(H27) WKUP_GPIO0_64.MCU_I2C0_SDA*/
-+		>;
-+	};
-+
- 	mcu_i2c1_pins_default: mcu-i2c1-pins-default {
- 		pinctrl-single,pins = <
- 			J721S2_WKUP_IOPAD(0x0e0, PIN_INPUT, 0) /* (F24) WKUP_GPIO0_8.MCU_I2C1_SCL */
- 			J721S2_WKUP_IOPAD(0x0e4, PIN_INPUT, 0) /* (H26) WKUP_GPIO0_9.MCU_I2C1_SDA */
- 		>;
- 	};
-+
-+	mcu_rpi_header_gpio0_pins_default: mcu-rpi-header-gpio0-pins-default {
-+		pinctrl-single,pins = <
-+			J721S2_WKUP_IOPAD(0x180, PIN_INPUT, 7) /* (G25) WKUP_GPIO0_66 */
-+			J721S2_WKUP_IOPAD(0x190, PIN_INPUT, 7) /* (K26) WKUP_GPIO0_49 */
-+			J721S2_WKUP_IOPAD(0x0c4, PIN_INPUT, 7) /* (E24) MCU_SPI1_D0.WKUP_GPIO0_1 */
-+			J721S2_WKUP_IOPAD(0x0c8, PIN_INPUT, 7) /* (C28) MCU_SPI1_D1.WKUP_GPIO0_2 */
-+			J721S2_WKUP_IOPAD(0x0c0, PIN_INPUT, 7) /* (D26) MCU_SPI1_CLK.WKUP_GPIO0_0 */
-+			J721S2_WKUP_IOPAD(0x0fc, PIN_INPUT, 7) /* (D25) MCU_SPI1_CS2.WKUP_GPIO0_15*/
-+			J721S2_WKUP_IOPAD(0x120, PIN_INPUT, 7) /* (G27) WKUP_GPIO0_56 */
-+			J721S2_WKUP_IOPAD(0x17c, PIN_INPUT, 7) /* (J26) WKUP_GPIO0_57 */
-+			J721S2_WKUP_IOPAD(0x184, PIN_INPUT, 7) /* (J27) WKUP_GPIO0_67 */
-+			J721S2_WKUP_IOPAD(0x0cc, PIN_INPUT, 7) /* (C27) MCU_SPI1_CS0.WKUP_GPIO0_3 */
-+		>;
-+	};
-+};
-+
-+&main_gpio0 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&rpi_header_gpio0_pins_default>;
- };
- 
- &main_gpio2 {
-@@ -235,7 +288,8 @@ &main_gpio6 {
- };
- 
- &wkup_gpio0 {
--	status = "disabled";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&mcu_rpi_header_gpio0_pins_default>;
- };
- 
- &wkup_gpio1 {
-@@ -271,6 +325,20 @@ exp1: gpio@21 {
- 	};
- };
- 
-+&main_i2c4 {
-+	status = "okay";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&main_i2c4_pins_default>;
-+	clock-frequency = <400000>;
-+};
-+
-+&mcu_i2c0 {
-+	status = "okay";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&mcu_i2c0_pins_default>;
-+	clock-frequency = <400000>;
-+};
-+
- &main_sdhci0 {
- 	/* Unused */
- 	status = "disabled";
--- 
-2.36.1
+This was great help. :)
+
+Thank you!
+Regards,
+Khadija
+
 
