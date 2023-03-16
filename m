@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7095D6BC7AA
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 08:49:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ADFA6BC7AC
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 08:49:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229870AbjCPHtP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 03:49:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43904 "EHLO
+        id S230258AbjCPHt0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 03:49:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230040AbjCPHtJ (ORCPT
+        with ESMTP id S230123AbjCPHtM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 03:49:09 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42CBAA8C62;
-        Thu, 16 Mar 2023 00:49:03 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id b20so584562pfo.6;
-        Thu, 16 Mar 2023 00:49:03 -0700 (PDT)
+        Thu, 16 Mar 2023 03:49:12 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14ED2ACBB5;
+        Thu, 16 Mar 2023 00:49:08 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id a2so845522plm.4;
+        Thu, 16 Mar 2023 00:49:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678952943;
+        d=gmail.com; s=20210112; t=1678952947;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Cm9FeMy4GVQb6Y304/sdZ2D3L6nSGw+tgNkZCTPzffM=;
-        b=h3a0FB3zEfWLChDCwDTq4NbtUzDTJqXLr2JguGJfZ3NC9rb4PXY++xqU1s/1JYq7IN
-         N85hOfCEM6ikcoY+6Nd9OCwR6nLmZWxBu8uJkhPgpYAESla4/OZPMWBRLjwevEqtqbol
-         LDe0mW/Dt4Z3sjX2k3sCIJccy3VLnjU9qqS3CtGzZqhyqx2iALqCGXMn23q7WQaqU54s
-         mJPpsTkp6TlCGhI4JU5ACu2YQMY6+yUXHQRKASuhnIiJBgz6I++M4HfKd4zHCZxdiLqB
-         bOdfZL18etGM01A2VnoHRUU/WIg7NUtcJLEoeLr5INmST6W4qTj1gGY5sT6UxLzaDiqF
-         jApg==
+        bh=FqZfoUoxy8iXzcBbOibqnO/QMawNVpGzC8pVpMz5OXw=;
+        b=XrakP6GBQtekN+sgg3bQqv9Ep1KiZK636rxYBHrDNRfSxKYnbN8Cthh35xM5RrFUDm
+         xFJ2UFVsm1Q+b7nP/YVqdLhmNNwKhZb8DET900/eJBexkpozHqTrzo7htIM3wpBKjV/x
+         mAZSMhFsdUtpsZBgVnKDUIe2MQqMSVyc1hUMVyYqJiwyov7trHFI5iA+FatMcMaUmeJJ
+         eA3e4QcrU4yHQvsIopO3PINEORbtK+a5sXwH2TvW1dHF/Dszy69RoR/aiA7B9EMwG9E0
+         /3FFpmnPHFhJnsFASME3zH+Jiw+7L/ggKZoY5hZ5NrXBWKMX9YKqdxbt9fhtcmfqsRkT
+         iAog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678952943;
+        d=1e100.net; s=20210112; t=1678952947;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Cm9FeMy4GVQb6Y304/sdZ2D3L6nSGw+tgNkZCTPzffM=;
-        b=bfO3znq1RSvl6ZtnDpGGm/h8gniQ4DQiZQZdNdGHmgONdNeMdRyQ63eYFyvTbWFh7T
-         3RJA1Lup9LTgrkuyZQRZz6KAB+bua5Lnas0liwU0+rTK0mEaIzdo5AvD/7o9JbKJYRTt
-         VKTQ94fIEyj2mo4TomiHHqllXvPLEdN9lTn0XdF+BrmR+ELoz/EczSYvFRZ7P/3hYAPk
-         VmWuiqmzMNcs4pZ3JY3bPD9rcVaaocV9AYgwYdGZJmJAscwgbPr3GVIOV+4L9nS1txrM
-         Zhw6s036bSM7l3fqcXOA5HTGOQNNPHFtYcHBKEA7vVNEfoXhXE240ZtUxLRuNkXMUSCt
-         QHOQ==
-X-Gm-Message-State: AO0yUKURUbaKh1ymL1nsADxB3MxygyP5YCfMNmfe4fu0o7rfZWf18ZnY
-        UNTpTA1aRm0nUUvWOADSv4+8vOzUZA0t1g==
-X-Google-Smtp-Source: AK7set9S+liUpjEXZPhBGtpSyKtFRvrIwjQMZRQp0K4mxJBXR4Bgn583qDgrBaMLg2+agLChSRsGtg==
-X-Received: by 2002:aa7:97a2:0:b0:625:d5b5:1e9d with SMTP id d2-20020aa797a2000000b00625d5b51e9dmr2283432pfq.1.1678952942815;
-        Thu, 16 Mar 2023 00:49:02 -0700 (PDT)
+        bh=FqZfoUoxy8iXzcBbOibqnO/QMawNVpGzC8pVpMz5OXw=;
+        b=nrtXH0cg+dg3UB8SJJa7BqQpkRR6WkewwZEcGol1cRpPyBUbTxblGgDCdzgZn+dRK7
+         OBkQ+r7c7L5hfGb0h+W1g62Rl2i3//iFgdjsLBaY98fcE/dx8xOYuncdT1lKGue5Cb/1
+         Zw+JoN1HpPks9vl93rQyjKJh0sjnBPk27b2/n6nwAaZNE0q1EX4NZtxfZX25+rwqOuE8
+         FMVpfpLVtaHT2rWO2xPvS04shpExNL1+VBBKo+PrVWI3uTO1THIMAlWnO+fBYDymljT2
+         I3zPLLCCcW+24Cw4dfGkpD5PFbv5UOgzgi/HQqpfdqAcpmSpOIlbtpLTRdQq8iIWHNdJ
+         w6/A==
+X-Gm-Message-State: AO0yUKULLEN+rCRzNgrqUOFXtPMOdnwZ9b81C+Z+1cE1MtiCbBPF6lcu
+        BkxqG9cH4E4rzXG6ZAGhKLz4K6gfntsKRg==
+X-Google-Smtp-Source: AK7set9uC6TxuZ+KP7W/oD56NUSmdRduZBGSJ23Hziptg0lvxtgTfF3oENH6ux6TKd+3TkqqBd/ZzQ==
+X-Received: by 2002:a05:6a20:8413:b0:d5:c14c:1263 with SMTP id c19-20020a056a20841300b000d5c14c1263mr3123026pzd.53.1678952947327;
+        Thu, 16 Mar 2023 00:49:07 -0700 (PDT)
 Received: from kazuki-mac.lan ([2400:4051:ea3:5910::789])
-        by smtp.gmail.com with ESMTPSA id 23-20020aa79217000000b005e099d7c30bsm4683618pfo.205.2023.03.16.00.48.58
+        by smtp.gmail.com with ESMTPSA id 23-20020aa79217000000b005e099d7c30bsm4683618pfo.205.2023.03.16.00.49.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Mar 2023 00:49:02 -0700 (PDT)
+        Thu, 16 Mar 2023 00:49:07 -0700 (PDT)
 From:   Kazuki H <kazukih0205@gmail.com>
 To:     linux-pm@vger.kernel.org
 Cc:     Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
@@ -67,9 +67,9 @@ Cc:     Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
         Daniel Bristot de Oliveira <bristot@redhat.com>,
         Valentin Schneider <vschneid@redhat.com>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 2/3] cpuidle: Don't pass any values to cpuidle_not_available
-Date:   Thu, 16 Mar 2023 16:47:49 +0900
-Message-Id: <20230316074750.289025-2-kazukih0205@gmail.com>
+Subject: [PATCH 3/3] PM: s2idle: Fully block the system from entering s2idle when cpuidle isn't supported
+Date:   Thu, 16 Mar 2023 16:47:50 +0900
+Message-Id: <20230316074750.289025-3-kazukih0205@gmail.com>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230316074750.289025-1-kazukih0205@gmail.com>
 References: <20230316074750.289025-1-kazukih0205@gmail.com>
@@ -85,72 +85,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There's no reason to pass any values to cpuidle_not_available() as the
-function works standalone. Since we're planning to use the function in
-other places, make it so to avoid code duplication.
+s2idle isn't supported on platforms that don't support cpuidle as of
+31a3409065d1 ("cpuidle / sleep: Do sanity checks in cpuidle_enter_freeze()
+too").
 
+There is a check in the cpuidle subsystem which would prevent the
+system from entering s2idle. However, there is nothing in the suspend
+framework which prevents this, which can cause the suspend subsystem to
+think that the machine is entering s2idle while the cpuidle subsystem is
+not, which can completely break the system.
+
+Block the machine from entering s2idle when cpuidle isn't supported in
+the suspend subsystem as well.
+
+Link: https://lore.kernel.org/all/20230204152747.drte4uitljzngdt6@kazuki-mac
+Fixes: 31a3409065d1 ("cpuidle / sleep: Do sanity checks in cpuidle_enter_freeze() too")
 Signed-off-by: Kazuki H <kazukih0205@gmail.com>
 ---
- drivers/cpuidle/cpuidle.c | 6 ++++--
- include/linux/cpuidle.h   | 6 ++----
- kernel/sched/idle.c       | 2 +-
- 3 files changed, 7 insertions(+), 7 deletions(-)
+ kernel/power/main.c    | 12 +++++++++---
+ kernel/power/suspend.c |  5 +++++
+ 2 files changed, 14 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/cpuidle/cpuidle.c b/drivers/cpuidle/cpuidle.c
-index 6eceb1988243..cc05acf4d2a8 100644
---- a/drivers/cpuidle/cpuidle.c
-+++ b/drivers/cpuidle/cpuidle.c
-@@ -48,9 +48,11 @@ void disable_cpuidle(void)
- 	off = 1;
- }
+diff --git a/kernel/power/main.c b/kernel/power/main.c
+index 31ec4a9b9d70..b14765447989 100644
+--- a/kernel/power/main.c
++++ b/kernel/power/main.c
+@@ -133,6 +133,8 @@ static ssize_t mem_sleep_show(struct kobject *kobj, struct kobj_attribute *attr,
+ 	for (i = PM_SUSPEND_MIN; i < PM_SUSPEND_MAX; i++) {
+ 		if (i >= PM_SUSPEND_MEM && cxl_mem_active())
+ 			continue;
++		if (i == PM_SUSPEND_TO_IDLE && cpuidle_not_available())
++			continue;
+ 		if (mem_sleep_states[i]) {
+ 			const char *label = mem_sleep_states[i];
  
--bool cpuidle_not_available(struct cpuidle_driver *drv,
--			   struct cpuidle_device *dev)
-+bool cpuidle_not_available(void)
- {
-+	struct cpuidle_device *dev = cpuidle_get_device();
-+	struct cpuidle_driver *drv = cpuidle_get_cpu_driver(dev);
-+
- 	return off || !initialized || !drv || !dev || !dev->enabled;
- }
- 
-diff --git a/include/linux/cpuidle.h b/include/linux/cpuidle.h
-index fce476275e16..11de17924910 100644
---- a/include/linux/cpuidle.h
-+++ b/include/linux/cpuidle.h
-@@ -139,8 +139,7 @@ struct cpuidle_driver {
- 
- #ifdef CONFIG_CPU_IDLE
- extern void disable_cpuidle(void);
--extern bool cpuidle_not_available(struct cpuidle_driver *drv,
--				  struct cpuidle_device *dev);
-+extern bool cpuidle_not_available(void);
- 
- extern int cpuidle_select(struct cpuidle_driver *drv,
- 			  struct cpuidle_device *dev,
-@@ -174,8 +173,7 @@ static inline struct cpuidle_device *cpuidle_get_device(void)
- {return __this_cpu_read(cpuidle_devices); }
- #else
- static inline void disable_cpuidle(void) { }
--static inline bool cpuidle_not_available(struct cpuidle_driver *drv,
--					 struct cpuidle_device *dev)
-+static inline bool cpuidle_not_available(void)
- {return true; }
- static inline int cpuidle_select(struct cpuidle_driver *drv,
- 				 struct cpuidle_device *dev, bool *stop_tick)
-diff --git a/kernel/sched/idle.c b/kernel/sched/idle.c
-index dbfc2eb5ccbd..558a5c987597 100644
---- a/kernel/sched/idle.c
-+++ b/kernel/sched/idle.c
-@@ -179,7 +179,7 @@ static void cpuidle_idle_call(void)
- 		return;
+@@ -185,11 +187,15 @@ static ssize_t mem_sleep_store(struct kobject *kobj, struct kobj_attribute *attr
  	}
  
--	if (cpuidle_not_available(drv, dev)) {
-+	if (cpuidle_not_available()) {
- 		tick_nohz_idle_stop_tick();
+ 	state = decode_suspend_state(buf, n);
+-	if (state < PM_SUSPEND_MAX && state > PM_SUSPEND_ON)
++	if (state == PM_SUSPEND_TO_IDLE && cpuidle_not_available())
++		goto einval;
++	if (state < PM_SUSPEND_MAX && state > PM_SUSPEND_ON) {
+ 		mem_sleep_current = state;
+-	else
+-		error = -EINVAL;
++		goto out;
++	}
  
- 		default_idle_call();
++ einval:
++	error = -EINVAL;
+  out:
+ 	pm_autosleep_unlock();
+ 	return error ? error : n;
+diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
+index 3f436282547c..55ddf525aaaf 100644
+--- a/kernel/power/suspend.c
++++ b/kernel/power/suspend.c
+@@ -556,6 +556,11 @@ static int enter_state(suspend_state_t state)
+ 
+ 	trace_suspend_resume(TPS("suspend_enter"), state, true);
+ 	if (state == PM_SUSPEND_TO_IDLE) {
++		if (cpuidle_not_available()) {
++			pr_warn("s2idle is unsupported when cpuidle is unavailable");
++			return -EINVAL;
++		}
++
+ #ifdef CONFIG_PM_DEBUG
+ 		if (pm_test_level != TEST_NONE && pm_test_level <= TEST_CPUS) {
+ 			pr_warn("Unsupported test mode for suspend to idle, please choose none/freezer/devices/platform.\n");
 -- 
 2.40.0
 
