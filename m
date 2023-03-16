@@ -2,154 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 237B56BC550
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 05:38:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C57C6BC558
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 05:41:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229629AbjCPEht (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 00:37:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33260 "EHLO
+        id S229678AbjCPElC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 00:41:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229667AbjCPEh0 (ORCPT
+        with ESMTP id S229436AbjCPEk7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 00:37:26 -0400
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 670C6AA716;
-        Wed, 15 Mar 2023 21:37:22 -0700 (PDT)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 14B8F24E2AE;
-        Thu, 16 Mar 2023 12:37:21 +0800 (CST)
-Received: from EXMBX162.cuchost.com (172.16.6.72) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 16 Mar
- 2023 12:37:21 +0800
-Received: from starfive-sdk.starfivetech.com (171.223.208.138) by
- EXMBX162.cuchost.com (172.16.6.72) with Microsoft SMTP Server (TLS) id
- 15.0.1497.42; Thu, 16 Mar 2023 12:37:20 +0800
-From:   Samin Guo <samin.guo@starfivetech.com>
-To:     <linux-riscv@lists.infradead.org>, <netdev@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Yanhong Wang <yanhong.wang@starfivetech.com>,
-        Samin Guo <samin.guo@starfivetech.com>,
-        Tommaso Merciai <tomm.merciai@gmail.com>
-Subject: [PATCH v7 6/6] net: stmmac: starfive_dmac: Add phy interface settings
-Date:   Thu, 16 Mar 2023 12:37:14 +0800
-Message-ID: <20230316043714.24279-7-samin.guo@starfivetech.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230316043714.24279-1-samin.guo@starfivetech.com>
-References: <20230316043714.24279-1-samin.guo@starfivetech.com>
+        Thu, 16 Mar 2023 00:40:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80DCB1CBE2;
+        Wed, 15 Mar 2023 21:40:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A92661EFB;
+        Thu, 16 Mar 2023 04:40:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B2169C433EF;
+        Thu, 16 Mar 2023 04:40:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678941617;
+        bh=D+k+ZFHEAw7xSJH2jLtU1BquXfnEXsP15ln59Y7vWYw=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=Lh5UxjIJUaSEz/bqe/+HHsaO/hNQTqpIht3+l18z0bKwP/ZloWQX8omRAqrIfmkol
+         Pg7bdSlQw7J2yY01r/p6FXlUV2TbVaEyy2u1cgMR+G/KsJLKECezUjW8PAPM12h8YE
+         Bo36Vssv7On7pjYv+JzgCll7UasAqdlcgzH25mdcWipnBOwCUiiaLb9ojhZQ166PZH
+         w9skD/LD1+X1+v6aMSijYujMV1EEL1c/Y5i3U5iEGenBbssvoReQRd5obsDrmHlE51
+         5wNI7MqhToNwRMK3L/XQzUtc/nF3f3OpG0YIQa9emGgR6Y/3KslfYWoMnRS/Dy48UG
+         TgxbydySeaKZQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9358AE66CBF;
+        Thu, 16 Mar 2023 04:40:17 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [171.223.208.138]
-X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX162.cuchost.com
- (172.16.6.72)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net] net: phy: mscc: fix deadlock in
+ phy_ethtool_{get,set}_wol()
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167894161760.2389.13225258059136604829.git-patchwork-notify@kernel.org>
+Date:   Thu, 16 Mar 2023 04:40:17 +0000
+References: <20230314153025.2372970-1-vladimir.oltean@nxp.com>
+In-Reply-To: <20230314153025.2372970-1-vladimir.oltean@nxp.com>
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     netdev@vger.kernel.org, andrew@lunn.ch, hkallweit1@gmail.com,
+        linux@armlinux.org.uk, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-dwmac supports multiple modess. When working under rmii and rgmii,
-you need to set different phy interfaces.
+Hello:
 
-According to the dwmac document, when working in rmii, it needs to be
-set to 0x4, and rgmii needs to be set to 0x1.
+This patch was applied to netdev/net.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-The phy interface needs to be set in syscon, the format is as follows:
-starfive,syscon: <&syscon, offset, shift>
+On Tue, 14 Mar 2023 17:30:25 +0200 you wrote:
+> Since the blamed commit, phy_ethtool_get_wol() and phy_ethtool_set_wol()
+> acquire phydev->lock, but the mscc phy driver implementations,
+> vsc85xx_wol_get() and vsc85xx_wol_set(), acquire the same lock as well,
+> resulting in a deadlock.
+> 
+> $ ip link set swp3 down
+> ============================================
+> WARNING: possible recursive locking detected
+> mscc_felix 0000:00:00.5 swp3: Link is Down
+> 
+> [...]
 
-Signed-off-by: Samin Guo <samin.guo@starfivetech.com>
-Tested-by: Tommaso Merciai <tomm.merciai@gmail.com>
----
- .../ethernet/stmicro/stmmac/dwmac-starfive.c  | 47 +++++++++++++++++++
- 1 file changed, 47 insertions(+)
+Here is the summary with links:
+  - [net] net: phy: mscc: fix deadlock in phy_ethtool_{get,set}_wol()
+    https://git.kernel.org/netdev/net/c/cd356010ce4c
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-starfive.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-starfive.c
-index ef5a769b1c75..84690c8f0250 100644
---- a/drivers/net/ethernet/stmicro/stmmac/dwmac-starfive.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-starfive.c
-@@ -13,6 +13,10 @@
- 
- #include "stmmac_platform.h"
- 
-+#define STARFIVE_DWMAC_PHY_INFT_RGMII	0x1
-+#define STARFIVE_DWMAC_PHY_INFT_RMII	0x4
-+#define STARFIVE_DWMAC_PHY_INFT_FIELD	0x7U
-+
- struct starfive_dwmac {
- 	struct device *dev;
- 	struct clk *clk_tx;
-@@ -44,6 +48,43 @@ static void starfive_dwmac_fix_mac_speed(void *priv, unsigned int speed)
- 		dev_err(dwmac->dev, "failed to set tx rate %lu\n", rate);
- }
- 
-+static int starfive_dwmac_set_mode(struct plat_stmmacenet_data *plat_dat)
-+{
-+	struct starfive_dwmac *dwmac = plat_dat->bsp_priv;
-+	struct regmap *regmap;
-+	unsigned int args[2];
-+	unsigned int mode;
-+
-+	switch (plat_dat->interface) {
-+	case PHY_INTERFACE_MODE_RMII:
-+		mode = STARFIVE_DWMAC_PHY_INFT_RMII;
-+		break;
-+
-+	case PHY_INTERFACE_MODE_RGMII:
-+	case PHY_INTERFACE_MODE_RGMII_ID:
-+		mode = STARFIVE_DWMAC_PHY_INFT_RGMII;
-+		break;
-+
-+	default:
-+		dev_err(dwmac->dev, "unsupported interface %d\n",
-+			plat_dat->interface);
-+		return -EINVAL;
-+	}
-+
-+	regmap = syscon_regmap_lookup_by_phandle_args(dwmac->dev->of_node,
-+						      "starfive,syscon",
-+						      2, args);
-+	if (IS_ERR(regmap)) {
-+		dev_err(dwmac->dev, "syscon regmap failed.\n");
-+		return -ENXIO;
-+	}
-+
-+	/* args[0]:offset  args[1]: shift */
-+	return regmap_update_bits(regmap, args[0],
-+				  STARFIVE_DWMAC_PHY_INFT_FIELD << args[1],
-+				  mode << args[1]);
-+}
-+
- static int starfive_dwmac_probe(struct platform_device *pdev)
- {
- 	struct plat_stmmacenet_data *plat_dat;
-@@ -89,6 +130,12 @@ static int starfive_dwmac_probe(struct platform_device *pdev)
- 	plat_dat->bsp_priv = dwmac;
- 	plat_dat->dma_cfg->dche = true;
- 
-+	err = starfive_dwmac_set_mode(plat_dat);
-+	if (err) {
-+		dev_err(&pdev->dev, "dwmac set mode failed.\n");
-+		return err;
-+	}
-+
- 	err = stmmac_dvr_probe(&pdev->dev, plat_dat, &stmmac_res);
- 	if (err) {
- 		stmmac_remove_config_dt(pdev, plat_dat);
+You are awesome, thank you!
 -- 
-2.17.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
