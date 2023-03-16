@@ -2,50 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AF756BD76E
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 18:48:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E9346BD771
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 18:49:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230197AbjCPRsr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 13:48:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50422 "EHLO
+        id S230207AbjCPRtO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 13:49:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230107AbjCPRso (ORCPT
+        with ESMTP id S230202AbjCPRtL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 13:48:44 -0400
-Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9068F6F4AC;
-        Thu, 16 Mar 2023 10:48:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=nEAMn
-        AlTlhmBc3GQSHDUq/SQ1R/Wav9t7BfHo/zL+ZI=; b=kFQb4+KZ4yjfok7VWHGT/
-        r2FnzTJMcN3+jiIMsKs5gej5yxzBiJi0JNk2J5ASyv1A7fXOGux9glugkK5O0X2v
-        6eF7G4pnfSLSSBG/bS8kqnR8Ahphe3fu7X5oZ5ySWxlvI5abOpATF/pYaqMBq29T
-        7BU1MouBKdYC/Jej5E6sDU=
-Received: from leanderwang-LC2.localdomain (unknown [111.206.145.21])
-        by zwqz-smtp-mta-g0-3 (Coremail) with SMTP id _____wDXJldjVhNkdFzYAA--.63147S2;
-        Fri, 17 Mar 2023 01:48:19 +0800 (CST)
-From:   Zheng Wang <zyytlz.wz@163.com>
-To:     valentina.manea.m@gmail.com
-Cc:     shuah@kernel.org, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        hackerzheng666@gmail.com, 1395428693sheep@gmail.com,
-        alex000young@gmail.com, Zheng Wang <zyytlz.wz@163.com>
-Subject: [PATCH RESEND] usbip: vudc: Fix use after free bug in vudc_remove due to race condition
-Date:   Fri, 17 Mar 2023 01:48:18 +0800
-Message-Id: <20230316174818.1593588-1-zyytlz.wz@163.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 16 Mar 2023 13:49:11 -0400
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A69510EAB6;
+        Thu, 16 Mar 2023 10:49:07 -0700 (PDT)
+Received: by mail-qt1-x834.google.com with SMTP id t9so2652421qtx.8;
+        Thu, 16 Mar 2023 10:49:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678988946;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=z/8oanUDBfexi57TtNYFoXvyhgYE0G1VxW08obb6zv0=;
+        b=p4vnGUY743AOhUMkm8wnCrCYQoHvHVq/5Gc2UVPYtsBRP0x+RPhjx9WHa3sMOg35ec
+         3pZjChHYQnHk+izqXVDj7yf0v4bYiFwOiV8ko4wiEuua79cSADPTSK0XLeL4Gf8MMWOp
+         9MwaGHD2ZwcmgbO0AbGKj0FbHpeszR13ziPAskRc9z+Ne/GEvImVZ2HFyGOjhvesjIKV
+         XnOsdDSMR5/R4ZjcPt83Gaiza+vfvjqBc1ycSzyumPij50bXV74ZDlEq1ELNlGcX4CzA
+         jEdRXHLHqz3K1sC7QNGo1g4EdftwV0DRA2TdcA6Z/Na1MXcuKcIseEPxCvWKsQtycD+J
+         B5DQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678988946;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=z/8oanUDBfexi57TtNYFoXvyhgYE0G1VxW08obb6zv0=;
+        b=r59IzIXwKgWQvL3MqonfHfOGWb5sd1Sf7IGHB77lkNwgS5M15nWg3vnbVI+WFpPuGt
+         xjCLWqGCJJe07DFWJZjiweZ6pqzAlIfXNZO56eAKmcYPZAmHQmvwR+dgxZxjYLjrTr6B
+         YSEFn8sv34YnzaZzVo3UWaSOUvkABcL2rYeTXGbDdYlQZzxQU4tKtCodpBtAi28Bw+k7
+         wCiFsmn9dFv0oivsobWvF/yG1kxY5UEwxLnDRH/jfMBjB1q8hLTDXeG0kLPiUnczRNbd
+         uM+6dAYe9FcfXd00AtscKEkmkZjugXcGAoIBG1wy61dWJf+x6rdhpEySc8oc4pnnyCkS
+         KTzQ==
+X-Gm-Message-State: AO0yUKW0e/jrsVBnKtxR2iaT9nBzEHlirB3XO4VGz6A/CaVmfDGY5t1u
+        x6wkaGFrVbvf5B8JM8ikGlA=
+X-Google-Smtp-Source: AK7set94ojwRNEXu+PkhVIjglP3EHECiU+kHNr269KiCcOr5bb0A3bfMKFkyD7iiQuOn5DFCI/J8Hw==
+X-Received: by 2002:a05:622a:8:b0:3bf:d13f:30ae with SMTP id x8-20020a05622a000800b003bfd13f30aemr6369522qtw.54.1678988945908;
+        Thu, 16 Mar 2023 10:49:05 -0700 (PDT)
+Received: from ?IPV6:2600:1700:2442:6db0:2cd2:a240:3730:1959? ([2600:1700:2442:6db0:2cd2:a240:3730:1959])
+        by smtp.gmail.com with ESMTPSA id i18-20020ac84f52000000b003d621964626sm65723qtw.8.2023.03.16.10.49.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Mar 2023 10:49:05 -0700 (PDT)
+Message-ID: <462cee8c-c946-4483-98f0-cb8491d9a87c@gmail.com>
+Date:   Thu, 16 Mar 2023 12:49:04 -0500
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _____wDXJldjVhNkdFzYAA--.63147S2
-X-Coremail-Antispam: 1Uf129KBjvdXoWrtF1UGFy5Jw45ZF18GrWkXrb_yoWkXwc_ua
-        4ruF4xGF4rCanxKF17XwnxZrWUKFyDXrn3XFs29F4fWa4xGr15Zw17Ars7uF47uF98GFyD
-        Cws8t395Zw47ujkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xRKApntUUUUU==
-X-Originating-IP: [111.206.145.21]
-X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/xtbBzgo0U2I0XqssLwAAsD
-X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_VALIDITY_RPBL,SPF_HELO_NONE,SPF_PASS autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [KTAP V2 PATCH] ktap_v2: add skip test result
+Content-Language: en-US
+To:     Mark Brown <broonie@kernel.org>
+Cc:     kernelci@groups.io, rmoar@google.com,
+        "Bird, Tim" <Tim.Bird@sony.com>,
+        "davidgow@google.com" <davidgow@google.com>,
+        "skhan@linuxfoundation.org" <skhan@linuxfoundation.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "brendanhiggins@google.com" <brendanhiggins@google.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "guillaume.tucker@collabora.com" <guillaume.tucker@collabora.com>,
+        "dlatypov@google.com" <dlatypov@google.com>,
+        "kunit-dev@googlegroups.com" <kunit-dev@googlegroups.com>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20230310222002.3633162-1-rmoar@google.com>
+ <BYAPR13MB2503C590A2AE6FEF6BCAC529FDBB9@BYAPR13MB2503.namprd13.prod.outlook.com>
+ <CA+GJov5O6hGdjYMXjRd34MEZuyBuukyJCOsS=HeO30h43eLQbQ@mail.gmail.com>
+ <4568b302-2a5a-4499-b2f7-12f89c031495@sirena.org.uk>
+ <155efcdb-2be6-16c4-42bc-37930639060a@gmail.com>
+ <ad7e6e40-6542-4439-8199-d46a6fc91364@sirena.org.uk>
+From:   Frank Rowand <frowand.list@gmail.com>
+In-Reply-To: <ad7e6e40-6542-4439-8199-d46a6fc91364@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,46 +91,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In vudc_probe, it calls init_vudc_hw, which bound &udc->timer with v_timer.
+On 3/16/23 06:33, Mark Brown wrote:
+> On Wed, Mar 15, 2023 at 04:45:29PM -0500, Frank Rowand wrote:
+> 
+>> Yes, there is no need to do a single specification change that results
+>> in incompatibility.  But given the previous discussions there seem to
+>> be plenty of other desired changes that will result in incompatibility.
+> 
+> Do you have a pointer to that previous discussion?
 
-When it calls usbip_sockfd_store, it will call v_start_timer to start the 
-timer work.
+There are links to a few threads at:
 
-When we call vudc_remove to remove the driver, theremay be a sequence as 
-follows:
+   https://elinux.org/Test_Results_Format_Notes#KTAP_version_1
 
-Fix it by shutdown the timer work before cleanup in vudc_remove.
+And I am tracking KTAP Specification version 2 activity in the
+next section of that web page (not much yet, but hopefully
+becoming more active).
 
-Note that removing a driver is a root-only operation, and should never
-happen.
-
-CPU0                  CPU1
-
-                     |v_timer
-vudc_remove          |
-kfree(udc);          |
-//free shost         |
-                     |udc->gadget
-                     |//use
-
-Fixes: b6a0ca111867 ("usbip: vudc: Add UDC specific ops")
-Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
----
- drivers/usb/usbip/vudc_dev.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/usb/usbip/vudc_dev.c b/drivers/usb/usbip/vudc_dev.c
-index 2bc428f2e261..33d0991755bb 100644
---- a/drivers/usb/usbip/vudc_dev.c
-+++ b/drivers/usb/usbip/vudc_dev.c
-@@ -633,6 +633,7 @@ int vudc_remove(struct platform_device *pdev)
- {
- 	struct vudc *udc = platform_get_drvdata(pdev);
- 
-+	timer_shutdown_sync(&udc->timer);
- 	usb_del_gadget_udc(&udc->gadget);
- 	cleanup_vudc_hw(udc);
- 	kfree(udc);
--- 
-2.25.1
-
+-Frank
