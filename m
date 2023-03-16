@@ -2,62 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB2C26BCB00
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 10:35:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB9DC6BCB05
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 10:36:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229899AbjCPJfa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 05:35:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59696 "EHLO
+        id S230318AbjCPJgu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 05:36:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229589AbjCPJf1 (ORCPT
+        with ESMTP id S229938AbjCPJgs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 05:35:27 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BDC81D91D;
-        Thu, 16 Mar 2023 02:35:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1678959316; x=1710495316;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=XSdA/tzh1oA+YHWvUYbB+BNJN185VFEmxlVBOOTiIQ8=;
-  b=bb5E/vlBV4BqlEg6Uv+/ZcpZbxu83O+Sm2E3j9dpcGVzWdyFiq1ZOq2G
-   pZXeXXIqCiHXWWVZPwtk0QUUNl96eB9MC9EdM3H3+tWaYJ9mAHqbc5Fne
-   sA305qESv1eQKTnxFGPofC6gRzLKFJ+l5fvitXO7NKnBQBeh0FBgv9Qdv
-   rIa3ywXgZtkDeRefHC1Pn6elIvx5jXh4xi07K1c0dbQMqN3JQkSDTEddd
-   +2Qn3TSUae+oRzs8Snc1ANA0wVmTKbIcQQpfk3qbUawx62g36v/kBFrYt
-   X1dgkwK8B/M8huJOl966XuuCqUUIsMu6QRPRa9eIeSBEKhb3BFLzBvb4G
-   g==;
-X-IronPort-AV: E=Sophos;i="5.98,265,1673938800"; 
-   d="scan'208";a="142345028"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 16 Mar 2023 02:35:14 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Thu, 16 Mar 2023 02:35:14 -0700
-Received: from den-her-m31857h.microchip.com (10.10.115.15) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2507.21 via Frontend Transport; Thu, 16 Mar 2023 02:35:12 -0700
-Message-ID: <261a7bca8f0f1f78e85d79a7be27cd809c956464.camel@microchip.com>
-Subject: Re: [PATCH net] hsr: ratelimit only when errors are printed
-From:   Steen Hegelund <steen.hegelund@microchip.com>
-To:     Matthieu Baerts <matthieu.baerts@tessares.net>,
-        <mptcp@lists.linux.dev>, "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kristian Overskeid <koverskeid@gmail.com>
-CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Date:   Thu, 16 Mar 2023 10:35:11 +0100
-In-Reply-To: <20230315-net-20230315-hsr_framereg-ratelimit-v1-1-61d2ef176d11@tessares.net>
-References: <20230315-net-20230315-hsr_framereg-ratelimit-v1-1-61d2ef176d11@tessares.net>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Thu, 16 Mar 2023 05:36:48 -0400
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2125.outbound.protection.outlook.com [40.107.215.125])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 730A15AB4D
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 02:36:46 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=PHXvq5jUbFI2kTFbfS3NzLzO/lWuaAZqjkSsurZ1OwsMENMjGaUd0R8pE4/h7OV0ulaaYiTK19TIcrkuoPdZsBv93pcS3W395g/6btGWv4jZCSQSAQWVJ6KKSff3cYJdViEUCtsXECWw6KxN1TsvhmaMt7FDXPuKY6PZORGl3b9rGHLdizlRKequPaCLNz0yGi13LUT5RVLz6dxynpHv/cj8EaUAM37q+/O/pmursUmN5gdbEn3kIZxuEXNDA4h8fIuEI2S8OzYDUd7bd/PAuBAlL7ZyDSMHaAThmIcH5xhhSZTamVF8klS1UP1Yvo4SpaTXpHpLCBABdfggoM2G+g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=+U0RZQPnC1tcpJmmJoMmkD3JOczH4sWS625pRkRPWDw=;
+ b=LKbB3OWaJuuFvrCn4cqzWZDv0Tr9+Lm2T+wZvT27Cx0uqsHRu3ycCq6oHQwWh09pL5x6b4j6TcJKdBGvEjuB68N+3CdfbCy9rmPImSCtTxgjFXdqztxWmctUMa1V+xSFv/6qitXlsXkwhNFtoc40OVv1iDgJiZWejGc8Pt7Dd45aGDqFH5TuAaaU5MYI3PN5HLYJEaXOgXPp0vfzlOVq0XONturq1cq5YCt2r3DbcGoXrbr1PgmHfShRDdk2ePYIa3IKS5rcFnIxMl1GeVskKGGMJY8uQVcbhHdWqhwTHkP5CtkDl1iVEbWFZ8NKfCY4gJvoWHx2MTkCk1WVVYEB6Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+U0RZQPnC1tcpJmmJoMmkD3JOczH4sWS625pRkRPWDw=;
+ b=Be6vO9loNrFzogyliYZzoFy8YBhqaoLdruAAFOjOVvrk8pG9oYgDE3EfPSrD48ZQngdzV0eFJo4PFo+bzeZrHZ/5p/T+xItbAlM7X9m5wdnr2OOSCpe+dNIEa0F9Cm5AdS4a8IAoHIIP8+c3lCQFXPCp1wIpi4a+UBegy/FMyeezVTKumZadWRJVJl8RjX+7HYqRfvsDsYTXbOHbfyDDhH48gI24rdX49a9YbPmP4i2q27PwZJ7HuTPapsYGi0ydh76foef1lriQKZMeNJAqS9w2+CvY7PdkLA/kj9Yvv8ov0XUnIiiP7JujZpLX9H0yA+Zt6sSOlXib7e5bcakptQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from TYZPR06MB5275.apcprd06.prod.outlook.com (2603:1096:400:1f5::6)
+ by TYUPR06MB6077.apcprd06.prod.outlook.com (2603:1096:400:353::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.26; Thu, 16 Mar
+ 2023 09:36:43 +0000
+Received: from TYZPR06MB5275.apcprd06.prod.outlook.com
+ ([fe80::a2c6:4a08:7779:5190]) by TYZPR06MB5275.apcprd06.prod.outlook.com
+ ([fe80::a2c6:4a08:7779:5190%2]) with mapi id 15.20.6178.026; Thu, 16 Mar 2023
+ 09:36:42 +0000
+From:   Yangtao Li <frank.li@vivo.com>
+To:     jaegeuk@kernel.org, chao@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, hanqi@vivo.com,
+        liyangtao <11127627@bbktel.com>
+Subject: [PATCH] f2fs: compress: fix to wait page writeback in f2fs_write_raw_pages()
+Date:   Thu, 16 Mar 2023 17:36:32 +0800
+Message-Id: <20230316093632.25929-1-frank.li@vivo.com>
+X-Mailer: git-send-email 2.35.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SI2PR02CA0007.apcprd02.prod.outlook.com
+ (2603:1096:4:194::23) To TYZPR06MB5275.apcprd06.prod.outlook.com
+ (2603:1096:400:1f5::6)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: TYZPR06MB5275:EE_|TYUPR06MB6077:EE_
+X-MS-Office365-Filtering-Correlation-Id: ebe01bef-114d-4595-8719-08db2601f345
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: vVPYnU9fuoNhliwIw0Aqo8TiPIUGHi55hfMjSMReUWStjfYkFyeq6IploLVr32F+uN6GRCRo6PIE+h7VYhg+8xzhTpDkwhsszfCgtelLjw+hE9F/L8Ce79tUvy9S1wI8WLHDxZ+3kAO4hzA45bhtsaeaGgkUfxRTa+GBSjJCHKzIuxJnJc90paKL1pRvY8iT/iZa4rs+5LrkHOiw/muZL7Av20shGq2hl2lCQFSZVCvqM+v9t29obH9UhXFfkVsv+7AUjm5QcVJbkGE6Qc/aYakxy4r7XOCBd+I/UEqVPnJZpTCRD87CU3NV6jaAf417kvOqErADg1iBxHkv2XPQLCStFCHc7T+HVpXzrCTMAdVvu1GRyKq8R6gCjFJAnZ3aPdDfD5hegL8yD8pq3yov4qdCWpJffwHL8BBqBNiLvBVT8wbLmFkEo/WA3vFrXM/GgElPRB/QlRM5d741LHlPeNqlQoKThEIs1vM3WsRGrDJQPaVKXTC1hEKyAzG+QnlzhZErMTgtHmrqMP5tEnEfIiMkcnjIG+1ZG3ev59JHVQIf/kehZ3DmAOZuglmeM6i9dRR2k5r815EVdkZ86dH3Z6L8R0qsy/1rYHscFMlqb1BPl/loZio/Q49Hy9l+tRoBO2BYVVQb47+P7e+PFSnYa6EcAPFkpEqn6HHi5/kcY0aDXB1JABadKvxZ/ohOphLKSmBW8nvOs/c3bTkpuPp1IQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR06MB5275.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(136003)(346002)(396003)(366004)(376002)(451199018)(2906002)(5660300002)(83380400001)(41300700001)(36756003)(316002)(8936002)(66946007)(66556008)(8676002)(38100700002)(66476007)(4326008)(38350700002)(86362001)(478600001)(186003)(26005)(6666004)(6506007)(52116002)(1076003)(2616005)(6512007)(6486002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?8Q+QO4zuQm5t5yx/y4t/HUG4oKZ5Xp17Dj8toAGXcf5dZra+bpyR8cn8WqNk?=
+ =?us-ascii?Q?yjiMwn3Jaali9XfMx/NAK6yidypoK6kFuehQx87Os5SZwrtaKkwRI1Ow8Ohf?=
+ =?us-ascii?Q?gelwTgvOuTKBrS7AOKynrUON/i9qqMlA00obKT3/D6d8/OB2BNnxLkOC8MNe?=
+ =?us-ascii?Q?gA7egHfunYuGTTWcwncOz5ududCDc+iAwWLtNC2cVkX/8KUL7Xwc5LJI5sx5?=
+ =?us-ascii?Q?NTLdk+jYX30cvo6mhHSsdRyJ5btV9JzUH8lmOxtioCPUE65Wy26aKsxlgffJ?=
+ =?us-ascii?Q?5MclZaro0tMKigOyycSqJrrrBZsXwcwqfC9Qr6HI2n2P1v+PoVwqvHxpVifj?=
+ =?us-ascii?Q?3p3BgZL7YXmV/tfdDz1JM03QEx0eNGLtkPFeh2+hJcPPQoOOlzGwEcopBywX?=
+ =?us-ascii?Q?J9PLe6K8GByuYfuEm7V4BUMG1l/5aaXEP8zbsneYAh0M/sXqAR0Fby7hypj6?=
+ =?us-ascii?Q?xfXHrcmei0qU7EQCxvNcVTFcqBO4khQFaYRSHV1xxMOzrnjmDNNYo3XogVgQ?=
+ =?us-ascii?Q?PcBuQo1z1U9H44VgbPNpEsyvSMgCK3mYcU33t/06g3/tKfoXz1f7mYxEJKrO?=
+ =?us-ascii?Q?/RLvM7wdHXQuQlUM/25d6RsWcq2fW/Z2TrhLgM+DkC261Ju6UHMA0oa3cmUx?=
+ =?us-ascii?Q?l3FSSAkaseYvyxPCqnsojNiTja+u36YGTJjVLJmydmuapWiD+7lCe7+fvmfG?=
+ =?us-ascii?Q?+2OqkWy90fUD+BcUAXWYvYu4wWlCKB/vdALsjyonoSNhpIhfRBfMNVL88D5Z?=
+ =?us-ascii?Q?cCnAkTbdhhs26iWPSQujpT9YGYtjsAXMLfbP/AfbH2ODmkkQs3xWSdNoLPcZ?=
+ =?us-ascii?Q?1JdfYgQ5f8VKUE7xCGdTmvQ6LBmsUfKr3FOHAFNhTx8kzdxXG2SEz7G/8C9q?=
+ =?us-ascii?Q?YB5qISuWII9y5Cq7h2QDYU513Hw6EtNe6g82xUNCAYbGLEfCBkXxXG38Zi9H?=
+ =?us-ascii?Q?90GjJyCpVXNpAmdjCzovLTWLXfAYYTAAhYh0B0wzTRjF4Cci6B+TOvD6s1ix?=
+ =?us-ascii?Q?fkt/Wc5+Fq+pElEObpKm4uwXUdlyBCn5jsAWhaetLPVFOOPVSur9t3qIAJvA?=
+ =?us-ascii?Q?y4VJXSryVqsXQYoACEBQxM9fDRthaMrThW+esE22Osxho8efo6he6jINaK57?=
+ =?us-ascii?Q?9/CrdXwC3LhpXHq/X1d/02Zw6IemMb5e4XJGSyrP0vulBZWshTkjdY0/9RjS?=
+ =?us-ascii?Q?GX1EkpZRGNpl/KydkaAAGt+9FnvU1mVfKeckddHkM+Rvb4mDP2PP47+WsmU0?=
+ =?us-ascii?Q?vMS0OZ+2o4M8nvJinNZrFW1NLSXiv5FrZq9gkJW2iJxRlP6X6214CC/k8fWG?=
+ =?us-ascii?Q?YrTfDT2g8FRI10j2rG/Hcpn1i2MOQMRWpGDThb71xWzksRk9JOxtxb10gfx3?=
+ =?us-ascii?Q?J76f/cCob45jmTBQ8JDmPdF6UPdMzwAJottFFXi9G3gW1/pbSvvl2N5Fp9vO?=
+ =?us-ascii?Q?v3lvjFVf310mWUQY04ZYRNew6Vqp0kCPGX8CdWaJyZ6DqqS9MeAfucrO8/Jo?=
+ =?us-ascii?Q?69FBJCl2z4eVBfqtJteinNrfhs2ZP2U6oKMk4d18BgyXIxHtHcWiwnMfQpJt?=
+ =?us-ascii?Q?NdS7vgktXOfv3I1idR1VcqQFmMobSUSdbez56PKZ?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ebe01bef-114d-4595-8719-08db2601f345
+X-MS-Exchange-CrossTenant-AuthSource: TYZPR06MB5275.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Mar 2023 09:36:42.2878
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 5wAUac34AAqmAdS3T5eZkQAJA3Tm5mijNNsrZXX0GanBPwG02xFC94Uwnn9Ady6TGrU6riXFYWhHrZUeEOr75g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYUPR06MB6077
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -66,63 +112,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mattieu,
+From: liyangtao <11127627@bbktel.com>
 
-Looks good to me.
+BUG_ON() will be triggered when writing files concurrently,
+because the same page is writtenback multiple times.
 
-Reviewed-by: Steen Hegelund <Steen.Hegelund@microchip.com>
+1597 void folio_end_writeback(struct folio *folio)
+1598 {
+		......
+1618     if (!__folio_end_writeback(folio))
+1619         BUG();
+		......
+1625 }
 
-On Wed, 2023-03-15 at 21:25 +0100, Matthieu Baerts wrote:
-> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
-> 
-> Recently, when automatically merging -net and net-next in MPTCP devel
-> tree, our CI reported [1] a conflict in hsr, the same as the one
-> reported by Stephen in netdev [2].
-> 
-> When looking at the conflict, I noticed it is in fact the v1 [3] that
-> has been applied in -net and the v2 [4] in net-next. Maybe the v1 was
-> applied by accident.
-> 
-> As mentioned by Jakub Kicinski [5], the new condition makes more sense
-> before the net_ratelimit(), not to update net_ratelimit's state which is
-> unnecessary if we're not going to print either way.
-> 
-> Here, this modification applies the v2 but in -net.
-> 
-> Link: https://github.com/multipath-tcp/mptcp_net-next/actions/runs/4423171069 [1]
-> Link: https://lore.kernel.org/netdev/20230315100914.53fc1760@canb.auug.org.au/ [2]
-> Link: https://lore.kernel.org/netdev/20230307133229.127442-1-koverskeid@gmail.com/ [3]
-> Link: https://lore.kernel.org/netdev/20230309092302.179586-1-koverskeid@gmail.com/ [4]
-> Link: https://lore.kernel.org/netdev/20230308232001.2fb62013@kernel.org/ [5]
-> Fixes: 28e8cabe80f3 ("net: hsr: Don't log netdev_err message on unknown prp dst node")
-> Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
-> ---
->  net/hsr/hsr_framereg.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/net/hsr/hsr_framereg.c b/net/hsr/hsr_framereg.c
-> index 865eda39d601..b77f1189d19d 100644
-> --- a/net/hsr/hsr_framereg.c
-> +++ b/net/hsr/hsr_framereg.c
-> @@ -415,7 +415,7 @@ void hsr_addr_subst_dest(struct hsr_node *node_src, struct sk_buff *skb,
->         node_dst = find_node_by_addr_A(&port->hsr->node_db,
->                                        eth_hdr(skb)->h_dest);
->         if (!node_dst) {
-> -               if (net_ratelimit() && port->hsr->prot_version != PRP_V1)
-> +               if (port->hsr->prot_version != PRP_V1 && net_ratelimit())
->                         netdev_err(skb->dev, "%s: Unknown node\n", __func__);
->                 return;
->         }
-> 
-> ---
-> base-commit: 75014826d0826d175aa9e36cd8e118793263e3f4
-> change-id: 20230315-net-20230315-hsr_framereg-ratelimit-3c8ff6e43511
-> 
-> Best regards,
-> --
-> Matthieu Baerts <matthieu.baerts@tessares.net>
-> 
+kernel BUG at mm/filemap.c:1619!
+Call Trace:
+ <TASK>
+ f2fs_write_end_io+0x1a0/0x370
+ blk_update_request+0x6c/0x410
+ blk_mq_end_request+0x15/0x130
+ blk_complete_reqs+0x3c/0x50
+ __do_softirq+0xb8/0x29b
+ ? sort_range+0x20/0x20
+ run_ksoftirqd+0x19/0x20
+ smpboot_thread_fn+0x10b/0x1d0
+ kthread+0xde/0x110
+ ? kthread_complete_and_exit+0x20/0x20
+ ret_from_fork+0x22/0x30
+ </TASK>
 
-BR
-Steen
+Below is the concurrency scenario:
+
+[Process A]			[Process B]			[Process C]
+f2fs_write_raw_pages()
+  - redirty_page_for_writepage()
+  - unlock page()
+					f2fs_do_write_data_page()
+					  - lock_page()
+					  - clear_page_dirty_for_io()
+					    - set_page_writeback() [1st writeback]
+					    .....
+					    - unlock page()
+
+										generic_perform_write()
+										  - f2fs_write_begin()
+										    - wait_for_stable_page()
+
+										  - f2fs_write_end()
+										    - set_page_dirty()
+
+  -	lock_page()
+    - f2fs_do_write_data_page()
+      - set_page_writeback() [2st writeback]
+
+This problem was introduced by the previous commit 7377e853967b ("f2fs:
+compress: fix potential deadlock of compress file"). All pagelocks were
+released in f2fs_write_raw_pages(), but whether the page was
+in the writeback state was ignored in the subsequent writing process.
+Let's fix it by waiting for the page to writeback before writing.
+
+Fixes: 4c8ff7095bef ("f2fs: support data compression")
+Fixes: 7377e853967b ("f2fs: compress: fix potential deadlock of compress file")
+Signed-off-by: Qi Han <hanqi@vivo.com>
+Signed-off-by: liyangtao <11127627@bbktel.com>
+---
+ fs/f2fs/compress.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/fs/f2fs/compress.c b/fs/f2fs/compress.c
+index 93fec1d37899..904af359fa8e 100644
+--- a/fs/f2fs/compress.c
++++ b/fs/f2fs/compress.c
+@@ -1456,6 +1456,14 @@ static int f2fs_write_raw_pages(struct compress_ctx *cc,
+ 		if (!PageDirty(cc->rpages[i]))
+ 			goto continue_unlock;
+ 
++		if (PageWriteback(cc->rpages[i])) {
++			if (wbc->sync_mode != WB_SYNC_NONE)
++				f2fs_wait_on_page_writeback(cc->rpages[i],
++						DATA, true, true);
++			else
++				goto continue_unlock;
++		}
++
+ 		if (!clear_page_dirty_for_io(cc->rpages[i]))
+ 			goto continue_unlock;
+ 
+-- 
+2.35.1
 
