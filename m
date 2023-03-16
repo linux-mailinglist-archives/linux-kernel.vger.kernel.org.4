@@ -2,101 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A383D6BCFDF
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 13:50:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4A8F6BCFD1
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 13:43:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229769AbjCPMuC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 08:50:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48820 "EHLO
+        id S230025AbjCPMnx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 08:43:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229634AbjCPMt6 (ORCPT
+        with ESMTP id S229678AbjCPMnu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 08:49:58 -0400
-X-Greylist: delayed 402 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 16 Mar 2023 05:49:55 PDT
-Received: from relay08.th.seeweb.it (relay08.th.seeweb.it [5.144.164.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C61ED21950;
-        Thu, 16 Mar 2023 05:49:55 -0700 (PDT)
-Received: from SoMainline.org (D57D4C6E.static.ziggozakelijk.nl [213.125.76.110])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Thu, 16 Mar 2023 08:43:50 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 030B3BCBAB;
+        Thu, 16 Mar 2023 05:43:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 62ABA40287;
-        Thu, 16 Mar 2023 13:43:09 +0100 (CET)
-Date:   Thu, 16 Mar 2023 13:43:07 +0100
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     Rob Herring <robh@kernel.org>, phone-devel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        iio@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v3 2/3] dt-bindings: thermal: qcom-spmi-adc-tm5: Use
- generic ADC node name
-Message-ID: <20230316124307.pzuvbacsmjdootfx@SoMainline.org>
-References: <20230201204447.542385-1-marijn.suijten@somainline.org>
- <20230201204447.542385-3-marijn.suijten@somainline.org>
- <20230203212501.GA908601-robh@kernel.org>
- <20230205150645.549ff062@jic23-huawei>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8DA8EB82161;
+        Thu, 16 Mar 2023 12:43:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B090C433EF;
+        Thu, 16 Mar 2023 12:43:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678970626;
+        bh=Bn22MEAaLbE8PfB0Mig0iBGYLYZGpXb6TOMcZGydyCc=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=TvN3CTBI4PVJzr40YBh7tMwpRxbvEmMqcwJO/r5la9UTSJpvsjrfiEYxDopXlbXF6
+         x9l+L3FP8LQkFjnwXH+It4upLoZKMcPhq3H5xbgdNZpjd4YZHRTPyNXPB/tLbew98k
+         Dli30Z/Bvzd3riOx7T3KbnZg2sAZqhL23EQx6sun0/Fq+bY24dhBH22ub5GAzDjMvL
+         wqtpxPrOD/A+2YKNNeGfMxOnnSYQU4SE4W0WtmxHnUSuPirYa8hZkKQ9JsewRAxUQY
+         Eg8G1zhzcVKsfWRKbm4fTeM5xyiBqRy6fDIDi2cSlduSrmiezB/77oUTg7NQm4bks0
+         es+l4bYAW4fSw==
+Received: by mail-lj1-f175.google.com with SMTP id z5so1523609ljc.8;
+        Thu, 16 Mar 2023 05:43:46 -0700 (PDT)
+X-Gm-Message-State: AO0yUKVc4nmO7NvDTvT9Zqdo5A4FLdahen7LbPLhOoghuPU4wc3EEHJy
+        fJVSdknUpbwbqM4dHrD2MPR3HJPYD/4vZgmSn/k=
+X-Google-Smtp-Source: AK7set+FZP5NUjM2xniaNqhtVmxnX6R/a73VMeQPbWUQJvUdTG4p4FGcohA6d5XHjCUIMZKudMArGY6bE+2Q7s1JwDU=
+X-Received: by 2002:a2e:8e2a:0:b0:298:a8d6:9fad with SMTP id
+ r10-20020a2e8e2a000000b00298a8d69fadmr2031766ljk.4.1678970624180; Thu, 16 Mar
+ 2023 05:43:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230205150645.549ff062@jic23-huawei>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <ZBLLSmLbt2P4ZN6O@righiandr-XPS-13-7390> <CAMj1kXHYqMdis99D3OaKf51eoCDW2+5NfcUEbF4Zrau4BcKgsQ@mail.gmail.com>
+ <ZBLlLRVVxCbZfEJd@righiandr-XPS-13-7390> <CAMj1kXET+A2rk+WQyebKPNtSvzzS0nJdMbx3uT1JgMxOvqfx4w@mail.gmail.com>
+ <ZBLpVDmy8BXQZve9@righiandr-XPS-13-7390> <CAMj1kXF_f4QFtaDYBaSJwO0B97TJHWr6uRQdeYeD=Gv7DrVicg@mail.gmail.com>
+ <ZBL+o7ydLk2iBCCr@righiandr-XPS-13-7390> <CAMj1kXEtj_jEZeT6YNh9xB=8o=0LVKiPYucHU08s34xBgy1yDA@mail.gmail.com>
+ <CAMj1kXF3pkxvDX6ZMpnRd3wQX2_T6CYmz7ML-h+PXeo+hM_ZdA@mail.gmail.com> <ZBMOitWwCDj3XiRw@righiandr-XPS-13-7390>
+In-Reply-To: <ZBMOitWwCDj3XiRw@righiandr-XPS-13-7390>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Thu, 16 Mar 2023 13:43:32 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXF=8KoCnRmUyLCZmbfPTeOFQZBeudZuTeA0uHOv-1drFg@mail.gmail.com>
+Message-ID: <CAMj1kXF=8KoCnRmUyLCZmbfPTeOFQZBeudZuTeA0uHOv-1drFg@mail.gmail.com>
+Subject: Re: kernel 6.2 stuck at boot (efi_call_rts) on arm64
+To:     Andrea Righi <andrea.righi@canonical.com>
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Paolo Pisati <paolo.pisati@canonical.com>,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Darren Hart <darren@os.amperecomputing.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-02-05 15:06:45, Jonathan Cameron wrote:
-> On Fri, 3 Feb 2023 15:25:01 -0600
-> Rob Herring <robh@kernel.org> wrote:
-> 
-> > On Wed, Feb 01, 2023 at 09:44:46PM +0100, Marijn Suijten wrote:
-> > > Update the example to reflect a future requirement for the generic
-> > > adc-chan node name on ADC channel nodes, while conveying the board name
-> > > of the channel in a label instead.  
-> > 
-> > I don't think we've defined 'adc-chan' as THE generic name. Looks like 
-> > we have:
-> > 
-> > adc-chan
-> > adc-channel
-> > channel
-> > 
-> > 'channel' is the most common (except for QCom).
-> Good spot.
-> 
-> We also have that defined as the channel name in 
-> bindings/iio/adc.yaml
+On Thu, 16 Mar 2023 at 13:41, Andrea Righi <andrea.righi@canonical.com> wrote:
+>
+> On Thu, Mar 16, 2023 at 01:38:30PM +0100, Ard Biesheuvel wrote:
+> > On Thu, 16 Mar 2023 at 13:21, Ard Biesheuvel <ardb@kernel.org> wrote:
+> > >
+> > > On Thu, 16 Mar 2023 at 12:34, Andrea Righi <andrea.righi@canonical.com> wrote:
+> > > >
+> > > > On Thu, Mar 16, 2023 at 11:18:21AM +0100, Ard Biesheuvel wrote:
+> > > > > On Thu, 16 Mar 2023 at 11:03, Andrea Righi <andrea.righi@canonical.com> wrote:
+> > > > > >
+> > > > > > On Thu, Mar 16, 2023 at 10:55:58AM +0100, Ard Biesheuvel wrote:
+> > > > > > > (cc Darren)
+> > > > > > >
+> > > > > > > On Thu, 16 Mar 2023 at 10:45, Andrea Righi <andrea.righi@canonical.com> wrote:
+> > > > > > > >
+> > > > > > > > On Thu, Mar 16, 2023 at 08:58:20AM +0100, Ard Biesheuvel wrote:
+> > > > > > > > > Hello Andrea,
+> > > > > > > > >
+> > > > > > > > > On Thu, 16 Mar 2023 at 08:54, Andrea Righi <andrea.righi@canonical.com> wrote:
+> > > > > > > > > >
+> > > > > > > > > > Hello,
+> > > > > > > > > >
+> > > > > > > > > > the latest v6.2.6 kernel fails to boot on some arm64 systems, the kernel
+> > > > > > > > > > gets stuck and never completes the boot. On the console I see this:
+> > > > > > > > > >
+> > > > > > > > > > [   72.043484] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+> > > > > > > > > > [   72.049571] rcu:     22-...0: (30 GPs behind) idle=b10c/1/0x4000000000000000 softirq=164/164 fqs=6443
+> > > > > > > > > > [   72.058520]     (detected by 28, t=15005 jiffies, g=449, q=174 ncpus=32)
+> > > > > > > > > > [   72.064949] Task dump for CPU 22:
+> > > > > > > > > > [   72.068251] task:kworker/u64:5   state:R  running task     stack:0     pid:447   ppid:2      flags:0x0000000a
+> > > > > > > > > > [   72.078156] Workqueue: efi_rts_wq efi_call_rts
+> > > > > > > > > > [   72.082595] Call trace:
+> > > > > > > > > > [   72.085029]  __switch_to+0xbc/0x100
+> > > > > > > > > > [   72.088508]  0xffff80000fe83d4c
+> > > > > > > > > >
+> > > > > > > > > > After that, as a consequence, I start to get a lot of hung task timeout traces.
+> > > > > > > > > >
+> > > > > > > > > > I tried to bisect the problem and I found that the offending commit is
+> > > > > > > > > > this one:
+> > > > > > > > > >
+> > > > > > > > > >  e7b813b32a42 ("efi: random: refresh non-volatile random seed when RNG is initialized")
+> > > > > > > > > >
+> > > > > > > > > > I've reverted this commit for now and everything works just fine, but I
+> > > > > > > > > > was wondering if the problem could be caused by a lack of entropy on
+> > > > > > > > > > these arm64 boxes or something else.
+> > > > > > > > > >
+> > > > > > > > > > Any suggestion? Let me know if you want me to do any specific test.
+> > > > > > > > > >
+> > > > > > > > >
+> > > > > > > > > Thanks for the report.
+> > > > > > > > >
+> > > > > > > > > This is most likely the EFI SetVariable() call going off into the
+> > > > > > > > > weeds and never returning.
+> > > > > > > > >
+> > > > > > > > > Is this an Ampere Altra system by any chance? Do you see it on
+> > > > > > > > > different types of hardware?
+> > > > > > > >
+> > > > > > > > This is: Ampere eMAG / Lenovo ThinkSystem HR330a.
+> > > > > > > >
+> > > > > > > > >
+> > > > > > > > > Could you check whether SetVariable works on this system? E.g. by
+> > > > > > > > > updating the EFI boot timeout (sudo efibootmgr -t <n>)?
+> > > > > > > >
+> > > > > > > > ubuntu@kuzzle:~$ sudo efibootmgr -t 10
+> > > > > > > > ^C^C^C^C
+> > > > > > > >
+> > > > > > > > ^ Stuck there, so it really looks like SetVariable is the problem.
+> > > > > > > >
+> > > > > > >
+> > > > > > > Could you please share the output of
+> > > > > > >
+> > > > > > > dmidecode -s bios
+> > > > > > > dmidecode -s system-family
+> > > > > >
+> > > > > > $ sudo dmidecode -s bios-vendor
+> > > > > > LENOVO
+> > > > > > $ sudo dmidecode -s bios-version
+> > > > > > hve104r-1.15
+> > > > > > $ sudo dmidecode -s bios-release-date
+> > > > > > 02/26/2021
+> > > > > > $ sudo dmidecode -s bios-revision
+> > > > > > 1.15
+> > > > > > $ sudo dmidecode -s system-family
+> > > > > > Lenovo ThinkSystem HR330A/HR350A
+> > > > > >
+> > > > >
+> > > > > Thanks
+> > > > >
+> > > > > Mind checking if this patch fixes your issue as well?
+> > > > >
+> > > > > https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/commit/?h=altra-fix&id=77fa99dd4741456da85049c13ec31a148f5f5ac0
+> > > >
+> > > > Unfortunately this doesn't seem to be enough, I'm still getting the same
+> > > > problem also with this patch applied.
+> > > >
+> > >
+> > > Thanks for trying.
+> > >
+> > > How about the last 3 patches on this branch?
+> > >
+> > > https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/log/?h=efi-smbios-altra-fix
+> >
+> > Actually, that may not match your hardware.
+> >
+> > Does your kernel log have a line like
+> >
+> > SMCCC: SOC_ID: ID = jep106:036b:0019 Revision = 0x00000102
+> >
+> > ?
+>
+> $ sudo dmesg | grep "SMCCC: SOC_ID"
+> [    5.320782] SMCCC: SOC_ID: ARCH_SOC_ID not implemented, skipping ....
+>
 
-Good point, let's match adc.yaml and use 'channel' instead.  I'll
-respin this series with thas, as well as rebasing on -next to solve
-conflicts with 8013295662f5 ("arm64: dts: qcom: sc8280xp: Add label
-property to vadc channel nodes"): supposedly that DT originally relied
-on the `@XX` suffix bug :)
-
-> Now this particular binding doesn't use anything from that
-> generic binding (other than trivial use of reg) but better to be
-> consistent with it than not!
-
-Should it inherit the common binding, or was it omitted for a reason?
-
-- Marijn
+Thanks. Could you share the entire dmidecode output somewhere? Or at
+least the type 4 record(s)?
