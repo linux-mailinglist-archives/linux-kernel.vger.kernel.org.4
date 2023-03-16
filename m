@@ -2,62 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D177F6BC37E
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 02:54:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A206F6BC380
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 02:56:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229669AbjCPByx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 21:54:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44904 "EHLO
+        id S229560AbjCPBz6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 21:55:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbjCPByv (ORCPT
+        with ESMTP id S229477AbjCPBz4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 21:54:51 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E113B1E9FF
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 18:54:48 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id z21so1880250edb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 18:54:48 -0700 (PDT)
+        Wed, 15 Mar 2023 21:55:56 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 772F523A6C
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 18:55:55 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id eh3so1757156edb.11
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 18:55:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent.com; s=google; t=1678931687;
+        d=isovalent.com; s=google; t=1678931754;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=VK16ssT3iVXFDwPE2/b5McnzjfW/AUDZ9chsGSHxweM=;
-        b=V4krVXtv+coVNo8PefjwHhL2VZ+4Pfnd4yl/QfhNKqFNl955Y4pGn2lpEIXzdeSrYv
-         5wTC9BnVTPfMkbvYMFMOMPPD1RMcyUHNeJ/CZUVsrd4mzymb2RwWd6xLBKUIb+AvBm3t
-         /k4mfUbhrRyJFhtT2Z5kTgU0s38T3W0zCl2NKWA9rNAxp9A9CeUL+Y9Kcd+edSj06jn+
-         c/zkChFeeAN+mHhQrY+RTGPamg2imNdk7DtG7QNuBo1fjFS+KsZxi3eGwLlAfs0t7RyR
-         hOK5zrYFd59BJ2ezC0bEAWy8iyMqRB71wkCDx6Lf8r0FBdYh1CS1ihsHj1vEyqSgR3AD
-         P9ow==
+        bh=ufDsCnepUTXOzJM2+beRgyDWu2qPzyR/ijQPsqIphUY=;
+        b=KF3/5gKz860T5swAtm7hcfaFT/jdRD4FPmXybm3n6cYqi+3xP2il93iHugwDMaw5GF
+         v6vgvLFcD1v2XYZ5IA7UieoJOHhe4bFaU7lw3pgqAVlxulCXV9hnn66reaIJo5O2zJrb
+         v5u9Vfu+6aZHVdAZPNIEh2xcQocZYha2+vkv33W6d3o1iqUY/WMVvHaMnxfh426Mlzoc
+         kGQhRhDHa86j7VkibWOfHiabSOowbrhtwAmWZQexDplKlibdxaRsW/HEFvcRSx1fDyOo
+         qJalIcBlOf2cUnlop1EBQAMfA4NfqJAgJuosYGFetT3ryBDHXS74nazTGAMrco1y20q/
+         4ngA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678931687;
+        d=1e100.net; s=20210112; t=1678931754;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=VK16ssT3iVXFDwPE2/b5McnzjfW/AUDZ9chsGSHxweM=;
-        b=mgFIi2lFPi/fJNEc9m52dcYU9GZgJRx1Fc000/Xs491rlAFIDUn6/uhtRIVGFJU3Ma
-         0mONya0S0TtIVzmkO8ly3O71dBHODNDfzQeyb+WmQEdQp+c/i+tqWrjGW6L7mSOBDyo1
-         aFz4k3s/OTs/vN8+/eYsYSqNMUJwC7Jd9Kd/siq6x8nws+LS8EJ2qrgiqH8xLLqo5NNB
-         iYrmU9quffR72wIvxKBlaEa5QDjqF+dduYQzuHPShWI5ySh6lr+0V8hEyJ9kL2QSj3yH
-         fGHMjgAX6sZPsjmjLfZfwXYGE8HcTKYNIKpbsdWHEDapWBv+mZPIDzEG/TjKnyS/+vZ9
-         SDAA==
-X-Gm-Message-State: AO0yUKVrPq9nY0V7OMKMy2Gql7kqpag5PkcZk6FTqqlLhwuNVTURfg5n
-        ncnjB3rrP0aaEFcK58GCUKcQ2w2Zs1YwvGI0fiiVJQ==
-X-Google-Smtp-Source: AK7set865sbz6R6Pj9A1v+mxb4vLIBDOk2fBHNE3/1+gnMyeS5huuYKPwF6X58KEvDH7zgiB2V3BZyRc9blCHjbMups=
-X-Received: by 2002:a17:907:8a12:b0:92f:cf96:e1f6 with SMTP id
- sc18-20020a1709078a1200b0092fcf96e1f6mr1152494ejc.11.1678931687347; Wed, 15
- Mar 2023 18:54:47 -0700 (PDT)
+        bh=ufDsCnepUTXOzJM2+beRgyDWu2qPzyR/ijQPsqIphUY=;
+        b=CvfCecwyM43Ay/HvBWYTqiKUZON/RLkgqLFpJpxBuZ27ktawEex/xnwfqUCq4XBCXC
+         KDmFqLpZnCIxv1ZPDGsmA+BzZFXPTUwgYEFf1ZpPxaVrmWKLIo09rSckRrbXjxtONQzh
+         p8yVAgbQnukpz47iJDCIRqg6mbTUZbsyYQe02dQDvHFQwWekZLxzEX/SIIBHkMHb6f3c
+         PMUPmeDurn2fD+mqj45/U7P9v1ruH8P7MJnJTRmD+QXJCYxfiV3EI39ZnpEu0At+dNjs
+         2tIdb5CqMHfja4mgp2xZQw7kcoZ2eObwGr5jIfqcO2Qg0XVY8JtaPfScH7hio3jDIkwW
+         Ty1w==
+X-Gm-Message-State: AO0yUKWgP8AyqDlIwOl+o3kU9+PQHdUS5OwUGToFGmwxWbyPeRtTliFW
+        76Zscy8sFTH/uB2blFYYGkuyrqVonPvuEebZbmNPw7fPTmznWD/p
+X-Google-Smtp-Source: AK7set8yweo49a1Ycphsi2axltsssm4oxxjrMvsp/VUrKDPFLEIDZR/EezLLR2Z5Ji8gWEoMtfNSqn1KUPgSjzx8ZKs=
+X-Received: by 2002:a17:906:191a:b0:8b1:7569:b526 with SMTP id
+ a26-20020a170906191a00b008b17569b526mr4301468eje.11.1678931753977; Wed, 15
+ Mar 2023 18:55:53 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230312190600.324573-1-joe@isovalent.com> <c6172fe2-7d88-f9f8-e19a-47c232f9cb75@linux.dev>
-In-Reply-To: <c6172fe2-7d88-f9f8-e19a-47c232f9cb75@linux.dev>
+References: <20230312201712.367545-1-joe@isovalent.com> <875yb5wwed.fsf@meer.lwn.net>
+ <CADa=RyzQmTEFnpKehGoKihmz+EniibjWQ0P12XMwqgqQ8UcO-w@mail.gmail.com> <87r0trryj1.fsf@meer.lwn.net>
+In-Reply-To: <87r0trryj1.fsf@meer.lwn.net>
 From:   Joe Stringer <joe@isovalent.com>
-Date:   Wed, 15 Mar 2023 18:54:36 -0700
-Message-ID: <CADa=RyxDHp5x0iCcfgiCDuM68we=dTAmVBvx1hgrRLBbN27rdw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3] docs/bpf: Add LRU internals description and graph
-To:     Martin KaFai Lau <martin.lau@linux.dev>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ast@kernel.org, corbet@lwn.net, bagasdotme@gmail.com,
-        maxtram95@gmail.com, bpf@vger.kernel.org
+Date:   Wed, 15 Mar 2023 18:55:43 -0700
+Message-ID: <CADa=Ryz3T9OWkPC5ThWCziF7N0aB8unTQvCvq2erouknKEc4Wg@mail.gmail.com>
+Subject: Re: [PATCH linux-doc] docs/doc-guide: Clarify how to write tables
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -69,161 +68,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 14, 2023 at 12:31=E2=80=AFPM Martin KaFai Lau <martin.lau@linux=
-.dev> wrote:
+On Tue, Mar 14, 2023 at 11:14=E2=80=AFAM Jonathan Corbet <corbet@lwn.net> w=
+rote:
 >
-> On 3/12/23 12:05 PM, Joe Stringer wrote:
-> > Extend the bpf hashmap docs to include a brief description of the
-> > internals of the LRU map type (setting appropriate API expectations),
-> > including the original commit message from Martin and a variant on the
-> > graph that I had presented during my Linux Plumbers Conference 2022 tal=
-k
-> > on "Pressure feedback for LRU map types"[0].
-> >
-> > The node names in the dot file correspond roughly to the functions wher=
-e
-> > the logic for those decisions or steps is defined, to help curious
-> > developers to cross-reference and update this logic if the details of
-> > the LRU implementation ever differ from this description.
-> >
-> > [0]: https://lpc.events/event/16/contributions/1368/
-> >
-> > Signed-off-by: Joe Stringer <joe@isovalent.com>
-> > ---
-> > v3: Use standard table syntax
-> >      Replace inline commit message with reference to commit
-> >      Fix incorrect Y/N label for common LRU check
-> >      Rename some dotfile variables to reduce confusion between cases
-> >      Minor wording touchups
-> > v2: Fix issue that caused initial email submission to fail
-> > ---
-> >   Documentation/bpf/map_hash.rst            |  62 ++++++++
-> >   Documentation/bpf/map_lru_hash_update.dot | 166 +++++++++++++++++++++=
-+
-> >   2 files changed, 228 insertions(+)
-> >   create mode 100644 Documentation/bpf/map_lru_hash_update.dot
-> >
-> > diff --git a/Documentation/bpf/map_hash.rst b/Documentation/bpf/map_has=
-h.rst
-> > index 8669426264c6..61602ce26561 100644
-> > --- a/Documentation/bpf/map_hash.rst
-> > +++ b/Documentation/bpf/map_hash.rst
-> > @@ -1,5 +1,6 @@
-> >   .. SPDX-License-Identifier: GPL-2.0-only
-> >   .. Copyright (C) 2022 Red Hat, Inc.
-> > +.. Copyright (C) 2022-2023 Isovalent, Inc.
-> >
-> >   =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> >   BPF_MAP_TYPE_HASH, with PERCPU and LRU Variants
-> > @@ -206,3 +207,64 @@ Userspace walking the map elements from the map de=
-clared above:
-> >                       cur_key =3D &next_key;
-> >               }
-> >       }
-> > +
-> > +Internals
-> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > +
-> > +This section of the document is targeted at Linux developers and descr=
-ibes
-> > +aspects of the map implementations that are not considered stable ABI.=
- The
-> > +following details are subject to change in future versions of the kern=
-el.
-> > +
-> > +``BPF_MAP_TYPE_LRU_HASH`` and variants
-> > +--------------------------------------
-> > +
-> > +An LRU hashmap type consists of two properties: Firstly, it is a hash =
-map and
-> > +hence is indexable by key for constant time lookups. Secondly, when at=
- map
-> > +capacity, map updates will trigger eviction of old entries based on th=
-e age of
-> > +the elements in a set of lists. Each of these properties may be either=
- global
-> > +or per-CPU, depending on the map type and flags used to create the map=
-:
-> > +
-> > ++------------------------+---------------------------+----------------=
-------------------+
-> > +|                        | ``BPF_MAP_TYPE_LRU_HASH`` | ``BPF_MAP_TYPE_=
-LRU_PERCPU_HASH`` |
-> > ++=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+
-> > +| ``BPF_NO_COMMON_LRU``  | Per-CPU LRU, global map   | Per-CPU LRU, pe=
-r-cpu map         |
-> > ++------------------------+---------------------------+----------------=
-------------------+
-> > +| ``!BPF_NO_COMMON_LRU`` | Global LRU, global map    | Global LRU, per=
--cpu map          |
-> > ++------------------------+---------------------------+----------------=
-------------------+
-> > +
-> > +Notably, there are various steps that the update algorithm attempts in=
- order to
-> > +enforce the LRU property which have increasing impacts on other CPUs i=
-nvolved
-> > +in the following operation attempts:
-> > +
-> > +- Attempt to use CPU-local state to batch operations
-> > +- Attempt to fetch free nodes from global lists
-> > +- Attempt to pull any node from a global list and remove it from the h=
-ashmap
-> > +- Attempt to pull any node from any CPU's list and remove it from the =
-hashmap
-> > +
-> > +Even if an LRU node may be acquired, maps of type ``BPF_MAP_TYPE_LRU_H=
-ASH``
-> > +may fail to insert the entry into the map if other CPUs are heavily co=
-ntending
-> > +on the global hashmap lock.
+> Joe Stringer <joe@isovalent.com> writes:
 >
-> The global hashmap lock described here is the action taken in htab_lock_b=
-ucket()?
+> >> ...and if they do merit an exception, why would we prefer the full gri=
+d
+> >> format (which is harder to create and maintain) than the simple table
+> >> format?  Most of the time, the simple format can do what's needed, and=
+ I
+> >> don't think it's less readable.
+> >
+> > I'm not opinionated about grid format, I just picked one. But this is
+> > interesting - If simple table is the preferred format, then that
+> > sounds like the sort of detail that this docs page should communicate.
+> > For example:
 >
-> It is a percpu counter added in commit 20b6cc34ea74 ("bpf: Avoid hashtab
-> deadlock with map_locked") to avoid deadlock/recursion.
+> I think that either format is fine, both are readable.  I just
+> questioned whether we should push people toward the grid format, which
+> takes more effort to create, in the absence of a reason to do so.
 
-Hmm, yes that's the lock I had in mind. Thanks for the pointer, I
-didn't really understand the motivation for that case previously. That
-said, I now find it even harder to think of reasonable wording to
-describe in the ABI about how an eBPF program developer should reason
-about the -EBUSY failure case.
-
-> I would suggest to simplify the diagram by removing the "Can lock this ha=
-shtab
-> bucket?" details.
-
-I could swap that to instead have "Update hashmap with new element",
-then have two possible outcomes depending on whether that succeeds or
-not. I guess this is also similar to John's feedback above that in the
-end, EBUSY return code ends up being ABI for the helper. Does that
-make sense? One of my goals for the diagram was to at least capture
-the various return codes to assist readers in reasoning about the
-different failure modes.
-
-> Maybe a note somewhere to mention why it will still fail to
-> shrink the list because the htab_lock_bucket() have detected potential
-> deadlock/recursion which is a very unlikely case.
-
-I missed the "shrink the list" link here since it seems like this
-could happen for any combination of update or delete elems for the
-same bucket. But yeah given that also needs to happen on the same CPU,
-it does seem very unlikely... Could there be a case something like
-"userspace process is touching that bucket, gets interrupted, then the
-same CPU runs an eBPF program that attempts to update/delete elements
-in the same bucket"?
-
-Previously I had read this to think that EBUSY was the common case and
-ENOMEM is the uncommon case, but based on your pointers above I'm less
-convinced now, and more surprised that either failure would occur.
-Perhaps the failure I had hit was even later in the regular hashtab
-update logic. At the time of the incidents I was investigating, we
-unfortunately did not record which of the failure cases occurred so I
-don't have specific data to back up what we were experiencing. We have
-since added such reporting but I haven't received further information
-from the failure mode.
+Got it, thanks Jon. I'll spin a v2.
