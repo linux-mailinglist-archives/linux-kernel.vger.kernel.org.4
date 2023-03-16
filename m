@@ -2,83 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 116FA6BD72F
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 18:35:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33DEA6BD733
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 18:35:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229783AbjCPRe6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 13:34:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55192 "EHLO
+        id S229903AbjCPRfO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 13:35:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229903AbjCPRev (ORCPT
+        with ESMTP id S229978AbjCPRfK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 13:34:51 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BE785ADEE;
-        Thu, 16 Mar 2023 10:34:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=ZWCsXuEnx5NPHpKnprrXUTjLpix1zKrrJlc3ZEj5QZQ=; b=eZshu5PoYOFmhYfVeDH1ySCMbb
-        VkI0LmoRQng2JMFCroNhLnri1gdzRcxOo6i2qEYjto0yFHVM1YpN5mMvVD9uAEOQJfBop4fVucM32
-        aiPq9DFkUZqO+BMNj+4VTIzfwwTEm+XCuAyD/oBvOKctWlJl5cGIpsxBdOc7uqqsJTeMbD8dqabq9
-        jZbbuEWtB53VuQxyjrTbx/PABYlHTB8NlpD7iKdVB1zF+59VChK7ESu6Za0uCbDBUo9stnFJYSnZ7
-        QLuimxG/wuwQKmgDs5Llr7qXlNMi4KVPNT4KDyFnYWObHIG9pl0q8etPwfLbfDfNh4xWVC3sAD5jl
-        QWKFxWWg==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pcrUv-00F2M2-Of; Thu, 16 Mar 2023 17:34:41 +0000
-Date:   Thu, 16 Mar 2023 17:34:41 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Jiri Olsa <jolsa@kernel.org>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Hao Luo <haoluo@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        bpf@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Namhyung Kim <namhyung@gmail.com>,
-        Dave Chinner <david@fromorbit.com>
-Subject: Re: [PATCHv3 bpf-next 0/9] mm/bpf/perf: Store build id in file object
-Message-ID: <ZBNTMZjEoETU9d8N@casper.infradead.org>
-References: <20230316170149.4106586-1-jolsa@kernel.org>
+        Thu, 16 Mar 2023 13:35:10 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FBBE5ADEE;
+        Thu, 16 Mar 2023 10:35:06 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id o8so3377100lfo.0;
+        Thu, 16 Mar 2023 10:35:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678988104;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gnhFCQhBNxfLhUrYhX259W+4mdZ7p8Vvsqy+MR+7n/U=;
+        b=ojufyz2wPgU7klZNadkuIRAtRj+sPBF8DiwQapaEF2zGkxSa8XQOWQCNavWRqXwviX
+         ufB4uRP7uqTVLYCAMxM9DjPCqi5fdzP6oNVEoLKxgXtKr8hoU68vBDheiTpwAcWWhntR
+         X4EexODXJsYWsjrWPSSWoJTCVsa6EJkaLWgnmREY5fJ0TO49z8Rp1Y4DNJn9ThDXz4jd
+         zrw953BAai9eKmGTsIG11hq0dvwzQlFBaFQxLitPt88o2wkc9HGr1hsBHd7Df7KdgHZ9
+         JmQX8mUsO7pymWfhfG9FFTG1RAMPV0gAgsPg06lPYmS8X/xNm3pAc7x//vQJgGDarlqa
+         JhqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678988104;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gnhFCQhBNxfLhUrYhX259W+4mdZ7p8Vvsqy+MR+7n/U=;
+        b=DPFesosEkISqFN7u46EbWIzou+60cP7UOIOgKNxde9U8d8jjj7eeCjAp4tvmMB0sF4
+         4mBwbYt9DLFKdK+8SCddPNklBffVdqvrxLZXXrqb+6gVFOdLN+GhI+sVGZxZBbujbc9n
+         o6p64pWWi4Bk8Qv7Qk6ct0/Or8SMNtYJ1ZyrlS6FSvPHv3eJckuOHHHJbpBJorldwnPe
+         ca7ToelxJSQbdlWRcHI5Mt5mVF2gDdZEFfZ7joJzvXd6FNMotpZ1zS0EZ8MIdcbT+XqR
+         mLQfKCS2R+/wt1Sjm7pKLHY99nE1MmiUk73KV0LEJbWJKdzQ6ruLqiTpO/D69HqXuBYc
+         W9oQ==
+X-Gm-Message-State: AO0yUKUYgAlKowRWuPGe37j+p0j9gyq1gkyXX+Ub3tV/VwgGmDNrEJw9
+        fxiOHzfXucr8zQj/d0k1vR7GAQiGu6uZgqy9394=
+X-Google-Smtp-Source: AK7set/p69kqiC2JsEgTO7TwDmd3Ef1XvI/Jqx9vnW/ks51avK/hr2HElJf/qngwANy64A4E0MhMK3gzE13ySovjC1Q=
+X-Received: by 2002:ac2:5508:0:b0:4d5:ca32:6aea with SMTP id
+ j8-20020ac25508000000b004d5ca326aeamr3493440lfk.10.1678988104085; Thu, 16 Mar
+ 2023 10:35:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230316170149.4106586-1-jolsa@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230316181112.v3.1.I9113bb4f444afc2c5cb19d1e96569e01ddbd8939@changeid>
+In-Reply-To: <20230316181112.v3.1.I9113bb4f444afc2c5cb19d1e96569e01ddbd8939@changeid>
+From:   Luiz Augusto von Dentz <luiz.dentz@gmail.com>
+Date:   Thu, 16 Mar 2023 10:34:52 -0700
+Message-ID: <CABBYNZKwHtoSfTOb+1A-NGqePzkP-LD1A3Fyb32xTrF4Qzj-Jg@mail.gmail.com>
+Subject: Re: [PATCH v3] Bluetooth: mgmt: Fix MGMT add advmon with RSSI command
+To:     Howard Chung <howardchung@google.com>
+Cc:     linux-bluetooth@vger.kernel.org, marcel@holtmann.org,
+        chromeos-bluetooth-upstreaming@chromium.org,
+        Archie Pusaka <apusaka@chromium.org>,
+        Brian Gix <brian.gix@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 16, 2023 at 06:01:40PM +0100, Jiri Olsa wrote:
-> hi,
-> this patchset adds build id object pointer to struct file object.
-> 
-> We have several use cases for build id to be used in BPF programs
-> [2][3].
+Hi Howard,
 
-Yes, you have use cases, but you never answered the question I asked:
+On Thu, Mar 16, 2023 at 3:11=E2=80=AFAM Howard Chung <howardchung@google.co=
+m> wrote:
+>
+> The MGMT command: MGMT_OP_ADD_ADV_PATTERNS_MONITOR_RSSI uses variable
+> length argument. This causes host not able to register advmon with rssi.
 
-Is this going to be enabled by every distro kernel, or is it for special
-use-cases where only people doing a very specialised thing who are
-willing to build their own kernels will use it?
+There is a way to prevent these regression, which would be to actually
+implement tests for these commands in the likes of mgmt-tester so we
+can catch regressions via CI, so I hope to see some work in this
+direction.
 
-Saying "hubble/tetragon" doesn't answer that question.  Maybe it does
-to you, but I have no idea what that software is.
+> This patch has been locally tested by adding monitor with rssi via
+> btmgmt on a kernel 6.1 machine.
+>
+> Reviewed-by: Archie Pusaka <apusaka@chromium.org>
+> Fixes: b338d91703fa ("Bluetooth: Implement support for Mesh")
+> Signed-off-by: Howard Chung <howardchung@google.com>
+> ---
+>
+> Changes in v3:
+> - Moved commit-notes to commit message
+> - Fixed a typo
+>
+> Changes in v2:
+> - Fixed git user name
+> - Included commit notes for the test step.
+>
+>  net/bluetooth/mgmt.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/net/bluetooth/mgmt.c b/net/bluetooth/mgmt.c
+> index 39589f864ea7..249dc6777fb4 100644
+> --- a/net/bluetooth/mgmt.c
+> +++ b/net/bluetooth/mgmt.c
+> @@ -9357,7 +9357,8 @@ static const struct hci_mgmt_handler mgmt_handlers[=
+] =3D {
+>         { add_ext_adv_data,        MGMT_ADD_EXT_ADV_DATA_SIZE,
+>                                                 HCI_MGMT_VAR_LEN },
+>         { add_adv_patterns_monitor_rssi,
+> -                                  MGMT_ADD_ADV_PATTERNS_MONITOR_RSSI_SIZ=
+E },
+> +                                  MGMT_ADD_ADV_PATTERNS_MONITOR_RSSI_SIZ=
+E,
+> +                                               HCI_MGMT_VAR_LEN },
+>         { set_mesh,                MGMT_SET_MESH_RECEIVER_SIZE,
+>                                                 HCI_MGMT_VAR_LEN },
+>         { mesh_features,           MGMT_MESH_READ_FEATURES_SIZE },
+> --
+> 2.40.0.rc2.332.ga46443480c-goog
+>
 
-Put it another way: how does this make *MY* life better?  Literally me.
-How will it affect my life?
+
+--=20
+Luiz Augusto von Dentz
