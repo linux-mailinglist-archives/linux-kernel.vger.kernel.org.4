@@ -2,104 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 014456BD56C
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 17:22:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F5DE6BD56F
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 17:22:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229621AbjCPQWL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 12:22:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48136 "EHLO
+        id S229707AbjCPQWU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 12:22:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229758AbjCPQWJ (ORCPT
+        with ESMTP id S229734AbjCPQWM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 12:22:09 -0400
-Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30681A245
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 09:22:08 -0700 (PDT)
-Received: by mail-il1-x134.google.com with SMTP id w4so1311636ilv.0
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 09:22:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678983727;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=C5ZrXU5jgXQn0XVrjMqAH34ooe0I0t296BlYZYfw7/M=;
-        b=Chb6oQoh8mUKTNLuEotK+lThxeQcm8CoPjwUqm3iPvOa5WHhelRb0+Bw0I02u9Dsh9
-         agGkluTJv5fRZXCo9UED1KsfzyUTFPPo/zc0sz1jNC8Ha4w+m/S6F0HSEWEafG/5gKSO
-         9JzHtCQu0nBZV59PvFacUT2VPInysxhxttvEj1aT+flE5eWTEquhK/pwmASmwubORmaG
-         5+1zI4A8sL8bjbxuQqg+ZB3a6maQ3b7sc6BCGSCfvjcOIfx0tbW5Lgy0XuQYSMxSQD5A
-         ZsyGraZ0J7fve9RLZ6SqveyAgBLeA18PhLU84Ag71SkRWQfKu5h2i2KQBBLb1P0nOHML
-         QHkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678983727;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=C5ZrXU5jgXQn0XVrjMqAH34ooe0I0t296BlYZYfw7/M=;
-        b=aJvMshTTkAb8eORVlBE3zjgJ+NekkbfQ2iNX9yD2VsRJmBrIpy/gHyzwBaAtwIqDxZ
-         RbV+MFUNxUzgtg7VdTV0ipCwahfyVBKBq8PBLyyRJ4EERBf3Q5dk/DNTRLXoWsv/YWuw
-         ozIQ1A/eQXDEvGI6SQakwjxPwB2Q54vm1DSJspP1ZWVVVah5ohqbZulxdRxn2DN1QJbP
-         c9yIyIiygBOM5TEwcbCj86VSHIgRO94Sb43pC9Ec5eW8wuVCqW0oSMk0z1qGgKaMY7qK
-         pkh9sVMEmlQG5PxpEyqj3U/AHhyCPPks6PhsFoXvCLP2cr3EHAIG1DjN3YW/0CNLLGNy
-         VAIA==
-X-Gm-Message-State: AO0yUKVfMmtNanqGTqtqIcRY4V4elFEg66XTC7M2EkjWRnPqhRhV+xcD
-        kk5g4QDuAr5wGM0Mi9oybdL7cZEFeqxAUSMW/WQ=
-X-Google-Smtp-Source: AK7set9Viz5SN76AZjQDfA87+f54kGoZ6SUuWt2bNJJIFaLvzZg1iDGCXr//iVN7u2T0uCTF57PYYEKVzOHV+eQ1TV4=
-X-Received: by 2002:a05:6e02:d46:b0:310:9d77:6063 with SMTP id
- h6-20020a056e020d4600b003109d776063mr5090462ilj.5.1678983727537; Thu, 16 Mar
- 2023 09:22:07 -0700 (PDT)
+        Thu, 16 Mar 2023 12:22:12 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69F6D619B;
+        Thu, 16 Mar 2023 09:22:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1678983731; x=1710519731;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=iImao4I7FTxTgDMyeHkCyoDdECSP8/GLuTLheEeH1Rc=;
+  b=HCZIGs56BH/xIELvhCYXrzO/aATxC3qEmKgOvNwyXsc73IED84zO3DOj
+   Su9h5kwpj/Cimc/fVi0ZecfkX3B5eiBvD9yIx29jK703uIi6o0+XzUZ2v
+   abBJnP8DCXVROoJH1d15eKi4Kps/1+SmaBUz850hFcQberpBBUceL2wla
+   Kxzo/CTA/eW3YPZVCSiSIbunnTd0H8ScgeWGkTQpGGzCD/7yNq9NqDWrS
+   o6qlnbogRNbkQqZaUUdj0aokBRMtDsSWNCh3khgu5XsrA/tvqu5L707bw
+   gImcvKRcaNgn5rPJnSRp1c6dRuNRo5bNEvUP+0ncf/nCa8oN1D70ueiES
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.98,265,1673938800"; 
+   d="scan'208";a="202008008"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 16 Mar 2023 09:22:11 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Thu, 16 Mar 2023 09:22:10 -0700
+Received: from [10.171.246.59] (10.10.115.15) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server id 15.1.2507.21 via Frontend
+ Transport; Thu, 16 Mar 2023 09:22:08 -0700
+Message-ID: <ae8e8b61-b00a-1ec1-8212-7194c5ae4b30@microchip.com>
+Date:   Thu, 16 Mar 2023 17:22:07 +0100
 MIME-Version: 1.0
-Received: by 2002:a02:ccb8:0:b0:3df:457e:1a81 with HTTP; Thu, 16 Mar 2023
- 09:22:07 -0700 (PDT)
-Reply-To: enocvendor6777@gmail.com
-From:   " Emirates National Oil Company (ENOC)" <linhtranngoc516@gmail.com>
-Date:   Thu, 16 Mar 2023 09:22:07 -0700
-Message-ID: <CANCRbgKnOeyG-esSqWSp0=CUE0PqQ8reRnMM2QRAbbx5BA4zaQ@mail.gmail.com>
-Subject: Emirates National Oil Company (ENOC)
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:134 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [linhtranngoc516[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [linhtranngoc516[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [enocvendor6777[at]gmail.com]
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH net-next] net: macb: Increase halt timeout to accommodate
+ 10Mbps link
+Content-Language: en-US
+To:     Harini Katakam <harini.katakam@amd.com>, <davem@davemloft.net>,
+        <claudiu.beznea@microchip.com>, <kuba@kernel.org>,
+        <edumazet@google.com>, <pabeni@redhat.com>
+CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <michal.simek@amd.com>, <harinikatakamlinux@gmail.com>
+References: <20230316083050.2108-1-harini.katakam@amd.com>
+From:   Nicolas Ferre <nicolas.ferre@microchip.com>
+Organization: microchip
+In-Reply-To: <20230316083050.2108-1-harini.katakam@amd.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We are inviting your esteemed company for vendor registration and
-intending partners for Emirates National Oil Company (ENOC)
-2023/2024 projects.
-These projects are open for all companies around the world, if you
-have intention to participate in the process,
-please confirm your interest by contacting us through our official
-email address  project-ae@enocvendor-ea.com
-MR. Nasir Khalid
-Senior Project Manager
+On 16/03/2023 at 09:30, Harini Katakam wrote:
+> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+> 
+> From: Harini Katakam <harini.katakam@xilinx.com>
+> 
+> Increase halt timeout to accommodate for 16K SRAM at 10Mbps rounded.
+> 
+> Signed-off-by: Harini Katakam <harini.katakam@xilinx.com>
+> Signed-off-by: Michal Simek <michal.simek@xilinx.com>
+> Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
+
+Fine with me:
+Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
+Best regards,
+   Nicolas
+
+> ---
+>   drivers/net/ethernet/cadence/macb_main.c | 3 +--
+>   1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/cadence/macb_main.c b/drivers/net/ethernet/cadence/macb_main.c
+> index 51c9fd6f68a4..96fd2aa9ee90 100644
+> --- a/drivers/net/ethernet/cadence/macb_main.c
+> +++ b/drivers/net/ethernet/cadence/macb_main.c
+> @@ -94,8 +94,7 @@ struct sifive_fu540_macb_mgmt {
+>   /* Graceful stop timeouts in us. We should allow up to
+>    * 1 frame time (10 Mbits/s, full-duplex, ignoring collisions)
+>    */
+> -#define MACB_HALT_TIMEOUT      1230
+> -
+> +#define MACB_HALT_TIMEOUT      14000
+>   #define MACB_PM_TIMEOUT  100 /* ms */
+> 
+>   #define MACB_MDIO_TIMEOUT      1000000 /* in usecs */
+> --
+> 2.17.1
+> 
+
+-- 
+Nicolas Ferre
+
