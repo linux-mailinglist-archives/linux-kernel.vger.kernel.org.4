@@ -2,160 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5B4F6BDCAE
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 00:08:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB6606BDCB3
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 00:10:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230191AbjCPXIe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 19:08:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52586 "EHLO
+        id S230284AbjCPXJ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 19:09:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbjCPXIb (ORCPT
+        with ESMTP id S230319AbjCPXJw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 19:08:31 -0400
-Received: from mail-4324.protonmail.ch (mail-4324.protonmail.ch [185.70.43.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 481DA1B571;
-        Thu, 16 Mar 2023 16:08:30 -0700 (PDT)
-Date:   Thu, 16 Mar 2023 23:08:09 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail3; t=1679008107; x=1679267307;
-        bh=RdJwww2uvpzoysL9F0tXhEGT0GvPdq65lmBm2Zylcbg=;
-        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-         Message-ID:BIMI-Selector;
-        b=ZdWvBT0TeUg6A0ZKKr31UdOcYoYWLttR9awIs6+khWO/kZTZEtRiyk8roZFBBSABp
-         a6Yi18rswqADWNghtORfqRR4XtBUx0DVEIxEmhqjuLELmurEg0BxNrrcI/nNNdY+r1
-         KzNLD7CHdnOoFs7SV23uzxV3lqUmq9VdCb0G95+HV+9q18E5bzvKFpz+FbC6vsX3C+
-         ZTt4SrBN6fzBoo1S2XTZhXpY34cC1UWK8xfS27s1NJgpCdp2c9ff1P0kf46lRllphd
-         EGg9kF+b9ZuX/dohR1LWNo1RUnvUctyiPDpT9lngz1Cj8AZ0Ayr/gdgWvrHQWkvFyC
-         nqXKOK+E+TW2A==
-To:     Gary Guo <gary@garyguo.net>
-From:   y86-dev <y86-dev@protonmail.com>
-Cc:     "ojeda@kernel.org" <ojeda@kernel.org>,
-        "alex.gaynor@gmail.com" <alex.gaynor@gmail.com>,
-        "wedsonaf@gmail.com" <wedsonaf@gmail.com>,
-        "boqun.feng@gmail.com" <boqun.feng@gmail.com>,
-        "bjorn3_gh@protonmail.com" <bjorn3_gh@protonmail.com>,
-        "rust-for-linux@vger.kernel.org" <rust-for-linux@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "patches@lists.linux.dev" <patches@lists.linux.dev>
-Subject: Re: [PATCH v1 2/3] rust: add pin-init API
-Message-ID: <mtmuEYnjtcWcHUOLMmGQ35qZ6AhxE7bna6gGB4u1Ldh9MLvSdZT2xKL43LYy71MMNQbwEvkWmUkEOO3HiiNrIgmYvIVjDt1kBVxaBI23ERY=@protonmail.com>
-In-Reply-To: <20230316173848.18b45232.gary@garyguo.net>
-References: <D0mWM1KEcWLeFa7IIqPygHlXRTD6gRFHvJKaegYzQXo9zTx7YbSpVLeYLFfq53s2S30Wx7v0khkPMOy6Ng5HiNZ5x7TXtOyLB58vUHtq6ro=@protonmail.com> <20230315200722.57487341.gary@garyguo.net> <ct76zcR4JhAXHG90VDfewAmzPJmEHhMvvOf-MejsM_uZsdcsBs9qVLJNYvNvTHOBLlOedgQ4Dm16M2DSDRBIF-olZfq2zp4XboRsCxsm3CA=@protonmail.com> <20230316173848.18b45232.gary@garyguo.net>
-Feedback-ID: 40624463:user:proton
+        Thu, 16 Mar 2023 19:09:52 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B5F82069C;
+        Thu, 16 Mar 2023 16:09:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679008190; x=1710544190;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=UH68FltZn58LYhbziPJqYiYePEpTo7vpEi3kwULtdnI=;
+  b=BtsWUG1XRfc65DFGs/aK9+iFwTEmMh784ohtsvkCaxULYFl46oEK4i1R
+   23Roav25DUFOurvXGOJMt2X4ke4XIvgJw3K8wrbpJ7wmhqF7O7k5G0T18
+   +mBPW1r3jATtpUE3pHvVNsjcEhdvOxZ3lmrUaChsIGeqXwUx1VcN+uDPe
+   kVoSw0FcChYsPFn9z88XJZCjEQbWuOD+McGGRT5KXbFgCUmZvKsqjyW8m
+   a+aSFQOjsDIdVEc9lGQ5uR16Ytbp8HpF0dFelaHlbgqvlQ2+jC03W3DlZ
+   UeDRuYYIDgTwFjkodaziKl9yZ5yFjp4HjU4xlgdmpqYMErK1C2Xs2jhBH
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="400717989"
+X-IronPort-AV: E=Sophos;i="5.98,267,1673942400"; 
+   d="scan'208";a="400717989"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 16:09:49 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="925933479"
+X-IronPort-AV: E=Sophos;i="5.98,267,1673942400"; 
+   d="scan'208";a="925933479"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 16 Mar 2023 16:09:46 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pcwjB-0008sY-2t;
+        Thu, 16 Mar 2023 23:09:45 +0000
+Date:   Fri, 17 Mar 2023 07:08:50 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Zheng Wang <zyytlz.wz@163.com>, valentina.manea.m@gmail.com
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, hackerzheng666@gmail.com,
+        1395428693sheep@gmail.com, alex000young@gmail.com,
+        skhan@linuxfoundation.org, Zheng Wang <zyytlz.wz@163.com>
+Subject: Re: [PATCH v2] usbip: vudc: Fix use after free bug in vudc_remove
+ due to race condition
+Message-ID: <202303170604.MoMGMPvW-lkp@intel.com>
+References: <20230316180940.1601515-1-zyytlz.wz@163.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230316180940.1601515-1-zyytlz.wz@163.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thursday, March 16th, 2023 at 18:38, Gary Guo <gary@garyguo.net> wrote:
-> On Thu, 16 Mar 2023 09:38:16 +0000
-> y86-dev <y86-dev@protonmail.com> wrote:
->
-> > > > +
-> > > > +/// Trait facilitating pinned destruction.
-> > > > +///
-> > > > +/// Use [`pinned_drop`] to implement this trait safely:
-> > > > +///
-> > > > +/// ```rust
-> > > > +/// # use kernel::sync::Mutex;
-> > > > +/// use kernel::macros::pinned_drop;
-> > > > +/// use core::pin::Pin;
-> > > > +/// #[pin_data(PinnedDrop)]
-> > > > +/// struct Foo {
-> > > > +///     #[pin]
-> > > > +///     mtx: Mutex<usize>,
-> > > > +/// }
-> > > > +///
-> > > > +/// #[pinned_drop]
-> > > > +/// impl PinnedDrop for Foo {
-> > > > +///     fn drop(self: Pin<&mut Self>) {
-> > > > +///         pr_info!("Foo is being dropped!");
-> > > > +///     }
-> > > > +/// }
-> > > > +/// ```
-> > > > +///
-> > > > +/// # Safety
-> > > > +///
-> > > > +/// This trait must be implemented with [`pinned_drop`].
-> > > > +///
-> > > > +/// [`pinned_drop`]: kernel::macros::pinned_drop
-> > > > +pub unsafe trait PinnedDrop: __PinData {
-> > > > +    /// Executes the pinned destructor of this type.
-> > > > +    ///
-> > > > +    /// # Safety
-> > > > +    ///
-> > > > +    /// Only call this from `<Self as Drop>::drop`.
-> > > > +    unsafe fn drop(self: Pin<&mut Self>);
-> > > > +
-> > > > +    // Used by the `pinned_drop` proc-macro to ensure that only sa=
-fe operations are used in `drop`.
-> > > > +    // the function should not be called.
-> > > > +    #[doc(hidden)]
-> > > > +    fn __ensure_no_unsafe_op_in_drop(self: Pin<&mut Self>);
-> > >
-> > > One idea to avoid this extra function is to have an unsafe token to t=
-he
-> > > drop function.
-> > >
-> > > fn drop(self: Pin<&mut Self>, token: TokenThatCanOnlyBeCreatedUnsafel=
-y);
-> >
-> > What is wrong with having this extra function? If the problem is that t=
-his
-> > function might be called, then we could add a parameter with an
-> > unconstructable type.
-> >
-> > I think that `drop` should be `unsafe`, since it really does have
-> > the requirement of only being called in the normal drop impl.
->
-> The point to avoid having two functions with the same body. This would
-> require double the amount of checks needed by the compiler (and make
-> error message worth if anything's wrong in the body of `drop`).
->
-> This current approach is really just a hack to avoid code from doing
-> unsafe stuff without using `unsafe` block -- and the best solution is
-> just to avoid make `drop` function unsafe. However we don't want drop
-> function to be actually called from safe code, and that's the point of
-> a token that can only be created unsafely is force `drop` to *not* be
-> called by safe code. The token is a proof that `unsafe` is being used.
->
-> This way the `__ensure_no_unsafe_op_in_drop` function would not be
-> needed.
+Hi Zheng,
 
-That makes sense.
+Thank you for the patch! Yet something to improve:
 
-> > > > +// This trait is only implemented via the `#[pin_data]` proc-macro=
-. It is used to facilitate
-> > > > +// the pin projections within the initializers.
-> > > > +#[doc(hidden)]
-> > > > +pub unsafe trait __PinData {
-> > > > +    type __PinData;
-> > > > +}
-> > > > +
-> > > > +/// Stack initializer helper type. Use [`stack_pin_init`] instead =
-of this primitive.
-> > >
-> > > `#[doc(hidden)]`?
-> >
-> > This trait is implementation detail of the `#[pin_data]` macro. Why sho=
-uld
-> > it be visible in the rust-docs?
->
-> I am commenting about `stack_pin_init` (note the doc comment above my
-> comment). `StackInit` is an implementation detail of `stack_pin_init`
-> and shouldn't be exposed, IMO. Or do you think manual use of
-> `StackInit` is needed?
+[auto build test ERROR on usb/usb-testing]
+[also build test ERROR on usb/usb-next usb/usb-linus linus/master v6.3-rc2 next-20230316]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-I thought that it could be used by something else, but I will hide it for
-now.
+url:    https://github.com/intel-lab-lkp/linux/commits/Zheng-Wang/usbip-vudc-Fix-use-after-free-bug-in-vudc_remove-due-to-race-condition/20230317-021228
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+patch link:    https://lore.kernel.org/r/20230316180940.1601515-1-zyytlz.wz%40163.com
+patch subject: [PATCH v2] usbip: vudc: Fix use after free bug in vudc_remove due to race condition
+config: i386-randconfig-a015-20230313 (https://download.01.org/0day-ci/archive/20230317/202303170604.MoMGMPvW-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/46cc0947344ed93f7f1f4639209c5c6cce16fad3
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Zheng-Wang/usbip-vudc-Fix-use-after-free-bug-in-vudc_remove-due-to-race-condition/20230317-021228
+        git checkout 46cc0947344ed93f7f1f4639209c5c6cce16fad3
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/usb/usbip/
 
-Cheers,
-Benno
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303170604.MoMGMPvW-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/usb/usbip/vudc_dev.c:636:28: error: no member named 'timer' in 'struct vudc'
+           timer_shutdown_sync(&udc->timer);
+                                ~~~  ^
+   1 error generated.
+
+
+vim +636 drivers/usb/usbip/vudc_dev.c
+
+   631	
+   632	int vudc_remove(struct platform_device *pdev)
+   633	{
+   634		struct vudc *udc = platform_get_drvdata(pdev);
+   635	
+ > 636		timer_shutdown_sync(&udc->timer);
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
