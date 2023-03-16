@@ -2,422 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46C946BC4BD
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 04:31:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47C786BC4C8
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 04:36:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229978AbjCPDbC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 23:31:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46190 "EHLO
+        id S229596AbjCPDgh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 23:36:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229949AbjCPDaX (ORCPT
+        with ESMTP id S229534AbjCPDgg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 23:30:23 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2060.outbound.protection.outlook.com [40.107.220.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F089824BF4
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 20:29:09 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Q7n3l1LBoRHWhLKJflbomOpMRyooni9auW636AbBQYVM87arT+gKLhvum1MA7UMvqIIfFHTYJ7ZWSGCsfzjGEXd3UMShIPHSjfRriDImJaxAoFCuJZmKIrQJvtRiVXSH+UNEh2qsXy9sbFzLfa7XiFXaxr/5LRt2A39889uUBCZYmfonfJas+IpwQpuq2deomlj+8OTOP9tudSgFB5aspGHBkvX/JhSM9UOZDtr3rNncW9cK9f1ayOwFGkePPfRceS+kkPLWOa3p/sUy0KhgJoFhzX+nNom5VUBWoF5XLzGNZ8fmtIu+wsccRHl+UXVm17xxxcFwtj1UhlREYE7jFA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ftvKusX/n6vJoyeLh9pXEuJmhU9H/GaOr9vHNEA7TCg=;
- b=dTl6WjFkWux8CpO3hSCLJc6pQRZhdlpVlCba0ltZ99QAWWYJAPanaKOlcwX2Gv1JX6UU5uy2+ACC8P8WDM6LAXyqMXlrS3SwB+hkzfO5Oh3j5U0vHeMWyTLpMlZpri1fHyXEkZOAvZoj8+4h5xPdhg1Ht0GnPMsZmd1v08RaVZZt6BS4PoZlJ2gieMpMAtn/BOwtq7iArTy4WA9acBF6rtvmB7CT+1IMCI2PcBkDiRlwjzy9qvh/Y+o5g0GgA7IM4TMKJzBSOmhR1iTz4hyVY2mZNXIPQbgerFBRJH+aU4yQZVCGWwPzq/2QXvP6OOVYxpXzx3KPmLKNLydPDolYOA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ftvKusX/n6vJoyeLh9pXEuJmhU9H/GaOr9vHNEA7TCg=;
- b=v9AluxpG1bCywddcCWoPdA8YtaRIyxy384YNQ2nMirHcYettiXmAXQXx6ent/VvjDgfYuaKrv1XMcryxLa2MqnzeDHaynP19/X4k32HWe6dQ86HXIugpZLKFONguJP0XAnAcsEBhQ3trrjSEJ8ErjqrPpzLSSPE3F6yebnvvlt4=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM6PR12MB4123.namprd12.prod.outlook.com (2603:10b6:5:21f::23)
- by CO6PR12MB5474.namprd12.prod.outlook.com (2603:10b6:303:139::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.31; Thu, 16 Mar
- 2023 03:29:07 +0000
-Received: from DM6PR12MB4123.namprd12.prod.outlook.com
- ([fe80::e4f3:9509:c6ee:41cb]) by DM6PR12MB4123.namprd12.prod.outlook.com
- ([fe80::e4f3:9509:c6ee:41cb%3]) with mapi id 15.20.6178.024; Thu, 16 Mar 2023
- 03:29:07 +0000
-Message-ID: <d65dd890-e9c4-1d33-b738-5f805606691a@amd.com>
-Date:   Thu, 16 Mar 2023 09:02:54 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH V6 3/8] soundwire: amd: register SoundWire manager dai ops
-Content-Language: en-US
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     alsa-devel@alsa-project.org, pierre-louis.bossart@linux.intel.com,
-        Basavaraj.Hiregoudar@amd.com, Sunil-kumar.Dommati@amd.com,
-        Mario.Limonciello@amd.com, amadeuszx.slawinski@linux.intel.com,
-        Mastan.Katragadda@amd.com, Arungopal.kondaveeti@amd.com,
-        claudiu.beznea@microchip.com,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Sanyog Kale <sanyog.r.kale@intel.com>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20230307133135.545952-1-Vijendar.Mukunda@amd.com>
- <20230307133135.545952-4-Vijendar.Mukunda@amd.com> <ZBGWx4kR/eFLoz4q@matsya>
-From:   "Mukunda,Vijendar" <vijendar.mukunda@amd.com>
-In-Reply-To: <ZBGWx4kR/eFLoz4q@matsya>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PN3PR01CA0046.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:98::22) To DM6PR12MB4123.namprd12.prod.outlook.com
- (2603:10b6:5:21f::23)
+        Wed, 15 Mar 2023 23:36:36 -0400
+Received: from mail-vs1-xe29.google.com (mail-vs1-xe29.google.com [IPv6:2607:f8b0:4864:20::e29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A236E5A6F5
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 20:36:34 -0700 (PDT)
+Received: by mail-vs1-xe29.google.com with SMTP id v27so374119vsa.7
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 20:36:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1678937794;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=jyEmm6B81IYpOazKXaItaeJ9Lzpd2jizZengq+kwNYA=;
+        b=YT6efm96Eff03/tp7Mjn7li27NGznOTzErf7RgXiWK0zl9dtJe/miKDL9qyYs9ATMs
+         sJMOu8+QrEu0SKNwqSDj7gmHU8fzSWMyxKYr3ejlc6r3HFHvADip+5Nc9s6GVTCnu7DW
+         lz1aOOj51HQic8S7WSY8YdK+sH8fMMJ4lj7Z1gvlsbC7CfKb06jR9/hYL3ivXM2qFiig
+         fKtTD1TRjeJtaLQKWIVzAx1DYiWo9SqAwU9MGEtGuRb0+239hbLblWyB3afbGqMlIe65
+         schFowt9m8Fy2+Jr/Hds6tfWQ5HSzM+39WFOd5rdze6OqGUmxu9IyTJ6J5xJuyHhObSf
+         kkKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678937794;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jyEmm6B81IYpOazKXaItaeJ9Lzpd2jizZengq+kwNYA=;
+        b=ebO4ErioMSFGRX2R1fvu5d7/gxyLrKYxCrJFlayL4FqikjClXxFA+BJT3u7YjVD5Ln
+         Um36VnaDxdFutHHU7m7X0kdKovpiugJQ3dipcgz/8D8l5F2lCSYWS/qbJQ9DfenLhTdn
+         nDkCS1DJ5zMpCR9RdthiUqI38x+fxLUaJD+t5rbV90ZBH0Ln3A2qKOCK9UYcXumvnDre
+         ayEwZXoX7UhNn3jBPd2T1/owGWrwxcN3g8aVyYjC7Z4UgGSUTdC2V+DxQx2nU4MN0IeS
+         N7N9vqq62VUqsPJoXzkSa9LEIiLlKrN1eEBAhf/+M7opFVj9A5+WvL09JfKMKAHbCojs
+         sVTQ==
+X-Gm-Message-State: AO0yUKVCBRKOeiqIcOLAM4/YHObva8ovxWaT9BW4DXNwyJ2RnjVy3ifZ
+        ouDSRlOi5WVILHkYMOIDv/afbkecZO7dqQK7YaXKVJCg3PL926SWPOM7BQ==
+X-Google-Smtp-Source: AK7set8TiXK3p8I3EjglHW1NF1uK55sBs3C2dvjrsHFypim38FSpKwuJ1zp43KXWOkKxFrc+ss7CikmPwYJzLmId1k0=
+X-Received: by 2002:a67:fd7a:0:b0:416:f1ea:1001 with SMTP id
+ h26-20020a67fd7a000000b00416f1ea1001mr27946120vsa.5.1678937793674; Wed, 15
+ Mar 2023 20:36:33 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR12MB4123:EE_|CO6PR12MB5474:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7825e413-7977-4e05-62b7-08db25ce9953
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: LwlPQglskbB3p4ZK5leSTN68Ir4cSD3gv9rgJP18qUvGfZbpJu3BAuvnOagGn6liY/Vr9RsHtU7ashigLmwo2XZRAMUIPeQFLtaBobED9NW15H1htlj3MtrZDXAubEMQMyYStI+wdqtogO6x2GMx5qsomNjOaetApKjW+gDUBnPvbn6YCEgcOX3OCGk+z3pa7ePa0FRW8gqbS6aqGuYG5UP11lrg4RlOSVPDee6bc5q0b6IX4rECC+l19WmlV6sO2lVUPLl/z07YpRCQmaNngLHzTiRheku+6yOyWxFDVKcdu6KZPnqSJ+ERoT6RmIhcEBTBZjtnV1n8/GrrUTFsU5st+gFFqk4HSH/eu3TjyYJrGuLAfNgkd4lsxljB89aJ3HreMFJTsUSLs29iakLDgKblOjh5xJOiItMt32+/3FfeG7g8aLGNtU5oKVfB5fxSvHGVcE2of02gpF7oU6OiHXRBamR8EKSBYZWskIqGFVoQNb5VpPtx1GqajkpjmAiUKg5KPGrmuWA/ZEnFHD2mxYuJNOZ9+NArGPdUga6vRMZcLUtU+Wt9Fqh7NpFeeR2mGfFrqq+GcF6zQqIs/+yNRGENFRbPfTgT5lBFb7lBKK71x0enBNlK+WyxRR+vI1tB8ndTAhliD17QzzYoGga5zFhLiG/5V8F6GOeti+pM9zv+k8JIS8WP274SdXIRZoJobcrx0j10THQnKToInoXmA4Lb6+AKyfHFuaRv0JVZWO8=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB4123.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(346002)(136003)(39860400002)(396003)(366004)(451199018)(8936002)(5660300002)(41300700001)(4326008)(6916009)(31696002)(36756003)(86362001)(38100700002)(2906002)(8676002)(6486002)(966005)(6666004)(83380400001)(478600001)(186003)(2616005)(6512007)(6506007)(26005)(53546011)(31686004)(66946007)(66556008)(54906003)(66476007)(316002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Tzl1SU5SS1lhSDRBSjBFcnpCZmdPUzgxWWhsZXdZZHFTZjdNV3dsaWdxZnVk?=
- =?utf-8?B?TGZXZDNxTHR1TDJYejVkbFMxamIyMGVhaSsyOThFNVd6dVVWalNNenVNMG1K?=
- =?utf-8?B?NFRUNWJaWnltRE8xc1ExMElmbThpVGhsakNJbUQ2YlRoaHhOZjhZK041S3FQ?=
- =?utf-8?B?Z29qemlzTk5aOTRmeHRFeU0zYncycldUK1J1T3VidzBhZmxpVmdoTDg1SlpJ?=
- =?utf-8?B?NDdMRlNqcUNWNVJRV1BVNm5SS2o1TDNwMWNvUWNNVzZDMURkNHB6V2gwelhx?=
- =?utf-8?B?bm5GMmcxdytyVEJFanRvQVAxdXhFeGxGTlRzdGs0d1RPS0FrcmtlVTBDcG1j?=
- =?utf-8?B?MzZNenJmY0Z4RlRnUDZhdm16VG9ST3lFbHRNWVVnYnBrVGxCQWtlSTA5KzJU?=
- =?utf-8?B?NFF4SVc0L2xtVW8rVGtXMjR4RGF2cHhLQTZuMmlEeHp2TFM3aHBRWUVYRlFD?=
- =?utf-8?B?cDFSTVcvSVpBQWdXUjhWS1l1ckh5c0RXR3hqVkZtOGhFUkxySXlCZXRXc2lh?=
- =?utf-8?B?Sm5oRlB0K1c1V1hFekVPdk5yOTZycEQ5SmY3ZDNGaWpjZUVOeVN6cEhoV0Yw?=
- =?utf-8?B?clFZblJldHF4OHd4WDNtNVVrMjZhcTRqSW9Kci9HKy9ucGJmQVNkblQ4eEI3?=
- =?utf-8?B?VUVqUlpZVnNXKzVUMDJ6Z3VNYjBTYjBIbGxLUGJWQTBFcm5jd0wzWHk4Mjk1?=
- =?utf-8?B?c1pIYk1JQkg4UnlWclg2ZWhZTXJvcWwxZEFZckRJTFB6QTdrSzRBNGgxM0lN?=
- =?utf-8?B?bGI5eEFhVDhjc0Rad3BISkMycVdmR0RQakg3Y0RTOGZnWUtkOWtEUjZoRzlZ?=
- =?utf-8?B?dlFlWHBOUjVrMDJQNm0yTlNwUXJmK2F6VC95eC9vSGJjQ1FYWndjc0hwRnhS?=
- =?utf-8?B?OWlyeFhyYXV2a29LVnVFa1R2VHFlaEhCNjIrYWZRa0ljQVpSVWs1M2Z6QWVY?=
- =?utf-8?B?TWpDQXBCWC9IY2k5NUI5L1U3NTN4RnFDZVVPZldQdnJheTh1TGVsVjMxSTB2?=
- =?utf-8?B?b3Q5bnZobXhwT0VIdUJ2MnJ4WVl1L3F5S3EwQlFQQStLajM5b05LM2pYbGEv?=
- =?utf-8?B?eVdQVE1xTE93ZlJZTzdzNXIyeHVzaDIwbFBQbGlJR0dvR2xRUGh0UWZrN1NB?=
- =?utf-8?B?MFA5K01IWHlMK3BoR3pBTXFzUTMxdkJMVStPM2xNckt4OEQ1eXpKUEdYVGI3?=
- =?utf-8?B?QVpDbEtnWmMrcUpnanhTb1MySkVsb01aRFAvWVhnNEFoVTR3dHBhQitrTmdq?=
- =?utf-8?B?ejZ4SHVzTkhjVG5zd1dIWWROSmtHUmVDVzRhWE12L1ZuT2VacFF0Y0dCWTB1?=
- =?utf-8?B?aVAxTXhQSEJQdzJOZkViMUhtTDhxYVJjc2V4M1o5YW8yVVpqci9ldmdwVkZX?=
- =?utf-8?B?aUp6VlJjd2haaklFS0hQZzlnNzBDT2g2N1VRNnpIZmh6NHIyVEUwWVpkc2Q0?=
- =?utf-8?B?VTg2MkpyVGtpR0l4T29ERytVWXo3OXNkRUdWZVNNVVdhRFpQd2hmUVJKaEdN?=
- =?utf-8?B?WlVjY3RWTzY4TWRvZmt6Nm92YTBWV242eG5PU1RTN1FMRWxSbSt2M3RhSmdK?=
- =?utf-8?B?UVpZMXNkc1pHVHc2dG9MZ293SkdxZ1g5R1hMMlZoZXM4YnB1ZDE1OU9wTGRX?=
- =?utf-8?B?VXd0UXhXbGF2R1BFS0k4SzE0ZjNBclU0VE9yU3JGMHo2TUNNSDNjaytlVHdE?=
- =?utf-8?B?NHdnbnlVZW9pajBHdDBXdDhMUk40SHdzSGdjVkhJbWxoaDhJMkJjZnhOOE80?=
- =?utf-8?B?U0haK011UTFMeE9QK203YUh2aE5pNm1vMkNLQjFvc29abENZR1IzNE5TalQ2?=
- =?utf-8?B?aHJhY3hjZSt2SHpLQ3huY0tzOGM0Ym1Xek5SSEk0ZzI5TnM0UE1PbkZqeVJj?=
- =?utf-8?B?cHhORzRadkE4MlVlNFJrU2lXSm45L094RDdSWjdqc0JuTGVFUWJMejRLRjFN?=
- =?utf-8?B?YTNBMHh2K1M1NkFjejVYWVFxUk1YUEdPc3FvOU9UVmt0YzRVOWlZYlBZMTVO?=
- =?utf-8?B?NlFQdnNLMmhhTSs5NUM3ekI5QVF6VTZxZGcvN09EblhwTkxCVTBLV1ZNUDhm?=
- =?utf-8?B?elNJM0ZIWjBPckFQODNnTXF3bFEySTdZS2ZNWXV4eGVpb3RsNHRMeGFJVUgx?=
- =?utf-8?Q?Vfonf5nqeLCK5sDCSDgeMdFkG?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7825e413-7977-4e05-62b7-08db25ce9953
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB4123.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Mar 2023 03:29:07.3145
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: fatzE/A9YrqWwtIr6yukWbg+ne6x6FOAxzU+nWZ4YyEa6QXxzPZUjRasF5oYR58PaBUtrluAE6r1f723tI3D+A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO6PR12MB5474
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230315233925.2416516-1-sboyd@kernel.org>
+In-Reply-To: <20230315233925.2416516-1-sboyd@kernel.org>
+From:   David Gow <davidgow@google.com>
+Date:   Thu, 16 Mar 2023 11:36:21 +0800
+Message-ID: <CABVgOSn9n+b-oD72yPiYXW8=ZnPt5xcgtAwWqgSah4hTh1mg=w@mail.gmail.com>
+Subject: Re: [PATCH] kunit: Use gfp in kunit_alloc_resource() kernel-doc
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="000000000000cfa70805f6fc2a66"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/03/23 15:28, Vinod Koul wrote:
-> On 07-03-23, 19:01, Vijendar Mukunda wrote:
->> Register dai ops for SoundWire manager instances.
->>
->> Signed-off-by: Vijendar Mukunda <Vijendar.Mukunda@amd.com>
->> Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
->> Link: https://lore.kernel.org/lkml/20230227154801.50319-4-Vijendar.Mukunda@amd.com
->> ---
->>  drivers/soundwire/amd_manager.c   | 182 ++++++++++++++++++++++++++++++
->>  drivers/soundwire/amd_manager.h   |  18 +++
->>  include/linux/soundwire/sdw_amd.h |  18 +++
->>  3 files changed, 218 insertions(+)
->>
->> diff --git a/drivers/soundwire/amd_manager.c b/drivers/soundwire/amd_manager.c
->> index a5cf6acd936c..dd7fd4036d89 100644
->> --- a/drivers/soundwire/amd_manager.c
->> +++ b/drivers/soundwire/amd_manager.c
->> @@ -581,6 +581,182 @@ static const struct sdw_master_ops amd_sdw_ops = {
->>  	.read_ping_status = amd_sdw_read_ping_status,
->>  };
->>  
->> +static int amd_sdw_hw_params(struct snd_pcm_substream *substream,
->> +			     struct snd_pcm_hw_params *params,
->> +			     struct snd_soc_dai *dai)
->> +{
->> +	struct amd_sdw_manager *amd_manager = snd_soc_dai_get_drvdata(dai);
->> +	struct sdw_amd_dai_runtime *dai_runtime;
->> +	struct sdw_stream_config sconfig;
->> +	struct sdw_port_config *pconfig;
->> +	int ch, dir;
->> +	int ret;
->> +
->> +	dai_runtime = amd_manager->dai_runtime_array[dai->id];
->> +	if (!dai_runtime)
->> +		return -EIO;
->> +
->> +	ch = params_channels(params);
->> +	if (substream->stream == SNDRV_PCM_STREAM_CAPTURE)
->> +		dir = SDW_DATA_DIR_RX;
->> +	else
->> +		dir = SDW_DATA_DIR_TX;
->> +	dev_dbg(amd_manager->dev, "dir:%d dai->id:0x%x\n", dir, dai->id);
->> +
->> +	sconfig.direction = dir;
->> +	sconfig.ch_count = ch;
->> +	sconfig.frame_rate = params_rate(params);
->> +	sconfig.type = dai_runtime->stream_type;
->> +
->> +	sconfig.bps = snd_pcm_format_width(params_format(params));
->> +
->> +	/* Port configuration */
->> +	pconfig = kzalloc(sizeof(*pconfig), GFP_KERNEL);
->> +	if (!pconfig) {
->> +		ret =  -ENOMEM;
->> +		goto error;
->> +	}
->> +
->> +	pconfig->num = dai->id;
->> +	pconfig->ch_mask = (1 << ch) - 1;
->> +	ret = sdw_stream_add_master(&amd_manager->bus, &sconfig,
->> +				    pconfig, 1, dai_runtime->stream);
->> +	if (ret)
->> +		dev_err(amd_manager->dev, "add manager to stream failed:%d\n", ret);
->> +
->> +	kfree(pconfig);
->> +error:
->> +	return ret;
->> +}
->> +
->> +static int amd_sdw_hw_free(struct snd_pcm_substream *substream, struct snd_soc_dai *dai)
->> +{
->> +	struct amd_sdw_manager *amd_manager = snd_soc_dai_get_drvdata(dai);
->> +	struct sdw_amd_dai_runtime *dai_runtime;
->> +	int ret;
->> +
->> +	dai_runtime = amd_manager->dai_runtime_array[dai->id];
->> +	if (!dai_runtime)
->> +		return -EIO;
->> +
->> +	ret = sdw_stream_remove_master(&amd_manager->bus, dai_runtime->stream);
->> +	if (ret < 0)
->> +		dev_err(dai->dev, "remove manager from stream %s failed: %d\n",
->> +			dai_runtime->stream->name, ret);
->> +	return ret;
->> +}
->> +
->> +static int amd_set_sdw_stream(struct snd_soc_dai *dai, void *stream, int direction)
->> +{
->> +	struct amd_sdw_manager *amd_manager = snd_soc_dai_get_drvdata(dai);
->> +	struct sdw_amd_dai_runtime *dai_runtime;
->> +
->> +	dai_runtime = amd_manager->dai_runtime_array[dai->id];
->> +	if (stream) {
->> +		/* first paranoia check */
->> +		if (dai_runtime) {
->> +			dev_err(dai->dev,
->> +				"dai_runtime already allocated for dai %s\n",
->> +				dai->name);
-> single line would look better
-will fix it.
->
->> +			return -EINVAL;
->> +		}
->> +
->> +		/* allocate and set dai_runtime info */
->> +		dai_runtime = kzalloc(sizeof(*dai_runtime), GFP_KERNEL);
->> +		if (!dai_runtime)
->> +			return -ENOMEM;
->> +
->> +		dai_runtime->stream_type = SDW_STREAM_PCM;
->> +		dai_runtime->bus = &amd_manager->bus;
->> +		dai_runtime->stream = stream;
->> +		amd_manager->dai_runtime_array[dai->id] = dai_runtime;
->> +	} else {
->> +		/* second paranoia check */
->> +		if (!dai_runtime) {
->> +			dev_err(dai->dev,
->> +				"dai_runtime not allocated for dai %s\n",
->> +				dai->name);
->> +			return -EINVAL;
->> +		}
->> +
->> +		/* for NULL stream we release allocated dai_runtime */
->> +		kfree(dai_runtime);
->> +		amd_manager->dai_runtime_array[dai->id] = NULL;
->> +	}
->> +	return 0;
->> +}
->> +
->> +static int amd_pcm_set_sdw_stream(struct snd_soc_dai *dai, void *stream, int direction)
->> +{
->> +	return amd_set_sdw_stream(dai, stream, direction);
->> +}
->> +
->> +static void *amd_get_sdw_stream(struct snd_soc_dai *dai, int direction)
->> +{
->> +	struct amd_sdw_manager *amd_manager = snd_soc_dai_get_drvdata(dai);
->> +	struct sdw_amd_dai_runtime *dai_runtime;
->> +
->> +	dai_runtime = amd_manager->dai_runtime_array[dai->id];
->> +	if (!dai_runtime)
->> +		return ERR_PTR(-EINVAL);
->> +
->> +	return dai_runtime->stream;
->> +}
->> +
->> +static const struct snd_soc_dai_ops amd_sdw_dai_ops = {
->> +	.hw_params = amd_sdw_hw_params,
->> +	.hw_free = amd_sdw_hw_free,
->> +	.set_stream = amd_pcm_set_sdw_stream,
->> +	.get_stream = amd_get_sdw_stream,
->> +};
->> +
->> +static const struct snd_soc_component_driver amd_sdw_dai_component = {
->> +	.name = "soundwire",
->> +};
->> +
->> +static int amd_sdw_register_dais(struct amd_sdw_manager *amd_manager)
->> +{
->> +	struct sdw_amd_dai_runtime **dai_runtime_array;
->> +	struct snd_soc_dai_driver *dais;
->> +	struct snd_soc_pcm_stream *stream;
->> +	struct device *dev;
->> +	int i, num_dais;
->> +
->> +	dev = amd_manager->dev;
->> +	num_dais = amd_manager->num_dout_ports + amd_manager->num_din_ports;
->> +	dais = devm_kcalloc(dev, num_dais, sizeof(*dais), GFP_KERNEL);
->> +	if (!dais)
->> +		return -ENOMEM;
->> +
->> +	dai_runtime_array = devm_kcalloc(dev, num_dais,
->> +					 sizeof(struct sdw_amd_dai_runtime *),
->> +					 GFP_KERNEL);
->> +	if (!dai_runtime_array)
->> +		return -ENOMEM;
->> +	amd_manager->dai_runtime_array = dai_runtime_array;
->> +	for (i = 0; i < num_dais; i++) {
->> +		dais[i].name = devm_kasprintf(dev, GFP_KERNEL, "SDW%d Pin%d", amd_manager->instance,
->> +					      i);
->> +		if (!dais[i].name)
->> +			return -ENOMEM;
->> +		if (i < amd_manager->num_dout_ports)
->> +			stream = &dais[i].playback;
->> +		else
->> +			stream = &dais[i].capture;
->> +
->> +		stream->channels_min = 2;
->> +		stream->channels_max = 2;
->> +		stream->rates = SNDRV_PCM_RATE_48000;
->> +		stream->formats = SNDRV_PCM_FMTBIT_S16_LE;
->> +
->> +		dais[i].ops = &amd_sdw_dai_ops;
->> +		dais[i].id = i;
->> +	}
->> +
->> +	return devm_snd_soc_register_component(dev, &amd_sdw_dai_component,
->> +					       dais, num_dais);
->> +}
->> +
->>  static void amd_sdw_probe_work(struct work_struct *work)
->>  {
->>  	struct amd_sdw_manager *amd_manager = container_of(work, struct amd_sdw_manager,
->> @@ -664,6 +840,12 @@ static int amd_sdw_manager_probe(struct platform_device *pdev)
->>  		dev_err(dev, "Failed to register SoundWire manager(%d)\n", ret);
->>  		return ret;
->>  	}
->> +	ret = amd_sdw_register_dais(amd_manager);
->> +	if (ret) {
->> +		dev_err(dev, "CPU DAI registration failed\n");
->> +		sdw_bus_master_delete(&amd_manager->bus);
->> +		return ret;
->> +	}
->>  	dev_set_drvdata(dev, amd_manager);
->>  	INIT_WORK(&amd_manager->probe_work, amd_sdw_probe_work);
->>  	/*
->> diff --git a/drivers/soundwire/amd_manager.h b/drivers/soundwire/amd_manager.h
->> index 0d4b8653877e..cad26034087b 100644
->> --- a/drivers/soundwire/amd_manager.h
->> +++ b/drivers/soundwire/amd_manager.h
->> @@ -204,6 +204,24 @@ struct sdw_manager_dp_reg {
->>  	u32 lane_ctrl_ch_en_reg;
->>  };
->>  
->> +/*
->> + * SDW0 Manager instance registers  6 CPU DAI (3 TX & 3 RX Ports)
->> + * whereas SDW1  Manager Instance registers 2 CPU DAI (one TX & one RX port)
->> + * Below is the CPU DAI <->Manager port number mapping
->> + * i.e SDW0 Pin0 -> port number 0 -> AUDIO0 TX
->> + *     SDW0 Pin1 -> Port number 1 -> AUDIO1 TX
->> + *     SDW0 Pin2 -> Port number 2 -> AUDIO2 TX
->> + *     SDW0 Pin3 -> port number 3 -> AUDIO0 RX
->> + *     SDW0 Pin4 -> Port number 4 -> AUDIO1 RX
->> + *     SDW0 Pin5 -> Port number 5 -> AUDIO2 RX
->> + *  Whereas for SDW1 instance
->> + *  SDW1 Pin0 -> port number 0 -> AUDIO1 TX
->> + *  SDW1 Pin1 -> Port number 1 -> AUDIO1 RX
->> + *  Same mapping should be used for programming DMA controller registers in SoundWire DMA driver.
->> + * i.e if AUDIO0 TX channel is selected then we need to use AUDIO0 TX registers for DMA programming
->> + * in SoundWire DMA driver.
->> + */
->> +
->>  static struct sdw_manager_dp_reg sdw0_manager_dp_reg[AMD_SDW0_MAX_DAI] =  {
->>  	{ACP_SW_AUDIO0_TX_FRAME_FORMAT, ACP_SW_AUDIO0_TX_SAMPLEINTERVAL, ACP_SW_AUDIO0_TX_HCTRL_DP0,
->>  	 ACP_SW_AUDIO0_TX_OFFSET_DP0, ACP_SW_AUDIO0_TX_CHANNEL_ENABLE_DP0},
->> diff --git a/include/linux/soundwire/sdw_amd.h b/include/linux/soundwire/sdw_amd.h
->> index c14a291a40e8..ac537419301d 100644
->> --- a/include/linux/soundwire/sdw_amd.h
->> +++ b/include/linux/soundwire/sdw_amd.h
->> @@ -23,6 +23,21 @@ struct sdw_manager_reg_mask {
->>  	u32 acp_sdw_intr_mask;
->>  };
->>  
->> +/**
->> + * struct sdw_amd_dai_runtime: AMD sdw dai runtime  data
->> + *
->> + * @name: SoundWire stream name
->> + * @stream: stream runtime
->> + * @bus: Bus handle
->> + * @stream_type: Stream type
->> + */
->> +struct sdw_amd_dai_runtime {
->> +	char *name;
->> +	struct sdw_stream_runtime *stream;
->> +	struct sdw_bus *bus;
->> +	enum sdw_stream_type stream_type;
->> +};
->> +
->>  /**
->>   * struct amd_sdw_manager - amd manager driver context
->>   * @bus: bus handle
->> @@ -40,6 +55,7 @@ struct sdw_manager_reg_mask {
->>   * @quirks: SoundWire manager quirks
->>   * @wake_en_mask: wake enable mask per SoundWire manager
->>   * @power_mode_mask: flag interprets amd SoundWire manager power mode
->> + * @dai_runtime_array: dai runtime array
->>   */
->>  struct amd_sdw_manager {
->>  	struct sdw_bus bus;
->> @@ -63,5 +79,7 @@ struct amd_sdw_manager {
->>  	u32 quirks;
->>  	u32 wake_en_mask;
->>  	u32 power_mode_mask;
->> +
->> +	struct sdw_amd_dai_runtime **dai_runtime_array;
->>  };
->>  #endif
->> -- 
->> 2.34.1
+--000000000000cfa70805f6fc2a66
+Content-Type: text/plain; charset="UTF-8"
 
+On Thu, 16 Mar 2023 at 07:39, Stephen Boyd <sboyd@kernel.org> wrote:
+>
+> Copy/pasting the code from the kernel-doc here doesn't compile because
+> kunit_alloc_resource() takes a gfp flags argument. Pass the gfp
+> argument from the caller to complete the example.
+>
+> Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+> ---
+
+Nice catch!
+
+Reviewed-by: David Gow <davidgow@google.com>
+
+Cheers,
+-- David
+
+>  include/kunit/resource.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/include/kunit/resource.h b/include/kunit/resource.h
+> index cf6fb8f2ac1b..c0d88b318e90 100644
+> --- a/include/kunit/resource.h
+> +++ b/include/kunit/resource.h
+> @@ -72,7 +72,7 @@ typedef void (*kunit_resource_free_t)(struct kunit_resource *);
+>   *             params.gfp = gfp;
+>   *
+>   *             return kunit_alloc_resource(test, kunit_kmalloc_init,
+> - *                     kunit_kmalloc_free, &params);
+> + *                     kunit_kmalloc_free, gfp, &params);
+>   *     }
+>   *
+>   * Resources can also be named, with lookup/removal done on a name
+>
+> base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
+> --
+> https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git/
+> https://git.kernel.org/pub/scm/linux/kernel/git/sboyd/spmi.git
+>
+
+--000000000000cfa70805f6fc2a66
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
+IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
+dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
+6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
+c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
+I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
+AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
+BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
+CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
+AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
+MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
+My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
+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
+64VRg2IjDI2fJVE9RD6aMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
+dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
+AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
+c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
+LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
+LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
+Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQA2lZLYRLu7foeR
+cHo1VeNA974FZBiCm08Kd44/aCMEzdTJvxAE9xbUJf7hS1i6eW49qxuSp3/YLn6U7uatwAcmZcwp
+Zma19ftf3LH+9Hvffk+X8fbPKe6uHkJhR2LktrhRzF159jj67NvXyGQv8J4n7UNeEVP0d5ByvRwv
+tF2bJwlOwRGLoxasKSyDHIyUpwTfWYPq7XvjoGqQ/tDS7Khcc5WncJl0/ZEj7EKjtoGbsDbLdXEF
+m/6vdcYKJzF9ghHewtV3YIU4RE3pEM4aCWWRtJwbExzeue6fI7RqURbNCAyQuSpWv0YQvzsX3ZX3
+c1otrs50n1N0Sf8/rfJxq7sWMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
+R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
+MDIwAhABxy1wm0tAmHKHFkLS9RWPMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCA0
+7ksPCT/k+hAcs7HDKlxI80naFa8I9oH2kFouIXwnpzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMzAzMTYwMzM2MzNaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEArJcnlncEbX2D9weeOVxj
+fL/NYvIqU/c+QlhAYWWIVCIhFO3zzLaFXQz1fQYX/4z6s5q3qq/jQnLxhZnvC+kX0OxrW/N+CN+z
+MuUD4gVRi+RgceLmLenb7/WERhSF8JPMhX/IYEkk9eMJhyXrPNYFnegUYRq6+MXBL48//MILz9Mc
+NYl2qeKfyyLEvTCsYeVagKxn2W2VZ1AXp9i/vbw5sk94UiPxmFHQ+2mH4DnWy0orR290KGG+3oAc
+8AhRys7cAF4KtMREMjwXp6/BhfW2cREwx8fple70hHabbE6qo1uVUnWJEHqERKuvT6/APk1TittS
+0VWLjbTy16jwS8nNRg==
+--000000000000cfa70805f6fc2a66--
