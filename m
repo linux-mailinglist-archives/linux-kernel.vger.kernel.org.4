@@ -2,183 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B06A76BC748
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 08:34:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A52E16BC746
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 08:33:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230147AbjCPHeJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 03:34:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45796 "EHLO
+        id S229542AbjCPHdj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 03:33:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229747AbjCPHeH (ORCPT
+        with ESMTP id S229801AbjCPHdg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 03:34:07 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B99E85B28;
-        Thu, 16 Mar 2023 00:33:24 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1pci69-0003AG-P4; Thu, 16 Mar 2023 08:32:29 +0100
-Message-ID: <c5e18ae6-52c5-0d95-b6c1-a1b59508cb79@leemhuis.info>
-Date:   Thu, 16 Mar 2023 08:32:29 +0100
+        Thu, 16 Mar 2023 03:33:36 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CC9E87A0C;
+        Thu, 16 Mar 2023 00:32:51 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id e15-20020a17090ac20f00b0023d1b009f52so4443780pjt.2;
+        Thu, 16 Mar 2023 00:32:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678951970;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=mcPnUDp2uPpFN6qrWcVm3iA+36dQ0Mwojauq/GYuGW4=;
+        b=ZaZ3pYmrfSmhTMW5BBDjL1MqZX7hSqr6gXshR3sAa4llWu6OeqbDC/ByJgP93L7nS1
+         uw9j2oJjD6Z4J/DtUEUZEuZ3w2Z8RvAU8qFlhP6ACpNNa/YuSs5B/TMXKhuMY4lnl3HL
+         wo+q6GQLL24y6XPzI/qNTHGz17K3C+MSKhmGpRntuSpAygK53xocuOkiqgiP/G/gFg2W
+         ObWbAKfWFlgkv9MBHruJ/6z7hWZ4iGbk7rldpk0HgXPiKIkBr0ySD/9IUJtBjwu0+/f9
+         vbDbz17GvYhUScSyjyR6kgJp4qfiaw5PIQ6lBldCprmlb7F0q5ofdJbDkMnnuZChYjhx
+         O/bg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678951970;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mcPnUDp2uPpFN6qrWcVm3iA+36dQ0Mwojauq/GYuGW4=;
+        b=YCNLvp0B1eTkq3IUn8kHKOG0IEvA9rz/5RqiQlz70x1brY2ZmEBsQB4L492MzaUr//
+         Sff8j/GzCUAG19ERQrXsuKWP3i2SXEMgJpbOI24DnAeEToPX8OPAGXcuT0+4AAnig+jL
+         7T3vhubJy1Fn1mFXokSg68zV2SE+eGJvrxlvk3UlbODrPLlvGEnn9wgq7tRVx4+icj0J
+         DTA6EeGHdJPWjyIdKXsE+9C1OF3/5tr611WcOMVeZcrbQSS9rGhlMwpDCggKl48+47oq
+         bytK/8ynjhlH/zYeo8uj4UslvesEfwFroYSODtYOcu/uo9YuXfJNTScfpAE4kXvGGSAI
+         s5lA==
+X-Gm-Message-State: AO0yUKVQNtQXvfOhxn7MTcEg/kI6PyfoKW2OBRfjins+AJ9wT7Iqd3fV
+        45lQ2pllT+QluuZTrJ4Uan8=
+X-Google-Smtp-Source: AK7set865NCA1infzuQT4Lgx3KiWiQEfKzG0o8erq89WRRWzoiYAbpJp60OseRunjgh6Xp05mWY4jg==
+X-Received: by 2002:a05:6a20:144a:b0:d0:15c9:4e68 with SMTP id a10-20020a056a20144a00b000d015c94e68mr3272692pzi.62.1678951970418;
+        Thu, 16 Mar 2023 00:32:50 -0700 (PDT)
+Received: from debian.me (subs02-180-214-232-12.three.co.id. [180.214.232.12])
+        by smtp.gmail.com with ESMTPSA id x48-20020a056a000bf000b005a8a4665d3bsm4737711pfu.116.2023.03.16.00.32.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Mar 2023 00:32:49 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 70D4B106628; Thu, 16 Mar 2023 14:32:45 +0700 (WIB)
+Date:   Thu, 16 Mar 2023 14:32:45 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 6.2 000/141] 6.2.7-rc1 review
+Message-ID: <ZBLGHXo4qyKSbwRh@debian.me>
+References: <20230315115739.932786806@linuxfoundation.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Content-Language: en-US, de-DE
-From:   "Linux regression tracking (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-To:     Shane Parslow <shaneparslow808@gmail.com>
-Cc:     Martin <mwolf@adiumentum.com>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Sergey Ryazanov <ryazanov.s.a@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        netdev <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux kernel regressions list <regressions@lists.linux.dev>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-Subject: [regression] Bug 217200 - after upgrading to Kernel 6.2 WWAN Intel
- XMM7560 LTE module is not working anymore
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1678952004;f0c194bf;
-X-HE-SMSGID: 1pci69-0003AG-P4
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="4u63Dz9MIHxlaJJw"
+Content-Disposition: inline
+In-Reply-To: <20230315115739.932786806@linuxfoundation.org>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Thorsten here, the Linux kernel's regression tracker.
 
-I noticed a regression report in bugzilla.kernel.org. Shane Parslow,
-apparently it's caused by a change of yours.
+--4u63Dz9MIHxlaJJw
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-As many (most?) kernel developer don't keep an eye on bugzilla, I
-decided to forward it by mail. Quoting from
-https://bugzilla.kernel.org/show_bug.cgi?id=217200 :
+On Wed, Mar 15, 2023 at 01:11:43PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.2.7 release.
+> There are 141 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>=20
 
->  Martin 2023-03-15 08:26:13 UTC
-> 
-> after upgrading to Kernel 6.2.x 
-> 01:00.0 Wireless controller [0d40]: Intel Corporation XMM7560 LTE Advanced Pro Modem (rev 01) 
-> is not working anymore.
-> 
-> I am getting errors like:
-> 
-> [   44.973374] iosm 0000:01:00.0: ch[1]: confused phase 2
-> [   45.973650] iosm 0000:01:00.0: ch[1]: confused phase 2
-> [   46.972517] iosm 0000:01:00.0: ch[1]: confused phase 2
-> [   47.973038] iosm 0000:01:00.0: ch[1]: confused phase 2
-> [   48.973154] iosm 0000:01:00.0: ch[1]: confused phase 3
-> ...
-> [  174.984861] iosm 0000:01:00.0: PORT open refused, phase A-CD_READY
-> [  174.985767] iosm 0000:01:00.0: ch[6]: confused phase 3
-> [  184.996879] iosm 0000:01:00.0: PORT open refused, phase A-CD_READY
-> [  344.482600] iosm 0000:01:00.0: msg timeout
-> [  344.986684] iosm 0000:01:00.0: msg timeout
-> ...
-> [  287.032750] iosm 0000:01:00.0: ch[6]:invalid channel state 2,expected 1
-> [  288.032786] iosm 0000:01:00.0: ch[6]:invalid channel state 2,expected 1
-> [  298.042818] iosm 0000:01:00.0: ch[6]:invalid channel state 2,expected 1
-> [  337.034256] iosm 0000:01:00.0: AMD-Vi: Event logged [IO_PAGE_FAULT domain=0x000d address=0x0 flags=0x0000]
-> [  337.536467] iosm 0000:01:00.0: msg timeout
-> [  338.040709] iosm 0000:01:00.0: msg timeout
-> 
-> with Kernel 6.1.18 it is working flawlessly.
-> 
-> The problem still occurs with the latest development release 6.3.-rc2.
-> 
-> I filed a bug report with more info on the redhat bugzilla:
-> 
-> https://bugzilla.redhat.com/show_bug.cgi?id=2175487
-> 
-> Here a bit more about my System:
-> 
-> System:
->   Host: HP845G9 Kernel: 6.2.6-200.fc37.x86_64 arch: x86_64 bits: 64
->     Desktop: GNOME v: 43.3 Distro: Fedora release 37 (Thirty Seven)
-> Machine:
->   Type: Laptop System: HP product: HP EliteBook 845 14 inch G9 Notebook PC
->     v: N/A serial: <superuser required>
->   Mobo: HP model: 8990 v: KBC Version 09.49.00 serial: <superuser required>
->     UEFI: HP v: U82 Ver. 01.04.01 date: 01/12/2023
-> CPU:
->   Info: 8-core model: AMD Ryzen 7 6800U with Radeon Graphics bits: 64
->     type: MT MCP cache: L2: 4 MiB
->   Speed (MHz): avg: 872 min/max: 400/4768 cores: 1: 400 2: 1186 3: 1155
->     4: 1186 5: 1217 6: 400 7: 1676 8: 400 9: 400 10: 400 11: 400 12: 400
->     13: 1353 14: 400 15: 400 16: 2588
-> 
-> [tag] [reply] [−]
-> Private
-> Comment 1 Martin 2023-03-15 22:02:46 UTC
-> 
-> after a bisection I found the breaking commit here:
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?h=v6.2&id=d08b0f8f46e45a274fc8c9a5bc92cb9da70d9887
-> 
-> d08b0f8f46e45a274fc8c9a5bc92cb9da70d9887 is the first bad commit
-> commit d08b0f8f46e45a274fc8c9a5bc92cb9da70d9887
-> Author: Shane Parslow <shaneparslow808@gmail.com>
-> Date:   Sat Oct 29 02:03:56 2022 -0700
-> 
->     net: wwan: iosm: add rpc interface for xmm modems
->     
->     Add a new iosm wwan port that connects to the modem rpc interface. This
->     interface provides a configuration channel, and in the case of the 7360, is
->     the only way to configure the modem (as it does not support mbim).
->     
->     The new interface is compatible with existing software, such as
->     open_xdatachannel.py from the xmm7360-pci project [1].
->     
->     [1] https://github.com/xmm7360/xmm7360-pci
->     
->     Signed-off-by: Shane Parslow <shaneparslow808@gmail.com>
->     Reviewed-by: Loic Poulain <loic.poulain@linaro.org>
->     Signed-off-by: David S. Miller <davem@davemloft.net>
-> 
->  drivers/net/wwan/iosm/iosm_ipc_chnl_cfg.c | 2 +-
->  drivers/net/wwan/wwan_core.c              | 4 ++++
->  include/linux/wwan.h                      | 2 ++
->  3 files changed, 7 insertions(+), 1 deletion(-)
-> 
-> This commit aims for a different XMM modem (7360) other than the one I use (7560).
-> 
+Successfully cross-compiled for arm64 (bcm2711_defconfig, GCC 10.2.0) and
+powerpc (ps3_defconfig, GCC 12.2.0).
 
+Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
 
-See the ticket for more details.
+--=20
+An old man doll... just what I always wanted! - Clara
 
+--4u63Dz9MIHxlaJJw
+Content-Type: application/pgp-signature; name="signature.asc"
 
-[TLDR for the rest of this mail: I'm adding this report to the list of
-tracked Linux kernel regressions; the text you find below is based on a
-few templates paragraphs you might have encountered already in similar
-form.]
+-----BEGIN PGP SIGNATURE-----
 
-BTW, let me use this mail to also add the report to the list of tracked
-regressions to ensure it's doesn't fall through the cracks:
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZBLGGQAKCRD2uYlJVVFO
+o8IAAPwKodi86HHP/TskrBp/C81NuVFDWI/xo8jE01KzRIsHwQD/TQx7O0h028VJ
+oLgvOjKwksu4N03a8yN8IRLMDWZjWQg=
+=fgnM
+-----END PGP SIGNATURE-----
 
-#regzbot introduced: d08b0f8f46e45a2
-https://bugzilla.kernel.org/show_bug.cgi?id=217200
-#regzbot title: net: wwan: Intel XMM7560 LTE module stopped working
-#regzbot ignore-activity
-
-This isn't a regression? This issue or a fix for it are already
-discussed somewhere else? It was fixed already? You want to clarify when
-the regression started to happen? Or point out I got the title or
-something else totally wrong? Then just reply and tell me -- ideally
-while also telling regzbot about it, as explained by the page listed in
-the footer of this mail.
-
-Developers: When fixing the issue, remember to add 'Link:' tags pointing
-to the report (e.g. the buzgzilla ticket and maybe this mail as well, if
-this thread sees some discussion). See page linked in footer for details.
-
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-If I did something stupid, please tell me, as explained on that page.
+--4u63Dz9MIHxlaJJw--
