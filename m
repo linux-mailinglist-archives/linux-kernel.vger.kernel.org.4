@@ -2,109 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A797E6BD327
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 16:14:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A12C96BD32E
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 16:15:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231317AbjCPPOw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 11:14:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40418 "EHLO
+        id S231310AbjCPPPY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 11:15:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230306AbjCPPOu (ORCPT
+        with ESMTP id S229581AbjCPPPW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 11:14:50 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E812B53EA;
-        Thu, 16 Mar 2023 08:14:47 -0700 (PDT)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32G68Rah023046;
-        Thu, 16 Mar 2023 15:14:43 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=qcppdkim1;
- bh=xu25t1+L1logSNGQY8L4QGc6129H+SjNawbfvbYf5v0=;
- b=oUyU75j8e51vyDh+XChuYuKGosotqqcaSVM72OGrPvtTZqIKNK6IGsuh4XeSzVyA62cy
- qXwK2e9ybHOGH0L9GxhC7hLVESlXTbVBsf239KqWGBP1iXGPVZQus5l5syV0nyAEFCYm
- 86SvAOw2EaLSZz4gLq7NOm5t6gMY+Lbjvljo3Eo4Hd2kr5VgWg47/Qne9RdRSGgsh2Xx
- bqSBm+yEbGVBZ2wByRhmBBBaeUehGiebYsEDTEynQHLIi3pLvKMdCEiJOyAoOD3h2znD
- a74n22vTvUNRUJdhNpFS2ju0VoWbzZEWb6a7JItvRCgnARoUaelAVUG6/4hyPxNKWTBe gw== 
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pbpy9j918-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 16 Mar 2023 15:14:43 +0000
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32GFEggY002391
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 16 Mar 2023 15:14:42 GMT
-Received: from hu-mojha-hyd.qualcomm.com (10.80.80.8) by
- nasanex01c.na.qualcomm.com (10.45.79.139) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.41; Thu, 16 Mar 2023 08:14:40 -0700
-From:   Mukesh Ojha <quic_mojha@quicinc.com>
-To:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>
-CC:     <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "Mukesh Ojha" <quic_mojha@quicinc.com>
-Subject: [PATCH v3] firmware: qcom_scm: Clear download bit during reboot
-Date:   Thu, 16 Mar 2023 20:44:26 +0530
-Message-ID: <1678979666-551-1-git-send-email-quic_mojha@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        Thu, 16 Mar 2023 11:15:22 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC4E55FEB7
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 08:14:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678979673;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=rgNFu0HUYKtw8RWi6zJrI5fEIZ3MEylYsjpsor26NCE=;
+        b=STaG/R6+0/xNbY06Wq8ZyPg+Rc/miyqFfvlChSqQfO3X4pt8KUVRYP0nrJes0APuppN8iw
+        3qYSMn35sKbPgBUZB88f6YXToU1Ts8/Zfj5GAmYGoHI4KP/g2657LlPiFFbexzGVuM0gjx
+        IaE+AcrHbD9WbxE7KvqViqGAsg/Z4/0=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-621-ib6dwUyfOJqUdzt2k15iFQ-1; Thu, 16 Mar 2023 11:14:30 -0400
+X-MC-Unique: ib6dwUyfOJqUdzt2k15iFQ-1
+Received: by mail-ed1-f72.google.com with SMTP id w6-20020a05640234c600b004fc0e5b4433so3463628edc.18
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 08:14:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678979669;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=rgNFu0HUYKtw8RWi6zJrI5fEIZ3MEylYsjpsor26NCE=;
+        b=EW9gM+1ik80j//PJB7IN2uZU/5jzqf8XTj14+kusDbwFsrCWKV3Hu1aJV68L4dzbPp
+         El2AOE7uSzMqDcNdbwYF8jBc4jvcgc/cyrjrOa6ySFCthZicvnY7IcXrAgkOYOou0VVX
+         km39L6Wp+JyIB2t04aA3EmEkbqQX/sE+wM5E3oMG3a88Xm3P6JJW//aKnmrpR5EWHxZf
+         T3o3tKqlGdRbsl0W2/KUG9btyRDLwP4JIIGnxlBK0uWuQJj7AF4IijGLkeQCYkOSIZAw
+         jrUSg4o+/qCWAWw3NRtXqaAng14qFEj7mQ6our0s1+fVhhU+w+Ja1lyjXvqHKXginLTz
+         6nCA==
+X-Gm-Message-State: AO0yUKU7vLAtjc/F0zSCtBevjEP6jASkffZ+y4ddwKUdmtHVvpXcg6/F
+        D3rYL0/ilBz0Rb+KFXtYLHHXURV8w7KzbQd6z4dwn835zk+8dP4ieWTJ8ccJ2VOvdEUJR8GizlA
+        OuZaxIUuYBIMLxpuXNVdhIFQr
+X-Received: by 2002:aa7:cd94:0:b0:4fb:de7d:b05a with SMTP id x20-20020aa7cd94000000b004fbde7db05amr5654685edv.40.1678979669844;
+        Thu, 16 Mar 2023 08:14:29 -0700 (PDT)
+X-Google-Smtp-Source: AK7set+XIgp7QXQ3ba0FT49wfaNVrxVtnOUdiaK2i2AZkhtOMIBtu2Us/b2gwSqe74sClFcf3ZR6EA==
+X-Received: by 2002:aa7:cd94:0:b0:4fb:de7d:b05a with SMTP id x20-20020aa7cd94000000b004fbde7db05amr5654664edv.40.1678979669562;
+        Thu, 16 Mar 2023 08:14:29 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id f16-20020a170906739000b008b1797b77b2sm3928248ejl.221.2023.03.16.08.14.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Mar 2023 08:14:29 -0700 (PDT)
+Message-ID: <81eeac36-f80b-0f9f-2524-189d41b257a5@redhat.com>
+Date:   Thu, 16 Mar 2023 16:14:28 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: L0cSsxEO97efyR4NGMtyZ1ge3bxx6p-o
-X-Proofpoint-GUID: L0cSsxEO97efyR4NGMtyZ1ge3bxx6p-o
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-16_10,2023-03-16_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- clxscore=1015 mlxlogscore=999 suspectscore=0 spamscore=0 malwarescore=0
- mlxscore=0 priorityscore=1501 bulkscore=0 adultscore=0 phishscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303150002 definitions=main-2303160123
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 2/3] platform: classmate: mark SPI related data as maybe
+ unused
+Content-Language: en-US, nl
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Mark Gross <markgross@kernel.org>,
+        Thadeu Lima de Souza Cascardo <cascardo@holoscopio.com>,
+        Daniel Oliveira Nascimento <don@syst.com.br>,
+        Mattia Dongili <malattia@linux.it>,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230312132624.352703-1-krzysztof.kozlowski@linaro.org>
+ <20230312132624.352703-2-krzysztof.kozlowski@linaro.org>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20230312132624.352703-2-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-During normal restart of a system download bit should
-be cleared irrespective of whether download mode is
-set or not.
+Hi,
 
-Fixes: 8c1b7dc9ba22 ("firmware: qcom: scm: Expose download-mode control")
-Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
----
-Changes in v3:
-  - Added Fixes tag.
-  - Removed it from below patch series, as it makes sense to go this independently.
-    https://lore.kernel.org/lkml/1677664555-30191-1-git-send-email-quic_mojha@quicinc.com/
+On 3/12/23 14:26, Krzysztof Kozlowski wrote:
+> The driver can be compile tested as built-in making certain data unused:
+> 
+>   drivers/platform/x86/classmate-laptop.c:1137:36: error: ‘cmpc_device_ids’ defined but not used [-Werror=unused-const-variable=]
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Changes in v2:
-  - No change.
+Thank you for your patch, I've applied this patch and patch 3/3
+to my review-hans branch:
+https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
 
- drivers/firmware/qcom_scm.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+Note it will show up in my review-hans branch once I've pushed my
+local branch there, which might take a while.
 
-diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
-index 468d4d5..3e020d1 100644
---- a/drivers/firmware/qcom_scm.c
-+++ b/drivers/firmware/qcom_scm.c
-@@ -1506,8 +1506,7 @@ static int qcom_scm_probe(struct platform_device *pdev)
- static void qcom_scm_shutdown(struct platform_device *pdev)
- {
- 	/* Clean shutdown, disable download mode to allow normal restart */
--	if (download_mode)
--		qcom_scm_set_download_mode(false);
-+	qcom_scm_set_download_mode(false);
- }
- 
- static const struct of_device_id qcom_scm_dt_match[] = {
--- 
-2.7.4
+Once I've run some tests on this branch the patches there will be
+added to the platform-drivers-x86/for-next branch and eventually
+will be included in the pdx86 pull-request to Linus for the next
+merge-window.
+
+Regards,
+
+Hans
+
+> ---
+>  drivers/platform/x86/classmate-laptop.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/platform/x86/classmate-laptop.c b/drivers/platform/x86/classmate-laptop.c
+> index 8b6a14611859..2edaea2492df 100644
+> --- a/drivers/platform/x86/classmate-laptop.c
+> +++ b/drivers/platform/x86/classmate-laptop.c
+> @@ -1134,7 +1134,7 @@ static void cmpc_exit(void)
+>  module_init(cmpc_init);
+>  module_exit(cmpc_exit);
+>  
+> -static const struct acpi_device_id cmpc_device_ids[] = {
+> +static const struct acpi_device_id cmpc_device_ids[] __maybe_unused = {
+>  	{CMPC_ACCEL_HID, 0},
+>  	{CMPC_ACCEL_HID_V4, 0},
+>  	{CMPC_TABLET_HID, 0},
 
