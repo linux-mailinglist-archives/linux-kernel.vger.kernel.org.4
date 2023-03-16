@@ -2,65 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2676F6BD9DE
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 21:09:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2D536BD9E5
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 21:10:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229770AbjCPUJL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 16:09:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36464 "EHLO
+        id S230129AbjCPUK0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 16:10:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229616AbjCPUJI (ORCPT
+        with ESMTP id S229909AbjCPUKZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 16:09:08 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33DA7D589D
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 13:09:05 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id er8so563662edb.0
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 13:09:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678997344;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=fHN/Ln1IovZ6Hx9JhApOw2Gnmfs/AmjzfLFkuqocZX8=;
-        b=WzkNFfBWBww8zzM1Q9L3W4zSLIp4uHv1k7rEusyoPJiN5VB4fZSviMv7b6O5b80V1t
-         4E/T8j4z7ZToHHmuE0Nik+/7Jl5R0GZPCwxezRt87nYboGgFIOYz8LQy8a5tpyuMPVRm
-         dVwaj3M5AW3eYnpKkUc7pvKn65dKq6dOqoArHsXurwdEF0QhrLGf0QUrAin55MSdhxoS
-         FU+lt/V3o/XTR6CWJwzo2dvLai6GcL+m1YlJt66uMAXQWOYoqNTj6PT0gUnknQDXiKpA
-         sIEzIjYHsLvRFyLYHNjwjd3JgtKxmyi8X/n712HALyOasXrwER6CayF3y92p9W4npP+s
-         RIBg==
+        Thu, 16 Mar 2023 16:10:25 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87CE86EB9C
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 13:09:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678997380;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=uDuRBhoJQRLG1TJECvT2cZ77RYvcvbx4g9GwtkqEBQ8=;
+        b=TFeFyhsUuvbXVaaLeYvNHKaVD+77g7UfRBXFM0XWDr8GmBV/xbhjMuxZaF6/H1M8WHytWw
+        t4xZti08ZBtlzXbnKFgmFhbcuh7uY5cMbrKjemmrZ3xMLSZytJdWcfVmqy1ymJt/C8P484
+        p6+frUnYUcldUGr93qpm77e9f7pmXvo=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-263-rWmeGv64MrGMY_yjIY2abQ-1; Thu, 16 Mar 2023 16:09:39 -0400
+X-MC-Unique: rWmeGv64MrGMY_yjIY2abQ-1
+Received: by mail-ed1-f71.google.com with SMTP id j21-20020a508a95000000b004fd82403c91so4569455edj.3
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 13:09:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678997344;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fHN/Ln1IovZ6Hx9JhApOw2Gnmfs/AmjzfLFkuqocZX8=;
-        b=UT0xiKflaEkRLybcGloKlDaKHEP0iKK0bQm5/THrSFt3Zn9IfSNjtfRp5nps/1OTRB
-         LLNRvJVxjgaHARn2WB+kNtY0WvuEb11NuYbCJYiw8qorZCk9uTcHOHLvpT4io8I+oj9x
-         MpbaisQTJqEvvFZQr/lEZKKbnR5hL53g09MMd8sihlQrhx68sBnNWg8gFqprO7k0+IHE
-         SWzG2DPCpceEr0eR2J+8e+4DDtUK4RyDewoCU5tE4eJ/SJpPdr8/FngjFnsWjeW6+CoM
-         Qr9yu/rxbajeAFl68PA+EjM5cPSLAqB4Ji7Re4OksfWiAg4kERAqgWGBpzwOY4li0ap9
-         fdsw==
-X-Gm-Message-State: AO0yUKX5B4JzM8o9EZOFyOSgz8AyQXdovvIlM5IwePwodwNVSZ9g7oAM
-        NZNvntufwfl+rPRpDcxc0NK+MNG9FmhKAqZS2N8=
-X-Google-Smtp-Source: AK7set81oiNPrE8vkbeu7pQdjLkL8wD6hNrnulxVCL/MBkw4pJPubMpiV7nef1JMGKpn4Wn8Ip/4Ww==
-X-Received: by 2002:a17:906:140a:b0:921:1c2c:48 with SMTP id p10-20020a170906140a00b009211c2c0048mr10677630ejc.49.1678997343861;
-        Thu, 16 Mar 2023 13:09:03 -0700 (PDT)
-Received: from khadija-virtual-machine ([39.41.53.192])
-        by smtp.gmail.com with ESMTPSA id m14-20020a1709061ece00b008b980c3e013sm35935ejj.179.2023.03.16.13.09.03
+        d=1e100.net; s=20210112; t=1678997375;
+        h=content-transfer-encoding:mime-version:message-id:date:references
+         :in-reply-to:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=uDuRBhoJQRLG1TJECvT2cZ77RYvcvbx4g9GwtkqEBQ8=;
+        b=SLqGxYESAIcVat4Nefd/VT24qK36wtKZQa7FBCggC9AMFkj1n6vKzuZXFVXnKf3zsh
+         ngdEHHBfDU6jX28uwj2weFzKz45f72B3GH8fIBeN1U9YXY62g5bEgVfG9+UQMihAWOBJ
+         7EYMuwVuu9zRBY9BuN6Cya1yE55+0zp3vVyliXEmlatEUWxNvR6OoSAtIwZ7eD1Ivm5+
+         R9mtXXwbDzwolbWxJuwCOicirPa1Mj7uvgraWg+RkHwpz9fgw2VRxm2sl4sYmjsZIiVM
+         J+jkKD1wEJmKAGVM+GC1GfmsN0KfTqbMOxGzLhfC9wmfA21H8zxlL8LCQJR0zYRES1f9
+         Zhmg==
+X-Gm-Message-State: AO0yUKVl71vSKJTx3W9l06Xr3/iJNAKpqmzoQtMnj0jiDMD4g18mTt6i
+        +dm9/JGQacGWHpsZkCEGmr6hT+qyoONobfBIxPC5vZ3EzQ31n7y9LJg+TpMOniCPvV4lPPR2Q6h
+        mHb6Nnd3h7ieu7s2/Gk8xPj1a
+X-Received: by 2002:a17:906:55d5:b0:8ae:fa9f:d58e with SMTP id z21-20020a17090655d500b008aefa9fd58emr13320780ejp.53.1678997374762;
+        Thu, 16 Mar 2023 13:09:34 -0700 (PDT)
+X-Google-Smtp-Source: AK7set/Zn5noaYYA4yFCj/3pnT/fygcd2BC8c+6A6YLObXRtLZvvopwbtIyuLgm4KaKt1zWXQfiPlg==
+X-Received: by 2002:a17:906:55d5:b0:8ae:fa9f:d58e with SMTP id z21-20020a17090655d500b008aefa9fd58emr13320722ejp.53.1678997373956;
+        Thu, 16 Mar 2023 13:09:33 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
+        by smtp.gmail.com with ESMTPSA id y6-20020a170906558600b009260634e25asm42582ejp.121.2023.03.16.13.09.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Mar 2023 13:09:03 -0700 (PDT)
-Date:   Fri, 17 Mar 2023 01:09:00 +0500
-From:   Khadija Kamran <kamrankhadijadj@gmail.com>
-To:     outreachy@lists.linux.dev
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH v8] staging: axis-fifo: initialize timeouts in init only
-Message-ID: <ZBN3XAsItCiTk7CV@khadija-virtual-machine>
+        Thu, 16 Mar 2023 13:09:33 -0700 (PDT)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id 6E3DE9E30A2; Thu, 16 Mar 2023 21:09:32 +0100 (CET)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     Alexander Lobakin <aleksander.lobakin@intel.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>
+Cc:     Alexander Lobakin <aleksander.lobakin@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Larysa Zaremba <larysa.zaremba@intel.com>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Song Liu <song@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzbot+e1d1b65f7c32f2a86a9f@syzkaller.appspotmail.com
+Subject: Re: [PATCH bpf-next 1/2] bpf, test_run: fix crashes due to XDP
+ frame overwriting/corruption
+In-Reply-To: <20230316175051.922550-2-aleksander.lobakin@intel.com>
+References: <20230316175051.922550-1-aleksander.lobakin@intel.com>
+ <20230316175051.922550-2-aleksander.lobakin@intel.com>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date:   Thu, 16 Mar 2023 21:09:32 +0100
+Message-ID: <878rfwa26b.fsf@toke.dk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,131 +94,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Initialize the module parameters, read_timeout and write_timeout once in
-init().
+Alexander Lobakin <aleksander.lobakin@intel.com> writes:
 
-Module parameters can only be set once and cannot be modified later, so we
-don't need to evaluate them again when passing the parameters to
-wait_event_interruptible_timeout().
+> syzbot and Ilya faced the splats when %XDP_PASS happens for bpf_test_run
+> after skb PP recycling was enabled for {__,}xdp_build_skb_from_frame():
+>
+> BUG: kernel NULL pointer dereference, address: 0000000000000d28
+> RIP: 0010:memset_erms+0xd/0x20 arch/x86/lib/memset_64.S:66
+> [...]
+> Call Trace:
+>  <TASK>
+>  __finalize_skb_around net/core/skbuff.c:321 [inline]
+>  __build_skb_around+0x232/0x3a0 net/core/skbuff.c:379
+>  build_skb_around+0x32/0x290 net/core/skbuff.c:444
+>  __xdp_build_skb_from_frame+0x121/0x760 net/core/xdp.c:622
+>  xdp_recv_frames net/bpf/test_run.c:248 [inline]
+>  xdp_test_run_batch net/bpf/test_run.c:334 [inline]
+>  bpf_test_run_xdp_live+0x1289/0x1930 net/bpf/test_run.c:362
+>  bpf_prog_test_run_xdp+0xa05/0x14e0 net/bpf/test_run.c:1418
+> [...]
+>
+> This happens due to that it calls xdp_scrub_frame(), which nullifies
+> xdpf->data. bpf_test_run code doesn't reinit the frame when the XDP
+> program doesn't adjust head or tail. Previously, %XDP_PASS meant the
+> page will be released from the pool and returned to the MM layer, but
+> now it does return to the Pool with the nullified xdpf->data, which
+> doesn't get reinitialized then.
+> So, in addition to checking whether the head and/or tail have been
+> adjusted, check also for a potential XDP frame corruption. xdpf->data
+> is 100% affected and also xdpf->flags is the field closest to the
+> metadata / frame start. Checking for these two should be enough for
+> non-extreme cases.
+>
+> Fixes: 9c94bbf9a87b ("xdp: recycle Page Pool backed skbs built from XDP f=
+rames")
+> Reported-by: syzbot+e1d1b65f7c32f2a86a9f@syzkaller.appspotmail.com
+> Link: https://lore.kernel.org/bpf/000000000000f1985705f6ef2243@google.com
+> Reported-by: Ilya Leoshkevich <iii@linux.ibm.com>
+> Link: https://lore.kernel.org/bpf/e07dd94022ad5731705891b9487cc9ed66328b9=
+4.camel@linux.ibm.com
+> Signed-off-by: Alexander Lobakin <aleksander.lobakin@intel.com>
 
-Convert datatype of {read,write}_timeout from 'int' to 'long int' because
-implicit conversion of 'long int' to 'int' in statement
-'{read,write}_timeout = MAX_SCHEDULE_TIMEOUT' results in an overflow.
-
-Change format specifier for {read,write}_timeout from %i to %li.
-
-Reviewed-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
-Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Khadija Kamran <kamrankhadijadj@gmail.com>
----
-
-Changes in v8:
- - Fixed a spelling mistake
-
-Changes in v7:
- - Fixed a grammatical error
-
-Changes in v6:
- - Initialize module parameters in init instead of probe function.
- - Change the subject and description
- - Change format specifiers of module parameters to "%li"
-
-Changes in v5:
- - Convert module parameters datatype from int to long.
- - Link to patch:
- https://lore.kernel.org/outreachy/ZBMR4s8xyHGqMm72@khadija-virtual-machine/
-
-Changes in v4:
- - Initialize timeouts once as suggested by Greg; this automatically
-   fixes the indentation problems.
- - Change the subject and description.
- - Link to patch:
- https://lore.kernel.org/outreachy/ZA4M3+ZeB1Rl2fbs@khadija-virtual-machine/
-
-Changes in v3:
- - Correct grammatical mistakes
- - Do not change the second argument's indentation in split lines
-
-Changes in v2:
- - Instead of matching alignment to open parenthesis, align second and
-   the last argument.
- - Change the subject and use imperative language.
- - Link to patch:
- https://lore.kernel.org/outreachy/ZAxNYw2rFQkrdtKl@khadija-virtual-machine/
-
-Link to first patch:
- https://lore.kernel.org/outreachy/ZAZSmPpB6fcozGa4@khadija-virtual-machine/
-
- drivers/staging/axis-fifo/axis-fifo.c | 28 ++++++++++++++++-----------
- 1 file changed, 17 insertions(+), 11 deletions(-)
-
-diff --git a/drivers/staging/axis-fifo/axis-fifo.c b/drivers/staging/axis-fifo/axis-fifo.c
-index dfd2b357f484..0a85ea667a1b 100644
---- a/drivers/staging/axis-fifo/axis-fifo.c
-+++ b/drivers/staging/axis-fifo/axis-fifo.c
-@@ -103,17 +103,17 @@
-  *           globals
-  * ----------------------------
-  */
--static int read_timeout = 1000; /* ms to wait before read() times out */
--static int write_timeout = 1000; /* ms to wait before write() times out */
-+static long read_timeout = 1000; /* ms to wait before read() times out */
-+static long write_timeout = 1000; /* ms to wait before write() times out */
- 
- /* ----------------------------
-  * module command-line arguments
-  * ----------------------------
-  */
- 
--module_param(read_timeout, int, 0444);
-+module_param(read_timeout, long, 0444);
- MODULE_PARM_DESC(read_timeout, "ms to wait before blocking read() timing out; set to -1 for no timeout");
--module_param(write_timeout, int, 0444);
-+module_param(write_timeout, long, 0444);
- MODULE_PARM_DESC(write_timeout, "ms to wait before blocking write() timing out; set to -1 for no timeout");
- 
- /* ----------------------------
-@@ -384,9 +384,7 @@ static ssize_t axis_fifo_read(struct file *f, char __user *buf,
- 		mutex_lock(&fifo->read_lock);
- 		ret = wait_event_interruptible_timeout(fifo->read_queue,
- 			ioread32(fifo->base_addr + XLLF_RDFO_OFFSET),
--				 (read_timeout >= 0) ?
--				  msecs_to_jiffies(read_timeout) :
--				  MAX_SCHEDULE_TIMEOUT);
-+			read_timeout);
- 
- 		if (ret <= 0) {
- 			if (ret == 0) {
-@@ -528,9 +526,7 @@ static ssize_t axis_fifo_write(struct file *f, const char __user *buf,
- 		ret = wait_event_interruptible_timeout(fifo->write_queue,
- 			ioread32(fifo->base_addr + XLLF_TDFV_OFFSET)
- 				 >= words_to_write,
--				 (write_timeout >= 0) ?
--				  msecs_to_jiffies(write_timeout) :
--				  MAX_SCHEDULE_TIMEOUT);
-+			write_timeout);
- 
- 		if (ret <= 0) {
- 			if (ret == 0) {
-@@ -948,7 +944,17 @@ static struct platform_driver axis_fifo_driver = {
- 
- static int __init axis_fifo_init(void)
- {
--	pr_info("axis-fifo driver loaded with parameters read_timeout = %i, write_timeout = %i\n",
-+	if (read_timeout >= 0)
-+		read_timeout = msecs_to_jiffies(read_timeout);
-+	else
-+		read_timeout = MAX_SCHEDULE_TIMEOUT;
-+
-+	if (write_timeout >= 0)
-+		write_timeout = msecs_to_jiffies(write_timeout);
-+	else
-+		write_timeout = MAX_SCHEDULE_TIMEOUT;
-+
-+	pr_info("axis-fifo driver loaded with parameters read_timeout = %li, write_timeout = %li\n",
- 		read_timeout, write_timeout);
- 	return platform_driver_register(&axis_fifo_driver);
- }
--- 
-2.34.1
+Acked-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
 
