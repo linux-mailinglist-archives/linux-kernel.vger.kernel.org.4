@@ -2,51 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BA636BCD74
+	by mail.lfdr.de (Postfix) with ESMTP id 1078A6BCD73
 	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 12:04:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229982AbjCPLE2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 07:04:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59894 "EHLO
+        id S229939AbjCPLE0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 07:04:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229850AbjCPLEX (ORCPT
+        with ESMTP id S229754AbjCPLEX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 16 Mar 2023 07:04:23 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7995CFF0D;
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79846F95F;
         Thu, 16 Mar 2023 04:04:21 -0700 (PDT)
 Date:   Thu, 16 Mar 2023 11:04:18 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020; t=1678964659;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=BvzODTdt2rVktDwVAWQSZNh8BaXMdae1JUj9xPFJ8GU=;
-        b=OZ2Cni2uXUCwCxx0wjBSWXlAiBw57rB3EBCK4cR41/zx02PAetiOEFJo85XUIcYs9NFv02
-        kpka3jInsHA0ffvixNF2CVNy7lwXcfKpjEou410Oilw6fENaywN/ytrGe0m7kbTQI5PG6y
-        CoYf19btOAod20H+5n/OPYSN4WHjsjkzrI6ztxL4TlkAjaa02yZpOz4Ujt+0ypy2tvXu91
-        HCmVraW3acGUFCs2tCbi31rR8N+whW8isrhvQMJfKPYTVa3cddWtdryKuN3vLSzDUo3FFj
-        9wsvBT7txdDcUVQJkTEQOI63xbEsuWGl+TZJlc9aLKobb9AiCIzD0w4MxrAdog==
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=sZlU2pKxAMcTbPq1A4MQlpVefaseF7Jb/tqM8ClnzbU=;
+        b=qvJtQYz70XSHkRM9BMzP8Uwp443ka7eke3cpCyzHPC0WOcvMatN3qfNSvDlmyj5UmkIjmf
+        iZrS+h4H0A8QxYRKn4QImjjYJawE09+3W8tcOqRpQK5+ALXOX0IfeFvWbIQDSqbpL6jytW
+        tfDK7VeWjqOwCwZ/o6dq4COtJRJWhYZ/VJo6++bWzdKaqtbhXLKkZ0SfziQPM0EuwmnBz2
+        NuoCfYXbVeW6fjbeOuZhmjmXzXhputxriWANpybxcWQ22VzlfsROaEiMXqEkNCKaqi26ma
+        5tDYtaf2wmhdUVpB793icW4OZetu6JXKu7ogGCcMmEoVMkUFb/6TAK/NQ+ghBg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1678964659;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=BvzODTdt2rVktDwVAWQSZNh8BaXMdae1JUj9xPFJ8GU=;
-        b=JHKZIc+QHlrVR1C49DQgjCgwjalNsaGplODPuiPa9EMJTGfi4fMOba3ye4oBtIMdZFDxQ/
-        Dr7WMglahtrU7dCw==
-From:   "tip-bot2 for Fenghua Yu" <tip-bot2@linutronix.de>
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=sZlU2pKxAMcTbPq1A4MQlpVefaseF7Jb/tqM8ClnzbU=;
+        b=w7Mv5gDacfSwMBukktA8XYL89Ci7oDaf+6ZuMLITciwBcA7pqP8L1JuiBIjAM/zhUi6r26
+        l92MS2g2NUWymYAw==
+From:   "tip-bot2 for Borislav Petkov (AMD)" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/cpu] x86/split_lock: Enumerate architectural split lock disable bit
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
+Subject: [tip: x86/cpu] x86/CPU/AMD: Make sure EFER[AIBRSE] is set
+Cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
         "Borislav Petkov (AMD)" <bp@alien8.de>,
-        Tony Luck <tony.luck@intel.com>, x86@kernel.org,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
+In-Reply-To: <20230224185257.o3mcmloei5zqu7wa@treble>
+References: <20230224185257.o3mcmloei5zqu7wa@treble>
 MIME-Version: 1.0
-Message-ID: <167896465821.5837.11576952994116410374.tip-bot2@tip-bot2>
+Message-ID: <167896465869.5837.816655048478460304.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -62,112 +67,99 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/cpu branch of tip:
 
-Commit-ID:     d7ce15e1d4162ab5e56dead10d4ae69a6b5c8ee8
-Gitweb:        https://git.kernel.org/tip/d7ce15e1d4162ab5e56dead10d4ae69a6b5c8ee8
-Author:        Fenghua Yu <fenghua.yu@intel.com>
-AuthorDate:    Wed, 01 Mar 2023 17:19:46 -08:00
+Commit-ID:     8cc68c9c9e92dbaae51a711454c66eb668045508
+Gitweb:        https://git.kernel.org/tip/8cc68c9c9e92dbaae51a711454c66eb668045508
+Author:        Borislav Petkov (AMD) <bp@alien8.de>
+AuthorDate:    Sat, 25 Feb 2023 01:11:31 +01:00
 Committer:     Borislav Petkov (AMD) <bp@alien8.de>
-CommitterDate: Thu, 16 Mar 2023 11:50:51 +01:00
+CommitterDate: Thu, 16 Mar 2023 11:50:00 +01:00
 
-x86/split_lock: Enumerate architectural split lock disable bit
+x86/CPU/AMD: Make sure EFER[AIBRSE] is set
 
-The December 2022 edition of the Intel Instruction Set Extensions manual
-defined that the split lock disable bit in the IA32_CORE_CAPABILITIES MSR
-is (and retrospectively always has been) architectural.
+The AutoIBRS bit gets set only on the BSP as part of determining which
+mitigation to enable on AMD. Setting on the APs relies on the
+circumstance that the APs get booted through the trampoline and EFER
+- the MSR which contains that bit - gets replicated on every AP from the
+BSP.
 
-Remove all the model specific checks except for Ice Lake variants which are
-still needed because these CPU models do not enumerate presence of the
-IA32_CORE_CAPABILITIES MSR.
+However, this can change in the future and considering the security
+implications of this bit not being set on every CPU, make sure it is set
+by verifying EFER later in the boot process and on every AP.
 
-Originally-by: Dave Hansen <dave.hansen@linux.intel.com>
-Signed-off-by: Fenghua Yu <fenghua.yu@intel.com>
+Reported-by: Josh Poimboeuf <jpoimboe@kernel.org>
 Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
-Reviewed-by: Tony Luck <tony.luck@intel.com>
-Link: https://lore.kernel.org/lkml/20220701131958.687066-1-fenghua.yu@intel.com/t/#mada243bee0915532a6adef6a9e32d244d1a9aef4
+Acked-by: Dave Hansen <dave.hansen@linux.intel.com>
+Link: https://lore.kernel.org/r/20230224185257.o3mcmloei5zqu7wa@treble
 ---
- arch/x86/kernel/cpu/intel.c | 59 +++++++++++++-----------------------
- 1 file changed, 22 insertions(+), 37 deletions(-)
+ arch/x86/kernel/cpu/amd.c  | 11 +++++++++++
+ arch/x86/kernel/cpu/bugs.c | 10 +---------
+ arch/x86/kernel/cpu/cpu.h  |  8 ++++++++
+ 3 files changed, 20 insertions(+), 9 deletions(-)
 
-diff --git a/arch/x86/kernel/cpu/intel.c b/arch/x86/kernel/cpu/intel.c
-index 291d416..1c648b0 100644
---- a/arch/x86/kernel/cpu/intel.c
-+++ b/arch/x86/kernel/cpu/intel.c
-@@ -1451,31 +1451,13 @@ void handle_bus_lock(struct pt_regs *regs)
- }
+diff --git a/arch/x86/kernel/cpu/amd.c b/arch/x86/kernel/cpu/amd.c
+index 380753b..dd32dbc 100644
+--- a/arch/x86/kernel/cpu/amd.c
++++ b/arch/x86/kernel/cpu/amd.c
+@@ -996,6 +996,17 @@ static void init_amd(struct cpuinfo_x86 *c)
+ 		msr_set_bit(MSR_K7_HWCR, MSR_K7_HWCR_IRPERF_EN_BIT);
  
- /*
-- * Bits in the IA32_CORE_CAPABILITIES are not architectural, so they should
-- * only be trusted if it is confirmed that a CPU model implements a
-- * specific feature at a particular bit position.
-- *
-- * The possible driver data field values:
-- *
-- * - 0: CPU models that are known to have the per-core split-lock detection
-- *	feature even though they do not enumerate IA32_CORE_CAPABILITIES.
-- *
-- * - 1: CPU models which may enumerate IA32_CORE_CAPABILITIES and if so use
-- *      bit 5 to enumerate the per-core split-lock detection feature.
-+ * CPU models that are known to have the per-core split-lock detection
-+ * feature even though they do not enumerate IA32_CORE_CAPABILITIES.
-  */
- static const struct x86_cpu_id split_lock_cpu_ids[] __initconst = {
--	X86_MATCH_INTEL_FAM6_MODEL(ICELAKE_X,		0),
--	X86_MATCH_INTEL_FAM6_MODEL(ICELAKE_L,		0),
--	X86_MATCH_INTEL_FAM6_MODEL(ICELAKE_D,		0),
--	X86_MATCH_INTEL_FAM6_MODEL(ATOM_TREMONT,	1),
--	X86_MATCH_INTEL_FAM6_MODEL(ATOM_TREMONT_D,	1),
--	X86_MATCH_INTEL_FAM6_MODEL(ATOM_TREMONT_L,	1),
--	X86_MATCH_INTEL_FAM6_MODEL(TIGERLAKE_L,		1),
--	X86_MATCH_INTEL_FAM6_MODEL(TIGERLAKE,		1),
--	X86_MATCH_INTEL_FAM6_MODEL(SAPPHIRERAPIDS_X,	1),
--	X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE,		1),
--	X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE_L,		1),
--	X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE,		1),
-+	X86_MATCH_INTEL_FAM6_MODEL(ICELAKE_X,	0),
-+	X86_MATCH_INTEL_FAM6_MODEL(ICELAKE_L,	0),
-+	X86_MATCH_INTEL_FAM6_MODEL(ICELAKE_D,	0),
- 	{}
- };
- 
-@@ -1487,24 +1469,27 @@ static void __init split_lock_setup(struct cpuinfo_x86 *c)
- 	if (boot_cpu_has(X86_FEATURE_HYPERVISOR))
- 		return;
- 
-+	/* Check for CPUs that have support but do not enumerate it: */
- 	m = x86_match_cpu(split_lock_cpu_ids);
--	if (!m)
--		return;
-+	if (m)
-+		goto supported;
- 
--	switch (m->driver_data) {
--	case 0:
--		break;
--	case 1:
--		if (!cpu_has(c, X86_FEATURE_CORE_CAPABILITIES))
--			return;
--		rdmsrl(MSR_IA32_CORE_CAPS, ia32_core_caps);
--		if (!(ia32_core_caps & MSR_IA32_CORE_CAPS_SPLIT_LOCK_DETECT))
--			return;
--		break;
--	default:
-+	if (!cpu_has(c, X86_FEATURE_CORE_CAPABILITIES))
- 		return;
--	}
- 
+ 	check_null_seg_clears_base(c);
++
 +	/*
-+	 * Not all bits in MSR_IA32_CORE_CAPS are architectural, but
-+	 * MSR_IA32_CORE_CAPS_SPLIT_LOCK_DETECT is.  All CPUs that set
-+	 * it have split lock detection.
++	 * Make sure EFER[AIBRSE - Automatic IBRS Enable] is set. The APs are brought up
++	 * using the trampoline code and as part of it, MSR_EFER gets prepared there in
++	 * order to be replicated onto them. Regardless, set it here again, if not set,
++	 * to protect against any future refactoring/code reorganization which might
++	 * miss setting this important bit.
 +	 */
-+	rdmsrl(MSR_IA32_CORE_CAPS, ia32_core_caps);
-+	if (ia32_core_caps & MSR_IA32_CORE_CAPS_SPLIT_LOCK_DETECT)
-+		goto supported;
-+
-+	/* CPU is not in the model list and does not have the MSR bit: */
-+	return;
-+
-+supported:
- 	cpu_model_supports_sld = true;
- 	__split_lock_setup();
++	if (spectre_v2_in_eibrs_mode(spectre_v2_enabled) &&
++	    cpu_has(c, X86_FEATURE_AUTOIBRS))
++		WARN_ON_ONCE(msr_set_bit(MSR_EFER, _EFER_AUTOIBRS));
  }
+ 
+ #ifdef CONFIG_X86_32
+diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
+index f9d060e..182af64 100644
+--- a/arch/x86/kernel/cpu/bugs.c
++++ b/arch/x86/kernel/cpu/bugs.c
+@@ -784,8 +784,7 @@ static int __init nospectre_v1_cmdline(char *str)
+ }
+ early_param("nospectre_v1", nospectre_v1_cmdline);
+ 
+-static enum spectre_v2_mitigation spectre_v2_enabled __ro_after_init =
+-	SPECTRE_V2_NONE;
++enum spectre_v2_mitigation spectre_v2_enabled __ro_after_init = SPECTRE_V2_NONE;
+ 
+ #undef pr_fmt
+ #define pr_fmt(fmt)     "RETBleed: " fmt
+@@ -1133,13 +1132,6 @@ spectre_v2_parse_user_cmdline(void)
+ 	return SPECTRE_V2_USER_CMD_AUTO;
+ }
+ 
+-static inline bool spectre_v2_in_eibrs_mode(enum spectre_v2_mitigation mode)
+-{
+-	return mode == SPECTRE_V2_EIBRS ||
+-	       mode == SPECTRE_V2_EIBRS_RETPOLINE ||
+-	       mode == SPECTRE_V2_EIBRS_LFENCE;
+-}
+-
+ static inline bool spectre_v2_in_ibrs_mode(enum spectre_v2_mitigation mode)
+ {
+ 	return spectre_v2_in_eibrs_mode(mode) || mode == SPECTRE_V2_IBRS;
+diff --git a/arch/x86/kernel/cpu/cpu.h b/arch/x86/kernel/cpu/cpu.h
+index 57a5349..f97b0fe 100644
+--- a/arch/x86/kernel/cpu/cpu.h
++++ b/arch/x86/kernel/cpu/cpu.h
+@@ -83,4 +83,12 @@ unsigned int aperfmperf_get_khz(int cpu);
+ extern void x86_spec_ctrl_setup_ap(void);
+ extern void update_srbds_msr(void);
+ 
++extern enum spectre_v2_mitigation spectre_v2_enabled;
++
++static inline bool spectre_v2_in_eibrs_mode(enum spectre_v2_mitigation mode)
++{
++	return mode == SPECTRE_V2_EIBRS ||
++	       mode == SPECTRE_V2_EIBRS_RETPOLINE ||
++	       mode == SPECTRE_V2_EIBRS_LFENCE;
++}
+ #endif /* ARCH_X86_CPU_H */
