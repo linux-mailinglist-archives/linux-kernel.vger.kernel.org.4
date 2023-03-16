@@ -2,236 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F9936BC8BB
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 09:17:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 960066BC8C2
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 09:18:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230398AbjCPIRJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 04:17:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58698 "EHLO
+        id S230034AbjCPISR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 04:18:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230164AbjCPIQv (ORCPT
+        with ESMTP id S229686AbjCPISO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 04:16:51 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDE00B4210;
-        Thu, 16 Mar 2023 01:16:17 -0700 (PDT)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32G622iv019200;
-        Thu, 16 Mar 2023 08:15:19 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references; s=qcppdkim1;
- bh=konrs8oy5Ris8v21QVEkfGVaheNILdZMjxbxTm0YeQ8=;
- b=lCdComlV5fHZwZOxx+H/5qd7GEF5BuSkoMvv7dAmY1+TcHxJJMKF2PSh/xJd0j3nyqxk
- B3unXS2zwftFAVeYriCOc0mUXLfo4Eb0H9xWTaFUYmryGIyTruwy1wKFzjbIG76znK2B
- YIHHUPk7GHA6Usdo13TcANv7SwjbnalZqAucTNcuAmZrM03UTyX0fPFJKYTL97lUPwkk
- 9pr0RIO3jQUK3Off/2DMhoyc4i8xvNfGFcFVdLeoVoVoJ7Bmyt+0YIEEauhXdGqNHWmP
- 1My9kZzV0gLF0EAnbpqoVbsP6fBtbDPOQz2ib9NHAOvXHXHaP3AAU3L91q/zyRszErq0 6w== 
-Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pbpy3h5h1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 16 Mar 2023 08:15:19 +0000
-Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 32G8FDKR008640;
-        Thu, 16 Mar 2023 08:15:16 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 3p8jqks0j2-1;
-        Thu, 16 Mar 2023 08:15:16 +0000
-Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32G8FGRb008653;
-        Thu, 16 Mar 2023 08:15:16 GMT
-Received: from vboma-linux.qualcomm.com (vboma-linux.qualcomm.com [10.204.65.94])
-        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 32G8FFbD008651;
-        Thu, 16 Mar 2023 08:15:16 +0000
-Received: by vboma-linux.qualcomm.com (Postfix, from userid 72083)
-        id 22368900889; Thu, 16 Mar 2023 13:45:15 +0530 (IST)
-From:   quic_vboma@quicinc.com
-To:     Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        Vikash Garodia <quic_vgarodia@quicinc.com>,
-        Viswanath Boma <quic_vboma@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Vikash Garodia <vgarodia@qti.qualcomm.com>
-Subject: [PATCH] venus: Enable sufficient sequence change support for sc7180 and fix for Decoder STOP command issue.
-Date:   Thu, 16 Mar 2023 13:45:09 +0530
-Message-Id: <20230316081509.12201-2-quic_vboma@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230316081509.12201-1-quic_vboma@quicinc.com>
-References: <20230202064712.5804-2-quic_vboma@quicinc.com>
- <20230316081509.12201-1-quic_vboma@quicinc.com>
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: U8VqVNmPAi4u_z1dIOcfhQ6lkuVXq4p1
-X-Proofpoint-ORIG-GUID: U8VqVNmPAi4u_z1dIOcfhQ6lkuVXq4p1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-16_05,2023-03-15_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501 mlxscore=0
- bulkscore=0 mlxlogscore=999 impostorscore=0 lowpriorityscore=0
- suspectscore=0 phishscore=0 malwarescore=0 adultscore=0 clxscore=1015
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303150002 definitions=main-2303160069
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,
-        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+        Thu, 16 Mar 2023 04:18:14 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4419BA7AAF;
+        Thu, 16 Mar 2023 01:17:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678954669; x=1710490669;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=oO1jpgjoT5YaamSNiLRYXDePLug0FnwuFVkPX/tD/kU=;
+  b=cQky4X27bhc7SoUEepquO8qhzW6J3W75Ao0EAvDTEM1v+U0ojTjHEAD1
+   EkPI4yWiRPn6ZcRIgg6T/12hCyxG9ArxE2i2Fo6x0g/u6PesUHnir1hMe
+   9ny784m2Ef2GrDwYtxDqe1r845ylDoZDDgsRTyAPqUqmxhJLRNwlvmx23
+   23Zw2wiK6zlPFZiYdWNjTB73cNT+92rS0s1/gkMOVRrtfBwRxYqPKPvcL
+   nzaP9OpZHj1IKHJsH/hPOO7bq6TTLuUEJ/9mN5/+L/ffq3ows6m110d79
+   +dpJNCZ9rHfu8hLKyAc/eA/1tyCRq8MCcBC5Jmkwae933+Wk7SCNfLzj6
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="424194796"
+X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
+   d="scan'208";a="424194796"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 01:16:39 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="768843560"
+X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
+   d="scan'208";a="768843560"
+Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
+  by FMSMGA003.fm.intel.com with ESMTP; 16 Mar 2023 01:16:38 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Thu, 16 Mar 2023 01:16:37 -0700
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21 via Frontend Transport; Thu, 16 Mar 2023 01:16:37 -0700
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.43) by
+ edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.21; Thu, 16 Mar 2023 01:16:37 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TNeNe+dHgKUva5U+HGod9oOvSNev1gKrPk0ybdf3yBesWZZ19pgZhxpOFSEQyjgvuMIcPOnVip8MPFdQHdebUFfHltqFMZoxHHDJWzfVhSj33C7bhzVTPHjsYE4hGSE+zy9un1qs0EompLl7XeRTIgf+RvNCHRKhbkQi94Tg8gnp0g/3bYSxcUiLWJZOO8+0FNkXlWZYpxp5LyQ2Xn03r6/vysgTCg41TmHvVZMsy+bxu7zD/WQa9JlxXgV/SLEJKwAxyxNNGJynTS7M8tKq9ELBt9/I+DENvI5u8tIO98Z0tw183BWS6leugY8LMqr4MiX7fD6OtD0+TtXyCIL9cA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=IuX1HRJaqHdr4WgWQZOtnJ7XmshuFJka1hJrETCJL7I=;
+ b=KreXIRGTxtaUZj/cKkP8WIF5WZozH9pjvqJYrEdaxCdCcpbB+EquQFdyUOCPvMItH4ISeI5YG+XZsInFQy21EmrHpRxEq2q3mcBm27Ga9JUKq2pBjn6Yaeaau99aq9OWconY4lgNuVaQpNMq9P1frmndq1bfQAQ/UUaN5H0uZhD2PgVichS4K6xaCyRkdyXAuaMgowt+enRwOJGU9I6IVRyrMg/Z6YliR3m1W7aEPG7wqJ3c7qe0dvf/vCzKPOYyn3hSzMJ2/8FpWJhbL6kiEBMqehSMMz9zbGjIm+0vwUKeRsdDhFCRd/RCYLQwaKcaKSjcdC6mdeeBLcjJbtNoXA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
+ by CH0PR11MB5235.namprd11.prod.outlook.com (2603:10b6:610:e2::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.31; Thu, 16 Mar
+ 2023 08:16:35 +0000
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::1aac:b695:f7c5:bcac]) by BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::1aac:b695:f7c5:bcac%9]) with mapi id 15.20.6178.031; Thu, 16 Mar 2023
+ 08:16:35 +0000
+From:   "Tian, Kevin" <kevin.tian@intel.com>
+To:     "Liu, Yi L" <yi.l.liu@intel.com>,
+        "joro@8bytes.org" <joro@8bytes.org>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+        "jgg@nvidia.com" <jgg@nvidia.com>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>
+CC:     "cohuck@redhat.com" <cohuck@redhat.com>,
+        "eric.auger@redhat.com" <eric.auger@redhat.com>,
+        "nicolinc@nvidia.com" <nicolinc@nvidia.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
+        "chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
+        "yi.y.sun@linux.intel.com" <yi.y.sun@linux.intel.com>,
+        "peterx@redhat.com" <peterx@redhat.com>,
+        "jasowang@redhat.com" <jasowang@redhat.com>,
+        "shameerali.kolothum.thodi@huawei.com" 
+        <shameerali.kolothum.thodi@huawei.com>,
+        "lulu@redhat.com" <lulu@redhat.com>,
+        "suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
+Subject: RE: [PATCH v2 2/4] iommu: Add new iommu op to get iommu hardware
+ information
+Thread-Topic: [PATCH v2 2/4] iommu: Add new iommu op to get iommu hardware
+ information
+Thread-Index: AQHZUlxYm6GOmk6wmUW710g04eg+cq79GCcg
+Date:   Thu, 16 Mar 2023 08:16:35 +0000
+Message-ID: <BN9PR11MB5276C6A0F26954A42B8C23498CBC9@BN9PR11MB5276.namprd11.prod.outlook.com>
+References: <20230309075358.571567-1-yi.l.liu@intel.com>
+ <20230309075358.571567-3-yi.l.liu@intel.com>
+In-Reply-To: <20230309075358.571567-3-yi.l.liu@intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|CH0PR11MB5235:EE_
+x-ms-office365-filtering-correlation-id: 28cfea90-0660-4a7d-ca48-08db25f6c243
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Anf907dIVwlfi5pp3yJ28QhyiOkBHi3aKvP6DqihGYOHiWaYyRZktIoNFHn4ZrVQh2QiC9uRHZ2sIUbSbWCO+2LWKje7YbaKXO3jIFZrD9u7vjvQ5+e0fnWuILOvxDi7Ze+VQU45aD1/jwKWO9NIso3o2IspZrYKcXaixFfPxY9m8pKpTdlFwY8kRG8BHQ0xhxKRwW7kRrJqvJVOYwaROP+nHKOhRluIx8die+acnzR8P4XDiYT8uFvExeEFwlZAJwkrUmu5HdTeBkCw9JGD8LpSgK7+I41F53tyW+2SiDta8FizMmRa9GNs15F+mSfoIspHEyCLJOkqEIGBA7Fu79+9RhiOlAGPkWDZj+vUf6Nh9vxdbwcT1lAqztqCEZ/MSN4vKzFy8HDri6Ejf6Q3Yd1aCxW4JEcAX9adMnXX1PNAIv7LDzCnvImwYgwlp7aiIx9CDgi3kAmikjjbMcAr5Hw8HKXf5HtvVPKS81KsJoWqc1Uo0ae/nNvogXz8NWIA9mLewAk7gKIsCmMb24eHFuXBVPsR3WxvYe3MQlYK5xQYC06ia8KmC6G9z82/a0MKmQvsAtRMpESpIocgOxGvdmsawLDVeW5UsH/UiyB8osum9c26jNBeDJbJR/bJDz8WvNhUJMz1wLVude+9/fJsVwL9OMvzVFG5ojncpezY3ERrKcjhLYvKW+cG/UGRMgtPS9/OtRSBUEIffIsTzU6yJ0l2mcBvNGD3qCOThCkr0FBSSnF10leQRXqouQCcEnJq
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(366004)(346002)(136003)(39860400002)(376002)(396003)(451199018)(38100700002)(38070700005)(86362001)(122000001)(82960400001)(33656002)(2906002)(41300700001)(7416002)(52536014)(4326008)(8936002)(5660300002)(55016003)(76116006)(186003)(9686003)(6506007)(83380400001)(26005)(316002)(110136005)(54906003)(64756008)(66556008)(66946007)(71200400001)(478600001)(7696005)(66476007)(8676002)(66446008);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?YjQ5+MdMU3rXNyElva1yFH0X+cMVVJzSGk54MuAtArv79RsXRavxONv2mlv3?=
+ =?us-ascii?Q?ncckNsVYz3EQPnHnVIksigT74ePnvnhB+CjXWdHtgXw3aaZ37cn63HGI6/L9?=
+ =?us-ascii?Q?YIiLJ44fLalPWfagSt2KFXd0CUXSjc6h/B3nup8EDmdZi6PXwk88zQ5fLu5G?=
+ =?us-ascii?Q?mRl6/DTROQSoCixnguhtjksB7p1c2vSkYmF4nSoqB//QwOpuMpNuqLbkdPWV?=
+ =?us-ascii?Q?x0mrUqUdl1CZeVYSBdyPZaUUtUbnSUu3l+uXmiYU/KTEo/MUwNkUrMX/JlLA?=
+ =?us-ascii?Q?Fg/7CjmRTmjqXq9gMRgD4eINhRBmoo45dOkZN/jIqh3EXXr/O0ttL90DD7VS?=
+ =?us-ascii?Q?jsW4396KDtDN2MXTnYKhTmQB7tmvhs21skXIFhhjICv5QXS3GqvjdJ0ZZSjm?=
+ =?us-ascii?Q?ULaSWWzW683e50InJD+YO1HviU63RTeYsrFGuYpFhjbLRXp38q7VedLzI8jV?=
+ =?us-ascii?Q?co3qwZXr6rsywwj/lqhkz/I+XHRURZpJfhUaiqw+3sN+jtmlAcq1u+VAWEV9?=
+ =?us-ascii?Q?3bi5LPbFbzRrM9dLpnGCWOfBfoOyTTGmEnIC/O6sEmT89HK6tizvzSRJ1Rb+?=
+ =?us-ascii?Q?qAKvM2ETtJNF+dPw8D/M3KAheMXBNh1Riu1MTDcelxVfTT9RbgT2k320pXXg?=
+ =?us-ascii?Q?65N5yzbMQhVlHeYa9FLeyjdbgYamVVVTnpaNZQrVTa+pWiEkXXmwwNmBmd+O?=
+ =?us-ascii?Q?/cxnYno+xLmkhF17FzO7T3AHfF/Bg0636Ll7zCvIT8cRjglAUXm4hdgIUtsc?=
+ =?us-ascii?Q?xNCeabb7f/G3N1JiRAKTkGavij0h/yQSq2OqAgK13HziPpTyR+QkEMSjEzm0?=
+ =?us-ascii?Q?wCrTn6Eo3qSAsW56rB1A0vBNkPwq0cl+ew/NVJTH9GR0UojYFlYYTT8RfLCi?=
+ =?us-ascii?Q?6MsW7mM2KXdsEw7nUoCoXpvq90aZ7agdM23fau9JL7qs/0OB9jffsfZPoOPC?=
+ =?us-ascii?Q?ZKtbEJIxyovt+xgDv1Rq9rPQs3khfT4teWDRHeQO/6fjIdx3YZdMQfG9ay9X?=
+ =?us-ascii?Q?HJRl4a90+qKnpU/r2rzvYboni5ZGL1PiZhWKxjLlbqqU7op1ehIXVUbRrkPw?=
+ =?us-ascii?Q?SGmcZXE1bfwi6l/udf4lk9CMwcuikZALR5i9Lxy/67/6AOxoS/UiT9SZGPnJ?=
+ =?us-ascii?Q?jU+h0FNwg7PdEXF94AYJd/jAB3FRl4UGZW85vC4NFST2jafu3uM1YiWVs90C?=
+ =?us-ascii?Q?xcPSUgdHOLA3jG/4sDsWRbX1lmXRY+yoXpFR9m9ZY3DBqYxAV4lhNoNLcEjF?=
+ =?us-ascii?Q?BhVZtZOQ1p95oKN/xIf21KiwKj3UmnyXoqro9EPbxKeZx45kH8YzXKYojvFV?=
+ =?us-ascii?Q?kcX9uQaeMk63fmZJlzPGUoitcVxR+NgYqWAqL97iTsNZP7sUny4cj+UC9/ZC?=
+ =?us-ascii?Q?uXdoL6zQXuUEfz7dk+cQj3eVNzn91nFzCwXmHizTruPMmvMMjBjDbmQ0qmvQ?=
+ =?us-ascii?Q?Y830UIScH+R8A7Q/hypoyHfTV8fajG7Ijf0h8C2mkMyLKiaEcF5+Hz7WODBR?=
+ =?us-ascii?Q?zNCBD9HXPOGxYniNQXjfvdYg6hdfrv8vOvXzeGwvnUE7oRl1oQdNwpPCvEqr?=
+ =?us-ascii?Q?15onFcrzko48y3Jyfmn1G6WMH6ffDbiD4cxC2LJG?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 28cfea90-0660-4a7d-ca48-08db25f6c243
+X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Mar 2023 08:16:35.4149
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: yirhpbO4Pvqyq2WwB4esYVGjJAvM0E/lZqRzOg45syO+43VnU9Ntc+GNj2jEUFJKSPbejfBSG4k4JDvZOvAiDg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR11MB5235
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Viswanath Boma <quic_vboma@quicinc.com>
+> From: Liu, Yi L <yi.l.liu@intel.com>
+> Sent: Thursday, March 9, 2023 3:54 PM
+> @@ -222,6 +223,11 @@ struct iommu_iotlb_gather {
+>  /**
+>   * struct iommu_ops - iommu ops and capabilities
+>   * @capable: check capability
+> + * @hw_info: IOMMU hardware information. The type of the returned data
+> is
+> + *           defined in include/uapi/linux/iommufd.h. The data buffer is
 
-For VP9 bitstreams, there could be a change in resolution at interframe,
-for driver to get notified of such resolution change,
-enable the property in video firmware.
-Also, EOS handling is now made same in video firmware across all V6 SOCs,
-hence above a certain firmware version, the driver handling is
-made generic for all V6s
+"The type of the returned data is marked by @driver_type".
 
-Signed-off-by: Vikash Garodia <vgarodia@qti.qualcomm.com>
-Signed-off-by: Viswanath Boma <quic_vboma@quicinc.com>
-Tested-by: Nathan Hebert <nhebert@chromium.org>
----
- drivers/media/platform/qcom/venus/core.h       | 18 ++++++++++++++++++
- drivers/media/platform/qcom/venus/hfi_cmds.c   |  1 +
- drivers/media/platform/qcom/venus/hfi_helper.h |  2 ++
- drivers/media/platform/qcom/venus/hfi_msgs.c   | 11 +++++++++--
- drivers/media/platform/qcom/venus/vdec.c       | 12 +++++++++++-
- 5 files changed, 41 insertions(+), 3 deletions(-)
+"defined in include/uapi/linux/iommufd.h" should belong to the comment
+of @driver_type
 
-diff --git a/drivers/media/platform/qcom/venus/core.h b/drivers/media/platform/qcom/venus/core.h
-index 32551c2602a9..ee8b70a34656 100644
---- a/drivers/media/platform/qcom/venus/core.h
-+++ b/drivers/media/platform/qcom/venus/core.h
-@@ -202,6 +202,11 @@ struct venus_core {
- 	unsigned int core0_usage_count;
- 	unsigned int core1_usage_count;
- 	struct dentry *root;
-+	struct venus_img_version {
-+		u32 major;
-+		u32 minor;
-+		u32 rev;
-+	} venus_ver;
- };
- 
- struct vdec_controls {
-@@ -500,4 +505,17 @@ venus_caps_by_codec(struct venus_core *core, u32 codec, u32 domain)
- 	return NULL;
- }
- 
-+static inline int
-+is_fw_rev_or_newer(struct venus_core *core, u32 vmajor, u32 vminor, u32 vrev)
-+{
-+	return ((core)->venus_ver.major == vmajor && (core)->venus_ver.minor ==
-+			vminor && (core)->venus_ver.rev >= vrev);
-+}
-+
-+static inline int
-+is_fw_rev_or_older(struct venus_core *core, u32 vmajor, u32 vminor, u32 vrev)
-+{
-+	return ((core)->venus_ver.major == vmajor && (core)->venus_ver.minor ==
-+			vminor && (core)->venus_ver.rev <= vrev);
-+}
- #endif
-diff --git a/drivers/media/platform/qcom/venus/hfi_cmds.c b/drivers/media/platform/qcom/venus/hfi_cmds.c
-index 930b743f225e..e2539b58340f 100644
---- a/drivers/media/platform/qcom/venus/hfi_cmds.c
-+++ b/drivers/media/platform/qcom/venus/hfi_cmds.c
-@@ -521,6 +521,7 @@ static int pkt_session_set_property_1x(struct hfi_session_set_property_pkt *pkt,
- 		pkt->shdr.hdr.size += sizeof(u32) + sizeof(*en);
- 		break;
- 	}
-+	case HFI_PROPERTY_PARAM_VDEC_ENABLE_SUFFICIENT_SEQCHANGE_EVENT:
- 	case HFI_PROPERTY_CONFIG_VDEC_POST_LOOP_DEBLOCKER: {
- 		struct hfi_enable *in = pdata;
- 		struct hfi_enable *en = prop_data;
-diff --git a/drivers/media/platform/qcom/venus/hfi_helper.h b/drivers/media/platform/qcom/venus/hfi_helper.h
-index d2d6719a2ba4..20516b4361d3 100644
---- a/drivers/media/platform/qcom/venus/hfi_helper.h
-+++ b/drivers/media/platform/qcom/venus/hfi_helper.h
-@@ -469,6 +469,8 @@
- #define HFI_PROPERTY_PARAM_VDEC_PIXEL_BITDEPTH			0x1003007
- #define HFI_PROPERTY_PARAM_VDEC_PIC_STRUCT			0x1003009
- #define HFI_PROPERTY_PARAM_VDEC_COLOUR_SPACE			0x100300a
-+#define HFI_PROPERTY_PARAM_VDEC_ENABLE_SUFFICIENT_SEQCHANGE_EVENT \
-+								0x0100300b
- 
- /*
-  * HFI_PROPERTY_CONFIG_VDEC_COMMON_START
-diff --git a/drivers/media/platform/qcom/venus/hfi_msgs.c b/drivers/media/platform/qcom/venus/hfi_msgs.c
-index df96db3761a7..07ac0fcd2852 100644
---- a/drivers/media/platform/qcom/venus/hfi_msgs.c
-+++ b/drivers/media/platform/qcom/venus/hfi_msgs.c
-@@ -248,9 +248,10 @@ static void hfi_sys_init_done(struct venus_core *core, struct venus_inst *inst,
- }
- 
- static void
--sys_get_prop_image_version(struct device *dev,
-+sys_get_prop_image_version(struct venus_core *core,
- 			   struct hfi_msg_sys_property_info_pkt *pkt)
- {
-+	struct device *dev = core->dev;
- 	u8 *smem_tbl_ptr;
- 	u8 *img_ver;
- 	int req_bytes;
-@@ -263,6 +264,12 @@ sys_get_prop_image_version(struct device *dev,
- 		return;
- 
- 	img_ver = pkt->data;
-+	if (IS_V4(core))
-+		sscanf(img_ver, "14:VIDEO.VE.%u.%u-%u-PROD",
-+		       &core->venus_ver.major, &core->venus_ver.minor, &core->venus_ver.rev);
-+	else if (IS_V6(core))
-+		sscanf(img_ver, "14:VIDEO.VPU.%u.%u-%u-PROD",
-+		       &core->venus_ver.major, &core->venus_ver.minor, &core->venus_ver.rev);
- 
- 	dev_dbg(dev, VDBGL "F/W version: %s\n", img_ver);
- 
-@@ -286,7 +293,7 @@ static void hfi_sys_property_info(struct venus_core *core,
- 
- 	switch (pkt->property) {
- 	case HFI_PROPERTY_SYS_IMAGE_VERSION:
--		sys_get_prop_image_version(dev, pkt);
-+		sys_get_prop_image_version(core, pkt);
- 		break;
- 	default:
- 		dev_dbg(dev, VDBGL "unknown property data\n");
-diff --git a/drivers/media/platform/qcom/venus/vdec.c b/drivers/media/platform/qcom/venus/vdec.c
-index 4ceaba37e2e5..36c88858ea9d 100644
---- a/drivers/media/platform/qcom/venus/vdec.c
-+++ b/drivers/media/platform/qcom/venus/vdec.c
-@@ -545,7 +545,7 @@ vdec_decoder_cmd(struct file *file, void *fh, struct v4l2_decoder_cmd *cmd)
- 
- 		fdata.buffer_type = HFI_BUFFER_INPUT;
- 		fdata.flags |= HFI_BUFFERFLAG_EOS;
--		if (IS_V6(inst->core))
-+		if (IS_V6(inst->core) && is_fw_rev_or_older(inst->core, 1, 0, 87))
- 			fdata.device_addr = 0;
- 		else
- 			fdata.device_addr = 0xdeadb000;
-@@ -671,6 +671,16 @@ static int vdec_set_properties(struct venus_inst *inst)
- 			return ret;
- 	}
- 
-+	/* Enabling sufficient sequence change support for VP9 */
-+	if (of_device_is_compatible(inst->core->dev->of_node, "qcom,sc7180-venus")) {
-+		if (is_fw_rev_or_newer(inst->core, 5, 4, 51)) {
-+			ptype = HFI_PROPERTY_PARAM_VDEC_ENABLE_SUFFICIENT_SEQCHANGE_EVENT;
-+			ret = hfi_session_set_property(inst, ptype, &en);
-+			if (ret)
-+				return ret;
-+		}
-+	}
-+
- 	ptype = HFI_PROPERTY_PARAM_VDEC_CONCEAL_COLOR;
- 	conceal = ctr->conceal_color & 0xffff;
- 	conceal |= ((ctr->conceal_color >> 16) & 0xffff) << 10;
--- 
-2.17.1
+> + *           allocated in the IOMMU driver and the caller should free it
+> + *           after use. Return the data buffer if success, or ERR_PTR on
+> + *           failure.
+>   * @domain_alloc: allocate iommu domain
+>   * @probe_device: Add device to iommu driver handling
+>   * @release_device: Remove device from iommu driver handling
+> @@ -246,11 +252,17 @@ struct iommu_iotlb_gather {
+>   * @remove_dev_pasid: Remove any translation configurations of a specifi=
+c
+>   *                    pasid, so that any DMA transactions with this pasi=
+d
+>   *                    will be blocked by the hardware.
+> + * @driver_type: One of enum iommu_hw_info_type. This is used in the
+> hw_info
+> + *               reporting path. For the drivers that supports it, a uni=
+que
+> + *               type should be defined. For the driver that does not su=
+pport
+> + *               it, this field is the IOMMU_HW_INFO_TYPE_DEFAULT that i=
+s 0.
+> + *               Hence, such drivers do not need to care this field.
 
+The meaning of "driver_type" is much broader than reporting hw_info.
+
+let's be accurate to call it as "hw_info_type". and while we have two
+separate fields for one feature where is the check enforced on whether
+both are provided?
+
+Is it simpler to return the type directly in @hw_info?
+
+btw IOMMU_HW_INFO_TYPE_DEFAULT also sounds misleading.
+'default' implies hw_info still available but in a default format.
+
+probably it's clearer to call it IOMMU_HW_INFO_TYPE_NONE.
