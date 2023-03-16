@@ -2,78 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BFD06BC417
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 04:02:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F95F6BC41A
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 04:02:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229597AbjCPDCT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 23:02:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60904 "EHLO
+        id S229678AbjCPDCf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 23:02:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbjCPDCR (ORCPT
+        with ESMTP id S229475AbjCPDCc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 23:02:17 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 012EEB5AAF
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 20:02:15 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id ja10so323294plb.5
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 20:02:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678935735;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=a7EWiKEbOPUDyB/zyzM3aKt/kTkta+HN39sJbR4GK64=;
-        b=zda6cwqWDW/ZoGfEs0UKEVqsEmth82V2Op4mAzethVMRg93zU57nyUl68JRhzcpOQv
-         YN+splHI4ZJWsS/7IuLDd6eQ6IhqAmExpcMDGFcJH74LsNLvy7nFyJgX8l5XKJPzU29y
-         etx3nvUnF9kQc3+2d644rev8b8j42vSrpcNryJtfor1+0OHitsM1CFkBqQUtMOQTjUMW
-         Ci73rGO108SF3gs5JFXg0tOcVZDwiwQgpLwLDtZ8TkNv8TjbSiyJbfxg7QmfYjCWfzdl
-         xVk2AWAn4INbBEb0vx1Tc4vcGVxouJHGcexIDc6fd6n25NJ45gABMovrDxFO2Pt4S3Oc
-         0JNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678935735;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=a7EWiKEbOPUDyB/zyzM3aKt/kTkta+HN39sJbR4GK64=;
-        b=ElXBj7Yx8DijtIYo1rGaljx0Wt7wjK6MrPqFJtwbkPAqMhr10DQZBpSnMFZgWpk98J
-         eXLXfBU5A/fMFRjBclWMH8+lfaudq1MJqasByIafpjxRcu/l1cEa5v9kvloL1JszCHIk
-         PWyyDI2YZHQzfZZ14VCDD/voLqpm1bdrkvvcvYr+dwzZCwbQ4At4kEqnaZq6bOPs5dX+
-         wzBTgCfmdzXsA1ouayGLqH+x1zeczsoVz9iaJj3e3abLAuPDT5sPhXApggdI16kKpOF1
-         faQ4HfRTtOn/P4l7kabeldRsXJ7MK+rj9111E+GYG/gsBuFo5/frcJH0TH7KFHzKthnK
-         WKgg==
-X-Gm-Message-State: AO0yUKUnC9yu42b6rh9JX1LntQ5h328tGwWtSeSjmBO+E8P55bHpk++l
-        RFbDrybyHRocN5BZidnH4wb9cw==
-X-Google-Smtp-Source: AK7set8c5ZrGL+nvSbQvYycqwXtRzHVmOwi5GpQiW2J6MANXBQteRhZRjSlj0F7wF52H79vCfsNpFQ==
-X-Received: by 2002:a05:6a20:729c:b0:cc:eb3b:56e9 with SMTP id o28-20020a056a20729c00b000cceb3b56e9mr2856563pzk.1.1678935735350;
-        Wed, 15 Mar 2023 20:02:15 -0700 (PDT)
-Received: from leoy-yangtze.lan ([107.151.177.133])
-        by smtp.gmail.com with ESMTPSA id c20-20020aa78814000000b005907716bf8bsm1729115pfo.60.2023.03.15.20.02.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Mar 2023 20:02:14 -0700 (PDT)
-Date:   Thu, 16 Mar 2023 11:02:06 +0800
-From:   Leo Yan <leo.yan@linaro.org>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        John Garry <john.g.garry@oracle.com>,
-        James Clark <james.clark@arm.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v5 06/16] perf kvm: Introduce histograms data structures
-Message-ID: <20230316030206.GB2267252@leoy-yangtze.lan>
-References: <20230315145112.186603-1-leo.yan@linaro.org>
- <20230315145112.186603-7-leo.yan@linaro.org>
- <ZBIgcX0TmC0tyFR0@kernel.org>
+        Wed, 15 Mar 2023 23:02:32 -0400
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30DF8C8897;
+        Wed, 15 Mar 2023 20:02:29 -0700 (PDT)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id 0463B24E208;
+        Thu, 16 Mar 2023 11:02:27 +0800 (CST)
+Received: from EXMBX071.cuchost.com (172.16.6.81) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 16 Mar
+ 2023 11:02:26 +0800
+Received: from [192.168.125.108] (113.72.145.194) by EXMBX071.cuchost.com
+ (172.16.6.81) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 16 Mar
+ 2023 11:02:25 +0800
+Message-ID: <7d573125-c751-3cb1-4506-a65c5705f590@starfivetech.com>
+Date:   Thu, 16 Mar 2023 11:02:25 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZBIgcX0TmC0tyFR0@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v3 5/5] dts: usb: add StarFive JH7110 USB dts
+ configuration.
+Content-Language: en-US
+To:     Peter Chen <peter.chen@kernel.org>
+CC:     Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        Conor Dooley <conor@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Pawel Laszczak <pawell@cadence.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Roger Quadros <rogerq@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>, <linux-usb@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>
+References: <20230315104411.73614-1-minda.chen@starfivetech.com>
+ <20230315104411.73614-6-minda.chen@starfivetech.com>
+ <20230316024305.GA2322573@nchen-desktop>
+From:   Minda Chen <minda.chen@starfivetech.com>
+In-Reply-To: <20230316024305.GA2322573@nchen-desktop>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [113.72.145.194]
+X-ClientProxiedBy: EXCAS065.cuchost.com (172.16.6.25) To EXMBX071.cuchost.com
+ (172.16.6.81)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,41 +69,116 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnaldo,
 
-On Wed, Mar 15, 2023 at 04:45:53PM -0300, Arnaldo Carvalho de Melo wrote:
 
-[...]
-
-> Had to add:
+On 2023/3/16 10:43, Peter Chen wrote:
+> On 23-03-15 18:44:11, Minda Chen wrote:
+>> USB Glue layer and Cadence USB subnode configuration,
+>> also includes USB and PCIe phy dts configuration.
+>> 
+>> Signed-off-by: Minda Chen <minda.chen@starfivetech.com>
+>> ---
+>>  .../jh7110-starfive-visionfive-2.dtsi         |  7 +++
+>>  arch/riscv/boot/dts/starfive/jh7110.dtsi      | 54 +++++++++++++++++++
+>>  2 files changed, 61 insertions(+)
+>> 
+>> diff --git a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
+>> index a132debb9b53..c64476aebc1a 100644
+>> --- a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
+>> +++ b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
+>> @@ -236,3 +236,10 @@
+>>  	pinctrl-0 = <&uart0_pins>;
+>>  	status = "okay";
+>>  };
+>> +
+>> +&usb0 {
+>> +	status = "okay";
+>> +	usbdrd_cdns3: usb@0 {
+>> +		dr_mode = "peripheral";
+>> +	};
+>> +};
+>> diff --git a/arch/riscv/boot/dts/starfive/jh7110.dtsi b/arch/riscv/boot/dts/starfive/jh7110.dtsi
+>> index f70a4ed47eb4..17722fd1be62 100644
+>> --- a/arch/riscv/boot/dts/starfive/jh7110.dtsi
+>> +++ b/arch/riscv/boot/dts/starfive/jh7110.dtsi
+>> @@ -362,6 +362,60 @@
+>>  			status = "disabled";
+>>  		};
+>>  
+>> +		usb0: usb@10100000 {
+>> +			compatible = "starfive,jh7110-usb";
+>> +			clocks = <&stgcrg JH7110_STGCLK_USB0_LPM>,
+>> +				 <&stgcrg JH7110_STGCLK_USB0_STB>,
+>> +				 <&stgcrg JH7110_STGCLK_USB0_APB>,
+>> +				 <&stgcrg JH7110_STGCLK_USB0_AXI>,
+>> +				 <&stgcrg JH7110_STGCLK_USB0_UTMI_APB>;
+>> +			clock-names = "lpm", "stb", "apb", "axi", "utmi_apb";
+>> +			resets = <&stgcrg JH7110_STGRST_USB0_PWRUP>,
+>> +				 <&stgcrg JH7110_STGRST_USB0_APB>,
+>> +				 <&stgcrg JH7110_STGRST_USB0_AXI>,
+>> +				 <&stgcrg JH7110_STGRST_USB0_UTMI_APB>;
+>> +			starfive,stg-syscon = <&stg_syscon 0x4 0xc4 0x148 0x1f4>;
+>> +			starfive,sys-syscon = <&sys_syscon 0x18>;
+>> +			status = "disabled";
+>> +			#address-cells = <1>;
+>> +			#size-cells = <1>;
+>> +			ranges = <0x0 0x0 0x10100000 0x100000>;
 > 
+> Why it is four entry at ranges? Your address-cells and size-cells are
+> both 1, and your binding-doc is also three?
 > 
-> diff --git a/tools/perf/builtin-kvm.c b/tools/perf/builtin-kvm.c
-> index c4cb34df155fec67..b06c11d306a11cab 100644
-> --- a/tools/perf/builtin-kvm.c
-> +++ b/tools/perf/builtin-kvm.c
-> @@ -85,7 +85,6 @@ static struct kvm_event_key keys[] = {
->  	DEF_SORT_NAME_KEY(time, mean),
->  	{ NULL, NULL }
->  };
-> -#endif // defined(HAVE_KVM_STAT_SUPPORT) && defined(HAVE_LIBTRACEEVENT)
->  
->  struct kvm_hists {
->  	struct hists		hists;
-> @@ -100,6 +99,7 @@ static int kvm_hists__init(void)
->  	perf_hpp_list__init(&kvm_hists.list);
->  	return 0;
->  }
-> +#endif // defined(HAVE_KVM_STAT_SUPPORT) && defined(HAVE_LIBTRACEEVENT)
+> Peter
+Because the parent soc node address-cells is 2. So the local address is 2 entry.
+  	
+	soc {
+                compatible = "simple-bus";
+                interrupt-parent = <&plic>;
+                #address-cells = <2>;
+                #size-cells = <2>;
+                ranges;
+                ...
 
-Thanks for fixing up, this is fine for me.
-
-Seems to me it is not a good practice to use macros (and nested macros) to
-mute or unmute big chunk code.  I will try to refine the building
-builtin-kvm.c and prepare patches based on current code base.
-
-P.s. I saw this series has been picked up into your branch
-acme/tmp.perf-tools-next, if you want me to follow up anything, please
-let me know.  Thank you!
-
-Leo
+So should I change the binding-doc ?
+>> +
+>> +			usbdrd_cdns3: usb@0 {
+>> +				compatible = "cdns,usb3";
+>> +				reg = <0x0 0x10000>,
+>> +				      <0x10000 0x10000>,
+>> +				      <0x20000 0x10000>;
+>> +				reg-names = "otg", "xhci", "dev";
+>> +				interrupts = <100>, <108>, <110>;
+>> +				interrupt-names = "host", "peripheral", "otg";
+>> +				phys = <&usbphy0>;
+>> +				phy-names = "cdns3,usb2-phy";
+>> +				maximum-speed = "super-speed";
+>> +			};
+>> +		};
+>> +
+>> +		usbphy0: phy@10200000 {
+>> +			compatible = "starfive,jh7110-usb-phy";
+>> +			reg = <0x0 0x10200000 0x0 0x10000>;
+>> +			clocks = <&syscrg JH7110_SYSCLK_USB_125M>,
+>> +				 <&stgcrg JH7110_STGCLK_USB0_APP_125>;
+>> +			clock-names = "125m", "app_125";
+>> +			#phy-cells = <0>;
+>> +		};
+>> +
+>> +		pciephy0: phy@10210000 {
+>> +			compatible = "starfive,jh7110-pcie-phy";
+>> +			reg = <0x0 0x10210000 0x0 0x10000>;
+>> +			#phy-cells = <0>;
+>> +		};
+>> +
+>> +		pciephy1: phy@10220000 {
+>> +			compatible = "starfive,jh7110-pcie-phy";
+>> +			reg = <0x0 0x10220000 0x0 0x10000>;
+>> +			#phy-cells = <0>;
+>> +		};
+>> +
+>>  		stgcrg: clock-controller@10230000 {
+>>  			compatible = "starfive,jh7110-stgcrg";
+>>  			reg = <0x0 0x10230000 0x0 0x10000>;
+>> -- 
+>> 2.17.1
+>> 
+> 
