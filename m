@@ -2,142 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC52F6BD7A7
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 18:58:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 838506BD7AA
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 18:59:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230230AbjCPR6q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 13:58:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39674 "EHLO
+        id S230241AbjCPR71 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 13:59:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230094AbjCPR6n (ORCPT
+        with ESMTP id S230161AbjCPR7X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 13:58:43 -0400
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A6E418B30
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 10:58:41 -0700 (PDT)
-Received: by mail-qt1-x82e.google.com with SMTP id s12so2681739qtq.11
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 10:58:41 -0700 (PDT)
+        Thu, 16 Mar 2023 13:59:23 -0400
+Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC91226C13
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 10:59:19 -0700 (PDT)
+Received: by mail-il1-x129.google.com with SMTP id h11so1430760ild.11
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 10:59:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google; t=1678989520;
-        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
-         :from:content-transfer-encoding:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=O/CT0VC/Pi7ybH2oOvSPa04iJydx3LmU8cq1LYYBaxo=;
-        b=Kt0P7blQO4QiB8u64webILAnLelRgcsXJPwaGCHYUs5sinmkiUe9DIvx9WIpHtyDaw
-         CDXigO1BoXDuJ4oHyHiwhuKZlXoaqnL4urF7LQ3T41abKnJuK67rIZuKEg1CXdwRnoIb
-         5VKkNqobEmpNJzvWeg8b7NwFu7SunOGAdmfgA=
+        d=linuxfoundation.org; s=google; t=1678989559; x=1681581559;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=kTWTEay1oNqa1NL3FtznR9uLIk7JecmAx4+1EDsbfbw=;
+        b=SFD1+I7EALeTtwmdMTIYBtmsyrKi/5S9qK1c2QqwiMZg3uvRuqAg7TOjsqFpudcDMt
+         2OI+Kb2Hd+tHhKaa5CAjeedvCLcK7bPGJiCdC66oRxfoawUjxKMiT57fV2k1rMVRI5IP
+         cS/Vhx79ow+XX64LQfy64p4FogHzdsc2iyEeE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678989520;
-        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
-         :from:content-transfer-encoding:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=O/CT0VC/Pi7ybH2oOvSPa04iJydx3LmU8cq1LYYBaxo=;
-        b=5+dztD7FjSDnVZS5iM/Y4g9kwWfonSIdjc/IV1Y7J32ZG9t5StMyFJtIDOMEJce5gL
-         NENT8XOp3aSN+YFguP29BAy+iflGVUkMasuEZFOlsTA5H6GSyiP4hefQmXik77fxSjzY
-         1NMHheKwb8ozLGo8oxcKnDlYI1LQpxLVW1qVW0KEABH1M17flPjQbPbieCyGy9+SC7C+
-         2i6IJEhdAlEJFTSNqON3EZjzc1EJg++p86CqTlVC0NikXl+IPlDOaqrM59nJK2cFEgM7
-         fPkTDnmPaKUDmHxbDJIduU7zoLJtVP5OcZwhaX7KEH7F32gPUKKDtYZ/chvgOILOb/UW
-         QRvw==
-X-Gm-Message-State: AO0yUKXfZp/HNSP2VKQsdj0Freu0ygIrwHdd0NDwv7w1YAoDD6AAzF77
-        fWIY3j+FOcRDR4JyzggJiBfFMQ==
-X-Google-Smtp-Source: AK7set8HcNhSlWCGy+lNBoJsBAtijhqmWQ97EAO52ZHjlCfBQdPWeZxnUrnhy9+jutYLdNGQT0oP0g==
-X-Received: by 2002:ac8:5c16:0:b0:3c0:14ec:bfc0 with SMTP id i22-20020ac85c16000000b003c014ecbfc0mr8136756qti.22.1678989520079;
-        Thu, 16 Mar 2023 10:58:40 -0700 (PDT)
-Received: from smtpclient.apple (c-98-249-43-138.hsd1.va.comcast.net. [98.249.43.138])
-        by smtp.gmail.com with ESMTPSA id q62-20020a374341000000b0074589d41342sm31762qka.17.2023.03.16.10.58.39
+        d=1e100.net; s=20210112; t=1678989559; x=1681581559;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=kTWTEay1oNqa1NL3FtznR9uLIk7JecmAx4+1EDsbfbw=;
+        b=T7r+zMkHBELaLWi1ly3nYyzDOkFiHv5ejlbQscQSG9jpkyVFsoi8R6Qr10vF6upMRj
+         Laqp6EQNEf575POvaEyCE96A88a29mjG6gipRGmaR8o2JMhK8NUATsFN1xIgLtnrKoQC
+         Z+vKrpWW7rNKH+i6aDx/lmKni+9lSczFrQtwcYK8GjHhqEwb6SMHF1ultItS3hyeU3CN
+         ktt0OcLL/u/5YVpP60Q6fIv0A6QxNh1R6+GEqhe4vbT7dDldiBqAForvhlPkhZ0kuYVY
+         Crq0JrAkHb2z2sIQHP4UKr8ZOegBKsmzIL0Vpju/nugvCS3AThLwxBYXnMdzLao9pnqC
+         FKtw==
+X-Gm-Message-State: AO0yUKWse4ctZinwaQNYKFI4fK2nmmj495F9zvBLORi82K5fAP5r6gql
+        IxfuEMGN22yUpgchwGAx9I8TBA==
+X-Google-Smtp-Source: AK7set8X4reR+82vgykilK8aHB+XRKgPcD/AxV28/6UBa3CALDS2MM38mA0PEFA08pso97HNguCN9A==
+X-Received: by 2002:a05:6e02:dd3:b0:317:2f8d:528f with SMTP id l19-20020a056e020dd300b003172f8d528fmr1982563ilj.2.1678989559048;
+        Thu, 16 Mar 2023 10:59:19 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id z13-20020a02cead000000b003a53692d6dbsm2686039jaq.124.2023.03.16.10.59.18
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Mar 2023 10:58:39 -0700 (PDT)
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-From:   Joel Fernandes <joel@joelfernandes.org>
-Mime-Version: 1.0 (1.0)
-Subject: Re: [PATCH] mac802154: Rename kfree_rcu() to kvfree_rcu_mightsleep()
-Date:   Thu, 16 Mar 2023 13:58:28 -0400
-Message-Id: <6EAB6B07-60C0-4489-9281-E01264E86DA5@joelfernandes.org>
-References: <99dccb18-d16e-0b5b-586d-59a7649f68c4@datenfreihafen.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Alexander Aring <alex.aring@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>, linux-wpan@vger.kernel.org,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        netdev@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
-        boqun.feng@gmail.com, paulmck@kernel.org, urezki@gmail.com
-In-Reply-To: <99dccb18-d16e-0b5b-586d-59a7649f68c4@datenfreihafen.org>
-To:     Stefan Schmidt <stefan@datenfreihafen.org>
-X-Mailer: iPhone Mail (20B101)
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLACK autolearn=no autolearn_force=no
-        version=3.4.6
+        Thu, 16 Mar 2023 10:59:18 -0700 (PDT)
+Message-ID: <a1ad3c9e-ee3d-7d30-fe8e-bca2eed77872@linuxfoundation.org>
+Date:   Thu, 16 Mar 2023 11:59:18 -0600
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH RESEND] usbip: vudc: Fix use after free bug in vudc_remove
+ due to race condition
+Content-Language: en-US
+To:     Zheng Wang <zyytlz.wz@163.com>, valentina.manea.m@gmail.com
+Cc:     shuah@kernel.org, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        hackerzheng666@gmail.com, 1395428693sheep@gmail.com,
+        alex000young@gmail.com, Shuah Khan <skhan@linuxfoundation.org>
+References: <20230316174818.1593588-1-zyytlz.wz@163.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20230316174818.1593588-1-zyytlz.wz@163.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 3/16/23 11:48, Zheng Wang wrote:
+> In vudc_probe, it calls init_vudc_hw, which bound &udc->timer with v_timer.
+> 
+> When it calls usbip_sockfd_store, it will call v_start_timer to start the
+> timer work.
+> 
+> When we call vudc_remove to remove the driver, theremay be a sequence as
+> follows:
+> 
+> Fix it by shutdown the timer work before cleanup in vudc_remove.
+> 
 
+Send me v2 for this patch with adding details on how you found this problem
+to this commit log.
+  
+> Note that removing a driver is a root-only operation, and should never
+> happen.
+> 
+> CPU0                  CPU1
+> 
+>                       |v_timer
+> vudc_remove          |
+> kfree(udc);          |
+> //free shost         |
+>                       |udc->gadget
+>                       |//use
+> 
+> Fixes: b6a0ca111867 ("usbip: vudc: Add UDC specific ops")
+> Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+> ---
+>   drivers/usb/usbip/vudc_dev.c | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/usb/usbip/vudc_dev.c b/drivers/usb/usbip/vudc_dev.c
+> index 2bc428f2e261..33d0991755bb 100644
+> --- a/drivers/usb/usbip/vudc_dev.c
+> +++ b/drivers/usb/usbip/vudc_dev.c
+> @@ -633,6 +633,7 @@ int vudc_remove(struct platform_device *pdev)
+>   {
+>   	struct vudc *udc = platform_get_drvdata(pdev);
+>   
+> +	timer_shutdown_sync(&udc->timer);
+>   	usb_del_gadget_udc(&udc->gadget);
+>   	cleanup_vudc_hw(udc);
+>   	kfree(udc);
 
-> On Mar 16, 2023, at 12:36 PM, Stefan Schmidt <stefan@datenfreihafen.org> w=
-rote:
->=20
-> =EF=BB=BFHello Joel.
->=20
->> On 10.03.23 02:31, Joel Fernandes (Google) wrote:
->> The k[v]free_rcu() macro's single-argument form is deprecated.
->> Therefore switch to the new k[v]free_rcu_mightsleep() variant. The goal
->> is to avoid accidental use of the single-argument forms, which can
->> introduce functionality bugs in atomic contexts and latency bugs in
->> non-atomic contexts.
->> The callers are holding a mutex so the context allows blocking. Hence
->> using the API with a single argument will be fine, but use its new name.
->> There is no functionality change with this patch.
->> Fixes: 57588c71177f ("mac802154: Handle passive scanning")
->> Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
->> ---
->> Please Ack the patch but we can carry it through the RCU tree as well if
->> needed, as it is not a bug per-se and we are not dropping the old API bef=
-ore
->> the next release.
->=20
-> The "but we can carry it" part throws me off here. Not sure if you want th=
-is through the RCU tree (I suppose). In that case see my ack below.
->=20
-> If you want me to take it through my wpan tree instead let me know.
-
-We will take this with your Ack below, thank you!
-
- - Joel
-
-
->>  net/mac802154/scan.c | 4 ++--
->>  1 file changed, 2 insertions(+), 2 deletions(-)
->> diff --git a/net/mac802154/scan.c b/net/mac802154/scan.c
->> index 9b0933a185eb..5c191bedd72c 100644
->> --- a/net/mac802154/scan.c
->> +++ b/net/mac802154/scan.c
->> @@ -52,7 +52,7 @@ static int mac802154_scan_cleanup_locked(struct ieee802=
-154_local *local,
->>      request =3D rcu_replace_pointer(local->scan_req, NULL, 1);
->>      if (!request)
->>          return 0;
->> -    kfree_rcu(request);
->> +    kvfree_rcu_mightsleep(request);
->>        /* Advertize first, while we know the devices cannot be removed */=
-
->>      if (aborted)
->> @@ -403,7 +403,7 @@ int mac802154_stop_beacons_locked(struct ieee802154_l=
-ocal *local,
->>      request =3D rcu_replace_pointer(local->beacon_req, NULL, 1);
->>      if (!request)
->>          return 0;
->> -    kfree_rcu(request);
->> +    kvfree_rcu_mightsleep(request);
->>        nl802154_beaconing_done(wpan_dev);
->> =20
->=20
->=20
-> Acked-by: Stefan Schmidt <stefan@datenfreihafen.org>
->=20
-> regards
-> Stefan Schmidt
+thanks,
+-- Shuah
