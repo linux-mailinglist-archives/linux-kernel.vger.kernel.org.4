@@ -2,170 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 670566BCF98
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 13:36:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 604AE6BCFA4
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 13:38:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229986AbjCPMgq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 08:36:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60002 "EHLO
+        id S229887AbjCPMig (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 08:38:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229678AbjCPMgp (ORCPT
+        with ESMTP id S229770AbjCPMie (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 08:36:45 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3E83A42E7;
-        Thu, 16 Mar 2023 05:36:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678970197; x=1710506197;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=0VNdeGsSmFwWcpyMxSZKKLNkZhIZ+u3xoeNhoZCNaOc=;
-  b=OPZst0rBltULR9SsBMKs+/q+9sKjbm1GpyweZs0GtyXdJskO8BRalchH
-   ODr3uJcCQO4ffV2vXEfEJBO9Ev49B9lKFVNOCQRC32KlvK78tfobQ/Zk6
-   gtxGVQic4s+k4ihSUNKLR1ic1FKeRmHJI2E3XQcKD0xV0yx7ovFVuAgrm
-   nvZvHe+IWaI3bh+O4V45YXCn43l+JJydW8pRd367Tzys1wzuAti53uUM7
-   ujYfEPuQXyTBH50QAkXHG8cB3dJ8KlE8biebI48llOSJHoVRk9JGN8TBx
-   5jMhLbcwTRioAxqW4g1ll6sHx3oD3f20P3+bPjIq348IS5azWticzsaI7
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10650"; a="321810657"
-X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
-   d="scan'208";a="321810657"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 05:36:34 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10650"; a="925761028"
-X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
-   d="scan'208";a="925761028"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 16 Mar 2023 05:36:30 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pcmqL-0008W6-1e;
-        Thu, 16 Mar 2023 12:36:29 +0000
-Date:   Thu, 16 Mar 2023 20:35:59 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Casey Schaufler <casey@schaufler-ca.com>, paul@paul-moore.com,
-        linux-security-module@vger.kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev, jmorris@namei.org,
-        keescook@chromium.org, john.johansen@canonical.com,
-        penguin-kernel@i-love.sakura.ne.jp, stephen.smalley.work@gmail.com,
-        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
-        mic@digikod.net
-Subject: Re: [PATCH v7 04/11] LSM: syscalls for current process attributes
-Message-ID: <202303162018.FY1iL9wN-lkp@intel.com>
-References: <20230315224704.2672-5-casey@schaufler-ca.com>
+        Thu, 16 Mar 2023 08:38:34 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BAC82698
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 05:37:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678970269;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9+hfNPh55s3QIpUAvR0km9DQY261PaQ6CD81XmL2nws=;
+        b=EMVPbKc9jC8GJ/Q04l5N3HfdBu1DjWdFQgSZg5RMX+TplW5Xng8BXbZbTfAE8880n5dct6
+        Fa2PDPA/9zR7iPjkEpnmT34d6/xZ2rywWuxHDXeZ9+lBx96EqU5St0gcqToKX4ae7fDO6E
+        B1H1zdXU9fF4zzhr3e+jJGnVtIHE0lc=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-447-6Ed-Ng3pO6ifvgbj0ehqlg-1; Thu, 16 Mar 2023 08:37:48 -0400
+X-MC-Unique: 6Ed-Ng3pO6ifvgbj0ehqlg-1
+Received: by mail-wm1-f69.google.com with SMTP id t1-20020a7bc3c1000000b003dfe223de49so2563595wmj.5
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 05:37:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678970267;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9+hfNPh55s3QIpUAvR0km9DQY261PaQ6CD81XmL2nws=;
+        b=aMhuEJlTCt0XOPyvDMCcBSHuCeDnZxervo2GlF5gm5jaq6ogVYXsk/wpweMvqSVKRz
+         HPIDZx0F+lAxUEbptGDHy4XfhxdKIOte5D7ckq2wkWBXi7qR2VQwjNDeXqZmd4IQppzD
+         J3rX2pX6IFLDtTL+Ou/F9VWAlYmH7kF3O6kGQi5crYwaiKbJm7JcGgCFffdYNpL/fToU
+         nFyAyu2ayWwdDbayuCqg+GbECIHJdnSp6VHRLraVuFyTF66p0WAReWLyaepGo047Vam2
+         3QmTgUkGqhnq1ODvfS6Y8+TRsayn20ihCwrNUX9m6p6w9lh8U5g/KfadBjXUaeJHEumZ
+         F6Xw==
+X-Gm-Message-State: AO0yUKW7voJw69R8kNOhmBQlUtKGiCXOOh/NcrTzM+5YoSqEy1Mlt7b6
+        vOGzdSK7Ja+a4SZrPTGkI6A/6w+zkFUuSFKOwuZdJk5bi+K1AlTwbYpvHCzilmeFQI7/IlOid1s
+        cSf/3ntyxLk7OVDzlEw5KC0ZT
+X-Received: by 2002:a05:600c:19c9:b0:3ed:31fa:f563 with SMTP id u9-20020a05600c19c900b003ed31faf563mr5633484wmq.20.1678970267664;
+        Thu, 16 Mar 2023 05:37:47 -0700 (PDT)
+X-Google-Smtp-Source: AK7set909uXZKSW83RKxR+7Cr6bSKy6Ix/SZI1X9kWjaMkvkdqwheynIZDPY0NqDBlcgG3YwAwc/EA==
+X-Received: by 2002:a05:600c:19c9:b0:3ed:31fa:f563 with SMTP id u9-20020a05600c19c900b003ed31faf563mr5633453wmq.20.1678970267347;
+        Thu, 16 Mar 2023 05:37:47 -0700 (PDT)
+Received: from ?IPV6:2a09:80c0:192:0:5dac:bf3d:c41:c3e7? ([2a09:80c0:192:0:5dac:bf3d:c41:c3e7])
+        by smtp.gmail.com with ESMTPSA id y16-20020a05600c365000b003ed23845666sm4764550wmq.45.2023.03.16.05.37.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Mar 2023 05:37:46 -0700 (PDT)
+Message-ID: <d7a530a9-fa96-22fd-5dee-6951b923181b@redhat.com>
+Date:   Thu, 16 Mar 2023 13:37:45 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230315224704.2672-5-casey@schaufler-ca.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v10 01/16] x86/tdx: Define TDX supported page sizes as
+ macros
+Content-Language: en-US
+To:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     linux-mm@kvack.org, dave.hansen@intel.com, peterz@infradead.org,
+        tglx@linutronix.de, seanjc@google.com, pbonzini@redhat.com,
+        dan.j.williams@intel.com, rafael.j.wysocki@intel.com,
+        kirill.shutemov@linux.intel.com, ying.huang@intel.com,
+        reinette.chatre@intel.com, len.brown@intel.com,
+        tony.luck@intel.com, ak@linux.intel.com, isaku.yamahata@intel.com,
+        chao.gao@intel.com, sathyanarayanan.kuppuswamy@linux.intel.com,
+        bagasdotme@gmail.com, sagis@google.com, imammedo@redhat.com
+References: <cover.1678111292.git.kai.huang@intel.com>
+ <ca5d11744de083812ba121f1b8cc0576a8691342.1678111292.git.kai.huang@intel.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <ca5d11744de083812ba121f1b8cc0576a8691342.1678111292.git.kai.huang@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Casey,
+On 06.03.23 15:13, Kai Huang wrote:
+> TDX supports 4K, 2M and 1G page sizes.  The corresponding values are
+> defined by the TDX module spec and used as TDX module ABI.  Currently,
+> they are used in try_accept_one() when the TDX guest tries to accept a
+> page.  However currently try_accept_one() uses hard-coded magic values.
+> 
+> Define TDX supported page sizes as macros and get rid of the hard-coded
+> values in try_accept_one().  TDX host support will need to use them too.
+> 
+> Signed-off-by: Kai Huang <kai.huang@intel.com>
+> Reviewed-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> Reviewed-by: Dave Hansen <dave.hansen@linux.intel.com>
+> ---
 
-I love your patch! Yet something to improve:
-
-[auto build test ERROR on shuah-kselftest/next]
-[also build test ERROR on shuah-kselftest/fixes linus/master v6.3-rc2]
-[cannot apply to tip/perf/core acme/perf/core next-20230316]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Casey-Schaufler/LSM-Maintain-a-table-of-LSM-attribute-data/20230316-074751
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git next
-patch link:    https://lore.kernel.org/r/20230315224704.2672-5-casey%40schaufler-ca.com
-patch subject: [PATCH v7 04/11] LSM: syscalls for current process attributes
-config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20230316/202303162018.FY1iL9wN-lkp@intel.com/config)
-compiler: sh4-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/0883a93af669a6fcb80a9cc74737d5285a1c46ae
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Casey-Schaufler/LSM-Maintain-a-table-of-LSM-attribute-data/20230316-074751
-        git checkout 0883a93af669a6fcb80a9cc74737d5285a1c46ae
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sh olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sh SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303162018.FY1iL9wN-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from security/lsm_syscalls.c:15:
->> include/linux/syscalls.h:243:25: error: conflicting types for 'sys_lsm_set_self_attr'; have 'long int(unsigned int,  struct lsm_ctx *, size_t,  u32)' {aka 'long int(unsigned int,  struct lsm_ctx *, unsigned int,  unsigned int)'}
-     243 |         asmlinkage long sys##name(__MAP(x,__SC_DECL,__VA_ARGS__))       \
-         |                         ^~~
-   include/linux/syscalls.h:229:9: note: in expansion of macro '__SYSCALL_DEFINEx'
-     229 |         __SYSCALL_DEFINEx(x, sname, __VA_ARGS__)
-         |         ^~~~~~~~~~~~~~~~~
-   include/linux/syscalls.h:221:36: note: in expansion of macro 'SYSCALL_DEFINEx'
-     221 | #define SYSCALL_DEFINE4(name, ...) SYSCALL_DEFINEx(4, _##name, __VA_ARGS__)
-         |                                    ^~~~~~~~~~~~~~~
-   security/lsm_syscalls.c:31:1: note: in expansion of macro 'SYSCALL_DEFINE4'
-      31 | SYSCALL_DEFINE4(lsm_set_self_attr, unsigned int, attr, struct lsm_ctx __user *,
-         | ^~~~~~~~~~~~~~~
-   include/linux/syscalls.h:1064:17: note: previous declaration of 'sys_lsm_set_self_attr' with type 'long int(unsigned int,  struct lsm_ctx *, __u64)' {aka 'long int(unsigned int,  struct lsm_ctx *, long long unsigned int)'}
-    1064 | asmlinkage long sys_lsm_set_self_attr(unsigned int attr, struct lsm_ctx *ctx,
-         |                 ^~~~~~~~~~~~~~~~~~~~~
->> include/linux/syscalls.h:243:25: error: conflicting types for 'sys_lsm_get_self_attr'; have 'long int(unsigned int,  struct lsm_ctx *, size_t *, u32)' {aka 'long int(unsigned int,  struct lsm_ctx *, unsigned int *, unsigned int)'}
-     243 |         asmlinkage long sys##name(__MAP(x,__SC_DECL,__VA_ARGS__))       \
-         |                         ^~~
-   include/linux/syscalls.h:229:9: note: in expansion of macro '__SYSCALL_DEFINEx'
-     229 |         __SYSCALL_DEFINEx(x, sname, __VA_ARGS__)
-         |         ^~~~~~~~~~~~~~~~~
-   include/linux/syscalls.h:221:36: note: in expansion of macro 'SYSCALL_DEFINEx'
-     221 | #define SYSCALL_DEFINE4(name, ...) SYSCALL_DEFINEx(4, _##name, __VA_ARGS__)
-         |                                    ^~~~~~~~~~~~~~~
-   security/lsm_syscalls.c:51:1: note: in expansion of macro 'SYSCALL_DEFINE4'
-      51 | SYSCALL_DEFINE4(lsm_get_self_attr, unsigned int, attr, struct lsm_ctx __user *,
-         | ^~~~~~~~~~~~~~~
-   include/linux/syscalls.h:1062:17: note: previous declaration of 'sys_lsm_get_self_attr' with type 'long int(unsigned int,  struct lsm_ctx *, size_t *, __u64)' {aka 'long int(unsigned int,  struct lsm_ctx *, unsigned int *, long long unsigned int)'}
-    1062 | asmlinkage long sys_lsm_get_self_attr(unsigned int attr, struct lsm_ctx *ctx,
-         |                 ^~~~~~~~~~~~~~~~~~~~~
-
-
-vim +243 include/linux/syscalls.h
-
-1bd21c6c21e848 Dominik Brodowski   2018-04-05  232  
-e145242ea0df6b Dominik Brodowski   2018-04-09  233  /*
-e145242ea0df6b Dominik Brodowski   2018-04-09  234   * The asmlinkage stub is aliased to a function named __se_sys_*() which
-e145242ea0df6b Dominik Brodowski   2018-04-09  235   * sign-extends 32-bit ints to longs whenever needed. The actual work is
-e145242ea0df6b Dominik Brodowski   2018-04-09  236   * done within __do_sys_*().
-e145242ea0df6b Dominik Brodowski   2018-04-09  237   */
-1bd21c6c21e848 Dominik Brodowski   2018-04-05  238  #ifndef __SYSCALL_DEFINEx
-bed1ffca022cc8 Frederic Weisbecker 2009-03-13  239  #define __SYSCALL_DEFINEx(x, name, ...)					\
-bee20031772af3 Arnd Bergmann       2018-06-19  240  	__diag_push();							\
-bee20031772af3 Arnd Bergmann       2018-06-19  241  	__diag_ignore(GCC, 8, "-Wattribute-alias",			\
-bee20031772af3 Arnd Bergmann       2018-06-19  242  		      "Type aliasing is used to sanitize syscall arguments");\
-83460ec8dcac14 Andi Kleen          2013-11-12 @243  	asmlinkage long sys##name(__MAP(x,__SC_DECL,__VA_ARGS__))	\
-e145242ea0df6b Dominik Brodowski   2018-04-09  244  		__attribute__((alias(__stringify(__se_sys##name))));	\
-c9a211951c7c79 Howard McLauchlan   2018-03-21  245  	ALLOW_ERROR_INJECTION(sys##name, ERRNO);			\
-e145242ea0df6b Dominik Brodowski   2018-04-09  246  	static inline long __do_sys##name(__MAP(x,__SC_DECL,__VA_ARGS__));\
-e145242ea0df6b Dominik Brodowski   2018-04-09  247  	asmlinkage long __se_sys##name(__MAP(x,__SC_LONG,__VA_ARGS__));	\
-e145242ea0df6b Dominik Brodowski   2018-04-09  248  	asmlinkage long __se_sys##name(__MAP(x,__SC_LONG,__VA_ARGS__))	\
-1a94bc34768e46 Heiko Carstens      2009-01-14  249  	{								\
-e145242ea0df6b Dominik Brodowski   2018-04-09  250  		long ret = __do_sys##name(__MAP(x,__SC_CAST,__VA_ARGS__));\
-07fe6e00f6cca6 Al Viro             2013-01-21  251  		__MAP(x,__SC_TEST,__VA_ARGS__);				\
-2cf0966683430b Al Viro             2013-01-21  252  		__PROTECT(x, ret,__MAP(x,__SC_ARGS,__VA_ARGS__));	\
-2cf0966683430b Al Viro             2013-01-21  253  		return ret;						\
-1a94bc34768e46 Heiko Carstens      2009-01-14  254  	}								\
-bee20031772af3 Arnd Bergmann       2018-06-19  255  	__diag_pop();							\
-e145242ea0df6b Dominik Brodowski   2018-04-09  256  	static inline long __do_sys##name(__MAP(x,__SC_DECL,__VA_ARGS__))
-1bd21c6c21e848 Dominik Brodowski   2018-04-05  257  #endif /* __SYSCALL_DEFINEx */
-1a94bc34768e46 Heiko Carstens      2009-01-14  258  
+Reviewed-by: David Hildenbrand <david@redhat.com>
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Thanks,
+
+David / dhildenb
+
