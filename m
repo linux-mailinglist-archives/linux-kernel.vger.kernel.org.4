@@ -2,121 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B6086BD762
+	by mail.lfdr.de (Postfix) with ESMTP id 2F0D76BD761
 	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 18:45:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230138AbjCPRpI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 13:45:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44198 "EHLO
+        id S230160AbjCPRpL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 13:45:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230160AbjCPRom (ORCPT
+        with ESMTP id S229895AbjCPRot (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 13:44:42 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDFFFDF720;
-        Thu, 16 Mar 2023 10:44:32 -0700 (PDT)
-Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4PcvkX1V3Rz6J7h1;
-        Fri, 17 Mar 2023 01:43:32 +0800 (CST)
-Received: from localhost (10.48.145.133) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Thu, 16 Mar
- 2023 17:44:29 +0000
-Date:   Thu, 16 Mar 2023 17:44:28 +0000
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Marijn Suijten <marijn.suijten@somainline.org>
-CC:     Jonathan Cameron <jic23@kernel.org>, Rob Herring <robh@kernel.org>,
-        <phone-devel@vger.kernel.org>,
-        <~postmarketos/upstreaming@lists.sr.ht>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        <iio@vger.kernel.org>, Lars-Peter Clausen <lars@metafoo.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        <linux-iio@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH v3 2/3] dt-bindings: thermal: qcom-spmi-adc-tm5: Use
- generic ADC node name
-Message-ID: <20230316174428.00003c4c@Huawei.com>
-In-Reply-To: <20230316124307.pzuvbacsmjdootfx@SoMainline.org>
-References: <20230201204447.542385-1-marijn.suijten@somainline.org>
-        <20230201204447.542385-3-marijn.suijten@somainline.org>
-        <20230203212501.GA908601-robh@kernel.org>
-        <20230205150645.549ff062@jic23-huawei>
-        <20230316124307.pzuvbacsmjdootfx@SoMainline.org>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        Thu, 16 Mar 2023 13:44:49 -0400
+Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.216])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5AA3749F3;
+        Thu, 16 Mar 2023 10:44:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=nEAMn
+        AlTlhmBc3GQSHDUq/SQ1R/Wav9t7BfHo/zL+ZI=; b=eFIIFAUwP5fDPLIp7KfFk
+        55oJJ5VNga9gWULLyFnBxMJEwVyYIPd0/yM18xNy31DuP0Fmx1oUfVw91R8YHcUQ
+        RFbXqF1bzzDhS3t4jiqB1GQrRgxgmVzToi2m0Vrsc3EFd+B0hcJlbXCOxQ0kYPdW
+        12oS+GZipHGfykDngcnBCA=
+Received: from leanderwang-LC2.localdomain (unknown [111.206.145.21])
+        by zwqz-smtp-mta-g4-0 (Coremail) with SMTP id _____wD3_8eBVRNkg0sdAQ--.31373S2;
+        Fri, 17 Mar 2023 01:44:33 +0800 (CST)
+From:   Zheng Wang <zyytlz.wz@163.com>
+To:     valentina.manea.m@gmail.com
+Cc:     shuah@kernel.org, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        hackerzheng666@gmail.com, 1395428693sheep@gmail.com,
+        alex000young@gmail.com, Zheng Wang <zyytlz.wz@163.com>
+Subject: [PATCH v3] usbip: vudc: Fix use after free bug in vudc_remove due to race condition
+Date:   Fri, 17 Mar 2023 01:44:32 +0800
+Message-Id: <20230316174432.1592087-1-zyytlz.wz@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.48.145.133]
-X-ClientProxiedBy: lhrpeml500005.china.huawei.com (7.191.163.240) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: _____wD3_8eBVRNkg0sdAQ--.31373S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWrtF1UGFy5Jw45ZF18GrWkXrb_yoWkXwc_ua
+        4ruF4xGF4rCanxKF17XwnxZrWUKFyDXrn3XFs29F4fWa4xGr15Zw17Ars7uF47uF98GFyD
+        Cws8t395Zw47ujkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xRK9NVJUUUUU==
+X-Originating-IP: [111.206.145.21]
+X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/1tbiXQU0U1WBo8O2kQAAss
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 16 Mar 2023 13:43:07 +0100
-Marijn Suijten <marijn.suijten@somainline.org> wrote:
+In vudc_probe, it calls init_vudc_hw, which bound &udc->timer with v_timer.
 
-> On 2023-02-05 15:06:45, Jonathan Cameron wrote:
-> > On Fri, 3 Feb 2023 15:25:01 -0600
-> > Rob Herring <robh@kernel.org> wrote:
-> >   
-> > > On Wed, Feb 01, 2023 at 09:44:46PM +0100, Marijn Suijten wrote:  
-> > > > Update the example to reflect a future requirement for the generic
-> > > > adc-chan node name on ADC channel nodes, while conveying the board name
-> > > > of the channel in a label instead.    
-> > > 
-> > > I don't think we've defined 'adc-chan' as THE generic name. Looks like 
-> > > we have:
-> > > 
-> > > adc-chan
-> > > adc-channel
-> > > channel
-> > > 
-> > > 'channel' is the most common (except for QCom).  
-> > Good spot.
-> > 
-> > We also have that defined as the channel name in 
-> > bindings/iio/adc.yaml  
-> 
-> Good point, let's match adc.yaml and use 'channel' instead.  I'll
-> respin this series with thas, as well as rebasing on -next to solve
-> conflicts with 8013295662f5 ("arm64: dts: qcom: sc8280xp: Add label
-> property to vadc channel nodes"): supposedly that DT originally relied
-> on the `@XX` suffix bug :)
-> 
-> > Now this particular binding doesn't use anything from that
-> > generic binding (other than trivial use of reg) but better to be
-> > consistent with it than not!  
-> 
-> Should it inherit the common binding, or was it omitted for a reason?
+When it calls usbip_sockfd_store, it will call v_start_timer to start the 
+timer work.
 
-Harmless but little point as far as I can see given we don't happen
-to have any of the generic elements defined in the generic channel
-binding.
+When we call vudc_remove to remove the driver, theremay be a sequence as 
+follows:
 
-Jonathan
+Fix it by shutdown the timer work before cleanup in vudc_remove.
 
-> 
-> - Marijn
-> 
+Note that removing a driver is a root-only operation, and should never
+happen.
+
+CPU0                  CPU1
+
+                     |v_timer
+vudc_remove          |
+kfree(udc);          |
+//free shost         |
+                     |udc->gadget
+                     |//use
+
+Fixes: b6a0ca111867 ("usbip: vudc: Add UDC specific ops")
+Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+---
+ drivers/usb/usbip/vudc_dev.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/usb/usbip/vudc_dev.c b/drivers/usb/usbip/vudc_dev.c
+index 2bc428f2e261..33d0991755bb 100644
+--- a/drivers/usb/usbip/vudc_dev.c
++++ b/drivers/usb/usbip/vudc_dev.c
+@@ -633,6 +633,7 @@ int vudc_remove(struct platform_device *pdev)
+ {
+ 	struct vudc *udc = platform_get_drvdata(pdev);
+ 
++	timer_shutdown_sync(&udc->timer);
+ 	usb_del_gadget_udc(&udc->gadget);
+ 	cleanup_vudc_hw(udc);
+ 	kfree(udc);
+-- 
+2.25.1
 
