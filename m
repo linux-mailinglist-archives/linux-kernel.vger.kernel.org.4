@@ -2,49 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B613F6BD447
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 16:47:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A3AC6BD44A
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 16:47:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231129AbjCPPrU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 11:47:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40940 "EHLO
+        id S230208AbjCPPrx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 11:47:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230304AbjCPPrH (ORCPT
+        with ESMTP id S230186AbjCPPrv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 11:47:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 959872F7B4;
-        Thu, 16 Mar 2023 08:46:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0994B62079;
-        Thu, 16 Mar 2023 15:45:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC840C433EF;
-        Thu, 16 Mar 2023 15:45:47 +0000 (UTC)
-Date:   Thu, 16 Mar 2023 11:45:44 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Florent Revest <revest@chromium.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        catalin.marinas@arm.com, will@kernel.org, mhiramat@kernel.org,
-        mark.rutland@arm.com, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, kpsingh@kernel.org, jolsa@kernel.org,
-        xukuohai@huaweicloud.com, lihuafei1@huawei.com
-Subject: Re: [PATCH v2 04/10] ftrace: Store direct called addresses in their
- ops
-Message-ID: <20230316114544.5db09039@gandalf.local.home>
-In-Reply-To: <CABRcYmLLbRGZXWwEpyLW1YFz87tTPA8pCL7oLd4K6Hp9Etr5LA@mail.gmail.com>
-References: <20230207182135.2671106-1-revest@chromium.org>
-        <20230207182135.2671106-5-revest@chromium.org>
-        <20230315194334.58eb56ab@gandalf.local.home>
-        <CABRcYmLLbRGZXWwEpyLW1YFz87tTPA8pCL7oLd4K6Hp9Etr5LA@mail.gmail.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Thu, 16 Mar 2023 11:47:51 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E12E726CD2;
+        Thu, 16 Mar 2023 08:47:22 -0700 (PDT)
+Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Pcs6C51zQz6J7G1;
+        Thu, 16 Mar 2023 23:45:23 +0800 (CST)
+Received: from A2006125610.china.huawei.com (10.202.227.178) by
+ lhrpeml500005.china.huawei.com (7.191.163.240) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Thu, 16 Mar 2023 15:46:18 +0000
+From:   Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>
+To:     <linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>
+CC:     <gshan@redhat.com>, <maz@kernel.org>
+Subject: [PATCH] KVM: Add the missing stub function for kvm_dirty_ring_check_request()
+Date:   Thu, 16 Mar 2023 15:45:54 +0000
+Message-ID: <20230316154554.1237-1-shameerali.kolothum.thodi@huawei.com>
+X-Mailer: git-send-email 2.12.0.windows.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain
+X-Originating-IP: [10.202.227.178]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.7 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,33 +44,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 16 Mar 2023 16:40:48 +0100
-Florent Revest <revest@chromium.org> wrote:
+The stub for !CONFIG_HAVE_KVM_DIRTY_RING case is missing.
 
-> > > @@ -5466,6 +5467,7 @@ __modify_ftrace_direct(struct ftrace_ops *ops, unsigned long addr)
-> > >                       entry->direct = addr;
-> > >               }
-> > >       }
-> > > +     WRITE_ONCE(ops->direct_call, addr);  
-> >
-> > I'm curious about the use of WRITE_ONCE(). It should not go outside the
-> > mutex barrier.  
-> 
-> This WRITE_ONCE was originally suggested by Mark here:
-> https://lore.kernel.org/all/Y9vW99htjOphDXqY@FVFF77S0Q05N.cambridge.arm.com/#t
-> 
-> My understanding is that it's not so much about avoiding re-ordering
-> but rather about avoiding store tearing since a ftrace_caller
-> trampoline could concurrently read ops->direct_call. Does that make
-> sense ?
+Fixes: cf87ac739e48 ("KVM: x86: Introduce KVM_REQ_DIRTY_RING_SOFT_FULL")
+Signed-off-by: Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>
+---
+ include/linux/kvm_dirty_ring.h | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Yes, but a comment needs to be added:
+diff --git a/include/linux/kvm_dirty_ring.h b/include/linux/kvm_dirty_ring.h
+index 4862c98d80d3..a00301059da5 100644
+--- a/include/linux/kvm_dirty_ring.h
++++ b/include/linux/kvm_dirty_ring.h
+@@ -69,6 +69,11 @@ static inline void kvm_dirty_ring_free(struct kvm_dirty_ring *ring)
+ {
+ }
+ 
++static inline bool kvm_dirty_ring_check_request(struct kvm_vcpu *vcpu)
++{
++	return false;
++}
++
+ #else /* CONFIG_HAVE_KVM_DIRTY_RING */
+ 
+ int kvm_cpu_dirty_log_size(void);
+-- 
+2.34.1
 
-     /* Prevent store tearing on some archs */
-     WRITE_ONCE(ops->direct_call, addr);  
-
-Or something to that affect. Otherwise I can see it confusing others in the
-future. And probably me too, as I'll forget why it was a WRITE_ONCE() by
-next month. ;-)
-
--- Steve
