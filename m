@@ -2,61 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39D8C6BC57E
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 06:10:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F5D36BC57F
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 06:11:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229547AbjCPFK4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 01:10:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44024 "EHLO
+        id S229616AbjCPFK6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 01:10:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbjCPFKy (ORCPT
+        with ESMTP id S229464AbjCPFKz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 01:10:54 -0400
+        Thu, 16 Mar 2023 01:10:55 -0400
 Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F25619C4C
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97E6E1A64C
         for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 22:10:52 -0700 (PDT)
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32G2FR1e027835;
-        Thu, 16 Mar 2023 05:10:39 GMT
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32G4E5UM023769;
+        Thu, 16 Mar 2023 05:10:41 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=uYipp+sMLzD8OSZ1BiR/1D4F0+IZY95zYF+fapiciJU=;
- b=BVJPgfVX1lTBc2DDPlCMiJYxDo57DblQbwl2TfrTwIvwZjzOmxTO0jIiw29N7psFMOzR
- mxGR3Lj/ZpXuUeFUJwXZngyg4fICzrybk0BXMga1YJGxudl8C60/6TPtGg0X7yv0TYId
- fHlD8ipxozzLEnKtTgjXCsx1/I1Vik+aAZf4fXCvT9X6ULwoZ5et59Ecxgp+160FEysx
- 7s2PixBLTTlJ0T/G9kUxw2f5WMohON8nltUsLQIZcITmL7N3Tfq9eGIm6hljZ2uThads
- NZGcRVbdx7O0YsdAihsVRAbV/Sk2aFBB6dIVN1XEZsmtQ/q71W9PMecYyHZ6fSyyAozu 8Q== 
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding; s=pp1;
+ bh=gBh+7d1v5a1i2yuAyTGRn8ECStMfSXE34UF0EajWmeA=;
+ b=tsVH5q5c1QBsi2kPhap8Wpym6aZ6R98h4PCdg3uL+PqYHaMgOUP8HYXgm0RnOBTN1KqS
+ V4qWqWX0EKqjYOQmOp6np71+v9sq18URYMck8uNaGovZZelOgux42bKhehhTlHTGbUUa
+ 0Wt1x15KAUQdOZgR0r5cX3v3UEMvTBrsFfYWSChI24zBoW+xDr4xNGssq4bV0EQKJL5h
+ JnryGR7WntRo992UOwJav4VJi85UUGdaZBkJBdlxv8U81kJYLPECqr9gzWqMlTz1kBdf
+ Lgjv1YoID9niaEU5d7YfREZNtZeBy3qCwelSlhXvH9FRDogTWNVYljdIdtDJ8ftO7P01 0Q== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pbpwayds0-1
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pbpwbyg7n-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 16 Mar 2023 05:10:39 +0000
-Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32G58BTD010788;
-        Thu, 16 Mar 2023 05:10:39 GMT
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pbpwaydrd-1
+        Thu, 16 Mar 2023 05:10:41 +0000
+Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32G577nq026445;
+        Thu, 16 Mar 2023 05:10:40 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pbpwbyg6u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 16 Mar 2023 05:10:40 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32G1SXrD016471;
+        Thu, 16 Mar 2023 05:10:38 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3pbsf3g6ar-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Thu, 16 Mar 2023 05:10:38 +0000
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32G22pIO027542;
-        Thu, 16 Mar 2023 05:10:36 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-        by ppma03fra.de.ibm.com (PPS) with ESMTPS id 3pbsyxr4bx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 16 Mar 2023 05:10:36 +0000
 Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32G5AWjt42074794
+        by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32G5AYZR17105532
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 16 Mar 2023 05:10:32 GMT
+        Thu, 16 Mar 2023 05:10:34 GMT
 Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A78282004B;
+        by IMSVA (Postfix) with ESMTP id A5CF92004D;
+        Thu, 16 Mar 2023 05:10:34 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EC3CA2004B;
         Thu, 16 Mar 2023 05:10:32 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id F359520043;
-        Thu, 16 Mar 2023 05:10:30 +0000 (GMT)
 Received: from r223l.aus.stglabs.ibm.com (unknown [9.3.109.14])
         by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Thu, 16 Mar 2023 05:10:30 +0000 (GMT)
+        Thu, 16 Mar 2023 05:10:32 +0000 (GMT)
 From:   Kautuk Consul <kconsul@linux.vnet.ibm.com>
 To:     Michael Ellerman <mpe@ellerman.id.au>,
         Nicholas Piggin <npiggin@gmail.com>,
@@ -66,22 +67,24 @@ To:     Michael Ellerman <mpe@ellerman.id.au>,
         Alexey Kardashevskiy <aik@ozlabs.ru>
 Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
         Kautuk Consul <kconsul@linux.vnet.ibm.com>
-Subject: [PATCH v3 0/2] Improving calls to kvmppc_hv_entry
-Date:   Thu, 16 Mar 2023 01:10:23 -0400
-Message-Id: <20230316051025.1424093-1-kconsul@linux.vnet.ibm.com>
+Subject: [PATCH v3 1/2] arch/powerpc/kvm: kvmppc_hv_entry: remove .global scope
+Date:   Thu, 16 Mar 2023 01:10:24 -0400
+Message-Id: <20230316051025.1424093-2-kconsul@linux.vnet.ibm.com>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230316051025.1424093-1-kconsul@linux.vnet.ibm.com>
+References: <20230316051025.1424093-1-kconsul@linux.vnet.ibm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: -IptIBy7kycJfyJVBIPSgrKplw3aZsKk
-X-Proofpoint-ORIG-GUID: 5O-4PcWa-da0N6P7c6oPIJ6KO0wQA9sh
+X-Proofpoint-ORIG-GUID: LnL88fGPp73G5UFtoa_PeBCbbzJI0B99
+X-Proofpoint-GUID: p-nIySiaNmJYwHauruBPO4-on59gWuHD
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-16_03,2023-03-15_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 suspectscore=0
- lowpriorityscore=0 impostorscore=0 mlxlogscore=797 malwarescore=0
- adultscore=0 clxscore=1015 phishscore=0 priorityscore=1501 bulkscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ definitions=2023-03-16_02,2023-03-15_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 phishscore=0
+ impostorscore=0 mlxlogscore=999 clxscore=1015 malwarescore=0
+ lowpriorityscore=0 spamscore=0 mlxscore=0 adultscore=0 suspectscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2303150002 definitions=main-2303160042
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
@@ -92,20 +95,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-- remove .global scope of kvmppc_hv_entry
-- remove r4 argument to kvmppc_hv_entry as it is not required
+kvmppc_hv_entry isn't called from anywhere other than
+book3s_hv_rmhandlers.S itself. Removing .global scope for
+this function and annotating it with SYM_INNER_LABEL.
 
-Changes since v2:
-- Add the lwsync instruction before the load to r4 to order
-  load of vcore before load of vcpu
+Signed-off-by: Kautuk Consul <kconsul@linux.vnet.ibm.com>
+---
+ arch/powerpc/kvm/book3s_hv_rmhandlers.S | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-Kautuk Consul (2):
-  arch/powerpc/kvm: kvmppc_hv_entry: remove .global scope
-  arch/powerpc/kvm: kvmppc_hv_entry: remove r4 argument
-
- arch/powerpc/kvm/book3s_hv_rmhandlers.S | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
-
+diff --git a/arch/powerpc/kvm/book3s_hv_rmhandlers.S b/arch/powerpc/kvm/book3s_hv_rmhandlers.S
+index acf80915f406..b81ba4ee0521 100644
+--- a/arch/powerpc/kvm/book3s_hv_rmhandlers.S
++++ b/arch/powerpc/kvm/book3s_hv_rmhandlers.S
+@@ -502,8 +502,7 @@ END_FTR_SECTION_IFSET(CPU_FTR_ARCH_207S)
+  *                                                                            *
+  *****************************************************************************/
+ 
+-.global kvmppc_hv_entry
+-kvmppc_hv_entry:
++SYM_INNER_LABEL(kvmppc_hv_entry, SYM_L_LOCAL)
+ 
+ 	/* Required state:
+ 	 *
 -- 
 2.39.2
 
