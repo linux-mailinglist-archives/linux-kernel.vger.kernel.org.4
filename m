@@ -2,164 +2,319 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1078A6BCD73
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 12:04:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75B3D6BCD7B
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 12:05:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229939AbjCPLE0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 07:04:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59892 "EHLO
+        id S230012AbjCPLFY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 07:05:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229754AbjCPLEX (ORCPT
+        with ESMTP id S229850AbjCPLFW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 07:04:23 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79846F95F;
-        Thu, 16 Mar 2023 04:04:21 -0700 (PDT)
-Date:   Thu, 16 Mar 2023 11:04:18 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1678964659;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=sZlU2pKxAMcTbPq1A4MQlpVefaseF7Jb/tqM8ClnzbU=;
-        b=qvJtQYz70XSHkRM9BMzP8Uwp443ka7eke3cpCyzHPC0WOcvMatN3qfNSvDlmyj5UmkIjmf
-        iZrS+h4H0A8QxYRKn4QImjjYJawE09+3W8tcOqRpQK5+ALXOX0IfeFvWbIQDSqbpL6jytW
-        tfDK7VeWjqOwCwZ/o6dq4COtJRJWhYZ/VJo6++bWzdKaqtbhXLKkZ0SfziQPM0EuwmnBz2
-        NuoCfYXbVeW6fjbeOuZhmjmXzXhputxriWANpybxcWQ22VzlfsROaEiMXqEkNCKaqi26ma
-        5tDYtaf2wmhdUVpB793icW4OZetu6JXKu7ogGCcMmEoVMkUFb/6TAK/NQ+ghBg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1678964659;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=sZlU2pKxAMcTbPq1A4MQlpVefaseF7Jb/tqM8ClnzbU=;
-        b=w7Mv5gDacfSwMBukktA8XYL89Ci7oDaf+6ZuMLITciwBcA7pqP8L1JuiBIjAM/zhUi6r26
-        l92MS2g2NUWymYAw==
-From:   "tip-bot2 for Borislav Petkov (AMD)" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/cpu] x86/CPU/AMD: Make sure EFER[AIBRSE] is set
-Cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
-        "Borislav Petkov (AMD)" <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20230224185257.o3mcmloei5zqu7wa@treble>
-References: <20230224185257.o3mcmloei5zqu7wa@treble>
+        Thu, 16 Mar 2023 07:05:22 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0BF067018;
+        Thu, 16 Mar 2023 04:05:20 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32GB5A7f074665;
+        Thu, 16 Mar 2023 06:05:10 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1678964710;
+        bh=43sI3V+5HkuG7ytp0+OIAoI/zPXPFa+f93/6FFpSTe0=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=myhLnEkk/AWjv9GNZBW6nJ791OGkoliA1JIlU79RT2nKz9YxEpBUJtd2WbUj9g3fd
+         8PaejyukVDjZ/97XcPaSI7yS/QMDexKTUmyoEPlhOvJd7cW9BYSixzcx5Y/PaTmkIx
+         KYDcURV3Wk/wCvNFFkQCygDSOZ7oYRESdQNHOSbU=
+Received: from DLEE110.ent.ti.com (dlee110.ent.ti.com [157.170.170.21])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32GB5A1a057792
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 16 Mar 2023 06:05:10 -0500
+Received: from DLEE109.ent.ti.com (157.170.170.41) by DLEE110.ent.ti.com
+ (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Thu, 16
+ Mar 2023 06:05:09 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Thu, 16 Mar 2023 06:05:09 -0500
+Received: from [10.24.69.114] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32GB54Ll085799;
+        Thu, 16 Mar 2023 06:05:05 -0500
+Message-ID: <b1409f34-86b5-14e8-f352-5032aa57ca46@ti.com>
+Date:   Thu, 16 Mar 2023 16:35:04 +0530
 MIME-Version: 1.0
-Message-ID: <167896465869.5837.816655048478460304.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [EXTERNAL] Re: [PATCH v4 4/5] soc: ti: pruss: Add helper
+ functions to set GPI mode, MII_RT_event and XFR
+Content-Language: en-US
+To:     Roger Quadros <rogerq@kernel.org>,
+        MD Danish Anwar <danishanwar@ti.com>,
+        "Andrew F. Davis" <afd@ti.com>, Suman Anna <s-anna@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Nishanth Menon <nm@ti.com>
+CC:     <linux-remoteproc@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-omap@vger.kernel.org>,
+        <srk@ti.com>, <devicetree@vger.kernel.org>,
+        <netdev@vger.kernel.org>
+References: <20230313111127.1229187-1-danishanwar@ti.com>
+ <20230313111127.1229187-5-danishanwar@ti.com>
+ <d168e7dd-42a0-b728-5c4c-e97209c13871@kernel.org>
+From:   Md Danish Anwar <a0501179@ti.com>
+Organization: Texas Instruments
+In-Reply-To: <d168e7dd-42a0-b728-5c4c-e97209c13871@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/cpu branch of tip:
+Hi Roger,
 
-Commit-ID:     8cc68c9c9e92dbaae51a711454c66eb668045508
-Gitweb:        https://git.kernel.org/tip/8cc68c9c9e92dbaae51a711454c66eb668045508
-Author:        Borislav Petkov (AMD) <bp@alien8.de>
-AuthorDate:    Sat, 25 Feb 2023 01:11:31 +01:00
-Committer:     Borislav Petkov (AMD) <bp@alien8.de>
-CommitterDate: Thu, 16 Mar 2023 11:50:00 +01:00
+On 15/03/23 17:52, Roger Quadros wrote:
+> 
+> 
+> On 13/03/2023 13:11, MD Danish Anwar wrote:
+>> From: Suman Anna <s-anna@ti.com>
+>>
+>> The PRUSS CFG module is represented as a syscon node and is currently
+>> managed by the PRUSS platform driver. Add easy accessor functions to set
+>> GPI mode, MII_RT event enable/disable and XFR (XIN XOUT) enable/disable
+>> to enable the PRUSS Ethernet usecase. These functions reuse the generic
+>> pruss_cfg_update() API function.
+>>
+>> Signed-off-by: Suman Anna <s-anna@ti.com>
+>> Co-developed-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
+>> Signed-off-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
+>> Signed-off-by: Puranjay Mohan <p-mohan@ti.com>
+>> Signed-off-by: MD Danish Anwar <danishanwar@ti.com>
+>> ---
+>>  drivers/soc/ti/pruss.c           | 60 ++++++++++++++++++++++++++++++++
+>>  include/linux/remoteproc/pruss.h | 22 ++++++++++++
+>>  2 files changed, 82 insertions(+)
+>>
+>> diff --git a/drivers/soc/ti/pruss.c b/drivers/soc/ti/pruss.c
+>> index 26d8129b515c..2f04b7922ddb 100644
+>> --- a/drivers/soc/ti/pruss.c
+>> +++ b/drivers/soc/ti/pruss.c
+>> @@ -203,6 +203,66 @@ static int pruss_cfg_update(struct pruss *pruss, unsigned int reg,
+>>  	return regmap_update_bits(pruss->cfg_regmap, reg, mask, val);
+>>  }
+>>  
+>> +/**
+>> + * pruss_cfg_gpimode() - set the GPI mode of the PRU
+>> + * @pruss: the pruss instance handle
+>> + * @pru_id: id of the PRU core within the PRUSS
+>> + * @mode: GPI mode to set
+>> + *
+>> + * Sets the GPI mode for a given PRU by programming the
+>> + * corresponding PRUSS_CFG_GPCFGx register
+>> + *
+>> + * Return: 0 on success, or an error code otherwise
+>> + */
+>> +int pruss_cfg_gpimode(struct pruss *pruss, enum pruss_pru_id pru_id,
+>> +		      enum pruss_gpi_mode mode)
+>> +{
+>> +	if (pru_id < 0 || pru_id >= PRUSS_NUM_PRUS)
+>> +		return -EINVAL;
+>> +
+>> +	if (mode < 0 || mode > PRUSS_GPI_MODE_MAX)
+>> +		return -EINVAL;
+>> +
+>> +	return pruss_cfg_update(pruss, PRUSS_CFG_GPCFG(pru_id),
+>> +				PRUSS_GPCFG_PRU_GPI_MODE_MASK,
+>> +				mode << PRUSS_GPCFG_PRU_GPI_MODE_SHIFT);
+>> +}
+>> +EXPORT_SYMBOL_GPL(pruss_cfg_gpimode);
+>> +
+>> +/**
+>> + * pruss_cfg_miirt_enable() - Enable/disable MII RT Events
+>> + * @pruss: the pruss instance
+>> + * @enable: enable/disable
+>> + *
+>> + * Enable/disable the MII RT Events for the PRUSS.
+>> + *
+>> + * Return: 0 on success, or an error code otherwise
+>> + */
+>> +int pruss_cfg_miirt_enable(struct pruss *pruss, bool enable)
+>> +{
+>> +	u32 set = enable ? PRUSS_MII_RT_EVENT_EN : 0;
+>> +
+>> +	return pruss_cfg_update(pruss, PRUSS_CFG_MII_RT,
+>> +				PRUSS_MII_RT_EVENT_EN, set);
+>> +}
+>> +EXPORT_SYMBOL_GPL(pruss_cfg_miirt_enable);
+>> +
+>> +/**
+>> + * pruss_cfg_xfr_enable() - Enable/disable XIN XOUT shift functionality
+>> + * @pruss: the pruss instance
+>> + * @enable: enable/disable
+>> + * @mask: Mask for PRU / RTU
+> 
+> You should not expect the user to provide the mask but only
+> the core type e.g. 
+> 
+> enum pru_type {
+>         PRU_TYPE_PRU = 0,
+>         PRU_TYPE_RTU,
+>         PRU_TYPE_TX_PRU,
+>         PRU_TYPE_MAX,
+> };
+> 
+> Then you figure out the mask in the function.
+> Also check for invalid pru_type and return error if so.
+> 
 
-x86/CPU/AMD: Make sure EFER[AIBRSE] is set
+Sure Roger, I will create a enum and take it as parameter in API. Based on
+these enum I will calculate mask and do XFR shifting inside the API
+pruss_cfg_xfr_enable().
 
-The AutoIBRS bit gets set only on the BSP as part of determining which
-mitigation to enable on AMD. Setting on the APs relies on the
-circumstance that the APs get booted through the trampoline and EFER
-- the MSR which contains that bit - gets replicated on every AP from the
-BSP.
+There are two registers for XFR shift.
 
-However, this can change in the future and considering the security
-implications of this bit not being set on every CPU, make sure it is set
-by verifying EFER later in the boot process and on every AP.
+#define PRUSS_SPP_XFER_SHIFT_EN                 BIT(1)
+#define PRUSS_SPP_RTU_XFR_SHIFT_EN              BIT(3)
 
-Reported-by: Josh Poimboeuf <jpoimboe@kernel.org>
-Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
-Acked-by: Dave Hansen <dave.hansen@linux.intel.com>
-Link: https://lore.kernel.org/r/20230224185257.o3mcmloei5zqu7wa@treble
----
- arch/x86/kernel/cpu/amd.c  | 11 +++++++++++
- arch/x86/kernel/cpu/bugs.c | 10 +---------
- arch/x86/kernel/cpu/cpu.h  |  8 ++++++++
- 3 files changed, 20 insertions(+), 9 deletions(-)
+For PRU XFR shifting, the mask should be PRUSS_SPP_XFER_SHIFT_EN,
+for RTU shifting mask should be PRUSS_SPP_RTU_XFR_SHIFT_EN and for PRU and RTU
+shifting mask should be (PRUSS_SPP_XFER_SHIFT_EN | PRUSS_SPP_RTU_XFR_SHIFT_EN)
 
-diff --git a/arch/x86/kernel/cpu/amd.c b/arch/x86/kernel/cpu/amd.c
-index 380753b..dd32dbc 100644
---- a/arch/x86/kernel/cpu/amd.c
-+++ b/arch/x86/kernel/cpu/amd.c
-@@ -996,6 +996,17 @@ static void init_amd(struct cpuinfo_x86 *c)
- 		msr_set_bit(MSR_K7_HWCR, MSR_K7_HWCR_IRPERF_EN_BIT);
- 
- 	check_null_seg_clears_base(c);
-+
-+	/*
-+	 * Make sure EFER[AIBRSE - Automatic IBRS Enable] is set. The APs are brought up
-+	 * using the trampoline code and as part of it, MSR_EFER gets prepared there in
-+	 * order to be replicated onto them. Regardless, set it here again, if not set,
-+	 * to protect against any future refactoring/code reorganization which might
-+	 * miss setting this important bit.
-+	 */
-+	if (spectre_v2_in_eibrs_mode(spectre_v2_enabled) &&
-+	    cpu_has(c, X86_FEATURE_AUTOIBRS))
-+		WARN_ON_ONCE(msr_set_bit(MSR_EFER, _EFER_AUTOIBRS));
- }
- 
- #ifdef CONFIG_X86_32
-diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
-index f9d060e..182af64 100644
---- a/arch/x86/kernel/cpu/bugs.c
-+++ b/arch/x86/kernel/cpu/bugs.c
-@@ -784,8 +784,7 @@ static int __init nospectre_v1_cmdline(char *str)
- }
- early_param("nospectre_v1", nospectre_v1_cmdline);
- 
--static enum spectre_v2_mitigation spectre_v2_enabled __ro_after_init =
--	SPECTRE_V2_NONE;
-+enum spectre_v2_mitigation spectre_v2_enabled __ro_after_init = SPECTRE_V2_NONE;
- 
- #undef pr_fmt
- #define pr_fmt(fmt)     "RETBleed: " fmt
-@@ -1133,13 +1132,6 @@ spectre_v2_parse_user_cmdline(void)
- 	return SPECTRE_V2_USER_CMD_AUTO;
- }
- 
--static inline bool spectre_v2_in_eibrs_mode(enum spectre_v2_mitigation mode)
--{
--	return mode == SPECTRE_V2_EIBRS ||
--	       mode == SPECTRE_V2_EIBRS_RETPOLINE ||
--	       mode == SPECTRE_V2_EIBRS_LFENCE;
--}
--
- static inline bool spectre_v2_in_ibrs_mode(enum spectre_v2_mitigation mode)
- {
- 	return spectre_v2_in_eibrs_mode(mode) || mode == SPECTRE_V2_IBRS;
-diff --git a/arch/x86/kernel/cpu/cpu.h b/arch/x86/kernel/cpu/cpu.h
-index 57a5349..f97b0fe 100644
---- a/arch/x86/kernel/cpu/cpu.h
-+++ b/arch/x86/kernel/cpu/cpu.h
-@@ -83,4 +83,12 @@ unsigned int aperfmperf_get_khz(int cpu);
- extern void x86_spec_ctrl_setup_ap(void);
- extern void update_srbds_msr(void);
- 
-+extern enum spectre_v2_mitigation spectre_v2_enabled;
-+
-+static inline bool spectre_v2_in_eibrs_mode(enum spectre_v2_mitigation mode)
-+{
-+	return mode == SPECTRE_V2_EIBRS ||
-+	       mode == SPECTRE_V2_EIBRS_RETPOLINE ||
-+	       mode == SPECTRE_V2_EIBRS_LFENCE;
-+}
- #endif /* ARCH_X86_CPU_H */
+So the enum would be something like this.
+
+/**
+ * enum xfr_shift_type - XFR shift type
+ * @XFR_SHIFT_PRU: Enables XFR shift for PRU
+ * @XFR_SHIFT_RTU: Enables XFR shift for RTU
+ * @XFR_SHIFT_PRU_RTU: Enables XFR shift for both PRU and RTU
+ * @XFR_SHIFT_MAX: Total number of XFR shift types available.
+ *
+ */
+
+enum xfr_shift_type {
+        XFR_SHIFT_PRU = 0,
+        XFR_SHIFT_RTU,
+        XFR_SHIFT_PRU_RTU,
+        XFR_SHIFT_MAX,
+};
+
+In pruss_cfg_xfr_enable() API, I will use switch case, and for first three
+enums, I will calculate the mask.
+
+If input is anything other than first three, I will retun -EINVAL. This will
+serve as check for valid xfr_shift_type.
+
+The API will look like this.
+
+int pruss_cfg_xfr_enable(struct pruss *pruss, enum xfr_shift_type xfr_type,
+			 bool enable);
+{
+	u32 mask;
+
+	switch (xfr_type) {
+	case XFR_SHIFT_PRU:
+		mask = PRUSS_SPP_XFER_SHIFT_EN;
+		break;
+	case XFR_SHIFT_RTU:
+		mask = PRUSS_SPP_RTU_XFR_SHIFT_EN;
+		break;
+	case XFR_SHIFT_PRU_RTU:
+		mask = PRUSS_SPP_XFER_SHIFT_EN | PRUSS_SPP_RTU_XFR_SHIFT_EN;
+		break;
+	default:
+		return -EINVAL;
+	}
+
+	u32 set = enable ? mask : 0;
+
+	return pruss_cfg_update(pruss, PRUSS_CFG_SPP, mask, set);
+}
+
+This entire change I will keep as part of this patch only.
+
+Please let me know if this looks OK to you.
+
+
+>> + *
+>> + * Return: 0 on success, or an error code otherwise
+>> + */
+>> +int pruss_cfg_xfr_enable(struct pruss *pruss, bool enable, u32 mask)
+> 
+> re-arrange so it is (struct pruss, enum pru_type, bool enable)
+> 
+>> +{
+>> +	u32 set = enable ? mask : 0;
+>> +
+>> +	return pruss_cfg_update(pruss, PRUSS_CFG_SPP, mask, set);
+>> +}
+>> +EXPORT_SYMBOL_GPL(pruss_cfg_xfr_enable);
+>> +
+>>  static void pruss_of_free_clk_provider(void *data)
+>>  {
+>>  	struct device_node *clk_mux_np = data;
+>> diff --git a/include/linux/remoteproc/pruss.h b/include/linux/remoteproc/pruss.h
+>> index 12ef10b9fe9a..51a3eedd2be6 100644
+>> --- a/include/linux/remoteproc/pruss.h
+>> +++ b/include/linux/remoteproc/pruss.h
+>> @@ -101,6 +101,7 @@ enum pruss_gpi_mode {
+>>  	PRUSS_GPI_MODE_PARALLEL,
+>>  	PRUSS_GPI_MODE_28BIT_SHIFT,
+>>  	PRUSS_GPI_MODE_MII,
+>> +	PRUSS_GPI_MODE_MAX,
+> 
+> This could have come as part of patch 3.
+> 
+>>  };
+>>  
+>>  /**
+>> @@ -165,6 +166,10 @@ int pruss_request_mem_region(struct pruss *pruss, enum pruss_mem mem_id,
+>>  			     struct pruss_mem_region *region);
+>>  int pruss_release_mem_region(struct pruss *pruss,
+>>  			     struct pruss_mem_region *region);
+>> +int pruss_cfg_gpimode(struct pruss *pruss, enum pruss_pru_id pru_id,
+>> +		      enum pruss_gpi_mode mode);
+>> +int pruss_cfg_miirt_enable(struct pruss *pruss, bool enable);
+>> +int pruss_cfg_xfr_enable(struct pruss *pruss, bool enable, u32 mask);
+>>  
+>>  #else
+>>  
+>> @@ -188,6 +193,23 @@ static inline int pruss_release_mem_region(struct pruss *pruss,
+>>  	return -EOPNOTSUPP;
+>>  }
+>>  
+>> +static inline int pruss_cfg_gpimode(struct pruss *pruss,
+>> +				    enum pruss_pru_id pru_id,
+>> +				    enum pruss_gpi_mode mode)
+>> +{
+>> +	return ERR_PTR(-EOPNOTSUPP);
+>> +}
+>> +
+>> +static inline int pruss_cfg_miirt_enable(struct pruss *pruss, bool enable)
+>> +{
+>> +	return ERR_PTR(-EOPNOTSUPP);
+>> +}
+>> +
+>> +static inline int pruss_cfg_xfr_enable(struct pruss *pruss, bool enable, u32 mask)
+>> +{
+>> +	return ERR_PTR(-EOPNOTSUPP);
+>> +}
+>> +
+>>  #endif /* CONFIG_TI_PRUSS */
+>>  
+>>  #if IS_ENABLED(CONFIG_PRU_REMOTEPROC)
+> 
+> cheers,
+> -roger
+
+-- 
+Thanks and Regards,
+Danish.
