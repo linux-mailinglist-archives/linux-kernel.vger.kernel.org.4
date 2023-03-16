@@ -2,187 +2,269 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 695DE6BCF8B
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 13:32:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E4BE6BCF95
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 13:36:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230093AbjCPMcH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 08:32:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53738 "EHLO
+        id S229708AbjCPMgb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 08:36:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229760AbjCPMcC (ORCPT
+        with ESMTP id S229678AbjCPMg2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 08:32:02 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 667F6CA1D1
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 05:32:01 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-5419fb7d6c7so13713457b3.11
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 05:32:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678969920;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Wgf7EduwhN6551MQujeSUTn74g+txYbPhrHuCm2tsLY=;
-        b=AyWoKrQzAyrLTzIXGUwTfXlrMUQUEzcdqf58netne9uKl/Mp/DJZVbiMFCi75BVjg+
-         37c6H916KKaLMAgkXrmdOY8pnJVXd4UEw39b1nnvb+SPDcNuL1VNWE8CcpNXuYM7sQuJ
-         zyD77kK2ta0teFzQHy6va89aFHW5sPOGNWgZV3p1aK/SSz2v/ay4t5IsUhsPe/LYFgzg
-         n/f5CzIIYi4gIevSJE6Q0bWZMZi42L4mD5RRoh5vBVKr8UHiha9Zev2fizVH/+a7lykf
-         qQQIICCLpehxLMZbHdpUvlgFU0WCE9A2i6/fLSSJVd8/iXqmMiSLyDZdu7DN3D6qQv0k
-         xt0A==
+        Thu, 16 Mar 2023 08:36:28 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B1182698
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 05:35:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678970139;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Axi3VeZSqh5zTSMWs1D0aJQSfcusrG43A8R7AMzfyZo=;
+        b=MMr9bswiS0l8BRQPTsNP2k0B9cMa5XpSH0OX4qEiJJSKyVdsiTWzd4Pswcwya8O3rfi1uz
+        jLQMrJP6YegCnY5dwi3CyHzhMu8J1LsxQTOLbQt6S2a4dXXq73RuhI8eX0Dfi4iH11+4/M
+        CzCNO9PJlxdygI2V2rceg+DlPpg2fm8=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-98-za9QyjXCNMC0cQgeEFHG9A-1; Thu, 16 Mar 2023 08:35:38 -0400
+X-MC-Unique: za9QyjXCNMC0cQgeEFHG9A-1
+Received: by mail-wm1-f72.google.com with SMTP id t1-20020a7bc3c1000000b003dfe223de49so2561118wmj.5
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 05:35:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678969920;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Wgf7EduwhN6551MQujeSUTn74g+txYbPhrHuCm2tsLY=;
-        b=18yguJ9aAppfyZVOrbcp0NUIlmK6BzOq+6Phnyo0mRDthSkr3db5CjUgxV+pSwv6ZT
-         iOZ25kxbKjWWIJwpb7ThIZSoR4TqII1Fk4kcyqH7wajvpa1KbHgnPigVQO7US22KDDqb
-         owea6+xYZYN/mDSUs9MDtjZ90wR+bSS++s4igHWjW1KAvZ9IhNWiRz7/vFrFr61eUdKL
-         lJZk4txPLtZ2GNB5pvFjJXm2tlDu1853HEzc+Jp5AFBj2briApo3ReiYUPB3fr0sdbDD
-         bCim1YP1iGJ2swM344qeXLofYI7vOEPvlWHO8DIvtHxIwhjzYUUd/mYLfISz/lazJyzl
-         /EjQ==
-X-Gm-Message-State: AO0yUKWJOcg1E7PgA1JnNNWmgVomjQr6MJG+liyhYN/Bwpjj669Dk8v6
-        Nv5ei/wV5NQvwd8pkUliKn/35ITP9g==
-X-Google-Smtp-Source: AK7set/u/hog7qriGRuTm81gsBOhizqGgDKI210by82U6cLVLThJ5+FWaQSPpbb1TmvQ5L53tUN4kqsCHQ==
-X-Received: from elver.muc.corp.google.com ([2a00:79e0:9c:201:f359:6b95:96e:1317])
- (user=elver job=sendgmr) by 2002:a81:e508:0:b0:544:5fc7:f01f with SMTP id
- s8-20020a81e508000000b005445fc7f01fmr2036499ywl.4.1678969920431; Thu, 16 Mar
- 2023 05:32:00 -0700 (PDT)
-Date:   Thu, 16 Mar 2023 13:30:28 +0100
-In-Reply-To: <20230316123028.2890338-1-elver@google.com>
-Mime-Version: 1.0
-References: <20230316123028.2890338-1-elver@google.com>
-X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
-Message-ID: <20230316123028.2890338-2-elver@google.com>
-Subject: [PATCH v6 2/2] selftests/timers/posix_timers: Test delivery of
- signals across threads
-From:   Marco Elver <elver@google.com>
-To:     elver@google.com, Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@kernel.org>
-Cc:     Oleg Nesterov <oleg@redhat.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Dmitry Vyukov <dvyukov@google.com>, kasan-dev@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        d=1e100.net; s=20210112; t=1678970137;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Axi3VeZSqh5zTSMWs1D0aJQSfcusrG43A8R7AMzfyZo=;
+        b=rGnJe0KT/3YkHzXDlSaGCMxE38wLD5ctA+vdi/xSoz7dJaIqeBqTk94qYSXrmVoNZ2
+         JRWJI+4+tzOUYr2XaXan4xL2PupSmlLXBLv2eerEYivz1qoKxMYVH0lX35ttn5/Z6m8j
+         QV3tsnu3BzO3jAw58ZguvKB/UB99dwAVgvubArf7HcF3JqO6AVnnusxEC49mt/1FFEAA
+         Bp/uzbQCq9fv8zd3pLgbaVyuP9p6lkm4oxhnakf6TPyepgFEXswTcQH0adTtP2V/xiHS
+         S6oWkwnTNBVXseKzV6tujY2gOcXRkb9guQ2tM4agM7+Ky0u7wY4fKWmUip0VxdYPvymp
+         gACw==
+X-Gm-Message-State: AO0yUKUmYS2XNfInuaiIjHe7VVHas6Fhw7mt519o3m1lyffOFGF/kUph
+        8oWeSVpFuxXDVfBHt8vflyNyxb6WnknWcOxY4Fs5IzugMUPCUSpb1GAjx6982IurRe/OsktMEXe
+        a17fIRoEovprzFFvGKff+/DUN9mw4D4Cs
+X-Received: by 2002:a1c:4c19:0:b0:3ed:64eb:5379 with SMTP id z25-20020a1c4c19000000b003ed64eb5379mr984151wmf.39.1678970137202;
+        Thu, 16 Mar 2023 05:35:37 -0700 (PDT)
+X-Google-Smtp-Source: AK7set9MjXFCuOZxZVa0Uj03RwiMu9ET665RDsPpD8wECxHGvHiraM4DtuooY0eCfTgM+1G3rOd8ew==
+X-Received: by 2002:a1c:4c19:0:b0:3ed:64eb:5379 with SMTP id z25-20020a1c4c19000000b003ed64eb5379mr984113wmf.39.1678970136784;
+        Thu, 16 Mar 2023 05:35:36 -0700 (PDT)
+Received: from ?IPV6:2a09:80c0:192:0:5dac:bf3d:c41:c3e7? ([2a09:80c0:192:0:5dac:bf3d:c41:c3e7])
+        by smtp.gmail.com with ESMTPSA id k3-20020a7bc403000000b003ed1f69c967sm4946903wmi.9.2023.03.16.05.35.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Mar 2023 05:35:36 -0700 (PDT)
+Message-ID: <12597014-f920-df75-d516-db871aedbc8c@redhat.com>
+Date:   Thu, 16 Mar 2023 13:35:35 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Content-Language: en-US
+To:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     linux-mm@kvack.org, dave.hansen@intel.com, peterz@infradead.org,
+        tglx@linutronix.de, seanjc@google.com, pbonzini@redhat.com,
+        dan.j.williams@intel.com, rafael.j.wysocki@intel.com,
+        kirill.shutemov@linux.intel.com, ying.huang@intel.com,
+        reinette.chatre@intel.com, len.brown@intel.com,
+        tony.luck@intel.com, ak@linux.intel.com, isaku.yamahata@intel.com,
+        chao.gao@intel.com, sathyanarayanan.kuppuswamy@linux.intel.com,
+        bagasdotme@gmail.com, sagis@google.com, imammedo@redhat.com
+References: <cover.1678111292.git.kai.huang@intel.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH v10 00/16] TDX host kernel support
+In-Reply-To: <cover.1678111292.git.kai.huang@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dmitry Vyukov <dvyukov@google.com>
+On 06.03.23 15:13, Kai Huang wrote:
+> Intel Trusted Domain Extensions (TDX) protects guest VMs from malicious
+> host and certain physical attacks.  TDX specs are available in [1].
 
-Test that POSIX timers using CLOCK_PROCESS_CPUTIME_ID eventually deliver
-a signal to all running threads.  This effectively tests that the kernel
-doesn't prefer any one thread (or subset of threads) for signal delivery.
+I'm afraid there is no [1], probably got lost while resending :)
 
-Signed-off-by: Dmitry Vyukov <dvyukov@google.com>
-Signed-off-by: Marco Elver <elver@google.com>
----
-v6:
-- Update wording on what the test aims to test.
-- Fix formatting per checkpatch.pl.
----
- tools/testing/selftests/timers/posix_timers.c | 77 +++++++++++++++++++
- 1 file changed, 77 insertions(+)
+> 
+> This series is the initial support to enable TDX with minimal code to
+> allow KVM to create and run TDX guests.  KVM support for TDX is being
+> developed separately[2].  A new "userspace inaccessible memfd" approach
+> to support TDX private memory is also being developed[3].  The KVM will
+> only support the new "userspace inaccessible memfd" as TDX guest memory.
 
-diff --git a/tools/testing/selftests/timers/posix_timers.c b/tools/testing/selftests/timers/posix_timers.c
-index 0ba500056e63..8a17c0e8d82b 100644
---- a/tools/testing/selftests/timers/posix_timers.c
-+++ b/tools/testing/selftests/timers/posix_timers.c
-@@ -188,6 +188,80 @@ static int check_timer_create(int which)
- 	return 0;
- }
- 
-+int remain;
-+__thread int got_signal;
-+
-+static void *distribution_thread(void *arg)
-+{
-+	while (__atomic_load_n(&remain, __ATOMIC_RELAXED));
-+	return NULL;
-+}
-+
-+static void distribution_handler(int nr)
-+{
-+	if (!__atomic_exchange_n(&got_signal, 1, __ATOMIC_RELAXED))
-+		__atomic_fetch_sub(&remain, 1, __ATOMIC_RELAXED);
-+}
-+
-+/*
-+ * Test that all running threads _eventually_ receive CLOCK_PROCESS_CPUTIME_ID
-+ * timer signals. This primarily tests that the kernel does not favour any one.
-+ */
-+static int check_timer_distribution(void)
-+{
-+	int err, i;
-+	timer_t id;
-+	const int nthreads = 10;
-+	pthread_t threads[nthreads];
-+	struct itimerspec val = {
-+		.it_value.tv_sec = 0,
-+		.it_value.tv_nsec = 1000 * 1000,
-+		.it_interval.tv_sec = 0,
-+		.it_interval.tv_nsec = 1000 * 1000,
-+	};
-+
-+	printf("Check timer_create() per process signal distribution... ");
-+	fflush(stdout);
-+
-+	remain = nthreads + 1;  /* worker threads + this thread */
-+	signal(SIGALRM, distribution_handler);
-+	err = timer_create(CLOCK_PROCESS_CPUTIME_ID, NULL, &id);
-+	if (err < 0) {
-+		perror("Can't create timer\n");
-+		return -1;
-+	}
-+	err = timer_settime(id, 0, &val, NULL);
-+	if (err < 0) {
-+		perror("Can't set timer\n");
-+		return -1;
-+	}
-+
-+	for (i = 0; i < nthreads; i++) {
-+		if (pthread_create(&threads[i], NULL, distribution_thread, NULL)) {
-+			perror("Can't create thread\n");
-+			return -1;
-+		}
-+	}
-+
-+	/* Wait for all threads to receive the signal. */
-+	while (__atomic_load_n(&remain, __ATOMIC_RELAXED));
-+
-+	for (i = 0; i < nthreads; i++) {
-+		if (pthread_join(threads[i], NULL)) {
-+			perror("Can't join thread\n");
-+			return -1;
-+		}
-+	}
-+
-+	if (timer_delete(id)) {
-+		perror("Can't delete timer\n");
-+		return -1;
-+	}
-+
-+	printf("[OK]\n");
-+	return 0;
-+}
-+
- int main(int argc, char **argv)
- {
- 	printf("Testing posix timers. False negative may happen on CPU execution \n");
-@@ -217,5 +291,8 @@ int main(int argc, char **argv)
- 	if (check_timer_create(CLOCK_PROCESS_CPUTIME_ID) < 0)
- 		return ksft_exit_fail();
- 
-+	if (check_timer_distribution() < 0)
-+		return ksft_exit_fail();
-+
- 	return ksft_exit_pass();
- }
+Same with [2].
+
+> 
+> This series doesn't aim to support all functionalities, and doesn't aim
+> to resolve all things perfectly.  For example, memory hotplug is handled
+> in simple way (please refer to "Kernel policy on TDX memory" and "Memory
+> hotplug" sections below).
+> 
+> (For memory hotplug, sorry for broadcasting widely but I cc'ed the
+> linux-mm@kvack.org following Kirill's suggestion so MM experts can also
+> help to provide comments.)
+> 
+> And TDX module metadata allocation just uses alloc_contig_pages() to
+> allocate large chunk at runtime, thus it can fail.  It is imperfect now
+> but _will_ be improved in the future.
+
+Good enough for now I guess. Reserving it via memblock might be better, 
+though.
+
+> 
+> Also, the patch to add the new kernel comline tdx="force" isn't included
+> in this initial version, as Dave suggested it isn't mandatory.  But I
+> _will_ add one once this initial version gets merged.
+
+What would be the main purpose of that option?
+
+> 
+> All other optimizations will be posted as follow-up once this initial
+> TDX support is upstreamed.
+> 
+
+
+[...]
+
+> == Background ==
+> 
+> TDX introduces a new CPU mode called Secure Arbitration Mode (SEAM)
+> and a new isolated range pointed by the SEAM Ranger Register (SEAMRR).
+> A CPU-attested software module called 'the TDX module' runs in the new
+> isolated region as a trusted hypervisor to create/run protected VMs.
+> 
+> TDX also leverages Intel Multi-Key Total Memory Encryption (MKTME) to
+> provide crypto-protection to the VMs.  TDX reserves part of MKTME KeyIDs
+> as TDX private KeyIDs, which are only accessible within the SEAM mode.
+> 
+> TDX is different from AMD SEV/SEV-ES/SEV-SNP, which uses a dedicated
+> secure processor to provide crypto-protection.  The firmware runs on the
+> secure processor acts a similar role as the TDX module.
+> 
+> The host kernel communicates with SEAM software via a new SEAMCALL
+> instruction.  This is conceptually similar to a guest->host hypercall,
+> except it is made from the host to SEAM software instead.
+> 
+> Before being able to manage TD guests, the TDX module must be loaded
+> and properly initialized.  This series assumes the TDX module is loaded
+> by BIOS before the kernel boots.
+> 
+> How to initialize the TDX module is described at TDX module 1.0
+> specification, chapter "13.Intel TDX Module Lifecycle: Enumeration,
+> Initialization and Shutdown".
+> 
+> == Design Considerations ==
+> 
+> 1. Initialize the TDX module at runtime
+> 
+> There are basically two ways the TDX module could be initialized: either
+> in early boot, or at runtime before the first TDX guest is run.  This
+> series implements the runtime initialization.
+> 
+> This series adds a function tdx_enable() to allow the caller to initialize
+> TDX at runtime:
+> 
+>          if (tdx_enable())
+>                  goto no_tdx;
+> 	// TDX is ready to create TD guests.
+> 
+> This approach has below pros:
+> 
+> 1) Initializing the TDX module requires to reserve ~1/256th system RAM as
+> metadata.  Enabling TDX on demand allows only to consume this memory when
+> TDX is truly needed (i.e. when KVM wants to create TD guests).
+
+Let's be clear: nobody is going to run encrypted VMs "out of the blue".
+
+You can expect a certain hypervisor setup to be required, for example, 
+enabling it on the cmdline and then allocating that metadata from 
+memblock during boot.
+
+IIRC s390x handles it similarly with protected VMs and required metadata.
+
+> 
+> 2) SEAMCALL requires CPU being already in VMX operation (VMXON has been
+> done).  So far, KVM is the only user of TDX, and it already handles VMXON.
+> Letting KVM to initialize TDX avoids handling VMXON in the core kernel.
+> 
+> 3) It is more flexible to support "TDX module runtime update" (not in
+> this series).  After updating to the new module at runtime, kernel needs
+> to go through the initialization process again.
+> 
+> 2. CPU hotplug
+> 
+> TDX module requires the per-cpu initialization SEAMCALL (TDH.SYS.LP.INIT)
+> must be done on one cpu before any other SEAMCALLs can be made on that
+> cpu, including those involved during the module initialization.
+> 
+> The kernel provides tdx_cpu_enable() to let the user of TDX to do it when
+> the user wants to use a new cpu for TDX task.
+> 
+> TDX doesn't support physical (ACPI) CPU hotplug.  A non-buggy BIOS should
+> never support hotpluggable CPU devicee and/or deliver ACPI CPU hotplug
+> event to the kernel.  This series doesn't handle physical (ACPI) CPU
+> hotplug at all but depends on the BIOS to behave correctly.
+> 
+> Note TDX works with CPU logical online/offline, thus this series still
+> allows to do logical CPU online/offline.
+> 
+> 3. Kernel policy on TDX memory
+> 
+> The TDX module reports a list of "Convertible Memory Region" (CMR) to
+> indicate which memory regions are TDX-capable.  The TDX architecture
+> allows the VMM to designate specific convertible memory regions as usable
+> for TDX private memory.
+> 
+> The initial support of TDX guests will only allocate TDX private memory
+> from the global page allocator.  This series chooses to designate _all_
+> system RAM in the core-mm at the time of initializing TDX module as TDX
+> memory to guarantee all pages in the page allocator are TDX pages.
+> 
+> 4. Memory Hotplug
+> 
+> After the kernel passes all "TDX-usable" memory regions to the TDX
+> module, the set of "TDX-usable" memory regions are fixed during module's
+> runtime.  No more "TDX-usable" memory can be added to the TDX module
+> after that.
+> 
+> To achieve above "to guarantee all pages in the page allocator are TDX
+> pages", this series simply choose to reject any non-TDX-usable memory in
+> memory hotplug.
+> 
+> This _will_ be enhanced in the future after first submission.
+
+What's the primary reason to enhance that? Are there reasonable use 
+cases? Why would be expect to have other (!TDX capable) memory in the 
+system?
+
+> 
+> A better solution, suggested by Kirill, is similar to the per-node memory
+> encryption flag in this series [4].  We can allow adding/onlining non-TDX
+> memory to separate NUMA nodes so that both "TDX-capable" nodes and
+> "TDX-capable" nodes can co-exist.  The new TDX flag can be exposed to
+> userspace via /sysfs so userspace can bind TDX guests to "TDX-capable"
+> nodes via NUMA ABIs.
+> 
+> 5. Physical Memory Hotplug
+> 
+> Note TDX assumes convertible memory is always physically present during
+> machine's runtime.  A non-buggy BIOS should never support hot-removal of
+> any convertible memory.  This implementation doesn't handle ACPI memory
+> removal but depends on the BIOS to behave correctly.
+
 -- 
-2.40.0.rc1.284.g88254d51c5-goog
+Thanks,
+
+David / dhildenb
 
