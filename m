@@ -2,160 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2CE56BC762
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 08:38:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 122B86BC768
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 08:39:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229691AbjCPHij (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 03:38:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54240 "EHLO
+        id S229960AbjCPHjT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 03:39:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229929AbjCPHie (ORCPT
+        with ESMTP id S229913AbjCPHjN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 03:38:34 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD30819C67;
-        Thu, 16 Mar 2023 00:38:24 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id g17so1173898lfv.4;
-        Thu, 16 Mar 2023 00:38:24 -0700 (PDT)
+        Thu, 16 Mar 2023 03:39:13 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5D3513D5E
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 00:39:03 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id z21so3972761edb.4
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 00:39:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678952303;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        d=linaro.org; s=google; t=1678952342;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=Rvs1+zLkgWFQK+bxZ6xuanlYESj2CqPRnz2A9+zJTq4=;
-        b=YhiCZFq0obvEp8H1OzbRKaO76PihZqoS/x5adjsyTQetQxTSl2hI5qSgz/NjaT+dAE
-         Fc7xtBshrXJHRTOnNXZqfO5hkjoBRRlWt13rhsZOSzre+FZfcbSD8PKOW6K5ialfLjMV
-         FD9OjG+NG1bB+4G6YA7tYei3W/ajfkyaK2XwvDGbPwez7Oo4olkLwZBu66cE0OgOM58j
-         sQOJS9ZYCBrUs7krlQXRh82f1oXdT4A5OMT3WPm3lL8Lpk17u+N9/8d1XvaWIOTn0d7S
-         XNaHs85bIxvoO+B2aqgP+mzTpqqGscRuou2p4ivu4nLY66vIyquk67Qpsm8RIJ/yvhTX
-         3N+w==
+        bh=L80D9NzBtpET8zgBI2TIGG8S31tA19Skk/lPpa1cvUU=;
+        b=u//MdYRS0r42kik8XCyqsuBQFuINbDrXTIOJEKYnG3tqfPtBuC+KZc3T9jvFF7sXoW
+         Bfbk+Cxi1ob15CQlMLw72r+YU4UWTpV8OuXwnFUJcFE0ecrEIBtjo7SkREW9IZl40GdX
+         0SiHSaTaKGRxmspn7C7k8LApCCDVGhBWlfwZ06xuYTHRGyQLubIeKSjymrDZ001ZOZnO
+         tpivkVMAeSKpUBEzRzI20Z8i7hBHLFmZtJXqlkVX7CVsBZ63Kbnm69DQAXEVJhQQRHA/
+         3Au4GBk8DYzC6VQeLUh7FWA83riRgzb4WYD4zFjyNUoAuC05pJw8rjfOUs4DevZqg/Lh
+         dbeg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678952303;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        d=1e100.net; s=20210112; t=1678952342;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Rvs1+zLkgWFQK+bxZ6xuanlYESj2CqPRnz2A9+zJTq4=;
-        b=gQcSg2GUm+pCibg7IT+2xawd2IdNcpYLZJT02wJwndWv+UD+C97Kj/sf5DyPu+7BgZ
-         oXqn+0cXlq7gLosLZr+WE0Udbjgt4k20qIVyBeHudqpGQlHHGPlM0GRJJyRqpZeW/Z1w
-         RhJp6p01+DmNQLFXj/GINJut2tVGVFbQt8BtVXCFBSU3Iutyl9bZ6+kdqowZA0XoEekQ
-         N9J4oS9aQRS1SskwuxOzSbrVSuesixfvEJI/xQJ8w7IjdzAzYJnmUTBi4JTMe0R071cJ
-         JZdaiUx4PQVjbhQcpsWXs9xuZMWJTKxsbZxQB0zAd/svkU7XFh2POAXmfHPKmHHo6oNH
-         Ow2g==
-X-Gm-Message-State: AO0yUKWZJWlNBVik6t6EaeuYq4CaaR10sbIf0wtEEx7snufE13JsLa40
-        cjP5KqvB00HvWBe+Wo3sNKto/rFpAh0=
-X-Google-Smtp-Source: AK7set9wLrN71OcjSdjEtPud0TkPUrM8kBZ2qBEj/i4aqe512qRbsbxt3VCrT+6wa6XgcmpCXpDlgw==
-X-Received: by 2002:a05:6512:7a:b0:4b0:2a2f:ea6d with SMTP id i26-20020a056512007a00b004b02a2fea6dmr2700488lfo.35.1678952303073;
-        Thu, 16 Mar 2023 00:38:23 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:16f3:4a00::6? (dc75zzyyyyyyyyyyyyydy-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::6])
-        by smtp.gmail.com with ESMTPSA id t16-20020ac24c10000000b004d4d7fb0e07sm1120070lfq.216.2023.03.16.00.38.22
+        bh=L80D9NzBtpET8zgBI2TIGG8S31tA19Skk/lPpa1cvUU=;
+        b=C4Lk0iwRr0eLjyT5bsSER+Hx95hS5WchkthG7aCZHzFQ1mgLj8X8/GEUPPelVOcAgt
+         wl3EoplOILMj6cEt0bbHoeq++3GlH1tO9TcFHpmwFI9vw1yagbQIEbJf4REN3psg+cGP
+         H5TMYraynK+VPGQY9RiUwN8bAOasBqNVaD+1KCZsOHyyHzC4BTlxca2zLBwzHd6oLFS6
+         pmV74EX9HXJXarBvnLFEntPaU6oRjVDQ/ggR9oDyBLYKFawNLyc5Sq3UDdR38RYlpFYG
+         1JqCJGH2cLzJ2Nyu5y6I5zVJF1YCrbCVVw/3s8jVHW6mr5tE/UaptE58rgJkmt+A9EOs
+         t6hA==
+X-Gm-Message-State: AO0yUKVM7ynW4V+6xcI4pvzzAvrJ9/0y3G2BP4UdSkei2FLwUA2oxi14
+        yE4/mhMw+EqB4b6EvjnhROk8pA==
+X-Google-Smtp-Source: AK7set+X7bdwNzSqtxKylbf4V544my6LOLVFYGokzYyuR1B0XP1meCH+xiaR2+xKI0kHvIiNDxq3MA==
+X-Received: by 2002:a05:6402:651:b0:4ef:9bf0:7177 with SMTP id u17-20020a056402065100b004ef9bf07177mr5564351edx.9.1678952342340;
+        Thu, 16 Mar 2023 00:39:02 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:9827:5f65:8269:a95f? ([2a02:810d:15c0:828:9827:5f65:8269:a95f])
+        by smtp.gmail.com with ESMTPSA id a1-20020a509b41000000b004fb00831851sm3424666edj.66.2023.03.16.00.39.01
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Mar 2023 00:38:22 -0700 (PDT)
-Message-ID: <775fab33-0964-67f0-837a-b5fdd7ae7a2b@gmail.com>
-Date:   Thu, 16 Mar 2023 09:38:21 +0200
+        Thu, 16 Mar 2023 00:39:02 -0700 (PDT)
+Message-ID: <b9f93711-7302-4ed6-3f71-7bb792507136@linaro.org>
+Date:   Thu, 16 Mar 2023 08:39:00 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-Subject: Re: [PATCHv2 08/12] power: supply: generic-adc-battery: use
- simple-battery API
-Content-Language: en-US, en-GB
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20230314225535.1321736-1-sre@kernel.org>
- <20230314225535.1321736-9-sre@kernel.org>
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-In-Reply-To: <20230314225535.1321736-9-sre@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Subject: Re: [PATCH 09/15] dt-bindings: reset: Document ma35d1 reset
+ controller bindings
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Jacky Huang <ychuang570808@gmail.com>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
+        mturquette@baylibre.com, sboyd@kernel.org, p.zabel@pengutronix.de,
+        gregkh@linuxfoundation.org, jirislaby@kernel.org
+Cc:     devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+        schung@nuvoton.com, Jacky Huang <ychuang3@nuvoton.com>
+References: <20230315072902.9298-1-ychuang570808@gmail.com>
+ <20230315072902.9298-10-ychuang570808@gmail.com>
+ <cee0497e-c441-3937-07ec-0b6c4621f4e4@linaro.org>
+In-Reply-To: <cee0497e-c441-3937-07ec-0b6c4621f4e4@linaro.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/15/23 00:55, Sebastian Reichel wrote:
-> Use standard simple-battery API for constant battery
-> information like min and max voltage. This simplifies
-> the driver a lot and brings automatic support for DT.
+On 16/03/2023 08:37, Krzysztof Kozlowski wrote:
+> On 15/03/2023 08:28, Jacky Huang wrote:
+>> From: Jacky Huang <ychuang3@nuvoton.com>
+>>
+>> Add documentation to describe nuvoton ma35d1 reset driver bindings.
 > 
-> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-> Signed-off-by: Sebastian Reichel <sre@kernel.org>
-> ---
->   drivers/power/supply/generic-adc-battery.c | 64 ++--------------------
->   include/linux/power/generic-adc-battery.h  | 18 ------
->   2 files changed, 4 insertions(+), 78 deletions(-)
->   delete mode 100644 include/linux/power/generic-adc-battery.h
+> Subject: drop second/last, redundant "bindings". The "dt-bindings"
+> prefix is already stating that these are bindings.
 > 
-> diff --git a/drivers/power/supply/generic-adc-battery.c b/drivers/power/supply/generic-adc-battery.c
-> index 771e5cfc49c3..d4f63d945b2c 100644
-> --- a/drivers/power/supply/generic-adc-battery.c
-> +++ b/drivers/power/supply/generic-adc-battery.c
-> @@ -22,7 +22,6 @@
->   #include <linux/slab.h>
->   #include <linux/iio/consumer.h>
->   #include <linux/iio/types.h>
-> -#include <linux/power/generic-adc-battery.h>
->   #include <linux/devm-helpers.h>
->   
->   #define JITTER_DEFAULT 10 /* hope 10ms is enough */
-> @@ -48,9 +47,7 @@ struct gab {
->   	struct power_supply		*psy;
->   	struct power_supply_desc	psy_desc;
->   	struct iio_channel	*channel[GAB_MAX_CHAN_TYPE];
-> -	struct gab_platform_data	*pdata;
->   	struct delayed_work bat_work;
-> -	int	level;
->   	int	status;
->   	bool cable_plugged;
->   	struct gpio_desc *charge_finished;
-> @@ -70,14 +67,6 @@ static void gab_ext_power_changed(struct power_supply *psy)
->   
->   static const enum power_supply_property gab_props[] = {
->   	POWER_SUPPLY_PROP_STATUS,
-> -	POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN,
-> -	POWER_SUPPLY_PROP_CHARGE_EMPTY_DESIGN,
-> -	POWER_SUPPLY_PROP_VOLTAGE_NOW,
-> -	POWER_SUPPLY_PROP_CURRENT_NOW,
-> -	POWER_SUPPLY_PROP_TECHNOLOGY,
-> -	POWER_SUPPLY_PROP_VOLTAGE_MIN_DESIGN,
-> -	POWER_SUPPLY_PROP_VOLTAGE_MAX_DESIGN,
-> -	POWER_SUPPLY_PROP_MODEL_NAME,
->   };
->   
->   /*
-> @@ -97,17 +86,6 @@ static bool gab_charge_finished(struct gab *adc_bat)
->   	return gpiod_get_value(adc_bat->charge_finished);
->   }
->   
-> -static int gab_get_status(struct gab *adc_bat)
-> -{
-> -	struct gab_platform_data *pdata = adc_bat->pdata;
-> -	struct power_supply_info *bat_info;
-> -
-> -	bat_info = &pdata->battery_info;
-> -	if (adc_bat->level == bat_info->charge_full_design)
-> -		return POWER_SUPPLY_STATUS_FULL;
+>>
+>> Signed-off-by: Jacky Huang <ychuang3@nuvoton.com>
+>> ---
+>>  .../bindings/reset/nuvoton,ma35d1-reset.yaml  | 50 +++++++++++++++++++
+>>  1 file changed, 50 insertions(+)
+>>  create mode 100644 Documentation/devicetree/bindings/reset/nuvoton,ma35d1-reset.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/reset/nuvoton,ma35d1-reset.yaml b/Documentation/devicetree/bindings/reset/nuvoton,ma35d1-reset.yaml
+>> new file mode 100644
+>> index 000000000000..f66c566c6dce
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/reset/nuvoton,ma35d1-reset.yaml
+>> @@ -0,0 +1,50 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/reset/nuvoton,ma35d1-reset.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Nuvoton MA35D1 Reset Controller
+>> +
+>> +maintainers:
+>> +  - Chi-Fang Li <cfli0@nuvoton.com>
+>> +  - Jacky Huang <ychuang3@nuvoton.com>
+>> +
+>> +description:
+>> +  The system reset controller can be used to reset various peripheral
+>> +  controllers in MA35D1 SoC.
+>> +
+>> +properties:
+>> +  compatible:
+>> +    const: nuvoton,ma35d1-reset
+>> +
+>> +  regmap:
+>> +    $ref: /schemas/types.yaml#/definitions/phandle
+>> +    description: Phandle to the register map node.
+> 
+> You need to be specific what is this. As you can easily check, there is
+> no such property in any devices. I don't understand why do you need it
+> in the first place.
+> 
+>> +
+>> +  '#reset-cells':
+>> +    const: 1
+>> +
+>> +required:
+>> +  - compatible
+>> +  - regmap
+>> +  - '#reset-cells'
+>> +
+>> +additionalProperties: false
+>> +
+>> +examples:
+>> +  # system reset controller node:
+>> +  - |
+>> +    #include <dt-bindings/reset/nuvoton,ma35d1-reset.h>
+>> +
+>> +    sys: system-management@40460000 {
+>> +        compatible = "nuvoton,ma35d1-sys", "syscon", "simple-mfd";
+> 
+> And your patchset is not bisectable.... Test for bisectability before
+> sending.
 
-Not sure if this is intentional but I don't see the 
-POWER_SUPPLY_STATUS_FULL being reported after applying your series. If 
-this is intended, maybe it could be mentioned in commit log?
+Ah, no, it's correct. I see the compatible in previous patch. You need
+to clearly describe the dependencies and merging strategy/requirements
+in cover letter.
 
-Other than that - this really cleans up the driver in a nice way!
-
-Yours,
-	-- Matti
-
--- 
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
-
-~~ When things go utterly wrong vim users can always type :help! ~~
+Best regards,
+Krzysztof
 
