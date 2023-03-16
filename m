@@ -2,86 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE8BE6BD4E4
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 17:15:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 325B36BD4E8
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 17:16:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230029AbjCPQPc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 12:15:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34892 "EHLO
+        id S229958AbjCPQQm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 12:16:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229896AbjCPQP3 (ORCPT
+        with ESMTP id S229770AbjCPQQk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 12:15:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25F73BCFDC;
-        Thu, 16 Mar 2023 09:14:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6D2786208A;
-        Thu, 16 Mar 2023 16:14:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FEEFC433EF;
-        Thu, 16 Mar 2023 16:14:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678983288;
-        bh=EOXfKepqJpZwzmeOGEP1BTpleS1yi4Np/zjGOVg7PSw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=br1IST8dPXD9G7kObn2KAcLdH0b9SZO3d8DFiv+vHmkA+k3HKpPdBTSP0Ten3MVWw
-         9vflVgqVZEvOSR1BHOPmiqB1c2usmYA9BsHALPpAQc8NwFWy3D0xqQcw+irTvfwphF
-         SPs/t6YS+7WQrADW1QSWj4FtPf/gyXNZCK6udQqAYfxE7LY4b0UMnWx43ffWNcM4nv
-         eUpNEGpwO8BS41gQ09hkJywTrUhADY92tkDyoR8WSr/b7MvviIaxmfz86XF0t3GxkZ
-         AZAvXGM2bHuSfU3/kh5btYtMSPnOnnUjKecumr1IlI7Pka9uk/5PRDeBnY6fwtK/lN
-         ZS93MWA0G3PzQ==
-Date:   Thu, 16 Mar 2023 16:14:42 +0000
-From:   Lee Jones <lee@kernel.org>
-To:     Niklas Schnelle <schnelle@linux.ibm.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Pavel Machek <pavel@ucw.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
-        linux-leds@vger.kernel.org
-Subject: Re: [PATCH v3 15/38] leds: add HAS_IOPORT dependencies
-Message-ID: <20230316161442.GV9667@google.com>
-References: <20230314121216.413434-1-schnelle@linux.ibm.com>
- <20230314121216.413434-16-schnelle@linux.ibm.com>
+        Thu, 16 Mar 2023 12:16:40 -0400
+Received: from msg-1.mailo.com (msg-1.mailo.com [213.182.54.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0C4ACB046
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 09:15:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
+        t=1678983329; bh=dO+ZMH6qjgplEx6nSU5n6rmwyk4FtUwjUTO3YAmYrSA=;
+        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
+         MIME-Version:Content-Type:In-Reply-To;
+        b=czetI19z036f9xoHox+85+Sns5BVqVEzyRoOQTDHsTw/LJ9qWoyXJBd86kyFqVKAn
+         6D5RIFHg+KuQMfbPEWMoo5IXG9Nva0ZLSc46lf9KVKABEKysEbnNcnzVU+2IagKgZN
+         gnoG3BT+5HqHer8nIcIYOJgtyPdXo27vQEtpksQM=
+Received: by b221-4.in.mailobj.net [192.168.90.24] with ESMTP
+        via ip-20.mailobj.net [213.182.54.20]
+        Thu, 16 Mar 2023 17:15:24 +0100 (CET)
+X-EA-Auth: eRMUx2J/pwtZS8PYOuWWYXRGDO+tJA8apJU774lQkFdOLH758ShCUPWz7omWuQwUyvXilBYISUqp5dyavZ64mtV+N6K/AeKh
+Date:   Thu, 16 Mar 2023 21:45:13 +0530
+From:   Deepak R Varma <drv@mailo.com>
+To:     Sumitra Sharma <sumitraartsy@gmail.com>
+Cc:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        linux-staging@lists.linux.dev, outreachy@lists.linux.dev
+Subject: Re: [PATCH v2] Staging: octeon: Fix line ending with '('
+Message-ID: <ZBNAkYSO3ARPbjKU@ubun2204.myguest.virtualbox.org>
+References: <20230316155202.GA82100@sumitra.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230314121216.413434-16-schnelle@linux.ibm.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230316155202.GA82100@sumitra.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 14 Mar 2023, Niklas Schnelle wrote:
+On Thu, Mar 16, 2023 at 08:52:02AM -0700, Sumitra Sharma wrote:
+> Adhere to coding-style.
 
-> In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
-> not being declared. We thus need to add HAS_IOPORT as dependency for
-> those drivers using them.
->
-> Acked-by: Pavel Machek <pavel@ucw.cz>
-> Co-developed-by: Arnd Bergmann <arnd@kernel.org>
-> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+Hi Sumitra,
+Quick background: Linux Kernel coding style required developers to limit the
+code within 80 columns per line. This resulted in splitting the long lines into
+more than one lines. Some splits were unwillingly poor causing checkpatch error
+[e.g. this one that you are attempting to address].
+Recently, the 80 column limit was relaxed to 100 columns. This now will allow to
+merge some poorly split lines resulting in improved readability and avoid
+checkpath complaints.
+
+Now, can you use this information to convert your live above a little more
+descriptive. Remember a well written "why" explanation is almost always
+necessary.
+
+> 
+> Checkpatch has reported code style warning:
+> CHECK: Lines should not end with a '('.
+> 
+> Enhance the design of a function header:
+> Align the function parameters immediately after '(' in a single line.
+
+This is the "what" part and not so useful for such a simple change. You need not
+write this. However for complex changes or tricky code optimization, the "what"
+part will be very useful as well.
+
+Hope this helps.
+
+Deepak.
+
+> 
+> Signed-off-by: Sumitra Sharma <sumitraartsy@gmail.com>
 > ---
->  drivers/leds/Kconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> v2: Change patch subject and description.
+> 
+>  drivers/staging/octeon/octeon-stubs.h | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+> 
+> diff --git a/drivers/staging/octeon/octeon-stubs.h b/drivers/staging/octeon/octeon-stubs.h
+> index 7a02e59e283f..3e7b92cd2e35 100644
+> --- a/drivers/staging/octeon/octeon-stubs.h
+> +++ b/drivers/staging/octeon/octeon-stubs.h
+> @@ -1372,9 +1372,7 @@ static inline void cvmx_fau_async_fetch_and_add32(uint64_t scraddr,
+>  						  int32_t value)
+>  { }
+>  
+> -static inline union cvmx_gmxx_rxx_rx_inbnd cvmx_spi4000_check_speed(
+> -	int interface,
+> -	int port)
+> +static inline union cvmx_gmxx_rxx_rx_inbnd cvmx_spi4000_check_speed(int interface, int port)
+>  {
+>  	union cvmx_gmxx_rxx_rx_inbnd r;
+>  
+> -- 
+> 2.25.1
+> 
+> 
 
-Applied, thanks
 
---
-Lee Jones [李琼斯]
