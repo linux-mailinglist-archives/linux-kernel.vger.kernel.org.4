@@ -2,175 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 911C76BD171
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 14:53:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01C4D6BD17F
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 14:53:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230173AbjCPNxa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 09:53:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57372 "EHLO
+        id S230371AbjCPNxy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 09:53:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229796AbjCPNx2 (ORCPT
+        with ESMTP id S230446AbjCPNxn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 09:53:28 -0400
-Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BCF12B291
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 06:53:27 -0700 (PDT)
-Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-17ac5ee3f9cso2183946fac.12
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 06:53:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678974806;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NT2+ny4p/vVYNzr7+EK2Lb0ixcwCh6elsP4Qy0BaT6o=;
-        b=epd5FV2Fr1C10Z/wxi9lYv0/neUD0acFnvSabLSTeExSFzq6FBR61NtOkPotXxqduE
-         brCR6NrGy0nAd/ZuhyIKajahPVWlyqLKTMcu3j3/sqDJ0y7fODXdqghObHQRhZ0sAl7/
-         ZnhPjY9r35Rq38NPvoRNjbxQWb3S+hxnmRL879TrtuNbeUNfmGvOwOY/0+Iotuys2qWe
-         1LzrE9z6D3OK6j0RYoTO+2S49ip5lo7CjgK/iSYsB+95/j6YZUTv1irUX4KELtY418GT
-         /BmDr2RP90VZB8Smm2fWftkXURgg+guml2VypqebETidlIzT3EMc6J33Jn9ApovvksTI
-         uHNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678974806;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NT2+ny4p/vVYNzr7+EK2Lb0ixcwCh6elsP4Qy0BaT6o=;
-        b=Aa1z0EimFBUByTg03iDvhd/RIJgvXwIe18ZsKUdgkJVu23ukeaSbH/JmAQ+mNMf874
-         BPi/LsC7vWF+GIof6/6e62Rjm7ldoLd093nEv7LL0WIkYWtkbRYqNG179eO5zirqOFWl
-         qPXtYsQH8dH8OVfiiSr5PndtsfnLq9mlb8ElbeE1nBFEFmP6YdbjoQoNvqOUDmKn1Lsv
-         eu4xHB1x12eho7wMA3XDimwZU8QzshLzITizg4GqGdh395swmIdZEI38egKSrq+TJsT5
-         wCnur+qjEKs59LEjb7ZZSiIIEtg9C2TREqn72mQtRkhsY40/DBfPR2KgrIGjR4wuXwlW
-         YI5g==
-X-Gm-Message-State: AO0yUKUuurfeKCYKihkKF8bBbZYYRcyquM9pLdjZtuK/E4yvAS/rbfJm
-        h0wFPW/MR1MrLCGPK7H8ZHGug1PH3WD8ZP2uwYQ=
-X-Google-Smtp-Source: AK7set/x0uSpr4lrBp0ShQSg5kgvHD9bjWFd3R0T4/YE3AtaigBfKP2+ZizIOyaqzSaC6IVNg0nCI15OW1QygajqbX8=
-X-Received: by 2002:a05:6870:886:b0:177:aa31:79d6 with SMTP id
- fx6-20020a056870088600b00177aa3179d6mr7154168oab.4.1678974806677; Thu, 16 Mar
- 2023 06:53:26 -0700 (PDT)
+        Thu, 16 Mar 2023 09:53:43 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94236B5FDC;
+        Thu, 16 Mar 2023 06:53:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 48C06B8219C;
+        Thu, 16 Mar 2023 13:53:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F325AC4339B;
+        Thu, 16 Mar 2023 13:53:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678974818;
+        bh=ZFCg1R9x3TYU2MIKEu2nraQz7Cm1ZbqwW3c+AwfOoRs=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=sP0YqmZZDv7gq2cfQr+7tzUpA/rkkSJR9Xpu3AfU2joplN6rprXlpO9j64C1MiOSp
+         a2gHHXkDJfNhMZrjPIYDkbVslyXsQ6p18ObepWz2JYUn7UP5B+efuLQxhGlLwgYVBO
+         yPY0vBZ6tI/r6ZQ/MYZhdRksWXwBb/LQzxWISSD1BY2MPb/R+gmUeFRS0kUkZEDshQ
+         uFDTzB17bWZbjkpxHIguHzv46ki7fGkU7HhqV4xkmKZDtmvARxV8VWDrDrcAJHbQZN
+         zEeDFteffNMXqjlgpWOls8BKxorwVUHYTQ+bVY2VReLgquV30igkqPe89W2tfXUeRG
+         ovkAzfEvmHZ6Q==
+Received: by mail-lf1-f41.google.com with SMTP id bi9so2443794lfb.12;
+        Thu, 16 Mar 2023 06:53:37 -0700 (PDT)
+X-Gm-Message-State: AO0yUKWVNhnAMXdxLpEWgK3R6xNyCnCyFR1bbfX/gjNhd+lr3oSld+rn
+        FE7Fs9rDMPj+jyhVfnOC7jX7iwnG8l1p5z4RH8c=
+X-Google-Smtp-Source: AK7set8aEVEP9Pqpoe8z0WN3pnvwA4tRVznAzzFiJbL5STPsavVMZe7yVpfRpYnltjdW55wDMKEycSwTyVwtTRI5UVk=
+X-Received: by 2002:a05:6512:304c:b0:4dc:7e56:9839 with SMTP id
+ b12-20020a056512304c00b004dc7e569839mr4911045lfb.5.1678974816034; Thu, 16 Mar
+ 2023 06:53:36 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230312120157.452859-1-ray.huang@amd.com> <20230312120157.452859-2-ray.huang@amd.com>
- <ea0e3852-87ba-984b-4010-5eeac3d6c507@suse.com> <alpine.DEB.2.22.394.2303141747350.863724@ubuntu-linux-20-04-desktop>
- <f5e03f2a-8176-528f-e885-9a97940367c0@suse.com> <alpine.DEB.2.22.394.2303151616200.3462@ubuntu-linux-20-04-desktop>
- <5e22a45d-6f12-da9b-94f6-3112a30e8574@suse.com> <CADnq5_PH9ZqDqpPES74V3fB3NVpaexDoGTyu_+-zoux5vgagyg@mail.gmail.com>
- <dcb54275-b21f-a837-76bb-e19e331a0666@suse.com>
-In-Reply-To: <dcb54275-b21f-a837-76bb-e19e331a0666@suse.com>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Thu, 16 Mar 2023 09:53:14 -0400
-Message-ID: <CADnq5_PpCWrZzQdE_X6ZnuNU3ktVeC6TbmE5vq3K6rCAdB8GTg@mail.gmail.com>
-Subject: Re: [RFC PATCH 1/5] x86/xen: disable swiotlb for xen pvh
-To:     Juergen Gross <jgross@suse.com>
-Cc:     Jan Beulich <jbeulich@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Honglei Huang <honglei1.huang@amd.com>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org,
-        Stewart Hildebrand <Stewart.Hildebrand@amd.com>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Huang Rui <ray.huang@amd.com>,
-        Chen Jiqian <Jiqian.Chen@amd.com>,
-        Xenia Ragiadakou <burzalodowa@gmail.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        xen-devel@lists.xenproject.org,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Julia Zhang <julia.zhang@amd.com>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        =?UTF-8?Q?Roger_Pau_Monn=C3=A9?= <roger.pau@citrix.com>
+References: <CAMj1kXET+A2rk+WQyebKPNtSvzzS0nJdMbx3uT1JgMxOvqfx4w@mail.gmail.com>
+ <ZBLpVDmy8BXQZve9@righiandr-XPS-13-7390> <CAMj1kXF_f4QFtaDYBaSJwO0B97TJHWr6uRQdeYeD=Gv7DrVicg@mail.gmail.com>
+ <ZBL+o7ydLk2iBCCr@righiandr-XPS-13-7390> <CAMj1kXEtj_jEZeT6YNh9xB=8o=0LVKiPYucHU08s34xBgy1yDA@mail.gmail.com>
+ <CAMj1kXF3pkxvDX6ZMpnRd3wQX2_T6CYmz7ML-h+PXeo+hM_ZdA@mail.gmail.com>
+ <ZBMOitWwCDj3XiRw@righiandr-XPS-13-7390> <CAMj1kXF=8KoCnRmUyLCZmbfPTeOFQZBeudZuTeA0uHOv-1drFg@mail.gmail.com>
+ <ZBMQdgPepwa+VyAH@righiandr-XPS-13-7390> <CAMj1kXES+FxxbqUPH5TRjHak2MMC2Yksm0_P6wo__LQMH6Emhw@mail.gmail.com>
+ <ZBMes6r2FiAyo81F@righiandr-XPS-13-7390>
+In-Reply-To: <ZBMes6r2FiAyo81F@righiandr-XPS-13-7390>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Thu, 16 Mar 2023 14:53:24 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXG0+NO6HayK2YqSJU0pwj8bn9Un_G-4VJr=hc1ELi-TpQ@mail.gmail.com>
+Message-ID: <CAMj1kXG0+NO6HayK2YqSJU0pwj8bn9Un_G-4VJr=hc1ELi-TpQ@mail.gmail.com>
+Subject: Re: kernel 6.2 stuck at boot (efi_call_rts) on arm64
+To:     Andrea Righi <andrea.righi@canonical.com>
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Paolo Pisati <paolo.pisati@canonical.com>,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Darren Hart <darren@os.amperecomputing.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 16, 2023 at 9:48=E2=80=AFAM Juergen Gross <jgross@suse.com> wro=
-te:
+On Thu, 16 Mar 2023 at 14:50, Andrea Righi <andrea.righi@canonical.com> wrote:
 >
-> On 16.03.23 14:45, Alex Deucher wrote:
-> > On Thu, Mar 16, 2023 at 3:50=E2=80=AFAM Jan Beulich <jbeulich@suse.com>=
- wrote:
-> >>
-> >> On 16.03.2023 00:25, Stefano Stabellini wrote:
-> >>> On Wed, 15 Mar 2023, Jan Beulich wrote:
-> >>>> On 15.03.2023 01:52, Stefano Stabellini wrote:
-> >>>>> On Mon, 13 Mar 2023, Jan Beulich wrote:
-> >>>>>> On 12.03.2023 13:01, Huang Rui wrote:
-> >>>>>>> Xen PVH is the paravirtualized mode and takes advantage of hardwa=
-re
-> >>>>>>> virtualization support when possible. It will using the hardware =
-IOMMU
-> >>>>>>> support instead of xen-swiotlb, so disable swiotlb if current dom=
-ain is
-> >>>>>>> Xen PVH.
-> >>>>>>
-> >>>>>> But the kernel has no way (yet) to drive the IOMMU, so how can it =
-get
-> >>>>>> away without resorting to swiotlb in certain cases (like I/O to an
-> >>>>>> address-restricted device)?
-> >>>>>
-> >>>>> I think Ray meant that, thanks to the IOMMU setup by Xen, there is =
-no
-> >>>>> need for swiotlb-xen in Dom0. Address translations are done by the =
-IOMMU
-> >>>>> so we can use guest physical addresses instead of machine addresses=
- for
-> >>>>> DMA. This is a similar case to Dom0 on ARM when the IOMMU is availa=
-ble
-> >>>>> (see include/xen/arm/swiotlb-xen.h:xen_swiotlb_detect, the correspo=
-nding
-> >>>>> case is XENFEAT_not_direct_mapped).
-> >>>>
-> >>>> But how does Xen using an IOMMU help with, as said, address-restrict=
-ed
-> >>>> devices? They may still need e.g. a 32-bit address to be programmed =
-in,
-> >>>> and if the kernel has memory beyond the 4G boundary not all I/O buff=
-ers
-> >>>> may fulfill this requirement.
-> >>>
-> >>> In short, it is going to work as long as Linux has guest physical
-> >>> addresses (not machine addresses, those could be anything) lower than
-> >>> 4GB.
-> >>>
-> >>> If the address-restricted device does DMA via an IOMMU, then the devi=
-ce
-> >>> gets programmed by Linux using its guest physical addresses (not mach=
-ine
-> >>> addresses).
-> >>>
-> >>> The 32-bit restriction would be applied by Linux to its choice of gue=
-st
-> >>> physical address to use to program the device, the same way it does o=
-n
-> >>> native. The device would be fine as it always uses Linux-provided <4G=
-B
-> >>> addresses. After the IOMMU translation (pagetable setup by Xen), we
-> >>> could get any address, including >4GB addresses, and that is expected=
- to
-> >>> work.
-> >>
-> >> I understand that's the "normal" way of working. But whatever the swio=
-tlb
-> >> is used for in baremetal Linux, that would similarly require its use i=
-n
-> >> PVH (or HVM) aiui. So unconditionally disabling it in PVH would look t=
-o
-> >> me like an incomplete attempt to disable its use altogether on x86. Wh=
-at
-> >> difference of PVH vs baremetal am I missing here?
+> On Thu, Mar 16, 2023 at 02:45:49PM +0100, Ard Biesheuvel wrote:
+> > On Thu, 16 Mar 2023 at 13:50, Andrea Righi <andrea.righi@canonical.com> wrote:
+> > >
+> > > On Thu, Mar 16, 2023 at 01:43:32PM +0100, Ard Biesheuvel wrote:
+> > > > On Thu, 16 Mar 2023 at 13:41, Andrea Righi <andrea.righi@canonical.com> wrote:
+> > > > >
+> > > > > On Thu, Mar 16, 2023 at 01:38:30PM +0100, Ard Biesheuvel wrote:
+> > > > > > On Thu, 16 Mar 2023 at 13:21, Ard Biesheuvel <ardb@kernel.org> wrote:
+> > > > > > >
+> > > > > > > On Thu, 16 Mar 2023 at 12:34, Andrea Righi <andrea.righi@canonical.com> wrote:
+> > > > > > > >
+> > > > > > > > On Thu, Mar 16, 2023 at 11:18:21AM +0100, Ard Biesheuvel wrote:
+> > > > > > > > > On Thu, 16 Mar 2023 at 11:03, Andrea Righi <andrea.righi@canonical.com> wrote:
+> > > > > > > > > >
+> > > > > > > > > > On Thu, Mar 16, 2023 at 10:55:58AM +0100, Ard Biesheuvel wrote:
+> > > > > > > > > > > (cc Darren)
+> > > > > > > > > > >
+> > > > > > > > > > > On Thu, 16 Mar 2023 at 10:45, Andrea Righi <andrea.righi@canonical.com> wrote:
+> > > > > > > > > > > >
+> > > > > > > > > > > > On Thu, Mar 16, 2023 at 08:58:20AM +0100, Ard Biesheuvel wrote:
+> > > > > > > > > > > > > Hello Andrea,
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > On Thu, 16 Mar 2023 at 08:54, Andrea Righi <andrea.righi@canonical.com> wrote:
+> > > > > > > > > > > > > >
+> > > > > > > > > > > > > > Hello,
+> > > > > > > > > > > > > >
+> > > > > > > > > > > > > > the latest v6.2.6 kernel fails to boot on some arm64 systems, the kernel
+> > > > > > > > > > > > > > gets stuck and never completes the boot. On the console I see this:
+> > > > > > > > > > > > > >
+> > > > > > > > > > > > > > [   72.043484] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+> > > > > > > > > > > > > > [   72.049571] rcu:     22-...0: (30 GPs behind) idle=b10c/1/0x4000000000000000 softirq=164/164 fqs=6443
+> > > > > > > > > > > > > > [   72.058520]     (detected by 28, t=15005 jiffies, g=449, q=174 ncpus=32)
+> > > > > > > > > > > > > > [   72.064949] Task dump for CPU 22:
+> > > > > > > > > > > > > > [   72.068251] task:kworker/u64:5   state:R  running task     stack:0     pid:447   ppid:2      flags:0x0000000a
+> > > > > > > > > > > > > > [   72.078156] Workqueue: efi_rts_wq efi_call_rts
+> > > > > > > > > > > > > > [   72.082595] Call trace:
+> > > > > > > > > > > > > > [   72.085029]  __switch_to+0xbc/0x100
+> > > > > > > > > > > > > > [   72.088508]  0xffff80000fe83d4c
+> > > > > > > > > > > > > >
+> > > > > > > > > > > > > > After that, as a consequence, I start to get a lot of hung task timeout traces.
+> > > > > > > > > > > > > >
+> > > > > > > > > > > > > > I tried to bisect the problem and I found that the offending commit is
+> > > > > > > > > > > > > > this one:
+> > > > > > > > > > > > > >
+> > > > > > > > > > > > > >  e7b813b32a42 ("efi: random: refresh non-volatile random seed when RNG is initialized")
+> > > > > > > > > > > > > >
+> > > > > > > > > > > > > > I've reverted this commit for now and everything works just fine, but I
+> > > > > > > > > > > > > > was wondering if the problem could be caused by a lack of entropy on
+> > > > > > > > > > > > > > these arm64 boxes or something else.
+> > > > > > > > > > > > > >
+> > > > > > > > > > > > > > Any suggestion? Let me know if you want me to do any specific test.
+> > > > > > > > > > > > > >
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > Thanks for the report.
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > This is most likely the EFI SetVariable() call going off into the
+> > > > > > > > > > > > > weeds and never returning.
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > Is this an Ampere Altra system by any chance? Do you see it on
+> > > > > > > > > > > > > different types of hardware?
+> > > > > > > > > > > >
+> > > > > > > > > > > > This is: Ampere eMAG / Lenovo ThinkSystem HR330a.
+> > > > > > > > > > > >
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > Could you check whether SetVariable works on this system? E.g. by
+> > > > > > > > > > > > > updating the EFI boot timeout (sudo efibootmgr -t <n>)?
+> > > > > > > > > > > >
+> > > > > > > > > > > > ubuntu@kuzzle:~$ sudo efibootmgr -t 10
+> > > > > > > > > > > > ^C^C^C^C
+> > > > > > > > > > > >
+> > > > > > > > > > > > ^ Stuck there, so it really looks like SetVariable is the problem.
+> > > > > > > > > > > >
+> > > > > > > > > > >
+> > > > > > > > > > > Could you please share the output of
+> > > > > > > > > > >
+> > > > > > > > > > > dmidecode -s bios
+> > > > > > > > > > > dmidecode -s system-family
+> > > > > > > > > >
+> > > > > > > > > > $ sudo dmidecode -s bios-vendor
+> > > > > > > > > > LENOVO
+> > > > > > > > > > $ sudo dmidecode -s bios-version
+> > > > > > > > > > hve104r-1.15
+> > > > > > > > > > $ sudo dmidecode -s bios-release-date
+> > > > > > > > > > 02/26/2021
+> > > > > > > > > > $ sudo dmidecode -s bios-revision
+> > > > > > > > > > 1.15
+> > > > > > > > > > $ sudo dmidecode -s system-family
+> > > > > > > > > > Lenovo ThinkSystem HR330A/HR350A
+> > > > > > > > > >
+> > > > > > > > >
+> > > > > > > > > Thanks
+> > > > > > > > >
+> > > > > > > > > Mind checking if this patch fixes your issue as well?
+> > > > > > > > >
+> > > > > > > > > https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/commit/?h=altra-fix&id=77fa99dd4741456da85049c13ec31a148f5f5ac0
+> > > > > > > >
+> > > > > > > > Unfortunately this doesn't seem to be enough, I'm still getting the same
+> > > > > > > > problem also with this patch applied.
+> > > > > > > >
+> > > > > > >
+> > > > > > > Thanks for trying.
+> > > > > > >
+> > > > > > > How about the last 3 patches on this branch?
+> > > > > > >
+> > > > > > > https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/log/?h=efi-smbios-altra-fix
+> > > > > >
+> > > > > > Actually, that may not match your hardware.
+> > > > > >
+> > > > > > Does your kernel log have a line like
+> > > > > >
+> > > > > > SMCCC: SOC_ID: ID = jep106:036b:0019 Revision = 0x00000102
+> > > > > >
+> > > > > > ?
+> > > > >
+> > > > > $ sudo dmesg | grep "SMCCC: SOC_ID"
+> > > > > [    5.320782] SMCCC: SOC_ID: ARCH_SOC_ID not implemented, skipping ....
+> > > > >
+> > > >
+> > > > Thanks. Could you share the entire dmidecode output somewhere? Or at
+> > > > least the type 4 record(s)?
+> > >
+> > > Sure, here's the full output of dmidecode:
+> > > https://pastebin.ubuntu.com/p/4ZmKmP2xTm/
+> > >
 > >
-> > swiotlb is not usable for GPUs even on bare metal.  They often have
-> > hundreds or megs or even gigs of memory mapped on the device at any
-> > given time.  Also, AMD GPUs support 44-48 bit DMA masks (depending on
-> > the chip family).
+> > Thanks. I have updated my SMBIOS patches to take the processor version
+> > 'eMAG' into account, which appears to be what these boxes are using.
+> >
+> > I have updated the efi/urgent branch here with the latest versions.
+> > Mind giving them a spin?
+> >
+> >
+> > In the mean time, just for the record - could you please run this as well?
+> >
+> > hexdump -C /sys/firmware/dmi/entries/4-0/raw
+> >
+> > (as root)
 >
-> But the swiotlb isn't per device, but system global.
+> hm.. I don't have that in /sys/firmware/, this is what I have:
+>
+> # ls -l /sys/firmware/dmi/
+> total 0
+> drwxr-xr-x 2 root root 0 Mar 16 13:26 tables
+> # ls -l /sys/firmware/dmi/tables/
+> total 0
+> -r-------- 1 root root 5004 Mar 16 13:26 DMI
+> -r-------- 1 root root   24 Mar 16 13:26 smbios_entry_point
+>
 
-Sure, but if the swiotlb is in use, then you can't really use the GPU.
-So you get to pick one.
-
-Alex
+You'll need to load the dmi_sysfs module for that. But no big deal
+otherwise, I'm pretty sure the word order is the correct on on your
+system in any case (it decodes the value correctly in the next line)
