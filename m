@@ -2,136 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 000D46BD5A0
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 17:31:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F8356BD5B6
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 17:33:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229620AbjCPQbK convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 16 Mar 2023 12:31:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36536 "EHLO
+        id S230335AbjCPQdM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 12:33:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229786AbjCPQbI (ORCPT
+        with ESMTP id S230244AbjCPQdF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 12:31:08 -0400
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FBBBDDF29
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 09:31:05 -0700 (PDT)
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-544787916d9so41850737b3.13
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 09:31:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678984264;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=onE1BSa8siKq3creWSMcSkNL7lBSXVXcbw9MfjVIBVY=;
-        b=G9cfY8kyKnm9zrjQs7dFwcW9j92E5uODjNP4NBNRXR7KaHR+i5dlBnSM6+/0X/gM7F
-         T6xuy43rQuFwLv1M/zVqOasKtgkheZ8nc4fuEtPcBVwnCw3D/iQFrWOTC2YacKlel4ux
-         YuUs1q4ZhhRAoUij3WJgOUyWwAJ9wiwpwTOdpJSdEr2kI0og46Yiu0EUBeWi0WfG68fy
-         fA8uH0J+IF1BS3fPKXKexQetWJ+ihIH73cc13DEBf0vVMfVT3lVX6fPcQ20b9U2+vR2/
-         hqhcQ9TcWqQAhWQkOo1FASNLp8kOUUFr+iWa3ImxoJ3nYlTPvMfdwiTjdNBj6c0QQouS
-         2Dyg==
-X-Gm-Message-State: AO0yUKXGeKaEgBdHN4S3wQlydUjRGEt7OjJ1gKn9sVaZLlogXi6dBhgd
-        IYb6unLZtn6fYD02w+u+L+y5siQislVDIw==
-X-Google-Smtp-Source: AK7set+uy5lK+XufkTap+Cws+xL4nYfNiIb7UPgVOY4Uc55RHbu37iFhZk6LqtvN/h4OGX8N9PSJ+g==
-X-Received: by 2002:a05:7508:104e:b0:4d:1821:f929 with SMTP id i14-20020a057508104e00b0004d1821f929mr846322gbi.12.1678984264411;
-        Thu, 16 Mar 2023 09:31:04 -0700 (PDT)
-Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com. [209.85.219.181])
-        by smtp.gmail.com with ESMTPSA id q9-20020a37f709000000b0073d873df3fesm6099526qkj.30.2023.03.16.09.31.03
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Mar 2023 09:31:03 -0700 (PDT)
-Received: by mail-yb1-f181.google.com with SMTP id y5so2605337ybu.3
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 09:31:03 -0700 (PDT)
-X-Received: by 2002:a05:6902:145:b0:ac2:a7a7:23c3 with SMTP id
- p5-20020a056902014500b00ac2a7a723c3mr21898287ybh.12.1678984262946; Thu, 16
- Mar 2023 09:31:02 -0700 (PDT)
+        Thu, 16 Mar 2023 12:33:05 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0692E4C62;
+        Thu, 16 Mar 2023 09:32:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678984374; x=1710520374;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=f3CiC2QaSsYUVd8b13hI0y9f5nq5N4yNeInHX5rBGGY=;
+  b=ZUjZhOOc5UhlW+bNa/1w5driFIwRqWd7dIMf53hp4mqXjTMbJTpJ9c1T
+   URc2PQ96Q2sgnZktJ7AjleZ+mmpJhc4cdiO4MEwlRFpOeHcHu2cNjCnyP
+   FSAfuFjDyjKbjBghwU7vOXNKuAFhISWtrEx7wUHGyurUVKBRYi/Y82Djc
+   JBik8fYCt2K4kuvTibtjLQYR1huuvJqWL0ZbPiKyv6cbm/M5EWonxxnQY
+   Z4NKE6u5Da5z92wYUVzeoEbu5R/sltt986Oy9v0xOjw46lyaFTgi+VKu8
+   9VSfabEZt/EkYl0SR2hnR0O5pQtro3VbU5Kp2y9MchGzze65Ds1FVvAyE
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="338060669"
+X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
+   d="scan'208";a="338060669"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 09:31:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="854117073"
+X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
+   d="scan'208";a="854117073"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 16 Mar 2023 09:31:35 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pcqVr-0008d0-15;
+        Thu, 16 Mar 2023 16:31:35 +0000
+Date:   Fri, 17 Mar 2023 00:30:58 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     hildawu@realtek.com, marcel@holtmann.org
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        johan.hedberg@gmail.com, luiz.dentz@gmail.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, apusaka@chromium.org,
+        mmandlik@google.com, yinghsu@chromium.org, max.chou@realtek.com,
+        alex_lu@realsil.com.cn, kidman@realtek.com
+Subject: Re: [PATCH] Bluetooth: msft: Extended monitor tracking by address
+ filter
+Message-ID: <202303170056.UsZ6RDV4-lkp@intel.com>
+References: <20230316090729.14572-1-hildawu@realtek.com>
 MIME-Version: 1.0
-References: <20230307215039.346863-1-javierm@redhat.com>
-In-Reply-To: <20230307215039.346863-1-javierm@redhat.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 16 Mar 2023 17:30:51 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUs0bXz1T41=bW0D1NwVYZyKUsrjCkF2hGsRPSt5+qvMA@mail.gmail.com>
-Message-ID: <CAMuHMdUs0bXz1T41=bW0D1NwVYZyKUsrjCkF2hGsRPSt5+qvMA@mail.gmail.com>
-Subject: Re: [PATCH v2] drm/format-helper: Make conversion_buf_size() support
- sub-byte pixel fmts
-To:     Javier Martinez Canillas <javierm@redhat.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Arthur Grillo <arthurgrillo@riseup.net>,
-        =?UTF-8?B?TWHDrXJhIENhbmFs?= <mairacanal@riseup.net>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@gmail.com>,
-        David Gow <davidgow@google.com>,
-        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
-        dri-devel@lists.freedesktop.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230316090729.14572-1-hildawu@realtek.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Javier,
+Hi,
 
-On Tue, Mar 7, 2023 at 10:54 PM Javier Martinez Canillas
-<javierm@redhat.com> wrote:
-> There are DRM fourcc formats that have pixels smaller than a byte, but the
-> conversion_buf_size() function assumes that pixels are a multiple of bytes
-> and use the struct drm_format_info .cpp field to calculate the dst_pitch.
->
-> Instead, calculate it by using the bits per pixel (bpp) and divide it by 8
-> to account for formats that have sub-byte pixels.
->
-> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
-> ---
-> Tested by making sure that the following command still succeeds:
->
-> ./tools/testing/kunit/kunit.py run \
-> --kunitconfig=drivers/gpu/drm/tests/.kunitconfig
->
-> Changes in v2:
-> - Drop an unused variable, that was pointed out by the kernel robot.
+Thank you for the patch! Perhaps something to improve:
 
-Thanks for your patch!
+[auto build test WARNING on bluetooth/master]
+[also build test WARNING on bluetooth-next/master net-next/main net/main linus/master v6.3-rc2 next-20230316]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> --- a/drivers/gpu/drm/tests/drm_format_helper_test.c
-> +++ b/drivers/gpu/drm/tests/drm_format_helper_test.c
-> @@ -409,12 +409,15 @@ static size_t conversion_buf_size(u32 dst_format, unsigned int dst_pitch,
->                                   const struct drm_rect *clip)
->  {
->         const struct drm_format_info *dst_fi = drm_format_info(dst_format);
-> +       unsigned int bpp;
->
->         if (!dst_fi)
->                 return -EINVAL;
->
-> -       if (!dst_pitch)
-> -               dst_pitch = drm_rect_width(clip) * dst_fi->cpp[0];
-> +       if (!dst_pitch) {
-> +               bpp = drm_format_info_bpp(dst_fi, 0);
-> +               dst_pitch = DIV_ROUND_UP(drm_rect_width(clip) * bpp, 8);
+url:    https://github.com/intel-lab-lkp/linux/commits/hildawu-realtek-com/Bluetooth-msft-Extended-monitor-tracking-by-address-filter/20230316-170950
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth.git master
+patch link:    https://lore.kernel.org/r/20230316090729.14572-1-hildawu%40realtek.com
+patch subject: [PATCH] Bluetooth: msft: Extended monitor tracking by address filter
+config: i386-randconfig-a016-20230313 (https://download.01.org/0day-ci/archive/20230317/202303170056.UsZ6RDV4-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/cee47af4605a9e5cba61be1ab1d92e8748d92e1e
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review hildawu-realtek-com/Bluetooth-msft-Extended-monitor-tracking-by-address-filter/20230316-170950
+        git checkout cee47af4605a9e5cba61be1ab1d92e8748d92e1e
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash net/bluetooth/
 
-I know I'm a bit late to the party,  but here's actually a helper for that:
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303170056.UsZ6RDV4-lkp@intel.com/
 
-    dst_pitch = drm_format_info_min_pitch(info, 0, drm_rect_width(clip));
+All warnings (new ones prefixed by >>):
 
-> +       }
->
->         return dst_pitch * drm_rect_height(clip);
->  }
+>> net/bluetooth/msft.c:521:43: warning: variable 'rp' set but not used [-Wunused-but-set-variable]
+           struct msft_rp_le_monitor_advertisement *rp;
+                                                    ^
+   1 warning generated.
 
-Gr{oetje,eeting}s,
 
-                        Geert
+vim +/rp +521 net/bluetooth/msft.c
+
+   507	
+   508	static int msft_add_monitor_sync(struct hci_dev *hdev,
+   509					 struct adv_monitor *monitor)
+   510	{
+   511		struct msft_cp_le_monitor_advertisement *cp;
+   512		struct msft_le_monitor_advertisement_pattern_data *pattern_data;
+   513		struct msft_le_monitor_advertisement_pattern *pattern;
+   514		struct adv_pattern *entry;
+   515		size_t total_size = sizeof(*cp) + sizeof(*pattern_data);
+   516		ptrdiff_t offset = 0;
+   517		u8 pattern_count = 0;
+   518		struct sk_buff *skb;
+   519		int err;
+   520		struct msft_monitor_advertisement_handle_data *handle_data;
+ > 521		struct msft_rp_le_monitor_advertisement *rp;
+   522	
+   523		if (!msft_monitor_pattern_valid(monitor))
+   524			return -EINVAL;
+   525	
+   526		list_for_each_entry(entry, &monitor->patterns, list) {
+   527			pattern_count++;
+   528			total_size += sizeof(*pattern) + entry->length;
+   529		}
+   530	
+   531		cp = kmalloc(total_size, GFP_KERNEL);
+   532		if (!cp)
+   533			return -ENOMEM;
+   534	
+   535		cp->sub_opcode = MSFT_OP_LE_MONITOR_ADVERTISEMENT;
+   536		cp->rssi_high = monitor->rssi.high_threshold;
+   537		cp->rssi_low = monitor->rssi.low_threshold;
+   538		cp->rssi_low_interval = (u8)monitor->rssi.low_threshold_timeout;
+   539		cp->rssi_sampling_period = monitor->rssi.sampling_period;
+   540	
+   541		cp->cond_type = MSFT_MONITOR_ADVERTISEMENT_TYPE_PATTERN;
+   542	
+   543		pattern_data = (void *)cp->data;
+   544		pattern_data->count = pattern_count;
+   545	
+   546		list_for_each_entry(entry, &monitor->patterns, list) {
+   547			pattern = (void *)(pattern_data->data + offset);
+   548			/* the length also includes data_type and offset */
+   549			pattern->length = entry->length + 2;
+   550			pattern->data_type = entry->ad_type;
+   551			pattern->start_byte = entry->offset;
+   552			memcpy(pattern->pattern, entry->value, entry->length);
+   553			offset += sizeof(*pattern) + entry->length;
+   554		}
+   555	
+   556		skb = __hci_cmd_sync(hdev, hdev->msft_opcode, total_size, cp,
+   557				     HCI_CMD_TIMEOUT);
+   558	
+   559		if (IS_ERR_OR_NULL(skb)) {
+   560			kfree(cp);
+   561			return PTR_ERR(skb);
+   562		}
+   563	
+   564		err = msft_le_monitor_advertisement_cb(hdev, hdev->msft_opcode,
+   565						       monitor, skb);
+   566		if (!err) {
+   567			rp = (struct msft_rp_le_monitor_advertisement *)skb->data;
+   568			handle_data = msft_find_handle_data(hdev, monitor->handle,
+   569							    true);
+   570			if (handle_data) {
+   571				handle_data->rssi_high   = cp->rssi_high;
+   572				handle_data->rssi_low    = cp->rssi_low;
+   573				handle_data->rssi_low_interval    =
+   574							cp->rssi_low_interval;
+   575				handle_data->rssi_sampling_period =
+   576							cp->rssi_sampling_period;
+   577			}
+   578		}
+   579		kfree(cp);
+   580	
+   581		return err;
+   582	}
+   583	
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
