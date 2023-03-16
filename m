@@ -2,138 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02A1C6BC36E
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 02:41:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D7116BC374
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 02:47:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229918AbjCPBls (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 21:41:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57808 "EHLO
+        id S229621AbjCPBrW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 21:47:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229844AbjCPBlk (ORCPT
+        with ESMTP id S229436AbjCPBrU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 21:41:40 -0400
-Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDACEB860D;
-        Wed, 15 Mar 2023 18:41:32 -0700 (PDT)
-Received: by mail-qt1-f172.google.com with SMTP id l13so285742qtv.3;
-        Wed, 15 Mar 2023 18:41:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678930891;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fujln5B4PJVc7FU0F2EjRjzV5VR7c7BJfqwtEXGQG30=;
-        b=fb9D9hLFXdrVtLcdhi5BPw8DzBQmDCcbu0PPRLD8eaUxDGZWBoM91Zo+X0RZwpvNLr
-         C+X+iunwZu0DpWRzI0RA+HEs/zLlC3Lup/YbmPrvZcul1kNsxbBNp63dbgG3+bTM5vPD
-         kGhOzsH7inIQVwfp2N+slHi4yuPVUV2wtlELX9nMPLHJg+Bh1Pmh0aJvU64TsE1nAxE0
-         4LdDajy9Z9fCSkRQBWawFIMPGmWJzSytUtSP1t/vYJtCsZ4WQS0HIWB4Is7KCQLr4Gwm
-         w5ssmj2KcymOhS1PzRE4uu1LrWXhSnEAQLd1v93m9Jmg7AT68beEEhDPKz9JmTuuwRZb
-         O/+w==
-X-Gm-Message-State: AO0yUKXj/PXGh556SY4JB384n7SbCHTJesYkQkTMSWGWlLiQp4s4gRUb
-        6qxvylzL1sHtchtcCOuGjKawAiCRqahB4d62
-X-Google-Smtp-Source: AK7set+RdTtIsY3zUnM14bUgfPDAx7kJsfU9mIvCdawhkU7qZ5kCOSCscrFjSTCMTRrTrAhMFE/28Q==
-X-Received: by 2002:a05:622a:174c:b0:3bf:d0c7:12df with SMTP id l12-20020a05622a174c00b003bfd0c712dfmr3506016qtk.63.1678930891324;
-        Wed, 15 Mar 2023 18:41:31 -0700 (PDT)
-Received: from localhost ([2620:10d:c091:400::5:5c58])
-        by smtp.gmail.com with ESMTPSA id x24-20020ac86b58000000b003bfa2c512e6sm4735074qts.20.2023.03.15.18.41.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Mar 2023 18:41:30 -0700 (PDT)
-From:   David Vernet <void@manifault.com>
-To:     bpf@vger.kernel.org
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@meta.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@meta.com
-Subject: [PATCH bpf-next 5/5] bpf,docs: Remove bpf_cpumask_kptr_get() from documentation
-Date:   Wed, 15 Mar 2023 20:41:22 -0500
-Message-Id: <20230316014122.678082-6-void@manifault.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230316014122.678082-1-void@manifault.com>
-References: <20230316014122.678082-1-void@manifault.com>
+        Wed, 15 Mar 2023 21:47:20 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD3BFABAD3;
+        Wed, 15 Mar 2023 18:47:18 -0700 (PDT)
+Received: from dggpemm500005.china.huawei.com (unknown [172.30.72.55])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4PcVVr38VrzKnFn;
+        Thu, 16 Mar 2023 09:47:00 +0800 (CST)
+Received: from [10.69.30.204] (10.69.30.204) by dggpemm500005.china.huawei.com
+ (7.185.36.74) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Thu, 16 Mar
+ 2023 09:47:15 +0800
+Subject: Re: [PATCH net] vmxnet3: use gro callback when UPT is enabled
+To:     Ronak Doshi <doshir@vmware.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+CC:     "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        Pv-drivers <Pv-drivers@vmware.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Guolin Yang <gyang@vmware.com>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20230308222504.25675-1-doshir@vmware.com>
+ <e3768ae9-6a2b-3b5e-9381-21407f96dd63@huawei.com>
+ <4DF8ED21-92C2-404F-9766-691AEA5C4E8B@vmware.com>
+ <252026f5-f979-2c8d-90d9-7ba396d495c8@huawei.com>
+ <0389636C-F179-48E1-89D2-48DE0B34FD30@vmware.com>
+ <2e2ae42b-4f10-048e-4828-5cb6dd8558f5@huawei.com>
+ <3EF78217-44AA-44F6-99DC-86FF1CC03A94@vmware.com>
+ <207a0919-1a5a-dee6-1877-ee0b27fc744a@huawei.com>
+ <AA320ADE-E149-4C0D-80D5-338B19AD31A2@vmware.com>
+From:   Yunsheng Lin <linyunsheng@huawei.com>
+Message-ID: <77c30632-849f-8b7b-42ef-be8b32981c15@huawei.com>
+Date:   Thu, 16 Mar 2023 09:47:14 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
+ Thunderbird/52.2.0
 MIME-Version: 1.0
+In-Reply-To: <AA320ADE-E149-4C0D-80D5-338B19AD31A2@vmware.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-Originating-IP: [10.69.30.204]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500005.china.huawei.com (7.185.36.74)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that the kfunc no longer exists, we can remove it and instead
-describe how RCU can be used to get a struct bpf_cpumask from a map
-value. This patch updates the BPF documentation accordingly.
+On 2023/3/16 7:44, Ronak Doshi wrote:
+> 
+>> ﻿On 3/14/23, 8:05 PM, "Yunsheng Lin" <linyunsheng@huawei.com <mailto:linyunsheng@huawei.com>> wrote:
+>>
+>> I am not sure how we can handle the runtime hw capability changing thing yet, that is why
+>> I suggested setting the hw capability during the driver init process, then user can enable
+>> or disable GRO if need to.
+>>
+> It is not about enabling or disabling the LRO/GRO. It is about which callback to be used to
+> deliver the packets to the stack.
 
-Signed-off-by: David Vernet <void@manifault.com>
----
- Documentation/bpf/cpumasks.rst | 30 ++++++++++--------------------
- 1 file changed, 10 insertions(+), 20 deletions(-)
+That's the piont I am trying to make.
+If I understand it correctly, you can not change callback from napi_gro_receive() to
+netif_receive_skb() when netdev->features has the NETIF_F_GRO bit set.
 
-diff --git a/Documentation/bpf/cpumasks.rst b/Documentation/bpf/cpumasks.rst
-index 75344cd230e5..41efd8874eeb 100644
---- a/Documentation/bpf/cpumasks.rst
-+++ b/Documentation/bpf/cpumasks.rst
-@@ -117,12 +117,7 @@ For example:
- As mentioned and illustrated above, these ``struct bpf_cpumask *`` objects can
- also be stored in a map and used as kptrs. If a ``struct bpf_cpumask *`` is in
- a map, the reference can be removed from the map with bpf_kptr_xchg(), or
--opportunistically acquired with bpf_cpumask_kptr_get():
--
--.. kernel-doc:: kernel/bpf/cpumask.c
--  :identifiers: bpf_cpumask_kptr_get
--
--Here is an example of a ``struct bpf_cpumask *`` being retrieved from a map:
-+opportunistically acquired using RCU:
- 
- .. code-block:: c
- 
-@@ -144,7 +139,7 @@ Here is an example of a ``struct bpf_cpumask *`` being retrieved from a map:
- 	/**
- 	 * A simple example tracepoint program showing how a
- 	 * struct bpf_cpumask * kptr that is stored in a map can
--	 * be acquired using the bpf_cpumask_kptr_get() kfunc.
-+	 * be passed to kfuncs using RCU protection.
- 	 */
- 	SEC("tp_btf/cgroup_mkdir")
- 	int BPF_PROG(cgrp_ancestor_example, struct cgroup *cgrp, const char *path)
-@@ -158,26 +153,21 @@ Here is an example of a ``struct bpf_cpumask *`` being retrieved from a map:
- 		if (!v)
- 			return -ENOENT;
- 
-+		bpf_rcu_read_lock();
- 		/* Acquire a reference to the bpf_cpumask * kptr that's already stored in the map. */
--		kptr = bpf_cpumask_kptr_get(&v->cpumask);
--		if (!kptr)
-+		kptr = v->cpumask;
-+		if (!kptr) {
- 			/* If no bpf_cpumask was present in the map, it's because
- 			 * we're racing with another CPU that removed it with
- 			 * bpf_kptr_xchg() between the bpf_map_lookup_elem()
--			 * above, and our call to bpf_cpumask_kptr_get().
--			 * bpf_cpumask_kptr_get() internally safely handles this
--			 * race, and will return NULL if the cpumask is no longer
--			 * present in the map by the time we invoke the kfunc.
-+			 * above, and our load of the pointer from the map.
- 			 */
-+			bpf_rcu_read_unlock();
- 			return -EBUSY;
-+		}
- 
--		/* Free the reference we just took above. Note that the
--		 * original struct bpf_cpumask * kptr is still in the map. It will
--		 * be freed either at a later time if another context deletes
--		 * it from the map, or automatically by the BPF subsystem if
--		 * it's still present when the map is destroyed.
--		 */
--		bpf_cpumask_release(kptr);
-+		bpf_cpumask_setall(kptr);
-+		bpf_rcu_read_unlock();
- 
- 		return 0;
- 	}
--- 
-2.39.0
+NETIF_F_GRO bit in netdev->features is to tell user that netstack will perform the
+software GRO processing if the packet can be GRO'ed.
 
+Calling netif_receive_skb() with NETIF_F_GRO bit set in netdev->features will cause
+confusion for user, IMHO.
+
+> 
+> During init, the vnic will always come up in emulation (non-UPT) mode and user can request 
+> whichever feature they want (lro or gro or both). If it is in UPT mode, as we know UPT device
+> does not support LRO, we use gro API to deliver. If GRO is disabled by the user, then it can still
+> take the normal path. If in emulation (non-UPT) mode, ESXi will perform LRO.
+> 
+>> Suppose user enable the software GRO using ethtool, disabling the GRO through some runtime
+>> checking seems against the will of the user.
+>>
+> We are not disabling GRO here, it's either we perform LRO on ESXi or GRO in guest stack.
+
+I means software GRO performed by netstack.
+There are NETIF_F_GRO_HW and NETIF_F_LRO bit for GRO and LRO performed by hw. LRO on ESXi
+is like hw offload in the eye of the driver in the guest, even if it is processed by some
+software in the ESXi.
+
+> 
+> 
+>> Also, if you are able to "add an event to notify the guest about this", I suppose the
+>> para-virtualized driver will clear the specific bit in netdev->hw_features and
+>> netdev->features when handling the event? does user need to be notified about this, does
+>> user get confusion about this change without notification?
+>>
+> We won’t be changing any feature bits. It is just to let know the driver that UPT is active and it
+> should use GRO path instead of relying on ESXi LRO.
+
+As above, there is different feature bit for that, NETIF_F_LRO, NETIF_F_GRO and
+NETIF_F_GRO_HW.
+IMHO, deciding which callback to be used depending on some driver configuation
+without corporation with the above feature bits does not seems right to me.
+
+> 
+> Thanks,
+> Ronak
+> 
