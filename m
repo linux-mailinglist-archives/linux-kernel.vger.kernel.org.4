@@ -2,200 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 313126BCB5A
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 10:49:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61D5D6BCB6A
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 10:51:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229969AbjCPJtH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 05:49:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50566 "EHLO
+        id S230084AbjCPJvF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 05:51:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbjCPJtF (ORCPT
+        with ESMTP id S230047AbjCPJvC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 05:49:05 -0400
-Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2130.outbound.protection.outlook.com [40.107.117.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 116412F790
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 02:49:03 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lvcOaFIbDLWog6rWo0hAsz9FI//nzS2tog4rEzNzJ92N6O+eWcrHCQOVo0iX2sEgwm1HmZpnJWB/Z8i/MSMMQTkGtpmUCcEp6ZBrHSFCFKIjeKIodtqrTfAg9EAhF19tgV2fMfmBVfcovpItJ301U2BOydTQf/mhymIGeUHtLfx9TpUgUxBJseB8KJlf+g5VJHQb1Z2Y9QoVPdnRHT/a4VGhCkMbr49g7JOaGevmfJW+LWty2XAcVFV83mKphwiPIxGMhpT+Q7m/YOD9ZOqlwcVb1ckBoG9BbC8jXFrY/C/V8cMHXtbXAh8Ko75ConYmgmbUIOctpb46gezEAJ9qLw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=38gNMJ9SsfkgOaV79jEwIUUP0mz+Rvvz5t9IAGYrGMY=;
- b=QGzgImyr+9+hRrsUHm/MHpHpCl+kfyS0ji0aS54E1wP4AwwhMfZknxzOEGezW4+86QwlrXgL2oZsC6JItiROSus241Q5N20Hx+kcMdNctu8VvBlHGjjYV0HA0Ou//Py7MNVz7kjkpC8vsn2AdxyZmmBxTjdcBOssMyokwgiSPKWoUZRXuXcQJZwc2VX8t5NpetA8dtNMuMbIb1HCvUbLKo97tuLD/XGyBJoYQ0o7pLmYXK0ARzZ7qisSE3oSdDpNkt0UWSSbt/PnOBcYRngOEPw1rCsHsokDfHSzqPDi967wSGgBIGV8QHA4BhLTFMYt84zfpbV1NVNNZSDAQp9ESw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=38gNMJ9SsfkgOaV79jEwIUUP0mz+Rvvz5t9IAGYrGMY=;
- b=VkLucwXJdsnjT+p2deocov3XqWpvtyKmEX+dG0RAm+q9VABPuSOfe5tEp+0vibEDJtGjz5PIwp4AGQR8myNDLDccGOlrnpEh/Rd8dJNAaDTD9S3L/H8h1TPLOO3G8KMiWK75O7v2SyA3GfO+TsWdyFY8oAQDibA03eVmeMX+sue8s1pcsyg3+U9dOV5qEfAHDh6TCbe6S/LgGwuW1XoYDGtvtH/T7v8kzQrX3/SXCK/fE+PgXqY74mI1hoLDdhEcuBS1MbKnVMQf73+abihaSuG5Bt4k8LYDnpGLLTJULLG4+ruGqVMfqbQpmZaMazwvq8LfOThhcGSIc8nOge9J4w==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from TYZPR06MB5275.apcprd06.prod.outlook.com (2603:1096:400:1f5::6)
- by SI2PR06MB5196.apcprd06.prod.outlook.com (2603:1096:4:1e0::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.31; Thu, 16 Mar
- 2023 09:48:59 +0000
-Received: from TYZPR06MB5275.apcprd06.prod.outlook.com
- ([fe80::a2c6:4a08:7779:5190]) by TYZPR06MB5275.apcprd06.prod.outlook.com
- ([fe80::a2c6:4a08:7779:5190%2]) with mapi id 15.20.6178.026; Thu, 16 Mar 2023
- 09:48:59 +0000
-From:   Yangtao Li <frank.li@vivo.com>
-To:     jaegeuk@kernel.org, chao@kernel.org
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, hanqi@vivo.com,
-        Yangtao Li <frank.li@vivo.com>
-Subject: [PATCH] f2fs: compress: fix to call f2fs_wait_on_page_writeback() in f2fs_write_raw_pages()
-Date:   Thu, 16 Mar 2023 17:48:47 +0800
-Message-Id: <20230316094847.32486-1-frank.li@vivo.com>
-X-Mailer: git-send-email 2.35.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SG2PR01CA0126.apcprd01.prod.exchangelabs.com
- (2603:1096:4:40::30) To TYZPR06MB5275.apcprd06.prod.outlook.com
- (2603:1096:400:1f5::6)
+        Thu, 16 Mar 2023 05:51:02 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7035B5ADEE
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 02:50:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678960216;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=huowlZPUW6H0KxMkpbfx9CP3sZ4JPlEUrwvUVboQxVY=;
+        b=V86xFdeYoMaN5s0OkSm1RYXc/RTTy19SrDpGfua3eTPyqr4dMZqPX/VHUQU+1cIt2XPRRJ
+        GZcH4hQCYgenx7otnhuoYmQb63OY+PuBQy4K++GGrC9cejpl6hfqobO4TYTxEUMLPI/KX3
+        wK4mTa0ItzDm19LZPXm6Ztcok0KEd5M=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-384-iez7HG_8OpO1PqI9Qntd9Q-1; Thu, 16 Mar 2023 05:50:15 -0400
+X-MC-Unique: iez7HG_8OpO1PqI9Qntd9Q-1
+Received: by mail-ed1-f71.google.com with SMTP id fi8-20020a056402550800b004a26cc7f6cbso2261619edb.4
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 02:50:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678960214;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=huowlZPUW6H0KxMkpbfx9CP3sZ4JPlEUrwvUVboQxVY=;
+        b=md31wR18vZv6ftsLsspbhfyZCj+a9skdvqjcroutybZpeF3w50r+Bubh2h0oTAVIbS
+         wNk2q2L1lbKCPaMuEdbx/7N0RigibH2RNbDXEDZLLV4xIJFPrayTKQxLQdtxUCrSIQqm
+         nCb+ChDbo8FIQ46JFR29Fef1KJ1sQoARyiWicoxY3tDtT/kIRDVNcO2DVkb7iCauPDxt
+         A18Wx0To/rBIpYmfksIF70pdiPVD6Qdzo/hFnTopmTV6ITs6sknUSZj7nGdn0Wk/s0W+
+         E9d0INPlLVM+78+hvbnntETLKyS4wj05XwNVF5v1+gdJgXWV62Pm+/6I+maM29q02RRx
+         RlKg==
+X-Gm-Message-State: AO0yUKWTrOIWzaBW4oMQhb3xBsi6gymKGro9yRIA4elVLs6tFmGM/ggZ
+        qmNAhH2lBYzH7+9zdHpogsGBGVikIuwbokAroQ8yFbsyIypS1e+zTQWoVVk7Y7n75RWvdny8lvg
+        kkgygo+Eg74RHDS4ofZNFEJry
+X-Received: by 2002:a17:907:1690:b0:878:481c:c49b with SMTP id hc16-20020a170907169000b00878481cc49bmr13813185ejc.1.1678960214280;
+        Thu, 16 Mar 2023 02:50:14 -0700 (PDT)
+X-Google-Smtp-Source: AK7set942yrVQ/Wj8al0sXYB+EAScOmstJzvOpb3F2mvsPMw1ODTqzHzTDJWX8nNO14vzK8gKsbNHA==
+X-Received: by 2002:a17:907:1690:b0:878:481c:c49b with SMTP id hc16-20020a170907169000b00878481cc49bmr13813155ejc.1.1678960213985;
+        Thu, 16 Mar 2023 02:50:13 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id lm15-20020a170906980f00b0093034e71b94sm750503ejb.65.2023.03.16.02.50.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Mar 2023 02:50:13 -0700 (PDT)
+Message-ID: <076097bc-1e7e-72d9-efa9-79d6a94d3f0a@redhat.com>
+Date:   Thu, 16 Mar 2023 10:50:12 +0100
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: TYZPR06MB5275:EE_|SI2PR06MB5196:EE_
-X-MS-Office365-Filtering-Correlation-Id: 08f89ec0-114d-4f8c-d25c-08db2603aa98
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: xis5Q4r92xVXeUcPy8YD3mTWZIp007szmL/eyPpBXVDJqphZGx5kTKvIxIf4bSLN1EL6chUW2U2kXsDUINeebhklkWjvfHQF/07EoJVcxC3AhmzUnBbP2syKMl4ULmfgD+Wn3aX8UndpcEuo4BQBqQGSG0Y6GiQdoOSlD0VoSLX4FohpL7l5bzPdbdY3KNpNAw4FjKUvhid2g8eDZtcgviruZ/jJslpK1meJDMNyVXRpu6AXjNk3tzcqZEAbtrJ+Gs0Bscy63vHW7nC2jkKIoRvvXG0bcWofMHxWj2cLMFyKcVtWZfZ2n4urJi0opr3Z4NQka6v0Kh5SvCj4ecu2v+D/ZIlnUv0mu2pVvUc66iBqCPtZNyLmNyyrJa9ihu/7O4g1Bx+P8tWuum+FeZFsZj68zKQewO/2frVTG8qXPONkLzJGKTtOSnyb+kkwggeCURCI0e4xqI0oAsHf4J1zyZs3vGFBg594OM0fzLn5y2+/y0ck9SUdsUz6ydftySsf/oJw/0tQSD+JbLBvkCedU+cfaSlXoEFvdupbU1scSu7VQaj9KeX10Tit7HBKzmn96pIU1mqDfva9BElI5zLmeEB6qVuqVEBWmAZUTx/kJPDEFXIrwWxBxupf1R20vWXjL7NQcGk6BuDKK3fECPteFYC1P8qpIkXtTnb6ay7VMmR916YOKWTh5fc2HpERktImQ/97k5qIXggcTuJpsLOlZw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR06MB5275.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(376002)(39860400002)(136003)(346002)(396003)(451199018)(86362001)(36756003)(38350700002)(2906002)(41300700001)(38100700002)(8936002)(5660300002)(2616005)(6506007)(1076003)(26005)(6512007)(186003)(4326008)(316002)(83380400001)(6666004)(66476007)(66556008)(8676002)(6486002)(66946007)(107886003)(52116002)(478600001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?oRvkElUvCiTIFxFjrWoWjwwDkBk3YuxzzvyeQUz+MU+BpjcIMMkZdF5MvVfp?=
- =?us-ascii?Q?AZxWad0DaSgYg1aeBv438HPYAYnnWE9YCTIceGDCJ30XC9YLD8AiA1Hga3wz?=
- =?us-ascii?Q?apUVWWEUNUqOI2th2cVYGb/1E7GpPtQqlwhRpBELvsM5+UzMdFGi1i7x3zPx?=
- =?us-ascii?Q?73d1ohQrLt/15EsA07DXZPCihPOKIrcHxWF3EsWpJhsZ7pIBGyRHEymR8x7P?=
- =?us-ascii?Q?ejWo3rtgYwjpxOd9iw/rOg0EbDLMDMR4YEO8Ifgxtllw0RwJ35I6A7KKfk32?=
- =?us-ascii?Q?tumGdlw1PS6SkKQckVGrEtd9a+dfJ82/m+u9KIgjDvpon4llk++T/LmnmbYt?=
- =?us-ascii?Q?ixFVCQNqe5fBYj0XnXlQnvAs7RDDPuoqA+QlusG+uZq/T9JPJc/l4CPqToZH?=
- =?us-ascii?Q?Tm+heO3q3UuZLK2F7H//QzkWEfH6i5vC1X5cVLGFCT5AJjlbmXTTDEQ0yhA2?=
- =?us-ascii?Q?eQEhPcb/e1vJjOSDvltoqUIL3rJNeFmxhIHGinE5cTxyMypnlw66PGC3Hv6z?=
- =?us-ascii?Q?/Zbqw8DziRi/aNVvnQOfTakwgIUgqv2OLPZer/ZEUjnE4KF2AqX70ZcDCf6A?=
- =?us-ascii?Q?wH9Qm0c4uickoTw4nZLhMtbR36HCY/pOJVxk5vap0NgNM53tNdFetCSWDL5R?=
- =?us-ascii?Q?oABq9KdYlAN4RmoYfghV9zFPP4kSMeTHygpdCjtfpbs7zX7e8KgHWvzyDLRH?=
- =?us-ascii?Q?7alCBHtEDAu0HMWOqq+dIQOY/9dpRHfyAkXo4vI812BgxSoD+JP47sZsM/4p?=
- =?us-ascii?Q?rrv6GJDRvgwqML3lvHsTNVq8TCdGvacAtFUqxvt6UPKBxu/GI2dBI8lUdQkZ?=
- =?us-ascii?Q?+2/Gi5pF2tqjiEGd1sKjNEAi3urEzpQoW2YQLc/gCeZI9WVt3O0nb9gBoS/d?=
- =?us-ascii?Q?tLMXsIgNnyJG3BBe8ZkTKvJgWApR1gjc7WfHD+51ws0UBLM84McxbGi8BGnz?=
- =?us-ascii?Q?8WS7NJ4h86emd3hX3Y7Z160lKkgVyVDwsBqhJjtKHcEiVQIqkthNquOax3iq?=
- =?us-ascii?Q?SKhe8QcdKVcLEwCHtcGMoIbm0YxUNzU9W0qL4NbUyYP5J/pkQKAVmuFHmAar?=
- =?us-ascii?Q?AdIDex7MVtwnxu96ss3rGi2zOSAXzhaueD93NY6CLWK4Fc904aG5CDeB2eY7?=
- =?us-ascii?Q?7KSLBC6LdS0VgTsh3XXf79xD07bmU7LNc0D2d2jPwAYywSuTFfhLhKgTsbIF?=
- =?us-ascii?Q?vtRlGoiz2ZAKYSR9ardYM38aB0AlpDzjIdks47JyLD8yRpiKlxB6MkZei2xy?=
- =?us-ascii?Q?yUHwh/B3JZ3b62JyvoFtzesNpyZdcroZ7vkV/1ShtAWa/xORMpHRCdsdc1b5?=
- =?us-ascii?Q?kwcz8XN3TrSyfl4PtiNK4QTjVZqs5NyTWYGKXNxxiCYukivOyLhfgmu4GEB7?=
- =?us-ascii?Q?VCHEEjQz+16uR3suiTcwdrkoGIxcijwep8uqhgSCEjcbePTCAuUmyDaCQeia?=
- =?us-ascii?Q?19n4TRCXNh5TZH+fD1Trn66nxQe/KFwEUw+z5iE6snHXYkvZjwvClSnu9TgV?=
- =?us-ascii?Q?iBTlFWF0cwjp0gozCtJW6k/9cS/t7Sz9QM08L14bYoOZLQenNvxAaFNnZQtC?=
- =?us-ascii?Q?rk43Qo6H7urcWedAOS9+HOKmWgPl6gJd6o7g0BXc?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 08f89ec0-114d-4f8c-d25c-08db2603aa98
-X-MS-Exchange-CrossTenant-AuthSource: TYZPR06MB5275.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Mar 2023 09:48:59.2893
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 4ZpnFlj5lfeSjsE9jg5t8bpvmWC9awYrdNvs8b4hYZLiqgCdfl7582Y4T4YiKTp3gZGt0OviXla1ZQo4DUGmJg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SI2PR06MB5196
-X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,RCVD_IN_VALIDITY_RPBL,SPF_HELO_PASS,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v3 4/8] platform/x86/intel/ifs: Introduce Array Scan test
+ to IFS
+Content-Language: en-US, nl
+To:     "Joseph, Jithu" <jithu.joseph@intel.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        "markgross@kernel.org" <markgross@kernel.org>
+Cc:     "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "Raj, Ashok" <ashok.raj@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "platform-driver-x86@vger.kernel.org" 
+        <platform-driver-x86@vger.kernel.org>,
+        "patches@lists.linux.dev" <patches@lists.linux.dev>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
+        "Macieira, Thiago" <thiago.macieira@intel.com>,
+        "Jimenez Gonzalez, Athenas" <athenas.jimenez.gonzalez@intel.com>,
+        "Mehta, Sohil" <sohil.mehta@intel.com>
+References: <20230214234426.344960-1-jithu.joseph@intel.com>
+ <20230301015942.462799-1-jithu.joseph@intel.com>
+ <20230301015942.462799-5-jithu.joseph@intel.com>
+ <7f82f241-39ee-15e0-1ae7-e98e50730c95@redhat.com>
+ <275d2f04-782f-2c9d-187a-7a510bf34f41@redhat.com>
+ <SJ1PR11MB60831C996C2EC462262948CDFCB99@SJ1PR11MB6083.namprd11.prod.outlook.com>
+ <363aa89e-de06-6fc4-e396-d8cc311017b9@intel.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <363aa89e-de06-6fc4-e396-d8cc311017b9@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-BUG_ON() will be triggered when writing files concurrently,
-because the same page is writtenback multiple times.
+Hi,
 
-1597 void folio_end_writeback(struct folio *folio)
-1598 {
-		......
-1618     if (!__folio_end_writeback(folio))
-1619         BUG();
-		......
-1625 }
+On 3/15/23 20:29, Joseph, Jithu wrote:
+> 
+> 
+> On 3/13/2023 10:21 AM, Luck, Tony wrote:
+> 
+>>
+>>
+>> I'm not sure this is better than splitting the tests into different directories.
+>>
+> 
+> To provide a bit more context to Tony's response - 
+> There are similarities between tests (one of the test inputs is cpu number , which is 
+> common among different tests , so are the test outputs described via status / details attributes)
+> and some differences too (distinct to each test are the test patterns, some tests needs to
+> load test patterns appropriate for that test type and some does not)
+> 
+> Current approach of keeping each test's attributes in its own directory (intel_ifs_n)
+> allows the driver to account for the differences naturally, for e.g load test file
+> suited for a specific test. (I.e if the load is issued from intel_ifs_<n> , the driver
+> will load test patterns from /lib/firmware/intel/ifs/ifs_<n>/ff-mm-ss-xx.<type_n>).
+> If load is not applicable for a test type , test directory doesn’t show load and image_version attributes). 
+> 
+> As Tony mentioned, similar effect might be achieved using distinct load / run (and image_version)
+> files for each test type, but the current approach of organizing files per test feels a little
+> bit more intuitive. 
+> 
+> Grouping attributes per test was the original design intent , when the first test was introduced,
+> as indicated by the existing ABI doc (Documentation/ABI/testing/sysfs-platform-intel-ifs),
+> wherein attributes are described under /sys/devices/virtual/misc/intel_ifs_<N>/ …
 
-kernel BUG at mm/filemap.c:1619!
-Call Trace:
- <TASK>
- f2fs_write_end_io+0x1a0/0x370
- blk_update_request+0x6c/0x410
- blk_mq_end_request+0x15/0x130
- blk_complete_reqs+0x3c/0x50
- __do_softirq+0xb8/0x29b
- ? sort_range+0x20/0x20
- run_ksoftirqd+0x19/0x20
- smpboot_thread_fn+0x10b/0x1d0
- kthread+0xde/0x110
- ? kthread_complete_and_exit+0x20/0x20
- ret_from_fork+0x22/0x30
- </TASK>
+Ok I see, lets go with 1 intel_ifs device per test-type then.
 
-Below is the concurrency scenario:
+If I understood things correctly esp. also with the /lib/firmware path then the <N> in intel_ifs_<N> basically specifies the test-type, correct ?
 
-[Process A]		[Process B]		[Process C]
-f2fs_write_raw_pages()
-  - redirty_page_for_writepage()
-  - unlock page()
-			f2fs_do_write_data_page()
-			  - lock_page()
-			  - clear_page_dirty_for_io()
-			  - set_page_writeback() [1st writeback]
-			    .....
-			    - unlock page()
+If I have that correct please add this to the ABI documentation in the form of a list with
 
-						generic_perform_write()
-						  - f2fs_write_begin()
-						    - wait_for_stable_page()
+intel_ifs_<N> <-> test-type
 
-						  - f2fs_write_end()
-						    - set_page_dirty()
+mappings. And also add documentation to each attribute for which test-types the attribute is valid (this can be "all" for e.g. status, to avoid churn when adding more test types).
 
-  - lock_page()
-    - f2fs_do_write_data_page()
-      - set_page_writeback() [2st writeback]
+> Hans, Shall I revise the series incorporating the rest of your comments ?
 
-This problem was introduced by the previous commit 7377e853967b ("f2fs:
-compress: fix potential deadlock of compress file"). All pagelocks were
-released in f2fs_write_raw_pages(), but whether the page was
-in the writeback state was ignored in the subsequent writing process.
-Let's fix it by waiting for the page to writeback before writing.
+Yes please.
 
-Fixes: 4c8ff7095bef ("f2fs: support data compression")
-Fixes: 7377e853967b ("f2fs: compress: fix potential deadlock of compress file")
-Signed-off-by: Qi Han <hanqi@vivo.com>
-Signed-off-by: Yangtao Li <frank.li@vivo.com>
----
- fs/f2fs/compress.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+Regards,
 
-diff --git a/fs/f2fs/compress.c b/fs/f2fs/compress.c
-index 93fec1d37899..904af359fa8e 100644
---- a/fs/f2fs/compress.c
-+++ b/fs/f2fs/compress.c
-@@ -1456,6 +1456,14 @@ static int f2fs_write_raw_pages(struct compress_ctx *cc,
- 		if (!PageDirty(cc->rpages[i]))
- 			goto continue_unlock;
- 
-+		if (PageWriteback(cc->rpages[i])) {
-+			if (wbc->sync_mode != WB_SYNC_NONE)
-+				f2fs_wait_on_page_writeback(cc->rpages[i],
-+						DATA, true, true);
-+			else
-+				goto continue_unlock;
-+		}
-+
- 		if (!clear_page_dirty_for_io(cc->rpages[i]))
- 			goto continue_unlock;
- 
--- 
-2.35.1
+Hans
+
 
