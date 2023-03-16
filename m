@@ -2,110 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5E046BD8B4
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 20:16:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6CC66BD8B3
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 20:16:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230009AbjCPTQi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 15:16:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34840 "EHLO
+        id S229577AbjCPTQg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 15:16:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229669AbjCPTQe (ORCPT
+        with ESMTP id S229620AbjCPTQd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 15:16:34 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 312C872020
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 12:16:33 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id cy23so11651227edb.12
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 12:16:33 -0700 (PDT)
+        Thu, 16 Mar 2023 15:16:33 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA6C06C1B0
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 12:16:32 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id o12so11700982edb.9
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 12:16:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678994191;
-        h=in-reply-to:content-disposition:mime-version:references:reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=x/wDWtFCM7WcRQcdZ/hsAREK7bWOLl6e/ZYZcmTu9kY=;
-        b=IbhDwe/+Pk8t2zx5e2xUger4Co7HNiCBwQ9eWAA5Oi/QXGYGiXKsNYIKwGmP+Jkpa/
-         7YQhL7J2euxNH84t9Xlcf3r8eTQaLsftCDfBA5RRjSaznLEqUPE+lJJ+OKh0FEhgTlMc
-         vcP9Loh7OeWURRHkvP4nSqhbAIMFnUa0zCVeSHUr/uxvm7n95MbYpVEjiOWp0QSPj2g0
-         621zIesyuaeEEbqiJ+NAuGzO4cxUOi/vfTMgUTZhA5/lplZrQfOHTjry3mMETd3lUFyi
-         jO20RHub+IYMCoL+bM/htpur1qK22YCP3GTJ/OID7TMsomM8XiD+Lm/KP1ouSIqdQ46N
-         m7/g==
+        d=linaro.org; s=google; t=1678994191;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=p4dswHx01qFyh/CKCq0Z4NfZll3Xh2LeviJSxwsyG5w=;
+        b=Gg8uFCNztqtT+wsx6xfWshpbc7uY5YbBmQpPWxiTPhbH/vb/RnRJpPq1QHfjjEqXum
+         c5YGUzOEXLuppCYlyR2TflIgEWSBklB545MHNItGSMNe7vilB/lhQWlCMscI66FpohrE
+         l+8MpyDM18ayd5wzIpDouqQlOliR7bbBGLT3U5nqkRfCXlf1qaYTNPjTo/NhP+jfqLfs
+         3PyjkLbl3ha2wEpXY1b3+18L0Glh3IF7SmqYoRPqu6Yl70dyB1YnoWeZ3Ar1oWOMW99g
+         K4gl2h+urC73/gWy4DsrMr8j2FJ0vqhAl3oyCropv7qsYaTuyWJni0RzzP9CsHY8UOzb
+         WtPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112; t=1678994191;
-        h=in-reply-to:content-disposition:mime-version:references:reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=x/wDWtFCM7WcRQcdZ/hsAREK7bWOLl6e/ZYZcmTu9kY=;
-        b=yn/M7W9Gz+AV5uzFen1kETRoNvqzQUVSAOWWyoq8S6fDobJx6a2EGyusM6P2b73xTk
-         hT2JG5PGE+5KcAQQymyKhMEcyYSTRdXu0FHl3pUJW5udwmV7CTpKuX1asvrtTPXqBjQ5
-         fLfotZ9b0/ItOQItfLCRbiS8hoC0Qv2+uPDyPr8ds20Sg2gg2SD3fp2CHmO5VFx0R6jK
-         Co4ZjYpW9so3v3KocMd6bXSQq2UuO4JvSdtJ/nezAUvKMs2LCTVZv494m0T0I1UsUwJk
-         m2j0VBTZhlnc22vKrVqg2L/H2VHQIOzkf6sBVWfkUjMyDxLicHrPpzKryectDW3abq4i
-         MDow==
-X-Gm-Message-State: AO0yUKWY3FHsYgxcreDDes2qWDU4y+vqz5+wTYoPuQ0wY8mtENFH7pPM
-        DoKKKVLKaJ+KIZZjUrXD98c=
-X-Google-Smtp-Source: AK7set9sU3F6kgpGUDoNVIyPCTEtbDfMWvBBxDekfNVTsfy16mWBxpaCLu2I8xtzVPpWB9Z5kqMewA==
-X-Received: by 2002:a17:907:a60b:b0:92f:cf87:578d with SMTP id vt11-20020a170907a60b00b0092fcf87578dmr5417045ejc.75.1678994191537;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=p4dswHx01qFyh/CKCq0Z4NfZll3Xh2LeviJSxwsyG5w=;
+        b=gxaKbgiLBWag5nelJbJ5fy8YoGILE3+Ham/4oy5qhbdbF1JByhIn2Dkbr6S8BG9dQ0
+         8xL9x4TYQU4AyCTekAUhbN+aEjYfR6lmZksy8JYlza0VF+u7RWkuVm5VVGCkpOPlzAKc
+         BQ7tOs/P0vgxdhsnrRpSXLzRWm/EyihBlMxAU/nnnqk+5b0UbBum6IpxAkxIKsa7Inew
+         bLOrji8XlsqNUnONJ1iU+ayJ9Ik7p75RHTMJe4ac7EYliPDSx7BcQPehfn/crFE3nHfZ
+         l8CZmcFXDvWTn0dx8bZmhldyc4IiHk6swkjcEp+wpJwWRWP/FUYAkajBvwvdArvB0X2i
+         QMgg==
+X-Gm-Message-State: AO0yUKVe/rOh6sQPgjj1twesL0orF1BzWPSvxbpnLL2BYZWPxhVbd2ta
+        qmEkRFjy0R8Qgy7+LO0eIkBVLA==
+X-Google-Smtp-Source: AK7set9jYWsIjNheBCK32m5C4J/UE6srSN1wMLPMWS2c5BWJd9JjV2zVQLvhuTL0ER5eoAGFzo+/8Q==
+X-Received: by 2002:aa7:d6d0:0:b0:4fb:fd22:29c0 with SMTP id x16-20020aa7d6d0000000b004fbfd2229c0mr636983edr.26.1678994191211;
         Thu, 16 Mar 2023 12:16:31 -0700 (PDT)
-Received: from archlinux (p200300e73722c9367ab74af7b32c2ca8.dip0.t-ipconnect.de. [2003:e7:3722:c936:7ab7:4af7:b32c:2ca8])
-        by smtp.gmail.com with ESMTPSA id g10-20020a1709061c8a00b0092bd1a7f5fdsm10169ejh.57.2023.03.16.12.16.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Mar 2023 12:16:31 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:9827:5f65:8269:a95f? ([2a02:810d:15c0:828:9827:5f65:8269:a95f])
+        by smtp.gmail.com with ESMTPSA id o2-20020a509b02000000b004faa1636758sm144187edi.68.2023.03.16.12.16.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Mar 2023 12:16:30 -0700 (PDT)
+Message-ID: <a3f7b1bf-b37a-1e42-1e43-02b82fbd895b@linaro.org>
 Date:   Thu, 16 Mar 2023 20:16:29 +0100
-From:   Nils Hartmann <nils1hartmann@gmail.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Using MAP_SHARE_VALIDATE in mmap without fd
-Message-ID: <20230316191629.2pet2mq5bpxl3z4p@archlinux>
-Reply-To: 20230310171617.wqnqs42l2viwjsz5@archlinux
-References: <20230310171617.wqnqs42l2viwjsz5@archlinux>
- <e6b72d88-3011-c284-f53a-71431065b991@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e6b72d88-3011-c284-f53a-71431065b991@redhat.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v2] ASoC: dt-bindings: adi,adau17x1: Convert to DT schema
+To:     Mark Brown <broonie@kernel.org>, lgirdwood@gmail.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Vijaya Anand <sunrockers8@gmail.com>
+Cc:     Daniel Baluta <daniel.baluta@nxp.com>
+References: <20230315231055.3067-1-sunrockers8@gmail.com>
+ <167897628543.92626.6326219364017588458.b4-ty@kernel.org>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <167897628543.92626.6326219364017588458.b4-ty@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 16, 2023 at 04:28:21PM +0100, David Hildenbrand wrote:
-> On 10.03.23 18:16, Nils Hartmann wrote:
-> > Hey,
-> > When used without a file pointer, EINVAL is returned. Is there a reason for this?
->
-> You mean, using it with shared anonymous memory? (MAP_SHARED|MAP_ANON)
-> I assume you mean "file descriptor" not "file pointer".
+On 16/03/2023 15:18, Mark Brown wrote:
+> On Thu, 16 Mar 2023 04:40:55 +0530, Vijaya Anand wrote:
+>> Convert the binding document for adi,adau17x1 from txt to yaml
+>> so one could validate dt-entries correctly and any future additions
+>> can go into yaml format. Add address and size cells to example to
+>> prevent errors regarding reg format.
+>>
+>>
+> 
+> Applied to
+> 
+>    https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+> 
+> Thanks!
+> 
+> [1/1] ASoC: dt-bindings: adi,adau17x1: Convert to DT schema
+>       commit: 87771c94025890246a6dfec9773eb62bd41c4c5a
 
-Yup thats what I meant.
+Hi Mark,
 
-> The only reason MAP_SHARED_VALIDATE was introduced was due to MAP_SYNC, only
-> required for DAX. DAX does not apply to shared anonymous memory.
+There was a warning from Rob's bot. Can you drop the patch or you expect
+follow-up?
 
-Yeah I heard about it being introduced with MAP_SYNC.
-But since the manpage from mmap specifically says:
-'MAP_SHARED_VALIDATE provides the same behaviour as MAP_SHARED',
-I didn't think it would make a difference
+Best regards,
+Krzysztof
 
-> I guess nobody cared/cares.
-> Question is if we want to update the implementation (there has to be a good
-> reason IMHO) or simply update the man page, stating that MAP_SHARED_VALIDATE
-> is not supported for MAP_ANON.
-
-The only reason I can come up with, is naming consistency.
-But it's really a non-issue und updating the man page is definitly
-the saner option.
-
-> --
-> Thanks,
->
-> David / dhildenb
->
-
-Best Regards,
-
-Nils
