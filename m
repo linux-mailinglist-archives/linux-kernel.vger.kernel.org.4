@@ -2,183 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C49556BCB94
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 10:54:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CCEC6BCB98
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 10:55:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231279AbjCPJyX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 05:54:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58456 "EHLO
+        id S230466AbjCPJzY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 05:55:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230508AbjCPJyA (ORCPT
+        with ESMTP id S230295AbjCPJzU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 05:54:00 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 291B5733A4;
-        Thu, 16 Mar 2023 02:53:52 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id AE59F660309E;
-        Thu, 16 Mar 2023 09:53:48 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1678960429;
-        bh=U016GfVVdnxsip9oeySV3RsjrHt+GbtN8I0vEam86cw=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=D1ZYug/Rc7GC9oaJibLCGVC1ot6HrZSJaaD6dBId+/IevQCU8BtC3krYiV1jYB1vG
-         QntG3e3/vTGxkEjKz92r3TfeVbI0b974DjcPXf4GI2j705nXTtC9lwiOAd2/AnY/F6
-         z0CXJd7cBrVcF76ENARf0NTaYVTa7yGwdM/0MVCXo3vZlYh0D5bvxoNXrF0aymJ3Zb
-         F8uYdm9tAIDz6DQWBRSVg36L9plmJGvA5FyZrNRsHMRHMDyI3PxKybudbJIEiuNwVP
-         V/QFPGh4hL2xHjhAFEFAKBm5yn+8gIYX9WiQd8Y0uE7XWaJ+xmz5ux83Th4WlKzPyS
-         T+JmIMMYGK3Ig==
-Message-ID: <e5ceec9e-d51b-2aeb-1db7-b79b151bd44c@collabora.com>
-Date:   Thu, 16 Mar 2023 10:53:45 +0100
+        Thu, 16 Mar 2023 05:55:20 -0400
+Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 222428A79
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 02:54:53 -0700 (PDT)
+Received: by mail-ot1-x332.google.com with SMTP id q11-20020a056830440b00b00693c1a62101so654649otv.0
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 02:54:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1678960489;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VyPonuJpZPidvHoqyiiruN24ythJvcvhCRR+oFRBUQo=;
+        b=WyWOmRYmWcARaQCKIPx+a6QDZPLHID9oiKEAMY+tiT94N8XaE2hCNwpz6cthuoqsIC
+         ZAktAfvp1rs4auNQ3CUVx1jJm4azn+SV6VKXrpqxM0kO/Xm/msc058zKrLNtBeuB8Sme
+         fkhw0vzc3NE3W/dene1RTv5OEQgLg0EV9JiPBCNC2pNg9Klwf2bDAdeCWeSraWx8dJ23
+         cSjTxL7kDc4N80/SrzIuSVD48LcyzpRDkGvOUNCm2/Uul7QVm3K+G4LkVBn7K7uo23ay
+         f6Rrf/77JRtZ/vH2zoQRyr4Fm9wYGEqByxWv8Ux+L80WogoaxMQ2cuwGSLsWw0lIZoYF
+         BF9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678960489;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VyPonuJpZPidvHoqyiiruN24ythJvcvhCRR+oFRBUQo=;
+        b=AE+cwXi6aAf4hSZ5Vdkj3GkjTgiH8U8cJb+9j58aBxTlz5EI1hYu5EuW9AD2rFQi3M
+         6K8QAUM/DhjowNfAUayfJWlnS08x++Nuc/uDf/egR5KPflfn5HCev7FI2Ss4w4MnZaTP
+         LYAkM5er9Zfzcr/LqTWcsbSl3kXBaDyscttt107nb18TFW7/q0pKMYRZCT7fo16nT4+p
+         qgKfs9FtKX9sOnwz+FuocoZ+5gVKEdJSabHpXnDaUa6PkXbElGJQJxYPiRPeKCZ/sDKM
+         FP/wQ4v1jbIHpme9JzLoHiYvnjWI1+ei+zV0Gd7D9NBQY8OJJPzj7AY1r15oNvtu31WR
+         7Ktw==
+X-Gm-Message-State: AO0yUKWeNDfjASNygKsyX7fbrcpbYNzw/3KNjqCF+3aaE+IHPRsCO5h+
+        Z9qtR+1HaVCN22n3wPj4bQ1Ip0kVJWqDQAGJx2vi4Q==
+X-Google-Smtp-Source: AK7set8ESZuKFscSM5ferhiXnh130+wa+CzR5SXyFtwgeeEzFZ+4AkmMqxD1bMJYgiKOMVTt9xBpvcWhDnsBF8JYhpU=
+X-Received: by 2002:a9d:12e9:0:b0:698:f988:7c37 with SMTP id
+ g96-20020a9d12e9000000b00698f9887c37mr2280261otg.3.1678960488957; Thu, 16 Mar
+ 2023 02:54:48 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v29 1/7] dt-bindings: mediatek: add ethdr definition for
- mt8195
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        =?UTF-8?B?TmFuY3kgTGluICjmnpfmrKPonqIp?= <Nancy.Lin@mediatek.com>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "chunkuang.hu@kernel.org" <chunkuang.hu@kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        =?UTF-8?B?U2luZ28gQ2hhbmcgKOW8teiIiOWciyk=?= 
-        <Singo.Chang@mediatek.com>,
-        "nathan@kernel.org" <nathan@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "daniel@ffwll.ch" <daniel@ffwll.ch>,
-        =?UTF-8?B?Q0sgSHUgKOiDoeS/iuWFiSk=?= <ck.hu@mediatek.com>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        Project_Global_Chrome_Upstream_Group 
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "clang-built-linux@googlegroups.com" 
-        <clang-built-linux@googlegroups.com>,
-        "ndesaulniers@google.com" <ndesaulniers@google.com>
-References: <20221227081011.6426-1-nancy.lin@mediatek.com>
- <20221227081011.6426-2-nancy.lin@mediatek.com>
- <4aff6a7a3b606f26ec793192d9c75774276935e0.camel@mediatek.com>
- <2700bd6c-f00d-fa99-b730-2fcdf89089fa@linaro.org>
- <1d65e8b2de708db18b5f7a0faaa53834e1002d9f.camel@mediatek.com>
- <b04eb48e-c9aa-0404-33ec-bef623b8282f@linaro.org>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <b04eb48e-c9aa-0404-33ec-bef623b8282f@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230316151018.v1.1.I9113bb4f444afc2c5cb19d1e96569e01ddbd8939@changeid>
+ <116b1db5-bf75-9fbf-c37b-2fe1028ddaeb@molgen.mpg.de>
+In-Reply-To: <116b1db5-bf75-9fbf-c37b-2fe1028ddaeb@molgen.mpg.de>
+From:   Yun-hao Chung <howardchung@google.com>
+Date:   Thu, 16 Mar 2023 17:54:37 +0800
+Message-ID: <CAPHZWUffEUY_OpW+zzpGWe7L5GfOgfgpOqHrJ8Ov2jhBum9ceg@mail.gmail.com>
+Subject: Re: [PATCH v1] Bluetooth: mgmt: Fix MGMT add advmon with RSSI command
+To:     Paul Menzel <pmenzel@molgen.mpg.de>
+Cc:     linux-bluetooth@vger.kernel.org, marcel@holtmann.org,
+        chromeos-bluetooth-upstreaming@chromium.org,
+        Archie Pusaka <apusaka@chromium.org>,
+        Brian Gix <brian.gix@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 16/03/23 07:31, Krzysztof Kozlowski ha scritto:
-> On 16/03/2023 07:19, Nancy Lin (林欣螢) wrote:
->> On Wed, 2023-03-15 at 08:16 +0100, Krzysztof Kozlowski wrote:
->>> On 15/03/2023 04:45, Nancy Lin (林欣螢) wrote:
->>>
+Thanks for the reply!
+A new patch has been sent.
+Please take a look when available.
 
-..snip..
-
->>>>
->>>>
->>>> [1].
->>>> Documentation/devicetree/bindings/display/mediatek/mediatek,ethdr.e
->>>> xamp
->>>> le.dtb
->>>> /proj/mtk19347/cros/src/third_party/kernel/v5.10/Documentation/devi
->>>> cetr
->>>> ee/bindings/display/mediatek/mediatek,ethdr.example.dtb:
->>>> hdr-engine@1c114000: mediatek,gce-client-reg:0: [4294967295, 7,
->>>> 16384,
->>>> 4096, 4294967295, 7, 20480, 4096, 4294967295, 7, 28672, 4096,
->>>> 4294967295, 7, 36864, 4096, 4294967295, 7, 40960, 4096, 4294967295,
->>>> 7,
->>>> 45056, 4096, 4294967295, 7, 49152, 4096] is too long
->>>>          From schema:
->>>
->>> This looks like known issue with phandles with variable number of
->>> arguments. Either we add it to the exceptions or just define it in
->>> reduced way like in other cases - only maxItems: 1 without describing
->>> items.
->>>
-
-...
-
->>
->> But I have several items for this vendor property in the binding
->> example.
-> 
-> Do you? I thought you have one phandle?
-> 
->> Can I remove maxItems? Change the mediatek,gce-client-reg as [1].
->>
->> [1]
->>    mediatek,gce-client-reg:
->>      $ref: /schemas/types.yaml#/definitions/phandle-array
->>      description: The register of display function block to be set by
->> gce.
->>        There are 4 arguments in this property, gce node, subsys id,
->> offset and
->>        register size. The subsys id is defined in the gce header of each
->> chips
->>        include/dt-bindings/gce/<chip>-gce.h, mapping to the register of
->> display
->>        function block.
-> 
-> No, this needs some constraints.
-
-Hello Krzysztof, Nancy,
-
-Since this series has reached v29, can we please reach an agreement on the bindings
-to use here, so that we can get this finally upstreamed?
-
-I will put some examples to try to get this issue resolved.
-
-### Example 1: Constrain the number of GCE entries to *seven* array elements (7x4!)
-
-   mediatek,gce-client-reg:
-     $ref: /schemas/types.yaml#/definitions/phandle-array
-     maxItems: 1
-     description: The register of display function block to be set by gce.
-       There are 4 arguments in this property, gce node, subsys id, offset and
-       register size. The subsys id is defined in the gce header of each chips
-       include/dt-bindings/gce/<chip>-gce.h, mapping to the register of display
-       function block.
-     items:
-       minItems: 28
-       maxItems: 28
-       items:                     <----- this block doesn't seem to get checked :\
-         - description: phandle of GCE
-         - description: GCE subsys id
-         - description: register offset
-         - description: register size
+Thanks,
+Howard
 
 
-### Example 2: Don't care about constraining the number of arguments
-
-   mediatek,gce-client-reg:
-     $ref: /schemas/types.yaml#/definitions/phandle-array
-     maxItems: 1
-     description: The register of display function block to be set by gce.
-       There are 4 arguments in this property, gce node, subsys id, offset and
-       register size. The subsys id is defined in the gce header of each chips
-       include/dt-bindings/gce/<chip>-gce.h, mapping to the register of display
-       function block.
-
-
-Regards,
-Angelo
+On Thu, Mar 16, 2023 at 5:47=E2=80=AFPM Paul Menzel <pmenzel@molgen.mpg.de>=
+ wrote:
+>
+> Dear Howard,
+>
+>
+> Thank you for your patch.
+>
+> Am 16.03.23 um 08:10 schrieb Howard Chung:
+> > From: howardchung <howardchung@google.com>
+>
+> Please configure your full name:
+>
+>      git config --global user.name "Howard Chung"
+>      git commit -s --amend --author=3D"Howard Chung <howardchung@google.c=
+om>"
+>
+> > The MGMT command: MGMT_OP_ADD_ADV_PATTERNS_MONITOR_RSSI uses variable
+> > length argumenent. This patch adds right the field.
+>
+> argument
+>
+> Were you seeing actual problems? If so, please describe the test setup.
+>
+> > Reviewed-by: Archie Pusaka <apusaka@chromium.org>
+> > Fixes: b338d91703fa ("Bluetooth: Implement support for Mesh")
+> > Signed-off-by: howardchung <howardchung@google.com>
+> > ---
+> >
+> >   net/bluetooth/mgmt.c | 3 ++-
+> >   1 file changed, 2 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/net/bluetooth/mgmt.c b/net/bluetooth/mgmt.c
+> > index 39589f864ea7..249dc6777fb4 100644
+> > --- a/net/bluetooth/mgmt.c
+> > +++ b/net/bluetooth/mgmt.c
+> > @@ -9357,7 +9357,8 @@ static const struct hci_mgmt_handler mgmt_handler=
+s[] =3D {
+> >       { add_ext_adv_data,        MGMT_ADD_EXT_ADV_DATA_SIZE,
+> >                                               HCI_MGMT_VAR_LEN },
+> >       { add_adv_patterns_monitor_rssi,
+> > -                                MGMT_ADD_ADV_PATTERNS_MONITOR_RSSI_SIZ=
+E },
+> > +                                MGMT_ADD_ADV_PATTERNS_MONITOR_RSSI_SIZ=
+E,
+> > +                                             HCI_MGMT_VAR_LEN },
+> >       { set_mesh,                MGMT_SET_MESH_RECEIVER_SIZE,
+> >                                               HCI_MGMT_VAR_LEN },
+> >       { mesh_features,           MGMT_MESH_READ_FEATURES_SIZE },
+>
+> Acked-by: Paul Menzel <pmenzel@molgen.mpg.de>
+>
+>
+> Kind regards,
+>
+> Paul
