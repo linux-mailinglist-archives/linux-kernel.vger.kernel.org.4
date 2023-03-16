@@ -2,138 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7047A6BC5CB
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 06:41:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CBEC6BC5CD
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 06:43:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229853AbjCPFlE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 01:41:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47352 "EHLO
+        id S229540AbjCPFnc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 01:43:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229823AbjCPFkp (ORCPT
+        with ESMTP id S229471AbjCPFna (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 01:40:45 -0400
-Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 640BD6A41F;
-        Wed, 15 Mar 2023 22:40:43 -0700 (PDT)
-Received: by mail-qt1-f179.google.com with SMTP id l13so651333qtv.3;
-        Wed, 15 Mar 2023 22:40:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678945242;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fujln5B4PJVc7FU0F2EjRjzV5VR7c7BJfqwtEXGQG30=;
-        b=UPe4MoEo5xB90E7RYxvwYRMo9UawZ2jOG35bbNgk6IW3u5h+eHIewAzFJ9VWTsIZtK
-         2ZdGdOcfEO4jzcCFLxPuZYLebUFQONfaNIifNYKk7p/8XVOmTA/zk/rsvxEAlCEmNxXO
-         RD2AIF9soECGakncnUjj+zVOfYyGzF4VytBqcFXXVmK7kORMg3wqR1ENn+PvYbTtuxEi
-         rwnJL6oQlMJNUH5JilYC0WrSDamZbn7+1gaC/MlroAcE4vMyWPa5pWIjtzQ7uWVUUVPL
-         tPc8wJtLrEmAfj3gDYm2MtTf4p7EklNrcsiGafw+8/i+O5WOjkfAOMdh1fMA4pPy95Q6
-         U/fA==
-X-Gm-Message-State: AO0yUKXqh4tvvM0Rj1e6tcynDrv3/EdCHEU+4S8Xyf2/h8OkRu+VZfFb
-        1LUyrPkev6sJqz5e4CqTEPh5Xc/yaON/0MwC
-X-Google-Smtp-Source: AK7set8u14/TgtQFShFGqRVTwenRE0RKtyesci01OPUE3ndb1zjE42wihiabm2gZ0OZuPxV7bjRPUA==
-X-Received: by 2002:ac8:58c2:0:b0:3bf:b6ba:1c1f with SMTP id u2-20020ac858c2000000b003bfb6ba1c1fmr4747926qta.10.1678945242097;
-        Wed, 15 Mar 2023 22:40:42 -0700 (PDT)
-Received: from localhost ([2620:10d:c091:400::5:7f57])
-        by smtp.gmail.com with ESMTPSA id q8-20020a374308000000b0074589d41342sm5152303qka.17.2023.03.15.22.40.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Mar 2023 22:40:41 -0700 (PDT)
-From:   David Vernet <void@manifault.com>
-To:     bpf@vger.kernel.org
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@meta.com
-Subject: [PATCH bpf-next v2 5/5] bpf,docs: Remove bpf_cpumask_kptr_get() from documentation
-Date:   Thu, 16 Mar 2023 00:40:28 -0500
-Message-Id: <20230316054028.88924-6-void@manifault.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230316054028.88924-1-void@manifault.com>
-References: <20230316054028.88924-1-void@manifault.com>
+        Thu, 16 Mar 2023 01:43:30 -0400
+Received: from out30-124.freemail.mail.aliyun.com (out30-124.freemail.mail.aliyun.com [115.124.30.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 586697DFB9;
+        Wed, 15 Mar 2023 22:43:29 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R591e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VdymIEA_1678945406;
+Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0VdymIEA_1678945406)
+          by smtp.aliyun-inc.com;
+          Thu, 16 Mar 2023 13:43:27 +0800
+From:   Yang Li <yang.lee@linux.alibaba.com>
+To:     michal.simek@xilinx.com
+Cc:     linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Yang Li <yang.lee@linux.alibaba.com>
+Subject: [PATCH -next] i2c: xiic: Use devm_platform_get_and_ioremap_resource()
+Date:   Thu, 16 Mar 2023 13:43:25 +0800
+Message-Id: <20230316054325.108457-1-yang.lee@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that the kfunc no longer exists, we can remove it and instead
-describe how RCU can be used to get a struct bpf_cpumask from a map
-value. This patch updates the BPF documentation accordingly.
+According to commit 890cc39a8799 ("drivers: provide
+devm_platform_get_and_ioremap_resource()"), convert
+platform_get_resource(), devm_ioremap_resource() to a single
+call to devm_platform_get_and_ioremap_resource(), as this is exactly
+what this function does.
 
-Signed-off-by: David Vernet <void@manifault.com>
+Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
 ---
- Documentation/bpf/cpumasks.rst | 30 ++++++++++--------------------
- 1 file changed, 10 insertions(+), 20 deletions(-)
+ drivers/i2c/busses/i2c-xiic.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/Documentation/bpf/cpumasks.rst b/Documentation/bpf/cpumasks.rst
-index 75344cd230e5..41efd8874eeb 100644
---- a/Documentation/bpf/cpumasks.rst
-+++ b/Documentation/bpf/cpumasks.rst
-@@ -117,12 +117,7 @@ For example:
- As mentioned and illustrated above, these ``struct bpf_cpumask *`` objects can
- also be stored in a map and used as kptrs. If a ``struct bpf_cpumask *`` is in
- a map, the reference can be removed from the map with bpf_kptr_xchg(), or
--opportunistically acquired with bpf_cpumask_kptr_get():
--
--.. kernel-doc:: kernel/bpf/cpumask.c
--  :identifiers: bpf_cpumask_kptr_get
--
--Here is an example of a ``struct bpf_cpumask *`` being retrieved from a map:
-+opportunistically acquired using RCU:
- 
- .. code-block:: c
- 
-@@ -144,7 +139,7 @@ Here is an example of a ``struct bpf_cpumask *`` being retrieved from a map:
- 	/**
- 	 * A simple example tracepoint program showing how a
- 	 * struct bpf_cpumask * kptr that is stored in a map can
--	 * be acquired using the bpf_cpumask_kptr_get() kfunc.
-+	 * be passed to kfuncs using RCU protection.
- 	 */
- 	SEC("tp_btf/cgroup_mkdir")
- 	int BPF_PROG(cgrp_ancestor_example, struct cgroup *cgrp, const char *path)
-@@ -158,26 +153,21 @@ Here is an example of a ``struct bpf_cpumask *`` being retrieved from a map:
- 		if (!v)
- 			return -ENOENT;
- 
-+		bpf_rcu_read_lock();
- 		/* Acquire a reference to the bpf_cpumask * kptr that's already stored in the map. */
--		kptr = bpf_cpumask_kptr_get(&v->cpumask);
--		if (!kptr)
-+		kptr = v->cpumask;
-+		if (!kptr) {
- 			/* If no bpf_cpumask was present in the map, it's because
- 			 * we're racing with another CPU that removed it with
- 			 * bpf_kptr_xchg() between the bpf_map_lookup_elem()
--			 * above, and our call to bpf_cpumask_kptr_get().
--			 * bpf_cpumask_kptr_get() internally safely handles this
--			 * race, and will return NULL if the cpumask is no longer
--			 * present in the map by the time we invoke the kfunc.
-+			 * above, and our load of the pointer from the map.
- 			 */
-+			bpf_rcu_read_unlock();
- 			return -EBUSY;
-+		}
- 
--		/* Free the reference we just took above. Note that the
--		 * original struct bpf_cpumask * kptr is still in the map. It will
--		 * be freed either at a later time if another context deletes
--		 * it from the map, or automatically by the BPF subsystem if
--		 * it's still present when the map is destroyed.
--		 */
--		bpf_cpumask_release(kptr);
-+		bpf_cpumask_setall(kptr);
-+		bpf_rcu_read_unlock();
- 
- 		return 0;
+diff --git a/drivers/i2c/busses/i2c-xiic.c b/drivers/i2c/busses/i2c-xiic.c
+index dbb792fc197e..0eea00d10545 100644
+--- a/drivers/i2c/busses/i2c-xiic.c
++++ b/drivers/i2c/busses/i2c-xiic.c
+@@ -1233,8 +1233,7 @@ static int xiic_i2c_probe(struct platform_device *pdev)
+ 		i2c->quirks = data->quirks;
  	}
+ 
+-	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	i2c->base = devm_ioremap_resource(&pdev->dev, res);
++	i2c->base = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
+ 	if (IS_ERR(i2c->base))
+ 		return PTR_ERR(i2c->base);
+ 
 -- 
-2.39.0
+2.20.1.7.g153144c
 
