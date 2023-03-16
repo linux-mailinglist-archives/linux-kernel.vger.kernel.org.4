@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 227086BD2BA
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 15:51:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C4926BD2BD
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 15:52:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231331AbjCPOvx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 10:51:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33618 "EHLO
+        id S231347AbjCPOvz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 10:51:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230420AbjCPOvp (ORCPT
+        with ESMTP id S229887AbjCPOvr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 10:51:45 -0400
-Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83587ACB92
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 07:51:44 -0700 (PDT)
-Received: by mail-qv1-xf32.google.com with SMTP id f1so1354526qvx.13
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 07:51:44 -0700 (PDT)
+        Thu, 16 Mar 2023 10:51:47 -0400
+Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC654A6BEF
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 07:51:45 -0700 (PDT)
+Received: by mail-qt1-x833.google.com with SMTP id r16so1940378qtx.9
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 07:51:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678978303;
+        d=linaro.org; s=google; t=1678978305;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=PKqWcLfcs3UmhMvL5K01K9FuLeIx9ZVjwoD0JyqWTuo=;
-        b=DNNVsRdstp9GXxAlTzZMwPKZHrhjXBxXrr41KyXv4TaGZT2jG+NcsGXMPSCVa2Vn7h
-         42JQDHB5hHosaVozlRoRXNGAaC7JcNdX45C623KL2WDwO4s+iE8yb/8I9nI2BHPaWYgZ
-         ZbJS6MGBAUwEtYavojtBFoPnYcGKRO5vw7HtLHmko8Y6Cm2fviTDjpLp6kitG0dbF3Yj
-         NzsEtq78ubo1utWJ3RU0QB/Syf/pQeTdFPE7nEtH6AhzaAcjUehwa55jFaNKnTxfXJhI
-         ygVttIHqnynljMGWOF6Ry23rS8xFdh+qO2oEvXKfKtBQhWl7Hmbr34Yk68EITfCfAQMT
-         hAsg==
+        bh=n9PDFYuVYy1JnFh9er4YyEDGQhbBjgJ9zKhwhKEYADA=;
+        b=NAmUYBwLeXTIs4g0JI6sodFDifpu5ZrHU//Zvo1zLl9HLFYQ7jwcwd3kCkMaOg183s
+         h5F9VjYLgk14uQoUg852KqZ4tzhp/ffH908wU1YDMrl0b4cPj16No4IN2jDrooHtWH2m
+         ChxBseknq8oIMV37IwbPvDgS1DZc8NKCTCOZsAuGCgey+T3K9L/kNKUGNbkOWA1Worv6
+         c1KpPuhkPVpFyVSNAlEC1uUad0iZ0kyocqn6qOGiB7If5CtHuNLjeufNMXfyU1M5wg6W
+         Orq+FFdaLK3oWXXa+gGyvAd+uFEBdNCWh0u4Tz78uZh40EiDKFR7sgB3PzRwJYKf1l98
+         4R0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678978303;
+        d=1e100.net; s=20210112; t=1678978305;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=PKqWcLfcs3UmhMvL5K01K9FuLeIx9ZVjwoD0JyqWTuo=;
-        b=IK+NrPP3lco1n0b5ydIgK99c0Gm2QeHzOZTto1w2JgcD2MjMkfdwduTlVjzlWXExXu
-         hfDgXK7z6sCs67F9mxkGrVDFAD8RoeB8uyUk5uOZGiZ4SK13ifWYjaRjLiJbf3ImM+RF
-         b+UxREduh2pEZv7fWM+gtLY+99qvYBpIVFKX/VLpD76zZLSUPLQr19C2sevKKOFjTauU
-         EH7I/Xq/+opruAYuk1d56HFn4IjTHCn2fzRCiTvXmLS03/VGaYnK9IUXc4HL4d9wPotR
-         Z2hoLu2v7B2nnSomK0kFsP6tfc2osSRjTADEUUbPLIdz7HA+AhTgqt3RCot1Ig298F9c
-         FUuQ==
-X-Gm-Message-State: AO0yUKVTpxYJ12q4o2gIUXb7+PpqlBEiCLYp37WQcfYfMbR4E0YE7QFy
-        amH8HT05T/fsWVCAnOYPh8F8Z0l7FJvDS9I/srjxqw==
-X-Google-Smtp-Source: AK7set9ennyVepKlBZYOOwCBNDuA2JSfxamJtSEn8L4rLCJ5oK6uxISaeI6s+YWNUNU3Rpdlud1iiA==
-X-Received: by 2002:a05:6214:23cd:b0:56b:fb58:c350 with SMTP id hr13-20020a05621423cd00b0056bfb58c350mr25263549qvb.26.1678978303262;
-        Thu, 16 Mar 2023 07:51:43 -0700 (PDT)
+        bh=n9PDFYuVYy1JnFh9er4YyEDGQhbBjgJ9zKhwhKEYADA=;
+        b=xuytXd/LralClJP4fbYNuYQBkZrPwc7ZUQsDlVv9lUr4cEFSzcIgc/LYAqIuuW+F31
+         A5q9/BE7V4FcZmph+Oo3sAQbVBieXrrk6+k+xXKk7Jlx0femFh8iLFbEaMVHiwHWFc/B
+         VqtdEwfp3bOFCHp61+o8ZSPIRjU99ONYqhKu67lZbUrrW78nIzCCBxp/+NBQkz45GqEi
+         uDSHDSlL8WvGtWIV/NgVKN2DDOq7UApcpKuXfqWkfLVeilsJDb6SxDvm+23MT9aIQuc5
+         uMq3Vebdw21X3c4wJbS3Et/0G5cYIEFdvdYH1j7ILBgbCxpE8bS0S267Gw1FSbkdQi7B
+         OdkQ==
+X-Gm-Message-State: AO0yUKVU/5JIuyj2bUPiM2K8yoqqUAUUe0NFIPWywgJ7wPuq38e761c6
+        BHkj3d4fAf3n/IhZTD2XacSEDA==
+X-Google-Smtp-Source: AK7set8LmiWDbj5mwlXi7S1W1OQjFZhCe/12/deUZwZTSnD3fAGCampp2J12L4WtAPl3jpdNAGp+Zg==
+X-Received: by 2002:a05:622a:174c:b0:3d4:6185:72d4 with SMTP id l12-20020a05622a174c00b003d4618572d4mr6332476qtk.7.1678978304754;
+        Thu, 16 Mar 2023 07:51:44 -0700 (PDT)
 Received: from localhost.localdomain ([98.61.227.136])
-        by smtp.gmail.com with ESMTPSA id n129-20020a37bd87000000b007456b2759efsm2844070qkf.28.2023.03.16.07.51.41
+        by smtp.gmail.com with ESMTPSA id n129-20020a37bd87000000b007456b2759efsm2844070qkf.28.2023.03.16.07.51.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Mar 2023 07:51:42 -0700 (PDT)
+        Thu, 16 Mar 2023 07:51:44 -0700 (PDT)
 From:   Alex Elder <elder@linaro.org>
 To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
         pabeni@redhat.com
@@ -59,9 +59,9 @@ Cc:     caleb.connolly@linaro.org, mka@chromium.org, evgreen@chromium.org,
         quic_subashab@quicinc.com, elder@kernel.org,
         netdev@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH net v3 2/4] net: ipa: add two missing declarations
-Date:   Thu, 16 Mar 2023 09:51:34 -0500
-Message-Id: <20230316145136.1795469-3-elder@linaro.org>
+Subject: [PATCH net v3 3/4] net: ipa: kill FILT_ROUT_CACHE_CFG IPA register
+Date:   Thu, 16 Mar 2023 09:51:35 -0500
+Message-Id: <20230316145136.1795469-4-elder@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230316145136.1795469-1-elder@linaro.org>
 References: <20230316145136.1795469-1-elder@linaro.org>
@@ -69,38 +69,81 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When gsi_reg_init() got added, its declaration was added to
-"gsi_reg.h" without declaring the two struct pointer types it uses.
-Add these struct declarations to "gsi_reg.h".
+A recent commit defined a few IPA registers used for IPA v5.0+.
+One of those was a mistake.  Although the filter and router caches
+get *flushed* using a single register, they use distinct registers
+(ENDP_FILTER_CACHE_CFG and ENDP_ROUTER_CACHE_CFG) for configuration.
 
-Fixes: 3c506add35c7 ("net: ipa: introduce gsi_reg_init()")
+And although there *exists* a FILT_ROUT_CACHE_CFG register, it is
+not needed in upstream code.  So get rid of definitions related to
+FILT_ROUT_CACHE_CFG, because they are not needed.
+
+Fixes: 8ba59716d16a ("net: ipa: define IPA v5.0+ registers")
 Signed-off-by: Alex Elder <elder@linaro.org>
 ---
- drivers/net/ipa/gsi_reg.h | 4 ++++
- 1 file changed, 4 insertions(+)
+v3: "Fixes" tag now refers to the proper upstream commit.
 
-diff --git a/drivers/net/ipa/gsi_reg.h b/drivers/net/ipa/gsi_reg.h
-index f62f0a5c653d1..48fde65fa2e8a 100644
---- a/drivers/net/ipa/gsi_reg.h
-+++ b/drivers/net/ipa/gsi_reg.h
-@@ -10,6 +10,10 @@
+ drivers/net/ipa/ipa_reg.c | 4 ++--
+ drivers/net/ipa/ipa_reg.h | 9 ---------
+ 2 files changed, 2 insertions(+), 11 deletions(-)
+
+diff --git a/drivers/net/ipa/ipa_reg.c b/drivers/net/ipa/ipa_reg.c
+index 735fa65916097..463a31dfa9f47 100644
+--- a/drivers/net/ipa/ipa_reg.c
++++ b/drivers/net/ipa/ipa_reg.c
+@@ -39,7 +39,8 @@ static bool ipa_reg_id_valid(struct ipa *ipa, enum ipa_reg_id reg_id)
+ 		return version <= IPA_VERSION_3_1;
  
- #include <linux/bits.h>
+ 	case ENDP_FILTER_ROUTER_HSH_CFG:
+-		return version != IPA_VERSION_4_2;
++		return version < IPA_VERSION_5_0 &&
++			version != IPA_VERSION_4_2;
  
-+struct platform_device;
-+
-+struct gsi;
-+
- /**
-  * DOC: GSI Registers
-  *
+ 	case IRQ_SUSPEND_EN:
+ 	case IRQ_SUSPEND_CLR:
+@@ -52,7 +53,6 @@ static bool ipa_reg_id_valid(struct ipa *ipa, enum ipa_reg_id reg_id)
+ 	case QSB_MAX_WRITES:
+ 	case QSB_MAX_READS:
+ 	case FILT_ROUT_HASH_EN:
+-	case FILT_ROUT_CACHE_CFG:
+ 	case FILT_ROUT_HASH_FLUSH:
+ 	case FILT_ROUT_CACHE_FLUSH:
+ 	case STATE_AGGR_ACTIVE:
+diff --git a/drivers/net/ipa/ipa_reg.h b/drivers/net/ipa/ipa_reg.h
+index 28aa1351dd488..ff2be8be0f683 100644
+--- a/drivers/net/ipa/ipa_reg.h
++++ b/drivers/net/ipa/ipa_reg.h
+@@ -61,7 +61,6 @@ enum ipa_reg_id {
+ 	QSB_MAX_WRITES,
+ 	QSB_MAX_READS,
+ 	FILT_ROUT_HASH_EN,				/* Not IPA v5.0+ */
+-	FILT_ROUT_CACHE_CFG,				/* IPA v5.0+ */
+ 	FILT_ROUT_HASH_FLUSH,				/* Not IPA v5.0+ */
+ 	FILT_ROUT_CACHE_FLUSH,				/* IPA v5.0+ */
+ 	STATE_AGGR_ACTIVE,
+@@ -206,14 +205,6 @@ enum ipa_reg_qsb_max_reads_field_id {
+ 	GEN_QMB_1_MAX_READS_BEATS,			/* IPA v4.0+ */
+ };
+ 
+-/* FILT_ROUT_CACHE_CFG register */
+-enum ipa_reg_filt_rout_cache_cfg_field_id {
+-	ROUTER_CACHE_EN,
+-	FILTER_CACHE_EN,
+-	LOW_PRI_HASH_HIT_DISABLE,
+-	LRU_EVICTION_THRESHOLD,
+-};
+-
+ /* FILT_ROUT_HASH_EN and FILT_ROUT_HASH_FLUSH registers */
+ enum ipa_reg_filt_rout_hash_field_id {
+ 	IPV6_ROUTER_HASH,
 -- 
 2.34.1
 
