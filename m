@@ -2,79 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C0B06BC3D6
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 03:36:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB2EE6BC3D9
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 03:37:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229687AbjCPCgR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 22:36:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59760 "EHLO
+        id S229631AbjCPChQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 22:37:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbjCPCgO (ORCPT
+        with ESMTP id S229475AbjCPChN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 22:36:14 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EF107D56F;
-        Wed, 15 Mar 2023 19:36:13 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32G24v6l031896;
-        Thu, 16 Mar 2023 02:36:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=05A5Fd6+yPWKz+JHS3bo5WpbGb9EWFg1cqLhx+b36+k=;
- b=i4XGtk2ax4fMWuxJB5HRCp5VBQpdLprJ32nr0lCMvMlB0Ur9h6l+rD+lt288R9JLcAkV
- xDYj/HFzHBrM1ywKpBqux3PoxjHAobxiiUozDPqRNUr8RJD6KU20fMdmE4Klg0NTTIvP
- /jc1zyalPyO92OhbL8/0Z6JmJsdToLfI3ucqS+eMH/DXE14pZ3Nwz6wBECdTDNmYbj83
- BRiCKqWhbClO6AGX10U48Z2abTzTUJhdc3TDxv89ePlPXHfURvUn63dO5vbnDRtg4lRn
- orlgTqGimgowxVCqfwClMl74qZ+s0dqrhXAEB79pbglpo7qmxRUssZY5xy6h2CToqRPN Tg== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pbpxjretd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 16 Mar 2023 02:36:03 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32G2a3gW010872
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 16 Mar 2023 02:36:03 GMT
-Received: from abhinavk-linux.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.41; Wed, 15 Mar 2023 19:36:02 -0700
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-To:     <robdclark@gmail.com>, <sean@poorly.run>, <swboyd@chromium.org>,
-        <dianders@chromium.org>, <vkoul@kernel.org>, <daniel@ffwll.ch>,
-        <airlied@gmail.com>, <agross@kernel.org>,
-        <dmitry.baryshkov@linaro.org>, <andersson@kernel.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>
-CC:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        <quic_sbillaka@quicinc.com>, <freedreno@lists.freedesktop.org>,
-        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: (subset) [PATCH v2] drm/msm/disp/dpu: fix sc7280_pp base offset
-Date:   Wed, 15 Mar 2023 19:35:51 -0700
-Message-ID: <167893410626.12323.14919462334772351303.b4-ty@quicinc.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <1677533800-3125-1-git-send-email-quic_khsieh@quicinc.com>
-References: <1677533800-3125-1-git-send-email-quic_khsieh@quicinc.com>
+        Wed, 15 Mar 2023 22:37:13 -0400
+Received: from SHSQR01.spreadtrum.com (mx1.unisoc.com [222.66.158.135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA1F596F38;
+        Wed, 15 Mar 2023 19:37:08 -0700 (PDT)
+Received: from SHSend.spreadtrum.com (bjmbx02.spreadtrum.com [10.0.64.8])
+        by SHSQR01.spreadtrum.com with ESMTP id 32G2aanJ017410;
+        Thu, 16 Mar 2023 10:36:36 +0800 (+08)
+        (envelope-from Chunyan.Zhang@unisoc.com)
+Received: from ubt.spreadtrum.com (10.0.74.87) by BJMBX02.spreadtrum.com
+ (10.0.64.8) with Microsoft SMTP Server (TLS) id 15.0.1497.23; Thu, 16 Mar
+ 2023 10:36:34 +0800
+From:   Chunyan Zhang <chunyan.zhang@unisoc.com>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+CC:     <linux-clk@vger.kernel.org>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Chunyan Zhang <chunyan.zhang@unisoc.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: [PATCH V2] clk: sprd: set max_register according to mapping range
+Date:   Thu, 16 Mar 2023 10:36:24 +0800
+Message-ID: <20230316023624.758204-1-chunyan.zhang@unisoc.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: di2Cg6JoXmsS3IcGuqCfeZZvJ04WNLMY
-X-Proofpoint-ORIG-GUID: di2Cg6JoXmsS3IcGuqCfeZZvJ04WNLMY
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-16_02,2023-03-15_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 mlxscore=0
- adultscore=0 suspectscore=0 mlxlogscore=974 clxscore=1015 malwarescore=0
- priorityscore=1501 bulkscore=0 phishscore=0 lowpriorityscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303150002 definitions=main-2303160022
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.0.74.87]
+X-ClientProxiedBy: SHCAS03.spreadtrum.com (10.0.1.207) To
+ BJMBX02.spreadtrum.com (10.0.64.8)
+X-MAIL: SHSQR01.spreadtrum.com 32G2aanJ017410
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,24 +50,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+In sprd clock driver, regmap_config.max_register was set to a fixed value
+which is likely larger than the address range configured in device tree,
+when reading registers through debugfs it would cause access violation.
 
-On Mon, 27 Feb 2023 13:36:40 -0800, Kuogee Hsieh wrote:
-> At sc7280, pingpong block is used to management the dither effects
-> to reduce distortion at panel. Currently pingpong-0 base offset is
-> wrongly set at 0x59000. This mistake will not cause system to crash.
-> However it will make dither not work. This patch correct sc7280 ping
-> pong-0 block base offset.
-> 
-> Changes in v2:
-> -- add more details info n regrading of pingpong block at commit text
-> 
-> [...]
+Fixes: d41f59fd92f2 (clk: sprd: Add common infrastructure)
+Signed-off-by: Chunyan Zhang <chunyan.zhang@unisoc.com>
+---
+V2:
+- Added Fixes tag.
+---
+ drivers/clk/sprd/common.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-Applied, thanks!
-
-[1/1] drm/msm/disp/dpu: fix sc7280_pp base offset
-      https://gitlab.freedesktop.org/drm/msm/-/commit/ce68153edb5b
-
-Best regards,
+diff --git a/drivers/clk/sprd/common.c b/drivers/clk/sprd/common.c
+index ce81e4087a8f..2bfbab8db94b 100644
+--- a/drivers/clk/sprd/common.c
++++ b/drivers/clk/sprd/common.c
+@@ -17,7 +17,6 @@ static const struct regmap_config sprdclk_regmap_config = {
+ 	.reg_bits	= 32,
+ 	.reg_stride	= 4,
+ 	.val_bits	= 32,
+-	.max_register	= 0xffff,
+ 	.fast_io	= true,
+ };
+ 
+@@ -43,6 +42,8 @@ int sprd_clk_regmap_init(struct platform_device *pdev,
+ 	struct device *dev = &pdev->dev;
+ 	struct device_node *node = dev->of_node, *np;
+ 	struct regmap *regmap;
++	struct resource *res;
++	struct regmap_config reg_config = sprdclk_regmap_config;
+ 
+ 	if (of_find_property(node, "sprd,syscon", NULL)) {
+ 		regmap = syscon_regmap_lookup_by_phandle(node, "sprd,syscon");
+@@ -59,12 +60,14 @@ int sprd_clk_regmap_init(struct platform_device *pdev,
+ 			return PTR_ERR(regmap);
+ 		}
+ 	} else {
+-		base = devm_platform_ioremap_resource(pdev, 0);
++		base = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
+ 		if (IS_ERR(base))
+ 			return PTR_ERR(base);
+ 
++		reg_config.max_register = resource_size(res) - reg_config.reg_stride;
++
+ 		regmap = devm_regmap_init_mmio(&pdev->dev, base,
+-					       &sprdclk_regmap_config);
++					       &reg_config);
+ 		if (IS_ERR(regmap)) {
+ 			pr_err("failed to init regmap\n");
+ 			return PTR_ERR(regmap);
 -- 
-Abhinav Kumar <quic_abhinavk@quicinc.com>
+2.25.1
+
