@@ -2,288 +2,261 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E645E6BD2ED
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 16:05:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E02376BD2F3
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 16:10:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231296AbjCPPFX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 11:05:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54268 "EHLO
+        id S230481AbjCPPJc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 11:09:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231217AbjCPPFT (ORCPT
+        with ESMTP id S230075AbjCPPJP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 11:05:19 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D7C3B9531;
-        Thu, 16 Mar 2023 08:05:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678979117; x=1710515117;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=/lKBXE6NMg4dM03Mb8QnXmlt4juzkr2o8eLsDDIEdAw=;
-  b=CWNVCgxcsYHEYWzrf7bR144mIl7JDQnshGm86/AeAY+b0Icb36vOu8m7
-   2QkjkMABYSRtutvWWUS3ElTAyUotU2aoMjQK8G/QATqGb8IZQmzHAIe9q
-   dSXYEHKN632Pksf9iLnjWsD7EE7NyHsOK2xUqW9uXnTx8dSGsEMVjxOIU
-   wpZ9EAYoN5Ubwd42WcIeiJKVEV1nE1U6Pcqb7+kzU38CqQXMahl0ASG8o
-   qGqu/nHGIPYr0poFX85fXCn3xjtrpcHSO3S3mDC2lUr4wUKgGK6FJk0Ns
-   3uAZlwR8qTRNbTnZkeLp6CB+Tjso5xQVsjknh7OjVDZL5dLGhbB3Mm6K9
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="336707384"
-X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
-   d="scan'208";a="336707384"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 08:05:16 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="768988962"
-X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
-   d="scan'208";a="768988962"
-Received: from trybicki-mobl1.ger.corp.intel.com ([10.252.63.119])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 08:05:12 -0700
-Date:   Thu, 16 Mar 2023 17:05:10 +0200 (EET)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Jacky Huang <ychuang570808@gmail.com>
-cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        lee@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
-        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
-        jirislaby@kernel.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-serial@vger.kernel.org, schung@nuvoton.com,
-        Jacky Huang <ychuang3@nuvoton.com>
-Subject: Re: [PATCH 13/15] reset: Add Nuvoton ma35d1 reset driver support
-In-Reply-To: <20230315072902.9298-14-ychuang570808@gmail.com>
-Message-ID: <1c943355-e9c0-3b23-4437-4040fa18b9fa@linux.intel.com>
-References: <20230315072902.9298-1-ychuang570808@gmail.com> <20230315072902.9298-14-ychuang570808@gmail.com>
+        Thu, 16 Mar 2023 11:09:15 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E17D72B3
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 08:09:13 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id w9so9024416edc.3
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 08:09:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678979351;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=2quNYX+HRyuvEQ3fh4N1hdxu22NmV7ILP9KErjbF4rw=;
+        b=TgSqjm8qtOPoLtnoANBoxGwoDvzwTi623LwQfF1NSttUfbLXjAK8i9vhv081QT7mHh
+         yseJJMcYiQvJxdBuLg0zdAvz6lZGQ0+h62Ay3vqu/4FV4wQIXPU2itq4J7rt/a+Cjrc9
+         f7SggSO5mV+FAOuz6BCzd2xuNZfz9RjwahzsnpMqQ5/4J7qRQHhp8skiwFR6Sa4iU/kz
+         t/Kg6fI9RSchneI+TS8MksRT/YpZ3mH7z225NA8DOv8TviP7mZxYMnkuqTv9Tq9xYXrl
+         v8dvsIQ11xzRP+/8bVkEP5BMV2sBHaJMo6PbiDxHZD1yx6NacGdFAVINScpEOcUryOEV
+         TbPA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678979351;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2quNYX+HRyuvEQ3fh4N1hdxu22NmV7ILP9KErjbF4rw=;
+        b=UTjH15eSV2LDxB8QNcCLnLmgxnJ5qG1EDPpD21aaYPjFvIo/YmGjMNjDX3kiZgptpN
+         L8rN5sF/10cJbkOIkS64AAWwRXMm9meWL4H+pbPEYvyGfrXAyUDeDNhEsRMEVihOGH1r
+         cFDagob1+zuEpaGjW2vt7BD8K3cc+TPVkqT8SYj0x8A55KFdMusQKOqdvDche5+Ug2q/
+         dS85Y74GBnyig/EphVUQrEei1JzdPbttVH9CdkRIX5Q6kOFrcASedfTkynp861KYfe2O
+         vxzYwvHFNTQYBztLvGx3Q03nLsrmGCl2OEmk+Ibeycg4abVdFFnM4wfmBLcLyu5Pe84l
+         iPQw==
+X-Gm-Message-State: AO0yUKXG5V0oO+oOQdpjNqG9FNtmTxdbH1Q2/Bch0Rw1UuTndo03fZ/a
+        avdM8Kyj8r7UIxEixyvQdTz1e99VN0hHSdkU
+X-Google-Smtp-Source: AK7set+Xtgb/QWxwdF/t3Xc0VwtnHqsydq8nILUkn5Fl7K2cvpbUN8GoIdTdTcT+Uns4xogT/QG1Yw==
+X-Received: by 2002:a17:906:cecb:b0:92f:f2cc:93 with SMTP id si11-20020a170906cecb00b0092ff2cc0093mr4363653ejb.22.1678979351101;
+        Thu, 16 Mar 2023 08:09:11 -0700 (PDT)
+Received: from khadija-virtual-machine ([39.41.209.88])
+        by smtp.gmail.com with ESMTPSA id v11-20020a1709062f0b00b00914fec9f40esm3966932eji.71.2023.03.16.08.09.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Mar 2023 08:09:10 -0700 (PDT)
+Date:   Thu, 16 Mar 2023 20:09:08 +0500
+From:   Khadija Kamran <kamrankhadijadj@gmail.com>
+To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Cc:     outreachy@lists.linux.dev,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5] staging: axis-fifo: initialize timeouts in probe only
+Message-ID: <ZBMxFLtW2ekCvm/s@khadija-virtual-machine>
+References: <ZBMR4s8xyHGqMm72@khadija-virtual-machine>
+ <2626731.BddDVKsqQX@suse>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <2626731.BddDVKsqQX@suse>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 15 Mar 2023, Jacky Huang wrote:
+On Thu, Mar 16, 2023 at 03:38:03PM +0100, Fabio M. De Francesco wrote:
+> Khadija,
+>
+> Just saw your v5 patch and Greg's two replies.
+> 
+> For v6 you will need to change the subject to "[PATCH v6] staging: axis-fifo: 
+> initialize timeouts in init only" to indicate that you are doing assignments 
+> in axis_fifo_init().
+> 
+> Don't forget to extend the version log with "Changes in v6:" and clarify that 
+> v5 had a different "Object" (you should probably also add a link to the v5 
+> patch in lore: https://lore.kernel.org/lkml /ZBMR4s8xyHGqMm72@khadija-virtual-
+> machine/). When the "Subject" changes, readers may not find the previous 
+> versions easily.    
+>
+> On giovedì 16 marzo 2023 13:56:02 CET Khadija Kamran wrote:
+> > Module parameter, read_timeout, can only be set at the loading time. As
+> > it can only be modified once, initialize read_timeout once in the probe
+> 
+> Substitute "probe" with "init".
+> 
+> > function.
+> > 
+> > As a result, only use read_timeout as the last argument in
+> > wait_event_interruptible_timeout() call.
+> 
+> This two sentences are not much clear. I'd merge and rework:
+> 
+> "Initialize the module parameters read_timeout and write_timeout once in 
+> init().
+> 
+> Module parameters can only be set once and cannot be modified later, so we 
+> don't need to evaluate them again when passing the parameters to  
+> wait_event_interruptible_timeout()."   
+> 
+> > 
+> > Convert datatpe
+> 
+> s/datatpe/type/
+> 
+> > of read_timeout
+> 
+> of {read,write}_timeout
+> 
+> > from 'int' to 'long int' because
+> > implicit conversion of 'long int' to 'int' in statement 'read_timeout =
+> > MAX_SCHEDULE_TIMEOUT' results in an overflow warning.
+> 
+> We don't care too much about the warning themselves: I mean, it overflows and 
+> you must avoid it to happen (as you are doing with the changes of types), not 
+> merely be interested in avoiding the warning. "[] results in an overflow." is 
+> all we care about.
+>
 
-> From: Jacky Huang <ychuang3@nuvoton.com>
-> 
-> This driver supports individual IP reset for ma35d1. The reset
-> control registers is a subset of system control registers.
-> 
-> Signed-off-by: Jacky Huang <ychuang3@nuvoton.com>
-> ---
->  drivers/reset/Kconfig        |   6 ++
->  drivers/reset/Makefile       |   1 +
->  drivers/reset/reset-ma35d1.c | 152 +++++++++++++++++++++++++++++++++++
->  3 files changed, 159 insertions(+)
->  create mode 100644 drivers/reset/reset-ma35d1.c
-> 
-> diff --git a/drivers/reset/Kconfig b/drivers/reset/Kconfig
-> index 2a52c990d4fe..47671060d259 100644
-> --- a/drivers/reset/Kconfig
-> +++ b/drivers/reset/Kconfig
-> @@ -143,6 +143,12 @@ config RESET_NPCM
->  	  This enables the reset controller driver for Nuvoton NPCM
->  	  BMC SoCs.
+Hey Fabio!
+Thank you for your feedback. I have undertood it and will make sure to
+send them in the next PATCH v6.
+
+> Add also the previous paragraph in the last part of the commit message.
 >  
-> +config RESET_NUVOTON_MA35D1
-> +	bool "Nuvton MA35D1 Reset Driver"
-> +	default ARCH_NUVOTON
-> +	help
-> +	  This enables the reset controller driver for Nuvoton MA35D1 SoC.
-> +
->  config RESET_OXNAS
->  	bool
->  
-> diff --git a/drivers/reset/Makefile b/drivers/reset/Makefile
-> index 3e7e5fd633a8..fd52dcf66a99 100644
-> --- a/drivers/reset/Makefile
-> +++ b/drivers/reset/Makefile
-> @@ -20,6 +20,7 @@ obj-$(CONFIG_RESET_MCHP_SPARX5) += reset-microchip-sparx5.o
->  obj-$(CONFIG_RESET_MESON) += reset-meson.o
->  obj-$(CONFIG_RESET_MESON_AUDIO_ARB) += reset-meson-audio-arb.o
->  obj-$(CONFIG_RESET_NPCM) += reset-npcm.o
-> +obj-$(CONFIG_RESET_NUVOTON_MA35D1) += reset-ma35d1.o
->  obj-$(CONFIG_RESET_OXNAS) += reset-oxnas.o
->  obj-$(CONFIG_RESET_PISTACHIO) += reset-pistachio.o
->  obj-$(CONFIG_RESET_POLARFIRE_SOC) += reset-mpfs.o
-> diff --git a/drivers/reset/reset-ma35d1.c b/drivers/reset/reset-ma35d1.c
-> new file mode 100644
-> index 000000000000..bdd39483ca4e
-> --- /dev/null
-> +++ b/drivers/reset/reset-ma35d1.c
-> @@ -0,0 +1,152 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (C) 2023 Nuvoton Technology Corp.
-> + * Author: Chi-Fang Li <cfli0@nuvoton.com>
-> + */
-> +
-> +#include <linux/device.h>
-> +#include <linux/err.h>
-> +#include <linux/mfd/syscon.h>
-> +#include <linux/io.h>
-> +#include <linux/of.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/reset-controller.h>
-> +#include <linux/mfd/ma35d1-sys.h>
-> +#include <dt-bindings/reset/nuvoton,ma35d1-reset.h>
-> +#include <linux/regmap.h>
-> +#include <linux/reboot.h>
-> +
-> +#define RST_PRE_REG	32
-> +
-> +struct ma35d1_reset_data {
-> +	struct reset_controller_dev rcdev;
-> +	struct regmap *regmap;
-> +};
-> +
-> +struct ma35d1_reboot_data {
-> +	struct notifier_block restart_handler;
-> +	struct regmap *regmap;
-> +};
-> +
-> +static int ma35d1_restart_handler(struct notifier_block *this,
-> +				  unsigned long mode, void *cmd)
-> +{
-> +	struct ma35d1_reboot_data *data =
-> +			container_of(this, struct ma35d1_reboot_data,
-> +				     restart_handler);
-> +	regmap_write(data->regmap, REG_SYS_IPRST0, 1 << MA35D1_RESET_CHIP);
-> +	return -EAGAIN;
-
-This results -EAGAIN always???
-
-> +}
-> +
-> +static int ma35d1_reset_update(struct reset_controller_dev *rcdev,
-> +			      unsigned long id, bool assert)
-> +{
-> +	int reg;
-> +	int offset = (id / RST_PRE_REG) * 4;
-> +	struct ma35d1_reset_data *data =
-> +			container_of(rcdev, struct ma35d1_reset_data, rcdev);
-> +
-> +	regmap_read(data->regmap, REG_SYS_IPRST0 + offset, &reg);
-> +	if (assert)
-> +		reg |= 1 << (id % RST_PRE_REG);
-> +	else
-> +		reg &= ~(1 << (id % RST_PRE_REG));
-> +
-> +	regmap_write(data->regmap, REG_SYS_IPRST0 + offset, reg);
-> +	return 0;
-
-This returns always 0. What about regmap_read/write() errors, should the 
-be returned?
-
-> +}
-> +
-> +static int ma35d1_reset_assert(struct reset_controller_dev *rcdev,
-> +			       unsigned long id)
-> +{
-> +	return ma35d1_reset_update(rcdev, id, true);
-> +}
-> +
-> +static int ma35d1_reset_deassert(struct reset_controller_dev *rcdev,
-> +				 unsigned long id)
-> +{
-> +	return ma35d1_reset_update(rcdev, id, false);
-> +}
-> +
-> +static int ma35d1_reset_status(struct reset_controller_dev *rcdev,
-> +			      unsigned long id)
-> +{
-> +	int reg;
-> +	int offset = id / RST_PRE_REG;
-> +	struct ma35d1_reset_data *data =
-> +			container_of(rcdev, struct ma35d1_reset_data, rcdev);
-> +
-> +	regmap_read(data->regmap, REG_SYS_IPRST0 + offset, &reg);
-
-Error handling?
-
-> +	return !!(reg & BIT(id % RST_PRE_REG));
-> +}
-> +
-> +static const struct reset_control_ops ma35d1_reset_ops = {
-> +	.assert = ma35d1_reset_assert,
-> +	.deassert = ma35d1_reset_deassert,
-> +	.status = ma35d1_reset_status,
-> +};
-> +
-> +static const struct of_device_id ma35d1_reset_dt_ids[] = {
-> +	{ .compatible = "nuvoton,ma35d1-reset" },
-> +	{ },
-> +};
-> +
-> +static int ma35d1_reset_probe(struct platform_device *pdev)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	struct ma35d1_reset_data *reset_data;
-> +	struct ma35d1_reboot_data *reboot_data;
-> +	int err;
-> +
-> +	if (!pdev->dev.of_node) {
-> +		dev_err(&pdev->dev, "Device tree node not found\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	reset_data = devm_kzalloc(dev, sizeof(*reset_data), GFP_KERNEL);
-> +	if (!reset_data)
-> +		return -ENOMEM;
-> +
-> +	reboot_data = devm_kzalloc(dev, sizeof(*reboot_data), GFP_KERNEL);
-> +	if (!reboot_data) {
-> +		devm_kfree(dev, reset_data);
-
-Unnecessary.
-
-> +		return -ENOMEM;
-> +	}
-> +
-> +	reset_data->regmap  = syscon_regmap_lookup_by_phandle(
-> +			      pdev->dev.of_node, "regmap");
-> +	if (IS_ERR(reset_data->regmap)) {
-> +		dev_err(&pdev->dev, "Failed to get SYS register base\n");
-> +		err = PTR_ERR(reset_data->regmap);
-> +		goto err_out;
-> +	}
-> +	reset_data->rcdev.owner = THIS_MODULE;
-> +	reset_data->rcdev.nr_resets = MA35D1_RESET_COUNT;
-> +	reset_data->rcdev.ops = &ma35d1_reset_ops;
-> +	reset_data->rcdev.of_node = dev->of_node;
-> +
-> +	reboot_data->regmap = reset_data->regmap;
-> +	reboot_data->restart_handler.notifier_call = ma35d1_restart_handler;
-> +	reboot_data->restart_handler.priority = 192;
-> +
-> +	err = register_restart_handler(&reboot_data->restart_handler);
-> +	if (err)
-> +		dev_warn(&pdev->dev, "failed to register restart handler\n");
-> +
-> +	return devm_reset_controller_register(dev, &reset_data->rcdev);
-> +
-> +err_out:
-> +	devm_kfree(dev, reset_data);
-> +	devm_kfree(dev, reboot_data);
-
-These are unnecessary since the probe is failing.
-
-> +	return err;
-> +}
-> +
-> +static struct platform_driver ma35d1_reset_driver = {
-> +	.probe = ma35d1_reset_probe,
-> +	.driver = {
-> +		.name = "ma35d1-reset",
-> +		.of_match_table	= ma35d1_reset_dt_ids,
-> +	},
-> +};
-> +
-> +builtin_platform_driver(ma35d1_reset_driver);
+> > Perform same steps formodule parameter, write_timeout.
+> 
+> And instead delete the this last phrase.
 > 
 
--- 
- i.
+Can you please explain the above feedback. I am confused. What should I
+use instead of this last phrase?
 
+> > Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > Signed-off-by: Khadija Kamran <kamrankhadijadj@gmail.com>
+> > ---
+> > 
+> > Changes in v5:
+> >  - Convert timeout's datatype from int to long.
+> > Changes in v4:
+> >  - Initialize timeouts once as suggested by Greg; this automatically
+> >    fixes the indentation problems.
+> >  - Change the subject and description.
+> > Changes in v3:
+> >  - Fix grammatical mistakes
+> >  - Do not change the second argument's indentation in split lines
+> > Changes in v2:
+> >  - Instead of matching alignment to open parenthesis, align second and
+> >    the last argument instead.
+> >  - Change the subject to 'remove tabs to align arguments'.
+> >  - Use imperative language in subject and description
+> > 
+> >  drivers/staging/axis-fifo/axis-fifo.c | 26 ++++++++++++++++----------
+> >  1 file changed, 16 insertions(+), 10 deletions(-)
+> > 
+> > diff --git a/drivers/staging/axis-fifo/axis-fifo.c
+> > b/drivers/staging/axis-fifo/axis-fifo.c index dfd2b357f484..d667dc80df47
+> > 100644
+> > --- a/drivers/staging/axis-fifo/axis-fifo.c
+> > +++ b/drivers/staging/axis-fifo/axis-fifo.c
+> > @@ -103,17 +103,17 @@
+> >   *           globals
+> >   * ----------------------------
+> >   */
+> > -static int read_timeout = 1000; /* ms to wait before read() times out */
+> > -static int write_timeout = 1000; /* ms to wait before write() times out */
+> > +static long read_timeout = 1000; /* ms to wait before read() times out */
+> > +static long write_timeout = 1000; /* ms to wait before write() times out */
+> > 
+> >  /* ----------------------------
+> >   * module command-line arguments
+> >   * ----------------------------
+> >   */
+> > 
+> > -module_param(read_timeout, int, 0444);
+> > +module_param(read_timeout, long, 0444);
+> >  MODULE_PARM_DESC(read_timeout, "ms to wait before blocking read() timing 
+> out;
+> > set to -1 for no timeout"); -module_param(write_timeout, int, 0444);
+> > +module_param(write_timeout, long, 0444);
+> >  MODULE_PARM_DESC(write_timeout, "ms to wait before blocking write() timing
+> > out; set to -1 for no timeout");
+> > 
+> >  /* ----------------------------
+> > @@ -384,9 +384,7 @@ static ssize_t axis_fifo_read(struct file *f, char 
+> __user
+> > *buf, mutex_lock(&fifo->read_lock);
+> >  		ret = wait_event_interruptible_timeout(fifo->read_queue,
+> >  			ioread32(fifo->base_addr + XLLF_RDFO_OFFSET),
+> > -				 (read_timeout >= 0) ?
+> > -				  msecs_to_jiffies(read_timeout) :
+> > -				  MAX_SCHEDULE_TIMEOUT);
+> > +			read_timeout);
+> > 
+> >  		if (ret <= 0) {
+> >  			if (ret == 0) {
+> > @@ -528,9 +526,7 @@ static ssize_t axis_fifo_write(struct file *f, const 
+> char
+> > __user *buf, ret = wait_event_interruptible_timeout(fifo->write_queue,
+> >  			ioread32(fifo->base_addr + XLLF_TDFV_OFFSET)
+> > 
+> >  				 >= words_to_write,
+> 
+> What is this? You haven't yet compiled your patch.
+> Any further problems with enabling axis-fifo as a module?
+>
+
+
+Sorry, my bad.  Instead of fixing the menuconfig I used this command to
+remove the warnings: 
+make -j"$(nproc)" ARCH=arm64 LLVM=1 drivers/staging/axis-fifo/
+I thought it is compiling my module correctly.
+But I am working on your feedback. And before sending my next patch I
+will make sure to compile it properly.
+
+
+> Fabio
+> 
+> > 
+> > -				 (write_timeout >= 0) ?
+> > -				  msecs_to_jiffies(write_timeout) :
+> > -				  MAX_SCHEDULE_TIMEOUT);
+> > +			write_timeout);
+> > 
+> >  		if (ret <= 0) {
+> >  			if (ret == 0) {
+> > @@ -815,6 +811,16 @@ static int axis_fifo_probe(struct platform_device 
+> *pdev)
+> >  	char *device_name;
+> >  	int rc = 0; /* error return value */
+> > 
+> > +	if (read_timeout >= 0)
+> > +		read_timeout = msecs_to_jiffies(read_timeout);
+> > +	else
+> > +		read_timeout = MAX_SCHEDULE_TIMEOUT;
+> > +
+> > +	if (write_timeout >= 0)
+> > +		write_timeout = msecs_to_jiffies(write_timeout);
+> > +	else
+> > +		write_timeout = MAX_SCHEDULE_TIMEOUT;
+> > +
+> >  	/* ----------------------------
+> >  	 *     init wrapper device
+> >  	 * ----------------------------
+> > --
+> > 2.34.1
+> 
+> 
+> 
+> 
