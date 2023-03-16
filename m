@@ -2,94 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9869F6BD9AC
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 20:58:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9443E6BD9AE
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 20:58:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230109AbjCPT6O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 15:58:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41814 "EHLO
+        id S230130AbjCPT60 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 15:58:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230011AbjCPT6H (ORCPT
+        with ESMTP id S230083AbjCPT6N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 15:58:07 -0400
-Received: from mail-il1-f170.google.com (mail-il1-f170.google.com [209.85.166.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E3C3BD4E4;
-        Thu, 16 Mar 2023 12:57:23 -0700 (PDT)
-Received: by mail-il1-f170.google.com with SMTP id 4so1631986ilz.6;
-        Thu, 16 Mar 2023 12:57:23 -0700 (PDT)
+        Thu, 16 Mar 2023 15:58:13 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32B93C0805
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 12:57:30 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id n203-20020a25dad4000000b0091231592671so2915940ybf.1
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 12:57:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1678996646;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=6hZkF2wD5S148YOwsLKgyhW8hSKyz5z+vIxAoDqNEoU=;
+        b=ppopHHPSmlauEReZkK5sf465mFh6p3Uf5alXDjm/6jJiPejFz3RHB7aixjA2ozrvOi
+         LjIiAi2RABPxvySD7Ql+1dTFgTiDAABrEGBxcuHmTvN2QnJJqaMEmm//EYMn+z2kO/bY
+         CmbWGysimF0nov7NS8ciC0fRQ5IaNXJlk2BHJr3BmSi1LabFKkFEwy90ULpt9//mAQem
+         ttXH3ONv2j2YWZoLkIcJ2UTDoJ6pR2hXdifOR4fdTv/7X7W4WnprLdJyiCr/i3PL3YKK
+         allvt39YWr14dR2/4YRKS+ACYy7NUzOxfL0NeLmQ6PYa/DALfNx3f2DPgXpkhnnpw7b+
+         UwgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678996611;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jQMHjPaeXjRCbmwReybTxCj3piy1a1zt9f0lIOYUeaM=;
-        b=gSwrMa3UF8042FXu+ojBw5H3t3lOxPuslFr8ZEFxZDrqb4ivVgccw/TWtlfaaXaaF4
-         leCDoj0bNkzyLi6m/1R1b4YuFqicDQE6soDLhGSZ9XYQ7c7V6NmLLJVUkDdezD6VE4YN
-         hzWwTRxH2OMAey6RY3hcLT6MXBPO8Ctgo18DH3aD9rls9gXdBkHfbO4gnE9Quulyl3fY
-         1CiKApWSfyXiP7IuGMba7i8IjvOvMdciRqjKMsWGvm7ODLTWdhkSeIRITTfzeBTHItUm
-         UeK833vVE7f+K7gq6Exnk7Y7PC7f8rJboQm80zoxqtnGiYU5so2JHCXp7Ft8d5Wd/iW8
-         eH5g==
-X-Gm-Message-State: AO0yUKXbrRhq4//nkjyDi0IjSDiwc6bEUHcVh90TFg+JsalMu9JbXeOv
-        1chOkkW//yNLDpVGDl+aHNX2aMw4JA==
-X-Google-Smtp-Source: AK7set/xRgAPFMSNNxoPPmiqrGXjmP7KYb/XlTkpq5V1/UNgry6o/5bHXBqkyYiFFZ0XwssSf1mXbg==
-X-Received: by 2002:a92:c10f:0:b0:311:13c1:abd4 with SMTP id p15-20020a92c10f000000b0031113c1abd4mr7365041ile.24.1678996611038;
-        Thu, 16 Mar 2023 12:56:51 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.249])
-        by smtp.gmail.com with ESMTPSA id r17-20020a92ac11000000b00312f2936087sm61266ilh.63.2023.03.16.12.56.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Mar 2023 12:56:50 -0700 (PDT)
-Received: (nullmailer pid 3780293 invoked by uid 1000);
-        Thu, 16 Mar 2023 19:56:48 -0000
-Date:   Thu, 16 Mar 2023 14:56:48 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     linux-crypto@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, Pankaj Gupta <pankaj.gupta@nxp.com>,
-        linux-kernel@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Horia =?utf-8?Q?Geant=C4=83?= <horia.geanta@nxp.com>,
-        Gaurav Jain <gaurav.jain@nxp.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>
-Subject: Re: [PATCH] dt-bindings: crypto: fsl,sec-v4.0: Convert to DT schema
-Message-ID: <167899646621.3777210.10339304142738109858.robh@kernel.org>
-References: <20230220213334.353779-1-robh@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230220213334.353779-1-robh@kernel.org>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        d=1e100.net; s=20210112; t=1678996646;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6hZkF2wD5S148YOwsLKgyhW8hSKyz5z+vIxAoDqNEoU=;
+        b=DHi7PGH8H8KQluSugZjhkaLIdI/vT4FXBR6lkHihjqToffVO9J8zs/YCdDywdHHXWG
+         6ZwySZxMw9BpwsENEngavT57rArVR8ElhPe7GcRJl3O0LlPRiOlmP6+fxe76SOTfttdp
+         QXspmI7JwBS3kDk9UIZbCO1odZ2eZtVKzBF6XS1SHs92G+donPR/6Xa6yXxwhlhVzvFz
+         XVT7/8mqSuunLGA8klLCzX5PbqSRl9mwW68xIgg3eRjsXzLf2psTw7OymF4U08rd5v7G
+         9/qUSVx3W2Y07SwPcjvN9CQXsLE4kLXKvQnG128Tzogw4Zu8YTdE3B3pQufjp7+ZMFGv
+         lKtA==
+X-Gm-Message-State: AO0yUKXtZWeBgzeNfN0JgQpAOYRW0N9e2srqboI0t4KsYxox0kCuF6fH
+        i03ewR9ir2hSphXSPNpmZkGXVp3CM+I=
+X-Google-Smtp-Source: AK7set90USqlvs8yez6D/amNzNA42LXhWOo0jeJaT0oOsHZyg7uk4XQQlogtskg3otXzxSL5LVe+YTvWptQ=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a05:6902:208:b0:a98:bd27:91de with SMTP id
+ j8-20020a056902020800b00a98bd2791demr28961776ybs.7.1678996646536; Thu, 16 Mar
+ 2023 12:57:26 -0700 (PDT)
+Date:   Thu, 16 Mar 2023 19:57:24 +0000
+In-Reply-To: <6b9e8589281c4d2bae46eba36f77afe7@huawei.com>
+Mime-Version: 1.0
+References: <20230316154554.1237-1-shameerali.kolothum.thodi@huawei.com>
+ <ZBNLnp7c1JvDsmHm@google.com> <6b9e8589281c4d2bae46eba36f77afe7@huawei.com>
+Message-ID: <ZBN0pFN/nF8G3fWl@google.com>
+Subject: Re: [PATCH] KVM: Add the missing stub function for kvm_dirty_ring_check_request()
+From:   Sean Christopherson <seanjc@google.com>
+To:     Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "gshan@redhat.com" <gshan@redhat.com>,
+        "maz@kernel.org" <maz@kernel.org>
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Mar 16, 2023, Shameerali Kolothum Thodi wrote:
+> > From: Sean Christopherson [mailto:seanjc@google.com]
+> > On Thu, Mar 16, 2023, Shameer Kolothum wrote:
+> > > The stub for !CONFIG_HAVE_KVM_DIRTY_RING case is missing.
+> > 
+> > No stub is needed.  kvm_dirty_ring_check_request() isn't called from
+> > common code,
+> > and should not (and isn't unless I'm missing something) be called from arch
+> > code
+> > unless CONFIG_HAVE_KVM_DIRTY_RING=y.
+> > 
+> > x86 and arm64 are the only users, and they both select
+> > HAVE_KVM_DIRTY_RING
+> > unconditionally when KVM is enabled.
+> 
+> Yes, it is at present not called from anywhere other than x86 and arm64.
+> But I still think since it is a common helper, better to have a stub.
 
-On Mon, 20 Feb 2023 15:33:33 -0600, Rob Herring wrote:
-> Convert Freescale CAAM/SEC4 binding to DT schema format. The
-> 'fsl,sec-v4.0' and 'fsl,sec-v4.0-mon' parts are independent, so split
-> them into separate schema files.
-> 
-> Add a bunch of missing compatibles for v5.0, v5.4, etc. Drop unused
-> 'ranges', '#address-cells', and '#size-cells' from fsl,sec-v4.0-mon nodes.
-> 
-> There's one DTB warning for LS1012a which has a 2nd 'reg' entry for
-> 'fsl,sec-v4.0-rtic'. Leaving that as there is no clue as to what it is for.
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  .../bindings/crypto/fsl,sec-v4.0-mon.yaml     | 150 +++++
->  .../bindings/crypto/fsl,sec-v4.0.yaml         | 266 +++++++++
->  .../devicetree/bindings/crypto/fsl-sec4.txt   | 553 ------------------
->  3 files changed, 416 insertions(+), 553 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/crypto/fsl,sec-v4.0-mon.yaml
->  create mode 100644 Documentation/devicetree/bindings/crypto/fsl,sec-v4.0.yaml
->  delete mode 100644 Documentation/devicetree/bindings/crypto/fsl-sec4.txt
-> 
-
-Applied, thanks!
-
+Why?  It buys us nothing other than dead code, and even worse it could let a bug
+that would otherwise be caught during build time escape to run time.
