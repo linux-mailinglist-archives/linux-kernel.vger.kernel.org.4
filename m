@@ -2,147 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD5146BD8C2
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 20:18:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCE806BD8BC
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 20:17:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230154AbjCPTR6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 15:17:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36660 "EHLO
+        id S229938AbjCPTRu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 15:17:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230015AbjCPTRx (ORCPT
+        with ESMTP id S229744AbjCPTRs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 15:17:53 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2BC2B32A7
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 12:17:50 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id eh3so11679673edb.11
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 12:17:50 -0700 (PDT)
+        Thu, 16 Mar 2023 15:17:48 -0400
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 194F2B1B0E
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 12:17:47 -0700 (PDT)
+Received: by mail-pj1-x104a.google.com with SMTP id j7-20020a17090aeb0700b0023d19dfe884so1202881pjz.4
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 12:17:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kali.org; s=google; t=1678994269;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xvbBMT7ofHzrbvXt+PN9x+UJpe8YiYYHtlZEo+jEfTM=;
-        b=heuHIWUccDy7S2Y8CmxkFumgitLqUSXgd84is/kjJO7/dGJ1qBPGqCXJjlLv8aE+HA
-         tGUKnK6FcsrZRrZ31SvxN0FxZgpDNTYlPBo2rOocBGTB+0Qk9HeNT32/uevX9z7FOzQN
-         RggEnVbUY9SAbSRZnGTVcmrSAAs7tyK87gX96c2OArvgHIrcKyTscq4GK0KlwXuoQ8Wf
-         lUtPskqfSzAtP/zCD8CP0lLMZ1JP/lLO/75gNgsuxT2KomkLX1sb3yQgXkT6CNHfjE5q
-         KlLOyZBrhis2D/ab3w3tn/UqTu+Idu3zOUpnwWZiTIq9vCrJS5ClgtPNcl8KyCDvhtsW
-         v5Pw==
+        d=google.com; s=20210112; t=1678994266;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TJcbWDGDY7mW2UZ8+dFYqV06yFsfykcIM5oQQgMomTE=;
+        b=NXIQoi3YBWb27fNIE5+YxwwobwjsnMUlQCThLejvGIka8X9iKT1GPt141RafmdDhvJ
+         Q1yQwnKxMawq65in8Dcskl0DbfPNT11jbIOrGadjZV/UCMTs/yuH812+5+U30Z66QnyT
+         HkUxGY5+kGA3AtIxFr5v9jTPb9iXv6f98VnwwB+Bzm8SRrIGyFvbkfbc8/xRNJxr+bwM
+         tOuADhijReGR7kTsHXr1YtDuCn8+YgJfv8fMSHPoAQtQ9TtOTWqiHUqi8w0znTR851GE
+         bsNlnjrMYY9xN3gIFdMpAxSJuHJl50OBqvj5Re8bwjTuB2gF/zf+OdPk5JGRqOKVGY3u
+         32og==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678994269;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xvbBMT7ofHzrbvXt+PN9x+UJpe8YiYYHtlZEo+jEfTM=;
-        b=4JKv9wBWd9e26weJoqkjfF9Lx1Q/N5tjUxtVPY5BRZdsUrKBtTC9aNheGK/cTmhuTz
-         ATL0clr/03qGRw9mYl2cb9dM+cCpwnvKuPYWlQ99tASwMjRSjZRHCI6FvFkpc6CMqQi8
-         WNGSaO5sY6acOtVfBBVoMqMSr8gCK0Rl20gpRRC3VE3Pttt5zux3rJW71/6YU7/0qplm
-         x5BnhMw87jnlxd+qMM5P2J5pMQMYkhOKGm3r/DLcLApwRrJnAC7P/Fjcg+CnI0myxYYp
-         xLyBFuQ70H92QZP976U7Hiq351pZm2r4XWxZEW5tXRUkiv02Evc66UwjznaXT06f98ka
-         /qnQ==
-X-Gm-Message-State: AO0yUKWqF8w8+aElk9i4SSgNwZ3f+W/l+EOpn5J0txccr1OiGO2ihsgR
-        GoYzDxImmIC4ryA4GmQrX7gI5ppH2g48Ot3Rm15bFkz+7v5zfVn7m98=
-X-Google-Smtp-Source: AK7set/kjprnV34qU3c1tgSinbRc90owaG+ycfoAtwQQ2Faa3s1pMXyrGprH3Sd/BLCv/uSuZUHRkGIxcWzoU10Kpho=
-X-Received: by 2002:a50:954e:0:b0:4fb:9735:f913 with SMTP id
- v14-20020a50954e000000b004fb9735f913mr400241eda.8.1678994269329; Thu, 16 Mar
- 2023 12:17:49 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230316034759.73489-1-steev@kali.org> <20230316034759.73489-5-steev@kali.org>
- <ZBLuxFxFvCY+0XHG@hovoldconsulting.com> <ZBL4Qrp9Lr+aOyXr@hovoldconsulting.com>
-In-Reply-To: <ZBL4Qrp9Lr+aOyXr@hovoldconsulting.com>
-From:   Steev Klimaszewski <steev@kali.org>
-Date:   Thu, 16 Mar 2023 14:17:38 -0500
-Message-ID: <CAKXuJqh447rZxDZ28aCiRZaL=uj5xDULhyU=HUbFVePYyz7AOw@mail.gmail.com>
-Subject: Re: [PATCH v6 4/4] arm64: dts: qcom: sc8280xp-x13s: Add bluetooth
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        Sven Peter <sven@svenpeter.dev>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-bluetooth@vger.kernel.org,
-        Mark Pearson <markpearson@lenovo.com>
-Content-Type: text/plain; charset="UTF-8"
+        d=1e100.net; s=20210112; t=1678994266;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=TJcbWDGDY7mW2UZ8+dFYqV06yFsfykcIM5oQQgMomTE=;
+        b=QX4DUiqB+XTYBCJtCmZNEh/4oWxFSufslhjvoAXAoCtP72Z5NTnEcqzTRxmxW6APh7
+         ieuizIQk0tD7t9JEGXhM6ecndehnIn7YxeOIFeT4QPlLTaSF6jNVSVgNyE6YQkVidf1F
+         VCNe8BlHGhFj5lB+lhfoyVm0RykLsWg6UYn//bfguIvEsbswMOD1P0tr3xA43XfJLKYc
+         F+iLn69nyjk3AOC/I2jnyNiVIJSSyFel0e9uyVWQr7nQ54PYaFojFPMnFOk5Bsh2+Vt5
+         qSx33kcofOFbcJs3wHwkjNOWZJw2t/df9kHglZWxYWENl2nIBlwc51DV8kTdLvzllCxb
+         DjKA==
+X-Gm-Message-State: AO0yUKW7yR76XE1DtPyzupv9O+t161ZaLKv7QHxudlLVgW8yUQ9nU2Qu
+        KZbvk0hjhOWmcrfu+apNvF3sfivadAM=
+X-Google-Smtp-Source: AK7set9O/4knFRyTM8/eHnkpwXDC/N3CPpiLPCHA3JrSy8khWhbEwCudTVlbz9cm5U2vbO9zvEYs7/JAUnw=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a05:6a00:218b:b0:625:c7de:48c1 with SMTP id
+ h11-20020a056a00218b00b00625c7de48c1mr2123151pfi.4.1678994266635; Thu, 16 Mar
+ 2023 12:17:46 -0700 (PDT)
+Date:   Thu, 16 Mar 2023 19:17:45 +0000
+In-Reply-To: <0a42f824d24946ab86bcc6efa31b2863@huawei.com>
+Mime-Version: 1.0
+References: <0a42f824d24946ab86bcc6efa31b2863@huawei.com>
+Message-ID: <ZBNrWZQhMX8AHzWM@google.com>
+Subject: Re: WARNING in kvm_arch_vcpu_ioctl_run
+From:   Sean Christopherson <seanjc@google.com>
+To:     "zhangjianguo (A)" <zhangjianguo18@huawei.com>
+Cc:     "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        Renxuming <renxuming@huawei.com>,
+        "Wangyuan (Ethan)" <wangyuan38@huawei.com>,
+        "Ligang (J)" <stuart.li@huawei.com>,
+        yuzenghui <yuzenghui@huawei.com>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Johan,
++LKML (lore isn't picking this up for some reason) and a real subject
 
-On Thu, Mar 16, 2023 at 6:05=E2=80=AFAM Johan Hovold <johan@kernel.org> wro=
-te:
->
-> On Thu, Mar 16, 2023 at 11:26:12AM +0100, Johan Hovold wrote:
-> > On Wed, Mar 15, 2023 at 10:47:58PM -0500, Steev Klimaszewski wrote:
-> > > The Lenovo Thinkpad X13s has a WCN6855 Bluetooth controller on uart2,
-> > > add this.
-> > >
-> > > Signed-off-by: Steev Klimaszewski <steev@kali.org>
-> > > ---
->
-> > > +           vreg_s1c: smps1 {
-> > > +                   regulator-name =3D "vreg_s1c";
-> > > +                   regulator-min-microvolt =3D <1880000>;
-> > > +                   regulator-max-microvolt =3D <1900000>;
-> > > +                   regulator-initial-mode =3D <RPMH_REGULATOR_MODE_H=
-PM>;
-> > > +                   regulator-allowed-modes =3D <RPMH_REGULATOR_MODE_=
-AUTO>,
-> > > +                                             <RPMH_REGULATOR_MODE_RE=
-T>;
-> > > +                   regulator-allow-set-load;
-> >
-> > So this does not look quite right still as you're specifying an initial
-> > mode which is not listed as allowed.
-> >
-> > Also there are no other in-tree users of RPMH_REGULATOR_MODE_RET and
-> > AUTO is used to switch mode automatically which seems odd to use with
-> > allow-set-load.
-> >
-> > This regulator is in fact also used by the wifi part of the chip and as
-> > that driver does not set any loads so we may end up with a regulator in
-> > retention mode while wifi is in use.
-> >
-> > Perhaps Bjorn can enlighten us, but my guess is that this should just b=
-e
-> > "intial-mode =3D AUTO" (or even HPM, but I have no idea where this came
-> > from originally).
->
-> This one probably also needs to be marked as always-on as we don't
-> currently describe the fact that the wifi part also uses s1c.
->
-> Johan
+On Thu, Mar 16, 2023, zhangjianguo (A) wrote:
+> Hi all,
+>=20
+> Install the 6.3.0-rc1 kernel on the x86 server, and execute the https://s=
+yzkaller.appspot.com/text?tag=3DReproC&x=3D14b34300880000 test case, the ca=
+ll trace appears.
+>=20
+> [  +0.000028] ------------[ cut here ]------------
+> [  +0.000002] WARNING: CPU: 36 PID: 73250 at arch/x86/kvm/x86.c:11060 kvm=
+_arch_vcpu_ioctl_run+0x482/0x4b0 [kvm]
+> [  +0.000086] Modules linked in: openvswitch nf_conncount nf_nat nf_connt=
+rack nf_defrag_ipv6 nf_defrag_ipv4 libcrc32c ebtable_filter ebtables ip6tab=
+le_filter ip6_tables iptable_filter ip_tables intel_rapl_msr intel_rapl_com=
+mon sb_edac x86_pkg_temp_thermal coretemp kvm_intel kvm irqbypass rapl inte=
+l_cstate ixgbe ses intel_uncore mei_me enclosure pcspkr i2c_i801 mdio sunrp=
+c mei intel_pch_thermal i2c_smbus joydev lpc_ich dca sg acpi_power_meter dr=
+m vhost_net tun vhost fuse vhost_iotlb tap ext4 mbcache jbd2 sd_mod crct10d=
+if_pclmul ipmi_si ahci crc32_pclmul crc32c_intel libahci ipmi_devintf ghash=
+_clmulni_intel mpt3sas libata sha512_ssse3 ipmi_msghandler wdat_wdt raid_cl=
+ass scsi_transport_sas dm_mod br_netfilter bridge stp llc nvme nvme_core t1=
+0_pi crc64_rocksoft_generic crc64_rocksoft crc64 nbd
+> [  +0.000077] CPU: 36 PID: 73250 Comm: run_vcpu_ioctrl Not tainted 6.3.0-=
+rc1+ #2
+> [  +0.000004] Hardware name: Huawei RH2288 V3/BC11HGSB0, BIOS 3.87 02/02/=
+2018
+> [  +0.000002] RIP: 0010:kvm_arch_vcpu_ioctl_run+0x482/0x4b0 [kvm]
+> [  +0.000002] Call Trace:
+> [  +0.000003]  <TASK>
+> [  +0.000003]  kvm_vcpu_ioctl+0x279/0x680 [kvm]
+> [  +0.000047]  ? vfs_write+0x2c8/0x3d0
+> [  +0.000006]  __x64_sys_ioctl+0x8f/0xc0
+> [  +0.000006]  do_syscall_64+0x3f/0x90
+> [  +0.000007]  entry_SYSCALL_64_after_hwframe+0x72/0xdc
+> [  +0.000002]  </TASK>
+> [  +0.000002] ---[ end trace 0000000000000000 ]---
+>=20
+> |        } else {
+> |                WARN_ON_ONCE(vcpu->arch.pio.count);
+> |                WARN_ON_ONCE(vcpu->mmio_needed);      // where the splat=
+ triggered
+> |        }
 
-I couldn't remember exactly why I chose HPM, and so I recreated what
-I'd done.  I looked to see what modes were available by git grepping
-the kernel sources and since they are in
-include/dt-bindings/regulator/qcom,rpmh-regulator.h with a comment
-explaining what each mode is, I picked HPM since it starts it at the
-full rated current.  As to why I chose the others... it was based on
-SMPS being mentioned in that comment block.  Since I wasn't sure what
-PFM is (and admittedly, did not look it up) I skipped it.
+The splat occurs due to a longstanding (literally since KVM's inception) sh=
+ortcoming
+in KVM's uAPI.  On an emulated MMIO write, KVM finishes the instruction bef=
+ore
+exiting to userspace.  This is necessary given how KVM's uAPI works, as out=
+side
+of REP string instructions, KVM doesn't provide a way to restart an instruc=
+tion
+that partially completed before the MMIO was encountered.
 
-And you are right, we probably don't want to yank that regulator out
-from under the wifi...  will add that in v7, so I guess for v7 we want
-HPM, LPM, AUTO with AUTO being initial.  I guess I was trying to think
-that RET would allow as little power usage as possible when bluetooth
-isn't in use.
+For the vast majority of _emulated_ instructions, this doesn't cause proble=
+ms as
+there is a single memory accesses, i.e. any exceptions on the instruction w=
+ill
+occur _before_ the MMIO write.
 
---steev
+What's happening here is that a PUSHA triggers an MMIO write and then runs =
+past
+the segment limit, resulting in a #SS after the MMIO is queued.  KVM inject=
+s the
+#SS (well, tries to) and thus loses track of the MMIO, but never clears mmi=
+o_needed.
+
+There's a second bug here that results in failed VM-Enter when KVM tries to=
+ inject
+the #SS: KVM doesn't ignore drop error code when the vCPU is in Real Mode. =
+ This
+too is a longstanding bug that has likely escaped notice because no real wo=
+rk code
+runs in Real Mode _and_ gracefully handles exceptions.
+
+My plan, pending testing, is to suppress the MMIO write + exception scenari=
+o since
+the bug has been around for 15+ years without anyone noticing, let alone ca=
+ring.
+Fixing it properly would be a heck of a lot of complexity and code churn fo=
+r no
+real benefit.
+
+And for the Real Mode exception bug, unless I'm missing something, the erro=
+r code
+can simply be suppressed when queueing the exception.
+
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index 237c483b1230..b3bf3a0d74ab 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -646,6 +646,9 @@ static void kvm_multiple_exception(struct kvm_vcpu *vcp=
+u,
+=20
+        kvm_make_request(KVM_REQ_EVENT, vcpu);
+=20
++       /* Real Mode exceptions do not report error codes. */
++       has_error &=3D is_protmode(vcpu);
++
+        /*
+         * If the exception is destined for L2 and isn't being reinjected,
+         * morph it to a VM-Exit if L1 wants to intercept the exception.  A
+@@ -8883,6 +8886,8 @@ int x86_emulate_instruction(struct kvm_vcpu *vcpu, gp=
+a_t cr2_or_gpa,
+        }
+=20
+        if (ctxt->have_exception) {
++               WARN_ON_ONCE(vcpu->mmio_needed && !vcpu->mmio_is_write);
++               vcpu->mmio_needed =3D false;
+                r =3D 1;
+                inject_emulated_exception(vcpu);
+        } else if (vcpu->arch.pio.count) {
+
