@@ -2,91 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E4396BDAD0
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 22:22:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B4E66BDACC
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 22:22:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229887AbjCPVWw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 17:22:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44564 "EHLO
+        id S229708AbjCPVWX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 17:22:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229760AbjCPVWq (ORCPT
+        with ESMTP id S229516AbjCPVWV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 17:22:46 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9798DCD660
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 14:22:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679001720;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=nOiJMs6jGjsIK5mURzzO91u2urF7NRidfMKLLbVDxmI=;
-        b=Kep5berdbyn9mfhIyF8BV6BbgGQMJqq27LFgHrvANvkK52xEedWDNLqgtHZGbXrmjyZepZ
-        CB4A5R6suaklCLO/M/xHPZHgnh0o6xF0AsUFTqBlxd3gIpWjZD7hna4EZ7URS+OMPnTdAX
-        vg+7Ohg1bjzyM//fOHNwTu675ZSdSgo=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-444-U1vkmoP_NjKzPR5dpAkY1w-1; Thu, 16 Mar 2023 17:21:56 -0400
-X-MC-Unique: U1vkmoP_NjKzPR5dpAkY1w-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D4ABE185A791;
-        Thu, 16 Mar 2023 21:21:55 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.18])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 95B8C140EBF4;
-        Thu, 16 Mar 2023 21:21:53 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <4EDC79DC-0C32-40FD-9C35-164C7A077922@oracle.com>
-References: <4EDC79DC-0C32-40FD-9C35-164C7A077922@oracle.com> <20230316152618.711970-1-dhowells@redhat.com> <20230316152618.711970-28-dhowells@redhat.com> <3DFBF27C-A62B-4AFE-87FD-3DF53FC39E8E@hammerspace.com>
-To:     Chuck Lever III <chuck.lever@oracle.com>
-Cc:     dhowells@redhat.com, Trond Myklebust <trondmy@hammerspace.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Jeffrey Layton <jlayton@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        Anna Schumaker <anna@kernel.org>,
-        Linux NFS Mailing List <linux-nfs@vger.kernel.org>
-Subject: Re: [RFC PATCH 27/28] sunrpc: Use sendmsg(MSG_SPLICE_PAGES) rather then sendpage
+        Thu, 16 Mar 2023 17:22:21 -0400
+Received: from soltyk.jannau.net (soltyk.jannau.net [144.76.91.90])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20F00D58AB;
+        Thu, 16 Mar 2023 14:22:19 -0700 (PDT)
+Received: by soltyk.jannau.net (Postfix, from userid 1000)
+        id 449DE26F967; Thu, 16 Mar 2023 22:22:17 +0100 (CET)
+Date:   Thu, 16 Mar 2023 22:22:17 +0100
+From:   Janne Grunau <j@jannau.net>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Marc Zyngier <maz@kernel.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Sven Peter <sven@svenpeter.dev>, linux-pci@vger.kernel.org,
+        asahi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Daire McNamara <daire.mcnamara@microchip.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v2] PCI: apple: Set only available ports up
+Message-ID: <20230316212217.GI24656@jannau.net>
+References: <20230307-apple_pcie_disabled_ports-v2-1-c3bd1fd278a4@jannau.net>
+ <20230309163935.GA1140101@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <818649.1679001712.1@warthog.procyon.org.uk>
-Date:   Thu, 16 Mar 2023 21:21:52 +0000
-Message-ID: <818650.1679001712@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230309163935.GA1140101@bhelgaas>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Chuck Lever III <chuck.lever@oracle.com> wrote:
+On 2023-03-09 10:39:35 -0600, Bjorn Helgaas wrote:
+> [+cc Daire, Conor for apple/microchip use of ECAM .init() method]
+> 
+> On Thu, Mar 09, 2023 at 02:36:24PM +0100, Janne Grunau wrote:
+> > Fixes following warning inside of_irq_parse_raw() called from the common
+> > PCI device probe path.
+> > 
+> >   /soc/pcie@690000000/pci@1,0 interrupt-map failed, using interrupt-controller
+> >   WARNING: CPU: 4 PID: 252 at drivers/of/irq.c:279 of_irq_parse_raw+0x5fc/0x724
+> 
+> Based on this commit log, I assume this patch only fixes the warning,
+> and the system *works* just fine either way.  If that's the case, it's
+> debatable whether it meets the stable kernel criteria, although the
+> documented criteria are much stricter than what happens in practice.
 
-> Therefore, this kind of change needs to be accompanied by both
-> benchmark results and some field testing to convince me it won't
-> cause harm.
+Yes, it fixes only the warning and hides devices. The present devices 
+still work. I confused myself with the submitted M2 devicetree. It 
+missed information in the dt node of an disabled PCIe port breaking 
+probing of the pcie controller.
+ 
+I agree that the Cc: stable is not necessary. Please drop it or tell me 
+to resend the change.
+ 
+> >   ...
+> >   Call trace:
+> >    of_irq_parse_raw+0x5fc/0x724
+> >    of_irq_parse_and_map_pci+0x128/0x1d8
+> >    pci_assign_irq+0xc8/0x140
+> >    pci_device_probe+0x70/0x188
+> >    really_probe+0x178/0x418
+> >    __driver_probe_device+0x120/0x188
+> >    driver_probe_device+0x48/0x22c
+> >    __device_attach_driver+0x134/0x1d8
+> >    bus_for_each_drv+0x8c/0xd8
+> >    __device_attach+0xdc/0x1d0
+> >    device_attach+0x20/0x2c
+> >    pci_bus_add_device+0x5c/0xc0
+> >    pci_bus_add_devices+0x58/0x88
+> >    pci_host_probe+0x124/0x178
+> >    pci_host_common_probe+0x124/0x198 [pci_host_common]
+> >    apple_pcie_probe+0x108/0x16c [pcie_apple]
+> >    platform_probe+0xb4/0xdc
+> > 
+> > This became apparent after disabling unused PCIe ports in the Apple
+> > silicon device trees instead of deleting them.
+> > 
+> > Use for_each_available_child_of_node instead of for_each_child_of_node
+> > which takes the "status" property into account.
+> > 
+> > Link: https://lore.kernel.org/asahi/20230214-apple_dts_pcie_disable_unused-v1-0-5ea0d3ddcde3@jannau.net/
+> > Link: https://lore.kernel.org/asahi/1ea2107a-bb86-8c22-0bbc-82c453ab08ce@linaro.org/
+> > Fixes: 1e33888fbe44 ("PCI: apple: Add initial hardware bring-up")
+> > Cc: stable@vger.kernel.org
+> > Reviewed-by: Marc Zyngier <maz@kernel.org>
+> > Signed-off-by: Janne Grunau <j@jannau.net>
+> > ---
+> > Changes in v2:
+> > - rewritten commit message with more details and corrections
+> > - collected Marc's "Reviewed-by:"
+> > - Link to v1: https://lore.kernel.org/r/20230307-apple_pcie_disabled_ports-v1-1-b32ef91faf19@jannau.net
+> > ---
+> >  drivers/pci/controller/pcie-apple.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/pci/controller/pcie-apple.c b/drivers/pci/controller/pcie-apple.c
+> > index 66f37e403a09..f8670a032f7a 100644
+> > --- a/drivers/pci/controller/pcie-apple.c
+> > +++ b/drivers/pci/controller/pcie-apple.c
+> > @@ -783,7 +783,7 @@ static int apple_pcie_init(struct pci_config_window *cfg)
+> >  	cfg->priv = pcie;
+> >  	INIT_LIST_HEAD(&pcie->ports);
+> >  
+> > -	for_each_child_of_node(dev->of_node, of_port) {
+> > +	for_each_available_child_of_node(dev->of_node, of_port) {
+> >  		ret = apple_pcie_setup_port(pcie, of_port);
+> >  		if (ret) {
+> >  			dev_err(pcie->dev, "Port %pOF setup fail: %d\n", of_port, ret);
+> 
+> Is this change still needed after 6fffbc7ae137 ("PCI: Honor firmware's
+> device disabled status")?  This is a generic problem, and it would be
+> a lot nicer if we had a generic solution.  But I assume it *is* still
+> needed because Rob gave his Reviewed-by.
 
-Btw, what do you use to benchmark NFS performance?
+6fffbc7ae137 avoids the warning and hides the disabled ports as well. I 
+think we want to keep this change however in the hope that avoiding the 
+port setup of disbled ports saves energy.
 
-David
+Thanks
 
+Janne
