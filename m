@@ -2,93 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E56706BC7F9
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 08:58:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C08DE6BC7FB
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 08:58:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230116AbjCPH6g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 03:58:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32898 "EHLO
+        id S230308AbjCPH6y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 03:58:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229902AbjCPH6d (ORCPT
+        with ESMTP id S230317AbjCPH6q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 03:58:33 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC3862748D
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 00:58:14 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id h8so4049982ede.8
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 00:58:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678953492;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ulFb/DYLA52m+dsDozOaz91f1oeP6qPYcrJj3qnGhBY=;
-        b=fUEGIxxtRkWzFEhAT/+kr6Kn04ygSL1OuFvhmYCy4YBNSSiJ2qWP0q/NkyiPu3UuQs
-         b6mNdHaNdCR/FnO/aet54cHqh9Vd6eV6oc7podiVui3Us7Zrluqn+tHzDFkMMoQkMqKs
-         aDq80FtSi1Fq1kvAQodHUmHuf9FUmZjkoo8q4K0b0SVo1jRBJ6/Rz7udiQN/QSMxtCIz
-         rPin4y9vUC2gE5efCZRLbfNMYMN7VUWnXwyI2IbRjbnU0hZgWRYAByLvkbnypGyod/Nx
-         tYEuii6Ts2YA1TTZWMTx1feqgImlAfhG2MJFcWAYtis2Nqx0IIKsvNnu90rclVebtqNT
-         s35A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678953492;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ulFb/DYLA52m+dsDozOaz91f1oeP6qPYcrJj3qnGhBY=;
-        b=1IUgDtKk6ThtCFPkEsmIZnACZWYFKFgTv7uuX4zYhKCsx/CNVUrUPDUNKExUyqNtHn
-         P0CqFEbAyucRLfGn3yn2hMt9ONGZFK8Zl6or61zB60fgvSwpc2YrBx8lqe4Kuju1qAUE
-         EE8nLhB0RSi0hqNtJR2gCWh8OAHCZekkAkudQV2rWRzNve9DxLu2opzcCSF176Mo30H9
-         NYh7z6f6BNyiB3mcAlTXCsf/wTQ4NYfikc7pArWvU0HN5lnFw8kgBofIlSqwPwFDYzlM
-         hEL9nxodfsMommvgDmIcSqrGNw9M4qVzFDTihZfVgf5BxjafFYQbO8DD/NW1al3OdX4/
-         ipJA==
-X-Gm-Message-State: AO0yUKUxdanVxAeP5UtEiQSJEbs4QHPzg1/uVMDx513UhBcuRi+evVOt
-        sM4ij1+5dmG1OHYLq6TDCjpd1A==
-X-Google-Smtp-Source: AK7set/smxfxpR9RQmrpknDR72xvmSPWaoLuoz1rzftWFJy6oCRtwnAAhkFuf6aLXLHwGS57XXXF8A==
-X-Received: by 2002:a17:906:5f90:b0:92b:f019:a9ef with SMTP id a16-20020a1709065f9000b0092bf019a9efmr9542124eju.31.1678953491903;
-        Thu, 16 Mar 2023 00:58:11 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:9827:5f65:8269:a95f? ([2a02:810d:15c0:828:9827:5f65:8269:a95f])
-        by smtp.gmail.com with ESMTPSA id le20-20020a170906ae1400b00921c608b737sm3478981ejb.126.2023.03.16.00.58.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Mar 2023 00:58:11 -0700 (PDT)
-Message-ID: <988ca4d1-d421-84e5-f9e5-80b77a992467@linaro.org>
-Date:   Thu, 16 Mar 2023 08:58:10 +0100
+        Thu, 16 Mar 2023 03:58:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2503136C7;
+        Thu, 16 Mar 2023 00:58:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F14161F5F;
+        Thu, 16 Mar 2023 07:58:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE3B4C433EF;
+        Thu, 16 Mar 2023 07:58:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678953513;
+        bh=tGrF8FN40I9NDQVodLp3N/ltZWrhiNCUoyB/iQXBDA4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=VroVw6g++624JIm7pyOH3YQuUqRkPWDykMnHgtJMV3APU7t+1MSOLcv1ggdhKjDrr
+         dmgtaFuYed6kxr/vmeXV+JmqFYvrO0uQA8fUbESjuRBPHG9KpAT55cUR21HmJPoGJt
+         mEG0IdkKsp3iqrg0LqclLekheOlrgJZCL/AoRGNrCpWgOxLBpjarN9eidVsmKV6AQD
+         QWeB4sR1NMPQqDd5dXdrP+BoiJxh4BqPjMSq/FW5v6Xgdn9gc7MvHcia9Fi+CD57NO
+         QfJMx7bSFimKSR/6KGPTOZ+vXsjaZIJAGHzZkxRh1jmkCLq5FeNEPHYdrK+qRxJa8a
+         szzQMp0MW5Aag==
+Received: by mail-lj1-f178.google.com with SMTP id h3so705993lja.12;
+        Thu, 16 Mar 2023 00:58:33 -0700 (PDT)
+X-Gm-Message-State: AO0yUKXWQIicKFyNQpnE/WR9qGcPHu059kc/fHErETvQfj0vvABM2Zzl
+        UbAx2V9hdNPU7X7jb60geLjQM2tgeKx5thyQyms=
+X-Google-Smtp-Source: AK7set9HWnRC13hh7svP3IEx3yg4RQpwib6E3L6bEt3NtBvlvXa9G1Kmu3LQBzHb8Yb5SGYyKGG0EL+yWakKHCnRPfM=
+X-Received: by 2002:a05:651c:337:b0:295:d460:5a2d with SMTP id
+ b23-20020a05651c033700b00295d4605a2dmr1748275ljp.2.1678953511817; Thu, 16 Mar
+ 2023 00:58:31 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH net-next] dt-bindings: net: qcom,ipa: add SDX65 compatible
-Content-Language: en-US
-To:     Alex Elder <elder@linaro.org>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     andersson@kernel.org, konrad.dybcio@linaro.org, agross@kernel.org,
-        devicetree@vger.kernel.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        elder@kernel.org, netdev@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230314210628.1579816-1-elder@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230314210628.1579816-1-elder@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <ZBLLSmLbt2P4ZN6O@righiandr-XPS-13-7390>
+In-Reply-To: <ZBLLSmLbt2P4ZN6O@righiandr-XPS-13-7390>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Thu, 16 Mar 2023 08:58:20 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXHYqMdis99D3OaKf51eoCDW2+5NfcUEbF4Zrau4BcKgsQ@mail.gmail.com>
+Message-ID: <CAMj1kXHYqMdis99D3OaKf51eoCDW2+5NfcUEbF4Zrau4BcKgsQ@mail.gmail.com>
+Subject: Re: kernel 6.2 stuck at boot (efi_call_rts) on arm64
+To:     Andrea Righi <andrea.righi@canonical.com>
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Paolo Pisati <paolo.pisati@canonical.com>,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/03/2023 22:06, Alex Elder wrote:
-> Add support for SDX65, which uses IPA v5.0.
-> 
-> Signed-off-by: Alex Elder <elder@linaro.org>
-> ---
->  Documentation/devicetree/bindings/net/qcom,ipa.yaml | 1 +
+Hello Andrea,
 
+On Thu, 16 Mar 2023 at 08:54, Andrea Righi <andrea.righi@canonical.com> wrote:
+>
+> Hello,
+>
+> the latest v6.2.6 kernel fails to boot on some arm64 systems, the kernel
+> gets stuck and never completes the boot. On the console I see this:
+>
+> [   72.043484] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+> [   72.049571] rcu:     22-...0: (30 GPs behind) idle=b10c/1/0x4000000000000000 softirq=164/164 fqs=6443
+> [   72.058520]     (detected by 28, t=15005 jiffies, g=449, q=174 ncpus=32)
+> [   72.064949] Task dump for CPU 22:
+> [   72.068251] task:kworker/u64:5   state:R  running task     stack:0     pid:447   ppid:2      flags:0x0000000a
+> [   72.078156] Workqueue: efi_rts_wq efi_call_rts
+> [   72.082595] Call trace:
+> [   72.085029]  __switch_to+0xbc/0x100
+> [   72.088508]  0xffff80000fe83d4c
+>
+> After that, as a consequence, I start to get a lot of hung task timeout traces.
+>
+> I tried to bisect the problem and I found that the offending commit is
+> this one:
+>
+>  e7b813b32a42 ("efi: random: refresh non-volatile random seed when RNG is initialized")
+>
+> I've reverted this commit for now and everything works just fine, but I
+> was wondering if the problem could be caused by a lack of entropy on
+> these arm64 boxes or something else.
+>
+> Any suggestion? Let me know if you want me to do any specific test.
+>
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Thanks for the report.
 
-Best regards,
-Krzysztof
+This is most likely the EFI SetVariable() call going off into the
+weeds and never returning.
 
+Is this an Ampere Altra system by any chance? Do you see it on
+different types of hardware?
+
+Could you check whether SetVariable works on this system? E.g. by
+updating the EFI boot timeout (sudo efibootmgr -t <n>)?
