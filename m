@@ -2,224 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C0536BCA78
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 10:12:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A804A6BCA7D
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 10:13:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230247AbjCPJMv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 05:12:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51796 "EHLO
+        id S229562AbjCPJNC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 05:13:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbjCPJMr (ORCPT
+        with ESMTP id S230177AbjCPJM4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 05:12:47 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF0A01739
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 02:11:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678957908;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3eMeY9yQN+W3p1vHqt8vyruDxKEouKBf8XoW+xN+7GI=;
-        b=WTapVjnBtsf4iDkaOoK6qqtuhXhhxpgvaZXnVs/FKHfqq6gsge4yBK44zDUyr/rh7rOoOX
-        TH5oOCQCZlG+cGJf6Rr1n+xiACwcsZuxfNiNq2FQVzyuLBWdGwQXqYNnIlGq9rT5ualJbQ
-        EJ9Qs1ChdDUUJuNXZNUF+hFgwxbxeq8=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-173-fGMSWzLXM7W5jBpxZR-PTA-1; Thu, 16 Mar 2023 05:11:47 -0400
-X-MC-Unique: fGMSWzLXM7W5jBpxZR-PTA-1
-Received: by mail-wm1-f72.google.com with SMTP id n18-20020a05600c501200b003ed24740ea4so2331781wmr.3
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 02:11:46 -0700 (PDT)
+        Thu, 16 Mar 2023 05:12:56 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DB3E3E0B0
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 02:12:52 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id q16so836738wrw.2
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 02:12:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678957970;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:reply-to:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=4i/+IbvCXFdjz4/Efw9W5WipElhYaJU8p9Z3d1lAFC4=;
+        b=E0+h3yXwq5fvWGNhV8VYhU38LOM9BchpTo9sZX+1Iuk+GRUdIBSDcswSrjXKgIoSYu
+         zCE/Y0S1RE6d55RUxTPve2n/dbd1BtK3gMidj6WB4FqobDGXRUpCFik3BU0wf1BhdBoF
+         TcZYncP1u2G2xmQA8PViKF9VngzzIreFVQ7BmkuIHAgRGniPtChAIEmjnaQzrGUSL+ZS
+         YAaXCkT0dM3oLR9SiwBYlcAl0gl1Io5cA2fszdkKKUkjlLw2eMrkXG4n8/okb09QcL3V
+         s7p3INwrwAB8SK7CkXCD0FeyHBwS8JalWojsX+g/SYvQBxtH4nJitSxSF9bTMEoTSMIe
+         BaFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678957906;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3eMeY9yQN+W3p1vHqt8vyruDxKEouKBf8XoW+xN+7GI=;
-        b=qoOsT9TJJpCSIAjjND0ZM6ltNAlICu+87QKftU1PaEIp5qkG1q8fpL1Jm28sWu7Xzl
-         0wPIfGJxDMQkEIsN2xJTcqFLqdzGVh1fN38emk/+WkNadaknoa5T0To711poBfB6nJy0
-         IfKVzHifAgLh+9T2elF+qPTYcflaPcW5ylLrA+jEnxquj1ZZ1i6G6a2NVWb2dAgYFRPG
-         Pt5nhphCbaTxtrqbf7A65UeCdlXyBuBiK2OzfT3yWsqOp95g7t+ksZ8EOPbr8vsNgHc6
-         tbB645/zVwtEcqpy8c2HXTouiqVXI4GQMaxzZOCYBAmu+6F3bSmBIUYcMmqBX3bQYhvf
-         iKrg==
-X-Gm-Message-State: AO0yUKVix4NkB61ZN4q+YBwS14iMgM4Lh7rFd/yv3e1nGNsHyLYsTl11
-        pOJK1/dHdRbN28XmqMhpBNeO764zz89n16bZaZ0+m2SrcDV5VabWjE+4FTSd4kUtCB/yUo/hboi
-        Cmnz+McbjEq70YLHY4oRKDO7z
-X-Received: by 2002:adf:ffc4:0:b0:2ce:fd37:9392 with SMTP id x4-20020adfffc4000000b002cefd379392mr4100475wrs.45.1678957905879;
-        Thu, 16 Mar 2023 02:11:45 -0700 (PDT)
-X-Google-Smtp-Source: AK7set+X9DfQli3Fz2uLdFc+Z4TbWmOca2fwWfEubcClbX5Pl3I1a8rJk+NQbGboz0DJZWf/m4UJLQ==
-X-Received: by 2002:adf:ffc4:0:b0:2ce:fd37:9392 with SMTP id x4-20020adfffc4000000b002cefd379392mr4100461wrs.45.1678957905562;
-        Thu, 16 Mar 2023 02:11:45 -0700 (PDT)
-Received: from sgarzare-redhat (host-82-57-51-170.retail.telecomitalia.it. [82.57.51.170])
-        by smtp.gmail.com with ESMTPSA id c10-20020adfed8a000000b002cf8220cc75sm6685830wro.24.2023.03.16.02.11.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Mar 2023 02:11:45 -0700 (PDT)
-Date:   Thu, 16 Mar 2023 10:11:42 +0100
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     virtualization@lists.linux-foundation.org,
-        Andrey Zhadchenko <andrey.zhadchenko@virtuozzo.com>,
-        eperezma@redhat.com, netdev@vger.kernel.org, stefanha@redhat.com,
-        linux-kernel@vger.kernel.org,
-        "Michael S. Tsirkin" <mst@redhat.com>, kvm@vger.kernel.org
-Subject: Re: [PATCH v2 8/8] vdpa_sim: add support for user VA
-Message-ID: <20230316091142.p2ogqf3q2fsyha3l@sgarzare-redhat>
-References: <20230302113421.174582-1-sgarzare@redhat.com>
- <20230302113421.174582-9-sgarzare@redhat.com>
- <CACGkMEt1hBcRdh0oQYCs4meRs0mvDu9X9o-zK4aS87hrN+QPxA@mail.gmail.com>
+        d=1e100.net; s=20210112; t=1678957970;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:reply-to:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4i/+IbvCXFdjz4/Efw9W5WipElhYaJU8p9Z3d1lAFC4=;
+        b=En8bE3OB6u8N0yBdHS2CUreVhOyDkHK3ri633ZSuH0i1OqrbI5M+CDj+hrzBpzoSEC
+         Coyo26ZFHdbfw64R23NCLL25X+5+fiLhavmsh+IalbVjkKBZGV1NwNOPyqF7Xc4kTS4M
+         RbOJqq7lNj8mO1wCLQP/zdjX1yXtIDedyRuv2ArSnuDwGmlrE625nSWGfM1Wjz91LCM4
+         /KK7/fbOeQeNImmQF6cW/NNYHisljnorqEDAmubpWmCmYBvswtDlDpT7QkYn5xwIpEAw
+         JmLQw+WLIebh4l1pTb8gpxPQnhVraRUJ3jZyLUduZrYjrud58F25VnRgtppndvZ2IRm1
+         87tQ==
+X-Gm-Message-State: AO0yUKVvzNcl2SntsveyamXeN3VTgnJMzOTY6hc6IDBm38iFJFz20RcF
+        GJFiRZkQ1rr40Tx9dKl83nBfUA==
+X-Google-Smtp-Source: AK7set8jZaolZMq/mj8iZgCzDU5vopOEcP9e972h+2SL64Qr19+KS2HhPt/PZAi+SVgjykT7KAaHyA==
+X-Received: by 2002:adf:e48c:0:b0:2c3:dd60:d749 with SMTP id i12-20020adfe48c000000b002c3dd60d749mr4559291wrm.47.1678957970566;
+        Thu, 16 Mar 2023 02:12:50 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:982:cbb0:d33b:7c79:2a99:1fd4? ([2a01:e0a:982:cbb0:d33b:7c79:2a99:1fd4])
+        by smtp.gmail.com with ESMTPSA id t4-20020a0560001a4400b002be5bdbe40csm6717165wry.27.2023.03.16.02.12.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Mar 2023 02:12:50 -0700 (PDT)
+Message-ID: <3e2932d4-89ea-39e1-da46-e9fd2d889fdf@linaro.org>
+Date:   Thu, 16 Mar 2023 10:12:49 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CACGkMEt1hBcRdh0oQYCs4meRs0mvDu9X9o-zK4aS87hrN+QPxA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH v3 7/7] arm64: dts: qcom: sm8550: Use the correct BWMON
+ fallback compatible
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Marijn Suijten <marijn.suijten@somainline.org>
+References: <20230304-topic-ddr_bwmon-v3-0-77a050c2fbda@linaro.org>
+ <20230304-topic-ddr_bwmon-v3-7-77a050c2fbda@linaro.org>
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Organization: Linaro Developer Services
+In-Reply-To: <20230304-topic-ddr_bwmon-v3-7-77a050c2fbda@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 14, 2023 at 01:36:13PM +0800, Jason Wang wrote:
->On Thu, Mar 2, 2023 at 7:35 PM Stefano Garzarella <sgarzare@redhat.com> wrote:
->>
->> The new "use_va" module parameter (default: false) is used in
->> vdpa_alloc_device() to inform the vDPA framework that the device
->> supports VA.
->>
->> vringh is initialized to use VA only when "use_va" is true and the
->> user's mm has been bound. So, only when the bus supports user VA
->> (e.g. vhost-vdpa).
->>
->> vdpasim_mm_work_fn work is used to attach the kthread to the user
->> address space when the .bind_mm callback is invoked, and to detach
->> it when the .unbind_mm callback is invoked.
->>
->> Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
->> ---
->>
->> Notes:
->>     v2:
->>     - `use_va` set to true by default [Eugenio]
->>     - supported the new unbind_mm callback [Jason]
->>     - removed the unbind_mm call in vdpasim_do_reset() [Jason]
->>     - avoided to release the lock while call kthread_flush_work() since we
->>       are now using a mutex to protect the device state
->>
->>  drivers/vdpa/vdpa_sim/vdpa_sim.h |  1 +
->>  drivers/vdpa/vdpa_sim/vdpa_sim.c | 98 +++++++++++++++++++++++++++++++-
->>  2 files changed, 97 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.h b/drivers/vdpa/vdpa_sim/vdpa_sim.h
->> index 4774292fba8c..3a42887d05d9 100644
->> --- a/drivers/vdpa/vdpa_sim/vdpa_sim.h
->> +++ b/drivers/vdpa/vdpa_sim/vdpa_sim.h
->> @@ -59,6 +59,7 @@ struct vdpasim {
->>         struct vdpasim_virtqueue *vqs;
->>         struct kthread_worker *worker;
->>         struct kthread_work work;
->> +       struct mm_struct *mm_bound;
->>         struct vdpasim_dev_attr dev_attr;
->>         /* mutex to synchronize virtqueue state */
->>         struct mutex mutex;
->> diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.c b/drivers/vdpa/vdpa_sim/vdpa_sim.c
->> index a28103a67ae7..eda26bc33df5 100644
->> --- a/drivers/vdpa/vdpa_sim/vdpa_sim.c
->> +++ b/drivers/vdpa/vdpa_sim/vdpa_sim.c
->> @@ -35,10 +35,77 @@ module_param(max_iotlb_entries, int, 0444);
->>  MODULE_PARM_DESC(max_iotlb_entries,
->>                  "Maximum number of iotlb entries for each address space. 0 means unlimited. (default: 2048)");
->>
->> +static bool use_va = true;
->> +module_param(use_va, bool, 0444);
->> +MODULE_PARM_DESC(use_va, "Enable/disable the device's ability to use VA");
->> +
->>  #define VDPASIM_QUEUE_ALIGN PAGE_SIZE
->>  #define VDPASIM_QUEUE_MAX 256
->>  #define VDPASIM_VENDOR_ID 0
->>
->> +struct vdpasim_mm_work {
->> +       struct kthread_work work;
->> +       struct mm_struct *mm;
->> +       bool bind;
->> +       int ret;
->> +};
->> +
->> +static void vdpasim_mm_work_fn(struct kthread_work *work)
->> +{
->> +       struct vdpasim_mm_work *mm_work =
->> +               container_of(work, struct vdpasim_mm_work, work);
->> +
->> +       mm_work->ret = 0;
->> +
->> +       if (mm_work->bind) {
->> +               kthread_use_mm(mm_work->mm);
->> +               //TODO: should we attach the cgroup of the mm owner?
->> +       } else {
->> +               kthread_unuse_mm(mm_work->mm);
->> +       }
->> +}
->> +
->> +static void vdpasim_worker_queue_mm(struct vdpasim *vdpasim,
->> +                                   struct vdpasim_mm_work *mm_work)
->> +{
->
->Nit: we need to tweak the name as it does flush besides queuing the work.
+On 15/03/2023 15:11, Konrad Dybcio wrote:
+> Use the correct fallback compatible for the BWMONv4 with merged global and
+> monitor register spaces.
+> 
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+>   arch/arm64/boot/dts/qcom/sm8550.dtsi | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sm8550.dtsi b/arch/arm64/boot/dts/qcom/sm8550.dtsi
+> index 25f51245fe9b..b5488c6822bd 100644
+> --- a/arch/arm64/boot/dts/qcom/sm8550.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sm8550.dtsi
+> @@ -3391,7 +3391,7 @@ opp-8 {
+>   		};
+>   
+>   		pmu@240b6400 {
+> -			compatible = "qcom,sm8550-cpu-bwmon", "qcom,msm8998-bwmon";
+> +			compatible = "qcom,sm8550-cpu-bwmon", "qcom,sdm845-bwmon";
+>   			reg = <0 0x240b6400 0 0x600>;
+>   			interrupts = <GIC_SPI 581 IRQ_TYPE_LEVEL_HIGH>;
+>   			interconnects = <&gem_noc MASTER_APPSS_PROC 3 &gem_noc SLAVE_LLCC 3>;
+> 
 
-Yep, or split in 2 functions.
+I can't test right now, but:
 
->
->> +       struct kthread_work *work = &mm_work->work;
->> +
->> +       kthread_init_work(work, vdpasim_mm_work_fn);
->> +       kthread_queue_work(vdpasim->worker, work);
->> +
->> +       kthread_flush_work(work);
->> +}
->> +
->> +static int vdpasim_worker_bind_mm(struct vdpasim *vdpasim,
->> +                                 struct mm_struct *new_mm)
->> +{
->> +       struct vdpasim_mm_work mm_work;
->> +
->> +       mm_work.mm = new_mm;
->> +       mm_work.bind = true;
->> +
->> +       vdpasim_worker_queue_mm(vdpasim, &mm_work);
->> +
->> +       if (!mm_work.ret)
->> +               vdpasim->mm_bound = new_mm;
->> +
->> +       return mm_work.ret;
->> +}
->> +
->> +static void vdpasim_worker_unbind_mm(struct vdpasim *vdpasim)
->> +{
->> +       struct vdpasim_mm_work mm_work;
->> +
->> +       if (!vdpasim->mm_bound)
->> +               return;
->> +
->> +       mm_work.mm = vdpasim->mm_bound;
->> +       mm_work.bind = false;
->
->Can we simply use mm_work.mm = NULL for unbinding?
->
->> +
->> +       vdpasim_worker_queue_mm(vdpasim, &mm_work);
->> +
->> +       vdpasim->mm_bound = NULL;
->
->And change the mm_bound in the worker?
-
-Yep, I need to put `vdpasim` in struct vdpasim_mm_work.
-
-I'll do in the next version.
-
-Thanks,
-Stefano
-
+Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
