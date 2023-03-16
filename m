@@ -2,58 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FC496BD5A1
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 17:31:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AC376BD5A5
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 17:32:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230169AbjCPQbd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 12:31:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37262 "EHLO
+        id S230103AbjCPQcH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 12:32:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229690AbjCPQbb (ORCPT
+        with ESMTP id S229597AbjCPQcF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 12:31:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3235E20DE
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 09:31:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 16 Mar 2023 12:32:05 -0400
+Received: from proxima.lasnet.de (proxima.lasnet.de [IPv6:2a01:4f8:121:31eb:3::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC95134323;
+        Thu, 16 Mar 2023 09:32:02 -0700 (PDT)
+Received: from [192.168.2.51] (p5dd0da05.dip0.t-ipconnect.de [93.208.218.5])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0860E620A3
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 16:31:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9ECBCC433D2;
-        Thu, 16 Mar 2023 16:31:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678984279;
-        bh=pirosOyYPxb7gdRU1NPpfNvNnz15Z33y9681TnHTFlM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=l6mv/K/P87rQtBc+pauTpDhxdURklyAnTWHyzHqnWtLN8gyTfdngQVD+JY+UBJjiZ
-         McKhk7fRcBG7iIkrlx0AMU3r28X13AkoeHcBwYkZaJJ3Bz58Ayd47bTzB9rDHAqmbz
-         tbwmNtXZ5O0KHEDzJoeHLtKABDVXKF1uHixkCIWs9nUtiPbk5lvrYUvhPECpSJv8j/
-         5tC4OKR0FyM0aEBVsek45kzbTfTwgQl5jPm+8q6DX7oxYzdS1EKTSPRIZY/oIa19FV
-         8jdU2xQk3iRybalVS6EShGE4AdWS1c9Y0KbJXfDF8sbYRZVPPe/9+EjdB+28+kA4re
-         QR9w/0HcH1DjA==
-Date:   Thu, 16 Mar 2023 16:31:14 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Ravulapati Vishnu Vardhan Rao <quic_visr@quicinc.com>
-Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Banajit Goswami <bgoswami@quicinc.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        "moderated list:QCOM AUDIO (ASoC) DRIVERS" 
-        <alsa-devel@alsa-project.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] ASoC: codecs:rx-macro: Fixing uninitialized variables.
-Message-ID: <e3165099-96c9-4326-af73-6020f0276f7b@sirena.org.uk>
-References: <20230316162249.17044-1-quic_visr@quicinc.com>
+        (Authenticated sender: stefan@datenfreihafen.org)
+        by proxima.lasnet.de (Postfix) with ESMTPSA id 2E736C0221;
+        Thu, 16 Mar 2023 17:32:00 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=datenfreihafen.org;
+        s=2021; t=1678984320;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=cGWjnOpHWIVV1/IYEFbJX9ceWb2uuKW/Q/MSwoElVOA=;
+        b=SZlvYtkKHarib2iwU34+kGLYqEJE46tTKRi/LVbTkO7bfW5ZysLdngXepNqS7L7PTDH1ik
+        XDMWTndQCRQAdgBbHG7iOnCxl7u3RRFXwDPnGtylowV1bDOUE3lTX5Nalx9/6zIgVck75p
+        aRmomzFRh7lA5Cx7CRO+Mx2d2m0fXdT3jwI5GSYRSuy0is+00M629Gs1/Fr3scglbZJudu
+        5KEgkCN5iqAuH5BdI0+7J3QIydFa2nyeear8giTBhnlwcw/0jC6jhpuDMUh4/cL0EtEDAy
+        Oicu2r0MUhqUsQUUGJXTeWeTZvkTM4GEdq6m3l1XB1I04gdTmmDf1diV/nHIqw==
+Message-ID: <daee2ba3-effc-67d6-71f7-e99797f93aeb@datenfreihafen.org>
+Date:   Thu, 16 Mar 2023 17:31:59 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="+5Ml4SivzgiYppgJ"
-Content-Disposition: inline
-In-Reply-To: <20230316162249.17044-1-quic_visr@quicinc.com>
-X-Cookie: ... I have read the INSTRUCTIONS ...
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH next] ca8210: Fix unsigned mac_len comparison with zero in
+ ca8210_skb_tx()
+Content-Language: en-US
+To:     Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+Cc:     error27@gmail.com, Alexander Aring <alex.aring@gmail.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Harry Morris <harrymorris12@gmail.com>,
+        linux-wpan@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230306191824.4115839-1-harshit.m.mogalapalli@oracle.com>
+From:   Stefan Schmidt <stefan@datenfreihafen.org>
+In-Reply-To: <20230306191824.4115839-1-harshit.m.mogalapalli@oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,39 +67,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello Harshit.
 
---+5Ml4SivzgiYppgJ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 06.03.23 20:18, Harshit Mogalapalli wrote:
+> mac_len is of type unsigned, which can never be less than zero.
+> 
+> 	mac_len = ieee802154_hdr_peek_addrs(skb, &header);
+> 	if (mac_len < 0)
+> 		return mac_len;
+> 
+> Change this to type int as ieee802154_hdr_peek_addrs() can return negative
+> integers, this is found by static analysis with smatch.
+> 
+> Fixes: ded845a781a5 ("ieee802154: Add CA8210 IEEE 802.15.4 device driver")
+> Signed-off-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+> ---
+> Only compile tested.
+> ---
+>   drivers/net/ieee802154/ca8210.c | 3 +--
+>   1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/drivers/net/ieee802154/ca8210.c b/drivers/net/ieee802154/ca8210.c
+> index 0b0c6c0764fe..d0b5129439ed 100644
+> --- a/drivers/net/ieee802154/ca8210.c
+> +++ b/drivers/net/ieee802154/ca8210.c
+> @@ -1902,10 +1902,9 @@ static int ca8210_skb_tx(
+>   	struct ca8210_priv  *priv
+>   )
+>   {
+> -	int status;
+>   	struct ieee802154_hdr header = { };
+>   	struct secspec secspec;
+> -	unsigned int mac_len;
+> +	int mac_len, status;
+>   
+>   	dev_dbg(&priv->spi->dev, "%s called\n", __func__);
+>   
 
-On Thu, Mar 16, 2023 at 09:52:49PM +0530, Ravulapati Vishnu Vardhan Rao wro=
-te:
+This patch has been applied to the wpan tree and will be
+part of the next pull request to net. Thanks!
 
->  {
->  	u16 hd2_scale_reg, hd2_enable_reg;
-> +	hd2_scale_reg =3D 0;
-> +	hd2_enable_reg =3D 0;
-> =20
->  	switch (interp_idx) {
->  	case INTERP_HPHL:
+I took the liberty and changed the fixes tag to the change that 
+introduced the resaon for the mismatch recently. As suggested by Simon.
 
-This is just shutting the warning up, it's not like 0 is ever a sensible
-value to use there.
-
---+5Ml4SivzgiYppgJ
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQTRFEACgkQJNaLcl1U
-h9BQCgf9EcoNSrCHri4SWhSYpoQdenmY3y0ta3Qssx4xLq5Qzeq/jtkdcXRjhuXh
-nA0uDYje3v5CDwZi7Hd6rew/iuryk4wDz2tHXxGDIcQ3e4xrRDrTKtj5VcyH0Dm/
-s0XtLWw8z0KHpFAlKSAxf90h0/oAOblT3Q+BtQ6+2V62gcPSCdfckiVii7TJPN8V
-O+vqfM7XRUy4twlstCuxnUqJe+3A5r38L8RQDpfIRhiSJOeIHnmxBlG3oswxWryr
-Huyio2s1fC1MU7iigW6bO9SEMEgZFiMA5Zqqc0cPinseQ8QzpRIrPN++Y7Mca0Bq
-VfzTC+k1FiasIBVh3/B64k5RFWdppA==
-=Jnv4
------END PGP SIGNATURE-----
-
---+5Ml4SivzgiYppgJ--
+regards
+Stefan Schmidt
