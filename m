@@ -2,235 +2,346 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAD8E6BC60C
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 07:19:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5AE86BC60E
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 07:20:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229678AbjCPGTc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 02:19:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58332 "EHLO
+        id S229616AbjCPGU3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 02:20:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbjCPGT3 (ORCPT
+        with ESMTP id S229454AbjCPGU1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 02:19:29 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5D2211167;
-        Wed, 15 Mar 2023 23:19:23 -0700 (PDT)
-X-UUID: 7d15b84ec3c211ed91027fb02e0f1d65-20230316
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=MIME-Version:Content-Transfer-Encoding:Content-ID:Content-Type:In-Reply-To:References:Message-ID:Date:Subject:CC:To:From; bh=LXS9e0JQ08DSTJIOGCsZYj55CpDVowa30+10lg1reIE=;
-        b=XKElfdPSgHM04PiGgJ2tC1bqIFpwXYAmVTv5sEDmniG5seyPCuwsoKiae98+SXuAOMMwT7sH81go/dYpqzRpNU4oMwf+/SF6ZUsDPpZu0ha6PcU5dt3lg1BjrM3MnyLZKMN+Rlm/9n/JOgpemLfG/z7dNzNumauoPv/XfNQg+f4=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.21,REQID:8aa4aff8-3707-4f34-b170-318172e9aca3,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-        release,TS:0
-X-CID-META: VersionHash:83295aa,CLOUDID:f6a98a28-564d-42d9-9875-7c868ee415ec,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
-X-CID-BVR: 0,NGT
-X-CID-BAS: 0,NGT,0,_
-X-UUID: 7d15b84ec3c211ed91027fb02e0f1d65-20230316
-Received: from mtkmbs13n2.mediatek.inc [(172.21.101.108)] by mailgw01.mediatek.com
-        (envelope-from <nancy.lin@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 953079201; Thu, 16 Mar 2023 14:19:20 +0800
-Received: from mtkmbs10n2.mediatek.inc (172.21.101.183) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.25; Thu, 16 Mar 2023 14:19:19 +0800
-Received: from APC01-SG2-obe.outbound.protection.outlook.com (172.21.101.239)
- by mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server id
- 15.2.1118.25 via Frontend Transport; Thu, 16 Mar 2023 14:19:19 +0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=L1rfqlovsF3B2WVGP4HNX99zN1JtTr8X+owVXFhNlx/W7aPphAAgg3LH9af54et+cradsYVK68wkdIy6xWV749eD6d/517hPbx+lGnyYnAhnFaANO9LDjfVslmE4qHCXV2+lTMC8Rw68eYRoq1YnNO1gAsUkWTOi59mGkoJztvtaqL77brMTHE+949sDHFdv1p0h46g0g7ubewirvyBHxJpuj7F7LiVkog+tqzgQi+by1slmqqaM6KyFGtsAHH7y85z3M7IW+dAAntKjEqMBwZVIPoA+JELaClPsqCUI+Ye3RxETMyPbvYnzRHrMKBUgkIi/ThmNaiLGjd0i+LZqAg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=LXS9e0JQ08DSTJIOGCsZYj55CpDVowa30+10lg1reIE=;
- b=SoBQpZAn1/n6H9dal3slJ1Dsy21AuQWLgDxMDxjcYxm5mEz5D7rxMSdxn5xUU60Pr0zTaVoEZM6CUx8by2jdSjpZ69yTmsoNqGjGeZk2tlm4Fpzl7PavV7D8gVdzueJDqL3LH9igvIXSnOtzUiI+U9BV13raTJ/9VT4Tz//xVWIuIpgO0TJhpLKiHAUBLtNXkCeJ8jdIoy1Sbdf/E+5QzFOD21b8MKiMKa0J8u9K035csT/HpMi8aVt/pj/GeUhhNj9scebn4Pir65tE6awiudUdcGqApj0l0X82Es2+faslWVQ0Bt6kyjmiSwmc7a48RTcEP/cf+F5/DTo06a4gbg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=mediatek.com; dmarc=pass action=none header.from=mediatek.com;
- dkim=pass header.d=mediatek.com; arc=none
+        Thu, 16 Mar 2023 02:20:27 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0895574DF1
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 23:20:25 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id qe8-20020a17090b4f8800b0023f07253a2cso551973pjb.3
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 23:20:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mediateko365.onmicrosoft.com; s=selector2-mediateko365-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=LXS9e0JQ08DSTJIOGCsZYj55CpDVowa30+10lg1reIE=;
- b=mP05UjI/wwMHCYVy16DlbIutnMU+Iw+M9v+pW6ybBdvEtA/FLZBGbW3ofFLxhmSoaE5+r1Au0TaG3OeolPgwq6EEQnzhDgK6QuO3979eLI7u0I5BWlv0NjaTFftI0dC/HhTmTplaKifj0dFzIrOCtqxA5v7laIvbXUCDJfkqqMg=
-Received: from KL1PR03MB5175.apcprd03.prod.outlook.com (2603:1096:820:8::11)
- by TYZPR03MB5566.apcprd03.prod.outlook.com (2603:1096:400:53::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.30; Thu, 16 Mar
- 2023 06:19:17 +0000
-Received: from KL1PR03MB5175.apcprd03.prod.outlook.com
- ([fe80::dd54:60c1:df32:bc65]) by KL1PR03MB5175.apcprd03.prod.outlook.com
- ([fe80::dd54:60c1:df32:bc65%4]) with mapi id 15.20.6178.031; Thu, 16 Mar 2023
- 06:19:16 +0000
-From:   =?utf-8?B?TmFuY3kgTGluICjmnpfmrKPonqIp?= <Nancy.Lin@mediatek.com>
-To:     "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "krzysztof.kozlowski@linaro.org" <krzysztof.kozlowski@linaro.org>,
-        "chunkuang.hu@kernel.org" <chunkuang.hu@kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        =?utf-8?B?U2luZ28gQ2hhbmcgKOW8teiIiOWciyk=?= 
-        <Singo.Chang@mediatek.com>,
-        "nathan@kernel.org" <nathan@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "daniel@ffwll.ch" <daniel@ffwll.ch>,
-        =?utf-8?B?Q0sgSHUgKOiDoeS/iuWFiSk=?= <ck.hu@mediatek.com>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        Project_Global_Chrome_Upstream_Group 
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "clang-built-linux@googlegroups.com" 
-        <clang-built-linux@googlegroups.com>,
-        "ndesaulniers@google.com" <ndesaulniers@google.com>
-Subject: Re: [PATCH v29 1/7] dt-bindings: mediatek: add ethdr definition for
- mt8195
-Thread-Topic: [PATCH v29 1/7] dt-bindings: mediatek: add ethdr definition for
- mt8195
-Thread-Index: AQHZGcrXQb/1V2Icz0ST2hH4Pb2de677rZiAgAA66wCAAYJcAA==
-Date:   Thu, 16 Mar 2023 06:19:15 +0000
-Message-ID: <1d65e8b2de708db18b5f7a0faaa53834e1002d9f.camel@mediatek.com>
-References: <20221227081011.6426-1-nancy.lin@mediatek.com>
-         <20221227081011.6426-2-nancy.lin@mediatek.com>
-         <4aff6a7a3b606f26ec793192d9c75774276935e0.camel@mediatek.com>
-         <2700bd6c-f00d-fa99-b730-2fcdf89089fa@linaro.org>
-In-Reply-To: <2700bd6c-f00d-fa99-b730-2fcdf89089fa@linaro.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=mediatek.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: KL1PR03MB5175:EE_|TYZPR03MB5566:EE_
-x-ms-office365-filtering-correlation-id: ec3c1c21-6084-4cb5-b0ca-08db25e65e31
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: kH6xdwiGc55gwjFyetwUM4wHvnrCZ4JWFyDqxZsaN8iaee5HMMr5BtU8a+tYWyvIKYRmmqa9ZLIznKEgOj5ISwtgRhIYQg3Z1eWM0svXdhlIJMqjRPKki2mS9cD5k0GUH6lp3Kvcn9mCW5oGrr0Zm50qJSdLXuodvJL2jB1tWWojvxrP09dgKI0pFxt6NprZe/f+LrR2Wr5/haHPraPYkfg3SnliiTlPMxWIKi55sBhFIdkOK6VZbxIuIOqwVbF2QyFZJmvWOvsX1dkYNfiEaziKLtJ4scqUn4ncqNT8mmF+PhGc5YPBV3lglhuC8PBMNQOu/p2sM0V4r4tZTv02P8zvPtPiDqjaHRovxUKumXhuNhX0QeC61Gw3lSlsGto8sM/EKL9UaTmoRtkYV+9qXulUbyQqQE+PVsrOZvrr+njpRVOfnpc3W6Pl1C8YhcHj+wUZonBxODLzlEQqVouxu6mn/UWdGpSYd0spm+VKiAKZ2hvUq0TeRVxm0rQsgn2hKb5Rp1oFdReqAYx0jxlWZZ94P0YJGNDqjXwbMJHNSos6FCHz8bSCdOAjeM2mqx85arjhUdXHCfnFldPmtvmuPlI9fZc7iv4/KuRKgF2KQGpuRXm7XE+tpJtGV15EQ6NsCl0VigK/g0dyi8OMID6J5FzrY7nXYJYW/eMxTIRSM42RaHlqGxGLOoAYsy0ylNuGpn7BwPlq9z+TpUjc9pmB4w==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:KL1PR03MB5175.apcprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(136003)(346002)(366004)(39860400002)(396003)(451199018)(38070700005)(86362001)(85182001)(36756003)(38100700002)(122000001)(2906002)(7416002)(5660300002)(41300700001)(8936002)(4326008)(2616005)(26005)(6506007)(186003)(53546011)(6512007)(83380400001)(316002)(54906003)(110136005)(8676002)(66946007)(66446008)(66476007)(64756008)(66556008)(91956017)(76116006)(6486002)(478600001)(71200400001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?SnhxM1BCdzdSTlFoNlVvNXNBVTdJaVdSUmpXdzBRRDh3OVhYZFluaEZ4R051?=
- =?utf-8?B?RVZUVHRQQjhvOG1MS2hnZ1M4VWFqUGVoQXoyMmhIZk5xVFJFcEY0Q2ROeUtv?=
- =?utf-8?B?VUFBRmFMSzErZjlTVTJiUVJaald4RzJKNlVxOTRLeFVHNDRUSWljNTlTOGxw?=
- =?utf-8?B?aWZPdkYxVWNBdjAvRWF5cTBtT0ZKLzRUYzlnMXg3YkFOVWVEdForYlVya0JJ?=
- =?utf-8?B?ckYyRFoxL28rMm4vUE1wSkcxdnorM20xMTlLVitIOU9hZVZFWThKVE01Yzho?=
- =?utf-8?B?bEVkdmF3d01yeHVZUStLR0VsL3U0empScEsyTm5qc1U3ck9lS0NCaU9Lek1s?=
- =?utf-8?B?dmNXWUV5SzRickZndUE2SlZjdjd4eFZFTXFrMUl2Q3NBS01adEwrWHowcUxK?=
- =?utf-8?B?b29MV0cxbkt5ZC9OODl5UHB6bWQxWWFwaXVaa2htcHVzS21XWHFkL3JoQXNR?=
- =?utf-8?B?dkJIUVFlZWJpYWhNNmpyNmxDMEFuRG9iZnZoMUFXNUdaRG1reS9uVjJoenZN?=
- =?utf-8?B?TFcyc0VCcmtFNG85L1ZwdWlRMmFQSHYzZm5OZXN4cUhxQjkwUk9kTW5DVFd6?=
- =?utf-8?B?bVZjMThMbGxYS3ZmbFVWTDhjN2I1Z0Q3Rzg1SzRkNVVqRU00TE5NZWFPcTlH?=
- =?utf-8?B?RVBLNmp4QXppbHJuOTNHMXlqVFNQdk93b2ZuUTYyb3lacitWVmt5RE9GWk5U?=
- =?utf-8?B?WmJ0UlZaQ3BPUnlmSmNjaDRXREhXbDJLNmFzNHNTdHZhQk5QMnpjUDJQTTlU?=
- =?utf-8?B?KzhOaG1VcitmcU9nRUZra05rVnd1WTdoaU92ejJyZmFJYXBtWUtrYmV1UG5B?=
- =?utf-8?B?N2pGWGN5cTJEQWpMV0MreG1QUUk2ZkJIYTNiK1BGaHhGZVBVZ0pvdFZndE56?=
- =?utf-8?B?aHF6cFh1U25CdVg3ejU2WnR5cC81TTNaSnNteU1mTG1HY1ZsQm84U294R1N4?=
- =?utf-8?B?L2lBRWpGdWd6VmxxMklHc3hUMmZQVDVZakZBanFFeHlpeHpIYXFPVXRsUGtY?=
- =?utf-8?B?eVNGWWtTaC9CNlVrTGZ3YnF0R2lpb3pRMkNkekRZWm5nM09TUHl2QU5wT1Nq?=
- =?utf-8?B?NXRaMzJKMVZGNlM0bXJBVm5mOFc1UisrOVBwSkNBT3JnRUZreEhYS096bnM3?=
- =?utf-8?B?aTB5OVM5TE14MkdCdHZXa3N1a0lVUkNZc2xJUHpSQ2xmS3R4dHpnLzg5aDN2?=
- =?utf-8?B?RTJtN2h3MEwrTGJLYkwxMGh2Tk1HNWQvUGFPcEdGbGQ2MWtxNEFVR1FUdUhV?=
- =?utf-8?B?Z2dMc0krWVV6bWFyNjFRUlhoUnpEY3N4NkRGM0ZhYmhqZkJSVVVEUlhMOUpG?=
- =?utf-8?B?WFduYlFxRUxTYjdXUmFlMHY3YnVnVEgwbVpCN1lDQldWb3Y0RWNHb0RZNk5o?=
- =?utf-8?B?MGJ3djdXUjI5TWxUaUYrZklSdGpNOUl5Z1dmK2dLVGJMUUpsMjdGSzFxWkIy?=
- =?utf-8?B?bjBuS0xrMk93R1ZWb2JUMGlyNTdlaGE3Y09QNkNoK2YxYWIwelRYSGVIMzhP?=
- =?utf-8?B?aTYzbDlGeEx3N2JiQ1I5SFVNd0p6T004Mm5WMzVCakkyemNCZjN2b2ZyZy8r?=
- =?utf-8?B?VGk1V2swUGR0djJGdy9CTjFmckExT25icEpoU1VzYWR5bm1ZVlZzRWRMWWtz?=
- =?utf-8?B?QUFvNG9oZjQ0UjhJd0NFYkZDRFdxaFJQZWpzUEQ0SXJsUi9nV0NuNmIxd0JG?=
- =?utf-8?B?Q0FaM1IxeFFoejF1WDc1ajZIang1Zzh0SllMTGZSYnVNTFVOREhKbW9zaVRN?=
- =?utf-8?B?eG5aRlJzYWNRZFQ1WDMxMXBvZVdPZDlJN2VLLzBQcEVvRFZIVWc0aUN2TFVD?=
- =?utf-8?B?cTNtOGk2bVNnaVFsQTNJWi9BRXFscHZLaHdvWHByOW44cDdhMDY0RGwyejFu?=
- =?utf-8?B?a2FDcUsvaXIzVG1leTFCSVBIRWpROG05dmkyRE1YcURFa2VMdEtUaXFvN1ho?=
- =?utf-8?B?ZFc5U01NWmVSMkFMSVc5eVBkQ0NqQkdoa1ZZZmZLOUpaYVdjdTRsUHBUMVZn?=
- =?utf-8?B?dVhxemVPT09JdGZJM1FEbkZ5RElOVDlrb1VwanZBSFo5cjZVcmRtYWNOaWJS?=
- =?utf-8?B?S2xkWWhObmpqVStYS3laaFl0MDBlMERvbXh3VVpTa29qV2JMeXhmMVpzenJK?=
- =?utf-8?B?THJoSkhKbEphaEJEOTdMNHRSWFJaTURKZVc5Sy90UGdSOUtOOTkxcGJTOU40?=
- =?utf-8?B?blE9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <3A0969E01705314991BAA273848ED353@apcprd03.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        d=efficientek-com.20210112.gappssmtp.com; s=20210112; t=1678947625;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4wPR3q9bhQ1Pb4cLYVjM+WMJHH4UrfvHRDpmSQYh45Q=;
+        b=ymrJCkke34gatJF/WH2IEEsOT5dLOKyOnvtWiWzV+wHUrPC5FQvAXkNGI5hq5cXPuQ
+         0Vz782hbeFiIJBezDDH12SLc3jeuiQmldXWW8DH3oScWP+AdyMvKTEqxeBN6lxnRzjjj
+         YQSkhmxi+5qDkFvzGGAErh5yrF4PLvOrdOSDN4qREYRw1Ee2iA2r2jXfw4q7iEYU1Dtn
+         yUokH7W/tOybOKAYTAHWz6vAOp087Txz++i6Pbj9yFaIKegtSmzZtsrphHgv6UXX/G0m
+         3jkFpSuc1TVEmfW96U/RwZdRgKRdWVHlBjVbQ6l6d+TvgQZNyzn6YrX9cHDl6LQDks/X
+         BwIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678947625;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4wPR3q9bhQ1Pb4cLYVjM+WMJHH4UrfvHRDpmSQYh45Q=;
+        b=lb2lC3ouyxC0qDQl5pFoHrRorTdM/5gvi2ibR4umcAdgmaxfBNhRh4RaQTg103oPMw
+         H7yWF0irIrwiRd+GUcVyRvgHXicbQ8oQQZgdWCqq8jr5vFVYjJwtpgTQVAEU+MQczWRT
+         kAaWA8vt7JHpaTEU4i8U9xYrWVQWBKGSrxGnLWfryAI/w2bCh69ci9JfrPMCA2c7QbFf
+         ByLtJ2GQkOzVAvO8TG/qd3MB4ovdeDaDWk9eET52dHTkyp1G/8Y/tshNh/ClXKUGVukP
+         bXf/95ltTwLziyezR5oqzJNANgBdObwlRCjQt6t2V6BcbkJmCCxBeJwS+u3NqMRLbwaO
+         kOkA==
+X-Gm-Message-State: AO0yUKV60RAlwGNf1CiNmt9uf1Lrhp3BE7qPFpUNdEkyW6KLJdkT6uYq
+        ES7SDoknUj+yaGEhS6B3R+RflA==
+X-Google-Smtp-Source: AK7set88RbQAZgVcArFixTGK4YC3GudAAxJKDA1JIEFoZI7mAR8cFVq1mva99DmtADR8ZlR37cOLCg==
+X-Received: by 2002:a17:902:e38c:b0:19d:19fb:55ec with SMTP id g12-20020a170902e38c00b0019d19fb55ecmr1583739ple.6.1678947625286;
+        Wed, 15 Mar 2023 23:20:25 -0700 (PDT)
+Received: from [10.41.0.90] ([199.254.238.56])
+        by smtp.gmail.com with ESMTPSA id i7-20020a170902c94700b00195f242d0a0sm4622211pla.194.2023.03.15.23.20.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Mar 2023 23:20:24 -0700 (PDT)
+Message-ID: <b0e04468-f313-047d-5bde-785bb826599b@efficientek.com>
+Date:   Thu, 16 Mar 2023 06:20:19 +0000
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: KL1PR03MB5175.apcprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ec3c1c21-6084-4cb5-b0ca-08db25e65e31
-X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Mar 2023 06:19:15.5452
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: a7687ede-7a6b-4ef6-bace-642f677fbe31
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: v1zsFrXj1YIF5XS0RtDPJg8o5hORGycwcBoxkT7TbHd6EpD7Gk6slZ6FHNWwxUf9/0PgvatBAQWPaxsSqGjJ0w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR03MB5566
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [RFC PATCH v2] hostfs: handle idmapped mounts
+Content-Language: en-US
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        linux-um@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Seth Forshee <sforshee@kernel.org>,
+        linux-fsdevel@vger.kernel.org
+References: <20230301015002.2402544-1-development@efficientek.com>
+ <20230302083928.zek46ybxvuwgwdf5@wittgenstein>
+ <20230304002846.48278199@crass-HP-ZBook-15-G2>
+ <20230304120118.bhbilwzhmjt72fok@wittgenstein>
+From:   Glenn Washburn <development@efficientek.com>
+In-Reply-To: <20230304120118.bhbilwzhmjt72fok@wittgenstein>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gV2VkLCAyMDIzLTAzLTE1IGF0IDA4OjE2ICswMTAwLCBLcnp5c3p0b2YgS296bG93c2tpIHdy
-b3RlOg0KPiBPbiAxNS8wMy8yMDIzIDA0OjQ1LCBOYW5jeSBMaW4gKOael+aso+ieoikgd3JvdGU6
-DQo+IA0KPiBUcmltIHRoZSByZXBsaWVzIGFuZCByZW1vdmUgdW5uZWVkZWQgY29udGV4dC4gWW91
-IHdhbnQgdG8gZ2V0IHRoZQ0KPiBhdHRlbnRpb24gb2Ygb3RoZXIgcGVvcGxlLCBub3QgZm9yY2Ug
-dGhlbSB0byByZWFkIGVudGlyZSBlbWFpbC4NCj4gDQo+ID4gPiArICBtZWRpYXRlayxnY2UtY2xp
-ZW50LXJlZzo+PiArICAgICRyZWY6DQo+ID4gPiAvc2NoZW1hcy90eXBlcy55YW1sIy9kZWZpbml0
-aW9ucy9waGFuZGxlLWFycmF5DQo+ID4gPiArICAgIGRlc2NyaXB0aW9uOiBUaGUgcmVnaXN0ZXIg
-b2YgZGlzcGxheSBmdW5jdGlvbiBibG9jayB0byBiZQ0KPiA+ID4gc2V0IGJ5DQo+ID4gPiBnY2Uu
-DQo+ID4gPiArICAgICAgVGhlcmUgYXJlIDQgYXJndW1lbnRzIGluIHRoaXMgcHJvcGVydHksIGdj
-ZSBub2RlLCBzdWJzeXMNCj4gPiA+IGlkLA0KPiA+ID4gb2Zmc2V0IGFuZA0KPiA+ID4gKyAgICAg
-IHJlZ2lzdGVyIHNpemUuIFRoZSBzdWJzeXMgaWQgaXMgZGVmaW5lZCBpbiB0aGUgZ2NlIGhlYWRl
-cg0KPiA+ID4gb2YNCj4gPiA+IGVhY2ggY2hpcHMNCj4gPiA+ICsgICAgICBpbmNsdWRlL2R0LWJp
-bmRpbmdzL2djZS88Y2hpcD4tZ2NlLmgsIG1hcHBpbmcgdG8gdGhlDQo+ID4gPiByZWdpc3Rlcg0K
-PiA+ID4gb2YgZGlzcGxheQ0KPiA+ID4gKyAgICAgIGZ1bmN0aW9uIGJsb2NrLg0KPiA+ID4gKyAg
-ICBpdGVtczoNCj4gPiA+ICsgICAgICBpdGVtczoNCj4gPiA+ICsgICAgICAgIC0gZGVzY3JpcHRp
-b246IHBoYW5kbGUgb2YgR0NFDQo+ID4gPiArICAgICAgICAtIGRlc2NyaXB0aW9uOiBHQ0Ugc3Vi
-c3lzIGlkDQo+ID4gPiArICAgICAgICAtIGRlc2NyaXB0aW9uOiByZWdpc3RlciBvZmZzZXQNCj4g
-PiA+ICsgICAgICAgIC0gZGVzY3JpcHRpb246IHJlZ2lzdGVyIHNpemUNCj4gPiA+ICsgICAgbWlu
-SXRlbXM6IDcNCj4gPiA+ICsgICAgbWF4SXRlbXM6IDcNCj4gPiA+ICsNCj4gPiANCj4gPiBIaSBS
-b2IgYW5kIGtyenlzenRvZiwNCj4gPiANCj4gPiBJIGdvdCB0aGUgdHdvIG1lc3NhZ2VzIHdoZW4g
-cnVubmluZyBkdF9iaW5kaW5nX2NoZWNrIFsxXS4gVGhpcw0KPiA+IGJpbmRpbmcNCj4gPiBwYXRj
-aCB3YXMgc2VudCBwcmV2aW91c2x5IGluIFsyXS4gDQo+ID4gDQo+ID4gSWYgSSByZW1vdmUgdGhl
-IGZvbGxvd2luZyBpdGVtcy9taW5JdGVtcy9tYXhJdGVtcyBpbiB0aGUNCj4gPiBtZWRpYXRlayxn
-Y2UtDQo+ID4gY2xpZW50IHByb3BlcnR5LCB0aGUgdHdvIG1lc3NhZ2UgZGlzYXBwZWFyLiBJIGRv
-bid0IGtub3cgd2hhdCdzDQo+ID4gd3JvbmcNCj4gPiB3aXRoIHRoZSBvcmlnaW5hbCBzeW50YXgu
-IERvIHlvdSBoYXZlIGFueSBzdWdnZXN0aW9ucyBmb3IgdGhpcz8NCj4gPiANCj4gPiAtICAgIGl0
-ZW1zOg0KPiA+IC0gICAgICBpdGVtczoNCj4gPiAtICAgICAgICAtIGRlc2NyaXB0aW9uOiBwaGFu
-ZGxlIG9mIEdDRQ0KPiA+IC0gICAgICAgIC0gZGVzY3JpcHRpb246IEdDRSBzdWJzeXMgaWQNCj4g
-PiAtICAgICAgICAtIGRlc2NyaXB0aW9uOiByZWdpc3RlciBvZmZzZXQNCj4gPiAtICAgICAgICAt
-IGRlc2NyaXB0aW9uOiByZWdpc3RlciBzaXplDQo+ID4gLSAgICBtaW5JdGVtczogNw0KPiA+IC0g
-ICAgbWF4SXRlbXM6IDcNCj4gPiANCj4gPiANCj4gPiBbMV0uDQo+ID4gRG9jdW1lbnRhdGlvbi9k
-ZXZpY2V0cmVlL2JpbmRpbmdzL2Rpc3BsYXkvbWVkaWF0ZWsvbWVkaWF0ZWssZXRoZHIuZQ0KPiA+
-IHhhbXANCj4gPiBsZS5kdGINCj4gPiAvcHJvai9tdGsxOTM0Ny9jcm9zL3NyYy90aGlyZF9wYXJ0
-eS9rZXJuZWwvdjUuMTAvRG9jdW1lbnRhdGlvbi9kZXZpDQo+ID4gY2V0cg0KPiA+IGVlL2JpbmRp
-bmdzL2Rpc3BsYXkvbWVkaWF0ZWsvbWVkaWF0ZWssZXRoZHIuZXhhbXBsZS5kdGI6IA0KPiA+IGhk
-ci1lbmdpbmVAMWMxMTQwMDA6IG1lZGlhdGVrLGdjZS1jbGllbnQtcmVnOjA6IFs0Mjk0OTY3Mjk1
-LCA3LA0KPiA+IDE2Mzg0LA0KPiA+IDQwOTYsIDQyOTQ5NjcyOTUsIDcsIDIwNDgwLCA0MDk2LCA0
-Mjk0OTY3Mjk1LCA3LCAyODY3MiwgNDA5NiwNCj4gPiA0Mjk0OTY3Mjk1LCA3LCAzNjg2NCwgNDA5
-NiwgNDI5NDk2NzI5NSwgNywgNDA5NjAsIDQwOTYsIDQyOTQ5NjcyOTUsDQo+ID4gNywNCj4gPiA0
-NTA1NiwgNDA5NiwgNDI5NDk2NzI5NSwgNywgNDkxNTIsIDQwOTZdIGlzIHRvbyBsb25nDQo+ID4g
-ICAgICAgICBGcm9tIHNjaGVtYToNCj4gDQo+IFRoaXMgbG9va3MgbGlrZSBrbm93biBpc3N1ZSB3
-aXRoIHBoYW5kbGVzIHdpdGggdmFyaWFibGUgbnVtYmVyIG9mDQo+IGFyZ3VtZW50cy4gRWl0aGVy
-IHdlIGFkZCBpdCB0byB0aGUgZXhjZXB0aW9ucyBvciBqdXN0IGRlZmluZSBpdCBpbg0KPiByZWR1
-Y2VkIHdheSBsaWtlIGluIG90aGVyIGNhc2VzIC0gb25seSBtYXhJdGVtczogMSB3aXRob3V0IGRl
-c2NyaWJpbmcNCj4gaXRlbXMuDQo+IA0KPiANCj4gQmVzdCByZWdhcmRzLA0KPiBLcnp5c3p0b2YN
-Cg0KDQpIaSBLcnp5c3p0b2YsDQoNClRoYW5rcyBmb3IgdGhlIGNvbW1lbnQuDQoNCkJ1dCBJIGhh
-dmUgc2V2ZXJhbCBpdGVtcyBmb3IgdGhpcyB2ZW5kb3IgcHJvcGVydHkgaW4gdGhlIGJpbmRpbmcN
-CmV4YW1wbGUuDQpDYW4gSSByZW1vdmUgbWF4SXRlbXM/IENoYW5nZSB0aGUgbWVkaWF0ZWssZ2Nl
-LWNsaWVudC1yZWcgYXMgWzFdLg0KDQpbMV0NCiAgbWVkaWF0ZWssZ2NlLWNsaWVudC1yZWc6DQog
-ICAgJHJlZjogL3NjaGVtYXMvdHlwZXMueWFtbCMvZGVmaW5pdGlvbnMvcGhhbmRsZS1hcnJheQ0K
-ICAgIGRlc2NyaXB0aW9uOiBUaGUgcmVnaXN0ZXIgb2YgZGlzcGxheSBmdW5jdGlvbiBibG9jayB0
-byBiZSBzZXQgYnkNCmdjZS4NCiAgICAgIFRoZXJlIGFyZSA0IGFyZ3VtZW50cyBpbiB0aGlzIHBy
-b3BlcnR5LCBnY2Ugbm9kZSwgc3Vic3lzIGlkLA0Kb2Zmc2V0IGFuZA0KICAgICAgcmVnaXN0ZXIg
-c2l6ZS4gVGhlIHN1YnN5cyBpZCBpcyBkZWZpbmVkIGluIHRoZSBnY2UgaGVhZGVyIG9mIGVhY2gN
-CmNoaXBzDQogICAgICBpbmNsdWRlL2R0LWJpbmRpbmdzL2djZS88Y2hpcD4tZ2NlLmgsIG1hcHBp
-bmcgdG8gdGhlIHJlZ2lzdGVyIG9mDQpkaXNwbGF5DQogICAgICBmdW5jdGlvbiBibG9jay4NCg0K
-UmVnYXJkcywNCk5hbmN5DQoNCj4gDQo=
+On 3/4/23 12:01, Christian Brauner wrote:
+> On Sat, Mar 04, 2023 at 12:28:46AM -0600, Glenn Washburn wrote:
+>> On Thu, 2 Mar 2023 09:39:28 +0100
+>> Christian Brauner <brauner@kernel.org> wrote:
+>>
+>>> On Tue, Feb 28, 2023 at 07:50:02PM -0600, Glenn Washburn wrote:
+>>>> Let hostfs handle idmapped mounts. This allows to have the same
+>>>> hostfs mount appear in multiple locations with different id
+>>>> mappings.
+>>>>
+>>>> root@(none):/media# id
+>>>> uid=0(root) gid=0(root) groups=0(root)
+>>>> root@(none):/media# mkdir mnt idmapped
+>>>> root@(none):/media# mount -thostfs -o/home/user hostfs mnt
+>>>>
+>>>> root@(none):/media# touch mnt/aaa
+>>>> root@(none):/media# mount-idmapped --map-mount u:`id -u user`:0:1
+>>>> --map-mount g:`id -g user`:0:1 /media/mnt /media/idmapped
+>>>> root@(none):/media# ls -l mnt/aaa idmapped/aaa -rw-r--r-- 1 root
+>>>> root 0 Jan 28 01:23 idmapped/aaa -rw-r--r-- 1 user user 0 Jan 28
+>>>> 01:23 mnt/aaa
+>>>>
+>>>> root@(none):/media# touch idmapped/bbb
+>>>> root@(none):/media# ls -l mnt/bbb idmapped/bbb
+>>>> -rw-r--r-- 1 root root 0 Jan 28 01:26 idmapped/bbb
+>>>> -rw-r--r-- 1 user user 0 Jan 28 01:26 mnt/bbb
+>>>>
+>>>> Signed-off-by: Glenn Washburn <development@efficientek.com>
+>>>> ---
+>>>> Changes from v1:
+>>>>   * Rebase on to tip. The above commands work and have the results
+>>>> expected. The __vfsuid_val(make_vfsuid(...)) seems ugly to get the
+>>>> uid_t, but it seemed like the best one I've come across. Is there a
+>>>> better way?
+>>>
+>>> Sure, I can help you with that. ;)
+>>
+>> Thank you!
+>>
+>>>>
+>>>> Glenn
+>>>> ---
+>>>>   fs/hostfs/hostfs_kern.c | 13 +++++++------
+>>>>   1 file changed, 7 insertions(+), 6 deletions(-)
+>>>>
+>>>> diff --git a/fs/hostfs/hostfs_kern.c b/fs/hostfs/hostfs_kern.c
+>>>> index c18bb50c31b6..9459da99a0db 100644
+>>>> --- a/fs/hostfs/hostfs_kern.c
+>>>> +++ b/fs/hostfs/hostfs_kern.c
+>>>> @@ -786,7 +786,7 @@ static int hostfs_permission(struct mnt_idmap
+>>>> *idmap, err = access_file(name, r, w, x);
+>>>>   	__putname(name);
+>>>>   	if (!err)
+>>>> -		err = generic_permission(&nop_mnt_idmap, ino,
+>>>> desired);
+>>>> +		err = generic_permission(idmap, ino, desired);
+>>>>   	return err;
+>>>>   }
+>>>>   
+>>>> @@ -794,13 +794,14 @@ static int hostfs_setattr(struct mnt_idmap
+>>>> *idmap, struct dentry *dentry, struct iattr *attr)
+>>>>   {
+>>>>   	struct inode *inode = d_inode(dentry);
+>>>> +	struct user_namespace *fs_userns = i_user_ns(inode);
+>>>
+>>> Fyi, since hostfs can't be mounted in a user namespace
+>>> fs_userns == &init_user_ns
+>>> so it doesn't really matter what you use.
+>>
+>> What would you suggest as preferable?
+> 
+> I would leave init_user_ns hardcoded as it clearly indicates that hostfs
+> can only be mounted in the initial user namespace. Plus, the patch is
+> smaller.
+> 
+>>
+>>>>   	struct hostfs_iattr attrs;
+>>>>   	char *name;
+>>>>   	int err;
+>>>>   
+>>>>   	int fd = HOSTFS_I(inode)->fd;
+>>>>   
+>>>> -	err = setattr_prepare(&nop_mnt_idmap, dentry, attr);
+>>>> +	err = setattr_prepare(idmap, dentry, attr);
+>>>>   	if (err)
+>>>>   		return err;
+>>>>   
+>>>> @@ -814,11 +815,11 @@ static int hostfs_setattr(struct mnt_idmap
+>>>> *idmap, }
+>>>>   	if (attr->ia_valid & ATTR_UID) {
+>>>>   		attrs.ia_valid |= HOSTFS_ATTR_UID;
+>>>> -		attrs.ia_uid = from_kuid(&init_user_ns,
+>>>> attr->ia_uid);
+>>>> +		attrs.ia_uid = __vfsuid_val(make_vfsuid(idmap,
+>>>> fs_userns, attr->ia_uid)); }
+>>>>   	if (attr->ia_valid & ATTR_GID) {
+>>>>   		attrs.ia_valid |= HOSTFS_ATTR_GID;
+>>>> -		attrs.ia_gid = from_kgid(&init_user_ns,
+>>>> attr->ia_gid);
+>>>> +		attrs.ia_gid = __vfsgid_val(make_vfsgid(idmap,
+>>>> fs_userns, attr->ia_gid));
+>>>
+>>> Heh, if you look include/linux/fs.h:
+>>>
+>>>          /*
+>>>           * The two anonymous unions wrap structures with the same
+>>> member. *
+>>>           * Filesystems raising FS_ALLOW_IDMAP need to use
+>>> ia_vfs{g,u}id which
+>>>           * are a dedicated type requiring the filesystem to use the
+>>> dedicated
+>>>           * helpers. Other filesystem can continue to use ia_{g,u}id
+>>> until they
+>>>           * have been ported.
+>>>           *
+>>>           * They always contain the same value. In other words
+>>> FS_ALLOW_IDMAP
+>>>           * pass down the same value on idmapped mounts as they would
+>>> on regular
+>>>           * mounts.
+>>>           */
+>>>          union {
+>>>                  kuid_t          ia_uid;
+>>>                  vfsuid_t        ia_vfsuid;
+>>>          };
+>>>          union {
+>>>                  kgid_t          ia_gid;
+>>>                  vfsgid_t        ia_vfsgid;
+>>>          };
+>>>
+>>> this just is:
+>>>
+>>> attrs.ia_uid = from_vfsuid(idmap, fs_userns, attr->ia_vfsuid));
+>>> attrs.ia_gid = from_vfsgid(idmap, fs_userns, attr->ia_vfsgid));
+>>
+>> Its easy to miss from this patch because of lack of context, but attrs
+>> is a struct hostfs_iattr, not struct iattr. And attrs.ia_uid is of type
+>> uid_t, not kuid_t. So the above fails to compile. This is why I needed
+> 
+> Oh, I see. And then that raw value is used by calling
+> fchmod()/chmod()/chown()/fchown() and so on. That's rather special.
+> Ok, then I know what to do.
+> 
+>> to wrap make_vfsuid() in __vfsuid_val() (to get the uid_t).
+> 
+> Right. My point had been - independent of the struct hostfs_iattr issue
+> you thankfully pointed out - that make_vfsuid() is wrong here.
+> 
+> make_vfsuid() is used to map a filesystem wide k{g,u}id_t according to
+> the mount's idmapping that operation originated from. But that's done
+> by the vfs way before we're calling into the filesystem. For example,
+> it's done in chown_common().
+> 
+> So the value placed in struct iattr (the VFS struct) is already a
+> vfs{g,u}id stored in iattr->ia_vfs{g,u}id. So you need to use
+> from_vfs{g,u}id() here.
+> 
+>>
+>> I had decided against using from_vfsuid() because then I thought I'd
+>> need to use from_kuid() to get the uid_t. And from_kuid() takes the
+>> namespace (again), which seemed uglier.
+>>
+>> Based on this, what do you suggest?
+> 
+> Ok, so just some details on the background before I paste what I think
+> we should do.
+> As soon as you support idmapped mounts you at least technically are
+Thanks for the detailed explanation. I apologize for not getting back to 
+this sooner.
+
+> always dealing with two mappings:
+> 
+> (1) First, there's the filesystem wide idmapping which is taken from the
+>      namespace the filessytem was mounted in. This idmapping is applied
+>      when you read the raw uid/gid value from disk and turn into a kuid_t
+>      type. That value is persistent and stored in inode->i_{g,u}id. All
+>      things that are cached and that can be accessed from multiple mounts
+>      concurrently can only ever cache k{g,u}id_t aka filesystem values.
+> (2) Whenever we're dealing with an operation that's coming from an
+>      idmapped mount we need to take the idmapping of the mount into
+>      account. That idmapping is completely separate type struct
+>      mnt_idmap that's opaque for filesystems and most of the vfs.
+> 
+>      That idmapping is used to generate the vfs{g,u}id_t. IOW, translates
+>      from the filesystem representation to a mount/vfs representation.
+> 
+> So, in order to store the correct value on disk we need to invert those
+> two idmappings to arrive at the raw value that we want to store:
+> (U1) from_vfsuid() // map to the filesystem wide value aka something
+>       that we can store in inode->i_{g,u}id and that's cacheable. This is
+>       done in setattr_copy().
+> (U2) from_kuid() // map the filesystem wide value to the raw value we
+>       want to store on disk
+
+It seems to me that there are actually 3 mappings, with the third being 
+(U2) above (ie vfsuid_t -> kuid_t). And that from_vfsuid() does mappings 
+(1) and (2) above. Is this incorrect?
+
+Whats confusing to me is that from_vfsuid() takes both an idmap and a 
+user namespace, so presumably it will handle both mapping types (1) and 
+(2). And then there's from_kuid() which takes an idmap, so I thought it 
+might also do a type (2) mapping. But looking at the code it doesn't 
+seem to ever use its idmap parameter. Can you explain the rational 
+behind having from_kuid() take an idmap? Is it legacy that will be 
+cleaned up as this code settles down / stabilizes? Or perhaps its
+
+> 
+> For nearly all filesystems these steps almost never need to be performed
+> explicitly. Instead, dedicated vfs helpers will do this:
+> 
+> (U1) i_{g,u}id_update() // map to filesystem wide value
+> (U2) i_{g,u}id_read() // map to raw on-disk value
+> 
+> For filesystems that don't support being mounted in namespaces the (U2)
+> step is always a nop. So technically there's no difference between:
+> 
+> (U2) from_kuid() and __kuid_val(kuid)
+> 
+> but it's cleaner to use the helpers even in that case.
+> 
+> So given how hostfs works these two steps need to be performed
+> explicitly. So I suggest (untested):
+> 
+> diff --git a/fs/hostfs/hostfs_kern.c b/fs/hostfs/hostfs_kern.c
+> index c18bb50c31b6..72b7e1bcc32e 100644
+> --- a/fs/hostfs/hostfs_kern.c
+> +++ b/fs/hostfs/hostfs_kern.c
+> @@ -813,12 +813,22 @@ static int hostfs_setattr(struct mnt_idmap *idmap,
+>                  attrs.ia_mode = attr->ia_mode;
+>          }
+>          if (attr->ia_valid & ATTR_UID) {
+> +               kuid_t kuid;
+> +
+>                  attrs.ia_valid |= HOSTFS_ATTR_UID;
+> -               attrs.ia_uid = from_kuid(&init_user_ns, attr->ia_uid);
+> +               /* Map the vfs id into the filesystem. */
+> +               kuid = from_vfsuid(idmap, &init_user_ns, attr->ia_vfsuid);
+> +               /* Map the filesystem id to its raw on disk value. */
+> +               attrs.ia_uid = from_kuid(&init_user_ns, kuid);
+
+Its interesting that this is what I originally discarded, as an 
+unfamiliar reader, it looks like you're doing two namespace mappings. 
+But that's not happening because from_kuid() disregards its namespace 
+parameter.
+
+I've tested this and it does seems to work. Thanks!
+
+Glenn
+
+>          }
+>          if (attr->ia_valid & ATTR_GID) {
+> +               kgid_t kgid;
+> +
+>                  attrs.ia_valid |= HOSTFS_ATTR_GID;
+> -               attrs.ia_gid = from_kgid(&init_user_ns, attr->ia_gid);
+> +               /* Map the vfs id into the filesystem. */
+> +               kgid = from_vfsgid(idmap, &init_user_ns, attr->ia_vfsgid);
+> +               /* Map the filesystem id to its raw on disk value. */
+> +               attrs.ia_gid = from_kgid(&init_user_ns, kgid);
+>          }
+>          if (attr->ia_valid & ATTR_SIZE) {
+>                  attrs.ia_valid |= HOSTFS_ATTR_SIZE;
+
