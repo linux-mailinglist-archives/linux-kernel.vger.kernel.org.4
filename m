@@ -2,204 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4465E6BD13E
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 14:47:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B9546BD149
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 14:48:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230427AbjCPNrM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 09:47:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48304 "EHLO
+        id S230267AbjCPNss (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 09:48:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230416AbjCPNrK (ORCPT
+        with ESMTP id S230154AbjCPNsn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 09:47:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB397CA1F4;
-        Thu, 16 Mar 2023 06:46:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BC61962035;
-        Thu, 16 Mar 2023 13:46:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3119FC4339E;
-        Thu, 16 Mar 2023 13:46:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678974399;
-        bh=WLQGVeSsMJqOCffJ4f6/HASsdqkUD/9yTlMF0nC5xBc=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=BQUdBvo0oaMrPYuEd53Obfglr0keb+ZeZwknxkBuboT3cSRpGUQUgUb6twleFfApy
-         tLZJ2eBXcVL+1lHZDx/JtHR53vG5fIhzkwpe6ZaeKAAwmmcBn7YfX+QunzgANcIOcq
-         t17iLdqsyJzU/XXbR2CUtOzgPSnA6symUxBypze2fcCP/qOLQzHjv0PJ/hsFHDO8at
-         DSPHupFa4pCNGPF3Quvyw1BT48lOBn7ALguCblWcNbX1ZRVf1A+oTs3wAUVJWTgCL6
-         60AsESOiday+PXWccy26kyusQsRPHUFlSNLc8fZpIjvxhOu2bPliR6NxyYVaYsgRdc
-         itZLiRtNANvNQ==
-Received: by mail-lf1-f50.google.com with SMTP id f18so2459919lfa.3;
-        Thu, 16 Mar 2023 06:46:39 -0700 (PDT)
-X-Gm-Message-State: AO0yUKWSREwtOo6gidftqL3kThiSLHQlo7nwQslE8MdNv+88w+0+K9Br
-        879lJ3hdejXvbPdsRDz+JHUFjVS2VCnOqcwIgFg=
-X-Google-Smtp-Source: AK7set/OutMevGIUG4r9IL+oiX2y3MD0WhNb35A1jzhEwvzX9ojsSg8fGLvHru0Fb3c2RIVVduJwuQBjhWqW2hZOcxc=
-X-Received: by 2002:ac2:48b0:0:b0:4d5:ca32:6ae4 with SMTP id
- u16-20020ac248b0000000b004d5ca326ae4mr3262548lfg.4.1678974397199; Thu, 16 Mar
- 2023 06:46:37 -0700 (PDT)
+        Thu, 16 Mar 2023 09:48:43 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EACACB055
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 06:47:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678974455;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZZo2YFcaNKaM3gZrAXPBzwFxyoNjSK9TD7bMUQJR6d4=;
+        b=QNzhp1G+UdbBx4xka8FK2vcRZjt69RNx3vULPGj1WzmzWtYgXYNxkehfGrS9Zs6lQjJWwy
+        FkDky6u6Jj45m7OsdW1QJszk9kTrkgLy6PNZi4lvgvbW0ELvTrWoSGvJ4iX0GRAYWRJFoQ
+        HJf3JxdrxnaTo6KAhou+hG7FTeTxCMg=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-31-FQ2aAsbVPZC9DzcdTs5GXA-1; Thu, 16 Mar 2023 09:47:34 -0400
+X-MC-Unique: FQ2aAsbVPZC9DzcdTs5GXA-1
+Received: by mail-ed1-f71.google.com with SMTP id j21-20020a508a95000000b004fd82403c91so3140106edj.3
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 06:47:34 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678974453;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZZo2YFcaNKaM3gZrAXPBzwFxyoNjSK9TD7bMUQJR6d4=;
+        b=HjQbakOsSRWNkouHVsszxcJcXBfAb6v4KrfxpyeYDCu82ohNGeB4i4U11QR47mM7qD
+         DDX3W6QOX7+N5oUvFig11gZAaGyu4n6ymV/8KN5maq2ybUdssyvausNsXccDG4YIZFKs
+         kzZdT3hDWKh1R1/kPdECyY4oMTQ0WgVpvBON4R1mHqgy3ogHvr7gHhQIHL3lOxg2ZSM1
+         bhNPBNglHIlJCcFI31+nYHmbYXx+jdn6WC9HuI8Zd9sd+O6qP+TfdAj0Xu8Jp8hy8yBV
+         GGGBarxdClKmwFLu8utz2dwpDL9reKrLBgqvBb52Doxdzhcg31C33FgSdjsxN1TbMG+j
+         WWKw==
+X-Gm-Message-State: AO0yUKVi6JCaJ96DF5ztRMN7y36xGT8by6/B0WvT2hGwOHr9B664B8H1
+        qaZc6PNIlDJhsp6xJqkt7/6cvJjfQ2agUkbL6Sc+AX8MgH0RovCMpDDaN3OPqxY4wZVcMmj/ojV
+        wK4ZFQK//D3Y9CUxP3wVffFZr
+X-Received: by 2002:aa7:d841:0:b0:4fd:206c:dc73 with SMTP id f1-20020aa7d841000000b004fd206cdc73mr6250677eds.32.1678974453508;
+        Thu, 16 Mar 2023 06:47:33 -0700 (PDT)
+X-Google-Smtp-Source: AK7set9AjZdi2q5FlJKKiuPwSZEOgDIgyPaa2iMdMMt5OdPjBU4QSsen92vQppfn5GamFbN51fx38g==
+X-Received: by 2002:aa7:d841:0:b0:4fd:206c:dc73 with SMTP id f1-20020aa7d841000000b004fd206cdc73mr6250662eds.32.1678974453247;
+        Thu, 16 Mar 2023 06:47:33 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id u11-20020a1709060b0b00b008e22978b98bsm3860930ejg.61.2023.03.16.06.47.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Mar 2023 06:47:32 -0700 (PDT)
+Message-ID: <b98cec03-d775-e13e-8255-c602d0c155f4@redhat.com>
+Date:   Thu, 16 Mar 2023 14:47:31 +0100
 MIME-Version: 1.0
-References: <CAMj1kXHYqMdis99D3OaKf51eoCDW2+5NfcUEbF4Zrau4BcKgsQ@mail.gmail.com>
- <ZBLlLRVVxCbZfEJd@righiandr-XPS-13-7390> <CAMj1kXET+A2rk+WQyebKPNtSvzzS0nJdMbx3uT1JgMxOvqfx4w@mail.gmail.com>
- <ZBLpVDmy8BXQZve9@righiandr-XPS-13-7390> <CAMj1kXF_f4QFtaDYBaSJwO0B97TJHWr6uRQdeYeD=Gv7DrVicg@mail.gmail.com>
- <ZBL+o7ydLk2iBCCr@righiandr-XPS-13-7390> <CAMj1kXEtj_jEZeT6YNh9xB=8o=0LVKiPYucHU08s34xBgy1yDA@mail.gmail.com>
- <CAMj1kXF3pkxvDX6ZMpnRd3wQX2_T6CYmz7ML-h+PXeo+hM_ZdA@mail.gmail.com>
- <ZBMOitWwCDj3XiRw@righiandr-XPS-13-7390> <CAMj1kXF=8KoCnRmUyLCZmbfPTeOFQZBeudZuTeA0uHOv-1drFg@mail.gmail.com>
- <ZBMQdgPepwa+VyAH@righiandr-XPS-13-7390> <CAMj1kXES+FxxbqUPH5TRjHak2MMC2Yksm0_P6wo__LQMH6Emhw@mail.gmail.com>
-In-Reply-To: <CAMj1kXES+FxxbqUPH5TRjHak2MMC2Yksm0_P6wo__LQMH6Emhw@mail.gmail.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Thu, 16 Mar 2023 14:46:26 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXEcxfKHZpjup0Pa-1OE+Xq6+0XuHYoQAj2d_gzCX5wKsA@mail.gmail.com>
-Message-ID: <CAMj1kXEcxfKHZpjup0Pa-1OE+Xq6+0XuHYoQAj2d_gzCX5wKsA@mail.gmail.com>
-Subject: Re: kernel 6.2 stuck at boot (efi_call_rts) on arm64
-To:     Andrea Righi <andrea.righi@canonical.com>
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Paolo Pisati <paolo.pisati@canonical.com>,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Darren Hart <darren@os.amperecomputing.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 0/3] platform/surface: Add support for tablet-mode switch
+ on Surface Pro 9
+Content-Language: en-US, nl
+To:     Maximilian Luz <luzmaximilian@gmail.com>
+Cc:     Mark Gross <markgross@kernel.org>,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230304194611.87770-1-luzmaximilian@gmail.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20230304194611.87770-1-luzmaximilian@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 16 Mar 2023 at 14:45, Ard Biesheuvel <ardb@kernel.org> wrote:
->
-> On Thu, 16 Mar 2023 at 13:50, Andrea Righi <andrea.righi@canonical.com> wrote:
-> >
-> > On Thu, Mar 16, 2023 at 01:43:32PM +0100, Ard Biesheuvel wrote:
-> > > On Thu, 16 Mar 2023 at 13:41, Andrea Righi <andrea.righi@canonical.com> wrote:
-> > > >
-> > > > On Thu, Mar 16, 2023 at 01:38:30PM +0100, Ard Biesheuvel wrote:
-> > > > > On Thu, 16 Mar 2023 at 13:21, Ard Biesheuvel <ardb@kernel.org> wrote:
-> > > > > >
-> > > > > > On Thu, 16 Mar 2023 at 12:34, Andrea Righi <andrea.righi@canonical.com> wrote:
-> > > > > > >
-> > > > > > > On Thu, Mar 16, 2023 at 11:18:21AM +0100, Ard Biesheuvel wrote:
-> > > > > > > > On Thu, 16 Mar 2023 at 11:03, Andrea Righi <andrea.righi@canonical.com> wrote:
-> > > > > > > > >
-> > > > > > > > > On Thu, Mar 16, 2023 at 10:55:58AM +0100, Ard Biesheuvel wrote:
-> > > > > > > > > > (cc Darren)
-> > > > > > > > > >
-> > > > > > > > > > On Thu, 16 Mar 2023 at 10:45, Andrea Righi <andrea.righi@canonical.com> wrote:
-> > > > > > > > > > >
-> > > > > > > > > > > On Thu, Mar 16, 2023 at 08:58:20AM +0100, Ard Biesheuvel wrote:
-> > > > > > > > > > > > Hello Andrea,
-> > > > > > > > > > > >
-> > > > > > > > > > > > On Thu, 16 Mar 2023 at 08:54, Andrea Righi <andrea.righi@canonical.com> wrote:
-> > > > > > > > > > > > >
-> > > > > > > > > > > > > Hello,
-> > > > > > > > > > > > >
-> > > > > > > > > > > > > the latest v6.2.6 kernel fails to boot on some arm64 systems, the kernel
-> > > > > > > > > > > > > gets stuck and never completes the boot. On the console I see this:
-> > > > > > > > > > > > >
-> > > > > > > > > > > > > [   72.043484] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
-> > > > > > > > > > > > > [   72.049571] rcu:     22-...0: (30 GPs behind) idle=b10c/1/0x4000000000000000 softirq=164/164 fqs=6443
-> > > > > > > > > > > > > [   72.058520]     (detected by 28, t=15005 jiffies, g=449, q=174 ncpus=32)
-> > > > > > > > > > > > > [   72.064949] Task dump for CPU 22:
-> > > > > > > > > > > > > [   72.068251] task:kworker/u64:5   state:R  running task     stack:0     pid:447   ppid:2      flags:0x0000000a
-> > > > > > > > > > > > > [   72.078156] Workqueue: efi_rts_wq efi_call_rts
-> > > > > > > > > > > > > [   72.082595] Call trace:
-> > > > > > > > > > > > > [   72.085029]  __switch_to+0xbc/0x100
-> > > > > > > > > > > > > [   72.088508]  0xffff80000fe83d4c
-> > > > > > > > > > > > >
-> > > > > > > > > > > > > After that, as a consequence, I start to get a lot of hung task timeout traces.
-> > > > > > > > > > > > >
-> > > > > > > > > > > > > I tried to bisect the problem and I found that the offending commit is
-> > > > > > > > > > > > > this one:
-> > > > > > > > > > > > >
-> > > > > > > > > > > > >  e7b813b32a42 ("efi: random: refresh non-volatile random seed when RNG is initialized")
-> > > > > > > > > > > > >
-> > > > > > > > > > > > > I've reverted this commit for now and everything works just fine, but I
-> > > > > > > > > > > > > was wondering if the problem could be caused by a lack of entropy on
-> > > > > > > > > > > > > these arm64 boxes or something else.
-> > > > > > > > > > > > >
-> > > > > > > > > > > > > Any suggestion? Let me know if you want me to do any specific test.
-> > > > > > > > > > > > >
-> > > > > > > > > > > >
-> > > > > > > > > > > > Thanks for the report.
-> > > > > > > > > > > >
-> > > > > > > > > > > > This is most likely the EFI SetVariable() call going off into the
-> > > > > > > > > > > > weeds and never returning.
-> > > > > > > > > > > >
-> > > > > > > > > > > > Is this an Ampere Altra system by any chance? Do you see it on
-> > > > > > > > > > > > different types of hardware?
-> > > > > > > > > > >
-> > > > > > > > > > > This is: Ampere eMAG / Lenovo ThinkSystem HR330a.
-> > > > > > > > > > >
-> > > > > > > > > > > >
-> > > > > > > > > > > > Could you check whether SetVariable works on this system? E.g. by
-> > > > > > > > > > > > updating the EFI boot timeout (sudo efibootmgr -t <n>)?
-> > > > > > > > > > >
-> > > > > > > > > > > ubuntu@kuzzle:~$ sudo efibootmgr -t 10
-> > > > > > > > > > > ^C^C^C^C
-> > > > > > > > > > >
-> > > > > > > > > > > ^ Stuck there, so it really looks like SetVariable is the problem.
-> > > > > > > > > > >
-> > > > > > > > > >
-> > > > > > > > > > Could you please share the output of
-> > > > > > > > > >
-> > > > > > > > > > dmidecode -s bios
-> > > > > > > > > > dmidecode -s system-family
-> > > > > > > > >
-> > > > > > > > > $ sudo dmidecode -s bios-vendor
-> > > > > > > > > LENOVO
-> > > > > > > > > $ sudo dmidecode -s bios-version
-> > > > > > > > > hve104r-1.15
-> > > > > > > > > $ sudo dmidecode -s bios-release-date
-> > > > > > > > > 02/26/2021
-> > > > > > > > > $ sudo dmidecode -s bios-revision
-> > > > > > > > > 1.15
-> > > > > > > > > $ sudo dmidecode -s system-family
-> > > > > > > > > Lenovo ThinkSystem HR330A/HR350A
-> > > > > > > > >
-> > > > > > > >
-> > > > > > > > Thanks
-> > > > > > > >
-> > > > > > > > Mind checking if this patch fixes your issue as well?
-> > > > > > > >
-> > > > > > > > https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/commit/?h=altra-fix&id=77fa99dd4741456da85049c13ec31a148f5f5ac0
-> > > > > > >
-> > > > > > > Unfortunately this doesn't seem to be enough, I'm still getting the same
-> > > > > > > problem also with this patch applied.
-> > > > > > >
-> > > > > >
-> > > > > > Thanks for trying.
-> > > > > >
-> > > > > > How about the last 3 patches on this branch?
-> > > > > >
-> > > > > > https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/log/?h=efi-smbios-altra-fix
-> > > > >
-> > > > > Actually, that may not match your hardware.
-> > > > >
-> > > > > Does your kernel log have a line like
-> > > > >
-> > > > > SMCCC: SOC_ID: ID = jep106:036b:0019 Revision = 0x00000102
-> > > > >
-> > > > > ?
-> > > >
-> > > > $ sudo dmesg | grep "SMCCC: SOC_ID"
-> > > > [    5.320782] SMCCC: SOC_ID: ARCH_SOC_ID not implemented, skipping ....
-> > > >
-> > >
-> > > Thanks. Could you share the entire dmidecode output somewhere? Or at
-> > > least the type 4 record(s)?
-> >
-> > Sure, here's the full output of dmidecode:
-> > https://pastebin.ubuntu.com/p/4ZmKmP2xTm/
-> >
->
-> Thanks. I have updated my SMBIOS patches to take the processor version
-> 'eMAG' into account, which appears to be what these boxes are using.
->
-> I have updated the efi/urgent branch here with the latest versions.
-> Mind giving them a spin?
->
+Hi,
 
-https://git.kernel.org/pub/scm/linux/kernel/git/efi/efi.git/log/?h=urgent
+On 3/4/23 20:46, Maximilian Luz wrote:
+> This series adds support for the tablet-mode switch on the Surface Pro
+> 9. On that device, the posture subsystem (POS) can be used to query the
+> state of the Type-Cover (detached, laptop-mode, flipped-back, ...) and
+> receive notifications when it changes. We can use this to implement a
+> tablet mode switch, extending the driver already in use on the Surface
+> Laptop Studio.
+> 
+> More specifically, the posture subsystem allows for different posture
+> sources, identified by a numerical ID, each of which can have different
+> states. At the moment, however, the tablet-mode switch driver using the
+> POS subsystem only supports the Surface Laptop Studio, and support for
+> that is hard-coded.
+> 
+> To support the Surface Pro 9, we therefore need to adapt the driver to
+> properly disambiguate between different posture sources (patch 1) and
+> then implement the respective functions for the source ID representing
+> the Type-Cover (patch 2). Finally, we also need to add the respective
+> device to the Surface Pro 9 entry in the aggregator registry, to allow
+> the driver to load (patch 3). 
+> 
+> Maximilian Luz (3):
+>   platform/surface: aggregator_tabletsw: Properly handle different
+>     posture source IDs
+>   platform/surface: aggregator_tabletsw: Add support for Type-Cover
+>     posture source
+>   platform/surface: aggregator_registry: Add support for tablet-mode
+>     switch on Surface Pro 9
+> 
+>  .../surface/surface_aggregator_registry.c     |   2 +-
+>  .../surface/surface_aggregator_tabletsw.c     | 180 ++++++++++++++----
+>  2 files changed, 142 insertions(+), 40 deletions(-)
+
+
+Thank you for your patch-series, I've applied the series to my
+review-hans branch:
+https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
+
+Note it will show up in my review-hans branch once I've pushed my
+local branch there, which might take a while.
+
+Once I've run some tests on this branch the patches there will be
+added to the platform-drivers-x86/for-next branch and eventually
+will be included in the pdx86 pull-request to Linus for the next
+merge-window.
+
+Regards,
+
+Hans
+
+
