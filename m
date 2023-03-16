@@ -2,110 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF0436BC743
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 08:32:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B06A76BC748
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 08:34:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229634AbjCPHcp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 03:32:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42980 "EHLO
+        id S230147AbjCPHeJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 03:34:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230270AbjCPHci (ORCPT
+        with ESMTP id S229747AbjCPHeH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 03:32:38 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02BB785687
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 00:32:02 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id x13so3952163edd.1
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 00:32:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678951918;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=GnScg0d+XUCiCIAUOYj6NtmRf8jyxKbyqx95uNvhbUU=;
-        b=C8NY87SkEYUArxDsUsCL2+2x4wbKNGgk8J2KjTCHYJX2tGfBfGyaUaA+yR6G2k3GPi
-         ntQR5iRQGJQJfNsTxPCPAHzxCOtgDpw1XlvSZMw5b5E6Cyc1SIi93jWsNH1WurMlxH+Q
-         nQBRV4QfNn+BvvLym+/qM0BxHCCkGxr0brEb2kKGGskrMaa3cqZQsbAwiUE57zCaMf5G
-         j2yim5dDqLzLK7NtLzPPLsxP3AI+jCIvtOb4xliA9ywIgPtQT4CU4/vMGydtzFFto0kd
-         dZ3RkmGd9VQWxJWeTZBciOQ+T+N6c9IPvmOqI6vD9SGpEx2ZhUWpT4kxwC1tzAj2wROa
-         XoAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678951918;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GnScg0d+XUCiCIAUOYj6NtmRf8jyxKbyqx95uNvhbUU=;
-        b=7sGSx1CpgFE7W80w9OTdpX0/BVB80kph8Pm2YAY/dIFN7WAKWBp+HBwN150YTJed3q
-         c0D3qjlSFlVVcw1hZw/QIOY38XlUSzb9DjgmqWD5dhzT9KXLgj1EM7QS4ogTHORzbQ2H
-         HOQnDcMpAIwkWK6Hzoxs+iI7qkwstoGEhXrBit+Xl9e9+cuVc/W6pVEUFe/Gerw9J8Yl
-         blov3zBlCL4KOnGbS5gdM/iVVnBEKzl90OOW6E1qJMTwqsTSzGoYHsHrrS6SXgas4zEM
-         30KkoAiZXqgkHEwaaG7ixkW6EsrRN9hppfmXkEqFjhsVx5koqqax5Sr4qjlqi6dwvnbd
-         P0Cg==
-X-Gm-Message-State: AO0yUKXPXXYdpjujoUVTyALfAHcecdBlvzZZAl2OiWVYHchCo+pMd0lG
-        OE2l6yB3pWzlGZURhMy0M8yweQ==
-X-Google-Smtp-Source: AK7set+7hxtHDmQV+OKIM/3ytJUsWaADhOhEP6f9Q7wl66uIR0rSLRCYBTN7JKldf1W6259Si4MQPg==
-X-Received: by 2002:a17:907:6297:b0:930:7324:2766 with SMTP id nd23-20020a170907629700b0093073242766mr1186457ejc.35.1678951918362;
-        Thu, 16 Mar 2023 00:31:58 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:9827:5f65:8269:a95f? ([2a02:810d:15c0:828:9827:5f65:8269:a95f])
-        by smtp.gmail.com with ESMTPSA id jz26-20020a17090775fa00b008e309da3253sm3462074ejc.202.2023.03.16.00.31.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Mar 2023 00:31:58 -0700 (PDT)
-Message-ID: <84805483-b20a-8dd7-6efe-904f59e063dc@linaro.org>
-Date:   Thu, 16 Mar 2023 08:31:56 +0100
+        Thu, 16 Mar 2023 03:34:07 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B99E85B28;
+        Thu, 16 Mar 2023 00:33:24 -0700 (PDT)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1pci69-0003AG-P4; Thu, 16 Mar 2023 08:32:29 +0100
+Message-ID: <c5e18ae6-52c5-0d95-b6c1-a1b59508cb79@leemhuis.info>
+Date:   Thu, 16 Mar 2023 08:32:29 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-Subject: Re: [PATCH 06/15] dt-bindings: mfd: syscon: Add nuvoton,ma35d1-sys
- compatible
-Content-Language: en-US
-To:     Jacky Huang <ychuang570808@gmail.com>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
-        mturquette@baylibre.com, sboyd@kernel.org, p.zabel@pengutronix.de,
-        gregkh@linuxfoundation.org, jirislaby@kernel.org
-Cc:     devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        schung@nuvoton.com, Jacky Huang <ychuang3@nuvoton.com>
-References: <20230315072902.9298-1-ychuang570808@gmail.com>
- <20230315072902.9298-7-ychuang570808@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230315072902.9298-7-ychuang570808@gmail.com>
+Content-Language: en-US, de-DE
+From:   "Linux regression tracking (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+To:     Shane Parslow <shaneparslow808@gmail.com>
+Cc:     Martin <mwolf@adiumentum.com>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Sergey Ryazanov <ryazanov.s.a@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        netdev <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux kernel regressions list <regressions@lists.linux.dev>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+Subject: [regression] Bug 217200 - after upgrading to Kernel 6.2 WWAN Intel
+ XMM7560 LTE module is not working anymore
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1678952004;f0c194bf;
+X-HE-SMSGID: 1pci69-0003AG-P4
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/03/2023 08:28, Jacky Huang wrote:
-> From: Jacky Huang <ychuang3@nuvoton.com>
+Hi, Thorsten here, the Linux kernel's regression tracker.
+
+I noticed a regression report in bugzilla.kernel.org. Shane Parslow,
+apparently it's caused by a change of yours.
+
+As many (most?) kernel developer don't keep an eye on bugzilla, I
+decided to forward it by mail. Quoting from
+https://bugzilla.kernel.org/show_bug.cgi?id=217200 :
+
+>  Martin 2023-03-15 08:26:13 UTC
 > 
-> Add Nuvoton ma35d1 system registers compatible
-
-Missing full stop.
-
+> after upgrading to Kernel 6.2.x 
+> 01:00.0 Wireless controller [0d40]: Intel Corporation XMM7560 LTE Advanced Pro Modem (rev 01) 
+> is not working anymore.
 > 
-> Signed-off-by: Jacky Huang <ychuang3@nuvoton.com>
-> ---
->  Documentation/devicetree/bindings/mfd/syscon.yaml | 1 +
->  1 file changed, 1 insertion(+)
+> I am getting errors like:
 > 
-> diff --git a/Documentation/devicetree/bindings/mfd/syscon.yaml b/Documentation/devicetree/bindings/mfd/syscon.yaml
-> index c828c4f5e4a7..e7a3c6e1e77f 100644
-> --- a/Documentation/devicetree/bindings/mfd/syscon.yaml
-> +++ b/Documentation/devicetree/bindings/mfd/syscon.yaml
-> @@ -57,6 +57,7 @@ properties:
->                - microchip,sparx5-cpu-syscon
->                - mstar,msc313-pmsleep
->                - nuvoton,wpcm450-shm
-> +              - nuvoton,ma35d1-sys
+> [   44.973374] iosm 0000:01:00.0: ch[1]: confused phase 2
+> [   45.973650] iosm 0000:01:00.0: ch[1]: confused phase 2
+> [   46.972517] iosm 0000:01:00.0: ch[1]: confused phase 2
+> [   47.973038] iosm 0000:01:00.0: ch[1]: confused phase 2
+> [   48.973154] iosm 0000:01:00.0: ch[1]: confused phase 3
+> ...
+> [  174.984861] iosm 0000:01:00.0: PORT open refused, phase A-CD_READY
+> [  174.985767] iosm 0000:01:00.0: ch[6]: confused phase 3
+> [  184.996879] iosm 0000:01:00.0: PORT open refused, phase A-CD_READY
+> [  344.482600] iosm 0000:01:00.0: msg timeout
+> [  344.986684] iosm 0000:01:00.0: msg timeout
+> ...
+> [  287.032750] iosm 0000:01:00.0: ch[6]:invalid channel state 2,expected 1
+> [  288.032786] iosm 0000:01:00.0: ch[6]:invalid channel state 2,expected 1
+> [  298.042818] iosm 0000:01:00.0: ch[6]:invalid channel state 2,expected 1
+> [  337.034256] iosm 0000:01:00.0: AMD-Vi: Event logged [IO_PAGE_FAULT domain=0x000d address=0x0 flags=0x0000]
+> [  337.536467] iosm 0000:01:00.0: msg timeout
+> [  338.040709] iosm 0000:01:00.0: msg timeout
+> 
+> with Kernel 6.1.18 it is working flawlessly.
+> 
+> The problem still occurs with the latest development release 6.3.-rc2.
+> 
+> I filed a bug report with more info on the redhat bugzilla:
+> 
+> https://bugzilla.redhat.com/show_bug.cgi?id=2175487
+> 
+> Here a bit more about my System:
+> 
+> System:
+>   Host: HP845G9 Kernel: 6.2.6-200.fc37.x86_64 arch: x86_64 bits: 64
+>     Desktop: GNOME v: 43.3 Distro: Fedora release 37 (Thirty Seven)
+> Machine:
+>   Type: Laptop System: HP product: HP EliteBook 845 14 inch G9 Notebook PC
+>     v: N/A serial: <superuser required>
+>   Mobo: HP model: 8990 v: KBC Version 09.49.00 serial: <superuser required>
+>     UEFI: HP v: U82 Ver. 01.04.01 date: 01/12/2023
+> CPU:
+>   Info: 8-core model: AMD Ryzen 7 6800U with Radeon Graphics bits: 64
+>     type: MT MCP cache: L2: 4 MiB
+>   Speed (MHz): avg: 872 min/max: 400/4768 cores: 1: 400 2: 1186 3: 1155
+>     4: 1186 5: 1217 6: 400 7: 1676 8: 400 9: 400 10: 400 11: 400 12: 400
+>     13: 1353 14: 400 15: 400 16: 2588
+> 
+> [tag] [reply] [−]
+> Private
+> Comment 1 Martin 2023-03-15 22:02:46 UTC
+> 
+> after a bisection I found the breaking commit here:
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?h=v6.2&id=d08b0f8f46e45a274fc8c9a5bc92cb9da70d9887
+> 
+> d08b0f8f46e45a274fc8c9a5bc92cb9da70d9887 is the first bad commit
+> commit d08b0f8f46e45a274fc8c9a5bc92cb9da70d9887
+> Author: Shane Parslow <shaneparslow808@gmail.com>
+> Date:   Sat Oct 29 02:03:56 2022 -0700
+> 
+>     net: wwan: iosm: add rpc interface for xmm modems
+>     
+>     Add a new iosm wwan port that connects to the modem rpc interface. This
+>     interface provides a configuration channel, and in the case of the 7360, is
+>     the only way to configure the modem (as it does not support mbim).
+>     
+>     The new interface is compatible with existing software, such as
+>     open_xdatachannel.py from the xmm7360-pci project [1].
+>     
+>     [1] https://github.com/xmm7360/xmm7360-pci
+>     
+>     Signed-off-by: Shane Parslow <shaneparslow808@gmail.com>
+>     Reviewed-by: Loic Poulain <loic.poulain@linaro.org>
+>     Signed-off-by: David S. Miller <davem@davemloft.net>
+> 
+>  drivers/net/wwan/iosm/iosm_ipc_chnl_cfg.c | 2 +-
+>  drivers/net/wwan/wwan_core.c              | 4 ++++
+>  include/linux/wwan.h                      | 2 ++
+>  3 files changed, 7 insertions(+), 1 deletion(-)
+> 
+> This commit aims for a different XMM modem (7360) other than the one I use (7560).
+> 
 
-Wrong order
 
-Best regards,
-Krzysztof
+See the ticket for more details.
 
+
+[TLDR for the rest of this mail: I'm adding this report to the list of
+tracked Linux kernel regressions; the text you find below is based on a
+few templates paragraphs you might have encountered already in similar
+form.]
+
+BTW, let me use this mail to also add the report to the list of tracked
+regressions to ensure it's doesn't fall through the cracks:
+
+#regzbot introduced: d08b0f8f46e45a2
+https://bugzilla.kernel.org/show_bug.cgi?id=217200
+#regzbot title: net: wwan: Intel XMM7560 LTE module stopped working
+#regzbot ignore-activity
+
+This isn't a regression? This issue or a fix for it are already
+discussed somewhere else? It was fixed already? You want to clarify when
+the regression started to happen? Or point out I got the title or
+something else totally wrong? Then just reply and tell me -- ideally
+while also telling regzbot about it, as explained by the page listed in
+the footer of this mail.
+
+Developers: When fixing the issue, remember to add 'Link:' tags pointing
+to the report (e.g. the buzgzilla ticket and maybe this mail as well, if
+this thread sees some discussion). See page linked in footer for details.
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+If I did something stupid, please tell me, as explained on that page.
