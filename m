@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C4DB6BD1D9
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 15:10:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01F006BD1DB
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 15:11:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231175AbjCPOKy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 10:10:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56622 "EHLO
+        id S231203AbjCPOLM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 10:11:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231162AbjCPOKp (ORCPT
+        with ESMTP id S231172AbjCPOLC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 10:10:45 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 896EA39CD2
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 07:09:34 -0700 (PDT)
+        Thu, 16 Mar 2023 10:11:02 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6E4835241
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 07:09:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678975772;
+        s=mimecast20190719; t=1678975789;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=GCtPtzpuFMR8qAF/d/etYJgL7eXxb5y6E1pj/qDFqRA=;
-        b=fr/sxjR8g9krcztrY1GBHPiz7wscYkx+JaJOQ4V8ITGKpFcMKxlthRdKCFir/wyLm+NsTy
-        FxjsQHH+fEcn1vIFM60LRk593BU49TzadOHf5fohqqzcplOR0/Oi3SAevdzvx5uoYxD17L
-        UV6tVtqgGS8UlOLY91qIwRBmDhlHzdE=
+        bh=i+mGYYulQUCelnuxj3PjgHCArB8Ei0mGxcOTGUHa8as=;
+        b=jMYPXM/gDrNGY695d7M1ilyJ/SfPWg8upAgMv/lxDGTsO2VxtswBb5O9fmGmolNg5gJRM0
+        kk8qaOEPPDJ91VE5SZACASHki7Uo5mqh4sU95SM5QOFAF+3b7mK9DmhctutBBbf6HTiCLU
+        iyJ+fqBW3qLbsC0J/PSarU0y64pKmbU=
 Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
  [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-654-qAMHYbxdOieUAFWWDX3POg-1; Thu, 16 Mar 2023 10:09:27 -0400
-X-MC-Unique: qAMHYbxdOieUAFWWDX3POg-1
+ us-mta-5-0S6QgkyZMHCDuzbWbgswFg-1; Thu, 16 Mar 2023 10:09:38 -0400
+X-MC-Unique: 0S6QgkyZMHCDuzbWbgswFg-1
 Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2E5CE3814590;
-        Thu, 16 Mar 2023 14:09:27 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6BA51381459A;
+        Thu, 16 Mar 2023 14:09:35 +0000 (UTC)
 Received: from desnesn.remote.csb (ovpn-116-3.gru2.redhat.com [10.97.116.3])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C188F40C6E67;
-        Thu, 16 Mar 2023 14:09:24 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 8FA9F40C6E67;
+        Thu, 16 Mar 2023 14:09:27 +0000 (UTC)
 From:   Desnes Nunes <desnesn@redhat.com>
 To:     iommu@lists.linux.dev, linux-scsi@vger.kernel.org,
         storagedev@microchip.com, linux-kernel@vger.kernel.org
 Cc:     hch@lst.de, martin.petersen@oracle.com, don.brace@microchip.com,
         m.szyprowski@samsung.com, robin.murphy@arm.com, jejb@linux.ibm.com,
         jsnitsel@redhat.com, Desnes Nunes <desnesn@redhat.com>
-Subject: [PATCH v2 2/3] dma-debug: add cacheline to user/kernel space dump messages
-Date:   Thu, 16 Mar 2023 11:09:11 -0300
-Message-Id: <20230316140912.1038404-3-desnesn@redhat.com>
+Subject: [PATCH v2 3/3] scsi: smartpqi: fix DMA overlapping mappings asymmetry
+Date:   Thu, 16 Mar 2023 11:09:12 -0300
+Message-Id: <20230316140912.1038404-4-desnesn@redhat.com>
 In-Reply-To: <20230316140912.1038404-1-desnesn@redhat.com>
 References: <20230316140912.1038404-1-desnesn@redhat.com>
 MIME-Version: 1.0
@@ -54,7 +54,7 @@ Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,162 +62,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Having the cacheline also printed on the debug_dma_dump_mappings() and
-dump_show() is useful for debugging. Furthermore, this also standardizes
-the messages shown on both dump functions.
+Currently, pqi_keep_device_offline() calls pqi_build_raid_path_request()
+(i.e., a wrapper to pqi_map_single()), but there isn't a pqi_pci_unmap()
+call in pqi_keep_device_offline(). Hence, this is flaged as an API viola-
+tion due to the overlapping mapping of the physical address.
 
+This patch fixes following warning:
+
+  DMA-API: smartpqi 0000:43:00.0: cacheline tracking EEXIST, overlapping
+  mappings aren't supported
+  WARNING: CPU: 0 PID: 15 at kernel/dma/debug.c:570
+  add_dma_entry+0x1f6/0x2f0
+  CPU: 0 PID: 15 Comm: kworker/0:1 Not tainted 6.3.0-rc1-linux #1
+  Call Trace:
+   <TASK>
+   dma_map_page_attrs+0x6f/0xa0
+   pqi_map_single+0xaa/0x160 [smartpqi]
+   pqi_keep_device_offline+0xaf/0x160 [smartpqi]
+   ? dma_unmap_page_attrs+0x1a1/0x1e0
+   ? pqi_identify_physical_device.constprop.0+0xd3/0xe0 [smartpqi]
+   pqi_update_scsi_devices+0x284/0x7e0 [smartpqi]
+   pqi_scan_scsi_devices+0x87/0xe0 [smartpqi]
+   pqi_ctrl_init+0x725/0xa60 [smartpqi]
+   pqi_pci_probe+0xa7/0x130 [smartpqi]
+   local_pci_probe+0x46/0xa0
+   work_for_cpu_fn+0x16/0x20
+   process_one_work+0x2bf/0x670
+   ? __pfx_worker_thread+0x10/0x10
+   worker_thread+0x1d1/0x3b0
+   ? __pfx_worker_thread+0x10/0x10
+   kthread+0xf3/0x120
+   ? __pfx_kthread+0x10/0x10
+   ret_from_fork+0x2c/0x50
+   </TASK>
+
+Fixes: be76f90668d8 ("scsi: smartpqi: Add TEST UNIT READY check for SANITIZE operation")
 Signed-off-by: Desnes Nunes <desnesn@redhat.com>
 ---
- kernel/dma/debug.c | 122 ++++++++++++++++++++++++---------------------
- 1 file changed, 64 insertions(+), 58 deletions(-)
+ drivers/scsi/smartpqi/smartpqi_init.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/kernel/dma/debug.c b/kernel/dma/debug.c
-index e0ad8db1ec25..19cc59829ffd 100644
---- a/kernel/dma/debug.c
-+++ b/kernel/dma/debug.c
-@@ -396,37 +396,6 @@ static unsigned long long phys_addr(struct dma_debug_entry *entry)
- 	return page_to_phys(pfn_to_page(entry->pfn)) + entry->offset;
- }
+diff --git a/drivers/scsi/smartpqi/smartpqi_init.c b/drivers/scsi/smartpqi/smartpqi_init.c
+index 49a8f91810b6..6fca497ca605 100644
+--- a/drivers/scsi/smartpqi/smartpqi_init.c
++++ b/drivers/scsi/smartpqi/smartpqi_init.c
+@@ -1726,6 +1726,8 @@ static bool pqi_keep_device_offline(struct pqi_ctrl_info *ctrl_info,
  
--/*
-- * Dump mapping entries for debugging purposes
-- */
--void debug_dma_dump_mappings(struct device *dev)
--{
--	int idx;
--
--	for (idx = 0; idx < HASH_SIZE; idx++) {
--		struct hash_bucket *bucket = &dma_entry_hash[idx];
--		struct dma_debug_entry *entry;
--		unsigned long flags;
--
--		spin_lock_irqsave(&bucket->lock, flags);
--
--		list_for_each_entry(entry, &bucket->list, list) {
--			if (!dev || dev == entry->dev) {
--				dev_info(entry->dev,
--					 "%s idx %d P=%Lx N=%lx D=%Lx L=%Lx %s %s\n",
--					 type2name[entry->type], idx,
--					 phys_addr(entry), entry->pfn,
--					 entry->dev_addr, entry->size,
--					 dir2name[entry->direction],
--					 maperr2str[entry->map_err_type]);
--			}
--		}
--
--		spin_unlock_irqrestore(&bucket->lock, flags);
--		cond_resched();
--	}
--}
--
- /*
-  * For each mapping (initial cacheline in the case of
-  * dma_alloc_coherent/dma_map_page, initial cacheline in each page of a
-@@ -547,6 +516,70 @@ static void active_cacheline_remove(struct dma_debug_entry *entry)
- 	spin_unlock_irqrestore(&radix_lock, flags);
- }
+ 	rc = pqi_submit_raid_request_synchronous(ctrl_info, &request.header, 0, &error_info);
  
-+/*
-+ * Dump mappings entries on kernel space for debugging purposes
-+ */
-+void debug_dma_dump_mappings(struct device *dev)
-+{
-+	int idx;
-+	phys_addr_t cln;
++	pqi_pci_unmap(ctrl_info->pci_dev, request.sg_descriptors, 1, dir);
 +
-+	for (idx = 0; idx < HASH_SIZE; idx++) {
-+		struct hash_bucket *bucket = &dma_entry_hash[idx];
-+		struct dma_debug_entry *entry;
-+		unsigned long flags;
-+
-+		spin_lock_irqsave(&bucket->lock, flags);
-+		list_for_each_entry(entry, &bucket->list, list) {
-+			if (!dev || dev == entry->dev) {
-+				cln = to_cacheline_number(entry);
-+				dev_info(entry->dev,
-+					 "%s idx %d P=%llx N=%lx D=%llx L=%llx cln=%llx %s %s\n",
-+					 type2name[entry->type], idx,
-+					 phys_addr(entry), entry->pfn,
-+					 entry->dev_addr, entry->size,
-+					 cln, dir2name[entry->direction],
-+					 maperr2str[entry->map_err_type]);
-+			}
-+		}
-+		spin_unlock_irqrestore(&bucket->lock, flags);
-+
-+		cond_resched();
-+	}
-+}
-+
-+/*
-+ * Dump mappings entries on user space via debugfs
-+ */
-+static int dump_show(struct seq_file *seq, void *v)
-+{
-+	int idx;
-+	phys_addr_t cln;
-+
-+	for (idx = 0; idx < HASH_SIZE; idx++) {
-+		struct hash_bucket *bucket = &dma_entry_hash[idx];
-+		struct dma_debug_entry *entry;
-+		unsigned long flags;
-+
-+		spin_lock_irqsave(&bucket->lock, flags);
-+		list_for_each_entry(entry, &bucket->list, list) {
-+			cln = to_cacheline_number(entry);
-+			seq_printf(seq,
-+				   "%s %s %s idx %d P=%llx N=%lx D=%llx L=%llx cln=%llx %s %s\n",
-+				   dev_driver_string(entry->dev),
-+				   dev_name(entry->dev),
-+				   type2name[entry->type], idx,
-+				   phys_addr(entry), entry->pfn,
-+				   entry->dev_addr, entry->size,
-+				   cln, dir2name[entry->direction],
-+				   maperr2str[entry->map_err_type]);
-+		}
-+		spin_unlock_irqrestore(&bucket->lock, flags);
-+	}
-+	return 0;
-+}
-+DEFINE_SHOW_ATTRIBUTE(dump);
-+
- /*
-  * Wrapper function for adding an entry to the hash.
-  * This function takes care of locking itself.
-@@ -765,33 +798,6 @@ static const struct file_operations filter_fops = {
- 	.llseek = default_llseek,
- };
+ 	if (rc)
+ 		goto out; /* Assume not offline */
  
--static int dump_show(struct seq_file *seq, void *v)
--{
--	int idx;
--
--	for (idx = 0; idx < HASH_SIZE; idx++) {
--		struct hash_bucket *bucket = &dma_entry_hash[idx];
--		struct dma_debug_entry *entry;
--		unsigned long flags;
--
--		spin_lock_irqsave(&bucket->lock, flags);
--		list_for_each_entry(entry, &bucket->list, list) {
--			seq_printf(seq,
--				   "%s %s %s idx %d P=%llx N=%lx D=%llx L=%llx %s %s\n",
--				   dev_name(entry->dev),
--				   dev_driver_string(entry->dev),
--				   type2name[entry->type], idx,
--				   phys_addr(entry), entry->pfn,
--				   entry->dev_addr, entry->size,
--				   dir2name[entry->direction],
--				   maperr2str[entry->map_err_type]);
--		}
--		spin_unlock_irqrestore(&bucket->lock, flags);
--	}
--	return 0;
--}
--DEFINE_SHOW_ATTRIBUTE(dump);
--
- static int __init dma_debug_fs_init(void)
- {
- 	struct dentry *dentry = debugfs_create_dir("dma-api", NULL);
 -- 
 2.39.1
 
