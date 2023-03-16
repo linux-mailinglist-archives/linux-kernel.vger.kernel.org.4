@@ -2,138 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F1FE6BD7C6
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 19:06:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06BDF6BD7CC
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 19:07:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230392AbjCPSGq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 14:06:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52904 "EHLO
+        id S230412AbjCPSHr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 14:07:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229702AbjCPSGo (ORCPT
+        with ESMTP id S229702AbjCPSHp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 14:06:44 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5567130EB
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 11:06:43 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id a2so2670956plm.4
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 11:06:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google; t=1678990003;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8mCt8prfCSQ7oDsx1bTuDrvYgv/LfInuW8e+kaRN+58=;
-        b=N7kAVSsQ2PohremsNoTkrBI76k1fo4dMkpIMDKU+nAYfLZWsQ7F29kyOiVeTJdYwZX
-         Fd65aCXwSsf023/A96yZN403ncG2Q8IWQoinGlAomyWDPk79ic0Fpp+DHxUwB7utP5OV
-         ZX4wSoTBTeEV9AAb5l1N8EFXjOHRnq7lhBgBg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678990003;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8mCt8prfCSQ7oDsx1bTuDrvYgv/LfInuW8e+kaRN+58=;
-        b=Y9y0KDtc1vRMJQOerekQCH9z6JhxU+Gc/404qD8arIsAqfVdOsco8W4LWdglFN6MAX
-         XLJ461KOnDr+3G+e2wahetzoHm63HfwpcgH0u+iG3wLtNVmHJNRqDOltW4oRTQWt/MP5
-         p+cuBelyQDLn5LGQXP1awOXFzMO34VWJ26Ac35sKsP1M0l/N5BnUxEuDaz71JEHlDmT5
-         wNS0ID8qMp51QRLiTAcW7t6VtKsBPvAuqDv7ZZCxaOGvola7emUOj2ZL6ROnrqldoSpF
-         8gyaR+AjPO+G3Oq/YZ6muZ+hNt0Nr7qYxXzThd3DwkpI3xGG6FjffnIw2aWD+U1jp1yb
-         ysnw==
-X-Gm-Message-State: AO0yUKUa7Y7slveTVg18eXlf2I3iRwjJzqaQxd2Xs31dIuibVh97VIYn
-        eig3rXRmmgTGCGmAuasfmVa1yfSz7ZyrAfAubF2YNQ==
-X-Google-Smtp-Source: AK7set+M3yi0RkByN/JVYAXsavvcjHycEh223j6ZkIHzA6icQqmZXnmsToLX0ZkwVT+60lYsEynMe/S+6cJ5ovdwPBo=
-X-Received: by 2002:a17:90a:5386:b0:237:9cbe:22ad with SMTP id
- y6-20020a17090a538600b002379cbe22admr1400389pjh.5.1678990002656; Thu, 16 Mar
- 2023 11:06:42 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230315181902.4177819-1-joel@joelfernandes.org>
- <20230315181902.4177819-12-joel@joelfernandes.org> <996f0981-98f4-5077-12b6-bb093bbd28be@datenfreihafen.org>
-In-Reply-To: <996f0981-98f4-5077-12b6-bb093bbd28be@datenfreihafen.org>
-From:   Joel Fernandes <joel@joelfernandes.org>
-Date:   Thu, 16 Mar 2023 14:06:30 -0400
-Message-ID: <CAEXW_YT-KEU-c6zUUEDPvBS=9HFmc1L6JeQiwXU-RfYR78sywA@mail.gmail.com>
-Subject: Re: [PATCH v2 12/14] mac802154: Rename kfree_rcu() to kvfree_rcu_mightsleep()
-To:     Stefan Schmidt <stefan@datenfreihafen.org>
-Cc:     Alexander Aring <alex.aring@gmail.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Thu, 16 Mar 2023 14:07:45 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A583360415
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 11:06:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678990017;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=z72FvUn0C+zfgOKSCB7WUz6jlvrWtPw83T7jP3vhoiw=;
+        b=LG4AOwYCG5QQqrqw1m1mBF6O2WTB1sQiD40fmr0B45goERBl5xYyT0svEQlTltf3sYcmvU
+        uvqMJHinVsdd/u8PLBOXfObjDRv6RHbd17WzbThshv5nBupfOwm8/nEkYi6LX46fljx+Bs
+        u4ESuflKgRSAm0Jub6AtyjakW7wOMq4=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-383-2akiADSaMgOJWrCm9Xiyrw-1; Thu, 16 Mar 2023 14:06:54 -0400
+X-MC-Unique: 2akiADSaMgOJWrCm9Xiyrw-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 80B5D101A54F;
+        Thu, 16 Mar 2023 18:06:53 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.18])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 56F502166B29;
+        Thu, 16 Mar 2023 18:06:51 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <8F8B62FD-0F16-4383-BB34-97E850DAA7AF@hammerspace.com>
+References: <8F8B62FD-0F16-4383-BB34-97E850DAA7AF@hammerspace.com> <3DFBF27C-A62B-4AFE-87FD-3DF53FC39E8E@hammerspace.com> <20230316152618.711970-1-dhowells@redhat.com> <20230316152618.711970-28-dhowells@redhat.com> <754534.1678983891@warthog.procyon.org.uk>
+To:     Trond Myklebust <trondmy@hammerspace.com>
+Cc:     dhowells@redhat.com, Matthew Wilcox <willy@infradead.org>,
         "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>,
-        David Girault <david.girault@qorvo.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Alexander Aring <aahringo@redhat.com>,
-        linux-wpan@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLACK autolearn=no autolearn_force=no
-        version=3.4.6
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Jeffrey Layton <jlayton@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        Anna Schumaker <anna@kernel.org>,
+        Charles Edward Lever <chuck.lever@oracle.com>,
+        "linux-nfs@vger.kernel.org" <linux-nfs@vger.kernel.org>
+Subject: Re: [RFC PATCH 27/28] sunrpc: Use sendmsg(MSG_SPLICE_PAGES) rather then sendpage
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <809994.1678990010.1@warthog.procyon.org.uk>
+Date:   Thu, 16 Mar 2023 18:06:50 +0000
+Message-ID: <809995.1678990010@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 16, 2023 at 12:41=E2=80=AFPM Stefan Schmidt
-<stefan@datenfreihafen.org> wrote:
->
-> Hello.
->
-> On 15.03.23 19:18, Joel Fernandes (Google) wrote:
-> > The k[v]free_rcu() macro's single-argument form is deprecated.
-> > Therefore switch to the new k[v]free_rcu_mightsleep() variant. The goal
-> > is to avoid accidental use of the single-argument forms, which can
-> > introduce functionality bugs in atomic contexts and latency bugs in
-> > non-atomic contexts.
-> >
-> > The callers are holding a mutex so the context allows blocking. Hence
-> > using the API with a single argument will be fine, but use its new name=
-.
-> >
-> > There is no functionality change with this patch.
-> >
-> > Fixes: 57588c71177f ("mac802154: Handle passive scanning")
-> > Reviewed-by: Paul E. McKenney <paulmck@kernel.org>
-> > Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
-> > ---
-> >   net/mac802154/scan.c | 4 ++--
-> >   1 file changed, 2 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/net/mac802154/scan.c b/net/mac802154/scan.c
-> > index 9b0933a185eb..5c191bedd72c 100644
-> > --- a/net/mac802154/scan.c
-> > +++ b/net/mac802154/scan.c
-> > @@ -52,7 +52,7 @@ static int mac802154_scan_cleanup_locked(struct ieee8=
-02154_local *local,
-> >       request =3D rcu_replace_pointer(local->scan_req, NULL, 1);
-> >       if (!request)
-> >               return 0;
-> > -     kfree_rcu(request);
-> > +     kvfree_rcu_mightsleep(request);
-> >
-> >       /* Advertize first, while we know the devices cannot be removed *=
-/
-> >       if (aborted)
-> > @@ -403,7 +403,7 @@ int mac802154_stop_beacons_locked(struct ieee802154=
-_local *local,
-> >       request =3D rcu_replace_pointer(local->beacon_req, NULL, 1);
-> >       if (!request)
-> >               return 0;
-> > -     kfree_rcu(request);
-> > +     kvfree_rcu_mightsleep(request);
-> >
-> >       nl802154_beaconing_done(wpan_dev);
-> >
->
-> I just saw that there is a v2 of this patch. My ACK still stands as for v=
-1.
->
->
-> Acked-by: Stefan Schmidt <stefan@datenfreihafen.org>
+Trond Myklebust <trondmy@hammerspace.com> wrote:
 
-Thanks! Applied the ack and will be taking it via the RCU tree as we discus=
-sed.
+> 1) This is code that is common to the client and the server. Why are we
+> adding unused 3 bvec slots to every client RPC call?
 
- - Joel
+Fair point, but I'm trying to avoid making four+ sendmsg calls in nfsd rather
+than one.
+
+> 2) It obfuscates the existence of these bvec slots.
+
+True, it'd be nice to find a better way to do it.  Question is, can the client
+make use of MSG_SPLICE_PAGES also?
+
+> 3) knfsd may use splice_direct_to_actor() in order to avoid copying the page
+> cache data into private buffers (it just takes a reference to the
+> pages). Using MSG_SPLICE_PAGES will presumably require it to protect those
+> pages against further writes while the socket is referencing them.
+
+Upstream sunrpc is using sendpage with TCP.  It already has that issue.
+MSG_SPLICE_PAGES is a way of doing sendpage through sendmsg.
+
+David
+
