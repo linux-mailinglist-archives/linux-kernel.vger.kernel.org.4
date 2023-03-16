@@ -2,91 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9443E6BD9AE
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 20:58:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8C016BD9B8
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 21:00:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230130AbjCPT60 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 15:58:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41806 "EHLO
+        id S229577AbjCPUAs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 16:00:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230083AbjCPT6N (ORCPT
+        with ESMTP id S230168AbjCPUAd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 15:58:13 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32B93C0805
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 12:57:30 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id n203-20020a25dad4000000b0091231592671so2915940ybf.1
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 12:57:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678996646;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=6hZkF2wD5S148YOwsLKgyhW8hSKyz5z+vIxAoDqNEoU=;
-        b=ppopHHPSmlauEReZkK5sf465mFh6p3Uf5alXDjm/6jJiPejFz3RHB7aixjA2ozrvOi
-         LjIiAi2RABPxvySD7Ql+1dTFgTiDAABrEGBxcuHmTvN2QnJJqaMEmm//EYMn+z2kO/bY
-         CmbWGysimF0nov7NS8ciC0fRQ5IaNXJlk2BHJr3BmSi1LabFKkFEwy90ULpt9//mAQem
-         ttXH3ONv2j2YWZoLkIcJ2UTDoJ6pR2hXdifOR4fdTv/7X7W4WnprLdJyiCr/i3PL3YKK
-         allvt39YWr14dR2/4YRKS+ACYy7NUzOxfL0NeLmQ6PYa/DALfNx3f2DPgXpkhnnpw7b+
-         UwgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678996646;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6hZkF2wD5S148YOwsLKgyhW8hSKyz5z+vIxAoDqNEoU=;
-        b=DHi7PGH8H8KQluSugZjhkaLIdI/vT4FXBR6lkHihjqToffVO9J8zs/YCdDywdHHXWG
-         6ZwySZxMw9BpwsENEngavT57rArVR8ElhPe7GcRJl3O0LlPRiOlmP6+fxe76SOTfttdp
-         QXspmI7JwBS3kDk9UIZbCO1odZ2eZtVKzBF6XS1SHs92G+donPR/6Xa6yXxwhlhVzvFz
-         XVT7/8mqSuunLGA8klLCzX5PbqSRl9mwW68xIgg3eRjsXzLf2psTw7OymF4U08rd5v7G
-         9/qUSVx3W2Y07SwPcjvN9CQXsLE4kLXKvQnG128Tzogw4Zu8YTdE3B3pQufjp7+ZMFGv
-         lKtA==
-X-Gm-Message-State: AO0yUKXtZWeBgzeNfN0JgQpAOYRW0N9e2srqboI0t4KsYxox0kCuF6fH
-        i03ewR9ir2hSphXSPNpmZkGXVp3CM+I=
-X-Google-Smtp-Source: AK7set90USqlvs8yez6D/amNzNA42LXhWOo0jeJaT0oOsHZyg7uk4XQQlogtskg3otXzxSL5LVe+YTvWptQ=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a05:6902:208:b0:a98:bd27:91de with SMTP id
- j8-20020a056902020800b00a98bd2791demr28961776ybs.7.1678996646536; Thu, 16 Mar
- 2023 12:57:26 -0700 (PDT)
-Date:   Thu, 16 Mar 2023 19:57:24 +0000
-In-Reply-To: <6b9e8589281c4d2bae46eba36f77afe7@huawei.com>
-Mime-Version: 1.0
-References: <20230316154554.1237-1-shameerali.kolothum.thodi@huawei.com>
- <ZBNLnp7c1JvDsmHm@google.com> <6b9e8589281c4d2bae46eba36f77afe7@huawei.com>
-Message-ID: <ZBN0pFN/nF8G3fWl@google.com>
-Subject: Re: [PATCH] KVM: Add the missing stub function for kvm_dirty_ring_check_request()
-From:   Sean Christopherson <seanjc@google.com>
-To:     Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "gshan@redhat.com" <gshan@redhat.com>,
-        "maz@kernel.org" <maz@kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 16 Mar 2023 16:00:33 -0400
+Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D812CCC33D;
+        Thu, 16 Mar 2023 13:00:14 -0700 (PDT)
+Received: from [192.168.1.103] (178.176.73.23) by msexch01.omp.ru
+ (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Thu, 16 Mar
+ 2023 22:58:41 +0300
+Subject: Re: [PATCH net v2 2/2] sh_eth: avoid PHY being resumed when interface
+ is not up
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        <netdev@vger.kernel.org>
+CC:     <linux-renesas-soc@vger.kernel.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Michal Kubiak <michal.kubiak@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        <linux-kernel@vger.kernel.org>
+References: <20230315074115.3008-1-wsa+renesas@sang-engineering.com>
+ <20230315074115.3008-3-wsa+renesas@sang-engineering.com>
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <4985c895-636d-9707-0acb-5334ae74e906@omp.ru>
+Date:   Thu, 16 Mar 2023 22:58:41 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
+MIME-Version: 1.0
+In-Reply-To: <20230315074115.3008-3-wsa+renesas@sang-engineering.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [178.176.73.23]
+X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
+ (10.188.4.12)
+X-KSE-ServerInfo: msexch01.omp.ru, 9
+X-KSE-AntiSpam-Interceptor-Info: scan successful
+X-KSE-AntiSpam-Version: 5.9.59, Database issued on: 03/16/2023 19:42:29
+X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
+X-KSE-AntiSpam-Method: none
+X-KSE-AntiSpam-Rate: 59
+X-KSE-AntiSpam-Info: Lua profiles 176151 [Mar 16 2023]
+X-KSE-AntiSpam-Info: Version: 5.9.59.0
+X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
+X-KSE-AntiSpam-Info: LuaCore: 507 507 08d345461d9bcca7095738422a5279ab257bb65a
+X-KSE-AntiSpam-Info: {rep_avail}
+X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
+X-KSE-AntiSpam-Info: {relay has no DNS name}
+X-KSE-AntiSpam-Info: {SMTP from is not routable}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.73.23 in (user)
+ dbl.spamhaus.org}
+X-KSE-AntiSpam-Info: 178.176.73.23:7.1.2;omp.ru:7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;127.0.0.199:7.1.2
+X-KSE-AntiSpam-Info: ApMailHostAddress: 178.176.73.23
+X-KSE-AntiSpam-Info: {DNS response errors}
+X-KSE-AntiSpam-Info: Rate: 59
+X-KSE-AntiSpam-Info: Status: not_detected
+X-KSE-AntiSpam-Info: Method: none
+X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
+ smtp.mailfrom=omp.ru;dkim=none
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Heuristic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 03/16/2023 19:46:00
+X-KSE-AttachmentFiltering-Interceptor-Info: protection disabled
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: Clean, bases: 3/16/2023 2:00:00 PM
+X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 16, 2023, Shameerali Kolothum Thodi wrote:
-> > From: Sean Christopherson [mailto:seanjc@google.com]
-> > On Thu, Mar 16, 2023, Shameer Kolothum wrote:
-> > > The stub for !CONFIG_HAVE_KVM_DIRTY_RING case is missing.
-> > 
-> > No stub is needed.  kvm_dirty_ring_check_request() isn't called from
-> > common code,
-> > and should not (and isn't unless I'm missing something) be called from arch
-> > code
-> > unless CONFIG_HAVE_KVM_DIRTY_RING=y.
-> > 
-> > x86 and arm64 are the only users, and they both select
-> > HAVE_KVM_DIRTY_RING
-> > unconditionally when KVM is enabled.
-> 
-> Yes, it is at present not called from anywhere other than x86 and arm64.
-> But I still think since it is a common helper, better to have a stub.
+On 3/15/23 10:41 AM, Wolfram Sang wrote:
 
-Why?  It buys us nothing other than dead code, and even worse it could let a bug
-that would otherwise be caught during build time escape to run time.
+> SH_ETH doesn't need mdiobus suspend/resume, that's why it sets
+> 'mac_managed_pm'. However, setting it needs to be moved from init to
+> probe, so mdiobus PM functions will really never be called (e.g. when
+> the interface is not up yet during suspend/resume).
+> 
+> Fixes: 6a1dbfefdae4 ("net: sh_eth: Fix PHY state warning splat during system resume")
+> Suggested-by: Heiner Kallweit <hkallweit1@gmail.com>
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> Reviewed-by: Michal Kubiak <michal.kubiak@intel.com>
+
+[...]
+
+Reviewed-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+
+MBR, Sergey
