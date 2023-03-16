@@ -2,176 +2,291 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAC196BCE9D
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 12:43:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03E736BCEA4
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 12:45:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230058AbjCPLn5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 07:43:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43178 "EHLO
+        id S230224AbjCPLp1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 07:45:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjCPLnz (ORCPT
+        with ESMTP id S230134AbjCPLpX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 07:43:55 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 648392004B
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 04:43:52 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id x13so6477278edd.1
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 04:43:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tessares.net; s=google; t=1678967031;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=thUFjFBGjR3fhOfIi9hVXRjQGGNCMGLil0BHgmTo/ic=;
-        b=KyeM9k0ZKw4NJASVXPNZ0vzzWep932EWoZHPycDlavk6txL1/DqQqg0mTQHmVoBHB8
-         V9ld6c8BWWd4ejSmes2n1NVAVRiMfE9S7xTmzhYXHIdu/VCiPbCBxVc7kQqy2r3f1Ofj
-         iL5ddMWOlA3dzOSwuoO9rJO+oAZ4dOzntwgYZRpbKJrHi82UH8VpTBxtxrq5YAfexj2s
-         4XtUvrhiXsokBnZxxZG+aSub9HBETU1W5BzCwFszLte9Ot1aFRCT/6MwFMcW1rtBHfiv
-         bsrIUxjk65K7fryaETQblboHu1M+n0igZBu8/imWB/nTu12GUKLLsoU+ZewJ9v4dTkXK
-         ptDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678967031;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=thUFjFBGjR3fhOfIi9hVXRjQGGNCMGLil0BHgmTo/ic=;
-        b=fpZiELwIsJW7FD3W9WIIV/9fTgZwX/WRlNsFjQw21YiBCtXM3/OEx4R68uzc3olec1
-         3wLLWOjfULbqHaepXdx6hqP7jGKTs5vqNN4ObOD1czz45PtGPvvt6Z4zkf1WbakpuWr4
-         YQH8RcNQ3ldF+9fzKQ/6ExCNHwI5f8Lq/QE7i4J7RvyR6/8nCWh57JCfnFx6hN7zDqgQ
-         80lMxuwC84qQd5HAcpr4qKLf8WEmVMW7X5q8GVX/OYyW6SmHeuAfYahMwoyjTn8oUbpN
-         5sqkbswwWa4OYlXF343BbVQgF681pWlALFl0J2qXqmASDQcjn1utu/05VlmJmhZ4nROk
-         VXiQ==
-X-Gm-Message-State: AO0yUKVnfoq0UfUTbvonlAMV0JayYyoxsGe+vaR2fxNqpEs+c/K5dFyq
-        Qf7Ox9pmiYSpSZN9rQsTwkUCZQ==
-X-Google-Smtp-Source: AK7set9DzddMMCMd0B+4V/kLF1eWBlJyzgxJJXNzHSTU0T9xuZkAhz9WVCq1iaeT3rYerBx/YztakQ==
-X-Received: by 2002:aa7:d99a:0:b0:4fb:78a0:eabf with SMTP id u26-20020aa7d99a000000b004fb78a0eabfmr5903708eds.29.1678967030711;
-        Thu, 16 Mar 2023 04:43:50 -0700 (PDT)
-Received: from ?IPV6:2a02:578:8593:1200:118:fc7d:1ce3:f580? ([2a02:578:8593:1200:118:fc7d:1ce3:f580])
-        by smtp.gmail.com with ESMTPSA id s26-20020a508d1a000000b004bef1187754sm3685504eds.95.2023.03.16.04.43.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Mar 2023 04:43:50 -0700 (PDT)
-Message-ID: <81f8be3e-4860-baf9-8e13-fec3a103245b@tessares.net>
-Date:   Thu, 16 Mar 2023 12:43:49 +0100
+        Thu, 16 Mar 2023 07:45:23 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A4BFA6BF4;
+        Thu, 16 Mar 2023 04:45:22 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32GBj5ol081794;
+        Thu, 16 Mar 2023 06:45:05 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1678967105;
+        bh=cwq5DqVgKzt9oDzelE5puUajTk6lsQ56nawsi3etSv8=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=kSxSuScGMIjGHJWdl27BpUvTneAhHnVezuMDEZlm/4okck/X2q6nj+DlUarD0yMLq
+         Y4cCq7y5CqivxjnV0tMHZUzynsihTqKAN3/6JQx0zFV2H/Ra2oFBhWk2SfbY2dTJOL
+         pV7HhErQxsyZJKTQvDp8fwIDWas5TGcg9dlvCUv0=
+Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32GBj5DQ077365
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 16 Mar 2023 06:45:05 -0500
+Received: from DFLE111.ent.ti.com (10.64.6.32) by DFLE104.ent.ti.com
+ (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Thu, 16
+ Mar 2023 06:45:05 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE111.ent.ti.com
+ (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Thu, 16 Mar 2023 06:45:05 -0500
+Received: from [10.24.69.114] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32GBj0FE117791;
+        Thu, 16 Mar 2023 06:45:00 -0500
+Message-ID: <20718115-7606-a77b-7e4d-511ca9c1d798@ti.com>
+Date:   Thu, 16 Mar 2023 17:14:59 +0530
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-Subject: Re: [PATCH 0/2] docs & checkpatch: allow Closes tags with links
-To:     Thorsten Leemhuis <linux@leemhuis.info>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andy Whitcroft <apw@canonical.com>,
-        Joe Perches <joe@perches.com>,
-        Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        =?UTF-8?Q?Kai_Wasserb=c3=a4ch?= <kai@dev.carbon-project.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, mptcp@lists.linux.dev
-References: <20230314-doc-checkpatch-closes-tag-v1-0-1b83072e9a9a@tessares.net>
- <c27709bd-90af-ec4f-de0b-3a4536bc17ca@leemhuis.info>
-Content-Language: en-GB
-From:   Matthieu Baerts <matthieu.baerts@tessares.net>
-In-Reply-To: <c27709bd-90af-ec4f-de0b-3a4536bc17ca@leemhuis.info>
-Content-Type: text/plain; charset=UTF-8
+Subject: Re: [PATCH v4 4/5] soc: ti: pruss: Add helper functions to set GPI
+ mode, MII_RT_event and XFR
+Content-Language: en-US
+To:     Roger Quadros <rogerq@kernel.org>,
+        MD Danish Anwar <danishanwar@ti.com>,
+        "Andrew F. Davis" <afd@ti.com>, Suman Anna <s-anna@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Nishanth Menon <nm@ti.com>
+CC:     <linux-remoteproc@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-omap@vger.kernel.org>,
+        <srk@ti.com>, <devicetree@vger.kernel.org>,
+        <netdev@vger.kernel.org>
+References: <20230313111127.1229187-1-danishanwar@ti.com>
+ <20230313111127.1229187-5-danishanwar@ti.com>
+ <d168e7dd-42a0-b728-5c4c-e97209c13871@kernel.org>
+ <b1409f34-86b5-14e8-f352-5032aa57ca46@ti.com>
+ <60e73395-f670-6eaa-0eb7-389553320a71@kernel.org>
+From:   Md Danish Anwar <a0501179@ti.com>
+Organization: Texas Instruments
+In-Reply-To: <60e73395-f670-6eaa-0eb7-389553320a71@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Thorsten, Linus,
 
-@Linus: in short, we would like to continue using the "Closes:" tag (or
-similar, see below) with a URL in commit messages. They are useful to
-have public bug trackers doing automated actions like closing a specific
-ticket. Any objection from your side?
-
-The full thread is visible there:
-
-https://lore.kernel.org/linux-doc/20230314-doc-checkpatch-closes-tag-v1-0-1b83072e9a9a@tessares.net/T/
-
-
-@Thorsten: thank you for your reply!
-
-On 16/03/2023 10:22, Thorsten Leemhuis wrote:
-> On 15.03.23 18:44, Matthieu Baerts wrote:
->> Since v6.3, checkpatch.pl now complains about the use of "Closes:" tags
->> followed by a link [1]. It also complains if a "Reported-by:" tag is
->> followed by a "Closes:" one [2].
+On 16/03/23 17:06, Roger Quadros wrote:
+> Hi,
+> 
+> On 16/03/2023 13:05, Md Danish Anwar wrote:
+>> Hi Roger,
 >>
->> As detailed in the first patch, this "Closes:" tag is used for a bit of
->> time, mainly by DRM and MPTCP subsystems. It is used by some bug
->> trackers to automate the closure of issues when a patch is accepted.
+>> On 15/03/23 17:52, Roger Quadros wrote:
+>>>
+>>>
+>>> On 13/03/2023 13:11, MD Danish Anwar wrote:
+>>>> From: Suman Anna <s-anna@ti.com>
+>>>>
+>>>> The PRUSS CFG module is represented as a syscon node and is currently
+>>>> managed by the PRUSS platform driver. Add easy accessor functions to set
+>>>> GPI mode, MII_RT event enable/disable and XFR (XIN XOUT) enable/disable
+>>>> to enable the PRUSS Ethernet usecase. These functions reuse the generic
+>>>> pruss_cfg_update() API function.
+>>>>
+>>>> Signed-off-by: Suman Anna <s-anna@ti.com>
+>>>> Co-developed-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
+>>>> Signed-off-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
+>>>> Signed-off-by: Puranjay Mohan <p-mohan@ti.com>
+>>>> Signed-off-by: MD Danish Anwar <danishanwar@ti.com>
+>>>> ---
+>>>>  drivers/soc/ti/pruss.c           | 60 ++++++++++++++++++++++++++++++++
+>>>>  include/linux/remoteproc/pruss.h | 22 ++++++++++++
+>>>>  2 files changed, 82 insertions(+)
+>>>>
+>>>> diff --git a/drivers/soc/ti/pruss.c b/drivers/soc/ti/pruss.c
+>>>> index 26d8129b515c..2f04b7922ddb 100644
+>>>> --- a/drivers/soc/ti/pruss.c
+>>>> +++ b/drivers/soc/ti/pruss.c
+>>>> @@ -203,6 +203,66 @@ static int pruss_cfg_update(struct pruss *pruss, unsigned int reg,
+>>>>  	return regmap_update_bits(pruss->cfg_regmap, reg, mask, val);
+>>>>  }
+>>>>  
+>>>> +/**
+>>>> + * pruss_cfg_gpimode() - set the GPI mode of the PRU
+>>>> + * @pruss: the pruss instance handle
+>>>> + * @pru_id: id of the PRU core within the PRUSS
+>>>> + * @mode: GPI mode to set
+>>>> + *
+>>>> + * Sets the GPI mode for a given PRU by programming the
+>>>> + * corresponding PRUSS_CFG_GPCFGx register
+>>>> + *
+>>>> + * Return: 0 on success, or an error code otherwise
+>>>> + */
+>>>> +int pruss_cfg_gpimode(struct pruss *pruss, enum pruss_pru_id pru_id,
+>>>> +		      enum pruss_gpi_mode mode)
+>>>> +{
+>>>> +	if (pru_id < 0 || pru_id >= PRUSS_NUM_PRUS)
+>>>> +		return -EINVAL;
+>>>> +
+>>>> +	if (mode < 0 || mode > PRUSS_GPI_MODE_MAX)
+>>>> +		return -EINVAL;
+>>>> +
+>>>> +	return pruss_cfg_update(pruss, PRUSS_CFG_GPCFG(pru_id),
+>>>> +				PRUSS_GPCFG_PRU_GPI_MODE_MASK,
+>>>> +				mode << PRUSS_GPCFG_PRU_GPI_MODE_SHIFT);
+>>>> +}
+>>>> +EXPORT_SYMBOL_GPL(pruss_cfg_gpimode);
+>>>> +
+>>>> +/**
+>>>> + * pruss_cfg_miirt_enable() - Enable/disable MII RT Events
+>>>> + * @pruss: the pruss instance
+>>>> + * @enable: enable/disable
+>>>> + *
+>>>> + * Enable/disable the MII RT Events for the PRUSS.
+>>>> + *
+>>>> + * Return: 0 on success, or an error code otherwise
+>>>> + */
+>>>> +int pruss_cfg_miirt_enable(struct pruss *pruss, bool enable)
+>>>> +{
+>>>> +	u32 set = enable ? PRUSS_MII_RT_EVENT_EN : 0;
+>>>> +
+>>>> +	return pruss_cfg_update(pruss, PRUSS_CFG_MII_RT,
+>>>> +				PRUSS_MII_RT_EVENT_EN, set);
+>>>> +}
+>>>> +EXPORT_SYMBOL_GPL(pruss_cfg_miirt_enable);
+>>>> +
+>>>> +/**
+>>>> + * pruss_cfg_xfr_enable() - Enable/disable XIN XOUT shift functionality
+>>>> + * @pruss: the pruss instance
+>>>> + * @enable: enable/disable
+>>>> + * @mask: Mask for PRU / RTU
+>>>
+>>> You should not expect the user to provide the mask but only
+>>> the core type e.g. 
+>>>
+>>> enum pru_type {
+>>>         PRU_TYPE_PRU = 0,
+>>>         PRU_TYPE_RTU,
+>>>         PRU_TYPE_TX_PRU,
+>>>         PRU_TYPE_MAX,
+>>> };
+>>>
+>>> Then you figure out the mask in the function.
+>>> Also check for invalid pru_type and return error if so.
+>>>
 >>
->> Because this tag is used for a bit of time by different subsystems and
->> it looks like it makes sense and it is useful for them, I didn't bother
->> Linus to get his permission to continue using it. If you think this is
->> necessary to do that up front, please tell me and I will be happy to ask
->> for his agreement.
+>> Sure Roger, I will create a enum and take it as parameter in API. Based on
+>> these enum I will calculate mask and do XFR shifting inside the API
+>> pruss_cfg_xfr_enable().
+>>
+>> There are two registers for XFR shift.
+>>
+>> #define PRUSS_SPP_XFER_SHIFT_EN                 BIT(1)
+>> #define PRUSS_SPP_RTU_XFR_SHIFT_EN              BIT(3)
+>>
+>> For PRU XFR shifting, the mask should be PRUSS_SPP_XFER_SHIFT_EN,
+>> for RTU shifting mask should be PRUSS_SPP_RTU_XFR_SHIFT_EN and for PRU and RTU
+>> shifting mask should be (PRUSS_SPP_XFER_SHIFT_EN | PRUSS_SPP_RTU_XFR_SHIFT_EN)
+>>
+>> So the enum would be something like this.
+>>
+>> /**
+>>  * enum xfr_shift_type - XFR shift type
+>>  * @XFR_SHIFT_PRU: Enables XFR shift for PRU
+>>  * @XFR_SHIFT_RTU: Enables XFR shift for RTU
+>>  * @XFR_SHIFT_PRU_RTU: Enables XFR shift for both PRU and RTU
 > 
-> Due to how he reacted to some "invented" tags recently, I'd think it
-> would be appropriate to CC him on this patchset, as he then can speak up
-> if he wants to (and I assume a few more mails don't bother him).
-
-Sure, just did with a short summary.
-
->> The first patch updates the documentation to explain what is this
->> "Closes:" tag and how/when to use it. The second patch modifies
->> checkpatch.pl to stop complaining about it.
+> This is not required. User can call the API twice. once for PRU and once for RTU.
 > 
-> I liked Andrew's `have been using "Addresses:" on occasion. [...] more
-> humble [...]` comment.  Sadly that tag is not supported by GitLab and
-> GitHub. But well, "Resolves" is and also a bit more humble if you ask
-> me. How about using that instead? Assuming that Konstantin can work with
-> that tag, too, but I guess he can.
-
-I don't mind changing the tag name but I still have a preference to use
-'Closes:' simply because it was used ~500 times in the past.
-
-If we want to change, it is probably the best time to do so but for me,
-the fact we -- MPTCP subsystem -- use the same tag as the DRM subsystem
-(and ClangBuiltLinux and Debian) without consulting each other -- if I'm
-not mistaken -- is a sign it is a good tag :)
-
-> I also wonder if the texts for the documentation could be shorter.
-> Wouldn't something like this do?
+>>  * @XFR_SHIFT_MAX: Total number of XFR shift types available.
+>>  *
+>>  */
+>>
+>> enum xfr_shift_type {
+>>         XFR_SHIFT_PRU = 0,
+>>         XFR_SHIFT_RTU,
+>>         XFR_SHIFT_PRU_RTU,
+>>         XFR_SHIFT_MAX,
+>> };
 > 
-> `Instead of "Link:" feel free to use "Resolves:" with an URL instead, if
-> the issue was filed in a public bug tracker that will consider the issue
-> resolved when it noticed that tag.`
+> Why do you need this new enum definition?
+> We already have pru_type defined somewhere. You can move it to a public header
+> if not there yet.
 > 
-> [s/Resolves/Closes/ if we stick to that]
+> enum pru_type {
+>          PRU_TYPE_PRU = 0,
+>          PRU_TYPE_RTU,
+>          PRU_TYPE_TX_PRU,
+>          PRU_TYPE_MAX,
+> };
+> 
 
-Sure, I'm not used to write doc and I appreciate your suggestion to
-improve that. I might change one or two words but I have no objection to
-write this in the v2 once we agreed on the name of this tag.
+This enum is present in drivers/remoteproc/pru_rproc.c file. But the problem
+with this enum is that in [1] we need to enable XFR shift for both PRU and RTU
+for which the mask will be OR of PRUSS_SPP_XFER_SHIFT_EN (mask for PRU) and
+PRUSS_SPP_RTU_XFR_SHIFT_EN (mask of RTU).
 
-Also, should I use the same text in both process/5.Posting.rst and
-process/submitting-patches.rst?
+Now this enum doesn't have a field for both PRU and RTU. Also we don't need
+need the XFR shift for PRU_TYPE_TX_PRU as only two XFR shift register bits are
+defined.
 
-> Side note: makes we wonder if we should go "all in" here to avoid
-> confusion and allow "Resolves" everywhere, even for links to lore.
+That is why I thought of introducing new enum.
 
-Personally, I would recommend that, it might even be useful for other
-bots like regzbot: a patch can be linked to one discussion but not
-fixing the issue and even fixing another one instead. It might be useful
-for a bot to be able to distinguish the two without depending on a not
-100% reliable AI ;-)
+[1] drivers/net/ethernet/ti/icssg_config.c
 
-A concrete example: patch 1/2 of this series is linked to a bug report
-[1]. The ticket can be closed only when patch 2/2 will be applied.
+/* enable XFR shift for PRU and RTU */
+	mask = PRUSS_SPP_XFER_SHIFT_EN | PRUSS_SPP_RTU_XFR_SHIFT_EN;
+> 
+>>
+>> In pruss_cfg_xfr_enable() API, I will use switch case, and for first three
+>> enums, I will calculate the mask.
+>>
+>> If input is anything other than first three, I will retun -EINVAL. This will
+>> serve as check for valid xfr_shift_type.
+>>
+>> The API will look like this.
+>>
+>> int pruss_cfg_xfr_enable(struct pruss *pruss, enum xfr_shift_type xfr_type,
+>> 			 bool enable);
+>> {
+>> 	u32 mask;
+>>
+>> 	switch (xfr_type) {
+>> 	case XFR_SHIFT_PRU:
+>> 		mask = PRUSS_SPP_XFER_SHIFT_EN;
+>> 		break;
+>> 	case XFR_SHIFT_RTU:
+>> 		mask = PRUSS_SPP_RTU_XFR_SHIFT_EN;
+>> 		break;
+>> 	case XFR_SHIFT_PRU_RTU:
+>> 		mask = PRUSS_SPP_XFER_SHIFT_EN | PRUSS_SPP_RTU_XFR_SHIFT_EN;
+>> 		break;
+>> 	default:
+>> 		return -EINVAL;
+>> 	}
+>>
+>> 	u32 set = enable ? mask : 0;
+>>
+>> 	return pruss_cfg_update(pruss, PRUSS_CFG_SPP, mask, set);
+>> }
+>>
+>> This entire change I will keep as part of this patch only.
+>>
+>> Please let me know if this looks OK to you.
+>>
+>>
+> 
+> cheers,
+> -roger
 
-Cheers,
-Matt
-
-[1] https://github.com/multipath-tcp/mptcp_net-next/issues/373
 -- 
-Tessares | Belgium | Hybrid Access Solutions
-www.tessares.net
+Thanks and Regards,
+Danish.
