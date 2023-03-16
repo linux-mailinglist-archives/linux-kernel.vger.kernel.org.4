@@ -2,112 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E7726BC79C
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 08:46:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DD346BC79A
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 08:46:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230035AbjCPHq3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 03:46:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38958 "EHLO
+        id S230179AbjCPHq0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 03:46:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230039AbjCPHqR (ORCPT
+        with ESMTP id S230040AbjCPHqR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 16 Mar 2023 03:46:17 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F18FA4033;
-        Thu, 16 Mar 2023 00:46:15 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id j13so841815pjd.1;
-        Thu, 16 Mar 2023 00:46:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678952774;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Sp8n21BUQb5dHlsU/Jl3vAwa9E+kF9N6pkWBGTGEZ/c=;
-        b=m0xT41KK42bpQg1SdxIkvBesNYR67uqep4fC7Gyt9rg/ikc4w1rrJGMUwThWNw8C0q
-         COvG8Ynqr0eH9nU5VuxjbKeRAX8dZWztf30gYL2Q+gn57HUOMk2Yt8M9MXKKAG5uh0z2
-         dlGyX2rbAd28ALqBvXcKayQl00R0u5MhP5lkZVRdjuhyPz5a0YShAh51D2on3kTsnqN+
-         LB3Gkd7xol02CSwTpzHfhNKzInylacO7kiJWosuRUqy4P1Vku/IY7IwIEhWf0OPtHxxz
-         xZ63Ixv4p0Ql4tloNsrNGq2gOF9OtEdOEWfKzodBWo7tr/8CdK+yLrFrZNOlgxBqMOBg
-         JjWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678952774;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Sp8n21BUQb5dHlsU/Jl3vAwa9E+kF9N6pkWBGTGEZ/c=;
-        b=4B3axtaYpTaEhy2ybPA8hdwAk9NDjm+IAGNTaLmKzw6zJfLsDogiaEpgNkKfbcXVKW
-         m3/jA3Tntc62ML2dPz/i/9+dVazsJk+BVin1Rga5YXKXRbHUzwHE6Bjs3tB0P9kCfofc
-         QszcDyXNgxlmcWC6k5c8tNg3Sle6UmYlCw93HLBwlAZqZt+5i8WRohTU7kZ0qKHWlX1a
-         naPzUzpKowtM6PX0o7XzvuiO/EXbqgfDI5zGRpwtU6/AZoF1C+qt+niCb8tzu7sgcCT+
-         wzhwFK/iJoZzYuZLnyTAx6XqmTUj0zcc477NDCFMcN3frAF7tetahbiB5RH4hrae3fjl
-         h4AA==
-X-Gm-Message-State: AO0yUKXoGDF6aKnweFjM1Di05m0Dgi5lRJ10YeMb7KOqj9rLBz1VOmXA
-        zzouQSCqlmYEWu+2iztTIPSo4Dl1v9ww2A==
-X-Google-Smtp-Source: AK7set8XFIK72Rtk0X1EhThGMVUB3zTC+gG6Mvs3ElWDeAAJgFTs5JfLsQrVjIjBH8tAINbxh3yB/A==
-X-Received: by 2002:a17:903:41d0:b0:1a0:41eb:fdb3 with SMTP id u16-20020a17090341d000b001a041ebfdb3mr2499067ple.10.1678952773962;
-        Thu, 16 Mar 2023 00:46:13 -0700 (PDT)
-Received: from kazuki-mac.lan ([2400:4051:ea3:5910::789])
-        by smtp.gmail.com with ESMTPSA id kh5-20020a170903064500b0019b9a075f1fsm4889717plb.80.2023.03.16.00.46.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Mar 2023 00:46:13 -0700 (PDT)
-From:   Kazuki H <kazukih0205@gmail.com>
-To:     linux-pm@vger.kernel.org
-Cc:     Kazuki H <kazukih0205@gmail.com>,
-        Kazuki Hashimoto <kazuki0205@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 1/3] sched/idle: Remove stale comments
-Date:   Thu, 16 Mar 2023 16:45:58 +0900
-Message-Id: <20230316074600.288864-1-kazukih0205@gmail.com>
-X-Mailer: git-send-email 2.40.0
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41915A2F0F
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 00:46:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        from:to:cc:subject:date:message-id:in-reply-to:references
+        :mime-version:content-transfer-encoding; s=k1; bh=zl2jnjzDWpy3C4
+        fB7TuVFiW4MYKclvO6XP0vE27XA8A=; b=MP4aeJnDTqGMF504Tj7vAH+ymvPq6/
+        iwQaNrbgixzVmfBPrGf06njGKslRidfB0Ls7eDVDnht1EP0baYD/SsYBFbfQ4f7m
+        9qPkg9sFl0V39b3683Ri8LrF1JH0FqMNj0600pQwSGzarUnBD3DR0Afjc0EPQjZn
+        jcb5oiiNBsm0g=
+Received: (qmail 3694275 invoked from network); 16 Mar 2023 08:46:10 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 16 Mar 2023 08:46:10 +0100
+X-UD-Smtp-Session: l3s3148p1@Kbx3p//2XJwujnvb
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     netdev@vger.kernel.org
+Cc:     linux-renesas-soc@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Steve Glendinning <steve.glendinning@shawell.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org
+Subject: [PATCH 2/2] smsc911x: avoid PHY being resumed when interface is not up
+Date:   Thu, 16 Mar 2023 08:45:58 +0100
+Message-Id: <20230316074558.15268-3-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230316074558.15268-1-wsa+renesas@sang-engineering.com>
+References: <20230316074558.15268-1-wsa+renesas@sang-engineering.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-rcu_idle_enter/exit() got removed in commit 1098582a0f6c
-("sched,idle,rcu: Push rcu_idle deeper into the idle path"), so this
-comment is outdated. Remove it.
+SMSC911x doesn't need mdiobus suspend/resume, that's why it sets
+'mac_managed_pm'. However, setting it needs to be moved from init to
+probe, so mdiobus PM functions will really never be called (e.g. when
+the interface is not up yet during suspend/resume). The errno is changed
+because ENODEV has a special meaning when returned in probe().
 
-Signed-off-by: Kazuki Hashimoto <kazuki0205@gmail.com>
+Fixes: 3ce9f2bef755 ("net: smsc911x: Stop and start PHY during suspend and resume")
+Suggested-by: Heiner Kallweit <hkallweit1@gmail.com>
+Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 ---
- kernel/sched/idle.c | 6 ------
- 1 file changed, 6 deletions(-)
+ drivers/net/ethernet/smsc/smsc911x.c | 17 ++++++++++-------
+ 1 file changed, 10 insertions(+), 7 deletions(-)
 
-diff --git a/kernel/sched/idle.c b/kernel/sched/idle.c
-index f26ab2675f7d..dbfc2eb5ccbd 100644
---- a/kernel/sched/idle.c
-+++ b/kernel/sched/idle.c
-@@ -179,12 +179,6 @@ static void cpuidle_idle_call(void)
- 		return;
+diff --git a/drivers/net/ethernet/smsc/smsc911x.c b/drivers/net/ethernet/smsc/smsc911x.c
+index 9d12fd54281a..4cc5b9833e8f 100644
+--- a/drivers/net/ethernet/smsc/smsc911x.c
++++ b/drivers/net/ethernet/smsc/smsc911x.c
+@@ -1015,12 +1015,7 @@ static int smsc911x_mii_probe(struct net_device *dev)
+ 	struct phy_device *phydev = NULL;
+ 	int ret;
+ 
+-	/* find the first phy */
+ 	phydev = phy_find_first(pdata->mii_bus);
+-	if (!phydev) {
+-		netdev_err(dev, "no PHY found\n");
+-		return -ENODEV;
+-	}
+ 
+ 	SMSC_TRACE(pdata, probe, "PHY: addr %d, phy_id 0x%08X",
+ 		   phydev->mdio.addr, phydev->phy_id);
+@@ -1033,8 +1028,6 @@ static int smsc911x_mii_probe(struct net_device *dev)
+ 		return ret;
  	}
  
--	/*
--	 * The RCU framework needs to be told that we are entering an idle
--	 * section, so no more rcu read side critical sections and one more
--	 * step to the grace period
--	 */
--
- 	if (cpuidle_not_available(drv, dev)) {
- 		tick_nohz_idle_stop_tick();
+-	/* Indicate that the MAC is responsible for managing PHY PM */
+-	phydev->mac_managed_pm = true;
+ 	phy_attached_info(phydev);
  
+ 	phy_set_max_speed(phydev, SPEED_100);
+@@ -1062,6 +1055,7 @@ static int smsc911x_mii_init(struct platform_device *pdev,
+ 			     struct net_device *dev)
+ {
+ 	struct smsc911x_data *pdata = netdev_priv(dev);
++	struct phy_device *phydev;
+ 	int err = -ENXIO;
+ 
+ 	pdata->mii_bus = mdiobus_alloc();
+@@ -1104,6 +1098,15 @@ static int smsc911x_mii_init(struct platform_device *pdev,
+ 		goto err_out_free_bus_2;
+ 	}
+ 
++	phydev = phy_find_first(pdata->mii_bus);
++	if (!phydev) {
++		netdev_err(dev, "no PHY found\n");
++		err = -ENOENT;
++		goto err_out_free_bus_2;
++	}
++
++	phydev->mac_managed_pm = true;
++
+ 	return 0;
+ 
+ err_out_free_bus_2:
 -- 
-2.40.0
+2.30.2
 
