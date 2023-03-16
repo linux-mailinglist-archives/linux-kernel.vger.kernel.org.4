@@ -2,50 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B76E6BD43C
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 16:44:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E36BB6BD43E
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 16:44:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231744AbjCPPoB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 11:44:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33372 "EHLO
+        id S231152AbjCPPoR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 11:44:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231286AbjCPPnd (ORCPT
+        with ESMTP id S231831AbjCPPnn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 11:43:33 -0400
+        Thu, 16 Mar 2023 11:43:43 -0400
 Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A01E7E1938;
-        Thu, 16 Mar 2023 08:42:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 001302197C;
+        Thu, 16 Mar 2023 08:42:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678981365; x=1710517365;
+  t=1678981375; x=1710517375;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=4GQ0qOCl+Atfv/CQFdipf14nnCdeBWAoGMrWMztiuR8=;
-  b=agzQwFECNsNqIX1Sh43Ny+36uORB4dJMYf7x5ZArK+oSzy+v3eXx1fxC
-   LjdUuDQrUl1lgmU1eVh/csNn9XptnU17izihAA1FwmZ1YTGppnZ8Jo9oh
-   vJIh+d6XhGGhJ9xYtEA/fIbqtqTujuI2ud/EccLzYJ1vVtBLpRPB1qcWa
-   6zJCIdbTrMWhZTe7Wqk+qNRDC2+6d2q8Bx+1FculqiV2mRbiOWPNsU1Wp
-   5G1sv3yPYlg7lgzWcuN6H1ShGKAmSkV+tczQWUl9HDZD1++AtQpzBccii
-   OydvhTzYktN4lEVhmia0eWVQEZ26xNui3DI3oUXMj5dgK/3An5h7vD2KI
+  bh=ZhgqSNBcFEaqD2pgrxFzkPcdx9DgTm+GYplXJSHR7CQ=;
+  b=HcOelp46oLZRGNuIwTChwcjKpNI+F0H7wW1EaKe0q1XU+kOvrTJvLegW
+   I6iTVT9AT0w3PGv2eG39F3ml4bpAvKcDHE35XWV/EFvlJ1SYTEUKsURPm
+   NzmhiWaRdsgOrxrViMwcSzZaYG3/k0diQDbBTdjOSS7ynrISexHI/VfOK
+   raV7Xlps1DofwKDVVtNDxFy+eT+xeTit/c8iDP2MdmuPewoINmVii6t4C
+   PF3LRS6EUkHL4xizjen3XvWuC8oRGq38idiKTPfwuXaJilhoEf9vISnBK
+   Y1kRU+D/ZP0IBXrP7/EfN4YhIoVcYwYli4SFEnKaU+YbiaeLQ8NWPBVq8
    w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="339571091"
+X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="339571100"
 X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
-   d="scan'208";a="339571091"
+   d="scan'208";a="339571100"
 Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 08:39:14 -0700
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 08:39:15 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="1009267198"
+X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="1009267220"
 X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
-   d="scan'208";a="1009267198"
+   d="scan'208";a="1009267220"
 Received: from feiwang3-mobl2.ccr.corp.intel.com (HELO rzhang1-DESK.intel.com) ([10.249.170.93])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 08:39:12 -0700
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 08:39:14 -0700
 From:   Zhang Rui <rui.zhang@intel.com>
 To:     linux-pm@vger.kernel.org, rafael.j.wysocki@intel.com,
         daniel.lezcano@linaro.org
 Cc:     linux-kernel@vger.kernel.org, srinivas.pandruvada@intel.com
-Subject: [PATCH 13/15] powercap/intel_rapl: Introduce RAPL I/F type
-Date:   Thu, 16 Mar 2023 23:38:39 +0800
-Message-Id: <20230316153841.3666-14-rui.zhang@intel.com>
+Subject: [PATCH 14/15] powercap/intel_rapl: Introduce core support for TPMI interface
+Date:   Thu, 16 Mar 2023 23:38:40 +0800
+Message-Id: <20230316153841.3666-15-rui.zhang@intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230316153841.3666-1-rui.zhang@intel.com>
 References: <20230316153841.3666-1-rui.zhang@intel.com>
@@ -61,128 +61,259 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Different RAPL Interfaces may have different primitive information and
-rapl_defaults calls.
+Compared with existing RAPL MSR/MMIO Interface, the RAPL TPMI Interface
+1. has per Power Limit register, thus has per Power Limit Lock and
+   Enable bit.
+2. doesn't have Power Limit Clamp bit.
+3. the Power Limit Lock and Enable bits have different bit offsets.
+These mean RAPL TPMI Interface needs its own primitive information.
 
-To better distinguish this difference in the RAPL framework code,
-introduce a new enum to represent different types of RAPL Interfaces.
+RAPL TPMI Interface also has per domain unit register but with a
+different register layout. This requires a TPMI specific rapl_defaults
+call to decode the unit register.
 
-No functional change.
+Introduce the RAPL core support for TPMI Interface.
 
 Signed-off-by: Zhang Rui <rui.zhang@intel.com>
 ---
- drivers/powercap/intel_rapl_common.c           | 18 +++++++++++++-----
- drivers/powercap/intel_rapl_msr.c              |  2 ++
- .../int340x_thermal/processor_thermal_rapl.c   |  1 +
- include/linux/intel_rapl.h                     |  6 ++++++
- 4 files changed, 22 insertions(+), 5 deletions(-)
+ drivers/powercap/intel_rapl_common.c | 126 +++++++++++++++++++++++++--
+ include/linux/intel_rapl.h           |   5 ++
+ 2 files changed, 123 insertions(+), 8 deletions(-)
 
 diff --git a/drivers/powercap/intel_rapl_common.c b/drivers/powercap/intel_rapl_common.c
-index a6a7d048d0b4..7e79066bcbcb 100644
+index 7e79066bcbcb..ef0b180fd8b7 100644
 --- a/drivers/powercap/intel_rapl_common.c
 +++ b/drivers/powercap/intel_rapl_common.c
-@@ -177,7 +177,7 @@ struct rapl_defaults {
- 	unsigned int psys_domain_energy_unit;
+@@ -75,6 +75,15 @@
+ #define PSYS_TIME_WINDOW1_MASK       (0x7FULL<<19)
+ #define PSYS_TIME_WINDOW2_MASK       (0x7FULL<<51)
+ 
++/* bitmasks for RAPL TPMI, used by primitive access functions */
++#define TPMI_POWER_LIMIT_MASK	0x3FFFF
++#define TPMI_POWER_LIMIT_ENABLE	BIT_ULL(62)
++#define TPMI_TIME_WINDOW_MASK	(0x7FULL<<18)
++#define TPMI_INFO_SPEC_MASK	0x3FFFF
++#define TPMI_INFO_MIN_MASK	(0x3FFFFULL << 18)
++#define TPMI_INFO_MAX_MASK	(0x3FFFFULL << 36)
++#define TPMI_INFO_MAX_TIME_WIN_MASK	(0x7FULL << 54)
++
+ /* Non HW constants */
+ #define RAPL_PRIMITIVE_DERIVED       BIT(1)	/* not from raw data */
+ #define RAPL_PRIMITIVE_DUMMY         BIT(2)
+@@ -123,7 +132,7 @@ static int get_pl_prim(struct rapl_domain *rd, int pl, enum pl_prims prim)
+ 	case POWER_LIMIT1:
+ 		if (prim == PL_ENABLE)
+ 			return PL1_ENABLE;
+-		if (prim == PL_CLAMP)
++		if (prim == PL_CLAMP && rd->rp->priv->type != RAPL_IF_TPMI)
+ 			return PL1_CLAMP;
+ 		if (prim == PL_LIMIT)
+ 			return POWER_LIMIT1;
+@@ -131,14 +140,18 @@ static int get_pl_prim(struct rapl_domain *rd, int pl, enum pl_prims prim)
+ 			return TIME_WINDOW1;
+ 		if (prim == PL_MAX_POWER)
+ 			return THERMAL_SPEC_POWER;
+-		if (prim == PL_LOCK)
+-			return rd->rp->priv->limits[rd->id] & BIT(POWER_LIMIT2) ?
+-			       FW_HIGH_LOCK : FW_LOCK;
++		if (prim == PL_LOCK) {
++			if (rd->rp->priv->type == RAPL_IF_TPMI)
++				return PL1_LOCK;
++			else
++				return rd->rp->priv->limits[rd->id] & BIT(POWER_LIMIT2) ?
++				       FW_HIGH_LOCK : FW_LOCK;
++		}
+ 		return -EINVAL;
+ 	case POWER_LIMIT2:
+ 		if (prim == PL_ENABLE)
+ 			return PL2_ENABLE;
+-		if (prim == PL_CLAMP)
++		if (prim == PL_CLAMP && rd->rp->priv->type != RAPL_IF_TPMI)
+ 			return PL2_CLAMP;
+ 		if (prim == PL_LIMIT)
+ 			return POWER_LIMIT2;
+@@ -146,9 +159,13 @@ static int get_pl_prim(struct rapl_domain *rd, int pl, enum pl_prims prim)
+ 			return TIME_WINDOW2;
+ 		if (prim == PL_MAX_POWER)
+ 			return MAX_POWER;
+-		if (prim == PL_LOCK)
+-			return rd->rp->priv->limits[rd->id] & BIT(POWER_LIMIT2) ?
+-			       FW_HIGH_LOCK : FW_LOCK;
++		if (prim == PL_LOCK) {
++			if (rd->rp->priv->type == RAPL_IF_TPMI)
++				return PL2_LOCK;
++			else
++				return rd->rp->priv->limits[rd->id] & BIT(POWER_LIMIT2) ?
++				       FW_HIGH_LOCK : FW_LOCK;
++		}
+ 		return -EINVAL;
+ 	case POWER_LIMIT4:
+ 		if (prim == PL_LIMIT)
+@@ -158,6 +175,8 @@ static int get_pl_prim(struct rapl_domain *rd, int pl, enum pl_prims prim)
+ 		/* PL4 would be around two times PL2, use same prim as PL2. */
+ 		if (prim == PL_MAX_POWER)
+ 			return MAX_POWER;
++		if (prim == PL_LOCK && rd->rp->priv->type == RAPL_IF_TPMI)
++			return PL4_LOCK;
+ 		return -EINVAL;
+ 	default:
+ 		return -EINVAL;
+@@ -178,6 +197,7 @@ struct rapl_defaults {
  	bool spr_psys_bits;
  };
--static struct rapl_defaults *rapl_defaults;
-+static struct rapl_defaults *rpd_msr;
+ static struct rapl_defaults *rpd_msr;
++static const struct rapl_defaults rapl_defaults_tpmi;
  
  static struct rapl_defaults *get_rpd(struct rapl_package *rp)
  {
-@@ -601,7 +601,7 @@ static u64 rapl_unit_xlate(struct rapl_domain *rd, enum unit_type type,
+@@ -601,6 +621,7 @@ static u64 rapl_unit_xlate(struct rapl_domain *rd, enum unit_type type,
  	return div64_u64(value, scale);
  }
  
--static struct rapl_primitive_info rpis_default[NR_RAPL_PRIMITIVES] = {
-+static struct rapl_primitive_info rpi_msr[NR_RAPL_PRIMITIVES] = {
++/* RAPL primitives for MSR and MMIO I/F */
+ static struct rapl_primitive_info rpi_msr[NR_RAPL_PRIMITIVES] = {
  	/* name, mask, shift, msr index, unit divisor */
  	[POWER_LIMIT1] = PRIMITIVE_INFO_INIT(POWER_LIMIT1, POWER_LIMIT1_MASK, 0,
- 			    RAPL_DOMAIN_REG_LIMIT, POWER_UNIT, 0),
-@@ -670,8 +670,16 @@ static struct rapl_primitive_info *get_rpi(struct rapl_package *rp, int prim)
- 
- static int rapl_config(struct rapl_package *rp)
- {
--	rp->priv->rpd = (void *)rapl_defaults;
--	rp->priv->rpi = (void *)rpis_default;
-+	switch (rp->priv->type) {
-+	/* MMIO I/F shares the same register layout as MSR registers */
-+	case RAPL_IF_MMIO:
-+	case RAPL_IF_MSR:
-+		rp->priv->rpd = (void *)rpd_msr;
-+		rp->priv->rpi = (void *)rpi_msr;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
- 	return 0;
- }
- 
-@@ -1536,7 +1544,7 @@ static int __init rapl_init(void)
- 
- 	id = x86_match_cpu(rapl_ids);
- 	if (id) {
--		rapl_defaults = (struct rapl_defaults *)id->driver_data;
-+		rpd_msr = (struct rapl_defaults *)id->driver_data;
- 
- 		rapl_msr_platdev = platform_device_alloc("intel_rapl_msr", 0);
- 		if (!rapl_msr_platdev)
-diff --git a/drivers/powercap/intel_rapl_msr.c b/drivers/powercap/intel_rapl_msr.c
-index 3e48e729050d..73c8bbcfc1bd 100644
---- a/drivers/powercap/intel_rapl_msr.c
-+++ b/drivers/powercap/intel_rapl_msr.c
-@@ -34,6 +34,7 @@
- static struct rapl_if_priv *rapl_msr_priv;
- 
- static struct rapl_if_priv rapl_msr_priv_intel = {
-+	.type = RAPL_IF_MSR,
- 	.reg_unit = MSR_RAPL_POWER_UNIT,
- 	.regs[RAPL_DOMAIN_PACKAGE] = {
- 		MSR_PKG_POWER_LIMIT, MSR_PKG_ENERGY_STATUS, MSR_PKG_PERF_STATUS, 0, MSR_PKG_POWER_INFO },
-@@ -50,6 +51,7 @@ static struct rapl_if_priv rapl_msr_priv_intel = {
+@@ -658,6 +679,48 @@ static struct rapl_primitive_info rpi_msr[NR_RAPL_PRIMITIVES] = {
+ 			    RAPL_PRIMITIVE_DERIVED),
  };
  
- static struct rapl_if_priv rapl_msr_priv_amd = {
-+	.type = RAPL_IF_MSR,
- 	.reg_unit = MSR_AMD_RAPL_POWER_UNIT,
- 	.regs[RAPL_DOMAIN_PACKAGE] = {
- 		0, MSR_AMD_PKG_ENERGY_STATUS, 0, 0, 0 },
-diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_rapl.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_rapl.c
-index 140fb85cfa7b..013f1633f082 100644
---- a/drivers/thermal/intel/int340x_thermal/processor_thermal_rapl.c
-+++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_rapl.c
-@@ -97,6 +97,7 @@ int proc_thermal_rapl_add(struct pci_dev *pdev, struct proc_thermal_device *proc
- 						rapl_regs->regs[domain][reg];
- 		rapl_mmio_priv.limits[domain] = rapl_regs->limits[domain];
- 	}
-+	rapl_mmio_priv.type = RAPL_IF_MMIO;
- 	rapl_mmio_priv.reg_unit = (u64)proc_priv->mmio_base + rapl_regs->reg_unit;
- 
- 	rapl_mmio_priv.read_raw = rapl_mmio_read_raw;
-diff --git a/include/linux/intel_rapl.h b/include/linux/intel_rapl.h
-index d92ded956140..e5a7b47ceac9 100644
---- a/include/linux/intel_rapl.h
-+++ b/include/linux/intel_rapl.h
-@@ -14,6 +14,11 @@
- #include <linux/powercap.h>
- #include <linux/cpuhotplug.h>
- 
-+enum rapl_if_type {
-+	RAPL_IF_MSR,	/* RAPL I/F using MSR registers */
-+	RAPL_IF_MMIO,	/* RAPL I/F using MMIO registers */
++/* RAPL primitives for TPMI I/F */
++static struct rapl_primitive_info rpi_tpmi[NR_RAPL_PRIMITIVES] = {
++	/* name, mask, shift, msr index, unit divisor */
++	[POWER_LIMIT1] = PRIMITIVE_INFO_INIT(POWER_LIMIT1, TPMI_POWER_LIMIT_MASK, 0,
++		RAPL_DOMAIN_REG_LIMIT, POWER_UNIT, 0),
++	[POWER_LIMIT2] = PRIMITIVE_INFO_INIT(POWER_LIMIT2, TPMI_POWER_LIMIT_MASK, 0,
++		RAPL_DOMAIN_REG_PL2, POWER_UNIT, 0),
++	[POWER_LIMIT4] = PRIMITIVE_INFO_INIT(POWER_LIMIT4, TPMI_POWER_LIMIT_MASK, 0,
++		RAPL_DOMAIN_REG_PL4, POWER_UNIT, 0),
++	[ENERGY_COUNTER] = PRIMITIVE_INFO_INIT(ENERGY_COUNTER, ENERGY_STATUS_MASK, 0,
++		RAPL_DOMAIN_REG_STATUS, ENERGY_UNIT, 0),
++	[PL1_LOCK] = PRIMITIVE_INFO_INIT(PL1_LOCK, POWER_HIGH_LOCK, 63,
++		RAPL_DOMAIN_REG_LIMIT, ARBITRARY_UNIT, 0),
++	[PL2_LOCK] = PRIMITIVE_INFO_INIT(PL2_LOCK, POWER_HIGH_LOCK, 63,
++		RAPL_DOMAIN_REG_PL2, ARBITRARY_UNIT, 0),
++	[PL4_LOCK] = PRIMITIVE_INFO_INIT(PL4_LOCK, POWER_HIGH_LOCK, 63,
++		RAPL_DOMAIN_REG_PL4, ARBITRARY_UNIT, 0),
++	[PL1_ENABLE] = PRIMITIVE_INFO_INIT(PL1_ENABLE, TPMI_POWER_LIMIT_ENABLE, 62,
++		RAPL_DOMAIN_REG_LIMIT, ARBITRARY_UNIT, 0),
++	[PL2_ENABLE] = PRIMITIVE_INFO_INIT(PL2_ENABLE, TPMI_POWER_LIMIT_ENABLE, 62,
++		RAPL_DOMAIN_REG_PL2, ARBITRARY_UNIT, 0),
++	[PL4_ENABLE] = PRIMITIVE_INFO_INIT(PL4_ENABLE, TPMI_POWER_LIMIT_ENABLE, 62,
++		RAPL_DOMAIN_REG_PL4, ARBITRARY_UNIT, 0),
++	[TIME_WINDOW1] = PRIMITIVE_INFO_INIT(TIME_WINDOW1, TPMI_TIME_WINDOW_MASK, 18,
++		RAPL_DOMAIN_REG_LIMIT, TIME_UNIT, 0),
++	[TIME_WINDOW2] = PRIMITIVE_INFO_INIT(TIME_WINDOW2, TPMI_TIME_WINDOW_MASK, 18,
++		RAPL_DOMAIN_REG_PL2, TIME_UNIT, 0),
++	[THERMAL_SPEC_POWER] = PRIMITIVE_INFO_INIT(THERMAL_SPEC_POWER, TPMI_INFO_SPEC_MASK, 0,
++		RAPL_DOMAIN_REG_INFO, POWER_UNIT, 0),
++	[MAX_POWER] = PRIMITIVE_INFO_INIT(MAX_POWER, TPMI_INFO_MAX_MASK, 36,
++		RAPL_DOMAIN_REG_INFO, POWER_UNIT, 0),
++	[MIN_POWER] = PRIMITIVE_INFO_INIT(MIN_POWER, TPMI_INFO_MIN_MASK, 18,
++		RAPL_DOMAIN_REG_INFO, POWER_UNIT, 0),
++	[MAX_TIME_WINDOW] = PRIMITIVE_INFO_INIT(MAX_TIME_WINDOW, TPMI_INFO_MAX_TIME_WIN_MASK, 54,
++		RAPL_DOMAIN_REG_INFO, TIME_UNIT, 0),
++	[THROTTLED_TIME] = PRIMITIVE_INFO_INIT(THROTTLED_TIME, PERF_STATUS_THROTTLE_TIME_MASK, 0,
++		RAPL_DOMAIN_REG_PERF, TIME_UNIT, 0),
++	/* non-hardware */
++	[AVERAGE_POWER] = PRIMITIVE_INFO_INIT(AVERAGE_POWER, 0, 0, 0,
++		POWER_UNIT, RAPL_PRIMITIVE_DERIVED),
 +};
 +
+ static struct rapl_primitive_info *get_rpi(struct rapl_package *rp, int prim)
+ {
+ 	struct rapl_primitive_info *rpi = rp->priv->rpi;
+@@ -677,6 +740,10 @@ static int rapl_config(struct rapl_package *rp)
+ 		rp->priv->rpd = (void *)rpd_msr;
+ 		rp->priv->rpi = (void *)rpi_msr;
+ 		break;
++	case RAPL_IF_TPMI:
++		rp->priv->rpd = (void *)&rapl_defaults_tpmi;
++		rp->priv->rpi = (void *)rpi_tpmi;
++		break;
+ 	default:
+ 		return -EINVAL;
+ 	}
+@@ -1037,6 +1104,49 @@ static u64 rapl_compute_time_window_atom(struct rapl_domain *rd, u64 value,
+ 	return value;
+ }
+ 
++/* TPMI Unit register has different layout */
++#define TPMI_POWER_UNIT_OFFSET	POWER_UNIT_OFFSET
++#define TPMI_POWER_UNIT_MASK	POWER_UNIT_MASK
++#define TPMI_ENERGY_UNIT_OFFSET	0x06
++#define TPMI_ENERGY_UNIT_MASK	0x7C0
++#define TPMI_TIME_UNIT_OFFSET	0x0C
++#define TPMI_TIME_UNIT_MASK	0xF000
++
++static int rapl_check_unit_tpmi(struct rapl_domain *rd)
++{
++	struct reg_action ra;
++	u32 value;
++
++	ra.reg = rd->regs[RAPL_DOMAIN_REG_UNIT];
++	ra.mask = ~0;
++	if (rd->rp->priv->read_raw(get_rid(rd->rp), &ra)) {
++		pr_err("Failed to read power unit REG 0x%llx on %s:%s, exit.\n",
++			ra.reg, rd->rp->name, rd->name);
++		return -ENODEV;
++	}
++
++	value = (ra.value & TPMI_ENERGY_UNIT_MASK) >> TPMI_ENERGY_UNIT_OFFSET;
++	rd->energy_unit = ENERGY_UNIT_SCALE * 1000000 / (1 << value);
++
++	value = (ra.value & TPMI_POWER_UNIT_MASK) >> TPMI_POWER_UNIT_OFFSET;
++	rd->power_unit = 1000000 / (1 << value);
++
++	value = (ra.value & TPMI_TIME_UNIT_MASK) >> TPMI_TIME_UNIT_OFFSET;
++	rd->time_unit = 1000000 / (1 << value);
++
++	pr_debug("Core CPU %s:%s energy=%dpJ, time=%dus, power=%duW\n",
++		 rd->rp->name, rd->name, rd->energy_unit, rd->time_unit, rd->power_unit);
++
++	return 0;
++}
++
++static const struct rapl_defaults rapl_defaults_tpmi = {
++	.check_unit = rapl_check_unit_tpmi,
++	/* Reuse existing logic, ignore the PL_CLAMP failures and enable all Power Limits */
++	.set_floor_freq = set_floor_freq_default,
++	.compute_time_window = rapl_compute_time_window_core,
++};
++
+ static const struct rapl_defaults rapl_defaults_core = {
+ 	.floor_freq_reg_addr = 0,
+ 	.check_unit = rapl_check_unit_core,
+diff --git a/include/linux/intel_rapl.h b/include/linux/intel_rapl.h
+index e5a7b47ceac9..2d5e75c6a67c 100644
+--- a/include/linux/intel_rapl.h
++++ b/include/linux/intel_rapl.h
+@@ -17,6 +17,7 @@
+ enum rapl_if_type {
+ 	RAPL_IF_MSR,	/* RAPL I/F using MSR registers */
+ 	RAPL_IF_MMIO,	/* RAPL I/F using MMIO registers */
++	RAPL_IF_TPMI,	/* RAPL I/F using TPMI registers */
+ };
+ 
  enum rapl_domain_type {
- 	RAPL_DOMAIN_PACKAGE,	/* entire package/socket */
- 	RAPL_DOMAIN_PP0,	/* core power plane */
-@@ -130,6 +135,7 @@ struct reg_action {
-  * @rpi:			internal pointer to interface primitive info
-  */
- struct rapl_if_priv {
-+	enum rapl_if_type type;
- 	struct powercap_control_type *control_type;
- 	enum cpuhp_state pcap_rapl_online;
- 	u64 reg_unit;
+@@ -36,6 +37,7 @@ enum rapl_domain_reg_id {
+ 	RAPL_DOMAIN_REG_INFO,
+ 	RAPL_DOMAIN_REG_PL4,
+ 	RAPL_DOMAIN_REG_UNIT,
++	RAPL_DOMAIN_REG_PL2,
+ 	RAPL_DOMAIN_REG_MAX,
+ };
+ 
+@@ -48,6 +50,9 @@ enum rapl_primitives {
+ 	ENERGY_COUNTER,
+ 	FW_LOCK,
+ 	FW_HIGH_LOCK,
++	PL1_LOCK,
++	PL2_LOCK,
++	PL4_LOCK,
+ 
+ 	PL1_ENABLE,		/* power limit 1, aka long term */
+ 	PL1_CLAMP,		/* allow frequency to go below OS request */
 -- 
 2.25.1
 
