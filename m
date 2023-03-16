@@ -2,84 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49FB76BDBCB
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 23:36:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AC686BDBCE
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 23:37:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229934AbjCPWgr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 18:36:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60212 "EHLO
+        id S229966AbjCPWhH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 18:37:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229907AbjCPWgp (ORCPT
+        with ESMTP id S229923AbjCPWhD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 18:36:45 -0400
-Received: from mail-il1-f175.google.com (mail-il1-f175.google.com [209.85.166.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAFE3D5889;
-        Thu, 16 Mar 2023 15:36:41 -0700 (PDT)
-Received: by mail-il1-f175.google.com with SMTP id w4so1866110ilv.0;
-        Thu, 16 Mar 2023 15:36:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679006201;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        Thu, 16 Mar 2023 18:37:03 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0773DC0B3;
+        Thu, 16 Mar 2023 15:36:59 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id z21so13648821edb.4;
+        Thu, 16 Mar 2023 15:36:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679006218;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=2fFaYRaLL3JKuCrCJqmJrBYuEJ3mxHPOfdY+l8rLlnU=;
-        b=l2gqCQlWBx9DbQcqvsadnUPjS4KTz1KCq5aopVxYfZsI5VAWEkqnCrpmZaFdbLFSX6
-         ZMsh1KOTPNnla21Rt9ziEr/S0KPFfF77oswk9vhAKmpyRv18HAUUdgnGac0yKLAoSwn0
-         Taq6D5HBA+t4oBsBmzIe/cuGvMF0rYpH7L1rRwtF5ObN5IiSfvJZwT9BbFoLU8utf6wS
-         +M8Q+2I1AMLFe2bc/WSrLLUpA31MO9Zq3Wbw0SjrWRHhRKEG279Utay/EPrq5Y7q5Lp9
-         E/Ffq71+saMGskzZ1v147e44NQaQuvwPlSrT4B7ROpHZP/dQ8nYthWopo/87W6PN3jus
-         +8ug==
-X-Gm-Message-State: AO0yUKW3aU6tfmMDv3EgnrCSxKftmHleHTn/kXsyBa2/Ewzv+s3CJg/s
-        FWratF311gO6WIEPCwq/csQq41QySQ==
-X-Google-Smtp-Source: AK7set8C2en+GhcRJBIrZyzXlF+P32aLozw/4aeABL0iRCbU+9at4TAmujIm/m3t3N7PhbgSvoow8A==
-X-Received: by 2002:a92:4a12:0:b0:323:70c:ba79 with SMTP id m18-20020a924a12000000b00323070cba79mr8576869ilf.12.1679006201157;
-        Thu, 16 Mar 2023 15:36:41 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.249])
-        by smtp.gmail.com with ESMTPSA id cl4-20020a0566383d0400b0040639da0a02sm143978jab.135.2023.03.16.15.36.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Mar 2023 15:36:40 -0700 (PDT)
-Received: (nullmailer pid 4014336 invoked by uid 1000);
-        Thu, 16 Mar 2023 22:36:39 -0000
-Date:   Thu, 16 Mar 2023 17:36:39 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        devicetree@vger.kernel.org, Viresh Kumar <viresh.kumar@linaro.org>,
-        Andy Gross <agross@kernel.org>
-Subject: Re: [PATCH 1/8] dt-bindings: cpufreq: cpufreq-qcom-hw: Allow just 1
- frequency domain
-Message-ID: <167900619866.4014261.927825171033177419.robh@kernel.org>
-References: <20230308-topic-cpufreq_bindings-v1-0-3368473ec52d@linaro.org>
- <20230308-topic-cpufreq_bindings-v1-1-3368473ec52d@linaro.org>
+        bh=gDnCsGM/FV1yfEUIqdP+WO9uXlOSf1wmfPkNbc+Ep1A=;
+        b=ij85mTrQsntyqaM6cYuQUcOw0ZVEZaogn+UmtL4AdzKsjIpIykVVEc9T6NaoHuSvFn
+         qD5fBvBqM4pVlBiGKwVOang8C1VcmLu0t936OUjLkRl5Ncv/21XOHsFhl3BhGRopkJ0i
+         CprpN/fg55PCEhGt84hVw2ojJHBdULh01mjLVDfBFcLZ3/UesQBOx0EWab76TTpaN4hJ
+         Gv0AdjlgBN9Ft7BZkZ08+kYX9AGR6MrGWY//APrptfEuaoU07bwqvCjsKdZOg4mLzvVn
+         wCUKhdj74B1mdK4nIveVEfIc45r3R2s0whRYhcLvV/MWBNeuaggNKngOnWpmIodrP+BY
+         aHLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679006218;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gDnCsGM/FV1yfEUIqdP+WO9uXlOSf1wmfPkNbc+Ep1A=;
+        b=HLLQ4N0sIhuhEmUl+dmthoa0J3LEn1QsH5SJd4rysyjoPT08syUKs+1GluhQbvxoYT
+         E1KaV2ODpsWO3dj2RsqfKDX3HSfJAmXei0dXqRPmFyVREkwLxuarWabF9tyUtVgbUmDy
+         Z3xM5NsUoG1AwMCx28CDS/lmSz3XwfltzipTdc8icuAiNlU8w2Vg5GaMWVRNcoPytHGY
+         9VGA0/rGy+hqQHfeibvHcPQp/NJ76ttuE8ekqbjdVeZ0vm+vImMoWfUebOmYz2ojIJER
+         7BHiMvlwP5sRtGVkSwunVAyGXoRQQBfULSSgLhPJ4zy1wZNfb4JtxQsPt0Zh6YJhZcbK
+         wkQA==
+X-Gm-Message-State: AO0yUKXkyXTF3OxT28uj9u+jFTLt3X8os0ShaI2M9qxCI8hPgX69ssve
+        h+kPGsIOmXJhM88luliE/ooOZPAldpVGIm08WoI=
+X-Google-Smtp-Source: AK7set/fYofBPE5FDtJ+WwJR9R3P0GNPMgNfhVh7QImSlv+fd8oGgSx09RSedQu6am3rrZne9IkTLIcoG7c1+0R1TTk=
+X-Received: by 2002:a50:8e14:0:b0:4fb:f19:883 with SMTP id 20-20020a508e14000000b004fb0f190883mr683888edw.1.1679006218096;
+ Thu, 16 Mar 2023 15:36:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230308-topic-cpufreq_bindings-v1-1-3368473ec52d@linaro.org>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <20230316170149.4106586-1-jolsa@kernel.org> <20230316170149.4106586-10-jolsa@kernel.org>
+In-Reply-To: <20230316170149.4106586-10-jolsa@kernel.org>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Thu, 16 Mar 2023 15:36:46 -0700
+Message-ID: <CAEf4BzaXRXZ7u3Pj2zsS9tXB-j8GtovK5rveVke=5KYTj2DdMA@mail.gmail.com>
+Subject: Re: [PATCHv3 bpf-next 9/9] selftests/bpf: Add file_build_id test
+To:     Jiri Olsa <jolsa@kernel.org>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Hao Luo <haoluo@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>, bpf@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Namhyung Kim <namhyung@gmail.com>,
+        Dave Chinner <david@fromorbit.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Mar 16, 2023 at 10:03=E2=80=AFAM Jiri Olsa <jolsa@kernel.org> wrote=
+:
+>
+> The test attaches bpf program to sched_process_exec tracepoint
+> and gets build of executed file from bprm->file object.
 
-On Wed, 08 Mar 2023 02:26:58 +0100, Konrad Dybcio wrote:
-> Some SoCs implementing CPUFREQ-HW only have a single frequency domain.
-> Allow such case.
-> 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+typo: build ID
+
+>
+> We use urandom_read as the test program and in addition we also
+> attach uprobe to liburandom_read.so:urandlib_read_without_sema
+> and retrieve and check build id of that shared library.
+>
+> Also executing the no_build_id binary to verify the bpf program
+> gets the error properly.
+>
+> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 > ---
->  Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
+>  tools/testing/selftests/bpf/Makefile          |  7 +-
+>  tools/testing/selftests/bpf/no_build_id.c     |  6 ++
+>  .../selftests/bpf/prog_tests/file_build_id.c  | 98 +++++++++++++++++++
+>  .../selftests/bpf/progs/file_build_id.c       | 70 +++++++++++++
+>  tools/testing/selftests/bpf/test_progs.h      | 10 ++
+>  5 files changed, 190 insertions(+), 1 deletion(-)
+>  create mode 100644 tools/testing/selftests/bpf/no_build_id.c
+>  create mode 100644 tools/testing/selftests/bpf/prog_tests/file_build_id.=
+c
+>  create mode 100644 tools/testing/selftests/bpf/progs/file_build_id.c
+>
 
-Acked-by: Rob Herring <robh@kernel.org>
+Looks good, but let's add CONFIG_FILE_BUILD_ID to
+selftests/bpf/config, as Daniel mentioned.
 
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
+
+[...]
