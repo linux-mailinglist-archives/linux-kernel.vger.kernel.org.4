@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51C2A6BC733
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 08:32:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A78CC6BC73F
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 08:32:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229479AbjCPHcD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 03:32:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42202 "EHLO
+        id S229985AbjCPHcd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 03:32:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229885AbjCPHb6 (ORCPT
+        with ESMTP id S230255AbjCPHc0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 03:31:58 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F8C592269
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 00:31:23 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id z21so3909998edb.4
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 00:31:23 -0700 (PDT)
+        Thu, 16 Mar 2023 03:32:26 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA14DAD02D
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 00:31:39 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id cy23so3772535edb.12
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 00:31:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678951881;
+        d=linaro.org; s=google; t=1678951898;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=WTN4NQIpgf6Jo4A0NXWAfIF91xzXZgRPNSS4md24FW0=;
-        b=X+oF+NdHrjW5uD+dWshdnvV0Ne2tdgtau6d0xBcVIhBHGrjHts6x4Hvnk3xcgSfXTg
-         jV4HaisLX05403mnWt2CAauf4/jKUqrpR58NI5rh44X44yyaVuSyBqeUe5CMFBXUU7lr
-         2FSoH+WCMBwqBsyemdjT0wd92iuT9Xx1V8C9VaXTk0PZ8MEREbNjY8Bhflu9HssbFd7p
-         U+mmpWd4WDZy0DxqM75Dhx2biWk/hLX1w7JhKDjDcxuaOQt3gXH4qBNrrWpujfduvdA+
-         cKNPg6TjflhXXXtAub+6NpgISkIKGnydB5tuEy6XJQ4jr56kJcnNROH2ardgvV11lqUg
-         2VGg==
+        bh=/93mrEeY6xwjN+aW9i3HMgTYVgvZthXEVo0SwOP9yz0=;
+        b=pWvQL6UWdEsVn0ulz6eZaGaz45ZgR3UZxbpVFYQtqM8Of9CXK9uH/zzYubSBBfEqnD
+         /+4oC1aSo7oxbFOSQouGKCez+2L20FDMGEKJEy7ZyoNL8oJAIG4KzEEEVtIQTBt4Az5c
+         JiyMWYQPQNgoBVmO/vc2RoKN5gN+vPgiUsHXGwtrrLKsk4uv5GZJQjDxmlggd9rsU9Ms
+         4B5K0+EI+UbcN9ZmaLzpM1CZNFcWW9pRA78YiglcmPzGEWI+DOZTuMzCwIIqpR/J5PwU
+         g8w1SUtKE+p0BM64OIsrE7i+15Kf61qzYDSYOE/CReEw2dbmn3c6moDH7k2OmxMmDTnd
+         spdA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678951881;
+        d=1e100.net; s=20210112; t=1678951898;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WTN4NQIpgf6Jo4A0NXWAfIF91xzXZgRPNSS4md24FW0=;
-        b=dPezP8i6+xS2SOck1gVZ1FnU53YVHeeNlEjFQrWvZCWnPAxlaVt9taSKTM65j9O9fU
-         jkhMOyEHLJnb+SVkXy956X3QG+52OXfZxEfNHgDe6h7qguDfK8Los3r6oJLoMNJbct3w
-         cBXajkRM/ERb8uv1QD5Scf7dwn9TvqHgruOOLdr447/KtYywvacQQuI4nHi/t6Ps3vXe
-         te6yJnIf6IbEoJnV0Op1c4wDXF9rTVWbq9SFzI9DUh7LuQud1Wz6ndDtIOxm9E6amSUc
-         uZf86NzSt3m+ins5Tea6bq0sKhe8JYY9m4kxfxibIhqh3XPCtRD2bzPYyaRMGSSy+n7a
-         0VCQ==
-X-Gm-Message-State: AO0yUKWOjWhN6LitvlMKu/Rgdvui3RV/10jnVinuS39TgK/zYGbmx1og
-        1LacNYgRBZvrirgV/yhw2+T+jQ==
-X-Google-Smtp-Source: AK7set9Vll/1hWCnpy2kN28EzqYQCfxTZ16YJguyUR4L1xna9EKBlT1lB2S0T72JA+zzB4HVy2wR4Q==
-X-Received: by 2002:a17:906:f2d7:b0:889:ed81:dff7 with SMTP id gz23-20020a170906f2d700b00889ed81dff7mr8798260ejb.9.1678951881596;
-        Thu, 16 Mar 2023 00:31:21 -0700 (PDT)
+        bh=/93mrEeY6xwjN+aW9i3HMgTYVgvZthXEVo0SwOP9yz0=;
+        b=wq029qWNiemPqwVgyST+M9kB6KZ3+uiRnHX2mUCjVxmI6kxQti2fQWRFbx5SO112ZE
+         AdadifpjSCmkkSmcljlbMjgFx/NXYn/Xph8V4M03DAU/sWndrf7+fFLO2RwB2A4I55nf
+         mAUhmnuD0IHb0iLC516QZuB2b3mtqUiSqpDNvI+rU17NtDAi22jp9hqzXeqCG7v1iEdL
+         gZ/96J0vbVEvBcWeCPROURlrOQ8PLa5i3Iy/9/CJGMWq06CqqW8o3WOE3+Y8mup+Gd0+
+         s+lUhrIN9q34ehLRI+wkyS9TAMwKReOPr9x9kbfrosWgKF5AbYrEuh07qbBeFghgt5Y0
+         koMQ==
+X-Gm-Message-State: AO0yUKULYjc5hEY76+PqH3XY0WXg6QGJT7NrxHJGqTgU2G58zeWwytwp
+        yPlx9oImYexCBYxAXmX1lg8RUA==
+X-Google-Smtp-Source: AK7set9Iw+FrqSDZZYHWOE0H7eBOAaW6XE7mWlnsadc2iqDDt4LlsPdRqsCuh/d+SOt0X7wDW8xm8Q==
+X-Received: by 2002:aa7:c7cc:0:b0:4fd:298d:2f95 with SMTP id o12-20020aa7c7cc000000b004fd298d2f95mr5455545eds.26.1678951897931;
+        Thu, 16 Mar 2023 00:31:37 -0700 (PDT)
 Received: from ?IPV6:2a02:810d:15c0:828:9827:5f65:8269:a95f? ([2a02:810d:15c0:828:9827:5f65:8269:a95f])
-        by smtp.gmail.com with ESMTPSA id lz3-20020a170906fb0300b008f767c69421sm3493125ejb.44.2023.03.16.00.31.20
+        by smtp.gmail.com with ESMTPSA id v18-20020a509552000000b004fe924d16cfsm2938042eda.31.2023.03.16.00.31.37
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Mar 2023 00:31:21 -0700 (PDT)
-Message-ID: <a64bbd77-cd5c-8149-51e6-262122fe954e@linaro.org>
-Date:   Thu, 16 Mar 2023 08:31:20 +0100
+        Thu, 16 Mar 2023 00:31:37 -0700 (PDT)
+Message-ID: <542d683b-0ad9-ec76-cf26-a817e3cb2e33@linaro.org>
+Date:   Thu, 16 Mar 2023 08:31:36 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-Subject: Re: [PATCH 04/15] dt-bindings: clock: nuvoton: add binding for ma35d1
- clock controller
+Subject: Re: [PATCH 05/15] dt-bindings: reset: nuvoton: add binding for ma35d1
+ IP reset control
 Content-Language: en-US
 To:     Jacky Huang <ychuang570808@gmail.com>, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
@@ -66,9 +66,9 @@ Cc:     devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
         schung@nuvoton.com, Jacky Huang <ychuang3@nuvoton.com>
 References: <20230315072902.9298-1-ychuang570808@gmail.com>
- <20230315072902.9298-5-ychuang570808@gmail.com>
+ <20230315072902.9298-6-ychuang570808@gmail.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230315072902.9298-5-ychuang570808@gmail.com>
+In-Reply-To: <20230315072902.9298-6-ychuang570808@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -85,26 +85,11 @@ On 15/03/2023 08:28, Jacky Huang wrote:
 > From: Jacky Huang <ychuang3@nuvoton.com>
 > 
 > Add the dt-bindings header for Nuvoton ma35d1, that gets shared
-> between the clock controller and clock references in the dts.
-
-I don't see the device binding. They come together.
-
+> between the reset controller and reset references in the dts.
 > 
 > Signed-off-by: Jacky Huang <ychuang3@nuvoton.com>
-> ---
->  .../dt-bindings/clock/nuvoton,ma35d1-clk.h    | 253 ++++++++++++++++++
->  1 file changed, 253 insertions(+)
->  create mode 100644 include/dt-bindings/clock/nuvoton,ma35d1-clk.h
-> 
-> diff --git a/include/dt-bindings/clock/nuvoton,ma35d1-clk.h b/include/dt-bindings/clock/nuvoton,ma35d1-clk.h
-> new file mode 100644
-> index 000000000000..6c569fdd6e06
-> --- /dev/null
-> +++ b/include/dt-bindings/clock/nuvoton,ma35d1-clk.h
-> @@ -0,0 +1,253 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
 
-Dual license.
+Same problems as previous patch.
 
 Best regards,
 Krzysztof
