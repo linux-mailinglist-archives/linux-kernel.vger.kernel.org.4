@@ -2,112 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78E246BC3AC
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 03:15:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87ADE6BC3CD
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 03:32:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229727AbjCPCPh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 22:15:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38022 "EHLO
+        id S229692AbjCPCca (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 22:32:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbjCPCPf (ORCPT
+        with ESMTP id S229602AbjCPCc3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 22:15:35 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ADBAFF1B;
-        Wed, 15 Mar 2023 19:15:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 072DFB81FA5;
-        Thu, 16 Mar 2023 02:15:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 589A4C433D2;
-        Thu, 16 Mar 2023 02:15:30 +0000 (UTC)
-Date:   Wed, 15 Mar 2023 22:15:28 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     "Theodore Ts'o" <tytso@mit.edu>
-Cc:     Joel Fernandes <joel@joelfernandes.org>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>,
-        Philipp Reisner <philipp.reisner@linbit.com>,
-        Bryan Tan <bryantan@vmware.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Bob Pearson <rpearsonhpe@gmail.com>,
-        Ariel Levkovich <lariel@nvidia.com>,
-        Julian Anastasov <ja@ssi.bg>
-Subject: Re: [PATCH 00/13] Rename k[v]free_rcu() single argument to
- k[v]free_rcu_mightsleep()
-Message-ID: <20230315221528.22132c3c@gandalf.local.home>
-In-Reply-To: <20230316012516.GK860405@mit.edu>
-References: <20230201150815.409582-1-urezki@gmail.com>
-        <20230315151415.2534e11c@gandalf.local.home>
-        <e5a1815b-65b5-55ca-9773-ec04378d53c0@kernel.dk>
-        <ZBIbloFMm5xRsjfn@pc636>
-        <20230315153448.6914f85b@gandalf.local.home>
-        <CAEXW_YTLFQ3-LApyCPNNx7Tn2ovFr8YUXL=1WVCm+rE2hRKE8g@mail.gmail.com>
-        <20230315162840.106a5b4f@gandalf.local.home>
-        <CAEXW_YTNNJJftsg1QRvhUCRoZpKa3SM6=-0M-cukCGt5=G+row@mail.gmail.com>
-        <20230316012516.GK860405@mit.edu>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Wed, 15 Mar 2023 22:32:29 -0400
+X-Greylist: delayed 932 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 15 Mar 2023 19:32:26 PDT
+Received: from mx1.zhaoxin.com (MX1.ZHAOXIN.COM [210.0.225.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D07F2310B
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 19:32:25 -0700 (PDT)
+X-ASG-Debug-ID: 1678933008-086e23383a0caf0001-xx1T2L
+Received: from ZXSHMBX1.zhaoxin.com (ZXSHMBX1.zhaoxin.com [10.28.252.163]) by mx1.zhaoxin.com with ESMTP id tm8aC84sEFWYeBmF (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Thu, 16 Mar 2023 10:16:48 +0800 (CST)
+X-Barracuda-Envelope-From: SilviaZhao-oc@zhaoxin.com
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.163
+Received: from ZXBJMBX02.zhaoxin.com (10.29.252.6) by ZXSHMBX1.zhaoxin.com
+ (10.28.252.163) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.16; Thu, 16 Mar
+ 2023 10:16:48 +0800
+Received: from silvia-OptiPlex-3010.zhaoxin.com (10.29.8.47) by
+ ZXBJMBX02.zhaoxin.com (10.29.252.6) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Thu, 16 Mar 2023 10:16:47 +0800
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.163
+From:   silviazhao <silviazhao-oc@zhaoxin.com>
+X-Barracuda-RBL-Trusted-Forwarder: 10.29.252.6
+To:     <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
+        <mark.rutland@arm.com>, <alexander.shishkin@linux.intel.com>,
+        <jolsa@kernel.org>, <namhyung@kernel.org>, <irogers@google.com>,
+        <adrian.hunter@intel.com>, <tglx@linutronix.de>, <bp@alien8.de>,
+        <dave.hansen@linux.intel.com>, <x86@kernel.org>, <hpa@zytor.com>,
+        <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <cobechen@zhaoxin.com>, <louisqi@zhaoxin.com>,
+        <silviazhao@zhaoxin.com>, <cooperyan@zhaoxin.com>
+Subject: [PATCH] perf/x86/zhaoxin: Add Yongfeng support
+Date:   Thu, 16 Mar 2023 10:16:47 +0800
+X-ASG-Orig-Subj: [PATCH] perf/x86/zhaoxin: Add Yongfeng support
+Message-ID: <20230316021647.771-1-silviazhao-oc@zhaoxin.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.29.8.47]
+X-ClientProxiedBy: zxbjmbx1.zhaoxin.com (10.29.252.163) To
+ ZXBJMBX02.zhaoxin.com (10.29.252.6)
+X-Barracuda-Connect: ZXSHMBX1.zhaoxin.com[10.28.252.163]
+X-Barracuda-Start-Time: 1678933008
+X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
+X-Barracuda-URL: https://10.28.252.35:4443/cgi-mod/mark.cgi
+X-Virus-Scanned: by bsmtpd at zhaoxin.com
+X-Barracuda-Scan-Msg-Size: 3206
+X-Barracuda-BRTS-Status: 1
+X-Barracuda-Bayes: INNOCENT GLOBAL 0.0000 1.0000 -2.0210
+X-Barracuda-Spam-Score: -2.02
+X-Barracuda-Spam-Status: No, SCORE=-2.02 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=
+X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.106093
+        Rule breakdown below
+         pts rule name              description
+        ---- ---------------------- --------------------------------------------------
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 15 Mar 2023 21:25:16 -0400
-"Theodore Ts'o" <tytso@mit.edu> wrote:
+Add support for Yongfeng which is Zhaoxin's successor microarchitecture
+to ZXE.
 
-> On Wed, Mar 15, 2023 at 06:08:19PM -0400, Joel Fernandes wrote:
-> > 
-> > I am doubtful there may be a future where it does not sleep. Why?
-> > Because you need an rcu_head *somewhere*.  
-> 
-> I think the real problem was that this won't sleep:
-> 
->    kfree_rcu(ptr, rhf);
-> 
-> While this *could* sleep:
-> 
->    kfree_rcu(ptr);
-> 
-> So the the original sin was to try to make the same mistake that C++
-> did --- which is to think that it's good to have functions that have
-> the same name but different function signatures, and in some cases,
-> different semantic meanings because they have different implementations.
-> 
-> Personally, this is why I refuse to use C++ for any of my personal
-> projects --- this kind of "magic" looks good, but it's a great way to
-> potentially shoot yourself (or worse, your users) in the foot.
-> 
-> So separating out the two-argument kfree_rcu() from the one-argument
-> kfree_rcu(), by renaming the latter to something else is IMHO, a
-> Really F***** Good Idea.  So while, sure, kfree_rcu_mightsleep() might
-> be a little awkward, the name documents the potential landmind
-> involved with using that function, that's a good thing.  Because do
-> you really think users will always conscientiously check the
-> documentation and/or the implementation before using the interface?  :-)
+Remove PERF_COUNT_HW_CACHE_REFERENCES and PERF_COUNT_HW_CACHE_MISSES
+from global zx_pmon_event_map, since the cache hierarchy was changed
+from Yongfeng, and these pmc event map changed too.
 
-I agree with everything you said above, and feel that having the same name
-with two different semantics was not a good way to go. Not to mention, I
-avoid C++ for basically the same reasons (plus others).
+Add PERF_COUNT_HW_BRANCH_INSTRUCTIONS and PERF_COUNT_HW_BRANCH_MISSES
+to global zx_pmon_event_map, since these two event will keep consistent
+for ZXE and later.
 
-> 
-> If you hate that name, one other possibility is to try to use the
-> two-argument form kfree_rcu() and arrange to *have* a rcu_head in the
-> structure.  That's going to be better from a performance perspective,
-> and thus kinder to the end user than using rcu_synchronize().
+Signed-off-by: silviazhao <silviazhao-oc@zhaoxin.com>
+---
+ arch/x86/events/zhaoxin/core.c | 29 ++++++++++++++++++++++++-----
+ 1 file changed, 24 insertions(+), 5 deletions(-)
 
-Which is the what I last suggested doing.
+diff --git a/arch/x86/events/zhaoxin/core.c b/arch/x86/events/zhaoxin/core.c
+index 3e9acdaeed1e..06a0923a9581 100644
+--- a/arch/x86/events/zhaoxin/core.c
++++ b/arch/x86/events/zhaoxin/core.c
+@@ -19,15 +19,15 @@
+ #include "../perf_event.h"
+ 
+ /*
+- * Zhaoxin PerfMon, used on zxc and later.
++ * Zhaoxin PerfMon, used on ZXE and later.
+  */
+ static u64 zx_pmon_event_map[PERF_COUNT_HW_MAX] __read_mostly = {
+ 
+ 	[PERF_COUNT_HW_CPU_CYCLES]        = 0x0082,
+ 	[PERF_COUNT_HW_INSTRUCTIONS]      = 0x00c0,
+-	[PERF_COUNT_HW_CACHE_REFERENCES]  = 0x0515,
+-	[PERF_COUNT_HW_CACHE_MISSES]      = 0x051a,
+ 	[PERF_COUNT_HW_BUS_CYCLES]        = 0x0083,
++	[PERF_COUNT_HW_BRANCH_INSTRUCTIONS] = 0x0028,
++	[PERF_COUNT_HW_BRANCH_MISSES]	= 0x0029,
+ };
+ 
+ static struct event_constraint zxc_event_constraints[] __read_mostly = {
+@@ -559,6 +559,8 @@ __init int zhaoxin_pmu_init(void)
+ 			zx_pmon_event_map[PERF_COUNT_HW_CACHE_REFERENCES] = 0;
+ 			zx_pmon_event_map[PERF_COUNT_HW_CACHE_MISSES] = 0;
+ 			zx_pmon_event_map[PERF_COUNT_HW_BUS_CYCLES] = 0;
++			zx_pmon_event_map[PERF_COUNT_HW_BRANCH_INSTRUCTIONS] = 0;
++			zx_pmon_event_map[PERF_COUNT_HW_BRANCH_MISSES] = 0;
+ 
+ 			pr_cont("ZXC events, ");
+ 			break;
+@@ -579,6 +581,9 @@ __init int zhaoxin_pmu_init(void)
+ 
+ 			x86_pmu.event_constraints = zxd_event_constraints;
+ 
++			zx_pmon_event_map[PERF_COUNT_HW_CACHE_REFERENCES]  = 0x0515,
++			zx_pmon_event_map[PERF_COUNT_HW_CACHE_MISSES]      = 0x051a,
++
+ 			zx_pmon_event_map[PERF_COUNT_HW_BRANCH_INSTRUCTIONS] = 0x0700;
+ 			zx_pmon_event_map[PERF_COUNT_HW_BRANCH_MISSES] = 0x0709;
+ 
+@@ -590,11 +595,25 @@ __init int zhaoxin_pmu_init(void)
+ 
+ 			x86_pmu.event_constraints = zxd_event_constraints;
+ 
+-			zx_pmon_event_map[PERF_COUNT_HW_BRANCH_INSTRUCTIONS] = 0x0028;
+-			zx_pmon_event_map[PERF_COUNT_HW_BRANCH_MISSES] = 0x0029;
++			zx_pmon_event_map[PERF_COUNT_HW_CACHE_REFERENCES]  = 0x0515,
++			zx_pmon_event_map[PERF_COUNT_HW_CACHE_MISSES]      = 0x051a,
+ 
+ 			pr_cont("ZXE events, ");
+ 			break;
++		case 0x5b:
++			zx_pmon_event_map[PERF_COUNT_HW_STALLED_CYCLES_FRONTEND] =
++				X86_CONFIG(.event = 0x02, .umask = 0x01, .inv = 0x01,
++						.cmask = 0x01);
++
++			memcpy(hw_cache_event_ids, zxe_hw_cache_event_ids,
++					sizeof(hw_cache_event_ids));
++
++			x86_pmu.event_constraints = zxd_event_constraints;
++			zx_pmon_event_map[PERF_COUNT_HW_CACHE_REFERENCES]  = 0x051a;
++			zx_pmon_event_map[PERF_COUNT_HW_CACHE_MISSES]      = 0;
++
++			pr_cont("Yongfeng events, ");
++			break;
+ 		default:
+ 			return -ENODEV;
+ 		}
+-- 
+2.17.1
 
-  https://lore.kernel.org/all/20230315183648.5164af0f@gandalf.local.home/
-
--- Steve
