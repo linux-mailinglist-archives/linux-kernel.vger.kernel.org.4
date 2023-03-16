@@ -2,203 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC9596BCCED
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 11:36:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94FC36BCCEE
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 11:36:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229916AbjCPKgK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 06:36:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47416 "EHLO
+        id S229899AbjCPKg1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 06:36:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbjCPKgI (ORCPT
+        with ESMTP id S229480AbjCPKgY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 06:36:08 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD1321735;
-        Thu, 16 Mar 2023 03:36:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678962967; x=1710498967;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=dvCx4nvSjzXyEWyrfmWg2nmOe5l2cJqpOk2LkTBiVeE=;
-  b=h4U47KwD/z56SzOsh5jwWzZMHadzu6fVArcuWePatWlk4h66EP+DQfbu
-   pjHbxTeJiJGnbsj97lT+3x++gN+tTZZb2V70orkKaE107bLqdz376Kwhk
-   wYxLo+j+GwudoLYS0pOBhCsKF0YBwUJOk/iN75NIAt2CIHRflJdX5bwgo
-   TxfTFe0PAwKomFxjxvw44pVO79RilNwsp2kTN9h4u7tSzR9TgeCb6ndLP
-   jQDkW9lKtnPhMROMXvo8PS0DMn3zsh8PiqO4kBIUbbMwiEMrOkzg4eTNh
-   vvyO81JApBE8+yzBOy0sDwGhmIXHMKBmwtKcs3w6zyvQEW8nDNbq1+uPF
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="400521521"
-X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
-   d="scan'208";a="400521521"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 03:36:07 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="823180039"
-X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
-   d="scan'208";a="823180039"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by fmsmga001.fm.intel.com with ESMTP; 16 Mar 2023 03:36:07 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Thu, 16 Mar 2023 03:36:06 -0700
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21 via Frontend Transport; Thu, 16 Mar 2023 03:36:06 -0700
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (104.47.57.46) by
- edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.21; Thu, 16 Mar 2023 03:36:06 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=A2nGt+FwYn/jSF3rvxdUEC/+UsiMtFNUUiizK9FkcIQJM9hkBrfU9SBZJ6BUZVAmvMTA1/T6ZwjbFhuxtXojcDOvtZClqkHNtNnQCWhxytcGJVX004CrqpdGeQGHTfBBJFdbTnhHruHJ07Y6QF+gIssnTdo/Cx1MRIm+/bnZY8wRCRI1DGAKxsq9NAv3mlzLelr6QHe1rcqOMLLBheTxVLIFZxomXuG+pvE3FRiz+t/gHLRVPOlE32E1Z/vDXuiYIhWO92cSJv52qSe7clqVhpq04aKMChTZR4iapHG0NhfV7hnVeMucZLhn7IA0vSrRpnw5rakEGG4I/ska2rSFBA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Eap+JaHFidn4S77CQW0nwPc1l7W9OGqbuiJ3DwacP5A=;
- b=UovemyNqNWYtFGcqa+f/DdjVFY0+mwpACJ2oJQ353HEo1YpZOoCp+AkG4N1wvHNjdU1kY5R6PBI2qBmZmvbfMRPXZ2za0bB8pjhPbL1acrIdDbQHnmTpUtAZ6fuxLUJTRMe0m6OGDXXwveasLnNDGWsCUt+3dMDQfiSmJUdNw9rJm3LUTxI5vdYBKEjYYFl39Sndjei5toN0nVMIKtANkbHL0BCcgk+nnBXeWW3fe1z191lPuYxdDmCi11CvJeotqphy+1pX7LceQZpV4mS1CHgQ3FnGULH1ikmRWiUNxj3RwydKt4mjIOf7Wuaex9uU6OKVGzGDiZ0LvpibTqyiOw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DM6PR11MB2937.namprd11.prod.outlook.com (2603:10b6:5:62::13) by
- PH7PR11MB5765.namprd11.prod.outlook.com (2603:10b6:510:139::7) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6178.31; Thu, 16 Mar 2023 10:36:04 +0000
-Received: from DM6PR11MB2937.namprd11.prod.outlook.com
- ([fe80::cece:5e80:b74f:9448]) by DM6PR11MB2937.namprd11.prod.outlook.com
- ([fe80::cece:5e80:b74f:9448%7]) with mapi id 15.20.6178.033; Thu, 16 Mar 2023
- 10:36:04 +0000
-Date:   Thu, 16 Mar 2023 11:35:57 +0100
-From:   Michal Kubiak <michal.kubiak@intel.com>
-To:     Bartosz Wawrzyniak <bwawrzyn@cisco.com>
-CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <nicolas.ferre@microchip.com>,
-        <claudiu.beznea@microchip.com>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <xe-linux-external@cisco.com>,
-        <danielwa@cisco.com>, <olicht@cisco.com>, <mawierzb@cisco.com>
-Subject: Re: [PATCH] net: macb: Set MDIO clock divisor for pclk higher than
- 160MHz
-Message-ID: <ZBLxDZRuRjyJb7qN@localhost.localdomain>
-References: <20230316100339.1302212-1-bwawrzyn@cisco.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20230316100339.1302212-1-bwawrzyn@cisco.com>
-X-ClientProxiedBy: LO4P123CA0567.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:33b::20) To DM6PR11MB2937.namprd11.prod.outlook.com
- (2603:10b6:5:62::13)
+        Thu, 16 Mar 2023 06:36:24 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E52A4136F8
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 03:36:19 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id cy23so5501772edb.12
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 03:36:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678962978;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=eFQrmV4Y6J/VlzENEy2pmuoKXBnBpTNDb984EiuL890=;
+        b=AA/xhG0NRLbbLdSMIcjR7BdfDSN4fuPjAarYvTwOk58HgGM9yDysXTs1XL6ckaucth
+         oRp/aoL5BUsyORQRCnariIR/DOAE8RrqAqSPCioU5ETOdJshKW+yJ0flqRogZiD6Y0+l
+         Y6uL/NDjXd1dWCpDa30LzWO8zMozPFtyhL+noOAQaMC+Ve3vEtNHmD8whcHfB5uP9zI4
+         NvxgA8eHotrpLlAKcnC6x8lLnGEuXBx8BTHlYx3F1Yw/QeJVFntEMnHuW6Y8p4JAe/A6
+         B5Wdvw8m9QozqGTIO4YBeEdcTYKSRjxIes8VphiVzB5jE/9+3rShdsTKdFfJ0s6jFn7x
+         eeSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678962978;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eFQrmV4Y6J/VlzENEy2pmuoKXBnBpTNDb984EiuL890=;
+        b=jcsPMfvFz3xPnLYo+scdCLFrfSPek79E4v8bcjIR4UoiEaII+DNHwtAs/+B2Sp8rVq
+         k2+oWlLZaiyGJXRlXUJ4esP3r/kaDnjJ6W5p/gVrW/zRW3TJTu7Qyro4gCxhmz48S7+b
+         JduKyzVFVezgwFUFD/RmhTdX5NupiSPbJY0akGR/0AMfhEZ3ptbIXBBZ+hKl2D0YAC/W
+         51m73SYEsIaK7sQwfRMicjIYURGqGIghgl/5B9jW0Uo511hdu3HCQ9YxOel8J7wiq9jJ
+         ZTYGX83ycUSbM3Dq5pEo9rVYLZh15AUv2PdRJndlW0JY2n+fmM/CqZmk5GtMNzIj/2o/
+         9qtg==
+X-Gm-Message-State: AO0yUKU58u7R1+nbG5G578q0ZM8rzJFMZgFxwzPMEvX54f03XVDwHzZN
+        XG3Z6yAjUjddrkkY53XCiJM=
+X-Google-Smtp-Source: AK7set9zhsWR7GgDboUAXUp1Ouiw7kPQSz0uEe5q9H+w1GWGdTHxiCPrDzg+y8cn6Jl286Xcdwer+Q==
+X-Received: by 2002:aa7:d943:0:b0:4ac:b687:f57e with SMTP id l3-20020aa7d943000000b004acb687f57emr5799234eds.1.1678962978008;
+        Thu, 16 Mar 2023 03:36:18 -0700 (PDT)
+Received: from khadija-virtual-machine ([39.41.209.88])
+        by smtp.gmail.com with ESMTPSA id q11-20020a5085cb000000b004bd6e3ed196sm3590299edh.86.2023.03.16.03.36.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Mar 2023 03:36:17 -0700 (PDT)
+Date:   Thu, 16 Mar 2023 15:36:15 +0500
+From:   Khadija Kamran <kamrankhadijadj@gmail.com>
+To:     Alison Schofield <alison.schofield@intel.com>
+Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        outreachy@lists.linux.dev,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>
+Subject: Re: [PATCH] staging: axis-fifo: initialize timeouts in probe only
+Message-ID: <ZBLxHyiFnOwEdPYf@khadija-virtual-machine>
+References: <ZA9mThZ7NyRrQAMX@khadija-virtual-machine>
+ <ZBEJ+8DbhADSBTLr@aschofie-mobl2>
+ <ZBG699SriXWy1I2K@khadija-virtual-machine>
+ <16148020.1MiD057Pog@suse>
+ <ZBHUr7bANuhnOnIV@khadija-virtual-machine>
+ <ZBHtrGjgKOiVwjSF@aschofie-mobl2>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR11MB2937:EE_|PH7PR11MB5765:EE_
-X-MS-Office365-Filtering-Correlation-Id: f4a739c5-6cd9-4fe7-ef7c-08db260a3e51
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: FlAAA4z8RGwh0hJGlXxGkeZQSTShve9d6bgXuwatOolHkahVe1mSIs3XOkDsuGw/YTPraavLC1aa/aexmsgf7I4lGED4c5ZGDXd1DDC9FhFd2j65kRaeXNgpj6s4Tt361ZJAL198I9Sm8fHdDdpk7wqqDr5WIWFduOBPflhri0VhKJbmAFTwEBy2lWMRycPqVhmgP65Ix6SpDE6hQ4jzaL/6QmyDPzl///mbf9z14F6jiGL452KIPOEWGB8DlpP5/0aqBZooO0GrEZB8AzCiPvx/AmIPLP5dRi5+sDnEGjNDC4LNocBM1CMHtZ06KOqXio1ympzhsXQmqTOhVp4moUCv8t4DefJohWSz6yQVWAaU4Q43oKCE+CD0U+Rh0R3/FPDzL09+sisDJVDjz8DgVJOY2vNjQ1cyfcHuJywwjYk/4gExQnWuTb6RgN9MKhcxUR3GmX1Tebj8lQHhAIR4lNeLq1uR6CJkpqF0p69/crpgzulDOTcoFyhmhwPX9/Wndi4odDYkeZvQgz5OVtddqlh3XR6mQLOMCsiUAhpRlqkpJHvj6jXbvNAfAAAaksyllTY7fUup5V+pZ7bRO6YgAAUaxKm0ozxPFbmreFK+41g9fTxRr4GjIPfxWnms8LzjAPyOD6cqwOJ/Tq5hN0mT3A==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB2937.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(346002)(366004)(396003)(39860400002)(376002)(136003)(451199018)(41300700001)(5660300002)(8936002)(7416002)(2906002)(44832011)(38100700002)(86362001)(82960400001)(478600001)(66556008)(6916009)(66476007)(8676002)(66946007)(6486002)(6666004)(316002)(83380400001)(4326008)(186003)(9686003)(6506007)(6512007)(26005);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?aKj9jNPKslKZdllW+tY9o57ZKRX2hUxhRp8X7R9uEuhYlbmgky2sCMavDkJa?=
- =?us-ascii?Q?XqKUacfRax79VyxQxWUk5fhLF/6qzI2AzSuS8qYnrifgYQmr0L9oU0mtpc6Y?=
- =?us-ascii?Q?617l/tWk8VzoOsVsVan3iCEkfU7hIRXBOTeL14NHvB2v6yQmFcGEu62NJpIs?=
- =?us-ascii?Q?KZbxgy4Jd9cKRcpZKb0H8A4gWUV+8PC3yzAloeCBmUOc0Fex9d/qOMhuw/n5?=
- =?us-ascii?Q?aGlIrD/+7NQoa3c7TD50KY9mLpFxCRINPcKfuenLtFPwAlW0jjeoEp7Ht4Ka?=
- =?us-ascii?Q?/z4rzlKHICU/Wu++9uZl7vZp2GuFz6BuxDvDBi139y93T+R3BaGfr2T0kC9A?=
- =?us-ascii?Q?Sc2uxTLhlo4a870zhue0NBO/3hRSagaGofxAPhO8XsGPpR+6nH5hsVu5N3kH?=
- =?us-ascii?Q?zxTbwuEZ593qdTsvoywpqChf7BKuzQLTHcctUB6Qj7K0CbDIQXgMENnDrd8n?=
- =?us-ascii?Q?AzWwehP7w5l/UoJJfiplLD/jXNbfM7eoeG4Ym6jFFrVltc/na7MxYWIbugMh?=
- =?us-ascii?Q?bk8jjqY1xwRW7DyiQ7HFfz0cjQKIM9lRpZ6OQV3Z/6R7AZW86yCs64+KX39b?=
- =?us-ascii?Q?LmU7vDVIkvztIxcA2aRW3TtrVtWVX+tVmZoqZVUIeHxMhxXp2faTtvVa/TW7?=
- =?us-ascii?Q?Y7LMQ4GE33ScBezWgzSthdrqfIDc2klg3NLkZsehmmWvA1ik2ea7HbrTX+5Z?=
- =?us-ascii?Q?RpmYSeBVMfCOgolpOkD+9wc1sMb9sD5EttQQr0cXyRGJOdrglXx4sd47uq5M?=
- =?us-ascii?Q?CuO2piiXessleC8Gsn59reVodkj0xZw14qk3UkslYpsmKpz0LKPyITFbB1L0?=
- =?us-ascii?Q?AkapTR+5ixw8ODC/BZTA2LSF5BN9cneCFm0Jz7x0NbjTfU4EmzHAOGP80Q/t?=
- =?us-ascii?Q?nO8kLXNWGXOEJULlrJz/5BPL9zA5qUAKtpz6QQqXAfQ3o5gd4L1uSPYeNh8N?=
- =?us-ascii?Q?98Yd4aQ3cyLEgKW1Q9ZfkLxMvNDXNjYYwNia5TFMocd/Wc2TqWQGjEAJI3Lx?=
- =?us-ascii?Q?lfRn4INkxaNmtDnL6FSrLkRSCZZpUvAmTTKjhtkOxLqTwbljv93YTTOKzU04?=
- =?us-ascii?Q?sTwFi8roVfPPXSurHWu6+eqpfQxrOaQttatHoBqdApgMN0v8s1lYDwQiKQoa?=
- =?us-ascii?Q?xBBcuMtT7qpLNkEeV148uCT2m4QJywPZh7o0aLivEYD5W3mYYA8aOJnsd3DB?=
- =?us-ascii?Q?hiJFl92xDyAhfaOwi1ahFECuFW3RErQlUd/O9R42QaiSK6+J5JBXH2GMkBJ9?=
- =?us-ascii?Q?o3BLVrXzFufZl4rpk59iaxrw2HJGdF+XWkoksxM4e/XarRfm/r6Omu6FXDAi?=
- =?us-ascii?Q?ks7PFJD41p2gtnR0fSH9yDupo00AxFQ1OK+M2NfId2AddjykF/Hio83v2Yzk?=
- =?us-ascii?Q?K8/Vp/jx8NQipiy4yVuYmFflisjJczxK9bRf53sm83jbTUCSIarVoe9mxkkt?=
- =?us-ascii?Q?VPjyE+uD45s44F6fnkezN03CiTPmwCWRAdYAMlALaI/XdXKZIdtkvrB9Rmxl?=
- =?us-ascii?Q?uQA4P2guuMJhX5Xyy3GJCLwD7eS+YpaY1wey+jzxonCDcps1Nk0K9eErBT+9?=
- =?us-ascii?Q?Jj78D55ojqa+RCqqMYvUgL3EyH4YdeWuIwUgJIAx5LtNEvS2JeY5v8HCIIaj?=
- =?us-ascii?Q?Vg=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: f4a739c5-6cd9-4fe7-ef7c-08db260a3e51
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB2937.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Mar 2023 10:36:04.1705
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: XOLj1qhdxKF5L1dmVaike0RwDCl5iBFuktAWom6RA/5BzQUca+qX9235+xClM06MPTMQnkEWH/ykNRxfHxX3Yg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB5765
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZBHtrGjgKOiVwjSF@aschofie-mobl2>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 16, 2023 at 10:03:39AM +0000, Bartosz Wawrzyniak wrote:
-> Currently macb sets clock divisor for pclk up to 160 MHz.
-> Function gem_mdc_clk_div was updated to enable divisor
-> for higher values of pclk.
+On Wed, Mar 15, 2023 at 09:09:16AM -0700, Alison Schofield wrote:
+> On Wed, Mar 15, 2023 at 07:22:39PM +0500, Khadija Kamran wrote:
+> > On Wed, Mar 15, 2023 at 02:34:31PM +0100, Fabio M. De Francesco wrote:
+> > > Aside from what I said and asked for with the other message of this same 
+> > > thread, please take note that you can build a specific module if you prefer 
+> > > not to re-build the whole kernel and other modules at the same time. 
+> > > 
+> > > I'm pretty sure that the instructions to do so are in the OutreachyFirstPatch 
+> > > tutorial.
+> > > 
+> > > If they are not there, please let us know.
+> > > 
+> > > Fabio
+> > 
+> > Hey Fabio!
+> > 
+> > In the Outreachy FirstPatchTutorial under the 'Compiling only part of
+> > the kernel' section there are ways to compile only some part of the
+> > kernel.
+> > 
+> > I have tried using "make W=1 drivers/staging/axis-fifo/" and it says
+> > 'nothing to be done for'. 
+> > 
+> > Should I start with the steps to reproduce? :'(
 > 
-> Signed-off-by: Bartosz Wawrzyniak <bwawrzyn@cisco.com>
-> ---
->  drivers/net/ethernet/cadence/macb.h      | 2 ++
->  drivers/net/ethernet/cadence/macb_main.c | 6 +++++-
->  2 files changed, 7 insertions(+), 1 deletion(-)
+> Khadija,
 > 
-> diff --git a/drivers/net/ethernet/cadence/macb.h b/drivers/net/ethernet/cadence/macb.h
-> index 14dfec4db8f9..c1fc91c97cee 100644
-> --- a/drivers/net/ethernet/cadence/macb.h
-> +++ b/drivers/net/ethernet/cadence/macb.h
-> @@ -692,6 +692,8 @@
->  #define GEM_CLK_DIV48				3
->  #define GEM_CLK_DIV64				4
->  #define GEM_CLK_DIV96				5
-> +#define GEM_CLK_DIV128				6
-> +#define GEM_CLK_DIV224				7
->  
->  /* Constants for MAN register */
->  #define MACB_MAN_C22_SOF			1
-> diff --git a/drivers/net/ethernet/cadence/macb_main.c b/drivers/net/ethernet/cadence/macb_main.c
-> index 6e141a8bbf43..8708af6d25ed 100644
-> --- a/drivers/net/ethernet/cadence/macb_main.c
-> +++ b/drivers/net/ethernet/cadence/macb_main.c
-> @@ -2641,8 +2641,12 @@ static u32 gem_mdc_clk_div(struct macb *bp)
->  		config = GEM_BF(CLK, GEM_CLK_DIV48);
->  	else if (pclk_hz <= 160000000)
->  		config = GEM_BF(CLK, GEM_CLK_DIV64);
-> -	else
-> +	else if (pclk_hz <= 240000000)
->  		config = GEM_BF(CLK, GEM_CLK_DIV96);
-> +	else if (pclk_hz <= 320000000)
-> +		config = GEM_BF(CLK, GEM_CLK_DIV128);
-> +	else
-> +		config = GEM_BF(CLK, GEM_CLK_DIV224);
->  
->  	return config;
->  }
-
-Hi,
-
-The patch looks OK.
-
-Thanks,
-Michal
-
-Reviewed-by: Michal Kubiak <michal.kubiak@intel.com>
-
-> -- 
-> 2.33.0
+> I've applied your patch and it fails to compile with the warnings
+> that LKP reports.
 > 
+> If you are doing: $ make drivers/staging/axis-fifo/
+> 
+> and it is saying 'nothing to be done...'
+> 
+> You either have not changed anything since the last compile, or you
+> do not have the module configured.
+>
+
+Hey Alison!
+I might've written the statement wrong. Actually, here is the output of
+make drivers/staging/axis-fifo
+
+YACC    scripts/genksyms/parse.tab.[ch]
+  HOSTCC  scripts/genksyms/parse.tab.o
+  HOSTCC  scripts/genksyms/lex.lex.o
+  HOSTLD  scripts/genksyms/genksyms
+  CC      scripts/mod/empty.o
+  MKELF   scripts/mod/elfconfig.h
+  HOSTCC  scripts/mod/modpost.o
+  CC      scripts/mod/devicetable-offsets.s
+  HOSTCC  scripts/mod/file2alias.o
+  HOSTCC  scripts/mod/sumversion.o
+  HOSTLD  scripts/mod/modpost
+  CC      kernel/bounds.s
+  CC      arch/x86/kernel/asm-offsets.s
+  CALL    scripts/checksyscalls.sh
+  DESCEND objtool
+  INSTALL libsubcmd_headers
+  DESCEND bpf/resolve_btfids
+  INSTALL libsubcmd_headers
+make[3]: Nothing to be done for 'drivers/staging/axis-fifo/'.
+
+
+> I suspect it has never compiled for you and you need to look at
+> the direction in the tutorial for 'Recompiling the driver' section
+> and learn how to use make menuconfig.
+> 
+> This driver has a couple of dependencies described in the Kconfig
+> file. You will not even see the 'XIL_AXIS_FIFO' option until you
+> turn on 'OF' and HAS_'IOMEM'.
+> 
+> See the drivers/staging/axis-fifo/Kconfig
+> 
+> Please confirm that you have compiled the driver before chasing
+> after the build env that lkp reports.
+> 
+> Thanks,
+> Alison
+
+Sorry, I made a mistake here.
+
+I did not change the driver 'Xilinx AXI-Stream FIFO IP core driver' to
+being compiled as a module by typing 'm'.
+Is that the problem here?
+
+Also, now when I try to change it by pressing 'm', it is not working.
+And I have tried many times but I cannot change the driver from '*' to
+'m'.
+
+Kindly help me with this.
+
+Regards,
+Khadija
+
+
