@@ -2,252 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C72956BC61A
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 07:30:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FEEB6BC61D
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 07:31:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229636AbjCPGac (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 02:30:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40662 "EHLO
+        id S229648AbjCPGbR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 02:31:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbjCPGa3 (ORCPT
+        with ESMTP id S229471AbjCPGbQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 02:30:29 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA3AB9EF45;
-        Wed, 15 Mar 2023 23:30:27 -0700 (PDT)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32G25Qcr002833;
-        Thu, 16 Mar 2023 06:30:18 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- content-transfer-encoding : in-reply-to; s=qcppdkim1;
- bh=x3CT63H/MNL5C7LmQ01erJeEHAfzFiLYI/OUMyys0Jg=;
- b=orelI1RYHxdLdEPrOi/GtcfOFR2PKkbkzgkY2zm6Mdd0rb0oIELVmWnLx4IMtCd5DKp3
- 0wfU246IzEYOvcFqRkjFXVcI9GAuKLlNaC4SsYYjC7u4mouPWJXvw5bongynKE3DTw4f
- qaCJmUnCjSBFHHZNP9qlRgyBZCmvKJ8nB/J08RITWiDSzw17KpkTm3e5fVFeuDTUT5yu
- 6wl/ut/NP58QzuCVqggpWaqMIEGZTzqTf0r1nrXzbb/tSz4V+fz042an3Rfq57s7Ou2l
- 6AbwCpTZc84+9Bg6/+zwjiAiXGOolaL1/OZznaOQMh/lK7S9eNpbkyad4K1dow92BP6L xg== 
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pbpy8gwj5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 16 Mar 2023 06:30:18 +0000
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32G6UH6J013336
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 16 Mar 2023 06:30:17 GMT
-Received: from varda-linux.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.41; Wed, 15 Mar 2023 23:30:13 -0700
-Date:   Thu, 16 Mar 2023 12:00:09 +0530
-From:   Varadarajan Narayanan <quic_varada@quicinc.com>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-CC:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Georgi Djakov <djakov@kernel.org>
-Subject: Re: [PATCH 7/8] arm64: dts: qcom: ipq9574: Add USB related nodes
-Message-ID: <20230316063009.GA29961@varda-linux.qualcomm.com>
-References: <cover.1677749625.git.quic_varada@quicinc.com>
- <6b8d17006d8ee9a1b0c4df803c1cc7caf53ea3ef.1677749625.git.quic_varada@quicinc.com>
- <CAA8EJprbMybV0o1-436yLhVnnEX6qywrj=JmWDCL5usaH0DXiQ@mail.gmail.com>
- <61e8c730-e46d-728d-d770-f1ead4405d12@quicinc.com>
- <83184da4-b183-3271-983f-3a1a62fb9f1a@linaro.org>
- <365f2609-d3b4-df23-5b6e-7a190815a640@quicinc.com>
- <47b591c0-2f68-429d-6d1b-fa8b701785ac@linaro.org>
+        Thu, 16 Mar 2023 02:31:16 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A4BD9FE61
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 23:31:14 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id eh3so3341032edb.11
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 23:31:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678948273;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=r9j8GQrtbHhtegURmxB3PLCY1oXF2JoBLNnpXVqbpVM=;
+        b=DOE9hQAN6fOzn+o/ztsM5Jcw8cu/mQ/ARao0w4j1eT+bb2zW1Xf1pXHcKozM34BjwH
+         iKpgLf9MjQWOBtBd7/9zvdrkX/O35KFOZH85Z4gemDZnNQwPlBAK515ba3PRctbm/MP5
+         2w4qPBdmYjd1M9ZcrKkGxQE2VBsQ46hedHLo0AEol6nOoPcn7QmYTaZrnQ9SSIAzlJTo
+         zc0M3tsia2kxJnZCJfV6893dKtPlRMCgQ/Eq8fl351N5NBuZgN825b/9mPvKOskwKuci
+         Pl1rHnJFP+3SIZEXJ2KeWnkucKJnEnWEJfJrco2K3ltS/H3ifTat5/wpXrhYStl05lA7
+         UHoQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678948273;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=r9j8GQrtbHhtegURmxB3PLCY1oXF2JoBLNnpXVqbpVM=;
+        b=MVyk3H/u+4+smEDVKpr+Y8sP6vX37UOh0iXxZtyNmO0DftVWU8xelA/99EiW0kz3Xo
+         yfnrZpFdwhKEXCr/4K2yqwty8ilIPxBCboXtWStUBdOlJbQHIRmBZ/Wjfr3VnZURMZOK
+         YjlH1myLc0MTyOQplhf1DVAyu8Se6JCWZC1kU+sz1Wv5phZaMzbewNH8waRij/Wf6Jj2
+         jRAJV/xTV7VEW18gzRl7KG77GDwWP1L+WMPC/B++N/PSepz9HuyNYA/5khNBL4jGHzZB
+         RkeHSw384vwx/V396NtZ7/N0Gtg597KHwwjKUAxG/b/ngUE+obHR3mUWI2Bz2hNFz9hU
+         QiUQ==
+X-Gm-Message-State: AO0yUKUxET17mkaPrjM61gM105uGWPU5HzM0PXDOgQ3xygHNuS4hQTEd
+        3qC+ETXLjxz7tJ3vTEBcQ/LGHg==
+X-Google-Smtp-Source: AK7set//6drX8/WV32h0Hq7ln8wNthIukaVT2fKbs7oH3weuhTKlatV+vwcvLqfs8GyzHamupsNjug==
+X-Received: by 2002:a17:906:14c9:b0:8ab:4c4:d0f6 with SMTP id y9-20020a17090614c900b008ab04c4d0f6mr8694921ejc.56.1678948273080;
+        Wed, 15 Mar 2023 23:31:13 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:9827:5f65:8269:a95f? ([2a02:810d:15c0:828:9827:5f65:8269:a95f])
+        by smtp.gmail.com with ESMTPSA id oy17-20020a170907105100b008e385438c76sm3427088ejb.55.2023.03.15.23.31.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Mar 2023 23:31:12 -0700 (PDT)
+Message-ID: <b04eb48e-c9aa-0404-33ec-bef623b8282f@linaro.org>
+Date:   Thu, 16 Mar 2023 07:31:11 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v29 1/7] dt-bindings: mediatek: add ethdr definition for
+ mt8195
+To:     =?UTF-8?B?TmFuY3kgTGluICjmnpfmrKPonqIp?= <Nancy.Lin@mediatek.com>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "chunkuang.hu@kernel.org" <chunkuang.hu@kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        =?UTF-8?B?U2luZ28gQ2hhbmcgKOW8teiIiOWciyk=?= 
+        <Singo.Chang@mediatek.com>,
+        "nathan@kernel.org" <nathan@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "daniel@ffwll.ch" <daniel@ffwll.ch>,
+        =?UTF-8?B?Q0sgSHUgKOiDoeS/iuWFiSk=?= <ck.hu@mediatek.com>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        Project_Global_Chrome_Upstream_Group 
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "clang-built-linux@googlegroups.com" 
+        <clang-built-linux@googlegroups.com>,
+        "ndesaulniers@google.com" <ndesaulniers@google.com>
+References: <20221227081011.6426-1-nancy.lin@mediatek.com>
+ <20221227081011.6426-2-nancy.lin@mediatek.com>
+ <4aff6a7a3b606f26ec793192d9c75774276935e0.camel@mediatek.com>
+ <2700bd6c-f00d-fa99-b730-2fcdf89089fa@linaro.org>
+ <1d65e8b2de708db18b5f7a0faaa53834e1002d9f.camel@mediatek.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1d65e8b2de708db18b5f7a0faaa53834e1002d9f.camel@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <47b591c0-2f68-429d-6d1b-fa8b701785ac@linaro.org>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: vSM5Xf1dVQIkWupo36QlI3tRGxATnzol
-X-Proofpoint-ORIG-GUID: vSM5Xf1dVQIkWupo36QlI3tRGxATnzol
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-16_04,2023-03-15_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- spamscore=0 clxscore=1015 malwarescore=0 mlxlogscore=999 suspectscore=0
- adultscore=0 impostorscore=0 bulkscore=0 phishscore=0 mlxscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2303150002 definitions=main-2303160053
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dmitry,
+On 16/03/2023 07:19, Nancy Lin (æž—æ¬£èž¢) wrote:
+> On Wed, 2023-03-15 at 08:16 +0100, Krzysztof Kozlowski wrote:
+>> On 15/03/2023 04:45, Nancy Lin (æž—æ¬£èž¢) wrote:
+>>
+>> Trim the replies and remove unneeded context. You want to get the
+>> attention of other people, not force them to read entire email.
+>>
+>>>> +  mediatek,gce-client-reg:>> +    $ref:
+>>>> /schemas/types.yaml#/definitions/phandle-array
+>>>> +    description: The register of display function block to be
+>>>> set by
+>>>> gce.
+>>>> +      There are 4 arguments in this property, gce node, subsys
+>>>> id,
+>>>> offset and
+>>>> +      register size. The subsys id is defined in the gce header
+>>>> of
+>>>> each chips
+>>>> +      include/dt-bindings/gce/<chip>-gce.h, mapping to the
+>>>> register
+>>>> of display
+>>>> +      function block.
+>>>> +    items:
+>>>> +      items:
+>>>> +        - description: phandle of GCE
+>>>> +        - description: GCE subsys id
+>>>> +        - description: register offset
+>>>> +        - description: register size
+>>>> +    minItems: 7
+>>>> +    maxItems: 7
+>>>> +
+>>>
+>>> Hi Rob and krzysztof,
+>>>
+>>> I got the two messages when running dt_binding_check [1]. This
+>>> binding
+>>> patch was sent previously in [2]. 
+>>>
+>>> If I remove the following items/minItems/maxItems in the
+>>> mediatek,gce-
+>>> client property, the two message disappear. I don't know what's
+>>> wrong
+>>> with the original syntax. Do you have any suggestions for this?
+>>>
+>>> -    items:
+>>> -      items:
+>>> -        - description: phandle of GCE
+>>> -        - description: GCE subsys id
+>>> -        - description: register offset
+>>> -        - description: register size
+>>> -    minItems: 7
+>>> -    maxItems: 7
+>>>
+>>>
+>>> [1].
+>>> Documentation/devicetree/bindings/display/mediatek/mediatek,ethdr.e
+>>> xamp
+>>> le.dtb
+>>> /proj/mtk19347/cros/src/third_party/kernel/v5.10/Documentation/devi
+>>> cetr
+>>> ee/bindings/display/mediatek/mediatek,ethdr.example.dtb: 
+>>> hdr-engine@1c114000: mediatek,gce-client-reg:0: [4294967295, 7,
+>>> 16384,
+>>> 4096, 4294967295, 7, 20480, 4096, 4294967295, 7, 28672, 4096,
+>>> 4294967295, 7, 36864, 4096, 4294967295, 7, 40960, 4096, 4294967295,
+>>> 7,
+>>> 45056, 4096, 4294967295, 7, 49152, 4096] is too long
+>>>         From schema:
+>>
+>> This looks like known issue with phandles with variable number of
+>> arguments. Either we add it to the exceptions or just define it in
+>> reduced way like in other cases - only maxItems: 1 without describing
+>> items.
+>>
+>>
+>> Best regards,
+>> Krzysztof
+> 
+> 
+> Hi Krzysztof,
+> 
+> Thanks for the comment.
+> 
+> But I have several items for this vendor property in the binding
+> example.
 
-On Tue, Mar 07, 2023 at 01:49:40PM +0200, Dmitry Baryshkov wrote:
-> On 07/03/2023 08:36, Varadarajan Narayanan wrote:
-> >
-> >On 3/6/2023 5:21 PM, Dmitry Baryshkov wrote:
-> >>On 06/03/2023 13:26, Varadarajan Narayanan wrote:
-> >>>Dmitry,
-> >>>
-> >>>On 3/2/2023 9:52 PM, Dmitry Baryshkov wrote:
-> >>>>On Thu, 2 Mar 2023 at 11:57, Varadarajan Narayanan
-> >>>><quic_varada@quicinc.com> wrote:
-> >>>>>Add USB phy and controller related nodes
-> >>>>>
-> >>>>>Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
-> >>>>>---
-> >>>>>  arch/arm64/boot/dts/qcom/ipq9574.dtsi | 92
-> >>>>>+++++++++++++++++++++++++++++++++++
-> >>>>>  1 file changed, 92 insertions(+)
-> >>>>>
-> >>>>>diff --git a/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-> >>>>>b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-> >>>>>index 2bb4053..319b5bd 100644
-> >>>>>--- a/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-> >>>>>+++ b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-> >>
-> >>[skipped]
-> >>
-> >>
-> >>>>>+               usb3: usb3@8A00000 {
-> >>>>You know the drill. This node is in the wrong place.
-> >>>>
-> >>>>>+                       compatible = "qcom,dwc3";
-> >>>>>+                       reg = <0x8AF8800 0x400>;
-> >>>>>+                       #address-cells = <1>;
-> >>>>>+                       #size-cells = <1>;
-> >>>>>+                       ranges;
-> >>>>>+
-> >>>>>+                       clocks = <&gcc GCC_SNOC_USB_CLK>,
-> >>>>>+                               <&gcc GCC_ANOC_USB_AXI_CLK>,
-> >>>>>+                               <&gcc GCC_USB0_MASTER_CLK>,
-> >>>>>+                               <&gcc GCC_USB0_SLEEP_CLK>,
-> >>>>>+                               <&gcc GCC_USB0_MOCK_UTMI_CLK>;
-> >>>>>+
-> >>>>>+                       clock-names = "sys_noc_axi",
-> >>>>>+                               "anoc_axi",
-> >>>>>+                               "master",
-> >>>>>+                               "sleep",
-> >>>>>+                               "mock_utmi";
-> >>>>Please fix the indentation of the lists.
-> >>>>
-> >>>>>+
-> >>>>>+                       assigned-clocks = <&gcc GCC_SNOC_USB_CLK>,
-> >>>>>+                                         <&gcc GCC_ANOC_USB_AXI_CLK>,
-> >>>>Why do you assign clock rates to the NOC clocks? Should they be set
-> >>>>using the interconnect instead?
-> >>>
-> >>>The SNOC and ANOC run at a fixed speed of 350MHz and 342MHz
-> >>>respectively and are not scaled. These clocks are for the interface
-> >>>between the USB block and the SNOC/ANOC. Do we still need to use
-> >>>interconnect?
-> >>
-> >>Maybe I misunderstand something here. If the snoc and anoc speeds are at
-> >>350 MHz and 342 MHz, why do you assign clock-rates of 200 MHz?
-> >>
-> >>Is it enough to call clk_prepare_enable() for these clocks or the rate
-> >>really needs to be set?
-> >
-> >The rate of 200MHz is not being set for the SNOC/ANOC. It is for the
-> >NIU that connects the USB and SNOC/ANOC. The reason for setting the
-> >rate to 200MHz is to configure the RCG parent for these interface
-> >clocks. That said can we configure this RCG standalone in the driver
-> >and enable these clocks?
->
-> We discussed this separately with Georgi Djakov. Let me quote his IRC
-> message: "it sounds like this is for USB port that connects to the NOC. if
-> bandwidth scaling is not needed (or other interconnect configuration), then
-> maybe this can go without interconnect provider driver."
->
-> However as we discover more and more about this platform (e.g. PCIe using
-> the aggre_noc region to setup some magic registers, see [1]), I'm more and
-> more biased towards suggesting implementing the interconnect driver to setup
-> all these tiny little things. With the DT tree being an ABI, it is much
-> preferable to overestimate the needs rather than underestimating them (and
-> having to cope with the backwards compatibility issues).
->
-> Generally I think that PCIe/USB/whatever should not poke into NoC registers
-> or NoC/NIU clocks directly (because this is a very platform-specific item).
-> Rather than that it should tell the icc/opp/whatever subsystem, "please
-> configure the SoC for me to work".
->
-> [1] https://lore.kernel.org/linux-arm-msm/30cf9717-dcca-e984-c506-c71b7f8e32cd@quicinc.com/
+Do you? I thought you have one phandle?
 
-Dmitry,
-Can we remove the interconnect clocks in the next patch
-version (and assume that the boot loader configures them)?
+> Can I remove maxItems? Change the mediatek,gce-client-reg as [1].
+> 
+> [1]
+>   mediatek,gce-client-reg:
+>     $ref: /schemas/types.yaml#/definitions/phandle-array
+>     description: The register of display function block to be set by
+> gce.
+>       There are 4 arguments in this property, gce node, subsys id,
+> offset and
+>       register size. The subsys id is defined in the gce header of each
+> chips
+>       include/dt-bindings/gce/<chip>-gce.h, mapping to the register of
+> display
+>       function block.
 
-And add these clocks once the interconnect support is available.
+No, this needs some constraints.
 
-Thanks
-Varada
+Best regards,
+Krzysztof
 
->
-> >
-> >Thanks
-> >Varada
-> >
-> >
-> >>
-> >>
-> >>>
-> >>>>>+ <&gcc GCC_USB0_MASTER_CLK>,
-> >>>>>+                                         <&gcc
-> >>>>>GCC_USB0_MOCK_UTMI_CLK>;
-> >>>>>+                       assigned-clock-rates = <200000000>,
-> >>>>>+ <200000000>,
-> >>>>>+ <200000000>,
-> >>>>>+ <24000000>;
-> >>>>>+
-> >>>>>+                       resets = <&gcc GCC_USB_BCR>;
-> >>>>>+                       status = "disabled";
-> >>>>>+
-> >>>>>+                       dwc_0: dwc3@8A00000 {
-> >>>>>+                               compatible = "snps,dwc3";
-> >>>>>+                               reg = <0x8A00000 0xcd00>;
-> >>>>>+                               clock-names = "ref";
-> >>>>>+                               clocks = <&gcc
-> >>>>>GCC_USB0_MOCK_UTMI_CLK>;
-> >>>>clocks before clock-names
-> >>>>
-> >>>>>+ interrupts = <GIC_SPI 140 IRQ_TYPE_LEVEL_HIGH>;
-> >>>>>+                               phys = <&qusb_phy_0>, <&usb0_ssphy>;
-> >>>>>+                               phy-names = "usb2-phy", "usb3-phy";
-> >>>>>+                               tx-fifo-resize;
-> >>>>>+                               snps,dis_ep_cache_eviction;
-> >>>>>+                               snps,is-utmi-l1-suspend;
-> >>>>>+                               snps,hird-threshold = /bits/ 8 <0x0>;
-> >>>>>+                               snps,dis_u2_susphy_quirk;
-> >>>>>+                               snps,dis_u3_susphy_quirk;
-> >>>>>+ snps,quirk-frame-length-adjustment = <0x0A87F0A0>;
-> >>>>>+                               dr_mode = "host";
-> >>>>>+                       };
-> >>>>>+               };
-> >>>>>+
-> >>>>>                 pcie0_phy: phy@84000 {
-> >>>>>                         compatible =
-> >>>>>"qcom,ipq9574-qmp-gen3x1-pcie-phy";
-> >>>>>                         reg = <0x00084000 0x1bc>; /* Serdes PLL */
-> >>>>>--
-> >>>>>2.7.4
-> >>>
-> >>>Will address these and post a new revision.
-> >>>
-> >>>Thanks
-> >>>
-> >>>Varada
-> >>>
-> >>
->
-> --
-> With best wishes
-> Dmitry
->
