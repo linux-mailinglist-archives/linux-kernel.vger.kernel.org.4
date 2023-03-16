@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B36176BC431
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 04:05:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00A0C6BC435
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 04:06:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229905AbjCPDFg convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 15 Mar 2023 23:05:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39190 "EHLO
+        id S230028AbjCPDFt convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 15 Mar 2023 23:05:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229816AbjCPDFW (ORCPT
+        with ESMTP id S229844AbjCPDFZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 23:05:22 -0400
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88B2640E6;
-        Wed, 15 Mar 2023 20:05:20 -0700 (PDT)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        Wed, 15 Mar 2023 23:05:25 -0400
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB6B24ED2;
+        Wed, 15 Mar 2023 20:05:21 -0700 (PDT)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
         (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 4142324E207;
-        Thu, 16 Mar 2023 11:05:19 +0800 (CST)
-Received: from EXMBX061.cuchost.com (172.16.6.61) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 16 Mar
- 2023 11:05:19 +0800
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 35AD624E0D6;
+        Thu, 16 Mar 2023 11:05:20 +0800 (CST)
+Received: from EXMBX061.cuchost.com (172.16.6.61) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 16 Mar
+ 2023 11:05:20 +0800
 Received: from localhost.localdomain (113.72.145.194) by EXMBX061.cuchost.com
  (172.16.6.61) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 16 Mar
- 2023 11:05:17 +0800
+ 2023 11:05:18 +0800
 From:   Xingyu Wu <xingyu.wu@starfivetech.com>
 To:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
         "Michael Turquette" <mturquette@baylibre.com>,
@@ -42,9 +42,9 @@ CC:     Rob Herring <robh+dt@kernel.org>,
         Xingyu Wu <xingyu.wu@starfivetech.com>,
         William Qiu <william.qiu@starfivetech.com>,
         <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>
-Subject: [PATCH v2 3/6] dt-bindings: soc: starfive: syscon: Add optional patternProperties
-Date:   Thu, 16 Mar 2023 11:05:11 +0800
-Message-ID: <20230316030514.137427-4-xingyu.wu@starfivetech.com>
+Subject: [PATCH v2 4/6] dt-bindings: clock: jh7110-syscrg: Add PLL clock inputs
+Date:   Thu, 16 Mar 2023 11:05:12 +0800
+Message-ID: <20230316030514.137427-5-xingyu.wu@starfivetech.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230316030514.137427-1-xingyu.wu@starfivetech.com>
 References: <20230316030514.137427-1-xingyu.wu@starfivetech.com>
@@ -55,80 +55,84 @@ X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX061.cuchost.com
  (172.16.6.61)
 X-YovoleRuleAgent: yovoleflag
 Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add optional compatible and patternProperties.
+Add PLL clock inputs from PLL clock generator.
 
 Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
 ---
- .../soc/starfive/starfive,jh7110-syscon.yaml  | 39 ++++++++++++++++---
- 1 file changed, 33 insertions(+), 6 deletions(-)
+ .../clock/starfive,jh7110-syscrg.yaml         | 20 +++++++++++++++++--
+ 1 file changed, 18 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/soc/starfive/starfive,jh7110-syscon.yaml b/Documentation/devicetree/bindings/soc/starfive/starfive,jh7110-syscon.yaml
-index ae7f1d6916af..b61d8921ef42 100644
---- a/Documentation/devicetree/bindings/soc/starfive/starfive,jh7110-syscon.yaml
-+++ b/Documentation/devicetree/bindings/soc/starfive/starfive,jh7110-syscon.yaml
-@@ -15,16 +15,31 @@ description: |
+diff --git a/Documentation/devicetree/bindings/clock/starfive,jh7110-syscrg.yaml b/Documentation/devicetree/bindings/clock/starfive,jh7110-syscrg.yaml
+index 84373ae31644..55d4e7f09cd5 100644
+--- a/Documentation/devicetree/bindings/clock/starfive,jh7110-syscrg.yaml
++++ b/Documentation/devicetree/bindings/clock/starfive,jh7110-syscrg.yaml
+@@ -27,6 +27,9 @@ properties:
+           - description: External I2S RX left/right channel clock
+           - description: External TDM clock
+           - description: External audio master clock
++          - description: PLL0
++          - description: PLL1
++          - description: PLL2
  
- properties:
-   compatible:
--    items:
--      - enum:
--          - starfive,jh7110-aon-syscon
--          - starfive,jh7110-stg-syscon
--          - starfive,jh7110-sys-syscon
--      - const: syscon
-+    oneOf:
-+      - items:
-+          - enum:
-+              - starfive,jh7110-aon-syscon
-+              - starfive,jh7110-stg-syscon
-+              - starfive,jh7110-sys-syscon
-+          - const: syscon
-+      - items:
-+          - enum:
-+              - starfive,jh7110-aon-syscon
-+              - starfive,jh7110-stg-syscon
-+              - starfive,jh7110-sys-syscon
-+          - const: syscon
-+          - const: simple-mfd
+       - items:
+           - description: Main Oscillator (24 MHz)
+@@ -38,6 +41,9 @@ properties:
+           - description: External I2S RX left/right channel clock
+           - description: External TDM clock
+           - description: External audio master clock
++          - description: PLL0
++          - description: PLL1
++          - description: PLL2
  
-   reg:
-     maxItems: 1
+   clock-names:
+     oneOf:
+@@ -52,6 +58,9 @@ properties:
+           - const: i2srx_lrck_ext
+           - const: tdm_ext
+           - const: mclk_ext
++          - const: pll0_out
++          - const: pll1_out
++          - const: pll2_out
  
-+patternProperties:
-+  # Optional children
-+  "pll-clock-controller":
-+    type: object
-+    $ref: /schemas/clock/starfive,jh7110-pll.yaml#
-+    description: Clock provider for PLL.
-+
- required:
-   - compatible
-   - reg
-@@ -38,4 +53,16 @@ examples:
-         reg = <0x10240000 0x1000>;
+       - items:
+           - const: osc
+@@ -63,6 +72,9 @@ properties:
+           - const: i2srx_lrck_ext
+           - const: tdm_ext
+           - const: mclk_ext
++          - const: pll0_out
++          - const: pll1_out
++          - const: pll2_out
+ 
+   '#clock-cells':
+     const: 1
+@@ -93,12 +105,16 @@ examples:
+                  <&gmac1_rgmii_rxin>,
+                  <&i2stx_bclk_ext>, <&i2stx_lrck_ext>,
+                  <&i2srx_bclk_ext>, <&i2srx_lrck_ext>,
+-                 <&tdm_ext>, <&mclk_ext>;
++                 <&tdm_ext>, <&mclk_ext>,
++                 <&pllclk JH7110_CLK_PLL0_OUT>,
++                 <&pllclk JH7110_CLK_PLL1_OUT>,
++                 <&pllclk JH7110_CLK_PLL2_OUT>;
+         clock-names = "osc", "gmac1_rmii_refin",
+                       "gmac1_rgmii_rxin",
+                       "i2stx_bclk_ext", "i2stx_lrck_ext",
+                       "i2srx_bclk_ext", "i2srx_lrck_ext",
+-                      "tdm_ext", "mclk_ext";
++                      "tdm_ext", "mclk_ext",
++                      "pll0_out", "pll1_out", "pll2_out";
+         #clock-cells = <1>;
+         #reset-cells = <1>;
      };
- 
-+  - |
-+    syscon@13030000 {
-+        compatible = "starfive,jh7110-sys-syscon", "syscon", "simple-mfd";
-+        reg = <0x13030000 0x1000>;
-+
-+        pll-clock-controller {
-+            compatible = "starfive,jh7110-pll";
-+            clocks = <&osc>;
-+            #clock-cells = <1>;
-+        };
-+    };
-+
- ...
 -- 
 2.25.1
 
