@@ -2,197 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33F166BC666
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 07:59:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13AA76BC66B
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 07:59:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229893AbjCPG7O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 02:59:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49514 "EHLO
+        id S229928AbjCPG7h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 02:59:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbjCPG7K (ORCPT
+        with ESMTP id S229912AbjCPG7f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 02:59:10 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D79A22CFD2
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 23:59:08 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id o12so3561587edb.9
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 23:59:08 -0700 (PDT)
+        Thu, 16 Mar 2023 02:59:35 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C806152F40
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 23:59:24 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id z21so3661374edb.4
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 23:59:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678949947;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VgDKGokQR+4JPSgN0QqCTweCwRsx4eTE4MHO9hOb9T0=;
-        b=WKjcew4l/h348OTCKt6zEsmhdyILWxegry52zwbTUXK5+ORd93qwQJYlaWWBcYu0nF
-         H+xPjC1V3S64zgWDnfPWvxaQUA8pXwZz+Ugu253yLvKXWbw6zcXBbFEKpm8oUlkfJcez
-         qO1wVd5iPhyw9I3FrEfhFr9jrgG9vrjK8D3NjCMrvjjN57ok0Kuj39CzaPVXwR5XhcXF
-         WEz+DRS4WZ5XA4QfGTsI9ctDUPRhbcO+a8ec25xVp6BeQq0xVzUVJzZG3W5qa2QFFmVM
-         x6c72mP0BIuyVDCpOjzZdfdXk+G56D1J59tSFObLmfchCM/GU11Clr7QGYm3dRRX0c4M
-         agXA==
+        d=linaro.org; s=google; t=1678949962;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=3GJ4RBxZ712Klo+UmXypi79MzTgIT7iOamcqNsLMPOQ=;
+        b=U3RaZU5JK+ElSE3D8SK48II4Cow+x8MfM8vox4NNEvaszAnAB+T94R0KIblOyYoImc
+         ABJK5D9H2V8VJJTWQnmbd/xAli6OONjm4yK6431muTNwyMWCPaPYXUYM/10XUY0p5PEp
+         ZVsAPB8nMxhxS47/cvck2Z8xb4Y1b3QQd40S3p2KssbS0xqKljj0UoXzAw6rQL4uK7xQ
+         6/Y3jeBUB74Bk+5TESn/V8mePAsZbQjPdRRTRlKGPZUJRk3l5ysPxAHKfzsFYMXZxjWN
+         xjs2ZEpqTpKrNTa9+Vl5OkbSEAZ14i3f5Y4tbAbWPqrWRoepR0K45sRwPszHDlBwT+3T
+         ukEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678949947;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VgDKGokQR+4JPSgN0QqCTweCwRsx4eTE4MHO9hOb9T0=;
-        b=ZGT8cQIgscXklhxDz1sxfdNqcsw5QUPOC9ZqCrKvM7W15hekLwhPPqO89slEDQn1v5
-         j/VoA5KUrluHoDYF73BBBasLP22Gf1chNBFnU7oPXXiD8poOk4mClOnOSVFL3dBTnj1D
-         VLOtknY2Qx0UkIk9lKmowJlSStLFBR/DFYRCGRdYaI1Py09dqE6RmOfC5naM5i02owVR
-         eD2tSwxXPikMyqWj7+LkJEs5zd+M3W3YDzw/io5FNbUTJYcXOuCZXGljv8PNXq4m8FvS
-         natPMadZ9Rml2/mwvd6Urrkg0K2errmd/YUFaZ+t/lNcwTtMsmEFG8YPTxHd8tVR3nUg
-         1qlA==
-X-Gm-Message-State: AO0yUKV5efNek85nVCy3QBvy3jXWZeqx3QJLz5KjbOyZo9DnD2OKagZt
-        6Wm7LNp42Z0Epq4mf5POGvMA2Yg4/0I09K2jUoLxCW+26mk=
-X-Google-Smtp-Source: AK7set/hRGu/gvEAQOZy55e95HFYusYBm+MYWsGO+1P/oimOY18G0R+Vs517oYPB5xrG+vDfgyyAyuLM0FDlExZIfig=
-X-Received: by 2002:a17:906:1dcc:b0:8b2:23fb:dfd8 with SMTP id
- v12-20020a1709061dcc00b008b223fbdfd8mr4667764ejh.12.1678949947098; Wed, 15
- Mar 2023 23:59:07 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1678949962;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=3GJ4RBxZ712Klo+UmXypi79MzTgIT7iOamcqNsLMPOQ=;
+        b=Iiv1Vdz+7n9yaRUOv9cqMWnDrFV9GvJgaSeEvUX+IIXM1aR3HjO0MmsEelptnt/hUY
+         As+Vqq7HXauVvWU93Oqa6+3SjX2a5vl2hroOnkBc0MSGIrHMnP344vAtOqeZXbB6M5XV
+         1GLWcBG20b0+QvApBEWbQBb/Z/doUb2BtaqZu3T/seJAk0L0agTtvcEh800Q2050ifW5
+         21xj5aravAMYiADfLZJnY/OgKMcu6y0bzts6nE/Pzo99L6pRoGbEU0/6LTUpCDWBR+op
+         sA+P7wkQ7FZSpiVAj3ApdXyKkh5q4xW0Fp4lpO+nEjGJ8XlHRxYdZHS/b6Cc2bz+TMOj
+         v71A==
+X-Gm-Message-State: AO0yUKVwUC8T8hnwOBAGsVIZjXU1x3ZIlPA82ezuzfNveU45/1AKvfcP
+        PyP3TSDhsuMxEo00gLp+1Z8dwA==
+X-Google-Smtp-Source: AK7set9GpyQBtfPlGOriyIwY+B/yPUh5T1CI1WhiR4rhceJZrqhIVM8O+Ucn/hyY8qHeP36jlIqhiw==
+X-Received: by 2002:a17:907:2d93:b0:8aa:33c4:87d5 with SMTP id gt19-20020a1709072d9300b008aa33c487d5mr11565369ejc.10.1678949962510;
+        Wed, 15 Mar 2023 23:59:22 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:9827:5f65:8269:a95f? ([2a02:810d:15c0:828:9827:5f65:8269:a95f])
+        by smtp.gmail.com with ESMTPSA id qh2-20020a170906eca200b008e2dfc6382asm3427107ejb.125.2023.03.15.23.59.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Mar 2023 23:59:22 -0700 (PDT)
+Message-ID: <e46f257b-6a81-ce42-3b93-6cf702571faf@linaro.org>
+Date:   Thu, 16 Mar 2023 07:59:20 +0100
 MIME-Version: 1.0
-References: <20230314153409.1805280-1-daniel.baluta@oss.nxp.com>
- <6d9d09aa-d83e-e811-1d43-34780ea05d4d@linux.intel.com> <CAEnQRZAj-FW-fCWsyupUDAH4Z2kTf0RL1acivyDHszMuU-75pg@mail.gmail.com>
- <5e26ef3e-1319-25cd-f7d5-245eaea66769@linux.intel.com>
-In-Reply-To: <5e26ef3e-1319-25cd-f7d5-245eaea66769@linux.intel.com>
-From:   Daniel Baluta <daniel.baluta@gmail.com>
-Date:   Thu, 16 Mar 2023 08:58:55 +0200
-Message-ID: <CAEnQRZCtmXdFqrsUEaDMG49=ZreFE2oBowjP1M4pywrQP4PA2A@mail.gmail.com>
-Subject: Re: [PATCH] ASoC: soc-compress: Inherit atomicity from DAI link for
- Compress FE
-To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Cc:     Daniel Baluta <daniel.baluta@oss.nxp.com>, broonie@kernel.org,
-        alsa-devel@alsa-project.org, lgirdwood@gmail.com,
-        kai.vehmanen@linux.intel.com, ranjani.sridharan@linux.intel.com,
-        linux-kernel@vger.kernel.org, paul.olaru@nxp.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v4 01/14] dt-bindings: display/msm: gpu: Document GMU
+ wrapper-equipped A6xx
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Akhil P Oommen <quic_akhilpo@quicinc.com>
+Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Rob Clark <robdclark@chromium.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>
+References: <20230223-topic-gmuwrapper-v4-0-e987eb79d03f@linaro.org>
+ <20230223-topic-gmuwrapper-v4-1-e987eb79d03f@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230223-topic-gmuwrapper-v4-1-e987eb79d03f@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 14, 2023 at 6:52=E2=80=AFPM Pierre-Louis Bossart
-<pierre-louis.bossart@linux.intel.com> wrote:
->
->
->
-> On 3/14/23 11:37, Daniel Baluta wrote:
-> > On Tue, Mar 14, 2023 at 6:14=E2=80=AFPM Pierre-Louis Bossart
-> > <pierre-louis.bossart@linux.intel.com> wrote:
-> >>
-> >>
-> >>
-> >> On 3/14/23 10:34, Daniel Baluta wrote:
-> >>> From: Daniel Baluta <daniel.baluta@nxp.com>
-> >>>
-> >>> After commit bbf7d3b1c4f40 ("ASoC: soc-pcm: align BE 'atomicity' with
-> >>> that of the FE") BE and FE atomicity must match.
-> >>>
-> >>> In the case of Compress PCM there is a mismatch in atomicity between =
-FE
-> >>> and BE and we get errors like this:
-> >>>
-> >>> [   36.434566]  sai1-wm8960-hifi: dpcm_be_connect: FE is atomic but B=
-E
-> >>> is nonatomic, invalid configuration
-> >>
-> >> Not clear on the 'FE is atomic' in the case of a compressed stream,
-> >> which has to be handled with some sort of IPC, i.e. be nonatomic.
-> >>
-> >
-> > 'FE is atomic' in this message is printed because this is the default v=
-alue
-> > of nonatomic field when PCM struct associated for a Compress PCM
-> > struct is allocated.
-> >
-> > No one changes 'nonatomic' field for Compress FE until my current patch=
-.
-> >
-> >> Also not sure why the FE is not set as nonatomic by the SOF parts?
-> >> If it's needed for PCM, why wouldn't it be needed for compressed data?
-> >
-> > FE is not touched for SOF parts. Only BE is set to nonatomic by SOF.
->
-> Where do you see the BE being changed by SOF?
->
-> >
-> > See: sound/soc/topology.c
-> >
-> > =C2=BB       /* Set nonatomic property for FE dai links as their trigge=
-r
-> > action involves IPC's */
-> > =C2=BB       if (!link->no_pcm) {
-> > =C2=BB       =C2=BB       link->nonatomic =3D true;
-> > =C2=BB       =C2=BB       return 0;
-> > =C2=BB       }
->
-> that's a FE property, not BE.
+On 14/03/2023 16:28, Konrad Dybcio wrote:
+> The "GMU Wrapper" is Qualcomm's name for "let's treat the GPU blocks
+> we'd normally assign to the GMU as if they were a part of the GMU, even
+> though they are not". It's a (good) software representation of the GMU_CX
+> and GMU_GX register spaces within the GPUSS that helps us programatically
+> treat these de-facto GMU-less parts in a way that's very similar to their
+> GMU-equipped cousins, massively saving up on code duplication.
+> 
+> The "wrapper" register space was specifically designed to mimic the layout
+> of a real GMU, though it rather obviously does not have the M3 core et al.
+> 
+> GMU wrapper-equipped A6xx GPUs require clocks and clock-names to be
+> specified under the GPU node, just like their older cousins. Account
+> for that.
+> 
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+>  .../devicetree/bindings/display/msm/gpu.yaml       | 57 ++++++++++++++++++----
+>  1 file changed, 48 insertions(+), 9 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/display/msm/gpu.yaml b/Documentation/devicetree/bindings/display/msm/gpu.yaml
+> index d4191cca71fb..ac1a9bce2042 100644
+> --- a/Documentation/devicetree/bindings/display/msm/gpu.yaml
+> +++ b/Documentation/devicetree/bindings/display/msm/gpu.yaml
+> @@ -36,10 +36,7 @@ properties:
+>  
+>    reg-names:
+>      minItems: 1
+> -    items:
+> -      - const: kgsl_3d0_reg_memory
+> -      - const: cx_mem
+> -      - const: cx_dbgc
+> +    maxItems: 3
+>  
+>    interrupts:
+>      maxItems: 1
+> @@ -157,16 +154,58 @@ allOf:
+>        required:
+>          - clocks
+>          - clock-names
+> +
+>    - if:
+>        properties:
+>          compatible:
+>            contains:
+> -            pattern: '^qcom,adreno-6[0-9][0-9]\.[0-9]$'
+> -
+> -    then: # Since Adreno 6xx series clocks should be defined in GMU
+> +            enum:
+> +              - qcom,adreno-610.0
+> +              - qcom,adreno-619.1
+> +    then:
+>        properties:
+> -        clocks: false
+> -        clock-names: false
+> +        clock-names:
+> +          items:
+> +            - const: core
+> +              description: GPU Core clock
+> +            - const: iface
+> +              description: GPU Interface clock
+> +            - const: mem_iface
+> +              description: GPU Memory Interface clock
+> +            - const: alt_mem_iface
+> +              description: GPU Alternative Memory Interface clock
+> +            - const: gmu
+> +              description: CX GMU clock
+> +            - const: xo
+> +              description: GPUCC clocksource clock
 
-You are right.
+Since you require fixed number of clocks, you also need:
 
->
-> > FE for PCM is modified by sound/soc/soc-pcm.c
-> >
-> > int soc_new_pcm(struct snd_soc_pcm_runtime *rtd, int num)
-> > =C2=BB       pcm->nonatomic =3D rtd->dai_link->nonatomic;
-> >
-> > So, I guess people assumed that is enough to use RTD dai link to set
-> > pcm->noatomic field
-> > and didn't look at it in SOF.
->
-> Ah yes, now I see your point now. You still had a logical inversion
-> above but you're correct here.
->
-> > When FE for Compress PCM is created, we don't use soc_new_pcm but inste=
-ad
-> > we use snd_pcm_new_internal which doesn't inherit the nonatomic field
-> > of the rtd->dai_link
-> > as Normal PCM does inside soc_pcm_new.
-> >
-> > So, my patch makes sure we inherit the nonatomic field from
-> > rtd->dai_link also for Compress PCM
-> > similar with what already happens for Normal PCM.
-> >
-> > tl;dr: when creating a Normal PCM pcm->nonatomic is inherited from RTD
-> > DAI link. when creating a
-> > Compress PCM pcm->nonatomic field is not set. This patch makes sure
-> > that for Compres PCM
-> > we also inherit nonatomic from RTD DAI link.
->
-> That makes sense. It's quite likely that the compress PCM should be
-> nonatomic by default, not sure how it can work otherwise.
+clocks:
+  minItems: 6
+  maxItems: 6
 
-To sum up:
+Best regards,
+Krzysztof
 
-- we need to merge current patch  because Compress PCM needs to
-inherit the atomicity from FE DAI
-
-Because SOF FE DAI links are made to be nonatomic:
-
-sound/soc/sof/topology.c
-=C2=BB       /* Set nonatomic property for FE dai links as their trigger
-action involves IPC's */
-=C2=BB       if (!link->no_pcm) {
-=C2=BB       =C2=BB       link->nonatomic =3D true;
-=C2=BB       =C2=BB       return 0;
-=C2=BB       }
-
-and with my patch:
-
-sound/soc/soc-compress.c
-
-+               /* inherit atomicity from DAI link */
-+               be_pcm->nonatomic =3D rtd->dai_link->nonatomic;
-+
-                rtd->pcm =3D be_pcm;
-
-... then Compres PCM will be nonatomic.
-
-Side note: I think be_pcm from the patch above should be called fe_pcm
-instead. But that's a story for another patch.
-
-thanks,
-Daniel.
