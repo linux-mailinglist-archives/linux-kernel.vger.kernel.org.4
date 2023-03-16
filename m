@@ -2,120 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 640B36BD402
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 16:38:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3BD26BD407
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 16:39:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231609AbjCPPis (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 11:38:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53590 "EHLO
+        id S231777AbjCPPjB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 11:39:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230227AbjCPPia (ORCPT
+        with ESMTP id S231578AbjCPPik (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 11:38:30 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4540BE1FF8;
-        Thu, 16 Mar 2023 08:36:44 -0700 (PDT)
-Date:   Thu, 16 Mar 2023 15:35:37 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1678980938;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=CMpJA9CnAQbYjqPq7Brlq3mMVZeSNU9fjtUmomY0bN0=;
-        b=lEqeWHw9pgk4oPSMTQm2vWEmPyaVdmrwUm3ROwRZilzhHjRTIGk/o22drfh2Hyc1rv6/dP
-        B+ggbC4RAygfHF96TlIEsvgni923Cjnkh40SARrvNAnPCY+AH9NnySUlPAs+AYqXMzsZog
-        D4/vmSy4ZaFaMpwrVP8euktSO+gDAwP4aKCTnPqT1K6EmUQ9XsETfP8k6WsV8FBms//vKO
-        oZUCaF34hD0dCIG2px9o+O2FQa1oWdSub51TbI9pSRur6wTRtSN47JYeA1Bsw4VgWk7LWW
-        H9G8OyrB8LrA1MWM0ekhLZw4k6Qur3Eh/OegN4PpfpRzPq0H1Eac+7klpi9D3g==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1678980938;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=CMpJA9CnAQbYjqPq7Brlq3mMVZeSNU9fjtUmomY0bN0=;
-        b=mPU8trPZ3fG7UbuICx6vNy+JDRhafYbnXA3ZWqCY7YEsZ9FvPMQ6mxHyqgeP16qfD24leC
-        tdEbTBw9K2QnsVDQ==
-From:   "tip-bot2 for Ira Weiny" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/cleanups] x86/uaccess: Remove memcpy_page_flushcache()
-Cc:     Ira Weiny <ira.weiny@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
+        Thu, 16 Mar 2023 11:38:40 -0400
+Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C492E2517
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 08:36:56 -0700 (PDT)
+Received: by mail-il1-x133.google.com with SMTP id bp11so1210233ilb.3
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 08:36:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112; t=1678980957; x=1681572957;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sYar2ybeVJqnai5t6j9VGmRtR2ovUMfBI/dkWezXyWc=;
+        b=sVk1JuZmFUhd1tlBehU7iFt3sVXohrn+jnAzxsEhXyW1rV3rTUKOwK9OK1Sh1mDfzd
+         Kdv9QjNsZcBRnPUFaxFo+MZqaO/wdpiUCKcD0WaWhPqnh8kAVh2LV8rzxLXlt/nl0ZkI
+         zmuuw653yy4/0bfN11ybpCc2F1GxYJUez5q3lorEpqZmPHRWANi9M5ZirtBDnQaQV313
+         h3yoZbRmcM/85ydvtqPw4hElb0MKrZBkT5NK+SHPVpIXcq/POirSUbuXiM63Nt1VDxJQ
+         tmJwN2tMboNaBqDwf6Ag8Rl5xWxtCDFYcmMQQgdpU8duQc+zZpHZfsl8DtrjYmguNLfo
+         5SFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678980957; x=1681572957;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=sYar2ybeVJqnai5t6j9VGmRtR2ovUMfBI/dkWezXyWc=;
+        b=3TTpTqpapEGlTA9F6TkuIHflhKqk7Ux5K7hXK1g74X7+AR+u+/PwZdPass46HqhBSF
+         D7xQ5nLMZ1d5EQBvjKQm9hjWqi/qKcuDccxP6TnV/F2taBVyh8ZO69nAG6vaE75sfzVS
+         b3Ff+gl8ubkvQpCmpKahQ3UdTUID0OSt5y+aRGTCRTTA3VjhiN+UxtN2fMUYylG2H8sJ
+         SMZIi3KLS75OTxDwz9z4clO1DmhPSoA5Hoh6Q4owOH8QFZdiHuNbmSplwNhstcB7xbB8
+         yHzNUEieqzDdZf8WgfrQ1hkviPAYlb/TNiDn+Ah041XlbX79NjJlpOxIfUmCRFH3M4ti
+         bkNA==
+X-Gm-Message-State: AO0yUKVmAo/u8BGlUYyMrIOGkDUGb1VzMYNBPcSTSIBpcJNVOlfH7257
+        8FvykHCTyAB+ZX7v/FPp+gG6Rw==
+X-Google-Smtp-Source: AK7set/W9ggxEyvzAzMZ4ShGBmfvBVdryiJ14kkiBwYaN78df/A1Lz33twWv8A/A/Ldki12xG+KOpg==
+X-Received: by 2002:a92:d64f:0:b0:323:10c5:899e with SMTP id x15-20020a92d64f000000b0032310c5899emr4228071ilp.1.1678980957025;
+        Thu, 16 Mar 2023 08:35:57 -0700 (PDT)
+Received: from [127.0.0.1] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id t8-20020a056638204800b004050d92f6d4sm726970jaj.50.2023.03.16.08.35.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Mar 2023 08:35:56 -0700 (PDT)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     Arnd Bergmann <arnd@arndb.de>, linux-block@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20230316111630.4897-1-lukas.bulwahn@gmail.com>
+References: <20230316111630.4897-1-lukas.bulwahn@gmail.com>
+Subject: Re: [PATCH] block: remove obsolete config BLOCK_COMPAT
+Message-Id: <167898095613.31557.5292857532580529637.b4-ty@kernel.dk>
+Date:   Thu, 16 Mar 2023 09:35:56 -0600
 MIME-Version: 1.0
-Message-ID: <167898093734.5837.6665906842521706513.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Mailer: b4 0.13-dev-2eb1a
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/cleanups branch of tip:
 
-Commit-ID:     b9da86e3aade0cd8c8b60a0f6356e7730fc90d5d
-Gitweb:        https://git.kernel.org/tip/b9da86e3aade0cd8c8b60a0f6356e7730fc90d5d
-Author:        Ira Weiny <ira.weiny@intel.com>
-AuthorDate:    Wed, 15 Mar 2023 16:20:54 -07:00
-Committer:     Dave Hansen <dave.hansen@linux.intel.com>
-CommitterDate: Thu, 16 Mar 2023 08:27:57 -07:00
+On Thu, 16 Mar 2023 12:16:30 +0100, Lukas Bulwahn wrote:
+> Before commit bdc1ddad3e5f ("compat_ioctl: block: move
+> blkdev_compat_ioctl() into ioctl.c"), the config BLOCK_COMPAT was used to
+> include compat_ioctl.c into the kernel build. With this commit, the code
+> is moved into ioctl.c and included with the config COMPAT. So, since then,
+> the config BLOCK_COMPAT has no effect and any further purpose.
+> 
+> Remove this obsolete config BLOCK_COMPAT.
+> 
+> [...]
 
-x86/uaccess: Remove memcpy_page_flushcache()
+Applied, thanks!
 
-Commit 21b56c847753 ("iov_iter: get rid of separate bvec and xarray
-callbacks") removed the calls to memcpy_page_flushcache().
+[1/1] block: remove obsolete config BLOCK_COMPAT
+      commit: 8f0d196e4dc137470bbd5de98278d941c8002fcb
 
-In addition, memcpy_page_flushcache() uses the deprecated
-kmap_atomic().
+Best regards,
+-- 
+Jens Axboe
 
-Remove the unused x86 memcpy_page_flushcache() implementation and
-also get rid of one more kmap_atomic() user.
 
-[ dhansen: tweak changelog ]
 
-Signed-off-by: Ira Weiny <ira.weiny@intel.com>
-Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
-Link: https://lore.kernel.org/all/20221230-kmap-x86-v1-1-15f1ecccab50%40intel.com
----
- arch/x86/include/asm/uaccess_64.h |  2 --
- arch/x86/lib/usercopy_64.c        |  9 ---------
- 2 files changed, 11 deletions(-)
-
-diff --git a/arch/x86/include/asm/uaccess_64.h b/arch/x86/include/asm/uaccess_64.h
-index d13d71a..c6b1dcd 100644
---- a/arch/x86/include/asm/uaccess_64.h
-+++ b/arch/x86/include/asm/uaccess_64.h
-@@ -62,8 +62,6 @@ extern long __copy_user_nocache(void *dst, const void __user *src,
- 				unsigned size, int zerorest);
- 
- extern long __copy_user_flushcache(void *dst, const void __user *src, unsigned size);
--extern void memcpy_page_flushcache(char *to, struct page *page, size_t offset,
--			   size_t len);
- 
- static inline int
- __copy_from_user_inatomic_nocache(void *dst, const void __user *src,
-diff --git a/arch/x86/lib/usercopy_64.c b/arch/x86/lib/usercopy_64.c
-index 6c1f8ac..f515542 100644
---- a/arch/x86/lib/usercopy_64.c
-+++ b/arch/x86/lib/usercopy_64.c
-@@ -136,13 +136,4 @@ void __memcpy_flushcache(void *_dst, const void *_src, size_t size)
- 	}
- }
- EXPORT_SYMBOL_GPL(__memcpy_flushcache);
--
--void memcpy_page_flushcache(char *to, struct page *page, size_t offset,
--		size_t len)
--{
--	char *from = kmap_atomic(page);
--
--	memcpy_flushcache(to, from + offset, len);
--	kunmap_atomic(from);
--}
- #endif
