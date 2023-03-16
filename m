@@ -2,102 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E542C6BC535
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 05:24:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34CBD6BC53A
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 05:35:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229636AbjCPEYf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 00:24:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51858 "EHLO
+        id S229620AbjCPEfC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 00:35:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbjCPEYc (ORCPT
+        with ESMTP id S229436AbjCPEe7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 00:24:32 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC7092885F;
-        Wed, 15 Mar 2023 21:24:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 16 Mar 2023 00:34:59 -0400
+Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3FF4A72B3
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 21:34:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
+        t=1678941292; bh=Oo6k/PJo2Jxh9vpeXCf8GRdwwmfbRN3ok8oQK918/08=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=NY8bWzyGUkx2540c2qPs3j0mJwdb3mDYornIaB4VhA7+ZrnsWTd0ptLt9ScQrE0yh
+         bN4qYMnXdOn7t7XwDLjf2aiKLLKCjhjTC8sTWBez7Ym0660GXKrO5AFxhkuX1SMDtM
+         zfPf7swtMGMlFBK4ojFbXWnGi2QJhoUPJ+5hIhaQ=
+Received: from [192.168.9.172] (unknown [101.88.27.125])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 48F69B81FAC;
-        Thu, 16 Mar 2023 04:24:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 837AAC433D2;
-        Thu, 16 Mar 2023 04:24:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678940666;
-        bh=SWftvtwBMsqpnfifYayDxLhuAFeXbIUC+wC8JVy38CY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Qs+lc8s1KTjOTNMQTCSq/sy8Con6uLlgGhbA40D9ik0Cw/h8eXu7VnL/4C85FrmYk
-         peLXqsZmQwGzqFov6Ujj+MZtiO5vNlam6Y2SOJKSWKpG+rJ+3DKZTZfV9uU1n7u0FV
-         IkX3SBO6vHpmRmJFoxGiHS1pdsaYJI9gW+5G89apgsDGkiT66HNtPOtuSHAZoWbyhf
-         diYGG+AXkhT7buSRJaFnriIQZbbf84zKl3CAWdZP7v09OReze50d0O6Uw0UMSlU/Za
-         9Ko4A+EU/JmcVuU2QUP4g46RQnYBOKycoQhHaWKANtsbiC4DjvrvsWrMVHumKSmzNA
-         hJZOR+xVIVHOA==
-Date:   Wed, 15 Mar 2023 21:24:25 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Szymon Heidrich <szymon.heidrich@gmail.com>
-Cc:     steve.glendinning@shawell.net, UNGLinuxDriver@microchip.com,
-        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: usb: smsc95xx: Limit packet length to skb->len
-Message-ID: <20230315212425.12cb48ca@kernel.org>
-In-Reply-To: <20230313220124.52437-1-szymon.heidrich@gmail.com>
-References: <20230313220124.52437-1-szymon.heidrich@gmail.com>
+        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 41B3E600D4;
+        Thu, 16 Mar 2023 12:34:52 +0800 (CST)
+Message-ID: <545d8512-5bc1-5c76-246a-fcad529006a4@xen0n.name>
+Date:   Thu, 16 Mar 2023 12:34:51 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH V3] LoongArch: Make WriteCombine configurable for
+ ioremap()
+Content-Language: en-US
+To:     Huacai Chen <chenhuacai@loongson.cn>,
+        Huacai Chen <chenhuacai@kernel.org>
+Cc:     loongarch@lists.linux.dev, Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn
+References: <20230315085314.1083141-1-chenhuacai@loongson.cn>
+From:   WANG Xuerui <kernel@xen0n.name>
+In-Reply-To: <20230315085314.1083141-1-chenhuacai@loongson.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 13 Mar 2023 23:01:24 +0100 Szymon Heidrich wrote:
-> Packet length retrieved from skb data may be larger than
-
-nit: s/skb data/descriptor/ may be better in terms of terminology
-
-> the actual socket buffer length (up to 1526 bytes). In such
-
-nit: the "up to 1526 bytes" is a bit confusing, I'd remove it.
-
-> case the cloned skb passed up the network stack will leak
-> kernel memory contents.
-
-
-
-> Fixes: 2f7ca802bdae ("net: Add SMSC LAN9500 USB2.0 10/100 ethernet adapter driver")
-> Signed-off-by: Szymon Heidrich <szymon.heidrich@gmail.com>
+On 3/15/23 16:53, Huacai Chen wrote:
+> LoongArch maintains cache coherency in hardware, but when paired with
+> LS7A chipsets the WUC attribute (Weak-ordered UnCached, which is similar
+> to WriteCombine) is out of the scope of cache coherency machanism for
+> PCIe devices (this is a PCIe protocol violation, which may be fixed in
+> newer chipsets).
+>
+> This means WUC can only used for write-only memory regions now, so this
+"can only be used for". Same for the Kconfig change.
+> option is disabled by default, making WUC silently fallback to SUC for
+> ioremap(). You can enable this option if the kernel is ensured to run on
+> hardware without this bug.
+>
+> Kernel parameter writecombine=on/off can be used to override the Kconfig
+> option.
+We normally want to document this in 
+Documentation/admin-guide/kernel-parameters too. This can be done later 
+(by you or me).
+>
+> Suggested-by: WANG Xuerui <kernel@xen0n.name>
+> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
 > ---
->  drivers/net/usb/smsc95xx.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/net/usb/smsc95xx.c b/drivers/net/usb/smsc95xx.c
-> index 32d2c60d3..ba766bdb2 100644
-> --- a/drivers/net/usb/smsc95xx.c
-> +++ b/drivers/net/usb/smsc95xx.c
-> @@ -1851,7 +1851,8 @@ static int smsc95xx_rx_fixup(struct usbnet *dev, struct sk_buff *skb)
->  			}
->  		} else {
->  			/* ETH_FRAME_LEN + 4(CRC) + 2(COE) + 4(Vlan) */
-> -			if (unlikely(size > (ETH_FRAME_LEN + 12))) {
-> +			if (unlikely(size > (ETH_FRAME_LEN + 12) ||
-> +				     size > skb->len)) {
+> V2: Add kernel prameter and update commit messages.
+> V3: Add a warning message for invalid kernel parameters.
+>
+>   arch/loongarch/Kconfig          | 16 ++++++++++++++++
+>   arch/loongarch/include/asm/io.h |  4 +++-
+>   arch/loongarch/kernel/setup.c   | 21 +++++++++++++++++++++
+>   3 files changed, 40 insertions(+), 1 deletion(-)
+>
+> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
+> index 7fd51257e0ed..3ddde336e6a5 100644
+> --- a/arch/loongarch/Kconfig
+> +++ b/arch/loongarch/Kconfig
+> @@ -447,6 +447,22 @@ config ARCH_IOREMAP
+>   	  protection support. However, you can enable LoongArch DMW-based
+>   	  ioremap() for better performance.
+>   
+> +config ARCH_WRITECOMBINE
+> +	bool "Enable WriteCombine (WUC) for ioremap()"
+> +	help
+> +	  LoongArch maintains cache coherency in hardware, but when paired
+> +	  with LS7A chipsets the WUC attribute (Weak-ordered UnCached, which
+> +	  is similar to WriteCombine) is out of the scope of cache coherency
+> +	  machanism for PCIe devices (this is a PCIe protocol violation, which
+> +	  may be fixed in newer chipsets).
+> +
+> +	  This means WUC can only used for write-only memory regions now, so
+> +	  this option is disabled by default, making WUC silently fallback to
+> +	  SUC for ioremap(). You can enable this option if the kernel is ensured
+> +	  to run on hardware without this bug.
+> +
+> +	  You can override this setting via writecombine=on/off boot parameter.
+via the ...
+> +
+>   config ARCH_STRICT_ALIGN
+>   	bool "Enable -mstrict-align to prevent unaligned accesses" if EXPERT
+>   	default y
+> diff --git a/arch/loongarch/include/asm/io.h b/arch/loongarch/include/asm/io.h
+> index 402a7d9e3a53..545e2708fbf7 100644
+> --- a/arch/loongarch/include/asm/io.h
+> +++ b/arch/loongarch/include/asm/io.h
+> @@ -54,8 +54,10 @@ static inline void __iomem *ioremap_prot(phys_addr_t offset, unsigned long size,
+>    * @offset:    bus address of the memory
+>    * @size:      size of the resource to map
+>    */
+> +extern pgprot_t pgprot_wc;
+> +
+>   #define ioremap_wc(offset, size)	\
+> -	ioremap_prot((offset), (size), pgprot_val(PAGE_KERNEL_WUC))
+> +	ioremap_prot((offset), (size), pgprot_val(pgprot_wc))
+>   
+>   #define ioremap_cache(offset, size)	\
+>   	ioremap_prot((offset), (size), pgprot_val(PAGE_KERNEL))
+> diff --git a/arch/loongarch/kernel/setup.c b/arch/loongarch/kernel/setup.c
+> index bae84ccf6d36..27f71f9531e1 100644
+> --- a/arch/loongarch/kernel/setup.c
+> +++ b/arch/loongarch/kernel/setup.c
+> @@ -160,6 +160,27 @@ static void __init smbios_parse(void)
+>   	dmi_walk(find_tokens, NULL);
+>   }
+>   
+> +#ifdef CONFIG_ARCH_WRITECOMBINE
+> +pgprot_t pgprot_wc = PAGE_KERNEL_WUC;
+> +#else
+> +pgprot_t pgprot_wc = PAGE_KERNEL_SUC;
+> +#endif
+> +
+> +EXPORT_SYMBOL(pgprot_wc);
+> +
+> +static int __init setup_writecombine(char *p)
+> +{
+> +	if (!strcmp(p, "on"))
+> +		pgprot_wc = PAGE_KERNEL_WUC;
+> +	else if (!strcmp(p, "off"))
+> +		pgprot_wc = PAGE_KERNEL_SUC;
+> +	else
+> +		pr_warn("Unknown writecombine setting \"%s\".\n", p);
+> +
+> +	return 0;
+> +}
+> +early_param("writecombine", setup_writecombine);
+> +
+>   static int usermem __initdata;
+>   
+>   static int __init early_parse_mem(char *p)
 
-We need this check on both sides of the big if {} statement.
+With the nits addressed:
 
-In case the error bit is set and we drop the packet we still
-end up in skb_pull() which if size > skb->len will panic the
-kernel.
+Reviewed-by: WANG Xuerui <git@xen0n.name>
 
-So let's do this check right after size and align are calculated?
-The patch for smsc75xx has sadly already been applied so you'll
-need to prepare a fix to the fix :(
+-- 
+WANG "xen0n" Xuerui
 
->  				netif_dbg(dev, rx_err, dev->net,
->  					  "size err header=0x%08x\n", header);
->  				return 0;
+Linux/LoongArch mailing list: https://lore.kernel.org/loongarch/
 
