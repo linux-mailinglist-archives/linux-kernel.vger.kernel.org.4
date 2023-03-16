@@ -2,150 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F30C46BD07C
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 14:12:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77CAB6BD07E
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 14:14:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230004AbjCPNMx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 09:12:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51732 "EHLO
+        id S229807AbjCPNOW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 09:14:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229978AbjCPNMq (ORCPT
+        with ESMTP id S229436AbjCPNOV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 09:12:46 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF9CDC97C6;
-        Thu, 16 Mar 2023 06:12:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 56DC2B82160;
-        Thu, 16 Mar 2023 13:12:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2896C4339E;
-        Thu, 16 Mar 2023 13:12:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678972361;
-        bh=1MM/XIDj4+n74RjajngtGaU+RhN1OSYKdhL9n+Ln1Rw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HCGMki6yauCY/bU/C7p+E5QrS3+kX//JJukwCGHCjztJhZjmw6HpXRqWhlvmUBn/z
-         wd2aPr1mcNQ1a+DXlpuMK8/pvFrZRvpU1VaRjXpFcis548zOD+Dn24iuDar51AAN1F
-         JzOxjFQG5xajIvqItvD4D43dU+RMTODLq4nxwNEmfhYjpybIQ4RcoZosvYh8nLhGEP
-         CqWfoREVQlZiSyuoa+MWgnzFVWjt53owt0OESgI2vfLeNb6BpJOTmmir7rC1lQVEBP
-         Zv95fTPZFHYobZWFFPvrIY7HOp/CS/VLaXEJyQY02P46x41KcLBfnq/6ipuMSgEDNw
-         7pxeldRsirz4w==
-From:   Roger Quadros <rogerq@kernel.org>
-To:     Thinh.Nguyen@synopsys.com
-Cc:     gregkh@linuxfoundation.org, stern@rowland.harvard.edu,
-        vigneshr@ti.com, srk@ti.com, r-gunasekaran@ti.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Roger Quadros <rogerq@kernel.org>
-Subject: [PATCH 3/3] usb: dwc3-am62: Fix up wake-up configuration and spurious wake up
-Date:   Thu, 16 Mar 2023 15:12:26 +0200
-Message-Id: <20230316131226.89540-4-rogerq@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230316131226.89540-1-rogerq@kernel.org>
-References: <20230316131226.89540-1-rogerq@kernel.org>
+        Thu, 16 Mar 2023 09:14:21 -0400
+Received: from mail-m118111.qiye.163.com (mail-m118111.qiye.163.com [115.236.118.111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A358F5FEF;
+        Thu, 16 Mar 2023 06:14:17 -0700 (PDT)
+Received: from [172.23.196.229] (unknown [121.32.254.147])
+        by mail-m118111.qiye.163.com (Hmail) with ESMTPA id 013F858083A;
+        Thu, 16 Mar 2023 21:13:59 +0800 (CST)
+Message-ID: <454b587e-6794-875d-b998-078af80fb195@sangfor.com.cn>
+Date:   Thu, 16 Mar 2023 21:13:56 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v4 1/2] function_graph: Support recording and printing the
+ return value of function
+To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Steven Rostedt <rostedt@goodmis.org>, linux@armlinux.org.uk,
+        mark.rutland@arm.com, will@kernel.org, catalin.marinas@arm.com,
+        palmer@dabbelt.com, paul.walmsley@sifive.com, tglx@linutronix.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, mingo@redhat.com,
+        xiehuan09@gmail.com, dinghui@sangfor.com.cn,
+        huangcun@sangfor.com.cn, dolinux.peng@gmail.com,
+        linux-trace-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20230315133911.958741-1-pengdonglin@sangfor.com.cn>
+ <20230315133911.958741-2-pengdonglin@sangfor.com.cn>
+ <20230315134911.GD2006103@hirez.programming.kicks-ass.net>
+ <20230315101348.1234c7f5@gandalf.local.home>
+ <20230315145757.GE2006103@hirez.programming.kicks-ass.net>
+ <664f9fa1-da31-2be9-76d9-3eb08e08b7f9@sangfor.com.cn>
+ <20230316213925.f958c648e25f723db86aa705@kernel.org>
+Content-Language: en-US
+From:   Donglin Peng <pengdonglin@sangfor.com.cn>
+In-Reply-To: <20230316213925.f958c648e25f723db86aa705@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+        tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVkaSR9PVk5CSkxJQkNLTEkYSlUTARMWGhIXJBQOD1
+        lXWRgSC1lBWUpJSlVISVVJTk9VSk9MWVdZFhoPEhUdFFlBWU9LSFVKSktPSEhVSktLVUtZBg++
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6NEk6DSo6Ez0PKRhKNw0jIj4R
+        IgEaCyJVSlVKTUxDQkxJT09KSE9IVTMWGhIXVQseFRwfFBUcFxIVOwgaFRwdFAlVGBQWVRgVRVlX
+        WRILWUFZSklKVUhJVUlOT1VKT0xZV1kIAVlBTkhPTjcG
+X-HM-Tid: 0a86ea8e515b2eb7kusn013f858083a
+X-HM-MType: 1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Explicitly set and clear wakeup config so we don't leave anything
-to chance.
+On 2023/3/16 20:39, Masami Hiramatsu (Google) wrote:
+> On Thu, 16 Mar 2023 11:18:23 +0800
+> Donglin Peng <pengdonglin@sangfor.com.cn> wrote:
+> 
+>> On 2023/3/15 22:57, Peter Zijlstra wrote:
+>>> On Wed, Mar 15, 2023 at 10:13:48AM -0400, Steven Rostedt wrote:
+>>>> On Wed, 15 Mar 2023 14:49:11 +0100
+>>>> Peter Zijlstra <peterz@infradead.org> wrote:
+>>>>
+>>>>>> diff --git a/arch/x86/kernel/ftrace_64.S b/arch/x86/kernel/ftrace_64.S
+>>>>>> index 1265ad519249..35ac9c58dc77 100644
+>>>>>> --- a/arch/x86/kernel/ftrace_64.S
+>>>>>> +++ b/arch/x86/kernel/ftrace_64.S
+>>>>>> @@ -348,6 +348,10 @@ SYM_CODE_START(return_to_handler)
+>>>>>>    	movq %rax, (%rsp)
+>>>>>>    	movq %rdx, 8(%rsp)
+>>>>>>    	movq %rbp, %rdi
+>>>>>> +#ifdef CONFIG_FUNCTION_GRAPH_RETVAL
+>>>>>> +	/* Pass the function return value to ftrace_return_to_handler */
+>>>>>> +	movq %rax, %rsi
+>>>>>> +#endif
+>>>>>>    
+>>>>>>    	call ftrace_return_to_handler
+>>>>>
+>>>>> What about the case of double register return values (when the value
+>>>>> is returned in the A,D pair) ?
+>>>>
+>>>> Is there anything that does that in 64 bit kernels?
+>>>
+>>> Note sure; but I have a patch series that introduces cmpxchg128 and
+>>> friends. Most of the actual functions are __always_inline, but still,
+>>> the moment a compiler decides to break out a subfunction on a u128
+>>> boundary we're in luck.
+>> I have reviewed the kretprobe implementation and noticed that $retval
+>> only retrieves the value of pt_regs.ax, which is an unsigned long data
+>> type. I wrote a demo and tested it on an x86 machine, and found that
+>> $retval only shows the least significant 32 bits of retval.Therefore,I
+>> think it can be consistent with kretprobe.
+> 
+> Yeah, because it doesn't support 128bit type (u128/long long).
+> It is possible to support it, but I think we can just document this
+> as a limitation for fgraph return value. It is just for quickly trace
+> most of the return values.
+> 
+Yeah,I will add this limitation to the documents in v5.
 
-Clear wakeup status on suspend so we know what caused wake up.
-
-The LINESTATE wake up should not be enabled in device mode
-if we are not connected to a USB host else it will cause spurious
-wake up.
-
-Signed-off-by: Roger Quadros <rogerq@kernel.org>
----
- drivers/usb/dwc3/dwc3-am62.c | 32 ++++++++++++++++++++++----------
- 1 file changed, 22 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/usb/dwc3/dwc3-am62.c b/drivers/usb/dwc3/dwc3-am62.c
-index 859b48279658..af0524e2f1e1 100644
---- a/drivers/usb/dwc3/dwc3-am62.c
-+++ b/drivers/usb/dwc3/dwc3-am62.c
-@@ -60,6 +60,13 @@
- #define USBSS_WAKEUP_CFG_SESSVALID_EN	BIT(1)
- #define USBSS_WAKEUP_CFG_VBUSVALID_EN	BIT(0)
- 
-+#define USBSS_WAKEUP_CFG_ALL	(USBSS_WAKEUP_CFG_VBUSVALID_EN | \
-+				 USBSS_WAKEUP_CFG_SESSVALID_EN | \
-+				 USBSS_WAKEUP_CFG_LINESTATE_EN | \
-+				 USBSS_WAKEUP_CFG_OVERCURRENT_EN)
-+
-+#define USBSS_WAKEUP_CFG_NONE	0
-+
- /* WAKEUP STAT register bits */
- #define USBSS_WAKEUP_STAT_OVERCURRENT	BIT(4)
- #define USBSS_WAKEUP_STAT_LINESTATE	BIT(3)
-@@ -103,6 +110,7 @@ struct dwc3_data {
- 	struct regmap *syscon;
- 	unsigned int offset;
- 	unsigned int vbus_divider;
-+	u32 wakeup_stat;
- };
- 
- static const int dwc3_ti_rate_table[] = {	/* in KHZ */
-@@ -294,6 +302,7 @@ static int dwc3_ti_suspend_common(struct device *dev)
- {
- 	struct dwc3_data *data = dev_get_drvdata(dev);
- 	u32 reg, current_prtcap_dir;
-+	u32 vbus_stat;
- 
- 	if (device_may_wakeup(dev)) {
- 		reg = dwc3_ti_readl(data, USBSS_CORE_STAT);
-@@ -302,12 +311,20 @@ static int dwc3_ti_suspend_common(struct device *dev)
- 		/* Set wakeup config enable bits */
- 		reg = dwc3_ti_readl(data, USBSS_WAKEUP_CONFIG);
- 		if (current_prtcap_dir == DWC3_GCTL_PRTCAP_HOST) {
--			reg |= USBSS_WAKEUP_CFG_LINESTATE_EN | USBSS_WAKEUP_CFG_OVERCURRENT_EN;
-+			reg = USBSS_WAKEUP_CFG_LINESTATE_EN | USBSS_WAKEUP_CFG_OVERCURRENT_EN;
- 		} else {
--			reg |= USBSS_WAKEUP_CFG_OVERCURRENT_EN | USBSS_WAKEUP_CFG_LINESTATE_EN |
--			       USBSS_WAKEUP_CFG_VBUSVALID_EN;
-+			reg = USBSS_WAKEUP_CFG_VBUSVALID_EN | USBSS_WAKEUP_CFG_SESSVALID_EN;
-+			/*
-+			 * Enable LINESTATE wake up only if connected to bus else
-+			 * it causes spurious wake-up.
-+			 */
-+			vbus_stat = dwc3_ti_readl(data, USBSS_VBUS_STAT);
-+			if (vbus_stat & (USBSS_VBUS_STAT_SESSVALID | USBSS_VBUS_STAT_VBUSVALID))
-+				reg |= USBSS_WAKEUP_CFG_LINESTATE_EN;
- 		}
- 		dwc3_ti_writel(data, USBSS_WAKEUP_CONFIG, reg);
-+		/* clear wakeup status so we know what caused the wake up */
-+		dwc3_ti_writel(data, USBSS_WAKEUP_STAT, USBSS_WAKEUP_STAT_CLR);
- 	}
- 
- 	clk_disable_unprepare(data->usb2_refclk);
-@@ -324,16 +341,11 @@ static int dwc3_ti_resume_common(struct device *dev)
- 
- 	if (device_may_wakeup(dev)) {
- 		/* Clear wakeup config enable bits */
--		reg = dwc3_ti_readl(data, USBSS_WAKEUP_CONFIG);
--		reg &= ~(USBSS_WAKEUP_CFG_OVERCURRENT_EN | USBSS_WAKEUP_CFG_LINESTATE_EN |
--			 USBSS_WAKEUP_CFG_VBUSVALID_EN);
--		dwc3_ti_writel(data, USBSS_WAKEUP_CONFIG, reg);
-+		dwc3_ti_writel(data, USBSS_WAKEUP_CONFIG, USBSS_WAKEUP_CFG_NONE);
- 	}
- 
- 	reg = dwc3_ti_readl(data, USBSS_WAKEUP_STAT);
--	/* Clear the wakeup status with wakeup clear bit */
--	reg |= USBSS_WAKEUP_STAT_CLR;
--	dwc3_ti_writel(data, USBSS_WAKEUP_STAT, reg);
-+	data->wakeup_stat = reg;
- 
- 	return 0;
- }
--- 
-2.34.1
+> Thank you,
+> 
+>>
+>> static noinline unsigned long long test_retval_func(void)
+>> {
+>> 	unsigned long long value = 0x1234567887654321;
+>> 	return value;
+>> }
+>>
+>> add a kretprobe event:
+>> echo 'r:myretprobe test_retval_func $retval:x64' > kprobe_events
+>>
+>> the trace log:
+>> myretprobe: (retval_open+0x1c/0x2c [test_retval] <- test_retval_func)
+>> arg1=0x87654321
+> 
+> 
 
