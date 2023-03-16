@@ -2,93 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36A756BD96F
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 20:40:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 768736BD970
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 20:42:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230371AbjCPTkd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 15:40:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45358 "EHLO
+        id S230308AbjCPTmQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 15:42:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230370AbjCPTk2 (ORCPT
+        with ESMTP id S229838AbjCPTmO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 15:40:28 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E886E501A;
-        Thu, 16 Mar 2023 12:40:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B4E2CB82337;
-        Thu, 16 Mar 2023 19:40:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 5A566C433EF;
-        Thu, 16 Mar 2023 19:40:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678995619;
-        bh=Qcoo2uEzbR3flQDWPx87j79lDDvXg34p78x3IbEnKZs=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=Am/bqP/1TZ3JuqywZ99Au3X1apqokjFsBlsSQMhXQDvaGj+c1vGHTZTisuoRsv4TB
-         JDc96h+55kJinZCyygZtEfCt8ae2el/16Tc/AK9CoAIkmmRwEHjLy8Dz3g9JsInu1e
-         s10AtDAa4lxYP5u6w8tuDR3cDR8bDzLDR79niu8oRVQia5HqRir8drSQqvqOvPqzIP
-         OEpoOUO4anjg7sVRPtPX0PqWC9vmf3a6WvgLlLQXqzYHpYiE+55CkmjPrjVglTmn7M
-         OafiDTHuaGjORhHVDKWwZfWNs0WZNwOZhTPhCIz6VM8A8lxQGY6tNzYJBxy2MS3oo9
-         g0GO/V8794JNg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2FF33E66CBB;
-        Thu, 16 Mar 2023 19:40:19 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 16 Mar 2023 15:42:14 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD45E26854;
+        Thu, 16 Mar 2023 12:42:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678995733; x=1710531733;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=PEHbTAcG8Dy16DzIEQj/RKjzcN4aB46ybFS9r0LuhvU=;
+  b=Ngc1AisAeqvMiU8XmvSl+Oss522X0SND3aJ8hrLv8udEuAENhaGPny1a
+   8p00nMUmMWJOFdY7r0DpJFHM4nn0SoO0oyfwwNz4QVJw0ukR8nnNwwuU5
+   yS8xh50+3IuqkCMSlk7B5DC+8XRCmo1JZA3KmfQu9e7VZOm1JuNcFH6bd
+   A1QG88KSr4ubHJOZnxDbBlL2DvMui/I5rpdpDMUKRGjESTnIhxGeblFeG
+   XPPbYcZIDjhHNh09YmRFrlYqjaillTYN67XJ+qsT2J4+VgLpjCFZO1c5a
+   laAE1qAk7qNcFdP7BUTqtHjIGYSUzsf+2m33NNyaLJq8w15/WZl26d0/F
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="326465392"
+X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
+   d="scan'208";a="326465392"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 12:42:13 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="823392384"
+X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
+   d="scan'208";a="823392384"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO ahunter-VirtualBox.home\044ger.corp.intel.com) ([10.251.221.172])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 12:42:10 -0700
+From:   Adrian Hunter <adrian.hunter@intel.com>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Jiri Olsa <jolsa@redhat.com>, Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org
+Subject: [PATCH 0/3] perf tools: Address fixes
+Date:   Thu, 16 Mar 2023 21:41:53 +0200
+Message-Id: <20230316194156.8320-1-adrian.hunter@intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki, Business Identity Code: 0357606 - 4, Domiciled in Helsinki
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v2 0/5] Make struct bpf_cpumask RCU safe
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167899561918.25671.10670272982001703575.git-patchwork-notify@kernel.org>
-Date:   Thu, 16 Mar 2023 19:40:19 +0000
-References: <20230316054028.88924-1-void@manifault.com>
-In-Reply-To: <20230316054028.88924-1-void@manifault.com>
-To:     David Vernet <void@manifault.com>
-Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
-        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
-        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@meta.com
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Hi
 
-This series was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+Here are 3 small fixes resulting from a report from a
+kernel test robot:
 
-On Thu, 16 Mar 2023 00:40:23 -0500 you wrote:
-> The struct bpf_cpumask type is currently not RCU safe. It uses the
-> bpf_mem_cache_{alloc,free}() APIs to allocate and release cpumasks, and
-> those allocations may be reused before an RCU grace period has elapsed.
-> We want to be able to enable using this pattern in BPF programs:
-> 
-> private(MASK) static struct bpf_cpumask __kptr *global;
-> 
-> [...]
+https://lore.kernel.org/oe-lkp/202303061424.6ad43294-yujie.liu@intel.com
 
-Here is the summary with links:
-  - [bpf-next,v2,1/5] bpf: Free struct bpf_cpumask in call_rcu handler
-    https://git.kernel.org/bpf/bpf-next/c/77473d1a962f
-  - [bpf-next,v2,2/5] bpf: Mark struct bpf_cpumask as rcu protected
-    https://git.kernel.org/bpf/bpf-next/c/63d2d83d21a6
-  - [bpf-next,v2,3/5] bpf/selftests: Test using global cpumask kptr with RCU
-    https://git.kernel.org/bpf/bpf-next/c/a5a197df58c4
-  - [bpf-next,v2,4/5] bpf: Remove bpf_cpumask_kptr_get() kfunc
-    https://git.kernel.org/bpf/bpf-next/c/1b403ce77dfb
-  - [bpf-next,v2,5/5] bpf,docs: Remove bpf_cpumask_kptr_get() from documentation
-    https://git.kernel.org/bpf/bpf-next/c/fec2c6d14fd5
+Issues were revealed due to the use of build
+option:
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+	EXTRA_CFLAGS="-fsanitize=undefined -fsanitize=address"
 
 
+Adrian Hunter (3):
+      perf symbols: Fix use-after-free in get_plt_got_name()
+      perf symbols: Fix unaligned access in get_x86_64_plt_disp()
+      perf tools: Avoid warning in do_realloc_array_as_needed()
+
+ tools/perf/util/symbol-elf.c | 10 ++++++++--
+ tools/perf/util/util.c       |  3 ++-
+ 2 files changed, 10 insertions(+), 3 deletions(-)
+
+
+Regards
+Adrian
