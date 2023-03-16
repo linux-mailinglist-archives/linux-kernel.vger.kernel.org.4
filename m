@@ -2,164 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F2136BD8E3
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 20:21:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE1FF6BD8F9
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 20:22:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230196AbjCPTVA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 15:21:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42964 "EHLO
+        id S230164AbjCPTWi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 15:22:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229988AbjCPTU6 (ORCPT
+        with ESMTP id S230156AbjCPTWd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 15:20:58 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1041312047
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 12:20:55 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id x3so11730201edb.10
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 12:20:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678994453;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=I6W9kUfmlY3tEraL4nU9eY/Af3MdcpRFdLZzCUy+85U=;
-        b=hVfamywI7Z36xHj6XfceRT3rEYu7wfXqO1XRTmOt0XtuS1PkmzUQX16lsH2KqLEfeV
-         d255f9CAmKEI7EjqrU+c2cWlBUD0/GqyV9J10tpEQV7fjFsPcfLEIB8cu57VtX7rUDek
-         4UanuNT7Ya6abBq+7caHifRqkiFOySFpEFbTnXAGI11fG0/r91wVhtxEmL9DFt2KZ+v9
-         61m93BAFn1HQ/DoFe2qm/JF3HyET+PE7ufKR1sVG3VDpherQkPZwxCxGbZFJj/Mf+ZmD
-         KzSeMCcilkxHvT6YH859eyYaRNj29AaCjaDhv1aCh46FqqymjR95pJOp7h4ME5sShC6V
-         8VDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678994453;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=I6W9kUfmlY3tEraL4nU9eY/Af3MdcpRFdLZzCUy+85U=;
-        b=34MO14kmSWVcX7ZyDb68Y6AdhOWKhDmMeN5Mw8I/E2KfTLjOaLZaETNhZ09h1QmOzm
-         lkmZYZufWH1PTsjGonqPaWHW6meMp2irVDCHT51yfFD15JZeE9nMtf4wkQdDoX0OvCI8
-         e2XTRpaKiDOKZgd7QNIoKZmLwt2Mkpmwjy1dvLmf4m6wUf8dFc4GinRzdFLrKU7cUYkj
-         ewHF7GO7sZdktGHtc9ifcpAA8JDdIF2niBH+I5MM9TwKGXXYv3vI7745Sxm/Wkd8LTk2
-         fbDRhlhOkomWRmmjVQEsB90Cq2Yvsqw0GmVpe8QDuNMRaQSe5hUe6afkc//rxAb7M8yK
-         Fydg==
-X-Gm-Message-State: AO0yUKV3mQMFCZopBr22gS3kC8/M4Hv30wjaE7YwxW+dAeSEYukzzpmg
-        7oN/R5FimWS1mX48njsPpVJXRQ==
-X-Google-Smtp-Source: AK7set8t10Jjk9M0yulDUJsBcv70/mUwE18d9PBfWRZHveo8W0esOHyL0XnxuDdXiwksCvF4lp4NSg==
-X-Received: by 2002:aa7:db96:0:b0:4fa:d2b1:9176 with SMTP id u22-20020aa7db96000000b004fad2b19176mr672063edt.22.1678994453564;
-        Thu, 16 Mar 2023 12:20:53 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:9827:5f65:8269:a95f? ([2a02:810d:15c0:828:9827:5f65:8269:a95f])
-        by smtp.gmail.com with ESMTPSA id k12-20020a50ce4c000000b004af70c546dasm143487edj.87.2023.03.16.12.20.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Mar 2023 12:20:53 -0700 (PDT)
-Message-ID: <066ca8a9-783d-de4f-aa49-86748e5ee716@linaro.org>
-Date:   Thu, 16 Mar 2023 20:20:51 +0100
+        Thu, 16 Mar 2023 15:22:33 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B40C9E333;
+        Thu, 16 Mar 2023 12:22:11 -0700 (PDT)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32GBglHB015969;
+        Thu, 16 Mar 2023 19:22:04 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=TGMGaP1AV6OuyURUeypOIgu/eGAUNg19K5lBm5AWlO0=;
+ b=lPvjeVLM2Et0nsEzBJfeUS/ThHeFjCOGTiEBB+pSD5EN8d8K7MgI95PzMvLay32tTxom
+ UPwaFLxvJMoAS04AbCDWzg6uAxU35PyiE2SHGAv4OfxIStUKWeL6rbM8ExV6xNXss+H5
+ lypuGjH7uBwyj6dn5e8NW3+6FDJcnzJBR2oo+6NvmEpNa2rZkZ+Ene45ypkI1+drVKTT
+ 14Wd8JDZGu55bZ/s2FV60ipkoat00KdNIANDKyjjGtuMsdq3lpvE3JLS9NYheLazyCOs
+ y38R+iwhmLb1UStGzaKq2NGEmjgtfL1kLz6rJzvuyueHU5GRSFnhdRS9nXq8bl9Wpuab wA== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pbpxju00v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 16 Mar 2023 19:22:04 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32GJM30I022380
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 16 Mar 2023 19:22:03 GMT
+Received: from hu-amelende-lv.qualcomm.com (10.49.16.6) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.41; Thu, 16 Mar 2023 12:22:02 -0700
+From:   Anjelique Melendez <quic_amelende@quicinc.com>
+To:     <pavel@ucw.cz>, <lee@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <andersson@kernel.org>
+CC:     <linux-leds@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_c_skakit@quicinc.com>,
+        "Anjelique Melendez" <quic_amelende@quicinc.com>
+Subject: [PATCH 0/3] Add support for high resolution PWMs
+Date:   Thu, 16 Mar 2023 12:21:31 -0700
+Message-ID: <20230316192134.26436-1-quic_amelende@quicinc.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH net-next 01/11] dt-bindings: net: snps,dwmac: Update
- interrupt-names
-Content-Language: en-US
-To:     Andrew Halaney <ahalaney@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, vkoul@kernel.org,
-        bhupesh.sharma@linaro.org, mturquette@baylibre.com,
-        sboyd@kernel.org, peppe.cavallaro@st.com,
-        alexandre.torgue@foss.st.com, joabreu@synopsys.com,
-        mcoquelin.stm32@gmail.com, richardcochran@gmail.com,
-        linux@armlinux.org.uk, veekhee@apple.com,
-        tee.min.tan@linux.intel.com, mohammad.athari.ismail@intel.com,
-        jonathanh@nvidia.com, ruppala@nvidia.com, bmasney@redhat.com,
-        andrey.konovalov@linaro.org, linux-arm-msm@vger.kernel.org,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, ncai@quicinc.com,
-        jsuraj@qti.qualcomm.com, hisunil@quicinc.com
-References: <20230313165620.128463-1-ahalaney@redhat.com>
- <20230313165620.128463-2-ahalaney@redhat.com>
- <d4831176-c6f1-5a9b-3086-23d82f1f05a6@linaro.org>
- <20230316161525.fwzfyj3fhekfwafd@halaney-x13s>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230316161525.fwzfyj3fhekfwafd@halaney-x13s>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 0H7qFtWLHtkhUseCh3ldbhntBtLPfpPN
+X-Proofpoint-ORIG-GUID: 0H7qFtWLHtkhUseCh3ldbhntBtLPfpPN
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-16_12,2023-03-16_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
+ priorityscore=1501 phishscore=0 malwarescore=0 lowpriorityscore=0
+ adultscore=0 impostorscore=0 mlxscore=0 bulkscore=0 clxscore=1011
+ mlxlogscore=589 suspectscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2303150002 definitions=main-2303160146
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/03/2023 17:15, Andrew Halaney wrote:
-> On Thu, Mar 16, 2023 at 08:13:24AM +0100, Krzysztof Kozlowski wrote:
->> On 13/03/2023 17:56, Andrew Halaney wrote:
->>> From: Bhupesh Sharma <bhupesh.sharma@linaro.org>
->>>
->>> As commit fc191af1bb0d ("net: stmmac: platform: Fix misleading
->>> interrupt error msg") noted, not every stmmac based platform
->>> makes use of the 'eth_wake_irq' or 'eth_lpi' interrupts.
->>>
->>> So, update the 'interrupt-names' inside 'snps,dwmac' YAML
->>> bindings to reflect the same.
->>>
->>> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
->>> Signed-off-by: Andrew Halaney <ahalaney@redhat.com>
->>> ---
->>>
->>> I picked this up from:
->>> 		https://lore.kernel.org/netdev/20220929060405.2445745-2-bhupesh.sharma@linaro.org/
->>> No changes other than collecting the Acked-by.
->>>
->>>  Documentation/devicetree/bindings/net/snps,dwmac.yaml | 4 ++--
->>>  1 file changed, 2 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/Documentation/devicetree/bindings/net/snps,dwmac.yaml b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
->>> index 16b7d2904696..52ce14a4bea7 100644
->>> --- a/Documentation/devicetree/bindings/net/snps,dwmac.yaml
->>> +++ b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
->>> @@ -105,8 +105,8 @@ properties:
->>>      minItems: 1
->>>      items:
->>>        - const: macirq
->>> -      - const: eth_wake_irq
->>> -      - const: eth_lpi
->>> +      - enum: [eth_wake_irq, eth_lpi]
->>> +      - enum: [eth_wake_irq, eth_lpi]
->>
->> I acked it before but this is not correct. This should be:
->> +      - enum: [eth_wake_irq, eth_lpi]
->> +      - enum: eth_lpi
-> 
-> Would
-> +      - enum: [eth_wake_irq, eth_lpi]
-> +      - const: eth_lpi
-> be more appropriate? With the suggested change above I get the following
-> error, but with the above things seem to work as I expect:
-> 
->     (dtschema) ahalaney@halaney-x13s ~/git/redhat/stmmac (git)-[stmmac|rebase-i] % git diff HEAD~
->     diff --git a/Documentation/devicetree/bindings/net/snps,dwmac.yaml b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
->     index 16b7d2904696..ca199a17f83d 100644
->     --- a/Documentation/devicetree/bindings/net/snps,dwmac.yaml
->     +++ b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
->     @@ -105,8 +105,8 @@ properties:
->          minItems: 1
->          items:
->            - const: macirq
->     -      - const: eth_wake_irq
->     -      - const: eth_lpi
->     +      - enum: [eth_wake_irq, eth_lpi]
->     +      - enum: eth_lpi
+Certain PMICs have a high reolution PWM module which can support from 8-bit
+to 15-bit PWM. This change series adds support for those PMICs. Thanks!
 
-Eh, right, obviously should be here const, so:
+Anjelique Melendez (3):
+  dt-bindings: leds-qcom-lpg: Add qcom,pmk8550-pwm compatible string
+  leds: rgb: leds-qcom-lpg: Add support for high resolution PWM
+  leds: rgb: leds-qcom-lpg: Add support for PMK8550 PWM
 
- - const: eth_lpi
+ .../bindings/leds/leds-qcom-lpg.yaml          |   1 +
+ drivers/leds/rgb/leds-qcom-lpg.c              | 151 +++++++++++++-----
+ 2 files changed, 110 insertions(+), 42 deletions(-)
 
-Best regards,
-Krzysztof
+-- 
+2.39.0
 
