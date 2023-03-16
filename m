@@ -2,383 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F140E6BCC02
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 11:07:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E28286BCC07
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 11:07:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229801AbjCPKHH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 06:07:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53832 "EHLO
+        id S229991AbjCPKH0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 06:07:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229706AbjCPKHA (ORCPT
+        with ESMTP id S229765AbjCPKHX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 06:07:00 -0400
-Received: from esa1.hc3370-68.iphmx.com (esa1.hc3370-68.iphmx.com [216.71.145.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9A7D59808
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 03:06:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=citrix.com; s=securemail; t=1678961209;
-  h=date:from:to:cc:subject:message-id:references:
-   content-transfer-encoding:in-reply-to:mime-version;
-  bh=xPOSWM9uBris1Lv760ndKfYv/SsqyjSbzUtuVhe/l/A=;
-  b=I6CEC5Di8rtWTohOjnkst8EcoNtWUI1fdyxxO+c6caF73/374qEbD4mL
-   W16KtGNWjt9UKwS6wZCa8Gj6XdCT24BeQtgVcxLRmkp/y8hxeYzE3KN4s
-   2TSZVIufuCAB62SaMXxF/aBk6Ii7uwR3SvAJAYE0mG1mEOKZN/sqfCL2b
-   k=;
-X-IronPort-RemoteIP: 104.47.55.175
-X-IronPort-MID: 101501202
-X-IronPort-Reputation: None
-X-IronPort-Listener: OutboundMail
-X-IronPort-SenderGroup: RELAY_O365
-X-IronPort-MailFlowPolicy: $RELAYED
-IronPort-Data: A9a23:1XcnSq8NphhCvbKWZw8bDrUDQH+TJUtcMsCJ2f8bNWPcYEJGY0x3z
- WIaDTzVaP+IZzanLd4natvjpxgE7MLVzINlTwRt/yE8E34SpcT7XtnIdU2Y0wF+jCHgZBk+s
- 5hBMImowOQcFCK0SsKFa+C5xZVE/fjUAOG6UKicYXoZqTZMEE8JkQhkl/MynrlmiN24BxLlk
- d7pqojUNUTNNwRcawr40Ire7kI/1BjOkGlA5AdmPqkV5AG2e0Q9V/rzG4ngdxMUfaEMdgKKb
- 76r5K20+Grf4yAsBruN+losWhRXKlJ6FVHmZkt+A8BOsDAbzsAB+v9T2M4nQVVWk120c+VZk
- 72hg3ASpTABZcUgkMxFO/VR/roX0aduoNcrKlDn2SCfItGvn9IBDJyCAWlvVbD09NqbDklI/
- 94AeCwLUSq9gt+5y5KFcNdguYc8eZyD0IM34hmMzBn/JNN/G9XpZfWP4tVVmjAtmspJAPDSI
- dIDbiZiZwjBZBsJPUoLDJU5n6GjgXyXnz9w8QrJ4/ZopTWOilUujdABM/KMEjCObd9SkUuC4
- HrP4kzyAw0ANczZwj2Amp6prraXxH6jAdhKTtVU8NZH2Ue+6XRUDyRMUGWjg9e3sxaTXtNAf
- hl8Fi0G6PJaGFaQZtv6RBC2iHmIswQYUtxcVfY3gCmJy6zJ80OaC3ICQzppdtMrrok1SCYs2
- 1vPmMnmbRR/vbvQRX+D+7O8qTKpJTNTPWIEfTUDTwYO/5/kuo5bpgKfEP5gHbSzg9mzHiv/q
- w1mtwA7jrQXyMQNh6Oy+Amdhyr2/8eUCAko+g/QQ2SpqBtjY5KobJCp7l6d6utcKIGeTR+Ku
- 31sd9Wi0d3ixKqlzESlKNjh1pnzjxpZGFUwWWJSIqQ=
-IronPort-HdrOrdr: A9a23:A77j0KlUY9dSNKIwDfw6m6TYRF/pDfI93DAbv31ZSRFFG/Fw9v
- rCoB1/73SftN9/YgBCpTn+AtjjfZqxz/BICOoqUYtKPjOHhILAFugL0WKI+VLd8kPFl9K13J
- 0QFpRDNA==
-X-IronPort-AV: E=Sophos;i="5.98,265,1673931600"; 
-   d="scan'208";a="101501202"
-Received: from mail-bn8nam12lp2175.outbound.protection.outlook.com (HELO NAM12-BN8-obe.outbound.protection.outlook.com) ([104.47.55.175])
-  by ob1.hc3370-68.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 16 Mar 2023 06:06:42 -0400
+        Thu, 16 Mar 2023 06:07:23 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2106.outbound.protection.outlook.com [40.107.92.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C631811EA0;
+        Thu, 16 Mar 2023 03:07:07 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZBrj+5VX3IDjCXUAeUY1BRo9j+cL2X9Z+RWc10tVk82qqNKKYM3YEi6ekPS48z2UcJyDCZwkyVBsTdwwnxwTCXsqLQVcUAhH8MUsN3cLRvWelbnxOEGrObgXcfhOfCd6BcdhjlUd7Sn1XNsok04PQm0iYTAYlfwucYpbYtOaMBiCc+1hUW8lid3t49GMhAKikBBQyUnDlMASiLlePUg4UiwBJl8IJUhLBrXX6UqmJFTNXNC9EqmgzLkXZO2U9XHacfb4oeLep3QA2RF/KVQFGrlfhgVXfg+MuXgjaAilCbwN7LRxxOBJBdmh1VwoaU23Uj0sxG0kD+bsbYrQfBUT3A==
+ b=H6IeZzH1jv3h0iCcdl37+vXAOU6pXlpWxYYmPQ0O++sSls5cUVnIEaOUAmmAO62XawnkU42cyuV2lsd8RuXHsf7T8+8kvNzNAi8KmXO/hsyxDwYC7THoDnRFyMD6gMuSnpLCbwY0GG60WF0sXrTZEc32xGtq+XO9b5r+dppLjdak7shVPbjvvezZeUiR0H7oS9OTr1fLWUsamsR2MI8bHTQAhoc573KyapxVaVNyiSGC8WwVr2KVqUVLMUK40q1NP/u2IGYCoR3XchEgwGinihA4lg1/pNBwPOr8HTh0whUAyHZXDVMJWbhcFqRDpijnbiktlPNHKG5b16KR0Rfrcg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=x99VX79samaRS0BqFe2rbZd0M6NI81izBgME213FgG0=;
- b=FFOirRrEU5GNdkOcfvDP3gPUCfeL+6/s1alfH1uQ+Xb8ka/Wzg9W/3DMOM/9LV57bmzalS5Lzhcw+SdIExT/nsGHmZ+56cVt+QBp/FWP6mXeSzpp/4VPXooualSlo5g38+pJnLILYtuAgTIgP1libaqM0sbORduXBBSzcz7ZdlmbWl10MBWU5Jz290yJ+uB/NlMRSJsO7UQfzLbBdro8DvIKLId6nyklM7+ABs++AYHDCOBigu/iJSPBYB1kO5YIUIlwRvI0IMg7QLKJCkQG+sik49XWTUAmAMRGR8T3hU+fJcfgq7+l+kv9eLcgW5HrLGPADw0a4/UclFHV8gLXEg==
+ bh=nzbDDyhUpcr8fPWOgbo3D67B9+01dAm2maXyQ5F8RyQ=;
+ b=hYB5bnnxv5J5XG5LZZvrSAgZmNOqCuv76OVkeYFJmfota/28IODOtlBpaNOPP1T45wVZfS4/VR8FVxDVcyryyeDl6yFVq8IU44zaPFOFqHmrJkaNby/CgS3WJbvPYpavxvheiWvu9eH4yCAz9+e96Kz24oVfMv8ceW5bz9+aBuOuTMhZJ0g4T5W74W0p8ow7EuXrdzlhj7jibrZm+1UZLWJs34gL1LSwuXLxy2RHkmppU+W5+EkJbm2dQujQMcSY283X5czaunruQP3aYeCt6oaWIpZLVzkYY18cJ88V7LFrgHuZrxN8ucY50ldXYBaychtqRvLrr4ojV95S7clvZA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=citrix.com; dmarc=pass action=none header.from=citrix.com;
- dkim=pass header.d=citrix.com; arc=none
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=citrix.onmicrosoft.com; s=selector2-citrix-onmicrosoft-com;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=x99VX79samaRS0BqFe2rbZd0M6NI81izBgME213FgG0=;
- b=mDcPfdcze1BctPa6nwG4MfZvUqZ8Cfcvy36ky+X8SLxmoDDDi/JrE/xbIOyUYM9B2q8wDtYMWcqbWNS42cBb18edAEmNFmEiuVESQQf39JrdHDYb9AuFCHU6kWSxJy2LSpjfFOceWxnLyv9ESDXvgYuBui6OwXyA1DQC1zs5FUg=
+ bh=nzbDDyhUpcr8fPWOgbo3D67B9+01dAm2maXyQ5F8RyQ=;
+ b=o6u4cOoThUf0b0c9iZFf6ncePAa0aBXyrlWvnjxSThTJvetqoBXwSPZcXma2KKZEY7XJfgkXln4ed/EZmDMK5Xd6eCD42iz3WJ+MKmGE/TZbihKT48wr/PVHIxF7oydeHIFAU5NjyiGG7iBKYH6rKVQX2ZzzeoWNkBFYc/Q6eX8=
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=citrix.com;
-Received: from SJ0PR03MB6360.namprd03.prod.outlook.com (2603:10b6:a03:395::11)
- by SJ0PR03MB5421.namprd03.prod.outlook.com (2603:10b6:a03:289::7) with
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by SN7PR13MB6279.namprd13.prod.outlook.com (2603:10b6:806:2e8::9) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.26; Thu, 16 Mar
- 2023 10:06:40 +0000
-Received: from SJ0PR03MB6360.namprd03.prod.outlook.com
- ([fe80::48a7:d1ab:897:acda]) by SJ0PR03MB6360.namprd03.prod.outlook.com
- ([fe80::48a7:d1ab:897:acda%6]) with mapi id 15.20.6178.031; Thu, 16 Mar 2023
- 10:06:40 +0000
-Date:   Thu, 16 Mar 2023 11:06:33 +0100
-From:   Roger Pau =?utf-8?B?TW9ubsOp?= <roger.pau@citrix.com>
-To:     Josef Johansson <josef@oderland.se>
-Cc:     linux-kernel@vger.kernel.org, xen-devel@lists.xenproject.org,
-        x86@kernel.org
-Subject: Re: [PATCH 3/3] xen/acpi: upload power and performance related data
- from a PVH dom0
-Message-ID: <ZBLqKWqkGawbbRo0@Air-de-Roger>
-References: <20221121102113.41893-1-roger.pau@citrix.com>
- <20221121102113.41893-4-roger.pau@citrix.com>
- <407b7c10-ad1f-b6d2-2976-2b297755b2b3@oderland.se>
- <ZBGuVjyDpuUZ3MnZ@Air-de-Roger>
- <2754848f-6c3c-5479-ea6f-1946c93f868e@oderland.se>
-Content-Type: text/plain; charset=utf-8
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.24; Thu, 16 Mar
+ 2023 10:07:04 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::85f5:bdb:fb9e:294c]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::85f5:bdb:fb9e:294c%2]) with mapi id 15.20.6178.033; Thu, 16 Mar 2023
+ 10:07:04 +0000
+Date:   Thu, 16 Mar 2023 11:06:58 +0100
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Markus Schneider-Pargmann <msp@baylibre.com>
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 10/16] can: m_can: Add tx coalescing ethtool support
+Message-ID: <ZBLqQmj4FoMAsNsh@corigine.com>
+References: <20230315110546.2518305-1-msp@baylibre.com>
+ <20230315110546.2518305-11-msp@baylibre.com>
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <2754848f-6c3c-5479-ea6f-1946c93f868e@oderland.se>
-X-ClientProxiedBy: LO4P123CA0548.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:319::11) To SJ0PR03MB6360.namprd03.prod.outlook.com
- (2603:10b6:a03:395::11)
+In-Reply-To: <20230315110546.2518305-11-msp@baylibre.com>
+X-ClientProxiedBy: AS4P189CA0015.EURP189.PROD.OUTLOOK.COM
+ (2603:10a6:20b:5d7::19) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ0PR03MB6360:EE_|SJ0PR03MB5421:EE_
-X-MS-Office365-Filtering-Correlation-Id: f8e74b66-8430-4c77-627f-08db260622a9
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|SN7PR13MB6279:EE_
+X-MS-Office365-Filtering-Correlation-Id: e4d14a95-f102-44a8-737f-08db26063110
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: maTGKo3NTcH5xgNl/paEI+I3Z5mQpDJ9pEAYrXAXtE7miUdfZRHz/ncDct3+vJj8564A5++8fl7GVwfZwR6XCXd3Olm5IpfKIHt5QamZicgyt6xeNN6OV2n2dtzAdiHKRIwtU8sb/LIfzCDwjSD5B14TUzoTiHxPNAreX7CwRYvnQxi5WDWHmq73RxoFWUIvzfKgUA4y5tH4NeRzedaeLd90301I7oV4RYWPfeQHmIhuu6s1HIHuLJiPjIWF6NDHGlqlawJqx7o5Gs/Lp87a+Z+QxgM3FQcxeWXv684NKGK7w5IkrmEm0aI2d937d4bTlkDIDcvdhPQuP2piMh+N76kCBTefCl9DtywRMpBUxzECm8yn3fEnMtfaEGCeoV2D6vnZm3ENgk5B30hrUjXOn3udDg9RNQCeYt9Avagciy18TiUD+NA0Y/h90B9KMkqyJEJ6O30LE09uqWEIGa49RO9lg5QHa8J+W7hj7wrXxpvTEAzSZGqhiBjC+/WjM04/8XH5nR0O9fxdtHeoo9x2QUgo5UfpyARLrU4RMoopYtGOxrmTW24pPu2Ib9MKfR+88IUHX4useyOiNu5s8vNVy4gPiVJ+OAASuOeDidl01t8X8qvTgTNqN50NcRb2Bvb14OcWR9nkSKs5JiULsZAqRg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR03MB6360.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(7916004)(376002)(346002)(39860400002)(396003)(366004)(136003)(451199018)(85182001)(316002)(86362001)(478600001)(6486002)(66556008)(66476007)(6916009)(2906002)(8676002)(8936002)(66946007)(41300700001)(4326008)(30864003)(5660300002)(82960400001)(38100700002)(9686003)(186003)(6512007)(6506007)(26005)(53546011)(83380400001)(33716001)(6666004);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: R/Z76vmD1opMeI1OAsCtLJUJVdDsOB1rD5npMsACCwaKEbJalLTzl4rvzThic6HLx/8Q4pRN8iNFL7XAMPY0RcQg/cNYMutO4qeIjNLgaFopxJKGKqTVZSiqdYaHADkgpyFgOUqopZP0uvkaEunXvWELPWGWAha8u0DsOB833oa76+1v5ayqYnQ73fE7Zt/JxA7P1WJfwrlOqZx6A9q1144qII35VItqV9exvEfAC6xV4fvyDeqFIRBiPVwvfF+m58Qm6a2Xdv2dJT2PV/NC2sRJXdhHX5MGQSnWjZcJjMgDyE9h7YYwp45xNpmdIJRsdNav8nfPUwpSoKl98RmVTO0o/vLFS9Le96H/refwQymsIBMr9J5LxPoYp1IQ3PjPpphrEAZSrLlw7V5qz1YbCkjSMWc46IbM2FsDGYg1nOGCAp/9+e5sH2KYw6Z4P307SfpZ1BGtv6h2QhaLgZAbFT6mCrdZnPavHwXSih+ba8nMkH7O2eTUc5UhI5fMn7YYkG/vEMunraOd1imkoPNz9D72JwVPy1cDtvM++yN+jV03UTDeuMokIlZXdg7FrEL9Uh62Pxbyg8xxp2aoxDgqf3xEzGonfWjsmHzPSuK3A+zEXThAcqfNX6XanRSgqOF4XQoryT4ERUd668bB+OifNg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(396003)(346002)(366004)(39840400004)(136003)(451199018)(54906003)(316002)(83380400001)(478600001)(38100700002)(86362001)(2616005)(6666004)(186003)(6506007)(6512007)(6486002)(36756003)(5660300002)(6916009)(66946007)(8676002)(66476007)(66556008)(44832011)(41300700001)(8936002)(2906002)(4326008);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Z3lXTDc3VTVzU0RDM2daRGRXZU1zMXJ0azFXZU8xUERjMjNURFl1SVdzMTZQ?=
- =?utf-8?B?WENST2NxdklnQVlOVUNReWpIMVh5all2MndJR2dQMzk3dVFxUDVnL0x1ZEw0?=
- =?utf-8?B?bXVoa2RBMEJlWWdzUUJzU3pxWjQ2ZUczWEY4UWtEeHp6elVzd3Q4Mkl0Tngy?=
- =?utf-8?B?bGVwQzhtTXZnRDBRU29BTElzSHBHeGpYVzFQMWo4cmRDOXQwazVIVjE3ejFM?=
- =?utf-8?B?WElBclZVQUZVVGNNOUNjOVdRSlZJWkNUZkM5VHVua1hmRmpaaGtmYjgrWVZJ?=
- =?utf-8?B?RHNNWWphbytaK0tyNUZCeWpQcXhsV3MwNnlFNkdHRXh5T0VKOTlwQ0kxd25G?=
- =?utf-8?B?QlRGdXRpZzdJV0s2VUU3ZmV3ODJwNEoxU3ZLb0hodGd4MXRMZEpQa1Z2NUhl?=
- =?utf-8?B?eFhSS0FiWVFyT1RReEsyYlJuSVdyeXlhSGdkSHMvQU5hbWN1RTlJRUtDRFQx?=
- =?utf-8?B?bE9zb0hrSUZnR3FCM29sL1JKemFOUkxlQm9CUzl4bHdCTXV6YXpESW9OdlVQ?=
- =?utf-8?B?MmJNZm52U1ZlQmFVVnl2TERsVUFhQ0dvNzdpTFh3ZDZrMGNpYWtwQlFZQmsr?=
- =?utf-8?B?elEzS2d4SmlSaCt4d3ZHM3lpSkRaRTJQRzdNalAraVV2cVk1engyMGkxQ2g1?=
- =?utf-8?B?a1p2dEkwWHVRbFZxVUhZbEVndmxOMld1bHVwQ2lwVHhuME1OZVBGN1JqRUZQ?=
- =?utf-8?B?Vm52MTBMV2V1UDN0K1hvRDFrV2MzQS9tclBiRHM4aWdzQmc1eEF6UXRpSW1N?=
- =?utf-8?B?a2c3eGlGMXFLOU53RTVjVjVTRzZOZlRnQXdCL1RncnZpOTZHWlVudDdCcFg2?=
- =?utf-8?B?OHFTeTVuL3VWNmMvRTFPWndhbThKc1U4b2VyWkVJRE90T01xS2x2N2YvZGVJ?=
- =?utf-8?B?a1p5YTIwellteHAzMVdtNncwazFQWXdDU1NDd0N6UWFlNmR4amRlM1ZXM3Nv?=
- =?utf-8?B?QVlxc2NLcjgxYnlGdzN0OUVJRnoxY2pyTnFzVWxhZDNhc0dDQXo2emNTOHlD?=
- =?utf-8?B?NUlhZ21VajBEVDhNMkEvclNzSUIxSmZHc2d2Mkx0QzFlOW1HMHY1cFduMFds?=
- =?utf-8?B?b3dVVXVWcmdTZkFIajN0MDZEUXNOVSttNVVCN1JMM0d1Z0dtbUp0VzJUUEtJ?=
- =?utf-8?B?Z0xDSGdmd3RkTUtPWnhIUHBkVndVRWdQeWdJZUYySTBnWFBBd0NRMWlxbEpk?=
- =?utf-8?B?OGlTME5qL21nUlFGbzYraWtpV2x4Q0xBYWtvMXd4MWhucXZVTi92bmEzV0l4?=
- =?utf-8?B?SzVmTmVma0hXZFF1LzFuK2t0WG93bUhzbXNwRWkwaWNsSFoveFVSQjg5US94?=
- =?utf-8?B?ZmlPbGh3SytBMVRVM201WUtWb1N6cWRhcUZUdFdiRDY5WVorOVRKZHZheVBa?=
- =?utf-8?B?c3lBK0J6clRZc1BLbkw4V01vdDVJL1dYcDU4ekZvR3JZN0piTDU0ZWpFRWRx?=
- =?utf-8?B?bzV5Ny9LZUNMMWNRZjI5SEhoYUtYenNpRVFBbHJPdlBscTJ1c3lNWkRjdHlF?=
- =?utf-8?B?NHRhRTRIdDhPME9id2FJSVVueWZCY1RMZm1SUzlZcmpjV0RGclRJckNXTXVZ?=
- =?utf-8?B?ZFV3R1JxNzUyOUFyYTRxTjEzc1prM0R3Q2JSRlEzU2NzTDBWdFd5TDdsejNl?=
- =?utf-8?B?eExQaFl5NmFEZzNqVlE2ZWo4dFNDQ0JFK3IvM0x4YnBsazhaNFhaaWd2YVVr?=
- =?utf-8?B?YmpIbVdvcDhraWJDMFdNSHIwb0VBNnVHRm5rNUpCR1gyQW1DYVM0Zlk3Nm9W?=
- =?utf-8?B?NWsrOEloanRFWG1ydmtNbGgwSWVVZzM3NmRib2VmcmFJeXozU2ZSd2t2MFNX?=
- =?utf-8?B?MlR5N3hjaXlxQ3g2S01Cem9KUG1ZSlFKQ0dLekk0NGE4YjZVN3AxeHdvS05M?=
- =?utf-8?B?R2d6U09MTmlmUFF0U2NxSDNlSTRnem5yWDZIYVZjSDBWYkxWT1diQldZOEpx?=
- =?utf-8?B?Qm53aDRuMSt5K04wUWsxZlJYRFpGS3QzWVlnRG1ZTGZkZGF6RzhudXMrYzVH?=
- =?utf-8?B?elNKOUdTLyt1aGc2Y2wxbHpIU2lXMHRCM0tORWVEcmwyUW52VGN2R1RGdDM2?=
- =?utf-8?B?eWoxL2hVdkRwUkIrQVRVczVpZEkxTmMyTVdVc0laVXVheGZkOGFnZDFGTFVn?=
- =?utf-8?B?ZmNOS3ZncXdvMDJBaDlYYTl5RHdHSTVBM0dBTTRHaTZTMjErTzdhY1UyVnJw?=
- =?utf-8?B?RkE9PQ==?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: XSMHv2SwfHHc0e3oynkIR/iusLXYCbFRv0LZQfLBTI5sLWszJKzrs3ln4lK0r3qqJKJHXwvXbtW+iy2wD8GLdFL/S8U2D02ErsC6hTgYYooH4ShT5lw1+LCEObxIimihwf93dIBLOZvYOxMmq7S9x0B4YKcUQnqxR3sojn5a9FcbYsW3Wo4WTYt3sioJU4ITBqMoSIapkL39xmvXmTAqcCb67niMCSj3yKyeYYPA1dlmfGI5w9gUPpk9kpFm33MHJlUNzoE+bGudaI/OPW+CgwM9F1A/mWmjX5iAL6HEhm0xQPJL3aKA3yPrkv502p7aKSnP6sxngPRKfriObDlJE8HOeQLfwl/JY4VQbW1knKi+gXS5xlRnFsuXv/HJPO+282iyF+vblv1eUx64TMUrF+IcP+ALNopk/vAujN3v3Pmi3Cqo9SS8Djawfyr3gJmbAKe242MZtdVOEmELM8yLQk24b5/yK/CxO48zsxhMLbaqKycRT4L9YOowFj/bJCSH3dPsRrhOJ6dIjORIcwbUWeqxVGTGGEpQ/a8ruWVXBDgD0JVUR0ZLjfRgpvJmHU/Ath6h230hmahx7BHMlyo+c59j6iPHx1ScvsUv3gaq3BgYiwRZkPZwrTF9sZYGgBTYt+kJRghphjZDvd5ActXpK0FXipEOcN4ECB2W1F6LaH5qk6rDZM+GVksnGFLEJew87dwtcBhiSIgCbD/qVHCez8wQXimptrzpFJfpIO2MEOZS41zAtfxKk4Dgyd5Yc6YVILx7Sfc3y5qn85HEj0+jdhdIS5LZA3IGTr0x/E5GUDV1tQiAJhxjUH1zJpkuu7lEWsocaRZ/flvp3J/Y/qOJzyE5rWVTL6Jfr4wS0bVbzzE/1JqdzFU1sx60+k1bcpF1
-X-OriginatorOrg: citrix.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f8e74b66-8430-4c77-627f-08db260622a9
-X-MS-Exchange-CrossTenant-AuthSource: SJ0PR03MB6360.namprd03.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?iQV2/QKJVrAbuXi8pEL/pVUvN6l8UbTIhCc1UcvhvEH2s/E3aLPAzqJNUD2f?=
+ =?us-ascii?Q?SqcM3EzrIHG/rNk0xCV0VcVbtaWJpY4lZ3M4wqzaEaEVBvo1j+1m3NUMqbdX?=
+ =?us-ascii?Q?HQlzbRasjMwDqBwnq4WUoMkn6YCi2aIT/bVX8xcjvm/0Y/eea3GGmHagFxYM?=
+ =?us-ascii?Q?ZdXLI3prUxfiolYg0+CY0BWXODAKVSYupiLHVLAI49eie9PcFt+XMVZJTixI?=
+ =?us-ascii?Q?lgdiU4IYJ+LUGkgxCLys1D1zr0au/KPpUNcW+XeQ343jfHapt9R2P2Y/ucvB?=
+ =?us-ascii?Q?w3ypdiIYyrn5/owluOEWHSy2L1gyR/I/CbJTVA821mwsGVn0rplfw41VpiFx?=
+ =?us-ascii?Q?4LS8hT1/DnQsrLU+yeU0cHxIySM3k3zs4VQJm3LA5t+gZdMDA6hrU+OycEct?=
+ =?us-ascii?Q?3+KFBqLigG4ncEl8hWkQ597C8zL9M2GP2/OXB+Qy6CJma1KKh7SFl4g+O8dX?=
+ =?us-ascii?Q?moXkIa5XnlTT8YLguGdgXJbneu3UfXzRqEVtstWvi65LZPYrZUktaK2/N9vV?=
+ =?us-ascii?Q?qxs5DzcgUkUeuCV1C7CLhO1SjD0Na1HglBv3C3rY+AB2RTSUpjnjbNxUBJ1S?=
+ =?us-ascii?Q?ZWZqmOwL7zSXYCjFy+kfjnxegHfU9VjQ3l5wsZxOolOfnKPslAU+sMGLKSui?=
+ =?us-ascii?Q?JJKKmlm61fW4wOCe1E/+sHLXCcf0UasELQtIlLf/G5BCfNbQDzqscwfmntmp?=
+ =?us-ascii?Q?qRP5AeY9jktdR0t05GQ3CAOIpdg+YjtH1CQii4/BIwnR5uYDJAbnx4e0tVWx?=
+ =?us-ascii?Q?ZWChvX4VHvwfkhhbWYyYOSAqa9IJlecZUVE2dwo+sdMMH0MphsuhmLYUisEw?=
+ =?us-ascii?Q?zOKOvOaLFBrl6G+w+3loccev0dRAMradIfQnksRZANLzNJLhjAccNnN81WFW?=
+ =?us-ascii?Q?MG/UJXkY4B0yInNES2pjXMdwGzSjplm2NBitxj5Q+0TkhoQGhx8djQSYbOAJ?=
+ =?us-ascii?Q?mkGuZ8EqmLAu0c2fM+d9TlOtfjtUmvuC8trHfb0wjErScWOcpZBndu+lS32U?=
+ =?us-ascii?Q?qxMWmYaXFPZI9SU1jQdqEJZ1Dg1w2ctheHSbWdMJoAKeJ5tlM3L3ZTmjXs7R?=
+ =?us-ascii?Q?qj5y9LCDsvO0c0EW07HOm/mADUxXJyY8EBBPPnv6UWeR5gGP9ZSZB9mnqzHt?=
+ =?us-ascii?Q?DT8m2Wx7Q3+PqZqD8PDtDxlAFkk3praICto0+EZ96sZSKG/SS8N4NUhNp6wD?=
+ =?us-ascii?Q?o5I7xq5pG+Um5aMrUyPE4SwNJB/0tFtkWjO3J19fCuykiy51jS1gg+TUxOvZ?=
+ =?us-ascii?Q?B3l1xEjLaOUrx3NV25FNipzS7AW43L4lmWBiFca7hBzALj4JaR5cTEk7YRgQ?=
+ =?us-ascii?Q?0SXRK5KvXLIXYJLO0gz+wEBFvHskzH+e9mJWtRy4BkCKK5aLyo3Kx792LtIa?=
+ =?us-ascii?Q?ycfkvU5+IiyjGEosOOOLxW9dDmSXRecH+ogw6BygKTBqzc+IarvLyMFALHPd?=
+ =?us-ascii?Q?CZoiCqRqDpz28/8NylEsuONdqS2WtO1kRF0fUeK+vOnpn1A7NPNfyYQoN71J?=
+ =?us-ascii?Q?JkKXUYMWVnShk0gLp1Bz0YOt2QkX5GYOtIampyhntdES4NH+eTRJvM3iZH1L?=
+ =?us-ascii?Q?rWVbGHzyowlnFCZbM8oGbqf6qhjif6BhTBvSMgRkaHg26iu7CV5h2HXP3RVf?=
+ =?us-ascii?Q?mShbN7AyRZek60rJ09jku8saM7W3E8tQMc+WCk2uyXKH3PHHsqZ/zKYb7oS8?=
+ =?us-ascii?Q?jlOChg=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e4d14a95-f102-44a8-737f-08db26063110
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Mar 2023 10:06:40.0929
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Mar 2023 10:07:03.9127
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 335836de-42ef-43a2-b145-348c2ee9ca5b
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: LnFNPynkwdTTMqfIf+UU3CSQv1J4SRbPjxJtcdPf1hPFlT62oCHn5HZ3tPwXensZc72Gbh7Ah85srKAj8ciePg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR03MB5421
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: ZcwdKOicOkYQ73fvaJQ9pRAGqhxJCKlONwBZvDWKxOi5BWF9anPTaEcEpCVVF1DxxD/nwKXOBIDWKt5KUQSEfKErOZsxld/k5Mw2/HneOKM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR13MB6279
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 16, 2023 at 08:54:57AM +0100, Josef Johansson wrote:
-> On 3/15/23 12:39, Roger Pau Monné wrote:
-> > On Mon, Jan 30, 2023 at 10:10:05AM +0100, Josef Johansson wrote:
-> > > On 11/21/22 11:21, Roger Pau Monne wrote:
-> > > > When running as a PVH dom0 the ACPI MADT is crafted by Xen in order to
-> > > > report the correct numbers of vCPUs that dom0 has, so the host MADT is
-> > > > not provided to dom0.  This creates issues when parsing the power and
-> > > > performance related data from ACPI dynamic tables, as the ACPI
-> > > > Processor UIDs found on the dynamic code are likely to not match the
-> > > > ones crafted by Xen in the dom0 MADT.
-> > > > 
-> > > > Xen would rely on Linux having filled at least the power and
-> > > > performance related data of the vCPUs on the system, and would clone
-> > > > that information in order to setup the remaining pCPUs on the system
-> > > > if dom0 vCPUs < pCPUs.  However when running as PVH dom0 it's likely
-> > > > that none of dom0 CPUs will have the power and performance data
-> > > > filled, and hence the Xen ACPI Processor driver needs to fetch that
-> > > > information by itself.
-> > > > 
-> > > > In order to do so correctly, introduce a new helper to fetch the _CST
-> > > > data without taking into account the system capabilities from the
-> > > > CPUID output, as the capabilities reported to dom0 in CPUID might be
-> > > > different from the ones on the host.
-> > > > 
-> > > > 
-> > > Hi Roger,
-> > > 
-> > > First of all, thanks for doing the grunt work here to clear up the ACPI
-> > > situation.
-> > > 
-> > > A bit of background, I'm trying to get an AMD APU (CPUID 0x17 (23)) to work
-> > > properly
-> > > under Xen. It works fine otherwise but something is amiss under Xen.
-> > Hello,
-> > 
-> > Sorry for the delay, I've been on paternity leave and just caching up
-> > on emails.
-> Hi Roger,
+On Wed, Mar 15, 2023 at 12:05:40PM +0100, Markus Schneider-Pargmann wrote:
+> Add get/set functions for ethtool coalescing. tx-frames-irq and
+> tx-usecs-irq can only be set/unset together. tx-frames-irq needs to be
+> less than TXE and TXB.
+
+Perhaps I'm reading this wrong (maybe I need a coffee). But I think it
+might be a bit clearer to call out the TX aspect of this patch up front (I
+know it is in the subject.
+
+Maybe something like this:
+
+  Add TX support to get/set functions for ethtool coalescing...
+
 > 
-> Congratulations! I hope you had time to really connect. It's the most
-> important thing we can do here in life.
+> As rx and tx share the same timer, rx-usecs-irq and tx-usecs-irq can be
+> enabled/disabled individually but they need to have the same value if
+> enabled.
 > 
-> I came into this to understand each and every error in my boot-log, it turns
-> out that the latest
-> kernel+xen+firmware fixes suspend/resume for me, thus is this not related.
-> But as I pointed out,
-> the output does not make any sense (nor yours nor the upstream). I should
-> check the debug
-> output with suspend working fine now to see if there are any changes, that
-> would be quite
-> interesting.
+> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+
+Nits above and below not withstanding,
+
+Reviewed-by: Simon Horman <simon.horman@corigine.com>
+
+> ---
+>  drivers/net/can/m_can/m_can.c | 38 ++++++++++++++++++++++++++++++++++-
+>  1 file changed, 37 insertions(+), 1 deletion(-)
 > 
-> Also, I should mention that your patch broke some things on my system and
-> made it
-> unstable. I don't remember exactly and I know you said that this is more of
-> a PoC. Just a
-> heads up.
+> diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
+> index 7f8decfae81e..4e794166664a 100644
+> --- a/drivers/net/can/m_can/m_can.c
+> +++ b/drivers/net/can/m_can/m_can.c
+> @@ -1945,6 +1945,8 @@ static int m_can_get_coalesce(struct net_device *dev,
+>  
+>  	ec->rx_max_coalesced_frames_irq = cdev->rx_max_coalesced_frames_irq;
+>  	ec->rx_coalesce_usecs_irq = cdev->rx_coalesce_usecs_irq;
+> +	ec->tx_max_coalesced_frames_irq = cdev->tx_max_coalesced_frames_irq;
+> +	ec->tx_coalesce_usecs_irq = cdev->tx_coalesce_usecs_irq;
+>  
+>  	return 0;
+>  }
+> @@ -1971,16 +1973,50 @@ static int m_can_set_coalesce(struct net_device *dev,
+>  		netdev_err(dev, "rx-frames-irq and rx-usecs-irq can only be set together\n");
+>  		return -EINVAL;
+>  	}
+> +	if (ec->tx_max_coalesced_frames_irq > cdev->mcfg[MRAM_TXE].num) {
+> +		netdev_err(dev, "tx-frames-irq %u greater than the TX event FIFO %u\n",
+> +			   ec->tx_max_coalesced_frames_irq,
+> +			   cdev->mcfg[MRAM_TXE].num);
+> +		return -EINVAL;
+> +	}
+> +	if (ec->tx_max_coalesced_frames_irq > cdev->mcfg[MRAM_TXB].num) {
+> +		netdev_err(dev, "tx-frames-irq %u greater than the TX FIFO %u\n",
+> +			   ec->tx_max_coalesced_frames_irq,
+> +			   cdev->mcfg[MRAM_TXB].num);
+> +		return -EINVAL;
+> +	}
+> +	if ((ec->tx_max_coalesced_frames_irq == 0) != (ec->tx_coalesce_usecs_irq == 0)) {
+> +		netdev_err(dev, "tx-frames-irq and tx-usecs-irq can only be set together\n");
+> +		return -EINVAL;
+> +	}
 
-Right, I don't plan to send the PVH part just now, and instead I'm
-focusing in the first patch that should fix _PDC evaluation for PV
-dom0.  I will Cc you on the last version so you can give it a try and
-assert is not regressing stuff for you.
+nit: checkpatch complains about unnecessary parentheses
 
-> > > Just to make sure that the patch is working as intended, what I found when
-> > > trying it out
-> > > is that the first 8 CPUs have C-States, but 0, 2, 4, 6, 8, 10, 12, 14 have
-> > > P-States, out of
-> > > 16 CPUs. Xen tells Linux that there are 8 CPUs since it's running with
-> > > nosmt.
-> > > 
-> > > Regards
-> > > - Josef
-> > > 
-> > > xen_acpi_processor: Max ACPI ID: 30
-> > > xen_acpi_processor: Uploading Xen processor PM info
-> > > xen_acpi_processor: ACPI CPU0 - C-states uploaded.
-> > > xen_acpi_processor:      C1: ACPI HLT 1 uS
-> > > xen_acpi_processor:      C2: ACPI IOPORT 0x414 18 uS
-> > > xen_acpi_processor:      C3: ACPI IOPORT 0x415 350 uS
-> > > xen_acpi_processor: ACPI CPU0 - P-states uploaded.
-> > > xen_acpi_processor:      *P0: 1700 MHz, 2071 mW, 0 uS
-> > > xen_acpi_processor:       P1: 1600 MHz, 1520 mW, 0 uS
-> > > xen_acpi_processor:       P2: 1400 MHz, 1277 mW, 0 uS
-> > > xen_acpi_processor: ACPI CPU1 - C-states uploaded.
-> > > xen_acpi_processor:      C1: ACPI HLT 1 uS
-> > > xen_acpi_processor:      C2: ACPI IOPORT 0x414 18 uS
-> > > xen_acpi_processor:      C3: ACPI IOPORT 0x415 350 uS
-> > > xen_acpi_processor: ACPI CPU2 - C-states uploaded.
-> > > xen_acpi_processor:      C1: ACPI HLT 1 uS
-> > > xen_acpi_processor:      C2: ACPI IOPORT 0x414 18 uS
-> > > xen_acpi_processor:      C3: ACPI IOPORT 0x415 350 uS
-> > > xen_acpi_processor: ACPI CPU2 - P-states uploaded.
-> > > xen_acpi_processor:      *P0: 1700 MHz, 2071 mW, 0 uS
-> > > xen_acpi_processor:       P1: 1600 MHz, 1520 mW, 0 uS
-> > > xen_acpi_processor:       P2: 1400 MHz, 1277 mW, 0 uS
-> > > xen_acpi_processor: ACPI CPU3 - C-states uploaded.
-> > > xen_acpi_processor:      C1: ACPI HLT 1 uS
-> > > xen_acpi_processor:      C2: ACPI IOPORT 0x414 18 uS
-> > > xen_acpi_processor:      C3: ACPI IOPORT 0x415 350 uS
-> > > xen_acpi_processor: ACPI CPU4 - C-states uploaded.
-> > > xen_acpi_processor:      C1: ACPI HLT 1 uS
-> > > xen_acpi_processor:      C2: ACPI IOPORT 0x414 18 uS
-> > > xen_acpi_processor:      C3: ACPI IOPORT 0x415 350 uS
-> > > xen_acpi_processor: ACPI CPU4 - P-states uploaded.
-> > > xen_acpi_processor:      *P0: 1700 MHz, 2071 mW, 0 uS
-> > > xen_acpi_processor:       P1: 1600 MHz, 1520 mW, 0 uS
-> > > xen_acpi_processor:       P2: 1400 MHz, 1277 mW, 0 uS
-> > > xen_acpi_processor: ACPI CPU5 - C-states uploaded.
-> > > xen_acpi_processor:      C1: ACPI HLT 1 uS
-> > > xen_acpi_processor:      C2: ACPI IOPORT 0x414 18 uS
-> > > xen_acpi_processor:      C3: ACPI IOPORT 0x415 350 uS
-> > > xen_acpi_processor: ACPI CPU6 - C-states uploaded.
-> > > xen_acpi_processor:      C1: ACPI HLT 1 uS
-> > > xen_acpi_processor:      C2: ACPI IOPORT 0x414 18 uS
-> > > xen_acpi_processor:      C3: ACPI IOPORT 0x415 350 uS
-> > > xen_acpi_processor: ACPI CPU6 - P-states uploaded.
-> > > xen_acpi_processor:      *P0: 1700 MHz, 2071 mW, 0 uS
-> > > xen_acpi_processor:       P1: 1600 MHz, 1520 mW, 0 uS
-> > > xen_acpi_processor:       P2: 1400 MHz, 1277 mW, 0 uS
-> > > xen_acpi_processor: ACPI CPU7 - C-states uploaded.
-> > > xen_acpi_processor:      C1: ACPI HLT 1 uS
-> > > xen_acpi_processor:      C2: ACPI IOPORT 0x414 18 uS
-> > > xen_acpi_processor:      C3: ACPI IOPORT 0x415 350 uS
-> > > xen_acpi_processor: ACPI CPU0 w/ PBLK:0x0
-> > > xen_acpi_processor: ACPI CPU0 w/ PST:coord_type = 254 domain = 0
-> > > xen_acpi_processor: CPU with ACPI ID 1 is unavailable
-> > Hm, that's weird, do you think you could check why it reports the CPU
-> > is unavailable?
-> If you would give me a hint at how I could check?
+drivers/net/can/m_can/m_can.c:1988: CHECK: Unnecessary parentheses around 'ec->tx_max_coalesced_frames_irq == 0'
++	if ((ec->tx_max_coalesced_frames_irq == 0) != (ec->tx_coalesce_usecs_irq == 0)) {
 
-It likely requires you to add printk statements to the kernel in order
-to figure out which conditional fails when running as a PVH dom0.
+drivers/net/can/m_can/m_can.c:1988: CHECK: Unnecessary parentheses around 'ec->tx_coalesce_usecs_irq == 0'
++	if ((ec->tx_max_coalesced_frames_irq == 0) != (ec->tx_coalesce_usecs_irq == 0)) {
 
-> Right now my guess is that C state and P state is not in sync, thus P state
-> are for every other
-> CPU and C state is for the first 8. AFAIK AMD only have performance-cores
-> (unlike Intel).
 
-Linux thinking the CPU is not online is more likely to be due to the
-ACPI ID differences when running as a PVH dom0.  Anyway, I will try to
-revisit this and figure out what's wrong.
+> +	if (ec->rx_coalesce_usecs_irq != 0 && ec->tx_coalesce_usecs_irq != 0 &&
+> +	    ec->rx_coalesce_usecs_irq != ec->tx_coalesce_usecs_irq) {
+> +		netdev_err(dev, "rx-usecs-irq %u needs to be equal to tx-usecs-irq %u if both are enabled\n",
+> +			   ec->rx_coalesce_usecs_irq,
+> +			   ec->tx_coalesce_usecs_irq);
+> +		return -EINVAL;
+> +	}
+>  
+>  	cdev->rx_max_coalesced_frames_irq = ec->rx_max_coalesced_frames_irq;
+>  	cdev->rx_coalesce_usecs_irq = ec->rx_coalesce_usecs_irq;
+> +	cdev->tx_max_coalesced_frames_irq = ec->tx_max_coalesced_frames_irq;
+> +	cdev->tx_coalesce_usecs_irq = ec->tx_coalesce_usecs_irq;
+> +
+> +	if (cdev->rx_coalesce_usecs_irq)
+> +		cdev->irq_timer_wait =
+> +			ns_to_ktime(cdev->rx_coalesce_usecs_irq * NSEC_PER_USEC);
+> +	else
+> +		cdev->irq_timer_wait =
+> +			ns_to_ktime(cdev->tx_coalesce_usecs_irq * NSEC_PER_USEC);
 
-> > 
-> > Overall I don't like the situation of the ACPI handling when running
-> > as dom0. It's fragile to rely on the data for dom0 CPUs to be
-> > filled by the system (by adding some band aids here and there so that
-> > the PV vCPUs are matched against the MADT objects) and then cloning
-> > the data for any physical CPU exceeding the number of dom0 virtual
-> > CPUs.
-> That's my understanding from earlier implementation as well, nobody actually
-> like it,
-> But the current solution is something working in a bad environment.
-> > 
-> > IMO it would be much better to just do the handling of ACPI processor
-> > objects in a Xen specific driver (preventing the native driver from
-> > attaching) in order to fetch the data and upload it to Xen.  This is
-> > what I've attempted to do on FreeBSD, and resulted in a cleaner
-> > implementation:
-> > 
-> > <link>
-> > 
-> > I however don't have time to do this right now for Linux.
+nit: perhaps adding us_to_ktime() and using it treewide would be interesting
+
+>  	return 0;
+>  }
+>  
+>  static const struct ethtool_ops m_can_ethtool_ops = {
+>  	.supported_coalesce_params = ETHTOOL_COALESCE_RX_USECS_IRQ |
+> -		ETHTOOL_COALESCE_RX_MAX_FRAMES_IRQ,
+> +		ETHTOOL_COALESCE_RX_MAX_FRAMES_IRQ |
+> +		ETHTOOL_COALESCE_TX_USECS_IRQ |
+> +		ETHTOOL_COALESCE_TX_MAX_FRAMES_IRQ,
+>  	.get_ts_info = ethtool_op_get_ts_info,
+>  	.get_coalesce = m_can_get_coalesce,
+>  	.set_coalesce = m_can_set_coalesce,
+> -- 
+> 2.39.2
 > 
-> Maybe I can take a stab, I very much like the climate of the kernel but
-> everything
-> seem so scary :) I've been trying to understand things better, how they're
-> all
-> connected.
-> > 
-> > > xen_acpi_processor: ACPI CPU2 w/ PBLK:0x0
-> > > xen_acpi_processor: ACPI CPU2 w/ PST:coord_type = 254 domain = 1
-> > > xen_acpi_processor: CPU with ACPI ID 3 is unavailable
-> > > xen_acpi_processor: ACPI CPU4 w/ PBLK:0x0
-> > > xen_acpi_processor: ACPI CPU4 w/ PST:coord_type = 254 domain = 2
-> > > xen_acpi_processor: CPU with ACPI ID 5 is unavailable
-> > > xen_acpi_processor: ACPI CPU6 w/ PBLK:0x0
-> > > xen_acpi_processor: ACPI CPU6 w/ PST:coord_type = 254 domain = 3
-> > > xen_acpi_processor: CPU with ACPI ID 7 is unavailable
-> > > xen_acpi_processor: ACPI CPU8 w/ PBLK:0x0
-> > > xen_acpi_processor: ACPI CPU8 w/ PST:coord_type = 254 domain = 4
-> > > xen_acpi_processor: CPU with ACPI ID 9 is unavailable
-> > > xen_acpi_processor: ACPI CPU10 w/ PBLK:0x0
-> > > xen_acpi_processor: ACPI CPU10 w/ PST:coord_type = 254 domain = 5
-> > > xen_acpi_processor: CPU with ACPI ID 11 is unavailable
-> > > xen_acpi_processor: ACPI CPU12 w/ PBLK:0x0
-> > > xen_acpi_processor: ACPI CPU12 w/ PST:coord_type = 254 domain = 6
-> > > xen_acpi_processor: CPU with ACPI ID 13 is unavailable
-> > > xen_acpi_processor: ACPI CPU14 w/ PBLK:0x0
-> > > xen_acpi_processor: ACPI CPU14 w/ PST:coord_type = 254 domain = 7
-> > > xen_acpi_processor: CPU with ACPI ID 15 is unavailable
-> > > xen_acpi_processor: ACPI CPU8 - P-states uploaded.
-> > > xen_acpi_processor:      *P0: 1700 MHz, 2071 mW, 0 uS
-> > > xen_acpi_processor:       P1: 1600 MHz, 1520 mW, 0 uS
-> > > xen_acpi_processor:       P2: 1400 MHz, 1277 mW, 0 uS
-> > > xen_acpi_processor: ACPI CPU10 - P-states uploaded.
-> > > xen_acpi_processor:      *P0: 1700 MHz, 2071 mW, 0 uS
-> > > xen_acpi_processor:       P1: 1600 MHz, 1520 mW, 0 uS
-> > > xen_acpi_processor:       P2: 1400 MHz, 1277 mW, 0 uS
-> > > xen_acpi_processor: ACPI CPU12 - P-states uploaded.
-> > > xen_acpi_processor:      *P0: 1700 MHz, 2071 mW, 0 uS
-> > > xen_acpi_processor:       P1: 1600 MHz, 1520 mW, 0 uS
-> > > xen_acpi_processor:       P2: 1400 MHz, 1277 mW, 0 uS
-> > > xen_acpi_processor: ACPI CPU14 - P-states uploaded.
-> > > xen_acpi_processor:      *P0: 1700 MHz, 2071 mW, 0 uS
-> > > xen_acpi_processor:       P1: 1600 MHz, 1520 mW, 0 uS
-> > > xen_acpi_processor:       P2: 1400 MHz, 1277 mW, 0 uS
-> > > 
-> > > As a bonus, here are the previous debug output on the same machine.
-> > I think the output below is with dom0 running as plain PV rather than
-> > PVH?
-> This is the upstream ACPI implementation vs yours. What would plain PV vs
-> PVH be in dom0?
-
-But that's always with Linux running as a dom0, or just running bare
-metal?
-
-Thanks, Roger.
