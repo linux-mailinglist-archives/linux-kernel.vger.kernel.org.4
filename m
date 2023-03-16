@@ -2,70 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9561F6BD9D4
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 21:07:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF9656BD9DB
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 21:08:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230141AbjCPUHU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 16:07:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60280 "EHLO
+        id S230259AbjCPUIG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 16:08:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229659AbjCPUHT (ORCPT
+        with ESMTP id S230030AbjCPUIE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 16:07:19 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E86936FFCE
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 13:07:12 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id r18so2640329wrx.1
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 13:07:12 -0700 (PDT)
+        Thu, 16 Mar 2023 16:08:04 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E85CA5699;
+        Thu, 16 Mar 2023 13:07:48 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id a2so3022854plm.4;
+        Thu, 16 Mar 2023 13:07:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678997231;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=r9ziMByUdjVcuxOVS7P6Nl63kEYULfddQWOptIA46eo=;
-        b=QKXngFB7FcpaiH7jG226b42Aot8t8FMJ8C3cVcTgJDmM344bK7NVUupukeh0vcg4Z9
-         1mIyzd5+SNdFDgWHhSh36R63dHsH/6Ovvt24Ysi9iLXqnz3r/OowkqiDhvXfl/3FRDgn
-         mVIXzelnfBYXyyCUAC5woPOt8i/0ou1PEFK1UJPphQ6j/stARNNxeDr50zyQ4LYqVyI6
-         E+Myxfy1oYNTsdM6Xl1X8dIN3veb3Y2z4RVIpBk9EtsxVXMfPjgca80bmYVSNIeyGdvE
-         Pots199v0Nm+eOioXoYgVDhIDDl4FObp1m1/vOgtqSeTwmeZpDy9Q+Flnx+bScqhc1wB
-         d61A==
+        d=gmail.com; s=20210112; t=1678997268;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=XgaE34WlFKyvwNRyoN2A9AopcNRZkWUVLIwBf1qOyzo=;
+        b=GDMLtLDfcK1D5wlRjBW7lxMaMjp0Z6N90Yh9wSaccCGXqL4TEHCO8BxgBcs6IK39DA
+         hrSn/p6csHUSsaxWy5Li6ZQndmGrfTsbeb35f8p7PmcAaF9p18cV+U6EGQBHEvJc0W1V
+         bqanY/yOnubREhnm9M8HU5N42GYV3gW6vtL7rr4ihMiCR8bCAWPVvoDTxFAphE0UBR4A
+         uYbsaw5xLwRFfa5FPfm0woLXgS1ts3hVd/ImnT5+qLXMm6nSGB+DpS/p86IPWpk0cAZ5
+         HXzSurfOZ0UugXqlodLtMIB2yJrSz0CUOlIX+Jv/VEPw9RL/561IcfonDxSEKZbfFSWL
+         X6Gw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678997231;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=r9ziMByUdjVcuxOVS7P6Nl63kEYULfddQWOptIA46eo=;
-        b=befcsVNpinIM30GkLGd7ai5MXrBv9fI6KJcUs9UuHPdRrBNtXSoiytXHOsqdf49Wdh
-         IAW8zL+qf98FiddY+BvByTKmcVNxYIucYFDWG1FYknVzu2ZXKhsbc2y9/1VAbzTb0WM/
-         dw8WGvBnPJunJvSLOup7iCCtqxL6DrTG5wHlByiLP0G3iJwLKgJ2u6S4rajgjdZPDFOl
-         ehbt9wfdBaV10HKJ93UEakMhg8mirUYMS6KzA8fHJFDncH4++kMCWheQcUu1VbJj7aBe
-         N1RngUT49zW3tJYn5SMQSmRpSERNeGBr6liN2JDL8H2nRBwGD+oYeXqUZ6LgFhBTS937
-         wJyQ==
-X-Gm-Message-State: AO0yUKUOa6F2qHh4gN3OsNDAG3mSLsoIhP1xOAXfvgVjM8akz8iN20Lw
-        XLnSzXh4sG9k7Q6+UbkVGc1MJ2s7t9M=
-X-Google-Smtp-Source: AK7set/3nen9rHtX0+dVEbzbs3rEyAtIebjLrZdlf4w1mK8soQvxo8erQrj2qFS8yKKjB7pl2xE4kw==
-X-Received: by 2002:a5d:448c:0:b0:2d0:bba8:38f3 with SMTP id j12-20020a5d448c000000b002d0bba838f3mr5361927wrq.14.1678997231026;
-        Thu, 16 Mar 2023 13:07:11 -0700 (PDT)
-Received: from suse.localnet (host-79-35-102-94.retail.telecomitalia.it. [79.35.102.94])
-        by smtp.gmail.com with ESMTPSA id w2-20020a5d6802000000b002cfe687fc7asm238780wru.67.2023.03.16.13.07.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Mar 2023 13:07:10 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Khadija Kamran <kamrankhadijadj@gmail.com>
-Cc:     outreachy@lists.linux.dev,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5] staging: axis-fifo: initialize timeouts in probe only
-Date:   Thu, 16 Mar 2023 21:07:09 +0100
-Message-ID: <2599595.k3LOHGUjKi@suse>
-In-Reply-To: <ZBNhXc3sVVLdibUF@khadija-virtual-machine>
-References: <ZBMR4s8xyHGqMm72@khadija-virtual-machine> <2162728.C4sosBPzcN@suse>
- <ZBNhXc3sVVLdibUF@khadija-virtual-machine>
+        d=1e100.net; s=20210112; t=1678997268;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XgaE34WlFKyvwNRyoN2A9AopcNRZkWUVLIwBf1qOyzo=;
+        b=uYwi0m825jqJti96i0H7pQymUENjY7FPRsZ1B16qPD4BFh4cI6PX+aT45eRTdSuRQv
+         23PfiwYkHB4EdAtD9bAeexGnjU3WxKJTX/ewfmc5BWVRtC11/nnFo8YVhN/MpKfNJH/O
+         X5tLJ6BOXzR+ZRDug+EDLazhg20eJBea5Y0EQPCTe53G8CUi54UD7rimJjZwwWKjAdFg
+         K4bj5+NEgn6kQokeKK49Iky07++AaiPavBs/QrMKrx4wsX0iNG9L0YW9+MhcQ4xcQjut
+         0VpHANT29PYhvKdtzW+ZLPOluMqqxm8EokFK5bfDc9FhYTALa1VvaTQZupj9gDhPOEso
+         KkaA==
+X-Gm-Message-State: AO0yUKV4SoengGlPQMnxJiHOkXbOJ71WJOXU4oq+/rayGp4aXiTkYiZ4
+        29Fl80glpcI/ObB6G/aGk78=
+X-Google-Smtp-Source: AK7set/EmN9A6HV7i6I2mpGfCkHSokbkfs3beFpJ6wfHptdaHxgdIWmEXl5EJHDgIQbU/3CdtChnnQ==
+X-Received: by 2002:a17:90b:3c0f:b0:23c:fdb9:b528 with SMTP id pb15-20020a17090b3c0f00b0023cfdb9b528mr5159040pjb.27.1678997267926;
+        Thu, 16 Mar 2023 13:07:47 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id mh10-20020a17090b4aca00b00233b1da232csm3596768pjb.41.2023.03.16.13.07.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Mar 2023 13:07:47 -0700 (PDT)
+Message-ID: <69230fab-349f-0666-de67-59b11001094d@gmail.com>
+Date:   Thu, 16 Mar 2023 13:07:39 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH net v2 1/2] ravb: avoid PHY being resumed when interface
+ is not up
+Content-Language: en-US
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        netdev@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Michal Kubiak <michal.kubiak@intel.com>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-kernel@vger.kernel.org
+References: <20230315074115.3008-1-wsa+renesas@sang-engineering.com>
+ <20230315074115.3008-2-wsa+renesas@sang-engineering.com>
+ <78e0a047-ad0a-2ca6-10f7-9734a191cefd@gmail.com> <ZBN2rE8WxLoQ1DVX@shikoro>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <ZBN2rE8WxLoQ1DVX@shikoro>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -74,122 +86,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On gioved=EC 16 marzo 2023 19:35:09 CET Khadija Kamran wrote:
-> On Thu, Mar 16, 2023 at 05:17:47PM +0100, Fabio M. De Francesco wrote:
-> > On gioved=EC 16 marzo 2023 16:09:08 CET Khadija Kamran wrote:
+On 3/16/23 13:06, Wolfram Sang wrote:
+> 
+>> Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+> 
+> Thanks!
+> 
+>> This is a pattern that a lot of drivers have, for better or for worse, it
+>> would be neat if we couldcome up with a common helper that could work mostly
+>> with OF configurations, what do you think?
+> 
+> I am not so experienced in this subsystem, so I only could identify 4
+> drivers which need this pattern, with one not using OF. So, while I
+> trust you with a helper being useful, I'd like to pass this task to
+> someone more experienced here.
 
-[snip]
-
-> Hey Fabio!
->=20
-> Hope you are doing well. After  spending a lot of time on this I am
-> stuck now. Kindly help me resolve this issue or understand it better.
->=20
-> Following your instructions I deleted my config file and copied one from
-> the /boot/ directory. After that I enabled the dependencies(CONFIG_OF=3Dy
-> and CONFIG_HAS_IOMEM=3Dy). I was successfully able to enable axis-fifo as
-> a module.
->=20
-> I then ran the following commands:
->  - make drivers/staging/axis-fifo/
-
-No, this is not the right command... you are not invoking the linker to mak=
-e=20
-the .ko object.
-
-Use "make M=3Ddrivers/staging/axis-fifo/"
-or "make M=3Ddrivers/staging/axis-fifo/ W=3D1 -j8" (the latter to enable le=
-vel '1'=20
-warning and run on your 2 * 4 logical cores).
-
->  - sudo make modules_install install(this command took hours) :'(
-
-This is odd, it shouldn't :-/
-
-As I said in another message, I'll set aside some time to help you check if=
-=20
-you need to fine tune your VM and Hypervisor configuration.=20
-
-I'm returning on the same subject we have been talked about because you sai=
-d=20
-at least twice that your builds and install are too slow. We'll try to=20
-diagnose it in an IRC session on #kernel-outreachy (I'm pretty sure for the=
-=20
-first days of next week - I'll send an invite).
-
-> > When you are done with build, install, and final reboot to test if your
-> > module can "modprobe" or "insmod" (i.e. link with the running custom=20
-kernel
-> > you built, installed and boot), try to compare the output of the follow=
-ing
-> > commands:
-> >=20
-> > # uname -a
-> > Linux suse 6.2.2-1-default #1 SMP PREEMPT_DYNAMIC Thu Mar  9 06:06:13 U=
-TC
-> > 2023 (44ca817) x86_64 x86_64 x86_64 GNU/Linux
->=20
-> The above command works
->=20
-> > AND
-> >=20
-> > # modinfo <name of the module you are testing here>
->=20
-> On running 'modinfo axis-fifo' I get error saying module axis-fifo not
-> found.
-
-Try again after building with "M=3Ddrivers/staging" (as said above). Don't=
-=20
-forget to run "make modules_install install" and then reboot into your cust=
-om=20
-built Kernel, not the distribution's kernel.
-
-While you are there, run "lsmod" to see all loaded modules. Pick one random=
-ly=20
-from the output list and run "modinfo name_of_the_module_you_want_info_abou=
-t".
-=20
-> > I'm running "modinfo kvm" (but showing only two of many lines):
-> >=20
-> > # modinfo kvm
-> > filename:       /lib/modules/6.2.2-1-default/kernel/arch/x86/kvm/
-kvm.ko.zst
-> > vermagic:       6.2.2-1-default SMP preempt mod_unload modversions
-> >=20
-> > Can you see that the kernel in "uname -a" and the filename and vermagic=
-=20
-have
-> > the same "6.2.2-1-default"? Well, so I'm sure I'm running the right Ker=
-nel
-> > and inserted the appropriate "kvm" module.
-> >=20
-> > Furthermore, before rebooting your custom kernel, you may also look at =
-the
-> > directory in the Kernel where you compiled your module and search for=20
-"*.o"
-> > "*mod*" and "*.ko" files. If you have them, you built your module=20
-properly.
->=20
-> There is a "*.o" file and "*.mod" file but there is no "*.ko" file in
-> the axis-fifo directory.
->=20
-> Kindly help me with this.
->=20
-> Regards,
-> Khadija
->=20
-> > Thanks,
-> >=20
-> > Fabio
-
-Let me know if this time it works.
-
-=46abio
-
-P.S.: Have you had time to read that "Linux Kernel Module Programming" guid=
-e I=20
-sent you the link of? You can find a lot of information about modules there=
-=2E=20
-I'd strongly recommend you to read it.=20
-
+That seems entirely fair, I have one such platform, so may come up with 
+a helper after I debug this other issue I am looking at :)
+-- 
+Florian
 
