@@ -2,136 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0AB56BD7C2
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 19:05:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F1FE6BD7C6
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 19:06:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230375AbjCPSFj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 14:05:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51682 "EHLO
+        id S230392AbjCPSGq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 14:06:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229849AbjCPSFg (ORCPT
+        with ESMTP id S229702AbjCPSGo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 14:05:36 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E79BA2B638;
-        Thu, 16 Mar 2023 11:05:34 -0700 (PDT)
-Received: from [192.168.10.39] (unknown [39.37.168.222])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 87F6A66030A0;
-        Thu, 16 Mar 2023 18:05:25 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1678989932;
-        bh=jwiEZNS4tHI3AyhUR5flPCUmaY4pqgMo6a2MuOTvpgc=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=UIKk2odsIVHeVbbI48EfWDpxnqExfuk36zZrRLgt0Qmook2AMvSibZKa576mOmHG2
-         LZmDmyzgeYfKRefHU/slR1yA/TK2MPeJ5YXaiUvcXZn8Axj9106fZHdh/24kzVSNnx
-         HgRG5pUyDAfAiyBfsnW1T2CrEb/Olz29roFry91NjFaUG2zGVEL0HsFIxaKahufTHH
-         RKbUppqFLOPocBRpG1jm490YFHRkzcLTj5KOMRmSntgsEj/tKOEBJzJK/pIbG1NlL9
-         jvNovDhTa3ZZYMseTC59Kk1llZi/L1UL7KYs8p5rGCxS2p5GW8CHmnon+5TMo6q9i2
-         YEQv+Q0xzRLVA==
-Message-ID: <5750b0af-4028-d9c3-8ae8-432713869a81@collabora.com>
-Date:   Thu, 16 Mar 2023 23:05:21 +0500
+        Thu, 16 Mar 2023 14:06:44 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5567130EB
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 11:06:43 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id a2so2670956plm.4
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 11:06:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google; t=1678990003;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8mCt8prfCSQ7oDsx1bTuDrvYgv/LfInuW8e+kaRN+58=;
+        b=N7kAVSsQ2PohremsNoTkrBI76k1fo4dMkpIMDKU+nAYfLZWsQ7F29kyOiVeTJdYwZX
+         Fd65aCXwSsf023/A96yZN403ncG2Q8IWQoinGlAomyWDPk79ic0Fpp+DHxUwB7utP5OV
+         ZX4wSoTBTeEV9AAb5l1N8EFXjOHRnq7lhBgBg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678990003;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8mCt8prfCSQ7oDsx1bTuDrvYgv/LfInuW8e+kaRN+58=;
+        b=Y9y0KDtc1vRMJQOerekQCH9z6JhxU+Gc/404qD8arIsAqfVdOsco8W4LWdglFN6MAX
+         XLJ461KOnDr+3G+e2wahetzoHm63HfwpcgH0u+iG3wLtNVmHJNRqDOltW4oRTQWt/MP5
+         p+cuBelyQDLn5LGQXP1awOXFzMO34VWJ26Ac35sKsP1M0l/N5BnUxEuDaz71JEHlDmT5
+         wNS0ID8qMp51QRLiTAcW7t6VtKsBPvAuqDv7ZZCxaOGvola7emUOj2ZL6ROnrqldoSpF
+         8gyaR+AjPO+G3Oq/YZ6muZ+hNt0Nr7qYxXzThd3DwkpI3xGG6FjffnIw2aWD+U1jp1yb
+         ysnw==
+X-Gm-Message-State: AO0yUKUa7Y7slveTVg18eXlf2I3iRwjJzqaQxd2Xs31dIuibVh97VIYn
+        eig3rXRmmgTGCGmAuasfmVa1yfSz7ZyrAfAubF2YNQ==
+X-Google-Smtp-Source: AK7set+M3yi0RkByN/JVYAXsavvcjHycEh223j6ZkIHzA6icQqmZXnmsToLX0ZkwVT+60lYsEynMe/S+6cJ5ovdwPBo=
+X-Received: by 2002:a17:90a:5386:b0:237:9cbe:22ad with SMTP id
+ y6-20020a17090a538600b002379cbe22admr1400389pjh.5.1678990002656; Thu, 16 Mar
+ 2023 11:06:42 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Peter Xu <peterx@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WC?= =?UTF-8?Q?aw?= 
-        <emmir@google.com>, Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Nadav Amit <namit@vmware.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Subject: Re: [PATCH v11 2/7] userfaultfd: Define dummy uffd_wp_range()
-Content-Language: en-US
-To:     Mike Rapoport <rppt@kernel.org>
-References: <20230309135718.1490461-1-usama.anjum@collabora.com>
- <20230309135718.1490461-3-usama.anjum@collabora.com>
- <ZBK+86eMMazwfhdx@kernel.org>
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <ZBK+86eMMazwfhdx@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230315181902.4177819-1-joel@joelfernandes.org>
+ <20230315181902.4177819-12-joel@joelfernandes.org> <996f0981-98f4-5077-12b6-bb093bbd28be@datenfreihafen.org>
+In-Reply-To: <996f0981-98f4-5077-12b6-bb093bbd28be@datenfreihafen.org>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Thu, 16 Mar 2023 14:06:30 -0400
+Message-ID: <CAEXW_YT-KEU-c6zUUEDPvBS=9HFmc1L6JeQiwXU-RfYR78sywA@mail.gmail.com>
+Subject: Re: [PATCH v2 12/14] mac802154: Rename kfree_rcu() to kvfree_rcu_mightsleep()
+To:     Stefan Schmidt <stefan@datenfreihafen.org>
+Cc:     Alexander Aring <alex.aring@gmail.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        David Girault <david.girault@qorvo.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Alexander Aring <aahringo@redhat.com>,
+        linux-wpan@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLACK autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/16/23 12:02 PM, Mike Rapoport wrote:
-> Hi,
-> 
-> On Thu, Mar 09, 2023 at 06:57:13PM +0500, Muhammad Usama Anjum wrote:
->> Define uffd_wp_range() for the cases when CONFIG_USERFAULTFD isn't set.
->>
->> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
->> ---
->>  include/linux/userfaultfd_k.h | 8 ++++++++
->>  1 file changed, 8 insertions(+)
->>
->> diff --git a/include/linux/userfaultfd_k.h b/include/linux/userfaultfd_k.h
->> index b680c0ec8b85..fd1a1ecdb5f6 100644
->> --- a/include/linux/userfaultfd_k.h
->> +++ b/include/linux/userfaultfd_k.h
->> @@ -182,6 +182,14 @@ extern int userfaultfd_wp_async(struct vm_area_struct *vma);
->>  
->>  #else /* CONFIG_USERFAULTFD */
->>  
->> +extern inline long uffd_wp_range(struct mm_struct *dst_mm,
-> 
-> static inline
-I'll update.
+On Thu, Mar 16, 2023 at 12:41=E2=80=AFPM Stefan Schmidt
+<stefan@datenfreihafen.org> wrote:
+>
+> Hello.
+>
+> On 15.03.23 19:18, Joel Fernandes (Google) wrote:
+> > The k[v]free_rcu() macro's single-argument form is deprecated.
+> > Therefore switch to the new k[v]free_rcu_mightsleep() variant. The goal
+> > is to avoid accidental use of the single-argument forms, which can
+> > introduce functionality bugs in atomic contexts and latency bugs in
+> > non-atomic contexts.
+> >
+> > The callers are holding a mutex so the context allows blocking. Hence
+> > using the API with a single argument will be fine, but use its new name=
+.
+> >
+> > There is no functionality change with this patch.
+> >
+> > Fixes: 57588c71177f ("mac802154: Handle passive scanning")
+> > Reviewed-by: Paul E. McKenney <paulmck@kernel.org>
+> > Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+> > ---
+> >   net/mac802154/scan.c | 4 ++--
+> >   1 file changed, 2 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/net/mac802154/scan.c b/net/mac802154/scan.c
+> > index 9b0933a185eb..5c191bedd72c 100644
+> > --- a/net/mac802154/scan.c
+> > +++ b/net/mac802154/scan.c
+> > @@ -52,7 +52,7 @@ static int mac802154_scan_cleanup_locked(struct ieee8=
+02154_local *local,
+> >       request =3D rcu_replace_pointer(local->scan_req, NULL, 1);
+> >       if (!request)
+> >               return 0;
+> > -     kfree_rcu(request);
+> > +     kvfree_rcu_mightsleep(request);
+> >
+> >       /* Advertize first, while we know the devices cannot be removed *=
+/
+> >       if (aborted)
+> > @@ -403,7 +403,7 @@ int mac802154_stop_beacons_locked(struct ieee802154=
+_local *local,
+> >       request =3D rcu_replace_pointer(local->beacon_req, NULL, 1);
+> >       if (!request)
+> >               return 0;
+> > -     kfree_rcu(request);
+> > +     kvfree_rcu_mightsleep(request);
+> >
+> >       nl802154_beaconing_done(wpan_dev);
+> >
+>
+> I just saw that there is a v2 of this patch. My ACK still stands as for v=
+1.
+>
+>
+> Acked-by: Stefan Schmidt <stefan@datenfreihafen.org>
 
-> 
->> +				 struct vm_area_struct *vma,
->> +				 unsigned long start, unsigned long len,
->> +				 bool enable_wp)
->> +{
->> +	return 0;
->> +}
->> +
-> 
-> I didn't see uffd_wp_range() defined in the previous patch.
-> Could be a rebase issue?
-> 
-> In any case, the stub should be defined in the same patch as the actual
-> function in order not to break bisectability.
-This 2/7 patch is a preparatory patch for 3/7 patch. I'll merge both then.
+Thanks! Applied the ack and will be taking it via the RCU tree as we discus=
+sed.
 
-> 
->>  /* mm helpers */
->>  static inline vm_fault_t handle_userfault(struct vm_fault *vmf,
->>  				unsigned long reason)
->> -- 
->> 2.39.2
->>
-> 
-
--- 
-BR,
-Muhammad Usama Anjum
+ - Joel
