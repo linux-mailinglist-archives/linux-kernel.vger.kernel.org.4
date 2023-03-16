@@ -2,101 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08AED6BCA11
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 09:53:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1393C6BCA07
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 09:53:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230410AbjCPIxm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 04:53:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46180 "EHLO
+        id S229744AbjCPIw7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 04:52:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230502AbjCPIwn (ORCPT
+        with ESMTP id S230308AbjCPIw0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 04:52:43 -0400
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C1EAB6D00;
-        Thu, 16 Mar 2023 01:51:55 -0700 (PDT)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 278841C0E45; Thu, 16 Mar 2023 09:51:12 +0100 (CET)
+        Thu, 16 Mar 2023 04:52:26 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11A97B6928
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 01:51:24 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id f16so833178ljq.10
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 01:51:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678956678;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FyfU1KJpQXcUs5jhogFBaoFTlgPH63DY/U4xjNHTWjQ=;
+        b=GVmkANiUKzqsxfD8qE2iPUWkvUhJ/HzvfWw1Dliysqxk4sB8mXoZ9qRqQ/bjIqWTYY
+         +96IqV9GT0cjHMbBllayjzzkmU04uve1BpJKTolaOvuxUGLB0C9Q54+mAbmpgAOaEKRN
+         cFgKdSeSIFBA9h9x/6QLpJk9FKkoizH6in3GYnnh0Oxu3fw/socVTYoYz1nsZfYB5rrh
+         mjPSNO/LE54ep0NDVEZfovEYzitlfNDsp8OCw8Qv21w6SNwvfu0pjwVeUSnmWNP8haYo
+         vicBPhw8JREVjuYDic/lf85fY7FZLbwSJjjJyD+I6T68BCa24+kdy+ZJwpvMzcjlDSch
+         VlhA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678956678;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=FyfU1KJpQXcUs5jhogFBaoFTlgPH63DY/U4xjNHTWjQ=;
+        b=OHCMjTwb8e9iJResxqKeR21ut8uRsWhdZO1sv4dl9hooEbMmiczUKNlbbAdxG8rRQh
+         Ggu37TG7p6XgdJITmiT9iaRP0B6ob+x0UsAyy7w0m16B6dwiQNHvuHQTJS/ctwTL13VZ
+         6ghV3mbl43/kSjsU02ZT8AVwmun8V75fqxnLNWuQsGnyAmy98RRnl1w9mlcxObqKuwd8
+         GOnebUMSvmegsHRxsTGPIrGoasAcFKK0xb7CjeVeQLmzKJi0dQwZBwrZfrj70rlnEbxh
+         nFGj7qoGIJumwt/di2BipBPD04Yujt6c8drD9AVX8IhxrggzRxeLu8ElzMDdg4Bv/QK7
+         Z7YA==
+X-Gm-Message-State: AO0yUKXmoD37WitSTLdohFey009lToMlurF1sfiGU/aL6Qp8I4KL6wL8
+        iC7JkF6PlvNGX+wk2pqOOyzUvA==
+X-Google-Smtp-Source: AK7set88JzAx3XXuUlQBet7+3BDgmO2U3N7bMdqpCAlN7dxwhc05DzBxKegTLBqJ7UBI/B/QPBGPQQ==
+X-Received: by 2002:a2e:9682:0:b0:299:aa9d:cea1 with SMTP id q2-20020a2e9682000000b00299aa9dcea1mr319553lji.47.1678956678537;
+        Thu, 16 Mar 2023 01:51:18 -0700 (PDT)
+Received: from [192.168.1.101] (abyj16.neoplus.adsl.tpnet.pl. [83.9.29.16])
+        by smtp.gmail.com with ESMTPSA id o11-20020a2e730b000000b002991baef49bsm251566ljc.12.2023.03.16.01.51.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Mar 2023 01:51:18 -0700 (PDT)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
 Date:   Thu, 16 Mar 2023 09:51:11 +0100
-From:   Pavel Machek <pavel@denx.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Missing patches in 4.19? was Re: [PATCH 4.19 00/39] 4.19.278-rc1
- review
-Message-ID: <ZBLYf4KZYj62HuHX@duo.ucw.cz>
-References: <20230315115721.234756306@linuxfoundation.org>
+Subject: [PATCH v5 05/10] drm/msm/dsi: dsi_cfg: Merge SC7180 config into
+ SDM845
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="hfoho1475IXJp3mD"
-Content-Disposition: inline
-In-Reply-To: <20230315115721.234756306@linuxfoundation.org>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NEUTRAL autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230307-topic-dsi_qcm-v5-5-9d4235b77f4f@linaro.org>
+References: <20230307-topic-dsi_qcm-v5-0-9d4235b77f4f@linaro.org>
+In-Reply-To: <20230307-topic-dsi_qcm-v5-0-9d4235b77f4f@linaro.org>
+To:     Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Krishna Manikandan <quic_mkrishn@quicinc.com>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>
+Cc:     Rob Herring <robh@kernel.org>, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+X-Mailer: b4 0.12.1
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1678956668; l=2206;
+ i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
+ bh=+ePdH/Gl1hrkxIW7hm63Vg7SPtBJUhhLLi5EVaR0ltI=;
+ b=8w//WdCiKTQ1Q2mhPCF/4PAiIaiCmaFTpPkBRC3P/oNR0L6U5mJ93AkvvZdml7I4DSw1vUGThg5m
+ +c0fcqs/A/gr4u5jrlAebphEnTwXQjUTFvQNHhrO7qkuDhYuOU8S
+X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
+X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The configs are identical, other than the number of *maximum* DSI
+hosts allowed. This isn't an issue, unless somebody deliberately
+tries to access the inexistent host by adding a dt node for it.
 
---hfoho1475IXJp3mD
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Remove the SC7180 struct and point the hw revision match to the
+SDM845's one. On a note, this could have been done back when
+7180 support was introduced.
 
-Hi!
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+ drivers/gpu/drm/msm/dsi/dsi_cfg.c | 15 ++-------------
+ 1 file changed, 2 insertions(+), 13 deletions(-)
 
-> Pseudo-Shortlog of commits:
+diff --git a/drivers/gpu/drm/msm/dsi/dsi_cfg.c b/drivers/gpu/drm/msm/dsi/dsi_cfg.c
+index 039f503233d7..03d98cbcc978 100644
+--- a/drivers/gpu/drm/msm/dsi/dsi_cfg.c
++++ b/drivers/gpu/drm/msm/dsi/dsi_cfg.c
+@@ -169,7 +169,7 @@ static const struct msm_dsi_config sdm845_dsi_cfg = {
+ 	.bus_clk_names = dsi_v2_4_clk_names,
+ 	.num_bus_clks = ARRAY_SIZE(dsi_v2_4_clk_names),
+ 	.io_start = {
+-		{ 0xae94000, 0xae96000 },
++		{ 0xae94000, 0xae96000 }, /* SDM845 / SDM670 / SC7180 */
+ 	},
+ };
+ 
+@@ -188,17 +188,6 @@ static const struct msm_dsi_config sm8550_dsi_cfg = {
+ 	},
+ };
+ 
+-static const struct msm_dsi_config sc7180_dsi_cfg = {
+-	.io_offset = DSI_6G_REG_SHIFT,
+-	.regulator_data = dsi_v2_4_regulators,
+-	.num_regulators = ARRAY_SIZE(dsi_v2_4_regulators),
+-	.bus_clk_names = dsi_v2_4_clk_names,
+-	.num_bus_clks = ARRAY_SIZE(dsi_v2_4_clk_names),
+-	.io_start = {
+-		{ 0xae94000 },
+-	},
+-};
+-
+ static const struct regulator_bulk_data sc7280_dsi_regulators[] = {
+ 	{ .supply = "vdda", .init_load_uA = 8350 },	/* 1.2 V */
+ };
+@@ -291,7 +280,7 @@ static const struct msm_dsi_cfg_handler dsi_cfg_handlers[] = {
+ 	{MSM_DSI_VER_MAJOR_6G, MSM_DSI_6G_VER_MINOR_V2_4_0,
+ 		&sdm845_dsi_cfg, &msm_dsi_6g_v2_host_ops},
+ 	{MSM_DSI_VER_MAJOR_6G, MSM_DSI_6G_VER_MINOR_V2_4_1,
+-		&sc7180_dsi_cfg, &msm_dsi_6g_v2_host_ops},
++		&sdm845_dsi_cfg, &msm_dsi_6g_v2_host_ops},
+ 	{MSM_DSI_VER_MAJOR_6G, MSM_DSI_6G_VER_MINOR_V2_5_0,
+ 		&sc7280_dsi_cfg, &msm_dsi_6g_v2_host_ops},
+ 	{MSM_DSI_VER_MAJOR_6G, MSM_DSI_6G_VER_MINOR_V2_6_0,
 
-There is something missing here.
+-- 
+2.39.2
 
-In 5.10-rc we have:
-
-de365066382ce0dbbf3b7189128ccc16e4eae198 net: caif: Fix use-after-free in c=
-fusbl_device_notify()
-
-4.14-rc has:
-
-921b052b636c72fbb97c50bd0be33bd7358ab374 net: caif: Fix use-after-free in c=
-fusbl_device_notify()
-
-But I don't see corresponding patch in 4.19.
-
-More than one patch may be affected:
-
- |70cec8eec 9781e9 .: 5.10| net: caif: Fix use-after-free in cfusbl_device_=
-notify()
- |f690886b9 9781e9 .: 4.14| net: caif: Fix use-after-free in cfusbl_device_=
-notify()
- |98e6078de 11f180 .: 5.10| nfc: fdp: add null check of devm_kmalloc_array =
-in fdp_nci_i2c_read_device_properties
- |012961752 11f180 .: 4.14| nfc: fdp: add null check of devm_kmalloc_array =
-in fdp_nci_i2c_read_device_properties
- |b4e4d4931 693aa2 o: 5.10| ila: do not generate empty messages in ila_xlat=
-_nl_cmd_get_mapping()
- |f2b350c04 693aa2 o: 4.14| ila: do not generate empty messages in ila_xlat=
-_nl_cmd_get_mapping()
-
-Best regards,
-								Pavel
-
---=20
-DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-
---hfoho1475IXJp3mD
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCZBLYfwAKCRAw5/Bqldv6
-8kBPAKCcpVZshDaytTYFTfpkxrsnpLxRFgCgoSk1P5lcFn5Weu1vWhhhtsdPgvI=
-=132h
------END PGP SIGNATURE-----
-
---hfoho1475IXJp3mD--
