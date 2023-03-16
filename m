@@ -2,201 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5902D6BDAA0
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 22:11:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 193C36BDAA7
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 22:13:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229948AbjCPVLZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 17:11:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56934 "EHLO
+        id S229631AbjCPVNh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 17:13:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjCPVLX (ORCPT
+        with ESMTP id S229595AbjCPVNf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 17:11:23 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1F4619C5B;
-        Thu, 16 Mar 2023 14:11:19 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YBrLCZE7ivm5+NZZnr7T2/EjnYOQtoW1kcXaTIgXsrz4sB/12IGC5fdKqw2wA694qmSVFHkT7qyiaC9i7rWkditgjD5hHeBcvPSv5L1huerKklUipj1agzANh8ZUZpx/bS0kiaLI7Y8knGKK3QDLtJjBQ4VHBlSGRslqCTz+O54mj3lAPR9UDNp2eFcPXlNFgzBzlw34RggffP1GtQJIJBMM0qjvNhNEfFyaQ/Qecv6nFg3KlQBSpPnDUZrVB1hOygMEjImrZmT4bbZOLwj6YpBnUMF9JdEj7iIpmsXlWzuyDMc8GtDh0bnuqy61V4RhofSRStURQVa4atFN6ipOKA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=oNr+UdpiheZwKszhKoc5Z/GUBaD7XVLkVpZJBHscPps=;
- b=dOeljnVgls/AyPcVxZEab+2CMhchSw4Kw1vGN4XR5YbcPynOGbddfQ3uiZGKqXC7kChlbTu1WtxesXIqfdH76tV5UNoYYXYxp4bTZyGpj0aDflaa9ol01YEFtuUbQCANQ6614LahODiQulaYFzGKo5JIMSzLabHkYcqU0B2Cq5T1OP9l3lO7auqLY6HQg3gjI2EvWxUuoR9lDJ8pAvYoR6B/8V8UGEMdh2P+2hNgCqUMiUthYOokmRhWQqnFj3nnzuiCPmk1KVgdXCUvBFK/A5yT6ymtYlEY6fbKGYzX4HunMl0VIWcK9xtMqFt+1eBnE6w4T88B17ljfEGZqfrjgw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=oNr+UdpiheZwKszhKoc5Z/GUBaD7XVLkVpZJBHscPps=;
- b=oC0WovGOBWY+gQIHQDBQsvPFhfD/0YSg0oSXPcTJicU+zuKdI8/Ia7cs2PYIoKWEtAHooGhOGFrrJ9gleLn4s37X9t8FAGbBySKtYuPsfutGAp2a0mdEqJo3fgFnkLCDrlpWxiOESM0T20YIIdvSc5N9mic8sPBo8Q+//HXpu8g=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MW3PR12MB4553.namprd12.prod.outlook.com (2603:10b6:303:2c::19)
- by DM4PR12MB5745.namprd12.prod.outlook.com (2603:10b6:8:5c::7) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6178.26; Thu, 16 Mar 2023 21:11:17 +0000
-Received: from MW3PR12MB4553.namprd12.prod.outlook.com
- ([fe80::3490:de56:de08:46f6]) by MW3PR12MB4553.namprd12.prod.outlook.com
- ([fe80::3490:de56:de08:46f6%9]) with mapi id 15.20.6178.029; Thu, 16 Mar 2023
- 21:11:17 +0000
-Message-ID: <c07dfb04-4502-47d8-ad89-9f9c7898f246@amd.com>
-Date:   Thu, 16 Mar 2023 16:11:09 -0500
+        Thu, 16 Mar 2023 17:13:35 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DFFBA76A1
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 14:13:32 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id g17so4079949lfv.4
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 14:13:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=semihalf.com; s=google; t=1679001210;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=EZht2X58FgZjJc2UYyPMsew0vdOtQyEdYhQD5ePFyeY=;
+        b=IuhuF8emKVnSAPRznRMDaFZODFCKL53aYJpjmZ7NFHz5J5zA29z4a8s8rUPjcZGcQh
+         C9NF9EPE44m0W/Ft3tAvtusJykH+abcbpxMNvVFItLWa4kDgGU5GdQdceuyzXM5e3GJQ
+         0zZbG/9gWQk0uB955rHAZRJdEf7Q8xRpbqCAqPu/KQWZBCd7FvY5cMPRHVv111QIHc9D
+         EnSNA1RkO0Lf/mmUwqvHQhdw9jlvDhHls84CIt1oJ7A8I4o8d5hX5+QRfRUiE1ccFA0Y
+         4JXNaXJ8rrrpnfO2O64nMdaKMdn/jOGs9B4IXLx4SMprRx6nYVJipFkX3m93mZn9DUhZ
+         yT9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679001210;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=EZht2X58FgZjJc2UYyPMsew0vdOtQyEdYhQD5ePFyeY=;
+        b=qALN+Mk+6M3+lmNSrNyVlnpjNNvNpJTXWn1i8nc2umXbQYm7rRCS4T6I4nQDynQmjW
+         AqIMIVQ3ZUSHJsvSzSa6cy7n9Sc6NqxtYb4Paidle8WxlGOQuDXG1EnBwuwJZm9zIH/G
+         z49+1SB2y3F2/sIoxOxvnY7hiR6cXTYJTTkwo3msVvyhhOfeHpKEMUi1KTETVEGE2+K0
+         +KopCNPt4sZQTvdKr+h869gNW/ACcTsXK0q49sxDn2BxGrxMz1rK1E0EUUL8wj+Ykn4V
+         TE6SIEyLYdCkrBAF0JGghcXAOj5zFq6JF8JXORPIyF2vH217xpZKvmjm82DCMP+D3LKY
+         Driw==
+X-Gm-Message-State: AO0yUKUmijIQMbzFOxc6R51X/aPZ2vkX66pzQ/gZODdx9ArWxlBnMyxk
+        ZP70nllDXGym4sz1Oj4CaBNbLQ==
+X-Google-Smtp-Source: AK7set9fMZrUVLJxQXI2GiQnpXFYqdAVAbHHMzkXfn2vcuZHQEhw9Nf409kV6vWz3A0lPxM1zNr7BA==
+X-Received: by 2002:ac2:5988:0:b0:4e0:54a3:4b3b with SMTP id w8-20020ac25988000000b004e054a34b3bmr3725955lfn.69.1679001210600;
+        Thu, 16 Mar 2023 14:13:30 -0700 (PDT)
+Received: from [10.43.1.252] ([83.142.187.84])
+        by smtp.gmail.com with ESMTPSA id g5-20020a19ee05000000b004d783b0d310sm41042lfb.307.2023.03.16.14.13.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Mar 2023 14:13:30 -0700 (PDT)
+Message-ID: <9ee7d5e3-2273-4aa7-6859-a5f82c82c34c@semihalf.com>
+Date:   Thu, 16 Mar 2023 22:13:28 +0100
+MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Reply-To: babu.moger@amd.com
-Subject: Re: [PATCH v3 2/7] x86/resctrl: Remove few unnecessary rftype flags
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v3 2/2] KVM: x86/ioapic: Resample the pending state of an
+ IRQ when unmasking
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        Marc Zyngier <maz@kernel.org>,
+        Eric Auger <eric.auger@redhat.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Rong L Liu <rong.l.liu@intel.com>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Tomasz Nowicki <tn@semihalf.com>,
+        Grzegorz Jaszczyk <jaz@semihalf.com>, upstream@semihalf.com,
+        Dmitry Torokhov <dtor@google.com>,
+        Eddie Dong <eddie.dong@intel.com>
+References: <20220818202701.3314045-1-dmy@semihalf.com>
+ <20220818202701.3314045-3-dmy@semihalf.com> <ZBJfuOOioFb0pVB6@google.com>
 Content-Language: en-US
-To:     Reinette Chatre <reinette.chatre@intel.com>, corbet@lwn.net,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de
-Cc:     fenghua.yu@intel.com, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, paulmck@kernel.org, akpm@linux-foundation.org,
-        quic_neeraju@quicinc.com, rdunlap@infradead.org,
-        damien.lemoal@opensource.wdc.com, songmuchun@bytedance.com,
-        peterz@infradead.org, jpoimboe@kernel.org, pbonzini@redhat.com,
-        chang.seok.bae@intel.com, pawan.kumar.gupta@linux.intel.com,
-        jmattson@google.com, daniel.sneddon@linux.intel.com,
-        sandipan.das@amd.com, tony.luck@intel.com, james.morse@arm.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bagasdotme@gmail.com, eranian@google.com,
-        christophe.leroy@csgroup.eu, jarkko@kernel.org,
-        adrian.hunter@intel.com, quic_jiles@quicinc.com,
-        peternewman@google.com
-References: <167778850105.1053859.14596357862185564029.stgit@bmoger-ubuntu>
- <167778867236.1053859.12920879751317268318.stgit@bmoger-ubuntu>
- <1a45fc82-9339-d086-2e70-27fd91906b8a@intel.com>
- <edcb0810-df39-669b-ebf2-5988a71525e9@amd.com>
- <4af7feb7-7663-7bab-33a4-7ffce092f55d@intel.com>
-From:   "Moger, Babu" <babu.moger@amd.com>
-In-Reply-To: <4af7feb7-7663-7bab-33a4-7ffce092f55d@intel.com>
+From:   Dmytro Maluka <dmy@semihalf.com>
+In-Reply-To: <ZBJfuOOioFb0pVB6@google.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BLAPR03CA0128.namprd03.prod.outlook.com
- (2603:10b6:208:32e::13) To MW3PR12MB4553.namprd12.prod.outlook.com
- (2603:10b6:303:2c::19)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MW3PR12MB4553:EE_|DM4PR12MB5745:EE_
-X-MS-Office365-Filtering-Correlation-Id: 725c72ec-89ba-48eb-f5b8-08db2662fb1a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: JbFq/QfW41n6sTFgZWi8pyz+wgl3F65ooueASNkW3iKCKkjQrYSBebHzlHrkDpTHPXCkwWPeFjChBuNqwmkMPqgsmEqzHKd0bALLiLuesLZdteHHH+yXW2W11Ma35Usk9CBhJ7IDKXxuDKtYRnlwJ4ZMYFUiBJyo/8JZ0u+qZpNX+4Kyvjb5VKfSconB2nI0+3GZdU+G607zXvdCvQBMkLCKlSz38YRmR4113lC2FI6Vk557xRTIf5YiJ1OKKGFUUjJUtBfVnzseLZagCMRItWAobADqOVJzkaSPwXesUmbHQ5bigUrTbM7XDpyF2bvuGEcTLa4wEj8VpuLd2cE6CJKrZrb1XyW0t7XAaQd/Ky0eOPQhjV9edGorA6DlRUSqp2qDphgLFRIYt2ek8FNup9aaPIqWOdvejxHs+yqMp5XEWR6J7nNTt9Ov6Uuod7VfkVvDBOY8IUQpGx+h5/QASqCzPl5Ng2e4Nrgh8jukL2ikubb10+TYdfLhHOS63kE8uT9+GbCS/UP9AyABVH34tArQwKwoE78JzQaUJW9HQbPUyDHdu5v+s5dQCjGpmENIkUirFotmNue0nZ8R1RXnne2Igb4dQByKqtfk/Ut/vwl8UT1/5T48KkVhSrd/WYvrQxBea49ZsNNXx9aD28FeTPaoK7JErEgZvq8X2Cz7L1kKZ9ojpDHX0ZV4jChaPG1fMwJc6mRLg3SPOO8jDo4HpZPUsQuOcp5vu4ULFWW//bE=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW3PR12MB4553.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(346002)(136003)(39860400002)(396003)(376002)(451199018)(36756003)(316002)(6506007)(41300700001)(83380400001)(6512007)(86362001)(8936002)(53546011)(6486002)(26005)(7416002)(5660300002)(2616005)(7406005)(3450700001)(478600001)(31696002)(66476007)(4326008)(66946007)(8676002)(38100700002)(2906002)(6666004)(186003)(66556008)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SmRhSEkzb1prS3dwcUVrOEtNb3h0ZUVidnVDcjdUYzBiOW9kNHlQK21CMi9i?=
- =?utf-8?B?a0tONFNndEhmVW1pVUtibGhIeFhaUmJJOU9aUUd1TnZRQ0ZJb1VCai9DbEUv?=
- =?utf-8?B?azBtMDZMOERPSDFnbThxQ2N5TmNzNUhXbkFXWjA0R0liZmVuMlRvUjhkczhT?=
- =?utf-8?B?RVplQjhmSXhRMnJIU0VMT1ZUcHVzdkQxRXpaMkNhVEVxV3lXYU11M0I5TVE3?=
- =?utf-8?B?MDdRSDBUekdNVDF2QXFPNGMxN2FOenhCNnJvVW5HZDlMbmpjREYxT3lLQU5z?=
- =?utf-8?B?M2NHbFN3QXB3ZjRpZFc3TXIxdGpFWUlhK284VFRDczR1M2pETUtrZUFycmFB?=
- =?utf-8?B?MDlCVytCMWRsTHVIaG4xVVdObE1nazNCbXdOV2g4aUZaRldIdmdHU2ppQ3BL?=
- =?utf-8?B?TUhYSytXcFJCc0g3LzEyaWNZN1BjbCs5UCtzRXJTNW83OHpTUWhqcms3U0pq?=
- =?utf-8?B?aGM1V3BucjlsaEFIbkdwaVYxUnMwOU9lcnFPblJjZmpyUnN2Lyt3UUY2T0ZN?=
- =?utf-8?B?U0FPSTdCalVvdFdrSWIzekgyUVFGYUxOVmUxY1FieGZlUFlTM1NkbVF3aEZG?=
- =?utf-8?B?Z3AwR3hYbUdWR0tFYnpIUWhrM1NmelBnem5OUG9XbjNrS3FQdmEya1BtUG5U?=
- =?utf-8?B?ZjZxWXVOeDloK1FkYkNjc1R1b0lqa3g2c3phWkFOa0FCbWRVdFVkK2NmdWll?=
- =?utf-8?B?THdBZEpFSWVhUXVBTmdReFN5cXA3N2FQa1dIYWdCMFdLMnhIakZSUmFXQUds?=
- =?utf-8?B?WVl3d2MwU0JxRUVEVHBKVi9lSlN2QzVMdDg2Ni8xc21IbFNJL2hGajhkcHRp?=
- =?utf-8?B?eUJXRG9RTWRlNWtEUFZVODNZbVdEVnJEUzZuSi80aWIyVEZzMjloalpFM1RS?=
- =?utf-8?B?TnpFRXpXRkdaalhmRUpUc0pFc2plTGlHWU5iamVSdVJpQmR1b2ZDTzM3VnBV?=
- =?utf-8?B?RThReWNzTUgzNEliWC96K3VrQUlmRzV1YkYvT0RyR3pzZ2xLcndpTmdRODk1?=
- =?utf-8?B?RkdESEFPdVVPVzE3bDVWeVlseVp6SEhBZW9KdFIrSDhQYmhHSi83Sjl5dG1k?=
- =?utf-8?B?VnFaM1JoMHArbkhyV0ZZa1ZGYUF4bGlrc3p2QmFFbGRLK2NIYmd5ZzZwVnln?=
- =?utf-8?B?QVhpME9jUmREZGM4MFdJRzIvNFBBOVVKSUJZMzh0SkVsczZERE1obHZ0S0xJ?=
- =?utf-8?B?aXRySDBVRy9rdXJaekM0OTd3cEpRK21RKy9VU0pINGtKbmtiT2dSTjVrTG4z?=
- =?utf-8?B?N2U0em5Rd1VHVnRDc3J1OG5Zc3hPT2tsMThrdWl3eHRKQTByMnphNUFzU1pY?=
- =?utf-8?B?UDJ1VEdVQUZINWJpWXlVbEZ1d1FXV0RkNUl0ZlJkV1NuOCtyWUpvR1p5dEs1?=
- =?utf-8?B?UXU3RmlsaDJ1emZFZnJOS1k5VTU4N2VoQjJrdm94UzM1cFQxbW01d0RtNXV3?=
- =?utf-8?B?VHRWZUoyZE9XMmpkaGNrcGVwMmgvV0tYcHdzMlJWQnFuN0ZQYjgwaXFwV013?=
- =?utf-8?B?L2w4dzhLek0xSkJoUE9hUlozc3VxWG56bjkvempQaVIvMTdZTFpNeGllbU1U?=
- =?utf-8?B?SVNGWFphOWxtZTJ1S205YitCQkltUW1LaC84cjhpdk14QmVtdzFxV2liTmd3?=
- =?utf-8?B?RE1IbElmZEgxeVFPcm81cXZHUWI5cmlmdllyUWYyZlVFazBIZlc2QWh1cmkv?=
- =?utf-8?B?dzJqNnhBcmt3T2RibDNFZ3hzaGJSQjEvL0YxRTNiak1IUEExRjZDRThWTndv?=
- =?utf-8?B?RmZoN1l3SzIwVERqVkM4NlZySksvZFJwczkxOHFGRzYwSDRQN2tta2VvZFdN?=
- =?utf-8?B?ZzltM0lPeE1PSk5WM01Zc0U2WW55ZFphc04xUVNGcS85UHp2MXI1dldyb3FJ?=
- =?utf-8?B?OWg1WUV6Uk1POFNtZHVJT0Q2WWFKb3IxZEh2dTArbHVGUitKLzFLN043TVJN?=
- =?utf-8?B?K2o1MHFqMk92ZnFkNXZxMVZ0RUVDWFNLV1dwZkdPN1pSTVRoYVJUT2dtY0RJ?=
- =?utf-8?B?Q3BvWXREWHhIL0F5bTRlQ2R0cEd3ZGlFTkMrNmhoUXFKVzd4ZEg4RUNnaSs2?=
- =?utf-8?B?ZEgrMkpyL1BLenBPTmVHZXRRdUlYZW5nTnZnWXhDWjVna3B5WGVEc3dnbkg0?=
- =?utf-8?Q?4JDeUi12KAUSg51hS+MaUUwOV?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 725c72ec-89ba-48eb-f5b8-08db2662fb1a
-X-MS-Exchange-CrossTenant-AuthSource: MW3PR12MB4553.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Mar 2023 21:11:16.7367
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: SCPu/XYLsFrz2lWcebyKW7y/aA0VE5Lx6vYAl+K3kkFXIkZOEu5ZBz7Mi1F/yGd3
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5745
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Reinette,
+Hi Sean,
 
-On 3/16/23 15:41, Reinette Chatre wrote:
-> Hi Babu,
+On 3/16/23 01:16, Sean Christopherson wrote:
+> Looks sane to me, just a bunch of cosmetic comments.  But this really needs input/review
+> from others.  I/O APIC and level triggered interrupts are not exactly in my wheelhouse.
+
+Ok, sure. All of your cosmetic suggestions below sound good to me.
+
 > 
-> On 3/16/2023 1:31 PM, Moger, Babu wrote:
->> On 3/15/23 13:33, Reinette Chatre wrote:
->>> On 3/2/2023 12:24 PM, Babu Moger wrote:
->>>> diff --git a/arch/x86/kernel/cpu/resctrl/rdtgroup.c b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
->>>> index 15ea5b550fe9..3c86506e54c1 100644
->>>> --- a/arch/x86/kernel/cpu/resctrl/rdtgroup.c
->>>> +++ b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
->>>> @@ -3163,7 +3163,7 @@ static int mkdir_rdt_prepare(struct kernfs_node *parent_kn,
->>>>  {
->>>>  	struct rdtgroup *prdtgrp, *rdtgrp;
->>>>  	struct kernfs_node *kn;
->>>> -	uint files = 0;
->>>> +	uint fflags = 0;
->>>
->>> Hoe does changing the variable name from "files" to "fflags" simplify
->>> the code?
+> On Thu, Aug 18, 2022, Dmytro Maluka wrote:
+>> ---
+>>  arch/x86/kvm/ioapic.c    | 36 ++++++++++++++++++++++++++++++++++--
+>>  include/linux/kvm_host.h |  8 ++++++++
+>>  virt/kvm/eventfd.c       | 39 +++++++++++++++++++++++++++++++++------
+>>  3 files changed, 75 insertions(+), 8 deletions(-)
 >>
->> I should have said readability of the code. Its actually fflags we are
->> passing to rdtgroup_add_files. While changing flags below, I changed the
->> variable name to fflags.
+>> diff --git a/arch/x86/kvm/ioapic.c b/arch/x86/kvm/ioapic.c
+>> index 765943d7cfa5..da7074d9b04e 100644
+>> --- a/arch/x86/kvm/ioapic.c
+>> +++ b/arch/x86/kvm/ioapic.c
+>> @@ -368,8 +368,40 @@ static void ioapic_write_indirect(struct kvm_ioapic *ioapic, u32 val)
+>>  		if (mask_before != mask_after)
+>>  			kvm_fire_mask_notifiers(ioapic->kvm, KVM_IRQCHIP_IOAPIC, index, mask_after);
+>>  		if (e->fields.trig_mode == IOAPIC_LEVEL_TRIG
+>> -		    && ioapic->irr & (1 << index))
+>> -			ioapic_service(ioapic, index, false);
+>> +		    && ioapic->irr & (1 << index)
+>> +		    && !e->fields.mask
+>> +		    && !e->fields.remote_irr) {
 > 
-> You are correct in that it is the actual fflags parameter but what it
-> reflects is which files will be created. I do not find that using "files"
-> makes the code unreadable. 
-
-Everything helps. I changed it because I was already changing few things
-in this function. That is not the only change in this function. Here is
-the main change in this function.
-
--	files = RFTYPE_BASE | BIT(RF_CTRLSHIFT + rtype);
--	ret = rdtgroup_add_files(kn, files);
-+	if (rtype == RDTCTRL_GROUP)
-+		fflags = RFTYPE_BASE | RFTYPE_CTRL;
-+	else
-+		fflags = RFTYPE_BASE | RFTYPE_MON;
-+
-+	ret = rdtgroup_add_files(kn, fflags);
-
-In my opinion this is more clearer. Also I can delete some of these
-un-necessary definitions below.
-
- #define RFTYPE_INFO			BIT(0)
- #define RFTYPE_BASE			BIT(1)
--#define RF_CTRLSHIFT			4
--#define RF_MONSHIFT			5
--#define RF_TOPSHIFT			6
--#define RFTYPE_CTRL			BIT(RF_CTRLSHIFT)
--#define RFTYPE_MON			BIT(RF_MONSHIFT)
--#define RFTYPE_TOP			BIT(RF_TOPSHIFT)
-+#define RFTYPE_CTRL			BIT(4)
-+#define RFTYPE_MON			BIT(5)
-+#define RFTYPE_TOP			BIT(6)
-
-Thanks
-Babu
+> Can you opportunistically change these to fit the preferred style of putting the &&
+> on the previous line?  Ignore the file's existing "style", this crud is ancient and
+> ugly (this goes for all of my comments).
+> 
+>> @@ -1987,6 +1988,13 @@ static inline int kvm_irqfd(struct kvm *kvm, struct kvm_irqfd *args)
+>>  }
+>>  
+>>  static inline void kvm_irqfd_release(struct kvm *kvm) {}
+>> +
+>> +static inline bool kvm_notify_irqfd_resampler(struct kvm *kvm,
+>> +					      unsigned irqchip,
+>> +					      unsigned pin)
+> 
+> "unsigned int" instead of bare "unsigned"
+> 
+>> +{
+>> +	return false;
+>> +}
+>>  #endif
+>>  
+>>  #else
+>> diff --git a/virt/kvm/eventfd.c b/virt/kvm/eventfd.c
+>> index 61aea70dd888..71f327019f1e 100644
+>> --- a/virt/kvm/eventfd.c
+>> +++ b/virt/kvm/eventfd.c
+>> @@ -55,6 +55,16 @@ irqfd_inject(struct work_struct *work)
+>>  			    irqfd->gsi, 1, false);
+>>  }
+>>  
+>> +/* Called within kvm->irq_srcu read side. */
+> 
+> Ne need for the comment, let lockdep do the heavy lifting.
+> 
+>> +static void __irqfd_resampler_notify(struct kvm_kernel_irqfd_resampler *resampler)
+> 
+> I don't see a need for the double underscores.  I assume the idea is to convey
+> that this is called under kvm->irq_srcu, but I just ended up looking for a version
+> without the underscores.
+> 
+>> +{
+>> +	struct kvm_kernel_irqfd *irqfd;
+>> +
+>> +	list_for_each_entry_srcu(irqfd, &resampler->list, resampler_link,
+>> +	    srcu_read_lock_held(&resampler->kvm->irq_srcu))
+> 
+> Align the indentation, i.e.
+> 
+> 	struct kvm_kernel_irqfd *irqfd;
+> 
+> 	list_for_each_entry_srcu(irqfd, &resampler->list, resampler_link,
+> 				 srcu_read_lock_held(&resampler->kvm->irq_srcu))
+> 		eventfd_signal(irqfd->resamplefd, 1);
+> 
+>> @@ -648,6 +653,28 @@ void kvm_irq_routing_update(struct kvm *kvm)
+>>  	spin_unlock_irq(&kvm->irqfds.lock);
+>>  }
+>>  
+>> +bool kvm_notify_irqfd_resampler(struct kvm *kvm, unsigned irqchip, unsigned pin)
+>> +{
+>> +	struct kvm_kernel_irqfd_resampler *resampler;
+>> +	int gsi, idx;
+>> +
+>> +	idx = srcu_read_lock(&kvm->irq_srcu);
+>> +	gsi = kvm_irq_map_chip_pin(kvm, irqchip, pin);
+>> +	if (gsi != -1)
+> 
+> This if-statement needs curly braces, the exemption doesn't apply if there are
+> multiple blocks? (can't think of the right name at the moment) in the guts of
+> the if-statement.
+> 
+>> +		list_for_each_entry_srcu(resampler,
+>> +					 &kvm->irqfds.resampler_list, link,
+>> +					 srcu_read_lock_held(&kvm->irq_srcu)) {
+>> +			if (resampler->notifier.gsi == gsi) {
+>> +				__irqfd_resampler_notify(resampler);
+>> +				srcu_read_unlock(&kvm->irq_srcu, idx);
+>> +				return true;
+>> +			}
+>> +		}
+>> +	srcu_read_unlock(&kvm->irq_srcu, idx);
+>> +
+>> +	return false;
+>> +}
+>> +
+>>  /*
+>>   * create a host-wide workqueue for issuing deferred shutdown requests
+>>   * aggregated from all vm* instances. We need our own isolated
+>> -- 
+>> 2.37.1.595.g718a3a8f04-goog
+>>
