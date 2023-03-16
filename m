@@ -2,102 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C2C26BD45E
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 16:52:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F8A66BD464
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 16:53:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231506AbjCPPwP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 11:52:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50902 "EHLO
+        id S230472AbjCPPxq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 11:53:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231286AbjCPPwI (ORCPT
+        with ESMTP id S230015AbjCPPxo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 11:52:08 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB17283FF
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 08:52:06 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id fd25so1422524pfb.1
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 08:52:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678981926;
-        h=content-disposition:mime-version:message-id:subject:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=tOcVYpEkBU+F2J1BLwbVIMceM+rp1K8jWNJcX1iHdIo=;
-        b=qBS8p0D8OOpgalLTxlU4DXIK3F+5cPuTq6SjsDfJ9wpnni3DIIeRQdwsP5PITOFAxs
-         bmi/77J0sVy3L6szsHMSntVJajGHtcP1idPWDamRtyL4bcuxkGa6IydOiDT0qfkqhlJO
-         HKtEAzMO5b5iPfGbd62Z0JamDBVKAvGYYY4jAkFD4YEszSxZB8SPOJRnOrEBxzJ3gw8V
-         p8z3g2vG240yzBukFaTy6M3ELn2RkngrXTvFl/iznQgvN4aMq/LDIIBt4MS7qpgretX3
-         2+KLmOnOIrdKpoutO9M2mfUbzOhJlTNUfeeYw88zffRTifYNRoqUxr4vY4stHTNzUeVL
-         Qc5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678981926;
-        h=content-disposition:mime-version:message-id:subject:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tOcVYpEkBU+F2J1BLwbVIMceM+rp1K8jWNJcX1iHdIo=;
-        b=nL0JyhNUa/2kpKDmIdoVfNxQA0nNf1xtojB/1hgdqmzfoPeO5Zwyjqxj0pGE1rEqMS
-         Y5/J2gyX9tEVTiByTd0cwHY7/2vQgNursXlAe3Hi9PZCpg0shXM9PIlOjPDZ9lhxZl+j
-         78lj1dJDWeVV9fWfA7GNu3OcfgIugUlSjP+wtTUMUWCwxPwIxW9KLQJ7gQO5s/obPV+p
-         oysbr5tBP+V7x1VqY3jb8vlCyi6VPHeXjSNcfzHJX+76n2w57Sr+AGl2ZXI4osRwI7DF
-         IerLjT37BxCdCtoHIhDpf1ucY5IqWhSFIeCTTuUVtM3T5F+xBQnUvEeNuoa9tSDjZWAI
-         ojLQ==
-X-Gm-Message-State: AO0yUKVIeiNRb+VNzux89eZ/cr9MeLJTtAW6s6fpOBqKqDuaUoEHBLrw
-        2IDsgUG5H8m2+FeP11JlYDOENW374Zyr9w==
-X-Google-Smtp-Source: AK7set88clC4PgM3UNPgE6+tMcTDdZ/P2AuucREOUuO2YQ0vkMTXCNnanVH7L5/QolZABvczlD1HLg==
-X-Received: by 2002:a62:8457:0:b0:625:eacf:caf9 with SMTP id k84-20020a628457000000b00625eacfcaf9mr2944270pfd.7.1678981926219;
-        Thu, 16 Mar 2023 08:52:06 -0700 (PDT)
-Received: from sumitra.com ([117.245.254.247])
-        by smtp.gmail.com with ESMTPSA id x21-20020aa784d5000000b00592eb6f239fsm5606817pfn.40.2023.03.16.08.52.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Mar 2023 08:52:05 -0700 (PDT)
-Date:   Thu, 16 Mar 2023 08:52:02 -0700
-From:   Sumitra Sharma <sumitraartsy@gmail.com>
-To:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-staging@lists.linux.dev, outreachy@lists.linux.dev
-Subject: [PATCH v2] Staging: octeon: Fix line ending with '('
-Message-ID: <20230316155202.GA82100@sumitra.com>
+        Thu, 16 Mar 2023 11:53:44 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB90DCA1D;
+        Thu, 16 Mar 2023 08:53:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 28576B82272;
+        Thu, 16 Mar 2023 15:53:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DAA5C433D2;
+        Thu, 16 Mar 2023 15:53:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678982019;
+        bh=Rj/V4HvM4lftSD7pR5Qhs+36gJgM/NfzJd5glSkQr/s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YIGG2QuV9M6wru4NUwa7EWkLGPBulz674i9mA5XOCE2CmTJ9uGsMePf+3NiFEKUof
+         GKxNtKYUhHmtHzmLkjHnv2cFxHtSOyaHSM/HpxF3HfVYU6l1ZgceT4hRjDKcc1cMZX
+         VCt70267hChSrXRbxqOvPKi75pPEcf2y1rgwCHZ81OIucGW56DqAL5zqMMF9OfQ3KP
+         Be8pEZHxzFjGeq/heU9OwWJJhqPFEuMh3dyn9CcIs6tYLXnDe3bvp8hz4TX+t3R8JI
+         nPmnIoub6qTFr45Q49rvmk/mypxAack4lCR7Fw4oAeJP2eDAoqN/MqPfX2plt/R0K8
+         Upu0a5Emv/UMA==
+Date:   Thu, 16 Mar 2023 15:53:33 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        devicetree@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-amlogic@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com
+Subject: Re: [PATCH] mfd: Use of_property_present() for testing DT property
+ presence
+Message-ID: <20230316155333.GL9667@google.com>
+References: <20230310144712.1543379-1-robh@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230310144712.1543379-1-robh@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adhere to coding-style.
+On Fri, 10 Mar 2023, Rob Herring wrote:
 
-Checkpatch has reported code style warning:
-CHECK: Lines should not end with a '('.
+> It is preferred to use typed property access functions (i.e.
+> of_property_read_<type> functions) rather than low-level
+> of_get_property/of_find_property functions for reading properties. As
+> part of this, convert of_get_property/of_find_property calls to the
+> recently added of_property_present() helper when we just want to test
+> for presence of a property and nothing more.
+>
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+>  drivers/mfd/bcm2835-pm.c | 2 +-
+>  drivers/mfd/khadas-mcu.c | 2 +-
+>  drivers/mfd/stmpe.c      | 2 +-
+>  3 files changed, 3 insertions(+), 3 deletions(-)
 
-Enhance the design of a function header:
-Align the function parameters immediately after '(' in a single line.
+Applied, thanks
 
-Signed-off-by: Sumitra Sharma <sumitraartsy@gmail.com>
----
-
-v2: Change patch subject and description.
-
- drivers/staging/octeon/octeon-stubs.h | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
-
-diff --git a/drivers/staging/octeon/octeon-stubs.h b/drivers/staging/octeon/octeon-stubs.h
-index 7a02e59e283f..3e7b92cd2e35 100644
---- a/drivers/staging/octeon/octeon-stubs.h
-+++ b/drivers/staging/octeon/octeon-stubs.h
-@@ -1372,9 +1372,7 @@ static inline void cvmx_fau_async_fetch_and_add32(uint64_t scraddr,
- 						  int32_t value)
- { }
- 
--static inline union cvmx_gmxx_rxx_rx_inbnd cvmx_spi4000_check_speed(
--	int interface,
--	int port)
-+static inline union cvmx_gmxx_rxx_rx_inbnd cvmx_spi4000_check_speed(int interface, int port)
- {
- 	union cvmx_gmxx_rxx_rx_inbnd r;
- 
--- 
-2.25.1
-
+--
+Lee Jones [李琼斯]
