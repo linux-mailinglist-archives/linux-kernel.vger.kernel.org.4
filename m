@@ -2,212 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9930F6BC824
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 09:04:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C20796BC828
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 09:04:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230206AbjCPIET (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 04:04:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42842 "EHLO
+        id S230184AbjCPIEl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 04:04:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230184AbjCPIEM (ORCPT
+        with ESMTP id S229770AbjCPIEj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 04:04:12 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 806FD4DBEB
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 01:03:55 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id y4so4200381edo.2
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 01:03:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678953834;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=b+cZwh2hI/bgGeKTrAQebGxqZCqqNNagfDg/OgVtVDg=;
-        b=cLqpe5KxXJEEEdU7lSOKM8wQALxgGMFJ7k3H3uZCLHZcwJt7RArA6ZlrxFXuc5L0PA
-         VY1qvxAs/j/HrGwfjHNXU5zEw8BerQ079NdnCkbydxb7QLjUT8xtYEDNP5IVymC+rT9X
-         2xZ/ztafdHhNtxpn4EHuLsL8d4CZ8uDrH5NzHLoNTcFQ4q5yYyGXOPjW6U0WQB/7aRsO
-         19asYfeQm60/lND7aq+D/a3VEyGqxStBfZobn3bbP0KKlrBr006iUZZ+ynG/7DGSn0F5
-         KQrmsmYhVMMt84ps4528f2AwuljVQiuVNQ38eb+zuaB4ri/W4XSpn9Wh9HUvf96tbb66
-         XXTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678953834;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=b+cZwh2hI/bgGeKTrAQebGxqZCqqNNagfDg/OgVtVDg=;
-        b=2emGZudhoeTrjsRZDbJpQgE4sRBPy4KsYnBy/an/QMD21DAQAJDGEY3ImxNIvi+nI3
-         qY9H/r/W4HtwjUjwMudxVXjcE7dazRuJ8lxA811ZdFV8V9/wcJnjPdhMjJ9dGeBe8wbE
-         Ajbk/D3kVPDYF1ZoFzQjJUQzdDPARWSAU9jobAWtVgLHYGeGj/5jeC0a6ITbE7NEKXcR
-         43NHYW+4YOFgXk7IM5EPPzONfv6KgDKzH1lPLT4d6p36feGL864szuZwV2Hzw2KmgLYb
-         zfvz6WOGTK+3zt8gkbXSnuxGQ5APENn5yTJkZ/s8UgvgAx+gkdQ78Gns2Vqmt4uOFHEf
-         6UDw==
-X-Gm-Message-State: AO0yUKX8D/NEeyPRNj/ETIQlR2HJFR34oTreEZ+8PzCV+zq1SyxGavsr
-        tcIKhAzbgZnaVu76dPf8Ub4qUQ==
-X-Google-Smtp-Source: AK7set++cHuluKT9KRDqdqU7M4iRO64R+sbBtAPAQnOnNLB7bIOQ5c0wLOiKR0IEg24HPnbLTZ1r2w==
-X-Received: by 2002:a17:906:7687:b0:8a6:e075:e364 with SMTP id o7-20020a170906768700b008a6e075e364mr8804524ejm.26.1678953833948;
-        Thu, 16 Mar 2023 01:03:53 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:9827:5f65:8269:a95f? ([2a02:810d:15c0:828:9827:5f65:8269:a95f])
-        by smtp.gmail.com with ESMTPSA id md21-20020a170906ae9500b0092b546b57casm3475456ejb.195.2023.03.16.01.03.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Mar 2023 01:03:53 -0700 (PDT)
-Message-ID: <9038dba0-6f72-44a1-9f57-1c08b03b9c31@linaro.org>
-Date:   Thu, 16 Mar 2023 09:03:52 +0100
+        Thu, 16 Mar 2023 04:04:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89A33E061;
+        Thu, 16 Mar 2023 01:04:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1E9CF61F5F;
+        Thu, 16 Mar 2023 08:04:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 016D7C433EF;
+        Thu, 16 Mar 2023 08:04:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1678953870;
+        bh=g296JjalEKy/VmXN5u7aQcjFNhAV8da0ymokVTzYSi0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gv24+HhQmw5Izep9kfmelYR02dlhyPAMXpvjfLOyzWbrUsokwIaNoe51FnW87fm7s
+         YQSIpbEbMqdOhjQv6zU9z8ZbrmzOf/igjfUpokKk20mDpiYsddMYVd7TWYiMaGzYGs
+         ylbI2dz3nRb/1bF3onTbLsBi5b4UWTwoFHPD/EDE=
+Date:   Thu, 16 Mar 2023 09:04:28 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Daniel =?iso-8859-1?Q?D=EDaz?= <daniel.diaz@linaro.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 6.2 000/141] 6.2.7-rc1 review
+Message-ID: <ZBLNjIGh6XzxWqYr@kroah.com>
+References: <20230315115739.932786806@linuxfoundation.org>
+ <20ff835c-99e1-4611-95d6-3050604c1b32@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v7 4/6] dt-bindings: net: Add support StarFive dwmac
-Content-Language: en-US
-To:     Guo Samin <samin.guo@starfivetech.com>,
-        linux-riscv@lists.infradead.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Yanhong Wang <yanhong.wang@starfivetech.com>,
-        Tommaso Merciai <tomm.merciai@gmail.com>
-References: <20230316043714.24279-1-samin.guo@starfivetech.com>
- <20230316043714.24279-5-samin.guo@starfivetech.com>
- <cfeec762-de75-f90f-7ba1-6c0bd8b70dff@linaro.org>
- <93a3b4bb-35a4-da7c-6816-21225b42f79b@starfivetech.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <93a3b4bb-35a4-da7c-6816-21225b42f79b@starfivetech.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20ff835c-99e1-4611-95d6-3050604c1b32@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/03/2023 09:02, Guo Samin wrote:
+On Wed, Mar 15, 2023 at 09:13:17AM -0600, Daniel D�az wrote:
+> Hello!
+> 
+> On 15/03/23 06:11, Greg Kroah-Hartman wrote:
+> > This is the start of the stable review cycle for the 6.2.7 release.
+> > There are 141 patches in this series, all will be posted as a response
+> > to this one.  If anyone has any issues with these being applied, please
+> > let me know.
+> > 
+> > Responses should be made by Fri, 17 Mar 2023 11:57:10 +0000.
+> > Anything received after that time might be too late.
+> > 
+> > The whole patch series can be found in one patch at:
+> > 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.2.7-rc1.gz
+> > or in the git tree and branch at:
+> > 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.2.y
+> > and the diffstat can be found below.
+> > 
+> > thanks,
+> > 
+> > greg k-h
+> 
+> We can see this build failure on PowerPC with Clang-16 and Clang-nightly, for cell_defconfig:
+> 
+> -----8<-----
+> error: unknown target CPU 'cell'
+> note: valid target CPU values are: generic, 440, 450, 601, 602, 603, 603e, 603ev, 604, 604e, 620, 630, g3, 7400, g4, 7450, g4+, 750, 8548, 970, g5, a2, e500, e500mc, e5500, power3, pwr3, power4, pwr4, power5, pwr5, power5x, pwr5x, power6, pwr6, power6x, pwr6x, power7, pwr7, power8, pwr8, power9, pwr9, power10, pwr10, powerpc, ppc, ppc32, powerpc64, ppc64, powerpc64le, ppc64le, future
+> make[2]: *** [/builds/linux/arch/powerpc/boot/Makefile:235: arch/powerpc/boot/cuboot.o] Error 1
+> ----->8-----
 > 
 > 
-> -------- 原始信息 --------
-> 主题: Re: [PATCH v7 4/6] dt-bindings: net: Add support StarFive dwmac
-> From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 收件人: Samin Guo <samin.guo@starfivetech.com>, linux-riscv@lists.infradead.org, netdev@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-> 日期: 2023/3/16
+> Then on GCC-8 and GCC-12, for ppc64e_defconfig, there's this:
 > 
->> On 16/03/2023 05:37, Samin Guo wrote:
->>> From: Yanhong Wang <yanhong.wang@starfivetech.com>
->>>
->>> Add documentation to describe StarFive dwmac driver(GMAC).
->>>
->> Thank you for your patch. There is something to discuss/improve.
->>
->>> Signed-off-by: Yanhong Wang <yanhong.wang@starfivetech.com>
->>> Signed-off-by: Samin Guo <samin.guo@starfivetech.com>
->>> Tested-by: Tommaso Merciai <tomm.merciai@gmail.com>
->>> ---
->>>  .../devicetree/bindings/net/snps,dwmac.yaml   |   1 +
->>>  .../bindings/net/starfive,jh7110-dwmac.yaml   | 130 ++++++++++++++++++
->>>  MAINTAINERS                                   |   6 +
->>>  3 files changed, 137 insertions(+)
->>>  create mode 100644 Documentation/devicetree/bindings/net/starfive,jh7110-dwmac.yaml
->>>
->>> diff --git a/Documentation/devicetree/bindings/net/snps,dwmac.yaml b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
->>> index e4519cf722ab..245f7d713261 100644
->>> --- a/Documentation/devicetree/bindings/net/snps,dwmac.yaml
->>> +++ b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
->>> @@ -91,6 +91,7 @@ properties:
->>>          - snps,dwmac-5.20
->>>          - snps,dwxgmac
->>>          - snps,dwxgmac-2.10
->>> +        - starfive,jh7110-dwmac
->>>  
->>>    reg:
->>>      minItems: 1
->>> diff --git a/Documentation/devicetree/bindings/net/starfive,jh7110-dwmac.yaml b/Documentation/devicetree/bindings/net/starfive,jh7110-dwmac.yaml
->>> new file mode 100644
->>> index 000000000000..b59e6bd8201f
->>> --- /dev/null
->>> +++ b/Documentation/devicetree/bindings/net/starfive,jh7110-dwmac.yaml
->>> @@ -0,0 +1,130 @@
->>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->>> +# Copyright (C) 2022 StarFive Technology Co., Ltd.
->>> +%YAML 1.2
->>> +---
->>> +$id: http://devicetree.org/schemas/net/starfive,jh7110-dwmac.yaml#
->>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>> +
->>> +title: StarFive JH7110 DWMAC glue layer
->>> +
->>> +maintainers:
->>> +  - Emil Renner Berthing <kernel@esmil.dk>
->>> +  - Samin Guo <samin.guo@starfivetech.com>
->>> +
->>> +select:
->>> +  properties:
->>> +    compatible:
->>> +      contains:
->>> +        enum:
->>> +          - starfive,jh7110-dwmac
->>> +  required:
->>> +    - compatible
->>> +
->>> +properties:
->>> +  compatible:
->>> +    items:
->>> +      - enum:
->>> +          - starfive,jh7110-dwmac
->>> +      - const: snps,dwmac-5.20
->>> +
->>
->> reg:
->>   maxItems: 1
-> 
->>
->>> +  clocks:
->>> +    items:
->>> +      - description: GMAC main clock
->>> +      - description: GMAC AHB clock
->>> +      - description: PTP clock
->>> +      - description: TX clock
->>> +      - description: GTX clock
->>> +
->>> +  clock-names:
->>> +    items:
->>> +      - const: stmmaceth
->>> +      - const: pclk
->>> +      - const: ptp_ref
->>> +      - const: tx
->>> +      - const: gtx
->>> +
->>
->> interrupts: ???
->>
-> 
-> Hi Krzysztof, 
-> 
-> snps,dwmac.yaml has defined the reg/interrupt/interrupt-names nodes,
-> and the JH7110 SoC is also applicable.
-> Maybe just add reg/interrupt/interrupt-names to the required ?
+> -----8<-----
+> powerpc64le-linux-gnu-gcc: error: missing argument to '-mcpu='
+> make[2]: *** [/builds/linux/arch/powerpc/boot/Makefile:238: arch/powerpc/boot/crt0.o] Error 1
+> powerpc64le-linux-gnu-gcc: error: missing argument to '-mcpu='
+> make[2]: *** [/builds/linux/arch/powerpc/boot/Makefile:238: arch/powerpc/boot/crtsavres.o] Error 1
+> powerpc64le-linux-gnu-gcc: error: missing argument to '-mcpu='
+> make[2]: *** [/builds/linux/arch/powerpc/boot/Makefile:235: arch/powerpc/boot/cuboot.o] Error 1
+> powerpc64le-linux-gnu-gcc: error: missing argument to '-mcpu='
+> make[2]: *** [/builds/linux/arch/powerpc/boot/Makefile:235: arch/powerpc/boot/devtree.o] Error 1
+> [...]
+> powerpc64le-linux-gnu-gcc: error: missing argument to '-mcpu='
+> make[2]: *** [/builds/linux/arch/powerpc/boot/Makefile:235: arch/powerpc/boot/fdt_wip.o] Error 1
+> make[2]: Target 'arch/powerpc/boot/zImage' not remade because of errors.
+> make[1]: *** [/builds/linux/arch/powerpc/Makefile:247: zImage] Error 2
+> make[1]: Target '__all' not remade because of errors.
+> make: *** [Makefile:242: __sub-make] Error 2
+> make: Target '__all' not remade because of errors.
+> ----->8-----
 
-You need to constrain them.
+I think I've fixed both of these for -rc2, but it's hard to test on my
+end.
 
-> 
-> 
->   required:
->     - compatible
-> +   - reg
->     - clocks
->     - clock-names
-> +   - interrupts
-> +   - interrupt-names
->     - resets
->     - reset-names
-Best regards,
-Krzysztof
+thanks,
 
+greg k-h
