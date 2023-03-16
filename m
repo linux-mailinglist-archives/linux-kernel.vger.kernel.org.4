@@ -2,240 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB6C26BC4EC
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 04:50:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03A6A6BC4F5
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 04:50:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229545AbjCPDsi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 23:48:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39794 "EHLO
+        id S230078AbjCPDuY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 23:50:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229813AbjCPDsN (ORCPT
+        with ESMTP id S230198AbjCPDt7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 23:48:13 -0400
-Received: from mail-oo1-xc2a.google.com (mail-oo1-xc2a.google.com [IPv6:2607:f8b0:4864:20::c2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 649309E309
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 20:48:10 -0700 (PDT)
-Received: by mail-oo1-xc2a.google.com with SMTP id n27-20020a4ad63b000000b005252709efdbso54746oon.4
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 20:48:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kali.org; s=google; t=1678938489;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MviEEWSTJxxSnXQ8MTU0qt5CxziP8W4MnnoSp2fynjs=;
-        b=XWl8vLRg8SWI+k7I74n/oowWqeKyPcjyMWA1lH1QzC2rDjJLZXfwRheUyKbLXuiN2e
-         /iOUiLF7OQcqv2an0KOFsoh5jUVWiJMRSlcNzV/sWLhjc00F8twiykhe4mncckWWyMBU
-         bikDI/5mXlnBz+Cmbrh3a5W56A6f5R1OEr/xF8nDQ8U4rSd68bwvWiGhloB/4PILWup9
-         ylD8uXJk2lvidmyjGn9YfGsAiKF/flB8o1QWdaHka8hyOhL9zjBgi7FO48x6Z5KRn1ec
-         y2ybe9MSGq91TQKPuqIw3+4H6spkIvl/fEtetMp2I0GRsE5HlTy+PXmtd/aGptkV+aiW
-         o0Cg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678938489;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MviEEWSTJxxSnXQ8MTU0qt5CxziP8W4MnnoSp2fynjs=;
-        b=nZ3mjqOXGaqPXVqO2miXSzsbYMTelV7/50GSbmgm9k6erg5q/kEtRcPODKfCgbQUBY
-         puK4PlcagjXQp0gtyDuzj3rNI+Xfa682yII/L3pJFCG8FPMAH1gR6sUEAyw6mctR08Tx
-         6N5dbeFywuurHuF/Gm3m4D0etd13oV+2fcvn5FUakS4YvQHTwLkW3IqV/cGPmXv2mCOj
-         Ek8Bv1lK3UYaTEwqaf6J39OzsOZvMp15hM3Sv0tNyaA6hi/ZJX2uVqSrA5uvucXbzOfY
-         SvoWJLXb+Ss65bGAPTSStbzK4hFUvGUq9bMiRGS60soWCBCHTkYYD4jXz/xKi2/ELTEI
-         P0xw==
-X-Gm-Message-State: AO0yUKUjhgx6MH8p2SDvP9gDXVo8zhxzIjd4/XZLPaACJSEKPgaY005V
-        imf7FSpClFICggQ13Nbqeyq1/Q==
-X-Google-Smtp-Source: AK7set+5yVTtbc+9dBUUCDW5xTHgd8ufHL8cPwAZ0n2vsAuStk3stYLCvHf+RRuXDZIsnLHWOvywQA==
-X-Received: by 2002:a4a:d286:0:b0:525:3dc9:c39b with SMTP id h6-20020a4ad286000000b005253dc9c39bmr11389658oos.0.1678938489411;
-        Wed, 15 Mar 2023 20:48:09 -0700 (PDT)
-Received: from localhost (23-118-233-243.lightspeed.snantx.sbcglobal.net. [23.118.233.243])
-        by smtp.gmail.com with ESMTPSA id b3-20020a9d4783000000b0068bc48c61a5sm3054659otf.19.2023.03.15.20.48.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Mar 2023 20:48:09 -0700 (PDT)
-From:   Steev Klimaszewski <steev@kali.org>
-To:     Steev Klimaszewski <steev@kali.org>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        Sven Peter <sven@svenpeter.dev>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-bluetooth@vger.kernel.org,
-        Mark Pearson <markpearson@lenovo.com>,
-        Johan Hovold <johan@kernel.org>
-Subject: [PATCH v6 4/4] arm64: dts: qcom: sc8280xp-x13s: Add bluetooth
-Date:   Wed, 15 Mar 2023 22:47:58 -0500
-Message-Id: <20230316034759.73489-5-steev@kali.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230316034759.73489-1-steev@kali.org>
-References: <20230316034759.73489-1-steev@kali.org>
+        Wed, 15 Mar 2023 23:49:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C00D12875
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 20:49:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5DEFD60FDE
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 03:49:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7BD2C433EF;
+        Thu, 16 Mar 2023 03:49:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678938554;
+        bh=rG+Uszcbg+9oJV591AEioVKZv2hgUyy8jPQH7Hru3ug=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=LeOpaGobVPNzqSlPPnRvYsZp6Pg35eQSz2aKc4C8r6d0OgWPB0f16Q3Tv/2eRIrb7
+         7wIIn9VAHY/1piYXPceB2QzwSWoiLsJh0uvuiRZIY6FJ+65WHfGpwTvt4ICQrU+c7g
+         6dHmvmuT6Imiu9F6SWAGnBoeSHAE/21M1TyZe8wZxC6nWmtqx7EZAU7GHigOCQvXvg
+         w6IlsZYrjzx7PxmfzjpBOXpcZwQTT4dfJA67JRND43LG9cIZsfc/Yby2qUBlDeWq5a
+         /5cb8ei22QN7dLI02bhQhLcc0rhvE9tObgSouMunzcteQMIoyJTXcGh0CW3fslffq0
+         semVNytl/vauA==
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id 548501540395; Wed, 15 Mar 2023 20:49:14 -0700 (PDT)
+Date:   Wed, 15 Mar 2023 20:49:14 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     "Joel Fernandes (Google)" <joel@joelfernandes.org>
+Cc:     Andy Whitcroft <apw@canonical.com>, Joe Perches <joe@perches.com>,
+        Dwaipayan Ray <dwaipayanray1@gmail.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 14/14] checkpatch: Error out if deprecated RCU API used
+Message-ID: <2747f36d-1598-4734-81f7-c42d4f354606@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <20230315181902.4177819-1-joel@joelfernandes.org>
+ <20230315181902.4177819-14-joel@joelfernandes.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230315181902.4177819-14-joel@joelfernandes.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Lenovo Thinkpad X13s has a WCN6855 Bluetooth controller on uart2,
-add this.
+On Wed, Mar 15, 2023 at 06:19:01PM +0000, Joel Fernandes (Google) wrote:
+> Single-argument kvfree_rcu() usage is being deprecated [1] [2]. However,
+> till all users are converted, we would like to introduce checkpatch
+> errors for new patches submitted.
+> 
+> This patch adds support for the same. Tested with a trial patch.
+> 
+> For now, we are only considering usages that don't have compound
+> nesting, for example ignore: kvfree_rcu( (rcu_head_obj), rcu_head_name).
+> This is sufficient as such usages are unlikely.
+> 
+> Once all users are converted and we remove the old API, we can also revert this
+> checkpatch patch then.
+> 
+> [1] https://lore.kernel.org/rcu/CAEXW_YRhHaVuq+5f+VgCZM=SF+9xO+QXaxe0yE7oA9iCXK-XPg@mail.gmail.com/
+> [2] https://lore.kernel.org/rcu/CAEXW_YSY=q2_uaE2qo4XSGjzs4+C102YMVJ7kWwuT5LGmJGGew@mail.gmail.com/
+> 
+> Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
 
-Signed-off-by: Steev Klimaszewski <steev@kali.org>
----
-Changes since v5:
- * Update patch subject
- * Specify initial mode (via guess) for vreg_s1c
- * Drop uart17 definition
- * Rename bt_en to bt_default because configuring more than one pin
- * Correct (maybe) bias configurations
- * Correct cts gpio
- * Split rts-tx into two nodes
- * Drop incorrect link in the commit message
+With or without the change suggested below:
 
-Changes since v4:
- * Address Konrad's review comments.
+Acked-by: Paul E. McKenney <paulmck@kernel.org>
 
-Changes since v3:
- * Add vreg_s1c
- * Add regulators and not dead code
- * Fix commit message changelog
+> ---
+>  scripts/checkpatch.pl | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+> 
+> diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
+> index bd44d12965c9..9da0a3cb1615 100755
+> --- a/scripts/checkpatch.pl
+> +++ b/scripts/checkpatch.pl
+> @@ -6388,6 +6388,15 @@ sub process {
+>  			}
+>  		}
+>  
+> +# check for soon-to-be-deprecated single-argument k[v]free_rcu() API
+> +		if ($line =~ /\bk[v]?free_rcu\s*\([^(]+\)/) {
+> +			if ($line =~ /\bk[v]?free_rcu\s*\([^,]+\)/) {
+> +				ERROR("DEPRECATED_API",
+> +				      "Single-argument k[v]free_rcu() API is deprecated, please call the API with an rcu_head object passed, like: k[v]free_rcu(object_ptr, rcu_head_name);  " . $herecurr);
 
-Changes since v2:
- * Remove dead code and add TODO comment
- * Make dtbs_check happy with the pin definitions
+Perhaps also point them at kvfree_rcu_mightsleep()?
 
- .../qcom/sc8280xp-lenovo-thinkpad-x13s.dts    | 80 +++++++++++++++++++
- 1 file changed, 80 insertions(+)
+							Thanx, Paul
 
-diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-index 53ae75fb52ed..b3221c27903a 100644
---- a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-+++ b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-@@ -24,6 +24,7 @@ / {
- 	aliases {
- 		i2c4 = &i2c4;
- 		i2c21 = &i2c21;
-+		serial1 = &uart2;
- 	};
- 
- 	wcd938x: audio-codec {
-@@ -431,6 +432,16 @@ regulators-1 {
- 		qcom,pmic-id = "c";
- 		vdd-bob-supply = <&vreg_vph_pwr>;
- 
-+		vreg_s1c: smps1 {
-+			regulator-name = "vreg_s1c";
-+			regulator-min-microvolt = <1880000>;
-+			regulator-max-microvolt = <1900000>;
-+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+			regulator-allowed-modes = <RPMH_REGULATOR_MODE_AUTO>,
-+						  <RPMH_REGULATOR_MODE_RET>;
-+			regulator-allow-set-load;
-+		};
-+
- 		vreg_l1c: ldo1 {
- 			regulator-name = "vreg_l1c";
- 			regulator-min-microvolt = <1800000>;
-@@ -901,6 +912,32 @@ &qup0 {
- 	status = "okay";
- };
- 
-+&uart2 {
-+	pinctrl-0 = <&uart2_default>;
-+	pinctrl-names = "default";
-+
-+	status = "okay";
-+
-+	bluetooth {
-+		compatible = "qcom,wcn6855-bt";
-+
-+		vddio-supply = <&vreg_s10b>;
-+		vddbtcxmx-supply = <&vreg_s12b>;
-+		vddrfacmn-supply = <&vreg_s12b>;
-+		vddrfa0p8-supply = <&vreg_s12b>;
-+		vddrfa1p2-supply = <&vreg_s11b>;
-+		vddrfa1p7-supply = <&vreg_s1c>;
-+
-+		max-speed = <3200000>;
-+
-+		enable-gpios = <&tlmm 133 GPIO_ACTIVE_HIGH>;
-+		swctrl-gpios = <&tlmm 132 GPIO_ACTIVE_HIGH>;
-+
-+		pinctrl-0 = <&bt_default>;
-+		pinctrl-names = "default";
-+	};
-+};
-+
- &qup1 {
- 	status = "okay";
- };
-@@ -1175,6 +1212,21 @@ hastings_reg_en: hastings-reg-en-state {
- &tlmm {
- 	gpio-reserved-ranges = <70 2>, <74 6>, <83 4>, <125 2>, <128 2>, <154 7>;
- 
-+	bt_default: bt-default-state {
-+		hstp-sw-ctrl-pins {
-+			pins = "gpio132";
-+			function = "gpio";
-+			bias-pull-down;
-+		};
-+
-+		hstp-bt-en-pins {
-+			pins = "gpio133";
-+			function = "gpio";
-+			drive-strength = <16>;
-+			bias-disable;
-+		};
-+	};
-+
- 	edp_reg_en: edp-reg-en-state {
- 		pins = "gpio25";
- 		function = "gpio";
-@@ -1196,6 +1248,34 @@ i2c4_default: i2c4-default-state {
- 		bias-disable;
- 	};
- 
-+	uart2_default: uart2-default-state {
-+		cts-pins {
-+			pins = "gpio121";
-+			function = "qup2";
-+			bias-pull-down;
-+		};
-+
-+		rts-pins {
-+			pins = "gpio122";
-+			function = "qup2";
-+			drive-strength = <2>;
-+			bias-disable;
-+		};
-+
-+		tx-pins {
-+			pins = "gpio123";
-+			function = "qup2";
-+			drive-strength = <2>;
-+			bias-disable;
-+		};
-+
-+		rx-pins {
-+			pins = "gpio124";
-+			function = "qup2";
-+			bias-pull-up;
-+		};
-+	};
-+
- 	i2c21_default: i2c21-default-state {
- 		pins = "gpio81", "gpio82";
- 		function = "qup21";
--- 
-2.39.2
-
+> +			}
+> +		}
+> +
+> +
+>  # check for unnecessary "Out of Memory" messages
+>  		if ($line =~ /^\+.*\b$logFunctions\s*\(/ &&
+>  		    $prevline =~ /^[ \+]\s*if\s*\(\s*(\!\s*|NULL\s*==\s*)?($Lval)(\s*==\s*NULL\s*)?\s*\)/ &&
+> -- 
+> 2.40.0.rc1.284.g88254d51c5-goog
+> 
