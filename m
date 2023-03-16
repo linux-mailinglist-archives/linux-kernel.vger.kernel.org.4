@@ -2,214 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEA846BCFE1
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 13:50:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 581606BCFE6
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 13:51:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230036AbjCPMuO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 08:50:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49132 "EHLO
+        id S230058AbjCPMvP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 08:51:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbjCPMuL (ORCPT
+        with ESMTP id S229516AbjCPMvL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 08:50:11 -0400
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDB9CC6400
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 05:50:05 -0700 (PDT)
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 700A03F22A
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 12:49:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1678970999;
-        bh=RTE1+/kyJT3ysYPqhg0Rdy0OJWOhaJ6nlSBBfgWtRzU=;
-        h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-         Content-Type:In-Reply-To;
-        b=UwWorSUMDynjjm2osInyHGLZc/zMydeVdAUXAhjmoirTaYRbMD63o/79sl57x8tHw
-         iX+aW/ApbGLQrg+4GOBMhqyzSUZNbK58pjhNIRHHUA4NCXwHJYpXvoIeEEehXj9vMO
-         xRfko5nTMk3SAnDT6r2sKYNuILtNQTyqfqTP0Do0Vwbw/G4Qp8YHiWhqU4Cim6VSji
-         CJVU6lP2M61o36oC3gXdSSoHweR4raRWCNUK7kzsqPUN9QW+yYOoxTc65qH1/JX2h5
-         JjtQA0XSABS7kdDss+n2u8vZZ1jw18ies/H6CTQ6u2GJh0+MJ3g6VkoJc92q0ADTbw
-         374GpOmFJ4AYA==
-Received: by mail-ed1-f71.google.com with SMTP id b7-20020a056402350700b004d2a3d5cd3fso2881184edd.8
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 05:49:59 -0700 (PDT)
+        Thu, 16 Mar 2023 08:51:11 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6588CB07C
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 05:50:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678971015;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=RPdjSzj6jsV5topoFHb/CW9wwLlrUfcPQ2AkSEnDD0g=;
+        b=Njpa0f+uzTSrl1di/fkYZrIVe8ZF0aJyON13x2B3YuCrDwl2pO0QlY8QQwDDoCcDBHMXU/
+        rPis6Jx5ZtXi+BOyMJyvvLaIw4YD/FhcHzto2IM0K5NNdjfps+J+hycrhkOUG71Zpx69gD
+        MPoWQ3cHHThaYdB+ONsAv8yr7tm43mQ=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-130-cxcNbvhEO9-3T66mGm3b3Q-1; Thu, 16 Mar 2023 08:50:12 -0400
+X-MC-Unique: cxcNbvhEO9-3T66mGm3b3Q-1
+Received: by mail-ed1-f71.google.com with SMTP id e18-20020a056402191200b004fa702d64b3so2904596edz.23
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 05:50:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678970999;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RTE1+/kyJT3ysYPqhg0Rdy0OJWOhaJ6nlSBBfgWtRzU=;
-        b=Oe9QqYvPjAD1Zbdbc/o2In7Whtg/w662qiFCp5RR1ccYr6Miwg6KlBfwVblpnyKekg
-         H99zPEst/yybwjYU0Psw0/Rzei03+yOedP7dLr0lLesiB6I5vmetwEyTf3lG5PEjSkTR
-         8tpg9iVXLRATjJoGjvD80eK+Wx2oRjofSeemyLJ7ofXt4fVs0Zh2BeF3+MRArH1f9ucu
-         elk63EMIPWThwdzQtPxyMOlJoDW6VjhxQ38fUVdNIZ6oNOcvrGQXrBROMJmKwJ23LWqM
-         yZ3wT7ecVuhqWJqxs0mqXPStsnVPk4Xf0zUES5zIEzDNbhP9JD1cL/vFyXzYGWYQzD1o
-         KFuA==
-X-Gm-Message-State: AO0yUKUAUE4VxcxZpFvIZgNT0NdjR0jn2dWt/NqkKHCBipjQrci1KxkK
-        GVQHand4i+nByDIx0tFjKtIBTrI3Juyw1o8V4GQz2votYVdVFSxsnEjcTFwu63Ie+HppHFb2pFW
-        yUFKlkXM7BgC7POhFODDEWUzZal6zKeyRb5QfCKPAQTa97hdGAdPe
-X-Received: by 2002:a17:906:c047:b0:927:34f1:f284 with SMTP id bm7-20020a170906c04700b0092734f1f284mr11269973ejb.16.1678970999164;
-        Thu, 16 Mar 2023 05:49:59 -0700 (PDT)
-X-Google-Smtp-Source: AK7set+4nDRbEGPF33UNX3MNrcdNYJbfk3Tgfgbr7luYB5IGcwuWkd4KNzMj8QVhHTRRVAy6nAsdsw==
-X-Received: by 2002:a17:906:c047:b0:927:34f1:f284 with SMTP id bm7-20020a170906c04700b0092734f1f284mr11269947ejb.16.1678970998857;
-        Thu, 16 Mar 2023 05:49:58 -0700 (PDT)
-Received: from localhost (host-79-53-23-214.retail.telecomitalia.it. [79.53.23.214])
-        by smtp.gmail.com with ESMTPSA id qh21-20020a170906ecb500b0092b422c9d37sm3776276ejb.110.2023.03.16.05.49.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Mar 2023 05:49:58 -0700 (PDT)
-Date:   Thu, 16 Mar 2023 13:49:58 +0100
-From:   Andrea Righi <andrea.righi@canonical.com>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Paolo Pisati <paolo.pisati@canonical.com>,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Darren Hart <darren@os.amperecomputing.com>
-Subject: Re: kernel 6.2 stuck at boot (efi_call_rts) on arm64
-Message-ID: <ZBMQdgPepwa+VyAH@righiandr-XPS-13-7390>
-References: <CAMj1kXHYqMdis99D3OaKf51eoCDW2+5NfcUEbF4Zrau4BcKgsQ@mail.gmail.com>
- <ZBLlLRVVxCbZfEJd@righiandr-XPS-13-7390>
- <CAMj1kXET+A2rk+WQyebKPNtSvzzS0nJdMbx3uT1JgMxOvqfx4w@mail.gmail.com>
- <ZBLpVDmy8BXQZve9@righiandr-XPS-13-7390>
- <CAMj1kXF_f4QFtaDYBaSJwO0B97TJHWr6uRQdeYeD=Gv7DrVicg@mail.gmail.com>
- <ZBL+o7ydLk2iBCCr@righiandr-XPS-13-7390>
- <CAMj1kXEtj_jEZeT6YNh9xB=8o=0LVKiPYucHU08s34xBgy1yDA@mail.gmail.com>
- <CAMj1kXF3pkxvDX6ZMpnRd3wQX2_T6CYmz7ML-h+PXeo+hM_ZdA@mail.gmail.com>
- <ZBMOitWwCDj3XiRw@righiandr-XPS-13-7390>
- <CAMj1kXF=8KoCnRmUyLCZmbfPTeOFQZBeudZuTeA0uHOv-1drFg@mail.gmail.com>
+        d=1e100.net; s=20210112; t=1678971012;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=RPdjSzj6jsV5topoFHb/CW9wwLlrUfcPQ2AkSEnDD0g=;
+        b=PmPmcdvBB4yg7sLWaqDe3UMpX92jGri9BXIEtDQmC/4J1GGgbta6O59bfeHavS+Yv/
+         KInlMeWbWzTR+rQK9e+gyQ9Dcodx5KICZUmBkAjv5r7WVIYad8kV8tWoZqfb5M/3ST3/
+         hQF3DynDT09Ijq6FfSJ+1bzzIAeZSKEk1+QgBSo+p/a6HlEk8Al69nQ/dkXSoXYtmVld
+         2MFBb+YA7BlsntUImEZBgavVp0TdxpR2IJzwXcO9tH0M/3H+ShSjUP0Fk0FTv/Nq/O+W
+         ChmHr0wdLbdjWkELcMlnte58ZGGmW3qKIzDON5srdY2/yrK0EVRruim+nk0sM8zx1o9a
+         MFcw==
+X-Gm-Message-State: AO0yUKXegpIa9rqwXlr7P+JnVBKWM/4h6zNKK+4upVG9mpwmkNS/Afh8
+        D5q6n5j1FcYqKzHjo+ByHBo9JZCUHaIJq34bld+LzDMKgvS4uIfPzc8cN8CkjH1nqq40PR54l6Q
+        +5bngdoEzRjff3UqWWI2eBiyB
+X-Received: by 2002:a17:907:2130:b0:930:f1b4:c033 with SMTP id qo16-20020a170907213000b00930f1b4c033mr1066575ejb.11.1678971011922;
+        Thu, 16 Mar 2023 05:50:11 -0700 (PDT)
+X-Google-Smtp-Source: AK7set++DOjx83OQ0JfoGdfQG9v8lmgkiW061sRJeYdjos2LTGanTGZWCP0iNKnh4yf+Lz3jt0zw6A==
+X-Received: by 2002:a17:907:2130:b0:930:f1b4:c033 with SMTP id qo16-20020a170907213000b00930f1b4c033mr1066562ejb.11.1678971011661;
+        Thu, 16 Mar 2023 05:50:11 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id d7-20020a50f687000000b004fe9386b259sm3293507edn.41.2023.03.16.05.50.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Mar 2023 05:50:11 -0700 (PDT)
+Message-ID: <63814b1b-1297-da4d-79fe-8f2e58e30482@redhat.com>
+Date:   Thu, 16 Mar 2023 13:50:10 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMj1kXF=8KoCnRmUyLCZmbfPTeOFQZBeudZuTeA0uHOv-1drFg@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 1/3] platform: olpc: mark SPI related data as maybe unused
+Content-Language: en-US, nl
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Mark Gross <markgross@kernel.org>,
+        Thadeu Lima de Souza Cascardo <cascardo@holoscopio.com>,
+        Daniel Oliveira Nascimento <don@syst.com.br>,
+        Mattia Dongili <malattia@linux.it>,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230312132624.352703-1-krzysztof.kozlowski@linaro.org>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20230312132624.352703-1-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 16, 2023 at 01:43:32PM +0100, Ard Biesheuvel wrote:
-> On Thu, 16 Mar 2023 at 13:41, Andrea Righi <andrea.righi@canonical.com> wrote:
-> >
-> > On Thu, Mar 16, 2023 at 01:38:30PM +0100, Ard Biesheuvel wrote:
-> > > On Thu, 16 Mar 2023 at 13:21, Ard Biesheuvel <ardb@kernel.org> wrote:
-> > > >
-> > > > On Thu, 16 Mar 2023 at 12:34, Andrea Righi <andrea.righi@canonical.com> wrote:
-> > > > >
-> > > > > On Thu, Mar 16, 2023 at 11:18:21AM +0100, Ard Biesheuvel wrote:
-> > > > > > On Thu, 16 Mar 2023 at 11:03, Andrea Righi <andrea.righi@canonical.com> wrote:
-> > > > > > >
-> > > > > > > On Thu, Mar 16, 2023 at 10:55:58AM +0100, Ard Biesheuvel wrote:
-> > > > > > > > (cc Darren)
-> > > > > > > >
-> > > > > > > > On Thu, 16 Mar 2023 at 10:45, Andrea Righi <andrea.righi@canonical.com> wrote:
-> > > > > > > > >
-> > > > > > > > > On Thu, Mar 16, 2023 at 08:58:20AM +0100, Ard Biesheuvel wrote:
-> > > > > > > > > > Hello Andrea,
-> > > > > > > > > >
-> > > > > > > > > > On Thu, 16 Mar 2023 at 08:54, Andrea Righi <andrea.righi@canonical.com> wrote:
-> > > > > > > > > > >
-> > > > > > > > > > > Hello,
-> > > > > > > > > > >
-> > > > > > > > > > > the latest v6.2.6 kernel fails to boot on some arm64 systems, the kernel
-> > > > > > > > > > > gets stuck and never completes the boot. On the console I see this:
-> > > > > > > > > > >
-> > > > > > > > > > > [   72.043484] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
-> > > > > > > > > > > [   72.049571] rcu:     22-...0: (30 GPs behind) idle=b10c/1/0x4000000000000000 softirq=164/164 fqs=6443
-> > > > > > > > > > > [   72.058520]     (detected by 28, t=15005 jiffies, g=449, q=174 ncpus=32)
-> > > > > > > > > > > [   72.064949] Task dump for CPU 22:
-> > > > > > > > > > > [   72.068251] task:kworker/u64:5   state:R  running task     stack:0     pid:447   ppid:2      flags:0x0000000a
-> > > > > > > > > > > [   72.078156] Workqueue: efi_rts_wq efi_call_rts
-> > > > > > > > > > > [   72.082595] Call trace:
-> > > > > > > > > > > [   72.085029]  __switch_to+0xbc/0x100
-> > > > > > > > > > > [   72.088508]  0xffff80000fe83d4c
-> > > > > > > > > > >
-> > > > > > > > > > > After that, as a consequence, I start to get a lot of hung task timeout traces.
-> > > > > > > > > > >
-> > > > > > > > > > > I tried to bisect the problem and I found that the offending commit is
-> > > > > > > > > > > this one:
-> > > > > > > > > > >
-> > > > > > > > > > >  e7b813b32a42 ("efi: random: refresh non-volatile random seed when RNG is initialized")
-> > > > > > > > > > >
-> > > > > > > > > > > I've reverted this commit for now and everything works just fine, but I
-> > > > > > > > > > > was wondering if the problem could be caused by a lack of entropy on
-> > > > > > > > > > > these arm64 boxes or something else.
-> > > > > > > > > > >
-> > > > > > > > > > > Any suggestion? Let me know if you want me to do any specific test.
-> > > > > > > > > > >
-> > > > > > > > > >
-> > > > > > > > > > Thanks for the report.
-> > > > > > > > > >
-> > > > > > > > > > This is most likely the EFI SetVariable() call going off into the
-> > > > > > > > > > weeds and never returning.
-> > > > > > > > > >
-> > > > > > > > > > Is this an Ampere Altra system by any chance? Do you see it on
-> > > > > > > > > > different types of hardware?
-> > > > > > > > >
-> > > > > > > > > This is: Ampere eMAG / Lenovo ThinkSystem HR330a.
-> > > > > > > > >
-> > > > > > > > > >
-> > > > > > > > > > Could you check whether SetVariable works on this system? E.g. by
-> > > > > > > > > > updating the EFI boot timeout (sudo efibootmgr -t <n>)?
-> > > > > > > > >
-> > > > > > > > > ubuntu@kuzzle:~$ sudo efibootmgr -t 10
-> > > > > > > > > ^C^C^C^C
-> > > > > > > > >
-> > > > > > > > > ^ Stuck there, so it really looks like SetVariable is the problem.
-> > > > > > > > >
-> > > > > > > >
-> > > > > > > > Could you please share the output of
-> > > > > > > >
-> > > > > > > > dmidecode -s bios
-> > > > > > > > dmidecode -s system-family
-> > > > > > >
-> > > > > > > $ sudo dmidecode -s bios-vendor
-> > > > > > > LENOVO
-> > > > > > > $ sudo dmidecode -s bios-version
-> > > > > > > hve104r-1.15
-> > > > > > > $ sudo dmidecode -s bios-release-date
-> > > > > > > 02/26/2021
-> > > > > > > $ sudo dmidecode -s bios-revision
-> > > > > > > 1.15
-> > > > > > > $ sudo dmidecode -s system-family
-> > > > > > > Lenovo ThinkSystem HR330A/HR350A
-> > > > > > >
-> > > > > >
-> > > > > > Thanks
-> > > > > >
-> > > > > > Mind checking if this patch fixes your issue as well?
-> > > > > >
-> > > > > > https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/commit/?h=altra-fix&id=77fa99dd4741456da85049c13ec31a148f5f5ac0
-> > > > >
-> > > > > Unfortunately this doesn't seem to be enough, I'm still getting the same
-> > > > > problem also with this patch applied.
-> > > > >
-> > > >
-> > > > Thanks for trying.
-> > > >
-> > > > How about the last 3 patches on this branch?
-> > > >
-> > > > https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/log/?h=efi-smbios-altra-fix
-> > >
-> > > Actually, that may not match your hardware.
-> > >
-> > > Does your kernel log have a line like
-> > >
-> > > SMCCC: SOC_ID: ID = jep106:036b:0019 Revision = 0x00000102
-> > >
-> > > ?
-> >
-> > $ sudo dmesg | grep "SMCCC: SOC_ID"
-> > [    5.320782] SMCCC: SOC_ID: ARCH_SOC_ID not implemented, skipping ....
-> >
+Hi Krzysztof,
+
+On 3/12/23 14:26, Krzysztof Kozlowski wrote:
+> The driver can be compile tested as built-in making certain data unused:
 > 
-> Thanks. Could you share the entire dmidecode output somewhere? Or at
-> least the type 4 record(s)?
+>   drivers/platform/olpc/olpc-xo175-ec.c:737:35: error: ‘olpc_xo175_ec_id_table’ defined but not used [-Werror=unused-const-variable=]
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  drivers/platform/olpc/olpc-xo175-ec.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/platform/olpc/olpc-xo175-ec.c b/drivers/platform/olpc/olpc-xo175-ec.c
+> index 4823bd2819f6..04573495ef5a 100644
+> --- a/drivers/platform/olpc/olpc-xo175-ec.c
+> +++ b/drivers/platform/olpc/olpc-xo175-ec.c
+> @@ -734,7 +734,7 @@ static const struct of_device_id olpc_xo175_ec_of_match[] = {
+>  };
+>  MODULE_DEVICE_TABLE(of, olpc_xo175_ec_of_match);
+>  
+> -static const struct spi_device_id olpc_xo175_ec_id_table[] = {
+> +static const struct spi_device_id olpc_xo175_ec_id_table[] __maybe_unused = {
+>  	{ "xo1.75-ec", 0 },
+>  	{}
+>  };
+>  MODULE_DEVICE_TABLE(spi, olpc_xo175_ec_id_table);
 
-Sure, here's the full output of dmidecode:
-https://pastebin.ubuntu.com/p/4ZmKmP2xTm/
+The whole presence of the olpc_xo175_ec_id_table[] seems to make little sense.
 
--Andrea
+This should be referenced by:
+
+static struct spi_driver olpc_xo175_ec_spi_driver = {
+
+Like this:
+
+        .probe          = olpc_xo175_ec_probe,
+        .remove         = olpc_xo175_ec_remove,
++       .id_table       = olpc_xo175_ec_id_table,
+
+Otherwise those ids cannot be used to load the driver the non DT/of way. Since the driver assumingly does actually bind already this means that it is only used the DT/of way and it seems to me that the whole olpc_xo175_ec_id_table[] can be removed entirely.
+
+Exposing modaliases for a non supported way of binding the driver does not really seem useful ?
+
+Patches 2/3 and 3/3 do make sense, I'll merge those soonish.
+
+Regards,
+
+Hans
+
+
+
+
+
+
