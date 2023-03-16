@@ -2,97 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9EEC6BD9C3
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 21:03:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66A5B6BD9C8
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 21:04:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230233AbjCPUC6 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 16 Mar 2023 16:02:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52280 "EHLO
+        id S229903AbjCPUD4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 16:03:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230206AbjCPUCy (ORCPT
+        with ESMTP id S229577AbjCPUDx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 16:02:54 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84EEBE6DB2;
-        Thu, 16 Mar 2023 13:02:29 -0700 (PDT)
-Received: from lhrpeml500002.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4PcylF2PMlz6J9fJ;
-        Fri, 17 Mar 2023 03:59:21 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
- lhrpeml500002.china.huawei.com (7.191.160.78) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Thu, 16 Mar 2023 20:02:27 +0000
-Received: from lhrpeml500005.china.huawei.com ([7.191.163.240]) by
- lhrpeml500005.china.huawei.com ([7.191.163.240]) with mapi id 15.01.2507.021;
- Thu, 16 Mar 2023 20:02:27 +0000
-From:   Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>
-To:     Sean Christopherson <seanjc@google.com>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "gshan@redhat.com" <gshan@redhat.com>,
-        "maz@kernel.org" <maz@kernel.org>
-Subject: RE: [PATCH] KVM: Add the missing stub function for
- kvm_dirty_ring_check_request()
-Thread-Topic: [PATCH] KVM: Add the missing stub function for
- kvm_dirty_ring_check_request()
-Thread-Index: AQHZWB65hkIreZwmx0eOO2ggOjI5jq79oegAgAArQ8CAAAWkAIAAACPw
-Date:   Thu, 16 Mar 2023 20:02:26 +0000
-Message-ID: <a026b6ddf62843129193842d80edd182@huawei.com>
-References: <20230316154554.1237-1-shameerali.kolothum.thodi@huawei.com>
- <ZBNLnp7c1JvDsmHm@google.com> <6b9e8589281c4d2bae46eba36f77afe7@huawei.com>
- <ZBN0pFN/nF8G3fWl@google.com>
-In-Reply-To: <ZBN0pFN/nF8G3fWl@google.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.195.246.25]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Thu, 16 Mar 2023 16:03:53 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7BFDBCFC6;
+        Thu, 16 Mar 2023 13:03:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=9u+MxKyUpdzghNYI5jl8H878EOVIcBNhQCQTydCUx7Q=; b=Q0Y9n5DflaL6R0hE39z+H/OPR8
+        bU95vQxwGNERx9UcJ9oc1y9pLiMLFq6Zi/sTIyjuTyTqGPu5F01U5/RPtuLzNchVtFvXjbbejNKeA
+        QLtmZHCDWb7Z7xtZwB7FRrJMediSePgSZ8bmfvzDcnOosHuRmXGdF+FI1ceBc/AkK4Zc=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1pctoX-007XXA-93; Thu, 16 Mar 2023 21:03:05 +0100
+Date:   Thu, 16 Mar 2023 21:03:05 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Subject: Re: [PATCH net-next v1 1/1] net: phy: at803x: Replace of_gpio.h with
+ what indeed is used
+Message-ID: <04e7d5e1-f5a7-4b21-b357-9ee9dc8bbc9a@lunn.ch>
+References: <20230316120826.14242-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230316120826.14242-1-andriy.shevchenko@linux.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-> -----Original Message-----
-> From: Sean Christopherson [mailto:seanjc@google.com]
-> Sent: 16 March 2023 19:57
-> To: Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>
-> Cc: linux-kernel@vger.kernel.org; kvm@vger.kernel.org; gshan@redhat.com;
-> maz@kernel.org
-> Subject: Re: [PATCH] KVM: Add the missing stub function for
-> kvm_dirty_ring_check_request()
+On Thu, Mar 16, 2023 at 02:08:26PM +0200, Andy Shevchenko wrote:
+> of_gpio.h in this driver is solely used as a proxy to other headers.
+> This is incorrect usage of the of_gpio.h. Replace it .h with what
+> indeed is used in the code.
 > 
-> On Thu, Mar 16, 2023, Shameerali Kolothum Thodi wrote:
-> > > From: Sean Christopherson [mailto:seanjc@google.com] On Thu, Mar 16,
-> > > 2023, Shameer Kolothum wrote:
-> > > > The stub for !CONFIG_HAVE_KVM_DIRTY_RING case is missing.
-> > >
-> > > No stub is needed.  kvm_dirty_ring_check_request() isn't called from
-> > > common code, and should not (and isn't unless I'm missing something)
-> > > be called from arch code unless CONFIG_HAVE_KVM_DIRTY_RING=y.
-> > >
-> > > x86 and arm64 are the only users, and they both select
-> > > HAVE_KVM_DIRTY_RING unconditionally when KVM is enabled.
-> >
-> > Yes, it is at present not called from anywhere other than x86 and arm64.
-> > But I still think since it is a common helper, better to have a stub.
-> 
-> Why?  It buys us nothing other than dead code, and even worse it could let
-> a bug that would otherwise be caught during build time escape to run time.
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Agree, it buys nothing now:) It just came up while I was playing with a custom
-build without HAVE_KVM_DIRTY_RING. Since all other functions there has a stub
-just thought it would make it easier for future common usage. We could very well
-leave it till that comes up as well.
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
 
-Thanks,
-Shameer
+    Andrew
