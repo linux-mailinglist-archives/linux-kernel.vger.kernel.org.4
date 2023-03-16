@@ -2,260 +2,442 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 492C36BC77C
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 08:41:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07CE46BC780
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 08:43:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229494AbjCPHlm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 03:41:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59742 "EHLO
+        id S229454AbjCPHnM convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 16 Mar 2023 03:43:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229845AbjCPHlj (ORCPT
+        with ESMTP id S229636AbjCPHnJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 03:41:39 -0400
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2081.outbound.protection.outlook.com [40.107.21.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA51C8B060;
-        Thu, 16 Mar 2023 00:41:37 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OD0blXNhae6rYAhjay3IxGyHgvyQeDxHm36WuNzVf8t5Vrywas/forrdXbJ1FEzm0WiQOedL/dMulxuCtiL0isd6lafZ7L0axmL3ETVGA1cQWLDba36Mt1FijwUgKPqHEGETnrQYq/n9HTpCMUjW2d+d9zRjq1MnHt1Ybv1qSKvxMYwfo8F06T4xVbv9jv2K9yzWqUJ36S9TAitcNUXeDZYw+A65Z5WPMoxAwVmXeJHTlElQeORk6NpLy4jjUKyLwl45iFdhp7kzMDY3e0JvtCSJggLWl3N3gluYtyR/oCfhc6wGOm01vQSvXoLWg8N+eXoeV13LDY/BP4yFI+WtSQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=926PGXAwZhjo5Bui61WOJoOU9yT/sRsmJ4epfpXg+QE=;
- b=E8Fm4bUK1y4E/46nd1ESsLmSpjnWuGPfJwgNUUIcsusy3rWg/vUjjCNxlYTPFInSZEDMB7yd9bmC/KlGY9cy57EUF/vQD28YDvat3OCla9Nee4O4Ha7MFTZm0v/EHcPO9/1VAmoGVlHJ3/Anm6Q41hsmIAk7d7k+8NF4rGlHb1+b5wfYK+qUtzUXAa0YS3jPtEAcyX0xYd3KIhQn8ajmFfTU3bg7zD5JRuLphAV82vhlg4pWHJ+5pniU5YBSMVlrNnIjqfgyYqV8DL92GuiEYsfIRzHtbU7MEFU9+LVsAJbjl6yVExOiMtN99Ia8Ruswpw3MjAGu1ISSvH5gLtM84g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=926PGXAwZhjo5Bui61WOJoOU9yT/sRsmJ4epfpXg+QE=;
- b=sRijDo4yq7TkXgyFPc3vUoi9l+y6A6tLdcZ33qCHpxfznAuEzKj9wcXSpytY12v2WrgAww4XYNAg+Fa3Qob4lLyRZg/Yt2+M9TKE561A6Ee4/Hc8LWDaI8hbVrjtdy65VdIql1OFjmShAA7IV66GF8fn5RWksXVDaxyMXk3t3oA=
-Received: from DB9PR04MB9648.eurprd04.prod.outlook.com (2603:10a6:10:30c::10)
- by AM9PR04MB7539.eurprd04.prod.outlook.com (2603:10a6:20b:2da::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.31; Thu, 16 Mar
- 2023 07:41:35 +0000
-Received: from DB9PR04MB9648.eurprd04.prod.outlook.com
- ([fe80::c1c1:4646:4635:547d]) by DB9PR04MB9648.eurprd04.prod.outlook.com
- ([fe80::c1c1:4646:4635:547d%6]) with mapi id 15.20.6178.026; Thu, 16 Mar 2023
- 07:41:35 +0000
-From:   Madhu Koriginja <madhu.koriginja@nxp.com>
-To:     "gerrit@erg.abdn.ac.uk" <gerrit@erg.abdn.ac.uk>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "kuznet@ms2.inr.ac.ru" <kuznet@ms2.inr.ac.ru>,
-        "yoshfuji@linux-ipv6.org" <yoshfuji@linux-ipv6.org>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "dccp@vger.kernel.org" <dccp@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     Vani Namala <vani.namala@nxp.com>
-Subject: RE: [PATCH net-next] net: netfilter: Keep conntrack reference until
- IPsecv6 policy checks are done
-Thread-Topic: [PATCH net-next] net: netfilter: Keep conntrack reference until
- IPsecv6 policy checks are done
-Thread-Index: AQHZTbSXHQfRkdayhEKdipmUdtJKx679GGag
-Date:   Thu, 16 Mar 2023 07:41:35 +0000
-Message-ID: <DB9PR04MB964855E6E7E29C333282170EFCBC9@DB9PR04MB9648.eurprd04.prod.outlook.com>
-References: <20230303094221.1501961-1-madhu.koriginja@nxp.com>
-In-Reply-To: <20230303094221.1501961-1-madhu.koriginja@nxp.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DB9PR04MB9648:EE_|AM9PR04MB7539:EE_
-x-ms-office365-filtering-correlation-id: 4a9b6061-6c8f-44f7-7c7e-08db25f1de62
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: fJUTyAPfkeim+g3oYNV0mVDBE6YYoTk7RY/9VR4LKQyg69Z197osgHZZfB04syKuu1T347wEdZLZsOimre3a9hfyJtI6aJ7hmnBPWG/691oXFQnxaeVwm4C1BQfHUDF4kirXbkJbq7slOV/+SfFoE6MZg25GZU42RxJLbclwJv3t1qMHJNFv1SAROim5ZrURyiCne1+NeL/4FjPHMuPhOf+9/KvySVZflN864lXORpt3Cl014EiQnL/C5fQWfZAKUO714clSrtu8l3iaG+LdAhquV9jBzFErcHEDJOJe7dVFwZpZvPsE7fkKUtdcaWDF3JTYYDmgG3e+WU46ToT0JhIjp6FJIU5vXp1Z2/QmIMBRL61ZctCjmHvDv/ECoiOhIuC6g2NBDkC92nT4NW1XUCK2pLKUOHZoSHfqRPc1tJkvWedOktyiFeD771b3Rj3odAPLNqw0MIZM+Ub7+t806WNzfRIHuLd51LWklxlPtW1482vTtGZ4tdbXFewW8JeVjprjC2wH98UJPeFhY026BDTPJJnC+9aq7LKAiW5zx7g8hFxf4/UlvOi93EwYEryGi5KEn+MBcN9iX9naVnvCwsfvvqA1zkqHNWgVCWy7tFO9/zTtA4qdBaCjRPgyxfbV6jYjwqUDdqj10hpyRpmZ+hd/vvC8yqEpS0OhOWte2jJFTWgOqDyOGmaDnITKU0nDsNj423NUbXP2puXXwelgzg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR04MB9648.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(366004)(39860400002)(396003)(136003)(376002)(451199018)(38070700005)(86362001)(33656002)(38100700002)(122000001)(2906002)(7696005)(44832011)(52536014)(5660300002)(8936002)(41300700001)(4326008)(55016003)(26005)(9686003)(6506007)(186003)(53546011)(83380400001)(316002)(296002)(110136005)(66946007)(66446008)(66476007)(8676002)(64756008)(76116006)(66556008)(478600001)(71200400001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?XWK2QfW+Ifc2Fv1/epcyRllsXOw5RfHJAHxt/z0YMmUgVXCB7hzTVJrwTrTP?=
- =?us-ascii?Q?7W8WeMMFTmJZm0yh5iT2UjcXX11gd1KA8GawIyb9KOm1tFhiIKckn3dJwbeo?=
- =?us-ascii?Q?VC/1mT6p2I7KSn/etxYjNgJuptX1Nq/ChqM9CngmioVDrbfkY2YqEXE3B5l0?=
- =?us-ascii?Q?mTb9Gvt2o7DVYVnZH1+M+JjlOVgzzU66lQv1GbT8DjyInh5zL9DKiUzRKLS4?=
- =?us-ascii?Q?139qy0XUKtpnWH+UwYgYTD9q/pFWR4CukZ6EdPxoE6apv0nEaYvbqIwA/6lH?=
- =?us-ascii?Q?eI/xEmHgxyZE2SL3kXl4xnsVFCUnCFSmv2urtEiygkM6z0S+bGCwFoWdM2o1?=
- =?us-ascii?Q?EzCVqPcFOa9nFVSAWxVk8+MuyiUk/7U+NhSvk623dHoe1P7nAKT37tivr8BF?=
- =?us-ascii?Q?f/1O/YpeB7cYLHe7JxBBl6vfikToMh5/5SFoXQI3u1O3Vju7cyul+mCbvtTu?=
- =?us-ascii?Q?vEutWeHklZ2iX7jQPcdFYKw/39bRhnrCWpLcHNM43I9AsaXjeGle+JwJ/rBZ?=
- =?us-ascii?Q?x0pcc/0+IjbHW/t2+DxYC1lOTpD9/ooocyCfc7I4oLTKLtSMeq6GB6TrcfXq?=
- =?us-ascii?Q?Qdn7qGKG6dHx7oquI7UZWtYlORYU/0q+CsBaYDKv6QONgImlMPzQ2ZhCfpKS?=
- =?us-ascii?Q?D39GbCatKL+Oz0wGmmKrcwZISIVouwWtCcFc4lMUD/vNDvrgFMV9dPlPjy1Q?=
- =?us-ascii?Q?cQ9WbK9jR4sDIPNRajglFQJ2hd3CLAPf1oMWpZlmsPP3/rrNjYTldzQszOKb?=
- =?us-ascii?Q?U7vkawzp4PrI8B2i618QmbqX/pL83DfMGSeXl/o/HXzrSuG33fyhCu/drite?=
- =?us-ascii?Q?a8LRPEO4UfjOAJGLhkqOXmbN02/k5L8T8lpCuK9hhXwTI+BuwveWhgJEJgHD?=
- =?us-ascii?Q?9yfldjmqhGlqmOmZb5T6sCnA+izq6oovdo6Wja/gNR3osbXh4CgxJPr8db3c?=
- =?us-ascii?Q?noADyDLmIwBNRysfuCnmQg03x3nf17dGf7FA7pFTwxzvq4BwwIMbHoa1E90W?=
- =?us-ascii?Q?vtufujYLZy1vYvLTWAppLuGt+He+2bxdHXIj2iJ6WXc3ZJhkZ8qnnB71BSVs?=
- =?us-ascii?Q?tkiUUvxWINzuSkLLRyH1RFiyJ+fkTTPUCOYhQMNOaRtnfuA0YcdgHIfnND1J?=
- =?us-ascii?Q?59DG39Jap7cCjkXSsR3c0ioekE0RFzNqbWuGvziaidijovrzDx0M8DMW7aNV?=
- =?us-ascii?Q?PfDjebrfh1a35HIWrR6KYIElc9hYcUNiT1fHYDgeaRBfiqv+qzMwXtsjJloW?=
- =?us-ascii?Q?4fVgBCfkY0HtZinxEAQEFlSv/ErjUjZqttwnq+sG1HaxJUJ2nSqZBjpWZ82Q?=
- =?us-ascii?Q?pIFYiKfrg6+arlPYGgUbWnuhSv1T9TvE1hL3dER5+IqZNj0XIl598+ikhGln?=
- =?us-ascii?Q?ioE0thDhruR9zrrywOrphJYqiI6k+oMGUMd0o3AqYmyPk9SGD5WLYLyvNYcU?=
- =?us-ascii?Q?0xs8XfETscFsRhylrnC2DQgYAdrKznWxXbFTsVAkmTIuTg8X8ZuW34qqWgMl?=
- =?us-ascii?Q?mYhnWZ1nRIK0T4S3385qd+6SGrKcw8tnHhAHnprItbpMStLQwehMNNveck9C?=
- =?us-ascii?Q?lMwbXzriY2v45DnWQXi99DhS0mRMiXH80ImbWLRU?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Thu, 16 Mar 2023 03:43:09 -0400
+Received: from mail-il1-f170.google.com (mail-il1-f170.google.com [209.85.166.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BF651BD4;
+        Thu, 16 Mar 2023 00:43:06 -0700 (PDT)
+Received: by mail-il1-f170.google.com with SMTP id r4so541764ila.2;
+        Thu, 16 Mar 2023 00:43:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678952585;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=igD8RIIFj1dhk1dALYOewgVi+GjxhG/bihSlyG51lQU=;
+        b=bz6Hw4/0F3qB2rLbBAVgLg0C4QmBTobLdt3q53/ZaGojFja9PBMp2NvmTPGYMVe5Df
+         SjCJdSKTl4cHeJvo03YZxZWmPKlcCky1YCT+98/AflH1nHvdvATMqB080e9C2QkbOHaw
+         EPqNVYF6R/B0SbZRnKCTiOjodTf7CVpSCHujsNqmaUrtaZr/GiXzKbTM7uFKL2uETTME
+         fH0bTkCkquVkHO2bMu4GsYk/efFER9M3V94ZecDNswdue2IPqSiNlkDpE/7paW3kQwxW
+         bqBV2JnX+jLMLi61jttwaNjWkK1n3zzyzZZB6MiIJRbIRWs2zNhZrvjDGLouhFdw6nJZ
+         icNg==
+X-Gm-Message-State: AO0yUKVvqt+AlzrLlBo9xFDtPuleNNY4mBzLK1rwbCLK8zMZTOpxfRZU
+        H2hqBoKN9wFyGssCOh4Go4mcX4AAzyipsZCkO4o=
+X-Google-Smtp-Source: AK7set8N3ijSNdUzUbn5gNnTWC5Hg2K8dmYzLIZ2kuQPrNoePyY+RrVb6B36yqdocXX7Vvd7HyUFUEPdBX7kK0V8KBk=
+X-Received: by 2002:a05:6e02:1d03:b0:323:1869:15a0 with SMTP id
+ i3-20020a056e021d0300b00323186915a0mr8145968ila.3.1678952585221; Thu, 16 Mar
+ 2023 00:43:05 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DB9PR04MB9648.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4a9b6061-6c8f-44f7-7c7e-08db25f1de62
-X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Mar 2023 07:41:35.1243
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: YmFxatR9YAO4qQICWFBx0AxKrQQ8YuHmy6eaT6YTTZsI69O0tu4zaPlkXndybs5MF0AZd2f5niWBK/2EgiYTVQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB7539
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230315145112.186603-1-leo.yan@linaro.org> <20230315145112.186603-12-leo.yan@linaro.org>
+In-Reply-To: <20230315145112.186603-12-leo.yan@linaro.org>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Thu, 16 Mar 2023 00:42:53 -0700
+Message-ID: <CAM9d7chSKPxMHzpKZ92xGZ+XmLpd2q2EJwMuszosXu_FO4_dgA@mail.gmail.com>
+Subject: Re: [PATCH v5 11/16] perf kvm: Use histograms list to replace cached list
+To:     Leo Yan <leo.yan@linaro.org>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+        John Garry <john.g.garry@oracle.com>,
+        James Clark <james.clark@arm.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi David,
-May I know the status of this patch, does this patch need any changes or it=
- is ready to go into Linux. Please let me know if it needs any changes.
-This patch is already reviewed by Florian Westphal <fw@strlen.de>.
-Thanks & Regards,
-Madhu K
+On Wed, Mar 15, 2023 at 7:52 AM Leo Yan <leo.yan@linaro.org> wrote:
+>
+> perf kvm tool defines its own cached list which is managed with RB tree,
+> histograms also provide RB tree to manage data entries.  Since now we
+> have introduced histograms in the tool, it's not necessary to use the
+> self defined list and we can directly use histograms list to manage
+> KVM events.
+>
+> This patch changes to use histograms list to track KVM events, and it
+> invokes the common function hists__output_resort_cb() to sort result,
+> this also give us flexibility to extend more sorting key words easily.
+>
+> After histograms list supported, the cached list is redundant so remove
+> the relevant code for it.
+>
+> Signed-off-by: Leo Yan <leo.yan@linaro.org>
+> ---
+>  tools/perf/builtin-kvm.c   | 189 +++++++++++++++++++------------------
+>  tools/perf/util/kvm-stat.h |   7 --
+>  2 files changed, 95 insertions(+), 101 deletions(-)
+>
+> diff --git a/tools/perf/builtin-kvm.c b/tools/perf/builtin-kvm.c
+> index 3f601ccb7aab..ba3134613bcb 100644
+> --- a/tools/perf/builtin-kvm.c
+> +++ b/tools/perf/builtin-kvm.c
+> @@ -323,6 +323,12 @@ static int kvm_hists__init(void)
+>         return kvm_hpp_list__parse(&kvm_hists.list, NULL, "ev_name");
+>  }
+>
+> +static int kvm_hists__reinit(const char *output, const char *sort)
+> +{
+> +       perf_hpp__reset_output_field(&kvm_hists.list);
+> +       return kvm_hpp_list__parse(&kvm_hists.list, output, sort);
+> +}
+> +
+>  static const char *get_filename_for_perf_kvm(void)
+>  {
+>         const char *filename;
+> @@ -420,44 +426,37 @@ struct vcpu_event_record {
+>         struct kvm_event *last_event;
+>  };
+>
+> -
+> -static void init_kvm_event_record(struct perf_kvm_stat *kvm)
+> -{
+> -       unsigned int i;
+> -
+> -       for (i = 0; i < EVENTS_CACHE_SIZE; i++)
+> -               INIT_LIST_HEAD(&kvm->kvm_events_cache[i]);
+> -}
+> -
+>  #ifdef HAVE_TIMERFD_SUPPORT
+> -static void clear_events_cache_stats(struct list_head *kvm_events_cache)
+> +static void clear_events_cache_stats(void)
+>  {
+> -       struct list_head *head;
+> +       struct rb_root_cached *root;
+> +       struct rb_node *nd;
+>         struct kvm_event *event;
+> -       unsigned int i;
+> -       int j;
+> -
+> -       for (i = 0; i < EVENTS_CACHE_SIZE; i++) {
+> -               head = &kvm_events_cache[i];
+> -               list_for_each_entry(event, head, hash_entry) {
+> -                       /* reset stats for event */
+> -                       event->total.time = 0;
+> -                       init_stats(&event->total.stats);
+> -
+> -                       for (j = 0; j < event->max_vcpu; ++j) {
+> -                               event->vcpu[j].time = 0;
+> -                               init_stats(&event->vcpu[j].stats);
+> -                       }
+> +       int i;
+> +
+> +       if (hists__has(&kvm_hists.hists, need_collapse))
+> +               root = &kvm_hists.hists.entries_collapsed;
+> +       else
+> +               root = kvm_hists.hists.entries_in;
+> +
+> +       for (nd = rb_first_cached(root); nd; nd = rb_next(nd)) {
+> +               struct hist_entry *he;
+> +
+> +               he = rb_entry(nd, struct hist_entry, rb_node_in);
+> +               event = container_of(he, struct kvm_event, he);
+> +
+> +               /* reset stats for event */
+> +               event->total.time = 0;
+> +               init_stats(&event->total.stats);
+> +
+> +               for (i = 0; i < event->max_vcpu; ++i) {
+> +                       event->vcpu[i].time = 0;
+> +                       init_stats(&event->vcpu[i].stats);
+>                 }
+>         }
+>  }
+>  #endif
+>
+> -static int kvm_events_hash_fn(u64 key)
+> -{
+> -       return key & (EVENTS_CACHE_SIZE - 1);
+> -}
+> -
+>  static bool kvm_event_expand(struct kvm_event *event, int vcpu_id)
+>  {
+>         int old_max_vcpu = event->max_vcpu;
+> @@ -483,44 +482,64 @@ static bool kvm_event_expand(struct kvm_event *event, int vcpu_id)
+>         return true;
+>  }
+>
+> -static struct kvm_event *kvm_alloc_init_event(struct perf_kvm_stat *kvm,
+> -                                             struct event_key *key,
+> -                                             struct perf_sample *sample __maybe_unused)
+> +static void *kvm_he_zalloc(size_t size)
+>  {
+> -       struct kvm_event *event;
+> +       struct kvm_event *kvm_ev;
+>
+> -       event = zalloc(sizeof(*event));
+> -       if (!event) {
+> -               pr_err("Not enough memory\n");
+> +       kvm_ev = zalloc(size + sizeof(*kvm_ev));
+> +       if (!kvm_ev)
+>                 return NULL;
+> -       }
+>
+> -       event->perf_kvm = kvm;
+> -       event->key = *key;
+> -       init_stats(&event->total.stats);
+> -       return event;
+> +       init_stats(&kvm_ev->total.stats);
+> +       hists__inc_nr_samples(&kvm_hists.hists, 0);
+> +       return &kvm_ev->he;
+> +}
+> +
+> +static void kvm_he_free(void *he)
+> +{
+> +       struct kvm_event *kvm_ev;
+> +
+> +       free(((struct hist_entry *)he)->kvm_info);
+> +       kvm_ev = container_of(he, struct kvm_event, he);
+> +       free(kvm_ev);
+>  }
+>
+> +static struct hist_entry_ops kvm_ev_entry_ops = {
+> +       .new    = kvm_he_zalloc,
+> +       .free   = kvm_he_free,
+> +};
+> +
+>  static struct kvm_event *find_create_kvm_event(struct perf_kvm_stat *kvm,
+>                                                struct event_key *key,
+>                                                struct perf_sample *sample)
+>  {
+>         struct kvm_event *event;
+> -       struct list_head *head;
+> +       struct hist_entry *he;
+> +       struct kvm_info *ki;
+>
+>         BUG_ON(key->key == INVALID_KEY);
+>
+> -       head = &kvm->kvm_events_cache[kvm_events_hash_fn(key->key)];
+> -       list_for_each_entry(event, head, hash_entry) {
+> -               if (event->key.key == key->key && event->key.info == key->info)
+> -                       return event;
+> +       ki = zalloc(sizeof(*ki));
+> +       if (!ki) {
+> +               pr_err("Failed to allocate kvm info\n");
+> +               return NULL;
+>         }
+>
+> -       event = kvm_alloc_init_event(kvm, key, sample);
+> -       if (!event)
+> +       kvm->events_ops->decode_key(kvm, key, ki->name);
+> +       he = hists__add_entry_ops(&kvm_hists.hists, &kvm_ev_entry_ops,
+> +                                 &kvm->al, NULL, NULL, NULL, ki, sample, true);
 
------Original Message-----
-From: Madhu Koriginja <madhu.koriginja@nxp.com>=20
-Sent: Friday, March 3, 2023 3:12 PM
-To: gerrit@erg.abdn.ac.uk; davem@davemloft.net; kuznet@ms2.inr.ac.ru; yoshf=
-uji@linux-ipv6.org; edumazet@google.com; dccp@vger.kernel.org; netdev@vger.=
-kernel.org; linux-kernel@vger.kernel.org
-Cc: Vani Namala <vani.namala@nxp.com>; Madhu Koriginja <madhu.koriginja@nxp=
-.com>
-Subject: [PATCH net-next] net: netfilter: Keep conntrack reference until IP=
-secv6 policy checks are done
+The hists__add_entry{,_ops} can return either a new entry
+or an existing one.  I think it'd leak the 'ki' when it returns
+the existing one.  You may deep-copy it in hist_entry__init()
+and always free the 'ki' here.
 
-Keep the conntrack reference until policy checks have been performed for IP=
-sec V6 NAT support. The reference needs to be dropped before a packet is qu=
-eued to avoid having the conntrack module unloadable.
+Another thought on this.  Lots of fields in the hist_entry are
+not used for kvm.  We might split the hist_entry somehow
+so that we can use unnecessary parts only.  But that could
+be a future project. :)
 
-Signed-off-by: Madhu Koriginja <madhu.koriginja@nxp.com>
-	V1-V2: added missing () in ip6_input.c in below condition
-	if (!(ipprot->flags & INET6_PROTO_NOPOLICY))
-	V2-V3: replaced nf_reset with nf_reset_ct
----
- net/dccp/ipv6.c      |  1 +
- net/ipv6/ip6_input.c | 12 +++++-------
- net/ipv6/raw.c       |  2 +-
- net/ipv6/tcp_ipv6.c  |  2 ++
- net/ipv6/udp.c       |  2 ++
- 5 files changed, 11 insertions(+), 8 deletions(-)
+Thanks,
+Namhyung
 
-diff --git a/net/dccp/ipv6.c b/net/dccp/ipv6.c index 1e5e08cc0..5a3104c7a 1=
-00644
---- a/net/dccp/ipv6.c
-+++ b/net/dccp/ipv6.c
-@@ -771,6 +771,7 @@ static int dccp_v6_rcv(struct sk_buff *skb)
-=20
- 	if (!xfrm6_policy_check(sk, XFRM_POLICY_IN, skb))
- 		goto discard_and_relse;
-+	nf_reset_ct(skb);
-=20
- 	return __sk_receive_skb(sk, skb, 1, dh->dccph_doff * 4,
- 				refcounted) ? -1 : 0;
-diff --git a/net/ipv6/ip6_input.c b/net/ipv6/ip6_input.c index 3d71c7d61..2=
-5ff89d9f 100644
---- a/net/ipv6/ip6_input.c
-+++ b/net/ipv6/ip6_input.c
-@@ -378,10 +378,6 @@ void ip6_protocol_deliver_rcu(struct net *net, struct =
-sk_buff *skb, int nexthdr,
- 			/* Only do this once for first final protocol */
- 			have_final =3D true;
-=20
--			/* Free reference early: we don't need it any more,
--			   and it may hold ip_conntrack module loaded
--			   indefinitely. */
--			nf_reset_ct(skb);
-=20
- 			skb_postpull_rcsum(skb, skb_network_header(skb),
- 					   skb_network_header_len(skb));
-@@ -402,10 +398,12 @@ void ip6_protocol_deliver_rcu(struct net *net, struct=
- sk_buff *skb, int nexthdr,
- 			    !ipv6_is_mld(skb, nexthdr, skb_network_header_len(skb)))
- 				goto discard;
- 		}
--		if (!(ipprot->flags & INET6_PROTO_NOPOLICY) &&
--		    !xfrm6_policy_check(NULL, XFRM_POLICY_IN, skb))
--			goto discard;
-+		if (!(ipprot->flags & INET6_PROTO_NOPOLICY)) {
-+			if (!xfrm6_policy_check(NULL, XFRM_POLICY_IN, skb))
-+				goto discard;
-=20
-+			nf_reset_ct(skb);
-+		}
- 		ret =3D INDIRECT_CALL_2(ipprot->handler, tcp_v6_rcv, udpv6_rcv,
- 				      skb);
- 		if (ret > 0) {
-diff --git a/net/ipv6/raw.c b/net/ipv6/raw.c index dfe5e603f..c13b8e0c4 100=
-644
---- a/net/ipv6/raw.c
-+++ b/net/ipv6/raw.c
-@@ -215,7 +215,6 @@ static bool ipv6_raw_deliver(struct sk_buff *skb, int n=
-exthdr)
-=20
- 			/* Not releasing hash table! */
- 			if (clone) {
--				nf_reset_ct(clone);
- 				rawv6_rcv(sk, clone);
- 			}
- 		}
-@@ -423,6 +422,7 @@ int rawv6_rcv(struct sock *sk, struct sk_buff *skb)
- 		kfree_skb(skb);
- 		return NET_RX_DROP;
- 	}
-+	nf_reset_ct(skb);
-=20
- 	if (!rp->checksum)
- 		skb->ip_summed =3D CHECKSUM_UNNECESSARY; diff --git a/net/ipv6/tcp_ipv6.=
-c b/net/ipv6/tcp_ipv6.c index b42fa41cf..820aa9767 100644
---- a/net/ipv6/tcp_ipv6.c
-+++ b/net/ipv6/tcp_ipv6.c
-@@ -1586,6 +1586,8 @@ INDIRECT_CALLABLE_SCOPE int tcp_v6_rcv(struct sk_buff=
- *skb)
- 	if (tcp_v6_inbound_md5_hash(sk, skb))
- 		goto discard_and_relse;
-=20
-+	nf_reset_ct(skb);
-+
- 	if (tcp_filter(sk, skb))
- 		goto discard_and_relse;
- 	th =3D (const struct tcphdr *)skb->data; diff --git a/net/ipv6/udp.c b/ne=
-t/ipv6/udp.c index d56698517..2be1364d0 100644
---- a/net/ipv6/udp.c
-+++ b/net/ipv6/udp.c
-@@ -604,6 +604,7 @@ static int udpv6_queue_rcv_one_skb(struct sock *sk, str=
-uct sk_buff *skb)
-=20
- 	if (!xfrm6_policy_check(sk, XFRM_POLICY_IN, skb))
- 		goto drop;
-+	nf_reset_ct(skb);
-=20
- 	if (static_branch_unlikely(&udpv6_encap_needed_key) && up->encap_type) {
- 		int (*encap_rcv)(struct sock *sk, struct sk_buff *skb); @@ -920,6 +921,7=
- @@ int __udp6_lib_rcv(struct sk_buff *skb, struct udp_table *udptable,
-=20
- 	if (!xfrm6_policy_check(NULL, XFRM_POLICY_IN, skb))
- 		goto discard;
-+	nf_reset_ct(skb);
-=20
- 	if (udp_lib_checksum_complete(skb))
- 		goto csum_error;
---
-2.25.1
 
+> +       if (he == NULL) {
+> +               pr_err("Failed to allocate hist entry\n");
+> +               free(ki);
+>                 return NULL;
+> +       }
+> +
+> +       event = container_of(he, struct kvm_event, he);
+> +       if (!event->perf_kvm) {
+> +               event->perf_kvm = kvm;
+> +               event->key = *key;
+> +       }
+>
+> -       list_add(&event->hash_entry, head);
+>         return event;
+>  }
+>
+> @@ -753,58 +772,32 @@ static bool select_key(struct perf_kvm_stat *kvm)
+>         return false;
+>  }
+>
+> -static void insert_to_result(struct rb_root *result, struct kvm_event *event,
+> -                            key_cmp_fun bigger, int vcpu)
+> -{
+> -       struct rb_node **rb = &result->rb_node;
+> -       struct rb_node *parent = NULL;
+> -       struct kvm_event *p;
+> -
+> -       while (*rb) {
+> -               p = container_of(*rb, struct kvm_event, rb);
+> -               parent = *rb;
+> -
+> -               if (bigger(event, p, vcpu) > 0)
+> -                       rb = &(*rb)->rb_left;
+> -               else
+> -                       rb = &(*rb)->rb_right;
+> -       }
+> -
+> -       rb_link_node(&event->rb, parent, rb);
+> -       rb_insert_color(&event->rb, result);
+> -}
+> -
+>  static bool event_is_valid(struct kvm_event *event, int vcpu)
+>  {
+>         return !!get_event_count(event, vcpu);
+>  }
+>
+> -static void sort_result(struct perf_kvm_stat *kvm)
+> +static int filter_cb(struct hist_entry *he, void *arg __maybe_unused)
+>  {
+> -       unsigned int i;
+> -       int vcpu = kvm->trace_vcpu;
+>         struct kvm_event *event;
+> +       struct perf_kvm_stat *perf_kvm;
+>
+> -       for (i = 0; i < EVENTS_CACHE_SIZE; i++) {
+> -               list_for_each_entry(event, &kvm->kvm_events_cache[i], hash_entry) {
+> -                       if (event_is_valid(event, vcpu)) {
+> -                               insert_to_result(&kvm->result, event,
+> -                                                kvm->compare, vcpu);
+> -                       }
+> -               }
+> -       }
+> +       event = container_of(he, struct kvm_event, he);
+> +       perf_kvm = event->perf_kvm;
+> +       if (!event_is_valid(event, perf_kvm->trace_vcpu))
+> +               he->filtered = 1;
+> +       else
+> +               he->filtered = 0;
+> +       return 0;
+>  }
+>
+> -/* returns left most element of result, and erase it */
+> -static struct kvm_event *pop_from_result(struct rb_root *result)
+> +static void sort_result(struct perf_kvm_stat *kvm)
+>  {
+> -       struct rb_node *node = rb_first(result);
+> -
+> -       if (!node)
+> -               return NULL;
+> +       const char *output_columns = "ev_name,sample,time,max_t,min_t,mean_t";
+>
+> -       rb_erase(node, result);
+> -       return container_of(node, struct kvm_event, rb);
+> +       kvm_hists__reinit(output_columns, kvm->sort_key);
+> +       hists__collapse_resort(&kvm_hists.hists, NULL);
+> +       hists__output_resort_cb(&kvm_hists.hists, NULL, filter_cb);
+>  }
+>
+>  static void print_vcpu_info(struct perf_kvm_stat *kvm)
+> @@ -847,6 +840,7 @@ static void print_result(struct perf_kvm_stat *kvm)
+>         char decode[KVM_EVENT_NAME_LEN];
+>         struct kvm_event *event;
+>         int vcpu = kvm->trace_vcpu;
+> +       struct rb_node *nd;
+>
+>         if (kvm->live) {
+>                 puts(CONSOLE_CLEAR);
+> @@ -865,9 +859,15 @@ static void print_result(struct perf_kvm_stat *kvm)
+>         pr_info("%16s ", "Avg time");
+>         pr_info("\n\n");
+>
+> -       while ((event = pop_from_result(&kvm->result))) {
+> +       for (nd = rb_first_cached(&kvm_hists.hists.entries); nd; nd = rb_next(nd)) {
+> +               struct hist_entry *he;
+>                 u64 ecount, etime, max, min;
+>
+> +               he = rb_entry(nd, struct hist_entry, rb_node);
+> +               if (he->filtered)
+> +                       continue;
+> +
+> +               event = container_of(he, struct kvm_event, he);
+>                 ecount = get_event_count(event, vcpu);
+>                 etime = get_event_time(event, vcpu);
+>                 max = get_event_max(event, vcpu);
+> @@ -1144,8 +1144,11 @@ static int perf_kvm__handle_timerfd(struct perf_kvm_stat *kvm)
+>         sort_result(kvm);
+>         print_result(kvm);
+>
+> +       /* Reset sort list to "ev_name" */
+> +       kvm_hists__reinit(NULL, "ev_name");
+> +
+>         /* reset counts */
+> -       clear_events_cache_stats(kvm->kvm_events_cache);
+> +       clear_events_cache_stats();
+>         kvm->total_count = 0;
+>         kvm->total_time = 0;
+>         kvm->lost_events = 0;
+> @@ -1201,7 +1204,6 @@ static int kvm_events_live_report(struct perf_kvm_stat *kvm)
+>         }
+>
+>         set_term_quiet_input(&save);
+> -       init_kvm_event_record(kvm);
+>
+>         kvm_hists__init();
+>
+> @@ -1397,7 +1399,6 @@ static int kvm_events_report_vcpu(struct perf_kvm_stat *kvm)
+>         if (!register_kvm_events_ops(kvm))
+>                 goto exit;
+>
+> -       init_kvm_event_record(kvm);
+>         setup_pager();
+>
+>         kvm_hists__init();
+> diff --git a/tools/perf/util/kvm-stat.h b/tools/perf/util/kvm-stat.h
+> index fc30a72dfac1..3f0cbecb862c 100644
+> --- a/tools/perf/util/kvm-stat.h
+> +++ b/tools/perf/util/kvm-stat.h
+> @@ -36,7 +36,6 @@ struct perf_kvm_stat;
+>
+>  struct kvm_event {
+>         struct list_head hash_entry;
+> -       struct rb_node rb;
+>
+>         struct perf_kvm_stat *perf_kvm;
+>         struct event_key key;
+> @@ -81,9 +80,6 @@ struct exit_reasons_table {
+>         const char *reason;
+>  };
+>
+> -#define EVENTS_BITS            12
+> -#define EVENTS_CACHE_SIZE      (1UL << EVENTS_BITS)
+> -
+>  struct perf_kvm_stat {
+>         struct perf_tool    tool;
+>         struct record_opts  opts;
+> @@ -103,7 +99,6 @@ struct perf_kvm_stat {
+>
+>         struct kvm_events_ops *events_ops;
+>         key_cmp_fun compare;
+> -       struct list_head kvm_events_cache[EVENTS_CACHE_SIZE];
+>
+>         u64 total_time;
+>         u64 total_count;
+> @@ -112,8 +107,6 @@ struct perf_kvm_stat {
+>
+>         struct intlist *pid_list;
+>
+> -       struct rb_root result;
+> -
+>         int timerfd;
+>         unsigned int display_time;
+>         bool live;
+> --
+> 2.34.1
+>
