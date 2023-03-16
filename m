@@ -2,156 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61D5D6BCB6A
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 10:51:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B62FE6BCB68
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 10:51:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230084AbjCPJvF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 05:51:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52402 "EHLO
+        id S230011AbjCPJvB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 05:51:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230047AbjCPJvC (ORCPT
+        with ESMTP id S229454AbjCPJu7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 05:51:02 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7035B5ADEE
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 02:50:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678960216;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=huowlZPUW6H0KxMkpbfx9CP3sZ4JPlEUrwvUVboQxVY=;
-        b=V86xFdeYoMaN5s0OkSm1RYXc/RTTy19SrDpGfua3eTPyqr4dMZqPX/VHUQU+1cIt2XPRRJ
-        GZcH4hQCYgenx7otnhuoYmQb63OY+PuBQy4K++GGrC9cejpl6hfqobO4TYTxEUMLPI/KX3
-        wK4mTa0ItzDm19LZPXm6Ztcok0KEd5M=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-384-iez7HG_8OpO1PqI9Qntd9Q-1; Thu, 16 Mar 2023 05:50:15 -0400
-X-MC-Unique: iez7HG_8OpO1PqI9Qntd9Q-1
-Received: by mail-ed1-f71.google.com with SMTP id fi8-20020a056402550800b004a26cc7f6cbso2261619edb.4
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 02:50:15 -0700 (PDT)
+        Thu, 16 Mar 2023 05:50:59 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9E5D580D4
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 02:50:54 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id x13so5221951edd.1
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 02:50:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678960253;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=jBsCdl9YocCAf0arjdLy7xl1yCYtEJHXhUtG9+jRSPE=;
+        b=obUK2zgAT0FWDrryCLe0nn5fjpIL+XW9VOtdiDoMK5AWeP9rIDWjsLJ26VKEqJrjrR
+         M4zFjsbg4ZjPNmJcZ3/7IaiG5aXudlgAcrwMccMA/iPz8WjtGPsQTsMjff/RTN8GRjiU
+         PCkScZtE5SWIr6Sz/ztmJDqtAeY3zFzQDKFy8Pfa7N6THWcf3QDoryMA1c05j4kZW8d1
+         Bftxj/+gwg61SwK6PHBNG/1zQlm5XDnRWQx/rskXvktt+ZjPgCKSQ28J3lYOQjzgay+B
+         wGn8dHyM0vZx3ih/F+ewKBm4dOOGqQvbnw9dfyYC6UVzda9qaB5AbqNpRawiuaH2jaVw
+         OQ4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678960214;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20210112; t=1678960253;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=huowlZPUW6H0KxMkpbfx9CP3sZ4JPlEUrwvUVboQxVY=;
-        b=md31wR18vZv6ftsLsspbhfyZCj+a9skdvqjcroutybZpeF3w50r+Bubh2h0oTAVIbS
-         wNk2q2L1lbKCPaMuEdbx/7N0RigibH2RNbDXEDZLLV4xIJFPrayTKQxLQdtxUCrSIQqm
-         nCb+ChDbo8FIQ46JFR29Fef1KJ1sQoARyiWicoxY3tDtT/kIRDVNcO2DVkb7iCauPDxt
-         A18Wx0To/rBIpYmfksIF70pdiPVD6Qdzo/hFnTopmTV6ITs6sknUSZj7nGdn0Wk/s0W+
-         E9d0INPlLVM+78+hvbnntETLKyS4wj05XwNVF5v1+gdJgXWV62Pm+/6I+maM29q02RRx
-         RlKg==
-X-Gm-Message-State: AO0yUKWTrOIWzaBW4oMQhb3xBsi6gymKGro9yRIA4elVLs6tFmGM/ggZ
-        qmNAhH2lBYzH7+9zdHpogsGBGVikIuwbokAroQ8yFbsyIypS1e+zTQWoVVk7Y7n75RWvdny8lvg
-        kkgygo+Eg74RHDS4ofZNFEJry
-X-Received: by 2002:a17:907:1690:b0:878:481c:c49b with SMTP id hc16-20020a170907169000b00878481cc49bmr13813185ejc.1.1678960214280;
-        Thu, 16 Mar 2023 02:50:14 -0700 (PDT)
-X-Google-Smtp-Source: AK7set942yrVQ/Wj8al0sXYB+EAScOmstJzvOpb3F2mvsPMw1ODTqzHzTDJWX8nNO14vzK8gKsbNHA==
-X-Received: by 2002:a17:907:1690:b0:878:481c:c49b with SMTP id hc16-20020a170907169000b00878481cc49bmr13813155ejc.1.1678960213985;
-        Thu, 16 Mar 2023 02:50:13 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id lm15-20020a170906980f00b0093034e71b94sm750503ejb.65.2023.03.16.02.50.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Mar 2023 02:50:13 -0700 (PDT)
-Message-ID: <076097bc-1e7e-72d9-efa9-79d6a94d3f0a@redhat.com>
-Date:   Thu, 16 Mar 2023 10:50:12 +0100
+        bh=jBsCdl9YocCAf0arjdLy7xl1yCYtEJHXhUtG9+jRSPE=;
+        b=jRn8UdNdujxZ7olBiXTsCSIF2Tl4Diz/DfxoNd84BlbdNsKk7lIEzQJIvYEopCOMVZ
+         63mJZ1hyH6GfZBBdP91HY0lGmZ9TOhyZnL57qNDpyQn8myXtQN5nbKzu/scpNxBE4nHB
+         nV67s4hvBDW7J5JdrCMQHQmK1rWnFzd9fPVz1tGU/wFQpZ6gB9KCV1dcBzV3889sj3q9
+         kiac7WvlHa7LA7z0nOkFZ0EHqReaROEVYptqyseXFYj36JOBYUwqvwws8uGKQyiPEA4T
+         mZazo5ytaSoh2u1RfNOUSX4dcG4EsPY7lmjB6pdhnWl2rl1n+hMQuNlaLTy1ZgBN4Dtp
+         CS0w==
+X-Gm-Message-State: AO0yUKWeBUFNJXTfRSPHcEe0ltKD+Q5DuUxN5S046S+ebmVgB5pFbbH6
+        v2rthoT6Gf/ln+kvTJR4auc=
+X-Google-Smtp-Source: AK7set9zy8miZDiRl1KvkR+eVp1koEm1rHR5bO/wZSTbgFw8h3D5eIu60J/Wi+tYyAA2SzoTx9WZGQ==
+X-Received: by 2002:a17:906:3ada:b0:91e:9cc8:427b with SMTP id z26-20020a1709063ada00b0091e9cc8427bmr8659236ejd.25.1678960252868;
+        Thu, 16 Mar 2023 02:50:52 -0700 (PDT)
+Received: from khadija-virtual-machine ([39.41.209.88])
+        by smtp.gmail.com with ESMTPSA id n3-20020a1709061d0300b009307ddcd13esm520185ejh.119.2023.03.16.02.50.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Mar 2023 02:50:52 -0700 (PDT)
+Date:   Thu, 16 Mar 2023 14:50:50 +0500
+From:   Khadija Kamran <kamrankhadijadj@gmail.com>
+To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Cc:     Alison Schofield <alison.schofield@intel.com>,
+        outreachy@lists.linux.dev,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>
+Subject: Re: [PATCH] staging: axis-fifo: initialize timeouts in probe only
+Message-ID: <ZBLmev7BaIhYQXIz@khadija-virtual-machine>
+References: <ZA9mThZ7NyRrQAMX@khadija-virtual-machine>
+ <2168386.Az4OtozEo7@suse>
+ <ZBHOi8vA/LpCyLTJ@khadija-virtual-machine>
+ <3096768.uvML7RA1vL@suse>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v3 4/8] platform/x86/intel/ifs: Introduce Array Scan test
- to IFS
-Content-Language: en-US, nl
-To:     "Joseph, Jithu" <jithu.joseph@intel.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        "markgross@kernel.org" <markgross@kernel.org>
-Cc:     "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "Raj, Ashok" <ashok.raj@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "platform-driver-x86@vger.kernel.org" 
-        <platform-driver-x86@vger.kernel.org>,
-        "patches@lists.linux.dev" <patches@lists.linux.dev>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
-        "Macieira, Thiago" <thiago.macieira@intel.com>,
-        "Jimenez Gonzalez, Athenas" <athenas.jimenez.gonzalez@intel.com>,
-        "Mehta, Sohil" <sohil.mehta@intel.com>
-References: <20230214234426.344960-1-jithu.joseph@intel.com>
- <20230301015942.462799-1-jithu.joseph@intel.com>
- <20230301015942.462799-5-jithu.joseph@intel.com>
- <7f82f241-39ee-15e0-1ae7-e98e50730c95@redhat.com>
- <275d2f04-782f-2c9d-187a-7a510bf34f41@redhat.com>
- <SJ1PR11MB60831C996C2EC462262948CDFCB99@SJ1PR11MB6083.namprd11.prod.outlook.com>
- <363aa89e-de06-6fc4-e396-d8cc311017b9@intel.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <363aa89e-de06-6fc4-e396-d8cc311017b9@intel.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <3096768.uvML7RA1vL@suse>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 3/15/23 20:29, Joseph, Jithu wrote:
+On Wed, Mar 15, 2023 at 05:44:47PM +0100, Fabio M. De Francesco wrote:
+> On mercoledì 15 marzo 2023 14:56:27 CET Khadija Kamran wrote:
+> > On Wed, Mar 15, 2023 at 02:13:51PM +0100, Fabio M. De Francesco wrote:
+> > > On mercoledì 15 marzo 2023 13:32:55 CET Khadija Kamran wrote:
+> > > > On Tue, Mar 14, 2023 at 04:57:47PM -0700, Alison Schofield wrote:
+> > > > > My guess is that this patch gets ignored because it has a lower 
+> version
+> > > > > number than a previous patch.
+> > > > > 
+> > > > > Take the feedback given here, and rev to
+> > > > > [PATCH v5] staging: axis-fifo: initialize timeouts in probe only
+> > > > > 
+> > > > > Be sure the Changelog, below the --- explains the journey.
+> > > > > 
+> > > > > Changes in v5:
+> > > > > 
+> > > > > Changes in v4:
+> > > > > 
+> > > > > Changes in v3:
+> > > > 
+> > > > > Changes in v2:
+> > > > Hey Alison!
+> > > 
+> > > Hi Khadija,
+> > > 
+> > > Please put one or two blank lines between the last message you are 
+> replying
+> > > and the new you are writing (exactly as I'm doing here between "Hey 
+> Alison!"
+> > > and "Hi Khadija").
+> > 
+> > Hey Fabio!
+> > 
+> > Sorry about that. This was pointed by Alison before and I have been
+> > adding spaces since then. Hopefully I am doing it right this time.
+> > 
+> You are doing right this time :-)
+> >
+> > > > Based on Nathan's feedback I am trying to recompile and send a patch
+> > > > without any warnings.
+> > > 
+> > > Great!
+> > > 
+> > > > As suggested by Fabio, I am running "make w=1 -jX" command to see if I
+> > > > get any warnings.
+> > > 
+> > > I suppose that "w=1" is a typo. The option is enabled with "W=1" (capital
+> > > case, Linux and all UNIX-like are case-sensitive).
+> > 
+> > Okay. I should re-run it with "W=1".
+> > 
+> > > > But it is taking a lot of time, is there any way of
+> > > > speeding it up?
+> > > 
+> > > What is you choice for 'X' in "-jX"?
+> > 
+> > I used "-j4".
+> > 
+> > > Did you try with the exact number of logical cores?
+> > > Are you building into a VM with enough logical cores?
+> > > If you are building into a VM, did you reserve enough RAM?
+> > 
+> > I am using Ubuntu 22.04.01 with the help of VM on VMware.
+> > My machine has 13GB RAM and 2 processors(4 cores each).
 > 
-> 
-> On 3/13/2023 10:21 AM, Luck, Tony wrote:
-> 
->>
->>
->> I'm not sure this is better than splitting the tests into different directories.
->>
-> 
-> To provide a bit more context to Tony's response - 
-> There are similarities between tests (one of the test inputs is cpu number , which is 
-> common among different tests , so are the test outputs described via status / details attributes)
-> and some differences too (distinct to each test are the test patterns, some tests needs to
-> load test patterns appropriate for that test type and some does not)
-> 
-> Current approach of keeping each test's attributes in its own directory (intel_ifs_n)
-> allows the driver to account for the differences naturally, for e.g load test file
-> suited for a specific test. (I.e if the load is issued from intel_ifs_<n> , the driver
-> will load test patterns from /lib/firmware/intel/ifs/ifs_<n>/ff-mm-ss-xx.<type_n>).
-> If load is not applicable for a test type , test directory doesnâ€™t show load and image_version attributes). 
-> 
-> As Tony mentioned, similar effect might be achieved using distinct load / run (and image_version)
-> files for each test type, but the current approach of organizing files per test feels a little
-> bit more intuitive. 
-> 
-> Grouping attributes per test was the original design intent , when the first test was introduced,
-> as indicated by the existing ABI doc (Documentation/ABI/testing/sysfs-platform-intel-ifs),
-> wherein attributes are described under /sys/devices/virtual/misc/intel_ifs_<N>/ â€¦
+> Therefore, you are using a Linux guest on a Linux host. This is a wise choice. 
+> However, you didn't say where you are running your builds...
 
-Ok I see, lets go with 1 intel_ifs device per test-type then.
+Hey Fabio!
 
-If I understood things correctly esp. also with the /lib/firmware path then the <N> in intel_ifs_<N> basically specifies the test-type, correct ?
-
-If I have that correct please add this to the ABI documentation in the form of a list with
-
-intel_ifs_<N> <-> test-type
-
-mappings. And also add documentation to each attribute for which test-types the attribute is valid (this can be "all" for e.g. status, to avoid churn when adding more test types).
-
-> Hans, Shall I revise the series incorporating the rest of your comments ?
-
-Yes please.
+I am not using a Linux guest on Linux host. Sorry if I did not explain
+it right. I am using Windows 10 and in order to run Ubuntu, I have
+created a VM(on VMWare). This VM has 13GB RAM and 2 processors(4 cores
+each).
+Thank you!
 
 Regards,
-
-Hans
-
-
+Khadija
+> 
+> I mean, the better things to do are the following steps:
+> 
+> 1) Your workspace with the staging tree should stay in the host.
+> 2) Shut down your guest in order to have all RAM and all logical processors 
+> available for the build.
+> 3) Run "make -j8" in the host. Since you shutdown your guest VM you can use 
+> all 8 logical cores and the maximum available RAM (without the VM draining 
+> resources while building)
+> 4) When the build is done, switch on your VM on VMware with at least 4 logical 
+> cores and 6GB of reserved RAM.
+> 5) Mount your cloned base directory as a shared folder between host and guest.
+> 6) In the guest, 'cd' to the shared folder and then run "make modules_install 
+> install" (in the guest, attention). This will install and configure the 
+> kernel, the modules, GRUB2 and everything else in your guest VM.
+> 7) Reboot the VM and test your patches.
+> 
+> This procedure will speed up your next builds.
+> The fundamental point is that you don't need to partition precious resources 
+> while building, Do everything without running the VM and switch it on only for 
+> install and tests. Since you only build in the host but never install and boot 
+> in it, you don't risk any system's damage.
+> 
+> This is what I do for Kernel development purposes.
+> 
+> I hope it helps to answer your question about how to run fast recompilation.
+> 
+> Fabio  
+> 
+> 
+> > 
+> > > Please read carefully my questions above and try to understand your
+> > > environment and reply, so that I can help you more effectively.
+> > > 
+> > > > If this doesn't work then I have to follow the steps to reproduce in lkp
+> > > > mail as you said before.
+> > > 
+> > > The steps to reproduce will take your precious time and use more 
+> resources.
+> > > Again, try to respond my questions.
+> > > 
+> > > > After dealing with these warnings I will send a [PATCH v5], following
+> > > > your instructions above.
+> > > 
+> > > Sorry for inadvertently overlooking to warn you about to send a message to
+> > > Greg and ask him to drop your first 3 + 1 patches. Now you are doing good 
+> by
+> > > following what Alison suggested: send v5 and write the log of revisions
+> > > under
+> > > the three dashes (exactly how Alison explained).
+> > > 
+> > > > Kindly, let me know if I am on the wrong track.
+> > > > Thank you!
+> > > 
+> > > I think you are in the right track.
+> > > Let's try to speed up your builds because you'll need to build again your
+> > > kernel many, many times for future works.
+> > 
+> > Okay great! Thank you.
+> > 
+> > Regards,
+> > Khadija
+> > 
+> > > Thanks,
+> > > 
+> > > Fabio
+> 
+> 
+> 
+> 
