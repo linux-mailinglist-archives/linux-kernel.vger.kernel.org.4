@@ -2,115 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71ED26BCD33
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 11:48:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86BA46BCD3B
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 11:49:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230130AbjCPKsJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 06:48:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34924 "EHLO
+        id S229842AbjCPKtJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 06:49:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229842AbjCPKrn (ORCPT
+        with ESMTP id S230287AbjCPKs3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 06:47:43 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 244F8BE5C2;
-        Thu, 16 Mar 2023 03:47:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678963652; x=1710499652;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=BYz5y8qjpu7VLTEbVu95st7NnX4R2KAVJgLfMmMipiA=;
-  b=ktO/uFatEgrgBb/1LubSl0GM8wN8xDOHysOZ+KPDrcFkhWOwxGfJUHQ8
-   m8y1jkM0HG5tr9fqCxCxr42coi8lsrWcRITpLzusZZIziibUV4D00BQfb
-   vF/xMxSgsxLxtLC7BnMpH/yLY1ohtD1xngNoDtbowJuNTbs+uufEdnQlz
-   0wDhMDS8kjDLhyn4ugYnfOVHvtwtCw1f+ATiLb6PH15esqQZQTyEs2jUJ
-   NLUOMCKJmRUJbE1lfsZprY/X/JMEb9Li3z7TSb8HH/+nzJ95ba9KoGuaV
-   bGuQqehsOcIRAu03aO7rWGM+gjtBmljDIh4VC+2lZ1yNT2UWOWvJXLCuL
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="424225339"
-X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
-   d="scan'208";a="424225339"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 03:47:30 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="679852794"
-X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
-   d="scan'208";a="679852794"
-Received: from unknown (HELO localhost.localdomain) ([10.237.112.144])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 03:47:27 -0700
-Date:   Thu, 16 Mar 2023 11:47:19 +0100
-From:   Michal Swiatkowski <michal.swiatkowski@linux.intel.com>
-To:     Daniil Tatianin <d-tatianin@yandex-team.ru>
-Cc:     Ariel Elior <aelior@marvell.com>,
-        Manish Chopra <manishc@marvell.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Yuval Mintz <Yuval.Mintz@qlogic.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] qed/qed_sriov: guard against NULL derefs from
- qed_iov_get_vf_info
-Message-ID: <ZBLzt+tS/SKO9IGC@localhost.localdomain>
-References: <20230316102921.609266-1-d-tatianin@yandex-team.ru>
+        Thu, 16 Mar 2023 06:48:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 419BEBDD2A;
+        Thu, 16 Mar 2023 03:47:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 21C6261FBC;
+        Thu, 16 Mar 2023 10:47:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F5EDC433D2;
+        Thu, 16 Mar 2023 10:47:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678963669;
+        bh=adDp088lfsRx00jTnzbgcWozbhk6SX4/HzArAfWHhL8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GHUYMytmwKFfch6AOme8SGcvXM0XGlwVDta3+wv17+MoBHhMIZMmmzFaV0kOah6Kw
+         WI/SOSOBeeznqsCWoXSVOz4ylZFi6ylsikplsJ+6EmqLQAHFzYNwKBDa9nnFt+q1kd
+         cA/N1dhpg0heFYO9eZWsjphZq2knApXmNn4r5mFM4uAWCpE71ZaXk+8525L5BDWLyB
+         gTI8WgYYRFT6xGidQidZNEQ4g0HIaEcM/dqrzhYXddqRchl5p359TBnas7gyYaVIMP
+         B65H5dPF11JZbxY23Y6LDugpZl3OxMaGq0rDZU8NZvLx2ylfx1S5kTaFiO2agx7rZ1
+         j9rCZtThEheuA==
+Date:   Thu, 16 Mar 2023 11:47:42 +0100
+From:   Christian Brauner <brauner@kernel.org>
+To:     David Howells <dhowells@redhat.com>
+Cc:     Jens Axboe <axboe@kernel.dk>, Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Hillf Danton <hdanton@sina.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Christoph Hellwig <hch@lst.de>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        linux-unionfs@vger.kernel.org
+Subject: Re: [PATCH v19 04/15] overlayfs: Implement splice-read
+Message-ID: <20230316104742.hstef2opz2atctl6@wittgenstein>
+References: <20230315163549.295454-1-dhowells@redhat.com>
+ <20230315163549.295454-5-dhowells@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230316102921.609266-1-d-tatianin@yandex-team.ru>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230315163549.295454-5-dhowells@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 16, 2023 at 01:29:21PM +0300, Daniil Tatianin wrote:
-> We have to make sure that the info returned by the helper is valid
-> before using it.
+On Wed, Mar 15, 2023 at 04:35:38PM +0000, David Howells wrote:
+> Implement splice-read for overlayfs by passing the request down a layer
+> rather than going through generic_file_splice_read() which is going to be
+> changed to assume that ->read_folio() is present on buffered files.
 > 
-> Found by Linux Verification Center (linuxtesting.org) with the SVACE
-> static analysis tool.
-> 
-> Fixes: f990c82c385b ("qed*: Add support for ndo_set_vf_trust")
-> Fixes: 733def6a04bf ("qed*: IOV link control")
-> Signed-off-by: Daniil Tatianin <d-tatianin@yandex-team.ru>
+> Signed-off-by: David Howells <dhowells@redhat.com>
+> cc: Christoph Hellwig <hch@lst.de>
+> cc: Jens Axboe <axboe@kernel.dk>
+> cc: Al Viro <viro@zeniv.linux.org.uk>
+> cc: John Hubbard <jhubbard@nvidia.com>
+> cc: David Hildenbrand <david@redhat.com>
+> cc: Matthew Wilcox <willy@infradead.org>
+> cc: Miklos Szeredi <miklos@szeredi.hu>
+> cc: linux-unionfs@vger.kernel.org
+> cc: linux-block@vger.kernel.org
+> cc: linux-fsdevel@vger.kernel.org
+> cc: linux-mm@kvack.org
 > ---
-> Changes since v1:
-> - Add a vf check to qed_iov_handle_trust_change as well
-> ---
->  drivers/net/ethernet/qlogic/qed/qed_sriov.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/net/ethernet/qlogic/qed/qed_sriov.c b/drivers/net/ethernet/qlogic/qed/qed_sriov.c
-> index 2bf18748581d..fa167b1aa019 100644
-> --- a/drivers/net/ethernet/qlogic/qed/qed_sriov.c
-> +++ b/drivers/net/ethernet/qlogic/qed/qed_sriov.c
-> @@ -4404,6 +4404,9 @@ qed_iov_configure_min_tx_rate(struct qed_dev *cdev, int vfid, u32 rate)
->  	}
->  
->  	vf = qed_iov_get_vf_info(QED_LEADING_HWFN(cdev), (u16)vfid, true);
-> +	if (!vf)
-> +		return -EINVAL;
-> +
->  	vport_id = vf->vport_id;
->  
->  	return qed_configure_vport_wfq(cdev, vport_id, rate);
-> @@ -5152,7 +5155,7 @@ static void qed_iov_handle_trust_change(struct qed_hwfn *hwfn)
->  
->  		/* Validate that the VF has a configured vport */
->  		vf = qed_iov_get_vf_info(hwfn, i, true);
-> -		if (!vf->vport_instance)
-> +		if (!vf || !vf->vport_instance)
->  			continue;
->  
->  		memset(&params, 0, sizeof(params));
-> -- 
-> 2.25.1
-> 
 
-Thanks,
-Reviewed-by: Michal Swiatkowski <michal.swiatkowski@linux.intel.com>
-
+Looks good,
+Reviewed-by: Christian Brauner <brauner@kernel.org>
