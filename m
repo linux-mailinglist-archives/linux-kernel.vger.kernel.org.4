@@ -2,79 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B8C26BC4AE
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 04:27:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5A1C6BC4B9
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 04:30:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229686AbjCPD1G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 23:27:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39572 "EHLO
+        id S229899AbjCPDaP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 23:30:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229599AbjCPD0d (ORCPT
+        with ESMTP id S229977AbjCPD3p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 23:26:33 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 822929BA52;
-        Wed, 15 Mar 2023 20:24:58 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id u5so354433plq.7;
-        Wed, 15 Mar 2023 20:24:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678937098;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=GNHlIO69ec3eioGUhSag8tmnyuktf3gIfuSWwZXOVbs=;
-        b=bCsX6pixTgzGXBT0Ep8l2BFiyOB4DzHtkZNsVJcf+RF3EpV6bNPK4qZliJy+0/V9Kg
-         QCrVpLEEzwHL4Qi2/kCk6aOGPOwa7oHQYho/QVFWT2YhIkbhjPLLoa2CJg/3eChM4qRc
-         e4eBlKVns3npPcNNTNSRyoqbmUAU2ADQGShOO27Z8oDfVowz5QNC7p7rOthGwXysN7JH
-         rK47fX763E3ALdVXV8oLfp273Aum3Po1FnPtC1p7YM0ZIh6DvyZ2RfDSjMU+038mBYZD
-         rvKdThjHz1pL5acI+L+JBWgagiUBRG0/b5TVoh7KhKypFbeIG4nkfzTcqz0J7lbXAMHa
-         dMkQ==
+        Wed, 15 Mar 2023 23:29:45 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFEF7A8834
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 20:27:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678937232;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=DMb/pvY0ifAYDi1mDsSYQA0P+lv6YS8p6Jz5ap0BMTc=;
+        b=IJhjE60XtiMNFQ09e9tVaX4EwfgwPB1/ZbaTtnGn6YzeVvbbpOfnGCDKMQlKgOBfJUiFyK
+        IL178otD8J7S6N5jkfhOYyzTNoAhlbFivOtC1bOjPMhLTMFZFN0/b24QgWQxYM6mGIB5Re
+        ijduXsL8JY/FAeN8LvWBXo3+Gb+XwYI=
+Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com
+ [209.85.214.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-90-gTipI1MnOPKa25o5y_51jg-1; Wed, 15 Mar 2023 23:27:10 -0400
+X-MC-Unique: gTipI1MnOPKa25o5y_51jg-1
+Received: by mail-pl1-f200.google.com with SMTP id k17-20020a170902d59100b0019abcf45d75so236471plh.8
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 20:27:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678937098;
+        d=1e100.net; s=20210112; t=1678937229;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GNHlIO69ec3eioGUhSag8tmnyuktf3gIfuSWwZXOVbs=;
-        b=sQn5ndZrEpVwl3sxYcyxwSL08RETi/CtNMtuWsVNlLjTwjFcjgD/lonpnkv1Z6kfNV
-         FvAlpBpJkqDIZrY03Lwn0lDBh0nzoiNjILfTa09N9X6Cn928zJhirs0qG1OR8j2Ezeo8
-         QfGhWIBNu0zroL0Lc1G4g/jb6LUdXagIzrDRrijDyK3AMortvTDp482oyJEtves1ttgV
-         PEy6QXjJJJDwfzepOuIS5DEK8n4eLHpGx6LVsSh6FRyGwmn18S8mzdhiznVBqt1JNI8d
-         qT/T0z2Y8BhPv6I36PYhWmfF/4swsS149txwKhXxqtfwUmrMvfJ9OOcxi0TdzBHlePKX
-         1nsQ==
-X-Gm-Message-State: AO0yUKUPUNwt+A87RBQzR/k73iWz+beCZOw7QF2xoqt4I9UwiNBW7jeR
-        7OdQrNWr9Eb37XV1qH5kLbA=
-X-Google-Smtp-Source: AK7set8+8Gttpm122NqDqvc3nC2lNl7BJB8qep7vWcThcDpY3xAa94UzgxD6C2weZGJKGFYJaL+MVA==
-X-Received: by 2002:a17:902:f9ce:b0:199:1160:956c with SMTP id kz14-20020a170902f9ce00b001991160956cmr1513924plb.31.1678937097840;
-        Wed, 15 Mar 2023 20:24:57 -0700 (PDT)
-Received: from [172.19.1.47] (60-250-192-107.hinet-ip.hinet.net. [60.250.192.107])
-        by smtp.gmail.com with ESMTPSA id f11-20020a17090274cb00b001a0450da45csm4308670plt.185.2023.03.15.20.24.55
+        bh=DMb/pvY0ifAYDi1mDsSYQA0P+lv6YS8p6Jz5ap0BMTc=;
+        b=hWEyVEyyEZltr0bvUFQPRwoiGMfwNOASAYDPQ3k8SbP1YmVLU91NZLiizSwB9hsl4L
+         9YEofXwIZbuFMG4UnayGFlSw7Vhuf4VS7B+7HukhKYPK2nhnkuuQJzBEFNQ9W658yxW2
+         Um8Bel9evPIb5MFDZcknC6Pb2geWooNYOQfH8GyrgCRjX751VfagbctiAZ6HrfneEn8r
+         qbu9Tc87hq0qMarJN2AJMQoyyC0094ejg8eWdaUTya3Slybwut/gCAknatKsdhg4ZKLX
+         MhEiH7dic1Mcwbdzbgh2xtAe4Vz/nJDTr7zOj8KL5yyB6LnvyAR/5SMwFmp1PAU+LCE5
+         gRJg==
+X-Gm-Message-State: AO0yUKVxLoHUU32uZRq3DYrSk9P/zRLxp/tpjA2YpQTMLOElJ0AflArl
+        sr3KkmJZHxd40HSUli1EgzWqNdLNHTkHCbNtgOnfqcwKmOhHlHXozzvOMMfwnSYa0NbwDwG1FQm
+        DdvFL+p7Cm2JHUcKk0IMiq6KW
+X-Received: by 2002:aa7:9559:0:b0:5a8:cbcc:4b58 with SMTP id w25-20020aa79559000000b005a8cbcc4b58mr1669511pfq.12.1678937229686;
+        Wed, 15 Mar 2023 20:27:09 -0700 (PDT)
+X-Google-Smtp-Source: AK7set+0MYBlNOJ1EjWFYI+3aCAZeGH+7StNpyaP/qL6fDx88yyfXpqfJL+lUPl3URKvRsQhhHnZ1Q==
+X-Received: by 2002:aa7:9559:0:b0:5a8:cbcc:4b58 with SMTP id w25-20020aa79559000000b005a8cbcc4b58mr1669500pfq.12.1678937229315;
+        Wed, 15 Mar 2023 20:27:09 -0700 (PDT)
+Received: from [10.72.12.40] ([43.228.180.230])
+        by smtp.gmail.com with ESMTPSA id m2-20020aa79002000000b00625c6ca32b0sm1743519pfo.213.2023.03.15.20.27.06
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Mar 2023 20:24:57 -0700 (PDT)
-Message-ID: <13780a99-33bb-6387-d4e3-66bc8456c2f2@gmail.com>
-Date:   Thu, 16 Mar 2023 11:24:54 +0800
+        Wed, 15 Mar 2023 20:27:09 -0700 (PDT)
+Message-ID: <319ece63-ac4f-db05-8a55-65ecad75e437@redhat.com>
+Date:   Thu, 16 Mar 2023 11:27:04 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 08/15] dt-bindings: clock: Document ma35d1 clock
- controller bindings
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.8.0
+Subject: Re: [PATCH v3 02/11] vdpa: Add set/get_vq_affinity callbacks in
+ vdpa_config_ops
 Content-Language: en-US
-To:     Stephen Boyd <sboyd@kernel.org>, gregkh@linuxfoundation.org,
-        jirislaby@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        lee@kernel.org, mturquette@baylibre.com, p.zabel@pengutronix.de,
-        robh+dt@kernel.org
-Cc:     devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        schung@nuvoton.com, Jacky Huang <ychuang3@nuvoton.com>
-References: <20230315072902.9298-1-ychuang570808@gmail.com>
- <20230315072902.9298-9-ychuang570808@gmail.com>
- <d181a7bffc22be4b690f95f594ecbf5c.sboyd@kernel.org>
-From:   Jacky Huang <ychuang570808@gmail.com>
-In-Reply-To: <d181a7bffc22be4b690f95f594ecbf5c.sboyd@kernel.org>
+To:     Xie Yongji <xieyongji@bytedance.com>, mst@redhat.com,
+        tglx@linutronix.de, hch@lst.de
+Cc:     virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+References: <20230228094110.37-1-xieyongji@bytedance.com>
+ <20230228094110.37-3-xieyongji@bytedance.com>
+From:   Jason Wang <jasowang@redhat.com>
+In-Reply-To: <20230228094110.37-3-xieyongji@bytedance.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,133 +85,101 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-Dear Stephen,
-
-
-Thanks for your review.
-
-
-On 2023/3/16 上午 05:59, Stephen Boyd wrote:
-> Quoting Jacky Huang (2023-03-15 00:28:55)
->> diff --git a/Documentation/devicetree/bindings/clock/nuvoton,ma35d1-clk.yaml b/Documentation/devicetree/bindings/clock/nuvoton,ma35d1-clk.yaml
->> new file mode 100644
->> index 000000000000..5c2dea071b38
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/clock/nuvoton,ma35d1-clk.yaml
->> @@ -0,0 +1,83 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/clock/nuvoton,ma35d1-clk.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Nuvoton MA35D1 Clock Controller Module Binding
-> Binding is redundant.
-
-I will remove this word.
-
->> +
->> +maintainers:
->> +  - Chi-Fang Li <cfli0@nuvoton.com>
->> +  - Jacky Huang <ychuang3@nuvoton.com>
->> +
->> +description: |
->> +  The MA35D1 clock controller generates clocks for the whole chip,
->> +  including system clocks and all peripheral clocks.
->> +
->> +  See also:
->> +    include/dt-bindings/clock/ma35d1-clk.h
->> +
->> +properties:
->> +  compatible:
->> +    items:
->> +      - const: nuvoton,ma35d1-clk
->> +      - const: syscon
-> Does it really need to be a syscon?
-
-Some registers of the clock controller are locked against writing.
-Before writing, the lock must be unlocked through the system controller.
-So syscon is needed.
-
->> +
->> +  reg:
->> +    maxItems: 1
->> +
->> +  "#clock-cells":
->> +    const: 1
->> +
->> +  clocks:
->> +    maxItems: 1
->> +
->> +  clock-names:
->> +    const: clk_hxt
->> +
->> +  assigned-clocks:
->> +    maxItems: 5
->> +
->> +  assigned-clock-rates:
->> +    maxItems: 5
-> I hope the assigned clocks properties can be left out of this doc.
-
-Sure, we will remove it.
-
->> +
->> +  nuvoton,pll-mode:
->> +    description:
->> +      A list of PLL operation mode corresponding to CAPLL, DDRPLL, APLL,
->> +      EPLL, and VPLL in sequential. The operation mode value 0 is for
->> +      integer mode, 1 is for fractional mode, and 2 is for spread
->> +      spectrum mode.
->> +    $ref: /schemas/types.yaml#/definitions/uint32-array
->> +    maxItems: 5
->> +    items:
->> +      minimum: 0
->> +      maximum: 2
-> Why not use a string?
-
-OK, we'll use strings instead.
-
->> +
->> +  nuvoton,sys:
->> +    description:
->> +      Phandle to the system management controller.
->> +    $ref: "/schemas/types.yaml#/definitions/phandle-array"
->> +
->> +required:
->> +  - compatible
->> +  - reg
->> +  - "#clock-cells"
->> +  - clocks
->> +  - clock-names
->> +  - nuvoton,sys
->> +
->> +additionalProperties: false
->> +
->> +examples:
->> +  - |
->> +    #include <dt-bindings/clock/nuvoton,ma35d1-clk.h>
-> No need to include this header right?
-
-Yes, I will remove this header in the next version.
-
+在 2023/2/28 17:41, Xie Yongji 写道:
+> This introduces set/get_vq_affinity callbacks in
+> vdpa_config_ops to support interrupt affinity
+> management for vdpa device drivers.
 >
->> +
->> +    clk: clock-controller@40460200 {
-> Drop the label?
-
-OK, I will drop this label in the next version.
-
+> Signed-off-by: Xie Yongji <xieyongji@bytedance.com>
+> Acked-by: Jason Wang <jasowang@redhat.com>
+> ---
+>   drivers/virtio/virtio_vdpa.c | 28 ++++++++++++++++++++++++++++
+>   include/linux/vdpa.h         | 13 +++++++++++++
+>   2 files changed, 41 insertions(+)
 >
->> +        compatible = "nuvoton,ma35d1-clk", "syscon";
->> +        reg = <0x40460200 0x100>;
->> +        #clock-cells = <1>;
->> +        clocks = <&clk_hxt>;
->> +        clock-names = "clk_hxt";
->> +        nuvoton,sys = <&sys>;
->> +    };
+> diff --git a/drivers/virtio/virtio_vdpa.c b/drivers/virtio/virtio_vdpa.c
+> index d7f5af62ddaa..f72696b4c1c2 100644
+> --- a/drivers/virtio/virtio_vdpa.c
+> +++ b/drivers/virtio/virtio_vdpa.c
+> @@ -337,6 +337,32 @@ static const char *virtio_vdpa_bus_name(struct virtio_device *vdev)
+>   	return dev_name(&vdpa->dev);
+>   }
+>   
+> +static int virtio_vdpa_set_vq_affinity(struct virtqueue *vq,
+> +				       const struct cpumask *cpu_mask)
+> +{
+> +	struct virtio_vdpa_device *vd_dev = to_virtio_vdpa_device(vq->vdev);
+> +	struct vdpa_device *vdpa = vd_dev->vdpa;
+> +	const struct vdpa_config_ops *ops = vdpa->config;
+> +	unsigned int index = vq->index;
+> +
+> +	if (ops->set_vq_affinity)
+> +		return ops->set_vq_affinity(vdpa, index, cpu_mask);
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct cpumask *
+> +virtio_vdpa_get_vq_affinity(struct virtio_device *vdev, int index)
+> +{
+> +	struct vdpa_device *vdpa = vd_get_vdpa(vdev);
+> +	const struct vdpa_config_ops *ops = vdpa->config;
+> +
+> +	if (ops->get_vq_affinity)
+> +		return ops->get_vq_affinity(vdpa, index);
+> +
+> +	return NULL;
+> +}
+> +
+>   static const struct virtio_config_ops virtio_vdpa_config_ops = {
+>   	.get		= virtio_vdpa_get,
+>   	.set		= virtio_vdpa_set,
+> @@ -349,6 +375,8 @@ static const struct virtio_config_ops virtio_vdpa_config_ops = {
+>   	.get_features	= virtio_vdpa_get_features,
+>   	.finalize_features = virtio_vdpa_finalize_features,
+>   	.bus_name	= virtio_vdpa_bus_name,
+> +	.set_vq_affinity = virtio_vdpa_set_vq_affinity,
+> +	.get_vq_affinity = virtio_vdpa_get_vq_affinity,
+>   };
+>   
+>   static void virtio_vdpa_release_dev(struct device *_d)
+> diff --git a/include/linux/vdpa.h b/include/linux/vdpa.h
+> index 43f59ef10cc9..d61f369f9cd6 100644
+> --- a/include/linux/vdpa.h
+> +++ b/include/linux/vdpa.h
+> @@ -250,6 +250,15 @@ struct vdpa_map_file {
+>    *				@vdev: vdpa device
+>    *				Returns the iova range supported by
+>    *				the device.
+> + * @set_vq_affinity:		Set the irq affinity of virtqueue (optional)
 
 
-Best Regards,
+Nit: it's better not mention IRQ here because the virtqueue notification 
+is not necessarily backed on IRQ.
 
-Jacky Huang
+Thanks
+
+
+> + *				@vdev: vdpa device
+> + *				@idx: virtqueue index
+> + *				@cpu_mask: irq affinity mask
+> + *				Returns integer: success (0) or error (< 0)
+> + * @get_vq_affinity:		Get the irq affinity of virtqueue (optional)
+> + *				@vdev: vdpa device
+> + *				@idx: virtqueue index
+> + *				Returns the irq affinity mask
+>    * @set_group_asid:		Set address space identifier for a
+>    *				virtqueue group (optional)
+>    *				@vdev: vdpa device
+> @@ -340,6 +349,10 @@ struct vdpa_config_ops {
+>   			   const void *buf, unsigned int len);
+>   	u32 (*get_generation)(struct vdpa_device *vdev);
+>   	struct vdpa_iova_range (*get_iova_range)(struct vdpa_device *vdev);
+> +	int (*set_vq_affinity)(struct vdpa_device *vdev, u16 idx,
+> +			       const struct cpumask *cpu_mask);
+> +	const struct cpumask *(*get_vq_affinity)(struct vdpa_device *vdev,
+> +						 u16 idx);
+>   
+>   	/* DMA ops */
+>   	int (*set_map)(struct vdpa_device *vdev, unsigned int asid,
 
