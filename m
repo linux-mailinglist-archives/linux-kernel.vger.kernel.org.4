@@ -2,101 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81CC86BD5C7
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 17:34:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 222176BD5C6
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 17:34:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230304AbjCPQeC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 12:34:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41244 "EHLO
+        id S230517AbjCPQd7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 12:33:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230429AbjCPQdZ (ORCPT
+        with ESMTP id S230420AbjCPQdZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 16 Mar 2023 12:33:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D52CE2364F;
-        Thu, 16 Mar 2023 09:33:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DA6EA620A3;
-        Thu, 16 Mar 2023 16:33:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60585C433EF;
-        Thu, 16 Mar 2023 16:33:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678984387;
-        bh=mjOBt0hwl4VEkVOuBgR29W11lOITYRPWxwYwBi1U/4k=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bPd+Y7Qo+noxbNTj3GsG57jZen9HJW9uDrAMF6aVloWUTSdA++zx+D88auN/tEJ+d
-         +InoxhytfHbb4JZ7YSzbt+N7smpDmlD+UFsIJVRGKdjusgzUgo2hM/qtgcCIZylokY
-         rubIvsFrR7bU1qCryJFjOeVC1cdDrcwEXny0j/hgNTHv15G8ieQU7k90UcyFivd6Vs
-         tumNV3GlIsJNXuE53qlreZkdKzcMRKyI5WT0/T4EKtP8ApRsgoj4CzGa8+xPoBe7nJ
-         zfUdfaDwCM7Z10f2v7SCirAEZkPZdUmDh093bZOHrH4tVxgfJsqVHWOfV2ad0QMbFb
-         +quIDX7XrA0KQ==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Alexandre Ghiti <alex@ghiti.fr>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Sasha Levin <sashal@kernel.org>, paul.walmsley@sifive.com,
-        palmer@dabbelt.com, aou@eecs.berkeley.edu,
-        linux-riscv@lists.infradead.org
-Subject: [PATCH AUTOSEL 6.2 7/7] riscv: Bump COMMAND_LINE_SIZE value to 1024
-Date:   Thu, 16 Mar 2023 12:32:24 -0400
-Message-Id: <20230316163227.708614-7-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230316163227.708614-1-sashal@kernel.org>
-References: <20230316163227.708614-1-sashal@kernel.org>
+Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E32AE4C47
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 09:33:06 -0700 (PDT)
+Received: by mail-vs1-xe32.google.com with SMTP id s1so2035222vsk.5
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 09:33:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=incline.eu; s=google; t=1678984384;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=8B3d1S23a0KcdvhQ92wJ0437Yle3gXb1RhMvXQci9J4=;
+        b=n3e8Z5+dg1VAXR3+2t7jvGEZ0CD9VH4XhsWI7+ik2wPXMAxg+l16LkJpv0W2LdM/kQ
+         Dx1KnhuUGHtXBlwIPfJQ30OtaFjaOpv9/DG2+DNtBrTlE5VXeCUzpwTOqEgXqy6umNT8
+         VNFEb8ROJvoQsqTlUcOAVqfv+ZFRLP5nfaXKhgAGwTF2C/1UBuGYpeao1c7gQyYfZwtC
+         jg0fSR+/xcvCL0oKgjb1RdchjH4CSaDVM3KDlrYXr7QkJMOG/zmDhEWfOCHuzUvTV5gI
+         nALMPqWL1pI43yXcTY5yJiU3wl5fTyU4i2swTmP3spRIPLg0FKnNPvu6UBaZ2ZrRBiSz
+         arFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678984384;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8B3d1S23a0KcdvhQ92wJ0437Yle3gXb1RhMvXQci9J4=;
+        b=UZxyu2ZXxJvwHRRr0VmiqZwdXR5JZpwBH+52WFvyxI1/juVlyBfwSGhM1DJGsjqjVh
+         RgTbQI9y8Qaz3U/WlGrd3Siqm/SBSmdC0r4hbQpifwz8OR5paZz/gwy7zKEzHq0vWbdA
+         UefQvtIL8kYpuRWcZP9t0+OPVMrwCr0CkWbzdoZs9vFBVqqRocFmWsDIM7jMp9D/bolX
+         qe8rZCOOi/eCCk+4xVp1Ie+3pjbjSOGOyLebeeFzQ33crpNF2uf8JqQaLh6k2UB1kuNC
+         C2wleIIkfbdQus90QHksgYWQShgUZXvqCNIezqWu6lryRzbJjtW6u8jjMCPsazeQueEs
+         tjIQ==
+X-Gm-Message-State: AO0yUKWOz19Sr6XlIkvHE7MaDXVfcUAI0mxi57YO4J4M/jeLzVZzfZGX
+        Bt7SSVumR8wYXojPMEgaIEO5+q+NsqTx9CvwwEC6zwCz6avdXIuAPe4=
+X-Google-Smtp-Source: AK7set/XYqoEoZ9PRe4KKx8z5WDa0F2MzP0birljKpD5C5T4HsZGI9FkOxeUI629ouWfkVjQHhuAZxyfMTsiuWWWh8k=
+X-Received: by 2002:a67:ea49:0:b0:411:a740:c3ea with SMTP id
+ r9-20020a67ea49000000b00411a740c3eamr29958526vso.0.1678984384556; Thu, 16 Mar
+ 2023 09:33:04 -0700 (PDT)
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20200519132616.794171-1-timo@incline.eu> <20230314192740.GQ2017917@hirez.programming.kicks-ass.net>
+In-Reply-To: <20230314192740.GQ2017917@hirez.programming.kicks-ass.net>
+From:   Timo Beckers <timo@incline.eu>
+Date:   Thu, 16 Mar 2023 17:32:53 +0100
+Message-ID: <CANgQc9jF_wimvUsC0ck7o5w3oEwJ5g7DS0DRQqNm57X-WdGz=Q@mail.gmail.com>
+Subject: Re: [PATCH] perf core: apply calculated padding to PERF_SAMPLE_RAW output
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        "open list:PERFORMANCE EVENTS SUBSYSTEM" 
+        <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexandre Ghiti <alex@ghiti.fr>
+On Tue, 14 Mar 2023 at 20:27, Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> On Tue, May 19, 2020 at 03:26:16PM +0200, Timo Beckers wrote:
+> > Zero the amount of padding bytes determined in perf_prepare_sample().
+> > This prevents garbage being read from the ring buffer after it has wrapped
+> > the page boundary at least once.
+>
+> But it's user garbage, right?
 
-[ Upstream commit 61fc1ee8be26bc192d691932b0a67eabee45d12f ]
+Hey Peter, correct. Not a security issue, but rather a usability one. (IMO)
+It would be nice if the receiver could verify if the trailing bytes
+are all zeroes
+after interpreting the payload. (I deal with Go interop; C<->Go struct
+alignment behaviour differs subtly, so this helps debugging)
 
-Increase COMMAND_LINE_SIZE as the current default value is too low
-for syzbot kernel command line.
+I know the ship has sailed and it's been like this for a long time, but getting
+it fixed in a non-invasive way would be neat if the performance penalty is
+not too steep. I think Jiri was playing around with some benchmarks.
 
-There has been considerable discussion on this patch that has led to a
-larger patch set removing COMMAND_LINE_SIZE from the uapi headers on all
-ports.  That's not quite done yet, but it's gotten far enough we're
-confident this is not a uABI change so this is safe.
+> And they should be unconsumed anyway.
 
-Reported-by: Dmitry Vyukov <dvyukov@google.com>
-Signed-off-by: Alexandre Ghiti <alex@ghiti.fr>
-Link: https://lore.kernel.org/r/20210316193420.904-1-alex@ghiti.fr
-[Palmer: it's not uabi]
-Link: https://lore.kernel.org/linux-riscv/874b8076-b0d1-4aaa-bcd8-05d523060152@app.fastmail.com/#t
-Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- arch/riscv/include/uapi/asm/setup.h | 8 ++++++++
- 1 file changed, 8 insertions(+)
- create mode 100644 arch/riscv/include/uapi/asm/setup.h
+Well, not quite. perf_event_sample.size contains the size of .data including
+padding, so the reader always needs to copy out the full event, which
+potentially includes garbage. .data is completely opaque from a generic
+perf reader POV, so it can't automatically trim it or choose not to read it.
 
-diff --git a/arch/riscv/include/uapi/asm/setup.h b/arch/riscv/include/uapi/asm/setup.h
-new file mode 100644
-index 0000000000000..66b13a5228808
---- /dev/null
-+++ b/arch/riscv/include/uapi/asm/setup.h
-@@ -0,0 +1,8 @@
-+/* SPDX-License-Identifier: GPL-2.0-only WITH Linux-syscall-note */
-+
-+#ifndef _UAPI_ASM_RISCV_SETUP_H
-+#define _UAPI_ASM_RISCV_SETUP_H
-+
-+#define COMMAND_LINE_SIZE	1024
-+
-+#endif /* _UAPI_ASM_RISCV_SETUP_H */
--- 
-2.39.2
+Haven't looked at the kernel side in a while, but maybe setting .size to
+the length of the input on the bpf side would be a better solution? Then no
+zeroing needs to be done. I assume there's no strong need to increase
+.size in 8-byte aligned steps, as I currently see values like 4, 12,
+20, 28, etc.
+Please correct me if I'm wrong.
 
+Thanks,
+
+Timo
+
+>
+> > Signed-off-by: Timo Beckers <timo@incline.eu>
+> > ---
+> >  kernel/events/core.c | 12 ++++++++++--
+> >  1 file changed, 10 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/kernel/events/core.c b/kernel/events/core.c
+> > index 80cf996a7f19..d4e0b003ece0 100644
+> > --- a/kernel/events/core.c
+> > +++ b/kernel/events/core.c
+> > @@ -6807,8 +6807,16 @@ void perf_output_sample(struct perf_output_handle *handle,
+> >                                       break;
+> >                               frag = frag->next;
+> >                       } while (1);
+> > -                     if (frag->pad)
+> > -                             __output_skip(handle, NULL, frag->pad);
+> > +                     /*
+> > +                      * The padding value is determined in
+> > +                      * perf_prepare_sample() and is not
+> > +                      * expected to exceed u64.
+> > +                      */
+> > +                     if (frag->pad) {
+> > +                             u64 zero = 0;
+> > +
+> > +                             __output_copy(handle, &zero, frag->pad);
+> > +                     }
+> >               } else {
+> >                       struct {
+> >                               u32     size;
+> > --
+> > 2.26.2
+> >
