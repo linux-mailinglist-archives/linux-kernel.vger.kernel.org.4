@@ -2,194 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F8356BD5B6
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 17:33:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FC496BD5A1
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 17:31:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230335AbjCPQdM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 12:33:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39012 "EHLO
+        id S230169AbjCPQbd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 12:31:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230244AbjCPQdF (ORCPT
+        with ESMTP id S229690AbjCPQbb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 12:33:05 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0692E4C62;
-        Thu, 16 Mar 2023 09:32:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678984374; x=1710520374;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=f3CiC2QaSsYUVd8b13hI0y9f5nq5N4yNeInHX5rBGGY=;
-  b=ZUjZhOOc5UhlW+bNa/1w5driFIwRqWd7dIMf53hp4mqXjTMbJTpJ9c1T
-   URc2PQ96Q2sgnZktJ7AjleZ+mmpJhc4cdiO4MEwlRFpOeHcHu2cNjCnyP
-   FSAfuFjDyjKbjBghwU7vOXNKuAFhISWtrEx7wUHGyurUVKBRYi/Y82Djc
-   JBik8fYCt2K4kuvTibtjLQYR1huuvJqWL0ZbPiKyv6cbm/M5EWonxxnQY
-   Z4NKE6u5Da5z92wYUVzeoEbu5R/sltt986Oy9v0xOjw46lyaFTgi+VKu8
-   9VSfabEZt/EkYl0SR2hnR0O5pQtro3VbU5Kp2y9MchGzze65Ds1FVvAyE
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="338060669"
-X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
-   d="scan'208";a="338060669"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 09:31:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="854117073"
-X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
-   d="scan'208";a="854117073"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 16 Mar 2023 09:31:35 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pcqVr-0008d0-15;
-        Thu, 16 Mar 2023 16:31:35 +0000
-Date:   Fri, 17 Mar 2023 00:30:58 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     hildawu@realtek.com, marcel@holtmann.org
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        johan.hedberg@gmail.com, luiz.dentz@gmail.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, apusaka@chromium.org,
-        mmandlik@google.com, yinghsu@chromium.org, max.chou@realtek.com,
-        alex_lu@realsil.com.cn, kidman@realtek.com
-Subject: Re: [PATCH] Bluetooth: msft: Extended monitor tracking by address
- filter
-Message-ID: <202303170056.UsZ6RDV4-lkp@intel.com>
-References: <20230316090729.14572-1-hildawu@realtek.com>
+        Thu, 16 Mar 2023 12:31:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3235E20DE
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 09:31:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0860E620A3
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 16:31:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9ECBCC433D2;
+        Thu, 16 Mar 2023 16:31:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678984279;
+        bh=pirosOyYPxb7gdRU1NPpfNvNnz15Z33y9681TnHTFlM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=l6mv/K/P87rQtBc+pauTpDhxdURklyAnTWHyzHqnWtLN8gyTfdngQVD+JY+UBJjiZ
+         McKhk7fRcBG7iIkrlx0AMU3r28X13AkoeHcBwYkZaJJ3Bz58Ayd47bTzB9rDHAqmbz
+         tbwmNtXZ5O0KHEDzJoeHLtKABDVXKF1uHixkCIWs9nUtiPbk5lvrYUvhPECpSJv8j/
+         5tC4OKR0FyM0aEBVsek45kzbTfTwgQl5jPm+8q6DX7oxYzdS1EKTSPRIZY/oIa19FV
+         8jdU2xQk3iRybalVS6EShGE4AdWS1c9Y0KbJXfDF8sbYRZVPPe/9+EjdB+28+kA4re
+         QR9w/0HcH1DjA==
+Date:   Thu, 16 Mar 2023 16:31:14 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Ravulapati Vishnu Vardhan Rao <quic_visr@quicinc.com>
+Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Banajit Goswami <bgoswami@quicinc.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        "moderated list:QCOM AUDIO (ASoC) DRIVERS" 
+        <alsa-devel@alsa-project.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] ASoC: codecs:rx-macro: Fixing uninitialized variables.
+Message-ID: <e3165099-96c9-4326-af73-6020f0276f7b@sirena.org.uk>
+References: <20230316162249.17044-1-quic_visr@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="+5Ml4SivzgiYppgJ"
 Content-Disposition: inline
-In-Reply-To: <20230316090729.14572-1-hildawu@realtek.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230316162249.17044-1-quic_visr@quicinc.com>
+X-Cookie: ... I have read the INSTRUCTIONS ...
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-Thank you for the patch! Perhaps something to improve:
+--+5Ml4SivzgiYppgJ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-[auto build test WARNING on bluetooth/master]
-[also build test WARNING on bluetooth-next/master net-next/main net/main linus/master v6.3-rc2 next-20230316]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+On Thu, Mar 16, 2023 at 09:52:49PM +0530, Ravulapati Vishnu Vardhan Rao wro=
+te:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/hildawu-realtek-com/Bluetooth-msft-Extended-monitor-tracking-by-address-filter/20230316-170950
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth.git master
-patch link:    https://lore.kernel.org/r/20230316090729.14572-1-hildawu%40realtek.com
-patch subject: [PATCH] Bluetooth: msft: Extended monitor tracking by address filter
-config: i386-randconfig-a016-20230313 (https://download.01.org/0day-ci/archive/20230317/202303170056.UsZ6RDV4-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/cee47af4605a9e5cba61be1ab1d92e8748d92e1e
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review hildawu-realtek-com/Bluetooth-msft-Extended-monitor-tracking-by-address-filter/20230316-170950
-        git checkout cee47af4605a9e5cba61be1ab1d92e8748d92e1e
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash net/bluetooth/
+>  {
+>  	u16 hd2_scale_reg, hd2_enable_reg;
+> +	hd2_scale_reg =3D 0;
+> +	hd2_enable_reg =3D 0;
+> =20
+>  	switch (interp_idx) {
+>  	case INTERP_HPHL:
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303170056.UsZ6RDV4-lkp@intel.com/
+This is just shutting the warning up, it's not like 0 is ever a sensible
+value to use there.
 
-All warnings (new ones prefixed by >>):
+--+5Ml4SivzgiYppgJ
+Content-Type: application/pgp-signature; name="signature.asc"
 
->> net/bluetooth/msft.c:521:43: warning: variable 'rp' set but not used [-Wunused-but-set-variable]
-           struct msft_rp_le_monitor_advertisement *rp;
-                                                    ^
-   1 warning generated.
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQTRFEACgkQJNaLcl1U
+h9BQCgf9EcoNSrCHri4SWhSYpoQdenmY3y0ta3Qssx4xLq5Qzeq/jtkdcXRjhuXh
+nA0uDYje3v5CDwZi7Hd6rew/iuryk4wDz2tHXxGDIcQ3e4xrRDrTKtj5VcyH0Dm/
+s0XtLWw8z0KHpFAlKSAxf90h0/oAOblT3Q+BtQ6+2V62gcPSCdfckiVii7TJPN8V
+O+vqfM7XRUy4twlstCuxnUqJe+3A5r38L8RQDpfIRhiSJOeIHnmxBlG3oswxWryr
+Huyio2s1fC1MU7iigW6bO9SEMEgZFiMA5Zqqc0cPinseQ8QzpRIrPN++Y7Mca0Bq
+VfzTC+k1FiasIBVh3/B64k5RFWdppA==
+=Jnv4
+-----END PGP SIGNATURE-----
 
-vim +/rp +521 net/bluetooth/msft.c
-
-   507	
-   508	static int msft_add_monitor_sync(struct hci_dev *hdev,
-   509					 struct adv_monitor *monitor)
-   510	{
-   511		struct msft_cp_le_monitor_advertisement *cp;
-   512		struct msft_le_monitor_advertisement_pattern_data *pattern_data;
-   513		struct msft_le_monitor_advertisement_pattern *pattern;
-   514		struct adv_pattern *entry;
-   515		size_t total_size = sizeof(*cp) + sizeof(*pattern_data);
-   516		ptrdiff_t offset = 0;
-   517		u8 pattern_count = 0;
-   518		struct sk_buff *skb;
-   519		int err;
-   520		struct msft_monitor_advertisement_handle_data *handle_data;
- > 521		struct msft_rp_le_monitor_advertisement *rp;
-   522	
-   523		if (!msft_monitor_pattern_valid(monitor))
-   524			return -EINVAL;
-   525	
-   526		list_for_each_entry(entry, &monitor->patterns, list) {
-   527			pattern_count++;
-   528			total_size += sizeof(*pattern) + entry->length;
-   529		}
-   530	
-   531		cp = kmalloc(total_size, GFP_KERNEL);
-   532		if (!cp)
-   533			return -ENOMEM;
-   534	
-   535		cp->sub_opcode = MSFT_OP_LE_MONITOR_ADVERTISEMENT;
-   536		cp->rssi_high = monitor->rssi.high_threshold;
-   537		cp->rssi_low = monitor->rssi.low_threshold;
-   538		cp->rssi_low_interval = (u8)monitor->rssi.low_threshold_timeout;
-   539		cp->rssi_sampling_period = monitor->rssi.sampling_period;
-   540	
-   541		cp->cond_type = MSFT_MONITOR_ADVERTISEMENT_TYPE_PATTERN;
-   542	
-   543		pattern_data = (void *)cp->data;
-   544		pattern_data->count = pattern_count;
-   545	
-   546		list_for_each_entry(entry, &monitor->patterns, list) {
-   547			pattern = (void *)(pattern_data->data + offset);
-   548			/* the length also includes data_type and offset */
-   549			pattern->length = entry->length + 2;
-   550			pattern->data_type = entry->ad_type;
-   551			pattern->start_byte = entry->offset;
-   552			memcpy(pattern->pattern, entry->value, entry->length);
-   553			offset += sizeof(*pattern) + entry->length;
-   554		}
-   555	
-   556		skb = __hci_cmd_sync(hdev, hdev->msft_opcode, total_size, cp,
-   557				     HCI_CMD_TIMEOUT);
-   558	
-   559		if (IS_ERR_OR_NULL(skb)) {
-   560			kfree(cp);
-   561			return PTR_ERR(skb);
-   562		}
-   563	
-   564		err = msft_le_monitor_advertisement_cb(hdev, hdev->msft_opcode,
-   565						       monitor, skb);
-   566		if (!err) {
-   567			rp = (struct msft_rp_le_monitor_advertisement *)skb->data;
-   568			handle_data = msft_find_handle_data(hdev, monitor->handle,
-   569							    true);
-   570			if (handle_data) {
-   571				handle_data->rssi_high   = cp->rssi_high;
-   572				handle_data->rssi_low    = cp->rssi_low;
-   573				handle_data->rssi_low_interval    =
-   574							cp->rssi_low_interval;
-   575				handle_data->rssi_sampling_period =
-   576							cp->rssi_sampling_period;
-   577			}
-   578		}
-   579		kfree(cp);
-   580	
-   581		return err;
-   582	}
-   583	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+--+5Ml4SivzgiYppgJ--
