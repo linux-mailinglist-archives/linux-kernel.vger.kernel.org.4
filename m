@@ -2,114 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDFF56BD81D
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 19:25:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 326086BD824
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 19:28:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229881AbjCPSZg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 14:25:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55930 "EHLO
+        id S230140AbjCPS2B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 14:28:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229589AbjCPSZe (ORCPT
+        with ESMTP id S229589AbjCPS17 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 14:25:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B478049897;
-        Thu, 16 Mar 2023 11:25:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Thu, 16 Mar 2023 14:27:59 -0400
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E5BE4B829;
+        Thu, 16 Mar 2023 11:27:57 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 43727620DE;
-        Thu, 16 Mar 2023 18:25:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FC3EC4339B;
-        Thu, 16 Mar 2023 18:25:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678991132;
-        bh=OI2Ulcxo7phfbJjhEgvVVLJPAd96fwMi7GpTSkmZpoI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=MMLEL8WJUzEXkO7glK+hQV+88BBnzRyPTtZq6fnaKE9UA5v+wYg6g19ZdHuwZF6Rh
-         PUsaGnIbIU72f2bme0RvLZ2EA80BCR3sWRQrOyymL17nKet+wNYZ1mqSqB3ZquULQx
-         ibOmke4rJ2Kd57ERM4ESNNb9hvf6k4iGpNUNq2tQRtM/xueu8z6T7l1rNfZ7yrcaGA
-         +/w7VSbHIwaQY45yNmIDqMjxVtnyg4qBDUH82Qx4z9cxMNxn6lxX/qGev5xmzlJnsh
-         IKjoMYgcaOGfh7lJAgxxeHZojb3HNq3UcAww11Tv6Y3062men50hGNW3XRNr28ozNH
-         V9pi8MyOGznwg==
-Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <maz@kernel.org>)
-        id 1pcsI6-000f2d-9f;
-        Thu, 16 Mar 2023 18:25:30 +0000
+        by ms.lwn.net (Postfix) with ESMTPSA id D14FA823;
+        Thu, 16 Mar 2023 18:27:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net D14FA823
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1678991277; bh=OwZBhz9VMbfwLaD6vDW+gcJbWhV8x+C3/Q50X51+JhM=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=QFstPU4oaTDsTc2nbT7WD/XIDOTQ92knb79vNLSDyNlTuLSVTuHbnrG33v4DZG6/z
+         ScKv9Fw6tZhUWrmKPBuKeNC4Wpwpk0A5ELxE8awvHZjIzaiKu424sgXKxjQxVAv8HA
+         wuazJA60F7mewuumNZaL1xo0aBfcRbqanhnSCYU95qNms0+0XCx5BFul00AazkRzSy
+         LfTfAzHdZ3p3BFXcWxBJhKtd37+ajbeRa3UzS+OZ2lTaMWc4FG60rYHnTgdQc+xGr6
+         An7PAhN7AOZ0di42WKOrdrk20ZDtt9KB3z5jNPPKOmKpbKDg50D6KwDbs1bh63do1Q
+         G0lZ0aIk1TO+w==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Thorsten Leemhuis <linux@leemhuis.info>
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        regressions@lists.linux.dev
+Subject: Re: [PATCH v3] docs: describe how to quickly build a trimmed kernel
+In-Reply-To: <d233a796-1cb8-a9b3-5a50-043dd2f98b3e@leemhuis.info>
+References: <1a788a8e7ba8a2063df08668f565efa832016032.1678021408.git.linux@leemhuis.info>
+ <87a60frxk0.fsf@meer.lwn.net>
+ <d233a796-1cb8-a9b3-5a50-043dd2f98b3e@leemhuis.info>
+Date:   Thu, 16 Mar 2023 12:27:56 -0600
+Message-ID: <87edpomtzn.fsf@meer.lwn.net>
 MIME-Version: 1.0
-Date:   Thu, 16 Mar 2023 18:25:30 +0000
-From:   Marc Zyngier <maz@kernel.org>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     =?UTF-8?Q?=C3=81lvaro_Fern=C3=A1ndez_Rojas?= <noltari@gmail.com>,
-        jonas.gorski@gmail.com, bcm-kernel-feedback-list@broadcom.com,
-        tglx@linutronix.de, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] irqchip/bcm-6345-l1: show MMIO address
-In-Reply-To: <aa72bcfb-b366-f373-60c5-99404109c482@gmail.com>
-References: <20230316180701.783785-1-noltari@gmail.com>
- <aa72bcfb-b366-f373-60c5-99404109c482@gmail.com>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <3950053c3e55fe89f61332c1b24fa0ed@kernel.org>
-X-Sender: maz@kernel.org
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 51.254.78.96
-X-SA-Exim-Rcpt-To: f.fainelli@gmail.com, noltari@gmail.com, jonas.gorski@gmail.com, bcm-kernel-feedback-list@broadcom.com, tglx@linutronix.de, linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-03-16 18:13, Florian Fainelli wrote:
-> On 3/16/23 11:07, Álvaro Fernández Rojas wrote:
->> It's safe to show MMIO address.
->> 
->> Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
-> 
-> This is going to be the kernel virtual address, and while on MIPS it
-> is easy to resolve to the physical address because these platforms map
-> registers through KSEG0/1, on other platforms like ARM/ARM64 the
-> kernel virtual addresses are pretty meaningless unless what you want
-> to debug is how ioremap() mapped the address.
-> 
-> I would rather do the following change:
-> 
-> diff --git a/drivers/irqchip/irq-bcm6345-l1.c 
-> b/drivers/irqchip/irq-bcm6345-l1.c
-> index 1bd0621c4ce2..832957d363a4 100644
-> --- a/drivers/irqchip/irq-bcm6345-l1.c
-> +++ b/drivers/irqchip/irq-bcm6345-l1.c
-> @@ -261,6 +261,8 @@ static int __init bcm6345_l1_init_one(struct
-> device_node *dn,
->         if (!cpu->map_base)
->                 return -ENOMEM;
-> 
-> +       request_mem_region(res.start, sz, res.name);
-> +
->         for (i = 0; i < n_words; i++) {
->                 cpu->enable_cache[i] = 0;
->                 __raw_writel(0, cpu->map_base + reg_enable(intc, i));
-> 
-> such that this shows up in /proc/iomem. WDYT?
+Thorsten Leemhuis <linux@leemhuis.info> writes:
 
-That's certainly much more useful in general.
+> Documentation/doc-guide/contributing.rst says that "books" are meant to
+> "group documentation for specific readers"; creating a new book for
+> tutorials would work against that, as readers (users and administrators
+> in this case) then would have to consult two books.
 
-Also, the current pr_info() is probably pretty useless, given
-that the OP was trying to circumvent the obfuscation. Either
-printing the PA or removing the message altogether would be
-good.
+The idea behind that guideline is that readers should be able to know
+where to look and to not have to dig through a lot of material that was
+not intended for them.  Not that, for any given reader, there should be
+exactly one book that has everything they might want.
+
+One could also argue, of course, that readers seeking tutorials are a
+different group than those seeking reference material.
+
+> And isn't for example Documentation/process/submitting-patches.rst also
+> more of a tutorial than reference material (which we also have in the
+> form of Documentation/process/development-process.rst)?
+
+It's a pretty clear example of what happens when you try to combine both
+types of documentation - you get something that isn't ideal for either
+type of reader.  It tries to take people through the process, but it is
+also the only reference document we have on how patches should be
+submitted. 
+
+> Does that mean
+> it should be moved? Into the same book or a separate book, as it has a
+> different target audience? I fear that might quickly get confusing for
+> readers without any real benefits
+
+No, I wouldn't move it.  We could, someday, consider splitting it into
+two more focused documents, one of which could (say) go under tutorials/.
+
+> Or did I understand the idea of a new book wrong and you meant something
+> else? Like creating Documentation/admin-guide/tutorials/ and putting the
+> text there? That might work and would help future authors to get the
+> right mental model when writing new texts. But I'm not sure that's worth it.
+
+I wasn't thinking of doing it that way, but we could certainly consider
+it.  It doesn't seem like we would have vast numbers of these, though,
+and they would mostly cover relatively elementary topics, so a single,
+top-level directory might be better if we decide to take this path.
 
 Thanks,
 
-         M.
--- 
-Jazz is not dead. It just smells funny...
+jon
