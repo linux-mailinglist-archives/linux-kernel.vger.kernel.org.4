@@ -2,121 +2,248 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 790086BC3C2
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 03:26:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82B846BC3C0
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 03:24:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229787AbjCPC0b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 22:26:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50154 "EHLO
+        id S229785AbjCPCYY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 22:24:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbjCPC03 (ORCPT
+        with ESMTP id S229552AbjCPCYW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 22:26:29 -0400
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5329DC8899;
-        Wed, 15 Mar 2023 19:26:28 -0700 (PDT)
-Received: by mail-il1-x12a.google.com with SMTP id l9so260738iln.1;
-        Wed, 15 Mar 2023 19:26:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678933587;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wn6GTzWZhVeWN9PHLIBwYzMfzh5f2SxCuW63G3ON8vA=;
-        b=EYke7L/0V16TNrSbT6Wd/Z2S7MJA3OsZBwtYESg7GgG097KlpCDeglcU5CEslriEaK
-         dRbQ2BR8iZjhdySIZM/KnbKWRchRf+RLGhKkC4ZUMbw7qOHP/00owgNxCOXeySIBxB8N
-         ljACycgo4gC+qpBsEdUS42OyGkFX/SNxsVMU/2jM7SdQbZQBNurwGl82Ze6CEcuKWsvU
-         3NHSa/2/Rb1pVEsEl8OcsfLu+4fZ9AolNfpJcvnk4b+Hfv6Mwkfpz3ljmgU7Z9IZGemo
-         Wkq9LTBynK91Y2+x5wPhrDSeKe02iqXya9JLB0PTDf1n3CcKA4IpG/wv5tP2SPjWPVjo
-         ZkDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678933587;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wn6GTzWZhVeWN9PHLIBwYzMfzh5f2SxCuW63G3ON8vA=;
-        b=uxbB8rneAdrWo49hBj4WLNEvA5F8cWeUZubWzqsVwPSDdeT7xfFxkYkeltezLfHCFr
-         EaPG181Vl5WyS9rOaUtY7z2kZ8NA1fMfv1+iuhdGkNYuWIshGgDwnu6cuuO90r6DP2sa
-         MQdx2ssz6/vwRu+cZqEbSjNE1FOLXrDyXCYVS0Sajq6hf1U/xouFDdUje+A+KJzRzp7D
-         CvJcV2vD4pqKs5CxuuNF3xIV4Hr1zX145jLu5lhlcwTQ1fcMuhE7k6oyLvqxHW6xlWIP
-         Mfq2h3s3gDIT+3e/z2ev1lg1sGMuDW73ZcrW8gVtMO81JvlnwvC0kww7Vls7E0Fi+88I
-         l2KQ==
-X-Gm-Message-State: AO0yUKVDFFzf6qNzK4bu+kRjx8SVR3xx5ehB8Q1H15hHXAbaHzl+E409
-        JR+ZtJ89SUqgQpbIr3Q7Rnw=
-X-Google-Smtp-Source: AK7set8p2OItMZv7IfV7pyIVxYF9z9ZHhZogOGMpMQFDu6g2dTdXi3txgIEK1s1udk3ydfCVe4nUpQ==
-X-Received: by 2002:a05:6e02:68a:b0:311:e48:d64a with SMTP id o10-20020a056e02068a00b003110e48d64amr6041036ils.17.1678933587699;
-        Wed, 15 Mar 2023 19:26:27 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id z9-20020a92cd09000000b00316e39f1285sm2030493iln.82.2023.03.15.19.26.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Mar 2023 19:26:27 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 15 Mar 2023 19:26:26 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Lorenz Brun <lorenz@brun.one>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: pwm-fan: set usage_power on PWM state
-Message-ID: <ec52f540-0f78-4cf0-ae61-314cab33ac80@roeck-us.net>
-References: <20230309011009.2109696-1-lorenz@brun.one>
+        Wed, 15 Mar 2023 22:24:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28C01AA71F;
+        Wed, 15 Mar 2023 19:24:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AA5B961EE6;
+        Thu, 16 Mar 2023 02:24:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10AFFC433D2;
+        Thu, 16 Mar 2023 02:24:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678933460;
+        bh=Dru+k7mXY5CpAC6aY6esr/ftvOW/j2SPoAN8MMrwrXk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Xx0sLu+EE6NGwrA7T1XLyK3xqdnhfUPax0Xde53H3kBa7xYlk5YqYNM/UR9MpEx8N
+         MDHrshUiYQfpdExClIp+Wkobv2rVERnHFdiZ7oZSjfs2Mu+XSorbVuXe9xmmUKoVWI
+         b0rraXBwEkRWibwqrdOCILhxp2RmV22nu2SiPY3p3Su5rrOppAkKvbriU8wDaE0jRl
+         Q8GCA2tiZQAX1hMv7Cp2R/dsNay95+ucp+Irlo37IE940XMtSvaqsdqU1sCtjWcIg7
+         XVnCdqOiaAq36q74y9DqKqB+D33P4ZOtYj7O1eaq0+o79J6GFRSewlUTxW1NOuk/dt
+         ZN41t9SAsroYw==
+Date:   Wed, 15 Mar 2023 19:27:40 -0700
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Melody Olvera <quic_molvera@quicinc.com>
+Cc:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Robert Marko <robimarko@gmail.com>,
+        Guru Das Srinagesh <quic_gurus@quicinc.com>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org
+Subject: Re: [PATCH v2 6/7] remoteproc: qcom_q6v5_pas: Add support to attach
+ a DSP
+Message-ID: <20230316022740.umavd6jviftktag7@ripper>
+References: <20230306231202.12223-1-quic_molvera@quicinc.com>
+ <20230306231202.12223-7-quic_molvera@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230309011009.2109696-1-lorenz@brun.one>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230306231202.12223-7-quic_molvera@quicinc.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 09, 2023 at 02:10:08AM +0100, Lorenz Brun wrote:
-> PWM fans are controlled solely by the duty cycle of the PWM signal, they
-> do not care about the exact timing. Thus set usage_power to true to
-> allow less flexible hardware to work as a PWM source for fan control.
+On Mon, Mar 06, 2023 at 03:12:01PM -0800, Melody Olvera wrote:
+> Some chipsets will have DSPs which will have begun running prior
+> to linux booting, so add support to late attach these DSPs by
+> adding support for:
+> - run-time checking of an offline or running DSP via rmb register
+> - a late attach framework to attach to the running DSP
+> - a handshake mechanism to ensure full and proper booting via rmb
 > 
-
-This doesn't seem to be used anywhere else. I do not understand the
-rationale, and I do not understand the practical impact of this change.
-This needs to be confirmed by someone who understands what the flag is
-supposed to be used for, its impact, and if it is indeed appropriate
-in this context.
-
-Also, since in practice there is no such "less flexible hardware"
-in the upstream kernel, please describe the use case in more detail.
-The only pwm driver that supports usage_power is pwm-pca9685,
-and that driver uses the flag for EMI reasons, not because it is
-"less flexible hardware". I am not inclined to accept such a change
-without specific use case or need.
-
-Thanks,
-Guenter
-
-> Signed-off-by: Lorenz Brun <lorenz@brun.one>
+> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
 > ---
->  drivers/hwmon/pwm-fan.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
+>  drivers/remoteproc/qcom_q6v5_pas.c | 103 ++++++++++++++++++++++++++++-
+>  1 file changed, 102 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/hwmon/pwm-fan.c b/drivers/hwmon/pwm-fan.c
-> index 83a347ca35da..aa746c2bde39 100644
-> --- a/drivers/hwmon/pwm-fan.c
-> +++ b/drivers/hwmon/pwm-fan.c
-> @@ -507,6 +507,14 @@ static int pwm_fan_probe(struct platform_device *pdev)
+> diff --git a/drivers/remoteproc/qcom_q6v5_pas.c b/drivers/remoteproc/qcom_q6v5_pas.c
+> index 0871108fb4dc..e22be6a029a8 100644
+> --- a/drivers/remoteproc/qcom_q6v5_pas.c
+> +++ b/drivers/remoteproc/qcom_q6v5_pas.c
+> @@ -242,10 +242,89 @@ static int adsp_load(struct rproc *rproc, const struct firmware *fw)
+>  	return ret;
+>  }
 >  
->  	pwm_init_state(ctx->pwm, &ctx->pwm_state);
->  
-> +	/*
-> +	 * PWM fans are controlled solely by the duty cycle of the PWM signal,
-> +	 * they do not care about the exact timing. Thus set usage_power to true
-> +	 * to allow less flexible hardware to work as a PWM source for fan
-> +	 * control.
-> +	 */
-> +	ctx->pwm_state.usage_power = true;
+> +static int adsp_attach(struct rproc *rproc)
+> +{
+> +	struct qcom_adsp *adsp = (struct qcom_adsp *)rproc->priv;
+> +	int i, ret;
 > +
->  	/*
->  	 * set_pwm assumes that MAX_PWM * (period - 1) fits into an unsigned
->  	 * long. Check this here to prevent the fan running at a too low
+> +	ret = qcom_q6v5_prepare(&adsp->q6v5);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = adsp_pds_enable(adsp, adsp->proxy_pds, adsp->proxy_pd_count);
+> +	if (ret < 0)
+> +		goto disable_irqs;
+> +
+> +	ret = clk_prepare_enable(adsp->xo);
+> +	if (ret)
+> +		goto disable_proxy_pds;
+> +
+> +	ret = clk_prepare_enable(adsp->aggre2_clk);
+> +	if (ret)
+> +		goto disable_xo_clk;
+> +
+> +	if (adsp->cx_supply) {
+> +		ret = regulator_enable(adsp->cx_supply);
+> +		if (ret)
+> +			goto disable_aggre2_clk;
+> +	}
+> +
+> +	if (adsp->px_supply) {
+> +		ret = regulator_enable(adsp->px_supply);
+> +		if (ret)
+> +			goto disable_cx_supply;
+> +	}
+> +
+> +	/* if needed, signal Q6 to continute booting */
+> +	if (adsp->q6v5.rmb_base) {
+> +		for (i = 0; i < RMB_POLL_MAX_TIMES; i++) {
+> +			if (readl_relaxed(adsp->q6v5.rmb_base + RMB_BOOT_WAIT_REG)) {
+> +				writel_relaxed(1, adsp->q6v5.rmb_base + RMB_BOOT_CONT_REG);
+> +				break;
+> +			}
+> +			msleep(20);
+> +		}
+> +
+> +		if (!readl_relaxed(adsp->q6v5.rmb_base + RMB_BOOT_WAIT_REG)) {
+> +			dev_err(adsp->dev, "Didn't get rmb signal from  %s\n", rproc->name);
+> +			goto disable_px_supply;
+> +		}
+> +	}
+> +
+> +	ret = qcom_q6v5_wait_for_start(&adsp->q6v5, msecs_to_jiffies(5000));
+> +	if (ret == -ETIMEDOUT) {
+> +		dev_err(adsp->dev, "start timed out\n");
+> +		qcom_scm_pas_shutdown(adsp->pas_id);
+> +		goto disable_px_supply;
+> +	}
+> +
+> +	return 0;
+> +
+> +disable_px_supply:
+> +	if (adsp->px_supply)
+> +		regulator_disable(adsp->px_supply);
+> +disable_cx_supply:
+> +	if (adsp->cx_supply)
+> +		regulator_disable(adsp->cx_supply);
+> +disable_aggre2_clk:
+> +	clk_disable_unprepare(adsp->aggre2_clk);
+> +disable_xo_clk:
+> +	clk_disable_unprepare(adsp->xo);
+> +disable_proxy_pds:
+> +	adsp_pds_disable(adsp, adsp->proxy_pds, adsp->proxy_pd_count);
+> +disable_irqs:
+> +	qcom_q6v5_unprepare(&adsp->q6v5);
+> +
+> +	/* Remove pointer to the loaded firmware, only valid in adsp_load() & adsp_start() */
+> +	adsp->firmware = NULL;
+> +
+> +	return ret;
+> +}
+> +
+>  static int adsp_start(struct rproc *rproc)
+>  {
+>  	struct qcom_adsp *adsp = (struct qcom_adsp *)rproc->priv;
+> -	int ret;
+> +	int i, ret;
+>  
+>  	ret = qcom_q6v5_prepare(&adsp->q6v5);
+>  	if (ret)
+> @@ -304,6 +383,22 @@ static int adsp_start(struct rproc *rproc)
+>  		goto release_pas_metadata;
+>  	}
+>  
+> +	/* if needed, signal Q6 to continute booting */
+
+Why does this come before the wait_for_start()? Is the DSP actually up
+and running when you hit attach, or is it just loaded?
+
+> +	if (adsp->q6v5.rmb_base) {
+
+Afaict this is copy-paste from attach, please move it to a helper
+function.
+
+> +		for (i = 0; i < RMB_POLL_MAX_TIMES; i++) {
+> +			if (readl_relaxed(adsp->q6v5.rmb_base + RMB_BOOT_WAIT_REG)) {
+> +				writel_relaxed(1, adsp->q6v5.rmb_base + RMB_BOOT_CONT_REG);
+> +				break;
+> +			}
+> +			msleep(20);
+> +		}
+> +
+> +		if (!readl_relaxed(adsp->q6v5.rmb_base + RMB_BOOT_WAIT_REG)) {
+
+If you hit the break above, there should be no reason to read this
+register again.
+
+Seems cleaner to write this as:
+
+	ret = readl_poll_timeout();
+	if (ret < 0)
+		goto release;
+
+	writel(1, ...);
+
+Regards,
+Bjorn
+
+> +			dev_err(adsp->dev, "Didn't get rmb signal from  %s\n", rproc->name);
+> +			goto release_pas_metadata;
+> +		}
+> +	}
+> +
+>  	ret = qcom_q6v5_wait_for_start(&adsp->q6v5, msecs_to_jiffies(5000));
+>  	if (ret == -ETIMEDOUT) {
+>  		dev_err(adsp->dev, "start timed out\n");
+> @@ -413,6 +508,7 @@ static unsigned long adsp_panic(struct rproc *rproc)
+>  static const struct rproc_ops adsp_ops = {
+>  	.unprepare = adsp_unprepare,
+>  	.start = adsp_start,
+> +	.attach = adsp_attach,
+>  	.stop = adsp_stop,
+>  	.da_to_va = adsp_da_to_va,
+>  	.parse_fw = qcom_register_dump_segments,
+> @@ -423,6 +519,7 @@ static const struct rproc_ops adsp_ops = {
+>  static const struct rproc_ops adsp_minidump_ops = {
+>  	.unprepare = adsp_unprepare,
+>  	.start = adsp_start,
+> +	.attach = adsp_attach,
+>  	.stop = adsp_stop,
+>  	.da_to_va = adsp_da_to_va,
+>  	.load = adsp_load,
+> @@ -728,6 +825,10 @@ static int adsp_probe(struct platform_device *pdev)
+>  	if (ret)
+>  		goto detach_proxy_pds;
+>  
+> +	if (adsp->q6v5.rmb_base &&
+> +			readl_relaxed(adsp->q6v5.rmb_base + RMB_Q6_BOOT_STATUS_REG))
+> +		rproc->state = RPROC_DETACHED;
+> +
+>  	qcom_add_glink_subdev(rproc, &adsp->glink_subdev, desc->ssr_name);
+>  	qcom_add_smd_subdev(rproc, &adsp->smd_subdev);
+>  	adsp->sysmon = qcom_add_sysmon_subdev(rproc,
+> -- 
+> 2.25.1
+> 
