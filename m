@@ -2,360 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 609DC6BDB47
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 23:07:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E46C6BDB59
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 23:08:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230117AbjCPWHR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 18:07:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40818 "EHLO
+        id S230193AbjCPWIT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 18:08:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230087AbjCPWHJ (ORCPT
+        with ESMTP id S229780AbjCPWII (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 18:07:09 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CB8184801
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 15:06:51 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-54476ef9caeso28898457b3.6
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 15:06:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679004410;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=2h1nWW+Tx2qkQciskmHzf90FfoypHRB1YvIyPPSqDIg=;
-        b=F17vTJwKW0LALuQ1LC/PSKl27Mv2IL7HV/6lO6Mdg4HwdTbjb/jX+HgWcnKAZXcwl3
-         A6Q6rtWbIgTXqAlgO0ASIynbjWyDoa25FT/LgOIUGQRnbwpuL8VcD1Mexz0XmDTWc/LJ
-         kxQ3NCmuSwJLidyc1HkPwWIxVH3yYy815xFCNcOEV3+M64ZoQ0VywsgXuMsVdoncWo4w
-         runTZCnEH/g+UVbq73zl6sYPsabp4U7Xrpw4ArgCvLv83qu5KO7kKhx9R/IJFPxMfHZL
-         OwovGKq1VldQGDZZ3OvtAtyMcFgKiZ6z6fwMfBzxpW0UWmN+n8vSzbxR2ucRYpkatn3R
-         PVrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679004410;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2h1nWW+Tx2qkQciskmHzf90FfoypHRB1YvIyPPSqDIg=;
-        b=FswPSVRXEUr9X0qBe/h9AYTgwk5YSmhk1OxwViswcU3jaPI5OjjP+IYln3o3SPp7o0
-         +dZTCmSSn4YgsiK1bMlJ3Rsq6C7xRRPiU2k0chvWZ85b15cMTXyjMGoVAinUDZrr1t8V
-         0yNszIa7lLWBVh8gC+L/UvkFnYAFxr0XhluYnwwu9omR6E81HSagegD4r7BkKiVxI6dr
-         r2kYsdZh1WuaYhF89ZevL1ZgfkMOYhlVEUQb6ImNdfMvADkeZ496Nz4QToFsQCf0LTDW
-         S328iHKIrl16G/QMCXtSfpdVDGS5uwz+TMore4u8hpW7Ow003kqloKttw0ovoPRA3IUK
-         YECg==
-X-Gm-Message-State: AO0yUKVJJqWihmJMM1h5P1UZnSusC/OtGvgZG0S1Zh+Yh1AfjoKly4+x
-        K4HiUAN9I+V+mvEELiKA//n2XYWB/EHs5w==
-X-Google-Smtp-Source: AK7set8278OSQmWB+I9xtX515VUEDokB2uaE3xiyFmMBsZEYqLi8a1ugfDIHo0XJETwhiY0qp4pbGyALWhstQA==
-X-Received: from dlatypov-spec.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:3f35])
- (user=dlatypov job=sendgmr) by 2002:a05:6902:1101:b0:b26:d140:5f74 with SMTP
- id o1-20020a056902110100b00b26d1405f74mr1008741ybu.1.1679004410486; Thu, 16
- Mar 2023 15:06:50 -0700 (PDT)
-Date:   Thu, 16 Mar 2023 15:06:38 -0700
-In-Reply-To: <20230316220638.983743-1-dlatypov@google.com>
-Mime-Version: 1.0
-References: <20230316220638.983743-1-dlatypov@google.com>
-X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
-Message-ID: <20230316220638.983743-3-dlatypov@google.com>
-Subject: [PATCH v2 3/3] kunit: tool: fix pre-existing `mypy --strict` errors
- and update run_checks.py
-From:   Daniel Latypov <dlatypov@google.com>
-To:     brendanhiggins@google.com, davidgow@google.com
-Cc:     rmoar@google.com, linux-kernel@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        skhan@linuxfoundation.org, johannes@sipsolutions.net,
-        Daniel Latypov <dlatypov@google.com>,
-        Johannes Berg <johannes.berg@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 16 Mar 2023 18:08:08 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70D4EB4224;
+        Thu, 16 Mar 2023 15:07:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679004471; x=1710540471;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=NUccJEQeyuFmY2OUH22+mD2DNXjeXrjGLxyTCvS9pEY=;
+  b=lMznxs/qshTbSSZkv+DZPVCDfunz3h4iUTefMNEBg1rsspKbv5ywpLVM
+   rqEkZdQLdkiW6DmeybcQXcA8tAh8t2085IaXBA50n3+hMN8f8Oym24vgP
+   6Px2NtaBw/mXJao1KZrW+gKdZanrIQ9fDmmDEcBqrPtROzNWckvp8OTTf
+   qHLwDuD5OqUhDhOghPKVqE6aH1OcgVGqpO7ZlVYkO7Io4kfOWHP7VnpOe
+   cE0GKvsyo4EBNEQyj/Zb5j86ew6kjBZhnIYvmrXLSHGMnuJrRmN95056f
+   ljxCo+RdCIZHVs3Y6JOF1R2NnDMYfuIrA5HXnoohd+jMjSFStBzJJdBQP
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="339665734"
+X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
+   d="scan'208";a="339665734"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 15:07:50 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="854217836"
+X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
+   d="scan'208";a="854217836"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 16 Mar 2023 15:07:46 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pcvlB-0008rW-0U;
+        Thu, 16 Mar 2023 22:07:45 +0000
+Date:   Fri, 17 Mar 2023 06:07:11 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Christian Marangi <ansuelsmth@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        John Crispin <john@phrozen.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Lee Jones <lee@kernel.org>, linux-leds@vger.kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev, netdev@vger.kernel.org
+Subject: Re: [net-next PATCH 01/11] net: dsa: qca8k: add LEDs basic support
+Message-ID: <202303170529.8ag9rmM4-lkp@intel.com>
+References: <20230307170046.28917-2-ansuelsmth@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230307170046.28917-2-ansuelsmth@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Basically, get this command to be happy and make run_checks.py happy
- $ mypy --strict --exclude '_test.py$' --exclude qemu_configs/ ./tools/testing/kunit/
+Hi Christian,
 
-Primarily the changes are
-* add `-> None` return type annotations
-* add all the missing argument type annotations
+Thank you for the patch! Yet something to improve:
 
-Previously, we had false positives from mypy in `main()`, see commit
-09641f7c7d8f ("kunit: tool: surface and address more typing issues").
-But after commit 2dc9d6ca52a4 ("kunit: kunit.py extract handlers")
-refactored things, the variable name reuse mypy hated is gone.
+[auto build test ERROR on net-next/master]
 
-Note: mypy complains we don't annotate the types the unused args in our
-signal handler. That's silly.
-But to make it happy, I've copy-pasted an appropriate annotation from
-https://github.com/python/typing/discussions/1042#discussioncomment-2013595.
+url:    https://github.com/intel-lab-lkp/linux/commits/Christian-Marangi/net-dsa-qca8k-add-LEDs-basic-support/20230308-063832
+patch link:    https://lore.kernel.org/r/20230307170046.28917-2-ansuelsmth%40gmail.com
+patch subject: [net-next PATCH 01/11] net: dsa: qca8k: add LEDs basic support
+config: m68k-allmodconfig (https://download.01.org/0day-ci/archive/20230317/202303170529.8ag9rmM4-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/ce1977c679b8737815636b72f4e65c2de59e8f7d
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Christian-Marangi/net-dsa-qca8k-add-LEDs-basic-support/20230308-063832
+        git checkout ce1977c679b8737815636b72f4e65c2de59e8f7d
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash drivers/net/dsa/qca/
 
-Reported-by: Johannes Berg <johannes.berg@intel.com>
-Link: https://lore.kernel.org/linux-kselftest/9a172b50457f4074af41fe1dc8e55dcaf4795d7e.camel@sipsolutions.net/
-Signed-off-by: Daniel Latypov <dlatypov@google.com>
----
- tools/testing/kunit/kunit.py        | 24 ++++++++++++------------
- tools/testing/kunit/kunit_config.py |  4 ++--
- tools/testing/kunit/kunit_kernel.py | 29 +++++++++++++++--------------
- tools/testing/kunit/run_checks.py   |  4 ++--
- 4 files changed, 31 insertions(+), 30 deletions(-)
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303170529.8ag9rmM4-lkp@intel.com/
 
-diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
-index 52853634ba23..3905c43369c3 100755
---- a/tools/testing/kunit/kunit.py
-+++ b/tools/testing/kunit/kunit.py
-@@ -269,7 +269,7 @@ def massage_argv(argv: Sequence[str]) -> Sequence[str]:
- def get_default_jobs() -> int:
- 	return len(os.sched_getaffinity(0))
- 
--def add_common_opts(parser) -> None:
-+def add_common_opts(parser: argparse.ArgumentParser) -> None:
- 	parser.add_argument('--build_dir',
- 			    help='As in the make command, it specifies the build '
- 			    'directory.',
-@@ -320,13 +320,13 @@ def add_common_opts(parser) -> None:
- 			    help='Additional QEMU arguments, e.g. "-smp 8"',
- 			    action='append', metavar='')
- 
--def add_build_opts(parser) -> None:
-+def add_build_opts(parser: argparse.ArgumentParser) -> None:
- 	parser.add_argument('--jobs',
- 			    help='As in the make command, "Specifies  the number of '
- 			    'jobs (commands) to run simultaneously."',
- 			    type=int, default=get_default_jobs(), metavar='N')
- 
--def add_exec_opts(parser) -> None:
-+def add_exec_opts(parser: argparse.ArgumentParser) -> None:
- 	parser.add_argument('--timeout',
- 			    help='maximum number of seconds to allow for all tests '
- 			    'to run. This does not include time taken to build the '
-@@ -351,7 +351,7 @@ def add_exec_opts(parser) -> None:
- 			    type=str,
- 			    choices=['suite', 'test'])
- 
--def add_parse_opts(parser) -> None:
-+def add_parse_opts(parser: argparse.ArgumentParser) -> None:
- 	parser.add_argument('--raw_output', help='If set don\'t parse output from kernel. '
- 			    'By default, filters to just KUnit output. Use '
- 			    '--raw_output=all to show everything',
-@@ -386,7 +386,7 @@ def tree_from_args(cli_args: argparse.Namespace) -> kunit_kernel.LinuxSourceTree
- 			extra_qemu_args=qemu_args)
- 
- 
--def run_handler(cli_args):
-+def run_handler(cli_args: argparse.Namespace) -> None:
- 	if not os.path.exists(cli_args.build_dir):
- 		os.mkdir(cli_args.build_dir)
- 
-@@ -405,7 +405,7 @@ def run_handler(cli_args):
- 		sys.exit(1)
- 
- 
--def config_handler(cli_args):
-+def config_handler(cli_args: argparse.Namespace) -> None:
- 	if cli_args.build_dir and (
- 			not os.path.exists(cli_args.build_dir)):
- 		os.mkdir(cli_args.build_dir)
-@@ -421,7 +421,7 @@ def config_handler(cli_args):
- 		sys.exit(1)
- 
- 
--def build_handler(cli_args):
-+def build_handler(cli_args: argparse.Namespace) -> None:
- 	linux = tree_from_args(cli_args)
- 	request = KunitBuildRequest(build_dir=cli_args.build_dir,
- 					make_options=cli_args.make_options,
-@@ -434,7 +434,7 @@ def build_handler(cli_args):
- 		sys.exit(1)
- 
- 
--def exec_handler(cli_args):
-+def exec_handler(cli_args: argparse.Namespace) -> None:
- 	linux = tree_from_args(cli_args)
- 	exec_request = KunitExecRequest(raw_output=cli_args.raw_output,
- 					build_dir=cli_args.build_dir,
-@@ -450,10 +450,10 @@ def exec_handler(cli_args):
- 		sys.exit(1)
- 
- 
--def parse_handler(cli_args):
-+def parse_handler(cli_args: argparse.Namespace) -> None:
- 	if cli_args.file is None:
--		sys.stdin.reconfigure(errors='backslashreplace')  # pytype: disable=attribute-error
--		kunit_output = sys.stdin
-+		sys.stdin.reconfigure(errors='backslashreplace')  # type: ignore
-+		kunit_output = sys.stdin  # type: Iterable[str]
- 	else:
- 		with open(cli_args.file, 'r', errors='backslashreplace') as f:
- 			kunit_output = f.read().splitlines()
-@@ -475,7 +475,7 @@ subcommand_handlers_map = {
- }
- 
- 
--def main(argv):
-+def main(argv: Sequence[str]) -> None:
- 	parser = argparse.ArgumentParser(
- 			description='Helps writing and running KUnit tests.')
- 	subparser = parser.add_subparsers(dest='subcommand')
-diff --git a/tools/testing/kunit/kunit_config.py b/tools/testing/kunit/kunit_config.py
-index 9f76d7b89617..eb5dd01210b1 100644
---- a/tools/testing/kunit/kunit_config.py
-+++ b/tools/testing/kunit/kunit_config.py
-@@ -8,7 +8,7 @@
- 
- from dataclasses import dataclass
- import re
--from typing import Dict, Iterable, List, Tuple
-+from typing import Any, Dict, Iterable, List, Tuple
- 
- CONFIG_IS_NOT_SET_PATTERN = r'^# CONFIG_(\w+) is not set$'
- CONFIG_PATTERN = r'^CONFIG_(\w+)=(\S+|".*")$'
-@@ -34,7 +34,7 @@ class Kconfig:
- 	def __init__(self) -> None:
- 		self._entries = {}  # type: Dict[str, str]
- 
--	def __eq__(self, other) -> bool:
-+	def __eq__(self, other: Any) -> bool:
- 		if not isinstance(other, self.__class__):
- 			return False
- 		return self._entries == other._entries
-diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
-index 775842b912d8..a3321a991f11 100644
---- a/tools/testing/kunit/kunit_kernel.py
-+++ b/tools/testing/kunit/kunit_kernel.py
-@@ -16,6 +16,7 @@ import shutil
- import signal
- import threading
- from typing import Iterator, List, Optional, Tuple
-+from types import FrameType
- 
- import kunit_config
- import qemu_config
-@@ -56,7 +57,7 @@ class LinuxSourceTreeOperations:
- 	def make_arch_config(self, base_kunitconfig: kunit_config.Kconfig) -> kunit_config.Kconfig:
- 		return base_kunitconfig
- 
--	def make_olddefconfig(self, build_dir: str, make_options) -> None:
-+	def make_olddefconfig(self, build_dir: str, make_options: Optional[List[str]]) -> None:
- 		command = ['make', 'ARCH=' + self._linux_arch, 'O=' + build_dir, 'olddefconfig']
- 		if self._cross_compile:
- 			command += ['CROSS_COMPILE=' + self._cross_compile]
-@@ -70,7 +71,7 @@ class LinuxSourceTreeOperations:
- 		except subprocess.CalledProcessError as e:
- 			raise ConfigError(e.output.decode())
- 
--	def make(self, jobs, build_dir: str, make_options) -> None:
-+	def make(self, jobs: int, build_dir: str, make_options: Optional[List[str]]) -> None:
- 		command = ['make', 'ARCH=' + self._linux_arch, 'O=' + build_dir, '--jobs=' + str(jobs)]
- 		if make_options:
- 			command.extend(make_options)
-@@ -132,7 +133,7 @@ class LinuxSourceTreeOperationsQemu(LinuxSourceTreeOperations):
- class LinuxSourceTreeOperationsUml(LinuxSourceTreeOperations):
- 	"""An abstraction over command line operations performed on a source tree."""
- 
--	def __init__(self, cross_compile=None):
-+	def __init__(self, cross_compile: Optional[str]=None):
- 		super().__init__(linux_arch='um', cross_compile=cross_compile)
- 
- 	def make_arch_config(self, base_kunitconfig: kunit_config.Kconfig) -> kunit_config.Kconfig:
-@@ -215,7 +216,7 @@ def _get_qemu_ops(config_path: str,
- 
- 	if not hasattr(config, 'QEMU_ARCH'):
- 		raise ValueError('qemu_config module missing "QEMU_ARCH": ' + config_path)
--	params: qemu_config.QemuArchParams = config.QEMU_ARCH  # type: ignore
-+	params: qemu_config.QemuArchParams = config.QEMU_ARCH
- 	if extra_qemu_args:
- 		params.extra_qemu_params.extend(extra_qemu_args)
- 	return params.linux_arch, LinuxSourceTreeOperationsQemu(
-@@ -229,10 +230,10 @@ class LinuxSourceTree:
- 	      build_dir: str,
- 	      kunitconfig_paths: Optional[List[str]]=None,
- 	      kconfig_add: Optional[List[str]]=None,
--	      arch=None,
--	      cross_compile=None,
--	      qemu_config_path=None,
--	      extra_qemu_args=None) -> None:
-+	      arch: Optional[str]=None,
-+	      cross_compile: Optional[str]=None,
-+	      qemu_config_path: Optional[str]=None,
-+	      extra_qemu_args: Optional[List[str]]=None) -> None:
- 		signal.signal(signal.SIGINT, self.signal_handler)
- 		if qemu_config_path:
- 			self._arch, self._ops = _get_qemu_ops(qemu_config_path, extra_qemu_args, cross_compile)
-@@ -275,7 +276,7 @@ class LinuxSourceTree:
- 		logging.error(message)
- 		return False
- 
--	def build_config(self, build_dir: str, make_options) -> bool:
-+	def build_config(self, build_dir: str, make_options: Optional[List[str]]) -> bool:
- 		kconfig_path = get_kconfig_path(build_dir)
- 		if build_dir and not os.path.exists(build_dir):
- 			os.mkdir(build_dir)
-@@ -303,7 +304,7 @@ class LinuxSourceTree:
- 		old_kconfig = kunit_config.parse_file(old_path)
- 		return old_kconfig != self._kconfig
- 
--	def build_reconfig(self, build_dir: str, make_options) -> bool:
-+	def build_reconfig(self, build_dir: str, make_options: Optional[List[str]]) -> bool:
- 		"""Creates a new .config if it is not a subset of the .kunitconfig."""
- 		kconfig_path = get_kconfig_path(build_dir)
- 		if not os.path.exists(kconfig_path):
-@@ -319,7 +320,7 @@ class LinuxSourceTree:
- 		os.remove(kconfig_path)
- 		return self.build_config(build_dir, make_options)
- 
--	def build_kernel(self, jobs, build_dir: str, make_options) -> bool:
-+	def build_kernel(self, jobs: int, build_dir: str, make_options: Optional[List[str]]) -> bool:
- 		try:
- 			self._ops.make_olddefconfig(build_dir, make_options)
- 			self._ops.make(jobs, build_dir, make_options)
-@@ -328,7 +329,7 @@ class LinuxSourceTree:
- 			return False
- 		return self.validate_config(build_dir)
- 
--	def run_kernel(self, args=None, build_dir='', filter_glob='', timeout=None) -> Iterator[str]:
-+	def run_kernel(self, args: Optional[List[str]]=None, build_dir: str='', filter_glob: str='', timeout: Optional[int]=None) -> Iterator[str]:
- 		if not args:
- 			args = []
- 		if filter_glob:
-@@ -339,7 +340,7 @@ class LinuxSourceTree:
- 		assert process.stdout is not None  # tell mypy it's set
- 
- 		# Enforce the timeout in a background thread.
--		def _wait_proc():
-+		def _wait_proc() -> None:
- 			try:
- 				process.wait(timeout=timeout)
- 			except Exception as e:
-@@ -365,6 +366,6 @@ class LinuxSourceTree:
- 			waiter.join()
- 			subprocess.call(['stty', 'sane'])
- 
--	def signal_handler(self, unused_sig, unused_frame) -> None:
-+	def signal_handler(self, unused_sig: int, unused_frame: Optional[FrameType]) -> None:
- 		logging.error('Build interruption occurred. Cleaning console.')
- 		subprocess.call(['stty', 'sane'])
-diff --git a/tools/testing/kunit/run_checks.py b/tools/testing/kunit/run_checks.py
-index 61cece1684df..8208c3b3135e 100755
---- a/tools/testing/kunit/run_checks.py
-+++ b/tools/testing/kunit/run_checks.py
-@@ -23,7 +23,7 @@ commands: Dict[str, Sequence[str]] = {
- 	'kunit_tool_test.py': ['./kunit_tool_test.py'],
- 	'kunit smoke test': ['./kunit.py', 'run', '--kunitconfig=lib/kunit', '--build_dir=kunit_run_checks'],
- 	'pytype': ['/bin/sh', '-c', 'pytype *.py'],
--	'mypy': ['/bin/sh', '-c', 'mypy *.py'],
-+	'mypy': ['mypy', '--strict', '--exclude', '_test.py$', '--exclude', 'qemu_configs/', '.'],
- }
- 
- # The user might not have mypy or pytype installed, skip them if so.
-@@ -73,7 +73,7 @@ def main(argv: Sequence[str]) -> None:
- 		sys.exit(1)
- 
- 
--def run_cmd(argv: Sequence[str]):
-+def run_cmd(argv: Sequence[str]) -> None:
- 	subprocess.check_output(argv, stderr=subprocess.STDOUT, cwd=ABS_TOOL_PATH, timeout=TIMEOUT)
- 
- 
+All errors (new ones prefixed by >>):
+
+>> drivers/net/dsa/qca/qca8k-leds.c:171:1: error: redefinition of 'qca8k_setup_led_ctrl'
+     171 | qca8k_setup_led_ctrl(struct qca8k_priv *priv)
+         | ^~~~~~~~~~~~~~~~~~~~
+   In file included from drivers/net/dsa/qca/qca8k-leds.c:5:
+   drivers/net/dsa/qca/qca8k.h:577:19: note: previous definition of 'qca8k_setup_led_ctrl' with type 'int(struct qca8k_priv *)'
+     577 | static inline int qca8k_setup_led_ctrl(struct qca8k_priv *priv)
+         |                   ^~~~~~~~~~~~~~~~~~~~
+
+
+vim +/qca8k_setup_led_ctrl +171 drivers/net/dsa/qca/qca8k-leds.c
+
+   169	
+   170	int
+ > 171	qca8k_setup_led_ctrl(struct qca8k_priv *priv)
+
 -- 
-2.40.0.rc1.284.g88254d51c5-goog
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
