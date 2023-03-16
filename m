@@ -2,114 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 299346BCAAD
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 10:23:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3A396BCAB0
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 10:23:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230256AbjCPJXS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 05:23:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40720 "EHLO
+        id S230435AbjCPJXs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 05:23:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbjCPJXQ (ORCPT
+        with ESMTP id S229532AbjCPJXr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 05:23:16 -0400
-Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29E3DA90A3
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 02:23:13 -0700 (PDT)
-Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
+        Thu, 16 Mar 2023 05:23:47 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 503EB12BEA;
+        Thu, 16 Mar 2023 02:23:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4PchdC38z4z8R039;
-        Thu, 16 Mar 2023 17:23:11 +0800 (CST)
-Received: from szxlzmapp04.zte.com.cn ([10.5.231.166])
-        by mse-fl2.zte.com.cn with SMTP id 32G9N3Ew025512;
-        Thu, 16 Mar 2023 17:23:03 +0800 (+08)
-        (envelope-from yang.yang29@zte.com.cn)
-Received: from mapi (szxlzmapp03[null])
-        by mapi (Zmail) with MAPI id mid14;
-        Thu, 16 Mar 2023 17:23:05 +0800 (CST)
-Date:   Thu, 16 Mar 2023 17:23:05 +0800 (CST)
-X-Zmail-TransId: 2b056412dff932c-66bf9
-X-Mailer: Zmail v1.0
-Message-ID: <202303161723055514455@zte.com.cn>
-Mime-Version: 1.0
-From:   <yang.yang29@zte.com.cn>
-To:     <akpm@linux-foundation.org>, <hannes@cmpxchg.org>
-Cc:     <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
-        <iamjoonsoo.kim@lge.com>, <yang.yang29@zte.com.cn>,
-        <willy@infradead.org>
-Subject: =?UTF-8?B?wqBbUEFUQ0ggbGludXgtbmV4dF0gbW06IHdvcmtpbmdzZXQ6IHNpbXBsaWZ5IHRoZcKgY2FsY3VsYXRpb24gb2Ygd29ya2luZ3NldCBzaXpl?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl2.zte.com.cn 32G9N3Ew025512
-X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at cgslv5.04-192.168.250.137.novalocal with ID 6412DFFF.001 by FangMail milter!
-X-FangMail-Envelope: 1678958591/4PchdC38z4z8R039/6412DFFF.001/10.5.228.133/[10.5.228.133]/mse-fl2.zte.com.cn/<yang.yang29@zte.com.cn>
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 6412DFFF.001/4PchdC38z4z8R039
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+        by ams.source.kernel.org (Postfix) with ESMTPS id E1B6BB8208C;
+        Thu, 16 Mar 2023 09:23:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CA8DC433D2;
+        Thu, 16 Mar 2023 09:23:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1678958623;
+        bh=yoSLZk3pSoNeYTGImZ7sWQR6VVLXyarTRCoh6XHI+y4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=B9TZi4zI6l7b74p93zbNWY1feiGyj3GyFXuilmVOlsz+pBFuJn4iaDSuFeeFHuyyc
+         Bl5kBmby9WZTP0Jdgl2/DB11PNIaJxsl62PxmwYtcVTAMOrVdipTi3Pq5RYFXf64Cr
+         NYbkTv02fTFcuvBXEZyeLcx8vmjKq8IDVOCa/6PY=
+Date:   Thu, 16 Mar 2023 10:23:40 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Pavel Machek <pavel@denx.de>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 4.14 00/20] 4.14.310-rc2 review
+Message-ID: <ZBLgHPbbQaQly5UC@kroah.com>
+References: <20230316083335.429724157@linuxfoundation.org>
+ <ZBLaULVciUIN+b4P@duo.ucw.cz>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZBLaULVciUIN+b4P@duo.ucw.cz>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yang Yang <yang.yang29@zte.com.cn>
+On Thu, Mar 16, 2023 at 09:58:56AM +0100, Pavel Machek wrote:
+> Hi!
+> 
+> > This is the start of the stable review cycle for the 4.14.310 release.
+> > There are 20 patches in this series, all will be posted as a response
+> > to this one.  If anyone has any issues with these being applied, please
+> > let me know.
+> 
+> > Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> >     clk: qcom: mmcc-apq8084: remove spdm clocks
+> 
+> This looks like a cleanup, we should not need it in stable.
 
-After we implemented workingset detection for anonymous LRU[1],
-the calculation of workingset size is a little complex. Actually there is
-no need to call mem_cgroup_get_nr_swap_pages() if refault page is
-anonymous page, since we are doing swapping then should always
-give pressure to NR_ACTIVE_ANON.
-So avoid using mem_cgroup_get_nr_swap_pages() when handling
-swapin in workingset_refault(). This also give us a chance to refactor
-the code to make it simpler and more understandable.
+Now removed.
 
-[1] commit aae466b0052e ("mm/swap: implement workingset detection for anonymous LRU")
+> > Paul Elder <paul.elder@ideasonboard.com>
+> >     media: ov5640: Fix analogue gain control
+> 
+> This is an API tweak, not a bugfix. This will have negative impact on
+> users upgrading from 4.14.309 and 4.14.310, because you can be pretty
+> sure someone out there uses the "old" interface in their
+> application. I'm probably responsible for that sin in millipixels
+> fork.
 
-Signed-off-by: Yang Yang <yang.yang29@zte.com.cn>
-Reviewed-by: Wang Yong <wang.yong12@zte.com.cn>
-Reviewed-by: Xiaokai Ran <ran.xiaokai@zte.com.cn>
----
- mm/workingset.c | 17 +++++++++--------
- 1 file changed, 9 insertions(+), 8 deletions(-)
+They would have the same "impact" when moving to a newer kernel anyway,
+so this seems like a valid bugfix to me.
 
-diff --git a/mm/workingset.c b/mm/workingset.c
-index 00c6f4d9d9be..a304e8571d54 100644
---- a/mm/workingset.c
-+++ b/mm/workingset.c
-@@ -466,22 +466,23 @@ void workingset_refault(struct folio *folio, void *shadow)
- 	/*
- 	 * Compare the distance to the existing workingset size. We
- 	 * don't activate pages that couldn't stay resident even if
--	 * all the memory was available to the workingset. Whether
--	 * workingset competition needs to consider anon or not depends
--	 * on having swap.
-+	 * all the memory was available to the workingset. For page
-+	 * cache whether workingset competition needs to consider
-+	 * anon or not depends on having swap.
- 	 */
- 	workingset_size = lruvec_page_state(eviction_lruvec, NR_ACTIVE_FILE);
-+	/* For anonymous page */
- 	if (!file) {
-+		workingset_size += lruvec_page_state(eviction_lruvec,
-+						     NR_ACTIVE_ANON);
- 		workingset_size += lruvec_page_state(eviction_lruvec,
- 						     NR_INACTIVE_FILE);
--	}
--	if (mem_cgroup_get_nr_swap_pages(eviction_memcg) > 0) {
-+	/* For page cache */
-+	} else if (mem_cgroup_get_nr_swap_pages(eviction_memcg) > 0) {
- 		workingset_size += lruvec_page_state(eviction_lruvec,
- 						     NR_ACTIVE_ANON);
--		if (file) {
--			workingset_size += lruvec_page_state(eviction_lruvec,
-+		workingset_size += lruvec_page_state(eviction_lruvec,
- 						     NR_INACTIVE_ANON);
--		}
- 	}
- 	if (refault_distance > workingset_size)
- 		goto out;
--- 
-2.25.1
+thanks,
+
+greg k-h
