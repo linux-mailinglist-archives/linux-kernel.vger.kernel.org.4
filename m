@@ -2,163 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC9BA6BC38C
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 03:02:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 251C96BC39F
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 03:11:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229574AbjCPCCK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 22:02:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52492 "EHLO
+        id S229673AbjCPCLj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 22:11:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbjCPCCI (ORCPT
+        with ESMTP id S229519AbjCPCLh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 22:02:08 -0400
-Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 144D2BAD02
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 19:02:05 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R741e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046056;MF=guorui.yu@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VdxtHh3_1678932119;
-Received: from 127.0.0.1(mailfrom:GuoRui.Yu@linux.alibaba.com fp:SMTPD_---0VdxtHh3_1678932119)
-          by smtp.aliyun-inc.com;
-          Thu, 16 Mar 2023 10:02:02 +0800
-Message-ID: <49d6a3df-4507-599c-8f4b-3f2ba78ac535@linux.alibaba.com>
-Date:   Thu, 16 Mar 2023 10:01:58 +0800
+        Wed, 15 Mar 2023 22:11:37 -0400
+Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77B33A4B24;
+        Wed, 15 Mar 2023 19:11:36 -0700 (PDT)
+Received: by mail-il1-x12a.google.com with SMTP id w4so260941ilv.0;
+        Wed, 15 Mar 2023 19:11:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678932696;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=E0wPHL5tG0y6TTLnk5Nwov0SWBJZgv5AdCy7yKorfXU=;
+        b=PTeTEX8U0RSI7iE3YTurBMueiTtBZbKTZmF+mSjXq6uM/qfHDlNEL8tDL4YtA+Qq9r
+         hIWBbpck4nvDsqM2p949doiKLTL6ac0U3gACGG0J/JAU1Zi14mEbTunNptqK5dFP8W4s
+         Vf9VkPpg2BqkJCcpjN3/Sz5+qBgrOYw4YjAl6USBZusPsSKXNSQi5wpuFLi5FIWOx8nR
+         5O/bitXCV4Zq82+PawspbhQxGcIQKdxuVMDo6DV8f7gMvHleSV0bKXhurcuRrR1TvqaS
+         WJsUSLHPqooEX5SZoEJEjB1EnPTQRj4A+I9K/l50pTJSL8uCtE1UKGI68wWpYSC3EmlY
+         X5DQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678932696;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=E0wPHL5tG0y6TTLnk5Nwov0SWBJZgv5AdCy7yKorfXU=;
+        b=U/mVQ0qbr6YC7oAGrEoeXrLBVg0H69Qc7MZgMmQTizgFM82n/5deKb5Mz2qF+FIZ3A
+         W9ZX0ewcua93oMWsCvXPjz6Y5KbgHVRN2X8zU87bFd7hAUj7s/nRlZO2hbnAKeIeIrSn
+         6hF7ALwRLbRqhtG1kXmQ/UBkg78Q2+lFjV1/vK2cj64iR+4ttFI81m62BLlfsJDE0vQZ
+         IiQqOqpgEXSL19KqoPINUHlL4imXPqf90gsVgYT5e2o8RmHisVdcJphHiroBlVrahSCb
+         7qIOest/lniZNoDjEjOoNU0QlCak6JyBed8Ba13vIzxLMov25JuQGm49DLpV3fMdvpFt
+         x6Dg==
+X-Gm-Message-State: AO0yUKVx9uL0vTLlGBf64bEkfM6CejK+gdpet5nceiXwDwg+4YR38ARa
+        z6IOBXjnBl3yK9gctq2Pc4w=
+X-Google-Smtp-Source: AK7set+Uiwr9aRlQrfzIKnd/Q+T1cb6r3ELsyNXB6t6Ob0UIM5MNT2jw5VdCumuowm0gNc8C7p+kcg==
+X-Received: by 2002:a05:6e02:1d82:b0:317:99c6:2791 with SMTP id h2-20020a056e021d8200b0031799c62791mr7992191ila.26.1678932695852;
+        Wed, 15 Mar 2023 19:11:35 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 20-20020a056e0211b400b003158e48f1e9sm2071154ilj.60.2023.03.15.19.11.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Mar 2023 19:11:35 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <970802b8-f99d-0d26-cfcd-5b2079ed4d6f@roeck-us.net>
+Date:   Wed, 15 Mar 2023 19:11:33 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.8.0
-Subject: Re: [PATCH v2] swiotlb: fix the deadlock in swiotlb_do_find_slots
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     m.szyprowski@samsung.com, robin.murphy@arm.com,
-        iommu@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-References: <20230222165315.89135-1-GuoRui.Yu@linux.alibaba.com>
- <20230315144737.GA28864@lst.de>
-From:   Guorui Yu <GuoRui.Yu@linux.alibaba.com>
-In-Reply-To: <20230315144737.GA28864@lst.de>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 2/2] hwmon: (nct6775) update ASUS WMI monitoring list
+ A520/B360/B460/B550...
+Content-Language: en-US
+To:     Denis Pauk <pauk.denis@gmail.com>
+Cc:     jdelvare@suse.com, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mischief@offblast.org,
+        de99like@mennucci.debian.net, holger.kiehl@dwd.de
+References: <20230315210135.2155-1-pauk.denis@gmail.com>
+ <20230315210135.2155-2-pauk.denis@gmail.com>
+ <20230315233054.5ac21db0@gmail.com>
+ <19097c39-9703-6b7f-6cc4-8a157b00f368@roeck-us.net>
+ <20230316000453.553bf6a8@gmail.com> <20230316001749.44e51d08@gmail.com>
+ <20230316003519.27224216@gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20230316003519.27224216@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Christoph,
+On 3/15/23 15:35, Denis Pauk wrote:
+> On Thu, 16 Mar 2023 00:17:49 +0200
+> Denis Pauk <pauk.denis@gmail.com> wrote:
+> 
+>> On Thu, 16 Mar 2023 00:04:53 +0200
+>> Denis Pauk <pauk.denis@gmail.com> wrote:
+>>
+>>> On Wed, 15 Mar 2023 14:58:24 -0700
+>>> Guenter Roeck <linux@roeck-us.net> wrote:
+>>>    
+>>>> On 3/15/23 14:30, Denis Pauk wrote:
+>>>>> On Wed, 15 Mar 2023 23:01:35 +0200
+>>>>> Denis Pauk <pauk.denis@gmail.com> wrote:
+>>>>>
+>>>>> Tested-by: Holger Kiehl <holger.kiehl@dwd.de>
+>>>>>
+>>>>> Pro A520M-C II/CSM is also tested by Holger Kiehl
+>>>>> https://patchwork.kernel.org/project/linux-hwmon/patch/868bdc4f-9d45-475c-963e-f5232a8b95@praktifix.dwd.de/
+>>>>>
+>>>>> Could it be applied as single patch or need to rebase over "Pro A520M-C
+>>>>> II" patch?
+>>>>>        
+>>>> Sorry, I don't understand what you are trying to say. I just applied all
+>>>> patches in sequence as received, with no conflicts. Should I undo that ?
+>>>>
+>>>> Guenter
+>>>>      
+>>>
+>>> No, Thank you!
+>>>
+>>> I just like to mention that Holger Kiehl sent separate patch with
+>>> "Pro A520M-C II" support and it could create conflicts. I have found it only
+>>> when I have sent my patches.
+>>>    
+>>
+>> I have rechecked repo and "Pro A520M-C II" is added twice after apply both of
+>> patches (my and from Holger Kiehl), could you please remove one of mention of
+>> it?
+> 
+> I have resent updated version of this patch without duplication of adding "Pro
+> A520M-C II",
+> https://patchwork.kernel.org/project/linux-hwmon/patch/20230315222702.1803-1-pauk.denis@gmail.com/
+> 
+> you could revert this patch and add apply new one, or fix this one.
+> 
 
-Thanks for your reply, and this new version looks go to me.
+Done. You could avoid this kind of problem by keeping board names
+in alphabetic order.
 
-Yours sincerely,
-Guorui
+Guenter
 
-在 2023/3/15 22:47, Christoph Hellwig 写道:
-> I think this looks generall fine, but the index_nowrap variable
-> name seems very confusing.  What about this slighlt adjusted
-> version?
-> 
-> ---
->  From 11559745f0920b53ba5f8b2fc6241891e1dfcf4b Mon Sep 17 00:00:00 2001
-> From: "GuoRui.Yu" <GuoRui.Yu@linux.alibaba.com>
-> Subject: swiotlb: fix the deadlock in swiotlb_do_find_slots
-> 
-> In general, if swiotlb is sufficient, the logic of index =
-> wrap_area_index(mem, index + 1) is fine, it will quickly take a slot and
-> release the area->lock; But if swiotlb is insufficient and the device
-> has min_align_mask requirements, such as NVME, we may not be able to
-> satisfy index == wrap and exit the loop properly. In this case, other
-> kernel threads will not be able to acquire the area->lock and release
-> the slot, resulting in a deadlock.
-> 
-> The current implementation of wrap_area_index does not involve a modulo
-> operation, so adjusting the wrap to ensure the loop ends is not trivial.
-> Introduce a new variable to record the number of loops and exit the loop
-> after completing the traversal.
-> 
-> Backtraces:
-> Other CPUs are waiting this core to exit the swiotlb_do_find_slots
-> loop.
-> [10199.924391] RIP: 0010:swiotlb_do_find_slots+0x1fe/0x3e0
-> [10199.924403] Call Trace:
-> [10199.924404]  <TASK>
-> [10199.924405]  swiotlb_tbl_map_single+0xec/0x1f0
-> [10199.924407]  swiotlb_map+0x5c/0x260
-> [10199.924409]  ? nvme_pci_setup_prps+0x1ed/0x340
-> [10199.924411]  dma_direct_map_page+0x12e/0x1c0
-> [10199.924413]  nvme_map_data+0x304/0x370
-> [10199.924415]  nvme_prep_rq.part.0+0x31/0x120
-> [10199.924417]  nvme_queue_rq+0x77/0x1f0
-> 
-> ...
-> [ 9639.596311] NMI backtrace for cpu 48
-> [ 9639.596336] Call Trace:
-> [ 9639.596337]
-> [ 9639.596338] _raw_spin_lock_irqsave+0x37/0x40
-> [ 9639.596341] swiotlb_do_find_slots+0xef/0x3e0
-> [ 9639.596344] swiotlb_tbl_map_single+0xec/0x1f0
-> [ 9639.596347] swiotlb_map+0x5c/0x260
-> [ 9639.596349] dma_direct_map_sg+0x7a/0x280
-> [ 9639.596352] __dma_map_sg_attrs+0x30/0x70
-> [ 9639.596355] dma_map_sgtable+0x1d/0x30
-> [ 9639.596356] nvme_map_data+0xce/0x370
-> 
-> ...
-> [ 9639.595665] NMI backtrace for cpu 50
-> [ 9639.595682] Call Trace:
-> [ 9639.595682]
-> [ 9639.595683] _raw_spin_lock_irqsave+0x37/0x40
-> [ 9639.595686] swiotlb_release_slots.isra.0+0x86/0x180
-> [ 9639.595688] dma_direct_unmap_sg+0xcf/0x1a0
-> [ 9639.595690] nvme_unmap_data.part.0+0x43/0xc0
-> 
-> Fixes: 1f221a0d0dbf ("swiotlb: respect min_align_mask")
-> Signed-off-by: GuoRui.Yu <GuoRui.Yu@linux.alibaba.com>
-> Signed-off-by: Xiaokang Hu <xiaokang.hxk@alibaba-inc.com>
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
-> ---
->   kernel/dma/swiotlb.c | 10 ++++++----
->   1 file changed, 6 insertions(+), 4 deletions(-)
-> 
-> diff --git a/kernel/dma/swiotlb.c b/kernel/dma/swiotlb.c
-> index 03e3251cd9d2b6..91454b513db069 100644
-> --- a/kernel/dma/swiotlb.c
-> +++ b/kernel/dma/swiotlb.c
-> @@ -625,8 +625,8 @@ static int swiotlb_do_find_slots(struct device *dev, int area_index,
->   	unsigned int iotlb_align_mask =
->   		dma_get_min_align_mask(dev) & ~(IO_TLB_SIZE - 1);
->   	unsigned int nslots = nr_slots(alloc_size), stride;
-> -	unsigned int index, wrap, count = 0, i;
->   	unsigned int offset = swiotlb_align_offset(dev, orig_addr);
-> +	unsigned int index, slots_checked, count = 0, i;
->   	unsigned long flags;
->   	unsigned int slot_base;
->   	unsigned int slot_index;
-> @@ -649,15 +649,16 @@ static int swiotlb_do_find_slots(struct device *dev, int area_index,
->   		goto not_found;
->   
->   	slot_base = area_index * mem->area_nslabs;
-> -	index = wrap = wrap_area_index(mem, ALIGN(area->index, stride));
-> +	index = wrap_area_index(mem, ALIGN(area->index, stride));
->   
-> -	do {
-> +	for (slots_checked = 0; slots_checked < mem->area_nslabs; ) {
->   		slot_index = slot_base + index;
->   
->   		if (orig_addr &&
->   		    (slot_addr(tbl_dma_addr, slot_index) &
->   		     iotlb_align_mask) != (orig_addr & iotlb_align_mask)) {
->   			index = wrap_area_index(mem, index + 1);
-> +			slots_checked++;
->   			continue;
->   		}
->   
-> @@ -673,7 +674,8 @@ static int swiotlb_do_find_slots(struct device *dev, int area_index,
->   				goto found;
->   		}
->   		index = wrap_area_index(mem, index + stride);
-> -	} while (index != wrap);
-> +		slots_checked += stride;
-> +	}
->   
->   not_found:
->   	spin_unlock_irqrestore(&area->lock, flags);
