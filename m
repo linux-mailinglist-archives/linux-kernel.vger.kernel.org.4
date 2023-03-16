@@ -2,82 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AFF66BCFEC
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 13:53:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E3076BCFF0
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 13:55:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229778AbjCPMx3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 08:53:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53834 "EHLO
+        id S229804AbjCPMz1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 08:55:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbjCPMx1 (ORCPT
+        with ESMTP id S229911AbjCPMzM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 08:53:27 -0400
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6A82234D7;
-        Thu, 16 Mar 2023 05:53:25 -0700 (PDT)
-Received: by mail-oi1-x22c.google.com with SMTP id be16so1293195oib.0;
-        Thu, 16 Mar 2023 05:53:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678971205;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ti3+/+O/mizRCYD6mJqQ9hW5peGLssPgu/LkZnsMASU=;
-        b=JqU31zkHGu3ptAj9SlVRIUKZOv+itjg1RCjjVUlbvP/Ckfz2yNmItTRqLDiHNUzFBe
-         U1K4kQwYZce/cY18NBc9DrOrnbzzTGlyCnMb/UbiYl3Y8MhtYMc4bF3lcsNLJdMJu3+q
-         epPfgeuV3fAexV+8mRMYrXcVOtVpyfjLiQB1lEFJlN2o9h0i/GjTzoEt7p/ZTkKCun39
-         hwXEj4UDbO2sBTbyF/An7M+xNP3Mbflve/fG/ARz41vvRnxcz1n0Uxk+BJ6zv9fkPhcE
-         4oxvsB6mmUoFxf+4SZfEs7Oto+afHRxvgRLTRikP+w6j4JmMwcJZVv3Ex1B83LVLweTW
-         50ig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678971205;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ti3+/+O/mizRCYD6mJqQ9hW5peGLssPgu/LkZnsMASU=;
-        b=oAvA2e53MX5uUjrFoUWQ6H/v+/jMW4L0V2XAQPQIxugAiyOBD6ghA/OAj9F+cyzZ+K
-         u7U6hSTGAoe88KXDCkAYri09kI1LzJwF/oaMj+9WCZkqAGc/PQ7pmgw5tISu0zfUtMi2
-         kl0PBR0wA/L3hshY0MHXu83m2poM/yZVUqFKbwQbEvgRt5+vNUnSj/8sWYMZwaMT240l
-         gBfum++fL62JaPGzY4IVqJWxA0fUZNM4YTNYSBZPWYWwSkQE2AvvnfrqxOnq3csx4kpw
-         Z2FDFZ+h+e+S6l+tQ4eBihe6bLUF9siFSujTWBuWjy5qNiBOHuTqehWVmYUZJGS5LTMP
-         Ytlg==
-X-Gm-Message-State: AO0yUKUMqrc4y8IWa+EmA6bOGzOCLEyA6JT8r7uU7Htiqt839SLXFzn8
-        aTEpEDVCXIp0e0J0XxhQfLJ5fguMagk021KGjtE=
-X-Google-Smtp-Source: AK7set9dWfwo7U4qmaHBStrTqQn7i/IJd9cr8lIzLT0RjtSxZKwFMzDm73eMdiD2f1s0u9V2YNi2R3uy/djkKyapVuo=
-X-Received: by 2002:a05:6808:29a:b0:386:9864:5064 with SMTP id
- z26-20020a056808029a00b0038698645064mr1739501oic.10.1678971205044; Thu, 16
- Mar 2023 05:53:25 -0700 (PDT)
+        Thu, 16 Mar 2023 08:55:12 -0400
+Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01on2137.outbound.protection.outlook.com [40.107.113.137])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E56BC1024B
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 05:55:07 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=WAZFzjBnTzFd/gm7BeO/IShPVsV6/sEtLGN1KmwWjfiS4sOLwPEkhgyzc4xUnsLALW/uPvt+SdM+blC9598pCzkm30U/He3yvERqv6QcCt9hN+4b88WKYWy3HZY6TnOfU7bXhcdM2vPkgp6y3/6N59u6PRXBegpUnM2s5v9wi1X45Sxdre1+7fgVjYASYas9YpTEr5cUTnb5DD4vUmlybvSfWk3Pfi7bGeFERmvIRK5qjYAtUpwUxzvnVEnXT9OJAxYUicUmP8XxMLfmOJp8LFyUR6Jai9/k77INUxyybBaJ8oyapd/ctxxRHpKkclidfso2TvC9tUDSMI76KuvUUg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=FwYtCzq4K6lIp6ni/xQzo4wyMmWeXaviZyl1+02RKF4=;
+ b=A6u2U+smFzg8NpCfdWaEHc7HOer6DzRKjnK27vmV1J8zTex6y7+rariYA4nE8Fx5C6QQk1id2UYLY+4jnHvxMvvx7V0fmjWIqF+D2DVjRkk9fxKzN1fB2hn41HLIyUBjdxyI/X+9vCWZaRcs+3ZsXOwIXvf+ZWwMBsust06kTLqeL3xYZuPt5jUlaO3dcmxv5ydJnRbPRsNXfYKgobT0//vso8bZZd7L456uHJbXRY966vnSYZ4bfPuuGl/tF/E2Lkn0jPqrLjEszZrKUdf8L/02aJ2M9onhhle3PKZ/LcAvJt0RLMsqVYw7ik/8lg9Ddc111yNcoewuCo73RMbBZw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=zenithal.me; dmarc=pass action=none header.from=zenithal.me;
+ dkim=pass header.d=zenithal.me; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zenithal.me;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=FwYtCzq4K6lIp6ni/xQzo4wyMmWeXaviZyl1+02RKF4=;
+ b=OUUGeBovJ8aiHoE2Dcj1qY4Lcu0KvotMSk1O6yfcoKzzJ9sPDC23/+xF2+OG4rjSj6lW0+FSq/R0+s973LUVmMTl/wqYVUYPvv/hJv5mv8ZsB5GhAAzKZkREF3mGB2XbpEmjNxV2mNtEJUXNuSrY0a1HzUDg9Scmu3HO1mfA6sw=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=zenithal.me;
+Received: from TYCP286MB1393.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:c0::6) by
+ OS3P286MB1995.JPNP286.PROD.OUTLOOK.COM (2603:1096:604:1a2::6) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6178.31; Thu, 16 Mar 2023 12:55:03 +0000
+Received: from TYCP286MB1393.JPNP286.PROD.OUTLOOK.COM
+ ([fe80::fdad:8d7e:adad:dc90]) by TYCP286MB1393.JPNP286.PROD.OUTLOOK.COM
+ ([fe80::fdad:8d7e:adad:dc90%8]) with mapi id 15.20.6178.031; Thu, 16 Mar 2023
+ 12:55:03 +0000
+Date:   Thu, 16 Mar 2023 20:54:55 +0800
+From:   Hongren Zheng <i@zenithal.me>
+To:     Palmer Dabbelt <palmer@rivosinc.com>
+Cc:     Kito Cheng <kito.cheng@gmail.com>,
+        Nelson Chu <nelson.chu@sifive.com>,
+        Atish Patra <atishp@rivosinc.com>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] RISC-V: cpu.c: remove nonexistent ext from cpuinfo
+Message-ID: <ZBMRnwL5hvjhm04U@Sun>
+References: <YoSw8lNHJqRDy6lg@Sun>
+ <mhng-7b349805-02ff-47b3-b9b5-31dcbd2bb256@palmer-ri-x1c9>
+ <YqYuiVwarHnbggtf@Sun>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YqYuiVwarHnbggtf@Sun>
+X-Operating-System: Linux Sun 5.15.67 
+X-Mailer: Mutt 2.2.7 (2022-08-07)
+X-ClientProxiedBy: SJ0PR13CA0055.namprd13.prod.outlook.com
+ (2603:10b6:a03:2c2::30) To TYCP286MB1393.JPNP286.PROD.OUTLOOK.COM
+ (2603:1096:400:c0::6)
 MIME-Version: 1.0
-References: <20230214140858.1133292-1-rick.wertenbroek@gmail.com>
- <ecd09f27-b799-4741-2c5a-a2de99776c51@opensource.wdc.com> <CAAEEuhrk4cSC312UiAL3UwoDZ=urrdDcBThcNHd1dqnAuJTzAw@mail.gmail.com>
- <3c4ed614-f088-928f-2807-deaa5e4b668a@opensource.wdc.com> <CAAEEuhqk0scWd3wFbVb9fSgHxPBKotpEPNi+YPG4GD9vLO94mw@mail.gmail.com>
- <8392a7de-666a-bce6-dc9f-b60d6dd93013@opensource.wdc.com> <1e8184e9-7e0b-2598-cc5a-e46d6c2f152a@opensource.wdc.com>
-In-Reply-To: <1e8184e9-7e0b-2598-cc5a-e46d6c2f152a@opensource.wdc.com>
-From:   Rick Wertenbroek <rick.wertenbroek@gmail.com>
-Date:   Thu, 16 Mar 2023 13:52:49 +0100
-Message-ID: <CAAEEuhoB2LqL=B_BQ0X2T-E+Yt83kPUiv-R9dgU0O-f22ukcWg@mail.gmail.com>
-Subject: Re: [PATCH v2 0/9] PCI: rockchip: Fix RK3399 PCIe endpoint controller driver
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Cc:     alberto.dassatti@heig-vd.ch, xxm@rock-chips.com,
-        rick.wertenbroek@heig-vd.ch, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Shawn Lin <shawn.lin@rock-chips.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Jani Nikula <jani.nikula@intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Mikko Kovanen <mikko.kovanen@aavamobile.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pci@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: TYCP286MB1393:EE_|OS3P286MB1995:EE_
+X-MS-Office365-Filtering-Correlation-Id: 714116d2-8f8b-4752-3f1d-08db261da8b5
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: nMLq7ynTo76MHMBI6uuz5o7i5xxLyH8lrqoJL/uUCmPEzgrG3CQ6aAg5grFWXtD5Cra3o1wV4u/sf1QsNHYfgeji86YtSJkrqJHQb7p2eawrk0+jBgjo7H4LJr+Eae3TVQxr8zmcZOgRmmKVTP7EsyfxFW3JY1aImQ9Hzl1lgkoccEYRYK6na5cEvwd7RvUcE/SutTyo9GieCFMt5X2s45oXovcPNgazo07WDg7NOrTy7QBibWYktNkwcv0131z/3S1wpij0wUllK2tRWRuhy9JBlSwODMGfjcZPBR8UqTFUrsIVJdU2NgYksznjVuQUdqTP4Xt7sep93FO5WakJbtJ/EVZe7fo5JxTQK2KBq0byhSwCGG0pR5UqXn8p+/sFG8an3dIvkV0qVbLR4yNtSc4h/GOaZhTajhO9ll1070TV5Ul49oEUaCFw7HQBnoiV6Nw1rEm96cXPM2OnI76WAE51c7fzhaakA3wedRaOY89sph8TEEIjIYYzDBer5vMIzb0yFu2jEVgR6hTKCDA0Xt0n52iFT7ecZvM3brSfjRwRegFKND4Y6WdPpPpZdgS8UJNeeuFbEsZOcMRA0blwieBSr1+irETE6E1JeJAvEQYtX7TqEhbufWd7En64wPu08PvHqwm1uzhpavnZxWEBkI9TOmozDbpZvGJeOGlUUIpu3ez6wGsywenbB+GOTo7k
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYCP286MB1393.JPNP286.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230025)(7916004)(376002)(366004)(346002)(396003)(39830400003)(136003)(451199018)(86362001)(38100700002)(2906002)(41300700001)(8936002)(5660300002)(33716001)(41320700001)(66556008)(6506007)(9686003)(6512007)(186003)(4326008)(786003)(316002)(6666004)(54906003)(83380400001)(8676002)(66946007)(966005)(6486002)(478600001)(66476007)(6916009)(49092004);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?oW1Os1bzjZYFiNh+S+WRyxgY5vsY9t0IaKiyZFjDrhC+5wsaPDtxpbbSnhAq?=
+ =?us-ascii?Q?qNKXHkM/UNHlVNlB1oU9qh3gzvUvDjBwnJCTk/db4/cbAvCxi1NjGd4BgwvT?=
+ =?us-ascii?Q?q+USP3Z6tJG1KRX2SaGQQ58dCn3rRNq1+SruUYMv5C2MsoM64m9rU6mhB1yl?=
+ =?us-ascii?Q?7azjiNpMw+7tGIlWIqdQ2kUz8cF+RRIv9FcgngQMfCtI36ZwNJJ0ob5UoJQs?=
+ =?us-ascii?Q?xaMLcX9FZg9gJ+Yw2Mmn6VgRJ8QNJ6d1PEZYpNhY0WjnkcfV5cJo22r2J/Us?=
+ =?us-ascii?Q?rsT0FzzJNyirkm1IY0rJUU8UMBpCZLUXFIbOjUZ+QGmpOYqxIdM0/6rzH+bU?=
+ =?us-ascii?Q?KOSOb5M/42RymgccSQBrAhIax+i8Ze/+8SbnpCxnSZMCfxxQ4zZSmUbG5FRm?=
+ =?us-ascii?Q?p5moT/QXYhm93ezvMsArifnJRIkZ/tnKMtj58kLnnypVG8uoKC34Fmvr1ggb?=
+ =?us-ascii?Q?nc6Y3VhyAxOpjE8pIP29OGNm1RLJi/ZuXx2JBMZSwZpXYu5a/OJWldmJHgox?=
+ =?us-ascii?Q?4m3aKpTXb6RYP6sPdV0AT6+c0+2mJJP/Y4amP02CrHbjU0sNd3bqmyC4sqtG?=
+ =?us-ascii?Q?yEMSLLDdDn6WiiDJYCljiuCXLxUza4dTenAEa0hfLC+DjqsPeTvOrZpWbDN9?=
+ =?us-ascii?Q?beUjQ88qCQ+3O5PyEZRsrJvlLoOitKNhVOsMm1EijO/Eoz2cQg017dOMy6OF?=
+ =?us-ascii?Q?LNlYRTG4w/6MnPNSIHYc8gIT857P0Vqg+jJKp127D4vN4Av6jeiUoWamiQA8?=
+ =?us-ascii?Q?4UW6wj3maMeS4e4ynHDNbazf+oOIRNHDUIyvIuYfGRzMetuDjXEbxANJP27q?=
+ =?us-ascii?Q?51hglqskdjId2JgoQwfdEXdGUGVyroMF2TDR4XNoyCGKALcUsLxwMi+5+TkE?=
+ =?us-ascii?Q?VlaPLpW3OqLD6kGkxw6SBmYl9bcqLlG+vq/cVVzjPHfe7GLXCk9CZote4KwJ?=
+ =?us-ascii?Q?atYtbSPMADXXHl3fZ+bb/N5NqKyx8Kw3otOd8p8Gwc9QB9vHnw+Ft1XF1lJv?=
+ =?us-ascii?Q?8qDtuvhOF/KyT/lhXRhlKHcqBAbbGCECoQxNphyjSHGdQJxFmAJd8/Rkepuq?=
+ =?us-ascii?Q?No1ku7LTgQK/wCI5r6cXPbJWTd7uwzCErmKLgivhiyA5u+omvgkmEj4uKrFI?=
+ =?us-ascii?Q?xJ9PHiI6DN2u0d06xUHnbV5CbnFc3dAL8r/u78nIbjauMdw8m0Ds83JDwOf3?=
+ =?us-ascii?Q?10ypItlBnwhF+K/YGpolpUANxiqYWpOAyPFSmWgzT+zSkzLrgtQhNlWyn2Kd?=
+ =?us-ascii?Q?FXUToxMGLIAFWGdqV2lMfILue5gyT9WJw8fRliWBVGBOE+kXAIz+O17gI6Hm?=
+ =?us-ascii?Q?wRvdx1ubQSaQyydZe4CMxlXSOyTY2wWxoz87dDiIk60D2+bT5EdlwL/b3wsp?=
+ =?us-ascii?Q?G80qfT1paZGctNdYEiTIMvkqsdMRFDUP11Nnagn5NPhFFwfaxS5eNjvTJsEf?=
+ =?us-ascii?Q?v5UUWpz1ecnWYcllFy0iowZbNVWoxbgDkUyMWZwL+ZITVH8UBs2h0wVkRUIu?=
+ =?us-ascii?Q?AzLVYMIszFowMvZTjAi0jpkjz7kgPx5aCHfHqWtDCTi2F64ZiaJgfHCBGP4d?=
+ =?us-ascii?Q?/eV0CBPtpWC1XlqEedRIDhqM41NS2o2/eJpMVYhP?=
+X-OriginatorOrg: zenithal.me
+X-MS-Exchange-CrossTenant-Network-Message-Id: 714116d2-8f8b-4752-3f1d-08db261da8b5
+X-MS-Exchange-CrossTenant-AuthSource: TYCP286MB1393.JPNP286.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Mar 2023 12:55:03.1133
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 436d481c-43b1-4418-8d7f-84c1e4887cf0
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 9d/0ZaFPiN9NKuY56M9gqMKIgsemG/psZYpUfLb86PzJbbsGpdlCZu0q7O+mNVOH
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: OS3P286MB1995
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,146 +118,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 15, 2023 at 1:00=E2=80=AFAM Damien Le Moal
-<damien.lemoal@opensource.wdc.com> wrote:
->
-> On 3/15/23 07:54, Damien Le Moal wrote:
-> > On 3/14/23 23:53, Rick Wertenbroek wrote:
-> >> Hello Damien,
-> >> I also noticed random issues I suspect to be related to link status or=
- power
-> >> state, in my case it sometimes happens that the BARs (0-6) in the conf=
-ig
-> >> space get reset to 0. This is not due to the driver because the driver=
- never
-> >> ever accesses these registers (@0xfd80'0010 to 0xfd80'0024 TRM
-> >> 17.6.4.1.5-17.6.4.1.10).
-> >> I don't think the host rewrites them because lspci shows the BARs as
-> >> "[virtual]" which means they have been assigned by host but have 0
-> >> value in the endpoint device (when lspci rereads the PCI config header=
-).
-> >> See https://github.com/pciutils/pciutils/blob/master/lspci.c#L422
-> >>
-> >> So I suspect the controller detects something related to link status o=
-r
-> >> power state and internally (in hardware) resets those registers. It's =
-not
-> >> the kernel code, it never accesses these regs. The problem occurs
-> >> very randomly, sometimes in a few seconds, sometimes I cannot see
-> >> it for a whole day.
-> >>
-> >> Is this similar to what you are experiencing ?
-> >
-> > Yes. I sometimes get NMIs after starting the function driver, when my f=
-unction
-> > driver starts probing the bar registers after seeing the host changing =
-one
-> > register. And the link also comes up with 4 lanes or 2 lanes, random.
+On Mon, Jun 13, 2022 at 02:20:57AM +0800, Hongren Zheng wrote:
+> On Wed, Jun 01, 2022 at 08:52:42PM -0700, Palmer Dabbelt wrote:
+> > On Wed, 18 May 2022 01:40:18 PDT (-0700), i@zenithal.me wrote:
+> > > On Tue, Apr 26, 2022 at 06:08:01AM +0800, Hongren (Zenithal) Zheng wrote:
+> > > > There are no single-letter B/K/J extentions,
+> > > > as they are never ratified. For P, it is still in
+> > > > progress and not ratified.
+> > > > 
+> > > > The ordering constraint of these placerholders is now removed
+> > > > from the spec. By commit ("Delete more nonexistent
+> > > > extensions from the naming constraints") of riscv/riscv-isa-manual
+> > > 
+> > > Hi, is there any further update on this patch?
+> > 
+> > IIRC there was some debate as to whether that change constituted an
+> > incompatible change to the spec, but I guess it's stuck around for long
+> > enough that maybe we should count on it being canon now?  I added Kito and
+> > Nelson, there's a GNU toolchain call tomorrow morning so hopefully we can
+> > remember to talk about it...
+> 
+> Hi, I'm curious about the output of the meeting, any update on this?
+> 
+> > 
+> > > 
+> > > > 
+> > > > Signed-off-by: Hongren (Zenithal) Zheng <i@zenithal.me>
+> > > > ---
+> > > >  arch/riscv/kernel/cpu.c | 4 +---
+> > > >  1 file changed, 1 insertion(+), 3 deletions(-)
+> > > > 
+> > > > diff --git a/arch/riscv/kernel/cpu.c b/arch/riscv/kernel/cpu.c
+> > > > index ccb617791e56..53a061ab0743 100644
+> > > > --- a/arch/riscv/kernel/cpu.c
+> > > > +++ b/arch/riscv/kernel/cpu.c
+> > > > @@ -113,10 +113,8 @@ static void print_isa_ext(struct seq_file *f)
+> > > >  /*
+> > > >   * These are the only valid base (single letter) ISA extensions as per the spec.
+> > > >   * It also specifies the canonical order in which it appears in the spec.
+> > > > - * Some of the extension may just be a place holder for now (B, K, P, J).
+> > > > - * This should be updated once corresponding extensions are ratified.
+> > > >   */
+> > > > -static const char base_riscv_exts[13] = "imafdqcbkjpvh";
+> > > > +static const char base_riscv_exts[9] = "imafdqcvh";
+> > > 
+> > > The base_riscv_exts "imafdqcvh" is exactly the spec now, as
+> > > https://github.com/riscv/riscv-isa-manual/commit/db7a4a0dad0e99d1ec1fc67b582624fc0aeae98e
+> > > (Add single-letter "H" extension to the table)
+> > > has shown
+> > 
+> > Oddly enough I stumbled upon that one this morning, it's another one of
+> > these like the HPM stuff: we used to say "there's no letter describing the
+> > hypervisor behavior, so it's part of the base" (see the commentary on the
+> > binutils patch), but now that there's a letter I'm assuming we should split
+> > that out?
+> 
+> I'm afraid I could not help here because I'm not familiar with this area.
+> 
+> > 
+> > Not clear if the RISC-V folks want H to be ignored by software like those
+> > other recent changes, and if so it's also not clear that's a good idea.
+> > 
+> > Anyway, sorry this is taking a while but I think it's going to be too late
+> > for this merge window -- kind of silly for such a small patch, but it's got
+> > interface implications and it's all a bit of a hot topic right now.
 
-Hello, I have never had it come up with only 2 lanes, I get 4 consistently.
-I have it connected through a M.2 to female PCIe 16x (4x electrically
-connected),
-then through a male-to-male PCIe 4x cable with TX/RX swap, then through a
-16x extender. All three cables are approx 25cm. It seems stable.
+This PATCH still applies. Might there be some update? Can we safely
+pick this PATCH?
 
-> >
-> >> Do you have any idea as to what could make these registers to be reset
-> >> (I could not find anything in the TRM, also nothing in the driver seem=
-s to
-> >> cause it).
-> >
-> > My thinking is that since we do not have a linkup notifier, the functio=
-n driver
-> > starts setting things up without the link established (e.g. when the ho=
-st is
-> > still powered down). Once the host start booting and pic link is establ=
-ished,
-> > things may be reset in the hardware... That is the only thing I can thi=
-nk of.
-
-This might be worth investigating, I'll look into it, but it seems
-many of the EP
-drivers don't have a Linkup notifier,
-drivers/pci/controller/dwc/pci-dra7xx.c has
-one, but most of the other EP drivers don't have them, so it might not be
-absolutely required.
-
-> >
-> > And yes, there are definitely something going on with the power states =
-too I
-> > think: if I let things idle for a few minutes, everything stops working=
-: no
-> > activity seen on the endpoint over the BARs. I tried enabling the sys a=
-nd client
-> > interrupts to see if I can see power state changes, or if clearing the
-> > interrupts helps (they are masked by default), but no change. And booti=
-ng the
-> > host with pci_aspm=3Doff does not help either. Also tried to change all=
- the
-> > capabilities related to link & power states to "off" (not supported), a=
-nd no
-> > change either. So currently, I am out of ideas regarding that one.
-> >
-> > I am trying to make progress on my endpoint driver (nvme function) to b=
-e sure it
-> > is not a bug there that breaks things. I may still have something bad b=
-ecause
-> > when I enable the BIOS native NVMe driver on the host, either the host =
-does not
-> > boot, or grub crashes with memory corruptions. Overall, not yet very st=
-able and
-> > still trying to sort out the root cause of that.
-
-I am also working on an NVMe driver but I have our NVMe firmware running in
-userspace so our endpoint function driver only exposes the BARs as UIO
-mapped memory and has a simple interface to generate IRQs to host / initiat=
-e
-DMA transfers.
-
-So that driver does very little in itself and I still have problems
-with the BARs
-getting unmapped (reset to 0) randomly. I hope your patches for monitoring
-the IRQs will shed some light on this. I also observed the BARs getting res=
-et
-with the pcie ep test function driver, so I don't think it necessarily
-is the function
-that is to blame, rather the controller itself (also because none of
-the kernel code
-should / does access the BARs registers @0xfd80'0010).
-
->
-> By the way, enabling the interrupts to see the error notifications, I do =
-see a
-> lot of retry timeout and other recoverable errors. So the issues I am see=
-ing
-> could be due to my PCI cable setup that is not ideal (bad signal, ground =
-loops,
-> ... ?). Not sure. I do not have a PCI analyzer handy :)
->
-> I attached the patches I used to enable the EP interrupts. Enabling debug=
- prints
-> will tell you what is going on. That may give you some hints on your setu=
-p ?
->
-> --
-> Damien Le Moal
-> Western Digital Research
-
-Thank you for these patches. I will try them and see if they give me more i=
-nfo.
-
-Also, I will delay the release of the v3 of my patch series because of
-these issues.
-The v3 only incorporates the changes discussed here in the mailing list so =
-your
-version should be up to date. If you want me to send you the series in
-its current
-state let me know.
-
-But I will need some more debugging, I'll release the v3 when the driver is=
- more
-stable. I don't when, I don't have that much time on this project. Thanks f=
-or
-your understanding.
-
-Rick
+> > 
+> > > 
+> > > > 
+> > > >  static void print_isa(struct seq_file *f, const char *isa)
+> > > >  {
+> > > > --
+> > > > 2.35.1
+> > > > 
