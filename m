@@ -2,77 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F8CA6BC933
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 09:31:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8A476BC921
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 09:31:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229697AbjCPIbz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 04:31:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43516 "EHLO
+        id S229977AbjCPIbS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 04:31:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230201AbjCPIbr (ORCPT
+        with ESMTP id S229697AbjCPIbQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 04:31:47 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03D6C5D47A;
-        Thu, 16 Mar 2023 01:31:29 -0700 (PDT)
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32G25G6n005233;
-        Thu, 16 Mar 2023 08:31:26 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=pCtK8yStFCoUdgm1GARqSe3ByjmfzfYBHM1eE0T8ptA=;
- b=p3ctpw2aijFjV5Wkml6MervSSvyNvzS5UaHAvHJDimwZ6xfQXCMj80tTP0MLthZ6GbL0
- 6QoLe/kphluXxL+UkSyroK4NAXOGv91QLsdQEVUpK1Y6aUKsOjWyYqUR7iL2l/FExibh
- ISdmItWJCrgrv4+GbOBgnq6JS7bvFXHy7wsSXDjwHEFrecsJS+Gh4bIvTHyrYC5WuUFu
- qhkGhgvOgHTKqoBOfGw0g3NX/dc2jTGEzwNbM7eWWfpDnaMVA9RX2ywdFPpp+fi36X2D
- gVFN4OEWHrUGYmLuilUvFejrayjh3k3ih3nc9R53VnmwoZqIf5GO8FmRbHBgRJks9nU6 sQ== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pbpyd16qm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 16 Mar 2023 08:31:25 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32G8VOOU006618
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 16 Mar 2023 08:31:24 GMT
-Received: from hu-tdas-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.41; Thu, 16 Mar 2023 01:31:20 -0700
-From:   Taniya Das <quic_tdas@quicinc.com>
-To:     Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>
-CC:     Bjorn Andersson <andersson@kernel.org>,
-        Taniya Das <quic_tdas@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_skakitap@quicinc.com>, <quic_jkona@quicinc.com>
-Subject: [PATCH 3/3] arm64: dts: qcom: sm8450: Add video clock controller
-Date:   Thu, 16 Mar 2023 14:00:49 +0530
-Message-ID: <20230316083049.29979-4-quic_tdas@quicinc.com>
+        Thu, 16 Mar 2023 04:31:16 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2082.outbound.protection.outlook.com [40.107.243.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA58FE381;
+        Thu, 16 Mar 2023 01:30:59 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GG2D+wa1jTKsvTwY0Kj1zPB51gjsuHx4AjtVQXH/xSn38ukzF81ybwI564swswUiu+zK2nLsZRm91eKXBORaZYVfEwx8RXFyuCmEcJpiGq6rV58cdjVhlDTDLPQGn7/ljWhecgu19oWum8QYzuyVpFditUIpGBJS+kf4D8PRt2hakC4gI1JvosmJrJUvmikNxx4jf1RuSeA0S1ENJ2jw6gP1t12Y1Jh9nnnlQ8h9BsTS4akGn2BvdIUcrcofmFYgX3b1lyby7VJ5bNSvJt4fYLiXMccTSTEiOyeOkF0sq43C+XPpbs+bkUnL38r/edXdBWHEdRDmBN0i83i3SzsBjA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Nm+4cAl9fMY65eit/A7yIyWP/zKW5gko2ljpIWb6AXA=;
+ b=TN+40f632435tWXtADacB9v21aWEt3osHTBCqwqcY0DRX15TwPY8lK8XJdT5E8TlhxSHHfXbzJt56PV9EYr3py6VZ7x8HHXQgynHk2rII7X1TUCVhCxQ8GUhdb2hrvUtnIF70e9qtiG30+bGG3cmHzrtc6THYaW59i9pWBiLQ8ycxwcKnZvNXcyH/tbAIWRK/O9qTno+qR704J3rW1kyUglMQlsetQoLdQ4fucE41Wv/NriCi+Lu9k/JLjZsV3ly/FU2GomCo5f57UC9zgT28q1t9Z91Y2OW0DJVW0L9iRghspKtd8EqvxYjiF3JtDVOPfrQDZVzA2m/eVOUHEenSA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=microchip.com smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Nm+4cAl9fMY65eit/A7yIyWP/zKW5gko2ljpIWb6AXA=;
+ b=uK2hFv/Zf8wKDdzmZRQ67MUQ9EgbSNwQ/JfJLr20bDB88iDSgR5GUW72ezootjdSpFW41PzKO9mwfiy+AUC0qFmbfpxXnCmp/TGe16B0FcDmjX3b1KRRH96fO4ZZq0u1u6RlW9eVs4Bh9flHWmDJdA6RFM40bdoE1AVeaASdveI=
+Received: from CY8PR12CA0001.namprd12.prod.outlook.com (2603:10b6:930:4e::24)
+ by SN7PR12MB7855.namprd12.prod.outlook.com (2603:10b6:806:343::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.31; Thu, 16 Mar
+ 2023 08:30:55 +0000
+Received: from CY4PEPF0000B8ED.namprd05.prod.outlook.com
+ (2603:10b6:930:4e:cafe::2) by CY8PR12CA0001.outlook.office365.com
+ (2603:10b6:930:4e::24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.30 via Frontend
+ Transport; Thu, 16 Mar 2023 08:30:55 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CY4PEPF0000B8ED.mail.protection.outlook.com (10.167.241.9) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6222.7 via Frontend Transport; Thu, 16 Mar 2023 08:30:55 +0000
+Received: from SATLEXMB07.amd.com (10.181.41.45) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 16 Mar
+ 2023 03:30:54 -0500
+Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB07.amd.com
+ (10.181.41.45) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 16 Mar
+ 2023 01:30:54 -0700
+Received: from xhdharinik40.xilinx.com (10.180.168.240) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server id 15.1.2375.34 via Frontend
+ Transport; Thu, 16 Mar 2023 03:30:51 -0500
+From:   Harini Katakam <harini.katakam@amd.com>
+To:     <nicolas.ferre@microchip.com>, <davem@davemloft.net>,
+        <claudiu.beznea@microchip.com>, <kuba@kernel.org>,
+        <edumazet@google.com>, <pabeni@redhat.com>
+CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <michal.simek@amd.com>, <harinikatakamlinux@gmail.com>,
+        <harini.katakam@amd.com>
+Subject: [PATCH net-next] net: macb: Increase halt timeout to accommodate 10Mbps link
+Date:   Thu, 16 Mar 2023 14:00:50 +0530
+Message-ID: <20230316083050.2108-1-harini.katakam@amd.com>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230316083049.29979-1-quic_tdas@quicinc.com>
-References: <20230316083049.29979-1-quic_tdas@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: fInyr5aMBfff7MdC8GR7rPhAHWP91yKd
-X-Proofpoint-ORIG-GUID: fInyr5aMBfff7MdC8GR7rPhAHWP91yKd
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-16_06,2023-03-15_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 bulkscore=0
- priorityscore=1501 phishscore=0 spamscore=0 mlxlogscore=849 adultscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 suspectscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303150002
- definitions=main-2303160071
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY4PEPF0000B8ED:EE_|SN7PR12MB7855:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7f3004da-abee-4ebc-77fb-08db25f8c2fd
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: c3RgXAoB2sHY+5AFDXj6n+KuFfy+DRsdGB5MbAN8Wnqy2yOsV+ljflChlxxuEoQTIuFdg8+ATvKT/s5hRsd1tbMt1Z3reB7LzRdfLEIlwBbjGQGXuO8567QQtIOanPuoK3QKOwJXmoLPRH8PAHNCzM8h5bjE2X99zvT7K5hjddRHoEi//fpByRh0WNqa8inQ6FSGIlIuhqY58Zaq+qUocOw4fR8gkLTYxWrO/6JmRq2IcXVIEgGQ3NXkXi94FPfs1G8dmGQcYhKm/Bu7wU45JxZyYQZv0vdfOfV4Y9V+/ORRBCbviYFN0eWPqKXk4Uk2KSI/guLzJYBcD7cY3X2d7EnDKvi+B42lw/neRM3rAiXnjf90mNTMUGv0GYyBGgl2DzQ/lEJRb0Ca2+hq+9TDTbtc1pqnGysEHDbL3mxNlS/iNGwCbJlC3DiHyjvHDiXmrDIDSxpyFDFpd5mcMes+MBzqz3Wd1G6YiEUTx8vLMtUqQXbOVaQz9QCcn9J5vUDrSz63sM9o/nhnAPs17n23ztboUVfwCzCO0/eY44U9ypGCUtHFyUR949xeA72wu09UEcdM6EQJX0R7YQMymD2B+xxhj6hcehytx0AyFcnt+vsbPncZoAG2fWnvE4eJLQR1q7BS7Bp7XA4xtiFW4B94xlDJGK+UOXmSkN7ip6zr6ZkVJYFyEwnKxj2lhYZ926iwJ0y/QkUo9jN69HmTvvco/xgaj9QwS8iiMjO/MYKrbL4=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(376002)(346002)(396003)(136003)(451199018)(46966006)(40470700004)(36840700001)(83380400001)(336012)(82310400005)(2616005)(426003)(44832011)(47076005)(186003)(36860700001)(5660300002)(70206006)(8676002)(70586007)(4744005)(41300700001)(81166007)(2906002)(40460700003)(82740400003)(36756003)(1076003)(26005)(8936002)(478600001)(54906003)(4326008)(356005)(86362001)(40480700001)(110136005)(316002)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Mar 2023 08:30:55.5628
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7f3004da-abee-4ebc-77fb-08db25f8c2fd
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CY4PEPF0000B8ED.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7855
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,37 +103,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add device node for video clock controller on Qualcomm SM8450 platform.
+From: Harini Katakam <harini.katakam@xilinx.com>
 
-Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
+Increase halt timeout to accommodate for 16K SRAM at 10Mbps rounded.
+
+Signed-off-by: Harini Katakam <harini.katakam@xilinx.com>
+Signed-off-by: Michal Simek <michal.simek@xilinx.com>
+Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
 ---
- arch/arm64/boot/dts/qcom/sm8450.dtsi | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+ drivers/net/ethernet/cadence/macb_main.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-index 1a744a33bcf4..1b36f59fc675 100644
---- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-@@ -760,6 +760,19 @@
- 				      "usb3_phy_wrapper_gcc_usb30_pipe_clk";
- 		};
+diff --git a/drivers/net/ethernet/cadence/macb_main.c b/drivers/net/ethernet/cadence/macb_main.c
+index 51c9fd6f68a4..96fd2aa9ee90 100644
+--- a/drivers/net/ethernet/cadence/macb_main.c
++++ b/drivers/net/ethernet/cadence/macb_main.c
+@@ -94,8 +94,7 @@ struct sifive_fu540_macb_mgmt {
+ /* Graceful stop timeouts in us. We should allow up to
+  * 1 frame time (10 Mbits/s, full-duplex, ignoring collisions)
+  */
+-#define MACB_HALT_TIMEOUT	1230
+-
++#define MACB_HALT_TIMEOUT	14000
+ #define MACB_PM_TIMEOUT  100 /* ms */
  
-+		videocc: clock-controller@aaf0000 {
-+			compatible = "qcom,sm8450-videocc";
-+			reg = <0 0x0aaf0000 0 0x10000>;
-+			clocks = <&gcc GCC_VIDEO_AHB_CLK>,
-+				 <&rpmhcc RPMH_CXO_CLK>;
-+			clock-names = "iface", "bi_tcxo";
-+			power-domains = <&rpmhpd SM8450_MMCX>;
-+			required-opps = <&rpmhpd_opp_low_svs>;
-+			#clock-cells = <1>;
-+			#reset-cells = <1>;
-+			#power-domain-cells = <1>;
-+		};
-+
- 		gpi_dma2: dma-controller@800000 {
- 			compatible = "qcom,sm8450-gpi-dma", "qcom,sm6350-gpi-dma";
- 			#dma-cells = <3>;
+ #define MACB_MDIO_TIMEOUT	1000000 /* in usecs */
 -- 
 2.17.1
 
