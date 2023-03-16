@@ -2,77 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D96B6BC621
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 07:34:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 593B86BC622
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 07:36:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229665AbjCPGeL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 02:34:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44052 "EHLO
+        id S229687AbjCPGgD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 02:36:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjCPGeI (ORCPT
+        with ESMTP id S229494AbjCPGgC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 02:34:08 -0400
-Received: from smtpbguseast3.qq.com (smtpbguseast3.qq.com [54.243.244.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DC40A674D;
-        Wed, 15 Mar 2023 23:34:01 -0700 (PDT)
-X-QQ-mid: bizesmtp73t1678948428tc83ll7o
-Received: from [10.4.16.24] ( [58.240.82.166])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Thu, 16 Mar 2023 14:33:46 +0800 (CST)
-X-QQ-SSF: 00400000002000I0Z000B00A0000000
-X-QQ-FEAT: 3M0okmaRx3hcKxKpNBvZixBsS7cYrOvg3mMWMCpNPcLHGTCbBMetyQ5NkHikX
-        Hzicsqh4CkLsk4mVq2WGOfyS3t2KuAiq1BiQGkVyUqo9eAHkNNMfCNJLCs+6kUlJh7h9HHC
-        NzXKa7Uyz9gsiiacvlhhC5O84jQG/2XKblpAtdn/4QNd4tlATuRIGMkUHQfJjl8v8ySo4hi
-        aG2tP7iEtSVtrWdhqAH7xjwVC8Qdgc2aXTDvnucl4VWrEX+jMnu20etB5whZzThLlZR9l4y
-        E06t0FOHriFWALWiVcizaybcz6dAM82hChxUj/72OUhfEu4pyQXMEDxMsViGNGnS+g51+Gu
-        3gYtdD9HNKTei0az0IpT0d232RxPdw5FeX7mOsBviD8fYV6PpA9uddmQvXlAmvazQ16zi81
-        5ilmmBvl8gI0O6DUeBB5pw==
-X-QQ-GoodBg: 2
-Message-ID: <FB5EB3E66BC11752+d365c0b5-3ea6-c1d9-6e2d-9eaed541f6c1@uniontech.com>
-Date:   Thu, 16 Mar 2023 14:33:46 +0800
+        Thu, 16 Mar 2023 02:36:02 -0400
+Received: from out30-112.freemail.mail.aliyun.com (out30-112.freemail.mail.aliyun.com [115.124.30.112])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03A73A8E9A
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Mar 2023 23:35:59 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=3;SR=0;TI=SMTPD_---0Vdz.tTL_1678948556;
+Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0Vdz.tTL_1678948556)
+          by smtp.aliyun-inc.com;
+          Thu, 16 Mar 2023 14:35:57 +0800
+From:   Yang Li <yang.lee@linux.alibaba.com>
+To:     srinivas.kandagatla@linaro.org
+Cc:     linux-kernel@vger.kernel.org, Yang Li <yang.lee@linux.alibaba.com>
+Subject: [PATCH -next 1/2] nvmem: vf610-ocotp: Use devm_platform_get_and_ioremap_resource()
+Date:   Thu, 16 Mar 2023 14:35:54 +0800
+Message-Id: <20230316063555.52169-1-yang.lee@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [REGRESSION] External mic not working on Lenovo Ideapad U310,
- ALSA: hda/conexant: Add quirk for LENOVO 20149 Notebook model
-To:     Takashi Iwai <tiwai@suse.de>
-Cc:     Jetro Jormalainen <jje-lxkl@jetro.fi>, regressions@lists.linux.dev,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-References: <20230308215009.4d3e58a6@mopti> <87o7ou9jfi.wl-tiwai@suse.de>
- <927A9CC7D19E5BD6+6758c124-1a86-a981-d3cf-fa0da9ab589e@uniontech.com>
- <87a60djl5y.wl-tiwai@suse.de>
-From:   tangmeng <tangmeng@uniontech.com>
-In-Reply-To: <87a60djl5y.wl-tiwai@suse.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:uniontech.com:qybglogicsvr:qybglogicsvr7
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,FORGED_MUA_MOZILLA,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+According to commit 890cc39a8799 ("drivers: provide
+devm_platform_get_and_ioremap_resource()"), convert
+platform_get_resource(), devm_ioremap_resource() to a single
+call to devm_platform_get_and_ioremap_resource(), as this is exactly
+what this function does.
 
+Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+---
+ drivers/nvmem/vf610-ocotp.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-On 2023/3/16 13:54, Takashi Iwai wrote:
-> Too bad.  So, if any, further fixes will be a guess work.
-> Do you know the codec vendor ID at least?
-> 
- From the information I saved as follows:
+diff --git a/drivers/nvmem/vf610-ocotp.c b/drivers/nvmem/vf610-ocotp.c
+index 5b6cad16892f..ee9c61ae727d 100644
+--- a/drivers/nvmem/vf610-ocotp.c
++++ b/drivers/nvmem/vf610-ocotp.c
+@@ -219,8 +219,7 @@ static int vf610_ocotp_probe(struct platform_device *pdev)
+ 	if (!ocotp_dev)
+ 		return -ENOMEM;
+ 
+-	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	ocotp_dev->base = devm_ioremap_resource(dev, res);
++	ocotp_dev->base = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
+ 	if (IS_ERR(ocotp_dev->base))
+ 		return PTR_ERR(ocotp_dev->base);
+ 
+-- 
+2.20.1.7.g153144c
 
-制造商:  Intel Corporation
-型  号:  Intel 7 Series/C216 Chipset Family High Definition Audio Controller
-
-And by my pci.ids comparison, the corresponding should be 8086:1e20
-
-> At the next time you submit such a change, please keep the
-> alsa-info.sh output for a future reference.
-> 
-Yes, I will save relevant information in the future.
-
-Thanks,
-   Meng
