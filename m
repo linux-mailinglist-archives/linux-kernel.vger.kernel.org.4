@@ -2,76 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E17856BC4BF
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 04:32:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89B946BC4C3
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 04:33:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229800AbjCPDcE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Mar 2023 23:32:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45910 "EHLO
+        id S229534AbjCPDdY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Mar 2023 23:33:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229787AbjCPDbV (ORCPT
+        with ESMTP id S229482AbjCPDdT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Mar 2023 23:31:21 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0582FD536;
-        Wed, 15 Mar 2023 20:30:58 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id qe8-20020a17090b4f8800b0023f07253a2cso260734pjb.3;
-        Wed, 15 Mar 2023 20:30:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678937457;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=YEj5OBECUBzAdwIoI2YKk6Ne6SPKlmrZMcAm1nJzScg=;
-        b=fmwUmHqO00Lbpi0eRp2PUAJm70IGVAwXU+H6lxOhMGtU00LVZjuJjiVzMeLBIuoXJP
-         2oeh7a+DnYfmWpUwnaRY7hEsAxYenVTSJkAw80njt5Aq3DmcZRkrzmrTrgQtEIBnp9kt
-         QjK0w1Zt7652hnFyZNDqqKoUU0E3vzNv7YZX94DHRrwwVGz827cdr68NmLcxCpfSSB/W
-         If+JOCgfIDQEWDOGagYg+kkGSRG90rj4xChuj4ufqa/3qfii9zR/8yX3gQatB/rEKXPM
-         gfCzeGCj7ykTAaFE/twfk3nLgrOH7VFN1N5fyOLaL3BMqYU/xfl2braNNdYQvgjuTWWt
-         UKPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678937457;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YEj5OBECUBzAdwIoI2YKk6Ne6SPKlmrZMcAm1nJzScg=;
-        b=mv2DKpxP041t24NWk1fh4f6hVtSz0XXoFvadc0ZsCwvbzTDibcChr4uhXXPjE7xPpq
-         mwkadbIVvIUGbmgRRPAOdnXl9teFieaK1cCw1PXtcmK8wKGmCBdumEe+3J1AO6YBFmqg
-         GOheSVg9UOvIV37lFQDRvCjkIpAh32dHJOdqY9f52fBsJZhgN/Pkh0CGnZ2dFjbNyE5f
-         AOHCx+Yo49pgin3T+dI8B5oQIqn1blJiQS8NoaWVfyLQRMYDlDBOIPZy/uDrO6MTEloa
-         quF+cE/46m+oS/Wu3c1jwbwfn9vSHTyQtnj9ib0SxyQAhGFQ/yclqO7Kxc9JvdMDJNiW
-         SjJw==
-X-Gm-Message-State: AO0yUKVOh4j0hhpVLxM9ugVZNIoatFZg04Qcfy1p3AQLyWav0ppMUH7C
-        WZNZ02I8sLl4NMgZ6rTHf1c=
-X-Google-Smtp-Source: AK7set+HAbU6lA9U/X2srZ5Xk4qpX5aEt2KI1YecH4Wupgn0JhzGtuCC8dVFOpYr7Zjn5c22QQvlsA==
-X-Received: by 2002:a17:90b:38c5:b0:23d:35d9:d03e with SMTP id nn5-20020a17090b38c500b0023d35d9d03emr1888838pjb.48.1678937457414;
-        Wed, 15 Mar 2023 20:30:57 -0700 (PDT)
-Received: from debian.me (subs28-116-206-12-41.three.co.id. [116.206.12.41])
-        by smtp.gmail.com with ESMTPSA id q30-20020a17090a17a100b002349608e80csm2030395pja.47.2023.03.15.20.30.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Mar 2023 20:30:56 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id EE4C6106569; Thu, 16 Mar 2023 10:30:52 +0700 (WIB)
-Date:   Thu, 16 Mar 2023 10:30:52 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 6.1 000/143] 6.1.20-rc1 review
-Message-ID: <ZBKNbLP8X05cvm+y@debian.me>
-References: <20230315115740.429574234@linuxfoundation.org>
+        Wed, 15 Mar 2023 23:33:19 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DB37193C2;
+        Wed, 15 Mar 2023 20:33:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1678937586; x=1710473586;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=GHshJxbJ8yeO5ap4EjBPm6DECjCHfXR+JNxj4WQDFGg=;
+  b=BfyPfEgj/lQbDVt5B0l7PLeIxE34CD6ldZf7c6xX/35LEWMsirazJ0jT
+   wBzPtv6OpyOF4MrB8V35H5UbRwbcD5YqB9Ocmh+HBTBPzt3HX5Mw0BEqm
+   ul64AVIXEkGDSvSA5gRk4DqA7is06eOUtBqU7+X18TPouL6injYwjelse
+   S253ESeZGO6EJtidl7Hr93wAx0jAMDKxvefGAk+lfiOILA08mrYwk9KDk
+   EBi73Djl1XTICI5s+hX/QG/HfoZ2ifg06l8UxryB7Sm1crczCAgud//F6
+   kcbr7IUoYIVV7AUwMknVykGxZavMyMoJlGKJ44AUwOQsI6bZh28a6jQs3
+   A==;
+X-IronPort-AV: E=Sophos;i="5.98,264,1673938800"; 
+   d="scan'208";a="201887971"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 15 Mar 2023 20:33:03 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Wed, 15 Mar 2023 20:33:01 -0700
+Received: from CHE-LT-UNGSOFTWARE.microchip.com (10.10.115.15) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
+ 15.1.2507.21 via Frontend Transport; Wed, 15 Mar 2023 20:32:59 -0700
+From:   Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
+To:     <linux-i2c@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <wsa@kernel.org>,
+        <andriy.shevchenko@linux.intel.com>, <UNGLinuxDriver@microchip.com>
+Subject: [PATCH i2c-master] i2c: microchip: pci1xxxx: Update Timing registers
+Date:   Thu, 16 Mar 2023 09:02:23 +0530
+Message-ID: <20230316033223.2046359-1-tharunkumar.pasumarthi@microchip.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="DmG69jtXaUvq1CLH"
-Content-Disposition: inline
-In-Reply-To: <20230315115740.429574234@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,36 +60,163 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Update I2C timing registers based on latest hardware design.
 
---DmG69jtXaUvq1CLH
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Fixes: 361693697249 ("i2c: microchip: pci1xxxx: Add driver for I2C host controller in multifunction endpoint of pci1xxxx switch")
 
-On Wed, Mar 15, 2023 at 01:11:26PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.1.20 release.
-> There are 143 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->=20
+Signed-off-by: Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
+---
+ drivers/i2c/busses/i2c-mchp-pci1xxxx.c | 60 +++++++++++++-------------
+ 1 file changed, 30 insertions(+), 30 deletions(-)
 
-Successfully cross-compiled for arm64 (bcm2711_defconfig, GCC 10.2.0) and
-powerpc (ps3_defconfig, GCC 12.2.0).
+diff --git a/drivers/i2c/busses/i2c-mchp-pci1xxxx.c b/drivers/i2c/busses/i2c-mchp-pci1xxxx.c
+index 09af75921147..b21ffd6df927 100644
+--- a/drivers/i2c/busses/i2c-mchp-pci1xxxx.c
++++ b/drivers/i2c/busses/i2c-mchp-pci1xxxx.c
+@@ -48,9 +48,9 @@
+  * SR_HOLD_TIME_XK_TICKS field will indicate the number of ticks of the
+  * baud clock required to program 'Hold Time' at X KHz.
+  */
+-#define SR_HOLD_TIME_100K_TICKS	133
+-#define SR_HOLD_TIME_400K_TICKS	20
+-#define SR_HOLD_TIME_1000K_TICKS	11
++#define SR_HOLD_TIME_100K_TICKS		150
++#define SR_HOLD_TIME_400K_TICKS		20
++#define SR_HOLD_TIME_1000K_TICKS	12
+ 
+ #define SMB_CORE_COMPLETION_REG_OFF3	(SMBUS_MAST_CORE_ADDR_BASE + 0x23)
+ 
+@@ -65,17 +65,17 @@
+  * the baud clock required to program 'fair idle delay' at X KHz. Fair idle
+  * delay establishes the MCTP T(IDLE_DELAY) period.
+  */
+-#define FAIR_BUS_IDLE_MIN_100K_TICKS		969
+-#define FAIR_BUS_IDLE_MIN_400K_TICKS		157
+-#define FAIR_BUS_IDLE_MIN_1000K_TICKS		157
++#define FAIR_BUS_IDLE_MIN_100K_TICKS		992
++#define FAIR_BUS_IDLE_MIN_400K_TICKS		500
++#define FAIR_BUS_IDLE_MIN_1000K_TICKS		500
+ 
+ /*
+  * FAIR_IDLE_DELAY_XK_TICKS field will indicate the number of ticks of the
+  * baud clock required to satisfy the fairness protocol at X KHz.
+  */
+-#define FAIR_IDLE_DELAY_100K_TICKS	1000
+-#define FAIR_IDLE_DELAY_400K_TICKS	500
+-#define FAIR_IDLE_DELAY_1000K_TICKS	500
++#define FAIR_IDLE_DELAY_100K_TICKS	963
++#define FAIR_IDLE_DELAY_400K_TICKS	156
++#define FAIR_IDLE_DELAY_1000K_TICKS	156
+ 
+ #define SMB_IDLE_SCALING_100K		\
+ 	((FAIR_IDLE_DELAY_100K_TICKS << 16) | FAIR_BUS_IDLE_MIN_100K_TICKS)
+@@ -105,7 +105,7 @@
+  */
+ #define BUS_CLK_100K_LOW_PERIOD_TICKS		156
+ #define BUS_CLK_400K_LOW_PERIOD_TICKS		41
+-#define BUS_CLK_1000K_LOW_PERIOD_TICKS	15
++#define BUS_CLK_1000K_LOW_PERIOD_TICKS		15
+ 
+ /*
+  * BUS_CLK_XK_HIGH_PERIOD_TICKS field defines the number of I2C Baud Clock
+@@ -131,7 +131,7 @@
+  */
+ #define CLK_SYNC_100K			4
+ #define CLK_SYNC_400K			4
+-#define CLK_SYNC_1000K		4
++#define CLK_SYNC_1000K			4
+ 
+ #define SMB_CORE_DATA_TIMING_REG_OFF	(SMBUS_MAST_CORE_ADDR_BASE + 0x40)
+ 
+@@ -142,25 +142,25 @@
+  * determines the SCLK hold time following SDAT driven low during the first
+  * START bit in a transfer.
+  */
+-#define FIRST_START_HOLD_100K_TICKS	22
+-#define FIRST_START_HOLD_400K_TICKS	16
+-#define FIRST_START_HOLD_1000K_TICKS	6
++#define FIRST_START_HOLD_100K_TICKS	23
++#define FIRST_START_HOLD_400K_TICKS	8
++#define FIRST_START_HOLD_1000K_TICKS	12
+ 
+ /*
+  * STOP_SETUP_XK_TICKS will indicate the number of ticks of the baud clock
+  * required to program 'STOP_SETUP' timer at X KHz. This timer determines the
+  * SDAT setup time from the rising edge of SCLK for a STOP condition.
+  */
+-#define STOP_SETUP_100K_TICKS		157
++#define STOP_SETUP_100K_TICKS		150
+ #define STOP_SETUP_400K_TICKS		20
+-#define STOP_SETUP_1000K_TICKS	12
++#define STOP_SETUP_1000K_TICKS		12
+ 
+ /*
+  * RESTART_SETUP_XK_TICKS will indicate the number of ticks of the baud clock
+  * required to program 'RESTART_SETUP' timer at X KHz. This timer determines the
+  * SDAT setup time from the rising edge of SCLK for a repeated START condition.
+  */
+-#define RESTART_SETUP_100K_TICKS	157
++#define RESTART_SETUP_100K_TICKS	156
+ #define RESTART_SETUP_400K_TICKS	20
+ #define RESTART_SETUP_1000K_TICKS	12
+ 
+@@ -169,7 +169,7 @@
+  * required to program 'DATA_HOLD' timer at X KHz. This timer determines the
+  * SDAT hold time following SCLK driven low.
+  */
+-#define DATA_HOLD_100K_TICKS		2
++#define DATA_HOLD_100K_TICKS		12
+ #define DATA_HOLD_400K_TICKS		2
+ #define DATA_HOLD_1000K_TICKS		2
+ 
+@@ -190,35 +190,35 @@
+  * Bus Idle Minimum time = BUS_IDLE_MIN[7:0] x Baud_Clock_Period x
+  * (BUS_IDLE_MIN_XK_TICKS[7] ? 4,1)
+  */
+-#define BUS_IDLE_MIN_100K_TICKS		167UL
+-#define BUS_IDLE_MIN_400K_TICKS		139UL
+-#define BUS_IDLE_MIN_1000K_TICKS		133UL
++#define BUS_IDLE_MIN_100K_TICKS		36UL
++#define BUS_IDLE_MIN_400K_TICKS		10UL
++#define BUS_IDLE_MIN_1000K_TICKS	4UL
+ 
+ /*
+  * CTRL_CUM_TIME_OUT_XK_TICKS defines SMBus Controller Cumulative Time-Out.
+  * SMBus Controller Cumulative Time-Out duration =
+  * CTRL_CUM_TIME_OUT_XK_TICKS[7:0] x Baud_Clock_Period x 2048
+  */
+-#define CTRL_CUM_TIME_OUT_100K_TICKS		159
+-#define CTRL_CUM_TIME_OUT_400K_TICKS		159
+-#define CTRL_CUM_TIME_OUT_1000K_TICKS		159
++#define CTRL_CUM_TIME_OUT_100K_TICKS		76
++#define CTRL_CUM_TIME_OUT_400K_TICKS		76
++#define CTRL_CUM_TIME_OUT_1000K_TICKS		76
+ 
+ /*
+  * TARGET_CUM_TIME_OUT_XK_TICKS defines SMBus Target Cumulative Time-Out duration.
+  * SMBus Target Cumulative Time-Out duration = TARGET_CUM_TIME_OUT_XK_TICKS[7:0] x
+  * Baud_Clock_Period x 4096
+  */
+-#define TARGET_CUM_TIME_OUT_100K_TICKS	199
+-#define TARGET_CUM_TIME_OUT_400K_TICKS	199
+-#define TARGET_CUM_TIME_OUT_1000K_TICKS	199
++#define TARGET_CUM_TIME_OUT_100K_TICKS	95
++#define TARGET_CUM_TIME_OUT_400K_TICKS	95
++#define TARGET_CUM_TIME_OUT_1000K_TICKS	95
+ 
+ /*
+  * CLOCK_HIGH_TIME_OUT_XK defines Clock High time out period.
+  * Clock High time out period = CLOCK_HIGH_TIME_OUT_XK[7:0] x Baud_Clock_Period x 8
+  */
+-#define CLOCK_HIGH_TIME_OUT_100K_TICKS	204
+-#define CLOCK_HIGH_TIME_OUT_400K_TICKS	204
+-#define CLOCK_HIGH_TIME_OUT_1000K_TICKS	204
++#define CLOCK_HIGH_TIME_OUT_100K_TICKS	97
++#define CLOCK_HIGH_TIME_OUT_400K_TICKS	97
++#define CLOCK_HIGH_TIME_OUT_1000K_TICKS	97
+ 
+ #define TO_SCALING_100K		\
+ 	((BUS_IDLE_MIN_100K_TICKS << 24) | (CTRL_CUM_TIME_OUT_100K_TICKS << 16) | \
+-- 
+2.25.1
 
-Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---DmG69jtXaUvq1CLH
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZBKNZwAKCRD2uYlJVVFO
-owPRAQCfREexag1qiZ0BXF0Jn8/mVjc+Uip9feQfZAHWEqThdAEAwTcEvq9eWgdq
-0uz12pCm/DgbLfTRyUAqC/1eXbw/IAo=
-=9tHI
------END PGP SIGNATURE-----
-
---DmG69jtXaUvq1CLH--
