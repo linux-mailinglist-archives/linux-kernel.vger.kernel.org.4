@@ -2,81 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC7576BE48E
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 09:57:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53AB96BE499
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 09:58:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231791AbjCQI5i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 04:57:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38666 "EHLO
+        id S231361AbjCQI6i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 04:58:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231734AbjCQI5J (ORCPT
+        with ESMTP id S231803AbjCQI6L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 04:57:09 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CBB767817
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 01:56:49 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id h8so17548731ede.8
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 01:56:49 -0700 (PDT)
+        Fri, 17 Mar 2023 04:58:11 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 442F89F077
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 01:57:19 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id r11so17609504edd.5
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 01:57:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fairphone.com; s=fair; t=1679043406;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4tr5k3/w3leHyi4aocCURJSRCZ6+xZ7Mx2vRgpBalJI=;
-        b=qTPUX1zDbkh0t+aQ/8gYzvh9TkOeBZPEOeruQc2Ql+n1b62gGuCXmj5KEjR7OLD2tB
-         7hR4vEaj4s+bc/AqYrIHyxmpmUC8FFpQtcOT2T6JHDZpWAKeid9vYSZToXSQaDCzcTlb
-         4a4OjvKeXxEKUSn54U0Qmv6X6WJe7gP/dkYdpNH1YNKMwaS3PcKB3ZB0mHXOGQAKBiT6
-         VDpFM5jRRJgekY3UYR2dOv9r0KZy3KDnRIwNMX7Zi0HAnopnEBlUrs7GgMGieJG/FM8U
-         OC2pl98dtD825v4342zKYDWSaYAY5NOZwxTdnMyJ7F3Y1u4xrkACkgEYBu5Xbq3Bfneo
-         u1OA==
+        d=linaro.org; s=google; t=1679043434;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=9lkYcGe56jj6Vu23+F5lwTMBHkX/FmQBfWkqpJWWWYE=;
+        b=TlDILzKXaZD0Kq3gq8brL0V9KGYMn1MlUcsJmCQ6N8Os8b0Zb9R/UnDuUmG/Z1mPKX
+         ofIXTtCcEXAlKitBVLxXjv8w5NJIxM0HdigIiCosn1JL2dy0BE2mFMlFekkgt9JfWuqZ
+         zbEO1CbWvLsAxG8lPWQY7G/LM7vtFj543yyST/CgkV7zVHr3KKyeyPaVNBW57Q8v/Fel
+         HLU2OZgzfGUlKC4SmKw79K4q9W7U2hjTP2nHlreP1A0US6L1BRX4ifFuOrLA9XSPgSIn
+         k/KRyBvaki4C5dpYWA8ufKiLwqtC76WCvHpHG0NWUnGvumIkQ2Fsnhb5m7B2zwl02kLV
+         qQTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679043406;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=4tr5k3/w3leHyi4aocCURJSRCZ6+xZ7Mx2vRgpBalJI=;
-        b=xiJoVisGBPdwdeD1DJTtPkQ0nrntctnUBFpAR5CTVbWJkzZtnOPum+Ga3Y72dO8uRg
-         LRD7FklPrxo0HCEm2n0Svtrr8cLSoMO2bBsvsZjmnwgZ/XaV4z32nSEubluO99BTR7Lv
-         EpX0179byqSNNeZh6kf5qGgSzWNxT07W08cKG9ifJ9mvZUJtME8jQiQh9jTI36WnKsac
-         ljQFILVIJo8n4a+xOF79VQmY3wzdRnIOhXbXjW1vMSRmNydLUe5zcjwg/ZNm4JzxGh5d
-         6BWOOy1LYB7JDC45bGPP7mIahXrxqUxdGtBwq71jynuKlqJBCs2T/Ebb28eJLvEdXS+s
-         42Ag==
-X-Gm-Message-State: AO0yUKUQsgfaydfIZKJK0DxW9mrLl8K8vz2bDEzBlH06CbVZtnBvcEjC
-        thE4hv26ZAhMAYPsdqPSRXsDOg==
-X-Google-Smtp-Source: AK7set+efCng4cHamJNfx7vBd5TB+fXK9PZgEtWM3lu3AIBCbxF4iQ/B6/Rr+A1n/0Xtf5BLRYIplQ==
-X-Received: by 2002:a17:906:a04a:b0:8ae:11ca:81de with SMTP id bg10-20020a170906a04a00b008ae11ca81demr15625732ejb.34.1679043405918;
-        Fri, 17 Mar 2023 01:56:45 -0700 (PDT)
-Received: from localhost ([2a02:8388:6582:fe80::b])
-        by smtp.gmail.com with ESMTPSA id lm15-20020a170906980f00b008c76facbbf7sm714385ejb.171.2023.03.17.01.56.45
+        d=1e100.net; s=20210112; t=1679043434;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9lkYcGe56jj6Vu23+F5lwTMBHkX/FmQBfWkqpJWWWYE=;
+        b=vNP2szJAHr2KPwrcCmF4R5bGnzgApNmWSTQsTRERpt580N1rEdIhGaMeuRDst833O+
+         Ruk2/DfPaUD1pOzkmJ6DD0+MrnqxYNNp+kI9EG9lS6cmzZbdz90egchwbMWwZrJxvU4K
+         TLCfdj0GGFQm57xZ/IOWLtImjk157B/9JJA91nWuqzbivboMwEwZbUxfnkjJ2Vpu5Zkp
+         BVSmjyMjs2putwIzFTyPKgWkzGjlIeeuJ9QcxJVmUHRuJnm/zOs4ywQL4CnzPVsfIAKF
+         /c4Q3cj8TR96fAroqVLUWSsKbQMzt1Mg+HqJsoHsvuheinUJkD8WbgOEhdLeDcD6wmuO
+         YVTg==
+X-Gm-Message-State: AO0yUKWrULFKj0cdybJRcymDJgAoJqhpBIne444QzYPrg1AEgVJXCqt9
+        SKrTXepBP1PVDnPKokVdJlpxsw==
+X-Google-Smtp-Source: AK7set/k6Z9YbriJ3jF4jAfkZWdrmAilfpztMLAKLNEFDkO9cZBivKSH+N9TjwPwdkoNNUp4GpKUfA==
+X-Received: by 2002:a17:907:2bc3:b0:92a:3b19:9a4c with SMTP id gv3-20020a1709072bc300b0092a3b199a4cmr2409377ejc.27.1679043433773;
+        Fri, 17 Mar 2023 01:57:13 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:848a:1971:93e0:b465? ([2a02:810d:15c0:828:848a:1971:93e0:b465])
+        by smtp.gmail.com with ESMTPSA id w3-20020a50c443000000b004ac54d4da22sm763279edf.71.2023.03.17.01.57.12
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Mar 2023 01:56:45 -0700 (PDT)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+        Fri, 17 Mar 2023 01:57:13 -0700 (PDT)
+Message-ID: <2d4dae57-e46d-7e81-9b56-2148074c8406@linaro.org>
+Date:   Fri, 17 Mar 2023 09:57:11 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v2 5/7] dt-bindings: sound: Add support for the Lantiq
+ PEF2256 codec
+Content-Language: en-US
+To:     Herve Codina <herve.codina@bootlin.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Derek Kiernan <derek.kiernan@xilinx.com>,
+        Dragan Cvetic <dragan.cvetic@xilinx.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        alsa-devel@alsa-project.org,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+References: <20230316122741.577663-1-herve.codina@bootlin.com>
+ <20230316122741.577663-6-herve.codina@bootlin.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230316122741.577663-6-herve.codina@bootlin.com>
 Content-Type: text/plain; charset=UTF-8
-Date:   Fri, 17 Mar 2023 09:56:44 +0100
-Message-Id: <CR8J7NPGU3AQ.NUJ64VVNTJYD@otso>
-From:   "Luca Weiss" <luca.weiss@fairphone.com>
-To:     "Konrad Dybcio" <konrad.dybcio@linaro.org>,
-        "Bjorn Andersson" <andersson@kernel.org>,
-        "Andy Gross" <agross@kernel.org>,
-        "Michael Turquette" <mturquette@baylibre.com>,
-        "Stephen Boyd" <sboyd@kernel.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        "AngeloGioacchino Del Regno" 
-        <angelogioacchino.delregno@somainline.org>
-Cc:     "Marijn Suijten" <marijn.suijten@somainline.org>,
-        "Rob Herring" <robh@kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        "Konrad Dybcio" <konrad.dybcio@somainline.org>
-Subject: Re: [PATCH 5/5] arm64: dts: qcom: sm6350: Fix ZAP region
-X-Mailer: aerc 0.14.0
-References: <20230315-topic-lagoon_gpu-v1-0-a74cbec4ecfc@linaro.org>
- <20230315-topic-lagoon_gpu-v1-5-a74cbec4ecfc@linaro.org>
-In-Reply-To: <20230315-topic-lagoon_gpu-v1-5-a74cbec4ecfc@linaro.org>
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -85,53 +88,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu Mar 16, 2023 at 12:17 PM CET, Konrad Dybcio wrote:
-> From: Konrad Dybcio <konrad.dybcio@somainline.org>
->
-> The previous ZAP region definition was wrong. Fix it.
-> Note this is not a device-specific fixup, but a fixup to the generic
-> PIL load address.
->
-> Fixes: 5f82b9cda61e ("arm64: dts: qcom: Add SM6350 device tree")
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+On 16/03/2023 13:27, Herve Codina wrote:
+> The Lantiq PEF2256, also known as Infineon PEF2256 or FALC256, is a
+> framer and line interface component designed to fulfill all required
+> interfacing between an analog E1/T1/J1 line and the digital PCM system
+> highway/H.100 bus.
+> 
+> The codec support allows to use some of the PCM system highway
+> time-slots as audio channels to transport audio data over the E1/T1/J1
+> lines.
+> 
 
-Reviewed-by: Luca Weiss <luca.weiss@fairphone.com>
+Your other file should also have specific compatible, unless this codec
+is actually part of the framer. Did not look like this in the binding -
+not $ref.
 
+> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
 > ---
->  arch/arm64/boot/dts/qcom/sm6350.dtsi | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
->
-> diff --git a/arch/arm64/boot/dts/qcom/sm6350.dtsi b/arch/arm64/boot/dts/q=
-com/sm6350.dtsi
-> index e967d06b0ad4..3fe4a5fa3021 100644
-> --- a/arch/arm64/boot/dts/qcom/sm6350.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm6350.dtsi
-> @@ -466,11 +466,6 @@ pil_ipa_gsi_mem: memory@8b710000 {
->  			no-map;
->  		};
-> =20
-> -		pil_gpu_mem: memory@8b715400 {
-> -			reg =3D <0 0x8b715400 0 0x2000>;
-> -			no-map;
-> -		};
-> -
->  		pil_modem_mem: memory@8b800000 {
->  			reg =3D <0 0x8b800000 0 0xf800000>;
->  			no-map;
-> @@ -491,6 +486,11 @@ removed_region: memory@c0000000 {
->  			no-map;
->  		};
-> =20
-> +		pil_gpu_mem: memory@f0d00000 {
-> +			reg =3D <0 0xf0d00000 0 0x1000>;
-> +			no-map;
-> +		};
+>  .../bindings/sound/lantiq,pef2256-codec.yaml  | 57 +++++++++++++++++++
+>  1 file changed, 57 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/sound/lantiq,pef2256-codec.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/sound/lantiq,pef2256-codec.yaml b/Documentation/devicetree/bindings/sound/lantiq,pef2256-codec.yaml
+> new file mode 100644
+> index 000000000000..acba3a0ccd1b
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/sound/lantiq,pef2256-codec.yaml
+> @@ -0,0 +1,57 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/sound/lantiq,pef2256-codec.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
->  		debug_region: memory@ffb00000 {
->  			reg =3D <0 0xffb00000 0 0xc0000>;
->  			no-map;
->
-> --=20
-> 2.39.2
+> +title: Lantiq PEF2256 codec device
+
+Drop "device". Everything is "device".
+
+> +
+> +maintainers:
+> +  - Herve Codina <herve.codina@bootlin.com>
+> +
+> +description: |
+> +  Codec support for PEF2256.
+> +
+> +  The Lantiq PEF2256, also known as Infineon PEF2256 or FALC256, is a framer and
+> +  line interface component designed to fulfill all required interfacing between
+> +  an analog E1/T1/J1 line and the digital PCM system highway/H.100 bus.
+> +
+> +  The codec support allows to use some of the PCM system highway time-slots as
+> +  audio channels to transport audio data over the E1/T1/J1 lines.
+> +
+> +  The time-slots used by the codec must be set and so, the properties
+> +  'dai-tdm-slot-num', 'dai-tdm-slot-width', 'dai-tdm-slot-tx-mask' and
+> +  'dai-tdm-slot-rx-mask' must be present in the ALSA sound card node for
+> +  sub-nodes that involve the codec. The codec uses 8bit time-slots.
+> +  'dai-tdm-tdm-slot-with' must be set to 8.
+> +
+> +allOf:
+> +  - $ref: /schemas/spi/spi-peripheral-props.yaml#
+> +  - $ref: dai-common.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    const: lantiq,pef2256-codec
+> +
+> +  lantiq,pef2256:
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +    description:
+> +      phandle to the PEF2256
+
+Why not its child? Why this is in parallel ?
+
+> +
+> +  '#sound-dai-cells':
+> +    const: 0
+> +
+
+
+Best regards,
+Krzysztof
 
