@@ -2,122 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A39F46BE2EC
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 09:19:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AA9C6BE303
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 09:21:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229678AbjCQITk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 04:19:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51320 "EHLO
+        id S230102AbjCQIVd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 04:21:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229769AbjCQITh (ORCPT
+        with ESMTP id S230044AbjCQIVI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 04:19:37 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D266623664;
-        Fri, 17 Mar 2023 01:19:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679041144; x=1710577144;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=/omHGfZ5dOYrjoSumS2lKvLRuYatBfJZeL4MVZdQvsM=;
-  b=ar5vgMHcIDoTV7R5bM7psD3sH0G2OJjZRHRjktk8t2fJOUQwj4Op2boQ
-   K6j4ZsC9OHVZdfwCDytjAHzF1zAVhjNzqnCPJPGrzeUlSJbeFEaJZGja/
-   PTEKZevJDwnzFtbIhzbBeW01bV8lgUeCLBrmyyD/+ujNSDi7zy+PV9YSZ
-   gbkk+U0QxWzRmuvXyMFEmTuxiUV7UlPiiJ859yQ19Vp0kNasx69DjuBKQ
-   sZYhmWhz97pCQpUVcwzWJ0ntwCf88PWCdoIIQOlNETH/10NynAOx3kboe
-   t1fWjD25YveXwpjA/8lTinZwbEkg0q1D4UrbpBHd4dhuT1lvpAXiwjgPv
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="322058149"
-X-IronPort-AV: E=Sophos;i="5.98,268,1673942400"; 
-   d="scan'208";a="322058149"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2023 01:18:17 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="804031943"
-X-IronPort-AV: E=Sophos;i="5.98,268,1673942400"; 
-   d="scan'208";a="804031943"
-Received: from unknown (HELO localhost.localdomain) ([10.237.112.144])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2023 01:18:15 -0700
-Date:   Fri, 17 Mar 2023 09:18:06 +0100
-From:   Michal Swiatkowski <michal.swiatkowski@linux.intel.com>
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Cc:     kuba@kernel.org, sgoutham@marvell.com, gakula@marvell.com,
-        sbhatta@marvell.com, hkelam@marvell.com, davem@davemloft.net,
-        edumazet@google.com, pabeni@redhat.com, richardcochran@gmail.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] octeontx2-vf: Add missing free for alloc_percpu
-Message-ID: <ZBQiPmhuH7aNJo5p@localhost.localdomain>
-References: <20230317064337.18198-1-jiasheng@iscas.ac.cn>
+        Fri, 17 Mar 2023 04:21:08 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE3622CC79;
+        Fri, 17 Mar 2023 01:20:46 -0700 (PDT)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32H7ak6S022063;
+        Fri, 17 Mar 2023 08:19:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=Odofb5S5iKcbSwRiPERtF/5jDQN1KT0/kHOd9jsZRgU=;
+ b=iYR+q1WYoEz/YDSqifHS0+uJM+A/ikf1sVGG6KF85wZXCX3CjS8WcxwyLonsLqeodyMO
+ Vkx0Yenv2N3VkTkdvj6UpfwfvX5uw2XsFFioYBiJD9SHF4UfZDJCMFRXx41Gw7UhOJkz
+ rDK7xqOShKaQdQ5sDM/lJuQIiyYBMVbjnnrF0qC22xdTU8q0wLSX4zj09n5mcRRWCrFr
+ 4DGh4pj7jRTa9DPad9ralBHrE7Mbs8Sj3FGrefmg3BXq4Rn9rfcNPt913OZCskZ9CnZO
+ 8YSmBmR92b4wVKWffQwQ2ygb2FHbF4TDqT2mgqonriIFaGX2Y4Hrpekge7tmdMCrtJR6 /Q== 
+Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pcbas9972-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 17 Mar 2023 08:19:39 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32H8JcYl029041
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 17 Mar 2023 08:19:38 GMT
+Received: from [10.233.17.245] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Fri, 17 Mar
+ 2023 01:19:32 -0700
+Message-ID: <d2ecff94-e608-fcca-f82c-e8e488f4288d@quicinc.com>
+Date:   Fri, 17 Mar 2023 16:19:30 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230317064337.18198-1-jiasheng@iscas.ac.cn>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v1 2/3] dt-bindings: arm: Add Coresight Dummy Trace YAML
+ schema
+To:     Rob Herring <robh@kernel.org>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        <linux-kernel@vger.kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>, <linux-doc@vger.kernel.org>,
+        Tao Zhang <quic_taozha@quicinc.com>,
+        "Palmer Dabbelt" <palmer@dabbelt.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-arm-msm@vger.kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Konrad Dybcio <konradybcio@gmail.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        <coresight@lists.linaro.org>,
+        "Trilok Soni" <quic_tsoni@quicinc.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Tingwei Zhang <quic_tingweiz@quicinc.com>,
+        Jonathan Corbet <corbet@lwn.net>, <devicetree@vger.kernel.org>,
+        Jinlong Mao <quic_jinlmao@quicinc.com>,
+        "Albert Ou" <aou@eecs.berkeley.edu>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>
+References: <20230316032005.6509-1-quic_hazha@quicinc.com>
+ <20230316032005.6509-3-quic_hazha@quicinc.com>
+ <167897435275.2729718.16512739524975963906.robh@kernel.org>
+Content-Language: en-US
+From:   Hao Zhang <quic_hazha@quicinc.com>
+In-Reply-To: <167897435275.2729718.16512739524975963906.robh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: KT0SzSRxfq3sZW8Zt9NQP-Gm5Hd8OwZ9
+X-Proofpoint-ORIG-GUID: KT0SzSRxfq3sZW8Zt9NQP-Gm5Hd8OwZ9
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-17_04,2023-03-16_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 adultscore=0
+ mlxlogscore=777 mlxscore=0 malwarescore=0 bulkscore=0 phishscore=0
+ spamscore=0 suspectscore=0 clxscore=1011 lowpriorityscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303150002 definitions=main-2303170056
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 17, 2023 at 02:43:37PM +0800, Jiasheng Jiang wrote:
-> Add the free_percpu for the allocated "vf->hw.lmt_info" in order to avoid
-> memory leak, same as the "pf->hw.lmt_info" in
-> `drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c`.
-> 
-> Fixes: 5c0512072f65 ("octeontx2-pf: cn10k: Use runtime allocated LMTLINE region")
-> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-> Reviewed-by: Michal Swiatkowski <michal.swiatkowski@linux.intel.com>
-> Acked-by: Geethasowjanya Akula <gakula@marvell.com>
-> ---
-> Changelog:
-> 
-> v1 -> v2:
-> 
-> 1. Remove the if () checks.
-Hi,
 
-Did You change that because of my comments? I am not sure it is correct.
-I meant moving these two ifs to new function, because they are called
-two times. It will be easier to do changes in the future.
 
-void cn10k_lmtst_deinit(struct otx2_nic *pfvf)
-{
-	if (vf->hw.lmt_info)
-		free_percpu(vf->hw.lmt_info);
-	if (test_bit(CN10K_LMTST, &vf->hw.cap_flag))
-		qmem_free(vf->dev, vf->dync_lmt);
-}
+On 3/16/2023 9:53 PM, Rob Herring wrote:
+> 
+> On Thu, 16 Mar 2023 11:20:04 +0800, Hao Zhang wrote:
+>> Add new coresight-dummy.yaml file describing the bindings required
+>> to define coresight dummy trace in the device trees.
+>>
+>> Signed-off-by: Hao Zhang <quic_hazha@quicinc.com>
+>> ---
+>>   .../bindings/arm/qcom,coresight-dummy.yaml    | 129 ++++++++++++++++++
+>>   1 file changed, 129 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/arm/qcom,coresight-dummy.yaml
+>>
+> 
+> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+> on your patch (DT_CHECKER_FLAGS is new in v5.13):
+> 
+> yamllint warnings/errors:
+> ./Documentation/devicetree/bindings/arm/qcom,coresight-dummy.yaml:91:5: [warning] wrong indentation: expected 6 but found 4 (indentation)
+> 
+> dtschema/dtc warnings/errors:
+> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/arm/qcom,coresight-dummy.yaml: required:4: {'oneOf': ['qcom,dummy-sink', 'qcom,dummy-source']} is not of type 'string'
+> 	from schema $id: http://json-schema.org/draft-07/schema#
+> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/arm/qcom,coresight-dummy.yaml: ignoring, error in schema: required: 4
+> Documentation/devicetree/bindings/arm/qcom,coresight-dummy.example.dtb: /example-0/dummy_sink: failed to match any schema with compatible: ['qcom,dummy']
+> Documentation/devicetree/bindings/arm/qcom,coresight-dummy.example.dtb: /example-1/dummy_source: failed to match any schema with compatible: ['qcom,dummy']
+> 
+> doc reference errors (make refcheckdocs):
+> 
+> See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230316032005.6509-3-quic_hazha@quicinc.com
+> 
+> The base for the series is generally the latest rc1. A different dependency
+> should be noted in *this* patch.
+> 
+> If you already ran 'make dt_binding_check' and didn't see the above
+> error(s), then make sure 'yamllint' is installed and dt-schema is up to
+> date:
+> 
+> pip3 install dtschema --upgrade
+> 
+> Please check and re-submit after running the above command yourself. Note
+> that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+> your schema. However, it must be unset to test all examples with your schema.
+> 
+
+Hi Rob,
+
+Thanks for your check.
+I have checked it and didn't see the above errors, will follow your 
+steps and change this in the next version of patch.
 
 Thanks,
-Michal
-
-> ---
->  drivers/net/ethernet/marvell/octeontx2/nic/otx2_vf.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_vf.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_vf.c
-> index 7f8ffbf79cf7..ab126f8706c7 100644
-> --- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_vf.c
-> +++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_vf.c
-> @@ -709,6 +709,7 @@ static int otx2vf_probe(struct pci_dev *pdev, const struct pci_device_id *id)
->  err_ptp_destroy:
->  	otx2_ptp_destroy(vf);
->  err_detach_rsrc:
-> +	free_percpu(vf->hw.lmt_info);
->  	if (test_bit(CN10K_LMTST, &vf->hw.cap_flag))
->  		qmem_free(vf->dev, vf->dync_lmt);
->  	otx2_detach_resources(&vf->mbox);
-> @@ -762,6 +763,7 @@ static void otx2vf_remove(struct pci_dev *pdev)
->  	otx2_shutdown_tc(vf);
->  	otx2vf_disable_mbox_intr(vf);
->  	otx2_detach_resources(&vf->mbox);
-> +	free_percpu(vf->hw.lmt_info);
->  	if (test_bit(CN10K_LMTST, &vf->hw.cap_flag))
->  		qmem_free(vf->dev, vf->dync_lmt);
->  	otx2vf_vfaf_mbox_destroy(vf);
-> -- 
-> 2.25.1
-> 
+Hao
