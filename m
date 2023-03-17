@@ -2,199 +2,343 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3559A6BEBA5
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 15:46:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67A076BED0A
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 16:33:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231243AbjCQOq1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 10:46:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49274 "EHLO
+        id S229844AbjCQPdU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 11:33:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231251AbjCQOqZ (ORCPT
+        with ESMTP id S229767AbjCQPdR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 10:46:25 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DACF23847
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 07:46:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679064384; x=1710600384;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=zpAUeRTWqprtvD9qo8Brjy+2IgyFvWtAe6wwQgE/ZWk=;
-  b=Jkhsfyh+FYkNiOinlLL7lB7YqarAnC3CdL903KS341wEugunsNI/+Qa5
-   cAWgXQBG70Acg8myMfi9ZkueI3tWDqGdFO3vR3vFz5VYhVgeAWnQ6bNck
-   Keu2q9dOnAMeFAvs9Z7Jmpe8a8E/NlciG1VSJHnWlrr/hYHeTU0EKVgxB
-   28gU0qMXF7MgzNk4Xm3N0JxSmYdD3eDMqgYyW+opo+0WMWPDVDKyIHM2n
-   6I1sd1rz1dncrRUby+gA+8POkHCk3GsNsJOJvT8OpnxiJh4RhOxl0GSY8
-   Xjc2OQKJKh4ZydnnCUGzEPkDQQA6RnooJNNUyFF1S6/slRjmqrnRzwxy/
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="365974223"
-X-IronPort-AV: E=Sophos;i="5.98,268,1673942400"; 
-   d="scan'208";a="365974223"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2023 07:46:24 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="823685413"
-X-IronPort-AV: E=Sophos;i="5.98,268,1673942400"; 
-   d="scan'208";a="823685413"
-Received: from dev2 (HELO DEV2.igk.intel.com) ([10.237.148.94])
-  by fmsmga001.fm.intel.com with ESMTP; 17 Mar 2023 07:46:22 -0700
-From:   =?UTF-8?q?Amadeusz=20S=C5=82awi=C5=84ski?= 
-        <amadeuszx.slawinski@linux.intel.com>
-To:     Russ Weight <russell.h.weight@intel.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     Cezary Rojewski <cezary.rojewski@intel.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        =?UTF-8?q?Amadeusz=20S=C5=82awi=C5=84ski?= 
-        <amadeuszx.slawinski@linux.intel.com>
-Subject: [PATCH v5] firmware_loader: Add debug message with checksum for FW file
-Date:   Fri, 17 Mar 2023 23:47:29 +0100
-Message-Id: <20230317224729.1025879-1-amadeuszx.slawinski@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
+        Fri, 17 Mar 2023 11:33:17 -0400
+X-Greylist: delayed 1190 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 17 Mar 2023 08:32:44 PDT
+Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D09CAD00A;
+        Fri, 17 Mar 2023 08:32:43 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.227])
+        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4PdRkT0yYYz9xFGZ;
+        Fri, 17 Mar 2023 22:45:21 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.204.63.22])
+        by APP2 (Coremail) with SMTP id GxC2BwBnOWDafhRkaQemAQ--.41316S4;
+        Fri, 17 Mar 2023 15:53:53 +0100 (CET)
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     corbet@lwn.net, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
+        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
+        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, dsahern@kernel.org, shuah@kernel.org,
+        brauner@kernel.org
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, ebiederm@xmission.com,
+        mcgrof@kernel.org, Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [PATCH 2/5] usermode_driver_mgmt: Introduce management of user mode drivers
+Date:   Fri, 17 Mar 2023 15:52:37 +0100
+Message-Id: <20230317145240.363908-3-roberto.sassu@huaweicloud.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230317145240.363908-1-roberto.sassu@huaweicloud.com>
+References: <20230317145240.363908-1-roberto.sassu@huaweicloud.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: GxC2BwBnOWDafhRkaQemAQ--.41316S4
+X-Coremail-Antispam: 1UD129KBjvJXoWxKFy5KF4rWr18AFW7ur4rZrb_yoWfJFyUpF
+        WUJry5uws5J34UZ3Z3G3yUuayfZw4kZF1YgFZ3Ww4Svwn2qr1jqr17t3W5uryxKr95GF12
+        yrZ09Fn8Crs8WrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUPab4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUXw
+        A2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+        w2x7M28EF7xvwVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+        WxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
+        Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ew
+        Av7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY
+        6r1j6r4UM4x0Y48IcxkI7VAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS14
+        v26r4a6rW5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8C
+        rVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXw
+        CIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x02
+        67AKxVWxJVW8Jr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r
+        1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjxU
+        IID7DUUUU
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgATBF1jj4asxgADsL
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable dynamic-debug logging of firmware filenames and SHA256 checksums
-to clearly identify the firmware files that are loaded by the system.
+From: Roberto Sassu <roberto.sassu@huawei.com>
 
-Example output:
-[   34.944619] firmware_class:_request_firmware: i915 0000:00:02.0: Loaded FW: i915/kbl_dmc_ver1_04.bin, sha256: 2cde41c3e5ad181423bcc3e98ff9c49f743c88f18646af4d0b3c3a9664b831a1
-[   48.155884] firmware_class:_request_firmware: snd_soc_avs 0000:00:1f.3: Loaded FW: intel/avs/cnl/dsp_basefw.bin, sha256: 43f6ac1b066e9bd0423d914960fbbdccb391af27d2b1da1085eee3ea8df0f357
-[   49.579540] firmware_class:_request_firmware: snd_soc_avs 0000:00:1f.3: Loaded FW: intel/avs/rt274-tplg.bin, sha256: 4b3580da96dc3d2c443ba20c6728d8b665fceb3ed57223c3a57582bbad8e2413
-[   49.798196] firmware_class:_request_firmware: snd_soc_avs 0000:00:1f.3: Loaded FW: intel/avs/hda-8086280c-tplg.bin, sha256: 5653172579b2be1b51fd69f5cf46e2bac8d63f2a1327924311c13b2f1fe6e601
-[   49.859627] firmware_class:_request_firmware: snd_soc_avs 0000:00:1f.3: Loaded FW: intel/avs/dmic-tplg.bin, sha256: 00fb7fbdb74683333400d7e46925dae60db448b88638efcca0b30215db9df63f
+Reuse the bpfilter code, with some adjustments to make the code more
+generic, and usable for other user mode drivers.
 
-Reviewed-by: Cezary Rojewski <cezary.rojewski@intel.com>
-Reviewed-by: Russ Weight <russell.h.weight@intel.com>
-Signed-off-by: Amadeusz Sławiński <amadeuszx.slawinski@linux.intel.com>
+:: struct umd_mgmt <=== struct bpfilter_umh_ops ::
+Replace the start method with post_start, to allow for some customization
+of the start procedure. All start procedures have in common the call to
+fork_usermode_driver().
+
+Remove the sockopt method, as it is use case-specific. Instead, use one of
+the following two alternatives: generate the message from the manager of
+the driver (e.g. sockopt), by exporting the message format definition; or,
+define a new structure embedding the umd_mgmt and the custom method, which
+can be registered from the kernel module through the post_start method.
+
+Add kmod and kmod_loaded. Kmod is name of the kernel module that
+umd_mgmt_send_recv() (from bpfilter_mbox_request()) attempts to load if
+kmod_loaded is false (the driver is not yet started). Kmod_loaded is added
+to replace the sockopt method test, and ensure that the driver is ready for
+use.
+
+:: start_umh() <=== start_umh() ::
+Remove the connection test, and call the post_start method in umd_mgmt, if
+set, which could point to that test.
+
+:: shutdown_umh() <=== shutdown_umh() ::
+Same code.
+
+:: umd_mgmt_send_recv() <=== bpfilter_mbox_request() ::
+Replace the bpfilter_mbox_request() parameters with the parameters of
+umd_send_recv(), except for the first which is a umd_mgmt structure instead
+of umd_info. Also, call umd_send_recv() instead of the sockopt method, and
+shutdown the driver if there is an error.
+
+:: umd_mgmt_load() <=== load_umh() ::
+Same code except for the registration of the start and sockopt methods,
+replaced with setting kmod_loaded to true (not depending on CONFIG_INET),
+as mentioned in the explanation of umd_mgmt.
+
+:: umd_mgmt_unload() <=== fini_umh() ::
+Same code except for the deregistration of the start and sockopt methods,
+replaced with setting kmod_loaded to false (not depending on CONFIG_INET).
+
+Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 ---
+ MAINTAINERS                          |   7 ++
+ include/linux/usermode_driver_mgmt.h |  35 +++++++
+ kernel/Makefile                      |   2 +-
+ kernel/usermode_driver_mgmt.c        | 137 +++++++++++++++++++++++++++
+ 4 files changed, 180 insertions(+), 1 deletion(-)
+ create mode 100644 include/linux/usermode_driver_mgmt.h
+ create mode 100644 kernel/usermode_driver_mgmt.c
 
-Changes in v5:
- * remove unnecessary select in Kconfig (Greg)
-
-Changes in v4:
- * update menuconfig prompt and help message (Russ)
-
-Changes in v3:
- * add DYNAMIC_DEBUG and FW_LOADER as dependencies before option can be
-enabled (kernel test robot)
-
-Changes in v2:
- * allocate buffers (Greg)
- * introduce CONFIG_ option to allow for CONFIG_CRYPTO and CONFIG_CRYPTO_SHA256
-dependencies without introducing circular dependency (Greg)
- * add new line between includes and function name (Cezary)
-
----
- drivers/base/firmware_loader/Kconfig | 12 +++++++
- drivers/base/firmware_loader/main.c  | 48 +++++++++++++++++++++++++++-
- 2 files changed, 59 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/base/firmware_loader/Kconfig b/drivers/base/firmware_loader/Kconfig
-index 5166b323a0f8..0cabc783d67a 100644
---- a/drivers/base/firmware_loader/Kconfig
-+++ b/drivers/base/firmware_loader/Kconfig
-@@ -24,6 +24,18 @@ config FW_LOADER
- 	  You also want to be sure to enable this built-in if you are going to
- 	  enable built-in firmware (CONFIG_EXTRA_FIRMWARE).
+diff --git a/MAINTAINERS b/MAINTAINERS
+index a3b14ec3383..7b27435fd20 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -11245,6 +11245,13 @@ S:	Maintained
+ F:	include/linux/umh.h
+ F:	kernel/umh.c
  
-+config FW_LOADER_DEBUG
-+	bool "Log filenames and checksums for loaded firmware"
-+	depends on DYNAMIC_DEBUG
-+	depends on FW_LOADER
-+	depends on CRYPTO
-+	depends on CRYPTO_SHA256
-+	default FW_LOADER
-+	help
-+	  Select this option to use dynamic debug to log firmware filenames and
-+	  SHA256 checksums to the kernel log for each firmware file that is
-+	  loaded.
++KERNEL USERMODE DRIVER MANAGEMENT
++M:	Roberto Sassu <roberto.sassu@huawei.com>
++L:	linux-kernel@vger.kernel.org
++S:	Maintained
++F:	include/linux/usermode_driver_mgmt.h
++F:	kernel/usermode_driver_mgmt.c
 +
- if FW_LOADER
- 
- config FW_LOADER_PAGED_BUF
-diff --git a/drivers/base/firmware_loader/main.c b/drivers/base/firmware_loader/main.c
-index 017c4cdb219e..b2c292ca95e8 100644
---- a/drivers/base/firmware_loader/main.c
-+++ b/drivers/base/firmware_loader/main.c
-@@ -791,6 +791,50 @@ static void fw_abort_batch_reqs(struct firmware *fw)
- 	mutex_unlock(&fw_lock);
- }
- 
-+#if defined(CONFIG_FW_LOADER_DEBUG)
-+#include <crypto/hash.h>
-+#include <crypto/sha2.h>
+ KERNEL VIRTUAL MACHINE (KVM)
+ M:	Paolo Bonzini <pbonzini@redhat.com>
+ L:	kvm@vger.kernel.org
+diff --git a/include/linux/usermode_driver_mgmt.h b/include/linux/usermode_driver_mgmt.h
+new file mode 100644
+index 00000000000..3f9fc783a09
+--- /dev/null
++++ b/include/linux/usermode_driver_mgmt.h
+@@ -0,0 +1,35 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/*
++ * Copyright (C) 2023 Huawei Technologies Duesseldorf GmbH
++ *
++ * User mode driver management API.
++ */
++#ifndef __LINUX_USERMODE_DRIVER_MGMT_H__
++#define __LINUX_USERMODE_DRIVER_MGMT_H__
 +
-+static void fw_log_firmware_info(const struct firmware *fw, const char *name, struct device *device)
++#include <linux/usermode_driver.h>
++
++/**
++ * struct umd_mgmt - user mode driver management structure
++ * @info: user mode driver information
++ * @lock: lock to serialize requests to the UMD Handler
++ * @post_start: function with additional operations after UMD Handler is started
++ * @kmod: kernel module acting as UMD Loader, to start the UMD Handler
++ * @kmod_loaded: whether @kmod is loaded or not
++ *
++ * Information necessary to manage the UMD during its lifecycle.
++ */
++struct umd_mgmt {
++	struct umd_info info;
++	struct mutex lock;
++	int (*post_start)(struct umd_mgmt *mgmt);
++	const char *kmod;
++	bool kmod_loaded;
++};
++
++int umd_mgmt_send_recv(struct umd_mgmt *mgmt, void *in, size_t in_len,
++		       void *out, size_t out_len);
++int umd_mgmt_load(struct umd_mgmt *mgmt, char *start, char *end);
++void umd_mgmt_unload(struct umd_mgmt *mgmt);
++
++#endif /* __LINUX_USERMODE_DRIVER_MGMT_H__ */
+diff --git a/kernel/Makefile b/kernel/Makefile
+index 10ef068f598..ee47f7c2023 100644
+--- a/kernel/Makefile
++++ b/kernel/Makefile
+@@ -12,7 +12,7 @@ obj-y     = fork.o exec_domain.o panic.o \
+ 	    notifier.o ksysfs.o cred.o reboot.o \
+ 	    async.o range.o smpboot.o ucount.o regset.o
+ 
+-obj-$(CONFIG_USERMODE_DRIVER) += usermode_driver.o
++obj-$(CONFIG_USERMODE_DRIVER) += usermode_driver.o usermode_driver_mgmt.o
+ obj-$(CONFIG_MODULES) += kmod.o
+ obj-$(CONFIG_MULTIUSER) += groups.o
+ 
+diff --git a/kernel/usermode_driver_mgmt.c b/kernel/usermode_driver_mgmt.c
+new file mode 100644
+index 00000000000..4fb06b37f62
+--- /dev/null
++++ b/kernel/usermode_driver_mgmt.c
+@@ -0,0 +1,137 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Copyright (C) 2023 Huawei Technologies Duesseldorf GmbH
++ *
++ * User mode driver management library.
++ */
++#include <linux/kmod.h>
++#include <linux/fs.h>
++#include <linux/usermode_driver_mgmt.h>
++
++static void shutdown_umh(struct umd_mgmt *mgmt)
 +{
-+	struct shash_desc *shash;
-+	struct crypto_shash *alg;
-+	u8 *sha256buf;
-+	char *outbuf;
++	struct umd_info *info = &mgmt->info;
++	struct pid *tgid = info->tgid;
 +
-+	alg = crypto_alloc_shash("sha256", 0, 0);
-+	if (!alg)
-+		return;
-+
-+	sha256buf = kmalloc(SHA256_DIGEST_SIZE, GFP_KERNEL);
-+	outbuf = kmalloc(SHA256_BLOCK_SIZE + 1, GFP_KERNEL);
-+	shash = kmalloc(sizeof(*shash) + crypto_shash_descsize(alg), GFP_KERNEL);
-+	if (!sha256buf || !outbuf || !shash)
-+		goto out_free;
-+
-+	shash->tfm = alg;
-+
-+	if (crypto_shash_digest(shash, fw->data, fw->size, sha256buf) < 0)
-+		goto out_shash;
-+
-+	for (int i = 0; i < SHA256_DIGEST_SIZE; i++)
-+		sprintf(&outbuf[i * 2], "%02x", sha256buf[i]);
-+	outbuf[SHA256_BLOCK_SIZE] = 0;
-+	dev_dbg(device, "Loaded FW: %s, sha256: %s\n", name, outbuf);
-+
-+out_shash:
-+	crypto_free_shash(alg);
-+out_free:
-+	kfree(shash);
-+	kfree(outbuf);
-+	kfree(sha256buf);
++	if (tgid) {
++		kill_pid(tgid, SIGKILL, 1);
++		wait_event(tgid->wait_pidfd, thread_group_exited(tgid));
++		umd_cleanup_helper(info);
++	}
 +}
-+#else
-+static void fw_log_firmware_info(const struct firmware *fw, const char *name,
-+				 struct device *device)
-+{}
-+#endif
 +
- /* called from request_firmware() and request_firmware_work_func() */
- static int
- _request_firmware(const struct firmware **firmware_p, const char *name,
-@@ -861,11 +905,13 @@ _request_firmware(const struct firmware **firmware_p, const char *name,
- 	revert_creds(old_cred);
- 	put_cred(kern_cred);
- 
-- out:
++static int start_umh(struct umd_mgmt *mgmt)
++{
++	int err;
++
++	/* fork usermode process */
++	err = fork_usermode_driver(&mgmt->info);
++	if (err)
++		return err;
++	pr_info("Loaded %s pid %d\n", mgmt->info.driver_name,
++		pid_nr(mgmt->info.tgid));
++
++	if (mgmt->post_start) {
++		err = mgmt->post_start(mgmt);
++		if (err)
++			shutdown_umh(mgmt);
++	}
++
++	return err;
++}
++
++/**
++ * umd_mgmt_send_recv - Communicate with the UMD Handler and start it.
++ * @mgmt: user mode driver management structure
++ * @in: request message
++ * @in_len: size of @in
++ * @out: reply message
++ * @out_len: size of @out
++ *
++ * Send a message to the UMD Handler through the created pipe and read the
++ * reply. If the UMD Handler is not available, invoke the UMD Loader to
++ * instantiate it. If the UMD Handler exited, restart it.
++ *
++ * Return: Zero on success, a negative value otherwise.
++ */
++int umd_mgmt_send_recv(struct umd_mgmt *mgmt, void *in, size_t in_len,
++		       void *out, size_t out_len)
++{
++	int err;
++
++	mutex_lock(&mgmt->lock);
++	if (!mgmt->kmod_loaded) {
++		mutex_unlock(&mgmt->lock);
++		request_module(mgmt->kmod);
++		mutex_lock(&mgmt->lock);
++
++		if (!mgmt->kmod_loaded) {
++			err = -ENOPROTOOPT;
++			goto out;
++		}
++	}
++	if (mgmt->info.tgid &&
++	    thread_group_exited(mgmt->info.tgid))
++		umd_cleanup_helper(&mgmt->info);
++
++	if (!mgmt->info.tgid) {
++		err = start_umh(mgmt);
++		if (err)
++			goto out;
++	}
++	err = umd_send_recv(&mgmt->info, in, in_len, out, out_len);
++	if (err)
++		shutdown_umh(mgmt);
 +out:
- 	if (ret < 0) {
- 		fw_abort_batch_reqs(fw);
- 		release_firmware(fw);
- 		fw = NULL;
-+	} else {
-+		fw_log_firmware_info(fw, name, device);
- 	}
- 
- 	*firmware_p = fw;
++	mutex_unlock(&mgmt->lock);
++	return err;
++}
++EXPORT_SYMBOL_GPL(umd_mgmt_send_recv);
++
++/**
++ * umd_mgmt_load - Load and start the UMD Handler.
++ * @mgmt: user mode driver management structure
++ * @start: start address of the binary blob of the UMD Handler
++ * @end: end address of the binary blob of the UMD Handler
++ *
++ * Copy the UMD Handler binary from the specified location to a private tmpfs
++ * filesystem. Then, start the UMD Handler.
++ *
++ * Return: Zero on success, a negative value otherwise.
++ */
++int umd_mgmt_load(struct umd_mgmt *mgmt, char *start, char *end)
++{
++	int err;
++
++	err = umd_load_blob(&mgmt->info, start, end - start);
++	if (err)
++		return err;
++
++	mutex_lock(&mgmt->lock);
++	err = start_umh(mgmt);
++	if (!err)
++		mgmt->kmod_loaded = true;
++	mutex_unlock(&mgmt->lock);
++	if (err)
++		umd_unload_blob(&mgmt->info);
++	return err;
++}
++EXPORT_SYMBOL_GPL(umd_mgmt_load);
++
++/**
++ * umd_mgmt_unload - Terminate and unload the UMD Handler.
++ * @mgmt: user mode driver management structure
++ *
++ * Terminate the UMD Handler, and cleanup the private tmpfs filesystem with the
++ * UMD Handler binary.
++ */
++void umd_mgmt_unload(struct umd_mgmt *mgmt)
++{
++	mutex_lock(&mgmt->lock);
++	shutdown_umh(mgmt);
++	mgmt->kmod_loaded = false;
++	mutex_unlock(&mgmt->lock);
++
++	umd_unload_blob(&mgmt->info);
++}
++EXPORT_SYMBOL_GPL(umd_mgmt_unload);
 -- 
-2.34.1
+2.25.1
 
