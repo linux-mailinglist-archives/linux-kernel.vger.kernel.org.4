@@ -2,178 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C44916BE636
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 11:09:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7EC46BE63B
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 11:10:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229885AbjCQKJE convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 17 Mar 2023 06:09:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41494 "EHLO
+        id S230123AbjCQKKJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 06:10:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229651AbjCQKJC (ORCPT
+        with ESMTP id S229832AbjCQKKF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 06:09:02 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71CFE7A8A;
-        Fri, 17 Mar 2023 03:08:57 -0700 (PDT)
-Received: from ip4d1634d3.dynamic.kabel-deutschland.de ([77.22.52.211] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1pd70n-0000QK-7c; Fri, 17 Mar 2023 11:08:37 +0100
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     Palmer Dabbelt <palmer@rivosinc.com>,
-        Evan Green <evan@rivosinc.com>
-Cc:     slewis@rivosinc.com, Conor Dooley <conor@kernel.org>,
-        vineetg@rivosinc.com, Evan Green <evan@rivosinc.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Andrew Bresticker <abrestic@rivosinc.com>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Atish Patra <atishp@rivosinc.com>,
-        Celeste Liu <coelacanthus@outlook.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Guo Ren <guoren@kernel.org>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Philipp Tomsich <philipp.tomsich@vrull.eu>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Sunil V L <sunilvl@ventanamicro.com>,
-        Tsukasa OI <research_trasio@irq.a4lg.com>,
-        Wei Fu <wefu@redhat.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v4 4/6] RISC-V: hwprobe: Support probing of misaligned access
- performance
-Date:   Fri, 17 Mar 2023 11:08:36 +0100
-Message-ID: <1846748.tdWV9SEqCh@diego>
-In-Reply-To: <20230314183220.513101-5-evan@rivosinc.com>
-References: <20230314183220.513101-1-evan@rivosinc.com>
- <20230314183220.513101-5-evan@rivosinc.com>
+        Fri, 17 Mar 2023 06:10:05 -0400
+Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.214])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EB2A37617D;
+        Fri, 17 Mar 2023 03:10:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=l0+rc
+        XAx9sjzsHZaRBR/f5UUh1q1PCzp0gO21Al0KDQ=; b=HiUf+8STawQQEKzZkTu1t
+        MTBzM9liXFBymei0yOAA81kVC5TCd4Mwgenyb45mp9NrCZrvYzW9xEweAO5uq0oy
+        4EgeI9i+Pqn069gRGjRJ0KEXrJKOfCsTKxIWD9o7XCdTr9vK2g4PFFFSy/OkIPTo
+        oubgC2TflD0m/23Vb9Fk84=
+Received: from leanderwang-LC2.localdomain (unknown [111.206.145.21])
+        by zwqz-smtp-mta-g4-1 (Coremail) with SMTP id _____wCn4kBzPBRk4VRZAQ--.53619S2;
+        Fri, 17 Mar 2023 18:09:55 +0800 (CST)
+From:   Zheng Wang <zyytlz.wz@163.com>
+To:     valentina.manea.m@gmail.com
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, hackerzheng666@gmail.com,
+        1395428693sheep@gmail.com, alex000young@gmail.com,
+        skhan@linuxfoundation.org, Zheng Wang <zyytlz.wz@163.com>
+Subject: [PATCH v3] usbip: vudc: Fix use after free bug in vudc_remove due to  race condition
+Date:   Fri, 17 Mar 2023 18:09:54 +0800
+Message-Id: <20230317100954.2626573-1-zyytlz.wz@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
-        T_SPF_HELO_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: _____wCn4kBzPBRk4VRZAQ--.53619S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7tr15Ww17urWkZrW5Cr1kAFb_yoW8ZrW3pF
+        s5WFWxCr1UJFs2vr1xtws0vF1rJanxJryUuFyxK393Zr43A34UXFyDtr1FkFWxAF9rXr4a
+        qr4kXw1ruFyvq3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0ziOB_8UUUUU=
+X-Originating-IP: [111.206.145.21]
+X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/1tbiQhY1U1aEEsmuWwAAsO
+X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,
+        RCVD_IN_VALIDITY_RPBL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Evan,
+In vudc_probe, it calls init_vudc_hw, which bound &udc->timer with v_timer.
 
-Am Dienstag, 14. März 2023, 19:32:18 CET schrieb Evan Green:
-> This allows userspace to select various routines to use based on the
-> performance of misaligned access on the target hardware.
+When it calls usbip_sockfd_store, it will call v_start_timer to start the
+timer work.
 
-I really like this implementation.
+When we call vudc_remove to remove the driver, theremay be a sequence as
+follows:
 
-Also interesting that T-Head actually has a fast unaligned access.
-Maybe that should be part of the commit message (including were
-this information comes from)
+Fix it by shutdown the timer work before cleanup in vudc_remove.
 
+Note that removing a driver is a root-only operation, and should never
+happen. But the attacker can directly unplug the usb to trigger the remove
+function.
 
-> Co-developed-by: Palmer Dabbelt <palmer@rivosinc.com>
-> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
-> Signed-off-by: Evan Green <evan@rivosinc.com>
-> 
-> ---
-> 
-> Changes in v4:
->  - Add newlines to CPUPERF_0 documentation (Conor)
->  - Add UNSUPPORTED value (Conor)
->  - Switched from DT to alternatives-based probing (Rob)
->  - Crispen up cpu index type to always be int (Conor)
-> 
-> Changes in v3:
->  - Have hwprobe_misaligned return int instead of long.
->  - Constify cpumask pointer in hwprobe_misaligned()
->  - Fix warnings in _PERF_O list documentation, use :c:macro:.
->  - Move include cpufeature.h to misaligned patch.
->  - Fix documentation mismatch for RISCV_HWPROBE_KEY_CPUPERF_0 (Conor)
->  - Use for_each_possible_cpu() instead of NR_CPUS (Conor)
->  - Break early in misaligned access iteration (Conor)
->  - Increase MISALIGNED_MASK from 2 bits to 3 for possible UNSUPPORTED future
->    value (Conor)
-> 
-> Changes in v2:
->  - Fixed logic error in if(of_property_read_string...) that caused crash
->  - Include cpufeature.h in cpufeature.h to avoid undeclared variable
->    warning.
->  - Added a _MASK define
->  - Fix random checkpatch complaints
-> 
->  Documentation/riscv/hwprobe.rst       | 21 ++++++++++++++++++++
->  arch/riscv/errata/thead/errata.c      |  9 +++++++++
->  arch/riscv/include/asm/alternative.h  |  5 +++++
->  arch/riscv/include/asm/cpufeature.h   |  2 ++
->  arch/riscv/include/asm/hwprobe.h      |  2 +-
->  arch/riscv/include/uapi/asm/hwprobe.h |  7 +++++++
->  arch/riscv/kernel/alternative.c       | 19 ++++++++++++++++++
->  arch/riscv/kernel/cpufeature.c        |  3 +++
->  arch/riscv/kernel/smpboot.c           |  1 +
->  arch/riscv/kernel/sys_riscv.c         | 28 +++++++++++++++++++++++++++
->  10 files changed, 96 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/riscv/hwprobe.rst b/Documentation/riscv/hwprobe.rst
-> index 945d44683c40..9f0dd62dcb5d 100644
-> --- a/Documentation/riscv/hwprobe.rst
-> +++ b/Documentation/riscv/hwprobe.rst
-> @@ -63,3 +63,24 @@ The following keys are defined:
->  
->    * :c:macro:`RISCV_HWPROBE_IMA_C`: The C extension is supported, as defined
->      by version 2.2 of the RISC-V ISA manual.
-> +
-> +* :c:macro:`RISCV_HWPROBE_KEY_CPUPERF_0`: A bitmask that contains performance
-> +  information about the selected set of processors.
-> +
-> +  * :c:macro:`RISCV_HWPROBE_MISALIGNED_UNKNOWN`: The performance of misaligned
-> +    accesses is unknown.
-> +
-> +  * :c:macro:`RISCV_HWPROBE_MISALIGNED_EMULATED`: Misaligned accesses are
-> +    emulated via software, either in or below the kernel.  These accesses are
-> +    always extremely slow.
-> +
-> +  * :c:macro:`RISCV_HWPROBE_MISALIGNED_SLOW`: Misaligned accesses are supported
-> +    in hardware, but are slower than the cooresponding aligned accesses
-> +    sequences.
-> +
-> +  * :c:macro:`RISCV_HWPROBE_MISALIGNED_FAST`: Misaligned accesses are supported
-> +    in hardware and are faster than the cooresponding aligned accesses
-> +    sequences.
-> +
-> +  * :c:macro:`RISCV_HWPROBE_MISALIGNED_UNSUPPORTED`: Misaligned accesses are
-> +    not supported at all and will generate a misaligned address fault.
-> diff --git a/arch/riscv/errata/thead/errata.c b/arch/riscv/errata/thead/errata.c
-> index fac5742d1c1e..f41a45af5607 100644
-> --- a/arch/riscv/errata/thead/errata.c
-> +++ b/arch/riscv/errata/thead/errata.c
-> @@ -10,7 +10,9 @@
->  #include <linux/uaccess.h>
->  #include <asm/alternative.h>
->  #include <asm/cacheflush.h>
-> +#include <asm/cpufeature.h>
->  #include <asm/errata_list.h>
-> +#include <asm/hwprobe.h>
->  #include <asm/patch.h>
->  #include <asm/vendorid_list.h>
->  
-> @@ -108,3 +110,10 @@ void __init_or_module thead_errata_patch_func(struct alt_entry *begin, struct al
->  	if (stage == RISCV_ALTERNATIVES_EARLY_BOOT)
->  		local_flush_icache_all();
->  }
-> +
-> +void thead_feature_probe_func(unsigned int cpu, unsigned long archid,
-> +			      unsigned long impid)
-> +{
-> +	if ((archid == 0) && (impid == 0))
-> +		per_cpu(misaligned_access_speed, cpu) = RISCV_HWPROBE_MISALIGNED_FAST;
+CPU0                  CPU1
 
-When looking at this function I 'm wondering if we also want to expose
-the active erratas somehow (not in this patch of course, just in general)
+                     |v_timer
+vudc_remove          |
+kfree(udc);          |
+//free shost         |
+                     |udc->gadget
+                     |//use
 
+The udc might be removed before v_timer finished, and UAF happens.
 
-Heiko
+This bug was found by Codeql static analysis and might by false positive.
 
+Fixes: b6a0ca111867 ("usbip: vudc: Add UDC specific ops")
+Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+---
+v3:
+- fix the issue by adding del_timer_sync in v_stop_timer and
+invoke it in vudc_remove
+
+v2:
+- add more details about how the bug was found suggested by Shuah
+---
+ drivers/usb/usbip/vudc_dev.c      | 1 +
+ drivers/usb/usbip/vudc_transfer.c | 2 ++
+ 2 files changed, 3 insertions(+)
+
+diff --git a/drivers/usb/usbip/vudc_dev.c b/drivers/usb/usbip/vudc_dev.c
+index 2bc428f2e261..dcbfed30806d 100644
+--- a/drivers/usb/usbip/vudc_dev.c
++++ b/drivers/usb/usbip/vudc_dev.c
+@@ -633,6 +633,7 @@ int vudc_remove(struct platform_device *pdev)
+ {
+ 	struct vudc *udc = platform_get_drvdata(pdev);
+ 
++	v_stop_timer(udc);
+ 	usb_del_gadget_udc(&udc->gadget);
+ 	cleanup_vudc_hw(udc);
+ 	kfree(udc);
+diff --git a/drivers/usb/usbip/vudc_transfer.c b/drivers/usb/usbip/vudc_transfer.c
+index 7e801fee33bf..562ea7b6ea2e 100644
+--- a/drivers/usb/usbip/vudc_transfer.c
++++ b/drivers/usb/usbip/vudc_transfer.c
+@@ -492,5 +492,7 @@ void v_stop_timer(struct vudc *udc)
+ 
+ 	/* timer itself will take care of stopping */
+ 	dev_dbg(&udc->pdev->dev, "timer stop");
++	
++	del_timer_sync(&t->timer);
+ 	t->state = VUDC_TR_STOPPED;
+ }
+-- 
+2.25.1
 
