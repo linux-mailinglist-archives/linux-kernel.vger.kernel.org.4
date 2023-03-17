@@ -2,214 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F17416BEA6B
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 14:47:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E387F6BEA84
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 14:55:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230523AbjCQNq7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 09:46:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50334 "EHLO
+        id S231145AbjCQNzZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 09:55:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229924AbjCQNq5 (ORCPT
+        with ESMTP id S229540AbjCQNzX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 09:46:57 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C252973035
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 06:46:55 -0700 (PDT)
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32HDBJUc002313;
-        Fri, 17 Mar 2023 13:46:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=PlqlzntpHLPj36p2Jm0RQSOWvLZkc6dnkzTHliS6Kio=;
- b=fjoKN/x0cFtimfoiwdi67tbUygQLc0G6XAO5KD/898VGLzTQCHAz/nXv8JqtlmO8qO/G
- tGF+aQvXZzSUP/ElP252+P3zvXnKk5cYKQH2kFhbENdrIX0gIKAYFGWd2hnaFTsQ3Q4V
- tSez2x+BmbXV2lzPgHKZvfSveckQSwPccPat9tp6ccgX3rrv6abFWTQYQvHMHU+d7cJG
- GFS4AKSLmsUDeaInuVP1m3bb0BIKg1nGDE5T3Wjkukw6PnWEqXNLNOeEBDA2XZBvrsJ2
- BRGS/XOKO4msIWR6pc+IULKLclGWrOzJ5pGivuaPD4KOdCVPGZNoxSXzfItjhObuxZ8W dg== 
-Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3pcpq9cq3y-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 17 Mar 2023 13:46:44 +0000
-Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
-        by ppma03dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32HCoaGl026757;
-        Fri, 17 Mar 2023 13:46:43 GMT
-Received: from smtprelay05.dal12v.mail.ibm.com ([9.208.130.101])
-        by ppma03dal.us.ibm.com (PPS) with ESMTPS id 3pbsa02w40-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 17 Mar 2023 13:46:43 +0000
-Received: from smtpav06.wdc07v.mail.ibm.com (smtpav06.wdc07v.mail.ibm.com [10.39.53.233])
-        by smtprelay05.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32HDkgQ038339032
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 17 Mar 2023 13:46:42 GMT
-Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 509655803F;
-        Fri, 17 Mar 2023 13:46:42 +0000 (GMT)
-Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 47BAE58066;
-        Fri, 17 Mar 2023 13:46:41 +0000 (GMT)
-Received: from slate16.aus.stglabs.ibm.com (unknown [9.160.25.240])
-        by smtpav06.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Fri, 17 Mar 2023 13:46:41 +0000 (GMT)
-From:   Eddie James <eajames@linux.ibm.com>
-To:     linux-fsi@lists.ozlabs.org
-Cc:     openbmc@lists.ozlabs.org, joel@jms.id.au,
-        linux-kernel@vger.kernel.org, alistair@popple.id.au,
-        Eddie James <eajames@linux.ibm.com>
-Subject: [PATCH] fsi: sbefifo: Add configurable in-command timeout
-Date:   Fri, 17 Mar 2023 08:46:38 -0500
-Message-Id: <20230317134638.3128232-1-eajames@linux.ibm.com>
-X-Mailer: git-send-email 2.31.1
+        Fri, 17 Mar 2023 09:55:23 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14A0FE1A2;
+        Fri, 17 Mar 2023 06:55:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Transfer-Encoding:Content-Disposition:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:From:
+        Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Content-Disposition:
+        In-Reply-To:References; bh=eC33ACaQYYAv+vtinocwyhqk7H8NHOdp/sCwnyXAa10=; b=hb
+        E0g7jIY/DnDZ7+E9Xp4KFPWV/I6LZuPmsXY0+f+I9LM7v4LWbjupLhNUIFJGNnMiuYElpwU04pHub
+        0t2dDVDw03GyfcH+NGYLfBoCteGFXFUlgeoKh0JqHyY1yr8Rlh6PHeAWfV1MU7T+ZaJOqZ9N0VNAJ
+        HR+EKHLxI4qYnj0=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1pdAY3-007c8f-O2; Fri, 17 Mar 2023 14:55:11 +0100
+Date:   Fri, 17 Mar 2023 14:55:11 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>
+Cc:     Christian Marangi <ansuelsmth@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        John Crispin <john@phrozen.org>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, Lee Jones <lee@kernel.org>,
+        linux-leds@vger.kernel.org
+Subject: Re: [net-next PATCH v4 04/14] net: phy: Add a binding for PHY LEDs
+Message-ID: <6cf03603-2a8e-4c08-a61b-aef164a0f5d9@lunn.ch>
+References: <20230317023125.486-1-ansuelsmth@gmail.com>
+ <20230317023125.486-5-ansuelsmth@gmail.com>
+ <20230317084519.12d3587a@dellmb>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: w8Dqacc40-QrNOl2G9XG8wHKDOieIolH
-X-Proofpoint-GUID: w8Dqacc40-QrNOl2G9XG8wHKDOieIolH
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-17_08,2023-03-16_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 bulkscore=0
- suspectscore=0 clxscore=1011 priorityscore=1501 adultscore=0 phishscore=0
- spamscore=0 lowpriorityscore=0 mlxscore=0 mlxlogscore=999 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303150002
- definitions=main-2303170092
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230317084519.12d3587a@dellmb>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A new use case for the SBEFIFO requires a long in-command timeout
-as the SBE processes each part of the command before clearing the
-upstream FIFO for the next part of the command. Add ioctl support
-to configure this timeout in a similar way to the existing read
-timeout.
+On Fri, Mar 17, 2023 at 08:45:19AM +0100, Marek Behún wrote:
+> On Fri, 17 Mar 2023 03:31:15 +0100
+> Christian Marangi <ansuelsmth@gmail.com> wrote:
+> 
+> > +	cdev->brightness_set_blocking = phy_led_set_brightness;
+> > +	cdev->max_brightness = 1;
+> > +	init_data.devicename = dev_name(&phydev->mdio.dev);
+> > +	init_data.fwnode = of_fwnode_handle(led);
+> > +
+> > +	err = devm_led_classdev_register_ext(dev, cdev, &init_data);
+> 
+> Since init_data.devname_mandatory is false, devicename is ignored.
+> Which is probably good, becuse the device name of a mdio device is
+> often ugly, taken from devicetree or switch drivers, for example:
+>   f1072004.mdio-mii
+>   fixed-0
+>   mv88e6xxx-1
+> So either don't fill devicename or use devname_mandatory (and maybe
+> fill devicename with something less ugly, but I guess if we don't have
+> much choice if we want to keep persistent names).
+> 
+> Without devname_mandatory, the name of the LED classdev will be of the
+> form
+>   color:function[-function-enumerator],
+> i.e.
+>   green:lan
+>   amber:lan-1
+> 
+> With multiple switch ethenret ports all having LAN function, it is
+> worth noting that the function enumerator must be explicitly used in the
+> devicetree, otherwise multiple LEDs will be registered under the same
+> name, and the LED subsystem will add a number at the and of the name
+> (function led_classdev_next_name), resulting in names
+>   green:lan
+>   green:lan_1
+>   green:lan_2
+>   ...
 
-Signed-off-by: Eddie James <eajames@linux.ibm.com>
----
- drivers/fsi/fsi-sbefifo.c | 33 ++++++++++++++++++++++++++++++++-
- include/uapi/linux/fsi.h  | 10 ++++++++++
- 2 files changed, 42 insertions(+), 1 deletion(-)
+I'm testing on a Marvell RDK, with limited LEDs. It has one LED on the
+front port to represent the WAN port. The DT patch is at the end of
+the series. With that, i end up with:
 
-diff --git a/drivers/fsi/fsi-sbefifo.c b/drivers/fsi/fsi-sbefifo.c
-index 9912b7a6a4b9..223486b3cfcb 100644
---- a/drivers/fsi/fsi-sbefifo.c
-+++ b/drivers/fsi/fsi-sbefifo.c
-@@ -127,6 +127,7 @@ struct sbefifo {
- 	bool			dead;
- 	bool			async_ffdc;
- 	bool			timed_out;
-+	u32			timeout_in_cmd_ms;
- 	u32			timeout_start_rsp_ms;
- };
- 
-@@ -136,6 +137,7 @@ struct sbefifo_user {
- 	void			*cmd_page;
- 	void			*pending_cmd;
- 	size_t			pending_len;
-+	u32			cmd_timeout_ms;
- 	u32			read_timeout_ms;
- };
- 
-@@ -508,7 +510,7 @@ static int sbefifo_send_command(struct sbefifo *sbefifo,
- 		rc = sbefifo_wait(sbefifo, true, &status, timeout);
- 		if (rc < 0)
- 			return rc;
--		timeout = msecs_to_jiffies(SBEFIFO_TIMEOUT_IN_CMD);
-+		timeout = msecs_to_jiffies(sbefifo->timeout_in_cmd_ms);
- 
- 		vacant = sbefifo_vacant(status);
- 		len = chunk = min(vacant, remaining);
-@@ -802,6 +804,7 @@ static int sbefifo_user_open(struct inode *inode, struct file *file)
- 		return -ENOMEM;
- 	}
- 	mutex_init(&user->file_lock);
-+	user->cmd_timeout_ms = SBEFIFO_TIMEOUT_IN_CMD;
- 	user->read_timeout_ms = SBEFIFO_TIMEOUT_START_RSP;
- 
- 	return 0;
-@@ -845,9 +848,11 @@ static ssize_t sbefifo_user_read(struct file *file, char __user *buf,
- 	rc = mutex_lock_interruptible(&sbefifo->lock);
- 	if (rc)
- 		goto bail;
-+	sbefifo->timeout_in_cmd_ms = user->cmd_timeout_ms;
- 	sbefifo->timeout_start_rsp_ms = user->read_timeout_ms;
- 	rc = __sbefifo_submit(sbefifo, user->pending_cmd, cmd_len, &resp_iter);
- 	sbefifo->timeout_start_rsp_ms = SBEFIFO_TIMEOUT_START_RSP;
-+	sbefifo->timeout_in_cmd_ms = SBEFIFO_TIMEOUT_IN_CMD;
- 	mutex_unlock(&sbefifo->lock);
- 	if (rc < 0)
- 		goto bail;
-@@ -937,6 +942,28 @@ static int sbefifo_user_release(struct inode *inode, struct file *file)
- 	return 0;
- }
- 
-+static int sbefifo_cmd_timeout(struct sbefifo_user *user, void __user *argp)
-+{
-+	struct device *dev = &user->sbefifo->dev;
-+	u32 timeout;
-+
-+	if (get_user(timeout, (__u32 __user *)argp))
-+		return -EFAULT;
-+
-+	if (timeout == 0) {
-+		user->cmd_timeout_ms = SBEFIFO_TIMEOUT_IN_CMD;
-+		dev_dbg(dev, "Command timeout reset to %u\n", user->cmd_timeout_ms);
-+		return 0;
-+	}
-+
-+	if (timeout > 120)
-+		return -EINVAL;
-+
-+	user->cmd_timeout_ms = timeout * 1000; /* user timeout is in sec */
-+	dev_dbg(dev, "Command timeout set to %u\n", user->cmd_timeout_ms);
-+	return 0;
-+}
-+
- static int sbefifo_read_timeout(struct sbefifo_user *user, void __user *argp)
- {
- 	struct device *dev = &user->sbefifo->dev;
-@@ -971,6 +998,9 @@ static long sbefifo_user_ioctl(struct file *file, unsigned int cmd, unsigned lon
- 
- 	mutex_lock(&user->file_lock);
- 	switch (cmd) {
-+	case FSI_SBEFIFO_CMD_TIMEOUT_SECONDS:
-+		rc = sbefifo_cmd_timeout(user, (void __user *)arg);
-+		break;
- 	case FSI_SBEFIFO_READ_TIMEOUT_SECONDS:
- 		rc = sbefifo_read_timeout(user, (void __user *)arg);
- 		break;
-@@ -1025,6 +1055,7 @@ static int sbefifo_probe(struct device *dev)
- 	sbefifo->fsi_dev = fsi_dev;
- 	dev_set_drvdata(dev, sbefifo);
- 	mutex_init(&sbefifo->lock);
-+	sbefifo->timeout_in_cmd_ms = SBEFIFO_TIMEOUT_IN_CMD;
- 	sbefifo->timeout_start_rsp_ms = SBEFIFO_TIMEOUT_START_RSP;
- 
- 	/*
-diff --git a/include/uapi/linux/fsi.h b/include/uapi/linux/fsi.h
-index b2f1977378c7..a2e730fc6309 100644
---- a/include/uapi/linux/fsi.h
-+++ b/include/uapi/linux/fsi.h
-@@ -59,6 +59,16 @@ struct scom_access {
-  * /dev/sbefifo* ioctl interface
-  */
- 
-+/**
-+ * FSI_SBEFIFO_CMD_TIMEOUT sets the timeout for writing data to the SBEFIFO.
-+ *
-+ * The command timeout is specified in seconds.  The minimum value of command
-+ * timeout is 1 seconds (default) and the maximum value of command timeout is
-+ * 120 seconds.  A command timeout of 0 will reset the value to the default of
-+ * 1 seconds.
-+ */
-+#define FSI_SBEFIFO_CMD_TIMEOUT_SECONDS		_IOW('s', 0x01, __u32)
-+
- /**
-  * FSI_SBEFIFO_READ_TIMEOUT sets the read timeout for response from SBE.
-  *
--- 
-2.31.1
+root@370rd:/sys/class/leds# ls -l
+total 0
+lrwxrwxrwx 1 root root 0 Mar 17 01:10 f1072004.mdio-mii:00:WAN -> ../../devices/platform/soc/soc:interna
+l-regs/f1072004.mdio/mdio_bus/f1072004.mdio-mii/f1072004.mdio-mii:00/leds/f1072004.mdio-mii:00:WAN
+
+I also have:
+
+root@370rd:/sys/class/net/eth0/phydev/leds# ls
+f1072004.mdio-mii:00:WAN
+
+f1072004.mdio-mii:00: is not nice, but it is unique to a netdev. The
+last part then comes from the label property. Since there is only one
+LED, i went with what the port is intended to be used as. If there had
+been more LEDs, i would of probably used labels like "LINK" and
+"ACTIVITY", since that is often what they reset default
+to. Alternatively, you could names the "Left" and "Right", which does
+suggest they can be given any function.
+
+I don't actually think the name is too important, so long as it is
+unique. You are going to find it via /sys/class/net. MAC LEDs should
+be /sys/class/net/eth42/leds, and PHY LEDs will be
+/sys/class/net/phydev/leds.
+
+It has been discussed in the past to either extend ethtool to
+understand this, or write a new little tool to make it easier to
+manipulate these LEDs.
+
+	   Andrew
 
