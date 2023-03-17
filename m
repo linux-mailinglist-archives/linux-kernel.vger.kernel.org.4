@@ -2,250 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A7226BDE33
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 02:38:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C18CA6BDE35
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 02:38:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229665AbjCQBiS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 21:38:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34292 "EHLO
+        id S229674AbjCQBiq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 21:38:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbjCQBiP (ORCPT
+        with ESMTP id S229688AbjCQBin (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 21:38:15 -0400
-Received: from mail-vs1-xe34.google.com (mail-vs1-xe34.google.com [IPv6:2607:f8b0:4864:20::e34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32EA9AA24D
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 18:38:13 -0700 (PDT)
-Received: by mail-vs1-xe34.google.com with SMTP id o2so3211702vss.8
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 18:38:13 -0700 (PDT)
+        Thu, 16 Mar 2023 21:38:43 -0400
+Received: from mail-ua1-x92b.google.com (mail-ua1-x92b.google.com [IPv6:2607:f8b0:4864:20::92b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE95BBDFD
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 18:38:39 -0700 (PDT)
+Received: by mail-ua1-x92b.google.com with SMTP id h34so2416773uag.4
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 18:38:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679017092;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bBn6JQBx1SHJKZPB8zhAUv5Fuj/NGhkfmZs2i9hUcgA=;
-        b=FG1EYVYdASOEs5PEIu0lXb6o34qMOplqYGGprFQXDnyCxeLmik+TqdNAFKcbg87hTz
-         daK8DPDMhSS4Oi+3xE0uH3JIsQhaqoZL1TqjyfcgUK2sijfi5Lw+Wr5kDbLpijtd/1Wh
-         QTmnGVCczewvFTbfMIPTK3p1WgraxXq+VkCTrwZ6zdrtj7RbOuI73jIcYOexOFWSK8at
-         JVvxK6esPsN+14+2CHOQp0Y9utSBH7nd+HZwOFU3cdpSHxprv7fKWaEgdWLdadDoJQ7u
-         VpRNa+FM2/3mwCbefIQGgtKgL0jJMHvjEa2Bg8t6GoSLrd4mRSR/SlT1TFS6gnDVeAW7
-         xQcw==
+        d=linaro.org; s=google; t=1679017119;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=gZiMCDMIqB6OVa8oI0SbxOaqsvPFfiDjO4dIGyuTuIg=;
+        b=ypwhZFcEyECXNJLrPmBrQBRxwV+y3VDSUZRidDldPrMlkddN8UY8Sd09RHpaiqdiJL
+         T7ZnlEx7oQHOvemcAeJimox6CqBwQt5mA6I5dl4zxVDLl84vlluYmnsW3XrJAq59rLmm
+         WEPR9GDZf3CMjIEeQ1ImdBuXtn3KtyXxGhGeEnmEZS0j2sqwdmlAlzOwUzK6i/XefAY5
+         7Y1tBOyhxN8wEoGSg6Y+f7V7aOput026rhrRVSliNNxcqNUPXZI8t7s/BGDZ4fpJznF2
+         a4wY+SXlfzZfwhEPy83h/v6w/SWGnfBLCXxitQ0B/IYAlEUQxW78axaN7PPFkDGCimfx
+         W+qA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679017092;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bBn6JQBx1SHJKZPB8zhAUv5Fuj/NGhkfmZs2i9hUcgA=;
-        b=ZvKyixLdA4SkQe2md3ddiLooulZj5GM3mVUpIXpaVa39wqfYLgg1tQBRNeLkMp+FMv
-         L+ZwJUUhJdq5Pofae6Asoy42iGlGi8Q6npMFbi5USDQH3CcNoxivLDi6CIzAkFIlOZit
-         Pvi78/vYg2gYMH0C7AxrnnTzpTaG717x8DRpaQ0qLueT1gWrfg0yp2lfwGSRmu+Eb1QE
-         sHR6YfGOzW3RuR8oUe37vJGfwQAaIcpkQBvYBan6uwGMTTwKhaSz6JqJXINoHOGJY51g
-         AUEuLeveelgshQctDkoevgXhJAEArgMkRlj+/49zFYckAbqgtdHUGZ5YLPlhwv2DU1+b
-         1m6A==
-X-Gm-Message-State: AO0yUKVVRISjLQ2IAl2nnVfHfUo8kfZMiK8gWEh+34dofwM5X1RYMnKY
-        NrIpxz9XX/UzcWdxgTkjSFJhDtjkgr1ylSaa4YjdXg==
-X-Google-Smtp-Source: AK7set8YSeusCd3ChZiDth1ZhkI6JI9Z0uq4CmeAATOagrzse4aeQHdjPRsmr+k9SuLvkMvvlZcIWBRnIAwrQievH/0=
-X-Received: by 2002:a67:f8c7:0:b0:412:4e02:ba9f with SMTP id
- c7-20020a67f8c7000000b004124e02ba9fmr30451280vsp.1.1679017091998; Thu, 16 Mar
- 2023 18:38:11 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679017119;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gZiMCDMIqB6OVa8oI0SbxOaqsvPFfiDjO4dIGyuTuIg=;
+        b=lU3CgJFqb3eEQFIV37GKrZV66/72hhKF3JwOGMCTxm6uboTO/FqeHn89QBmvaOV00v
+         jrDK9ywhwBGbH5eO/Kxnz4nF+p45Wrz7r5/lpQ6zKVV8nha09PGQ97mS6QHtEQuu9XT9
+         WXGubfU+/N+mwDvmNOAlxfZeb82E5zo2wa5YwXWYtDSovtipyLnNq+0kqXbXdhnOZLHU
+         q6lZdxY8XBKFuVwhL6a6ulTnkAMWYbHJSnD0ef63YwJ2dgy9MZDjFd2ImZ1k31ZZuGp1
+         sgqpu7fkNfGgYLJlzlIVhF9ClqkNv2KSrzDyquF8Zg75G4hTr70/fT+B8AOY7+B4CHiX
+         0v8A==
+X-Gm-Message-State: AO0yUKVNtYaYgZ9qxpX60AEzexP+aYdCORGd9e0f9rwoLPjGVJHkbQAS
+        ZGAOExcUsGL8mubTS1wbF7p4LjN1CdeZNKHLuk0uAQ==
+X-Google-Smtp-Source: AK7set+/q/KOu9X2oqklAu82mx0ZTERuPycsI3lxx4LB0u576R4uCrwSrRzaoqbLzoyXIBsLOflo4MZ1GqF/8zksvhU=
+X-Received: by 2002:a1f:b292:0:b0:42d:18f9:d0b6 with SMTP id
+ b140-20020a1fb292000000b0042d18f9d0b6mr18388753vkf.2.1679017118886; Thu, 16
+ Mar 2023 18:38:38 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230316083443.733397152@linuxfoundation.org>
-In-Reply-To: <20230316083443.733397152@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Fri, 17 Mar 2023 07:08:00 +0530
-Message-ID: <CA+G9fYuErbJtY68zb32gkggNb96GRznoLS7OLfDSqBDD6-eJBw@mail.gmail.com>
-Subject: Re: [PATCH 6.2 000/137] 6.2.7-rc2 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+References: <20230314230004.961993-1-alexey.klimov@linaro.org> <c98a3741-273b-8a69-016d-5f3e79f8a71e@acm.org>
+In-Reply-To: <c98a3741-273b-8a69-016d-5f3e79f8a71e@acm.org>
+From:   Alexey Klimov <alexey.klimov@linaro.org>
+Date:   Fri, 17 Mar 2023 01:38:27 +0000
+Message-ID: <CANgGJDqhimVZ7Pfes0sT8S2VHo_gTLBYkGFNcfbT5CV5VJz51Q@mail.gmail.com>
+Subject: Re: [REGRESSION] CPUIDLE_FLAG_RCU_IDLE, blk_mq_freeze_queue_wait()
+ and slow-stuck reboots
+To:     Bart Van Assche <bvanassche@acm.org>
+Cc:     peterz@infradead.org, draszik@google.com, peter.griffin@linaro.org,
+        willmcvicker@google.com, mingo@kernel.org, ulf.hansson@linaro.org,
+        tony@atomide.com, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, axboe@kernel.dk,
+        alim.akhtar@samsung.com, regressions@lists.linux.dev,
+        avri.altman@wdc.com, klimova@google.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 16 Mar 2023 at 14:20, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+On Tue, 14 Mar 2023 at 23:21, Bart Van Assche <bvanassche@acm.org> wrote:
 >
-> This is the start of the stable review cycle for the 6.2.7 release.
-> There are 137 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+> On 3/14/23 16:00, Alexey Klimov wrote:
+> > The delay is found to be in device's ->shutdown() methods called from kernel_restart():
+> > void kernel_restart_prepare(char *cmd)
+> > {
+> >       blocking_notifier_call_chain(&reboot_notifier_list, SYS_RESTART, cmd);
+> >       system_state = SYSTEM_RESTART;
+> >       usermodehelper_disable();
+> >       device_shutdown();      <---- here
+
+[..]
+
 >
-> Responses should be made by Sat, 18 Mar 2023 08:33:04 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-=
-6.2.7-rc2.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-6.2.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+> Please let me know if you want me to resubmit patch "scsi: ufs: Remove
+> the LUN quiescing code from ufshcd_wl_shutdown()"
+> (https://lore.kernel.org/linux-scsi/20220331223424.1054715-14-bvanassche@acm.org/).
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+This indeed works and helps to reduce reboot time. Thanks!
+If you decide to resubmit, feel free to ping me to test it.
+However I have no knowledge how comments from Adrian can be addressed.
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+With that patch the reboot time decreases from 60-100 seconds to
+~10-20 seconds. The next
+"slow" thing is wlan driver which callback is called from
+blocking_notifier_call_chain(&reboot_notifier_list, ...) but obviously
+it is not a part of ufs code.
 
-## Build
-* kernel: 6.2.7-rc2
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-6.2.y
-* git commit: 2756d84ffc14891b590f8d8e516ee60adea3b3b8
-* git describe: v6.2.5-143-g2756d84ffc14
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.2.y/build/v6.2.5=
--143-g2756d84ffc14
-
-## Test Regressions (compared to v6.2.5)
-
-## Metric Regressions (compared to v6.2.5)
-
-## Test Fixes (compared to v6.2.5)
-
-## Metric Fixes (compared to v6.2.5)
-
-## Test result summary
-total: 190311, pass: 163849, fail: 3908, skip: 22192, xfail: 362
-
-## Build Summary
-* arc: 5 total, 5 passed, 0 failed
-* arm: 145 total, 142 passed, 3 failed
-* arm64: 54 total, 53 passed, 1 failed
-* i386: 41 total, 38 passed, 3 failed
-* mips: 30 total, 28 passed, 2 failed
-* parisc: 8 total, 8 passed, 0 failed
-* powerpc: 38 total, 36 passed, 2 failed
-* riscv: 26 total, 25 passed, 1 failed
-* s390: 16 total, 16 passed, 0 failed
-* sh: 14 total, 12 passed, 2 failed
-* sparc: 8 total, 7 passed, 1 failed
-* x86_64: 46 total, 46 passed, 0 failed
-
-## Test suites summary
-* boot
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers-dma-buf
-* kselftest-efivarfs
-* kselftest-exec
-* kselftest-filesystems
-* kselftest-filesystems-binderfs
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-ftrace
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-net-forwarding
-* kselftest-net-mptcp
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-user_events
-* kselftest-vDSO
-* kselftest-vm
-* kselftest-watchdog
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* ltpa-6278247/0/tests/4_ltp-fsx
-* network-basic-tests
-* packetdrill
-* perf
-* rcutorture
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
+Best regards,
+Alexey
