@@ -2,78 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C282C6BF1E8
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 20:50:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 157FD6BF1E9
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 20:50:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229659AbjCQTu1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 15:50:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36334 "EHLO
+        id S229729AbjCQTuj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 15:50:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbjCQTuZ (ORCPT
+        with ESMTP id S229734AbjCQTuh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 15:50:25 -0400
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 878E530B09;
-        Fri, 17 Mar 2023 12:50:23 -0700 (PDT)
-Received: by mail-yb1-xb2e.google.com with SMTP id e194so6973354ybf.1;
-        Fri, 17 Mar 2023 12:50:23 -0700 (PDT)
+        Fri, 17 Mar 2023 15:50:37 -0400
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E08E47415
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 12:50:35 -0700 (PDT)
+Received: by mail-pj1-x104a.google.com with SMTP id d5-20020a17090ac24500b0023cb04ec86fso2739200pjx.7
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 12:50:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679082622;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=b3CQ8WGc4w2GVbQ+AHog+uRw/SumpjFjDyqWJL60hI0=;
-        b=paYhQ9HyuGNRZhcX+W+4wkvn49Zl73wDxF4NFJxzuc1lFNhTty3Zzjl6En/7ixGVcJ
-         DRevvNT0lj+toUBebDZYr87DPb4a/y4d82jfNLOrBrl6cPnv7zfpXiJ/VvhEsCw6Pj5L
-         O0Nd0MhGXYztpw/BnZUkpdmg/DXvpyTQNNYZRuyDS9hR1kO3SNpYRTX7QUcjqhMXw2Kf
-         a6cxw9oC9shZs8YqTn3m+AU1i34IdXxRBvQv0xEsIzG1ec+7z30Nsgmd4Hl8amvp8Hae
-         xO20DAhReNI3KkuZ9kBqlSg4gdGPXcu4msryUzBC8G7nZrmdmYMt/K597LuScKXoDv+i
-         wSFQ==
+        d=google.com; s=20210112; t=1679082634;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=rAMNw7I/iPQBXA5776+hHO5jp6wGCvuivl6D7qCj+lg=;
+        b=bkDvkAdeGenE8Nh+dNVYbOas9j+tbvuvSxVZ3KZ6+Bp1/ka2FLNL89Mybe9NZYX7dt
+         GMU8OOsR4l62JzYYGVcxdjL/FhvKNqKUph7Wep4ysxQsQ4+zlnVygMiWznRQbvBterir
+         Sc5HKVqhSk23DF3gaZ0JkHgXLoLomYTau8+SgyfFiWkyOC7iF0Xwnq8DAR4E9qLq5rr5
+         pbx4NRjR/m7tdJcDmIKTFw4osieL92c3ru5Y1UppsyXCXwXJ8ImOGQ3RphFl5W+++D4j
+         iZltVWp/nHYfkz8YHLqDCymyLCUI9T494hD4X3z9W64iqLAqayU9pTw1zHxhzvU9tlX5
+         9NYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679082622;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=b3CQ8WGc4w2GVbQ+AHog+uRw/SumpjFjDyqWJL60hI0=;
-        b=27uhgJ0TyisLdxgHqjR11XwvZbGS5uGHrLBg4ara29FaxDqc3NjuSO3mS21JVJYjRu
-         9y2kDprYNplkQtwiKu/jkOy7a06MO+WmgSn0sTgSZ8IQx76em06b1FoEneMrb/TH77Co
-         ogacSi4Qj7czc3uTstZDKaEuIgYxYoQjoDvJYL31ZHTekPpYnB1yfX+JLEBLyz+pjCW9
-         lpXGwsm5BwAbnLjWRHS+XTwKtYL7UPyv4ZAjQdvFOr3IklB0Mb4yj9kv/spvLXlAgN5q
-         pGpHe07LJSw0UBpnaW6rx4nsEs1Qtr73bEPvX9tZbOoCgDNHaHAy57+4QJdfRfdEcbmq
-         IHTg==
-X-Gm-Message-State: AO0yUKU/rFYH8da+da4nf0JyhVKHx4TH6/aBaaPS6Hh2WPjBhbwEn1NU
-        Hp5KPVCtyb4+3wLXE1EhCG8WlBtHqHXhpiKa2g==
-X-Google-Smtp-Source: AK7set8TKJGwscidXv9PDMw39S7PyU+VEVKzDYJObGO75JeJd57fC94Asa1qL2/ZU+c85KzeRGGrt/90is3aHzUu/3w=
-X-Received: by 2002:a5b:611:0:b0:b67:f07:d180 with SMTP id d17-20020a5b0611000000b00b670f07d180mr235414ybq.5.1679082622364;
- Fri, 17 Mar 2023 12:50:22 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230123090555.21415-1-git@qrsnap.io>
-In-Reply-To: <20230123090555.21415-1-git@qrsnap.io>
-From:   Nick Morrow <morrownr@gmail.com>
-Date:   Fri, 17 Mar 2023 14:49:56 -0500
-Message-ID: <CAFktD2eFdaCAdE=zxVx05QYWPRcr5StompKr+ehn7piYpQHjzA@mail.gmail.com>
-Subject: Re: [PATCH] Added Netgear AXE3000 (A8000) usb_device_id to mt7921u_device_table[]
-To:     Reese Russell <git@qrsnap.io>
-Cc:     Felix Fietkau <nbd@nbd.name>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Ryder Lee <ryder.lee@mediatek.com>,
-        Shayne Chen <shayne.chen@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Deren Wu <deren.wu@mediatek.com>,
-        YN Chen <YN.Chen@mediatek.com>,
-        Ben Greear <greearb@candelatech.com>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+        d=1e100.net; s=20210112; t=1679082634;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=rAMNw7I/iPQBXA5776+hHO5jp6wGCvuivl6D7qCj+lg=;
+        b=0BvaOFpKHxAg2Xq0o6syTLcphiUvOz7hxCIErG/K5qWRnNFyQqQgYnD7IhhmRZGhBX
+         HCattsmY9ee+jPt+jLGAL3qmjjX7U+51BX2aFVxtK05BWiL+P+0Jq5dqzLYiTdTZCIMC
+         QucZ050tnTPznTn4p/3C/yHHZtrlOuyzvjQkSmKYMPyDYETv3hdN/fiHW3zcG5SK/I78
+         shtuWyCHtLFFyD5gy53PShPcKsOU7IFKVAYc5US7Cpxx7i1HnpqktmaIF0SF7Z7hem9+
+         N9Uv3jSAz/sYdhkiCzI1pgtlWw8GmQTyJcdCb643DxEyZ4i6oE6EmFcsRRZOGS9DK+XD
+         FIbg==
+X-Gm-Message-State: AO0yUKXC5uwsKjV2tmYBKqo0iYyibOxjwC64a1JbUVUsnxN1c1SkvcYi
+        9iswJ6gpI0Wv/PCsRjxvlEMLhcRNTsTeAH0=
+X-Google-Smtp-Source: AK7set/gvArTV0vJudQh6stgruRNDqAenLkESzbpOZcMUYDbXQMRuvUxE1x49plm6rE743b7PqZM35p2AJ1snKs=
+X-Received: from zaidcloud.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5325])
+ (user=zalbassam job=sendgmr) by 2002:a05:6a00:4503:b0:5a8:aaa1:6c05 with SMTP
+ id cw3-20020a056a00450300b005a8aaa16c05mr1896705pfb.2.1679082634554; Fri, 17
+ Mar 2023 12:50:34 -0700 (PDT)
+Date:   Fri, 17 Mar 2023 15:50:19 -0400
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.0.rc2.332.ga46443480c-goog
+Message-ID: <20230317195027.3746949-1-zalbassam@google.com>
+Subject: [PATCH v4 0/8] perf: arm: Make PMUv3 driver available for aarch32
+From:   Zaid Al-Bassam <zalbassam@google.com>
+To:     Jesus Sanchez-Palencia <jesussanp@google.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, kvmarm@lists.linux.dev,
+        kvmarm@lists.cs.columbia.edu, f.fainelli@gmail.com
+Cc:     Zaid Al-Bassam <zalbassam@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,53 +83,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Issue: Though the Netgear AXE3000 (A8000) is based on the mt7921
-> chipset because of the unique USB VID:PID combination this device
-> does not initialize/register. Thus making it not plug and play.
->
-> Fix: Adds support for the Netgear AXE3000 (A8000) based on the Mediatek
-> mt7921au chipset. The method of action is adding the USD VID/PID
-> pair to the mt7921u_device_table[] array.
->
-> Notes: A retail sample of the Netgear AXE3000 (A8000) yeilds the following
-> from lsusb D 0846:9060 NetGear, Inc. Wireless_Device. This pair
-> 0846:9060 VID:PID has been reported by other users on Github.
->
-> Signed-off-by: Reese Russell <git@qrsnap.io>
-> ---
->  drivers/net/wireless/mediatek/mt76/mt7921/usb.c | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/drivers/net/wireless/mediatek/mt76/mt7921/usb.c b/drivers/net/wireless/mediatek/mt76/mt7921/usb.c
-> index 5321d20dcdcb..62e9728588f8 100644
-> --- a/drivers/net/wireless/mediatek/mt76/mt7921/usb.c
-> +++ b/drivers/net/wireless/mediatek/mt76/mt7921/usb.c
-> @@ -15,6 +15,8 @@
->  static const struct usb_device_id mt7921u_device_table[] = {
->         { USB_DEVICE_AND_INTERFACE_INFO(0x0e8d, 0x7961, 0xff, 0xff, 0xff),
->                 .driver_info = (kernel_ulong_t)MT7921_FIRMWARE_WM },
-> +       { USB_DEVICE_AND_INTERFACE_INFO(0x0846, 0x9060, 0xff, 0xff, 0xff),
-> +               .driver_info = (kernel_ulong_t)MT7921_FIRMWARE_WM },
->         { },
->  };
->
-> --
-> 2.37.2
+Currently, PMUv3 driver is only available for ARMv8 aarch64 platforms,
+ARMv8 platorms running in aarch32 mode dont have access to the driver.
+This is, especially, a problem for ARMv8 platforms that only have
+aarch32 support, like the Cortex-A32.
 
+Make the PMUv3 driver available to arm arch (ARMv8 aarch32) by moving
+the PMUv3 driver from arm64 to drivers, that makes the driver common
+to both arm and arm64 architectures, then add PMUv3 arm Support.
 
-I can confirm this VID/PID needs to go into 6.1 LTS and the current
-testing version of the kernel as I am getting an increasing amount of
-traffic from users that have purchased the Netgear A8000.
+The main work in this patchset was made a while back by Marc Zyngier
+in [1]. Patchset version 1 [v1] rebases Marc's patches to the latest
+kernel revision and adds additional patches to accommodate the changes
+in the kernel since Marc wrote the patches.
 
-My site is github.com/morrownr/USB-WiFi
+version 2 [v2] of the patchset was created by Marc Zyngier and I
+picked it up from [2].
 
-Helping Linux users with USB WiFi is what we do.
+Changes in v2:
+- Flattened the nested switches in the arm_pmuv3.h for arm.
+- Removed wrappers and added stubs for the PMU KVM functions for arm.
+- Added PMU version abstractions.
 
-The OP could have added a comment to the patch showing the adapter
-that is causing this patch to be submitted. Maybe he can submit a v2
-that can be expedited?
+Changes in v3:
+- Removed the link tag from the commit messages.
+- Fixed the license header in the arm_pmuv3.h files.
 
-Guidance?
+Changes in v4:
+- Rebased to 6.3.0-rc2 (Clean rebase)
 
-Nick
-github.com/morrownr/USB-WiFi
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git/log/?h=kvm-arm/pmuv3-32bit
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git/log/?h=arm/pmuv3
+
+[v1] https://lore.kernel.org/all/20230126204444.2204061-1-zalbassam@google.com/
+[v2] https://lore.kernel.org/all/20230210165500.2292608-1-zalbassam@google.com/
+[v3] https://lore.kernel.org/all/20230213210319.1075872-1-zalbassam@google.com/
+
+Thank you,
+Zaid Al-Bassam
+
+Marc Zyngier (5):
+  arm64: perf: Move PMUv3 driver to drivers/perf
+  arm64: perf: Abstract system register accesses away
+  ARM: Make CONFIG_CPU_V7 valid for 32bit ARMv8 implementations
+  ARM: perf: Allow the use of the PMUv3 driver on 32bit ARM
+  ARM: mach-virt: Select PMUv3 driver by default
+
+Zaid Al-Bassam (3):
+  perf: pmuv3: Abstract PMU version checks
+  perf: pmuv3: Move inclusion of kvm_host.h to the arch-specific helper
+  perf: pmuv3: Change GENMASK to GENMASK_ULL
+
+ arch/arm/Kconfig                              |   1 +
+ arch/arm/include/asm/arm_pmuv3.h              | 247 ++++++++++++++
+ arch/arm/mm/Kconfig                           |   2 +-
+ arch/arm64/include/asm/arm_pmuv3.h            | 155 +++++++++
+ arch/arm64/include/asm/perf_event.h           | 249 --------------
+ arch/arm64/kernel/Makefile                    |   1 -
+ drivers/perf/Kconfig                          |  10 +
+ drivers/perf/Makefile                         |   1 +
+ .../perf_event.c => drivers/perf/arm_pmuv3.c  | 131 ++------
+ include/kvm/arm_pmu.h                         |   2 +-
+ include/linux/perf/arm_pmuv3.h                | 303 ++++++++++++++++++
+ 11 files changed, 751 insertions(+), 351 deletions(-)
+ create mode 100644 arch/arm/include/asm/arm_pmuv3.h
+ create mode 100644 arch/arm64/include/asm/arm_pmuv3.h
+ rename arch/arm64/kernel/perf_event.c => drivers/perf/arm_pmuv3.c (93%)
+ create mode 100644 include/linux/perf/arm_pmuv3.h
+
+-- 
+2.40.0.rc2.332.ga46443480c-goog
+
