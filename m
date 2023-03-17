@@ -2,183 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CCC36BE175
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 07:44:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A48C26BE126
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 07:20:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229494AbjCQGoh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 02:44:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59154 "EHLO
+        id S229840AbjCQGU2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 02:20:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbjCQGoe (ORCPT
+        with ESMTP id S229588AbjCQGTz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 02:44:34 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC3C591B59;
-        Thu, 16 Mar 2023 23:44:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679035461; x=1710571461;
-  h=date:from:to:cc:subject:message-id:reply-to:references:
-   in-reply-to:mime-version;
-  bh=1XYrJ21QaZftsg9AQUbZFeQe3zR8ZQdOvFw+VP4gVZc=;
-  b=mpazrycdolynt3H0djOD3Q63ESEtxNX9feDj4k65WXoNotnJU0IU9k7u
-   yTZti0qQblh9SmxTD9ckVpEtfjzBpowihvtCIhrYadNLD7g75Yv+t7DiW
-   NJDHjtK7tBCaQ6zsFqRChaQRx7VDUFyRfzojqWG9xoDLrECZoO1WqWo5O
-   DDoPwe/udGxOQlzCy9wkfnjmmPeWBYkdjtIce1Wzk3XvxjXM5cKjTFHS3
-   sMmgJ+pdMa5cgWy07xPrGBmHjc13h/kf3R60GtZ0qZxhD/C3yLkAHS6/k
-   oNGZsNdjtHzfPGtVcNFOFxv37109Qjja12pq9ghthqOLlQHnFVHyouwtU
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="339735808"
-X-IronPort-AV: E=Sophos;i="5.98,268,1673942400"; 
-   d="scan'208";a="339735808"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 23:44:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="710401374"
-X-IronPort-AV: E=Sophos;i="5.98,268,1673942400"; 
-   d="scan'208";a="710401374"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by orsmga008.jf.intel.com with ESMTP; 16 Mar 2023 23:44:17 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Thu, 16 Mar 2023 23:44:17 -0700
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21 via Frontend Transport; Thu, 16 Mar 2023 23:44:17 -0700
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.171)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+        Fri, 17 Mar 2023 02:19:55 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E90BBACB92;
+        Thu, 16 Mar 2023 23:19:53 -0700 (PDT)
+X-UUID: b769cd04c48b11ed91027fb02e0f1d65-20230317
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=xqeNtvkOt380WvrUL9+n5dvMHV6xjQJa/F/8T0qazGA=;
+        b=uwhldcv7l9C3VRVkMbeptZzqJiCxLx0CUAwEY/9mP36tO9lghsshT0cD5ltt2qcwo1UBiOuuPtMueoCktKETRF83eItpy5vnhBndGP05uHrn75xWetn0Vv4Fv9u/qvr6k3tTm1dcnoLFNRkIHubhQDqSJTTU2FB8P4H/Xmn3trI=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.21,REQID:bc211a6b-d1b9-4e01-a02c-fe6cc5d2197c,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:83295aa,CLOUDID:ed0789b3-beed-4dfc-bd9c-e1b22fa6ccc4,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
+X-CID-BVR: 0,NGT
+X-CID-BAS: 0,NGT,0,_
+X-UUID: b769cd04c48b11ed91027fb02e0f1d65-20230317
+Received: from mtkmbs13n2.mediatek.inc [(172.21.101.108)] by mailgw01.mediatek.com
+        (envelope-from <allen-kh.cheng@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 332766105; Fri, 17 Mar 2023 14:19:47 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs13n1.mediatek.inc (172.21.101.193) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.21; Thu, 16 Mar 2023 23:44:17 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=W85izYBspRJRlWU0Hd5Oc5Z9gpbECrb8Xv8g+O+fpcNLecqo0btT0RllZ8zkpCERkKbcQtD2AYVtlIQ2vZbwdmzlTvhymU7wTHdxtHd8mSHkRNRHQehTlndwZxo4MeyBNgUBb3Mbq3vYx5tgKco9lyDlaRJPrtGiGj54Z8DhcIUVRR231x5nyPIA6J3TqXN+66Ax3OnhdJwM3rEjQh6GOj5euO5xQlzr8QGBaeAgFow1OPoTJSH7i9BdRF5L/On748i6gtn/ilPDHSTk8yXlPn/3F2dUxyAkvtXgu+BIo1BEkoWZG6C+2Z/rXJPHwFPEgcl5P4Y4hl/QL7mRLKv46Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=41WtfN08KuQ+5nDvKbbsAonQE20eQYG9OO8qjS6EsmU=;
- b=JJ7p7x6m5kiHCY7LM4y147Hm9rGyAvuGuXhzhKDZMK9Y9RILKSIym+/jKtu8wAlPqg9Dla9b2NG496bV4pmeSceT/l4OET3XOspERoN0QS2orC4+Tixe4AWD8Km3qoYMBhD8wTSoDwJKBNkngDLfryy/R1P/1oypGTZ+cK1ICCP7oRYTn6ondevOgVPh3ENS260cvW4+gla7WCrtpIolMWpM8iSBGSp1ko+TYKTAeWi0RyW/HB2jmJR5pYgRgemPSszB/K5E7ANDohdUNjYBrSu6scBZWDFKk7V8gL4ims1rPd/SVizHMFjLER3k8ClC1PlXN4oofLYRloyzX0nbpw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DS7PR11MB5966.namprd11.prod.outlook.com (2603:10b6:8:71::6) by
- SA1PR11MB6759.namprd11.prod.outlook.com (2603:10b6:806:25e::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.26; Fri, 17 Mar
- 2023 06:44:14 +0000
-Received: from DS7PR11MB5966.namprd11.prod.outlook.com
- ([fe80::b00e:ac74:158e:1c7e]) by DS7PR11MB5966.namprd11.prod.outlook.com
- ([fe80::b00e:ac74:158e:1c7e%4]) with mapi id 15.20.6178.026; Fri, 17 Mar 2023
- 06:44:14 +0000
-Date:   Fri, 17 Mar 2023 14:19:36 +0800
-From:   Yan Zhao <yan.y.zhao@intel.com>
-To:     Sean Christopherson <seanjc@google.com>
-CC:     Paolo Bonzini <pbonzini@redhat.com>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>,
-        Zhi Wang <zhi.a.wang@intel.com>, <kvm@vger.kernel.org>,
-        <intel-gvt-dev@lists.freedesktop.org>,
-        <intel-gfx@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
-        Ben Gardon <bgardon@google.com>
-Subject: Re: [PATCH v2 08/27] drm/i915/gvt: Use an "unsigned long" to iterate
- over memslot gfns
-Message-ID: <ZBQGeJiNosyes2DM@yzhao56-desk.sh.intel.com>
-Reply-To: Yan Zhao <yan.y.zhao@intel.com>
-References: <20230311002258.852397-1-seanjc@google.com>
- <20230311002258.852397-9-seanjc@google.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20230311002258.852397-9-seanjc@google.com>
-X-ClientProxiedBy: SG2PR03CA0097.apcprd03.prod.outlook.com
- (2603:1096:4:7c::25) To DS7PR11MB5966.namprd11.prod.outlook.com
- (2603:10b6:8:71::6)
+ 15.2.1118.25; Fri, 17 Mar 2023 14:19:46 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.25 via Frontend Transport; Fri, 17 Mar 2023 14:19:46 +0800
+From:   Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <angelogioacchino.delregno@collabora.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+Subject: [PATCH v3] arm64: dts: mediatek: Add cpufreq nodes for MT8192
+Date:   Fri, 17 Mar 2023 14:19:44 +0800
+Message-ID: <20230317061944.15434-1-allen-kh.cheng@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS7PR11MB5966:EE_|SA1PR11MB6759:EE_
-X-MS-Office365-Filtering-Correlation-Id: b758b9bd-e9e9-40ad-b6ca-08db26b305a7
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 5scGmx3V2rTYNMhjRJDdcHhTAOrxOZt14eOc1Fk2hsi5cwLf74MWJSFb7cEmoRNsEQc+r6bj9CV6uy0/Tz0xXRnzSROvVZwD6u8vFOH1aZAmXhxRNE7dDC7xlghU1/CHoiQ4Mk5/F7m/8P7ujHmqZC0F3tRC8TYhEex9ChdPTFpqWA7KDdj0SLCCZem/exA7hymuXPgOKMfU35f9czP1Q2vTzFsv87pfmzBPrSbbiConLrrnb58hDuw7UtxEK/5dZjBouXuaDyI+qM1WGO0VszRKEwmjDtcPWFF9FodhQNRHLQUrJf+GjfVRpb7npLvEIXeZG8GYRFzsdkJpPQQmFDkqmErj+ewhrCf7LgTSmTTE67lUBJISfrLwiRsqJCIA7NgaRcVv7ZMIbzuO08VEvLmXZa04mohwn5BeKHpYuJmiY17HPj0/k8eGyx+eZBCgFbaXIuU6lx7ASpdgVsx9U58xJ+z3E7irDT7bzPxHw44tXaMckG9Up0U/VPLukJOZpZ2vV3D6l+xJmCxgzctVkhFiTumrNA+uYjUp4DzbdLWDsWW6ItiOt/JSjjwMndcCnRkhseFLTg8kCbHyKJ1cOwB6+9X6JsgSUT7EwF90mJ+Ggge3SEFwBNBIChEVpk1M0RX9Fp+jnnO4+C/2Dr9ttw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR11MB5966.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(39860400002)(376002)(346002)(366004)(396003)(136003)(451199018)(316002)(54906003)(5660300002)(2906002)(478600001)(6486002)(8676002)(8936002)(66476007)(66946007)(66556008)(4326008)(41300700001)(6916009)(3450700001)(6512007)(86362001)(82960400001)(6506007)(26005)(83380400001)(186003)(38100700002)(6666004);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?d4kDCdlJOEFgaBpoN7hJUKDD9BvqZoDcwneJIjmBv3a7C79IAhzQ4Riv9ULP?=
- =?us-ascii?Q?VXgujwQBkaeCBo7FSb9ELpdAsyOzZPUnTiIPx8vv0JGr6uSwcPChb/rJR5Pl?=
- =?us-ascii?Q?IWTKr2zGsS+HC3NzBzi+ROfKtdDC9eZj4O71D+EedCqaG5cWI3FGMytgysv5?=
- =?us-ascii?Q?bs6JqesfC7YB2nPUv34+aFPoBV775a8V07yY6sUW6oMELrvmiajNAZPsmq00?=
- =?us-ascii?Q?6zKfQZip1WM+G+J8bSvcktq3TdWw1T5iqJAjlSXkmiBESrioR5cHlJkQUVkB?=
- =?us-ascii?Q?N4eAT1I0d9GoDVTRc36TEQlsr4yIBNhFjzlTcdGOMPP0Nw4s8kY+t81JLWhM?=
- =?us-ascii?Q?x/RcDgC+ae+dl+6godbB8/XcjdLk6old1zkbqcKdU78ksBiXfsWA3NYHR9XQ?=
- =?us-ascii?Q?B4yIoAXrQGDjbQk1kj377m95JN9ieL4s2AdF96HyuVsOSbXqXFsRAycVHgWl?=
- =?us-ascii?Q?Wc57M3C4Hy/H1rAkawiQsSa2zWTM6uC14a8WYXaAhjyuZBQSDFvsA/OOGAr3?=
- =?us-ascii?Q?ftLoRTH+GlFZqNeCfIsCDGPccfnADRHCIr8NxzphfSt6dpIGU2argIiIVAgN?=
- =?us-ascii?Q?t7iZzXCq+s4djk9cFigvdl472XTd31Qro9Vt55cJfyBpkBimOdH3JO7bzUjb?=
- =?us-ascii?Q?ihSsHqqnChqgcN2ckBkmZTDaremDshRMEYpIuMoR8zz4W55u/VmTeWS+Iosz?=
- =?us-ascii?Q?T1RDZ9lh0tCOBjYRLhZfZEiA28lOU0qz81stqipX+nA3cksmN3A7tDqZPEjL?=
- =?us-ascii?Q?FC12N0uQQkW2G/UwsM9oLeU21OZk0mxswYWbWU7l4dq67qKb4XKTPbnZB22k?=
- =?us-ascii?Q?qsg00TJo4VwGoG/rLmlIlcUO0ERmCQyzUfnpF0oXgLv+v4PG9HWRMT8AS+hq?=
- =?us-ascii?Q?8fGPYGnxW7NoQiLedpZWscEYIWakfxECLRvqEmDzPED6+0yl3gl8q7yWqpZw?=
- =?us-ascii?Q?c06KdDBvJVtEgpNhyZpP4eC/P+xjPCSKrhnGPWSPEvbXtHPr+rbU4fdQi945?=
- =?us-ascii?Q?2wCRfbH6TXj7/Gn+7Divi3QubrMMcCmr4X+fuuhTbhm98JdMzD32An/xq6IT?=
- =?us-ascii?Q?DdVZ+l7g7V99coKAJ6Ak1q8aiZXQTW8Z2K9HxodOMY5+P5KsBqka8tLMIfms?=
- =?us-ascii?Q?PMrGhw3jsoYqB6SkZ33MixRegwzQleNFARlNQ9r/X1mcr2Pcbd4T9+2Iq3Pq?=
- =?us-ascii?Q?3Lo+42xMTxWfmnPAHzc0mi0rNg0IdeS5NctLMAv6M4evaA974vJS3zrZZA8Z?=
- =?us-ascii?Q?tBVv7LUSuLvA7hvSh7nMHqnsuh0mZ49tYxMFffzRW7PHBEBtz2H0MIx296YS?=
- =?us-ascii?Q?xEefSXpxYaUy50RkGmr1zP/ToCXTjQXkm/h7UraBfMGDq+pxnYBUHhMTmr/X?=
- =?us-ascii?Q?SCY654ZQlpFJ5SmXi4Agt82MUmUkA61qXTwARCasUq5bWpN4tN0chJEMQrUy?=
- =?us-ascii?Q?yDqfFZZ9MIr3/Ai0Gn80KT/wCojZZj5vOokuIyP7fAA/wiKc8bkCRgK/TiG/?=
- =?us-ascii?Q?+TNPmipuncc0t5KXcbApPmSjbN4D3qTHlmD7jm8/6DDBd4/tpLqr2JlGHbtK?=
- =?us-ascii?Q?YeQXn+aO7uZ6bAZZhQmalY0KxRDxHWjStg6vuWMW0VcFPWqyJOCsHol45Ric?=
- =?us-ascii?Q?OA=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: b758b9bd-e9e9-40ad-b6ca-08db26b305a7
-X-MS-Exchange-CrossTenant-AuthSource: DS7PR11MB5966.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Mar 2023 06:44:14.0510
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: yJdFSRXzJ1yhXt6TLCfixcFeTG5GpoNNR+m2SjELed4bVRRFa1LWDDCm5guSydRJ58+hUHCVuD/RvYRxsIp5Dg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR11MB6759
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reviewed-by: Yan Zhao <yan.y.zhao@intel.com>
+Add the cpufreq nodes for MT8192 SoC.
 
-On Fri, Mar 10, 2023 at 04:22:39PM -0800, Sean Christopherson wrote:
-> Use an "unsigned long" instead of an "int" when iterating over the gfns
-> in a memslot.  The number of pages in the memslot is tracked as an
-> "unsigned long", e.g. KVMGT could theoretically break if a KVM memslot
-> larger than 16TiB were deleted (2^32 * 4KiB).
-> 
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
->  drivers/gpu/drm/i915/gvt/kvmgt.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/i915/gvt/kvmgt.c b/drivers/gpu/drm/i915/gvt/kvmgt.c
-> index 90997cc385b4..68be66395598 100644
-> --- a/drivers/gpu/drm/i915/gvt/kvmgt.c
-> +++ b/drivers/gpu/drm/i915/gvt/kvmgt.c
-> @@ -1634,7 +1634,7 @@ static void kvmgt_page_track_flush_slot(struct kvm *kvm,
->  		struct kvm_memory_slot *slot,
->  		struct kvm_page_track_notifier_node *node)
->  {
-> -	int i;
-> +	unsigned long i;
->  	gfn_t gfn;
->  	struct intel_vgpu *info =
->  		container_of(node, struct intel_vgpu, track_node);
-> -- 
-> 2.40.0.rc1.284.g88254d51c5-goog
-> 
+Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+---
+Change from v2:
+    Fix wrong performance-domains
+    [Allen-KH Cheng <allen-kh.cheng@mediatek.com>]
+---
+---
+ arch/arm64/boot/dts/mediatek/mt8192.dtsi | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/mediatek/mt8192.dtsi b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+index 87b91c8feaf9..ba49f37933d6 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+@@ -70,6 +70,7 @@
+ 			d-cache-line-size = <64>;
+ 			d-cache-sets = <128>;
+ 			next-level-cache = <&l2_0>;
++			performance-domains = <&performance 0>;
+ 			capacity-dmips-mhz = <530>;
+ 		};
+ 
+@@ -87,6 +88,7 @@
+ 			d-cache-line-size = <64>;
+ 			d-cache-sets = <128>;
+ 			next-level-cache = <&l2_0>;
++			performance-domains = <&performance 0>;
+ 			capacity-dmips-mhz = <530>;
+ 		};
+ 
+@@ -104,6 +106,7 @@
+ 			d-cache-line-size = <64>;
+ 			d-cache-sets = <128>;
+ 			next-level-cache = <&l2_0>;
++			performance-domains = <&performance 0>;
+ 			capacity-dmips-mhz = <530>;
+ 		};
+ 
+@@ -121,6 +124,7 @@
+ 			d-cache-line-size = <64>;
+ 			d-cache-sets = <128>;
+ 			next-level-cache = <&l2_0>;
++			performance-domains = <&performance 0>;
+ 			capacity-dmips-mhz = <530>;
+ 		};
+ 
+@@ -138,6 +142,7 @@
+ 			d-cache-line-size = <64>;
+ 			d-cache-sets = <256>;
+ 			next-level-cache = <&l2_1>;
++			performance-domains = <&performance 1>;
+ 			capacity-dmips-mhz = <1024>;
+ 		};
+ 
+@@ -155,6 +160,7 @@
+ 			d-cache-line-size = <64>;
+ 			d-cache-sets = <256>;
+ 			next-level-cache = <&l2_1>;
++			performance-domains = <&performance 1>;
+ 			capacity-dmips-mhz = <1024>;
+ 		};
+ 
+@@ -172,6 +178,7 @@
+ 			d-cache-line-size = <64>;
+ 			d-cache-sets = <256>;
+ 			next-level-cache = <&l2_1>;
++			performance-domains = <&performance 1>;
+ 			capacity-dmips-mhz = <1024>;
+ 		};
+ 
+@@ -189,6 +196,7 @@
+ 			d-cache-line-size = <64>;
+ 			d-cache-sets = <256>;
+ 			next-level-cache = <&l2_1>;
++			performance-domains = <&performance 1>;
+ 			capacity-dmips-mhz = <1024>;
+ 		};
+ 
+@@ -318,6 +326,12 @@
+ 		compatible = "simple-bus";
+ 		ranges;
+ 
++		performance: performance-controller@11bc10 {
++			compatible = "mediatek,cpufreq-hw";
++			reg = <0 0x0011bc10 0 0x120>, <0 0x0011bd30 0 0x120>;
++			#performance-domain-cells = <1>;
++		};
++
+ 		gic: interrupt-controller@c000000 {
+ 			compatible = "arm,gic-v3";
+ 			#interrupt-cells = <4>;
+-- 
+2.18.0
+
