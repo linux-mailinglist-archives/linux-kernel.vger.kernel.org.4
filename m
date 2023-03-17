@@ -2,57 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C7A36BEE9E
+	by mail.lfdr.de (Postfix) with ESMTP id 7759E6BEE9F
 	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 17:41:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230271AbjCQQlA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 12:41:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36886 "EHLO
+        id S230307AbjCQQlF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 12:41:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230262AbjCQQkq (ORCPT
+        with ESMTP id S230266AbjCQQks (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 12:40:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99B235A6CD;
-        Fri, 17 Mar 2023 09:40:45 -0700 (PDT)
+        Fri, 17 Mar 2023 12:40:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B80A860AA9
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 09:40:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 34BDD60C7F;
-        Fri, 17 Mar 2023 16:40:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9820C4339C;
-        Fri, 17 Mar 2023 16:40:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5307F60B3B
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 16:40:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 161C2C4339B;
+        Fri, 17 Mar 2023 16:40:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679071244;
-        bh=Pfx1OfplKXtSZ7oy2GQi8FZJpWIVZujUx3snzJWO+HY=;
-        h=From:To:In-Reply-To:References:Subject:Date:From;
-        b=SwqzyT+9mL3loVh0nPKiufOKPHJmshnp7tQL45K8kmh7/R6YgmTaLKHKi5+Qlf1QS
-         R/QDHJSbOmdco385Q6LnNYcxwA6sFTmOygDSiXBKUPnZmewMtGB8VlQHgnaWRD5jj2
-         60ECubpEaNIDt/nCqLtzrbcIkt6aeJwqseaHeHUrrHCJatDJtd7weW7lAzstMs3KeA
-         wFTJ6YmqWc+4Y0e2IFsfHK2E9JFwaaPvp4CK5sNkKI4x7VJNRnj09fNeCMazaTtFFa
-         e+t31ZgW61kvLfdObkR0EA+N283ZEKZzOlpup6qR8Nh6lBkcLvj2E7tzX7DKB/nOC2
-         j6oMWP2KrM8og==
+        s=k20201202; t=1679071245;
+        bh=wfMt2rqPVc8JIDu5zrxam2PXOGSEa4FBlP33E5oCfBM=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=H9Yz3Jqyi6x+ITQuXlRg25ViG5PSiHTApwPXR35XydWhlsRUWQM+TbJ6Xj7z/IY0A
+         MN3wOvlcK9xnW1J7L+p4iue7qA33FnQJvNuVicNnjkiqVOqm/kTiIh59fB2rV+IZOr
+         8o/JdS/Q7hbfWt0LraQCFb1j4zkeLKzOYuOn32NTe8moHeFyxSB6K+LCm+TQWzCu6v
+         5Uxl9vGarLGJ+YADVe9RKaa6cu9LEKaiWcl3Tje0HpLZ9EMiuO6uc73Sp/n7re+mCl
+         GPz3yWfnn0XHiBJEuAPO0QTXfBlkVp4DgIon8nAihI5tivBowNHPP1F8D6GkIMEo20
+         Ik5cUL/18cyHw==
 From:   Mark Brown <broonie@kernel.org>
-To:     Liam Girdwood <lgirdwood@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Vijaya Anand <sunrockers8@gmail.com>,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230317092900.16770-1-krzysztof.kozlowski@linaro.org>
-References: <20230317092900.16770-1-krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v2] ASoC: dt-bindings: adi,adau17x1: fix indentation
- and example
-Message-Id: <167907124254.46507.14257812881099935258.b4-ty@kernel.org>
-Date:   Fri, 17 Mar 2023 16:40:42 +0000
+To:     gbrohammer@outlook.com
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+In-Reply-To: <PAVP195MB2261322C220E95D7F4B2732ADABC9@PAVP195MB2261.EURP195.PROD.OUTLOOK.COM>
+References: <PAVP195MB2261322C220E95D7F4B2732ADABC9@PAVP195MB2261.EURP195.PROD.OUTLOOK.COM>
+Subject: Re: [PATCH] ASoC: amd: yc: Add DMI entries to support Victus by HP
+ Laptop 16-e1xxx (8A22)
+Message-Id: <167907124480.46507.791817533962228386.b4-ty@kernel.org>
+Date:   Fri, 17 Mar 2023 16:40:44 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.13-dev-bd1bf
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,11 +54,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 17 Mar 2023 10:29:00 +0100, Krzysztof Kozlowski wrote:
-> Fix errors in binding indentation and example:
+On Fri, 17 Mar 2023 00:38:51 +0200, gbrohammer@outlook.com wrote:
+> This model requires an additional detection quirk to
+> enable the internal microphone.
 > 
->   adi,adau17x1.yaml:8:2: [warning] wrong indentation: expected 2 but found 1 (indentation)
->   adi,adau17x1.example.dts:29.3-30.1 syntax error
+> Tried to use git send-email this time.
 > 
 > 
 
@@ -74,8 +68,8 @@ Applied to
 
 Thanks!
 
-[1/1] ASoC: dt-bindings: adi,adau17x1: fix indentation and example
-      commit: b36bf721578bfe8229c1d7f2fcd0bd021cc8b2f4
+[1/1] ASoC: amd: yc: Add DMI entries to support Victus by HP Laptop 16-e1xxx (8A22)
+      commit: 205efd4619b860404ebb5882e5a119eb3b3b3716
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
