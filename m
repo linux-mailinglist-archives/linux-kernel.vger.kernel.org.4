@@ -2,125 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47C236BEF8A
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 18:21:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24A906BEF8D
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 18:22:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229710AbjCQRVh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 13:21:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45328 "EHLO
+        id S229489AbjCQRWq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 13:22:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230232AbjCQRV0 (ORCPT
+        with ESMTP id S229473AbjCQRWn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 13:21:26 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08BA1E6DAD;
-        Fri, 17 Mar 2023 10:21:09 -0700 (PDT)
-Received: from [192.168.1.90] (unknown [188.24.156.231])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: cristicc)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 4974566030B7;
-        Fri, 17 Mar 2023 17:21:06 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1679073667;
-        bh=I+Gvi5bzAnoJMxokQ84k9j+H+aFc/IN+XvqBbP6wpvg=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=durtctia6ys5ahpIvt7urL9eaWQyHgUoJkCI/3sUZz+Cz60FX1D6+GjNICq2duwN1
-         xZRgyxlKfz+V1Amu3xsfbnZ5TCoifrJHIDWxHV55eBpfNc61nV9yFIsxGnDnFbZfL2
-         jYOSnI0gYZwIc/w9qHpoBRNEA7zjzTWC1zI2/mjj65/yNAfIgtvCRFU9Wo67hfWk66
-         K5R+RDs/sD9q/OPpiZpz1oJqo3LYu/m3v3JqXR6K5O9UJsURGl8aes3t5ZRZ5kNCs8
-         ZHUrK6VT9Euy6HTz+SS0RdaMhV37DWSBfmRncbIsjROD8ggD8T5h1hwSW1Cpv2v9d4
-         UdRzr7Qu4U2iA==
-Message-ID: <793d6c43-d71e-3ffc-17c2-26062e40b4bc@collabora.com>
-Date:   Fri, 17 Mar 2023 19:21:03 +0200
+        Fri, 17 Mar 2023 13:22:43 -0400
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A6B035EDC
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 10:22:10 -0700 (PDT)
+Received: by mail-io1-xd2d.google.com with SMTP id b5so2627661iow.0
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 10:22:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1679073725;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yieuB07RXsRpgLR6n15FdRIxUfXhtg7ChhJcPd+fr8c=;
+        b=VbatxW0HW7qexAUUlZAqZnYTUyDsuc2x0Yih95dYePd2KKUMJO2MtjT5RucUo6LjPs
+         8pDvWzdDL0y9y4qIoH9tFxY06QJvwqFCbtXM6X8oLz/wvB4WZu+VBR6+VvqVGRcCS/aZ
+         jn+O4lQjBcdv6AHIH/c+ADrb7sfTROFrxFTT4Zup88iY8GtJLeHDk2yvViJhsTYvHE4X
+         h8gmRzrcbk4cSBixtX8QFxdy3nd9wbf7e8+UF7p7OpHY5RG56KvJ6X/3Z8Y3aoQcrJmz
+         6MmyT5wbPSrdkBt30zXnDXvHg9SDmgrraBuXM+KJwn/pdiGWCF97B6F8aV0uAgLmHKR8
+         N1FA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679073725;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=yieuB07RXsRpgLR6n15FdRIxUfXhtg7ChhJcPd+fr8c=;
+        b=X9d1z9MEvPZZyBajSQnY/eDPbD46UqI17X2JUHKzMR3MkvgzcvZ11dRlgs1gCNWC9d
+         WZikT4wdiRRL3ZtSk6JGdKnB1LFz0iBboy/ZmCMf/UEJgrcBBr/UrkjqvywnUx5ieaFd
+         LzUBZgLzGrtwGWI3RyjPUePEqfgmvqNlGTBax5JF/maiD6XH3VOV/VDeCeki/M8So+X8
+         ha5Rf0AaRXYP3d4QtsMUsSFyo3oObt/VKpxYaVANMviigOhh5fFoNrmFymSj3j3SkouB
+         bdNpLGZ7mmL8pRl3RDc7uB/y00iFw8A2sFlkIqt7I0KDken+dmR+38kN6nA2dyCuSuP5
+         y+7Q==
+X-Gm-Message-State: AO0yUKXke59yBi4myqCCTren/8+Zz9YSF9CccWESQc9+Czb4Hv+rsfZx
+        mwx8jPIkukcapuuokLCDeHtfwvCXC2V/VHnt4Hjq3g==
+X-Google-Smtp-Source: AK7set9oVNJY0vYTB5ZfbSOlWqH+5+fu77atXt0iDLmyJgaHKY0ltw8/0Jl4aEWSfbfjS7HFEH2jF+qXGU1xARTaumE=
+X-Received: by 2002:a5d:8ad0:0:b0:752:a213:2573 with SMTP id
+ e16-20020a5d8ad0000000b00752a2132573mr147232iot.18.1679073724912; Fri, 17 Mar
+ 2023 10:22:04 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH 01/11] dt-bindings: firmware: arm,scmi: Document
- assigned-clocks and assigned-clock-rates
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-Cc:     Sudeep Holla <sudeep.holla@arm.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Daniel Drake <drake@endlessm.com>,
-        Katsuhiro Suzuki <katsuhiro@katsuster.net>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-rockchip@lists.infradead.org,
-        linux-riscv@lists.infradead.org, kernel@collabora.com
-References: <20230315114806.3819515-1-cristian.ciocaltea@collabora.com>
- <20230315114806.3819515-2-cristian.ciocaltea@collabora.com>
- <20230316203417.GA3833267-robh@kernel.org>
- <20230316222619.r4jzk3lzdxzamr2s@bogus>
- <d5881d9f-90cc-f7a2-72a3-0701348a03fe@collabora.com>
- <CAL_JsqL_EogoKOQ1xwU75=rJSC4o7yV3Jej4vadtacX2Pt3-hw@mail.gmail.com>
-From:   Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
-In-Reply-To: <CAL_JsqL_EogoKOQ1xwU75=rJSC4o7yV3Jej4vadtacX2Pt3-hw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230312112612.31869-1-kirill.shutemov@linux.intel.com> <CAG_fn=UHz93odccvRFo5H2yKq9URTcQs2jWWc5Yehioq-QC8hA@mail.gmail.com>
+In-Reply-To: <CAG_fn=UHz93odccvRFo5H2yKq9URTcQs2jWWc5Yehioq-QC8hA@mail.gmail.com>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Fri, 17 Mar 2023 18:21:28 +0100
+Message-ID: <CAG_fn=XE-iDrPEB=bsnAqxYkRi+nFvTSbywOz56W_xQWLHeCAQ@mail.gmail.com>
+Subject: Re: [PATCHv16 00/17] Linear Address Masking enabling
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Kostya Serebryany <kcc@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Taras Madan <tarasmadan@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Bharata B Rao <bharata@amd.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Ashok Raj <ashok.raj@intel.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org, x86@kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/17/23 16:27, Rob Herring wrote:
-> On Fri, Mar 17, 2023 at 4:59 AM Cristian Ciocaltea
-> <cristian.ciocaltea@collabora.com> wrote:
->>
->> On 3/17/23 00:26, Sudeep Holla wrote:
->>> On Thu, Mar 16, 2023 at 03:34:17PM -0500, Rob Herring wrote:
->>>> +Stephen
->>>>
->>>> On Wed, Mar 15, 2023 at 01:47:56PM +0200, Cristian Ciocaltea wrote:
->>>>> Since commit df4fdd0db475 ("dt-bindings: firmware: arm,scmi: Restrict
->>>>> protocol child node properties") the following dtbs_check warning is
->>>>> shown:
->>>>>
->>>>>     rk3588-rock-5b.dtb: scmi: protocol@14: Unevaluated properties are not allowed ('assigned-clock-rates', 'assigned-clocks' were unexpected)
->>>>
->>>> I think that's a somewhat questionable use of assigned-clock-rates. It
->>>> should be located with the consumer rather than the provider IMO. The
->>>> consumers of those 2 clocks are the CPU nodes.
->>>>
->>>
->>> Agreed. We definitely don't use those in the scmi clk provider driver.
->>> So NACK for the generic SCMI binding change.
->>
->> According to [1], "configuration of common clocks, which affect multiple
->> consumer devices can be similarly specified in the clock provider node".
-> 
-> True, but in this case it's really a single consumer because it's all
-> CPU nodes which are managed together.
-> 
->> That would avoid duplicating assigned-clock-rates in the CPU nodes.
-> 
-> Wouldn't one node be sufficient?
-
-Yeah, that should be fine.
-
-> Thinking more about this, why aren't you using OPP tables to define
-> CPU frequencies. Assigned-clocks looks like a temporary hack because
-> you haven't done proper OPP tables.
-
-Right, this is currently not possible since it depends on some work in 
-progress.
-
-Thanks,
-Cristian
+On Fri, Mar 17, 2023 at 6:18=E2=80=AFPM Alexander Potapenko <glider@google.=
+com> wrote:
+>
+> Dear x86 maintainers,
+>
+> the series looks pretty mature now, any chance it can be considered
+> for upstream?
+>
+(Adding the maintainers just to be sure)
