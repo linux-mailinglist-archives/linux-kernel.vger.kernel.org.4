@@ -2,84 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE6C66BE807
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 12:26:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4998A6BE7FF
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 12:25:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230004AbjCQL0e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 07:26:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39080 "EHLO
+        id S229966AbjCQLZx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 07:25:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbjCQL0a (ORCPT
+        with ESMTP id S229539AbjCQLZv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 07:26:30 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D28726A1F4
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 04:25:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679052343;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3eg+W4V459K453HHEWu6+WOIdJvDrwAbatlv4pe/Z8I=;
-        b=LYssn6Kq6bpiOLz5CywMTWjZHFMrkz3zFjINv5EGN33/Qt3c2ASQf+l0Ep1xahKs0EjQr+
-        JZwTkVgTQ6lFrIMNAacplxrsVYLOE9WG2M11s64iTMvLcYXHn68dsf7Y8GSbqZX7SXxbKi
-        ZX+C8nSKqP3I5hALdB46zVI1n4PfBUQ=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-605-9J5DCpsBNUelN7dOyZlZfQ-1; Fri, 17 Mar 2023 07:25:40 -0400
-X-MC-Unique: 9J5DCpsBNUelN7dOyZlZfQ-1
-Received: by mail-wm1-f70.google.com with SMTP id t1-20020a7bc3c1000000b003dfe223de49so4131139wmj.5
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 04:25:40 -0700 (PDT)
+        Fri, 17 Mar 2023 07:25:51 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DCF620D35;
+        Fri, 17 Mar 2023 04:25:50 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id bh21-20020a05600c3d1500b003ed1ff06fb0so3075112wmb.3;
+        Fri, 17 Mar 2023 04:25:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679052349;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=hNO4YTYPu+vesxBB7tlPYGkKhGJaH/b9VuXd4UUCCuk=;
+        b=i9Wj5Wz2CcBxCaIXIP8h3Bj0dRq3ztoYJf2yINByDJ38A2uO4OqKGsTcbXGQKpKZIq
+         c4qDeBStYgUnByThXiiETA5g8D5tZpmTeFEWS9hxkkkpxN0mt9l8UYLBWabTR331kzCe
+         lFWjaAmeEkwSY+8F6L3LwP5vjZcA3i7icV2F7U/feh1Xv6TAjf/Kwt6SB5gd+ojaVWDD
+         EO+mKlFhyl5Op8DXtQS6/PqFrJBzrCBF1CM7mmv2YXDhI7SVoWzCYVsFA+Zs43BvFXrY
+         RIyjpCgEtOZa8zp1GO0hUMW9pBwpnwnT0fiRHOkQqQvlBYiY9AwCBtXx0BP0m98pjEQl
+         jUYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679052339;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
+        d=1e100.net; s=20210112; t=1679052349;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3eg+W4V459K453HHEWu6+WOIdJvDrwAbatlv4pe/Z8I=;
-        b=a+iLjV2n6Gj6ldL94E/ml5+IuT3fWoLUHQ6hV7DTmQx5IDCEomfPAD7LI+YqKzoabz
-         vDTzfKt0TLRDRmofW9UyfxdHMwDtSJTqNy2NaW7P2LQusaRFd+v+MyUE/TUMphjm2ag7
-         /ViaoWpjHgPYr68zn/glvLEkwkEl08tUjAlLBYva3PydGeQredmD26fsx10UbdvgD8BA
-         5ay8dmVcDFmt1w5SlDVqVvLvTg69ZDs4qRBmyQWYZ7muX0hjUF7NZxUFiXvoIh2avjXe
-         E8VwKpFs/61/N6SF8gUpHpcv/3jpllYk/b8fS3EEHcoCJLw1Wc7l+yTvgaSUJ/RrNez0
-         Y6Ig==
-X-Gm-Message-State: AO0yUKU8xH89V9hwWi3LCJeUhl0wgB7a7XVg5KIeYlZZTWq5+lQKh35Z
-        1Qwq6odbgnjBBD5BqxW274fqxU7ADG1MXqaJRUpDwbNP6+BSeqN2W5TuT45J1wLoLm2bS3UclqF
-        C3QMm7wakCeJkE34/4T00Kkfx
-X-Received: by 2002:adf:ecc4:0:b0:2c5:510b:8f9c with SMTP id s4-20020adfecc4000000b002c5510b8f9cmr7021027wro.52.1679052339555;
-        Fri, 17 Mar 2023 04:25:39 -0700 (PDT)
-X-Google-Smtp-Source: AK7set9FZ5f9vlrQw7xgnuvkWSEFXAo8AQG5rmR3D2Ycyj5yA2kbAhnhVzi4UvMN5l8xZtTnmtbeRA==
-X-Received: by 2002:adf:ecc4:0:b0:2c5:510b:8f9c with SMTP id s4-20020adfecc4000000b002c5510b8f9cmr7021010wro.52.1679052339284;
-        Fri, 17 Mar 2023 04:25:39 -0700 (PDT)
-Received: from sgarzare-redhat (host-82-57-51-170.retail.telecomitalia.it. [82.57.51.170])
-        by smtp.gmail.com with ESMTPSA id r10-20020adfce8a000000b002cefcac0c62sm1770714wrn.9.2023.03.17.04.25.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Mar 2023 04:25:38 -0700 (PDT)
-Date:   Fri, 17 Mar 2023 12:25:36 +0100
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     Eugenio Perez Martin <eperezma@redhat.com>
-Cc:     Jason Wang <jasowang@redhat.com>,
-        virtualization@lists.linux-foundation.org,
-        Andrey Zhadchenko <andrey.zhadchenko@virtuozzo.com>,
-        netdev@vger.kernel.org, stefanha@redhat.com,
-        linux-kernel@vger.kernel.org,
-        "Michael S. Tsirkin" <mst@redhat.com>, kvm@vger.kernel.org
-Subject: Re: [PATCH v2 4/8] vringh: support VA with iotlb
-Message-ID: <20230317112536.t7gm4dop5cafgvoe@sgarzare-redhat>
-References: <20230302113421.174582-1-sgarzare@redhat.com>
- <20230302113421.174582-5-sgarzare@redhat.com>
- <CAJaqyWdeEzKnYuX-c348vVg0PpUH4y-e1dSLhRvYem=MEDKE=Q@mail.gmail.com>
- <CAGxU2F7GZxMwLNsAebaPx61MoePYYmFS1q66An-EDhq4u+a9ng@mail.gmail.com>
- <CAJaqyWcAfyANeShsdV55vVkK=sHxGNVef7E7jj-CqTL7SbqhCg@mail.gmail.com>
+        bh=hNO4YTYPu+vesxBB7tlPYGkKhGJaH/b9VuXd4UUCCuk=;
+        b=k6FXhyp7/+yBrZEldbyCd5oHGSCKR9TFicUDKuP5MHlCPIVjWBQ3bFyxeflQkFa9U6
+         dn5bJIoXaZoj5L1AEc4RuIDSJntUVGadAuV91CiE3okVTgrOyys6FlOaQ/ItW32Dh6q8
+         EmeZ37DD9KDskzDru1vQlJyF3YD1CpsqriTDvyPEo+M4iLglhuzIHVtBuu+j1rcp4gUt
+         iqY7EG1N+itRUCaVZrNUOyyx+nznQqjCBDCLo0nlGLhKzUYSYHOomFWexuhpMwpw6ECG
+         Q4TBgZfKCuVo+yM1732d2N9iodgrV7QJoqGbxvo3IO0qN3+QSFIH/eqrohPpcx1TO0la
+         6JJw==
+X-Gm-Message-State: AO0yUKWMZXvY+T6Kgtqu03fiiT34Muqvl0ZHX3z3HvdMRQWQ2rPpjHjA
+        HtH3RDmN3PrsiAMtQ/vjeVg=
+X-Google-Smtp-Source: AK7set9AZgBwQRetpG5pAKvdSStKHWZZDn5pX8FDFHrAZcHx7URK0Whqyt8RNBG4wx0hW18wu9zHkw==
+X-Received: by 2002:a05:600c:540a:b0:3ea:e582:48dd with SMTP id he10-20020a05600c540a00b003eae58248ddmr24674303wmb.34.1679052348654;
+        Fri, 17 Mar 2023 04:25:48 -0700 (PDT)
+Received: from [192.168.2.177] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id m25-20020a7bca59000000b003ed341d2d68sm1717773wml.16.2023.03.17.04.25.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Mar 2023 04:25:48 -0700 (PDT)
+Message-ID: <008996c3-074c-b443-73f2-c14f0fdf8e4e@gmail.com>
+Date:   Fri, 17 Mar 2023 12:25:46 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJaqyWcAfyANeShsdV55vVkK=sHxGNVef7E7jj-CqTL7SbqhCg@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v2] dt-bindings: display: mediatek: Fix the duplicated
+ fallback
+Content-Language: en-US
+To:     Alexandre Mergnat <amergnat@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Rob Herring <robh@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org
+References: <20230306-ccorr-binding-fix-v2-0-4822939a837d@baylibre.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20230306-ccorr-binding-fix-v2-0-4822939a837d@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,97 +87,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 17, 2023 at 10:49:27AM +0100, Eugenio Perez Martin wrote:
->On Thu, Mar 16, 2023 at 5:07 PM Stefano Garzarella <sgarzare@redhat.com> wrote:
->>
->> On Fri, Mar 3, 2023 at 3:39 PM Eugenio Perez Martin <eperezma@redhat.com> wrote:
->> >
->> > On Thu, Mar 2, 2023 at 12:35 PM Stefano Garzarella <sgarzare@redhat.com> wrote:
->> > >
->> > > vDPA supports the possibility to use user VA in the iotlb messages.
->> > > So, let's add support for user VA in vringh to use it in the vDPA
->> > > simulators.
->> > >
->> > > Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
->> > > ---
->> > >
->> > > Notes:
->> > >     v2:
->> > >     - replace kmap_atomic() with kmap_local_page() [see previous patch]
->> > >     - fix cast warnings when build with W=1 C=1
->> > >
->> > >  include/linux/vringh.h            |   5 +-
->> > >  drivers/vdpa/mlx5/net/mlx5_vnet.c |   2 +-
->> > >  drivers/vdpa/vdpa_sim/vdpa_sim.c  |   4 +-
->> > >  drivers/vhost/vringh.c            | 247 ++++++++++++++++++++++++------
->> > >  4 files changed, 205 insertions(+), 53 deletions(-)
->> > >
->>
->> [...]
->>
->> >
->> > It seems to me iotlb_translate_va and iotlb_translate_pa are very
->> > similar, their only difference is that the argument is that iov is
->> > iovec instead of bio_vec. And how to fill it, obviously.
->> >
->> > It would be great to merge both functions, only differing with a
->> > conditional on vrh->use_va, or generics, or similar. Or, if following
->> > the style of the rest of vringh code, to provide a callback to fill
->> > iovec (although I like conditional more).
->> >
->> > However I cannot think of an easy way to perform that without long
->> > macros or type erasure.
->>
->> Thank you for pushing me :-)
->> I finally managed to avoid code duplication (partial patch attached,
->> but not yet fully tested).
->>
->> @Jason: with this refactoring I removed copy_to_va/copy_to_pa, so I
->> also avoided getu16_iotlb_va/pa.
->>
->> I will send the full patch in v3, but I would like to get your opinion
->> first ;-)
->>
->>
->>
->> diff --git a/drivers/vhost/vringh.c b/drivers/vhost/vringh.c
->> index 0ba3ef809e48..71dd67700e36 100644
->> --- a/drivers/vhost/vringh.c
->> +++ b/drivers/vhost/vringh.c
->> @@ -1096,8 +1096,7 @@ EXPORT_SYMBOL(vringh_need_notify_kern);
->>
->>  static int iotlb_translate(const struct vringh *vrh,
->>                            u64 addr, u64 len, u64 *translated,
->> -                          struct bio_vec iov[],
->> -                          int iov_size, u32 perm)
->> +                          void *iov, int iov_size, bool iovec, u32 perm)
->
->I think this is an improvement, but we're doing type erasure here. I
->don't think it is a big deal since the function is not exported, it's
->pretty contained in this file, so I'd ack this version too. I'm just
->throwing ideas here:
->
->a) typedef the union {iovec, bio_vec} and use that type in the parameter.
->
->As a drawback, that union feels out of place in this file. Is this the
->only place where it is needed? I don't see other similar uses in the
->kernel.
 
-iov_iter has something similar, but they are const pointers, so IIUC
-it is not supposed to be used to set the bvec contents, just iterate it.
 
-Anyway I thought something similar and should be doable, but since
-it was internal API I went to type erasure.
+On 06/03/2023 17:15, Alexandre Mergnat wrote:
+> The item which have the mediatek,mt8192-disp-ccorr const compatible already
+> exist above. Remove duplicated fallback.
+> 
+> Fixes: 137272ef1b0f ("dt-bindings: display: mediatek: Fix the fallback for mediatek,mt8186-disp-ccorr")
 
->
->b) To convert from iov to bio_iov at return
->The drawback is the extra processing if the compiler is not smart
->enough to inline it. I prefer the previous one but I didn't want to
->omit it, just in case.
+We can argue if dt-binding patches should have a fixes tag at all. Given the 
+fact that there are so many warnings still around, I don't see any value add to 
+backport these to stable kernel.
 
-Yep, I prefer too the previous one, so let's go in that direction for
-v3 ;-)
+That said, this is defenitely no fix, as it's only a code clean-up. No warning, 
+no bug, no functional error fixed here :)
 
-Thanks,
-Stefano
+> Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
+> ---
+> Fix MTK color correction binding
+> 
+> The fallback compatible has been duplicated in the 137272ef1b0f commit.
+> 
+> To: Chun-Kuang Hu <chunkuang.hu@kernel.org>
+> To: Philipp Zabel <p.zabel@pengutronix.de>
+> To: David Airlie <airlied@gmail.com>
+> To: Daniel Vetter <daniel@ffwll.ch>
+> To: Rob Herring <robh+dt@kernel.org>
+> To: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+> To: Matthias Brugger <matthias.bgg@gmail.com>
+> To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> To: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+> Cc: Rob Herring <robh@kernel.org>
+> Cc: dri-devel@lists.freedesktop.org
+> Cc: linux-mediatek@lists.infradead.org
+> Cc: devicetree@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Cc: linux-arm-kernel@lists.infradead.org
+> ---
+> Changes in v2:
+> - Fix commit title.
+> - Link to v1: https://lore.kernel.org/r/20230306-ccorr-binding-fix-v1-0-177d81d60c69@baylibre.com
+> ---
+>   Documentation/devicetree/bindings/display/mediatek/mediatek,ccorr.yaml | 3 ---
+>   1 file changed, 3 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,ccorr.yaml b/Documentation/devicetree/bindings/display/mediatek/mediatek,ccorr.yaml
+> index b04820c95b22..3aaf44719786 100644
+> --- a/Documentation/devicetree/bindings/display/mediatek/mediatek,ccorr.yaml
+> +++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,ccorr.yaml
+> @@ -29,9 +29,6 @@ properties:
+>             - enum:
+>                 - mediatek,mt8188-disp-ccorr
+>                 - mediatek,mt8195-disp-ccorr
+> -          - const: mediatek,mt8192-disp-ccorr
+> -      - items:
+> -          - enum:
+>                 - mediatek,mt8186-disp-ccorr
 
+Please sort compatibles, that will allow for easier reading once we add more to 
+the file.
+
+Regards,
+Matthias
+
+>             - const: mediatek,mt8192-disp-ccorr
+>   
+> 
+> ---
+> base-commit: add072536971d7ce891fde3cdbf68c55e7cfa95a
+> change-id: 20230306-ccorr-binding-fix-718c6d725088
+> 
+> Best regards,
