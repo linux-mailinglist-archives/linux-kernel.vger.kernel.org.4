@@ -2,234 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AE6C6BE95A
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 13:35:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFF0A6BE95E
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 13:35:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230003AbjCQMeq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 08:34:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59654 "EHLO
+        id S230087AbjCQMfz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 08:35:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229634AbjCQMek (ORCPT
+        with ESMTP id S229608AbjCQMfw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 08:34:40 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5E67CC37;
-        Fri, 17 Mar 2023 05:33:53 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id r19-20020a05600c459300b003eb3e2a5e7bso3223050wmo.0;
-        Fri, 17 Mar 2023 05:33:53 -0700 (PDT)
+        Fri, 17 Mar 2023 08:35:52 -0400
+Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58BBC10D1
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 05:35:13 -0700 (PDT)
+Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-17aceccdcf6so5552587fac.9
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 05:35:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679056410;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tjv5+PrqXIvURLUwrYK99nDGIhWRuR6pNFnPWF4wxiI=;
-        b=pbq6ZSdR5nIJ5secaZFI6sBee3J/JDWHO/lvytKXVsCeITaXjYWtt+t0MkrWZ3iedo
-         T9tKUfefMrXI3w1xGDD9U1ynjXMApbUXrK+Fsdrs6sUls4W0g/VCWVfkzSwXyv9u9nsY
-         GVPhUOQ5tNAtGJodPWFWdUrGZSQt3b83uqJi8let1fcM4ny9sbp98WjviMfTXc2/lGhP
-         tU7wlzYtN2VLezg2e2eSIuR5676SnuAmeEV+0jRj5NFivwgBjZpMLRZDKZ8agRTaZVLR
-         jMSv+V4V2DuZCEBgFALXw/WTR9Ox45xPjQ1U4bQG13iCpVUCMGPuL33cb36ypy2tgFix
-         w+Rw==
+        d=linaro.org; s=google; t=1679056509;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=thMf+lug8NwzjJ8UrWmYkebi5ayFtZtj8+KQizln9XY=;
+        b=xmfw8yR+09QFjq8j8pD21JCCAbazLOrVVwkXx1uQOnrsMhQ56LaTqz7iofglA+G4YA
+         XfVcmSQjfkaPKV5kiDToJk0K/tAg2frbid7zBizW7wmcCWRFpXBx7RCmGUcZlGk7oZb/
+         b3EX6cdBQgxMYrL6vJY0bJ0UgFa1ER0tTx7yhA5xvFDZLerC/J2V9cbX5OhDhsT74mUR
+         bDsTNr4cyQkk7Fib1uj1jTU797Ij9r+Yyf2xSgja8yc4Hz4ziuufP5/2b7z1Jv7sDBpQ
+         IOoZUV3r3H+0KD+js1JmHQM0z97//loglRePmJYZ0aObiGUVpXR5SIay1ZGSgOxkHFYZ
+         +iJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679056410;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tjv5+PrqXIvURLUwrYK99nDGIhWRuR6pNFnPWF4wxiI=;
-        b=s+NIdB+HM35p8sL7hmCgyxb3Xk1m/o2HgnNvQmdL+vUOxAp0+k4wS3QRNdx9MuZPN/
-         snrkVG3XKx0j23LQQjkGGsdyTU0bmI5xLvBZwfvbkf77RddWFXMsOOQ7pvkJKMkPrf4J
-         8lrGGb9lwSZ+BwnKxFXzH5rhNd/AoSgqcb17FLgboqOVeYr9ah4kL1Fy4cMU6CIXFPXU
-         3YoRERvtAUDJIBC6JOtByCGSTwhUHj1lRUIKCKx/hvI1CV15ynk6IgKcSnu96VMKEDZ5
-         U9TWzI+Es49gPXTno0mj0cj3Jlyf7CQBFNqQ1oIAn+ACK5FsiB8RR2XfduJtIyHbAzJJ
-         876Q==
-X-Gm-Message-State: AO0yUKVZMsYQq44FSqp/rGO1h/K9NXtwC10WQa52RWpXaTeFm8iN/WeV
-        a8286Aqqc+HoUEMHIEbDBZ0=
-X-Google-Smtp-Source: AK7set9hdWTVaCX8MlH6PFGqjP0Nh+FiR/SUaH1b6OLEkubj7+mS425PcGjwWynqyiDgRVdNx5vttA==
-X-Received: by 2002:a05:600c:310d:b0:3eb:3945:d405 with SMTP id g13-20020a05600c310d00b003eb3945d405mr23817708wmo.38.1679056410405;
-        Fri, 17 Mar 2023 05:33:30 -0700 (PDT)
-Received: from prasmi.home ([2a00:23c8:2501:c701:cc60:8c15:c868:fa91])
-        by smtp.gmail.com with ESMTPSA id j10-20020a5d464a000000b002cea8f07813sm1876515wrs.81.2023.03.17.05.33.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Mar 2023 05:33:29 -0700 (PDT)
-From:   Prabhakar <prabhakar.csengg@gmail.com>
-X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH v2 2/2] arm64: dts: renesas: rzg2l-smarc: Enable CRU, CSI support
-Date:   Fri, 17 Mar 2023 12:33:14 +0000
-Message-Id: <20230317123314.145121-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230317123314.145121-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-References: <20230317123314.145121-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        d=1e100.net; s=20210112; t=1679056509;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=thMf+lug8NwzjJ8UrWmYkebi5ayFtZtj8+KQizln9XY=;
+        b=6OKBiTws1dL8ToKiZuh0WEqtDDNqqCV2jp3kmE5I0MjZUl9H5s7uveqx5aJ8iqieMc
+         stpmxH02lsjN6F9o1a6rGtdps/lL721SKVMlWqYEVwbpF5njUqO+Q+ZMo/n9h01Hi9Ia
+         5ZHHFuU5KE8TSRXfEjsioxn5OiSIkT0KEL5sakaGEkxZY2bvtOylT79YEkMr89A5nHP5
+         OeaaDKIruMwT+Nyxs/yYQSzUveOkYCxzQkwHJ7ej5DwjN/21sh2nz97bUMCQlw0u6qdq
+         b75tmJu5a9+xbNKX/mpWqMQgWWsPuwS4LlHeCIlhzDFWaMxbf9OCIkCqudS3zik/kJue
+         3BkQ==
+X-Gm-Message-State: AO0yUKUPuNd2bQokYM8hOcwWuuRNOoJe3ajD5hx7RyL4VfePWAyZF0/r
+        /BL1HoG7jgZwwcJins4NRggDxO5hHuKXwVDu78Xm+Q==
+X-Google-Smtp-Source: AK7set/Ipwo0vFR/sCF+tDORfKSTUbgHqFFe4H0pGWPJ3eeNy9t52Zo2aJ2GyN3NAEbtCN4lI2/IPaKVe6oKYMf2UTE=
+X-Received: by 2002:a05:6870:be99:b0:17a:ac8f:57fb with SMTP id
+ nx25-20020a056870be9900b0017aac8f57fbmr6036066oab.6.1679056508771; Fri, 17
+ Mar 2023 05:35:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20230317080942.183514-1-yanchao.yang@mediatek.com> <20230317080942.183514-2-yanchao.yang@mediatek.com>
+In-Reply-To: <20230317080942.183514-2-yanchao.yang@mediatek.com>
+From:   Loic Poulain <loic.poulain@linaro.org>
+Date:   Fri, 17 Mar 2023 13:34:32 +0100
+Message-ID: <CAMZdPi9_xYO_MQ0BpxcqDci761uu=ZoczGMg81qkEDeOsP6apw@mail.gmail.com>
+Subject: Re: [PATCH net-next v4 01/10] net: wwan: tmi: Add PCIe core
+To:     Yanchao Yang <yanchao.yang@mediatek.com>
+Cc:     Sergey Ryazanov <ryazanov.s.a@gmail.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        netdev ML <netdev@vger.kernel.org>,
+        kernel ML <linux-kernel@vger.kernel.org>,
+        Intel experts <linuxwwan@intel.com>,
+        Chetan <m.chetan.kumar@intel.com>,
+        MTK ML <linux-mediatek@lists.infradead.org>,
+        Liang Lu <liang.lu@mediatek.com>,
+        Haijun Liu <haijun.liu@mediatek.com>,
+        Hua Yang <hua.yang@mediatek.com>,
+        Ting Wang <ting.wang@mediatek.com>,
+        Felix Chen <felix.chen@mediatek.com>,
+        Mingliang Xu <mingliang.xu@mediatek.com>,
+        Min Dong <min.dong@mediatek.com>,
+        Aiden Wang <aiden.wang@mediatek.com>,
+        Guohao Zhang <guohao.zhang@mediatek.com>,
+        Chris Feng <chris.feng@mediatek.com>,
+        Lambert Wang <lambert.wang@mediatek.com>,
+        Mingchuang Qiao <mingchuang.qiao@mediatek.com>,
+        Xiayu Zhang <xiayu.zhang@mediatek.com>,
+        Haozhe Chang <haozhe.chang@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Hi Yanchao,
 
-Enable CRU, CSI on RZ/G2L SMARC EVK and tie the CSI to OV5645 sensor
-using Device Tree overlay. rz-smarc-cru-csi-ov5645.dtsi is created so
-that RZ/G2L alike EVKs can make use of it.
+On Fri, 17 Mar 2023 at 09:10, Yanchao Yang <yanchao.yang@mediatek.com> wrote:
+>
+> Registers the TMI device driver with the kernel. Set up all the fundamental
+> configurations for the device: PCIe layer, Modem Host Cross Core Interface
+> (MHCCIF), Reset Generation Unit (RGU), modem common control operations and
+> build infrastructure.
+>
+> * PCIe layer code implements driver probe and removal, MSI-X interrupt
+> initialization and de-initialization, and the way of resetting the device.
+> * MHCCIF provides interrupt channels to communicate events such as handshake,
+> PM and port enumeration.
+> * RGU provides interrupt channels to generate notifications from the device
+> so that the TMI driver could get the device reset.
+> * Modem common control operations provide the basic read/write functions of
+> the device's hardware registers, mask/unmask/get/clear functions of the
+> device's interrupt registers and inquiry functions of the device's status.
+>
+> Signed-off-by: Yanchao Yang <yanchao.yang@mediatek.com>
+> Signed-off-by: Ting Wang <ting.wang@mediatek.com>
+> ---
+>  drivers/net/wwan/Kconfig                 |  14 +
+>  drivers/net/wwan/Makefile                |   1 +
+>  drivers/net/wwan/mediatek/Makefile       |   8 +
+>  drivers/net/wwan/mediatek/mtk_dev.h      | 203 ++++++
+>  drivers/net/wwan/mediatek/pcie/mtk_pci.c | 887 +++++++++++++++++++++++
+>  drivers/net/wwan/mediatek/pcie/mtk_pci.h | 144 ++++
+>  drivers/net/wwan/mediatek/pcie/mtk_reg.h |  69 ++
+>  7 files changed, 1326 insertions(+)
+>  create mode 100644 drivers/net/wwan/mediatek/Makefile
+>  create mode 100644 drivers/net/wwan/mediatek/mtk_dev.h
+>  create mode 100644 drivers/net/wwan/mediatek/pcie/mtk_pci.c
+>  create mode 100644 drivers/net/wwan/mediatek/pcie/mtk_pci.h
+>  create mode 100644 drivers/net/wwan/mediatek/pcie/mtk_reg.h
+>
 
-Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
----
-setenv bootfile kernel_fdt.itb
-tftpboot ${bootfile}
-bootm ${fileaddr}#rzg2l-smarc#ov5645
+[...]
 
-v1->v2
-* New patch
----
- arch/arm64/boot/dts/renesas/Makefile          |  1 +
- .../r9a07g044l2-smarc-cru-csi-ov5645.dtso     | 18 ++++
- .../dts/renesas/rz-smarc-cru-csi-ov5645.dtsi  | 87 +++++++++++++++++++
- 3 files changed, 106 insertions(+)
- create mode 100644 arch/arm64/boot/dts/renesas/r9a07g044l2-smarc-cru-csi-ov5645.dtso
- create mode 100644 arch/arm64/boot/dts/renesas/rz-smarc-cru-csi-ov5645.dtsi
+> +static int mtk_pci_get_virq_id(struct mtk_md_dev *mdev, int irq_id)
+> +{
+> +       struct pci_dev *pdev = to_pci_dev(mdev->dev);
+> +       int nr = 0;
+> +
+> +       if (pdev->msix_enabled)
+> +               nr = irq_id % mdev->msi_nvecs;
+> +
+> +       return pci_irq_vector(pdev, nr);
+> +}
+> +
+> +static int mtk_pci_register_irq(struct mtk_md_dev *mdev, int irq_id,
+> +                               int (*irq_cb)(int irq_id, void *data), void *data)
+> +{
+> +       struct mtk_pci_priv *priv = mdev->hw_priv;
+> +
+> +       if (unlikely((irq_id < 0 || irq_id >= MTK_IRQ_CNT_MAX) || !irq_cb))
+> +               return -EINVAL;
+> +
+> +       if (priv->irq_cb_list[irq_id]) {
+> +               dev_err(mdev->dev,
+> +                       "Unable to register irq, irq_id=%d, it's already been register by %ps.\n",
+> +                       irq_id, priv->irq_cb_list[irq_id]);
+> +               return -EFAULT;
+> +       }
+> +       priv->irq_cb_list[irq_id] = irq_cb;
+> +       priv->irq_cb_data[irq_id] = data;
 
-diff --git a/arch/arm64/boot/dts/renesas/Makefile b/arch/arm64/boot/dts/renesas/Makefile
-index 23b10c03091c..a553d99175cb 100644
---- a/arch/arm64/boot/dts/renesas/Makefile
-+++ b/arch/arm64/boot/dts/renesas/Makefile
-@@ -79,6 +79,7 @@ dtb-$(CONFIG_ARCH_R9A07G043) += r9a07g043u11-smarc.dtb
- 
- dtb-$(CONFIG_ARCH_R9A07G044) += r9a07g044c2-smarc.dtb
- dtb-$(CONFIG_ARCH_R9A07G044) += r9a07g044l2-smarc.dtb
-+dtb-$(CONFIG_ARCH_R9A07G044) += r9a07g044l2-smarc-cru-csi-ov5645.dtbo
- 
- dtb-$(CONFIG_ARCH_R9A07G054) += r9a07g054l2-smarc.dtb
- 
-diff --git a/arch/arm64/boot/dts/renesas/r9a07g044l2-smarc-cru-csi-ov5645.dtso b/arch/arm64/boot/dts/renesas/r9a07g044l2-smarc-cru-csi-ov5645.dtso
-new file mode 100644
-index 000000000000..40cece1491bb
---- /dev/null
-+++ b/arch/arm64/boot/dts/renesas/r9a07g044l2-smarc-cru-csi-ov5645.dtso
-@@ -0,0 +1,18 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Device Tree overlay for the RZ/G2L SMARC EVK with OV5645 camera
-+ * connected to CSI and CRU enabled.
-+ *
-+ * Copyright (C) 2023 Renesas Electronics Corp.
-+ */
-+
-+/dts-v1/;
-+/plugin/;
-+
-+#define OV5645_PARENT_I2C i2c0
-+#include "rz-smarc-cru-csi-ov5645.dtsi"
-+
-+&ov5645 {
-+	enable-gpios = <&pinctrl RZG2L_GPIO(2, 0) GPIO_ACTIVE_HIGH>;
-+	reset-gpios = <&pinctrl RZG2L_GPIO(40, 2) GPIO_ACTIVE_LOW>;
-+};
-diff --git a/arch/arm64/boot/dts/renesas/rz-smarc-cru-csi-ov5645.dtsi b/arch/arm64/boot/dts/renesas/rz-smarc-cru-csi-ov5645.dtsi
-new file mode 100644
-index 000000000000..95286bf2066e
---- /dev/null
-+++ b/arch/arm64/boot/dts/renesas/rz-smarc-cru-csi-ov5645.dtsi
-@@ -0,0 +1,87 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Common Device Tree for the RZ/G2L SMARC EVK (and alike EVKs) with
-+ * OV5645 camera connected to CSI and CRU enabled.
-+ *
-+ * Copyright (C) 2023 Renesas Electronics Corp.
-+ */
-+
-+/dts-v1/;
-+/plugin/;
-+
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/pinctrl/rzg2l-pinctrl.h>
-+
-+&{/} {
-+	ov5645_vdddo_1v8: 1p8v {
-+		compatible = "regulator-fixed";
-+		regulator-name = "camera_vdddo";
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <1800000>;
-+		regulator-always-on;
-+	};
-+
-+	ov5645_vdda_2v8: 2p8v {
-+		compatible = "regulator-fixed";
-+		regulator-name = "camera_vdda";
-+		regulator-min-microvolt = <2800000>;
-+		regulator-max-microvolt = <2800000>;
-+		regulator-always-on;
-+	};
-+
-+	ov5645_vddd_1v5: 1p5v {
-+		compatible = "regulator-fixed";
-+		regulator-name = "camera_vddd";
-+		regulator-min-microvolt = <1500000>;
-+		regulator-max-microvolt = <1500000>;
-+		regulator-always-on;
-+	};
-+
-+	ov5645_fixed_clk: osc25250_clk {
-+		compatible = "fixed-clock";
-+		#clock-cells = <0>;
-+		clock-frequency = <24000000>;
-+	};
-+};
-+
-+&cru {
-+	status = "okay";
-+};
-+
-+&csi2 {
-+	status = "okay";
-+
-+	ports {
-+		port@0 {
-+			csi2_in: endpoint {
-+				clock-lanes = <0>;
-+				data-lanes = <1 2>;
-+				remote-endpoint = <&ov5645_ep>;
-+			};
-+		};
-+	};
-+};
-+
-+&OV5645_PARENT_I2C {
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+	status = "okay";
-+
-+	ov5645: camera@3c {
-+		compatible = "ovti,ov5645";
-+		reg = <0x3c>;
-+		clocks = <&ov5645_fixed_clk>;
-+		clock-frequency = <24000000>;
-+		vdddo-supply = <&ov5645_vdddo_1v8>;
-+		vdda-supply = <&ov5645_vdda_2v8>;
-+		vddd-supply = <&ov5645_vddd_1v5>;
-+
-+		port {
-+			ov5645_ep: endpoint {
-+				clock-lanes = <0>;
-+				data-lanes = <1 2>;
-+				remote-endpoint = <&csi2_in>;
-+			};
-+		};
-+	};
-+};
--- 
-2.25.1
+So it looks like you re-implement your own irq chip internally. What
+about creating a new irq-chip/domain for this (cf irq_domain_add_simple)?
+That would allow the client code to use the regular irq interface and helpers
+and it should simply code and improve its debuggability (/proc/irq...).
 
+[...]
+
+> +static int mtk_mhccif_register_evt(struct mtk_md_dev *mdev, u32 chs,
+> +                                  int (*evt_cb)(u32 status, void *data), void *data)
+> +{
+> +       struct mtk_pci_priv *priv = mdev->hw_priv;
+> +       struct mtk_mhccif_cb *cb;
+> +       unsigned long flag;
+> +       int ret = 0;
+> +
+> +       if (!chs || !evt_cb)
+> +               return -EINVAL;
+> +
+> +       spin_lock_irqsave(&priv->mhccif_lock, flag);
+
+Why spinlock here and not mutex. AFAIU, you always take this lock in a
+non-atomic/process context.
+
+> +       list_for_each_entry(cb, &priv->mhccif_cb_list, entry) {
+> +               if (cb->chs & chs) {
+> +                       ret = -EFAULT;
+> +                       dev_err(mdev->dev,
+> +                               "Unable to register evt, chs=0x%08X&0x%08X registered_cb=%ps\n",
+> +                               chs, cb->chs, cb->evt_cb);
+> +                       goto err;
+> +               }
+> +       }
+> +       cb = devm_kzalloc(mdev->dev, sizeof(*cb), GFP_ATOMIC);
+> +       if (!cb) {
+> +               ret = -ENOMEM;
+> +               goto err;
+> +       }
+> +       cb->evt_cb = evt_cb;
+> +       cb->data = data;
+> +       cb->chs = chs;
+> +       list_add_tail(&cb->entry, &priv->mhccif_cb_list);
+> +
+> +err:
+> +       spin_unlock_irqrestore(&priv->mhccif_lock, flag);
+> +
+> +       return ret;
+> +}
+
+[...]
+
+> +
+> +MODULE_LICENSE("GPL");
+> diff --git a/drivers/net/wwan/mediatek/pcie/mtk_pci.h b/drivers/net/wwan/mediatek/pcie/mtk_pci.h
+> new file mode 100644
+> index 000000000000..b487ca9b302e
+> --- /dev/null
+> +++ b/drivers/net/wwan/mediatek/pcie/mtk_pci.h
+
+Why a separated header file, isn't the content (e.g. mtk_pci_priv)
+used only from mtk_pci.c?
+
+> @@ -0,0 +1,144 @@
+> +/* SPDX-License-Identifier: BSD-3-Clause-Clear
+> + *
+> + * Copyright (c) 2022, MediaTek Inc.
+> + */
+> +
+> +#ifndef __MTK_PCI_H__
+> +#define __MTK_PCI_H__
+> +
+> +#include <linux/pci.h>
+> +#include <linux/spinlock.h>
+> +
+> +#include "../mtk_dev.h"
+> +
+> +enum mtk_atr_type {
+> +       ATR_PCI2AXI = 0,
+> +       ATR_AXI2PCI
+> +};
+
+[...]
+
+Regards,
+Loic
