@@ -2,146 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AA176BE4F1
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 10:08:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F3A16BE4F9
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 10:10:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230064AbjCQJI1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 05:08:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33940 "EHLO
+        id S231489AbjCQJJp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 05:09:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229981AbjCQJH4 (ORCPT
+        with ESMTP id S231244AbjCQJJ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 05:07:56 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B65C0166D0
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 02:07:03 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id o11-20020a05600c4fcb00b003eb33ea29a8so2822982wmq.1
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 02:07:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679044021;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=FkEW8ZYuZi33cVLz405PPEYTVS02b7guai4VJnc/u0s=;
-        b=Q6GGawkHUaBC3zY4KVyRU2zkTV8I/A3fQwxW7vTpJrTozVht9LImkNfbBCRCosXa0m
-         pd7TBNyANDkYveJ2bhPyAp4KF6gKFGL5nSe71B61hyNABpnJuYVwciehnVTke16XsHkt
-         FsBJJhM40ydNvoYFsecqfm0EzfkcQunE5FgD8M6ukgPmOfmmmPgu/4NlxdQjJpj+hPYJ
-         axfR6dGJrSVb3HtEHlPHaxD2AyWfNzbMa4+JeWw0nvc6HsJ085fcxmt3vgf5tLRbSyby
-         YeUW4PmcBtee2DYPwXFAwToI8SgWqv+LAG8OKBai099FX6K2zS8T9UqV+0L1tZUy9wWV
-         d3Mg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679044021;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=FkEW8ZYuZi33cVLz405PPEYTVS02b7guai4VJnc/u0s=;
-        b=AeE1uFCvz7bKaSPnfkzjw1riKbeKKxzSznVM7CcZ/rYMJjq8/6o8wyzsHmhT9Un69N
-         vV/Ziinx92e+QYaw4VO3WqsvoU17j8JJZgUtRsV1IZC4KuAli3Uz0fJMfytPkyGMy9Dk
-         3t5Lp9grqZNTGmm7UHRfy4e3u6pq+neoAIAaZ3Vytj9WNkLDXmvPv1UqSZOYeAINvAWF
-         oLB9ckp0iHsHNqjtjm1bk3Q1gy1iwE/h2Bp6ZohRAbQ8Rp36a74ZFeap+nZwFCorBMVU
-         13nnq/2Mtp+oqJenIVPFrFu20J/yx5jv4Mryq0L9RDrjq1M5yWMpJi1LPAaCAmOI5Jr9
-         vTeA==
-X-Gm-Message-State: AO0yUKVivHSSNolioJpZ1BeZL3wED1bjEyAf0E30Djue5Bsjj35GXKdo
-        kIbLBbwIclgNl+IQdnKj4kRSkA==
-X-Google-Smtp-Source: AK7set+A4ni6dKWDcGtNRjRWaK1QKtVa/vvIX67r+ZAtb/CzWUnqPiOUWmFYG5d7yJ93VdhYmJaZlw==
-X-Received: by 2002:a05:600c:450c:b0:3ea:e7e7:95d9 with SMTP id t12-20020a05600c450c00b003eae7e795d9mr25428831wmo.32.1679044021068;
-        Fri, 17 Mar 2023 02:07:01 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:9ed5:bad0:e925:7938? ([2a01:e0a:982:cbb0:9ed5:bad0:e925:7938])
-        by smtp.gmail.com with ESMTPSA id ay38-20020a05600c1e2600b003df7b40f99fsm7331479wmb.11.2023.03.17.02.06.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Mar 2023 02:07:00 -0700 (PDT)
-Message-ID: <8a6ecd92-ff4f-e72f-457e-4061546dc46f@linaro.org>
-Date:   Fri, 17 Mar 2023 10:06:59 +0100
+        Fri, 17 Mar 2023 05:09:27 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C41BCC88A4;
+        Fri, 17 Mar 2023 02:08:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 35911B824F2;
+        Fri, 17 Mar 2023 09:08:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAF6FC433D2;
+        Fri, 17 Mar 2023 09:08:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679044122;
+        bh=WnAsQkCuk6vwlo0YFVkG/FlxPdhE6fKSFwri8e00zNw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=i1BNDZFRcfFhr5T8h484xu0dWsZYLVvEg22vCqfSvoD6yEOL5hAycMYzL6pjW0O3i
+         KO5vQkynRzv0PS5BB2JrHYMUlsMxQHuQePnpSqkjI7vMC7bjmSOzvjeoWDVVPRNKgU
+         I/Uuo/Ewj8wm+aI3kwrpg6EfMEuCgqwcJ+LBuCfcjcdYHQPkVIwg26jlnYiAORQP7s
+         dSfTKhIcd5RLsnSUNGQZgflWahr1cDkfe3+9Ojh2bbrokxqCnQw9jS2peKYjvEN+Tx
+         MPHAAwVeI5oqavjFenUp99zsLFUNJogvj7nkCt8OOIKtFnWjb8Hpcv2mYjUG+RSTuv
+         z8mMqk2UGliCQ==
+Date:   Fri, 17 Mar 2023 10:08:35 +0100
+From:   Christian Brauner <brauner@kernel.org>
+To:     Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+Cc:     davem@davemloft.net, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        David Ahern <dsahern@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Kees Cook <keescook@chromium.org>, linux-arch@vger.kernel.org
+Subject: Re: [PATCH net-next 2/3] net: core: add getsockopt SO_PEERPIDFD
+Message-ID: <20230317090835.hz4lbm3pmvvmt2fs@wittgenstein>
+References: <20230316131526.283569-1-aleksandr.mikhalitsyn@canonical.com>
+ <20230316131526.283569-3-aleksandr.mikhalitsyn@canonical.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH v4 5/5] arm64: dts: qcom: sm8450: add dp controller
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230206-topic-sm8450-upstream-dp-controller-v4-0-dca33f531e0d@linaro.org>
- <20230206-topic-sm8450-upstream-dp-controller-v4-5-dca33f531e0d@linaro.org>
- <c63ecdc2-11e0-79d2-8647-284913f0c0da@linaro.org>
-Organization: Linaro Developer Services
-In-Reply-To: <c63ecdc2-11e0-79d2-8647-284913f0c0da@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230316131526.283569-3-aleksandr.mikhalitsyn@canonical.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/03/2023 23:12, Konrad Dybcio wrote:
+On Thu, Mar 16, 2023 at 02:15:25PM +0100, Alexander Mikhalitsyn wrote:
+> Add SO_PEERPIDFD which allows to get pidfd of peer socket holder pidfd.
+> This thing is direct analog of SO_PEERCRED which allows to get plain PID.
 > 
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Eric Dumazet <edumazet@google.com>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Paolo Abeni <pabeni@redhat.com>
+> Cc: Leon Romanovsky <leon@kernel.org>
+> Cc: David Ahern <dsahern@kernel.org>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Kees Cook <keescook@chromium.org>
+> Cc: Christian Brauner <brauner@kernel.org>
+> Cc: linux-kernel@vger.kernel.org
+> Cc: netdev@vger.kernel.org
+> Cc: linux-arch@vger.kernel.org
+> Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+> ---
+>  arch/alpha/include/uapi/asm/socket.h    |  1 +
+>  arch/mips/include/uapi/asm/socket.h     |  1 +
+>  arch/parisc/include/uapi/asm/socket.h   |  1 +
+>  arch/sparc/include/uapi/asm/socket.h    |  1 +
+>  include/uapi/asm-generic/socket.h       |  1 +
+>  net/core/sock.c                         | 24 ++++++++++++++++++++++++
+>  tools/include/uapi/asm-generic/socket.h |  1 +
+>  7 files changed, 30 insertions(+)
 > 
-> On 9.03.2023 10:19, Neil Armstrong wrote:
->> Add the Display Port controller subnode to the MDSS node.
->>
->> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
->> ---
-> [...]
->> +
->> +				dp_opp_table: opp-table {
->> +					compatible = "operating-points-v2";
->> +
->> +					opp-160000000 {
->> +						opp-hz = /bits/ 64 <160000000>;
->> +						required-opps = <&rpmhpd_opp_low_svs>;
->> +					};
-> Downstream seems to use 19200000 here
+> diff --git a/arch/alpha/include/uapi/asm/socket.h b/arch/alpha/include/uapi/asm/socket.h
+> index ff310613ae64..e94f621903fe 100644
+> --- a/arch/alpha/include/uapi/asm/socket.h
+> +++ b/arch/alpha/include/uapi/asm/socket.h
+> @@ -138,6 +138,7 @@
+>  #define SO_RCVMARK		75
+>  
+>  #define SO_PASSPIDFD		76
+> +#define SO_PEERPIDFD		77
+>  
+>  #if !defined(__KERNEL__)
+>  
+> diff --git a/arch/mips/include/uapi/asm/socket.h b/arch/mips/include/uapi/asm/socket.h
+> index 762dcb80e4ec..60ebaed28a4c 100644
+> --- a/arch/mips/include/uapi/asm/socket.h
+> +++ b/arch/mips/include/uapi/asm/socket.h
+> @@ -149,6 +149,7 @@
+>  #define SO_RCVMARK		75
+>  
+>  #define SO_PASSPIDFD		76
+> +#define SO_PEERPIDFD		77
+>  
+>  #if !defined(__KERNEL__)
+>  
+> diff --git a/arch/parisc/include/uapi/asm/socket.h b/arch/parisc/include/uapi/asm/socket.h
+> index df16a3e16d64..be264c2b1a11 100644
+> --- a/arch/parisc/include/uapi/asm/socket.h
+> +++ b/arch/parisc/include/uapi/asm/socket.h
+> @@ -130,6 +130,7 @@
+>  #define SO_RCVMARK		0x4049
+>  
+>  #define SO_PASSPIDFD		0x404A
+> +#define SO_PEERPIDFD		0x404B
+>  
+>  #if !defined(__KERNEL__)
+>  
+> diff --git a/arch/sparc/include/uapi/asm/socket.h b/arch/sparc/include/uapi/asm/socket.h
+> index 6e2847804fea..682da3714686 100644
+> --- a/arch/sparc/include/uapi/asm/socket.h
+> +++ b/arch/sparc/include/uapi/asm/socket.h
+> @@ -131,6 +131,7 @@
+>  #define SO_RCVMARK               0x0054
+>  
+>  #define SO_PASSPIDFD             0x0055
+> +#define SO_PEERPIDFD             0x0056
+>  
+>  #if !defined(__KERNEL__)
+>  
+> diff --git a/include/uapi/asm-generic/socket.h b/include/uapi/asm-generic/socket.h
+> index b76169fdb80b..8ce8a39a1e5f 100644
+> --- a/include/uapi/asm-generic/socket.h
+> +++ b/include/uapi/asm-generic/socket.h
+> @@ -133,6 +133,7 @@
+>  #define SO_RCVMARK		75
+>  
+>  #define SO_PASSPIDFD		76
+> +#define SO_PEERPIDFD		77
+>  
+>  #if !defined(__KERNEL__)
+>  
+> diff --git a/net/core/sock.c b/net/core/sock.c
+> index 3f974246ba3e..3aa1ccd4bcf3 100644
+> --- a/net/core/sock.c
+> +++ b/net/core/sock.c
+> @@ -1763,6 +1763,30 @@ int sk_getsockopt(struct sock *sk, int level, int optname,
+>  		goto lenout;
+>  	}
+>  
+> +	case SO_PEERPIDFD:
+> +	{
+> +		struct pid *peer_pid;
+> +		int pidfd;
+> +		if (len > sizeof(pidfd))
+> +			len = sizeof(pidfd);
+> +
+> +		spin_lock(&sk->sk_peer_lock);
+> +		peer_pid = get_pid(sk->sk_peer_pid);
+> +		spin_unlock(&sk->sk_peer_lock);
+> +
+> +		if (!peer_pid ||
+> +		    !pid_has_task(peer_pid, PIDTYPE_TGID))
+> +			pidfd = -ESRCH;
 
-Ack, will update.
-
-Thx,
-Neil
-
-> 
-> Otherwise,
-> 
-> Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> 
-> Konrad
-> 
->> +
->> +					opp-270000000 {
->> +						opp-hz = /bits/ 64 <270000000>;
->> +						required-opps = <&rpmhpd_opp_svs>;
->> +					};
->> +
->> +					opp-540000000 {
->> +						opp-hz = /bits/ 64 <540000000>;
->> +						required-opps = <&rpmhpd_opp_svs_l1>;
->> +					};
->> +
->> +					opp-810000000 {
->> +						opp-hz = /bits/ 64 <810000000>;
->> +						required-opps = <&rpmhpd_opp_nom>;
->> +					};
->> +				};
->> +			};
->> +
->>   			mdss_dsi0: dsi@ae94000 {
->>   				compatible = "qcom,sm8450-dsi-ctrl", "qcom,mdss-dsi-ctrl";
->>   				reg = <0 0x0ae94000 0 0x400>;
->>
-
+Any specific reason you want -ESRCH here?
+pidfd_create() returns -EINVAL for exactly this check it performs mainly
+because the non-existence of PIDTYPE_TGID could either indicate that
+this struct pid isn't used as a thread-group leader or - indeed - that
+the process has already been reaped. IOW, if there's no specific reason
+I would not deviate from pidfd_create()'s return value.
