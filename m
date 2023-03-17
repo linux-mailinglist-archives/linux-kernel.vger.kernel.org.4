@@ -2,232 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 663CE6BDDDF
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 02:02:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D7AD6BDDE4
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 02:03:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229617AbjCQBB5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 21:01:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53964 "EHLO
+        id S229624AbjCQBDI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 21:03:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjCQBBz (ORCPT
+        with ESMTP id S229476AbjCQBDG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 21:01:55 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 576ECB6D19;
-        Thu, 16 Mar 2023 18:01:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679014913; x=1710550913;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=90aXFT30DnFK60tUbNIT7GTgbDigZvOI9/EjEEL+EKw=;
-  b=TPUuqqpS38x4KPGyXpQOm2XV6FhbtqelJgOU4RQuUHtJSdO3lhwigzfR
-   nHp7XOW6G+8keIn5Qf9H+4dCXHOa977gAvG7289Cu0AeuY5QkJF6Wj9p0
-   S52x2NVMTBDnmUgP1lqsa4r9MhDmts6n0/PuevGClhNhbOkFg6YmvzB6M
-   ul6MFvSUDerDnOtCcQPvglk9+ibs2IzOdLDUXBaPhsrDohKRMQcy3DY0T
-   L/poWvhm3VWSYa/ShWuIJpPbyJq1+RwWMRUP04JTwb8V4kRPndG+9OhsP
-   EFkmNxo4oofvHrFIHsJuCbX/Cer+FJrI7t15+TngORCXj/4iR3+gDA3bD
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="317806976"
-X-IronPort-AV: E=Sophos;i="5.98,267,1673942400"; 
-   d="scan'208";a="317806976"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 18:01:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="710335151"
-X-IronPort-AV: E=Sophos;i="5.98,267,1673942400"; 
-   d="scan'208";a="710335151"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 16 Mar 2023 18:01:50 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pcyTd-0008wQ-23;
-        Fri, 17 Mar 2023 01:01:49 +0000
-Date:   Fri, 17 Mar 2023 09:01:47 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mehdi Djait <mehdi.djait.k@gmail.com>, jic23@kernel.org,
-        mazziesaccount@gmail.com
-Cc:     oe-kbuild-all@lists.linux.dev, krzysztof.kozlowski+dt@linaro.org,
-        andriy.shevchenko@linux.intel.com, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Mehdi Djait <mehdi.djait.k@gmail.com>
-Subject: Re: [PATCH 2/3] iio: accel: kionix-kx022a: Add chip_info structure
-Message-ID: <202303170813.jSOLGCL5-lkp@intel.com>
-References: <3ddca10a4c03c3a64afb831cc9dd1e01fe89d305.1679009443.git.mehdi.djait.k@gmail.com>
+        Thu, 16 Mar 2023 21:03:06 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD2B53A87F;
+        Thu, 16 Mar 2023 18:03:05 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id l9-20020a17090a3f0900b0023d32684e7fso6912012pjc.1;
+        Thu, 16 Mar 2023 18:03:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679014985;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=U8KNhZxtIwwnFgPoB9cKshvnNQ6ZSPfMANNSxGtCt/E=;
+        b=JkrFFCsyfZ5ctVkc1+n+HgBbo6I8Bt5EUUw6DlqoHj7oE2rPzaVj1pAv3GrL6tJC+d
+         MVTM/8KN01m4LymcM/E0iwkIMWryo75g1XecCEkrEPKbN6nuQe8RLvNtXPizT6Nko1GX
+         lyAz46AaF+Q1hPmuLVtlzDroP10ZZnN+HnEcUzWuQ3Cty++/FhkXW9YAuhAC2YBAaxwF
+         ZDnxZRu4/MJU+VnT2RHRVU99KbbeILSzrYPqOXzmpqEOrT1WP6b5uodevoFWK9zA20in
+         UW9nRGrNUkz8K0Mxh1f35nhIRZE/n6vCPTKq/mgQqFNF6SHD5VosOWaM1xLfJ9ISNejI
+         I3vA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679014985;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=U8KNhZxtIwwnFgPoB9cKshvnNQ6ZSPfMANNSxGtCt/E=;
+        b=7ep8jgEWFl623BIBlJ+bTzhYnQJmX1iCLy67R01FmcBY1+xhi2rS/dafcFes8P7c00
+         0zUkLtdjdKK6mZbIuhDs9ymvMU05/GBzsUS9kez/nQ2sg6ghTFc5uotpaDWFO4BHRhkT
+         ERUYidS2bkAFumNbjIxDe76cercPjilEp2aG1tCCLHrsdRE2dF6GT6/PFazYjZpJH0qu
+         nOn6sZjfytL/W9MMNZD2untDsbD4UQm+JhUG9bStqK/en5AoPY4jmvHcsgeG8smNIz1Z
+         MQksl+p0VEdlu7j6WXCslDEK/DBv+ReCQOjzmVEmAFOImtbkX+IbYRx2jjaTUEx2srvj
+         OGtQ==
+X-Gm-Message-State: AO0yUKUQv+7XmNZN2fl7S44fgXN/BHOshHYRYLeIz9osl1fIVpEIAofL
+        /7VXQUMDdyEyn5Er+RVWMrA=
+X-Google-Smtp-Source: AK7set/v4wjGRC3TH9FG8GJbcppkm0YTmHnGNZoOn/RAmXHcWRSAiWlitjQW0cpvhX7DSXTeY20cnA==
+X-Received: by 2002:a05:6a20:a61b:b0:d4:979a:e31c with SMTP id bb27-20020a056a20a61b00b000d4979ae31cmr4612994pzb.62.1679014985073;
+        Thu, 16 Mar 2023 18:03:05 -0700 (PDT)
+Received: from [172.19.1.47] (60-250-192-107.hinet-ip.hinet.net. [60.250.192.107])
+        by smtp.gmail.com with ESMTPSA id j24-20020aa79298000000b005897f5436c0sm290391pfa.118.2023.03.16.18.03.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Mar 2023 18:03:04 -0700 (PDT)
+Message-ID: <2f7d87dd-75dc-afa0-e11e-ffd1afc8de3b@gmail.com>
+Date:   Fri, 17 Mar 2023 09:03:00 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3ddca10a4c03c3a64afb831cc9dd1e01fe89d305.1679009443.git.mehdi.djait.k@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 06/15] dt-bindings: mfd: syscon: Add nuvoton,ma35d1-sys
+ compatible
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        lee@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
+        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org
+Cc:     devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+        schung@nuvoton.com, Jacky Huang <ychuang3@nuvoton.com>
+References: <20230315072902.9298-1-ychuang570808@gmail.com>
+ <20230315072902.9298-7-ychuang570808@gmail.com>
+ <84805483-b20a-8dd7-6efe-904f59e063dc@linaro.org>
+Content-Language: en-US
+From:   Jacky Huang <ychuang570808@gmail.com>
+In-Reply-To: <84805483-b20a-8dd7-6efe-904f59e063dc@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mehdi,
+Dear Krzysztof ,
 
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on jic23-iio/togreg]
-[also build test WARNING on next-20230316]
-[cannot apply to linus/master v6.3-rc2]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Mehdi-Djait/dt-bindings-iio-Add-KX132-accelerometer/20230317-075056
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
-patch link:    https://lore.kernel.org/r/3ddca10a4c03c3a64afb831cc9dd1e01fe89d305.1679009443.git.mehdi.djait.k%40gmail.com
-patch subject: [PATCH 2/3] iio: accel: kionix-kx022a: Add chip_info structure
-config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20230317/202303170813.jSOLGCL5-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/40c75341c42d0e5bea5d73961202978a4be41cd2
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Mehdi-Djait/dt-bindings-iio-Add-KX132-accelerometer/20230317-075056
-        git checkout 40c75341c42d0e5bea5d73961202978a4be41cd2
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash drivers/iio/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303170813.jSOLGCL5-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   drivers/iio/accel/kionix-kx022a.c: In function '__kx022a_fifo_flush':
->> drivers/iio/accel/kionix-kx022a.c:598:9: warning: ISO C90 forbids variable length array 'buffer' [-Wvla]
-     598 |         __le16 buffer[data->chip_info->fifo_length * 3];
-         |         ^~~~~~
---
-   drivers/iio/accel/kionix-kx022a-i2c.c: In function 'kx022a_i2c_probe':
->> drivers/iio/accel/kionix-kx022a-i2c.c:27:19: warning: assignment discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
-      27 |         chip_info = device_get_match_data(&i2c->dev);
-         |                   ^
-   drivers/iio/accel/kionix-kx022a-i2c.c:29:27: warning: assignment discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
-      29 |                 chip_info = (const struct kx022a_chip_info *) id->driver_data;
-         |                           ^
---
-   drivers/iio/accel/kionix-kx022a-spi.c: In function 'kx022a_spi_probe':
->> drivers/iio/accel/kionix-kx022a-spi.c:27:19: warning: assignment discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
-      27 |         chip_info = device_get_match_data(&spi->dev);
-         |                   ^
-   drivers/iio/accel/kionix-kx022a-spi.c:29:27: warning: assignment discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
-      29 |                 chip_info = (const struct kx022a_chip_info *) id->driver_data;
-         |                           ^
+Thank you for review.
 
 
-vim +/buffer +598 drivers/iio/accel/kionix-kx022a.c
+On 2023/3/16 下午 03:31, Krzysztof Kozlowski wrote:
+> On 15/03/2023 08:28, Jacky Huang wrote:
+>> From: Jacky Huang <ychuang3@nuvoton.com>
+>>
+>> Add Nuvoton ma35d1 system registers compatible
+> Missing full stop.
 
-   593	
-   594	static int __kx022a_fifo_flush(struct iio_dev *idev, unsigned int samples,
-   595				       bool irq)
-   596	{
-   597		struct kx022a_data *data = iio_priv(idev);
- > 598		__le16 buffer[data->chip_info->fifo_length * 3];
-   599		uint64_t sample_period;
-   600		int count, fifo_bytes;
-   601		bool renable = false;
-   602		int64_t tstamp;
-   603		int ret, i;
-   604	
-   605		fifo_bytes = kx022a_get_fifo_bytes(data);
-   606		count = fifo_bytes / KX_FIFO_SAMPLES_SIZE_BYTES;
-   607		if (!count)
-   608			return 0;
-   609	
-   610		/*
-   611		 * If we are being called from IRQ handler we know the stored timestamp
-   612		 * is fairly accurate for the last stored sample. Otherwise, if we are
-   613		 * called as a result of a read operation from userspace and hence
-   614		 * before the watermark interrupt was triggered, take a timestamp
-   615		 * now. We can fall anywhere in between two samples so the error in this
-   616		 * case is at most one sample period.
-   617		 */
-   618		if (!irq) {
-   619			/*
-   620			 * We need to have the IRQ disabled or we risk of messing-up
-   621			 * the timestamps. If we are ran from IRQ, then the
-   622			 * IRQF_ONESHOT has us covered - but if we are ran by the
-   623			 * user-space read we need to disable the IRQ to be on a safe
-   624			 * side. We do this usng synchronous disable so that if the
-   625			 * IRQ thread is being ran on other CPU we wait for it to be
-   626			 * finished.
-   627			 */
-   628			disable_irq(data->irq);
-   629			renable = true;
-   630	
-   631			data->old_timestamp = data->timestamp;
-   632			data->timestamp = iio_get_time_ns(idev);
-   633		}
-   634	
-   635		/*
-   636		 * Approximate timestamps for each of the sample based on the sampling
-   637		 * frequency, timestamp for last sample and number of samples.
-   638		 *
-   639		 * We'd better not use the current bandwidth settings to compute the
-   640		 * sample period. The real sample rate varies with the device and
-   641		 * small variation adds when we store a large number of samples.
-   642		 *
-   643		 * To avoid this issue we compute the actual sample period ourselves
-   644		 * based on the timestamp delta between the last two flush operations.
-   645		 */
-   646		if (data->old_timestamp) {
-   647			sample_period = data->timestamp - data->old_timestamp;
-   648			do_div(sample_period, count);
-   649		} else {
-   650			sample_period = data->odr_ns;
-   651		}
-   652		tstamp = data->timestamp - (count - 1) * sample_period;
-   653	
-   654		if (samples && count > samples) {
-   655			/*
-   656			 * Here we leave some old samples to the buffer. We need to
-   657			 * adjust the timestamp to match the first sample in the buffer
-   658			 * or we will miscalculate the sample_period at next round.
-   659			 */
-   660			data->timestamp -= (count - samples) * sample_period;
-   661			count = samples;
-   662		}
-   663	
-   664		fifo_bytes = count * KX_FIFO_SAMPLES_SIZE_BYTES;
-   665		ret = regmap_noinc_read(data->regmap, data->chip_info->buf_read,
-   666					&buffer[0], fifo_bytes);
-   667		if (ret)
-   668			goto renable_out;
-   669	
-   670		for (i = 0; i < count; i++) {
-   671			__le16 *sam = &buffer[i * 3];
-   672			__le16 *chs;
-   673			int bit;
-   674	
-   675			chs = &data->scan.channels[0];
-   676			for_each_set_bit(bit, idev->active_scan_mask, AXIS_MAX)
-   677				chs[bit] = sam[bit];
-   678	
-   679			iio_push_to_buffers_with_timestamp(idev, &data->scan, tstamp);
-   680	
-   681			tstamp += sample_period;
-   682		}
-   683	
-   684		ret = count;
-   685	
-   686	renable_out:
-   687		if (renable)
-   688			enable_irq(data->irq);
-   689	
-   690		return ret;
-   691	}
-   692	
+I will fix it.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+>> Signed-off-by: Jacky Huang <ychuang3@nuvoton.com>
+>> ---
+>>   Documentation/devicetree/bindings/mfd/syscon.yaml | 1 +
+>>   1 file changed, 1 insertion(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/mfd/syscon.yaml b/Documentation/devicetree/bindings/mfd/syscon.yaml
+>> index c828c4f5e4a7..e7a3c6e1e77f 100644
+>> --- a/Documentation/devicetree/bindings/mfd/syscon.yaml
+>> +++ b/Documentation/devicetree/bindings/mfd/syscon.yaml
+>> @@ -57,6 +57,7 @@ properties:
+>>                 - microchip,sparx5-cpu-syscon
+>>                 - mstar,msc313-pmsleep
+>>                 - nuvoton,wpcm450-shm
+>> +              - nuvoton,ma35d1-sys
+> Wrong order
+
+I will fix the order.
+
+>
+> Best regards,
+> Krzysztof
+>
+
+Best regards,
+
+Jacky Huang
+
