@@ -2,101 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC2A26BEF2D
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 18:07:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0176E6BEF2E
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 18:07:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230025AbjCQRHI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 13:07:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47198 "EHLO
+        id S230148AbjCQRHK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 13:07:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230224AbjCQRGy (ORCPT
+        with ESMTP id S229881AbjCQRHI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 13:06:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6C804C6F2
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 10:06:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B82BE60DF6
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 17:06:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA672C433EF;
-        Fri, 17 Mar 2023 17:06:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1679072802;
-        bh=jiDGsqRzlRcCtmQwsHMBFR0ipayvPpuWQ/T8IQ9YOGs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VtjTPo2OfHs1ld2M/QAPOBsUNmbHMxgUsveATgEhEebgcfQKdW0rgr9ijO40QqZmE
-         eajD6pCLR3AdTUODKx8mHttgTJBRyGnJDeteBxDnZZSGM7wT1n+2GEg7zUIV8KU3YA
-         BvuNWTMrEZqOwIQpZTReMJ4n+/wY+a/hUNT+F8UU=
-Date:   Fri, 17 Mar 2023 18:06:34 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Rodolfo Giometti <giometti@enneenne.com>
-Cc:     Alex Komrakov <alexander.komrakov@broadcom.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4] pps: Add elapsed realtime timestamping
-Message-ID: <ZBSeGjBEEzeBv35c@kroah.com>
-References: <20230317074739.193965-1-alexander.komrakov@broadcom.com>
- <ZBQdWRHzakFLzSkb@kroah.com>
- <CAMedr-_ssg-baCz94ExMVTeXr2Qivzop1kEpx0S4PWuQdAiGaw@mail.gmail.com>
- <2713f092-5d21-ad5e-c5f4-87c927b18a27@enneenne.com>
- <ZBR3t0D0JEl8feRt@kroah.com>
- <f8ea9ab9-e1c1-7962-dab4-126beda74046@enneenne.com>
+        Fri, 17 Mar 2023 13:07:08 -0400
+Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93C313BC42;
+        Fri, 17 Mar 2023 10:06:52 -0700 (PDT)
+Received: by mail-qt1-x833.google.com with SMTP id hf2so2171690qtb.3;
+        Fri, 17 Mar 2023 10:06:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679072811;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=7slRHzySkFpcs5sLGs5rs/Zo/tii5Gf2oRkxqfYc3ME=;
+        b=Kek04f79WnaIcT+dOUXzrQKuP0dZR/Hy+AiojA/r63kjHTdvE/Cmir3cvlHv7XTfwN
+         /Y4TC0PngTzR69ghb8F5YuioSN1SS0rxw8yNKQ4dD1531Sm5wGSPMVISCLz3umafy20R
+         rduGwvliVdc7QiQaP9r0lPcYkPQWj5LEvCj/IaYihkr7QPQv2NofTj4kV1RSz22D0xI7
+         Wws32N4FMhHSwHqcqzstQt9/qf73rZyjskLuwxsIez6ttoNqhiQGS5XwyNdmj0s3Lhvy
+         M+EVCwgYjLtl6TvqF5fTYUzDU1hPaYolekGiGHaO7towujgh0+COmfh4b07Aymva98mW
+         n5Ww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679072811;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7slRHzySkFpcs5sLGs5rs/Zo/tii5Gf2oRkxqfYc3ME=;
+        b=8GDms6pAFg7ObAgzO4qwNks05991qWn0bndJApGY/zZDPOfkhtBkeHvFMlfZ8x6nKL
+         5lSYWhEtsRdqDB8eN8phSGc26ftu1KPOFlUf2L8XFc2ZYG6Q0CkSOh8rfHdFBPKqBgtv
+         hjwN904Qxoety9YkHq1zCdDEKNP15WCdvOwXrPe7BxP9DIQwVRPo2yQuqQu6NhdGXhc3
+         mw7EQkyBeKIWJBFg1OapjAm5I0fXcOjr7d06TWF24zhnehErr5pQ8OGkMwLBQ4TDNhJt
+         92YJs0m81g6axy0pPWI0UVboNU8p26SwxRiAb2rCQa98krtnI3oxD8SOCFn0cZGZsEQX
+         umcQ==
+X-Gm-Message-State: AO0yUKWZIrZqu/F9jO7CdyMOc5HrbDYC5VHu8NUPmAgRIolOmSnvR6zb
+        u3RxSc8C/+WtnjXgEE/ftSc=
+X-Google-Smtp-Source: AK7set9tbs+OBNF02rY6nczH2fMQnZFsgV7XWhxNUpRTYF8aKuOHUUvYQAq5a/s9/aYuF+xxgbOpng==
+X-Received: by 2002:a05:622a:87:b0:3d8:8d4b:c7cb with SMTP id o7-20020a05622a008700b003d88d4bc7cbmr9944778qtw.40.1679072811617;
+        Fri, 17 Mar 2023 10:06:51 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id v15-20020ac8728f000000b003d872f97722sm1584977qto.78.2023.03.17.10.06.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Mar 2023 10:06:50 -0700 (PDT)
+Message-ID: <2fa5e5ce-3198-fd38-a0cd-88698282338c@gmail.com>
+Date:   Fri, 17 Mar 2023 10:06:44 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <f8ea9ab9-e1c1-7962-dab4-126beda74046@enneenne.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH net-next v4 1/4] net: dsa: mv88e6xxx: don't dispose of
+ Global2 IRQ mappings from mdiobus code
+Content-Language: en-US
+To:     Klaus Kudielka <klaus.kudielka@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>
+Cc:     Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Vladimir Oltean <vladimir.oltean@nxp.com>
+References: <20230315163846.3114-1-klaus.kudielka@gmail.com>
+ <20230315163846.3114-2-klaus.kudielka@gmail.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20230315163846.3114-2-klaus.kudielka@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 17, 2023 at 05:34:28PM +0100, Rodolfo Giometti wrote:
-> On 17/03/23 15:22, Greg KH wrote:
-> > On Fri, Mar 17, 2023 at 03:04:31PM +0100, Rodolfo Giometti wrote:
-> > > On 17/03/23 10:51, Alex Komrakov wrote:
-> > > > > +     if (!(pps->info.mode & PPS_CAPTURECLEAR))
-> > > > > +             return 0;   Why are you not returning an error?
-> > > > [AK] I used the style in this file sysfs.c.
-> > > >    assert_show() and clear_show()  have the same condition.
-> > > > When '& PPS_CAPTURECLEAR' -- 0 means no interrupt asserted  and it is not error
-> > > > Probably Rodolfo can get more info why return 0
-> > > 
-> > > It's just as Alex said, if the PPS source has no PPS_CAPTUREASSERT or
-> > > PPS_CAPTURECLEAR mode it should not print ASSERT and CLEAR info.
-> > 
-> > But shouldn't you return an error instead of an empty string?
+On 3/15/23 09:38, Klaus Kudielka wrote:
+> From: Vladimir Oltean <vladimir.oltean@nxp.com>
 > 
-> This is not an error... it's just a disabled capability. :)
-
-Then maybe return "0" or something like that?
-
-> > > > And why are these sysfs files even present if the mode is not set
-> > > > properly?  Can the mode be set while the device is attached or is this
-> > > > only defined at probe time?  If at probe time, just never create these
-> > > > files.
-> > > > [AK] we can understand mode is set when interrupts asserted and
-> > > > file assert_elapsed will be updated.
-> > > 
-> > > PPS source's "mode bits" can be set at runtime via PPS_SETPARAMS.
-> > 
-> > Ok, that's good to know.  But I think the error return value is a better
-> > indication that something went wrong here and this attribute does not
-> > work for this device at this point in time.
+> irq_find_mapping() does not need irq_dispose_mapping(), only
+> irq_create_mapping() does.
 > 
-> I see... however I suppose several code relays on this behavior.
+> Calling irq_dispose_mapping() from mv88e6xxx_g2_irq_mdio_free() and from
+> the error path of mv88e6xxx_g2_irq_mdio_setup() effectively means that
+> the mdiobus logic (for internal PHY interrupts) is disposing of a
+> hwirq->virq mapping which it is not responsible of (but instead, the
+> function pair mv88e6xxx_g2_irq_setup() + mv88e6xxx_g2_irq_free() is).
+> 
+> With the current code structure, this isn't such a huge problem, because
+> mv88e6xxx_g2_irq_mdio_free() is called relatively close to the real
+> owner of the IRQ mappings:
+> 
+> mv88e6xxx_remove()
+> -> mv88e6xxx_unregister_switch()
+> -> mv88e6xxx_mdios_unregister()
+>     -> mv88e6xxx_g2_irq_mdio_free()
+> -> mv88e6xxx_g2_irq_free()
+> 
+> and the switch isn't 'live' in any way such that it would be able of
+> generating interrupts at this point (mv88e6xxx_unregister_switch() has
+> been called).
+> 
+> However, there is a desire to split mv88e6xxx_mdios_unregister() and
+> mv88e6xxx_g2_irq_free() such that mv88e6xxx_mdios_unregister() only gets
+> called from mv88e6xxx_teardown(). This is much more problematic, as can
+> be seen below.
+> 
+> In a cross-chip scenario (say 3 switches d0032004.mdio-mii:10,
+> d0032004.mdio-mii:11 and d0032004.mdio-mii:12 which form a single DSA
+> tree), it is possible to unbind the device driver from a single switch
+> (say d0032004.mdio-mii:10).
+> 
+> When that happens, mv88e6xxx_remove() will be called for just that one
+> switch, and this will call mv88e6xxx_unregister_switch() which will tear
+> down the entire tree (calling mv88e6xxx_teardown() for all 3 switches).
+> 
+> Assuming mv88e6xxx_mdios_unregister() was moved to mv88e6xxx_teardown(),
+> at this stage, all 3 switches will have called irq_dispose_mapping() on
+> their mdiobus virqs.
+> 
+> When we bind again the device driver to d0032004.mdio-mii:10,
+> mv88e6xxx_probe() is called for it, which calls dsa_register_switch().
+> The DSA tree is now complete again, and mv88e6xxx_setup() is called for
+> all 3 switches.
+> 
+> Also assuming that mv88e6xxx_mdios_register() is moved to
+> mv88e6xxx_setup() (the 2 assumptions go together), at this point,
+> d0032004.mdio-mii:11 and d0032004.mdio-mii:12 don't have an IRQ mapping
+> for the internal PHYs anymore, as they've disposed of it in
+> mv88e6xxx_teardown(). Whereas switch d0032004.mdio-mii:10 has re-created
+> it, because its code path comes from mv88e6xxx_probe().
+> 
+> Simply put, this change prepares the driver to handle the movement of
+> mv88e6xxx_mdios_register() to mv88e6xxx_setup() for cross-chip DSA trees.
+> 
+> Also, the code being deleted was partially wrong anyway (in a way which
+> may have hidden this other issue). mv88e6xxx_g2_irq_mdio_setup()
+> populates bus->irq[] starting with offset chip->info->phy_base_addr, but
+> the teardown path doesn't apply that offset too. So it disposes of virq
+> 0 for phy = [ 0, phy_base_addr ).
+> 
+> All switch families have phy_base_addr = 0, except for MV88E6141 and
+> MV88E6341 which have it as 0x10. I guess those families would have
+> happened to work by mistake in cross-chip scenarios too.
+> 
+> I'm deleting the body of mv88e6xxx_g2_irq_mdio_free() but leaving its
+> call sites and prototype in place. This is because, if we ever need to
+> add back some teardown procedure in the future, it will be perhaps
+> error-prone to deduce the proper call sites again. Whereas like this,
+> no extra code should get generated, it shouldn't bother anybody.
+> 
+> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+> Signed-off-by: Klaus Kudielka <klaus.kudielka@gmail.com>
 
-If that's the case, then you are right, you can't change it, and I'll
-stop complaining here :)
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian
 
-What tools use these sysfs files?  How did you test your changes?
-
-thanks,
-
-greg k-h
