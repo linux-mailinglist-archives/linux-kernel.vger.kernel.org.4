@@ -2,197 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 146896BEF86
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 18:21:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47C236BEF8A
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 18:21:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230131AbjCQRVK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 13:21:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44020 "EHLO
+        id S229710AbjCQRVh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 13:21:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230078AbjCQRU5 (ORCPT
+        with ESMTP id S230232AbjCQRV0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 13:20:57 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28581DFB56;
-        Fri, 17 Mar 2023 10:20:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679073656; x=1710609656;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=UAk6x7dXlpS53KN8GVwp8qaBKdkzhw/mGjhHXz+ApAs=;
-  b=hKvKOPEh/EJXHun2KQpZNWdhi/Fe590h7/hIz50XLJDtuaKeoGzbxTqV
-   sPKieUrUGgpO1DHCGfKB5gYcCh4eIn3YmllNtBlNBhpjJT1lH8v3rdoma
-   Z74THQiqg1L2DgKWPnG5kXOsA6Y/p1Me5Z9k5CPKgE2WV2rNKusNeoSb1
-   yX8D0us+TycR8M6Niai6KURzSc+OYHpmWYfiTdPLX5SIJJDR0DDQVmIZi
-   OAf5uVvrmD9XMoz1ix0lIKe0jXffK32Vi+xsUrtw2n1e02DdehK9h/lv9
-   3LM2km0BBmlpZpLeP4Qjo43ULxOR211lJbqbfqBqpM9ni7m9qMzjQkcoa
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="339858254"
-X-IronPort-AV: E=Sophos;i="5.98,268,1673942400"; 
-   d="scan'208";a="339858254"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2023 10:20:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="804166614"
-X-IronPort-AV: E=Sophos;i="5.98,268,1673942400"; 
-   d="scan'208";a="804166614"
-Received: from agluck-desk3.sc.intel.com ([172.25.222.78])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2023 10:20:49 -0700
-From:   Tony Luck <tony.luck@intel.com>
-To:     Yazen Ghannam <yazen.ghannam@amd.com>
-Cc:     Borislav Petkov <bp@alien8.de>,
-        Smita.KoralahalliChannabasappa@amd.com,
-        dave.hansen@linux.intel.com, hpa@zytor.com,
-        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        x86@kernel.org, patches@lists.linux.dev,
-        Tony Luck <tony.luck@intel.com>
-Subject: [PATCH v3 5/5] x86/mce: Handle AMD threshold interrupt storms
-Date:   Fri, 17 Mar 2023 10:20:42 -0700
-Message-Id: <20230317172042.117201-6-tony.luck@intel.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230317172042.117201-1-tony.luck@intel.com>
-References: <ZBR+GMH0olGoDMGs@yaz-fattaah>
- <20230317172042.117201-1-tony.luck@intel.com>
+        Fri, 17 Mar 2023 13:21:26 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08BA1E6DAD;
+        Fri, 17 Mar 2023 10:21:09 -0700 (PDT)
+Received: from [192.168.1.90] (unknown [188.24.156.231])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: cristicc)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 4974566030B7;
+        Fri, 17 Mar 2023 17:21:06 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1679073667;
+        bh=I+Gvi5bzAnoJMxokQ84k9j+H+aFc/IN+XvqBbP6wpvg=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=durtctia6ys5ahpIvt7urL9eaWQyHgUoJkCI/3sUZz+Cz60FX1D6+GjNICq2duwN1
+         xZRgyxlKfz+V1Amu3xsfbnZ5TCoifrJHIDWxHV55eBpfNc61nV9yFIsxGnDnFbZfL2
+         jYOSnI0gYZwIc/w9qHpoBRNEA7zjzTWC1zI2/mjj65/yNAfIgtvCRFU9Wo67hfWk66
+         K5R+RDs/sD9q/OPpiZpz1oJqo3LYu/m3v3JqXR6K5O9UJsURGl8aes3t5ZRZ5kNCs8
+         ZHUrK6VT9Euy6HTz+SS0RdaMhV37DWSBfmRncbIsjROD8ggD8T5h1hwSW1Cpv2v9d4
+         UdRzr7Qu4U2iA==
+Message-ID: <793d6c43-d71e-3ffc-17c2-26062e40b4bc@collabora.com>
+Date:   Fri, 17 Mar 2023 19:21:03 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [PATCH 01/11] dt-bindings: firmware: arm,scmi: Document
+ assigned-clocks and assigned-clock-rates
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>
+Cc:     Sudeep Holla <sudeep.holla@arm.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Daniel Drake <drake@endlessm.com>,
+        Katsuhiro Suzuki <katsuhiro@katsuster.net>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-rockchip@lists.infradead.org,
+        linux-riscv@lists.infradead.org, kernel@collabora.com
+References: <20230315114806.3819515-1-cristian.ciocaltea@collabora.com>
+ <20230315114806.3819515-2-cristian.ciocaltea@collabora.com>
+ <20230316203417.GA3833267-robh@kernel.org>
+ <20230316222619.r4jzk3lzdxzamr2s@bogus>
+ <d5881d9f-90cc-f7a2-72a3-0701348a03fe@collabora.com>
+ <CAL_JsqL_EogoKOQ1xwU75=rJSC4o7yV3Jej4vadtacX2Pt3-hw@mail.gmail.com>
+From:   Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+In-Reply-To: <CAL_JsqL_EogoKOQ1xwU75=rJSC4o7yV3Jej4vadtacX2Pt3-hw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
+On 3/17/23 16:27, Rob Herring wrote:
+> On Fri, Mar 17, 2023 at 4:59 AM Cristian Ciocaltea
+> <cristian.ciocaltea@collabora.com> wrote:
+>>
+>> On 3/17/23 00:26, Sudeep Holla wrote:
+>>> On Thu, Mar 16, 2023 at 03:34:17PM -0500, Rob Herring wrote:
+>>>> +Stephen
+>>>>
+>>>> On Wed, Mar 15, 2023 at 01:47:56PM +0200, Cristian Ciocaltea wrote:
+>>>>> Since commit df4fdd0db475 ("dt-bindings: firmware: arm,scmi: Restrict
+>>>>> protocol child node properties") the following dtbs_check warning is
+>>>>> shown:
+>>>>>
+>>>>>     rk3588-rock-5b.dtb: scmi: protocol@14: Unevaluated properties are not allowed ('assigned-clock-rates', 'assigned-clocks' were unexpected)
+>>>>
+>>>> I think that's a somewhat questionable use of assigned-clock-rates. It
+>>>> should be located with the consumer rather than the provider IMO. The
+>>>> consumers of those 2 clocks are the CPU nodes.
+>>>>
+>>>
+>>> Agreed. We definitely don't use those in the scmi clk provider driver.
+>>> So NACK for the generic SCMI binding change.
+>>
+>> According to [1], "configuration of common clocks, which affect multiple
+>> consumer devices can be similarly specified in the clock provider node".
+> 
+> True, but in this case it's really a single consumer because it's all
+> CPU nodes which are managed together.
+> 
+>> That would avoid duplicating assigned-clock-rates in the CPU nodes.
+> 
+> Wouldn't one node be sufficient?
 
-Extend the logic of handling CMCI storms to AMD threshold interrupts.
+Yeah, that should be fine.
 
-Rely on the similar approach as of Intel's CMCI to mitigate storms per
-CPU and per bank. But, unlike CMCI, do not set thresholds and reduce
-interrupt rate on a storm. Rather, disable the interrupt on the
-corresponding CPU and bank. Re-enable back the interrupts if enough
-consecutive polls of the bank show no corrected errors (30, as
-programmed by Intel).
+> Thinking more about this, why aren't you using OPP tables to define
+> CPU frequencies. Assigned-clocks looks like a temporary hack because
+> you haven't done proper OPP tables.
 
-Turning off the threshold interrupts would be a better solution on AMD
-systems as other error severities will still be handled even if the
-threshold interrupts are disabled.
+Right, this is currently not possible since it depends on some work in 
+progress.
 
-[Tony: Small tweak because mce_handle_storm() isn't a pointer now]
-
-Signed-off-by: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
-Signed-off-by: Tony Luck <tony.luck@intel.com>
----
- arch/x86/kernel/cpu/mce/internal.h |  2 ++
- arch/x86/kernel/cpu/mce/amd.c      | 49 ++++++++++++++++++++++++++++++
- arch/x86/kernel/cpu/mce/core.c     |  3 ++
- 3 files changed, 54 insertions(+)
-
-diff --git a/arch/x86/kernel/cpu/mce/internal.h b/arch/x86/kernel/cpu/mce/internal.h
-index 9b2c54f30fb9..b580bd609fdc 100644
---- a/arch/x86/kernel/cpu/mce/internal.h
-+++ b/arch/x86/kernel/cpu/mce/internal.h
-@@ -206,7 +206,9 @@ extern bool filter_mce(struct mce *m);
- 
- #ifdef CONFIG_X86_MCE_AMD
- extern bool amd_filter_mce(struct mce *m);
-+void mce_amd_handle_storm(int bank, bool on);
- #else
-+static inline void mce_amd_handle_storm(int bank, bool on) {}
- static inline bool amd_filter_mce(struct mce *m) { return false; }
- #endif
- 
-diff --git a/arch/x86/kernel/cpu/mce/amd.c b/arch/x86/kernel/cpu/mce/amd.c
-index 1c87501e0fa3..b7f92af065e1 100644
---- a/arch/x86/kernel/cpu/mce/amd.c
-+++ b/arch/x86/kernel/cpu/mce/amd.c
-@@ -466,6 +466,47 @@ static void threshold_restart_bank(void *_tr)
- 	wrmsr(tr->b->address, lo, hi);
- }
- 
-+static void _reset_block(struct threshold_block *block)
-+{
-+	struct thresh_restart tr;
-+
-+	memset(&tr, 0, sizeof(tr));
-+	tr.b = block;
-+	threshold_restart_bank(&tr);
-+}
-+
-+static void toggle_interrupt_reset_block(struct threshold_block *block, bool on)
-+{
-+	if (!block)
-+		return;
-+
-+	block->interrupt_enable = !!on;
-+	_reset_block(block);
-+}
-+
-+void mce_amd_handle_storm(int bank, bool on)
-+{
-+	struct threshold_block *first_block = NULL, *block = NULL, *tmp = NULL;
-+	struct threshold_bank **bp = this_cpu_read(threshold_banks);
-+	unsigned long flags;
-+
-+	if (!bp)
-+		return;
-+
-+	local_irq_save(flags);
-+
-+	first_block = bp[bank]->blocks;
-+	if (!first_block)
-+		goto end;
-+
-+	toggle_interrupt_reset_block(first_block, on);
-+
-+	list_for_each_entry_safe(block, tmp, &first_block->miscj, miscj)
-+		toggle_interrupt_reset_block(block, on);
-+end:
-+	local_irq_restore(flags);
-+}
-+
- static void mce_threshold_block_init(struct threshold_block *b, int offset)
- {
- 	struct thresh_restart tr = {
-@@ -867,6 +908,7 @@ static void amd_threshold_interrupt(void)
- 	struct threshold_block *first_block = NULL, *block = NULL, *tmp = NULL;
- 	struct threshold_bank **bp = this_cpu_read(threshold_banks);
- 	unsigned int bank, cpu = smp_processor_id();
-+	u64 status;
- 
- 	/*
- 	 * Validate that the threshold bank has been initialized already. The
-@@ -880,6 +922,13 @@ static void amd_threshold_interrupt(void)
- 		if (!(per_cpu(bank_map, cpu) & (1 << bank)))
- 			continue;
- 
-+		rdmsrl(mca_msr_reg(bank, MCA_STATUS), status);
-+		track_cmci_storm(bank, status);
-+
-+		/* Return early on an interrupt storm */
-+		if (this_cpu_read(bank_storm[bank]))
-+			return;
-+
- 		first_block = bp[bank]->blocks;
- 		if (!first_block)
- 			continue;
-diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-index d27daa199523..6121f0afe45a 100644
---- a/arch/x86/kernel/cpu/mce/core.c
-+++ b/arch/x86/kernel/cpu/mce/core.c
-@@ -2072,6 +2072,9 @@ void mce_handle_storm(int bank, bool on)
- 	case X86_VENDOR_INTEL:
- 		mce_intel_handle_storm(bank, on);
- 		break;
-+	case X86_VENDOR_AMD:
-+		mce_amd_handle_storm(bank, on);
-+		break;
- 	}
- }
- 
--- 
-2.39.2
-
+Thanks,
+Cristian
