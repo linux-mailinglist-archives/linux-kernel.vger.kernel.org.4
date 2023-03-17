@@ -2,115 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 661656BEA64
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 14:44:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D0AD6BEA66
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 14:45:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230510AbjCQNoJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 09:44:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46842 "EHLO
+        id S230515AbjCQNpK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 09:45:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230499AbjCQNoG (ORCPT
+        with ESMTP id S230527AbjCQNoz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 09:44:06 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FDEB26B1;
-        Fri, 17 Mar 2023 06:44:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679060645; x=1710596645;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=YnswIAVSAKSWgRwAObgdrkxFmz81bo8K0xCi5ASID54=;
-  b=eglB+EvjOmy3hyWEaA9GTGixTHo1qjw1IteoZgku6Obh8k/h65v0kyr1
-   VaZbW0cw17gkwrnhbJlFEy9TON77QQzDzpG9socn+Z7+IxRO5ui07HwrA
-   NGlTdsV2s8TUyjcVUhPmy2pvCHN9M8FFyTw7INS9hNcs/8qPlIooSLQxK
-   g8DaYS7z5iB50MaALKSwekNpqd4WqPOP7hVrMEmx9K+cifX+wfppYcX4E
-   jh489ajAGhT9/eXgfS2N3Ys7NtTOyLg10ZT2hCEcCa9tdFwnKmOGCqi7k
-   nXaoacfTuYHj8NtxNbbOie0ialvzUQgH3Oh+ovC0mYptK9vzGHlEe7U+w
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="318659214"
-X-IronPort-AV: E=Sophos;i="5.98,268,1673942400"; 
-   d="scan'208";a="318659214"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2023 06:44:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="680291092"
-X-IronPort-AV: E=Sophos;i="5.98,268,1673942400"; 
-   d="scan'208";a="680291092"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga002.jf.intel.com with ESMTP; 17 Mar 2023 06:43:58 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@intel.com>)
-        id 1pdAN9-0053qv-2j;
-        Fri, 17 Mar 2023 15:43:55 +0200
-Date:   Fri, 17 Mar 2023 15:43:55 +0200
-From:   Andy Shevchenko <andriy.shevchenko@intel.com>
-To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Cc:     Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Wolfram Sang <wsa@kernel.org>, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Peter Rosin <peda@axentia.se>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Mike Pagano <mpagano@gentoo.org>,
-        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
-        Marek Vasut <marex@denx.de>,
-        Satish Nagireddy <satish.nagireddy@getcruise.com>,
-        Luca Ceresoli <luca@lucaceresoli.net>
-Subject: Re: [PATCH v10 1/8] i2c: add I2C Address Translator (ATR) support
-Message-ID: <ZBRumwIyINlZ/pzJ@smile.fi.intel.com>
-References: <20230222132907.594690-1-tomi.valkeinen@ideasonboard.com>
- <20230222132907.594690-2-tomi.valkeinen@ideasonboard.com>
- <20230317101606.69602bba@booty>
- <b281b472-f911-1f04-2cc8-c3713e771bf6@ideasonboard.com>
+        Fri, 17 Mar 2023 09:44:55 -0400
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FA4610CC
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 06:44:53 -0700 (PDT)
+Received: by mail-ed1-f43.google.com with SMTP id y4so20632756edo.2
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 06:44:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679060692;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JJJBSnB7o70eAA7mqVir08dpO4NUXBSh7FyCL+f6E1s=;
+        b=Ab/3L9n+Jpoworo651uEP1aIjiYPTvF+J0m8MKtGG6t+blqoKvU21hx/kUEc5nMeL6
+         gEdlXp/4YOQRiQXhFgZQDJQxely+RgQy8TZsS56Z7cNyUL7SFYNJm6IN6krOICnb6QR2
+         GO6K/0rx0GtGCti2UNoZUm2Pgibl3htt+OjMyRCgkzGRfhUKYw7Vmjof++ZGHt2ieN0o
+         dBO7uf6xBjbSNbjJHLfSyh0QdQmwet9LaJie9ZMu42mMCwNrtndT8jov2P7Obvy9auSk
+         cndDBICwLR+rpEuvkzc45rVp84AgnvDCfgRPOeRKqah94sD9/1igAmyPa2lEgq9LiXci
+         mX+g==
+X-Gm-Message-State: AO0yUKUk1agKlVfsGX2Z4r2zjGi/tBxotzxewEV3QVFHzYBkS8cIdLFt
+        C4pacujzW7/QZMAJUkpC7j4=
+X-Google-Smtp-Source: AK7set+bv2JJPSJzrjYUiKpymvnxoVfPw+PkOH4EeukjH39GC4jd/80SFBmpwh0LjjhTCUvCkSfCtQ==
+X-Received: by 2002:a17:906:f85:b0:909:3c55:a1b3 with SMTP id q5-20020a1709060f8500b009093c55a1b3mr13801506ejj.38.1679060691908;
+        Fri, 17 Mar 2023 06:44:51 -0700 (PDT)
+Received: from localhost.localdomain (85-160-41-201.reb.o2.cz. [85.160.41.201])
+        by smtp.gmail.com with ESMTPSA id gz14-20020a170906f2ce00b00923221f4062sm999273ejb.112.2023.03.17.06.44.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Mar 2023 06:44:51 -0700 (PDT)
+From:   Michal Hocko <mhocko@kernel.org>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Leonardo Bras <leobras@redhat.com>
+Cc:     Frederic Weisbecker <fweisbecker@suse.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <muchun.song@linux.dev>,
+        LKML <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>
+Subject: [PATCH 0/2] memcg, cpuisol: do not interfere pcp cache charges draining with cpuisol workloads
+Date:   Fri, 17 Mar 2023 14:44:46 +0100
+Message-Id: <20230317134448.11082-1-mhocko@kernel.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b281b472-f911-1f04-2cc8-c3713e771bf6@ideasonboard.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 17, 2023 at 02:36:25PM +0200, Tomi Valkeinen wrote:
-> On 17/03/2023 11:16, Luca Ceresoli wrote:
-> > On Wed, 22 Feb 2023 15:29:00 +0200
-> > Tomi Valkeinen <tomi.valkeinen@ideasonboard.com> wrote:
+Leonardo has reported [1] that pcp memcg charge draining can interfere
+with cpu isolated workloads. The said draining is done from a WQ context
+with a pcp worker scheduled on each CPU which holds any cached charges
+for a specific memcg hierarchy. Operation is not really a common
+operation [2]. It can be triggered from the userspace though so some
+care is definitely due.
 
-...
+Leonardo has tried to address the issue by allowing remote charge
+draining [3]. This approach requires an additional locking to
+synchronize pcp caches sync from a remote cpu from local pcp consumers.
+Even though the proposed lock was per-cpu there is still potential for
+contention and less predictable behavior.
 
-> > > +	/* lock for the I2C bus segment (see struct i2c_lock_operations) */
-> > 
-> > This comment is identical to the one in the kerneldoc comments just
-> > above, I'd just remove it.
-> 
-> checkpatch wants an explicit comment for each lock.
+This patchset addresses the issue from a different angle. Rather than
+dealing with a potential synchronization, cpus which are isolated are
+simply never scheduled to be drained. This means that a small amount of
+charges could be laying around and waiting for a later use or they are
+flushed when a different memcg is charged from the same cpu. More
+details are in patch 2. The first patch from Frederic is implementing an
+abstraction to tell whether a specific cpu has been isolated and
+therefore require a special treatment.
 
-Checkpatch is a recommendation tool and not obligation.
+The patchset is on top of Andrew's mm-unstable tree. I am not sure which
+tree is the best to route both of them but unless there are any special
+requirements for the cpu isolation parts then pushing this via Andrew
+seems like the easiest choice.
 
-What it does correctly is sending message that lock should be described.
-The kernel doc is good format for that, checkpatch has to gain support
-for this type of lock descriptions.
+Frederic Weisbecker (1):
+      sched/isolation: Add cpu_is_isolated() API
 
-> > > +	struct mutex lock;
+Michal Hocko (1):
+      memcg: do not drain charge pcp caches on remote isolated cpus
 
+ include/linux/sched/isolation.h | 12 ++++++++++++
+ mm/memcontrol.c                 |  2 +-
+ 2 files changed, 13 insertions(+), 1 deletion(-)
 
--- 
-With Best Regards,
-Andy Shevchenko
+[1] https://lore.kernel.org/all/20221102020243.522358-1-leobras@redhat.com/T/#u
+[2] https://lore.kernel.org/all/Y9LQ615H13RmG7wL@dhcp22.suse.cz/T/#u
+[3] https://lore.kernel.org/all/20230125073502.743446-1-leobras@redhat.com/T/#u
 
 
