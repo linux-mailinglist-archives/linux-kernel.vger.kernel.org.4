@@ -2,50 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 411D96BE36A
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 09:25:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A5F86BE361
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 09:24:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230307AbjCQIYl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 04:24:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58342 "EHLO
+        id S231351AbjCQIYS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 04:24:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231135AbjCQIXn (ORCPT
+        with ESMTP id S229543AbjCQIXe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 04:23:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 522E2A5D2;
-        Fri, 17 Mar 2023 01:23:15 -0700 (PDT)
+        Fri, 17 Mar 2023 04:23:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB00110272
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 01:23:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F1AD3B824FB;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E911B6222D
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 08:23:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35C23C433EF;
         Fri, 17 Mar 2023 08:23:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72552C433D2;
-        Fri, 17 Mar 2023 08:23:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679041382;
-        bh=eVjVeNRWTWrNvZ0ADJpOpPfGExYmn5HJ+ecNEWoPDEg=;
+        s=k20201202; t=1679041385;
+        bh=Yy6qQhiWlQeyRXwDMARwFhqS8zBGMG54yD+MPv2mfpM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ulun32YaRazjRkzxIZjPbqKxF6ImcLWBmaPIvepaMqbz8of7ETiXZcWkPs6RE3JxL
-         2M1h8mkmBcoPxQ3wJmDd3ceuDE2Zwt59R7NXQiUEs1SWKUQfoADEX68QjACH/nQf7n
-         KsFILlJiZoHeCWYwoj/9YwQv2XozshXqfLSHMLNVpr9+mjKDSxUkgC6GR4EFLLay++
-         sze/f/kNYnk6DAF3roBOckVZdzWQyQNZEdYtVSYsZIzOfxE+esmve0pKaeAJ6xLEzi
-         zp8UluWatlfV2ZVCj8bn144UDVaep1UKS5v12Kf5UWqBKO/Q+IrwccbSgwhpbrYd4A
-         xlC/nXQYYkTTA==
+        b=EjxtDlZyH9IgO2RrdO8cPGAXjcXr/cr9/taRKEB359jIZzlOSKIZiOLhafVN05amT
+         B43Yyacb9tFrPYub1uHBTYJAY3rkO+IzwpY24lal5neRg0gKHn2z5vObTkojNxtM8h
+         uKunhQxvc0pA7cbj7Mn4cHz4hzwAwU35bRyIH2M7cIHpRv00Y0ETIyM/yR4Zol3Xbv
+         GBFLDU9/kq2WJk8pk4GnWH9NLe9t9+TemPeL2wDSf7QntdpobBn9UKMYmR6MTHNHeQ
+         E0YhjH8jnhnS7Tsk+urMBX83n2gnnvEqC89mFyWbo9i7AYhqWwE0FmllDpthylwM7p
+         IdiNp5YFmkYNw==
 From:   Lee Jones <lee@kernel.org>
 To:     lee@kernel.org, dri-devel@lists.freedesktop.org
-Cc:     linux-kernel@vger.kernel.org,
+Cc:     linux-kernel@vger.kernel.org, Evan Quan <evan.quan@amd.com>,
         Alex Deucher <alexander.deucher@amd.com>,
         =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
         "Pan, Xinhui" <Xinhui.Pan@amd.com>,
         David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        amd-gfx@lists.freedesktop.org, linux-media@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org
-Subject: [PATCH 18/37] drm/amd/amdgpu/amdgpu_vce: Provide description for amdgpu_vce_validate_bo()'s 'p' param
-Date:   Fri, 17 Mar 2023 08:16:59 +0000
-Message-Id: <20230317081718.2650744-19-lee@kernel.org>
+        Daniel Vetter <daniel@ffwll.ch>, Li Ma <li.ma@amd.com>,
+        amd-gfx@lists.freedesktop.org
+Subject: [PATCH 19/37] drm/amd/pm/swsmu/smu11/vangogh_ppt: Provide a couple of missing parameter descriptions
+Date:   Fri, 17 Mar 2023 08:17:00 +0000
+Message-Id: <20230317081718.2650744-20-lee@kernel.org>
 X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
 In-Reply-To: <20230317081718.2650744-1-lee@kernel.org>
 References: <20230317081718.2650744-1-lee@kernel.org>
@@ -63,35 +61,43 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Fixes the following W=1 kernel build warning(s):
 
- drivers/gpu/drm/amd/amdgpu/amdgpu_vce.c:599: warning: Function parameter or member 'p' not described in 'amdgpu_vce_validate_bo'
+ drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu11/vangogh_ppt.c:2381: warning: Function parameter or member 'residency' not described in 'vangogh_get_gfxoff_residency'
+ drivers/gpu/drm/amd/amdgpu/../pm/swsmu/smu11/vangogh_ppt.c:2399: warning: Function parameter or member 'entrycount' not described in 'vangogh_get_gfxoff_entrycount'
 
+Cc: Evan Quan <evan.quan@amd.com>
 Cc: Alex Deucher <alexander.deucher@amd.com>
 Cc: "Christian König" <christian.koenig@amd.com>
 Cc: "Pan, Xinhui" <Xinhui.Pan@amd.com>
 Cc: David Airlie <airlied@gmail.com>
 Cc: Daniel Vetter <daniel@ffwll.ch>
-Cc: Sumit Semwal <sumit.semwal@linaro.org>
+Cc: Li Ma <li.ma@amd.com>
 Cc: amd-gfx@lists.freedesktop.org
 Cc: dri-devel@lists.freedesktop.org
-Cc: linux-media@vger.kernel.org
-Cc: linaro-mm-sig@lists.linaro.org
 Signed-off-by: Lee Jones <lee@kernel.org>
 ---
- drivers/gpu/drm/amd/amdgpu/amdgpu_vce.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/gpu/drm/amd/pm/swsmu/smu11/vangogh_ppt.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_vce.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_vce.c
-index 2fb61410b1c02..c4d65ade5c00a 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_vce.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_vce.c
-@@ -585,6 +585,7 @@ static int amdgpu_vce_get_destroy_msg(struct amdgpu_ring *ring, uint32_t handle,
- /**
-  * amdgpu_vce_validate_bo - make sure not to cross 4GB boundary
+diff --git a/drivers/gpu/drm/amd/pm/swsmu/smu11/vangogh_ppt.c b/drivers/gpu/drm/amd/pm/swsmu/smu11/vangogh_ppt.c
+index 4590374251f3b..7433dcaa16e04 100644
+--- a/drivers/gpu/drm/amd/pm/swsmu/smu11/vangogh_ppt.c
++++ b/drivers/gpu/drm/amd/pm/swsmu/smu11/vangogh_ppt.c
+@@ -2389,6 +2389,7 @@ static u32 vangogh_set_gfxoff_residency(struct smu_context *smu, bool start)
+  * vangogh_get_gfxoff_residency
   *
-+ * @p: parser context
-  * @ib: indirect buffer to use
-  * @lo: address of lower dword
-  * @hi: address of higher dword
+  * @smu: amdgpu_device pointer
++ * @residency: placeholder for return value
+  *
+  * This function will be used to get gfxoff residency.
+  *
+@@ -2407,6 +2408,7 @@ static u32 vangogh_get_gfxoff_residency(struct smu_context *smu, uint32_t *resid
+  * vangogh_get_gfxoff_entrycount - get gfxoff entry count
+  *
+  * @smu: amdgpu_device pointer
++ * @entrycount: placeholder for return value
+  *
+  * This function will be used to get gfxoff entry count
+  *
 -- 
 2.40.0.rc1.284.g88254d51c5-goog
 
