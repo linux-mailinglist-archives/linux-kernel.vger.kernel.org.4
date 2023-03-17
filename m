@@ -2,88 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BCA26BEAB2
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 15:05:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A4D36BEAB5
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 15:07:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230043AbjCQOFj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 10:05:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44258 "EHLO
+        id S230153AbjCQOHe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 10:07:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229621AbjCQOFh (ORCPT
+        with ESMTP id S229540AbjCQOHb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 10:05:37 -0400
-X-Greylist: delayed 61 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 17 Mar 2023 07:05:35 PDT
-Received: from smtpcmd01-sp1.aruba.it (smtpcmd01-sp1.aruba.it [62.149.158.218])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 752FD1A2
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 07:05:35 -0700 (PDT)
-Received: from [192.168.1.56] ([79.0.204.227])
-        by Aruba Outgoing Smtp  with ESMTPSA
-        id dAh5peDmMlwgQdAh5p6DM7; Fri, 17 Mar 2023 15:04:31 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
-        t=1679061871; bh=WflWTIh9j2tSU54l5h8eJJvWwKqlkFvF68Qe3qMjt2I=;
-        h=Date:MIME-Version:Subject:To:From:Content-Type;
-        b=Kn/QE2fpoWiSEBxAjMK7HMGImE1qun2dwZBC5WMAgGC7s7tWwQuK8/Hv1VkbyrDT4
-         RB5cL7VyHEinFMge1FI5d9rLDS1wIi4j2ZcmfLZie+1I3XzmEETbQft13SnzYL2KVP
-         ThOsSCbjFUuPjAa+1PB5vNT4H+3XOFPqSW5A0LozmrSYAjF9wPCQihF2AtAA6kV3Hb
-         Hi0tQltT3JUrKcNJtIaqOhEPLEGmw2StAwALE/UDtNSaMvMZbJkK2ipq6IJq3xD4RL
-         Uk7QX/S3qrbvPNkqYijPni9JxWvZ14H6NQWDE0B6DBFkvURYeODI8tAYjDska0FdJB
-         OisjsYsQxEtDg==
-Message-ID: <2713f092-5d21-ad5e-c5f4-87c927b18a27@enneenne.com>
-Date:   Fri, 17 Mar 2023 15:04:31 +0100
+        Fri, 17 Mar 2023 10:07:31 -0400
+Received: from EUR03-AM7-obe.outbound.protection.outlook.com (mail-am7eur03on2084.outbound.protection.outlook.com [40.107.105.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 828E622119;
+        Fri, 17 Mar 2023 07:07:29 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kd6qcK2PdK9o0KeDw3NBtFhy5earKqyJevKnc+F6BB1EhCZMM939k1VEIVYJw+OS9UCUJ8DJEpBp8OKpjiHNU8TWpMEbWqw03qbLidjTcLKZ+k6YyeOYKfvQc7QZrYtfheUunCYKqyuNRyDicYLKJJnDtDJGgbQwPto+Pz80ZVP7ZGgOkoC5NBmvjCwalz7OzlhxwdW6OX52zkjNDsE68BG3MHb4ehFRP++OqW0avesoXUE0bjfQGvhShd9AH18WuzrM2Ejv+GpWCJXZvYgnujvhA87tNnP9xNfbYJgUXlOlC96EwiLqeVAC7cxaMAevBAzJtN0gk605Lj42bIz39g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=0hLlEFwNrtfDYjmKLqvBZk779IypPpQOfA3g/xsWCtY=;
+ b=SJsEo0IIsRqTnx9RarnPFgXVEUA22MbKEEw1XNjda1N5bDcuUOtgy3sLHyTaQiED2VPuqpkGspI8Gc6Arv8IeKVKwDl6C5MgWdeVJwnAE9aXg/wAe3kqbBO3+7Q4Q9NDgTKE5nnrKobPoqm/ddzHN0DKARTGHuH3W7aaSZmBBTheCdnKtGUd0o11+nbuF2cD3v4PjzF5DoN5Ew4yfVjy57Z1V6C+1OjXtbmrRMOs431CyFQdQ9g1L0EXwlvxwlGvQesXIImsc6fvmWnab+P5KmHKwBIZXaeox/lb4CUhLtcYKR38VagHFnPnBh64Yyi9mz7/uM5uxbuh/QT/k/Jxrg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=0hLlEFwNrtfDYjmKLqvBZk779IypPpQOfA3g/xsWCtY=;
+ b=q9Qn6rYUrjjKDVfv/GOirSCWZzpfmm0TNl3Xp1aWdd+nDjqEm/uLvQUK2ZAsYlnaVn+7qk/X5fIyftj0XO1IPssHpdkc+47cHU0OKeDgZfThGa9l10De3KYkk9a3hMuvuHGoXKr27rshO/8CAcMgirlrjOBOXSbJQa7x4IgCyaA=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from DB8PR04MB6459.eurprd04.prod.outlook.com (2603:10a6:10:103::19)
+ by DU2PR04MB8887.eurprd04.prod.outlook.com (2603:10a6:10:2e2::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.35; Fri, 17 Mar
+ 2023 14:07:27 +0000
+Received: from DB8PR04MB6459.eurprd04.prod.outlook.com
+ ([fe80::e555:cc9e:b278:15d9]) by DB8PR04MB6459.eurprd04.prod.outlook.com
+ ([fe80::e555:cc9e:b278:15d9%7]) with mapi id 15.20.6178.031; Fri, 17 Mar 2023
+ 14:07:27 +0000
+Date:   Fri, 17 Mar 2023 16:07:22 +0200
+From:   Vladimir Oltean <vladimir.oltean@nxp.com>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     netdev@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com,
+        Arun Ramadoss <arun.ramadoss@microchip.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Marek Vasut <marex@denx.de>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        Ben Hutchings <ben.hutchings@mind.be>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC/RFT PATCH net-next 2/4] net: dsa: microchip: partial
+ conversion to regfields API for KSZ8795 (WIP)
+Message-ID: <20230317140722.wtobrtpgazutykaj@skbuf>
+References: <20230316161250.3286055-1-vladimir.oltean@nxp.com>
+ <20230316161250.3286055-3-vladimir.oltean@nxp.com>
+ <20230317094629.nryf6qkuxp4nisul@skbuf>
+ <20230317114646.GA15269@pengutronix.de>
+ <20230317125022.ujbnwf2k5uvhyx53@skbuf>
+ <20230317132140.GB15269@pengutronix.de>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230317132140.GB15269@pengutronix.de>
+X-ClientProxiedBy: VI1PR10CA0111.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:803:28::40) To DB8PR04MB6459.eurprd04.prod.outlook.com
+ (2603:10a6:10:103::19)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v4] pps: Add elapsed realtime timestamping
-Content-Language: en-US
-To:     Alex Komrakov <alexander.komrakov@broadcom.com>,
-        Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org
-References: <20230317074739.193965-1-alexander.komrakov@broadcom.com>
- <ZBQdWRHzakFLzSkb@kroah.com>
- <CAMedr-_ssg-baCz94ExMVTeXr2Qivzop1kEpx0S4PWuQdAiGaw@mail.gmail.com>
-From:   Rodolfo Giometti <giometti@enneenne.com>
-In-Reply-To: <CAMedr-_ssg-baCz94ExMVTeXr2Qivzop1kEpx0S4PWuQdAiGaw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4xfNdxL369wUWuovvRjXsxQPGn3a1fJDukeBvwZ8jbETPnDLUStkJk3Bk0ekD3dqzWTpx1RZmpYsNnvi+TgxxHLv8tOUjbGBVRbtNkmCus0wsbe9hV92Pi
- PpUmxvY6UMpoSkcEBfleSjD2yi4wfw2Xj+ebaKTX0a+8oPQ+0O9xL+E2mTEhridebS8wpe1wUvLLs0ro3cEV7VFSEzT6wSjF/kSVlPQxrUax0njDr0zUP52C
- gKt7aI6ebOqbap08RjcQFygwV6Jis11qtMmkFrNOkF36YTl5IDJ+0vQBY6m91rFG
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DB8PR04MB6459:EE_|DU2PR04MB8887:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9dad5591-4637-47b1-d6fe-08db26f0f01b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: vBVJFt0P7HgajXv88weGBBzTphhGcKA1sddRgm0SPtoe2zGYZ6ee7f4CchmpzarDp4oPBHoUlou8VkLLrF4ScsZim5rQSmL+9GoIFqWQigrlsT596A7sdFdz8te3yYJbpj2C7xgpUzIA+MZTOjK4BclU6jLsFCg5OEvGv/8DRJnvv9c5fkHiJUV1BDa3Srohu5ES2vp3GEJLTvp8bVzF6I8ZvIQt68tj6R2pzJKT9ZX5McKiSHoqlNowtSa733tMsbjNb3pXnZHjDWP+V3iGgRxpi3RFhAGUHeSK8YUO9gIr0PAqHDJSdDdt4FdWbVn20Q57HEZeLL+ndQnnfAn6RO06QVwcG73x2jyXJ9eRNEj4pR1dNQNq/rG8ocG1swmYfyZzsm2VFDaDknLSo8N8ES0Gind3NXc6ib1t4xKcDo3YmynSmC/DSju9MIekwwvxT8VauXW1cECLfetpp/JlQSwxNTtsnj7gKkqLte+Kvaq9uoKb/cBNcnmhy/USaeI6tPPy+N1DatZTMJvk29OwBDxxUNn//mif/4kpRM4mZNF/F9RRUCP/I+c8CjvpyWOrzeCvc23jRYoTa/Rq9+rxAUKkQISKx3cJW/u3JDbWnyc+lULxmFD5S4qa4c4guYKkFLPJKgHMQXW43YtGgyKsnw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB8PR04MB6459.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(7916004)(4636009)(346002)(376002)(39860400002)(366004)(396003)(136003)(451199018)(8936002)(44832011)(7416002)(5660300002)(4326008)(41300700001)(6916009)(558084003)(86362001)(33716001)(38100700002)(3716004)(2906002)(6486002)(6666004)(478600001)(186003)(1076003)(26005)(9686003)(6512007)(6506007)(54906003)(316002)(66946007)(8676002)(66556008)(66476007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?GEYNtDlAbnH6zNSp/3xeOAvZY70zea5eUJ6qmbBgMkoEvseIIXG/NouGjEXZ?=
+ =?us-ascii?Q?fhXPd4x1zjPAdgTRUCwKtRzF0m+OYLDwp2BFohXp4hetLugMAoJgZC+NDFFF?=
+ =?us-ascii?Q?j4lXiylu1HZM5k99x8R8fu034rdmR3DNUKlsR2RrJbT7fhsRMEK4zo5ihBjR?=
+ =?us-ascii?Q?6Xi9aKWD7uGaMnNKPjSNQw2fbfBm4WF6HAMuSxtaHPgnZrkQuvLZBo0yXrIH?=
+ =?us-ascii?Q?6TFjnHdp6OBRmHlXfTlsNomc62+PMisenFuHdGplNjGGShLv+K/tdrpV3Hqj?=
+ =?us-ascii?Q?jTSjfp0SH6QsvNtjW5IqT6YpABs7sTU8BuuwMfmRRJKgpDaeHmyOTfGDwfaQ?=
+ =?us-ascii?Q?KX5+NaJxZ2q0TpVxVUvm6uZjsyNNHln7+ulxZHdVF4kkkZ3LnMSqzZV4EWFF?=
+ =?us-ascii?Q?E4EOJVPo1ZY1wJnesNeYGdH34qkItcYCbJEf5CO2UpSwtFDtf3Jy5De/spqq?=
+ =?us-ascii?Q?rv4hd5aWJwZ5PreTNpjLRsP2QzEPI1ZoPo1NbvXzS/EanJ+D5QAxCQZXKVqM?=
+ =?us-ascii?Q?+V4LGPebTW7qXwWkNHspljliYT1jOBqACByIhUlILPm6znt3dkPoyvB502vW?=
+ =?us-ascii?Q?SJ9228ZlZyBIOHmkNlsGhfZyfPFKn6WMbNBGcKsIrh8+Z6Xo+bIkgVECQb9P?=
+ =?us-ascii?Q?f9luJPTKq+DEndHCCir/iAW6EDp5o9uhGO9zCeBzS+5EhMjoRyu+einlYUcN?=
+ =?us-ascii?Q?gT/fXWhl/jnsz8s2Kycte9SUImN0VbKcFKotOdiQPJaAksggPcTfFAvWwRo3?=
+ =?us-ascii?Q?rJLdUmIW7xbnETWvqqhTXnHbrAJDaprFTCCO5wk9IZHsOPoXUc/j+/dQHx5y?=
+ =?us-ascii?Q?O+m59TZdSNIka8gfzm8l+YcCVuaMAaAmveBI+yqFADYFeRqSN1GmB3giQ8qy?=
+ =?us-ascii?Q?aJBoX2IfTKIIkpX947ugiUdftyH5zNd/yEGFc20904LTGi0kyGosRM+tkqln?=
+ =?us-ascii?Q?RYJXhnBAWttmF6wdE+ZAMZbPPLZNMOYICPt5lnb0eD5PacE9f0Ij2NZ8Vhzy?=
+ =?us-ascii?Q?OyUWF7B+kSHKnu8Pdx2dB8qNk/craW6/awSg+k7QhW8oqodKGeFzuW2QSfsg?=
+ =?us-ascii?Q?1uAFut6UkoO+EPk6ttIbhffMpr7orz14oNg3cD88BvKkep2XCOLQiBgwmAR4?=
+ =?us-ascii?Q?AU+TvHN+nxQ50+aZbvmvHnYO74bXjE9bvaorI7k/mlHAs+89i6CfI/Y6ZGQq?=
+ =?us-ascii?Q?oCFpERaWs1UsoaBfocSQMB+ioXePMOIPcDJ9k7fW/gKjWb/waGDxxNY9/z6q?=
+ =?us-ascii?Q?Mvs9SxfkZNJpEY73sWjsbWX7lcyUQwwIlbuqoZx9/t9pxT9kyeDk2YDLrvWT?=
+ =?us-ascii?Q?tsNlXXVNcAir0cq8H5Fll3cE7H08euSH+o2j6IRZWeMl6yHx8U1fyiAgvuFL?=
+ =?us-ascii?Q?4z6NXT9Lb0BxMF3aCxYTZG6aQJGlsSk0c3bBwvnNH6mUSdQHrDWGSxjLsTED?=
+ =?us-ascii?Q?sHVPB53MU3lKvjUH98Z/pANw0jh8bX2WtsW9sTYt8B8K8YN5BJSuHDCicldA?=
+ =?us-ascii?Q?Fqs65dxzPuvWuJ3ur3ciZhlfBn/80zchZdkbi9dGbGf1u3G8xlzE0MRgzkgM?=
+ =?us-ascii?Q?5eqTP+tBrQQIQhiTjegv+HdVUBhdHFX9UQL+zknr0cZVAGcN4wB1Y3uPCYjo?=
+ =?us-ascii?Q?xg=3D=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9dad5591-4637-47b1-d6fe-08db26f0f01b
+X-MS-Exchange-CrossTenant-AuthSource: DB8PR04MB6459.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Mar 2023 14:07:26.9482
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 9RNTjo+4sTmleP4LSe7LWrSzAcTzHtcqHfM/pNCTLd5dMfMsyZq7vYnwMEAH9AcZkkaqQ9fkDSJFPfmIq5da2w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR04MB8887
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/03/23 10:51, Alex Komrakov wrote:
->> +     if (!(pps->info.mode & PPS_CAPTURECLEAR))
->> +             return 0;   Why are you not returning an error?
-> [AK] I used the style in this file sysfs.c.
->   assert_show() and clear_show()  have the same condition.
-> When '& PPS_CAPTURECLEAR' -- 0 means no interrupt asserted  and it is not error
-> Probably Rodolfo can get more info why return 0
+On Fri, Mar 17, 2023 at 02:21:40PM +0100, Oleksij Rempel wrote:
+> If you'll give up, may be i'll be able to take it over.
 
-It's just as Alex said, if the PPS source has no PPS_CAPTUREASSERT or 
-PPS_CAPTURECLEAR mode it should not print ASSERT and CLEAR info.
-
-> And why are these sysfs files even present if the mode is not set
-> properly?  Can the mode be set while the device is attached or is this
-> only defined at probe time?  If at probe time, just never create these
-> files.
-> [AK] we can understand mode is set when interrupts asserted and  
-> file assert_elapsed will be updated.
-
-PPS source's "mode bits" can be set at runtime via PPS_SETPARAMS.
-
-Ciao,
-
-Rodolfo
-
--- 
-GNU/Linux Solutions                  e-mail: giometti@enneenne.com
-Linux Device Driver                          giometti@linux.it
-Embedded Systems                     phone:  +39 349 2432127
-UNIX programming                     skype:  rodolfo.giometti
-
+I have not given up yet, I just need someone to run a few tests on KSZ8795.
