@@ -2,60 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70C7A6BE744
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 11:51:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1863B6BE74D
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 11:53:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230180AbjCQKvn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 06:51:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46660 "EHLO
+        id S229885AbjCQKxA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 06:53:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbjCQKvl (ORCPT
+        with ESMTP id S229603AbjCQKw6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 06:51:41 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17C0BD5174;
-        Fri, 17 Mar 2023 03:51:40 -0700 (PDT)
+        Fri, 17 Mar 2023 06:52:58 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BA2FDCF76;
+        Fri, 17 Mar 2023 03:52:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679050300; x=1710586300;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version:content-id;
-  bh=YVFL4ge9rV3l7hCkWnb3UlUIAamKuHY1SEXdPYljMcU=;
-  b=OecK244Wi2+hgqxWGhD/B/CmaR8MsIbULdDY+mjUMV4c44Oi5qqjGWvQ
-   Y6QjR6FYbAhtyjX0U+7jm9l/aaltUmvQSub1i1NPCAKk4nlLpciDHwrhc
-   84NgUYuWPoqOGwt+gyLOLTPb7RsJ9UVcaw0pRITD/0J4mzK6e+kFc2k85
-   YdFu59ncsP/o3soAIE3iCzrEH7zPdUxCxI0b1/F3ZtmFgCHjGtj5wsiy9
-   rtSSgBpL9+J1zpc6eYKE2fu+TgFOgiAuXmfnSZr9CAxMGQr/CnN6JDT0u
-   OF8caRbYkKOeUZPjyWx1B9qeqK5TsYi+cONJWjtqU7XfctDSDmlQgQ/xM
+  t=1679050377; x=1710586377;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=iQ1t0ClL1aPi65qRW6K1FWVcELWBdYbryklmXMw4RzU=;
+  b=KCxAr4Ls3zXlGQUuI2ehAx5pSO55xJQSXBEwK7FdOcDJzZeR3Z7QWN3n
+   ieMvlU4KgUvuLDNOGQXYJr7dJ3A22KESxzFZS7mkTObDWbWLEXDtwpjzr
+   IFf+UChT0MNISzTBdQyCnWNnoN9Sj+VfG1HoiCp9kRFj3yJi4VQIG9vLr
+   lQxV7PTPDQ0bt2ishF7CgT1nEMukxiNUbwoOQ6FM9DiVIBW0IsJXtdtvT
+   hhBaHtwJwNXeRzq25dA9xar901jYSoxIKgroHnDSlpMdXfgbrm3YNn60J
+   K7hz4r3hp1yppm4sovG37vffFUBby2J8U4akyGu0KhODPeqGaYNoMv73X
    g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="335729921"
+X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="424506303"
 X-IronPort-AV: E=Sophos;i="5.98,268,1673942400"; 
-   d="scan'208";a="335729921"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2023 03:51:39 -0700
+   d="scan'208";a="424506303"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2023 03:52:57 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="790670316"
+X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="823633759"
 X-IronPort-AV: E=Sophos;i="5.98,268,1673942400"; 
-   d="scan'208";a="790670316"
-Received: from bstach-mobl1.ger.corp.intel.com ([10.251.221.222])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2023 03:51:37 -0700
-Date:   Fri, 17 Mar 2023 12:51:35 +0200 (EET)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     David Laight <David.Laight@ACULAB.COM>
-cc:     "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: RE: [PATCH 2/2] serial: 8250: Fix serial8250_tx_empty() race with
- DMA Tx
-In-Reply-To: <55704d488ee644f5a710841f3912b25f@AcuMS.aculab.com>
-Message-ID: <ce143371-3ad-6c8-a37c-f8bcbc9382a@linux.intel.com>
-References: <20230316132452.76478-1-ilpo.jarvinen@linux.intel.com> <20230316132452.76478-3-ilpo.jarvinen@linux.intel.com> <55704d488ee644f5a710841f3912b25f@AcuMS.aculab.com>
+   d="scan'208";a="823633759"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 17 Mar 2023 03:52:54 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 17 Mar 2023 12:52:53 +0200
+Date:   Fri, 17 Mar 2023 12:52:53 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Alvin =?utf-8?Q?=C5=A0ipraga?= <alvin@pqrs.dk>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        linux-usb@vger.kernel.org,
+        Alvin =?utf-8?Q?=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] extcon: usbc-tusb320: add accessory detection support
+Message-ID: <ZBRGhcAeoyxMRMEP@kuha.fi.intel.com>
+References: <20230317104229.1392742-1-alvin@pqrs.dk>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; BOUNDARY="8323329-1087178227-1679049047=:2227"
-Content-ID: <20fe732a-369d-11c1-b35-1e8fcc56b0@linux.intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230317104229.1392742-1-alvin@pqrs.dk>
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
@@ -65,91 +66,177 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-
---8323329-1087178227-1679049047=:2227
-Content-Type: text/plain; CHARSET=ISO-8859-15
-Content-Transfer-Encoding: 8BIT
-Content-ID: <f8943e1-539b-1d44-6a3d-e3a465255b85@linux.intel.com>
-
-On Fri, 17 Mar 2023, David Laight wrote:
-
-> From: Ilpo Järvinen
-> > Sent: 16 March 2023 13:25
-> > 
-> > There's a potential race before THRE/TEMT deasserts when DMA Tx is
-> > starting up (or the next batch of continuous Tx is being submitted).
-> > This can lead to misdetecting Tx empty condition.
-> > 
-> > It is entirely normal for THRE/TEMT to be set for some time after the
-> > DMA Tx had been setup in serial8250_tx_dma(). As Tx side is definitely
-> > not empty at that point, it seems incorrect for serial8250_tx_empty()
-> > claim Tx is empty.
-> > 
-> > Fix the race by also checking in serial8250_tx_empty() whether there's
-> > DMA Tx active.
-> > 
-> > Note: This fix only addresses in-kernel race mainly to make using
-> > TCSADRAIN/FLUSH robust. Userspace can still cause other races but they
-> > seem userspace concurrency control problems.
-> > 
-> > Fixes: 9ee4b83e51f74 ("serial: 8250: Add support for dmaengine")
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-> > ---
-> >  drivers/tty/serial/8250/8250.h      | 12 ++++++++++++
-> >  drivers/tty/serial/8250/8250_port.c |  7 ++++++-
-> >  2 files changed, 18 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/tty/serial/8250/8250.h b/drivers/tty/serial/8250/8250.h
-> ...
-> >  static inline int ns16550a_goto_highspeed(struct uart_8250_port *up)
-> > diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
-> > index fa43df05342b..4954c4f15fb2 100644
-> > --- a/drivers/tty/serial/8250/8250_port.c
-> > +++ b/drivers/tty/serial/8250/8250_port.c
-> > @@ -2006,17 +2006,22 @@ static unsigned int serial8250_tx_empty(struct uart_port *port)
-> >  {
-> >  	struct uart_8250_port *up = up_to_u8250p(port);
-> >  	unsigned long flags;
-> > +	bool dma_tx_running;
-> >  	u16 lsr;
-> > 
-> >  	serial8250_rpm_get(up);
-> > 
-> >  	spin_lock_irqsave(&port->lock, flags);
-> >  	lsr = serial_lsr_in(up);
-> > +	dma_tx_running = serial8250_tx_dma_running(up);
-> >  	spin_unlock_irqrestore(&port->lock, flags);
-> > 
-> >  	serial8250_rpm_put(up);
-> > 
-> > -	return uart_lsr_tx_empty(lsr) ? TIOCSER_TEMT : 0;
-> > +	if (uart_lsr_tx_empty(lsr) && !dma_tx_running)
-> > +		return TIOCSER_TEMT;
-> > +
-> > +	return 0;
-> >  }
+On Fri, Mar 17, 2023 at 11:42:27AM +0100, Alvin Å ipraga wrote:
+> From: Alvin Å ipraga <alsi@bang-olufsen.dk>
 > 
-> Since checking whether dma is active is fast but reading
-> the lsr is slow it is probably better to generate the return
-> value inside the lock and test for dma first.
-> Something like:
-> 	spin_lock()
-> 	result = 0;
-> 	if (!serial8250_tx_dma_running(up) &&
-> 	    uart_lsr_tx_empty(serial_lsr_in(up)))
-> 		result = TIOCSER_TEMT;
-> 	}
-> 	spin_unlock()
-> 	...
-> 	return result;
+> The TUSB320 can detect the following types of accessory:
 > 
-> 	David
+>   - Audio Accessory
+>   - Audio Accessory with charge-thru
+>   - Debug Accessory (DFP)
+>   - Debug Accessory (UFP)
+> 
+> Moreover, the typec subsystem can be informed of this through the
+> typec_set_mode() function. The information will be propagated to any
+> linked typec muxes. Add the necessary support to the driver.
+> 
+> Note that for the Debug Accessory modes, an educated guess was made that
+> for the USB data role, DFP implies HOST and UFP implies DEVICE. But this
+> might want to be made configurable at a later date.
+> 
+> Signed-off-by: Alvin Å ipraga <alsi@bang-olufsen.dk>
+> ---
+> v2: no change
 
-Thanks, I'll change it to something along those lines.
+Not a big problem, but you forgot to include the version in the
+subject. In any case, FWIW:
+
+Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+
+> ---
+>  drivers/extcon/extcon-usbc-tusb320.c | 90 +++++++++++++++++++++-------
+>  1 file changed, 68 insertions(+), 22 deletions(-)
+> 
+> diff --git a/drivers/extcon/extcon-usbc-tusb320.c b/drivers/extcon/extcon-usbc-tusb320.c
+> index 10dff1c512c4..882d1f48495e 100644
+> --- a/drivers/extcon/extcon-usbc-tusb320.c
+> +++ b/drivers/extcon/extcon-usbc-tusb320.c
+> @@ -15,6 +15,7 @@
+>  #include <linux/module.h>
+>  #include <linux/regmap.h>
+>  #include <linux/usb/typec.h>
+> +#include <linux/usb/typec_altmode.h>
+>  
+>  #define TUSB320_REG8				0x8
+>  #define TUSB320_REG8_CURRENT_MODE_ADVERTISE	GENMASK(7, 6)
+> @@ -26,16 +27,16 @@
+>  #define TUSB320_REG8_CURRENT_MODE_DETECT_MED	0x1
+>  #define TUSB320_REG8_CURRENT_MODE_DETECT_ACC	0x2
+>  #define TUSB320_REG8_CURRENT_MODE_DETECT_HI	0x3
+> -#define TUSB320_REG8_ACCESSORY_CONNECTED	GENMASK(3, 2)
+> +#define TUSB320_REG8_ACCESSORY_CONNECTED	GENMASK(3, 1)
+>  #define TUSB320_REG8_ACCESSORY_CONNECTED_NONE	0x0
+>  #define TUSB320_REG8_ACCESSORY_CONNECTED_AUDIO	0x4
+> -#define TUSB320_REG8_ACCESSORY_CONNECTED_ACC	0x5
+> -#define TUSB320_REG8_ACCESSORY_CONNECTED_DEBUG	0x6
+> +#define TUSB320_REG8_ACCESSORY_CONNECTED_ACHRG	0x5
+> +#define TUSB320_REG8_ACCESSORY_CONNECTED_DBGDFP	0x6
+> +#define TUSB320_REG8_ACCESSORY_CONNECTED_DBGUFP	0x7
+>  #define TUSB320_REG8_ACTIVE_CABLE_DETECTION	BIT(0)
+>  
+>  #define TUSB320_REG9				0x9
+> -#define TUSB320_REG9_ATTACHED_STATE_SHIFT	6
+> -#define TUSB320_REG9_ATTACHED_STATE_MASK	0x3
+> +#define TUSB320_REG9_ATTACHED_STATE		GENMASK(7, 6)
+>  #define TUSB320_REG9_CABLE_DIRECTION		BIT(5)
+>  #define TUSB320_REG9_INTERRUPT_STATUS		BIT(4)
+>  
+> @@ -250,8 +251,7 @@ static void tusb320_extcon_irq_handler(struct tusb320_priv *priv, u8 reg)
+>  {
+>  	int state, polarity;
+>  
+> -	state = (reg >> TUSB320_REG9_ATTACHED_STATE_SHIFT) &
+> -		TUSB320_REG9_ATTACHED_STATE_MASK;
+> +	state = FIELD_GET(TUSB320_REG9_ATTACHED_STATE, reg);
+>  	polarity = !!(reg & TUSB320_REG9_CABLE_DIRECTION);
+>  
+>  	dev_dbg(priv->dev, "attached state: %s, polarity: %d\n",
+> @@ -277,32 +277,78 @@ static void tusb320_typec_irq_handler(struct tusb320_priv *priv, u8 reg9)
+>  {
+>  	struct typec_port *port = priv->port;
+>  	struct device *dev = priv->dev;
+> -	u8 mode, role, state;
+> +	int typec_mode;
+> +	enum typec_role pwr_role;
+> +	enum typec_data_role data_role;
+> +	u8 state, mode, accessory;
+>  	int ret, reg8;
+>  	bool ori;
+>  
+> +	ret = regmap_read(priv->regmap, TUSB320_REG8, &reg8);
+> +	if (ret) {
+> +		dev_err(dev, "error during reg8 i2c read, ret=%d!\n", ret);
+> +		return;
+> +	}
+> +
+>  	ori = reg9 & TUSB320_REG9_CABLE_DIRECTION;
+>  	typec_set_orientation(port, ori ? TYPEC_ORIENTATION_REVERSE :
+>  					  TYPEC_ORIENTATION_NORMAL);
+>  
+> -	state = (reg9 >> TUSB320_REG9_ATTACHED_STATE_SHIFT) &
+> -		TUSB320_REG9_ATTACHED_STATE_MASK;
+> -	if (state == TUSB320_ATTACHED_STATE_DFP)
+> -		role = TYPEC_SOURCE;
+> -	else
+> -		role = TYPEC_SINK;
+> +	state = FIELD_GET(TUSB320_REG9_ATTACHED_STATE, reg9);
+> +	accessory = FIELD_GET(TUSB320_REG8_ACCESSORY_CONNECTED, reg8);
+> +
+> +	switch (state) {
+> +	case TUSB320_ATTACHED_STATE_DFP:
+> +		typec_mode = TYPEC_MODE_USB2;
+> +		pwr_role = TYPEC_SOURCE;
+> +		data_role = TYPEC_HOST;
+> +		break;
+> +	case TUSB320_ATTACHED_STATE_UFP:
+> +		typec_mode = TYPEC_MODE_USB2;
+> +		pwr_role = TYPEC_SINK;
+> +		data_role = TYPEC_DEVICE;
+> +		break;
+> +	case TUSB320_ATTACHED_STATE_ACC:
+> +		/*
+> +		 * Accessory detected. For debug accessories, just make some
+> +		 * qualified guesses as to the role for lack of a better option.
+> +		 */
+> +		if (accessory == TUSB320_REG8_ACCESSORY_CONNECTED_AUDIO ||
+> +		    accessory == TUSB320_REG8_ACCESSORY_CONNECTED_ACHRG) {
+> +			typec_mode = TYPEC_MODE_AUDIO;
+> +			pwr_role = TYPEC_SINK;
+> +			data_role = TYPEC_DEVICE;
+> +			break;
+> +		} else if (accessory ==
+> +			   TUSB320_REG8_ACCESSORY_CONNECTED_DBGDFP) {
+> +			typec_mode = TYPEC_MODE_DEBUG;
+> +			pwr_role = TYPEC_SOURCE;
+> +			data_role = TYPEC_HOST;
+> +			break;
+> +		} else if (accessory ==
+> +			   TUSB320_REG8_ACCESSORY_CONNECTED_DBGUFP) {
+> +			typec_mode = TYPEC_MODE_DEBUG;
+> +			pwr_role = TYPEC_SINK;
+> +			data_role = TYPEC_DEVICE;
+> +			break;
+> +		}
+>  
+> -	typec_set_vconn_role(port, role);
+> -	typec_set_pwr_role(port, role);
+> -	typec_set_data_role(port, role == TYPEC_SOURCE ?
+> -				  TYPEC_HOST : TYPEC_DEVICE);
+> +		dev_warn(priv->dev, "unexpected ACCESSORY_CONNECTED state %d\n",
+> +			 accessory);
+>  
+> -	ret = regmap_read(priv->regmap, TUSB320_REG8, &reg8);
+> -	if (ret) {
+> -		dev_err(dev, "error during reg8 i2c read, ret=%d!\n", ret);
+> -		return;
+> +		fallthrough;
+> +	default:
+> +		typec_mode = TYPEC_MODE_USB2;
+> +		pwr_role = TYPEC_SINK;
+> +		data_role = TYPEC_DEVICE;
+> +		break;
+>  	}
+>  
+> +	typec_set_vconn_role(port, pwr_role);
+> +	typec_set_pwr_role(port, pwr_role);
+> +	typec_set_data_role(port, data_role);
+> +	typec_set_mode(port, typec_mode);
+> +
+>  	mode = FIELD_GET(TUSB320_REG8_CURRENT_MODE_DETECT, reg8);
+>  	if (mode == TUSB320_REG8_CURRENT_MODE_DETECT_DEF)
+>  		typec_set_pwr_opmode(port, TYPEC_PWR_MODE_USB);
+> -- 
+> 2.39.2
 
 -- 
- i.
---8323329-1087178227-1679049047=:2227--
+heikki
