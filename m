@@ -2,205 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F9706BE916
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 13:20:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A9636BE91A
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 13:20:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229651AbjCQMT7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 08:19:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38594 "EHLO
+        id S230039AbjCQMUB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 08:20:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230087AbjCQMTz (ORCPT
+        with ESMTP id S229603AbjCQMT7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 08:19:55 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B33B41991
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 05:19:53 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id b10so5036209lfb.9
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 05:19:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679055592;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=621ABpoi5KgPunSWjk55F8jRowzyF4/iYlPhbyE1p3k=;
-        b=Tcz6A375PBqbDYHy74MKAPAIlPZ1jemPuQr4I6n8D2OO3pIV62Z/hGSGxZAt2tem3o
-         PNdlhA0pksXg2VtFM4TOuFuJGf3TuQHMIhA1jhGQ+KfM3LCKL1oFGu4bRigcfll36cMA
-         rGmTIgzNEuz53ZbWOtBwmdIY9q/ZRxrgbzLDwXPlLfi2J9M1Xd+Df26AZLY5cQXJm/Fr
-         i5ApGdtUxPCQbq0PzSXsLLErCEZ2KMJoFempeASZUoz97tvZAPa+JqccFaza9CbjUgEM
-         nT3UKhbxfQeWvlZmXyHDJMUi6MjBaTNSyOgbFgluMct7G//tJ+rCLjQDmlOcLWBRA1YG
-         VkMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679055592;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=621ABpoi5KgPunSWjk55F8jRowzyF4/iYlPhbyE1p3k=;
-        b=ibcI2eDj2Uux346v8d75NYCLEi412bv2yFn0xgtZKHBn7by67bOUIlvCJkfVv9Q4Ge
-         0gmRQD3ylYXfEO56WqsZLTteQsY9Xa1IpNh6h+1npQi1RMMCsyJ+oQfBJ/fMoTi3Ik8H
-         ED8UTHPvu5z3QEKT+5cg8s4yXUE1eKLtc7/QqJZpMpkaK/O2Aoj9k8U/O3uwG1cQWGg1
-         5Qi56l0JG46cyGF6ZlTHWIL8Z6hXfr/QbO+hZ4jhR4dgtBTeLUr7CRwFiET6WKiMbHDF
-         iZjIqZ5BVKik/0brttlEU5Tu1u6d+LPdgAIdc7UcRwhCnEd0U5fuy8NEkYTdAf1Lbcmw
-         VRSw==
-X-Gm-Message-State: AO0yUKWMbTe+GyhN7GMXBViODnqKUT5xhGJfclW/dUIWo9vfQhUo90OB
-        Mduxa9Mhl7cOqToBW4YDE09QyQ==
-X-Google-Smtp-Source: AK7set9ad5XRcgl5xT0h9V0R6N2FtgL3FB9Rbklyz6pXbnXEyTKtGoy/nJkE4hVrwMTiEM4xVHG/Aw==
-X-Received: by 2002:a19:ac02:0:b0:4d7:4826:3192 with SMTP id g2-20020a19ac02000000b004d748263192mr882384lfc.5.1679055591940;
-        Fri, 17 Mar 2023 05:19:51 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id v2-20020ac25602000000b004a0589786ddsm344236lfd.69.2023.03.17.05.19.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Mar 2023 05:19:51 -0700 (PDT)
-Message-ID: <30b349bd-c083-ed17-1e20-c84e4b67d449@linaro.org>
-Date:   Fri, 17 Mar 2023 14:19:50 +0200
+        Fri, 17 Mar 2023 08:19:59 -0400
+Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01on2097.outbound.protection.outlook.com [40.107.113.97])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B36914220;
+        Fri, 17 Mar 2023 05:19:57 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=lgCVcmuy6BwckQ4r6TTfTvwLDncLdYCvGHZaRZ5wBTi+Mon84oxViGbdZhJJJTDxMiXlfkO3EOZ2FYzabos5CdXI4Py7viJkubf5hcVP+OA7VDbVjEHV3fhqNX7iKilAamq/xLPIUCsDb8QQODoSwE7sc9ut8wZEaZXaJtxpWabp/di6O3FT/p112b6k1i1jXUvN1aHHds2LKAmrfjSdVUFvNtXbCcptBJd/DC+6cTJ06d8QxNIA45F7+6tcMRF1GYvp/g4cba5ay1yPuoDHwkFBnPgslasFG/pcSWJPvXmXk6ZDhBk7gD788gkmmWZHOsOfQgInqTn6dXTPwx5ISA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=CURcBLnaqfKvvZpp9hKaZY7/xGfwu1NZGJWLu2LjXks=;
+ b=FOh+Yc75vwlZ0STWb5ErU5BajolwWXcrepMcMCRrVWYrJ5m1vXVkgg1nKFDj2LMkrVdyrafY+9TcsB5i7cJQum03SbBpv0UdvrNk5i4T7fDdDuL/TwHmNlDS4S8pU3v4lgKxwrUKlvSvD2i+bBBGnpgPoGU9NSyGbgzgUMbp9kQchWoJfDSZ0kjEfUZ15mCQAmJi3+GEhJLv/HD9aJHgTGmXLdeW7/DzpPVrAj6UyxEc2msBVtxltX9qiQiuSJKFf95PzJ58Iuj2AJBxkkBJi8VwqvYnivo9V3p7kx76jU9fxKR/QXUgB69iULodVPzuKgcwWZe5xk8S0sJoV7BHlQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
+ dkim=pass header.d=renesas.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=renesas.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=CURcBLnaqfKvvZpp9hKaZY7/xGfwu1NZGJWLu2LjXks=;
+ b=H5S7INOC2jMj+24LkZDNhyc299mqikneXVhRJ/f/BkXn7lxAGpMhWXmBJblmIpkFsQe4FH5c2H52vAtmod3dxOYuGe7Prqfl69Ad04br55OZkRfJODRO/VXbdon6c1DvY9+rkyf3pb1SgQi4v/hQoyiMHYlgVJooaM63Af8eIto=
+Received: from OSYPR01MB5334.jpnprd01.prod.outlook.com (2603:1096:604:8a::15)
+ by OS7PR01MB11823.jpnprd01.prod.outlook.com (2603:1096:604:23d::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.33; Fri, 17 Mar
+ 2023 12:19:53 +0000
+Received: from OSYPR01MB5334.jpnprd01.prod.outlook.com
+ ([fe80::e342:5c46:e5d3:d8f7]) by OSYPR01MB5334.jpnprd01.prod.outlook.com
+ ([fe80::e342:5c46:e5d3:d8f7%8]) with mapi id 15.20.6178.035; Fri, 17 Mar 2023
+ 12:19:53 +0000
+From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+To:     Zheng Wang <zyytlz.wz@163.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+CC:     "skhan@linuxfoundation.org" <skhan@linuxfoundation.org>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        "phil.edworthy@renesas.com" <phil.edworthy@renesas.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "hackerzheng666@gmail.com" <hackerzheng666@gmail.com>,
+        "1395428693sheep@gmail.com" <1395428693sheep@gmail.com>,
+        "alex000young@gmail.com" <alex000young@gmail.com>
+Subject: RE: [PATCH v9] usb: gadget: udc: renesas_usb3: Fix use after free bug
+ in  renesas_usb3_remove due to race condition
+Thread-Topic: [PATCH v9] usb: gadget: udc: renesas_usb3: Fix use after free
+ bug in  renesas_usb3_remove due to race condition
+Thread-Index: AQHZWLaq7vZqB9iNWEOEZaM4fcXiLq7+4vTQ
+Date:   Fri, 17 Mar 2023 12:19:53 +0000
+Message-ID: <OSYPR01MB5334DA88B0881C50E819A19CD8BD9@OSYPR01MB5334.jpnprd01.prod.outlook.com>
+References: <20230317095505.2599838-1-zyytlz.wz@163.com>
+In-Reply-To: <20230317095505.2599838-1-zyytlz.wz@163.com>
+Accept-Language: ja-JP, en-US
+Content-Language: ja-JP
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=renesas.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: OSYPR01MB5334:EE_|OS7PR01MB11823:EE_
+x-ms-office365-filtering-correlation-id: 837de4fd-db4d-4ba6-1e26-08db26e1e9e0
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: ZpEgF7eb9LuH8O5u8wWASLKq8YlQRIOi/uI7gnP0oMrm7QPDJJc4OHL24nB7gS2lb78UtA45mI7TrXAOnM36cLjZHr4npEoUre+zUndFkbGXHoZpd/NevxYCLYr9EJhaqsj2xhrjnxZMG6vy6RJIxvFBP6ukJZWs62Uk93GDTReNdZeGDndYo3JclfjlBMVeVqkL1zaFkpXOakq/VHJlxLdlOwBfE4xCqWed8WPbeq0dhLRV53BEicspNQ0bwQjy6uNgIAuZ6S5zGXnVhc0Hkpa6XMs0B3ajfHJuQ/jOA27hmZyoro3cB6BrdgdyVw/2hb46U70J+zq9mQ/SOTeLfzwWSyv8vLOF5EJJe3KpEq5jHamCcZxJnyf8HZkGpObKuWLfmFyNy2QG+k4Z+DMiXXSgWI5HpFo8oYl50Lk0o8GegaDskRCfDPMuOygoyWrxC1cr3QQOsADQsqYphyj6ieN9jr4gTybBEQXOVLfwglq1GCxxLXeKsPYNWaqNqoCK18hsdXTvm90FPneX9OVAEACUvlcPdJquhyw4CtVdYh/DPkoFEUFm1C8W3okZSAmanGjzwVGSjyxbhwA1RDvlTAFZU/ZOyu/qBFgpFJbuup+BVp7vIh67ujhDzI55zMv3qU/PGe88pC0HfqOIvE5Q/fRbbZeqiksjp4kceAad3U7qBubl9endQrBlZPmdCClq/lhI/Fh4WwJWy26PfXlOkg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OSYPR01MB5334.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(376002)(366004)(136003)(396003)(39860400002)(451199018)(52536014)(41300700001)(8936002)(5660300002)(2906002)(122000001)(86362001)(33656002)(38100700002)(478600001)(7696005)(55016003)(76116006)(66946007)(71200400001)(8676002)(64756008)(66556008)(66476007)(66446008)(38070700005)(316002)(4326008)(110136005)(54906003)(83380400001)(9686003)(26005)(6506007)(186003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?3KGGqXFlNZPHalN3MwItDJKiLgMLP/Tt35kB76VXbBYK3GwhAYW3Hh6vdnhO?=
+ =?us-ascii?Q?c68ppn1HZc8GzanBqpWhrHYBwfbA1mVie0jFUs6ObCqO2q4+Pity2E63ysw3?=
+ =?us-ascii?Q?wlr/8XTbqBxpZvnPaZbK4PNgPCH2q6EbQNNe0WpyO18za2evUJIf9277Do0V?=
+ =?us-ascii?Q?Go3mW1NTzDBmcXlz2+GTD+kKCnjExZUj7I9E/YsK14lBgz6plZG7YXyeEBvW?=
+ =?us-ascii?Q?HPv4HovYBUPSfRKHEYz5gnoLM920xn7VNcPkW1SoQ6SZs57tlFrDLter2eCA?=
+ =?us-ascii?Q?PEOa1Ell4XzoZSaY9g4bpeWtFkgaTf63RDOw9bKWm3g49Yluqj7phYsCOEI4?=
+ =?us-ascii?Q?29z/sYgFJnN4yN7AH6aZGuEXRocR3lgUb6wEmDEjrijqMKMMhWedgDzrGbZA?=
+ =?us-ascii?Q?UU2D+bvHNE5NCw/31AI5SggmkTyL8wI7RwCpUH0VyHo4PtuH8VHsdHFbqSH/?=
+ =?us-ascii?Q?tm/aqgpLtzUy7Y9BA0GCCxVlH3a55AfOhyGFX1lzICmmDLJQhOhVXDAItiAP?=
+ =?us-ascii?Q?cZfwHG/n0BLLqB3gr1nn3xRIZHZDbD867gC6iB+L8vOmB/cP8h0BmLN2SiNq?=
+ =?us-ascii?Q?uK8IZhHZQ7VfVcISRzcwd8uKjisRNmYt8LLZK02TSN3uWFRlDgMrueu/rsQ9?=
+ =?us-ascii?Q?HW3V9ZtaFyBkhxezKYpFeXgtsJYgqzChX8YTdJgJHkhNXEJoufPUjRL3A6iZ?=
+ =?us-ascii?Q?TDhxvSj/qADFOXsO+ffydotO3j9BHAGTF07aPH4X04UGs55Qg8aa6+WHm6oA?=
+ =?us-ascii?Q?NKJA350bqpnMKN8PQ6h/GozdRRpE7CKftY9ICSh4T6NDFfgmw4eGemMy01YV?=
+ =?us-ascii?Q?uax0SbXbPHgZzG0u+jH8/lUR8tnQcA8RfM6VjghMB9sqjGEPO5i1F9Sji+qh?=
+ =?us-ascii?Q?GMVbItctFkxrlfW7p4AOR+pXC7jLnUpEpjvTt2IUWPdTkWSzVgADklZPtK8U?=
+ =?us-ascii?Q?P1nYNv+jZ3VeVZGalyKr/m2W5xCVWVZ9SLZev5kJrgAa4FJnO9kVjmMfybGS?=
+ =?us-ascii?Q?21OpjsvWGNAVAJwvptFR8/F97CuJhm8gnUsMCrxKakZioX2fRBH9YqXhPOrw?=
+ =?us-ascii?Q?kP8dts8xGVdv9XD/w33Xcgr5I+xwKRZZAqg533v9W9UYAra4E5sLJF2f16+o?=
+ =?us-ascii?Q?vUj3YMZMQLkNd4YncUepcyRMHbXLxK07WfVMDJ2VZe7emZYNkv4gZNRD9hK7?=
+ =?us-ascii?Q?V8vaKlEy4u5D2EzWny/dfo00HLbkyttXfnNivQgKZ6ngCPBVGDwuA0OsnmDE?=
+ =?us-ascii?Q?Vgq1Ya4xeyv/WF4GPHhaMRspJkWw5i/gPjxme+u2LmqqQzzNj3QeDZdvjkdl?=
+ =?us-ascii?Q?xS/oKnThGituWrWo0uubAFV7Ruhn8xuJJ30oPIStJNCB4Fjj8xy91nzEXo+7?=
+ =?us-ascii?Q?ZvjzeALoqaTbi3qxMOwlV1xD0omGPP4qkAdxUWLAq10THznApcrThArVkrZP?=
+ =?us-ascii?Q?sYsV87iFZ1DIrb5Sv6f+I4q3OISiwOyKZVM8v44DT+F7AppYHF62Z4A2wzCn?=
+ =?us-ascii?Q?RniEg6itULTh9SMiJc3ihGt6a7zdz9aXfye4diRCnxoTVPLf4/E4Vcpwl8ho?=
+ =?us-ascii?Q?U0jdRKxJsgyJDQAMAfmLez1GYRd9X7mpImKRkzJE1/fqCitMvQLJC0um6EUb?=
+ =?us-ascii?Q?UQ=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v5 5/5] arm64: dts: qcom: sm8450: add dp controller
-Content-Language: en-GB
-To:     Neil Armstrong <neil.armstrong@linaro.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230206-topic-sm8450-upstream-dp-controller-v5-0-a27f1b26ebe8@linaro.org>
- <20230206-topic-sm8450-upstream-dp-controller-v5-5-a27f1b26ebe8@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230206-topic-sm8450-upstream-dp-controller-v5-5-a27f1b26ebe8@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-OriginatorOrg: renesas.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: OSYPR01MB5334.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 837de4fd-db4d-4ba6-1e26-08db26e1e9e0
+X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Mar 2023 12:19:53.5863
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: XzVhdCWe3BCtRVZ8ya52Sidc9i5uGOIVNxGQrQehE6voTBhgf7N0erAI28bAKwQrFDa4MjYq3lqN6J28/rmyoB4kqZw2BClj2YdxbEs78w3b4pt9ZccYpXbCq4Q/+cAe
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: OS7PR01MB11823
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/03/2023 11:12, Neil Armstrong wrote:
-> Add the Display Port controller subnode to the MDSS node.
-> 
-> Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+Hi Zheng,
+
+> From: Zheng Wang <zyytlz.wz@163.com>, Sent: Friday, March 17, 2023 6:55 P=
+M
+>=20
+> In renesas_usb3_probe, role_work is bound with renesas_usb3_role_work.
+> renesas_usb3_start will be called to start the work.
+>=20
+> If we remove the driver which will call usbhs_remove, there may be
+> an unfinished work. The possible sequence is as follows:
+>=20
+> CPU0                  			CPU1
+>=20
+>                     			 renesas_usb3_role_work
+> renesas_usb3_remove
+> usb_role_switch_unregister
+> device_unregister
+> kfree(sw)
+> //free usb3->role_sw
+>                     			 usb_role_switch_set_role
+>                     			 //use usb3->role_sw
+>=20
+> The usb3->role_sw could be freed under such circumstance and use in usb_r=
+ole_switch_set_role.
+
+The checkpatch.pl said:
+---
+./scripts/checkpatch.pl this.patch
+WARNING: Possible unwrapped commit description (prefer a maximum 75 chars p=
+er line)
+#75:
+The usb3->role_sw could be freed under such circumstance and use in usb_rol=
+e_switch_set_role.
+
+total: 0 errors, 1 warnings, 7 lines checked
+---
+
+> This bug was found by static analysis. And note that removing a driver is=
+ a root-only operation, and should never
+> happen in normal case. But the attacker can directly remove the device wh=
+ich will also triggering remove function.
+
+I think you should fix them about 75 chars per line) too.
+
+And, I don't know why "attacker" is related to this issue.
+I think "the root user" is better than "attacker".
+
+Best regards,
+Yoshihiro Shimoda
+
+> Fix it by canceling the work before cleanup in the renesas_usb3_remove.
+>=20
+> Fixes: 39facfa01c9f ("usb: gadget: udc: renesas_usb3: Add register of usb=
+ role switch")
+> Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+> Reviewed-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
 > ---
->   arch/arm64/boot/dts/qcom/sm8450.dtsi | 79 ++++++++++++++++++++++++++++++++++++
->   1 file changed, 79 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> index 0b5a151ce138..41f5015e615b 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> @@ -2751,6 +2751,13 @@ dpu_intf2_out: endpoint {
->   						};
->   					};
->   
-> +					port@2 {
-> +						reg = <2>;
-> +						dpu_intf0_out: endpoint {
-> +							remote-endpoint = <&mdss_dp0_in>;
-> +						};
-> +					};
-> +
->   				};
->   
->   				mdp_opp_table: opp-table {
-> @@ -2783,6 +2790,78 @@ opp-500000000 {
->   				};
->   			};
->   
-> +			mdss_dp0: displayport-controller@ae90000 {
-> +				compatible = "qcom,sm8450-dp", "qcom,sm8350-dp";
-> +				reg = <0 0xae90000 0 0x200>,
-> +				      <0 0xae90200 0 0x200>,
-> +				      <0 0xae90400 0 0xc00>,
-> +				      <0 0xae91000 0 0x400>,
-> +				      <0 0xae91400 0 0x400>;
-> +				interrupt-parent = <&mdss>;
-> +				interrupts = <12>;
-> +				clocks = <&dispcc DISP_CC_MDSS_AHB_CLK>,
-> +					 <&dispcc DISP_CC_MDSS_DPTX0_AUX_CLK>,
-> +					 <&dispcc DISP_CC_MDSS_DPTX0_LINK_CLK>,
-> +					 <&dispcc DISP_CC_MDSS_DPTX0_LINK_INTF_CLK>,
-> +					 <&dispcc DISP_CC_MDSS_DPTX0_PIXEL0_CLK>;
-> +				clock-names = "core_iface",
-> +					      "core_aux",
-> +					      "ctrl_link",
-> +			                      "ctrl_link_iface",
-> +					      "stream_pixel";
-> +
-> +				assigned-clocks = <&dispcc DISP_CC_MDSS_DPTX0_LINK_CLK_SRC>,
-> +						  <&dispcc DISP_CC_MDSS_DPTX0_PIXEL0_CLK_SRC>;
-> +				assigned-clock-parents = <&usb_1_qmpphy QMP_USB43DP_DP_LINK_CLK>,
-> +							 <&usb_1_qmpphy QMP_USB43DP_DP_VCO_DIV_CLK>;
-> +
-> +				phys = <&usb_1_qmpphy QMP_USB43DP_DP_PHY>;
-> +			        phy-names = "dp";
-> +
-> +			        #sound-dai-cells = <0>;
-> +
-> +				operating-points-v2 = <&dp_opp_table>;
-> +				power-domains = <&rpmhpd SM8450_MMCX>;
-> +
-> +				status = "disabled";
-> +
-> +				ports {
-> +					#address-cells = <1>;
-> +					#size-cells = <0>;
-> +
-> +					port@0 {
-> +						reg = <0>;
-> +						mdss_dp0_in: endpoint {
-> +							remote-endpoint = <&dpu_intf0_out>;
-> +						};
-> +					};
-> +				};
-> +
-> +				dp_opp_table: opp-table {
-> +					compatible = "operating-points-v2";
-> +
-> +					opp-19200000 {
-> +						opp-hz = /bits/ 64 <19200000>;
-> +						required-opps = <&rpmhpd_opp_low_svs>;
-> +					};
-
-Yes, the vendor kernel has 19.2 MHz as a frequency for the low_svs. 
-However I don't think we should do it this way, we list DP rates here, 
-so the lowest entry should be RBR, 160000000.
-
-> +
-> +					opp-270000000 {
-> +						opp-hz = /bits/ 64 <270000000>;
-> +						required-opps = <&rpmhpd_opp_svs>;
-> +					};
-> +
-> +					opp-540000000 {
-> +						opp-hz = /bits/ 64 <540000000>;
-> +						required-opps = <&rpmhpd_opp_svs_l1>;
-> +					};
-> +
-> +					opp-810000000 {
-> +						opp-hz = /bits/ 64 <810000000>;
-> +						required-opps = <&rpmhpd_opp_nom>;
-> +					};
-> +				};
-> +			};
-> +
->   			mdss_dsi0: dsi@ae94000 {
->   				compatible = "qcom,sm8450-dsi-ctrl", "qcom,mdss-dsi-ctrl";
->   				reg = <0 0x0ae94000 0 0x400>;
-> 
-
--- 
-With best wishes
-Dmitry
+> v9:
+> - append with more information suggested by Greg KH
+> v8:
+> - replace | with spaces to make line up suggested by Greg KH
+> v7:
+> - add more details about how the bug was found suggested by Shuah
+> v6:
+> - beautify the format and add note suggested by Greg KH
+> v5:
+> - fix typo
+> v4:
+> - add Reviewed-by label and resubmit v4 suggested by Greg KH
+> v3:
+> - modify the commit message to make it clearer suggested by Yoshihiro Shi=
+moda
+> v2:
+> - fix typo, use clearer commit message and only cancel the UAF-related wo=
+rk suggested by Yoshihiro Shimoda
+> ---
+>  drivers/usb/gadget/udc/renesas_usb3.c | 1 +
+>  1 file changed, 1 insertion(+)
+>=20
+> diff --git a/drivers/usb/gadget/udc/renesas_usb3.c b/drivers/usb/gadget/u=
+dc/renesas_usb3.c
+> index bee6bceafc4f..a301af66bd91 100644
+> --- a/drivers/usb/gadget/udc/renesas_usb3.c
+> +++ b/drivers/usb/gadget/udc/renesas_usb3.c
+> @@ -2661,6 +2661,7 @@ static int renesas_usb3_remove(struct platform_devi=
+ce *pdev)
+>  	debugfs_remove_recursive(usb3->dentry);
+>  	device_remove_file(&pdev->dev, &dev_attr_role);
+>=20
+> +	cancel_work_sync(&usb3->role_work);
+>  	usb_role_switch_unregister(usb3->role_sw);
+>=20
+>  	usb_del_gadget_udc(&usb3->gadget);
+> --
+> 2.25.1
 
