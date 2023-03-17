@@ -2,85 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A41056BE46C
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 09:55:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A6E96BE473
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 09:55:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231426AbjCQIzk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 04:55:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36902 "EHLO
+        id S231246AbjCQIzt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 04:55:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231240AbjCQIzg (ORCPT
+        with ESMTP id S231162AbjCQIzi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 04:55:36 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA6A150F9D
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 01:55:09 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id er8so5827522edb.0
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 01:55:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679043308;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=dwQCSboZuICS8K0G99TN2ErNpuHmb25ohMxPa9VYNgM=;
-        b=VsLpF6UP/jfyNkUsgQrIsNMGXgi/PJovAp/PEgrwKmC7LvQ3vZoDfSi7sJOz+cjCtW
-         Mfq7E2g/DpcTuaHtkGSh3KCtenJ9bbJFUitQvGCWLFGfaGQiZbwkz8rVt8EuWtfEs8Tt
-         URnRe6zJe4zIgmZtI88okxgqCkeFD4tH4GaR5aNu8xJMplkbBtrpLSWuOzTukThWJu4i
-         CwcV7MoVGDVfAuKTzthsNDPWZ0uOEjB2hQrVD7ZjJjEXPz/EjAf/lpZV3tSr51JHdZbB
-         jWFioQa7Rf4J2yVF3Wm9Y0EsQ9M+hHR0NZbcmQvD+KOaVToNE/1fHfdLNYGmIxnlwi3t
-         tSdw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679043308;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dwQCSboZuICS8K0G99TN2ErNpuHmb25ohMxPa9VYNgM=;
-        b=NE3eMGP4M1YKCnPRnKL7DYp8fo3DnloLqHkgjgXc0fa40p7YisQEmFZToytl2agY2g
-         BsYH7LzEOryvb2qpQHkPboMD1L1ZrmOY2DYZ2cz3Sbu0dRBGZI0urvVFQWn6Q8KRZieH
-         PogS2dwl3btZUMXpOsvjeWLWdAl/9ATUSCwQ/gbjyj+XNSeRCUdS2AUOV+wdOIa8joXJ
-         OjXebSHkzjn7W5DaPALYLiCMIJhM7eegT5UVxm+NaCAAnz0n+wEdHAMVfHB9zsyDZ0oa
-         xxKu0i5QMtFA/Qg1i50MjXGKXv1fPsH7fXin4g3Uh7QyK/bHRbbu9vsxNbXujv4Il4lh
-         bUiA==
-X-Gm-Message-State: AO0yUKVtnfoZmBS8aWpouegz2pxxuLEAsi1wk22gfFLlasiENbv0sKET
-        dxTGDe65dEhyqWRsEWhHiB4qUA==
-X-Google-Smtp-Source: AK7set80Yz1YZY3oiWgcfa6PyrhEtP3Mt3TfQtRSQiG9n3crrunLtvU94OSm8ORktCN5u2WpIKBZNw==
-X-Received: by 2002:aa7:dd5a:0:b0:4fb:40c2:f35e with SMTP id o26-20020aa7dd5a000000b004fb40c2f35emr2108143edw.36.1679043307942;
-        Fri, 17 Mar 2023 01:55:07 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:848a:1971:93e0:b465? ([2a02:810d:15c0:828:848a:1971:93e0:b465])
-        by smtp.gmail.com with ESMTPSA id w3-20020a50c443000000b004ac54d4da22sm760848edf.71.2023.03.17.01.55.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Mar 2023 01:55:07 -0700 (PDT)
-Message-ID: <349aaac2-a9ef-5cfc-36fa-40ce20bb84b8@linaro.org>
-Date:   Fri, 17 Mar 2023 09:55:05 +0100
+        Fri, 17 Mar 2023 04:55:38 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D2E26A1CC;
+        Fri, 17 Mar 2023 01:55:29 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32H8tKHF084921;
+        Fri, 17 Mar 2023 03:55:20 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1679043320;
+        bh=iNOyU8jAlyYbzlqmmNzxj5imjqg2Dawl0ITO6Jw3VBE=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=AJjkqJGh1Y/2MZawzjBmnsIgQmcnw8F1UwY5GzR2sWPOziCIba/MCrteVk6tGcvdg
+         2i/ys17INWggxOiy2BRiOAdm1WzHVdtmGwIiRBW9VxYkqjTOiEZgFGLEILd1iN+siE
+         fHuVKZG338ZjJqwbnLkVUveFccAuNMaCjogQcAEU=
+Received: from DLEE111.ent.ti.com (dlee111.ent.ti.com [157.170.170.22])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32H8tKm9043688
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 17 Mar 2023 03:55:20 -0500
+Received: from DLEE114.ent.ti.com (157.170.170.25) by DLEE111.ent.ti.com
+ (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Fri, 17
+ Mar 2023 03:55:20 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE114.ent.ti.com
+ (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Fri, 17 Mar 2023 03:55:20 -0500
+Received: from [10.24.69.114] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32H8tE1a042709;
+        Fri, 17 Mar 2023 03:55:15 -0500
+Message-ID: <4f4dd491-e7f6-a963-c185-68521b262b22@ti.com>
+Date:   Fri, 17 Mar 2023 14:25:14 +0530
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v2 1/7] dt-bindings: misc: Add the Lantiq PEF2466 E1/T1/J1
- framer
+ Thunderbird/102.8.0
+Subject: Re: [EXTERNAL] Re: [EXTERNAL] Re: [EXTERNAL] Re: [PATCH v4 4/5] soc:
+ ti: pruss: Add helper functions to set GPI mode, MII_RT_event and XFR
 Content-Language: en-US
-To:     Herve Codina <herve.codina@bootlin.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Derek Kiernan <derek.kiernan@xilinx.com>,
-        Dragan Cvetic <dragan.cvetic@xilinx.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        alsa-devel@alsa-project.org,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20230316122741.577663-1-herve.codina@bootlin.com>
- <20230316122741.577663-2-herve.codina@bootlin.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230316122741.577663-2-herve.codina@bootlin.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Roger Quadros <rogerq@kernel.org>,
+        MD Danish Anwar <danishanwar@ti.com>,
+        "Andrew F. Davis" <afd@ti.com>, Suman Anna <s-anna@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Nishanth Menon <nm@ti.com>
+CC:     <linux-remoteproc@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-omap@vger.kernel.org>,
+        <srk@ti.com>, <devicetree@vger.kernel.org>,
+        <netdev@vger.kernel.org>
+References: <20230313111127.1229187-1-danishanwar@ti.com>
+ <20230313111127.1229187-5-danishanwar@ti.com>
+ <d168e7dd-42a0-b728-5c4c-e97209c13871@kernel.org>
+ <b1409f34-86b5-14e8-f352-5032aa57ca46@ti.com>
+ <60e73395-f670-6eaa-0eb7-389553320a71@kernel.org>
+ <20718115-7606-a77b-7e4d-511ca9c1d798@ti.com>
+ <e49b9a78-5e35-209e-7ecc-2333478b98b0@kernel.org>
+ <468f85ad-e4b0-54e1-a5b9-4692ae8a1445@ti.com>
+ <455440f4-7f2b-366e-53ec-700c3bb98534@kernel.org>
+ <22b8860c-12bd-384d-41af-93f1dde9a0fd@ti.com>
+ <d8776be3-75a2-02fd-3702-79169675e4f6@kernel.org>
+From:   Md Danish Anwar <a0501179@ti.com>
+Organization: Texas Instruments
+In-Reply-To: <d8776be3-75a2-02fd-3702-79169675e4f6@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,18 +88,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/03/2023 13:27, Herve Codina wrote:
-> The Lantiq PEF2256 is a framer and line interface component designed to
 
-Your subject says PEF2466, commit msg and code say something different.
 
-> fulfill all required interfacing between an analog E1/T1/J1 line and the
-> digital PCM system highway/H.100 bus.
+On 17/03/23 14:01, Roger Quadros wrote:
 > 
-> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
-> ---
+> 
+> On 17/03/2023 07:02, Md Danish Anwar wrote:
+>>
+>>
+>> On 16/03/23 19:34, Roger Quadros wrote:
+>>>
+>>> Hi,
+>>>
+>>> On 16/03/2023 15:11, Md Danish Anwar wrote:
+>>>>
+>>>>
+>>>> On 16/03/23 17:49, Roger Quadros wrote:
+>>>>>
+>>>>>
+>>>>> On 16/03/2023 13:44, Md Danish Anwar wrote:
+>>>>>>
+>>>>>> On 16/03/23 17:06, Roger Quadros wrote:
+>>>>>>> Hi,
+>>>>>>>
+>>>>>>> On 16/03/2023 13:05, Md Danish Anwar wrote:
+>>>>>>>> Hi Roger,
+>>>>>>>>
+>>>>>>>> On 15/03/23 17:52, Roger Quadros wrote:
+>>>>>>>>>
+>>>>>>>>>
+>>>>>>>>> On 13/03/2023 13:11, MD Danish Anwar wrote:
+>>>>>>>>>> From: Suman Anna <s-anna@ti.com>
+>>>
+>>
+>> [..]
+>>
+>>>> Sure, then I will use the existing enum pru_type.
+>>>>
+>>>> The enum pru_type is currently in drivers/remoteproc/pruss.c I will move this
+>>>> enum definition from there to include/linux/remoteproc/pruss.h
+>>>
+>>> There are 2 public pruss.h files.
+>>> 	include/linux/remoteproc/pruss.h
+>>> and
+>>> 	include/linux/pruss_driver.h
+>>>
+>>> Why is that and when to use what?
+>>>
+>>
+>> The include/linux/remoteproc/pruss.h file was introduced in series [1] as a
+>> public header file for PRU_RPROC driver (drivers/remoteproc/pru_rproc.c)
+>>
+>> The second header file include/linux/pruss_driver.h was introduced much earlier
+>> as part of [2] , "soc: ti: pruss: Add a platform driver for PRUSS in TI SoCs".
+>>
+>> As far as I can see, seems like pruss_driver.h was added as a public header
+>> file for PRUSS platform driver (drivers/soc/ti/pruss.c)
+>>
+>> [1] https://lore.kernel.org/all/20230106121046.886863-1-danishanwar@ti.com/
+>> [2] https://lore.kernel.org/all/1542886753-17625-7-git-send-email-rogerq@ti.com/
+> 
+> Thanks. "include/linux/remoteproc/pruss.h" seems appropriate for enum pru_type.
+> 
+> cheers,
+> -roger
 
+Yes, enum pru_type is located in pru_rproc.c, I will move enum pru_type to
+include/linux/remoteproc/pruss.h and then include
+include/linux/remoteproc/pruss.h" in pru_rproc.c and any other file that needs
+this enum.
 
-Best regards,
-Krzysztof
-
+-- 
+Thanks and Regards,
+Danish.
