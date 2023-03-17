@@ -2,69 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 053F96BE9FE
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 14:21:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD9266BEA00
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 14:22:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229867AbjCQNVo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 09:21:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38802 "EHLO
+        id S229890AbjCQNWL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 09:22:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229599AbjCQNVn (ORCPT
+        with ESMTP id S229894AbjCQNWJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 09:21:43 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3608474E6;
-        Fri, 17 Mar 2023 06:21:41 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id er8so8555026edb.0;
-        Fri, 17 Mar 2023 06:21:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679059300;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=SLgOfewvMPWGU0rcCg6ppHB2MURpJza9CN5p/ySPUQ4=;
-        b=artZlANRnJSoDpasdGAz9tAGLeKOrBFmIyjNWfKWlV8kLtflWuYpxx9cg7Zs0u06kr
-         oFlTS7G5XcISxB0M9Kp7rfKFTWIu4l8V4BUKVcLKqhTGT1f+kdlx3Ozv4muUZmAH4kRy
-         OT/WOzolsKOASMj/cbXWRMzWPCUxjDGwt+kEJmmgmzDpyeFbcvqMUMP0nVMtkVdSMMc0
-         2fk18i45/v+xKN13oqo39hX0NVad16aVAYLI6FmplGZ2b3HDp9jMrlNh+EXafv9FtuI7
-         X3U/KIr6CzFJKKWJoKWPRI4AFx0+lTKpM80wMcSYAb1w3cPlM1Q0MJmUMR+O8EI/J5qJ
-         fB5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679059300;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=SLgOfewvMPWGU0rcCg6ppHB2MURpJza9CN5p/ySPUQ4=;
-        b=iD0LbMPpD5aGncjQMndWKaya+MDqIm3S3H3bIbMkXmqajX/cydoxarqtHmKra8tsQs
-         TlyShOSC9gMWga+Hd/UEdJah+/rpUsbMIIM04/iL0HrkSO5Dcl8lMyFVe3MfIPO8tHGL
-         U3xQ051euLHGyFB+XaQJXeh1t+G4QB92ntKyaxZaCnUQ2fcVMPNRyF0KcuWV0cQjRcOC
-         sDeYUkaJTeU4n4nfKpxrya9k7G33D9wIcKGoWk9AGffqeg5FDZ3plx1TMRsCtl8zHCTE
-         Vp1c9a1BfCmRvuYhtvtaQc5DtWQLsne1yjs9jfNWlyNakZxer8PjwZ3ICHUx1WmBR32t
-         CMNw==
-X-Gm-Message-State: AO0yUKXRcBbnoR/X7VzZkRkDDGOWaoTzMpWV8VvF+OAYTBuw/bHrF+t7
-        FnNMLowPi5ENG1gEDEHAdh5TbZlErhOMUPzV8HE=
-X-Google-Smtp-Source: AK7set9ANTzdsTwzL3UCfR4HDZWJNPK6TdkWA6M6SDIwGJ1GfPC6MuABd6wOfEMgD66ZPECeashqtmIuHcIJhfvw1PA=
-X-Received: by 2002:a17:907:d13:b0:926:5020:1421 with SMTP id
- gn19-20020a1709070d1300b0092650201421mr7804499ejc.9.1679059299875; Fri, 17
- Mar 2023 06:21:39 -0700 (PDT)
+        Fri, 17 Mar 2023 09:22:09 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D552F4ECDD
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 06:22:06 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1pdA1i-0004H6-9G; Fri, 17 Mar 2023 14:21:46 +0100
+Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1pdA1c-0007xo-KL; Fri, 17 Mar 2023 14:21:40 +0100
+Date:   Fri, 17 Mar 2023 14:21:40 +0100
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     netdev@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com,
+        Arun Ramadoss <arun.ramadoss@microchip.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Marek Vasut <marex@denx.de>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        Ben Hutchings <ben.hutchings@mind.be>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC/RFT PATCH net-next 2/4] net: dsa: microchip: partial
+ conversion to regfields API for KSZ8795 (WIP)
+Message-ID: <20230317132140.GB15269@pengutronix.de>
+References: <20230316161250.3286055-1-vladimir.oltean@nxp.com>
+ <20230316161250.3286055-3-vladimir.oltean@nxp.com>
+ <20230317094629.nryf6qkuxp4nisul@skbuf>
+ <20230317114646.GA15269@pengutronix.de>
+ <20230317125022.ujbnwf2k5uvhyx53@skbuf>
 MIME-Version: 1.0
-References: <20230316094129.846802350@linuxfoundation.org> <ZBQ/rhv9nP+i8Pyc@debian>
- <ZBRjTid0Hc4V7bwB@kroah.com>
-In-Reply-To: <ZBRjTid0Hc4V7bwB@kroah.com>
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Date:   Fri, 17 Mar 2023 13:21:03 +0000
-Message-ID: <CADVatmOU9nJQDo7OGDNGppU8eci98yqsJzxYLjT=NPXqv8BbDg@mail.gmail.com>
-Subject: Re: [PATCH 4.19 00/27] 4.19.278-rc3 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com, srw@sladewatkins.net,
-        rwarsow@gmx.de
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230317125022.ujbnwf2k5uvhyx53@skbuf>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,49 +71,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+On Fri, Mar 17, 2023 at 02:50:22PM +0200, Vladimir Oltean wrote:
+> On Fri, Mar 17, 2023 at 12:46:46PM +0100, Oleksij Rempel wrote:
+> > There reason is that ksz8795_regfields[] is assigned only to KSZ8795.
+> > KSZ8794, KSZ8765 and KSZ8830 (KSZ8863/KSZ8873) do not have needed regfields.
+> > 
+> > Please note, ksz8795_regfields[] is not compatible with KSZ8830 (KSZ8863/KSZ8873)
+> > series.
+> 
+> Right... well, it's kind of in the title and in the commit description:
+> 
+> | !! WARNING !! I only attempted to add a ksz_reg_fields structure for
+> | KSZ8795. The other switch families will currently crash!
+> 
+> If the only device you can test on is KSZ8873, that isn't going to help
+> me very much at the moment, because it doesn't have an xMII port, but
+> rather, either MII or RMII depending on part number. AFAIU, ksz_is_ksz88x3()
+> returns true for your device, and this means that neither phylink_mac_link_up()
+> nor phylink_mac_config() do nothing for your device. Also, above all,
+> ksz8863_regs[] does not have either P_XMII_CTRL_0 nor P_XMII_CTRL_1
+> defined, which are some of the registers I had converted to reg_fields,
+> in order to see whether it's possible to access a global register via a
+> port regfield call.
+> 
+> I'm going to let this patch set simmer for a few more days. If no one
+> volunteers to test on a KSZ8795, IMO the exercise is slightly pointless,
+> as that's where the problems were, and more and more blind reasoning
+> about what could be a problem isn't going to get us very far. I'd rather
+> not spend more time on this problem at this stage. I've copied some more
+> people who contributed patches to this switch family in the past few
+> years, in the hope that maybe someone can help.
+> 
+> For context, the cover letter is here:
+> https://patchwork.kernel.org/project/netdevbpf/cover/20230316161250.3286055-1-vladimir.oltean@nxp.com/
 
-On Fri, 17 Mar 2023 at 12:55, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Fri, Mar 17, 2023 at 10:23:42AM +0000, Sudip Mukherjee wrote:
-> > Hi Greg,
-> >
-> > On Thu, Mar 16, 2023 at 10:42:14AM +0100, Greg Kroah-Hartman wrote:
-> > > This is the start of the stable review cycle for the 4.19.278 release.
-> > > There are 27 patches in this series, all will be posted as a response
-> > > to this one.  If anyone has any issues with these being applied, please
-> > > let me know.
-> > >
-> > > Responses should be made by Sat, 18 Mar 2023 09:41:20 +0000.
-> > > Anything received after that time might be too late.
-> >
-> > Build test (gcc version 11.3.1 20230311):
-> > mips: 63 configs -> no  failure
-> > arm: 115 configs -> no failure
-> > arm64: 2 configs -> no failure
-> > x86_64: 4 configs -> no failure
-> > alpha allmodconfig -> no failure
-> > powerpc allmodconfig -> no failure
-> > riscv allmodconfig -> no failure
-> > s390 allmodconfig -> no failure
-> > xtensa allmodconfig -> no failure
-> >
-> > Boot test:
-> > x86_64: Booted on qemu. No regression. [1]
-> >
-> > Boot Regression on test laptop:
-> > Only black screen but ssh worked, so from the dmesg it seems i915 failed.
->
-> Can you bisect this?
+If you'll give up, may be i'll be able to take it over.
 
-There was no need to bisect. Only one i915 related commit was there
-and reverting that has fixed it for me.
-
-9a0789a26289 ("drm/i915: Don't use BAR mappings for ring buffers with LLC")
-commit 85636167e3206c3fbd52254fc432991cc4e90194 upstream.
-
-
+Thanks!
+Oleksij
 -- 
-Regards
-Sudip
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
