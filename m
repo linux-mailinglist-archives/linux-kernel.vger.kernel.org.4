@@ -2,198 +2,384 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 244216BE5DC
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 10:47:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57D306BE5E6
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 10:51:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229989AbjCQJry (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 05:47:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39466 "EHLO
+        id S230076AbjCQJvD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 05:51:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229734AbjCQJrw (ORCPT
+        with ESMTP id S229999AbjCQJu5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 05:47:52 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49D6C442C3
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 02:47:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679046471; x=1710582471;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=ZWJ2ONoLVXYdNhBudPI7T4fHapuBJvo4M69OEvKhanQ=;
-  b=IrMDXJDwxltJEcBt2AS4Kd+A+XJsPC8r7hdFEdcZndQJ6rsvdwrCp8J3
-   duJjJBykGJVUmv5bmxozkh0tl6wGeYfmYhboDop/tzPCpbhcchrI/6WQx
-   DK3RrcN70uoqd4lEUUKdRWNN2uXJ2OCrlXkVa5bSJEMJkZTzud7+4F17r
-   z1iL969Hv1KfrqShCPjJ8ayz2meRv+z4UFQ7sOQqARAuCLaZMy7JO52pK
-   TVjhVkRPiWO2Hob0x2giWlsuVHpPtQp8T3uDApfqggeuvujmNAVJ4eBZL
-   TH3NkMyeOFe2k0l+lVf59pdDy7yly06ipNpEyAOqr+f1FlDRGmp0Jx+ai
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="400804074"
-X-IronPort-AV: E=Sophos;i="5.98,268,1673942400"; 
-   d="scan'208";a="400804074"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2023 02:47:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="712693344"
-X-IronPort-AV: E=Sophos;i="5.98,268,1673942400"; 
-   d="scan'208";a="712693344"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by orsmga001.jf.intel.com with ESMTP; 17 Mar 2023 02:47:50 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Fri, 17 Mar 2023 02:47:50 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Fri, 17 Mar 2023 02:47:49 -0700
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21 via Frontend Transport; Fri, 17 Mar 2023 02:47:49 -0700
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.109)
- by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.21; Fri, 17 Mar 2023 02:47:49 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SikgAPflZOR+0Tr5/S0lqaH7iZb1d5iRnJU2V+2adMHQYccS+8HfR+j7D+lO3kvdwJ60Yyq6Kn9EZq6b50PomOtMP4hxO9uE2ux/1gga5ztWq3Hs9AJOLOC/R4P9T3mXRkGlykaGJVis2DPjUcxICmGOa7tRiEF3qgoGjhuP08SpjvP9TilOkGLzdSXX2m6C/VGigSUSkb1nqXG8zqziRm3vztTcXv01r42kChxiCfaK6UjBnss28DNZUTZT9myjnwhRkaGTZry/5kRYTfTnPrBYUqD5spABucKZMu87KBEVnfKO82ZC9uMXUEf+E133S8ELEKyMAdyGnt3DSvhtjg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ZWJ2ONoLVXYdNhBudPI7T4fHapuBJvo4M69OEvKhanQ=;
- b=idlmC4GW1oJ0IRPx6WJkEJx6Ul/uls4mZRixgiUbwRk2IYRHDfLcPnxbm7qkBEX9G4OMsu9uqLeKQZqpzoemVBfj8kiLlULKFdD60IB0uDmLVBBvoPxaIwruiowR02U+KcE9RFOStC91cPSHrLDWVMKB1wm9fSKL4Rk2jkWG0Z149zgxXk3ggup5NF7MDkqTIAYDnU3w/hsge8DyIR6x30ASwvqvW3NmMWLIhmmEZpn2RZ7alAQz5IhGA3fNzmsc/DDwzH46z+beMcpwS8O4ZUV23C20fa7o6gQS5XJQqytckKw+LyfrN9nPyVIKPO61/AdRNS5Fky+G1PWeLWHIrQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
- by MW4PR11MB5800.namprd11.prod.outlook.com (2603:10b6:303:186::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.31; Fri, 17 Mar
- 2023 09:47:47 +0000
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::1aac:b695:f7c5:bcac]) by BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::1aac:b695:f7c5:bcac%8]) with mapi id 15.20.6178.035; Fri, 17 Mar 2023
- 09:47:47 +0000
-From:   "Tian, Kevin" <kevin.tian@intel.com>
-To:     Robin Murphy <robin.murphy@arm.com>,
-        Nicolin Chen <nicolinc@nvidia.com>,
-        "jgg@nvidia.com" <jgg@nvidia.com>,
-        "will@kernel.org" <will@kernel.org>
-CC:     "eric.auger@redhat.com" <eric.auger@redhat.com>,
-        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "shameerali.kolothum.thodi@huawei.com" 
-        <shameerali.kolothum.thodi@huawei.com>,
-        "jean-philippe@linaro.org" <jean-philippe@linaro.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v1 14/14] iommu/arm-smmu-v3: Add
- arm_smmu_cache_invalidate_user
-Thread-Topic: [PATCH v1 14/14] iommu/arm-smmu-v3: Add
- arm_smmu_cache_invalidate_user
-Thread-Index: AQHZUnWe1bQRwtfhAUSI/T7BqHBa167yh7YAgAw88+A=
-Date:   Fri, 17 Mar 2023 09:47:47 +0000
-Message-ID: <BN9PR11MB5276CC29BB979D6093CA91F48CBD9@BN9PR11MB5276.namprd11.prod.outlook.com>
-References: <cover.1678348754.git.nicolinc@nvidia.com>
- <aa327f9ea61e5a4771c13e53639e33955b9acde3.1678348754.git.nicolinc@nvidia.com>
- <1467e666-1b6c-c285-3f79-f8e8b088718b@arm.com>
-In-Reply-To: <1467e666-1b6c-c285-3f79-f8e8b088718b@arm.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|MW4PR11MB5800:EE_
-x-ms-office365-filtering-correlation-id: 494aaca1-e944-4319-fc49-08db26ccaa21
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Ban7sjCXbn3xrgqiN6XGbnZ9UE4IAh46UmClMhcGXwjwXerj+sCqRqfZJUfftBefXM8WpK/iAHyyvdHe2DJTtxEgmtvsPnHnopXbrvbnYhYrvHPq7/tbWqzvvyLkpZLA3OAFFa6fptH8Nu8bfStVSXwErOrbsRQsu1iPfOhgOYUO6/qk1RipBT/S+S+giPop83CvIgUS1P6CqPqtf7aUKnhAj/C2ywtwpYt2j54N1oRFtS//l87vsm/t6hvAljF7NAu5GOZ5nBBGFTZpISB3NzUwGX3LWFGUn2AtnKVSrzntKV+a3Ro0qkFD2wGj40L+VzQwbguLdkNPF4ESia/42VelrVFp2iIsrqtlFYuvrrcGMaO3qVfvZcQNWCPQtAsXSM8rsOW+79PIGHyCO8u1vkxzboAyKlm0wiMHdsyS/zMqGVIHq0ogSZ3Ix6sFhEYz80FaxlDCdyiX9+82bcPDUBxeKb3a7xmXVa0wNqKJwuoK3aZE5RpW3lK63kEO8mJAd8TO1oPG51b2XAf0SggHFGYofkMcPKZAN9HlO6lI0FK0Wt2w+QU9MvZLPXsQAJ3JB701zp++NjM4W2JLvriM+QoK5VJnXglyFAJWQQg19V0SUL9rj9SrppyIpop4gHGLiMKrfZjksSqswfzH8Q0U14Ipt2zbyXmvQ2cewi/G6TvkcsPc5bJBMhWkvTCZ9zZ42yUmCSZXgXKjQFRoCuNkTg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(39860400002)(346002)(366004)(396003)(376002)(136003)(451199018)(110136005)(54906003)(8936002)(478600001)(55016003)(66476007)(66946007)(76116006)(8676002)(66556008)(64756008)(66446008)(41300700001)(4326008)(33656002)(38070700005)(86362001)(122000001)(82960400001)(38100700002)(52536014)(26005)(6506007)(186003)(7696005)(71200400001)(316002)(2906002)(7416002)(5660300002)(83380400001)(9686003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?aUdnbHhCV3kwMzF0dHVzOUx3Y1hGbGxJUTVQeldIazh0TVlWUGtGd3ZlMVZv?=
- =?utf-8?B?eG8vZmx3cm1PRkllNmtNYmV1dFhWVmdNR0RCcG1vRXlmeEIzNE5sSENPazNE?=
- =?utf-8?B?eFFROHhjSGhIN0ZEeThtb1NmUi9xRkVMVDlaNkNjZXF5NmhVWk80aWZURklI?=
- =?utf-8?B?L3REV1NzcXBRelR5NnNKV1pvMDhKbFVoNTFENXpxMTNEc2NkRmpxRzBPQUd2?=
- =?utf-8?B?SXhPNVBVMFNCeXpWVnNMN2JENU5JT3BLQm1PR0xBZ2dJenh3ay8xUDZOTkNv?=
- =?utf-8?B?cktFMzZXWkNWemUyWkFtSjBKQmE5TFBXaW1iZlpodmsydEp2U0prS05jdEwx?=
- =?utf-8?B?TEtHTjBjaW9QV2lEWkY0em1VdnZsaTdmZ3hORGgrUTBFMHFuNFpDMFpyTlRm?=
- =?utf-8?B?bGlEajdxRlp3Y0ZseTJEUGR5V2VHRE16UVk2QWh1SmFncWdrdWljMjlMaHpH?=
- =?utf-8?B?QlBxOGpJY1FoYU10UDVCNDczUGh3US9JYVgyMjhudnVraGphek9VTng3K3Br?=
- =?utf-8?B?ajJ4MHlzR0ErcXNqVmNEb20xVHF0K1NCd3BrVW1WNkVHZ0ZOa2hOelZxV1BS?=
- =?utf-8?B?QzlNYkpLUVQ1YVlwOFdXM1JyWlVBYm1tTUZtMDZ1dXQ1TlhGN09SR21HMFNp?=
- =?utf-8?B?QjVkV1FJNjg2bFVjZEF0UjFXb0ROU1I2dGJUUWNYTStMdHVTVk8vYkU1a21w?=
- =?utf-8?B?WEpuM3I5YzdFVHM5a1dvSDViTVhXNXNKUHMvSklXeUlJSEU4VHU3dnpMamQ0?=
- =?utf-8?B?R1NpZ1JTNzJSUUZXaEpvUExmMUpwaUlxQjVFOGhYKzhsbExVcm1ZZjBhYXZD?=
- =?utf-8?B?Qm0rcmxNNDNXM1NUakU4anJudnFjeTArQkw0QjJaNTcyUWV0TEZ0cnZONUd2?=
- =?utf-8?B?ZVdvTmlnZ29wS0dSTjdkdElNZHRlWGtncDVmVFpKeFNWdEUxalV0Q2Z6Z1JW?=
- =?utf-8?B?ZElCeEt6U0VVL2c3MW1xWHkyU1I5OUZmbDZuc25TYmlNbDA3OEpjT1RWQXpJ?=
- =?utf-8?B?a01BdHhhbzI3aXc3Vi9LT2hxWk5GdENPQ2tNdWlKWGliT1lyd2JRR2ZBU3N1?=
- =?utf-8?B?K2lxVnUzVEd0LzVtQU9LN3hmYU14Mk1IekVzR0NIZEZmK1I5ZU52ZFhscjJY?=
- =?utf-8?B?Mkdjb01pY0g4T2pGRFpmQXpGVjlkRUxUVDFMM3J6MENUWGdYVEdYV3pSVEEy?=
- =?utf-8?B?RHU5RkxEWjh5YVp0SjVYZHVKTlpRMThxZXdmUzZYaU1Ba2J4Q3EwUkR6UFRM?=
- =?utf-8?B?NC9XNHorbURsODYybHdJY3laeUJ3cUpidWJ1UGZnVW9xN3hjRjJjeWVFZWlp?=
- =?utf-8?B?RytWSllPam1TTDc0MmNxc2MwVmRnbkdDVXdRVVZoMTI5SVArZEltNW8zNEox?=
- =?utf-8?B?L0ZCT2ZxZHJJMVo3REtJYVoxNUp1YkZPM01rOFF0eDlZMDRNdnJvYWVwYi9l?=
- =?utf-8?B?b1I0SU8vT09aUVhCSUp5dGF0QzZmSzFDK1Z4bE8xTEFONkltaEVPaGo0MEN3?=
- =?utf-8?B?OXhUMklQNjVVd3lsUFg5ZkpOdXpWZkt2UWRVaEVtekhoQ2psUlFmN2RzeWh1?=
- =?utf-8?B?YXBCMWd5OFBmUGNsRGRvKzJYc0NlNTZYSHp3SCtCRXpaY0g2cmMxSENDc3ho?=
- =?utf-8?B?QlhyclZuNEhXbWo2MzV0TW9kTE5IWnR2Q0lZbkoxdi82dVNSeHBlYlQ1cUZC?=
- =?utf-8?B?ajI2aC9jcXJmMEI3M0NPSlQ1M2VKckdQNnNsSTlDbkw4WTcxcGtMNys1SXk2?=
- =?utf-8?B?SW4rdlZBWFpiZnArWnMxeXM0cnhjN2Z1aHF3aTc4bld4NmpNT00zMlRuR09O?=
- =?utf-8?B?WjNDM2VaSWFDK0tjMDhaODVMenoxR1Bpb2lob3RBaU5GWngxRmRUMWtxR1hB?=
- =?utf-8?B?UUlZWitkOUd1WnY3UnA3SStHZlZYYUFoZDJPbEZlZXVPc2liQVA3UHl0d0Iv?=
- =?utf-8?B?b2ZONytJK0hDMjFyeDcxanJGazRpOGQ3TGoxcVZtRGtLblNpYW1VeEhpWlNU?=
- =?utf-8?B?MWY2bTd1bzh1VW9QU3kxWTVoU3ZUM3NqNE00NVUrWXJqVHhSOGlENTk0ZHRi?=
- =?utf-8?B?Q0ZMWGFDNG5Jdlh4QTRrbm9zb0p6ZDZ0THBOSWdkdzloL0c1TEVhVTNEQ3JR?=
- =?utf-8?Q?sfQyv2F2wkuEbR4FX6CQSQh9E?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Fri, 17 Mar 2023 05:50:57 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1524D5A920
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 02:50:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679046607;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=cIjz5dsv/dg9VYh+9CXThg5ObzG/xNMA+jvhP6AWg7g=;
+        b=HlFMHJbzLm6TWZl+GqM6DHf5KnasxuLW/DMcQdc2xZvDdHHxe7Qp8S0Byjmd6SRigCnqcN
+        yUlhM/+urg4tGGExbGDp2junjP7cXTOhRewRlUQvOabKNE0uZoAlfQuNzcGq+gqApZJuiJ
+        LTn+2VKVf+2LgO3C7Vu/1XNY+CRMYME=
+Received: from mail-yw1-f199.google.com (mail-yw1-f199.google.com
+ [209.85.128.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-599-ErIWkmxxPjKysorf04WBuw-1; Fri, 17 Mar 2023 05:50:04 -0400
+X-MC-Unique: ErIWkmxxPjKysorf04WBuw-1
+Received: by mail-yw1-f199.google.com with SMTP id 00721157ae682-5417f156cb9so42100607b3.8
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 02:50:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679046603;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=cIjz5dsv/dg9VYh+9CXThg5ObzG/xNMA+jvhP6AWg7g=;
+        b=khqP4xljY66aPFbhguhE5a+g8DnVc4eaqsUw5htAsg2cakgR/X7H9miNdHmYfPbPQj
+         o6sOnPhu1PRy0QedV8vpk/o6OKzshZa5A27xx7XyKtvwLln28Bl9vfTgIR4Quw3lwRcE
+         elCB/vPahE/bfFiBG9lUAZBOhCnp/zDTXk1FF/MZ0ZarDOvAem/lL6rkwa2OTPqKyGX8
+         geRSi2xBZTWYJhGRafowsrT5Y/oV7mqxyoox95RKeBXG0emFqiKqwsJncb1DlOYm0WV/
+         91YHRjNIhMEiggkPXGevkVjbSp/51GRnMe7EllhF2YbniM4B8a+Q+GZMsd0T8uYScCyJ
+         zWEw==
+X-Gm-Message-State: AO0yUKXJ447LjoBcpEa6i+fBLKFlqPHBuAX9/IeUg/MQLbwSwtjlcYnF
+        MGobgiJQmvJhJXQ7g1CzF9jCt+9D/E61h4LIQAxfufbcpc5GrRgBFbdKxQOf2KIJgqWfhWfV3ZT
+        BiAM3ZsdthiMmqhz8NuCxJuX8gh0ntTgXfjqVIfe2
+X-Received: by 2002:a81:af63:0:b0:52e:d380:ab14 with SMTP id x35-20020a81af63000000b0052ed380ab14mr2783816ywj.3.1679046603431;
+        Fri, 17 Mar 2023 02:50:03 -0700 (PDT)
+X-Google-Smtp-Source: AK7set/g7TjoXhX9YrJrHBG0q5oaOfbqdr1UHnhY/7B2j60EyqRZ6PSrTZ/nlJcE85yupZ7mvozduX8LpHbbRgU/Dgo=
+X-Received: by 2002:a81:af63:0:b0:52e:d380:ab14 with SMTP id
+ x35-20020a81af63000000b0052ed380ab14mr2783803ywj.3.1679046603134; Fri, 17 Mar
+ 2023 02:50:03 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 494aaca1-e944-4319-fc49-08db26ccaa21
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Mar 2023 09:47:47.2282
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: J7tczvCw8vJeYA5brInaZgLZq0fKZl9bmGC75n71MEtkTUJPdYXnmtKW0TdIm9qkJrP57iT4l0SvnuufwfrOVQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR11MB5800
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230302113421.174582-1-sgarzare@redhat.com> <20230302113421.174582-5-sgarzare@redhat.com>
+ <CAJaqyWdeEzKnYuX-c348vVg0PpUH4y-e1dSLhRvYem=MEDKE=Q@mail.gmail.com> <CAGxU2F7GZxMwLNsAebaPx61MoePYYmFS1q66An-EDhq4u+a9ng@mail.gmail.com>
+In-Reply-To: <CAGxU2F7GZxMwLNsAebaPx61MoePYYmFS1q66An-EDhq4u+a9ng@mail.gmail.com>
+From:   Eugenio Perez Martin <eperezma@redhat.com>
+Date:   Fri, 17 Mar 2023 10:49:27 +0100
+Message-ID: <CAJaqyWcAfyANeShsdV55vVkK=sHxGNVef7E7jj-CqTL7SbqhCg@mail.gmail.com>
+Subject: Re: [PATCH v2 4/8] vringh: support VA with iotlb
+To:     Stefano Garzarella <sgarzare@redhat.com>
+Cc:     Jason Wang <jasowang@redhat.com>,
+        virtualization@lists.linux-foundation.org,
+        Andrey Zhadchenko <andrey.zhadchenko@virtuozzo.com>,
+        netdev@vger.kernel.org, stefanha@redhat.com,
+        linux-kernel@vger.kernel.org,
+        "Michael S. Tsirkin" <mst@redhat.com>, kvm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiBGcm9tOiBSb2JpbiBNdXJwaHkgPHJvYmluLm11cnBoeUBhcm0uY29tPg0KPiBTZW50OiBUaHVy
-c2RheSwgTWFyY2ggOSwgMjAyMyAxMDo0OSBQTQ0KPiA+ICsJY2FzZSBDTURRX09QX0FUQ19JTlY6
-DQo+ID4gKwkJc3NpZCA9IGludl9pbmZvLT5zc2lkOw0KPiA+ICsJCWlvdmEgPSBpbnZfaW5mby0+
-cmFuZ2Uuc3RhcnQ7DQo+ID4gKwkJc2l6ZSA9IGludl9pbmZvLT5yYW5nZS5sYXN0IC0gaW52X2lu
-Zm8tPnJhbmdlLnN0YXJ0ICsgMTsNCj4gPiArCQlicmVhazsNCj4gDQo+IENhbiB3ZSBkbyBhbnkg
-YmV0dGVyIHRoYW4gbXVsdGlwbHlpbmcgZXZlcnkgc2luZ2xlIEFUQ19JTlYgY29tbWFuZCwgZXZl
-bg0KPiBmb3IgcmFuZG9tIGJvZ3VzIFN0cmVhbUlEcywgaW50byBtdWx0aXBsZSBjb21tYW5kcyBh
-Y3Jvc3MgZXZlcnkgcGh5c2ljYWwNCj4gZGV2aWNlPyBJbiBmYWN0LCBJJ20gbm90IGVudGlyZWx5
-IGNvbmZpZGVudCB0aGlzIGlzbid0IHByb2JsZW1hdGljLCBpZg0KPiB0aGUgZ3Vlc3Qgd2lzaGVz
-IHRvIHNlbmQgaW52YWxpZGF0aW9ucyBmb3Igb25lIGRldmljZSBzcGVjaWZpY2FsbHkgd2hpbGUN
-Cj4gaXQncyBwdXQgc29tZSBvdGhlciBkZXZpY2UgaW50byBhIHN0YXRlIHdoZXJlIHNlbmRpbmcg
-aXQgYSBjb21tYW5kIHdvdWxkDQo+IGRvIHNvbWV0aGluZyBiYWQuIEF0IHRoZSB2ZXJ5IGxlYXN0
-LCBpdCdzIGxpYWJsZSB0byBiZSBjb25mdXNpbmcgaWYgdGhlDQo+IGd1ZXN0IHNlbmRzIGEgY29t
-bWFuZCBmb3Igb25lIFN0cmVhbUlEIGJ1dCBnZXRzIGFuIGVycm9yIGJhY2sgZm9yIGENCj4gZGlm
-ZmVyZW50IG9uZS4NCj4gDQoNCk9yIGRvIHdlIG5lZWQgc3VwcG9ydCB0aGlzIGNtZCBhdCBhbGw/
-DQoNCkZvciB2dC1kIHdlIGFsd2F5cyBpbXBsaWNpdGx5IGludmFsaWRhdGUgQVRDIGZvbGxvd2lu
-ZyBhIGlvdGxiIGludmFsaWRhdGlvbg0KcmVxdWVzdCBmcm9tIHVzZXJzcGFjZS4gVGhlbiB2SU9N
-TVUganVzdCB0cmVhdHMgaXQgYXMgYSBub3AgaW4gdGhlDQp2aXJ0dWFsIHF1ZXVlLg0KDQpJTUhP
-IGEgc2FuZSBpb21tdSBkcml2ZXIgc2hvdWxkIGFsd2F5cyBpbnZhbGlkYXRlIGJvdGggaW90bGIg
-YW5kIGF0Yw0KdG9nZXRoZXIuIEknbSBub3Qgc3VyZSBhIHZhbGlkIHVzYWdlIHdoZXJlIGlvdGxi
-IGlzIGludmFsaWRhdGVkIHdoaWxlDQphdGMgaXMgbGVmdCB3aXRoIHNvbWUgc3RhbGUgbWFwcGlu
-Z3MuDQo=
+On Thu, Mar 16, 2023 at 5:07=E2=80=AFPM Stefano Garzarella <sgarzare@redhat=
+.com> wrote:
+>
+> On Fri, Mar 3, 2023 at 3:39=E2=80=AFPM Eugenio Perez Martin <eperezma@red=
+hat.com> wrote:
+> >
+> > On Thu, Mar 2, 2023 at 12:35 PM Stefano Garzarella <sgarzare@redhat.com=
+> wrote:
+> > >
+> > > vDPA supports the possibility to use user VA in the iotlb messages.
+> > > So, let's add support for user VA in vringh to use it in the vDPA
+> > > simulators.
+> > >
+> > > Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
+> > > ---
+> > >
+> > > Notes:
+> > >     v2:
+> > >     - replace kmap_atomic() with kmap_local_page() [see previous patc=
+h]
+> > >     - fix cast warnings when build with W=3D1 C=3D1
+> > >
+> > >  include/linux/vringh.h            |   5 +-
+> > >  drivers/vdpa/mlx5/net/mlx5_vnet.c |   2 +-
+> > >  drivers/vdpa/vdpa_sim/vdpa_sim.c  |   4 +-
+> > >  drivers/vhost/vringh.c            | 247 ++++++++++++++++++++++++----=
+--
+> > >  4 files changed, 205 insertions(+), 53 deletions(-)
+> > >
+>
+> [...]
+>
+> >
+> > It seems to me iotlb_translate_va and iotlb_translate_pa are very
+> > similar, their only difference is that the argument is that iov is
+> > iovec instead of bio_vec. And how to fill it, obviously.
+> >
+> > It would be great to merge both functions, only differing with a
+> > conditional on vrh->use_va, or generics, or similar. Or, if following
+> > the style of the rest of vringh code, to provide a callback to fill
+> > iovec (although I like conditional more).
+> >
+> > However I cannot think of an easy way to perform that without long
+> > macros or type erasure.
+>
+> Thank you for pushing me :-)
+> I finally managed to avoid code duplication (partial patch attached,
+> but not yet fully tested).
+>
+> @Jason: with this refactoring I removed copy_to_va/copy_to_pa, so I
+> also avoided getu16_iotlb_va/pa.
+>
+> I will send the full patch in v3, but I would like to get your opinion
+> first ;-)
+>
+>
+>
+> diff --git a/drivers/vhost/vringh.c b/drivers/vhost/vringh.c
+> index 0ba3ef809e48..71dd67700e36 100644
+> --- a/drivers/vhost/vringh.c
+> +++ b/drivers/vhost/vringh.c
+> @@ -1096,8 +1096,7 @@ EXPORT_SYMBOL(vringh_need_notify_kern);
+>
+>  static int iotlb_translate(const struct vringh *vrh,
+>                            u64 addr, u64 len, u64 *translated,
+> -                          struct bio_vec iov[],
+> -                          int iov_size, u32 perm)
+> +                          void *iov, int iov_size, bool iovec, u32 perm)
+
+I think this is an improvement, but we're doing type erasure here. I
+don't think it is a big deal since the function is not exported, it's
+pretty contained in this file, so I'd ack this version too. I'm just
+throwing ideas here:
+
+a) typedef the union {iovec, bio_vec} and use that type in the parameter.
+
+As a drawback, that union feels out of place in this file. Is this the
+only place where it is needed? I don't see other similar uses in the
+kernel.
+
+b) To convert from iov to bio_iov at return
+The drawback is the extra processing if the compiler is not smart
+enough to inline it. I prefer the previous one but I didn't want to
+omit it, just in case.
+
+Thanks!
+
+>  {
+>         struct vhost_iotlb_map *map;
+>         struct vhost_iotlb *iotlb =3D vrh->iotlb;
+> @@ -1107,7 +1106,7 @@ static int iotlb_translate(const struct vringh *vrh=
+,
+>         spin_lock(vrh->iotlb_lock);
+>
+>         while (len > s) {
+> -               u64 size, pa, pfn;
+> +               u64 size;
+>
+>                 if (unlikely(ret >=3D iov_size)) {
+>                         ret =3D -ENOBUFS;
+> @@ -1124,10 +1123,22 @@ static int iotlb_translate(const struct vringh *v=
+rh,
+>                 }
+>
+>                 size =3D map->size - addr + map->start;
+> -               pa =3D map->addr + addr - map->start;
+> -               pfn =3D pa >> PAGE_SHIFT;
+> -               bvec_set_page(&iov[ret], pfn_to_page(pfn), min(len - s, s=
+ize),
+> -                             pa & (PAGE_SIZE - 1));
+> +               if (iovec) {
+> +                       struct iovec *iovec =3D iov;
+> +
+> +                       iovec[ret].iov_len =3D min(len - s, size);
+> +                       iovec[ret].iov_base =3D (void __user *)(unsigned =
+long)
+> +                                             (map->addr + addr - map->st=
+art);
+> +               } else {
+> +                       u64 pa =3D map->addr + addr - map->start;
+> +                       u64 pfn =3D pa >> PAGE_SHIFT;
+> +                       struct bio_vec *bvec =3D iov;
+> +
+> +                       bvec_set_page(&bvec[ret], pfn_to_page(pfn),
+> +                                     min(len - s, size),
+> +                                     pa & (PAGE_SIZE - 1));
+> +               }
+> +
+>                 s +=3D size;
+>                 addr +=3D size;
+>                 ++ret;
+> @@ -1141,26 +1152,38 @@ static int iotlb_translate(const struct vringh *v=
+rh,
+>         return ret;
+>  }
+>
+> +#define IOTLB_IOV_SIZE 16
+> +
+>  static inline int copy_from_iotlb(const struct vringh *vrh, void *dst,
+>                                   void *src, size_t len)
+>  {
+>         u64 total_translated =3D 0;
+>
+>         while (total_translated < len) {
+> -               struct bio_vec iov[16];
+> +               union {
+> +                       struct iovec iovec[IOTLB_IOV_SIZE];
+> +                       struct bio_vec bvec[IOTLB_IOV_SIZE];
+> +               } iov;
+>                 struct iov_iter iter;
+>                 u64 translated;
+>                 int ret;
+>
+>                 ret =3D iotlb_translate(vrh, (u64)(uintptr_t)src,
+>                                       len - total_translated, &translated=
+,
+> -                                     iov, ARRAY_SIZE(iov), VHOST_MAP_RO)=
+;
+> +                                     &iov, IOTLB_IOV_SIZE, vrh->use_va,
+> +                                     VHOST_MAP_RO);
+>                 if (ret =3D=3D -ENOBUFS)
+> -                       ret =3D ARRAY_SIZE(iov);
+> +                       ret =3D IOTLB_IOV_SIZE;
+>                 else if (ret < 0)
+>                         return ret;
+>
+> -               iov_iter_bvec(&iter, ITER_SOURCE, iov, ret, translated);
+> +               if (vrh->use_va) {
+> +                       iov_iter_init(&iter, ITER_SOURCE, iov.iovec, ret,
+> +                                     translated);
+> +               } else {
+> +                       iov_iter_bvec(&iter, ITER_SOURCE, iov.bvec, ret,
+> +                                     translated);
+> +               }
+>
+>                 ret =3D copy_from_iter(dst, translated, &iter);
+>                 if (ret < 0)
+> @@ -1180,20 +1203,30 @@ static inline int copy_to_iotlb(const struct vrin=
+gh *vrh, void *dst,
+>         u64 total_translated =3D 0;
+>
+>         while (total_translated < len) {
+> -               struct bio_vec iov[16];
+> +               union {
+> +                       struct iovec iovec[IOTLB_IOV_SIZE];
+> +                       struct bio_vec bvec[IOTLB_IOV_SIZE];
+> +               } iov;
+>                 struct iov_iter iter;
+>                 u64 translated;
+>                 int ret;
+>
+>                 ret =3D iotlb_translate(vrh, (u64)(uintptr_t)dst,
+>                                       len - total_translated, &translated=
+,
+> -                                     iov, ARRAY_SIZE(iov), VHOST_MAP_WO)=
+;
+> +                                     &iov, IOTLB_IOV_SIZE, vrh->use_va,
+> +                                     VHOST_MAP_WO);
+>                 if (ret =3D=3D -ENOBUFS)
+> -                       ret =3D ARRAY_SIZE(iov);
+> +                       ret =3D IOTLB_IOV_SIZE;
+>                 else if (ret < 0)
+>                         return ret;
+>
+> -               iov_iter_bvec(&iter, ITER_DEST, iov, ret, translated);
+> +               if (vrh->use_va) {
+> +                       iov_iter_init(&iter, ITER_DEST, iov.iovec, ret,
+> +                                     translated);
+> +               } else {
+> +                       iov_iter_bvec(&iter, ITER_DEST, iov.bvec, ret,
+> +                                     translated);
+> +               }
+>
+>                 ret =3D copy_to_iter(src, translated, &iter);
+>                 if (ret < 0)
+> @@ -1210,20 +1243,32 @@ static inline int copy_to_iotlb(const struct vrin=
+gh *vrh, void *dst,
+>  static inline int getu16_iotlb(const struct vringh *vrh,
+>                                u16 *val, const __virtio16 *p)
+>  {
+> -       struct bio_vec iov;
+> -       void *kaddr, *from;
+> +       union {
+> +               struct iovec iovec;
+> +               struct bio_vec bvec;
+> +       } iov;
+> +       __virtio16 tmp;
+>         int ret;
+>
+>         /* Atomic read is needed for getu16 */
+> -       ret =3D iotlb_translate(vrh, (u64)(uintptr_t)p, sizeof(*p), NULL,
+> -                             &iov, 1, VHOST_MAP_RO);
+> +       ret =3D iotlb_translate(vrh, (u64)(uintptr_t)p, sizeof(*p),
+> +                             NULL, &iov, 1, vrh->use_va, VHOST_MAP_RO);
+>         if (ret < 0)
+>                 return ret;
+>
+> -       kaddr =3D kmap_local_page(iov.bv_page);
+> -       from =3D kaddr + iov.bv_offset;
+> -       *val =3D vringh16_to_cpu(vrh, READ_ONCE(*(__virtio16 *)from));
+> -       kunmap_local(kaddr);
+> +       if (vrh->use_va) {
+> +               ret =3D __get_user(tmp, (__virtio16 __user *)iov.iovec.io=
+v_base);
+> +               if (ret)
+> +                       return ret;
+> +       } else {
+> +               void *kaddr =3D kmap_local_page(iov.bvec.bv_page);
+> +               void *from =3D kaddr + iov.bvec.bv_offset;
+> +
+> +               tmp =3D READ_ONCE(*(__virtio16 *)from);
+> +               kunmap_local(kaddr);
+> +       }
+> +
+> +       *val =3D vringh16_to_cpu(vrh, tmp);
+>
+>         return 0;
+>  }
+> @@ -1231,20 +1276,32 @@ static inline int getu16_iotlb(const struct vring=
+h *vrh,
+>  static inline int putu16_iotlb(const struct vringh *vrh,
+>                                __virtio16 *p, u16 val)
+>  {
+> -       struct bio_vec iov;
+> -       void *kaddr, *to;
+> +       union {
+> +               struct iovec iovec;
+> +               struct bio_vec bvec;
+> +       } iov;
+> +       __virtio16 tmp;
+>         int ret;
+>
+>         /* Atomic write is needed for putu16 */
+> -       ret =3D iotlb_translate(vrh, (u64)(uintptr_t)p, sizeof(*p), NULL,
+> -                             &iov, 1, VHOST_MAP_WO);
+> +       ret =3D iotlb_translate(vrh, (u64)(uintptr_t)p, sizeof(*p),
+> +                             NULL, &iov, 1, vrh->use_va, VHOST_MAP_RO);
+>         if (ret < 0)
+>                 return ret;
+>
+> -       kaddr =3D kmap_local_page(iov.bv_page);
+> -       to =3D kaddr + iov.bv_offset;
+> -       WRITE_ONCE(*(__virtio16 *)to, cpu_to_vringh16(vrh, val));
+> -       kunmap_local(kaddr);
+> +       tmp =3D cpu_to_vringh16(vrh, val);
+> +
+> +       if (vrh->use_va) {
+> +               ret =3D __put_user(tmp, (__virtio16 __user *)iov.iovec.io=
+v_base);
+> +               if (ret)
+> +                       return ret;
+> +       } else {
+> +               void *kaddr =3D kmap_local_page(iov.bvec.bv_page);
+> +               void *to =3D kaddr + iov.bvec.bv_offset;
+> +
+> +               WRITE_ONCE(*(__virtio16 *)to, tmp);
+> +               kunmap_local(kaddr);
+> +       }
+>
+>         return 0;
+>  }
+>
+
