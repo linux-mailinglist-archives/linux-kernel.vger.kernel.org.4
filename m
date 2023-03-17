@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C45616BEC27
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 16:04:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0BD66BEC2A
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 16:04:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230346AbjCQPEh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 11:04:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49418 "EHLO
+        id S231422AbjCQPEl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 11:04:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231379AbjCQPEc (ORCPT
+        with ESMTP id S230003AbjCQPEc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 17 Mar 2023 11:04:32 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C09A010EAAA
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 08:04:28 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id h17so4714260wrt.8
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 08:04:28 -0700 (PDT)
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA468145B49
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 08:04:29 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id m2so4720506wrh.6
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 08:04:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google; t=1679065467;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=N8+H5EEAbdvf52NcUpG/q5u48K7jDEZDyAtoMXnmBJw=;
-        b=jHGCSiXevtNjxOVGInmryEA0cMxUdotBKyr94ROrASFDjwy5qXgtX5VUmbzeD4M6eN
-         yMnRzvZZn3QOv+HvQArfIRC4oRGVNzT130NdtAhDH6RCQiqvMVz11WF0lA8vkxXi+CSo
-         C5N51luDn1GqmZxFvbCPnbRM0jkuYp46suEXI9Qd2hc1PL33Tu5pxi6jUytLMz3pmBee
-         HkIaipaXCtArPpAAxfDcbZvqz175ekyrbM2PqVoLmObjLqjelmL3IQ6/mfAlDt+mcB4f
-         Z2nhWA9+VTycG+9luVDC5/S6LeUn1gEuKcguZVXC/FiSJcUjX83t/WqU2W7U0PGqADs2
-         YpcA==
+        bh=ehh+IB7mATn8qRRIIxxLIJvaBEzJ12on/Ve9T/GbUQs=;
+        b=zL6tjSZZwavSiV7nxL7ZYOD2UA1MeMtf6V0z+SSQkFO+5sVFOJqjmkp5pNzsfNxq9z
+         8DsS12/o/oTlUSo9JgGcaStM6ZMF24ZqeyNRKGgjzSjuyjfZpbV+kw5dJU3VWwAfm491
+         Q+mk8Dft8YNodNASDf/pYB/dsN5pw7kVbvj/uf4VZIxUXBXuX4wPNmTcwYJ0LhC302i8
+         4osxPabCp7v5HEwDxM/46ic/BcwVfaNjMPhKmqDsxyHJUag1G8A6pAdY5OtDJkJ7L+Dz
+         V3EHFnsUzyvncvkyhwcidLerAWh2XK7P+ELgP7RD1M9eGmcB/hBJxZPulHPF/bd2Tv8C
+         tKUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112; t=1679065467;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=N8+H5EEAbdvf52NcUpG/q5u48K7jDEZDyAtoMXnmBJw=;
-        b=5HOs6nV+yIgN/PLnC13buqUBAi+AMHoZm/Y26YUKRT/7JhaProGI7sCxOy6Pxibdnb
-         mjUO2Wv92B5UwQG06CTvaHpuiCyWitZUN2Ov8ekYXjtWtmUZC8fNbGbIoLnWbnnFg2zC
-         UgB3wmRocKH7uSEjJhS5FIbo4VZupvtuJUc5Dv6XDBeg15ugZSv4M+jKWeLQVAwf/I+7
-         JiMuR76Ubgdo7XRclx7BLtFGq/7kEGvMgYXJuj3IEt+VDDObKny8lMH47fzw/vy703gj
-         EEqwZVnbL2WFB70G0yuSnNKMlHXfGl/D62QtC8SEIGenrxIxuWC9syl8b4nh7aX9YSq7
-         AfFQ==
-X-Gm-Message-State: AO0yUKUEBDZpM49EKvjz+faSLQe76WhmR6uLXKQOr10ZAlP5c58JY+eB
-        1iD/q5Bc+qW64gTIbd7NEmb4Lg==
-X-Google-Smtp-Source: AK7set81ak7mUMjYlTz5RGLLeMqFxklgoARBhu+7vkLku+YL8l7zvmRB8APlHJRa1BrJkd1uFIabFw==
-X-Received: by 2002:adf:d083:0:b0:2ca:c865:51c4 with SMTP id y3-20020adfd083000000b002cac86551c4mr6914500wrh.0.1679065466776;
-        Fri, 17 Mar 2023 08:04:26 -0700 (PDT)
+        bh=ehh+IB7mATn8qRRIIxxLIJvaBEzJ12on/Ve9T/GbUQs=;
+        b=xQzy1CLwjfll4YWzHph4mo49THOMFXIpUdX2S+Pw24IXwXBmkMv2wseiKeZlNClbo5
+         G9/0kutIbT4xEMsqVAq58BcJ8cYR0lnAwZ/Qxh8mKJ6Lj9Q8IwPIszijYGmoFK9NO3ta
+         ZYJofOh9kA4buuSm8yHoag53FWQ7qONgI/syEq8Npd769fdkrmgDbZ6BTx1FlSD234Tm
+         EGp0wAmddvFRqWgOQluOnWdK8SdY+iAGuURdVy3BMWQXZt1HqeN9diixj/NNS6Ci/wqg
+         IjJ7Ho8RMHFQmb9vg5oso5bUeNN+w5G+f23IvDNLj9CR0+yqOJrfLdk2mzW0/WGOxVod
+         pxSQ==
+X-Gm-Message-State: AO0yUKXEPnzp30eDn6uoHU4Zjg1b3+rQEx+BfXXAGQQ7QRT3gzCU0VSn
+        /thLFcnJM9WK9AJ0RRWiofa5oQ==
+X-Google-Smtp-Source: AK7set/NqW4Kbk9eVF0j0q7FtpPi/wkWEO5WCtNVYF74PINBGAkZzS7igmPg/Hiy70mF7QHxJVt1wQ==
+X-Received: by 2002:adf:e3c2:0:b0:2d1:46eb:3f97 with SMTP id k2-20020adfe3c2000000b002d146eb3f97mr6063265wrm.68.1679065467674;
+        Fri, 17 Mar 2023 08:04:27 -0700 (PDT)
 Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
-        by smtp.gmail.com with ESMTPSA id q14-20020a05600000ce00b002be505ab59asm2133773wrx.97.2023.03.17.08.04.25
+        by smtp.gmail.com with ESMTPSA id q14-20020a05600000ce00b002be505ab59asm2133773wrx.97.2023.03.17.08.04.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Mar 2023 08:04:26 -0700 (PDT)
+        Fri, 17 Mar 2023 08:04:27 -0700 (PDT)
 From:   Neil Armstrong <neil.armstrong@linaro.org>
-Date:   Fri, 17 Mar 2023 16:04:18 +0100
-Subject: [PATCH v4 02/12] dt-bindings: soc: qcom: qcom,pmic-glink: document
- SM8450 compatible
+Date:   Fri, 17 Mar 2023 16:04:19 +0100
+Subject: [PATCH v4 03/12] dt-bindings: soc: qcom: qcom,pmic-glink: document
+ SM8550 compatible
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230130-topic-sm8450-upstream-pmic-glink-v4-2-38bf0f5d07bd@linaro.org>
+Message-Id: <20230130-topic-sm8450-upstream-pmic-glink-v4-3-38bf0f5d07bd@linaro.org>
 References: <20230130-topic-sm8450-upstream-pmic-glink-v4-0-38bf0f5d07bd@linaro.org>
 In-Reply-To: <20230130-topic-sm8450-upstream-pmic-glink-v4-0-38bf0f5d07bd@linaro.org>
 To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
@@ -85,7 +85,7 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Document the SM8450 compatible used to describe the pmic glink
+Document the SM8550 compatible used to describe the pmic glink
 on this platform.
 
 Acked-by: Rob Herring <robh@kernel.org>
@@ -95,14 +95,14 @@ Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
  1 file changed, 1 insertion(+)
 
 diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,pmic-glink.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,pmic-glink.yaml
-index cf863683c21a..a85bc14de065 100644
+index a85bc14de065..6440dc801387 100644
 --- a/Documentation/devicetree/bindings/soc/qcom/qcom,pmic-glink.yaml
 +++ b/Documentation/devicetree/bindings/soc/qcom/qcom,pmic-glink.yaml
-@@ -25,6 +25,7 @@ properties:
-           - qcom,sc8180x-pmic-glink
+@@ -26,6 +26,7 @@ properties:
            - qcom,sc8280xp-pmic-glink
            - qcom,sm8350-pmic-glink
-+          - qcom,sm8450-pmic-glink
+           - qcom,sm8450-pmic-glink
++          - qcom,sm8550-pmic-glink
        - const: qcom,pmic-glink
  
    '#address-cells':
