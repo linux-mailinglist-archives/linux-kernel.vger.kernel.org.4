@@ -2,102 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 256DE6BEE08
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 17:24:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77BD76BEE06
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 17:24:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229703AbjCQQYk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 12:24:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36202 "EHLO
+        id S229866AbjCQQYo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 12:24:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229600AbjCQQYi (ORCPT
+        with ESMTP id S229643AbjCQQYl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 12:24:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7550C5AF0;
-        Fri, 17 Mar 2023 09:24:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 432FC60BFE;
-        Fri, 17 Mar 2023 16:24:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA6F7C433EF;
-        Fri, 17 Mar 2023 16:24:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679070276;
-        bh=O8JIGk5nsYYJhzj0FqYlrFfvfvhDJYNad0cgf6C+4ZQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Zj18jaOzN9aVwIuJb59Q8lTPAE8uKsOZEa0T8aGA/cPNVDoN93IKZR/Hix2TyB8Gj
-         8uAc6qE6E0oTkh/1iwsjItgYmDlO/bBvUiiBjRtM/5YAEz8BtPwz947c7nT3imWHuC
-         2s0CsP0hOztemBzj9RKY32AzHiAkhFb0TdmtjnviBEFdRnEDFhpCQaAhqDTjMoz7iO
-         Y7sE5uw/rikWKxlNq93SSelH+3FSiflFSm9TLKgvoyVT+KxKdSgNzFU5rie2QW3qik
-         kR8ig1YAwl90B7GzDWc0N7qSMwoMrP6xTyDkN03+O2f3geGF1NaM8KW47iB9a1/Snw
-         HqmoS3oKvAiNA==
-Date:   Fri, 17 Mar 2023 09:24:34 -0700
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-Cc:     linux-hyperv@vger.kernel.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, decui@microsoft.com,
-        haiyangz@microsoft.com, kys@microsoft.com, wei.liu@kernel.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com,
-        thomas.lendacky@amd.com, peterz@infradead.org,
-        kernel-dev@igalia.com, kernel@gpiccoli.net,
-        Arnd Bergmann <arnd@arndb.de>,
-        Michael Kelley <mikelley@microsoft.com>
-Subject: Re: [PATCH v3] x86/hyperv: Mark hv_ghcb_terminate() as noreturn
-Message-ID: <20230317162434.dpby4idecp7a6hrg@treble>
-References: <20230310154452.1169204-1-gpiccoli@igalia.com>
- <20230317160546.1497477-1-gpiccoli@igalia.com>
+        Fri, 17 Mar 2023 12:24:41 -0400
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F61CC5AF0
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 09:24:40 -0700 (PDT)
+Received: by mail-il1-f200.google.com with SMTP id i22-20020a056e021d1600b0031f64ecb112so2752189ila.12
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 09:24:40 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679070279;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=j0y9/Ok6+vCNzIdYJxiv4jUMbvf9Rwu/ySfXsPtfW0A=;
+        b=oiyOmSxuR3Z6rOHjv4uV+/xOsj/d7SmwrvBponsYxTByIBVPjaf2mqpXPb9SDm82Ns
+         1TSK2y7iT1ORU+TqAAN9F+cu5RzqWpMPZ3N2P44wKXPINqaQ+fdjKs8y7a/2HiGCn6k9
+         76ZmDxG9Axt1U9e0OMJB3mZbKpvnrwbesWohspjuVgDCmPb11CP47YpT3F/s9eBvROgV
+         ITNg/6a5Sw5I1zXo55hXzAXaO+9ugSa4J0j7bmlVYhJr8GrUkAleSiB8795mog2GorOt
+         Iecjes5R2M5MHUcyQB6/I3tXpyLGWh6aF5lR2Hgb5tfSSkoCjKVIXmfya9blYL0DIbjk
+         BoCA==
+X-Gm-Message-State: AO0yUKVxeke9jNR76oRrRCn+f+UAuK/qyvbzQGqlvf7XJhLbQaBXiz5R
+        jJHtf952HncBwgYR3cdceGmW/+OipBjIgMJ1hb+VQittVQ/o
+X-Google-Smtp-Source: AK7set+OMtlyYcxWFmRQyHbPvAkJYa6PMDJgDHLpH8OVq5WotsOwW5ikDZc4bsOtz+9ed8dSigIZoQmfDWqa7g7rZHKsrH0ITRN2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230317160546.1497477-1-gpiccoli@igalia.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:3312:0:b0:3eb:3166:9da4 with SMTP id
+ c18-20020a023312000000b003eb31669da4mr47250jae.2.1679070279581; Fri, 17 Mar
+ 2023 09:24:39 -0700 (PDT)
+Date:   Fri, 17 Mar 2023 09:24:39 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000009146bb05f71b03a0@google.com>
+Subject: [syzbot] [ntfs?] KASAN: use-after-free Read in ntfs_read_folio
+From:   syzbot <syzbot+d3cd38158cd7c8d1432c@syzkaller.appspotmail.com>
+To:     anton@tuxera.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-ntfs-dev@lists.sourceforge.net,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 17, 2023 at 01:05:46PM -0300, Guilherme G. Piccoli wrote:
-> Annotate the function prototype and definition as noreturn to prevent
-> objtool warnings like:
-> 
-> vmlinux.o: warning: objtool: hyperv_init+0x55c: unreachable instruction
-> 
-> Also, as per Josh's suggestion, add it to the global_noreturns list.
-> As a comparison, an objdump output without the annotation:
-> 
-> [...]
-> 1b63:  mov    $0x1,%esi
-> 1b68:  xor    %edi,%edi
-> 1b6a:  callq  ffffffff8102f680 <hv_ghcb_terminate>
-> 1b6f:  jmpq   ffffffff82f217ec <hyperv_init+0x9c> # unreachable
-> 1b74:  cmpq   $0xffffffffffffffff,-0x702a24(%rip)
-> [...]
-> 
-> Now, after adding the __noreturn to the function prototype:
-> 
-> [...]
-> 17df:  callq  ffffffff8102f6d0 <hv_ghcb_negotiate_protocol>
-> 17e4:  test   %al,%al
-> 17e6:  je     ffffffff82f21bb9 <hyperv_init+0x469>
-> [...]  <many insns>
-> 1bb9:  mov    $0x1,%esi
-> 1bbe:  xor    %edi,%edi
-> 1bc0:  callq  ffffffff8102f680 <hv_ghcb_terminate>
-> 1bc5:  nopw   %cs:0x0(%rax,%rax,1) # end of function
-> 
-> Reported-by: Arnd Bergmann <arnd@arndb.de>
-> Link: https://lore.kernel.org/r/9698eff1-9680-4f0a-94de-590eaa923e94@app.fastmail.com/
-> Cc: Josh Poimboeuf <jpoimboe@kernel.org>
-> Cc: Michael Kelley <mikelley@microsoft.com>
-> Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
+Hello,
 
-Looks good to me.  I've got some other noreturn fixes pending, so I can
-add this patch to the pile unless somebody else wants to take it.
+syzbot found the following issue on:
 
--- 
-Josh
+HEAD commit:    fe15c26ee26e Linux 6.3-rc1
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=144bbde2c80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=7573cbcd881a88c9
+dashboard link: https://syzkaller.appspot.com/bug?extid=d3cd38158cd7c8d1432c
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1314fdaec80000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=148332bec80000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/89d41abd07bd/disk-fe15c26e.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/fa75f5030ade/vmlinux-fe15c26e.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/590d0f5903ee/Image-fe15c26e.gz.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/863572f0c7ee/mount_0.gz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+d3cd38158cd7c8d1432c@syzkaller.appspotmail.com
+
+ntfs: (device loop0): ntfs_read_locked_inode(): Failed with error code -5.  Marking corrupt inode 0xa as bad.  Run chkdsk.
+ntfs: (device loop0): load_and_init_upcase(): Failed to load $UpCase from the volume. Using default.
+==================================================================
+BUG: KASAN: use-after-free in ntfs_read_folio+0x6d4/0x200c fs/ntfs/aops.c:489
+Read of size 1 at addr ffff0000e11f617f by task syz-executor319/5946
+
+CPU: 0 PID: 5946 Comm: syz-executor319 Not tainted 6.3.0-rc1-syzkaller-gfe15c26ee26e #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/02/2023
+Call trace:
+ dump_backtrace+0x1c8/0x1f4 arch/arm64/kernel/stacktrace.c:158
+ show_stack+0x2c/0x3c arch/arm64/kernel/stacktrace.c:165
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xd0/0x124 lib/dump_stack.c:106
+ print_address_description mm/kasan/report.c:319 [inline]
+ print_report+0x174/0x514 mm/kasan/report.c:430
+ kasan_report+0xd4/0x130 mm/kasan/report.c:536
+ kasan_check_range+0x264/0x2a4 mm/kasan/generic.c:187
+ __asan_memcpy+0x48/0x90 mm/kasan/shadow.c:105
+ ntfs_read_folio+0x6d4/0x200c fs/ntfs/aops.c:489
+ filemap_read_folio+0x14c/0x39c mm/filemap.c:2424
+ do_read_cache_folio+0x24c/0x544 mm/filemap.c:3683
+ do_read_cache_page mm/filemap.c:3749 [inline]
+ read_cache_page+0x6c/0x180 mm/filemap.c:3758
+ read_mapping_page include/linux/pagemap.h:769 [inline]
+ ntfs_map_page fs/ntfs/aops.h:75 [inline]
+ load_and_init_attrdef fs/ntfs/super.c:1617 [inline]
+ load_system_files+0x1e34/0x4734 fs/ntfs/super.c:1825
+ ntfs_fill_super+0x14e0/0x2314 fs/ntfs/super.c:2900
+ mount_bdev+0x26c/0x368 fs/super.c:1371
+ ntfs_mount+0x44/0x58 fs/ntfs/super.c:3057
+ legacy_get_tree+0xd4/0x16c fs/fs_context.c:610
+ vfs_get_tree+0x90/0x274 fs/super.c:1501
+ do_new_mount+0x25c/0x8c8 fs/namespace.c:3042
+ path_mount+0x590/0xe20 fs/namespace.c:3372
+ do_mount fs/namespace.c:3385 [inline]
+ __do_sys_mount fs/namespace.c:3594 [inline]
+ __se_sys_mount fs/namespace.c:3571 [inline]
+ __arm64_sys_mount+0x45c/0x594 fs/namespace.c:3571
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall+0x98/0x2c0 arch/arm64/kernel/syscall.c:52
+ el0_svc_common+0x138/0x258 arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0x64/0x198 arch/arm64/kernel/syscall.c:193
+ el0_svc+0x58/0x168 arch/arm64/kernel/entry-common.c:637
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
+ el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:591
+
+The buggy address belongs to the physical page:
+page:00000000b1c79ae3 refcount:0 mapcount:0 mapping:0000000000000000 index:0x1 pfn:0x1211f6
+flags: 0x5ffc00000000000(node=0|zone=2|lastcpupid=0x7ff)
+raw: 05ffc00000000000 fffffc0003847848 fffffc0003847d48 0000000000000000
+raw: 0000000000000001 0000000000000000 00000000ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+
+Memory state around the buggy address:
+ ffff0000e11f6000: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+ ffff0000e11f6080: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+>ffff0000e11f6100: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+                                                                ^
+ ffff0000e11f6180: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+ ffff0000e11f6200: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+==================================================================
+ntfs: volume version 3.1.
+syz-executor319: attempt to access beyond end of device
+loop0: rw=0, sector=2072, nr_sectors = 8 limit=190
+ntfs: (device loop0): ntfs_end_buffer_async_read(): Buffer I/O error, logical block 0x103.
+syz-executor319: attempt to access beyond end of device
+loop0: rw=0, sector=552, nr_sectors = 8 limit=190
+syz-executor319: attempt to access beyond end of device
+loop0: rw=0, sector=224, nr_sectors = 8 limit=190
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
