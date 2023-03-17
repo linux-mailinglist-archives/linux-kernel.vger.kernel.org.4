@@ -2,161 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CAFF6BDFFA
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 05:08:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 520676BDFFB
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 05:09:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229608AbjCQEIw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 00:08:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51686 "EHLO
+        id S229712AbjCQEJF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 00:09:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbjCQEIs (ORCPT
+        with ESMTP id S230020AbjCQEJB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 00:08:48 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 518A22278E;
-        Thu, 16 Mar 2023 21:08:45 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32H48O5C025320;
-        Thu, 16 Mar 2023 23:08:24 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1679026104;
-        bh=hTnCLwzT7E/jUr8nrf+BIIZqCannDfxi+O/YjyW82n0=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=K+4+TSTYFK6JfARcyJI0kc9asINmKkFlRokxTmtHz46gP6HxXOzu2F5+bi2S0zXyW
-         8zroPzjIpexxesYzusJD5HnGBMULMadJwAYPMN1nAj3qPmgFxWJbNLozn/L/kp5cEO
-         UgjWe622xhb4eNQynJrhpQP1Q5lvq1Y98cQ6kCnU=
-Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32H48O59007269
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 16 Mar 2023 23:08:24 -0500
-Received: from DLEE109.ent.ti.com (157.170.170.41) by DLEE113.ent.ti.com
- (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Thu, 16
- Mar 2023 23:08:24 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE109.ent.ti.com
- (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Thu, 16 Mar 2023 23:08:23 -0500
-Received: from [172.24.145.182] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32H48K8T130014;
-        Thu, 16 Mar 2023 23:08:20 -0500
-Message-ID: <11b83885-ff64-df78-e14c-137fffb5f7ce@ti.com>
-Date:   Fri, 17 Mar 2023 09:38:19 +0530
+        Fri, 17 Mar 2023 00:09:01 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3195D8F531
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 21:08:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679026138; x=1710562138;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Sxj9f38uDyBLJxpJInG5C3Pn6jrYi4bZPL45CkR9mgg=;
+  b=QtpADGSnihI7cSNIZYVz3+F3cQfwHBZY4MTJ4Ncy8dou+s2z6ACNlCas
+   icaC1qytOSt52EjqRcgM++uL72wlGeU496/Z3kVOJF+YUGHqHCjggRuYJ
+   UlQSuCIRwNAy2M6LMJLN07FSIeak+Lt3h3gKcSC5ZlyJHTAWLv0p8oSiI
+   OtEsEjrLGdqOhXIP6c+PmAvnwvVIP1u90DS8QGreRnZlqlYgETn9GFb+6
+   yuJoBS/OPIcHZ4l2LUkRc0+gGZ5KJDgIGEXXYgi/r1chbPfCJLBp9gNxd
+   RpP4ZIvgj3+jO00FYYCyWggFaX0z4p3yTfHSoo4IaZP8ZfDlxfu4v02rN
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="365872833"
+X-IronPort-AV: E=Sophos;i="5.98,267,1673942400"; 
+   d="scan'208";a="365872833"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 21:08:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="682545306"
+X-IronPort-AV: E=Sophos;i="5.98,267,1673942400"; 
+   d="scan'208";a="682545306"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 16 Mar 2023 21:08:56 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pd1Oh-00094k-2F;
+        Fri, 17 Mar 2023 04:08:55 +0000
+Date:   Fri, 17 Mar 2023 12:08:21 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/cleanups] BUILD SUCCESS
+ b9da86e3aade0cd8c8b60a0f6356e7730fc90d5d
+Message-ID: <6413e7b5.6wRLSqnRl6q13gWz%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v3] PCI: cadence: Clear the ARI Capability Next Function
- Number of the last function
-Content-Language: en-US
-To:     Achal Verma <a-verma1@ti.com>, Tom Joseph <tjoseph@cadence.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Wilczy_ski <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>
-CC:     <linux-pci@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-omap@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Milind Parab <mparab@cadence.com>,
-        <wojciech.jasko-EXT@continental-corporation.com>
-References: <20230316071156.200888-1-a-verma1@ti.com>
-From:   Vignesh Raghavendra <vigneshr@ti.com>
-In-Reply-To: <20230316071156.200888-1-a-verma1@ti.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/cleanups
+branch HEAD: b9da86e3aade0cd8c8b60a0f6356e7730fc90d5d  x86/uaccess: Remove memcpy_page_flushcache()
 
+elapsed time: 727m
 
-On 16/03/23 12:41, Achal Verma wrote:
-> From: Jasko-EXT Wojciech <wojciech.jasko-EXT@continental-corporation.com>
-> 
-> Next Function Number field in ARI Capability Register for last function
-> must be zero by default as per the PCIe specification, indicating there
-> is no next higher number function but that's not happening in our case,
-> so this patch clears the Next Function Number field for last function used.
-> 
-> Signed-off-by: Jasko-EXT Wojciech <wojciech.jasko-EXT@continental-corporation.com>
-> Signed-off-by: Achal Verma <a-verma1@ti.com>
-> ---
-> Changes from v1:
-> * Fix commments in the code.
-> 
-> Changes from v2:
-> * Rework the commit message.
-> 
->  drivers/pci/controller/cadence/pcie-cadence-ep.c | 14 +++++++++++++-
->  drivers/pci/controller/cadence/pcie-cadence.h    |  6 ++++++
->  2 files changed, 19 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/pci/controller/cadence/pcie-cadence-ep.c b/drivers/pci/controller/cadence/pcie-cadence-ep.c
-> index b8b655d4047e..8742b2f594fd 100644
-> --- a/drivers/pci/controller/cadence/pcie-cadence-ep.c
-> +++ b/drivers/pci/controller/cadence/pcie-cadence-ep.c
-> @@ -565,7 +565,8 @@ static int cdns_pcie_ep_start(struct pci_epc *epc)
->  	struct cdns_pcie *pcie = &ep->pcie;
->  	struct device *dev = pcie->dev;
->  	int max_epfs = sizeof(epc->function_num_map) * 8;
-> -	int ret, value, epf;
-> +	int ret, epf, last_fn;
-> +	u32 reg, value;
->  
->  	/*
->  	 * BIT(0) is hardwired to 1, hence function 0 is always enabled
-> @@ -573,6 +574,17 @@ static int cdns_pcie_ep_start(struct pci_epc *epc)
->  	 */
->  	cdns_pcie_writel(pcie, CDNS_PCIE_LM_EP_FUNC_CFG, epc->function_num_map);
->  
-> +	/*
-> +	 * Next function field in ARI_CAP_AND_CTR register for last function
-> +	 * should be 0.
-> +	 * Clearing Next Function Number field for the last function used.
-> +	 */
-> +	last_fn = find_last_bit(&epc->function_num_map, BITS_PER_LONG);
-> +	reg     = CDNS_PCIE_CORE_PF_I_ARI_CAP_AND_CTRL(last_fn);
-> +	value  = cdns_pcie_readl(pcie, reg);
-> +	value &= ~CDNS_PCIE_ARI_CAP_NFN_MASK;
-> +	cdns_pcie_writel(pcie, reg, value);
-> +
->  	if (ep->quirk_disable_flr) {
->  		for (epf = 0; epf < max_epfs; epf++) {
->  			if (!(epc->function_num_map & BIT(epf)))
-> diff --git a/drivers/pci/controller/cadence/pcie-cadence.h b/drivers/pci/controller/cadence/pcie-cadence.h
-> index 190786e47df9..68c4c7878111 100644
-> --- a/drivers/pci/controller/cadence/pcie-cadence.h
-> +++ b/drivers/pci/controller/cadence/pcie-cadence.h
-> @@ -130,6 +130,12 @@
->  #define CDNS_PCIE_EP_FUNC_DEV_CAP_OFFSET	0xc0
->  #define CDNS_PCIE_EP_FUNC_SRIOV_CAP_OFFSET	0x200
->  
-> +/*
-> + * Endpoint PF Registers
-> + */
-> +#define CDNS_PCIE_CORE_PF_I_ARI_CAP_AND_CTRL(fn)	(0x144 + (fn) * 0x1000)
-> +#define CDNS_PCIE_ARI_CAP_NFN_MASK	GENMASK(15, 8)
-> +
->  /*
->   * Root Port Registers (PCI configuration space for the root port function)
->   */
+configs tested: 105
+configs skipped: 120
 
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-
-Reviewed-by: Vignesh Raghavendra <vigneshr@ti.com>
-
-FYI, there seems to be a duplicate patch [1], you may want to clarify
-which one to look at
-
-
-[1] https://lore.kernel.org/all/20230316065455.191785-1-a-verma1@ti.com/
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+alpha                randconfig-r016-20230312   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                  randconfig-r006-20230313   gcc  
+arc                  randconfig-r013-20230313   gcc  
+arc                  randconfig-r014-20230312   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   gcc  
+arm                  randconfig-r013-20230313   gcc  
+arm                  randconfig-r016-20230313   gcc  
+arm                  randconfig-r046-20230312   clang
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+arm64                randconfig-r011-20230312   gcc  
+csky                                defconfig   gcc  
+csky                 randconfig-r002-20230312   gcc  
+csky                 randconfig-r011-20230313   gcc  
+csky                 randconfig-r012-20230313   gcc  
+hexagon              randconfig-r041-20230312   clang
+hexagon              randconfig-r041-20230313   clang
+hexagon              randconfig-r045-20230312   clang
+hexagon              randconfig-r045-20230313   clang
+i386                             allyesconfig   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                 randconfig-a001-20230313   gcc  
+i386                 randconfig-a002-20230313   gcc  
+i386                 randconfig-a003-20230313   gcc  
+i386                 randconfig-a004-20230313   gcc  
+i386                 randconfig-a005-20230313   gcc  
+i386                 randconfig-a006-20230313   gcc  
+i386                 randconfig-a011-20230313   clang
+i386                 randconfig-a012-20230313   clang
+i386                 randconfig-a013-20230313   clang
+i386                 randconfig-a014-20230313   clang
+i386                 randconfig-a015-20230313   clang
+i386                 randconfig-a016-20230313   clang
+i386                 randconfig-r004-20230313   gcc  
+ia64                             allmodconfig   gcc  
+ia64                                defconfig   gcc  
+ia64                 randconfig-r012-20230312   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+m68k                             allmodconfig   gcc  
+m68k                                defconfig   gcc  
+m68k                 randconfig-r014-20230313   gcc  
+m68k                 randconfig-r015-20230313   gcc  
+m68k                 randconfig-r016-20230312   gcc  
+m68k                 randconfig-r016-20230313   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+nios2                               defconfig   gcc  
+nios2                randconfig-r005-20230312   gcc  
+nios2                randconfig-r012-20230312   gcc  
+nios2                randconfig-r012-20230313   gcc  
+nios2                randconfig-r013-20230312   gcc  
+parisc                              defconfig   gcc  
+parisc               randconfig-r005-20230313   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc              randconfig-r015-20230312   gcc  
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                randconfig-r014-20230312   gcc  
+riscv                randconfig-r042-20230313   clang
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r044-20230313   clang
+sh                               allmodconfig   gcc  
+sparc                               defconfig   gcc  
+sparc                randconfig-r002-20230313   gcc  
+sparc64              randconfig-r004-20230312   gcc  
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64               randconfig-a001-20230313   gcc  
+x86_64               randconfig-a002-20230313   gcc  
+x86_64               randconfig-a003-20230313   gcc  
+x86_64               randconfig-a004-20230313   gcc  
+x86_64               randconfig-a005-20230313   gcc  
+x86_64               randconfig-a006-20230313   gcc  
+x86_64               randconfig-a011-20230313   clang
+x86_64               randconfig-a012-20230313   clang
+x86_64               randconfig-a013-20230313   clang
+x86_64               randconfig-a014-20230313   clang
+x86_64               randconfig-a015-20230313   clang
+x86_64               randconfig-a016-20230313   clang
+x86_64                           rhel-8.3-bpf   gcc  
+x86_64                         rhel-8.3-kunit   gcc  
+x86_64                           rhel-8.3-kvm   gcc  
+x86_64                           rhel-8.3-syz   gcc  
+x86_64                               rhel-8.3   gcc  
+xtensa               randconfig-r001-20230312   gcc  
+xtensa               randconfig-r001-20230313   gcc  
+xtensa               randconfig-r003-20230312   gcc  
+xtensa               randconfig-r015-20230312   gcc  
 
 -- 
-Regards
-Vignesh
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
