@@ -2,190 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5B8E6BE4AE
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 10:00:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96D4D6BE4AF
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 10:01:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231866AbjCQJAy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 05:00:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38986 "EHLO
+        id S231871AbjCQJBA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 05:01:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232008AbjCQJAS (ORCPT
+        with ESMTP id S232012AbjCQJAT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 05:00:18 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AB2E75A66;
+        Fri, 17 Mar 2023 05:00:19 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCFACB7182
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 01:59:23 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id ek18so17592350edb.6
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 01:59:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679043561;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=BpkLCLMxsQQ5zA0IK7LMtaOGnKaPKAwAcMkZQbS+ecQ=;
+        b=pHbbCuGA73Mk/5ARt0wjvlbfuD2U2p8YzBghmxGyOdaN1JNoHewvpvgFn1ZBgKiz0X
+         9dLD2nTcp321vivUCuNFoOtFep8Y8qhtbfOWUfJ0QOgjI8jhg+ubkiTTkgvQHTXLyLdL
+         txqylu8tsHvYkw9YRgn6S2zhcDAAc+Gmp3kkxwc6XsHw3xR9jQrevpjlD9zNBhycviCW
+         DTqaQ7jwAUnLd9Ya7Q9AT2JOBqnOg3HFYC20kG8GV9Im5KhlLOBAa3GQLRrpuRdRcAYX
+         qjbJG6UgCroi8P8LZtsXaQpKWgzP7W+hyKY4euRp7N2+28vHYw6j8IAHA5buT9Zgo9On
+         J7Ag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679043561;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BpkLCLMxsQQ5zA0IK7LMtaOGnKaPKAwAcMkZQbS+ecQ=;
+        b=h7HwGDnc266urw5R70aVb0fV/xxhAoLNK+sZ9iZbwRkMOWYvx0vRm7SYFh3PipID+B
+         AAyb9kR2vDrdVm5HVDzI8DaDoyDVUzJ4cHTJCS7nbtRZezRTPgBynw6mk4DEwZogT49t
+         9MoFpO8HGsb0UeaXo9hcekovSx3ee5qqqLqrtAzWlPSsE5dynLfBG3wcKHUoiilox0xM
+         /F3CauUU2xIZq6wR/SloyOyHte9yFDJkCgGanyhhEFbl3DxFEEde6meyYJf3UIOs7rYO
+         JD27ac3UsuoCVGYn0n4Wq+18hkUrsWK9sMRINlVFkB6zQCGMfr6lpqhltwpclldqpDlu
+         /QBw==
+X-Gm-Message-State: AO0yUKU0lpj/ZW/zIjoEHhdMUAX1DBr7SAbJcudiXgG+pKzFRx+4xzqg
+        66JODUymGMy8IT3YmKjdLo0dlQ==
+X-Google-Smtp-Source: AK7set9i+hpbTfIEJCzFJx6UJzlGdk6rfTOxfYznJbRKglHBbeQKiDgDqUCtziNFxDe/kvzbG7mqbA==
+X-Received: by 2002:a17:906:e0a:b0:92b:846d:8928 with SMTP id l10-20020a1709060e0a00b0092b846d8928mr12685839eji.65.1679043560906;
         Fri, 17 Mar 2023 01:59:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679043560; x=1710579560;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=oCf58mkw6z/UOzQVLyw0X8P6tYofIqYaH4g4wKjkx1o=;
-  b=ThjOUWVXVmPxW81IORjcKAuXlbrgRPV4i+7WVUxfa627uy4t8Sx+nnfn
-   1fbpivZWneLd6OeOhUVogEMtgC1Ecq20hVCYEtROjJ0BCNH0j5UbhT50N
-   xZ8EIIL73B3ukcDfqObRHUv3rqq1K7WVLpP4lq2Rp1QpMQTzmRc/8QdKs
-   /ovzxIbteZ2wxSSmp8exBLUfo4IPmnUeJaKdnRRbjbu7eydVbguIxcTa/
-   UP/oAI6+zFukDEtAHAfuHF7t+TOYaFToeXWmdcm/SfGKOHJIalsxwQRfz
-   0piJBgyMOm23V6WdKa4bOKBjLmTSjXjKg9FCOhnPD0EHpWHGV3bVOEWq0
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="340578764"
-X-IronPort-AV: E=Sophos;i="5.98,268,1673942400"; 
-   d="scan'208";a="340578764"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2023 01:58:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="710425033"
-X-IronPort-AV: E=Sophos;i="5.98,268,1673942400"; 
-   d="scan'208";a="710425033"
-Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2023 01:58:38 -0700
-Received: from kekkonen.localdomain (localhost [IPv6:::1])
-        by kekkonen.fi.intel.com (Postfix) with SMTP id 000E211F7FC;
-        Fri, 17 Mar 2023 10:58:34 +0200 (EET)
-Date:   Fri, 17 Mar 2023 10:58:34 +0200
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     "Wu, Wentong" <wentong.wu@intel.com>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        "mchehab@kernel.org" <mchehab@kernel.org>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "Pandruvada, Srinivas" <srinivas.pandruvada@intel.com>,
-        "pierre-louis.bossart@linux.intel.com" 
-        <pierre-louis.bossart@linux.intel.com>,
-        "Wang, Zhifeng" <zhifeng.wang@intel.com>,
-        "Ye, Xiang" <xiang.ye@intel.com>,
-        "Qiu, Tian Shu" <tian.shu.qiu@intel.com>,
-        "Cao, Bingbu" <bingbu.cao@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 0/3] media: pci: intel: ivsc: Add driver of Intel
- Visual Sensing Controller(IVSC)
-Message-ID: <ZBQrulUBX1rYD9EN@kekkonen.localdomain>
-References: <ZAb2G7kqsEvrBhpG@kekkonen.localdomain>
- <DM6PR11MB4316B4F865472CA998E696FC8DB79@DM6PR11MB4316.namprd11.prod.outlook.com>
- <4c3ba301-6241-f2f4-f139-b4f4a0cd6223@redhat.com>
- <DM6PR11MB43166ADFA7D0775BA2C223C78DB59@DM6PR11MB4316.namprd11.prod.outlook.com>
- <e12fe65e-0b1f-a058-75e6-fa3e0a292c5b@redhat.com>
- <DM6PR11MB4316B02E112305F411B1A5158DB59@DM6PR11MB4316.namprd11.prod.outlook.com>
- <bb608934-23a6-213b-ab28-5dd66afd88e5@redhat.com>
- <MN2PR11MB43183F350CB575F94B1F05748DBC9@MN2PR11MB4318.namprd11.prod.outlook.com>
- <346c376e-01ed-267e-b1c8-ee42c345d03f@redhat.com>
- <DM6PR11MB4316F0F7B7A0F52FA5DF03BE8DBD9@DM6PR11MB4316.namprd11.prod.outlook.com>
+Received: from ?IPV6:2a02:810d:15c0:828:848a:1971:93e0:b465? ([2a02:810d:15c0:828:848a:1971:93e0:b465])
+        by smtp.gmail.com with ESMTPSA id k15-20020a50ce4f000000b004bef1187754sm747872edj.95.2023.03.17.01.59.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Mar 2023 01:59:20 -0700 (PDT)
+Message-ID: <265d30c5-93a7-7e60-32f2-ec15f91af5b9@linaro.org>
+Date:   Fri, 17 Mar 2023 09:59:19 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DM6PR11MB4316F0F7B7A0F52FA5DF03BE8DBD9@DM6PR11MB4316.namprd11.prod.outlook.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v9 1/7] dt-bindings: mediatek: mt8188: Add binding for MM
+ & INFRA IOMMU
+Content-Language: en-US
+To:     Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
+        Will Deacon <will@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Robin Murphy <robin.murphy@arm.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, iommu@lists.linux.dev,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        mingyuan.ma@mediatek.com, yf.wang@mediatek.com,
+        jianjiao.zeng@mediatek.com, chengci.xu@mediatek.com
+References: <20230317085541.20447-1-yong.wu@mediatek.com>
+ <20230317085541.20447-2-yong.wu@mediatek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230317085541.20447-2-yong.wu@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Wentong,
-
-On Fri, Mar 17, 2023 at 07:30:19AM +0000, Wu, Wentong wrote:
+On 17/03/2023 09:55, Yong Wu wrote:
+> From: "Chengci.Xu" <chengci.xu@mediatek.com>
 > 
+> Add descriptions for mt8188 IOMMU which also use ARM Short-Descriptor
+> translation table format.
 > 
-> > -----Original Message-----
-> > From: Hans de Goede <hdegoede@redhat.com>
-> > Sent: Thursday, March 16, 2023 5:04 PM
-> > 
-> > Hi,
-> > 
-> > On 3/16/23 03:58, Wu, Wentong wrote:
-> > >
-> > >
-> > >> -----Original Message-----
-> > >> From: Hans de Goede <hdegoede@redhat.com>
-> > >> Sent: Thursday, March 9, 2023 11:24 PM
-> > >>
-> > >> <re-added the previous Cc list, which I dropped because of the large
-> > >> attachments>
-> > >>
-> > >> Hi Wentong,
-> > >>
-> > >> On 3/9/23 15:29, Wu, Wentong wrote:
-> > >>> Hi Hans,
-> > >>>
-> > >>> Thanks
-> > >>>
-> > >>> And AFAICT, there is no IVSC device on your Dell Latitude 9420 where
-> > >>> the
-> > >> platform is based on TGL instead of ADL, and I have never heard IVSC
-> > >> runs on TGL,  if no IVSC, INT3472 will control sensor's power.
-> > >>> And I will double confirm with people who know dell product well tomorrow.
-> > >>
-> > >> Ah, I was under the impression that there was an IVSC there because:
-> > >>
-> > >> 1. The sensor driver for the used sensor (tries to) poke the IVSC 2.
-> > >> Things did not work without building the IVSC drivers, but that might
-> > >>    be due to a dependency on the LCJA GPIO expander instead
-> > >
-> > > Below is your dmesg log, the required SPI controller for IVSC isn't here.
-> > >
-> > > [   35.538114] ljca 2-6:1.0: acked sem wait timed out ret:0 timeout:20 ack:0
-> > > [   35.538129] ljca 2-6:1.0: MNG_ENUM_SPI failed ret:-110 len:7 num:0
-> > > [   35.538621] ljca 2-6:1.0: LJCA USB device init success
-> > > [   35.538776] usbcore: registered new interface driver ljca
-> > >
-> > > Also I checked your SSDT, there is no IVSC device and the sensor
-> > > device depends on
-> > > INT3472 instead of IVSC device as on my setup.
-> > 
-> > Ack.
-> > 
-> > >> But you might very well be right, that would also explain the "intel vsc not
-> > ready"
-> > >> messages in dmesg.
-> > >>
-> > >> If with the IVSC case the IVSC controls the power to the sensor too,
-> > >> then another option might be to model the I2C-switch + the
-> > >> power-control as a powerdown GPIO for the sensor, which most sensor
-> > drivers already try to use.
-> > >> The advantage of doing this would be that GPIO lookups can reference
-> > >> the GPIO provider + consumer by device-name so then we don't need to
-> > >> have both devices instantiated at the time of
-> > >> adding the GPIO lookup.   And in that case we could e.g. add the lookup
-> > >> before registering the I2C controller.
-> > >
-> > > Can we add IVSC device to acpi_honor_dep_ids, so that when everything
-> > > is done during mei_ace probe, acpi_dev_clear_dependencies can make sensor
-> > start probe?
-> > 
-> > Does the sensor ACPI device node have an ACPI _DEP on the IVSC device ?
+> In mt8188, there are two smi-common HW and IOMMU, one is for vdo(video
+> output), the other is for vpp(video processing pipe). They connects
+> with different smi-larbs, then some setting(larbid_remap) is different.
+> Differentiate them with the compatible string.
 > 
-> Yes,
+> Something like this:
 > 
-> > 
-> > If yes, then yes we can add the IVSC device to acpi_honor_dep_id and make
-> > mei_ace probe call acpi_dev_clear_dependencies().
+>    IOMMU(VDO)          IOMMU(VPP)
+>       |                   |
+>  SMI_COMMON_VDO      SMI_COMMON_VPP
+>  ---------------     ----------------
+>   |     |    ...      |     |    ...
+> larb0 larb2  ...    larb1 larb3  ...
 > 
-> But I prefer the powerdown gpio model, because we have to follow the commands
-> sequences as below which is required by firmware, runtime pm is hard to achieve this.
+> We also have an IOMMU that is for infra master like PCIe.
+> And infra master don't have the larb and ports.
+> 
+> Signed-off-by: Chengci.Xu <chengci.xu@mediatek.com>
+> Signed-off-by: Yong Wu <yong.wu@mediatek.com>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> ---
+>  .../bindings/iommu/mediatek,iommu.yaml        |  12 +-
+>  .../memory/mediatek,mt8188-memory-port.h      | 489 ++++++++++++++++++
+>  2 files changed, 500 insertions(+), 1 deletion(-)
 
-How so?
 
-I don't insist on the runtime PM based solution but I'd rather not have
-changes to virtually all sensor drivers --- this is an external chip to
-them.
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-> +	/* switch camera sensor ownership to host */
-> +	ret = ace_set_camera_owner(ACE_CAMERA_HOST);
-> +	if (ret)
-> +		goto error;
-> +
-> +	/* switch CSI-2 link to host */
-> +	ret = csi_set_link_owner(CSI_LINK_HOST, callback, context);
-> +	if (ret)
-> +		goto release_camera;
-> +
-> +	/* configure CSI-2 link */
-> +	ret = csi_set_link_cfg(nr_of_lanes, link_freq);
-> +	if (ret)
-> +		goto release_csi;
+Best regards,
+Krzysztof
 
--- 
-Kind regards,
-
-Sakari Ailus
