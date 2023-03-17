@@ -2,91 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7A4C6BE7EA
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 12:21:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7DF26BE7EB
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 12:21:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229588AbjCQLVN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 07:21:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58716 "EHLO
+        id S229893AbjCQLVX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 07:21:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229783AbjCQLVJ (ORCPT
+        with ESMTP id S229866AbjCQLVN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 07:21:09 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5A8BF76E;
-        Fri, 17 Mar 2023 04:20:45 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id k2so4944397pll.8;
-        Fri, 17 Mar 2023 04:20:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679052045;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=MwLiXEkSoODfLPV/T7b8EOfk9wVIiqqUoC/gH53lWZU=;
-        b=Ttm6IQgPtKVqW35fvUeY6VXzeem1vkYZOaz7vrKbqQj84Ey4plajxvY5qeVS5aAce6
-         Xkwcd0olSVfA/Pt70m1P4G+S5TwoKQ6+En8w3Y9Zhaa534QbBM3pGw8FoxdHQYCpzPEm
-         vDXQlV0DA2NaGBjJhZz2svDF7liaMLdMlcxGLHBo4mcBGWLVug4R8MBTr0IqaK3zd8wM
-         /UIyPPMOjC1Kbgst4AaM+SJvN3kd9EKEh1VLPosb4D8m8bBzlbU4xfabzadoAygf9A8j
-         I8oxYJJT3O4GiOf+6Y5mAYH/yqbI46z+dKEdO4LS4O6A8QL/Huv9sMoxrmSm7x8crldR
-         vYKA==
+        Fri, 17 Mar 2023 07:21:13 -0400
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF1711EFDF
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 04:20:49 -0700 (PDT)
+Received: by mail-il1-f199.google.com with SMTP id z8-20020a92cd08000000b00317b27a795aso2258368iln.0
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 04:20:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679052045;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MwLiXEkSoODfLPV/T7b8EOfk9wVIiqqUoC/gH53lWZU=;
-        b=KEXosVDyFbGnJ8fOyLA5Pmw40v88U7xQShUIZtWrcxSPVzm0hvjLabEm/thHF0aR7d
-         yij+8XXUqHoy6G59FgEFcEgGXvkM39lfRxvWsZ4OBYiZzxecBUCoHXQbz0/2oxJtrlvg
-         DXqGDlcP7h1G2rYhds3JnOg7We1HXVr4qFzIoWqNW2N2v/r0v8kTxA5zyQBClNtCnQ1/
-         osVp/fQcizPtE7yNjN6YnSQSmlNhBTAfIWXVelxhVM9siiq3znlg6x7ofn3gggSesXYF
-         ts4ybbg0k9IYbKr7jU1wkUhQ+5WWBdDwOR1A2Vmo2ZNfFZdKlwM74hsLR33brJXONyf2
-         IRag==
-X-Gm-Message-State: AO0yUKVPWEVNBM+q+/Ezfx8H4/4ceE+cCDqKoscZ8IMvIhSCpl7EfhIY
-        UXDU2Bcg8jFc3ShEkPv6iQE=
-X-Google-Smtp-Source: AK7set/62xLpYpXgwN2rSkGaoIOTq1VB0W8uBipmcDV+jPGswnD5z5uLk5Q3AY0HOm7fAjS0AE5Faw==
-X-Received: by 2002:a17:902:d2c7:b0:19a:a520:b203 with SMTP id n7-20020a170902d2c700b0019aa520b203mr8979837plc.25.1679052045382;
-        Fri, 17 Mar 2023 04:20:45 -0700 (PDT)
-Received: from google.com ([2620:15c:9d:2:d084:8252:e846:af61])
-        by smtp.gmail.com with ESMTPSA id iw21-20020a170903045500b0019aa8149cb9sm1353820plb.79.2023.03.17.04.20.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Mar 2023 04:20:44 -0700 (PDT)
-Date:   Fri, 17 Mar 2023 04:20:41 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
-Subject: Re: [PATCH 4/4] Input: bcm_iproc_tsc: drop of_match_ptr for ID table
-Message-ID: <ZBRNCbrpzfy35mdO@google.com>
-References: <20230312131514.351603-1-krzysztof.kozlowski@linaro.org>
- <20230312131514.351603-4-krzysztof.kozlowski@linaro.org>
+        d=1e100.net; s=20210112; t=1679052048;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=oqnk41ySeSNX2yCHZGZE/dWEboCHTt1MyXh/PnBDvLQ=;
+        b=1Dcs1S6Cbj2fzCPaWVIzvNawsDEZUbClusAo528ONGV3WEGl3kiLTqATEYeaoy6z/4
+         XgFj9eucCAMkYWDEEmR3qhxJdKYrBuXX6fUjVGhLaM1afFjoNt9k8Zrq8lV4HC9O3q0y
+         1afRuzEkJ+uZM4LM6rOOzTCbwqk3VlIBQvF5EgD4fIETk9Anm374yXJBGPvYXh0t63U6
+         U2Fk+jbkTnaaQlz7uH0Y8AikjWnFAk8JzA4Jd6222VSq9x9IVI7iL7pgrxmaoCNW7b+F
+         ch30QcWvmUk7eXB5bzKjNqyfEX6OdwhRSyhAbWBgG09c58EuPOaFQ/BJqVcg0A99AWad
+         WndA==
+X-Gm-Message-State: AO0yUKUtazVTpJOSISBA5xaT7AJRW3Bx5O3xa3bKx0cxHTOYHS4VMsRx
+        Q480KEZixK5+4x1ylGsLH5cUAnKzDgLSvZPhlNyrMfgGGbU9
+X-Google-Smtp-Source: AK7set/E46YUb/h8n4P1dIpqcv0BhxhTRIa/AlZKjOHC1IjT6dYDvSb1+C4bOw1cBKRbe6vxJJyG8SchGgcG/0BpqrnEGXVGqslS
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230312131514.351603-4-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:2147:b0:3c5:1971:1b7f with SMTP id
+ z7-20020a056638214700b003c519711b7fmr1037599jaj.6.1679052048555; Fri, 17 Mar
+ 2023 04:20:48 -0700 (PDT)
+Date:   Fri, 17 Mar 2023 04:20:48 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000e9e9ee05f716c445@google.com>
+Subject: [syzbot] [udf?] WARNING in udf_new_block
+From:   syzbot <syzbot+cc717c6c5fee9ed6e41d@syzkaller.appspotmail.com>
+To:     jack@suse.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 12, 2023 at 02:15:14PM +0100, Krzysztof Kozlowski wrote:
-> The driver can match only via the DT table so the table should be always
-> used and the of_match_ptr does not have any sense (this also allows ACPI
-> matching via PRP0001, even though it might not be relevant here).  This
-> also fixes !CONFIG_OF error:
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Hello,
 
-Applied, thank you.
+syzbot found the following issue on:
 
--- 
-Dmitry
+HEAD commit:    eeac8ede1755 Linux 6.3-rc2
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=16e97a70c80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=dbab9019ad6fc418
+dashboard link: https://syzkaller.appspot.com/bug?extid=cc717c6c5fee9ed6e41d
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/204f10b1db6d/disk-eeac8ede.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/c0ab57601df9/vmlinux-eeac8ede.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/21d53c00efd1/bzImage-eeac8ede.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+cc717c6c5fee9ed6e41d@syzkaller.appspotmail.com
+
+------------[ cut here ]------------
+WARNING: CPU: 1 PID: 14411 at fs/udf/udfdecl.h:123 udf_add_free_space fs/udf/balloc.c:125 [inline]
+WARNING: CPU: 1 PID: 14411 at fs/udf/udfdecl.h:123 udf_table_new_block fs/udf/balloc.c:667 [inline]
+WARNING: CPU: 1 PID: 14411 at fs/udf/udfdecl.h:123 udf_new_block+0x1dc2/0x2130 fs/udf/balloc.c:733
+Modules linked in:
+CPU: 1 PID: 14411 Comm: syz-executor.0 Not tainted 6.3.0-rc2-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/02/2023
+RIP: 0010:udf_updated_lvid fs/udf/udfdecl.h:121 [inline]
+RIP: 0010:udf_add_free_space fs/udf/balloc.c:125 [inline]
+RIP: 0010:udf_table_new_block fs/udf/balloc.c:667 [inline]
+RIP: 0010:udf_new_block+0x1dc2/0x2130 fs/udf/balloc.c:733
+Code: fe e9 00 fd ff ff e8 ed 61 8d fe 48 8b bc 24 88 00 00 00 e8 60 82 b8 07 45 31 f6 48 8b 5c 24 78 e9 6d fd ff ff e8 ce 61 8d fe <0f> 0b e9 64 fc ff ff 89 d9 80 e1 07 fe c1 38 c1 0f 8c 7d e3 ff ff
+RSP: 0018:ffffc9001688f580 EFLAGS: 00010287
+RAX: ffffffff82fde5b2 RBX: 000000004c84c04c RCX: 0000000000040000
+RDX: ffffc90012967000 RSI: 0000000000000938 RDI: 0000000000000939
+RBP: ffffc9001688f7d0 R08: ffffffff82fde210 R09: fffffbfff1ca8066
+R10: 0000000000000000 R11: dffffc0000000001 R12: 0000000000000000
+R13: dffffc0000000000 R14: ffff8880489d301c R15: 0000000000000037
+FS:  00007fe1f2f80700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000000002004c000 CR3: 000000001e4ed000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ udf_new_inode+0x389/0xd10 fs/udf/ialloc.c:71
+ udf_create+0x21/0xe0 fs/udf/namei.c:384
+ lookup_open fs/namei.c:3416 [inline]
+ open_last_lookups fs/namei.c:3484 [inline]
+ path_openat+0x13df/0x3170 fs/namei.c:3712
+ do_filp_open+0x234/0x490 fs/namei.c:3742
+ do_sys_openat2+0x13f/0x500 fs/open.c:1348
+ do_sys_open fs/open.c:1364 [inline]
+ __do_sys_open fs/open.c:1372 [inline]
+ __se_sys_open fs/open.c:1368 [inline]
+ __x64_sys_open+0x225/0x270 fs/open.c:1368
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fe1f228c0f9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fe1f2f80168 EFLAGS: 00000246 ORIG_RAX: 0000000000000002
+RAX: ffffffffffffffda RBX: 00007fe1f23ac050 RCX: 00007fe1f228c0f9
+RDX: 0000000000000048 RSI: 00000000000060c2 RDI: 0000000020000100
+RBP: 00007fe1f22e7ae9 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffec8d11ecf R14: 00007fe1f2f80300 R15: 0000000000022000
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
