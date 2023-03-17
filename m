@@ -2,388 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 477AC6BF49A
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 22:51:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94C8D6BF4A3
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 22:52:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229995AbjCQVvj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 17:51:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52684 "EHLO
+        id S230222AbjCQVw3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 17:52:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229765AbjCQVvh (ORCPT
+        with ESMTP id S229764AbjCQVw1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 17:51:37 -0400
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B008D2FCF0;
-        Fri, 17 Mar 2023 14:51:03 -0700 (PDT)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id E784A240003;
-        Fri, 17 Mar 2023 21:50:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1679089818;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to; bh=RpfUPFa7Pjz3eL1lIlllGYE22+iVyiYtNaJkGf0is+0=;
-        b=IPPeK1ehF6ODLo1gc63bn/vkXoF0LZtUcIe3UewPh+/iXUP9alqzFKzqjjoGUwi7JHxbgF
-        ATVjETsXgS5oDbRhNj4DbPv8Ky87ZMxle4VM8Vo8DAHJmE95rIiQKlCZ5KDDUlsTfJOK+R
-        rrwDKbQ/k+raisljl001CIcf+qaOQq+LHU+1gE7vAdExMqp3vmgnvjjFPs1/QmIUwFw17h
-        N3pk8X50PjDeF0RN2nlxqM7MrjbX6cp/bS7OvIiR4QWQ2JmN9q4b8hsvkZtHc/s3pjpM+s
-        5/6jQvDZdWWcYzxnnOzVWrn6WpK449mprCcaR8BB7OqJIk37PNl4GTbaYMQeDg==
-Date:   Fri, 17 Mar 2023 22:50:16 +0100
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Ibrahim Tilki <Ibrahim.Tilki@analog.com>
-Cc:     a.zummo@towertech.it, jdelvare@suse.com, linux@roeck-us.net,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
-Subject: Re: [PATCH v4 1/2] drivers: rtc: add max313xx series rtc driver
-Message-ID: <202303172150163e1de7e3@mail.local>
+        Fri, 17 Mar 2023 17:52:27 -0400
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73AD3B761;
+        Fri, 17 Mar 2023 14:52:01 -0700 (PDT)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-5447d217bc6so118172157b3.7;
+        Fri, 17 Mar 2023 14:52:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679089916;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PKtagOM/JAUz4jAmNpr2xD81W1Y87KjgbxfWBpiZoeg=;
+        b=AumdPhs5m5HCtXnISRZtI6eGxQZZaORJM2u41wlLLEdtgw6P4gZwp2JI3LuJ6Iii2H
+         +Svbj7vqD9N/gNiZ+kCwxSAl8tUqAAk7kWCkcoJPoTZuRwn37NMNuWexh9HzZSZb/2L0
+         V7HvSOmGw1DqKO6tO6MwU1BN7CPMC+xOw8N5w7HbXzybExOwJPfF5XI7uT/1NPX/EBAF
+         mnTY5musbCb61oD/aoE4kfgHNv7DfiBE4cQ2DFxsNR+ma9gAw17v8koy6zrvzaYxmmGw
+         g6CGVLLrZ40Cm1P7F+GsahPZ9bt62psbDbiIsF0PHiQD6SM248i6sYkauqQcOluhdW1o
+         uY+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679089916;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PKtagOM/JAUz4jAmNpr2xD81W1Y87KjgbxfWBpiZoeg=;
+        b=bgiEr3jkdPHT/52WbxblmSFMLinc9UqtO9kbqZPtqR7r3tcOjInfF/0MhiV3KJOdsA
+         d6w+2lTPVJhCmglTRuSBgX5dvBWbCG5Wv5PS25yMrVEBeUAgR3+34mCcaJwa7/Xt3JQa
+         ZWMjbYGU2THJbJjbh68JyKYptpoH0zkNicJWdW/ODYWfN/sN2h9O6OW0xi/aGFb3G3Ai
+         aJUHjMS71n/Nqjc0tLfvXgqER8kF/QlMRwTtXo5DADQZSQgrBuDyeYoN0HDH2ZAd17vF
+         +E4Z0Cj12WL460IwkKQRWQh/cVVcHbZM9uplCWkTRT+H+oESAwLhJmeIveYvb0YYA7hL
+         +0rg==
+X-Gm-Message-State: AO0yUKWIput97AOR3qSxALyHkU8oDnikGXwpwom+tt39hZX4xVFDXGMr
+        ytlXaKDhdyFAB7sKF756B0QPj/bW4gdlUXhmdNg=
+X-Google-Smtp-Source: AK7set/WnalWzyU2DZyj10hIZUdLEpGZo5yGe9ZqTSTod2e3UkLYddRiEsg/gqpiT2qmyBM41gtSvWiikIzJQ+2fyuc=
+X-Received: by 2002:a81:ed06:0:b0:540:e6c5:5118 with SMTP id
+ k6-20020a81ed06000000b00540e6c55118mr5786288ywm.2.1679089915760; Fri, 17 Mar
+ 2023 14:51:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230315161626.247-2-Ibrahim.Tilki@analog.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230317120815.321871-1-noltari@gmail.com> <00783066-a99c-4bab-ae60-514f4bce687b@lunn.ch>
+ <CAOiHx==TiSZKE4AP3PZ9Ah4zuAsrfpOTvRADWpT2kMS9UVRH9Q@mail.gmail.com> <9f771318-5a59-ac31-a333-e2ad9947679f@gmail.com>
+In-Reply-To: <9f771318-5a59-ac31-a333-e2ad9947679f@gmail.com>
+From:   =?UTF-8?B?w4FsdmFybyBGZXJuw6FuZGV6IFJvamFz?= <noltari@gmail.com>
+Date:   Fri, 17 Mar 2023 22:51:45 +0100
+Message-ID: <CAKR-sGdgfztvXCymeNSPSoR=C466NzQ-6siiWSUukSAR_-c4-Q@mail.gmail.com>
+Subject: Re: [PATCH] net: dsa: tag_brcm: legacy: fix daisy-chained switches
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     Jonas Gorski <jonas.gorski@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>, olteanv@gmail.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/03/2023 19:16:25+0300, Ibrahim Tilki wrote:
-> +static int max313xx_trickle_charger_setup(struct device *dev)
-> +{
-> +	struct max313xx *rtc = dev_get_drvdata(dev);
-> +	bool trickle_diode_en;
-> +	u32 charger_en = 0;
-> +	int index, reg;
-> +	u32 ohms = 0;
-> +	int ret;
-> +
-> +	device_property_read_u32(dev, "aux-voltage-chargeable", &charger_en);
-> +	if (charger_en > 1)
-> +		return dev_err_probe(dev, -EINVAL,
-> +				     "invalid value %d for property aux-voltage-chargeable\n",
-> +				     charger_en);
+El vie, 17 mar 2023 a las 17:55, Florian Fainelli
+(<f.fainelli@gmail.com>) escribi=C3=B3:
+>
+> On 3/17/23 09:49, Jonas Gorski wrote:
+> > On Fri, 17 Mar 2023 at 17:32, Andrew Lunn <andrew@lunn.ch> wrote:
+> >>
+> >> On Fri, Mar 17, 2023 at 01:08:15PM +0100, =C3=81lvaro Fern=C3=A1ndez R=
+ojas wrote:
+> >>> When BCM63xx internal switches are connected to switches with a 4-byt=
+e
+> >>> Broadcom tag, it does not identify the packet as VLAN tagged, so it a=
+dds one
+> >>> based on its PVID (which is likely 0).
+> >>> Right now, the packet is received by the BCM63xx internal switch and =
+the 6-byte
+> >>> tag is properly processed. The next step would to decode the correspo=
+nding
+> >>> 4-byte tag. However, the internal switch adds an invalid VLAN tag aft=
+er the
+> >>> 6-byte tag and the 4-byte tag handling fails.
+> >>> In order to fix this we need to remove the invalid VLAN tag after the=
+ 6-byte
+> >>> tag before passing it to the 4-byte tag decoding.
+> >>
+> >> Is there an errata for this invalid VLAN tag? Or is the driver simply
+> >> missing some configuration for it to produce a valid VLAN tag?
+> >>
+> >> The description does not convince me you are fixing the correct
+> >> problem.
+> >
+> > This isn't a bug per se, it's just the interaction of a packet going
+> > through two tagging CPU ports.
+> >
+> > My understanding of the behaviour is:
+> >
+> > 1. The external switch inserts a 4-byte Broadcom header before the
+> > VLAN tag, and sends it to the internal switch.
+> > 2. The internal switch looks at the EtherType, finds it is not a VLAN
+> > EtherType, so assumes it is untagged, and adds a VLAN tag based on the
+> > configured PVID (which 0 in the default case).
+> > 3. The internal switch inserts a legacy 6-byte Broadcom header before
+> > the VLAN tag when forwarding to its CPU port.
+> >
+> > The internal switch does not know how to handle the (non-legacy)
+> > Broadcom tag, so it does not know that there is a VLAN tag after it.
+> >
+> > The internal switch enforces VLAN tags on its CPU port when it is in
+> > VLAN enabled mode, regardless what the VLAN table's untag bit says.
+> >
+> > The result is a bogus VID 0 and priority 0 tag between the two
+> > Broadcom Headers. The VID would likely change based on the PVID of the
+> > port of the external switch.
+>
+> My understanding matches yours, at the very least, we should only strip
+> off the VLAN tag =3D=3D 0, in case we are stacked onto a 4-bytes Broadcom
+> tag speaking switch, otherwise it seems to me we are stripping of VLAN
+> tags a bait too greedily.
 
-This is too verbose, you can simply return -EINVAL here. dtbs_check will
-report the invalid value.
+Maybe I'm wrong here, but we're only removing the VLAN tag for a
+specific case in which we shouldn't have any kind of VLAN tag, right?
 
-> +
-> +	if (!charger_en)
-> +		return 0;
-> +
-> +	trickle_diode_en = device_property_read_bool(dev, "adi,trickle-diode-enable");
+For example, let's say we have an internal switch with the following ports:
+- 0: LAN 1
+- 4: RGMII -> External switch
+- 8: CPU -> enetsw controller
 
-There is no point having this property, simply use aux-voltage-chargeable.
+And the external switch has the following ports:
+- 0: LAN 2
+- 1: LAN 3
+...
+- 8: CPU -> Internal switch RGMII
 
-> +	device_property_read_u32(dev, "trickle-resistor-ohms", &ohms);
-> +
-> +	if (!rtc->chip->trickle_reg) {
-> +		dev_warn(dev, "device does not have trickle charger\n");
+A. If we get a packet from LAN 1, it will only have the 6-bytes tag
+(and optionally the VLAN tag).
+When dsa_master_find_slave() is called, the net_device returned won't
+have any kind of DSA protocol and therefore netdev_uses_dsa() will
+return FALSE.
 
-Simply return 0, no string.
+B. However, when a packet is received from LAN 2/3, the first tag
+processed will be the 6-byte tag (corresponding to the internal
+switch).
+The 6-byte tag will identify this as coming from port 4 of the
+internal switch (RGMII) and therefore dsa_master_find_slave() will
+return the extsw interface which will have the DSA protocol of the
+4-byte tag and netdev_uses_dsa() will return TRUE.
 
-> +		return 0;
-> +	}
-> +
-> +	index = find_closest(ohms, max313xx_trickle_ohms,
-> +			     ARRAY_SIZE(max313xx_trickle_ohms)) + 1;
-> +
-> +	switch (rtc->id) {
-> +	case ID_MAX31329:
-> +		reg = FIELD_PREP(MAX31329_TRICKLE_ENABLE_BIT, 1) |
-> +		      FIELD_PREP(MAX31329_43_TRICKLE_RES_MASK, index) |
-> +		      FIELD_PREP(MAX31329_43_TRICKLE_DIODE_EN, trickle_diode_en);
-> +		break;
-> +	case ID_MAX31331:
-> +	case ID_MAX31334:
-> +		reg = FIELD_PREP(MAX3133X_TRICKLE_ENABLE_BIT, 1) |
-> +		      FIELD_PREP(MAX3133X_TRICKLE_RES_MASK, index) |
-> +		      FIELD_PREP(MAX3133X_TRICKLE_DIODE_EN, trickle_diode_en);
-> +		break;
-> +	case ID_MAX31341:
-> +		if (index == 1)
-> +			index = 0;
-> +
-> +		reg = FIELD_PREP(MAX31341_TRICKLE_ENABLE_BIT, 1) |
-> +		      FIELD_PREP(MAX31341_TRICKLE_RES_MASK, index) |
-> +		      FIELD_PREP(MAX31341_TRICKLE_DIODE_EN, trickle_diode_en);
-> +
-> +		ret = regmap_set_bits(rtc->regmap, MAX31341_POWER_MGMT_REG,
-> +				      MAX31341_POWER_MGMT_TRICKLE_BIT);
-> +		if (ret)
-> +			return ret;
-> +
-> +		break;
-> +	case ID_MAX31343:
-> +		reg = FIELD_PREP(MAX31329_43_TRICKLE_RES_MASK, index) |
-> +		      FIELD_PREP(MAX31329_43_TRICKLE_DIODE_EN, trickle_diode_en) |
-> +		      FIELD_PREP(MAX31343_TRICKLE_ENABLE_MASK,
-> +				 MAX31343_TRICKLE_ENABLE_CODE);
-> +		break;
-> +	default:
-> +		return -EOPNOTSUPP;
-> +	}
-> +
-> +	return regmap_write(rtc->regmap, rtc->chip->trickle_reg, reg);
-> +}
-> +
-> +static int max313xx_find_clkin_freq_index(struct clk *clk)
-> +{
-> +	unsigned long rate = clk_get_rate(clk);
-> +	int freq;
-> +	int i;
-> +
-> +	i = find_closest(rate, max313xx_clkin_freq,
-> +			 ARRAY_SIZE(max313xx_clkin_freq));
-> +	if (max313xx_clkin_freq[i] == rate)
-> +		return i;
-> +
-> +	for (i = ARRAY_SIZE(max313xx_clkin_freq) - 1; i >= 0; i--) {
-> +		freq = max313xx_clkin_freq[i];
-> +		if (freq == clk_round_rate(clk, freq))
-> +			return i;
-> +	}
-> +
-> +	/* supplied clock cannot produce one of desired frequency rate */
-> +	return -ENODEV;
-> +}
-> +
-> +static int max313xx_clkin_init(struct device *dev)
-> +{
-> +	struct max313xx *rtc = dev_get_drvdata(dev);
-> +	int rate;
-> +	int ret;
-> +
-> +	rtc->clkin = devm_clk_get_enabled(dev, NULL);
-> +	if (IS_ERR(rtc->clkin)) {
-> +		if (PTR_ERR(rtc->clkin) == -ENOENT)
-> +			rtc->clkin = NULL;
-> +		else
-> +			return dev_err_probe(dev, PTR_ERR(rtc->clkin),
-> +					     "error while clkin setup\n");
-> +	}
-> +
-> +	if (!rtc->clkin) {
-> +		switch (rtc->id) {
-> +		case ID_MAX31329:
-> +			return regmap_clear_bits(rtc->regmap,
-> +						 MAX31329_CONFIG2_REG,
-> +						 MAX31329_CONFIG2_CLKIN_EN);
-> +		case ID_MAX31341:
-> +		case ID_MAX31342:
-> +			return regmap_clear_bits(rtc->regmap,
-> +						 MAX31341_42_CONFIG1_REG,
-> +						 MAX31341_42_CONFIG1_CLKIN_EN);
-> +		default:
-> +			return 0;
-> +		}
-> +	}
-> +
-> +	rate = max313xx_find_clkin_freq_index(rtc->clkin);
-> +	if (rate < 0)
-> +		return dev_err_probe(dev, rate,
-> +				     "clkin cannot produce required frequency\n");
-> +
-> +	ret = clk_set_rate(rtc->clkin, max313xx_clkin_freq[rate]);
-> +	if (ret)
-> +		return ret;
-> +
-> +	switch (rtc->id) {
-> +	case ID_MAX31329:
-> +		ret = regmap_update_bits(rtc->regmap, MAX31329_CONFIG2_REG,
-> +					 MAX31329_CONFIG2_CLKIN_FREQ, rate);
-> +		if (ret)
-> +			return ret;
-> +
-> +		return regmap_set_bits(rtc->regmap, MAX31329_CONFIG2_REG,
-> +				       MAX31329_CONFIG2_CLKIN_EN);
-> +	case ID_MAX31341:
-> +	case ID_MAX31342:
-> +		ret = regmap_update_bits(rtc->regmap, MAX31341_42_CONFIG1_REG,
-> +					 MAX31341_42_CONFIG1_CLKIN_FREQ,
-> +					 FIELD_PREP(MAX31341_42_CONFIG1_CLKIN_FREQ, rate));
-> +		if (ret)
-> +			return ret;
-> +
-> +		return regmap_set_bits(rtc->regmap, MAX31341_42_CONFIG1_REG,
-> +				       MAX31341_42_CONFIG1_CLKIN_EN);
-> +	default:
-> +		rtc->clkin = NULL;
-> +		dev_warn(dev, "device does not have clock input\n");
-> +		return 0;
-> +	}
-> +}
-> +
-> +static int max313xx_irq_init(struct device *dev, const char *devname)
-> +{
-> +	struct max313xx *rtc = dev_get_drvdata(dev);
-> +	int ret;
-> +
-> +	switch (rtc->id) {
-> +	case ID_MAX31328:
-> +		/* max31328 sqw and interrupt pin is shared */
-> +		if (rtc->irq > 0 && rtc->clkout.clk)
-> +			return dev_err_probe(dev, -EOPNOTSUPP,
-> +					     "cannot have both sqw clock output and irq enabled");
+Only for the second case the invalid VLAN tag will be removed and
+since extsw (RGMI) will never have VLANs enabled, I don't see the
+problem that you suggest about removing the VLAN tags too greedily.
 
-This still doesn't work, having a clock registered doesn't mean it is
-used or muxed. Also, you want to always register it so it gets disabled
-when it is not used.
+Am I wrong here?
 
-> +
-> +		break;
-> +	case ID_MAX31331:
-> +	case ID_MAX31334:
-> +		if (rtc->clkout.clk) {
-> +			/*
-> +			 * interrupt muxing depends on clkout so enable clkout
-> +			 * if configured before requesting interrupt
-> +			 */
-> +			ret = clk_prepare_enable(rtc->clkout.clk);
-> +			if (ret)
-> +				return dev_err_probe(dev, ret,
-> +						     "cannot enable clkout\n");
-> +		}
-> +		break;
-> +	default:
-> +		if (rtc->clkin) {
-> +			if (rtc->clkout.clk && rtc->irq > 0)
-> +				return dev_err_probe(dev, -EOPNOTSUPP,
-> +						     "irq not possible when both clkin and clkout are configured\n");
-> +
-> +			if (rtc->irq <= 0)
-> +				break;
-> +
-> +			/* clkout needs to be disabled for interrupt */
-> +			if (rtc->chip->clkout->en_invert)
-> +				ret = regmap_set_bits(rtc->regmap,
-> +						      rtc->chip->clkout->reg,
-> +						      rtc->chip->clkout->en_bit);
-> +			else
-> +				ret = regmap_clear_bits(rtc->regmap,
-> +							rtc->chip->clkout->reg,
-> +							rtc->chip->clkout->en_bit);
-> +
+> --
+> Florian
+>
 
-What if you want alarm1 on INTA without any clkin? This doesn't seem to
-be configured.
-
-> +			if (ret)
-> +				return ret;
-> +		}
-> +		break;
-> +	}
-> +
-> +	if (rtc->irq > 0) {
-> +		return devm_request_threaded_irq(dev, rtc->irq, NULL,
-> +						 &max313xx_irq, IRQF_ONESHOT,
-> +						 devname, rtc);
-> +	}
-
-You still want to parse wakeup-source in case INTA/INTB is connected
-directly to a PMIC for exemple.
-
-> +
-> +	clear_bit(RTC_FEATURE_ALARM, rtc->rtc->features);
-> +
-> +	return 0;
-> +}
-> +
-> +static int max313xx_probe(struct i2c_client *client,
-> +			  const struct i2c_device_id *id)
-> +{
-> +	struct device *dev = &client->dev;
-> +	struct max313xx *max313xx;
-> +	struct device *hwmon;
-> +	const void *match;
-> +	int ret;
-> +
-> +	max313xx->irq = client->irq;
-> +
-> +	ret = max313xx_clkout_register(dev);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = max313xx_clkin_init(dev);
-> +	if (ret)
-> +		return ret;
-> +
-> +	/* IRQ wiring depends on the clock configuration so parse them first */
-> +	ret = max313xx_irq_init(dev, client->name);
-> +	if (ret)
-> +		return ret;
-> +
-> +	if (max313xx->chip->ram_size) {
-> +		max313xx_nvmem_cfg.size = max313xx->chip->ram_size;
-> +		max313xx_nvmem_cfg.priv = max313xx;
-> +
-> +		ret = devm_rtc_nvmem_register(max313xx->rtc, &max313xx_nvmem_cfg);
-> +		if (ret)
-> +			dev_warn(dev, "cannot register rtc nvmem\n");
-> +	}
-> +
-> +	if (max313xx->chip->temp_reg) {
-> +		hwmon = devm_hwmon_device_register_with_info(dev, client->name,
-> +							     max313xx,
-> +							     &max313xx_chip_info,
-> +							     NULL);
-> +		if (IS_ERR(hwmon))
-> +			dev_warn(dev, "cannot register hwmon device: %li\n",
-> +				 PTR_ERR(hwmon));
-> +	}
-> +
-> +	return max313xx_trickle_charger_setup(dev);
-> +}
-> +
-> +static const struct of_device_id max313xx_of_id[] = {
-> +	{ .compatible = "adi,max31328", .data = &chip[ID_MAX31328] },
-> +	{ .compatible = "adi,max31329", .data = &chip[ID_MAX31329] },
-> +	{ .compatible = "adi,max31331", .data = &chip[ID_MAX31331] },
-> +	{ .compatible = "adi,max31334", .data = &chip[ID_MAX31334] },
-> +	{ .compatible = "adi,max31341", .data = &chip[ID_MAX31341] },
-> +	{ .compatible = "adi,max31342", .data = &chip[ID_MAX31342] },
-> +	{ .compatible = "adi,max31343", .data = &chip[ID_MAX31343] },
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(of, max313xx_of_id);
-> +
-> +static const struct i2c_device_id max313xx_id[] = {
-> +	{ "max31328", (kernel_ulong_t)&chip[ID_MAX31328] },
-> +	{ "max31329", (kernel_ulong_t)&chip[ID_MAX31329] },
-> +	{ "max31331", (kernel_ulong_t)&chip[ID_MAX31331] },
-> +	{ "max31334", (kernel_ulong_t)&chip[ID_MAX31334] },
-> +	{ "max31341", (kernel_ulong_t)&chip[ID_MAX31341] },
-> +	{ "max31342", (kernel_ulong_t)&chip[ID_MAX31342] },
-> +	{ "max31343", (kernel_ulong_t)&chip[ID_MAX31343] },
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(i2c, max313xx_id);
-> +
-> +static struct i2c_driver max313xx_driver = {
-> +	.driver = {
-> +		.name	= "rtc-max313xx",
-> +		.of_match_table = max313xx_of_id,
-> +	},
-> +	.probe		= max313xx_probe,
-> +	.id_table	= max313xx_id,
-> +};
-> +module_i2c_driver(max313xx_driver);
-> +
-> +MODULE_DESCRIPTION("Analog Devices MAX313XX RTCs");
-> +MODULE_AUTHOR("Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>");
-> +MODULE_AUTHOR("Ibrahim Tilki <Ibrahim.Tilki@analog.com>");
-> +MODULE_SOFTDEP("pre: regmap-i2c");
-> +MODULE_LICENSE("GPL");
-> +MODULE_VERSION("1.0");
-> -- 
-> 2.25.1
-> 
-
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Best regards,
+=C3=81lvaro.
