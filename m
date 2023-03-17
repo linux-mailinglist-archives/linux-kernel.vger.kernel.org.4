@@ -2,276 +2,367 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B4AA6BE34D
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 09:23:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42A286BE379
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 09:26:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230109AbjCQIXq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 04:23:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57022 "EHLO
+        id S231511AbjCQI0D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 04:26:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229943AbjCQIXL (ORCPT
+        with ESMTP id S231593AbjCQIZB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 04:23:11 -0400
-Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com [IPv6:2607:f8b0:4864:20::e2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADEFD39CD9
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 01:22:43 -0700 (PDT)
-Received: by mail-vs1-xe2d.google.com with SMTP id s1so3819261vsk.5
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 01:22:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679041362;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=t6f7xyyisY4jwcHBQ+vgkR6A7bqpDt9y+7QtEUgkqsA=;
-        b=Qdy+e860gOrCGFHQ0QiqgRLaSm7CCztVBTRSMOYmj7KEpupfsyfcCXyhMx9wSU+ebZ
-         +NdPxtwcv9q/o9fTjtw914JgX3lW2xl7YGQigjckoza6kJehcnECGn5GmjINS6PI2g3y
-         eboZRtNdBj3Lsf3zB5FHDgws1auABbhR8aFYmJzdY2FGl2eBdAJAV7hucnFeexZysTZV
-         ElK0x4bYy92xwyUMcn2DhyLnSWmvoAT6/1rAG6RvXBq6GeOBjjQBvDgVmVkCGbPEBhwl
-         H84JXd+tZWqSc6Ezq6KzdPSEBjHYAOjUSwCFfnaGk2U/GgKhQcAy0OetQ6npj/Urq45C
-         TdIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679041362;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=t6f7xyyisY4jwcHBQ+vgkR6A7bqpDt9y+7QtEUgkqsA=;
-        b=apHD7Ck79ZBwkjcTJ2unIyyXvZuUyuYPFCD4BsK54R/R30whrn9LWFkKiznyJT5em5
-         tGHhci9VYIVNhUAe3n09X39K5ERg653WOJNlT82NKVtNqgARIcfR0jaMUQCPmVS05+ej
-         1OI+OUAP/l2FIfDax12aU4cgJvEX5u4qyMpMSKbalR14JAP+1bhNAO1dbJinBs+cLUxi
-         7ba6SbaEkm0pdMJucXscY8RjBRtXbqayCdiLVHkdujp1SlzYRNaDq+u45ibxYIw5ERi6
-         LZDaZBbN4a7GJhwy2WGnONt2nwJKXXmbdOmqgn2/F2z6I+l0UoJrdsnY1d2AQwSmZDdM
-         vYlg==
-X-Gm-Message-State: AO0yUKVBoDX/R0k9jglXmlUYtyXqmgnWwsdBc66qURsqU+sfaauuvvof
-        KlZ+DxtiWms5WfzO4qWtl1rEfYINDse0i0BdOFmsOm+N6q22CrHZxap+L7yO
-X-Google-Smtp-Source: AK7set/9AE4RSZxJdKcBAH5kvuNKB5KDURWDDse3moefUQ7EjosATFwsHMtyRxtgDtAo+kXYHGpu6UK8/i7ekNNEf3g=
-X-Received: by 2002:a67:dc81:0:b0:422:194a:8566 with SMTP id
- g1-20020a67dc81000000b00422194a8566mr20213687vsk.5.1679041362233; Fri, 17 Mar
- 2023 01:22:42 -0700 (PDT)
+        Fri, 17 Mar 2023 04:25:01 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 732B4DDF27;
+        Fri, 17 Mar 2023 01:24:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679041444; x=1710577444;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=Sj7QSI04yOdoXcjhya42SAzZWKHXmdvxCTXNxtFjVY0=;
+  b=LFTXuSiLCTiYBcd9QXWFt62yXuNbkaqx//MMVv6h2Qe97EnPhxyI79b8
+   unwPZKKnOYBo3hPhO9UZBeMLsgqV/rHfc706qvd8pldakP8wLd6yF8oAH
+   /k06R5aP7fwzS1Y9UGp3JWbC59/KlXFc5kGcHTJx2YICI9rH8x/9JHhg7
+   9KwdmGx/zd+xHXXiKeQJz0xI2Fb6+ocU+Cvg80t/u9QMjVQEKIMGwTzqU
+   5YgMb7E/WDG/6C9fphlRmO3L9n1tSsl+spTO6vEAB22NRIUgVl2oCkTRL
+   lhHmrRNBbr+rnk7Yo7Ghgv77TcG1VR2loyA3O2B6U30UHQWD2Z1/4NI1w
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="365909942"
+X-IronPort-AV: E=Sophos;i="5.98,268,1673942400"; 
+   d="scan'208";a="365909942"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2023 01:23:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="854365293"
+X-IronPort-AV: E=Sophos;i="5.98,268,1673942400"; 
+   d="scan'208";a="854365293"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by orsmga005.jf.intel.com with ESMTP; 17 Mar 2023 01:23:59 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Fri, 17 Mar 2023 01:23:58 -0700
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21 via Frontend Transport; Fri, 17 Mar 2023 01:23:58 -0700
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.40) by
+ edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.21; Fri, 17 Mar 2023 01:23:58 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Ff4hrnYyn1p8o6/IwrxxdAok9taN/otwC0xd3bf5JS7pK53+z1IC1Su/pnzjShUl6ru1PEdW/13UllN3aFdNhhc/oDaAFcOZlcGk5pZ3bAFVf3uDLIKguB2mqUrVBc27LASfx6QGqE8YOEan0xlaJYoOw/AYrXg87oz5ejn2TpUkBf0iRK0RAG34c2jzeivKoQ+/pLERxoWOWI59+wx5ZiDmyH5bH3BOys9lZCWJZxyTE/SLTdA6nXLLWp+wA17Ql41PfOLWoBpf9Jk35O+rzZgk8LuOlOa8stPYRNPt3fFysyIj2cxX33vl8XIcwkZcvnVTkUz1Wg+rpNI1gqEr4w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=+UbWC/9f7qlFKxysDUNhFlLrh/gYq80SKU83y2me5XA=;
+ b=DoAuUDVOlbEDNl4Nzrn9s09WE3WHNoSf7YZ+C/FOdo/Xfteb7YgEVmjDrHC97yAXb2a9rZN1zZfhmnI9OHIThGUCQd8SDAUg1wcDZFqfmp+vfzhOSuAJbVcyiFb7MBgdB19p6OT/dTNz5OtKRZuordsOkF+Ihd9k9mwWraXwKoQtvkg7bwcIiGU6ZTcCPP18Uh5/PGJXrzhORbeFz73sTWoj50hA3qBULGl83DubuPsxqTSphnCF/pKUe9onnXm4h2fbz+CrcPgYagL2RnREWdGDm1d4jLlFzg0W6l7PN0ufMY1alsGpWnqaZfoyRj7B3+uXi9OqCNHfvyT+sgsZyg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from SJ0PR11MB4831.namprd11.prod.outlook.com (2603:10b6:a03:2d2::20)
+ by CO1PR11MB4979.namprd11.prod.outlook.com (2603:10b6:303:99::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.26; Fri, 17 Mar
+ 2023 08:23:56 +0000
+Received: from SJ0PR11MB4831.namprd11.prod.outlook.com
+ ([fe80::b974:36b0:e768:1b21]) by SJ0PR11MB4831.namprd11.prod.outlook.com
+ ([fe80::b974:36b0:e768:1b21%8]) with mapi id 15.20.6178.035; Fri, 17 Mar 2023
+ 08:23:56 +0000
+Message-ID: <f3ffe13c-321a-07f6-6a6f-1a67f585ffe2@intel.com>
+Date:   Fri, 17 Mar 2023 16:23:48 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.8.0
+Subject: Re: [PATCH v4 34/36] rmap: add folio_add_file_rmap_range()
+Content-Language: en-US
+To:     Ryan Roberts <ryan.roberts@arm.com>,
+        "Yin, Fengwei" <fengwei.yin@intel.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        <linux-arch@vger.kernel.org>
+CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
+References: <20230315051444.3229621-1-willy@infradead.org>
+ <20230315051444.3229621-35-willy@infradead.org>
+ <387dc921-de2b-f244-985c-d1e6336d5909@arm.com>
+ <01071d9c-483f-2d95-87a6-e1030acaf8dd@arm.com>
+ <0f581d0d-3139-4007-2161-592a0a545b50@intel.com>
+ <fe743597-cefa-4bf8-aa3f-da9cc10bbd5f@arm.com>
+From:   "Yin, Fengwei" <fengwei.yin@intel.com>
+In-Reply-To: <fe743597-cefa-4bf8-aa3f-da9cc10bbd5f@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SG2PR02CA0110.apcprd02.prod.outlook.com
+ (2603:1096:4:92::26) To SJ0PR11MB4831.namprd11.prod.outlook.com
+ (2603:10b6:a03:2d2::20)
 MIME-Version: 1.0
-References: <20230315183729.2376178-1-sboyd@kernel.org>
-In-Reply-To: <20230315183729.2376178-1-sboyd@kernel.org>
-From:   David Gow <davidgow@google.com>
-Date:   Fri, 17 Mar 2023 16:22:30 +0800
-Message-ID: <CABVgOS=g6yvNg6xscZqa5fQdyWMEGJ0K9_86R3K7_Fa0wCM_VQ@mail.gmail.com>
-Subject: Re: [PATCH v2 00/11] clk: Add kunit tests for fixed rate and parent data
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        patches@lists.linux.dev,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com, Maxime Ripard <maxime@cerno.tech>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000fb79b805f7144710"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ0PR11MB4831:EE_|CO1PR11MB4979:EE_
+X-MS-Office365-Filtering-Correlation-Id: f8a666f6-2b3e-4c23-f44a-08db26c0f354
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: iq9ETeM7JBEr0WcUvhBWy3IYxju42allo6QUfDx7jTPWejoFPas+Yiqc08gknRfCaDrzIgwo2wKSJIWAvl6TjWf+dfjiuPBXGJeblsYtebCbylhJMxyLY+lbftEbo89DVny7C5JEpOE6PbANKPlL90C7PLn93y/VyXGjxJW/ctyXcsVtx0B1hggRY6F0a0bO2/1HIoPMzIwh/tAo4i0gaAPy3U9+fxKdvNyEZFNBvW6mfJN4feUHU5niUIr+FhHRA3Ey9iCHIZE+6th6QiDfehodNJzmsonBp1EmkMIQE9R17LVBp5zRCnGlWHbquMwuk2fK77/T+mHKNfzs2v2TRDWn0ZG5NKvTERYJHuldAFcJjATiE+dUIzWEDpwS7LPNEEnX3BVDSFUhkSqQYcjzSDsHRDRZ9u4r8PrsLg8aH+Vc1bxmsrmH6rF3WbMdi7JPIGN2dYs4Vvf/aKSlRbr+NDHim6ORyyqk5rXkMX7IPGkFqJ4kFYjs2VhuB3IFVieYotQ2kZJxwWkqfE+h98H7OVoFPYej2HMcgM7iWu6WJfFgvNRTPuWawv0XwmrA7WAqCZAUyekbWbPOOVaI8yRMXIV3YQVut1hHq/K4fT2Ei0e0CFDuW+aIXq0rfIrabako1IAkzjLnV6t+vYIhtY4jfMHTOyOhbVwSZgF1sJ4dffENHbPKp7RrrZO/TczeqT1agBAwo1zSfIMIQ+Al3/1SJg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR11MB4831.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(366004)(136003)(376002)(396003)(39860400002)(346002)(451199018)(86362001)(82960400001)(41300700001)(5660300002)(2906002)(8936002)(36756003)(31696002)(4326008)(66946007)(26005)(6486002)(6512007)(6506007)(2616005)(316002)(83380400001)(38100700002)(186003)(53546011)(66556008)(6666004)(478600001)(110136005)(966005)(8676002)(66476007)(66899018)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?U2lXeEpSZ1dVVkNRQm53QzdPbGhKRkEzbkoxZzBDcG51dEd1cjVnSjcxenFQ?=
+ =?utf-8?B?L1lOSkw4cnR6dUhDQXdIM0JHRGJ3WWZJRVRwS2NhOXFqNXBWUVh6djA4bTVi?=
+ =?utf-8?B?RDJYcmVielRqUzV2UWc3OVdVcVlJWmU5M1lmeDdhVUUwanMzVFI2QUx3MmNs?=
+ =?utf-8?B?RVd1V0drOWladXZFMFZBNHFlSWFUMy9EUHpCek9ObnhxU0gzMzFBUVZ6Qmsw?=
+ =?utf-8?B?VUFTT2JXTW9FZWQ2VEVCSGwzSXpJTFBIamM1Wm5wOUEraHgvVG1Sb01LSDBK?=
+ =?utf-8?B?eHJ3dlYvSlZLU3pRWWVjYzQxYVhiY0pncjE1NnBWU3EvZVl4dnAwS3FtZ01W?=
+ =?utf-8?B?a0p0RWZ6OGZBNER0QjBFTTlYZERibENBd3VsRWNhR1lhYzMwM1I0dHlGaktI?=
+ =?utf-8?B?TkwycmdOVVBqa3JoNDQ0eTM5SEpSMk95YUlMR1FoVEFlK1VKTHlzb1hRNyth?=
+ =?utf-8?B?ckkzdVlxaWswZ0JqcEpMOEN5eEJCYWNza0lNanJ4WVV3Y1AxQUhBOFBiQUU0?=
+ =?utf-8?B?d01CK1Fmd1Z1VEk0YURqN2lFWUpXdUt4dm5CVkw1Ris5V3JXRGUyRzZSeU9n?=
+ =?utf-8?B?OWZuZjd3VmtLemlML2orUEkydjZmaUwxOFJ1LzZOS1MrUnVrV24xcVg3dzV2?=
+ =?utf-8?B?bzRrbEFzL3BQc0V5b0ZRU2IrNkp0RlRwWURLWWpyMFozZDIzanJRNUxNd3pZ?=
+ =?utf-8?B?UTFtaHg2L2FURll4cjA3eEJROGhRUlY3MnZzT1RSblIycURDTWNaK1VjVWNG?=
+ =?utf-8?B?MW96Njk0WmQvVVFWem12bjdZQ1ZoTDBhaDZOOGpvN3V2RDNLY05LanhvakZN?=
+ =?utf-8?B?NWwvc1JhVjE3aFpVMHpKL0lIeWFDa1p6Y2dQcUQvYU43TC9UZVBSM0tISGFh?=
+ =?utf-8?B?MEEyUlEzOFAxc0FVdlY3UlF1NnZyZ1dJcFR6a2gxM1FrdjRZRXVjS0RRb3Iv?=
+ =?utf-8?B?QWpWakZaWjlyeFRpZVZ3TklYWU1lQ01uRnJQZzVBZ1N2N25qQXZmOTRDZVRH?=
+ =?utf-8?B?NDZDQUZ5RDJEUStmNy9UVzB5cGh1MDg3d0FRbElzTUVIR0VWNTh4K2d0bFY2?=
+ =?utf-8?B?NTFoRmsxbUN2UmZuQU5lVFF1dlQzMk1xSzdhOUlGaFVvRmNybWNxMW5SWHY2?=
+ =?utf-8?B?V1pxd0s3QWpOVnV4UWlXM3R1Q3UrQktoeUNFNTFWcXBrNXp0V090eVNFL01p?=
+ =?utf-8?B?eWQ3emxJZm9XMWpINWVWeGlOWHpvazFuN1ZOdmJRem9Hd1gvMUV4TW4wcVB5?=
+ =?utf-8?B?MzFVRS9zc05BTWxTSkdmU0tIVGZOZ20zTW9GR0NGVnovbklTdWNkQkRpbXBL?=
+ =?utf-8?B?Sm1KZnZSMHNEd3BGZ0lidlp3U0FndG5RU2xTck9WbXdVb01aVzVSVlhCZjFs?=
+ =?utf-8?B?anhzcmRwdWZNZWNsU0dqVkJXYnc1bWlhckNYOHhiaktRUVNjTVN5VVdiYW5k?=
+ =?utf-8?B?a251SDhBcW1GRlRmekpBc0NKMENDaDVDdmVTYjVpNGFBcS9MSS9hV3FHWXlU?=
+ =?utf-8?B?cDJQT3pYdjU2UFdUbG9zbis4OVRkTDZiRnBQYWlIRDNEa2FKRVo2dzJvQ3Nw?=
+ =?utf-8?B?TVg3Wm9wTnQzVGxiVmJSZDhWbDM4RytvQVBLaGNIRkZvOGZlZC9lWk5vQ0Q5?=
+ =?utf-8?B?UVFpUDJaRFhuU3A4MDFMYjBtNGlQWGVwbVprNERZaFJPR1Y4T3JQL2ZUT0RI?=
+ =?utf-8?B?TE5iWGZmTlFvMGNtZlZkR0V6b092L3hLUkp1WjhZL2dDYVZNRGdxbVdsdjcv?=
+ =?utf-8?B?TEo3WVNleTFzYTg2cnF2RWFyQ21TV2YzWm93UXlLMy9zTjRRZjNIS1JXTWRp?=
+ =?utf-8?B?Q2gwRk9nc2NzcDFjbC9tU016NU5ZSXJtSmQrSWYwcVUzU3lPd3lLeGcraHNY?=
+ =?utf-8?B?VysyQnFUYU01S2FGZ2huMDVEVENlWTN0b0VsVU00Um5tTVJ4OXBLcHEzZGl0?=
+ =?utf-8?B?VDUxeUdsU2gvNDZnRURwQk1PZU1ZZDlQOWRhaEc4ODR5dE04c1JDN215bEVH?=
+ =?utf-8?B?ZEhsZHJKYS9hbTBxRjkrWDUwTVdwckJnM3VlZkhEN0RaSnZiZVBBZCt0UFJK?=
+ =?utf-8?B?U3FLSDN5bWRjaysyaEd1d3plQ0NPbUlHbzVtRHpsZGY3UWdocER5Tkg1Z2hO?=
+ =?utf-8?B?UHc5V2h6TFpxYk45ZXZEdUdJeWpCQWxDd0hJWjR6RVV6MkhMbTN0WURHZ3RE?=
+ =?utf-8?B?T3c9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: f8a666f6-2b3e-4c23-f44a-08db26c0f354
+X-MS-Exchange-CrossTenant-AuthSource: SJ0PR11MB4831.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Mar 2023 08:23:56.5126
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 1MJu8GkHSfMRlk4SU3m8mP29jI2RjJPAUqV7lQ633zgtF+f1Yp3cLV9Zp+FnfeZc0t4fDuo1NPUJsdpjzd7k8w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR11MB4979
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000fb79b805f7144710
-Content-Type: text/plain; charset="UTF-8"
+Hi Ryan,
 
-On Thu, 16 Mar 2023 at 02:37, Stephen Boyd <sboyd@kernel.org> wrote:
->
-> This patch series adds unit tests for the clk fixed rate basic type and
-> the clk registration functions that use struct clk_parent_data. To get
-> there, we add support for loading device tree overlays onto the live DTB
-> along with probing platform drivers to bind to device nodes in the
-> overlays. With this series, we're able to exercise some of the code in
-> the common clk framework that uses devicetree lookups to find parents
-> and the fixed rate clk code that scans device tree directly and creates
-> clks. Please review.
->
-> I Cced everyone to all the patches so they get the full context. I'm
-> hoping I can take the whole pile through the clk tree as they almost all
-> depend on each other.
->
-> Changes from v1 (https://lore.kernel.org/r/20230302013822.1808711-1-sboyd@kernel.org):
->  * Don't depend on UML, use unittest data approach to attach nodes
->  * Introduce overlay loading API for KUnit
->  * Move platform_device KUnit code to drivers/base/test
->  * Use #define macros for constants shared between unit tests and
->    overlays
->  * Settle on "test" as a vendor prefix
->  * Make KUnit wrappers have "_kunit" postfix
->
+On 3/17/2023 12:34 AM, Ryan Roberts wrote:
+> On 16/03/2023 16:27, Yin, Fengwei wrote:
+>> Hi Matthew,
+>>
+>> On 3/16/2023 12:08 AM, Ryan Roberts wrote:
+>>> On 15/03/2023 13:34, Ryan Roberts wrote:
+>>>> On 15/03/2023 05:14, Matthew Wilcox (Oracle) wrote:
+>>>>> From: Yin Fengwei <fengwei.yin@intel.com>
+>>>>>
+>>>>> folio_add_file_rmap_range() allows to add pte mapping to a specific
+>>>>> range of file folio. Comparing to page_add_file_rmap(), it batched
+>>>>> updates __lruvec_stat for large folio.
+>>>>>
+>>>>> Signed-off-by: Yin Fengwei <fengwei.yin@intel.com>
+>>>>> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+>>>>> ---
+>>>>>  include/linux/rmap.h |  2 ++
+>>>>>  mm/rmap.c            | 60 +++++++++++++++++++++++++++++++++-----------
+>>>>>  2 files changed, 48 insertions(+), 14 deletions(-)
+>>>>>
+>>>>> diff --git a/include/linux/rmap.h b/include/linux/rmap.h
+>>>>> index b87d01660412..a3825ce81102 100644
+>>>>> --- a/include/linux/rmap.h
+>>>>> +++ b/include/linux/rmap.h
+>>>>> @@ -198,6 +198,8 @@ void folio_add_new_anon_rmap(struct folio *, struct vm_area_struct *,
+>>>>>  		unsigned long address);
+>>>>>  void page_add_file_rmap(struct page *, struct vm_area_struct *,
+>>>>>  		bool compound);
+>>>>> +void folio_add_file_rmap_range(struct folio *, struct page *, unsigned int nr,
+>>>>> +		struct vm_area_struct *, bool compound);
+>>>>>  void page_remove_rmap(struct page *, struct vm_area_struct *,
+>>>>>  		bool compound);
+>>>>>  
+>>>>> diff --git a/mm/rmap.c b/mm/rmap.c
+>>>>> index 4898e10c569a..a91906b28835 100644
+>>>>> --- a/mm/rmap.c
+>>>>> +++ b/mm/rmap.c
+>>>>> @@ -1301,31 +1301,39 @@ void folio_add_new_anon_rmap(struct folio *folio, struct vm_area_struct *vma,
+>>>>>  }
+>>>>>  
+>>>>>  /**
+>>>>> - * page_add_file_rmap - add pte mapping to a file page
+>>>>> - * @page:	the page to add the mapping to
+>>>>> + * folio_add_file_rmap_range - add pte mapping to page range of a folio
+>>>>> + * @folio:	The folio to add the mapping to
+>>>>> + * @page:	The first page to add
+>>>>> + * @nr_pages:	The number of pages which will be mapped
+>>>>>   * @vma:	the vm area in which the mapping is added
+>>>>>   * @compound:	charge the page as compound or small page
+>>>>>   *
+>>>>> + * The page range of folio is defined by [first_page, first_page + nr_pages)
+>>>>> + *
+>>>>>   * The caller needs to hold the pte lock.
+>>>>>   */
+>>>>> -void page_add_file_rmap(struct page *page, struct vm_area_struct *vma,
+>>>>> -		bool compound)
+>>>>> +void folio_add_file_rmap_range(struct folio *folio, struct page *page,
+>>>>> +			unsigned int nr_pages, struct vm_area_struct *vma,
+>>>>> +			bool compound)
+>>>>>  {
+>>>>> -	struct folio *folio = page_folio(page);
+>>>>>  	atomic_t *mapped = &folio->_nr_pages_mapped;
+>>>>> -	int nr = 0, nr_pmdmapped = 0;
+>>>>> -	bool first;
+>>>>> +	unsigned int nr_pmdmapped = 0, first;
+>>>>> +	int nr = 0;
+>>>>>  
+>>>>> -	VM_BUG_ON_PAGE(compound && !PageTransHuge(page), page);
+>>>>> +	VM_WARN_ON_FOLIO(compound && !folio_test_pmd_mappable(folio), folio);
+>>>>>  
+>>>>>  	/* Is page being mapped by PTE? Is this its first map to be added? */
+>>>>>  	if (likely(!compound)) {
+>>>>> -		first = atomic_inc_and_test(&page->_mapcount);
+>>>>> -		nr = first;
+>>>>> -		if (first && folio_test_large(folio)) {
+>>>>> -			nr = atomic_inc_return_relaxed(mapped);
+>>>>> -			nr = (nr < COMPOUND_MAPPED);
+>>>>> -		}
+>>>>> +		do {
+>>>>> +			first = atomic_inc_and_test(&page->_mapcount);
+>>>>> +			if (first && folio_test_large(folio)) {
+>>>>> +				first = atomic_inc_return_relaxed(mapped);
+>>>>> +				first = (nr < COMPOUND_MAPPED);
+>>>>
+>>>> This still contains the typo that Yin Fengwei spotted in the previous version:
+>>>> https://lore.kernel.org/linux-mm/20230228213738.272178-1-willy@infradead.org/T/#m84673899e25bc31356093a1177941f2cc35e5da8
+>>>>
+>>>> FYI, I'm seeing a perf regression of about 1% when compiling the kernel on
+>>>> Ampere Altra (arm64) with this whole series on top of v6.3-rc1 (In a VM using
+>>>> ext4 filesystem). Looks like instruction aborts are taking much longer and a
+>>>> selection of syscalls are a bit slower. Still hunting down the root cause. Will
+>>>> report once I have conclusive diagnosis.
+>>>
+>>> I'm sorry - I'm struggling to find the exact cause. But its spending over 2x the
+>>> amount of time in the instruction abort handling code once patches 32-36 are
+>>> included. Everything in the flame graph is just taking longer. Perhaps we are
+>>> getting more instruction aborts somehow? I have the flamegraphs if anyone wants
+>>> them - just shout and I'll email them separately.
+>> Thanks a lot to Ryan for sharing the flamegraphs to me. I found the __do_fault()
+>> is called with patch 32-36 while no __do_fault() just with first 31 patches. I 
+>> suspect the folio_add_file_rmap_range() missed some PTEs population. Please give
+>> me few days to find the root cause and fix. Sorry for this.
+> 
+> You're welcome. Give me a shout once you have a re-spin and I'll rerun the tests.
+Could you please help to try following changes? Thanks in advance.
+
+diff --git a/mm/filemap.c b/mm/filemap.c
+index 40be33b5ee46..137011320c68 100644
+--- a/mm/filemap.c
++++ b/mm/filemap.c
+@@ -3504,15 +3504,16 @@ static vm_fault_t filemap_map_folio_range(struct vm_fault *vmf,
+ 		if (!pte_none(vmf->pte[count]))
+ 			goto skip;
+ 
+-		if (vmf->address == addr)
+-			ret = VM_FAULT_NOPAGE;
+-
+ 		count++;
+ 		continue;
+ skip:
+ 		if (count) {
+ 			set_pte_range(vmf, folio, page, count, addr);
+ 			folio_ref_add(folio, count);
++			if ((vmf->address < (addr + count * PAGE_SIZE)) &&
++					(vmf->address >= addr))
++				ret = VM_FAULT_NOPAGE;
++
+ 		}
+ 
+ 		count++;
+@@ -3525,6 +3526,9 @@ static vm_fault_t filemap_map_folio_range(struct vm_fault *vmf,
+ 	if (count) {
+ 		set_pte_range(vmf, folio, page, count, addr);
+ 		folio_ref_add(folio, count);
++		if ((vmf->address < (addr + count * PAGE_SIZE)) &&
++				(vmf->address >= addr))
++			ret = VM_FAULT_NOPAGE;
+ 	}
+ 
+ 	vmf->pte = old_ptep;
 
 
-Thanks! I like this much better, and it is working fine here under UML
-and x86_64.
+Regards
+Yin, Fengwei
 
-There are some issues with other architectures (mostly endianness
-problems, but I got a refcount underflow in kunit_remove_resource
-after platform_device_alloc_kunit_test on sparc64 as well), but
-otherwise it's working on most of the things I've tried.
-
-I'll play around with it some more next week and dig into the code in
-more detail, but I've not seen anything I dislike about the overall
-design so far.
-
-Thanks!
--- David
-
-
-> Stephen Boyd (11):
->   of: Load KUnit DTB from of_core_init()
->   of: Add test managed wrappers for of_overlay_apply()/of_node_put()
->   dt-bindings: vendor-prefixes: Add "test" vendor for KUnit and friends
->   dt-bindings: test: Add KUnit empty node binding
->   of: Add a KUnit test for overlays and test managed APIs
->   platform: Add test managed platform_device/driver APIs
->   dt-bindings: kunit: Add fixed rate clk consumer test
->   clk: Add test managed clk provider/consumer APIs
->   clk: Add KUnit tests for clk fixed rate basic type
->   dt-bindings: clk: Add KUnit clk_parent_data test
->   clk: Add KUnit tests for clks registered with struct clk_parent_data
->
->  .../clock/test,clk-kunit-parent-data.yaml     |  47 ++
->  .../kunit/test,clk-kunit-fixed-rate.yaml      |  35 ++
->  .../bindings/test/test,kunit-empty.yaml       |  30 ++
->  .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
->  drivers/base/test/Makefile                    |   3 +
->  drivers/base/test/platform_kunit-test.c       | 108 +++++
->  drivers/base/test/platform_kunit.c            | 186 +++++++
->  drivers/clk/.kunitconfig                      |   3 +
->  drivers/clk/Kconfig                           |   7 +
->  drivers/clk/Makefile                          |   9 +-
->  drivers/clk/clk-fixed-rate_test.c             | 299 ++++++++++++
->  drivers/clk/clk-fixed-rate_test.h             |   8 +
->  drivers/clk/clk_kunit.c                       | 219 +++++++++
->  drivers/clk/clk_parent_data_test.h            |  10 +
->  drivers/clk/clk_test.c                        | 459 +++++++++++++++++-
->  drivers/clk/kunit_clk_fixed_rate_test.dtso    |  19 +
->  drivers/clk/kunit_clk_parent_data_test.dtso   |  28 ++
->  drivers/of/.kunitconfig                       |   5 +
->  drivers/of/Kconfig                            |  23 +
->  drivers/of/Makefile                           |   7 +
->  drivers/of/base.c                             | 182 +++++++
->  drivers/of/kunit.dtso                         |  10 +
->  drivers/of/kunit_overlay_test.dtso            |   9 +
->  drivers/of/of_kunit.c                         | 123 +++++
->  drivers/of/of_private.h                       |   6 +
->  drivers/of/of_test.c                          |  43 ++
->  drivers/of/overlay_test.c                     | 107 ++++
->  drivers/of/unittest.c                         | 101 +---
->  include/kunit/clk.h                           |  28 ++
->  include/kunit/of.h                            |  90 ++++
->  include/kunit/platform_device.h               |  15 +
->  31 files changed, 2119 insertions(+), 102 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/clock/test,clk-kunit-parent-data.yaml
->  create mode 100644 Documentation/devicetree/bindings/kunit/test,clk-kunit-fixed-rate.yaml
->  create mode 100644 Documentation/devicetree/bindings/test/test,kunit-empty.yaml
->  create mode 100644 drivers/base/test/platform_kunit-test.c
->  create mode 100644 drivers/base/test/platform_kunit.c
->  create mode 100644 drivers/clk/clk-fixed-rate_test.c
->  create mode 100644 drivers/clk/clk-fixed-rate_test.h
->  create mode 100644 drivers/clk/clk_kunit.c
->  create mode 100644 drivers/clk/clk_parent_data_test.h
->  create mode 100644 drivers/clk/kunit_clk_fixed_rate_test.dtso
->  create mode 100644 drivers/clk/kunit_clk_parent_data_test.dtso
->  create mode 100644 drivers/of/.kunitconfig
->  create mode 100644 drivers/of/kunit.dtso
->  create mode 100644 drivers/of/kunit_overlay_test.dtso
->  create mode 100644 drivers/of/of_kunit.c
->  create mode 100644 drivers/of/of_test.c
->  create mode 100644 drivers/of/overlay_test.c
->  create mode 100644 include/kunit/clk.h
->  create mode 100644 include/kunit/of.h
->  create mode 100644 include/kunit/platform_device.h
->
->
-> base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
-> --
-> https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git/
-> https://git.kernel.org/pub/scm/linux/kernel/git/sboyd/spmi.git
->
-
---000000000000fb79b805f7144710
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-LmNybDBMBgNVHSAERTBDMEEGCSsGAQQBoDIBKDA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3dy5n
-bG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzANBgkqhkiG9w0BAQsFAAOCAQEANyYcO+9JZYyqQt41
-TMwvFWAw3vLoLOQIfIn48/yea/ekOcParTb0mbhsvVSZ6sGn+txYAZb33wIb1f4wK4xQ7+RUYBfI
-TuTPL7olF9hDpojC2F6Eu8nuEf1XD9qNI8zFd4kfjg4rb+AME0L81WaCL/WhP2kDCnRU4jm6TryB
-CHhZqtxkIvXGPGHjwJJazJBnX5NayIce4fGuUEJ7HkuCthVZ3Rws0UyHSAXesT/0tXATND4mNr1X
-El6adiSQy619ybVERnRi5aDe1PTwE+qNiotEEaeujz1a/+yYaaTY+k+qJcVxi7tbyQ0hi0UB3myM
-A/z2HmGEwO8hx7hDjKmKbDCCA18wggJHoAMCAQICCwQAAAAAASFYUwiiMA0GCSqGSIb3DQEBCwUA
-MEwxIDAeBgNVBAsTF0dsb2JhbFNpZ24gUm9vdCBDQSAtIFIzMRMwEQYDVQQKEwpHbG9iYWxTaWdu
-MRMwEQYDVQQDEwpHbG9iYWxTaWduMB4XDTA5MDMxODEwMDAwMFoXDTI5MDMxODEwMDAwMFowTDEg
-MB4GA1UECxMXR2xvYmFsU2lnbiBSb290IENBIC0gUjMxEzARBgNVBAoTCkdsb2JhbFNpZ24xEzAR
-BgNVBAMTCkdsb2JhbFNpZ24wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDMJXaQeQZ4
-Ihb1wIO2hMoonv0FdhHFrYhy/EYCQ8eyip0EXyTLLkvhYIJG4VKrDIFHcGzdZNHr9SyjD4I9DCuu
-l9e2FIYQebs7E4B3jAjhSdJqYi8fXvqWaN+JJ5U4nwbXPsnLJlkNc96wyOkmDoMVxu9bi9IEYMpJ
-pij2aTv2y8gokeWdimFXN6x0FNx04Druci8unPvQu7/1PQDhBjPogiuuU6Y6FnOM3UEOIDrAtKeh
-6bJPkC4yYOlXy7kEkmho5TgmYHWyn3f/kRTvriBJ/K1AFUjRAjFhGV64l++td7dkmnq/X8ET75ti
-+w1s4FRpFqkD2m7pg5NxdsZphYIXAgMBAAGjQjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8E
-BTADAQH/MB0GA1UdDgQWBBSP8Et/qC5FJK5NUPpjmove4t0bvDANBgkqhkiG9w0BAQsFAAOCAQEA
-S0DbwFCq/sgM7/eWVEVJu5YACUGssxOGhigHM8pr5nS5ugAtrqQK0/Xx8Q+Kv3NnSoPHRHt44K9u
-bG8DKY4zOUXDjuS5V2yq/BKW7FPGLeQkbLmUY/vcU2hnVj6DuM81IcPJaP7O2sJTqsyQiunwXUaM
-ld16WCgaLx3ezQA3QY/tRG3XUyiXfvNnBB4V14qWtNPeTCekTBtzc3b0F5nCH3oO4y0IrQocLP88
-q1UOD5F+NuvDV0m+4S4tfGCLw0FREyOdzvcya5QBqJnnLDMfOjsl0oZAzjsshnjJYS8Uuu7bVW/f
-hO4FCU29KNhyztNiUGUe65KXgzHZs7XKR1g/XzCCBNgwggPAoAMCAQICEAHHLXCbS0CYcocWQtL1
-FY8wDQYJKoZIhvcNAQELBQAwVDELMAkGA1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYt
-c2ExKjAoBgNVBAMTIUdsb2JhbFNpZ24gQXRsYXMgUjMgU01JTUUgQ0EgMjAyMDAeFw0yMzAxMjkw
-NjQ2MThaFw0yMzA3MjgwNjQ2MThaMCQxIjAgBgkqhkiG9w0BCQEWE2RhdmlkZ293QGdvb2dsZS5j
-b20wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQC+31G8qfgjYj6KzASqulKfP5LGLw1o
-hZ6j8Uv9o+fA+zL+2wOPYHLNIb6jyAS16+FwevgTr7d9QynTPBiCGE9Wb/i2ob9aBcupQVtBjlJZ
-I6qUXdVBlo5zsORdNV7/XEqlpu+X5MK5gNHlWhe8gNpAhADSib2H4rjBvFF2yi9BHBAYZU95f0IN
-cSS0WDNSSCktPaXtAGsI3tslroyjFYUluwGklmQms/tV8f/52zc7A5lzX+hxnnJdsRgirJRI9Sb6
-Uypzk06KLxOO2Pg9SFn6MwbAO6LuInpokhxcULUz3g/CMQBmEMSEzPPnfDIAqwDI0Kqh0NAin+V4
-fQxJfDCZAgMBAAGjggHUMIIB0DAeBgNVHREEFzAVgRNkYXZpZGdvd0Bnb29nbGUuY29tMA4GA1Ud
-DwEB/wQEAwIFoDAdBgNVHSUEFjAUBggrBgEFBQcDBAYIKwYBBQUHAwIwHQYDVR0OBBYEFJyglaiY
-64VRg2IjDI2fJVE9RD6aMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
-dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
-AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
-c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
-LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
-LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
-Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQA2lZLYRLu7foeR
-cHo1VeNA974FZBiCm08Kd44/aCMEzdTJvxAE9xbUJf7hS1i6eW49qxuSp3/YLn6U7uatwAcmZcwp
-Zma19ftf3LH+9Hvffk+X8fbPKe6uHkJhR2LktrhRzF159jj67NvXyGQv8J4n7UNeEVP0d5ByvRwv
-tF2bJwlOwRGLoxasKSyDHIyUpwTfWYPq7XvjoGqQ/tDS7Khcc5WncJl0/ZEj7EKjtoGbsDbLdXEF
-m/6vdcYKJzF9ghHewtV3YIU4RE3pEM4aCWWRtJwbExzeue6fI7RqURbNCAyQuSpWv0YQvzsX3ZX3
-c1otrs50n1N0Sf8/rfJxq7sWMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
-R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABxy1wm0tAmHKHFkLS9RWPMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCAm
-LD0bzOo1mGqnjDNiyk612P/TmqI26xsS4FiA39NZDjAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMzAzMTcwODIyNDJaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
-BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAnMvBaiqgwWbHc+GYNLuy
-ZzWSji42DQggTYSuJTH6GX49osxY/MC/tgZ6U7aEB5uXnBi4AZKfKB9GMUOWjU1ZsayRtu8PjISE
-4WDI+xSidDZUTcQJVo6hho5nQeUmqk2UTSOr5XbFIOyhZlctvn6zYUrqF8/Rjx9RMpEVlKU4KdvD
-tPWs4+hzAPy9Ai7aeeWHkZ3IxD7KRyKCwT3cdX4ZWoOFRfZGU7YcJygqd2CWKOCPmhUW7nh8klWn
-olpHzCe2mfvwzuBydDC0YG6cYeL9mMDk6k1YS8wlaSU2op9+SDDxL1oighAZxPfDOm9IKqado/Ei
-e7nMMLdSLzoUedMCYg==
---000000000000fb79b805f7144710--
+> 
+>>
+>>
+>> Regards
+>> Yin, Fengwei
+>>
+>>>
+>>>>
+>>>> Thanks,
+>>>> Ryan
+>>>>
+>>>>
+>>>>> +			}
+>>>>> +
+>>>>> +			if (first)
+>>>>> +				nr++;
+>>>>> +		} while (page++, --nr_pages > 0);
+>>>>>  	} else if (folio_test_pmd_mappable(folio)) {
+>>>>>  		/* That test is redundant: it's for safety or to optimize out */
+>>>>>  
+>>>>> @@ -1354,6 +1362,30 @@ void page_add_file_rmap(struct page *page, struct vm_area_struct *vma,
+>>>>>  	mlock_vma_folio(folio, vma, compound);
+>>>>>  }
+>>>>>  
+>>>>> +/**
+>>>>> + * page_add_file_rmap - add pte mapping to a file page
+>>>>> + * @page:	the page to add the mapping to
+>>>>> + * @vma:	the vm area in which the mapping is added
+>>>>> + * @compound:	charge the page as compound or small page
+>>>>> + *
+>>>>> + * The caller needs to hold the pte lock.
+>>>>> + */
+>>>>> +void page_add_file_rmap(struct page *page, struct vm_area_struct *vma,
+>>>>> +		bool compound)
+>>>>> +{
+>>>>> +	struct folio *folio = page_folio(page);
+>>>>> +	unsigned int nr_pages;
+>>>>> +
+>>>>> +	VM_WARN_ON_ONCE_PAGE(compound && !PageTransHuge(page), page);
+>>>>> +
+>>>>> +	if (likely(!compound))
+>>>>> +		nr_pages = 1;
+>>>>> +	else
+>>>>> +		nr_pages = folio_nr_pages(folio);
+>>>>> +
+>>>>> +	folio_add_file_rmap_range(folio, page, nr_pages, vma, compound);
+>>>>> +}
+>>>>> +
+>>>>>  /**
+>>>>>   * page_remove_rmap - take down pte mapping from a page
+>>>>>   * @page:	page to remove mapping from
+>>>>
+>>>
+> 
+> 
