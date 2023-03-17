@@ -2,62 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7029E6BEBE3
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 15:55:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7FFB6BEBE0
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 15:55:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231349AbjCQOz5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 10:55:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38490 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231342AbjCQOzy (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S231343AbjCQOzy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Fri, 17 Mar 2023 10:55:54 -0400
-Received: from mail-il1-f173.google.com (mail-il1-f173.google.com [209.85.166.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DE663B64E;
-        Fri, 17 Mar 2023 07:55:24 -0700 (PDT)
-Received: by mail-il1-f173.google.com with SMTP id h11so2858718ild.11;
-        Fri, 17 Mar 2023 07:55:24 -0700 (PDT)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38434 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230196AbjCQOzv (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 17 Mar 2023 10:55:51 -0400
+Received: from mail-io1-f49.google.com (mail-io1-f49.google.com [209.85.166.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AB996150A;
+        Fri, 17 Mar 2023 07:55:22 -0700 (PDT)
+Received: by mail-io1-f49.google.com with SMTP id q6so2398219iot.2;
+        Fri, 17 Mar 2023 07:55:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679064923;
+        d=1e100.net; s=20210112; t=1679064921;
         h=date:subject:message-id:references:in-reply-to:cc:to:from
          :mime-version:content-transfer-encoding:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=OPDHGlW00DcqYFQkzNIJaresadj1hOtwbNVh2L00JvM=;
-        b=KDas3LZ/Ak36KmH+2QiKtJ2mINtkEyX0QBzXYNnpnwEYoUhqU4QIRguqafSLK+bkQ+
-         Qg0BrKwerqJIAGmU30Z/X4qNVTsEdLiCUT9tTR6geXJuytzzY5OOC+ujlOz7GAvywBX2
-         NGE2TubdKHTatvGiONvPc7eY7ZtHvBvqJJ3xVDEbmghbo2dWPUTZ8kxlkDhiIO06H+sP
-         VP0tpvacA7b8LmKvjyao0ja//uA28tTkk8JJcCQw6Kei1txjiK4Og/TkF4z4MZ4o/VgF
-         uNTsHKFjK9meLIUgpoSDVKUOWTj9ghy9cPDP2lGZ3l6CvPREJ393fTn/dniIqFIU03a/
-         jBQw==
-X-Gm-Message-State: AO0yUKUyL64MnP4e/H3Tv12rimSb1R3movn9phWefUbVBEi3uEbmVkyC
-        JKz2wdPrcj6P/UHPFRKIcA==
-X-Google-Smtp-Source: AK7set9W6q0fozm9+PQJIIav+dAysxpwcQm5IOKQQ3iYBxMSE62YmexVpBQ1kW/GnNTcoWWTEu4yjg==
-X-Received: by 2002:a92:cf04:0:b0:31f:9b6e:2f4d with SMTP id c4-20020a92cf04000000b0031f9b6e2f4dmr139249ilo.0.1679064923724;
-        Fri, 17 Mar 2023 07:55:23 -0700 (PDT)
+        bh=rZSOUyuCSrUz5N/H+o+NJ3xKMTNoMLx1KYXhbS5FPY8=;
+        b=L2VIF4k6QktpGYUPEV0jouRq8b9pRbOgVn4Qd9IaRIDqiwTbdN4cc3bOluooiLmuwe
+         36XZ7sHBQTYIxIrs2IPm2AFTJeIcEgB9rONth/TnRnEWL/7BU/3ZmRzrE1q5gHYAx0ev
+         iajVeH3d+/efJx8Y6H8WdbLjf+LtPep955A054hmx4tPjuAuyfnuLM0Yd2MjqPMyCkdx
+         ETrjdyalqnagjhUx+1InYJXPDQUzm2RFPZ1vuPM26KApiw+Rbxhv4qiRFywy2c/Vmyq2
+         qJQAI41JVEUsxWwyL+wKRGL802XsXOKWvhLTK/6+u+2qdiwLom5vInv1drzEskjlyWi8
+         A8Zg==
+X-Gm-Message-State: AO0yUKWkj1I28nglR3Hn1q27IqIYqPj0usRFk9+Ch3+ChkRpltu7eaY9
+        1i/7TT+l86yXezR7weph6rtQK18u1g==
+X-Google-Smtp-Source: AK7set/sCF3qnbQifdlhrYVwSflG6YACrfvZ09Zk1ANk0OtJBbGnh0nPxN5jOUo8s9/w/mhsEXsHbg==
+X-Received: by 2002:a5e:db4b:0:b0:751:df6e:79ba with SMTP id r11-20020a5edb4b000000b00751df6e79bamr1615893iop.5.1679064921584;
+        Fri, 17 Mar 2023 07:55:21 -0700 (PDT)
 Received: from robh_at_kernel.org ([64.188.179.249])
-        by smtp.gmail.com with ESMTPSA id r15-20020a92c5af000000b00313ca4be5e1sm669187ilt.12.2023.03.17.07.55.22
+        by smtp.gmail.com with ESMTPSA id g8-20020a6b7608000000b0074c7db1470dsm604027iom.20.2023.03.17.07.55.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Mar 2023 07:55:23 -0700 (PDT)
-Received: (nullmailer pid 2039511 invoked by uid 1000);
+        Fri, 17 Mar 2023 07:55:21 -0700 (PDT)
+Received: (nullmailer pid 2039508 invoked by uid 1000);
         Fri, 17 Mar 2023 14:55:19 -0000
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
 From:   Rob Herring <robh@kernel.org>
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc:     Peng Fan <peng.fan@nxp.com>, s.hauer@pengutronix.de,
-        kernel@pengutronix.de, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-imx@nxp.com,
-        gregkh@linuxfoundation.org, festevam@gmail.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        shawnguo@kernel.org, xu.yang_2@nxp.com, robh+dt@kernel.org,
-        jun.li@nxp.com, krzysztof.kozlowski+dt@linaro.org
-In-Reply-To: <20230317123708.337286-3-peng.fan@oss.nxp.com>
-References: <20230317123708.337286-1-peng.fan@oss.nxp.com>
- <20230317123708.337286-3-peng.fan@oss.nxp.com>
-Message-Id: <167906278443.1989626.14584373898685842817.robh@kernel.org>
-Subject: Re: [PATCH V4 2/6] dt-bindings: usb: ci-hdrc-usb2: convert to DT
- schema format
+To:     Yinbo Zhu <zhuyinbo@loongson.cn>
+Cc:     linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        loongson-kernel@lists.loongnix.cn, wanghongliang@loongson.cn,
+        Liu Peibao <liupeibao@loongson.cn>,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+In-Reply-To: <20230317082950.12738-2-zhuyinbo@loongson.cn>
+References: <20230317082950.12738-1-zhuyinbo@loongson.cn>
+ <20230317082950.12738-2-zhuyinbo@loongson.cn>
+Message-Id: <167906278354.1989456.6038971429020823802.robh@kernel.org>
+Subject: Re: [PATCH v2 1/2] dt-bindings: spi: add loongson spi
 Date:   Fri, 17 Mar 2023 09:55:19 -0500
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
@@ -71,20 +70,16 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Fri, 17 Mar 2023 20:37:04 +0800, Peng Fan (OSS) wrote:
-> From: Peng Fan <peng.fan@nxp.com>
+On Fri, 17 Mar 2023 16:29:49 +0800, Yinbo Zhu wrote:
+> Add the Loongson platform spi binding with DT schema format using
+> json-schema.
 > 
-> Convert the binding to DT schema format. To fix the dtbs_check
-> error, some properties were also added, such as nvidia,phy, reset-names
-> ulpi; missing compatibles are added.
-> 
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
 > ---
->  .../devicetree/bindings/usb/ci-hdrc-usb2.txt  | 159 -------
->  .../devicetree/bindings/usb/ci-hdrc-usb2.yaml | 412 ++++++++++++++++++
->  2 files changed, 412 insertions(+), 159 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/usb/ci-hdrc-usb2.txt
->  create mode 100644 Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml
+>  .../bindings/spi/loongson,ls-spi.yaml         | 44 +++++++++++++++++++
+>  MAINTAINERS                                   |  6 +++
+>  2 files changed, 50 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/spi/loongson,ls-spi.yaml
 > 
 
 My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
@@ -93,12 +88,15 @@ on your patch (DT_CHECKER_FLAGS is new in v5.13):
 yamllint warnings/errors:
 
 dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/ci-hdrc-usb2.yaml: properties:pinctrl-names:items: {'enum': ['default', 'host', 'device', 'idle', 'active']} is not of type 'array'
-	from schema $id: http://devicetree.org/meta-schemas/string-array.yaml#
+Error: Documentation/devicetree/bindings/spi/loongson,ls-spi.example.dts:22.28-29 syntax error
+FATAL ERROR: Unable to parse input tree
+make[1]: *** [scripts/Makefile.lib:419: Documentation/devicetree/bindings/spi/loongson,ls-spi.example.dtb] Error 1
+make[1]: *** Waiting for unfinished jobs....
+make: *** [Makefile:1512: dt_binding_check] Error 2
 
 doc reference errors (make refcheckdocs):
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230317123708.337286-3-peng.fan@oss.nxp.com
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230317082950.12738-2-zhuyinbo@loongson.cn
 
 The base for the series is generally the latest rc1. A different dependency
 should be noted in *this* patch.
