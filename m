@@ -2,94 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C67D6BF0B4
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 19:29:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6306A6BF0B7
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 19:30:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230015AbjCQS3G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 14:29:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38108 "EHLO
+        id S230174AbjCQSad (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 14:30:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230150AbjCQS3D (ORCPT
+        with ESMTP id S229517AbjCQSab (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 14:29:03 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7983E6;
-        Fri, 17 Mar 2023 11:28:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679077742; x=1710613742;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=Lps3yZe65I+TdcwDf8TkYYOh2/7Yhn32SE/ftofaovg=;
-  b=PXwvRJDLaU92Oqt6Ott8J0AX0pS9134dxTzshvz1fZjQ2h3WI+J+g6oF
-   C7TYHFoxtyTqxB6LL3XOpE8elgbjV8cHbmrI4ngoTDTHuiuJeOmQgfEhv
-   2qS+cth7qFdEC8B+nUC1T+5bbRQGN2g1oZ+0hSURXQu2Fpyff95hNFhLh
-   Vz30foyhOAZVGprXR0PEE72OyaRlPrYYRmWDC62i9mdEXsQrVBhLI8QfQ
-   UXUJRC4d9zdS3Fldf7OPqjPOxQax/M9bDd6dxZkAgJESNgZlffJO97GgX
-   wqL9uNt/kkMP/igp2Jq2UqiEf9vZvSgW4AjOnIcYNy6+YbxQxrLI6nDmS
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="424605050"
-X-IronPort-AV: E=Sophos;i="5.98,268,1673942400"; 
-   d="scan'208";a="424605050"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2023 11:28:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="744641796"
-X-IronPort-AV: E=Sophos;i="5.98,268,1673942400"; 
-   d="scan'208";a="744641796"
-Received: from rasmith3-mobl1.amr.corp.intel.com ([10.212.49.175])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2023 11:28:58 -0700
-Message-ID: <472cf360819845616daea229e9884cf9febf06e9.camel@linux.intel.com>
-Subject: Re: [PATCH 12/16] crypto: iaa - Add support for iaa_crypto deflate
- compression algorithm
-From:   Tom Zanussi <tom.zanussi@linux.intel.com>
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     davem@davemloft.net, fenghua.yu@intel.com, vkoul@kernel.org,
-        dave.jiang@intel.com, tony.luck@intel.com,
-        wajdi.k.feghali@intel.com, james.guilford@intel.com,
-        kanchana.p.sridhar@intel.com, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org
-Date:   Fri, 17 Mar 2023 13:28:54 -0500
-In-Reply-To: <ZBPVxDSESihZ12tD@gondor.apana.org.au>
-References: <20230306185226.26483-1-tom.zanussi@linux.intel.com>
-         <20230306185226.26483-13-tom.zanussi@linux.intel.com>
-         <ZBPVxDSESihZ12tD@gondor.apana.org.au>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-User-Agent: Evolution 3.44.1-0ubuntu1 
+        Fri, 17 Mar 2023 14:30:31 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2874E4A1F8;
+        Fri, 17 Mar 2023 11:30:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D016BB826AE;
+        Fri, 17 Mar 2023 18:30:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5030CC433D2;
+        Fri, 17 Mar 2023 18:30:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679077827;
+        bh=B7OSJyjdwKWY48GIx7sDwmRKjhiHNgvWng4QzsAwV84=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=nwwi4JG5I1IYOhStnJN394y1Zn5VO4TEtmLeapCjCzjIDJvkNtSbmazFBMWnaJQFi
+         RnDwc4K44CU+GCouF7bW7H27yje0alaQazaVyIvyHMPIbZPgW3xJUD7Ivg9puP8hQY
+         CvK2gIm+YaoXVhN3b5uJaZTLRx32qBtW7TJv4fKwBG3dHF86Jry5cPKiXvREUBXiFl
+         IsWfW2tddyFQ5EK7sef3PzA83HE6riToguObK9pGiz6scyVpyUT91TZHhdg7pN0FWV
+         L8D2SNDM3dcy4Z8WJwqTg/TGGmfPXY2wUbThz6vvYh102VxDqwEuU+1mhHD/ga285T
+         FmX+UsPsStZSg==
+Message-ID: <51362ea7a2e0571ccc5154939030d37b.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20230317141622.1926573-3-quic_mohs@quicinc.com>
+References: <20230317141622.1926573-1-quic_mohs@quicinc.com> <20230317141622.1926573-3-quic_mohs@quicinc.com>
+Subject: Re: [PATCH v9 2/4] clk: qcom: lpasscc-sc7280: Skip qdsp6ss clock registration
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
+        Mohammad Rafi Shaik <quic_mohs@quicinc.com>
+To:     Mohammad Rafi Shaik <quic_mohs@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, broonie@kernel.org,
+        konrad.dybcio@somainline.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mturquette@baylibre.com,
+        quic_plai@quicinc.com, quic_visr@quicinc.com, robh+dt@kernel.org,
+        swboyd@chromium.org
+Date:   Fri, 17 Mar 2023 11:30:25 -0700
+User-Agent: alot/0.10
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgSGVyYmVydCwKCk9uIEZyaSwgMjAyMy0wMy0xNyBhdCAxMDo1MSArMDgwMCwgSGVyYmVydCBY
-dSB3cm90ZToKPiBPbiBNb24sIE1hciAwNiwgMjAyMyBhdCAxMjo1MjoyMlBNIC0wNjAwLCBUb20g
-WmFudXNzaSB3cm90ZToKPiA+IAo+ID4gK3N0YXRpYyBzdHJ1Y3QgY3J5cHRvX2FsZyBpYWFfY29t
-cF9kZWZsYXRlID0gewo+ID4gK8KgwqDCoMKgwqDCoMKgLmNyYV9uYW1lwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgPSAiZGVmbGF0ZSIsCj4gPiArwqDCoMKgwqDCoMKgwqAuY3JhX2RyaXZl
-cl9uYW1lwqDCoMKgwqDCoMKgwqDCoD0gImlhYV9jcnlwdG8iLAo+ID4gK8KgwqDCoMKgwqDCoMKg
-LmNyYV9mbGFnc8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqA9IENSWVBUT19BTEdfVFlQRV9D
-T01QUkVTUywKPiA+ICvCoMKgwqDCoMKgwqDCoC5jcmFfcHJpb3JpdHnCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgPSBJQUFfQUxHX1BSSU9SSVRZLAo+ID4gK8KgwqDCoMKgwqDCoMKgLmNyYV9tb2R1bGXC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoD0gVEhJU19NT0RVTEUsCj4gPiArwqDCoMKgwqDCoMKg
-wqAuY3JhX3XCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqA9IHsKPiA+ICvCoMKg
-wqDCoMKgwqDCoC5jb21wcmVzcyA9IHsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgLmNvYV9jb21wcmVzc8KgwqDCoD0gaWFhX2NvbXBfY29tcHJlc3Ms
-Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoC5jb2Ff
-ZGVjb21wcmVzc8KgPSBpYWFfY29tcF9kZWNvbXByZXNzCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgfQo+ID4gK8KgwqDCoMKgwqDCoMKgfQo+ID4gK307Cj4gCj4gUGxlYXNlIGFk
-ZCBhbnkgbmV3IGNvZGUgdXNpbmcgdGhlIGxlZ2FjeSBjb21wcmVzc2lvbiBpbnRlcmZhY2UuCj4g
-V2UncmUgdHJ5aW5nIHRvIHBoYXNlIHRoZW0gb3V0Lgo+IAo+IElmIHlvdXIgdXNlciBpcyBzdGls
-bCB1c2luZyB0aGUgbGVnYWN5IGludGVyZmFjZSwgdGhleSBzaG91bGQKPiBiZSBjb252ZXJ0ZWQg
-aW5zdGVhZC4KPiAKCk9LLCBJJ2xsIGp1c3QgcmVtb3ZlIHRoaXMgaW50ZXJmYWNlLiAgSXQgd2Fz
-IGFkZGVkIHNvIElBQSBjb3VsZCBiZSB1c2VkCndpdGggenJhbSwgd2hpY2ggc3RpbGwgdXNlcyB0
-aGUgb2xkIGludGVyZmFjZS4KCkknbGwgcGxheSBhcm91bmQgd2l0aCBzZWVpbmcgd2hhdCBpdCB3
-b3VsZCB0YWtlIHRvIGdldCB6cmFtIHRvIHVzZSB0aGUKYXN5bmMgaW50ZXJmYWNlIGFsYSB6c3dh
-cCwgYnV0IEknbSBndWVzc2luZyB0aGVyZSBtYXkgYmUgYSByZWFzb24gaXQKaGFzbid0IGJlZW4g
-Y29udmVydGVkIHlldC4uLgoKVGhhbmtzLAoKVG9tCgo+IFRoYW5rcywKCg==
+Quoting Mohammad Rafi Shaik (2023-03-17 07:16:20)
+> From: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+>=20
+> The qdsp6ss memory region is being shared by ADSP remoteproc device and
+> lpasscc clock device, hence causing memory conflict.
+> As the qdsp6ss clocks are being enabled in remoteproc driver, skip qdsp6ss
+> clock registration if "qcom,adsp-pil-mode" is enabled.
+>=20
+> Fixes: 4ab43d171181 ("clk: qcom: Add lpass clock controller driver for SC=
+7280")
+> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+> Signed-off-by: Mohammad Rafi Shaik <quic_mohs@quicinc.com>
+> Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+> ---
+>  drivers/clk/qcom/lpasscc-sc7280.c | 12 +++++++-----
+>  1 file changed, 7 insertions(+), 5 deletions(-)
+>=20
+> diff --git a/drivers/clk/qcom/lpasscc-sc7280.c b/drivers/clk/qcom/lpasscc=
+-sc7280.c
+> index 5c1e17bd0d76..85dd5b9d64f0 100644
+> --- a/drivers/clk/qcom/lpasscc-sc7280.c
+> +++ b/drivers/clk/qcom/lpasscc-sc7280.c
+> @@ -118,12 +118,14 @@ static int lpass_cc_sc7280_probe(struct platform_de=
+vice *pdev)
+>                 goto destroy_pm_clk;
+>         }
+> =20
+> -       lpass_regmap_config.name =3D "qdsp6ss";
+> -       desc =3D &lpass_qdsp6ss_sc7280_desc;
+> +       if (!of_property_read_bool(pdev->dev.of_node, "qcom,adsp-pil-mode=
+")) {
+> +               lpass_regmap_config.name =3D "qdsp6ss";
+> +               desc =3D &lpass_qdsp6ss_sc7280_desc;
+> =20
+> -       ret =3D qcom_cc_probe_by_index(pdev, 0, desc);
+> -       if (ret)
+> -               goto destroy_pm_clk;
+> +               ret =3D qcom_cc_probe_by_index(pdev, 0, desc);
+> +               if (ret)
+> +                       goto destroy_pm_clk;
+> +       }
 
+I noticed that we don't set any max_register on the regmap_config. Can
+you also do that in a patch before this patch? I think without that set
+you can oops the kernel by reading the debugfs file for the regmap.
+
+> =20
+>         lpass_regmap_config.name =3D "top_cc";
+>         desc =3D &lpass_cc_top_sc7280_desc;
