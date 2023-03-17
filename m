@@ -2,68 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A00E26BE009
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 05:12:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E27C6BE010
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 05:13:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230061AbjCQEMN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 00:12:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56844 "EHLO
+        id S230080AbjCQENp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 00:13:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229812AbjCQEML (ORCPT
+        with ESMTP id S229534AbjCQENm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 00:12:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DA5219F16;
-        Thu, 16 Mar 2023 21:12:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 984E3B82405;
-        Fri, 17 Mar 2023 04:12:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10AF1C433D2;
-        Fri, 17 Mar 2023 04:12:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679026327;
-        bh=v2zEYx2quVdWHyE4m+BHJg7VxqG48NX5bk+PdK53SKc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=rTSWDI3mfJKKGhHTdkEc6wbjHhJWQdrojAI6fGLlVIBxOwZuxZ88Bxq+ezuuv4ggK
-         Jg5tehC3W8eVEAqeXLgCOXp1J/eO7kRKt0t2vDtAhkqWRH9cu4Pn6LmbqL9vCdRQD2
-         Qx0J7xash3y8rRx6b1VF0MeshXqX1QyAZW1r289UtrJyebpkQMToi5Ttkh5DOKWvTN
-         y45+dK5DkApDUS3C4V+ZgBnQHmCeoIrTFPWKFnStlKUKVXGgRHKPSgfc00rfK+uW49
-         y6GZ/2XtlgkGAPurMnSvWPAknf2A81DbYqqUdwe+bGcpKw5MBA/EoUhCp2+fnwju3j
-         bHBIBlrOcKNmQ==
-Date:   Thu, 16 Mar 2023 21:12:06 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Matthieu Baerts <matthieu.baerts@tessares.net>
-Cc:     mptcp@lists.linux.dev, "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kristian Overskeid <koverskeid@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net] hsr: ratelimit only when errors are printed
-Message-ID: <20230316211206.1c01b585@kernel.org>
-In-Reply-To: <20230315-net-20230315-hsr_framereg-ratelimit-v1-1-61d2ef176d11@tessares.net>
-References: <20230315-net-20230315-hsr_framereg-ratelimit-v1-1-61d2ef176d11@tessares.net>
+        Fri, 17 Mar 2023 00:13:42 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32CB275850;
+        Thu, 16 Mar 2023 21:13:39 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32H4DOAI035305;
+        Thu, 16 Mar 2023 23:13:24 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1679026404;
+        bh=rzBjLuA2vnESonRLg0uUEFMBnPEQcoqzzcZIcS76hqI=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=g7+meP32+a0d80hU5jXxK3yvNqWpuuhXtpUV2aAKa7VdMuJoLgqrqLZaDiC01TFk5
+         2NQ0vMqHniyX3viSmyhZe8E/lb9h4PQottTN6OfXEACN0tkLzQ34OLeSeQBs74q8xa
+         Rx29omPAgl+YF/h6Y+xSd6mHt+M7creB71L4+wrU=
+Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32H4DOWr126883
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 16 Mar 2023 23:13:24 -0500
+Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE104.ent.ti.com
+ (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Thu, 16
+ Mar 2023 23:13:24 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE107.ent.ti.com
+ (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Thu, 16 Mar 2023 23:13:24 -0500
+Received: from [172.24.145.182] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32H4DLgx061170;
+        Thu, 16 Mar 2023 23:13:21 -0500
+Message-ID: <5835c3ba-7d69-e9d9-b6bb-9fd7637e85fa@ti.com>
+Date:   Fri, 17 Mar 2023 09:43:20 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v7 0/2] arm64: dts: ti: k3-j721s2: Add support for ADC
+ nodes
+Content-Language: en-US
+To:     Bhavya Kapoor <b-kapoor@ti.com>, <devicetree@vger.kernel.org>,
+        <robh+dt@kernel.org>
+CC:     <nm@ti.com>, <kristo@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20230316095146.498999-1-b-kapoor@ti.com>
+From:   Vignesh Raghavendra <vigneshr@ti.com>
+In-Reply-To: <20230316095146.498999-1-b-kapoor@ti.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 15 Mar 2023 21:25:17 +0100 Matthieu Baerts wrote:
-> Recently, when automatically merging -net and net-next in MPTCP devel
-> tree, our CI reported [1] a conflict in hsr, the same as the one
-> reported by Stephen in netdev [2].
-> 
-> When looking at the conflict, I noticed it is in fact the v1 [3] that
-> has been applied in -net and the v2 [4] in net-next. Maybe the v1 was
-> applied by accident.
 
-Ah, thank you! I didn't even notice that the version which went into 
-net was v1 :S
+
+On 16/03/23 15:21, Bhavya Kapoor wrote:
+> J721s2 has two instances of 8 channel ADCs in MCU domain. Add support
+> for both ADC nodes in dtsi file. Add pinmux information for both
+> instances of ADC in board dts file.
+> 
+> Changelog v6->v7:
+>  - Created 2 commits for k3-j721s2-mcu-wakeup.dtsi and
+>  k3-j721s2-common-proc-board.dts instead of a single commit
+> 
+> Bhavya Kapoor (2):
+>   arm64: dts: ti: k3-j721s2-mcu-wakeup: Add support for ADC nodes
+>   arm64: dts: ti: k3-j721s2-common-proc-board: Add pinmux information
+>     for ADC
+> 
+>  .../dts/ti/k3-j721s2-common-proc-board.dts    | 44 +++++++++++++++++++
+>  .../boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi     | 40 +++++++++++++++++
+>  2 files changed, 84 insertions(+)
+> 
+
+LGTM
+
+Reviewed-by: Vignesh Raghavendra <vigneshr@ti.com>
+
+
+-- 
+Regards
+Vignesh
