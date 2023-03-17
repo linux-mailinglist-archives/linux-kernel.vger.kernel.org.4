@@ -2,117 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E16E6BEF57
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 18:16:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4E596BEF5A
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 18:16:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229621AbjCQRQ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 13:16:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37312 "EHLO
+        id S230308AbjCQRQp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 13:16:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229986AbjCQRQX (ORCPT
+        with ESMTP id S229986AbjCQRQn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 13:16:23 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 738E02E0D9;
-        Fri, 17 Mar 2023 10:16:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679073381; x=1710609381;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=94pw9rxhjDC1X+hebb6ss2+DW8AEYbcU3bNVKEnzNSw=;
-  b=Ouw2qDrE3dp6B+qN1zUjJ+OBvrVPOsUycbq7cCyfPN5cmvmk6NUH1Z+P
-   pZw/0JEUzEF6GEyTk3afqgUP4xrwS8aHCfeq/Mx8JXQsEm4OfAR9q5t1E
-   EpOO+s2VLw7PL1EdJCmZwQKGk0GaOevr1JJvSb/YkIErQigHEubMix4Nr
-   X+qF5fT8rvQZQ7ZKVgEpXucbCdDSxYKH8jV6ybdHf2qbjhqLzI4Gkc2Sv
-   w3q4mMjW7dv8n7GYbf/p+t0xAS0zSdMy5Do9MWZ4AZNfPzie9IYHlAqDf
-   qnhjs/VWG2yz/yUlRO11x4BAslCcIRLvq74YPV0abdo8pVtRfI+ItuQlP
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="403185767"
-X-IronPort-AV: E=Sophos;i="5.98,268,1673942400"; 
-   d="scan'208";a="403185767"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2023 10:16:20 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="682751665"
-X-IronPort-AV: E=Sophos;i="5.98,268,1673942400"; 
-   d="scan'208";a="682751665"
-Received: from dlacbain-mobl.amr.corp.intel.com (HELO [10.209.46.45]) ([10.209.46.45])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2023 10:16:18 -0700
-Message-ID: <236ae66c-fafb-80e9-d58b-6b18a22071c1@intel.com>
-Date:   Fri, 17 Mar 2023 10:16:18 -0700
+        Fri, 17 Mar 2023 13:16:43 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A906B854A;
+        Fri, 17 Mar 2023 10:16:40 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id c10so3520370pfv.13;
+        Fri, 17 Mar 2023 10:16:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679073400;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=6Y24dD9SurSVZudT7syqKqVCObHCsVLG0RCYuKVO5vg=;
+        b=lz5YCQ+mtJiinHFfCtTtEWIh1QFnjmiq9b1/1QOphlbcyrKBmxBV8NmJX0pYxiaDyx
+         Zh8b4JGFOIIRimI8Pu6TPtpxXUltYC5CdFOiqsV+HRDxN1XWDSZsqs8xeSvqsGqflQCh
+         OrxxcYmmBlgcaCmB+kjolqikeI9FmpaUsyrthVjurymPAs5XwsVD0T86pHXpmSgQd+9i
+         CvsHGnsYj5Rg0+jlqni+0g1Y+uDawko6CDqN2QRJSY7kjt/wO+oAWtPKL+p+XuYcz9Yh
+         tFnFhjvX4WN5aiHWjcOP/4acCHS/7jAuaWysxBKS6Ow+yArEsd0eGPZZ0Tf4zOdQdwKz
+         1qqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679073400;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6Y24dD9SurSVZudT7syqKqVCObHCsVLG0RCYuKVO5vg=;
+        b=k4pEwPi8j4ruE2OnlrZP4kfKs7Pb2Zd9APLbg96bwDVPX7baYiEynHgY4KZI6lONEm
+         0N0CISy99BJ0qBM5L+bBgi0Tvt263voVLSv98NDIwAQRIlQUT3Z8xa1ijTlJqj8PQg+J
+         l/nCV4Ko6ZaLIKt+IexSDQ0t0w9hy8waVMwKFXY/x8c7B1qx77O16RRPtJghvca/Z1Rm
+         4wLkjXEGlKUJ1vlF0X/05ICfbP5XDS52PcBsDUKoMbrMPsqXqlLGvxJwHEV3sJgxEaIC
+         H9v0434jVv8aKPf0uN4ZbKPX0rWhzlVyYDun58q8L8bk8eG6eGW3yb/QDIg6hkH26hOl
+         +9wA==
+X-Gm-Message-State: AO0yUKXx0E7DNMUPB/ijy8wBekvDetORQykv2FNEExZDhORaDbCNQhRG
+        kCZZ0whSZ7i2HzdPrrUyUxI=
+X-Google-Smtp-Source: AK7set/Bq9UvcAsURmU3NPoXn/5o6fZ+BnWZhTN+6XSGaKMKzrvRKnTECbUMIcOIo9RnuSx13obL1w==
+X-Received: by 2002:a62:1a4e:0:b0:622:ec07:c6bc with SMTP id a75-20020a621a4e000000b00622ec07c6bcmr7263293pfa.15.1679073399844;
+        Fri, 17 Mar 2023 10:16:39 -0700 (PDT)
+Received: from dhcp-172-26-102-232.dhcp.thefacebook.com ([2620:10d:c090:400::5:2bcf])
+        by smtp.gmail.com with ESMTPSA id x20-20020aa784d4000000b005a8bc154bf4sm1824761pfn.39.2023.03.17.10.16.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Mar 2023 10:16:39 -0700 (PDT)
+Date:   Fri, 17 Mar 2023 10:16:36 -0700
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     starmiku1207184332@gmail.com
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, baijiaju1990@outlook.com
+Subject: Re: [PATCH v2] kernel: bpf: stackmap: fix a possible sleep-in-atomic
+ bug in bpf_mmap_unlock_get_irq_work()
+Message-ID: <20230317171636.ftelyp6ty7mgo4rt@dhcp-172-26-102-232.dhcp.thefacebook.com>
+References: <20230317035227.22293-1-starmiku1207184332@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v7 22/41] mm/mmap: Add shadow stack pages to memory
- accounting
-Content-Language: en-US
-To:     Deepak Gupta <debug@rivosinc.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        John Allen <john.allen@amd.com>, kcc@google.com,
-        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
-        dethoma@microsoft.com, akpm@linux-foundation.org,
-        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
-        david@redhat.com, Yu-cheng Yu <yu-cheng.yu@intel.com>
-References: <20230227222957.24501-1-rick.p.edgecombe@intel.com>
- <20230227222957.24501-23-rick.p.edgecombe@intel.com>
- <CAKC1njQ+resjS-O8vAVLhRfLHEdgta09faEr5zwi1JTNSWK0Fw@mail.gmail.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <CAKC1njQ+resjS-O8vAVLhRfLHEdgta09faEr5zwi1JTNSWK0Fw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230317035227.22293-1-starmiku1207184332@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/17/23 10:12, Deepak Gupta wrote:
->>  /*
->> - * Stack area - automatically grows in one direction
->> + * Stack area
->>   *
->> - * VM_GROWSUP / VM_GROWSDOWN VMAs are always private anonymous:
->> - * do_mmap() forbids all other combinations.
->> + * VM_GROWSUP, VM_GROWSDOWN VMAs are always private
->> + * anonymous. do_mmap() forbids all other combinations.
->>   */
->>  static inline bool is_stack_mapping(vm_flags_t flags)
->>  {
->> -       return (flags & VM_STACK) == VM_STACK;
->> +       return ((flags & VM_STACK) == VM_STACK) || (flags & VM_SHADOW_STACK);
-> Same comment here. `VM_SHADOW_STACK` is an x86 specific way of
-> encoding a shadow stack.
-> Instead let's have a proxy here which allows architectures to have
-> their own encodings to represent a shadow stack.
+On Fri, Mar 17, 2023 at 03:52:27AM +0000, starmiku1207184332@gmail.com wrote:
+> context because of its possible sleep operation. However, mmap_read_unlock()
+> is unsafely called in a preempt disabled context when spin_lock() or
+> rcu_read_lock() has been called.
 
-This doesn't _preclude_ another architecture from coming along and doing
-that, right?  I'd just prefer that shadow stack architecture #2 comes
-along and refactors this in precisely the way _they_ need it.
+Why is that unsafe?
+See __up_read(). It's doing preempt_disable().
+
+
+> -	if (irqs_disabled()) {
+> +	if (in_atomic() || irqs_disabled()) {
+
+We cannot do this. It will significantly hurt stack traces with build_id.
