@@ -2,131 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C5C56BF319
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 21:51:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EE936BF321
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 21:53:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229987AbjCQUvk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 16:51:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41618 "EHLO
+        id S230052AbjCQUxz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 16:53:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229654AbjCQUvj (ORCPT
+        with ESMTP id S229644AbjCQUxy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 16:51:39 -0400
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0729220D0E
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 13:51:37 -0700 (PDT)
-Received: by mail-pf1-x44a.google.com with SMTP id j9-20020aa79289000000b00625894ca452so3217765pfa.22
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 13:51:37 -0700 (PDT)
+        Fri, 17 Mar 2023 16:53:54 -0400
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A971730ED
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 13:53:52 -0700 (PDT)
+Received: by mail-yb1-xb31.google.com with SMTP id z83so7123619ybb.2
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 13:53:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679086296;
-        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=Yggrs7JW2XscQytYe7EBpJHNPpg8x3R96N64SOflxtY=;
-        b=RAry5PXHsASD+K5+nH62ZqbHB7MFCUVzBcN5mY4qWmHbPDQ1f1zypiehbGI3Fy2dSe
-         iX2pqs93kI8/3o/jaSqjFr5BBBKCgHip+qCPKPhcOI4Y6ut8fbiHXAiVgErNVtCnJcXm
-         i9DmoeWwhpBn8Jk1zJ2hhWqwu1xle2yNWkjpzRFKBRaI6dVJT4pZTWAalnGEQB0vQ+AS
-         49Pd9+WQ/Uk1BMhDrFU3vXnGiaW/GpkOzokYmmHczYWYudRYqIu2j2Rd+aqHakTWRHJe
-         NF7FNpT7U6ePNJiMXRR93Yvri7zp48jiYPB4GKf+aUjr4lVJ9ROaR9oo7C+47wCsPD5a
-         Enug==
+        d=linaro.org; s=google; t=1679086432;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=81k/wsN5LJHSw7IMmKprz7MljTYWXfOO3qNXbhpMYDY=;
+        b=GbicmX698aU6P3ndLa71hM7B5bhfNOjyuIQiA9eX8PBOUq1/RzNGBMXbQ0iECrEv5q
+         Qs2X2vRlWaonAomu6hJyTwJyst53I6ZQ3AwexcFFxvypToqzgoHD0fkw2SQ2SPgYDhQR
+         9YJ8jnhRejBiis4ni0UupkquEUOOR9t1B4kTsa+LnMK4mG+TfWQwbJZmH+Ig8uje91Dh
+         9TageZMNT90SRCTnPZvM+X195DHkOewu9tGsi5ElbC+A16u6x8o1p0fGf+3NYX48p5Pm
+         3EYTdu4fPQ8e7qhaNJFLLBWfW480I1Nua6D65Pmpkq/ezNlYQ+TljEyo4C433zu+IWft
+         T1jg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679086296;
-        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Yggrs7JW2XscQytYe7EBpJHNPpg8x3R96N64SOflxtY=;
-        b=H7+wvNqjhjikqVV/9kM9kYVcxAdPmUq9mmBD2KataR/iI1iYa0rFyaGXYaSOjoNWU1
-         z6s80STbg9geKwlys5SObumUDSmJcUAKBkrAsfOkWJpSwwmHG8+gPeRksOAWX+3Veijc
-         K37C7ZeweBmxayO/NlPpnRGQxwWOXweI+azJ/SCi0xJP7s2W2cg3efM4Pkony3sKRJ2c
-         /zAAQ1AJPPTUho9g9Zz05zMgZvUlgiIZue6onEAiGCZiCnZb/KzaDGkpus9/7Oaq0rAr
-         jm88p+tPJdpAoWGjZpdkOCDYjoUkjK6YCRkjZIOtNy5aJKdW73Cex0WA9Ql+kAGSKkmX
-         AW5A==
-X-Gm-Message-State: AO0yUKUBBjpMh9YMgxIkEIf8Phf4D0IC6OhNnffd+ZS4s+eLc4avWGHS
-        fpcf6splk+xa4RmgUaWC0TdjWKk4rZE9pfw=
-X-Google-Smtp-Source: AK7set9ujWU8oOm1pDCp66YX98ebwfY3nfVdMyOciog+H+VQc+CT2GZ323ey6nIm6Cn0TshspgbSZ5bIwWRKM6k=
-X-Received: from saravanak.san.corp.google.com ([2620:15c:2d:3:8fa5:ab5f:d83a:1b71])
- (user=saravanak job=sendgmr) by 2002:a05:6a00:999:b0:5a9:d579:6902 with SMTP
- id u25-20020a056a00099900b005a9d5796902mr2035696pfg.0.1679086296544; Fri, 17
- Mar 2023 13:51:36 -0700 (PDT)
-Date:   Fri, 17 Mar 2023 13:51:33 -0700
-Message-Id: <20230317205134.964098-1-saravanak@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.40.0.rc2.332.ga46443480c-goog
-Subject: [PATCH v4] driver core: Add CONFIG_FW_DEVLINK_SYNC_STATE_TIMEOUT
-From:   Saravana Kannan <saravanak@google.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Saravana Kannan <saravanak@google.com>,
-        Doug Anderson <dianders@chromium.org>, kernel-team@android.com,
-        linux-kernel@vger.kernel.org
+        d=1e100.net; s=20210112; t=1679086432;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=81k/wsN5LJHSw7IMmKprz7MljTYWXfOO3qNXbhpMYDY=;
+        b=oj6gir3fMZ39hU3neH8jhR7pq52vHbYCj2tsqLVBtY7b2PUHjsaUjTuxUHkV1YOyk/
+         rQ65imBmZFEtLImyKgpgPgz5pg3jKwrLqMI8gNTV1CKOybteOMlDp4zcbu9aC02szJWM
+         hQQxWB+TfWCYS4MVuldSZxFwK8E0McGjZPkOyyqxVQp+ngmZTQUhsOCVaAGNr0vIILgH
+         lOZ1zwVzT3AFSMXvdN5K7xJGQaLC9mhzIRUeLZEAVJwVmqRe33QPLDUn5tG79Ryd8RIS
+         WPC9B9/oe5ozi+TtH9ZvKTBd/WGZzATn4QhgVOo5Docs5+HJJ75ycoYO4gInbnq4717l
+         3dpw==
+X-Gm-Message-State: AO0yUKWJzBYxz1nDPiU4Z07QUMXSZDO/xQQwkzefD/nRyutXvFUJ5NpF
+        /JyUP7qj1NH/oY/U4QQsu7/dsAmyIKwIk1nhH1CPjQ==
+X-Google-Smtp-Source: AK7set/xMcJB36hfzj7lWnW/tGG+jyb989JVS6ZTe5X+GsibjG7yhs/EkXgKMrPvyfaL3Ej3pxGpi4IcL7WRbw5L0/o=
+X-Received: by 2002:a5b:611:0:b0:b67:f07:d180 with SMTP id d17-20020a5b0611000000b00b670f07d180mr357039ybq.5.1679086431900;
+ Fri, 17 Mar 2023 13:53:51 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230317185230.46189-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20230317185230.46189-1-andriy.shevchenko@linux.intel.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 17 Mar 2023 21:53:40 +0100
+Message-ID: <CACRpkdYXTk2pzXEM9MTjt=oT-CbhENABSLeb9dN7ZvEy8oqiag@mail.gmail.com>
+Subject: Re: [PATCH v1 1/1] backlight: hx8357: Convert to agnostic GPIO API
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Lee Jones <lee@kernel.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>, Helge Deller <deller@gmx.de>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a build time equivalent of fw_devlink.sync_state=timeout so that
-board specific kernels could enable it and not have to deal with setting
-or cluttering the kernel commandline.
+On Fri, Mar 17, 2023 at 7:51=E2=80=AFPM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
 
-Cc: Doug Anderson <dianders@chromium.org>
-Signed-off-by: Saravana Kannan <saravanak@google.com>
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
----
-v1 -> v2:
-- Removed "default n" and expanded on the help text.
-v2 -> v3:
-- Added a description for the "bool" so the config can be enabled by the
-  user.
-v3 -> v4:
-- Added this version change history.
-- Added Doug's Reviewed-by.
+> The of_gpio.h is going to be removed. In preparation of that convert
+> the driver to the agnostic API.
+>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
- drivers/base/Kconfig | 12 ++++++++++++
- drivers/base/core.c  |  5 +++++
- 2 files changed, 17 insertions(+)
+Thanks for fixing this Andy!
 
-diff --git a/drivers/base/Kconfig b/drivers/base/Kconfig
-index 6f04b831a5c0..2b8fd6bb7da0 100644
---- a/drivers/base/Kconfig
-+++ b/drivers/base/Kconfig
-@@ -230,4 +230,16 @@ config GENERIC_ARCH_NUMA
- 	  Enable support for generic NUMA implementation. Currently, RISC-V
- 	  and ARM64 use it.
- 
-+config FW_DEVLINK_SYNC_STATE_TIMEOUT
-+	bool "sync_state() behavior defaults to timeout instead of strict"
-+	help
-+	  This is build time equivalent of adding kernel command line parameter
-+	  "fw_devlink.sync_state=timeout". Give up waiting on consumers and
-+	  call sync_state() on any devices that haven't yet received their
-+	  sync_state() calls after deferred_probe_timeout has expired or by
-+	  late_initcall() if !CONFIG_MODULES. You should almost always want to
-+	  select N here unless you have already successfully tested with the
-+	  command line option on every system/board your kernel is expected to
-+	  work on.
-+
- endmenu
-diff --git a/drivers/base/core.c b/drivers/base/core.c
-index fe74a786e2c3..adc81871829f 100644
---- a/drivers/base/core.c
-+++ b/drivers/base/core.c
-@@ -1672,7 +1672,12 @@ early_param("fw_devlink.strict", fw_devlink_strict_setup);
- #define FW_DEVLINK_SYNC_STATE_STRICT	0
- #define FW_DEVLINK_SYNC_STATE_TIMEOUT	1
- 
-+#ifndef CONFIG_FW_DEVLINK_SYNC_STATE_TIMEOUT
- static int fw_devlink_sync_state;
-+#else
-+static int fw_devlink_sync_state = FW_DEVLINK_SYNC_STATE_TIMEOUT;
-+#endif
-+
- static int __init fw_devlink_sync_state_setup(char *arg)
- {
- 	if (!arg)
--- 
-2.40.0.rc2.332.ga46443480c-goog
+> -#if !IS_ENABLED(CONFIG_LCD_HX8357)
+> +#if IS_ENABLED(CONFIG_LCD_HX8357)
+>                 /*
+>                  * Himax LCD controllers used incorrectly named
+>                  * "gpios-reset" property and also specified wrong
+> @@ -452,7 +452,7 @@ static struct gpio_desc *of_find_gpio_rename(struct d=
+evice_node *np,
+>                  */
+>                 const char *compatible;
+>         } gpios[] =3D {
+> -#if !IS_ENABLED(CONFIG_LCD_HX8357)
+> +#if IS_ENABLED(CONFIG_LCD_HX8357)
+>                 /* Himax LCD controllers used "gpios-reset" */
+>                 { "reset",      "gpios-reset",  "himax,hx8357" },
+>                 { "reset",      "gpios-reset",  "himax,hx8369" },
 
+Eh what happened here .. it's even intuitively wrong.
+I would add
+Fixes: fbbbcd177a27 ("gpiolib: of: add quirk for locating reset lines
+with legacy bindings")
+
+It wasn't used until now it seems so not a regression and no
+need for a separate patch.
+
+Other than that it looks correct.
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+
+Yours,
+Linus Walleij
