@@ -2,248 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49E8F6BE674
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 11:20:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE9F16BE677
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 11:20:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230043AbjCQKUK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 06:20:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58772 "EHLO
+        id S230063AbjCQKUS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 06:20:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230027AbjCQKUF (ORCPT
+        with ESMTP id S230044AbjCQKUN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 06:20:05 -0400
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3877A21A0;
-        Fri, 17 Mar 2023 03:20:02 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id 825FF32000EB;
-        Fri, 17 Mar 2023 06:20:00 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Fri, 17 Mar 2023 06:20:02 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1679048400; x=1679134800; bh=R2
-        PhvQmlrawFBySIsOtkrlNsyj6Omx2RMGhf6x3YrHg=; b=aMOdgnRWlv3W/79Yr5
-        zwaKq4mM6VXVcYqKC3K9jQxDpE5O0i3CjPqVUROdZUJUQtdbn+wQSAK2IwiDCC6+
-        dY/fhdNpbDeDvOchyUl+KOEUNDmKvjz64XOs1WgwYR+PMX4hox3DYcScn9b/iNPT
-        cPl8tfXPP1Ch5bstZR/rc8otFtfo8hCYKODiOUy1BZ80g/nxA6b1twizN3rHLS1h
-        ZfKXEAhkoa3ra9nk3Kk5mlyYI/focJ5/nUyWtVCBcwRsvPHPG1cj29IESAo+9FGx
-        7VqaFKq59gLzsxs5gNm8Cl5Sn953afEpZTy7eID0fL1xM9HqE3IwY+THHTEuV01V
-        iBpw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1679048400; x=1679134800; bh=R2PhvQmlrawFB
-        ySIsOtkrlNsyj6Omx2RMGhf6x3YrHg=; b=G3Myr2ALwXfc7bS4pAyC21hkfLSWP
-        Bt7f9a2hDwk8/FITqun7YedWwyJB6XT5yCPBWw4ty3OH6LboomKwl2ltF2adRCqh
-        VUm/kJAWX2Px+jXlioRKVLesI9beBG824riZuy/qj7aiSV6HkF49V8vmXZ/bGNcV
-        lkaeMhSovdTdO86t9OldI9hjN/4E1uOKQmYMTk+ZHKmi19P2s9TjK+4Y27c52MwC
-        lsbsFIuPHDb6EiDNuF8K5JvOJh8ehiJOf6QCrHAOqM/NBtVKt2veBP0KNpApeXLJ
-        YHZWwUh6NrMLzzEzKKr10EBCLH8AWaiqjGjOqbiNbaTEZ1Yz5ttiiJAGg==
-X-ME-Sender: <xms:zz4UZHWQfWN-MtJcTvoPXbsAc0uxWjPPAnFI20xZlciDE4754n0GDg>
-    <xme:zz4UZPm7ERboPe--aNUskBx5j7tezaSGEgdoYEdL1_gqbznb7h8Jkz-iTF7VoeSqT
-    o-CnUS7Fi2MRwcf0w4>
-X-ME-Received: <xmr:zz4UZDYXW4P-RtBCsYfVzfPT-MQjKsWXgaeTTNV3a4821uVthIPEPlxrEn7ZGHtPL7R7H9GddV5m9foRsGq1mXO7YOwoV0w>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdefvddgudegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtudenucfhrhhomhepofgrgihi
-    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
-    htthgvrhhnpeeljeeugfegveetleevkeetffegudevieetieeugeeugeeivddtjeejvdef
-    feetgfenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
-    eptdenucfrrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggt
-    hh
-X-ME-Proxy: <xmx:zz4UZCXSTkPgh-JxRP1U_s-0Y1Dr1XsknTYlfkUebozHCzArYj9oog>
-    <xmx:zz4UZBl8vIWvypKuUZ7Feh3RcC6RTGF1M-ImaWiRaDn5lCy4wjigfA>
-    <xmx:zz4UZPfosd6z-B4n5wG7YTvqk_AJJJEm4Y5uVV039trqmgUsKgSJng>
-    <xmx:0D4UZDUJ1Yv8dPxz9Oin7ogxcvGm_uFVKE1oD1TkrrudmVR7vammfQ>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 17 Mar 2023 06:19:58 -0400 (EDT)
-Date:   Fri, 17 Mar 2023 11:19:56 +0100
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Matti Vaittinen <mazziesaccount@gmail.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Shreeya Patel <shreeya.patel@collabora.com>,
-        Paul Gazzillo <paul@pgazz.com>,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        Zhigang Shi <Zhigang.Shi@liteon.com>,
-        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
-        Stephen Boyd <sboyd@kernel.org>
-Subject: Re: [PATCH v3 2/6] iio: light: Add gain-time-scale helpers
-Message-ID: <20230317101956.ebe4bhpwybjhvsq6@houat>
-References: <cover.1678093787.git.mazziesaccount@gmail.com>
- <a4cb9a34ca027867ac014ffe93ca7e8245ce263f.1678093787.git.mazziesaccount@gmail.com>
- <20230312170638.3e6807b7@jic23-huawei>
- <20230312170848.651b5b2c@jic23-huawei>
- <ZA8Z08U1sMOhc+V5@smile.fi.intel.com>
- <31d8bc33-eabe-9084-71c3-7d1e29f51863@gmail.com>
- <ZA8lNBPCB4BNnfUq@smile.fi.intel.com>
- <39a7b489-4856-8dc1-d0a6-f27d0c1324a2@gmail.com>
- <a41874be-f0bd-1570-8a4a-5b28079b9fed@gmail.com>
+        Fri, 17 Mar 2023 06:20:13 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D53A3A8C6D;
+        Fri, 17 Mar 2023 03:20:11 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id m35so2981539wms.4;
+        Fri, 17 Mar 2023 03:20:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679048410;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=B2zyx3U3AXPDRFjYOKBt3zCYzGwvMHjuxaFvhcNGMYw=;
+        b=K3QDrLd9/AHTE97KGupZsihjvv1DcPrg2e5kH4N0u/ThdjpSlxk4PJnJ9/W85XPSVY
+         zfpR2A/7EoOEyo9550zL4/vmpfYl5lHM165L/lkqA7Wk5e/nBD9VnONeb+Ez793paFFp
+         RxLrZ8g8vsw5NIz3niUCWkssoP2pnhKziF9soVnCQVqJa9NU+K+eBXiQWjYeXVVpf8Ea
+         AoOekpaWai5FbM4COmKJ/BDQtrJNRfInvBhVWCCkHFy1S5u62UdueveL3+51NeXMtdqz
+         SetdI7WF1tRyDt+Xg/KfChDi8C0UaNruqs4LXxNzfsB61BFNwRFhSKOZM1Upw0RCaBBt
+         0+2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679048410;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=B2zyx3U3AXPDRFjYOKBt3zCYzGwvMHjuxaFvhcNGMYw=;
+        b=ssmBiLA9DVCYeyC8re6arEIfPSvf12+ZaR/lSBvPJ7neJBPgX28RJgfWLbi9OusC5u
+         wmSMBZ0qVjMyrcS6sYaOGQ56OxGeHkV1AoCPChp4/4gaWQJmyqY+2oPTGkA2+m0074uL
+         T2+QW0Lur1M2SHucj+0efX80LEnRxP5vm9AM4eyLIlJ2QQxjgZXugBUhCrbZGXiEP9eB
+         SdMQGSWQD8CGXoT5XdlsjsoVz1OD3eTQ473h9hoEzJJHt8iaev/cbakU+sXJp47LAOm+
+         Z9lFp48X9PYKCMLnIpv9R7wDOZEuVUsFbSt+cWYjYhe/2pk81hq/6GoqwRg49d5RCGYg
+         0yJQ==
+X-Gm-Message-State: AO0yUKXr0uvEyGo9igqtrAKEBKNPRe53kAqRy0B/zeh/7tt0qOu9YtUj
+        YMatgtK4nm//OUHE/4+7hlAo/t4+V2+khw==
+X-Google-Smtp-Source: AK7set+XbAcnblyGYtZEQ3m/zbT8wd4QB6ZZhQIf//mcWDT47T1rsYpCDodIx9M1dCI0qTfC6sZw7w==
+X-Received: by 2002:a05:600c:540a:b0:3ea:e582:48dd with SMTP id he10-20020a05600c540a00b003eae58248ddmr24486119wmb.34.1679048409764;
+        Fri, 17 Mar 2023 03:20:09 -0700 (PDT)
+Received: from atlantis.lan (255.red-79-146-124.dynamicip.rima-tde.net. [79.146.124.255])
+        by smtp.gmail.com with ESMTPSA id 1-20020a05600c234100b003e00c453447sm7336512wmq.48.2023.03.17.03.20.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Mar 2023 03:20:09 -0700 (PDT)
+From:   =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
+        <noltari@gmail.com>
+To:     f.fainelli@gmail.com, jonas.gorski@gmail.com,
+        bcm-kernel-feedback-list@broadcom.com, tsbogend@alpha.franken.de,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
+        <noltari@gmail.com>
+Subject: [PATCH v3] mips: bmips: BCM6358: disable RAC flush for TP1
+Date:   Fri, 17 Mar 2023 11:20:04 +0100
+Message-Id: <20230317102004.235879-1-noltari@gmail.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230316180518.783613-1-noltari@gmail.com>
+References: <20230316180518.783613-1-noltari@gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="xdcm5g2kingdnkbe"
-Content-Disposition: inline
-In-Reply-To: <a41874be-f0bd-1570-8a4a-5b28079b9fed@gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,LOTS_OF_MONEY,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+RAC flush causes kernel panics on BCM6358 with EHCI/OHCI when booting from TP1:
+[    3.881739] usb 1-1: new high-speed USB device number 2 using ehci-platform
+[    3.895011] Reserved instruction in kernel code[#1]:
+[    3.900113] CPU: 0 PID: 1 Comm: init Not tainted 5.10.16 #0
+[    3.905829] $ 0   : 00000000 10008700 00000000 77d94060
+[    3.911238] $ 4   : 7fd1f088 00000000 81431cac 81431ca0
+[    3.916641] $ 8   : 00000000 ffffefff 8075cd34 00000000
+[    3.922043] $12   : 806f8d40 f3e812b7 00000000 000d9aaa
+[    3.927446] $16   : 7fd1f068 7fd1f080 7ff559b8 81428470
+[    3.932848] $20   : 00000000 00000000 55590000 77d70000
+[    3.938251] $24   : 00000018 00000010
+[    3.943655] $28   : 81430000 81431e60 81431f28 800157fc
+[    3.949058] Hi    : 00000000
+[    3.952013] Lo    : 00000000
+[    3.955019] epc   : 80015808 setup_sigcontext+0x54/0x24c
+[    3.960464] ra    : 800157fc setup_sigcontext+0x48/0x24c
+[    3.965913] Status: 10008703	KERNEL EXL IE
+[    3.970216] Cause : 00800028 (ExcCode 0a)
+[    3.974340] PrId  : 0002a010 (Broadcom BMIPS4350)
+[    3.979170] Modules linked in: ohci_platform ohci_hcd fsl_mph_dr_of ehci_platform ehci_fsl ehci_hcd gpio_button_hotplug usbcore nls_base usb_common
+[    3.992907] Process init (pid: 1, threadinfo=(ptrval), task=(ptrval), tls=77e22ec8)
+[    4.000776] Stack : 81431ef4 7fd1f080 81431f28 81428470 7fd1f068 81431edc 7ff559b8 81428470
+[    4.009467]         81431f28 7fd1f080 55590000 77d70000 77d5498c 80015c70 806f0000 8063ae74
+[    4.018149]         08100002 81431f28 0000000a 08100002 81431f28 0000000a 77d6b418 00000003
+[    4.026831]         ffffffff 80016414 80080734 81431ecc 81431ecc 00000001 00000000 04000000
+[    4.035512]         77d54874 00000000 00000000 00000000 00000000 00000012 00000002 00000000
+[    4.044196]         ...
+[    4.046706] Call Trace:
+[    4.049238] [<80015808>] setup_sigcontext+0x54/0x24c
+[    4.054356] [<80015c70>] setup_frame+0xdc/0x124
+[    4.059015] [<80016414>] do_notify_resume+0x1dc/0x288
+[    4.064207] [<80011b50>] work_notifysig+0x10/0x18
+[    4.069036]
+[    4.070538] Code: 8fc300b4  00001025  26240008 <ac820000> ac830004  3c048063  0c0228aa  24846a00  26240010
+[    4.080686]
+[    4.082517] ---[ end trace 22a8edb41f5f983b ]---
+[    4.087374] Kernel panic - not syncing: Fatal exception
+[    4.092753] Rebooting in 1 seconds..
 
---xdcm5g2kingdnkbe
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Because the bootloader (CFE) is not initializing the Read-ahead cache properly
+on the second thread (TP1). Since the RAC was not initialized properly, we
+should avoid flushing it at the risk of corrupting the instruction stream as
+seen in the trace above.
 
-On Wed, Mar 15, 2023 at 12:51:26PM +0200, Matti Vaittinen wrote:
-> On 3/13/23 15:59, Matti Vaittinen wrote:
-> > On 3/13/23 15:29, Andy Shevchenko wrote:
-> > > On Mon, Mar 13, 2023 at 03:11:52PM +0200, Matti Vaittinen wrote:
-> > > > On 3/13/23 14:40, Andy Shevchenko wrote:
-> > > > > On Sun, Mar 12, 2023 at 05:08:48PM +0000, Jonathan Cameron wrote:
-> > > > > > On Sun, 12 Mar 2023 17:06:38 +0000
-> > > > > > Jonathan Cameron <jic23@kernel.org> wrote:
-> > >=20
-> > > ...
-> > >=20
-> > > > > > Ah. I forgot the tests that don't have a device so can't use de=
-vm.
-> > > > >=20
-> > > > > Why not? I have seen, IIRC, test cases inside the kernel
-> > > > > that fakes the device
-> > > > > for that.
-> > > >=20
-> > > > I'd appreciated any pointer for such an example if you have one
-> > > > at hand. (I
-> > > > can do the digging if you don't though!)
-> > > >=20
-> > > > I am not a fan of unit tests. They add huge amount of inertia to
-> > > > development, and in worst case, they stop people from contributing =
-where
-> > > > improving a feature requires test code modification(s). And
-> > > > harder the test
-> > > > code is to understand, worse the unwanted side-effects. Also, harde=
-r the
-> > > > test code is to read, more time and effort it requires to analyze a=
- test
-> > > > failure... Hence, I am _very_ conservative what comes to adding
-> > > > size of test
-> > > > code with anything that is not strictly required.
-> > > >=20
-> > > > After that being said, unit tests are a great tool when
-> > > > carefully used - and
-> > > > I assume/hope stubbing a device for devm_ tests does not add
-> > > > much extra...
-> > > > But let me see if I can find an example :)
-> > >=20
-> > > drivers/gpu/drm/tests/drm_managed_test.c ?
-> > >=20
-> > > (somewhere underneath:
-> > >=20
-> > > =A0 ret =3D platform_driver_register(&fake_platform_driver);
-> > >=20
-> > > which suggests... what exactly? :-)
->=20
-> Thanks to pointer from Andy I found the
-> drm_kunit_helper_[alloc/free]_device() functions. I renamed them to
-> test_kunit_helper_[alloc/free]_device(), move them to drivers/base, add
-> declarations to include/kunit/test-helpers.h fixed KConfigs and existing
-> callers + added the tests for managed interfaces. I have this in place in=
- my
-> personal playground where I am working towards the v4 of the series.
->=20
-> ...
->=20
-> After that I asked from Maxime if he had a reason to not make those gener=
-ic
-> and available to other subsystems besides drm in the first place...
->=20
-> And Maxime was kind enough to point me to the fact that something like th=
-is
-> was done in the CCF context:
-> https://lore.kernel.org/all/20230302013822.1808711-1-sboyd@kernel.org/
->=20
-> I like the 'single function to get the dummy device which can be passed to
-> devm'-approach used in drm helpers. I do also like Stephen's idea of havi=
-ng
-> the prototypes in kunit/platform_device.h which matches the
-> linux/platform_device.h.
->=20
-> However, I don't know when Stephen's work will be finished and merged to
-> IIO-tree so that it could be used/extended for the needs of these tests.
->=20
-> Meanwhile, I don't think it makes sense to go forward with my changes
-> splitting the helpers out of drm until we see what Stephen's changes will
-> bring us. On the other hand, I don't like delaying the gts-helpers or the
-> sensor drivers.
->=20
-> So, any suggestions what I should do? I see following options:
->=20
-> 1) Drop the tests for managed interfaces for now.
-> 2) Add the tests with a yet-another duplicate implementation of the
->    dummy device for devm.
-> 3) Add the tests using the helpers from drm as they are now.
->=20
-> option 1):
-> I like it as it would be an easy way (for now) - but I hate it as it may =
-be
-> a hard way as well. In my experience, when a driver/helper lands upstream=
- it
-> will get first few fixes quite fast - and not having a test available
-> upstream when this happens is bad. Bad because it means the out-of-tree t=
-est
-> may get broken, and bad because there is no easy way to test the fixes.
->=20
-> option 2):
-> I hate it because it makes the test code more complex - and duplicates the
-> kernel code which is never nice. This could be reworked later when Stephe=
-ns
-> work is done though.
->=20
-> option 3):
-> It's in general not nice to use functions exported for some other
-> subsystem's specific purposes. This would however keep the test code at
-> minimum, while leaving the same "I swear I'll fix this later when
-> dependencies have settled" - possibility as option 2) did.
->=20
-> Oh, in theory there is option 4) to just send out the changes I did(*) wh=
-ich
-> pull the drm_kunit_helper_[alloc/free]_device() out of the DRM - but I gu=
-ess
-> that would lead some extra work to merge this later with stuff Stephen's
-> series does introduce.
->=20
-> Any suggestions which of the options to proceed with?
+Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
+---
+ v3: add changes suggested by Florian:
+   - Switch to a bool and remove unneeded initialization.
+   - Remove if from bcm6358_quirks().
+   - Improve commit description and bcm6358_quirks() comment.
+ v2: check if we're running on TP1 and invert logic.
 
-I think the best course of action would be to synchronize with Stephen,
-and make sure that whatever patch you're doing can be used for his work.
+ arch/mips/bmips/dma.c   | 5 +++++
+ arch/mips/bmips/setup.c | 8 ++++++++
+ 2 files changed, 13 insertions(+)
 
-Once it works for both of you, then I guess it can go through the kunit
-tree and you will use it both.
+diff --git a/arch/mips/bmips/dma.c b/arch/mips/bmips/dma.c
+index 33788668cbdb..3779e7855bd7 100644
+--- a/arch/mips/bmips/dma.c
++++ b/arch/mips/bmips/dma.c
+@@ -5,6 +5,8 @@
+ #include <asm/bmips.h>
+ #include <asm/io.h>
+ 
++bool bmips_rac_flush_disable;
++
+ void arch_sync_dma_for_cpu_all(void)
+ {
+ 	void __iomem *cbr = BMIPS_GET_CBR();
+@@ -15,6 +17,9 @@ void arch_sync_dma_for_cpu_all(void)
+ 	    boot_cpu_type() != CPU_BMIPS4380)
+ 		return;
+ 
++	if (unlikely(bmips_rac_flush_disable))
++		return;
++
+ 	/* Flush stale data out of the readahead cache */
+ 	cfg = __raw_readl(cbr + BMIPS_RAC_CONFIG);
+ 	__raw_writel(cfg | 0x100, cbr + BMIPS_RAC_CONFIG);
+diff --git a/arch/mips/bmips/setup.c b/arch/mips/bmips/setup.c
+index e95b3f78e7cd..549a6392a3d2 100644
+--- a/arch/mips/bmips/setup.c
++++ b/arch/mips/bmips/setup.c
+@@ -35,6 +35,8 @@
+ #define REG_BCM6328_OTP		((void __iomem *)CKSEG1ADDR(0x1000062c))
+ #define BCM6328_TP1_DISABLED	BIT(9)
+ 
++extern bool bmips_rac_flush_disable;
++
+ static const unsigned long kbase = VMLINUX_LOAD_ADDRESS & 0xfff00000;
+ 
+ struct bmips_quirk {
+@@ -104,6 +106,12 @@ static void bcm6358_quirks(void)
+ 	 * disable SMP for now
+ 	 */
+ 	bmips_smp_enabled = 0;
++
++	/*
++	 * RAC flush causes kernel panics on BCM6358 when booting from TP1
++	 * because the bootloader is not initializing it properly.
++	 */
++	bmips_rac_flush_disable = !!(read_c0_brcm_cmt_local() & (1 << 31));
+ }
+ 
+ static void bcm6368_quirks(void)
+-- 
+2.30.2
 
-Maxime
-
---xdcm5g2kingdnkbe
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZBQ+xwAKCRDj7w1vZxhR
-xbR2AQC+odcZGk8eMOMQcm+pwGNMtd0mUNgViVvhCvCb+4hsCwEAuMAEFb9Uw46L
-3O7y7a29aijAc0yWDlTk8ABO7hZxHAk=
-=/7fP
------END PGP SIGNATURE-----
-
---xdcm5g2kingdnkbe--
