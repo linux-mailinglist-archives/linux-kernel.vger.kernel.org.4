@@ -2,71 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F0096BEEE8
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 17:53:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 594576BEEF0
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 17:55:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230271AbjCQQxV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 12:53:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56476 "EHLO
+        id S229893AbjCQQzL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 12:55:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229665AbjCQQxM (ORCPT
+        with ESMTP id S229488AbjCQQzI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 12:53:12 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5645B52934;
-        Fri, 17 Mar 2023 09:53:09 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id r11so22884542edd.5;
-        Fri, 17 Mar 2023 09:53:09 -0700 (PDT)
+        Fri, 17 Mar 2023 12:55:08 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3234044A4;
+        Fri, 17 Mar 2023 09:55:07 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id om3-20020a17090b3a8300b0023efab0e3bfso9647230pjb.3;
+        Fri, 17 Mar 2023 09:55:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679071988;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=xik3iJ00mVNTE2RhMz8qKcSHsqehHvNwOtK7XaZrqLU=;
-        b=eaQwsSVwxarxhh1j5Q/OGFagC7mZqqgwlEifOKAuo/MdgYoqcz5yMDjGj5kS6Ql8dz
-         +yUKqxh8WQg4B9myzmEhVvtA31b9tEnlOkj/bieK+tAF43TXImAmx/ZEtXIp6gtHZXPK
-         ++iGSS32BGUrpInzp8xokQGRgzSVcGvKlKIrNi6QLNhYx3oqZR3xuf+IGkB62wi44YFB
-         T6o+jcH16dSezrS06k4Cxwt08xDkFrRi3kJe+XfN+Fk/63/6biZtUtcTNGqPR4rLb4mh
-         ArtWN1OAPqkCLLbUmG67tltL3nums7lBzIJ3oac38rptd9OE9fJO/8ugMc297gjPOmcg
-         teZg==
+        d=gmail.com; s=20210112; t=1679072106;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=AQBpav1FYobf3FdN98BFiGZMbqLp2dtSePWz+wd/wDU=;
+        b=DItLMS1d3mWz/5TcrtphrYofycA1jCPq6/0jEmwewNozlTUqCH3XAvDPhZjpEF/kXB
+         JXPaxpP8d+YlQGdzVB/AKSPX0R0XRVCRD5320YS/BEQKRaRgfbQKidC+ftfFjl1D5o0X
+         hKf6n0hd3nsuF6x48cRS9bochchQKNBCzuT6N7zflTzo9uiT2SqpO/5ZI2MBCHuAHY0K
+         7pSTK4rDOZJ594FNjrOoIr6xfznzGIcu6crcfeYDEJPK46whZYEx7Apn8KzInWx+kfTf
+         wuYth7ifK51zVJaA7pxHFgkUB3lOI+i6x+wk7qj/oZfXnOpjg26HNcYlqRFyiMB3nNEx
+         XmoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679071988;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xik3iJ00mVNTE2RhMz8qKcSHsqehHvNwOtK7XaZrqLU=;
-        b=2Kqsp96PgIqn/eEsmUZJ9vvyHZhkHFzV33X7wTqlPWsB/hjW2G2T+D3J2WgtZaTMTg
-         wZH8SsZKY5nBhS4baI4LOzUQRt4inQT+XcaE+p0RIiq5YS7BqgqVeiy7gJ1DkyxlDLcn
-         ILjyiQHO1Vp5oAzsCAzVM/hcv77hqRscd1HP/RE2ECJ8zh6GEhR5bj+UaWdz9Fvhv55/
-         EB7k0d9fktLUuvIUq/QzTXeXfgT8XmdT+u8jLRSymR8W514WhEyQARd7ffO+GKkmWFuN
-         H/0N/P81Ts+mYK35mY52Mjy9Fju/gKBEQcm0Sxz8YBwoEJIMvrk21AwmTq6te+4AAAvS
-         nCyg==
-X-Gm-Message-State: AO0yUKWRRmGHyG5Doy78xzMpBkH1ex7XtHpsuQXk/WIWUlbNXcoK13RU
-        9rJf3UEvmv2Jb9xU7uVGbw==
-X-Google-Smtp-Source: AK7set/bFSw2rvWP4R0Btu2M1iXG9y4DWm0zfqTdDTos/vXQhZ5DffbYhkOL3uRCuN/SNOnX0MxuPg==
-X-Received: by 2002:aa7:c9d5:0:b0:4fb:e9b8:ca56 with SMTP id i21-20020aa7c9d5000000b004fbe9b8ca56mr3056447edt.41.1679071987722;
-        Fri, 17 Mar 2023 09:53:07 -0700 (PDT)
-Received: from p183 ([46.53.253.24])
-        by smtp.gmail.com with ESMTPSA id r29-20020a50d69d000000b004c2158e87e6sm1278785edi.97.2023.03.17.09.53.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Mar 2023 09:53:07 -0700 (PDT)
-Date:   Fri, 17 Mar 2023 19:53:05 +0300
-From:   Alexey Dobriyan <adobriyan@gmail.com>
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     Randy Dunlap <rdunlap@infradead.org>, akpm@linux-foundation.org,
-        linux-kernel@vger.kernel.org,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>
-Subject: Re: [PATCH] ELF: document some de-facto PT_* ABI quirks
-Message-ID: <cc449f31-071c-48b8-a6a8-7b91f205c3c6@p183>
-References: <2acb586c-08a9-42d9-a41e-7986cc1383ea@p183>
- <e262ea00-a027-9073-812e-7e034d75e718@infradead.org>
- <ZBQjRLiXOwfmoIs+@debian.me>
+        d=1e100.net; s=20210112; t=1679072106;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=AQBpav1FYobf3FdN98BFiGZMbqLp2dtSePWz+wd/wDU=;
+        b=DwrVDRlBYZVXlKlej46ujTtrPqazHHe1SNGCPLDbB6pUnsQ6Z7GQe9J7IuFlMRLWoN
+         2sHpSqTXGp4ia9s6prVB0JtpV70gRuWL8jey07m94VqFk1X5jUJaE9e6AA2nHSjGzgk6
+         nE1VRi7Om/mhDigx27n77mt5DwdxtaxXM0GgIgyTrSxVK0s3zMNVfiYjJluXSwlmL4ds
+         L80LPKlahejcB+FUMbeMl84/+VdFTMWXA8WJMhHw9ZJWybzofaNbGx7iGau7zptLCVoY
+         2GpYkOlWq5EmJfwJ7nHt9EAhV2+UAzA0Y7T3uc+85FxQ5IpuTGqSScC3VaDGbq6AQNEP
+         cong==
+X-Gm-Message-State: AO0yUKXqLNncohtIFybrBYaXoGpQRo0YL6II8sMZFhSG2vu1pCVjbB5M
+        CPw2XMNb/IiM7A4rKCBL1+8=
+X-Google-Smtp-Source: AK7set/wdNYlcSaXja9Wy9Rv5RxF6uNAeWSUfwiDKTYXBDQh0ik9TYkps4sAmgW0dU0OHT/i1OYWsQ==
+X-Received: by 2002:a05:6a21:99a6:b0:d6:532:6671 with SMTP id ve38-20020a056a2199a600b000d605326671mr3791392pzb.14.1679072106382;
+        Fri, 17 Mar 2023 09:55:06 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id a3-20020a637f03000000b005034a46fbf7sm1703624pgd.28.2023.03.17.09.55.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Mar 2023 09:55:05 -0700 (PDT)
+Message-ID: <9f771318-5a59-ac31-a333-e2ad9947679f@gmail.com>
+Date:   Fri, 17 Mar 2023 09:54:59 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <ZBQjRLiXOwfmoIs+@debian.me>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH] net: dsa: tag_brcm: legacy: fix daisy-chained switches
+Content-Language: en-US
+To:     Jonas Gorski <jonas.gorski@gmail.com>, Andrew Lunn <andrew@lunn.ch>
+Cc:     =?UTF-8?Q?=c3=81lvaro_Fern=c3=a1ndez_Rojas?= <noltari@gmail.com>,
+        olteanv@gmail.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230317120815.321871-1-noltari@gmail.com>
+ <00783066-a99c-4bab-ae60-514f4bce687b@lunn.ch>
+ <CAOiHx==TiSZKE4AP3PZ9Ah4zuAsrfpOTvRADWpT2kMS9UVRH9Q@mail.gmail.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <CAOiHx==TiSZKE4AP3PZ9Ah4zuAsrfpOTvRADWpT2kMS9UVRH9Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,41 +79,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 17, 2023 at 03:22:28PM +0700, Bagas Sanjaya wrote:
-> On Tue, Mar 14, 2023 at 07:34:11PM -0700, Randy Dunlap wrote:
-> > Hi,
-> > 
-> > [adding linux-doc for other interested parties]
+On 3/17/23 09:49, Jonas Gorski wrote:
+> On Fri, 17 Mar 2023 at 17:32, Andrew Lunn <andrew@lunn.ch> wrote:
+>>
+>> On Fri, Mar 17, 2023 at 01:08:15PM +0100, Álvaro Fernández Rojas wrote:
+>>> When BCM63xx internal switches are connected to switches with a 4-byte
+>>> Broadcom tag, it does not identify the packet as VLAN tagged, so it adds one
+>>> based on its PVID (which is likely 0).
+>>> Right now, the packet is received by the BCM63xx internal switch and the 6-byte
+>>> tag is properly processed. The next step would to decode the corresponding
+>>> 4-byte tag. However, the internal switch adds an invalid VLAN tag after the
+>>> 6-byte tag and the 4-byte tag handling fails.
+>>> In order to fix this we need to remove the invalid VLAN tag after the 6-byte
+>>> tag before passing it to the 4-byte tag decoding.
+>>
+>> Is there an errata for this invalid VLAN tag? Or is the driver simply
+>> missing some configuration for it to produce a valid VLAN tag?
+>>
+>> The description does not convince me you are fixing the correct
+>> problem.
 > 
-> Unfortunately akpm had already applied this doc as 60b38b7cbb295d ("ELF:
-> document some de-facto PT_* ABI quirks") while it being reviewed and
-> doesn't have any consensus yet.
+> This isn't a bug per se, it's just the interaction of a packet going
+> through two tagging CPU ports.
 > 
-> > And could the document have a title, like:
-> > 
-> > =========================
-> > ELF header usage in Linux
-> > =========================
+> My understanding of the behaviour is:
 > 
-> The current doc path is Documentation/ELF/ELF.rst, which means that
-> readers expect to find general info about the executable format, not
-> some sort of trivia/niche like this.
-
-General info is in ELF spec. This document is intended to be Linux
-specific stuff you won't find anywhere but source.
-
-I'll write down overmapping rules as well.
-
-> > (I just made that up. Feel free to change it. :)
-> > 
-> > Also, the .rst file should be added to some chapter in the current
-> > documentation tree, such as under "Other documentation", so add this file name
-> > to Documentation/staging/index.rst. In fact this file could live in
-> > Documentation/staging instead of in Documentation/ELF/ (IMO of course).
+> 1. The external switch inserts a 4-byte Broadcom header before the
+> VLAN tag, and sends it to the internal switch.
+> 2. The internal switch looks at the EtherType, finds it is not a VLAN
+> EtherType, so assumes it is untagged, and adds a VLAN tag based on the
+> configured PVID (which 0 in the default case).
+> 3. The internal switch inserts a legacy 6-byte Broadcom header before
+> the VLAN tag when forwarding to its CPU port.
 > 
-> If there are more ELF docs there then a separate directory may be
-> warranted.
+> The internal switch does not know how to handle the (non-legacy)
+> Broadcom tag, so it does not know that there is a VLAN tag after it.
+> 
+> The internal switch enforces VLAN tags on its CPU port when it is in
+> VLAN enabled mode, regardless what the VLAN table's untag bit says.
+> 
+> The result is a bogus VID 0 and priority 0 tag between the two
+> Broadcom Headers. The VID would likely change based on the PVID of the
+> port of the external switch.
 
-This is codification of what Linux has been doing for years:
-e.g pre 2.4.11 executables with multiple PT_INTERP segments were
-rejected.
+My understanding matches yours, at the very least, we should only strip 
+off the VLAN tag == 0, in case we are stacked onto a 4-bytes Broadcom 
+tag speaking switch, otherwise it seems to me we are stripping of VLAN 
+tags a bait too greedily.
+-- 
+Florian
+
