@@ -2,89 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EBDD6BF5F0
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 00:05:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6EDB6BF5F8
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 00:07:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230220AbjCQXEn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 19:04:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38776 "EHLO
+        id S229733AbjCQXHR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 19:07:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230301AbjCQXEg (ORCPT
+        with ESMTP id S229590AbjCQXHO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 19:04:36 -0400
-Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0050F9ED0
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 16:04:16 -0700 (PDT)
-Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-536af432ee5so121705857b3.0
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 16:04:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1679094256;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=w2C+V/8voXxzsC2KICa9qM/vADLcn6b/HYkR0aaSEj8=;
-        b=qadP/ybP7YOevfO52m8wnUG+YiHdnOn5wiTDCLm2VjUVfUOG5wAohBATwM/IL4n8wK
-         EUonCnQCrjtmnZRLgAC03JV9/+QCTi0BqZVDxpFq8SqiyAubeFWwbgMfqbnZcZRTl18c
-         P1tSJdCagaQjOfouDP1NBm1bVz0SB49wHTXq7N7Gtb10cvdkyrfhhznn8dfTLLzfQ5xn
-         VHTktar+xrik+S2ltlWJ4wrDf2vjCcW8doNdhQxWFwKhPnui+CRO0C1yWNJIJNiJ5rCB
-         wKdladKdkllKCIdJYUqadUqaVvHHE+1Xq2vf4P6OzQfmw3LxIqhH43Ggd4aPaJltT2yX
-         CDQg==
+        Fri, 17 Mar 2023 19:07:14 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FFD73AAD
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 16:06:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679094385;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=i4/4tOgwP/X+xCG5XArCzD3rKZ+G/aYQCWfq3NKAVk0=;
+        b=OFZYryhY8a8j6wY25jWfU8Xm/w6c5EJbZKSz0pBWRP69FCDGxUDQuNeYPAK6iPUcgUW3a7
+        /6PqFRHISdgfxvfpVvSPOmazzHbcsOfEepdXYwLbYJsVE+rm2sX9paMLkj2QtKCknSqy9N
+        rvsLWwEUU7UgTGPlzchcCooJoYUftSY=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-271-BdU3IqLgNSGma0x76hMmzw-1; Fri, 17 Mar 2023 19:06:23 -0400
+X-MC-Unique: BdU3IqLgNSGma0x76hMmzw-1
+Received: by mail-qk1-f200.google.com with SMTP id d23-20020ae9ef17000000b007464ce9a4f5so2632949qkg.18
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 16:06:23 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679094256;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=w2C+V/8voXxzsC2KICa9qM/vADLcn6b/HYkR0aaSEj8=;
-        b=ZIBb3tYn/D3aQRF+PG6zeGNndodFwUNO1c2go6x9Hed+Fwj4JIqw3fCloyr/w4HpEi
-         gFGPB1MCScuMfwanGdQvPgh7GTzdAzveVreZfIHF7fkS/JajjMKheuEBxVbTiH0moX2o
-         A4xHli+eaV8slzO8iFMkbKC7QXpT1UzJWXp8etEUh59kc7MOVpoVIsWF2PA3DOGV+Fs+
-         7f5xG8iwaAIHz8cSpX5Ss39G+VRCmDMSpWTCqr9V4z8aQwySvo2vLro6blv9ow3cKb9d
-         l2XSJuC56TnnQGjx3sCrPFPojII2QOC5KS5gOaU4TI1NlmTn3LU5PcCQd9nm8KOaGlqV
-         et4A==
-X-Gm-Message-State: AO0yUKWOpzEhx+fpN00RoBe/VMY22ktwTU5A2e8s+8hfh7DYWyqH+7yy
-        Q33Otj0Qpy7OcT5YIvdCY92s9zhE4hkjcwtXTzlH/w==
-X-Google-Smtp-Source: AK7set8hywCBVoHzE2HL9COIHr0uPX9RzbYv5voQJIobm2WkCY5b7MlTeFVb42odO3dQtnivkNUSPb3IzOuPUKYTNlk=
-X-Received: by 2002:a81:c148:0:b0:544:51f7:83c5 with SMTP id
- e8-20020a81c148000000b0054451f783c5mr5551479ywl.1.1679094255994; Fri, 17 Mar
- 2023 16:04:15 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679094383;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=i4/4tOgwP/X+xCG5XArCzD3rKZ+G/aYQCWfq3NKAVk0=;
+        b=AU+91VNyMDobwBynsvJTiX7y14OjuLAbM0PR5m6aMolHXVOqVcetQpz0C3t5RvxiYp
+         I/AYk9y0R389M2QVakawklR3k7RvzlCOb2OsarMu77j7KZeBFijZNlfmG1sVgcAqNNpV
+         lqam61MaHMvGR+AASyzsZzHsY/dS9TNz78uiF0SqMQ4AqFcH8L7qhBeZfq6PQyVuI/47
+         fwsodMGa7BwOgoAbnrq4XhP78ZJrTTnVHfrOZWS21LUmisk+e5ig7BFWk3UaI42EvqPi
+         yGN+0EbMs3gIt+Fs1BrNQhMG6/l9y4Lu2XUcJEOgHHKD6MGHOPtfIzm3qsYPdJVYLP8C
+         6ICw==
+X-Gm-Message-State: AO0yUKVG8l2PBA73Y0DXEbu0ibsl04N6k0WWxh7Of/DZ1h1MjNSJTCwy
+        OOrs8GdEKNxUNJAD34k77qyJpNJovoVfzo6zMvxUNfGJjH4DsNTNd/iml7X7mbMk4BmdHwZLP+B
+        WfFbz0cGqQSL9+TZF96OkfaAN
+X-Received: by 2002:a05:6214:1250:b0:56e:a0fb:18ab with SMTP id r16-20020a056214125000b0056ea0fb18abmr43535294qvv.19.1679094383190;
+        Fri, 17 Mar 2023 16:06:23 -0700 (PDT)
+X-Google-Smtp-Source: AK7set+CvCK7xfA2z4a8rn/h8YoqqpGCDL9n+rxJp8+V5zj/8rhXm9CC2WiHcUfi72KYNIoH5Wu+QQ==
+X-Received: by 2002:a05:6214:1250:b0:56e:a0fb:18ab with SMTP id r16-20020a056214125000b0056ea0fb18abmr43535257qvv.19.1679094382804;
+        Fri, 17 Mar 2023 16:06:22 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id 13-20020a37080d000000b007456efa7f73sm2518474qki.85.2023.03.17.16.06.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Mar 2023 16:06:22 -0700 (PDT)
+From:   Tom Rix <trix@redhat.com>
+To:     mdf@kernel.org, hao.wu@intel.com, yilun.xu@intel.com,
+        michal.simek@xilinx.com, nathan@kernel.org, ndesaulniers@google.com
+Cc:     linux-fpga@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        Tom Rix <trix@redhat.com>
+Subject: [PATCH] fpga: xilinx-pr-decoupler: remove unused xlnx_pr_decouple_read function
+Date:   Fri, 17 Mar 2023 19:06:17 -0400
+Message-Id: <20230317230617.1673923-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-References: <20230126193752.297968-1-surenb@google.com> <20230314141144.6a0892e6.alex.williamson@redhat.com>
- <CAJuCfpFkKuyBJkk8OzWEu2YCg-UYooS4bHuDaXvnCbeR-cBdVw@mail.gmail.com> <20230317164059.466d1c70.alex.williamson@redhat.com>
-In-Reply-To: <20230317164059.466d1c70.alex.williamson@redhat.com>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Fri, 17 Mar 2023 16:04:05 -0700
-Message-ID: <CAJuCfpFZ06DCzO01gFv4944tXtyPWt_KxidLRVZLY_wMgtsN1Q@mail.gmail.com>
-Subject: Re: [PATCH v4 0/7] introduce vm_flags modifier functions
-To:     Alex Williamson <alex.williamson@redhat.com>
-Cc:     akpm@linux-foundation.org, michel@lespinasse.org,
-        jglisse@google.com, mhocko@suse.com, vbabka@suse.cz,
-        hannes@cmpxchg.org, mgorman@techsingularity.net, dave@stgolabs.net,
-        willy@infradead.org, liam.howlett@oracle.com, peterz@infradead.org,
-        ldufour@linux.ibm.com, paulmck@kernel.org, mingo@redhat.com,
-        will@kernel.org, luto@kernel.org, songliubraving@fb.com,
-        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
-        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
-        punit.agrawal@bytedance.com, lstoakes@gmail.com,
-        peterjung1337@gmail.com, rientjes@google.com,
-        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
-        rppt@kernel.org, jannh@google.com, shakeelb@google.com,
-        tatashin@google.com, edumazet@google.com, gthelen@google.com,
-        gurua@google.com, arjunroy@google.com, soheil@google.com,
-        leewalsh@google.com, posk@google.com, linux-mm@kvack.org,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@android.com,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        =?UTF-8?Q?C=C3=A9dric_Le_Goater?= <clg@redhat.com>,
-        dimitri.sivanich@hpe.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,95 +77,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 17, 2023 at 3:41=E2=80=AFPM Alex Williamson
-<alex.williamson@redhat.com> wrote:
->
-> On Fri, 17 Mar 2023 12:08:32 -0700
-> Suren Baghdasaryan <surenb@google.com> wrote:
->
-> > On Tue, Mar 14, 2023 at 1:11=E2=80=AFPM Alex Williamson
-> > <alex.williamson@redhat.com> wrote:
-> > >
-> > > On Thu, 26 Jan 2023 11:37:45 -0800
-> > > Suren Baghdasaryan <surenb@google.com> wrote:
-> > >
-> > > > This patchset was originally published as a part of per-VMA locking=
- [1] and
-> > > > was split after suggestion that it's viable on its own and to facil=
-itate
-> > > > the review process. It is now a preprequisite for the next version =
-of per-VMA
-> > > > lock patchset, which reuses vm_flags modifier functions to lock the=
- VMA when
-> > > > vm_flags are being updated.
-> > > >
-> > > > VMA vm_flags modifications are usually done under exclusive mmap_lo=
-ck
-> > > > protection because this attrubute affects other decisions like VMA =
-merging
-> > > > or splitting and races should be prevented. Introduce vm_flags modi=
-fier
-> > > > functions to enforce correct locking.
-> > > >
-> > > > The patchset applies cleanly over mm-unstable branch of mm tree.
-> > >
-> > > With this series, vfio-pci developed a bunch of warnings around not
-> > > holding the mmap_lock write semaphore while calling
-> > > io_remap_pfn_range() from our fault handler, vfio_pci_mmap_fault().
-> > >
-> > > I suspect vdpa has the same issue for their use of remap_pfn_range()
-> > > from their fault handler, JasonW, MST, FYI.
-> > >
-> > > It also looks like gru_fault() would have the same issue, Dimitri.
-> > >
-> > > In all cases, we're preemptively setting vm_flags to what
-> > > remap_pfn_range_notrack() uses, so I thought we were safe here as I
-> > > specifically remember trying to avoid changing vm_flags from the
-> > > fault handler.  But apparently that doesn't take into account
-> > > track_pfn_remap() where VM_PAT comes into play.
-> > >
-> > > The reason for using remap_pfn_range() on fault in vfio-pci is that
-> > > we're mapping device MMIO to userspace, where that MMIO can be disabl=
-ed
-> > > and we'd rather zap the mapping when that occurs so that we can sigbu=
-s
-> > > the user rather than allow the user to trigger potentially fatal bus
-> > > errors on the host.
-> > >
-> > > Peter Xu has suggested offline that a non-lazy approach to reinsert t=
-he
-> > > mappings might be more inline with mm expectations relative to touchi=
-ng
-> > > vm_flags during fault.  What's the right solution here?  Can the faul=
-t
-> > > handling be salvaged, is proactive remapping the right approach, or i=
-s
-> > > there something better?  Thanks,
-> >
-> > Hi Alex,
-> > If in your case it's safe to change vm_flags without holding exclusive
-> > mmap_lock, maybe you can use __vm_flags_mod() the way I used it in
-> > https://lore.kernel.org/all/20230126193752.297968-7-surenb@google.com,
-> > while explaining why this should be safe?
->
-> Hi Suren,
->
-> Thanks for the reply, but I'm not sure I'm following.  Are you
-> suggesting a bool arg added to io_remap_pfn_range(), or some new
-> variant of that function to conditionally use __vm_flags_mod() in place
-> of vm_flags_set() across the call chain?  Thanks,
+clang with W=1 reports
+drivers/fpga/xilinx-pr-decoupler.c:37:19: error: unused function 'xlnx_pr_decouple_read' [-Werror,-Wunused-function]
+static inline u32 xlnx_pr_decouple_read(const struct xlnx_pr_decoupler_data *d,
+                  ^
+This static function is not used, so remove it.
 
-I think either way could work but after taking a closer look, both
-ways would be quite ugly. If we could somehow identify that we are
-handling a page fault and use __vm_flags_mod() without additional
-parameters it would be more palatable IMHO...
-Peter's suggestion to avoid touching vm_flags during fault would be
-much cleaner but I'm not sure how easily that can be done.
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/fpga/xilinx-pr-decoupler.c | 6 ------
+ 1 file changed, 6 deletions(-)
 
->
-> Alex
->
-> --
-> To unsubscribe from this group and stop receiving emails from it, send an=
- email to kernel-team+unsubscribe@android.com.
->
+diff --git a/drivers/fpga/xilinx-pr-decoupler.c b/drivers/fpga/xilinx-pr-decoupler.c
+index 2d9c491f7be9..b6f18c07c752 100644
+--- a/drivers/fpga/xilinx-pr-decoupler.c
++++ b/drivers/fpga/xilinx-pr-decoupler.c
+@@ -34,12 +34,6 @@ static inline void xlnx_pr_decoupler_write(struct xlnx_pr_decoupler_data *d,
+ 	writel(val, d->io_base + offset);
+ }
+ 
+-static inline u32 xlnx_pr_decouple_read(const struct xlnx_pr_decoupler_data *d,
+-					u32 offset)
+-{
+-	return readl(d->io_base + offset);
+-}
+-
+ static int xlnx_pr_decoupler_enable_set(struct fpga_bridge *bridge, bool enable)
+ {
+ 	int err;
+-- 
+2.27.0
+
