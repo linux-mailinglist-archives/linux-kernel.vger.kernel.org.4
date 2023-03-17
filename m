@@ -2,73 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8D5B6BE307
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 09:22:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 068916BE357
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 09:24:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230030AbjCQIWS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 04:22:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55674 "EHLO
+        id S231228AbjCQIX7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 04:23:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229928AbjCQIWQ (ORCPT
+        with ESMTP id S230112AbjCQIXR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 04:22:16 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3016DC08E
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 01:21:44 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id y4so17333121edo.2
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 01:21:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679041302;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ttgr06Px/QEUxP0oNoIFTGB9mYSSeRv48aMtVkoD6UQ=;
-        b=JeiNuyIoP+dpZMvhNpzBeFhkEA0+Z6EAwmxKMjoUTZKi4GodVFvRz8oGGWiaNPS9Bz
-         HeJ352TsFytsuVoSmb6/0ExhsUgPg5KA3JLb2HHN9QicvxrXF1Jmm3pI812ykcyIaqGq
-         dV6xN7QbyFPMvlJtq4QBQCV5ztDsT78IKGyM8gDB8YM9YA9NZ2lu+sDlR1ACtPhq06Mb
-         Aylrqt4gyM7FuHaehEwJIBJiAY28ZZBUJt+1ta64EcN0ADMPeCj9fN+tDLm0UrNiY5Rr
-         BDQx4h1UAuwM4Pq7HGp5tRbH2WYP14MUAKCr5Hq7xriZswI3W1e0bTJz8w13owjPl/So
-         M2lw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679041302;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ttgr06Px/QEUxP0oNoIFTGB9mYSSeRv48aMtVkoD6UQ=;
-        b=XGHu76WDu3aUAhiUGklvHQ2Fvmb5+J2Q1dS3KbSdBQ8NuktNTLYaxQO0FAczHpRAAx
-         wCBdeuDQD3uOj2BL823L6YVS0vSSgODD7d9Klu0zFaUD8rjKspNqewJTGDdOccuFDBiT
-         xXnSzNM7KS9MApbXE9dK+bz4OULSKYmDIhU2orLWF5fxZIIbr5yjfWRwXuLWLrWO8RgZ
-         FaLd1cdLrSgqEu+YEYnN70JAy52e2Nwsm/247Bcb9jF9xpSJUu689Y2TqQ9OBdFAQf1T
-         rYci9msHmEPJCkWm2U1GsCkgTJmT9HIO4pmuhc3/TrY/C8uETYqMOVD+IIO0Gp4JPotp
-         ayfA==
-X-Gm-Message-State: AO0yUKUAXd5kK1AB7O/+kNHAbVTH3ECdVbEZq1aRMd5T38YJETCwNnfz
-        O4wHl8d0JqC0bfm4nwSMZaKxdQ==
-X-Google-Smtp-Source: AK7set8h1D4JPdlcDv4x/a3XajXnmoWknZq2UQGEUaV9yQdTNCy0+V1oVHB44c04RBWBDgnfuDbOKw==
-X-Received: by 2002:a17:907:6d09:b0:931:de76:c2e8 with SMTP id sa9-20020a1709076d0900b00931de76c2e8mr2016427ejc.9.1679041302511;
-        Fri, 17 Mar 2023 01:21:42 -0700 (PDT)
-Received: from krzk-bin.. ([2a02:810d:15c0:828:848a:1971:93e0:b465])
-        by smtp.gmail.com with ESMTPSA id e5-20020a170906314500b009236ae669ecsm673882eje.191.2023.03.17.01.21.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Mar 2023 01:21:41 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
-Subject: [PATCH] ASoC: dt-bindings: renesas: rsnd: correct comments syntax
-Date:   Fri, 17 Mar 2023 09:21:37 +0100
-Message-Id: <20230317082137.12629-1-krzysztof.kozlowski@linaro.org>
+        Fri, 17 Mar 2023 04:23:17 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98679D5A44;
+        Fri, 17 Mar 2023 01:22:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679041375; x=1710577375;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=f8DXY+pVVHfCkMB1JHs3DE65L96pEtB89jOaYuZ7eoY=;
+  b=U9R9kNDcrPO2zTS8hv/DNwkQHmb4wym1kuOB71S4DDiOl11vWim4ssQn
+   Yn5bboQcRdUkCm33uXFETIGYmEqJzfhy+YKY6eltiQkrxG4ZHXQl+dneM
+   3B4CcZ+bAdXVxccvBJjcbrM0c2gdjBAyaW3scA6PIqvvqKO3MDfpYrsyj
+   WlqkLUNHZE9+wAP4YIXntSGMI7j14LS9ph5m8Lb3qSyG4RT3DHqBO2IR4
+   HuiAk6Lw1fAXHBChIZ56fGOv+PkNbL7W2fTrWVS3SugU9ga7r1yO/C3+M
+   rcHakIdqQ0t4vEuxlcnkW3jx6Z3Jh/6I1NKmiqIeyCJakjor1/2gciNew
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="403081807"
+X-IronPort-AV: E=Sophos;i="5.98,268,1673942400"; 
+   d="scan'208";a="403081807"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2023 01:22:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="680220217"
+X-IronPort-AV: E=Sophos;i="5.98,268,1673942400"; 
+   d="scan'208";a="680220217"
+Received: from gsd-build.iind.intel.com ([10.227.90.132])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2023 01:22:31 -0700
+From:   "K V P, Satyanarayana" <satyanarayana.k.v.p@intel.com>
+To:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        alex.williamson@redhat.com, cohuck@redhat.com, jgg@ziepe.ca,
+        kevin.tian@intel.com, michal.winiarski@intel.com,
+        dave.jiang@intel.com, ashok.raj@intel.com
+Cc:     "K V P, Satyanarayana" <satyanarayana.k.v.p@intel.com>
+Subject: [PATCH v2] vfio/pci: Add DVSEC PCI Extended Config Capability to user visible list.
+Date:   Fri, 17 Mar 2023 08:22:22 +0000
+Message-Id: <20230317082222.3355912-1-satyanarayana.k.v.p@intel.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,46 +61,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-yamllint expect space after '#' comment mark:
+The Designated Vendor-Specific Extended Capability (DVSEC Capability) is an
+optional Extended Capability that is permitted to be implemented by any PCI
+Express Function. This allows PCI Express component vendors to use
+the Extended Capability mechanism to expose vendor-specific registers that can
+be present in components by a variety of vendors. A DVSEC Capability structure
+can tell vendor-specific software which features a particular component
+supports.
 
-  renesas,rsnd.yaml:282:4: [error] missing starting space in comment (comments)
+An example usage of DVSEC is Intel Platform Monitoring Technology (PMT) for
+enumerating and accessing hardware monitoring capabilities on a device.
+PMT encompasses three device monitoring features, Telemetry (device metrics),
+Watcher (sampling/tracing), and Crashlog. The DVSEC is used to discover these
+features and provide a BAR offset to their registers with the Intel vendor code.
 
-Fixes: 7f8b5b24bbb4 ("ASoC: dt-bindings: renesas,rsnd.yaml: add R-Car Gen4 support")
-Reported-by: Rafał Miłecki <zajec5@gmail.com>
-Link: https://lore.kernel.org/all/b2810924-169d-0bad-8f20-6ec2e683d170@gmail.com/
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+The current VFIO driver does not pass DVSEC capabilities to Virtual Machine (VM)
+which makes PMT not to work inside the virtual machine. This series adds DVSEC
+capability to user visible list to allow its use with VFIO. VFIO supports
+passing of Vendor Specific Extended Capability (VSEC) and raw write access to
+device. DVSEC also passed to VM in the same way as of VSEC.
+
+Signed-off-by: K V P Satyanarayana <satyanarayana.k.v.p@intel.com>
+
+Changes since Version V2:
+- Added support for raw pci write for DVSEC same as VSEC.
 ---
- Documentation/devicetree/bindings/sound/renesas,rsnd.yaml | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/vfio/pci/vfio_pci_config.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/sound/renesas,rsnd.yaml b/Documentation/devicetree/bindings/sound/renesas,rsnd.yaml
-index 676dfe7a7f17..68a93b290433 100644
---- a/Documentation/devicetree/bindings/sound/renesas,rsnd.yaml
-+++ b/Documentation/devicetree/bindings/sound/renesas,rsnd.yaml
-@@ -279,9 +279,9 @@ required:
- allOf:
-   - $ref: dai-common.yaml#
+diff --git a/drivers/vfio/pci/vfio_pci_config.c b/drivers/vfio/pci/vfio_pci_config.c
+index 523e0144c86f..948cdd464f4e 100644
+--- a/drivers/vfio/pci/vfio_pci_config.c
++++ b/drivers/vfio/pci/vfio_pci_config.c
+@@ -96,6 +96,7 @@ static const u16 pci_ext_cap_length[PCI_EXT_CAP_ID_MAX + 1] = {
+ 	[PCI_EXT_CAP_ID_SECPCI]	=	0,	/* not yet */
+ 	[PCI_EXT_CAP_ID_PMUX]	=	0,	/* not yet */
+ 	[PCI_EXT_CAP_ID_PASID]	=	0,	/* not yet */
++	[PCI_EXT_CAP_ID_DVSEC]	=	0xFF,
+ };
  
--  #--------------------
-+  # --------------------
-   # reg/reg-names
--  #--------------------
-+  # --------------------
-   # for Gen1
-   - if:
-       properties:
-@@ -336,9 +336,9 @@ allOf:
-               - ssi
-               - sdmc
+ /*
+@@ -1101,6 +1102,7 @@ int __init vfio_pci_init_perm_bits(void)
+ 	ret |= init_pci_ext_cap_err_perm(&ecap_perms[PCI_EXT_CAP_ID_ERR]);
+ 	ret |= init_pci_ext_cap_pwr_perm(&ecap_perms[PCI_EXT_CAP_ID_PWR]);
+ 	ecap_perms[PCI_EXT_CAP_ID_VNDR].writefn = vfio_raw_config_write;
++	ecap_perms[PCI_EXT_CAP_ID_DVSEC].writefn = vfio_raw_config_write;
  
--  #--------------------
-+  # --------------------
-   # clock-names
--  #--------------------
-+  # --------------------
-   - if:
-       properties:
-         compatible:
+ 	if (ret)
+ 		vfio_pci_uninit_perm_bits();
+@@ -1440,6 +1442,11 @@ static int vfio_ext_cap_len(struct vfio_pci_core_device *vdev, u16 ecap, u16 epo
+ 			return PCI_TPH_BASE_SIZEOF + (sts * 2) + 2;
+ 		}
+ 		return PCI_TPH_BASE_SIZEOF;
++	case PCI_EXT_CAP_ID_DVSEC:
++		ret = pci_read_config_dword(pdev, epos + PCI_DVSEC_HEADER1, &dword);
++		if (ret)
++			return pcibios_err_to_errno(ret);
++		return PCI_DVSEC_HEADER1_LEN(dword);
+ 	default:
+ 		pci_warn(pdev, "%s: unknown length for PCI ecap %#x@%#x\n",
+ 			 __func__, ecap, epos);
 -- 
 2.34.1
 
