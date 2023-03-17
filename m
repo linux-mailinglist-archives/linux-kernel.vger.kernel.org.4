@@ -2,50 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 080086BF022
+	by mail.lfdr.de (Postfix) with ESMTP id A9B6F6BF024
 	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 18:51:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230109AbjCQRvW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 13:51:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35378 "EHLO
+        id S229995AbjCQRvZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 13:51:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229886AbjCQRvS (ORCPT
+        with ESMTP id S229900AbjCQRvT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 13:51:18 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3DB7E501B
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 10:51:15 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id y19so3363105pgk.5
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 10:51:15 -0700 (PDT)
+        Fri, 17 Mar 2023 13:51:19 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05CD1E501F
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 10:51:17 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id x11so4131603pja.5
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 10:51:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1679075475;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=43JEK5+W42TYEVE1MBp+nwf6FlyScDxxoIeOAiKETT4=;
-        b=at5KvBs/SsIFLhrCajDj+2ic58nt7EptrKDtknXhQyBiYh/rAUI3ogSmrYqt6r3Gzn
-         bHrDDY5UIhKRqNAowpUUTxn0EYu+FC9AqeqqAFiQKIDeAas23IEFiA67dTSaXCdSBU9l
-         ItdKt7AaQIyuqKDwisBPlp2zCArEIOipSriZA=
+        d=chromium.org; s=google; t=1679075476;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0r1WhvyKSBCJVCHAYDyDm94/mvsRvq4dBSf7I61xoxs=;
+        b=UBRYAWa0HLHlLIh4eOYDdiXjSbkgBB4MZb4Mq2Gnlmscik1Joax9SF47VL6Y38yV62
+         5WJzPjjlS7dcbf0MpfP7wKFbNGvCB52nxOljJWMjdRcpPuGr2NU993xreY7wp1sRmhMe
+         M6k+jXQ/2Paj5NEdkF39VTDAmrUuQL59IT9ao=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679075475;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=43JEK5+W42TYEVE1MBp+nwf6FlyScDxxoIeOAiKETT4=;
-        b=6xHQmaxMVHwbhraEKyHnGtRsfScGRTiqlq2tR1+nHm2KTAZYoxRIrJi5FIHS4KuZsb
-         ue60BAitAAYuW5viclH1c64FY1CoSFv5NUZs+tnEA6HKmSjh2mB6DD9nrcvnHTpYZKss
-         nsR4nXfDZuVI+YE9cLy3vCw179ZH+zSaZJqqO+k9Av4WWjtjkCvJCOyyq+Hvg81y1+d8
-         UOqokwL+PIm4tPLuGQJbD/mlCJCPmReoJJZl8teU8DgRvUV2zi5VZBwjZVKX4Tj7rAcz
-         JzWEnkc09oNY+2L341EjWFIR1WJ1fZ5tueDDeulGDWfL4UtppOqAHuK55iELxj/6IpgQ
-         jlZw==
-X-Gm-Message-State: AO0yUKUdCOHJ6W7tX8FaIOEhBO7K0PbjgzkC8aaA5evoR390hCm1ZcmB
-        iqhXh/nLRUKzfVg918zx2nvGwQ==
-X-Google-Smtp-Source: AK7set/sYgh4Viredkz8vxjuTOp+i2zpVLHfDM0VoUKo3EbkAWqX4wGgB33MW0KiGOp4ARCopur8Ew==
-X-Received: by 2002:a62:6105:0:b0:626:237c:bcfe with SMTP id v5-20020a626105000000b00626237cbcfemr3032153pfb.8.1679075475442;
-        Fri, 17 Mar 2023 10:51:15 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679075476;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0r1WhvyKSBCJVCHAYDyDm94/mvsRvq4dBSf7I61xoxs=;
+        b=p7WUsZ21STwHMlLXCXI3o4YGz5bdSQvPchPgZqpMw+m/FAud9AV4IgKuIOmLGVz4Qd
+         1mK+Q5kCUA2HYafzYUxDuvx85gZt27S8YCxkHST4f3ab3EKWY37N7IAPgOd8PmilZZrT
+         Gg9SA1SndYbXBFFi7+RFDAoZ7U+lvounQTlWZ+JS4EugzUWXiivtkkyrxbCdksbfjr9R
+         bkA4qLpEB/OI7u/sg7BK43fL1E5FuGq9SYSZHlbyqw1z/0NvICHM9VzmWicdvOhZjCw3
+         OZn1+AtYoUloPW6euGup12TaxOz4LkT7wVwkCztjpSOuHdMTShRKKyuHPMKU3l6M5e54
+         4bbQ==
+X-Gm-Message-State: AO0yUKXahspf+f6V9TP0cUCoFR5FdBnyXPpQT70CbTom1Kiv1u0aljyx
+        ohVyi4jfRWImfTiZnG1q2YYGnw==
+X-Google-Smtp-Source: AK7set/sQyoWYUEGFHlwyoIs+exsMbHe/kPJa4crxSUkdewCyt37oTeNx3BFtEY/Jq6XDcZaojzADw==
+X-Received: by 2002:a05:6a20:6699:b0:cd:832c:f9c6 with SMTP id o25-20020a056a20669900b000cd832cf9c6mr8447401pzh.1.1679075476474;
+        Fri, 17 Mar 2023 10:51:16 -0700 (PDT)
 Received: from grundler-glapstation.lan ([70.134.62.80])
-        by smtp.gmail.com with ESMTPSA id q20-20020a62e114000000b0061949fe3beasm1848113pfh.22.2023.03.17.10.51.14
+        by smtp.gmail.com with ESMTPSA id q20-20020a62e114000000b0061949fe3beasm1848113pfh.22.2023.03.17.10.51.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Mar 2023 10:51:15 -0700 (PDT)
+        Fri, 17 Mar 2023 10:51:16 -0700 (PDT)
 From:   Grant Grundler <grundler@chromium.org>
 To:     Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
         "Oliver O \ 'Halloran" <oohall@gmail.com>,
@@ -54,10 +55,12 @@ Cc:     Rajat Khandelwal <rajat.khandelwal@linux.intel.com>,
         linuxppc-dev@lists.ozlabs.org, linux-pci@vger.kernel.org,
         linux-kernel@vger.kernel.org, Rajat Jain <rajatja@chromium.org>,
         Grant Grundler <grundler@chromium.org>
-Subject: [PATCHv2 pci-next 1/2] PCI/AER: correctable error message as KERN_INFO
-Date:   Fri, 17 Mar 2023 10:51:08 -0700
-Message-Id: <20230317175109.3859943-1-grundler@chromium.org>
+Subject: [PATCHv2 pci-next 2/2] PCI/AER: Rate limit the reporting of the correctable errors
+Date:   Fri, 17 Mar 2023 10:51:09 -0700
+Message-Id: <20230317175109.3859943-2-grundler@chromium.org>
 X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
+In-Reply-To: <20230317175109.3859943-1-grundler@chromium.org>
+References: <20230317175109.3859943-1-grundler@chromium.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -70,93 +73,112 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since correctable errors have been corrected (and counted), the dmesg output
-should not be reported as a warning, but rather as "informational".
+From: Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
 
-Otherwise, using a certain well known vendor's PCIe parts in a USB4 docking
-station, the dmesg buffer can be spammed with correctable errors, 717 bytes
-per instance, potentially many MB per day.
+There are many instances where correctable errors tend to inundate
+the message buffer. We observe such instances during thunderbolt PCIe
+tunneling.
 
-Given the "WARN" priority, these messages have already confused the typical
-user that stumbles across them, support staff (triaging feedback reports),
-and more than a few linux kernel devs. Changing to INFO will hide these
-messages from most audiences.
+It's true that they are mitigated by the hardware and are non-fatal
+but we shouldn't be spamming the logs with such correctable errors as it
+confuses other kernel developers less familiar with PCI errors, support
+staff, and users who happen to look at the logs, hence rate limit them.
 
+A typical example log inside an HP TBT4 dock:
+[54912.661142] pcieport 0000:00:07.0: AER: Multiple Corrected error received: 0000:2b:00.0
+[54912.661194] igc 0000:2b:00.0: PCIe Bus Error: severity=Corrected, type=Data Link Layer, (Transmitter ID)
+[54912.661203] igc 0000:2b:00.0:   device [8086:5502] error status/mask=00001100/00002000
+[54912.661211] igc 0000:2b:00.0:    [ 8] Rollover
+[54912.661219] igc 0000:2b:00.0:    [12] Timeout
+[54982.838760] pcieport 0000:00:07.0: AER: Corrected error received: 0000:2b:00.0
+[54982.838798] igc 0000:2b:00.0: PCIe Bus Error: severity=Corrected, type=Data Link Layer, (Transmitter ID)
+[54982.838808] igc 0000:2b:00.0:   device [8086:5502] error status/mask=00001000/00002000
+[54982.838817] igc 0000:2b:00.0:    [12] Timeout
+
+This gets repeated continuously, thus inundating the buffer.
+
+Signed-off-by: Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
 Signed-off-by: Grant Grundler <grundler@chromium.org>
 ---
- drivers/pci/pcie/aer.c | 29 +++++++++++++++++++----------
- 1 file changed, 19 insertions(+), 10 deletions(-)
+ drivers/pci/pcie/aer.c | 42 ++++++++++++++++++++++++++++--------------
+ 1 file changed, 28 insertions(+), 14 deletions(-)
 
 diff --git a/drivers/pci/pcie/aer.c b/drivers/pci/pcie/aer.c
-index f6c24ded134c..cb6b96233967 100644
+index cb6b96233967..b592cea8bffe 100644
 --- a/drivers/pci/pcie/aer.c
 +++ b/drivers/pci/pcie/aer.c
-@@ -687,23 +687,29 @@ static void __aer_print_error(struct pci_dev *dev,
- {
- 	const char **strings;
- 	unsigned long status = info->status & ~info->mask;
--	const char *level, *errmsg;
- 	int i;
- 
- 	if (info->severity == AER_CORRECTABLE) {
- 		strings = aer_correctable_error_string;
--		level = KERN_WARNING;
-+		pci_info(dev, "aer_status: 0x%08x, aer_mask: 0x%08x\n",
-+			info->status, info->mask);
- 	} else {
- 		strings = aer_uncorrectable_error_string;
--		level = KERN_ERR;
-+		pci_err(dev, "aer_status: 0x%08x, aer_mask: 0x%08x\n",
-+			info->status, info->mask);
- 	}
- 
- 	for_each_set_bit(i, &status, 32) {
--		errmsg = strings[i];
-+		const char *errmsg = strings[i];
-+
- 		if (!errmsg)
+@@ -706,8 +706,8 @@ static void __aer_print_error(struct pci_dev *dev,
  			errmsg = "Unknown Error Bit";
  
--		pci_printk(level, dev, "   [%2d] %-22s%s\n", i, errmsg,
-+		if (info->severity == AER_CORRECTABLE)
-+			pci_info(dev, "   [%2d] %-22s%s\n", i, errmsg,
-+				info->first_error == i ? " (First)" : "");
-+		else
-+			pci_err(dev, "   [%2d] %-22s%s\n", i, errmsg,
+ 		if (info->severity == AER_CORRECTABLE)
+-			pci_info(dev, "   [%2d] %-22s%s\n", i, errmsg,
+-				info->first_error == i ? " (First)" : "");
++			pci_info_ratelimited(dev, "   [%2d] %-22s%s\n", i, errmsg,
++					     info->first_error == i ? " (First)" : "");
+ 		else
+ 			pci_err(dev, "   [%2d] %-22s%s\n", i, errmsg,
  				info->first_error == i ? " (First)" : "");
- 	}
- 	pci_dev_aer_stats_incr(dev, info);
-@@ -724,7 +730,7 @@ void aer_print_error(struct pci_dev *dev, struct aer_err_info *info)
+@@ -719,7 +719,6 @@ void aer_print_error(struct pci_dev *dev, struct aer_err_info *info)
+ {
+ 	int layer, agent;
+ 	int id = ((dev->bus->number << 8) | dev->devfn);
+-	const char *level;
+ 
+ 	if (!info->status) {
+ 		pci_err(dev, "PCIe Bus Error: severity=%s, type=Inaccessible, (Unregistered Agent ID)\n",
+@@ -730,14 +729,21 @@ void aer_print_error(struct pci_dev *dev, struct aer_err_info *info)
  	layer = AER_GET_LAYER_ERROR(info->severity, info->status);
  	agent = AER_GET_AGENT(info->severity, info->status);
  
--	level = (info->severity == AER_CORRECTABLE) ? KERN_WARNING : KERN_ERR;
-+	level = (info->severity == AER_CORRECTABLE) ? KERN_INFO : KERN_ERR;
+-	level = (info->severity == AER_CORRECTABLE) ? KERN_INFO : KERN_ERR;
++	if (info->severity == AER_CORRECTABLE) {
++		pci_info_ratelimited(dev, "PCIe Bus Error: severity=%s, type=%s, (%s)\n",
++				     aer_error_severity_string[info->severity],
++				     aer_error_layer[layer], aer_agent_string[agent]);
  
- 	pci_printk(level, dev, "PCIe Bus Error: severity=%s, type=%s, (%s)\n",
- 		   aer_error_severity_string[info->severity],
-@@ -797,14 +803,17 @@ void cper_print_aer(struct pci_dev *dev, int aer_severity,
- 	info.mask = mask;
- 	info.first_error = PCI_ERR_CAP_FEP(aer->cap_control);
- 
--	pci_err(dev, "aer_status: 0x%08x, aer_mask: 0x%08x\n", status, mask);
- 	__aer_print_error(dev, &info);
--	pci_err(dev, "aer_layer=%s, aer_agent=%s\n",
--		aer_error_layer[layer], aer_agent_string[agent]);
- 
--	if (aer_severity != AER_CORRECTABLE)
-+	if (aer_severity == AER_CORRECTABLE) {
-+		pci_info(dev, "aer_layer=%s, aer_agent=%s\n",
-+			aer_error_layer[layer], aer_agent_string[agent]);
+-	pci_printk(level, dev, "PCIe Bus Error: severity=%s, type=%s, (%s)\n",
+-		   aer_error_severity_string[info->severity],
+-		   aer_error_layer[layer], aer_agent_string[agent]);
++		pci_info_ratelimited(dev, "  device [%04x:%04x] error status/mask=%08x/%08x\n",
++				     dev->vendor, dev->device, info->status, info->mask);
 +	} else {
-+		pci_err(dev, "aer_layer=%s, aer_agent=%s\n",
++		pci_err(dev, "PCIe Bus Error: severity=%s, type=%s, (%s)\n",
++			aer_error_severity_string[info->severity],
 +			aer_error_layer[layer], aer_agent_string[agent]);
- 		pci_err(dev, "aer_uncor_severity: 0x%08x\n",
- 			aer->uncor_severity);
+ 
+-	pci_printk(level, dev, "  device [%04x:%04x] error status/mask=%08x/%08x\n",
+-		   dev->vendor, dev->device, info->status, info->mask);
++		pci_err(dev, "  device [%04x:%04x] error status/mask=%08x/%08x\n",
++			dev->vendor, dev->device, info->status, info->mask);
 +	}
  
- 	if (tlp_header_valid)
- 		__print_tlp_header(dev, &aer->header_log);
+ 	__aer_print_error(dev, info);
+ 
+@@ -757,11 +763,19 @@ static void aer_print_port_info(struct pci_dev *dev, struct aer_err_info *info)
+ 	u8 bus = info->id >> 8;
+ 	u8 devfn = info->id & 0xff;
+ 
+-	pci_info(dev, "%s%s error received: %04x:%02x:%02x.%d\n",
+-		 info->multi_error_valid ? "Multiple " : "",
+-		 aer_error_severity_string[info->severity],
+-		 pci_domain_nr(dev->bus), bus, PCI_SLOT(devfn),
+-		 PCI_FUNC(devfn));
++	if (info->severity == AER_CORRECTABLE)
++		pci_info_ratelimited(dev, "%s%s error received: %04x:%02x:%02x.%d\n",
++				     info->multi_error_valid ? "Multiple " : "",
++				     aer_error_severity_string[info->severity],
++				     pci_domain_nr(dev->bus), bus, PCI_SLOT(devfn),
++				     PCI_FUNC(devfn));
++	else
++		pci_info(dev, "%s%s error received: %04x:%02x:%02x.%d\n",
++			 info->multi_error_valid ? "Multiple " : "",
++			 aer_error_severity_string[info->severity],
++			 pci_domain_nr(dev->bus), bus, PCI_SLOT(devfn),
++			 PCI_FUNC(devfn));
++
+ }
+ 
+ #ifdef CONFIG_ACPI_APEI_PCIEAER
 -- 
 2.40.0.rc1.284.g88254d51c5-goog
 
