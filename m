@@ -2,151 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A1606BEA28
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 14:35:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2922B6BEA21
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 14:34:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230280AbjCQNfC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 09:35:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56822 "EHLO
+        id S230248AbjCQNed (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 09:34:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229621AbjCQNfA (ORCPT
+        with ESMTP id S229679AbjCQNeb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 09:35:00 -0400
-Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A95732CF6;
-        Fri, 17 Mar 2023 06:34:59 -0700 (PDT)
-Received: by mail-qk1-x72d.google.com with SMTP id bm1so1712493qkb.13;
-        Fri, 17 Mar 2023 06:34:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679060098;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8wYD2tZNMuLD2tLDq6uC02rKNtsvqsc5Llw9/64tTP4=;
-        b=p0jdlxrQwAq5VTw3187WfCRTXWZemohRsAg1qcIe0IOUbzfqIdYMY7uHaJRH/tXbBU
-         vqqAGi7zvAPNUAWmGRICb+1muFiKVtw8TRmoRMJs6hkaBPaItAlGQr8qKtEAZXMhRHL8
-         a6i20HGiUZ02DeQHZylFzTOOn7bM8bOhiHjuCxvKL3O3zxtzK4B8g4WP/9poxTxeKrn9
-         /SK56qSTtIT+l+0dr0MYUcAuv1scuJYVVDQLXId2mkokaiMUimTIcJj4e33ZTGr6w6zV
-         hu1Ej1gRBJpKJoe40vlm7bFAUOXCfe7FiHqFb2OBDyChlOkduEhX2LKs3rVp5qKbo3pL
-         qwlQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679060098;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8wYD2tZNMuLD2tLDq6uC02rKNtsvqsc5Llw9/64tTP4=;
-        b=F8KxyZNOg8sZ8GzDYh5D7TGeSNPKfvSiD5v5tR9rkSItaNl7/ibcOoAA8POIPszNeV
-         0lfYpMWNtVfmNVhjpS4zUNSBvfPGQJzI8LGMNAhp44hhAhcUhSGiWHVGwwSYdZzNHITq
-         a1Ab63/4JG2Bd5AD5k8o9PqiYaZulGoknVnnimIrIgT8mLlS/uPX40PR9vTTxj5bjOAJ
-         Z63RjO3jTORivYuCHls3B+nbjUR/fNO6R0KH7wx9hma4udgSKJOgZH2m8znaavhCfXlY
-         v0/hHRGD9Iyq8YvHnxVSMZsc0f3QdBgeHoFoUWDKoYiU271n/0ENH3U1sDfxEFColqaX
-         Ah6A==
-X-Gm-Message-State: AO0yUKXHpo64WGS1gSzv5HzWt4PVX15Ez561VtUmTRTLkGH5JkU+8SMH
-        q01KCGDSR5bBUZgSQtoxijtsNF9OoUyC4xY16E4=
-X-Google-Smtp-Source: AK7set/soQZodLw0OJK1WAvQBTaXWyS/o3WUYrJrNRFUjTe0WwIZIYA4cfwGHnQSJyxjOOMi5jNDu7y9MM0DEkT1F8c=
-X-Received: by 2002:a05:620a:c81:b0:743:6092:91b4 with SMTP id
- q1-20020a05620a0c8100b00743609291b4mr7040184qki.14.1679060097764; Fri, 17 Mar
- 2023 06:34:57 -0700 (PDT)
+        Fri, 17 Mar 2023 09:34:31 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D6742A6F6
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 06:34:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B562FB8255C
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 13:34:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0F1EC4339B;
+        Fri, 17 Mar 2023 13:34:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679060067;
+        bh=acAFgWVAW9Z16jtQyDLytLmE2NTyzAFRY8egGYSBlpA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=henuGGhglknoZ8qup/Rt9WTxF4ivkJWfsz2ImqjDbnJ92C2CgIQGjZrIUn/WKo4QI
+         DhZwVK+o0WyqaQ3i2G9eHS4dcAX7rbb8rk4XpomxiFyFAt8mB1OJ+HJgW2QgpFNTjx
+         hZoKtVrDEcpsH8BVSowgifyWvH/SHT+fc6slkV1EoWee56IQjCTQg8OXsAmev7VdNK
+         faESzw0kkHGJRbAHsFB9xpX5MxYVRdd1I3SdmUgH5GRtihWE+4O/KOv8l2tg33fz4r
+         +tGwJyEAwbpvxrjy3XyajTq9a6V9I4lFMX5gwzTofV8RKDNEltIF0LNG9nKr86Zexp
+         BYTI3SBRfNRDw==
+Date:   Fri, 17 Mar 2023 19:04:23 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     "Mukunda,Vijendar" <vijendar.mukunda@amd.com>
+Cc:     alsa-devel@alsa-project.org, pierre-louis.bossart@linux.intel.com,
+        Basavaraj.Hiregoudar@amd.com, Sunil-kumar.Dommati@amd.com,
+        Mario.Limonciello@amd.com, amadeuszx.slawinski@linux.intel.com,
+        Mastan.Katragadda@amd.com, Arungopal.kondaveeti@amd.com,
+        claudiu.beznea@microchip.com,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Sanyog Kale <sanyog.r.kale@intel.com>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH V6 2/8] soundwire: amd: Add support for AMD Manager driver
+Message-ID: <ZBRsX7W4l1HyT44y@matsya>
+References: <20230307133135.545952-1-Vijendar.Mukunda@amd.com>
+ <20230307133135.545952-3-Vijendar.Mukunda@amd.com>
+ <ZBGTDXJvVjVuUkiZ@matsya>
+ <7a7f5d93-d6ec-5ad1-9927-7ac4b6d9a643@amd.com>
 MIME-Version: 1.0
-References: <20230316225736.2856521-1-david.e.box@linux.intel.com>
-In-Reply-To: <20230316225736.2856521-1-david.e.box@linux.intel.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Fri, 17 Mar 2023 15:34:21 +0200
-Message-ID: <CAHp75VcB9vokGSZ6ZCqyuNGfVWpn8vdTeLyHSO9MiuSoXR8tqw@mail.gmail.com>
-Subject: Re: [PATCH 1/2] platform/x86/intel/pmt: Add INTEL_PMT module namespace
-To:     "David E. Box" <david.e.box@linux.intel.com>
-Cc:     irenic.rajneesh@gmail.com, david.e.box@intel.com,
-        hdegoede@redhat.com, markgross@kernel.org,
-        linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <7a7f5d93-d6ec-5ad1-9927-7ac4b6d9a643@amd.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 17, 2023 at 12:57=E2=80=AFAM David E. Box
-<david.e.box@linux.intel.com> wrote:
->
-> Since the currently exported symbols in pmt_class are only used by other
-> Intel PMT drivers, create an INTEL_PMT module namespace for them.
+On 16-03-23, 19:28, Mukunda,Vijendar wrote:
+> On 15/03/23 15:12, Vinod Koul wrote:
+> > On 07-03-23, 19:01, Vijendar Mukunda wrote:
 
-Makes sense.
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+> >> +/**
+> >> + * struct amd_sdw_manager - amd manager driver context
+> >> + * @bus: bus handle
+> >> + * @dev: linux device
+> >> + * @mmio: SoundWire registers mmio base
+> >> + * @acp_mmio: acp registers mmio base
+> >> + * @reg_mask: register mask structure per manager instance
+> >> + * @probe_work: SoundWire manager probe workqueue
+> >> + * @acp_sdw_lock: mutex to protect acp share register access
+> >> + * @num_din_ports: number of input ports
+> >> + * @num_dout_ports: number of output ports
+> >> + * @cols_index: Column index in frame shape
+> >> + * @rows_index: Rows index in frame shape
+> >> + * @instance: SoundWire manager instance
+> >> + * @quirks: SoundWire manager quirks
+> >> + * @wake_en_mask: wake enable mask per SoundWire manager
+> >> + * @power_mode_mask: flag interprets amd SoundWire manager power mode
+> >> + */
+> >> +struct amd_sdw_manager {
+> >> +	struct sdw_bus bus;
+> >> +	struct device *dev;
+> >> +
+> >> +	void __iomem *mmio;
+> >> +	void __iomem *acp_mmio;
+> >> +
+> >> +	struct sdw_manager_reg_mask *reg_mask;
+> >> +	struct work_struct probe_work;
+> >> +	/* mutex to protect acp common register access */
+> >> +	struct mutex *acp_sdw_lock;
+> >> +
+> >> +	int num_din_ports;
+> >> +	int num_dout_ports;
+> >> +
+> >> +	int cols_index;
+> >> +	int rows_index;
+> >> +
+> >> +	u32 instance;
+> >> +	u32 quirks;
+> >> +	u32 wake_en_mask;
+> >> +	u32 power_mode_mask;
+> >> +};
+> > Does the manager need to be exposed to rest of kernel or users of this
+> > driver, is so why?
+> Currently, amd_manager structure being used in ACP PCI driver
+> (parent driver) and Soundwire DMA driver.
+> 
+> In ACP PCI driver, IRQ handler we will use amd_manager structure to
+> schedule workqueue based on soundwire manager instance.
+> In Soundwire DMA driver, we need to retrieve amd_manager instance.
+> As per our design, we have fixed mapping. We need to use same set of
+> DMA registers based on CPU DAI ID.
+>  i.e if AUDIO0 TX port is selected in amd_manager driver
+> then we need to use AUDIO0 TX registers for DMA programming.
+> we have included comments for describing mapping in amd_manager.h
+> file.
 
-> Signed-off-by: David E. Box <david.e.box@linux.intel.com>
-> ---
->  drivers/platform/x86/intel/pmt/class.c     | 6 +++---
->  drivers/platform/x86/intel/pmt/crashlog.c  | 1 +
->  drivers/platform/x86/intel/pmt/telemetry.c | 1 +
->  3 files changed, 5 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/platform/x86/intel/pmt/class.c b/drivers/platform/x8=
-6/intel/pmt/class.c
-> index 46598dcb634a..0b96d75f5924 100644
-> --- a/drivers/platform/x86/intel/pmt/class.c
-> +++ b/drivers/platform/x86/intel/pmt/class.c
-> @@ -33,7 +33,7 @@ bool intel_pmt_is_early_client_hw(struct device *dev)
->          */
->         return !!(ivdev->info->quirks & VSEC_QUIRK_EARLY_HW);
->  }
-> -EXPORT_SYMBOL_GPL(intel_pmt_is_early_client_hw);
-> +EXPORT_SYMBOL_NS_GPL(intel_pmt_is_early_client_hw, INTEL_PMT);
->
->  static inline int
->  pmt_memcpy64_fromio(void *to, const u64 __iomem *from, size_t count)
-> @@ -327,7 +327,7 @@ int intel_pmt_dev_create(struct intel_pmt_entry *entr=
-y, struct intel_pmt_namespa
->         return intel_pmt_dev_register(entry, ns, dev);
->
->  }
-> -EXPORT_SYMBOL_GPL(intel_pmt_dev_create);
-> +EXPORT_SYMBOL_NS_GPL(intel_pmt_dev_create, INTEL_PMT);
->
->  void intel_pmt_dev_destroy(struct intel_pmt_entry *entry,
->                            struct intel_pmt_namespace *ns)
-> @@ -343,7 +343,7 @@ void intel_pmt_dev_destroy(struct intel_pmt_entry *en=
-try,
->         device_unregister(dev);
->         xa_erase(ns->xa, entry->devid);
->  }
-> -EXPORT_SYMBOL_GPL(intel_pmt_dev_destroy);
-> +EXPORT_SYMBOL_NS_GPL(intel_pmt_dev_destroy, INTEL_PMT);
->
->  static int __init pmt_class_init(void)
->  {
-> diff --git a/drivers/platform/x86/intel/pmt/crashlog.c b/drivers/platform=
-/x86/intel/pmt/crashlog.c
-> index ace1239bc0a0..bbb3d61d09f4 100644
-> --- a/drivers/platform/x86/intel/pmt/crashlog.c
-> +++ b/drivers/platform/x86/intel/pmt/crashlog.c
-> @@ -328,3 +328,4 @@ module_exit(pmt_crashlog_exit);
->  MODULE_AUTHOR("Alexander Duyck <alexander.h.duyck@linux.intel.com>");
->  MODULE_DESCRIPTION("Intel PMT Crashlog driver");
->  MODULE_LICENSE("GPL v2");
-> +MODULE_IMPORT_NS(INTEL_PMT);
-> diff --git a/drivers/platform/x86/intel/pmt/telemetry.c b/drivers/platfor=
-m/x86/intel/pmt/telemetry.c
-> index 5e4009c05ecf..71cdef42084a 100644
-> --- a/drivers/platform/x86/intel/pmt/telemetry.c
-> +++ b/drivers/platform/x86/intel/pmt/telemetry.c
-> @@ -160,3 +160,4 @@ module_exit(pmt_telem_exit);
->  MODULE_AUTHOR("David E. Box <david.e.box@linux.intel.com>");
->  MODULE_DESCRIPTION("Intel PMT Telemetry driver");
->  MODULE_LICENSE("GPL v2");
-> +MODULE_IMPORT_NS(INTEL_PMT);
->
-> base-commit: 79df06733435e2773eb5e9ab9c0ce13c23e4cd88
-> --
-> 2.34.1
->
+Sorry not sure I follow, can you elaborate which members of above struct
+are used by PCI driver?
 
-
---=20
-With Best Regards,
-Andy Shevchenko
+-- 
+~Vinod
