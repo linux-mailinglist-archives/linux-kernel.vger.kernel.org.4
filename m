@@ -2,91 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B17376BF434
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 22:32:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F98F6BF45F
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 22:37:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231237AbjCQVcX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 17:32:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43424 "EHLO
+        id S231314AbjCQVhG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 17:37:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231149AbjCQVbu (ORCPT
+        with ESMTP id S230514AbjCQVg1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 17:31:50 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0319BE1939;
-        Fri, 17 Mar 2023 14:31:19 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id x3so25370210edb.10;
-        Fri, 17 Mar 2023 14:31:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679088669;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gA3EusZCOhK627Wk0FirSH/GwKNGmUqwf4ijzEsCNuk=;
-        b=SzjAbA2qsawtxmUxI1XuRk4mZffC5q2hSDgqbFtLfE49cZ3+PZdeenZnNp7Y0SBOll
-         gYrqyca7M465hBdEXzA2swDdCSxwjoQGx16kwpodEGCMXhItidBxbQIdeDd+m68DL6IN
-         KY413kGA430d3GTBArcfyP+B84Ar+FhdVcHpujv5QISjot37GImrKvG+B5RDPFYTtIXh
-         TSPaSyo6kcV+TfMngTjm4bL6p/nbNf+Gb0ihJiz/nUqReMQG03I+/2myV/yfVspGEls+
-         8fCOtkdytqKI0nxCMFe34xpIO+Sx/kwa3OAL1sUBGA3AHy/259Um2vaW/ny9E4AzeyCI
-         OvBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679088669;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gA3EusZCOhK627Wk0FirSH/GwKNGmUqwf4ijzEsCNuk=;
-        b=u7wjs6O3SMBFmI7TH3Fo72X9Ees3AtKp5njAPqBgmheyL0E+oDyMAFV9iZi/Se/Aow
-         u3ztwJcnkQQkRele4OEIT8URxL/8zj28DCuibwk7YXirT2E1ULqPgnVJSjO/OH5U2jDw
-         s9cUkBh6r9sy/WMS2EnfqG8i7PZkHxPPZMKGKHJavuoZ98/fuc+PgfHDLDj3lNbbnbhb
-         hlb26yld4RFawLPwSfHhL5ePJpNfFsyvFh4mH7Ql4xVeI0ptOypd34mVwNbNXpvY+eJi
-         jhi7zEZnhtDq/iR5+2Q3C5xZzJ1mvv3ZMFMaPE+QWs8XJs5+M0FgD7MB7Y274jT4Vi6q
-         4gWg==
-X-Gm-Message-State: AO0yUKWzfErOeWsgV/aV2ryVkAyzioRdWDRYA7iM7AzeSJFl7kTfcdih
-        rR+Mhxr+twxy19/3puNhy7c=
-X-Google-Smtp-Source: AK7set/PsH37vV26HFz0DUNVPwUSw8kToM24rwlbs1ygRWWocDwys742MwLTFeeRwnWp9Vpfbez3bA==
-X-Received: by 2002:a17:906:5017:b0:92a:3709:e872 with SMTP id s23-20020a170906501700b0092a3709e872mr859654ejj.19.1679088669349;
-        Fri, 17 Mar 2023 14:31:09 -0700 (PDT)
-Received: from arinc9-PC.lan ([149.91.1.15])
-        by smtp.gmail.com with ESMTPSA id v19-20020a17090651d300b0092b86d41dbasm1404683ejk.114.2023.03.17.14.31.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Mar 2023 14:31:09 -0700 (PDT)
-From:   arinc9.unal@gmail.com
-X-Google-Original-From: arinc.unal@arinc9.com
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        William Dean <williamsukatube@gmail.com>,
-        Sean Wang <sean.wang@kernel.org>,
-        Andy Teng <andy.teng@mediatek.com>,
-        Del Regno <angelogioacchino.delregno@collabora.com>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Hui Liu <hui.liu@mediatek.com>,
-        Zhiyong Tao <zhiyong.tao@mediatek.com>,
-        =?UTF-8?q?Bernhard=20Rosenkr=C3=A4nzer?= <bero@baylibre.com>,
-        Daniel Santos <daniel.santos@pobox.com>,
-        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>, erkin.bozoglu@xeront.com,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-mediatek@lists.infradead.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org
-Subject: [PATCH v3 21/21] MAINTAINERS: move ralink pinctrl to mediatek mips pinctrl
-Date:   Sat, 18 Mar 2023 00:30:11 +0300
-Message-Id: <20230317213011.13656-22-arinc.unal@arinc9.com>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20230317213011.13656-1-arinc.unal@arinc9.com>
-References: <20230317213011.13656-1-arinc.unal@arinc9.com>
+        Fri, 17 Mar 2023 17:36:27 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99E3049898;
+        Fri, 17 Mar 2023 14:35:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679088941; x=1710624941;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=p8BFbONHc7WqCzZIsrm1QJI48QM17cOqjlYx5rUU83M=;
+  b=htGBf4VfbREFIEH2xqQuTjV+2AkmusrecI9SU2jXmxW2Q4FrMBFuxiQS
+   TfcsaCHdTjsm92LvigQJ2jQI3dQY/Ae5Ho1QyB39wLFJ+VIaAcUgG9t8i
+   K1ZADsmsCnVjZIEcsrBF32e6/FbVG270dR7Q7PQvvbGwJOe86mFFlYB48
+   NRkfx64mNudnpAH0Q71pT8gdIOlHUIJij9lwxaJO7IU9fQ/kG56XKn/qC
+   FZeQ5nPACLs7FM1LnP2A11O3EYqo+W2u2Asru40pn8d5fZRFnuWEISGr7
+   O5yToCIXT5koeR05AM8559tDOOwIWnBP+XzCcI04FlkArrbs3LBcYxqHm
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="403237078"
+X-IronPort-AV: E=Sophos;i="5.98,268,1673942400"; 
+   d="scan'208";a="403237078"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2023 14:31:51 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="804244454"
+X-IronPort-AV: E=Sophos;i="5.98,268,1673942400"; 
+   d="scan'208";a="804244454"
+Received: from fcvilla-mobl1.amr.corp.intel.com (HELO [10.209.177.176]) ([10.209.177.176])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2023 14:31:50 -0700
+Message-ID: <44b1519b-f9e0-476a-ff47-8d21f004b3cd@linux.intel.com>
+Date:   Fri, 17 Mar 2023 14:31:49 -0700
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v3] PCI: vmd: Add the module param to adjust MSI mode
+Content-Language: en-US
+To:     korantwork@gmail.com, helgaas@kernel.org, kbusch@kernel.org,
+        jonathan.derrick@linux.dev, lpieralisi@kernel.org
+Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Xinghui Li <korantli@tencent.com>
+References: <20230316122322.339316-1-korantwork@gmail.com>
+From:   "Patel, Nirmal" <nirmal.patel@linux.intel.com>
+In-Reply-To: <20230316122322.339316-1-korantwork@gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -94,66 +65,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arınç ÜNAL <arinc.unal@arinc9.com>
+On 3/16/2023 5:23 AM, korantwork@gmail.com wrote:
+> From: Xinghui Li <korantli@tencent.com>
+>
+> In the legacy, the vmd MSI mode can only be adjusted by configing
 
-The Ralink pinctrl driver is now under the name of MediaTek MIPS pin
-controller. Move the maintainer information accordingly. Add dt-binding
-schema files. Add linux-mediatek@lists.infradead.org as an associated
-mailing list.
+configuring
 
-Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
-Acked-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
----
- MAINTAINERS | 29 ++++++++++++++++++++++-------
- 1 file changed, 22 insertions(+), 7 deletions(-)
+> vmd_ids table. This patch adds another way to adjust MSI mode by
+> adjusting module param, which allow users easier to adjust the vmd
+> according to the I/O scenario without rebuilding driver. There are two
+> params could be recognized: on, off. The default param is NULL,
+> the goal is not to effect the existing settings of the device.
+>
+> Signed-off-by: Xinghui Li <korantli@tencent.com>
+> ---
+>  drivers/pci/controller/vmd.c | 27 +++++++++++++++++++++++++++
+>  1 file changed, 27 insertions(+)
+>
+> diff --git a/drivers/pci/controller/vmd.c b/drivers/pci/controller/vmd.c
+> index 990630ec57c6..fb61181baa9e 100644
+> --- a/drivers/pci/controller/vmd.c
+> +++ b/drivers/pci/controller/vmd.c
+> @@ -34,6 +34,19 @@
+>  #define MB2_SHADOW_OFFSET	0x2000
+>  #define MB2_SHADOW_SIZE		16
+>  
+> +/*
+> + * The VMD msi_remap module parameter provides the alternative way
+> + * to adjust MSI mode when loading vmd.ko other than vmd_ids table.
+> + * There are two params could be recognized:
+> + *
+> + * off: enable MSI bypass
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 6048bbe0e672..f4ee11dab1ab 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -16521,6 +16521,28 @@ F:	Documentation/devicetree/bindings/pinctrl/mediatek,mt7622-pinctrl.yaml
- F:	Documentation/devicetree/bindings/pinctrl/mediatek,mt8183-pinctrl.yaml
- F:	drivers/pinctrl/mediatek/
- 
-+PIN CONTROLLER - MEDIATEK MIPS
-+M:	Arınç ÜNAL <arinc.unal@arinc9.com>
-+M:	Sergio Paracuellos <sergio.paracuellos@gmail.com>
-+L:	linux-mediatek@lists.infradead.org (moderated for non-subscribers)
-+L:	linux-mips@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/pinctrl/mediatek,mt7620-pinctrl.yaml
-+F:	Documentation/devicetree/bindings/pinctrl/mediatek,mt7621-pinctrl.yaml
-+F:	Documentation/devicetree/bindings/pinctrl/mediatek,mt76x8-pinctrl.yaml
-+F:	Documentation/devicetree/bindings/pinctrl/ralink,rt2880-pinctrl.yaml
-+F:	Documentation/devicetree/bindings/pinctrl/ralink,rt305x-pinctrl.yaml
-+F:	Documentation/devicetree/bindings/pinctrl/ralink,rt3352-pinctrl.yaml
-+F:	Documentation/devicetree/bindings/pinctrl/ralink,rt3883-pinctrl.yaml
-+F:	Documentation/devicetree/bindings/pinctrl/ralink,rt5350-pinctrl.yaml
-+F:	drivers/pinctrl/mediatek/pinctrl-mt7620.c
-+F:	drivers/pinctrl/mediatek/pinctrl-mt7621.c
-+F:	drivers/pinctrl/mediatek/pinctrl-mt76x8.c
-+F:	drivers/pinctrl/mediatek/pinctrl-mtmips.*
-+F:	drivers/pinctrl/mediatek/pinctrl-rt2880.c
-+F:	drivers/pinctrl/mediatek/pinctrl-rt305x.c
-+F:	drivers/pinctrl/mediatek/pinctrl-rt3883.c
-+
- PIN CONTROLLER - MICROCHIP AT91
- M:	Ludovic Desroches <ludovic.desroches@microchip.com>
- L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
-@@ -17496,13 +17518,6 @@ L:	linux-mips@vger.kernel.org
- S:	Maintained
- F:	arch/mips/boot/dts/ralink/mt7621*
- 
--RALINK PINCTRL DRIVER
--M:	Arınç ÜNAL <arinc.unal@arinc9.com>
--M:	Sergio Paracuellos <sergio.paracuellos@gmail.com>
--L:	linux-mips@vger.kernel.org
--S:	Maintained
--F:	drivers/pinctrl/ralink/
--
- RALINK RT2X00 WIRELESS LAN DRIVER
- M:	Stanislaw Gruszka <stf_xl@wp.pl>
- M:	Helmut Schaa <helmut.schaa@googlemail.com>
--- 
-2.37.2
+What about this?
+off: disable MSI remapping
+
+> + * on: enable MSI remapping
+> + *
+> + */
+> +static char *msi_remap;
+> +module_param(msi_remap, charp, 0444);
+> +MODULE_PARM_DESC(msi_remap, "Whether to enable MSI remapping function");
+> +
+>  enum vmd_features {
+>  	/*
+>  	 * Device may contain registers which hint the physical location of the
+> @@ -875,6 +888,7 @@ static int vmd_enable_domain(struct vmd_dev *vmd, unsigned long features)
+>  			return ret;
+>  
+>  		vmd_set_msi_remapping(vmd, true);
+> +		dev_info(&vmd->dev->dev, "init vmd with remapping MSI\n");
+>  
+>  		ret = vmd_create_irq_domain(vmd);
+>  		if (ret)
+> @@ -887,6 +901,7 @@ static int vmd_enable_domain(struct vmd_dev *vmd, unsigned long features)
+>  		irq_domain_update_bus_token(vmd->irq_domain, DOMAIN_BUS_VMD_MSI);
+>  	} else {
+>  		vmd_set_msi_remapping(vmd, false);
+> +		dev_info(&vmd->dev->dev, "init vmd with bypass MSI\n");
+>  	}
+>  
+>  	pci_add_resource(&resources, &vmd->resources[0]);
+> @@ -955,6 +970,16 @@ static int vmd_enable_domain(struct vmd_dev *vmd, unsigned long features)
+>  	return 0;
+>  }
+>  
+> +static void vmd_config_msi_remap_param(unsigned long *features)
+> +{
+> +	if (msi_remap) {
+> +		if (strcmp(msi_remap, "on") == 0)
+> +			*features &= ~(VMD_FEAT_CAN_BYPASS_MSI_REMAP);
+> +		else if (strcmp(msi_remap, "off") == 0)
+> +			*features |= VMD_FEAT_CAN_BYPASS_MSI_REMAP;
+> +	}
+> +}
+> +
+>  static int vmd_probe(struct pci_dev *dev, const struct pci_device_id *id)
+>  {
+>  	unsigned long features = (unsigned long) id->driver_data;
+> @@ -984,6 +1009,8 @@ static int vmd_probe(struct pci_dev *dev, const struct pci_device_id *id)
+>  	if (err < 0)
+>  		goto out_release_instance;
+>  
+> +	vmd_config_msi_remap_param(&features);
+> +
+>  	vmd->cfgbar = pcim_iomap(dev, VMD_CFGBAR, 0);
+>  	if (!vmd->cfgbar) {
+>  		err = -ENOMEM;
+
+Reviewed-by: Nirmal Patel <nirmal.patel@linux.intel.com>
+
+Thanks
 
