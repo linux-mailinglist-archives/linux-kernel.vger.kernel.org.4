@@ -2,82 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32D526BE5F3
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 10:52:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAAE06BE5FA
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 10:53:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230110AbjCQJws (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 05:52:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46806 "EHLO
+        id S230094AbjCQJxh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 05:53:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbjCQJwo (ORCPT
+        with ESMTP id S229886AbjCQJxb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 05:52:44 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 172165A1AA;
-        Fri, 17 Mar 2023 02:52:42 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id b20so2749182pfo.6;
-        Fri, 17 Mar 2023 02:52:42 -0700 (PDT)
+        Fri, 17 Mar 2023 05:53:31 -0400
+Received: from smtp-fw-80007.amazon.com (smtp-fw-80007.amazon.com [99.78.197.218])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2346D44A4
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 02:53:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679046761;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=PsEb3SDGOwkHQaNoHVoDRTOrknkbKKQLzhqYs04kgsY=;
-        b=GzPAATDzw6A/6u4KXzA+AaQVvrcynfPngF05VYXSSHt1qVA+U8Jw2pmnHaOPht7al7
-         FiPT/neB9YppTRU1zq8840dGabMAccjOZ1U9F4nnPurOVt8ZkY6veTbC62PoHQcIvLuV
-         8JcxvnGM+eiATwnE5I+oFZ055GqIYB32qJqyf1Cnc5NR8Gdv4vcql/3hPb8OufYIS+ow
-         v0RqEz/BaL3CRuz5pa+uwMTo0443FL4bnVVEfcksR1X+68wruR/HYUL4s3OFA5rww/Tj
-         Q2pxI8n2fuWRwTEAznyQVdwoWnPndbqr1x6hF5NbcfAyq+EREkEWBkdDAUeEO4UwoMM7
-         bcJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679046761;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PsEb3SDGOwkHQaNoHVoDRTOrknkbKKQLzhqYs04kgsY=;
-        b=2XWN0q9KLpAmVcFEdafSwXX3+8HC1PZDqoE1fEy0r97DIwqPXi9+BSis2J4EgmLmcP
-         nAnNUbn4Tg9PNr+OoGe+1nqfg499kRagthlZpz3xdw3ojIRhgWKdh+5KsVyzv1vcYabj
-         rsCA1Fpq4Jsifjft++mAeGnhamG2Yy0lN0KoBgoZYytJkN6s6xRi6IzB0xnNFCdAgQCM
-         OJDd5AmfQo2PB2I73GWjgw/G+v6wrAY3EzrkUpUmlrn2YHB3Qir9k+y1l4RIrwjFb+Cr
-         G6jWS2TNw9TmaI/Lsu+LYKdWwhbbVomMWaze+scIiDEylQdhow/a51QdLMHGgtDdH9iN
-         mOtg==
-X-Gm-Message-State: AO0yUKXCOzYOyQMyH0bUVOzUshCmtzIW6RNzDSOirjlIgS+paZg9Rqbm
-        eGQ6EE9A6nLi+tiL6sZMcUmdKQ8zxEcDhg==
-X-Google-Smtp-Source: AK7set/OgS0uPw6yjnZ8+WeGwAa05pV+fzH2wXZANRbFUxJwIlZ3+tq8drWJypCPaCBFMaZyc3mRiw==
-X-Received: by 2002:aa7:972c:0:b0:625:ba5a:cadd with SMTP id k12-20020aa7972c000000b00625ba5acaddmr6175348pfg.21.1679046761537;
-        Fri, 17 Mar 2023 02:52:41 -0700 (PDT)
-Received: from [172.19.1.47] (60-250-192-107.hinet-ip.hinet.net. [60.250.192.107])
-        by smtp.gmail.com with ESMTPSA id c25-20020aa78c19000000b00623f72df4e2sm1132370pfd.203.2023.03.17.02.52.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Mar 2023 02:52:41 -0700 (PDT)
-Message-ID: <77b713f8-93bd-d0fa-d344-c8a4ec365c50@gmail.com>
-Date:   Fri, 17 Mar 2023 17:52:37 +0800
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1679046810; x=1710582810;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=SRoBsf0DBlijqQReE0yd93kjz2dNVXaOIMZ+MtfqJ3U=;
+  b=qBUBi1eqvtJh/RXcDjubKzOsLmSiR7fOW3eCoqIzLTpj33/0fu5/zF/6
+   CFXGAAC01bGs6ZA490ASECiWKaBT1tkS1W+M7Mau+sbUk7aSs7HUS4lsG
+   LiSxiJ+/5YrifxOY08H+In+kSTsJ6pBSufBud+cM7ddR9XSNaWMBbFrPA
+   k=;
+X-IronPort-AV: E=Sophos;i="5.98,268,1673913600"; 
+   d="scan'208";a="194436520"
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-iad-1a-m6i4x-93c3b254.us-east-1.amazon.com) ([10.25.36.214])
+  by smtp-border-fw-80007.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2023 09:53:27 +0000
+Received: from EX19D014EUC004.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
+        by email-inbound-relay-iad-1a-m6i4x-93c3b254.us-east-1.amazon.com (Postfix) with ESMTPS id 0C7F3E6BD3;
+        Fri, 17 Mar 2023 09:53:24 +0000 (UTC)
+Received: from u5d18b891348c5b.ant.amazon.com (172.31.190.49) by
+ EX19D014EUC004.ant.amazon.com (10.252.51.182) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.24; Fri, 17 Mar 2023 09:53:20 +0000
+From:   James Gowans <jgowans@amazon.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+CC:     <linux-kernel@vger.kernel.org>, James Gowans <jgowans@amazon.com>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Marc Zyngier <maz@kernel.org>,
+        KarimAllah Raslan <karahmed@amazon.com>
+Subject: [PATCH] irq: fasteoi handler re-runs on concurrent invoke
+Date:   Fri, 17 Mar 2023 11:53:00 +0200
+Message-ID: <20230317095300.4076497-1-jgowans@amazon.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 08/15] dt-bindings: clock: Document ma35d1 clock
- controller bindings
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        lee@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
-        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
-        jirislaby@kernel.org
-Cc:     devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        schung@nuvoton.com, Jacky Huang <ychuang3@nuvoton.com>
-References: <20230315072902.9298-1-ychuang570808@gmail.com>
- <20230315072902.9298-9-ychuang570808@gmail.com>
- <0ad8521d-90b9-29c7-62e6-2d65aa2a7a27@linaro.org>
- <00423efa-d4ca-5d76-d0b2-11853a49c5e9@gmail.com>
- <b9753d54-6605-e3cb-2943-795b4d58cd83@linaro.org>
-From:   Jacky Huang <ychuang570808@gmail.com>
-In-Reply-To: <b9753d54-6605-e3cb-2943-795b4d58cd83@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain
+X-Originating-IP: [172.31.190.49]
+X-ClientProxiedBy: EX19D046UWB003.ant.amazon.com (10.13.139.174) To
+ EX19D014EUC004.ant.amazon.com (10.252.51.182)
+X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,73 +62,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Krzysztof,
+Update the generic handle_fasteoi_irq to cater for the case when the
+next interrupt comes in while the previous handler is still running.
+Currently when that happens the irq_may_run() early out causes the next
+IRQ to be lost. Change the behaviour to mark the interrupt as pending
+and re-run the handler when handle_fasteoi_irq sees that the pending
+flag has been set again. This is largely inspired by handle_edge_irq.
 
-Thanks for your advice.
+Generally it should not be possible for the next interrupt to arrive
+while the previous handler is still running: the next interrupt should
+only arrive after the EOI message has been sent and the previous handler
+has returned. However, there is a race where if the interrupt affinity
+is changed while the previous handler is running, then the next
+interrupt can arrive at a different CPU while the previous handler is
+still running. In that case there will be a concurrent invoke and the
+early out will be taken.
 
-On 2023/3/17 下午 05:13, Krzysztof Kozlowski wrote:
-> On 17/03/2023 04:47, Jacky Huang wrote:
->>>> +
->>>> +  nuvoton,pll-mode:
->>>> +    description:
->>>> +      A list of PLL operation mode corresponding to CAPLL, DDRPLL, APLL,
->>>> +      EPLL, and VPLL in sequential. The operation mode value 0 is for
->>>> +      integer mode, 1 is for fractional mode, and 2 is for spread
->>>> +      spectrum mode.
->>>> +    $ref: /schemas/types.yaml#/definitions/uint32-array
->>>> +    maxItems: 5
->>>> +    items:
->>>> +      minimum: 0
->>>> +      maximum: 2
->>> Why exactly this is suitable for DT?
->> I will use strings instead.
-> I have doubts why PLL mode is a property of DT. Is this a board-specific
-> property?
+For example:
 
-CA-PLL has mode 0 only.
-DDRPLL, APLL, EPLL, and VPLL have the same PLL design that supports
-integer mode, fractional mode, and spread spctrum mode. The PLL mode
-is controlled by clock controller register. I think it's not board-specific.
+           CPU 0             |          CPU 1
+-----------------------------|-----------------------------
+interrupt start              |
+  handle_fasteoi_irq         | set_affinity(CPU 1)
+    handler                  |
+    ...                      | interrupt start
+    ...                      |   handle_fasteoi_irq -> early out
+  handle_fasteoi_irq return  | interrupt end
+interrupt end                |
 
->>>> +
->>>> +  nuvoton,sys:
->>>> +    description:
->>>> +      Phandle to the system management controller.
->>>> +    $ref: "/schemas/types.yaml#/definitions/phandle-array"
->>> Drop quotes.
->>>
->>> You need here constraints, look for existing examples.
->>>
->> I would like to modify this as:
->>
->>
->>     nuvoton,sys:
->>       description:
->>         Use to unlock and lock some clock controller registers. The lock
->>         control register is in system controller.
->>       $ref: /schemas/types.yaml#/definitions/phandle-array
->>       items:
->>         - items:
->>             - description: phandle to the system controller.
-> In such case you do not have array. Just make it phandle and drop the items.
->
+This issue was observed specifically on an arm64 system with a GIC-v3
+handling MSIs; GIC-v3 uses the handle_fasteoi_irq handler. The issue is
+that the global ITS is responsible for affinity but does not know
+whether interrupts are pending/running, only the CPU-local redistributor
+handles the EOI. Hence when the affinity is changed in the ITS, the new
+CPU's redistributor does not know that the original CPU is still running
+the handler.
 
-Thank you.
-So, I will rewrite it as
+There are a few uncertainties about this implementation compared to the
+prior art in handle_edge_irq:
 
-   nuvoton,sys:
-     description:
-       Use to unlock and lock some clock controller registers. The lock
-       control register is in system controller.
-     $ref: /schemas/types.yaml#/definitions/phandle
+1. Do we need to mask the IRQ and then unmask it later? I don't think so
+but it's not entirely clear why handle_edge_irq does this anyway; it's
+an edge IRQ so not sure why it needs to be masked.
 
+2. Should the EOI delivery be inside the do loop after every handler
+run? I think outside the loops is best; only inform the chip to deliver
+more IRQs once all pending runs have been finished.
 
->
-> Best regards,
-> Krzysztof
->
+3. Do we need to check that desc->action is still set? I don't know if
+it can be un-set while the IRQ is still enabled.
 
-Best regards,
+4. There is now more overlap with the handle_edge_eoi_irq handler;
+should we try to unify these?
 
-Jacky Huang
+Signed-off-by: James Gowans <jgowans@amazon.com>
+Reviewed-by: David Woodhouse <dwmw@amazon.co.uk>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Marc Zyngier <maz@kernel.org>
+Cc: KarimAllah Raslan <karahmed@amazon.com>
+---
+ Documentation/core-api/genericirq.rst | 9 ++++++++-
+ kernel/irq/chip.c                     | 9 +++++++--
+ 2 files changed, 15 insertions(+), 3 deletions(-)
+
+diff --git a/Documentation/core-api/genericirq.rst b/Documentation/core-api/genericirq.rst
+index f959c9b53f61..b54485eca8b5 100644
+--- a/Documentation/core-api/genericirq.rst
++++ b/Documentation/core-api/genericirq.rst
+@@ -240,7 +240,14 @@ which only need an EOI at the end of the handler.
+ 
+ The following control flow is implemented (simplified excerpt)::
+ 
+-    handle_irq_event(desc->action);
++    if (desc->status & running) {
++        desc->status |= pending;
++        return;
++    }
++    do {
++        desc->status &= ~pending;
++        handle_irq_event(desc->action);
++    } while (status & pending);
+     desc->irq_data.chip->irq_eoi();
+ 
+ 
+diff --git a/kernel/irq/chip.c b/kernel/irq/chip.c
+index 49e7bc871fec..4e5fc2b7e8a9 100644
+--- a/kernel/irq/chip.c
++++ b/kernel/irq/chip.c
+@@ -692,8 +692,10 @@ void handle_fasteoi_irq(struct irq_desc *desc)
+ 
+ 	raw_spin_lock(&desc->lock);
+ 
+-	if (!irq_may_run(desc))
++	if (!irq_may_run(desc)) {
++		desc->istate |= IRQS_PENDING;
+ 		goto out;
++	}
+ 
+ 	desc->istate &= ~(IRQS_REPLAY | IRQS_WAITING);
+ 
+@@ -711,7 +713,10 @@ void handle_fasteoi_irq(struct irq_desc *desc)
+ 	if (desc->istate & IRQS_ONESHOT)
+ 		mask_irq(desc);
+ 
+-	handle_irq_event(desc);
++	do {
++		handle_irq_event(desc);
++	} while (unlikely((desc->istate & IRQS_PENDING) &&
++			!irqd_irq_disabled(&desc->irq_data)));
+ 
+ 	cond_unmask_eoi_irq(desc, chip);
+ 
+-- 
+2.25.1
 
