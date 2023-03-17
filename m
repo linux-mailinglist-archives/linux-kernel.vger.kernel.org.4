@@ -2,56 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3E7E6BEE6A
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 17:34:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B22AC6BEE6C
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 17:35:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230063AbjCQQej (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 12:34:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53928 "EHLO
+        id S230125AbjCQQfQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 12:35:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230117AbjCQQeg (ORCPT
+        with ESMTP id S230131AbjCQQfL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 12:34:36 -0400
-Received: from smtpcmd01-g.aruba.it (smtpcmd01-g.aruba.it [62.149.158.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 590D833CC5
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 09:34:32 -0700 (PDT)
-Received: from [192.168.1.56] ([79.0.204.227])
-        by Aruba Outgoing Smtp  with ESMTPSA
-        id dD2Cp0lUtlwgQdD2Cp7Y0V; Fri, 17 Mar 2023 17:34:28 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
-        t=1679070868; bh=tQ+9MMbSyKEwB5c9FRbKPgfZFtzqJftNHMoDhcibqsI=;
-        h=Date:MIME-Version:Subject:To:From:Content-Type;
-        b=aFBySqQqwb3tDDSaIzEK//OkEYa8jO4IKSVRNaxRnmp6yK/b6jj4NwI38FuxKJXgG
-         IrlQNwGnKB/95dDRHw+TY2XcnVoto/Pgp7xRyLKVhZjB8W1EXGAEgOgtB7U9lG9HWt
-         NLk/nu2FS13ap/3MQazs2S+8Kb+3htC2KDNRshKdWMxSpixTIhnAClvIlbXh2LjcuN
-         ychYeAkKf6ms/D/ESlOqh8rQoOlCl3+/K+xWAReFGmDW40xK5QWZtaTFUNBFrtK/iQ
-         7huY27OjUvB9YMTR8/5CN0XiO412EBqodE9m3OCyaFf6Qqe4Pk/IvQ+eyBmAElTWFX
-         akpY5Te7M8tpg==
-Message-ID: <f8ea9ab9-e1c1-7962-dab4-126beda74046@enneenne.com>
-Date:   Fri, 17 Mar 2023 17:34:28 +0100
+        Fri, 17 Mar 2023 12:35:11 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 876565328F
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 09:35:06 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id eg48so22547964edb.13
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 09:35:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1679070905;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cwwFe9XoORdWYnr1GggJwexbAEqzdO4e3QsgeG37W0s=;
+        b=bJft0Wdr2IsagGUK+795Mty2OjjrtqhsxSPLBzqlylRuW4EedUA1s0x6Lkx2HU2dmb
+         Sr595T99LhSewIShJ4Pgqlk9HuZmaoIll1uuivcMVjS1SExqQNGUwiCLcA1BKYm4jqkk
+         an7ZKo+A3whn8ygZCHTdr/MLLayqSUPhkxYiw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679070905;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=cwwFe9XoORdWYnr1GggJwexbAEqzdO4e3QsgeG37W0s=;
+        b=2Ed+tu35JVoQThD/lbMFZlZIWQXvyay+96UUmF2oL/IOfiHbT3x1V2VTb1ZoMyrZZc
+         eGlhkMcqlFfPm2jM6CFZnNF7HANq1B5gBSQJOoN7DSyynxpkXve6Gu2v/wtT1KapGMm6
+         tVFzFIePCKH1ARxSWvvhzsQHLTuDlv/x9IUNu/yy/fb6rXz2nGDqgfTp1QSuWi7sY32V
+         tGPIEdVzkpf0kXmTphsTcoR1lqYPNuLIWLjcvhQiQqXDs+0Nv6Ni/JEFcirVgo+dw1yB
+         ir7fzs6UZbhaNZUikptA9BvFeTESRHwt1LvPdVdEhl79PJAd2Ht+zR3f7IREiXwcCC8j
+         lhrA==
+X-Gm-Message-State: AO0yUKXyHjp4aAYwOl8NOtCEqE01Fmt1ianTK5GiEixPsMSyIGzdJtgT
+        U5poThp1HoOhBwzVSlQsf0EdJLsJSLiOaHN6eTrsqA==
+X-Google-Smtp-Source: AK7set+G3OW6hkQ+socl1u8JLu0U+gIQKl9zNWjceyKiJgK7JsdAqbw/1V2ZUQGVWCcvywe8kPVghA==
+X-Received: by 2002:a50:ff17:0:b0:4fa:b302:84d9 with SMTP id a23-20020a50ff17000000b004fab30284d9mr3947012edu.14.1679070905262;
+        Fri, 17 Mar 2023 09:35:05 -0700 (PDT)
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com. [209.85.208.45])
+        by smtp.gmail.com with ESMTPSA id d23-20020a50f697000000b004fd2a7aa1ecsm1299364edn.32.2023.03.17.09.35.03
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Mar 2023 09:35:04 -0700 (PDT)
+Received: by mail-ed1-f45.google.com with SMTP id cy23so22578841edb.12
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 09:35:03 -0700 (PDT)
+X-Received: by 2002:a17:907:a40e:b0:8b0:7e1d:f6fa with SMTP id
+ sg14-20020a170907a40e00b008b07e1df6famr7325815ejc.15.1679070902628; Fri, 17
+ Mar 2023 09:35:02 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v4] pps: Add elapsed realtime timestamping
-Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Alex Komrakov <alexander.komrakov@broadcom.com>,
-        linux-kernel@vger.kernel.org
-References: <20230317074739.193965-1-alexander.komrakov@broadcom.com>
- <ZBQdWRHzakFLzSkb@kroah.com>
- <CAMedr-_ssg-baCz94ExMVTeXr2Qivzop1kEpx0S4PWuQdAiGaw@mail.gmail.com>
- <2713f092-5d21-ad5e-c5f4-87c927b18a27@enneenne.com>
- <ZBR3t0D0JEl8feRt@kroah.com>
-From:   Rodolfo Giometti <giometti@enneenne.com>
-In-Reply-To: <ZBR3t0D0JEl8feRt@kroah.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4xfCJo3kEz9c5MaW0qoi03UP/coqAAWPEkJBLXJ93Oxpm0gIpnJaT+uA/21lCWywpxmevI/RmHTvlQwMWYevVgJ+UMtysfiiZRa5mqscqi04Dwrc6Jp7Ws
- UtBZBAolB0lgBj8ezRxd9UAu1WTm7h/rYtmigjtLiCPUhbmDq+iPr+p3y7nVy/eNhQTH/St8wDEHnM2LjN2J0yxdlDY0mOokpbCQvQDpVMs5s6SDjTDvX3RM
- rtrwBp+CLv9EIvr5p90jG9G6q9TYXOhaji9Y0fIn0t5U6xmnZ87tFh6xP0LPNBeA
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
+References: <20230317053152.2232639-1-kuba@kernel.org> <20230317093129.697d2d6d@kernel.org>
+In-Reply-To: <20230317093129.697d2d6d@kernel.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 17 Mar 2023 09:34:45 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgxEH_4v3wBJJqJJsR7dWqh-xdRLW=CrbPK+bYZ-RN1Sw@mail.gmail.com>
+Message-ID: <CAHk-=wgxEH_4v3wBJJqJJsR7dWqh-xdRLW=CrbPK+bYZ-RN1Sw@mail.gmail.com>
+Subject: Re: [PULL] Networking for v6.3-rc3
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     davem@davemloft.net, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, pabeni@redhat.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,48 +76,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/03/23 15:22, Greg KH wrote:
-> On Fri, Mar 17, 2023 at 03:04:31PM +0100, Rodolfo Giometti wrote:
->> On 17/03/23 10:51, Alex Komrakov wrote:
->>>> +     if (!(pps->info.mode & PPS_CAPTURECLEAR))
->>>> +             return 0;   Why are you not returning an error?
->>> [AK] I used the style in this file sysfs.c.
->>>    assert_show() and clear_show()  have the same condition.
->>> When '& PPS_CAPTURECLEAR' -- 0 means no interrupt asserted  and it is not error
->>> Probably Rodolfo can get more info why return 0
->>
->> It's just as Alex said, if the PPS source has no PPS_CAPTUREASSERT or
->> PPS_CAPTURECLEAR mode it should not print ASSERT and CLEAR info.
-> 
-> But shouldn't you return an error instead of an empty string?
+On Fri, Mar 17, 2023 at 9:31=E2=80=AFAM Jakub Kicinski <kuba@kernel.org> wr=
+ote:
+>
+> Sorry, please drop this one if it's not a hassle. I'll send a v2.
 
-This is not an error... it's just a disabled capability. :)
+No problem. Dropped.
 
->>> And why are these sysfs files even present if the mode is not set
->>> properly?  Can the mode be set while the device is attached or is this
->>> only defined at probe time?  If at probe time, just never create these
->>> files.
->>> [AK] we can understand mode is set when interrupts asserted and
->>> file assert_elapsed will be updated.
->>
->> PPS source's "mode bits" can be set at runtime via PPS_SETPARAMS.
-> 
-> Ok, that's good to know.  But I think the error return value is a better
-> indication that something went wrong here and this attribute does not
-> work for this device at this point in time.
-
-I see... however I suppose several code relays on this behavior.
-
-If we decide to change it, which should be the better way to do it? Any 
-suggestions are appreciated.
-
-Ciao,
-
-Rodolfo
-
--- 
-GNU/Linux Solutions                  e-mail: giometti@enneenne.com
-Linux Device Driver                          giometti@linux.it
-Embedded Systems                     phone:  +39 349 2432127
-UNIX programming                     skype:  rodolfo.giometti
-
+                 Linus
