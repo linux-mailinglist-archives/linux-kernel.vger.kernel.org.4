@@ -2,130 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5F926BE6C5
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 11:30:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C19986BE6C8
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 11:30:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230248AbjCQKas (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 06:30:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47678 "EHLO
+        id S230283AbjCQKa5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 06:30:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbjCQKaq (ORCPT
+        with ESMTP id S229643AbjCQKaw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 06:30:46 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B41C834328;
-        Fri, 17 Mar 2023 03:30:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679049044; x=1710585044;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=JjbrSAPPpxCv7orXEzp/qzb0yoFhw8whzb7/+Tbqop0=;
-  b=PAK/KclMzMt861mECEaYy6xboNdVIOeA8zFWmbG6oYlEWrhVs8wl9jpR
-   A86yMHnk8+HWSPretodFqfaj64RadOTbBQRuL+nCESVMCmRtDbBW2vw5W
-   QWMeWtICZ4mm9t2ZTBMg7K6lq+NhM6PA/x+omCatFQnY0xQKG5XcG1lOA
-   dWnFhBsBmRWhJSl/c9ngowkzjUmdAKbHHQyIu8avsZ6A5xO/arusqYvuf
-   i6UB2JulGY0C3zuMK6buxqpJ1JaEgbI59fn3QNKEwBPeTs4eDTRZuOJDT
-   GPY2WvO/+DXiM202/JuvmGt3vDP7+8RxHtmsJNyRx/rf6fnNpBRXRUiGR
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="336930940"
-X-IronPort-AV: E=Sophos;i="5.98,268,1673942400"; 
-   d="scan'208";a="336930940"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2023 03:30:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="926098291"
-X-IronPort-AV: E=Sophos;i="5.98,268,1673942400"; 
-   d="scan'208";a="926098291"
-Received: from bstach-mobl1.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.251.221.222])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2023 03:30:42 -0700
-From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Hans de Goede <hdegoede@redhat.com>, stable@vger.kernel.org
-Subject: [PATCH 1/1] serial: 8250: Prevent starting up DMA Rx on THRI interrupt
-Date:   Fri, 17 Mar 2023 12:30:34 +0200
-Message-Id: <20230317103034.12881-1-ilpo.jarvinen@linux.intel.com>
-X-Mailer: git-send-email 2.30.2
+        Fri, 17 Mar 2023 06:30:52 -0400
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C2D0E4D9E;
+        Fri, 17 Mar 2023 03:30:49 -0700 (PDT)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 50F1D24E289;
+        Fri, 17 Mar 2023 18:30:41 +0800 (CST)
+Received: from EXMBX071.cuchost.com (172.16.6.81) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 17 Mar
+ 2023 18:30:41 +0800
+Received: from [192.168.125.108] (113.72.145.194) by EXMBX071.cuchost.com
+ (172.16.6.81) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 17 Mar
+ 2023 18:30:40 +0800
+Message-ID: <e304283e-c564-527a-b1a3-0a04b80604d0@starfivetech.com>
+Date:   Fri, 17 Mar 2023 18:30:39 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v3 3/5] dt-binding: Add JH7110 USB wrapper layer doc.
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        Conor Dooley <conor@kernel.org>,
+        "Vinod Koul" <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Pawel Laszczak <pawell@cadence.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Chen <peter.chen@kernel.org>,
+        Roger Quadros <rogerq@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>, <linux-usb@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>
+References: <20230315104411.73614-1-minda.chen@starfivetech.com>
+ <20230315104411.73614-4-minda.chen@starfivetech.com>
+ <451c8112-c7f3-f435-5d90-840f01c60bd5@linaro.org>
+From:   Minda Chen <minda.chen@starfivetech.com>
+In-Reply-To: <451c8112-c7f3-f435-5d90-840f01c60bd5@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [113.72.145.194]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX071.cuchost.com
+ (172.16.6.81)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hans de Goede reported Bluetooth adapters (HCIs) connected over an UART
-connection failed due corrupted Rx payload. The problem was narrowed
-down to DMA Rx starting on UART_IIR_THRI interrupt. The problem occurs
-despite LSR having DR bit set, which is precondition for attempting to
-start DMA Rx in the first place.
 
-From a debug patch:
-[x.807834] 8250irq: iir=cc lsr+saved=60 received=0/15 ier=0f dma_t/rx/err=0/0/0
-[x.808676] 8250irq: iir=c2 lsr+saved=61 received=0/0 ier=0f dma_t/rx/err=0/0/0
-[x.808776] 8250irq: iir=cc lsr+saved=60 received=1/12 ier=0d dma_t/rx/err=0/1/0
-[x.808870] Bluetooth: hci0: Frame reassembly failed (-84)
 
-In the debug snippet, received field indicates 1 byte was transferred
-over DMA and 12 bytes after that with the non-DMA Rx. The sole byte DMA
-handled was corrupted (gets zeroed) which leads to the HCI failure.
-
-This problem became apparent after commit e8ffbb71f783 ("serial: 8250:
-use THRE & __stop_tx also with DMA") changed Tx stop behavior. Tx stop
-is now triggered from a THRI interrupt.
-
-Despite that this problem looks like a HW bug, this fix is not adding
-UART_BUG_xx flag to the driver beucase it seems useful in general to
-avoid starting DMA when there are only a few bytes to transfer.
-Skipping DMA for small transfers avoids the extra overhead DMA incurs.
-
-Thus, don't setup DMA Rx on UART_IIR_THRI but leave it to a subsequent
-interrupt which has Rx a related IIR value.
-
-By returning false from handle_rx_dma(), the DMA vs non-DMA decision is
-postponed until either UART_IIR_RDI (FIFO threshold worth of bytes
-awaiting) or UART_IIR_TIMEOUT (inter-character timeout) triggers at a
-later time which allows better to discern whether the number of bytes
-warrants starting DMA or not.
-
-Reported-by: Hans de Goede <hdegoede@redhat.com>
-Tested-by: Hans de Goede <hdegoede@redhat.com>
-Fixes: e8ffbb71f783 ("serial: 8250: use THRE & __stop_tx also with DMA")
-Cc: stable@vger.kernel.org
-Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
----
- drivers/tty/serial/8250/8250_port.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
-
-diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
-index fa43df05342b..3ba9c8b93ae6 100644
---- a/drivers/tty/serial/8250/8250_port.c
-+++ b/drivers/tty/serial/8250/8250_port.c
-@@ -1903,6 +1903,17 @@ EXPORT_SYMBOL_GPL(serial8250_modem_status);
- static bool handle_rx_dma(struct uart_8250_port *up, unsigned int iir)
- {
- 	switch (iir & 0x3f) {
-+	case UART_IIR_THRI:
-+		/*
-+		 * Postpone DMA or not decision to IIR_RDI or IIR_RX_TIMEOUT
-+		 * because it's impossible to do an informed decision about
-+		 * that with IIR_THRI.
-+		 *
-+		 * This also fixes one known DMA Rx corruption issue where
-+		 * DR is asserted but DMA Rx only gets a corrupted zero byte
-+		 * (too early DR?).
-+		 */
-+		return false;
- 	case UART_IIR_RDI:
- 		if (!up->dma->rx_running)
- 			break;
--- 
-2.30.2
-
+On 2023/3/17 16:43, Krzysztof Kozlowski wrote:
+> On 15/03/2023 11:44, Minda Chen wrote:
+>> The dt-binding doc of Cadence USBSS-DRD controller wrapper
+>> layer.
+> 
+> Subject: drop full stop. It's not a sentence.
+> 
+> Use subject prefixes matching the subsystem (which you can get for
+> example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
+> your patch is touching).
+> 
+> 
+Thanks. I should check all the commits title and commit messages.
+>> 
+>> Signed-off-by: Minda Chen <minda.chen@starfivetech.com>
+>> ---
+>>  .../bindings/usb/starfive,jh7110-usb.yaml     | 119 ++++++++++++++++++
+>>  1 file changed, 119 insertions(+)
+>>  create mode 100644 Documentation/devicetree/bindings/usb/starfive,jh7110-usb.yaml
+>> 
+>> diff --git a/Documentation/devicetree/bindings/usb/starfive,jh7110-usb.yaml b/Documentation/devicetree/bindings/usb/starfive,jh7110-usb.yaml
+>> new file mode 100644
+>> index 000000000000..b1a8dc6d7b4b
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/usb/starfive,jh7110-usb.yaml
+>> @@ -0,0 +1,119 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/usb/starfive,jh7110-usb.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: StarFive JH7110 wrapper module for the Cadence USBSS-DRD controller
+>> +
+>> +maintainers:
+>> +  - Minda Chen <minda.chen@starfivetech.com>
+>> +
+>> +properties:
+>> +  compatible:
+>> +    const: starfive,jh7110-usb
+>> +
+>> +  clocks:
+>> +    items:
+>> +      - description: lpm clock
+>> +      - description: stb clock
+>> +      - description: apb clock
+>> +      - description: axi clock
+>> +      - description: utmi apb clock
+>> +
+>> +  clock-names:
+>> +    items:
+>> +      - const: lpm
+>> +      - const: stb
+>> +      - const: apb
+>> +      - const: axi
+>> +      - const: utmi_apb
+>> +
+>> +  resets:
+>> +    items:
+>> +      - description: PWRUP reset
+>> +      - description: APB reset
+>> +      - description: AXI reset
+>> +      - description: UTMI_APB reset
+>> +
+>> +  starfive,sys-syscon:
+>> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+>> +    items:
+>> +      items:
+>> +        - description: phandle to System Register Controller sys_syscon node.
+>> +        - description: offset of SYS_SYSCONSAIF__SYSCFG register for USB.
+>> +    description:
+>> +      The phandle to System Register Controller syscon node and the offset
+>> +      of SYS_SYSCONSAIF__SYSCFG register for USB.
+>> +
+>> +  starfive,stg-syscon:
+>> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+>> +    items:
+>> +      items:
+>> +        - description: phandle to System Register Controller stg_syscon node.
+>> +        - description: register0 offset of STG_SYSCONSAIF__SYSCFG register for USB.
+>> +        - description: register1 offset of STG_SYSCONSAIF__SYSCFG register for USB.
+>> +        - description: register2 offset of STG_SYSCONSAIF__SYSCFG register for USB.
+>> +        - description: register3 offset of STG_SYSCONSAIF__SYSCFG register for USB.
+>> +    description:
+>> +      The phandle to System Register Controller syscon node and the offset
+>> +      of STG_SYSCONSAIF__SYSCFG register for USB. Total 4 regsisters offset
+>> +      for USB.
+>> +
+>> +  "#address-cells":
+>> +    maximum: 2
+> 
+> enum: [ 1, 2 ]
+> (because 0 should not be valid for you)
+> 
+>> +
+>> +  "#size-cells":
+>> +    maximum: 2
+> 
+> ditto
+> 
+ok
+>> +
+>> +  ranges: true
+>> +
+>> +patternProperties:
+>> +  "^usb@[0-9a-f]+$":
+>> +    type: object
+> 
+> missing $ref and unevaluatedProperties: false
+> 
+ok, thanks
+>> +
+>> +required:
+>> +  - compatible
+>> +  - clocks
+>> +  - clock-names
+>> +  - resets
+>> +  - starfive,sys-syscon
+>> +  - starfive,stg-syscon
+>> +  - "#address-cells"
+>> +  - "#size-cells"
+>> +  - ranges
+>> +
+>> +additionalProperties: false
+> 
+> 
+> Best regards,
+> Krzysztof
+> 
