@@ -2,97 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5333F6BE1CF
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 08:16:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 203EB6BE1D3
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 08:18:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230212AbjCQHQq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 03:16:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43006 "EHLO
+        id S230076AbjCQHSS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 03:18:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbjCQHQo (ORCPT
+        with ESMTP id S229760AbjCQHSM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 03:16:44 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45B0D10CD;
-        Fri, 17 Mar 2023 00:16:43 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id u3-20020a17090a450300b00239db6d7d47so4253933pjg.4;
-        Fri, 17 Mar 2023 00:16:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679037403;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=twdLlgB3/E3HSbMTtDor1opxwUKFLrWwvnMciQmwMZw=;
-        b=PSnreZneZ+daXFmxmBfyRM8oFppTxIPoLSkAQVJXO425Ams0XucJ29tF4NZ2pCr/DZ
-         W4t6jB+urog/fxeD+uVczo/pSQiCUKz6n1Cturd5fMhf3oduhppStGOfySmai9oqRGrR
-         xHf+UQWdqH+aY+eh7Zk1O+kCfW2dN7usRAWCwzDOVYt6ahI04FWI/bf+dJdfsx5Kz5KP
-         0BKi8vkdVscgdYPYxPUE+BoL/J1vFwTH6ixaHRwrNcWZ27CAOUersTjxffeZoqWac6ms
-         Lw3Ua6KYPfDs32wxC0pEEOEKxh6udbW2viYzE5uCVmmzp3cj2iepEkyrlX35ERHtd1GZ
-         ALEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679037403;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=twdLlgB3/E3HSbMTtDor1opxwUKFLrWwvnMciQmwMZw=;
-        b=qvbdDKr74dcNie3W0DlrQTzSyRH1s24cEAgh/QHTRSPYVdlXkTbKvFuza7iFJeeQu4
-         938Gi/riImMeViZBr8PuKoap8juKZpHyLs7xg/5SpYpRdUsyePn1GZlKH+didtywd1hL
-         R9mnmlGk7C51muGh0xPgTRRRgj3rvGYGN7wRVh3J6YzpHPxlgu5WOwieFdiK/8KCKQHE
-         39SOEvob9xRWLK/IUDbaA7VmmYT1QeOnRiEvcvlMbLZJmlsO6rPssFKrnx/JoVHB0FiS
-         NhQYG6z7nyPnbONT0MXZxl1bft6ehjeu9pT02ALYiUMNgDwrMpZETTlhKLFutLts2nPI
-         R7sg==
-X-Gm-Message-State: AO0yUKXgsoYxyztGkE+Rr1tqg95AebrgHXJjyoKW2zCDm4DG/mlAPnXt
-        qjLRID30qsA/SfLZXqznSYE=
-X-Google-Smtp-Source: AK7set/zUnAVf6iz7d2V6pdox3/jQlIdrwRizEbq0p1299dimTSDl4ZFN+7EKJbuB4kNVGBHh3qtXg==
-X-Received: by 2002:a17:902:dac9:b0:19e:82d5:634c with SMTP id q9-20020a170902dac900b0019e82d5634cmr8183720plx.53.1679037402633;
-        Fri, 17 Mar 2023 00:16:42 -0700 (PDT)
-Received: from passwd123-ThinkStation-P920.. ([222.20.94.23])
-        by smtp.gmail.com with ESMTPSA id w4-20020a1709029a8400b0019a773419a6sm832498plp.170.2023.03.17.00.16.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Mar 2023 00:16:42 -0700 (PDT)
-From:   Kang Chen <void0red@gmail.com>
-To:     borisp@nvidia.com
-Cc:     john.fastabend@gmail.com, kuba@kernel.org, davem@davemloft.net,
-        edumazet@google.com, pabeni@redhat.com,
-        dirk.vandermerwe@netronome.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Kang Chen <void0red@gmail.com>
-Subject: [PATCH] net/tls: refine the branch condition in tls_dev_event
-Date:   Fri, 17 Mar 2023 15:16:36 +0800
-Message-Id: <20230317071636.1028488-1-void0red@gmail.com>
+        Fri, 17 Mar 2023 03:18:12 -0400
+X-Greylist: delayed 64 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 17 Mar 2023 00:18:10 PDT
+Received: from emcscan.emc.com.tw (emcscan.emc.com.tw [192.72.220.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 34F13CC36
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 00:18:09 -0700 (PDT)
+X-IronPort-AV: E=Sophos;i="5.98,268,1673884800"; 
+   d="scan'208";a="2219544"
+Received: from unknown (HELO webmail.emc.com.tw) ([192.168.10.1])
+  by emcscan.emc.com.tw with ESMTP; 17 Mar 2023 15:16:59 +0800
+Received: from 192.168.10.23
+        by webmail.emc.com.tw with MailAudit ESMTP Server V5.0(80150:0:AUTH_RELAY)
+        (envelope-from <jingle.wu@emc.com.tw>); Fri, 17 Mar 2023 15:16:59 +0800 (CST)
+Received: from 101.10.109.20
+        by webmail.emc.com.tw with Mail2000 ESMTPA Server V7.00(2479:0:AUTH_LOGIN)
+        (envelope-from <jingle.wu@emc.com.tw>); Fri, 17 Mar 2023 15:16:58 +0800 (CST)
+From:   "jingle.wu" <jingle.wu@emc.com.tw>
+To:     linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        dmitry.torokhov@gmail.com
+Cc:     phoenix@emc.com.tw, josh.chen@emc.com.tw, dave.wang@emc.com.tw,
+        "jingle.wu" <jingle.wu@emc.com.tw>
+Subject: [PATCH] Input: elan_i2c - Implement inhibit/uninhibit functions.
+Date:   Fri, 17 Mar 2023 15:16:46 +0800
+Message-Id: <20230317071646.977357-1-jingle.wu@emc.com.tw>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-dev->tlsdev_ops may be null and cause null pointer dereference later.
+Add inhibit/uninhibit functions.
 
-Fixes: eeb2efaf36c7 ("net/tls: generalize the resync callback")
-Signed-off-by: Kang Chen <void0red@gmail.com>
+Signed-off-by: Jingle.wu <jingle.wu@emc.com.tw>
 ---
- net/tls/tls_device.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/input/mouse/elan_i2c_core.c | 86 +++++++++++++++++++++++++++++
+ 1 file changed, 86 insertions(+)
 
-diff --git a/net/tls/tls_device.c b/net/tls/tls_device.c
-index a7cc4f9faac2..f30a8fe373c2 100644
---- a/net/tls/tls_device.c
-+++ b/net/tls/tls_device.c
-@@ -1449,7 +1449,8 @@ static int tls_dev_event(struct notifier_block *this, unsigned long event,
- 		if (netif_is_bond_master(dev))
- 			return NOTIFY_DONE;
- 		if ((dev->features & NETIF_F_HW_TLS_RX) &&
--		    !dev->tlsdev_ops->tls_dev_resync)
-+		   (!dev->tlsdev_ops || (dev->tlsdev_ops &&
-+		    !dev->tlsdev_ops->tls_dev_resync)))
- 			return NOTIFY_BAD;
+diff --git a/drivers/input/mouse/elan_i2c_core.c b/drivers/input/mouse/elan_i2c_core.c
+index 5f0d75a45c80..cc0375265659 100644
+--- a/drivers/input/mouse/elan_i2c_core.c
++++ b/drivers/input/mouse/elan_i2c_core.c
+@@ -329,6 +329,89 @@ static int elan_initialize(struct elan_tp_data *data, bool skip_reset)
+ 	return error;
+ }
  
- 		if  (dev->tlsdev_ops &&
++static int elan_reactivate(struct elan_tp_data *data)
++{
++	struct device *dev = &data->client->dev;
++	int ret;
++
++	ret = elan_set_power(data, true);
++	if (ret)
++		dev_err(dev, "failed to restore power: %d\n", ret);
++
++	ret = data->ops->sleep_control(data->client, false);
++		if (ret) {
++			dev_err(dev,
++				"failed to wake device up: %d\n", ret);
++			return ret;
++		}
++
++	return ret;
++}
++
++static void elan_inhibit(struct input_dev *input_dev)
++{
++	struct elan_tp_data *data = input_get_drvdata(input_dev);
++	struct i2c_client *client = data->client;
++	int ret;
++
++	if (data->in_fw_update)
++		return;
++
++	dev_dbg(&client->dev, "inhibiting\n");
++	/*
++	 * We are taking the mutex to make sure sysfs operations are
++	 * complete before we attempt to bring the device into low[er]
++	 * power mode.
++	 */
++	ret = mutex_lock_interruptible(&data->sysfs_mutex);
++	if (ret)
++		return;
++
++	disable_irq(client->irq);
++
++	ret = elan_set_power(data, false);
++	if (ret)
++		enable_irq(client->irq);
++
++	mutex_unlock(&data->sysfs_mutex);
++
++}
++
++static void elan_close(struct input_dev *input_dev)
++{
++	if ((input_dev->users) && (!input_dev->inhibited))
++		elan_inhibit(input_dev);
++
++}
++
++static int elan_uninhibit(struct input_dev *input_dev)
++{
++	struct elan_tp_data *data = input_get_drvdata(input_dev);
++	struct i2c_client *client = data->client;
++	int ret;
++
++	dev_dbg(&client->dev, "uninhibiting\n");
++	ret = mutex_lock_interruptible(&data->sysfs_mutex);
++	if (ret)
++		return ret;
++
++	ret = elan_reactivate(data);
++	if (ret == 0)
++		enable_irq(client->irq);
++
++	mutex_unlock(&data->sysfs_mutex);
++
++	return ret;
++}
++
++static int elan_open(struct input_dev *input_dev)
++{
++	if ((input_dev->users) && (input_dev->inhibited))
++		return elan_uninhibit(input_dev);
++
++	return 0;
++}
++
+ static int elan_query_device_info(struct elan_tp_data *data)
+ {
+ 	int error;
+@@ -1175,6 +1258,9 @@ static int elan_setup_input_device(struct elan_tp_data *data)
+ 				     0, ETP_FINGER_WIDTH * min_width, 0, 0);
+ 	}
+ 
++	input->open = elan_open;
++	input->close = elan_close;
++
+ 	data->input = input;
+ 
+ 	return 0;
 -- 
 2.34.1
 
