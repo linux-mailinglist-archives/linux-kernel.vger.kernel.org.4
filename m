@@ -2,181 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 872CD6BE6AC
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 11:26:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB6736BE6B4
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 11:28:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230336AbjCQK0K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 06:26:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39254 "EHLO
+        id S230308AbjCQK16 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 06:27:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230261AbjCQKZw (ORCPT
+        with ESMTP id S230326AbjCQK1t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 06:25:52 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 529AEE4C4A;
-        Fri, 17 Mar 2023 03:25:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679048750; x=1710584750;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=x+vYdx2/n7bvjj5P9nRRVFdtUcTVFbS47NfBTRf8CH4=;
-  b=B0OKv3An2lngeih05TdRDfuvkLMvpooeu2vJ8EbIxUCoXH6S5zCdZ/9H
-   aR/3famYESvzegVD6fG2sr8FlUWZ/kYZfDXyF0g8aK68BFZu4pSCDsQ2L
-   CkEFBS1v7pc7B9nsuiqcCpT8jvB5I3SttXc7osPPUtWt2uCTpRS/M9Et4
-   slqBbywKYNQrIqfFYZOYS0VfZl0yvD5aTPUarjJze+MYbK3T5PcIUyYST
-   PHXgpmA6Iv2fwBQ+hKwdnEd8TdmZNnSTON2Xl0Qm1FacqZtzbxoeFhmQ5
-   Y3V6RsynLw13pYrj++EHSUJPy+yt6Y7RBvYgBpNPJldKqQpo2EaDvmtTS
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="336930251"
-X-IronPort-AV: E=Sophos;i="5.98,268,1673942400"; 
-   d="scan'208";a="336930251"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2023 03:25:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="854402533"
-X-IronPort-AV: E=Sophos;i="5.98,268,1673942400"; 
-   d="scan'208";a="854402533"
-Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
-  by orsmga005.jf.intel.com with ESMTP; 17 Mar 2023 03:25:48 -0700
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Fri, 17 Mar 2023 03:25:48 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Fri, 17 Mar 2023 03:25:48 -0700
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21 via Frontend Transport; Fri, 17 Mar 2023 03:25:48 -0700
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.172)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.21; Fri, 17 Mar 2023 03:25:47 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=C7aEZ0pc3I316N/jqqUuUiBjaJ2Ql0VgqdT7fwtwcXwDo3GdARdfMWp0MGWLAWxV/cSg9LEyjJeanq+iYD2+fHwXk7QCt53/TG3koM4TEVRFqiqThGfDMmNt0gKcR77T5+vwfChA+sxbBgwHbLNHQrrrPvBTbBgkhmfPnqEXAU/DdUKQHVjclNREXphCKlg48RDmT7gtNtBOdSpKZZSTogrSERGJtVrAoS0orbOgx4jOKpoK2ycQF0SjCslZyYL5kqFZDkYro8wI2gdQ1DRQ8CPcbgdrPwHDLs7sDI7DGGR3+TUgbza6n5lvxLEhln5buwbuOJMRsDPHrOtBMNThEg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=x+vYdx2/n7bvjj5P9nRRVFdtUcTVFbS47NfBTRf8CH4=;
- b=ejI9xLzs2clkxh0Jf90FHk0PoHSRJwNSNZlJeLvV+Os3E30annn6PImXcO8VEfHi9jPUk+WuGBplepsfVNsVWMqL8duKpl6RRTZinLeNKcTvqS3GLCSTYhrZdmb/GVTfmO11rihal3hK/KTbM5riKqx7L+FzFa+obw0mVWTzUWUkR7+a3hu8fCsnL50AoDr8xQSga+b2NgCuXJecaiRy0ktExg8XWoRBs/pyphPViC5gGt0mjNl0qZOZmB0qcLyHwtto5VIdDz5zy5mtMBiT1P2JXcAZzvbgOpH86Dtl9scCILAc7d8R3k96K001grDZ3rzMXEqPyU4pE1PhWH9lvA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
- by IA1PR11MB8150.namprd11.prod.outlook.com (2603:10b6:208:44c::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.24; Fri, 17 Mar
- 2023 10:25:46 +0000
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::1aac:b695:f7c5:bcac]) by BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::1aac:b695:f7c5:bcac%8]) with mapi id 15.20.6178.035; Fri, 17 Mar 2023
- 10:25:46 +0000
-From:   "Tian, Kevin" <kevin.tian@intel.com>
-To:     "Liu, Yi L" <yi.l.liu@intel.com>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "jgg@nvidia.com" <jgg@nvidia.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>
-CC:     "cohuck@redhat.com" <cohuck@redhat.com>,
-        "eric.auger@redhat.com" <eric.auger@redhat.com>,
-        "nicolinc@nvidia.com" <nicolinc@nvidia.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
-        "chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
-        "yi.y.sun@linux.intel.com" <yi.y.sun@linux.intel.com>,
-        "peterx@redhat.com" <peterx@redhat.com>,
-        "jasowang@redhat.com" <jasowang@redhat.com>,
-        "shameerali.kolothum.thodi@huawei.com" 
-        <shameerali.kolothum.thodi@huawei.com>,
-        "lulu@redhat.com" <lulu@redhat.com>,
-        "suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
-Subject: RE: [PATCH 02/12] iommu: Add nested domain support
-Thread-Topic: [PATCH 02/12] iommu: Add nested domain support
-Thread-Index: AQHZUl56OnBZKouzpkSAeG2m6axxIK7+0JUg
-Date:   Fri, 17 Mar 2023 10:25:46 +0000
-Message-ID: <BN9PR11MB5276265987486AC84D2039818CBD9@BN9PR11MB5276.namprd11.prod.outlook.com>
-References: <20230309080910.607396-1-yi.l.liu@intel.com>
- <20230309080910.607396-3-yi.l.liu@intel.com>
-In-Reply-To: <20230309080910.607396-3-yi.l.liu@intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|IA1PR11MB8150:EE_
-x-ms-office365-filtering-correlation-id: e36ff35e-57d6-488e-98a1-08db26d1f874
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: +k95twkdHP6tKLFdqnZuloDOiot17o660MiXZn6AdBdwlLCcxRbXb+e8EMGCvgCIspwf9Jd3Vq0DM0o2ruw6wucKZS+7wKJgGwCI8Wju3Jj4UWUqkOXHSLb0Rg8/KSo0eSrnbKBdgVCPBPLL1BfR5bxI6tXECwsxgg2lOt/2KA4Wm+j0RgbwTS/jdCuu8Rpgmy9FP4eVQUkZEolH8QFXfUq/Nw0h0XE3+lvnuhVTuIcE2Iu9CvBWDBfrDlDd5jnVluBajOm4S63svuBiS9CBAGuM6GFgXId6UG5mD+4KuV0SgryvAsGMQ/Is3JLeJeaEpvhakR+nC059yPeBxBcFStEsybHNFMYaW34qqbxQ54M3uGN7bQBE6obpusXw7wa9fqhoAb7eZlEehEpG+/gcmaQvHQY8jnZhJ7e/ueJngg2i4vq20T4Nv+VjdSXjxwm1/90jcVol1rCne23rWY66vTOb5yaqb87tQuTIjvm+O7U5pATHwj9+UTtFyEEetisAL1vCHS/Ua8aok5a3ltRTVlTPPECpKo/W9oF+kuJTdaNteLrmlSu0ljHRoQpP0+mE714690BBdi1+Ck0+Tg1wreDoN4F+hH1Tq8eHsAIPd6N9JR7VxIY7SOBLyB2lG1zt58FI2okddxhhkXm7ESFjZKlzLyMYPDKelE3LTBP89Y9Y/O1ZRHLdFHoppTnqpXIK5hP+9VPTgg6+c9Aqd7YTbw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(346002)(39860400002)(396003)(136003)(366004)(376002)(451199018)(122000001)(82960400001)(186003)(5660300002)(7416002)(558084003)(52536014)(38070700005)(8936002)(66476007)(41300700001)(38100700002)(66946007)(4326008)(76116006)(2906002)(316002)(64756008)(9686003)(54906003)(478600001)(55016003)(110136005)(66446008)(7696005)(86362001)(66556008)(33656002)(8676002)(26005)(71200400001)(6506007);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?eOYlxQVKi2Hgr43dbz43apJrZNCwzj7jWNimxfpn8lNKH/tmChKY6emOxZpr?=
- =?us-ascii?Q?FYzorI3S7s2sqtxabyeYqEzcH+N9/TvsDGhgoP/GVS3NgRRk6kj/MlavpN8V?=
- =?us-ascii?Q?b7eRmKrgmIxZUJhW/Uq5ZUKb+E74yMplpEwhAMojhxbn5k3GrQ+95XCiqsJz?=
- =?us-ascii?Q?OaxCUV4b8BlO15rbydASOQq+xH47/iLYNgI2Iec2nPFSSrFikDp6pTxJ8U/C?=
- =?us-ascii?Q?SnYyq27qrI2LONysLoEFqCvJoFuD/uJD+a8NBdyU/CuCztBVJ3oSu0l6pT+o?=
- =?us-ascii?Q?fc92XV3jZjP35btnpTSES+1c3JawZ8Lj2O9cGmyW5KBxMErcdZ2Gn4jIyNBL?=
- =?us-ascii?Q?K6x+nQvY3ffg+FFALfbP4JFBmt3phT1zdxofO6CuQa28wcBjUS3C9Xyid9Dt?=
- =?us-ascii?Q?l+KmIlqNT8OHcHg/NtoFxswtd7skwlPST6Ra1raacWxix/kk8zGUwR1IIitT?=
- =?us-ascii?Q?/yQ43dmCEJuUequSHUtfcgWWcCKM3cO33BqIhh7zASRLtVfMGr8y077i7PhW?=
- =?us-ascii?Q?HHAC1JstSET5n4n+yFhaoJHZqff7+T4mVtwU1YDU/BsLsQ2NTcCsAzj3CiNw?=
- =?us-ascii?Q?BKUdDPGzKgpjvjHhTIfJkEu1TEklDbFmcMXigu/rEgj0PGb45tGGc6UV9Rl0?=
- =?us-ascii?Q?leUUfTYX+SWJROrQ2S17riOgerIcy7za2te5hUBsiYqu/lgTsvFEBFL/4JHo?=
- =?us-ascii?Q?FyscOtTk2FVyHW/Ry+GajgNZJyCjTeLQ3KUpZP1ZACI0RFEh9a557Kw+Knqm?=
- =?us-ascii?Q?2wBvOVbsvHcJnsevcmRD7yTSSl0Aj1RsBWAXBizyp7ThkQf4JrYvvAA2iEjV?=
- =?us-ascii?Q?+xU82E9xpDaKreU5M7RFetyaxNgyKLduOJ0mo1fL13MvOtwZ6fQlYSxlXJku?=
- =?us-ascii?Q?myZ6WmMmKaRCazb4Dd8oS9Itc7qHalwhMafN1dETDkt9UJSBPX3/rm/0eB+b?=
- =?us-ascii?Q?em9iefRuWgA/2/hkugc6iJAP0Cg47pmSRkhNrxjVNV5atNCMjpwdVizj3v1X?=
- =?us-ascii?Q?sgjVz9Lsr+ETiHVajl1uocuZQJTnz/CSsdSU7I+06nxHNTCP89wk2syV59PF?=
- =?us-ascii?Q?IA03OCw/KjvRZs8oCG+OwRryzHYULXDr4Bhphd1Gx8ANU2a5ZVoqPfJl+ZxO?=
- =?us-ascii?Q?gWdsg0GxPupTZz4oLkpMwL8McB7xSUuf7w1ZcYIsLU/0BzD+b9vLZo1YUg5W?=
- =?us-ascii?Q?EZwu1eZ+8R2I/WV9vyMLfe3So0GAXOv5pt9S848+0fSkIhwWbLop+BF+TCFz?=
- =?us-ascii?Q?OAIhnxI67EJrONF+sabXEvB5/lvpsEgodX0FPWKkHvYfz2CRRJf8MsksiQbM?=
- =?us-ascii?Q?eYdXo5qdZMl3MljJuexYijly8WzfPOv5lY06OMZVevpKmHn4/M/DyfQZMcIe?=
- =?us-ascii?Q?oM1NUAKNBxDmV1fzuiKMXGw0PTcyoe0dQStSHy7BT03acN2RxAzcdlkTmFnK?=
- =?us-ascii?Q?FVJm4vQtqBMmrkO5RLAfd0PZU4Pqm0UWw0dXfSrVphMLQG8Vp1u55amhEtHf?=
- =?us-ascii?Q?unqzrK9hJp7W0KPrmNvwMhLdZufTW53ZP7U/4RtQXvfchQ5o5hiethv2b3+q?=
- =?us-ascii?Q?uJMhVaEnBdTrkpMPHylnE5g5yQJXXAk5F8GcJmh6?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Fri, 17 Mar 2023 06:27:49 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68B12E5015;
+        Fri, 17 Mar 2023 03:27:07 -0700 (PDT)
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32HABQ9K028404;
+        Fri, 17 Mar 2023 10:26:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=yO8si3+qVNWSrYdd+uGWatDvhebZLLgBBHpS17CbCCk=;
+ b=D2Mw0vVBeTibf/qL3DUCNMTXvMriHeHcOFmJMFOE3NmwvrGVNXZEXXMV7BbEYdCR1BE9
+ 7/rs9sNuZFWIcEYKiSUrjS8YHVqO5jw5g1RcU+Dj5qUZobL+wMq6TnpMXqObbUn1n/vG
+ xjUpCVt46WkAJYFCui0gBNY0JXkhNNt90/6EQWmvxTHuVnIU51rnz8PhuTN39X77dii/
+ Jw2YW1dVU8qQtW9l1GnQsydw79Z2Kcsz69+rS5huZCjnim6IaPbeDKu6CQ3ofV4xkBDc
+ oZHF6VTvxILJzNgvA5tJRjrpUdwhx0tVXR3BW7w3Mt+b1l7Vi2WsIH1qV/yJczQaZogw Fg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3pcnjx1d7v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 17 Mar 2023 10:26:56 +0000
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32HABVCf029337;
+        Fri, 17 Mar 2023 10:26:55 GMT
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3pcnjx1d74-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 17 Mar 2023 10:26:55 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32GIT4fj027512;
+        Fri, 17 Mar 2023 10:26:53 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+        by ppma03fra.de.ibm.com (PPS) with ESMTPS id 3pbsyxsmbv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 17 Mar 2023 10:26:53 +0000
+Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
+        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32HAQpuw62062884
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 17 Mar 2023 10:26:51 GMT
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 387352006A;
+        Fri, 17 Mar 2023 10:26:51 +0000 (GMT)
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 14B5B20063;
+        Fri, 17 Mar 2023 10:26:49 +0000 (GMT)
+Received: from li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com (unknown [9.43.91.202])
+        by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Fri, 17 Mar 2023 10:26:48 +0000 (GMT)
+Date:   Fri, 17 Mar 2023 15:56:46 +0530
+From:   Ojaswin Mujoo <ojaswin@linux.ibm.com>
+To:     Jan Kara <jack@suse.cz>
+Cc:     linux-ext4@vger.kernel.org, "Theodore Ts'o" <tytso@mit.edu>,
+        Ritesh Harjani <riteshh@linux.ibm.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ritesh Harjani <ritesh.list@gmail.com>
+Subject: Re: [RFC 04/11] ext4: Convert mballoc cr (criteria) to enum
+Message-ID: <ZBRAZsvbcSBNJ+Pl@li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com>
+References: <cover.1674822311.git.ojaswin@linux.ibm.com>
+ <9670431b31aa62e83509fa2802aad364910ee52e.1674822311.git.ojaswin@linux.ibm.com>
+ <20230309121122.vzfswandgqqm4yk5@quack3>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e36ff35e-57d6-488e-98a1-08db26d1f874
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Mar 2023 10:25:46.0999
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: sPjoCNKkGnUplNx9x076Gkz0FtQhz+qwgBY9ZFXfjNWqX6WvTFfJ2R85CSsg/VhDWE08SbwS97RBOvoPAtPJsw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR11MB8150
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230309121122.vzfswandgqqm4yk5@quack3>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 1oTpBwgoKcrO-oSGQ7zgqkLbRV1bPfo5
+X-Proofpoint-ORIG-GUID: wbmmz5BvAKShzth4OIPAAWvkqPugUlUa
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-17_06,2023-03-16_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxscore=0
+ impostorscore=0 priorityscore=1501 lowpriorityscore=0 bulkscore=0
+ adultscore=0 clxscore=1015 suspectscore=0 spamscore=0 mlxlogscore=999
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303150002 definitions=main-2303170068
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> From: Liu, Yi L <yi.l.liu@intel.com>
-> Sent: Thursday, March 9, 2023 4:09 PM
->=20
-> From: Lu Baolu <baolu.lu@linux.intel.com>
->=20
-> Introduce a new domain type for a user space I/O address, which is nested
+On Thu, Mar 09, 2023 at 01:11:22PM +0100, Jan Kara wrote:
+> On Fri 27-01-23 18:07:31, Ojaswin Mujoo wrote:
+> > Convert criteria to be an enum so it easier to maintain. This change
+> > also makes it easier to insert new criterias in the future.
+> > 
+> > Signed-off-by: Ojaswin Mujoo <ojaswin@linux.ibm.com>
+> > Reviewed-by: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
+> 
+> Just two small comments below:
+Hi Jan,
 
-'a ... address'? let's call it 'user I/O page table'.
+Thanks for the review. 
+> 
+> > diff --git a/fs/ext4/ext4.h b/fs/ext4/ext4.h
+> > index b8b00457da8d..6037b8e0af86 100644
+> > --- a/fs/ext4/ext4.h
+> > +++ b/fs/ext4/ext4.h
+> > @@ -126,6 +126,14 @@ enum SHIFT_DIRECTION {
+> >  	SHIFT_RIGHT,
+> >  };
+> >  
+> > +/*
+> > + * Number of criterias defined. For each criteria, mballoc has slightly
+> > + * different way of finding the required blocks nad usually, higher the
+> 						   ^^^ and
+> 
+> > + * criteria the slower the allocation. We start at lower criterias and keep
+> > + * falling back to higher ones if we are not able to find any blocks.
+> > + */
+> > +#define EXT4_MB_NUM_CRS 4
+> > +
+> 
+> So defining this in a different header than the enum itself is fragile. I
+> understand you need it in ext4_sb_info declaration so probably I'd move the
+> enum declaration to ext4.h. Alternatively I suppose we could move a lot of
+Got it, I'll try to keep them in the same file.
 
+> mballoc stuff out of ext4_sb_info into a separate struct because there's a
+> lot of it. But that would be much larger undertaking.
+Right, we did notice that as well, but as you said, that's out of scope
+of this patchset.
+> 
+> Also when going for symbolic allocator scan names maybe we could actually
+> make names sensible instead of CR[0-4]? Perhaps like CR_ORDER2_ALIGNED,
+> CR_BEST_LENGHT_FAST, CR_BEST_LENGTH_ALL, CR_ANY_FREE. And probably we could
+> deal with ordered comparisons like in:
+I like this idea, it should make the code a bit more easier to
+understand. However just wondering if I should do it as a part of this
+series or a separate patch since we'll be touching code all around and 
+I don't want to confuse people with the noise :) 
+> 
+>                 if (cr < 2 &&
+>                     (!sbi->s_log_groups_per_flex ||
+>                      ((group & ((1 << sbi->s_log_groups_per_flex) - 1)) != 0)) &
+>                     !(ext4_has_group_desc_csum(sb) &&
+>                       (gdp->bg_flags & cpu_to_le16(EXT4_BG_BLOCK_UNINIT))))
+>                         return 0;
+> 
+> to declare CR_FAST_SCAN = 2, or something like that. What do you think?
+About this, wont it be better to just use something like
+
+cr < CR_BEST_LENGTH_ALL 
+
+instead of defining a new CR_FAST_SCAN = 2.
+
+The only concern is that if we add a new "fast" CR (say between
+CR_BEST_LENGTH_FAST and CR_BEST_LENGTH_ALL) then we'll need to make
+sure we also update CR_FAST_SCAN to 3 which is easy to miss.
+
+Regards,
+Ojaswin
+> 
+> 								Honza
+> -- 
+> Jan Kara <jack@suse.com>
+> SUSE Labs, CR
