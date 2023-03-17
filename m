@@ -2,79 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2AAC6BDD4A
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 01:01:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A9506BDD4F
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 01:05:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229936AbjCQABd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 20:01:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36854 "EHLO
+        id S229787AbjCQAFO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 20:05:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbjCQABa (ORCPT
+        with ESMTP id S229567AbjCQAFN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 20:01:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA6B9DDF3E;
-        Thu, 16 Mar 2023 17:01:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 801016215E;
-        Fri, 17 Mar 2023 00:01:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D02DC433EF;
-        Fri, 17 Mar 2023 00:01:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679011288;
-        bh=hTYgEnMkyE64wnXsk3avUA5GCBJ8kbqVBwnmO0El23w=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=mypInJB7USBxQTN7HvThfy/CAw1zfzkM+ju9mTokOdz/uj0tuVPYUCuC+Y5HM3AWi
-         Ar+wZyMFzHVje5vIzYY79u0DpGUqhKOkETv6ZGZb80uT+dGLD3wZcvf9B/rOMjIUrG
-         HbAwQWFw2Yh4V3bu/vDt7XAgb3kJZzUtpNGrheUjeCco69BP9N/QRSFXeDSV6P0Xmd
-         EHlmapHbhpWZbGBo7HJdrRbP3HIIGeJBJUI8HFU61wrTzwQsERKXGSs1XMXza4ULqH
-         lzv8gDeATgqg9E0sHBOOOZ3fQtNSdnpY7ZRUrxWjzFb2hKmMEdwQDBAXJJ3iRCCIdZ
-         SJY7Sq6DgwSWQ==
-Date:   Thu, 16 Mar 2023 17:01:27 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>,
-        Ong Boon Leong <boon.leong.ong@intel.com>
-Cc:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Looi Hong Aun <hong.aun.looi@intel.com>,
-        Voon Weifeng <weifeng.voon@intel.com>,
-        Lai Peter Jun Ann <peter.jun.ann.lai@intel.com>
-Subject: Re: [PATCH net v2 2/2] net: stmmac: move fixed-link support fixup
- code
-Message-ID: <20230316170127.5bbd559d@kernel.org>
-In-Reply-To: <20230314070208.3703963-3-michael.wei.hong.sit@intel.com>
-References: <20230314070208.3703963-1-michael.wei.hong.sit@intel.com>
-        <20230314070208.3703963-3-michael.wei.hong.sit@intel.com>
+        Thu, 16 Mar 2023 20:05:13 -0400
+Received: from smtp.gentoo.org (woodpecker.gentoo.org [140.211.166.183])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 976E06BDD2
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 17:05:11 -0700 (PDT)
+References: <20221217084155.663235-1-mgorny@gentoo.org>
+ <CAK7LNAQ8=YbOVvugBUQBo8eXRMH+YA49aS-1C=2hCGq0xoW7XA@mail.gmail.com>
+ <628c5e32a437ad198866b03f2d6ff8a9c65754df.camel@gentoo.org>
+ <897BDBF1-6C6E-4C69-8BA7-FEEFEB8ADC11@gentoo.org>
+ <1416803D-E4E9-426B-8419-60251B8245B7@gentoo.org>
+User-agent: mu4e 1.8.14; emacs 29.0.60
+From:   Sam James <sam@gentoo.org>
+To:     =?utf-8?B?TWljaGHFgiBHw7Nybnk=?= <mgorny@gentoo.org>,
+        yamada.masahiro@socionext.com
+Cc:     Dmitry Goldin <dgoldin+lkml@protonmail.ch>,
+        linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        dist-kernel@gentoo.org
+Subject: Re: [PATCH] kheaders: prefer gtar over tar for better compatibility
+Date:   Fri, 17 Mar 2023 00:04:36 +0000
+In-reply-to: <1416803D-E4E9-426B-8419-60251B8245B7@gentoo.org>
+Message-ID: <87wn3g2qfk.fsf@gentoo.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha512; protocol="application/pgp-signature"
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 14 Mar 2023 15:02:08 +0800 Michael Sit Wei Hong wrote:
-> xpcs_an_inband value is updated in the speed_mode_2500 function
-> which turns on the xpcs_an_inband mode.
-> 
-> Moving the fixed-link fixup code to right before phylink setup to
-> ensure no more fixup will affect the fixed-link mode configurations.
-> 
-> Fixes: 72edaf39fc65 ("stmmac: intel: add phy-mode and fixed-link ACPI _DSD setting support")
-> Signed-off-by: Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>
+--=-=-=
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Ong Boon, since you added the code which gets moved - could we get 
-an ack/review tag from you? Helps increase the confidence in the change.
+
+Sam James <sam@gentoo.org> writes:
+
+> [[PGP Signed Part:Undecided]]
+>
+>
+>> On 17 Jan 2023, at 19:01, Sam James <sam@gentoo.org> wrote:
+>>=20
+>>=20
+>>=20
+>>> On 25 Dec 2022, at 16:33, Micha=C5=82 G=C3=B3rny <mgorny@gentoo.org> wr=
+ote:
+>>>=20
+>>> On Sun, 2022-12-25 at 01:45 +0900, Masahiro Yamada wrote:
+>>>> Instead of inserting a workaround like this,
+>>>> another way is to allow users to override a variable
+>>>> from the command line.
+>>>>=20
+>>>>=20
+>>>> See the top Makefile, for example,
+>>>>=20
+>>>>=20
+>>>> AWK             =3D awk
+>>>>=20
+>>>>=20
+>>>> Then, users can do "make AWK=3Dgawk"
+>>>=20
+>>> I'm sorry but are you requesting that I remove the check and use $TAR
+>>> instead, or allow overriding with TAR, and fall back to gtar or tar
+>>> respectively?  If the former, should the script unconditionally assume
+>>> that TAR will be always set in the environment, or include fallback to
+>>> tar for when the script is run directly?
+>>=20
+>>=20
+>> Masahiro, what do you reckon? Thanks.
+>>=20
+>
+> Ping.
+
+ping^2. We'd really love to get this in to fix a bug for our users in
+Gentoo.
+
+>
+>> Best,
+>> sam
+>
+>
+> [[End of PGP Signed Part]]
+
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iOUEARYKAI0WIQQlpruI3Zt2TGtVQcJzhAn1IN+RkAUCZBOusV8UgAAAAAAuAChp
+c3N1ZXItZnByQG5vdGF0aW9ucy5vcGVucGdwLmZpZnRoaG9yc2VtYW4ubmV0MjVB
+NkJCODhERDlCNzY0QzZCNTU0MUMyNzM4NDA5RjUyMERGOTE5MA8cc2FtQGdlbnRv
+by5vcmcACgkQc4QJ9SDfkZBxFAD+JBeFAe0c+gzCpovBYIpWGW0bYgbqSTYNsmSG
+bq+Jd7QBAJfSEJpOeh6rTQO6x3vtroZy1UwzzO9GlUPT4SYIgjQP
+=goNs
+-----END PGP SIGNATURE-----
+--=-=-=--
