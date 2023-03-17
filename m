@@ -2,96 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51FC26BE223
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 08:51:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC7366BE244
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 08:54:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230320AbjCQHvf convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 17 Mar 2023 03:51:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57334 "EHLO
+        id S230443AbjCQHyQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 03:54:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230260AbjCQHvc (ORCPT
+        with ESMTP id S230396AbjCQHyM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 03:51:32 -0400
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EB008F71C;
-        Fri, 17 Mar 2023 00:51:30 -0700 (PDT)
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.95)
-          with esmtps (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1pd4s0-000c8p-Tf; Fri, 17 Mar 2023 08:51:24 +0100
-Received: from dynamic-078-055-143-011.78.55.pool.telefonica.de ([78.55.143.11] helo=[192.168.1.11])
-          by inpost2.zedat.fu-berlin.de (Exim 4.95)
-          with esmtpsa (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1pd4s0-002izB-N2; Fri, 17 Mar 2023 08:51:24 +0100
-Message-ID: <2749830124ec9d6990c95bf2ce4ea4de56b2967a.camel@physik.fu-berlin.de>
-Subject: Re: [PATCH 5/7 v4] sh: remove sh5/sh64 last fragments
-From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>, Rich Felker <dalias@libc.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        linux-sh@vger.kernel.org
-Date:   Fri, 17 Mar 2023 08:51:23 +0100
-In-Reply-To: <CAMuHMdXaZEWxB9Opgt2wcD2xAqF9Jv4r4KY9RGaR7vVVFXs5NQ@mail.gmail.com>
-References: <ef8fbda8-cace-1db3-9161-abd2e75dcf13@infradead.org>
-         <A8D501D3-68ED-4112-BDA7-EE67357A2E28@physik.fu-berlin.de>
-         <ca94954e-88ea-6707-d2a5-722e589d0c87@infradead.org>
-         <50863bc8642d52f1533ad5809ae2dcd690e2493b.camel@physik.fu-berlin.de>
-         <CAMuHMdXaZEWxB9Opgt2wcD2xAqF9Jv4r4KY9RGaR7vVVFXs5NQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.46.4 
+        Fri, 17 Mar 2023 03:54:12 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B1E7C6414;
+        Fri, 17 Mar 2023 00:53:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0B03EB8247B;
+        Fri, 17 Mar 2023 07:53:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD5E9C433EF;
+        Fri, 17 Mar 2023 07:53:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679039613;
+        bh=FHqeoUzoVZtRqyxQJUT/4e1BNJn6xtdz6lPXXgD9+QU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Vj1ByAAC/ZRd2EHSGZHX0kRv5PTnfDa6eJPKaJ3uRVm4e9ye0AdQngEC1EoNQXbZM
+         hI6/uUPPS3nLTIgu2WNwAyYWplTI1WuagQxQ5I+ERvldOyt6/rK37eHIkbOFLPCSjV
+         yroVnV+uMQJHJSqhEZOx2LquTRtov+j86ySViL0a3PawzrXRMcpkIftj20ZPvn5fxj
+         2QL6eAz/lClygp5T9Hjs9yZ72iMi7aQBsSH8Q2p1qUAmIJn9NjFglQ/DX2b+lCGReh
+         pr8ObugbtbXKMP/+RUPiBTIWZNX43Snzm0j0Y0JjS4lx2x59oBn2RKz/a0gSxxKk8s
+         bKsCzQLPNrXhA==
+Date:   Fri, 17 Mar 2023 07:53:27 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     ChiaEn Wu <chiaen_wu@richtek.com>
+Cc:     corbet@lwn.net, pavel@ucw.cz, matthias.bgg@gmail.com,
+        andriy.shevchenko@linux.intel.com, jacek.anaszewski@gmail.com,
+        angelogioacchino.delregno@collabora.com, linux-doc@vger.kernel.org,
+        peterwu.pub@gmail.com, cy_huang@richtek.com,
+        linux-leds@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        szunichen@gmail.com, Alice Chen <alice_chen@richtek.com>
+Subject: Re: [PATCH v18 1/3] leds: rgb: mt6370: Add MediaTek MT6370 current
+ sink type LED Indicator support
+Message-ID: <20230317075327.GA9667@google.com>
+References: <cover.1678430444.git.chiaen_wu@richtek.com>
+ <1df93a583c3f508a7158b83b95857e9bce235e1b.1678430444.git.chiaen_wu@richtek.com>
 MIME-Version: 1.0
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-Originating-IP: 78.55.143.11
-X-ZEDAT-Hint: PO
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1df93a583c3f508a7158b83b95857e9bce235e1b.1678430444.git.chiaen_wu@richtek.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Geert!
+On Fri, 10 Mar 2023, ChiaEn Wu wrote:
 
-On Fri, 2023-03-17 at 08:31 +0100, Geert Uytterhoeven wrote:
-> Hi Adrian,
-> 
-> On Thu, Mar 16, 2023 at 9:46 PM John Paul Adrian Glaubitz
-> <glaubitz@physik.fu-berlin.de> wrote:
-> > On Thu, 2023-03-16 at 13:43 -0700, Randy Dunlap wrote:
-> > > > Oops, sorry. My bad. I will use the proper tree.
-> > > 
-> > > Just let me know if you want me to resend it.
-> > > Thanks.
-> > 
-> > No, that's fine. I will rebase my for-next tree.
-> 
-> Rebase on top of what? Commit 49deed336ef9a409 ("parisc:
-> update kbuild doc. aliases for parisc64") is in the parisc tree.
-> You must not base the SH tree on the parisc tree.
+> From: ChiYuan Huang <cy_huang@richtek.com>
+>
+> The MediaTek MT6370 is a highly-integrated smart power management IC,
+> which includes a single cell Li-Ion/Li-Polymer switching battery
+> charger, a USB Type-C & Power Delivery (PD) controller, dual
+> Flash LED current sources, a RGB LED driver, a backlight WLED driver,
+> a display bias driver and a general LDO for portable devices.
+>
+> Add support for the MediaTek MT6370 Current Sink Type LED Indicator
+> driver. It can control four channels current-sink RGB LEDs with 3 modes:
+> constant current, PWM, and breath mode.
+>
+> Acked-by: Jacek Anaszewski <jacek.anaszewski@gmail.com>
+> Co-developed-by: Alice Chen <alice_chen@richtek.com>
+> Signed-off-by: Alice Chen <alice_chen@richtek.com>
+> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+> Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
+> ---
+> v18:
+> - Rename 'MT6370_VENID_MASK' to more human readable
+>   'MT6370_VENDOR_ID_MASK'
+> - Define the const number vid.
+> - Unwrap each line by 100 chars limit.
+> - Remove the redudant space in 'mt6370_gen_breath_pattern()' comment for
+>   patterh data allocation.
+> - Define a sub function 'mt6370_assign_multicolor_info()' to tidy up
+>   'mt6370_init_led_properties()' for multicolor case.
+> - Define a sub function 'mt6370_multicolor_led_register' to tidy up
+>   'mt6370_led_register()' for multicolor case.
+> - Refine 'fwnode_handle_put' in probe function with 'goto'.
+> ---
+>  drivers/leds/rgb/Kconfig           |   13 +
+>  drivers/leds/rgb/Makefile          |    1 +
+>  drivers/leds/rgb/leds-mt6370-rgb.c | 1010 ++++++++++++++++++++++++++++++++++++
+>  3 files changed, 1024 insertions(+)
+>  create mode 100644 drivers/leds/rgb/leds-mt6370-rgb.c
 
-Oh, I wasn't aware of that.
+Applied, thanks
 
-> Don't care about the simple conflict, Stephen and Linus can
-> handle that fine.
-> 
-> FTR, if the conflict was more complex, an immutable branch to be
-> merged by all parties would be appropriate.  But that's overkill and
-> thus not needed for simple conflicts like this.
-
-I'll resolve the conflict manually then. Thanks.
-
-Adrian
-
--- 
- .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer
-`. `'   Physicist
-  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
+--
+Lee Jones [李琼斯]
