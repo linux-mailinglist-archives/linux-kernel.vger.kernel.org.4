@@ -2,73 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54CC26BEDAF
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 17:05:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B67896BEDAD
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 17:05:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231350AbjCQQFj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 12:05:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34350 "EHLO
+        id S231578AbjCQQFg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 12:05:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231533AbjCQQFd (ORCPT
+        with ESMTP id S231580AbjCQQF0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 12:05:33 -0400
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A86328A46;
-        Fri, 17 Mar 2023 09:05:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=fpeUbGcjjy+4WfkcXpJ+w4mJC4TfpIrgZQL8Efq/lgw=; b=VGxV1NMAY7KXNAqJyMaNjinpsw
-        oHqLWeRMgw0Jevo1MImj3JaFVOnXM1HOl/5ReLa382My+evaqFMq7H4xhjlzf5Yr636RNkjdLo0Mj
-        aWnWozkUOkiiogoir12UhSZrFAAe2l1xgR+AWwTR+9G3/KFSNFK49OTnQQT7gOIwiL645GiSb4dI6
-        8MImcAKXy5Fso4qUmw3RFeCot6MstIYCRYOeyjjQ+NpQRGBnsdCzX1LPVG9Lh90dtJv4HwUD1DgVp
-        zlqCSYN9lUTgO4M8KbvbaHT/lid48kUomIAWWz6iwpZ297ip3LAE8Tyebgv2QTmSFqRqsGvkkQslc
-        logipHPA==;
-Received: from [152.254.169.34] (helo=[192.168.1.60])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1pdCZV-00G3gn-80; Fri, 17 Mar 2023 17:04:49 +0100
-Message-ID: <ef2b7503-1023-67c1-3b06-87d611472d22@igalia.com>
-Date:   Fri, 17 Mar 2023 13:04:39 -0300
+        Fri, 17 Mar 2023 12:05:26 -0400
+Received: from 18.mo561.mail-out.ovh.net (18.mo561.mail-out.ovh.net [87.98.172.162])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CB8B60D41
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 09:04:57 -0700 (PDT)
+Received: from director8.ghost.mail-out.ovh.net (unknown [10.108.4.24])
+        by mo561.mail-out.ovh.net (Postfix) with ESMTP id C26CE2668E
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 16:04:53 +0000 (UTC)
+Received: from ghost-submission-6684bf9d7b-ljxbb (unknown [10.110.171.111])
+        by director8.ghost.mail-out.ovh.net (Postfix) with ESMTPS id 0C01B1FDF2;
+        Fri, 17 Mar 2023 16:04:51 +0000 (UTC)
+Received: from milecki.pl ([37.59.142.102])
+        by ghost-submission-6684bf9d7b-ljxbb with ESMTPSA
+        id pQNhOaOPFGR9LCYAwsBWZw
+        (envelope-from <rafal@milecki.pl>); Fri, 17 Mar 2023 16:04:51 +0000
+Authentication-Results: garm.ovh; auth=pass (GARM-102R004ac1e6109-3b86-4a94-b551-02a4c2f0f22c,
+                    EED6CEFD7F1E654E27D1F960EB8ACCFF2FD7B002) smtp.auth=rafal@milecki.pl
+X-OVh-ClientIp: 194.187.74.233
+Message-ID: <d7b026ea-036a-fd47-648f-b5b10ca58cea@milecki.pl>
+Date:   Fri, 17 Mar 2023 17:04:50 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2] x86/hyperv: Mark hv_ghcb_terminate() as noreturn
-Content-Language: en-US
-To:     Josh Poimboeuf <jpoimboe@kernel.org>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-Cc:     "x86@kernel.org" <x86@kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "kernel-dev@igalia.com" <kernel-dev@igalia.com>,
-        "kernel@gpiccoli.net" <kernel@gpiccoli.net>,
-        Arnd Bergmann <arnd@arndb.de>
-References: <20230310152442.cbrjise6uex4ak4x@treble>
- <20230310154452.1169204-1-gpiccoli@igalia.com>
- <BYAPR21MB16888EBB51D1597F9B9C212FD7BA9@BYAPR21MB1688.namprd21.prod.outlook.com>
- <a1f40654-b3cf-5c77-561e-056f47cbff61@igalia.com>
- <BYAPR21MB1688673F3E49C9944E892894D7BD9@BYAPR21MB1688.namprd21.prod.outlook.com>
- <20230317145327.sl7kzgxtlqgrte7j@treble>
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-In-Reply-To: <20230317145327.sl7kzgxtlqgrte7j@treble>
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:96.0) Gecko/20100101
+ Thunderbird/96.0
+Subject: Re: [PATCH V4 4/4] nvmem: layouts: add fixed cells layout
+To:     kernel test robot <lkp@intel.com>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc:     oe-kbuild-all@lists.linux.dev,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Michael Walle <michael@walle.cc>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230317132620.31142-5-zajec5@gmail.com>
+ <202303172348.sb4rePWl-lkp@intel.com>
+From:   =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
+In-Reply-To: <202303172348.sb4rePWl-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+X-Ovh-Tracer-Id: 10350679321734130651
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrvdefvddgkedvucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepkfffgggfuffvvehfhfgjtgfgsehtjeertddtfeejnecuhfhrohhmpeftrghfrghlucfoihhlvggtkhhiuceorhgrfhgrlhesmhhilhgvtghkihdrphhlqeenucggtffrrghtthgvrhhnpefggefgjeefffekfeejffejhfektddvhfefleevgedvlefhtdeihfefudeijeeitdenucffohhmrghinhepghhithdqshgtmhdrtghomhdpghhithhhuhgsrdgtohhmpdhkvghrnhgvlhdrohhrghdptddurdhorhhgpdhgihhthhhusghushgvrhgtohhnthgvnhhtrdgtohhmnecukfhppeduvdejrddtrddtrddupdefjedrheelrddugedvrddutddvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepuddvjedrtddrtddruddpmhgrihhlfhhrohhmpeeorhgrfhgrlhesmhhilhgvtghkihdrphhlqedpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheeiuddpmhhouggvpehsmhhtphhouhht
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
         SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,24 +63,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/03/2023 11:53, Josh Poimboeuf wrote:
-> [...]
->>> Hi Michael / Josh (and all), lemme know if you want me to submit a V3
->>> doing that. The function is not called inside this own definition file
->>> nor exported, so I'm not sure that'd be necessary, but glad to do so if
->>> you prefer.
->>>
->>
->> I don't have a preference.  I was just trying to make sure the details
->> are all correct.  I'll defer to those with more knowledge of the
->> __noreturn attribute than I have.
+On 17.03.2023 16:54, kernel test robot wrote:
+> I love your patch! Perhaps something to improve:
 > 
-> It's not required, but probably good practice to put __noreturn in both
-> places to make it more self-documenting.
+> [auto build test WARNING on next-20230317]
+> [cannot apply to robh/for-next krzk-dt/for-next char-misc/char-misc-testing char-misc/char-misc-next char-misc/char-misc-linus linus/master v6.3-rc2 v6.3-rc1 v6.2 v6.3-rc2]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
 > 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Rafa-Mi-ecki/dt-bindings-nvmem-layouts-add-fixed-layout/20230317-212948
+> patch link:    https://lore.kernel.org/r/20230317132620.31142-5-zajec5%40gmail.com
+> patch subject: [PATCH V4 4/4] nvmem: layouts: add fixed cells layout
+> config: sparc-allyesconfig (https://download.01.org/0day-ci/archive/20230317/202303172348.sb4rePWl-lkp@intel.com/config)
+> compiler: sparc64-linux-gcc (GCC) 12.1.0
+> reproduce (this is a W=1 build):
+>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>          chmod +x ~/bin/make.cross
+>          # https://github.com/intel-lab-lkp/linux/commit/7ffae9ad6cdb83ae60e3eacf96ab779e0b69a65b
+>          git remote add linux-review https://github.com/intel-lab-lkp/linux
+>          git fetch --no-tags linux-review Rafa-Mi-ecki/dt-bindings-nvmem-layouts-add-fixed-layout/20230317-212948
+>          git checkout 7ffae9ad6cdb83ae60e3eacf96ab779e0b69a65b
+>          # save the config file
+>          mkdir build_dir && cp config build_dir/.config
+>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc olddefconfig
+>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc SHELL=/bin/bash drivers/nvmem/
+> 
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Link: https://lore.kernel.org/oe-kbuild-all/202303172348.sb4rePWl-lkp@intel.com/
+> 
+> All warnings (new ones prefixed by >>):
+> 
+>>> drivers/nvmem/layouts/fixed.c:37:1: warning: data definition has no type or storage class
+>        37 | module_nvmem_layout_driver(fixed_nvmem_layout);
+>           | ^~~~~~~~~~~~~~~~~~~~~~~~~~
+>     drivers/nvmem/layouts/fixed.c:37:1: error: type defaults to 'int' in declaration of 'module_nvmem_layout_driver' [-Werror=implicit-int]
+>>> drivers/nvmem/layouts/fixed.c:37:1: warning: parameter names (without types) in function declaration
+>     cc1: some warnings being treated as errors
 
-Thanks Josh and Michael, will submit a V3 shortly with this improvement!
-Cheers,
+I reported that to Miquel already, he's going to improve his patch:
+https://lore.kernel.org/lkml/20230316173741.4f572068@xps-13/
 
 
-Guilherme
+> vim +37 drivers/nvmem/layouts/fixed.c
+> 
+>      36	
+>    > 37	module_nvmem_layout_driver(fixed_nvmem_layout);
+>      38	
+> 
