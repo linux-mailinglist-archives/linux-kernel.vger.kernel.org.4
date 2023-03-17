@@ -2,69 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A42826BE1C1
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 08:10:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D3926BE1C2
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 08:13:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230129AbjCQHKY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 03:10:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34814 "EHLO
+        id S230270AbjCQHNo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 03:13:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229543AbjCQHKW (ORCPT
+        with ESMTP id S229543AbjCQHNm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 03:10:22 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3481A39BA4
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 00:10:21 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id fd5so16695341edb.7
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 00:10:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1679037019;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sO/7E7z2vOjsJ4C2pcztUKWGDnDolBCwkV4hnPOL/zc=;
-        b=M3lBTBvAkGx2YRvpjBSj65pcLelUbWRCS7Shu16S8ANiepQ67cP/4p+6fvd8AwNqeR
-         LDPFxEYnuMcqx+rZVEwr+oIjfo/UZp4HYxrb0IT/KQlxeL2iSfKXASgGPhEVk29ie/Di
-         3RlEbmQGWlYjGdraTPrOZE/t2nDB031JWzCwV4EBtjCPx6xZfBAMm/8/U674jY8tmE62
-         KcWblB3OhY/dQOkJp86jDaIpnPLY6UTYDBd9uiaGsaibfDQ2sBXcqgOkop4k1IkCdymI
-         +XSax3ctcUtTgVILR3riI67+AzkSUfMyzF7cn7Hh7jDZfoxQ5DFX/DBeMYg/SOB2SzzS
-         DRsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679037019;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sO/7E7z2vOjsJ4C2pcztUKWGDnDolBCwkV4hnPOL/zc=;
-        b=Mq8pkX4s44rWMuZnSbTBtwcr9MQbVv7lakPwYoVcnBD1YmyIZ25qqfzLCkAdhr05M/
-         85VRGbD0c7dideS/OCfqeJlSdyVR1+5pd4aO+9iXjExHctU48954ARQjFqgZy9qavxmf
-         JWzjwzmAPnw5TY1QqqiU8hnlrzX0ESZaBprfShAj9uEuTGI8cAeS0cqn+syV4JZ9JqZy
-         moMTKjoKACIxlNwyNup9DhbmfgjDcV/V4WCQhC45dWzSNSttW2m8cGD546dzOOK0sg71
-         tahHSRtG1tHKAahKkyIMxR6LStkJCSgZ7tk7cVN8linTmWU2Be3dUyxkUSpFen6qqSpl
-         6Lfw==
-X-Gm-Message-State: AO0yUKXnkxzl3hhiFSC9QoPgpfeS16HKGx629u+tcJIqy7TBzYbFOr/k
-        qCCWabnmL/Qs4NUrKGGKH/+UJkbo8Bz356PY875z
-X-Google-Smtp-Source: AK7set9riBz6lk7CluuYhI4YYNfPsk2TDCBW7w33j2QiBhLVMTuJt28oT2MF3qZ0ZzTgw6oTH9H4fDWVJaWzEDxeZ3w=
-X-Received: by 2002:a50:8e41:0:b0:4ac:b832:856c with SMTP id
- 1-20020a508e41000000b004acb832856cmr1155208edx.1.1679037019651; Fri, 17 Mar
- 2023 00:10:19 -0700 (PDT)
+        Fri, 17 Mar 2023 03:13:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DA7351FA4
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 00:13:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 16A69621AF
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 07:13:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27925C433D2;
+        Fri, 17 Mar 2023 07:13:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1679037220;
+        bh=EMox3uAJdc454qzosMEHyqhK1IpB/SyLPpxJcdBDMJU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RoDHeXffgYoGLwNwon+Lc6Bnl+yTo4PTXHv8ZHsZbCIsWF1u/Y82MILsxpobukDD6
+         UXMmrExB81yHrf1nQwwxasJ4V/T0+depmydn2uOH97S1M8aGHgy64gbGtQsfR+BHTM
+         IHrTvLePspIq/y8SsTQ0QBDU4BZmAuXuIrVIEH+w=
+Date:   Fri, 17 Mar 2023 08:13:37 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Khadija Kamran <kamrankhadijadj@gmail.com>
+Cc:     outreachy@lists.linux.dev, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v8] staging: axis-fifo: initialize timeouts in init only
+Message-ID: <ZBQTIVk0zsgv1hMH@kroah.com>
+References: <ZBN3XAsItCiTk7CV@khadija-virtual-machine>
 MIME-Version: 1.0
-References: <20230228094110.37-1-xieyongji@bytedance.com> <20230228094110.37-3-xieyongji@bytedance.com>
- <319ece63-ac4f-db05-8a55-65ecad75e437@redhat.com>
-In-Reply-To: <319ece63-ac4f-db05-8a55-65ecad75e437@redhat.com>
-From:   Yongji Xie <xieyongji@bytedance.com>
-Date:   Fri, 17 Mar 2023 15:10:08 +0800
-Message-ID: <CACycT3v7kzJ5f+ENzP6d_Y=wyhL4z1uaSAJH+3keTyquTAKf5A@mail.gmail.com>
-Subject: Re: [PATCH v3 02/11] vdpa: Add set/get_vq_affinity callbacks in vdpa_config_ops
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Christoph Hellwig <hch@lst.de>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZBN3XAsItCiTk7CV@khadija-virtual-machine>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -73,89 +51,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 16, 2023 at 11:27=E2=80=AFAM Jason Wang <jasowang@redhat.com> w=
-rote:
->
->
-> =E5=9C=A8 2023/2/28 17:41, Xie Yongji =E5=86=99=E9=81=93:
-> > This introduces set/get_vq_affinity callbacks in
-> > vdpa_config_ops to support interrupt affinity
-> > management for vdpa device drivers.
-> >
-> > Signed-off-by: Xie Yongji <xieyongji@bytedance.com>
-> > Acked-by: Jason Wang <jasowang@redhat.com>
-> > ---
-> >   drivers/virtio/virtio_vdpa.c | 28 ++++++++++++++++++++++++++++
-> >   include/linux/vdpa.h         | 13 +++++++++++++
-> >   2 files changed, 41 insertions(+)
-> >
-> > diff --git a/drivers/virtio/virtio_vdpa.c b/drivers/virtio/virtio_vdpa.=
-c
-> > index d7f5af62ddaa..f72696b4c1c2 100644
-> > --- a/drivers/virtio/virtio_vdpa.c
-> > +++ b/drivers/virtio/virtio_vdpa.c
-> > @@ -337,6 +337,32 @@ static const char *virtio_vdpa_bus_name(struct vir=
-tio_device *vdev)
-> >       return dev_name(&vdpa->dev);
-> >   }
-> >
-> > +static int virtio_vdpa_set_vq_affinity(struct virtqueue *vq,
-> > +                                    const struct cpumask *cpu_mask)
-> > +{
-> > +     struct virtio_vdpa_device *vd_dev =3D to_virtio_vdpa_device(vq->v=
-dev);
-> > +     struct vdpa_device *vdpa =3D vd_dev->vdpa;
-> > +     const struct vdpa_config_ops *ops =3D vdpa->config;
-> > +     unsigned int index =3D vq->index;
-> > +
-> > +     if (ops->set_vq_affinity)
-> > +             return ops->set_vq_affinity(vdpa, index, cpu_mask);
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +static const struct cpumask *
-> > +virtio_vdpa_get_vq_affinity(struct virtio_device *vdev, int index)
-> > +{
-> > +     struct vdpa_device *vdpa =3D vd_get_vdpa(vdev);
-> > +     const struct vdpa_config_ops *ops =3D vdpa->config;
-> > +
-> > +     if (ops->get_vq_affinity)
-> > +             return ops->get_vq_affinity(vdpa, index);
-> > +
-> > +     return NULL;
-> > +}
-> > +
-> >   static const struct virtio_config_ops virtio_vdpa_config_ops =3D {
-> >       .get            =3D virtio_vdpa_get,
-> >       .set            =3D virtio_vdpa_set,
-> > @@ -349,6 +375,8 @@ static const struct virtio_config_ops virtio_vdpa_c=
-onfig_ops =3D {
-> >       .get_features   =3D virtio_vdpa_get_features,
-> >       .finalize_features =3D virtio_vdpa_finalize_features,
-> >       .bus_name       =3D virtio_vdpa_bus_name,
-> > +     .set_vq_affinity =3D virtio_vdpa_set_vq_affinity,
-> > +     .get_vq_affinity =3D virtio_vdpa_get_vq_affinity,
-> >   };
-> >
-> >   static void virtio_vdpa_release_dev(struct device *_d)
-> > diff --git a/include/linux/vdpa.h b/include/linux/vdpa.h
-> > index 43f59ef10cc9..d61f369f9cd6 100644
-> > --- a/include/linux/vdpa.h
-> > +++ b/include/linux/vdpa.h
-> > @@ -250,6 +250,15 @@ struct vdpa_map_file {
-> >    *                          @vdev: vdpa device
-> >    *                          Returns the iova range supported by
-> >    *                          the device.
-> > + * @set_vq_affinity:         Set the irq affinity of virtqueue (option=
-al)
->
->
-> Nit: it's better not mention IRQ here because the virtqueue notification
-> is not necessarily backed on IRQ.
->
+On Fri, Mar 17, 2023 at 01:09:00AM +0500, Khadija Kamran wrote:
+> Initialize the module parameters, read_timeout and write_timeout once in
+> init().
+> 
+> Module parameters can only be set once and cannot be modified later, so we
+> don't need to evaluate them again when passing the parameters to
+> wait_event_interruptible_timeout().
 
-OK.
+I feel like we are being too picky here, but this isn't the correct
+wording.  It is possible for module parameters to be modified "later",
+if the permissions on the parameter are set to allow this.  But that's
+not what this driver does here, so this might be better phrased as:
 
-Thanks,
-Yongji
+  The module parameters in this driver can not be modified after
+  loading, so they can be evaluated once at module load and set to
+  default values if needed at that time.
+
+> Convert datatype of {read,write}_timeout from 'int' to 'long int' because
+> implicit conversion of 'long int' to 'int' in statement
+> '{read,write}_timeout = MAX_SCHEDULE_TIMEOUT' results in an overflow.
+> 
+> Change format specifier for {read,write}_timeout from %i to %li.
+
+You are listing all of _what_ you do here, not really _why_ you are
+doing any of this.
+
+Anyway, if I were writing this, here's what I would say as a changelog
+text:
+
+  The module parameters, read_timeout and write_timeout, are only ever
+  evaluated at module load time, so set the default values then if
+  needed so as to not recompute the timeout values every time the driver
+  reads or writes data.
+
+
+And that's it, short, concise, and it explains why you are doing this.
+
+Writing changelog comments are almost always harder than actually
+writing the patch (at least for me.)  So don't feel bad, it take a lot
+of experience doing it.
+
+All that being said, I think we are just polishing something that
+doesn't need to really be polished anymore, so let me go just apply this
+patch as-is to the tree now so you can move on to a different change.
+You've put in the effort here, and I don't want you to get bogged down
+in specifics that really do not matter at all overall (like the memory
+size of your vm...)
+
+thanks,
+
+greg k-h
