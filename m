@@ -2,98 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 518C66BEFEA
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 18:40:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB1336BEFE6
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 18:39:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231259AbjCQRjp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 13:39:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42422 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230506AbjCQRja (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S230454AbjCQRja (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Fri, 17 Mar 2023 13:39:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA51AE394;
-        Fri, 17 Mar 2023 10:39:16 -0700 (PDT)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41594 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230252AbjCQRjL (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 17 Mar 2023 13:39:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 679B733CC4;
+        Fri, 17 Mar 2023 10:39:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A5BEA60F37;
-        Fri, 17 Mar 2023 17:39:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A8ACC433A0;
-        Fri, 17 Mar 2023 17:39:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F05CF60B35;
+        Fri, 17 Mar 2023 17:39:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16824C4339C;
+        Fri, 17 Mar 2023 17:39:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679074755;
-        bh=fQhztykTbvG44/m8npYHjnnMg6cEalBp0Xpsis3PrSc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eJUvtiQpdkk1XcDg5c7Jz/A/1L1OlYogM5EUBazvpUKdz64sBO0+N0ZTl8fGbP8vC
-         EqvU3Nd/pBUHvbPMhMGxdjlgSNzl7lvMZykOkgZkcD7rRR+0g4NeLorPCo6EiwzMzK
-         J+YXqoWssr6Bqg8YW+Tyz4hrGwxUrBIPDzFTESmk4OiXwwyPixsySeCVWzJaLF3Ghe
-         I6ebDiCXuy5Eyp+0fdSdqN0KwXgdwBXmVlB8oOM7Wqz7kLWrgZrUH8h73TbEhiLUrF
-         LuMYajWEOf1YSOKOH/u5t4aSkX3bbx25hsFom530Kqasotay84oRyTWDuacvdBwmbQ
-         ManNJuzCADYiA==
-Date:   Fri, 17 Mar 2023 23:09:10 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Jisheng Zhang <jszhang@kernel.org>
-Cc:     Lars-Peter Clausen <lars@metafoo.de>,
-        Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Sinan Kaya <okaya@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH 1/5] dmaengine: dw-axi-dmac: Don't set chancnt
-Message-ID: <ZBSlvrDmKGjwWBa7@matsya>
-References: <20230313170250.815-1-jszhang@kernel.org>
- <20230313170250.815-2-jszhang@kernel.org>
+        s=k20201202; t=1679074747;
+        bh=d2dbiKmY5zdyizSPGR6FY41MGap7MSDENVLqaS/yv7A=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Tnoc0wbFnYcI8PTEOW4setBX+PUqyFAClZo4S/KpN5fAdd461DOke0bIfLY0H+lwR
+         8H/6AEX3fYWWAK+91sB1j6HCKJASKKYDcuHDqdVLvUqtNPYVhFumLcp2NHNavfL0Jx
+         KlRKScg4cCHoEc/82rgagqqyssu/zEZZ3pdBrwL2jmhuVjmorl30IgeIa2KLjKFviR
+         t7p8SkMLSaX4G2tGhWwJ5+IeaMghtFZUqn3lM93+oibAaqBOkCHXKz9I1ebnnAKRgX
+         qUzJaRKSRfKqkFC7q3i7dnj6Aa7ZoPukq052Fv+wr9krAlWcDQP+M75Fnrm7dvHeYm
+         XUPM4vTcqr9Vg==
+Date:   Fri, 17 Mar 2023 11:39:36 -0600
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     Christian Lamparter <chunkeey@googlemail.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH][next] wifi: carl9170: Replace fake flex-array with
+ flexible-array member
+Message-ID: <ZBSl2M+aGIO1fnuG@work>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230313170250.815-2-jszhang@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14-03-23, 01:02, Jisheng Zhang wrote:
-> The dma framework will calculate the dma channels chancnt, setting it
+Zero-length arrays as fake flexible arrays are deprecated and we are
+moving towards adopting C99 flexible-array members instead.
 
-The dmaengine framework...
+Address the following warnings found with GCC-13 and
+-fstrict-flex-arrays=3 enabled:
+drivers/net/wireless/ath/carl9170/tx.c:702:61: warning: array subscript i is outside array bounds of ‘const struct _carl9170_tx_status[0]’ [-Warray-bounds=]
+drivers/net/wireless/ath/carl9170/tx.c:701:65: warning: array subscript i is outside array bounds of ‘const struct _carl9170_tx_status[0]’ [-Warray-bounds=]
 
-> outself is wrong.
+This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
+routines on memcpy() and help us make progress towards globally
+enabling -fstrict-flex-arrays=3 [1].
 
-s/outself/ourself
+Link: https://github.com/KSPP/linux/issues/21
+Link: https://github.com/KSPP/linux/issues/267
+Link: https://gcc.gnu.org/pipermail/gcc-patches/2022-October/602902.html [1]
+Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+---
+ drivers/net/wireless/ath/carl9170/fwcmd.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Looks this this is needed for all the patches
-
-> 
-> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> ---
->  drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c b/drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c
-> index 4169e1d7d5ca..7f3a60e28e38 100644
-> --- a/drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c
-> +++ b/drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c
-> @@ -1445,7 +1445,6 @@ static int dw_probe(struct platform_device *pdev)
->  	dma_cap_set(DMA_CYCLIC, dw->dma.cap_mask);
->  
->  	/* DMA capabilities */
-> -	dw->dma.chancnt = hdata->nr_channels;
->  	dw->dma.max_burst = hdata->axi_rw_burst_len;
->  	dw->dma.src_addr_widths = AXI_DMA_BUSWIDTHS;
->  	dw->dma.dst_addr_widths = AXI_DMA_BUSWIDTHS;
-> -- 
-> 2.39.2
-
+diff --git a/drivers/net/wireless/ath/carl9170/fwcmd.h b/drivers/net/wireless/ath/carl9170/fwcmd.h
+index ff4b3b50250c..e5bcc364f088 100644
+--- a/drivers/net/wireless/ath/carl9170/fwcmd.h
++++ b/drivers/net/wireless/ath/carl9170/fwcmd.h
+@@ -320,9 +320,9 @@ struct carl9170_rsp {
+ 		struct carl9170_u32_list	rreg_res;
+ 		struct carl9170_u32_list	echo;
+ #ifdef __CARL9170FW__
+-		struct carl9170_tx_status	tx_status[0];
++		DECLARE_FLEX_ARRAY(struct carl9170_tx_status, tx_status);
+ #endif /* __CARL9170FW__ */
+-		struct _carl9170_tx_status	_tx_status[0];
++		DECLARE_FLEX_ARRAY(struct _carl9170_tx_status, _tx_status);
+ 		struct carl9170_gpio		gpio;
+ 		struct carl9170_tsf_rsp		tsf;
+ 		struct carl9170_psm		psm;
 -- 
-~Vinod
+2.34.1
+
