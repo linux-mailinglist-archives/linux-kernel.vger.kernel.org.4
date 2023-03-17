@@ -2,123 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BD056BF1D5
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 20:40:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C20816BF1DC
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 20:43:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230197AbjCQTkk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 15:40:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54294 "EHLO
+        id S229755AbjCQTnu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 15:43:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbjCQTki (ORCPT
+        with ESMTP id S229473AbjCQTnr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 15:40:38 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A428CB8571;
-        Fri, 17 Mar 2023 12:40:37 -0700 (PDT)
-Received: from mercury (unknown [185.254.75.29])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8181A66030C4;
-        Fri, 17 Mar 2023 19:40:35 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1679082035;
-        bh=Ez8htNwV6hiCuJJ5bg3KiGn6GZ+ZptFMQp+ghf8/tRc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JMx97s6DuC6nBEn21eqRlEaiJXEQA0vZUBeZa25ND5MDvYt5JLNjrF8Y6C1NpPkL/
-         BwwpvPwOV3hM2mADiyHfHBw/xiUE0tNnV7yWlFMBeuBfEMNFAllg6RtUkEOreS++xC
-         G19KpDcz0MsXVj6kAbb+chR71EGjCgUr8ZgIZeMBcHtZaIkPADzBG6OQ6NW/gReoBs
-         1LbNGM/WjG47Q53dUC5Pnh0WrJvDhjKW6sc7oR+bpMh1F27Fq3XPn+Mlt6aEAxGPxl
-         vu/wKhyneC/T+6KoqDi1YZXx/FBWqueqkTwL9bCPnQjjLMs8z333tpy0xZOgfMRw6l
-         GOOQ0MwlQ7k9Q==
-Received: by mercury (Postfix, from userid 1000)
-        id 8127B10620FB; Fri, 17 Mar 2023 20:40:32 +0100 (CET)
-Date:   Fri, 17 Mar 2023 20:40:32 +0100
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Anton Gusev <aagusev@ispras.ru>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lvc-project@linuxtesting.org
-Subject: Re: [PATCH] power: supply: generic-adc-battery: remove redundant
- return code assignment
-Message-ID: <20230317194032.widpyvv6f4dqapla@mercury.elektranox.org>
-References: <20230317170007.25692-1-aagusev@ispras.ru>
+        Fri, 17 Mar 2023 15:43:47 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A89A1024B;
+        Fri, 17 Mar 2023 12:43:46 -0700 (PDT)
+Received: by mail-pg1-x536.google.com with SMTP id x37so3545624pga.1;
+        Fri, 17 Mar 2023 12:43:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679082225;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=On053GRmvak1ihY8RYqod2dWpDbMYWVHxbUsiBufrE4=;
+        b=bWuWBxePZdmS6fAxELkPLZtrc3YBaRacBPWnUC8Fg9k847PqQEM6GBoznngWHnRiM1
+         UD2BY5mT1+gURMJ3oeXJBqMYo+/nA5HbL1pRA7qV/EVYvjnuKdh2rPo+oSs2cLja4vEa
+         FZdnsYdwMwvpyqc0ZOEjyN1BSRdOghVTk+z64Eprz4YLPxPixUWdRzgK45LObe5IgHu6
+         YPfN0xcIyKqY+RGRzwWlhhzMs5hUNkwWGv1/5bbcBTg0q6ubmKQeiXFXLQC5gYD4LMBg
+         o/uZ9tU8y+5MWct8zPWDGetHzEBI9/GQ4F7jxYsVXYxcUWg9HpxLT6AwiLpYgk0XJsaK
+         ynVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679082225;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=On053GRmvak1ihY8RYqod2dWpDbMYWVHxbUsiBufrE4=;
+        b=jp5/gkBRn9oYA9xebmIUjpbbhKxAljJIWemE8iw8fwT1ww7+eVfZ/5amohEYw+uXzT
+         Svg8dcvOQA/tYN55Vc02c/+Coub8t4KOU8W4/aE+BuX//AEIqal3z3t/+Y8RLu1B+V/y
+         iyzHaiCdeCTibydUmuBiXwygW+N04u05oISXfN/7BNdrzP8TP9IAhm0MW0r+QILPm+g/
+         AF7BVO0JTcj+6dGK2b6oeK/kPt12IAnXnqmoBRhrdOBURmX/dWnTZDHoPCi85rp0hgnu
+         ukdDExBPFnwbHZ0rAveLL8aArmBiQOocm4ULnEQqnzuRD00ghLI9SFJk/RRUjjXNvgjL
+         hexg==
+X-Gm-Message-State: AO0yUKUy0fvVdKU1fLqwyAfIjvEeFblBIYJkhYTDzmbsdXL0LK/Gy2NO
+        +/kg2Xt0/eMY+ho0zu0IH1fnfmtoYWAUDwkQg+Y=
+X-Google-Smtp-Source: AK7set/VvoBvLQmtjKHDMAsTOMhGtcA3zjyXPp1c3IIegaU12wGeed1P6f+RMZv7TSZVS2hLxgZnuJm8cIHFpckQksw=
+X-Received: by 2002:a05:6a00:4ac7:b0:5a8:daec:c325 with SMTP id
+ ds7-20020a056a004ac700b005a8daecc325mr1894046pfb.1.1679082225507; Fri, 17 Mar
+ 2023 12:43:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="gqsaijm7pp7dfxxo"
-Content-Disposition: inline
-In-Reply-To: <20230317170007.25692-1-aagusev@ispras.ru>
+References: <20230308135936.761794-4-kory.maincent@bootlin.com>
+ <20230308230321.liw3v255okrhxg6s@skbuf> <20230310114852.3cef643d@kmaincent-XPS-13-7390>
+ <20230310113533.l7flaoli7y3bmlnr@skbuf> <b4ebfd3770ffa5ad1233d2b5e79499ee@walle.cc>
+ <20230310131529.6bahmi4obryy5dsx@soft-dev3-1> <20230310164451.ls7bbs6pdzs4m6pw@skbuf>
+ <20230313084059.GA11063@pengutronix.de> <20230316160920.53737d1c@kmaincent-XPS-13-7390>
+ <20230317152150.qahrr6w5x4o3eysz@skbuf> <20230317120744.5b7f1666@kernel.org>
+In-Reply-To: <20230317120744.5b7f1666@kernel.org>
+From:   Max Georgiev <glipus@gmail.com>
+Date:   Fri, 17 Mar 2023 13:43:34 -0600
+Message-ID: <CAP5jrPHep12hRbbcb5gXrZB5w_uzmVpEp4EhpfqW=9zC+zcu9A@mail.gmail.com>
+Subject: Re: [PATCH v3 3/5] net: Let the active time stamping layer be selectable.
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Vladimir Oltean <vladimir.oltean@nxp.com>,
+        =?UTF-8?Q?K=C3=B6ry_Maincent?= <kory.maincent@bootlin.com>,
+        Oleksij Rempel <o.rempel@pengutronix.de>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        Michael Walle <michael@walle.cc>, Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-omap@vger.kernel.org,
+        Maxime Chevallier <maxime.chevallier@bootlin.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        thomas.petazzoni@bootlin.com, Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Jay Vosburgh <j.vosburgh@gmail.com>,
+        Veaceslav Falico <vfalico@gmail.com>,
+        Andy Gospodarek <andy@greyhouse.net>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        UNGLinuxDriver@microchip.com, Minghao Chi <chi.minghao@zte.com.cn>,
+        Jie Wang <wangjie125@huawei.com>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Sean Anderson <sean.anderson@seco.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Marco Bonelli <marco@mebeim.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Jakub,
 
---gqsaijm7pp7dfxxo
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I started working on a patch introducing NDO functions for hw
+timestamping, but unfortunately put it on hold.
+Let me finish it and send it out for review.
 
-Hi,
-
-On Fri, Mar 17, 2023 at 08:00:07PM +0300, Anton Gusev wrote:
-> Since any subsequent uses of ret reassign it first and PTR_ERR does not
-> have any effect on its own, this line has no effect and can be removed.
->=20
-> Found by Linux Verification Center (linuxtesting.org) with SVACE.
->=20
-> Signed-off-by: Anton Gusev <aagusev@ispras.ru>
-> ---
-
-Thanks, but the correct thing to do is using ret, which is WIP:
-
-https://lore.kernel.org/linux-pm/20230314225535.1321736-4-sre@kernel.org/T/=
-#u
-
--- Sebastian
-
->  drivers/power/supply/generic-adc-battery.c | 1 -
->  1 file changed, 1 deletion(-)
->=20
-> diff --git a/drivers/power/supply/generic-adc-battery.c b/drivers/power/s=
-upply/generic-adc-battery.c
-> index 66039c665dd1..b51e5c4b36ff 100644
-> --- a/drivers/power/supply/generic-adc-battery.c
-> +++ b/drivers/power/supply/generic-adc-battery.c
-> @@ -285,7 +285,6 @@ static int gab_probe(struct platform_device *pdev)
->  		adc_bat->channel[chan] =3D iio_channel_get(&pdev->dev,
->  							 gab_chan_name[chan]);
->  		if (IS_ERR(adc_bat->channel[chan])) {
-> -			ret =3D PTR_ERR(adc_bat->channel[chan]);
->  			adc_bat->channel[chan] =3D NULL;
->  		} else {
->  			/* copying properties for supported channels only */
-> --=20
-> 2.39.2
->=20
-
---gqsaijm7pp7dfxxo
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmQUwikACgkQ2O7X88g7
-+poDNQ//ZJVnez02u5/gIUx/p6ANkdpx19bnGMta5LLVb+ycj+fq78Z7rfYHYtbS
-JCVCnKy+ciiHO+hHWPNzFqPEDbVoWe0hh8tMiX6cgnIDn4VzWo/mctj1Ib3RwiTC
-Sw3uTz5o5mW4uaCzhyGHOjxgzws7DwQZG9FQxKEeTdRURJRgQTwln35mnixUJW8O
-VyphZiE8DCKvSsvfz3rlxa2XsCe6lIhLAaz16o1f9jSk/uwVdgOu5XpnqQEBNYON
-jnnlRuzffquAtUfkIZhoPkqJ1YF698v4Dk1bWGaCAARTJ7+TFeIpBHLLvTGKkc11
-Iu0fuSXDW1P+lSGkq97Do5+9GuHsfhXeCKAqI+8MIffa1BMDteXiL9+ScsfkXSsH
-bU6xolg6eZr9BBl7bEEeAzfscUQZzWXKlD3Kh8pu8Klr9JIR7HtNHyO9E40Y5OEv
-+8vxOnVM2jNHhaWd+zoe19UjLltOu80s0Kmna+e0r5A9sJapk5h96cp6/VjDPdPc
-PRGGsiGdNZtIBMBcz0F0ESjMno+Z69etecGRf4SDcuoRKzkOfl/0jBdbRNex0b+/
-cs10HsGRDfyJHl7gDceLBgmtImFZ5oCkzUZDDS5RzZBVz/0MZZTVF5vSf7FY2laP
-rrzKLiDwfW7swoUGO9yAZ2QOjyWbvmJqmDLAKskHCR34MpzkxGk=
-=ce23
------END PGP SIGNATURE-----
-
---gqsaijm7pp7dfxxo--
+On Fri, Mar 17, 2023 at 1:07=E2=80=AFPM Jakub Kicinski <kuba@kernel.org> wr=
+ote:
+>
+> On Fri, 17 Mar 2023 17:21:50 +0200 Vladimir Oltean wrote:
+> > On Thu, Mar 16, 2023 at 04:09:20PM +0100, K=C3=B6ry Maincent wrote:
+> > > Was there any useful work that could be continued on managing timesta=
+mp through
+> > > NDOs. As it seem we will made some change to the timestamp API, maybe=
+ it is a
+> > > good time to also take care of this.
+> >
+> > Not to my knowledge. Yes, I agree that it would be a good time to add a=
+n
+> > NDO for hwtimestamping (while keeping the ioctl fallback), then
+> > transitioning as many devices as we can, and removing the fallback when
+> > the transition is complete.
+>
+> I believe Max was looking into it - hi Max! Did you make much
+> progress? Any code you could share to build on?
