@@ -2,99 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFF1C6BF548
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 23:41:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04CB46BF552
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 23:45:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230321AbjCQWl4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 18:41:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32814 "EHLO
+        id S229680AbjCQWpj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 18:45:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbjCQWlx (ORCPT
+        with ESMTP id S229769AbjCQWph (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 18:41:53 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A79D085B1C
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 15:41:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679092865;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=DTqXt+xo9t4MKZl9inPofpb9h7U7JlyPPD0kMbn7WHE=;
-        b=a+C8PoK8O6QGcj0SWnFCIAKpJxgiZnNpUhilASsf4LwCT9hsBFDGn/Izb+udWcEhohf+Iw
-        gMC7wkupE9DjINnltKjE0jxvgeklVnSPQ9N0i6YqqMgki0SLDA9jPFonX5FkzfbhY7kiEK
-        C5wWFz0ISi8ehlzGkXXLGCRPQBGKjm4=
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com
- [209.85.166.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-221-d0EHtZQZOjWGRssZ_xuP8Q-1; Fri, 17 Mar 2023 18:41:04 -0400
-X-MC-Unique: d0EHtZQZOjWGRssZ_xuP8Q-1
-Received: by mail-il1-f200.google.com with SMTP id l10-20020a056e0205ca00b00322fdda7261so3109944ils.6
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 15:41:04 -0700 (PDT)
+        Fri, 17 Mar 2023 18:45:37 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35FAAC4E91
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 15:45:36 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 3-20020a250b03000000b00b5f1fab9897so5765584ybl.19
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 15:45:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1679093135;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=AqXgfygPxY7mlBkz79u7U4DZ9eg5UFKA4PQmqAP4PgA=;
+        b=FS9j79UgbkR5WomZl1V+D/BZ18ux3cKkPrPE1xL79TJdXfSc6OJgU40eeuVyAKJ3Tj
+         +Lpy2cAqJGS6KxS6u2jG8S2wXPlE7zhJr+BfQKFoYXxXbaUCIxHWF0cEQHYJyokA5vxn
+         5nVfHr/0IHzTV6XHM0zCYxe7JyIzTYv6aEjYIaNOA5kCg5+vsAzbG/Rt1jxtg+9DSX+P
+         egWsAzef+3K/hz4zEFZsvaTybnC8scu1PqLSI4MHyBWuORiAdkAyfKGqW34FD9S+NnQ+
+         fHMrN4EJ0/BhvvFqw9sIFVx8KBni/HRsD02Bp27qrd9sXDKrDZIbxeKKhbI8g9aO5Cx2
+         X5BA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679092863;
-        h=content-transfer-encoding:mime-version:organization:references
-         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=DTqXt+xo9t4MKZl9inPofpb9h7U7JlyPPD0kMbn7WHE=;
-        b=sDbDpLSljmO1dCxzB7ExTm//7BUOXeX2I3EyQrFO51p3DLq6GKSX76uC0BALfBDmjC
-         sKAPGPWEoa+i8nRBEsZa1wPBigzopIvnvA/Cddce7QOrpZ2mP6nYfJgqclyU5cGhxB6V
-         RLQmOsB3GsQi2kO/gK4VNWgxskQZ2TVem8ltpFjqA3gNHjqGl4xZCfk2onS3zOqwKEGy
-         yr/K/vbcz5/zt7lTx+J/t8Q/Bed9fN3VyGTPZz2J0eH9MrbJ9unp5MHf8FZGvPfWayS9
-         7CWNnYvfK/I2mp0rtFPlGz6HovgcJtgzng0pljy4hMpiIaWynoSAJMn9jRjEKXh9fRQh
-         EytQ==
-X-Gm-Message-State: AO0yUKV1CiyVVA0MErBhKDYT+dlM5A1ue0bqiH84cF+iIWphVg6vLS2P
-        V/hLXWlpQo3oY9lLdKB5gDnwI2QAo62YKuUZG54Usuap5/u6R30ffmp3vYF8jl6/na4XAWKP8aq
-        AwpMJUWRG4K7e3RhAWZKdxuwWXYsu4hyrDNM=
-X-Received: by 2002:a92:c6ca:0:b0:317:951d:1696 with SMTP id v10-20020a92c6ca000000b00317951d1696mr85590ilm.3.1679092863438;
-        Fri, 17 Mar 2023 15:41:03 -0700 (PDT)
-X-Google-Smtp-Source: AK7set87c1NIAKUmEpfr4tzQnIJXEdWv1u+znmZLZ35q/KPacnrvpXDdPzfrlB+0sZFBlBtfHyN/iw==
-X-Received: by 2002:a92:c6ca:0:b0:317:951d:1696 with SMTP id v10-20020a92c6ca000000b00317951d1696mr85571ilm.3.1679092863136;
-        Fri, 17 Mar 2023 15:41:03 -0700 (PDT)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id x10-20020a92300a000000b0030c0dce44b1sm930381ile.15.2023.03.17.15.41.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Mar 2023 15:41:01 -0700 (PDT)
-Date:   Fri, 17 Mar 2023 16:40:59 -0600
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     Suren Baghdasaryan <surenb@google.com>
-Cc:     akpm@linux-foundation.org, michel@lespinasse.org,
-        jglisse@google.com, mhocko@suse.com, vbabka@suse.cz,
-        hannes@cmpxchg.org, mgorman@techsingularity.net, dave@stgolabs.net,
-        willy@infradead.org, liam.howlett@oracle.com, peterz@infradead.org,
-        ldufour@linux.ibm.com, paulmck@kernel.org, mingo@redhat.com,
-        will@kernel.org, luto@kernel.org, songliubraving@fb.com,
-        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
-        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
-        punit.agrawal@bytedance.com, lstoakes@gmail.com,
-        peterjung1337@gmail.com, rientjes@google.com,
-        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
-        rppt@kernel.org, jannh@google.com, shakeelb@google.com,
-        tatashin@google.com, edumazet@google.com, gthelen@google.com,
-        gurua@google.com, arjunroy@google.com, soheil@google.com,
-        leewalsh@google.com, posk@google.com, linux-mm@kvack.org,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@android.com,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        =?UTF-8?B?Q8OpZHJpYw==?= Le Goater <clg@redhat.com>,
-        dimitri.sivanich@hpe.com
-Subject: Re: [PATCH v4 0/7] introduce vm_flags modifier functions
-Message-ID: <20230317164059.466d1c70.alex.williamson@redhat.com>
-In-Reply-To: <CAJuCfpFkKuyBJkk8OzWEu2YCg-UYooS4bHuDaXvnCbeR-cBdVw@mail.gmail.com>
-References: <20230126193752.297968-1-surenb@google.com>
-        <20230314141144.6a0892e6.alex.williamson@redhat.com>
-        <CAJuCfpFkKuyBJkk8OzWEu2YCg-UYooS4bHuDaXvnCbeR-cBdVw@mail.gmail.com>
-Organization: Red Hat
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        d=1e100.net; s=20210112; t=1679093135;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=AqXgfygPxY7mlBkz79u7U4DZ9eg5UFKA4PQmqAP4PgA=;
+        b=I4o2DnoMEAIU6XOLojMf+yMzNXC/AMxJc38OYCysovLOSOHy7a8l655wmq05wrM+cy
+         zWCL3zO7BEpc7X1QgSBINg2AMEQSir/w0Zp8/lvgnYq0La40UiKpzEuek1GR2HIE0VCC
+         LC91lgZf4LDeDePqt6pCnpq0bjYOTXhxGmy2Nl7xN9dgvf9qdkVhuGoxzVtVCOfPYBzs
+         7uOKRXlPHgp2Ns7euUM32WdlONuK6M3NugBBXPDmK58mQCBvsLh+fatE/29SAjUqslbc
+         qX41VhOm1UUi+9M+d+Tp8kXOoCejtCnjNqWGCjvEDDJCUTRMMdd2Ngxeh1jLql2zyn2Q
+         zt5g==
+X-Gm-Message-State: AO0yUKXflnPCxzg6q0CAFAXRg515ioOfaxfJzMDxP/mN7KM6MRi2NtkU
+        VKdWQlRrtALmeHbIXD2GhCWSVxO8Ze4=
+X-Google-Smtp-Source: AK7set9jKryMTfEz0aawEcOiBhZ6L+WdPDV54k6PbMiRGY8l6TCBteaEhikFo/LyZLfGVBpL9Spv4wSGraI=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a25:9786:0:b0:a58:af0b:5150 with SMTP id
+ i6-20020a259786000000b00a58af0b5150mr94019ybo.3.1679093135255; Fri, 17 Mar
+ 2023 15:45:35 -0700 (PDT)
+Date:   Fri, 17 Mar 2023 15:45:33 -0700
+In-Reply-To: <20230217193336.15278-3-minipli@grsecurity.net>
+Mime-Version: 1.0
+References: <20230217193336.15278-1-minipli@grsecurity.net> <20230217193336.15278-3-minipli@grsecurity.net>
+Message-ID: <ZBTtjTFPCRtK0Cy8@google.com>
+Subject: Re: [PATCH v2 2/2] KVM: Shrink struct kvm_mmu_memory_cache
+From:   Sean Christopherson <seanjc@google.com>
+To:     Mathias Krause <minipli@grsecurity.net>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -102,73 +67,10 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 17 Mar 2023 12:08:32 -0700
-Suren Baghdasaryan <surenb@google.com> wrote:
+On Fri, Feb 17, 2023, Mathias Krause wrote:
+> Move the 'capacity' member around to make use of the padding hole on 64
 
-> On Tue, Mar 14, 2023 at 1:11=E2=80=AFPM Alex Williamson
-> <alex.williamson@redhat.com> wrote:
-> >
-> > On Thu, 26 Jan 2023 11:37:45 -0800
-> > Suren Baghdasaryan <surenb@google.com> wrote:
-> > =20
-> > > This patchset was originally published as a part of per-VMA locking [=
-1] and
-> > > was split after suggestion that it's viable on its own and to facilit=
-ate
-> > > the review process. It is now a preprequisite for the next version of=
- per-VMA
-> > > lock patchset, which reuses vm_flags modifier functions to lock the V=
-MA when
-> > > vm_flags are being updated.
-> > >
-> > > VMA vm_flags modifications are usually done under exclusive mmap_lock
-> > > protection because this attrubute affects other decisions like VMA me=
-rging
-> > > or splitting and races should be prevented. Introduce vm_flags modifi=
-er
-> > > functions to enforce correct locking.
-> > >
-> > > The patchset applies cleanly over mm-unstable branch of mm tree. =20
-> >
-> > With this series, vfio-pci developed a bunch of warnings around not
-> > holding the mmap_lock write semaphore while calling
-> > io_remap_pfn_range() from our fault handler, vfio_pci_mmap_fault().
-> >
-> > I suspect vdpa has the same issue for their use of remap_pfn_range()
-> > from their fault handler, JasonW, MST, FYI.
-> >
-> > It also looks like gru_fault() would have the same issue, Dimitri.
-> >
-> > In all cases, we're preemptively setting vm_flags to what
-> > remap_pfn_range_notrack() uses, so I thought we were safe here as I
-> > specifically remember trying to avoid changing vm_flags from the
-> > fault handler.  But apparently that doesn't take into account
-> > track_pfn_remap() where VM_PAT comes into play.
-> >
-> > The reason for using remap_pfn_range() on fault in vfio-pci is that
-> > we're mapping device MMIO to userspace, where that MMIO can be disabled
-> > and we'd rather zap the mapping when that occurs so that we can sigbus
-> > the user rather than allow the user to trigger potentially fatal bus
-> > errors on the host.
-> >
-> > Peter Xu has suggested offline that a non-lazy approach to reinsert the
-> > mappings might be more inline with mm expectations relative to touching
-> > vm_flags during fault.  What's the right solution here?  Can the fault
-> > handling be salvaged, is proactive remapping the right approach, or is
-> > there something better?  Thanks, =20
->=20
-> Hi Alex,
-> If in your case it's safe to change vm_flags without holding exclusive
-> mmap_lock, maybe you can use __vm_flags_mod() the way I used it in
-> https://lore.kernel.org/all/20230126193752.297968-7-surenb@google.com,
-> while explaining why this should be safe?
+Nit, 'nobjs' is the field that gets moved in this version.  No need for another
+version, I can fix up when applying.
 
-Hi Suren,
-
-Thanks for the reply, but I'm not sure I'm following.  Are you
-suggesting a bool arg added to io_remap_pfn_range(), or some new
-variant of that function to conditionally use __vm_flags_mod() in place
-of vm_flags_set() across the call chain?  Thanks,
-
-Alex
-
+If no one objects, I'll plan on taking this through kvm-x86/generic.
