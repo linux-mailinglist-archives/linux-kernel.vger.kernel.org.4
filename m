@@ -2,167 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CF736BEAFF
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 15:19:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BA376BEB0C
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 15:22:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229916AbjCQOTx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 10:19:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37342 "EHLO
+        id S230147AbjCQOWr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 10:22:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230147AbjCQOTo (ORCPT
+        with ESMTP id S229533AbjCQOWp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 10:19:44 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18F1EAA729
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 07:19:21 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id ek18so20981581edb.6
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 07:19:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679062757;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=a6UGZ1j5YRGIf++SOvuEvf0e/rChiAlxEglEcWXrI2w=;
-        b=REjKmlFEGmcll6US1J3Fjy2eVZPzYE79Zxt6zU0wgJvPLI7pghhh0qSBZi/9pQIQbW
-         LYBgYDutldhhhvbTgkt4p3ajRS62P2evYQ0/wtRtaLRIwJZLBKQABWAdYP1Nkw+za3Ms
-         p2UQKQj8CXbThEFh2kWQTmLh1EaN2CPHSNVhtRHMnK8u0VulujPDzwDSIzG7dUfQz8bd
-         jSPLipQ8iXKN+o4mrDdrg+lQP/Owb96c9Vfy2CoTCnQJq8JGHv1u8QElkfGgTBEaKnL7
-         k15Cqe8TEUEGrtOVyAQ0GMb3kxsJ9oURsbN6KoeCQW6O9k/wIaXVFTNkyGvaXQzWMieW
-         0VYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679062757;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=a6UGZ1j5YRGIf++SOvuEvf0e/rChiAlxEglEcWXrI2w=;
-        b=KlUZEm0c0nte4/GcXTLvr6gbrsydWCo3OJ9tX1EbrAivmhojRoioWv1aw0YDG8hmRL
-         oRsBWYdAD5bCX/ZNpKm1CqEndoa+YxP5L3tQgyqiR8oT4oUmkK7w9ZUlGvcCsqiPplB3
-         JKhTvAaSkdEm+KN4cD7wZNyVIc1BNGDlacXqBR1GaUmnos2Bbk6so5fOuip9PCPy+Pn0
-         DVSSLRwZrtrrOXGav+8uBzfBRZGBqVO2kkQ9ZOIJYjwdGdQSY+D9upM3WjSt7QSkU3Ky
-         sO6WHUO3UW2JwSpZIGCvNP/2lUhmlF8CYozynXRJovlI7mdKrMs26PBEyRbx4xC9fG+G
-         ELUQ==
-X-Gm-Message-State: AO0yUKXMU318a27caSCLw/uW0eE5qASh2brtdsI9fSlE67ufN4zNVS0K
-        /lo1Ev0BjDVx61nc9+Jc61kUfw==
-X-Google-Smtp-Source: AK7set9CQKALE1nJSPxCGWqo6FPkmjxZdLykShuvvS32DIAJUqhvKbNqm5KYD0e8JHNU/6SCZ193Ig==
-X-Received: by 2002:a17:906:702:b0:913:ff28:59bd with SMTP id y2-20020a170906070200b00913ff2859bdmr14499758ejb.52.1679062756938;
-        Fri, 17 Mar 2023 07:19:16 -0700 (PDT)
-Received: from [192.168.2.107] ([79.115.63.78])
-        by smtp.gmail.com with ESMTPSA id z9-20020a1709067e4900b0092be390b51asm1024602ejr.113.2023.03.17.07.19.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Mar 2023 07:19:16 -0700 (PDT)
-Message-ID: <33ad964e-edfd-a894-5399-1e870cb36112@linaro.org>
-Date:   Fri, 17 Mar 2023 14:19:15 +0000
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: Probing devices by their less-specific "compatible" bindings
- (here: brcmnand)
-Content-Language: en-US
-To:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
+        Fri, 17 Mar 2023 10:22:45 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C607B5A8F;
+        Fri, 17 Mar 2023 07:22:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=eA+pnD7dYsD9I52QLx0lohm6/RMWYuxO9nL8ghwZbQU=; b=5yZJe6wFcmnnQf7wiiD1qTcOkE
+        8cpX1aXvDuqb9qFXtNWyUz7QqA7P1cW8vtLi8q7/Glf2Prx7eQgIodRC1L4Wk2qUjvxZPeGwNsio9
+        CQmUjNzbdOKKuW9zG9q7Jwo3H+nHrgtVKx4wU+Ibg2TqRgWCOMFufhMjRHk0ixaJaKvE=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1pdAyU-007cIm-NV; Fri, 17 Mar 2023 15:22:30 +0100
+Date:   Fri, 17 Mar 2023 15:22:30 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>
+Cc:     Christian Marangi <ansuelsmth@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        Lee Jones <lee@kernel.org>, linux-leds@vger.kernel.org,
+        pavel@ucw.cz, Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Brian Norris <briannorris@chromium.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        MTD Maling List <linux-mtd@lists.infradead.org>
-References: <399d2f43-5cad-6c51-fe3a-623950e2151a@gmail.com>
-From:   Tudor Ambarus <tudor.ambarus@linaro.org>
-In-Reply-To: <399d2f43-5cad-6c51-fe3a-623950e2151a@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        John Crispin <john@phrozen.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: [net-next PATCH v4 10/14] dt-bindings: net: dsa: qca8k: add LEDs
+ definition example
+Message-ID: <8825d43d-7340-4984-8c13-25731edbd827@lunn.ch>
+References: <20230317023125.486-1-ansuelsmth@gmail.com>
+ <20230317023125.486-11-ansuelsmth@gmail.com>
+ <20230317091410.58787646@dellmb>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230317091410.58787646@dellmb>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+> We could specify in DT something like:
+>   eth0: ethernet-controller {
+>     ...
+>   }
+> 
+>   ethernet-phy {
+>     leds {
+>       led@0 {
+>         reg = <0>;
+>         color = <LED_COLOR_ID_GREEN>;
+>         trigger-sources = <&eth0>;
+>         function = LED_FUNCTION_ ?????? ;
+>       }
+>     }
+>   }
 
+For generic case, where you just have an LED on some random bus, you
+need to know what netdev it should represent. And in effect, this
+patch series gives you just that.
 
-On 3/17/23 10:02, Rafał Miłecki wrote:
-> Hi, I just spent few hours debugging hidden hw lockup and I need to
-> consult driver core code behaviour.
-> 
-> I have a BCM4908 SoC based board with a NAND controller on it.
-> 
-> 
-> ### Hardware binding
-> 
-> Hardware details:
-> arch/arm64/boot/dts/broadcom/bcmbca/bcm4908.dtsi
-> 
-> Relevant part:
-> nand-controller@1800 {
->     compatible = "brcm,nand-bcm63138", "brcm,brcmnand-v7.1",
-> "brcm,brcmnand";
->     reg = <0x1800 0x600>, <0x2000 0x10>;
->     reg-names = "nand", "nand-int-base";
-> }:
-> 
-> Above binding is based on the documentation:
-> Documentation/devicetree/bindings/mtd/brcm,brcmnand.yaml
-> 
-> 
-> ### Linux drivers
-> 
-> Linux has separated drivers for few Broadcom's NAND controller bindings:
-> 
-> 1. drivers/mtd/nand/raw/brcmnand/bcm63138_nand.c for:
-> brcm,nand-bcm63138
-> 
-> 2. drivers/mtd/nand/raw/brcmnand/brcmnand.c for:
-> brcm,brcmnand-v2.1
-> brcm,brcmnand-v2.2
-> brcm,brcmnand-v4.0
-> brcm,brcmnand-v5.0
-> brcm,brcmnand-v6.0
-> brcm,brcmnand-v6.1
-> brcm,brcmnand-v6.2
-> brcm,brcmnand-v7.0
-> brcm,brcmnand-v7.1
-> brcm,brcmnand-v7.2
-> brcm,brcmnand-v7.3
-> 
-> 3. drivers/mtd/nand/raw/brcmnand/brcmstb_nand.c for:
-> brcm,brcmnand
-> 
-> 
-> ### Problem
-> 
-> As first Linux probes my hardware using the "brcm,nand-bcm63138"
-> compatibility string driver bcm63138_nand.c. That's good.
-> 
-> It that fails however (.probe() returns an error) then Linux core starts
-> probing using drivers for less specific bindings.
-> 
-> In my case probing with the "brcm,brcmnand" string driver brcmstb_nand.c
-> results in ignoring SoC specific bits and causes a hardware lockup. Hw
-> isn't initialized properly and writel_relaxed(0x00000009, base + 0x04)
-> just make it hang.
-> 
-> That obviously isn't an acceptable behavior for me. So I'm wondering
-> what's going on wrong here.
-> 
-> Should Linux avoid probing with less-specific compatible strings?
+However, when we get to offload, which is the ultimate goal, things
+are different. We cannot expect an LED inside the PHY connected to
+eth42 to offload blinking for eth24. There is a clear hardware
+relationship between the LED and the netdev. And in the more general
+case, there will always be a hardware relationship, be it wifi
+activity, or hard disk activity. phylib knows this relationship, and
+the DSA core also knows this relationship. Probably the SATA core will
+know the relationship. So i have a patchset which adds an op to the
+cdev to ask it, what struct device do you HW blink for?
+trigger-sources then becomes optional. And in fact, if it is used, you
+need to verify if it fits to this relationship, and if not, refuse to
+offload blinking, so software blinking only.
 
-No. It's quite common to have a list of compatibles. An use case is that
-you have a new IP that works with an existing compatible, but this IP
-also has new features that are not supported by the existing compatible
-and by the hardware for which the existing compatible was created. So
-people introduce a new compatible for the existing IP in order to
-differentiate from the older versions. If the new compatible is not yet
-defined in the driver, the second compatible from the list is used and
-you get the IP working but with a reduced function set.
+Anyway, that is an aside to your main question. But the Day Job is
+calling. I will address your question later today.
 
-> Or should I not claim hw to be "brcm,brcmnand" compatible if it REQUIRES
-> SoC-specific handling?
+	 Andrew
 
-Correct.
-
-Cheers,
-ta
