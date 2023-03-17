@@ -2,115 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CCE36BED4E
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 16:51:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A93976BED51
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 16:51:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230223AbjCQPvV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 11:51:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39650 "EHLO
+        id S231200AbjCQPv0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 11:51:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229991AbjCQPvT (ORCPT
+        with ESMTP id S230357AbjCQPvX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 11:51:19 -0400
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1554AD02F
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 08:51:18 -0700 (PDT)
-Received: from cwcc.thunk.org (pool-173-48-120-46.bstnma.fios.verizon.net [173.48.120.46])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 32HFolij015247
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 17 Mar 2023 11:50:48 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
-        t=1679068250; bh=tsuI/3AQbb01opNQjlPT5OtU6shs2k5NRqebA+XQ/O4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=oGQSktXGSx7A73SE3u8bOgcG6CYh40tQTA0hbo3KWAxrR4P/XVYNa/tT5l8cteSqy
-         6wZt7G7NO/Bn3tiQsQixOtl87C2xELVCdHL2l0PNYsD3jian/BBX0SVVQSNix5snOY
-         mrlK650tq/w+I2gqnkeDV8+5VTBjzy8n9PjPH8kp9EWCtUgN9sD90PeBJf1s59X/AR
-         DPsjzjeKYLH4Ro84Yfv2UDibyOlLDqlL/eF2bnG/i1lAXJWI+2T8kUWhi+hfcjNzAe
-         rxGigEa5azKlALNSjDB/tpS4YNjycjNuORbUws1NEECTsVeubgnJRVgADf+Hotlurh
-         IWTrg4dPzxkjg==
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-        id B108615C33A7; Fri, 17 Mar 2023 11:50:47 -0400 (EDT)
-Date:   Fri, 17 Mar 2023 11:50:47 -0400
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     Kemeng Shi <shikemeng@huaweicloud.com>
-Cc:     adilger.kernel@dilger.ca, ojaswin@linux.ibm.com,
-        ritesh.list@gmail.com,
-        Harshad Shirwadkar <harshadshirwadkar@gmail.com>,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 20/20] ext4: simplify calculation of blkoff in
- ext4_mb_new_blocks_simple
-Message-ID: <20230317155047.GB3270589@mit.edu>
-References: <20230303172120.3800725-1-shikemeng@huaweicloud.com>
- <20230303172120.3800725-21-shikemeng@huaweicloud.com>
- <20230316050740.GL860405@mit.edu>
- <d88a3d33-6832-2921-c8bb-b935b19e7db4@huaweicloud.com>
+        Fri, 17 Mar 2023 11:51:23 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27DCAB0B99
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 08:51:21 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id y4so22230216edo.2
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 08:51:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679068279;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=VgbCEwBBaMJgjzTFKLCTgfUkZg+a1TMJ6pPEoqV63Hc=;
+        b=LwuCElSXbXOCVZGj7kYeemZnW62++O0ppaxM7gnXTHJSYAyJpXJoVkQ6DwBOhLNaMJ
+         Kf4s1x9Cc69FYIaJywiJMkt86sBWGheEfqggTlkg3v9Qs5LctnwnQfXKWmbQDk3Yuh9r
+         g+tDtl8BlfPDL8GXvh6KyA5aggB1LpL2rV2UcjyA/qytvb7zxpgXFIc7eutHCtx14aze
+         Y3byhgJcqb5+9UzImhKpn/GG+qN+lbe4sQLDvqmeBBegMst5k512i+IlC6pkBjt0sob4
+         LaGs8Ob+BCPvmVjLrMR3UT2NUe4h9u7+3b91+l88eUdb624n8f9Od8Re/7TIJK49RGpT
+         roCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679068279;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VgbCEwBBaMJgjzTFKLCTgfUkZg+a1TMJ6pPEoqV63Hc=;
+        b=D2+A/EP/lEY5CMWC7YhzgZITy2yOe17g8E0S5O1pp5Z5PXCTvCv+XRv3dqkM4urDvo
+         doEBV0laE9BzVR4ya/OV+dta1RemBbNgSLiA54nCO1Yl5S9hZwqa4C8OVUSTINpGrsr1
+         1DctOmy8RIg0r0fd7tccwOfZWGWLAOZlFHGsvMZny0tV35TudZuwhms2V99aLf5WWuAq
+         iPl/dJrRopQz9QCbkpqNwZnVNqXAMaZgUzjFZu+z8UUdRUNzbIl/z9DKiLui8KJy37b1
+         fy8DbUBBYzNRHYmxbdukHjYrW9cMdOTXeaWLfZ6wEdt49FgOplNWxmj+2SgJ6HlaaVlU
+         AykQ==
+X-Gm-Message-State: AO0yUKUJ7xuOnuvfSlJXm0mGgqgxQuBxbPWUM+PEXYNSBEVjhQuQtSGu
+        tGUm246GMjOcQAnjjht4SOl19A==
+X-Google-Smtp-Source: AK7set+le+sP+6r2wPX7W1qxTD9Ck//nvh8FN3PUI0b+9ZyihWQUg3l+YvlQhJ034uCNeDK4yazy9w==
+X-Received: by 2002:aa7:db97:0:b0:4fb:fd22:29b6 with SMTP id u23-20020aa7db97000000b004fbfd2229b6mr3165846edt.40.1679068279633;
+        Fri, 17 Mar 2023 08:51:19 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:d013:3eeb:7658:cec? ([2a02:810d:15c0:828:d013:3eeb:7658:cec])
+        by smtp.gmail.com with ESMTPSA id k12-20020a50ce4c000000b004af70c546dasm1226755edj.87.2023.03.17.08.51.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Mar 2023 08:51:19 -0700 (PDT)
+Message-ID: <7469290a-0671-7d2f-b0ce-cdde2a9e66cc@linaro.org>
+Date:   Fri, 17 Mar 2023 16:51:18 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d88a3d33-6832-2921-c8bb-b935b19e7db4@huaweicloud.com>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v2 1/2] dt-bindings: spi: add loongson spi
+Content-Language: en-US
+To:     zhuyinbo <zhuyinbo@loongson.cn>, Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
+        Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn
+References: <20230317082950.12738-1-zhuyinbo@loongson.cn>
+ <20230317082950.12738-2-zhuyinbo@loongson.cn>
+ <a736c6db-466a-12e4-8e22-c8dc900978d4@linaro.org>
+ <e944732b-9a2d-b6ff-8336-7363788809b9@loongson.cn>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <e944732b-9a2d-b6ff-8336-7363788809b9@loongson.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 16, 2023 at 06:19:40PM +0800, Kemeng Shi wrote:
-> Hi Theodore, thanks for feedback. I will submit another patchset for
-> mballoc and I would like to include this fix if no one else does. As
-> new patches may be conflicted with old ones I submited, I would submit
-> the new patchset after the old ones are fully reviewed and applied
-> if this fix is not in rush. Thanks!
+On 17/03/2023 11:00, zhuyinbo wrote:
+>>> +properties:
+>>> +  compatible:
+>>> +    enum:
+>>> +      - loongson,ls2k-spi
+>>> +      - loongson,ls7a-spi
+>>> +
+>>> +  reg:
+>>> +    maxItems: 1
+>>> +
+>>> +  clocks:
+>>> +    minItems: 1
+>> I don't understand why did you change it. I did not ask for it.
+>>
+>> Best regards,
+>> Krzysztof
+> Add clocks "minItems: 1" description is for fix yaml file compile issue.
 
-Hi, I've already taken the your patches into the dev branch; were
-there any changes you were intending to make to your patches?
+minItems: 1 is not correct, so you cannot use incorrect code to suppress
+some warning. This should be list the clocks or use maxItems: 1, if you
+have only one clock.
 
-If you could submit a separate fix for the bug that I noticed, that
-would be great.
+Best regards,
+Krzysztof
 
-Also, if you are interested in doing some more work in mballoc.c, I
-was wondering if you would be interested in adding some Kunit tests
-for mballoc.c.  A simple example Kunit test for ext4 can be found in
-fs/ext4/inode_test.c.  (The convention is to place tests for foo.c in
-foo_test.c.)
-
-[1] https://docs.kernel.org/dev-tools/kunit/
-
-In order to add mballoc Kunit tests, we will need to add some "mock"[2]
-functions to simulate what happens when mballoc.c tries reading a
-block bitmap.  My thinking was to have a test provide an array of some
-data structure like this:
-
-struct test_bitmap {
-       unsigned int	start;
-       unsigned int	len;
-};
-
-[2] https://en.wikipedia.org/wiki/Mock_object
-
-... which indicates the starting block, and the length of a run of
-blocks that are marked as in use, where the list of blocks are sorted
-by starting block number, and where a starting block of ~0 indicates
-the end of the list of block extents.
-
-We would also need have a set of utility ext4 Kunit functions to
-create "fake" ext4 superblocks and ext4_sb_info structures.
-
-I was originally thinking that obvious starting Kunit tests would be
-for fs/ext4/hash.c and fs/ext4/extents_status.c, since they require
-the little or no "mocking" support.  However, there are so many
-changes in fs/ext4/mballoc.c, the urgency in having unit tests for it
-is getting more urgent --- since if there is a bug in one of these
-functions, such as the one that I noted in
-ext4_mb_new_blocks_simple(), since it's harder to exhaustively test
-some of these smaller sub-functions in integration tests such as those
-found in xfstests.  Unit tests are the best way to make sure we're
-testing all of the code paths in a complex module such as mballoc.c
-
-Cheers,
-
-						- Ted
