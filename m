@@ -2,125 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 848436BF226
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 21:09:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 835C46BF227
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 21:09:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229868AbjCQUJC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 16:09:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34730 "EHLO
+        id S230041AbjCQUJM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 16:09:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbjCQUI7 (ORCPT
+        with ESMTP id S229489AbjCQUJF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 16:08:59 -0400
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10A38298E9;
-        Fri, 17 Mar 2023 13:08:57 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.nyi.internal (Postfix) with ESMTP id C932F5C006E;
-        Fri, 17 Mar 2023 16:08:53 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Fri, 17 Mar 2023 16:08:53 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-         h=cc:cc:content-type:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1679083733; x=
-        1679170133; bh=3QWgEiDb3A7ZhMIEvI0tzxFEGhvDtOx1RahjR/6QWNA=; b=M
-        GedoY5aaxFV/mxmaayuthUUl708xNdt3fmxwD8GMviApKv8EGOQ27s3VEMbrSc8A
-        Mk3SW+nqtcMKZGul3h2VmMXpGqUEhpOJOrkASe/Dzm5o37oIXzDwdJpTkjDgM7f0
-        nY0QlEcXBVw7TZmWQ5hP76SE2wSAxomWiYpNKrCdyHM015TviE/5AKP4BgJcRo8p
-        1xehc70tD01HTWJATU/fcxKwsHeCyLwTnWKJyF4j42tla1KFUMCDUxbJhHKPvgP3
-        Qrai2nW/SYF70PHUSPBALw6ELzRTJ2oKvEdu6lqnnB+F34/eWdL3cO89kkSJz6lo
-        CWgRQcnjzrd9/GtjgepCQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1679083733; x=1679170133; bh=3QWgEiDb3A7Zh
-        MIEvI0tzxFEGhvDtOx1RahjR/6QWNA=; b=IEBSeC5Y04frThJ8YmLFURABMT5i/
-        v7iaesDsL4BNVRj3nNHDCejUjFlNW++QaLptLFf13aK0Gcn148RlM8Gsmb3KubwZ
-        hM0OSiE0BdmQPBKrBptDfX9iaTdUL+Ob4aPClpkIEHOGk3SIhLRtzn/KiQDLyviK
-        gqlqNBp8IsBmRj9Al6+jVmI1QjN6FmL/hvTqSdFJx/+qKUJBvlsxXrlmHi+46N0h
-        xshyF15xOBgj/WUmXydXIVjdvP9ffyhyH7VZagS9U8SSfh8dqt0e1pXSFus8NLz7
-        Dk18k/9knbt/tyudCCflaNJYXZGqsFQAEDf4McBcpokwQIfdXUgB0mseQ==
-X-ME-Sender: <xms:1MgUZCnov5xBHYDqBtdbjPLV7Gts6BI6yLhHTjJhNLvIk3snQQZhZw>
-    <xme:1MgUZJ3LDARXClcCX5bChW6c6OM8p0yuzjZWO5C-PU9Vh0j4P9YxwyJARbF8hi9tI
-    -tac6hTCDUWZD6H7Q8>
-X-ME-Received: <xmr:1MgUZAoYfgozDiu6uJQBH7en08guN7vr0tjJH_ktrtmQg8tGipBgL-e1kgPrMrmdt44V8g>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdefvddgudefvdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehttddttddttddvnecuhfhrohhmpedfmfhi
-    rhhilhhlucetrdcuufhhuhhtvghmohhvfdcuoehkihhrihhllhesshhhuhhtvghmohhvrd
-    hnrghmvgeqnecuggftrfgrthhtvghrnhephfeigefhtdefhedtfedthefghedutddvueeh
-    tedttdehjeeukeejgeeuiedvkedtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
-    hmpehmrghilhhfrhhomhepkhhirhhilhhlsehshhhuthgvmhhovhdrnhgrmhgv
-X-ME-Proxy: <xmx:1MgUZGmkZNvcBgBVi-TY-AxFcIZIon_LUO2heD5RokRbo65wN8VXBw>
-    <xmx:1MgUZA0boLDyqqvd5b0opN7sJ0cSaY6UoNwmuGt8A0DyiVE23uiQEA>
-    <xmx:1MgUZNvOW8PLIa34MBOLCSxCLFR46vK1MlPn39rNclzOgtk9bhnEuQ>
-    <xmx:1cgUZKqpi4rqyZryffE7fNGa_kaeKgvtPKGVUMSvvpRjC4mJ4p9hZQ>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 17 Mar 2023 16:08:52 -0400 (EDT)
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 54A6410D47D; Fri, 17 Mar 2023 23:08:49 +0300 (+03)
-Date:   Fri, 17 Mar 2023 23:08:49 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mel Gorman <mgorman@suse.de>, Vlastimil Babka <vbabka@suse.cz>,
-        linux-mm@kvack.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm/page_alloc: Make deferred page init free pages in
- MAX_ORDER blocks
-Message-ID: <20230317200849.gjqezmeaiqkfz7so@box.shutemov.name>
-References: <20230317153501.19807-1-kirill.shutemov@linux.intel.com>
- <373b22c7-9162-eff0-1f0c-0a8d79a8b372@redhat.com>
+        Fri, 17 Mar 2023 16:09:05 -0400
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A0424C6EC
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 13:09:04 -0700 (PDT)
+Received: by mail-yb1-xb2d.google.com with SMTP id p203so6959346ybb.13
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 13:09:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1679083743;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tiU63fzKbrxG6OsvAQO5eoTUgRIjxq/dY+rYtWI2V/Y=;
+        b=O3zQpVlmOTiLTFQb7Faze4s9B7m1eqRhe730lI97hcfmDpS5kFaaYVf7wsVLD0aYDf
+         rSd/6s/VKT7CPe1IeJVBgpT8tLQsol7A4ArTdTMzv2bhmh3Xdg0KscyPUZbPqb05qUSj
+         f5RKWldN0/q6mBLZwkECcux9WaVCew76VEE/U74vIHx1DeW20vh2DSFDgub0K5VZJGzC
+         D07tSjuff7OBrYvLn+fQQavGN/8qbLLicJANb+fBGCUQWiaaVRGkYc1xrR8hMgXTccMo
+         oMdYqXsFdwVAAha750b/5p1/FUQ6R4sE1VtqiYLo/yF7KSrCxd9xH4L1Nd4rVFe0rdzi
+         UDsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679083743;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=tiU63fzKbrxG6OsvAQO5eoTUgRIjxq/dY+rYtWI2V/Y=;
+        b=rm/2IaYdFkr+qKI0XsZp7an7QRCUKyib2QCwf0sXCJ/NFy14MC9Na0Cvqm/iTfPVs7
+         iYruEbg35g5bEy/TSLyvS+0Go4SW3C0dT9Ms5UpumeCQqJiH+j/1bLn/GdVKCw/ArfHP
+         K6iyfR6pVlt3/wQ6Y97ajS9Z6uMa6rNU0U9lH4hvN2Sgvucl/Ktg74Ri+W5nU+MglY9z
+         CRVq3SwtGb0QJFYbNq21FjPxQZAUV4D6XOzpypR0sA77K/xEwZikPpSzOz34pbgveQ/2
+         7yGwiJH8C4ys+oVtVkYpoMCAUHrtGcNufCpTB9FgSF/8+hlXZyrXuH4tx0alAZeYTx0X
+         ViAA==
+X-Gm-Message-State: AO0yUKXla6NfF1pTZYdA+SAJkVlDgpBTxAtlz6mnvFr0ZQr16Jekp/bS
+        LH28x2QQjfuirNhza+3fYp5Ve1v/lyLFJX77gBF3WA==
+X-Google-Smtp-Source: AK7set+E7kGxOkwB68SQ5anuvVXg2Hon15ymj8sjOl0ixG4OA/sKg7LmyULFkZn+7bUvVxyXp0Lkz+kTTDBtj5oq4jE=
+X-Received: by 2002:a25:3486:0:b0:b56:1f24:7e9f with SMTP id
+ b128-20020a253486000000b00b561f247e9fmr509657yba.12.1679083743422; Fri, 17
+ Mar 2023 13:09:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <373b22c7-9162-eff0-1f0c-0a8d79a8b372@redhat.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230317134448.11082-1-mhocko@kernel.org> <20230317134448.11082-3-mhocko@kernel.org>
+In-Reply-To: <20230317134448.11082-3-mhocko@kernel.org>
+From:   Shakeel Butt <shakeelb@google.com>
+Date:   Fri, 17 Mar 2023 13:08:52 -0700
+Message-ID: <CALvZod7z399WdGDuYFOusaTOpG2BwGrnCtN__QxnjCs4sCB+7g@mail.gmail.com>
+Subject: Re: [PATCH 2/2] memcg: do not drain charge pcp caches on remote
+ isolated cpus
+To:     Michal Hocko <mhocko@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Leonardo Bras <leobras@redhat.com>,
+        Frederic Weisbecker <fweisbecker@suse.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Muchun Song <muchun.song@linux.dev>,
+        LKML <linux-kernel@vger.kernel.org>, linux-mm@kvack.org,
+        Michal Hocko <mhocko@suse.com>,
+        Frederic Weisbecker <frederic@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 17, 2023 at 06:50:17PM +0100, David Hildenbrand wrote:
-> On 17.03.23 16:35, Kirill A. Shutemov wrote:
-> > Normal page init path frees pages during the boot in MAX_ORDER chunks,
-> > but deferred page init path does it in pageblock blocks.
-> > 
-> > Change deferred page init path to work in MAX_ORDER blocks.
-> > 
-> > For cases when pageblock is larger than MAX_ORDER, set migrate type to
-> > MIGRATE_MOVABLE for all pageblocks covered by the page.
-> 
-> See
-> 
-> commit b3d40a2b6d10c9d0424d2b398bf962fb6adad87e
-> Author: David Hildenbrand <david@redhat.com>
-> Date:   Tue Mar 22 14:43:20 2022 -0700
-> 
->     mm: enforce pageblock_order < MAX_ORDER
->     Some places in the kernel don't really expect pageblock_order >=
->     MAX_ORDER, and it looks like this is only possible in corner cases:
->     1) CONFIG_DEFERRED_STRUCT_PAGE_INIT we'll end up freeing pageblock_order
->        pages via __free_pages_core(), which cannot possibly work.
-> 
->     ...
-> 
-> How should it still happen?
+On Fri, Mar 17, 2023 at 6:44=E2=80=AFAM Michal Hocko <mhocko@kernel.org> wr=
+ote:
+>
+> From: Michal Hocko <mhocko@suse.com>
+>
+> Leonardo Bras has noticed that pcp charge cache draining might be
+> disruptive on workloads relying on 'isolated cpus', a feature commonly
+> used on workloads that are sensitive to interruption and context
+> switching such as vRAN and Industrial Control Systems.
+>
+> There are essentially two ways how to approach the issue. We can either
+> allow the pcp cache to be drained on a different rather than a local cpu
+> or avoid remote flushing on isolated cpus.
+>
+> The current pcp charge cache is really optimized for high performance
+> and it always relies to stick with its cpu. That means it only requires
+> local_lock (preempt_disable on !RT) and draining is handed over to pcp
+> WQ to drain locally again.
+>
+> The former solution (remote draining) would require to add an additional
+> locking to prevent local charges from racing with the draining. This
+> adds an atomic operation to otherwise simple arithmetic fast path in the
+> try_charge path. Another concern is that the remote draining can cause a
+> lock contention for the isolated workloads and therefore interfere with
+> it indirectly via user space interfaces.
+>
+> Another option is to avoid draining scheduling on isolated cpus
+> altogether. That means that those remote cpus would keep their charges
+> even after drain_all_stock returns. This is certainly not optimal either
+> but it shouldn't really cause any major problems. In the worst case
+> (many isolated cpus with charges - each of them with MEMCG_CHARGE_BATCH
+> i.e 64 page) the memory consumption of a memcg would be artificially
+> higher than can be immediately used from other cpus.
+>
+> Theoretically a memcg OOM killer could be triggered pre-maturely.
+> Currently it is not really clear whether this is a practical problem
+> though. Tight memcg limit would be really counter productive to cpu
+> isolated workloads pretty much by definition because any memory
+> reclaimed induced by memcg limit could break user space timing
+> expectations as those usually expect execution in the userspace most of
+> the time.
+>
+> Also charges could be left behind on memcg removal. Any future charge on
+> those isolated cpus will drain that pcp cache so this won't be a
+> permanent leak.
+>
+> Considering cons and pros of both approaches this patch is implementing
+> the second option and simply do not schedule remote draining if the
+> target cpu is isolated. This solution is much more simpler. It doesn't
+> add any new locking and it is more more predictable from the user space
+> POV. Should the pre-mature memcg OOM become a real life problem, we can
+> revisit this decision.
+>
+> Cc: Leonardo Br=C3=A1s <leobras@redhat.com>
+> Cc: Marcelo Tosatti <mtosatti@redhat.com>
+> Cc: Shakeel Butt <shakeelb@google.com>
+> Cc: Muchun Song <muchun.song@linux.dev>
+> Cc: Johannes Weiner <hannes@cmpxchg.org>
+> Cc: Frederic Weisbecker <frederic@kernel.org>
+> Reported-by: Leonardo Bras <leobras@redhat.com>
+> Acked-by: Roman Gushchin <roman.gushchin@linux.dev>
+> Suggested-by: Roman Gushchin <roman.gushchin@linux.dev>
+> Signed-off-by: Michal Hocko <mhocko@suse.com>
 
-I got the sentence backwards. It suppose to be
-
-	For cases when MAX_ORDER is larger than pageblock, set migrate type to
-	MIGRATE_MOVABLE for all pageblocks covered by the page.
-
-
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+Acked-by: Shakeel Butt <shakeelb@google.com>
