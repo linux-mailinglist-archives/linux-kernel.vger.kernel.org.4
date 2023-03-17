@@ -2,238 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C792C6BDE69
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 03:02:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09C886BDE6B
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 03:02:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229754AbjCQCCP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 22:02:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36064 "EHLO
+        id S229772AbjCQCCn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 22:02:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbjCQCCN (ORCPT
+        with ESMTP id S229707AbjCQCCl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 22:02:13 -0400
-Received: from mail-ua1-x92f.google.com (mail-ua1-x92f.google.com [IPv6:2607:f8b0:4864:20::92f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94D48A6BC4
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 19:02:11 -0700 (PDT)
-Received: by mail-ua1-x92f.google.com with SMTP id i22so2439427uat.8
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 19:02:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679018530;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zuQS+IqfIFU2bMpQvvRcDBiPpn6HUMH1Idu185oetYQ=;
-        b=g5TQGM1U2g04r0O36hQ2Ds1XKfbNyLjuS8QjAJ7kAP3kNtLJ2teR90AF5Izf05llbv
-         3KpuoVfdPJ1aJBZwmlNs4Fy43Re45JBKiY7xkzuGi/FiBu23NW4LlSRbHWEuFD2Fo0mg
-         jsF8A1MMIA3+/+AalNoGi4SFWV8AfsQQQlmPOxxz4c3Alt9kZLQU7cXxjS1xPiml1/+j
-         KeBTKzg+IGipArtro5crTPz5HiC+KisfVCakfqIRK+QajHqSPXQ1MqGELBJM8bN3hJi6
-         SDbyaUPhHH8eEEv+X6s00uqe3GsVGJlLU6It8LunzlddFX5+rt5a1+aRCN9Dr2iH+iGZ
-         gOwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679018530;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zuQS+IqfIFU2bMpQvvRcDBiPpn6HUMH1Idu185oetYQ=;
-        b=d3ZAlFkcee6KLvxQdYEdPdBWRmdm4Z+sibuTooeF5jLbhNRCpU/VnU8NFSS6jx68Mu
-         ZBJS46NX2xYH+kAQlVAEF+NE8/ka2jOumrN/fLFCuDdfHA+8NEUhzJ0Konv2xBvTvNsk
-         PoYW9wAH6WvmXRcJgT6B4zQ8IoGp41QVdYaO/kpryRaiNd8iuJsvbQe+cutzFqeoCuM/
-         9p4sVyEuK0H1TxnF7mCvl+kw/Fvs4aWPJRvaWtowQti3j6Cr00rda2Pj5u57bhUpCZyD
-         BjcNCeFI0Bcjl9n2yH4D4vN5cFfuugOcowi5Fty1Gqi4QZg9leuy/Nl4WIed+RfEdisM
-         IWDg==
-X-Gm-Message-State: AO0yUKXXpbAcwopGT4IM53QIX7IOSY1di7Kb2axkzSbIC9BStiLqBuhX
-        STmzpchwe2Hqj1rhGV2MnvbHDs0fbfA54BOCoJ9ldw==
-X-Google-Smtp-Source: AK7set/f1LUOJk3hFjvAj8zmDpRufQDm4er3XvnhFis3CHXbEQ1bV74440MmUDPxIOuq0EzlIs+Fwj65uH1YK6iocpY=
-X-Received: by 2002:a1f:9817:0:b0:400:ea69:7082 with SMTP id
- a23-20020a1f9817000000b00400ea697082mr28160316vke.0.1679018530392; Thu, 16
- Mar 2023 19:02:10 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230316083403.224993044@linuxfoundation.org>
-In-Reply-To: <20230316083403.224993044@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Fri, 17 Mar 2023 07:31:59 +0530
-Message-ID: <CA+G9fYtTBW_BvHwyASUPJUw8QT-PX1pcroWsnQ658FSxj1YsTQ@mail.gmail.com>
-Subject: Re: [PATCH 5.4 00/55] 5.4.237-rc2 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Thu, 16 Mar 2023 22:02:41 -0400
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A705AA76A0
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 19:02:36 -0700 (PDT)
+Received: from epcas2p4.samsung.com (unknown [182.195.41.56])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20230317020233epoutp043fff5c9d3181669c660b52a8095f4860~NEnqgiT820393303933epoutp04n
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 02:02:33 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20230317020233epoutp043fff5c9d3181669c660b52a8095f4860~NEnqgiT820393303933epoutp04n
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1679018554;
+        bh=HzuXTIGhsJtmn+7K+M/XpU65FRNGqAod8SGW99Rw/90=;
+        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
+        b=Y3Ydni+mTyloHfip/pPkg8U35msx7zyLwUU4DSoWINRTvf9YOYGXB3JpOCCqlHZjG
+         d6qa2Zivm3HGdS86k4VYrSXrSdzAIsteQCu6ggvAuj1FqpSSS19EwOxJbeNKJ31HRl
+         yT2VfodnxIgdDx1uWCrO3s0gzvjtoUtzeke6KNfw=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas2p1.samsung.com (KnoxPortal) with ESMTP id
+        20230317020233epcas2p1ac37ad088bea59e1cc0220fa2e0bb0d3~NEnqUHUfO1891918919epcas2p1_;
+        Fri, 17 Mar 2023 02:02:33 +0000 (GMT)
+Received: from epsmges2p1.samsung.com (unknown [182.195.36.91]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4Pd6pJ5TyYz4x9Q3; Fri, 17 Mar
+        2023 02:02:32 +0000 (GMT)
+X-AuditID: b6c32a45-8bdf87000001f1e7-07-6413ca3805aa
+Received: from epcas2p4.samsung.com ( [182.195.41.56]) by
+        epsmges2p1.samsung.com (Symantec Messaging Gateway) with SMTP id
+        0F.E4.61927.83AC3146; Fri, 17 Mar 2023 11:02:32 +0900 (KST)
+Mime-Version: 1.0
+Subject: RE:(2) [PATCH v1] f2fs: Fix system crash due to lack of free space
+ in LFS
+Reply-To: yonggil.song@samsung.com
+Sender: Yonggil Song <yonggil.song@samsung.com>
+From:   Yonggil Song <yonggil.song@samsung.com>
+To:     Jaegeuk Kim <jaegeuk@kernel.org>
+CC:     "chao@kernel.org" <chao@kernel.org>,
+        "linux-f2fs-devel@lists.sourceforge.net" 
+        <linux-f2fs-devel@lists.sourceforge.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+In-Reply-To: <ZBNOKq/EYNMnMSFi@google.com>
+X-CPGS-Detection: blocking_info_exchange
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <20230317020232epcms2p8674f817aeddbcf3aaf6a64f9fa77d5c3@epcms2p8>
+Date:   Fri, 17 Mar 2023 11:02:32 +0900
+X-CMS-MailID: 20230317020232epcms2p8674f817aeddbcf3aaf6a64f9fa77d5c3
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrFKsWRmVeSWpSXmKPExsWy7bCmha7FKeEUg51r5SxOTz3LZPFk/Sxm
+        i0uL3C0u75rD5sDisWlVJ5vH7gWfmTw+b5ILYI7KtslITUxJLVJIzUvOT8nMS7dV8g6Od443
+        NTMw1DW0tDBXUshLzE21VXLxCdB1y8wBWqakUJaYUwoUCkgsLlbSt7Mpyi8tSVXIyC8usVVK
+        LUjJKTAv0CtOzC0uzUvXy0stsTI0MDAyBSpMyM6Ysoun4LtexeTvu1gbGLeodTFyckgImEi8
+        Wd3F1sXIxSEksINRYubr04xdjBwcvAKCEn93CIPUCAuESExceIAJxBYSUJK4dqCXBSKuL7F5
+        8TJ2EJtNQFfi74blYLaIgIrEoUWX2UFmMgvsZ5S407ODCWIZr8SM9qcsELa0xPblWxlBbE4B
+        LYm+DfvYIeIaEj+W9TJD2KISN1e/ZYex3x+bzwhhi0i03jsLVSMo8eDnbqi4pMSiQ+ehduVL
+        /F1xnQ3CrpHY2tAGFdeXuNaxkQXiR1+JnafSQMIsAqoSL/5thRrjInH82hew8cwC8hLb385h
+        BilnFtCUWL9LH8SUEFCWOHKLBaKCT6Lj8F92mAd3zHsCtUhNYvOmzawQtozEhcdtUNM9JH7N
+        PMk6gVFxFiKcZyHZNQth1wJG5lWMYqkFxbnpqcVGBYbwmE3Oz93ECE50Wq47GCe//aB3iJGJ
+        g/EQowQHs5IIbziLQIoQb0piZVVqUX58UWlOavEhRlOgLycyS4km5wNTbV5JvKGJpYGJmZmh
+        uZGpgbmSOK+07clkIYH0xJLU7NTUgtQimD4mDk6pBqbIooDp5UFXDt7fWmEbmZ38eEHskg16
+        l75EXVrtuvQuQ6+NxOub8nI9XRzqIn4Bf5o2MOtt3TONkWHLF46Aear15wRmik95F+P5QE+7
+        o8OQaYFTztkJ3yb5VOUefGug6rNhvrGLR0pkXvK0LeY/M92FPQ/NbWtSXSSSoaN6Q0m+w6I/
+        PktJI/fpxsT5ttFJ0klHV7G/+tgfeWBqHVdcDMPPVJ3fx/grY48U7UwIUb+6iLM1siYx47yG
+        kcgdjxPBdv06Uu3dxxIUM/Z+aFnqZhX6aGE8n/IXr5k3bziX3sgLikqrs92WJeWsaPFhwRHJ
+        iJIrORo12WzSzFuNY4U99seo/JvB91bgz+GFOY5KLMUZiYZazEXFiQDUxc/N/QMAAA==
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20230314074733epcms2p511d7a7fa11d5b54ac2fbaa840db3f1cb
+References: <ZBNOKq/EYNMnMSFi@google.com>
+        <20230314074733epcms2p511d7a7fa11d5b54ac2fbaa840db3f1cb@epcms2p5>
+        <CGME20230314074733epcms2p511d7a7fa11d5b54ac2fbaa840db3f1cb@epcms2p8>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 16 Mar 2023 at 14:20, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+>On 03/14, Yonggil Song wrote:
+>> When f2fs tries to checkpoint during foreground gc in LFS mode, system
+>> crash occurs due to lack of free space if the amount of dirty node and
+>> dentry pages generated by data migration exceeds free space.
+>> The reproduction sequence is as follows.
+>> 
+>>  - 20GiB capacity block device (null_blk)
+>>  - format and mount with LFS mode
+>>  - create a file and write 20,000MiB
+>>  - 4k random write on full range of the file
+>> 
+>>  RIP: 0010:new_curseg+0x48a/0x510 [f2fs]
+>>  Code: 55 e7 f5 89 c0 48 0f af c3 48 8b 5d c0 48 c1 e8 20 83 c0 01 89 43 6c 48 83 c4 28 5b 41 5c 41 5d 41 5e 41 5f 5d c3 cc cc cc cc <0f> 0b f0 41 80 4f 48 04 45 85 f6 0f 84 ba fd ff ff e9 ef fe ff ff
+>>  RSP: 0018:ffff977bc397b218 EFLAGS: 00010246
+>>  RAX: 00000000000027b9 RBX: 0000000000000000 RCX: 00000000000027c0
+>>  RDX: 0000000000000000 RSI: 00000000000027b9 RDI: ffff8c25ab4e74f8
+>>  RBP: ffff977bc397b268 R08: 00000000000027b9 R09: ffff8c29e4a34b40
+>>  R10: 0000000000000001 R11: ffff977bc397b0d8 R12: 0000000000000000
+>>  R13: ffff8c25b4dd81a0 R14: 0000000000000000 R15: ffff8c2f667f9000
+>>  FS: 0000000000000000(0000) GS:ffff8c344ec80000(0000) knlGS:0000000000000000
+>>  CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>>  CR2: 000000c00055d000 CR3: 0000000e30810003 CR4: 00000000003706e0
+>>  DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+>>  DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+>>  Call Trace:
+>>  <TASK>
+>>  allocate_segment_by_default+0x9c/0x110 [f2fs]
+>>  f2fs_allocate_data_block+0x243/0xa30 [f2fs]
+>>  ? __mod_lruvec_page_state+0xa0/0x150
+>>  do_write_page+0x80/0x160 [f2fs]
+>>  f2fs_do_write_node_page+0x32/0x50 [f2fs]
+>>  __write_node_page+0x339/0x730 [f2fs]
+>>  f2fs_sync_node_pages+0x5a6/0x780 [f2fs]
+>>  block_operations+0x257/0x340 [f2fs]
+>>  f2fs_write_checkpoint+0x102/0x1050 [f2fs]
+>>  f2fs_gc+0x27c/0x630 [f2fs]
+>>  ? folio_mark_dirty+0x36/0x70
+>>  f2fs_balance_fs+0x16f/0x180 [f2fs]
+>> 
+>> This patch adds checking whether free sections are enough before checkpoint
+>> during gc.
+>> 
+>> Signed-off-by: Yonggil Song <yonggil.song@samsung.com>
+>> ---
+>>  fs/f2fs/gc.c      |  7 ++++++-
+>>  fs/f2fs/segment.h | 26 +++++++++++++++++++++-----
+>>  2 files changed, 27 insertions(+), 6 deletions(-)
+>> 
+>> diff --git a/fs/f2fs/gc.c b/fs/f2fs/gc.c
+>> index 4546e01b2ee0..b22f49a6f128 100644
+>> --- a/fs/f2fs/gc.c
+>> +++ b/fs/f2fs/gc.c
+>> @@ -1773,6 +1773,7 @@ int f2fs_gc(struct f2fs_sb_info *sbi, struct f2fs_gc_control *gc_control)
+>>  		.iroot = RADIX_TREE_INIT(gc_list.iroot, GFP_NOFS),
+>>  	};
+>>  	unsigned int skipped_round = 0, round = 0;
+>> +	unsigned int nr_needed_secs = 0, node_blocks = 0, dent_blocks = 0;
+>>  
+>>  	trace_f2fs_gc_begin(sbi->sb, gc_type, gc_control->no_bg_gc,
+>>  				gc_control->nr_free_secs,
+>> @@ -1858,8 +1859,12 @@ int f2fs_gc(struct f2fs_sb_info *sbi, struct f2fs_gc_control *gc_control)
+>>  		}
+>>  	}
+>>  
+>> +	/* need more three extra sections for writer's data/node/dentry */
+>> +	nr_needed_secs = get_min_need_secs(sbi, &node_blocks, &dent_blocks) + 3;
 >
-> This is the start of the stable review cycle for the 5.4.237 release.
-> There are 55 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+>	get_min_need_secs(&lower, &upper)
+>	{
+>		...
 >
-> Responses should be made by Sat, 18 Mar 2023 08:33:04 +0000.
-> Anything received after that time might be too late.
+>		*lower = node_secs + dent_secs;
+>		*upper = *lower + (node_blocks ? 1 : 0) + (dent_blocks ? 1 : 0);
+>	}
 >
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.4.237-rc2.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.4.y
-> and the diffstat can be found below.
+>> +	nr_needed_secs += ((node_blocks ? 1 : 0) + (dent_blocks ? 1 : 0));
+>> +
+>>  	/* Write checkpoint to reclaim prefree segments */
+>> -	if (free_sections(sbi) < NR_CURSEG_PERSIST_TYPE &&
+>> +	if (free_sections(sbi) <= nr_needed_secs &&
 >
-> thanks,
+>#define NR_GC_CHECKPOINT_SECS	(3)	/* data/node/dentry sections */
 >
-> greg k-h
+>	if (free_sections(sbi) <= upper + NR_GC_CHECKPOINT_SECS &&
+>
+>>  				prefree_segments(sbi)) {
+>>  		ret = f2fs_write_checkpoint(sbi, &cpc);
+>>  		if (ret)
+>> diff --git a/fs/f2fs/segment.h b/fs/f2fs/segment.h
+>> index be8f2d7d007b..ac11c47bfe37 100644
+>> --- a/fs/f2fs/segment.h
+>> +++ b/fs/f2fs/segment.h
+>> @@ -605,8 +605,11 @@ static inline bool has_curseg_enough_space(struct f2fs_sb_info *sbi,
+>>  	return true;
+>>  }
+>>  
+>> -static inline bool has_not_enough_free_secs(struct f2fs_sb_info *sbi,
+>> -					int freed, int needed)
+>> +/*
+>> + * calculate the minimum number of sections (needed) for dirty node/dentry
+>> + */
+>> +static inline unsigned int get_min_need_secs(struct f2fs_sb_info *sbi,
+>> +		unsigned int *node_blocks, unsigned int *dent_blocks)
+>>  {
+>>  	unsigned int total_node_blocks = get_pages(sbi, F2FS_DIRTY_NODES) +
+>>  					get_pages(sbi, F2FS_DIRTY_DENTS) +
+>> @@ -614,15 +617,28 @@ static inline bool has_not_enough_free_secs(struct f2fs_sb_info *sbi,
+>>  	unsigned int total_dent_blocks = get_pages(sbi, F2FS_DIRTY_DENTS);
+>>  	unsigned int node_secs = total_node_blocks / CAP_BLKS_PER_SEC(sbi);
+>>  	unsigned int dent_secs = total_dent_blocks / CAP_BLKS_PER_SEC(sbi);
+>> -	unsigned int node_blocks = total_node_blocks % CAP_BLKS_PER_SEC(sbi);
+>> -	unsigned int dent_blocks = total_dent_blocks % CAP_BLKS_PER_SEC(sbi);
+>> +
+>> +	f2fs_bug_on(sbi, (!node_blocks || !dent_blocks));
+>> +
+>> +	*node_blocks = total_node_blocks % CAP_BLKS_PER_SEC(sbi);
+>> +	*dent_blocks = total_dent_blocks % CAP_BLKS_PER_SEC(sbi);
+>> +
+>> +	return (node_secs + dent_secs);
+>> +}
+>> +
+>> +static inline bool has_not_enough_free_secs(struct f2fs_sb_info *sbi,
+>> +					int freed, int needed)
+>> +{
+>> +	unsigned int node_blocks = 0;
+>> +	unsigned int dent_blocks = 0;
+>>  	unsigned int free, need_lower, need_upper;
+>>  
+>>  	if (unlikely(is_sbi_flag_set(sbi, SBI_POR_DOING)))
+>>  		return false;
+>>  
+>>  	free = free_sections(sbi) + freed;
+>> -	need_lower = node_secs + dent_secs + reserved_sections(sbi) + needed;
+>> +	need_lower = get_min_need_secs(sbi, &node_blocks, &dent_blocks) + needed +
+>> +				reserved_sections(sbi);
+>>  	need_upper = need_lower + (node_blocks ? 1 : 0) + (dent_blocks ? 1 : 0);
+>>  
+>>  	if (free > need_upper)
+>> -- 
+>> 2.34.1
 
-
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
-
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-## Build
-* kernel: 5.4.237-rc2
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.4.y
-* git commit: 1baba0e91ac5e439c0e58b2d241a6aac8d50191c
-* git describe: v5.4.235-60-g1baba0e91ac5
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.4.y/build/v5.4.2=
-35-60-g1baba0e91ac5
-
-## Test Regressions (compared to v5.4.235)
-
-## Metric Regressions (compared to v5.4.235)
-
-## Test Fixes (compared to v5.4.235)
-
-## Metric Fixes (compared to v5.4.235)
-
-## Test result summary
-total: 117469, pass: 95900, fail: 2961, skip: 18470, xfail: 138
-
-## Build Summary
-* arc: 5 total, 5 passed, 0 failed
-* arm: 146 total, 145 passed, 1 failed
-* arm64: 46 total, 42 passed, 4 failed
-* i386: 28 total, 22 passed, 6 failed
-* mips: 30 total, 29 passed, 1 failed
-* parisc: 8 total, 8 passed, 0 failed
-* powerpc: 33 total, 32 passed, 1 failed
-* riscv: 15 total, 12 passed, 3 failed
-* s390: 8 total, 8 passed, 0 failed
-* sh: 14 total, 12 passed, 2 failed
-* sparc: 8 total, 8 passed, 0 failed
-* x86_64: 39 total, 37 passed, 2 failed
-
-## Test suites summary
-* boot
-* fwts
-* kselftest-android
-* kselftest-arm64
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers-dma-buf
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-filesystems-binderfs
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-ftrace
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-net-forwarding
-* kselftest-net-mptcp
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* perf
-* rcutorture
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
+Thanks for your review.
+I'll send a patch v2 soon.
