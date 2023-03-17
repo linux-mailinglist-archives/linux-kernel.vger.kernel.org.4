@@ -2,358 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 980A46BE74B
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 11:52:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 743CA6BE710
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 11:43:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230133AbjCQKwZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 06:52:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47514 "EHLO
+        id S230284AbjCQKm7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 06:42:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbjCQKwW (ORCPT
+        with ESMTP id S229943AbjCQKmv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 06:52:22 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86379DCA5C;
-        Fri, 17 Mar 2023 03:52:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679050341; x=1710586341;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Tz/YeDU0Cf1yEbryNrde9LYjQnRRAIiPA4Gh8Snvrz8=;
-  b=FRB8okEmZeICGof5SdJk9lbCvCyLDmYVoWq639mR3MKOdj22AFUweUqA
-   Gxzv9WuK+LF8EBUj91pJzlPKhMLzsiaMUjBRwm3jBhFiuGo5f1bzfmhgf
-   rScOmYtKnx5apK1TbkXSR4K7GEXZWKCmqlIVd1+ohUdrvlVExb5WoWvBN
-   a+8lIb++GxlJZiyGJW0o+mp6XccQOEhN4PG608YZSaLQk7GsUuwCT5C7G
-   O8L5HtUSdubUdS72jWeyF6UUCUTjH1QfkgpTCflUNox2t2gg8+LEmCf51
-   8/dIRwQeEDwPaiZWVYOQc3XRE57Kzpegv9Ddc5ARfV54Tqjvicku8DrM9
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="424506240"
-X-IronPort-AV: E=Sophos;i="5.98,268,1673942400"; 
-   d="scan'208";a="424506240"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2023 03:52:21 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="769319846"
-X-IronPort-AV: E=Sophos;i="5.98,268,1673942400"; 
-   d="scan'208";a="769319846"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by FMSMGA003.fm.intel.com with ESMTP; 17 Mar 2023 03:52:19 -0700
-Date:   Fri, 17 Mar 2023 18:40:59 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Marco Pagani <marpagan@redhat.com>
-Cc:     Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-fpga@vger.kernel.org
-Subject: Re: [RFC PATCH v2 3/4] fpga: add fake FPGA region
-Message-ID: <ZBRDu2/Kc142b8jJ@yilunxu-OptiPlex-7050>
-References: <20230310170412.708363-1-marpagan@redhat.com>
- <20230310170412.708363-4-marpagan@redhat.com>
+        Fri, 17 Mar 2023 06:42:51 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6315378CB1
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 03:42:46 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id eg48so18462752edb.13
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 03:42:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=pqrs.dk; s=google; t=1679049765;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=4mzN/37UoYXUZaB9D3Kvm+oDNKKugvTJRDf02rBTRys=;
+        b=mbOx0ApqHiRq7wPARubyIPBIX+wNc6krXZwwVEumSxZJMbtTu7p6cgaitvyO6C+SMb
+         E0pjhB6uenC5fFMCQr0d3vw5ml2WQ1A08n2ba0WAF1QJ7h2wlgnVilM0xOBC8a08dFSH
+         83A/pM2xDe/8im3WqN9Cs9UHF4/zFemO9PZ/c=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679049765;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4mzN/37UoYXUZaB9D3Kvm+oDNKKugvTJRDf02rBTRys=;
+        b=aPnMJ53JbiOiKK5IZ50HL4FB1GpqFVpoTbc9SY0Q9w4C4eIbKOUgZPBx1J9ZCVPiAV
+         stdo2RfcNV5Zx4dhWPDRGPERhSSIzpDBw+SDIMxQ3poM51IoqRn79CubHHjpLR5Y8O9e
+         HL9zHuxZUkI1WTBcC7C/1jS+XSSpX3q99py8SRTT9x0Cqyy7cR4Zx5rDQgSIee3ijrKQ
+         V6F5bHPmerXxGyTAvhBxkh3NT12/UoYCJefssZ+l954NtSbzP+FU9uUPUnRjd44D9W0j
+         CTrMhdAihkiGwrFFIJKg+vrOgGJg3BUbsJmWJUh38Qp1Attz4EedD3xB0UgS0rT15weV
+         keFg==
+X-Gm-Message-State: AO0yUKXqKFpMYFWkJgb7dchJZFZVfwocsNGahD4T3db8hXWxlTmM8yIK
+        oYcjP3cq43WRmfswDzSnBsvN2A==
+X-Google-Smtp-Source: AK7set/A3JcjdNLJx52qZo3Imzp237XXegZMjJzgTtom2W6zEiWpF7C0hM0xWzAEz4eM3T79GXx01g==
+X-Received: by 2002:a17:906:4e92:b0:878:72d0:2817 with SMTP id v18-20020a1709064e9200b0087872d02817mr13248540eju.29.1679049764924;
+        Fri, 17 Mar 2023 03:42:44 -0700 (PDT)
+Received: from localhost.localdomain ([193.89.194.60])
+        by smtp.gmail.com with ESMTPSA id e5-20020a170906314500b009236ae669ecsm816144eje.191.2023.03.17.03.42.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Mar 2023 03:42:44 -0700 (PDT)
+From:   =?UTF-8?q?Alvin=20=C5=A0ipraga?= <alvin@pqrs.dk>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>
+Cc:     linux-usb@vger.kernel.org,
+        =?UTF-8?q?Alvin=20=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] extcon: usbc-tusb320: add accessory detection support
+Date:   Fri, 17 Mar 2023 11:42:27 +0100
+Message-Id: <20230317104229.1392742-1-alvin@pqrs.dk>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230310170412.708363-4-marpagan@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-03-10 at 18:04:11 +0100, Marco Pagani wrote:
-> Add fake FPGA region platform driver with support functions. This
-> module is part of the KUnit tests for the FPGA subsystem.
-> 
-> Signed-off-by: Marco Pagani <marpagan@redhat.com>
-> ---
->  drivers/fpga/tests/fake-fpga-region.c | 219 ++++++++++++++++++++++++++
->  drivers/fpga/tests/fake-fpga-region.h |  38 +++++
->  2 files changed, 257 insertions(+)
->  create mode 100644 drivers/fpga/tests/fake-fpga-region.c
->  create mode 100644 drivers/fpga/tests/fake-fpga-region.h
-> 
-> diff --git a/drivers/fpga/tests/fake-fpga-region.c b/drivers/fpga/tests/fake-fpga-region.c
-> new file mode 100644
-> index 000000000000..54d0e564728b
-> --- /dev/null
-> +++ b/drivers/fpga/tests/fake-fpga-region.c
-> @@ -0,0 +1,219 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Driver for the fake FPGA region
-> + *
-> + * Copyright (C) 2023 Red Hat, Inc.
-> + *
-> + * Author: Marco Pagani <marpagan@redhat.com>
-> + */
-> +
-> +#include <linux/device.h>
-> +#include <linux/list.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/fpga/fpga-mgr.h>
-> +#include <linux/fpga/fpga-region.h>
-> +#include <linux/fpga/fpga-bridge.h>
-> +#include <kunit/test.h>
-> +
-> +#include "fake-fpga-region.h"
-> +
-> +#define FAKE_FPGA_REGION_DEV_NAME	"fake_fpga_region"
-> +
-> +struct fake_region_priv {
-> +	int id;
-> +	struct kunit *test;
-> +	struct list_head bridge_list;
-> +};
-> +
-> +struct fake_region_data {
-> +	struct fpga_manager *mgr;
-> +	struct kunit *test;
-> +};
-> +
-> +/**
-> + * fake_fpga_region_register() - register a fake FPGA region.
-> + * @region_ctx: fake FPGA region context data structure.
-> + * @mgr: associated FPGA manager.
-> + * @parent: parent device.
-> + * @test: KUnit test context object.
-> + *
-> + * Return: 0 if registration succeeded, an error code otherwise.
-> + */
-> +int fake_fpga_region_register(struct fake_fpga_region *region_ctx,
-> +			      struct fpga_manager *mgr, struct device *parent,
-> +			      struct kunit *test)
-> +{
-> +	struct fake_region_data pdata;
-> +	struct fake_region_priv *priv;
-> +	int ret;
-> +
-> +	pdata.mgr = mgr;
-> +	pdata.test = test;
-> +
-> +	region_ctx->pdev = platform_device_alloc(FAKE_FPGA_REGION_DEV_NAME,
-> +						 PLATFORM_DEVID_AUTO);
-> +	if (IS_ERR(region_ctx->pdev)) {
-> +		pr_err("Fake FPGA region device allocation failed\n");
-> +		return -ENOMEM;
-> +	}
-> +
-> +	region_ctx->pdev->dev.parent = parent;
-> +	platform_device_add_data(region_ctx->pdev, &pdata, sizeof(pdata));
-> +
-> +	ret = platform_device_add(region_ctx->pdev);
-> +	if (ret) {
-> +		pr_err("Fake FPGA region device add failed\n");
-> +		platform_device_put(region_ctx->pdev);
-> +		return ret;
-> +	}
-> +
-> +	region_ctx->region = platform_get_drvdata(region_ctx->pdev);
-> +
-> +	if (test) {
-> +		priv = region_ctx->region->priv;
-> +		kunit_info(test, "Fake FPGA region %d registered\n", priv->id);
-> +	}
-> +
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL_GPL(fake_fpga_region_register);
-> +
-> +/**
-> + * fake_fpga_region_unregister() - unregister a fake FPGA region.
-> + * @region_ctx: fake FPGA region context data structure.
-> + */
-> +void fake_fpga_region_unregister(struct fake_fpga_region *region_ctx)
-> +{
-> +	struct fake_region_priv *priv;
-> +	struct kunit *test;
-> +	int id;
-> +
-> +	if (!region_ctx)
-> +		return;
-> +
-> +	priv = region_ctx->region->priv;
-> +	test = priv->test;
-> +	id = priv->id;
-> +
-> +	if (region_ctx->pdev) {
-> +		platform_device_unregister(region_ctx->pdev);
-> +		if (test)
-> +			kunit_info(test, "Fake FPGA region %d unregistered\n", id);
-> +	}
-> +}
-> +EXPORT_SYMBOL_GPL(fake_fpga_region_unregister);
-> +
-> +/**
-> + * fake_fpga_region_add_bridge() - add a bridge to a fake FPGA region.
-> + * @region_ctx: fake FPGA region context data structure.
-> + * @bridge: FPGA bridge.
-> + *
-> + * Return: 0 if registration succeeded, an error code otherwise.
-> + */
-> +void fake_fpga_region_add_bridge(struct fake_fpga_region *region_ctx,
-> +				 struct fpga_bridge *bridge)
-> +{
-> +	struct fake_region_priv *priv;
-> +
-> +	priv = region_ctx->region->priv;
-> +
-> +	/* Add bridge to the list of bridges in the private context */
-> +	list_add(&bridge->node, &priv->bridge_list);
-> +
-> +	if (priv->test)
-> +		kunit_info(priv->test, "Bridge added to fake FPGA region %d\n",
-> +			   priv->id);
-> +}
-> +EXPORT_SYMBOL_GPL(fake_fpga_region_add_bridge);
-> +
-> +static int fake_region_get_bridges(struct fpga_region *region)
-> +{
-> +	struct fake_region_priv *priv;
-> +	struct fpga_bridge *bridge, *tmp;
-> +	int ret;
-> +
-> +	priv = region->priv;
-> +
-> +	list_for_each_entry_safe(bridge, tmp, &priv->bridge_list, node) {
-> +		list_del(&bridge->node);
+From: Alvin Šipraga <alsi@bang-olufsen.dk>
 
-I think the fake_fpga_region user just need to call
-fake_fpga_region_add_bridge() once on init, and may call
-fpga_bridges_put() at any time after fpga_region_program_fpga(), then
-you may lose the track of the bridges, which breaks the next
-fpga_region_program_fpga().
+The TUSB320 can detect the following types of accessory:
 
-Thanks,
-Yilun
+  - Audio Accessory
+  - Audio Accessory with charge-thru
+  - Debug Accessory (DFP)
+  - Debug Accessory (UFP)
 
-> +		ret = fpga_bridge_get_to_list(bridge->dev.parent,
-> +					      region->info,
-> +					      &region->bridge_list);
-> +		if (ret)
-> +			break;
-> +	}
-> +
-> +	return ret;
-> +}
-> +
-> +static int fake_fpga_region_probe(struct platform_device *pdev)
-> +{
-> +	struct device *dev;
-> +	struct fpga_region *region;
-> +	struct fpga_manager *mgr;
-> +	struct fake_region_data *pdata;
-> +	struct fake_region_priv *priv;
-> +	struct fpga_region_info info;
-> +	static int id_count;
-> +
-> +	dev = &pdev->dev;
-> +	pdata = dev_get_platdata(dev);
-> +
-> +	if (!pdata) {
-> +		dev_err(&pdev->dev, "Missing platform data\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-> +	if (!priv)
-> +		return -ENOMEM;
-> +
-> +	mgr = fpga_mgr_get(pdata->mgr->dev.parent);
-> +	if (IS_ERR(mgr))
-> +		return PTR_ERR(mgr);
-> +
-> +	INIT_LIST_HEAD(&priv->bridge_list);
-> +	priv->id = id_count++;
-> +	priv->test = pdata->test;
-> +
-> +	memset(&info, 0, sizeof(info));
-> +	info.priv = priv;
-> +	info.mgr = mgr;
-> +	info.get_bridges = fake_region_get_bridges;
-> +
-> +	region = fpga_region_register_full(dev, &info);
-> +	if (IS_ERR(region)) {
-> +		fpga_mgr_put(mgr);
-> +		return PTR_ERR(region);
-> +	}
-> +
-> +	platform_set_drvdata(pdev, region);
-> +
-> +	return 0;
-> +}
-> +
-> +static int fake_fpga_region_remove(struct platform_device *pdev)
-> +{
-> +	struct fpga_region *region = platform_get_drvdata(pdev);
-> +	struct fpga_manager *mgr = region->mgr;
-> +
-> +	fpga_mgr_put(mgr);
-> +	fpga_bridges_put(&region->bridge_list);
-> +	fpga_region_unregister(region);
-> +
-> +	return 0;
-> +}
-> +
-> +static struct platform_driver fake_fpga_region_drv = {
-> +	.driver = {
-> +		.name = FAKE_FPGA_REGION_DEV_NAME
-> +	},
-> +	.probe = fake_fpga_region_probe,
-> +	.remove = fake_fpga_region_remove,
-> +};
-> +
-> +module_platform_driver(fake_fpga_region_drv);
-> +
-> +MODULE_AUTHOR("Marco Pagani <marpagan@redhat.com>");
-> +MODULE_DESCRIPTION("Fake FPGA Bridge");
-> +MODULE_LICENSE("GPL v2");
-> diff --git a/drivers/fpga/tests/fake-fpga-region.h b/drivers/fpga/tests/fake-fpga-region.h
-> new file mode 100644
-> index 000000000000..9268ca335662
-> --- /dev/null
-> +++ b/drivers/fpga/tests/fake-fpga-region.h
-> @@ -0,0 +1,38 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Header file for the fake FPGA region
-> + *
-> + * Copyright (C) 2023 Red Hat, Inc.
-> + *
-> + * Author: Marco Pagani <marpagan@redhat.com>
-> + */
-> +
-> +#ifndef __FPGA_FAKE_RGN_H
-> +#define __FPGA_FAKE_RGN_H
-> +
-> +#include <linux/platform_device.h>
-> +#include <kunit/test.h>
-> +#include <linux/fpga/fpga-mgr.h>
-> +#include <linux/fpga/fpga-bridge.h>
-> +
-> +/**
-> + * struct fake_fpga_region - fake FPGA region context data structure
-> + *
-> + * @region: FPGA region.
-> + * @pdev: platform device of the FPGA region.
-> + */
-> +struct fake_fpga_region {
-> +	struct fpga_region *region;
-> +	struct platform_device *pdev;
-> +};
-> +
-> +int fake_fpga_region_register(struct fake_fpga_region *region_ctx,
-> +			      struct fpga_manager *mgr, struct device *parent,
-> +			      struct kunit *test);
-> +
-> +void fake_fpga_region_add_bridge(struct fake_fpga_region *region_ctx,
-> +				 struct fpga_bridge *bridge);
-> +
-> +void fake_fpga_region_unregister(struct fake_fpga_region *region_ctx);
-> +
-> +#endif /* __FPGA_FAKE_RGN_H */
-> -- 
-> 2.39.2
-> 
+Moreover, the typec subsystem can be informed of this through the
+typec_set_mode() function. The information will be propagated to any
+linked typec muxes. Add the necessary support to the driver.
+
+Note that for the Debug Accessory modes, an educated guess was made that
+for the USB data role, DFP implies HOST and UFP implies DEVICE. But this
+might want to be made configurable at a later date.
+
+Signed-off-by: Alvin Šipraga <alsi@bang-olufsen.dk>
+---
+v2: no change
+---
+ drivers/extcon/extcon-usbc-tusb320.c | 90 +++++++++++++++++++++-------
+ 1 file changed, 68 insertions(+), 22 deletions(-)
+
+diff --git a/drivers/extcon/extcon-usbc-tusb320.c b/drivers/extcon/extcon-usbc-tusb320.c
+index 10dff1c512c4..882d1f48495e 100644
+--- a/drivers/extcon/extcon-usbc-tusb320.c
++++ b/drivers/extcon/extcon-usbc-tusb320.c
+@@ -15,6 +15,7 @@
+ #include <linux/module.h>
+ #include <linux/regmap.h>
+ #include <linux/usb/typec.h>
++#include <linux/usb/typec_altmode.h>
+ 
+ #define TUSB320_REG8				0x8
+ #define TUSB320_REG8_CURRENT_MODE_ADVERTISE	GENMASK(7, 6)
+@@ -26,16 +27,16 @@
+ #define TUSB320_REG8_CURRENT_MODE_DETECT_MED	0x1
+ #define TUSB320_REG8_CURRENT_MODE_DETECT_ACC	0x2
+ #define TUSB320_REG8_CURRENT_MODE_DETECT_HI	0x3
+-#define TUSB320_REG8_ACCESSORY_CONNECTED	GENMASK(3, 2)
++#define TUSB320_REG8_ACCESSORY_CONNECTED	GENMASK(3, 1)
+ #define TUSB320_REG8_ACCESSORY_CONNECTED_NONE	0x0
+ #define TUSB320_REG8_ACCESSORY_CONNECTED_AUDIO	0x4
+-#define TUSB320_REG8_ACCESSORY_CONNECTED_ACC	0x5
+-#define TUSB320_REG8_ACCESSORY_CONNECTED_DEBUG	0x6
++#define TUSB320_REG8_ACCESSORY_CONNECTED_ACHRG	0x5
++#define TUSB320_REG8_ACCESSORY_CONNECTED_DBGDFP	0x6
++#define TUSB320_REG8_ACCESSORY_CONNECTED_DBGUFP	0x7
+ #define TUSB320_REG8_ACTIVE_CABLE_DETECTION	BIT(0)
+ 
+ #define TUSB320_REG9				0x9
+-#define TUSB320_REG9_ATTACHED_STATE_SHIFT	6
+-#define TUSB320_REG9_ATTACHED_STATE_MASK	0x3
++#define TUSB320_REG9_ATTACHED_STATE		GENMASK(7, 6)
+ #define TUSB320_REG9_CABLE_DIRECTION		BIT(5)
+ #define TUSB320_REG9_INTERRUPT_STATUS		BIT(4)
+ 
+@@ -250,8 +251,7 @@ static void tusb320_extcon_irq_handler(struct tusb320_priv *priv, u8 reg)
+ {
+ 	int state, polarity;
+ 
+-	state = (reg >> TUSB320_REG9_ATTACHED_STATE_SHIFT) &
+-		TUSB320_REG9_ATTACHED_STATE_MASK;
++	state = FIELD_GET(TUSB320_REG9_ATTACHED_STATE, reg);
+ 	polarity = !!(reg & TUSB320_REG9_CABLE_DIRECTION);
+ 
+ 	dev_dbg(priv->dev, "attached state: %s, polarity: %d\n",
+@@ -277,32 +277,78 @@ static void tusb320_typec_irq_handler(struct tusb320_priv *priv, u8 reg9)
+ {
+ 	struct typec_port *port = priv->port;
+ 	struct device *dev = priv->dev;
+-	u8 mode, role, state;
++	int typec_mode;
++	enum typec_role pwr_role;
++	enum typec_data_role data_role;
++	u8 state, mode, accessory;
+ 	int ret, reg8;
+ 	bool ori;
+ 
++	ret = regmap_read(priv->regmap, TUSB320_REG8, &reg8);
++	if (ret) {
++		dev_err(dev, "error during reg8 i2c read, ret=%d!\n", ret);
++		return;
++	}
++
+ 	ori = reg9 & TUSB320_REG9_CABLE_DIRECTION;
+ 	typec_set_orientation(port, ori ? TYPEC_ORIENTATION_REVERSE :
+ 					  TYPEC_ORIENTATION_NORMAL);
+ 
+-	state = (reg9 >> TUSB320_REG9_ATTACHED_STATE_SHIFT) &
+-		TUSB320_REG9_ATTACHED_STATE_MASK;
+-	if (state == TUSB320_ATTACHED_STATE_DFP)
+-		role = TYPEC_SOURCE;
+-	else
+-		role = TYPEC_SINK;
++	state = FIELD_GET(TUSB320_REG9_ATTACHED_STATE, reg9);
++	accessory = FIELD_GET(TUSB320_REG8_ACCESSORY_CONNECTED, reg8);
++
++	switch (state) {
++	case TUSB320_ATTACHED_STATE_DFP:
++		typec_mode = TYPEC_MODE_USB2;
++		pwr_role = TYPEC_SOURCE;
++		data_role = TYPEC_HOST;
++		break;
++	case TUSB320_ATTACHED_STATE_UFP:
++		typec_mode = TYPEC_MODE_USB2;
++		pwr_role = TYPEC_SINK;
++		data_role = TYPEC_DEVICE;
++		break;
++	case TUSB320_ATTACHED_STATE_ACC:
++		/*
++		 * Accessory detected. For debug accessories, just make some
++		 * qualified guesses as to the role for lack of a better option.
++		 */
++		if (accessory == TUSB320_REG8_ACCESSORY_CONNECTED_AUDIO ||
++		    accessory == TUSB320_REG8_ACCESSORY_CONNECTED_ACHRG) {
++			typec_mode = TYPEC_MODE_AUDIO;
++			pwr_role = TYPEC_SINK;
++			data_role = TYPEC_DEVICE;
++			break;
++		} else if (accessory ==
++			   TUSB320_REG8_ACCESSORY_CONNECTED_DBGDFP) {
++			typec_mode = TYPEC_MODE_DEBUG;
++			pwr_role = TYPEC_SOURCE;
++			data_role = TYPEC_HOST;
++			break;
++		} else if (accessory ==
++			   TUSB320_REG8_ACCESSORY_CONNECTED_DBGUFP) {
++			typec_mode = TYPEC_MODE_DEBUG;
++			pwr_role = TYPEC_SINK;
++			data_role = TYPEC_DEVICE;
++			break;
++		}
+ 
+-	typec_set_vconn_role(port, role);
+-	typec_set_pwr_role(port, role);
+-	typec_set_data_role(port, role == TYPEC_SOURCE ?
+-				  TYPEC_HOST : TYPEC_DEVICE);
++		dev_warn(priv->dev, "unexpected ACCESSORY_CONNECTED state %d\n",
++			 accessory);
+ 
+-	ret = regmap_read(priv->regmap, TUSB320_REG8, &reg8);
+-	if (ret) {
+-		dev_err(dev, "error during reg8 i2c read, ret=%d!\n", ret);
+-		return;
++		fallthrough;
++	default:
++		typec_mode = TYPEC_MODE_USB2;
++		pwr_role = TYPEC_SINK;
++		data_role = TYPEC_DEVICE;
++		break;
+ 	}
+ 
++	typec_set_vconn_role(port, pwr_role);
++	typec_set_pwr_role(port, pwr_role);
++	typec_set_data_role(port, data_role);
++	typec_set_mode(port, typec_mode);
++
+ 	mode = FIELD_GET(TUSB320_REG8_CURRENT_MODE_DETECT, reg8);
+ 	if (mode == TUSB320_REG8_CURRENT_MODE_DETECT_DEF)
+ 		typec_set_pwr_opmode(port, TYPEC_PWR_MODE_USB);
+-- 
+2.39.2
+
