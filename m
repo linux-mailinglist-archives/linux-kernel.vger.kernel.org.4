@@ -2,141 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6EA66BF222
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 21:07:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 848436BF226
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 21:09:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229765AbjCQUHc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 16:07:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60222 "EHLO
+        id S229868AbjCQUJC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 16:09:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbjCQUH3 (ORCPT
+        with ESMTP id S229489AbjCQUI7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 16:07:29 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3BD2C926C;
-        Fri, 17 Mar 2023 13:07:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0D285B826C3;
-        Fri, 17 Mar 2023 20:06:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADB64C433D2;
-        Fri, 17 Mar 2023 20:06:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679083617;
-        bh=Mgg4bDFRGesX8yNPgO7fnJobvuTc6xBNxQK+2C4ouDI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=mj37XDLMC7EUXqDoyspDOe+cTo7fK8qaE3rF9zRvgUMuJ+eVZCbfFBM20pI0k2hK9
-         SeTWZh80Ysa65/PNCcfI90guofNqwhevO3UwVG5LzQPaf9l8Hskg0si41nMkgj38XU
-         +fB23CYd+GdjpOfO3G5R6N3D2iYDRbuzNwyWvES5rGhq8yR2tSGf9x5f8aqTY+ixMT
-         coEo5i+keOnhpZ9agnFOZzOK3wtBF4NwWuycJcl1eSlkuuPw3J89YLUl1w0/0X6HJy
-         rdqK4wNvsKs10k4+bof4G69+P37fYCLCdGydm3wD52E6xocOcqngizlyIUSFic6FR4
-         P1UCI/rEu449g==
-Received: by mail-ua1-f44.google.com with SMTP id i22so4118059uat.8;
-        Fri, 17 Mar 2023 13:06:57 -0700 (PDT)
-X-Gm-Message-State: AO0yUKV46y+oHdJsIlTZ4zs//QzqM+roNFYqhG1wTGXAxZKOwQGPfZB3
-        3y1aPCw//kEF59aAP3yJXGCwWDF3xDiBXeM5gA==
-X-Google-Smtp-Source: AK7set9V2TUxO+XXHuoP7ORPvTwFeu0As3/hkSPDWT8VpWzStpv3mMm61AnJtMT8sVYYfD0AKS6SlVxHvn/8/Q9dvOA=
-X-Received: by 2002:a1f:a04d:0:b0:432:872c:cee0 with SMTP id
- j74-20020a1fa04d000000b00432872ccee0mr535116vke.3.1679083616598; Fri, 17 Mar
- 2023 13:06:56 -0700 (PDT)
+        Fri, 17 Mar 2023 16:08:59 -0400
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10A38298E9;
+        Fri, 17 Mar 2023 13:08:57 -0700 (PDT)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.nyi.internal (Postfix) with ESMTP id C932F5C006E;
+        Fri, 17 Mar 2023 16:08:53 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute1.internal (MEProxy); Fri, 17 Mar 2023 16:08:53 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+         h=cc:cc:content-type:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1679083733; x=
+        1679170133; bh=3QWgEiDb3A7ZhMIEvI0tzxFEGhvDtOx1RahjR/6QWNA=; b=M
+        GedoY5aaxFV/mxmaayuthUUl708xNdt3fmxwD8GMviApKv8EGOQ27s3VEMbrSc8A
+        Mk3SW+nqtcMKZGul3h2VmMXpGqUEhpOJOrkASe/Dzm5o37oIXzDwdJpTkjDgM7f0
+        nY0QlEcXBVw7TZmWQ5hP76SE2wSAxomWiYpNKrCdyHM015TviE/5AKP4BgJcRo8p
+        1xehc70tD01HTWJATU/fcxKwsHeCyLwTnWKJyF4j42tla1KFUMCDUxbJhHKPvgP3
+        Qrai2nW/SYF70PHUSPBALw6ELzRTJ2oKvEdu6lqnnB+F34/eWdL3cO89kkSJz6lo
+        CWgRQcnjzrd9/GtjgepCQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1679083733; x=1679170133; bh=3QWgEiDb3A7Zh
+        MIEvI0tzxFEGhvDtOx1RahjR/6QWNA=; b=IEBSeC5Y04frThJ8YmLFURABMT5i/
+        v7iaesDsL4BNVRj3nNHDCejUjFlNW++QaLptLFf13aK0Gcn148RlM8Gsmb3KubwZ
+        hM0OSiE0BdmQPBKrBptDfX9iaTdUL+Ob4aPClpkIEHOGk3SIhLRtzn/KiQDLyviK
+        gqlqNBp8IsBmRj9Al6+jVmI1QjN6FmL/hvTqSdFJx/+qKUJBvlsxXrlmHi+46N0h
+        xshyF15xOBgj/WUmXydXIVjdvP9ffyhyH7VZagS9U8SSfh8dqt0e1pXSFus8NLz7
+        Dk18k/9knbt/tyudCCflaNJYXZGqsFQAEDf4McBcpokwQIfdXUgB0mseQ==
+X-ME-Sender: <xms:1MgUZCnov5xBHYDqBtdbjPLV7Gts6BI6yLhHTjJhNLvIk3snQQZhZw>
+    <xme:1MgUZJ3LDARXClcCX5bChW6c6OM8p0yuzjZWO5C-PU9Vh0j4P9YxwyJARbF8hi9tI
+    -tac6hTCDUWZD6H7Q8>
+X-ME-Received: <xmr:1MgUZAoYfgozDiu6uJQBH7en08guN7vr0tjJH_ktrtmQg8tGipBgL-e1kgPrMrmdt44V8g>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdefvddgudefvdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtuggjsehttddttddttddvnecuhfhrohhmpedfmfhi
+    rhhilhhlucetrdcuufhhuhhtvghmohhvfdcuoehkihhrihhllhesshhhuhhtvghmohhvrd
+    hnrghmvgeqnecuggftrfgrthhtvghrnhephfeigefhtdefhedtfedthefghedutddvueeh
+    tedttdehjeeukeejgeeuiedvkedtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
+    hmpehmrghilhhfrhhomhepkhhirhhilhhlsehshhhuthgvmhhovhdrnhgrmhgv
+X-ME-Proxy: <xmx:1MgUZGmkZNvcBgBVi-TY-AxFcIZIon_LUO2heD5RokRbo65wN8VXBw>
+    <xmx:1MgUZA0boLDyqqvd5b0opN7sJ0cSaY6UoNwmuGt8A0DyiVE23uiQEA>
+    <xmx:1MgUZNvOW8PLIa34MBOLCSxCLFR46vK1MlPn39rNclzOgtk9bhnEuQ>
+    <xmx:1cgUZKqpi4rqyZryffE7fNGa_kaeKgvtPKGVUMSvvpRjC4mJ4p9hZQ>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 17 Mar 2023 16:08:52 -0400 (EDT)
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 54A6410D47D; Fri, 17 Mar 2023 23:08:49 +0300 (+03)
+Date:   Fri, 17 Mar 2023 23:08:49 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mel Gorman <mgorman@suse.de>, Vlastimil Babka <vbabka@suse.cz>,
+        linux-mm@kvack.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm/page_alloc: Make deferred page init free pages in
+ MAX_ORDER blocks
+Message-ID: <20230317200849.gjqezmeaiqkfz7so@box.shutemov.name>
+References: <20230317153501.19807-1-kirill.shutemov@linux.intel.com>
+ <373b22c7-9162-eff0-1f0c-0a8d79a8b372@redhat.com>
 MIME-Version: 1.0
-References: <20230317030501.1811905-1-anshuman.khandual@arm.com>
- <20230317030501.1811905-7-anshuman.khandual@arm.com> <CAL_JsqK8vnwTZ3-nTd-S+dpCrQebAUm-NRiaJBE6KkoAVq=Ovg@mail.gmail.com>
- <b1518e16-d74b-719c-a0fc-bc172a6011c4@arm.com>
-In-Reply-To: <b1518e16-d74b-719c-a0fc-bc172a6011c4@arm.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Fri, 17 Mar 2023 15:06:45 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqKQWL4Y9zZj5x11QUB=8N9GLKo26EX=fVxXes_gShYf7Q@mail.gmail.com>
-Message-ID: <CAL_JsqKQWL4Y9zZj5x11QUB=8N9GLKo26EX=fVxXes_gShYf7Q@mail.gmail.com>
-Subject: Re: [PATCH 6/7] of/platform: Skip coresight etm4x devices from AMBA bus
-To:     Suzuki K Poulose <suzuki.poulose@arm.com>
-Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        linux-arm-kernel@lists.infradead.org, coresight@lists.linaro.org,
-        scclevenger@os.amperecomputing.com,
-        Frank Rowand <frowand.list@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>, devicetree@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <373b22c7-9162-eff0-1f0c-0a8d79a8b372@redhat.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 17, 2023 at 11:03=E2=80=AFAM Suzuki K Poulose
-<suzuki.poulose@arm.com> wrote:
->
-> Hi Rob
->
-> Thanks for your response.
->
-> On 17/03/2023 14:52, Rob Herring wrote:
-> > On Thu, Mar 16, 2023 at 10:06=E2=80=AFPM Anshuman Khandual
-> > <anshuman.khandual@arm.com> wrote:
-> >>
-> >> Allow other drivers to claim a device, disregarding the "priority" of
-> >> "arm,primecell". e.g., CoreSight ETM4x devices could be accessed via M=
-MIO
-> >> (AMBA Bus) or via CPU system instructions.
-> >
-> > The OS can pick which one, use both, or this is a system integration
-> > time decision?
->
-> Not an OS choice. Historically, this has always been MMIO accessed but
-> with v8.4 TraceFiltering support, CPUs are encouraged to use system
-> instructions and obsolete MMIO. So, yes, MMIO is still possible but
-> something that is discouraged and have to be decided at system
-> integration time.
->
-> >
-> >> The CoreSight ETM4x platform
-> >> driver can now handle both types of devices. In order to make sure the
-> >> driver gets to handle the "MMIO based" devices, which always had the
-> >> "arm,primecell" compatible, we have two options :
-> >>
-> >> 1) Remove the "arm,primecell" from the DTS. But this may be problemati=
-c
-> >>   for an older kernel without the support.
-> >>
-> >> 2) The other option is to allow OF code to "ignore" the arm,primecell
-> >> priority for a selected list of compatibles. This would make sure that
-> >> both older kernels and the new kernels work fine without breaking
-> >> the functionality. The new DTS could always have the "arm,primecell"
-> >> removed.
-> >
-> > 3) Drop patches 6 and 7 and just register as both AMBA and platform
-> > drivers. It's just some extra boilerplate. I would also do different
-> > compatible strings for CPU system instruction version (assuming this
-> > is an integration time decision).
->
-> The system instruction (and the reigster layouts) are all part of the
-> ETMv4/ETE architecture and specific capabilities/features are
-> discoverable, just like the Arm CPUs. Thus we don't need special
-> versions within the ETMv4x or ETE minor versions. As of now, we have
-> one for etm4x and another for ete.
+On Fri, Mar 17, 2023 at 06:50:17PM +0100, David Hildenbrand wrote:
+> On 17.03.23 16:35, Kirill A. Shutemov wrote:
+> > Normal page init path frees pages during the boot in MAX_ORDER chunks,
+> > but deferred page init path does it in pageblock blocks.
+> > 
+> > Change deferred page init path to work in MAX_ORDER blocks.
+> > 
+> > For cases when pageblock is larger than MAX_ORDER, set migrate type to
+> > MIGRATE_MOVABLE for all pageblocks covered by the page.
+> 
+> See
+> 
+> commit b3d40a2b6d10c9d0424d2b398bf962fb6adad87e
+> Author: David Hildenbrand <david@redhat.com>
+> Date:   Tue Mar 22 14:43:20 2022 -0700
+> 
+>     mm: enforce pageblock_order < MAX_ORDER
+>     Some places in the kernel don't really expect pageblock_order >=
+>     MAX_ORDER, and it looks like this is only possible in corner cases:
+>     1) CONFIG_DEFERRED_STRUCT_PAGE_INIT we'll end up freeing pageblock_order
+>        pages via __free_pages_core(), which cannot possibly work.
+> 
+>     ...
+> 
+> How should it still happen?
 
-I just meant 2 new compatible strings. One each for ETMv4x and ETE,
-but different from the 2 existing ones. It is different h/w presented
-to the OS, so different compatible.
+I got the sentence backwards. It suppose to be
 
-> One problem with the AMBA driver in place is having to keep on adding
-> new PIDs for the CPUs. The other option is to have a blanket mask
-> for matching the PIDs with AMBA_UCI_ID checks.
+	For cases when MAX_ORDER is larger than pageblock, set migrate type to
+	MIGRATE_MOVABLE for all pageblocks covered by the page.
 
-But if MMIO access is discouraged, then new h/w would use the platform
-driver(s), not the amba driver, and you won't have to add PIDs.
 
-Rob
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
