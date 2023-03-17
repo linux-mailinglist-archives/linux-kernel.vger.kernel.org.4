@@ -2,105 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63EE16BED57
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 16:52:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CBAB6BED62
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 16:55:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231220AbjCQPwa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 11:52:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41394 "EHLO
+        id S231357AbjCQPzS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 11:55:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230300AbjCQPw2 (ORCPT
+        with ESMTP id S229754AbjCQPzR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 11:52:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58EE2457C4
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 08:52:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E832E60A48
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 15:52:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0280EC433EF;
-        Fri, 17 Mar 2023 15:52:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679068346;
-        bh=zbml9Ax+BPYhanZ2Ux03Lm6k/z3XDmnQdAr1qifQ7/c=;
-        h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
-        b=WZY3HbBrYxvI9VpcjD5s351/yYSfj/935cw1n5pOU2/WcrPLUFuNICtgiXwRUVcb3
-         9hvi9ZQnmQTdCqhZodY6DewetjvE/V7sdmLpKhbI+vzr+nebakTjBBvxP9RgpjpilU
-         wG0RX7CJp9P4sMzmln2wmq2/cP1Y7V56xbbf7GyJZi6NnHxQX0Flqsgap0S3KKIgji
-         qM6vz254jH+E4bgyJEvr0bQ8TzOnTsjDzS0Lpa2tZp4Kgmeym6U92ryULzYbshe/Xc
-         c7kPVBMM8qqaBu+NQguVNnLaFRvxqNdBEfZAI8GOBHvTobj/ldNvXbe3NEb+aOAZ3n
-         R1PLi7Yyd/q/A==
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailauth.nyi.internal (Postfix) with ESMTP id DDDB327C0060;
-        Fri, 17 Mar 2023 11:52:24 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Fri, 17 Mar 2023 11:52:24 -0400
-X-ME-Sender: <xms:uIwUZIW-8_lyXEJB54faoT91WvaNFkHtpRuezsqFIuexvKV0pr-mHw>
-    <xme:uIwUZMm4haoxg70aJ6VRmtvM5RFGcC4wjaPBsBtsrdUu2RxRYsKUx4poFUCzd-WcZ
-    F86SM1AYqJKemZWTqY>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdefvddgkedtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusehkvghrnhgvlhdrohhrgheqnecuggftrf
-    grthhtvghrnhepvdeviefgtedugeevieelvdfgveeuvdfgteegfeeiieejjeffgeeghedu
-    gedtveehnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    eprghrnhguodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdduvdekhedujedt
-    vdegqddvkeejtddtvdeigedqrghrnhgupeepkhgvrhhnvghlrdhorhhgsegrrhhnuggsrd
-    guvg
-X-ME-Proxy: <xmx:uIwUZMaboF0xRTxHzzZDckNcqo5yw-KMlmWh0fEQaysgQg0htZ7OjQ>
-    <xmx:uIwUZHWjwbxNvfQD9kfj3BhS6J6w1cqzdlLEExwDnK36IcNkzXpokQ>
-    <xmx:uIwUZCl7bbkdHBgk3Gxf6g7lH8-FAMoEbq1bFyUvF63vYiW4jv62cQ>
-    <xmx:uIwUZDAgoaUgUVo4Kguw7Izae0XwqCLvQrh9qnomUoPNlganyzfDTg>
-Feedback-ID: i36794607:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 8E499B60086; Fri, 17 Mar 2023 11:52:24 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-221-gec32977366-fm-20230306.001-gec329773
-Mime-Version: 1.0
-Message-Id: <ed327f8d-ac9f-454c-a005-0edb400be165@app.fastmail.com>
-In-Reply-To: <20230317154411.3727514-1-jeremy@jeremypeper.com>
-References: <20230317154411.3727514-1-jeremy@jeremypeper.com>
-Date:   Fri, 17 Mar 2023 16:52:04 +0100
-From:   "Arnd Bergmann" <arnd@kernel.org>
-To:     "Jeremy J. Peper" <jeremy@jeremypeper.com>,
-        linux-kernel@vger.kernel.org
-Cc:     "Andrew Lunn" <andrew@lunn.ch>,
-        "Sebastian Hesselbarth" <sebastian.hesselbarth@gmail.com>,
-        "Gregory Clement" <gregory.clement@bootlin.com>,
-        "Russell King" <linux@armlinux.org.uk>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 1/4] adjust init logic for ts-wxl to reflect single core dev
-Content-Type: text/plain
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 17 Mar 2023 11:55:17 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7035BC927B;
+        Fri, 17 Mar 2023 08:55:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679068516; x=1710604516;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=HgLImZGRBBiGqTOroqJsGqFHu4w0mEVxE+5AQmtGuS0=;
+  b=g47PnRwRATV0f621DeLqzpbCZlylww8JIbJaUDrSeZnuTWaQa4ZAgtLs
+   6kie4FqWrhrycu1wxuvjfcXvWwSKcr/0tOljllNuD5nGs6hAsnYmIWBsu
+   glHP4eDt6QTBQCoiLkSLJkdy5iQND3sA+wR+4pE41WTirq+05PBQwWus9
+   B+W1rcCLwwRkSXpeBQiu+Na3KwaA23I8Jhuxp3ek+UqIunN5GlLlyLKGs
+   3rPSSwNvawFjC3tAEUtjNZO3hP63DQMFZIadlqVjhc9axHdizEGocS8tc
+   9CU46BIx5opRiuX6sCD1ELrVC6IiCOSPzU2+X6BKG6NjerXwBk+6WraPV
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="338311739"
+X-IronPort-AV: E=Sophos;i="5.98,268,1673942400"; 
+   d="scan'208";a="338311739"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2023 08:55:16 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="673594290"
+X-IronPort-AV: E=Sophos;i="5.98,268,1673942400"; 
+   d="scan'208";a="673594290"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 17 Mar 2023 08:55:13 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pdCQC-0009SG-1v;
+        Fri, 17 Mar 2023 15:55:12 +0000
+Date:   Fri, 17 Mar 2023 23:54:26 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Anjelique Melendez <quic_amelende@quicinc.com>, pavel@ucw.cz,
+        lee@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, andersson@kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev, linux-leds@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_c_skakit@quicinc.com,
+        Anjelique Melendez <quic_amelende@quicinc.com>
+Subject: Re: [PATCH 2/3] leds: rgb: leds-qcom-lpg: Add support for high
+ resolution PWM
+Message-ID: <202303172326.QZxzjZq4-lkp@intel.com>
+References: <20230316192134.26436-3-quic_amelende@quicinc.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230316192134.26436-3-quic_amelende@quicinc.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 17, 2023, at 16:43, Jeremy J. Peper wrote:
-> Original code was largely copy-pasted from the reference board code, 
-> adjust pcie initialiazation to reflect the TS-WXL using the single-core 
-> variant of this SoC.
-> Correct pcie_port_size to be a power of 2 as required.
->
-> Signed-off-by: Jeremy J. Peper <jeremy@jeremypeper.com>
+Hi Anjelique,
 
-All four patches look good to me in this version,
+Thank you for the patch! Yet something to improve:
 
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+[auto build test ERROR on lee-leds/for-leds-next]
+[also build test ERROR on robh/for-next pavel-leds/for-next linus/master v6.3-rc2 next-20230317]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Andrew/Sebastian/Gregory, please let me know if you have any comments
-on this, and if you want to pick it up in the mvebu tree or I should
-just apply them directly in the soc tree to save you the work.
+url:    https://github.com/intel-lab-lkp/linux/commits/Anjelique-Melendez/dt-bindings-leds-qcom-lpg-Add-qcom-pmk8550-pwm-compatible-string/20230317-032340
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/lee/leds.git for-leds-next
+patch link:    https://lore.kernel.org/r/20230316192134.26436-3-quic_amelende%40quicinc.com
+patch subject: [PATCH 2/3] leds: rgb: leds-qcom-lpg: Add support for high resolution PWM
+config: arm-allmodconfig (https://download.01.org/0day-ci/archive/20230317/202303172326.QZxzjZq4-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/916dd0b271b3f035efd07efdaa696e7c815f7e6c
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Anjelique-Melendez/dt-bindings-leds-qcom-lpg-Add-qcom-pmk8550-pwm-compatible-string/20230317-032340
+        git checkout 916dd0b271b3f035efd07efdaa696e7c815f7e6c
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
-If I apply them directly, I'd probably take patches 1, 2 and 4 as
-bugfixes for 6.3, but leave patch 3 for the 6.4 merge window, unless
-you have a different preference.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303172326.QZxzjZq4-lkp@intel.com/
 
-      Arnd
+All errors (new ones prefixed by >>, old ones prefixed by <<):
+
+>> ERROR: modpost: "__aeabi_uldivmod" [drivers/leds/rgb/leds-qcom-lpg.ko] undefined!
+>> ERROR: modpost: "__aeabi_ldivmod" [drivers/leds/rgb/leds-qcom-lpg.ko] undefined!
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
