@@ -2,53 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 593276BE9C4
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 14:00:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3DD06BE9CB
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 14:03:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230188AbjCQNAw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 09:00:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43008 "EHLO
+        id S230396AbjCQNDI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 09:03:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbjCQNAu (ORCPT
+        with ESMTP id S229523AbjCQNDF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 09:00:50 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 55D24A9DC7;
-        Fri, 17 Mar 2023 06:00:48 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DA6F61480;
-        Fri, 17 Mar 2023 06:01:31 -0700 (PDT)
-Received: from [10.57.64.98] (unknown [10.57.64.98])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 11ABE3F64C;
-        Fri, 17 Mar 2023 06:00:46 -0700 (PDT)
-Message-ID: <01df1870-8e2f-0e86-6dbc-728353cdd224@arm.com>
-Date:   Fri, 17 Mar 2023 13:00:45 +0000
+        Fri, 17 Mar 2023 09:03:05 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE1B61ACC2;
+        Fri, 17 Mar 2023 06:03:04 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id y19so2826012pgk.5;
+        Fri, 17 Mar 2023 06:03:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679058184;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ywu7g+5i4JW2WWe/jt88w5+leiQxgW3upihw/iKd5+U=;
+        b=qMOpeC0sL+5hYR2dxRV2qcHEE3DvWwo2nD3N8Sy12tC0Wkqw2sbU3F+MbSo2qDMTiz
+         yLnFbehLR0RSzSR8NK2Lu5Su4iU9DILMD5P46ZI+eggWNetcT2gh08iJqlvu9saclf9w
+         FAvbdEBzmP2avkR3WybqKd85KQjmrG0rX6Pzl/R8j0tAkLE5b00sBJGTn7kHHcCDnr20
+         XiB7CMveJo6nyzNoytB165W5FwTA+/1tS+9wJCeyO61QUYmXRVJB7VDsU5y8hqIGwVzc
+         CPLTbSGbVvmru4eWEFhDuQ6Lkts37tueqsLXxsVbcqxGRIZZoKa/p5o7dF9IaXWZfhpG
+         zCHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679058184;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ywu7g+5i4JW2WWe/jt88w5+leiQxgW3upihw/iKd5+U=;
+        b=hKKPttKUe1z+T3AlJjjQQEh5qTpODnz+nHCm15jPUcdtehDnikfMLaYdE46WfqkRxd
+         HFd8JbrH92kCPKH1af9SNvMtBi6YPs63KOV9pHYhtqESKYkEb0XliM9B6NNu1ix5F8zk
+         4ViDriVO9g0l+ws7o9CWZcEyYtaGJEnieGg2yHUxvTF1ekcQo+R3FG1qJGN3lsyu4c1w
+         UVNMr+KcMyAKtl9yyRhSe23EN7nrshw4ATz26o7NQSCiY+LcwI3Rc4ItS8qNuuRUS93p
+         9tdk/LtGLCGyMg96Q5tyQavFU4qqwpX1wcbKRcp8J3YZFEjS9VCP+JwndXrHAFlonjNl
+         HLiA==
+X-Gm-Message-State: AO0yUKWGuKnHEblJp7DJsidcvQWiPISGXI+2xzCh8ACkdUtxXWw4xhqX
+        gUYcgJmNP/WjVO9oDA1/PQfCyRwyXSljbvn2aEk=
+X-Google-Smtp-Source: AK7set8X1CgjoJPH6S6fX/XGqxGKXoIkxKViJd8c+UIHcRiSX069x+YtTbQzanP2Dyy1soSxpoAGGkuJEruB+XZv7/U=
+X-Received: by 2002:a65:4349:0:b0:502:fd71:d58c with SMTP id
+ k9-20020a654349000000b00502fd71d58cmr1914625pgq.9.1679058184302; Fri, 17 Mar
+ 2023 06:03:04 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.8.0
-Subject: Re: [PATCH v4 35/36] mm: Convert do_set_pte() to set_pte_range()
-Content-Language: en-US
-To:     "Yin, Fengwei" <fengwei.yin@intel.com>,
-        Matthew Wilcox <willy@infradead.org>
-Cc:     linux-arch@vger.kernel.org, will@kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-References: <20230315051444.3229621-1-willy@infradead.org>
- <20230315051444.3229621-36-willy@infradead.org>
- <6dd5cdf8-400e-8378-22be-994f0ada5cc2@arm.com>
- <b39f4816-2064-e402-4e02-908f40c396d4@intel.com>
- <2fa5a911-8432-2fce-c6e1-de4e592219d8@arm.com>
- <ZBNXcmOrrOS4Rydg@casper.infradead.org>
- <b2c00aab-82ad-ea7a-df9d-c816b216b0f1@intel.com>
- <ZBPiOgYDLYBmVwOc@casper.infradead.org>
- <12d7564f-5b33-bdcc-1a06-504ad8487aca@intel.com>
- <25bf8e75-cc2e-7d08-dbba-41c53ab751b0@arm.com>
- <d2e90338-6200-f005-110d-4626fda067a2@intel.com>
-From:   Ryan Roberts <ryan.roberts@arm.com>
-In-Reply-To: <d2e90338-6200-f005-110d-4626fda067a2@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+References: <20230307023946.14516-1-xin3.li@intel.com> <20230307023946.14516-29-xin3.li@intel.com>
+ <CAJhGHyC6LgCwdDTkiy2TaQ8wzBQQfrx8ni7fY8vH-bUT2kR8pg@mail.gmail.com> <ed318bd6-25b2-efcf-0cc4-c57699f6654a@citrix.com>
+In-Reply-To: <ed318bd6-25b2-efcf-0cc4-c57699f6654a@citrix.com>
+From:   Lai Jiangshan <jiangshanlai@gmail.com>
+Date:   Fri, 17 Mar 2023 21:02:52 +0800
+Message-ID: <CAJhGHyAdyqWp_W3yHMn0euYG9TMctpSmNnqr_e+=FR3rN5UzpA@mail.gmail.com>
+Subject: Re: [PATCH v5 28/34] x86/fred: fixup fault on ERETU by jumping to fred_entrypoint_user
+To:     andrew.cooper3@citrix.com
+Cc:     Xin Li <xin3.li@intel.com>, linux-kernel@vger.kernel.org,
+        x86@kernel.org, kvm@vger.kernel.org, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com, peterz@infradead.org, seanjc@google.com,
+        pbonzini@redhat.com, ravi.v.shankar@intel.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,140 +73,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/03/2023 08:19, Yin, Fengwei wrote:
-> 
-> 
-> On 3/17/2023 4:00 PM, Ryan Roberts wrote:
->> On 17/03/2023 06:33, Yin, Fengwei wrote:
->>>
->>>
->>> On 3/17/2023 11:44 AM, Matthew Wilcox wrote:
->>>> On Fri, Mar 17, 2023 at 09:58:17AM +0800, Yin, Fengwei wrote:
->>>>>
->>>>>
->>>>> On 3/17/2023 1:52 AM, Matthew Wilcox wrote:
->>>>>> On Thu, Mar 16, 2023 at 04:38:58PM +0000, Ryan Roberts wrote:
->>>>>>> On 16/03/2023 16:23, Yin, Fengwei wrote:
->>>>>>>>> I think you are changing behavior here - is this intentional? Previously this
->>>>>>>>> would be evaluated per page, now its evaluated once for the whole range. The
->>>>>>>>> intention below is that directly faulted pages are mapped young and prefaulted
->>>>>>>>> pages are mapped old. But now a whole range will be mapped the same.
->>>>>>>>
->>>>>>>> Yes. You are right here.
->>>>>>>>
->>>>>>>> Look at the prefault and cpu_has_hw_af for ARM64, it looks like we
->>>>>>>> can avoid to handle vmf->address == addr specially. It's OK to 
->>>>>>>> drop prefault and change the logic here a little bit to:
->>>>>>>>   if (arch_wants_old_prefaulted_pte())
->>>>>>>>       entry = pte_mkold(entry);
->>>>>>>>   else
->>>>>>>>       entry = pte_sw_mkyong(entry);
->>>>>>>>
->>>>>>>> It's not necessary to use pte_sw_mkyong for vmf->address == addr
->>>>>>>> because HW will set the ACCESS bit in page table entry.
->>>>>>>>
->>>>>>>> Add Will Deacon in case I missed something here. Thanks.
->>>>>>>
->>>>>>> I'll defer to Will's response, but not all arm HW supports HW access flag
->>>>>>> management. In that case it's done by SW, so I would imagine that by setting
->>>>>>> this to old initially, we will get a second fault to set the access bit, which
->>>>>>> will slow things down. I wonder if you will need to split this into (up to) 3
->>>>>>> calls to set_ptes()?
->>>>>>
->>>>>> I don't think we should do that.  The limited information I have from
->>>>>> various microarchitectures is that the PTEs must differ only in their
->>>>>> PFN bits in order to use larger TLB entries.  That includes the Accessed
->>>>>> bit (or equivalent).  So we should mkyoung all the PTEs in the same
->>>>>> folio, at least initially.
->>>>>>
->>>>>> That said, we should still do this conditionally.  We'll prefault some
->>>>>> other folios too.  So I think this should be:
->>>>>>
->>>>>>         bool prefault = (addr > vmf->address) || ((addr + nr) < vmf->address);
->>>>>>
->>>>> According to commit 46bdb4277f98e70d0c91f4289897ade533fe9e80, if hardware access
->>>>> flag is supported on ARM64, there is benefit if prefault PTEs is set as "old".
->>>>> If we change prefault like above, the PTEs is set as "yong" which loose benefit
->>>>> on ARM64 with hardware access flag.
->>>>>
->>>>> ITOH, if from "old" to "yong" is cheap, why not leave all PTEs of folio as "old"
->>>>> and let hardware to update it to "yong"?
->>>>
->>>> Because we're tracking the entire folio as a single entity.  So we're
->>>> better off avoiding the extra pagefaults to update the accessed bit,
->>>> which won't actually give us any information (vmscan needs to know "were
->>>> any of the accessed bits set", not "how many of them were set").
->>> There is no extra pagefaults to update the accessed bit. There are three cases here:
->>> 1. hardware support access flag and cheap from "old" to "yong" without extra fault
->>> 2. hardware support access flag and expensive from "old" to "yong" without extra fault
->>> 3. no hardware support access flag (extra pagefaults from "old" to "yong". Expensive)
->>>
->>> For #2 and #3, it's expensive from "old" to "yong", so we always set PTEs "yong" in
->>> page fault.
->>> For #1, It's cheap from "old" to "yong", so it's OK to set PTEs "old" in page fault.
->>> And hardware will set it to "yong" when access memory. Actually, ARM64 with hardware
->>> access bit requires to set PTEs "old".
->>
->> Your logic makes sense, but it doesn't take into account the HPA
->> micro-architectural feature present in some ARM CPUs. HPA can transparently
->> coalesce multiple pages into a single TLB entry when certain conditions are met
->> (roughly; upto 4 pages physically and virtually contiguous and all within a
->> 4-page natural alignment). But as Matthew says, this works out better when all
->> pte attributes (including access and dirty) match. Given the reason for setting
->> the prefault pages to old is so that vmscan can do a better job of finding cold
->> pages, and given vmscan will now be looking for folios and not individual pages
->> (I assume?), I agree with Matthew that we should make whole folios young or old.
->> It will marginally increase our chances of the access and dirty bits being
->> consistent across the whole 4-page block that the HW tries to coalesce. If we
->> unconditionally make everything old, the hw will set accessed for the single
->> page that faulted, and we therefore don't have consistency for that 4-page block.
-> My concern was that the benefit of "old" PTEs for ARM64 with hardware access bit
-> will be lost. The workloads (application launch latency and direct reclaim according
-> to commit 46bdb4277f98e70d0c91f4289897ade533fe9e80) can show regression with this
-> series. Thanks.
+On Fri, Mar 17, 2023 at 5:56=E2=80=AFPM <andrew.cooper3@citrix.com> wrote:
+>
+> On 17/03/2023 9:39 am, Lai Jiangshan wrote:
+> >> +#ifdef CONFIG_X86_FRED
+> >> +static bool ex_handler_eretu(const struct exception_table_entry *fixu=
+p,
+> >> +                            struct pt_regs *regs, unsigned long error=
+_code)
+> >> +{
+> >> +       struct pt_regs *uregs =3D (struct pt_regs *)(regs->sp - offset=
+of(struct pt_regs, ip));
+> >> +       unsigned short ss =3D uregs->ss;
+> >> +       unsigned short cs =3D uregs->cs;
+> >> +
+> >> +       fred_info(uregs)->edata =3D fred_event_data(regs);
+> >> +       uregs->ssx =3D regs->ssx;
+> >> +       uregs->ss =3D ss;
+> >> +       uregs->csx =3D regs->csx;
+> >> +       uregs->current_stack_level =3D 0;
+> >> +       uregs->cs =3D cs;
+> > Hello
+> >
+> > If the ERETU instruction had tried to return from NMI to ring3 and just=
+ faulted,
+> > is NMI still blocked?
+> >
+> > We know that IRET unconditionally enables NMI, but I can't find any clu=
+e in the
+> > FRED's manual.
+> >
+> > In the pseudocode of ERETU in the manual, it seems that NMI is only ena=
+bled when
+> > ERETU succeeds with bit28 in csx set.  If so, this code will fail to re=
+enable
+> > NMI if bit28 is not explicitly re-set in csx.
+>
+> IRET clearing NMI blocking is the source of an immense amount of grief,
+> and ultimately the reason why Linux and others can't use supervisor
+> shadow stacks at the moment.
+>
+> Changing this property, so NMIs only get unblocked on successful
+> execution of an ERET{S,U}, was a key demand of the FRED spec.
+>
+> i.e. until you have successfully ERET*'d, you're still logically in the
+> NMI handler and NMIs need to remain blocked even when handling the #GP
+> from a bad ERET.
+>
 
-My (potentially incorrect) understanding of the reason that marking the
-prefaulted ptes as old was because it made it easier/quicker for vmscan to
-identify those prefaulted pages and reclaim them under memory pressure. I
-_assume_ now that we have large folios, that vmscan will be trying to pick
-folios for reclaim, not individual subpages within the folio? In which case,
-vmscan will only consider the folio as old if _all_ pages within are old. So
-marking all the pages of a folio young vs marking 1 page in the folio young
-won't make a difference from this perspective. But it will make a difference
-from the perspective a HPA. (Please Matthew or somebody else, correct me if my
-understanding is incorrect!)
+Handling of the #GP for a bad ERETU can be rescheduled. It is not
+OK to reschedule with NMI blocked.
 
-> 
-> BTW, with TLB merge feature, should hardware update coalesce multiple pages access
-> bit together? otherwise, it's avoidable that only one page access is set by hardware
-> finally.
-
-No, the HW will only update the access flag for the single page that is
-accessed. So yes, in the long run the value of the flags across the 4-page block
-will diverge - that's why I said "marginal" above.
-
-> 
-> Regards
-> Yin, Fengwei
-> 
->>
->>>
->>>>
->>>> Anyway, hopefully Ryan can test this and let us know if it fixes the
->>>> regression he sees.
->>> I highly suspect the regression Ryan saw is not related with this but another my
->>> stupid work. I will send out the testing patch soon. Thanks.
->>
->> I tested a version of this where I made everything unconditionally young,
->> thinking it might be the source of the perf regression, before I reported it. It
->> doesn't make any difference. So I agree the regression is somewhere else.
->>
->> Thanks,
->> Ryan
->>
->>>
->>>
->>> Regards
->>> Yin, Fengwei
->>
-
+I think "regs->nmi =3D 1;" (not uregs->nmi) can fix the problem.
