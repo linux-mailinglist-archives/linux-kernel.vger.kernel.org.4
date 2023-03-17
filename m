@@ -2,278 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A843B6BF224
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 21:07:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6EA66BF222
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 21:07:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229842AbjCQUHp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 16:07:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59764 "EHLO
+        id S229765AbjCQUHc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 16:07:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229987AbjCQUHk (ORCPT
+        with ESMTP id S229489AbjCQUH3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 16:07:40 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 801C8E251C
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 13:06:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679083578;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=v+nprD01z1N5CeGZUpLv/tqCApb2AEnd4EOLkbIS8P0=;
-        b=NlArBgBtnbqMqlS9FuDHt0WrORYW43pxL7bjU30TVhrQc37iiAhUoh3CoriF2lhyDZz+b6
-        PCO+xBo79LqAFfN9hcydJY44/7BQSUIkyCM22Bx5gIrXm+zfXDnRqO7bwpthyUgdra1tnQ
-        Vu8S2UT8CFzeCi3gMVPaqjlq+BHKfQo=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-208-q8tafQNFNXabxL3e-xqL8A-1; Fri, 17 Mar 2023 16:06:17 -0400
-X-MC-Unique: q8tafQNFNXabxL3e-xqL8A-1
-Received: by mail-qt1-f197.google.com with SMTP id h21-20020ac87d55000000b003bffb1c9745so3065378qtb.4
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 13:06:17 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679083577;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=v+nprD01z1N5CeGZUpLv/tqCApb2AEnd4EOLkbIS8P0=;
-        b=7i8BdEgrRktM8GPUrOpQhjIxQa38iu2tPrShSU3EKnVpbl5OO65dHZcU/ifypNY7c0
-         nD2X7AH5jmK2vFZIS48PduH59G67Y7fjL9h7j9EvMK0ygSn2UdL0npfgyu7GC6/kjhch
-         YxzvBKC+rYWuqYL3duWYggVz7sqe5RL8nJ/paUu6+Og9UsIKJCijc16ypbzJM2Vkihur
-         Hhtwwb7+dAzAZMlQfmR9CkP0b/lPNobtMzPf3V284kRbUypQIdVD42wwuJRpFB6kAPUa
-         vZ0ZEmgavTs3ei/DvtBTQu7hvpBwUKBdTFEg2J0Q4Tl2gfBeyMVXIEjtj1qQLk/bw0VG
-         ATmQ==
-X-Gm-Message-State: AO0yUKWmdEOs+TXiRlVW5m9bmuNMuc4lmgcCQOUvxrk+IYUD65v6Y5NS
-        xV2byz+fjUf9qrWNT0fb07tHL2AhP//IBaJPBO9DzHCcvqgWs24PnSAqZwY00hIzbdO7lb/NCHP
-        68az30CIKuilwIzrmsYd7cIoL
-X-Received: by 2002:ac8:5a8d:0:b0:3bf:e375:cfb6 with SMTP id c13-20020ac85a8d000000b003bfe375cfb6mr14940296qtc.1.1679083576911;
-        Fri, 17 Mar 2023 13:06:16 -0700 (PDT)
-X-Google-Smtp-Source: AK7set81QuAnUOCEVj6K0ec+K2JX5nE9mxIjIs/3hgX5szW+C5Ut7K9o3Y8jNCAeuW4G3RNfLWryoA==
-X-Received: by 2002:ac8:5a8d:0:b0:3bf:e375:cfb6 with SMTP id c13-20020ac85a8d000000b003bfe375cfb6mr14940236qtc.1.1679083576451;
-        Fri, 17 Mar 2023 13:06:16 -0700 (PDT)
-Received: from [192.168.1.9] (pool-68-160-135-240.bstnma.fios.verizon.net. [68.160.135.240])
-        by smtp.gmail.com with ESMTPSA id j13-20020a37ef0d000000b00729b7d71ac7sm2282132qkk.33.2023.03.17.13.06.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Mar 2023 13:06:16 -0700 (PDT)
-Message-ID: <b2a6784f-d928-19a8-365f-35fc1e6c617d@redhat.com>
-Date:   Fri, 17 Mar 2023 16:06:15 -0400
+        Fri, 17 Mar 2023 16:07:29 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3BD2C926C;
+        Fri, 17 Mar 2023 13:07:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0D285B826C3;
+        Fri, 17 Mar 2023 20:06:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADB64C433D2;
+        Fri, 17 Mar 2023 20:06:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679083617;
+        bh=Mgg4bDFRGesX8yNPgO7fnJobvuTc6xBNxQK+2C4ouDI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=mj37XDLMC7EUXqDoyspDOe+cTo7fK8qaE3rF9zRvgUMuJ+eVZCbfFBM20pI0k2hK9
+         SeTWZh80Ysa65/PNCcfI90guofNqwhevO3UwVG5LzQPaf9l8Hskg0si41nMkgj38XU
+         +fB23CYd+GdjpOfO3G5R6N3D2iYDRbuzNwyWvES5rGhq8yR2tSGf9x5f8aqTY+ixMT
+         coEo5i+keOnhpZ9agnFOZzOK3wtBF4NwWuycJcl1eSlkuuPw3J89YLUl1w0/0X6HJy
+         rdqK4wNvsKs10k4+bof4G69+P37fYCLCdGydm3wD52E6xocOcqngizlyIUSFic6FR4
+         P1UCI/rEu449g==
+Received: by mail-ua1-f44.google.com with SMTP id i22so4118059uat.8;
+        Fri, 17 Mar 2023 13:06:57 -0700 (PDT)
+X-Gm-Message-State: AO0yUKV46y+oHdJsIlTZ4zs//QzqM+roNFYqhG1wTGXAxZKOwQGPfZB3
+        3y1aPCw//kEF59aAP3yJXGCwWDF3xDiBXeM5gA==
+X-Google-Smtp-Source: AK7set9V2TUxO+XXHuoP7ORPvTwFeu0As3/hkSPDWT8VpWzStpv3mMm61AnJtMT8sVYYfD0AKS6SlVxHvn/8/Q9dvOA=
+X-Received: by 2002:a1f:a04d:0:b0:432:872c:cee0 with SMTP id
+ j74-20020a1fa04d000000b00432872ccee0mr535116vke.3.1679083616598; Fri, 17 Mar
+ 2023 13:06:56 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Content-Language: en-US
-To:     Marcos Paulo de Souza <mpdesouza@suse.de>
-Cc:     live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, Josh Poimboeuf <jpoimboe@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Marcos Paulo de Souza <mpdesouza@suse.com>
-References: <20230306140824.3858543-1-joe.lawrence@redhat.com>
- <20230306140824.3858543-3-joe.lawrence@redhat.com>
- <20230314182621.tsh55pjeo6onb6ix@daedalus>
-From:   Joe Lawrence <joe.lawrence@redhat.com>
-Subject: Re: [PATCH v7 02/10] livepatch: Add klp-convert tool
-In-Reply-To: <20230314182621.tsh55pjeo6onb6ix@daedalus>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230317030501.1811905-1-anshuman.khandual@arm.com>
+ <20230317030501.1811905-7-anshuman.khandual@arm.com> <CAL_JsqK8vnwTZ3-nTd-S+dpCrQebAUm-NRiaJBE6KkoAVq=Ovg@mail.gmail.com>
+ <b1518e16-d74b-719c-a0fc-bc172a6011c4@arm.com>
+In-Reply-To: <b1518e16-d74b-719c-a0fc-bc172a6011c4@arm.com>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Fri, 17 Mar 2023 15:06:45 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqKQWL4Y9zZj5x11QUB=8N9GLKo26EX=fVxXes_gShYf7Q@mail.gmail.com>
+Message-ID: <CAL_JsqKQWL4Y9zZj5x11QUB=8N9GLKo26EX=fVxXes_gShYf7Q@mail.gmail.com>
+Subject: Re: [PATCH 6/7] of/platform: Skip coresight etm4x devices from AMBA bus
+To:     Suzuki K Poulose <suzuki.poulose@arm.com>
+Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        linux-arm-kernel@lists.infradead.org, coresight@lists.linaro.org,
+        scclevenger@os.amperecomputing.com,
+        Frank Rowand <frowand.list@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>, devicetree@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/14/23 14:26, Marcos Paulo de Souza wrote:
-> On Mon, Mar 06, 2023 at 09:08:16AM -0500, Joe Lawrence wrote:
->> Livepatches may use symbols which are not contained in its own scope,
->> and, because of that, may end up compiled with relocations that will
->> only be resolved during module load. Yet, when the referenced symbols
->> are not exported, solving this relocation requires information on the
->> object that holds the symbol (either vmlinux or modules) and its
->> position inside the object, as an object may contain multiple symbols
->> with the same name. Providing such information must be done accordingly
->> to what is specified in Documentation/livepatch/module-elf-format.txt.
->>
->> Currently, there is no trivial way to embed the required information as
->> requested in the final livepatch elf object. klp-convert solves this
->> problem in two different forms: (i) by relying on symbols.klp, which is
->> built during kernel compilation, to automatically infer the relocation
->> targeted symbol, and, when such inference is not possible (ii) by using
->> annotations in the elf object to convert the relocation accordingly to
->> the specification, enabling it to be handled by the livepatch loader.
->>
->> Given the above, create scripts/livepatch to hold tools developed for
->> livepatches and add source files for klp-convert there.
->>
->> The core file of klp-convert is scripts/livepatch/klp-convert.c, which
->> implements the heuristics used to solve the relocations and the
->> conversion of unresolved symbols into the expected format, as defined in
->> [1].
->>
->> klp-convert receives as arguments the symbols.klp file, an input
->> livepatch module to be converted and the output name for the converted
->> livepatch. When it starts running, klp-convert parses symbols.klp and
->> builds two internal lists of symbols, one containing the exported and
->> another containing the non-exported symbols. Then, by parsing the rela
->> sections in the elf object, klp-convert identifies which symbols must be
->> converted, which are those unresolved and that do not have a
->> corresponding exported symbol, and attempts to convert them accordingly
->> to the specification.
->>
->> By using symbols.klp, klp-convert identifies which symbols have names
->> that only appear in a single kernel object, thus being capable of
->> resolving these cases without the intervention of the developer. When
->> various homonymous symbols exist through kernel objects, it is not
->> possible to infer the right one, thus klp-convert falls back into using
->> developer annotations. If these were not provided, then the tool will
->> print a list with all acceptable targets for the symbol being processed.
->>
->> Annotations in the context of klp-convert are accessible as struct
->> klp_module_reloc entries in sections named .klp.module_relocs.<objname>.
->> These entries are pairs of symbol references and positions which are to
->> be resolved against definitions in <objname>.
->>
->> Define the structure klp_module_reloc in include/linux/uapi/livepatch.h
->> allowing developers to annotate the livepatch source code with it.
->>
->> klp-convert relies on libelf and on a list implementation. Add files
->> scripts/livepatch/elf.c and scripts/livepatch/elf.h, which are a libelf
->> interfacing layer and scripts/livepatch/list.h, which is a list
->> implementation.
->>
->> Update Makefiles to correctly support the compilation of the new tool,
->> update MAINTAINERS file and add a .gitignore file.
->>
->> [1] - Documentation/livepatch/module-elf-format.txt
-> 
-> LGTM:
-> 
-> Reviewed-by: Marcos Paulo de Souza <mpdesouza@suse.com>
-> 
-> I only have two remarks:
-> 
->>
->> Signed-off-by: Josh Poimboeuf <jpoimboe@redhat.com>
->> Signed-off-by: Konstantin Khlebnikov <khlebnikov@yandex-team.ru>
->> Signed-off-by: Joao Moreira <jmoreira@suse.de>
->> Signed-off-by: Joe Lawrence <joe.lawrence@redhat.com>
-> 
-> ...
-> 
-> 
->> +#if 0
->> +	/*
->> +	 * klp-relocations forbidden in sections that otherwise would
->> +	 * match in allowed_prefixes[]
->> +	 */
->> +	static const char * const not_allowed[] = {
->> +		".rela.data.rel.ro",
->> +		".rela.data.rel.ro.local",
->> +		".rela.data..ro_after_init",
->> +		NULL
->> +	};
->> +#endif
->> +
->> +	/* klp-relocations allowed in sections only for vmlinux */
->> +	static const char * const allowed_vmlinux[] = {
->> +		".rela__jump_table",
->> +		NULL
->> +	};
->> +
->> +	/* klp-relocations allowed in sections with prefixes */
->> +	static const char * const allowed_prefixes[] = {
->> +		".rela.data",
->> +		".rela.rodata",	// supported ???
->> +		".rela.sdata",
->> +		".rela.text",
->> +		".rela.toc",
->> +		NULL
->> +	};
->> +
->> +	const char * const *name;
->> +
->> +#if 0
->> +	for (name = not_allowed; *name; name++)
->> +		if (strcmp(sec->name, *name) == 0)
->> +			return false;
->> +#endif
->> +
-> 
-> Have you needed to enable the not_allowed checks when creating your livepatches?
-> Otherwise I believe that this can be removed and added again in the future is
-> needed.
-> 
+On Fri, Mar 17, 2023 at 11:03=E2=80=AFAM Suzuki K Poulose
+<suzuki.poulose@arm.com> wrote:
+>
+> Hi Rob
+>
+> Thanks for your response.
+>
+> On 17/03/2023 14:52, Rob Herring wrote:
+> > On Thu, Mar 16, 2023 at 10:06=E2=80=AFPM Anshuman Khandual
+> > <anshuman.khandual@arm.com> wrote:
+> >>
+> >> Allow other drivers to claim a device, disregarding the "priority" of
+> >> "arm,primecell". e.g., CoreSight ETM4x devices could be accessed via M=
+MIO
+> >> (AMBA Bus) or via CPU system instructions.
+> >
+> > The OS can pick which one, use both, or this is a system integration
+> > time decision?
+>
+> Not an OS choice. Historically, this has always been MMIO accessed but
+> with v8.4 TraceFiltering support, CPUs are encouraged to use system
+> instructions and obsolete MMIO. So, yes, MMIO is still possible but
+> something that is discouraged and have to be decided at system
+> integration time.
+>
+> >
+> >> The CoreSight ETM4x platform
+> >> driver can now handle both types of devices. In order to make sure the
+> >> driver gets to handle the "MMIO based" devices, which always had the
+> >> "arm,primecell" compatible, we have two options :
+> >>
+> >> 1) Remove the "arm,primecell" from the DTS. But this may be problemati=
+c
+> >>   for an older kernel without the support.
+> >>
+> >> 2) The other option is to allow OF code to "ignore" the arm,primecell
+> >> priority for a selected list of compatibles. This would make sure that
+> >> both older kernels and the new kernels work fine without breaking
+> >> the functionality. The new DTS could always have the "arm,primecell"
+> >> removed.
+> >
+> > 3) Drop patches 6 and 7 and just register as both AMBA and platform
+> > drivers. It's just some extra boilerplate. I would also do different
+> > compatible strings for CPU system instruction version (assuming this
+> > is an integration time decision).
+>
+> The system instruction (and the reigster layouts) are all part of the
+> ETMv4/ETE architecture and specific capabilities/features are
+> discoverable, just like the Arm CPUs. Thus we don't need special
+> versions within the ETMv4x or ETE minor versions. As of now, we have
+> one for etm4x and another for ete.
 
-Good question.
+I just meant 2 new compatible strings. One each for ETMv4x and ETE,
+but different from the 2 existing ones. It is different h/w presented
+to the OS, so different compatible.
 
-I left the disabled blocks in the code as a bookmark for an outstanding
-question: should klp-convert avoid converting relocations in any
-read-only-ish section?
+> One problem with the AMBA driver in place is having to keep on adding
+> new PIDs for the CPUs. The other option is to have a blanket mask
+> for matching the PIDs with AMBA_UCI_ID checks.
 
-This becomes interesting in the late module loading case -- some arches
-(ppc64le IIRC) do not like the module loader tweaking these relocations
-post module load. [1]
+But if MMIO access is discouraged, then new h/w would use the platform
+driver(s), not the amba driver, and you won't have to add PIDs.
 
-In "[PATCH v7 09/10] livepatch/selftests: add data relocations test"
-test_klp_convert_data.c, you'll see a few "// .rela.data.rel.ro,
-.rela.rodata supported ??" comments.  Those would generate relocations
-in such sections.
-
-Do they *need* to be supported?  AFAIK kpatch-build hasn't needed to
-create any of those.  That said, it's not too difficult for this
-patchset's self-tests to generate these.  klp-convert could easily
-detect this scenario.  The livepatch author could be advised to remove
-const or  __ro_after_init annotation to move the relocation out of the
-read-only-ish section.
-
-[1] https://github.com/joe-lawrence/klp-convert-tree/issues/5
-
->> +int main(int argc, const char **argv)
->> +{
->> +	const char *klp_in_module, *klp_out_module, *symbols_list;
-> 
-> ...
-> 
->> +
->> +/* Functions kept commented since they might be useful for future debugging */
->> +
->> +/* Dumps sympos list (useful for debugging purposes)
->> + * static void dump_sympos(void)
->> + * {
->> + *	struct sympos *sp;
->> + *
->> + *	fprintf(stderr, "BEGIN OF SYMPOS DUMP\n");
->> + *	list_for_each_entry(sp, &usr_symbols, list) {
->> + *		fprintf(stderr, "%s %s %d\n", sp->symbol_name, sp->object_name,
->> + *				sp->pos);
->> + *	}
->> + *	fprintf(stderr, "END OF SYMPOS DUMP\n");
->> + * }
->> + *
->> + *
->> + * / Dump symbols list for debugging purposes /
->> + * static void dump_symbols(void)
->> + * {
->> + *	struct symbol_entry *entry;
->> + *
->> + *	fprintf(stderr, "BEGIN OF SYMBOLS DUMP\n");
->> + *	list_for_each_entry(entry, &symbols, list)
->> + *		printf("%s %s\n", entry->object_name, entry->symbol_name);
->> + *	fprintf(stderr, "END OF SYMBOLS DUMP\n");
->> + * }
-> 
-> Same here. Have you used these functions recently when debugging klp-convert?
-> Othewise it can be removed as well.
-> 
-
-I was tinkering with an alternate sympos annotation (I'll describe it in
-a separate reply) and think that these debug routines could be activated
-with --debug cmdline flag(s).  They can be handy for debug/development,
-so better to make them always active rather than #if 0'd out.
-
--- 
-Joe
-
+Rob
