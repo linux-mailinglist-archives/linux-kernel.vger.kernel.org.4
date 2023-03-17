@@ -2,153 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CE956BF290
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 21:30:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41D4F6BF29A
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 21:32:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230135AbjCQUat (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 16:30:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36696 "EHLO
+        id S230146AbjCQUb5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 16:31:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229999AbjCQUaq (ORCPT
+        with ESMTP id S230115AbjCQUbz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 16:30:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B5ABC9CAB;
-        Fri, 17 Mar 2023 13:30:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 17 Mar 2023 16:31:55 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEB25270D
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 13:30:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679084997;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZfI3A5lLUd+09/+y0z8qaJcUWRJWrslDGbCcJ6wExMU=;
+        b=RQpoLB2AmfXILEpFQDjdsgJw5kDGFAx99y/u5VVXNyLplIO+8wUbdyJj7O3i+PF5dlpuKR
+        qHGgaYWjZ8iU7rsJ2KquHGh65Db1VewrxzuVsEqtYND1n3G9Roenm71cQrG7D0nUZBCDTJ
+        lxqZKbkUPfeKGIF0gLtpoYsyUKRT6wo=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-74-xz_omIicNESOkGk9Xc2xhw-1; Fri, 17 Mar 2023 16:29:51 -0400
+X-MC-Unique: xz_omIicNESOkGk9Xc2xhw-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 18DB0616C1;
-        Fri, 17 Mar 2023 20:29:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47C2DC433EF;
-        Fri, 17 Mar 2023 20:29:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679084963;
-        bh=9we5fWO8cVkhd7UCyIsMxQQuZI93G3p6+v2TY2SerNM=;
-        h=From:To:Cc:Subject:Date:From;
-        b=HIDL2SEC7HCM/VPvRg2iEAvLYHl8r9S57w+6l2+Qcbp4ediC1ZvDTKCeeHIAvWrdZ
-         3xOtZVXqaQUeX5KVs0CoGH4+ZsfN3xk1FTV0rHK8XL7B+etX+iWIh8/6b1lrrG1nn1
-         +Fs166iYeBAO+RNT8FqGmIfxw92G0qUXl29SDQ/0NzJ407InA9RmadJtgbATmFZTVc
-         Kr0WwWZu4wuBi88jieuAsRNV54ab1SlufA6QSs8VQ0ltd8Oqg9AxIbUaasJ2rvvYxa
-         K2g6oDSmPOFFj762kPA4/E1lyb5UVPbPJneAk6Dw3pYzgAlc9iDWBsgVT92zj8F62W
-         yuZtp0WyzFTRQ==
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     torvalds@linux-foundation.org
-Cc:     kuba@kernel.org, davem@davemloft.net, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, pabeni@redhat.com
-Subject: [PULL v2] Networking for v6.3-rc3
-Date:   Fri, 17 Mar 2023 13:29:22 -0700
-Message-Id: <20230317202922.2240017-1-kuba@kernel.org>
-X-Mailer: git-send-email 2.39.2
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 383A885A588;
+        Fri, 17 Mar 2023 20:29:51 +0000 (UTC)
+Received: from redhat.com (unknown [10.22.16.127])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id BFEFA1121315;
+        Fri, 17 Mar 2023 20:29:50 +0000 (UTC)
+Date:   Fri, 17 Mar 2023 16:29:48 -0400
+From:   Joe Lawrence <joe.lawrence@redhat.com>
+To:     Marcos Paulo de Souza <mpdesouza@suse.de>
+Cc:     live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kbuild@vger.kernel.org, Josh Poimboeuf <jpoimboe@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Marcos Paulo de Souza <mpdesouza@suse.com>
+Subject: Re: [PATCH v7 00/10] livepatch: klp-convert tool
+Message-ID: <ZBTNvEPrCcRj3F1C@redhat.com>
+References: <20230306140824.3858543-1-joe.lawrence@redhat.com>
+ <20230314202356.kal22jracaw5442y@daedalus>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230314202356.kal22jracaw5442y@daedalus>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus!
+On Tue, Mar 14, 2023 at 05:23:56PM -0300, Marcos Paulo de Souza wrote:
+> On Mon, Mar 06, 2023 at 09:08:14AM -0500, Joe Lawrence wrote:
+> > Summary
+> > -------
+> > 
+> > Livepatches may use symbols which are not contained in its own scope,
+> > and, because of that, may end up compiled with relocations that will
+> > only be resolved during module load. Yet, when the referenced symbols
+> > are not exported, solving this relocation requires information on the
+> > object that holds the symbol (either vmlinux or modules) and its
+> > position inside the object, as an object may contain multiple symbols
+> > with the same name.  Providing such information must be done accordingly
+> > to what is specified in Documentation/livepatch/module-elf-format.txt.
+> > 
+> > Currently, there is no trivial way to embed the required information as
+> > requested in the final livepatch elf object. klp-convert solves this
+> > problem in two different forms: (i) by relying on a symbol map, which is
+> > built during kernel compilation, to automatically infer the relocation
+> > targeted symbol, and, when such inference is not possible (ii) by using
+> > annotations in the elf object to convert the relocation accordingly to
+> > the specification, enabling it to be handled by the livepatch loader.
+> > 
+> > Given the above, add support for symbol mapping in the form of a
+> > symbols.klp file; add klp-convert tool; integrate klp-convert tool into
+> > kbuild; make livepatch modules discernible during kernel compilation
+> > pipeline; add data-structure and macros to enable users to annotate
+> > livepatch source code; make modpost stage compatible with livepatches;
+> > update livepatch-sample and update documentation.
+> > 
+> > The patch was tested under three use-cases:
+> > 
+> > use-case 1: There is a relocation in the lp that can be automatically
+> > resolved by klp-convert.  For example. see the saved_command_line
+> > variable in lib/livepatch/test_klp_convert2.c.
+> > 
+> > use-case 2: There is a relocation in the lp that cannot be automatically
+> > resolved, as the name of the respective symbol appears in multiple
+> > objects. The livepatch contains an annotation to enable a correct
+> > relocation.  See the KLP_MODULE_RELOC / KLP_SYMPOS annotation sections
+> > in lib/livepatch/test_klp_convert{1,2}.c.
+> > 
+> > use-case 3: There is a relocation in the lp that cannot be automatically
+> > resolved similarly as 2, but no annotation was provided in the
+> > livepatch, triggering an error during compilation.  Reproducible by
+> > removing the KLP_MODULE_RELOC / KLP_SYMPOS annotation sections in
+> > lib/livepatch/test_klp_convert{1,2}.c.
+> > 
+> > Selftests have been added to exercise these klp-convert use-cases
+> > through several tests.
+> > 
+> > 
+> > Testing
+> > -------
+> > 
+> > The patchset selftests build and execute on x86_64, s390x, and ppc64le
+> > for both default config (with added livepatch dependencies) and a larger
+> > RHEL-9-ish config.
+> > 
+> > Using the Intel's Linux Kernel Performance tests's make.cross,
+> > klp-convert builds and processes livepatch .ko's for x86_64 ppc64le
+> > ppc32 s390 arm64 arches.
+> > 
+> > 
+> > Summary of changes in v7
+> > ------------------------
+> > 
+> > - rebase for v6.2
+> > - combine ("livepatch: Add klp-convert tool") with ("livepatch: Add
+> >   klp-convert annotation helpers")
+> > - combine ("kbuild: Support for symbols.klp creation") with ("modpost:
+> >   Integrate klp-convert") to simplify Kbuild magic [Petr, Nicolas]
+> > - klp-convert: add safe_snprintf() (-Wsign-compare)
+> > - klp-convert: fix -Wsign-compare warnings
+> > - klp-convert: use calloc() where appropriate
+> > - klp-convert: copy ELF e_flags
+> > - selftests: fix various build warnings
+> > - klp-convert: WARN msg simplification, failed sanity checks, and sympos
+> >   comment [Marcos]
+> > - klp-convert: fix elf_write_file() error paths [Petr]
+> 
+> Thanks for the new version Joe. I've run the ksefltests on my x86 laptop, and it
+> succeed as expected, so
+> 
+> Tested-by: Marcos Paulo de Souza <mpdesouza@suse.com>
+> 
 
-Here we go again..
+Thanks for the testing and reviews, Marcos.
 
-A little more changes than usual, but it's pretty normal for us
-that the rc3/rc4 PRs are oversized as people start testing in
-earnest. Possibly an extra boost from people deploying the 6.1 LTS
-but that's more of an unscientific hunch.
+The selftests are the first level of testing... we should probably
+tackle a real or simulated CVE fix to see how well the tooling fits
+larger livepatches.
 
-The following changes since commit f5e305e63b035a1782a666a6535765f80bb2dca3:
+One complication that I can envision is symbol positioning.  Currently,
+the klp-convert annotations are a direct mirror of the kernel's
+<obj,symbol,pos> tuple.  It should be possible to make this a bit more
+user friendly for the livepatch developer if the annotations were
+<obj,file,symbol>, as derived from the vmlinux / module.tmp.ko symbol
+tables.
 
-  Merge branch 'bonding-fixes' (2023-03-17 07:56:41 +0000)
+For example, the following code:
 
-are available in the Git repository at:
+  KLP_MODULE_RELOC(test_klp_convert_mod, test_klp_convert_mod_b.c) test_klp_convert_mod_relocs_b[] = {
+        KLP_SYMPOS(homonym_string),
+        KLP_SYMPOS(get_homonym_string),
+  };
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git tags/net-6.3-rc3
+could generate the following relocations:
 
-for you to fetch changes up to f5e305e63b035a1782a666a6535765f80bb2dca3:
+  Relocation section '.rela.klp.module_relocs.test_klp_convert_mod.test_klp_convert_mod_b.c' at offset 0x1dc0 contains 2 entries:
+      Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+  0000000000000000  0000003f00000001 R_X86_64_64            0000000000000000 homonym_string + 0
+  0000000000000008  0000004900000001 R_X86_64_64            0000000000000000 get_homonym_string + 0
 
-  Merge branch 'bonding-fixes' (2023-03-17 07:56:41 +0000)
+for which klp-convert looks up in symbols.klp:
 
-----------------------------------------------------------------
-Including fixes from netfilter, wifi and ipsec.
+  klp-convert-symbol-data.0.2
+  *vmlinux
+  ...
+  *test_klp_convert_mod
+  -test_klp_convert_mod_a.c             << added filenames to the format
+  test_klp_get_driver_name
+  driver_name
+  get_homonym_string                    << sympos = 1
+  homonym_string                        << sympos = 1
+  ...
+  -test_klp_convert_mod_b.c
+  get_homonym_string                    << sympos = 2
+  homonym_string                        << sympos = 2
+  ...
 
-Current release - regressions:
+and then generates the usual klp-relocations as currently defined.
 
- - phy: mscc: fix deadlock in phy_ethtool_{get,set}_wol()
+(Unfortunately full pathnames are not saved in the STT_FILE symbol table
+entries, so there will be a few non-unique <obj,file,symbol> entries.  I
+believe the last time this was discussed, we found that there were a
+relatively small number of such symbols.)
 
- - virtio: vsock: don't use skbuff state to account credit
+Have you tried retrofitting klp-convert into any real-world livepatch?
+I'm curious as to your observations on the overall experience, or
+thoughts on the sympos annotation style noted above.
 
- - virtio: vsock: don't drop skbuff on copy failure
+Regards,
 
- - virtio_net: fix page_to_skb() miscalculating the memory size
+-- Joe
 
-Current release - new code bugs:
-
- - eth: correct xdp_features after device reconfig
-
- - wifi: nl80211: fix the puncturing bitmap policy
-
- - net/mlx5e: flower:
-   - fix raw counter initialization
-   - fix missing error code
-   - fix cloned flow attribute
-
- - ipa:
-   - fix some register validity checks
-   - fix a surprising number of bad offsets
-   - kill FILT_ROUT_CACHE_CFG IPA register
-
-Previous releases - regressions:
-
- - tcp: fix bind() conflict check for dual-stack wildcard address
-
- - veth: fix use after free in XDP_REDIRECT when skb headroom is small
-
- - ipv4: fix incorrect table ID in IOCTL path
-
- - ipvlan: make skb->skb_iif track skb->dev for l3s mode
-
- - mptcp:
-  - fix possible deadlock in subflow_error_report
-  - fix UaFs when destroying unaccepted and listening sockets
-
- - dsa: mv88e6xxx: fix max_mtu of 1492 on 6165, 6191, 6220, 6250, 6290
-
-Previous releases - always broken:
-
- - tcp: tcp_make_synack() can be called from process context,
-   don't assume preemption is disabled when updating stats
-
- - netfilter: correct length for loading protocol registers
-
- - virtio_net: add checking sq is full inside xdp xmit
-
- - bonding: restore IFF_MASTER/SLAVE flags on bond enslave
-   Ethertype change
-
- - phy: nxp-c45-tja11xx: fix MII_BASIC_CONFIG_REV bit number
-
- - eth: i40e: fix crash during reboot when adapter is in recovery mode
-
- - eth: ice: avoid deadlock on rtnl lock when auxiliary device
-   plug/unplug meets bonding
-
- - dsa: mt7530:
-   - remove now incorrect comment regarding port 5
-   - set PLL frequency and trgmii only when trgmii is used
-
- - eth: mtk_eth_soc: reset PCS state when changing interface types
-
-Misc:
-
- - ynl: another license adjustment
-
- - move the TCA_EXT_WARN_MSG attribute for tc action
-
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-
-----------------------------------------------------------------
