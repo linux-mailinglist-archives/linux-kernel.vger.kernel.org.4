@@ -2,117 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C8626BF28A
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 21:29:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B47996BF270
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 21:28:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230173AbjCQU3O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 16:29:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59166 "EHLO
+        id S230112AbjCQU2G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 16:28:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230028AbjCQU3E (ORCPT
+        with ESMTP id S229959AbjCQU2B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 16:29:04 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90DF6C8319
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 13:28:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679084883;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=LMNmNTOdx390ioTe9XNiCAi1NYjBrn3x8X89rBxIitg=;
-        b=WazmDTzj2Z3HfpEHD5v0sK5b0QPNEDvzdtjXO2bGsUwSgKcYRdUKjMtylzQfhMI1o79ZyC
-        gNcCFKCjHHb8m044X1OeecEAet79kS9WE+qX65bTk7eNFuDAyqlDxpsPs3SG2WS8GDqHj8
-        b5DxF0nqugOCzssnvdpQoKtKb/bnkjg=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-294-Mxwocp_hMcOEN5qt7QZfpw-1; Fri, 17 Mar 2023 16:27:58 -0400
-X-MC-Unique: Mxwocp_hMcOEN5qt7QZfpw-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9D7602999B21;
-        Fri, 17 Mar 2023 20:27:57 +0000 (UTC)
-Received: from green.redhat.com (unknown [10.2.16.99])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id E243B492B00;
-        Fri, 17 Mar 2023 20:27:56 +0000 (UTC)
-From:   Eric Blake <eblake@redhat.com>
-To:     josef@toxicpanda.com, linux-block@vger.kernel.org,
-        nbd@other.debian.org
-Cc:     philipp.reisner@linbit.com, lars.ellenberg@linbit.com,
-        christoph.boehmwalder@linbit.com, corbet@lwn.net,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 4/5] block nbd: use req.cookie instead of req.handle
-Date:   Fri, 17 Mar 2023 15:27:48 -0500
-Message-Id: <20230317202749.419094-5-eblake@redhat.com>
-In-Reply-To: <20230317202749.419094-1-eblake@redhat.com>
-References: <20230317202749.419094-1-eblake@redhat.com>
+        Fri, 17 Mar 2023 16:28:01 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56EC4AB8B4;
+        Fri, 17 Mar 2023 13:27:54 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id 539265FD4F;
+        Fri, 17 Mar 2023 23:27:52 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1679084872;
+        bh=9klZq5XNmdsCI8Jf4BIs+c2sADGKOJ1gBsYtYIHMRbs=;
+        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+        b=XZLGSNSDmTYCZb7s7O8f3ZHMIYyHbCaPHo56b39hLpJh8r2PPMyPdt6JZf/f58gS6
+         348VQBGsQwgKna4KcBjfocVat4Lqe47Se+jPzZVU/R2rBfpLoY1XV5J9SdDnY/MhuD
+         nEQmoM7C4NtEflIqujh+NYYR6c0/dYiZ2pSZIDpWO/wkYg9ssjJ8UCokIFIKbMHW4O
+         wrMnu9VEuqIb6kJwYg6uDZFbq4+xVLkxvqCB/1BdyNc2QmNUJgg2jzPqIkAyQSsUIV
+         4ehY8/Xe9OvmJIHSZFZWjeQXbTyfcDZK5fT93/oA8Zjv4VhwxaKfF9gR7OjPIoDThE
+         zH5yyfYc2Jekg==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Fri, 17 Mar 2023 23:27:49 +0300 (MSK)
+Date:   Fri, 17 Mar 2023 23:27:48 +0300
+From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
+To:     Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+CC:     <neil.armstrong@linaro.org>, <jbrunet@baylibre.com>,
+        <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <khilman@baylibre.com>,
+        <martin.blumenstingl@googlemail.com>, <jian.hu@amlogic.com>,
+        <kernel@sberdevices.ru>, <rockosov@gmail.com>,
+        <linux-amlogic@lists.infradead.org>, <linux-clk@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v10 3/5] dt-bindings: clock: meson: add A1 PLL and
+ Peripherals clkcs bindings
+Message-ID: <20230317202748.7ctqhswettiemwi7@CAB-WSD-L081021>
+References: <20230313201259.19998-1-ddrokosov@sberdevices.ru>
+ <20230313201259.19998-4-ddrokosov@sberdevices.ru>
+ <ffebef1d-8447-181b-1890-3e638d399c62@linaro.org>
+ <20230314114825.yiv4vcszr6b7m45w@CAB-WSD-L081021>
+ <20230317185317.GA2608140-robh@kernel.org>
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230317185317.GA2608140-robh@kernel.org>
+User-Agent: NeoMutt/20220415
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/03/17 17:26:00 #20964929
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A good optimizing compiler should not compile this any differently,
-but it is nicer to work directly with integers instead of memcpy().
+On Fri, Mar 17, 2023 at 01:53:17PM -0500, Rob Herring wrote:
+> On Tue, Mar 14, 2023 at 02:48:25PM +0300, Dmitry Rokosov wrote:
+> > On Tue, Mar 14, 2023 at 12:28:40PM +0100, Krzysztof Kozlowski wrote:
+> > > On 13/03/2023 21:12, Dmitry Rokosov wrote:
+> > 
+> > [...]
+> > 
+> > > > +#define CLKID_SPIFC		84
+> > > > +#define CLKID_USB_BUS		85
+> > > > +#define CLKID_SD_EMMC		86
+> > > > +#define CLKID_PSRAM		87
+> > > > +#define CLKID_DMC		88
+> > > 
+> > > And what is here? Between 88 and 121?
+> > > 
+> > 
+> > Explained below.
+> > 
+> > > > +#define CLKID_GEN_SEL		121
+> > > > +
+> > > > +#endif /* __A1_CLKC_H */
+> > > > diff --git a/include/dt-bindings/clock/amlogic,a1-pll-clkc.h b/include/dt-bindings/clock/amlogic,a1-pll-clkc.h
+> > > > new file mode 100644
+> > > > index 000000000000..8e97d3fb9d30
+> > > > --- /dev/null
+> > > > +++ b/include/dt-bindings/clock/amlogic,a1-pll-clkc.h
+> > > > @@ -0,0 +1,20 @@
+> > > > +/* SPDX-License-Identifier: GPL-2.0+ */
+> > > 
+> > > I found in changelog:
+> > > "fix license issue, it's GPL-2.0+ only in the current version"
+> > > and I do not understand.
+> > > 
+> > > The license is wrong, so what did you fix?
+> > > 
+> > 
+> > Sorry don't get you. Why is it wrong?
+> > I've changed all new source files to GPL-2.0+ except yaml, because yaml
+> > dt bindings schemas require the following license:
+> 
+> Why 2.0+? The kernel's default license is 2.0-only. Are you (and 
+> your lawyer) okay with GPL v4?
+> 
+> But this is still part of the DT binding and has the same license 
+> preference:
+>  
+> >     # SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> 
+> However, the header licenses are complicated due to .dts licenses which 
+> are all over the place. The requirement is dual licensed and matching 
+> what includes it.
 
-Signed-off-by: Eric Blake <eblake@redhat.com>
+Agree with you. As we discussed with Krzysztof, checkpatch must verify
+such wrong license tags. I've introduced the patchset for that, please
+take a look:
 
----
-v2: Fix kernel test robot complaint about wrong endianness on loongarch:
-https://lore.kernel.org/oe-kbuild-all/202303121323.Jd35Q1Au-lkp@intel.com/
----
- drivers/block/nbd.c | 8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
+https://lore.kernel.org/all/20230317201621.15518-1-ddrokosov@sberdevices.ru/
 
-diff --git a/drivers/block/nbd.c b/drivers/block/nbd.c
-index 8a9487e79f1c..94ae85400b46 100644
---- a/drivers/block/nbd.c
-+++ b/drivers/block/nbd.c
-@@ -560,7 +560,6 @@ static int nbd_send_cmd(struct nbd_device *nbd, struct nbd_cmd *cmd, int index)
- 	unsigned long size = blk_rq_bytes(req);
- 	struct bio *bio;
- 	u64 handle;
--	__be64 tmp;
- 	u32 type;
- 	u32 nbd_cmd_flags = 0;
- 	int sent = nsock->sent, skip = 0;
-@@ -607,8 +606,7 @@ static int nbd_send_cmd(struct nbd_device *nbd, struct nbd_cmd *cmd, int index)
- 		request.len = htonl(size);
- 	}
- 	handle = nbd_cmd_handle(cmd);
--	tmp = cpu_to_be64(handle);
--	memcpy(request.handle, &tmp, sizeof(tmp));
-+	request.cookie = cpu_to_be64(handle);
-
- 	trace_nbd_send_request(&request, nbd->index, blk_mq_rq_from_pdu(cmd));
-
-@@ -729,14 +727,12 @@ static struct nbd_cmd *nbd_handle_reply(struct nbd_device *nbd, int index,
- 	int result;
- 	struct nbd_cmd *cmd;
- 	struct request *req = NULL;
--	__be64 tmp;
- 	u64 handle;
- 	u16 hwq;
- 	u32 tag;
- 	int ret = 0;
-
--	memcpy(&tmp, reply->handle, sizeof(tmp));
--	handle = be64_to_cpu(tmp);
-+	handle = be64_to_cpu(reply->cookie);
- 	tag = nbd_handle_to_tag(handle);
- 	hwq = blk_mq_unique_tag_to_hwq(tag);
- 	if (hwq < nbd->tag_set.nr_hw_queues)
 -- 
-2.39.2
-
+Thank you,
+Dmitry
