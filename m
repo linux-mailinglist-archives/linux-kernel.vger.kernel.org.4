@@ -2,199 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04CD86BEEC7
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 17:47:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08A336BEEBF
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 17:46:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230205AbjCQQrF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 12:47:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46816 "EHLO
+        id S230030AbjCQQqd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 12:46:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229621AbjCQQrC (ORCPT
+        with ESMTP id S229845AbjCQQqa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 12:47:02 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC0317C975;
-        Fri, 17 Mar 2023 09:46:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679071603; x=1710607603;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=mtstCQdXn38bkovo6+1oAkS250S6g+dn6FzQ5TgKIOc=;
-  b=VvJ3FxK8fddK0u0R4zBzYnyprI1A9N2hATImP9iWECmcoQQ8lynb8WFe
-   X2mixxS2xHltwh1y3co2Lg1wq2+e+qcvp+E7I8vcBktMFVTVBujwjlQL0
-   K6a7MHqtPjfnfIDw4Yy4Mkw58ljk8QOYHr8vLHFTfLF32mFQEdbbJerUT
-   DMyRMerzSmbn6AYxGdMcIXaicKDoVOxOTCLCyQGsxnFlv6BkHFwXVH0Ei
-   juHKczSfsKv/VUqRlhyLuIyNbSgU7XTxPPxkEp9s3tjrYgC5+3tFETcsg
-   w1ZQqbJAPvEaKOpH1pTJ4OgOaLfdKp+WElG+mAYrIZTCnXlNT0ME46qvQ
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="317963335"
-X-IronPort-AV: E=Sophos;i="5.98,268,1673942400"; 
-   d="scan'208";a="317963335"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2023 09:46:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="682743908"
-X-IronPort-AV: E=Sophos;i="5.98,268,1673942400"; 
-   d="scan'208";a="682743908"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 17 Mar 2023 09:46:15 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pdDDa-0009Ug-2P;
-        Fri, 17 Mar 2023 16:46:14 +0000
-Date:   Sat, 18 Mar 2023 00:46:03 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Szymon Heidrich <szymon.heidrich@gmail.com>,
-        woojung.huh@microchip.com, UNGLinuxDriver@microchip.com,
-        kuba@kernel.org, davem@davemloft.net, edumazet@google.com
-Cc:     oe-kbuild-all@lists.linux.dev, pabeni@redhat.com,
-        szymon.heidrich@gmail.com, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: usb: lan78xx: Limit packet length to skb->len
-Message-ID: <202303180031.EsiDo4qY-lkp@intel.com>
-References: <20230317153217.90145-1-szymon.heidrich@gmail.com>
+        Fri, 17 Mar 2023 12:46:30 -0400
+Received: from DM5PR00CU002-vft-obe.outbound.protection.outlook.com (mail-centralusazon11021025.outbound.protection.outlook.com [52.101.62.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3B8773391;
+        Fri, 17 Mar 2023 09:46:15 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GUZ684CnVPI1BUXM6bEJVLqoMwZhsaIhYIXeTRzMoCpJ9rc1sxhln4//miyJbqZk0M5yKJYbuGJuUvKmJHEnWhJ7I2kLOl8hIWQbFsq6oG2Lb0bSurcEx4FlDlSCwF6tt6k56UHOc0zEQIRXojFVv7CUllxjNrKLrMTHTJKZyed/DeSs7Hd0xgKNZDCRc9Wg41i371PUXzLUx+Q70dKDvMi6Ye1vB9MNpzA5ZJhWFtbG7Bte98Hb6TakLe6g+uez3Gzg2ZpZGbxzBdRuOWS7gNBxDqn1vv9Q9SXf2vMTb/z9H7itHfor4UyI/fUJa7/BQlNkBxS+/HWEO8fKSJ+PKw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=brr6Bxnrp/rKzuNvEYRIjeqhiccYA9485UmvhD8ohRo=;
+ b=J93LCewcQAsD6io2HHle1FNtudkjPyKXiTh643o5SkFQJKZid4I/etguryICYZEVp5X6+j7Gh0K6EzZgMajegbGBUIOEOrFE5arF+dA1PtiNWZrNjfeZZ/3dheELeGo2bs5wpJg0zr89GOX03/dGwPXRtW+GOwU+iTix+r02AzQor5p+sjtyRWbFvQ3KN/+Wbzsk9TeZy7t63OnlOEAveMCtbqL9sWedGiousCY/7fTDKjQ9iWmlZ5dxsg0VLQ/Hh59esgG+H0242pP7f5KOv2VJMoyoSzREFnz8er0PDGWbSmREEbS2AKfSeZ8zaG3SK49XJ/1IXPXIiWliN+yC9Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=brr6Bxnrp/rKzuNvEYRIjeqhiccYA9485UmvhD8ohRo=;
+ b=NgwbLRJ8Hwsp7/dw9gTVB4Z7tTiMtrXF+1g3PDqgayQoFtR7e7y4QcnxSbsaJ7lIMSESaGOopOr6O+T3sN8jphAWvaZ0J0K9e5dsQ9N5mPb98ZmbBECb8rSpaJ3NYle7iRuJiXPyTkCo8j5TXEqS9PrV+qcz9g7B3FqWeCiPQ3U=
+Received: from BYAPR21MB1688.namprd21.prod.outlook.com (2603:10b6:a02:bf::26)
+ by PH0PR21MB1879.namprd21.prod.outlook.com (2603:10b6:510:13::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6222.5; Fri, 17 Mar
+ 2023 16:46:11 +0000
+Received: from BYAPR21MB1688.namprd21.prod.outlook.com
+ ([fe80::629a:b75a:482e:2d4a]) by BYAPR21MB1688.namprd21.prod.outlook.com
+ ([fe80::629a:b75a:482e:2d4a%6]) with mapi id 15.20.6222.008; Fri, 17 Mar 2023
+ 16:46:11 +0000
+From:   "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Dexuan Cui <decui@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "kernel-dev@igalia.com" <kernel-dev@igalia.com>,
+        "kernel@gpiccoli.net" <kernel@gpiccoli.net>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Josh Poimboeuf <jpoimboe@kernel.org>
+Subject: RE: [PATCH v3] x86/hyperv: Mark hv_ghcb_terminate() as noreturn
+Thread-Topic: [PATCH v3] x86/hyperv: Mark hv_ghcb_terminate() as noreturn
+Thread-Index: AQHZWOpj38QitTc2cUa3ycvKpYsc367/LdKA
+Date:   Fri, 17 Mar 2023 16:46:11 +0000
+Message-ID: <BYAPR21MB1688F17B2E1C6043BD50BA31D7BD9@BYAPR21MB1688.namprd21.prod.outlook.com>
+References: <20230310154452.1169204-1-gpiccoli@igalia.com>
+ <20230317160546.1497477-1-gpiccoli@igalia.com>
+In-Reply-To: <20230317160546.1497477-1-gpiccoli@igalia.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=8bc43685-e1b0-47dc-a56a-2e1b585715d4;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2023-03-17T16:45:05Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BYAPR21MB1688:EE_|PH0PR21MB1879:EE_
+x-ms-office365-filtering-correlation-id: fc07d298-e14a-45b5-0459-08db27071d81
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: mwCrK9sgXC+zjTM3h+6m+DsDwy7KfdPFdW4tlHclAtbMQs19BK+iZWwm6exXmN+pO20VIS4KRrUwrwWD06C4XUuzHZcaW0mPqCvvvE+d0e8iqT8HJ9dD/+5CLKx6oSUIgGSJm/NCrlWwUB1XouJd7Vx0VUdJP+CPZRJ7D1CevZgaAOvIorIyn74t4D6CJwhtM4As9KaReP0nQRWfo/aaCHOcOQRYrGTFqcmbcPFZyneEvbA9msPPoF0fVsiJlzCKWH+KHTJr3e8BoW4w+QJ4OcPVU5qFgl4UTkeGTyZ4j2PZRraiir5CQ3NvU0PlzkgBoCA3wku687VGn0HfL6+p2e1HDEdG9XiFh2ugS6wxxAx3Rf1rTz/gbBuDI7jhaib8C1oVJeDsrlZkniGmSgZUrL38j2sSNdh8HonqBc06+sJU7foXFk0DYzVpabqvv1v3ZiDzVyf210CdArXQ2gp5ODkkIXTr6X2nXvDvzO9qK3+mFNsEZvsN4DV9zA21Ai1Td9cq7LY1W2L+yDcCM+iiKriyQYd+GhY/3nQpNR1njbGYD/vLLtYqzs944dzlF08bO5tLY0H2IlXhITZ7YWPQ8qPk2yqmm6Ebpm7E4mtMU6CQTzEGk3EqbfPYR+Ds7QBVLn8iXejKT8T7xgx/lffkahXy9D/V6PeFSsSQf1jCKyiDFTpbksc0BLKFiVhBc/zSsxHhnLStZlmdWQsloDe/X89Kax8Zs1Y7I1rBeFmbOlA=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR21MB1688.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(396003)(366004)(346002)(376002)(136003)(451199018)(10290500003)(8936002)(7416002)(8990500004)(38100700002)(5660300002)(71200400001)(7696005)(55016003)(966005)(86362001)(82960400001)(2906002)(186003)(82950400001)(26005)(38070700005)(76116006)(64756008)(66556008)(4326008)(66946007)(8676002)(33656002)(122000001)(66476007)(52536014)(54906003)(9686003)(83380400001)(6506007)(478600001)(41300700001)(110136005)(66446008)(316002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?xP5eESxOv0wvO/qzK5zVHiaJPiY9vakqeHBBxWyfYOMuVSlL9XsHLE4QkM87?=
+ =?us-ascii?Q?hgbswTQSK8HxOJWUj7PYqcO/r3qt8O+2eXvP3Gb2NsGGebcNUCGWXZJhvhbi?=
+ =?us-ascii?Q?pWCFbbLLpAACnLJNaBZsSUVU7SnIqVCv8sf2rxg2CFTdmEVhRqHLxpjh1h/v?=
+ =?us-ascii?Q?UIGfZo6qpd4BYc+LJCbmtNpwakFSWnb7bZaQWOGAmgV0ImSTwNKpxBudGMJZ?=
+ =?us-ascii?Q?Xrlmp6pIcT7jIrNVuVLK7vHVPiAmm6iOSvfQaC/zodBQK6sZtzEwborxmPPY?=
+ =?us-ascii?Q?Oe0uyNEAPEVnHZvSDfjzADDanmVRepSEUU6W4k53RCrMRFvWmxNQjhW/tFCW?=
+ =?us-ascii?Q?iAK/hzZ1DWv/mQlXn9zFVNvMGev1L+3b0lQ+pubZfN/SoQiL5kQtPcF2PuLe?=
+ =?us-ascii?Q?woj0Kq64Bzzi/GVB40cDOlfyfXebSz/IzH+7tG209h9vPaXhwWmpjqdkcXi5?=
+ =?us-ascii?Q?YSVyw5dC4HQAQXyPgaj0EWmAT4HEa32SSyZh+VGdvywIgAa12RndM7O30Ewl?=
+ =?us-ascii?Q?DM3ndEV1hH1T1G433yk/pxP7dycT/0wUG7cn2uPUQcpvvBwoid/0ITiA5DhC?=
+ =?us-ascii?Q?VqpBwt3tMMdV74y6zh9NcLDVY/zXnBDDgdFXNwmBmNqLb8rjVCEtCYB8nL63?=
+ =?us-ascii?Q?HfiJClOQ7zUXlyNRDEBb/FbS62pyGsH91i8PoT+smozPbJWslnt9DLrasY4y?=
+ =?us-ascii?Q?fdQSxSbySfboqgTG5wx8HzWJ8Qb/pyM6DfL2mhQ6700OcAE2L/Jqyf8fF56z?=
+ =?us-ascii?Q?WNx+fJKYeJfiujilMS0rylzOAXmhSmWcaQ6srOcxZJoXKIi1Q8zlyX8HUdcn?=
+ =?us-ascii?Q?Q7N4PaOaWpIFI+fahoN4iDnt9jUYB5x1pkCmLictEOtmn2O2WKTNJRKv68jp?=
+ =?us-ascii?Q?SXYp+XiwIkPvONmNBZr9CZaRRpr00RCpn5hJ211QGyiV08zOe9N5vFt72fx+?=
+ =?us-ascii?Q?1VT1y774RVLs4XibAvMYNwzAkpluwgiNxOJvqmpiOGGPsV6aj/NHHB37QaDm?=
+ =?us-ascii?Q?T+dvTOMYmBAzXqx6Mwdfb5m2nu2i5Od6zSwUzMcir+8q95776kN8N7k8qqEK?=
+ =?us-ascii?Q?eA8ByRCnZ/TtTbLVNcU3wkA1n/b2tVCT87spsgKyHeZODjkEFjI/TOzvElLJ?=
+ =?us-ascii?Q?m3XgAjr4D3S7nHcufNVggoO37pB4LBfhAA6Fmx2xHQMzCFKQ9ZkoHyk8N8a+?=
+ =?us-ascii?Q?/eEjm9LAKbrMV64wtl+kdRi7eYdWKRHDLEUmyjo1NznxBX7lIsGYkcWWOSLg?=
+ =?us-ascii?Q?NAFhtC7pIR2GRC+N4eOg7ZWp8dGrEs2zWwmHV59UyD/OhFXrh/kFBM2g9+JS?=
+ =?us-ascii?Q?DhY25D2nNuTaKE8Yoh1LW1bcxVxuJsUxTvTwUYMsoeNPK1EY4N44B/O2wboE?=
+ =?us-ascii?Q?Lwpal8wScofje1X+MS7N8ThNufwWu9uSLeIpz8mx4YMh+bWRHzSR1EKqaWct?=
+ =?us-ascii?Q?dhyv6sEf+mbTQWvbbaB9r4AsjUmyL3iw24r3+tka8mrHa/IREvUNO2j0ol50?=
+ =?us-ascii?Q?Hfkde1pWF+RWF7/pQqfVIkiDQLKvCPX+QZsxBFxUvFOWnHYhoUPmG3m05XMT?=
+ =?us-ascii?Q?9H9f47DV3MwI60Yq0tT7Sqsf52sOSxX6hAJBjeo7MGbL/k/Fq6WhRdvrs3W4?=
+ =?us-ascii?Q?Zg=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230317153217.90145-1-szymon.heidrich@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR21MB1688.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: fc07d298-e14a-45b5-0459-08db27071d81
+X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Mar 2023 16:46:11.6044
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: wf2yguC7yxei6v0/9vl7aOpOeQHJfgHHz5rpLIpZ1llSolm/CsWwZ11dDFJmHEcWRRDgjjV4AWMlt7EDYkbUOKrAdDC/6kUPfPr8LvdKrGY=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR21MB1879
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Szymon,
+From: Guilherme G. Piccoli <gpiccoli@igalia.com> Sent: Friday, March 17, 20=
+23 9:06 AM
+>=20
+> Annotate the function prototype and definition as noreturn to prevent
+> objtool warnings like:
+>=20
+> vmlinux.o: warning: objtool: hyperv_init+0x55c: unreachable instruction
+>=20
+> Also, as per Josh's suggestion, add it to the global_noreturns list.
+> As a comparison, an objdump output without the annotation:
+>=20
+> [...]
+> 1b63:  mov    $0x1,%esi
+> 1b68:  xor    %edi,%edi
+> 1b6a:  callq  ffffffff8102f680 <hv_ghcb_terminate>
+> 1b6f:  jmpq   ffffffff82f217ec <hyperv_init+0x9c> # unreachable
+> 1b74:  cmpq   $0xffffffffffffffff,-0x702a24(%rip)
+> [...]
+>=20
+> Now, after adding the __noreturn to the function prototype:
+>=20
+> [...]
+> 17df:  callq  ffffffff8102f6d0 <hv_ghcb_negotiate_protocol>
+> 17e4:  test   %al,%al
+> 17e6:  je     ffffffff82f21bb9 <hyperv_init+0x469>
+> [...]  <many insns>
+> 1bb9:  mov    $0x1,%esi
+> 1bbe:  xor    %edi,%edi
+> 1bc0:  callq  ffffffff8102f680 <hv_ghcb_terminate>
+> 1bc5:  nopw   %cs:0x0(%rax,%rax,1) # end of function
+>=20
+> Reported-by: Arnd Bergmann <arnd@arndb.de>
+> Link: https://lore.kernel.org/all/9698eff1-9680-4f0a-94de-590eaa923e94@ap=
+p.fastmail.com/
+> Cc: Josh Poimboeuf <jpoimboe@kernel.org>
+> Cc: Michael Kelley <mikelley@microsoft.com>
+> Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
+> ---
+>=20
+>=20
+> V3:
+> - As per Michael / Josh advice (thanks!), added __noreturn to the
+> function definition as well.
+>=20
+> V2:
+> - Per Josh's suggestion (thanks!), added the function name to the
+> objtool global table.
+>=20
+> Thanks in advance for reviews/comments!
+> Cheers,
+>=20
+> Guilherme
+>=20
+>=20
+>  arch/x86/hyperv/ivm.c           | 2 +-
+>  arch/x86/include/asm/mshyperv.h | 2 +-
+>  tools/objtool/check.c           | 1 +
+>  3 files changed, 3 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/arch/x86/hyperv/ivm.c b/arch/x86/hyperv/ivm.c
+> index 1dbcbd9da74d..4f79dc76042d 100644
+> --- a/arch/x86/hyperv/ivm.c
+> +++ b/arch/x86/hyperv/ivm.c
+> @@ -127,7 +127,7 @@ static enum es_result hv_ghcb_hv_call(struct ghcb *gh=
+cb, u64
+> exit_code,
+>  		return ES_OK;
+>  }
+>=20
+> -void hv_ghcb_terminate(unsigned int set, unsigned int reason)
+> +void __noreturn hv_ghcb_terminate(unsigned int set, unsigned int reason)
+>  {
+>  	u64 val =3D GHCB_MSR_TERM_REQ;
+>=20
+> diff --git a/arch/x86/include/asm/mshyperv.h b/arch/x86/include/asm/mshyp=
+erv.h
+> index 4c4c0ec3b62e..09c26e658bcc 100644
+> --- a/arch/x86/include/asm/mshyperv.h
+> +++ b/arch/x86/include/asm/mshyperv.h
+> @@ -212,7 +212,7 @@ int hv_set_mem_host_visibility(unsigned long addr, in=
+t
+> numpages, bool visible);
+>  void hv_ghcb_msr_write(u64 msr, u64 value);
+>  void hv_ghcb_msr_read(u64 msr, u64 *value);
+>  bool hv_ghcb_negotiate_protocol(void);
+> -void hv_ghcb_terminate(unsigned int set, unsigned int reason);
+> +void __noreturn hv_ghcb_terminate(unsigned int set, unsigned int reason)=
+;
+>  #else
+>  static inline void hv_ghcb_msr_write(u64 msr, u64 value) {}
+>  static inline void hv_ghcb_msr_read(u64 msr, u64 *value) {}
+> diff --git a/tools/objtool/check.c b/tools/objtool/check.c
+> index f937be1afe65..4b5e03f61f1f 100644
+> --- a/tools/objtool/check.c
+> +++ b/tools/objtool/check.c
+> @@ -209,6 +209,7 @@ static bool __dead_end_function(struct objtool_file *=
+file, struct
+> symbol *func,
+>  		"do_task_dead",
+>  		"ex_handler_msr_mce",
+>  		"fortify_panic",
+> +		"hv_ghcb_terminate",
+>  		"kthread_complete_and_exit",
+>  		"kthread_exit",
+>  		"kunit_try_catch_throw",
+> --
+> 2.39.2
 
-Thank you for the patch! Perhaps something to improve:
+Reviewed-by: Michael Kelley <mikelley@microsoft.com>
 
-[auto build test WARNING on net-next/main]
-[also build test WARNING on net/main linus/master v6.3-rc2 next-20230317]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Szymon-Heidrich/net-usb-lan78xx-Limit-packet-length-to-skb-len/20230317-233602
-patch link:    https://lore.kernel.org/r/20230317153217.90145-1-szymon.heidrich%40gmail.com
-patch subject: [PATCH] net: usb: lan78xx: Limit packet length to skb->len
-config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20230318/202303180031.EsiDo4qY-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/0110af02bdfd214f5cd310013aa19163d6558a7d
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Szymon-Heidrich/net-usb-lan78xx-Limit-packet-length-to-skb-len/20230317-233602
-        git checkout 0110af02bdfd214f5cd310013aa19163d6558a7d
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash drivers/net/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303180031.EsiDo4qY-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   drivers/net/usb/lan78xx.c: In function 'lan78xx_rx':
->> drivers/net/usb/lan78xx.c:3600:25: warning: ISO C90 forbids mixed declarations and code [-Wdeclaration-after-statement]
-    3600 |                         u32 frame_len = size - ETH_FCS_LEN;
-         |                         ^~~
-
-
-vim +3600 drivers/net/usb/lan78xx.c
-
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3552  
-ec4c7e12396b1a John Efstathiades         2021-11-18  3553  static int lan78xx_rx(struct lan78xx_net *dev, struct sk_buff *skb,
-ec4c7e12396b1a John Efstathiades         2021-11-18  3554  		      int budget, int *work_done)
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3555  {
-0dd87266c1337d John Efstathiades         2021-11-18  3556  	if (skb->len < RX_SKB_MIN_LEN)
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3557  		return 0;
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3558  
-ec4c7e12396b1a John Efstathiades         2021-11-18  3559  	/* Extract frames from the URB buffer and pass each one to
-ec4c7e12396b1a John Efstathiades         2021-11-18  3560  	 * the stack in a new NAPI SKB.
-ec4c7e12396b1a John Efstathiades         2021-11-18  3561  	 */
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3562  	while (skb->len > 0) {
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3563  		u32 rx_cmd_a, rx_cmd_b, align_count, size;
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3564  		u16 rx_cmd_c;
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3565  		unsigned char *packet;
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3566  
-bb448f8a60ea93 Chuhong Yuan              2019-07-19  3567  		rx_cmd_a = get_unaligned_le32(skb->data);
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3568  		skb_pull(skb, sizeof(rx_cmd_a));
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3569  
-bb448f8a60ea93 Chuhong Yuan              2019-07-19  3570  		rx_cmd_b = get_unaligned_le32(skb->data);
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3571  		skb_pull(skb, sizeof(rx_cmd_b));
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3572  
-bb448f8a60ea93 Chuhong Yuan              2019-07-19  3573  		rx_cmd_c = get_unaligned_le16(skb->data);
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3574  		skb_pull(skb, sizeof(rx_cmd_c));
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3575  
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3576  		packet = skb->data;
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3577  
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3578  		/* get the packet length */
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3579  		size = (rx_cmd_a & RX_CMD_A_LEN_MASK_);
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3580  		align_count = (4 - ((size + RXW_PADDING) % 4)) % 4;
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3581  
-0110af02bdfd21 Szymon Heidrich           2023-03-17  3582  		if (unlikely(size > skb->len)) {
-0110af02bdfd21 Szymon Heidrich           2023-03-17  3583  			netif_dbg(dev, rx_err, dev->net,
-0110af02bdfd21 Szymon Heidrich           2023-03-17  3584  				  "size err rx_cmd_a=0x%08x\n",
-0110af02bdfd21 Szymon Heidrich           2023-03-17  3585  				  rx_cmd_a);
-0110af02bdfd21 Szymon Heidrich           2023-03-17  3586  			return 0;
-0110af02bdfd21 Szymon Heidrich           2023-03-17  3587  		}
-0110af02bdfd21 Szymon Heidrich           2023-03-17  3588  
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3589  		if (unlikely(rx_cmd_a & RX_CMD_A_RED_)) {
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3590  			netif_dbg(dev, rx_err, dev->net,
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3591  				  "Error rx_cmd_a=0x%08x", rx_cmd_a);
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3592  		} else {
-0110af02bdfd21 Szymon Heidrich           2023-03-17  3593  			if (unlikely(size < ETH_FCS_LEN)) {
-0110af02bdfd21 Szymon Heidrich           2023-03-17  3594  				netif_dbg(dev, rx_err, dev->net,
-0110af02bdfd21 Szymon Heidrich           2023-03-17  3595  					  "size err rx_cmd_a=0x%08x\n",
-0110af02bdfd21 Szymon Heidrich           2023-03-17  3596  					  rx_cmd_a);
-0110af02bdfd21 Szymon Heidrich           2023-03-17  3597  				return 0;
-0110af02bdfd21 Szymon Heidrich           2023-03-17  3598  			}
-0110af02bdfd21 Szymon Heidrich           2023-03-17  3599  
-ec4c7e12396b1a John Efstathiades         2021-11-18 @3600  			u32 frame_len = size - ETH_FCS_LEN;
-ec4c7e12396b1a John Efstathiades         2021-11-18  3601  			struct sk_buff *skb2;
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3602  
-ec4c7e12396b1a John Efstathiades         2021-11-18  3603  			skb2 = napi_alloc_skb(&dev->napi, frame_len);
-ec4c7e12396b1a John Efstathiades         2021-11-18  3604  			if (!skb2)
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3605  				return 0;
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3606  
-ec4c7e12396b1a John Efstathiades         2021-11-18  3607  			memcpy(skb2->data, packet, frame_len);
-ec4c7e12396b1a John Efstathiades         2021-11-18  3608  
-ec4c7e12396b1a John Efstathiades         2021-11-18  3609  			skb_put(skb2, frame_len);
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3610  
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3611  			lan78xx_rx_csum_offload(dev, skb2, rx_cmd_a, rx_cmd_b);
-ec21ecf0aad279 Dave Stevenson            2018-06-25  3612  			lan78xx_rx_vlan_offload(dev, skb2, rx_cmd_a, rx_cmd_b);
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3613  
-ec4c7e12396b1a John Efstathiades         2021-11-18  3614  			/* Processing of the URB buffer must complete once
-ec4c7e12396b1a John Efstathiades         2021-11-18  3615  			 * it has started. If the NAPI work budget is exhausted
-ec4c7e12396b1a John Efstathiades         2021-11-18  3616  			 * while frames remain they are added to the overflow
-ec4c7e12396b1a John Efstathiades         2021-11-18  3617  			 * queue for delivery in the next NAPI polling cycle.
-ec4c7e12396b1a John Efstathiades         2021-11-18  3618  			 */
-ec4c7e12396b1a John Efstathiades         2021-11-18  3619  			if (*work_done < budget) {
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3620  				lan78xx_skb_return(dev, skb2);
-ec4c7e12396b1a John Efstathiades         2021-11-18  3621  				++(*work_done);
-ec4c7e12396b1a John Efstathiades         2021-11-18  3622  			} else {
-ec4c7e12396b1a John Efstathiades         2021-11-18  3623  				skb_queue_tail(&dev->rxq_overflow, skb2);
-ec4c7e12396b1a John Efstathiades         2021-11-18  3624  			}
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3625  		}
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3626  
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3627  		skb_pull(skb, size);
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3628  
-ec4c7e12396b1a John Efstathiades         2021-11-18  3629  		/* skip padding bytes before the next frame starts */
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3630  		if (skb->len)
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3631  			skb_pull(skb, align_count);
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3632  	}
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3633  
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3634  	return 1;
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3635  }
-55d7de9de6c30a Woojung.Huh@microchip.com 2015-07-30  3636  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
