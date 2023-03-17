@@ -2,178 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06E336BF1A2
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 20:26:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 573346BF1A7
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 20:27:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230100AbjCQT00 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 15:26:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35510 "EHLO
+        id S230266AbjCQT1v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 15:27:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230146AbjCQT0Y (ORCPT
+        with ESMTP id S229604AbjCQT1t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 15:26:24 -0400
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D304D42BCA
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 12:26:21 -0700 (PDT)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-54195ef155aso111957837b3.9
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 12:26:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112; t=1679081181;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fDoP7wMOn5QpwBzbN9iej+FeZ8kKaqhVDSnQkP9mPKA=;
-        b=if4Xv7MHtb5r/yx0jJJa7ZCf6eQjI9hJYAxsdQIFhamSCND9oLO8bYH/C2I1hUNeY8
-         1BMlZLqLplLYHXMOHyoHWHhK4KDJObKlGKWpddb0oQRIBHss6GquFZ5dFLsAcM6NYro+
-         pabWPsc5c8HNd6rzXX99ECRdtkqom+eV/fa7fIRLQXScMk7ka8eBFKmzBLBeKeAYCgXz
-         Fo+VHMBQrrJ/j6Msoz1ab/7ZmVPRSyaBZpelmaWMMBlQpNFXaweiJf87AR3+9nefm4Go
-         W8PPE9VHbz+5CAs9WWpzHA+c7oQ78s1CCMbx+v4aqVmba1SLdbQ06c/wt7SrZl86mumM
-         +c2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679081181;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fDoP7wMOn5QpwBzbN9iej+FeZ8kKaqhVDSnQkP9mPKA=;
-        b=lQJnXoI142ZoJtwgMEhte7rrPJYP/9nnMlFL/jvFMj6rELuChjqqvqlC/Ly14Kd3zz
-         kUytNQAlolBl5xHslDmyw0XN/S5pFaTTZxmxzn0qGBhhB1JLpgPUtRi9vZ2ticLEur+D
-         9yqVCBWI7uXr8BDptrPwZKlpeXso5dVCCd8fx/FflZYoynu9Wn/WfSIwDM3kNr/uWpL9
-         GwCNfcnDNeVZv/DSJS2M8BTAYr+RAGq71xpWRck0dVc5A7ZRKoON+G9Pw19mPNelQ7/h
-         v+7TsPFXJZTQaEGyvmZJU0l+x5kiQ5689TZoPOWKoUBvhDiCT1AitknqkvvzJfbw72KB
-         /Bwg==
-X-Gm-Message-State: AO0yUKVySlja7vcW+tM60w1kt5nU7LVfMAkAZwRBB4tGEumYiWZPFpJY
-        t0Z5hHu7G9UnNXE32h46FhKlExurQQ8OMS/VmKaS6Q==
-X-Google-Smtp-Source: AK7set+myjiUnKVO61LEZiJcudJZOJn6IXxmmQI8lH+wNR24WEkoog27XzLkn1lq3skZj5f0wOGKIvBdFCYchYFCzTo=
-X-Received: by 2002:a81:1904:0:b0:542:927b:1c79 with SMTP id
- 4-20020a811904000000b00542927b1c79mr2742027ywz.3.1679081180481; Fri, 17 Mar
- 2023 12:26:20 -0700 (PDT)
+        Fri, 17 Mar 2023 15:27:49 -0400
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBD4810A9F;
+        Fri, 17 Mar 2023 12:27:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=uxf5gWwvz7UPGdoL8yu+UzoQ93mCh7u52QZx31NTrrM=; b=bWanNDEItZAe6i1FJsviwCR23C
+        Pe//0OgtOtPwqrWJGwrrOSRvnInUQPEBS5M9bUNzj0wpQ1qM9RzTUeSdHSIizvsPvtcJ96XQDGwgv
+        niqcfKQTKYYAikI1IUkvYNms6Q2Evw22YnnBFZWuN0jCCjcOUer4CS6C9GOrPCl0JVwDjCXVoEPxO
+        u8e8OdIpP17Mx299Rj0Dbs4mlj867PmZu1B33kf/XLgakzHs8Lg7ozVEEBfzCbmB+UOVMIk62riPm
+        dFvNibai7+6rRvRVOE5N/RbSIMQs4IA0abA37tTvN5LD1s+/TJRQhe+40ZFZDt4LWEHGWXSDhdbhj
+        UzWjmsfg==;
+Received: from [152.254.169.34] (helo=[192.168.1.60])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1pdFjl-00GDoz-Hb; Fri, 17 Mar 2023 20:27:38 +0100
+Message-ID: <25e0fc05-fff3-87b6-14a7-4ab8b07cec01@igalia.com>
+Date:   Fri, 17 Mar 2023 16:27:28 -0300
 MIME-Version: 1.0
-References: <20230227222957.24501-1-rick.p.edgecombe@intel.com>
- <20230227222957.24501-23-rick.p.edgecombe@intel.com> <CAKC1njQ+resjS-O8vAVLhRfLHEdgta09faEr5zwi1JTNSWK0Fw@mail.gmail.com>
- <236ae66c-fafb-80e9-d58b-6b18a22071c1@intel.com> <CAKC1njR6WEuXbghupaX6R8LPSVP69yofYNb5+tEp5huHvsroCw@mail.gmail.com>
- <e9a302a41d68c4886d8d1989438d92eb2a89b922.camel@intel.com>
-In-Reply-To: <e9a302a41d68c4886d8d1989438d92eb2a89b922.camel@intel.com>
-From:   Deepak Gupta <debug@rivosinc.com>
-Date:   Fri, 17 Mar 2023 12:26:08 -0700
-Message-ID: <CAKC1njQL8zNHh35wbpQ71ncqOTdm-L9+sbp9aDmUOHRcqV+Z6A@mail.gmail.com>
-Subject: Re: [PATCH v7 22/41] mm/mmap: Add shadow stack pages to memory accounting
-To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc:     "Hansen, Dave" <dave.hansen@intel.com>,
-        "david@redhat.com" <david@redhat.com>,
-        "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "Eranian, Stephane" <eranian@google.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "dethoma@microsoft.com" <dethoma@microsoft.com>,
-        "kcc@google.com" <kcc@google.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "bp@alien8.de" <bp@alien8.de>, "oleg@redhat.com" <oleg@redhat.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "pavel@ucw.cz" <pavel@ucw.cz>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "Schimpe, Christina" <christina.schimpe@intel.com>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v3] x86/hyperv: Mark hv_ghcb_terminate() as noreturn
+Content-Language: en-US
+To:     Josh Poimboeuf <jpoimboe@kernel.org>,
+        Michael Kelley <mikelley@microsoft.com>
+Cc:     linux-hyperv@vger.kernel.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, decui@microsoft.com,
+        haiyangz@microsoft.com, kys@microsoft.com, wei.liu@kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com,
+        thomas.lendacky@amd.com, peterz@infradead.org,
+        kernel-dev@igalia.com, kernel@gpiccoli.net,
+        Arnd Bergmann <arnd@arndb.de>
+References: <20230310154452.1169204-1-gpiccoli@igalia.com>
+ <20230317160546.1497477-1-gpiccoli@igalia.com>
+ <20230317162434.dpby4idecp7a6hrg@treble>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <20230317162434.dpby4idecp7a6hrg@treble>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 17, 2023 at 10:42=E2=80=AFAM Edgecombe, Rick P
-<rick.p.edgecombe@intel.com> wrote:
->
-> On Fri, 2023-03-17 at 10:28 -0700, Deepak Gupta wrote:
-> > On Fri, Mar 17, 2023 at 10:16=E2=80=AFAM Dave Hansen <dave.hansen@intel=
-.com>
-> > wrote:
-> > >
-> > > On 3/17/23 10:12, Deepak Gupta wrote:
-> > > > >   /*
-> > > > > - * Stack area - automatically grows in one direction
-> > > > > + * Stack area
-> > > > >    *
-> > > > > - * VM_GROWSUP / VM_GROWSDOWN VMAs are always private
-> > > > > anonymous:
-> > > > > - * do_mmap() forbids all other combinations.
-> > > > > + * VM_GROWSUP, VM_GROWSDOWN VMAs are always private
-> > > > > + * anonymous. do_mmap() forbids all other combinations.
-> > > > >    */
-> > > > >   static inline bool is_stack_mapping(vm_flags_t flags)
-> > > > >   {
-> > > > > -       return (flags & VM_STACK) =3D=3D VM_STACK;
-> > > > > +       return ((flags & VM_STACK) =3D=3D VM_STACK) || (flags &
-> > > > > VM_SHADOW_STACK);
-> > > >
-> > > > Same comment here. `VM_SHADOW_STACK` is an x86 specific way of
-> > > > encoding a shadow stack.
-> > > > Instead let's have a proxy here which allows architectures to
-> > > > have
-> > > > their own encodings to represent a shadow stack.
-> > >
-> > > This doesn't _preclude_ another architecture from coming along and
-> > > doing
-> > > that, right?  I'd just prefer that shadow stack architecture #2
-> > > comes
-> > > along and refactors this in precisely the way _they_ need it.
-> >
-> > There are two issues here
-> >  - Encoding of shadow stack: Another arch can choose different
-> > encoding.
-> >    And yes, another architecture can come in and re-factor it. But so
-> > much thought and work has been given to x86 implementation to keep
-> >    shadow stack to not impact arch agnostic parts of the kernel. So
-> > why creep it in here.
-> >
-> > - VM_SHADOW_STACK is coming out of the VM_HIGH_ARCH_XX bit position
-> > which makes it arch specific.
-> >
-> >
->
-> VM_SHADOW_STACK is defined like this (trimmed for clarity):
-> #ifdef CONFIG_X86_USER_SHADOW_STACK
-> # define VM_SHADOW_STACK        VM_HIGH_ARCH_5
-> #else
-> # define VM_SHADOW_STACK        VM_NONE
-> #endif
+On 17/03/2023 13:24, Josh Poimboeuf wrote:
+> [...]
+> 
+> Looks good to me.  I've got some other noreturn fixes pending, so I can
+> add this patch to the pile unless somebody else wants to take it.
 
-Ok.
+Thanks, that'd be great. And thanks Michael for your review =)
 
->
-> Also, we actually had an is_shadow_stack_mapping(vma) in the past, but
-> it was dropped from other feedback.
-
-looks like I've been late to the party.
-IMHO, that was the right approach.
-
->
->
