@@ -2,346 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEA946BE17F
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 07:46:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4BE26BE136
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 07:27:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229624AbjCQGqQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 02:46:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33046 "EHLO
+        id S229904AbjCQG1C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 02:27:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229621AbjCQGqN (ORCPT
+        with ESMTP id S229881AbjCQG07 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 02:46:13 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28969ABAC1;
-        Thu, 16 Mar 2023 23:46:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679035572; x=1710571572;
-  h=date:from:to:cc:subject:message-id:reply-to:references:
-   in-reply-to:mime-version;
-  bh=M5FqumOfsEIH5gJqt4jI4/kH7tGkjckgXV97Lv5MtUg=;
-  b=B3S2nIxZt8pzDFA0ZfVvdYR3yf37Cr05NMNPu9amYi4+EVZ4ud1QX/qR
-   Ds7R9o9Lws09OTpCF0zO9pUeZpdB2zwAQxJHt+EVo9VCfTcbING1ZbE0D
-   aP31Wqkfe+SDnin2fFEHexCmrZ8qkIkO/VqRd1ywayHO/pevwIxm8JxPR
-   9YyopTEXGjuMBDegHmso9XGXnG8a/OtFQ+lNOcf4k85LZb23K6Cq4aOn1
-   MhRs8U0m0dWv+mvax4rlR7L8UMoc9QQRgMRv/P8MDHa79tgcmczvh1eZF
-   x9Zc/591EUwVT6VwsELqB20Y1m4nDYLWtDs76jSzCRZd+oErzk1diyUYN
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="339736121"
-X-IronPort-AV: E=Sophos;i="5.98,268,1673942400"; 
-   d="scan'208";a="339736121"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 23:46:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="657453567"
-X-IronPort-AV: E=Sophos;i="5.98,268,1673942400"; 
-   d="scan'208";a="657453567"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by orsmga006.jf.intel.com with ESMTP; 16 Mar 2023 23:46:11 -0700
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Thu, 16 Mar 2023 23:46:11 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Thu, 16 Mar 2023 23:46:11 -0700
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21 via Frontend Transport; Thu, 16 Mar 2023 23:46:11 -0700
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (104.47.73.45) by
- edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.21; Thu, 16 Mar 2023 23:46:09 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BKJRDbtahG+sPFAmA12aq3V8kwdn//fIkJJlktbEUoq7OWh080J/uWJey4FwSdsjJPA10bPmFX7nRoAI3pwfxWsPUOGHmjavS08NGswSf5LyXGkQd2STbCyiIOa18+kXQDlpPK2l+ijZFk4nvY0qIm3OiTZ4MlEeyIjCd9peVgHTIDS4sE0iCB8TmKIW+/pixGECK2KUyEZ1RArfCq6fIqsLJt7sB2ap/YoT/F779uJ11FGSWSsbS4R9nIkKs7vvpyJVgomjGX/qpBPDl/iN0xSwu/jmn+m+vqK/bdY1FRlt4DhBMlNB85ZB9CVWAhFYZNTalJL1euJB/FimUD/9dw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=9EUm7/oxaTWRU39gx8LQrFRFEcvJROXynkPVMIJmyHk=;
- b=jG6wBKfW+jOA0i9wRtj1zHg1qfH1vuWMkRTBVIMzbvJbjA9gk68yzjYZgrlEC+dZ9Qqj3Cw/V/zdZIFbD6IfjFAZ+/oNrvsSFZuS4abwF5NKtlURxsB5BVZWaUD8ajg61uLF6t78TTzrdnP9PoKzzCZcoh9N/LqPYHb1EcHxzXHSLJMm3NwGKS+XPGmGrJfaLvZ1RDBHpMnxvlo4FpJdfqoeu0W48M6CcfHJHplkRIgUrFd2FOgDWexSYjdh4mgU4W+ZTToHDGv4/CQfagIv1d0ZrHvd2Y0hZfDNZtuk+UeJSXT9erDvygbJq5xIRc3L3MFRTsDudb6De5pNtINKyA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DS7PR11MB5966.namprd11.prod.outlook.com (2603:10b6:8:71::6) by
- SA1PR11MB8253.namprd11.prod.outlook.com (2603:10b6:806:250::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.35; Fri, 17 Mar
- 2023 06:46:07 +0000
-Received: from DS7PR11MB5966.namprd11.prod.outlook.com
- ([fe80::b00e:ac74:158e:1c7e]) by DS7PR11MB5966.namprd11.prod.outlook.com
- ([fe80::b00e:ac74:158e:1c7e%4]) with mapi id 15.20.6178.026; Fri, 17 Mar 2023
- 06:46:07 +0000
-Date:   Fri, 17 Mar 2023 14:21:29 +0800
-From:   Yan Zhao <yan.y.zhao@intel.com>
-To:     Sean Christopherson <seanjc@google.com>
-CC:     Paolo Bonzini <pbonzini@redhat.com>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>,
-        Zhi Wang <zhi.a.wang@intel.com>, <kvm@vger.kernel.org>,
-        <intel-gvt-dev@lists.freedesktop.org>,
-        <intel-gfx@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
-        Ben Gardon <bgardon@google.com>
-Subject: Re: [PATCH v2 10/27] drm/i915/gvt: Protect gfn hash table with
- vgpu_lock
-Message-ID: <ZBQG6SIS2a4WBjNc@yzhao56-desk.sh.intel.com>
-Reply-To: Yan Zhao <yan.y.zhao@intel.com>
-References: <20230311002258.852397-1-seanjc@google.com>
- <20230311002258.852397-11-seanjc@google.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20230311002258.852397-11-seanjc@google.com>
-X-ClientProxiedBy: SG2PR04CA0186.apcprd04.prod.outlook.com
- (2603:1096:4:14::24) To DS7PR11MB5966.namprd11.prod.outlook.com
- (2603:10b6:8:71::6)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS7PR11MB5966:EE_|SA1PR11MB8253:EE_
-X-MS-Office365-Filtering-Correlation-Id: c179e12f-1b07-4070-3a79-08db26b34906
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ZZcuPfT8yh+N5inrHrsFmeKs5RLS9/dCtYpICVn6G7BXHlcTehYhLcmpnw8+1jlelZJB30+UpctA+BiheSVS6ME74aJ2ZOGQqA+1OcmHVUmFKwtG9vXB1IrjdZjuATBKE9NfH0JSQZI4m4MVzChj28o5hQfaiPNcGzrR82Qz1/vP3kHmXvIQ64ONKXpXIGMEK/nSgIEIUaW7r3xs1be4pGziZMi3MDgwMI4L/KQkgb2twYKbr187LpJW3NptCq4GMo1TO4GjduJ2aLel4offFTtrG+MyLmhQW9sZnDlKECTDHDuzRnpLKu7nLVbbhWXrbQaSbaggQzex0LQS51jM4QaKaxQ6RzCuGnaSB+ssWK6HFzJsY9vQvMi4FCvghgNnYV6UiQsQCGFVET93Az54SeIR5VXw3CJa4x4P7vpoQy80cLd2Haid0PuIgQeyZQ4EUxUW6cBvjP0b0f74tErFgSA8DuR6wwdKVfCoE/3CRc0d69fQZytbENOiLQl0uJYd1fWIgJimJhbMc6X4ybRm6v+pAzl0Rxj50TZ8xI8FXhBSkoN8Pq/VhOyw2urxMwa//XqgQRcU/GYyeMh/SiCatbqNYhX9jChiEHXJk0oODn+YTW3KsGwaO8LGBWmPGnB6sfVLtzJOccvDyUubAk387g==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR11MB5966.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(39860400002)(346002)(366004)(136003)(396003)(376002)(451199018)(5660300002)(8936002)(2906002)(41300700001)(3450700001)(316002)(8676002)(66476007)(66556008)(54906003)(478600001)(6486002)(6916009)(6666004)(83380400001)(186003)(26005)(6512007)(6506007)(4326008)(66946007)(86362001)(82960400001)(38100700002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?pevretJm3gBlix0ZT28P42zZBizUM0TkTninuHuZz4aVHIty3fXt3UsWUnnE?=
- =?us-ascii?Q?1Tqm94D00g1aMKvN2CtEEA619fevEJ0k+NymjbZQY6e/99w5fiSYMP0W3eVa?=
- =?us-ascii?Q?TRPieSnjF2IdM1X88h4ZZVCUSTHZP2eoMu6mRT2fz23PRC+3IfrFAhTos90p?=
- =?us-ascii?Q?hVhFO2mwoUQrx9VTqA2KBaMokalil6EAhrLWn78WnAFHaLlZrwfqhl8pFwFo?=
- =?us-ascii?Q?yVGOVkLUajqy/IxbuLMmJ50FUr0HVAOLoeqsRYj/SZG2mCKgcfSSIEDHXavI?=
- =?us-ascii?Q?RMETBPe68H8wswG9mCjJcMc00OafOPXTYIlVi4dtJRBdLsZqCpXRw/MiAlTY?=
- =?us-ascii?Q?kggdVpLrmTy7U+DceTPJ/ZDDt8sCDVQ4+eBrQaUmouTvClIL6K8yTZbn/OWp?=
- =?us-ascii?Q?4Dac6pgf3GtH9jAxGcFMUxbHjrDsjNMMMqJfCIwqH4X4NaQNdhAqVAQT7Sl5?=
- =?us-ascii?Q?0/hsFXlvBDxea9eMaOAZ2K3j/YTSTQJCgchkVfWdO7P+k8okZH5xoOXwwIB/?=
- =?us-ascii?Q?dtxNUeNjNliJ7C6nSSFnZL94VHTDXNJ9QU127KKhLSv3Ke6E7rA3BMmiSmCT?=
- =?us-ascii?Q?pbaaBrKyPTTDDiXoHdRdCY3V9w+pNqfyUUO4n4/cNOHnulgT7nJ2aTJOXWE7?=
- =?us-ascii?Q?m8LOSqlVFpcdjuqf66gVjo+Kmu9BIuFeMxSzCgcLbFydEkdu88NVHwfJlpzE?=
- =?us-ascii?Q?kC+mqhQgCOtujOKuI0LBXCQLEe4go0cgRweOxzgqXtP/EpNSl/fzrhKg1u2K?=
- =?us-ascii?Q?2qn4y8GOezZw2KcdYPp3LIWfLuF77W9flnKLZCx/EtV7CJ4UcSPMCI2tKVh1?=
- =?us-ascii?Q?o2YhP47JYWMIvR2yf2LuitkVHS/Wlc1DfQr/QvDFHE6b0r703RAj/AsQzA5x?=
- =?us-ascii?Q?jSIhxEIWyvOHnFKV6JhWkuS8/JBsJFPx4+vOXXj23QLF0gPsasnjoG2nrMjX?=
- =?us-ascii?Q?9MsrXv1R5sHQu5pH0bmEfCwhsEh5G1Ub5DcuRBULyCgE6Mbj+BTpKtbbW9E5?=
- =?us-ascii?Q?MVj0cvLaxLGmoNWxL4umrnydxE/5ork+9LjSzFdHdfyhLa7cRBSFLyalGCNi?=
- =?us-ascii?Q?yExRtcfqkRg8z1HrD7zqsVM5LWLUYtGbzqaKASz1pfLp5TAFfvVUs7PNYeBl?=
- =?us-ascii?Q?1J+Iac9m0OPEsLBZTFMssz+JPZ9EgA45YTwxIz437/ZnkorChlZtUvIdw/u2?=
- =?us-ascii?Q?rIYNrhwfp0lKDDGaFe4kq/sYbxQtSMSVrhEy0YRsZ8CPUL+2XdjdMj7Tqiih?=
- =?us-ascii?Q?/97lTKQaqbd4wq8OawkLIbELBEZ1RxJWqi5JC7yVzKsGcxqwm3LHVOK3c8GH?=
- =?us-ascii?Q?xYZ9ZQleJOj0OKJO5KE2meKxY0sJqvi0qz1sGsAsxuvqbEozhQWPsbGsar4U?=
- =?us-ascii?Q?807ATigpM5croJsMZNPkiZw1odtTVjaN+XNV743wx3ki2X+K0rzynY4Ak3B6?=
- =?us-ascii?Q?S7mg5cNxDBjjVdvp4S2nSnRBvk7a1zziK1DgOlSx4xb4JMo4nYNMiB5FJy7b?=
- =?us-ascii?Q?VmDH7E6WQGTKN5w1UVyu354iVCPtMfhjx7H6RHwBo6olVAJfrX9BYo1Hc+sI?=
- =?us-ascii?Q?VXBWkSuzW+EVCkyWbQ0F+0Djtfrfkl64hVvJ9h+4Hm5AANU6HZKOqJzcBfZe?=
- =?us-ascii?Q?Sw=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: c179e12f-1b07-4070-3a79-08db26b34906
-X-MS-Exchange-CrossTenant-AuthSource: DS7PR11MB5966.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Mar 2023 06:46:07.0609
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: x0hCsyxv9ehDoqNDgp0XHuUezXx+/y0aRC2y9VhnE+FJaZTBhx137Utpbe1Ov/ddXhmTDxckwhQ+nnhsiS04Mw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR11MB8253
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 17 Mar 2023 02:26:59 -0400
+Received: from mail.nfschina.com (unknown [42.101.60.237])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8AB3B71B3;
+        Thu, 16 Mar 2023 23:26:54 -0700 (PDT)
+Received: from localhost (unknown [127.0.0.1])
+        by mail.nfschina.com (Postfix) with ESMTP id 112831A00AE2;
+        Fri, 17 Mar 2023 14:26:54 +0800 (CST)
+X-Virus-Scanned: amavisd-new at nfschina.com
+Received: from mail.nfschina.com ([127.0.0.1])
+        by localhost (localhost.localdomain [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id WitBJxWGFz4N; Fri, 17 Mar 2023 14:26:53 +0800 (CST)
+Received: from localhost.localdomain (unknown [180.167.10.98])
+        (Authenticated sender: yuzhe@nfschina.com)
+        by mail.nfschina.com (Postfix) with ESMTPA id 727801A00ADF;
+        Fri, 17 Mar 2023 14:26:52 +0800 (CST)
+From:   Yu Zhe <yuzhe@nfschina.com>
+To:     herbert@gondor.apana.org.au, davem@davemloft.net
+Cc:     linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, liqiong@nfshcina.com,
+        Yu Zhe <yuzhe@nfschina.com>
+Subject: [PATCH] crypto: remove unnecessary (void*) conversions
+Date:   Fri, 17 Mar 2023 14:26:03 +0800
+Message-Id: <20230317062603.1729-1-yuzhe@nfschina.com>
+X-Mailer: git-send-email 2.11.0
+X-Spam-Status: No, score=0.2 required=5.0 tests=BAYES_00,RCVD_IN_VALIDITY_RPBL,
+        RDNS_NONE,SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reviewed-by: Yan Zhao <yan.y.zhao@intel.com>
+Pointer variables of void * type do not require type cast.
 
-On Fri, Mar 10, 2023 at 04:22:41PM -0800, Sean Christopherson wrote:
-> Use vgpu_lock instead of KVM's mmu_lock to protect accesses to the hash
-> table used to track which gfns are write-protected when shadowing the
-> guest's GTT, and hoist the acquisition of vgpu_lock from
-> intel_vgpu_page_track_handler() out to its sole caller,
-> kvmgt_page_track_write().
-> 
-> This fixes a bug where kvmgt_page_track_write(), which doesn't hold
-> kvm->mmu_lock, could race with intel_gvt_page_track_remove() and trigger
-> a use-after-free.
-> 
-> Fixing kvmgt_page_track_write() by taking kvm->mmu_lock is not an option
-> as mmu_lock is a r/w spinlock, and intel_vgpu_page_track_handler() might
-> sleep when acquiring vgpu->cache_lock deep down the callstack:
-> 
->   intel_vgpu_page_track_handler()
->   |
->   |->  page_track->handler / ppgtt_write_protection_handler()
->        |
->        |-> ppgtt_handle_guest_write_page_table_bytes()
->            |
->            |->  ppgtt_handle_guest_write_page_table()
->                 |
->                 |-> ppgtt_handle_guest_entry_removal()
->                     |
->                     |-> ppgtt_invalidate_pte()
->                         |
->                         |-> intel_gvt_dma_unmap_guest_page()
->                             |
->                             |-> mutex_lock(&vgpu->cache_lock);
-> 
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
->  drivers/gpu/drm/i915/gvt/kvmgt.c      | 55 +++++++++++++++------------
->  drivers/gpu/drm/i915/gvt/page_track.c | 10 +----
->  2 files changed, 33 insertions(+), 32 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/i915/gvt/kvmgt.c b/drivers/gpu/drm/i915/gvt/kvmgt.c
-> index 68be66395598..9824d075562e 100644
-> --- a/drivers/gpu/drm/i915/gvt/kvmgt.c
-> +++ b/drivers/gpu/drm/i915/gvt/kvmgt.c
-> @@ -366,6 +366,8 @@ __kvmgt_protect_table_find(struct intel_vgpu *info, gfn_t gfn)
->  {
->  	struct kvmgt_pgfn *p, *res = NULL;
->  
-> +	lockdep_assert_held(&info->vgpu_lock);
-> +
->  	hash_for_each_possible(info->ptable, p, hnode, gfn) {
->  		if (gfn == p->gfn) {
->  			res = p;
-> @@ -1567,6 +1569,9 @@ int intel_gvt_page_track_add(struct intel_vgpu *info, u64 gfn)
->  	if (!test_bit(INTEL_VGPU_STATUS_ATTACHED, info->status))
->  		return -ESRCH;
->  
-> +	if (kvmgt_gfn_is_write_protected(info, gfn))
-> +		return 0;
-> +
->  	idx = srcu_read_lock(&kvm->srcu);
->  	slot = gfn_to_memslot(kvm, gfn);
->  	if (!slot) {
-> @@ -1575,16 +1580,12 @@ int intel_gvt_page_track_add(struct intel_vgpu *info, u64 gfn)
->  	}
->  
->  	write_lock(&kvm->mmu_lock);
-> -
-> -	if (kvmgt_gfn_is_write_protected(info, gfn))
-> -		goto out;
-> -
->  	kvm_slot_page_track_add_page(kvm, slot, gfn, KVM_PAGE_TRACK_WRITE);
-> +	write_unlock(&kvm->mmu_lock);
-> +
-> +	srcu_read_unlock(&kvm->srcu, idx);
-> +
->  	kvmgt_protect_table_add(info, gfn);
-> -
-> -out:
-> -	write_unlock(&kvm->mmu_lock);
-> -	srcu_read_unlock(&kvm->srcu, idx);
->  	return 0;
->  }
->  
-> @@ -1597,24 +1598,22 @@ int intel_gvt_page_track_remove(struct intel_vgpu *info, u64 gfn)
->  	if (!test_bit(INTEL_VGPU_STATUS_ATTACHED, info->status))
->  		return -ESRCH;
->  
-> -	idx = srcu_read_lock(&kvm->srcu);
-> -	slot = gfn_to_memslot(kvm, gfn);
-> -	if (!slot) {
-> -		srcu_read_unlock(&kvm->srcu, idx);
-> -		return -EINVAL;
-> -	}
-> -
-> -	write_lock(&kvm->mmu_lock);
-> -
->  	if (!kvmgt_gfn_is_write_protected(info, gfn))
-> -		goto out;
-> +		return 0;
->  
-> +	idx = srcu_read_lock(&kvm->srcu);
-> +	slot = gfn_to_memslot(kvm, gfn);
-> +	if (!slot) {
-> +		srcu_read_unlock(&kvm->srcu, idx);
-> +		return -EINVAL;
-> +	}
-> +
-> +	write_lock(&kvm->mmu_lock);
->  	kvm_slot_page_track_remove_page(kvm, slot, gfn, KVM_PAGE_TRACK_WRITE);
-> +	write_unlock(&kvm->mmu_lock);
-> +	srcu_read_unlock(&kvm->srcu, idx);
-> +
->  	kvmgt_protect_table_del(info, gfn);
-> -
-> -out:
-> -	write_unlock(&kvm->mmu_lock);
-> -	srcu_read_unlock(&kvm->srcu, idx);
->  	return 0;
->  }
->  
-> @@ -1625,9 +1624,13 @@ static void kvmgt_page_track_write(struct kvm_vcpu *vcpu, gpa_t gpa,
->  	struct intel_vgpu *info =
->  		container_of(node, struct intel_vgpu, track_node);
->  
-> +	mutex_lock(&info->vgpu_lock);
-> +
->  	if (kvmgt_gfn_is_write_protected(info, gpa_to_gfn(gpa)))
->  		intel_vgpu_page_track_handler(info, gpa,
->  						     (void *)val, len);
-> +
-> +	mutex_unlock(&info->vgpu_lock);
->  }
->  
->  static void kvmgt_page_track_flush_slot(struct kvm *kvm,
-> @@ -1639,16 +1642,20 @@ static void kvmgt_page_track_flush_slot(struct kvm *kvm,
->  	struct intel_vgpu *info =
->  		container_of(node, struct intel_vgpu, track_node);
->  
-> -	write_lock(&kvm->mmu_lock);
-> +	mutex_lock(&info->vgpu_lock);
-> +
->  	for (i = 0; i < slot->npages; i++) {
->  		gfn = slot->base_gfn + i;
->  		if (kvmgt_gfn_is_write_protected(info, gfn)) {
-> +			write_lock(&kvm->mmu_lock);
->  			kvm_slot_page_track_remove_page(kvm, slot, gfn,
->  						KVM_PAGE_TRACK_WRITE);
-> +			write_unlock(&kvm->mmu_lock);
-> +
->  			kvmgt_protect_table_del(info, gfn);
->  		}
->  	}
-> -	write_unlock(&kvm->mmu_lock);
-> +	mutex_unlock(&info->vgpu_lock);
->  }
->  
->  void intel_vgpu_detach_regions(struct intel_vgpu *vgpu)
-> diff --git a/drivers/gpu/drm/i915/gvt/page_track.c b/drivers/gpu/drm/i915/gvt/page_track.c
-> index df34e73cba41..60a65435556d 100644
-> --- a/drivers/gpu/drm/i915/gvt/page_track.c
-> +++ b/drivers/gpu/drm/i915/gvt/page_track.c
-> @@ -162,13 +162,9 @@ int intel_vgpu_page_track_handler(struct intel_vgpu *vgpu, u64 gpa,
->  	struct intel_vgpu_page_track *page_track;
->  	int ret = 0;
->  
-> -	mutex_lock(&vgpu->vgpu_lock);
-> -
->  	page_track = intel_vgpu_find_page_track(vgpu, gpa >> PAGE_SHIFT);
-> -	if (!page_track) {
-> -		ret = -ENXIO;
-> -		goto out;
-> -	}
-> +	if (!page_track)
-> +		return -ENXIO;
->  
->  	if (unlikely(vgpu->failsafe)) {
->  		/* Remove write protection to prevent furture traps. */
-> @@ -179,7 +175,5 @@ int intel_vgpu_page_track_handler(struct intel_vgpu *vgpu, u64 gpa,
->  			gvt_err("guest page write error, gpa %llx\n", gpa);
->  	}
->  
-> -out:
-> -	mutex_unlock(&vgpu->vgpu_lock);
->  	return ret;
->  }
-> -- 
-> 2.40.0.rc1.284.g88254d51c5-goog
-> 
+Signed-off-by: Yu Zhe <yuzhe@nfschina.com>
+---
+ drivers/crypto/hifn_795x.c | 24 ++++++++++++------------
+ drivers/crypto/img-hash.c  |  2 +-
+ drivers/crypto/sa2ul.c     |  6 +++---
+ drivers/crypto/sahara.c    |  4 ++--
+ 4 files changed, 18 insertions(+), 18 deletions(-)
+
+diff --git a/drivers/crypto/hifn_795x.c b/drivers/crypto/hifn_795x.c
+index 5a7f6611803c..8e4a49b7ab4f 100644
+--- a/drivers/crypto/hifn_795x.c
++++ b/drivers/crypto/hifn_795x.c
+@@ -879,7 +879,7 @@ static int hifn_enable_crypto(struct hifn_device *dev)
+ 
+ static void hifn_init_dma(struct hifn_device *dev)
+ {
+-	struct hifn_dma *dma = (struct hifn_dma *)dev->desc_virt;
++	struct hifn_dma *dma = dev->desc_virt;
+ 	u32 dptr = dev->desc_dma;
+ 	int i;
+ 
+@@ -1072,7 +1072,7 @@ static int hifn_setup_crypto_command(struct hifn_device *dev,
+ 		u8 *buf, unsigned dlen, unsigned slen,
+ 		u8 *key, int keylen, u8 *iv, int ivsize, u16 mode)
+ {
+-	struct hifn_dma *dma = (struct hifn_dma *)dev->desc_virt;
++	struct hifn_dma *dma = dev->desc_virt;
+ 	struct hifn_crypt_command *cry_cmd;
+ 	u8 *buf_pos = buf;
+ 	u16 cmd_len;
+@@ -1113,7 +1113,7 @@ static int hifn_setup_cmd_desc(struct hifn_device *dev,
+ 		struct hifn_context *ctx, struct hifn_request_context *rctx,
+ 		void *priv, unsigned int nbytes)
+ {
+-	struct hifn_dma *dma = (struct hifn_dma *)dev->desc_virt;
++	struct hifn_dma *dma = dev->desc_virt;
+ 	int cmd_len, sa_idx;
+ 	u8 *buf, *buf_pos;
+ 	u16 mask;
+@@ -1231,7 +1231,7 @@ static int hifn_setup_cmd_desc(struct hifn_device *dev,
+ static int hifn_setup_src_desc(struct hifn_device *dev, struct page *page,
+ 		unsigned int offset, unsigned int size, int last)
+ {
+-	struct hifn_dma *dma = (struct hifn_dma *)dev->desc_virt;
++	struct hifn_dma *dma = dev->desc_virt;
+ 	int idx;
+ 	dma_addr_t addr;
+ 
+@@ -1264,7 +1264,7 @@ static int hifn_setup_src_desc(struct hifn_device *dev, struct page *page,
+ 
+ static void hifn_setup_res_desc(struct hifn_device *dev)
+ {
+-	struct hifn_dma *dma = (struct hifn_dma *)dev->desc_virt;
++	struct hifn_dma *dma = dev->desc_virt;
+ 
+ 	dma->resr[dma->resi].l = __cpu_to_le32(HIFN_USED_RESULT |
+ 			HIFN_D_VALID | HIFN_D_LAST);
+@@ -1290,7 +1290,7 @@ static void hifn_setup_res_desc(struct hifn_device *dev)
+ static void hifn_setup_dst_desc(struct hifn_device *dev, struct page *page,
+ 		unsigned offset, unsigned size, int last)
+ {
+-	struct hifn_dma *dma = (struct hifn_dma *)dev->desc_virt;
++	struct hifn_dma *dma = dev->desc_virt;
+ 	int idx;
+ 	dma_addr_t addr;
+ 
+@@ -1710,7 +1710,7 @@ static void hifn_process_ready(struct skcipher_request *req, int error)
+ 
+ static void hifn_clear_rings(struct hifn_device *dev, int error)
+ {
+-	struct hifn_dma *dma = (struct hifn_dma *)dev->desc_virt;
++	struct hifn_dma *dma = dev->desc_virt;
+ 	int i, u;
+ 
+ 	dev_dbg(&dev->pdev->dev, "ring cleanup 1: i: %d.%d.%d.%d, u: %d.%d.%d.%d, "
+@@ -1784,7 +1784,7 @@ static void hifn_work(struct work_struct *work)
+ 
+ 	spin_lock_irqsave(&dev->lock, flags);
+ 	if (dev->active == 0) {
+-		struct hifn_dma *dma = (struct hifn_dma *)dev->desc_virt;
++		struct hifn_dma *dma = dev->desc_virt;
+ 
+ 		if (dma->cmdu == 0 && (dev->flags & HIFN_FLAG_CMD_BUSY)) {
+ 			dev->flags &= ~HIFN_FLAG_CMD_BUSY;
+@@ -1815,7 +1815,7 @@ static void hifn_work(struct work_struct *work)
+ 	if (reset) {
+ 		if (++dev->reset >= 5) {
+ 			int i;
+-			struct hifn_dma *dma = (struct hifn_dma *)dev->desc_virt;
++			struct hifn_dma *dma = dev->desc_virt;
+ 
+ 			dev_info(&dev->pdev->dev,
+ 				 "r: %08x, active: %d, started: %d, "
+@@ -1848,8 +1848,8 @@ static void hifn_work(struct work_struct *work)
+ 
+ static irqreturn_t hifn_interrupt(int irq, void *data)
+ {
+-	struct hifn_device *dev = (struct hifn_device *)data;
+-	struct hifn_dma *dma = (struct hifn_dma *)dev->desc_virt;
++	struct hifn_device *dev = data;
++	struct hifn_dma *dma = dev->desc_virt;
+ 	u32 dmacsr, restart;
+ 
+ 	dmacsr = hifn_read_1(dev, HIFN_1_DMA_CSR);
+@@ -1914,7 +1914,7 @@ static void hifn_flush(struct hifn_device *dev)
+ 	unsigned long flags;
+ 	struct crypto_async_request *async_req;
+ 	struct skcipher_request *req;
+-	struct hifn_dma *dma = (struct hifn_dma *)dev->desc_virt;
++	struct hifn_dma *dma = dev->desc_virt;
+ 	int i;
+ 
+ 	for (i = 0; i < HIFN_D_RES_RSIZE; ++i) {
+diff --git a/drivers/crypto/img-hash.c b/drivers/crypto/img-hash.c
+index fe93d19e3044..00e5e709af65 100644
+--- a/drivers/crypto/img-hash.c
++++ b/drivers/crypto/img-hash.c
+@@ -209,7 +209,7 @@ static int img_hash_xmit_cpu(struct img_hash_dev *hdev, const u8 *buf,
+ 
+ static void img_hash_dma_callback(void *data)
+ {
+-	struct img_hash_dev *hdev = (struct img_hash_dev *)data;
++	struct img_hash_dev *hdev = data;
+ 	struct img_hash_request_ctx *ctx = ahash_request_ctx(hdev->req);
+ 
+ 	if (ctx->bufcnt) {
+diff --git a/drivers/crypto/sa2ul.c b/drivers/crypto/sa2ul.c
+index f4bc06c24ad8..df5f9d675c57 100644
+--- a/drivers/crypto/sa2ul.c
++++ b/drivers/crypto/sa2ul.c
+@@ -1037,7 +1037,7 @@ static void sa_free_sa_rx_data(struct sa_rx_data *rxd)
+ 
+ static void sa_aes_dma_in_callback(void *data)
+ {
+-	struct sa_rx_data *rxd = (struct sa_rx_data *)data;
++	struct sa_rx_data *rxd = data;
+ 	struct skcipher_request *req;
+ 	u32 *result;
+ 	__be32 *mdptr;
+@@ -1351,7 +1351,7 @@ static int sa_decrypt(struct skcipher_request *req)
+ 
+ static void sa_sha_dma_in_callback(void *data)
+ {
+-	struct sa_rx_data *rxd = (struct sa_rx_data *)data;
++	struct sa_rx_data *rxd = data;
+ 	struct ahash_request *req;
+ 	struct crypto_ahash *tfm;
+ 	unsigned int authsize;
+@@ -1689,7 +1689,7 @@ static void sa_sha_cra_exit(struct crypto_tfm *tfm)
+ 
+ static void sa_aead_dma_in_callback(void *data)
+ {
+-	struct sa_rx_data *rxd = (struct sa_rx_data *)data;
++	struct sa_rx_data *rxd = data;
+ 	struct aead_request *req;
+ 	struct crypto_aead *tfm;
+ 	unsigned int start;
+diff --git a/drivers/crypto/sahara.c b/drivers/crypto/sahara.c
+index dd4c703cd855..4c799df3e883 100644
+--- a/drivers/crypto/sahara.c
++++ b/drivers/crypto/sahara.c
+@@ -1035,7 +1035,7 @@ static int sahara_sha_process(struct ahash_request *req)
+ 
+ static int sahara_queue_manage(void *data)
+ {
+-	struct sahara_dev *dev = (struct sahara_dev *)data;
++	struct sahara_dev *dev = data;
+ 	struct crypto_async_request *async_req;
+ 	struct crypto_async_request *backlog;
+ 	int ret = 0;
+@@ -1270,7 +1270,7 @@ static struct ahash_alg sha_v4_algs[] = {
+ 
+ static irqreturn_t sahara_irq_handler(int irq, void *data)
+ {
+-	struct sahara_dev *dev = (struct sahara_dev *)data;
++	struct sahara_dev *dev = data;
+ 	unsigned int stat = sahara_read(dev, SAHARA_REG_STATUS);
+ 	unsigned int err = sahara_read(dev, SAHARA_REG_ERRSTATUS);
+ 
+-- 
+2.11.0
+
