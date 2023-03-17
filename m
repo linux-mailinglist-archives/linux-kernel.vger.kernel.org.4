@@ -2,81 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 738556BE9BD
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 13:58:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 979E46BE9C1
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 13:59:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230482AbjCQM6M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 08:58:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39600 "EHLO
+        id S230494AbjCQM7V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 08:59:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230474AbjCQM6K (ORCPT
+        with ESMTP id S230470AbjCQM7T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 08:58:10 -0400
-Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD2351CF5F;
-        Fri, 17 Mar 2023 05:58:09 -0700 (PDT)
-Received: by mail-il1-x12d.google.com with SMTP id i19so2678846ila.10;
-        Fri, 17 Mar 2023 05:58:09 -0700 (PDT)
+        Fri, 17 Mar 2023 08:59:19 -0400
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9DEBA8C44;
+        Fri, 17 Mar 2023 05:59:17 -0700 (PDT)
+Received: by mail-qt1-x830.google.com with SMTP id c18so5401644qte.5;
+        Fri, 17 Mar 2023 05:59:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679057889;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=U8+4cXu3qDjUouNJqRhPXdnyraju2nbEvYbMrucPxSE=;
-        b=YZy43MHhLsBKYE3NR/zoHY7UjvO8FU9R96nyRXlZAZegB/5jclv2il9icUwmi4/pYR
-         bbBhrDEn51XVLiOwVd3RzY8rR8VQItdGtyyDgfkV0l+oJgqQRQvrQbQhOEnr5q8I1hyR
-         r6geo/w9ouL30rFvDVtNLe7nt2AOXzCA6RFjYfJvGoH2o0cwrsdq9ReZJUiSsFqQ7sXv
-         WHj4cDRq8IRnd1X/TwqR07CReq0FSkd5DDQNvHsEYD31F5n84qhCP5D08EEAlgCHyXLS
-         zqYxN22vwAp9UiGJhAbrEx6083QEazixDu/GS3OvikqBRHIG+I0MeBgoyXHGVawUYMGK
-         y1CQ==
+        d=gmail.com; s=20210112; t=1679057957;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=R0jJi3/3o5+UsDeZckrwCaYcdVgtZCA0iNilQ+fn514=;
+        b=LIN5kQaQ7jfR84kB+aIvJZ1W7ae1fi++RILUxrS50tq8LmcCyzu+WCkZgtC5GXyrdp
+         qkN21szKv06UpkcJ6p0ynBQuAOaQOFgjJP8tE9wLIpSs9/XYCrvFmX/1EF0vaYT7PI53
+         SpMt6JVbNqVILMT8/9AvQ9JF9A7sqeqEwv+JiR1vUcdnYGvjPiz29O94wa8CBIYIi14N
+         D37NrPmQz6o8RTYqL+EhDWIDks9mBXaplPbIo57GA3YKer5IyFwwkwJy+DTPxZq4hw2m
+         Zoksdp7Lk5sLoApLJW80svzKBPTbhcY79SCjnftnukcEMvhzykWxfNyfty7/533VgZxc
+         NbFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679057889;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=U8+4cXu3qDjUouNJqRhPXdnyraju2nbEvYbMrucPxSE=;
-        b=cMo6yNp+60sXMRODshCTMqoZXrgqqF9DmrmSMICyxAwLz1GyxzZvDpDfapIlhJTOaM
-         BEQ0WZG53Do4YJ92NuNPUelK0Kq5tthqXtlJKcREWM9aC/UL+NWPYZRWXNDITO3kZ4jO
-         4PkGwuYfFmfToBvMHfHTPEiiYz1FVnEXYRvBUH56phkF9Xk498ngJSmMBF6DLOQ0yKba
-         Lbt1BOACmN8m6Nkd/QZXQywz88HbxfUCmlqyu2DCiB87uGruAFgHb6l00C+zC3vvkhNX
-         N4ewUexWY7k6UNw+EEwUWU4Lc6EqC7ubGGPxM6Q0159DuJROocDQR1kgqpwurl+nB90q
-         mA4w==
-X-Gm-Message-State: AO0yUKXrnr0c2LM8vn+1tdMcbAZCk7gCrg9sFDGWymq5HJ7LlasGu4WI
-        lIgdUl/jjCcJ3ozCmfKEDaA=
-X-Google-Smtp-Source: AK7set9imSwZfpVK/XShg0oQ3fFaFqKk37d66TfcA+zJ0qe4+XvX2no2yd7RUImM07ROYPHTSIg1Vw==
-X-Received: by 2002:a92:dc4d:0:b0:323:1470:a08c with SMTP id x13-20020a92dc4d000000b003231470a08cmr9687213ilq.8.1679057889107;
-        Fri, 17 Mar 2023 05:58:09 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id x7-20020a056e020f0700b00317a2fed5b6sm585329ilj.45.2023.03.17.05.58.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Mar 2023 05:58:08 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <f5650fa4-db16-b1e4-f5b4-917fbcabb415@roeck-us.net>
-Date:   Fri, 17 Mar 2023 05:58:06 -0700
+        d=1e100.net; s=20210112; t=1679057957;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=R0jJi3/3o5+UsDeZckrwCaYcdVgtZCA0iNilQ+fn514=;
+        b=WDN+VUQ9fnt+S22gjwN7XPjV06ADJ/zTyn1prFVAyzFRpeN2b74z4wIyeUYtoSYDvb
+         e9xz4TNRgQ1QKUYdEGpMz6/LYvtgfD2EJpcKMHuwKOYYdT09+LABXWNNyOYd4+mW7RFU
+         dKZ4YBlWRz7aYN5E65jEqT0x4nwmNyVuUuLoFxyN7zfsm6cX6RaKyzNT3YMAqpqejHbj
+         YrZBjjnshV128c2m3JIgT7ZrQxCNdeU9I5q0pNMeO/bYJjrHmoHRZTuknWrczVNDsz7p
+         t1PwNR2UgTXXeZ9y9MSqINXoDYal08969ZGxCCo5MiTc7H7qda2htRfLUjeVDdJjzKWr
+         gq5Q==
+X-Gm-Message-State: AO0yUKUE8rd8OtlljInIKn6qUOcsF7pbIDUrJwkF0gy/flrbLWBvXKgG
+        TEYxKDjEO8oKH29TXV7rGNJON4G4RyxNBVCe8Tg=
+X-Google-Smtp-Source: AK7set+EkdNXyvthPFb5i9ewk7OjGcJq5Fxx9JBuvOBWZ3MZlR6jIfvzD9YFggkYo5xWTeKPYKy5FaZhb+4Wno7Q2mg=
+X-Received: by 2002:ac8:4142:0:b0:3bf:fe82:7525 with SMTP id
+ e2-20020ac84142000000b003bffe827525mr2090235qtm.0.1679057956816; Fri, 17 Mar
+ 2023 05:59:16 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 4/4] usb: typec: tcpm: fix source caps may lost after soft
- reset
-Content-Language: en-US
-To:     Frank Wang <frank.wang@rock-chips.com>,
-        heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
-        heiko@sntech.de
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, huangtao@rock-chips.com,
-        william.wu@rock-chips.com, jianwei.zheng@rock-chips.com,
-        yubing.zhang@rock-chips.com, wmc@rock-chips.com
-References: <20230313025843.17162-1-frank.wang@rock-chips.com>
- <20230313025843.17162-5-frank.wang@rock-chips.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20230313025843.17162-5-frank.wang@rock-chips.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+References: <20230316224628.2855884-1-david.e.box@linux.intel.com>
+In-Reply-To: <20230316224628.2855884-1-david.e.box@linux.intel.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Fri, 17 Mar 2023 14:58:40 +0200
+Message-ID: <CAHp75Vd6ee_uqPLHiOa8DX4huf7bB0CmWf4yRPN=0TQw_5JvgA@mail.gmail.com>
+Subject: Re: [PATCH] platform/x86/intel/vsec: Explicitly enable capabilities
+To:     "David E. Box" <david.e.box@linux.intel.com>
+Cc:     irenic.rajneesh@gmail.com, david.e.box@intel.com,
+        hdegoede@redhat.com, markgross@kernel.org,
+        linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,65 +70,212 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/12/23 19:58, Frank Wang wrote:
-> Invoke set_pd_rx() may flush the RX FIFO of PD controller, so do
-> set_pd_rx() before sending Soft Reset in case Source caps may be flushed
-> at debounce time between SOFT_RESET_SEND and SNK_WAIT_CAPABILITIES state.
-> 
+On Fri, Mar 17, 2023 at 12:46=E2=80=AFAM David E. Box
+<david.e.box@linux.intel.com> wrote:
+>
+> Discovered Intel VSEC/DVSEC capabilities are enabled by default and only
+> get disabled by quirk. Instead, remove such quirks and only enable suppor=
+t
+> for capabilities that have been explicitly added to a new capabilities
+> field. While here, also reorder the device info structures alphabetically=
+.
 
-Isn't that a problem of the fusb302 driver that it flushes its buffers
-unconditionally when its set_pd_rx() callback is called ?
+This looks better indeed.
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 
-Guenter
-
-> Without this patch, in PD charger stress test, the FUSB302 driver may
-> occur the following exceptions in power negotiation stage.
-> 
-> [ ...]
-> [ 4.512252] fusb302_irq_intn
-> [ 4.512260] AMS SOFT_RESET_AMS finished
-> [ 4.512269] state change SOFT_RESET_SEND ->SNK_WAIT_CAPABILITIES [rev3 NONE_AMS]
-> [ 4.514511] pd := on
-> [ 4.514516] pending state change SNK_WAIT_CAPABILITIES ->HARD_RESET_SEND @ 310 ms [rev3 NONE_AMS]
-> [ 4.515428] IRQ: 0x51, a: 0x00, b: 0x01, status0: 0x93
-> [ 4.515431] IRQ: BC_LVL, handler pending
-> [ 4.515435] IRQ: PD sent good CRC
-> [ 4.516434] PD message header: 0
-> [ 4.516437] PD message len: 0
-> [ 4.516444] PD RX, header: 0x0 [1]
-> 
-> Signed-off-by: Frank Wang <frank.wang@rock-chips.com>
+> Signed-off-by: David E. Box <david.e.box@linux.intel.com>
 > ---
->   drivers/usb/typec/tcpm/tcpm.c | 11 +++++++----
->   1 file changed, 7 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index 9e583060e64fc..ba6bf71838eed 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -4321,10 +4321,12 @@ static void run_state_machine(struct tcpm_port *port)
->   		tcpm_set_state(port, unattached_state(port), 0);
->   		break;
->   	case SNK_WAIT_CAPABILITIES:
-> -		ret = port->tcpc->set_pd_rx(port->tcpc, true);
-> -		if (ret < 0) {
-> -			tcpm_set_state(port, SNK_READY, 0);
-> -			break;
-> +		if (port->prev_state != SOFT_RESET_SEND) {
-> +			ret = port->tcpc->set_pd_rx(port->tcpc, true);
-> +			if (ret < 0) {
-> +				tcpm_set_state(port, SNK_READY, 0);
-> +				break;
-> +			}
->   		}
->   		/*
->   		 * If VBUS has never been low, and we time out waiting
-> @@ -4603,6 +4605,7 @@ static void run_state_machine(struct tcpm_port *port)
->   	case SOFT_RESET_SEND:
->   		port->message_id = 0;
->   		port->rx_msgid = -1;
-> +		port->tcpc->set_pd_rx(port->tcpc, true);
->   		if (tcpm_pd_send_control(port, PD_CTRL_SOFT_RESET))
->   			tcpm_set_state_cond(port, hard_reset_state(port), 0);
->   		else
+>  drivers/platform/x86/intel/vsec.c | 69 ++++++++++++++-----------------
+>  drivers/platform/x86/intel/vsec.h |  9 +++-
+>  2 files changed, 38 insertions(+), 40 deletions(-)
+>
+> diff --git a/drivers/platform/x86/intel/vsec.c b/drivers/platform/x86/int=
+el/vsec.c
+> index 13decf36c6de..01b1f6480e5c 100644
+> --- a/drivers/platform/x86/intel/vsec.c
+> +++ b/drivers/platform/x86/intel/vsec.c
+> @@ -67,14 +67,6 @@ enum intel_vsec_id {
+>         VSEC_ID_TPMI            =3D 66,
+>  };
+>
+> -static enum intel_vsec_id intel_vsec_allow_list[] =3D {
+> -       VSEC_ID_TELEMETRY,
+> -       VSEC_ID_WATCHER,
+> -       VSEC_ID_CRASHLOG,
+> -       VSEC_ID_SDSI,
+> -       VSEC_ID_TPMI,
+> -};
+> -
+>  static const char *intel_vsec_name(enum intel_vsec_id id)
+>  {
+>         switch (id) {
+> @@ -98,26 +90,19 @@ static const char *intel_vsec_name(enum intel_vsec_id=
+ id)
+>         }
+>  }
+>
+> -static bool intel_vsec_allowed(u16 id)
+> -{
+> -       int i;
+> -
+> -       for (i =3D 0; i < ARRAY_SIZE(intel_vsec_allow_list); i++)
+> -               if (intel_vsec_allow_list[i] =3D=3D id)
+> -                       return true;
+> -
+> -       return false;
+> -}
+> -
+> -static bool intel_vsec_disabled(u16 id, unsigned long quirks)
+> +static bool intel_vsec_supported(u16 id, unsigned long caps)
+>  {
+>         switch (id) {
+> +       case VSEC_ID_TELEMETRY:
+> +               return !!(caps & VSEC_CAP_TELEMETRY);
+>         case VSEC_ID_WATCHER:
+> -               return !!(quirks & VSEC_QUIRK_NO_WATCHER);
+> -
+> +               return !!(caps & VSEC_CAP_WATCHER);
+>         case VSEC_ID_CRASHLOG:
+> -               return !!(quirks & VSEC_QUIRK_NO_CRASHLOG);
+> -
+> +               return !!(caps & VSEC_CAP_CRASHLOG);
+> +       case VSEC_ID_SDSI:
+> +               return !!(caps & VSEC_CAP_SDSI);
+> +       case VSEC_ID_TPMI:
+> +               return !!(caps & VSEC_CAP_TPMI);
+>         default:
+>                 return false;
+>         }
+> @@ -205,7 +190,7 @@ static int intel_vsec_add_dev(struct pci_dev *pdev, s=
+truct intel_vsec_header *he
+>         unsigned long quirks =3D info->quirks;
+>         int i;
+>
+> -       if (!intel_vsec_allowed(header->id) || intel_vsec_disabled(header=
+->id, quirks))
+> +       if (!intel_vsec_supported(header->id, info->caps))
+>                 return -EINVAL;
+>
+>         if (!header->num_entries) {
+> @@ -260,14 +245,14 @@ static int intel_vsec_add_dev(struct pci_dev *pdev,=
+ struct intel_vsec_header *he
+>  static bool intel_vsec_walk_header(struct pci_dev *pdev,
+>                                    struct intel_vsec_platform_info *info)
+>  {
+> -       struct intel_vsec_header **header =3D info->capabilities;
+> +       struct intel_vsec_header **header =3D info->headers;
+>         bool have_devices =3D false;
+>         int ret;
+>
+>         for ( ; *header; header++) {
+>                 ret =3D intel_vsec_add_dev(pdev, *header, info);
+>                 if (ret)
+> -                       dev_info(&pdev->dev, "Could not add device for DV=
+SEC id %d\n",
+> +                       dev_info(&pdev->dev, "Could not add device for VS=
+EC id %d\n",
+>                                  (*header)->id);
+>                 else
+>                         have_devices =3D true;
+> @@ -402,14 +387,8 @@ static int intel_vsec_pci_probe(struct pci_dev *pdev=
+, const struct pci_device_id
+>         return 0;
+>  }
+>
+> -/* TGL info */
+> -static const struct intel_vsec_platform_info tgl_info =3D {
+> -       .quirks =3D VSEC_QUIRK_NO_WATCHER | VSEC_QUIRK_NO_CRASHLOG |
+> -                 VSEC_QUIRK_TABLE_SHIFT | VSEC_QUIRK_EARLY_HW,
+> -};
+> -
+>  /* DG1 info */
+> -static struct intel_vsec_header dg1_telemetry =3D {
+> +static struct intel_vsec_header dg1_header =3D {
+>         .length =3D 0x10,
+>         .id =3D 2,
+>         .num_entries =3D 1,
+> @@ -418,19 +397,31 @@ static struct intel_vsec_header dg1_telemetry =3D {
+>         .offset =3D 0x466000,
+>  };
+>
+> -static struct intel_vsec_header *dg1_capabilities[] =3D {
+> -       &dg1_telemetry,
+> +static struct intel_vsec_header *dg1_headers[] =3D {
+> +       &dg1_header,
+>         NULL
+>  };
+>
+>  static const struct intel_vsec_platform_info dg1_info =3D {
+> -       .capabilities =3D dg1_capabilities,
+> +       .caps =3D VSEC_CAP_TELEMETRY,
+> +       .headers =3D dg1_headers,
+>         .quirks =3D VSEC_QUIRK_NO_DVSEC | VSEC_QUIRK_EARLY_HW,
+>  };
+>
+>  /* MTL info */
+>  static const struct intel_vsec_platform_info mtl_info =3D {
+> -       .quirks =3D VSEC_QUIRK_NO_WATCHER | VSEC_QUIRK_NO_CRASHLOG,
+> +       .caps =3D VSEC_CAP_TELEMETRY,
+> +};
+> +
+> +/* OOBMSM info */
+> +static const struct intel_vsec_platform_info oobmsm_info =3D {
+> +       .caps =3D VSEC_CAP_TELEMETRY | VSEC_CAP_SDSI | VSEC_CAP_TPMI,
+> +};
+> +
+> +/* TGL info */
+> +static const struct intel_vsec_platform_info tgl_info =3D {
+> +       .caps =3D VSEC_CAP_TELEMETRY,
+> +       .quirks =3D VSEC_QUIRK_TABLE_SHIFT | VSEC_QUIRK_EARLY_HW,
+>  };
+>
+>  #define PCI_DEVICE_ID_INTEL_VSEC_ADL           0x467d
+> @@ -445,7 +436,7 @@ static const struct pci_device_id intel_vsec_pci_ids[=
+] =3D {
+>         { PCI_DEVICE_DATA(INTEL, VSEC_DG1, &dg1_info) },
+>         { PCI_DEVICE_DATA(INTEL, VSEC_MTL_M, &mtl_info) },
+>         { PCI_DEVICE_DATA(INTEL, VSEC_MTL_S, &mtl_info) },
+> -       { PCI_DEVICE_DATA(INTEL, VSEC_OOBMSM, &(struct intel_vsec_platfor=
+m_info) {}) },
+> +       { PCI_DEVICE_DATA(INTEL, VSEC_OOBMSM, &oobmsm_info) },
+>         { PCI_DEVICE_DATA(INTEL, VSEC_RPL, &tgl_info) },
+>         { PCI_DEVICE_DATA(INTEL, VSEC_TGL, &tgl_info) },
+>         { }
+> diff --git a/drivers/platform/x86/intel/vsec.h b/drivers/platform/x86/int=
+el/vsec.h
+> index ae8fe92c5595..0fd042c171ba 100644
+> --- a/drivers/platform/x86/intel/vsec.h
+> +++ b/drivers/platform/x86/intel/vsec.h
+> @@ -5,6 +5,12 @@
+>  #include <linux/auxiliary_bus.h>
+>  #include <linux/bits.h>
+>
+> +#define VSEC_CAP_TELEMETRY     BIT(0)
+> +#define VSEC_CAP_WATCHER       BIT(1)
+> +#define VSEC_CAP_CRASHLOG      BIT(2)
+> +#define VSEC_CAP_SDSI          BIT(3)
+> +#define VSEC_CAP_TPMI          BIT(4)
+> +
+>  struct pci_dev;
+>  struct resource;
+>
+> @@ -27,7 +33,8 @@ enum intel_vsec_quirks {
+>
+>  /* Platform specific data */
+>  struct intel_vsec_platform_info {
+> -       struct intel_vsec_header **capabilities;
+> +       struct intel_vsec_header **headers;
+> +       unsigned long caps;
+>         unsigned long quirks;
+>  };
+>
+>
+> base-commit: 02c464b73645404654359ad21f368a13735e2850
+> --
+> 2.34.1
+>
 
+
+--=20
+With Best Regards,
+Andy Shevchenko
