@@ -2,169 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FA6C6BEB14
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 15:24:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA6E46BEB17
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 15:25:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230377AbjCQOYU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 10:24:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42218 "EHLO
+        id S230426AbjCQOZJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 10:25:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230098AbjCQOYS (ORCPT
+        with ESMTP id S229868AbjCQOZH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 10:24:18 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2044.outbound.protection.outlook.com [40.107.243.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 131691D930
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 07:24:17 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GL02CWKux8qgkPdy9wDLJYbpFse6iWUmn/gKLkjLCWeeKq1W5TMVA7+0iMD8+jXoYSxlVtJz470hwlQ383OfP0qQCnNPw0NLx/YXSIh7ve33e609aCKV/k6JvWNLFeixG8eutYX+bgEXXSyxbFTs6y1Ew2cV/TL1tEvp6iT4FEnZNgyOavzO+U02uq8it/KgdLkHzBlseGYtZ/R6DwR4YZWTbYFDrfaFDFIYPwGWCzq82D5g5ElfRZUFVSxJOoA9eD5cWhjoVrz0t6C/uOcXP6GwJGhtKEyTofYsl1v6h45NkcoCMXlHydWa+tHivitgM3WeLknCox0FoEIWnTmxUg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=NefcJvgfkP/vMcdZvRV9/tZyNyu5GhX7ODKoQjc4CVg=;
- b=eErlqSIGhsco3rwKa24yeBsjCRLQeJBZrDA1UQekKxjSbYXulcOXgBILDifEvdlZ8w8g2mxbUhDqUYLYWtbXD95S2yIku3ol7MXBQKZT5gBODhIWj+PsBCTfnOJyXKEvkUL8cFxO0j+Qid05qE8kNDnpUQIcBRMCFndty87WHP87v+3pqc3a4u3t0MY2z9tIrErNyNwCw7NdrmqzIYC8h+Qb+pTfxrRWF5FXBtiApnyCHH5bfvHu3LdbUcGdlzG1Pkj9U8dqyJaN5ltk8jhfFKTbe3H4rAbDKRAKx6IshLTktgLYsLtfzMY6t/+JvuqMGEgv1PiuFaFAPLhtZtm54Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NefcJvgfkP/vMcdZvRV9/tZyNyu5GhX7ODKoQjc4CVg=;
- b=CVfdQ8e7NjBGc5696+1ijmFcm5V6QsySkWCRIZ7vwXCKZKAgjtHBLdbnaxxilRIrQML8jPtBT26WtzhTDmaN/7iBj1qiDuJUSr/ALe3oKHNVmOeZbvxa98QXfVWtik7QfGmR7296mvsWlu2WwLvgXU58DyZrhoZ9Xya/d9WOuenQPd5zNo3wYr7PaX/ogK793cjFPYM0cdQFpqoP5I5nZ+woJNaWtKc4hqPuQwzlBAay2Q7rxPg55kYiKIrVOB2uDNrdURrosmGnxCZJiKFjz95yR8Szf+EiCZ2WlPCD9xnSPT5rEwawBLWcTk6VDrbgtYkCw2ysC7WRuTQfY7Jhew==
-Received: from DM6PR04CA0001.namprd04.prod.outlook.com (2603:10b6:5:334::6) by
- CH2PR12MB4149.namprd12.prod.outlook.com (2603:10b6:610:7c::13) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6178.35; Fri, 17 Mar 2023 14:24:14 +0000
-Received: from DM6NAM11FT039.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:334:cafe::ba) by DM6PR04CA0001.outlook.office365.com
- (2603:10b6:5:334::6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.35 via Frontend
- Transport; Fri, 17 Mar 2023 14:24:14 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- DM6NAM11FT039.mail.protection.outlook.com (10.13.172.83) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6199.20 via Frontend Transport; Fri, 17 Mar 2023 14:24:14 +0000
-Received: from rnnvmail205.nvidia.com (10.129.68.10) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Fri, 17 Mar 2023
- 07:24:08 -0700
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by rnnvmail205.nvidia.com
- (10.129.68.10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Fri, 17 Mar
- 2023 07:24:08 -0700
-Received: from Asurada-Nvidia (10.127.8.9) by mail.nvidia.com (10.129.68.8)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37 via Frontend
- Transport; Fri, 17 Mar 2023 07:24:07 -0700
-Date:   Fri, 17 Mar 2023 07:24:06 -0700
-From:   Nicolin Chen <nicolinc@nvidia.com>
-To:     "Tian, Kevin" <kevin.tian@intel.com>
-CC:     Jason Gunthorpe <jgg@nvidia.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "eric.auger@redhat.com" <eric.auger@redhat.com>,
-        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "shameerali.kolothum.thodi@huawei.com" 
-        <shameerali.kolothum.thodi@huawei.com>,
-        "jean-philippe@linaro.org" <jean-philippe@linaro.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v1 14/14] iommu/arm-smmu-v3: Add
- arm_smmu_cache_invalidate_user
-Message-ID: <ZBR4BkVAgQeVEART@Asurada-Nvidia>
-References: <cover.1678348754.git.nicolinc@nvidia.com>
- <aa327f9ea61e5a4771c13e53639e33955b9acde3.1678348754.git.nicolinc@nvidia.com>
- <1467e666-1b6c-c285-3f79-f8e8b088718b@arm.com>
- <ZAn7uC9UweiNdGkJ@nvidia.com>
- <ZAqv87fjbdynVaHA@Asurada-Nvidia>
- <ZAtYphmOuEqQ1BiC@nvidia.com>
- <BN9PR11MB52768F4D3E21C5231C1A04D38CBD9@BN9PR11MB5276.namprd11.prod.outlook.com>
+        Fri, 17 Mar 2023 10:25:07 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C54883344A;
+        Fri, 17 Mar 2023 07:25:04 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CDB5B1763;
+        Fri, 17 Mar 2023 07:25:47 -0700 (PDT)
+Received: from [10.57.53.217] (unknown [10.57.53.217])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C47393F64C;
+        Fri, 17 Mar 2023 07:25:01 -0700 (PDT)
+Message-ID: <f5a1d873-8aa0-ea11-28df-8857fc256862@arm.com>
+Date:   Fri, 17 Mar 2023 14:25:00 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <BN9PR11MB52768F4D3E21C5231C1A04D38CBD9@BN9PR11MB5276.namprd11.prod.outlook.com>
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT039:EE_|CH2PR12MB4149:EE_
-X-MS-Office365-Filtering-Correlation-Id: 05c00783-0d81-44b5-ae40-08db26f348db
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: YQtpSrQovBzL+aFgQvLCITH87p4RjFuQOyfXeEZo35g9oVeRJdWrh2M6+wzIUR5O2PpjSaNnXonzA2wV3JYSzb4DC5pW5BXKa+EGBPS9dOBsLUNlGCsVg7QzOLzgMGM0t5AuCz+XkycZwXUFjPBrc7Czjxm6PkmzRQ5/vx6Oe34OPEBKcVtvktA4fDnVCpwd0Z25dBofPxHy+bz8P/XwEM9IaTLqMf7JjGspTA94yRNZeaT0MfcAC0jag81o3Qr0Q7gUYp/dq8t7DqTCj+19h1603XcDIjSTw6PAWD8Y+Ak2RCMN8hR4LlkOiE1On1hPE7BinTbzMb6a0KoWiIY0XMfN4eRbQFifBuudGEXQtT5nrIBX3OZfGUIomKUA24qWI0RR2kMwibMknAIz3vz/xM8loJirTfRVwLKQ0UugbMj8cUFaAp2DgtkavrXhIJ4JBYurLbDHzfOHF7SAF1RSFTIyzIA52GFxb16kflXIef2psUsrSxL7feKR+sI/0TlVSGhZeVnJ02cp10z2YpAtI6oHYYexy8ivof1cTCgMgnq/cOOiyq/OXkSyjv3UBNYpcV8G76ize6qdI4pNjio1zQb0G5chp0ckRnyI0LTwO9puLnGtf0IoRjHV9VkClel3CT/XrDn2oXQCE1oYIIT6Rc+5atgugM8Ae/sPG0uQhEHFwmBZL80AMRY93zD8/KlbzYqCbOcYcxcb0QE7kH8lil/wh06Lya7HzmbCHWD9n4lI+M9LmBrzKKYcUgVGbtH0
-X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(136003)(396003)(376002)(39860400002)(346002)(451199018)(36840700001)(40470700004)(46966006)(8936002)(7416002)(356005)(5660300002)(41300700001)(36860700001)(55016003)(86362001)(33716001)(82310400005)(40480700001)(40460700003)(82740400003)(2906002)(7636003)(26005)(478600001)(83380400001)(426003)(4326008)(47076005)(336012)(6916009)(70586007)(8676002)(70206006)(54906003)(66899018)(186003)(316002)(9686003);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Mar 2023 14:24:14.2759
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 05c00783-0d81-44b5-ae40-08db26f348db
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT039.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4149
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.8.0
+Subject: Re: [PATCH] coresight: core: Add coresight name support
+To:     Jinlong Mao <quic_jinlmao@quicinc.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Rob Herring <robh@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>
+Cc:     coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Tingwei Zhang <quic_tingweiz@quicinc.com>,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        Tao Zhang <quic_taozha@quicinc.com>,
+        Hao Zhang <quic_hazha@quicinc.com>
+References: <20230208110716.18321-1-quic_jinlmao@quicinc.com>
+ <3c105c79-f523-653e-5154-7ba641e51a96@arm.com>
+ <180a66b1-6996-c705-5d8a-0a69ce0353d7@quicinc.com>
+ <b7abee2a-99ca-26d6-5850-60ee19d9c0e9@quicinc.com>
+ <619818ad-71cb-6c07-bcae-ea9398f08878@arm.com>
+ <6b976d2b-3c78-96e4-bf35-3ef88828a9dd@quicinc.com>
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <6b976d2b-3c78-96e4-bf35-3ef88828a9dd@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 17, 2023 at 09:41:34AM +0000, Tian, Kevin wrote:
-> External email: Use caution opening links or attachments
+On 17/03/2023 05:34, Jinlong Mao wrote:
 > 
+> On 3/13/2023 5:16 PM, Suzuki K Poulose wrote:
+>> Cc: Rob
+>>
+>> On 01/03/2023 15:11, Jinlong Mao wrote:
+>>> Hi Suzuki,
+>>>
+>>> On 2/9/2023 10:16 AM, Jinlong Mao wrote:
+>>>>
+>>>> On 2/8/2023 10:26 PM, Suzuki K Poulose wrote:
+>>>>> On 08/02/2023 11:07, Mao Jinlong wrote:
+>>>>>> Apart from STM and ETM sources, there will be more sources added to
+>>>>>> coresight components. For example, there are over 10 TPDM sources.
+>>>>>> Add coresight name support for custom names which will be
+>>>>>> easy to identify the source.
+>>>>>>
+>>>>>
+>>>>> As we have previously discussed, please don't make this a generic
+>>>>> code change. If your device has a "specifici" name, use that for
+>>>>> allocating in the driver and leave the core code alone.
+>>>>>
+>>>>> Suzuki
+>>>>>
+>>>> Hi Suzuki,
+>>>>
+>>>> Not only for TPDMs. There could be dozens of CTI devices.
+>>>> It is hard for user to know which CTI device it is with current names.
+>>>>
+>>>> Thanks
+>>>> Jinlong Mao
+>>>
+>>> The coresight name support is applicable to CTI and TPDM devices.
+>>> This is a generic change for the source which has dozens of devices.
+>>
+>> I took a look at the CTI situation and I agree that the situation
+>> is a bit tricky. The CTI could be connected to multiple devices,
+>> some of them may not be even CoreSight devices. Given there could
+>> be numerous of them, we need some way to make the "devices" naming
+>> a bit more intuitive.
+>>
+>> Before we go ahead and add something specific to coresight, I would
+>> like to see if there is a generic property. Ideally, the "labels"
+>> in the DTS sources would have been an ideal choice, but can't
+>> see how that is available in the FDT.
+>>
+>> Suzuki
+> Hi Suzuki,
 > 
-> > From: Jason Gunthorpe <jgg@nvidia.com>
-> > Sent: Saturday, March 11, 2023 12:20 AM
-> >
-> > What I'm broadly thinking is if we have to make the infrastructure for
-> > VCMDQ HW accelerated invalidation then it is not a big step to also
-> > have the kernel SW path use the same infrastructure just with a CPU
-> > wake up instead of a MMIO poke.
-> >
-> > Ie we have a SW version of VCMDQ to speed up SMMUv3 cases without HW
-> > support.
-> >
+> Shall we use the full_name of device_node struct as coresight 
+> component's name ?
 > 
-> I thought about this in VT-d context. Looks there are some difficulties.
+>    struct device_node {
+>      const char *name;
+>      phandle phandle;
+> *    const char *full_name;
 > 
-> The most prominent one is that head/tail of the VT-d invalidation queue
-> are in MMIO registers. Handling it in kernel iommu driver suggests
-> reading virtual tail register and updating virtual head register. Kind of
-> moving some vIOMMU awareness into the kernel which, iirc, is not
-> a welcomed model.
+> *For component below, the full_name will be "coresight-tpdm-ipcc".
+> *
+> **coresight-tpdm-ipcc* {
 
-I had a similar question in another email:
-"Firstly, the consumer and producer indexes might need
- to be synced between the host and kernel?"
-And Jason replied me with this:
-"No, qemu would handles this. The kernel would just read the command
- entries it is told by qemu to read which qemu has already sorted out."
+Does that go against the convention of naming the DT nodes ?
+I am not sure. Also, we would need a way to solve this for ACPI too.
 
-Maybe there is no need of a concern for the head/tail readings?
+Suzuki
 
-> vhost doesn't have this problem as its vring structure fully resides in
-> memory including ring tail/head. As long as kernel vhost driver understands
-> the structure and can send/receive notification to/from kvm then the
-> in-kernel acceleration works seamlessly.
+
+>      compatible = "qcom,coresight-tpdm", "arm,primecell";
+>      reg = <0 0x10c29000 0 0x1000>;
 > 
-> Not sure whether SMMU has similar obstacle as VT-d. But this is my
-> impression why vhost-iommu is preferred when talking about such
-> optimization before.
+>      clocks = <&aoss_qmp>;
+>      clock-names = "apb_pclk";
+> 
+>      out-ports {
+>              port {
+>                      tpdm_ipcc_out_tpda_dl_center_27: endpoint {
+>                              remote-endpoint =
+> <&tpda_dl_center_27_in_tpdm_ipcc>;
+>                      };
+>              };
+>      };
+> };*
+> 
+> *Thanks
+> Jinlong Mao
+>>
+>>
+>>>
+>>> Thanks
+>>> Jinlong Mao
+>>>
+>>>>>
+>>>>>> Signed-off-by: Mao Jinlong <quic_jinlmao@quicinc.com>
+>>>>>> ---
+>>>>>>   drivers/hwtracing/coresight/coresight-core.c | 34 
+>>>>>> +++++++++++---------
+>>>>>>   1 file changed, 19 insertions(+), 15 deletions(-)
+>>>>>>
+>>>>>> diff --git a/drivers/hwtracing/coresight/coresight-core.c 
+>>>>>> b/drivers/hwtracing/coresight/coresight-core.c
+>>>>>> index d3bf82c0de1d..5e95d9c7f256 100644
+>>>>>> --- a/drivers/hwtracing/coresight/coresight-core.c
+>>>>>> +++ b/drivers/hwtracing/coresight/coresight-core.c
+>>>>>> @@ -1733,28 +1733,32 @@ char *coresight_alloc_device_name(struct 
+>>>>>> coresight_dev_list *dict,
+>>>>>>   {
+>>>>>>       int idx;
+>>>>>>       char *name = NULL;
+>>>>>> +    const char *coresight_name = NULL;
+>>>>>>       struct fwnode_handle **list;
+>>>>>> +    struct device_node *node = dev->of_node;
+>>>>>>         mutex_lock(&coresight_mutex);
+>>>>>>   -    idx = coresight_search_device_idx(dict, dev_fwnode(dev));
+>>>>>> -    if (idx < 0) {
+>>>>>> -        /* Make space for the new entry */
+>>>>>> -        idx = dict->nr_idx;
+>>>>>> -        list = krealloc_array(dict->fwnode_list,
+>>>>>> -                      idx + 1, sizeof(*dict->fwnode_list),
+>>>>>> -                      GFP_KERNEL);
+>>>>>> -        if (ZERO_OR_NULL_PTR(list)) {
+>>>>>> -            idx = -ENOMEM;
+>>>>>> -            goto done;
+>>>>>> +    if (!of_property_read_string(node, "coresight-name", 
+>>>>>> &coresight_name))
+>>>>>> +        name = devm_kasprintf(dev, GFP_KERNEL, "%s", 
+>>>>>> coresight_name);
+>>>>>> +    else {
+>>>>>> +        idx = coresight_search_device_idx(dict, dev_fwnode(dev));
+>>>>>> +        if (idx < 0) {
+>>>>>> +            /* Make space for the new entry */
+>>>>>> +            idx = dict->nr_idx;
+>>>>>> +            list = krealloc_array(dict->fwnode_list,
+>>>>>> +                          idx + 1, sizeof(*dict->fwnode_list),
+>>>>>> +                          GFP_KERNEL);
+>>>>>> +            if (ZERO_OR_NULL_PTR(list))
+>>>>>> +                goto done;
+>>>>>> +
+>>>>>> +            list[idx] = dev_fwnode(dev);
+>>>>>> +            dict->fwnode_list = list;
+>>>>>> +            dict->nr_idx = idx + 1;
+>>>>>>           }
+>>>>>>   -        list[idx] = dev_fwnode(dev);
+>>>>>> -        dict->fwnode_list = list;
+>>>>>> -        dict->nr_idx = idx + 1;
+>>>>>> +        name = devm_kasprintf(dev, GFP_KERNEL, "%s%d", dict->pfx, 
+>>>>>> idx);
+>>>>>>       }
+>>>>>> -
+>>>>>> -    name = devm_kasprintf(dev, GFP_KERNEL, "%s%d", dict->pfx, idx);
+>>>>>>   done:
+>>>>>>       mutex_unlock(&coresight_mutex);
+>>>>>>       return name;
+>>>>>
+>>>> _______________________________________________
+>>>> CoreSight mailing list -- coresight@lists.linaro.org
+>>>> To unsubscribe send an email to coresight-leave@lists.linaro.org
+>>
 
-SMMU has a similar pair of head/tail pointers to the invalidation
-queue (consumer/producer indexes and command queue in SMMU term).
-
-Thanks
-Nic
