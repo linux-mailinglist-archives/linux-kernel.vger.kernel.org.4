@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05FCB6BEA69
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 14:45:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 983786BEA67
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 14:45:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231134AbjCQNpP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 09:45:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47832 "EHLO
+        id S230525AbjCQNpM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 09:45:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231132AbjCQNo4 (ORCPT
+        with ESMTP id S231138AbjCQNo5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 09:44:56 -0400
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD4E326B1
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 06:44:54 -0700 (PDT)
-Received: by mail-ed1-f50.google.com with SMTP id o12so20509633edb.9
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 06:44:54 -0700 (PDT)
+        Fri, 17 Mar 2023 09:44:57 -0400
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D869C10CC
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 06:44:55 -0700 (PDT)
+Received: by mail-ed1-f51.google.com with SMTP id r11so20594554edd.5
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 06:44:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679060693;
+        d=1e100.net; s=20210112; t=1679060694;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=YezikHQUygm0KAkzKI4mrR3/7OjNf8PCGFqoeYhJShw=;
-        b=AAFW63e+eppt68OPxTT/AQxPyu+iGOgLoSs1zmOotKqHP8S4Q+XuL2Dkn2cO/1YA9n
-         FJFo1pVZ9pUtGRzuRPcWHfkS+QD5lxv1ucwrqITGcncTKe3ZyBwBEfBfbIrzAe7inBLM
-         ZHkL4BsJpMyxXN4/SyvgvyK6bQxtrOUJY999U9XijXOGGBiM4IsSpzDbxpLJDlRIwXiP
-         zJjbntqyLhxFEzcFzh6/blQrn8rGpA7EZ2Ct/W0GCxLfMsbRF7fYo0c9TPZolx9QyWN5
-         z/1euYRzqwLEqg6s9Z/AClov6FI+UDuiSlO9RTNmGzGiaCoFJT7XdwMjqZkjTFWQG3GW
-         NvFA==
-X-Gm-Message-State: AO0yUKVmLElz0DreRSXOZgcGTsuGxB66geD2xPQ0o07NZZ+IO4lVrcfS
-        fwBUmo30foKSbRnLnJRo8z8=
-X-Google-Smtp-Source: AK7set8W6CBQK9DHME/oMj44VdHDuWDaYeldL0uT0YRT9PqS8dczD/Fs05iiv7KqmxIKgTa6EaVd8A==
-X-Received: by 2002:a17:906:2645:b0:882:ed4a:f23 with SMTP id i5-20020a170906264500b00882ed4a0f23mr13791775ejc.49.1679060693197;
-        Fri, 17 Mar 2023 06:44:53 -0700 (PDT)
+        bh=vJPMQdWRr2R62+6qFAGrbR0pxQ+XXGNRMUC/h0VNtm0=;
+        b=NblaNDhlO7T4DUnSrbf+fQ3DoMDrfuzzdpADg/F2IxCD1zIMpAXMxHQV5I2GYGjNJc
+         8ERTQbenqFS5GnId9swpvBxSa95UBJlUz1dKPuYSfhoXGCHtlHIOa3/n/WmQVyK+wl3N
+         j++xOagxxEwTzbMUFNdWrcX80tv1kXZo2lTuru/Q47ybDPsvREPd9O6klukhbRpwRGVa
+         4XNU+5nTYl1TYnIt8GOHzkm8uFqJOjPBleGViQRmaKw3Bok+pvI8pNKV+mwz9Y69R3Gp
+         SgSOqzFjmFh1HC/RC1MvXx1aq5hwChRQMykq7DOSt72V62wpRKXz1lD17Ey6Jm/exYCP
+         f9jg==
+X-Gm-Message-State: AO0yUKWrOAJdgU8agLRWXsrS83Lmep+wPxr73Dofw2YtWYV79K3i/9/L
+        ddWwkK1zkQWFbwnDbBOdQb8=
+X-Google-Smtp-Source: AK7set83jXniV558MlOBbZXcyh1vr8063l9PNIhAzz51dJmEJsUiFtl0X65tzwCOY8u2W3NER4j7yg==
+X-Received: by 2002:a17:906:eec2:b0:92d:46f1:dc68 with SMTP id wu2-20020a170906eec200b0092d46f1dc68mr17325149ejb.67.1679060694390;
+        Fri, 17 Mar 2023 06:44:54 -0700 (PDT)
 Received: from localhost.localdomain (85-160-41-201.reb.o2.cz. [85.160.41.201])
-        by smtp.gmail.com with ESMTPSA id gz14-20020a170906f2ce00b00923221f4062sm999273ejb.112.2023.03.17.06.44.52
+        by smtp.gmail.com with ESMTPSA id gz14-20020a170906f2ce00b00923221f4062sm999273ejb.112.2023.03.17.06.44.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Mar 2023 06:44:52 -0700 (PDT)
+        Fri, 17 Mar 2023 06:44:54 -0700 (PDT)
 From:   Michal Hocko <mhocko@kernel.org>
 To:     Andrew Morton <akpm@linux-foundation.org>,
         Leonardo Bras <leobras@redhat.com>
@@ -50,15 +50,16 @@ Cc:     Frederic Weisbecker <fweisbecker@suse.de>,
         Shakeel Butt <shakeelb@google.com>,
         Muchun Song <muchun.song@linux.dev>,
         LKML <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Michal Hocko <mhocko@suse.com>
-Subject: [PATCH 1/2] sched/isolation: Add cpu_is_isolated() API
-Date:   Fri, 17 Mar 2023 14:44:47 +0100
-Message-Id: <20230317134448.11082-2-mhocko@kernel.org>
+        Michal Hocko <mhocko@suse.com>,
+        Frederic Weisbecker <frederic@kernel.org>
+Subject: [PATCH 2/2] memcg: do not drain charge pcp caches on remote isolated cpus
+Date:   Fri, 17 Mar 2023 14:44:48 +0100
+Message-Id: <20230317134448.11082-3-mhocko@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230317134448.11082-1-mhocko@kernel.org>
 References: <20230317134448.11082-1-mhocko@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -70,50 +71,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Frederic Weisbecker <frederic@kernel.org>
+From: Michal Hocko <mhocko@suse.com>
 
-Provide this new API to check if a CPU has been isolated either through
-isolcpus= or nohz_full= kernel parameter.
+Leonardo Bras has noticed that pcp charge cache draining might be
+disruptive on workloads relying on 'isolated cpus', a feature commonly
+used on workloads that are sensitive to interruption and context
+switching such as vRAN and Industrial Control Systems.
 
-It aims at avoiding kernel load deemed to be safely spared on CPUs
-running sensitive workload that can't bear any disturbance, such as
-pcp cache draining.
+There are essentially two ways how to approach the issue. We can either
+allow the pcp cache to be drained on a different rather than a local cpu
+or avoid remote flushing on isolated cpus.
 
-Suggested-by: Michal Hocko <mhocko@suse.com>
-Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
+The current pcp charge cache is really optimized for high performance
+and it always relies to stick with its cpu. That means it only requires
+local_lock (preempt_disable on !RT) and draining is handed over to pcp
+WQ to drain locally again.
+
+The former solution (remote draining) would require to add an additional
+locking to prevent local charges from racing with the draining. This
+adds an atomic operation to otherwise simple arithmetic fast path in the
+try_charge path. Another concern is that the remote draining can cause a
+lock contention for the isolated workloads and therefore interfere with
+it indirectly via user space interfaces.
+
+Another option is to avoid draining scheduling on isolated cpus
+altogether. That means that those remote cpus would keep their charges
+even after drain_all_stock returns. This is certainly not optimal either
+but it shouldn't really cause any major problems. In the worst case
+(many isolated cpus with charges - each of them with MEMCG_CHARGE_BATCH
+i.e 64 page) the memory consumption of a memcg would be artificially
+higher than can be immediately used from other cpus.
+
+Theoretically a memcg OOM killer could be triggered pre-maturely.
+Currently it is not really clear whether this is a practical problem
+though. Tight memcg limit would be really counter productive to cpu
+isolated workloads pretty much by definition because any memory
+reclaimed induced by memcg limit could break user space timing
+expectations as those usually expect execution in the userspace most of
+the time.
+
+Also charges could be left behind on memcg removal. Any future charge on
+those isolated cpus will drain that pcp cache so this won't be a
+permanent leak.
+
+Considering cons and pros of both approaches this patch is implementing
+the second option and simply do not schedule remote draining if the
+target cpu is isolated. This solution is much more simpler. It doesn't
+add any new locking and it is more more predictable from the user space
+POV. Should the pre-mature memcg OOM become a real life problem, we can
+revisit this decision.
+
+Cc: Leonardo Brás <leobras@redhat.com>
+Cc: Marcelo Tosatti <mtosatti@redhat.com>
+Cc: Shakeel Butt <shakeelb@google.com>
+Cc: Muchun Song <muchun.song@linux.dev>
+Cc: Johannes Weiner <hannes@cmpxchg.org>
+Cc: Frederic Weisbecker <frederic@kernel.org>
+Reported-by: Leonardo Bras <leobras@redhat.com>
+Acked-by: Roman Gushchin <roman.gushchin@linux.dev>
+Suggested-by: Roman Gushchin <roman.gushchin@linux.dev>
 Signed-off-by: Michal Hocko <mhocko@suse.com>
 ---
- include/linux/sched/isolation.h | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ mm/memcontrol.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/linux/sched/isolation.h b/include/linux/sched/isolation.h
-index 8c15abd67aed..fe1a46f30d24 100644
---- a/include/linux/sched/isolation.h
-+++ b/include/linux/sched/isolation.h
-@@ -46,6 +46,12 @@ static inline bool housekeeping_enabled(enum hk_type type)
- 
- static inline void housekeeping_affine(struct task_struct *t,
- 				       enum hk_type type) { }
-+
-+static inline bool housekeeping_test_cpu(int cpu, enum hk_type type)
-+{
-+	return true;
-+}
-+
- static inline void housekeeping_init(void) { }
- #endif /* CONFIG_CPU_ISOLATION */
- 
-@@ -58,4 +64,10 @@ static inline bool housekeeping_cpu(int cpu, enum hk_type type)
- 	return true;
- }
- 
-+static inline bool cpu_is_isolated(int cpu)
-+{
-+	return !housekeeping_test_cpu(cpu, HK_TYPE_DOMAIN) ||
-+		 !housekeeping_test_cpu(cpu, HK_TYPE_TICK);
-+}
-+
- #endif /* _LINUX_SCHED_ISOLATION_H */
+diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+index 0524add35cae..12559c08d976 100644
+--- a/mm/memcontrol.c
++++ b/mm/memcontrol.c
+@@ -2366,7 +2366,7 @@ static void drain_all_stock(struct mem_cgroup *root_memcg)
+ 		    !test_and_set_bit(FLUSHING_CACHED_CHARGE, &stock->flags)) {
+ 			if (cpu == curcpu)
+ 				drain_local_stock(&stock->work);
+-			else
++			else if (!cpu_is_isolated(cpu))
+ 				schedule_work_on(cpu, &stock->work);
+ 		}
+ 	}
 -- 
 2.30.2
 
