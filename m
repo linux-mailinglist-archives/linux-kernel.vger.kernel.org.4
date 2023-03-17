@@ -2,108 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 553866BE766
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 11:58:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 873036BE770
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 11:59:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229644AbjCQK6T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 06:58:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54290 "EHLO
+        id S229923AbjCQK7d convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 17 Mar 2023 06:59:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229599AbjCQK6Q (ORCPT
+        with ESMTP id S229841AbjCQK7a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 06:58:16 -0400
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29C934C22;
-        Fri, 17 Mar 2023 03:58:11 -0700 (PDT)
-Received: by mail-wr1-f52.google.com with SMTP id y14so4031847wrq.4;
-        Fri, 17 Mar 2023 03:58:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679050689;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+vOkNaE/TWI3jduytxs7WicDzMHo3tHuCTXWmM7qHy0=;
-        b=PBfRTFXLM1jxA72GoK5U04AsGVDrxZcDOCpWiH8p3v0sLqssFRhV+hXkxCj511Dkh2
-         +6KNQE2E3LJB+y1r7XcIwK9fObIX7g9O4ZWr3KoeaYZ9ONL8EpBiJxs3SYNhw3odizTY
-         AHyZtdTyhK0AGxIdPGwpA7IzCauBK6zjy3sG6L/BkSnBlSKZhYdm1QCCRGmLWrFgoUR3
-         6n4H4oqPzNBh0fHLwheFypFRkfvMW2vUBPbg9X3DinIEoUKVjhrnRrFSmvuHEGznIGum
-         EXr5KfDI49oScUdWtjD4ynxhQZaAuMSoe2B586zO/n49s4YVsVsjZ1CDkfgHumbuNbCR
-         48LA==
-X-Gm-Message-State: AO0yUKUhydtH2d2XULr7qk26m/JIyqmf4+w2+zTMF4rucmURfgsQsmAm
-        xzh5Lc/NP7pHMHAsPX81/Sg=
-X-Google-Smtp-Source: AK7set9sGw7iXXdVoiV+kOawF2/v4txV73NNutWJ6nOzM6nMIviPHfoLG/j+vEyZM7V8hvpN77gN7w==
-X-Received: by 2002:adf:dc44:0:b0:2ce:6f5a:c3b8 with SMTP id m4-20020adfdc44000000b002ce6f5ac3b8mr7407058wrj.31.1679050689576;
-        Fri, 17 Mar 2023 03:58:09 -0700 (PDT)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id m8-20020a5d4a08000000b002c3f03d8851sm1688809wrq.16.2023.03.17.03.58.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Mar 2023 03:58:09 -0700 (PDT)
-Date:   Fri, 17 Mar 2023 10:57:59 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     Michael Kelley <mikelley@microsoft.com>
-Cc:     kys@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com, x86@kernel.org,
-        linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org
-Subject: Re: [PATCH 1/1] x86/hyperv: Block root partition functionality in a
- Confidential VM
-Message-ID: <ZBRHt9TnYLuA+tI3@liuwe-devbox-debian-v2>
-References: <1678894453-95392-1-git-send-email-mikelley@microsoft.com>
+        Fri, 17 Mar 2023 06:59:30 -0400
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 937FD1BAF2;
+        Fri, 17 Mar 2023 03:59:28 -0700 (PDT)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id 164C624DBC2;
+        Fri, 17 Mar 2023 18:59:27 +0800 (CST)
+Received: from EXMBX071.cuchost.com (172.16.6.81) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 17 Mar
+ 2023 18:59:27 +0800
+Received: from [192.168.125.108] (113.72.145.194) by EXMBX071.cuchost.com
+ (172.16.6.81) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 17 Mar
+ 2023 18:59:26 +0800
+Message-ID: <11873190-a8ff-e93d-5c08-8a24903c170d@starfivetech.com>
+Date:   Fri, 17 Mar 2023 18:59:25 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1678894453-95392-1-git-send-email-mikelley@microsoft.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v3 5/5] dts: usb: add StarFive JH7110 USB dts
+ configuration.
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        Conor Dooley <conor@kernel.org>,
+        "Vinod Koul" <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Pawel Laszczak <pawell@cadence.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Chen <peter.chen@kernel.org>,
+        Roger Quadros <rogerq@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>, <linux-usb@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>
+References: <20230315104411.73614-1-minda.chen@starfivetech.com>
+ <20230315104411.73614-6-minda.chen@starfivetech.com>
+ <79593668-6ded-7290-f39b-e226d30e6e95@linaro.org>
+From:   Minda Chen <minda.chen@starfivetech.com>
+In-Reply-To: <79593668-6ded-7290-f39b-e226d30e6e95@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Originating-IP: [113.72.145.194]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX071.cuchost.com
+ (172.16.6.81)
+X-YovoleRuleAgent: yovoleflag
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 15, 2023 at 08:34:13AM -0700, Michael Kelley wrote:
-> Hyper-V should never specify a VM that is a Confidential VM and also
-> running in the root partition.  Nonetheless, explicitly block such a
-> combination to guard against a compromised Hyper-V maliciously trying to
-> exploit root partition functionality in a Confidential VM to expose
-> Confidential VM secrets. No known bug is being fixed, but the attack
-> surface for Confidential VMs on Hyper-V is reduced.
-> 
-> Signed-off-by: Michael Kelley <mikelley@microsoft.com>
 
-Applied to hyperv-fixes. Thanks.
 
-> ---
->  arch/x86/kernel/cpu/mshyperv.c | 12 ++++++++----
->  1 file changed, 8 insertions(+), 4 deletions(-)
+On 2023/3/17 16:44, Krzysztof Kozlowski wrote:
+> On 15/03/2023 11:44, Minda Chen wrote:
+>> USB Glue layer and Cadence USB subnode configuration,
+>> also includes USB and PCIe phy dts configuration.
+>> 
+>> Signed-off-by: Minda Chen <minda.chen@starfivetech.com>
 > 
-> diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyperv.c
-> index ff348eb..ac630ec 100644
-> --- a/arch/x86/kernel/cpu/mshyperv.c
-> +++ b/arch/x86/kernel/cpu/mshyperv.c
-> @@ -356,12 +356,16 @@ static void __init ms_hyperv_init_platform(void)
->  	 * To mirror what Windows does we should extract CPU management
->  	 * features and use the ReservedIdentityBit to detect if Linux is the
->  	 * root partition. But that requires negotiating CPU management
-> -	 * interface (a process to be finalized).
-> +	 * interface (a process to be finalized). For now, use the privilege
-> +	 * flag as the indicator for running as root.
->  	 *
-> -	 * For now, use the privilege flag as the indicator for running as
-> -	 * root.
-> +	 * Hyper-V should never specify running as root and as a Confidential
-> +	 * VM. But to protect against a compromised/malicious Hyper-V trying
-> +	 * to exploit root behavior to expose Confidential VM memory, ignore
-> +	 * the root partition setting if also a Confidential VM.
->  	 */
-> -	if (cpuid_ebx(HYPERV_CPUID_FEATURES) & HV_CPU_MANAGEMENT) {
-> +	if ((ms_hyperv.priv_high & HV_CPU_MANAGEMENT) &&
-> +	    !(ms_hyperv.priv_high & HV_ISOLATION)) {
->  		hv_root_partition = true;
->  		pr_info("Hyper-V: running as root partition\n");
->  	}
-> -- 
-> 1.8.3.1
+> Use subject prefixes matching the subsystem (which you can get for
+> example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
+> your patch is touching).
+>ok
+>> ---
+>>  .../jh7110-starfive-visionfive-2.dtsi         |  7 +++
+>>  arch/riscv/boot/dts/starfive/jh7110.dtsi      | 54 +++++++++++++++++++
+>>  2 files changed, 61 insertions(+)
+>> 
+>> diff --git a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
+>> index a132debb9b53..c64476aebc1a 100644
+>> --- a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
+>> +++ b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
+>> @@ -236,3 +236,10 @@
+>>  	pinctrl-0 = <&uart0_pins>;
+>>  	status = "okay";
+>>  };
+>> +
+>> +&usb0 {
+>> +	status = "okay";
+>> +	usbdrd_cdns3: usb@0 {
+> 
+> You should rather override by phandle this as well.
+> 
+I will remove the wrapper node 'usb0'. 
+
+Just like this :
++&usbdrd_cdns3 {
++       dr_mode = "peripheral";
++};
+
+
+（similar configuration in arch/arm64/boot/dts/ti/k3-j721e-sk.dts, usb1 node)
+   &usb1 {
+        dr_mode = "host";
+        ....
+  
+>> +		dr_mode = "peripheral";
+>> +	};
+>> +};
+>> diff --git a/arch/riscv/boot/dts/starfive/jh7110.dtsi b/arch/riscv/boot/dts/starfive/jh7110.dtsi
+>> index f70a4ed47eb4..17722fd1be62 100644
+>> --- a/arch/riscv/boot/dts/starfive/jh7110.dtsi
+>> +++ b/arch/riscv/boot/dts/starfive/jh7110.dtsi
+>> @@ -362,6 +362,60 @@
+>>  			status = "disabled";
+>>  		};
+>>  
+>> +		usb0: usb@10100000 {
+>> +			compatible = "starfive,jh7110-usb";
+>> +			clocks = <&stgcrg JH7110_STGCLK_USB0_LPM>,
+>> +				 <&stgcrg JH7110_STGCLK_USB0_STB>,
+>> +				 <&stgcrg JH7110_STGCLK_USB0_APB>,
+>> +				 <&stgcrg JH7110_STGCLK_USB0_AXI>,
+>> +				 <&stgcrg JH7110_STGCLK_USB0_UTMI_APB>;
+>> +			clock-names = "lpm", "stb", "apb", "axi", "utmi_apb";
+>> +			resets = <&stgcrg JH7110_STGRST_USB0_PWRUP>,
+>> +				 <&stgcrg JH7110_STGRST_USB0_APB>,
+>> +				 <&stgcrg JH7110_STGRST_USB0_AXI>,
+>> +				 <&stgcrg JH7110_STGRST_USB0_UTMI_APB>;
+>> +			starfive,stg-syscon = <&stg_syscon 0x4 0xc4 0x148 0x1f4>;
+>> +			starfive,sys-syscon = <&sys_syscon 0x18>;
+>> +			status = "disabled";
+>> +			#address-cells = <1>;
+>> +			#size-cells = <1>;
+>> +			ranges = <0x0 0x0 0x10100000 0x100000>;
+> 
+> reg and ranges should be second property. This also applies to your
+> binding example.
+> 
+> 
+ok, thanks
+> Best regards,
+> Krzysztof
 > 
