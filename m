@@ -2,90 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 534736BE9B6
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 13:55:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E47E6BE9B8
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 13:55:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230426AbjCQMzQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 08:55:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36730 "EHLO
+        id S230469AbjCQMzt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 08:55:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230474AbjCQMzL (ORCPT
+        with ESMTP id S230452AbjCQMzr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 08:55:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 121EAB2541
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 05:55:08 -0700 (PDT)
+        Fri, 17 Mar 2023 08:55:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AADE12BC7;
+        Fri, 17 Mar 2023 05:55:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6C4BCB825AA
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 12:55:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A87F2C43443;
-        Fri, 17 Mar 2023 12:55:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679057706;
-        bh=k18uy8OPPsrShBwobjjGrG9H0/Rc4JOaj+IDtGpfrus=;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C84E7622A3;
+        Fri, 17 Mar 2023 12:55:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9CB0C4339B;
+        Fri, 17 Mar 2023 12:55:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1679057745;
+        bh=qg+EwQsv/p5UD+n3/gGaCynZ+XcaO3bFfgawomGNlQI=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mb6gwMJUCTUq8Si0Ca56dSiOVKyEAY6yYKIvhop1uDGamZIZ/W0lGmNdFCWdMH8WO
-         0IEG/4qHRQgT5iEGAISO+zV2IXpqg1fUPSf0kotnOirK9gwXMtC3cCIJRi9cfOAmyQ
-         J5q4zmXqmAOZf24DphJoOsOhz/C/8FLStDcvIuOtiVCeXz+xzC1ONsLBjTS1Pif4fz
-         NqfRGi8zyJNV+JtM0BRtCJnY8iapk8MlUtnvn49xcBey5KyyrrWR9I6rpGzZatHHIs
-         V6fVlkhObq9quBVv5FfXLhLYT+KAVycJvF1lM017ecdOqCc7AjJp8yeiHqy2i/AAPj
-         XNkPVVpCBK+pA==
-Date:   Fri, 17 Mar 2023 12:55:01 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Dongxu Sun <sundongxu3@huawei.com>
-Cc:     catalin.marinas@arm.com, will@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        wanghaibin.wang@huawei.com
-Subject: Re: [PATCH 2/4] arm64/signal: Alloc tpidr2 sigframe after checking
- system_supports_tpidr2()
-Message-ID: <ae917789-3562-44d9-9860-db86b07953ba@sirena.org.uk>
-References: <20230317124915.1263-1-sundongxu3@huawei.com>
- <20230317124915.1263-3-sundongxu3@huawei.com>
+        b=d+qMuMXC7iao+a1aAKpUS2OVaIkAjXbk9uWgOqd/hGE9TvU8rQkUN6gh1NgFLJRPW
+         DJaYCUr46TbKw9fzMmbBOt4BCzgp5R9S2ivZK1bhGmPFW5Q/7thQebwY/qtUk6Gazs
+         vMMevCEVS45DFDoGgjRwHJsQpK3TqCqTi0eia8vo=
+Date:   Fri, 17 Mar 2023 13:55:42 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com, srw@sladewatkins.net,
+        rwarsow@gmx.de
+Subject: Re: [PATCH 4.19 00/27] 4.19.278-rc3 review
+Message-ID: <ZBRjTid0Hc4V7bwB@kroah.com>
+References: <20230316094129.846802350@linuxfoundation.org>
+ <ZBQ/rhv9nP+i8Pyc@debian>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="366TaKwbCSC6iYPr"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230317124915.1263-3-sundongxu3@huawei.com>
-X-Cookie: Life is like an analogy.
+In-Reply-To: <ZBQ/rhv9nP+i8Pyc@debian>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Mar 17, 2023 at 10:23:42AM +0000, Sudip Mukherjee wrote:
+> Hi Greg,
+> 
+> On Thu, Mar 16, 2023 at 10:42:14AM +0100, Greg Kroah-Hartman wrote:
+> > This is the start of the stable review cycle for the 4.19.278 release.
+> > There are 27 patches in this series, all will be posted as a response
+> > to this one.  If anyone has any issues with these being applied, please
+> > let me know.
+> > 
+> > Responses should be made by Sat, 18 Mar 2023 09:41:20 +0000.
+> > Anything received after that time might be too late.
+> 
+> Build test (gcc version 11.3.1 20230311):
+> mips: 63 configs -> no  failure
+> arm: 115 configs -> no failure
+> arm64: 2 configs -> no failure
+> x86_64: 4 configs -> no failure
+> alpha allmodconfig -> no failure
+> powerpc allmodconfig -> no failure
+> riscv allmodconfig -> no failure
+> s390 allmodconfig -> no failure
+> xtensa allmodconfig -> no failure
+> 
+> Boot test:
+> x86_64: Booted on qemu. No regression. [1]
+> 
+> Boot Regression on test laptop:
+> Only black screen but ssh worked, so from the dmesg it seems i915 failed.
 
---366TaKwbCSC6iYPr
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Can you bisect this?
 
-On Fri, Mar 17, 2023 at 08:49:13PM +0800, Dongxu Sun wrote:
-> Move tpidr2 sigframe allocation from under the checking of
-> system_supports_sme() to the checking of system_supports_tpidr2().
-
-Reviewed-by: Mark Brown <broonie@kernel.org>
-
-I didn't check the context enough to confirm if this may reorder things
-in the sigframe but given that we don't have shipping hardware yet and
-the layout is generally subject to change I think that's fine.
-
---366TaKwbCSC6iYPr
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQUYyQACgkQJNaLcl1U
-h9Aa7wf/VEksKAWpYjcDcTusEJlRBQNpfjGhGjx8/OPckRfBRkqeiyWblcQX1BOL
-GWr4j5tOK4bl7dF5ItV/AKnVjgqENNTeIWSkM9Hj4OMvVIOKNlE4W3UlRFnVgpjH
-ns0/6fBSHT5UGYpHE4CssDUwLTRkDhjUasXDUqmGK1N9aluKizFZMENkwtAuxx6f
-wpYawzcaxrcw7iPjqzm/PlSMTHTLiYfwGT5comW8ZidyOa0ukkgu1m94rydlSiwi
-BL5ShRr46Ln7Var8v5gyQgW0CLWK58IfMgNuxZc+8aFDJk7uW8/zouNZNsBUzNwo
-2hJgKw7pL/6lhNpsT9C9BtR8xEsxPA==
-=RNRN
------END PGP SIGNATURE-----
-
---366TaKwbCSC6iYPr--
