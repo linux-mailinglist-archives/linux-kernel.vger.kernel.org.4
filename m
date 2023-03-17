@@ -2,83 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E69356BEF9E
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 18:24:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63B996BEFAA
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 18:28:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229678AbjCQRYS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 13:24:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49580 "EHLO
+        id S229886AbjCQR2T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 13:28:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229841AbjCQRYO (ORCPT
+        with ESMTP id S229928AbjCQR2P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 13:24:14 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3362A3BC58;
-        Fri, 17 Mar 2023 10:24:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C0413B8263D;
-        Fri, 17 Mar 2023 17:24:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2E06C433EF;
-        Fri, 17 Mar 2023 17:24:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679073845;
-        bh=q1ov1xk0U4do5di1Twf4O7l40oHoIVwEUbGW7/GLBrU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Tul2MrWIiA8qWqpQ0mpkZFbX1EfW+tpHKc59rTX4Am4lq/tlg2sBHtk4YJtyqJ8ZJ
-         Z41S4Dn1/BjtiLgJ+40xFricwrNrBVJw50ZmFT6Z6TQ2Ze5uQmaZAEhUwpceB0b3lE
-         tUhu0AzxaUEzfyR4dmpHKLE6TI7CDk1OoPtLDdYW+iBx7GtU5kQGrHgZtUHWNXts2s
-         zvGKn9cobB7ntyjL67OQTc8KVbyuNmjCUquCKflmIy9iLR3YoFzVhkhHkojtsrPiIy
-         ahvLsjPxyxpT1iKQZfOTLCyPgMra5pBIy1dvpEI9ibZ5Zd0n0atqVA45zJ9pMhgwXq
-         uXcKBadNMEIIA==
-Date:   Fri, 17 Mar 2023 22:54:00 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Wesley Cheng <quic_wcheng@quicinc.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-arm-msm@vger.kernel.org,
-        linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH 2/6] dt-bindings: dmaengine: qcom: gpi: Add QCM2290 GPI
- DMA
-Message-ID: <ZBSiMAuX4qiUF06k@matsya>
-References: <20230314-topic-2290_compats-v1-0-47e26c3c0365@linaro.org>
- <20230314-topic-2290_compats-v1-2-47e26c3c0365@linaro.org>
+        Fri, 17 Mar 2023 13:28:15 -0400
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D42F3B873
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 10:28:13 -0700 (PDT)
+Received: by mail-yb1-xb35.google.com with SMTP id i6so6528248ybu.8
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 10:28:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112; t=1679074092;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Tgr4FzdJQUvv8sxqD3n2+NEThU5C851YsP5telCNKqc=;
+        b=AVJAcOWp//de/0qDhs3JXDyEG3wxRVQTCv1ru1HtbdhiRMIDKdXikzGW3RRw0fucvE
+         VlB4zbOpDjPDB3ZElOjSCBckSPk1pFTIop+KtLRwQg6lMvKT5ZKvpMNtyfdKbzQsOhKc
+         VDdc3Mm9tfcxn4dUeSa6w+E1LGqCBoha1ACyLYbR8J58ddMQJg+Bz8lEZjTnLAAGcaVN
+         GcpTFBtPbde0FVM9WEaKk7OArNKido3Y4beg/x0rykBtwZCx4p5FouxY5j8foPMGD4Db
+         BbK2BZB1Mq/I9a/AedKB6pO0RcEa0EQ8G6ApBBOp07MNGZ1ocDykMr8AoSuFPgLOuQKV
+         udRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679074092;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Tgr4FzdJQUvv8sxqD3n2+NEThU5C851YsP5telCNKqc=;
+        b=q7quSzlp3m3naMFnw7gYaiBAjVdW8lUL0q825YRBMVkDjYxwBt/jRwgNfCRKv6pW4W
+         C4smdKMkHHiX0TbaF5797Qdtka50pmrJPwn0lLCIY7AO74TO9I/bGhM0FjIYFlBeunsz
+         COrJ+y9WE+Jy7NzFWfOn4ZlBkRjHiqDbbX2P0ZObsVMpKlLfOlEKbaFfSEB4XDisZqmB
+         EWTmI6BvQ5hPLq5ZSv1ALl1UiAv8Q+bkANMBFeab0nfM6dOVSRcXMXPMrKUiGzVHXSBe
+         KiHwWH6JOvvf9cJ0lse0WWiFx2YMTIYSqoo4y8gAzprJmxML+DoL3GnORS93N9y34KDL
+         GfmA==
+X-Gm-Message-State: AO0yUKVkSC4XFyredDEwpSeFMckLf0LaBiSP3MserMiwcpWv8nmGuHp/
+        WNKVFdQdz8yg6eSeQjRRBrp3Rkc44VDV6m4yDSlRyg==
+X-Google-Smtp-Source: AK7set/RbsEZazIS5BwsZiaD/X/kDFc2no4aoSIrcxUs6+4E8c1A8bsJPb7czfxiV4RlDZCemGAGqyHD95or4DWx7m8=
+X-Received: by 2002:a25:9385:0:b0:b46:c5aa:86ef with SMTP id
+ a5-20020a259385000000b00b46c5aa86efmr148517ybm.12.1679074092398; Fri, 17 Mar
+ 2023 10:28:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230314-topic-2290_compats-v1-2-47e26c3c0365@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230227222957.24501-1-rick.p.edgecombe@intel.com>
+ <20230227222957.24501-23-rick.p.edgecombe@intel.com> <CAKC1njQ+resjS-O8vAVLhRfLHEdgta09faEr5zwi1JTNSWK0Fw@mail.gmail.com>
+ <236ae66c-fafb-80e9-d58b-6b18a22071c1@intel.com>
+In-Reply-To: <236ae66c-fafb-80e9-d58b-6b18a22071c1@intel.com>
+From:   Deepak Gupta <debug@rivosinc.com>
+Date:   Fri, 17 Mar 2023 10:28:03 -0700
+Message-ID: <CAKC1njR6WEuXbghupaX6R8LPSVP69yofYNb5+tEp5huHvsroCw@mail.gmail.com>
+Subject: Re: [PATCH v7 22/41] mm/mmap: Add shadow stack pages to memory accounting
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Rick Edgecombe <rick.p.edgecombe@intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        John Allen <john.allen@amd.com>, kcc@google.com,
+        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
+        dethoma@microsoft.com, akpm@linux-foundation.org,
+        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
+        david@redhat.com, Yu-cheng Yu <yu-cheng.yu@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14-03-23, 13:52, Konrad Dybcio wrote:
-> Add a compatible for the single GPI DMA controller on QCM2290. It uses
-> the same 0x10000 offset as SM6350.
+On Fri, Mar 17, 2023 at 10:16=E2=80=AFAM Dave Hansen <dave.hansen@intel.com=
+> wrote:
+>
+> On 3/17/23 10:12, Deepak Gupta wrote:
+> >>  /*
+> >> - * Stack area - automatically grows in one direction
+> >> + * Stack area
+> >>   *
+> >> - * VM_GROWSUP / VM_GROWSDOWN VMAs are always private anonymous:
+> >> - * do_mmap() forbids all other combinations.
+> >> + * VM_GROWSUP, VM_GROWSDOWN VMAs are always private
+> >> + * anonymous. do_mmap() forbids all other combinations.
+> >>   */
+> >>  static inline bool is_stack_mapping(vm_flags_t flags)
+> >>  {
+> >> -       return (flags & VM_STACK) =3D=3D VM_STACK;
+> >> +       return ((flags & VM_STACK) =3D=3D VM_STACK) || (flags & VM_SHA=
+DOW_STACK);
+> > Same comment here. `VM_SHADOW_STACK` is an x86 specific way of
+> > encoding a shadow stack.
+> > Instead let's have a proxy here which allows architectures to have
+> > their own encodings to represent a shadow stack.
+>
+> This doesn't _preclude_ another architecture from coming along and doing
+> that, right?  I'd just prefer that shadow stack architecture #2 comes
+> along and refactors this in precisely the way _they_ need it.
 
-Applied, thanks
+There are two issues here
+ - Encoding of shadow stack: Another arch can choose different encoding.
+   And yes, another architecture can come in and re-factor it. But so
+much thought and work has been given to x86 implementation to keep
+   shadow stack to not impact arch agnostic parts of the kernel. So
+why creep it in here.
 
--- 
-~Vinod
+- VM_SHADOW_STACK is coming out of the VM_HIGH_ARCH_XX bit position
+which makes it arch specific.
+
+If re-factor takes care then I would say the 2nd issue still exists,
+it's better to keep it away from arch agnostic code.
