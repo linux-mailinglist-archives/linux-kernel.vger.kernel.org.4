@@ -2,113 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F38116BEC4B
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 16:05:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C2DD6BEC6B
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 16:07:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231429AbjCQPFX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 11:05:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49416 "EHLO
+        id S231400AbjCQPHp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 11:07:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231474AbjCQPEy (ORCPT
+        with ESMTP id S229841AbjCQPHm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 11:04:54 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DED0F145B72
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 08:04:37 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id j2so4714203wrh.9
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 08:04:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679065476;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=n0orW1CTnM6DAdshwwXX6e/Knv2tholAvEuPEyPRFIo=;
-        b=thOz4Bqxx3aTg5BS5u+gcrBNnxZbSpDBFAr6GQFvbn1o0Cw1G2+korkQq5PDU/bGbm
-         Cc1uy6fQDBocp9xAfnJSIcZtxGmgaoYWyzDJCfeXQO5LApq26Q5LbblslY0DNBliOQlp
-         H2p89gtcc1iu72YHH+C/yXj3al3bml83tOkWYzCiFKUh1qPG4oWjxmkZrBvztPtQj6Yc
-         yHbL15SZl50wfpidVG6U5cZz8d0vImB9kekXI1YLFQNU7NzbuZoMLOvA/wubJAWwcjzE
-         Ne8uKWTk+48RrV6M+oo6dSSeQW5JMoVfSjBvoE0q2mgna7BpTM4PJg9OWdZ8pXIhoqac
-         RkEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679065476;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=n0orW1CTnM6DAdshwwXX6e/Knv2tholAvEuPEyPRFIo=;
-        b=8IAclD7DA3RkIzXjliyCODRsobsRWG0te40IX7oK3Hu2fFiPq+dsDWrDP7aFrTTu+l
-         U0XtwK+HMVZEO8GwHooQL5GDKm2mUdJ92EVNBDhJ0fNT4uH53j0svqVvXqeeZFkMHcK1
-         xlY3PHQmCNlkI2UmpeT6lmHGSFHzayxzqV2Ql3DZOIUB+lBeGa4+oumewrNzw37QNu1l
-         gQHHnp8O0UVBleHMmEywEUBujJPih1vz2wfpR/9N72vZ2unQdBlvswWLu8tsXF7KRYAM
-         9FeV0AIIDK+MwFWyCHNx62oG3fbbhyyHReuWiSxiaLHbjWbiQa+a4h5SqIxCN+RPZs9K
-         aLgA==
-X-Gm-Message-State: AO0yUKXJbHSL/jSizSV66cZtqAg34CWU7CB0611RQgc7d8Xw21+ViBEL
-        pdIwHLa1ae2Fh1KFZ/SMd2k89g==
-X-Google-Smtp-Source: AK7set/27QgRLlofrRbBq6ib9GCEdM3UBqceT1TuEhdddZ/nsuIbDQcnv0yskcG1IYIplUBj0Sw1pg==
-X-Received: by 2002:adf:fd50:0:b0:2c3:fb3e:ae85 with SMTP id h16-20020adffd50000000b002c3fb3eae85mr7995557wrs.44.1679065475843;
-        Fri, 17 Mar 2023 08:04:35 -0700 (PDT)
-Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
-        by smtp.gmail.com with ESMTPSA id q14-20020a05600000ce00b002be505ab59asm2133773wrx.97.2023.03.17.08.04.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Mar 2023 08:04:35 -0700 (PDT)
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Date:   Fri, 17 Mar 2023 16:04:28 +0100
-Subject: [PATCH v4 12/12] arm64: defconfig: add PMIC GLINK modules
+        Fri, 17 Mar 2023 11:07:42 -0400
+Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-he1eur04on0631.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe0d::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5749C1BCF;
+        Fri, 17 Mar 2023 08:06:59 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=aCx9vjQ4d4AoyIWGadL197grNECr77YfiwFhCLysc+JA8m+dXYpmL0T+snHkXRMF1rZkhyqqZOgXVOkHsBXWihlbE9ZwEo8clBGquTibeEWrNSn0HxyQKDvoR4VrHsVMlY0ZA+U9KxuiGlvO1CTvyl8biosqJZT4CklmINsAcLLVcl/W4FetUBp60FOOmJuo22fu4s+vE+Rz5/C+3qV9ukivVct6r+YrQ9z6I9tuRWFvn0KcMfsdUy83mINxg3FILp9Dwi/t9WqsyNsN1RAEsElGL9NQHRSEurWzy71hQajkVZYpNk5gqgJpvNSK4MbuGnb+RmCQvLpuf7j1+4Qyxg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=gAZmkxD1IDWc34G3D6qOyWAhNx9y9C+YSEpFYL+zrQs=;
+ b=jn65DInsl2pKmdhVDQhiDawjlEvjPtZvdTRFew3isqvjUb4b6jTjKX5fQdfLcWnzseKYpWaHBrm5yD5jOz9ZqoZu5mLVHL7y63jdgecEavdxSN/W542W8a9VQ2xEs5+2LX14DHjK0mhWJ60E9D6gNAaMDbwq0hgtBtQcGtm7o2guiRNTWPUjtoPAL3CkfHFZDqU40R/nO0CEoYcfbIfCXpqVvAuqlUeubxYuK8PO8fp+53y68Rmsq2maB8Va1pI4oLK2GqYR2uu6t8OOURHKu9nFi47Q1lLMBX6LEeIE5viw0jhIkdDxvSaqfx0wV2yCrDfU1ItpC+cbWNkRas41lw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=gAZmkxD1IDWc34G3D6qOyWAhNx9y9C+YSEpFYL+zrQs=;
+ b=Q9wk908hAMx+5vDVIT3gLxVxnwv5yQhLMbXMYW24PVH3csTt+H7/x5A5jg+wg2QSZ28aRXpWcLvvPfwmJXZUuTvKAMUpWn0PJ+luzWaW8xPDMYMph7Hix22svrTRVd3Llv5vguXr6wyBCYWQSZ8ayHz2dSZv9yJQ+48YdXE6xXE=
+Received: from AM6PR04MB4838.eurprd04.prod.outlook.com (2603:10a6:20b:4::16)
+ by AS4PR04MB9363.eurprd04.prod.outlook.com (2603:10a6:20b:4e8::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.29; Fri, 17 Mar
+ 2023 15:05:47 +0000
+Received: from AM6PR04MB4838.eurprd04.prod.outlook.com
+ ([fe80::fb2a:a683:b78e:b9b5]) by AM6PR04MB4838.eurprd04.prod.outlook.com
+ ([fe80::fb2a:a683:b78e:b9b5%4]) with mapi id 15.20.6178.029; Fri, 17 Mar 2023
+ 15:05:44 +0000
+From:   Frank Li <frank.li@nxp.com>
+To:     Alexander Stein <alexander.stein@ew.tq-group.com>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+CC:     "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "imx@lists.linux.dev" <imx@lists.linux.dev>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>
+Subject: RE: [EXT] Re: [PATCH v2 2/3] arm64: dts: imx8qxp: add cadence usb3
+ support
+Thread-Topic: [EXT] Re: [PATCH v2 2/3] arm64: dts: imx8qxp: add cadence usb3
+ support
+Thread-Index: AQHZWE4gY8I1HVGK8EKXaSGyCYF/Mq7+hb6AgACL7xA=
+Date:   Fri, 17 Mar 2023 15:05:44 +0000
+Message-ID: <AM6PR04MB4838F13033FCB62B2519C42088BD9@AM6PR04MB4838.eurprd04.prod.outlook.com>
+References: <20230316212712.2426542-1-Frank.Li@nxp.com>
+ <20230316212712.2426542-3-Frank.Li@nxp.com> <3810738.Icojqenx9y@steina-w>
+In-Reply-To: <3810738.Icojqenx9y@steina-w>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: AM6PR04MB4838:EE_|AS4PR04MB9363:EE_
+x-ms-office365-filtering-correlation-id: 5f0ceb4d-5b53-4aaa-fc99-08db26f91539
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: TBWTmQ7SHmXR89oIo8yT4EgOwbZ2Al6PYDr4WAvACRlbdxwotBy+UOgSF7pqLrw1WYKjTuWLQovUil9RSjyYVUD5Y1wOPM3nPIeF9MA2lvPlViiLuj5eBeCM3U+anx4PSUtPz91W+LGWoJBCexuCy43FzmyqJ/9cMItw/oS2ZoyR3x7dpkB3fU7J/FcUX13TSb6u/Hmr5OQ9VAFU9lz1S2OIPslr5RPl9WSBDPXXSmUe8MrP7Szs7viPV7CRIHAfHKQljlgfqqXStEjvg6YpRzAM9ziQg2EDQAUzYZxKoZhOpg8ZS+r5s7spMP8vv0kfqrklQ0oYfuLJMytQFxVT6TjOKU9eM6AqeQk08YMVLK0et14fNYr72cqullqJNNUY6wx1k6a1HQ9JSXZs3zqW9of2LEF3OLI2LviRwS5Qwj2Pwzi/hB/xLgZu/HS/Q9J0/WEj5JP5JsRF4tJAOqsuZkXP/oZCjcYI6k7gCav7pnThMcHH6BrxoojCL4ZiKa2QuNkngJJ3AbDE/7HhChTm0c5tHvtsQ3m9T0Zodh/85ZX6KRPrmygzq4Pgp30hzU4VN7W5iYbvNyIDZSrtIfaRsp70NqfXT5k3BI1MZQcEYoJ8+fawygxIHSMyjlk5MDQ15++ID6d5aykTX0hPZ9NAuTVRhKGOiW65Lh73uvBhOYR/EGTyFGzBx7s2lSc0zTtix2cfO8PyPRgADb60YasI6UBnaAt7jmw6KxZatZ56VhE=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB4838.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(136003)(346002)(39860400002)(376002)(366004)(396003)(451199018)(5660300002)(44832011)(7416002)(4326008)(8676002)(41300700001)(52536014)(55016003)(8936002)(33656002)(86362001)(38070700005)(122000001)(2906002)(38100700002)(26005)(6506007)(55236004)(83380400001)(9686003)(186003)(71200400001)(66574015)(478600001)(76116006)(64756008)(7696005)(66446008)(66476007)(54906003)(66556008)(66946007)(110136005)(316002)(32563001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?1tUGZ4Swl+I8S/JGcCQSqIHKH0I8THnSbUg4ZqVsN4XFniHfLBYFEZB/VQ?=
+ =?iso-8859-1?Q?1dngZHyfvM+rD7bTo4E6+uOke8YHsL3E1cyF0Vo1eN0idrO8wmacTJDB77?=
+ =?iso-8859-1?Q?1GrN+Fh5UvhTS9mP1xE8vAi8XAOeHwXsL8a0KQvX6aR4qOKAEbd+V7WXZl?=
+ =?iso-8859-1?Q?ANgB/waXR77Rwo+UL9r4eYCFumGCHvmqI9e6n7bp0fJPzxYtLcDxvI8vSK?=
+ =?iso-8859-1?Q?sKuPnLt+GwZStSFvZaEJWHZYf6qy85CUuGQEIp6vwYK9xkbJHFw2sHI29J?=
+ =?iso-8859-1?Q?n67aLdISu39OFSPYRlS1pBKzy82bVPAGPmAUQKvFv215vuKXaAouAu5Sc7?=
+ =?iso-8859-1?Q?GziUTA2y9TfHmhJb3PNn3G9RovZ4LfMnDiBIwIuiwRAlNuLooi38etDr/O?=
+ =?iso-8859-1?Q?tc9H4Mq2o/FG3srzhBGsBDcE9anUojfsogwwaLS7IgIRUmwPqChkW9j8Yi?=
+ =?iso-8859-1?Q?9CbDGD6r28+yHqopOB9FBoJd+lSS0qvEQQ9mazvIUEwJVlF6IgyLuqwplQ?=
+ =?iso-8859-1?Q?SJfieolPzwr7vLMAMmGIOn6mOZzPhlI134QYDFxJb3GBpirOj46pu8vTa0?=
+ =?iso-8859-1?Q?YALQFaCEgaLpE9lrGfxgddBVNV4dgEJNrg0To8qf6suHir5C7bkhieZXrQ?=
+ =?iso-8859-1?Q?CSraugPwIDBJQ/kl92AAK0Ul1ZQ7ktAVff1IBAM7jvfVFFoRiDLKh27XGJ?=
+ =?iso-8859-1?Q?7bpE8OUvftTsAsN/DMDsJMLbGEms9gNW2ggp4Ahbzfs+fE1/i2KPXhyswK?=
+ =?iso-8859-1?Q?HwAfJG65wUdvv4tXsAGkpaecI0OuwQ170m930MGfSleGhSObOz5EF2WajO?=
+ =?iso-8859-1?Q?erXQRwUcOR+TzMl1uEk8cxDgnxj9znGqXK+c20o4gvOrrqNfKgiGyd5CEk?=
+ =?iso-8859-1?Q?eIQnGo4yfzuJFPyWXHOHikk7oWSwqC+dNwt1cDVQUARRxCr2WxKbXgq18M?=
+ =?iso-8859-1?Q?MEud0MAwz4F+JaSlbp3vFV4Vid7QBWcd0g2hXUm8N7IaP9BXGMhHvoUEro?=
+ =?iso-8859-1?Q?SDz7lFeS8FhX/sf3jt7png8L+/fKMA50zzwwJsC3ZOi+B4QplF/kXD2lGy?=
+ =?iso-8859-1?Q?+F43dSyX5fAwDJzDRJr/+Zx2/+T7vlQ5O4Hbiic39AGxGnS5nUj78xvVrF?=
+ =?iso-8859-1?Q?YpZRKTSXHgkw/sOOcT14vTMZdZgJ2pFngTrYw/UAaRB5JUWa5av7Zkl3rh?=
+ =?iso-8859-1?Q?emu4UAIJvZ6J82VLc5zGgDa3ZQwF8jXvV0F3gS2NvRzTfNt/ZT0trhFV4U?=
+ =?iso-8859-1?Q?MuJdh6nAyAzwshiAGqK0vNlGqPIa2L/EaiRt6FVjz58Wu5KDFLKrqi3WZI?=
+ =?iso-8859-1?Q?ClBwDasfVzDEv1xq9pvd0uim/3bvAk9Xn1FIyhc9+q2qj7E7hwTxmKAQCx?=
+ =?iso-8859-1?Q?sV4PS7hXNTBT3Q63zBaKo2yg//B31fsMzoSzcx2etOll4sY9m+QGsxM0uO?=
+ =?iso-8859-1?Q?snSErGKArafrJol/H45Byw+cCATGoxk8NkwcpXQNmHS80oU98S7z1WUAzi?=
+ =?iso-8859-1?Q?POIn3O7XsFGhnqN+Ftv+nJ3y3pHAwItwtSovtngVKHgfp2Rd6jRfBXio8D?=
+ =?iso-8859-1?Q?YOVjIlylfYXwuZYkYYOa16OWpINBykS+ZiBmDD6jbTP/GLEdMAS+04YOJC?=
+ =?iso-8859-1?Q?q/Zg6xvavpI9/DweX4v/Q/LHcG3sDUyRr4?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230130-topic-sm8450-upstream-pmic-glink-v4-12-38bf0f5d07bd@linaro.org>
-References: <20230130-topic-sm8450-upstream-pmic-glink-v4-0-38bf0f5d07bd@linaro.org>
-In-Reply-To: <20230130-topic-sm8450-upstream-pmic-glink-v4-0-38bf0f5d07bd@linaro.org>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Neil Armstrong <neil.armstrong@linaro.org>
-X-Mailer: b4 0.12.1
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB4838.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5f0ceb4d-5b53-4aaa-fc99-08db26f91539
+X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Mar 2023 15:05:44.7422
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: QyIZi8gFWcP4/fR0nh1wAKK9yENI/V6gN241yqwd37gVj9ubOURlgv492wLV856xk9XFAsyAE1TWErdDnqBo4A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS4PR04MB9363
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,SPF_HELO_PASS,
+        T_SPF_PERMERROR,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable the PMIC GLINK core, altmode, battery and UCSI
-aux drivers as module to enable USB Type-C management
-over the PMIC GLINK protocol on modern Qcom platforms.
+>=20
+> Caution: EXT Email
+>=20
+> Am Donnerstag, 16. M=E4rz 2023, 22:27:10 CET schrieb Frank Li:
+> > There are cadence usb3.0 controller in 8qxp and 8qm.
+> > Add usb3 node at common connect subsystem.
+> >
+> > Signed-off-by: Frank Li <Frank.Li@nxp.com>
+> > ---
+> >  .../boot/dts/freescale/imx8-ss-conn.dtsi      | 72 +++++++++++++++++++
+> >  1 file changed, 72 insertions(+)
+> >
+> > diff --git a/arch/arm64/boot/dts/freescale/imx8-ss-conn.dtsi
+> > b/arch/arm64/boot/dts/freescale/imx8-ss-conn.dtsi index
+> > 4852760adeee..389f52f16a5c 100644
+> > --- a/arch/arm64/boot/dts/freescale/imx8-ss-conn.dtsi
+> > +++ b/arch/arm64/boot/dts/freescale/imx8-ss-conn.dtsi
+> > @@ -138,6 +138,56 @@ fec2: ethernet@5b050000 {
+> >               status =3D "disabled";
+> >       };
+> >
+> > +     usbotg3: usb@5b110000 {
+> > +             compatible =3D "fsl,imx8qm-usb3";
+>=20
+> Mh, is imx8qm considered a subset of imx8qxp or vice versa?
+> Maybe it's worth adding a dedicated compatible for imx8qxp as well.
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
----
- arch/arm64/configs/defconfig | 4 ++++
- 1 file changed, 4 insertions(+)
+Imx8qxp is subset of imx8qm.
+This part is the same between qxp and qm.=20
+If exact same,  I think not necessary to add compatible string.=20
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 3a6d995384d9..d849fa2ca852 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -273,6 +273,10 @@ CONFIG_VIRTIO_BLK=y
- CONFIG_BLK_DEV_NVME=m
- CONFIG_QCOM_COINCELL=m
- CONFIG_QCOM_FASTRPC=m
-+CONFIG_BATTERY_QCOM_BATTMGR=m
-+CONFIG_QCOM_PMIC_GLINK=m
-+CONFIG_TYPEC_UCSI=m
-+CONFIG_UCSI_PMIC_GLINK=m
- CONFIG_SRAM=y
- CONFIG_PCI_ENDPOINT_TEST=m
- CONFIG_EEPROM_AT24=m
-
--- 
-2.34.1
+>=20
+> Best regards,
+> Alexander
+>=20
+> > +             #address-cells =3D <1>;
+> > +             #size-cells =3D <1>;
+> > +             ranges;
+> > +             reg =3D <0x5b110000 0x10000>;
+> > +             clocks =3D <&usb3_lpcg IMX_LPCG_CLK_1>,
+> > +                      <&usb3_lpcg IMX_LPCG_CLK_0>,
+> > +                      <&usb3_lpcg IMX_LPCG_CLK_7>,
+>=20
 
