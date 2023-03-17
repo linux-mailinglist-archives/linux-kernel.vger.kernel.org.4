@@ -2,53 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0C0B6BF017
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 18:47:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CC896BF01C
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 18:48:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230385AbjCQRrF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 13:47:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58374 "EHLO
+        id S230420AbjCQRsB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 13:48:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230373AbjCQRrD (ORCPT
+        with ESMTP id S230402AbjCQRr7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 13:47:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 801874E5F5;
-        Fri, 17 Mar 2023 10:47:02 -0700 (PDT)
+        Fri, 17 Mar 2023 13:47:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50EFAC8319;
+        Fri, 17 Mar 2023 10:47:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C6FD860F30;
-        Fri, 17 Mar 2023 17:47:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E11BC433EF;
-        Fri, 17 Mar 2023 17:47:00 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DFD7760F85;
+        Fri, 17 Mar 2023 17:47:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9DFFC433EF;
+        Fri, 17 Mar 2023 17:47:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679075221;
-        bh=g3D9UlthErJgQKx8E+92yEXHrLI/cWb05adOnPrNrwE=;
+        s=k20201202; t=1679075277;
+        bh=+kGC7FbC9kl4Uk9kpXxBRDWJCgeiHeBHPRPimywbtMU=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Tp8gWNSUZimamExfxl0Gd27Z1pMSa6Vmri1x/Kgv0sbdWSH47OfVgZXSN4+WieD+Z
-         dqc4I+eqS2rQrtMs8YzxrYlmMa0+UornrQ7W2J1hCCUj9gxD8mH0WWs+hcdGt9CqOF
-         E/PCKZQK9GnNKkj0qnDEXtq9nro4i0Jsfpbd+3KMpdDSP+WxrbcJTC8v74I39FvzOa
-         EBXZvRIby/axAh7WraV15jFVU0F9ZOyMxG3juhzYgbj8mTnQCvwNBWt1yFWZG3jdmO
-         uoQEnFPAoGNitrGSXV/1CYKBTPd9jKCdbNS5z9FyvOottoKJxmtOI8Mp2yICekraZm
-         S/FUaMMqfWUJA==
-Date:   Fri, 17 Mar 2023 23:16:57 +0530
+        b=n0/kQS9q37VRCcmxsnhRngTuthe7jfLxnqAZEsV0LTiuO7b73aKJZECZL+Z0+r507
+         dOyKg3KaMlPWglXDtmmkTaPR/xhKYBl1OWOPNU2rJUFe7pBj4y81pymOMpHAXBoa/z
+         sURuYsc+LWxQzwbroiWOfKkWpmEatH2noS/sR3sym6cb3ENQY2Kdxy0iZG1R+b4zdB
+         pjLbJn4yRhA+t25iQwuzt3ngqb2XryPpzw+c58pd7hAg92kFNLUZYnyO006cjdfLG+
+         piBnpSnnWSXgWTRx4cvbGf8b0/+RBkEqj+a6kjZwjRN6wBy3V2LVhbs3iUefHSl9Mr
+         LCOX7Ixh/Dg5g==
+Date:   Fri, 17 Mar 2023 23:17:53 +0530
 From:   Vinod Koul <vkoul@kernel.org>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>
-Subject: Re: [PATCH 0/2] PCI/AER: Remove redundant Device Control Error
- Reporting Enable
-Message-ID: <ZBSnkdedr568FBiv@matsya>
-References: <20230307192655.874008-1-helgaas@kernel.org>
+To:     Janne Grunau <j@jannau.net>
+Cc:     Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mark Kettenis <kettenis@openbsd.org>, asahi@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v3 13/15] dt-bindings: dma: apple,admac: Add t8112-admac
+ compatible
+Message-ID: <ZBSnybiX5c9oWe7X@matsya>
+References: <20230202-asahi-t8112-dt-v3-0-d1a5f6383d95@jannau.net>
+ <20230202-asahi-t8112-dt-v3-13-d1a5f6383d95@jannau.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230307192655.874008-1-helgaas@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <20230202-asahi-t8112-dt-v3-13-d1a5f6383d95@jannau.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,15 +62,9 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07-03-23, 13:26, Bjorn Helgaas wrote:
-> From: Bjorn Helgaas <bhelgaas@google.com>
-> 
-> Since f26e58bf6f54 ("PCI/AER: Enable error reporting when AER is native"),
-> which appeared in v6.0, the PCI core has enabled PCIe error reporting for
-> all devices during enumeration.
-> 
-> Remove driver code to do this and remove unnecessary includes of
-> <linux/aer.h>.
+On 07-03-23, 13:10, Janne Grunau wrote:
+> The block found on Apple's M2 SoC is compatible with the existing driver
+> so add its per-SoC compatible.
 
 Applied, thanks
 
