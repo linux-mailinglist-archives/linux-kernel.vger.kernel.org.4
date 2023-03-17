@@ -2,125 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B13A46BF00F
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 18:45:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F0406BF013
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 18:46:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230378AbjCQRoi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 13:44:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53156 "EHLO
+        id S230322AbjCQRqG convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 17 Mar 2023 13:46:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230322AbjCQRoe (ORCPT
+        with ESMTP id S230288AbjCQRqD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 13:44:34 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E58E933CDE;
-        Fri, 17 Mar 2023 10:44:05 -0700 (PDT)
-Received: from [192.168.1.90] (unknown [188.24.156.231])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: cristicc)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 4B80866030BF;
-        Fri, 17 Mar 2023 17:43:56 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1679075037;
-        bh=shPYMuCODMkFNZjlOGCzX1xSspkhpTtkW3qN+SA5vgY=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=dwBoIYsLp+X4EZ5VGBf9C8ruKohVTzsEh46ctOJfM+2uehmidYGbx2ySpEG6S8XPi
-         PfHEP9cIkHFIDTg/MFj+btE06jGlnQcmTZJy2q/UB+iC9kSbbsm9j1jEGdyk3QDmvG
-         juJn5aJnBZwJVPTXz/VaXKg4bCiAaAfpd3tWNPaEa8wcxtdti81O0x3v+JsC+zwORH
-         2nmd6vw7ir1lsEERedx3pV2T9+xrGXk9wZSOIaDjv7pc6fsqk9p4fnSsp9WpuctEQ7
-         6eTCFCeMGePzaUWoYdEPL/Qntt+hvlfI+a8Yasyqw9Fy2Az0o0IUji6LpEC2reJ9Ls
-         Of5YYPuUEuh9w==
-Message-ID: <e81f02f2-e692-e4ef-1510-fdc285dd5964@collabora.com>
-Date:   Fri, 17 Mar 2023 19:43:53 +0200
+        Fri, 17 Mar 2023 13:46:03 -0400
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8818E4BEB7;
+        Fri, 17 Mar 2023 10:46:01 -0700 (PDT)
+Received: by mail-ed1-f42.google.com with SMTP id er8so11684338edb.0;
+        Fri, 17 Mar 2023 10:46:01 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679075160;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=K26auEMnTKuvwDj2KTkLuNYLs8JTlath/TrD8GdyZuY=;
+        b=ftZt6PjaCERQlYfK2VxFxcRpauT6eNnks5ugIPX+w/Z2mct8QhhTbSL5LDckj8Jlhf
+         8jCxURt79XmEGeyaW238zhrn1rs4KFDgKhPNslzQ+i8N8VB22ZIdentDGOOT+9hkR79j
+         KSOAYW6PbKMlg1uFH8Gf7ScQ6JyXOX7mIOIxOY9wpEf1nG3fmV9IDeQggsjOzztrKUxT
+         pZ6KjfGO6FSemc4RnMmVaq/7Y1OARmwHi9wuUGDaBlnpFNqI8oi9b6ai/GpiCLoJqbvb
+         TmGFXesOwGteSvYsI7pRojhnrfWNxH+QWfe2HhvgSqf2SMSRc+i7WYMLo2mY0jpF7+5x
+         3qrg==
+X-Gm-Message-State: AO0yUKWfBDh9MDHq3q7Ag59tWGhAUeN62qb7TgQ9aWZIawDFjCrq29zg
+        BoDwJjFFqCymUN28d2n/FrEqq/jQy79YWSPmEys=
+X-Google-Smtp-Source: AK7set/BxPwqnQib4HdMApNSAvC73vRc2vG2UkPhjLk0SbUeAPoMoGX85KgLumZ06Sh3op65qz0MOcA6rWZdB4kODys=
+X-Received: by 2002:a50:d0d3:0:b0:4fa:71a2:982b with SMTP id
+ g19-20020a50d0d3000000b004fa71a2982bmr2139979edf.0.1679075159978; Fri, 17 Mar
+ 2023 10:45:59 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH 02/11] dt-bindings: serial: snps-dw-apb-uart: Relax
- dma-names order constraint
-Content-Language: en-US
-To:     Conor Dooley <conor@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Sudeep Holla <sudeep.holla@arm.com>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Daniel Drake <drake@endlessm.com>,
-        Katsuhiro Suzuki <katsuhiro@katsuster.net>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-rockchip@lists.infradead.org,
-        linux-riscv@lists.infradead.org, kernel@collabora.com
-References: <20230315114806.3819515-1-cristian.ciocaltea@collabora.com>
- <20230315114806.3819515-3-cristian.ciocaltea@collabora.com>
- <3679f2d0-55f0-1710-abc2-b268b6fc6969@linaro.org>
- <8ae57fe3-56aa-7e50-3eaa-a12a40657baf@collabora.com>
- <80796828-7b38-184a-2e8e-3cfe9158b67f@linaro.org>
- <13cb8dbd-994c-4b38-b715-44a3bf3d278d@spud>
-From:   Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
-In-Reply-To: <13cb8dbd-994c-4b38-b715-44a3bf3d278d@spud>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230217131726.12666-1-alsp705@gmail.com>
+In-Reply-To: <20230217131726.12666-1-alsp705@gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 17 Mar 2023 18:45:48 +0100
+Message-ID: <CAJZ5v0jsmshYESk2KX0SiUZKZTaNyrNqVy=GxMK4DkN3j6yPZw@mail.gmail.com>
+Subject: Re: [PATCH] arch/x86/kernel/acpi/boot: fix buffer overflow on
+ negative index in mp_config_acpi_gsi()
+To:     Alexander Sapozhnikov <alsp705@gmail.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/17/23 18:26, Conor Dooley wrote:
-> On Fri, Mar 17, 2023 at 04:54:47PM +0100, Krzysztof Kozlowski wrote:
->> On 17/03/2023 11:21, Cristian Ciocaltea wrote:
->>> On 3/17/23 10:31, Krzysztof Kozlowski wrote:
->>>> On 15/03/2023 12:47, Cristian Ciocaltea wrote:
->>>>> Commit 370f696e4474 ("dt-bindings: serial: snps-dw-apb-uart: add dma &
->>>>> dma-names properties") documented dma-names property to handle Allwiner
->>>>> D1 dtbs_check warnings, but relies on a strict rx->tx ordering, which is
->>>>> the reverse of what a different board expects:
->>>>>
->>>>>     rk3326-odroid-go2.dtb: serial@ff030000: dma-names:0: 'rx' was expected
->>>>>
->>>>> A quick and incomplete check shows the inconsistency is present in many
->>>>> other DT files:
->>>>
->>>> Why not fixing the DTS? The properties should have fixed order.
->>>
->>> I was initially concerned about the risk of a potential ABI breakage,
->>> but I think that's not really a problem since dma-names is not directly
->>> accessed in the driver and DT Kernel API doesn't rely on a particular order.
->>>
->>> If there are no objections, I would switch the order in the binding to
->>> tx->rx, since that's what most of the DTS use, and fix the remaining ones.
->>
->> Since we added the order recently, I rather assume it is the correct or
->> preferred one.
-> 
-> IIRC I checked around the other serial bindings & there was not a
-> consistent order that all serial bindings used, so I picked the order that
-> was used across the various allwinner boards that do use dma-names.
+On Fri, Feb 17, 2023 at 2:17 PM Alexander Sapozhnikov <alsp705@gmail.com> wrote:
+>
+> Variable 'ioapic', which may receive negative value by calling
+> function 'mp_find_ioapic' at boot.c:465, is used at
+> io_apic.c:128 by passing as 1st parameter to function 'mpc_ioapic_id'
+> at boot.c:466
 
-Thanks for clarifying this, Conor! Would it be fine to switch to tx->rx 
-order as it requires less changes to fix the inconsistencies?
+And that function uses the given value for array indexing without
+checking it, right?
 
-> Before changing dts files, it's probably a good idea to make sure that
-> the dma-names are not used somewhere outside of Linux.
+I would rather call this "out of bounds access"
 
-Right, that means we cannot exclude the ABI breakage concern. Not sure 
-how easy would be to actually verify this. Hence I wonder if there is 
-really no chance to allow the flexible order in the binding..
+> Found by Linux Verification Center (linuxtesting.org) with SVACE.
+>
+> Signed-off-by: Alexander Sapozhnikov <alsp705@gmail.com>
+> ---
+>  arch/x86/kernel/acpi/boot.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+>
+> diff --git a/arch/x86/kernel/acpi/boot.c b/arch/x86/kernel/acpi/boot.c
+> index 907cc98b1938..abb78822f164 100644
+> --- a/arch/x86/kernel/acpi/boot.c
+> +++ b/arch/x86/kernel/acpi/boot.c
+> @@ -463,8 +463,10 @@ static void mp_config_acpi_gsi(struct device *dev, u32 gsi, int trigger,
+>         mp_irq.srcbus = number;
+>         mp_irq.srcbusirq = (((devfn >> 3) & 0x1f) << 2) | ((pin - 1) & 3);
+>         ioapic = mp_find_ioapic(gsi);
+> -       mp_irq.dstapic = mpc_ioapic_id(ioapic);
+> -       mp_irq.dstirq = mp_find_ioapic_pin(ioapic, gsi);
+> +       if (ioapic >= 0) {
+> +               mp_irq.dstapic = mpc_ioapic_id(ioapic);
+> +               mp_irq.dstirq = mp_find_ioapic_pin(ioapic, gsi);
+> +       }
+>
+>         mp_save_irq(&mp_irq);
 
-> Cheers,
-> Conor
+Is it still valid to call this if ioapic is negative?
+
+>  #endif
+> --
+> 2.34.1
+>
