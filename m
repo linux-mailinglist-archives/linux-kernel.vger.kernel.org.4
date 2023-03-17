@@ -2,144 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B8936BF083
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 19:15:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9CCD6BF08B
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 19:17:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230432AbjCQSPn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 14:15:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44366 "EHLO
+        id S230461AbjCQSQ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 14:16:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbjCQSPk (ORCPT
+        with ESMTP id S230452AbjCQSQ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 14:15:40 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2052.outbound.protection.outlook.com [40.107.92.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6E3B126F2;
-        Fri, 17 Mar 2023 11:15:37 -0700 (PDT)
+        Fri, 17 Mar 2023 14:16:57 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89CC4301B1;
+        Fri, 17 Mar 2023 11:16:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679077014; x=1710613014;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=2O4ZAFDo85Zl1Bnlj3p0yLhUeLAVVqRsvmjUndUjBYY=;
+  b=QZQWzzxsHkLhng4lVAjnKP0MzRFm9bY7yRzJCjLp3EhKKGtJgPEzcdvB
+   KwhepKNFEgpkzZ8IhE0texGb+Y9kragA/rIKu9QIpxJNuxUhTFv9vMO7z
+   Tjrxwh1Xu2tu5Lx3rw3bNoVBpNIX6+/zGzrZHJngD8zhf41/c63X/uapR
+   p+aYx5QYUHGxfN+cgU/S/Fn1d8zCUo5/caD4v+ixQtH6tHqAwHoNhdUUP
+   tUVcSYosPz83GKwzJsDVZ7l2tXJ1s1AwCgk3IGbNVr7Fim2NSY3Z5waeG
+   Z8tZy/NynDFhhAxYU5OYqjoOZtohwc1Jbno5Hsis4G3na//rKJ3QHd6VG
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="424602362"
+X-IronPort-AV: E=Sophos;i="5.98,268,1673942400"; 
+   d="scan'208";a="424602362"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2023 11:16:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="744636674"
+X-IronPort-AV: E=Sophos;i="5.98,268,1673942400"; 
+   d="scan'208";a="744636674"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by fmsmga008.fm.intel.com with ESMTP; 17 Mar 2023 11:16:54 -0700
+Received: from fmsmsx601.amr.corp.intel.com (10.18.126.81) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Fri, 17 Mar 2023 11:16:53 -0700
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21 via Frontend Transport; Fri, 17 Mar 2023 11:16:53 -0700
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.105)
+ by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.21; Fri, 17 Mar 2023 11:16:53 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Ka5/8UGZKP80iDk8TAkkV78hlMUuhJzgjKG0Cmco/MQgklGmAn3i5jmXA0s1V+Zew26NOvWk+1+uQDVV6I/m8/m5h8vKq1zHMyzayv7qwV/Xzndl/gIo4TZrpTdnY1ZuyCPk9BcS3cF7zLKdiJmCF3K1ruOAHIkbtYYStBCmMUmkDXHjWypWjewjgFAtSTptSBjcIe+G+otcPVhAz6UNdaWjhht3nka7YvAOwKyTx6QhO7YT1Y7mGyabk6p0jslIqBd8xwrtM62exJTSWAoJLsqNDkLZt8KCJ7cfbFbx23pz2YOw1fhLweuu79GpvxuFPt6wH8fYMpEt4l9qktayGg==
+ b=hP1vt7rqBQfkDYU90QSNWjj+7ey736QEaeCTnNqCxIFER6nv5wfx7voyTQLDHjzBbnej/pm9mxsosrRn1zywSF+BQ1OY3bGFcYroIwTgFIGd991yM1xFIkEafzCShgV0pDXcPW/Wm5LFRtgF0T10/CDD7cj6u8fy9ReGY2mnTQHJl8VmbtivKUpv/QfjZAbzB3+tgEDEhb2WTg4/si9uNS3mLs74JE2Axs9Jo0ckAhB8pCcDRKm8JmRvtbaOF5MifcZaAq0qOZh1zgYwuLaMHMLWhRbPlrRBtyZDYauH6AACY7TFdsIULRDCFdz+zgGFK08wPND2Ls0ppvQrYVmNsQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vZp6hANYxIvzVVbSrrwn+vFzu5MqQh0W/iWZvw3lN8k=;
- b=PYCsSRFA9bqGw6zb8qoxveR4QWuI8kCtz9cML2aLinE4AXJ/cTkyf9lXBYR37Ij23X8fSKB1pIPBbJrPoP6MxvoOXPVqpqbA8A4RT7mduFPD7OyCsnIQiyMMGZg8jBUY2qOwvrnKPSW9LPjNC0Eo2ADElEGvS4mmt/3S3MPS+I9UMfOy6vK/RIVRhJSmgTB6ZRv4HcZVZnJFqsxAm1fqbsRQs4RpYMCK7RnHSwnTgXOmq9J7BmrZG4GQQGPE/4KG/BA7zVN/+cVqNZb5HDcYw3pP+pPuAh+Dg0n3fjTdXbd37YN1AccPr3TjPESdAmYknm18x8h62d8ikqR9zF3ZZQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vZp6hANYxIvzVVbSrrwn+vFzu5MqQh0W/iWZvw3lN8k=;
- b=cBHuFcxrmalrIaM3IT0dkghaMriMVIB1ihBWhEfy/bB8ll9mpiMmURBC6d4DpIguST1dzv33yISBtNBqd2RDbsbn8WQWZZqzftQ8r4gy1EuC53H+d29SeIRiCZ63eMm1gGLnR5QFlCFv8gP7HVscmuNptAhK/w50CJ30l18tFnc=
-Received: from DS7PR05CA0060.namprd05.prod.outlook.com (2603:10b6:8:2f::13) by
- MW6PR12MB8957.namprd12.prod.outlook.com (2603:10b6:303:23a::5) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6178.35; Fri, 17 Mar 2023 18:15:35 +0000
-Received: from DM6NAM11FT027.eop-nam11.prod.protection.outlook.com
- (2603:10b6:8:2f:cafe::f4) by DS7PR05CA0060.outlook.office365.com
- (2603:10b6:8:2f::13) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6222.10 via Frontend
- Transport; Fri, 17 Mar 2023 18:15:35 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT027.mail.protection.outlook.com (10.13.172.205) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6199.20 via Frontend Transport; Fri, 17 Mar 2023 18:15:35 +0000
-Received: from SATLEXMB05.amd.com (10.181.40.146) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Fri, 17 Mar
- 2023 13:15:35 -0500
-Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB05.amd.com
- (10.181.40.146) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Fri, 17 Mar
- 2023 13:15:34 -0500
-Received: from xsjlizhih40.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server id 15.1.2375.34 via Frontend
- Transport; Fri, 17 Mar 2023 13:15:34 -0500
-From:   Lizhi Hou <lizhi.hou@amd.com>
-To:     <dmaengine@vger.kernel.org>
-CC:     Lizhi Hou <lizhi.hou@amd.com>, <tumic@gpxsee.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH V1] dmaengine: xdma: Check zero length scatter list segment
-Date:   Fri, 17 Mar 2023 11:14:56 -0700
-Message-ID: <1679076896-4876-1-git-send-email-lizhi.hou@amd.com>
-X-Mailer: git-send-email 1.8.3.1
+ bh=YcSTg/b1hri1EGlafkhXvlktHOSGK4Kc274ZN+j2DUQ=;
+ b=P6qadketRdnPQkdoprWrl/pUu83OyHdBP2Hd/fEVqBosMBf7te2kTQP2igzqoP9otDL761P1RhOhQewc+Hjrpa4BwaoaPku1AbfxIGWvxNr3Fn9vM3LCYmDjLkoCyagIfMo/ZYVkC2ALwtuhTV2nhqziiQglIdcG6/efNHsc69xdgcaprLG97hR68TDWWMQ7YwQ8yFgOu6SFeHSUSMXFzOU1rwP7BKl2TjHfKDfmNdiIChzw3x1e/HSbO1oj2l7WV+03BkCXq94/FtuKPSEv0VXc/nvDMU3r9ljYyScE9SPJRSINY4PkodS22ZYSpCVWqO70MdaGKt+MHO09UMVIHQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from PH0PR11MB7471.namprd11.prod.outlook.com (2603:10b6:510:28a::13)
+ by PH0PR11MB5610.namprd11.prod.outlook.com (2603:10b6:510:e9::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.35; Fri, 17 Mar
+ 2023 18:16:51 +0000
+Received: from PH0PR11MB7471.namprd11.prod.outlook.com
+ ([fe80::37bf:fa82:8a21:a056]) by PH0PR11MB7471.namprd11.prod.outlook.com
+ ([fe80::37bf:fa82:8a21:a056%2]) with mapi id 15.20.6178.024; Fri, 17 Mar 2023
+ 18:16:51 +0000
+Date:   Fri, 17 Mar 2023 19:16:50 +0100
+From:   Piotr Raczynski <piotr.raczynski@intel.com>
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+CC:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        "Jakub Kicinski" <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <kernel@collabora.com>
+Subject: Re: [PATCHv1 2/2] net: ethernet: stmmac: dwmac-rk: fix optional phy
+ regulator handling
+Message-ID: <ZBSukvE/EEH5UsTQ@nimitz>
+References: <20230317174243.61500-1-sebastian.reichel@collabora.com>
+ <20230317174243.61500-3-sebastian.reichel@collabora.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230317174243.61500-3-sebastian.reichel@collabora.com>
+X-ClientProxiedBy: FR3P281CA0209.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:a5::8) To PH0PR11MB7471.namprd11.prod.outlook.com
+ (2603:10b6:510:28a::13)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT027:EE_|MW6PR12MB8957:EE_
-X-MS-Office365-Filtering-Correlation-Id: 270d23f7-f967-4985-5552-08db27139a9b
+X-MS-TrafficTypeDiagnostic: PH0PR11MB7471:EE_|PH0PR11MB5610:EE_
+X-MS-Office365-Filtering-Correlation-Id: b5e9d2ab-78e3-4a0c-95ec-08db2713c7d0
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: R5H6golhZmCxXdwbgB2TCzSZIqEA5DVgY4AQTTAUGZmgFPex+fipClKF6faGydLKYyLGFY008NS5I8y0R+Lqo+Nu+/Z4T0s249Dqvq+5nZSkFj+46B5PMB2rThxmFSg1CMeWMa4Wekm5sZ+YSR2ZbexLiwGrWdCAQFiqjLGkfhQAPU3u1kxOIv/ckl/4LbTGrSedilLXUjWNY2w2IKZQnM7iu1F5t0ff7nbXMUAY+QMLrRQWiX6MJhBT/2R0diej+uAI5d4F6vx9Pe6iruXcxkerDJ8LS/TWZgNd5w+FyjYu2DZ1vKEIHYgMKafh371WGiBxfr5z1MXOs5l7f7tPAJBm8a0ticNTw8oc7r9XlzmpRnrJ1qM+elk9+OrZfIbUmKaQNdIYOde7iAcRkaWAk/lrw7IfEUIHeffZBnEEqVMixhTIn2+GFNtC3dUfaE+w+gxh1yukFceCs3bjjHLRkWkDS+9H4DvpLITESQ3xnb7DfsdB7lnSIdC8xGdG6yVppo1DZNoQGOfSnhvxtf5/Tf/vzxSORnCDC+IFAuU1RYYvLJKmnZe3XYKK+ynMMoDsaAd8ZXHH6qgDNvkzysrh0OYuzwcYtOMNI5ChWcKuf1H7GcSaysrVEoMGZDt8QGLHuuV7XX+QmLMfDI19m/NHVvMNwF9kmkleJmeanufuk/EmIoLsOwySCskwK7mHSE9ljuHodHmfKsw9uzr0b43wwpR9x0fX6G6nld/J7kJeZnw=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(136003)(376002)(346002)(39860400002)(396003)(451199018)(40470700004)(46966006)(36840700001)(4326008)(6916009)(8676002)(2906002)(70206006)(70586007)(44832011)(5660300002)(82740400003)(36756003)(86362001)(356005)(81166007)(36860700001)(8936002)(6666004)(26005)(966005)(41300700001)(54906003)(316002)(40480700001)(478600001)(82310400005)(83380400001)(40460700003)(47076005)(336012)(2616005)(426003)(186003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Mar 2023 18:15:35.4009
+X-Microsoft-Antispam-Message-Info: IT2vJdO5zVDscZP66DSb8tXXwAMLkDswlPCmCbCvv0x2riUHf94d8+RR0oJOnAq4dnpSXbV85z9yHhVnZJTC8TeS6JTUJBb21gBMvgyZzwxHqYlnJgVHFbOsHjncS+seKdzXGwLbZ4L9k190tGy0peAvZQnZ1ASCEBXVhKaYJqvGd5vbr3wVtNvMvzKSjbMQh/NdTxfsKVBylhZ0K3n0gETs9Km+cfEDiUQ0/VB5I27CPsHY76NI08nCFRg6VIDnkHCdF8i+NyXOoFvrXd4hGDxGW3pPKhiZjDmRsTgQBBS4S68N6S/N8vWUMvgI8sLrEx6JweE9yVDp7b1exub+T8UtaxIy7T36ju5JaXXsgUCSYEklNXHIC0OtfjtjYdLtMli3/1E1AhSQn7kk0nrBNdsG6lOwrsM4pKQ1gAsSkoVWNSRDo+AhYIOIT2dWbqgpIumVQtzonlfvCnCGkwCJfwle5Zrd00844wDCoNHcoe3cOODjmWJ0HcxErl9U2xqMLcoWl8dzNODz7MArUPZm85y2iCidraWvWYIXongz2oPG339y0k2GyFpM3+sv4XKyCrABFh5HDeHAZfJMWh73VVkFBZCiLhu0jwvirtngbNQV1AaAMuY+TM26I1r3o8RCK+uS3QVHrhWHoWfYKCrqDA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB7471.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(7916004)(396003)(346002)(366004)(136003)(376002)(39860400002)(451199018)(6512007)(66476007)(186003)(9686003)(26005)(6506007)(33716001)(83380400001)(86362001)(82960400001)(38100700002)(6916009)(4326008)(66946007)(66556008)(316002)(54906003)(44832011)(8936002)(5660300002)(7416002)(2906002)(41300700001)(6486002)(8676002)(478600001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?3X9hmYf32uDf6oUO93fXODkNhZxdypsUKdOYIyPL9ZN6X/pjjxUPcozvl0rG?=
+ =?us-ascii?Q?xpnCzn94L06KDWdgIEeK3bgRyifz7z248X8bBzd3FZPxuuvgER0P67riWMiP?=
+ =?us-ascii?Q?bsJha9u+QBwlJSarW8lJlx1JcdmMGEWRNXasAIXP4RfwdIhOA1a6GlLgQa2e?=
+ =?us-ascii?Q?/PA90A2RMgC//adCIsiR9pThKUvbM9bNK6ESV6DFlJ+UZvovjOEgTC53Ox7e?=
+ =?us-ascii?Q?ya56TXC/L4XkwqvtyG9uEvk6yCA7XXqf/btxb+GNMUUKCUbXb5xuLhci3yD/?=
+ =?us-ascii?Q?5c/74EiVdmzI5mcexFydFHV6E6FoaoIiXX5nH1pFdLeBN0n7leu9BGw1TKir?=
+ =?us-ascii?Q?9l37ipovSDk6HhNBGqwg7PgRUNuNHrYN2c1kFoA3xjKMrQZ9YXJpX2+EPVyy?=
+ =?us-ascii?Q?PrEns+oPnMTzuZ3udb653lTdWdLyIH/G0kJ9vuVbQHk+Ent3tEDAKJMpAPDT?=
+ =?us-ascii?Q?QoWS/qHpHBCCgTpQKKjzUx4V8pE9ytGjpE0QI7I9G/dvbwlhkgPJOYkvlPni?=
+ =?us-ascii?Q?cjx9TZerT1WYc5CJtAXYyRrygdBXkacKPjPDOvoOAmuBbRqnTXWAjI6UYTva?=
+ =?us-ascii?Q?UB7LGTVrikRDMxkBlqJxQ4QWOmdbWveChO9EHjKoX7umJlA8f84otujSnNPv?=
+ =?us-ascii?Q?5kBj/vLlPpSFFA++g+3eq6BCDEBRhaN2XX96VovMBAhENmaZj34GbVAEEnbt?=
+ =?us-ascii?Q?E3bigYCabpvTPBSrq6K5WczGsD8oUM4DvpwhCElbqOVoanrC/rRoOpOw5GNE?=
+ =?us-ascii?Q?pH+wzCtSCT5L8iO187fjWnHqrpfa57dhu3524zYG28BpzwZHJoA32MV1kkDf?=
+ =?us-ascii?Q?c7cCk7++luk+B00UAe8j8BNhnStqcMnDhWG5ibN8eLWsZ/1PgAzCoLItbzwJ?=
+ =?us-ascii?Q?nzcRYuRifW/U2jRazQTIYPyYWIClm/uVkDH4p7tSb55i2D6+fZPqjaekIa/3?=
+ =?us-ascii?Q?JVy8QdGtgUY/IuvOHn9hK3pTbya98guCX5++jmnMJNN5U6Ysp7Lndq64HZ4T?=
+ =?us-ascii?Q?o3uh18GBlSVi/u9ZosQd8okPMJLWk+1eQPMMuSrDBF5ciSrt+GeBbEfAeVQk?=
+ =?us-ascii?Q?vqG+tBhvLEHsXeh3ObDsTeo4/SNhXcbptL4T45Db4VhTbSna9UmhLL7V9R6N?=
+ =?us-ascii?Q?iZZ8JCIl5FTyWLyVLYT5DU2sD8XHEswQowQ6DJIri2NXSn/rc6+WNkALN2Mk?=
+ =?us-ascii?Q?424FTr2KLnyZNizWkhBVPS6zQgzonkrnAWjP3ic87apZ85ijFqOKFwDcbTda?=
+ =?us-ascii?Q?kEYBXcBk2IJ5DlHjMFNkmn3tALtnZukBA//zpyNmWJgd7APkEg9rs4pEoTel?=
+ =?us-ascii?Q?AoKMXgR9ATBGXSjctiIMwDMqcos8q3A/G0TBqdEhw4Uu6tQpaRpd+ZwMZ60g?=
+ =?us-ascii?Q?bfVf3hdAX32s5kae8zUWSMpM0unNdPYKIl90kw4Xo2PNGD3xjrX/LU3f2kK8?=
+ =?us-ascii?Q?acuS2VSmHqgU2gmr0YlVX0IPTJc/FPdwggqrdJ0VaqHPAdwlF3ZOwpKT+nyF?=
+ =?us-ascii?Q?pCkBPRYA76dZTjrVMH+hisTxc+tCOpJZ2pggJh6C1PkSLmAjZLux1bDhnRhA?=
+ =?us-ascii?Q?G3fZqW1xCDRYF/gXaTABfVjDg0EL1k4mtbC36wPxkran1/DctQ5FdgbjDwt5?=
+ =?us-ascii?Q?jA=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: b5e9d2ab-78e3-4a0c-95ec-08db2713c7d0
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB7471.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Mar 2023 18:16:51.6826
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 270d23f7-f967-4985-5552-08db27139a9b
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT027.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW6PR12MB8957
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: WorUN+VjQNXeyEvI2ujnVyDCZYjhZjBV+TbP0zbJ5C/RXdCaHx5wXgDorkeY0YGrN6uv83J/0Bxs0HCMLIFJN2fCoEiSKckDIewxOtx2m9E=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB5610
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In callback function xdma_prep_device_sg(), it is nice to check if there
-is zero length segment and skip it in the input scatter list.
+On Fri, Mar 17, 2023 at 06:42:43PM +0100, Sebastian Reichel wrote:
+> The usual devm_regulator_get() call already handles "optional"
+> regulators by returning a valid dummy and printing a warning
+> that the dummy regulator should be described properly. This
+> code open coded the same behaviour, but masked any errors that
+> are not -EPROBE_DEFER and is quite noisy.
+> 
+> This change effectively unmasks and propagates regulators errors
+> not involving -ENODEV, downgrades the error print to warning level
+> if no regulator is specified and captures the probe defer message
+> for /sys/kernel/debug/devices_deferred.
 
-Reported-by: Martin Tuma <tumic@gpxsee.org>
-Link: https://lore.kernel.org/dmaengine/f6a0051f-acec-f661-55cb-8b2504bef79e@amd.com/T/#t
-Signed-off-by: Lizhi Hou <lizhi.hou@amd.com>
----
- drivers/dma/xilinx/xdma.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+Code looks fine, however this seems like a fix, then Fixes tag would
+be nice. Also target tree (net?) should be specified.
 
-diff --git a/drivers/dma/xilinx/xdma.c b/drivers/dma/xilinx/xdma.c
-index 462109c61653..5134757e88b1 100644
---- a/drivers/dma/xilinx/xdma.c
-+++ b/drivers/dma/xilinx/xdma.c
-@@ -465,6 +465,8 @@ xdma_prep_device_sg(struct dma_chan *chan, struct scatterlist *sgl,
- 
- 	for_each_sg(sgl, sg, sg_len, i)
- 		desc_num += DIV_ROUND_UP(sg_dma_len(sg), XDMA_DESC_BLEN_MAX);
-+	if (!desc_num)
-+		return NULL;
- 
- 	sw_desc = xdma_alloc_desc(xdma_chan, desc_num);
- 	if (!sw_desc)
-@@ -488,7 +490,7 @@ xdma_prep_device_sg(struct dma_chan *chan, struct scatterlist *sgl,
- 		addr = sg_dma_address(sg);
- 		rest = sg_dma_len(sg);
- 
--		do {
-+		while (rest) {
- 			len = min_t(u32, rest, XDMA_DESC_BLEN_MAX);
- 			/* set hardware descriptor */
- 			desc->bytes = cpu_to_le32(len);
-@@ -506,7 +508,7 @@ xdma_prep_device_sg(struct dma_chan *chan, struct scatterlist *sgl,
- 			dev_addr += len;
- 			addr += len;
- 			rest -= len;
--		} while (rest);
-+		};
- 	}
- 
- 	tx_desc = vchan_tx_prep(&xdma_chan->vchan, &sw_desc->vdesc, flags);
--- 
-2.27.0
-
+> 
+> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+> ---
+>  drivers/net/ethernet/stmicro/stmmac/dwmac-rk.c | 11 ++++-------
+>  1 file changed, 4 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-rk.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-rk.c
+> index 126812cd17e6..01de0174fa18 100644
+> --- a/drivers/net/ethernet/stmicro/stmmac/dwmac-rk.c
+> +++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-rk.c
+> @@ -1680,14 +1680,11 @@ static struct rk_priv_data *rk_gmac_setup(struct platform_device *pdev,
+>  		}
+>  	}
+>  
+> -	bsp_priv->regulator = devm_regulator_get_optional(dev, "phy");
+> +	bsp_priv->regulator = devm_regulator_get(dev, "phy");
+>  	if (IS_ERR(bsp_priv->regulator)) {
+> -		if (PTR_ERR(bsp_priv->regulator) == -EPROBE_DEFER) {
+> -			dev_err(dev, "phy regulator is not available yet, deferred probing\n");
+> -			return ERR_PTR(-EPROBE_DEFER);
+> -		}
+> -		dev_err(dev, "no regulator found\n");
+> -		bsp_priv->regulator = NULL;
+> +		ret = PTR_ERR(bsp_priv->regulator);
+> +		dev_err_probe(dev, ret, "failed to get phy regulator\n");
+> +		return ERR_PTR(ret);
+>  	}
+>  
+>  	ret = of_property_read_string(dev->of_node, "clock_in_out", &strings);
+> -- 
+> 2.39.2
+> 
