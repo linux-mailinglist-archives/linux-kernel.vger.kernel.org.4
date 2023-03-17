@@ -2,219 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C79896BDFB0
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 04:36:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5EDB6BDFBD
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 04:44:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229707AbjCQDgC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 23:36:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42868 "EHLO
+        id S229488AbjCQDof (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 23:44:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229590AbjCQDf7 (ORCPT
+        with ESMTP id S229476AbjCQDod (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 23:35:59 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EE0A1CF63
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 20:35:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679024157; x=1710560157;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=IHt4G0WAu2gSTDXf0Ktg9cVBi8lPEQATGOe4AJGToN8=;
-  b=E4ZGZOETT9Fjhm/80OLPoaIX7Zdn6q+eCiaklWzqST2fRWTY9aHTlm28
-   FUUYN7SNN3sNaO+yKRYlfa88+ALJhpoZN6P7NAGrg0ELAC8Um1LhKdjLs
-   JSEGODIBcx+KgP76G/UoEMDXrZjsWWPohQD6BNTWviEtWcTUjUsK9/p9z
-   aNky1vg/8FcDpAjsGzKSKayUo0GkfujeCO23wcgcedvmmwMteAzz+ghy0
-   K1MsDZY/1/xWHXQ0OifwO3RGDrAlrkjczgthfqls4JqkJHkGfWOsd5b7l
-   ZCpqGG0q6AodACNeYSFDrug4Y4RCV3MLrRBM1LZpq37HDLXCppEdqUxtK
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="318567507"
-X-IronPort-AV: E=Sophos;i="5.98,267,1673942400"; 
-   d="scan'208";a="318567507"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 20:35:57 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="926001442"
-X-IronPort-AV: E=Sophos;i="5.98,267,1673942400"; 
-   d="scan'208";a="926001442"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 16 Mar 2023 20:35:54 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pd0sj-00092s-2I;
-        Fri, 17 Mar 2023 03:35:53 +0000
-Date:   Fri, 17 Mar 2023 11:35:24 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Richard Fitzgerald via Alsa-devel <alsa-devel@alsa-project.org>,
-        broonie@kernel.org, pierre-louis.bossart@linux.intel.com
-Cc:     oe-kbuild-all@lists.linux.dev, peter.ujfalusi@linux.intel.com,
-        yung-chuan.liao@linux.intel.com, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, patches@opensource.cirrus.com,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Simon Trimmer <simont@opensource.cirrus.com>
-Subject: Re: [PATCH v2 8/8] ASoC: cs35l56: Add driver for Cirrus Logic CS35L56
-Message-ID: <202303171105.3mGHjK8s-lkp@intel.com>
-References: <167872265923.26.336497278776737619@mailman-core.alsa-project.org>
+        Thu, 16 Mar 2023 23:44:33 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B616438668;
+        Thu, 16 Mar 2023 20:44:31 -0700 (PDT)
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32H26PCB017660;
+        Fri, 17 Mar 2023 03:44:28 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : message-id : references : date : in-reply-to : content-type :
+ mime-version; s=corp-2022-7-12;
+ bh=11bNJzNSsSlMNqr+GEuRg1wfGhtzr8bPKdK8FKzfFQk=;
+ b=p2lnCHS39He4ERDK0G59lBH1w1sjduBLI8+4hUQFk3eh/BnT2YRTR8YpY3KDPNse2q6M
+ omnNul4SGwUNj8fLtfYBK5aIAuwTtSdXnwwEupyd+SFehJUnrV2y1bpwfIJrxJdyvKI1
+ UbmhpdUTH/SoNCzgS9v4HJEf8x7fnG/P2uolZ0rW4KafULCxcLLPqi3yNW9g+EESVWZS
+ R07TAiXmOnjLe7xU147HbA/np0pp9AQLiolbCiPmWz8sj1qXH0GQhNR5jr5tz/Oyb2Lb
+ OXCM2XVcgh4yoYOISMnisIRcKPL0BUNAw4Wd0ebNfVh7tS+ePvNGi2Nw5sNr0r9xECbg dg== 
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3pbs2atrvs-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 17 Mar 2023 03:44:27 +0000
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 32H0YcXb003166;
+        Fri, 17 Mar 2023 03:44:26 GMT
+Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2177.outbound.protection.outlook.com [104.47.56.177])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3pbq45qm03-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 17 Mar 2023 03:44:26 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=YZsMu28fYxp7qzWB+iVNOU6r/KZoXKhjZQgyTOh3v8ynLpb5kOWEQlgEgp1WCHCF0yXjWf8Jvg9RuJW6bxzphnFc6O/Wn6C84JQi+9o+HnEveQcI5mKhKniHVjnQsD9yp4EgV0MkzkXQAS4w7rkMd4pV3P//B6ZMR4uJd9rjcSk2bqqIPTQR/2TypzVYivCv3O0xz1CSh0hjI6gihvQlv6TB9AiKVYv7Idta9HW9kXwk9EPHxSFjDbsmGsUPortpdSwPQz8iO8/9kHlldn82U3wIUgKONRKk48yE6ZZWplpptWFImKqj56/xQxXs5MMzUk7fJfMvVvhJYZKyw6DilA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=11bNJzNSsSlMNqr+GEuRg1wfGhtzr8bPKdK8FKzfFQk=;
+ b=QpFhewVPaiaJYbRVJzBrDSGhZcEHQ34USDYmkm842G86KuFkYanUgZSxVNsXGDEmbCtiSsdhOoTG1vdKaH+hCKYb9k3X+NeQOWGyOXkUlRAl+5V3bjnn/qxrmpQArEWQFXzDQod75a/wxs8DOiEi7wmgUPXhDOtE4sP0lZAlYTv9AQLhYARVYlayM/ihqE2kAEUNWXae7HJRs2WU67Ks+cOC2CL7/h23vvekIvzHphU9RlEx/kUKpLGM9fHad85Qv2Bton9/sXZIuZ2qQhj7erF+MuRb9HJw59bW5zJl5+jryflDgkPv3bF6QqxkTokTHv76X7toWKTvXj+U2b9gbQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=11bNJzNSsSlMNqr+GEuRg1wfGhtzr8bPKdK8FKzfFQk=;
+ b=OO9Lgtw2JOmEOX7W//9iNWJb9/9AZDfIINe+DI5ZtQz/FM9Dlo6ywjS7jI40+SVFn4+ZbZeyh2BLyungIUqyXbSYjy+33ApUDMSblShhJHvvkwD66sh79dZnPYMDR/vqx+W5naFKl3LTXOHFBSkal4nuPZPVwQn++INHQlhXjs8=
+Received: from PH0PR10MB4759.namprd10.prod.outlook.com (2603:10b6:510:3d::12)
+ by MN0PR10MB5935.namprd10.prod.outlook.com (2603:10b6:208:3cd::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.24; Fri, 17 Mar
+ 2023 03:44:23 +0000
+Received: from PH0PR10MB4759.namprd10.prod.outlook.com
+ ([fe80::8ef9:5939:13aa:d6a2]) by PH0PR10MB4759.namprd10.prod.outlook.com
+ ([fe80::8ef9:5939:13aa:d6a2%8]) with mapi id 15.20.6178.031; Fri, 17 Mar 2023
+ 03:44:23 +0000
+To:     Rob Herring <robh@kernel.org>
+Cc:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        devicetree@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] scsi: Use of_property_read_bool() for boolean properties
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+Organization: Oracle Corporation
+Message-ID: <yq15yb0xcs7.fsf@ca-mkp.ca.oracle.com>
+References: <20230310144723.1544999-1-robh@kernel.org>
+Date:   Thu, 16 Mar 2023 23:44:17 -0400
+In-Reply-To: <20230310144723.1544999-1-robh@kernel.org> (Rob Herring's message
+        of "Fri, 10 Mar 2023 08:47:23 -0600")
+Content-Type: text/plain
+X-ClientProxiedBy: AS4P189CA0009.EURP189.PROD.OUTLOOK.COM
+ (2603:10a6:20b:5d7::13) To PH0PR10MB4759.namprd10.prod.outlook.com
+ (2603:10b6:510:3d::12)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <167872265923.26.336497278776737619@mailman-core.alsa-project.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR10MB4759:EE_|MN0PR10MB5935:EE_
+X-MS-Office365-Filtering-Correlation-Id: c8f5363e-43fd-44d8-8b55-08db2699e606
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 7k2Qla24kASlF+nZJPVYOhWjIeoKiJs276iatOzr7vUyuMsbtckdySQTW16dxyG8Khayoah7+JZPzD7Ymo0YZwgF2RdXBz4UabMUVJHH4/UmUAIZjTl/8zj/f7W5jRh15y1m/C3Bqo4cUa08iauFGwbsUQlM5P6lLewZ21warQI4SOp5qetn14N+BId9RAI9PpfM4MGYBCVmBFS5T0B+2hYKegXAfmcMGZtrT6Rkii5wJu4ak5JZjVbkQVbvjQfHi5tj4Sleh4JiM+tkk91a4BNwdV7OZ+f3yooNyNnu8UC4egeC7sgETCxkpLr1kbyv1KW3sk2nayDNeTXTd1WkAbCjJR19b1UgQpi4+Xl+HJ2/Q+d4UxhJs8IrSq7lljIT5R+95/HR7LiB3sfVW02RKeUl4ooXcWxvR8BrdZ45ufy1GyIkZ8VqiXFyZguEqiOo5BA+JzjC9Po0FxnaYjFVxyfbHx7tsS6j197SQBWROz8IrYsjSrEHaA9T73b5qkZ822x1Okj4gRCVQNnDEgs+9fJ7tzog1kmx1jGQ0vctFPy9RraDClY6Q1uJEalQ/6tfLXzSynGq3d+vjsehEmLDCRJVrqM08zFCO3l8rsvpo6+HvR2xMSD2UFx19/3Snc9eF8BedBMGiSrDxID6CehtIg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB4759.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(39860400002)(396003)(366004)(136003)(346002)(376002)(451199018)(86362001)(478600001)(316002)(4326008)(186003)(6506007)(6512007)(41300700001)(6916009)(8936002)(5660300002)(26005)(6486002)(54906003)(66476007)(66556008)(8676002)(6666004)(36916002)(38100700002)(2906002)(4744005)(83380400001)(66946007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?rIx1F56x1MK7exxxcJctUUfikGgnX0xhcwgJ2tbwMRK/fznfPhXmLxr02+mZ?=
+ =?us-ascii?Q?yNE92N+bEMJdiD64/Nfvkk8t0hrBHkfmz/44Hj767Ovzl+BuauOwO6+Ofr52?=
+ =?us-ascii?Q?mIwHRWLFK0D2KhoCoILueJXH5V3djLGPmsV/YWB9bCC1Fr8zjIu927z5myF9?=
+ =?us-ascii?Q?dvTL+8difxvVQg4nvGvogFedH9sQweWVJS4wvS1NwdhGYe8E6uwK4waL85UC?=
+ =?us-ascii?Q?5unpUfdUY8LAuOGK+NNWDArD8eTzAZ5SLwyh3IZUQe8qzx+XRzp9SHpJDV1L?=
+ =?us-ascii?Q?DqrmY9xZg6rFVklH/tJUCjgsoHA65ZSghxHFyiPrBbqTEAVEF0qomo6aPdJg?=
+ =?us-ascii?Q?BzX9b1brRYKP9h4Au4NerEfhmU2wrk2AnBjkYjFp4HpuFzGEY8Bf+1thjR4f?=
+ =?us-ascii?Q?3vwZqBzzhwIBLi17tZYY3JP2u/Ck1OfnBAAIimNY8v80dp9oXU43sR4f2QbC?=
+ =?us-ascii?Q?P6dSr12BKWMAm7mXLomuD5ykrtOTLw0iskHcBZzS3lTC9TSqRsnEidEhBN2s?=
+ =?us-ascii?Q?xq2cPh/FPRwqPYiC0r074BVyF/eQ6NE8vb3alSDJSUfGErDg2ejd0vvm4J+X?=
+ =?us-ascii?Q?/UrPHisrHto1F9nf5evSTWpcSeDCuoHxhY9o1EYDs+Ri3frOEtiQ5yj1elmE?=
+ =?us-ascii?Q?Nv4OSegA+M4mlfrVtHBOZ+aDQaYK1h2EDBSQx+aa2PxY1WkQkBNXoMbvoILG?=
+ =?us-ascii?Q?SbTyxaYWyw5i/PLv7EGf7aHHszk+G0i7VmVuwah0s8Urw/BI0tA/HSX31SGh?=
+ =?us-ascii?Q?F8ofCqSZejkC36SJhpDPSChJCpfz93AivwG+DpWHFMD9b4XORoJSDDdoVf1m?=
+ =?us-ascii?Q?pOx22CPa6o2dd7npAYoM+FD0W0W7fBU7IH3FLl8D28yiHChVQtmIvuBn38kg?=
+ =?us-ascii?Q?Ep9TqFNkphxkmlwrrNUEkkPXsBccJ96lvw+g09iRtu3lXBISUSnZI6kO+xDn?=
+ =?us-ascii?Q?p1cdLKpryU58CBSYqU0tm21aCSmiib3M0iUNfzs4ubgpvunRIgfkNfwQa8AJ?=
+ =?us-ascii?Q?2U+e01PC0wsXqtRFYplLYv1D/66kjWI9jed325kaEGuxSSWzoRzBHyPh4N31?=
+ =?us-ascii?Q?4Y3qylfb/+6WPkTqyZUgB+fLa7MDI5BnLjGnpkPByVgSvK5/x4MtRMl+Whvn?=
+ =?us-ascii?Q?u7keWET+16MXejOEfOfSQWj0wXCfiFF0vDsyIcJfz8iG8RWNRS6M06nudlb+?=
+ =?us-ascii?Q?sUvuU5RC/QUoDuyDz4HDF46iGHcS8O8BwFH9DoY+sIv0t73WIi3s5fixI9ph?=
+ =?us-ascii?Q?GuCSGirMAi6+06rhsfF4Lo3z6DxX/9gyv0VPhZtX6qDLa1cpIdmLecS348SX?=
+ =?us-ascii?Q?sloeMOpz+K6i7eOwqyhf26XilV6QLpFCYYtJOgsfZy+QNq+CL8Miw+tJVSEp?=
+ =?us-ascii?Q?H8NncUxRwAlwpvgkU41H2bOZwoySfQzpLmp/4Fl6BZJg7req8OARP5cfdtRV?=
+ =?us-ascii?Q?2YtwaOAXzbDDelw0mIka5j2nyVmpvUrdOdkSmKkdkSXPX8L9n8G1d7eoBBdP?=
+ =?us-ascii?Q?m/r8ZORVQr0aQSdDJ4aU+vx+12H4tkJgx+ms8WscULl7SS4xEhSrk0e/M8f4?=
+ =?us-ascii?Q?Cm12bD56ok2//xZkQN+p9lyuYzjCch4dzZTMKdkaIffzeLvY+jBUhPrFrE7X?=
+ =?us-ascii?Q?ow=3D=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: 5W9L3RW3t6VtvOVc4Rz5xmz9gk8DpNIUV4cqxzTFkU5gU54eivlB17DI7wO/xo+u/ipxUBICfwm00MtPa2gNWBTNxZLP/1R0n+sKFL6Bf6w5gA6bDUhXavhjuA3EJ6ViSieKfND8iMiWmeJIYtX5fyPJShjtrWpk8eqHG9Ogm1Za+WM5NDwLuc6unpTY58/jnjn+rgAEVlM36qvQcWuoMW6SbdiJqlx9L/PXbGx/+IHdvCfwJ4BbBb5WfHDFHIYV0kaNJl9UooahXsD9isPBaoaeyXUbz3KLSG/ji85WHC7nUVBlnzteIEXDK75KdICrYHG8Dz1RW4mZI4Zo5Tsdg/t1NrRHfeomiPHDjHLVb3rbHUDn/VO8ynDD222vsMf2JnpjzBgJRCErnqdbZzUxeff4soMVQCBE5Z4f8w/CdLuFBJLVhv894v0BQPPurCEVAqUg7n6E1mW47837CvXkgr5ogm+uB4xxTOZ7PQ1EwNsQnmImr3WW2bxnb2x9EGDP40zYbB6hx6ZOLXVOdnkg8zdYBwHdrgKQ3acsG/zGyPWq4ucbQDztCAEXcdt5zKKapRvt1JK2qJrYVMFW1e9dVbIepNjj4EYiv2WIAIEziPlnynV9/KINvV8GjawfO4cG7U7cRD0zw174S/0rkqWlj+rJQpHuAi0BbZAho8Mh63TYGwaX7aEVqBMkAfllSxu9+X8UfcW/AaJwxG4Wd6XrxD8EtZaTY11h+78pikUP709capvtOdAdyiSocq0ltjWCiF87y/ySQc45jbur0ud50jx/hawhJaL6nJV72EwylXatyqPDa0oVO0VwWvpCRdFiHT1tL3ywOtJ3OtqT0xcLwA==
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c8f5363e-43fd-44d8-8b55-08db2699e606
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB4759.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Mar 2023 03:44:23.6284
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: lkFEc6U6QSAae4wtCUBgMNph30bhSfj5zgmK7UhFC9/JV4Lu5a4+DBh5/LsP2QjHMfh63AQmQ69083DJFYH0H+jcporE9sloAefjNwFUeqQ=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR10MB5935
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-16_16,2023-03-16_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 suspectscore=0 mlxscore=0
+ bulkscore=0 mlxlogscore=970 malwarescore=0 spamscore=0 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303150002
+ definitions=main-2303170020
+X-Proofpoint-ORIG-GUID: rSXnRd9YDcH0LT0Jj0xyyMJAZ4tJxa7U
+X-Proofpoint-GUID: rSXnRd9YDcH0LT0Jj0xyyMJAZ4tJxa7U
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Richard,
 
-Thank you for the patch! Yet something to improve:
+Rob,
 
-[auto build test ERROR on broonie-sound/for-next]
-[also build test ERROR on linus/master v6.3-rc2 next-20230316]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> It is preferred to use typed property access functions (i.e.
+> of_property_read_<type> functions) rather than low-level
+> of_get_property/of_find_property functions for reading properties.
+> Convert reading boolean properties to to of_property_read_bool().
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Richard-Fitzgerald-via-Alsa-devel/ASoC-wm_adsp-Use-no_core_startstop-to-prevent-creating-preload-control/20230313-235605
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
-patch link:    https://lore.kernel.org/r/167872265923.26.336497278776737619%40mailman-core.alsa-project.org
-patch subject: [PATCH v2 8/8] ASoC: cs35l56: Add driver for Cirrus Logic CS35L56
-config: x86_64-buildonly-randconfig-r004-20230313 (https://download.01.org/0day-ci/archive/20230317/202303171105.3mGHjK8s-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/5856c94d659f9c9963f5c37762cf201e1f1765e9
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Richard-Fitzgerald-via-Alsa-devel/ASoC-wm_adsp-Use-no_core_startstop-to-prevent-creating-preload-control/20230313-235605
-        git checkout 5856c94d659f9c9963f5c37762cf201e1f1765e9
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 olddefconfig
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/platform/x86/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303171105.3mGHjK8s-lkp@intel.com/
-
-All error/warnings (new ones prefixed by >>):
-
-   drivers/platform/x86/serial-multi-instantiate.c: In function 'smi_spi_probe':
->> drivers/platform/x86/serial-multi-instantiate.c:98:15: error: implicit declaration of function 'acpi_spi_count_resources'; did you mean 'acpi_set_current_resources'? [-Werror=implicit-function-declaration]
-      98 |         ret = acpi_spi_count_resources(adev);
-         |               ^~~~~~~~~~~~~~~~~~~~~~~~
-         |               acpi_set_current_resources
->> drivers/platform/x86/serial-multi-instantiate.c:112:27: error: implicit declaration of function 'acpi_spi_device_alloc' [-Werror=implicit-function-declaration]
-     112 |                 spi_dev = acpi_spi_device_alloc(NULL, adev, i);
-         |                           ^~~~~~~~~~~~~~~~~~~~~
->> drivers/platform/x86/serial-multi-instantiate.c:112:25: warning: assignment to 'struct spi_device *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
-     112 |                 spi_dev = acpi_spi_device_alloc(NULL, adev, i);
-         |                         ^
->> drivers/platform/x86/serial-multi-instantiate.c:115:59: error: invalid use of undefined type 'struct acpi_device'
-     115 |                                             dev_name(&adev->dev));
-         |                                                           ^~
-   drivers/platform/x86/serial-multi-instantiate.c:137:53: error: invalid use of undefined type 'struct acpi_device'
-     137 |                                       dev_name(&adev->dev));
-         |                                                     ^~
-   cc1: some warnings being treated as errors
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for SERIAL_MULTI_INSTANTIATE
-   Depends on [n]: X86_PLATFORM_DEVICES [=n] && I2C [=y] && SPI [=y] && ACPI [=n]
-   Selected by [y]:
-   - SND_SOC_CS35L56_I2C [=y] && SOUND [=y] && !UML && SND [=y] && SND_SOC [=y] && I2C [=y]
-   - SND_SOC_CS35L56_SPI [=y] && SOUND [=y] && !UML && SND [=y] && SND_SOC [=y] && SPI_MASTER [=y]
-
-
-vim +112 drivers/platform/x86/serial-multi-instantiate.c
-
-68f201f9061c000 Stefan Binding  2022-01-21   79  
-68f201f9061c000 Stefan Binding  2022-01-21   80  /**
-68f201f9061c000 Stefan Binding  2022-01-21   81   * smi_spi_probe - Instantiate multiple SPI devices from inst array
-68f201f9061c000 Stefan Binding  2022-01-21   82   * @pdev:	Platform device
-68f201f9061c000 Stefan Binding  2022-01-21   83   * @smi:	Internal struct for Serial multi instantiate driver
-68f201f9061c000 Stefan Binding  2022-01-21   84   * @inst_array:	Array of instances to probe
-68f201f9061c000 Stefan Binding  2022-01-21   85   *
-68f201f9061c000 Stefan Binding  2022-01-21   86   * Returns the number of SPI devices instantiate, Zero if none is found or a negative error code.
-68f201f9061c000 Stefan Binding  2022-01-21   87   */
-8b50c48d59a9cd0 Andy Shevchenko 2022-07-10   88  static int smi_spi_probe(struct platform_device *pdev, struct smi *smi,
-68f201f9061c000 Stefan Binding  2022-01-21   89  			 const struct smi_instance *inst_array)
-68f201f9061c000 Stefan Binding  2022-01-21   90  {
-68f201f9061c000 Stefan Binding  2022-01-21   91  	struct device *dev = &pdev->dev;
-8b50c48d59a9cd0 Andy Shevchenko 2022-07-10   92  	struct acpi_device *adev = ACPI_COMPANION(dev);
-68f201f9061c000 Stefan Binding  2022-01-21   93  	struct spi_controller *ctlr;
-68f201f9061c000 Stefan Binding  2022-01-21   94  	struct spi_device *spi_dev;
-68f201f9061c000 Stefan Binding  2022-01-21   95  	char name[50];
-68f201f9061c000 Stefan Binding  2022-01-21   96  	int i, ret, count;
-68f201f9061c000 Stefan Binding  2022-01-21   97  
-68f201f9061c000 Stefan Binding  2022-01-21  @98  	ret = acpi_spi_count_resources(adev);
-68f201f9061c000 Stefan Binding  2022-01-21   99  	if (ret < 0)
-68f201f9061c000 Stefan Binding  2022-01-21  100  		return ret;
-f3e13bbc6f5a84f Andy Shevchenko 2022-07-10  101  	if (!ret)
-2b5b27826a48eea Andy Shevchenko 2022-07-10  102  		return -ENOENT;
-68f201f9061c000 Stefan Binding  2022-01-21  103  
-68f201f9061c000 Stefan Binding  2022-01-21  104  	count = ret;
-68f201f9061c000 Stefan Binding  2022-01-21  105  
-68f201f9061c000 Stefan Binding  2022-01-21  106  	smi->spi_devs = devm_kcalloc(dev, count, sizeof(*smi->spi_devs), GFP_KERNEL);
-68f201f9061c000 Stefan Binding  2022-01-21  107  	if (!smi->spi_devs)
-68f201f9061c000 Stefan Binding  2022-01-21  108  		return -ENOMEM;
-68f201f9061c000 Stefan Binding  2022-01-21  109  
-68f201f9061c000 Stefan Binding  2022-01-21  110  	for (i = 0; i < count && inst_array[i].type; i++) {
-68f201f9061c000 Stefan Binding  2022-01-21  111  
-68f201f9061c000 Stefan Binding  2022-01-21 @112  		spi_dev = acpi_spi_device_alloc(NULL, adev, i);
-68f201f9061c000 Stefan Binding  2022-01-21  113  		if (IS_ERR(spi_dev)) {
-14a9aa99aca6c28 Andy Shevchenko 2022-07-10  114  			ret = dev_err_probe(dev, PTR_ERR(spi_dev), "failed to allocate SPI device %s from ACPI\n",
-14a9aa99aca6c28 Andy Shevchenko 2022-07-10 @115  					    dev_name(&adev->dev));
-68f201f9061c000 Stefan Binding  2022-01-21  116  			goto error;
-68f201f9061c000 Stefan Binding  2022-01-21  117  		}
-68f201f9061c000 Stefan Binding  2022-01-21  118  
-68f201f9061c000 Stefan Binding  2022-01-21  119  		ctlr = spi_dev->controller;
-68f201f9061c000 Stefan Binding  2022-01-21  120  
-68f201f9061c000 Stefan Binding  2022-01-21  121  		strscpy(spi_dev->modalias, inst_array[i].type, sizeof(spi_dev->modalias));
-68f201f9061c000 Stefan Binding  2022-01-21  122  
-68f201f9061c000 Stefan Binding  2022-01-21  123  		ret = smi_get_irq(pdev, adev, &inst_array[i]);
-68f201f9061c000 Stefan Binding  2022-01-21  124  		if (ret < 0) {
-68f201f9061c000 Stefan Binding  2022-01-21  125  			spi_dev_put(spi_dev);
-68f201f9061c000 Stefan Binding  2022-01-21  126  			goto error;
-68f201f9061c000 Stefan Binding  2022-01-21  127  		}
-68f201f9061c000 Stefan Binding  2022-01-21  128  		spi_dev->irq = ret;
-68f201f9061c000 Stefan Binding  2022-01-21  129  
-68f201f9061c000 Stefan Binding  2022-01-21  130  		snprintf(name, sizeof(name), "%s-%s-%s.%d", dev_name(&ctlr->dev), dev_name(dev),
-68f201f9061c000 Stefan Binding  2022-01-21  131  			 inst_array[i].type, i);
-68f201f9061c000 Stefan Binding  2022-01-21  132  		spi_dev->dev.init_name = name;
-68f201f9061c000 Stefan Binding  2022-01-21  133  
-68f201f9061c000 Stefan Binding  2022-01-21  134  		ret = spi_add_device(spi_dev);
-68f201f9061c000 Stefan Binding  2022-01-21  135  		if (ret) {
-14a9aa99aca6c28 Andy Shevchenko 2022-07-10  136  			dev_err_probe(&ctlr->dev, ret, "failed to add SPI device %s from ACPI\n",
-14a9aa99aca6c28 Andy Shevchenko 2022-07-10  137  				      dev_name(&adev->dev));
-68f201f9061c000 Stefan Binding  2022-01-21  138  			spi_dev_put(spi_dev);
-68f201f9061c000 Stefan Binding  2022-01-21  139  			goto error;
-68f201f9061c000 Stefan Binding  2022-01-21  140  		}
-68f201f9061c000 Stefan Binding  2022-01-21  141  
-68f201f9061c000 Stefan Binding  2022-01-21  142  		dev_dbg(dev, "SPI device %s using chip select %u", name, spi_dev->chip_select);
-68f201f9061c000 Stefan Binding  2022-01-21  143  
-68f201f9061c000 Stefan Binding  2022-01-21  144  		smi->spi_devs[i] = spi_dev;
-68f201f9061c000 Stefan Binding  2022-01-21  145  		smi->spi_num++;
-68f201f9061c000 Stefan Binding  2022-01-21  146  	}
-68f201f9061c000 Stefan Binding  2022-01-21  147  
-68f201f9061c000 Stefan Binding  2022-01-21  148  	if (smi->spi_num < count) {
-68f201f9061c000 Stefan Binding  2022-01-21  149  		dev_dbg(dev, "Error finding driver, idx %d\n", i);
-68f201f9061c000 Stefan Binding  2022-01-21  150  		ret = -ENODEV;
-68f201f9061c000 Stefan Binding  2022-01-21  151  		goto error;
-68f201f9061c000 Stefan Binding  2022-01-21  152  	}
-68f201f9061c000 Stefan Binding  2022-01-21  153  
-68f201f9061c000 Stefan Binding  2022-01-21  154  	dev_info(dev, "Instantiated %d SPI devices.\n", smi->spi_num);
-68f201f9061c000 Stefan Binding  2022-01-21  155  
-68f201f9061c000 Stefan Binding  2022-01-21  156  	return 0;
-68f201f9061c000 Stefan Binding  2022-01-21  157  error:
-68f201f9061c000 Stefan Binding  2022-01-21  158  	smi_devs_unregister(smi);
-68f201f9061c000 Stefan Binding  2022-01-21  159  
-68f201f9061c000 Stefan Binding  2022-01-21  160  	return ret;
-35a36cbb7b1ce75 Lucas Tanure    2022-01-21  161  }
-35a36cbb7b1ce75 Lucas Tanure    2022-01-21  162  
+Applied to 6.4/scsi-staging, thanks!
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Martin K. Petersen	Oracle Linux Engineering
