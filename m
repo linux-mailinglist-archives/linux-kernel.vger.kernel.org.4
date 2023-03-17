@@ -2,80 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB9B76BF4AE
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 22:54:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D08486BF4B1
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 22:54:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231423AbjCQVyp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 17:54:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59618 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231350AbjCQVyl (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S231349AbjCQVyl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Fri, 17 Mar 2023 17:54:41 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BCC0AF1F;
-        Fri, 17 Mar 2023 14:54:18 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id k15so2947238pgt.10;
-        Fri, 17 Mar 2023 14:54:18 -0700 (PDT)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59502 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231178AbjCQVyj (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 17 Mar 2023 17:54:39 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03A34984D6;
+        Fri, 17 Mar 2023 14:54:17 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id y2so6713725pjg.3;
+        Fri, 17 Mar 2023 14:54:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112; t=1679090057;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=QgWoxlECZXdVrynxfG/iUFVQwxWjeSo565mClnIZWnc=;
-        b=YaTxmeYgjyyGDmiFAS7L+PljTKNdLcc5nol9+/wEE4H/wa86Znz2DX0ZJfrJwf3NQn
-         mi3C91RvdtoBgNdOgNPzvLFxbkHQkvXTlyahrA98EeV9jXJbi9Sf/XEa9/M9qyswTCDW
-         D99bJK6fLSCVJlxECISp5CFXVVNG2U3nnd/arcWTtrF02mJTSLao1RZSGb5ddQAsDtD0
-         V/Kg+cT9lPI18ueEdAm4jK/b8QlthdZ8NjbUa5tvX9L4AXpUzN7XDHJnLEp7WPDEa0Vo
-         rMhgXgfShXbVMEgHkEdJHLTq9hSBwCIDpZz3rogKfyxXw7dAmr6u14NdJ5LyUmR3w+3T
-         PuPA==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=uZLLDbPm3nkjoP0JuZeXds6jg7ClAAqz2Z12AuSnWK4=;
+        b=hYjLY8ATu6it/don+rer9uslXtao78n3n6+zA1KdL2ODoAHrNNbCJ2I9kovibJhoQq
+         SGNAEFVD2qE9qJxh1PJuBpFJ0jHQDZ+PtsxV97ycCGdeB4D87Eu+jDy/6m9oXgRECvwG
+         nzSJ1fpOETu0qYWVJxWMwNDJk2g07Uko4IWxekBidZ/xoPnt78tyaSBveigFb3LmcGZZ
+         UpS6pYVvJ3T1uhkkvmrqFwIepKop+0buA1nJ1cNSkFQiqhXJhPAEnD/FrgDd+ncwcHyn
+         b4H1y2ewGun69vepLaWlidOi5iV5N91WjYIs7N1+8a2qwZPJxNWI7ZG8CvpRN3rJUkgg
+         oyeQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112; t=1679090057;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QgWoxlECZXdVrynxfG/iUFVQwxWjeSo565mClnIZWnc=;
-        b=1QN89Y+2vIkEyIxSCLPLnH6F4dehA9JFpJQDEn6TGwR/mQm2eZIb05GvkXtJatv+qN
-         VRDVkKm6WQfM4P2tO0/fpPz/68zgBD+WhQWdMm5d69r602tGUYDt3OrVDkEP/ZecGrKx
-         xxZa81e+UDtnaw2xz1/rNWKKalD7mLMtcV9JGz55HS1UV3AQBI3sxhSeup/o0e1XQTw8
-         iiGzYu6gt+7S2d2MWhN5wNIU+GrUcC06pH7+zJviJVY52Za8sk/W5fmZDdRMe9Yn22D7
-         U+TJPB6YSqXQw1IninFfNJPx9YA/X4cbhX2rzG/LR0Mmyy5BjNybNbB+Fqam1WzjVd5f
-         kvNQ==
-X-Gm-Message-State: AO0yUKU/6/l8vrpFz1Q3BRVI68fR2yK8Im5xX+kZcD2dmJqXHLOFx1yD
-        JWPqUbKASYyPaFOBxFtQVvI=
-X-Google-Smtp-Source: AK7set++51QrZc9ogfyZzZlsl7EgVQqsEkLr7zb0xLfkGDusnfnLbtVRqFamGeYkvD60E3j8n/6MAg==
-X-Received: by 2002:a62:520f:0:b0:5cd:d766:8a2b with SMTP id g15-20020a62520f000000b005cdd7668a2bmr6584338pfb.6.1679090057160;
-        Fri, 17 Mar 2023 14:54:17 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id 22-20020aa79256000000b00582f222f088sm1998885pfp.47.2023.03.17.14.54.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uZLLDbPm3nkjoP0JuZeXds6jg7ClAAqz2Z12AuSnWK4=;
+        b=j25gaaTS6He4VeYXlk9FlIaAsGE5B1WyLb3I+U5xM2ewTfBbcHzmI2QsFCsHJPi0Np
+         meC7s8JIaQ5v2tnr47o2To6Fyk3vDRDNnb6a+LR+rl5DszlKfB55QU6WQ0S91b/H8KNt
+         5tApro0EBtFz4eK+m8VN9uddPP6N5Gdw7Jh81OU0Ax9z0gQWf2teQTKg2i57/ySbm2d9
+         zcSpwdv6AOtA5U3ex/i+ne6/LMJ5qDzNJr41Z8wZf0VS5cYp7GL7qp4dfTXBmqmLDiEC
+         mb6bxc7KyzHcY6rZbpFMGPrm4y2eYlVCQp7pkMOvah6BRIzRoM0xlhk+/fqIXEhU1iyM
+         Jmvg==
+X-Gm-Message-State: AO0yUKVP+O3gLh/oXrlfidL8gywiDBPT2oNCzBpegu/Ba1SPsqLUMke7
+        I1R5rxUkoN58CalKTN136XA=
+X-Google-Smtp-Source: AK7set/t9oC6xoocjc5+W6yf1YIOlsHqaitrdnjMfBG9ETATyxHCRUyhxEvcYhGrOlPY0zVrJdICRQ==
+X-Received: by 2002:a17:90b:4c8d:b0:23d:2f73:d3c8 with SMTP id my13-20020a17090b4c8d00b0023d2f73d3c8mr10132317pjb.42.1679090056783;
         Fri, 17 Mar 2023 14:54:16 -0700 (PDT)
-Message-ID: <0bbaa346-edbf-a1b9-3c95-5a1aacaf0c44@gmail.com>
-Date:   Fri, 17 Mar 2023 14:54:10 -0700
+Received: from localhost (ec2-54-67-115-33.us-west-1.compute.amazonaws.com. [54.67.115.33])
+        by smtp.gmail.com with ESMTPSA id t18-20020a170902d21200b0019719f752c5sm1997319ply.59.2023.03.17.14.54.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Mar 2023 14:54:16 -0700 (PDT)
+Date:   Fri, 17 Mar 2023 21:54:15 +0000
+From:   Bobby Eshleman <bobbyeshleman@gmail.com>
+To:     Arseniy Krasnov <avkrasnov@sberdevices.ru>
+Cc:     Stefan Hajnoczi <stefanha@redhat.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Bobby Eshleman <bobby.eshleman@bytedance.com>,
+        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@sberdevices.ru, oxffffaa@gmail.com
+Subject: Re: [RFC PATCH v1] virtio/vsock: check transport before skb
+ allocation
+Message-ID: <ZBThh0y3yVNwhlM5@bullseye>
+References: <47a7dbf6-1c63-3338-5102-122766e6378d@sberdevices.ru>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: Probing devices by their less-specific "compatible" bindings
- (here: brcmnand)
-Content-Language: en-US
-To:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Brian Norris <briannorris@chromium.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        MTD Maling List <linux-mtd@lists.infradead.org>,
-        "William (Zhenghao) Zhang" <william.zhang@broadcom.com>
-References: <399d2f43-5cad-6c51-fe3a-623950e2151a@gmail.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <399d2f43-5cad-6c51-fe3a-623950e2151a@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <47a7dbf6-1c63-3338-5102-122766e6378d@sberdevices.ru>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,94 +80,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+William,
+On Fri, Mar 17, 2023 at 01:37:10PM +0300, Arseniy Krasnov wrote:
+> Pointer to transport could be checked before allocation of skbuff, thus
+> there is no need to free skbuff when this pointer is NULL.
+> 
+> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+> ---
+>  net/vmw_vsock/virtio_transport_common.c | 8 +++-----
+>  1 file changed, 3 insertions(+), 5 deletions(-)
+> 
+> diff --git a/net/vmw_vsock/virtio_transport_common.c b/net/vmw_vsock/virtio_transport_common.c
+> index cda587196475..607149259e8b 100644
+> --- a/net/vmw_vsock/virtio_transport_common.c
+> +++ b/net/vmw_vsock/virtio_transport_common.c
+> @@ -867,6 +867,9 @@ static int virtio_transport_reset_no_sock(const struct virtio_transport *t,
+>  	if (le16_to_cpu(hdr->op) == VIRTIO_VSOCK_OP_RST)
+>  		return 0;
+>  
+> +	if (!t)
+> +		return -ENOTCONN;
+> +
+>  	reply = virtio_transport_alloc_skb(&info, 0,
+>  					   le64_to_cpu(hdr->dst_cid),
+>  					   le32_to_cpu(hdr->dst_port),
+> @@ -875,11 +878,6 @@ static int virtio_transport_reset_no_sock(const struct virtio_transport *t,
+>  	if (!reply)
+>  		return -ENOMEM;
+>  
+> -	if (!t) {
+> -		kfree_skb(reply);
+> -		return -ENOTCONN;
+> -	}
+> -
+>  	return t->send_pkt(reply);
+>  }
+>  
+> -- 
+> 2.25.1
 
-On 3/17/23 03:02, Rafał Miłecki wrote:
-> Hi, I just spent few hours debugging hidden hw lockup and I need to
-> consult driver core code behaviour.
-> 
-> I have a BCM4908 SoC based board with a NAND controller on it.
-> 
-> 
-> ### Hardware binding
-> 
-> Hardware details:
-> arch/arm64/boot/dts/broadcom/bcmbca/bcm4908.dtsi
-> 
-> Relevant part:
-> nand-controller@1800 {
->      compatible = "brcm,nand-bcm63138", "brcm,brcmnand-v7.1", 
-> "brcm,brcmnand";
->      reg = <0x1800 0x600>, <0x2000 0x10>;
->      reg-names = "nand", "nand-int-base";
-> }:
-> 
-> Above binding is based on the documentation:
-> Documentation/devicetree/bindings/mtd/brcm,brcmnand.yaml
-> 
-> 
-> ### Linux drivers
-> 
-> Linux has separated drivers for few Broadcom's NAND controller bindings:
-> 
-> 1. drivers/mtd/nand/raw/brcmnand/bcm63138_nand.c for:
-> brcm,nand-bcm63138
-> 
-> 2. drivers/mtd/nand/raw/brcmnand/brcmnand.c for:
-> brcm,brcmnand-v2.1
-> brcm,brcmnand-v2.2
-> brcm,brcmnand-v4.0
-> brcm,brcmnand-v5.0
-> brcm,brcmnand-v6.0
-> brcm,brcmnand-v6.1
-> brcm,brcmnand-v6.2
-> brcm,brcmnand-v7.0
-> brcm,brcmnand-v7.1
-> brcm,brcmnand-v7.2
-> brcm,brcmnand-v7.3
-> 
-> 3. drivers/mtd/nand/raw/brcmnand/brcmstb_nand.c for:
-> brcm,brcmnand
-> 
-> 
-> ### Problem
-> 
-> As first Linux probes my hardware using the "brcm,nand-bcm63138"
-> compatibility string driver bcm63138_nand.c. That's good.
-> 
-> It that fails however (.probe() returns an error) then Linux core starts
-> probing using drivers for less specific bindings.
+LGTM.
 
-Why does it fail?
-
-> 
-> In my case probing with the "brcm,brcmnand" string driver brcmstb_nand.c
-> results in ignoring SoC specific bits and causes a hardware lockup. Hw
-> isn't initialized properly and writel_relaxed(0x00000009, base + 0x04)
-> just make it hang.
-
-Well, the missing piece here is that brcmnand.c is a library driver, 
-therefore it needs an entry point, the next one that matches is 
-brcmstb_nand.c.
-
-> 
-> That obviously isn't an acceptable behavior for me. So I'm wondering
-> what's going on wrong here.
-> 
-> Should Linux avoid probing with less-specific compatible strings?
-> Or should I not claim hw to be "brcm,brcmnand" compatible if it REQUIRES
-> SoC-specific handling?
-> 
-> An extra note: that fallback probing happens even with .probe()
-> returning -EPROBE_DEFER. This actually smells fishy for me on the Linux
-> core part.
-> I'm not an expect but I think core should wait for actual error without
-> trying less-specific compatible strings & drivers.
-> 
-> ______________________________________________________
-> Linux MTD discussion mailing list
-> http://lists.infradead.org/mailman/listinfo/linux-mtd/
-
--- 
-Florian
-
+Reviewed-by: Bobby Eshleman <bobby.eshleman@bytedance.com>
