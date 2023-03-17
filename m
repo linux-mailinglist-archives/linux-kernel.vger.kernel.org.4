@@ -2,56 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83C606BDDA2
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 01:30:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27FD96BDDA7
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 01:31:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229881AbjCQAa1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 20:30:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44756 "EHLO
+        id S229815AbjCQAbk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 20:31:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229804AbjCQAaY (ORCPT
+        with ESMTP id S229482AbjCQAbi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 20:30:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E4F11BAE4;
-        Thu, 16 Mar 2023 17:30:23 -0700 (PDT)
+        Thu, 16 Mar 2023 20:31:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D1D68090B;
+        Thu, 16 Mar 2023 17:31:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CFD8FB82396;
-        Fri, 17 Mar 2023 00:30:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 6DEAAC433A8;
-        Fri, 17 Mar 2023 00:30:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BC9C36215A;
+        Fri, 17 Mar 2023 00:31:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CB99C433EF;
+        Fri, 17 Mar 2023 00:31:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679013020;
-        bh=KhpEYfBg/Ny2yT11VUI8QjCKTFwhFo+BIr9t653yUt4=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=m4zkkcuMofm3Z5SqSI67ztC6V6AkXqnEJEQHMgOut6yZqLyG32zMCSAGCkN67XM02
-         x7FYDGC7CN9RkCwShlQ5OTJ11eSZfGS+AnwOqFaroNTxp7dE+njxAb98/uiwdIFNke
-         JGoyQmkW/8tXY/O92p1AU3xxENuSbXkQbozmpUs6JjckTcf1pzD3CHoioA3ZL3hS5e
-         cuJeHoHXqWHRZR0RkgfWGPP6w5sxPth/yVgBUJnfbpwm+LFLbRr7buMqaH3aZpn76Y
-         CzJxrHY1UWNptSnUXyTg7PUs0FBl1UPyBC+NFeJm9r9gGEAAhGiyG8dxvQuI3J6LY5
-         Wdbgrh6WtNjxA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4A581E501EA;
-        Fri, 17 Mar 2023 00:30:20 +0000 (UTC)
+        s=k20201202; t=1679013076;
+        bh=Nhpqn/sIr/rBSfz125kjIVwRa7eO52ZCanweMIXsACs=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=t99MJSpQjkHLLinT2SDWYyww8YndV1+LNMc1y6rcb/ITB4wOs/v9wAxspC/xsfoRL
+         qowGVw3MIFrIxYU+gSIGNyWvCsTkXhdIuPCONp1/giHLQRYRzuRe/7GrHWTgy4dJCb
+         uOjjHdjM8zmVM38MlElxzj9iCr1d1PO9lD9e+zhGV6vjDLhqF9Zz2txeoWEiN0PZ2M
+         ffcMrCIbx/D5HvDCNY3l7dibKAgd+ExyGrMM+gG+AWYu2cVZ/SXTmEd4A28m+nln1E
+         JJdrgyQe2U3t19uOg21vNe7D6RxgCaaFeBz1nU71rFIeQmpxikB7/HrMncmBZd/k4a
+         51g6hP5lmL2bA==
+Message-ID: <4a9b2ed78ed80c15bb8089e2fccaf1b3.sboyd@kernel.org>
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] net: usb: smsc75xx: Move packet length check to prevent
- kernel panic in skb_pull
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167901302030.26766.10050313158281660408.git-patchwork-notify@kernel.org>
-Date:   Fri, 17 Mar 2023 00:30:20 +0000
-References: <20230316110540.77531-1-szymon.heidrich@gmail.com>
-In-Reply-To: <20230316110540.77531-1-szymon.heidrich@gmail.com>
-To:     Szymon Heidrich <szymon.heidrich@gmail.com>
-Cc:     kuba@kernel.org, steve.glendinning@shawell.net,
-        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20230316154850.wxwiztump5de3xt4@pengutronix.de>
+References: <20230312161512.2715500-1-u.kleine-koenig@pengutronix.de> <20230312161512.2715500-16-u.kleine-koenig@pengutronix.de> <20230316150144.2aap5otmgblj24ty@bogus> <20230316154850.wxwiztump5de3xt4@pengutronix.de>
+Subject: Re: [PATCH 15/30] clk: scpi: Convert to platform remove callback returning void
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     Cristian Marussi <cristian.marussi@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
         linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Uwe =?utf-8?q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Date:   Thu, 16 Mar 2023 17:31:14 -0700
+User-Agent: alot/0.10
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,28 +58,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Quoting Uwe Kleine-K=C3=B6nig (2023-03-16 08:48:50)
+> Hello,
+>=20
+> [put the clk maintainers in To:]
+>=20
+> On Thu, Mar 16, 2023 at 03:01:44PM +0000, Sudeep Holla wrote:
+> > On Sun, Mar 12, 2023 at 05:14:57PM +0100, Uwe Kleine-K=EF=BF=BDnig wrot=
+e:
+> > > The .remove() callback for a platform driver returns an int which mak=
+es
+> > > many driver authors wrongly assume it's possible to do error handling=
+ by
+> > > returning an error code. However the value returned is (mostly) ignor=
+ed
+> > > and this typically results in resource leaks. To improve here there i=
+s a
+> > > quest to make the remove callback return void. In the first step of t=
+his
+> > > quest all drivers are converted to .remove_new() which already returns
+> > > void.
+> > >=20
+> > > Trivially convert this driver from always returning zero in the remove
+> > > callback to the void returning variant.
+> > >
+> >=20
+> > Acked-by: Sudeep Holla <sudeep.holla@arm.com>
+> >=20
+> > Let me know if you want me to pick up instead.
+>=20
+> Honestly I don't know. I expected that the series is applied completely
+> via the clk maintainers, but the samsung patch was already taken
+> individually.
+>=20
+> Michael and Stephen: It would probably be helpful if you shared your
+> thoughs about this. For me both options are fine.
+>=20
 
-This patch was applied to netdev/net.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Thu, 16 Mar 2023 12:05:40 +0100 you wrote:
-> Packet length check needs to be located after size and align_count
-> calculation to prevent kernel panic in skb_pull() in case
-> rx_cmd_a & RX_CMD_A_RED evaluates to true.
-> 
-> Fixes: d8b228318935 ("net: usb: smsc75xx: Limit packet length to skb->len")
-> Signed-off-by: Szymon Heidrich <szymon.heidrich@gmail.com>
-> 
-> [...]
-
-Here is the summary with links:
-  - net: usb: smsc75xx: Move packet length check to prevent kernel panic in skb_pull
-    https://git.kernel.org/netdev/net/c/43ffe6caccc7
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+I will pick up whatever isn't picked by SoC maintainers.
