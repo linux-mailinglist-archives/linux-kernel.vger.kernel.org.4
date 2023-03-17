@@ -2,159 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F98F6BF45F
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 22:37:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C1056BF43A
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 22:35:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231314AbjCQVhG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 17:37:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52264 "EHLO
+        id S230341AbjCQVfE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 17:35:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230514AbjCQVg1 (ORCPT
+        with ESMTP id S230322AbjCQVfB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 17:36:27 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99E3049898;
-        Fri, 17 Mar 2023 14:35:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679088941; x=1710624941;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=p8BFbONHc7WqCzZIsrm1QJI48QM17cOqjlYx5rUU83M=;
-  b=htGBf4VfbREFIEH2xqQuTjV+2AkmusrecI9SU2jXmxW2Q4FrMBFuxiQS
-   TfcsaCHdTjsm92LvigQJ2jQI3dQY/Ae5Ho1QyB39wLFJ+VIaAcUgG9t8i
-   K1ZADsmsCnVjZIEcsrBF32e6/FbVG270dR7Q7PQvvbGwJOe86mFFlYB48
-   NRkfx64mNudnpAH0Q71pT8gdIOlHUIJij9lwxaJO7IU9fQ/kG56XKn/qC
-   FZeQ5nPACLs7FM1LnP2A11O3EYqo+W2u2Asru40pn8d5fZRFnuWEISGr7
-   O5yToCIXT5koeR05AM8559tDOOwIWnBP+XzCcI04FlkArrbs3LBcYxqHm
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="403237078"
-X-IronPort-AV: E=Sophos;i="5.98,268,1673942400"; 
-   d="scan'208";a="403237078"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2023 14:31:51 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="804244454"
-X-IronPort-AV: E=Sophos;i="5.98,268,1673942400"; 
-   d="scan'208";a="804244454"
-Received: from fcvilla-mobl1.amr.corp.intel.com (HELO [10.209.177.176]) ([10.209.177.176])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2023 14:31:50 -0700
-Message-ID: <44b1519b-f9e0-476a-ff47-8d21f004b3cd@linux.intel.com>
-Date:   Fri, 17 Mar 2023 14:31:49 -0700
+        Fri, 17 Mar 2023 17:35:01 -0400
+Received: from mail.zytor.com (unknown [IPv6:2607:7c80:54:3::138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE5FD4BE95;
+        Fri, 17 Mar 2023 14:34:22 -0700 (PDT)
+Received: from [127.0.0.1] ([73.223.221.228])
+        (authenticated bits=0)
+        by mail.zytor.com (8.17.1/8.17.1) with ESMTPSA id 32HLWU9P3796329
+        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+        Fri, 17 Mar 2023 14:32:31 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 32HLWU9P3796329
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+        s=2023030901; t=1679088752;
+        bh=zouPmF5oIF79YFX+c7vh33GjORXIJQkkKwKkjw1JFCY=;
+        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+        b=hIyEMEShpq66H/XKzls46Q/C4bEvmhNsuLYgZ0+YZGkdpP0jL8n3QUS/aDPOhrs7b
+         7fR/3xj4+p+SibqLTQmyhqjVkBocHoqZMPeCJJ1msDdUq0K0T18DS1mJkYDod54Thq
+         g7q/vsO15Bl86//xoAlaZ7xbSkjWhUgvS1VztmXzCYk6ZFtSemjXmR9xhvA3RxFT9O
+         AHyEMbfcghTqd4OoMfERXO4l35FnH0lJzrQuz7EHjW+7EvhP0esP/F1gJe9bGaaryo
+         r5+dpjBrUYUXVsf4R9L3WmKavQp79q/RVhunKwFUVmVfp0JVs3xHpezk1T3a3qvoab
+         KlbvbbMLEPWKg==
+Date:   Fri, 17 Mar 2023 14:32:28 -0700
+From:   "H. Peter Anvin" <hpa@zytor.com>
+To:     Lai Jiangshan <jiangshanlai@gmail.com>, Xin Li <xin3.li@intel.com>
+CC:     linux-kernel@vger.kernel.org, x86@kernel.org, kvm@vger.kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, peterz@infradead.org,
+        andrew.cooper3@citrix.com, seanjc@google.com, pbonzini@redhat.com,
+        ravi.v.shankar@intel.com
+Subject: Re: [PATCH v5 22/34] x86/fred: FRED initialization code
+User-Agent: K-9 Mail for Android
+In-Reply-To: <CAJhGHyADXz-3PCFS3M_7TJ8qLGJ=4NcV9aBWrpjemuXB_SnMGg@mail.gmail.com>
+References: <20230307023946.14516-1-xin3.li@intel.com> <20230307023946.14516-23-xin3.li@intel.com> <CAJhGHyADXz-3PCFS3M_7TJ8qLGJ=4NcV9aBWrpjemuXB_SnMGg@mail.gmail.com>
+Message-ID: <5D679723-D84F-42F0-AD8A-8BD1A38FB6CD@zytor.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v3] PCI: vmd: Add the module param to adjust MSI mode
-Content-Language: en-US
-To:     korantwork@gmail.com, helgaas@kernel.org, kbusch@kernel.org,
-        jonathan.derrick@linux.dev, lpieralisi@kernel.org
-Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Xinghui Li <korantli@tencent.com>
-References: <20230316122322.339316-1-korantwork@gmail.com>
-From:   "Patel, Nirmal" <nirmal.patel@linux.intel.com>
-In-Reply-To: <20230316122322.339316-1-korantwork@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/16/2023 5:23 AM, korantwork@gmail.com wrote:
-> From: Xinghui Li <korantli@tencent.com>
+On March 17, 2023 6:35:57 AM PDT, Lai Jiangshan <jiangshanlai@gmail=2Ecom> =
+wrote:
+>Hello
 >
-> In the legacy, the vmd MSI mode can only be adjusted by configing
-
-configuring
-
-> vmd_ids table. This patch adds another way to adjust MSI mode by
-> adjusting module param, which allow users easier to adjust the vmd
-> according to the I/O scenario without rebuilding driver. There are two
-> params could be recognized: on, off. The default param is NULL,
-> the goal is not to effect the existing settings of the device.
 >
-> Signed-off-by: Xinghui Li <korantli@tencent.com>
-> ---
->  drivers/pci/controller/vmd.c | 27 +++++++++++++++++++++++++++
->  1 file changed, 27 insertions(+)
+>Comments in cpu_init_fred_exceptions() seem scarce for understanding=2E
 >
-> diff --git a/drivers/pci/controller/vmd.c b/drivers/pci/controller/vmd.c
-> index 990630ec57c6..fb61181baa9e 100644
-> --- a/drivers/pci/controller/vmd.c
-> +++ b/drivers/pci/controller/vmd.c
-> @@ -34,6 +34,19 @@
->  #define MB2_SHADOW_OFFSET	0x2000
->  #define MB2_SHADOW_SIZE		16
->  
-> +/*
-> + * The VMD msi_remap module parameter provides the alternative way
-> + * to adjust MSI mode when loading vmd.ko other than vmd_ids table.
-> + * There are two params could be recognized:
-> + *
-> + * off: enable MSI bypass
+>On Tue, Mar 7, 2023 at 11:07=E2=80=AFAM Xin Li <xin3=2Eli@intel=2Ecom> wr=
+ote:
+>
+>> +/*
+>> + * Initialize FRED on this CPU=2E This cannot be __init as it is calle=
+d
+>> + * during CPU hotplug=2E
+>> + */
+>> +void cpu_init_fred_exceptions(void)
+>> +{
+>> +       wrmsrl(MSR_IA32_FRED_CONFIG,
+>> +              FRED_CONFIG_ENTRYPOINT(fred_entrypoint_user) |
+>> +              FRED_CONFIG_REDZONE(8) | /* Reserve for CALL emulation *=
+/
+>> +              FRED_CONFIG_INT_STKLVL(0));
+>
+>What is it about "Reserve for CALL emulation"?
+>
+>I guess it relates to X86_TRAP_BP=2E In entry_64=2ES:
+>
+>        =2Eif \vector =3D=3D X86_TRAP_BP
+>                /*
+>                 * If coming from kernel space, create a 6-word gap to al=
+low the
+>                 * int3 handler to emulate a call instruction=2E
+>                 */
+>
+>> +
+>> +       wrmsrl(MSR_IA32_FRED_STKLVLS,
+>> +              FRED_STKLVL(X86_TRAP_DB,  1) |
+>> +              FRED_STKLVL(X86_TRAP_NMI, 2) |
+>> +              FRED_STKLVL(X86_TRAP_MC,  2) |
+>> +              FRED_STKLVL(X86_TRAP_DF,  3));
+>
+>Why each exception here needs a stack level > 0?
+>Especially for X86_TRAP_DB and X86_TRAP_NMI=2E
+>
+>Why does or why does not X86_TRAP_VE have a stack level > 0?
+>
+>X86_TRAP_DF is the highest stack level, is it accidental
+>or deliberate?
+>
+>Thanks
+>Lai
+>
 
-What about this?
-off: disable MSI remapping
+Yes, the extra redzone space is there to allow for the call emulation with=
+out having to adjust the stack frame "manually"=2E
 
-> + * on: enable MSI remapping
-> + *
-> + */
-> +static char *msi_remap;
-> +module_param(msi_remap, charp, 0444);
-> +MODULE_PARM_DESC(msi_remap, "Whether to enable MSI remapping function");
-> +
->  enum vmd_features {
->  	/*
->  	 * Device may contain registers which hint the physical location of the
-> @@ -875,6 +888,7 @@ static int vmd_enable_domain(struct vmd_dev *vmd, unsigned long features)
->  			return ret;
->  
->  		vmd_set_msi_remapping(vmd, true);
-> +		dev_info(&vmd->dev->dev, "init vmd with remapping MSI\n");
->  
->  		ret = vmd_create_irq_domain(vmd);
->  		if (ret)
-> @@ -887,6 +901,7 @@ static int vmd_enable_domain(struct vmd_dev *vmd, unsigned long features)
->  		irq_domain_update_bus_token(vmd->irq_domain, DOMAIN_BUS_VMD_MSI);
->  	} else {
->  		vmd_set_msi_remapping(vmd, false);
-> +		dev_info(&vmd->dev->dev, "init vmd with bypass MSI\n");
->  	}
->  
->  	pci_add_resource(&resources, &vmd->resources[0]);
-> @@ -955,6 +970,16 @@ static int vmd_enable_domain(struct vmd_dev *vmd, unsigned long features)
->  	return 0;
->  }
->  
-> +static void vmd_config_msi_remap_param(unsigned long *features)
-> +{
-> +	if (msi_remap) {
-> +		if (strcmp(msi_remap, "on") == 0)
-> +			*features &= ~(VMD_FEAT_CAN_BYPASS_MSI_REMAP);
-> +		else if (strcmp(msi_remap, "off") == 0)
-> +			*features |= VMD_FEAT_CAN_BYPASS_MSI_REMAP;
-> +	}
-> +}
-> +
->  static int vmd_probe(struct pci_dev *dev, const struct pci_device_id *id)
->  {
->  	unsigned long features = (unsigned long) id->driver_data;
-> @@ -984,6 +1009,8 @@ static int vmd_probe(struct pci_dev *dev, const struct pci_device_id *id)
->  	if (err < 0)
->  		goto out_release_instance;
->  
-> +	vmd_config_msi_remap_param(&features);
-> +
->  	vmd->cfgbar = pcim_iomap(dev, VMD_CFGBAR, 0);
->  	if (!vmd->cfgbar) {
->  		err = -ENOMEM;
+In theory we could enable it only while code patching is in progress, but =
+that would probably just result in stack overflows becoming utterly impossi=
+ble to debug as we have to consider the worst case=2E
 
-Reviewed-by: Nirmal Patel <nirmal.patel@linux.intel.com>
+The purpose of separate stacks for NMI, #DB and #MC *in the kernel* (remem=
+ber that user space faults are always taken on stack level 0) is to avoid o=
+verflowing the kernel stack=2E #DB in the kernel would imply the use of a k=
+ernel debugger=2E
 
-Thanks
+#DF is the highest level because a #DF means "something went wrong *while =
+delivering an exception*=2E" The number of cases for which that can happen =
+with FRED is drastically reduced and basically amount to "the stack you poi=
+nted me to is broken=2E"
 
+Thus, you basically always want to change stacks on #DF, which means it sh=
+ould be at the highest level=2E
