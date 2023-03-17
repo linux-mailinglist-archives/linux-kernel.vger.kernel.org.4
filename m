@@ -2,228 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31C3F6BE121
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 07:18:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5D676BE124
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 07:20:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229814AbjCQGSe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 02:18:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52168 "EHLO
+        id S229616AbjCQGTw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 02:19:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229704AbjCQGSb (ORCPT
+        with ESMTP id S229494AbjCQGTu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 02:18:31 -0400
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF013A225D
-        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 23:18:26 -0700 (PDT)
-Received: from epcas1p4.samsung.com (unknown [182.195.41.48])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20230317061822epoutp0410b88836181cb091b54f21357da14ecd~NIHAkjM1o0877708777epoutp04m
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 06:18:22 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20230317061822epoutp0410b88836181cb091b54f21357da14ecd~NIHAkjM1o0877708777epoutp04m
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1679033902;
-        bh=8CbruO9QHy1Pi24lHSIWndXgjvSY156tnMjPXjFB46E=;
-        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
-        b=quuI+KnbczsLDz0oVGM7f/1++COyMzzbClQCsSuZ1o2RmHc+6opUyE+FQ1H+CIPDs
-         UddHzf1AhgPJpjEO6PLQGU7p3CQHYPjEMHg4ung7mwxevbZ7HxLMS20d6iNmTgWh/G
-         4aTYH/94oVf2GwuS+RBa+HA8AHzlV6PKDz8wfpQo=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas1p4.samsung.com (KnoxPortal) with ESMTP id
-        20230317061821epcas1p42ea8c5f50cc665f7f9ce987b81d7f336~NIHAClPJz1242612426epcas1p4U;
-        Fri, 17 Mar 2023 06:18:21 +0000 (GMT)
-Received: from epsmges1p3.samsung.com (unknown [182.195.38.250]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 4PdDTT17plz4x9Pp; Fri, 17 Mar
-        2023 06:18:21 +0000 (GMT)
-Received: from epcas1p4.samsung.com ( [182.195.41.48]) by
-        epsmges1p3.samsung.com (Symantec Messaging Gateway) with SMTP id
-        74.17.52037.D2604146; Fri, 17 Mar 2023 15:18:21 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20230317061820epcas1p2721102e23224fcccbc2c69c2f14fd1c3~NIG-Zc9H42012920129epcas1p2H;
-        Fri, 17 Mar 2023 06:18:20 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20230317061820epsmtrp13c9bc2e184633ebb9d50f28287c0169a~NIG-YrXQ50057100571epsmtrp1h;
-        Fri, 17 Mar 2023 06:18:20 +0000 (GMT)
-X-AuditID: b6c32a37-7cbfd7000001cb45-9c-6414062dcdd1
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        9C.71.18071.C2604146; Fri, 17 Mar 2023 15:18:20 +0900 (KST)
-Received: from youngjingil02 (unknown [10.253.98.199]) by
-        epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20230317061820epsmtip2ae9439847795bd4e88e282b6a952c9d7~NIG-Lo0SC0912909129epsmtip29;
-        Fri, 17 Mar 2023 06:18:20 +0000 (GMT)
-From:   =?ks_c_5601-1987?B?sea/tcH4L1N5c3RlbSBDb3JlIExhYi4oTVgpL7vvvLrA/MDa?= 
-        <youngjin.gil@samsung.com>
-To:     "'Eric Biggers'" <ebiggers@kernel.org>
-Cc:     <agk@redhat.com>, <snitzer@kernel.org>, <dm-devel@redhat.com>,
-        <linux-kernel@vger.kernel.org>,
-        "'Sungjong Seo'" <sj1557.seo@samsung.com>,
-        "'Nathan Huckleberry'" <nhuck@google.com>,
-        "'Sami Tolvanen'" <samitolvanen@google.com>
-In-Reply-To: <ZBNjcA1feNWUxvaW@gmail.com>
-Subject: RE: [PATCH] dm verity: fix error handling for check_at_most_once
-Date:   Fri, 17 Mar 2023 15:18:20 +0900
-Message-ID: <000001d95898$456301d0$d0290570$@samsung.com>
+        Fri, 17 Mar 2023 02:19:50 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9DDDABAD9;
+        Thu, 16 Mar 2023 23:19:48 -0700 (PDT)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32H0u0K5027439;
+        Fri, 17 Mar 2023 06:18:43 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : from : to : cc : references : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=pA1tMapjhLc8luf/elXgKP2JckGZ8Ljg8ZpDb2dHeZA=;
+ b=NQMLEQ8lOSe3DMD3vgOpurhWodYUJ99DpHOCdFNlXeTtdi4rY+XAphhTxvRrmkhkrJCI
+ 7O10w7dTLyhJvB6sbpF4bOkm5ExaMWsJTaJ87z5DFbnLjhczqCe8AEJdeIsuKbzR10A8
+ RO0Zb7mK8jwXuYRZgGwkiOdFKp4aqyuP6aahvxnlzf7xiykY+F5A/7xv1bPfJ/5Or1+r
+ 50pxFMe2E2MkwrFltdKSp12HN8o6G6Ou2Sl9muLmMmMhjuthUV44GTlBPLbPyRhcXvcU
+ kk1i91tadIQ+5rpypwOqSdHGhrEsWabD5e9OXo7JGWSOCNyvhdsQ5Ym9EIxp/Xx6o62T FQ== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pc3ypac3q-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 17 Mar 2023 06:18:42 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32H6IfEq022928
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 17 Mar 2023 06:18:41 GMT
+Received: from [10.239.133.9] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Thu, 16 Mar
+ 2023 23:18:38 -0700
+Message-ID: <6320e079-4fc8-f435-52e5-6d5ad1369d84@quicinc.com>
+Date:   Fri, 17 Mar 2023 14:18:35 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset="ks_c_5601-1987"
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 15.0
-Thread-Index: AQGQOF3WKzL6/erBkz5jz0bMtah/BQHnLikgA3pH1sOvZa6BUA==
-Content-Language: ko
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrEJsWRmVeSWpSXmKPExsWy7bCmga4um0iKwZVLbBbrTx1jttj7bjar
-        xdo9f5gtLu+aw2ax+fAnFoulK96yWmz5d4TV4sQtaQcOjwWbSj02repk83i/7yqbR9+WVYwe
-        nzfJBbBGNTDaJBYlZ2SWpSqk5iXnp2TmpdsqhYa46VooKWTkF5fYKkUbGhrpGRqY6xkZGemZ
-        GsVaGZkqKeQl5qbaKlXoQvUqKRQlFwDV5lYWAw3ISdWDiusVp+alOGTll4Kcr1ecmFtcmpeu
-        l5yfq6RQlphTCjRCST/hG2PGlYt32Qs6FCp2zsxrYNwn2cXIySEhYCKx5GUDYxcjF4eQwA5G
-        iTtX57NDOJ8YJTqetDFDON8YJT4cmsUG0zLv3h2olr2MEqsvHIWqes0o8WvDOiaQKjaBDInO
-        +btYQGwRAS2J3jlPWUGKmAVeMUq8ed4HNopTQFPi5PRuRhBbWMBTovHlRLA4i4CqxLYJ84Bs
-        Dg5eAUuJK0v8QMK8AoISJ2c+AZvJLGAksWT1fCYIW15i+9s5zBDXKUjs/nSUFaRVRMBJ4vr7
-        IogSEYnZnRDfSAjM5ZBo6Z/FCFHvIjHlz2ImCFtY4tXxLewQtpTEy/42doiGdkaJFQ/nMEI4
-        Mxgl/r6/zwpRZS/R3NoMDRdFiZ2/50JNFZQ4fa2bGWI1n8S7rz1gF0kI8Ep0tAlBlKhJXJn0
-        i3UCo/IsJL/NQvLbLCS/zULyxAJGllWMYqkFxbnpqcWGBcbIUb6JEZx8tcx3ME57+0HvECMT
-        B+MhRgkOZiURXt6fwilCvCmJlVWpRfnxRaU5qcWHGJOBoT2RWUo0OR+Y/vNK4g3NzCwtLI1M
-        DI3NDA0JC5tYGpiYGZlYGFsamymJ84rbnkwWEkhPLEnNTk0tSC2C2cLEwSnVwDTNQna1V6Co
-        +N4JW7rvNGRwT19w9LJPzQoGyfcNZlNYXG9nL9VyfKF++eDhBdp5KyTLVc7ZTBdxXe9f2LE/
-        a8OVr35Xl2exOMuXSd1i1+Rd/DTjZdNF5esd/KkPdRPLbqfc5dMuObhCdZe/7YyeUp2TDyfP
-        XKrdc3HdrtInTa/kMwVN73/06RBdPM3flsXXJ26t6P69Ocp91360SF8y/dFxoSXygKrn2oSq
-        aOslkTs5jimJ3fiWsib4+LuarOMHtrTKMU/vL0iT81rTy3eEx9PL6k7SvDdfjLaHfqqdVr7w
-        gJnYda4iRpXMZsYqx0tnrL6rpv9yXH7b+p6iOluRcr5/5xfXhlJLHv/K7ltKSizFGYmGWsxF
-        xYkARgRQwnUEAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpikeLIzCtJLcpLzFFi42LZdlhJXleHTSTFoPmXtsX6U8eYLfa+m81q
-        sXbPH2aLy7vmsFlsPvyJxWLpiresFlv+HWG1OHFL2oHDY8GmUo9NqzrZPN7vu8rm0bdlFaPH
-        501yAaxRXDYpqTmZZalF+nYJXBlXLt5lL+hQqNg5M6+BcZ9kFyMnh4SAicS8e3cYuxi5OIQE
-        djNKbGzZyw6RkJH4M/E9WxcjB5AtLHH4cDFIWEjgJaPE08taIDabQJrEn2NPGEFsEQEtid45
-        T1lB5jALfGCUWPlwExtEwxpGiR+fkkBsTgFNiZPTu8EahAU8JRpfTgSrYRFQldg2YR7YLl4B
-        S4krS/xAwrwCghInZz5hAbGZge5sPNwNZctLbH87hxniTAWJ3Z+OsoK0igg4SVx/XwRRIiIx
-        u7ONeQKj8Cwkk2YhmTQLyaRZSFoWMLKsYpRMLSjOTc8tNiwwzEst1ytOzC0uzUvXS87P3cQI
-        jiYtzR2M21d90DvEyMTBeIhRgoNZSYSX96dwihBvSmJlVWpRfnxRaU5q8SFGaQ4WJXHeC10n
-        44UE0hNLUrNTUwtSi2CyTBycUg1M5xVu33V6srvolvqh5//WT6mUr1ur4LNPSc2GZTtnQs1a
-        rSm5wdckGO/MYH6WZ3T3UfOy3mQ7M+OkQFV3mw5LMTaNHYI7t2eFXE3pOelnxlDhan/+4F/G
-        JXNXZpRc3M9x7M0/Te6pKvuXdrRJ1AbUMS8TMerb5buIzSDMcfKGpbYr//naF5QulG5cnnm/
-        bEFMdvXUDUf3vFko7WlXe73gzELrdfqvI3QFcv79mJfuPcdF2kv13v//Dh5NlSeDJKY833m8
-        fM/GCzxSk7bx6i7qDKkUfOfZL1Kesv14HztL3eOTPzimvZ4ullnybHXjJ19R2R8HrTw/PBZ7
-        qVDBom7ilJMqF9t6+1WmZoaTn7USS3FGoqEWc1FxIgAZ4Xk4FQMAAA==
-X-CMS-MailID: 20230317061820epcas1p2721102e23224fcccbc2c69c2f14fd1c3
-X-Msg-Generator: CA
-X-Sendblock-Type: SVC_REQ_APPROVE
-X-ArchiveUser: EV
-CMS-TYPE: 101P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20230316031936epcas1p1ebd93477dcf3bf9ab1640306dd1da8ff
-References: <CGME20230316031936epcas1p1ebd93477dcf3bf9ab1640306dd1da8ff@epcas1p1.samsung.com>
-        <20230316031842.17295-1-youngjin.gil@samsung.com>
-        <ZBNjcA1feNWUxvaW@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH] coresight: core: Add sysfs node to reset all sources and
+ sinks
+Content-Language: en-US
+From:   Jinlong Mao <quic_jinlmao@quicinc.com>
+To:     Mike Leach <mike.leach@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>
+CC:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        <coresight@lists.linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        Tingwei Zhang <quic_tingweiz@quicinc.com>,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        Tao Zhang <quic_taozha@quicinc.com>,
+        Hao Zhang <quic_hazha@quicinc.com>
+References: <20230208111630.20132-1-quic_jinlmao@quicinc.com>
+ <CAJ9a7ViBS9K6cKsOi3btw1b5cM9VTSb-q8s6W3WUAgeW3-T2Sg@mail.gmail.com>
+ <CAJ9a7ViA5BsbLjRWMsttmpmcPh1yUXK8J79k-pqYybVZkMQHXQ@mail.gmail.com>
+ <bb6c9df9-af9b-873e-85bd-a29d00bb39d7@arm.com>
+ <1d9b8ee8-c3f2-99bc-cd4e-8c2dd0f04b2b@quicinc.com>
+ <CAJ9a7Vh08A8b7YLF=pYPudB0CZ0XjEpF=4YHrNNd7xo_JQGYaA@mail.gmail.com>
+ <0308d380-bc8b-cb66-55cd-b0934d8f9676@quicinc.com>
+In-Reply-To: <0308d380-bc8b-cb66-55cd-b0934d8f9676@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: Rx5DTVCL2LmxNOfCHw9vifF3JL8mKbf7
+X-Proofpoint-ORIG-GUID: Rx5DTVCL2LmxNOfCHw9vifF3JL8mKbf7
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-17_02,2023-03-16_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ lowpriorityscore=0 clxscore=1015 priorityscore=1501 mlxscore=0
+ suspectscore=0 bulkscore=0 phishscore=0 adultscore=0 impostorscore=0
+ mlxlogscore=999 spamscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2303150002 definitions=main-2303170041
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Eric,
-Thank you for your detailed feedback.
-> Hi Yeongjin,
-> 
-> On Thu, Mar 16, 2023 at 12:18:42PM +0900, Yeongjin Gil wrote:
-> > In verity_work(), the return value of verity_verify_io() is converted
-> > to blk_status and passed to verity_finish_io(). BTW, when a bit is set
-> > in
-> > v->validated_blocks, verity_verify_io() skips verification regardless
-> > v->of
-> > I/O error for the corresponding bio. In this case, the I/O error could
-> > not be returned properly, and as a result, there is a problem that
-> > abnormal data could be read for the corresponding block.
-> >
-> > To fix this problem, when an I/O error occurs, do not skip
-> > verification even if the bit related is set in v->validated_blocks.
-> >
-> > Fixes: 843f38d382b1 ("dm verity: add 'check_at_most_once' option to
-> > only validate hashes once")
-> >
-> > Signed-off-by: Sungjong Seo <sj1557.seo@samsung.com>
-> > Signed-off-by: Yeongjin Gil <youngjin.gil@samsung.com>
-> > ---
-> >  drivers/md/dm-verity-target.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/md/dm-verity-target.c
-> > b/drivers/md/dm-verity-target.c index ade83ef3b439..9316399b920e
-> > 100644
-> > --- a/drivers/md/dm-verity-target.c
-> > +++ b/drivers/md/dm-verity-target.c
-> > @@ -523,7 +523,7 @@ static int verity_verify_io(struct dm_verity_io *io)
-> >  		sector_t cur_block = io->block + b;
-> >  		struct ahash_request *req = verity_io_hash_req(v, io);
-> >
-> > -		if (v->validated_blocks &&
-> > +		if (v->validated_blocks && bio->bi_status == BLK_STS_OK &&
-> >  		    likely(test_bit(cur_block, v->validated_blocks))) {
-> >  			verity_bv_skip_block(v, io, iter);
-> >  			continue;
-> 
-> Thanks for sending this patch!  This looks like a correct fix, but I have
-> some
-> comments:
-> 
-> * Using "check_at_most_once" is strongly discouraged, as it reduces
-> security.
->   If you are using check_at_most_once to improve performance at the cost
-> of
->   reduced security, please consider that very recently, dm-verity
-> performance
->   has significantly improved due to the removal of the WQ_UNBOUND
-> workqueue flag
->   which was causing significant I/O latency.  See commit c25da5b7baf1
->   ("dm verity: stop using WQ_UNBOUND for verify_wq").
-> 
-> * I think your commit message does not explain a key aspect of the problem
-> which
->   is why is verity even attempted when the underlying I/O has failed?
-> This
->   appears to be because of the Forward Error Correction (FEC) feature.
-So,
-> this
->   issue is specific to the case where both FEC and check_at_most_once is
-> used.
->   Can you make your commit message explain this?
-Okay. I will update commit message.
-> 
-> * This patch does not appear to have been received by the dm-devel mailing
-> list,
->   which is the list where dm-verity patches should be reviewed on.  It
-> doesn't
->   show up in the archive at https://lore.kernel.org/dm-devel.  Also, I'm
->   subscribed to dm-devel and I didn't receive this patch in my inbox.  (I
-> had to
->   download it from https://lore.kernel.org/lkml instead.)  Did you receive
-> a
->   bounce message when you sent this patch?
-I am not sure but I received message from googlemail.com as follow
-"totte@google.com because the address couldn't be found".
-I will try to send v2 patch exclude totte@google.com and check the mailing.
-> 
-> * Please add 'Cc: stable@vger.kernel.org' to the commit message, just
-> below the
->   Fixes line, as per Documentation/process/stable-kernel-rules.rst.  This
-> will
->   ensure that the fix will be backported to the stable kernels.
-Okay.
-> 
-> * "Signed-off-by: Sungjong Seo <sj1557.seo@samsung.com>" does not have a
->   corresponding Author or Co-developed-line, which is not allowed.  Did
-> you mean
->   to list Sungjong as the Author or as a co-author?
-I created a patch through an internal review with Sungjong.
-I will change the tag to "Reviewed-by"
-> 
-> * No blank line between Fixes and the Signed-off-by line(s), please.
-Okay. Thanks. I will send v2 patch soon.
-> 
-> Thanks!
-> 
-> - Eric
 
+On 3/1/2023 11:04 PM, Jinlong Mao wrote:
+> Hi Mike & Suzuki,
+>
+> On 2/9/2023 10:56 PM, Mike Leach wrote:
+>> Hi,
+>>
+>> On Thu, 9 Feb 2023 at 03:02, Jinlong Mao <quic_jinlmao@quicinc.com> 
+>> wrote:
+>>>
+>>> On 2/9/2023 12:36 AM, Suzuki K Poulose wrote:
+>>>> On 08/02/2023 16:20, Mike Leach wrote:
+>>>>> Quick correction - you need to look for enable_source  / enable_sink
+>>>>> files and disable those that are currently '1'
+>>>>>
+>>>>> Mike
+>>>>>
+>>>>> On Wed, 8 Feb 2023 at 16:16, Mike Leach <mike.leach@linaro.org> 
+>>>>> wrote:
+>>>>>> Hi
+>>>>>>
+>>>>>> As this is a sysfs only update - would it not be easier to simply 
+>>>>>> use
+>>>>>> a shell script to iterate through coresight/devices/ looking for
+>>>>>> disable_source / disable_sink files and setting those accordingly?
+>>>>>>
+>>>>>> See tools/perf/tests/shell/test_arm_coresight.sh for an example of a
+>>>>>> script that does similar iteration to test coresight in perf
+>>>>>>
+>>>> +1
+>>>>
+>>>> Suzuki
+>>> Hi Mike & Suzuki,
+>>>
+>>> Sometimes user just want to have some quick test from PC with adb 
+>>> commands.
+>>> It is very easy to reset all sources and sinks' status by command 
+>>> below.
+>>> echo 1 > /sys/bus/coresight/reset_source_sink
+>>>
+>> Users of coresight via sysfs will have to know how to use the
+>> coresight infrastructure in order to enable the sources and sinks in
+>> the first place -
+>> e.g
+>> echo 1 > /sys/bus/coresight/devices/tmc_etr0/enable_sink
+>> echo 1 > /sys/bus/coresight/devices/etm0/enable_source
+>>
+>> Given that they are aware of which sources and sinks they enabled -
+>> disabling them should be simple.
+>>
+>>
+>>> Preparing the script for test is not easy for users who are not 
+>>> familiar
+>>> with the coresight framework.
+>>>
+>> If there is a genuine use case were a user has opened so many sources
+>> on the command line that they need a simpler way of closing them than
+>> repeating the enabled commands with an
+>> echo 0 > ...
+>> then any script could be shipped as part of kernel/tools/coresight or
+>> kernel/samples/coresight - they would not have to write it themselves,
+>> and just run it from the command line - for example :-
+>> ./kernel/tools/coresight/scripts/sysfs_disable_sources_and_sinks.sh
+>>
+>> Realistically users will only try out a couple of devices as the
+>> usefulness of the sysfs interface is really limited to testing or
+>> board bring up.
+>> Any complex use with sysfs - as in the coresight tests I mentioned
+>> earlier is really going to be done by scripting.
+>>
+>>
+>> Regards
+>>
+>> Mike
+>
+> There is also requirement that reset all the sources and sinks in an 
+> user space daemon.
+> For such requirement, I think it is better to use only once sysfs node 
+> instead of iterating through coresight/device folder in an user space 
+> daemon.
+
+Hi Mike & Suzuki,
+
+In our internal build, there is binary executable which can configure 
+coresight source/sink.
+Before running the case, it will disable all the sources and sinks by 
+writing reset_source_sink node to
+avoid any other source packet's impact.
+
+
+Thanks
+Jinlong Mao
+
+>
+> Thanks
+> Jinlong Mao
+>
+>>> Thanks
+>>> Jinlong Mao
+>>>
+>>>>
+>>
+>>
+> _______________________________________________
+> CoreSight mailing list -- coresight@lists.linaro.org
+> To unsubscribe send an email to coresight-leave@lists.linaro.org
