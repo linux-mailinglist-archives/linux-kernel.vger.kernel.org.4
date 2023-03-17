@@ -2,99 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5962A6BF6AE
-	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 00:51:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1813E6BF6B2
+	for <lists+linux-kernel@lfdr.de>; Sat, 18 Mar 2023 00:52:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230034AbjCQXvL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 19:51:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40984 "EHLO
+        id S230035AbjCQXwQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 19:52:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229902AbjCQXvJ (ORCPT
+        with ESMTP id S229665AbjCQXwN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 19:51:09 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A3EE3B23E;
-        Fri, 17 Mar 2023 16:50:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5502BB82741;
-        Fri, 17 Mar 2023 23:50:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id EB6A8C433D2;
-        Fri, 17 Mar 2023 23:50:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679097056;
-        bh=WR+tqewczy5kh9G0x5J34eXgDDCY5t9xJhykv7aIXN4=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=ptxVKc0dN/q8hYKuRw3Ps+YJg5t6XwIU6VqruWwjxVhouF71Kc/eeYZ21fCk8Dsk7
-         QcVbB6EJPmY0asHTvd7uiPP7LNnHL50Ag34RpRpO0jV3SKCVxtCN7HoFtRTwzNObxd
-         D649t4FFcAFzy1rPMsEHsjInuNuBuf2isyWfxs30brJZcIoHGv3nJBPXZkg60jmFQf
-         7viIGijL/yij7Imw0csg5gJwKflshfD7mIXP3Wa78rWtm/S5g9pZKB06Amn2n+C8Aw
-         E/SyzdqzRPBoWLjrL66URd29BM+cw9u4HYO1fap6iO7rWNdV7BO2tVR1R2PMlVRgMc
-         9S3vqVi6mlfOQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C744EE66CBF;
-        Fri, 17 Mar 2023 23:50:55 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Fri, 17 Mar 2023 19:52:13 -0400
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51406497FF
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 16:52:02 -0700 (PDT)
+Received: by mail-yb1-xb34.google.com with SMTP id r1so7438271ybu.5
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 16:52:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1679097121;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eQMD/29uw8RUz0fNzK2trwLryR+NGIrIQSt625LLiR4=;
+        b=TS6enXcAOm38L7QvT+K/jT3x16hmeT+y+4kagaEDckdmpRvnOeAsbBSaoxSgJNrMG9
+         hSDoMP05VscGo4LbTYECC5AxoNaVqnnTnHAs/iWsoKurGamEavoev9wvQFzc5ajoajeu
+         DYLeXS21zZR/OdOOW6HSDWhDHkm0jkfxTu0QoA9CnKv9CUV4sjRRndhJhVmkIO1l+wiO
+         zZFvqMqBj5ylb0eGeV9fiDugpe8fq+UHlDR1JCe/RfaO4Rm5ay4W9VOz4jkfVIkbHLVr
+         BGzYpR9cO24ehDUEE1+X4CiHtCVUjxXxZNeZLMWIFUHSXrcjpQHtzE7T714PnT4ICFBm
+         QduA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679097121;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=eQMD/29uw8RUz0fNzK2trwLryR+NGIrIQSt625LLiR4=;
+        b=ixnszNqEFJeI8TMHCP7ZlQt0fqAOvUD/fFdZ1WSHAv56QsJG2ALblYe2DN+I9+9b0I
+         zMjIq3pwzOy1fv7l0j5KmAJ6+h1Rh37iREmvIMBze9+KPAceyIVaSWCLCnqoAb2WmHBP
+         aVENZOmEHzrWeBNd9xlFFfySNgj9BwbS7dXOyy04Q5Ld2RJWH3dkmbEGKW95L37RD44Q
+         qg7UP+t23mUwgW9BcyTOKmj2g4ndSbAsGwfwsV/SFZQNCL8S3JZ93GXrw86RhZtCjrvh
+         cf6hzfVHr6Y4+9z/N7Z6o+sbBnpo8qw2RCEeaIEkGMzvYl4AuX20SvE8KXZ8nig7GMfZ
+         szaA==
+X-Gm-Message-State: AO0yUKV9QF6CA3NE3MkWz4s8pk5l0AL2zcCPDiYNYa7XlkzlVGOgjvva
+        gGqnKFPGhMO4V3/QHzZoLyOa77+D8emqRc/o3ylGnQ==
+X-Google-Smtp-Source: AK7set/6K0VHPQzMrr66R5AXYXA3YJNzCDyiJiEWzDsvRDdmZ6ptCgflUF6JxqibsYXvfUTKehd9lDdnM5vVfI53kFo=
+X-Received: by 2002:a5b:181:0:b0:acd:7374:f15b with SMTP id
+ r1-20020a5b0181000000b00acd7374f15bmr187259ybl.13.1679097121136; Fri, 17 Mar
+ 2023 16:52:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v13 0/4] Add support for NXP bluetooth chipsets
-From:   patchwork-bot+bluetooth@kernel.org
-Message-Id: <167909705581.28336.12052092434994272835.git-patchwork-notify@kernel.org>
-Date:   Fri, 17 Mar 2023 23:50:55 +0000
-References: <20230316172214.3899786-1-neeraj.sanjaykale@nxp.com>
-In-Reply-To: <20230316172214.3899786-1-neeraj.sanjaykale@nxp.com>
-To:     Neeraj Sanjay Kale <neeraj.sanjaykale@nxp.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, marcel@holtmann.org,
-        johan.hedberg@gmail.com, luiz.dentz@gmail.com,
-        gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        alok.a.tiwari@oracle.com, hdanton@sina.com,
-        ilpo.jarvinen@linux.intel.com, leon@kernel.org,
-        simon.horman@corigine.com, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-bluetooth@vger.kernel.org, linux-serial@vger.kernel.org,
-        amitkumar.karwar@nxp.com, rohit.fule@nxp.com, sherry.sun@nxp.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230211014626.3659152-1-vipinsh@google.com> <ZBTwX5790zwl5721@google.com>
+In-Reply-To: <ZBTwX5790zwl5721@google.com>
+From:   Vipin Sharma <vipinsh@google.com>
+Date:   Fri, 17 Mar 2023 16:51:25 -0700
+Message-ID: <CAHVum0fw2RXfqLNMbAFHbwh1P-O0JjnDCUTco9zt18mBi4Pk-Q@mail.gmail.com>
+Subject: Re: [Patch v3 0/7] Optimize clear dirty log
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     pbonzini@redhat.com, bgardon@google.com, dmatlack@google.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On Fri, Mar 17, 2023 at 3:57=E2=80=AFPM Sean Christopherson <seanjc@google.=
+com> wrote:
+>
+> On Fri, Feb 10, 2023, Vipin Sharma wrote:
+> > This patch series has optimized control flow of clearing dirty log and
+> > improved its performance by ~40% (2% more than v2).
+> >
+> > It also got rid of many variants of the handle_changed_spte family of
+> > functions and converged logic to one handle_changed_spte() function. It
+> > also remove tdp_mmu_set_spte_no_[acc_track|dirty_log] and various
+> > booleans for controlling them.
+> >
+> > v3:
+> > - Tried to do better job at writing commit messages.
+>
+> LOL, that's the spirit!
+>
+> Did a cursory glance, looks good.  I'll do a more thorough pass next week=
+ and get
+> it queued up if all goes well.  No need for a v4 at this point, I'll fixu=
+p David's
+> various nits when applying.  I'll also add a link in patch 2 to the discu=
+ssion
 
-This series was applied to bluetooth/bluetooth-next.git (master)
-by Luiz Augusto von Dentz <luiz.von.dentz@intel.com>:
+Yeah, he is too demanding! :p
 
-On Thu, 16 Mar 2023 22:52:10 +0530 you wrote:
-> This patch adds a driver for NXP bluetooth chipsets.
-> 
-> The driver is based on H4 protocol, and uses serdev APIs. It supports host
-> to chip power save feature, which is signalled by the host by asserting
-> break over UART TX lines, to put the chip into sleep state.
-> 
-> To support this feature, break_ctl has also been added to serdev-tty along
-> with a new serdev API serdev_device_break_ctl().
-> 
-> [...]
+> about why we determined that bypassing __tdp_mmu_set_spte() is safe; that=
+'s critical
+> information that isn't captured in the changelog.
 
-Here is the summary with links:
-  - [v13,1/4] serdev: Replace all instances of ENOTSUPP with EOPNOTSUPP
-    https://git.kernel.org/bluetooth/bluetooth-next/c/d227f286d259
-  - [v13,2/4] serdev: Add method to assert break signal over tty UART port
-    https://git.kernel.org/bluetooth/bluetooth-next/c/5ea260df53c2
-  - [v13,3/4] dt-bindings: net: bluetooth: Add NXP bluetooth support
-    https://git.kernel.org/bluetooth/bluetooth-next/c/02986ce4a4fe
-  - [v13,4/4] Bluetooth: NXP: Add protocol support for NXP Bluetooth chipsets
-    https://git.kernel.org/bluetooth/bluetooth-next/c/3e662aa4453a
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Thanks!
