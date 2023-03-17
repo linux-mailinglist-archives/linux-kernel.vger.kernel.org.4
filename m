@@ -2,163 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BD236BE512
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 10:12:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B03DA6BE519
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 10:12:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229832AbjCQJMZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 05:12:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42172 "EHLO
+        id S229991AbjCQJMz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 05:12:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229954AbjCQJMS (ORCPT
+        with ESMTP id S229949AbjCQJMx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 05:12:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 696631A482;
-        Fri, 17 Mar 2023 02:12:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F1DDD62243;
-        Fri, 17 Mar 2023 09:12:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52552C433EF;
-        Fri, 17 Mar 2023 09:12:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679044335;
-        bh=yIBWbJIYgG7lzu3cPwnPr24tCM1jWhNKwE63jEH40XI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DLDuqfOWe2nJQQWCu6USvWskzisA+FW5J/GUjoTAR9FP6Gv/gsUyPsyS7T/K++rWf
-         zJ+dY0xI4DDP+pTn7SQWsJoeC9yIvYkCLGTZhnexu94dqdBsNTuy0wGxOnwo4Q/zMM
-         VNkcTnRfKVp1tkrY3q1vkDMARN4ZLBREsg3MB5n/d7bzj23YH8qFVbj1MQsppxLzyy
-         b8hZkl6PXb4E+KP66CoT2GT8Z4AQFmYvYQ46+PP5zGiGX5+dnmBCmOmgMh5OMQtrTb
-         +M2OsoOOsx0G2SCXaZtplTxYyOgBbE/Bl4UXmlRZMFlpJSvOdhqfCzS1po+ji40vZ1
-         c77C5wm7qegdA==
-Date:   Fri, 17 Mar 2023 10:12:08 +0100
-From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
-To:     Janne Grunau <j@jannau.net>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Marc Zyngier <maz@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Sven Peter <sven@svenpeter.dev>, linux-pci@vger.kernel.org,
-        asahi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Daire McNamara <daire.mcnamara@microchip.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v2] PCI: apple: Set only available ports up
-Message-ID: <ZBQu6PBvNVO1ps/A@lpieralisi>
-References: <20230307-apple_pcie_disabled_ports-v2-1-c3bd1fd278a4@jannau.net>
- <20230309163935.GA1140101@bhelgaas>
- <20230316212217.GI24656@jannau.net>
+        Fri, 17 Mar 2023 05:12:53 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECE0112F3E
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 02:12:50 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id bh21-20020a05600c3d1500b003ed1ff06fb0so2821718wmb.3
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 02:12:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679044369;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=7c9JjlZJtBSyylkTITjEuLXDkbRdXKeg/7F2Np4VoK4=;
+        b=xn4ySr462E77WN6Cn3meWVkqicL5GPL6OoJR8/j08mehD3RwTkhDZlBARcVLYaKX0a
+         OqVYYbUHFWKbeirhwfIKeGE7dhDH9vGnz4/6WaBarvZlBHs1yBsP2YZoOQnODh6j/kg8
+         8KmbrijJg/2Afsv7lOMAJMTqd7XgybPtnUHD1ZUQKxFcaUXiE9XkLTeIQAZYdQymQiqC
+         buhLPWDH6lFEJEWiAoBwogvjVoJgH+DK3Ta0qhHIiLGO0pLJWit9MUc7HDwSLjLjLKOt
+         gXKq+dfIb6BsVlIALLkm0Cyr3goXmVV+JRCQDwDAH0I3KkGfXWOBSx0cmP9WAXytWV9x
+         rTkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679044369;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7c9JjlZJtBSyylkTITjEuLXDkbRdXKeg/7F2Np4VoK4=;
+        b=opfyxe/pQcD4xzPr/bbsOTKakeolulWSPCDij4yRrd6xM6pjWPCdTLyARGrA0WvPER
+         mYidZsVUY2jPalsJF4jxD1kWZPX1dxjqKZR2GN6J1cLe6aenaqjOksoKAAGCsMGUbvGE
+         BG7CPpwyDfJ58wwnuOIS/DC4uCx035dJlpSetzkekKxra3Vc+eRN3f0KAMsLPdVmPSwL
+         6m4h4Ei/4aaEAc6CqwETwiHWUYYGp+owkSKv+fDz4824+IR5vQX6RqMcAr+l+NGWJzE/
+         hmwx6DLV1U6DemvW/VeEVwmXejHLt7hhKlM+sXhFUo3x7yIv2HyIA7KdcpQ8iPFLJgRr
+         Ok3A==
+X-Gm-Message-State: AO0yUKW2cupnEutg5lnlYDJ5Z+etml8LUd2h/AJ4SiJMsNnFCPsDkTCZ
+        MKT7Py/pmnExpD5/UxSiLmWXKA==
+X-Google-Smtp-Source: AK7set9wS82lmwxJ2FaGmXLBW3ZcVfgDdtvU2c/fw/pgl2hG50W8e3fNXMlvw97WzyU99JYiYl65iw==
+X-Received: by 2002:a05:600c:46d3:b0:3e2:a9e:4eaa with SMTP id q19-20020a05600c46d300b003e20a9e4eaamr24281346wmo.35.1679044369379;
+        Fri, 17 Mar 2023 02:12:49 -0700 (PDT)
+Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
+        by smtp.gmail.com with ESMTPSA id j10-20020a5d464a000000b002cea8f07813sm1467976wrs.81.2023.03.17.02.12.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Mar 2023 02:12:49 -0700 (PDT)
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Subject: [PATCH v5 0/5] arm64: dts: qcom: add DP Controller to SM8350 &
+ SM8450 DTS
+Date:   Fri, 17 Mar 2023 10:12:46 +0100
+Message-Id: <20230206-topic-sm8450-upstream-dp-controller-v5-0-a27f1b26ebe8@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230316212217.GI24656@jannau.net>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAA4vFGQC/53OwW7DIBAE0F+JOHcrvIBreup/VD1gWMdIBKzFs
+ VpF/veS3Kqc6uPM4c3cRCWOVMX76SaYtlhjyS2Yl5Pws8tnghhaFihRSZQ9rGWJHupl0EbCdak
+ rk7tAWMCXvHJJiRhQSqPdiIMMJJo0ukowsst+bla+ptTKhWmK34/pz6+W51jXwj+PJ1t3b/83u
+ nUgYeqUNsMbUujsR4rZcXktfBb3gQ0PoNhQgzY4RKl684yqA6hqaK96mixZaxU+ofoAqhsavFN
+ qMqojGf6g+77/AiRA6YnrAQAA
+To:     Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+X-Mailer: b4 0.12.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 16, 2023 at 10:22:17PM +0100, Janne Grunau wrote:
-> On 2023-03-09 10:39:35 -0600, Bjorn Helgaas wrote:
-> > [+cc Daire, Conor for apple/microchip use of ECAM .init() method]
-> > 
-> > On Thu, Mar 09, 2023 at 02:36:24PM +0100, Janne Grunau wrote:
-> > > Fixes following warning inside of_irq_parse_raw() called from the common
-> > > PCI device probe path.
-> > > 
-> > >   /soc/pcie@690000000/pci@1,0 interrupt-map failed, using interrupt-controller
-> > >   WARNING: CPU: 4 PID: 252 at drivers/of/irq.c:279 of_irq_parse_raw+0x5fc/0x724
-> > 
-> > Based on this commit log, I assume this patch only fixes the warning,
-> > and the system *works* just fine either way.  If that's the case, it's
-> > debatable whether it meets the stable kernel criteria, although the
-> > documented criteria are much stricter than what happens in practice.
-> 
-> Yes, it fixes only the warning and hides devices. The present devices 
-> still work. I confused myself with the submitted M2 devicetree. It 
-> missed information in the dt node of an disabled PCIe port breaking 
-> probing of the pcie controller.
->  
-> I agree that the Cc: stable is not necessary. Please drop it or tell me 
-> to resend the change.
+Switch the QMP PHY to the newly documented USB3/DP Combo PHY
+bindings at [1] and add the DP controller nodes.
 
-I think this change is not needed as it stands. If the goal is
-to disable *probing* some root ports for power efficiency, we
-need a different commit log altogether, see below.
+The DP output is shared with the USB3 SuperSpeed lanes and is
+usually connected to an USB-C port which Altmode is controlled
+by the PMIC Glink infrastructure in discution at [1] & [2].
 
-> > >   ...
-> > >   Call trace:
-> > >    of_irq_parse_raw+0x5fc/0x724
-> > >    of_irq_parse_and_map_pci+0x128/0x1d8
-> > >    pci_assign_irq+0xc8/0x140
-> > >    pci_device_probe+0x70/0x188
-> > >    really_probe+0x178/0x418
-> > >    __driver_probe_device+0x120/0x188
-> > >    driver_probe_device+0x48/0x22c
-> > >    __device_attach_driver+0x134/0x1d8
-> > >    bus_for_each_drv+0x8c/0xd8
-> > >    __device_attach+0xdc/0x1d0
-> > >    device_attach+0x20/0x2c
-> > >    pci_bus_add_device+0x5c/0xc0
-> > >    pci_bus_add_devices+0x58/0x88
-> > >    pci_host_probe+0x124/0x178
-> > >    pci_host_common_probe+0x124/0x198 [pci_host_common]
-> > >    apple_pcie_probe+0x108/0x16c [pcie_apple]
-> > >    platform_probe+0xb4/0xdc
-> > > 
-> > > This became apparent after disabling unused PCIe ports in the Apple
-> > > silicon device trees instead of deleting them.
-> > > 
-> > > Use for_each_available_child_of_node instead of for_each_child_of_node
-> > > which takes the "status" property into account.
-> > > 
-> > > Link: https://lore.kernel.org/asahi/20230214-apple_dts_pcie_disable_unused-v1-0-5ea0d3ddcde3@jannau.net/
-> > > Link: https://lore.kernel.org/asahi/1ea2107a-bb86-8c22-0bbc-82c453ab08ce@linaro.org/
-> > > Fixes: 1e33888fbe44 ("PCI: apple: Add initial hardware bring-up")
-> > > Cc: stable@vger.kernel.org
-> > > Reviewed-by: Marc Zyngier <maz@kernel.org>
-> > > Signed-off-by: Janne Grunau <j@jannau.net>
-> > > ---
-> > > Changes in v2:
-> > > - rewritten commit message with more details and corrections
-> > > - collected Marc's "Reviewed-by:"
-> > > - Link to v1: https://lore.kernel.org/r/20230307-apple_pcie_disabled_ports-v1-1-b32ef91faf19@jannau.net
-> > > ---
-> > >  drivers/pci/controller/pcie-apple.c | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > > 
-> > > diff --git a/drivers/pci/controller/pcie-apple.c b/drivers/pci/controller/pcie-apple.c
-> > > index 66f37e403a09..f8670a032f7a 100644
-> > > --- a/drivers/pci/controller/pcie-apple.c
-> > > +++ b/drivers/pci/controller/pcie-apple.c
-> > > @@ -783,7 +783,7 @@ static int apple_pcie_init(struct pci_config_window *cfg)
-> > >  	cfg->priv = pcie;
-> > >  	INIT_LIST_HEAD(&pcie->ports);
-> > >  
-> > > -	for_each_child_of_node(dev->of_node, of_port) {
-> > > +	for_each_available_child_of_node(dev->of_node, of_port) {
-> > >  		ret = apple_pcie_setup_port(pcie, of_port);
-> > >  		if (ret) {
-> > >  			dev_err(pcie->dev, "Port %pOF setup fail: %d\n", of_port, ret);
-> > 
-> > Is this change still needed after 6fffbc7ae137 ("PCI: Honor firmware's
-> > device disabled status")?  This is a generic problem, and it would be
-> > a lot nicer if we had a generic solution.  But I assume it *is* still
-> > needed because Rob gave his Reviewed-by.
-> 
-> 6fffbc7ae137 avoids the warning and hides the disabled ports as well. I 
-> think we want to keep this change however in the hope that avoiding the 
-> port setup of disbled ports saves energy.
+DT changes tying the DP controller to the USB-C port on the HDK
+boards will be sent later.
 
-That's fine but the commit log must be rewritten, it is a completely
-different aim than the one stated in the current commit log and it
-is not stable material.
+Bindings dependencies merged into v6.3-rc1.
 
-Thanks,
-Lorenzo
+[1] https://lore.kernel.org/all/20230201041853.1934355-1-quic_bjorande@quicinc.com/
+[2] https://lore.kernel.org/all/20230130-topic-sm8450-upstream-pmic-glink-v2-0-71fea256474f@linaro.org/
+
+Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+---
+Changes in v5:
+- Add review tags
+- Fixed DP opp tables
+- Link to v4: https://lore.kernel.org/r/20230206-topic-sm8450-upstream-dp-controller-v4-0-dca33f531e0d@linaro.org
+
+Changes in v4:
+- Updated trailers
+- Fixed patch 4 compatible and reg sizes
+- Link to v3: https://lore.kernel.org/r/20230206-topic-sm8450-upstream-dp-controller-v3-0-636ef9e99932@linaro.org
+
+Changes in v3:
+- Added Reviewed-by, Tested-by tags
+- Used QMP PHY constants for phandle parameters
+- Dropped reordering of mdp ports
+- Added p1 dp regs address space
+- Link to v2: https://lore.kernel.org/r/20230206-topic-sm8450-upstream-dp-controller-v2-0-529da2203659@linaro.org
+
+Changes in v2:
+- fixed the bindings
+- cleaned up the usb_1_qmpphy &  displayport-controller nodes as requested by dmitry
+- removed invalid mdss_dp0 change in sm8450-hdk.dts
+- Link to v1: https://lore.kernel.org/r/20230206-topic-sm8450-upstream-dp-controller-v1-0-f1345872ed19@linaro.org
+
+---
+Neil Armstrong (5):
+      dt-bindings: display: msm: dp-controller: document SM8450 compatible
+      arm64: dts: qcom: sm8350: switch to combo usb3/dp phy
+      arm64: dts: qcom: sm8350: add dp controller
+      arm64: dts: qcom: sm8450: switch to usb3/dp combo phy
+      arm64: dts: qcom: sm8450: add dp controller
+
+ .../bindings/display/msm/dp-controller.yaml        |  25 +++--
+ arch/arm64/boot/dts/qcom/sm8350.dtsi               | 116 +++++++++++++++-----
+ arch/arm64/boot/dts/qcom/sm8450.dtsi               | 121 ++++++++++++++++-----
+ 3 files changed, 198 insertions(+), 64 deletions(-)
+---
+base-commit: 6f72958a49f68553f2b6ff713e8c8e51a34c1e1e
+change-id: 20230206-topic-sm8450-upstream-dp-controller-20054ab280de
+
+Best regards,
+-- 
+Neil Armstrong <neil.armstrong@linaro.org>
+
