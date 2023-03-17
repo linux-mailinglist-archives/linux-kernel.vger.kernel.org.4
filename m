@@ -2,179 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75BC86BF3CC
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 22:25:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D43176BF3CF
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 22:26:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229896AbjCQVZm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 17:25:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33824 "EHLO
+        id S230035AbjCQV0u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 17:26:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229746AbjCQVZj (ORCPT
+        with ESMTP id S230078AbjCQV0r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 17:25:39 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1361DCA26;
-        Fri, 17 Mar 2023 14:25:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679088304; x=1710624304;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=TpccXvRfZhgmfkJ/RgSdSma+cifq/HkihV7eqOo6/5c=;
-  b=R0X6EuTt+G0hJoQbVamzb8XTWGcfc/rjv+tAfgAc4hP3nIkl9l/0GGzb
-   Nx/44ZLtlr6ZUNtcM5GzqyrbX1aGCYWTcBidTyL/KcBKcZh6dHRJ1CLan
-   RUu89Bd2+o+Ym6v/sQGStw1k/3udUTDKs4u07pOWbgkWB/9iHd8fUP/Wc
-   usyVqT6sPNeYoQcNqK2S0bLSMSn5EzBPy1QOGS0YrKoZ+aRF1eZbBfhwC
-   hJPqJqlT09Fu/xoWHcFYjBQGCBoAkQcBI7HZALf7W0mA8CfzBNWc9vpxL
-   gNzAQJFYncF3SJjKvrHGq2T8osotZYaykHtnP/3+4yupV09x4bGXuZgIK
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="335860821"
-X-IronPort-AV: E=Sophos;i="5.98,268,1673942400"; 
-   d="scan'208";a="335860821"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2023 14:24:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="926273084"
-X-IronPort-AV: E=Sophos;i="5.98,268,1673942400"; 
-   d="scan'208";a="926273084"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by fmsmga006.fm.intel.com with ESMTP; 17 Mar 2023 14:24:28 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Fri, 17 Mar 2023 14:24:28 -0700
-Received: from orsmsx602.amr.corp.intel.com (10.22.229.15) by
- ORSMSX610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Fri, 17 Mar 2023 14:24:27 -0700
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21 via Frontend Transport; Fri, 17 Mar 2023 14:24:27 -0700
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.168)
- by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.21; Fri, 17 Mar 2023 14:24:27 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kq6ptKL4Unll96Gh0ERLtjo5ttYVSLgEzTSu88Gw6oZOyiNozTDgr10OU5Wiwu34P69u5qBydTwUW5i5ECWkxDuHOOLb5oGz2e3C81fPH9Ap6nrLcfUT0N/lOmIO00TkLNlTFfMve+P7+gQ48+pJCHJsRMSi3hrklE/p0EKduwj2SkErtTJfL31g6J+dzxFk67psOvD6YCr/bu9azhawdW/O5t0nQeTE+dB+dZwOm5I8B572rZy/c5+tL5IxMzG+EhpAIpk/+VxjD3oA8AHw7/4dShj9iwDr9sJhtsRxLXY4/9xKE2T4i0gdIkXVFUBuvOJBnwXhmFvNtQTpyyVXsQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2Qx1nqJf319lrlEkXEgZQMBY3Y73d5vo+GWrhgrBhHE=;
- b=ItYs0QiOM3C+JVY0NdFb2zO5YJNpWx7rF1cgYoPCE1GtsTm7lUFlVIcm35NV1kZozpNQSzmBf37zgiqWeofE4H7AGieCTf2STeeKSzLaHugdVMIOLuP1h+256sTzD8ZxOG3MP49khTvoY0tJxqN4Kr0NIU4OkHjvj85JNKohW8uUcap4XBPleZpbQbaGtRgsw3ZrQ08gRx9OaivlTxEbxaW0IoPZZpNbSHuw2c6tt93VWXznIhtS0Tvjc3GOl+f/pNs1SeGCiDtijBzCntzsVK5ndVFgOieP/m4UJrXOmBzRCeB3xP/RWTnJ9UEIAUlN1oDugB62RkDoYbATZAKU/A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from SJ1PR11MB6083.namprd11.prod.outlook.com (2603:10b6:a03:48a::9)
- by BL1PR11MB5256.namprd11.prod.outlook.com (2603:10b6:208:30a::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.35; Fri, 17 Mar
- 2023 21:24:25 +0000
-Received: from SJ1PR11MB6083.namprd11.prod.outlook.com
- ([fe80::a47:481:d644:a8b5]) by SJ1PR11MB6083.namprd11.prod.outlook.com
- ([fe80::a47:481:d644:a8b5%7]) with mapi id 15.20.6178.024; Fri, 17 Mar 2023
- 21:24:25 +0000
-From:   "Luck, Tony" <tony.luck@intel.com>
-To:     Shuai Xue <xueshuai@linux.alibaba.com>
-CC:     "baolin.wang@linux.alibaba.com" <baolin.wang@linux.alibaba.com>,
-        "benjamin.cheatham@amd.com" <benjamin.cheatham@amd.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "Williams, Dan J" <dan.j.williams@intel.com>,
-        "james.morse@arm.com" <james.morse@arm.com>,
-        "jaylu102@amd.com" <jaylu102@amd.com>,
-        "lenb@kernel.org" <lenb@kernel.org>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "zhuo.song@linux.alibaba.com" <zhuo.song@linux.alibaba.com>
-Subject: RE: [PATCH] ACPI: APEI: EINJ: warn on invalid argument when
- explicitly indicated by platform
-Thread-Topic: [PATCH] ACPI: APEI: EINJ: warn on invalid argument when
- explicitly indicated by platform
-Thread-Index: AQHZWKLi/0R39JELJU+i6OTnfLpOoa7/fDzw
-Date:   Fri, 17 Mar 2023 21:24:25 +0000
-Message-ID: <SJ1PR11MB60836145DD10108B1FE13A4FFCBD9@SJ1PR11MB6083.namprd11.prod.outlook.com>
-References: <20230317073310.4237-1-xueshuai@linux.alibaba.com>
-In-Reply-To: <20230317073310.4237-1-xueshuai@linux.alibaba.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SJ1PR11MB6083:EE_|BL1PR11MB5256:EE_
-x-ms-office365-filtering-correlation-id: 5ca499a0-02f2-425f-ea78-08db272dfb98
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: HhCeZeft93F8JxpPEetoBu7BRFNwZIEvwU1ccF8QGqqKbGG5+wDBIOzPiCQslYmpg/QwWSzSo45Um4nqdBCjSUdsOOiL+Eq5DJdMPPl5W2OxrJd5k2EPDk8G0D/YjDfAZMTlbRRwUOin/uUOtGf/8g5sHr7UK6i8ukTP/JUn/m7GKLfDgB23gpsTk7xHJm1+St6uQ8m/Bc580EaTuRsWyxUouvNpfakUmPaNdyiwnLRIuFvKSZFjTuLXDi4IXaGvFuttJTFapbtzmZq92jMQ9KPBaPE0qys5c8LtIlr9o/LyggIqlKCq4WRkb0lxqhYJPa9gfSpga0iaqmpueCNdRz0l7TVtlpkrGlqAVyLZo8nqNR0JuzFD+ial13VYdaiz8EHWbKx6xm0C9v6pWDGcuWJ22bHYL+jokQkSn47Nit9TH91ZJ3CMtAKYsnl41LwaVlkIdj07xNAnWyVyXo+UoiicOjR5xdcQLINGVyWAs+oAa/UXLNLxTOU5cz4Q/GxSaA2vRqMc3LksCbpLaeHTzzh6lUPRPzsS7nh4Iu5MAa0kJ0AmxlIWOAJyVfWg5Kyhvag44wq4BfYj3s7cOadRU0L67rK1L3Ckm5YHqo0uHG1RjGoDD42n4VcCLCN4nFRYgIBD+1fQ/bfPjswpQcLfCsaPQdxhhup3LRtsMXENSp/bp54yZG4i+BnlFUjNtbkdBpCzTdpwNUcEX0lMEl4wrQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ1PR11MB6083.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(366004)(346002)(39860400002)(376002)(136003)(396003)(451199018)(7416002)(5660300002)(4744005)(6916009)(4326008)(52536014)(66556008)(41300700001)(55016003)(33656002)(86362001)(38070700005)(38100700002)(122000001)(8936002)(82960400001)(2906002)(83380400001)(478600001)(7696005)(71200400001)(186003)(6506007)(9686003)(66476007)(64756008)(66446008)(26005)(66946007)(76116006)(54906003)(8676002)(316002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?an71zlE/5YrdBbmi95QqesBNYFag0KDDpJgJfjwHqk9fFacQGHkVDSZ/gBGh?=
- =?us-ascii?Q?3fXbb6Z+0zthhZSlxia6lJbm6bmAWma29ej1p5I4mTnFlSb9dU8Y8UbEJAkV?=
- =?us-ascii?Q?HS5b2pPSiWY+Ee7HVchOVsuc05tjCvEObgcZ6QJCahgR6VetZiotMSgHWo0J?=
- =?us-ascii?Q?U4S7Y+j4Axp+KdR2twRVBywvQOKIIm5k4sZejW9OE/WGR2BQ+KH7q8wGk1HN?=
- =?us-ascii?Q?jrqQl3YTAjJaXRhxZJWY/3gKoxW3meAr4K+iqkpSJaiSfXZR3f4L4GaDiE3S?=
- =?us-ascii?Q?XFTdKB5edW45qmbrVzAEljWuykdPMBPJz8HHcSiKk7P4R7F8e3SXkfqZakg9?=
- =?us-ascii?Q?NRth/SN5HZaYe0BzKU1gro+OZ+lgdhGTdj4Vm0GgfTKHuCEGv+PXe6SsYBca?=
- =?us-ascii?Q?VG3R9XDoWfZTuxwtoU9bOBjb6lSaYvjBLzaS0qNZc2j5sADdbe8te9NpOCZ+?=
- =?us-ascii?Q?8LguJ9Ve1TGwHZigVVT74P4TKqBZ2hk8gaXGhuUCN2uLYrhPVvwpeDV0Gmwx?=
- =?us-ascii?Q?lf0wybVdtrCkLZ94Bg7m9SH1FXtbKyzHBXqgjw/yYr2JI1dbgd86VZ0KaumR?=
- =?us-ascii?Q?cwnSiZ4P/Qw366ZQGGgruO6mYr9q+aTZOR1E5t4lftREfnCI2JSeeiL2xDbC?=
- =?us-ascii?Q?0UIgd1dyyHb51cu1rUETQdGTkid2N344RiZWCzqBcj16a1Qfs+WGT8U5GkQU?=
- =?us-ascii?Q?NsmAtN6Xf973qxobBmjHIE6D7FQntR3etqa63xtp4j7CQ/U3g3WbTNKsfLgw?=
- =?us-ascii?Q?5P1Lbc/D8XHlRKYdaQIhcD98/Q1ob7ZK4Y/HPA3LWjAxKPcaWIu9CTcCsKcT?=
- =?us-ascii?Q?DzjbOfQrOK+Wa51B+6kPLWDXi7sX+ezQgp3B3iDiY9qhlNf5NyXT9kWch+td?=
- =?us-ascii?Q?tKDYoTs7cauTedIcXdf/azDiOOy/Eq916giK9WEtkYyiy7lwEMR1YOHhgoxv?=
- =?us-ascii?Q?KB2Zcj7EOW2Rb81YVq7CTkcjnPnqmOIkqSzWqhz7Mw4m9okIkqkTq30HuapF?=
- =?us-ascii?Q?sErtE5qCX8khnBQBjVi7VwdHrgFH36SwiabubRlaq2urOfV6oFQWvCvwGl4H?=
- =?us-ascii?Q?y3NuhLWO9oiX4t3eDvpIPGTWUChjKSCjgPBy9mQFG8CWRbQSKbGjRVQxByCo?=
- =?us-ascii?Q?tGMkpbZN6VC6iYj9hybqYh6KI4/boHaJl3q8oDm3nL6ENZBfyw5TQAL+YYja?=
- =?us-ascii?Q?Dumzj9zGcrpyqcD6agPcHFdMjSxByYONwUgXpOnnMpzP5/OAQbGwLzDAzK7z?=
- =?us-ascii?Q?3SwOR2zKrACpQHfni26phQKRAcrZXvImoTj3Fm1ja2ehiGCrLyaBFjyP2TFv?=
- =?us-ascii?Q?wZz9nKZBzWJKAFaSyE6VtynNCO/urN0zocGcbcVMbV5c2nFfhCjn7H0Ncmrf?=
- =?us-ascii?Q?B7HxooYM8/3h2jnHkhqjULcN0GtmveI63WXKQWAooB3dp+FmS+ztfADDuhi8?=
- =?us-ascii?Q?PN623ybyeEEeKtyE4Iw5HmfDVXvylg2XjQP1ujvdn5MfvcliEz1CNVAdc0BL?=
- =?us-ascii?Q?H6joeNxlPDiH8/vd56/p9eQ7O1BD5xesFrlLglhHX3+vPztfAmcsOtjRxFqd?=
- =?us-ascii?Q?64p0nZFz7EMOGB6ed4vOV6saFJKwiKQYFJ3jxdRN?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Fri, 17 Mar 2023 17:26:47 -0400
+Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 234A1EFAC;
+        Fri, 17 Mar 2023 14:26:32 -0700 (PDT)
+Received: by mail-qv1-xf2d.google.com with SMTP id op8so4306098qvb.11;
+        Fri, 17 Mar 2023 14:26:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679088391;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sTO9PAiMHyzLu/JWJW5k8It2fLbj2YzeM6Nsv7I7SPA=;
+        b=AOooFp0xMb5shmFdwrYLLKW3bG6annQ2D/HhiWv/CI4te3KlN1iVru2Ln3TirqWpXW
+         GyxKAvPNGt2T0ZXzS3OsacTIUVYSiRQxuDrxQMYWSwmrWPtfag+VU4+f0cnWpwDFr/XB
+         86/8sAxfDAre80JF6uh+TJQIvbxk6iUP9vgNrPYxE1xftrLHUHKGZoPUkaJq6mqo4fU0
+         bkQkpqnzml2jSwyMjo1PiuHiQwE3YXRBD6qWI3VVfrhPIx76S2UsY9rpjHnLOagaU5bL
+         B/12tKssHVmCYNeFrDutS7oJxIYktozsoGTtmHt0JEkCPWVSlfvKkoRe0uDqi0ERfjDu
+         ssIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679088391;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=sTO9PAiMHyzLu/JWJW5k8It2fLbj2YzeM6Nsv7I7SPA=;
+        b=S+nJuF/PgErNVbffcz+YNmNIMCCo3s2WUaxHSd2DO9PcCph+q7N0djJ2U5b9DWCPX6
+         rASf5vSMcSUSWP4a7h1aU1xJoRhwRKoRhlXDsIxx0yNqDAjHus0x/Li15NoTUha3GQQ0
+         WbXY/cx0ZAP1mtfSS3QQmsNdrSiWzhBVR1tsbgc1ucHPZ/hVV6wUHppu6Je/d5hq2bkD
+         EUkDs2kgxXeQX4up9EfKYLW9N1dlNxIGrKtSxTNtSPiynSHuQT0j1OtJkBR8t+vq7xN1
+         rRqTfsode9eGNsKhHRPHt++ySf6yf8diwpAjBH1YnE1NHdgjfXA2GMWM3GrLtaD92Tzg
+         dxFA==
+X-Gm-Message-State: AO0yUKUemw5OWLmfIT8hrjazjR4Ut+pr4amo10qH/CAkO/qTpe8B47pl
+        5/1zUqi6W8sXR7n68UCq6Aw=
+X-Google-Smtp-Source: AK7set8A1PH+17+Hksf9h5fcDDrayHQJR15A4XkYemMpGGaHjwOiiHuzIaF2NOEFDLlGO6f2ULtSDw==
+X-Received: by 2002:a05:6214:509b:b0:5b4:89b4:1afc with SMTP id kk27-20020a056214509b00b005b489b41afcmr14343496qvb.17.1679088391308;
+        Fri, 17 Mar 2023 14:26:31 -0700 (PDT)
+Received: from auth2-smtp.messagingengine.com (auth2-smtp.messagingengine.com. [66.111.4.228])
+        by smtp.gmail.com with ESMTPSA id s187-20020a37a9c4000000b007456e020846sm2427709qke.13.2023.03.17.14.26.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Mar 2023 14:26:30 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailauth.nyi.internal (Postfix) with ESMTP id 10A0727C0054;
+        Fri, 17 Mar 2023 17:26:30 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Fri, 17 Mar 2023 17:26:30 -0400
+X-ME-Sender: <xms:BNsUZCpUma_UC72kse5Nj8xDVz3GGsgbfzy4GYQq2eLpPhxxwE2Emg>
+    <xme:BNsUZAqulNBamUhX56TAiDB8T9cqxP7k8NHLDskRcdnV_JSJb22OLvNv9zQwDml_m
+    UOWEa_dE4J3T-Jwyw>
+X-ME-Received: <xmr:BNsUZHNuQ3hfpsw-cM-65Q0YWTzSIxuz3x9_vaTvet1uCj6wo-5aLk0UhbU>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdefvddgudegkecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeeuohhq
+    uhhnucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrf
+    grthhtvghrnhephfetvdfgtdeukedvkeeiteeiteejieehvdetheduudejvdektdekfeeg
+    vddvhedtnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiii
+    gvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegsohhquhhnodhmvghsmhhtphgruhht
+    hhhpvghrshhonhgrlhhithihqdeiledvgeehtdeigedqudejjeekheehhedvqdgsohhquh
+    hnrdhfvghngheppehgmhgrihhlrdgtohhmsehfihigmhgvrdhnrghmvg
+X-ME-Proxy: <xmx:BdsUZB7F2Jon2PmWbu-h7EFw7oA1-yERzKx1eihjAjENjP1sbXJHcg>
+    <xmx:BdsUZB6mUKcNgTwP8B8ZPx_rD1AHIlMYvSZsSAuefGwc-nogv3M79A>
+    <xmx:BdsUZBhLJFv4gDbr8CH9Z2_NFoKPSFQxRCY0fwNFDLqE0XqhpFq9bA>
+    <xmx:BtsUZKQD8qG9OYxqYXv1Ei-h7wHVYzwLwIjiJtXQJYCcgdhBdSNd0g>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 17 Mar 2023 17:26:28 -0400 (EDT)
+Date:   Fri, 17 Mar 2023 14:26:22 -0700
+From:   Boqun Feng <boqun.feng@gmail.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     rcu@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Shuah Khan <shuah@kernel.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        seanjc@google.com, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        kernel test robot <oliver.sang@intel.com>
+Subject: Re: [PATCH rcu 3/7] locking: Reduce the number of locks in ww_mutex
+ stress tests
+Message-ID: <ZBTa/pQ1cm9V4Pvn@boqun-archlinux>
+References: <20230317031339.10277-1-boqun.feng@gmail.com>
+ <20230317031339.10277-4-boqun.feng@gmail.com>
+ <2e8a6800-78e7-42bf-b4ff-5d7ef43511c5@paulmck-laptop>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SJ1PR11MB6083.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5ca499a0-02f2-425f-ea78-08db272dfb98
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Mar 2023 21:24:25.0858
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: wruY5F77SL7akfbC2EQk8Xn3/UfpvbnSnkkQtixDV/AoACONNUSVl3rx6xaMP0sKrr93OSYfvdjovXKUqVvHOw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR11MB5256
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2e8a6800-78e7-42bf-b4ff-5d7ef43511c5@paulmck-laptop>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--	if (val !=3D EINJ_STATUS_SUCCESS)
-+	if (val =3D=3D EINJ_STATUS_FAIL)
- 		return -EBUSY;
-+	else if (val =3D=3D EINJ_STATUS_INVAL)
-+		return -EINVAL;
+On Fri, Mar 17, 2023 at 11:38:19AM -0700, Paul E. McKenney wrote:
+> On Thu, Mar 16, 2023 at 08:13:35PM -0700, Boqun Feng wrote:
+> > The stress test in test_ww_mutex_init() uses 4095 locks since
+> > lockdep::reference has 12 bits, and since we are going to reduce it to
+> > 11 bits to support lock_sync(), and 2047 is still a reasonable number of
+> > the max nesting level for locks, so adjust the test.
+> > 
+> > Reported-by: kernel test robot <oliver.sang@intel.com>
+> > Link: https://lore.kernel.org/oe-lkp/202302011445.9d99dae2-oliver.sang@intel.com
+> > Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
+> 
+> Tested-by: Paul E. McKenney <paulmck@kernel.org>
+> 
 
-The ACPI Specification is really vague here. Documented error codes are
+Applied, thanks!
 
-0 =3D Success (Linux #define EINJ_STATUS_SUCCESS)
-1 =3D Unknown failure (Linux #define EINJ_STATUS_FAIL)
-2 =3D Invalid Access (Linux #define EINJ_STATUS_INVAL)
+Regards,
+Boqun
 
-I don't see how reporting -EBUSY for the "Unknown Failure" case is
-actually better.
-
--Tony
+> > ---
+> >  kernel/locking/test-ww_mutex.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/kernel/locking/test-ww_mutex.c b/kernel/locking/test-ww_mutex.c
+> > index 29dc253d03af..93cca6e69860 100644
+> > --- a/kernel/locking/test-ww_mutex.c
+> > +++ b/kernel/locking/test-ww_mutex.c
+> > @@ -659,7 +659,7 @@ static int __init test_ww_mutex_init(void)
+> >  	if (ret)
+> >  		return ret;
+> >  
+> > -	ret = stress(4095, hweight32(STRESS_ALL)*ncpus, STRESS_ALL);
+> > +	ret = stress(2047, hweight32(STRESS_ALL)*ncpus, STRESS_ALL);
+> >  	if (ret)
+> >  		return ret;
+> >  
+> > -- 
+> > 2.39.2
+> > 
