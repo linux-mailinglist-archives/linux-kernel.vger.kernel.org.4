@@ -2,109 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DE8D6BEB19
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 15:25:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDDDD6BEB1C
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 15:25:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230321AbjCQOZj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 10:25:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44590 "EHLO
+        id S230323AbjCQOZ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 10:25:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229643AbjCQOZi (ORCPT
+        with ESMTP id S229643AbjCQOZw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 10:25:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DFA1559CB
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 07:25:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0E325B825AA
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 14:25:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 337D7C433EF;
-        Fri, 17 Mar 2023 14:25:29 +0000 (UTC)
-Date:   Fri, 17 Mar 2023 14:25:26 +0000
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Kristina Martsenko <kristina.martsenko@arm.com>
-Cc:     linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mark Brown <broonie@kernel.org>,
-        Luis Machado <luis.machado@arm.com>,
-        Vladimir Murzin <vladimir.murzin@arm.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 01/10] KVM: arm64: initialize HCRX_EL2
-Message-ID: <ZBR4Vv9m11kEviDF@arm.com>
-References: <20230216160012.272345-1-kristina.martsenko@arm.com>
- <20230216160012.272345-2-kristina.martsenko@arm.com>
+        Fri, 17 Mar 2023 10:25:52 -0400
+Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07916BCBB8
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 07:25:50 -0700 (PDT)
+Received: by mail-il1-x133.google.com with SMTP id r4so2834920ila.2
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 07:25:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112; t=1679063149; x=1681655149;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2p2CUhIvsIV018a8ZSlFgQ3zlVEcQ2/v9OhzU3Atnhs=;
+        b=PCf+H4Nqqd52N4v//r7DysAg/Vcpsa22ZGsVjWanidwqLUnW26KPl1lC4EEa723Q5Q
+         1nr+dDLFEYC66wboYQ6QSe8XzZ5NVnjtaxMvfbavlQGLA2/ES6RK1PXU5S+vGdxb8k+F
+         H5IKgHmnM34hzjgBPjSQNTWrker2VxSkbCGFfmQrVa4YLkUnLeOhG2U3CrDw8klvRleO
+         X3C77RSN2PqedLH0uVlGfGGnKJaXxuZJ/HG6zhjN8ZhDplgHsi3TfYKpJErZYvQaVmyG
+         ew1oER4K1lWnaF1Qllu6lbCea1CH0xNlRWFVmbMW2q12C75StvlX1Oftn9nVH22wUu7j
+         i+eg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679063149; x=1681655149;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=2p2CUhIvsIV018a8ZSlFgQ3zlVEcQ2/v9OhzU3Atnhs=;
+        b=EvLvclSroTwMjWJYNvGjsvq4oLKDWx2UA76gdBsB4fuolXJvOLyPbwNeWQOreETFdc
+         p0n8D12kTgTryXbEdcEvLYZrAbB6mWUd9P6H11KUcA3mze8BA4vp02fIRlv51NGwP+di
+         vU7Qhvyko3bYinSFoQaIWgDsaYl+nO8+igFEvjgNda2KHu6lE7fbKwvIIER6975TQhOV
+         Ddh/Wam0CZXtzArTG6PSblDIa1FKaSIcuXkgrdq7SKl1EHCxgWOZVBPBapVk2t4mSh7C
+         y2vCCi5B5bm2imGXJoXFnzhO+OKas1sMl77qwEvJEgTOdJNWxhX75BW+bwIZtA9WkPwY
+         OumQ==
+X-Gm-Message-State: AO0yUKUBxEQFN/127p9Z25V7k7u8lhbaEFqhGP64J6O60eFnxKeOLuSN
+        mfo/XrF/qRD8Gt+HxYEt89iPJWScfO55mRaKDRMTbg==
+X-Google-Smtp-Source: AK7set/i6lNRTCFj0GTvMl4IudVQiLW4GHLxlBPyxY/ouyWzURSvJ+jggFHPi3pYbnY/u1nwYyuuLw==
+X-Received: by 2002:a92:c266:0:b0:317:36d8:cfc6 with SMTP id h6-20020a92c266000000b0031736d8cfc6mr4372418ild.3.1679063149130;
+        Fri, 17 Mar 2023 07:25:49 -0700 (PDT)
+Received: from [192.168.1.94] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id r23-20020a02b117000000b00406328003a4sm724854jah.65.2023.03.17.07.25.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Mar 2023 07:25:48 -0700 (PDT)
+Message-ID: <25fccb43-8338-a690-0009-384dc0640169@kernel.dk>
+Date:   Fri, 17 Mar 2023 08:25:47 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230216160012.272345-2-kristina.martsenko@arm.com>
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, acme@kernel.org
+Cc:     linux-perf-users@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+From:   Jens Axboe <axboe@kernel.dk>
+Subject: NMI reason 2d when running perf
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Feb 16, 2023 at 04:00:03PM +0000, Kristina Martsenko wrote:
-> ARMv8.7/9.2 adds a new hypervisor configuration register HCRX_EL2.
-> Initialize the register to a safe value (all fields 0), to be robust
-> against firmware that has not initialized it.
+Hi,
 
-I think the risk of firmware not initialising this register is small
-given that EL3 needs to set SCR_EL3.HXEn to allow EL2 access. But it
-doesn't hurt to re-initialise it in the hypervisor.
+When running perf on my Dell R7525 on a running process, I get a ton of:
 
-> diff --git a/arch/arm64/kernel/head.S b/arch/arm64/kernel/head.S
-> index 212d93aca5e6..e06b34322339 100644
-> --- a/arch/arm64/kernel/head.S
-> +++ b/arch/arm64/kernel/head.S
-> @@ -572,6 +572,13 @@ SYM_INNER_LABEL(init_el2, SYM_L_LOCAL)
->  	msr	hcr_el2, x0
->  	isb
->  
-> +	mrs	x0, ID_AA64MMFR1_EL1
-> +	ubfx	x0, x0, #ID_AA64MMFR1_EL1_HCX_SHIFT, #4
-> +	cbz	x0, 3f
-> +	mov_q	x1, HCRX_HOST_FLAGS
-> +	msr_s	SYS_HCRX_EL2, x1
-> +	isb
-> +3:
->  	init_el2_state
+[  504.234782] Dazed and confused, but trying to continue
+[  504.267843] Uhhuh. NMI received for unknown reason 2d on CPU 48.
+[  504.267846] Dazed and confused, but trying to continue
+[  504.335975] Uhhuh. NMI received for unknown reason 2d on CPU 48.
+[  504.335977] Dazed and confused, but trying to continue
+[  504.368031] Uhhuh. NMI received for unknown reason 2d on CPU 48.
+[  504.368033] Dazed and confused, but trying to continue
+[  504.371037] Uhhuh. NMI received for unknown reason 2d on CPU 48.
+[  504.371038] Dazed and confused, but trying to continue
+[  504.439165] Uhhuh. NMI received for unknown reason 2d on CPU 48.
+[  504.439167] Dazed and confused, but trying to continue
 
-Nitpick: we can probably leave a single ISB after both HCR_EL2 and
-HCRX_EL2 are initialised. Well, we could probably drop all of them
-altogether, there's at least one down this path.
+spew in dmesg. The box has 2x7763 CPUS. This seems to be a recent
+regression, been using this box for a while and haven't seen this
+before. The test being traced is pinned to CPU 48. The box is currently
+running:
 
->  
->  	/* Hypervisor stub */
-> diff --git a/arch/arm64/kvm/hyp/nvhe/hyp-init.S b/arch/arm64/kvm/hyp/nvhe/hyp-init.S
-> index a6d67c2bb5ae..01f854697c70 100644
-> --- a/arch/arm64/kvm/hyp/nvhe/hyp-init.S
-> +++ b/arch/arm64/kvm/hyp/nvhe/hyp-init.S
-> @@ -95,6 +95,12 @@ SYM_CODE_START_LOCAL(___kvm_hyp_init)
->  	ldr	x1, [x0, #NVHE_INIT_HCR_EL2]
->  	msr	hcr_el2, x1
->  
-> +	mrs	x1, ID_AA64MMFR1_EL1
-> +	ubfx	x1, x1, #ID_AA64MMFR1_EL1_HCX_SHIFT, #4
-> +	cbz	x1, 1f
-> +	mov_q	x2, HCRX_HOST_FLAGS
-> +	msr_s	SYS_HCRX_EL2, x2
-> +1:
+commit 6015b1aca1a233379625385feb01dd014aca60b5 (origin/master, origin/HEAD)
+Author: Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue Mar 14 19:32:38 2023 -0700
 
-Maybe you could use a macro to avoid writing this sequence twice. I lost
-track of the KVM initialisation refactoring since pKVM, it looks like
-the other register values are loaded from a structure here. I guess a
-value of 0 doesn't make sense to store (unless at a later point it
-becomes non-zero).
+    sched_getaffinity: don't assume 'cpumask_size()' is fully initialized
+
+with the pending block/io_uring branches merged in for testing.
 
 -- 
-Catalin
+Jens Axboe
+
