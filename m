@@ -2,139 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 031646BE20A
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 08:45:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C4616BE211
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 08:45:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230206AbjCQHpD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 03:45:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47648 "EHLO
+        id S230227AbjCQHpb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 03:45:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229562AbjCQHpB (ORCPT
+        with ESMTP id S229783AbjCQHp3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 03:45:01 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D222F6B972
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 00:44:59 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id o12so16933171edb.9
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 00:44:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1679039098;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cITCa799qe2upMd6k42Jvo+4kyqcYEmXBxO50VP6e5U=;
-        b=SxSQQQBT3US8XPh1SIVcHcPCBSuKk6EDjDZuSqaeF6m0bV5+OrFgdbAKcaSq4kuhx6
-         mV/u5HCZMk3CQHzCnHXXzTk7lESHWYEuXBzRnaUVWmM7Jn3ksW02J14ugo0TIce6EvBx
-         3mPVGq70JVAwW6ndtxBwsV+rf0oSajbAFiMnS82yrKwo7w5MmA4oAAGRQCZ8ilIep3IZ
-         PSZL0L4jQr9dAZMEK05Uy+SvAoDxwWK7jma0bLYVppa49HueG9yjg0Sg3eSqOlf+EJfD
-         9mvTsS53iSQvsCn0hQ/YkcB+05QRn5gmiCmGIr1pmJjxI8Ompc7g9dKxfR6uIsBOGMQC
-         SlDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679039098;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cITCa799qe2upMd6k42Jvo+4kyqcYEmXBxO50VP6e5U=;
-        b=OO2m4IGl1POmmS4CepgJsR9LpNG4yt0njQR58KrrKT7FzffN9A+NdX7mOwqYoY0Pxn
-         zzH6BRbBypaLRK1dRCPP+pGyCU2eUq3oh2Ot8ibV1mVTPsXWVs2nDyB3M7Drqosbr7r9
-         +YHYustGGyLf2cqhOPjaF76HpBRZyoHQ0f6mCzdYRHzXR3vFhkl1T212Fs8sPEJHp9va
-         2XWH1ZaOy7mfBVHtawLVlp99rialLfhrvrOhEoK3kovKdgctC6ATBcSTiFpW+QbUfCDC
-         1GNLYn18ecPnKrz6bhbXctbq6Y5mFH128S9rfOUJ9MmHJV/6GnKf31YoSLHjXGrdqYR3
-         fP+A==
-X-Gm-Message-State: AO0yUKWi4BZIgjE1oI6cTs3BX/BjkdXoX5dUb/TvmUZtET3BOR0cyBjO
-        TMO1Fo7L5xDs5y9KDnMM+VRw5exHXdDdaRiCW/Ea
-X-Google-Smtp-Source: AK7set95AE0ngSBO0F64mVK0HvU2T/rpVDtPx07gAxiWkQXf5RqevHZSfF+26UPahbPtdxHKX58DfpFBJ4j0/W/kMmU=
-X-Received: by 2002:a17:907:971d:b0:92e:a234:110a with SMTP id
- jg29-20020a170907971d00b0092ea234110amr5213493ejc.3.1679039098192; Fri, 17
- Mar 2023 00:44:58 -0700 (PDT)
+        Fri, 17 Mar 2023 03:45:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58FB3B329B;
+        Fri, 17 Mar 2023 00:45:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D2781621DC;
+        Fri, 17 Mar 2023 07:45:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B4F0C433EF;
+        Fri, 17 Mar 2023 07:45:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679039127;
+        bh=uMC+mKisSczlSP5vnGYRs4BuFUpa/scNus377rX44J0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=sR3e/4eBXDoo1W3Jp5JGHJIuY0EK//4Pc6SkXzWsmHNRPPWeWk5A++HMSz+evmAhV
+         uVweUDEqfJ8E0ANk3QGoxnYfzl+Qs5dTXYEjhXGm+4v1r1oxGLry60xFLpEP6P9PhV
+         C2CXnlIU78mjBM0m2zhMIMc1Ir8uVdrNPjtjeo8x3fSO+L1HlQAyIgteuTU2c4MXEJ
+         AAnGDsVgHFIqKbYICDx2wrZhnbjvuARW/F/omqPeO+vBXa+GU+8J7Dp1zGVSaB9URk
+         0+r4L8Bn4nn5bQhY0s9mYHMDybNH5RF6eMA/6smCj1IPkDD8A44PYjFpEthj90xNTe
+         d94fS/VAl+DAA==
+Date:   Fri, 17 Mar 2023 08:45:19 +0100
+From:   Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>
+To:     Christian Marangi <ansuelsmth@gmail.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        John Crispin <john@phrozen.org>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, Lee Jones <lee@kernel.org>,
+        linux-leds@vger.kernel.org
+Subject: Re: [net-next PATCH v4 04/14] net: phy: Add a binding for PHY LEDs
+Message-ID: <20230317084519.12d3587a@dellmb>
+In-Reply-To: <20230317023125.486-5-ansuelsmth@gmail.com>
+References: <20230317023125.486-1-ansuelsmth@gmail.com>
+        <20230317023125.486-5-ansuelsmth@gmail.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.35; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20230228094110.37-1-xieyongji@bytedance.com> <20230228094110.37-4-xieyongji@bytedance.com>
- <CACGkMEvmV7xKc7VnaZT+DGcN2hg64ksGHxRAihW2f=RpXydZoQ@mail.gmail.com>
-In-Reply-To: <CACGkMEvmV7xKc7VnaZT+DGcN2hg64ksGHxRAihW2f=RpXydZoQ@mail.gmail.com>
-From:   Yongji Xie <xieyongji@bytedance.com>
-Date:   Fri, 17 Mar 2023 15:44:47 +0800
-Message-ID: <CACycT3t+n4MXzva7w_yh-iTmzU0M--O4RNXDPxumpY-LmPb6Zg@mail.gmail.com>
-Subject: Re: [PATCH v3 03/11] vdpa: Add set_irq_affinity callback in vdpa_config_ops
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Christoph Hellwig <hch@lst.de>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 16, 2023 at 12:03=E2=80=AFPM Jason Wang <jasowang@redhat.com> w=
-rote:
->
-> On Tue, Feb 28, 2023 at 5:42=E2=80=AFPM Xie Yongji <xieyongji@bytedance.c=
-om> wrote:
-> >
-> > This introduces set_irq_affinity callback in
-> > vdpa_config_ops so that vdpa device driver can
-> > get the interrupt affinity hint from the virtio
-> > device driver. The interrupt affinity hint would
-> > be needed by the interrupt affinity spreading
-> > mechanism.
-> >
-> > Signed-off-by: Xie Yongji <xieyongji@bytedance.com>
-> > ---
-> >  drivers/virtio/virtio_vdpa.c | 4 ++++
-> >  include/linux/vdpa.h         | 9 +++++++++
-> >  2 files changed, 13 insertions(+)
-> >
-> > diff --git a/drivers/virtio/virtio_vdpa.c b/drivers/virtio/virtio_vdpa.=
-c
-> > index f72696b4c1c2..9eee8afabda8 100644
-> > --- a/drivers/virtio/virtio_vdpa.c
-> > +++ b/drivers/virtio/virtio_vdpa.c
-> > @@ -282,9 +282,13 @@ static int virtio_vdpa_find_vqs(struct virtio_devi=
-ce *vdev, unsigned int nvqs,
-> >         struct virtio_vdpa_device *vd_dev =3D to_virtio_vdpa_device(vde=
-v);
-> >         struct vdpa_device *vdpa =3D vd_get_vdpa(vdev);
-> >         const struct vdpa_config_ops *ops =3D vdpa->config;
-> > +       struct irq_affinity default_affd =3D { 0 };
-> >         struct vdpa_callback cb;
-> >         int i, err, queue_idx =3D 0;
-> >
-> > +       if (ops->set_irq_affinity)
-> > +               ops->set_irq_affinity(vdpa, desc ? desc : &default_affd=
-);
-> > +
-> >         for (i =3D 0; i < nvqs; ++i) {
-> >                 if (!names[i]) {
-> >                         vqs[i] =3D NULL;
-> > diff --git a/include/linux/vdpa.h b/include/linux/vdpa.h
-> > index d61f369f9cd6..10bd22387276 100644
-> > --- a/include/linux/vdpa.h
-> > +++ b/include/linux/vdpa.h
-> > @@ -259,6 +259,13 @@ struct vdpa_map_file {
-> >   *                             @vdev: vdpa device
-> >   *                             @idx: virtqueue index
-> >   *                             Returns the irq affinity mask
-> > + * @set_irq_affinity:          Pass the irq affinity hint (best effort=
-)
->
-> Note that this could easily confuse the users. I wonder if we can
-> unify it with set_irq_affinity. Looking at vduse's implementation, it
-> should be possible.
->
+On Fri, 17 Mar 2023 03:31:15 +0100
+Christian Marangi <ansuelsmth@gmail.com> wrote:
 
-Do you mean unify set_irq_affinity() with set_vq_affinity()? Actually
-I didn't get how to achieve that. The set_vq_affinity() callback is
-called by virtio_config_ops.set_vq_affinity() but the set_irq_affinity
-is called by virtio_config_ops.find_vqs(), I don't know where to call
-the unified callback.
+> +	cdev->brightness_set_blocking = phy_led_set_brightness;
+> +	cdev->max_brightness = 1;
+> +	init_data.devicename = dev_name(&phydev->mdio.dev);
+> +	init_data.fwnode = of_fwnode_handle(led);
+> +
+> +	err = devm_led_classdev_register_ext(dev, cdev, &init_data);
 
-Thanks,
-Yongji
+Since init_data.devname_mandatory is false, devicename is ignored.
+Which is probably good, becuse the device name of a mdio device is
+often ugly, taken from devicetree or switch drivers, for example:
+  f1072004.mdio-mii
+  fixed-0
+  mv88e6xxx-1
+So either don't fill devicename or use devname_mandatory (and maybe
+fill devicename with something less ugly, but I guess if we don't have
+much choice if we want to keep persistent names).
+
+Without devname_mandatory, the name of the LED classdev will be of the
+form
+  color:function[-function-enumerator],
+i.e.
+  green:lan
+  amber:lan-1
+
+With multiple switch ethenret ports all having LAN function, it is
+worth noting that the function enumerator must be explicitly used in the
+devicetree, otherwise multiple LEDs will be registered under the same
+name, and the LED subsystem will add a number at the and of the name
+(function led_classdev_next_name), resulting in names
+  green:lan
+  green:lan_1
+  green:lan_2
+  ...
+These names are dependent on the order of classdev registration.
+
+Marek
