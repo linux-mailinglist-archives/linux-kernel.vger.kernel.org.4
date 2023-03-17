@@ -2,73 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE9F16BE677
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 11:20:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94AF26BE679
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 11:20:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230063AbjCQKUS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 06:20:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59114 "EHLO
+        id S230077AbjCQKUZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 06:20:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230044AbjCQKUN (ORCPT
+        with ESMTP id S230051AbjCQKUO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 06:20:13 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D53A3A8C6D;
-        Fri, 17 Mar 2023 03:20:11 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id m35so2981539wms.4;
-        Fri, 17 Mar 2023 03:20:11 -0700 (PDT)
+        Fri, 17 Mar 2023 06:20:14 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75025B0BAF;
+        Fri, 17 Mar 2023 03:20:13 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id o7so3940101wrg.5;
+        Fri, 17 Mar 2023 03:20:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679048410;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=B2zyx3U3AXPDRFjYOKBt3zCYzGwvMHjuxaFvhcNGMYw=;
-        b=K3QDrLd9/AHTE97KGupZsihjvv1DcPrg2e5kH4N0u/ThdjpSlxk4PJnJ9/W85XPSVY
-         zfpR2A/7EoOEyo9550zL4/vmpfYl5lHM165L/lkqA7Wk5e/nBD9VnONeb+Ez793paFFp
-         RxLrZ8g8vsw5NIz3niUCWkssoP2pnhKziF9soVnCQVqJa9NU+K+eBXiQWjYeXVVpf8Ea
-         AoOekpaWai5FbM4COmKJ/BDQtrJNRfInvBhVWCCkHFy1S5u62UdueveL3+51NeXMtdqz
-         SetdI7WF1tRyDt+Xg/KfChDi8C0UaNruqs4LXxNzfsB61BFNwRFhSKOZM1Upw0RCaBBt
-         0+2Q==
+        d=gmail.com; s=20210112; t=1679048412;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=fcgizilFINCxrFl9PEuFkW7yKtyneOXZtW9e2hb5He8=;
+        b=e6saHuMp3aikwOvmKqjh8Yfbz8bc535pVk0svM7aOpKIJXRkOWpDMFS0tD5TT2ATQK
+         p9E3yZ5EQWPXo34FF0UcPGsV2OlCSE4P9owaVLgES9hqUN2++FUheYrlYAljsqJv56H4
+         OE4NNUIn7rTw2p6lQ0jbRhx6QtS5iIeL3Z9tJteN21282mpImwML0+6coEWjgnSYnu3Y
+         BQHwiSt9MtpZjx3UVgttAI8uueQAlfonYFHrUqNE5BC8u/WxN9ARSz1N2QxPcyt8P/9y
+         KRVpJ13jEevV6MZfcSoUyRK2IFtFR3Bm30Vfggv1IoX5AQtED4Tc9JjD/FQqtDjXvJzd
+         EOHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679048410;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=B2zyx3U3AXPDRFjYOKBt3zCYzGwvMHjuxaFvhcNGMYw=;
-        b=ssmBiLA9DVCYeyC8re6arEIfPSvf12+ZaR/lSBvPJ7neJBPgX28RJgfWLbi9OusC5u
-         wmSMBZ0qVjMyrcS6sYaOGQ56OxGeHkV1AoCPChp4/4gaWQJmyqY+2oPTGkA2+m0074uL
-         T2+QW0Lur1M2SHucj+0efX80LEnRxP5vm9AM4eyLIlJ2QQxjgZXugBUhCrbZGXiEP9eB
-         SdMQGSWQD8CGXoT5XdlsjsoVz1OD3eTQ473h9hoEzJJHt8iaev/cbakU+sXJp47LAOm+
-         Z9lFp48X9PYKCMLnIpv9R7wDOZEuVUsFbSt+cWYjYhe/2pk81hq/6GoqwRg49d5RCGYg
-         0yJQ==
-X-Gm-Message-State: AO0yUKXr0uvEyGo9igqtrAKEBKNPRe53kAqRy0B/zeh/7tt0qOu9YtUj
-        YMatgtK4nm//OUHE/4+7hlAo/t4+V2+khw==
-X-Google-Smtp-Source: AK7set+XbAcnblyGYtZEQ3m/zbT8wd4QB6ZZhQIf//mcWDT47T1rsYpCDodIx9M1dCI0qTfC6sZw7w==
-X-Received: by 2002:a05:600c:540a:b0:3ea:e582:48dd with SMTP id he10-20020a05600c540a00b003eae58248ddmr24486119wmb.34.1679048409764;
-        Fri, 17 Mar 2023 03:20:09 -0700 (PDT)
-Received: from atlantis.lan (255.red-79-146-124.dynamicip.rima-tde.net. [79.146.124.255])
-        by smtp.gmail.com with ESMTPSA id 1-20020a05600c234100b003e00c453447sm7336512wmq.48.2023.03.17.03.20.08
+        d=1e100.net; s=20210112; t=1679048412;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fcgizilFINCxrFl9PEuFkW7yKtyneOXZtW9e2hb5He8=;
+        b=ftZcZYKt4lbBWRPCjTW4rOnnq02uDDBf1iu3CuPRnBFtSujoNK//wM9F0eqgbZHJhr
+         WfUejM8vJVLKd6O3Z6uZgrjCalxu3Yd5xwa4Bhw86XkWTQhICmCuA1hDn/P1LA/YMsG4
+         F4uEn71V8wuCs3D2SCmhmetSb0x6YVLUc3mmTO2/n1Rc+LN22rnjXvYvI/8ig4iScSzZ
+         kOdRigaJQE5WxBjHPL+W5bwrvJwBWwOUZH7J9U88XJ4CWHNOFufdNdsymyCyDSXsxv5R
+         kIsgEEIJwF8xJejlGrJC/vfzlsk2TfY6QEDF3sL7Cdm+z2xqEf3HMI79GyNThRducPKb
+         QdeA==
+X-Gm-Message-State: AO0yUKUcEvNM7ik9WW6NZ0Vc4aPIrniML5rsqX//Z0nKXu0pGPRkdI4T
+        Of6fPFP5MkRn3pIvJ3l+Piw=
+X-Google-Smtp-Source: AK7set+hHSxbzHEVhO/6H8MzI6mV6MDwc59G9dEY81eho+qIihC9XbfLCZttKDN8PFGpUdO35GJPpA==
+X-Received: by 2002:a5d:4002:0:b0:2ce:a0c2:d9ed with SMTP id n2-20020a5d4002000000b002cea0c2d9edmr6385501wrp.32.1679048411775;
+        Fri, 17 Mar 2023 03:20:11 -0700 (PDT)
+Received: from debian ([167.98.27.226])
+        by smtp.gmail.com with ESMTPSA id u13-20020adfdb8d000000b002d2b117a6a6sm1603266wri.41.2023.03.17.03.20.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Mar 2023 03:20:09 -0700 (PDT)
-From:   =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
-        <noltari@gmail.com>
-To:     f.fainelli@gmail.com, jonas.gorski@gmail.com,
-        bcm-kernel-feedback-list@broadcom.com, tsbogend@alpha.franken.de,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
-        <noltari@gmail.com>
-Subject: [PATCH v3] mips: bmips: BCM6358: disable RAC flush for TP1
-Date:   Fri, 17 Mar 2023 11:20:04 +0100
-Message-Id: <20230317102004.235879-1-noltari@gmail.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230316180518.783613-1-noltari@gmail.com>
-References: <20230316180518.783613-1-noltari@gmail.com>
+        Fri, 17 Mar 2023 03:20:11 -0700 (PDT)
+Date:   Fri, 17 Mar 2023 10:20:09 +0000
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com, srw@sladewatkins.net,
+        rwarsow@gmx.de
+Subject: Re: [PATCH 5.4 00/55] 5.4.237-rc2 review
+Message-ID: <ZBQ+2XUJC5CjaI6V@debian>
+References: <20230316083403.224993044@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230316083403.224993044@linuxfoundation.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,LOTS_OF_MONEY,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,111 +75,110 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RAC flush causes kernel panics on BCM6358 with EHCI/OHCI when booting from TP1:
-[    3.881739] usb 1-1: new high-speed USB device number 2 using ehci-platform
-[    3.895011] Reserved instruction in kernel code[#1]:
-[    3.900113] CPU: 0 PID: 1 Comm: init Not tainted 5.10.16 #0
-[    3.905829] $ 0   : 00000000 10008700 00000000 77d94060
-[    3.911238] $ 4   : 7fd1f088 00000000 81431cac 81431ca0
-[    3.916641] $ 8   : 00000000 ffffefff 8075cd34 00000000
-[    3.922043] $12   : 806f8d40 f3e812b7 00000000 000d9aaa
-[    3.927446] $16   : 7fd1f068 7fd1f080 7ff559b8 81428470
-[    3.932848] $20   : 00000000 00000000 55590000 77d70000
-[    3.938251] $24   : 00000018 00000010
-[    3.943655] $28   : 81430000 81431e60 81431f28 800157fc
-[    3.949058] Hi    : 00000000
-[    3.952013] Lo    : 00000000
-[    3.955019] epc   : 80015808 setup_sigcontext+0x54/0x24c
-[    3.960464] ra    : 800157fc setup_sigcontext+0x48/0x24c
-[    3.965913] Status: 10008703	KERNEL EXL IE
-[    3.970216] Cause : 00800028 (ExcCode 0a)
-[    3.974340] PrId  : 0002a010 (Broadcom BMIPS4350)
-[    3.979170] Modules linked in: ohci_platform ohci_hcd fsl_mph_dr_of ehci_platform ehci_fsl ehci_hcd gpio_button_hotplug usbcore nls_base usb_common
-[    3.992907] Process init (pid: 1, threadinfo=(ptrval), task=(ptrval), tls=77e22ec8)
-[    4.000776] Stack : 81431ef4 7fd1f080 81431f28 81428470 7fd1f068 81431edc 7ff559b8 81428470
-[    4.009467]         81431f28 7fd1f080 55590000 77d70000 77d5498c 80015c70 806f0000 8063ae74
-[    4.018149]         08100002 81431f28 0000000a 08100002 81431f28 0000000a 77d6b418 00000003
-[    4.026831]         ffffffff 80016414 80080734 81431ecc 81431ecc 00000001 00000000 04000000
-[    4.035512]         77d54874 00000000 00000000 00000000 00000000 00000012 00000002 00000000
-[    4.044196]         ...
-[    4.046706] Call Trace:
-[    4.049238] [<80015808>] setup_sigcontext+0x54/0x24c
-[    4.054356] [<80015c70>] setup_frame+0xdc/0x124
-[    4.059015] [<80016414>] do_notify_resume+0x1dc/0x288
-[    4.064207] [<80011b50>] work_notifysig+0x10/0x18
-[    4.069036]
-[    4.070538] Code: 8fc300b4  00001025  26240008 <ac820000> ac830004  3c048063  0c0228aa  24846a00  26240010
-[    4.080686]
-[    4.082517] ---[ end trace 22a8edb41f5f983b ]---
-[    4.087374] Kernel panic - not syncing: Fatal exception
-[    4.092753] Rebooting in 1 seconds..
+Hi Greg,
 
-Because the bootloader (CFE) is not initializing the Read-ahead cache properly
-on the second thread (TP1). Since the RAC was not initialized properly, we
-should avoid flushing it at the risk of corrupting the instruction stream as
-seen in the trace above.
+On Thu, Mar 16, 2023 at 09:49:55AM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.4.237 release.
+> There are 55 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Sat, 18 Mar 2023 08:33:04 +0000.
+> Anything received after that time might be too late.
 
-Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
----
- v3: add changes suggested by Florian:
-   - Switch to a bool and remove unneeded initialization.
-   - Remove if from bcm6358_quirks().
-   - Improve commit description and bcm6358_quirks() comment.
- v2: check if we're running on TP1 and invert logic.
+Build test (gcc version 11.3.1 20230311):
+mips: 65 configs -> 1 failure
+arm: 106 configs -> no failure
+arm64: 2 configs -> no failure
+x86_64: 4 configs -> no failure
+alpha allmodconfig -> no failure
+powerpc allmodconfig -> no failure
+riscv allmodconfig -> no failure
+s390 allmodconfig -> no failure
+xtensa allmodconfig -> no failure
 
- arch/mips/bmips/dma.c   | 5 +++++
- arch/mips/bmips/setup.c | 8 ++++++++
- 2 files changed, 13 insertions(+)
+mips build failure:
+lasat_defconfig -> failed
 
-diff --git a/arch/mips/bmips/dma.c b/arch/mips/bmips/dma.c
-index 33788668cbdb..3779e7855bd7 100644
---- a/arch/mips/bmips/dma.c
-+++ b/arch/mips/bmips/dma.c
-@@ -5,6 +5,8 @@
- #include <asm/bmips.h>
- #include <asm/io.h>
- 
-+bool bmips_rac_flush_disable;
-+
- void arch_sync_dma_for_cpu_all(void)
- {
- 	void __iomem *cbr = BMIPS_GET_CBR();
-@@ -15,6 +17,9 @@ void arch_sync_dma_for_cpu_all(void)
- 	    boot_cpu_type() != CPU_BMIPS4380)
- 		return;
- 
-+	if (unlikely(bmips_rac_flush_disable))
-+		return;
-+
- 	/* Flush stale data out of the readahead cache */
- 	cfg = __raw_readl(cbr + BMIPS_RAC_CONFIG);
- 	__raw_writel(cfg | 0x100, cbr + BMIPS_RAC_CONFIG);
-diff --git a/arch/mips/bmips/setup.c b/arch/mips/bmips/setup.c
-index e95b3f78e7cd..549a6392a3d2 100644
---- a/arch/mips/bmips/setup.c
-+++ b/arch/mips/bmips/setup.c
-@@ -35,6 +35,8 @@
- #define REG_BCM6328_OTP		((void __iomem *)CKSEG1ADDR(0x1000062c))
- #define BCM6328_TP1_DISABLED	BIT(9)
- 
-+extern bool bmips_rac_flush_disable;
-+
- static const unsigned long kbase = VMLINUX_LOAD_ADDRESS & 0xfff00000;
- 
- struct bmips_quirk {
-@@ -104,6 +106,12 @@ static void bcm6358_quirks(void)
- 	 * disable SMP for now
- 	 */
- 	bmips_smp_enabled = 0;
-+
-+	/*
-+	 * RAC flush causes kernel panics on BCM6358 when booting from TP1
-+	 * because the bootloader is not initializing it properly.
-+	 */
-+	bmips_rac_flush_disable = !!(read_c0_brcm_cmt_local() & (1 << 31));
- }
- 
- static void bcm6368_quirks(void)
+arch/mips/lasat/picvue_proc.c:42:44: error: expected ')' before '&' token
+   42 | static DECLARE_TASKLET(pvc_display_tasklet, &pvc_display, 0);
+      |                                            ^~
+      |                                            )
+arch/mips/lasat/picvue_proc.c: In function 'pvc_line_proc_write':
+arch/mips/lasat/picvue_proc.c:87:27: error: 'pvc_display_tasklet' undeclared (first use in this function)
+   87 |         tasklet_schedule(&pvc_display_tasklet);
+      |                           ^~~~~~~~~~~~~~~~~~~
+arch/mips/lasat/picvue_proc.c:87:27: note: each undeclared identifier is reported only once for each function it appears in
+At top level:
+arch/mips/lasat/picvue_proc.c:33:13: error: 'pvc_display' defined but not used [-Werror=unused-function]
+   33 | static void pvc_display(unsigned long data)
+      |             ^~~~~~~~~~~
+
+
+Boot test:
+x86_64: Booted on qemu. No regression. [1]
+
+Boot Regression on test laptop.
+
+[    3.473713] BUG: kernel NULL pointer dereference, address: 000000000000007c
+[    3.473720] #PF: supervisor read access in kernel mode
+[    3.473722] #PF: error_code(0x0000) - not-present page
+[    3.473723] PGD 0 P4D 0 
+[    3.473727] Oops: 0000 [#1] SMP NOPTI
+[    3.473730] CPU: 0 PID: 114 Comm: systemd-udevd Not tainted 5.4.237-rc2-1baba0e91ac5+ #1
+[    3.473732] Hardware name: LENOVO 4287CTO/4287CTO, BIOS 8DET68WW (1.38 ) 04/11/2013
+[    3.473798] RIP: 0010:intel_context_unpin+0xe/0x120 [i915]
+[    3.473804] Code: 60 00 e9 44 ff ff ff be 02 00 00 00 e8 8b 8d d3 fa eb ae 41 bd fc ff ff ff eb b2 90 66 66 66 66 90 41 55 48 8d 57 7c 41 54 55 <8b> 47 7c 48 89 fd 83 f8 01 74 0f 8d 48 ff f0 0f b1 0a 75 f2 5d 41
+[    3.473808] RSP: 0018:ffff9d6900167a58 EFLAGS: 00010246
+[    3.473811] RAX: ffff8898905c9400 RBX: ffff889787fea000 RCX: ffff8898905c94c0
+[    3.473814] RDX: 000000000000007c RSI: ffff8898905caac0 RDI: 0000000000000000
+[    3.473817] RBP: ffff889787fea000 R08: ffff889891f86160 R09: ffff8898960af4b8
+[    3.473820] R10: ffff88978757a0c0 R11: 00000000030c44f5 R12: 00000000fffffffa
+[    3.473823] R13: ffff8898913feb80 R14: ffffffffc04e4bf0 R15: ffff889891f877c8
+[    3.473827] FS:  00007f5b0f8648c0(0000) GS:ffff889896000000(0000) knlGS:0000000000000000
+[    3.473830] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[    3.473833] CR2: 000000000000007c CR3: 000000021100c005 CR4: 00000000000606f0
+[    3.473836] Call Trace:
+[    3.473893]  intel_engine_cleanup_common+0xb7/0x1f0 [i915]
+[    3.473947]  intel_ring_submission_init+0x60/0x110 [i915]
+[    3.473999]  intel_engines_init+0x44/0xa0 [i915]
+[    3.474056]  i915_gem_init+0x1f7/0x7e0 [i915]
+[    3.474118]  ? intel_modeset_init+0x101e/0x1c70 [i915]
+[    3.474167]  i915_driver_probe+0xc43/0x14f0 [i915]
+[    3.474175]  ? __kernfs_new_node+0x156/0x1b0
+[    3.474180]  ? kfree+0xb3/0x230
+[    3.474229]  ? i915_pci_probe+0x3f/0x150 [i915]
+[    3.474234]  local_pci_probe+0x42/0x80
+[    3.474240]  ? _cond_resched+0x16/0x40
+[    3.474245]  pci_device_probe+0xfd/0x1b0
+[    3.474251]  really_probe+0x160/0x400
+[    3.474255]  driver_probe_device+0xb6/0x100
+[    3.474259]  device_driver_attach+0xa1/0xb0
+[    3.474263]  __driver_attach+0x9b/0x140
+[    3.474267]  ? device_driver_attach+0xb0/0xb0
+[    3.474271]  bus_for_each_dev+0x78/0xc0
+[    3.474275]  bus_add_driver+0x136/0x200
+[    3.474279]  driver_register+0x8f/0xe0
+[    3.474283]  ? 0xffffffffc06ec000
+[    3.474288]  do_one_initcall+0x46/0x200
+[    3.474292]  ? _cond_resched+0x16/0x40
+[    3.474297]  ? kmem_cache_alloc_trace+0x19d/0x220
+[    3.474302]  ? do_init_module+0x23/0x250
+[    3.474305]  do_init_module+0x4c/0x250
+[    3.474310]  __do_sys_finit_module+0xac/0x110
+[    3.474315]  do_syscall_64+0x52/0x160
+[    3.474320]  entry_SYSCALL_64_after_hwframe+0x5c/0xc1
+[    3.474324] Modules linked in: i915(+) ahci crc32c_intel libahci libata psmouse i2c_i801 scsi_mod i2c_algo_bit lpc_ich ehci_pci ehci_hcd sdhci_pci drm_kms_helper cqhci sdhci usbcore usb_common mmc_core e1000e(+) drm ptp pps_core video
+[    3.474342] CR2: 000000000000007c
+[    3.474346] ---[ end trace c956347dbb581033 ]---
+
+
+
+[1]. https://openqa.qa.codethink.co.uk/tests/3131
+
+
+Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+
 -- 
-2.30.2
-
+Regards
+Sudip
