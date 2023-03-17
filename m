@@ -2,129 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C20816BF1DC
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 20:43:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9E2A6BF1DE
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 20:44:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229755AbjCQTnu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 15:43:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56528 "EHLO
+        id S229832AbjCQTo0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 15:44:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbjCQTnr (ORCPT
+        with ESMTP id S229814AbjCQToX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 15:43:47 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A89A1024B;
-        Fri, 17 Mar 2023 12:43:46 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id x37so3545624pga.1;
-        Fri, 17 Mar 2023 12:43:46 -0700 (PDT)
+        Fri, 17 Mar 2023 15:44:23 -0400
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D188531BEB
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 12:44:17 -0700 (PDT)
+Received: by mail-qt1-x830.google.com with SMTP id r16so6856782qtx.9
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 12:44:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679082225;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=On053GRmvak1ihY8RYqod2dWpDbMYWVHxbUsiBufrE4=;
-        b=bWuWBxePZdmS6fAxELkPLZtrc3YBaRacBPWnUC8Fg9k847PqQEM6GBoznngWHnRiM1
-         UD2BY5mT1+gURMJ3oeXJBqMYo+/nA5HbL1pRA7qV/EVYvjnuKdh2rPo+oSs2cLja4vEa
-         FZdnsYdwMwvpyqc0ZOEjyN1BSRdOghVTk+z64Eprz4YLPxPixUWdRzgK45LObe5IgHu6
-         YPfN0xcIyKqY+RGRzwWlhhzMs5hUNkwWGv1/5bbcBTg0q6ubmKQeiXFXLQC5gYD4LMBg
-         o/uZ9tU8y+5MWct8zPWDGetHzEBI9/GQ4F7jxYsVXYxcUWg9HpxLT6AwiLpYgk0XJsaK
-         ynVg==
+        d=joelfernandes.org; s=google; t=1679082256;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=341yOCJQSt3i3F13IHsmlZ0mEcYrW2rEkyPXLsqSxhw=;
+        b=Le7Jg+shSRNiwD6FiSczFsxExYNPVqS08zfPewPnT+ZQXuSPT36dB9lln1docPcEc/
+         /FeIOtFnbloRYz1jlFWQP90P1OwlVfyiryf2rpniGyNZmhudZeEnJBQuNZEGljflRGlq
+         FkSBEp7W1zkXW8jfTYYja9a2DDfIYTSXRQ7Bg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679082225;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=On053GRmvak1ihY8RYqod2dWpDbMYWVHxbUsiBufrE4=;
-        b=jp5/gkBRn9oYA9xebmIUjpbbhKxAljJIWemE8iw8fwT1ww7+eVfZ/5amohEYw+uXzT
-         Svg8dcvOQA/tYN55Vc02c/+Coub8t4KOU8W4/aE+BuX//AEIqal3z3t/+Y8RLu1B+V/y
-         iyzHaiCdeCTibydUmuBiXwygW+N04u05oISXfN/7BNdrzP8TP9IAhm0MW0r+QILPm+g/
-         AF7BVO0JTcj+6dGK2b6oeK/kPt12IAnXnqmoBRhrdOBURmX/dWnTZDHoPCi85rp0hgnu
-         ukdDExBPFnwbHZ0rAveLL8aArmBiQOocm4ULnEQqnzuRD00ghLI9SFJk/RRUjjXNvgjL
-         hexg==
-X-Gm-Message-State: AO0yUKUy0fvVdKU1fLqwyAfIjvEeFblBIYJkhYTDzmbsdXL0LK/Gy2NO
-        +/kg2Xt0/eMY+ho0zu0IH1fnfmtoYWAUDwkQg+Y=
-X-Google-Smtp-Source: AK7set/VvoBvLQmtjKHDMAsTOMhGtcA3zjyXPp1c3IIegaU12wGeed1P6f+RMZv7TSZVS2hLxgZnuJm8cIHFpckQksw=
-X-Received: by 2002:a05:6a00:4ac7:b0:5a8:daec:c325 with SMTP id
- ds7-20020a056a004ac700b005a8daecc325mr1894046pfb.1.1679082225507; Fri, 17 Mar
- 2023 12:43:45 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679082256;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=341yOCJQSt3i3F13IHsmlZ0mEcYrW2rEkyPXLsqSxhw=;
+        b=pynINGkuivn7JSi2eMWxZVdYzngESlnA2bUeAi7W3u9dZqUZ2VJSYDJO/bv8t2YVn3
+         Vsu90lSncVCW+ZCGaWk0suIgYkhN4tSWccCJ7aA3W840ZKkBmcihgdjhUwYrENw+T4TI
+         uQnLbeef4axgiuby448ag/hzW53SJdZaNwyhCGYyYAj/QsYSdVnczGx0Ix8t0NFMRUZq
+         oKGX77QoOAgDuuXWciFY0LamUW39ucXUbl5nmPWg1K6wanpoWUFyNk83s2iBEuT2yaXM
+         W3t/hhWMr74scG4vpcEq/ennMeH7Ak2ilm30lRnSlIqvy2QGNjY+0/B1T3P+JEMKnJFp
+         6a3w==
+X-Gm-Message-State: AO0yUKUW4gOJ6iky2HBzPe9EBLxEJ8Eq/GOY/2qPqPhII4W5LsG3ogiV
+        Nn8znitmf38gZ7u56MQ4kpY9Ng85ejmsI1usj7Y=
+X-Google-Smtp-Source: AK7set/60T9owq2KRRh95IJ85Hkd46seE3FORmqTjanaEzIjg/6lxRl8b9VWpfTnLoyX6ugzI9kk5A==
+X-Received: by 2002:a05:622a:104d:b0:3ae:189c:7455 with SMTP id f13-20020a05622a104d00b003ae189c7455mr15537285qte.47.1679082256678;
+        Fri, 17 Mar 2023 12:44:16 -0700 (PDT)
+Received: from joelboxx.c.googlers.com.com (129.239.188.35.bc.googleusercontent.com. [35.188.239.129])
+        by smtp.gmail.com with ESMTPSA id c72-20020ae9ed4b000000b007461fe6d6e3sm2251085qkg.49.2023.03.17.12.44.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Mar 2023 12:44:16 -0700 (PDT)
+From:   "Joel Fernandes (Google)" <joel@joelfernandes.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Boqun Feng <boqun.feng@gmail.com>
+Subject: [PATCH] MAINTAINERS: Change Joel Fernandes from R: to M:
+Date:   Fri, 17 Mar 2023 19:44:04 +0000
+Message-Id: <20230317194404.923623-1-joel@joelfernandes.org>
+X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
 MIME-Version: 1.0
-References: <20230308135936.761794-4-kory.maincent@bootlin.com>
- <20230308230321.liw3v255okrhxg6s@skbuf> <20230310114852.3cef643d@kmaincent-XPS-13-7390>
- <20230310113533.l7flaoli7y3bmlnr@skbuf> <b4ebfd3770ffa5ad1233d2b5e79499ee@walle.cc>
- <20230310131529.6bahmi4obryy5dsx@soft-dev3-1> <20230310164451.ls7bbs6pdzs4m6pw@skbuf>
- <20230313084059.GA11063@pengutronix.de> <20230316160920.53737d1c@kmaincent-XPS-13-7390>
- <20230317152150.qahrr6w5x4o3eysz@skbuf> <20230317120744.5b7f1666@kernel.org>
-In-Reply-To: <20230317120744.5b7f1666@kernel.org>
-From:   Max Georgiev <glipus@gmail.com>
-Date:   Fri, 17 Mar 2023 13:43:34 -0600
-Message-ID: <CAP5jrPHep12hRbbcb5gXrZB5w_uzmVpEp4EhpfqW=9zC+zcu9A@mail.gmail.com>
-Subject: Re: [PATCH v3 3/5] net: Let the active time stamping layer be selectable.
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Vladimir Oltean <vladimir.oltean@nxp.com>,
-        =?UTF-8?Q?K=C3=B6ry_Maincent?= <kory.maincent@bootlin.com>,
-        Oleksij Rempel <o.rempel@pengutronix.de>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        Michael Walle <michael@walle.cc>, Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-omap@vger.kernel.org,
-        Maxime Chevallier <maxime.chevallier@bootlin.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        thomas.petazzoni@bootlin.com, Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Jay Vosburgh <j.vosburgh@gmail.com>,
-        Veaceslav Falico <vfalico@gmail.com>,
-        Andy Gospodarek <andy@greyhouse.net>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        UNGLinuxDriver@microchip.com, Minghao Chi <chi.minghao@zte.com.cn>,
-        Jie Wang <wangjie125@huawei.com>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Sean Anderson <sean.anderson@seco.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Marco Bonelli <marco@mebeim.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jakub,
+I have spent years learning / contributing to RCU with several features,
+talks and presentations, with my most recent work being on Lazy-RCU.
 
-I started working on a patch introducing NDO functions for hw
-timestamping, but unfortunately put it on hold.
-Let me finish it and send it out for review.
+Please consider me for M, so I can tell my wife why I spend a lot of my
+weekends and evenings on this complicated and mysterious thing -- which is
+mostly in the hopes of preventing the world from burning down because
+everything runs on this one way or another. ;-)
 
-On Fri, Mar 17, 2023 at 1:07=E2=80=AFPM Jakub Kicinski <kuba@kernel.org> wr=
-ote:
->
-> On Fri, 17 Mar 2023 17:21:50 +0200 Vladimir Oltean wrote:
-> > On Thu, Mar 16, 2023 at 04:09:20PM +0100, K=C3=B6ry Maincent wrote:
-> > > Was there any useful work that could be continued on managing timesta=
-mp through
-> > > NDOs. As it seem we will made some change to the timestamp API, maybe=
- it is a
-> > > good time to also take care of this.
-> >
-> > Not to my knowledge. Yes, I agree that it would be a good time to add a=
-n
-> > NDO for hwtimestamping (while keeping the ioctl fallback), then
-> > transitioning as many devices as we can, and removing the fallback when
-> > the transition is complete.
->
-> I believe Max was looking into it - hi Max! Did you make much
-> progress? Any code you could share to build on?
+Cc: "Paul E. McKenney" <paulmck@kernel.org>
+Cc: Frederic Weisbecker <frederic@kernel.org>
+Cc: Neeraj Upadhyay <quic_neeraju@quicinc.com>
+Cc: Boqun Feng <boqun.feng@gmail.com>
+Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+---
+ MAINTAINERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index ec57c42ed544..2e70394ac64a 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -17638,11 +17638,11 @@ READ-COPY UPDATE (RCU)
+ M:	"Paul E. McKenney" <paulmck@kernel.org>
+ M:	Frederic Weisbecker <frederic@kernel.org> (kernel/rcu/tree_nocb.h)
+ M:	Neeraj Upadhyay <quic_neeraju@quicinc.com> (kernel/rcu/tasks.h)
++M:	Joel Fernandes <joel@joelfernandes.org>
+ M:	Josh Triplett <josh@joshtriplett.org>
+ R:	Steven Rostedt <rostedt@goodmis.org>
+ R:	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+ R:	Lai Jiangshan <jiangshanlai@gmail.com>
+-R:	Joel Fernandes <joel@joelfernandes.org>
+ L:	rcu@vger.kernel.org
+ S:	Supported
+ W:	http://www.rdrop.com/users/paulmck/RCU/
+-- 
+2.40.0.rc1.284.g88254d51c5-goog
+
