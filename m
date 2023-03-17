@@ -2,60 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14CF86BE95F
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 13:36:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 908BE6BE96E
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 13:38:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230160AbjCQMgH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 08:36:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33620 "EHLO
+        id S230260AbjCQMiH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 08:38:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229939AbjCQMf5 (ORCPT
+        with ESMTP id S230252AbjCQMiE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 08:35:57 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C48E6EBB2
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 05:35:22 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id cy23so19664663edb.12
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 05:35:22 -0700 (PDT)
+        Fri, 17 Mar 2023 08:38:04 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9884674A48
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 05:37:26 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id ek18so19777996edb.6
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 05:37:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679056519;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QlbqNJrYO/n+aN0q9wkJ44zCBKlY2BEF+Xu3HHvs+lk=;
-        b=GvRWPpicmYmXHlmXJzdNDbj3S2e1NM1t2O+d+G4mcyTjY+RNbfyihjEQYVJCfuEE3A
-         zlk5lls0IKRXAYSk+W1k4r7WAAHoNJX84ayxCGpob5VB9WjjIRAu4iokWHbfwkohcJ0p
-         dn7hj23Lm2z6UssOPx44p2pRPWOb8dbf4aS4BxoFNeF5i/2klS/kLb9dLxWY0B9Mb9g6
-         DqYWZ/C8CxvtQqSstmM2VXxkwKe6tg/1ZLHXeRz2GTVRHZyxRySRLyF02xn0dBT22pki
-         p6JwPKDTHjKHDOEm7/jfym7V+hsH8VThTT9YTKbgj3qxoc4Jth5eU6zK1QXhz+7LL8oO
-         29+g==
+        d=gmail.com; s=20210112; t=1679056644;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=zG+Fullr1evfHoIsSVfpr6zWgtZeQgscYvErLPyQFGI=;
+        b=gCuBPF8Q//qtJHEANJYlS6l2sNTnvzGXgW7oTC/0ZEhziDZzOKxWNrWzMMHXTNNQaB
+         qpJ9TBGAx1KZldJ9Q4XGAlKm+biixAVxoASEdMetmF56HW/DHGXq/jOBBagk28gQAxN+
+         qS2vWBOSOU7l9hg6M4qMs4fnzxqeyh2F2NdOCj1WKHrEkB2x/ZZnsBfk3caUEv2ml7NE
+         Vr/+HbOQu0F3csoE7FmF9Y3XLNU20UF5Go3vwh9AWmDti3T3NtrCEN3siUMxT/hHUagE
+         IENK+8SDm8FcxSctWoKtHnFMteYpoeTrReYQccAxNIQqoS08kzKgfIgi8G7ePWYWr+v4
+         odjg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679056519;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=QlbqNJrYO/n+aN0q9wkJ44zCBKlY2BEF+Xu3HHvs+lk=;
-        b=irLodSFhUz2O+OqLNksmDxGzh7qkFyyFgKv74Qz3Br+TMkP0hrCEiP/zviuXcEBT2U
-         AMyUBzp5FyT0eErUpRMLuMGvuZRHrsvsl7jnsJZqwTHdfwSetYbVxNEY1GEsoNYCJlcA
-         6lgY+3lCr2+LKXWhvwojYRhz4YjkULCqUdzI0r+KOqXVcSdNK498J7jzMZTuX9VZlVHB
-         11URyh9bTDatlsLVljn/PORTVqokSBFuPy5jhLYrzUQ/fuUeyEuF2W7vYj/SDrjsHbDy
-         fLxqJkt+pMq7AbHtqVwUChg5408Plh1mcKVBsA1zADRHKVnzrENrP1z18yNagmKDCcNR
-         s3/w==
-X-Gm-Message-State: AO0yUKVzZUdMR6I59Qp69QnWfuEssLgYZykvrm4YEwC/NPw2pjljLwk0
-        KI5X2ezPM2hpHD62OHNPLLg=
-X-Google-Smtp-Source: AK7set+E6F3bPV5Jt0m8BKiK0eZ6JpTKSy+WaRiCMLFnBv3jH/IifuFoXGNDYNDyEjhRp3YiSBSA9A==
-X-Received: by 2002:a17:906:2357:b0:931:829c:9d58 with SMTP id m23-20020a170906235700b00931829c9d58mr2769653eja.23.1679056518751;
-        Fri, 17 Mar 2023 05:35:18 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679056644;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zG+Fullr1evfHoIsSVfpr6zWgtZeQgscYvErLPyQFGI=;
+        b=ps1etpqszXyn8s1GrzIGCdHPtqhSp+2MlOmeoRmf816ZBf07jcJjLIZgOpiCykUVbw
+         vJJQQ3Kc3ha2QeHR8ozYeH2dVD/BbNIkoXZ55Pkxg6ukxKTFDMGWBwB3WpQUaIMvTXEw
+         8a0eBNV5Z+ECs+F4P8e5fpA9L/oWCPQmz0SliNa7341Y1BW9nLMrFCzYYJUTNqSq7I19
+         SH08cGOVTgqMHWwe4v6/zY8CYup8kAfS4uTdP19yw/7CC4wUaFfNLc7fQMbfosl/gJrm
+         gMlqqxHJ1IvZZH3OjHv8F0BTTvJtKZ2tqJsL0wn6yhAebizcWPp6tFdol0uOkrBUS5If
+         eOWg==
+X-Gm-Message-State: AO0yUKUhUIZaTF6NJnx5ZkWgiiXYXMD+cyBXi8AYaQlubBMOGaAWZRpe
+        tNhz5OUtHBBb/lnLj2NFJ+E=
+X-Google-Smtp-Source: AK7set8ayA3Ff2SyNGaRCXyUM/1nEx+2zZjs7st1mYfUKWCv6Bj0GP/yy9Fglwgknwlo75Gv3fY+jQ==
+X-Received: by 2002:a17:906:1254:b0:8b1:fc58:a4ad with SMTP id u20-20020a170906125400b008b1fc58a4admr13864475eja.11.1679056643943;
+        Fri, 17 Mar 2023 05:37:23 -0700 (PDT)
 Received: from ?IPV6:2a01:c23:c5b8:6200:dd0b:20c2:4c96:a825? (dynamic-2a01-0c23-c5b8-6200-dd0b-20c2-4c96-a825.c23.pool.telefonica.de. [2a01:c23:c5b8:6200:dd0b:20c2:4c96:a825])
-        by smtp.googlemail.com with ESMTPSA id r3-20020a50aac3000000b004fccef39ec9sm1020810edc.70.2023.03.17.05.35.18
+        by smtp.googlemail.com with ESMTPSA id k6-20020a17090632c600b00924d38bbdc0sm938073ejk.105.2023.03.17.05.37.23
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Mar 2023 05:35:18 -0700 (PDT)
-Message-ID: <d846047f-b714-3fd1-d8c6-9f774902fb9f@gmail.com>
-Date:   Fri, 17 Mar 2023 13:35:17 +0100
+        Fri, 17 Mar 2023 05:37:23 -0700 (PDT)
+Message-ID: <6dbdf458-9f46-613e-de58-b4a56a6cdd9f@gmail.com>
+Date:   Fri, 17 Mar 2023 13:36:18 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.9.0
+Subject: [PATCH 1/2] base: soc: populate machine name in soc_device_register
+ if empty
 Content-Language: en-US
+From:   Heiner Kallweit <hkallweit1@gmail.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
         Jerome Brunet <jbrunet@baylibre.com>,
@@ -66,9 +69,8 @@ Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>,
         "linux-arm-kernel@lists.infradead.org" 
         <linux-arm-kernel@lists.infradead.org>
-From:   Heiner Kallweit <hkallweit1@gmail.com>
-Subject: [PATCH 0/2] base: soc: populate machine name in soc_device_register
- if empty
+References: <d846047f-b714-3fd1-d8c6-9f774902fb9f@gmail.com>
+In-Reply-To: <d846047f-b714-3fd1-d8c6-9f774902fb9f@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -84,17 +86,53 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 Several SoC drivers use the same of-based mechanism to populate the machine
 name. Therefore move this to the core and try to populate the machine name
 in soc_device_register if it's not set yet.
-Make meson-gx-socinfo the first user of this new functionality.
 
-Heiner Kallweit (2):
-  base: soc: populate machine name in soc_device_register if empty
-  soc: amlogic: meson-gx-socinfo: use new soc_device_register
-    functionality to populate machine name
+Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+---
+ drivers/base/soc.c | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
- drivers/base/soc.c                     | 15 +++++++++++++++
- drivers/soc/amlogic/meson-gx-socinfo.c |  5 -----
- 2 files changed, 15 insertions(+), 5 deletions(-)
-
+diff --git a/drivers/base/soc.c b/drivers/base/soc.c
+index 0fb1d4ab9..8dec5228f 100644
+--- a/drivers/base/soc.c
++++ b/drivers/base/soc.c
+@@ -7,6 +7,7 @@
+ 
+ #include <linux/sysfs.h>
+ #include <linux/init.h>
++#include <linux/of.h>
+ #include <linux/stat.h>
+ #include <linux/slab.h>
+ #include <linux/idr.h>
+@@ -110,6 +111,18 @@ static void soc_release(struct device *dev)
+ 	kfree(soc_dev);
+ }
+ 
++static void soc_device_get_machine(struct soc_device_attribute *soc_dev_attr)
++{
++	struct device_node *np;
++
++	if (soc_dev_attr->machine)
++		return;
++
++	np = of_find_node_by_path("/");
++	of_property_read_string(np, "model", &soc_dev_attr->machine);
++	of_node_put(np);
++}
++
+ static struct soc_device_attribute *early_soc_dev_attr;
+ 
+ struct soc_device *soc_device_register(struct soc_device_attribute *soc_dev_attr)
+@@ -118,6 +131,8 @@ struct soc_device *soc_device_register(struct soc_device_attribute *soc_dev_attr
+ 	const struct attribute_group **soc_attr_groups;
+ 	int ret;
+ 
++	soc_device_get_machine(soc_dev_attr);
++
+ 	if (!soc_bus_registered) {
+ 		if (early_soc_dev_attr)
+ 			return ERR_PTR(-EBUSY);
 -- 
 2.39.2
+
 
