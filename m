@@ -2,179 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55D9E6BE508
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 10:10:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AC846BE50F
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 10:11:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230332AbjCQJKm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 05:10:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38794 "EHLO
+        id S231231AbjCQJLr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 05:11:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230369AbjCQJKb (ORCPT
+        with ESMTP id S231140AbjCQJLZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 05:10:31 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 48EF546BF;
-        Fri, 17 Mar 2023 02:10:12 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0DE051480;
+        Fri, 17 Mar 2023 05:11:25 -0400
+Received: from mout-p-101.mailbox.org (mout-p-101.mailbox.org [IPv6:2001:67c:2050:0:465::101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33E7E3A81;
         Fri, 17 Mar 2023 02:10:56 -0700 (PDT)
-Received: from [10.57.53.217] (unknown [10.57.53.217])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 77A043F64C;
-        Fri, 17 Mar 2023 02:10:10 -0700 (PDT)
-Message-ID: <d304145e-dcc6-60db-fca2-920a0e75ef3e@arm.com>
-Date:   Fri, 17 Mar 2023 09:10:08 +0000
+Received: from smtp202.mailbox.org (smtp202.mailbox.org [IPv6:2001:67c:2050:b231:465::202])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mout-p-101.mailbox.org (Postfix) with ESMTPS id 4PdJJS0wgpz9sTs;
+        Fri, 17 Mar 2023 10:10:48 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
+        t=1679044248;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=tn5PncTOyWtxRza5q2TsQE5fEAu3fMK2xK+AqAvZbho=;
+        b=Y+VziNywRfRo0p0YxCt9vAJJJkXWTB2oYFB6IXyyxVPUkQuatIDv/40S0p0S9A+Q/lhVgT
+        lTxCKmh9gCbe75OH5I4nJUCRqn77pF4gV6FN92wQfUOWOqsVXKsje+5oxU1c1/zgnCOMq0
+        H0/SEULmLieHoXsdA7AiXQw5TIVjIloXie9iKgzbO3DWKiHRZAW2zFC7/k/0cf5SDBIaxd
+        nZzNF9GokuFZdw3km6HgWQ/y173AXrLXCZH21M0OtSHKfM89JRn2d8JFeoJSSBFObO2uFa
+        YNsQn9WXl9Yn94hgddXN/Duaf6YdhQ6xYPVDouaLK+AMdLBvBmi0XMg7ZXgF9Q==
+Message-ID: <12626002-98db-7702-598e-28ea4a3e5061@mailbox.org>
+Date:   Fri, 17 Mar 2023 10:10:44 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.8.0
-Subject: Re: [PATCH] coresight: core: Add sysfs node to reset all sources and
- sinks
-To:     Jinlong Mao <quic_jinlmao@quicinc.com>,
-        Mike Leach <mike.leach@linaro.org>
-Cc:     Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Tingwei Zhang <quic_tingweiz@quicinc.com>,
-        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
-        Tao Zhang <quic_taozha@quicinc.com>,
-        Hao Zhang <quic_hazha@quicinc.com>
-References: <20230208111630.20132-1-quic_jinlmao@quicinc.com>
- <CAJ9a7ViBS9K6cKsOi3btw1b5cM9VTSb-q8s6W3WUAgeW3-T2Sg@mail.gmail.com>
- <CAJ9a7ViA5BsbLjRWMsttmpmcPh1yUXK8J79k-pqYybVZkMQHXQ@mail.gmail.com>
- <bb6c9df9-af9b-873e-85bd-a29d00bb39d7@arm.com>
- <1d9b8ee8-c3f2-99bc-cd4e-8c2dd0f04b2b@quicinc.com>
- <CAJ9a7Vh08A8b7YLF=pYPudB0CZ0XjEpF=4YHrNNd7xo_JQGYaA@mail.gmail.com>
- <0308d380-bc8b-cb66-55cd-b0934d8f9676@quicinc.com>
- <6320e079-4fc8-f435-52e5-6d5ad1369d84@quicinc.com>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <6320e079-4fc8-f435-52e5-6d5ad1369d84@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Subject: Re: [PATCH v10 01/15] dma-buf/dma-fence: Add deadline awareness
+Content-Language: de-CH-frami, en-CA
+To:     Sebastian Wick <sebastian.wick@redhat.com>,
+        Rob Clark <robdclark@gmail.com>
+Cc:     Rob Clark <robdclark@chromium.org>,
+        Pekka Paalanen <pekka.paalanen@collabora.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>,
+        intel-gfx@lists.freedesktop.org,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        dri-devel@lists.freedesktop.org,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
+        <linaro-mm-sig@lists.linaro.org>,
+        Luben Tuikov <luben.tuikov@amd.com>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Gustavo Padovan <gustavo@padovan.org>,
+        Matt Turner <mattst88@gmail.com>,
+        freedreno@lists.freedesktop.org,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        "open list:DMA BUFFER SHARING FRAMEWORK" 
+        <linux-media@vger.kernel.org>
+References: <20230308155322.344664-1-robdclark@gmail.com>
+ <20230308155322.344664-2-robdclark@gmail.com> <ZAtQspuFjPtGy7ze@gmail.com>
+ <CAF6AEGsGOr5+Q10wX=5ttrWCSUJfn7gzHW8QhxFC0GDLgagMHg@mail.gmail.com>
+ <ZBHNvT3BLgS3qvV5@gmail.com>
+ <CAF6AEGu1S2CXzRxV_c5tE_H+XUGiO=n0tXjLZ_u_tW-eMqMsQw@mail.gmail.com>
+ <ZBLg0t0tTVvuPuiJ@gmail.com>
+ <CAF6AEGvV5arZThTyju_=xFFDWRbMaexgO_kkdKZuK-zeCxrN7Q@mail.gmail.com>
+ <CA+hFU4xbssR+=Sf4ia5kPdsSb4y9SQUd4nx_2p1Szcbtna28CA@mail.gmail.com>
+From:   =?UTF-8?Q?Michel_D=c3=a4nzer?= <michel.daenzer@mailbox.org>
+In-Reply-To: <CA+hFU4xbssR+=Sf4ia5kPdsSb4y9SQUd4nx_2p1Szcbtna28CA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MBO-RS-ID: 8afd7b6bd4c7689e5ec
+X-MBO-RS-META: 7n4co8ucek6ryf9zcbhkmobgbkmu6uzh
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/03/2023 06:18, Jinlong Mao wrote:
-> 
-> On 3/1/2023 11:04 PM, Jinlong Mao wrote:
->> Hi Mike & Suzuki,
->>
->> On 2/9/2023 10:56 PM, Mike Leach wrote:
->>> Hi,
->>>
->>> On Thu, 9 Feb 2023 at 03:02, Jinlong Mao <quic_jinlmao@quicinc.com> 
->>> wrote:
->>>>
->>>> On 2/9/2023 12:36 AM, Suzuki K Poulose wrote:
->>>>> On 08/02/2023 16:20, Mike Leach wrote:
->>>>>> Quick correction - you need to look for enable_source  / enable_sink
->>>>>> files and disable those that are currently '1'
+On 3/16/23 23:22, Sebastian Wick wrote:
+> On Thu, Mar 16, 2023 at 5:29 PM Rob Clark <robdclark@gmail.com> wrote:
+>> On Thu, Mar 16, 2023 at 2:26 AM Jonas Ådahl <jadahl@gmail.com> wrote:
+>>> On Wed, Mar 15, 2023 at 09:19:49AM -0700, Rob Clark wrote:
+>>>> On Wed, Mar 15, 2023 at 6:53 AM Jonas Ådahl <jadahl@gmail.com> wrote:
+>>>>> On Fri, Mar 10, 2023 at 09:38:18AM -0800, Rob Clark wrote:
+>>>>>> On Fri, Mar 10, 2023 at 7:45 AM Jonas Ådahl <jadahl@gmail.com> wrote:
+>>>>>>>
+>>>>>>>> + *
+>>>>>>>> + * To this end, deadline hint(s) can be set on a &dma_fence via &dma_fence_set_deadline.
+>>>>>>>> + * The deadline hint provides a way for the waiting driver, or userspace, to
+>>>>>>>> + * convey an appropriate sense of urgency to the signaling driver.
+>>>>>>>> + *
+>>>>>>>> + * A deadline hint is given in absolute ktime (CLOCK_MONOTONIC for userspace
+>>>>>>>> + * facing APIs).  The time could either be some point in the future (such as
+>>>>>>>> + * the vblank based deadline for page-flipping, or the start of a compositor's
+>>>>>>>> + * composition cycle), or the current time to indicate an immediate deadline
+>>>>>>>> + * hint (Ie. forward progress cannot be made until this fence is signaled).
+>>>>>>>
+>>>>>>> Is it guaranteed that a GPU driver will use the actual start of the
+>>>>>>> vblank as the effective deadline? I have some memories of seing
+>>>>>>> something about vblank evasion browsing driver code, which I might have
+>>>>>>> misunderstood, but I have yet to find whether this is something
+>>>>>>> userspace can actually expect to be something it can rely on.
 >>>>>>
->>>>>> Mike
+>>>>>> I guess you mean s/GPU driver/display driver/ ?  It makes things more
+>>>>>> clear if we talk about them separately even if they happen to be the
+>>>>>> same device.
+>>>>>
+>>>>> Sure, sorry about being unclear about that.
+>>>>>
 >>>>>>
->>>>>> On Wed, 8 Feb 2023 at 16:16, Mike Leach <mike.leach@linaro.org> 
->>>>>> wrote:
->>>>>>> Hi
->>>>>>>
->>>>>>> As this is a sysfs only update - would it not be easier to simply 
->>>>>>> use
->>>>>>> a shell script to iterate through coresight/devices/ looking for
->>>>>>> disable_source / disable_sink files and setting those accordingly?
->>>>>>>
->>>>>>> See tools/perf/tests/shell/test_arm_coresight.sh for an example of a
->>>>>>> script that does similar iteration to test coresight in perf
->>>>>>>
->>>>> +1
+>>>>>> Assuming that is what you mean, nothing strongly defines what the
+>>>>>> deadline is.  In practice there is probably some buffering in the
+>>>>>> display controller.  For ex, block based (including bandwidth
+>>>>>> compressed) formats, you need to buffer up a row of blocks to
+>>>>>> efficiently linearize for scanout.  So you probably need to latch some
+>>>>>> time before you start sending pixel data to the display.  But details
+>>>>>> like this are heavily implementation dependent.  I think the most
+>>>>>> reasonable thing to target is start of vblank.
 >>>>>
->>>>> Suzuki
->>>> Hi Mike & Suzuki,
+>>>>> The driver exposing those details would be quite useful for userspace
+>>>>> though, so that it can delay committing updates to late, but not too
+>>>>> late. Setting a deadline to be the vblank seems easy enough, but it
+>>>>> isn't enough for scheduling the actual commit.
 >>>>
->>>> Sometimes user just want to have some quick test from PC with adb 
->>>> commands.
->>>> It is very easy to reset all sources and sinks' status by command 
->>>> below.
->>>> echo 1 > /sys/bus/coresight/reset_source_sink
->>>>
->>> Users of coresight via sysfs will have to know how to use the
->>> coresight infrastructure in order to enable the sources and sinks in
->>> the first place -
->>> e.g
->>> echo 1 > /sys/bus/coresight/devices/tmc_etr0/enable_sink
->>> echo 1 > /sys/bus/coresight/devices/etm0/enable_source
+>>>> I'm not entirely sure how that would even work.. but OTOH I think you
+>>>> are talking about something on the order of 100us?  But that is a bit
+>>>> of another topic.
 >>>
->>> Given that they are aware of which sources and sinks they enabled -
->>> disabling them should be simple.
->>>
->>>
->>>> Preparing the script for test is not easy for users who are not 
->>>> familiar
->>>> with the coresight framework.
->>>>
->>> If there is a genuine use case were a user has opened so many sources
->>> on the command line that they need a simpler way of closing them than
->>> repeating the enabled commands with an
->>> echo 0 > ...
->>> then any script could be shipped as part of kernel/tools/coresight or
->>> kernel/samples/coresight - they would not have to write it themselves,
->>> and just run it from the command line - for example :-
->>> ./kernel/tools/coresight/scripts/sysfs_disable_sources_and_sinks.sh
->>>
->>> Realistically users will only try out a couple of devices as the
->>> usefulness of the sysfs interface is really limited to testing or
->>> board bring up.
->>> Any complex use with sysfs - as in the coresight tests I mentioned
->>> earlier is really going to be done by scripting.
->>>
->>>
->>> Regards
->>>
->>> Mike
->>
->> There is also requirement that reset all the sources and sinks in an 
->> user space daemon.
->> For such requirement, I think it is better to use only once sysfs node 
->> instead of iterating through coresight/device folder in an user space 
->> daemon.
+>>> Yes, something like that. But yea, it's not really related. Scheduling
+>>> commits closer to the deadline has more complex behavior than that too,
+>>> e.g. the need for real time scheduling, and knowing how long it usually
+>>> takes to create and commit and for the kernel to process.
 > 
-> Hi Mike & Suzuki,
-> 
-> In our internal build, there is binary executable which can configure 
-> coresight source/sink.
-> Before running the case, it will disable all the sources and sinks by 
-> writing reset_source_sink node to
-> avoid any other source packet's impact.
+> Vblank can be really long, especially with VRR where the additional
+> time you get to finish the frame comes from making vblank longer.
+> Using the start of vblank as a deadline makes VRR useless.
 
-How does that justify this patch ? Your internal build depending on
-something is your code. It looks like there is more to these patches
-than what you are disclosing. e.g., with the dummy device series.
+Not really. We normally still want to aim for start of vblank with VRR, which would result in the maximum refresh rate. Missing that target just incurs less of a penalty than with fixed refresh rate.
 
-Please could you paint a complete picture and call out the dependencies
-/ requirements for what you are trying to achieve ?
 
-Kind regards
-Suzuki
-
-> 
-> 
-> Thanks
-> Jinlong Mao
-> 
->>
->> Thanks
->> Jinlong Mao
->>
->>>> Thanks
->>>> Jinlong Mao
->>>>
->>>>>
->>>
->>>
->> _______________________________________________
->> CoreSight mailing list -- coresight@lists.linaro.org
->> To unsubscribe send an email to coresight-leave@lists.linaro.org
+-- 
+Earthling Michel Dänzer            |                  https://redhat.com
+Libre software enthusiast          |         Mesa and Xwayland developer
 
