@@ -2,67 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 438806BF3D9
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 22:30:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79D4E6BF3E0
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 22:30:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229999AbjCQVaS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 17:30:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38840 "EHLO
+        id S230274AbjCQVad (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 17:30:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230078AbjCQVaP (ORCPT
+        with ESMTP id S230163AbjCQVa3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 17:30:15 -0400
-Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4255E34F49
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 14:29:26 -0700 (PDT)
-Received: by mail-qt1-f178.google.com with SMTP id c19so7134920qtn.13
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 14:29:26 -0700 (PDT)
+        Fri, 17 Mar 2023 17:30:29 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47E452F793;
+        Fri, 17 Mar 2023 14:30:18 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id z21so25473795edb.4;
+        Fri, 17 Mar 2023 14:30:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679088617;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=svSDOZGqlBpqSZHit5yPFayaIWAjSd1camlnzH3nrTQ=;
+        b=qBjj+LCXL5CTTsQjeYzBYKmGk2JhYuqNk8h6xWpIf1IjIO8QqgA7NL+XgzI5VSAhq6
+         +ESqetLdqoUO1N/V7cprhJuS4aMIcKzl8WyyAnCLi/OuHZ1sUTZ8h07C6DIRD4vFwX0Y
+         5e3YVxnm8HS9IBg+N5T3e09pqbNnMHT2/bwX+OBfukrU8PuulcNTemocib1jv8O3qk3J
+         3/nSSe7o6fFWVUFsBbI6oStAea9lmd962aGT7Y5SERvdxi1Ades20WQshTQUsZ6uNn8k
+         Xqo+Pl8izHzS6FsZCu9vNy1z7jXMPe96DaNLv1yUfB8oo5DuzmFZU2CUsZ6vMQrqZnQy
+         Dtxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679088565;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=74hpKbybG/zGoZI9G2CYpMbOVE4AuEECFGt5DlMCgIs=;
-        b=NNTAFY6l2Tjo5Ag7NMl0OaRV8etQNRA4dTa/UrsgYM10ceeCPXsT9j3uxqU1vFM8lj
-         YCwvmhJk67luPjqcRmizzwYSDNNfZrYl4ufgucywBR201Q4WRc7sEqp8l/N/kXwXQLU7
-         bkrC6iyLTDL7O4u0czFhNzFoTLz3D66dujRexL5iK/gGwMSfjYSbqPJdWoIjeWeQr+Bg
-         NPe6+2wauDxMrJtIWFlHerDAsju2WfUGVwOIQECxknZ9o0lG/JoD4+nSA/byo7Z9irHn
-         B2MlL/oEnrJLqOhbwuQdlbhPRScnKQ2F5ID1hfBI2N9VVv4LYLpGO4NJEiG+SMm8n7i7
-         A5BA==
-X-Gm-Message-State: AO0yUKVR+GxlaMyn00QAPoDP+sPf6f7PfU5b6GwwPLc6+RXtkeHS6VwV
-        oQtTlMvKiRIJxJCSqOxFgZ/IQpSpvqgnY+8hIQ5u
-X-Google-Smtp-Source: AK7set9ZLKSM6EiLDPWzjcge7jruT1aFdqM8FlQ+ab7okXXatbx/IBhdTJ9xFEiPkivpMASpdzXRwA==
-X-Received: by 2002:ac8:5e51:0:b0:3d6:88a0:7a5 with SMTP id i17-20020ac85e51000000b003d688a007a5mr15348985qtx.37.1679088565343;
-        Fri, 17 Mar 2023 14:29:25 -0700 (PDT)
-Received: from localhost (pool-68-160-166-30.bstnma.fios.verizon.net. [68.160.166.30])
-        by smtp.gmail.com with ESMTPSA id a72-20020ae9e84b000000b00745a3b63569sm2377074qkg.107.2023.03.17.14.29.24
+        d=1e100.net; s=20210112; t=1679088617;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=svSDOZGqlBpqSZHit5yPFayaIWAjSd1camlnzH3nrTQ=;
+        b=KQ2wOJ8vZhPwOs43KlEwvu64hKfnJxNQLjQNcDpkKGUEzBTxJk2BJcJZYXdWbkqNbN
+         adhlwFzQdp0/iTWeFhkFgthfZUEYWOeeJqmw+sXKoBM1r6swPVn6rWsXdGehU3JDEUVO
+         OH10fG/QPcVli/zjvba/UHD5Wcbo4Gtoy4C1PQwgJ4ndDDwkfvxvC8domZUoiiBESP68
+         1vNWItnHJmMDrE6olfUcyV+Kc9vVUAxhrAT6f8nZ4lqJpapaI4iake8lKL+Lm6XlgZj/
+         SCmkeo3UJOznWwBB35ZJOh2P2EvbPcZ+7zvoPByAyrSSvD9Yo8vcz89W7d3wj7pJsvGE
+         Hx0w==
+X-Gm-Message-State: AO0yUKVTuhHWJc3zcL3pTOIHgtQ0CwPqK2cDU1oopzEtBWoNpx7bBhFt
+        9aTTf/K2OwkrN5k1oAUJeNw=
+X-Google-Smtp-Source: AK7set/pQx743ufDsmhqP+LNcld2+2C21qsGT/HHcejhagzLMOTjwEqtBzNzdsTyK4LILTlswmXGfg==
+X-Received: by 2002:a17:906:118e:b0:92f:b290:78c with SMTP id n14-20020a170906118e00b0092fb290078cmr912511eja.21.1679088616596;
+        Fri, 17 Mar 2023 14:30:16 -0700 (PDT)
+Received: from arinc9-PC.lan ([149.91.1.15])
+        by smtp.gmail.com with ESMTPSA id v19-20020a17090651d300b0092b86d41dbasm1404683ejk.114.2023.03.17.14.30.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Mar 2023 14:29:24 -0700 (PDT)
-Date:   Fri, 17 Mar 2023 17:29:23 -0400
-From:   Mike Snitzer <snitzer@kernel.org>
-To:     Michael =?iso-8859-1?Q?Wei=DF?= 
-        <michael.weiss@aisec.fraunhofer.de>
-Cc:     Paul Moore <paul@paul-moore.com>,
-        Richard Guy Briggs <rgb@redhat.com>,
-        Mikulas Patocka <mpatocka@redhat.com>,
-        gyroidos@aisec.fraunhofer.de, Alasdair Kergon <agk@redhat.com>,
-        "maintainer:DEVICE-MAPPER (LVM)" <dm-devel@redhat.com>,
-        Eric Paris <eparis@redhat.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:AUDIT SUBSYSTEM" <audit@vger.kernel.org>
-Subject: Re: dm verity: log audit events for dm-verity target
-Message-ID: <ZBTbsx69kGXiKMIw@redhat.com>
-References: <20230301113415.47664-1-michael.weiss@aisec.fraunhofer.de>
- <CAHC9VhQ_zvTqck4A7HvqH2rcwxuato_9nVWMk_Yf=ip3q9omgA@mail.gmail.com>
- <1f58acef-1e93-ed7a-3ad8-dd0927dacddc@aisec.fraunhofer.de>
+        Fri, 17 Mar 2023 14:30:16 -0700 (PDT)
+From:   arinc9.unal@gmail.com
+X-Google-Original-From: arinc.unal@arinc9.com
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>,
+        William Dean <williamsukatube@gmail.com>,
+        Sean Wang <sean.wang@kernel.org>,
+        Andy Teng <andy.teng@mediatek.com>,
+        Del Regno <angelogioacchino.delregno@collabora.com>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Hui Liu <hui.liu@mediatek.com>,
+        Zhiyong Tao <zhiyong.tao@mediatek.com>,
+        =?UTF-8?q?Bernhard=20Rosenkr=C3=A4nzer?= <bero@baylibre.com>,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        Daniel Santos <daniel.santos@pobox.com>,
+        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>, erkin.bozoglu@xeront.com,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-mediatek@lists.infradead.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org
+Subject: [PATCH v3 00/21] pinctrl: ralink: fix ABI, improve driver, move to mediatek, improve dt-bindings
+Date:   Sat, 18 Mar 2023 00:29:50 +0300
+Message-Id: <20230317213011.13656-1-arinc.unal@arinc9.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <1f58acef-1e93-ed7a-3ad8-dd0927dacddc@aisec.fraunhofer.de>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE autolearn=no
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,69 +91,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 17 2023 at  4:00P -0400,
-Michael Weiß <michael.weiss@aisec.fraunhofer.de> wrote:
+This is an ambitious effort I've been wanting to do for months.
 
-> On 02.03.23 03:25, Paul Moore wrote:
-> > On Wed, Mar 1, 2023 at 6:34 AM Michael Weiß
-> > <michael.weiss@aisec.fraunhofer.de> wrote:
-> >>
-> >> dm-verity signals integrity violations by returning I/O errors
-> >> to user space. To identify integrity violations by a controlling
-> >> instance, the kernel audit subsystem can be used to emit audit
-> >> events to user space. Analogous to dm-integrity, we also use the
-> >> dm-audit submodule allowing to emit audit events on verification
-> >> failures of metadata and data blocks as well as if max corrupted
-> >> errors are reached.
-> >>
-> >> The construction and destruction of verity device mappings are
-> >> also relevant for auditing a system. Thus, those events are also
-> >> logged as audit events.
-> >>
-> >> We tested this by starting a container with the container manager
-> >> (cmld) of GyroidOS which uses a dm-verity protected rootfs image
-> >> root.img mapped to /dev/mapper/<uuid>-root. We than manipulated
-> >> one block in the underlying image file and reading it from the
-> >> protected mapper device again and again until we reach the max
-> >> corrupted errors like this:
-> >>
-> >>   dd if=/dev/urandom of=root.img bs=512 count=1 seek=1000
-> >>   for i in range {1..101}; do \
-> >>     dd if=/dev/mapper/<uuid>-root of=/dev/null bs=4096 \
-> >>        count=1 skip=1000 \
-> >>   done
-> >>
-> >> The resulting audit log looks as follows:
-> >>
-> >>   type=DM_CTRL msg=audit(1677618791.876:962):
-> >>     module=verity op=ctr ppid=4876 pid=29102 auid=0 uid=0 gid=0
-> >>     euid=0 suid=0 fsuid=0 egid=0 sgid=0 fsgid=0 tty=(none) ses=44
-> >>     comm="cmld" exe="/usr/sbin/cml/cmld" subj=unconfined
-> >>     dev=254:3 error_msg='success' res=1
-> >>
-> >>   type=DM_EVENT msg=audit(1677619463.786:1074): module=verity
-> >>     op=verify-data dev=7:0 sector=1000 res=0
-> >>   ...
-> >>   type=DM_EVENT msg=audit(1677619596.727:1162): module=verity
-> >>     op=verify-data dev=7:0 sector=1000 res=0
-> >>
-> >>   type=DM_EVENT msg=audit(1677619596.731:1163): module=verity
-> >>     op=max-corrupted-errors dev=254:3 sector=? res=0
-> >>
-> >> Signed-off-by: Michael Weiß <michael.weiss@aisec.fraunhofer.de>
-> >> ---
-> >>  drivers/md/dm-verity-target.c | 20 ++++++++++++++++++--
-> >>  1 file changed, 18 insertions(+), 2 deletions(-)
-> > 
-> > This looks reasonable to me from an audit perspective.
-> > 
-> > Acked-by: Paul Moore <paul@paul-moore.com>
-> 
-> Hi Mike, since Paul already gave his ack from audit perspective,
-> do you pick this up? Or is there anything which I can improve from device
-> mapper side?
+Straight off the bat, I'm fixing the ABI that I broke a while back, by
+reintroducing the ralink,rt2880-pinmux compatible string.
 
-Looks fine, but I haven't started a 6.4 branch yet. I'll pick this up
-from dm-devel's patchwork when I do.
+If you take a look at the schema for mt7620 and rt305x, some functions got
+multiple lists for groups. Like refclk on mt7620. Because mt7620 and
+mt7628/mt7688 SoCs use the same compatible string, it's impossible to
+differentiate on the binding which SoC a devicetree is actually for.
+Therefore, the binding will allow all groups listed for that function. For
+example, if the SoC is mt7620, only the refclk function for the mdio group
+can be used. If one were to put "spi cs1" as the function there, there
+wouldn't be a warning.
 
-Mike
+I address this by introducing new compatible strings for these SoCs, then
+split the schemas. I also separate mt7628/mt7688 from mt7620 pinctrl
+subdriver in the process.
+
+I wanted to split the rt305x driver too but too much code would be reused
+so I backed down from that.
+
+This platform from Ralink was acquired by MediaTek in 2011. Then, MediaTek
+introduced new SoCs which utilise this platform. We're moving the Ralink
+pinctrl driver to MediaTek, and rename the schemas for MediaTek SoCs to
+mediatek.
+
+I've renamed the ralink core driver to mtmips. I decided to call the core
+mtmips as I've seen folks from MediaTek use the same name when they added
+support for MT7621 pinctrl on U-Boot. Feel free to comment on this.
+
+Arınç
+
+v3:
+- Address Rob's indentation report.
+- Add Rob's reviewed-by.
+- Rebase to linusw/linux-pinctrl.git devel.
+
+v2:
+- Address Rob and Krzysztof's reviews, add Rob's acked-by.
+- More more cleanups, hooray!
+- Don't add new mediatek compatible strings, we don't do that here. RIP
+Chadwick Boseman.
+- Don't deprecate ralink,mt7620-pinctrl, we need it now.
+- More slight changes I can't currently remember to mention.
+
+RFC to v1:
+- Address Rob and Krzysztof's reviews, add Rob's acked-by.
+- More cleanups, hooray!
+- Keep ralink,rt2880-pinmux deprecated.
+- Deprecate ralink,mt7620-pinctrl. Another one bites the dust!
+- More slight changes I can't currently remember to mention.
+
+Arınç ÜNAL (21):
+  pinctrl: ralink: reintroduce ralink,rt2880-pinmux compatible string
+  pinctrl: ralink: rt305x: add new compatible string for every SoC
+  pinctrl: ralink: mt7620: split out to mt76x8
+  pinctrl: ralink: move to mediatek as mtmips
+  pinctrl: mediatek: remove OF_GPIO as reverse dependency
+  dt-bindings: pinctrl: ralink: move additionalProperties to top
+  dt-bindings: pinctrl: ralink: drop quotes from referred schemas
+  dt-bindings: pinctrl: ralink: add new compatible strings
+  dt-bindings: pinctrl: ralink: {mt7620,mt7621}: rename to mediatek
+  dt-bindings: pinctrl: mediatek: mt6795: rename to mediatek,mt6795-pinctrl
+  dt-bindings: pinctrl: mediatek: mt8186: rename to mediatek,mt8186-pinctrl
+  dt-bindings: pinctrl: mediatek: mt8192: rename to mediatek,mt8192-pinctrl
+  dt-bindings: pinctrl: mediatek: mt8195: rename to mediatek,mt8195-pinctrl
+  dt-bindings: pinctrl: mediatek: fix naming inconsistency
+  dt-bindings: pinctrl: {mediatek,ralink}: fix formatting
+  dt-bindings: pinctrl: mediatek: fix pinmux header location
+  dt-bindings: pinctrl: mediatek: drop quotes from referred schemas
+  dt-bindings: pinctrl: mediatek: mt7986: fix patternProperties regex
+  dt-bindings: pinctrl: ralink: rt305x: split binding
+  dt-bindings: pinctrl: mediatek: mt7620: split binding
+  MAINTAINERS: move ralink pinctrl to mediatek mips pinctrl
+
+ .../pinctrl/mediatek,mt65xx-pinctrl.yaml        |  32 +-
+ .../pinctrl/mediatek,mt6779-pinctrl.yaml        |  39 +-
+ ...mt6795.yaml => mediatek,mt6795-pinctrl.yaml} |  51 +--
+ .../pinctrl/mediatek,mt7620-pinctrl.yaml        | 298 ++++++++++++++
+ ...inctrl.yaml => mediatek,mt7621-pinctrl.yaml} |  17 +-
+ .../pinctrl/mediatek,mt7622-pinctrl.yaml        |  34 +-
+ ...inctrl.yaml => mediatek,mt76x8-pinctrl.yaml} | 252 ++----------
+ .../pinctrl/mediatek,mt7981-pinctrl.yaml        |  35 +-
+ .../pinctrl/mediatek,mt7986-pinctrl.yaml        |  80 ++--
+ .../pinctrl/mediatek,mt8183-pinctrl.yaml        |  32 +-
+ ...mt8186.yaml => mediatek,mt8186-pinctrl.yaml} |  55 ++-
+ .../pinctrl/mediatek,mt8188-pinctrl.yaml        |  80 ++--
+ ...mt8192.yaml => mediatek,mt8192-pinctrl.yaml} |  57 +--
+ ...mt8195.yaml => mediatek,mt8195-pinctrl.yaml} |  51 ++-
+ .../pinctrl/mediatek,mt8365-pinctrl.yaml        |  30 +-
+ .../bindings/pinctrl/ralink,rt2880-pinctrl.yaml |  11 +-
+ .../bindings/pinctrl/ralink,rt305x-pinctrl.yaml |  89 +----
+ .../bindings/pinctrl/ralink,rt3352-pinctrl.yaml | 243 ++++++++++++
+ .../bindings/pinctrl/ralink,rt3883-pinctrl.yaml |  11 +-
+ .../bindings/pinctrl/ralink,rt5350-pinctrl.yaml | 206 ++++++++++
+ MAINTAINERS                                     |  29 +-
+ drivers/pinctrl/Kconfig                         |   1 -
+ drivers/pinctrl/Makefile                        |   1 -
+ drivers/pinctrl/mediatek/Kconfig                |  54 ++-
+ drivers/pinctrl/mediatek/Makefile               |  63 +--
+ drivers/pinctrl/mediatek/pinctrl-mt7620.c       | 137 +++++++
+ .../{ralink => mediatek}/pinctrl-mt7621.c       |  31 +-
+ drivers/pinctrl/mediatek/pinctrl-mt76x8.c       | 283 ++++++++++++++
+ .../pinctrl-mtmips.c}                           |  90 ++---
+ .../pinctrl-mtmips.h}                           |  16 +-
+ .../{ralink => mediatek}/pinctrl-rt2880.c       |  21 +-
+ .../{ralink => mediatek}/pinctrl-rt305x.c       |  47 +--
+ .../{ralink => mediatek}/pinctrl-rt3883.c       |  29 +-
+ drivers/pinctrl/ralink/Kconfig                  |  35 --
+ drivers/pinctrl/ralink/Makefile                 |   8 -
+ drivers/pinctrl/ralink/pinctrl-mt7620.c         | 391 -------------------
+ 36 files changed, 1742 insertions(+), 1197 deletions(-)
+
+
