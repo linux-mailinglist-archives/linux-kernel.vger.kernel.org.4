@@ -2,167 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C57EF6BE133
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 07:26:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11B946BE145
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 07:30:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229780AbjCQG0x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 02:26:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33478 "EHLO
+        id S229934AbjCQGaf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 02:30:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbjCQG0w (ORCPT
+        with ESMTP id S229455AbjCQGae (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 02:26:52 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DE1C65475;
-        Thu, 16 Mar 2023 23:26:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679034406; x=1710570406;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=bL/PYAQu02/a6klSErCbC2EVB0viYzOA5B2PQDBINuM=;
-  b=ndLJM+yCK4/McL0xVQwz4mMWqWwtYccHOwa4Az0NlEkEzdh7aatta5sJ
-   itOaN3d7KjJPryxIl9IuLMr83gV452jlNODnx6XOn9LvkqUHOz925PA25
-   wB5sNPbF5tMpYnehRBFHwoIZq06aRIqGUg64s14R0RPxAYXWWeBHDeMZF
-   uqpfDPYGLnwhnrvVGVym6m49z86ZOz1u27HpSUuOMlcuOZH6l3g1kLF6F
-   KgrFFEjBDDPZyYZu4MItwCryA3HpUP4t8UCdRY3PcF+4q0FtsgQ4YQVWg
-   tk3JmzMUv3PxR0QOKqKFWR4xn4j2ULFSxwW9sA3fT2h3fy1n1/PSiKm2l
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="339732990"
-X-IronPort-AV: E=Sophos;i="5.98,268,1673942400"; 
-   d="scan'208";a="339732990"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 23:26:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="710399574"
-X-IronPort-AV: E=Sophos;i="5.98,268,1673942400"; 
-   d="scan'208";a="710399574"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.249.44.29])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 23:26:42 -0700
-Message-ID: <e7105cdd-3bc0-d4a8-52c3-36d95fcf3ad2@intel.com>
-Date:   Fri, 17 Mar 2023 08:26:38 +0200
+        Fri, 17 Mar 2023 02:30:34 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A7596773C;
+        Thu, 16 Mar 2023 23:30:33 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id ix20so4327860plb.3;
+        Thu, 16 Mar 2023 23:30:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679034632;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=QowYjOwpVeC+cmhtPU+4JUq/a+8cTteF1DVyYYSO1iY=;
+        b=l2WwTVnblFcR+NDGUILKqhkLSo/PPXRbUyCP3ps08M59W/rMYB33ormF3RBDGAs7WE
+         L3o95/WlF2oe9GVEtLGtmbXPobglas+d2YGJti8Kpg9N7n6B9sv74E/g33k2OQy3lFQP
+         9xfRxOZDwAibCIvDT7nKYUEXxxcUGpewRLGEfDY4mfW8rmjrrJMiS0MskiFU00C8Pc7j
+         TS0CQJ9hPdqVKoOb6OS5ZNtbo5X3skRjpif5GRgJU6MX+il0+OE6HtY+bR+RLb5o0t/8
+         Ee6MhertRAcox4n7aJxVGqrPsMKLiP8CGT5AqNeiyYiS4rrrOAjiC9oV+fvX6mpWfXym
+         rToQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679034632;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QowYjOwpVeC+cmhtPU+4JUq/a+8cTteF1DVyYYSO1iY=;
+        b=zN/X6w5t+SChee6wmbkf5+tPo953gVeHru/YzwGIUmTy9U0fVmsJdlOPUXrVM8Yif/
+         cXoJJ00aMDB37av4XQURs7KChfgIt6R47gdrGuxNavEAUpy+iiIE1Hc7WawvumMNxbZe
+         hg1UkyJisf+HxZyrgD/17Oi71f2R3X4hJgzyzyWtPkLkeZxBv/cqp4pk0LwTOO3ekgid
+         ZuBX1OEsm12+Y9UqQnqPlQNneymSNdLiA1gyYeME+7onerKoSJPVi5AOSAjPhb6MMG8x
+         Cy+NIwYpkii/lBNAaV2fhr1p2A+7xqyst1g9sa7F7qua/Xj45alrl+Tlk3XMeBco1Dr9
+         STQg==
+X-Gm-Message-State: AO0yUKXwXPI6/aBnNYFDjknb9BXKjeXPGmYghkCPbt1oSomsyqyAZx5H
+        +k09YqU/LNlyi3CZjYp8yms=
+X-Google-Smtp-Source: AK7set/jCr8RT3wJrihBeThKo6LPb99Ma+fIdEQqKEHJqXbq96VBfVdC2af3+6srNdH8FfiZFXd4QA==
+X-Received: by 2002:a17:903:2283:b0:19e:7c33:3722 with SMTP id b3-20020a170903228300b0019e7c333722mr7617579plh.40.1679034632455;
+        Thu, 16 Mar 2023 23:30:32 -0700 (PDT)
+Received: from [172.19.1.47] (60-250-192-107.hinet-ip.hinet.net. [60.250.192.107])
+        by smtp.gmail.com with ESMTPSA id j12-20020a17090276cc00b0019abb539cddsm753773plt.10.2023.03.16.23.30.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Mar 2023 23:30:32 -0700 (PDT)
+Message-ID: <1a1277ac-4ae5-eaab-01c3-0242c12be76b@gmail.com>
+Date:   Fri, 17 Mar 2023 14:30:28 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.9.0
-Subject: Re: [linus:master] [perf symbols] ce4c8e7966:
- perf-sanity-tests.Test_data_symbol.fail
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 00/15] Introduce Nuvoton ma35d1 SoC
 Content-Language: en-US
-To:     Yujie Liu <yujie.liu@intel.com>
-Cc:     oe-lkp@lists.linux.dev, lkp@intel.com,
-        linux-kernel@vger.kernel.org,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        linux-perf-users@vger.kernel.org
-References: <202303061424.6ad43294-yujie.liu@intel.com>
- <d62c6cc7-9f43-2c23-d9e2-1ddbd0f5234c@intel.com>
- <ZBK00bqcyl2lnG8W@yujie-X299>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <ZBK00bqcyl2lnG8W@yujie-X299>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+To:     Arnd Bergmann <arnd@arndb.de>, Rob Herring <robh+dt@kernel.org>,
+        krzysztof.kozlowski+dt@linaro.org, Lee Jones <lee@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+        schung@nuvoton.com, Jacky Huang <ychuang3@nuvoton.com>
+References: <20230315072902.9298-1-ychuang570808@gmail.com>
+ <f2699aa1-4d8a-48c0-b332-484db0b04252@app.fastmail.com>
+From:   Jacky Huang <ychuang570808@gmail.com>
+In-Reply-To: <f2699aa1-4d8a-48c0-b332-484db0b04252@app.fastmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/03/23 08:18, Yujie Liu wrote:
-> On Mon, Mar 06, 2023 at 03:20:09PM +0200, Adrian Hunter wrote:
->> On 6/03/23 08:30, kernel test robot wrote:
->>> Greeting,
->>>
->>> FYI, we sent a report when this commit was in linux-next/master:
->>>
->>> https://lore.kernel.org/all/202302092156.c0b14693-oliver.sang@intel.com/
->>>
->>> This commit has been merged to mainline and we still observe similar
->>> failures, so we report again FYI.
->>>
->>> We noticed perf-sanity-tests.Test_data_symbol.fail due to commit (built with gcc-11):
->>>
->>> commit: ce4c8e7966f317ef2af896778b5fa9105a5cd351 ("perf symbols: Get symbols for .plt.got for x86-64")
->>> https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git master
->>>
->>> [test failed on linux-next/master 1acf39ef8f1425cd105f630dc2c7c1d8fff27ed1]
->>>
->>> in testcase: perf-sanity-tests
->>> version: 
->>> with following parameters:
->>>
->>> 	perf_compiler: clang
->>>
->>> on test machine: 8 threads 1 sockets Intel(R) Core(TM) i7-7700 CPU @ 3.60GHz (Kaby Lake) with 32G memory
->>>
->>> caused below changes (please refer to attached dmesg/kmsg for entire log/backtrace):
->>>
->>>
->>> 2023-02-08 19:29:00 sudo /usr/src/perf_selftests-x86_64-rhel-8.3-func-ce4c8e7966f317ef2af896778b5fa91
->>> 05a5cd351/tools/perf/perf test 105
->>> 105: Test data symbol                                                : FAILED!
->>>
->>>
->>> =========================================================================================
->>> tbox_group/testcase/rootfs/kconfig/compiler/perf_compiler:
->>>   lkp-kbl-d01/perf-sanity-tests/debian-11.1-x86_64-20220510.cgz/x86_64-rhel-8.3-func/gcc-11/clang
->>>
->>> commit: 
->>>   51a188ad8c2d8 ("perf symbols: Start adding support for .plt.got for x86")
->>>   ce4c8e7966f31 ("perf symbols: Get symbols for .plt.got for x86-64")
->>>
->>> 51a188ad8c2d89c5 ce4c8e7966f317ef2af896778b5 
->>> ---------------- --------------------------- 
->>>        fail:runs  %reproduction    fail:runs
->>>            |             |             |    
->>>            :6           50%           3:6     perf-sanity-tests.Check_branch_stack_sampling.fail
->>>            :6          100%           6:6     perf-sanity-tests.Test_data_symbol.fail
->>>            :6           33%           2:6     perf-sanity-tests.perf_record_tests.fail
->>>
->>>
->>> If you fix the issue, kindly add following tag
->>> | Reported-by: kernel test robot <yujie.liu@intel.com>
->>> | Link: https://lore.kernel.org/oe-lkp/202303061424.6ad43294-yujie.liu@intel.com
->>>
->>>
->>> To reproduce:
->>>
->>>         git clone https://github.com/intel/lkp-tests.git
->>>         cd lkp-tests
->>>         sudo bin/lkp install job.yaml           # job file is attached in this email
->>>         bin/lkp split-job --compatible job.yaml # generate the yaml file for lkp run
->>>         sudo bin/lkp run generated-yaml-file
->>>
->>>         # if come across any failure that blocks the test,
->>>         # please remove ~/.lkp and /lkp dir to run from a clean state.
+
+
+On 2023/3/16 下午 10:05, Arnd Bergmann wrote:
+> On Wed, Mar 15, 2023, at 08:28, Jacky Huang wrote:
+>> From: Jacky Huang <ychuang3@nuvoton.com>
 >>
->> Works fine for me.  See below.
+>> This patchset adds initial support for the Nuvoton ma35d1 SoC, including
+>> initial device tree, clock driver, reset driver, and serial driver.
 >>
->> You will have to debug your environment:
->> Add option -v to perf test (e.g. perf test -c "data symbol") and
->> add 'set -x' to tools/perf/tests/shell/test_data_symbol.sh
-> 
-> Thanks for the suggestion on debugging our environment.
-> 
-> We found that we were asked by developers to run perf test with
-> sanitizer on, so we build perf with some additional flags like
-> `make EXTRA_CFLAGS="-fsanitize=undefined -fsanitize=address"`, and the
-> test_data_symbol failure only happens when these flags are set, but
-> won't happen if do a make without those flags.
-> 
-> Could you please help check if above flags could impact the behavior of
-> perf test? Thanks.
-> 
+>> This patchset cover letter is based from the initial support for Nuvoton
+>> ma35d1 to keep tracking the version history.
+>>
+>> This patchset had been applied to Linux kernel 6.3-rc2 and tested on the
+>> Nuvoton ma35d1 SOM evaluation board.
+>>
+>> (ma35d1 information:
+>> https://www.nuvoton.com/products/microprocessors/arm-cortex-a35-mpus/)
+>> MA35D1 porting on linux-5.10.y can be found at:
+>> https://github.com/OpenNuvoton/MPU-Family
+> Hi Jacky,
+>
+> Thanks a lot for your submission. I saw this presented at
+> EmbeddedWorld yesterday and asked about mainline Linux
+> support, but did not expect to see the patches this soon ;-)
+>
+> The easiest process for getting the series merged is to
+> have me add it the entire series to the SoC tree after the
+> individual drivers have been reviewed by the respective
+> subsystem maintainers that are already on Cc here. When
+> the review is complete, you can add soc@kernel.org to Cc,
+> so they show up in patchwork, or alternatively send a pull
+> request for a git tree to that address. Until then, you
+> can add my own email address to Cc so I can follow the
+> reviews.
+>
+> After the initial merge, the normal method for additional
+> device drivers is to have them sent for inclusion to the
+> subsystem maintainers. The soc tree and soc@kernel.org address
+> is then only used for changes in arch/arm64, i.e. updates
+> to the dts files, Kconfig, defconfig and MAINTAINERS,
+> as well as the drivers/soc and drivers/firmware directories,
+> if you have anything in there.
+>
+> If you have any additional questions about the process,
+> feel free to also ask me.
+>
+>       Arnd
 
-Thanks for the information.
+Hi Anrd,
 
-I sent 3 patches which should fix the test case:
+Thank you very much for your kind help. You explained it so well,
+I have understood the process. We got a lot of suggestions for this
+patchset, and there are a lot of issues to fix. When most of the
+problems get solved and acknowledged by the reviewers, I will
+add you and soc@kernel.org to Cc.
 
-https://lore.kernel.org/lkml/?q=%3C20230316194156.8320-1-adrian.hunter%40intel.com%3E
 
+Best regards,
+
+Jacky Huang
 
