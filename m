@@ -2,148 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEC886BE593
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 10:28:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3F516BE597
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 10:28:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231208AbjCQJ2M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 05:28:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40516 "EHLO
+        id S231158AbjCQJ2h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 05:28:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229809AbjCQJ2J (ORCPT
+        with ESMTP id S230247AbjCQJ2f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 05:28:09 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70E5FC48A4;
-        Fri, 17 Mar 2023 02:28:07 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id v21so4692353ple.9;
-        Fri, 17 Mar 2023 02:28:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679045287;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=u8LqT03HzqRZKjSDqL/i4TvoyMlrA9qMCZ206BpQZVo=;
-        b=UhjGNFXazzUo+jepNWB6YPAMrbmXmW0oEHBmFm1ZC81EcW29aOR4+oWetmBi7qdcrf
-         azA1y6bOZK6qdRinQ9Go5nTcMElTdlr4F28vYCvH94PGOa7sZde49n/nuNev5R3znB57
-         fusvjyyqjzdk4ua9i5b82o5n2TP34/ee9zHA1qMSATtUU3LV+zvJFWlR9tDncAaDpruA
-         HlK/kMqeXraybuK9R44jXpqnLh2m0ZzcRO29PbHqQParUziei/jXq4cK9H4f36llivmn
-         rEj+VwonwLlafwORogfKYb+BZMd5QbMeqzKact8ttl4J+mlXt4/FSov0TvJbf48p8jve
-         f0Yw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679045287;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=u8LqT03HzqRZKjSDqL/i4TvoyMlrA9qMCZ206BpQZVo=;
-        b=QZ/kkbqfHMhwqjZI3ED0Ml8Dh1ojB7YJt1TtGHfJNE64l170YVU3H0iQK1kIA/dMh4
-         Ba5wzlJvQPCieJ2FmLuQRd/zqB4xqTNes55IyNcJCdcKpTZMDUTLNPQ8lCZpGTe5KASg
-         FNlNjprutU8scQHTp6binxnWahwf+8SviuDwwyGQUlWcE2E8Mu0mZiSQk7Wqr0FM/99h
-         XaVgYTTWtao7ELODt1vxphaZD61o/8ur5WxR9VWLGrh9857wMrWI8rbfuBsVDC/v9zOk
-         wWxWNv1StUGxqQOoTei9V2USsq+7QQ2Tbc3HmymjA8VZsRwjYxRfL+YETNjKhQWteU35
-         EF2Q==
-X-Gm-Message-State: AO0yUKWq2PjoPeT9OoX+/UXJ//T7eF50tT8EuVXS8LTjOg9ErXdYX1Ki
-        Ix6YALuHU1KkPqdIe9KaQU0=
-X-Google-Smtp-Source: AK7set9eu22SCZQs8yUTVpmrhShMwDYwfOgvFcsCnNHkDvEyH1gZNPjiwGpJ20koMB6S6n7wtkNi/w==
-X-Received: by 2002:a17:902:d4cb:b0:19a:95ab:6b38 with SMTP id o11-20020a170902d4cb00b0019a95ab6b38mr8257544plg.1.1679045286859;
-        Fri, 17 Mar 2023 02:28:06 -0700 (PDT)
-Received: from [172.19.1.47] (60-250-192-107.hinet-ip.hinet.net. [60.250.192.107])
-        by smtp.gmail.com with ESMTPSA id s7-20020a170902988700b0019edd34dac9sm1121371plp.60.2023.03.17.02.28.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Mar 2023 02:28:06 -0700 (PDT)
-Message-ID: <d5e18ffd-426f-79de-d8cc-7ee10b3dc110@gmail.com>
-Date:   Fri, 17 Mar 2023 17:28:03 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 03/15] mfd: Add the header file of Nuvoton ma35d1 system
- manager
-Content-Language: en-US
-To:     Arnd Bergmann <arnd@arndb.de>, Rob Herring <robh+dt@kernel.org>,
-        krzysztof.kozlowski+dt@linaro.org, Lee Jones <lee@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        schung@nuvoton.com, Jacky Huang <ychuang3@nuvoton.com>
-References: <20230315072902.9298-1-ychuang570808@gmail.com>
- <20230315072902.9298-4-ychuang570808@gmail.com>
- <fa966844-2750-4951-9a40-ecc2653aab77@app.fastmail.com>
-From:   Jacky Huang <ychuang570808@gmail.com>
-In-Reply-To: <fa966844-2750-4951-9a40-ecc2653aab77@app.fastmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Fri, 17 Mar 2023 05:28:35 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B64CAB53D3
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 02:28:31 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 0DEC81FDDD;
+        Fri, 17 Mar 2023 09:28:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1679045310; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=AY0BdxrJCSfhvJj5wNPfk166AiZmXuO/LHgTRMzIqnw=;
+        b=NFwXGpZdVTQ52u92btZyIlkb5mENx2z6WeuQB3ad5ayq4titSp2m+fl/rM5W/gehqdiMzo
+        pQAm3F46SvsmlII6KRkE7BOok2zGqUPJdgrfwdc1DKGtnWC1lxoBwiDUccOcGl67akuq5O
+        K2TwpSmvG73ch/JNbwSbCOmup2DHxpg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1679045310;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=AY0BdxrJCSfhvJj5wNPfk166AiZmXuO/LHgTRMzIqnw=;
+        b=ec2A4BhzPAn4wym6AJC09LWq017rc6mxu2LGNDsMcPXn97DMb9qZeMK7aBXMmxgiZmIzVp
+        OSn8JgGNcm3b9rCw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E4A7E13428;
+        Fri, 17 Mar 2023 09:28:29 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id cZwuN70yFGS5UAAAMHmgww
+        (envelope-from <tiwai@suse.de>); Fri, 17 Mar 2023 09:28:29 +0000
+Date:   Fri, 17 Mar 2023 10:28:29 +0100
+Message-ID: <871qlnafr6.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] sound fixes for 6.3-rc3
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=ISO-8859-2
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Arnd,
+Linus,
 
-Thanks for your advice.
+please pull sound fixes for v6.3-rc3 from:
 
+  git://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git tags/sound-6.3-rc3
 
-On 2023/3/16 ä¸‹åˆ 10:44, Arnd Bergmann wrote:
-> On Wed, Mar 15, 2023, at 08:28, Jacky Huang wrote:
->> From: Jacky Huang <ychuang3@nuvoton.com>
->>
->> The system manager is a set of registers used for power control,
->> multi-function pin control, USB phy control, IP reset, and other
->> miscellaneous controls. It also contains some registers that
->> provide SoC information and status.
->>
->> Signed-off-by: Jacky Huang <ychuang3@nuvoton.com>
->> ---
->>   include/linux/mfd/ma35d1-sys.h | 95 ++++++++++++++++++++++++++++++++++
->>   1 file changed, 95 insertions(+)
->>   create mode 100644 include/linux/mfd/ma35d1-sys.h
->>
->> diff --git a/include/linux/mfd/ma35d1-sys.h b/include/linux/mfd/ma35d1-sys.h
->> new file mode 100644
->> index 000000000000..dcd85231125d
->> --- /dev/null
->> +++ b/include/linux/mfd/ma35d1-sys.h
->> +
->> +#define REG_SYS_PDID		(0x000) /* Product and Device Identifier */
->> +#define REG_SYS_PWRONOTP	(0x004) /* Power-on Setting OTP Source */
->> +#define REG_SYS_PWRONPIN	(0x008) /* Power-on Setting Pin Source */
->> +#define REG_SYS_RSTSTS		(0x010) /* Reset Source Active Status */
-> ...
->
-> It is a bit odd to have a header file in include/linux/mfd/
-> but only have the register numbers in there, and not an
-> actual drivers/mfd/ driver to go along with them.
->
-> I think what we often do is to just list the individual register
-> numbers in the drivers that need them and not have the central
-> header at all. On the other hand, I can see it's useful to
-> have this documented in one place, and we clearly don't want
-> to add a driver if none is needed.
->
-> Maybe Lee has a suggestion for how he'd like to handle this.
+The topmost commit is 98e5eb110095ec77cb6d775051d181edbf9cd3cf
 
-Agree with this.
-We will add #define of individual system control registers to the drivers
-that have to use them.
-So, I will remove this patch from the patchset in the next version.
+----------------------------------------------------------------
 
->> +void ma35d1_reg_lock(void);
->> +void ma35d1_reg_unlock(void);
-> These look like they were left over from an earlier version
-> of the code. Since you use the regmap framework, I think this
-> will take care of the locking for you.
->
->         Arnd
+sound fixes for 6.3-rc3
 
-Best regards,
+Nothing surprising, a collection of small device-specific fixes.
+The majority of changes are for ASoC Intel stuff, while a few other
+ASoC and HD-audio fixes are found.
 
-Jacky Huang
+----------------------------------------------------------------
 
+Amadeusz S³awiñski (3):
+      ASoC: Intel: avs: max98357a: Explicitly define codec format
+      ASoC: Intel: avs: da7219: Explicitly define codec format
+      ASoC: Intel: avs: rt5682: Explicitly define codec format
+
+Bard Liao (1):
+      ALSA: hda: intel-dsp-config: add MTL PCI id
+
+Bjorn Helgaas (1):
+      ALSA: hda: Match only Intel devices with CONTROLLER_IN_GPU()
+
+Cezary Rojewski (2):
+      ASoC: Intel: avs: ssm4567: Remove nau8825 bits
+      ASoC: Intel: avs: nau8825: Adjust clock control
+
+Emil Abildgaard Svendsen (1):
+      ASoC: hdmi-codec: only startup/shutdown on supported streams
+
+Guenter Roeck (1):
+      ASoC: da7219: Initialize jack_det_mutex
+
+Hamidreza H. Fard (1):
+      ALSA: hda/realtek: Fix the speaker output on Samsung Galaxy Book2 Pro
+
+Jaska Uimonen (1):
+      ASoC: SOF: ipc4-topology: set dmic dai index from copier
+
+Jeremy Szu (1):
+      ALSA: hda/realtek: fix speaker, mute/micmute LEDs not work on a HP platform
+
+Krzysztof Kozlowski (1):
+      ASoC: qcom: q6prm: fix incorrect clk_root passed to ADSP
+
+Kuninori Morimoto (2):
+      ALSA: asihpi: check pao in control_message()
+      ALSA: hda/ca0132: fixup buffer overrun at tuning_ctl_set()
+
+Luca Ceresoli (1):
+      ASoC: clarify that SND_SOC_IMX_SGTL5000 is the old driver
+
+Peter Ujfalusi (1):
+      ASoC: SOF: ipc3: Check for upper size limit for the received message
+
+Pierre-Louis Bossart (4):
+      ASoC: Intel: soc-acpi: fix copy-paste issue in topology names
+      ASoC: SOF: Intel: pci-tng: revert invalid bar size setting
+      ASoC: SOF: Intel: hda-ctrl: re-add sleep after entering and exiting reset
+      ASoC: SOF: sof-audio: don't squelch errors in WIDGET_SETUP phase
+
+Rander Wang (2):
+      ASoC: SOF: Intel: hda-dsp: harden D0i3 programming sequence
+      ASoC: SOF: IPC4: update gain ipc msg definition to align with fw
+
+Ranjani Sridharan (6):
+      ASoC: SOF: Intel: MTL: Fix the device description
+      ASoC: SOF: Intel: HDA: Fix device description
+      ASoC: SOF: Intel: SKL: Fix device description
+      ASOC: SOF: Intel: pci-tgl: Fix device description
+      ASoC: SOF: topology: Fix error handling in sof_widget_ready()
+      ASoC: SOF: sof-audio: Fix broken early bclk feature for SSP
+
+Ravulapati Vishnu Vardhan Rao (1):
+      ASoC: codecs: tx-macro: Fix for KASAN: slab-out-of-bounds
+
+Seppo Ingalsuo (1):
+      ASoC: SOF: ipc4-topology: Fix incorrect sample rate print unit
+
+---
+ sound/hda/intel-dsp-config.c                      |  9 ++++++
+ sound/pci/asihpi/hpi6205.c                        |  2 +-
+ sound/pci/hda/hda_intel.c                         |  5 ++--
+ sound/pci/hda/patch_ca0132.c                      |  4 ++-
+ sound/pci/hda/patch_realtek.c                     |  2 ++
+ sound/soc/codecs/da7219-aad.c                     |  2 ++
+ sound/soc/codecs/hdmi-codec.c                     | 11 ++++++++
+ sound/soc/codecs/lpass-tx-macro.c                 | 11 ++++----
+ sound/soc/fsl/Kconfig                             |  4 +++
+ sound/soc/intel/avs/boards/da7219.c               | 21 ++++++++++++++
+ sound/soc/intel/avs/boards/max98357a.c            | 22 +++++++++++++++
+ sound/soc/intel/avs/boards/nau8825.c              | 14 +++++-----
+ sound/soc/intel/avs/boards/rt5682.c               | 22 +++++++++++++++
+ sound/soc/intel/avs/boards/ssm4567.c              | 31 ---------------------
+ sound/soc/intel/common/soc-acpi-intel-adl-match.c |  2 +-
+ sound/soc/qcom/qdsp6/q6prm.c                      |  4 +--
+ sound/soc/sof/intel/hda-ctrl.c                    |  3 ++
+ sound/soc/sof/intel/hda-dsp.c                     | 12 ++++++++
+ sound/soc/sof/intel/pci-apl.c                     |  1 +
+ sound/soc/sof/intel/pci-cnl.c                     |  2 ++
+ sound/soc/sof/intel/pci-icl.c                     |  1 +
+ sound/soc/sof/intel/pci-mtl.c                     |  1 +
+ sound/soc/sof/intel/pci-skl.c                     |  2 ++
+ sound/soc/sof/intel/pci-tgl.c                     |  7 +++++
+ sound/soc/sof/intel/pci-tng.c                     |  6 +---
+ sound/soc/sof/ipc3-topology.c                     | 32 +++++++++++++++++++--
+ sound/soc/sof/ipc3.c                              |  5 ++--
+ sound/soc/sof/ipc4-control.c                      |  3 +-
+ sound/soc/sof/ipc4-topology.c                     | 21 ++++++++++----
+ sound/soc/sof/ipc4-topology.h                     |  8 ++++--
+ sound/soc/sof/sof-audio.c                         | 32 +++++++++++++++++----
+ sound/soc/sof/topology.c                          | 34 +++++++++++------------
+ 32 files changed, 246 insertions(+), 90 deletions(-)
 
