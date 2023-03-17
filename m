@@ -2,183 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9B6F6BF024
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 18:51:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCB4F6BF0CE
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 19:38:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229995AbjCQRvZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 13:51:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35426 "EHLO
+        id S230283AbjCQSiN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 14:38:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229900AbjCQRvT (ORCPT
+        with ESMTP id S230156AbjCQSiL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 13:51:19 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05CD1E501F
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 10:51:17 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id x11so4131603pja.5
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 10:51:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1679075476;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0r1WhvyKSBCJVCHAYDyDm94/mvsRvq4dBSf7I61xoxs=;
-        b=UBRYAWa0HLHlLIh4eOYDdiXjSbkgBB4MZb4Mq2Gnlmscik1Joax9SF47VL6Y38yV62
-         5WJzPjjlS7dcbf0MpfP7wKFbNGvCB52nxOljJWMjdRcpPuGr2NU993xreY7wp1sRmhMe
-         M6k+jXQ/2Paj5NEdkF39VTDAmrUuQL59IT9ao=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679075476;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0r1WhvyKSBCJVCHAYDyDm94/mvsRvq4dBSf7I61xoxs=;
-        b=p7WUsZ21STwHMlLXCXI3o4YGz5bdSQvPchPgZqpMw+m/FAud9AV4IgKuIOmLGVz4Qd
-         1mK+Q5kCUA2HYafzYUxDuvx85gZt27S8YCxkHST4f3ab3EKWY37N7IAPgOd8PmilZZrT
-         Gg9SA1SndYbXBFFi7+RFDAoZ7U+lvounQTlWZ+JS4EugzUWXiivtkkyrxbCdksbfjr9R
-         bkA4qLpEB/OI7u/sg7BK43fL1E5FuGq9SYSZHlbyqw1z/0NvICHM9VzmWicdvOhZjCw3
-         OZn1+AtYoUloPW6euGup12TaxOz4LkT7wVwkCztjpSOuHdMTShRKKyuHPMKU3l6M5e54
-         4bbQ==
-X-Gm-Message-State: AO0yUKXahspf+f6V9TP0cUCoFR5FdBnyXPpQT70CbTom1Kiv1u0aljyx
-        ohVyi4jfRWImfTiZnG1q2YYGnw==
-X-Google-Smtp-Source: AK7set/sQyoWYUEGFHlwyoIs+exsMbHe/kPJa4crxSUkdewCyt37oTeNx3BFtEY/Jq6XDcZaojzADw==
-X-Received: by 2002:a05:6a20:6699:b0:cd:832c:f9c6 with SMTP id o25-20020a056a20669900b000cd832cf9c6mr8447401pzh.1.1679075476474;
-        Fri, 17 Mar 2023 10:51:16 -0700 (PDT)
-Received: from grundler-glapstation.lan ([70.134.62.80])
-        by smtp.gmail.com with ESMTPSA id q20-20020a62e114000000b0061949fe3beasm1848113pfh.22.2023.03.17.10.51.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Mar 2023 10:51:16 -0700 (PDT)
-From:   Grant Grundler <grundler@chromium.org>
-To:     Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
-        "Oliver O \ 'Halloran" <oohall@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Cc:     Rajat Khandelwal <rajat.khandelwal@linux.intel.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Rajat Jain <rajatja@chromium.org>,
-        Grant Grundler <grundler@chromium.org>
-Subject: [PATCHv2 pci-next 2/2] PCI/AER: Rate limit the reporting of the correctable errors
-Date:   Fri, 17 Mar 2023 10:51:09 -0700
-Message-Id: <20230317175109.3859943-2-grundler@chromium.org>
-X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
-In-Reply-To: <20230317175109.3859943-1-grundler@chromium.org>
-References: <20230317175109.3859943-1-grundler@chromium.org>
+        Fri, 17 Mar 2023 14:38:11 -0400
+X-Greylist: delayed 2724 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 17 Mar 2023 11:38:01 PDT
+Received: from fallback22.i.mail.ru (fallback22.i.mail.ru [79.137.243.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5576521C5;
+        Fri, 17 Mar 2023 11:38:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mail.ru; s=mail4;
+        h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:Cc:To:From:From:Subject:Content-Type:Content-Transfer-Encoding:To:Cc; bh=o+1mU1q4gkL434JQCvQOjbVkDZrRwY9QYosc0X3le7g=;
+        t=1679078281;x=1679168281; 
+        b=drdjJJhub69D0KMZ28C9BChx3AaunuDptySW03cQKCcEpxL1GzqnJrKKldPiurjvgSLp+pv+ejw/DoELEjs4n5aTK3a4qlSr5H6OpAG0GEhaEjwJMsma2E/O+YcPYqFF8lDXpp4BK/8fqfGSqZwAP2imvHV2fh/FXauHSKBuhIIbYnNsbN2hGObsFQ1uEOB3kr8OlaYJ08XTh/swpfQBZxCuZuKj1G9ZUdsyjVZtG1X8WJGasVqLLHjtT4k+ApZf5lIu4rOmZfYgWIF7gf0sQ+WJddvYAesYNyKd8iGERZdZ2WQL0XfWa+xh37M1YmII8WmG8zcK+7at5ANmvpQ9Ig==;
+Received: from [10.12.4.13] (port=47206 helo=smtp38.i.mail.ru)
+        by fallback22.i.mail.ru with esmtp (envelope-from <listdansp@mail.ru>)
+        id 1pdEFl-002KB7-RX; Fri, 17 Mar 2023 20:52:34 +0300
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mail.ru; s=mail4;
+        h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:Cc:To:From:From:Subject:Content-Type:Content-Transfer-Encoding:To:Cc; bh=o+1mU1q4gkL434JQCvQOjbVkDZrRwY9QYosc0X3le7g=;
+        t=1679075553;x=1679165553; 
+        b=0Q52CoOVpZ1MPUZ8eia0aAgcrzz47B0qqx3/6W93Q5ml7OyBOfGb5TAMQnDpgpBKXm/bmwN4abYof6dPpGxMYZA2L9lSo1dJxu3ossPn9Awq830rtvUJ3ODtlq/51lunuOjIuk/mVnGiAvsJHVMrH0P1bToLdODHUTFrj+zEF946bMRmjkEjqJmh8iy7TZkaN7JriGaKBIn5fLbxKu6tQEdr7FVlbYN9FYr3D0GHty3ZlCoKRsG/EvtUNONTI1WeBjS40PCaBuzI50wlsaLU5aqjgxQaxvwoSP376zOUPt+CXH6JyrJwnVciTdVEwu0vnv74GJL9TWzczs/ge/KV3w==;
+Received: by smtp38.i.mail.ru with esmtpa (envelope-from <listdansp@mail.ru>)
+        id 1pdEFV-00FTFd-Ve; Fri, 17 Mar 2023 20:52:18 +0300
+From:   Danila Chernetsov <listdansp@mail.ru>
+To:     Kashyap Desai <kashyap.desai@broadcom.com>
+Cc:     Danila Chernetsov <listdansp@mail.ru>,
+        Sumit Saxena <sumit.saxena@broadcom.com>,
+        Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        megaraidlinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
+Subject: [PATCH] megaraid: fix mega_cmd_done CMDID_INT_CMDS
+Date:   Fri, 17 Mar 2023 17:51:09 +0000
+Message-Id: <20230317175109.18585-1-listdansp@mail.ru>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Mailru-Src: smtp
+X-7564579A: 646B95376F6C166E
+X-77F55803: 4F1203BC0FB41BD9303C7CA6F8B0D1AB3FDF257D500913EAB79CDFBE95766163182A05F5380850409F5C60878D86A282A9A3AF9403D21D97063C3F2E1D9CF7229FB7F584D1CE28B8
+X-7FA49CB5: FF5795518A3D127A4AD6D5ED66289B5278DA827A17800CE71EEA4C46C73542F4EA1F7E6F0F101C67BD4B6F7A4D31EC0BCC500DACC3FED6E28638F802B75D45FF8AA50765F7900637BFD6B3F1638522B88638F802B75D45FF36EB9D2243A4F8B5A6FCA7DBDB1FC311F39EFFDF887939037866D6147AF826D82644E96FABFBF3F94CD7AD57DCCBC6D06F9789CCF6C18C3F8528715B7D10C86878DA827A17800CE7E5E8FA3E51EEB5BC9FA2833FD35BB23D9E625A9149C048EE599709FD55CB46A6618001F51B5FD3F9D2E47CDBA5A96583BD4B6F7A4D31EC0BC014FD901B82EE079FA2833FD35BB23D27C277FBC8AE2E8B6D77D8F98F67F34EA471835C12D1D977C4224003CC836476EB9C4185024447017B076A6E789B0E975F5C1EE8F4F765FCAB6F2D16C1B8CE9D3AA81AA40904B5D9CF19DD082D7633A078D18283394535A93AA81AA40904B5D98AA50765F7900637E63F877465845756D81D268191BDAD3D3666184CF4C3C14F3FC91FA280E0CE3D1A620F70A64A45A98AA50765F79006372E808ACE2090B5E1725E5C173C3A84C3C5EA940A35A165FF2DBA43225CD8A89FD2A95C73FD1EFF45156CCFE7AF13BCA4B5C8C57E37DE458BEDA766A37F9254B7
+X-C1DE0DAB: 0D63561A33F958A5DD427AD2E4A9B1EA8AD849504D580BEB522FF0690FA735744EAF44D9B582CE87C8A4C02DF684249C2E763F503762DF505830FD47C92F6C63
+X-C8649E89: 4E36BF7865823D7055A7F0CF078B5EC49A30900B95165D348BE83DFD8AFB1CACEE02C8844339E1B4B202B0E0389BB5CAFABF101A5320A17EAB48BA705C6417941D7E09C32AA3244C8BCCE5772FEC1F5022DE84C2D1552F52A995755A1445935EED98077840A144B9
+X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu530nj6fImhcD4MUrOEAnl0W826KZ9Q+tr5ycPtXkTV4k65bRjmOUUP8cvGozZ33TWg5HZplvhhXbhDGzqmQDTd6OAevLeAnq3Ra9uf7zvY2zzsIhlcp/Y7m53TZgf2aB4JOg4gkr2biojBy9lRm6Il0sKqTyfoFU+Yg==
+X-Mailru-Sender: 4CE1109FD677D2770147F6A9E21DCA7B8F327498E8707629B1ACCDDC98EF4007976AF1CB91E6EA817E3C9C7AF06D9E7B78274A4A9E9E44FD3C3897ABF9FF211DE8284E426C7B2D9A5FEEDEB644C299C0ED14614B50AE0675
+X-Mras: Ok
+X-7564579A: 646B95376F6C166E
+X-77F55803: 6242723A09DB00B4754CEC505B6CD4089D2F09A1EB72CE4461CD78E14AA687EE049FFFDB7839CE9ED70DE35110CB393164F4B33B2FB038503FD78B7ED81EAB6C178A9E8AB591FB15
+X-7FA49CB5: 0D63561A33F958A59159B04F0CE15162DFB909C8CD758DBF3117ABA9CF772B58CACD7DF95DA8FC8BD5E8D9A59859A8B6B324FA1BA8AFA530
+X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu530nj6fImhcD4MUrOEAnl0W826KZ9Q+tr5xhPKz0ZEsZ5k6NOOPWz5QAiZSCXKGQRq3/7KxbCLSB2ESzQkaOXqCBFZPLWFrEGlV1shfWe2EVcxl5toh0c/aCGOghz/frdRhzMe95NxDFdx+85qy1Cr/QrN2mfjh5Ieg==
+X-Mailru-MI: C000000000000800
+X-Mras: Ok
+X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_VALIDITY_RPBL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
+When cmdid == CMDID_INT_CMDS, the 'cmds' pointer is NULL but is dereferenced below. 
 
-There are many instances where correctable errors tend to inundate
-the message buffer. We observe such instances during thunderbolt PCIe
-tunneling.
+Found by Linux Verification Center (linuxtesting.org) with SVACE.
 
-It's true that they are mitigated by the hardware and are non-fatal
-but we shouldn't be spamming the logs with such correctable errors as it
-confuses other kernel developers less familiar with PCI errors, support
-staff, and users who happen to look at the logs, hence rate limit them.
-
-A typical example log inside an HP TBT4 dock:
-[54912.661142] pcieport 0000:00:07.0: AER: Multiple Corrected error received: 0000:2b:00.0
-[54912.661194] igc 0000:2b:00.0: PCIe Bus Error: severity=Corrected, type=Data Link Layer, (Transmitter ID)
-[54912.661203] igc 0000:2b:00.0:   device [8086:5502] error status/mask=00001100/00002000
-[54912.661211] igc 0000:2b:00.0:    [ 8] Rollover
-[54912.661219] igc 0000:2b:00.0:    [12] Timeout
-[54982.838760] pcieport 0000:00:07.0: AER: Corrected error received: 0000:2b:00.0
-[54982.838798] igc 0000:2b:00.0: PCIe Bus Error: severity=Corrected, type=Data Link Layer, (Transmitter ID)
-[54982.838808] igc 0000:2b:00.0:   device [8086:5502] error status/mask=00001000/00002000
-[54982.838817] igc 0000:2b:00.0:    [12] Timeout
-
-This gets repeated continuously, thus inundating the buffer.
-
-Signed-off-by: Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
-Signed-off-by: Grant Grundler <grundler@chromium.org>
+Fixes: 0f2bb84d2a68 ("[SCSI] megaraid: simplify internal command handling")
+Signed-off-by: Danila Chernetsov <listdansp@mail.ru>
 ---
- drivers/pci/pcie/aer.c | 42 ++++++++++++++++++++++++++++--------------
- 1 file changed, 28 insertions(+), 14 deletions(-)
+ drivers/scsi/megaraid.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/pci/pcie/aer.c b/drivers/pci/pcie/aer.c
-index cb6b96233967..b592cea8bffe 100644
---- a/drivers/pci/pcie/aer.c
-+++ b/drivers/pci/pcie/aer.c
-@@ -706,8 +706,8 @@ static void __aer_print_error(struct pci_dev *dev,
- 			errmsg = "Unknown Error Bit";
+diff --git a/drivers/scsi/megaraid.c b/drivers/scsi/megaraid.c
+index bf491af9f0d6..16e2cf848c6e 100644
+--- a/drivers/scsi/megaraid.c
++++ b/drivers/scsi/megaraid.c
+@@ -1441,6 +1441,7 @@ mega_cmd_done(adapter_t *adapter, u8 completed[], int nstatus, int status)
+ 		 */
+ 		if (cmdid == CMDID_INT_CMDS) {
+ 			scb = &adapter->int_scb;
++			cmd = scb->cmd;
  
- 		if (info->severity == AER_CORRECTABLE)
--			pci_info(dev, "   [%2d] %-22s%s\n", i, errmsg,
--				info->first_error == i ? " (First)" : "");
-+			pci_info_ratelimited(dev, "   [%2d] %-22s%s\n", i, errmsg,
-+					     info->first_error == i ? " (First)" : "");
- 		else
- 			pci_err(dev, "   [%2d] %-22s%s\n", i, errmsg,
- 				info->first_error == i ? " (First)" : "");
-@@ -719,7 +719,6 @@ void aer_print_error(struct pci_dev *dev, struct aer_err_info *info)
- {
- 	int layer, agent;
- 	int id = ((dev->bus->number << 8) | dev->devfn);
--	const char *level;
- 
- 	if (!info->status) {
- 		pci_err(dev, "PCIe Bus Error: severity=%s, type=Inaccessible, (Unregistered Agent ID)\n",
-@@ -730,14 +729,21 @@ void aer_print_error(struct pci_dev *dev, struct aer_err_info *info)
- 	layer = AER_GET_LAYER_ERROR(info->severity, info->status);
- 	agent = AER_GET_AGENT(info->severity, info->status);
- 
--	level = (info->severity == AER_CORRECTABLE) ? KERN_INFO : KERN_ERR;
-+	if (info->severity == AER_CORRECTABLE) {
-+		pci_info_ratelimited(dev, "PCIe Bus Error: severity=%s, type=%s, (%s)\n",
-+				     aer_error_severity_string[info->severity],
-+				     aer_error_layer[layer], aer_agent_string[agent]);
- 
--	pci_printk(level, dev, "PCIe Bus Error: severity=%s, type=%s, (%s)\n",
--		   aer_error_severity_string[info->severity],
--		   aer_error_layer[layer], aer_agent_string[agent]);
-+		pci_info_ratelimited(dev, "  device [%04x:%04x] error status/mask=%08x/%08x\n",
-+				     dev->vendor, dev->device, info->status, info->mask);
-+	} else {
-+		pci_err(dev, "PCIe Bus Error: severity=%s, type=%s, (%s)\n",
-+			aer_error_severity_string[info->severity],
-+			aer_error_layer[layer], aer_agent_string[agent]);
- 
--	pci_printk(level, dev, "  device [%04x:%04x] error status/mask=%08x/%08x\n",
--		   dev->vendor, dev->device, info->status, info->mask);
-+		pci_err(dev, "  device [%04x:%04x] error status/mask=%08x/%08x\n",
-+			dev->vendor, dev->device, info->status, info->mask);
-+	}
- 
- 	__aer_print_error(dev, info);
- 
-@@ -757,11 +763,19 @@ static void aer_print_port_info(struct pci_dev *dev, struct aer_err_info *info)
- 	u8 bus = info->id >> 8;
- 	u8 devfn = info->id & 0xff;
- 
--	pci_info(dev, "%s%s error received: %04x:%02x:%02x.%d\n",
--		 info->multi_error_valid ? "Multiple " : "",
--		 aer_error_severity_string[info->severity],
--		 pci_domain_nr(dev->bus), bus, PCI_SLOT(devfn),
--		 PCI_FUNC(devfn));
-+	if (info->severity == AER_CORRECTABLE)
-+		pci_info_ratelimited(dev, "%s%s error received: %04x:%02x:%02x.%d\n",
-+				     info->multi_error_valid ? "Multiple " : "",
-+				     aer_error_severity_string[info->severity],
-+				     pci_domain_nr(dev->bus), bus, PCI_SLOT(devfn),
-+				     PCI_FUNC(devfn));
-+	else
-+		pci_info(dev, "%s%s error received: %04x:%02x:%02x.%d\n",
-+			 info->multi_error_valid ? "Multiple " : "",
-+			 aer_error_severity_string[info->severity],
-+			 pci_domain_nr(dev->bus), bus, PCI_SLOT(devfn),
-+			 PCI_FUNC(devfn));
-+
- }
- 
- #ifdef CONFIG_ACPI_APEI_PCIEAER
+ 			list_del_init(&scb->list);
+ 			scb->state = SCB_FREE;
 -- 
-2.40.0.rc1.284.g88254d51c5-goog
+2.25.1
 
