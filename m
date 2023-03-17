@@ -2,88 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A84BD6BEA49
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 14:40:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4BA36BEA5A
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 14:42:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229815AbjCQNkF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 09:40:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38094 "EHLO
+        id S230482AbjCQNmH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 09:42:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229634AbjCQNkC (ORCPT
+        with ESMTP id S230443AbjCQNmC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 09:40:02 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E5CAD7C1B
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 06:39:35 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id k25-20020a7bc419000000b003ed23114fa7so5135112wmi.4
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 06:39:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679060373;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=CIfDp3gROtXKGXMIKzWbXAPrNmngywTi0JGEAejv9Ec=;
-        b=KgVZec/idfHRzOWkDUQAv1fxhj6ksP5r2Vz1TcJ3E9/kHQ4hY9GmOivCfmTAPWCRv6
-         NxQnp/PtQ31A8ORadVoraKxFz8MjJL0tQ0Is+q5juZ+bIsTWWnxGfP/auIJXlpEd6Ua1
-         ZLPqmACUjwj5aaBko0Tbbi8EoA57sior9WgFJ377E3jKZEZP+rP647aYk+1CtCyc9TLc
-         ZCJxQ0EPSU5jOjKj9paatgOAxvDm+rcaCHDgD/tls8WHM6HNzGBZ8V9dYBsdvMMegys8
-         77IPAiDNlDM/Yh+cy917WV659x0SW5e67PYX3J7SrWJ8VnJTh/FSGa7UpW8+f0hqiNkP
-         q39w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679060373;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=CIfDp3gROtXKGXMIKzWbXAPrNmngywTi0JGEAejv9Ec=;
-        b=qFucFdInJ2r2TKpMUyRvhh3M52Zg3az0PAFPDRUwwqNTNcj1q0GPEbFGfukjl4RRYs
-         u0wxreGp+mFTEetBcyR//IaZuG4GFK6aXYGZI6wHrg80/oKubmKkiZRJL6+y152NH9uI
-         /QOEv7p8pUGNSf4VPcCwj4Qq+Rt81v22gptmRF1QPxCdLIfPzwYupgqNXj4ZWDQimo5X
-         5J3GHvGyVcqjVTgDR5+7qHzmV0vF9UtcVfB1ELMhrJU3vt15cl0mJiqUjDvsAR2CYYcu
-         Koc9YZiPL4wK57NtY5ZuNlPtUPIuyI/UYhMKGQWQX8Hr0QBd3pnU53r7BqFbClCZJajY
-         svNA==
-X-Gm-Message-State: AO0yUKWONgJjgwz9amniDjUe/olx83syGLFje3ej3r1vFq3giiikkskK
-        Sg+9soI75fRX3eiK6/vedTuSvg==
-X-Google-Smtp-Source: AK7set8n4tLd/fOIgy+lUbYezWgQq3v0dockgttAJ/suRbNcRR+7qidJtQKNAjh4p+RY/8tPQDlbbQ==
-X-Received: by 2002:a05:600c:1c1d:b0:3ea:edd7:1f1f with SMTP id j29-20020a05600c1c1d00b003eaedd71f1fmr24279049wms.40.1679060373534;
-        Fri, 17 Mar 2023 06:39:33 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:9ed5:bad0:e925:7938? ([2a01:e0a:982:cbb0:9ed5:bad0:e925:7938])
-        by smtp.gmail.com with ESMTPSA id c9-20020a5d4cc9000000b002d21379bcabsm1972144wrt.110.2023.03.17.06.39.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Mar 2023 06:39:33 -0700 (PDT)
-Message-ID: <9f7ffda5-8f7e-5b8a-15d9-4db60efdfb72@linaro.org>
-Date:   Fri, 17 Mar 2023 14:39:31 +0100
-MIME-Version: 1.0
+        Fri, 17 Mar 2023 09:42:02 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14B2D22A14;
+        Fri, 17 Mar 2023 06:41:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679060507; x=1710596507;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=rsxTSYN8Z3kV49J0f2KZNu9BMQhwu8dqJZHC7dBHsAk=;
+  b=FKXyPl28G0wZFh3X7iH4nfZCeXzNNUJB7IKd3SyNTRG68KAbk3ZWs+oV
+   sPfpt/2cmMwvrOkH6OTEzlXRDZf3x0GcO25PHMm/xaUa7wiLzR2pc3XcS
+   hD9jGnQfBsqvKp3vpypjnS4PxfffrjIpUdmVEftU3s2vvUdhG2YJQtk+g
+   2XWTyH9edIXxm7+FBHY5P8uZHvB6a60bg2Agjw4m3lXqA8t2jaPtTFsOV
+   L1nbhS5yNjxocblX+rXkHgVGhnPtfA0lyuqZKeQtth/5ALuaDmn4V76yG
+   waSpbbwPb3l+QL2wK5geMqyl1aGLZjl79Rw2cvYJoIQulD3lI/C0mgXw8
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="317916523"
+X-IronPort-AV: E=Sophos;i="5.98,268,1673942400"; 
+   d="scan'208";a="317916523"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2023 06:41:39 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="926142655"
+X-IronPort-AV: E=Sophos;i="5.98,268,1673942400"; 
+   d="scan'208";a="926142655"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by fmsmga006.fm.intel.com with ESMTP; 17 Mar 2023 06:41:39 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Fri, 17 Mar 2023 06:41:38 -0700
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Fri, 17 Mar 2023 06:41:38 -0700
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21 via Frontend Transport; Fri, 17 Mar 2023 06:41:38 -0700
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.100)
+ by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.21; Fri, 17 Mar 2023 06:41:37 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=eKvjyPCa2vXVMBWbxZiYclFvsdJYjKPk1/GRLjUdrw2SPgjmdRoIryN1SdLibJ8c++LGTualCaSmdtGSAqS7Wb0uhOFed+4n2UiUkvyRsAtDq8WqR6/sGP7Nc07cIWaaxdbY8bKldeQgR62C6UOAtpiHvv9uQCmPCgexqbJh/WjOT5Aq7OEptcx6aYT4lcBrekXpKYR3vV1dxe6ebwuRdR7G/KalnvXj/k7LwUOEKPKddR6HNK2k48gOYGWfDLyCu/GipVzRAqYw3lSMxJZLZD4AHTYrbrZ1Q8o3G1CYgOEpcue1/nJLY0RwGoVMmrCGb236mUnjA1ElKq/cJADEZg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Z1ZB1Acqxha4fKbwjGdoV1ZG/UPdr10CDgQRNQTYSNE=;
+ b=TrSb/b5263KzFi62FNAyhQO7HvLtPEn52qUAqDIsTc6lSAOD5fhAdbrcgArRVDo+tm0YteLTq8RsuLEvDXbSo4M4pvdgFIzEM60Y9y8FqIIYwbnztIg/WsGMskDZVFtrUaBEDwlt3IkM0YpE17PQjC5tLzq20lkQlswVi6dFD0D7Un+NpmakOPo5KIt1D00H1leEAghqmPx4Y92stI3qU9GnM8DH0DbT06irVQm4ScbsoIPXFFbaiHkPc72UiSkvNmrymsb2eTKpHAMRyGdtiRuL/Q6we3Q1T5Boaus23oN6skgS+xIC0EN+69I7t5Sqgjti2H+xW6pvn7jT2v8FUw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DM6PR11MB3625.namprd11.prod.outlook.com (2603:10b6:5:13a::21)
+ by BL1PR11MB5978.namprd11.prod.outlook.com (2603:10b6:208:385::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.24; Fri, 17 Mar
+ 2023 13:41:35 +0000
+Received: from DM6PR11MB3625.namprd11.prod.outlook.com
+ ([fe80::7911:de29:ded:224]) by DM6PR11MB3625.namprd11.prod.outlook.com
+ ([fe80::7911:de29:ded:224%5]) with mapi id 15.20.6178.035; Fri, 17 Mar 2023
+ 13:41:35 +0000
+Message-ID: <0a3933ee-17aa-c6fa-a493-89b96e1c01db@intel.com>
+Date:   Fri, 17 Mar 2023 14:40:23 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH v5 5/5] arm64: dts: qcom: sm8450: add dp controller
+Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: fix "metadata marker" getting
+ overwritten by the netstack
 Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230206-topic-sm8450-upstream-dp-controller-v5-0-a27f1b26ebe8@linaro.org>
- <20230206-topic-sm8450-upstream-dp-controller-v5-5-a27f1b26ebe8@linaro.org>
- <30b349bd-c083-ed17-1e20-c84e4b67d449@linaro.org>
-Organization: Linaro Developer Services
-In-Reply-To: <30b349bd-c083-ed17-1e20-c84e4b67d449@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Ilya Leoshkevich <iii@linux.ibm.com>
+CC:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Larysa Zaremba <larysa.zaremba@intel.com>,
+        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>,
+        Song Liu <song@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>, <bpf@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20230316175051.922550-1-aleksander.lobakin@intel.com>
+ <20230316175051.922550-3-aleksander.lobakin@intel.com>
+ <8f6bf3e51b5b56ac4cc93dc51456eec221eca559.camel@linux.ibm.com>
+From:   Alexander Lobakin <aleksander.lobakin@intel.com>
+In-Reply-To: <8f6bf3e51b5b56ac4cc93dc51456eec221eca559.camel@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+X-ClientProxiedBy: LO2P265CA0177.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:a::21) To DM6PR11MB3625.namprd11.prod.outlook.com
+ (2603:10b6:5:13a::21)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR11MB3625:EE_|BL1PR11MB5978:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6c7a5ff7-2c0a-4f9b-b982-08db26ed5344
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: WpwqPPZ29XIgtf0D99++jXyEwAMPnclHxBbtG/Jp5M1ZHxN7oT2K0V7BSbvAhzNP5KZU/XJYF5hU1ikrREOedzlCHZl7gTKuahmgVhMsZRiyO0FFPakDEPqS1q48UBwFeMKYJ6cS/klN72P3BuEgDogL+n02igZvCkSyYCa401d0q0f5OAJWf8RDdiFK9Al5WPdoNIHPKagn8EhsVRcJB5cMOqiy/OTf5n7TXdGhlhK1cCHPCHRxoE+XUtUvInfkqd3H8QwCOcI7bhYCll5QWZhVhl67veLabCixR08VVDmRD9CDgqTPcHoLN7PwPq1sI7Oy4UTguKo2xFSRQl+W1MSo/fh995dzBk7Dn3/fOQjdHIni6Pstgg18UH28dhjWbthK6aY8nNgy5RK/aFi/IsIHm4+/52s5ZSdd3BhPmxfHvX4CNq93IJZ/0kwI2dNPRLnvnqrnVLXuhljWrKo4heqCVimEQgMcm0hcHOvEvXKbshvyZPhiE+TLm9HpYayee+yjAgcMByaDXJrr/mIYA+gkMHugOP/GMShCKlkUYhHZxR/wJjn3PMkhN0SMaI452VGDK1tvA9LKFc5SqaD7qmXJeGtiN+BNjXQkp8y0af0ntHIM+Y1HIBCaBxLARiWavmo5Ex32/li9szP+us3FHxe5OWvqTliTHlm2PMD8EZas8dNqrA7RjkxwbyRneW2U6OxQIfhSVF4CKMlyRKvIm3Su5Uk/3TsONpugPYL6bAs=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB3625.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(376002)(396003)(346002)(136003)(366004)(39860400002)(451199018)(82960400001)(186003)(6512007)(6506007)(26005)(41300700001)(31686004)(38100700002)(66476007)(6666004)(8676002)(66946007)(8936002)(7416002)(4744005)(4326008)(5660300002)(66556008)(83380400001)(6916009)(2616005)(6486002)(316002)(54906003)(31696002)(36756003)(86362001)(2906002)(478600001)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RzlRSnIzK3FYUWJIL1c4MnIwNkpGRkF4Q0J4N2ppc1YrK3JSdFB4VS9sWFdk?=
+ =?utf-8?B?L1BISHpWUitEOURuV0NDc3JwWngrcGJNQ2tkUFhDaTZJenIwOUxERXJWNUQw?=
+ =?utf-8?B?M1ZhTi8vR3BRalhTSGVBaHo5RXdHMlFGU3cxblJqQkZ4dGtuREJROFpWczNM?=
+ =?utf-8?B?UG9LalRSSGlpSlVqdFp0MHlLZmdTMTlYaWp0RDcyQWFmT2swYUUvd1dRNEk5?=
+ =?utf-8?B?enVBQVU2SzZFbzdxVVR5cHBtVE5ISVQrS3YzS2lPZmZOOFZ4OTFwVFBIMFhX?=
+ =?utf-8?B?SThiUTlRUWJuODVPK3VUYzVaMXpMcXVDQ0ZDUytEcldGUnhyNmxQZ2poZ3p5?=
+ =?utf-8?B?WVdQUnM3N2dPQndxZnVMZmZRRzBwZVcrQ0NFRHFRZmNkNXVWSGhraXhQVGVu?=
+ =?utf-8?B?QnAvRVdrM3VFcmE3MkRiSi81SDhHTGlOY1JPdlZUL1JLZGduVUcvSjhtVlpT?=
+ =?utf-8?B?ZHZyQkhua3pTelZOWDNSVFlLY1I3UFZYaGRDTG03ZGo4ZW85bVBYelFDWjJa?=
+ =?utf-8?B?eit2VDhUd3dWbjBHT3o4blJjYXhWemNTa2M1b216NzR0SGF6Vkg0b3BYNEE3?=
+ =?utf-8?B?Z0MzaHFZVHRJc2tkWWtrMEZweWNUZlYrN05mOGVsT2wvZm9HSEg3WU1HVmpY?=
+ =?utf-8?B?TGxBL1lMUG5KcXBsNWtubjdFelorYUg3TFdUMzZ4U0FBdWloZFhVbnNHUTRL?=
+ =?utf-8?B?SEZudmUwZmJQZ1diRlQ4WTdXK3BHOXdUOTl1UGdaR0NLYmc5UWhiSUtENHhC?=
+ =?utf-8?B?c0ZQdVpKU3VlS0UzdzdSTnlqVmI0ZDVXeTgrL3FiQThEM0c5QzJJZFlFQzVn?=
+ =?utf-8?B?S1AzcmdSdmZmaUdLUFJwd0RNQ0FQUmdSaFNacW80SVpKTjdDY3QxUnZDYjZv?=
+ =?utf-8?B?eW15VnlUYUFuWVhGZmNTT3dtRmwvdCt0cGdTWnl3V2YwNUt4NWlsbFJsTEdn?=
+ =?utf-8?B?M1BNNnZneFFoeW9CQUlabGEzaGkyci8wd0pjQjRaNjVEL3NxK1VETXJZbFcr?=
+ =?utf-8?B?YlZQWWl1NjB2MGJ1QmY0T3FnSFVYYldHeUpwcnRkRXQwbDlmaC9KcFpFeDR1?=
+ =?utf-8?B?WFFmbnFGTDN0eWhsamtOV29rZ282SWU0YmRveGpFTEtlMG40d1V5azREekVk?=
+ =?utf-8?B?blhpWVB0MlFjTEN6N3R6eGU1cWtmMmd3eitNTElsQ2tIRkRqNk5tV21YQk9w?=
+ =?utf-8?B?RHJFVWtWUGVDei9XMlRsS3ZXSGJkSklCaG50a2pFeUE3ZEZjMjlRb0c1VXk5?=
+ =?utf-8?B?TmNZLzF6R3ZHM1M1L0hadElNQkZESVVyOVRrYXBtcG9TWHE5OG54dUN4UUYr?=
+ =?utf-8?B?NVJUc0tVdlk5eFlMYUZLWUJrQjR4cW5mMnRLUnJvSy95TUxhVWpYY1BOUFcw?=
+ =?utf-8?B?OWd3dGlZQTRHSzVSNmhDWEVlWnNHSjR2Sk1lTkNYZHdLb0lsYlJKaDVOZDY0?=
+ =?utf-8?B?L2ZaNmtMK0JoU0pLdXFQWjJkUU5ST3pIRG1nVWp0ekNKZnB5dW9kbVF3OEpH?=
+ =?utf-8?B?T2NRZWpzU3ZkVFVvZldPNkxwRGt3T0JnVGlHTkRISTd6T0pWN2RMNTFwazNT?=
+ =?utf-8?B?aUx0d0UyK0hDZFhnZ3JxbTlFYnFMUEVKMTZ5OFYzVTNWVDV5cWE0NjJYeW5D?=
+ =?utf-8?B?bG15L1diczZ3NGtFTnB4c0dHLzBtVG8wTE1IQXpGUjAwQlB5eWZtK2ZXNGdV?=
+ =?utf-8?B?VkJNUXVOV1gycm56VDZ2MHBnNmptVFBacThPRktsaXkxQjdhSE01ZUwyV2la?=
+ =?utf-8?B?RlFkNm9vSm1ha1U2ODUrOC9GZE9rOHRqNHNuVHFmV2ZZeDVDY0Rqc3dPbU05?=
+ =?utf-8?B?N2hmaHpyNE5Ndmtrb3JIQ3N3MkNXN0NzbGRKYXJHaTZHNDhXeVBVTXJNODV1?=
+ =?utf-8?B?VXVrT0UwaFI0aGV5eXplQTJKNTBwTlY1NnR0QldyUDZxMVBla3ZDOTZBYkhh?=
+ =?utf-8?B?ZjFGRVZjMGdkT0UwRFBKNy9OcG9pKy9EaEl4QWF3SHBNb2Rwd09HbGhhb1Er?=
+ =?utf-8?B?ZjNjLyswZGt2bHpwWC9GeXpoMWxCQ21FWFlaUStCK3lBd1IvekJ1cWhDWGFr?=
+ =?utf-8?B?SVNMdGlvN0g1Z1NOMVZNdEdGSFl6dFJwVk5rc2Z0S3h2MmtUek8yS05XVGFD?=
+ =?utf-8?B?RVdJdFZ6YTVkSEZ3RjliQjc0SFQzeXp0Z2R3Qm9hSUhJT0Fla3BWWVY3cmdo?=
+ =?utf-8?Q?0QJo1ZuwWu+Rylhwwb+VxaY=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6c7a5ff7-2c0a-4f9b-b982-08db26ed5344
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB3625.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Mar 2023 13:41:35.1830
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: J236y5LdKKsS5py+4KQfs0aFJxYiO1vs/8C72msRZAu2yMvTUF4yol3yBue3YoA0p1sPL9uxdS56FO+6JWVw4lXNpGQda3/O6LhQnQ/7QW8=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR11MB5978
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,120 +173,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/03/2023 13:19, Dmitry Baryshkov wrote:
-> On 17/03/2023 11:12, Neil Armstrong wrote:
->> Add the Display Port controller subnode to the MDSS node.
->>
->> Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
->> ---
->>   arch/arm64/boot/dts/qcom/sm8450.dtsi | 79 ++++++++++++++++++++++++++++++++++++
->>   1 file changed, 79 insertions(+)
->>
->> diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
->> index 0b5a151ce138..41f5015e615b 100644
->> --- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
->> +++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
->> @@ -2751,6 +2751,13 @@ dpu_intf2_out: endpoint {
->>                           };
->>                       };
->> +                    port@2 {
->> +                        reg = <2>;
->> +                        dpu_intf0_out: endpoint {
->> +                            remote-endpoint = <&mdss_dp0_in>;
->> +                        };
->> +                    };
->> +
->>                   };
->>                   mdp_opp_table: opp-table {
->> @@ -2783,6 +2790,78 @@ opp-500000000 {
->>                   };
->>               };
->> +            mdss_dp0: displayport-controller@ae90000 {
->> +                compatible = "qcom,sm8450-dp", "qcom,sm8350-dp";
->> +                reg = <0 0xae90000 0 0x200>,
->> +                      <0 0xae90200 0 0x200>,
->> +                      <0 0xae90400 0 0xc00>,
->> +                      <0 0xae91000 0 0x400>,
->> +                      <0 0xae91400 0 0x400>;
->> +                interrupt-parent = <&mdss>;
->> +                interrupts = <12>;
->> +                clocks = <&dispcc DISP_CC_MDSS_AHB_CLK>,
->> +                     <&dispcc DISP_CC_MDSS_DPTX0_AUX_CLK>,
->> +                     <&dispcc DISP_CC_MDSS_DPTX0_LINK_CLK>,
->> +                     <&dispcc DISP_CC_MDSS_DPTX0_LINK_INTF_CLK>,
->> +                     <&dispcc DISP_CC_MDSS_DPTX0_PIXEL0_CLK>;
->> +                clock-names = "core_iface",
->> +                          "core_aux",
->> +                          "ctrl_link",
->> +                                  "ctrl_link_iface",
->> +                          "stream_pixel";
->> +
->> +                assigned-clocks = <&dispcc DISP_CC_MDSS_DPTX0_LINK_CLK_SRC>,
->> +                          <&dispcc DISP_CC_MDSS_DPTX0_PIXEL0_CLK_SRC>;
->> +                assigned-clock-parents = <&usb_1_qmpphy QMP_USB43DP_DP_LINK_CLK>,
->> +                             <&usb_1_qmpphy QMP_USB43DP_DP_VCO_DIV_CLK>;
->> +
->> +                phys = <&usb_1_qmpphy QMP_USB43DP_DP_PHY>;
->> +                    phy-names = "dp";
->> +
->> +                    #sound-dai-cells = <0>;
->> +
->> +                operating-points-v2 = <&dp_opp_table>;
->> +                power-domains = <&rpmhpd SM8450_MMCX>;
->> +
->> +                status = "disabled";
->> +
->> +                ports {
->> +                    #address-cells = <1>;
->> +                    #size-cells = <0>;
->> +
->> +                    port@0 {
->> +                        reg = <0>;
->> +                        mdss_dp0_in: endpoint {
->> +                            remote-endpoint = <&dpu_intf0_out>;
->> +                        };
->> +                    };
->> +                };
->> +
->> +                dp_opp_table: opp-table {
->> +                    compatible = "operating-points-v2";
->> +
->> +                    opp-19200000 {
->> +                        opp-hz = /bits/ 64 <19200000>;
->> +                        required-opps = <&rpmhpd_opp_low_svs>;
->> +                    };
+From: Ilya Leoshkevich <iii@linux.ibm.com>
+Date: Thu, 16 Mar 2023 22:22:26 +0100
+
+> On Thu, 2023-03-16 at 18:50 +0100, Alexander Lobakin wrote:
+>> Alexei noticed xdp_do_redirect test on BPF CI started failing on
+>> BE systems after skb PP recycling was enabled:
+
+[...]
+
+>> @@ -52,7 +52,7 @@ int xdp_redirect(struct xdp_md *xdp)
+>>  
+>>         *payload = MARK_IN;
+>>  
+>> -       if (bpf_xdp_adjust_meta(xdp, 4))
+>> +       if (bpf_xdp_adjust_meta(xdp, sizeof(__u64)))
+>>                 return XDP_ABORTED;
+>>  
+>>         if (retcode > XDP_PASS)
 > 
-> Yes, the vendor kernel has 19.2 MHz as a frequency for the low_svs. However I don't think we should do it this way, we list DP rates here, so the lowest entry should be RBR, 160000000.
+> Tested-by: Ilya Leoshkevich <iii@linux.ibm.com>
 
-Ok so v4 for ok for both patches 3 & 5
+Much thanks again for the debugging and testing! It definitely wouldn't
+have been quick without you :D
 
-Will send v6 with those reverted
-
-Neil
-
-> 
->> +
->> +                    opp-270000000 {
->> +                        opp-hz = /bits/ 64 <270000000>;
->> +                        required-opps = <&rpmhpd_opp_svs>;
->> +                    };
->> +
->> +                    opp-540000000 {
->> +                        opp-hz = /bits/ 64 <540000000>;
->> +                        required-opps = <&rpmhpd_opp_svs_l1>;
->> +                    };
->> +
->> +                    opp-810000000 {
->> +                        opp-hz = /bits/ 64 <810000000>;
->> +                        required-opps = <&rpmhpd_opp_nom>;
->> +                    };
->> +                };
->> +            };
->> +
->>               mdss_dsi0: dsi@ae94000 {
->>                   compatible = "qcom,sm8450-dsi-ctrl", "qcom,mdss-dsi-ctrl";
->>                   reg = <0 0x0ae94000 0 0x400>;
->>
-> 
-
+Olek
