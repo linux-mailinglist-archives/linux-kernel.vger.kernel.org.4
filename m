@@ -2,95 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A15246BED15
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 16:34:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BC546BED19
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 16:37:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229533AbjCQPe0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 11:34:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41956 "EHLO
+        id S231451AbjCQPhd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 11:37:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231190AbjCQPeX (ORCPT
+        with ESMTP id S229659AbjCQPhI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 11:34:23 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8371DE1902;
-        Fri, 17 Mar 2023 08:33:43 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id eh3so21880263edb.11;
-        Fri, 17 Mar 2023 08:33:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679067222;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Vco4+qW5a0X8eRJOY0dcIZHS++IQaiyeogu6t5HV9oA=;
-        b=DdDYwHNsOPzQPMrbcOjApyE5k1OS/YtLNNbB9xqpqaHG3iSdoZrhxvZk7wp1pGDMb+
-         jVEJwR9Qrp03SfHNwaDc6mumK5S1eZnUDALoN1AkuYXOGrAgVCLNBq/soGLH/319ojZF
-         mYK5xwTjzXacmHFu/CizkKIa4LsWf8t92kayC9b9/wfXFtcpw2AZzKUz68PtoxNMTWNA
-         UuK6snX2A5zzBADF9TOfF6hKMCulrTZrYvIsjLWcShIC0v9OCX0gH7yajW7y+Q3tEEhk
-         YwDvnxdtugAeQeI25KY94o9oH6lB/jE6W4FyZooOpY3bMy2TN8SgbRj8b0VNLQvbZ46I
-         DV0g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679067222;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Vco4+qW5a0X8eRJOY0dcIZHS++IQaiyeogu6t5HV9oA=;
-        b=6SX+QOVYD3tvr9UatpSWk0EFndlnGx51Q4DFV5iUVPofwkUzYq3adxRh2m533Xjd6k
-         dUvkLi4ZGVRseRjpqeKFQMzyDj/JHmoPQK4PM7qkYS3SPMtxuKgWQEYpTkYqiZZXSX7j
-         wVwC2SK/6pH0/h2SJT6v4DUKuE8qgw4aRkdPFks312ghQjToIVF62CZTzKSoHkeKGB/g
-         jCRfAlJzP6eV6XupgW77TNdQG3EMHC2l/YO54fmSPgF0Q0UvnCYciqv4/pTMUvTiYFUu
-         XA/VKhGeWb8dcQWyzJnw/idcbZu/g1j6vbxz7+23fXM5LIYZe9W1lzKgYThQ14aqoE9x
-         Hfng==
-X-Gm-Message-State: AO0yUKUJrTgNOQLIbdVGvmxsn9buYFnj33CzxSX+L5gaS/ccZxPqQ23N
-        t3Nut/PbPx/PK5V05DcNMEuItvT0mbdv2w==
-X-Google-Smtp-Source: AK7set99hu91DP4G+H0AA/K7ZdG9n47atXoIszqKsP3ORQmKjXsItzSzOMC01Qdrc9aM22y7LyLtRA==
-X-Received: by 2002:a17:907:72d2:b0:930:af71:eae with SMTP id du18-20020a17090772d200b00930af710eaemr7859787ejc.66.1679067221787;
-        Fri, 17 Mar 2023 08:33:41 -0700 (PDT)
-Received: from skbuf ([188.27.184.189])
-        by smtp.gmail.com with ESMTPSA id k6-20020a17090632c600b00924d38bbdc0sm1102091ejk.105.2023.03.17.08.33.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Mar 2023 08:33:41 -0700 (PDT)
-Date:   Fri, 17 Mar 2023 17:33:39 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Klaus Kudielka <klaus.kudielka@gmail.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next v4 4/4] net: dsa: mv88e6xxx: mask apparently
- non-existing phys during probing
-Message-ID: <20230317153339.a73rkwgx56hn3ct5@skbuf>
-References: <20230315163846.3114-1-klaus.kudielka@gmail.com>
- <20230315163846.3114-5-klaus.kudielka@gmail.com>
+        Fri, 17 Mar 2023 11:37:08 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB8D053716;
+        Fri, 17 Mar 2023 08:36:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679067374; x=1710603374;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=JJhHmMEgTKijBL3qP7Bc1Wtdy27vQcYTHcBz2RcuKB8=;
+  b=KQNS4LTUKqVIXjovShBwPq3CrLwJUzH+U35Td6V6FtHXjWQjeJ6U/bk6
+   /4GISBhZiTgoNsYml3Xg0MvrgzenFLbhS8Jr1MZgVtMOJ8qPOfYa5Rsfm
+   1out38TZt1CM5jPLp1XDH5hX11oY+DuOOYcfpAfb+lDfrcQsyM7cSg6qX
+   chImrKiOwpr6gyoJJCj+uzh0rM5ztOQndC3P8O1pyVd9iwwoGty8zCjSI
+   jEw8lr7rvKEOQGuWNQkipcVv7Tcz4QRXFxKC5qC6VJ9B/nmmGB2sg0J5F
+   RWD0LIgmi8Nfr9rF8EQ9JxRC7FsHHt39m3ua3lM97FxvyDrbA9dMzHOSX
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="400864271"
+X-IronPort-AV: E=Sophos;i="5.98,268,1673942400"; 
+   d="scan'208";a="400864271"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2023 08:35:06 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="769392505"
+X-IronPort-AV: E=Sophos;i="5.98,268,1673942400"; 
+   d="scan'208";a="769392505"
+Received: from pczabans-mobl.ger.corp.intel.com (HELO box.shutemov.name) ([10.252.33.98])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2023 08:35:04 -0700
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 3A10E10D47D; Fri, 17 Mar 2023 18:35:02 +0300 (+03)
+From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Mel Gorman <mgorman@suse.de>, Vlastimil Babka <vbabka@suse.cz>,
+        David Hildenbrand <david@redhat.com>
+Cc:     linux-mm@kvack.org, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Subject: [PATCH] mm/page_alloc: Make deferred page init free pages in MAX_ORDER blocks
+Date:   Fri, 17 Mar 2023 18:35:01 +0300
+Message-Id: <20230317153501.19807-1-kirill.shutemov@linux.intel.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230315163846.3114-5-klaus.kudielka@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 15, 2023 at 05:38:46PM +0100, Klaus Kudielka wrote:
-> To avoid excessive mdio bus transactions during probing, mask all phy
-> addresses that do not exist (there is a 1:1 mapping between switch port
-> number and phy address).
-> 
-> Suggested-by: Andrew Lunn <andrew@lunn.ch>
-> Signed-off-by: Klaus Kudielka <klaus.kudielka@gmail.com>
-> Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-> ---
+Normal page init path frees pages during the boot in MAX_ORDER chunks,
+but deferred page init path does it in pageblock blocks.
 
-Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
+Change deferred page init path to work in MAX_ORDER blocks.
 
-Note that on Turris MOX, the PHYs are described in the device tree, so
-the MDIO bus is not auto-scanned and this patch has no effect, therefore
-I won't add my Tested-by tag here.
+For cases when pageblock is larger than MAX_ORDER, set migrate type to
+MIGRATE_MOVABLE for all pageblocks covered by the page.
+
+Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+---
+
+Note: the patch depends on the new definiton of MAX_ORDER.
+
+---
+ include/linux/mmzone.h |  2 ++
+ mm/page_alloc.c        | 19 ++++++++++---------
+ 2 files changed, 12 insertions(+), 9 deletions(-)
+
+diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
+index 96599cb9eb62..f53fe3a7ca45 100644
+--- a/include/linux/mmzone.h
++++ b/include/linux/mmzone.h
+@@ -32,6 +32,8 @@
+ #endif
+ #define MAX_ORDER_NR_PAGES (1 << MAX_ORDER)
+ 
++#define IS_MAX_ORDER_ALIGNED(pfn) IS_ALIGNED(pfn, MAX_ORDER_NR_PAGES)
++
+ /*
+  * PAGE_ALLOC_COSTLY_ORDER is the order at which allocations are deemed
+  * costly to service.  That is between allocation orders which should
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index 87d760236dba..fc02a243425d 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -1875,9 +1875,10 @@ static void __init deferred_free_range(unsigned long pfn,
+ 	page = pfn_to_page(pfn);
+ 
+ 	/* Free a large naturally-aligned chunk if possible */
+-	if (nr_pages == pageblock_nr_pages && pageblock_aligned(pfn)) {
+-		set_pageblock_migratetype(page, MIGRATE_MOVABLE);
+-		__free_pages_core(page, pageblock_order);
++	if (nr_pages == MAX_ORDER_NR_PAGES && IS_MAX_ORDER_ALIGNED(pfn)) {
++		for (i = 0; i < nr_pages; i += pageblock_nr_pages)
++			set_pageblock_migratetype(page + i, MIGRATE_MOVABLE);
++		__free_pages_core(page, MAX_ORDER);
+ 		return;
+ 	}
+ 
+@@ -1901,19 +1902,19 @@ static inline void __init pgdat_init_report_one_done(void)
+ /*
+  * Returns true if page needs to be initialized or freed to buddy allocator.
+  *
+- * We check if a current large page is valid by only checking the validity
++ * We check if a current MAX_ORDER block is valid by only checking the validity
+  * of the head pfn.
+  */
+ static inline bool __init deferred_pfn_valid(unsigned long pfn)
+ {
+-	if (pageblock_aligned(pfn) && !pfn_valid(pfn))
++	if (IS_MAX_ORDER_ALIGNED(pfn) && !pfn_valid(pfn))
+ 		return false;
+ 	return true;
+ }
+ 
+ /*
+  * Free pages to buddy allocator. Try to free aligned pages in
+- * pageblock_nr_pages sizes.
++ * MAX_ORDER_NR_PAGES sizes.
+  */
+ static void __init deferred_free_pages(unsigned long pfn,
+ 				       unsigned long end_pfn)
+@@ -1924,7 +1925,7 @@ static void __init deferred_free_pages(unsigned long pfn,
+ 		if (!deferred_pfn_valid(pfn)) {
+ 			deferred_free_range(pfn - nr_free, nr_free);
+ 			nr_free = 0;
+-		} else if (pageblock_aligned(pfn)) {
++		} else if (IS_MAX_ORDER_ALIGNED(pfn)) {
+ 			deferred_free_range(pfn - nr_free, nr_free);
+ 			nr_free = 1;
+ 		} else {
+@@ -1937,7 +1938,7 @@ static void __init deferred_free_pages(unsigned long pfn,
+ 
+ /*
+  * Initialize struct pages.  We minimize pfn page lookups and scheduler checks
+- * by performing it only once every pageblock_nr_pages.
++ * by performing it only once every MAX_ORDER_NR_PAGES.
+  * Return number of pages initialized.
+  */
+ static unsigned long  __init deferred_init_pages(struct zone *zone,
+@@ -1953,7 +1954,7 @@ static unsigned long  __init deferred_init_pages(struct zone *zone,
+ 		if (!deferred_pfn_valid(pfn)) {
+ 			page = NULL;
+ 			continue;
+-		} else if (!page || pageblock_aligned(pfn)) {
++		} else if (!page || IS_MAX_ORDER_ALIGNED(pfn)) {
+ 			page = pfn_to_page(pfn);
+ 		} else {
+ 			page++;
+-- 
+2.39.2
+
