@@ -2,72 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EC856BF2C6
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 21:38:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 869546BF2CA
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 21:39:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230174AbjCQUiX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 16:38:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48964 "EHLO
+        id S230220AbjCQUjB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 16:39:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbjCQUiV (ORCPT
+        with ESMTP id S230146AbjCQUi6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 16:38:21 -0400
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7A9DE1FCA
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 13:38:16 -0700 (PDT)
-Received: by mail-oi1-x231.google.com with SMTP id bh20so4699077oib.9
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 13:38:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679085496;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SiRvHTQSgz2sGcSTSQDgv3aXyZNisuXYRa3sxKRv48Y=;
-        b=noYwnuOKwWFBEAWH0wq1AdvXvo0lxwy+yu1fQsV7rQIPzMSyaxnzBDlyQxhC4v52Ct
-         yXtAe5qHKmzlFVyMg2MvEFUZ/in5sNDuzVPjvobe2cQE62L/zUXtgdG9/5dE98golwAz
-         Ed6z4X5fJrzBPJ92tZUmfPGZpMxFkxdUQn3yJLtTRhXkKIZI73bNql15Ard1aygScgz2
-         hkyTxS5hYGkMVbyo34mOVMwqwZXxoQZn1uAlYtJA8C4RMswGdbBrsnvGqU2wuoxXbDhG
-         oZuh9h0n4hPXDMqiJ6BIgFFltwVOeD84pfIPmMRcaNmpuio5cimIqvhzvcT6GeJgdDUp
-         NBSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679085496;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SiRvHTQSgz2sGcSTSQDgv3aXyZNisuXYRa3sxKRv48Y=;
-        b=VeRC4df7dJ7XxG0buGOFwpWSw6MpecLuheprdkUOs4vsHMomTN1ExYic9Np8R0VioR
-         o3YKHTndRMLuzlOPUaJ9JY/ipTRpTB5A6XGgIVD5KN1TuI253Tm/jWi75zy59RM/fEIm
-         2gogUIt4vZxmo0Q3kpcISj6Qf1/Ze+WJSPV9L8piHfrpRP1XEZyuvEltzl3ka7k0+Kin
-         2sHh5j7L0trgvU7T3OBeqQvINsvjwWOlE+3fHryjLlRV20Rch4pD/jXOtlIBa1OutjA8
-         Z3OrbisXyaj7WY7V0+zcQjTbMF4oJQrOekf+JXCly3ySpJoq7mD0IxS5VvTgeUdCv4uQ
-         NfJA==
-X-Gm-Message-State: AO0yUKV8kiGXG/Z4DRyjBGouajUk9pXjFGwYtPzReYaqM6nm1e1aImHJ
-        vfCSdmvK2aNip6wuCyHz4GPV41ZoLbeSs6JOLb8=
-X-Google-Smtp-Source: AK7set8f+RPp3l5ctUFTldzEQWJ2g1WSss80boStaRHFLdQ+ziQfn8ZgMwEGBd9VJfl8grT2a0sf3hJhAwAYLhNr0Zs=
-X-Received: by 2002:a05:6808:6384:b0:386:9c6c:ebc with SMTP id
- ec4-20020a056808638400b003869c6c0ebcmr3725311oib.3.1679085495886; Fri, 17 Mar
- 2023 13:38:15 -0700 (PDT)
+        Fri, 17 Mar 2023 16:38:58 -0400
+Received: from sender4-op-o10.zoho.com (sender4-op-o10.zoho.com [136.143.188.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16C9F2D6D;
+        Fri, 17 Mar 2023 13:38:55 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1679085506; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=Xw/JmgIpXeWcbao/wk4KwQ4Jquj/5Ho6qfNyIdO4Ur9aMayyP5TrN4EJzDccCEWYKoi4giSEwrW8C7YmlUOx5lLKRARF5SvcfAOUPlUqOtzkuvyJxE0ICjHeIj6/XOEN0YueD64oXSDgmxlcsfdP12Ve3Tut9SiH7UwHypfT2tI=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1679085506; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=WjIwrwxKeq5Ld9Ij9H2Gbwf8PRvgEpDh113K4y969wE=; 
+        b=LMni3nsGFnG2FVnh6j6xH22hvSZ6yIBCrpnLHfsA/dr1HxdNGBW3iVIQHTXhOVPzKYUuycLznExUjo8h5UKKTL/SF/44yWFqQpXVvYb5NDnuILezptc2szB91vBW92Xc0Q/ToflYp23Z/AovR6QALoXUAsa/VJTtN1VCOY34Cnc=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1679085506;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=WjIwrwxKeq5Ld9Ij9H2Gbwf8PRvgEpDh113K4y969wE=;
+        b=h2jZZs7IRiH7FdUfBugzOWe/DM0kpKGcr02Mcdb8/PX8HJ9rm3kNyMUqKb9N9t/b
+        oYooBgEjewh5KXrq5ufHqBSB8F1msv9f8aEqaMtg8Eu518AB6iU0gnkQrohkv1nRhQp
+        8vPyCEZaBehcCPGd5eKq36itLWJWYLFZ757aLLkI=
+Received: from [10.10.10.3] (149.91.1.15 [149.91.1.15]) by mx.zohomail.com
+        with SMTPS id 1679085504453905.0224911165027; Fri, 17 Mar 2023 13:38:24 -0700 (PDT)
+Message-ID: <022c66f3-75d4-5ab4-4a4d-e8260fd70904@arinc9.com>
+Date:   Fri, 17 Mar 2023 23:38:16 +0300
 MIME-Version: 1.0
-References: <20230317081718.2650744-1-lee@kernel.org> <20230317081718.2650744-30-lee@kernel.org>
-In-Reply-To: <20230317081718.2650744-30-lee@kernel.org>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Fri, 17 Mar 2023 16:38:04 -0400
-Message-ID: <CADnq5_PR+VHHELVqbVYjOoJA-u_2V=kZmbyk2E0LJ==QOwPnbw@mail.gmail.com>
-Subject: Re: [PATCH 29/37] drm/amd/display/dc/link/link_detection: Remove
- unused variable 'status'
-To:     Lee Jones <lee@kernel.org>
-Cc:     dri-devel@lists.freedesktop.org, Leo Li <sunpeng.li@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        Wenjing Liu <wenjing.liu@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v2 20/21] dt-bindings: pinctrl: mediatek: mt7620: split
+ binding
+To:     Rob Herring <robh@kernel.org>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        William Dean <williamsukatube@gmail.com>,
+        Sean Wang <sean.wang@kernel.org>,
+        Andy Teng <andy.teng@mediatek.com>,
+        Del Regno <angelogioacchino.delregno@collabora.com>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Hui Liu <hui.liu@mediatek.com>,
+        Zhiyong Tao <zhiyong.tao@mediatek.com>,
+        =?UTF-8?Q?Bernhard_Rosenkr=c3=a4nzer?= <bero@baylibre.com>,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        Daniel Santos <daniel.santos@pobox.com>,
+        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>, erkin.bozoglu@xeront.com,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-mediatek@lists.infradead.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org
+References: <20230313205921.35342-1-arinc.unal@arinc9.com>
+ <20230313205921.35342-21-arinc.unal@arinc9.com>
+ <20230317190331.GA2628708-robh@kernel.org>
+Content-Language: en-US
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+In-Reply-To: <20230317190331.GA2628708-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,61 +83,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Applied.  Thanks!
+On 17.03.2023 22:03, Rob Herring wrote:
+> On Mon, Mar 13, 2023 at 11:59:20PM +0300, arinc9.unal@gmail.com wrote:
+>> From: Arınç ÜNAL <arinc.unal@arinc9.com>
+>>
+>> The MT7628 and MT7688 SoCs contain different pin muxing information,
+>> therefore, should be split. This can be done now that there are compatible
+>> strings to distinguish them from other SoCs.
+>>
+>> Split the schema out to mediatek,mt76x8-pinctrl.yaml.
+>>
+>> Remove mediatek,mt76x8-pinctrl from mt7620.
+>>
+>> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+>> ---
+>>   .../pinctrl/mediatek,mt7620-pinctrl.yaml      | 379 +--------------
+>>   .../pinctrl/mediatek,mt76x8-pinctrl.yaml      | 450 ++++++++++++++++++
+>>   2 files changed, 459 insertions(+), 370 deletions(-)
+>>   create mode 100644 Documentation/devicetree/bindings/pinctrl/mediatek,mt76x8-pinctrl.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/pinctrl/mediatek,mt7620-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/mediatek,mt7620-pinctrl.yaml
+>> index 808dd8bd276f..591bc0664ec6 100644
+>> --- a/Documentation/devicetree/bindings/pinctrl/mediatek,mt7620-pinctrl.yaml
+>> +++ b/Documentation/devicetree/bindings/pinctrl/mediatek,mt7620-pinctrl.yaml
+>> @@ -11,15 +11,13 @@ maintainers:
+>>     - Sergio Paracuellos <sergio.paracuellos@gmail.com>
+>>   
+>>   description: |
+>> -  MediaTek MT7620 pin controller for MT7620, MT7628 and MT7688 SoCs.
+>> +  MediaTek MT7620 pin controller for MT7620 SoC.
+> 
+> Saying MT7620 twice is redundant. Otherwise,
+> 
+> Reviewed-by: Rob Herring <robh@kernel.org>
 
-On Fri, Mar 17, 2023 at 4:23=E2=80=AFAM Lee Jones <lee@kernel.org> wrote:
->
-> Fixes the following W=3D1 kernel build warning(s):
->
->  drivers/gpu/drm/amd/amdgpu/../display/dc/link/link_detection.c: In funct=
-ion =E2=80=98query_hdcp_capability=E2=80=99:
->  drivers/gpu/drm/amd/amdgpu/../display/dc/link/link_detection.c:501:42: w=
-arning: variable =E2=80=98status=E2=80=99 set but not used [-Wunused-but-se=
-t-variable]
->
-> Cc: Harry Wentland <harry.wentland@amd.com>
-> Cc: Leo Li <sunpeng.li@amd.com>
-> Cc: Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
-> Cc: Alex Deucher <alexander.deucher@amd.com>
-> Cc: "Christian K=C3=B6nig" <christian.koenig@amd.com>
-> Cc: "Pan, Xinhui" <Xinhui.Pan@amd.com>
-> Cc: David Airlie <airlied@gmail.com>
-> Cc: Daniel Vetter <daniel@ffwll.ch>
-> Cc: Wenjing Liu <wenjing.liu@amd.com>
-> Cc: amd-gfx@lists.freedesktop.org
-> Cc: dri-devel@lists.freedesktop.org
-> Signed-off-by: Lee Jones <lee@kernel.org>
-> ---
->  drivers/gpu/drm/amd/display/dc/link/link_detection.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
->
-> diff --git a/drivers/gpu/drm/amd/display/dc/link/link_detection.c b/drive=
-rs/gpu/drm/amd/display/dc/link/link_detection.c
-> index 9177b146a80a8..9a4cfa777622e 100644
-> --- a/drivers/gpu/drm/amd/display/dc/link/link_detection.c
-> +++ b/drivers/gpu/drm/amd/display/dc/link/link_detection.c
-> @@ -498,8 +498,6 @@ static void query_hdcp_capability(enum signal_type si=
-gnal, struct dc_link *link)
->         dc_process_hdcp_msg(signal, link, &msg22);
->
->         if (signal =3D=3D SIGNAL_TYPE_DISPLAY_PORT || signal =3D=3D SIGNA=
-L_TYPE_DISPLAY_PORT_MST) {
-> -               enum hdcp_message_status status =3D HDCP_MESSAGE_UNSUPPOR=
-TED;
-> -
->                 msg14.data =3D &link->hdcp_caps.bcaps.raw;
->                 msg14.length =3D sizeof(link->hdcp_caps.bcaps.raw);
->                 msg14.msg_id =3D HDCP_MESSAGE_ID_READ_BCAPS;
-> @@ -507,7 +505,7 @@ static void query_hdcp_capability(enum signal_type si=
-gnal, struct dc_link *link)
->                 msg14.link =3D HDCP_LINK_PRIMARY;
->                 msg14.max_retries =3D 5;
->
-> -               status =3D dc_process_hdcp_msg(signal, link, &msg14);
-> +               dc_process_hdcp_msg(signal, link, &msg14);
->         }
->
->  }
-> --
-> 2.40.0.rc1.284.g88254d51c5-goog
->
+It's not always a one to one relation so I'd rather explicitly point the 
+SoC out like on other schemas like MT7621. Thanks for reviewing!
+
+Arınç
