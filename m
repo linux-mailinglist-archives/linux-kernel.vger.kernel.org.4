@@ -2,74 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3A9E6BF4B9
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 22:55:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 171CB6BF4A9
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 22:54:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231448AbjCQVzW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 17:55:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60812 "EHLO
+        id S231240AbjCQVx0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 17:53:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231210AbjCQVzT (ORCPT
+        with ESMTP id S230452AbjCQVxW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 17:55:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2A47CC305;
-        Fri, 17 Mar 2023 14:54:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EFAF5B82738;
-        Fri, 17 Mar 2023 21:51:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id AB25DC433EF;
-        Fri, 17 Mar 2023 21:51:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679089917;
-        bh=wptaZDt3yDeZgxhc2CiH5c/QRbtFHU8GDlk+IC1MhJM=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=CGGChXUIduO1LnPfJ26lC7w2714GHqpwAQiDtTKrQWOuw769Q5H280vGWAeUrJYd9
-         JZ5N9b4xpAO1QFvDoR3saLi6Dp2tzJJyUDPxTBgaSC1AoBbLQ5QlUc774l6oIfr+B2
-         g/Yes0QkXDsXZbC6o8FH8+LFiFaYgzZ8oISdoF1Ui/h47xtYek3KzRNmcBvOceS0/Y
-         Kg8i6SV7B0Uma95rmbtt5gZD4D2Z1KDQXxlrYS13XqeYAoLW3xtB+4lPhLGIegdtzc
-         wQubY02VrU3LcjfCSdDCPPFR/uhkOsdF2b9CmhtHNlLbe37NxiLVcIlWyQQ5S2r1B9
-         CVT1/LRiIdGmA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 99692E66CBF;
-        Fri, 17 Mar 2023 21:51:57 +0000 (UTC)
-Subject: Re: [PULL] Networking for v6.3-rc3
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20230317053152.2232639-1-kuba@kernel.org>
-References: <20230317053152.2232639-1-kuba@kernel.org>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20230317053152.2232639-1-kuba@kernel.org>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git tags/net-6.3-rc3
-X-PR-Tracked-Commit-Id: 0c98b8bc48cf91bf8bdad123d6c07195341b0a81
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 90de546d9a0b3c771667af18bb3f80567eabb89b
-Message-Id: <167908991762.6577.12740367448486038411.pr-tracker-bot@kernel.org>
-Date:   Fri, 17 Mar 2023 21:51:57 +0000
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     torvalds@linux-foundation.org, kuba@kernel.org,
-        davem@davemloft.net, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, pabeni@redhat.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 17 Mar 2023 17:53:22 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76CF2D0E50;
+        Fri, 17 Mar 2023 14:53:00 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id lr16-20020a17090b4b9000b0023f187954acso6673032pjb.2;
+        Fri, 17 Mar 2023 14:53:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679089978;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=4poqTf05FiPQHsMRuHP+xbWISjWPqpxmI37fFELJAGs=;
+        b=ARGbcukXCyyo8jyVnWbuRYt/PGdiQXSlT3xZxNST4aeJvEf6CjBW3f9uVm4iAy/Okk
+         7wWpC4apGT+uEyGiBiTVZB/Jfv7nhEaSvrTztYZAgMcOg3GllNldv/wwrMXrli1G/x0Z
+         AUcKepLXGJOqPIyR1khQMONOTqI6f+0d86l1ssDBzAHWbeO3JTnn5shOa2E1sSZwFAok
+         iekn0QRh+Aqih5SQU6IXdSWzEOOSEtR+ve1ZLGWYn5CHzc1xph5Iupc7FOogPQfsSwOH
+         sp/cz3edsNFlmZFzYVXmwPRPQn29CyIpEFUH3wkzpeCFe3otvUB22GGbm0a3iHD6+165
+         g8sQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679089978;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4poqTf05FiPQHsMRuHP+xbWISjWPqpxmI37fFELJAGs=;
+        b=fhTgWzjEwu4KqmrgCNWzEOUmSYRvChjOOHlPUUCxOO3VrWIsln2vsQu5Bx2S4JYY8W
+         r9WClW+GGSLxghtP5RkjX0QGFuX3Dw6p7PBqhBYf+yxuJJ1zpARYvtwMRDtbD0E+OuZm
+         T4BFmrl0WTf9L9mpiP3h2jHjeBwoZPebXhER2KXiureZB7lEU7tQ69iZfJnXPK69HPdV
+         HJ4BgtlVzo7UVkeDwmQg7gcSqa/BwdrV+vK3FTBtU6/CbSd72bbYdHq6sjEG4aZ8oN1B
+         e+pXThUtH57zCl8xTLpjFQJcMa64CHCTV92eV6+7SjNVEtm7RRDy4PhIN3sot3+xTcFs
+         yK+w==
+X-Gm-Message-State: AO0yUKXAgkGMP+A+e3Q/zHZ0IOzWWQaQCxQ3hmfjJKvf0LD8tkRiC0pb
+        9cilK5Gb0aieuvDbL99IjZI=
+X-Google-Smtp-Source: AK7set/caK4qYFgs6zEDm+RZ2wHn9RMnd08MMGlpv81ljN3yUqSFSEDTg8AkDU/YU9Ddsqv4n4BeLw==
+X-Received: by 2002:a17:902:fa0b:b0:1a1:956e:5417 with SMTP id la11-20020a170902fa0b00b001a1956e5417mr5910746plb.22.1679089978238;
+        Fri, 17 Mar 2023 14:52:58 -0700 (PDT)
+Received: from localhost (ec2-54-67-115-33.us-west-1.compute.amazonaws.com. [54.67.115.33])
+        by smtp.gmail.com with ESMTPSA id p12-20020a1709028a8c00b001a198422025sm1990339plo.125.2023.03.17.14.52.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Mar 2023 14:52:57 -0700 (PDT)
+Date:   Fri, 17 Mar 2023 21:52:56 +0000
+From:   Bobby Eshleman <bobbyeshleman@gmail.com>
+To:     Arseniy Krasnov <avkrasnov@sberdevices.ru>
+Cc:     Stefan Hajnoczi <stefanha@redhat.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Bobby Eshleman <bobby.eshleman@bytedance.com>,
+        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@sberdevices.ru, oxffffaa@gmail.com
+Subject: Re: [RFC PATCH v1] virtio/vsock: allocate multiple skbuffs on tx
+Message-ID: <ZBThOG/nISvqbllq@bullseye>
+References: <2c52aa26-8181-d37a-bccd-a86bd3cbc6e1@sberdevices.ru>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2c52aa26-8181-d37a-bccd-a86bd3cbc6e1@sberdevices.ru>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Thu, 16 Mar 2023 22:31:52 -0700:
+On Fri, Mar 17, 2023 at 01:38:39PM +0300, Arseniy Krasnov wrote:
+> This adds small optimization for tx path: instead of allocating single
+> skbuff on every call to transport, allocate multiple skbuffs until
+> credit space allows, thus trying to send as much as possible data without
+> return to af_vsock.c.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git tags/net-6.3-rc3
+Hey Arseniy, I really like this optimization. I have a few
+questions/comments below.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/90de546d9a0b3c771667af18bb3f80567eabb89b
+> 
+> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+> ---
+>  net/vmw_vsock/virtio_transport_common.c | 45 +++++++++++++++++--------
+>  1 file changed, 31 insertions(+), 14 deletions(-)
+> 
+> diff --git a/net/vmw_vsock/virtio_transport_common.c b/net/vmw_vsock/virtio_transport_common.c
+> index 6564192e7f20..cda587196475 100644
+> --- a/net/vmw_vsock/virtio_transport_common.c
+> +++ b/net/vmw_vsock/virtio_transport_common.c
+> @@ -196,7 +196,8 @@ static int virtio_transport_send_pkt_info(struct vsock_sock *vsk,
+>  	const struct virtio_transport *t_ops;
+>  	struct virtio_vsock_sock *vvs;
+>  	u32 pkt_len = info->pkt_len;
+> -	struct sk_buff *skb;
+> +	u32 rest_len;
+> +	int ret;
+>  
+>  	info->type = virtio_transport_get_type(sk_vsock(vsk));
+>  
+> @@ -216,10 +217,6 @@ static int virtio_transport_send_pkt_info(struct vsock_sock *vsk,
+>  
+>  	vvs = vsk->trans;
+>  
+> -	/* we can send less than pkt_len bytes */
+> -	if (pkt_len > VIRTIO_VSOCK_MAX_PKT_BUF_SIZE)
+> -		pkt_len = VIRTIO_VSOCK_MAX_PKT_BUF_SIZE;
+> -
+>  	/* virtio_transport_get_credit might return less than pkt_len credit */
+>  	pkt_len = virtio_transport_get_credit(vvs, pkt_len);
+>  
+> @@ -227,17 +224,37 @@ static int virtio_transport_send_pkt_info(struct vsock_sock *vsk,
+>  	if (pkt_len == 0 && info->op == VIRTIO_VSOCK_OP_RW)
+>  		return pkt_len;
+>  
+> -	skb = virtio_transport_alloc_skb(info, pkt_len,
+> -					 src_cid, src_port,
+> -					 dst_cid, dst_port);
+> -	if (!skb) {
+> -		virtio_transport_put_credit(vvs, pkt_len);
+> -		return -ENOMEM;
+> -	}
+> +	rest_len = pkt_len;
+>  
+> -	virtio_transport_inc_tx_pkt(vvs, skb);
+> +	do {
+> +		struct sk_buff *skb;
+> +		size_t skb_len;
+> +
+> +		skb_len = min_t(u32, VIRTIO_VSOCK_MAX_PKT_BUF_SIZE, rest_len);
+> +
+> +		skb = virtio_transport_alloc_skb(info, skb_len,
+> +						 src_cid, src_port,
+> +						 dst_cid, dst_port);
+> +		if (!skb) {
+> +			ret = -ENOMEM;
+> +			goto out;
+> +		}
 
-Thank you!
+In this case, if a previous round of the loop succeeded with send_pkt(),
+I think that we may still want to return the number of bytes that have
+successfully been sent so far?
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+>  
+> -	return t_ops->send_pkt(skb);
+> +		virtio_transport_inc_tx_pkt(vvs, skb);
+> +
+> +		ret = t_ops->send_pkt(skb);
+> +
+> +		if (ret < 0)
+> +			goto out;
+
+Ditto here.
+
+> +
+> +		rest_len -= skb_len;
+> +	} while (rest_len);
+> +
+> +	return pkt_len;
+> +
+> +out:
+> +	virtio_transport_put_credit(vvs, rest_len);
+> +	return ret;
+>  }
+>  
+>  static bool virtio_transport_inc_rx_pkt(struct virtio_vsock_sock *vvs,
+> -- 
+> 2.25.1
