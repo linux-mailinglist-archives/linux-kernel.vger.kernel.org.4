@@ -2,144 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7958D6BE1F7
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 08:35:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E0ED6BE1D8
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 08:25:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229929AbjCQHfs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 03:35:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35268 "EHLO
+        id S229707AbjCQHZD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 03:25:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbjCQHfp (ORCPT
+        with ESMTP id S230203AbjCQHY7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 03:35:45 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03E3876A8;
-        Fri, 17 Mar 2023 00:35:43 -0700 (PDT)
-Received: from maxwell ([109.42.112.148]) by mrelayeu.kundenserver.de
- (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis) id
- 1MJn8J-1pxDxV14DR-00K6xA; Fri, 17 Mar 2023 08:28:28 +0100
-References: <20230316095306.721255-1-jh@henneberg-systemdesign.com>
- <20230316131503.738933-1-jh@henneberg-systemdesign.com>
- <ZBOhy02DFBlnIQR1@shell.armlinux.org.uk>
-User-agent: mu4e 1.8.14; emacs 28.2
-From:   Jochen Henneberg <jh@henneberg-systemdesign.com>
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     netdev@vger.kernel.org,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Wong Vee Khee <veekhee@apple.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Revanth Kumar Uppala <ruppala@nvidia.com>,
-        Andrey Konovalov <andrey.konovalov@linaro.org>,
-        Tan Tee Min <tee.min.tan@linux.intel.com>,
-        Voon Weifeng <weifeng.voon@intel.com>,
-        Mohammad Athari Bin Ismail <mohammad.athari.ismail@intel.com>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH net V2] net: stmmac: Fix for mismatched host/device DMA
- address width
-Date:   Fri, 17 Mar 2023 08:22:57 +0100
-In-reply-to: <ZBOhy02DFBlnIQR1@shell.armlinux.org.uk>
-Message-ID: <87edpng7l9.fsf@henneberg-systemdesign.com>
+        Fri, 17 Mar 2023 03:24:59 -0400
+Received: from out30-119.freemail.mail.aliyun.com (out30-119.freemail.mail.aliyun.com [115.124.30.119])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79F305CC0E;
+        Fri, 17 Mar 2023 00:24:56 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046060;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=22;SR=0;TI=SMTPD_---0Ve21xtP_1679037888;
+Received: from localhost.localdomain(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0Ve21xtP_1679037888)
+          by smtp.aliyun-inc.com;
+          Fri, 17 Mar 2023 15:24:51 +0800
+From:   Shuai Xue <xueshuai@linux.alibaba.com>
+To:     tony.luck@intel.com, naoya.horiguchi@nec.com
+Cc:     linux-acpi@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, xueshuai@linux.alibaba.com,
+        justin.he@arm.com, akpm@linux-foundation.org, ardb@kernel.org,
+        ashish.kalra@amd.com, baolin.wang@linux.alibaba.com, bp@alien8.de,
+        cuibixuan@linux.alibaba.com, dave.hansen@linux.intel.com,
+        james.morse@arm.com, jarkko@kernel.org, lenb@kernel.org,
+        linmiaohe@huawei.com, lvying6@huawei.com, rafael@kernel.org,
+        xiexiuqi@huawei.com, zhuo.song@linux.alibaba.com
+Subject: [PATCH v3 0/2] ACPI: APEI: handle synchronous exceptions with proper si_code
+Date:   Fri, 17 Mar 2023 15:24:41 +0800
+Message-Id: <20230317072443.3189-1-xueshuai@linux.alibaba.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221027042445.60108-1-xueshuai@linux.alibaba.com>
+References: <20221027042445.60108-1-xueshuai@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Provags-ID: V03:K1:5QIZD/zEoIlUl4J9g1YiRKLAvKnLDmfGku0rnPpP1GG1pOn9VFa
- gZ65HdQ0A+BnO6uOKrPi9+upVoPI97O/Vt5RPMeh+n9Yp7gDzxgJXLzIgNfbJoN0W+UT0+V
- g5vHPFtmWyMvG1ZqxHCzKb496+Q1ZfunoHrMGb8GRQla4ubIUed752mK8Q1uWvwhX6HNpJE
- Oo6tRW5cs3XaDQHjb2gzw==
-UI-OutboundReport: notjunk:1;M01:P0:iO4irr/xORg=;fdACBsCyznXGQO24QIlMEjR+Ivb
- 5M7ptgNSWPS3sCgBghotj4WccMMxp3AobAhwIPOJK82PtVl2AhAAy+9jHus5Hp1gK0mXJaHeT
- DAun+frkSqGnY4IpDOFezrIiJ5Z2vc25McOdt1/ez6MEgIUELG2PYgCdQITnqlS2ugZkI6AR0
- w7kno3PtcD6xT7sIz/yf1sNxQ2wFBL9SRugSWGMqhGErlM09TFUaEBRKBcukKXKK3Ajjinfex
- Daej7OhcHLiV7yqcBRZjJkK8X6ZiOIZw3772QxWfWFx4XhuhjtPRtxYwb0yIwYkV+sGjXVn5y
- 5g2eavxAoD4kH4ablQPpLjeW35v80Syfx5hJzvnviOl4zIB+fwvFBCvmRNwQ7CP7n5/QZlNO/
- /sKrR+yaJ1P4yVakQj2l5zuvS/TOGL4ewa+CeCu2Nwn+b0x6VQSrrHckWIk19UV7Z65bTmnI6
- F9USa3Lp9CFymBTd53BJkj9HS4ftdneptcqqcBv1CIpvReUyINx6xo2QddxI7TP4rB8GJdFzY
- gNHuYxVxPMamnpaeUGNsOJDhaWkVSu1apUYgvOSLMmNnXUDoZ1R1IZ5UYJXKfnqjPAHY5G+QL
- UCyEQ4A1qeWWUEYTAg28xbIQFLCulxBuGimQHfCOt8iFQslglKr/254S3jCBoffiyu4VGxyAt
- e/OZkfN/LZPvu2Yq2aCWOSIrpzf7Ipb7TskrVH30TQ==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,URIBL_BLOCKED,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+changes since v2 by addressing comments from Naoya:
+- rename mce_task_work to sync_task_work
+- drop ACPI_HEST_NOTIFY_MCE case in is_hest_sync_notify()
+- add steps to reproduce this problem in cover letter
+- Link: https://lore.kernel.org/lkml/1aa0ca90-d44c-aa99-1e2d-bd2ae610b088@linux.alibaba.com/T/#mb3dede6b7a6d189dc8de3cf9310071e38a192f8e
 
-"Russell King (Oracle)" <linux@armlinux.org.uk> writes:
+changes since v1:
+- synchronous events by notify type
+- Link: https://lore.kernel.org/lkml/20221206153354.92394-3-xueshuai@linux.alibaba.com/
 
-> On Thu, Mar 16, 2023 at 02:15:03PM +0100, Jochen Henneberg wrote:
->> Currently DMA address width is either read from a RO device register
->> or force set from the platform data. This breaks DMA when the host DMA
->> address width is <=32it but the device is >32bit.
->> 
->> Right now the driver may decide to use a 2nd DMA descriptor for
->> another buffer (happens in case of TSO xmit) assuming that 32bit
->> addressing is used due to platform configuration but the device will
->> still use both descriptor addresses as one address.
->> 
->> This can be observed with the Intel EHL platform driver that sets
->> 32bit for addr64 but the MAC reports 40bit. The TX queue gets stuck in
->> case of TCP with iptables NAT configuration on TSO packets.
->> 
->> The logic should be like this: Whatever we do on the host side (memory
->> allocation GFP flags) should happen with the host DMA width, whenever
->> we decide how to set addresses on the device registers we must use the
->> device DMA address width.
->> 
->> This patch renames the platform address width field from addr64 (term
->> used in device datasheet) to host_addr and uses this value exclusively
->> for host side operations while all chip operations consider the device
->> DMA width as read from the device register.
->> 
->> Fixes: 7cfc4486e7ea ("stmmac: intel: Configure EHL PSE0 GbE and PSE1 GbE to 32 bits DMA addressing")
->> Signed-off-by: Jochen Henneberg <jh@henneberg-systemdesign.com>
->> ---
->> V2: Fixes from checkpatch.pl for commit message
->> 
->>  drivers/net/ethernet/stmicro/stmmac/common.h  |  1 +
->>  .../net/ethernet/stmicro/stmmac/dwmac-imx.c   |  2 +-
->>  .../net/ethernet/stmicro/stmmac/dwmac-intel.c |  4 +--
->>  .../ethernet/stmicro/stmmac/dwmac-mediatek.c  |  2 +-
->>  .../net/ethernet/stmicro/stmmac/stmmac_main.c | 30 ++++++++++---------
->>  include/linux/stmmac.h                        |  2 +-
->>  6 files changed, 22 insertions(+), 19 deletions(-)
->> 
->> diff --git a/drivers/net/ethernet/stmicro/stmmac/common.h b/drivers/net/ethernet/stmicro/stmmac/common.h
->> index 6b5d96bced47..55a728b1b708 100644
->> --- a/drivers/net/ethernet/stmicro/stmmac/common.h
->> +++ b/drivers/net/ethernet/stmicro/stmmac/common.h
->> @@ -418,6 +418,7 @@ struct dma_features {
->>  	unsigned int frpbs;
->>  	unsigned int frpes;
->>  	unsigned int addr64;
->> +	unsigned int host_addr;
->
-> Obvious question: is host_addr an address? From the above description it
-> sounds like this is more of a host address width indicator.
->
-> Maybe call these "dev_addr_width" and "host_addr_width" so it's clear
-> what each of these are?
+Currently, both synchronous and asynchronous error are queued and handled
+by a dedicated kthread in workqueue. And Memory failure for synchronous
+error is synced by a cancel_work_sync trick which ensures that the
+corrupted page is unmapped and poisoned. And after returning to user-space,
+the task starts at current instruction which triggering a page fault in
+which kernel will send SIGBUS to current process due to VM_FAULT_HWPOISON.
 
-You are right. I chose the name because the original field was called
-addr64 which follows the naming from the chip specification. I will
-switch to host_dma_width which makes it more clear that it's a DMA
-address width. For both the platform field as well as the driver's
-private data.
+However, the memory failure recovery for hwpoison-aware mechanisms does not
+work as expected. For example, hwpoison-aware user-space processes like
+QEMU register their customized SIGBUS handler and enable early kill mode by
+seting PF_MCE_EARLY at initialization. Then the kernel will directy notify
+the process by sending a SIGBUS signal in memory failure with wrong
+si_code: BUS_MCEERR_AO si_code to the actual user-space process instead of
+BUS_MCEERR_AR.
+
+To address this problem:
+
+- PATCH 1 sets mf_flags as MF_ACTION_REQUIRED on synchronous events which
+  indicates error happened in current execution context
+- PATCH 2 separates synchronous error handling into task work so that the
+  current context in memory failure is exactly belongs to the task
+  consuming poison data.
+
+Then, kernel will send SIGBUS with proper si_code in kill_proc().
+
+Lv Ying and XiuQi also proposed to address similar problem and we discussed
+about new solution to add a new flag(acpi_hest_generic_data::flags bit 8) to
+distinguish synchronous event. [2][3] The UEFI community still has no response.
+After a deep dive into the SDEI TRM, the SDEI notification should be used for
+asynchronous error. As SDEI TRM[1] describes "the dispatcher can simulate an
+exception-like entry into the client, **with the client providing an additional
+asynchronous entry point similar to an interrupt entry point**". The client
+(kernel) lacks complete synchronous context, e.g. systeam register (ELR, ESR,
+etc). So notify type is enough to distinguish synchronous event.
+
+To reproduce this problem:
+
+	# STEP1: enable early kill mode
+	#sysctl -w vm.memory_failure_early_kill=1
+	vm.memory_failure_early_kill = 1
+
+	# STEP2: inject an UCE error and consume it to trigger a synchronous error
+	#einj_mem_uc single
+	0: single   vaddr = 0xffffb0d75400 paddr = 4092d55b400
+	injecting ...
+	triggering ...
+	signal 7 code 5 addr 0xffffb0d75000
+	page not present
+	Test passed
+
+The si_code (code 5) from einj_mem_uc indicates that it is BUS_MCEERR_AO error
+and it is not fact.
+
+After this patch set:
+
+	# STEP1: enable early kill mode
+	#sysctl -w vm.memory_failure_early_kill=1
+	vm.memory_failure_early_kill = 1
+
+	# STEP2: inject an UCE error and consume it to trigger a synchronous error
+	#einj_mem_uc single
+	0: single   vaddr = 0xffffb0d75400 paddr = 4092d55b400
+	injecting ...
+	triggering ...
+	signal 7 code 4 addr 0xffffb0d75000
+	page not present
+	Test passed
+
+The si_code (code 4) from einj_mem_uc indicates that it is BUS_MCEERR_AR error
+as we expected.
+
+[1] https://developer.arm.com/documentation/den0054/latest/
+[2] https://lore.kernel.org/linux-arm-kernel/20221205160043.57465-4-xiexiuqi@huawei.com/T/
+[3] https://lore.kernel.org/lkml/20221209095407.383211-1-lvying6@huawei.com/
+
+Shuai Xue (2):
+  ACPI: APEI: set memory failure flags as MF_ACTION_REQUIRED on
+    synchronous events
+  ACPI: APEI: handle synchronous exceptions in task work
+
+ drivers/acpi/apei/ghes.c | 135 ++++++++++++++++++++++++---------------
+ include/acpi/ghes.h      |   3 -
+ mm/memory-failure.c      |  13 ----
+ 3 files changed, 83 insertions(+), 68 deletions(-)
+
+-- 
+2.20.1.12.g72788fdb
+
