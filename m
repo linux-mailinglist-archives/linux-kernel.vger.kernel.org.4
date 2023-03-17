@@ -2,124 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CDC86BF3A3
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 22:13:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39F966BF3AA
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 22:14:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230214AbjCQVNH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 17:13:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43276 "EHLO
+        id S230241AbjCQVOa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 17:14:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229680AbjCQVNE (ORCPT
+        with ESMTP id S229868AbjCQVO1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 17:13:04 -0400
-Received: from mail-il1-f170.google.com (mail-il1-f170.google.com [209.85.166.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E4D6F951;
-        Fri, 17 Mar 2023 14:13:03 -0700 (PDT)
-Received: by mail-il1-f170.google.com with SMTP id h7so3423373ila.5;
-        Fri, 17 Mar 2023 14:13:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679087583;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0cLT9nvbyGDO+rZS3qLUAHKtUfaXz4dTYvgAZ9mY5+E=;
-        b=NpWMh+H/TD2usHQijYSLrbgfH08F/dXQAukjeJk8X3pFC3/OOoyaeJqDGolc4GsFdD
-         sX3tFXazEBEGNvrksvkPxxrrE/YmQPhKdhI1rUiuX5QiqT1GMKBoLwPe74jLuI0Tgsgl
-         mViVoGLWjhM1SJsAxotvIUK/bfmMQD4Jj1eJ5fquCfZMa93wqJxlQsv3Wv2agSu7Oiik
-         D47JBbCZkF1QowdIAp5dm436H1wptG5fYqy8DS5ODZfzF+NtLRqzBVeDAHpGWt/T4gAk
-         u4oqvFZ0mNY6YfkzCb3DgfFh0RGaMGlkdpMqEzjULOpQHzdZkz8R7Wmo/JsCH6CmOg/i
-         JR2w==
-X-Gm-Message-State: AO0yUKX/Gmnk2m+ztIn66dn4lTEmLbl9GNRBJ/eRMTE5aX7FFTV6IFjX
-        /MG7dvcRZcBBshVSaXFR0A==
-X-Google-Smtp-Source: AK7set+kHa11pPniVGqEyT+IX45l08nf/CPb3WXSyO/YNiwEYWD2EUMXyJV7HLcXyV4EPbUjxdWQlg==
-X-Received: by 2002:a92:d40c:0:b0:317:93dc:10f5 with SMTP id q12-20020a92d40c000000b0031793dc10f5mr33737ilm.19.1679087582684;
-        Fri, 17 Mar 2023 14:13:02 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.249])
-        by smtp.gmail.com with ESMTPSA id i35-20020a056638382300b003a607dccd1bsm1009090jav.17.2023.03.17.14.13.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Mar 2023 14:13:02 -0700 (PDT)
-Received: (nullmailer pid 2814507 invoked by uid 1000);
-        Fri, 17 Mar 2023 21:13:00 -0000
-Date:   Fri, 17 Mar 2023 16:13:00 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Vladimir Oltean <olteanv@gmail.com>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        John Crispin <john@phrozen.org>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, Lee Jones <lee@kernel.org>,
-        linux-leds@vger.kernel.org
-Subject: Re: [net-next PATCH v3 09/14] dt-bindings: net: dsa: dsa-port:
- Document support for LEDs node
-Message-ID: <20230317211300.GA2811156-robh@kernel.org>
-References: <20230314101516.20427-1-ansuelsmth@gmail.com>
- <20230314101516.20427-1-ansuelsmth@gmail.com>
- <20230314101516.20427-10-ansuelsmth@gmail.com>
- <20230314101516.20427-10-ansuelsmth@gmail.com>
- <20230315005000.co4in33amy3t3xbx@skbuf>
- <afd1f052-6bb6-4388-9620-1adb02e6d607@lunn.ch>
+        Fri, 17 Mar 2023 17:14:27 -0400
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B1512884B;
+        Fri, 17 Mar 2023 14:14:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=cHqfWu/5jLA19Bc4SPAq+8G3pCotHNCQZAShat/fUf4=; b=ThJc2vpScZAiBQxgjZDotCj6p9
+        DTMXzCRy/yOVCF1einZD1BU3rJhnQlNH/lx0rME2jZK8WR2dHAQCIrEvB7h+6AuCu2BbZMhLp0Q00
+        nTH6K91KnBffoDwCNL9mWkxkDt119Qqu2/YNsFWqzbKjFjUHE0YRZOL0HNo27frzNWUMmSiPS/RrA
+        vaJ19v53ST1t6XJKO8KVCuiX7sa9MO4YtCw2PcXkZt7xKzB3MGXTHTztFzp0+U4jZWfUduusForhh
+        XiwJ6m3g2kURSNAnW4uDwXALalBS5zSd/NEhT8m1wOrCLKqKICf2NMWUdxUCp9JkxOHQg9ozJu8u/
+        ZOqYY8aw==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1pdHOl-00HSsX-0w;
+        Fri, 17 Mar 2023 21:14:03 +0000
+Date:   Fri, 17 Mar 2023 21:14:03 +0000
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Ian Rogers <irogers@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Hao Luo <haoluo@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        bpf@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Namhyung Kim <namhyung@gmail.com>,
+        Dave Chinner <david@fromorbit.com>
+Subject: Re: [PATCHv3 bpf-next 0/9] mm/bpf/perf: Store build id in file object
+Message-ID: <20230317211403.GZ3390869@ZenIV>
+References: <20230316170149.4106586-1-jolsa@kernel.org>
+ <ZBNTMZjEoETU9d8N@casper.infradead.org>
+ <CAP-5=fVYriALLwF2FU1ZUtLuHndnvPw=3SctVqY6Uwex8JfscA@mail.gmail.com>
+ <CAEf4BzYgyGTVv=cDwaW+DBke1uk_aLCg3CB_9W6+9tkS8Nyn_Q@mail.gmail.com>
+ <ZBPjs1b8crUv4ur6@casper.infradead.org>
+ <CAEf4BzbPa-5b9uU0+GN=iaMGc6otje3iNQd+MOg_byTSYU8fEQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <afd1f052-6bb6-4388-9620-1adb02e6d607@lunn.ch>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <CAEf4BzbPa-5b9uU0+GN=iaMGc6otje3iNQd+MOg_byTSYU8fEQ@mail.gmail.com>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 15, 2023 at 02:58:23AM +0100, Andrew Lunn wrote:
-> On Wed, Mar 15, 2023 at 02:50:00AM +0200, Vladimir Oltean wrote:
-> > On Tue, Mar 14, 2023 at 11:15:11AM +0100, Christian Marangi wrote:
-> > > Document support for LEDs node in dsa port.
-> > > Switch may support different LEDs that can be configured for different
-> > > operation like blinking on traffic event or port link.
-> > > 
-> > > Also add some Documentation to describe the difference of these nodes
-> > > compared to PHY LEDs, since dsa-port LEDs are controllable by the switch
-> > > regs and the possible intergated PHY doesn't have control on them.
-> > > 
-> > > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> > > ---
-> > >  .../devicetree/bindings/net/dsa/dsa-port.yaml | 21 +++++++++++++++++++
-> > >  1 file changed, 21 insertions(+)
-> > 
-> > Of all schemas, why did you choose dsa-port.yaml? Why not either something
-> > hardware specific (qca8k.yaml) or more generic (ethernet-controller.yaml)?
-> 
-> The binding should be generic. So qca8k.yaml is way to specific. The
-> Marvell switch should re-use it at some point.
-> 
-> Looking at the hierarchy, ethernet-controller.yaml would work since
-> dsa-port includes ethernet-switch-port, which includes
-> ethernet-controller.
-> 
-> These are MAC LEDs, and there is no reason why a standalone MAC in a
-> NIC could not implement such LEDs. So yes,
-> ethernet-controller.yaml.
-> 
-> Is there actually anything above ethernet-controller.yaml?
+On Fri, Mar 17, 2023 at 09:33:17AM -0700, Andrii Nakryiko wrote:
 
-Yes, the one under review[1].
+> > But build IDs are _generally_ available.  The only problem (AIUI)
+> > is when you're trying to examine the contents of one container from
+> > another container.  And to solve that problem, you're imposing a cost
+> > on everybody else with (so far) pretty vague justifications.  I really
+> > don't like to see you growing struct file for this (nor struct inode,
+> > nor struct vm_area_struct).  It's all quite unsatisfactory and I don't
+> > have a good suggestion.
+> 
+> There is a lot of profiling, observability and debugging tooling built
+> using BPF. And when capturing stack traces from BPF programs, if the
+> build ID note is not physically present in memory, fetching it from
+> the BPF program might fail in NMI (and other non-faultable contexts).
+> This patch set is about making sure we always can fetch build ID, even
+> from most restrictive environments. It's guarded by Kconfig to avoid
+> adding 8 bytes of overhead to struct file for environment where this
+> might be unacceptable, giving users and distros a choice.
 
-Rob
- 
-[1] https://lore.kernel.org/all/20230203-dt-bindings-network-class-v2-0-499686795073@jannau.net/
+Lovely.  As an exercise you might want to collect the stats on the
+number of struct file instances on the system vs. the number of files
+that happen to be ELF objects and are currently mmapped anywhere.
+That does depend upon the load, obviously, but it's not hard to collect -
+you already have more than enough hooks inserted in the relevant places.
+That might give a better appreciation of the reactions...
