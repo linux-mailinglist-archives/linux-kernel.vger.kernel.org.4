@@ -2,241 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1863B6BE74D
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 11:53:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB1ED6BE757
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 11:55:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229885AbjCQKxA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 06:53:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48154 "EHLO
+        id S229532AbjCQKz2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 06:55:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbjCQKw6 (ORCPT
+        with ESMTP id S229494AbjCQKzZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 06:52:58 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BA2FDCF76;
-        Fri, 17 Mar 2023 03:52:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679050377; x=1710586377;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=iQ1t0ClL1aPi65qRW6K1FWVcELWBdYbryklmXMw4RzU=;
-  b=KCxAr4Ls3zXlGQUuI2ehAx5pSO55xJQSXBEwK7FdOcDJzZeR3Z7QWN3n
-   ieMvlU4KgUvuLDNOGQXYJr7dJ3A22KESxzFZS7mkTObDWbWLEXDtwpjzr
-   IFf+UChT0MNISzTBdQyCnWNnoN9Sj+VfG1HoiCp9kRFj3yJi4VQIG9vLr
-   lQxV7PTPDQ0bt2ishF7CgT1nEMukxiNUbwoOQ6FM9DiVIBW0IsJXtdtvT
-   hhBaHtwJwNXeRzq25dA9xar901jYSoxIKgroHnDSlpMdXfgbrm3YNn60J
-   K7hz4r3hp1yppm4sovG37vffFUBby2J8U4akyGu0KhODPeqGaYNoMv73X
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="424506303"
-X-IronPort-AV: E=Sophos;i="5.98,268,1673942400"; 
-   d="scan'208";a="424506303"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2023 03:52:57 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="823633759"
-X-IronPort-AV: E=Sophos;i="5.98,268,1673942400"; 
-   d="scan'208";a="823633759"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 17 Mar 2023 03:52:54 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 17 Mar 2023 12:52:53 +0200
-Date:   Fri, 17 Mar 2023 12:52:53 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Alvin =?utf-8?Q?=C5=A0ipraga?= <alvin@pqrs.dk>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        linux-usb@vger.kernel.org,
-        Alvin =?utf-8?Q?=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] extcon: usbc-tusb320: add accessory detection support
-Message-ID: <ZBRGhcAeoyxMRMEP@kuha.fi.intel.com>
-References: <20230317104229.1392742-1-alvin@pqrs.dk>
+        Fri, 17 Mar 2023 06:55:25 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7AF9DDF35;
+        Fri, 17 Mar 2023 03:55:23 -0700 (PDT)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32HAe8Pk020672;
+        Fri, 17 Mar 2023 10:55:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=RUMpbwc4wqUe3MjJ+ltbvkY9rJ1XIpkrtSkNguYYYYU=;
+ b=GkYkcWuhW0C7LoU/lfin6dQFbRnhkxk2RMY1SKZNC5RXfjqx6hX+D6vttucVH/4IpdXO
+ h1/2E/MRsRoKkblDQSklJmp/47WjOBX/HLUHRGzNZGgJRJS3es0hLBZzka86kvhF46Sp
+ UgPdk+hcODiPSvZxKZe0Z8aVwCKY5jzMLFcmJnn9J2NJQV3CUre5eFHsGls9Xfylyqjt
+ d/o44ljsO/m+H+oD1iLNGXwJ1hc8e95u4/E1FAy/TkvmKA3e6u89BbZbLuHGZiBgLaCP
+ LgutpWPoXys1I8NIvT+u0yvNx3DwLsCOKD6yg+RAh5HULP9qLnXtQp3J7QGnKuxMK+1c mw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pcjfhpwc9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 17 Mar 2023 10:55:19 +0000
+Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32HAeZfB022275;
+        Fri, 17 Mar 2023 10:55:18 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pcjfhpwbs-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 17 Mar 2023 10:55:18 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32H6uoAx022101;
+        Fri, 17 Mar 2023 10:55:16 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3pbsvb210m-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 17 Mar 2023 10:55:16 +0000
+Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
+        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32HAtEkQ8258098
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 17 Mar 2023 10:55:14 GMT
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6A0792004B;
+        Fri, 17 Mar 2023 10:55:14 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7A01B20049;
+        Fri, 17 Mar 2023 10:55:12 +0000 (GMT)
+Received: from li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com (unknown [9.43.91.202])
+        by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Fri, 17 Mar 2023 10:55:12 +0000 (GMT)
+Date:   Fri, 17 Mar 2023 16:25:04 +0530
+From:   Ojaswin Mujoo <ojaswin@linux.ibm.com>
+To:     Jan Kara <jack@suse.cz>
+Cc:     linux-ext4@vger.kernel.org, "Theodore Ts'o" <tytso@mit.edu>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ritesh Harjani <ritesh.list@gmail.com>,
+        Andreas Dilger <adilger@dilger.ca>
+Subject: Re: [RFC 08/11] ext4: Don't skip prefetching BLOCK_UNINIT groups
+Message-ID: <ZBRHCHySeQ0KC/f7@li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com>
+References: <cover.1674822311.git.ojaswin@linux.ibm.com>
+ <4881693a4f5ba1fed367310b27c793e4e78520d3.1674822311.git.ojaswin@linux.ibm.com>
+ <20230309141422.b2nbl554ngna327k@quack3>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230317104229.1392742-1-alvin@pqrs.dk>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230309141422.b2nbl554ngna327k@quack3>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: D9YVdtmD-D3rJBeAV2lkCzxwOK-kRLei
+X-Proofpoint-ORIG-GUID: JTnpt8bXAF7aeoR6KCJMuv1bUoA8YMJ5
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-17_06,2023-03-16_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 suspectscore=0
+ priorityscore=1501 bulkscore=0 lowpriorityscore=0 adultscore=0
+ impostorscore=0 mlxscore=0 malwarescore=0 spamscore=0 phishscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2303150002 definitions=main-2303170071
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 17, 2023 at 11:42:27AM +0100, Alvin Šipraga wrote:
-> From: Alvin Šipraga <alsi@bang-olufsen.dk>
+On Thu, Mar 09, 2023 at 03:14:22PM +0100, Jan Kara wrote:
+> On Fri 27-01-23 18:07:35, Ojaswin Mujoo wrote:
+> > Currently, ext4_mb_prefetch() and ext4_mb_prefetch_fini() skip
+> > BLOCK_UNINIT groups since fetching their bitmaps doesn't need disk IO.
+> > As a consequence, we end not initializing the buddy structures and CR0/1
+> > lists for these BGs, even though it can be done without any disk IO
+> > overhead. Hence, don't skip such BGs during prefetch and prefetch_fini.
+> > 
+> > This improves the accuracy of CR0/1 allocation as earlier, we could have
+> > essentially empty BLOCK_UNINIT groups being ignored by CR0/1 due to their buddy
+> > not being initialized, leading to slower CR2 allocations. With this patch CR0/1
+> > will be able to discover these groups as well, thus improving performance.
+> > 
+> > Signed-off-by: Ojaswin Mujoo <ojaswin@linux.ibm.com>
+> > Reviewed-by: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
 > 
-> The TUSB320 can detect the following types of accessory:
+> The patch looks good. I just somewhat wonder - this change may result in
+> uninitialized groups being initialized and used earlier (previously we'd
+> rather search in other already initialized groups) which may spread
+> allocations more. But I suppose that's fine and uninit groups are not
+> really a feature meant to limit fragmentation and as the filesystem ages
+> the differences should be minimal. So feel free to add:
 > 
->   - Audio Accessory
->   - Audio Accessory with charge-thru
->   - Debug Accessory (DFP)
->   - Debug Accessory (UFP)
+> Reviewed-by: Jan Kara <jack@suse.cz>
 > 
-> Moreover, the typec subsystem can be informed of this through the
-> typec_set_mode() function. The information will be propagated to any
-> linked typec muxes. Add the necessary support to the driver.
-> 
-> Note that for the Debug Accessory modes, an educated guess was made that
-> for the USB data role, DFP implies HOST and UFP implies DEVICE. But this
-> might want to be made configurable at a later date.
-> 
-> Signed-off-by: Alvin Šipraga <alsi@bang-olufsen.dk>
-> ---
-> v2: no change
+> 								Honza
+Thanks for the review. As for the allocation spread, I agree that it
+should be something our goal determination logic should take care of
+rather than limiting the BGs available to the allocator.
 
-Not a big problem, but you forgot to include the version in the
-subject. In any case, FWIW:
+Another point I wanted to discuss wrt this patch series was why were the
+BLOCK_UNINIT groups not being prefetched earlier. One point I can think
+of is that this might lead to memory pressure when we have too many
+empty BGs in a very large (say terabytes) disk.
 
-Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+But i'd still like to know if there's some history behind not
+prefetching block uninit.
 
-> ---
->  drivers/extcon/extcon-usbc-tusb320.c | 90 +++++++++++++++++++++-------
->  1 file changed, 68 insertions(+), 22 deletions(-)
+Cc'ing Andreas as well to check if they came across anything in Lustre
+in the past.
 > 
-> diff --git a/drivers/extcon/extcon-usbc-tusb320.c b/drivers/extcon/extcon-usbc-tusb320.c
-> index 10dff1c512c4..882d1f48495e 100644
-> --- a/drivers/extcon/extcon-usbc-tusb320.c
-> +++ b/drivers/extcon/extcon-usbc-tusb320.c
-> @@ -15,6 +15,7 @@
->  #include <linux/module.h>
->  #include <linux/regmap.h>
->  #include <linux/usb/typec.h>
-> +#include <linux/usb/typec_altmode.h>
->  
->  #define TUSB320_REG8				0x8
->  #define TUSB320_REG8_CURRENT_MODE_ADVERTISE	GENMASK(7, 6)
-> @@ -26,16 +27,16 @@
->  #define TUSB320_REG8_CURRENT_MODE_DETECT_MED	0x1
->  #define TUSB320_REG8_CURRENT_MODE_DETECT_ACC	0x2
->  #define TUSB320_REG8_CURRENT_MODE_DETECT_HI	0x3
-> -#define TUSB320_REG8_ACCESSORY_CONNECTED	GENMASK(3, 2)
-> +#define TUSB320_REG8_ACCESSORY_CONNECTED	GENMASK(3, 1)
->  #define TUSB320_REG8_ACCESSORY_CONNECTED_NONE	0x0
->  #define TUSB320_REG8_ACCESSORY_CONNECTED_AUDIO	0x4
-> -#define TUSB320_REG8_ACCESSORY_CONNECTED_ACC	0x5
-> -#define TUSB320_REG8_ACCESSORY_CONNECTED_DEBUG	0x6
-> +#define TUSB320_REG8_ACCESSORY_CONNECTED_ACHRG	0x5
-> +#define TUSB320_REG8_ACCESSORY_CONNECTED_DBGDFP	0x6
-> +#define TUSB320_REG8_ACCESSORY_CONNECTED_DBGUFP	0x7
->  #define TUSB320_REG8_ACTIVE_CABLE_DETECTION	BIT(0)
->  
->  #define TUSB320_REG9				0x9
-> -#define TUSB320_REG9_ATTACHED_STATE_SHIFT	6
-> -#define TUSB320_REG9_ATTACHED_STATE_MASK	0x3
-> +#define TUSB320_REG9_ATTACHED_STATE		GENMASK(7, 6)
->  #define TUSB320_REG9_CABLE_DIRECTION		BIT(5)
->  #define TUSB320_REG9_INTERRUPT_STATUS		BIT(4)
->  
-> @@ -250,8 +251,7 @@ static void tusb320_extcon_irq_handler(struct tusb320_priv *priv, u8 reg)
->  {
->  	int state, polarity;
->  
-> -	state = (reg >> TUSB320_REG9_ATTACHED_STATE_SHIFT) &
-> -		TUSB320_REG9_ATTACHED_STATE_MASK;
-> +	state = FIELD_GET(TUSB320_REG9_ATTACHED_STATE, reg);
->  	polarity = !!(reg & TUSB320_REG9_CABLE_DIRECTION);
->  
->  	dev_dbg(priv->dev, "attached state: %s, polarity: %d\n",
-> @@ -277,32 +277,78 @@ static void tusb320_typec_irq_handler(struct tusb320_priv *priv, u8 reg9)
->  {
->  	struct typec_port *port = priv->port;
->  	struct device *dev = priv->dev;
-> -	u8 mode, role, state;
-> +	int typec_mode;
-> +	enum typec_role pwr_role;
-> +	enum typec_data_role data_role;
-> +	u8 state, mode, accessory;
->  	int ret, reg8;
->  	bool ori;
->  
-> +	ret = regmap_read(priv->regmap, TUSB320_REG8, &reg8);
-> +	if (ret) {
-> +		dev_err(dev, "error during reg8 i2c read, ret=%d!\n", ret);
-> +		return;
-> +	}
-> +
->  	ori = reg9 & TUSB320_REG9_CABLE_DIRECTION;
->  	typec_set_orientation(port, ori ? TYPEC_ORIENTATION_REVERSE :
->  					  TYPEC_ORIENTATION_NORMAL);
->  
-> -	state = (reg9 >> TUSB320_REG9_ATTACHED_STATE_SHIFT) &
-> -		TUSB320_REG9_ATTACHED_STATE_MASK;
-> -	if (state == TUSB320_ATTACHED_STATE_DFP)
-> -		role = TYPEC_SOURCE;
-> -	else
-> -		role = TYPEC_SINK;
-> +	state = FIELD_GET(TUSB320_REG9_ATTACHED_STATE, reg9);
-> +	accessory = FIELD_GET(TUSB320_REG8_ACCESSORY_CONNECTED, reg8);
-> +
-> +	switch (state) {
-> +	case TUSB320_ATTACHED_STATE_DFP:
-> +		typec_mode = TYPEC_MODE_USB2;
-> +		pwr_role = TYPEC_SOURCE;
-> +		data_role = TYPEC_HOST;
-> +		break;
-> +	case TUSB320_ATTACHED_STATE_UFP:
-> +		typec_mode = TYPEC_MODE_USB2;
-> +		pwr_role = TYPEC_SINK;
-> +		data_role = TYPEC_DEVICE;
-> +		break;
-> +	case TUSB320_ATTACHED_STATE_ACC:
-> +		/*
-> +		 * Accessory detected. For debug accessories, just make some
-> +		 * qualified guesses as to the role for lack of a better option.
-> +		 */
-> +		if (accessory == TUSB320_REG8_ACCESSORY_CONNECTED_AUDIO ||
-> +		    accessory == TUSB320_REG8_ACCESSORY_CONNECTED_ACHRG) {
-> +			typec_mode = TYPEC_MODE_AUDIO;
-> +			pwr_role = TYPEC_SINK;
-> +			data_role = TYPEC_DEVICE;
-> +			break;
-> +		} else if (accessory ==
-> +			   TUSB320_REG8_ACCESSORY_CONNECTED_DBGDFP) {
-> +			typec_mode = TYPEC_MODE_DEBUG;
-> +			pwr_role = TYPEC_SOURCE;
-> +			data_role = TYPEC_HOST;
-> +			break;
-> +		} else if (accessory ==
-> +			   TUSB320_REG8_ACCESSORY_CONNECTED_DBGUFP) {
-> +			typec_mode = TYPEC_MODE_DEBUG;
-> +			pwr_role = TYPEC_SINK;
-> +			data_role = TYPEC_DEVICE;
-> +			break;
-> +		}
->  
-> -	typec_set_vconn_role(port, role);
-> -	typec_set_pwr_role(port, role);
-> -	typec_set_data_role(port, role == TYPEC_SOURCE ?
-> -				  TYPEC_HOST : TYPEC_DEVICE);
-> +		dev_warn(priv->dev, "unexpected ACCESSORY_CONNECTED state %d\n",
-> +			 accessory);
->  
-> -	ret = regmap_read(priv->regmap, TUSB320_REG8, &reg8);
-> -	if (ret) {
-> -		dev_err(dev, "error during reg8 i2c read, ret=%d!\n", ret);
-> -		return;
-> +		fallthrough;
-> +	default:
-> +		typec_mode = TYPEC_MODE_USB2;
-> +		pwr_role = TYPEC_SINK;
-> +		data_role = TYPEC_DEVICE;
-> +		break;
->  	}
->  
-> +	typec_set_vconn_role(port, pwr_role);
-> +	typec_set_pwr_role(port, pwr_role);
-> +	typec_set_data_role(port, data_role);
-> +	typec_set_mode(port, typec_mode);
-> +
->  	mode = FIELD_GET(TUSB320_REG8_CURRENT_MODE_DETECT, reg8);
->  	if (mode == TUSB320_REG8_CURRENT_MODE_DETECT_DEF)
->  		typec_set_pwr_opmode(port, TYPEC_PWR_MODE_USB);
+> > ---
+> >  fs/ext4/mballoc.c | 8 ++------
+> >  1 file changed, 2 insertions(+), 6 deletions(-)
+> > 
+> > diff --git a/fs/ext4/mballoc.c b/fs/ext4/mballoc.c
+> > index 14529d2fe65f..48726a831264 100644
+> > --- a/fs/ext4/mballoc.c
+> > +++ b/fs/ext4/mballoc.c
+> > @@ -2557,9 +2557,7 @@ ext4_group_t ext4_mb_prefetch(struct super_block *sb, ext4_group_t group,
+> >  		 */
+> >  		if (!EXT4_MB_GRP_TEST_AND_SET_READ(grp) &&
+> >  		    EXT4_MB_GRP_NEED_INIT(grp) &&
+> > -		    ext4_free_group_clusters(sb, gdp) > 0 &&
+> > -		    !(ext4_has_group_desc_csum(sb) &&
+> > -		      (gdp->bg_flags & cpu_to_le16(EXT4_BG_BLOCK_UNINIT)))) {
+> > +		    ext4_free_group_clusters(sb, gdp) > 0 ) {
+> >  			bh = ext4_read_block_bitmap_nowait(sb, group, true);
+> >  			if (bh && !IS_ERR(bh)) {
+> >  				if (!buffer_uptodate(bh) && cnt)
+> > @@ -2600,9 +2598,7 @@ void ext4_mb_prefetch_fini(struct super_block *sb, ext4_group_t group,
+> >  		grp = ext4_get_group_info(sb, group);
+> >  
+> >  		if (EXT4_MB_GRP_NEED_INIT(grp) &&
+> > -		    ext4_free_group_clusters(sb, gdp) > 0 &&
+> > -		    !(ext4_has_group_desc_csum(sb) &&
+> > -		      (gdp->bg_flags & cpu_to_le16(EXT4_BG_BLOCK_UNINIT)))) {
+> > +		    ext4_free_group_clusters(sb, gdp) > 0) {
+> >  			if (ext4_mb_init_group(sb, group, GFP_NOFS))
+> >  				break;
+> >  		}
+> > -- 
+> > 2.31.1
+> > 
 > -- 
-> 2.39.2
-
--- 
-heikki
+> Jan Kara <jack@suse.com>
+> SUSE Labs, CR
