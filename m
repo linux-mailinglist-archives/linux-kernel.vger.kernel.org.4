@@ -2,103 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D3926BE1C2
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 08:13:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 104DF6BE1C6
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 08:13:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230270AbjCQHNo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 03:13:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37726 "EHLO
+        id S229539AbjCQHNs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 03:13:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229543AbjCQHNm (ORCPT
+        with ESMTP id S230273AbjCQHNp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 03:13:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DA7351FA4
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 00:13:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 16A69621AF
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 07:13:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27925C433D2;
-        Fri, 17 Mar 2023 07:13:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1679037220;
-        bh=EMox3uAJdc454qzosMEHyqhK1IpB/SyLPpxJcdBDMJU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RoDHeXffgYoGLwNwon+Lc6Bnl+yTo4PTXHv8ZHsZbCIsWF1u/Y82MILsxpobukDD6
-         UXMmrExB81yHrf1nQwwxasJ4V/T0+depmydn2uOH97S1M8aGHgy64gbGtQsfR+BHTM
-         IHrTvLePspIq/y8SsTQ0QBDU4BZmAuXuIrVIEH+w=
-Date:   Fri, 17 Mar 2023 08:13:37 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Khadija Kamran <kamrankhadijadj@gmail.com>
-Cc:     outreachy@lists.linux.dev, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v8] staging: axis-fifo: initialize timeouts in init only
-Message-ID: <ZBQTIVk0zsgv1hMH@kroah.com>
-References: <ZBN3XAsItCiTk7CV@khadija-virtual-machine>
+        Fri, 17 Mar 2023 03:13:45 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEFE452F7C;
+        Fri, 17 Mar 2023 00:13:43 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id iw3so4412230plb.6;
+        Fri, 17 Mar 2023 00:13:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679037223;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=rS8vmgsmQUQexeshG8mg626xwm1wz51m7Q+8asY/2Rw=;
+        b=dhf4sO35yzWINMqYFOfO0OiEfnkf/Ms5Tso+UVfgZtZ42r+r1xIn4kJhUgYmKxeJ8u
+         h3FwuIt3itmFdxlFgYinuYSUk0xEqo1ee3o/qqq9lQ8ZkyZpCgg4mUFE9EFIUsGkBlYl
+         t3/UgPnDTOaqqkSqGZoy26MXGe9NkqMR+RD1pBgNfyABMSxnBmIkQ9EHDiRfFP36QnOl
+         icyehwAC9hy6osr8EvZdfagt48ecy1B4eYDuW55L3ZdWMtTEM27V4sRSiws7WGUdAqHt
+         zsSWCvMjrWr3YZ41EBOcLCUMtmiuHIrKLRHDiBIECDZwlsav3sVw0KxN4pmnqKD28Lor
+         /Dsg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679037223;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=rS8vmgsmQUQexeshG8mg626xwm1wz51m7Q+8asY/2Rw=;
+        b=y3C2Y3wQQrWdylZhJ5dERAJeHcz1J1WHlTu1S0dZtvtfXB4Qdm3010HBMdjNnq4MRx
+         IlIBk1xsOr7v8Z6tnWpVX00BoaQCN17QiLHE2a1wI+Be51ZLh0LGRo960sfSymZjIIXP
+         KPwgFtT9WL0DioQOTT8OUKJ8aZUR2uBByJ9Grzby0bG+iINwGZ8rdHsn3lH9rvhUW2kP
+         7QCYAnP8KY5nHtjy+zzritkuTnestk0wS33WNKOpiTEtJaetYE87AUijgJ0fk8XBG2xf
+         kmiHGoegCBbtG2zY+aH5FI7V9FVdvwqoOYM6zaEfjH669iUdjGDK+fcQIIBYK4NKAd4i
+         sXTQ==
+X-Gm-Message-State: AO0yUKX/i5UcPMUQcfoSwzILyid1669IqUpE+B5a6RMT2GnacB9pySun
+        1V/X3FnJhOlKEySloPaYdwQ=
+X-Google-Smtp-Source: AK7set+ragKq/pQ1oF0HYlPS9kQvnXfjm0DjLY6PdurywOwCN6KVkYzJcWX/Km5eamNV0UdUUIq+bw==
+X-Received: by 2002:a17:90b:350e:b0:23d:3f32:1cd5 with SMTP id ls14-20020a17090b350e00b0023d3f321cd5mr7053391pjb.26.1679037223289;
+        Fri, 17 Mar 2023 00:13:43 -0700 (PDT)
+Received: from [172.19.1.47] (60-250-192-107.hinet-ip.hinet.net. [60.250.192.107])
+        by smtp.gmail.com with ESMTPSA id y10-20020a1709029b8a00b0019a7bb18f98sm853322plp.48.2023.03.17.00.13.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Mar 2023 00:13:42 -0700 (PDT)
+Message-ID: <1120263c-60d3-d359-5e68-d922fdc20c87@gmail.com>
+Date:   Fri, 17 Mar 2023 15:13:39 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZBN3XAsItCiTk7CV@khadija-virtual-machine>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+From:   Jacky Huang <ychuang570808@gmail.com>
+Subject: Re: [PATCH 13/15] reset: Add Nuvoton ma35d1 reset driver support
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        lee@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
+        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org
+Cc:     devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+        schung@nuvoton.com, Jacky Huang <ychuang3@nuvoton.com>
+References: <20230315072902.9298-1-ychuang570808@gmail.com>
+ <20230315072902.9298-14-ychuang570808@gmail.com>
+ <cbfad8ff-fe52-4e25-40d8-84ff43f5c3ad@linaro.org>
+Content-Language: en-US
+In-Reply-To: <cbfad8ff-fe52-4e25-40d8-84ff43f5c3ad@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 17, 2023 at 01:09:00AM +0500, Khadija Kamran wrote:
-> Initialize the module parameters, read_timeout and write_timeout once in
-> init().
-> 
-> Module parameters can only be set once and cannot be modified later, so we
-> don't need to evaluate them again when passing the parameters to
-> wait_event_interruptible_timeout().
-
-I feel like we are being too picky here, but this isn't the correct
-wording.  It is possible for module parameters to be modified "later",
-if the permissions on the parameter are set to allow this.  But that's
-not what this driver does here, so this might be better phrased as:
-
-  The module parameters in this driver can not be modified after
-  loading, so they can be evaluated once at module load and set to
-  default values if needed at that time.
-
-> Convert datatype of {read,write}_timeout from 'int' to 'long int' because
-> implicit conversion of 'long int' to 'int' in statement
-> '{read,write}_timeout = MAX_SCHEDULE_TIMEOUT' results in an overflow.
-> 
-> Change format specifier for {read,write}_timeout from %i to %li.
-
-You are listing all of _what_ you do here, not really _why_ you are
-doing any of this.
-
-Anyway, if I were writing this, here's what I would say as a changelog
-text:
-
-  The module parameters, read_timeout and write_timeout, are only ever
-  evaluated at module load time, so set the default values then if
-  needed so as to not recompute the timeout values every time the driver
-  reads or writes data.
+Hi Krzysztof,
 
 
-And that's it, short, concise, and it explains why you are doing this.
+On 2023/3/16 下午 03:51, Krzysztof Kozlowski wrote:
+> On 15/03/2023 08:29, Jacky Huang wrote:
+>> From: Jacky Huang<ychuang3@nuvoton.com>
+>>
+>> This driver supports individual IP reset for ma35d1. The reset
+>> control registers is a subset of system control registers.
+>>
+>> Signed-off-by: Jacky Huang<ychuang3@nuvoton.com>
+>> ---
+>>   drivers/reset/Kconfig        |   6 ++
+>>   drivers/reset/Makefile       |   1 +
+>>   drivers/reset/reset-ma35d1.c | 152 +++++++++++++++++++++++++++++++++++
+>>   3 files changed, 159 insertions(+)
+>>   create mode 100644 drivers/reset/reset-ma35d1.c
+>>
+>> diff --git a/drivers/reset/Kconfig b/drivers/reset/Kconfig
+>> index 2a52c990d4fe..47671060d259 100644
+>> --- a/drivers/reset/Kconfig
+>> +++ b/drivers/reset/Kconfig
+>> @@ -143,6 +143,12 @@ config RESET_NPCM
+>>   	  This enables the reset controller driver for Nuvoton NPCM
+>>   	  BMC SoCs.
+>>   
+>> +config RESET_NUVOTON_MA35D1
+>> +	bool "Nuvton MA35D1 Reset Driver"
+>> +	default ARCH_NUVOTON
+> || COMPILE_TEST
 
-Writing changelog comments are almost always harder than actually
-writing the patch (at least for me.)  So don't feel bad, it take a lot
-of experience doing it.
+I will add this config. Thank you.
 
-All that being said, I think we are just polishing something that
-doesn't need to really be polished anymore, so let me go just apply this
-patch as-is to the tree now so you can move on to a different change.
-You've put in the effort here, and I don't want you to get bogged down
-in specifics that really do not matter at all overall (like the memory
-size of your vm...)
+>> +	help
+>> +	  This enables the reset controller driver for Nuvoton MA35D1 SoC.
+>> +
+> Best regards,
+> Krzysztof
+>
 
-thanks,
+Best regards,
 
-greg k-h
+Jacky Huang
+
