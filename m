@@ -2,105 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 738D86BF34D
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 21:58:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9C426BF352
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 21:58:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230358AbjCQU6Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 16:58:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49332 "EHLO
+        id S229532AbjCQU6T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 16:58:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229830AbjCQU6L (ORCPT
+        with ESMTP id S230329AbjCQU6M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 16:58:11 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7359B6590;
-        Fri, 17 Mar 2023 13:58:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=dZeWiRhjX2jTc6AkO+17VmA9bj/Bj3rR/73GUR3OEW4=; b=IO/VVsx2D9PvqNqMwcSg/mPkeh
-        vu5KPNie2nPo1nelTEi4mumhG1/k4XJkbVPXA3NgUGhz6aq+sNHwzq4mHHnuoUwgRjZY7L+eSSpkz
-        iDGfAmwREQTpsVT41OjhnF0s95Xbzxlm594QPFtyTSttqZO+GIutg1AIKAUjJYdBLtKHrGZfg4LQX
-        FX/jreGLqVFpgdeBeMKmQkT748OA5ELDA1vu4x0SE63krhv35+Q09L93VzTXK5FnSj6t2oV0tB4YM
-        St7NZC4tkYCNht4tfHkS3CU/oHtBWUhwAi0mRFrofWJEKBs/uvJxTN3URflAFRPktjDXAWBWBhbTD
-        S+qo3zIQ==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:56108)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1pdH94-0003TX-At; Fri, 17 Mar 2023 20:57:50 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1pdH92-0003mq-JK; Fri, 17 Mar 2023 20:57:48 +0000
-Date:   Fri, 17 Mar 2023 20:57:48 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Ong Boon Leong <boon.leong.ong@intel.com>,
-        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Looi Hong Aun <hong.aun.looi@intel.com>,
-        Voon Weifeng <weifeng.voon@intel.com>,
-        Lai Peter Jun Ann <peter.jun.ann.lai@intel.com>
-Subject: Re: [PATCH net v2 1/2] net: stmmac: fix PHY handle parsing
-Message-ID: <ZBTUTD6RL22pdlmq@shell.armlinux.org.uk>
-References: <20230314070208.3703963-1-michael.wei.hong.sit@intel.com>
- <20230314070208.3703963-2-michael.wei.hong.sit@intel.com>
- <10aff941-e18a-4d77-974b-1760529988a6@lunn.ch>
+        Fri, 17 Mar 2023 16:58:12 -0400
+Received: from mail-io1-f51.google.com (mail-io1-f51.google.com [209.85.166.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58FAB410A9;
+        Fri, 17 Mar 2023 13:58:03 -0700 (PDT)
+Received: by mail-io1-f51.google.com with SMTP id s4so2851561ioj.11;
+        Fri, 17 Mar 2023 13:58:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679086682;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ODtKQbFPksFs46vhcZADgTeYdUWvuTaUcZXqR29mSnE=;
+        b=61x4ZM4Ax6E7hd8xFO9fSwX2ycXKxJlQEYuw54KgkuRER/8stGfuZC8LNeX3k3ivfI
+         /lFI8G9CwwnfQUvR3wgu46yUMOMjaUbfcga9AYgADSzG+7QOCR8gvnwovTiBRrwT/047
+         4euzvKOLMR8D0qNrDzmzo267wXr33qmEEZ3H1M8jyYesVKME04d/yiYuQfVDFzyyDTZh
+         Xj6S/pRrWfhtcmVIZfeVRRMJoCHKmJirah5Tqzd564DitZfdGPYVviAm9Mq7enHQqWvR
+         nmIcLr8cIS2axb0sLVQeVPNlfzd/M009Z2yLP3g5lY0XkrBiz8qXoGE+7WgqeqUzkE8k
+         80IQ==
+X-Gm-Message-State: AO0yUKX/ghdSCmw+2aH8tP0tgU6B0vzXbCvsHy5Fxb37U5Hn6tnUq8ls
+        0lMuHsxnLCIdZJoG5DFwiw==
+X-Google-Smtp-Source: AK7set8N9zYRYrpZyLblDS4PEDFDQUupo0tfdX2hbjpkS+GnTDcVDX7P3ZHEX2vzinq+JYrFy5IMEQ==
+X-Received: by 2002:a5e:a708:0:b0:74c:8a51:ecf7 with SMTP id b8-20020a5ea708000000b0074c8a51ecf7mr3747iod.11.1679086682392;
+        Fri, 17 Mar 2023 13:58:02 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.249])
+        by smtp.gmail.com with ESMTPSA id s127-20020a025185000000b0040626f5b56csm998256jaa.40.2023.03.17.13.58.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Mar 2023 13:58:01 -0700 (PDT)
+Received: (nullmailer pid 2790050 invoked by uid 1000);
+        Fri, 17 Mar 2023 20:58:00 -0000
+Date:   Fri, 17 Mar 2023 15:58:00 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Chia-Wei Wang <chiawei_wang@aspeedtech.com>
+Cc:     krzysztof.kozlowski+dt@linaro.org, openbmc@lists.ozlabs.org,
+        robh+dt@kernel.org, andrew@aj.id.au, dmaengine@vger.kernel.org,
+        linux-aspeed@lists.ozlabs.org, pmenzel@molgen.mpg.de,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        gregkh@linuxfoundation.org, joel@jms.id.au,
+        linux-kernel@vger.kernel.org, jirislaby@kernel.org,
+        ilpo.jarvinen@linux.intel.com, linux-serial@vger.kernel.org,
+        vkoul@kernel.org
+Subject: Re: [PATCH v2 1/5] dt-bindings: serial: 8250: Add aspeed,ast2600-uart
+Message-ID: <167908667961.2789991.1539212131187994719.robh@kernel.org>
+References: <20230314021817.30446-1-chiawei_wang@aspeedtech.com>
+ <20230314021817.30446-2-chiawei_wang@aspeedtech.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <10aff941-e18a-4d77-974b-1760529988a6@lunn.ch>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230314021817.30446-2-chiawei_wang@aspeedtech.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 17, 2023 at 08:56:19PM +0100, Andrew Lunn wrote:
-> On Tue, Mar 14, 2023 at 03:02:07PM +0800, Michael Sit Wei Hong wrote:
-> > phylink_fwnode_phy_connect returns 0 when set to MLO_AN_INBAND.
-> > This causes the PHY handle parsing to skip and the PHY will not be attached
-> > to the MAC.
-> 
-> Please could you expand the commit message because i'm having trouble
-> following this.
-> 
-> phylink_fwnode_phy_connect() says:
-> 
-> 	/* Fixed links and 802.3z are handled without needing a PHY */
-> 	if (pl->cfg_link_an_mode == MLO_AN_FIXED ||
-> 	    (pl->cfg_link_an_mode == MLO_AN_INBAND &&
-> 	     phy_interface_mode_is_8023z(pl->link_interface)))
-> 		return 0;
-> 
-> So your first statement is not true. It should be MLO_AN_INBAND
-> and phy_interface_mode_is_8023z.
-> 
-> > Add additional check for PHY handle parsing when set to MLO_AN_INBAND.
-> 
-> Looking at the patch, there is no reference to MLO_AN_INBAND, or
-> managed = "in-band-status";
 
-That's the pesky "xpcs_an_inband" which ends up as phylink's
-"ovr_an_inband"... I'm sure these are random renames of stuff to make
-sure that people struggle to follow the code.
+On Tue, 14 Mar 2023 10:18:13 +0800, Chia-Wei Wang wrote:
+> Add a compatible string for the NS16550A-compatible UARTs
+> of Aspeed AST2600 SoCs.
+> 
+> Signed-off-by: Chia-Wei Wang <chiawei_wang@aspeedtech.com>
+> ---
+>  Documentation/devicetree/bindings/serial/8250.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+> 
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+Acked-by: Rob Herring <robh@kernel.org>
+
