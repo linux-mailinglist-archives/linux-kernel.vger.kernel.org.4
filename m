@@ -2,125 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E66B6BE925
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 13:26:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1743F6BE92A
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 13:27:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229969AbjCQM0N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 08:26:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45132 "EHLO
+        id S230043AbjCQM1O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 08:27:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229554AbjCQM0M (ORCPT
+        with ESMTP id S229517AbjCQM1M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 08:26:12 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A2B65849E;
-        Fri, 17 Mar 2023 05:26:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1679055971; x=1710591971;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=wwb7QQUYDZ1MGwyahU1bpHx/tV/A7KWGOzAqHD9NCzs=;
-  b=LId+y+ItMz0FtogdpnbZyjVxY03kS2FGrv3UEKqm1hYFRtWeN2bhfp7Y
-   Te7+31Zk41v0lpCSmHFDwrvj24kjfzDZpMLd6N7ZzT0wCxt6A30oOSqFh
-   Pv5ejTB3jLDlC5RKJZXA1YJ5dNR5Jhuod/zlXjmKbXkfzPKKJihxLRQES
-   117y2ZKD0S4uJC/Z86FotFzb6o7k1EZRqL/PD5552PeE3uJZRzJeWf1M5
-   +xj9bkpR8iUIVvSbC3gudtqjZRv8B+ltXRJXAZblAjO5oSHlYpc6SOVfW
-   0qO9d8ubeypWXr8QpHyMLxJrWQdaoVn9D9Mjg9m2/J0wu5VKxual70Rvh
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="336948022"
-X-IronPort-AV: E=Sophos;i="5.98,268,1673942400"; 
-   d="scan'208";a="336948022"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2023 05:26:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="749242431"
-X-IronPort-AV: E=Sophos;i="5.98,268,1673942400"; 
-   d="scan'208";a="749242431"
-Received: from unknown (HELO localhost.localdomain) ([10.237.112.144])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2023 05:26:07 -0700
-Date:   Fri, 17 Mar 2023 13:26:00 +0100
-From:   Michal Swiatkowski <michal.swiatkowski@linux.intel.com>
-To:     =?iso-8859-1?Q?=C1lvaro_Fern=E1ndez?= Rojas <noltari@gmail.com>
-Cc:     andrew@lunn.ch, f.fainelli@gmail.com, jonas.gorski@gmail.com,
-        olteanv@gmail.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: dsa: tag_brcm: legacy: fix daisy-chained switches
-Message-ID: <ZBRcWLngOPY51qPc@localhost.localdomain>
-References: <20230317120815.321871-1-noltari@gmail.com>
+        Fri, 17 Mar 2023 08:27:12 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5CD15849E;
+        Fri, 17 Mar 2023 05:27:11 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 15C7F21A68;
+        Fri, 17 Mar 2023 12:27:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1679056030; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=NHGqTJTnUqNOxZp472cVknzLVo5SZVLbcDm4mbJepYE=;
+        b=rJdcWQzdyPd9a/cihTdjKLylB/F971V//4EK68lFcSi6+QeE07wyMRp1v6doKHg+S1kGH+
+        QzehHDeBxhchvhFxoFakWGODWsO7/LFV6j32hmil6vGLW1R2ShqimpkaxQO06BQr0oUgjT
+        X10Hf/7R/l8wZNHqXg3ME1xb63WNxHs=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D187A1346F;
+        Fri, 17 Mar 2023 12:27:09 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 94c1Mp1cFGSrNAAAMHmgww
+        (envelope-from <mkoutny@suse.com>); Fri, 17 Mar 2023 12:27:09 +0000
+Date:   Fri, 17 Mar 2023 13:27:08 +0100
+From:   Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [PATCH 3/5] cgroup/cpuset: Find another usable CPU if none found
+ in current cpuset
+Message-ID: <20230317122708.ax3m2d4zijkfdzjq@blackpad>
+References: <20230306200849.376804-1-longman@redhat.com>
+ <20230306200849.376804-4-longman@redhat.com>
+ <20230314181749.5b4k6selbgdhl3up@blackpad>
+ <58a1a878-fa0b-285d-3e43-2b5103d3c770@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="wkiro4aaqlim764r"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230317120815.321871-1-noltari@gmail.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <58a1a878-fa0b-285d-3e43-2b5103d3c770@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 17, 2023 at 01:08:15PM +0100, Álvaro Fernández Rojas wrote:
-> When BCM63xx internal switches are connected to switches with a 4-byte
-> Broadcom tag, it does not identify the packet as VLAN tagged, so it adds one
-> based on its PVID (which is likely 0).
-> Right now, the packet is received by the BCM63xx internal switch and the 6-byte
-> tag is properly processed. The next step would to decode the corresponding
-> 4-byte tag. However, the internal switch adds an invalid VLAN tag after the
-> 6-byte tag and the 4-byte tag handling fails.
-> In order to fix this we need to remove the invalid VLAN tag after the 6-byte
-> tag before passing it to the 4-byte tag decoding.
-> 
-> Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
-> ---
->  net/dsa/tag_brcm.c | 10 ++++++++--
->  1 file changed, 8 insertions(+), 2 deletions(-)
-> 
-> diff --git a/net/dsa/tag_brcm.c b/net/dsa/tag_brcm.c
-> index 10239daa5745..cacdafb41200 100644
-> --- a/net/dsa/tag_brcm.c
-> +++ b/net/dsa/tag_brcm.c
-> @@ -7,6 +7,7 @@
->  
->  #include <linux/dsa/brcm.h>
->  #include <linux/etherdevice.h>
-> +#include <linux/if_vlan.h>
->  #include <linux/list.h>
->  #include <linux/slab.h>
->  
-> @@ -252,6 +253,7 @@ static struct sk_buff *brcm_leg_tag_xmit(struct sk_buff *skb,
->  static struct sk_buff *brcm_leg_tag_rcv(struct sk_buff *skb,
->  					struct net_device *dev)
->  {
-> +	int len = BRCM_LEG_TAG_LEN;
->  	int source_port;
->  	u8 *brcm_tag;
->  
-> @@ -266,12 +268,16 @@ static struct sk_buff *brcm_leg_tag_rcv(struct sk_buff *skb,
->  	if (!skb->dev)
->  		return NULL;
->  
-> +	/* VLAN tag is added by BCM63xx internal switch */
-> +	if (netdev_uses_dsa(skb->dev))
-> +		len += VLAN_HLEN;
-> +
->  	/* Remove Broadcom tag and update checksum */
-> -	skb_pull_rcsum(skb, BRCM_LEG_TAG_LEN);
-> +	skb_pull_rcsum(skb, len);
->  
->  	dsa_default_offload_fwd_mark(skb);
->  
-> -	dsa_strip_etype_header(skb, BRCM_LEG_TAG_LEN);
-> +	dsa_strip_etype_header(skb, len);
->  
->  	return skb;
->  }
-LGTM, but You can add fixes tag.
-Reviewed-by: Michal Swiatkowski <michal.swiatkowski@linux.intel.com>
 
-> -- 
-> 2.30.2
-> 
+--wkiro4aaqlim764r
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Tue, Mar 14, 2023 at 04:22:06PM -0400, Waiman Long <longman@redhat.com> =
+wrote:
+> Some arm64 systems can have asymmetric CPUs where certain tasks are only
+> runnable on a selected subset of CPUs.
+
+Ah, I'm catching up.
+
+> This information is not captured in the cpuset. As a result,
+> task_cpu_possible_mask() may return a mask that have no overlap with
+> effective_cpus causing new_cpus to become empty.
+
+I can see that historically, there was an approach of terminating
+unaccomodable tasks:
+   94f9c00f6460 ("arm64: Remove logic to kill 32-bit tasks on 64-bit-only c=
+ores")=20
+the removal of killing had been made possible with
+   df950811f4a8 ("arm64: Prevent offlining first CPU with 32-bit EL0 on mis=
+matched system").
+
+That gives two other alternatives to affinity modification:
+2) kill such tasks (not unlike OOM upon memory.max reduction),
+3) reject cpuset reduction (violates cgroup v2 delegation).
+
+What do you think about 2)?
+
+Michal
+
+--wkiro4aaqlim764r
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQTrXXag4J0QvXXBmkMkDQmsBEOquQUCZBRcmgAKCRAkDQmsBEOq
+ucYMAQDoDiiyg+tQDkv5bZDwLQd/3BXqchUmoOd8JRUt6N8NbAEA3Fmj3clZkURa
+n/kLtf6/Db3HtQYwAN0g7e9CJjWZPQE=
+=QJAy
+-----END PGP SIGNATURE-----
+
+--wkiro4aaqlim764r--
