@@ -2,94 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A6816BE1B8
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 08:01:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B25F6BE429
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 09:45:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230233AbjCQHBt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 03:01:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55460 "EHLO
+        id S229693AbjCQIpi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 04:45:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229815AbjCQHBr (ORCPT
+        with ESMTP id S231664AbjCQIoq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 03:01:47 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F55B51C9B
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 00:01:23 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id w9so16739006edc.3
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 00:01:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1679036482;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EnD4uVazU5UI/twgsfCrpZTZ1d0CsIZe3nQQw6rvhvA=;
-        b=V02mjA1XkhWoG5uNrSgtRxq2W8NsVwcGOHMMBwLlznHRP0IZBUNO2LZiSGJYAUi/OK
-         xPAWNu+muzYnhg73kEXy7+akPBaSu1zB1286hIaEOm8xQSbxpPfO5dKJk4srOHPta3Ry
-         r1gWyLRVcsiqvkBXT78/rsCuHdSFFGAUEJqX9+AgHB5n+bkM1W+JTYWquPa5baMBAoiH
-         iXT2eoZlkNev/yjXHWmLc0q28CXddUMQdt9cn/G5bz8gI7uGk33fMnpCgbYF5WwDwhej
-         OrmR0eFrmeOq2daXEXLUbK+Y4yjjRmSTI7omfj87DAVZxUa6+5TGivy3q/eEa2bGCvkF
-         kyzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679036482;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EnD4uVazU5UI/twgsfCrpZTZ1d0CsIZe3nQQw6rvhvA=;
-        b=NrGFgDSvZHNGsD3J7JRcK95OiFX9+7uWppBcogbP3qqK0jQdVluwns8EP+EBvAm8XZ
-         zhVdSA5L1FaS6nPSk4mh10ycdqh2HjoKiQ97QYEaLXmWHURPKRweTDdjDvbZBKr6IhHC
-         Y1JKUIOKeMpHo1vDO1dHBmkNYYfX2miug+f+EQ1LvCox90BsZwGzivm37RN+7d2TQerf
-         w3g5oYzIif/RuEwtfdcWK5sK0HLGk9xi14vWWqJR9aBI6FLtQjCm6JSRP2OgEeZIWwbh
-         v0MqA6UeAkQWkhiF1x8391VkTYeK2qfGv/ewOXIQgoPCDHLVH784t4Ked8bBP6bgNLdW
-         XYXQ==
-X-Gm-Message-State: AO0yUKVOwOMmVee2ZDyioGARI47bgaEs5bdO2tZGsCYW5kXtg9TCvzVu
-        VUbPa1SMnbeU/Gl6NVA/g8ZP9GcGIBNx//ZepKV9wVZef7xz2Bo=
-X-Google-Smtp-Source: AK7set+s6t+fxNrqLDFwecdgV7ggGi7lUeTtTn7IdzuhbzDeLiMKX1fWvr9f1xy5DksNOwc8QNiV/T/FsVOTL0O8P34=
-X-Received: by 2002:a17:906:fb9a:b0:92a:581:ac49 with SMTP id
- lr26-20020a170906fb9a00b0092a0581ac49mr6700012ejb.3.1679036481988; Fri, 17
- Mar 2023 00:01:21 -0700 (PDT)
+        Fri, 17 Mar 2023 04:44:46 -0400
+Received: from mail.academia-cj.ro (mail.academia-cj.ro [188.213.48.91])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 61D0C1ADEF;
+        Fri, 17 Mar 2023 01:43:41 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.academia-cj.ro (Postfix) with ESMTP id 6453D69020F;
+        Fri, 17 Mar 2023 07:22:33 +0200 (EET)
+Received: from mail.academia-cj.ro ([127.0.0.1])
+        by localhost (mail.academia-cj.ro [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id nx-DPR7XghWj; Fri, 17 Mar 2023 07:22:33 +0200 (EET)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.academia-cj.ro (Postfix) with ESMTP id 2E7AA6BC71C;
+        Fri, 17 Mar 2023 07:22:33 +0200 (EET)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.academia-cj.ro 2E7AA6BC71C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=academia-cj.ro;
+        s=93010AC8-7C69-11ED-80B1-80F20A9C3584; t=1679030553;
+        bh=xYGm9m/GNOtni3QRCnrpgD9tYUQy/QedRbsUDmgL2JA=;
+        h=MIME-Version:To:From:Date:Message-Id;
+        b=l/n1Ob5darsyDHkz9TsdyYLiexPnKfyaJPd+/B3UJXeIA45wzcEFD8GeHcrXWno/j
+         MhEtxlnHdLjh1fczBFWD4NIz7pEBj/g7VBxCXdfbooDpP9PSUY03NJRZPiGp02fhn4
+         YXJHkRfhRtHCutL5w/JIxu12CMREuM3jk7clrjQ+/43rCEjgt6i0VSpD2jb9OacDSr
+         pgI6Fhsc3Nsvc9Itqipq1FPNYVQmxtIGhZu5PpmbEh06FHvi95Mw50s8L/3fTZC++N
+         8xqea6RKLojhMQGxhK+MN3K1T2B5tolNyE+p9UXA1HHTboDvSShUnFSBqe4ZBVCibN
+         0TIHZjr4xq2ug==
+X-Virus-Scanned: amavisd-new at mail.academia-cj.ro
+Received: from mail.academia-cj.ro ([127.0.0.1])
+        by localhost (mail.academia-cj.ro [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id J0VhcRDyMDMl; Fri, 17 Mar 2023 07:22:33 +0200 (EET)
+Received: from [10.120.22.42] (unknown [185.246.210.15])
+        by mail.academia-cj.ro (Postfix) with ESMTPSA id ECE8769BF80;
+        Fri, 17 Mar 2023 07:22:28 +0200 (EET)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-References: <20230228094110.37-1-xieyongji@bytedance.com> <20230228094110.37-10-xieyongji@bytedance.com>
- <CACGkMEsaeAJbTzx0M3DJzt=dwWyWvX79L1tapfZ1O-AKyG73Mw@mail.gmail.com>
-In-Reply-To: <CACGkMEsaeAJbTzx0M3DJzt=dwWyWvX79L1tapfZ1O-AKyG73Mw@mail.gmail.com>
-From:   Yongji Xie <xieyongji@bytedance.com>
-Date:   Fri, 17 Mar 2023 15:01:11 +0800
-Message-ID: <CACycT3vqdfm2KpF+JD_8oZouGfeK1nPc004isnNBUzXkVwSWww@mail.gmail.com>
-Subject: Re: [PATCH v3 09/11] vduse: Signal interrupt's eventfd directly in
- vhost-vdpa case
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Christoph Hellwig <hch@lst.de>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Description: Mail message body
+Subject: Hello Sunshine, How are you?
+To:     Recipients <marion@academia-cj.ro>
+From:   "Marion" <marion@academia-cj.ro>
+Date:   Fri, 17 Mar 2023 06:22:22 +0100
+Reply-To: marion.K08@bahnhof.se
+X-Antivirus: Avast (VPS 230316-10, 3/16/2023), Outbound message
+X-Antivirus-Status: Clean
+Message-Id: <20230317052228.ECE8769BF80@mail.academia-cj.ro>
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 16, 2023 at 5:31=E2=80=AFPM Jason Wang <jasowang@redhat.com> wr=
-ote:
->
-> On Tue, Feb 28, 2023 at 5:42=E2=80=AFPM Xie Yongji <xieyongji@bytedance.c=
-om> wrote:
-> >
-> > Now the vdpa callback will associate an eventfd in
-> > vhost-vdpa case.
->
-> I'd suggest avoiding mentioning drivers since vDPA parents should not
-> know which vDPA driver is bound.
->
-> We could say "signal vq trigger eventfd directly if possible"?
->
+I am sorry to bother you and intrude your privacy. I am single,
+ lonely and in need of a caring, loving and romantic companion.
 
-It makes sense to me.
+I am a secret admirer and would like to explore the opportunity to 
+learn more about each other. I know it is strange to contact you 
+this way and I hope you can forgive me. I am a shy person and 
+this is the only way I know I could get your attention. I just want 
+to know what you think and my intention is not to offend you.
+I hope we can be friends if that is what you want, although I wish 
+to be more than just a friend. I know you have a few questions to 
+ask and I hope I can satisfy some of your curiousity with a few 
+answers.
 
-Thanks,
-Yongji
+I believe in the saying that 'to the world you are just one person, 
+but to someone special you are the world'. All I want is love, 
+romantic care and attention from a special companion which I am
+hoping would be you.
+
+I hope this message will be the beginning of a long term 
+communication between us, simply send a reply to this message, it 
+will make me happy.
+
+
+Hugs and kisses,
+
+Marion.
+
+-- 
+This email has been checked for viruses by Avast antivirus software.
+www.avast.com
