@@ -2,154 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF0146BE94E
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 13:33:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 796EC6BE975
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 13:38:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229936AbjCQMdQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 08:33:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56306 "EHLO
+        id S230240AbjCQMih (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 08:38:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230134AbjCQMdN (ORCPT
+        with ESMTP id S230282AbjCQMid (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 08:33:13 -0400
-Received: from EUR02-VI1-obe.outbound.protection.outlook.com (mail-vi1eur02on2047.outbound.protection.outlook.com [40.107.241.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CD1D73AD4;
-        Fri, 17 Mar 2023 05:32:38 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZspbcUqZoDx5LkxBoHUm1XHWq4W3cUmc/g6cgnUiuxWGP1U6sC8I9MV1cyTKlF0mgIzsHmKjeoZqk9+3XQzuOnrrAtxdOyKLG7xamc8yE8l3It3FM/mP7joVhrTgCeUqjnNq2BYeJB3tZ78xNXEMY80yraNGzmh23UlZhEGX4aMiyXaK4jhk10AGS+zSAug1OAxDgIgYf5xziQqgfHtUOG9oFTUNnJJGoU/Hq+KUCBX6MHHwUNOQ5GpKYjb72f6qm6h0J3qfAfxu2YktYa9ky73NVcVm+8gDmACBXNC+ZbZkKT4Z4RJvgKhWWMxmfBXYBYFJyVRn0bMooXzNbPLFAw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ff4ng602SoshLDvQgPEcxyiSzsCtkn3MaccwzpQapdA=;
- b=GbNpivjE7DlY4nSt0ynkBTOU1K04wAfofBo4krkw7+mAsZcDOY0GxxzvNnQUlLPIyLn6V/zIkkP8Es2gaLw8341NnTsT3m869Fcke7XHZzdV9wqzqai0dHE7r2s11uvc6XptK5fnrP3+kI6SY+E4nEEACgNWtTfzdCUq9IMpkLzPXIncMeM3ejmEEY4WOB3S72nqxoRGK/Kbaqbc7bNVyfBzVsayAuJQPuq2sWvi/auQqE5cYoT7BHz5BK/5KAKy2zTabUNv/A7OZpTo2oEwu5QUNx+4f7f5J61IYbpTt8DlT6A5liUgC3GQgD7q/eX2USQJjhkta15JToDfj3KkQw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector2-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ff4ng602SoshLDvQgPEcxyiSzsCtkn3MaccwzpQapdA=;
- b=akH3fMxTQz8IGOwZP7A7w0cjSzNFQngNpMUDvkPo5l6Z7CInEfnMlBdClcAyyRNMbpiCJ3d1mMeoX3q8i/cpej9VY/3xkZjYgMrbOw6r+/E+E/WIfPP7axbb7ROoGBgkZtapwCJz+WMuBmcZYv3Mmnt/EnbmqQkGxALKosaHPM4=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-Received: from PA4PR04MB9416.eurprd04.prod.outlook.com (2603:10a6:102:2ab::21)
- by DB8PR04MB6970.eurprd04.prod.outlook.com (2603:10a6:10:fa::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.29; Fri, 17 Mar
- 2023 12:32:34 +0000
-Received: from PA4PR04MB9416.eurprd04.prod.outlook.com
- ([fe80::7ebc:3d88:4dd1:ecbf]) by PA4PR04MB9416.eurprd04.prod.outlook.com
- ([fe80::7ebc:3d88:4dd1:ecbf%6]) with mapi id 15.20.6178.026; Fri, 17 Mar 2023
- 12:32:33 +0000
-From:   "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-To:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, xu.yang_2@nxp.com
-Cc:     kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        jun.li@nxp.com, Peng Fan <peng.fan@nxp.com>
-Subject: [PATCH V4 6/6] arm64: dts: imx8dxl: update usb compatible
-Date:   Fri, 17 Mar 2023 20:37:08 +0800
-Message-Id: <20230317123708.337286-7-peng.fan@oss.nxp.com>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20230317123708.337286-1-peng.fan@oss.nxp.com>
-References: <20230317123708.337286-1-peng.fan@oss.nxp.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SI1PR02CA0050.apcprd02.prod.outlook.com
- (2603:1096:4:1f5::12) To PA4PR04MB9416.eurprd04.prod.outlook.com
- (2603:10a6:102:2ab::21)
+        Fri, 17 Mar 2023 08:38:33 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E8E11CF56
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 05:38:16 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id y4so19861204edo.2
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 05:38:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1679056693;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ieazCt2VSnmnZGU95p6J0fsPaC9JLJVb1N3OVs1/cl0=;
+        b=wWm92anBEh5LJKqIt11EWk8LOC6uQMCTPlNDhESr9AByn7qv7i10LEhfT2+27ABv4X
+         oVhyfgQFosdO3SGAKXDB4xLIbhIp1DAXDFNu9+vDlKHisyMVe/MVX4wlteE21O4IdHyF
+         2MaDQ6NoVjZVSvDAJEuinunyBkf9JCEqu1L4rUiO55egC0EqoUrH+jwa2T9YsSOmyxM6
+         e6egpVHFb57LQ2q/8w1CPNPJYjwIQBBTI5FuVR7YR+y3o9XEigW32n/pgJPj3J8TdZ6+
+         4/1fY4SXxgu4fwsN93Jee/F6x/S2n78zutVYPRUvmp9MJ6qNvaYPvYAk/iv6orVy0Wg9
+         tJGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679056693;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ieazCt2VSnmnZGU95p6J0fsPaC9JLJVb1N3OVs1/cl0=;
+        b=uB8i3QWyEOlF9a+NMXybohLb+928Rr5kdlFI7YYDrY5x1vGHpL/6A6uCkhrKLax7M/
+         tHLTKACAQYsNsFBR/WDDJWHVK5JU+WM3YOTFhqssZ8eu3W68YdayTqunOYuZ+aRgtYhB
+         dkqaeISYbwulT3/IGQ4+bnjiEpkgWpG7UGBtKjZZOILzCYfUa72OD0ro9z1l9/DHKjr9
+         VZ57mPiXrqCmSsmaqv/f4PS+0abVgoKkUi0x3QsyV5gTxkx86xUS2WqppMo2v3eCaxoy
+         170HNyc10tWOsT2mA2iyoV4NAC8ZdTAJWkZPlsN8vgoR+0F8TcRzIUYfbhMdjjB+KBV/
+         KYLQ==
+X-Gm-Message-State: AO0yUKX78SRu6XB9XXzjbcplLtxNnB85tlRntb0LyPwVQQd52srGcu7K
+        OwPOJ35/zpSSBNM2nfiRrb48BA==
+X-Google-Smtp-Source: AK7set+1PvvGYbX0zTdWZ0gf0CuuqjXnelxeVybKsKLfgomNgbJ0antRXviNxYHV7QkozPwqUu1Hsg==
+X-Received: by 2002:a17:907:c304:b0:8ae:e724:ea15 with SMTP id tl4-20020a170907c30400b008aee724ea15mr13960431ejc.76.1679056693686;
+        Fri, 17 Mar 2023 05:38:13 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:d013:3eeb:7658:cec? ([2a02:810d:15c0:828:d013:3eeb:7658:cec])
+        by smtp.gmail.com with ESMTPSA id v6-20020a170906b00600b0091f58083a15sm936500ejy.175.2023.03.17.05.38.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Mar 2023 05:38:12 -0700 (PDT)
+Message-ID: <dbc43c09-f8ec-f877-598a-adff47d44b0e@linaro.org>
+Date:   Fri, 17 Mar 2023 13:38:11 +0100
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PA4PR04MB9416:EE_|DB8PR04MB6970:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4651bb16-7bc1-4c01-5c6b-08db26e3aec5
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: g5RCEzOqGGlrexes4NaT0CZGXZoIP70qgRcgcdnf++xRSVs6VJ+wwjUo0LiilXEIRIoTEwMpagC+856oL0bgwqhJ0Uw/LZGfzJw7r+HDT1QYWaMAGSnX/GOgrYlBUrxjFaxqWDF3VrCwyl1HOclTIssp1YntDcXUBSx099LifqNgdZ10HcpLBWb1f2G7B+1+d/2thyi6tbjVKfrE0Tt/jeheqhS6UvX+RJh7pPNpzO0ovTLxRDUMXK6EoDtOTSdHsYCsw5kI0jGui4mAwPP+xfZrzgZLurLcZvfVlE/CJ3FhxOy+N69v63JXSvigtIM68CtiPkUjopBaLZdSblGq8huypVWzDLD1zSkQXhJhiERDffoKz/wKogQe+yiGdOfsQtXEqiUT2k+u54JOEPUrecrnKldeanpJM/+koboqaaX7576bspG8/u3yW70/4IbgadUb0cFzUCVMwLTgLPUyQanVnfhXJ6ec4BR4F99VIOr5jumd6SJ3012RB3MjZi4R7Jt6VW0hr1lCqK7tr2iih164gFuhPSO5YOIPwzPh1D8b0Xhzhk7sW+XRDFsp9DQX5ccm/rp4jF5Ck22tLMh/K0G1La/q7DiNBGz0CbBKLwvvW3n81BoqPMoTUEhZVoSpzUZjttzwGn6lr8n43WemSHX1LxFNFhFgJFeeYNkGELqy1MvzLaWXgOUuJlcpxOE3noadiXSdowdgeg+MSPZDiObIIrGmQSDa3poqFjn60C0=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR04MB9416.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(376002)(346002)(136003)(366004)(396003)(451199018)(2906002)(5660300002)(15650500001)(7416002)(186003)(26005)(2616005)(6666004)(83380400001)(6506007)(52116002)(6486002)(478600001)(6512007)(1076003)(316002)(66946007)(41300700001)(8936002)(86362001)(66476007)(38100700002)(66556008)(8676002)(4326008)(38350700002)(32563001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?LvBZwgAN0+rZGqcMOKcvHwIj4nMm1tRwRRO3PsuPQBP3nlzDOglGCwU0nKmI?=
- =?us-ascii?Q?3aPxGkIU4T36bJR3tlIwLpVTaznRg3XDZyWlQUw4z3Bz2MIoeF0xbpIcWDLZ?=
- =?us-ascii?Q?uQM77pDhSq5wLc1aubJhoufDUei7YUxxwnHO92crUXcEFAwGL42Lvx0Ll/iD?=
- =?us-ascii?Q?L/RQ6QuRQ5aI+ewGdGcyfoAoWDnIAxvn5mICAR/iVcFHT3doIceh+bOW2fjq?=
- =?us-ascii?Q?n+qR+K9EnBUlJnrtR3/BNtcjvw36aV0CSZAluwm286C4thy4z2362+MEhgYP?=
- =?us-ascii?Q?sbFXc9SDkV2bz6gMCIGQUiBv34w5Y/7Mz0VtK/TB/EnxBBa7GYZg3jrM8rsA?=
- =?us-ascii?Q?IaGfgPvyP0trUfcqanbVMNlw4ebFrv/G5O9BJh5qky8kwkMkJIJ2IusZXRhP?=
- =?us-ascii?Q?tuONju+24AoFuwhOOHrCB5622vaoXQQqTCt3liQUobxDPze2YUHnxeyOjH1z?=
- =?us-ascii?Q?7fvdL9eLzPxrQ16A9vdijdTy0g33281VraPD4WlVVFlH8U13iayMq1Ur53jC?=
- =?us-ascii?Q?FcweaOXqtqZcP81cdHdhETQ/ToIKRJUaRIxCmmm0emGmS6p7/ZGD11cRvawS?=
- =?us-ascii?Q?8shM09zXXKmb/WsdzvKaJS6L1DtkvYyyjzPqO+3U+sUYT3Ts1Gpt+sofKVgM?=
- =?us-ascii?Q?ynOa/Bd9m+y/A0dn/PXbuimDAZt4m4qyZaIDrWW7cKppAfXJ8MEkbyvSH9V2?=
- =?us-ascii?Q?O6Vp5rab3FNLLk7uQtori7Tu/0vp0hlypm62P9+Y1IShl29HF6mfnjzkbLTZ?=
- =?us-ascii?Q?sB0g0LeEow/OyV3j6UnjZ6nLZe59MCbX+21HQ3yc+GMQDOEqhpFy+0ET8H29?=
- =?us-ascii?Q?bj6KX2EwjKoyi8JZRvOr6hN/9YViqqwUFw5DcERpEpt42yLwBxnQfVsqIzSX?=
- =?us-ascii?Q?TiSbFrA4lh2tDLnvA/E7r6N6y1rZL1Wb1p0E1cnreuAnZmJ1I344Jqi5qVAa?=
- =?us-ascii?Q?TkJHoyyHMsE+4WV0l2eY859SZlKwnx4Z6CKlq9S0Dmj18Yvd4qf9FFYMsW4z?=
- =?us-ascii?Q?u5pOO1YKELLSrhzdmDBtC1+WRyMzRtfZwMjTJiTUbIIfnFHnlqIrT5G9ijBd?=
- =?us-ascii?Q?4iJob5PVuOwhi6MlhqrMqLFYodAUclzmyQ0FfdS/pW5pSXuCtYA8GE31CPeS?=
- =?us-ascii?Q?YPkB1pXdmVDXbe7cGyZKPu7qaOwoHaIdg0c2ltvXsrm+y1glldNYF3hS+b44?=
- =?us-ascii?Q?ICwjdO+YuGrq99FpZ0zBIOv+/DjG9ySnNjLIqm0Oe+lC/gXVZVg2Y+UlNaNn?=
- =?us-ascii?Q?k6oN3j6fWTJaMbf7zWTlP16oao8LPfAm6mgSgM/awCqR0AuqYXrspxFVHkDu?=
- =?us-ascii?Q?udlZksh58a2mKubfzZKNFF7f9wzOolMyBZdqDbHHFmjbWXjCKhaC/7KMoWpd?=
- =?us-ascii?Q?fxKVySJNEfhDRFQZe74wjSbYoFrh87XJlnloQkJBCrX6kM5tln8JeGgYbCGh?=
- =?us-ascii?Q?fatXFOzIfkrJvtlIGWqsDrcb7tq8NUCYdNtIpIt+9m81sfjdcsExu3Qu+bkV?=
- =?us-ascii?Q?M3BXSI+vULEzkqPnftZfbqtVxUst3KddstH1gmmc5kyp+mZxqFlgWoASRArG?=
- =?us-ascii?Q?3+iblwMZEnhsmJzjv7El/CxjWbA/+PH6X83qp/Cm?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4651bb16-7bc1-4c01-5c6b-08db26e3aec5
-X-MS-Exchange-CrossTenant-AuthSource: PA4PR04MB9416.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Mar 2023 12:32:33.8407
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 76r2BIGGCdKxh/6D8elq6zpngETeKpW1h7ZwPouwAp7yDaBtBONv4hnIfg0wkaVTW9tGUsc6BFeIsClliVytkw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR04MB6970
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH 1/2] dt-bindings: drm/bridge: Add no-hpd property
+Content-Language: en-US
+To:     Jayesh Choudhary <j-choudhary@ti.com>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     andrzej.hajda@intel.com, neil.armstrong@linaro.org,
+        rfoss@kernel.org, Laurent.pinchart@ideasonboard.com,
+        jonas@kwiboo.se, jernej.skrabec@gmail.com, airlied@gmail.com,
+        daniel@ffwll.ch, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, sam@ravnborg.org,
+        jani.nikula@intel.com, tzimmermann@suse.de, javierm@redhat.com,
+        ville.syrjala@linux.intel.com, r-ravikumar@ti.com,
+        lyude@redhat.com, alexander.deucher@amd.com, sjakhade@cadence.com,
+        yamonkar@cadence.com
+References: <20230316140823.234263-1-j-choudhary@ti.com>
+ <20230316140823.234263-2-j-choudhary@ti.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230316140823.234263-2-j-choudhary@ti.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peng Fan <peng.fan@nxp.com>
+On 16/03/2023 15:08, Jayesh Choudhary wrote:
+> From: Rahul T R <r-ravikumar@ti.com>
+> 
+> Add no-hpd property to the bindings, to disable
+> hpd when not connected or unusable
+> 
+> Signed-off-by: Rahul T R <r-ravikumar@ti.com>
+> Signed-off-by: Jayesh Choudhary <j-choudhary@ti.com>
+> ---
+>  .../devicetree/bindings/display/bridge/cdns,mhdp8546.yaml   | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/display/bridge/cdns,mhdp8546.yaml b/Documentation/devicetree/bindings/display/bridge/cdns,mhdp8546.yaml
+> index b2e8bc6da9d0..69d381195218 100644
+> --- a/Documentation/devicetree/bindings/display/bridge/cdns,mhdp8546.yaml
+> +++ b/Documentation/devicetree/bindings/display/bridge/cdns,mhdp8546.yaml
+> @@ -57,6 +57,12 @@ properties:
+>    interrupts:
+>      maxItems: 1
+>  
+> +  cdns,no-hpd:
 
-Update usb compatible per binding doc
+There is already no-hpd property.
 
-Signed-off-by: Peng Fan <peng.fan@nxp.com>
----
- arch/arm64/boot/dts/freescale/imx8dxl-ss-conn.dtsi | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+> +    type: boolean
+> +    description:
+> +      Set if the HPD line on the bridge isn't hooked up to anything or is
+> +      otherwise unusable.
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8dxl-ss-conn.dtsi b/arch/arm64/boot/dts/freescale/imx8dxl-ss-conn.dtsi
-index ca195e6d8f37..88913869ae9c 100644
---- a/arch/arm64/boot/dts/freescale/imx8dxl-ss-conn.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8dxl-ss-conn.dtsi
-@@ -34,7 +34,7 @@ eqos: ethernet@5b050000 {
- 	};
- 
- 	usbotg2: usb@5b0e0000 {
--		compatible = "fsl,imx8dxl-usb", "fsl,imx7ulp-usb";
-+		compatible = "fsl,imx8dxl-usb", "fsl,imx7ulp-usb", "fsl,imx6ul-usb";
- 		reg = <0x5b0e0000 0x200>;
- 		interrupt-parent = <&gic>;
- 		interrupts = <GIC_SPI 166 IRQ_TYPE_LEVEL_HIGH>;
-@@ -63,7 +63,7 @@ clk_dummy: clock-dummy {
- 
- 	usbmisc2: usbmisc@5b0e0200 {
- 		#index-cells = <1>;
--		compatible = "fsl,imx7ulp-usbmisc";
-+		compatible = "fsl,imx7ulp-usbmisc", "fsl,imx7d-usbmisc", "fsl,imx6q-usbmisc";
- 		reg = <0x5b0e0200 0x200>;
- 	};
- 
--- 
-2.37.1
+It's the property of the panel, not bridge. Unless you want to say that
+bridge physically does not have HPD? Does it follow the standard in such
+case?
+
+Best regards,
+Krzysztof
 
