@@ -2,125 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 774086BE67D
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 11:20:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4E496BE683
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 11:22:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230051AbjCQKUg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 06:20:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59400 "EHLO
+        id S230043AbjCQKWB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 06:22:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230139AbjCQKUW (ORCPT
+        with ESMTP id S229707AbjCQKV5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 06:20:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 706313FB8F;
-        Fri, 17 Mar 2023 03:20:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 17 Mar 2023 06:21:57 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47B8CDBE2;
+        Fri, 17 Mar 2023 03:21:47 -0700 (PDT)
+Received: from [192.168.1.90] (unknown [188.24.156.231])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7D3A16222D;
-        Fri, 17 Mar 2023 10:20:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 957E3C433D2;
-        Fri, 17 Mar 2023 10:20:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679048417;
-        bh=3kO5aavn20pRd6T/BnfAZNIDQYJTPBi56iyxaCeDH38=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Vn7jq9AbkHQpEfF0NajnVkhbJBwbKwFv2NrW3hncAMbjBGV8uoywdZOpLgZEId4bv
-         PyyiOmyL5fPi5AB1IK4FKxqvefzCPFrCEF/ue0z4YrLq1pda/jjXQAEInj0KU8wm3D
-         lex0AJ3pwc7ow3/UVzDhFutbU5y+GQHGaLh2qmMgmhfboTLVQogEUStyZa75U1Tq3Q
-         owlqqNXh7FUFQuKgAZuMUlwwbnSRl2D9oD2xcwrE87a3j+Qxp/vCgXWS67CgdxbmOe
-         d1TodGbEoGjF8yDleyIHQOHUCU6KK1UCba/kz0T5K/u1HolJgeASeG5tWB0KAs8kSt
-         3R5uD2mkoGF6g==
-Date:   Fri, 17 Mar 2023 11:20:11 +0100
-From:   Christian Brauner <brauner@kernel.org>
-To:     Eric Dumazet <edumazet@google.com>
-Cc:     davem@davemloft.net,
-        Aleksandr Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        David Ahern <dsahern@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Kees Cook <keescook@chromium.org>, linux-arch@vger.kernel.org,
-        Lennart Poettering <lennart@poettering.net>
-Subject: Re: [PATCH net-next 1/3] scm: add SO_PASSPIDFD and SCM_PIDFD
-Message-ID: <20230317102011.2cn7gv7r7lgyylg7@wittgenstein>
-References: <20230316131526.283569-1-aleksandr.mikhalitsyn@canonical.com>
- <20230316131526.283569-2-aleksandr.mikhalitsyn@canonical.com>
- <CANn89i+s7TG4jqC1qanboKff=-DRmDjB-vEkoLKbEDwv195ytg@mail.gmail.com>
- <CAEivzxeXx51+R=Pws_ZDyidrNOLcyi=xfS7KR8oRebRR9H6=3g@mail.gmail.com>
+        (Authenticated sender: cristicc)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 41CFA66030AA;
+        Fri, 17 Mar 2023 10:21:44 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1679048505;
+        bh=Dm30hfUK/ZdXDVg1rCbXsR0BnwH4IRiPfIqA2q405Ls=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=bzQBHJvu17Oeth8lZ8Cb+nujPSlPj2BwvCf4/6emcigFdBmI9bCTs8qtiWzTIq9tb
+         Ff/Drf9RarmfQ5751LBrwjCkRpywYybDTwWmNLaVbDURC9T2FVLIif8LBQ67tmu3dx
+         ngL2z79aAh2AK9RRG9p8uhI0jDpDPHx9iLWrhSGQ2C20WwljgXDM68svaFZej+nlFE
+         dD1JpzcuMCGrxsH4i8UZsi+H7wl109GAhv0KNlWoa3uHQp2AZ9Gxn6hRUwk2Tke86g
+         Try3mpmzEEAsyktX6rpRPT9EOvDOTruIBOTtWce/s02dAynoQ7WydXYhzgDAns5GvA
+         HaqmPo236G4gg==
+Message-ID: <8ae57fe3-56aa-7e50-3eaa-a12a40657baf@collabora.com>
+Date:   Fri, 17 Mar 2023 12:21:41 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAEivzxeXx51+R=Pws_ZDyidrNOLcyi=xfS7KR8oRebRR9H6=3g@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [PATCH 02/11] dt-bindings: serial: snps-dw-apb-uart: Relax
+ dma-names order constraint
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Daniel Drake <drake@endlessm.com>,
+        Katsuhiro Suzuki <katsuhiro@katsuster.net>
+Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-rockchip@lists.infradead.org,
+        linux-riscv@lists.infradead.org, kernel@collabora.com
+References: <20230315114806.3819515-1-cristian.ciocaltea@collabora.com>
+ <20230315114806.3819515-3-cristian.ciocaltea@collabora.com>
+ <3679f2d0-55f0-1710-abc2-b268b6fc6969@linaro.org>
+From:   Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+In-Reply-To: <3679f2d0-55f0-1710-abc2-b268b6fc6969@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 16, 2023 at 04:32:03PM +0100, Aleksandr Mikhalitsyn wrote:
-> On Thu, Mar 16, 2023 at 3:34 PM Eric Dumazet <edumazet@google.com> wrote:
-> >
-> > On Thu, Mar 16, 2023 at 6:16 AM Alexander Mikhalitsyn
-> > <aleksandr.mikhalitsyn@canonical.com> wrote:
-> > >
-> > > Implement SCM_PIDFD, a new type of CMSG type analogical to SCM_CREDENTIALS,
-> > > but it contains pidfd instead of plain pid, which allows programmers not
-> > > to care about PID reuse problem.
-> >
-> > Hi Alexander
+On 3/17/23 10:31, Krzysztof Kozlowski wrote:
+> On 15/03/2023 12:47, Cristian Ciocaltea wrote:
+>> Commit 370f696e4474 ("dt-bindings: serial: snps-dw-apb-uart: add dma &
+>> dma-names properties") documented dma-names property to handle Allwiner
+>> D1 dtbs_check warnings, but relies on a strict rx->tx ordering, which is
+>> the reverse of what a different board expects:
+>>
+>>    rk3326-odroid-go2.dtb: serial@ff030000: dma-names:0: 'rx' was expected
+>>
+>> A quick and incomplete check shows the inconsistency is present in many
+>> other DT files:
 > 
-> Hi Eric
-> 
-> Thanks for the fast reply! ;-)
-> 
-> >
-> > This would add yet another conditional in af_unix fast path.
-> >
-> > It seems that we already can use pidfd_open() (since linux-5.3), and
-> > pass the resulting fd in af_unix SCM_RIGHTS message ?
-> 
-> Yes, it's possible, but it means that from the receiver side we need
-> to trust the sent pidfd (in SCM_RIGHTS),
-> or always use combination of SCM_RIGHTS+SCM_CREDENTIALS, then we can
-> extract pidfd from SCM_RIGHTS,
-> then acquire plain pid from pidfd and after compare it with the pid
-> from SCM_CREDENTIALS.
-> 
-> >
-> > If you think this is not suitable, it should at least be mentioned in
-> > the changelog.
+> Why not fixing the DTS? The properties should have fixed order.
 
-Let me try and provide some of the missing background.
+I was initially concerned about the risk of a potential ABI breakage, 
+but I think that's not really a problem since dma-names is not directly 
+accessed in the driver and DT Kernel API doesn't rely on a particular order.
 
-There are a range of use-cases where we would like to authenticate a
-client through sockets without being susceptible to PID recycling
-attacks. Currently, we can't do this as the race isn't fully fixable.
-We can only apply mitigations.
+If there are no objections, I would switch the order in the binding to 
+tx->rx, since that's what most of the DTS use, and fix the remaining ones.
 
-What this patchset will allows us to do is to get a pidfd without the
-client having to send us an fd explicitly via SCM_RIGHTS. As that's
-already possibly as you correctly point out.
+> Best regards,
+> Krzysztof
 
-But for protocols like polkit this is quite important. Every message is
-standalone and we would need to force a complete protocol change where
-we would need to require that every client allocate and send a pidfd via
-SCM_RIGHTS. That would also mean patching through all polkit users.
-
-For something like systemd-journald where we provide logging facilities
-and want to add metadata to the log we would also immensely benefit from
-being able to get a receiver-side controlled pidfd.
-
-With the message type we envisioned we don't need to change the sender
-at all and can be safe against pid recycling.
-
-Link: https://gitlab.freedesktop.org/polkit/polkit/-/merge_requests/154
-Link: https://uapi-group.org/kernel-features
+Thanks,
+Cristian
