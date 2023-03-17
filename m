@@ -2,114 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73CAF6BDF0C
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 03:50:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 961E66BDF0E
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 03:50:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229800AbjCQCuH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 22:50:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38894 "EHLO
+        id S229802AbjCQCug (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 22:50:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229680AbjCQCuF (ORCPT
+        with ESMTP id S229799AbjCQCue (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 22:50:05 -0400
-Received: from mail-m118111.qiye.163.com (mail-m118111.qiye.163.com [115.236.118.111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F07116A9F4;
-        Thu, 16 Mar 2023 19:50:01 -0700 (PDT)
-Received: from [172.23.196.229] (unknown [121.32.254.147])
-        by mail-m118111.qiye.163.com (Hmail) with ESMTPA id DFE60580599;
-        Fri, 17 Mar 2023 10:49:49 +0800 (CST)
-Message-ID: <34781b74-8d3e-a7e6-9abe-e8d45d680eec@sangfor.com.cn>
-Date:   Fri, 17 Mar 2023 10:49:49 +0800
+        Thu, 16 Mar 2023 22:50:34 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DA4A6C188;
+        Thu, 16 Mar 2023 19:50:23 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id p20so3809640plw.13;
+        Thu, 16 Mar 2023 19:50:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679021423;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=eqOf+CxGj15FfKuwcu74lHhmDEBF3KHOJ76Xs74tsCo=;
+        b=JZvwoa5Ef9PAedLtfmTHXeMTJSaerdQAhIIO/0fM1fEVLJfU+DpZEa07vrhzguD0VS
+         oxzTUa/8Pd1FAnN/4TXZlRLDidiegGz4h5qANU9ymG9MiPmjtyybYohl3G5jWp4+K4Th
+         5mlr3xZJXHv+lxvrR/V+vji6H+P24Dr+SqW38X1FRgT9joDR4JzpFoM5h+9MSyFuYGBG
+         hOpj5AlSsWcfG1UNKE+p9JCaHhFWkuIz2bZvvqsMXTyzkq0PI4TL+OHaifyi34M6XKbH
+         3ub1Ai+wXMa0Shh8GzCvyHWw3jimj71KuyVDnQZmdQZ3Bg5ZrwKWQ7zWBYLg37H+xkDX
+         6NYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679021423;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eqOf+CxGj15FfKuwcu74lHhmDEBF3KHOJ76Xs74tsCo=;
+        b=28Ao31zobZ8LDD3tLkx4CUg3zkZc9DPTeaG0tLJ59Vg3Gq2NtWr+49L0pov0wZtPKV
+         OdTwzWNfybSiV75EVHB1917GML+NBLjE1eIWhBqNnZOdZSLsGK1QHIfoAj+OSUVWLzP3
+         mOizW2+t9anvmYrlWbI3uw4PXls3hhdFhuEci/JkQvga6gmEqxmER89v6klajaVFg5Q0
+         SjByiqDjzin3yj4/1HgNL4SdvKdCcVwMEjzWLM4DjCUCbCyE+nBRSwBKsKPLkWJHeQbw
+         xtfXYAHtpEEiQVZTjpsxhJLX6scfpdpdt2thzAeKkDT33LmwFjoY96NlhgbEED5HrFON
+         9Xqw==
+X-Gm-Message-State: AO0yUKUcqUrejluHD30TsLb646G3Gw7Q4Ufv34tlf0wdLb9ewbwQfhJv
+        tOC8jRBnxsVdk0TU5+rVB+I=
+X-Google-Smtp-Source: AK7set+v4mVgYo7xq5UuvP/+1h15xes5JpADeaNqzsp2Wtx8siW6JkXm09m4A5J0xbYsRG9n+d2Vtg==
+X-Received: by 2002:a05:6a20:4320:b0:d0:45c0:1421 with SMTP id h32-20020a056a20432000b000d045c01421mr7271059pzk.48.1679021422972;
+        Thu, 16 Mar 2023 19:50:22 -0700 (PDT)
+Received: from debian.me (subs32-116-206-28-44.three.co.id. [116.206.28.44])
+        by smtp.gmail.com with ESMTPSA id x17-20020aa784d1000000b005dc70330d9bsm398175pfn.26.2023.03.16.19.50.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Mar 2023 19:50:22 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id E3F24106830; Fri, 17 Mar 2023 09:50:19 +0700 (WIB)
+Date:   Fri, 17 Mar 2023 09:50:19 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 5.15 000/137] 5.15.103-rc2 review
+Message-ID: <ZBPVa6Bjb8MycqR7@debian.me>
+References: <20230316083443.411936182@linuxfoundation.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-From:   Donglin Peng <pengdonglin@sangfor.com.cn>
-Subject: Re: [PATCH v4 1/2] function_graph: Support recording and printing the
- return value of function
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     mhiramat@kernel.org, rostedt@goodmis.org, mark.rutland@arm.com,
-        will@kernel.org, catalin.marinas@arm.com, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, tglx@linutronix.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, mingo@redhat.com,
-        xiehuan09@gmail.com, dinghui@sangfor.com.cn,
-        huangcun@sangfor.com.cn, dolinux.peng@gmail.com,
-        linux-trace-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230315133911.958741-1-pengdonglin@sangfor.com.cn>
- <20230315133911.958741-2-pengdonglin@sangfor.com.cn>
- <ZBOkY8FkqgoBfzQ2@shell.armlinux.org.uk>
-Content-Language: en-US
-In-Reply-To: <ZBOkY8FkqgoBfzQ2@shell.armlinux.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-        tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVkaSB4eVk1OSxlOHRpMTkpNH1UTARMWGhIXJBQOD1
-        lXWRgSC1lBWUpJSlVISVVJTk9VSk9MWVdZFhoPEhUdFFlBWU9LSFVKSktPSEhVSktLVUtZBg++
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6PCI6PRw6PT0NSB9CNyk*NA8x
-        QzkwCVFVSlVKTUxCS0lKSEJKT09KVTMWGhIXVQseFRwfFBUcFxIVOwgaFRwdFAlVGBQWVRgVRVlX
-        WRILWUFZSklKVUhJVUlOT1VKT0xZV1kIAVlBT0xOTTcG
-X-HM-Tid: 0a86ed793c992eb7kusndfe60580599
-X-HM-MType: 1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="G5gDks0r2/4k1sM6"
+Content-Disposition: inline
+In-Reply-To: <20230316083443.411936182@linuxfoundation.org>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/3/17 7:21, Russell King (Oracle) wrote:
-> On Wed, Mar 15, 2023 at 06:39:10AM -0700, Donglin Peng wrote:
->> diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
->> index e24a9820e12f..ad03fc868f34 100644
->> --- a/arch/arm/Kconfig
->> +++ b/arch/arm/Kconfig
->> @@ -99,6 +99,7 @@ config ARM
->>   	select HAVE_FTRACE_MCOUNT_RECORD if !XIP_KERNEL
->>   	select HAVE_FUNCTION_ERROR_INJECTION
->>   	select HAVE_FUNCTION_GRAPH_TRACER
->> +	select HAVE_FUNCTION_GRAPH_RETVAL if HAVE_FUNCTION_GRAPH_TRACER
->>   	select HAVE_FUNCTION_TRACER if !XIP_KERNEL
->>   	select HAVE_GCC_PLUGINS
->>   	select HAVE_HW_BREAKPOINT if PERF_EVENTS && (CPU_V6 || CPU_V6K || CPU_V7)
->> diff --git a/arch/arm/kernel/entry-ftrace.S b/arch/arm/kernel/entry-ftrace.S
->> index 3e7bcaca5e07..0151d2ce9958 100644
->> --- a/arch/arm/kernel/entry-ftrace.S
->> +++ b/arch/arm/kernel/entry-ftrace.S
->> @@ -258,6 +258,10 @@ ENDPROC(ftrace_graph_regs_caller)
->>   #ifdef CONFIG_FUNCTION_GRAPH_TRACER
->>   ENTRY(return_to_handler)
->>   	stmdb	sp!, {r0-r3}
->> +#ifdef CONFIG_FUNCTION_GRAPH_RETVAL
->> +	/* Pass the function return value to ftrace_return_to_handler */
->> +	mov	r1, r0
-> 
-> In a similar vein to Peter's comment, do we care about 64-bit return
-> values here, because the above only covers 32-bit values.
-> 
-> If we do care about 64-bit values, then we get into EABI/OABI
-> stickyness, because on EABI the 64-bit value would have to be passed
-> in r2,r3, and OABI would need r1,r2.
-> 
-> it would be better to have the 64-bit argument as the first argument
-> to ftrace_return_to_handler() which would eliminate that variability,
-> but I don't know what effect that would have for other architectures.
-> 
-> Things get more icky if we want 128-bit values. For EABI, we've
-> conveniently just stacked that. For OABI, that would need to be in
-> r1-r3 and the final high bits on the stack.
-> 
-> With a 128-bit argument as the first, that would be r0-r3 with the
-> existing stack pointer argument stored... on the stack.
-> 
-> So, really it depends what size of return value we want to report.
-> Also, please bear in mind that where a function returns a 32-bit
-> value, that will be in r0, and r1 will be whatever happened to be
-> in it at function exit - there's no defined value for r1.
-> 
 
-Thank you. I will document this as a limitation of fgraph return value.
-It can just cover most cases at present and I think the r0 is enough.
+--G5gDks0r2/4k1sM6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+On Thu, Mar 16, 2023 at 09:50:12AM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.103 release.
+> There are 137 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>=20
+
+Successfully cross-compiled for arm64 (bcm2711_defconfig, GCC 10.2.0)
+and
+powerpc (ps3_defconfig, GCC 12.2.0).
+
+Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--G5gDks0r2/4k1sM6
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZBPVawAKCRD2uYlJVVFO
+o1JlAQDmo1xyFn0bF+wqbHTfjl5EH4NqrNB5OIqt0w9tkkjzjQD/YLXBymEElPyV
+D7qJStL1c9hx06Vio0druOR2et9UxwQ=
+=2EUh
+-----END PGP SIGNATURE-----
+
+--G5gDks0r2/4k1sM6--
