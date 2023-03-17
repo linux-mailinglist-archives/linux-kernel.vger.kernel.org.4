@@ -2,64 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FE1B6BE47F
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 09:56:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62C176BE487
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 09:57:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231421AbjCQI4t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 04:56:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38742 "EHLO
+        id S231655AbjCQI5I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 04:57:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231339AbjCQI4m (ORCPT
+        with ESMTP id S231431AbjCQI4v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 04:56:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2E0D69CF2;
-        Fri, 17 Mar 2023 01:56:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EBFB862233;
-        Fri, 17 Mar 2023 08:56:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16927C433D2;
-        Fri, 17 Mar 2023 08:56:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679043368;
-        bh=slpiaAEjXiTq1hkVY9j8a9HW24x6Azyc16xU5RO6KWs=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=DMAqwki8MOihwuNweDUAzPF6FMgssCtOcAeccrigmtelNe0g+LdJRLX8uXqrlEQcE
-         eTR9VInTe4pXTF32ygqzEEDiPuJZA13bxKKAeWA/Px9Z2BkeedsjUmGFK82KNRB3oh
-         CO0siH7jD+SQ6R8gRdRYYRb7hQGEJT29610+EZIi8/3FEIlV3CHv6+a/Yqa1EXpQPc
-         tST++7pP2OMT4PWz52KW7JWp+kfaZYU99R21TAAvDlMVKNOcc5iAOPhODpfKkR7/y/
-         11mOmXuCbZRvHfcbKc68NUeBRpFUWyyGdmJvk0i7cF5HBXnxI1aYkU5imjfxwkbTwO
-         fojVBkNNfSHEg==
-Message-ID: <3f26b194-287c-074d-8e78-572875f9a734@kernel.org>
-Date:   Fri, 17 Mar 2023 10:56:02 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v4 2/5] soc: ti: pruss: Add
- pruss_{request,release}_mem_region() API
-Content-Language: en-US
-To:     MD Danish Anwar <danishanwar@ti.com>,
-        "Andrew F. Davis" <afd@ti.com>, Suman Anna <s-anna@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Nishanth Menon <nm@ti.com>
-Cc:     linux-remoteproc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-omap@vger.kernel.org, srk@ti.com, devicetree@vger.kernel.org,
-        netdev@vger.kernel.org
-References: <20230313111127.1229187-1-danishanwar@ti.com>
- <20230313111127.1229187-3-danishanwar@ti.com>
-From:   Roger Quadros <rogerq@kernel.org>
-In-Reply-To: <20230313111127.1229187-3-danishanwar@ti.com>
+        Fri, 17 Mar 2023 04:56:51 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBB5869CEB
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 01:56:19 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id ek18so17565104edb.6
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 01:56:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fairphone.com; s=fair; t=1679043376;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oXPml0L2FvWT/P6LsYduii0VEz4PvjP2XGtEFW2HUq4=;
+        b=4ehrPnQOB0XrxGXZW32Fzhnptnmb+Hw335tL+IIYTZNVisk43LRgtfmm31kJO8BG2h
+         1z4Yo4xZLnLPDFZIdtTCkNoGRnJ+RYMoSXmUKwO7tNfWhRttVOizMWl0Vlsbj5NL9OCu
+         uBVhU5J76g+VchukPCgKHC8zeZeFbfZ+Y6RNCN0LCEyh6VlFTb9Y5H6yTtnXCompaZrx
+         ANVel6uPYlJKgtDkeCFiyhJ9zQtvOY5GjlHvS4vMYuiWCIY81FtTkiDUFYXSrCsLCXty
+         SIF84nfJV4GygkeUWye74JovGwtoSqBzwSlCUD1OIaRLsCh15fHjWPSk3roTgxZyFnW6
+         iiSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679043376;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=oXPml0L2FvWT/P6LsYduii0VEz4PvjP2XGtEFW2HUq4=;
+        b=DF8Ffxk/mNcgF8cnwt8MHv1iR0mmJIZ5ViOlWi0NCOHm3QKuuVXfkjLh1/l/IOkYex
+         YtwIHPktOeJINSd/nJtcGVlN9xft01Pt5THBJk2bYshlFa0KvMj24muBWcyxEl33Oypb
+         FmOImutDO+Ekg9MAuAKYzG6qEervYRw7vSugEiuU6DEAl4cswaNYwPvNembpEsvBTc7I
+         jNK0wwVDhnADupF0Ihg/VOaULCMCB6YTwVKATEe9Ewz1fJJ0TeBdZ5O5rdCGHwpyDiOY
+         z7GUeWamFUiNBgEwlAMEtup/tpzJ98SPM8b5hZRYX9lCt6HU/QE/jlwDJCsgNFYMhRGH
+         10uQ==
+X-Gm-Message-State: AO0yUKW7oFSnqiqGSESsT7xwKDaSjkkMXrNJJRdxccGMy9WRuoAoVr2B
+        YwmQ9gZMgB3fs+JwFkWANk4Pdg==
+X-Google-Smtp-Source: AK7set9NxTBVIQmtSDubH5be+XCsaEEwrVBJdBHJw3BTSJEXc4IgmfFhk5P/hmvEos14ccyaleWa5w==
+X-Received: by 2002:a17:906:2357:b0:931:7709:4c80 with SMTP id m23-20020a170906235700b0093177094c80mr2387795eja.71.1679043376333;
+        Fri, 17 Mar 2023 01:56:16 -0700 (PDT)
+Received: from localhost (2a02-8388-6582-fe80-0000-0000-0000-000b.cable.dynamic.v6.surfer.at. [2a02:8388:6582:fe80::b])
+        by smtp.gmail.com with ESMTPSA id k15-20020a50ce4f000000b004bef1187754sm744557edj.95.2023.03.17.01.56.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Mar 2023 01:56:16 -0700 (PDT)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Date:   Fri, 17 Mar 2023 09:56:15 +0100
+Message-Id: <CR8J7A4RGCHZ.293RWUBS367M2@otso>
+Cc:     "Marijn Suijten" <marijn.suijten@somainline.org>,
+        "Rob Herring" <robh@kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        "Konrad Dybcio" <konrad.dybcio@somainline.org>
+Subject: Re: [PATCH 4/5] arm64: dts: qcom: sm6350: Add GPU nodes
+From:   "Luca Weiss" <luca.weiss@fairphone.com>
+To:     "Konrad Dybcio" <konrad.dybcio@linaro.org>,
+        "Bjorn Andersson" <andersson@kernel.org>,
+        "Andy Gross" <agross@kernel.org>,
+        "Michael Turquette" <mturquette@baylibre.com>,
+        "Stephen Boyd" <sboyd@kernel.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        "AngeloGioacchino Del Regno" 
+        <angelogioacchino.delregno@somainline.org>
+X-Mailer: aerc 0.14.0
+References: <20230315-topic-lagoon_gpu-v1-0-a74cbec4ecfc@linaro.org>
+ <20230315-topic-lagoon_gpu-v1-4-a74cbec4ecfc@linaro.org>
+In-Reply-To: <20230315-topic-lagoon_gpu-v1-4-a74cbec4ecfc@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,254 +85,257 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andrew & Danish,
-
-
-On 13/03/2023 13:11, MD Danish Anwar wrote:
-> From: "Andrew F. Davis" <afd@ti.com>
-> 
-> Add two new API - pruss_request_mem_region() & pruss_release_mem_region(),
-> to the PRUSS platform driver to allow client drivers to acquire and release
-> the common memory resources present within a PRU-ICSS subsystem. This
-> allows the client drivers to directly manipulate the respective memories,
-> as per their design contract with the associated firmware.
-> 
-> Co-developed-by: Suman Anna <s-anna@ti.com>
-> Signed-off-by: Suman Anna <s-anna@ti.com>
-> Signed-off-by: Andrew F. Davis <afd@ti.com>
-> Co-developed-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
-> Signed-off-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
-> Signed-off-by: MD Danish Anwar <danishanwar@ti.com>
-> Reviewed-by: Roger Quadros <rogerq@kernel.org>
+On Thu Mar 16, 2023 at 12:16 PM CET, Konrad Dybcio wrote:
+> From: Konrad Dybcio <konrad.dybcio@somainline.org>
+>
+> Add Adreno, GPU SMMU and GMU nodes to hook up everything that
+> the A619 needs to function properly.
+>
+> Co-developed-by: Luca Weiss <luca.weiss@fairphone.com>
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 > ---
->  drivers/soc/ti/pruss.c           | 77 ++++++++++++++++++++++++++++++++
->  include/linux/pruss_driver.h     | 27 +++--------
->  include/linux/remoteproc/pruss.h | 39 ++++++++++++++++
+>  arch/arm64/boot/dts/qcom/sm6350.dtsi | 140 +++++++++++++++++++++++++++++=
+++++++
+>  1 file changed, 140 insertions(+)
+>
+> diff --git a/arch/arm64/boot/dts/qcom/sm6350.dtsi b/arch/arm64/boot/dts/q=
+com/sm6350.dtsi
+> index 60b68d305e53..e967d06b0ad4 100644
+> --- a/arch/arm64/boot/dts/qcom/sm6350.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sm6350.dtsi
+> @@ -1138,6 +1138,74 @@ compute-cb@5 {
+>  			};
+>  		};
+> =20
+> +		gpu: gpu@3d00000 {
+> +			compatible =3D "qcom,adreno-619.0", "qcom,adreno";
+> +			reg =3D <0 0x03d00000 0 0x40000>,
+> +			      <0 0x03d9e000 0 0x1000>;
+> +			reg-names =3D "kgsl_3d0_reg_memory",
+> +				    "cx_mem";
+> +			interrupts =3D <GIC_SPI 300 IRQ_TYPE_LEVEL_HIGH>;
+> +
+> +			iommus =3D <&adreno_smmu 0>;
+> +			operating-points-v2 =3D <&gpu_opp_table>;
+> +			qcom,gmu =3D <&gmu>;
+> +			nvmem-cells =3D <&gpu_speed_bin>;
+> +			nvmem-cell-names =3D "speed_bin";
 
+What about adding interconnect already? I also have opp-peak-kBps
+additions in the opp table for that. I'll attach the diff I have at the
+end of the email.
 
-We have these 2 header files and I think anything that deals with
-'struct pruss' should go in include/linux/pruss_driver.h
+> +
+> +			status =3D "disabled";
+> +
+> +			zap-shader {
+> +				memory-region =3D <&pil_gpu_mem>;
+> +			};
+> +
+> +			gpu_opp_table: opp-table {
+> +				compatible =3D "operating-points-v2";
+> +
+> +				opp-850000000 {
+> +					opp-hz =3D /bits/ 64 <850000000>;
+> +					opp-level =3D <RPMH_REGULATOR_LEVEL_TURBO_L1>;
+> +					opp-supported-hw =3D <0x02>;
+> +				};
+> +
+> +				opp-800000000 {
+> +					opp-hz =3D /bits/ 64 <800000000>;
+> +					opp-level =3D <RPMH_REGULATOR_LEVEL_TURBO>;
+> +					opp-supported-hw =3D <0x04>;
+> +				};
+> +
+> +				opp-650000000 {
+> +					opp-hz =3D /bits/ 64 <650000000>;
+> +					opp-level =3D <RPMH_REGULATOR_LEVEL_NOM_L1>;
+> +					opp-supported-hw =3D <0x08>;
+> +				};
+> +
+> +				opp-565000000 {
+> +					opp-hz =3D /bits/ 64 <565000000>;
+> +					opp-level =3D <RPMH_REGULATOR_LEVEL_NOM>;
+> +					opp-supported-hw =3D <0x10>;
+> +				};
+> +
+> +				opp-430000000 {
+> +					opp-hz =3D /bits/ 64 <430000000>;
+> +					opp-level =3D <RPMH_REGULATOR_LEVEL_SVS_L1>;
+> +					opp-supported-hw =3D <0xff>;
+> +				};
+> +
+> +				opp-355000000 {
+> +					opp-hz =3D /bits/ 64 <355000000>;
+> +					opp-level =3D <RPMH_REGULATOR_LEVEL_SVS>;
+> +					opp-supported-hw =3D <0xff>;
+> +				};
+> +
+> +				opp-253000000 {
+> +					opp-hz =3D /bits/ 64 <253000000>;
+> +					opp-level =3D <RPMH_REGULATOR_LEVEL_LOW_SVS>;
+> +					opp-supported-hw =3D <0xff>;
+> +				};
+> +			};
+> +		};
+> +
+> +
+>  		gpucc: clock-controller@3d90000 {
+>  			compatible =3D "qcom,sm6350-gpucc";
+>  			reg =3D <0 0x03d90000 0 0x9000>;
+> @@ -1152,6 +1220,78 @@ gpucc: clock-controller@3d90000 {
+>  			#power-domain-cells =3D <1>;
+>  		};
+> =20
+> +		adreno_smmu: iommu@3d40000 {
 
-Anything that deals with pru_rproc (i.e. struct rproc) should go in
-include/linux/remoteproc/pruss.h
+This and gmu should be above gpucc @3d90000?
 
-Do you agree?
+> +			compatible =3D "qcom,sm6350-smmu-v2", "qcom,adreno-smmu", "qcom,smmu-=
+v2";
+> +			reg =3D <0 0x03d40000 0 0x10000>;
+> +			#iommu-cells =3D <1>;
+> +			#global-interrupts =3D <2>;
+> +			interrupts =3D <GIC_SPI 229 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 231 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 364 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 365 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 366 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 367 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 368 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 369 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 370 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 371 IRQ_TYPE_LEVEL_HIGH>;
+> +
+> +			clocks =3D <&gpucc GPU_CC_AHB_CLK>,
+> +				 <&gcc GCC_GPU_MEMNOC_GFX_CLK>,
+> +				 <&gcc GCC_GPU_SNOC_DVM_GFX_CLK>;
+> +			clock-names =3D "ahb",
+> +				      "bus",
+> +				      "iface";
+> +
+> +			power-domains =3D <&gpucc GPU_CX_GDSC>;
+> +		};
+> +
+> +		gmu: gmu@3d6a000 {
+> +			compatible =3D "qcom,adreno-gmu-619.0", "qcom,adreno-gmu";
+> +			reg =3D <0 0x03d6a000 0 0x31000>,
+> +			      <0 0x0b290000 0 0x10000>,
+> +			      <0 0x0b490000 0 0x10000>;
+> +			reg-names =3D "gmu",
+> +				    "gmu_pdc",
+> +				    "gmu_pdc_seq";
+> +
+> +			interrupts =3D <GIC_SPI 304 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 305 IRQ_TYPE_LEVEL_HIGH>;
+> +			interrupt-names =3D "hfi",
+> +					  "gmu";
+> +
+> +			clocks =3D <&gpucc GPU_CC_AHB_CLK>,
+> +				 <&gpucc GPU_CC_CX_GMU_CLK>,
+> +				 <&gpucc GPU_CC_CXO_CLK>,
+> +				 <&gcc GCC_DDRSS_GPU_AXI_CLK>,
+> +				 <&gcc GCC_GPU_MEMNOC_GFX_CLK>;
+> +			clock-names =3D "ahb",
+> +				      "gmu",
+> +				      "cxo",
+> +				      "axi",
+> +				      "memnoc";
+> +
+> +			power-domains =3D <&gpucc GPU_CX_GDSC>,
+> +					<&gpucc GPU_GX_GDSC>;
+> +			power-domain-names =3D "cx",
+> +					     "gx";
+> +
+> +			iommus =3D <&adreno_smmu 5>;
+> +
+> +			operating-points-v2 =3D <&gmu_opp_table>;
+> +
+> +			status =3D "disabled";
+> +
+> +			gmu_opp_table: opp-table {
+> +				compatible =3D "operating-points-v2";
+> +
+> +				opp-200000000 {
+> +					opp-hz =3D /bits/ 64 <200000000>;
+> +					opp-level =3D <RPMH_REGULATOR_LEVEL_MIN_SVS>;
+> +				};
+> +			};
+> +		};
+> +
+>  		mpss: remoteproc@4080000 {
+>  			compatible =3D "qcom,sm6350-mpss-pas";
+>  			reg =3D <0x0 0x04080000 0x0 0x4040>;
+>
+> --=20
+> 2.39.2
 
->  3 files changed, 121 insertions(+), 22 deletions(-)
-> 
-> diff --git a/drivers/soc/ti/pruss.c b/drivers/soc/ti/pruss.c
-> index a169aa1ed044..c8053c0d735f 100644
-> --- a/drivers/soc/ti/pruss.c
-> +++ b/drivers/soc/ti/pruss.c
-> @@ -88,6 +88,82 @@ void pruss_put(struct pruss *pruss)
->  }
->  EXPORT_SYMBOL_GPL(pruss_put);
->  
-> +/**
-> + * pruss_request_mem_region() - request a memory resource
-> + * @pruss: the pruss instance
-> + * @mem_id: the memory resource id
-> + * @region: pointer to memory region structure to be filled in
-> + *
-> + * This function allows a client driver to request a memory resource,
-> + * and if successful, will let the client driver own the particular
-> + * memory region until released using the pruss_release_mem_region()
-> + * API.
-> + *
-> + * Return: 0 if requested memory region is available (in such case pointer to
-> + * memory region is returned via @region), an error otherwise
-> + */
-> +int pruss_request_mem_region(struct pruss *pruss, enum pruss_mem mem_id,
-> +			     struct pruss_mem_region *region)
-> +{
-> +	if (!pruss || !region || mem_id >= PRUSS_MEM_MAX)
-> +		return -EINVAL;
-> +
-> +	mutex_lock(&pruss->lock);
-> +
-> +	if (pruss->mem_in_use[mem_id]) {
-> +		mutex_unlock(&pruss->lock);
-> +		return -EBUSY;
-> +	}
-> +
-> +	*region = pruss->mem_regions[mem_id];
-> +	pruss->mem_in_use[mem_id] = region;
-> +
-> +	mutex_unlock(&pruss->lock);
-> +
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL_GPL(pruss_request_mem_region);
-> +
-> +/**
-> + * pruss_release_mem_region() - release a memory resource
-> + * @pruss: the pruss instance
-> + * @region: the memory region to release
-> + *
-> + * This function is the complimentary function to
-> + * pruss_request_mem_region(), and allows the client drivers to
-> + * release back a memory resource.
-> + *
-> + * Return: 0 on success, an error code otherwise
-> + */
-> +int pruss_release_mem_region(struct pruss *pruss,
-> +			     struct pruss_mem_region *region)
-> +{
-> +	int id;
-> +
-> +	if (!pruss || !region)
-> +		return -EINVAL;
-> +
-> +	mutex_lock(&pruss->lock);
-> +
-> +	/* find out the memory region being released */
-> +	for (id = 0; id < PRUSS_MEM_MAX; id++) {
-> +		if (pruss->mem_in_use[id] == region)
-> +			break;
-> +	}
-> +
-> +	if (id == PRUSS_MEM_MAX) {
-> +		mutex_unlock(&pruss->lock);
-> +		return -EINVAL;
-> +	}
-> +
-> +	pruss->mem_in_use[id] = NULL;
-> +
-> +	mutex_unlock(&pruss->lock);
-> +
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL_GPL(pruss_release_mem_region);
-> +
->  static void pruss_of_free_clk_provider(void *data)
->  {
->  	struct device_node *clk_mux_np = data;
-> @@ -290,6 +366,7 @@ static int pruss_probe(struct platform_device *pdev)
->  		return -ENOMEM;
->  
->  	pruss->dev = dev;
-> +	mutex_init(&pruss->lock);
->  
->  	child = of_get_child_by_name(np, "memories");
->  	if (!child) {
-> diff --git a/include/linux/pruss_driver.h b/include/linux/pruss_driver.h
-> index 86242fb5a64a..22b4b37d2536 100644
-> --- a/include/linux/pruss_driver.h
-> +++ b/include/linux/pruss_driver.h
-> @@ -9,37 +9,18 @@
->  #ifndef _PRUSS_DRIVER_H_
->  #define _PRUSS_DRIVER_H_
->  
-> +#include <linux/mutex.h>
->  #include <linux/remoteproc/pruss.h>
->  #include <linux/types.h>
->  
-> -/*
-> - * enum pruss_mem - PRUSS memory range identifiers
-> - */
-> -enum pruss_mem {
-> -	PRUSS_MEM_DRAM0 = 0,
-> -	PRUSS_MEM_DRAM1,
-> -	PRUSS_MEM_SHRD_RAM2,
-> -	PRUSS_MEM_MAX,
-> -};
-> -
-> -/**
-> - * struct pruss_mem_region - PRUSS memory region structure
-> - * @va: kernel virtual address of the PRUSS memory region
-> - * @pa: physical (bus) address of the PRUSS memory region
-> - * @size: size of the PRUSS memory region
-> - */
-> -struct pruss_mem_region {
-> -	void __iomem *va;
-> -	phys_addr_t pa;
-> -	size_t size;
-> -};
-> -
->  /**
->   * struct pruss - PRUSS parent structure
->   * @dev: pruss device pointer
->   * @cfg_base: base iomap for CFG region
->   * @cfg_regmap: regmap for config region
->   * @mem_regions: data for each of the PRUSS memory regions
-> + * @mem_in_use: to indicate if memory resource is in use
-> + * @lock: mutex to serialize access to resources
->   * @core_clk_mux: clk handle for PRUSS CORE_CLK_MUX
->   * @iep_clk_mux: clk handle for PRUSS IEP_CLK_MUX
->   */
-> @@ -48,6 +29,8 @@ struct pruss {
->  	void __iomem *cfg_base;
->  	struct regmap *cfg_regmap;
->  	struct pruss_mem_region mem_regions[PRUSS_MEM_MAX];
-> +	struct pruss_mem_region *mem_in_use[PRUSS_MEM_MAX];
-> +	struct mutex lock; /* PRU resource lock */
->  	struct clk *core_clk_mux;
->  	struct clk *iep_clk_mux;
->  };
-> diff --git a/include/linux/remoteproc/pruss.h b/include/linux/remoteproc/pruss.h
-> index 93a98cac7829..33f930e0a0ce 100644
-> --- a/include/linux/remoteproc/pruss.h
-> +++ b/include/linux/remoteproc/pruss.h
-> @@ -44,6 +44,28 @@ enum pru_ctable_idx {
->  	PRU_C31,
->  };
->  
-> +/*
-> + * enum pruss_mem - PRUSS memory range identifiers
-> + */
-> +enum pruss_mem {
-> +	PRUSS_MEM_DRAM0 = 0,
-> +	PRUSS_MEM_DRAM1,
-> +	PRUSS_MEM_SHRD_RAM2,
-> +	PRUSS_MEM_MAX,
-> +};
-> +
-> +/**
-> + * struct pruss_mem_region - PRUSS memory region structure
-> + * @va: kernel virtual address of the PRUSS memory region
-> + * @pa: physical (bus) address of the PRUSS memory region
-> + * @size: size of the PRUSS memory region
-> + */
-> +struct pruss_mem_region {
-> +	void __iomem *va;
-> +	phys_addr_t pa;
-> +	size_t size;
-> +};
-> +
->  struct device_node;
->  struct rproc;
->  struct pruss;
-> @@ -52,6 +74,10 @@ struct pruss;
->  
->  struct pruss *pruss_get(struct rproc *rproc);
->  void pruss_put(struct pruss *pruss);
-> +int pruss_request_mem_region(struct pruss *pruss, enum pruss_mem mem_id,
-> +			     struct pruss_mem_region *region);
-> +int pruss_release_mem_region(struct pruss *pruss,
-> +			     struct pruss_mem_region *region);
->  
->  #else
->  
-> @@ -62,6 +88,19 @@ static inline struct pruss *pruss_get(struct rproc *rproc)
->  
->  static inline void pruss_put(struct pruss *pruss) { }
->  
-> +static inline int pruss_request_mem_region(struct pruss *pruss,
-> +					   enum pruss_mem mem_id,
-> +					   struct pruss_mem_region *region)
-> +{
-> +	return -EOPNOTSUPP;
-> +}
-> +
-> +static inline int pruss_release_mem_region(struct pruss *pruss,
-> +					   struct pruss_mem_region *region)
-> +{
-> +	return -EOPNOTSUPP;
-> +}
-> +
->  #endif /* CONFIG_TI_PRUSS */
->  
->  #if IS_ENABLED(CONFIG_PRU_REMOTEPROC)
+Here's the diff I have for interconnect on top of this:
 
-cheers,
--roger
+diff --git a/arch/arm64/boot/dts/qcom/sm6350.dtsi b/arch/arm64/boot/dts/qco=
+m/sm6350.dtsi
+index 4954cbc2c0fc..51c5ac679a32 100644
+--- a/arch/arm64/boot/dts/qcom/sm6350.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm6350.dtsi
+@@ -1142,6 +1142,8 @@ gpu: gpu@3d00000 {
+ 			iommus =3D <&adreno_smmu 0>;
+ 			operating-points-v2 =3D <&gpu_opp_table>;
+ 			qcom,gmu =3D <&gmu>;
++			interconnects =3D <&gem_noc MASTER_GRAPHICS_3D 0 &clk_virt SLAVE_EBI_CH=
+0 0>;
++			interconnect-names =3D "gfx-mem";
+ 			nvmem-cells =3D <&gpu_speed_bin>;
+ 			nvmem-cell-names =3D "speed_bin";
+=20
+@@ -1157,42 +1159,49 @@ gpu_opp_table: opp-table {
+ 				opp-850000000 {
+ 					opp-hz =3D /bits/ 64 <850000000>;
+ 					opp-level =3D <RPMH_REGULATOR_LEVEL_TURBO_L1>;
++					opp-peak-kBps =3D <8371200>;
+ 					opp-supported-hw =3D <0x02>;
+ 				};
+=20
+ 				opp-800000000 {
+ 					opp-hz =3D /bits/ 64 <800000000>;
+ 					opp-level =3D <RPMH_REGULATOR_LEVEL_TURBO>;
++					opp-peak-kBps =3D <8371200>;
+ 					opp-supported-hw =3D <0x04>;
+ 				};
+=20
+ 				opp-650000000 {
+ 					opp-hz =3D /bits/ 64 <650000000>;
+ 					opp-level =3D <RPMH_REGULATOR_LEVEL_NOM_L1>;
++					opp-peak-kBps =3D <6220000>;
+ 					opp-supported-hw =3D <0x08>;
+ 				};
+=20
+ 				opp-565000000 {
+ 					opp-hz =3D /bits/ 64 <565000000>;
+ 					opp-level =3D <RPMH_REGULATOR_LEVEL_NOM>;
++					opp-peak-kBps =3D <5412000>;
+ 					opp-supported-hw =3D <0x10>;
+ 				};
+=20
+ 				opp-430000000 {
+ 					opp-hz =3D /bits/ 64 <430000000>;
+ 					opp-level =3D <RPMH_REGULATOR_LEVEL_SVS_L1>;
++					opp-peak-kBps =3D <4068000>;
+ 					opp-supported-hw =3D <0xff>;
+ 				};
+=20
+ 				opp-355000000 {
+ 					opp-hz =3D /bits/ 64 <355000000>;
+ 					opp-level =3D <RPMH_REGULATOR_LEVEL_SVS>;
++					opp-peak-kBps =3D <3072000>;
+ 					opp-supported-hw =3D <0xff>;
+ 				};
+=20
+ 				opp-253000000 {
+ 					opp-hz =3D /bits/ 64 <253000000>;
+ 					opp-level =3D <RPMH_REGULATOR_LEVEL_LOW_SVS>;
++					opp-peak-kBps =3D <2188000>;
+ 					opp-supported-hw =3D <0xff>;
+ 				};
+ 			};
+
