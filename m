@@ -2,107 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 302446BF059
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 19:06:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 911B86BF052
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 19:05:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230359AbjCQSGZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 14:06:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56394 "EHLO
+        id S230200AbjCQSFi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 14:05:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229705AbjCQSGX (ORCPT
+        with ESMTP id S229697AbjCQSFh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 14:06:23 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A92F60AAA
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 11:05:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1679076340;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=UIc+3uJLQO2epi9c5c7YBS9m+h9LmNMS++rx41y2Zn0=;
-        b=cXFwSROA3SToN8WsX1xwT4z321uPrMY1pkWh2AtNA1TybhE8ZGr3z+vaCzXYNIn8AJLnkv
-        tRgeUtM8BUwPKMkjZZrdTzQlZA6EjTbxc7yvZNGt76BI6zbdycwSqkvaNu/+PDF13IYDRm
-        fFUd2STNiDjddBYDqU1iL9hq5OXs41I=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-645-gD9KEK47O7-cDd1-m1Er1g-1; Fri, 17 Mar 2023 14:05:34 -0400
-X-MC-Unique: gD9KEK47O7-cDd1-m1Er1g-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Fri, 17 Mar 2023 14:05:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6585D367DD;
+        Fri, 17 Mar 2023 11:05:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D1E0C96DC8C;
-        Fri, 17 Mar 2023 18:05:32 +0000 (UTC)
-Received: from [10.22.10.238] (unknown [10.22.10.238])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 436EC2027046;
-        Fri, 17 Mar 2023 18:05:32 +0000 (UTC)
-Message-ID: <11b5454b-42c7-fb0d-f071-c46712f76f3b@redhat.com>
-Date:   Fri, 17 Mar 2023 14:05:32 -0400
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v2 3/4] cgroup/cpuset: Include offline CPUs when tasks'
- cpumasks in top_cpuset are updated
-Content-Language: en-US
-To:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
-Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>
-References: <20230317151508.1225282-1-longman@redhat.com>
- <20230317151508.1225282-4-longman@redhat.com>
- <20230317180157.uqlleobldg53pgj6@blackpad>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <20230317180157.uqlleobldg53pgj6@blackpad>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ED481610A7;
+        Fri, 17 Mar 2023 18:05:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 5D92AC433EF;
+        Fri, 17 Mar 2023 18:05:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1679076335;
+        bh=9QSB1PiXIAm1gt9SBmK8Jm1YhKADFlfSB/xSxtNIRvY=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=qpbOUgRW4P0C37WxHmGwimGg6FyFOWzW8Gaw2e8x/I1g71HVerr4pyLX9qa+/tMpZ
+         5crYrMcKjNbUh9ysDCtK+M6soZCBRm3bpZNuJgVjHjdG+oo6Bccpa7WGzEZVn/aIL0
+         dyWrdM3Ic/LXGXm4/v6rPczn86Py4osKtJMTi2T5JfOatcd7xqgFu0GB+pzyTw2UpB
+         UfAgRT/Ist4dzvqo6LrPtXjC6Xap1lROb+427H2ogwyMfLfcaBCIX6DG0j0Gjuyc/q
+         KInH8MA2eEQh4qX0js1jk4AiEYMFLMmp2gr81mxjLK4Y7rMDjunxs5RTNNuUKkkPLT
+         VPcApZM8D7D5g==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4236AC43161;
+        Fri, 17 Mar 2023 18:05:35 +0000 (UTC)
+Subject: Re: [GIT PULL] ACPI fixes for v6.3-rc3
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <CAJZ5v0gOXYVLXkPmk6_9r+Gwa+FXMdVXZBvjJsY--KW2MOC_tg@mail.gmail.com>
+References: <CAJZ5v0gOXYVLXkPmk6_9r+Gwa+FXMdVXZBvjJsY--KW2MOC_tg@mail.gmail.com>
+X-PR-Tracked-List-Id: <linux-acpi.vger.kernel.org>
+X-PR-Tracked-Message-Id: <CAJZ5v0gOXYVLXkPmk6_9r+Gwa+FXMdVXZBvjJsY--KW2MOC_tg@mail.gmail.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git acpi-6.3-rc3
+X-PR-Tracked-Commit-Id: f36cc6cd65204352815640a34e37ef39e56fbd42
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: abb02a824555c160dccc316971cbb802b3ebf4f7
+Message-Id: <167907633526.25430.3224522014979511911.pr-tracker-bot@kernel.org>
+Date:   Fri, 17 Mar 2023 18:05:35 +0000
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The pull request you sent on Fri, 17 Mar 2023 17:11:25 +0100:
 
-On 3/17/23 14:01, Michal Koutný wrote:
-> Hello.
->
-> On Fri, Mar 17, 2023 at 11:15:07AM -0400, Waiman Long <longman@redhat.com> wrote:
->>    * Iterate through each task of @cs updating its cpus_allowed to the
->>    * effective cpuset's.  As this function is called with cpuset_rwsem held,
->> - * cpuset membership stays stable.
->> + * cpuset membership stays stable. For top_cpuset, task_cpu_possible_mask()
->> + * is used instead of effective_cpus to make sure all offline CPUs are also
->> + * included as hotplug code won't update cpumasks for tasks in top_cpuset.
->>    */
-> On Wed, Mar 15, 2023 at 11:06:20AM +0100, Michal Koutný <mkoutny@suse.com> wrote:
->> I see now that it returns offlined cpus to top cpuset's tasks.
-> I considered only the "base" set change cs->effective_cpus ->
-> possible_mask. (Apologies for that mistake.)
->
-> However, I now read the note about subparts_cpus
->
->>          * effective_cpus contains only onlined CPUs, but subparts_cpus
->>          * may have offlined ones.
-> So if subpart_cpus keeps offlined CPUs, they will be subtracted from
-> possible_mask and absent in the resulting new_cpus, i.e. undesirable for
-> the tasks in that cpuset :-/
+> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git acpi-6.3-rc3
 
-A cpu will be in the subparts_cpus only if it has been given to the 
-child partition. So when it becomes online, it will become part of the 
-scheduling domain that child partition. Only the tasks in that child 
-partition will get their cpumasks updated to use it, not those in the 
-top cpuset.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/abb02a824555c160dccc316971cbb802b3ebf4f7
 
-Cheers,
-Longman
+Thank you!
 
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
