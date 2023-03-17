@@ -2,76 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E9A86BE057
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 05:58:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 148616BE05B
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 06:01:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229786AbjCQE6o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 00:58:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49486 "EHLO
+        id S229772AbjCQFAi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 01:00:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbjCQE6m (ORCPT
+        with ESMTP id S229476AbjCQFAf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 00:58:42 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 373821BAFD;
-        Thu, 16 Mar 2023 21:58:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F2B0AB81C3C;
-        Fri, 17 Mar 2023 04:58:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D688C433EF;
-        Fri, 17 Mar 2023 04:58:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679029118;
-        bh=JpS7lSiVAa5ROcbP589KLEjo9s5dmVcm1sS229Jdobs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AmC/25I1+Kwb3Rx8Hhyl/J+hOvTJxf4vn4LUyBmzd+MGYIr7rRiGOD82/E56jhmhJ
-         oLN3QvF0XlFKuJmN95TpNXaK5cvG9QsVkMSY1n+9cojMQ4OihZbauVaFgMirSJEfmH
-         yt68EuTs19EoW+N41UVBjtwHLkicQH9/Xa7x4q8Ny8v3JhDYjzON1owckv4pvaKCIY
-         rmsgGuJk/CjMCdRrsk6+N9sTy1rSmQaR3nRdZBsLQGsSUGTELqvl77J9CyUB27Psk3
-         w5jYXwHfjHfqHac3OXDU73SWHSniCQXz7Pc7R/ISHGrzbjJr0fBQC8XF+IcNrnazA/
-         wAuxS2YG8ad+g==
-Date:   Thu, 16 Mar 2023 21:58:36 -0700
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Tom Rix <trix@redhat.com>
-Cc:     tytso@mit.edu, adilger.kernel@dilger.ca,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ext4: remove unneeded check of nr_to_submit
-Message-ID: <20230317045836.GA882@sol.localdomain>
-References: <20230316204831.2472537-1-trix@redhat.com>
+        Fri, 17 Mar 2023 01:00:35 -0400
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 665E95A920
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 22:00:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=XqB12is+kKUQInBlIS2SuiteZwZo
+        5y3HKbz0OXT3cB8=; b=Nw7+UxfHAqvfkzXwnvjFT20v507LE2gl58Ld0oEBasXz
+        oUVbde5VlPSewH55So9G2xcWSPkr6zFJ0FvvB8G+O21omvXna9ZcYtf5fjSeFLYk
+        fyEilLpwA4kcDr3G99bXcV0K/t09bDFkByMpTsnxFDL0E82DxVHh17nNm889d9I=
+Received: (qmail 4104850 invoked from network); 17 Mar 2023 06:00:27 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 17 Mar 2023 06:00:27 +0100
+X-UD-Smtp-Session: l3s3148p1@KwmDdBH33ogujnvb
+Date:   Fri, 17 Mar 2023 06:00:24 +0100
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     netdev@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Steve Glendinning <steve.glendinning@shawell.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] Revert "net: smsc911x: Make Runtime PM handling more
+ fine-grained"
+Message-ID: <ZBPz6Ads0dOT8ceT@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>, netdev@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Steve Glendinning <steve.glendinning@shawell.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+        linux-kernel@vger.kernel.org
+References: <20230316074558.15268-1-wsa+renesas@sang-engineering.com>
+ <20230316074558.15268-2-wsa+renesas@sang-engineering.com>
+ <CAMuHMdURZ-nC-yZua1wGCcW++fDhgd-U93KP3PT5v6cbm8305A@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="SS7CshjXnRjbyo7D"
 Content-Disposition: inline
-In-Reply-To: <20230316204831.2472537-1-trix@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAMuHMdURZ-nC-yZua1wGCcW++fDhgd-U93KP3PT5v6cbm8305A@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 16, 2023 at 04:48:31PM -0400, Tom Rix wrote:
-> cppcheck reports
-> fs/ext4/page-io.c:516:51: style:
->   Condition 'nr_to_submit' is always true [knownConditionTrueFalse]
->  if (fscrypt_inode_uses_fs_layer_crypto(inode) && nr_to_submit) {
->                                                   ^
-> This earlier check to bail, makes this check unncessary
-> 	/* Nothing to submit? Just unlock the page... */
-> 	if (!nr_to_submit)
-> 		return 0;
-> 
-> Signed-off-by: Tom Rix <trix@redhat.com>
 
-Maybe add:
+--SS7CshjXnRjbyo7D
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Fixes: dff4ac75eeee ("ext4: move keep_towrite handling to ext4_bio_write_page()")
+Hi Geert,
 
-Either way, looks good to me.
+> In sh_eth this was fixed differently, by adding a check for
+> mdp->is_opened to sh_eth_get_stats() [1].
+> I believe the modern way would be to add a check for netif_running()
+> instead.
+>=20
+> Would adding such a check to smsc911x_get_stats() work for you, too?
 
-Reviewed-by: Eric Biggers <ebiggers@google.com>
+Yeah, that worked. Thank you! I'll send v2 soon.
 
-- Eric
+Happy hacking,
+
+   Wolfram
+
+
+--SS7CshjXnRjbyo7D
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmQT8+QACgkQFA3kzBSg
+KbZ0JBAAkAPwb+0C+ARVJB1Al8Hhln5uG1ezKfroDEoHiiUQCE+RgLbnfd5r7PLc
+XU30ZgvwuS5/G7fVphgY3hPIp8oO3sI6Hms1wkvb/lcHvheyeejZB0HHxLcaebdJ
+FgqkC7UUZ3ltC6xHgjVgJDPrI2tZH0sNPtzNRLmQ3vvD2YMeU6NZWSuHNIt82YFM
+EPUdVOwBFm3V/M0PF6MkCrCA6e/R93wHvSeYjJbNdxQ840bWieTCTRTrbLtMVkjz
+Gk4BnMElJcOPVyE9wpcdMgoU8DJ6H55wUpq2ACc9nY6d225VQU/z+Du70vpPZSlD
+/of0x6ScFRigLQ2NDJTiWWKIzDh/bA/yKa482UZVimmQeUySnMCcyB/IM9cFWPnT
+4znt9odurbULOtS9uBY8VgL0LZYdlHSJwQExYus7w8yuKXZW+iMWLC1bhOIto7GN
+MZCX3NSo3RLYRTp/lM4Px3xNdJoTqhSuozGfjqB/mGuyGAthdeR8uzucb+p7R/U4
+vPKgIXgMb1QNdURHTMnjVLB/oXCYahGPxbd1dEfJkiJCIVmHXANYXaloZz5G2hD5
+Mjbo87rMguJM61xK6j1WrkUXalGGl5a9uMUZyJUVU0x5SNOsR1pAVq8rqmc2XCK6
+2HqoU2JCy7JL2uzMNu89Sz1SatUoEjTgs0Y0vxfxUil3cBbHpeg=
+=aRKd
+-----END PGP SIGNATURE-----
+
+--SS7CshjXnRjbyo7D--
