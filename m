@@ -2,73 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 637896BF03A
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 18:55:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1AEA6BF03D
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 18:57:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230084AbjCQRzn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 13:55:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42662 "EHLO
+        id S230223AbjCQR5k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 13:57:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229811AbjCQRzl (ORCPT
+        with ESMTP id S229783AbjCQR5j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 13:55:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C189655055
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 10:55:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5554E6103F
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 17:55:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B57F9C433EF;
-        Fri, 17 Mar 2023 17:55:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679075739;
-        bh=pOiJt/GdXT+g7wc43tRROZKnfISDSVnPoMPzLBoXC5E=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=SpMiI8O9VWo8E0fg4RFzJFY+Ahj/F3mOtw+HslrKnIB7N+QUFJFPr7ZkjoorHdZDy
-         +zfQC6NUZEf/P/q1DhIbxZG0eEy5n3+1hzmZDMqF1c1XWtrHuKXDKupLkBIQrFmaEJ
-         XfiDl7Nn7No9rSZNSqlGekZsqm/TL5/CRk5jEnOqurBOG3fbCQmZg/hy6LRRl3mFuf
-         kUjBNZty9QaEx5l0JXf3NG6KiLyW5nVyMK0+2yd+ulDd7wLLFWb/Siqw+wrvl8tJkv
-         jRHdHbP1+q3Tv2EonLpg43NRzovZuNs/QlYKq+IcgkIswSa1YCga+D61iEq4nxPYaA
-         1y44zJxQSY4EQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A17BEC43161;
-        Fri, 17 Mar 2023 17:55:39 +0000 (UTC)
-Subject: Re: [GIT PULL] xen: branch for v6.3-rc3
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20230317064023.1229-1-jgross@suse.com>
-References: <20230317064023.1229-1-jgross@suse.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20230317064023.1229-1-jgross@suse.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/xen/tip.git for-linus-6.3-rc3-tag
-X-PR-Tracked-Commit-Id: 7ad2c39860dc0ca01d2152232224d2124e160fe3
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 0eb392ec095ee29b932985deefb43e6d86d8a463
-Message-Id: <167907573965.19035.6263826550490708525.pr-tracker-bot@kernel.org>
-Date:   Fri, 17 Mar 2023 17:55:39 +0000
-To:     Juergen Gross <jgross@suse.com>
-Cc:     torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
-        xen-devel@lists.xenproject.org, sstabellini@kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 17 Mar 2023 13:57:39 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2C25E6FF4
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 10:57:37 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-3ec1e8c4cacso30885e9.1
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 10:57:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1679075856;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=a0kdWElxUrPVHoXwucdphZLsl4pqIxyDfVSRYkUVA0M=;
+        b=XlSn50LmxMUxU8YGoCMXayJyl+xbOjaBtM1uHj+HDPFVuXFn63xuY81ycuJnn4S9/q
+         1FpRVJwZToHYg9BtVM0soOzxl5iOMpMiKaLUzkb4B57FBm2q732fpd3UzFfE5pzlQa2D
+         0QPt3zEl5OFOJ4piQ9C9fhWBuf/crY9XhT9LE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679075856;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=a0kdWElxUrPVHoXwucdphZLsl4pqIxyDfVSRYkUVA0M=;
+        b=dCwvUEf3tiU8XRyJhkz8JpKk4q24c92NU5jGvsN3pUUaa4aP+oFGVnA4Hyau5MiR30
+         f4NC33TcqnsHSmC+scFO4OlLiVldblWrHegWGlnfECa4OchvSqYD3dGzBCUobnATUsS0
+         ogj95+u5sWTyzP3iOhplbvs5At9LtvuwrlPaoIjnFfPEFQOo5mIkGvDzd1eBRYetc0Ox
+         WipoJYHk5c/speX/0Qa3V6amVRrMP2ff/QDbRlgS7AVuZjHQKB7b78IeynOZ2EboUSQM
+         nDaWs+ZEF0M5JAsMN6AMXyD1QAMqJjyKbfebvg4W7kYpE99xdBzAraa/q2T0p5q93vKz
+         GR0g==
+X-Gm-Message-State: AO0yUKWUehSSVrOTRqWjbCJDUUEZxCD/d+5eTFRrRMuXSnKPiCDqolK/
+        mZwf5201uu023pGtoiSuINRPz3P14DYg8MSTVBI4Dg==
+X-Google-Smtp-Source: AK7set+xx+1ZWkJR/ePpXRomoOoF2jHljAnW/hhNfVsWmQ3rGcVeZksBzo2JeYsXElUnV/xYc2I0OQwYOWWVbskJGy4=
+X-Received: by 2002:a05:600c:1c8b:b0:3ed:8826:256e with SMTP id
+ k11-20020a05600c1c8b00b003ed8826256emr155775wms.1.1679075855950; Fri, 17 Mar
+ 2023 10:57:35 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230301060453.4031503-1-grundler@chromium.org>
+ <20230314193836.GA1667748@bhelgaas> <CANEJEGtxn79+weGWVuF+Ytw789Smxv-2vGaM_qes1hfzg7qeYw@mail.gmail.com>
+In-Reply-To: <CANEJEGtxn79+weGWVuF+Ytw789Smxv-2vGaM_qes1hfzg7qeYw@mail.gmail.com>
+From:   Grant Grundler <grundler@chromium.org>
+Date:   Fri, 17 Mar 2023 10:57:24 -0700
+Message-ID: <CANEJEGt6oNVvPpUgt=Zi8P_gUp09EctKt+uBiRfO0Cx5gsUvPA@mail.gmail.com>
+Subject: Re: [PATCH] PCI/AER: correctable error message as KERN_INFO
+To:     Grant Grundler <grundler@chromium.org>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>,
+        Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
+        "Oliver O 'Halloran" <oohall@gmail.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rajat Khandelwal <rajat.khandelwal@linux.intel.com>,
+        linuxppc-dev@lists.ozlabs.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Rajat Jain <rajatja@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED,
+        USER_IN_DEF_SPF_WL autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Fri, 17 Mar 2023 07:40:23 +0100:
+On Tue, Mar 14, 2023 at 5:24=E2=80=AFPM Grant Grundler <grundler@chromium.o=
+rg> wrote:
+>
+> On Tue, Mar 14, 2023 at 12:38=E2=80=AFPM Bjorn Helgaas <helgaas@kernel.or=
+g> wrote:
+> >
+> > On Tue, Feb 28, 2023 at 10:04:53PM -0800, Grant Grundler wrote:
+> > > Since correctable errors have been corrected (and counted), the dmesg=
+ output
+> > > should not be reported as a warning, but rather as "informational".
+> > >
+> > > Otherwise, using a certain well known vendor's PCIe parts in a USB4 d=
+ocking
+> > > station, the dmesg buffer can be spammed with correctable errors, 717=
+ bytes
+> > > per instance, potentially many MB per day.
+> > >
+> > > Given the "WARN" priority, these messages have already confused the t=
+ypical
+> > > user that stumbles across them, support staff (triaging feedback repo=
+rts),
+> > > and more than a few linux kernel devs. Changing to INFO will hide the=
+se
+> > > messages from most audiences.
+> > >
+> > > Signed-off-by: Grant Grundler <grundler@chromium.org>
+> > > ---
+> > > This patch will likely conflict with:
+> > >   https://lore.kernel.org/all/20230103165548.570377-1-rajat.khandelwa=
+l@linux.intel.com/
+> > >
+> > > which I'd also like to see upstream. Please let me know to resubmit
+> > > mine if Rajat's patch lands first. Or feel free to fix up this one.
+> >
+> > Yes.  I think it makes sense to separate this into two patches:
+> >
+> >   1) Log correctable errors as KERN_INFO instead of KERN_WARNING, and
+> >   2) Rate-limit correctable error logging.
+>
+> I'm going to look into your comment below. I'll port Rajat's patch on
+> top of mine to follow the order you've listed above.
+>
+> > >  drivers/pci/pcie/aer.c | 4 ++--
+> > >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > >
+> > > diff --git a/drivers/pci/pcie/aer.c b/drivers/pci/pcie/aer.c
+> > > index f6c24ded134c..e4cf3ec40d66 100644
+> > > --- a/drivers/pci/pcie/aer.c
+> > > +++ b/drivers/pci/pcie/aer.c
+> > > @@ -692,7 +692,7 @@ static void __aer_print_error(struct pci_dev *dev=
+,
+> > >
+> > >       if (info->severity =3D=3D AER_CORRECTABLE) {
+> > >               strings =3D aer_correctable_error_string;
+> > > -             level =3D KERN_WARNING;
+> > > +             level =3D KERN_INFO;
+> > >       } else {
+> > >               strings =3D aer_uncorrectable_error_string;
+> > >               level =3D KERN_ERR;
+> > > @@ -724,7 +724,7 @@ void aer_print_error(struct pci_dev *dev, struct =
+aer_err_info *info)
+> > >       layer =3D AER_GET_LAYER_ERROR(info->severity, info->status);
+> > >       agent =3D AER_GET_AGENT(info->severity, info->status);
+> > >
+> > > -     level =3D (info->severity =3D=3D AER_CORRECTABLE) ? KERN_WARNIN=
+G : KERN_ERR;
+> > > +     level =3D (info->severity =3D=3D AER_CORRECTABLE) ? KERN_INFO :=
+ KERN_ERR;
+> > >
+> > >       pci_printk(level, dev, "PCIe Bus Error: severity=3D%s, type=3D%=
+s, (%s)\n",
+> > >                  aer_error_severity_string[info->severity],
+> >
+> > Shouldn't we do the same in the cper_print_aer() path?  That path
+> > currently uses pci_err() and then calls __aer_print_error(), so the
+> > initial message will always be KERN_ERR, and the decoding done by
+> > __aer_print_error() will be KERN_INFO (for correctable) or KERN_ERR.
+>
+> I was completely unaware of this since it's not causing me any
+> immediate problems. But I agree the message priority should be
+> consistent for correctable errors.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/xen/tip.git for-linus-6.3-rc3-tag
+I've just posted a V2 which I believe is against "pci-next":
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/0eb392ec095ee29b932985deefb43e6d86d8a463
+grundler <1607>git remote -v show pci-next
+* remote pci-next
+  Fetch URL: git://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git
+  Push  URL: git://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git
+  HEAD branch: main
+  Remote branches:
+    aer                   tracked
+    controller/dt         tracked
+    controller/kirin      tracked
+    controller/layerscape tracked
+    controller/rcar       tracked
+    for-linus             tracked
+    main                  tracked
+    next                  tracked
+  Local branch configured for 'git pull':
+    aer_correctable_info merges with remote next
 
-Thank you!
+Please let me know if this is the wrong git tree and branch to track.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+> > Seems like a shame to do the same test in three places, but would
+> > require a little more refactoring to avoid that.
+>
+> I don't mind doing the same test in multiple places. If refactoring
+> this isn't straight forward, I'll leave the refactoring for someone
+> more ambitious. :D
+
+I've moved one of the pci_info lines from cper_print_aer()  to
+__aer_print_info() since the status/mask are the same for both paths
+that invoke __aer_print_info(). But that's as far as I understand what
+each of the paths that calls __aer_print_info() do.  If this is not
+OK, I can move it back.
+
+cheers,
+grant
