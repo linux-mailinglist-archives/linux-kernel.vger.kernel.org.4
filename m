@@ -2,234 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D05696BEF42
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 18:11:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BC396BEF44
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 18:11:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230256AbjCQRKa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 13:10:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53438 "EHLO
+        id S230297AbjCQRKc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 13:10:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230309AbjCQRKK (ORCPT
+        with ESMTP id S230390AbjCQRK2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 13:10:10 -0400
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BED242BF9
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 10:09:43 -0700 (PDT)
-Received: by mail-yb1-xb34.google.com with SMTP id j7so6455276ybg.4
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 10:09:43 -0700 (PDT)
+        Fri, 17 Mar 2023 13:10:28 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76366A5D3
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 10:10:25 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id h8so23011331ede.8
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 10:10:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112; t=1679072982;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yyGiCOuzpCUygYrGB2PwFluAD4+Kj2HT1bQEGXBzqqs=;
-        b=Z7nmpkLKoGRLV+P2V/8LME8aWSNFmNhPgyFVKqtl2aYwfLMBFAy6IMaHXlp4FvtbZp
-         sKYJeU2zg04OOU+M8DqUhdKDmF7CtBnyJF3DMmZ2lCQEWexghjH2XTbPUAENd2lKOEbJ
-         7vrbI5pnmVpv2N0sNAYLpmfWtkXRNeBYMnYo7leB0kUTfRFH+FQYCvXjsdNB6THdBg4t
-         8zlIbIx0O6DH/n6MnYPSE7Bd4EMyp6tRtl8L/QYFYGMWkiu8752qSl9k4rD8eb+D36al
-         DtH4cdKh6iSZNyV79DtBAMOaQXxbV5eILGoWqiE06QQ4rmbfz9F7OI/W6UE2RAfld7KL
-         A7QA==
+        d=linaro.org; s=google; t=1679073023;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=DbiO5/X3P9CxjsxwAoFfrfx6CtrKMZRN7CMSZJ9KayM=;
+        b=WjWna3CsJ/ma24fuaikjiZhs9+BstGlhXHBQXWp/Nbqwzm2OeAqGfg/A7tQUET5E2u
+         NgfGKqOMDoiwGYMZTlmiqT1xtQyLWWM0tOTIigFQPVk9IDiocJHAUck3+OvCJC2CUWYj
+         8jHjmAydWufJtElxKE4y8ZBBG/ARLmB6Av+ukYDfbzkTR9UTXtnFrsQd3G1qQ8Sk/60i
+         8hzrO49oZffS5xoFrOHhnimfPhJAquL+UnRiHGmjSKpVoBPuAiwdKsgG5H4XafaeGo0G
+         1TehSVpsNxSXhH+1VOgttJvkkPaeuqbeaLLfuZ9aTwsf71WbETGxdB+HW0onVQa6Gej2
+         P7hQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679072982;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yyGiCOuzpCUygYrGB2PwFluAD4+Kj2HT1bQEGXBzqqs=;
-        b=M54gzcG/lUTpOiKFqSBl0xmOn747IW9cq5s8IaND45iye4QYvqKxBsBIfJDQpUDWYR
-         DSLeS0reJXAYv6L6cD2t489wl/Kl/M4NlsNE2UJlf+duaMgyKjTPLxz/2bv1DzaZ7KoY
-         h3P65kW5nEZE2oaxdumjK60Ah28XyPHXOKsr5sIQIesTPDHo3DixvFmO6mY8Kymyj3O0
-         73l6jpdk1PY78MX/Wcp/rOis0pFBFsz5iVa7mL6QvdJTv0VPqwYCiTW0gvsUopUI/2iJ
-         dPfqJuPFqupG2W4btGfgS/OyW7qzSELTrkP2Uo6dS7FUs0RbCbemmTYOzJ7rUeoalU8d
-         E9mg==
-X-Gm-Message-State: AO0yUKXCSaBA32M1OrMqXW8GAHrh7GGs87MvBdxGUujI+nA3eWhsGUdA
-        hKYqPkCP65H61BivTiQaC5g+sJ8nAVE+mUUWAxh1IA==
-X-Google-Smtp-Source: AK7set8WHpFUpGLzM3ZMAI8efrv3wxVYI2960/n8L99qdwz+ch5b09JYgpcWyA+XYcURNxejBGDwGuAnYXXWegpW86k=
-X-Received: by 2002:a5b:406:0:b0:a09:314f:a3ef with SMTP id
- m6-20020a5b0406000000b00a09314fa3efmr160914ybp.12.1679072982266; Fri, 17 Mar
- 2023 10:09:42 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1679073023;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DbiO5/X3P9CxjsxwAoFfrfx6CtrKMZRN7CMSZJ9KayM=;
+        b=lFGXzlP5zVTyzJPriFri5cxVepX7kC3pNp7IjEYmkI1tt5uzuZRhta2Mkg9oR5bu/E
+         leAGn2WSJMuCgiJc9OLNH8JLkA3nAt8L1vcMiDIgqVoi1n1Pmcs+1JFQrGwGabw/sgPW
+         h8Tl+rCTcuZOacrMAzWVDjEZ0YAeUZk7493Pg4IQ1yWO7MyAJ2xrX8wAmmGJo6dldIk9
+         tEFIwdqb9O/z1VhZwG/MqlRxbqUMAuCyDd/wRaXkhPPvK74nJgxe57tS/o8uvAI7WqYy
+         sPjiy/hEKUbVLU4vLbUn8kitNzXEHWKS1q/ukIYGEB2v3y16IxmbhJSLfT5ogZxmO5o9
+         3MbA==
+X-Gm-Message-State: AO0yUKVj/KGDsBXCu+VmdM1wJSf8SaXzof+GvUj5thvfJChYmC45x+aU
+        +4CQ+5eTHsFz6wi1qMGLWlpLj//HQiSW9NoifrY=
+X-Google-Smtp-Source: AK7set9gP8Oua/MgC7u4bl/PdJ8GJj9h1Z32jCyyMKVY+tUp09SF3tAQnBmwqDmJFb2VB2QJbc4MSg==
+X-Received: by 2002:a17:906:cd11:b0:930:123:8cc8 with SMTP id oz17-20020a170906cd1100b0093001238cc8mr77478ejb.21.1679073023656;
+        Fri, 17 Mar 2023 10:10:23 -0700 (PDT)
+Received: from lmecxl1178.lme.st.com ([2a04:cec0:10af:6120:339:9abb:39d1:cb35])
+        by smtp.gmail.com with ESMTPSA id kx1-20020a170907774100b0091fdd2ee44bsm1181067ejc.197.2023.03.17.10.10.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Mar 2023 10:10:23 -0700 (PDT)
+From:   Etienne Carriere <etienne.carriere@linaro.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Etienne Carriere <etienne.carriere@linaro.org>,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        Pascal Paillet <p.paillet@foss.st.com>
+Subject: [PATCH v4 1/2] dt-bindings: arm: optee: add interrupt controller properties
+Date:   Fri, 17 Mar 2023 18:10:02 +0100
+Message-Id: <20230317171003.974801-1-etienne.carriere@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20230227222957.24501-1-rick.p.edgecombe@intel.com> <20230227222957.24501-22-rick.p.edgecombe@intel.com>
-In-Reply-To: <20230227222957.24501-22-rick.p.edgecombe@intel.com>
-From:   Deepak Gupta <debug@rivosinc.com>
-Date:   Fri, 17 Mar 2023 10:09:33 -0700
-Message-ID: <CAKC1njTexZ3-8u8iW3cDv9FBSUx107N-MMekMoLL5ShRFaryYQ@mail.gmail.com>
-Subject: Re: [PATCH v7 21/41] mm: Add guard pages around a shadow stack.
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        John Allen <john.allen@amd.com>, kcc@google.com,
-        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
-        dethoma@microsoft.com, akpm@linux-foundation.org,
-        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
-        david@redhat.com, Yu-cheng Yu <yu-cheng.yu@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 27, 2023 at 2:31=E2=80=AFPM Rick Edgecombe
-<rick.p.edgecombe@intel.com> wrote:
->
-> From: Yu-cheng Yu <yu-cheng.yu@intel.com>
->
-> The x86 Control-flow Enforcement Technology (CET) feature includes a new
-> type of memory called shadow stack. This shadow stack memory has some
-> unusual properties, which requires some core mm changes to function
-> properly.
->
-> The architecture of shadow stack constrains the ability of userspace to
-> move the shadow stack pointer (SSP) in order to  prevent corrupting or
-> switching to other shadow stacks. The RSTORSSP can move the ssp to
-> different shadow stacks, but it requires a specially placed token in orde=
-r
-> to do this. However, the architecture does not prevent incrementing the
-> stack pointer to wander onto an adjacent shadow stack. To prevent this in
-> software, enforce guard pages at the beginning of shadow stack vmas, such
-> that there will always be a gap between adjacent shadow stacks.
->
-> Make the gap big enough so that no userspace SSP changing operations
-> (besides RSTORSSP), can move the SSP from one stack to the next. The
-> SSP can increment or decrement by CALL, RET  and INCSSP. CALL and RET
-> can move the SSP by a maximum of 8 bytes, at which point the shadow
-> stack would be accessed.
->
-> The INCSSP instruction can also increment the shadow stack pointer. It
-> is the shadow stack analog of an instruction like:
->
->         addq    $0x80, %rsp
->
-> However, there is one important difference between an ADD on %rsp and
-> INCSSP. In addition to modifying SSP, INCSSP also reads from the memory
-> of the first and last elements that were "popped". It can be thought of
-> as acting like this:
->
-> READ_ONCE(ssp);       // read+discard top element on stack
-> ssp +=3D nr_to_pop * 8; // move the shadow stack
-> READ_ONCE(ssp-8);     // read+discard last popped stack element
->
-> The maximum distance INCSSP can move the SSP is 2040 bytes, before it
-> would read the memory. Therefore a single page gap will be enough to
-> prevent any operation from shifting the SSP to an adjacent stack, since
-> it would have to land in the gap at least once, causing a fault.
->
-> This could be accomplished by using VM_GROWSDOWN, but this has a
-> downside. The behavior would allow shadow stack's to grow, which is
-> unneeded and adds a strange difference to how most regular stacks work.
->
-> Tested-by: Pengfei Xu <pengfei.xu@intel.com>
-> Tested-by: John Allen <john.allen@amd.com>
-> Tested-by: Kees Cook <keescook@chromium.org>
-> Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
-> Reviewed-by: Kees Cook <keescook@chromium.org>
-> Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
-> Co-developed-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
-> Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
-> Cc: Kees Cook <keescook@chromium.org>
->
-> ---
-> v5:
->  - Fix typo in commit log
->
-> v4:
->  - Drop references to 32 bit instructions
->  - Switch to generic code to drop __weak (Peterz)
->
-> v2:
->  - Use __weak instead of #ifdef (Dave Hansen)
->  - Only have start gap on shadow stack (Andy Luto)
->  - Create stack_guard_start_gap() to not duplicate code
->    in an arch version of vm_start_gap() (Dave Hansen)
->  - Improve commit log partly with verbiage from (Dave Hansen)
->
-> Yu-cheng v25:
->  - Move SHADOW_STACK_GUARD_GAP to arch/x86/mm/mmap.c.
-> ---
->  include/linux/mm.h | 31 ++++++++++++++++++++++++++-----
->  1 file changed, 26 insertions(+), 5 deletions(-)
->
-> diff --git a/include/linux/mm.h b/include/linux/mm.h
-> index 097544afb1aa..6a093daced88 100644
-> --- a/include/linux/mm.h
-> +++ b/include/linux/mm.h
-> @@ -3107,15 +3107,36 @@ struct vm_area_struct *vma_lookup(struct mm_struc=
-t *mm, unsigned long addr)
->         return mtree_load(&mm->mm_mt, addr);
->  }
->
-> +static inline unsigned long stack_guard_start_gap(struct vm_area_struct =
-*vma)
-> +{
-> +       if (vma->vm_flags & VM_GROWSDOWN)
-> +               return stack_guard_gap;
-> +
-> +       /*
-> +        * Shadow stack pointer is moved by CALL, RET, and INCSSPQ.
-> +        * INCSSPQ moves shadow stack pointer up to 255 * 8 =3D ~2 KB
-> +        * and touches the first and the last element in the range, which
-> +        * triggers a page fault if the range is not in a shadow stack.
-> +        * Because of this, creating 4-KB guard pages around a shadow
-> +        * stack prevents these instructions from going beyond.
-> +        *
-> +        * Creation of VM_SHADOW_STACK is tightly controlled, so a vma
-> +        * can't be both VM_GROWSDOWN and VM_SHADOW_STACK
-> +        */
-> +       if (vma->vm_flags & VM_SHADOW_STACK)
-> +               return PAGE_SIZE;
+Adds an optional interrupt controller property to optee firmware node
+in the DT bindings. Optee driver may embeds an irqchip exposing
+OP-TEE interrupt events notified by the TEE world. Optee registers up
+to 1 interrupt controller and identifies each line with a line
+number from 0 to UINT16_MAX.
 
-This is an arch agnostic header file. Can we remove `VM_SHADOW_STACK`
-from here? and instead
-have `arch_is_shadow_stack` which consumes vma flags and returns true or fa=
-lse.
-This allows different architectures to choose their own encoding of
-vma flags to represent a shadow stack.
+The identifiers and meaning of the interrupt line number are specific
+to the platform and shall be found in the OP-TEE platform documentation.
 
-> +
-> +       return 0;
-> +}
-> +
->  static inline unsigned long vm_start_gap(struct vm_area_struct *vma)
->  {
-> +       unsigned long gap =3D stack_guard_start_gap(vma);
->         unsigned long vm_start =3D vma->vm_start;
->
-> -       if (vma->vm_flags & VM_GROWSDOWN) {
-> -               vm_start -=3D stack_guard_gap;
-> -               if (vm_start > vma->vm_start)
-> -                       vm_start =3D 0;
-> -       }
-> +       vm_start -=3D gap;
-> +       if (vm_start > vma->vm_start)
-> +               vm_start =3D 0;
->         return vm_start;
->  }
->
-> --
-> 2.17.1
->
+In the example shown in optee DT binding documentation, the platform SCMI
+device controlled by Linux scmi driver uses optee interrupt irq 5 as
+signal to trigger processing of an asynchronous incoming SCMI message
+in the scope of a CPU DVFS control. A platform can have several SCMI
+channels driven this way. Optee irqs also permit small embedded devices
+to share e.g. a gpio expander, a group of wakeup sources, etc... between
+OP-TEE world (for sensitive services) and Linux world (for non-sensitive
+services). The physical controller is driven from the TEE which exposes
+some controls to Linux kernel.
+
+Cc: Jens Wiklander <jens.wiklander@linaro.org>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc: Marc Zyngier <maz@kernel.org>
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: Sumit Garg <sumit.garg@linaro.org>
+
+Co-developed-by: Pascal Paillet <p.paillet@foss.st.com>
+Signed-off-by: Pascal Paillet <p.paillet@foss.st.com>
+Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
+---
+No changes since v3
+
+Changes since v2:
+- Added a sentence on optee irq line number values and meaning, in
+  DT binding doc and commit message.
+- Updated example in DT binding doc from comment, fixed misplaced
+  interrupt-parent property and removed gic and sram shm nodes.
+
+Changes since v1:
+- Added a description to #interrupt-cells property.
+- Changed of example. Linux wakeup event was subject to discussion and
+  i don't know much about input events in Linux. So move to SCMI.
+  In the example, an SCMI server in OP-TEE world raises optee irq 5
+  so that Linux scmi optee channel &scmi_cpu_dvfs pushed in the incoming
+  SCMI message in the scmi device for liekly later processing in threaded
+  context. The example includes all parties: optee, scmi, sram, gic.
+- Obviously rephrased the commit message.
+---
+ .../arm/firmware/linaro,optee-tz.yaml         | 38 +++++++++++++++++++
+ 1 file changed, 38 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/arm/firmware/linaro,optee-tz.yaml b/Documentation/devicetree/bindings/arm/firmware/linaro,optee-tz.yaml
+index d4dc0749f9fd..ff7e1292c803 100644
+--- a/Documentation/devicetree/bindings/arm/firmware/linaro,optee-tz.yaml
++++ b/Documentation/devicetree/bindings/arm/firmware/linaro,optee-tz.yaml
+@@ -40,6 +40,16 @@ properties:
+       HVC #0, register assignments
+       register assignments are specified in drivers/tee/optee/optee_smc.h
+ 
++  interrupt-controller: true
++
++  "#interrupt-cells":
++    const: 1
++    description: |
++      OP-TEE exposes irq for irp chip controllers from OP-TEE world. Each
++      irq is assigned a single line number identifier used as first argument.
++      Line number identifiers and their meaning shall be found in the OP-TEE
++      firmware platform documentation.
++
+ required:
+   - compatible
+   - method
+@@ -64,3 +74,31 @@ examples:
+             method = "hvc";
+         };
+     };
++
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    firmware  {
++        optee: optee {
++            compatible = "linaro,optee-tz";
++            method = "smc";
++            interrupt-parent = <&gic>;
++            interrupts = <GIC_SPI 187 IRQ_TYPE_EDGE_RISING>;
++            interrupt-controller;
++            #interrupt-cells = <1>;
++        };
++
++        scmi {
++            compatible = "linaro,scmi-optee";
++            linaro,optee-channel-id = <0>;
++            shmem = <&scmi_shm_tx>, <&scmi_shm_rx>;
++            interrupts-extended = <&optee 5>;
++            interrupt-names = "a2p";
++            #address-cells = <1>;
++            #size-cells = <0>;
++
++            scmi_cpu_dvfs: protocol@13 {
++                reg = <0x13>;
++                #clock-cells = <1>;
++            };
++        };
++    };
+-- 
+2.25.1
+
