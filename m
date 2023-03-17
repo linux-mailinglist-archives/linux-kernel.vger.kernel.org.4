@@ -2,185 +2,354 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E67ED6BF1B1
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 20:31:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D21326BF1CB
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 20:38:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230252AbjCQTbI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 15:31:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43008 "EHLO
+        id S230215AbjCQTii (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 15:38:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230061AbjCQTbG (ORCPT
+        with ESMTP id S229735AbjCQTig (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 15:31:06 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0E77EF82;
-        Fri, 17 Mar 2023 12:31:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9C0E9B826AD;
-        Fri, 17 Mar 2023 19:30:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33344C433EF;
-        Fri, 17 Mar 2023 19:30:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1679081458;
-        bh=lnEDqKzb3mX5y3332ZIAEeWNU38nficQPQNsR0UtPlk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=AeqHvmafVW963V9vGxQq4PnUEVGOp9bZgq23HSCkmCRYLAHH0kBU9NbgjGzftlRqc
-         iY7eu4LyjvPG6imVHbZcO47U2TBbbR6IuLfU/rU37BkIuGBzNJtS8Rvuzrirg/qeO3
-         fLTNJv1XZPanrDEv5EE/qTrRkuT/oJWjbuAlT+7EIyfpd102ILVswCpn5iCerLo+zH
-         mkZuPG6U6QRfw76QCf9hWuFENJoykG3Y24YeXXQelObSjn2+OXCPYZTRg9e0B0Pjmd
-         7ZH45wUeAW9ZwnTgGRKE90runga5U8bvbvqyF42WklurocVerHX/g8vxifAcXLAApH
-         iucVHFd0rw/gQ==
-Date:   Fri, 17 Mar 2023 14:30:56 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-Cc:     Grant Grundler <grundler@chromium.org>,
-        Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
-        Oliver O 'Halloran <oohall@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        Rajat Khandelwal <rajat.khandelwal@linux.intel.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        Rajat Jain <rajatja@chromium.org>
-Subject: Re: [PATCHv2 pci-next 1/2] PCI/AER: correctable error message as
- KERN_INFO
-Message-ID: <20230317193056.GA1963022@bhelgaas>
+        Fri, 17 Mar 2023 15:38:36 -0400
+Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 766F948E2E
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 12:38:34 -0700 (PDT)
+Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-176261d7f45so6788585fac.11
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 12:38:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679081913;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=g4CRQW5pF6Xx0toKLDpXgqayNx8cYo+HEUQnJtr2Bps=;
+        b=V1FnTrEDvrmXooPxB9BFOFCSWeFA3PtHSqlkjo3B/kgdwP55lAHlbXCarz0wrLHewv
+         2zD8JslNGzIuuGMggdw0yQCXPJEpioP7O/1ukOSfEUq74v7a1J8AJoXNsl8t6GOgcUag
+         6DCSJdrSQtnwyYdU1AhxYv61LIxrTvbm2r0Pq1JFTFBlexf9kBPjlqC25c08RPqSzcCg
+         LvrlapBm0HRhqfM2MBcKzOmqOGLsGY36asurvz2OlJefE5wDaET4HwD9wo2GUSepQeIm
+         zoiAaNv4syW2StXWCw4oqyP09CY2LtVhfq3TVEfMIt6+cI4DaMAev5aAT+hWpUfgbKCU
+         9PLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679081913;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=g4CRQW5pF6Xx0toKLDpXgqayNx8cYo+HEUQnJtr2Bps=;
+        b=m1lMNVdDZuzltwc/QqaBQ3dwhh+Z2I+Gnmg++x35ytOpT9oZj6OAYc+hPxlUODdEL1
+         9JsYBE9ad6XJRYVGu7zv9e/3Dgc/FgvBAddMXdYG4yVoSFKQmzT5VRIn4e6/97X4YDtf
+         m0svnPAKX7/gJSEHD0WsskPjzk6Q3E6EtziZr97SfI5pPyP50c6Y3KEdNGfHb+2gE18m
+         W2WT3YET2MhCSUs12yRZy9mRWKKr1cVSkHiv3OSQ+ceXOLGvcdTB6kNlGDWBk85nwQ5A
+         x+BcurmPrJbEYHpMyV6V3AzDE27/hN8FfY9kf3w5yOghUbRefeXUSEE1DoRjcLwWy7C1
+         5ldw==
+X-Gm-Message-State: AO0yUKWMUrmu3F4fm7m8SX73aoz3iHioXp5R720vj4LcFb7hKYRcxEc2
+        SQvqO/9rs1rs3EYJCVVYSRmX7R/ZlIeunzYyY3c=
+X-Google-Smtp-Source: AK7set8HTaL1eqc4hBHnhHOUeVdf6WbJQVjDF98pwXR1E4FskcwcsCC/FpTAIQOgS8D203EVYEsr5r2haK6MFrcmjus=
+X-Received: by 2002:a05:6870:df8c:b0:176:3897:6928 with SMTP id
+ us12-20020a056870df8c00b0017638976928mr263980oab.5.1679081913684; Fri, 17 Mar
+ 2023 12:38:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <bd48a3f0-138d-9c48-27d6-a5133f054c96@linux.intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230308155322.344664-1-robdclark@gmail.com> <20230308155322.344664-10-robdclark@gmail.com>
+ <CAOFGe944_xJOJ3a-uJDVyca_1_+aYTqat4=Qc3CC1wUubxw3XQ@mail.gmail.com>
+In-Reply-To: <CAOFGe944_xJOJ3a-uJDVyca_1_+aYTqat4=Qc3CC1wUubxw3XQ@mail.gmail.com>
+From:   Rob Clark <robdclark@gmail.com>
+Date:   Fri, 17 Mar 2023 12:38:22 -0700
+Message-ID: <CAF6AEGv5Bo6sbT+en7=C+QG9+m+Wn0gauQ1qhdzBv6AEkChu7A@mail.gmail.com>
+Subject: Re: [Intel-gfx] [PATCH v10 09/15] drm/syncobj: Add deadline support
+ for syncobj waits
+To:     Faith Ekstrand <faith@gfxstrand.net>
+Cc:     dri-devel@lists.freedesktop.org,
+        Rob Clark <robdclark@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <ckoenig.leichtzumerken@gmail.com>,
+        intel-gfx@lists.freedesktop.org,
+        Bas Nieuwenhuizen <bas@basnieuwenhuizen.nl>,
+        open list <linux-kernel@vger.kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        David Airlie <airlied@gmail.com>,
+        Luben Tuikov <luben.tuikov@amd.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Matt Turner <mattst88@gmail.com>,
+        freedreno@lists.freedesktop.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 17, 2023 at 11:50:22AM -0700, Sathyanarayanan Kuppuswamy wrote:
-> On 3/17/23 10:51 AM, Grant Grundler wrote:
-> > Since correctable errors have been corrected (and counted), the dmesg output
-> > should not be reported as a warning, but rather as "informational".
-> > 
-> > Otherwise, using a certain well known vendor's PCIe parts in a USB4 docking
-> > station, the dmesg buffer can be spammed with correctable errors, 717 bytes
-> > per instance, potentially many MB per day.
-> 
-> Why don't you investigate why you are getting so many correctable errors?
-> Isn't solving the problem preferable to hiding the logs?
+On Fri, Mar 17, 2023 at 12:08=E2=80=AFPM Faith Ekstrand <faith@gfxstrand.ne=
+t> wrote:
+>
+>
+> On Wed, Mar 8, 2023 at 9:54=E2=80=AFAM Rob Clark <robdclark@gmail.com> wr=
+ote:
+>>
+>> From: Rob Clark <robdclark@chromium.org>
+>>
+>> Add a new flag to let userspace provide a deadline as a hint for syncobj
+>> and timeline waits.  This gives a hint to the driver signaling the
+>> backing fences about how soon userspace needs it to compete work, so it
+>> can addjust GPU frequency accordingly.  An immediate deadline can be
+>> given to provide something equivalent to i915 "wait boost".
+>>
+>> v2: Use absolute u64 ns value for deadline hint, drop cap and driver
+>>     feature flag in favor of allowing count_handles=3D=3D0 as a way for
+>>     userspace to probe kernel for support of new flag
+>> v3: More verbose comments about UAPI
+>>
+>> Signed-off-by: Rob Clark <robdclark@chromium.org>
+>> ---
+>>  drivers/gpu/drm/drm_syncobj.c | 64 ++++++++++++++++++++++++++++-------
+>>  include/uapi/drm/drm.h        | 17 ++++++++++
+>>  2 files changed, 68 insertions(+), 13 deletions(-)
+>>
+>> diff --git a/drivers/gpu/drm/drm_syncobj.c b/drivers/gpu/drm/drm_syncobj=
+.c
+>> index 0c2be8360525..a85e9464f07b 100644
+>> --- a/drivers/gpu/drm/drm_syncobj.c
+>> +++ b/drivers/gpu/drm/drm_syncobj.c
+>> @@ -126,6 +126,11 @@
+>>   * synchronize between the two.
+>>   * This requirement is inherited from the Vulkan fence API.
+>>   *
+>> + * If &DRM_SYNCOBJ_WAIT_FLAGS_WAIT_DEADLINE is set, the ioctl will also=
+ set
+>> + * a fence deadline hint on the backing fences before waiting, to provi=
+de the
+>> + * fence signaler with an appropriate sense of urgency.  The deadline i=
+s
+>> + * specified as an absolute &CLOCK_MONOTONIC value in units of ns.
+>> + *
+>>   * Similarly, &DRM_IOCTL_SYNCOBJ_TIMELINE_WAIT takes an array of syncob=
+j
+>>   * handles as well as an array of u64 points and does a host-side wait =
+on all
+>>   * of syncobj fences at the given points simultaneously.
+>> @@ -973,7 +978,8 @@ static signed long drm_syncobj_array_wait_timeout(st=
+ruct drm_syncobj **syncobjs,
+>>                                                   uint32_t count,
+>>                                                   uint32_t flags,
+>>                                                   signed long timeout,
+>> -                                                 uint32_t *idx)
+>> +                                                 uint32_t *idx,
+>> +                                                 ktime_t *deadline)
+>>  {
+>>         struct syncobj_wait_entry *entries;
+>>         struct dma_fence *fence;
+>> @@ -1053,6 +1059,15 @@ static signed long drm_syncobj_array_wait_timeout=
+(struct drm_syncobj **syncobjs,
+>>                         drm_syncobj_fence_add_wait(syncobjs[i], &entries=
+[i]);
+>>         }
+>>
+>> +       if (deadline) {
+>> +               for (i =3D 0; i < count; ++i) {
+>> +                       fence =3D entries[i].fence;
+>> +                       if (!fence)
+>> +                               continue;
+>> +                       dma_fence_set_deadline(fence, *deadline);
+>> +               }
+>> +       }
+>> +
+>>         do {
+>>                 set_current_state(TASK_INTERRUPTIBLE);
+>>
+>> @@ -1151,7 +1166,8 @@ static int drm_syncobj_array_wait(struct drm_devic=
+e *dev,
+>>                                   struct drm_file *file_private,
+>>                                   struct drm_syncobj_wait *wait,
+>>                                   struct drm_syncobj_timeline_wait *time=
+line_wait,
+>> -                                 struct drm_syncobj **syncobjs, bool ti=
+meline)
+>> +                                 struct drm_syncobj **syncobjs, bool ti=
+meline,
+>> +                                 ktime_t *deadline)
+>>  {
+>>         signed long timeout =3D 0;
+>>         uint32_t first =3D ~0;
+>> @@ -1162,7 +1178,8 @@ static int drm_syncobj_array_wait(struct drm_devic=
+e *dev,
+>>                                                          NULL,
+>>                                                          wait->count_han=
+dles,
+>>                                                          wait->flags,
+>> -                                                        timeout, &first=
+);
+>> +                                                        timeout, &first=
+,
+>> +                                                        deadline);
+>>                 if (timeout < 0)
+>>                         return timeout;
+>>                 wait->first_signaled =3D first;
+>> @@ -1172,7 +1189,8 @@ static int drm_syncobj_array_wait(struct drm_devic=
+e *dev,
+>>                                                          u64_to_user_ptr=
+(timeline_wait->points),
+>>                                                          timeline_wait->=
+count_handles,
+>>                                                          timeline_wait->=
+flags,
+>> -                                                        timeout, &first=
+);
+>> +                                                        timeout, &first=
+,
+>> +                                                        deadline);
+>>                 if (timeout < 0)
+>>                         return timeout;
+>>                 timeline_wait->first_signaled =3D first;
+>> @@ -1243,17 +1261,22 @@ drm_syncobj_wait_ioctl(struct drm_device *dev, v=
+oid *data,
+>>  {
+>>         struct drm_syncobj_wait *args =3D data;
+>>         struct drm_syncobj **syncobjs;
+>> +       unsigned possible_flags;
+>> +       ktime_t t, *tp =3D NULL;
+>>         int ret =3D 0;
+>>
+>>         if (!drm_core_check_feature(dev, DRIVER_SYNCOBJ))
+>>                 return -EOPNOTSUPP;
+>>
+>> -       if (args->flags & ~(DRM_SYNCOBJ_WAIT_FLAGS_WAIT_ALL |
+>> -                           DRM_SYNCOBJ_WAIT_FLAGS_WAIT_FOR_SUBMIT))
+>> +       possible_flags =3D DRM_SYNCOBJ_WAIT_FLAGS_WAIT_ALL |
+>> +                        DRM_SYNCOBJ_WAIT_FLAGS_WAIT_FOR_SUBMIT |
+>> +                        DRM_SYNCOBJ_WAIT_FLAGS_WAIT_DEADLINE;
+>> +
+>> +       if (args->flags & ~possible_flags)
+>>                 return -EINVAL;
+>>
+>>         if (args->count_handles =3D=3D 0)
+>> -               return -EINVAL;
+>> +               return 0;
+>
+>
+> Did you intend this change? If so, why? What does waiting with no handles=
+ gain us? I mean, it's probably fine but it seems unrelated to this change.
 
-I hope there's some effort to find the cause of the errors, too.  But
-I do think KERN_INFO is a reasonable level for errors that have
-already been corrected.  KERN_ERR seems a little bit too severe to me.
+Yes, it was intentional.. it gives userspace a way to probe whether
+the kernel supports the new flag..
 
-Does changing to KERN_INFO keep the messages out of the dmesg log?  I
-don't think it does, because *most* kernel messages are at KERN_INFO.
-This may be just a commit log clarification.
+BR,
+-R
 
-I would like to know *which* devices are involved.  Is there some
-reason for weasel-wording this?  Knowing which devices are involved
-helps in triaging issue reports.  If there are any public reports on
-mailing lists, etc, we could also cite those here to help users find
-this solution.
-
-> > Given the "WARN" priority, these messages have already confused the typical
-> > user that stumbles across them, support staff (triaging feedback reports),
-> > and more than a few linux kernel devs. Changing to INFO will hide these
-> > messages from most audiences.
-> > 
-> > Signed-off-by: Grant Grundler <grundler@chromium.org>
-> > ---
-> >  drivers/pci/pcie/aer.c | 29 +++++++++++++++++++----------
-> >  1 file changed, 19 insertions(+), 10 deletions(-)
-> > 
-> > diff --git a/drivers/pci/pcie/aer.c b/drivers/pci/pcie/aer.c
-> > index f6c24ded134c..cb6b96233967 100644
-> > --- a/drivers/pci/pcie/aer.c
-> > +++ b/drivers/pci/pcie/aer.c
-> > @@ -687,23 +687,29 @@ static void __aer_print_error(struct pci_dev *dev,
-> >  {
-> >  	const char **strings;
-> >  	unsigned long status = info->status & ~info->mask;
-> > -	const char *level, *errmsg;
-> >  	int i;
-> >  
-> >  	if (info->severity == AER_CORRECTABLE) {
-> >  		strings = aer_correctable_error_string;
-> > -		level = KERN_WARNING;
-> > +		pci_info(dev, "aer_status: 0x%08x, aer_mask: 0x%08x\n",
-> > +			info->status, info->mask);
-> >  	} else {
-> >  		strings = aer_uncorrectable_error_string;
-> > -		level = KERN_ERR;
-> > +		pci_err(dev, "aer_status: 0x%08x, aer_mask: 0x%08x\n",
-> > +			info->status, info->mask);
-> >  	}
-> >  
-> >  	for_each_set_bit(i, &status, 32) {
-> > -		errmsg = strings[i];
-> > +		const char *errmsg = strings[i];
-> > +
-> >  		if (!errmsg)
-> >  			errmsg = "Unknown Error Bit";
-> >  
-> > -		pci_printk(level, dev, "   [%2d] %-22s%s\n", i, errmsg,
-> > +		if (info->severity == AER_CORRECTABLE)
-> > +			pci_info(dev, "   [%2d] %-22s%s\n", i, errmsg,
-> > +				info->first_error == i ? " (First)" : "");
-> > +		else
-> > +			pci_err(dev, "   [%2d] %-22s%s\n", i, errmsg,
-> >  				info->first_error == i ? " (First)" : "");
-
-The - 5 lines, + 11 lines diff and repetition of the printk strings
-doesn't seem like an improvement compared to the -1, +1 in the v1
-patch:
-
-  @@ -692,7 +692,7 @@ static void __aer_print_error(struct pci_dev *dev,
-
-          if (info->severity == AER_CORRECTABLE) {
-                  strings = aer_correctable_error_string;
-  -               level = KERN_WARNING;
-  +               level = KERN_INFO;
-          } else {
-
-But maybe there's a reason?
-
-> >  	}
-> >  	pci_dev_aer_stats_incr(dev, info);
-> > @@ -724,7 +730,7 @@ void aer_print_error(struct pci_dev *dev, struct aer_err_info *info)
-> >  	layer = AER_GET_LAYER_ERROR(info->severity, info->status);
-> >  	agent = AER_GET_AGENT(info->severity, info->status);
-> >  
-> > -	level = (info->severity == AER_CORRECTABLE) ? KERN_WARNING : KERN_ERR;
-> > +	level = (info->severity == AER_CORRECTABLE) ? KERN_INFO : KERN_ERR;
-> >  
-> >  	pci_printk(level, dev, "PCIe Bus Error: severity=%s, type=%s, (%s)\n",
-> >  		   aer_error_severity_string[info->severity],
-> > @@ -797,14 +803,17 @@ void cper_print_aer(struct pci_dev *dev, int aer_severity,
-> >  	info.mask = mask;
-> >  	info.first_error = PCI_ERR_CAP_FEP(aer->cap_control);
-> >  
-> > -	pci_err(dev, "aer_status: 0x%08x, aer_mask: 0x%08x\n", status, mask);
-> >  	__aer_print_error(dev, &info);
-> > -	pci_err(dev, "aer_layer=%s, aer_agent=%s\n",
-> > -		aer_error_layer[layer], aer_agent_string[agent]);
-> >  
-> > -	if (aer_severity != AER_CORRECTABLE)
-> > +	if (aer_severity == AER_CORRECTABLE) {
-> > +		pci_info(dev, "aer_layer=%s, aer_agent=%s\n",
-> > +			aer_error_layer[layer], aer_agent_string[agent]);
-> > +	} else {
-> > +		pci_err(dev, "aer_layer=%s, aer_agent=%s\n",
-> > +			aer_error_layer[layer], aer_agent_string[agent]);
-> >  		pci_err(dev, "aer_uncor_severity: 0x%08x\n",
-> >  			aer->uncor_severity);
-> > +	}
-> >  
-> >  	if (tlp_header_valid)
-> >  		__print_tlp_header(dev, &aer->header_log);
-> 
-> -- 
-> Sathyanarayanan Kuppuswamy
-> Linux Kernel Developer
+>>         ret =3D drm_syncobj_array_find(file_private,
+>>                                      u64_to_user_ptr(args->handles),
+>> @@ -1262,8 +1285,13 @@ drm_syncobj_wait_ioctl(struct drm_device *dev, vo=
+id *data,
+>>         if (ret < 0)
+>>                 return ret;
+>>
+>> +       if (args->flags & DRM_SYNCOBJ_WAIT_FLAGS_WAIT_DEADLINE) {
+>> +               t =3D ns_to_ktime(args->deadline_ns);
+>> +               tp =3D &t;
+>> +       }
+>> +
+>>         ret =3D drm_syncobj_array_wait(dev, file_private,
+>> -                                    args, NULL, syncobjs, false);
+>> +                                    args, NULL, syncobjs, false, tp);
+>>
+>>         drm_syncobj_array_free(syncobjs, args->count_handles);
+>>
+>> @@ -1276,18 +1304,23 @@ drm_syncobj_timeline_wait_ioctl(struct drm_devic=
+e *dev, void *data,
+>>  {
+>>         struct drm_syncobj_timeline_wait *args =3D data;
+>>         struct drm_syncobj **syncobjs;
+>> +       unsigned possible_flags;
+>> +       ktime_t t, *tp =3D NULL;
+>>         int ret =3D 0;
+>>
+>>         if (!drm_core_check_feature(dev, DRIVER_SYNCOBJ_TIMELINE))
+>>                 return -EOPNOTSUPP;
+>>
+>> -       if (args->flags & ~(DRM_SYNCOBJ_WAIT_FLAGS_WAIT_ALL |
+>> -                           DRM_SYNCOBJ_WAIT_FLAGS_WAIT_FOR_SUBMIT |
+>> -                           DRM_SYNCOBJ_WAIT_FLAGS_WAIT_AVAILABLE))
+>> +       possible_flags =3D DRM_SYNCOBJ_WAIT_FLAGS_WAIT_ALL |
+>> +                        DRM_SYNCOBJ_WAIT_FLAGS_WAIT_FOR_SUBMIT |
+>> +                        DRM_SYNCOBJ_WAIT_FLAGS_WAIT_AVAILABLE |
+>> +                        DRM_SYNCOBJ_WAIT_FLAGS_WAIT_DEADLINE;
+>> +
+>> +       if (args->flags & ~possible_flags)
+>>                 return -EINVAL;
+>>
+>>         if (args->count_handles =3D=3D 0)
+>> -               return -EINVAL;
+>> +               return -0;
+>
+>
+> Did you intend this change? -0 is a pretty weird integer.
+>
+>>
+>>         ret =3D drm_syncobj_array_find(file_private,
+>>                                      u64_to_user_ptr(args->handles),
+>> @@ -1296,8 +1329,13 @@ drm_syncobj_timeline_wait_ioctl(struct drm_device=
+ *dev, void *data,
+>>         if (ret < 0)
+>>                 return ret;
+>>
+>> +       if (args->flags & DRM_SYNCOBJ_WAIT_FLAGS_WAIT_DEADLINE) {
+>> +               t =3D ns_to_ktime(args->deadline_ns);
+>> +               tp =3D &t;
+>> +       }
+>> +
+>>         ret =3D drm_syncobj_array_wait(dev, file_private,
+>> -                                    NULL, args, syncobjs, true);
+>> +                                    NULL, args, syncobjs, true, tp);
+>>
+>>         drm_syncobj_array_free(syncobjs, args->count_handles);
+>>
+>> diff --git a/include/uapi/drm/drm.h b/include/uapi/drm/drm.h
+>> index 642808520d92..bff0509ac8b6 100644
+>> --- a/include/uapi/drm/drm.h
+>> +++ b/include/uapi/drm/drm.h
+>> @@ -887,6 +887,7 @@ struct drm_syncobj_transfer {
+>>  #define DRM_SYNCOBJ_WAIT_FLAGS_WAIT_ALL (1 << 0)
+>>  #define DRM_SYNCOBJ_WAIT_FLAGS_WAIT_FOR_SUBMIT (1 << 1)
+>>  #define DRM_SYNCOBJ_WAIT_FLAGS_WAIT_AVAILABLE (1 << 2) /* wait for time=
+ point to become available */
+>> +#define DRM_SYNCOBJ_WAIT_FLAGS_WAIT_DEADLINE (1 << 3) /* set fence dead=
+line based to deadline_ns */
+>>  struct drm_syncobj_wait {
+>>         __u64 handles;
+>>         /* absolute timeout */
+>> @@ -895,6 +896,14 @@ struct drm_syncobj_wait {
+>>         __u32 flags;
+>>         __u32 first_signaled; /* only valid when not waiting all */
+>>         __u32 pad;
+>> +       /**
+>> +        * @deadline_ns - fence deadline hint
+>> +        *
+>> +        * Deadline hint, in absolute CLOCK_MONOTONIC, to set on backing
+>> +        * fence(s) if the DRM_SYNCOBJ_WAIT_FLAGS_WAIT_DEADLINE flag is
+>> +        * set.
+>> +        */
+>> +       __u64 deadline_ns;
+>>  };
+>>
+>>  struct drm_syncobj_timeline_wait {
+>> @@ -907,6 +916,14 @@ struct drm_syncobj_timeline_wait {
+>>         __u32 flags;
+>>         __u32 first_signaled; /* only valid when not waiting all */
+>>         __u32 pad;
+>> +       /**
+>> +        * @deadline_ns - fence deadline hint
+>> +        *
+>> +        * Deadline hint, in absolute CLOCK_MONOTONIC, to set on backing
+>> +        * fence(s) if the DRM_SYNCOBJ_WAIT_FLAGS_WAIT_DEADLINE flag is
+>> +        * set.
+>> +        */
+>> +       __u64 deadline_ns;
+>>  };
+>>
+>>
+>> --
+>> 2.39.2
+>>
