@@ -2,76 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 171CB6BF4A9
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 22:54:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB9B76BF4AE
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 22:54:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231240AbjCQVx0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 17:53:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56460 "EHLO
+        id S231423AbjCQVyp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 17:54:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230452AbjCQVxW (ORCPT
+        with ESMTP id S231350AbjCQVyl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 17:53:22 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76CF2D0E50;
-        Fri, 17 Mar 2023 14:53:00 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id lr16-20020a17090b4b9000b0023f187954acso6673032pjb.2;
-        Fri, 17 Mar 2023 14:53:00 -0700 (PDT)
+        Fri, 17 Mar 2023 17:54:41 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BCC0AF1F;
+        Fri, 17 Mar 2023 14:54:18 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id k15so2947238pgt.10;
+        Fri, 17 Mar 2023 14:54:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1679089978;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=4poqTf05FiPQHsMRuHP+xbWISjWPqpxmI37fFELJAGs=;
-        b=ARGbcukXCyyo8jyVnWbuRYt/PGdiQXSlT3xZxNST4aeJvEf6CjBW3f9uVm4iAy/Okk
-         7wWpC4apGT+uEyGiBiTVZB/Jfv7nhEaSvrTztYZAgMcOg3GllNldv/wwrMXrli1G/x0Z
-         AUcKepLXGJOqPIyR1khQMONOTqI6f+0d86l1ssDBzAHWbeO3JTnn5shOa2E1sSZwFAok
-         iekn0QRh+Aqih5SQU6IXdSWzEOOSEtR+ve1ZLGWYn5CHzc1xph5Iupc7FOogPQfsSwOH
-         sp/cz3edsNFlmZFzYVXmwPRPQn29CyIpEFUH3wkzpeCFe3otvUB22GGbm0a3iHD6+165
-         g8sQ==
+        d=gmail.com; s=20210112; t=1679090057;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=QgWoxlECZXdVrynxfG/iUFVQwxWjeSo565mClnIZWnc=;
+        b=YaTxmeYgjyyGDmiFAS7L+PljTKNdLcc5nol9+/wEE4H/wa86Znz2DX0ZJfrJwf3NQn
+         mi3C91RvdtoBgNdOgNPzvLFxbkHQkvXTlyahrA98EeV9jXJbi9Sf/XEa9/M9qyswTCDW
+         D99bJK6fLSCVJlxECISp5CFXVVNG2U3nnd/arcWTtrF02mJTSLao1RZSGb5ddQAsDtD0
+         V/Kg+cT9lPI18ueEdAm4jK/b8QlthdZ8NjbUa5tvX9L4AXpUzN7XDHJnLEp7WPDEa0Vo
+         rMhgXgfShXbVMEgHkEdJHLTq9hSBwCIDpZz3rogKfyxXw7dAmr6u14NdJ5LyUmR3w+3T
+         PuPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679089978;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4poqTf05FiPQHsMRuHP+xbWISjWPqpxmI37fFELJAGs=;
-        b=fhTgWzjEwu4KqmrgCNWzEOUmSYRvChjOOHlPUUCxOO3VrWIsln2vsQu5Bx2S4JYY8W
-         r9WClW+GGSLxghtP5RkjX0QGFuX3Dw6p7PBqhBYf+yxuJJ1zpARYvtwMRDtbD0E+OuZm
-         T4BFmrl0WTf9L9mpiP3h2jHjeBwoZPebXhER2KXiureZB7lEU7tQ69iZfJnXPK69HPdV
-         HJ4BgtlVzo7UVkeDwmQg7gcSqa/BwdrV+vK3FTBtU6/CbSd72bbYdHq6sjEG4aZ8oN1B
-         e+pXThUtH57zCl8xTLpjFQJcMa64CHCTV92eV6+7SjNVEtm7RRDy4PhIN3sot3+xTcFs
-         yK+w==
-X-Gm-Message-State: AO0yUKXAgkGMP+A+e3Q/zHZ0IOzWWQaQCxQ3hmfjJKvf0LD8tkRiC0pb
-        9cilK5Gb0aieuvDbL99IjZI=
-X-Google-Smtp-Source: AK7set/caK4qYFgs6zEDm+RZ2wHn9RMnd08MMGlpv81ljN3yUqSFSEDTg8AkDU/YU9Ddsqv4n4BeLw==
-X-Received: by 2002:a17:902:fa0b:b0:1a1:956e:5417 with SMTP id la11-20020a170902fa0b00b001a1956e5417mr5910746plb.22.1679089978238;
-        Fri, 17 Mar 2023 14:52:58 -0700 (PDT)
-Received: from localhost (ec2-54-67-115-33.us-west-1.compute.amazonaws.com. [54.67.115.33])
-        by smtp.gmail.com with ESMTPSA id p12-20020a1709028a8c00b001a198422025sm1990339plo.125.2023.03.17.14.52.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Mar 2023 14:52:57 -0700 (PDT)
-Date:   Fri, 17 Mar 2023 21:52:56 +0000
-From:   Bobby Eshleman <bobbyeshleman@gmail.com>
-To:     Arseniy Krasnov <avkrasnov@sberdevices.ru>
-Cc:     Stefan Hajnoczi <stefanha@redhat.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Bobby Eshleman <bobby.eshleman@bytedance.com>,
-        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@sberdevices.ru, oxffffaa@gmail.com
-Subject: Re: [RFC PATCH v1] virtio/vsock: allocate multiple skbuffs on tx
-Message-ID: <ZBThOG/nISvqbllq@bullseye>
-References: <2c52aa26-8181-d37a-bccd-a86bd3cbc6e1@sberdevices.ru>
+        d=1e100.net; s=20210112; t=1679090057;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QgWoxlECZXdVrynxfG/iUFVQwxWjeSo565mClnIZWnc=;
+        b=1QN89Y+2vIkEyIxSCLPLnH6F4dehA9JFpJQDEn6TGwR/mQm2eZIb05GvkXtJatv+qN
+         VRDVkKm6WQfM4P2tO0/fpPz/68zgBD+WhQWdMm5d69r602tGUYDt3OrVDkEP/ZecGrKx
+         xxZa81e+UDtnaw2xz1/rNWKKalD7mLMtcV9JGz55HS1UV3AQBI3sxhSeup/o0e1XQTw8
+         iiGzYu6gt+7S2d2MWhN5wNIU+GrUcC06pH7+zJviJVY52Za8sk/W5fmZDdRMe9Yn22D7
+         U+TJPB6YSqXQw1IninFfNJPx9YA/X4cbhX2rzG/LR0Mmyy5BjNybNbB+Fqam1WzjVd5f
+         kvNQ==
+X-Gm-Message-State: AO0yUKU/6/l8vrpFz1Q3BRVI68fR2yK8Im5xX+kZcD2dmJqXHLOFx1yD
+        JWPqUbKASYyPaFOBxFtQVvI=
+X-Google-Smtp-Source: AK7set++51QrZc9ogfyZzZlsl7EgVQqsEkLr7zb0xLfkGDusnfnLbtVRqFamGeYkvD60E3j8n/6MAg==
+X-Received: by 2002:a62:520f:0:b0:5cd:d766:8a2b with SMTP id g15-20020a62520f000000b005cdd7668a2bmr6584338pfb.6.1679090057160;
+        Fri, 17 Mar 2023 14:54:17 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id 22-20020aa79256000000b00582f222f088sm1998885pfp.47.2023.03.17.14.54.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Mar 2023 14:54:16 -0700 (PDT)
+Message-ID: <0bbaa346-edbf-a1b9-3c95-5a1aacaf0c44@gmail.com>
+Date:   Fri, 17 Mar 2023 14:54:10 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2c52aa26-8181-d37a-bccd-a86bd3cbc6e1@sberdevices.ru>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: Probing devices by their less-specific "compatible" bindings
+ (here: brcmnand)
+Content-Language: en-US
+To:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Brian Norris <briannorris@chromium.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        MTD Maling List <linux-mtd@lists.infradead.org>,
+        "William (Zhenghao) Zhang" <william.zhang@broadcom.com>
+References: <399d2f43-5cad-6c51-fe3a-623950e2151a@gmail.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <399d2f43-5cad-6c51-fe3a-623950e2151a@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,100 +83,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 17, 2023 at 01:38:39PM +0300, Arseniy Krasnov wrote:
-> This adds small optimization for tx path: instead of allocating single
-> skbuff on every call to transport, allocate multiple skbuffs until
-> credit space allows, thus trying to send as much as possible data without
-> return to af_vsock.c.
++William,
 
-Hey Arseniy, I really like this optimization. I have a few
-questions/comments below.
+On 3/17/23 03:02, Rafał Miłecki wrote:
+> Hi, I just spent few hours debugging hidden hw lockup and I need to
+> consult driver core code behaviour.
+> 
+> I have a BCM4908 SoC based board with a NAND controller on it.
+> 
+> 
+> ### Hardware binding
+> 
+> Hardware details:
+> arch/arm64/boot/dts/broadcom/bcmbca/bcm4908.dtsi
+> 
+> Relevant part:
+> nand-controller@1800 {
+>      compatible = "brcm,nand-bcm63138", "brcm,brcmnand-v7.1", 
+> "brcm,brcmnand";
+>      reg = <0x1800 0x600>, <0x2000 0x10>;
+>      reg-names = "nand", "nand-int-base";
+> }:
+> 
+> Above binding is based on the documentation:
+> Documentation/devicetree/bindings/mtd/brcm,brcmnand.yaml
+> 
+> 
+> ### Linux drivers
+> 
+> Linux has separated drivers for few Broadcom's NAND controller bindings:
+> 
+> 1. drivers/mtd/nand/raw/brcmnand/bcm63138_nand.c for:
+> brcm,nand-bcm63138
+> 
+> 2. drivers/mtd/nand/raw/brcmnand/brcmnand.c for:
+> brcm,brcmnand-v2.1
+> brcm,brcmnand-v2.2
+> brcm,brcmnand-v4.0
+> brcm,brcmnand-v5.0
+> brcm,brcmnand-v6.0
+> brcm,brcmnand-v6.1
+> brcm,brcmnand-v6.2
+> brcm,brcmnand-v7.0
+> brcm,brcmnand-v7.1
+> brcm,brcmnand-v7.2
+> brcm,brcmnand-v7.3
+> 
+> 3. drivers/mtd/nand/raw/brcmnand/brcmstb_nand.c for:
+> brcm,brcmnand
+> 
+> 
+> ### Problem
+> 
+> As first Linux probes my hardware using the "brcm,nand-bcm63138"
+> compatibility string driver bcm63138_nand.c. That's good.
+> 
+> It that fails however (.probe() returns an error) then Linux core starts
+> probing using drivers for less specific bindings.
+
+Why does it fail?
 
 > 
-> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-> ---
->  net/vmw_vsock/virtio_transport_common.c | 45 +++++++++++++++++--------
->  1 file changed, 31 insertions(+), 14 deletions(-)
+> In my case probing with the "brcm,brcmnand" string driver brcmstb_nand.c
+> results in ignoring SoC specific bits and causes a hardware lockup. Hw
+> isn't initialized properly and writel_relaxed(0x00000009, base + 0x04)
+> just make it hang.
+
+Well, the missing piece here is that brcmnand.c is a library driver, 
+therefore it needs an entry point, the next one that matches is 
+brcmstb_nand.c.
+
 > 
-> diff --git a/net/vmw_vsock/virtio_transport_common.c b/net/vmw_vsock/virtio_transport_common.c
-> index 6564192e7f20..cda587196475 100644
-> --- a/net/vmw_vsock/virtio_transport_common.c
-> +++ b/net/vmw_vsock/virtio_transport_common.c
-> @@ -196,7 +196,8 @@ static int virtio_transport_send_pkt_info(struct vsock_sock *vsk,
->  	const struct virtio_transport *t_ops;
->  	struct virtio_vsock_sock *vvs;
->  	u32 pkt_len = info->pkt_len;
-> -	struct sk_buff *skb;
-> +	u32 rest_len;
-> +	int ret;
->  
->  	info->type = virtio_transport_get_type(sk_vsock(vsk));
->  
-> @@ -216,10 +217,6 @@ static int virtio_transport_send_pkt_info(struct vsock_sock *vsk,
->  
->  	vvs = vsk->trans;
->  
-> -	/* we can send less than pkt_len bytes */
-> -	if (pkt_len > VIRTIO_VSOCK_MAX_PKT_BUF_SIZE)
-> -		pkt_len = VIRTIO_VSOCK_MAX_PKT_BUF_SIZE;
-> -
->  	/* virtio_transport_get_credit might return less than pkt_len credit */
->  	pkt_len = virtio_transport_get_credit(vvs, pkt_len);
->  
-> @@ -227,17 +224,37 @@ static int virtio_transport_send_pkt_info(struct vsock_sock *vsk,
->  	if (pkt_len == 0 && info->op == VIRTIO_VSOCK_OP_RW)
->  		return pkt_len;
->  
-> -	skb = virtio_transport_alloc_skb(info, pkt_len,
-> -					 src_cid, src_port,
-> -					 dst_cid, dst_port);
-> -	if (!skb) {
-> -		virtio_transport_put_credit(vvs, pkt_len);
-> -		return -ENOMEM;
-> -	}
-> +	rest_len = pkt_len;
->  
-> -	virtio_transport_inc_tx_pkt(vvs, skb);
-> +	do {
-> +		struct sk_buff *skb;
-> +		size_t skb_len;
-> +
-> +		skb_len = min_t(u32, VIRTIO_VSOCK_MAX_PKT_BUF_SIZE, rest_len);
-> +
-> +		skb = virtio_transport_alloc_skb(info, skb_len,
-> +						 src_cid, src_port,
-> +						 dst_cid, dst_port);
-> +		if (!skb) {
-> +			ret = -ENOMEM;
-> +			goto out;
-> +		}
+> That obviously isn't an acceptable behavior for me. So I'm wondering
+> what's going on wrong here.
+> 
+> Should Linux avoid probing with less-specific compatible strings?
+> Or should I not claim hw to be "brcm,brcmnand" compatible if it REQUIRES
+> SoC-specific handling?
+> 
+> An extra note: that fallback probing happens even with .probe()
+> returning -EPROBE_DEFER. This actually smells fishy for me on the Linux
+> core part.
+> I'm not an expect but I think core should wait for actual error without
+> trying less-specific compatible strings & drivers.
+> 
+> ______________________________________________________
+> Linux MTD discussion mailing list
+> http://lists.infradead.org/mailman/listinfo/linux-mtd/
 
-In this case, if a previous round of the loop succeeded with send_pkt(),
-I think that we may still want to return the number of bytes that have
-successfully been sent so far?
+-- 
+Florian
 
->  
-> -	return t_ops->send_pkt(skb);
-> +		virtio_transport_inc_tx_pkt(vvs, skb);
-> +
-> +		ret = t_ops->send_pkt(skb);
-> +
-> +		if (ret < 0)
-> +			goto out;
-
-Ditto here.
-
-> +
-> +		rest_len -= skb_len;
-> +	} while (rest_len);
-> +
-> +	return pkt_len;
-> +
-> +out:
-> +	virtio_transport_put_credit(vvs, rest_len);
-> +	return ret;
->  }
->  
->  static bool virtio_transport_inc_rx_pkt(struct virtio_vsock_sock *vvs,
-> -- 
-> 2.25.1
