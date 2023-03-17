@@ -2,204 +2,253 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 126A16BF0E1
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 19:41:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC7176BF0E5
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 19:42:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229787AbjCQSlK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 14:41:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52750 "EHLO
+        id S229611AbjCQSmz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 14:42:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229599AbjCQSlI (ORCPT
+        with ESMTP id S229494AbjCQSmx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 14:41:08 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 797282412D
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 11:41:06 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id cy23so23857578edb.12
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 11:41:06 -0700 (PDT)
+        Fri, 17 Mar 2023 14:42:53 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF101C6D9E
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 11:42:51 -0700 (PDT)
+Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32HI4VGF026476;
+        Fri, 17 Mar 2023 18:42:33 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2022-7-12;
+ bh=+MoZkXttl0/UZLb0DpD1YxQ69ZQDHMcpJmUjfsrZoIk=;
+ b=ecLj1Q4bgu+ATd35HWPLbPAv7VmuR/3KK9lHfwHLsqeuj4jhim6jOK4ogvxwf7fkO9MZ
+ KE8ieff7a1N+WNkCHYnb3gRmtblKPrNjblGIZoYj+b0oU/exc+WKbwJFYjZ4jsn12QvA
+ sBXvhMQgvz8h9925TpPTCntZ+kRqW1urLEgImud+SjA+A95oHwO0VsB4kPsnwCzssQRj
+ /GT7hXia2PMVluP6a35/QZt53ieiuZn6+s0GsE3oDwL+xNmamod2/dM1tNklQTAkZCQR
+ 4omtmu9nfHsHMWm8MqLUh8vlqGasij5zR1sE0kSQ44YiBz1/v+DA0vu5QwtymgQizy17 fw== 
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3pbs29ckkk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 17 Mar 2023 18:42:32 +0000
+Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 32HHE67X002531;
+        Fri, 17 Mar 2023 18:42:31 GMT
+Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2106.outbound.protection.outlook.com [104.47.55.106])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3pch08d522-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 17 Mar 2023 18:42:31 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JFc4IbNRNe+1GLAlKRONSPmHbS9QLTqJ+UuRJXJuf4PBH8kNQGGg1aU4/bTmk9EL6+/j1SvDnVVwnrtu4MWcfq02v54sKV87CpcQl169Wz1YxpMsTK8X4RHDapRWpMPe2FRkSDlo+ZT25aC4KEA9YaOGz/NJqniBhT4jRrBMGuO2Y7NouW1kqYoD+sBaPkhirn+eMhHzCTP2yP/rSSO/997BKW3f98YY3h4ZI6Lc6e9rIOU5fUM2y8enG3yWt82swUsuygh/z+SkeST3ISJpmIhFgqkivAoXfabDB23B/fu2CPQme4zwEzJW+NrRg3pzuv/j+3cIgmAEkPmy2wkdsA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=+MoZkXttl0/UZLb0DpD1YxQ69ZQDHMcpJmUjfsrZoIk=;
+ b=ZpJMMVhjk7bQQadcFW4ggENvR2/hGsqJqsXuOFjFGy1stZv5XZAk+nf98ZG5nFRtmm/tERn8wM6uf3hDOhP0GPO7BTjEBk9UUHqQrByEsY/JJRhY6JtwvGyoUwuVoObEQ5ZDaA8HytjmF0KP20dxBZGz68O7vG8rc+BynR9oCQVWdBW6PuKNvM7Rf9IxyyVc9Zpd0hVdeWGnDGOyeO6YYpSFhIA7MfNts1fEVV2/3/GRnf8f5MUGDd2ExTO2s5LBi5D+dVWqADi2Jt+gwxBN9IWaKdCGSimvZ3C9tDpwcKJ6IvQ7VxuB+mQ9M0dPF9C5D3lHq3HzBB/6RI+PRb71mw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tessares.net; s=google; t=1679078465;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=qLt5F1/Ugauyf5shEntzjWUG+KhzEEAAsNAk/6CtFTE=;
-        b=lcoDKNmu1EfwcWHjdgwtVGLMa25SD/WC8VLwf7alwUeGfLq6eshSCJ22WOuJDtfOzb
-         6/69b0NxZlClU5YgYlWRL8KpAmwIWQOSw0civfngs2yfIhF6JLwFMe4Seg9TFyZh9GrZ
-         ytK+xvIOsMaQMd0BDqriHu/ELLUBiM0R0xAE1a2wv1u2LtV43klnMANaaqS68vU0nD2f
-         /oh9MQFTDdOXS+q+z69HiGaIdllndDY+7zS54Xou9egCnSJjupfgWj3u+aX8dQhHyUNi
-         Odh6bYxbmS79lr3QcCbLkCRU0JcC9lu5c0Z0hbPYrIEVRyRPEuJ6YtlAIkalOl8gNkdz
-         75gA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679078465;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qLt5F1/Ugauyf5shEntzjWUG+KhzEEAAsNAk/6CtFTE=;
-        b=b8pSw6usKCr46Wt6sTjclLLf2KVvExvkXwYOuL4NtokHepuJkSY6he0M5PI6Yz8e7K
-         X5vu/3QJ44zSvWtVppZkYPFAfwx6VWh44e3M3uk//nXz1ulSHIZJbd3bcKHGDgqx/jWa
-         hnZMmfUp21ovw6NJwz16gfWOoxdtQCLNaePawaejZklFYRP7iBXL2b5Xj6T0Qjsu6Cg5
-         hqfGCW3ggmgwAF04Nmi8/IQy5cjI7ESNtEvR3tf2ObljrCyc1x8Aa96GL+1Nq1DAJBb9
-         fQaMTnjZcF6HtHMsgXd0GsU6sdOg1BkGo7nAugQJgU2D8iwZW9aFdAtTeqducmkNi0x5
-         dstw==
-X-Gm-Message-State: AO0yUKVtgCxgB8DGbWJFyogjWCAKyEU1HOXima66BAt3xlKt9kbQ9TsV
-        rem053C1LENwpN12S5NJiYuoWA==
-X-Google-Smtp-Source: AK7set9zmfshHjflDBnfziFdWGSSG/cPG5ezsYRMkRCGB0k0XRTVRYAcMr0jg//ExGnmLG9ZrZDnQw==
-X-Received: by 2002:a17:906:d8d6:b0:886:ec6e:4c1 with SMTP id re22-20020a170906d8d600b00886ec6e04c1mr400460ejb.59.1679078464904;
-        Fri, 17 Mar 2023 11:41:04 -0700 (PDT)
-Received: from [10.44.2.5] ([81.246.10.41])
-        by smtp.gmail.com with ESMTPSA id v2-20020a170906292200b009321cd80e15sm883836ejd.73.2023.03.17.11.41.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Mar 2023 11:41:04 -0700 (PDT)
-Message-ID: <7974f3ec-3f17-c21c-139b-fd5651871a75@tessares.net>
-Date:   Fri, 17 Mar 2023 19:41:04 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 0/2] docs & checkpatch: allow Closes tags with links
-Content-Language: en-GB
-To:     Daniel Vetter <daniel@ffwll.ch>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Konstantin Ryabitsev <konstantin@linuxfoundation.org>
-Cc:     Thorsten Leemhuis <linux@leemhuis.info>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andy Whitcroft <apw@canonical.com>,
-        Joe Perches <joe@perches.com>,
-        Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        =?UTF-8?Q?Kai_Wasserb=c3=a4ch?= <kai@dev.carbon-project.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Airlie <airlied@gmail.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        mptcp@lists.linux.dev
-References: <20230314-doc-checkpatch-closes-tag-v1-0-1b83072e9a9a@tessares.net>
- <c27709bd-90af-ec4f-de0b-3a4536bc17ca@leemhuis.info>
- <81f8be3e-4860-baf9-8e13-fec3a103245b@tessares.net>
- <CAHk-=wh0v1EeDV3v8TzK81nDC40=XuTdY2MCr0xy3m3FiBV3+Q@mail.gmail.com>
- <CAKMK7uESvC-zgGJEup1OAmf34Rk8s5cCrSBYUNP_REFUuer1-w@mail.gmail.com>
-From:   Matthieu Baerts <matthieu.baerts@tessares.net>
-In-Reply-To: <CAKMK7uESvC-zgGJEup1OAmf34Rk8s5cCrSBYUNP_REFUuer1-w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+MoZkXttl0/UZLb0DpD1YxQ69ZQDHMcpJmUjfsrZoIk=;
+ b=Uce5ksHjgGNKUosGzh0kDtN7e10Tsxfth+PFwt77vrwzjqMb5mMJWZ1WcqW7dWd1x1n/nSeaOvJrvoLQvDir4hjrXLSZ2v0tFfo3rZBHyUCzqu/gbviqLu/Pbnz1tWqjz17r55l5m0rYz/4NpjcWle4E+Y7n5rYGe58cceB49rk=
+Received: from CO1PR10MB4531.namprd10.prod.outlook.com (2603:10b6:303:6c::22)
+ by CY5PR10MB6141.namprd10.prod.outlook.com (2603:10b6:930:37::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.27; Fri, 17 Mar
+ 2023 18:42:28 +0000
+Received: from CO1PR10MB4531.namprd10.prod.outlook.com
+ ([fe80::671e:6486:6996:c38]) by CO1PR10MB4531.namprd10.prod.outlook.com
+ ([fe80::671e:6486:6996:c38%9]) with mapi id 15.20.6178.035; Fri, 17 Mar 2023
+ 18:42:28 +0000
+Message-ID: <5e6d1cc8-82b0-b854-e244-73ed00997e40@oracle.com>
+Date:   Fri, 17 Mar 2023 13:42:12 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.1
+Subject: Re: [PATCH v19 7/7] x86/crash: optimize cpu changes
+Content-Language: en-US
+To:     Sourabh Jain <sourabhjain@linux.ibm.com>,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        kexec@lists.infradead.org, ebiederm@xmission.com,
+        dyoung@redhat.com, bhe@redhat.com, vgoyal@redhat.com
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com,
+        nramas@linux.microsoft.com, thomas.lendacky@amd.com,
+        robh@kernel.org, efault@gmx.de, rppt@kernel.org, david@redhat.com,
+        konrad.wilk@oracle.com, boris.ostrovsky@oracle.com
+References: <20230306162228.8277-1-eric.devolder@oracle.com>
+ <20230306162228.8277-8-eric.devolder@oracle.com>
+ <53343c55-c59f-fee7-22f5-94de15a1d18c@linux.ibm.com>
+From:   Eric DeVolder <eric.devolder@oracle.com>
+In-Reply-To: <53343c55-c59f-fee7-22f5-94de15a1d18c@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-ClientProxiedBy: LO4P123CA0592.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:295::9) To CO1PR10MB4531.namprd10.prod.outlook.com
+ (2603:10b6:303:6c::22)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1PR10MB4531:EE_|CY5PR10MB6141:EE_
+X-MS-Office365-Filtering-Correlation-Id: e9133f29-1667-4fe0-a483-08db27175ba6
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ry6rd0vmLwHCbBtm7pfCEtv7iocmaj9b/4L37CL2AxShBnXopJrRQ4T57rleT7hr79xAucIwM7S+i1ADCZQxA4qkhkl43WlGhCelfIMyleV5rTcq1yVwWeCrAuz272f6jUvmD8wqIvsEyyLPZFtJs3d/gd9NYEgEf9PL6hLxAh2CIY+cLoqgmosdLljlOEZ8B4UHK0YtDYk0Hrn0TB0xq8FAlvFbs1tI4wheJQUjTRY3dpcB1lpRXhT1KMJcOprUJgHJ20RwRk/tS+zZMFEdE9Hal5sqGt141RVXhTqTeh23/mv2yNr/qDkSXMGc3JQAGPW3yBpvnigNGy9Ak9PyxJdcRduzsXATW+rYNavrJzefwTyDODH3TndAxLEFHT9xShCMpWp2n6evBAsqGvvXmWXmIHsgPr65p0gdIjWZUrTcSyM+Rms4d58mYTbyp8hgZURAx4swYfDTRcPcqkEErZvngCtBiObexbGO8hyz8RJEIxtVKtKEXspe4/SgooDLb4yIiLnMoAr0pUj1pDdR0gE8hz6LpiqP3mB2uUGlJ3ftAV1cpBBcKk7fll5Dma5RRUThLO3VXQ13Q98UC6kmW0Drw+HAWzNgAif+dkW1mXnReBcUlZKVDlZeFFHDlCUR3GaLlwqWs7qSPDZitC+cUgIKFY45ZmM40FNWmlEfA5mr6/ulJsBm0uIaM++oghA922QafRcJZGH7Qgmc7pthwK3l5X+5f5T4KjW6vg+gK58=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR10MB4531.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(366004)(39860400002)(396003)(376002)(346002)(136003)(451199018)(31686004)(316002)(6666004)(36756003)(478600001)(83380400001)(186003)(66946007)(38100700002)(2616005)(6486002)(107886003)(31696002)(4326008)(6512007)(8676002)(66556008)(41300700001)(5660300002)(2906002)(66476007)(86362001)(53546011)(6506007)(7416002)(8936002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VHZSNzZuQ3dtcjBIU0hobm5PSU9NbzlKc3V4bEt4dDcyRklXT09SKzZ6Y2kz?=
+ =?utf-8?B?YjdzeXRDencwZWw3eGdXZGZ1M2lDUHA2cGhPSStDNnJPY093WTNHcUg0NGx1?=
+ =?utf-8?B?SThob1psbFVxY1cyR05GNmE1TmZQdmRKaVBTQ2Z4TWM1ZFdwemlJenZMUVR5?=
+ =?utf-8?B?QWZHSnlIMWlsYUJQZHZqSkkvLzNaNnlPV0p6dno2OW1adTAreUROOFJHbURu?=
+ =?utf-8?B?eTFlb1NOUFhZVXl3UVI5Wi9jYlVPaWI5NzQzcXl4ZkM3ejhGNExxV2orU2NI?=
+ =?utf-8?B?NlBSZUVuenE3SmorMUZacGpiVHREM2NkVU95TGlTZDlaUEo1enBMMmhsMm1m?=
+ =?utf-8?B?RlZsUThFT0Nza3hWWEpUYnZBb0E3WURNWnd5MWZvUGZ5SU0zTlcyMmxmc0Er?=
+ =?utf-8?B?N2h5dTEvdktEemI0UHZLTlZVdzM4V2FXZ0ZpNDlQZTRaTTNOTXR0cVI4SHA4?=
+ =?utf-8?B?ZXhFRklqQkpkeW95N2RUKzNFaFNJeXk4M0ZjNHVjNWNZUmh5bUJBSDg1VzVW?=
+ =?utf-8?B?Mm5jdnh2c0xYNFR0aVhqdEVOU2pSdCtzRXY5UWpGTmUzcGl3M0hTWnBpT3BL?=
+ =?utf-8?B?S1BzR1dCc2dZWFIvM3JpTjNPblkrR3lINkppMzlGdHU3YWRyTUg3UU9NTDQw?=
+ =?utf-8?B?UHpvb0Z3eHBURHlXT0FFSW1qZStVOHhmNXBWaXgrekRpZDNvSytOdkptV01v?=
+ =?utf-8?B?L1pLOGVrRUtuWStzSVVFZkV1OHlDbGludGJIK1lWa1JVN2dvRlkzVC9HU2ls?=
+ =?utf-8?B?ZmZWTzRzeWhDczRHNUdYLytFYS9kTEZFZVljZWlLcFZ2RGptU1VGTHpZZUhX?=
+ =?utf-8?B?b0RxZG0yazVtcTA1NUpsTzFSdE5RTG5QajRjMVpwTW9LdHIwSjdaeVpYMmVU?=
+ =?utf-8?B?elBnbnRlQ2VVUVAxWEx3ZjFSOGtwZml4bjhYQjVQeGh5SlJmdThIdWE2SGZv?=
+ =?utf-8?B?eVAwS0tUTmFlSHFSNWROMlNnZG9mQTYxZ1hzV05DVGhTTWs4NjdaRkZmTDhL?=
+ =?utf-8?B?SkFFVkxoZnFTWHJFOFRneHZUTDBqNE9xZGxvTlQvMC9FMW9zOHFZbVhyRlNV?=
+ =?utf-8?B?K1l1S051aldLWVg5RFZ2WXpHM3JCRVI1NU5hVFBMSVlyVkZSckc0STJuOXdm?=
+ =?utf-8?B?QnJTYm1iMXp2cWFFcUkzMnN5SHYzTDdnRVBPd0x4OUU1KzZqMUJVQ0hEQ0t3?=
+ =?utf-8?B?SnZPSXBwUVk2R0ZXVnJhQ2E2NzNQTDlOSHo2VGtMeGVLanA5Qzh5WTlYblcz?=
+ =?utf-8?B?NjZHdGV2T0VzR1JaRDJGYUswdHNnZFFHV0pvQW5LT1JEcmdKTGNLeVluQkoz?=
+ =?utf-8?B?TjRad0tpZmtrMHRtdUVnWlZZNCtXZ3Y3U2ZUeEM3RVcrK3h3K1NtcXZPRFhE?=
+ =?utf-8?B?L1oxVjlDRUFDRTlkU1RIejNwYVE0MXN6RmZYaHUvdk9XZFVNTnh1QlhMQitn?=
+ =?utf-8?B?YlJLNlhtb3BnS2dvNGxURXRNT0k5eFRvY2RiTDVadmtXWVRRekNHdjZtbVly?=
+ =?utf-8?B?NHZ0UXc4em9YNE5oU051WlRTc2V5VXNlblozWUo2VGVUNEJhR2pMZ1Q0VzNT?=
+ =?utf-8?B?S3lraDJtamhHY1Y2dy9XZTBpT05lc0NwYTJxc0RvV3BxRlpJekIwZ2tjNXRC?=
+ =?utf-8?B?QVkxZlErWW5pdVdxT09VazhQLzZodDJTNkpxNE5Yem5CTFVWNXRWakRYYW5x?=
+ =?utf-8?B?bDZPN04yWGhyQXFlSms5K0J6Y2p4SmtUVDJsa2c5WG5qNG5aSEoyWllTNXpX?=
+ =?utf-8?B?NHBvUnZHQWZ6dmFVNHAzK2NWZFVzWkUzY3A3VHBTUEJGZmgyNFJDWXlIOE11?=
+ =?utf-8?B?UWdvenJzZm43emZJczJNUHl1QUhwb29GV0QxejlwLzhvT0dvT0pMdnROUUd5?=
+ =?utf-8?B?QlNZNFdlQm9CRVJ5azV5WTdLMHQ3L21MZ0lEMlR0SGl4TXIxT1RHZTdTeHR6?=
+ =?utf-8?B?N05kbWFSWTZsaXp0QURiVnVxRXNiV3oyeVpXV2c4KzYwa2xjVFBCOTlwZHBW?=
+ =?utf-8?B?d0RrdCsySGgxYk1GRnBiOTNpYUpHcjEyRVE1SldOQWJvUmtLcFpZcDl1NURZ?=
+ =?utf-8?B?Y3VlV0l3QUxlcXdBL1IwcWNyN1lJTmphTXlOUW1BRmlZdTc0c2dhaUhDbkdQ?=
+ =?utf-8?B?NzB4VlpRSi9ML045eWw4YUR3Ni9RL1NoU0w4UWtZejVxUWRxNTU2S2t3RWZx?=
+ =?utf-8?Q?DEF3Boys2SP8IoexLYO1Fwk=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?utf-8?B?TTNQYUZKa1dUc21SM2tSNlFkbjUrdEw1bHBMY1Vrc3pPcnZSbmFLWXk1QVUy?=
+ =?utf-8?B?R1RMaElDYi94V05FSnRBVm5yMytWelRzWjF2YlZ0Q05DdCtPQytSa3p5dE5E?=
+ =?utf-8?B?eFpWbkt3L3M4ZEorL1ptRlYwa2luRk5qRm1pVERibjBRbkN1RnFCUVU1VEJw?=
+ =?utf-8?B?WGlDMjBDamRpSXZCaEltT25KZ1hXdzhla0FOV0JUb3VlYWpOZEo1QkRqRmVN?=
+ =?utf-8?B?S2U2MWtMM0FaYytZQkNSVERTL2xBTmkzYSt6ODRZMUtNczYrbzYwai9kbVFh?=
+ =?utf-8?B?UFJMSWRWdkt4T3VFTVlBUHN0QStDZzNtd2k0VXJTT3NXMkR3YjhkSlVkWjVQ?=
+ =?utf-8?B?T1liNDlBV3p6WjhORWxuTm1YZlFGeDk5aXpPMUVidkZFaWlwbTdmYnl0K2I0?=
+ =?utf-8?B?cnNFTzBweS90U0xvaUovUUhKTkJYY0c4SXN5QWppQTdnZTE5a0czU2t1SUZV?=
+ =?utf-8?B?QVJ3d3dNOVI1YUlaZHg5UUNvVmVKV0FWdVQyTjdQWGRUTzUrajd5UXZOQ0hK?=
+ =?utf-8?B?Y1VBOGlkVW8ydjliaHdYei9ObzVzMWQ2YzRlR0o5aWd5SlptZUx0UEtTUE15?=
+ =?utf-8?B?Sng2WW9OUzVFa0VlZTFpemg1N2REQk1TWHNnUWNVT3BwK2plYlYyQ3AzK1Yy?=
+ =?utf-8?B?SDVGTDlkTFJNVWFLdTZ6cmNaTUU2TzdvYnJCckFtbGpQVVlzZy9xNlQrQVVn?=
+ =?utf-8?B?b1JHZ2FOWmpsS2RjR1dmS2NnTXcrWW8vV1JPa2lhaDIyY3RvOFlIcmlBdEl6?=
+ =?utf-8?B?VUczR0Z2U1NhK1JQNXIyVG53SmoxNUxDeWtlUnlYWkxUemFMdnBPdVRWME9m?=
+ =?utf-8?B?bEVKcTdTY09LVS95eCtpbzhqOVZpT0g0VmI1WUFOcWtOVzlmdmdKdWdVRldq?=
+ =?utf-8?B?cFNrZlUrY2ttQzA2QnNvM2pueTNJMTZiVlRKTEo2YUZXSXY1aUJOejJ0Z1hY?=
+ =?utf-8?B?SndDZDNlUmZsa09XdnhzaTM5UWhsclVSQ3RFZ0tnWmtQUE5yUXBHb05EOFFy?=
+ =?utf-8?B?NC9XeGVabUI5R1BEZnJVYSs1YnFyNkZMOGdrSTk4cUlvdW80UXROY2tUb1hx?=
+ =?utf-8?B?TzFUYlo5V2QvaVlvQ1RKMjk3dXROZ1JPY2pmamRhZTE5RUx6UTZIb25OeTVG?=
+ =?utf-8?B?WTRWRjg1azllTHpTa09lTXU1Q2NwWGJNYTJUYmJaNGQyb2lSeG5oenc5ZmlG?=
+ =?utf-8?B?emFnanFvbXZuYTFYalkxN3pUT3JkaVBVRGJ0akNwUjFsY0JFUE5NWEw0dFR3?=
+ =?utf-8?B?b2k1bjJ2c2NZSHF4citwN0NvQWt6UUdsQWhrZlNoYytKazkydXNlOWJHZEd0?=
+ =?utf-8?B?SXhLQk1lb3FPQUluelV3KzFNY2NJamtJYk4zZjBWT0E4cFZrV3M4ckgwK20v?=
+ =?utf-8?B?d0VaOWpFWkUxZ3pDUzBQblg1ZFJ2cXlCTnFWdXJCQ2k3VVBmSjNkZWJxS1ZG?=
+ =?utf-8?B?d1dFaGJIVmtjS0REN2lLV0dRV0RHdFdRQ2M4RlZvY2VYN1lIV2k3Y2FZYkxF?=
+ =?utf-8?B?N2xVQVRMdXZ2bURXWCtrMUo0Snk3RUkwZjJrcmhjdHdFQ2ozOHB1VmV2T3J3?=
+ =?utf-8?Q?615QTaYxSIxDEzxz/z13URPos=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e9133f29-1667-4fe0-a483-08db27175ba6
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR10MB4531.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Mar 2023 18:42:28.3591
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: E/hH3EeH1j+qx6s5/wRd7BQj2I+mWZ2rs0UTHURxLuYzI5S7EMRE1A0OwpfErDra4cjQe8k0A97TLSwwnZwJgPU1jmatlPBbEwul5CBz3C4=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR10MB6141
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-17_14,2023-03-16_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 malwarescore=0 bulkscore=0
+ adultscore=0 phishscore=0 mlxscore=0 suspectscore=0 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2303150002
+ definitions=main-2303170128
+X-Proofpoint-GUID: FDMkk4x_VLXJTgsHTtIswOq5pBIyn0uh
+X-Proofpoint-ORIG-GUID: FDMkk4x_VLXJTgsHTtIswOq5pBIyn0uh
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus, Daniel, Konstantin,
 
-@Linus, Daniel: Thank you both for your replies!
 
-@Konstantin: I have one question for you at the end of this email if you
-don't mind.
-
-On 17/03/2023 17:58, Daniel Vetter wrote:
-> On Thu, 16 Mar 2023 at 18:30, Linus Torvalds
-> <torvalds@linux-foundation.org> wrote:
->>
->> On Thu, Mar 16, 2023 at 4:43 AM Matthieu Baerts
->> <matthieu.baerts@tessares.net> wrote:
->>>
->>> @Linus: in short, we would like to continue using the "Closes:" tag (or
->>> similar, see below) with a URL in commit messages. They are useful to
->>> have public bug trackers doing automated actions like closing a specific
->>> ticket. Any objection from your side?
->>
->> As long as it's a public link, I guess that just documents what the
->> drm people have been doing.
->>
->> I'm not convinced "Closes" is actually any better than just "Link:",
->> though. I would very much hope and expect that the actual closing of
->> any bug report is actually done separately and verified, rather than
->> some kind of automated "well, the commit says it closes it, so.."
->>
->> So honestly, I feel like "Link:" is just a better thing, and I worry
->> that "Closes:" is then going to be used for random internal crap.
->> We've very much seen people wanting to do that - having their own
->> private bug trackers, and then using the commit message to refer to
->> them, which I am *violently* against. If it's only useful to some
->> closed community, it shouldn't be in the public commits.
+On 3/7/23 03:00, Sourabh Jain wrote:
 > 
-> Yeah I think that's fine. The bot can then autogenerate a request in
-> the bug report to confirm that it's fixed, and ask the reporter to
-> close in that case. And then maybe if there's no message a few weeks
-> after the release, auto-close or something.
-
-That would be a nice behaviour indeed. That's just a shame it means we
-cannot use the default behaviour of these bug trackers and we need a
-dedicated bot instead. I don't know what's the behaviour with GitLab and
-other bug trackers but with GitHub, when a commit is seen in a public
-repo with a "Link:" tag pointing to an issue, a "special" comment is
-added to the bug report but no notifications are sent. So if we don't
-implement the bot you described, we will still have to do the tracking
-manually.
-
-I understand we can see that as an issue with the existing service but
-it also means we cannot use their build-in automations.
-
-Maybe it means we have to switch to Bugzilla and wait for the new bot :)
-(but no, I don't want to add pressure on Konstantin ;) )
-
-
-> Bot needs to make sure it's only parsing tags for the instance it's
-> botting for anyway, so overloading Link: with all the meanings
-> (absolutely all themeanings!) is not really a problem since Closes:
-> has the same issue if different subsystems use it for different bug
-> tracking needs.
-
-Here, "Closes:" would be used exclusively with a URL to a specific bug
-report, not just "Closes: #1234". Would this not work if different
-subsystems use it?
-
-An extra check could be added to checkpatch.pl to display a warning if
-this "Closes:" tag is not used with a URL.
-
-In the case of GitHub -- and GitLab if I'm not mistaken -- there are
-some safeguards: the closure is only done if a commit having the
-"Closes:" tag to the bug report is applied into a specific branch. In
-other words, if someone applies the same patch elsewhere, the bug report
-will not be closed automatically. Also in case of closure, a
-notification is also sent and the bug report can be re-opened if
-something wrong happened.
-
->> And while the current GPU people seem to use "Closes:" the right way
->> (and maybe some other groups do too - but it does seem to be mostly a
->> freedesktop thing), I really think it is amenable to mis-use in ways
->> "Link:" is not.
+> On 06/03/23 21:52, Eric DeVolder wrote:
+>> This patch is dependent upon the patch 'crash: change
+>> crash_prepare_elf64_headers() to for_each_possible_cpu()'. With that
+>> patch, crash_prepare_elf64_headers() writes out an ELF cpu PT_NOTE
+>> for all possible cpus, thus further cpu changes to the elfcorehdr
+>> are not needed.
+>>
+>> This change works for kexec_file_load() and kexec_load() syscalls.
+>> For kexec_file_load(), crash_prepare_elf64_headers() is utilized
+>> directly and thus all ELF cpu PT_NOTEs are in the elfcorehdr already.
+>> This is the kimage->file_mode term.
+>> For kexec_load() syscall, one cpu or memory change will cause the
+>> elfcorehdr to be updated via crash_prepare_elf64_headers() and at
+>> that point all ELF cpu PT_NOTEs are in the elfcorehdr. This is the
+>> kimage->elfcorehdr_updated term.
+>>
+>> This code is intentionally *NOT* hoisted into
+>> crash_handle_hotplug_event() as it would prevent the arch-specific
+>> handler from running for cpu changes. This would break PPC, for
+>> example, which needs to update other information besides the
+>> elfcorehdr, on cpu changes.
+>>
+>> Signed-off-by: Eric DeVolder <eric.devolder@oracle.com>
+>> ---
+>>   arch/x86/kernel/crash.c | 10 ++++++++++
+>>   1 file changed, 10 insertions(+)
+>>
+>> diff --git a/arch/x86/kernel/crash.c b/arch/x86/kernel/crash.c
+>> index c9aaec9de775..82ea2b1bdc61 100644
+>> --- a/arch/x86/kernel/crash.c
+>> +++ b/arch/x86/kernel/crash.c
+>> @@ -471,6 +471,16 @@ void arch_crash_handle_hotplug_event(struct kimage *image)
+>>       unsigned long mem, memsz;
+>>       unsigned long elfsz = 0;
+>> +    /* As crash_prepare_elf64_headers() has already described all
+>> +     * possible cpus, there is no need to update the elfcorehdr
+>> +     * for additional cpu changes. This works for both kexec_load()
+>> +     * and kexec_file_load() syscalls.
+>> +     */
+>> +    if ((image->file_mode || image->elfcorehdr_updated) &&
+>> +        ((image->hp_action == KEXEC_CRASH_HP_ADD_CPU) ||
+>> +        (image->hp_action == KEXEC_CRASH_HP_REMOVE_CPU)))
+>> +        return;
 > 
-> Huh I didn't realize this picked up. Way back we used Bugzilla: for
-> this sometimes, but I think just using Link: for everything and
-> letting instance-specific bots figure out whether it's relevant for
-> them should be perfectly fine. Humans should have no problem parsing
-> meaning out of a tag soup anyway (I mean we have Cc: stable meaning
-> backport after all, and I think that address is a blackhole).
+> I like the idea of having elfcorehdr_updated to track elfcoredhr segment updates.
+> It handles the possible CPU thing for kexec_load syscall nicely.
 > 
-> I guess if you feel strongly we can percolate this a bit to
-> submaintainers and contributors in drm.
-
-I understand the risks of being misused by some and I guess the main
-point here is that we want to avoid exceptions.
-
-On our side with MPTCP, if we can definitively no longer use the
-"Closes:" tag, we will find alternatives. Probably by rewriting patches
-containing them before sending patches to netdev. This way we can
-continue to use the feature internally and when sent upstream, the
-commits will contain Fixes tag instead :)
-
-
-So correct me if I'm wrong but the conclusion is then to stop using the
-"Closes:" tag to avoid misuses. In this case, we can of course drop this
-series.
-
-@Konstantin: would it be OK for your future Bugzilla bot to deal with
-the generic "Link:" tag instead of the specific "Closes:" one?
-
-Cheers,
-Matt
--- 
-Tessares | Belgium | Hybrid Access Solutions
-www.tessares.net
+> Thanks for incorporating the possible CPU change.
+> 
+> The patch series looks good to me.
+> Reviewed-by: Sourabh Jain <sourabhjain@linux.ibm.com>
+> 
+> - Sourabh Jain
+> 
+Thanks for the RB! Look for v20 very soon.
+eric
