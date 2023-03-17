@@ -2,115 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FBBF6BE4C7
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 10:03:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 603DD6BE4D5
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 10:05:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231892AbjCQJDw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 05:03:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50180 "EHLO
+        id S230203AbjCQJFe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 05:05:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231766AbjCQJD1 (ORCPT
+        with ESMTP id S230369AbjCQJEl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 05:03:27 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8D37460AA
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 02:01:48 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id y4so17683622edo.2
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 02:01:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1679043706;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=GBWALVr8KY1goXZeil3F5gNo955a6USL6Kw1fweeuxw=;
-        b=ecBf25k/N3YtrG/Y1ehTw2E3CsRToRHDfcjgg+0a3f6Sy4G5N8+s5zNjQLF7ceSdui
-         6SS6LQZ/5I6dZfIea20VXsWXfcSbc881NIBQYPBeKJwxsgwp3mUXO7m3e0j92udaSJ1C
-         AqWDVoiYlCEOcCeHiploU5k02fzYkG7WF6MbUAtwGC0wtLiMRTRUknptCkIHpJ/vNDNg
-         TKm2MB6xGCK3du6EiKIjYtgZSHvarNwgAg80jrLj+E5GybqdpY7tdYFRTS2veWL+MB4E
-         PF0MATYH35iObdp2diDneXl1sPs2x9+uFhcDIKL4HZwWwh/W3EjMNANlXY26llnWo4Qs
-         6llg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679043706;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GBWALVr8KY1goXZeil3F5gNo955a6USL6Kw1fweeuxw=;
-        b=CaX1nMbKdImr0RcgwR83a3Jcaw5y67w8d+Iv5NCLCBmORYUtpPw+mMKd3LhQwK62Ce
-         QIH/J+smXWCEZa+W4bD2LoTvORI+9mfwlkSf4neshkqV2C/5A8ulE72lZiVntTX5bFPv
-         rdEQuB4Wa7AVXr1RgxuT+TNUJhHYI88mNgDb2GOMY3B3YTCr/uAkMmKxVYQqKyuFHtaY
-         mBJE8ey0aDZuQjb1LCodV+qw9skUgRZJii0nKmLI1w9lh0YsKTvoNDDLrxvrSF6gD9hR
-         ghI2fDALiHuoqvK6wg+YHqwWN783B0u83sIQx5KIySS17a5wE2vi3P9Z7q/zzzgVsock
-         DCDA==
-X-Gm-Message-State: AO0yUKWA1QYUhWVBAfEdEAfNxbMIbhYUaNxRBxflEIyP3jrpaiVVcNcH
-        HDzAEXI36gLVlDO2WPoOEGteGg==
-X-Google-Smtp-Source: AK7set+RLMqFJAmEQQOX0KsfvOHG0SQZiKe3Ky+yEBGorEgZgQ89ZoXPnun4I4cXtON8LBpVC4/K4A==
-X-Received: by 2002:a17:907:3206:b0:932:8dc:5afe with SMTP id xg6-20020a170907320600b0093208dc5afemr1206946ejb.67.1679043706138;
-        Fri, 17 Mar 2023 02:01:46 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:848a:1971:93e0:b465? ([2a02:810d:15c0:828:848a:1971:93e0:b465])
-        by smtp.gmail.com with ESMTPSA id sd13-20020a170906ce2d00b008e09deb6610sm705584ejb.200.2023.03.17.02.01.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 17 Mar 2023 02:01:45 -0700 (PDT)
-Message-ID: <e7cd7252-9cc6-0970-b0e2-35fccde45e86@linaro.org>
-Date:   Fri, 17 Mar 2023 10:01:44 +0100
+        Fri, 17 Mar 2023 05:04:41 -0400
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2347E91BE
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 02:03:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=Rhi3f9praoz5y8ySslDnXpCvODq7
+        jZR0ixa9gWhtu+g=; b=sli5IyEZd7dQYW9hxdazjvgWONCLVPbLFjq1mxVsKbV4
+        zxuVPW8tEb8GYWHBdd2jubs5Je6gtRo3se6d+IPzaL6CaWRemTtGJUZ3gC2iQ06E
+        uqS5Iq7C7HVw/wJQt9HqZyrGCJ0rU5KDzRzohK5akEG8DK5sz7KkoRoAztwdk1I=
+Received: (qmail 4168939 invoked from network); 17 Mar 2023 10:02:49 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 17 Mar 2023 10:02:49 +0100
+X-UD-Smtp-Session: l3s3148p1@qN5A1xT3sp8ujnvb
+Date:   Fri, 17 Mar 2023 10:02:43 +0100
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Magnus Damm <magnus.damm@gmail.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MAINTAINERS: renesas: Add "renesas," file content pattern
+Message-ID: <ZBQss4CsKVrV/nMZ@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <c1be1e97c5457eade25b0eb5118196677cecfc08.1679039809.git.geert+renesas@glider.be>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH 2/2] crypto - img-hash: Drop of_match_ptr for ID table
-Content-Language: en-US
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        linux-crypto@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20230310223027.315954-1-krzysztof.kozlowski@linaro.org>
- <20230310223027.315954-2-krzysztof.kozlowski@linaro.org>
- <ZBPYpYfd29YwN1Dy@gondor.apana.org.au>
- <b8cd828b-edc5-6748-bf97-af0fc85e14a4@linaro.org>
- <ZBQlKMTcTm1yjete@gondor.apana.org.au>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <ZBQlKMTcTm1yjete@gondor.apana.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="bcYeugDHl1UQYMh0"
+Content-Disposition: inline
+In-Reply-To: <c1be1e97c5457eade25b0eb5118196677cecfc08.1679039809.git.geert+renesas@glider.be>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/03/2023 09:30, Herbert Xu wrote:
-> On Fri, Mar 17, 2023 at 09:12:05AM +0100, Krzysztof Kozlowski wrote:
->>
->> The missing dependency on OF is not a problem. The OF code is prepare
->> and will work fine if the driver is built with !OF. The point is that
->> with !OF after dropping of_match_ptr(), the driver could match via ACPI
->> (PRP0001). If we make it depending on OF, the driver won't be able to
->> use it, unless kernel is built with OF which is unlikely for ACPI systems.
-> 
-> I know it works now, but what I'm saying is that if struct device_driver
-> actually had of_match_table as conditional on OF, which ideally it
-> should, then removing of_match_ptr will break the build.
-> 
-> I know that it's currently unconditionally defined, but that's
-> just wasting memory on non-OF machines such as x86.
 
-That's not true. There is no waste because having it on x86 allows to
-match via ACPI PRP0001. It's on purpose there.
+--bcYeugDHl1UQYMh0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> So either this driver is OF-only, in which case you can drop
-> the of_match_ptr but must add a dependency on OF.  Or it's not
-> OF-only, in which case you should use of_match_ptr.
+On Fri, Mar 17, 2023 at 08:59:00AM +0100, Geert Uytterhoeven wrote:
+> Add a keyword match pattern for the word "renesas," in files to the
+> ARM/RISC-V/RENESAS ARCHITECTURE section.  This make sure patches
+> changing drivers that match against "renesas,<foo>" (as used mostly for
+> Renesas on-SoC components) are CCed to the linux-renesas-soc mailing
+> list.
+>=20
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-There are OF-drivers used on ACPI and x86/arm64.
+Acked-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-The true question is whether this device will be ever used on ACPI via
-PRP0001, but you are not referring to this?
 
-Best regards,
-Krzysztof
+--bcYeugDHl1UQYMh0
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmQULK8ACgkQFA3kzBSg
+KbbGig//bCKGptOrExgDeYlfst5dVW1CEnflbrvLLY76wr7K8RuS0+T0wN+9PoMG
+TXTzFTmfh3lWWK5+549msZ5YEk5cV6wwupVCnoBI9y9rpmRNPyTw7WEpqDnki0Fr
+tMFjPSUKBreCLb2CT76eTAi3ghcYdrMhYvOS63hyUx+NYAXrW38M4EUDYI2zcZPn
+ynQ1lAXNTS+ZqMm8JRsGTz5tDSk3nSboWug0uv0z/8oksknW9y63ludzEbHFXZBA
+iHWSNuwJngUhc095XZsHWPkLa163BYOUEKnYLvrEzGYKU1CR7BSjWVKaN5Kc/boQ
+RG1pfikY4vOd3c+lfkj/0vA5p/Oeel1EoNUrqQZAXrCVGIlqXm7SWOsmV9gF6bxc
+yarbMvAPpjHwBYKyaycJcpfWxf/DKWyma/kvrWqF5PscagotvuCGZBxFNcd3I+Sg
+CdJupkaUW0qN4AKW7aTmYenUG4jzeOXxtz161RSDDH1775wkI1S/fXzyPyQ7EWkM
+oySAAhnRSmqlZi0z21zzVsTUaMmmeLHPciViXJbtyTM8mQ4N4Zk+kcAFVtpfLQn1
+w3Ins7GRp+g/DYyXbTZPNDW/P0wgmhPEhhsT0Z67KXWl52Rh3N/tflgWnsz2aueE
+Ice9brMC3wr1OTqKYZ9dL+GU3z+v7tKbJ9OXn9cp/0OUb0RpxXY=
+=WAN0
+-----END PGP SIGNATURE-----
+
+--bcYeugDHl1UQYMh0--
