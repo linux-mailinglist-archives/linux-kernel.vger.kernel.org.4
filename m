@@ -2,107 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E8E06BE185
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 07:48:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 909536BE182
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 07:48:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230163AbjCQGsX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 02:48:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35896 "EHLO
+        id S230147AbjCQGsR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 02:48:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230154AbjCQGsV (ORCPT
+        with ESMTP id S229669AbjCQGsP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 02:48:21 -0400
-Received: from mail.nfschina.com (unknown [42.101.60.237])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7A1D856B5;
-        Thu, 16 Mar 2023 23:48:19 -0700 (PDT)
-Received: from localhost (unknown [127.0.0.1])
-        by mail.nfschina.com (Postfix) with ESMTP id B14D51A00A8B;
-        Fri, 17 Mar 2023 14:48:19 +0800 (CST)
-X-Virus-Scanned: amavisd-new at nfschina.com
-Received: from mail.nfschina.com ([127.0.0.1])
-        by localhost (localhost.localdomain [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id XD_21-S8BybF; Fri, 17 Mar 2023 14:48:17 +0800 (CST)
-Received: from localhost.localdomain (unknown [180.167.10.98])
-        (Authenticated sender: yuzhe@nfschina.com)
-        by mail.nfschina.com (Postfix) with ESMTPA id 4E0A11A00994;
-        Fri, 17 Mar 2023 14:48:17 +0800 (CST)
-From:   Yu Zhe <yuzhe@nfschina.com>
-To:     ulf.hansson@linaro.org
-Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, liqiong@nfschina.com,
-        Yu Zhe <yuzhe@nfschina.com>
-Subject: [PATCH] mmc: core: remove unnecessary (void*) conversions
-Date:   Fri, 17 Mar 2023 14:47:29 +0800
-Message-Id: <20230317064729.24407-1-yuzhe@nfschina.com>
-X-Mailer: git-send-email 2.11.0
-X-Spam-Status: No, score=0.2 required=5.0 tests=BAYES_00,RCVD_IN_VALIDITY_RPBL,
-        RDNS_NONE,SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no
-        version=3.4.6
+        Fri, 17 Mar 2023 02:48:15 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73031524D
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 23:48:12 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id eh3so16493906edb.11
+        for <linux-kernel@vger.kernel.org>; Thu, 16 Mar 2023 23:48:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1679035691;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=CTh0F21TwbjU88Bbz1hq5ZE+hy838Tvfzn8yCnXFty4=;
+        b=pSj+KwElbb+2jzq501JA/pCh4CkyH4uILIM30gt0mkNF1CHnLVHVUFh5KvHOQzUB44
+         B2qE44/QUblHAppjMP1lXcbQFFAmvkDY+P5uPB2UvJuF408n7UYzV07JThP0FIEAGFB2
+         EfyIE4vlmzuE4ywRBmBKI/ttNnnre9MulnxynTd6z/EfMPhMzCj2uz0W3sIPif/ewoT/
+         svrrxDMsJyE6qU3oDKXPhgXtG8PhX729DBpRrJ0kHcNOrmJiDs7DgFnifynSXvMuhNe5
+         I8miJcmowHWZHlVbAi00+t66Z7sNPLKhppI0jtOQvYkdqSHDNNdR4f7C3U+32VmxNCFi
+         LzOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1679035691;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=CTh0F21TwbjU88Bbz1hq5ZE+hy838Tvfzn8yCnXFty4=;
+        b=LnNSCrFV5UNsNSbyS0RDj5b+ZW0JcLAvj7/6e46tkLrkwXF8Ij+VCSyD/mNOOQKl3L
+         ZWtJRTgTsZ34L+xD0F/9k6A3H2ftQZNOyRjueK8RGHAP4ndEZ+jT1JyNGgZMhu2vvgt1
+         2LVxztOckLqOktdiCPe34NQRXcTxjZNZoKZ7y9zzmCoHKMuwFC8uwDeLcoExRxvibXJv
+         uoVTCmv4yOZkTZmw3+/EHm4gRnh4XYkKxhW/RqsZt/2qT0G+/ux4q0oubBY2TJZcs3c3
+         RibUOm7wjPnnolB3832GgAv3TLqBmtEx9AxKA1smUDCiY1qP3wGLCkRageEhXqtF+kMk
+         f7Vw==
+X-Gm-Message-State: AO0yUKUjSc3WdfNrq37u2yRMLnYKeJs8FehezmqSRlBZzaNoGH+qVtct
+        7JbwnvJF2tuHqcKO8rpAgRE=
+X-Google-Smtp-Source: AK7set/4N1GHVyF2fZkorcLa7fn9Z9JiQJjZIJuc6IJOPPpzB1sUKnTvLjiZaHYFRjeE+yD/X0IAKw==
+X-Received: by 2002:aa7:cc15:0:b0:500:47ed:9784 with SMTP id q21-20020aa7cc15000000b0050047ed9784mr231767edt.14.1679035690850;
+        Thu, 16 Mar 2023 23:48:10 -0700 (PDT)
+Received: from localhost.localdomain (ip5f5abbef.dynamic.kabel-deutschland.de. [95.90.187.239])
+        by smtp.gmail.com with ESMTPSA id y43-20020a50bb2e000000b004f9ca99cf5csm601963ede.92.2023.03.16.23.48.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Mar 2023 23:48:10 -0700 (PDT)
+From:   Michael Straube <straube.linux@gmail.com>
+To:     gregkh@linuxfoundation.org
+Cc:     forest@alittletooquiet.net, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        Michael Straube <straube.linux@gmail.com>
+Subject: [PATCH] staging: vt6656: remove unused vnt_get_current_tsf() function
+Date:   Fri, 17 Mar 2023 07:48:00 +0100
+Message-Id: <20230317064800.12276-1-straube.linux@gmail.com>
+X-Mailer: git-send-email 2.40.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Pointer variables of void * type do not require type cast.
+The function vnt_get_current_tsf() is not used anywhere, remove it.
 
-Signed-off-by: Yu Zhe <yuzhe@nfschina.com>
+Signed-off-by: Michael Straube <straube.linux@gmail.com>
 ---
- drivers/mmc/core/debugfs.c  | 2 +-
- drivers/mmc/core/host.c     | 2 +-
- drivers/mmc/core/mmc_test.c | 6 +++---
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ drivers/staging/vt6656/card.c | 21 ---------------------
+ drivers/staging/vt6656/card.h |  1 -
+ 2 files changed, 22 deletions(-)
 
-diff --git a/drivers/mmc/core/debugfs.c b/drivers/mmc/core/debugfs.c
-index fe6808771bc7..2c97b94aab23 100644
---- a/drivers/mmc/core/debugfs.c
-+++ b/drivers/mmc/core/debugfs.c
-@@ -246,7 +246,7 @@ DEFINE_DEBUGFS_ATTRIBUTE(mmc_err_state, mmc_err_state_get, NULL, "%llu\n");
- 
- static int mmc_err_stats_show(struct seq_file *file, void *data)
- {
--	struct mmc_host *host = (struct mmc_host *)file->private;
-+	struct mmc_host *host = file->private;
- 	const char *desc[MMC_ERR_MAX] = {
- 		[MMC_ERR_CMD_TIMEOUT] = "Command Timeout Occurred",
- 		[MMC_ERR_CMD_CRC] = "Command CRC Errors Occurred",
-diff --git a/drivers/mmc/core/host.c b/drivers/mmc/core/host.c
-index 096093f7be00..76900f67c782 100644
---- a/drivers/mmc/core/host.c
-+++ b/drivers/mmc/core/host.c
-@@ -590,7 +590,7 @@ EXPORT_SYMBOL(mmc_alloc_host);
- 
- static void devm_mmc_host_release(struct device *dev, void *res)
- {
--	mmc_free_host(*(struct mmc_host **)res);
-+	mmc_free_host(res);
+diff --git a/drivers/staging/vt6656/card.c b/drivers/staging/vt6656/card.c
+index 7827e579ef3d..b9dc0d13c00c 100644
+--- a/drivers/staging/vt6656/card.c
++++ b/drivers/staging/vt6656/card.c
+@@ -11,7 +11,6 @@
+  *      vnt_add_basic_rate - Add to BasicRateSet
+  *      vnt_ofdm_min_rate - Check if any OFDM rate is in BasicRateSet
+  *      vnt_get_tsf_offset - Calculate TSFOffset
+- *      vnt_get_current_tsf - Read Current NIC TSF counter
+  *      vnt_get_next_tbtt - Calculate Next Beacon TSF counter
+  *      vnt_reset_next_tbtt - Set NIC Beacon time
+  *      vnt_update_next_tbtt - Sync. NIC Beacon time
+@@ -230,26 +229,6 @@ int vnt_adjust_tsf(struct vnt_private *priv, u8 rx_rate,
+ 			       MESSAGE_REQUEST_TSF, 0, 8, data);
  }
  
- struct mmc_host *devm_mmc_alloc_host(struct device *dev, int extra)
-diff --git a/drivers/mmc/core/mmc_test.c b/drivers/mmc/core/mmc_test.c
-index 156d34b2ed4d..0f6a563103fd 100644
---- a/drivers/mmc/core/mmc_test.c
-+++ b/drivers/mmc/core/mmc_test.c
-@@ -3045,7 +3045,7 @@ static LIST_HEAD(mmc_test_file_test);
- 
- static int mtf_test_show(struct seq_file *sf, void *data)
- {
--	struct mmc_card *card = (struct mmc_card *)sf->private;
-+	struct mmc_card *card = sf->private;
- 	struct mmc_test_general_result *gr;
- 
- 	mutex_lock(&mmc_test_lock);
-@@ -3079,8 +3079,8 @@ static int mtf_test_open(struct inode *inode, struct file *file)
- static ssize_t mtf_test_write(struct file *file, const char __user *buf,
- 	size_t count, loff_t *pos)
- {
--	struct seq_file *sf = (struct seq_file *)file->private_data;
--	struct mmc_card *card = (struct mmc_card *)sf->private;
-+	struct seq_file *sf = file->private_data;
-+	struct mmc_card *card = sf->private;
- 	struct mmc_test_card *test;
- 	long testcase;
- 	int ret;
+-/*
+- * Description: Read NIC TSF counter
+- *              Get local TSF counter
+- *
+- * Parameters:
+- *  In:
+- *	priv		- The adapter to be read
+- *  Out:
+- *	current_tsf	- Current TSF counter
+- *
+- * Return Value: true if success; otherwise false
+- *
+- */
+-bool vnt_get_current_tsf(struct vnt_private *priv, u64 *current_tsf)
+-{
+-	*current_tsf = priv->current_tsf;
+-
+-	return true;
+-}
+-
+ /*
+  * Description: Clear NIC TSF counter
+  *              Clear local TSF counter
+diff --git a/drivers/staging/vt6656/card.h b/drivers/staging/vt6656/card.h
+index be32c25c95de..eb01f7cc871f 100644
+--- a/drivers/staging/vt6656/card.h
++++ b/drivers/staging/vt6656/card.h
+@@ -30,7 +30,6 @@ void vnt_update_top_rates(struct vnt_private *priv);
+ bool vnt_ofdm_min_rate(struct vnt_private *priv);
+ int vnt_adjust_tsf(struct vnt_private *priv, u8 rx_rate,
+ 		   u64 time_stamp, u64 local_tsf);
+-bool vnt_get_current_tsf(struct vnt_private *priv, u64 *current_tsf);
+ bool vnt_clear_current_tsf(struct vnt_private *priv);
+ int vnt_reset_next_tbtt(struct vnt_private *priv, u16 beacon_interval);
+ int vnt_update_next_tbtt(struct vnt_private *priv, u64 tsf,
 -- 
-2.11.0
+2.40.0
 
