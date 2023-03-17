@@ -2,112 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C07F6BEABE
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 15:10:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 828786BEAC4
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 15:12:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231138AbjCQOKD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 10:10:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49762 "EHLO
+        id S230196AbjCQOMm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 10:12:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231232AbjCQOJ4 (ORCPT
+        with ESMTP id S229887AbjCQOMk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 10:09:56 -0400
-Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B40A61115B
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 07:09:54 -0700 (PDT)
-Received: by mail-qv1-xf2b.google.com with SMTP id m6so3526393qvq.0
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 07:09:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112; t=1679062194;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=7soAOZz6NR1eZEWlBBPKzE8Phw744HY/clHBuCipMIQ=;
-        b=GJE2sGyV/zNswHv/7z89KXA6Cb429VDXVVNbH4B5+f+XRZPbPKi7IKo29LF5wh/bbS
-         bdV/flZ2c4Qx4e1cMLrbTXBz1PjOtmDDfuulOzISfCWtEomTOJH6MLe6CH10fL+8XBm3
-         AOZVAtagi87V8voZUBBleOn0Zs6BO/iI7hGWfXhDRLiU3JzVB6q9g2VUZh5z+qY4pa1/
-         XSH391RhIP9GWyxr2Tgv1F1po4q5/5IambFCWiIByQ+zTWbx6+4yMpjIz+/5mYd4DSaa
-         X98LcGZOCKPUfaYjpG/Lq5k7yDyUqkPn/QwKPg0KXyH61oT/7A9LmCrPlIadxrOKznt3
-         zzyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679062194;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7soAOZz6NR1eZEWlBBPKzE8Phw744HY/clHBuCipMIQ=;
-        b=fv7ZySHuDpaVQEVYMb+hNUHmPEkU30aXiH9xE7cR3Ua3Cz1TNVzO5uhKDdXrPZCLN4
-         YMDBADytnTrH9LMefu64DebjMchU2ZciDsLpAjMw7tuncGhPrkpVg36KE6DvmZzCMWQ4
-         N7yr6R4M8SvC8DTeAsJkdQ1stlcOZsF12s6uGXySml0qY2zNoDFCv1ZUasZiI0va2pZs
-         wsB8lzW7oGl09TPJwlwzXjwkiu/hnIldbM+2lYGG+k3pMqUczkgJg2BbMW2aeuZ+J2oK
-         XQOcUZB41IUn7gcfsqdUJ6AU9wHYaaqJLTMMUFGx6keKhAP0IkoYwddqezVHCrBcscvI
-         o7eg==
-X-Gm-Message-State: AO0yUKXdhjGFiGNvzp+fAaqwQreY59loYkRA7xuaAtUmtN857Ky8Qjq0
-        A1qM1gIedQ8Tb4y9zNX8TT7FdMD8UWQDS0WNnHs=
-X-Google-Smtp-Source: AK7set+qN246fWnzI9pdVkkjz8IcefLkz8J54CXZP+n5oPR4V1S/SUbYc3X9+w7bLhhjTLghkaGjmA==
-X-Received: by 2002:ad4:5962:0:b0:56e:9986:4fa9 with SMTP id eq2-20020ad45962000000b0056e99864fa9mr45763775qvb.7.1679062193817;
-        Fri, 17 Mar 2023 07:09:53 -0700 (PDT)
-Received: from localhost ([2620:10d:c091:400::5:62db])
-        by smtp.gmail.com with ESMTPSA id 4-20020a370504000000b007458ae32290sm1693202qkf.128.2023.03.17.07.09.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Mar 2023 07:09:53 -0700 (PDT)
-Date:   Fri, 17 Mar 2023 10:09:52 -0400
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Yang Yang <yang.yang29@zte.com.cn>
-Cc:     akpm@linux-foundation.org, iamjoonsoo.kim@lge.com,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        willy@infradead.org
-Subject: Re: [PATCH linux-next] mm: workingset: simplify the calculation of
- workingset size
-Message-ID: <20230317140952.GA153257@cmpxchg.org>
-References: <20230316143007.GC116016@cmpxchg.org>
- <20230317015903.16978-1-yang.yang29@zte.com.cn>
+        Fri, 17 Mar 2023 10:12:40 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C3412ED7D
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 07:12:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679062359; x=1710598359;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=eifpQLMvSzmeClZNBGX6vEj8f3i9hiF71k3b+Ift7KM=;
+  b=M0ll5rq2ls+zV773rVCY/g2UKA9SeYTo7DJIcUT0JBNQiUifpSS+omF6
+   w7OTOCl55OQsb5P+zuXEur1biE3fh2hOvkQhKhpHJOzm8kL1BKPWs71ir
+   CS8D4TmxaSOEWpXSA//g0sS8mStW3Sp143sthjs7mdMxlwk/4+QxXGbl5
+   TKYAFJCG9mr9WlHE4F6zHEuqgWmLBlYK37prIcTw2NmXKDgUz3TrYVdkH
+   2Z4KOg2eoSScLnuH7fSstpYUJZaAslbUIZ/Zzrs64kvXbf/mqcg3RVDpx
+   +SVhASm2uBzSX53luGCRja/1cWFvZS8rFkoNdT+p/cLUDs8Rn6Edhc67B
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="326627272"
+X-IronPort-AV: E=Sophos;i="5.98,268,1673942400"; 
+   d="scan'208";a="326627272"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2023 07:12:18 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10652"; a="673563000"
+X-IronPort-AV: E=Sophos;i="5.98,268,1673942400"; 
+   d="scan'208";a="673563000"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga007.jf.intel.com with ESMTP; 17 Mar 2023 07:12:15 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pdAoY-0054Uk-0Q;
+        Fri, 17 Mar 2023 16:12:14 +0200
+Date:   Fri, 17 Mar 2023 16:12:13 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>,
+        Alexander Usyskin <alexander.usyskin@intel.com>,
+        Vitaly Lubart <vitaly.lubart@intel.com>,
+        Tomas Winkler <tomas.winkler@intel.com>,
+        Alexander Graf <graf@amazon.com>, linux-kernel@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>
+Subject: Re: [PATCH v1 1/1] mei: Move uuid.h to the MEI namespace
+Message-ID: <ZBR1PWRY7ql7VIth@smile.fi.intel.com>
+References: <20230310170747.22782-1-andriy.shevchenko@linux.intel.com>
+ <ZBR0MVcQrokpSoRp@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230317015903.16978-1-yang.yang29@zte.com.cn>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <ZBR0MVcQrokpSoRp@kroah.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 17, 2023 at 01:59:03AM +0000, Yang Yang wrote:
-> >On Thu, Mar 16, 2023 at 05:23:05PM +0800, yang.yang29@zte.com.cn wrote:
-> >> From: Yang Yang <yang.yang29@zte.com.cn>
-> >> 
-> >> After we implemented workingset detection for anonymous LRU[1],
-> >> the calculation of workingset size is a little complex. Actually there is
-> >> no need to call mem_cgroup_get_nr_swap_pages() if refault page is
-> >> anonymous page, since we are doing swapping then should always
-> >> give pressure to NR_ACTIVE_ANON.
-> >
-> > This is false.
-> >
-> > (mem_cgroup_)get_nr_swap_pages() returns the *free swap slots*. There
-> > might be swap, but if it's full, reclaim stops scanning anonymous
-> > pages altogether. That means that refaults of either type can no
-> > longer displace existing anonymous pages, only cache.
+On Fri, Mar 17, 2023 at 03:07:45PM +0100, Greg Kroah-Hartman wrote:
+> On Fri, Mar 10, 2023 at 07:07:47PM +0200, Andy Shevchenko wrote:
+> > There is only a single user of the UUID uAPI, let's make it
+> > part of that user.
+> > 
+> > The way it's done is to prevent compilation time breakage for
+> > the user space that does
+> > 
+> > 	#include <linux/uuid.h>
+> > 
+> > In the future MEI user space tools can switch over to use mei_uuid.h.
 > 
-> I see in this patch "mm: vmscan: enforce inactive:active ratio at the
-> reclaim root", reclaim will be done in the combined workingset of
-> different workloads in different cgroups.
->
-> So if current cgroup reach it's swap limit(mem_cgroup_get_nr_swap_pages(memcg) == 0),
-> but other cgroup still has swap slot, should we allow the refaulting page
-> to active and give pressure to other cgroup?
+> When will that happen?
 
-That's what we do today.
+I don't know
 
-The shadow entry remembers the reclaim root, so that refaults can
-later evaluated at the same level. So, say you have:
+> And why the churn, what's the problem with keeping this as uuid.h?
 
-root - A - A1
-        `- A2
+The problem here is a possible confusion with uAPI and internal headers with
+the same name.
 
-and A1 and A2 are reclaimed due to a limit in A. The shadow entries of
-evictions from A1 and A2 will actually refer to A.
+-- 
+With Best Regards,
+Andy Shevchenko
 
-When they refault later on, the distance is interpreted based on
-whether A has swap (eviction_lruvec).
+
