@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5357B6BE82F
+	by mail.lfdr.de (Postfix) with ESMTP id 9F24A6BE830
 	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 12:33:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229533AbjCQLdl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 07:33:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50258 "EHLO
+        id S229733AbjCQLdu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 07:33:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229989AbjCQLdi (ORCPT
+        with ESMTP id S230082AbjCQLdr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 07:33:38 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34E6AA21A0
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 04:33:08 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id l9-20020a17090a3f0900b0023d32684e7fso7910872pjc.1
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 04:33:07 -0700 (PDT)
+        Fri, 17 Mar 2023 07:33:47 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA83AAA734
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 04:33:11 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id a2so4992464plm.4
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 04:33:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=igel-co-jp.20210112.gappssmtp.com; s=20210112; t=1679052787;
+        d=igel-co-jp.20210112.gappssmtp.com; s=20210112; t=1679052791;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Ob+dv03gMiw66cBwoU+hYD2Vt8Qv5SEsoU9zMOVBkuQ=;
-        b=v0OVgL+DK0/1OLwNt1hvzurF9AgD0O2q65xQcB7iRde3gkzixBT/sZf5kAoAc6NM8n
-         jNrxQKU2uVJ95IlWvsLGe9xQq/YJ3Pp0UGKMKFxzddpvDy9xSC15QsTeUNKJ5QbiQqa9
-         PSMNxlmk0HnYn6fAMswlbTqW/4ewcMn1GF8BwZN/bKF8nF0PO+5JkIc4JZb9tKsdgrd9
-         KdpZqxj4joy6mL0urr8Zyswjk0VO9NzvZmf41sEfhphLTVwt4AyyedBJjwzbR+TN0EmJ
-         3wBTUjByYqhE3ty4Mfe/Yk7LCEb/MYdZj3no50Ru+nhtOpUnQLJkkpVy+IsCD1I7t8sc
-         l/3g==
+        bh=XsdH0oLvA5PMhdbh6lug1hHlRUTM7D8rYh/xwgUFb5s=;
+        b=mvu65/QfRfRZArhG2eSvUbIHdoFY4+XUZwAOfwXTe1cLvSbmcJMG1Kmiu6dWv5m+sV
+         N7H2LviIzAS9sDn5AjrkYhybo0WDWwXYNfIzD/FaBPa3FtdWnklkMXUOLLlXJP47u7PV
+         2RSnZ24DTlFUNYaFwq8oq6qbiqtMOkwC9ILG7FGV+6u/iV21JyUVsT02+cTdERsgX/qX
+         A6zj7Wkl1PpAup8r0VYcA85bsYauBVIq6sNO9QzpRJUISg6nSFLGCdjCcLZMxIthqssR
+         Urfue+pE2rMnHktmFhN953n1+V0rUOZrCt4mUGc3MTzdrqPy1n8oeheLEkWk4fh9jURc
+         tegA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1679052787;
+        d=1e100.net; s=20210112; t=1679052791;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Ob+dv03gMiw66cBwoU+hYD2Vt8Qv5SEsoU9zMOVBkuQ=;
-        b=Iod22CWEbWvW6MCdc0w1Ofazfvz9YysZxsKXJg3ew3egEHt2VhYjDR9PFVhij3Hmpj
-         doMgEMpxLgNs5+01kFsJGGYJ6LLo51NsgicNztPpebhh28DTtR9bHHU+UPNP4xRt+NoM
-         RQ+L/Wsyk5Xg6tlPOzo8lBuic2KkcsM4oCrLjoqjV4PDuhsO5LaQTqYDJeLJX1f3XE5H
-         AMBsC54Je1H7Q/nIiDSPfKbBY4KxO2BhfvIEqvkjgdjLlx5d8iQfbWnztHtiYzdu5DwR
-         mPctAPLA5ilj7toARj9oYpe8+impk+lONyiUWBsFaPMtDcvAiGns/9k8yUixj9b3q0Ar
-         /UCQ==
-X-Gm-Message-State: AO0yUKUmDYUdl3U/SgSsc808rsfbtYqgDu+UJMNmit5AqMWHohc2JeOe
-        LTRdDT+eomOmJc7EvFNvWWZipQ==
-X-Google-Smtp-Source: AK7set/4cQfdbVb01q3i9EBygum5/NcOwZKrEbddz29AigoY+K4DZYp+9xpVs6i+I7fm8qg6riVLPw==
-X-Received: by 2002:a17:90b:3881:b0:23f:618a:6bed with SMTP id mu1-20020a17090b388100b0023f618a6bedmr1406906pjb.47.1679052787033;
-        Fri, 17 Mar 2023 04:33:07 -0700 (PDT)
+        bh=XsdH0oLvA5PMhdbh6lug1hHlRUTM7D8rYh/xwgUFb5s=;
+        b=Cmcjt5oIttcjtx8WdVGUi0hu4nlEQhYZTHiuWnVsDpdVfrFEaPESAXbhwbU/DaDue1
+         +8wbL1n7P6uJracIWbMrb3QbSf/oKU4+slfrt9Q40WqfCCmkeMpnoGfYdAtJN3+HEjs9
+         u5bc/Isn6QupF3S3NAFxkUwjDmcqbBuOoSaFSSHZ+gk0V+JdpsPGchLrVVgy9FIy2tb7
+         M8Gh1R2TJvf9TqXMVKTV5FAIhrhyAY60orGqSS/zDPApqdmWaBx4ifigb+J5yi0xkiCT
+         NQlI8AnlCNAClbW1MHs81rHs6Sfd7i4MuUWI5VogvZbldx6gv320zvViNj5rMWYH5MY+
+         QvZA==
+X-Gm-Message-State: AO0yUKV8mkdsrCO48tTBCyraE8evgGdeJ+L9mozEBpbKaODoITeXcm0b
+        HxRaccvCGlCm0iId4KuDvUvRgw==
+X-Google-Smtp-Source: AK7set/uRUgDY2cX8naSHuM20nfNZ9dM/YY+xJQJECgmJbS3+imJdlIRZMryd8zO2HdBEbhtsUlhqA==
+X-Received: by 2002:a17:90b:1646:b0:23d:3aa5:5ff3 with SMTP id il6-20020a17090b164600b0023d3aa55ff3mr2791934pjb.14.1679052790713;
+        Fri, 17 Mar 2023 04:33:10 -0700 (PDT)
 Received: from tyrell.hq.igel.co.jp (napt.igel.co.jp. [219.106.231.132])
-        by smtp.gmail.com with ESMTPSA id e3-20020a17090a818300b00233aacab89esm1182904pjn.48.2023.03.17.04.33.03
+        by smtp.gmail.com with ESMTPSA id e3-20020a17090a818300b00233aacab89esm1182904pjn.48.2023.03.17.04.33.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Mar 2023 04:33:06 -0700 (PDT)
+        Fri, 17 Mar 2023 04:33:10 -0700 (PDT)
 From:   Shunsuke Mie <mie@igel.co.jp>
 To:     Gustavo Pimentel <gustavo.pimentel@synopsys.com>
 Cc:     Vinod Koul <vkoul@kernel.org>,
@@ -65,9 +65,9 @@ Cc:     Vinod Koul <vkoul@kernel.org>,
         Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
         Frank Li <Frank.Li@nxp.com>, linux-kernel@vger.kernel.org,
         dmaengine@vger.kernel.org, linux-pci@vger.kernel.org
-Subject: [RFC PATCH 06/11] misc: pci_endpoint_test: Use a common header file between endpoint driver
-Date:   Fri, 17 Mar 2023 20:32:33 +0900
-Message-Id: <20230317113238.142970-7-mie@igel.co.jp>
+Subject: [RFC PATCH 07/11] PCI: endpoint: functions/pci-epf-test: Extend the test for continuous transfers
+Date:   Fri, 17 Mar 2023 20:32:34 +0900
+Message-Id: <20230317113238.142970-8-mie@igel.co.jp>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230317113238.142970-1-mie@igel.co.jp>
 References: <20230317113238.142970-1-mie@igel.co.jp>
@@ -82,74 +82,422 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Duplicated definitions between pci-epf-test and pci_endpoint_test are
-already moved to a header file. Remove the common definitions and include
-the header file. In addition, the separate register address writes were
-combined into a single write.
+The test could not test continuous DMAs because it was only synchronously
+issuing a single DMA and waiting for it to complete.
+
+Add a new parameter, `count` and extend the test for continuous transfers
+to improve the test coverage.
 
 Signed-off-by: Shunsuke Mie <mie@igel.co.jp>
 ---
- drivers/misc/pci_endpoint_test.c | 42 +-------------------------------
- 1 file changed, 1 insertion(+), 41 deletions(-)
+ drivers/pci/endpoint/functions/pci-epf-test.c | 152 ++++++++++--------
+ 1 file changed, 84 insertions(+), 68 deletions(-)
 
-diff --git a/drivers/misc/pci_endpoint_test.c b/drivers/misc/pci_endpoint_test.c
-index 55733dee95ad..d4a42e9ab86a 100644
---- a/drivers/misc/pci_endpoint_test.c
-+++ b/drivers/misc/pci_endpoint_test.c
-@@ -22,52 +22,12 @@
- #include <linux/pci_ids.h>
+diff --git a/drivers/pci/endpoint/functions/pci-epf-test.c b/drivers/pci/endpoint/functions/pci-epf-test.c
+index 99d8a05b8507..7898dfd956db 100644
+--- a/drivers/pci/endpoint/functions/pci-epf-test.c
++++ b/drivers/pci/endpoint/functions/pci-epf-test.c
+@@ -63,6 +63,7 @@ static void pci_epf_test_dma_callback(void *param)
+  * @dma_src: The source address of the data transfer. It can be a physical
+  *	     address given by pci_epc_mem_alloc_addr or DMA mapping APIs.
+  * @len: The size of the data transfer
++ * @count: The number of DMAs issuing in consecutive
+  * @dma_remote: remote RC physical address
+  * @dir: DMA transfer direction
+  *
+@@ -74,7 +75,7 @@ static void pci_epf_test_dma_callback(void *param)
+  */
+ static int pci_epf_test_data_transfer(struct pci_epf_test *epf_test,
+ 				      dma_addr_t dma_dst, dma_addr_t dma_src,
+-				      size_t len, dma_addr_t dma_remote,
++				      size_t len, size_t count, dma_addr_t dma_remote,
+ 				      enum dma_transfer_direction dir)
+ {
+ 	struct dma_chan *chan = (dir == DMA_MEM_TO_DEV) ?
+@@ -87,47 +88,56 @@ static int pci_epf_test_data_transfer(struct pci_epf_test *epf_test,
+ 	struct device *dev = &epf->dev;
+ 	dma_cookie_t cookie;
+ 	int ret;
++	int i;
++	size_t offset;
  
- #include <linux/pci_regs.h>
-+#include <linux/pci-epf-test.h>
+ 	if (IS_ERR_OR_NULL(chan)) {
+ 		dev_err(dev, "Invalid DMA memcpy channel\n");
+ 		return -EINVAL;
+ 	}
  
- #include <uapi/linux/pcitest.h>
+-	if (epf_test->dma_private) {
+-		sconf.direction = dir;
+-		if (dir == DMA_MEM_TO_DEV)
+-			sconf.dst_addr = dma_remote;
+-		else
+-			sconf.src_addr = dma_remote;
++	for (i = 0, offset = 0; i < count; i++, offset += len) {
++		if (epf_test->dma_private) {
++			sconf.direction = dir;
++			if (dir == DMA_MEM_TO_DEV)
++				sconf.dst_addr = dma_remote + offset;
++			else
++				sconf.src_addr = dma_remote + offset;
++
++			if (dmaengine_slave_config(chan, &sconf)) {
++				dev_err(dev, "DMA slave config fail\n");
++				return -EIO;
++			}
++			tx = dmaengine_prep_slave_single(
++				chan, dma_local + offset, len, dir, flags);
++		} else {
++			tx = dmaengine_prep_dma_memcpy(chan, dma_dst + offset,
++						       dma_src + offset, len,
++						       flags);
++		}
  
- #define DRV_MODULE_NAME				"pci-endpoint-test"
+-		if (dmaengine_slave_config(chan, &sconf)) {
+-			dev_err(dev, "DMA slave config fail\n");
++		if (!tx) {
++			dev_err(dev, "Failed to prepare DMA memcpy\n");
+ 			return -EIO;
+ 		}
+-		tx = dmaengine_prep_slave_single(chan, dma_local, len, dir,
+-						 flags);
+-	} else {
+-		tx = dmaengine_prep_dma_memcpy(chan, dma_dst, dma_src, len,
+-					       flags);
+-	}
  
--#define IRQ_TYPE_UNDEFINED			-1
--#define IRQ_TYPE_LEGACY				0
--#define IRQ_TYPE_MSI				1
--#define IRQ_TYPE_MSIX				2
+-	if (!tx) {
+-		dev_err(dev, "Failed to prepare DMA memcpy\n");
+-		return -EIO;
+-	}
++		if (i == count - 1) {
++			tx->callback = pci_epf_test_dma_callback;
++			tx->callback_param = epf_test;
++			reinit_completion(&epf_test->transfer_complete);
++		}
+ 
+-	tx->callback = pci_epf_test_dma_callback;
+-	tx->callback_param = epf_test;
+-	cookie = tx->tx_submit(tx);
+-	reinit_completion(&epf_test->transfer_complete);
++		cookie = tx->tx_submit(tx);
+ 
+-	ret = dma_submit_error(cookie);
+-	if (ret) {
+-		dev_err(dev, "Failed to do DMA tx_submit %d\n", cookie);
+-		return -EIO;
++		ret = dma_submit_error(cookie);
++		if (ret) {
++			dev_err(dev, "Failed to do DMA tx_submit %d\n", cookie);
++			return -EIO;
++		}
++
++		dma_async_issue_pending(chan);
+ 	}
+ 
+-	dma_async_issue_pending(chan);
+ 	ret = wait_for_completion_interruptible(&epf_test->transfer_complete);
+ 	if (ret < 0) {
+ 		dmaengine_terminate_sync(chan);
+@@ -244,7 +254,7 @@ static void pci_epf_test_clean_dma_chan(struct pci_epf_test *epf_test)
+ 	return;
+ }
+ 
+-static void pci_epf_test_print_rate(const char *ops, u64 size,
++static void pci_epf_test_print_rate(const char *ops, u64 size, u32 count,
+ 				    struct timespec64 *start,
+ 				    struct timespec64 *end, bool dma)
+ {
+@@ -255,7 +265,7 @@ static void pci_epf_test_print_rate(const char *ops, u64 size,
+ 
+ 	/* convert both size (stored in 'rate') and time in terms of 'ns' */
+ 	ns = timespec64_to_ns(&ts);
+-	rate = size * NSEC_PER_SEC;
++	rate = size * count * NSEC_PER_SEC;
+ 
+ 	/* Divide both size (stored in 'rate') and ns by a common factor */
+ 	while (ns > UINT_MAX) {
+@@ -269,14 +279,14 @@ static void pci_epf_test_print_rate(const char *ops, u64 size,
+ 	/* calculate the rate */
+ 	do_div(rate, (uint32_t)ns);
+ 
+-	pr_info("\n%s => Size: %llu bytes\t DMA: %s\t Time: %llu.%09u seconds\t"
+-		"Rate: %llu KB/s\n", ops, size, dma ? "YES" : "NO",
++	pr_info("\n%s => Size: %llu bytes\tcount %d\t DMA: %s\t Time: %llu.%09u seconds\t"
++		"Rate: %llu KB/s\n", ops, size, count, dma ? "YES" : "NO",
+ 		(u64)ts.tv_sec, (u32)ts.tv_nsec, rate / 1024);
+ }
+ 
+ static int pci_epf_test_copy(struct pci_epf_test *epf_test)
+ {
+-	int ret;
++	int ret, i;
+ 	bool use_dma;
+ 	void __iomem *src_addr;
+ 	void __iomem *dst_addr;
+@@ -288,8 +298,9 @@ static int pci_epf_test_copy(struct pci_epf_test *epf_test)
+ 	struct pci_epc *epc = epf->epc;
+ 	enum pci_barno test_reg_bar = epf_test->test_reg_bar;
+ 	struct pci_epf_test_reg *reg = epf_test->reg[test_reg_bar];
++	size_t offset;
+ 
+-	src_addr = pci_epc_mem_alloc_addr(epc, &src_phys_addr, reg->size);
++	src_addr = pci_epc_mem_alloc_addr(epc, &src_phys_addr, reg->size * reg->count);
+ 	if (!src_addr) {
+ 		dev_err(dev, "Failed to allocate source address\n");
+ 		reg->status = STATUS_SRC_ADDR_INVALID;
+@@ -298,14 +309,14 @@ static int pci_epf_test_copy(struct pci_epf_test *epf_test)
+ 	}
+ 
+ 	ret = pci_epc_map_addr(epc, epf->func_no, epf->vfunc_no, src_phys_addr,
+-			       reg->src_addr, reg->size);
++			       reg->src_addr, reg->size * reg->count);
+ 	if (ret) {
+ 		dev_err(dev, "Failed to map source address\n");
+ 		reg->status = STATUS_SRC_ADDR_INVALID;
+ 		goto err_src_addr;
+ 	}
+ 
+-	dst_addr = pci_epc_mem_alloc_addr(epc, &dst_phys_addr, reg->size);
++	dst_addr = pci_epc_mem_alloc_addr(epc, &dst_phys_addr, reg->size * reg->count);
+ 	if (!dst_addr) {
+ 		dev_err(dev, "Failed to allocate destination address\n");
+ 		reg->status = STATUS_DST_ADDR_INVALID;
+@@ -314,7 +325,7 @@ static int pci_epf_test_copy(struct pci_epf_test *epf_test)
+ 	}
+ 
+ 	ret = pci_epc_map_addr(epc, epf->func_no, epf->vfunc_no, dst_phys_addr,
+-			       reg->dst_addr, reg->size);
++			       reg->dst_addr, reg->size * reg->count);
+ 	if (ret) {
+ 		dev_err(dev, "Failed to map destination address\n");
+ 		reg->status = STATUS_DST_ADDR_INVALID;
+@@ -337,7 +348,7 @@ static int pci_epf_test_copy(struct pci_epf_test *epf_test)
+ 
+ 		ktime_get_ts64(&start);
+ 		ret = pci_epf_test_data_transfer(epf_test, dst_phys_addr,
+-						 src_phys_addr, reg->size, 0,
++						 src_phys_addr, reg->size, reg->count, 0,
+ 						 DMA_MEM_TO_MEM);
+ 		ktime_get_ts64(&end);
+ 		if (ret)
+@@ -345,32 +356,33 @@ static int pci_epf_test_copy(struct pci_epf_test *epf_test)
+ 	} else {
+ 		void *buf;
+ 
+-		buf = kzalloc(reg->size, GFP_KERNEL);
++		buf = kzalloc(reg->size * reg->count, GFP_KERNEL);
+ 		if (!buf) {
+ 			ret = -ENOMEM;
+ 			goto err_map_addr;
+ 		}
+ 
+ 		ktime_get_ts64(&start);
+-		memcpy_fromio(buf, src_addr, reg->size);
+-		memcpy_toio(dst_addr, buf, reg->size);
++		for (i = 0, offset = 0; i < reg->count; i++, offset += reg->size) {
++			memcpy_fromio(buf + offset, src_addr + offset, reg->size);
++			memcpy_toio(dst_addr + offset, buf + offset, reg->size);
++		}
+ 		ktime_get_ts64(&end);
+ 		kfree(buf);
+ 	}
 -
--#define PCI_ENDPOINT_TEST_MAGIC			0x0
--
--#define PCI_ENDPOINT_TEST_COMMAND		0x4
--#define COMMAND_RAISE_LEGACY_IRQ		BIT(0)
--#define COMMAND_RAISE_MSI_IRQ			BIT(1)
--#define COMMAND_RAISE_MSIX_IRQ			BIT(2)
--#define COMMAND_READ				BIT(3)
--#define COMMAND_WRITE				BIT(4)
--#define COMMAND_COPY				BIT(5)
--
--#define PCI_ENDPOINT_TEST_STATUS		0x8
--#define STATUS_READ_SUCCESS			BIT(0)
--#define STATUS_READ_FAIL			BIT(1)
--#define STATUS_WRITE_SUCCESS			BIT(2)
--#define STATUS_WRITE_FAIL			BIT(3)
--#define STATUS_COPY_SUCCESS			BIT(4)
--#define STATUS_COPY_FAIL			BIT(5)
--#define STATUS_IRQ_RAISED			BIT(6)
--#define STATUS_SRC_ADDR_INVALID			BIT(7)
--#define STATUS_DST_ADDR_INVALID			BIT(8)
--
--#define PCI_ENDPOINT_TEST_LOWER_SRC_ADDR	0x0c
--#define PCI_ENDPOINT_TEST_UPPER_SRC_ADDR	0x10
--
--#define PCI_ENDPOINT_TEST_LOWER_DST_ADDR	0x14
--#define PCI_ENDPOINT_TEST_UPPER_DST_ADDR	0x18
--
--#define PCI_ENDPOINT_TEST_SIZE			0x1c
--#define PCI_ENDPOINT_TEST_CHECKSUM		0x20
--
--#define PCI_ENDPOINT_TEST_IRQ_TYPE		0x24
--#define PCI_ENDPOINT_TEST_IRQ_NUMBER		0x28
--
--#define PCI_ENDPOINT_TEST_FLAGS			0x2c
--#define FLAG_USE_DMA				BIT(0)
--
- #define PCI_DEVICE_ID_TI_AM654			0xb00c
- #define PCI_DEVICE_ID_TI_J7200			0xb00f
- #define PCI_DEVICE_ID_TI_AM64			0xb010
+-	pci_epf_test_print_rate("COPY", reg->size, &start, &end, use_dma);
++	pci_epf_test_print_rate("COPY", reg->size, reg->count, &start, &end, use_dma);
+ 
+ err_map_addr:
+ 	pci_epc_unmap_addr(epc, epf->func_no, epf->vfunc_no, dst_phys_addr);
+ 
+ err_dst_addr:
+-	pci_epc_mem_free_addr(epc, dst_phys_addr, dst_addr, reg->size);
++	pci_epc_mem_free_addr(epc, dst_phys_addr, dst_addr, reg->size * reg->count);
+ 
+ err_src_map_addr:
+ 	pci_epc_unmap_addr(epc, epf->func_no, epf->vfunc_no, src_phys_addr);
+ 
+ err_src_addr:
+-	pci_epc_mem_free_addr(epc, src_phys_addr, src_addr, reg->size);
++	pci_epc_mem_free_addr(epc, src_phys_addr, src_addr, reg->size * reg->count);
+ 
+ err:
+ 	return ret;
+@@ -378,7 +390,7 @@ static int pci_epf_test_copy(struct pci_epf_test *epf_test)
+ 
+ static int pci_epf_test_read(struct pci_epf_test *epf_test)
+ {
+-	int ret;
++	int ret, i;
+ 	void __iomem *src_addr;
+ 	void *buf;
+ 	u32 crc32;
+@@ -392,8 +404,9 @@ static int pci_epf_test_read(struct pci_epf_test *epf_test)
+ 	struct device *dma_dev = epf->epc->dev.parent;
+ 	enum pci_barno test_reg_bar = epf_test->test_reg_bar;
+ 	struct pci_epf_test_reg *reg = epf_test->reg[test_reg_bar];
++	size_t offset;
+ 
+-	src_addr = pci_epc_mem_alloc_addr(epc, &phys_addr, reg->size);
++	src_addr = pci_epc_mem_alloc_addr(epc, &phys_addr, reg->size * reg->count);
+ 	if (!src_addr) {
+ 		dev_err(dev, "Failed to allocate address\n");
+ 		reg->status = STATUS_SRC_ADDR_INVALID;
+@@ -402,14 +415,14 @@ static int pci_epf_test_read(struct pci_epf_test *epf_test)
+ 	}
+ 
+ 	ret = pci_epc_map_addr(epc, epf->func_no, epf->vfunc_no, phys_addr,
+-			       reg->src_addr, reg->size);
++			       reg->src_addr, reg->size * reg->count);
+ 	if (ret) {
+ 		dev_err(dev, "Failed to map address\n");
+ 		reg->status = STATUS_SRC_ADDR_INVALID;
+ 		goto err_addr;
+ 	}
+ 
+-	buf = kzalloc(reg->size, GFP_KERNEL);
++	buf = kzalloc(reg->size * reg->count, GFP_KERNEL);
+ 	if (!buf) {
+ 		ret = -ENOMEM;
+ 		goto err_map_addr;
+@@ -423,7 +436,7 @@ static int pci_epf_test_read(struct pci_epf_test *epf_test)
+ 			goto err_dma_map;
+ 		}
+ 
+-		dst_phys_addr = dma_map_single(dma_dev, buf, reg->size,
++		dst_phys_addr = dma_map_single(dma_dev, buf, reg->size * reg->count,
+ 					       DMA_FROM_DEVICE);
+ 		if (dma_mapping_error(dma_dev, dst_phys_addr)) {
+ 			dev_err(dev, "Failed to map destination buffer addr\n");
+@@ -433,23 +446,24 @@ static int pci_epf_test_read(struct pci_epf_test *epf_test)
+ 
+ 		ktime_get_ts64(&start);
+ 		ret = pci_epf_test_data_transfer(epf_test, dst_phys_addr,
+-						 phys_addr, reg->size,
++						 phys_addr, reg->size, reg->count,
+ 						 reg->src_addr, DMA_DEV_TO_MEM);
+ 		ktime_get_ts64(&end);
+ 		if (ret)
+ 			dev_err(dev, "Data transfer failed\n");
+ 
+-		dma_unmap_single(dma_dev, dst_phys_addr, reg->size,
++		dma_unmap_single(dma_dev, dst_phys_addr, reg->size * reg->count,
+ 				 DMA_FROM_DEVICE);
+ 	} else {
+ 		ktime_get_ts64(&start);
+-		memcpy_fromio(buf, src_addr, reg->size);
++		for (i = 0, offset = 0; i < reg->count; i++, offset += reg->size)
++			memcpy_fromio(buf + offset, src_addr + offset, reg->size);
+ 		ktime_get_ts64(&end);
+ 	}
+ 
+-	pci_epf_test_print_rate("READ", reg->size, &start, &end, use_dma);
++	pci_epf_test_print_rate("READ", reg->size, reg->count, &start, &end, use_dma);
+ 
+-	crc32 = crc32_le(~0, buf, reg->size);
++	crc32 = crc32_le(~0, buf, reg->size * reg->count);
+ 	if (crc32 != reg->checksum)
+ 		ret = -EIO;
+ 
+@@ -460,7 +474,7 @@ static int pci_epf_test_read(struct pci_epf_test *epf_test)
+ 	pci_epc_unmap_addr(epc, epf->func_no, epf->vfunc_no, phys_addr);
+ 
+ err_addr:
+-	pci_epc_mem_free_addr(epc, phys_addr, src_addr, reg->size);
++	pci_epc_mem_free_addr(epc, phys_addr, src_addr, reg->size * reg->count);
+ 
+ err:
+ 	return ret;
+@@ -468,7 +482,7 @@ static int pci_epf_test_read(struct pci_epf_test *epf_test)
+ 
+ static int pci_epf_test_write(struct pci_epf_test *epf_test)
+ {
+-	int ret;
++	int ret, i;
+ 	void __iomem *dst_addr;
+ 	void *buf;
+ 	bool use_dma;
+@@ -481,8 +495,9 @@ static int pci_epf_test_write(struct pci_epf_test *epf_test)
+ 	struct device *dma_dev = epf->epc->dev.parent;
+ 	enum pci_barno test_reg_bar = epf_test->test_reg_bar;
+ 	struct pci_epf_test_reg *reg = epf_test->reg[test_reg_bar];
++	size_t offset;
+ 
+-	dst_addr = pci_epc_mem_alloc_addr(epc, &phys_addr, reg->size);
++	dst_addr = pci_epc_mem_alloc_addr(epc, &phys_addr, reg->size * reg->count);
+ 	if (!dst_addr) {
+ 		dev_err(dev, "Failed to allocate address\n");
+ 		reg->status = STATUS_DST_ADDR_INVALID;
+@@ -491,21 +506,21 @@ static int pci_epf_test_write(struct pci_epf_test *epf_test)
+ 	}
+ 
+ 	ret = pci_epc_map_addr(epc, epf->func_no, epf->vfunc_no, phys_addr,
+-			       reg->dst_addr, reg->size);
++			       reg->dst_addr, reg->size * reg->count);
+ 	if (ret) {
+ 		dev_err(dev, "Failed to map address\n");
+ 		reg->status = STATUS_DST_ADDR_INVALID;
+ 		goto err_addr;
+ 	}
+ 
+-	buf = kzalloc(reg->size, GFP_KERNEL);
++	buf = kzalloc(reg->size * reg->count, GFP_KERNEL);
+ 	if (!buf) {
+ 		ret = -ENOMEM;
+ 		goto err_map_addr;
+ 	}
+ 
+-	get_random_bytes(buf, reg->size);
+-	reg->checksum = crc32_le(~0, buf, reg->size);
++	get_random_bytes(buf, reg->size * reg->count);
++	reg->checksum = crc32_le(~0, buf, reg->size * reg->count);
+ 
+ 	use_dma = !!(reg->flags & FLAG_USE_DMA);
+ 	if (use_dma) {
+@@ -515,7 +530,7 @@ static int pci_epf_test_write(struct pci_epf_test *epf_test)
+ 			goto err_dma_map;
+ 		}
+ 
+-		src_phys_addr = dma_map_single(dma_dev, buf, reg->size,
++		src_phys_addr = dma_map_single(dma_dev, buf, reg->size * reg->count,
+ 					       DMA_TO_DEVICE);
+ 		if (dma_mapping_error(dma_dev, src_phys_addr)) {
+ 			dev_err(dev, "Failed to map source buffer addr\n");
+@@ -525,22 +540,23 @@ static int pci_epf_test_write(struct pci_epf_test *epf_test)
+ 
+ 		ktime_get_ts64(&start);
+ 		ret = pci_epf_test_data_transfer(epf_test, phys_addr,
+-						 src_phys_addr, reg->size,
++						 src_phys_addr, reg->size, reg->count,
+ 						 reg->dst_addr,
+ 						 DMA_MEM_TO_DEV);
+ 		ktime_get_ts64(&end);
+ 		if (ret)
+ 			dev_err(dev, "Data transfer failed\n");
+ 
+-		dma_unmap_single(dma_dev, src_phys_addr, reg->size,
++		dma_unmap_single(dma_dev, src_phys_addr, reg->size * reg->count,
+ 				 DMA_TO_DEVICE);
+ 	} else {
+ 		ktime_get_ts64(&start);
+-		memcpy_toio(dst_addr, buf, reg->size);
++		for (i = 0, offset = 0; i < reg->count; i++, offset += reg->size)
++			memcpy_toio(dst_addr + offset, buf + offset, reg->size);
+ 		ktime_get_ts64(&end);
+ 	}
+ 
+-	pci_epf_test_print_rate("WRITE", reg->size, &start, &end, use_dma);
++	pci_epf_test_print_rate("WRITE", reg->size, reg->count, &start, &end, use_dma);
+ 
+ 	/*
+ 	 * wait 1ms inorder for the write to complete. Without this delay L3
+@@ -555,7 +571,7 @@ static int pci_epf_test_write(struct pci_epf_test *epf_test)
+ 	pci_epc_unmap_addr(epc, epf->func_no, epf->vfunc_no, phys_addr);
+ 
+ err_addr:
+-	pci_epc_mem_free_addr(epc, phys_addr, dst_addr, reg->size);
++	pci_epc_mem_free_addr(epc, phys_addr, dst_addr, reg->size * reg->count);
+ 
+ err:
+ 	return ret;
 -- 
 2.25.1
 
