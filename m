@@ -2,128 +2,358 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30B086BE70D
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 11:42:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 980A46BE74B
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 11:52:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229772AbjCQKms (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 06:42:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33332 "EHLO
+        id S230133AbjCQKwZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 06:52:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbjCQKmn (ORCPT
+        with ESMTP id S229488AbjCQKwW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 06:42:43 -0400
-Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 095F2B53E4
-        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 03:42:31 -0700 (PDT)
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32H7foUJ015333;
-        Fri, 17 Mar 2023 05:41:02 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=PODMain02222019;
- bh=KKA0KiB1b7sWikqUS2H+de2M8bIODACLff8UqwwIRKI=;
- b=QEPeAY4bjHDR8f8q/I3SzD8amteUtM1B3ocVkO24bWFQh0Z8oUqN8gWYimJxHzGjNRaB
- DuUJ7Twuid1w+yLki2ivqdb1rGHrmZCoK7Ynr9BdJmNqWg3V0o1xDcyzfmHHim6r/+NR
- BPYOqoUjne6gyKF6BOvVbXEAsCXpv8hrLltG7saBPkltoaHVACk/tf4aRagzzO0210us
- 9SDXo17Ay/9n7n+Oh4sM93/2PYKPZNOEW1xpbxXeym6rZbm7RKpi+NOFHQ10bhNhVZel
- /2qv/X6OEnjCAUWLKtjMs3vkVhWDeeHBaF+K5e2Fh+6N4k/2b0UHtNQe11+KwMnx0Z2y Mg== 
-Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3pbs3b9wuk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 17 Mar 2023 05:41:01 -0500
-Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.25; Fri, 17 Mar
- 2023 05:40:58 -0500
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.25 via Frontend
- Transport; Fri, 17 Mar 2023 05:40:58 -0500
-Received: from [198.90.251.127] (edi-sw-dsktp-006.ad.cirrus.com [198.90.251.127])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 9815D45;
-        Fri, 17 Mar 2023 10:40:58 +0000 (UTC)
-Message-ID: <2f983fe6-8c43-be16-758b-098ea461836b@opensource.cirrus.com>
-Date:   Fri, 17 Mar 2023 10:40:58 +0000
+        Fri, 17 Mar 2023 06:52:22 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86379DCA5C;
+        Fri, 17 Mar 2023 03:52:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1679050341; x=1710586341;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Tz/YeDU0Cf1yEbryNrde9LYjQnRRAIiPA4Gh8Snvrz8=;
+  b=FRB8okEmZeICGof5SdJk9lbCvCyLDmYVoWq639mR3MKOdj22AFUweUqA
+   Gxzv9WuK+LF8EBUj91pJzlPKhMLzsiaMUjBRwm3jBhFiuGo5f1bzfmhgf
+   rScOmYtKnx5apK1TbkXSR4K7GEXZWKCmqlIVd1+ohUdrvlVExb5WoWvBN
+   a+8lIb++GxlJZiyGJW0o+mp6XccQOEhN4PG608YZSaLQk7GsUuwCT5C7G
+   O8L5HtUSdubUdS72jWeyF6UUCUTjH1QfkgpTCflUNox2t2gg8+LEmCf51
+   8/dIRwQeEDwPaiZWVYOQc3XRE57Kzpegv9Ddc5ARfV54Tqjvicku8DrM9
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="424506240"
+X-IronPort-AV: E=Sophos;i="5.98,268,1673942400"; 
+   d="scan'208";a="424506240"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Mar 2023 03:52:21 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10651"; a="769319846"
+X-IronPort-AV: E=Sophos;i="5.98,268,1673942400"; 
+   d="scan'208";a="769319846"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by FMSMGA003.fm.intel.com with ESMTP; 17 Mar 2023 03:52:19 -0700
+Date:   Fri, 17 Mar 2023 18:40:59 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Marco Pagani <marpagan@redhat.com>
+Cc:     Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
+        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-fpga@vger.kernel.org
+Subject: Re: [RFC PATCH v2 3/4] fpga: add fake FPGA region
+Message-ID: <ZBRDu2/Kc142b8jJ@yilunxu-OptiPlex-7050>
+References: <20230310170412.708363-1-marpagan@redhat.com>
+ <20230310170412.708363-4-marpagan@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v2 8/8] ASoC: cs35l56: Add driver for Cirrus Logic CS35L56
-To:     kernel test robot <lkp@intel.com>,
-        Richard Fitzgerald via Alsa-devel 
-        <alsa-devel@alsa-project.org>, <broonie@kernel.org>,
-        <pierre-louis.bossart@linux.intel.com>
-CC:     <llvm@lists.linux.dev>, <oe-kbuild-all@lists.linux.dev>,
-        <peter.ujfalusi@linux.intel.com>,
-        <yung-chuan.liao@linux.intel.com>, <linux-kernel@vger.kernel.org>,
-        <patches@opensource.cirrus.com>,
-        Simon Trimmer <simont@opensource.cirrus.com>
-References: <167872265923.26.336497278776737619@mailman-core.alsa-project.org>
- <202303170422.ZYpOtc4P-lkp@intel.com>
-Content-Language: en-US
-From:   Richard Fitzgerald <rf@opensource.cirrus.com>
-In-Reply-To: <202303170422.ZYpOtc4P-lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-GUID: OePiBmjLWfhCxasIpBWCnONiYz13bGq6
-X-Proofpoint-ORIG-GUID: OePiBmjLWfhCxasIpBWCnONiYz13bGq6
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230310170412.708363-4-marpagan@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/03/2023 20:15, kernel test robot wrote:
-> Hi Richard,
+On 2023-03-10 at 18:04:11 +0100, Marco Pagani wrote:
+> Add fake FPGA region platform driver with support functions. This
+> module is part of the KUnit tests for the FPGA subsystem.
 > 
-> Thank you for the patch! Yet something to improve:
+> Signed-off-by: Marco Pagani <marpagan@redhat.com>
+> ---
+>  drivers/fpga/tests/fake-fpga-region.c | 219 ++++++++++++++++++++++++++
+>  drivers/fpga/tests/fake-fpga-region.h |  38 +++++
+>  2 files changed, 257 insertions(+)
+>  create mode 100644 drivers/fpga/tests/fake-fpga-region.c
+>  create mode 100644 drivers/fpga/tests/fake-fpga-region.h
 > 
-> [auto build test ERROR on broonie-sound/for-next]
-> [also build test ERROR on linus/master v6.3-rc2 next-20230316]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Richard-Fitzgerald-via-Alsa-devel/ASoC-wm_adsp-Use-no_core_startstop-to-prevent-creating-preload-control/20230313-235605
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
-> patch link:    https://lore.kernel.org/r/167872265923.26.336497278776737619%40mailman-core.alsa-project.org
-> patch subject: [PATCH v2 8/8] ASoC: cs35l56: Add driver for Cirrus Logic CS35L56
-> config: s390-randconfig-r044-20230313 (https://download.01.org/0day-ci/archive/20230317/202303170422.ZYpOtc4P-lkp@intel.com/config)
-> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
-> reproduce (this is a W=1 build):
->          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->          chmod +x ~/bin/make.cross
->          # install s390 cross compiling tool for clang build
->          # apt-get install binutils-s390x-linux-gnu
->          # https://github.com/intel-lab-lkp/linux/commit/5856c94d659f9c9963f5c37762cf201e1f1765e9
->          git remote add linux-review https://github.com/intel-lab-lkp/linux
->          git fetch --no-tags linux-review Richard-Fitzgerald-via-Alsa-devel/ASoC-wm_adsp-Use-no_core_startstop-to-prevent-creating-preload-control/20230313-235605
->          git checkout 5856c94d659f9c9963f5c37762cf201e1f1765e9
->          # save the config file
->          mkdir build_dir && cp config build_dir/.config
->          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 olddefconfig
->          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
-> 
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Link: https://lore.kernel.org/oe-kbuild-all/202303170422.ZYpOtc4P-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
->     s390x-linux-ld: sound/soc/codecs/cs35l56.o: in function `cs35l56_dsp_work':
->>> sound/soc/codecs/cs35l56.c:887: undefined reference to `sdw_write_no_pm'
->>> s390x-linux-ld: sound/soc/codecs/cs35l56.c:888: undefined reference to `sdw_read_no_pm'
->>> s390x-linux-ld: sound/soc/codecs/cs35l56.c:889: undefined reference to `sdw_write_no_pm'
->     s390x-linux-ld: sound/soc/codecs/cs35l56.c:953: undefined reference to `sdw_write_no_pm'
->     s390x-linux-ld: sound/soc/codecs/cs35l56.o: in function `cs35l56_sdw_dai_hw_params':
->>> sound/soc/codecs/cs35l56.c:710: undefined reference to `sdw_stream_add_slave'
->     s390x-linux-ld: sound/soc/codecs/cs35l56.o: in function `cs35l56_sdw_dai_hw_free':
->>> sound/soc/codecs/cs35l56.c:729: undefined reference to `sdw_stream_remove_slave'
-> 
+> diff --git a/drivers/fpga/tests/fake-fpga-region.c b/drivers/fpga/tests/fake-fpga-region.c
+> new file mode 100644
+> index 000000000000..54d0e564728b
+> --- /dev/null
+> +++ b/drivers/fpga/tests/fake-fpga-region.c
+> @@ -0,0 +1,219 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Driver for the fake FPGA region
+> + *
+> + * Copyright (C) 2023 Red Hat, Inc.
+> + *
+> + * Author: Marco Pagani <marpagan@redhat.com>
+> + */
+> +
+> +#include <linux/device.h>
+> +#include <linux/list.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/fpga/fpga-mgr.h>
+> +#include <linux/fpga/fpga-region.h>
+> +#include <linux/fpga/fpga-bridge.h>
+> +#include <kunit/test.h>
+> +
+> +#include "fake-fpga-region.h"
+> +
+> +#define FAKE_FPGA_REGION_DEV_NAME	"fake_fpga_region"
+> +
+> +struct fake_region_priv {
+> +	int id;
+> +	struct kunit *test;
+> +	struct list_head bridge_list;
+> +};
+> +
+> +struct fake_region_data {
+> +	struct fpga_manager *mgr;
+> +	struct kunit *test;
+> +};
+> +
+> +/**
+> + * fake_fpga_region_register() - register a fake FPGA region.
+> + * @region_ctx: fake FPGA region context data structure.
+> + * @mgr: associated FPGA manager.
+> + * @parent: parent device.
+> + * @test: KUnit test context object.
+> + *
+> + * Return: 0 if registration succeeded, an error code otherwise.
+> + */
+> +int fake_fpga_region_register(struct fake_fpga_region *region_ctx,
+> +			      struct fpga_manager *mgr, struct device *parent,
+> +			      struct kunit *test)
+> +{
+> +	struct fake_region_data pdata;
+> +	struct fake_region_priv *priv;
+> +	int ret;
+> +
+> +	pdata.mgr = mgr;
+> +	pdata.test = test;
+> +
+> +	region_ctx->pdev = platform_device_alloc(FAKE_FPGA_REGION_DEV_NAME,
+> +						 PLATFORM_DEVID_AUTO);
+> +	if (IS_ERR(region_ctx->pdev)) {
+> +		pr_err("Fake FPGA region device allocation failed\n");
+> +		return -ENOMEM;
+> +	}
+> +
+> +	region_ctx->pdev->dev.parent = parent;
+> +	platform_device_add_data(region_ctx->pdev, &pdata, sizeof(pdata));
+> +
+> +	ret = platform_device_add(region_ctx->pdev);
+> +	if (ret) {
+> +		pr_err("Fake FPGA region device add failed\n");
+> +		platform_device_put(region_ctx->pdev);
+> +		return ret;
+> +	}
+> +
+> +	region_ctx->region = platform_get_drvdata(region_ctx->pdev);
+> +
+> +	if (test) {
+> +		priv = region_ctx->region->priv;
+> +		kunit_info(test, "Fake FPGA region %d registered\n", priv->id);
+> +	}
+> +
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(fake_fpga_region_register);
+> +
+> +/**
+> + * fake_fpga_region_unregister() - unregister a fake FPGA region.
+> + * @region_ctx: fake FPGA region context data structure.
+> + */
+> +void fake_fpga_region_unregister(struct fake_fpga_region *region_ctx)
+> +{
+> +	struct fake_region_priv *priv;
+> +	struct kunit *test;
+> +	int id;
+> +
+> +	if (!region_ctx)
+> +		return;
+> +
+> +	priv = region_ctx->region->priv;
+> +	test = priv->test;
+> +	id = priv->id;
+> +
+> +	if (region_ctx->pdev) {
+> +		platform_device_unregister(region_ctx->pdev);
+> +		if (test)
+> +			kunit_info(test, "Fake FPGA region %d unregistered\n", id);
+> +	}
+> +}
+> +EXPORT_SYMBOL_GPL(fake_fpga_region_unregister);
+> +
+> +/**
+> + * fake_fpga_region_add_bridge() - add a bridge to a fake FPGA region.
+> + * @region_ctx: fake FPGA region context data structure.
+> + * @bridge: FPGA bridge.
+> + *
+> + * Return: 0 if registration succeeded, an error code otherwise.
+> + */
+> +void fake_fpga_region_add_bridge(struct fake_fpga_region *region_ctx,
+> +				 struct fpga_bridge *bridge)
+> +{
+> +	struct fake_region_priv *priv;
+> +
+> +	priv = region_ctx->region->priv;
+> +
+> +	/* Add bridge to the list of bridges in the private context */
+> +	list_add(&bridge->node, &priv->bridge_list);
+> +
+> +	if (priv->test)
+> +		kunit_info(priv->test, "Bridge added to fake FPGA region %d\n",
+> +			   priv->id);
+> +}
+> +EXPORT_SYMBOL_GPL(fake_fpga_region_add_bridge);
+> +
+> +static int fake_region_get_bridges(struct fpga_region *region)
+> +{
+> +	struct fake_region_priv *priv;
+> +	struct fpga_bridge *bridge, *tmp;
+> +	int ret;
+> +
+> +	priv = region->priv;
+> +
+> +	list_for_each_entry_safe(bridge, tmp, &priv->bridge_list, node) {
+> +		list_del(&bridge->node);
 
-I don't understand what's happened here.
-include/linux/soundwire/sdw.h provides inline dummy versions of these
-functions if !IS_ENABLED(CONFIG_SOUNDWIRE) so how can they be
-undefined reference?
+I think the fake_fpga_region user just need to call
+fake_fpga_region_add_bridge() once on init, and may call
+fpga_bridges_put() at any time after fpga_region_program_fpga(), then
+you may lose the track of the bridges, which breaks the next
+fpga_region_program_fpga().
+
+Thanks,
+Yilun
+
+> +		ret = fpga_bridge_get_to_list(bridge->dev.parent,
+> +					      region->info,
+> +					      &region->bridge_list);
+> +		if (ret)
+> +			break;
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+> +static int fake_fpga_region_probe(struct platform_device *pdev)
+> +{
+> +	struct device *dev;
+> +	struct fpga_region *region;
+> +	struct fpga_manager *mgr;
+> +	struct fake_region_data *pdata;
+> +	struct fake_region_priv *priv;
+> +	struct fpga_region_info info;
+> +	static int id_count;
+> +
+> +	dev = &pdev->dev;
+> +	pdata = dev_get_platdata(dev);
+> +
+> +	if (!pdata) {
+> +		dev_err(&pdev->dev, "Missing platform data\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+> +	if (!priv)
+> +		return -ENOMEM;
+> +
+> +	mgr = fpga_mgr_get(pdata->mgr->dev.parent);
+> +	if (IS_ERR(mgr))
+> +		return PTR_ERR(mgr);
+> +
+> +	INIT_LIST_HEAD(&priv->bridge_list);
+> +	priv->id = id_count++;
+> +	priv->test = pdata->test;
+> +
+> +	memset(&info, 0, sizeof(info));
+> +	info.priv = priv;
+> +	info.mgr = mgr;
+> +	info.get_bridges = fake_region_get_bridges;
+> +
+> +	region = fpga_region_register_full(dev, &info);
+> +	if (IS_ERR(region)) {
+> +		fpga_mgr_put(mgr);
+> +		return PTR_ERR(region);
+> +	}
+> +
+> +	platform_set_drvdata(pdev, region);
+> +
+> +	return 0;
+> +}
+> +
+> +static int fake_fpga_region_remove(struct platform_device *pdev)
+> +{
+> +	struct fpga_region *region = platform_get_drvdata(pdev);
+> +	struct fpga_manager *mgr = region->mgr;
+> +
+> +	fpga_mgr_put(mgr);
+> +	fpga_bridges_put(&region->bridge_list);
+> +	fpga_region_unregister(region);
+> +
+> +	return 0;
+> +}
+> +
+> +static struct platform_driver fake_fpga_region_drv = {
+> +	.driver = {
+> +		.name = FAKE_FPGA_REGION_DEV_NAME
+> +	},
+> +	.probe = fake_fpga_region_probe,
+> +	.remove = fake_fpga_region_remove,
+> +};
+> +
+> +module_platform_driver(fake_fpga_region_drv);
+> +
+> +MODULE_AUTHOR("Marco Pagani <marpagan@redhat.com>");
+> +MODULE_DESCRIPTION("Fake FPGA Bridge");
+> +MODULE_LICENSE("GPL v2");
+> diff --git a/drivers/fpga/tests/fake-fpga-region.h b/drivers/fpga/tests/fake-fpga-region.h
+> new file mode 100644
+> index 000000000000..9268ca335662
+> --- /dev/null
+> +++ b/drivers/fpga/tests/fake-fpga-region.h
+> @@ -0,0 +1,38 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Header file for the fake FPGA region
+> + *
+> + * Copyright (C) 2023 Red Hat, Inc.
+> + *
+> + * Author: Marco Pagani <marpagan@redhat.com>
+> + */
+> +
+> +#ifndef __FPGA_FAKE_RGN_H
+> +#define __FPGA_FAKE_RGN_H
+> +
+> +#include <linux/platform_device.h>
+> +#include <kunit/test.h>
+> +#include <linux/fpga/fpga-mgr.h>
+> +#include <linux/fpga/fpga-bridge.h>
+> +
+> +/**
+> + * struct fake_fpga_region - fake FPGA region context data structure
+> + *
+> + * @region: FPGA region.
+> + * @pdev: platform device of the FPGA region.
+> + */
+> +struct fake_fpga_region {
+> +	struct fpga_region *region;
+> +	struct platform_device *pdev;
+> +};
+> +
+> +int fake_fpga_region_register(struct fake_fpga_region *region_ctx,
+> +			      struct fpga_manager *mgr, struct device *parent,
+> +			      struct kunit *test);
+> +
+> +void fake_fpga_region_add_bridge(struct fake_fpga_region *region_ctx,
+> +				 struct fpga_bridge *bridge);
+> +
+> +void fake_fpga_region_unregister(struct fake_fpga_region *region_ctx);
+> +
+> +#endif /* __FPGA_FAKE_RGN_H */
+> -- 
+> 2.39.2
+> 
