@@ -2,137 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B47996BF270
-	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 21:28:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59C236BF28B
+	for <lists+linux-kernel@lfdr.de>; Fri, 17 Mar 2023 21:29:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230112AbjCQU2G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 17 Mar 2023 16:28:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58538 "EHLO
+        id S230115AbjCQU3R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 17 Mar 2023 16:29:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229959AbjCQU2B (ORCPT
+        with ESMTP id S229913AbjCQU3H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 17 Mar 2023 16:28:01 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56EC4AB8B4;
-        Fri, 17 Mar 2023 13:27:54 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id 539265FD4F;
-        Fri, 17 Mar 2023 23:27:52 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1679084872;
-        bh=9klZq5XNmdsCI8Jf4BIs+c2sADGKOJ1gBsYtYIHMRbs=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=XZLGSNSDmTYCZb7s7O8f3ZHMIYyHbCaPHo56b39hLpJh8r2PPMyPdt6JZf/f58gS6
-         348VQBGsQwgKna4KcBjfocVat4Lqe47Se+jPzZVU/R2rBfpLoY1XV5J9SdDnY/MhuD
-         nEQmoM7C4NtEflIqujh+NYYR6c0/dYiZ2pSZIDpWO/wkYg9ssjJ8UCokIFIKbMHW4O
-         wrMnu9VEuqIb6kJwYg6uDZFbq4+xVLkxvqCB/1BdyNc2QmNUJgg2jzPqIkAyQSsUIV
-         4ehY8/Xe9OvmJIHSZFZWjeQXbTyfcDZK5fT93/oA8Zjv4VhwxaKfF9gR7OjPIoDThE
-         zH5yyfYc2Jekg==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Fri, 17 Mar 2023 23:27:49 +0300 (MSK)
-Date:   Fri, 17 Mar 2023 23:27:48 +0300
-From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
-To:     Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-CC:     <neil.armstrong@linaro.org>, <jbrunet@baylibre.com>,
-        <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <khilman@baylibre.com>,
-        <martin.blumenstingl@googlemail.com>, <jian.hu@amlogic.com>,
-        <kernel@sberdevices.ru>, <rockosov@gmail.com>,
-        <linux-amlogic@lists.infradead.org>, <linux-clk@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v10 3/5] dt-bindings: clock: meson: add A1 PLL and
- Peripherals clkcs bindings
-Message-ID: <20230317202748.7ctqhswettiemwi7@CAB-WSD-L081021>
-References: <20230313201259.19998-1-ddrokosov@sberdevices.ru>
- <20230313201259.19998-4-ddrokosov@sberdevices.ru>
- <ffebef1d-8447-181b-1890-3e638d399c62@linaro.org>
- <20230314114825.yiv4vcszr6b7m45w@CAB-WSD-L081021>
- <20230317185317.GA2608140-robh@kernel.org>
+        Fri, 17 Mar 2023 16:29:07 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 079DCA8E99
+        for <linux-kernel@vger.kernel.org>; Fri, 17 Mar 2023 13:28:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1679084883;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=zrOb7zhbNBSA2vEfdnizburgLjEAzsaXpryIF7Glvbk=;
+        b=Go3de1f8e9k1pGBJ5nh27kKzsiswOVo1k7PSkqDhEenEPawiY6Krc/BFNWkxG+tXN7mJTe
+        fuDNHXOrSpP+Zq36MbVvDqP3xGwy06i4fO8kJVNnJm7FC1XmbpgR2tTpMCL0AyhEFP7Hw6
+        UKiYt4FpX1yO3vZSwIDg/ge6tqLOny4=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-386-oN7h2_Q0PUqxhq_LDwb8xg-1; Fri, 17 Mar 2023 16:27:59 -0400
+X-MC-Unique: oN7h2_Q0PUqxhq_LDwb8xg-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 762FB1011573;
+        Fri, 17 Mar 2023 20:27:58 +0000 (UTC)
+Received: from green.redhat.com (unknown [10.2.16.99])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id BB66D492B00;
+        Fri, 17 Mar 2023 20:27:57 +0000 (UTC)
+From:   Eric Blake <eblake@redhat.com>
+To:     josef@toxicpanda.com, linux-block@vger.kernel.org,
+        nbd@other.debian.org
+Cc:     philipp.reisner@linbit.com, lars.ellenberg@linbit.com,
+        christoph.boehmwalder@linbit.com, corbet@lwn.net,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 5/5] docs nbd: userspace NBD now favors github over sourceforge
+Date:   Fri, 17 Mar 2023 15:27:49 -0500
+Message-Id: <20230317202749.419094-6-eblake@redhat.com>
+In-Reply-To: <20230317202749.419094-1-eblake@redhat.com>
+References: <20230317202749.419094-1-eblake@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20230317185317.GA2608140-robh@kernel.org>
-User-Agent: NeoMutt/20220415
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/03/17 17:26:00 #20964929
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 17, 2023 at 01:53:17PM -0500, Rob Herring wrote:
-> On Tue, Mar 14, 2023 at 02:48:25PM +0300, Dmitry Rokosov wrote:
-> > On Tue, Mar 14, 2023 at 12:28:40PM +0100, Krzysztof Kozlowski wrote:
-> > > On 13/03/2023 21:12, Dmitry Rokosov wrote:
-> > 
-> > [...]
-> > 
-> > > > +#define CLKID_SPIFC		84
-> > > > +#define CLKID_USB_BUS		85
-> > > > +#define CLKID_SD_EMMC		86
-> > > > +#define CLKID_PSRAM		87
-> > > > +#define CLKID_DMC		88
-> > > 
-> > > And what is here? Between 88 and 121?
-> > > 
-> > 
-> > Explained below.
-> > 
-> > > > +#define CLKID_GEN_SEL		121
-> > > > +
-> > > > +#endif /* __A1_CLKC_H */
-> > > > diff --git a/include/dt-bindings/clock/amlogic,a1-pll-clkc.h b/include/dt-bindings/clock/amlogic,a1-pll-clkc.h
-> > > > new file mode 100644
-> > > > index 000000000000..8e97d3fb9d30
-> > > > --- /dev/null
-> > > > +++ b/include/dt-bindings/clock/amlogic,a1-pll-clkc.h
-> > > > @@ -0,0 +1,20 @@
-> > > > +/* SPDX-License-Identifier: GPL-2.0+ */
-> > > 
-> > > I found in changelog:
-> > > "fix license issue, it's GPL-2.0+ only in the current version"
-> > > and I do not understand.
-> > > 
-> > > The license is wrong, so what did you fix?
-> > > 
-> > 
-> > Sorry don't get you. Why is it wrong?
-> > I've changed all new source files to GPL-2.0+ except yaml, because yaml
-> > dt bindings schemas require the following license:
-> 
-> Why 2.0+? The kernel's default license is 2.0-only. Are you (and 
-> your lawyer) okay with GPL v4?
-> 
-> But this is still part of the DT binding and has the same license 
-> preference:
->  
-> >     # SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> 
-> However, the header licenses are complicated due to .dts licenses which 
-> are all over the place. The requirement is dual licensed and matching 
-> what includes it.
+While the sourceforge site for userspace NBD still exists, the code
+repository moved to github several years ago.  Then with a recent
+patch[1], the github landing page contains just as much information as
+the sourceforge page, so we might as well point to a single location
+that also provides the code.
 
-Agree with you. As we discussed with Krzysztof, checkpatch must verify
-such wrong license tags. I've introduced the patchset for that, please
-take a look:
+[1] https://lists.debian.org/nbd/2023/03/msg00051.html
 
-https://lore.kernel.org/all/20230317201621.15518-1-ddrokosov@sberdevices.ru/
+Signed-off-by: Eric Blake <eblake@redhat.com>
 
+---
+v2: split into its own patch
+---
+ Documentation/admin-guide/blockdev/nbd.rst | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Documentation/admin-guide/blockdev/nbd.rst b/Documentation/admin-guide/blockdev/nbd.rst
+index d78dfe559dcf..faf2ac4b1509 100644
+--- a/Documentation/admin-guide/blockdev/nbd.rst
++++ b/Documentation/admin-guide/blockdev/nbd.rst
+@@ -14,7 +14,7 @@ to borrow disk space from another computer.
+ Unlike NFS, it is possible to put any filesystem on it, etc.
+
+ For more information, or to download the nbd-client and nbd-server
+-tools, go to http://nbd.sf.net/.
++tools, go to https://github.com/NetworkBlockDevice/nbd.
+
+ The nbd kernel module need only be installed on the client
+ system, as the nbd-server is completely in userspace. In fact,
 -- 
-Thank you,
-Dmitry
+2.39.2
+
